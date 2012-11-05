@@ -35,7 +35,6 @@ use POSIX;
 use Storable;
 use Time::Local;
 
-use Lock;
 use Log;
 use Message;
 use Sympa::Archive;
@@ -47,6 +46,7 @@ use Sympa::Datasource::LDAP;
 use Sympa::Family;
 use Sympa::Fetch;
 use Sympa::Language;
+use Sympa::Lock;
 use Sympa::Mail;
 use Sympa::PlainDigest;
 use Sympa::Report;
@@ -2450,7 +2450,7 @@ sub savestats {
     return undef unless ($list_of_lists{$self->{'domain'}}{$name});
     
     ## Lock file
-    my $lock = new Lock ($dir.'/stats');
+    my $lock = new Sympa::Lock ($dir.'/stats');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -2654,7 +2654,7 @@ sub save_config {
     my $config_file_name = "$self->{'dir'}/config";
 
     ## Lock file
-    my $lock = new Lock ($self->{'dir'}.'/config');
+    my $lock = new Sympa::Lock ($self->{'dir'}.'/config');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -2769,7 +2769,7 @@ sub load {
 	! $options->{'reload_config'}) { 
 
 	## Get a shared lock on config file first 
-	my $lock = new Lock ($self->{'dir'}.'/config');
+	my $lock = new Sympa::Lock ($self->{'dir'}.'/config');
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    return undef;
@@ -2797,7 +2797,7 @@ sub load {
 	$admin = _load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
 
 	## Get a shared lock on config file first 
-	my $lock = new Lock ($self->{'dir'}.'/config');
+	my $lock = new Sympa::Lock ($self->{'dir'}.'/config');
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    return undef;
@@ -6177,7 +6177,7 @@ sub get_first_list_member {
     $rows = $data->{'rows'};
     $sql_regexp = $data->{'sql_regexp'};
     
-    my $lock = new Lock ($self->{'dir'}.'/include');
+    my $lock = new Sympa::Lock ($self->{'dir'}.'/include');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -6353,7 +6353,7 @@ sub get_first_list_admin {
 
     &Log::do_log('debug2', '(%s,%s,%s,%d,%d)', $self->{'name'},$role, $sortby, $offset, $rows);
 
-    my $lock = new Lock ($self->{'dir'}.'/include_admin_user');
+    my $lock = new Sympa::Lock ($self->{'dir'}.'/include_admin_user');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -6429,7 +6429,7 @@ sub get_first_list_admin {
         $sth = pop @sth_stack;
 
 	## Release the Shared lock
-	my $lock = new Lock($self->{'dir'}.'/include_admin_user');
+	my $lock = new Sympa::Lock($self->{'dir'}.'/include_admin_user');
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    return undef;
@@ -6476,7 +6476,7 @@ sub get_next_list_member {
 		$sth = pop @sth_stack;
 	
 		## Release lock
-		my $lock = new Lock ($self->{'dir'}.'/include');
+		my $lock = new Sympa::Lock ($self->{'dir'}.'/include');
 		unless (defined $lock) {
 			&Log::do_log('err','Could not create new lock');
 			return undef;
@@ -6510,7 +6510,7 @@ sub get_next_list_admin {
 		$sth = pop @sth_stack;
 	
 		## Release the Shared lock
-		my $lock = new Lock($self->{'dir'}.'/include_admin_user');
+		my $lock = new Sympa::Lock($self->{'dir'}.'/include_admin_user');
 		unless (defined $lock) {
 			&Log::do_log('err','Could not create new lock');
 			return undef;
@@ -6531,7 +6531,7 @@ sub get_first_bouncing_list_member {
     my $self = shift;
     &Log::do_log('debug2', '');
 
-    my $lock = new Lock ($self->{'dir'}.'/include');
+    my $lock = new Sympa::Lock ($self->{'dir'}.'/include');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -6603,7 +6603,7 @@ sub get_next_bouncing_list_member {
 		$sth = pop @sth_stack;
 	
 		## Release the Shared lock
-		my $lock = new Lock ($self->{'dir'}.'/include');
+		my $lock = new Sympa::Lock ($self->{'dir'}.'/include');
 		unless (defined $lock) {
 			&Log::do_log('err','Could not create new lock');
 			return undef;
@@ -9551,7 +9551,7 @@ sub sync_include {
     my $users_updated = 0;
 
     ## Get an Exclusive lock
-    my $lock = new Lock ($self->{'dir'}.'/include');
+    my $lock = new Sympa::Lock ($self->{'dir'}.'/include');
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock');
 	return undef;
@@ -9782,7 +9782,7 @@ sub sync_include_admin {
 	my $admin_users_updated = 0;
 	
 	## Get an Exclusive lock
-	my $lock = new Lock ($self->{'dir'}.'/include_admin_user');
+	my $lock = new Sympa::Lock ($self->{'dir'}.'/include_admin_user');
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    return undef;
@@ -11110,7 +11110,7 @@ sub _load_list_config_file {
     }
 
     ## Lock file
-    my $lock = new Lock ($config_file);
+    my $lock = new Sympa::Lock ($config_file);
     unless (defined $lock) {
 	&Log::do_log('err','Could not create new lock on %s',$config_file);
 	return undef;

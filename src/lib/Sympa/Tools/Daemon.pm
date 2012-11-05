@@ -26,8 +26,8 @@ use strict;
 use Proc::ProcessTable;
 use Sys::Hostname;
 
-use Lock;
 use Log;
+use Sympa::Lock;
 use Sympa::Tools::File;
 
 ## Remove PID file and STDERR output
@@ -102,7 +102,7 @@ sub write_pid {
     my @pids;
 
     # Lock pid file
-    my $lock = new Lock ($pidfile);
+    my $lock = new Sympa::Lock ($pidfile);
     unless (defined $lock) {
 	&Log::fatal_err('Lock could not be created. Exiting.');
     }

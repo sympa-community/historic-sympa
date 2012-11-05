@@ -31,11 +31,11 @@ use Mail::Address;
 use MIME::QuotedPrint;
 
 use Log;
-use Lock;
 use Message;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::Lock;
 use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -308,7 +308,7 @@ while (!$signal) {
 
 
 	## Lock file
-	my $lock = new Lock ($spooldir.'/'.$filename);
+	my $lock = new Sympa::Lock ($spooldir.'/'.$filename);
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    next;
