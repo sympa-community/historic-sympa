@@ -50,7 +50,6 @@ use MIME::Parser;
 use Time::Local;
 
 use Commands;
-use Language;
 use Log;
 use Marc::Search;
 use OAuthProvider;
@@ -63,6 +62,7 @@ use Sympa::Conf;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Datasource::LDAP;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Mail;
 use Sympa::Report;
@@ -1045,7 +1045,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 &Log::do_log('info', 'WWSympa started');
 
 ## Set locale configuration	 
-$Language::default_lang = $Conf{'lang'};	 
+$Sympa::Language::default_lang = $Conf{'lang'};	 
 
 ## Important to leave this there because it defined defaults for user_data_source
 &SDM::check_db_connect();
@@ -1093,7 +1093,7 @@ my $birthday = time ;
      undef $session;
 
      &Log::set_log_level($Conf{'log_level'});
-     &Language::SetLang($Language::default_lang);
+     &Sympa::Language::SetLang($Sympa::Language::default_lang);
 
      ## Empty cache of the List.pm module
      &Sympa::List::init_list_cache();
@@ -1496,7 +1496,7 @@ my $birthday = time ;
 	     $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});	     
 	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');	     
 
-	     $param->{'locale'} = &Language::SetLang($param->{'lang'});
+	     $param->{'locale'} = &Sympa::Language::SetLang($param->{'lang'});
 	     
 	     &export_topics ($robot);
 	     
@@ -1670,11 +1670,11 @@ my $birthday = time ;
      }
 	 
      ## Available languages
-     my $saved_lang = &Language::GetLang();
+     my $saved_lang = &Sympa::Language::GetLang();
 
 
-     foreach my $l (@{&Language::GetSupportedLanguages($robot)}) {
-	 &Language::SetLang($l) || next;
+     foreach my $l (@{&Sympa::Language::GetSupportedLanguages($robot)}) {
+	 &Sympa::Language::SetLang($l) || next;
 
 	 if (gettext("_language_")) {
 	     $param->{'languages'}{$l}{'complete'} = gettext("_language_");
@@ -1689,7 +1689,7 @@ my $birthday = time ;
 	 }
      }
 
-     &Language::SetLang($saved_lang);
+     &Sympa::Language::SetLang($saved_lang);
 
      $param->{'html_dumpvars'} = &Sympa::Tools::Data::dump_html_var($param) if ($session->{'dumpvars'});
 
@@ -1755,7 +1755,7 @@ my $birthday = time ;
  	     $param->{'list_conf'} = $list->{'admin'};
  	 }
 
-	 my $lang = &Language::Lang2Locale($param->{'lang'});
+	 my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
 	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 	 
  	 unless (&Sympa::TT2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
@@ -1780,7 +1780,7 @@ my $birthday = time ;
  	     $param->{'list_conf'} = $list->{'admin'};
  	 }
 
-	 my $lang = &Language::Lang2Locale($param->{'lang'});
+	 my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
 	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 	 
  	 unless (&Sympa::TT2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
@@ -2501,15 +2501,15 @@ sub send_html {
 
     ## Send HTML
     if ($param->{'date'}) {
-	Language::PushLang("en");
+	Sympa::Language::PushLang("en");
 	printf "Date: %s\n", &POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
-	Language::PopLang();
+	Sympa::Language::PopLang();
     }
     ## If we set the header indicating the last time the file to send was modified, add an HTTP header (limitate web harvesting).
     if ($param->{'header_date'}) {
-	Language::PushLang("en");
+	Sympa::Language::PushLang("en");
 	printf "Last-Modified: %s\n", &POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT', gmtime($param->{'header_date'}));
-	Language::PopLang();
+	Sympa::Language::PopLang();
     }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
     print "Content-Type: text/html\n";
@@ -2534,7 +2534,7 @@ sub send_html {
 	}
     }
     
-    my $lang = &Language::Lang2Locale($param->{'lang'});
+    my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
     
     # XSS escaping applied to all outgoing parameters.
@@ -2619,7 +2619,7 @@ Use it to create a List object and initialize output parameters.
 
 =item * wwslog
 
-=item * Language::SetLang
+=item * Sympa::Language::SetLang
 
 =item * Sympa::List::am_i
 
@@ -2672,7 +2672,7 @@ sub check_param_in {
 	 }
 
 	 ## Set lang to list lang
-	 &Language::SetLang($list->{'admin'}{'lang'});
+	 &Sympa::Language::SetLang($list->{'admin'}{'lang'});
      }
 
      ## listmaster has owner and editor privileges for the list
@@ -6258,7 +6258,7 @@ sub do_skinsedit {
     }
     if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
-	my $lang = &Language::Lang2Locale($param->{'lang'});
+	my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
 	my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
 	my $date= time;
@@ -8974,7 +8974,7 @@ sub do_editsubscriber {
 
      ## Get language from user_table
      my $user = &Sympa::List::get_global_user($in{'email'});
-     $param->{'current_subscriber'}{'lang'} = &Language::GetLangName($user->{'lang'});
+     $param->{'current_subscriber'}{'lang'} = &Sympa::Language::GetLangName($user->{'lang'});
 
      foreach my $m (keys %wwslib::reception_mode) {		
        if ($list->is_available_reception_mode($m)) {
@@ -10432,9 +10432,9 @@ Prepares config data to be sent in the edition form. Adds to the parameters arra
 
 =item * Sympa::List::may_edit
 
-=item * Language::GetLang
+=item * Sympa::Language::GetLang
 
-=item * Language::SetLang
+=item * Sympa::Language::SetLang
 
 =item * Sympa::Report::reject_report_web
 
@@ -10536,14 +10536,14 @@ sub _prepare_edit_form {
 		}
 	    }
 	 }elsif ($pname eq 'lang') {
-	     my $saved_lang = &Language::GetLang();
+	     my $saved_lang = &Sympa::Language::GetLang();
 	     
 	     foreach my $lang (keys %{$p->{'value'}}) {
 		 #&wwslog('notice','LANG: %s', $lang);
-		 &Language::SetLang($lang);
+		 &Sympa::Language::SetLang($lang);
 		 $p->{'value'}{$lang}{'title'} = gettext('_language_');
 	     }
-	     &Language::SetLang($saved_lang);
+	     &Sympa::Language::SetLang($saved_lang);
 	 }
 
 	 push @{$param->{'param'}}, $p;	
@@ -14076,7 +14076,7 @@ sub d_unzip_shared_file {
 
     ## Qencode 8bit filenames afterward
     ## The suspected charset is the one that is associated to the user's language
-    &Sympa::Tools::qencode_hierarchy($zip_abs_dir.'/zip', &Language::GetCharset());
+    &Sympa::Tools::qencode_hierarchy($zip_abs_dir.'/zip', &Sympa::Language::GetCharset());
 
     return $status;
 }
@@ -16059,7 +16059,7 @@ sub do_send_mail {
     
     if (defined $param->{'subscriber'}) {
 	$from = &Sympa::Tools::addrencode($from, $param->{'subscriber'}{'gecos'},
-				   &Language::GetCharset());
+				   &Sympa::Language::GetCharset());
     }
     
     ##--------------- TOPICS --------------------
@@ -17428,7 +17428,7 @@ sub do_css {
     printf "Content-type: text/css\n\n";
     $param->{'css'} = $in{'file'}; 
 
-    my $lang = &Language::Lang2Locale($param->{'lang'});
+    my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     unless (&Sympa::TT2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {

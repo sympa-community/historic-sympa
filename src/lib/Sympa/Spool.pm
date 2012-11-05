@@ -36,7 +36,6 @@ use Sys::Hostname;
 use Time::Local;
 
 use Family;
-use Language;
 use Ldap;
 use Lock;
 use Log;

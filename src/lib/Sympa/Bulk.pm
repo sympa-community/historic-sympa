@@ -39,13 +39,13 @@ use Time::HiRes qw(time);
 use Time::Local;
 use URI::Escape;
 
-use Language;
 use Ldap;
 use Lock;
 use Log;
 use Message;
 use SDM;
 use Sympa::Conf;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;

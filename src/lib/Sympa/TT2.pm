@@ -29,9 +29,9 @@ use CGI::Util;
 use MIME::EncWords; 
 use Template;
 
-use Language;
 use Log;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::Template::Compat;
 
 my $current_lang;
@@ -46,7 +46,7 @@ sub qencode {
     # longest (maybe) one.    
     return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
 					    Encoding=>'A',
-					    Charset=>&Language::GetCharset(),
+					    Charset=>&Sympa::Language::GetCharset(),
 					    Field=>"message-id");
 }
 
@@ -134,7 +134,7 @@ sub maketext {
     # my $s = $stash->_dump();    
 
     return sub {
-	&Language::maketext($template_name, $_[0],  @arg);
+	&Sympa::Language::maketext($template_name, $_[0],  @arg);
     }	
 }
 
@@ -222,7 +222,7 @@ sub parse_tt2 {
 	$template = \join('', @$template);
     }
 
-    &Language::SetLang($data->{lang}) if ($data->{'lang'});
+    &Sympa::Language::SetLang($data->{lang}) if ($data->{'lang'});
 
     my $config = {
 	# ABSOLUTE => 1,

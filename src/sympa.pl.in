@@ -32,7 +32,6 @@ use MIME::QuotedPrint;
 
 use Commands;
 use Family;
-use Language;
 use Log;
 use Message;
 use SDM;
@@ -40,6 +39,7 @@ use Sympa::Admin;
 use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Mail;
 use Sympa::Report;
@@ -224,7 +224,7 @@ if (&Sympa::Tools::cookie_changed($Conf{'cookie'}, $Sympa::Conf::Conf{'etc'})) {
 
 ## Set locale configuration
 $main::options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
-$Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
+$Sympa::Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
 
 ## Main program
 if (!chdir($Conf{'home'})) {
@@ -806,8 +806,8 @@ if ($main::options{'dump'}) {
 	
 	## Determine default lang for this list
 	## It should tell us what character encoding was used for filenames
-	&Language::SetLang($list->{'admin'}{'lang'});
-	my $list_encoding = &Language::GetCharset();
+	&Sympa::Language::SetLang($list->{'admin'}{'lang'});
+	my $list_encoding = &Sympa::Language::GetCharset();
 	
 	my $count = &Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 	
@@ -962,7 +962,7 @@ my $spool = new Sympa::Spool ($spoolname);
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
 
-    &Language::SetLang($Language::default_lang);
+    &Sympa::Language::SetLang($Language::default_lang);
 
     &Sympa::List::init_list_cache();
 	&Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
@@ -1019,7 +1019,7 @@ while (!$signal) {
     }
 
     ## Set NLS default lang for current message
-    $Language::default_lang = $main::options{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
+    $Sympa::Language::default_lang = $main::options{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
 	
     my $status = &process_message($message_in_spool);
         
@@ -1303,7 +1303,7 @@ sub process_message {
 	if ( &Sympa::Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
 	    unless (&Sympa::List::send_global_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
 										   'recipient' => $list_address,
-										   'lang' => $Language::default_lang,
+										   'lang' => $Sympa::Language::default_lang,
 										   'auto_submitted' => 'auto-replied'})) {
 		&Log::do_log('notice',"Unable to send template 'your infected_msg' to $sender");
 	    }
@@ -1675,7 +1675,7 @@ sub DoMessage{
 	    
 	    my $start_time = time;
 	    
-	    &Language::SetLang($list->{'admin'}{'lang'});
+	    &Sympa::Language::SetLang($list->{'admin'}{'lang'});
 	    
 	    ## Now check if the sender is an authorized address.
 	    
@@ -2078,7 +2078,7 @@ sub SendDigest{
 	    next;
 	}
 
-	&Language::SetLang($list->{'admin'}{'lang'});
+	&Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
 	if ($list->get_nextdigest($digest->{'date'})){
 	    ## Blindly send the message to all users.

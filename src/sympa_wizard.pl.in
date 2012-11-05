@@ -67,6 +67,7 @@ use Sys::Hostname qw(hostname);
 use Sympa::Conf;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
+use Sympa::Language;
 
 ## sympa configuration files
 my $wwsympa_conf = Sympa::Constants::WWSCONFIG;
@@ -100,10 +101,10 @@ sub create_configuration {
 	require tools;
     };
     if ($@) {
-	*{Language::gettext} = sub { shift };
+	*{Sympa::Language::gettext} = sub { shift };
 	*{tools::wrap_text} = sub { "$_[1]$_[0]\n" };
     } else {
-	Language::SetLang('');
+	Sympa::Language::SetLang('');
     }
 
     my $conf;
@@ -138,7 +139,7 @@ sub create_configuration {
 
         if ($param->{'title'}) {
             printf NEWF "###\\\\\\\\ %s ////###\n\n",
-                        Language::gettext($param->{'title'});
+                        Sympa::Language::gettext($param->{'title'});
             next;
         }
 
@@ -146,11 +147,11 @@ sub create_configuration {
 
         next unless (defined $param->{'default'} || defined $param->{'sample'});
 
-        print NEWF tools::wrap_text(Language::gettext($param->{'query'}),
+        print NEWF tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
                                     '## ', '## ')
             if (defined $param->{'query'});
 
-        print NEWF tools::wrap_text(Language::gettext($param->{'advice'}),
+        print NEWF tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
                                     '## ', '## ')
             if (defined $param->{'advice'});
 
@@ -195,9 +196,9 @@ sub edit_configuration {
     if (lc $rep eq 'y') {
         my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
         $lang =~ s/\..*//;
-        Language::SetLang($lang);
+        Sympa::Language::SetLang($lang);
     } else {
-	Language::SetLang('en_US');
+	Sympa::Language::SetLang('en_US');
     }
 
     ## Load config 
@@ -217,7 +218,7 @@ sub edit_configuration {
         my $desc;
 
         if ($param->{'title'}) {
-            my $title = Language::gettext($param->{'title'});
+            my $title = Sympa::Language::gettext($param->{'title'});
             print "\n\n** $title **\n";
 
             ## write to conf file
@@ -232,9 +233,9 @@ sub edit_configuration {
         my $file = $param->{'file'} ;
         my $name = $param->{'name'} ; 
         my $query = $param->{'query'} ;
-        $query = Language::gettext($query) if $query;
+        $query = Sympa::Language::gettext($query) if $query;
         my $advice = $param->{'advice'} ;
-        $advice = Language::gettext($advice) if $advice;
+        $advice = Sympa::Language::gettext($advice) if $advice;
         my $sample = $param->{'sample'} ;
         my $current_value ;
         if ($file eq 'wwsympa.conf') {	
@@ -249,7 +250,7 @@ sub edit_configuration {
             print "\n";
             print tools::wrap_text($query, '* ', '  ');
             print tools::wrap_text($advice, '  ... ', '  ') if $advice;
-            printf(Language::gettext('%s [%s] : '), $name, $current_value);
+            printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
             $new_value = <STDIN> ;
             chomp $new_value;
         }
@@ -302,30 +303,30 @@ sub edit_configuration {
 
     if ($somechange) {
 
-        my $date = Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
+        my $date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
                                               localtime(time));
 
         ## Keep old config files
         unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
-            warn sprintf(Language::gettext("Unable to rename %s : %s"),
+            warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
                          $wwsympa_conf, $!);
         }
 
         unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
-            warn sprintf(Language::gettext("Unable to rename %s : %s"),
+            warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
                          $sympa_conf, $!);
         }
 
         ## Write new config files
         unless (open (WWSYMPA,"> $wwsympa_conf")){
-            die sprintf(Language::gettext("Unable to open %s : %s"),
+            die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
                         $wwsympa_conf, $!);
         };
 
         my $umask = umask 037;
         unless (open (SYMPA,"> $sympa_conf")){
             umask $umask;
-            die sprintf(Language::gettext("Unable to open %s : %s"),
+            die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
                         $sympa_conf, $!);
         };
         umask $umask;
@@ -337,7 +338,7 @@ sub edit_configuration {
         close SYMPA;
         close WWSYMPA;
 
-        printf Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
+        printf Sympa::Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
     }
 }
 

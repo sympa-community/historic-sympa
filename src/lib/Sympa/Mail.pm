@@ -31,10 +31,10 @@ use POSIX;
 use Time::Local;
 
 use Log;
-use Language;
 use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::SMIME;
@@ -137,18 +137,18 @@ sub mail_file {
     }
 
     ## Charset for encoding
-    &Language::PushLang($data->{'lang'}) if defined $data->{'lang'};
-    $data->{'charset'} ||= &Language::GetCharset();
-    &Language::PopLang() if defined $data->{'lang'};
+    &Sympa::Language::PushLang($data->{'lang'}) if defined $data->{'lang'};
+    $data->{'charset'} ||= &Sympa::Language::GetCharset();
+    &Sympa::Language::PopLang() if defined $data->{'lang'};
 
     ## TT2 file parsing 
     if ($filename =~ /\.tt2$/) {
 	my $output;
 	my @path = split /\//, $filename;	   
-	&Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
+	&Sympa::Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
 	my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP;
 	&Sympa::TT2::parse_tt2($data, $path[$#path], \$output);
-	&Language::PopLang() if (defined $data->{'lang'});
+	&Sympa::Language::PopLang() if (defined $data->{'lang'});
 	$message_as_string .= join('',$output);
 	$header_possible = 1;
 
@@ -191,12 +191,12 @@ sub mail_file {
 	}
 	$tzoff = sprintf '%s%02d%02d',
 			 $sign, int($tzoff / 3600), int($tzoff / 60) % 60;
-	Language::PushLang('en');
+	Sympa::Language::PushLang('en');
 	$headers .= 'Date: ' .
 		    POSIX::strftime("%a, %d %b %Y %H:%M:%S $tzoff",
 				    localtime $now) .
 		    "\n";
-	Language::PopLang();
+	Sympa::Language::PopLang();
     }
 
     unless ($header_ok{'to'}) {

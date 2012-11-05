@@ -39,12 +39,12 @@ use File::Copy;
 use Term::ProgressBar;
 use XML::LibXML;
 
-use Language;
 use Log;
 use Sympa::Admin;
 use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Scenario;
 

@@ -24,11 +24,11 @@ package Sympa::Auth;
 
 use Digest::MD5;
 
-use Language;
 use Log;
 use SDM;
 use Sympa::Conf;
 use Sympa::Datasource::LDAP;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Report;
 use Sympa::Session;

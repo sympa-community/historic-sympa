@@ -28,8 +28,9 @@ use Digest::MD5;
 use POSIX;
 use Time::Local;
 
-use Sympa::Conf;
 use Log;
+use Sympa::Conf;
+use Sympa::Language;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
@@ -354,8 +355,8 @@ sub list_sessions {
     
     while (my $session = ($sth->fetchrow_hashref('NAME_lc'))) {
 
-	$session->{'formated_date'} = &Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
-	$session->{'formated_start_date'} = &Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
+	$session->{'formated_date'} = &Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
+	$session->{'formated_start_date'} = &Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
 
 	push @sessions, $session;
     }

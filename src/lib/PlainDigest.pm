@@ -86,7 +86,7 @@
  use HTML::TreeBuilder;
  use HTML::FormatText;
 
- use Language;
+ use Sympa::Language;
  use Sympa::Tools;
 
  @ISA = qw(MIME::Entity);
@@ -350,7 +350,7 @@
  
  @ISA = qw(HTML::FormatText);
      
- use Language;
+ use Sympa::Language;
  use strict;
 
  sub img_start   {

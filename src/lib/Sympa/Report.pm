@@ -24,7 +24,7 @@ package Sympa::Report;
 
 use strict;
 
-use Language;
+use Sympa::Language;
 use Sympa::List;
 use Log;
 

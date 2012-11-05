@@ -37,10 +37,10 @@ use strict;
 
 use File::Copy;
 
-use Language;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Scenario;
 use Sympa::Tools;

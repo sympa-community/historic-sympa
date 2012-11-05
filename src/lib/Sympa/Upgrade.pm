@@ -30,6 +30,7 @@ use Sympa::Conf;
 use Log;
 use SDM;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::Spool;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
@@ -474,8 +475,8 @@ sub upgrade {
 
 		## Determine default lang for this list
 		## It should tell us what character encoding was used for filenames
-		&Language::SetLang($list->{'admin'}{'lang'});
-		my $list_encoding = &Language::GetCharset();
+		&Sympa::Language::SetLang($list->{'admin'}{'lang'});
+		my $list_encoding = &Sympa::Language::GetCharset();
 
 		my $count = &Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 
@@ -935,9 +936,9 @@ sub to_utf8 {
 	if ((defined $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
 	    $charset = $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'};
 	}else {	    
-	    &Language::PushLang($lang);
-	    $charset = &Language::GetCharset;
-	    &Language::PopLang;
+	    &Sympa::Language::PushLang($lang);
+	    $charset = &Sympa::Language::GetCharset;
+	    &Sympa::Language::PopLang;
 	}
 	
 	# Add X-Sympa-Attach: headers if required.

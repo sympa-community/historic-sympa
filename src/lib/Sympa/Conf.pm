@@ -29,10 +29,10 @@ use Exporter;
 use Storable;
 
 use Log;
-use Language;
 use SDM;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::File;

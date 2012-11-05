@@ -23,10 +23,10 @@
 
 use lib '--modulesdir--';
 
-use Language;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Tools::File;
 use Sympa::Upgrade;
@@ -207,7 +207,7 @@ foreach my $tpl (@templates) {
     if ($dest_file =~ /^([\w\-]+)\.(\w+)\.tt2$/) {
 	my $lang = $2;
 	$dest_file =~ s/^([\w\-]+)\.(\w+)\.tt2$/$1\.tt2/;
-	$dest_path .= '/'.&Language::Lang2Locale($lang);
+	$dest_path .= '/'.&Sympa::Language::Lang2Locale($lang);
     }
 
     ## If file has no extension

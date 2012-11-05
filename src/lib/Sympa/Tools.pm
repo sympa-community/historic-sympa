@@ -34,9 +34,9 @@ use POSIX qw(strftime mkfifo strtod);
 use Sys::Hostname;
 use Text::LineFold;
 
-use Language;
 use Log;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::Tools::File;
 
 ## RCS identification.
@@ -439,7 +439,7 @@ sub get_list_list_tpl {
 
 		$list_templates->{$template}{'path'} = $dir;
 
-		my $locale = &Language::Lang2Locale( &Language::GetLang());
+		my $locale = &Sympa::Language::Lang2Locale( &Sympa::Language::GetLang());
 		## Look for a comment.tt2 in the appropriate locale first
 		if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
 		    $list_templates->{$template}{'comment'} = $dir.'/'.$template.'/'.$locale.'/comment.tt2';
@@ -1854,7 +1854,7 @@ sub wrap_text {
     return $text unless $cols;
 
     $text = Text::LineFold->new(
-	    Language => &Language::GetLang(),
+	    Language => &Sympa::Language::GetLang(),
 	    OutputCharset => (&Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
 	    Prep => 'NONBREAKURI',
 	    ColumnsMax => $cols
