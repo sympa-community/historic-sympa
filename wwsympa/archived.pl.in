@@ -43,7 +43,6 @@ use lib '--modulesdir--';
 use Getopt::Long;
 use Digest::MD5;
 
-use Commands;
 use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
