@@ -28,7 +28,6 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::SDM;
 use Sympa::Tools;
-use wwslib;
 
 unless (require Crypt::CipherSaber) {
     die "Crypt::CipherSaber not installed ; cannot crypt passwords";
