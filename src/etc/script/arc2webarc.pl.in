@@ -24,16 +24,16 @@
 
 use lib '--modulesdir--';
 
+use Getopt::Long;
+
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Upgrade;
 use Sympa::WWSympa;
 
 $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 $sympa_conf_file = Sympa::Constants::CONFIG;
-
-use Sympa::List;
-use Getopt::Long;
 
 my %month_idx = qw(jan 1 
 		   fev 2

@@ -23,11 +23,11 @@
 
 use lib '--modulesdir--';
 
-use Sympa::Log;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
+use Sympa::Log;
 use Sympa::Tools::File;
 use Sympa::Upgrade;
 use Sympa::WWSympa;
