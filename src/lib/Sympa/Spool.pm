@@ -43,7 +43,6 @@ use Lock;
 use Log;
 use Message;
 use PlainDigest;
-use Scenario;
 use SDM;
 use Sympa::Constants;
 use Sympa::DatabaseDescription;

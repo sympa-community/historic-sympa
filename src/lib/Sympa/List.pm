@@ -43,7 +43,6 @@ use Lock;
 use Log;
 use Message;
 use PlainDigest;
-use Scenario;
 use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
@@ -53,6 +52,7 @@ use Sympa::Datasource::LDAP;
 use Sympa::Fetch;
 use Sympa::Mail;
 use Sympa::Report;
+use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
@@ -7464,7 +7464,7 @@ sub check_list_authz {
 
     $context->{'list_object'} = $self;
 
-    return &Scenario::request_action($operation, $auth_method, $self->{'domain'}, $context, $debug);
+    return &Sympa::Scenario::request_action($operation, $auth_method, $self->{'domain'}, $context, $debug);
 }
 
 ## Initialize internal list cache
@@ -7794,7 +7794,7 @@ sub load_scenario_list {
 	    next if (defined $list_of_scenario{$name});
 	    next if (defined $skip_scenario{$name});
 
-	    my $scenario = new Scenario ('robot' => $robot,
+	    my $scenario = new Sympa::Scenario ('robot' => $robot,
 					 'directory' => $directory,
 					 'function' => $action,
 					 'name' => $name);
@@ -11006,13 +11006,13 @@ sub _load_list_param {
     ## Scenario
     if ($p->{'scenario'}) {
 	$value =~ y/,/_/;
-	my $scenario = new Scenario ('function' => $p->{'scenario'},
+	my $scenario = new Sympa::Scenario ('function' => $p->{'scenario'},
 				     'robot' => $robot, 
 				     'name' => $value, 
 				     'directory' => $directory);
 
 	## We store the path of the scenario in the sstructure
-	## Later &Scenario::request_action() will look for the scenario in %Scenario::all_scenarios through Scenario::new()
+	## Later &Sympa::Scenario::request_action() will look for the scenario in %Sympa::Scenario::all_scenarios through Sympa::Scenario::new()
 	$value = {'file_path' => $scenario->{'file_path'},
 		  'name' => $scenario->{'name'}};
     }elsif ($p->{'task'}) {

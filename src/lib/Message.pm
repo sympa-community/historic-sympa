@@ -45,6 +45,7 @@ use MIME::Parser;
 use Log;
 use Sympa::Conf;
 use Sympa::List;
+use Sympa::Scenario;
 use Sympa::Tools;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
@@ -258,7 +259,7 @@ sub new {
 	$robot = lc($robot);
 	$listname = lc($listname);
 	$robot ||= $Sympa::Conf::Conf{'domain'};
-	my $spam_status = &Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
+	my $spam_status = &Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
 	$message->{'spam_status'} = 'unkown';
 	if(defined $spam_status) {
 	    if (ref($spam_status ) eq 'HASH') {

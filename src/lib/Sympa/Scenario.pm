@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package Scenario;
+package Sympa::Scenario;
 
 use strict;
 
@@ -321,7 +321,7 @@ sub request_action {
 	}
 	
 	## Create Scenario object
-	$scenario = new Scenario ('robot' => $robot, 
+	$scenario = new Sympa::Scenario ('robot' => $robot, 
 				  'directory' => $list->{'dir'},
 				  'file_path' => $scenario_path,
 				  'options' => $context->{'options'});
@@ -345,7 +345,7 @@ sub request_action {
 	if (defined $context->{'scenario'}) { 
 	    
 	    # loading of the structure
-	    $scenario = new Scenario ('robot' => $robot, 
+	    $scenario = new Sympa::Scenario ('robot' => $robot, 
 				      'directory' => $list->{'dir'},
 				      'function' => $operations[$#operations],
 				      'name' => $context->{'scenario'},
@@ -355,7 +355,7 @@ sub request_action {
     }elsif ($context->{'topicname'}) {
 	## Topics
 
-	$scenario = new Scenario ('robot' => $robot, 
+	$scenario = new Sympa::Scenario ('robot' => $robot, 
 				  'function' => 'topics_visibility',
 				  'name' => $Sympa::List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
 				  'options' => $context->{'options'});
@@ -364,7 +364,7 @@ sub request_action {
 	## Global scenario (ie not related to a list) ; example : create_list
 	
 	my $p = &Sympa::Conf::get_robot_conf($robot, $operation);
-	$scenario = new Scenario ('robot' => $robot, 
+	$scenario = new Sympa::Scenario ('robot' => $robot, 
 				  'function' => $operation,
 				  'name' => $p,
 				  'options' => $context->{'options'});
@@ -389,7 +389,7 @@ sub request_action {
 		 'name' => $operation.'.header',
 		 'options' => $context->{'options'});
     $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-    my $include_scenario = new Scenario %param;
+    my $include_scenario = new Sympa::Scenario %param;
     if (defined $include_scenario) {
 	## Add rules at the beginning of the array
 	unshift @rules, @{$include_scenario->{'rules'}};
@@ -403,7 +403,7 @@ sub request_action {
 			 'name' => $include_file,
 			 'options' => $context->{'options'});
 	    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-	    my $include_scenario = new Scenario %param;
+	    my $include_scenario = new Sympa::Scenario %param;
 	    if (defined $include_scenario) {
 		## Removes the include directive and replace it with included rules
 		splice @rules, $index, 1, @{$include_scenario->{'rules'}};

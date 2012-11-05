@@ -37,6 +37,7 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Report;
+use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
@@ -952,7 +953,7 @@ sub info {
 	}
 
 	foreach my $p ('subscribe','unsubscribe','send','review') {
-	  my $scenario = new Scenario ('robot' => $robot,
+	  my $scenario = new Sympa::Scenario ('robot' => $robot,
 				       'directory' => $list->{'dir'},
 				       'file_path' => $list->{'admin'}{$p}{'file_path'}
 				      );
@@ -1542,7 +1543,7 @@ sub remind {
 
     if ($listname eq '*') {
 
-	$result = &Scenario::request_action('global_remind',$auth_method,$robot,
+	$result = &Sympa::Scenario::request_action('global_remind',$auth_method,$robot,
 					{'sender' => $sender });
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	

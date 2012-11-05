@@ -66,6 +66,7 @@ use Sympa::List;
 use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Robot;
+use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -2799,7 +2800,7 @@ sub check_param_in {
     }
      
      ## Check if the current user can create a list.
-     my $result = &Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
+     my $result = &Sympa::Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
 					     {'sender' => $param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}}); 
@@ -8845,7 +8846,7 @@ Sends back the list creation edition form.
 sub do_create_list_request {
      &wwslog('info', 'do_create_list_request()');
 
-     my $result = &Scenario::request_action('create_list',$param->{'auth_method'},$robot,
+     my $result = &Sympa::Scenario::request_action('create_list',$param->{'auth_method'},$robot,
 						       {'sender' => $param->{'user'}{'email'},
 							'remote_host' => $param->{'remote_host'},
 							'remote_addr' => $param->{'remote_addr'}});
@@ -9103,7 +9104,7 @@ sub do_scenario_test {
 	 my $operation = $in{'scenario'};
 	 &wwslog('debug3', 'do_scenario_test: perform scenario_test');
 
-	 my $result = &Scenario::request_action ($operation,$in{'auth_method'},$robot,
+	 my $result = &Sympa::Scenario::request_action ($operation,$in{'auth_method'},$robot,
 					     {'listname' => $in{'listname'},
 					      'sender' => $in{'sender'},
 					      'email' => $in{'email'},
@@ -10869,7 +10870,7 @@ sub do_close_list_request {
 sub do_rename_list_request {
      &wwslog('info', 'do_rename_list_request()');
 
-     my $result = &Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
+     my $result = &Sympa::Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
 					 {'sender' => $param->{'user'}{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
@@ -16566,7 +16567,7 @@ sub export_topics {
 
      my $total = 0;
      foreach my $t (sort {$topics{$a}{'order'} <=> $topics{$b}{'order'}} keys %topics) {
-	 my $result = &Scenario::request_action ('topics_visibility', $param->{'auth_method'},$robot,
+	 my $result = &Sympa::Scenario::request_action ('topics_visibility', $param->{'auth_method'},$robot,
 					     {'topicname' => $t, 
 					      'sender' => $param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
@@ -16676,7 +16677,7 @@ sub do_blacklist {
 sub do_dump_scenario {
      &wwslog('info', "do_dump_scenario($param->{'list'}), $in{'pname'}");
 
-     my $scenario = new Scenario ('function' => $in{'pname'},
+     my $scenario = new Sympa::Scenario ('function' => $in{'pname'},
 				  'robot' => $robot,
 				  'name' => $list->{'admin'}{$in{'pname'}}{'name'},
 				  'directory' => $list->{'dir'});

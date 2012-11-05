@@ -33,13 +33,13 @@ use Time::Local;
 
 use Bulk;
 use Log;
-use Scenario;
 use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Mail;
 use Sympa::Session;
+use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
@@ -970,7 +970,7 @@ sub select_subs {
 	push (@users, $user);
     }
     
-    # parameter of subroutine Scenario::verify
+    # parameter of subroutine Sympa::Scenario::verify
     my $verify_context = {'sender' => 'nobody',
 			  'email' => 'nobody',
 			  'remote_host' => 'unknown_host',
@@ -984,7 +984,7 @@ sub select_subs {
 	# condition rewriting for older and newer
 	$new_condition = "$1($user->{'update_date'}, $2)" if ($condition =~ /(older|newer)\((\d+)\)/ );
 	
-	if (&Scenario::verify ($verify_context, $new_condition) == 1) {
+	if (&Sympa::Scenario::verify ($verify_context, $new_condition) == 1) {
 	    $selection{$user->{'email'}} = undef;
 	    &Log::do_log ('notice', "--> user $user->{'email'} has been selected");
 	}
@@ -1517,7 +1517,7 @@ sub purge_orphan_bounces {
 	 my $verify_context;
 	 $verify_context->{'sender'} = 'nobody';
 
-	 if (&Scenario::verify ($verify_context, $condition) == 1) {
+	 if (&Sympa::Scenario::verify ($verify_context, $condition) == 1) {
 	     unlink ($file);
 	     &Log::do_log ('notice', "--> updating of the $file crl file");
 	     my $cmd = "wget -O \'$file\' \'$url\'";

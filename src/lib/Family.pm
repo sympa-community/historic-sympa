@@ -46,6 +46,7 @@ use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::Scenario;
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
@@ -2895,7 +2896,7 @@ sub is_allowed_to_create_automatic_lists {
     my $listname = $param{'listname'};
     
     # check authorization
-    my $result = &Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},
+    my $result = &Sympa::Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},
 					   {'sender' => $sender, 
 					    'message' => $message, 
 					    'family'=>$self, 

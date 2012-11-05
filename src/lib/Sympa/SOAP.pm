@@ -22,6 +22,7 @@ use Language;
 use Log;
 use Sympa::Auth;
 use Sympa::Conf;
+use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::Tools;
 use Sympa::TT2;
@@ -538,7 +539,7 @@ sub createList {
 	    ->faultdetail("Missing required parameter(s) : $reject");	
     }
     # check authorization
-    my $result = &Scenario::request_action('create_list','md5',$robot,
+    my $result = &Sympa::Scenario::request_action('create_list','md5',$robot,
 					 {'sender' => $sender,
 					  'remote_host' => $ENV{'REMOTE_HOST'},
 					  'remote_addr' =>  $ENV{'REMOTE_ADDR'},

@@ -43,6 +43,7 @@ use Sympa::Constants;
 use Sympa::List;
 use Sympa::Mail;
 use Sympa::Report;
+use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -1218,7 +1219,7 @@ sub process_message {
 	    $auth_level = 'dkim' if $message->{'dkim_pass'};
 	    $auth_level = 'md5' if $message->{'md5_check'};
 	    $auth_level = 'smime' if $message->{'smime_signed'};
-	    my $result = &Scenario::request_action('automatic_list_creation',$auth_level,$robot,
+	    my $result = &Sympa::Scenario::request_action('automatic_list_creation',$auth_level,$robot,
 						   {'sender' => $sender, 
 						    'message' => $message, 
 						    'family'=>$dyn_list_family, 

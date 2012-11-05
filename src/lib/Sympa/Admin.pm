@@ -42,6 +42,7 @@ use Log;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::Scenario;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
@@ -724,7 +725,7 @@ sub rename_list{
     ## Evaluate authorization scenario unless run as listmaster (sympa.pl)
     my ($result, $r_action, $reason); 
     unless ($param{'options'}{'skip_authz'}) {
-      $result = &Scenario::request_action ('create_list',$param{'auth_method'},$param{'new_robot'},
+      $result = &Sympa::Scenario::request_action ('create_list',$param{'auth_method'},$param{'new_robot'},
 					   {'sender' => $param{'user_email'},
 					    'remote_host' => $param{'remote_host'},
 					    'remote_addr' => $param{'remote_addr'}});
