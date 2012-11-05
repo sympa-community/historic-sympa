@@ -219,7 +219,7 @@ if (Site->db_name and Site->db_type) {
 }
 
 ## Now trying to load full config (including database)
-unless (defined Site->load() and defined Robot::get_robots()) {
+unless (defined Robot::get_robots()) {
     Log::fatal_err(
 	'Configuration file %s has errors.',
 	Conf::get_sympa_conf()
@@ -851,6 +851,7 @@ if ($main::options{'dump'}) {
 	&Log::do_log('notice', 'Loading ALL lists...');
 	&List::get_lists($robot, { 'reload_config' => 1 });
     }
+    &Log::do_log('notice', '...Done.');
 
     exit 0;
 }
@@ -1693,7 +1694,8 @@ sub DoMessage{
 	    my $hdr = $message->{'msg'}->head;
 
 
-	    my $messageid = $hdr->get('Message-Id');
+    my $messageid = $hdr->get('Message-Id');
+    chomp $messageid;
 	    my $msg = $message->{'msg'};
 	    my $msg_string = $msg->as_string;
 	    
@@ -1833,8 +1835,14 @@ sub DoMessage{
 	$apply_dkim_signature = 'on' if &tools::is_in_array($list->dkim_signature_apply_on,'dkim_authenticated_messages');
 	
 	my $numsmtp;
-	eval { $numsmtp =$list->distribute_msg('message'=> $message,
-					       'apply_dkim_signature'=>$apply_dkim_signature)};
+	eval {
+	    $numsmtp = $list->distribute_msg('message' => $message,
+		'apply_dkim_signature' => $apply_dkim_signature);
+	};
+	if ($@) {
+	    &Log::do_log('err',
+		'FATAL: Failed to distribute message: %s', $@);
+	}
 	## Keep track of known message IDs...if any
 	$msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
 	

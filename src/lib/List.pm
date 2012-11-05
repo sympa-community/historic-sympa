@@ -3526,8 +3526,8 @@ sub distribute_msg {
     $hdr->add('Errors-to',  $self->get_list_address('return_path'));
     $hdr->add('Precedence', 'list');
     $hdr->add('Precedence', 'bulk');
-    $hdr->add('Sender',     $self->get_list_address('owner'))
-	;   # The Sender: header should be add at least for DKIM compatibility
+    # The Sender: header should be add at least for DKIM compatibility
+    $hdr->add('Sender', $self->get_list_address('owner'));
     $hdr->add('X-no-archive', 'yes');
 
     foreach my $i (@{$self->custom_header}) {
@@ -13828,43 +13828,47 @@ sub AUTOLOAD {
 	    shift->{$attr};
 	};
     } elsif (ref $_[0] and $p = $::pinfo{$attr}) {
-	if (ref $p->{'default'} eq 'HASH' and $p->{'default'}->{'conf'}) {
-	    my $defaultconf = $p->{'default'}->{'conf'};
-
-	    ## getter/setter for list parameters.
-	    no strict "refs";
-	    *{$AUTOLOAD} = sub {
-		my $self = shift;
-
-		croak "Can't call method \"$attr\" on uninitialized " .
-		    (ref $self) . " object"
-		    unless defined $self->{'admin'};
-		$self->{'admin'}{$attr} = shift
-		    if scalar @_;
-
-		if (exists $self->{'admin'}{$attr}) {
-		    $self->{'admin'}{$attr};
-		} else {
-		    $self->{'robot'}->$defaultconf;
-		}
-	    };
+	my ($defaultconf, $default) = ();
+	if (ref $p->{'default'} eq 'HASH') {
+	    $defaultconf = $p->{'default'}->{'conf'};
+	} elsif (exists $p->{'default'}) {
+	    $default = $p->{'default'};
 	} else {
-	    ## getter/setter for list parameters.
-	    no strict "refs";
-	    *{$AUTOLOAD} = sub {
-		my $self = shift;
-
-		croak "Can't call method \"$attr\" on uninitialized " .
-		    (ref $self) . " object"
-		    unless defined $self->{'admin'};
-		$self->{'admin'}{$attr} = shift
-		    if scalar @_;
-
-		$self->{'admin'}{$attr};
-	    };
+	    ##FIXME: defaults of suboptions
 	}
-    } elsif (ref $_[0] and index($attr, '_') != 0 and defined $_[0]->{$attr})
-    {
+	## getter/setter for list parameters.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $self = shift;
+
+	    croak "Can't call method \"$attr\" on uninitialized " .
+		(ref $self) . " object"
+		unless defined $self->{'admin'};
+	    $self->{'admin'}{$attr} = shift
+		if scalar @_;
+
+	    my $ret;
+	    if (exists $self->{'admin'}{$attr}) {
+		$ret = $self->{'admin'}{$attr};
+	    } elsif ($defaultconf) {
+		$ret = $self->{'robot'}->$defaultconf;
+	    } else {
+		$ret = $default;
+	    }
+	    # To avoid "Can't use an undefined value as a XXX reference"
+	    unless (defined $ret) {
+		if ($p->{'split_char'} or
+		    ($p->{'occurrence'} and $p->{'occurrence'} =~ /n/)) {
+		    return [];
+		} elsif (ref $p->{'format'} and
+		    ref $p->{'format'} eq 'HASH') {
+		    return {};
+		}
+	    }
+	    $ret;
+	};
+    } elsif (ref $_[0] and index($attr, '_') != 0 and
+	defined $_[0]->{$attr}) {
 	## getter for unknwon list attributes.
 	## XXX This code would be removed later.
 	&Log::do_log(
