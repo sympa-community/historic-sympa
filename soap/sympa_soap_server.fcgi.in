@@ -9,7 +9,6 @@ use SOAP::Lite;
 ## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()
 use SOAP::Transport::HTTP;
 
-use Language;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;

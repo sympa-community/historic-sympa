@@ -27,7 +27,6 @@ use URI;
 
 use Commands;
 use Family;
-use Language;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
