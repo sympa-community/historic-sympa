@@ -70,7 +70,7 @@ sub new {
 	($parameters{'function'}, $parameters{'name'}) = ($1, $2);
 
     }else {
-	## We can't use &tools::get_filename() because we don't have a List object yet ; it's being constructed
+	## We can't use get_etc_filename() because we don't have a List object yet ; it's being constructed
 	my @dirs = ($Conf::Conf{'etc'}.'/'.$parameters{'robot'}, $Conf::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
 	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
 	foreach my $dir (@dirs) {
@@ -663,12 +663,12 @@ sub verify {
 	    ## Sender's user/subscriber attributes (if subscriber)
 	}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
 	    
-	    $context->{'user'} ||= &List::get_global_user($context->{'sender'});	    
+	    $context->{'user'} ||= User::get_global_user($context->{'sender'});	    
 	    $value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
 	    
 	}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 	    
-	    $context->{'user'} ||= &List::get_global_user($context->{'sender'});
+	    $context->{'user'} ||= User::get_global_user($context->{'sender'});
 	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
 	    
 	}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
@@ -1135,7 +1135,7 @@ sub search{
     
     if ($filter_file =~ /\.sql$/) {
  
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list);
+	my $file = $list->get_etc_filename("search_filters/$filter_file");
 	
         my $timeout = 3600;
         my ($sql_conf, $tsth);
@@ -1219,7 +1219,7 @@ sub search{
  
      }elsif ($filter_file =~ /\.ldap$/) {	
 	## Determine full path of the filter file
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list);
+	my $file = $list->get_etc_filename("search_filters/$filter_file");
 	
 	unless ($file) {
 	    &Log::do_log('err', 'Could not find search filter %s', $filter_file);
@@ -1304,7 +1304,8 @@ sub search{
 
     }elsif($filter_file =~ /\.txt$/){ 
 	# &Log::do_log('info', 'List::search: eval %s', $filter_file);
-	my @files = &tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list); 
+	my @files = $list->get_etc_filename("search_filters/$filter_file",
+	    {'order'=>'all'}); 
 
 	## Raise an error except for blacklist.txt
 	unless (@files) {
@@ -1345,7 +1346,14 @@ sub search{
 sub verify_custom {
 	my ($condition, $args_ref, $robot, $list) = @_;
         my $timeout = 3600;
-	
+
+    ## Compatibility: $robot may be a string
+    unless (ref $robot) {
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	}
+    }
+
 	my $filter = join ('*', @{$args_ref});
 	&Log::do_log('debug2', 'List::verify_custom(%s,%s,%s,%s)', $condition, $filter, $robot, $list);
         if (defined ($persistent_cache{'named_filter'}{$condition}{$filter}) &&
@@ -1355,8 +1363,8 @@ sub verify_custom {
         }
 
     	# use this if your want per list customization (be sure you know what you are doing)
-	#my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list);
-	my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot);
+	#my $file = $list->get_etc_filename("custom_conditions/${condition}.pm");
+	my $file = $robot->get_etc_filename("custom_conditions/${condition}.pm");
 	unless ($file) {
 	    &Log::do_log('err', 'No module found for %s custom condition', $condition);
 	    return undef;

@@ -307,6 +307,7 @@ sub clean_archived_message{
 #    result is stored in $destination_dir
 #    attachement_url is used to link attachement
 #    
+# NOTE: This might be moved to Site package as a mutative method.
 sub convert_single_msg_2_html {
     
     my $data =shift;
@@ -317,15 +318,26 @@ sub convert_single_msg_2_html {
     my $robot = $data->{'robot'};
     my $messagekey = $data->{'messagekey'};
 
-    my $listname =''; my $msg_file;
-    my $host = $robot;
+    ## Compatibility: robot may be a string
+    unless (ref $robot) {
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	}
+    }
+
+    my $listname ='';
+    my $msg_file;
+    #XXXmy $host = $robot;
+    my $host;
     if ($list) {
 	$host = $list->host;
-	$robot = $list->domain;
+	$robot = $list->robot;
 	$listname = $list->name;
-	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
-    }else{
-	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+	$msg_file = $robot->tmpdir . '/' . $list->get_id() . '_' . $$;
+    } else {
+	$host = $robot->host;
+	$listname = '';
+	$msg_file = $robot->tmpdir . '/' . $messagekey . '_' . $$;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it    
@@ -342,7 +354,8 @@ sub convert_single_msg_2_html {
 	    return undef;
 	}
     }
-    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
+    my $mhonarc_ressources = ($list || $robot)->get_etc_filename(
+	'mhonarc-ressources.tt2');
     
     unless ($mhonarc_ressources) {
 &Log::do_log('notice',"Cannot find any MhOnArc ressource file");
@@ -355,8 +368,8 @@ sub convert_single_msg_2_html {
     my $tracepwd = getcwd ;
 
 
-    my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
-    my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
+    my $mhonarc = $robot->mhonarc;
+    my $base_url = $robot->wwsympa_url;
     #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
     #open MSG, ">msg00000.html";
     #&Log::do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");

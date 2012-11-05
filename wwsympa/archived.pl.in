@@ -502,7 +502,7 @@ sub rebuild {
     my $arcpath = &Conf::get_robot_conf($robot,'arc_path');
     &Log::do_log('debug',"Rebuilding $adrlist archive ($2)");
 
-    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list);
+    my $mhonarc_ressources = $list->get_etc_filename('mhonarc-ressources.tt2');
 
     if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 	&set_hidden_mode($tag);
@@ -867,7 +867,7 @@ sub mail2arc {
 	    next;
 	}
 
-	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->domain, $list);
+	my $mhonarc_ressources = $list->get_etc_filename('mhonarc-ressources.tt2');
 	
 	&Log::do_log ('debug',"calling %s for list %s", Site->mhonarc, $list);
 	

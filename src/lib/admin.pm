@@ -40,7 +40,7 @@ use List;
 use Language;
 use Log;
 use tools;
-use Sympa::Constants;
+#use Sympa::Constants; # load in Conf - List
 use File::Copy;
 
 use Data::Dumper;
@@ -119,7 +119,9 @@ Creates a list. Used by the create_list() sub in sympa.pl and the do_create_list
 
 =item * List::has_include_data_sources
 
-=item * List::sync_includetools::get_filename
+=item * List::sync_include
+
+=item * tools::get_filename
 
 =item * Log::do_log
 
@@ -149,7 +151,7 @@ Creates a list. Used by the create_list() sub in sympa.pl and the do_create_list
 #         $param->{'owner_include'} array of hash :
 #              with key source obligatory
 #       - $template : the create list template 
-#       - $robot : the list's robot       
+#       - $robot_id : the list's robot       
 #       - $origin : the source of the command : web, soap or command_line  
 #              no longer used
 # OUT : - hash with keys :
@@ -159,8 +161,17 @@ Creates a list. Used by the create_list() sub in sympa.pl and the do_create_list
 #           are not installed or 1(in status open)
 #######################################################
 sub create_list_old{
+    &Log::do_log('debug2', '(%s, %s, %s, %s, %s)', @_);
     my ($param,$template,$robot,$origin, $user_mail) = @_;
-    &Log::do_log('debug', 'admin::create_list_old(%s,%s)',$param->{'listname'},$robot,$origin);
+
+    ## Compatibility: $robot may be a robot name
+    my $robot_id;
+    unless (ref $robot) {
+	$robot_id = $robot;
+	$robot = Robot->new($robot);
+    } else {
+	$robot_id = $robot->name;
+    }
 
      ## obligatory list parameters 
     foreach my $arg ('listname','subject') {
@@ -183,7 +194,7 @@ sub create_list_old{
     }
     # robot
     unless ($robot) {
-	&Log::do_log('err','admin::create_list_old : missing param "robot"', $robot);
+	&Log::do_log('err','admin::create_list_old : missing param "robot"', $robot_id);
 	return undef;
     }
    
@@ -196,7 +207,7 @@ sub create_list_old{
 	return undef;
     }
 
-    my $regx = &Conf::get_robot_conf($robot,'list_check_regexp');
+    my $regx = $robot->list_check_regexp;
     if( $regx ) {
 	if ($param->{'listname'} =~ /^(\S+)-($regx)$/) {
 	    &Log::do_log('err','admin::create_list_old : incorrect listname %s matches one of service aliases', $param->{'listname'});
@@ -204,52 +215,38 @@ sub create_list_old{
 	}
     }    
 
-    if ($param->{'listname'} eq &Conf::get_robot_conf($robot,'email')) {
+    if ($param->{'listname'} eq $robot->email) {
 	&do_log('err','admin::create_list : incorrect listname %s matches one of service aliases', $param->{'listname'});
 	return undef;
     }
 
     ## Check listname on SMTP server
-    my $res = &list_check_smtp($param->{'listname'}, $robot);
+    my $res = &list_check_smtp($param->{'listname'}, $robot->domain); #FIXME?
     unless (defined $res) {
 	&Log::do_log('err', "admin::create_list_old : can't check list %.128s on %s",
-		$param->{'listname'}, $robot);
+		$param->{'listname'}, $robot->domain);
 	return undef;
     }
     
     ## Check this listname doesn't exist already.
     if( $res || new List ($param->{'listname'}, $robot, {'just_try' => 1})) {
-	&Log::do_log('err', 'admin::create_list_old : could not create already existing list %s on %s for ', 
-		$param->{'listname'}, $robot);
-	foreach my $o (@{$param->{'owner'}}){
-	    &Log::do_log('err',$o->{'email'});
-	}
+	&Log::do_log('err',
+	    'could not create already existing list %s on %s for %s', 
+	    $param->{'listname'}, $robot,
+	    join(', ', map { $_->{'email'} } @{$param->{'owner'} || []}));
 	return undef;
     }
 
 
     ## Check the template supposed to be used exist.
-    my $template_file = &tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot);
+    my $template_file = $robot->get_etc_filename('create_list_templates/' . $template . '/config.tt2');
     unless (defined $template_file) {
 	&Log::do_log('err', 'no template %s found',$template);
 	return undef;
     }
 
      ## Create the list directory
-     my $list_dir;
-
-     # a virtual robot
-     if (-d "$Conf::Conf{'home'}/$robot") {
-	 unless (-d $Conf::Conf{'home'}.'/'.$robot) {
-	     unless (mkdir ($Conf::Conf{'home'}.'/'.$robot,0777)) {
-		 &Log::do_log('err', 'admin::create_list_old : unable to create %s/%s : %s',$Conf::Conf{'home'},$robot,$?);
-		 return undef;
-	     }    
-	 }
-	 $list_dir = $Conf::Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
-     }else {
-	 $list_dir = $Conf::Conf{'home'}.'/'.$param->{'listname'};
-     }
+     my $list_dir = $robot->home . '/' . $param->{'listname'};
 
     ## Check the privileges on the list directory
      unless (mkdir ($list_dir,0777)) {
@@ -259,19 +256,20 @@ sub create_list_old{
     
     ## Check topics
     if ($param->{'topics'}){
-	unless (&check_topics($param->{'topics'},$robot)){
+	unless (&check_topics($param->{'topics'},$robot_id)){
 	    &Log::do_log('err', 'admin::create_list_old : topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
       
     ## Creation of the config file
-    my $host = &Conf::get_robot_conf($robot, 'host');
+    my $host = $robot->host;
     $param->{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $param->{'creation'}{'date_epoch'} = time;
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
        
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','');
+    my $tt2_include_path =
+	$robot->make_tt2_include_path('create_list_templates/' . $template);
 
     ## Lock config before openning the config file
     my $lock = new Lock ($list_dir.'/config');
@@ -329,14 +327,14 @@ sub create_list_old{
     #log in stat_table to make statistics
 
     if($origin eq "web"){
-	&Log::db_stat_log({'robot' => $robot, 'list' => $param->{'listname'}, 'operation' => 'create list', 'parameter' => '', 'mail' => $user_mail, 'client' => '', 'daemon' => 'wwsympa.fcgi'});
+	&Log::db_stat_log({'robot' => $robot_id, 'list' => $param->{'listname'}, 'operation' => 'create list', 'parameter' => '', 'mail' => $user_mail, 'client' => '', 'daemon' => 'wwsympa.fcgi'});
     }
 
     my $return = {};
     $return->{'list'} = $list;
 
     if ($list->{'admin'}{'status'} eq 'open') {
-	$return->{'aliases'} = &install_aliases($list,$robot);
+	$return->{'aliases'} = &install_aliases($list,$robot_id);
     }else{
     $return->{'aliases'} = 1;
     }
@@ -437,7 +435,7 @@ sub create_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{},'config.tt2', $robot,$family);
+    my $template_file = $family->get_etc_filename('config.tt2');
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::create_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
@@ -518,7 +516,7 @@ sub create_list{
 
     ## Create associated files if a template was given.
     for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
-	my $template_file = &tools::get_filename('etc',{},$file.".tt2", $robot,$family);
+	my $template_file = $family->get_etc_filename($file . ".tt2");
 	if (defined $template_file) {
 	    my $file_content;
 	    my $tt_result = &tt2::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
@@ -612,7 +610,7 @@ sub update_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{}, 'config.tt2', $robot,$family);
+    my $template_file = $family->get_etc_filename('config.tt2');
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::update_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
@@ -1447,15 +1445,14 @@ sub change_user_email {
 	    'listowner_email_changed',
 					 {'previous_email' => $in{'current_email'},
 					  'new_email' => $in{'new_email'},
-					  'updated_lists' => keys %updated_lists})
+					  'updated_lists' => keys %updated_lists});
     }
     
     ## Update User_table and remove existing entry first (to avoid duplicate entries)
-    &List::delete_global_user($in{'new_email'},);
-    
-    unless ( &List::update_global_user($in{'current_email'},
-				       {'email' => $in{'new_email'},					
-				       })) {
+    my $oldu = User->new($in{'new_email'});
+    $oldu->expire if $oldu;
+    my $u = User->new($in{'current_email'});
+    unless ($u and $u->moveto($in{'new_mail'})) {
 	&Log::do_log('err','change_email: update failed');
 	return undef;
     }

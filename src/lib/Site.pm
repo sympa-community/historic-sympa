@@ -1,9 +1,14 @@
 ## This package handles Sympa global site
 ## It should :
 ##   * provide access to global conf parameters,
-##   * deliver the list of robots
 
-package Site;
+####
+#### Site_r package
+####
+#### Don't access to the contents of this class directly.  This class is
+#### used by subclasses such as List to exclude autoloading accessors
+#### from inherited methods.
+package Site_r;
 
 use strict;
 use warnings;
@@ -21,12 +26,9 @@ Site - Sympa Site
 
 =cut
 
-our $is_initialized;
-our $use_db;
-our %list_of_robots = ();
 our %listmaster_messages_stack;
 
-=head2 METHODS
+=head2 INITIALIZER
 
 =over 4
 
@@ -66,7 +68,7 @@ sub load {
 	}
 	$opts{'config_file'} = $self->{'etc'} . '/robot.conf';
 	$opts{'robot'}       = $self->{'name'};
-    } elsif ($self eq __PACKAGE__) {
+    } elsif ($self eq 'Site') {
 	$opts{'config_file'} ||= Conf::get_sympa_conf();
 	$opts{'robot'} = '*';
     } else {
@@ -78,10 +80,12 @@ sub load {
     return $result if $opts{'return_result'};
 
     ## Site configuration was successfully initialized.
-    $is_initialized = 1 if !ref $self and $self eq __PACKAGE__;
+    $Site::is_initialized = 1 if !ref $self and $self eq 'Site';
 
     return 1;
 }
+
+=head2 METHODS
 
 =head3 Handling the Authentication Token
 
@@ -114,7 +118,7 @@ sub compute_auth {
 	## Method excluded from inheritance chain
 	croak sprintf 'Can\'t locate object method "%s" via package "%s"',
 	    'compute_auth', ref $self;
-    } elsif ($self eq __PACKAGE__) {
+    } elsif ($self eq 'Site') {
 	$listname = '';
     } else {
 	croak 'bug in logic.  Ask developer';
@@ -141,7 +145,7 @@ Sends an authentification request for a requested
 command.
 
 IN : 
-      -$self : ref(List) | ref(Robot)
+      -$self : ref(List) | "Site"
       -$email(+) : recepient (the personn who asked
                    for the command)
       -$cmd : -signoff|subscribe|add|del|remind if $self is List
@@ -203,7 +207,7 @@ sub request_auth {
 	## Method excluded from inheritance chain
 	croak sprintf 'Can\'t locate object method "%s" via package "%s"',
 	    'request_auth', ref $self;
-    } elsif ($self eq __PACKAGE__) {
+    } elsif ($self eq 'Site') {
 	if ($cmd eq 'remind') {
 	    my $keyauth = $self->compute_auth('', $cmd);
 	    $data->{'command'} = "auth $keyauth $cmd *";
@@ -222,6 +226,207 @@ sub request_auth {
     }
 
     return 1;
+}
+
+=head3 Finding config files and templates
+
+=over 4
+
+=item get_etc_filename
+
+    # To get file name for global site
+    $file = Site->get_etc_filename($name);
+    # To get file name for a robot
+    $file = $robot->get_etc_filename($name);
+    # To get file name for a family
+    $file = $family->get_etc_filename($name);
+    # To get file name for a list
+    $file = $list->get_etc_filename($name);
+
+Look for a file in the list > robot > server > default locations.
+
+Possible values for $options : order=all
+
+=back
+
+=cut
+
+sub get_etc_filename {
+    &Log::do_log('debug3', '(%s, %s, %s)', @_);
+    my $self    = shift;
+    my $name    = shift;
+    my $options = shift || {};
+
+    if (ref $self eq 'List') {
+	;
+    } elsif (ref $self eq 'Family') {
+	;
+    } elsif (ref $self eq 'Robot') {
+	;
+    } elsif ($self eq 'Site') {
+	;
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+
+    my (@try, $default_name);
+
+    ## template refers to a language
+    ## => extend search to default tpls
+    ## FIXME: family path precedes to list path.  Is it appropriate?
+    ## FIXME: Should language subdirectories be searched?
+    if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
+	$default_name = $1 . '.tt2';
+	@try =
+	    map { ($_ . $name, $_ . $default_name) }
+	    @{$self->make_tt2_include_path};
+    } else {
+	@try = map { $_ . $name } @{$self->make_tt2_include_path};
+    }
+
+    my @result;
+    foreach my $f (@try) {
+	if (-r $f) {
+	    &Log::do_log('debug3', 'name: %s ; dir %s', $name, $f);
+	    if ($options->{'order'} eq 'all') {
+		push @result, $f;
+	    } else {
+		return $f;
+	    }
+	}
+    }
+    if ($options->{'order'} eq 'all') {
+	return @result;
+    }
+
+    return undef;
+}
+
+=over 4
+
+=item make_tt2_include_path
+
+    # To make include path for global site
+    @path = @{Site->make_tt2_include_path};
+    # To make include path for a robot
+    @path = @{$robot->make_tt2_include_path};
+    # To make include path for a family
+    @path = @{$family->make_tt2_include_path};
+    # To make include path for a list
+    @path = @{$list->make_tt2_include_path};
+
+make an array of include path for tt2 parsing
+
+IN :
+      -$self(+) : ref(List) | ref(Family) | ref(Robot) | "Site"
+      -$dir : directory ending each path
+      -$lang : lang
+
+OUT : ref(ARRAY) of tt2 include path
+
+=back
+
+=cut
+
+sub _make_tt2_include_path {
+    &Log::do_log('debug3', '(%s, %s, %s)', @_);
+    my $self = shift;
+    my ($dir, $lang) = @_;
+
+    my @include_path;
+
+    if (ref $self and ref $self eq 'List') {
+	my $path_list;
+	my $path_family;
+	@include_path = $self->robot->_make_tt2_include_path(@_);
+
+	if ($dir) {
+	    $path_list = $self->dir . '/' . $dir;
+	} else {
+	    $path_list = $self->dir;
+	}
+	if ($lang) {
+	    unshift @include_path, $path_list . '/' . $lang, $path_list;
+	} else {
+	    unshift @include_path, $path_list;
+	}
+
+	if (defined $self->family) {
+	    my $family = $self->family;
+	    if ($dir) {
+		$path_family = $family->dir . '/' . $dir;
+	    } else {
+		$path_family = $family->dir;
+	    }
+	    if ($lang) {
+		unshift @include_path,
+		    $path_family . '/' . $lang, $path_family;
+	    } else {
+		unshift @include_path, $path_family;
+	    }
+	}
+    } elsif (ref $self and ref $self eq 'Family') {
+	my $path_family;
+	@include_path = $self->robot->_make_tt2_include_path(@_);
+
+	if ($dir) {
+	    $path_family = $self->dir . '/' . $dir;
+	} else {
+	    $path_family = $self->dir;
+	}
+	if ($lang) {
+	    unshift @include_path, $path_family . '/' . $lang, $path_family;
+	} else {
+	    unshift @include_path, $path_family;
+	}
+    } elsif (ref $self and ref $self eq 'Robot') {
+	my $path_robot;
+	@include_path = Site->_make_tt2_include_path(@_);
+
+	if ($self->etc ne Site->etc) {
+	    if ($dir) {
+		$path_robot = $self->etc . '/' . $dir;
+	    } else {
+		$path_robot = $self->etc;
+	    }
+	    if ($lang) {
+		unshift @include_path, $path_robot . '/' . $lang, $path_robot;
+	    } else {
+		unshift @include_path, $path_robot;
+	    }
+	}
+    } elsif ($self eq 'Site') {
+	my $path_etcbindir;
+	my $path_etcdir;
+
+	if ($dir) {
+	    $path_etcbindir = Sympa::Constants::DEFAULTDIR . '/$dir';
+	    $path_etcdir    = Site->etc . '/' . $dir;
+	} else {
+	    $path_etcbindir = Sympa::Constants::DEFAULTDIR;
+	    $path_etcdir    = Site->etc;
+	}
+	if ($lang) {
+	    @include_path = (
+		$path_etcdir . '/' . $lang,    $path_etcdir,
+		$path_etcbindir . '/' . $lang, $path_etcbindir
+	    );
+	} else {
+	    @include_path = ($path_etcdir, $path_etcbindir);
+	}
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+
+    return @include_path;
+}
+
+sub make_tt2_include_path {
+    &Log::do_log('debug3', '(%s, %s, %s)', @_);
+    my $self = shift;
+    ## Not always expose viewmail directory.
+    ##return [Site->viewmail_dir, $self->_make_tt2_include_path(@_)];
+    return [$self->_make_tt2_include_path(@_)];
 }
 
 =head3 Sending Notifications
@@ -378,7 +583,7 @@ certificate
 Note: List::send_global_file() was deprecated.
 
 IN :
-      -$self (+): ref(List) | ref(Robot) | ref(conf)
+      -$self (+): ref(List) | ref(Robot) | "Site"
       -$tpl (+): template file name (file.tt2),
          without tt2 extension
       -$who (+): SCALAR |ref(ARRAY) - recipient(s)
@@ -418,7 +623,7 @@ sub send_file {
 	$robot    = $self;
 	$list     = '';
 	$robot_id = $self->name;
-    } elsif ($self eq __PACKAGE__) {
+    } elsif ($self eq 'Site') {
 	$robot    = $self;
 	$list     = '';
 	$robot_id = '*';
@@ -470,8 +675,8 @@ sub send_file {
 	    }
 	}
 
-	unless ($data->{'user'}{'password'}) {
-	    $data->{'user'}{'password'} = &tools::tmp_passwd($who);
+	unless ($data->{'user'}->password) {
+	    $data->{'user'}->password(&tools::tmp_passwd($who));
 	}
 
 	if (ref $self eq 'List') {
@@ -530,15 +735,15 @@ sub send_file {
     }
 
     $data->{'conf'} ||= {};
-    $data->{'conf'}{'email'}            = $robot->email;
-    $data->{'conf'}{'email_gecos'}      = $robot->email_gecos;
-    $data->{'conf'}{'host'}             = $robot->host;
-    $data->{'conf'}{'sympa'}            = $robot->sympa;
-    $data->{'conf'}{'request'}          = $robot->request;
-    $data->{'conf'}{'listmaster'}       = $robot->listmaster;
-    $data->{'conf'}{'wwsympa_url'}      = $robot->wwsympa_url;
-    $data->{'conf'}{'title'}            = $robot->title;
-    $data->{'conf'}{'listmaster_email'} = $robot->listmaster_email;
+    foreach my $p (
+	'email',       'email_gecos',
+	'host',        'sympa',
+	'request',     'listmaster',
+	'wwsympa_url', 'title',
+	'listmaster_email'
+	) {
+	$data->{'conf'}{$p} = $robot->$p;
+    }
 
     $data->{'sender'} ||= $who;
 
@@ -623,6 +828,7 @@ listmaster_notification.tt2 template
 Note: List::send_notify_to_listmaster() was deprecated.
 
 IN :
+       -$self (+): ref(Robot) | "Site"
        -$operation (+): notification type
        -$param(+) : ref(HASH) | ref(ARRAY)
         values for template parsing
@@ -651,7 +857,7 @@ sub send_notify_to_listmaster {
 	    'send_notify_to_listmaster', ref $self;
     } elsif (ref $self and ref $self eq 'Robot') {
 	$robot_id = $self->name;
-    } elsif ($self eq __PACKAGE__) {
+    } elsif ($self eq 'Site') {
 	$robot_id = '*';
     } else {
 	croak 'bug in logic.  Ask developer';
@@ -661,7 +867,7 @@ sub send_notify_to_listmaster {
 	foreach my $robot_id (keys %listmaster_messages_stack) {
 	    my $robot;
 	    if (!$robot_id or $robot_id eq '*') {
-		$robot = __PACKAGE__;
+		$robot = 'Site';
 	    } else {
 		$robot = Robot->new($robot_id);
 	    }
@@ -876,6 +1082,28 @@ sub send_notify_to_listmaster {
     return 1;
 }
 
+###### END of the Site_r package ######
+
+####
+#### Site class
+####
+#### This implements accessor methods to global config
+####
+package Site;
+
+use strict;
+use warnings;
+use Carp qw(croak);
+
+our @ISA = qw(Site_r);
+
+####
+#### global variables
+####
+our $is_initialized;
+our $use_db;
+our %list_of_robots = ();
+
 =head3 ACCESSORS
 
 =over 4
@@ -891,6 +1119,8 @@ Some parameters may be vary by each robot from default value given by these
 methods.  Use C<$robot-E<gt>>E<lt>config parameterE<gt> accessors instead.
 See L<Robot/ACCESSORS>.
 
+=item list_check_regexp
+
 =item locale2charset
 
 =item pictures_path
@@ -899,10 +1129,12 @@ See L<Robot/ACCESSORS>.
 
 =item robots
 
+=item robot_by_http_host
+
 =item sympa
 
 I<Getters>.
-Gets config parameters for internal use.
+Gets derived config parameters.
 
 =back
 
@@ -965,7 +1197,7 @@ sub AUTOLOAD {
 	} elsif ($self eq 'Site') {
 	    ## getter for internal config parameters.
 	    croak "Can't call method \"$attr\" on uninitialized $self class"
-		unless $is_initialized;
+		unless $Site::is_initialized;
 	    croak "Can't modify \"$attr\" attribute"
 		if scalar @_ > 1;
 	    $Conf::Conf{$attr};
@@ -990,14 +1222,26 @@ In scalar context, returns arrayref to them.
 =cut
 
 sub listmasters {
-    my $pkg = shift;
-    croak "Can't call method \"listmasters\" on uninitialized $pkg class"
-	unless $is_initialized;
+    my $self = shift;
+
     croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
-    if (wantarray) {
-	return @{$Conf::Conf{'listmasters'} || []};
+    if (ref $self and ref $self eq 'Robot') {
+	if (wantarray) {
+	    @{Site->robots->{$self->domain}{'listmasters'} || []};
+	} else {
+	    Site->robots->{$self->domain}{'listmasters'};
+	}
+    } elsif ($self eq 'Site') {
+	croak "Can't call method \"listmasters\" on uninitialized $self class"
+	    unless $Site::is_initialized;
+
+	if (wantarray) {
+	    @{$Conf::Conf{'listmasters'} || []};
+	} else {
+	    $Conf::Conf{'listmasters'};
+	}
     } else {
-	return $Conf::Conf{'listmasters'};
+	croak 'bug in loginc.  Ask developer';
     }
 }
 

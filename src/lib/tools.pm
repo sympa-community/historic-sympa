@@ -362,31 +362,33 @@ sub checkcommand {
    return 0;
 }
 
-
-
 ## return a hash from the edit_list_conf file
+## NOTE: this might be moved to List only where this is used.
 sub load_edit_list_conf {
-    my $robot = shift;
-    my $list = shift;
-    &Log::do_log('debug2', 'tools::load_edit_list_conf (%s)',$robot);
+    &Log::do_log('debug2', '(%s)', @_);
+    my $self  = shift;
+    my $robot = $self->robot;
 
     my $file;
-    my $conf ;
-    
-    return undef 
-	unless ($file = &tools::get_filename('etc',{},'edit_list.conf',$robot,$list));
+    my $conf;
 
-    unless (open (FILE, $file)) {
-	&Log::do_log('info','Unable to open config file %s', $file);
+    return undef
+	unless ($file = $self->get_etc_filename('edit_list.conf'));
+
+    my $fh;
+    unless (open $fh, '<', $file) {
+	&Log::do_log('info', 'Unable to open config file %s', $file);
 	return undef;
     }
 
     my $error_in_conf;
-    my $roles_regexp = 'listmaster|privileged_owner|owner|editor|subscriber|default';
-    while (<FILE>) {
+    my $roles_regexp =
+	'listmaster|privileged_owner|owner|editor|subscriber|default';
+    while (<$fh>) {
 	next if /^\s*(\#.*|\s*)$/;
 
-	if (/^\s*(\S+)\s+(($roles_regexp)\s*(,\s*($roles_regexp))*)\s+(read|write|hidden)\s*$/i) {
+	if (/^\s*(\S+)\s+(($roles_regexp)\s*(,\s*($roles_regexp))*)\s+(read|write|hidden)\s*$/i
+	    ) {
 	    my ($param, $role, $priv) = ($1, $2, $6);
 	    my @roles = split /,/, $role;
 	    foreach my $r (@roles) {
@@ -394,40 +396,48 @@ sub load_edit_list_conf {
 		if ($r eq 'default') {
 		    $error_in_conf = 1;
 		    &Log::do_log('notice', '"default" is no more recognised');
-		    foreach my $set ('owner','privileged_owner','listmaster') {
+		    foreach
+			my $set ('owner', 'privileged_owner', 'listmaster') {
 			$conf->{$param}{$set} = $priv;
 		    }
 		    next;
 		}
 		$conf->{$param}{$r} = $priv;
 	    }
-	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
-		Site->etc . '/edit_list.conf', $_);
+	} else {
+	    &Log::do_log('info', 'unknown parameter in %s  (Ignored) %s',
+		$file, $_);
 	    next;
 	}
     }
 
     if ($error_in_conf) {
-	unless (Robot->new($robot)->send_notify_to_listmaster(
-	    'edit_list_error', [$file])) {
-	    &Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
+	unless ($robot->send_notify_to_listmaster('edit_list_error', $file)) {
+	    &Log::do_log('notice',
+		"Unable to send notify 'edit_list_error' to listmaster");
 	}
     }
-    
-    close FILE;
+
+    close $fh;
     return $conf;
 }
 
-
 ## return a hash from the edit_list_conf file
+## NOTE: This might be moved to wwslib along with get_list_list_tpl().
 sub load_create_list_conf {
     my $robot = shift;
+
+    ## Compatibility: $robot may be a string
+    unless (ref $robot) {
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	}
+    }
 
     my $file;
     my $conf ;
     
-    $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot);
+    $file = $robot->get_etc_filename('create_list.conf');
     unless ($file) {
 	&Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
 	return undef;
@@ -453,19 +463,7 @@ sub load_create_list_conf {
     return $conf;
 }
 
-sub _add_topic {
-    my ($name, $title) = @_;
-    my $topic = {};
-
-    my @tree = split '/', $name;
-    if ($#tree == 0) {
-	return {'title' => $title};
-    }else {
-	$topic->{'sub'}{$name} = &_add_topic(join ('/', @tree[1..$#tree]), $title);
-	return $topic;
-    }
-}
-
+## NOTE: This might be moved to wwslib.
 sub get_list_list_tpl {
     my $robot = shift;
 
@@ -623,6 +621,7 @@ sub shift_file {
     return ($file.'.'.$file_extention);
 }
 
+## NOTE: this might be moved to wwslib.
 sub get_templates_list {
 
     my $type = shift;
@@ -690,6 +689,7 @@ sub get_templates_list {
 
 
 # return the path for a specific template
+## NOTE: this might be moved to wwslib.
 sub get_template_path {
 
     my $type = shift;
@@ -2254,180 +2254,25 @@ sub duration_conv {
 
 ## Look for a file in the list > robot > server > default locations
 ## Possible values for $options : order=all
+## OBSOLETED: use $list->get_etc_filename(), $family->get_etc_filename(),
+##   $robot->get_etc_filaname() or Site->get_etc_filename().
 sub get_filename {
     my ($type, $options, $name, $robot, $object) = @_;
-    my $list;
-    my $family;
-    &Log::do_log('debug3','tools::get_filename(%s,%s,%s,%s,%s)', $type,  join('/',keys %$options), $name, $robot, $object->{'name'});
 
-    
-    if (ref($object) eq 'List') {
- 	$list = $object;
- 	if ($list->family_name) {
- 	    unless ($family = $list->family) {
- 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config', $list, $list->family_name);
- 		$list->set_status_error_config('no_list_family',
-					       $list->family_name);
- 		return undef;
- 	    }  
- 	}
-    }elsif (ref($object) eq 'Family') {
- 	$family = $object;
-    }
-    
-    if ($type eq 'etc') {
-	my (@try, $default_name);
-	
-	## template refers to a language
-	## => extend search to default tpls
-	if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
-	    $default_name = $1.'.tt2';
-	    
-	    @try = (
-            $Conf::Conf{'etc'} . "/$robot/$name",
-		    $Conf::Conf{'etc'} . "/$robot/$default_name",
-		    $Conf::Conf{'etc'} . "/$name",
-		    $Conf::Conf{'etc'} . "/$default_name",
-		    Sympa::Constants::DEFAULTDIR . "/$name",
-		    Sympa::Constants::DEFAULTDIR . "/$default_name");
-	}else {
-	    @try = (
-            $Conf::Conf{'etc'} . "/$robot/$name",
-		    $Conf::Conf{'etc'} . "/$name",
-		    Sympa::Constants::DEFAULTDIR . "/$name"
-        );
-	}
-	
-	if ($family) {
- 	    ## Default tpl
- 	    if ($default_name) {
-		unshift @try, $family->{'dir'}.'/'.$default_name;
-	    }
-	}
-	
-	unshift @try, $family->{'dir'}.'/'.$name;
-    
-	if ($list->{'name'}) {
-	    ## Default tpl
-	    if ($default_name) {
-		unshift @try, $list->{'dir'}.'/'.$default_name;
-	    }
-	    
-	    unshift @try, $list->{'dir'}.'/'.$name;
-	}
-	my @result;
-	foreach my $f (@try) {
-	    &Log::do_log('debug3','get_filename : name: %s ; dir %s', $name, $f  );
-	    if (-r $f) {
-		if ($options->{'order'} eq 'all') {
-		    push @result, $f;
-		}else {
-		    return $f;
-		}
-	    }
-	}
-	if ($options->{'order'} eq 'all') {
-	    return @result ;
-	}
-    }
-    
-    #&Log::do_log('notice','tools::get_filename: Cannot find %s in %s', $name, join(',',@try));
-    return undef;
-}
-####################################################
-# make_tt2_include_path
-####################################################
-# make an array of include path for tt2 parsing
-# 
-# IN -$robot(+) : robot
-#    -$dir : directory ending each path
-#    -$lang : lang
-#    -$list : ref(List)
-#
-# OUT : ref(ARRAY) of tt2 include path
-#
-######################################################
-sub make_tt2_include_path {
-    my ($robot,$dir,$lang,$list) = @_;
-
-    my $listname;
-    if (ref $list eq 'List') {
-	$listname = $list->{'name'};
+    if (ref $object) {
+	return $object->get_etc_filename($name, $options);
+    } elsif (ref $robot) {
+	return $robot->get_etc_filename($name, $options);
+    } elsif ($robot and $robot ne '*') {
+	return Robot->new($robot)->get_etc_filename($name, $options);
     } else {
-	$listname = $list;
+	return Site->get_etc_filename($name, $options);
     }
-    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s)', $robot, $dir, $lang, $listname);
-
-    my @include_path;
-
-    my $path_etcbindir;
-    my $path_etcdir;
-    my $path_robot;  ## optional
-    my $path_list;   ## optional
-    my $path_family; ## optional
-
-    if ($dir) {
-	$path_etcbindir = Sympa::Constants::DEFAULTDIR . "/$dir";
-	$path_etcdir = "$Conf::Conf{'etc'}/".$dir;
-	$path_robot = "$Conf::Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'domain'}));
-	if (ref($list) eq 'List'){
-	    $path_list = $list->dir . '/' . $dir;
-	    if (defined $list->family_name) {
-		my $family = $list->family;
-	        $path_family = $family->{'dir'}.'/'.$dir;
-	    }
-	} 
-    }else {
-	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
-	$path_etcdir = "$Conf::Conf{'etc'}";
-	$path_robot = "$Conf::Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf::Conf{'domain'}));
-	if (ref($list) eq 'List') {
-	    $path_list = $list->dir;
-	    if (defined $list->family_name) {
-		my $family = $list->family;
-	        $path_family = $family->{'dir'};
-	    }
-	}
-    }
-    if ($lang) {
-	@include_path = ($path_etcdir.'/'.$lang,
-			 $path_etcdir,
-			 $path_etcbindir.'/'.$lang,
-			 $path_etcbindir);
-	if ($path_robot) {
-	    unshift @include_path,$path_robot;
-	    unshift @include_path,$path_robot.'/'.$lang;
-	}
-	if ($path_list) {
-	    unshift @include_path,$path_list;
-	    unshift @include_path,$path_list.'/'.$lang;
-
-	    if ($path_family) {
-		unshift @include_path,$path_family;
-		unshift @include_path,$path_family.'/'.$lang;
-	    }	
-	    
-	}
-    }else {
-	@include_path = ($path_etcdir,
-			 $path_etcbindir);
-
-	if ($path_robot) {
-	    unshift @include_path,$path_robot;
-	}
-	if ($path_list) {
-	    unshift @include_path,$path_list;
-	   
-	    if ($path_family) {
-		unshift @include_path,$path_family;
-	    }
-	}
-    }
-
-    unshift @include_path,$Conf::Conf{'viewmaildir'};
-    return \@include_path;
-
 }
+
+## sub make_tt2_include_path
+## OBSOLETED: use $list->make_tt2_include_path(),
+##    $robot->make_tt2_include_path() or Site->make_tt2_include_path().
 
 ## Find a file in an ordered list of directories
 sub find_file {

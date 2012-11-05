@@ -21,9 +21,8 @@
 
 package Commands;
 
-#XXXuse strict 'subs';
 use strict;
-
+use warnings;
 use Exporter;
 use Digest::MD5;
 use Fcntl;
@@ -207,8 +206,9 @@ sub help {
 
 	$data->{'is_owner'}  = 1 if ($#owner > -1);
 	$data->{'is_editor'} = 1 if ($#editor > -1);
-	$data->{'user'}      = User->new($sender);
-	&Language::SetLang($data->{'user'}->lang) if $data->{'user'}->lang;
+	$data->{'user'} = User::get_global_user($sender);
+	&Language::SetLang($data->{'user'}{'lang'})
+	    if $data->{'user'}{'lang'};
 	$data->{'subject'}        = gettext("User guide");
 	$data->{'auto_submitted'} = 'auto-replied';
 
@@ -1105,11 +1105,9 @@ sub subscribe {
 
 	if ($Site::use_db) {
 	    my $u = User->new($sender);
-	    $u->save(
-		'lang' => ($u->lang || $list->lang),
-		'password' =>
-		    ($u->{'password'} || &tools::tmp_passwd($sender))
-	    );
+	    $u->lang($list->lang) unless $u->lang;
+	    $u->password(&tools::tmp_passwd($sender)) unless $u->password;
+	    $u->save;
 	}
 
 	## Now send the welcome file to the user
@@ -1741,10 +1739,9 @@ sub add {
 
 	if ($Site::use_db) {
 	    my $u = User->new($email);
-	    $u->save(
-		'lang'     => ($u->lang     || $list->lang),
-		'password' => ($u->password || &tools::tmp_passwd($email))
-	    );
+	    $u->lang($list->lang) unless $u->lang;
+	    $u->password(&tools::tmp_passwd($email)) unless $u->password;
+	    $u->save;
 	}
 
 	## Now send the welcome file to the user if it exists and notification is supposed to be sent.
@@ -2298,7 +2295,7 @@ sub remind {
 	    &Log::do_log('debug2', 'Sending REMIND * to %d users', $count);
 
 	    foreach my $email (keys %global_subscription) {
-		my $user = User->new($email);
+		my $user = User::get_global_user($email);
 		foreach my $key (keys %{$user}) {
 		    $global_info{$email}{$key} = $user->{$key}
 			if ($user->{$key});

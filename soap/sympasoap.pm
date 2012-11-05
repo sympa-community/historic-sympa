@@ -444,7 +444,7 @@ sub info {
     my $user;
 
     # Part of the authorization code
-    $user = &List::get_global_user($sender);
+    $user = User::get_global_user($sender);
      
     my $result = $list->check_list_authz('info','md5',
 					 {'sender' => $sender,
@@ -571,8 +571,8 @@ sub createList {
     # prepare parameters
     my $param = {};
     $param->{'user'}{'email'} = $sender;
-    if (&List::is_global_user($param->{'user'}{'email'})) {
-	$param->{'user'} = &List::get_global_user($sender);
+    if (User::is_global_user($param->{'user'}{'email'})) {
+	$param->{'user'} = User::get_global_user($sender);
     }
     my $parameters;
     $parameters->{'creation_email'} =$sender;
@@ -937,7 +937,7 @@ sub review {
     my $user;
 
     # Part of the authorization code
-    $user = &List::get_global_user($sender);
+    $user = User::get_global_user($sender);
      
     my $result = $list->check_list_authz('review','md5',
 					 {'sender' => $sender,
@@ -1148,7 +1148,7 @@ sub signoff {
     $list = new List ($listname, $robot);
     
     # Part of the authorization code
-    my $user = &List::get_global_user($sender);
+    my $user = User::get_global_user($sender);
     
     my $result = $list->check_list_authz('unsubscribe','md5',
 					 {'email' => $sender,
@@ -1337,9 +1337,9 @@ sub subscribe {
       }
       
       if ($Site::use_db) {
-	  my $u = &List::get_global_user($sender);
+	  my $u = User::get_global_user($sender);
 	  
-	  &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
+	  User::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
 					  });
       }
       
@@ -1527,15 +1527,15 @@ sub struct_to_soap {
 
 sub get_reason_string {
     my ($reason,$robot) = @_;
+    my $robot = Robot->new($robot) unless ref $robot; # compat.
 
     my $data = {'reason' => $reason };
     my $string;
-    my $tt2_include_path =  &tools::make_tt2_include_path($robot,'mail_tt2','','');
+    my $tt2_include_path = $robot->make_tt2_include_path('mail_tt2');
 
     unless (&tt2::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &tt2::get_error();
-	Robot->new($robot)->send_notify_to_listmaster(
-	    'web_tt2_error', [$error]);
+	$robot->send_notify_to_listmaster('web_tt2_error', [$error]);
 	&Log::do_log('info', "get_reason_string : error parsing");
 	return '';
     }

@@ -1,8 +1,8 @@
 ## This package handles Sympa virtual robots
 ## It should :
 ##   * provide access to robot conf parameters,
-##   * deliver the list of lists
-##   * determine the current robot, given a host
+##   * determine the current robot, given a domain
+##   * deliver the list of robots
 package Robot;
 
 use strict;
@@ -27,7 +27,7 @@ Robot - robot of mailing list service
 
 =head1 DESCRIPTION
 
-=head2 CONSTRUCTOR
+=head2 CONSTRUCTOR AND INITIALIZER
 
 =over 4
 
@@ -78,8 +78,6 @@ sub new {
 
     return $robot;
 }
-
-=head2 METHODS
 
 =over 4
 
@@ -195,6 +193,8 @@ sub load {
     return 1;
 }
 
+=head2 METHODS
+
 =over 4
 
 =item get_id
@@ -234,6 +234,19 @@ sub is_listmaster {
 
     return 0;
 }
+
+=over 4
+
+=item make_tt2_include_path
+
+make an array of include path for tt2 parsing.
+See L<Site/make_tt2_include_path>.
+
+=back
+
+=cut
+
+## Inherited from Site class.
 
 =over 4
 
@@ -287,6 +300,8 @@ robot.
 I<Getters>.
 Get profile of robot.
 
+=item list_check_regexp
+
 =item pictures_path
 
 =item request
@@ -294,13 +309,14 @@ Get profile of robot.
 =item sympa
 
 I<Getters>.
-Gets config parameters for internal use.
+Gets derived config parameters.
 
 =back
 
 =cut
 
-#XXour $AUTOLOAD;
+#XXXour $AUTOLOAD;
+## AUTOLOAD method will be inherited from Site class
 
 sub DESTROY;
 
@@ -316,15 +332,7 @@ In array context, returns array of them.
 
 =cut
 
-sub listmasters {
-    my $self = shift;
-    croak "Can't modify \"listmasters\" attribute" if scalar @_;
-    if (wantarray) {
-	@{Site->robots->{$self->domain}{'listmasters'} || []};
-    } else {
-	Site->robots->{$self->domain}{'listmasters'};
-    }
-}
+## Inherited from Site class
 
 =head2 FUNCTIONS
 
@@ -372,7 +380,7 @@ sub get_robots {
 	next unless -d $vhost_etc;
 	next unless -f $vhost_etc . '/robot.conf';
 
-	unless ($robot = __PACKAGE__->new($name, %options)) {
+	unless ($robot = Robot->new($name, %options)) {
 	    closedir $dir;
 	    return undef;
 	    $exiting = 1;
@@ -386,7 +394,7 @@ sub get_robots {
     closedir $dir;
 
     unless ($got_default) {
-	unless ($robot = __PACKAGE__->new(Site->domain, %options)) {
+	unless ($robot = Robot->new(Site->domain, %options)) {
 	    return undef;
 	    $exiting = 1;
 	} else {

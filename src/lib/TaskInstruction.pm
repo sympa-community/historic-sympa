@@ -672,7 +672,7 @@ sub purge_user_table {
     &Log::do_log('debug2','purge_user_table()');
 
     ## Load user_table entries
-    my @users = &List::get_all_global_user();
+    my @users = User::get_all_global_user();
 
     ## Load known subscribers/owners/editors
     my %known_people;
@@ -720,7 +720,7 @@ sub purge_user_table {
     }
     
     unless ($#purged_users < 0) {
-		unless (&List::delete_global_user(@purged_users)) {
+		unless (User::delete_global_user(@purged_users)) {
 			$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Failed to delete users'});
 			return undef;
 		}

@@ -38,15 +38,17 @@ use strict;
 use XML::LibXML;
 
 use List;
-use Conf;
+#use Conf; # load in List - Robot - Site
 use Language;
-use Log;
+#use Log; # load in Conf
 use admin;
 use Config_XML;
 use File::Copy;
-use Sympa::Constants;
+#use Sympa::Constants; # load in Conf - confdef
 
 use Term::ProgressBar;
+
+our @ISA = qw(Site_r); # not fully inherit Robot.
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
@@ -2959,6 +2961,107 @@ sub insert_delete_exclusion {
     }
    
     return 1;
+}
+
+=pod
+
+=head1 Inherited Methods
+
+=head2 get_etc_filename
+
+=over
+
+See L<Site/get_etc_filename>.
+
+=back
+
+=head2 make_tt2_include_path
+
+=over
+
+See L<Site/make_tt2_include_path>.
+
+=back
+
+=cut
+
+## Inherited from Site_r class
+
+=pod
+
+=head1 Accessors
+
+=head2 dir
+
+=head2 domain
+
+=head2 name
+
+=head2 robot
+
+=over
+
+I<Getters>.
+Gets attributes of family object.
+
+Note: C<robot> accessor returns L<Robot> object.
+To get robot name of family, use C<domain> accessor.
+
+=back
+
+=head2 status
+
+=over
+
+I<Getter/Setter>.
+Gets or sets status.
+
+=back
+
+=cut
+
+sub dir {
+    shift->{'dir'};
+}
+
+sub domain {
+    shift->{'robot'};
+}
+
+sub name {
+    shift->{'name'};
+}
+
+sub robot {
+    Robot->new(shift->domain);
+}
+
+sub state {
+    my $self = shift;
+    if (scalar @_) {
+	$self->{'state'} = shift;
+    }
+    $self->{'state'};
+}
+
+=head1 Miscelaneous Methods
+
+=head2 get_id
+
+=over
+
+Get unique identifier of family.
+
+=back
+
+=cut
+
+sub get_id {
+    my $self = shift;
+
+    return '' unless $self->{'name'} and $self->{'robot'};
+    return sprintf '%s@%s',
+	$self->{'name'}, Robot->new($self->{'robot'})->get_id;
 }
 
 =pod 

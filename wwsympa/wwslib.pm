@@ -223,15 +223,15 @@ sub init_passwd {
     
     my ($passwd, $user);
     
-    if (&List::is_global_user($email)) {
-	$user = &List::get_global_user($email);
+    if (User::is_global_user($email)) {
+	$user = User::get_global_user($email);
 	
 	$passwd = $user->{'password'};
 	
 	unless ($passwd) {
 	    $passwd = &new_passwd();
 	    
-	    unless ( &List::update_global_user($email,
+	    unless ( User::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
 		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
@@ -241,7 +241,7 @@ sub init_passwd {
 	}
     }else {
 	$passwd = &new_passwd();
-	unless ( &List::add_global_user({'email' => $email,
+	unless ( User::add_global_user({'email' => $email,
 				     'password' => $passwd,
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {

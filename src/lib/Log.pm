@@ -110,7 +110,8 @@ sub do_log {
     for (my $i = 0; $i < scalar @n; $i++) {
 	my $p = $_[$i];
 	unless (defined $p) {
-	    push @param, ''; # prevent 'Use of uninitialized value' warning
+	    # prevent 'Use of uninitialized value' warning
+	    push @param, '';
 	} elsif (ref $p) {
 	    if (ref $p eq 'ARRAY') {
 		push @param, '[...]';

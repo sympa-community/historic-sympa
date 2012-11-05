@@ -3,34 +3,30 @@ package User;
 
 use strict;
 use warnings;
-use Exporter;
 use Carp qw(croak);
 
-#use Site; # this module is used in Site and inheriting classeses.
+#use Site; # this module is used in Site
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
 
 ## mapping between var and field names
-my %map_field = (
-    gecos             => 'gecos_user',
-    password          => 'password_user',
-    cookie_delay      => 'cookie_delay_user',
-    lang              => 'lang_user',
-    attributes        => 'attributes_user',
-    email             => 'email_user',
-    data              => 'data_user',
-    last_login_date   => 'last_login_date_user',
-    last_login_host   => 'last_login_host_user',
-    wrong_login_count => 'wrong_login_count_user'
-);
+my %db_struct = Sympa::DatabaseDescription::full_db_struct();
+my %map_field;
+foreach my $k (keys %{$db_struct{'user_table'}->{'fields'}}) {
+    if ($k =~ /^(.+)_user$/) {
+	$map_field{$1} = $k;
+    }
+}
 
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
-my %numeric_field = (
-    'cookie_delay_user'      => 1,
-    'wrong_login_count_user' => 1,
-);
+my %numeric_field;
+foreach my $k (keys %{$db_struct{'user_table'}->{'fields'}}) {
+    if ($db_struct{'user_table'}->{'fields'}{$k}{'struct'} =~ /^int/) {
+	$numeric_field{$k} = 1;
+    }
+}
 
 =encoding utf-8
 
@@ -79,21 +75,21 @@ sub new {
 
 =item expire
 
-XXX
+XXX @todo doc
 
 =back
 
 =cut
 
 sub expire {
-    croak();
+    delete_global_user(shift->email);
 }
 
 =over 4
 
 =item get_id
 
-XXX
+XXX @todo doc
 
 =back
 
@@ -106,16 +102,68 @@ sub get_id {
 
 =over 4
 
+=item moveto
+
+XXX @todo doc
+
+=back
+
+=cut
+
+sub moveto {
+    my $self = shift;
+    my $newemail = tools::clean_email(shift || '');
+
+    unless ($newemail) {
+	&Log::do_log('err', 'No email');
+	return undef;
+    }
+    if ($self->email eq $newemail) {
+	return 0;
+    }
+
+    push @sth_stack, $sth;
+
+    unless (
+	$sth = do_prepared_query(
+	    q{UPDATE user_table
+	      SET email_user = ?
+	      WHERE email_user = ?},
+	    $newemail, $self->email
+	) and
+	$sth->rows
+	) {
+	&Log::do_log('err', 'Can\'t move user %s to %s', $self, $newemail);
+	$sth = pop @sth_stack;
+	return undef;
+    }
+
+    $sth = pop @sth_stack;
+
+    $self->{'email'} = $newemail;
+
+    return 1;
+}
+
+=over 4
+
 =item save
 
-XXX
+XXX @todo doc
 
 =back
 
 =cut
 
 sub save {
-    croak();
+    my $self = shift;
+    unless (add_global_user('email' => $self->email, %$self) or
+	update_global_user($self->email, %$self)) {
+	&Log::do_log('err', 'Cannot save user %s', $self);
+	return undef;
+    }
+
+    return 1;
 }
 
 =head3 ACCESSORS
@@ -145,6 +193,7 @@ sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
 
     my $attr = $2;
+
     if (scalar grep { $_ eq $attr } qw(email)) {
 	## getter for user attribute.
 	no strict "refs";
@@ -193,6 +242,26 @@ sub get_users {
 ## Old-style functions
 ############################################################################
 
+=head2 OLD STYLE FUNCTIONS
+
+=over 4
+
+=item add_global_user
+
+=item delete_global_user
+
+=item is_global_user
+
+=item get_global_user
+
+=item get_all_global_user
+
+=item update_global_user
+
+=back
+
+=cut
+
 ## Delete a user in the user_table
 sub delete_global_user {
     my @users = @_;
@@ -234,8 +303,17 @@ sub get_global_user {
     unless (
 	$sth = &SDM::do_prepared_query(
 	    sprintf(
-		'SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host%s FROM user_table WHERE email_user = ?',
-		$additional),
+		q{SELECT email_user AS email, gecos_user AS gecos,
+			 password_user AS password,
+			 cookie_delay_user AS cookie_delay, lang_user AS lang,
+			 attributes_user AS attributes, data_user AS data,
+			 last_login_date_user AS last_login_date,
+			 wrong_login_count_user AS wrong_login_count,
+			 last_login_host_user AS last_login_host%s
+		  FROM user_table
+		  WHERE email_user = ?},
+		$additional
+	    ),
 	    $who
 	)
 	) {
@@ -315,9 +393,8 @@ sub is_global_user {
 
     ## Query the Database
     unless (
-	$sth = &SDM::do_query(
-	    "SELECT count(*) FROM user_table WHERE email_user = %s",
-	    &SDM::quote($who)
+	$sth = &SDM::do_prepared_query(
+	    q{SELECT count(*) FROM user_table WHERE email_user = ?}, $who
 	)
 	) {
 	&Log::do_log('err',
@@ -336,8 +413,14 @@ sub is_global_user {
 
 ## Sets new values for the given user in the Database
 sub update_global_user {
-    my ($who, $values) = @_;
-    &Log::do_log('debug', '(%s)', $who);
+    &Log::do_log('debug', '(%s, ...)', @_);
+    my $who    = shift;
+    my $values = $_[0];
+    if (ref $values) {
+	$values = {%$values};
+    } else {
+	$values = {@_};
+    }
 
     $who = &tools::clean_email($who);
 
@@ -373,25 +456,38 @@ sub update_global_user {
 
     ## Update field
 
-    unless (
-	$sth = &SDM::do_query(
-	    "UPDATE user_table SET %s WHERE (email_user=%s)",
-	    join(',', @set_list),
-	    &SDM::quote($who)
-	)
-	) {
+    push @sth_stack, $sth;
+
+    $sth = &SDM::do_query(
+	"UPDATE user_table SET %s WHERE (email_user=%s)",
+	join(',', @set_list),
+	&SDM::quote($who)
+    );
+    unless (defined $sth) {
 	&Log::do_log('err',
 	    'Could not update informations for user %s in user_table', $who);
+	$sth = pop @sth_stack;
 	return undef;
     }
+    unless ($sth->rows) {
+	$sth = pop @sth_stack;
+	return 0;
+    }
+
+    $sth = pop @sth_stack;
 
     return 1;
 }
 
 ## Adds a user to the user_table
 sub add_global_user {
-    my ($values) = @_;
-    &Log::do_log('debug2', '');
+    &Log::do_log('debug3', '(...)');
+    my $values = $_[0];
+    if (ref $values) {
+	$values = {%$values};
+    } else {
+	$values = {@_};
+    }
 
     my ($field, $value);
     my ($user, $statement, $table);
@@ -429,19 +525,27 @@ sub add_global_user {
 	return undef;
     }
 
+    push @sth_stack, $sth;
+
     ## Update field
-    unless (
-	$sth = &SDM::do_query(
-	    "INSERT INTO user_table (%s) VALUES (%s)",
-	    join(',', @insert_field),
-	    join(',', @insert_value)
-	)
-	) {
+    $sth = &SDM::do_query(
+	"INSERT INTO user_table (%s) VALUES (%s)",
+	join(',', @insert_field),
+	join(',', @insert_value)
+    );
+    unless (defined $sth) {
 	&Log::do_log('err',
 	    'Unable to add user %s to the DB table user_table',
 	    $values->{'email'});
+	$sth = pop @sth_stack;
 	return undef;
     }
+    unless ($sth->rows) {
+	$sth = pop @sth_stack;
+	return 0;
+    }
+
+    $sth = pop @sth_stack;
 
     return 1;
 }

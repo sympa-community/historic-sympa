@@ -150,7 +150,7 @@ sub get_template {
  
      # for global model
     if ($self->{'object'} eq '_global') {
-	unless ($self->{'template'} = &tools::get_filename('etc',{},"global_task_models/$self->{'model_name'}", $Conf::Conf{'host'})) {
+	unless ($self->{'template'} = Site->get_etc_filename("global_task_models/$self->{'model_name'}")) {
 	    &Log::do_log ('err', 'Unable to find task model %s. Creation aborted',$self->{'model_name'});
 	    return undef;
 	}
@@ -159,7 +159,7 @@ sub get_template {
     # for a list
     if ($self->{'object'}  eq 'list') {
 	my $list = $self->{'list_object'};
-	unless ($self->{'template'} = &tools::get_filename('etc', {},"list_task_models/$self->{'model_name'}", $list->{'domain'}, $list)) {
+	unless ($self->{'template'} = $list->get_etc_filename("list_task_models/$self->{'model_name'}")) {
 	    &Log::do_log ('err', 'Unable to find task model %s for list %s. Creation aborted',$self->{'model_name'},$self->get_full_listname);
 	    return undef;
 	}

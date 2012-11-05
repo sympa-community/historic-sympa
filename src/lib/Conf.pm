@@ -571,7 +571,7 @@ sub checkfiles {
     }
 
     ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot_id,'web_tt2','','');
+    my $tt2_include_path = $robot->make_tt2_include_path('web_tt2');
 
     ## Create directory if required
     unless (-d $dir) {
@@ -586,7 +586,7 @@ sub checkfiles {
     foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 
         $param->{'css'} = $css;
-        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot_id, undef);
+        my $css_tt2_path = $robot->get_etc_filename('web_tt2/css.tt2');
         
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||
@@ -1489,9 +1489,12 @@ sub _infer_server_specific_parameter_values {
 sub _load_server_specific_secondary_config_files {
     my $param = shift;
 
-    ## As several parameters prefer to wwsympa.conf, overwrite them of
-    ## sympa.conf.
-    _load_wwsconf($param);
+    ## wwsympa.conf exists
+    if (-f get_wwsympa_conf()) {
+	&Log::do_log('notice',
+	    '%s was found but it is no longer loaded.  Please run sympa.pl --upgrade to migrate it.',
+	    get_wwsympa_conf());
+    }
 
     ## Load charset.conf file if necessary.
     if($param->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
