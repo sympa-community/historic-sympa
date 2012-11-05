@@ -39,7 +39,7 @@ use strict;
 use OAuthProvider;
 use JSON::XS;
 
-use Log;
+use Sympa::Log;
 use Sympa::Tools;
 
 =pod 
@@ -91,7 +91,7 @@ Creates a new VOOTProvider object.
 
 =over 
 
-=item * &Log::do_log
+=item * &Sympa::Log::do_log
 
 =back 
 
@@ -102,7 +102,7 @@ sub new {
 	my $pkg = shift;
 	my %param = @_;
 	
-	&Log::do_log('debug2', 'OAuthProvider::new()');
+	&Sympa::Log::do_log('debug2', 'OAuthProvider::new()');
 	
 	my $provider = {
 		oauth_provider => new OAuthProvider(
@@ -282,7 +282,7 @@ Get user groups
 ## Get groups for user
 sub getGroups {
 	my $self = shift;
-	&Log::do_log('debug2', 'VOOTProvider::getGroups(%s)', $self->{'user'});
+	&Sympa::Log::do_log('debug2', 'VOOTProvider::getGroups(%s)', $self->{'user'});
 	
 	my @entries = ();
 	
@@ -354,7 +354,7 @@ Get members of a group.
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
-	&Log::do_log('debug2', 'VOOTProvider::getGroupMembers(%s, %s)', $self->{'user'}, $param{'group'});
+	&Sympa::Log::do_log('debug2', 'VOOTProvider::getGroupMembers(%s, %s)', $self->{'user'}, $param{'group'});
 	
 	my @entries = ();
 	

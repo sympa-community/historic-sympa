@@ -31,11 +31,11 @@ use Digest::MD5;
 use Getopt::Long;
 use Time::Local;
 
-use Log;
 use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::Log;
 use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Scenario;
@@ -54,7 +54,7 @@ my $opt_F;
 my %options;
 
 unless (&GetOptions(\%main::options, 'debug|d', 'log_level=s', 'foreground')) {
-    &Log::fatal_err("Unknown options.");
+    &Sympa::Sympa::Log::fatal_err("Unknown options.");
 }
 
 # $main::options{'debug2'} = 1 if ($main::options{'debug'});
@@ -76,27 +76,27 @@ my $adrlist = {};
 
 # Load WWSympa configuration
 unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
-    &Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
+    &Sympa::Sympa::Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
 # Load sympa.conf
 unless (Sympa::Conf::load($sympa_conf_file)) {
-    &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
+    &Sympa::Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
 ## Check databse connectivity
 unless (&Sympa::SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Sympa::Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
 }
 
 ## Check that the data structure is uptodate
 unless (&Sympa::Upgrade::data_structure_uptodate()) {
-    &Log::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
+    &Sympa::Sympa::Log::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 
 ## Check for several files.
 unless (&Sympa::Conf::checkfiles()) {
-    &Log::fatal_err("Missing files. Aborting.");
+    &Sympa::Sympa::Log::fatal_err("Missing files. Aborting.");
     ## No return.                                         
 }
 
@@ -128,15 +128,15 @@ unless ($options->{'stderr_to_tty'}) {
 
 
 $wwsconf->{'log_facility'}||= $Conf{'syslog'};
-&Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'task_manager');
+&Sympa::Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'task_manager');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
-    &Log::set_log_level($main::options{'log_level'});
-    &Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
+    &Sympa::Sympa::Log::set_log_level($main::options{'log_level'});
+    &Sympa::Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Log::set_log_level($Conf{'log_level'});
-    &Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Sympa::Sympa::Log::set_log_level($Conf{'log_level'});
+    &Sympa::Sympa::Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
 }
 
 ## Set the UserID & GroupID for the process
@@ -149,7 +149,7 @@ $< = $> = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
-    &Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
+    &Sympa::Sympa::Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
 
 ## Sets the UMASK
@@ -157,7 +157,7 @@ umask(oct($Conf{'umask'}));
 
 ## Change to list root
 unless (chdir($Conf{'home'})) {
-    &Log::do_log('err',"error : unable to change to directory $Conf{'home'}");
+    &Sympa::Sympa::Log::do_log('err',"error : unable to change to directory $Conf{'home'}");
     exit (-1);
 }
 
@@ -273,7 +273,7 @@ while (!$end) {
    ## List all tasks
     unless (&Task::list_tasks) {
 	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in spool"});
-	&Log::do_log ('err', "Failed to list task files in spool");
+	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in spool");
 	exit -1;
     }
 
@@ -287,7 +287,7 @@ while (!$end) {
 			'execution_date' => 'execution_date');
     ## global tasks
     foreach my $key (keys %global_models) {	
-	&Log::do_log('debug2',"global_model : $key");
+	&Sympa::Sympa::Log::do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
 	    if ($Conf{$key}) { 
 		my %data = %default_data; # hash of datas necessary to the creation of tasks
@@ -299,10 +299,10 @@ while (!$end) {
     
     ## list tasks
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	&Log::do_log('debug3',"creating list task : current bot  is $robot");
+	&Sympa::Sympa::Log::do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &Sympa::List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
-	    &Log::do_log('debug3',"creating list task : current list  is $list->{'name'}");
+	    &Sympa::Sympa::Log::do_log('debug3',"creating list task : current list  is $list->{'name'}");
 	    my %data = %default_data;
 	
 	    $data{'list'} = {'name' => $list->{'name'},
@@ -315,7 +315,7 @@ while (!$end) {
 	    foreach my $model (&Task::get_used_models($list->get_list_id())) {		
 		$used_list_models{$model} = 1; 
 	    }
-	    &Log::do_log('debug3',"creating list task using models");my $tt= 0;
+	    &Sympa::Sympa::Log::do_log('debug3',"creating list task using models");my $tt= 0;
 
 	    foreach my $model (@list_models) {
 		unless ($used_list_models{$model}) {
@@ -326,7 +326,7 @@ while (!$end) {
 				     ($list->{'admin'}{'status'} eq 'open'));
 
 			create ($current_date, 'INIT', $model, 'ttl', \%data);
-			&Log::do_log('debug3',"sync_include task ceration done");$tt++;
+			&Sympa::Sympa::Log::do_log('debug3',"sync_include task ceration done");$tt++;
 			
 		    }elsif (defined $list->{'admin'}{$model_task_parameter} && 
 			    defined $list->{'admin'}{$model_task_parameter}{'name'} &&
@@ -343,12 +343,12 @@ while (!$end) {
     ## List all tasks
     unless (&Task::list_tasks($spool_task)) {
 	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
-	&Log::do_log ('err', "Failed to list task files in %s", $spool_task);
+	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in %s", $spool_task);
 	exit -1;
     }
 
     ## processing of tasks anterior to the current date
-    &Log::do_log ('debug3', 'processing of tasks anterior to the current date');
+    &Sympa::Sympa::Log::do_log ('debug3', 'processing of tasks anterior to the current date');
     foreach my $task ( &Task::get_task_list() ) {
 	
 	last if $end;
@@ -358,7 +358,7 @@ while (!$end) {
 	    
 	    ## Skip closed lists
 	    unless (defined $list && ($list->{'admin'}{'status'} eq 'open')) {
-		&Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
+		&Sympa::Sympa::Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		$task->remove;
 		next;
 	    }
@@ -366,14 +366,14 @@ while (!$end) {
 	    ## Skip if parameter is not defined
 	    if ( $task->{'model'} eq 'sync_include') {
 		unless ($list->{'admin'}{'status'} eq 'open') {
-		    &Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
+		    &Sympa::Sympa::Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		    $task->remove;
 		    next;
 		}
 	    }else {
 		unless (defined $list->{'admin'}{$task->{'model'}} && 
 			defined $list->{'admin'}{$task->{'model'}}{'name'}) {
-		    &Log::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
+		    &Sympa::Sympa::Log::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		    $task->remove;
 		    next;
 		}		
@@ -391,7 +391,7 @@ while (!$end) {
 
 &Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
-&Log::do_log ('notice', 'task_manager exited normally due to signal'); 
+&Sympa::Sympa::Log::do_log ('notice', 'task_manager exited normally due to signal'); 
 &Sympa::Tools::Daemon::remove_pid($wwsconf->{'task_manager_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
@@ -407,7 +407,7 @@ sub create {
     my $model_choice  = shift;
     my $Rdata         = shift;
 
-    &Log::do_log ('debug', "create task date: $date label: $label model: $model model_choice: $model_choice Rdata :$Rdata");
+    &Sympa::Sympa::Log::do_log ('debug', "create task date: $date label: $label model: $model model_choice: $model_choice Rdata :$Rdata");
 
     my $list_name;
     my $robot;
@@ -430,7 +430,7 @@ sub create {
      # for global model
     if ($object eq '_global') {
 	unless ($model_file = &Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", $Conf{'host'}, $Sympa::Conf::Conf{'etc'})) {
-	    &Log::do_log ('err', "error : unable to find $model_name, creation aborted");
+	    &Sympa::Sympa::Log::do_log ('err', "error : unable to find $model_name, creation aborted");
 	    return undef;
 	}
     }
@@ -442,24 +442,24 @@ sub create {
 	$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
 	unless ($model_file = &Sympa::Tools::get_filename('etc', {},"list_task_models/$model_name", $list->{'domain'}, $list, $Sympa::Conf::Conf{'etc'})) {
-	    &Log::do_log ('err', "error : unable to find $model_name, for list $list_name creation aborted");
+	    &Sympa::Sympa::Log::do_log ('err', "error : unable to find $model_name, for list $list_name creation aborted");
 	    return undef;
 	}
     }
    
-    &Log::do_log ('notice', "create task with with tt2 template $model_file");
+    &Sympa::Sympa::Log::do_log ('notice', "create task with with tt2 template $model_file");
     
     ## creation
     my $task_as_string = '';
     my $tt2 = Template->new({'START_TAG' => quotemeta('['),'END_TAG' => quotemeta(']'), 'ABSOLUTE' => 1});
 
     unless (defined $tt2 && $tt2->process($model_file, $Rdata, \$task_as_string)) {
-	&Log::do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
+	&Sympa::Sympa::Log::do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
     }
         
     if  (!check ($task_as_string)) {
-	&Log::do_log ('err', "error : syntax error in $task_as_string, you should check $model_file");
-	&Log::do_log ('notice', "Ignoring creation task request") ;
+	&Sympa::Sympa::Log::do_log ('err', "error : syntax error in $task_as_string, you should check $model_file");
+	&Sympa::Sympa::Log::do_log ('notice', "Ignoring creation task request") ;
 	return undef;
     }
     # task is accetable, store it in spool
@@ -480,7 +480,7 @@ sub create {
     #my $dump = &Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP; 
     #my $dump = &Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP; 
 
-    &Log::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
+    &Sympa::Sympa::Log::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
     $taskspool->store($task_as_string,\%meta);
     return 1;
 }
@@ -492,7 +492,7 @@ sub check {
 
     my $task_as_string = shift; # the task to check
 
-    &Log::do_log ('debug2', "check($task_as_string)" );
+    &Sympa::Sympa::Log::do_log ('debug2', "check($task_as_string)" );
     my %result; # stores the result of the chk_line subroutine
     my $lnb = 0; # line number
     my %used_labels; # list of labels used as parameter in commands
@@ -511,8 +511,8 @@ sub check {
 
 	next if ( $line =~ /^\s*\#/ ); 
 	unless (chk_line ($line, \%result)) {
-	    &Log::do_log ('err', "error at line $lnb : $line");
-	    &Log::do_log ('err', "$result{'error'}");
+	    &Sympa::Sympa::Log::do_log ('err', "error at line $lnb : $line");
+	    &Sympa::Sympa::Log::do_log ('err', "$result{'error'}");
 	    return undef;
 	}
 	
@@ -533,26 +533,26 @@ sub check {
 
     # are all labels used ?
     foreach my $label (keys %labels) {
-	&Log::do_log ('debug3', "warning : label $label exists but is not used") unless ($used_labels{$label});
+	&Sympa::Sympa::Log::do_log ('debug3', "warning : label $label exists but is not used") unless ($used_labels{$label});
     }
 
     # do all used labels exist ?
     foreach my $label (keys %used_labels) {
 	unless ($labels{$label}) {
-	    &Log::do_log ('err', "error : label $label is used but does not exist");
+	    &Sympa::Sympa::Log::do_log ('err', "error : label $label is used but does not exist");
 	    return undef;
 	}
     }
     
     # are all variables used ?
     foreach my $var (keys %vars) {
-	&Log::do_log ('notice', "warning : var $var exists but is not used") unless ($used_vars{$var});
+	&Sympa::Sympa::Log::do_log ('notice', "warning : var $var exists but is not used") unless ($used_vars{$var});
     }
 
     # do all used variables exist ?
     foreach my $var (keys %used_vars) {
 	unless ($vars{$var}) {
-	    &Log::do_log ('err', "error : var $var is used but does not exist");
+	    &Sympa::Sympa::Log::do_log ('err', "error : var $var is used but does not exist");
 	    return undef;
 	}
     }
@@ -569,7 +569,7 @@ sub chk_line {
     ## just in case...
     chomp $line;
 
-    &Log::do_log('debug2', 'chk_line(%s, %s)', $line, $Rhash->{'nature'});
+    &Sympa::Sympa::Log::do_log('debug2', 'chk_line(%s, %s)', $line, $Rhash->{'nature'});
         
     $Rhash->{'nature'} = undef;
   
@@ -651,7 +651,7 @@ sub chk_cmd {
     my $Rused_labels = $_[3];
     my $Rused_vars = $_[4];
 
-    &Log::do_log('debug2', 'chk_cmd(%s, %d, %s)', $cmd, $lnb, join(',',@{$Rargs}));
+    &Sympa::Sympa::Log::do_log('debug2', 'chk_cmd(%s, %d, %s)', $cmd, $lnb, join(',',@{$Rargs}));
     
     if (defined $commands{$cmd}) {
 	
@@ -659,8 +659,8 @@ sub chk_cmd {
 	my @args = @{$Rargs};
 	
 	unless ($#expected_args == $#args) {
-	    &Log::do_log ('err', "error at line $lnb : wrong number of arguments for $cmd");
-	    &Log::do_log ('err', "args = @args ; expected_args = @expected_args");
+	    &Sympa::Sympa::Log::do_log ('err', "error at line $lnb : wrong number of arguments for $cmd");
+	    &Sympa::Sympa::Log::do_log ('err', "args = @args ; expected_args = @expected_args");
 	    return undef;
 	}
 	
@@ -687,7 +687,7 @@ sub chk_cmd {
 	    }
 	    
 	    if ($error) {
-		&Log::do_log ('err', "error at line $lnb : argument $_ is not valid");
+		&Sympa::Sympa::Log::do_log ('err', "error at line $lnb : argument $_ is not valid");
 		return undef;
 	    }
 	    
@@ -710,12 +710,12 @@ sub execute {
     my %vars; # list of task vars
     my $lnb = 0; # line number
 
-    &Log::do_log('notice', 'Running task id = %s, line %d with vars %s)', $task->{'messagekey'}, $lnb, join('/',  %vars));
+    &Sympa::Sympa::Log::do_log('notice', 'Running task id = %s, line %d with vars %s)', $task->{'messagekey'}, $lnb, join('/',  %vars));
 
     my $label = $task->{'label'};
     return undef if ($label eq 'ERROR');
 
-    &Log::do_log ('debug2', "* execution of the task id = %s", $task->{'messagekey'});
+    &Sympa::Sympa::Log::do_log ('debug2', "* execution of the task id = %s", $task->{'messagekey'});
 
     my @tasklines = split('\n',$taskasstring);
 
@@ -734,7 +734,7 @@ sub execute {
 	    }
 	}
 	unless ( chk_line ($line, \%result) ) {
-	    &Log::do_log ('err', "error : $result{'error'}");
+	    &Sympa::Sympa::Log::do_log ('err', "error : $result{'error'}");
 	    return undef;
 	}
 	
@@ -752,12 +752,12 @@ sub execute {
     } 
 
     unless (defined $status) {
-	&Log::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+	&Sympa::Sympa::Log::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
 	$task->remove;
 	return undef;
     }
     unless ($status >= 0) {
-	&Log::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+	&Sympa::Sympa::Log::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
 	$task->remove;
     }
 
@@ -775,12 +775,12 @@ sub cmd_process {
 
     my $taskasstring = $task->{'taskasstring'};
 
-    &Log::do_log('debug2', 'cmd_process(%s, %d)', $command, $lnb);
+    &Sympa::Sympa::Log::do_log('debug2', 'cmd_process(%s, %d)', $command, $lnb);
 
      # building of %context
     my %context = ('line_number' => $lnb);
 
-    &Log::do_log('debug2','Current task : %s', join(':',%$task));
+    &Sympa::Sympa::Log::do_log('debug2','Current task : %s', join(':',%$task));
 
      # regular commands
     return stop ($task, \%context) if ($command eq 'stop');
@@ -838,7 +838,7 @@ sub stop {
     
     my ($task, $context) = @_;
 
-    &Log::do_log ('notice', "$context->{'line_number'} : stop $task->{'mesageid'}");
+    &Sympa::Sympa::Log::do_log ('notice', "$context->{'line_number'} : stop $task->{'mesageid'}");
     
     unless ($task->remove) { 
 	error ($task->{'mesagekey'}, "error in stop command : unable to delete task $task->{'messagekey'}");
@@ -854,16 +854,16 @@ sub send_msg {
     my $template = $tab[1];
     my $var = $tab[0];
     
-    &Log::do_log ('notice', "line $context->{'line_number'} : send_msg (@{$Rarguments})");
+    &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : send_msg (@{$Rarguments})");
 
 
     if ($task->{'object'} eq '_global') {
 
 	foreach my $email (keys %{$Rvars->{$var}}) {
-	    &Log::do_log ('notice', "--> message sent to $email");
+	    &Sympa::Sympa::Log::do_log ('notice', "--> message sent to $email");
  	    if (!$log) {
  		unless (&Sympa::List::send_global_file ($template, $email, ,'',$Rvars->{$var}{$email}) ) {
- 		    &Log::do_log ('notice', "Unable to send template $template to $email");
+ 		    &Sympa::Sympa::Log::do_log ('notice', "Unable to send template $template to $email");
  		}
  	    }
 	}
@@ -871,10 +871,10 @@ sub send_msg {
 	my $list = $task->{'list_object'};
 	
 	foreach my $email (keys %{$Rvars->{$var}}) {
-	    &Log::do_log ('notice', "--> message sent to $email");
+	    &Sympa::Sympa::Log::do_log ('notice', "--> message sent to $email");
  	    if (!$log) {
  		unless ($list->send_file ($template, $email, $list->{'domain'}, $Rvars->{$var}{$email}))  {
- 		    &Log::do_log ('notice', "Unable to send template $template to $email");
+ 		    &Sympa::Sympa::Log::do_log ('notice', "Unable to send template $template to $email");
  		}
 	    }
 	}
@@ -890,7 +890,7 @@ sub next_cmd {
     my $date = &Sympa::Tools::Time::epoch_conv ($tab[0], $task->{'date'}); # conversion of the date argument into epoch format
     my $label = $tab[1];
 
-    &Log::do_log ('notice', "line $context->{'line_number'} of $task->{'model'} : next ($date, $label)");
+    &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} of $task->{'model'} : next ($date, $label)");
 
     my $listname = $task->{'object'};
     my $model = $task->{'model'};
@@ -943,7 +943,7 @@ sub next_cmd {
 	return undef;
     }
 
-    &Log::do_log ('notice', "--> new task $model ($human_date)");
+    &Sympa::Sympa::Log::do_log ('notice', "--> new task $model ($human_date)");
     
     return 0;
 }
@@ -955,7 +955,7 @@ sub select_subs {
     my @tab = @{$Rarguments};
     my $condition = $tab[0];
  
-    &Log::do_log ('debug2', "line $context->{'line_number'} : select_subs ($condition)");
+    &Sympa::Sympa::Log::do_log ('debug2', "line $context->{'line_number'} : select_subs ($condition)");
     $condition =~ /(\w+)\(([^\)]*)\)/;
     if ($2) { # conversion of the date argument into epoch format
 	my $date = &Sympa::Tools::Time::epoch_conv ($2, $task->{'date'});
@@ -980,13 +980,13 @@ sub select_subs {
     # loop on the subscribers of $list_name
     foreach my $user (@users) {
 
-	# AF : voir 'update' &Log::do_log ('notice', "date $user->{'date'} & update $user->{'update'}");
+	# AF : voir 'update' &Sympa::Sympa::Log::do_log ('notice', "date $user->{'date'} & update $user->{'update'}");
 	# condition rewriting for older and newer
 	$new_condition = "$1($user->{'update_date'}, $2)" if ($condition =~ /(older|newer)\((\d+)\)/ );
 	
 	if (&Sympa::Scenario::verify ($verify_context, $new_condition) == 1) {
 	    $selection{$user->{'email'}} = undef;
-	    &Log::do_log ('notice', "--> user $user->{'email'} has been selected");
+	    &Sympa::Sympa::Log::do_log ('notice', "--> user $user->{'email'} has been selected");
 	}
     }
     
@@ -1000,7 +1000,7 @@ sub delete_subs_cmd {
     my @tab = @{$Rarguments};
     my $var = $tab[0];
 
-    &Log::do_log ('notice', "line $context->{'line_number'} : delete_subs ($var)");
+    &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : delete_subs ($var)");
 
     
     my $list = $task->{'list_object'};
@@ -1008,7 +1008,7 @@ sub delete_subs_cmd {
 
     foreach my $email (keys %{$Rvars->{$var}}) {
 
-	&Log::do_log ('notice', "email : $email");
+	&Sympa::Sympa::Log::do_log ('notice', "email : $email");
 	my $result = $list->check_list_authz('del', 'smime',
 					     {'sender'   => $Conf{'listmaster'},
 					      'email'    => $email,
@@ -1019,7 +1019,7 @@ sub delete_subs_cmd {
 	    error ($task->{'filepath'}, "error in delete_subs command : deletion of $email not allowed");
 	} else {
 	    my $u = $list->delete_list_member ($email) if (!$log);
-	    &Log::do_log ('notice', "--> $email deleted");
+	    &Sympa::Sympa::Log::do_log ('notice', "--> $email deleted");
 	    $selection{$email} = {};
 	}
     }
@@ -1036,7 +1036,7 @@ sub create_cmd {
     my $model = $tab[1];
     my $model_choice = $tab[2];
 
-    &Log::do_log ('notice', "line $context->{'line_number'} : create ($arg, $model, $model_choice)");
+    &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : create ($arg, $model, $model_choice)");
 
     # recovery of the object type and object
     my $type;
@@ -1073,7 +1073,7 @@ sub exec_cmd {
     my @tab = @{$Rarguments};
     my $file = $tab[0];
 
-    &Log::do_log ('notice', "line $context->{'line_number'} : exec ($file)");
+    &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : exec ($file)");
     system ($file);
     
     return 1;
@@ -1086,9 +1086,9 @@ sub purge_logs_table {
     my $execution_date = $task->{'date'};
     my @slots = ();
     
-    &Log::do_log('debug2','purge_logs_table()');
-    unless(&Log::db_log_del()) {
-	&Log::do_log('err','purge_logs_table(): Failed to delete logs');
+    &Sympa::Sympa::Log::do_log('debug2','purge_logs_table()');
+    unless(&Sympa::Sympa::Log::db_log_del()) {
+	&Sympa::Sympa::Log::do_log('err','purge_logs_table(): Failed to delete logs');
 	return undef;
     }
 
@@ -1100,7 +1100,7 @@ sub purge_logs_table {
 
 	my $sth;
 	unless($sth = &Sympa::SDM::do_query("SELECT date_stat FROM stat_table WHERE read_stat = 0 ORDER BY date_stat ASC LIMIT 1")) {
-		&Log::do_log('err', 'Unable to retrieve oldest non processed stat');
+		&Sympa::Sympa::Log::do_log('err', 'Unable to retrieve oldest non processed stat');
 		return undef;
 	}
 	my @res = $sth->fetchrow_array;
@@ -1115,36 +1115,36 @@ sub purge_logs_table {
 
     for (my $j=1; $j <= scalar(@slots); $j++){
 	 
-	&Log::aggregate_data($slots[$j-1], $slots[$j]);
+	&Sympa::Sympa::Log::aggregate_data($slots[$j-1], $slots[$j]);
     }
     #-------------------------------------------------------------------
 
-    &Log::do_log('notice','purge_logs_table(): logs purged');
+    &Sympa::Sympa::Log::do_log('notice','purge_logs_table(): logs purged');
     return 1;
 }
 
 ## remove sessions from session_table if older than $Conf{'session_table_ttl'}
 sub purge_session_table {    
 
-    &Log::do_log('info','task_manager::purge_session_table()');
+    &Sympa::Sympa::Log::do_log('info','task_manager::purge_session_table()');
     my $removed = &Sympa::Session::purge_old_sessions('*');
     unless(defined $removed) {
-	&Log::do_log('err','&Sympa::Session::purge_old_sessions(): Failed to remove old sessions');
+	&Sympa::Sympa::Log::do_log('err','&Sympa::Session::purge_old_sessions(): Failed to remove old sessions');
 	return undef;
     }
-    &Log::do_log('notice','purge_session_table(): %s row removed in session_table',$removed);
+    &Sympa::Sympa::Log::do_log('notice','purge_session_table(): %s row removed in session_table',$removed);
     return 1;
 }
 
 ## remove messages from bulkspool table when no more packet have any pointer to this message
 sub purge_tables {    
 
-    &Log::do_log('info','task_manager::purge_tables()');
+    &Sympa::Sympa::Log::do_log('info','task_manager::purge_tables()');
     my $removed = &Sympa::Bulk::purge_bulkspool();
     unless(defined $removed) {
-	&Log::do_log('err','Failed to purge bulkspool');
+	&Sympa::Sympa::Log::do_log('err','Failed to purge bulkspool');
     }
-    &Log::do_log('notice','%s rows removed in bulkspool_table',$removed);    
+    &Sympa::Sympa::Log::do_log('notice','%s rows removed in bulkspool_table',$removed);    
     #
     my $removed = 0;
     foreach my $robot (keys %{$Conf{'robots'}}) {
@@ -1153,7 +1153,7 @@ sub purge_tables {
 	    $removed += &Sympa::Tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
 	}
     }
-    &Log::do_log('notice', "%s rows removed in tracking table",$removed);
+    &Sympa::Sympa::Log::do_log('notice', "%s rows removed in tracking table",$removed);
 
     return 1;
 }
@@ -1161,19 +1161,19 @@ sub purge_tables {
 ## remove one time ticket table if older than $Conf{'one_time_ticket_table_ttl'}
 sub purge_one_time_ticket_table {    
 
-    &Log::do_log('info','task_manager::purge_one_time_ticket_table()');
+    &Sympa::Sympa::Log::do_log('info','task_manager::purge_one_time_ticket_table()');
     my $removed = &Sympa::Session::purge_old_tickets('*');
     unless(defined $removed) {
-	&Log::do_log('err','&Sympa::Session::purge_old_tickets(): Failed to remove old tickets');
+	&Sympa::Sympa::Log::do_log('err','&Sympa::Session::purge_old_tickets(): Failed to remove old tickets');
 	return undef;
     }
-    &Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
+    &Sympa::Sympa::Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
     return 1;
 }
 
 sub purge_user_table {
     my ($task, $Rarguments, $context) = @_;
-    &Log::do_log('debug2','purge_user_table()');
+    &Sympa::Sympa::Log::do_log('debug2','purge_user_table()');
 
     ## Load user_table entries
     my @users = &Sympa::List::get_all_global_user();
@@ -1218,14 +1218,14 @@ sub purge_user_table {
     my @purged_users;
     foreach (@users) {
 	unless ($known_people{$_}) {
-	    &Log::do_log('debug2','User to purge: %s', $_);
+	    &Sympa::Sympa::Log::do_log('debug2','User to purge: %s', $_);
 	    push @purged_users, $_;
 	}
     }
     
     unless ($#purged_users < 0) {
 	unless (&Sympa::List::delete_global_user(@purged_users)) {
-	    &Log::do_log('err', 'purge_user_table error: Failed to delete users');
+	    &Sympa::Sympa::Log::do_log('err', 'purge_user_table error: Failed to delete users');
 	    return undef;
 	}
     }
@@ -1237,14 +1237,14 @@ sub purge_user_table {
 sub purge_orphan_bounces {
     my($task, $context) = @_;
     
-    &Log::do_log('info','purge_orphan_bounces()');
+    &Sympa::Sympa::Log::do_log('info','purge_orphan_bounces()');
     
     ## Hash {'listname' => 'bounced address' => 1}
     my %bounced_users;
     my $all_lists;
     
     unless ($all_lists = &Sympa::List::get_lists('*')) {
-	&Log::do_log('notice','No list available');
+	&Sympa::Sympa::Log::do_log('notice','No list available');
 	return 1;
     }
     
@@ -1261,13 +1261,13 @@ sub purge_orphan_bounces {
 	my $bounce_dir = $list->get_bounce_dir();
 	
 	unless (-d $bounce_dir) {
-	    &Log::do_log('notice', 'No bouncing subscribers in list %s', $listname);
+	    &Sympa::Sympa::Log::do_log('notice', 'No bouncing subscribers in list %s', $listname);
 	    next;
 	}
 	
 	## then reading Bounce directory & compare with %bounced_users
 	unless (opendir(BOUNCE,$bounce_dir)) {
-	    &Log::do_log('err','Error while opening bounce directory %s',$bounce_dir);
+	    &Sympa::Sympa::Log::do_log('err','Error while opening bounce directory %s',$bounce_dir);
 	    return undef;
 	}
 	
@@ -1275,9 +1275,9 @@ sub purge_orphan_bounces {
 	foreach my $bounce (readdir(BOUNCE)) {
 	    if ($bounce =~ /\@/){
 		unless (defined($bounced_users{$listname}{$bounce})) {
-		    &Log::do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
+		    &Sympa::Sympa::Log::do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
 		    unless (unlink($bounce_dir.'/'.$bounce)) {
-			&Log::do_log('err','Error while removing file %s/%s', $bounce_dir, $bounce);
+			&Sympa::Sympa::Log::do_log('err','Error while removing file %s/%s', $bounce_dir, $bounce);
 		    }
 		}
 	    }	    
@@ -1298,7 +1298,7 @@ sub purge_orphan_bounces {
      my @tab = @{$Rarguments};
      my $delay = $tab[0];
 
-     &Log::do_log('debug2','expire_bounce(%d)',$delay);
+     &Sympa::Sympa::Log::do_log('debug2','expire_bounce(%d)',$delay);
      my $all_lists = &Sympa::List::get_lists('*');
      foreach my $list (@$all_lists ) {
 
@@ -1308,7 +1308,7 @@ sub purge_orphan_bounces {
 	 # the latest_distribution_date is the date of last distribution #days from 01 01 1970
 
 	 unless ($list->get_latest_distribution_date()) {
-	     &Log::do_log('debug2','bounce expiration : skipping list %s because could not get latest distribution date',$listname);
+	     &Sympa::Sympa::Log::do_log('debug2','bounce expiration : skipping list %s because could not get latest distribution date',$listname);
 	     next;
 	 }
 	 my $refdate = (($list->get_latest_distribution_date() - $delay) * 3600 * 24);
@@ -1320,12 +1320,12 @@ sub purge_orphan_bounces {
 		 my $email = $u->{'email'};
 
 		 unless ( $list->is_list_member($email) ) {
-		     &Log::do_log('info','expire_bounce: %s not subscribed', $email);
+		     &Sympa::Sympa::Log::do_log('info','expire_bounce: %s not subscribed', $email);
 		     next;
 		 }
 
 		 unless( $list->update_list_member($email, {'bounce' => 'NULL'},{'bounce_address' => 'NULL'})) {
-		     &Log::do_log('info','expire_bounce: failed update database for %s', $email);
+		     &Sympa::Sympa::Log::do_log('info','expire_bounce: failed update database for %s', $email);
 		     next;
 		 }
 		 my $escaped_email = &Sympa::Tools::escape_chars($email);
@@ -1333,10 +1333,10 @@ sub purge_orphan_bounces {
 		 my $bounce_dir = $list->get_bounce_dir();
 
 		 unless (unlink $bounce_dir.'/'.$escaped_email) {
-		     &Log::do_log('info','expire_bounce: failed deleting %s', $bounce_dir.'/'.$escaped_email);
+		     &Sympa::Sympa::Log::do_log('info','expire_bounce: failed deleting %s', $bounce_dir.'/'.$escaped_email);
 		     next;
 		 }
-		 &Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
+		 &Sympa::Sympa::Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
 			$email,$listname,
 			&POSIX::strftime("%d %b %Y", localtime($list->get_latest_distribution_date() * 3600 * 24)),
 			&POSIX::strftime("%d %b %Y", localtime($u->{'last_bounce'})));
@@ -1357,7 +1357,7 @@ sub purge_orphan_bounces {
      my $template = $tab[0];
      my $limit = &Sympa::Tools::Time::duration_conv ($tab[1], $execution_date);
 
-     &Log::do_log ('notice', "line $context->{'line_number'} : chk_cert_expiration (@{$Rarguments})");
+     &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : chk_cert_expiration (@{$Rarguments})");
 
      ## building of certificate list
      unless (opendir(DIR, $cert_dir)) {
@@ -1378,7 +1378,7 @@ sub purge_orphan_bounces {
 	 chomp ($date);
 
 	 unless ($date) {
-	     &Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
+	     &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
 	     next;
 	 }
 
@@ -1392,7 +1392,7 @@ sub purge_orphan_bounces {
 	 if ($expiration_date > $limit) { 
 	     # deletion of unuseful soon_expired file if it is existing
 	     if (-e $soon_expired_file) {
-		 unlink ($soon_expired_file) || &Log::do_log ('err', "error : can't delete $soon_expired_file");
+		 unlink ($soon_expired_file) || &Sympa::Sympa::Log::do_log ('err', "error : can't delete $soon_expired_file");
 	     }
 	     next;
 	 }
@@ -1400,12 +1400,12 @@ sub purge_orphan_bounces {
 	 # expired certificate processing
 	 if ($expiration_date < $execution_date) {
 
-	     &Log::do_log ('notice', "--> $_ certificate expired ($date), certificate file deleted");
+	     &Sympa::Sympa::Log::do_log ('notice', "--> $_ certificate expired ($date), certificate file deleted");
 	     if (!$log) {
-		 unlink ("$cert_dir/$_") || &Log::do_log ('notice', "error : can't delete certificate file $_");
+		 unlink ("$cert_dir/$_") || &Sympa::Sympa::Log::do_log ('notice', "error : can't delete certificate file $_");
 	     }
 	     if (-e $soon_expired_file) {
-		 unlink ("$cert_dir/$soon_expired_file") || &Log::do_log ('err', "error : can't delete $soon_expired_file");
+		 unlink ("$cert_dir/$soon_expired_file") || &Sympa::Sympa::Log::do_log ('err', "error : can't delete $soon_expired_file");
 	     }
 	     next;
 	 }
@@ -1416,7 +1416,7 @@ sub purge_orphan_bounces {
 	      !(-e $soon_expired_file) ) {
 
 	     unless (open (FILE, ">$cert_dir/$soon_expired_file")) {
-		 &Log::do_log ('err', "error in chk_cert_expiration : can't create $soon_expired_file");
+		 &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration : can't create $soon_expired_file");
 		 next;
 	     } else {close (FILE);}
 
@@ -1428,22 +1428,22 @@ sub purge_orphan_bounces {
 	     chomp ($id);
 
 	     unless ($id) {
-		 &Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
+		 &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
 		 next;
 	     }
 
 	     $id =~ s/subject= //;
-	     &Log::do_log ('notice', "id : $id");
+	     &Sympa::Sympa::Log::do_log ('notice', "id : $id");
 	     $tpl_context{'expiration_date'} = &Sympa::Tools::Time::adate ($expiration_date);
 	     $tpl_context{'certificate_id'} = $id;
 	     $tpl_context{'auto_submitted'} = 'auto-generated';
 	     
 	     if (!$log) {
 		 unless (&Sympa::List::send_global_file ($template, $_,'', \%tpl_context)) {
-		     &Log::do_log ('notice', "Unable to send template $template to $_");
+		     &Sympa::Sympa::Log::do_log ('notice', "Unable to send template $template to $_");
 		 }
 	     }
-	     &Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
+	     &Sympa::Sympa::Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
 	 }
      }
      return 1;
@@ -1458,7 +1458,7 @@ sub purge_orphan_bounces {
      my @tab = @{$Rarguments};
      my $limit = &Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
      my $CA_file = "$Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
-     &Log::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
+     &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
      # building of CA list
      my @CA;
@@ -1476,9 +1476,9 @@ sub purge_orphan_bounces {
      my $crl_dir = "$Conf{'crl_dir'}";
      unless (-d $Conf{'crl_dir'}) {
 	 if ( mkdir ($Conf{'crl_dir'}, 0775)) {
-	     &Log::do_log('notice', "creating spool $Conf{'crl_dir'}");
+	     &Sympa::Sympa::Log::do_log('notice', "creating spool $Conf{'crl_dir'}");
 	 }else{
-	     &Log::do_log('err', "Unable to create CRLs directory $Conf{'crl_dir'}");
+	     &Sympa::Sympa::Log::do_log('err', "Unable to create CRLs directory $Conf{'crl_dir'}");
 	     return undef;
 	 }
      }
@@ -1502,7 +1502,7 @@ sub purge_orphan_bounces {
 	 chomp ($date);
 
 	 unless ($date) {
-	     &Log::do_log ('err', "error in update_crl command : can't get expiration date for $file crl file by using the crl openssl command");
+	     &Sympa::Sympa::Log::do_log ('err', "error in update_crl command : can't get expiration date for $file crl file by using the crl openssl command");
 	     next;
 	 }
 
@@ -1519,7 +1519,7 @@ sub purge_orphan_bounces {
 
 	 if (&Sympa::Scenario::verify ($verify_context, $condition) == 1) {
 	     unlink ($file);
-	     &Log::do_log ('notice', "--> updating of the $file crl file");
+	     &Sympa::Sympa::Log::do_log ('notice', "--> updating of the $file crl file");
 	     my $cmd = "wget -O \'$file\' \'$url\'";
 	     open CMD, "| $cmd";
 	     close CMD;
@@ -1541,11 +1541,11 @@ sub eval_bouncers {
 	my $listname = $list->{'name'};
 	my $list_traffic = {};
 	
-	&Log::do_log('info','eval_bouncers(%s)',$listname);
+	&Sympa::Sympa::Log::do_log('info','eval_bouncers(%s)',$listname);
 	
 	## Analizing file Msg-count and fill %$list_traffic
 	unless (open(COUNT,$list->{'dir'}.'/msg_count')){
-	    &Log::do_log('debug','** Could not open msg_count FILE for list %s',$listname);
+	    &Sympa::Sympa::Log::do_log('debug','** Could not open msg_count FILE for list %s',$listname);
 	    next;
 	}    
 	while (<COUNT>) {
@@ -1562,7 +1562,7 @@ sub eval_bouncers {
 	    
 	    ## copying score into DataBase
 	    unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {
-		&Log::do_log('err','Task eval_bouncers :Error while updating DB for user %s',$user_ref->{'email'});
+		&Sympa::Sympa::Log::do_log('err','Task eval_bouncers :Error while updating DB for user %s',$user_ref->{'email'});
 		next;
 	    }
 	}
@@ -1580,7 +1580,7 @@ sub none {
 sub process_bouncers {
 ###################
     my ($task,$context) = @_;
-    &Log::do_log('info','Processing automatic actions on bouncing users'); 
+    &Sympa::Sympa::Log::do_log('info','Processing automatic actions on bouncing users'); 
 
 ###########################################################################
 # This sub apply a treatment foreach category of bouncing-users
@@ -1642,7 +1642,7 @@ sub process_bouncers {
 	    if (@{$bouncers[$level]}){
 		## calling action subroutine with (list,email list) in parameter 
 		unless ($actions{$action}->($list,$bouncers[$level])){
-		    &Log::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
+		    &Sympa::Sympa::Log::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
 		    return undef;
 		}
 
@@ -1656,11 +1656,11 @@ sub process_bouncers {
 	        if ($notification eq 'listmaster'){
 
 		    unless(&Sympa::List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
-			&Log::do_log('err','error while notifying listmaster');
+			&Sympa::Sympa::Log::do_log('err','error while notifying listmaster');
 		    }
 		}elsif ($notification eq 'owner'){
 		    unless ($list->send_notify_to_owner('automatic_bounce_management',$param)){
-			&Log::do_log('err','error while notifying owner');
+			&Sympa::Sympa::Log::do_log('err','error while notifying owner');
 		    }
 		}
 	    }
@@ -1675,7 +1675,7 @@ sub get_score {
     my $user_ref = shift;
     my $list_traffic = shift;
 
-    &Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
+    &Sympa::Sympa::Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
 
     my $min_period = $Conf{'minimum_bouncing_period'};
     my $min_msg_count = $Conf{'minimum_bouncing_count'};
@@ -1693,13 +1693,13 @@ sub get_score {
 
     unless ($bounce_count >= $min_msg_count){
 	#not enough messages distributed to keep score
-	&Log::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
+	&Sympa::Sympa::Log::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
 	return undef ;
     }
 
     unless (($EO_period - $BO_period) >= $min_period){
 	#too short bounce period to keep score
-	&Log::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
+	&Sympa::Sympa::Log::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
 	return undef;
     } 
 
@@ -1768,9 +1768,9 @@ sub change_label {
     $new_task_file =~ s/(.+\.)(\w*)(\.\w+\.\w+$)/$1$new_label$3/;
 
     if (rename ($task_file, $new_task_file)) {
-	&Log::do_log ('notice', "$task_file renamed in $new_task_file");
+	&Sympa::Sympa::Log::do_log ('notice', "$task_file renamed in $new_task_file");
     } else {
-	&Log::do_log ('err', "error ; can't rename $task_file in $new_task_file");
+	&Sympa::Sympa::Log::do_log ('err', "error ; can't rename $task_file in $new_task_file");
     }
 }
 
@@ -1782,17 +1782,17 @@ sub error {
     my @param;
     $param[0] = "An error has occured during the execution of the task $task_id :
                  $message";
-    &Log::do_log ('err', "$message");
+    &Sympa::Sympa::Log::do_log ('err', "$message");
     change_label ($task_id, 'ERROR') unless ($task_id eq '');
     unless (&Sympa::List::send_notify_to_listmaster ('error in task', $Conf{'domain'}, \@param)) {
-    	&Log::do_log('notice','error while notifying listmaster about "error_in_task"');
+    	&Sympa::Sympa::Log::do_log('notice','error while notifying listmaster about "error_in_task"');
     }
 }
 
 sub sync_include {
     my ($task, $context) = @_;
 
-    &Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
+    &Sympa::Sympa::Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
 
     my $list = $task->{'list_object'};
 
@@ -1801,7 +1801,7 @@ sub sync_include {
 
     if (! $list->has_include_data_sources() &&
 	(!$list->{'last_sync'} || ($list->{'last_sync'} > (stat("$list->{'dir'}/config"))[9]))) {
-	&Log::do_log('debug', "List $list->{'name'} no more require sync_include task");
+	&Sympa::Sympa::Log::do_log('debug', "List $list->{'name'} no more require sync_include task");
 	return -1;	
     }    
 }

@@ -6,6 +6,7 @@ use vars qw(@ISA);
 use SOAP::Transport::HTTP;
 
 use Sympa::Conf;
+use Sympa::Log;
 use Sympa::Session;
 use Sympa::Tools::Cookie;
 
@@ -20,9 +21,9 @@ sub request {
 	## Select appropriate robot
 	if ($Sympa::Conf::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
 	  $ENV{'SYMPA_ROBOT'} = $Sympa::Conf::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
-	  &Log::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
+	  &Sympa::Log::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 	}else {
-	  &Log::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
+	  &Sympa::Log::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
 	  $ENV{'SYMPA_ROBOT'} =  $Sympa::Conf::Conf{'host'} ;
 	}
 

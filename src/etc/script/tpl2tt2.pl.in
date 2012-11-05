@@ -23,7 +23,7 @@
 
 use lib '--modulesdir--';
 
-use Log;
+use Sympa::Log;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Language;
@@ -228,7 +228,7 @@ foreach my $tpl (@templates) {
 					mode => 0755,
 					))
 	{
-	    &Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+	    &Sympa::Sympa::Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
 	    next;
 	}
     }
@@ -280,7 +280,7 @@ sub convert {
 				    group => Sympa::Constants::GROUP
 				    ))
     {
-	&Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+	&Sympa::Sympa::Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
 	return undef;
     }
 }

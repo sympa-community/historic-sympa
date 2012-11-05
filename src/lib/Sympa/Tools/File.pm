@@ -28,7 +28,7 @@ use File::Copy::Recursive;
 use File::Find;
 use POSIX qw(strftime);
 
-use Log;
+use Sympa::Log;
 
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {
@@ -37,7 +37,7 @@ sub set_file_rights {
 
     if ($param{'user'}){
 	unless ($uid = (getpwnam($param{'user'}))[2]) {
-	    &Log::do_log('err', "User %s can't be found in passwd file",$param{'user'});
+	    &Sympa::Log::do_log('err', "User %s can't be found in passwd file",$param{'user'});
 	    return undef;
 	}
     }else {
@@ -45,19 +45,19 @@ sub set_file_rights {
     }
     if ($param{'group'}) {
 	unless ($gid = (getgrnam($param{'group'}))[2]) {
-	    &Log::do_log('err', "Group %s can't be found",$param{'group'});
+	    &Sympa::Log::do_log('err', "Group %s can't be found",$param{'group'});
 	    return undef;
 	}
     }else {
 	$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
     }
     unless (chown($uid,$gid, $param{'file'})){
-	&Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$param{'file'},$param{'user'},$param{'group'}, $!);
+	&Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$param{'file'},$param{'user'},$param{'group'}, $!);
 	return undef;
     }
     if ($param{'mode'}){
 	unless (chmod($param{'mode'}, $param{'file'})){
-	    &Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $!);
+	    &Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $!);
 	    return undef;
 	}
     }
@@ -68,10 +68,10 @@ sub set_file_rights {
 sub copy_dir {
     my $dir1 = shift;
     my $dir2 = shift;
-    &Log::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
+    &Sympa::Log::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
 
     unless (-d $dir1){
-	&Log::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
+	&Sympa::Log::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
 	return undef;
     }
     return (&File::Copy::Recursive::dircopy($dir1,$dir2)) ;
@@ -80,7 +80,7 @@ sub copy_dir {
 #delete a directory and its content
 sub del_dir {
     my $dir = shift;
-    &Log::do_log('debug','del_dir %s',$dir);
+    &Sympa::Log::do_log('debug','del_dir %s',$dir);
     
     if(opendir DIR, $dir){
 	for (readdir DIR) {
@@ -90,9 +90,9 @@ sub del_dir {
 	    del_dir($path) if -d $path;
 	}
 	closedir DIR;
-	unless(rmdir $dir) {&Log::do_log('err','Unable to delete directory %s: $!',$dir);}
+	unless(rmdir $dir) {&Sympa::Log::do_log('err','Unable to delete directory %s: $!',$dir);}
     }else{
-	&Log::do_log('err','Unable to open directory %s to delete the files it contains: $!',$dir);
+	&Sympa::Log::do_log('err','Unable to open directory %s to delete the files it contains: $!',$dir);
     }
 }
 
@@ -145,10 +145,10 @@ sub mkdir_all {
 sub shift_file {
     my $file = shift;
     my $count = shift;
-    &Log::do_log('debug', "shift_file ($file,$count)");
+    &Sympa::Log::do_log('debug', "shift_file ($file,$count)");
 
     unless (-f $file) {
-	&Log::do_log('info', "shift_file : unknown file $file");
+	&Sympa::Log::do_log('info', "shift_file : unknown file $file");
 	return undef;
     }
     
@@ -156,7 +156,7 @@ sub shift_file {
     my $file_extention = strftime("%Y:%m:%d:%H:%M:%S", @date);
     
     unless (rename ($file,$file.'.'.$file_extention)) {
-	&Log::do_log('err', "shift_file : Cannot rename file $file to $file.$file_extention" );
+	&Sympa::Log::do_log('err', "shift_file : Cannot rename file $file to $file.$file_extention" );
 	return undef;
     }
     if ($count) {
@@ -164,7 +164,7 @@ sub shift_file {
 	my $dir = $1;
 
 	unless (opendir(DIR, $dir)) {
-	    &Log::do_log('err', "shift_file : Cannot read dir $dir" );
+	    &Sympa::Log::do_log('err', "shift_file : Cannot read dir $dir" );
 	    return ($file.'.'.$file_extention);
 	}
 	my $i = 0 ;
@@ -172,9 +172,9 @@ sub shift_file {
 	    $i ++;
 	    if ($count lt $i) {
 		if (unlink ($oldfile)) { 
-		    &Log::do_log('info', "shift_file : unlink $oldfile");
+		    &Sympa::Log::do_log('info', "shift_file : unlink $oldfile");
 		}else{
-		    &Log::do_log('info', "shift_file : unable to unlink $oldfile");
+		    &Sympa::Log::do_log('info', "shift_file : unable to unlink $oldfile");
 		}
 	    }
 	}
@@ -185,7 +185,7 @@ sub shift_file {
 ## Find a file in an ordered list of directories
 sub find_file {
     my ($filename, @directories) = @_;
-    &Log::do_log('debug3','tools::find_file(%s,%s)', $filename, join(':',@directories));
+    &Sympa::Log::do_log('debug3','tools::find_file(%s,%s)', $filename, join(':',@directories));
 
     foreach my $d (@directories) {
 	if (-f "$d/$filename") {
@@ -259,7 +259,7 @@ sub get_dir_size {
 ## or few direcoty paths
 sub remove_dir {
     
-    &Log::do_log('debug2','remove_dir()');
+    &Sympa::Log::do_log('debug2','remove_dir()');
     
     foreach my $current_dir (@_){
 	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
@@ -269,11 +269,11 @@ sub remove_dir {
 
 	if (!-l && -d _) {
 	    unless (rmdir($name)) {
-		&Log::do_log('err','Error while removing dir %s',$name);
+		&Sympa::Log::do_log('err','Error while removing dir %s',$name);
 	    }
 	}else{
 	    unless (unlink($name)) {
-		&Log::do_log('err','Error while removing file  %s',$name);
+		&Sympa::Log::do_log('err','Error while removing file  %s',$name);
 	    }
 	}
     }
@@ -303,24 +303,24 @@ sub lock {
     
     ## Read access to prevent "Bad file number" error on Solaris
     unless (open FH, $open_mode.$lock_file) {
-	&Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
 	return undef;
     }
     
     my $got_lock = 1;
     unless (flock (FH, $operation | LOCK_NB)) {
-	&Log::do_log('notice','Waiting for %s lock on %s', $mode, $lock_file);
+	&Sympa::Log::do_log('notice','Waiting for %s lock on %s', $mode, $lock_file);
 
 	## If lock was obtained more than 20 minutes ago, then force the lock
 	if ( (time - (stat($lock_file))[9] ) >= 60*20) {
-	    &Log::do_log('notice','Removing lock file %s', $lock_file);
+	    &Sympa::Log::do_log('notice','Removing lock file %s', $lock_file);
 	    unless (unlink $lock_file) {
-		&Log::do_log('err', 'Cannot remove %s: %s', $lock_file, $!);
+		&Sympa::Log::do_log('err', 'Cannot remove %s: %s', $lock_file, $!);
 		return undef;	    		
 	    }
 	    
 	    unless (open FH, ">$lock_file") {
-		&Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
+		&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
 		return undef;	    
 	    }
 	}
@@ -334,19 +334,19 @@ sub lock {
 		$got_lock = 1;
 		last;
 	    }
-	    &Log::do_log('notice','Waiting for %s lock on %s', $mode, $lock_file);
+	    &Sympa::Log::do_log('notice','Waiting for %s lock on %s', $mode, $lock_file);
 	}
     }
 	
     if ($got_lock) {
-	&Log::do_log('debug2', 'Got lock for %s on %s', $mode, $lock_file);
+	&Sympa::Log::do_log('debug2', 'Got lock for %s on %s', $mode, $lock_file);
 
 	## Keep track of the locking PID
 	if ($mode eq 'write') {
 	    print FH "$$\n";
 	}
     }else {
-	&Log::do_log('err', 'Failed locking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $!);
 	return undef;
     }
 
@@ -359,11 +359,11 @@ sub unlock {
     my $fh = shift;
     
     unless (flock($fh,LOCK_UN)) {
-	&Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
 	return undef;
     }
     close $fh;
-    &Log::do_log('debug2', 'Release lock on %s', $lock_file);
+    &Sympa::Log::do_log('debug2', 'Release lock on %s', $lock_file);
     
     return 1;
 }
@@ -388,12 +388,12 @@ sub a_is_older_than_b {
     if (-r $param->{'a_file'}) {
 	$a_file_readable = 1;
     }else{
-	&Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'a_file'});
+	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'a_file'});
     }
     if (-r $param->{'b_file'}) {
 	$b_file_readable = 1;
     }else{
-	&Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'b_file'});
+	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'b_file'});
     }
     if ($a_file_readable && $b_file_readable) {
 	my @a_stats = stat ($param->{'a_file'});

@@ -24,7 +24,6 @@ package Sympa::Datasource::SQL::Informix;
 use strict;
 
 use Sympa::Datasource::SQL::Default;
-use Log;
 
 our @ISA = qw(Sympa::Datasource::SQL::Default);
 

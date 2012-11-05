@@ -26,8 +26,8 @@ use strict;
 use Proc::ProcessTable;
 use Sys::Hostname;
 
-use Log;
 use Sympa::Lock;
+use Sympa::Log;
 use Sympa::Tools::File;
 
 ## Remove PID file and STDERR output
@@ -39,7 +39,7 @@ sub remove_pid {
 	if($options->{'multiple_process'}) {
 		unless(open(PFILE, $pidfile)) {
 			# fatal_err('Could not open %s, exiting', $pidfile);
-			&Log::do_log('err','Could not open %s to remove pid %s', $pidfile, $pid);
+			&Sympa::Log::do_log('err','Could not open %s to remove pid %s', $pidfile, $pid);
 			return undef;
 		}
 		my $l = <PFILE>;
@@ -51,30 +51,30 @@ sub remove_pid {
 		if($#pids < 0) {
 			## Release the lock
 			unless(unlink $pidfile) {
-				&Log::do_log('err', "Failed to remove $pidfile: %s", $!);
+				&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $!);
 				return undef;
 			}
 		}else{
 			if(-f $pidfile) {
 				unless(open(PFILE, '> '.$pidfile)) {
-					&Log::do_log('err', "Failed to open $pidfile: %s", $!);
+					&Sympa::Log::do_log('err', "Failed to open $pidfile: %s", $!);
 					return undef;
 				}
 				print PFILE join(' ', @pids)."\n";
 				close(PFILE);
 			}else{
-				&Log::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $pidfile);
+				&Sympa::Log::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $pidfile);
 			}
 		}
 	}else{
 		unless(unlink $pidfile) {
-			&Log::do_log('err', "Failed to remove $pidfile: %s", $!);
+			&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $!);
 			return undef;
 		}
 		my $err_file = $tmpdir.'/'.$pid.'.stderr';
 		if(-f $err_file) {
 			unless(unlink $err_file) {
-				&Log::do_log('err', "Failed to remove $err_file: %s", $!);
+				&Sympa::Log::do_log('err', "Failed to remove $err_file: %s", $!);
 				return undef;
 			}
 		}
@@ -96,7 +96,7 @@ sub write_pid {
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
+	&Sympa::Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
 
     my @pids;
@@ -104,11 +104,11 @@ sub write_pid {
     # Lock pid file
     my $lock = new Sympa::Lock ($pidfile);
     unless (defined $lock) {
-	&Log::fatal_err('Lock could not be created. Exiting.');
+	&Sympa::Log::fatal_err('Lock could not be created. Exiting.');
     }
     $lock->set_timeout(5); 
     unless ($lock->lock('write')) {
-	&Log::fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
+	&Sympa::Log::fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
     }
     ## If pidfile exists, read the PIDs
     if(-f $pidfile) {
@@ -125,7 +125,7 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$!);
+	    &Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$!);
 	}
 	## Print other pids + this one
 	push(@pids, $pid);
@@ -136,13 +136,13 @@ sub write_pid {
 	unless(open(PIDFILE, '+>> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &Log::fatal_err('Could not open %s, exiting: %s', $pidfile);
+	    &Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile);
 	}
 	## The previous process died suddenly, without pidfile cleanup
 	## Send a notice to listmaster with STDERR of the previous process
 	if($#pids >= 0) {
 	    my $other_pid = $pids[0];
-	    &Log::do_log('notice', "Previous process %s died suddenly ; notifying listmaster", $other_pid);
+	    &Sympa::Log::do_log('notice', "Previous process %s died suddenly ; notifying listmaster", $other_pid);
 	    my $pname = $0;
 	    $pname =~ s/.*\/(\w+)/$1/;
 	    &send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
@@ -151,12 +151,12 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &Log::fatal_err('Could not open %s, exiting', $pidfile);
+	    &Sympa::Log::fatal_err('Could not open %s, exiting', $pidfile);
 	}
 	unless(truncate(PIDFILE, 0)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &Log::fatal_err('Could not truncate %s, exiting.', $pidfile);
+	    &Sympa::Log::fatal_err('Could not truncate %s, exiting.', $pidfile);
 	}
 	
 	print PIDFILE $pid."\n";
@@ -170,7 +170,7 @@ sub write_pid {
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	&Log::fatal_err('Unable to set rights on %s', $pidfile);
+	&Sympa::Log::fatal_err('Unable to set rights on %s', $pidfile);
     }
     ## Unlock pid file
     $lock->unlock();
@@ -188,7 +188,7 @@ sub direct_stderr_to_file {
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::do_log('err','Unable to set rights on %s', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
+	&Sympa::Log::do_log('err','Unable to set rights on %s', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
 	return undef;
     }
     return 1;
@@ -197,7 +197,7 @@ sub direct_stderr_to_file {
 # Send content of $pid.stderr to listmaster for process whose pid is $pid.
 sub send_crash_report {
     my %data = @_;
-    &Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
+    &Sympa::Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
     my $err_file = $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
     my (@err_output, $err_date);
     if(-f $err_file) {
@@ -213,7 +213,7 @@ sub send_crash_report {
 sub get_pids_in_pid_file {
 	my $pidfile = shift;
 	unless (open(PFILE, $pidfile)) {
-		&Log::do_log('err', "unable to open pidfile %s:%s",$pidfile,$!);
+		&Sympa::Log::do_log('err', "unable to open pidfile %s:%s",$pidfile,$!);
 		return undef;
 	}
 	my $l = <PFILE>;
@@ -223,7 +223,7 @@ sub get_pids_in_pid_file {
 }
 
 sub get_children_processes_list {
-    &Log::do_log('debug3','');
+    &Sympa::Log::do_log('debug3','');
     my @children;
     for my $p (@{new Proc::ProcessTable->table}){
 	if($p->ppid == $$) {

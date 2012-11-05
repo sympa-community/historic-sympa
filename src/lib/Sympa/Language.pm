@@ -27,9 +27,9 @@ use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 use POSIX qw(setlocale strftime);
 
-use Log;
 #use Sympa::Conf; FIXME
 use Sympa::Constants;
+use Sympa::Log;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(&gettext gettext_strftime);
@@ -121,7 +121,7 @@ sub GetSupportedLanguages {
 ## Keep the previous lang ; can be restored with PopLang
 sub PushLang {
     my $locale = shift;
-    &Log::do_log('debug', 'Language::PushLang(%s)', $locale);
+    &Sympa::Log::do_log('debug', 'Language::PushLang(%s)', $locale);
 
     push @previous_locale, $current_locale;
     &SetLang($locale);
@@ -130,7 +130,7 @@ sub PushLang {
 }
 
 sub PopLang {
-    &Log::do_log('debug', '');
+    &Sympa::Log::do_log('debug', '');
 
     my $locale = pop @previous_locale;
     &SetLang($locale);
@@ -141,12 +141,12 @@ sub PopLang {
 sub SetLang {
 ###########
     my $locale = shift;
-    &Log::do_log('debug2', 'Language::SetLang(%s)', $locale);
+    &Sympa::Log::do_log('debug2', 'Language::SetLang(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
 
     unless ($lang) {
-	&Log::do_log('err','Language::SetLang(), missing locale parameter');
+	&Sympa::Log::do_log('err','Language::SetLang(), missing locale parameter');
 	return undef;
     }
 
@@ -179,7 +179,7 @@ sub SetLang {
 	    }	
 	}
 	unless ($success) {
-	    &Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
+	    &Sympa::Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
 	    return undef;
 	}
     }
@@ -250,7 +250,7 @@ sub maketext {
     my $template_file = shift;
     my $msg = shift;
 
-#    &Log::do_log('notice','Maketext: %s', $msg);
+#    &Sympa::Log::do_log('notice','Maketext: %s', $msg);
 
     my $translation;
     my $textdomain = $template2textdomain{$template_file};
@@ -275,7 +275,7 @@ sub sympa_dgettext {
     my $textdomain = shift;
     my @param = @_;
 
-    &Log::do_log('debug3', 'Language::sympa_dgettext(%s)', $param[0]);
+    &Sympa::Log::do_log('debug3', 'Language::sympa_dgettext(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
@@ -312,7 +312,7 @@ sub sympa_dgettext {
 sub gettext {
     my @param = @_;
 
-    &Log::do_log('debug3', 'Language::gettext(%s)', $param[0]);
+    &Sympa::Log::do_log('debug3', 'Language::gettext(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {

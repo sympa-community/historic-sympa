@@ -6,16 +6,17 @@
 package Sympa::Robot;
 
 use Sympa::Conf;
+use Sympa::Log;
 
 ## Constructor of a Robot instance
 sub new {
     my($pkg, $name) = @_;
 
     my $robot = {'name' => $name};
-    &Log::do_log('debug2', '');
+    &Sympa::Log::do_log('debug2', '');
     
     unless (defined $name && $Sympa::Conf::Conf{'robots'}{$name}) {
-	&Log::do_log('err',"Unknown robot '$name'");
+	&Sympa::Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
@@ -25,7 +26,7 @@ sub new {
     }else {
 	$robot->{'home'} = $Sympa::Conf::Conf{'home'}.'/'.$name;
 	unless (-d $robot->{'home'}) {
-	    &Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
+	    &Sympa::Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
 	    return undef;
 	}
     }

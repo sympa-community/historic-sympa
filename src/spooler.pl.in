@@ -30,12 +30,12 @@ use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
 
-use Log;
 use Message;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Lock;
+use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -52,7 +52,7 @@ srand (time());
 my $version_string =
     sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
 
-my $daemon_name = &Log::set_daemon($0);
+my $daemon_name = &Sympa::Log::set_daemon($0);
 
 my $usage_string = "Usage:
    $0 [OPTIONS]
@@ -105,27 +105,27 @@ unless (Sympa::Conf::load($config_file,1)) {
 
 
 ## Open the syslog and say we're read out stuff.
-&Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
+&Sympa::Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
-    &Log::set_log_level($main::options{'log_level'});
-    &Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
+    &Sympa::Log::set_log_level($main::options{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Log::set_log_level($Conf{'log_level'});
-    &Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Sympa::Log::set_log_level($Conf{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
 }
 
 ## Probe Db if defined
 if ($Conf{'db_name'} and $Conf{'db_type'}) {
     unless (&Sympa::Upgrade::probe_db()) {
-	&Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Conf{'db_name'});
+	&Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Conf{'db_name'});
     }
 }
 
 ## Now trying to load full config (including database)
 unless (Sympa::Conf::load($config_file)) {
-   &Log::fatal_err("Configuration file $config_file has errors.");
+   &Sympa::Log::fatal_err("Configuration file $config_file has errors.");
    
 }
 
@@ -135,20 +135,20 @@ unless (Sympa::Conf::load($config_file)) {
 
 ## Main program
 if (!chdir($Conf{'home'})) {
-   &Log::fatal_err("Can't chdir to %s: %m", $Conf{'home'});
+   &Sympa::Log::fatal_err("Can't chdir to %s: %m", $Conf{'home'});
    ## Function never returns.
 }
 
 ## Check for several files.
 unless (&Sympa::Conf::checkfiles_as_root()) {
-   &Log::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
+   &Sympa::Log::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
    ## No return.
 }
 
 ## Check that the data structure is uptodate
 unless ($main::options{'upgrade'} || $main::options{'help'}) {
     unless (&Sympa::Upgrade::data_structure_uptodate()) {
-	&Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
+	&Sympa::Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
     }
 }
 my $spooldir;
@@ -183,23 +183,23 @@ if ($signal ne 'hup') {
 	    $spooldir = $distinct_spool;
 	    if ($master) { # only master process fork child process
 		if ((my $child_pid = fork) != 0) {
-		   &Log::do_log('debug', "Master daemon fork child %s",$child_pid);		
+		   &Sympa::Log::do_log('debug', "Master daemon fork child %s",$child_pid);		
 		}else{
-		   &Log::do_log('info', "Child process PID %s spooler for spool %s",$$,$spooldir);
+		   &Sympa::Log::do_log('info', "Child process PID %s spooler for spool %s",$$,$spooldir);
 		    $master = 0;
 		    last;
 		}
 	    }
 	}
 	if ($master) {
-	   &Log::do_log('debug', "Fork, exiting from initial process");
+	   &Sympa::Log::do_log('debug', "Fork, exiting from initial process");
 	    exit (0);
 	}
 	
 
-	&Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
+	&Sympa::Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
 
-	&Log::do_log('debug', "Running server $$ for spooler purpose ");
+	&Sympa::Log::do_log('debug', "Running server $$ for spooler purpose ");
 
 	unless ($main::options{'batch'} ) {
 	    
@@ -231,9 +231,9 @@ if ($signal ne 'hup') {
 	umask(oct($Conf{'umask'}));
 	
 	## Most initializations have now been done.
-	&Log::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
+	&Sympa::Log::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
     }else{
-	&Log::do_log('notice', "Sympa spooler %s reload config", Sympa::Constants::VERSION);
+	&Sympa::Log::do_log('notice', "Sympa spooler %s reload config", Sympa::Constants::VERSION);
 	$signal = '0';
     }
 
@@ -241,7 +241,7 @@ if ($signal ne 'hup') {
 ## Prevent that 2 processes perform checks at the same time...
 if ($main::daemon_usage == DAEMON_ALL) {
     unless (&Sympa::Conf::checkfiles()) {
-	&Log::fatal_err("Missing files. Aborting.");
+	&Sympa::Log::fatal_err("Missing files. Aborting.");
 	## No return.
     }
 }else {
@@ -257,10 +257,10 @@ if ($main::options{'help'}) {
 ## Do we have right access in the directory
 if ($main::options{'keepcopy'}) {
     if (! -d $main::options{'keepcopy'}) {
-	&Log::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $main::options{'keepcopy'});
+	&Sympa::Log::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $main::options{'keepcopy'});
 	delete $main::options{'keepcopy'};
     }elsif (! -w $main::options{'keepcopy'}) {
-	&Log::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $main::options{'keepcopy'});
+	&Sympa::Log::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $main::options{'keepcopy'});
 	delete $main::options{'keepcopy'};
     }
 }
@@ -280,7 +280,7 @@ my $bouncespool = new Sympa::Spool('bounce');
 while (!$signal) {
 
     if (!opendir(DIR, $spooldir)) {
-	&Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
+	&Sympa::Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
     }
     @qfile = sort tools::by_date grep (!/^\./,readdir(DIR));
     closedir(DIR);
@@ -310,7 +310,7 @@ while (!$signal) {
 	## Lock file
 	my $lock = new Sympa::Lock ($spooldir.'/'.$filename);
 	unless (defined $lock) {
-	    &Log::do_log('err','Could not create new lock');
+	    &Sympa::Log::do_log('err','Could not create new lock');
 	    next;
 	}
 	$lock->set_timeout(2); 
@@ -383,20 +383,20 @@ while (!$signal) {
 #	my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP; 
 	my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
 	unless($messagekey) {
-	   &Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
+	   &Sympa::Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
 	    next;
 	}
 
 	if ($main::options{'keepcopy'}) {
 	    unless (&File::Copy::copy($t_spool.'/'.$filename, $main::options{'keepcopy'}.'/'.$filename) ) {
- 		&Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $!);
+ 		&Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $!);
 	    }
 	}
 	
 	## Release the lock
 	$lock->unlock();
 	unless (unlink ($spooldir.'/'.$filename)) {
-	   &Log::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+	   &Sympa::Log::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
 	    exit;
 	}	
     } 
@@ -411,7 +411,7 @@ while (!$signal) {
 Sympa::SDM::db_disconnect;
 
 }
-&Log::do_log('notice', 'spooler exited normally due to signal');
+&Sympa::Log::do_log('notice', 'spooler exited normally due to signal');
 my $file = $Conf{'pidfile_spooler'};
 &Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
 
@@ -430,7 +430,7 @@ exit(0);
 #
 ############################################################
 sub sigterm {
-    &Log::do_log('notice', 'signal TERM received, still processing current task');
+    &Sympa::Log::do_log('notice', 'signal TERM received, still processing current task');
     $signal = 'term';
 }
 
@@ -448,10 +448,10 @@ sub sigterm {
 ###########################################################
 sub sighup {
     if ($main::options{'mail'}) {
-	&Log::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
+	&Sympa::Log::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
 	undef $main::options{'mail'};
     }else{
-	&Log::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
+	&Sympa::Log::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
 	$main::options{'mail'} = 1;
     }
     $signal = 'hup';

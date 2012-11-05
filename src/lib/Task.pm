@@ -24,8 +24,8 @@ package Task;
 
 use strict;
 
-use Log;
 use Sympa::List;
+use Sympa::Log;
 use Sympa::Spool;
 use Sympa::Tools;
 
@@ -43,7 +43,7 @@ sub set_spool {
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
-    &Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
+    &Sympa::Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
     
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
     my $host_regexp = &Sympa::Tools::get_regexp('host');
@@ -73,9 +73,9 @@ sub new {
 ##remove a task using message key
 sub remove {
     my $self = shift;
-    &Log::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
+    &Sympa::Log::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
     unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
-	&Log::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
+	&Sympa::Log::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
 	return undef;
     }
 }
@@ -84,7 +84,7 @@ sub remove {
 ## Build all Task objects
 sub list_tasks {
 
-    &Log::do_log('debug',"Listing all tasks");
+    &Sympa::Log::do_log('debug',"Listing all tasks");
     ## Reset the list of tasks
     undef @task_list;
     undef %task_by_list;
@@ -112,7 +112,7 @@ sub list_tasks {
 ## Return a list tasks for the given list
 sub get_tasks_by_list {
     my $list_id = shift;
-    &Log::do_log('debug',"Getting tasks for list '%s'",$list_id);
+    &Sympa::Log::do_log('debug',"Getting tasks for list '%s'",$list_id);
     return () unless (defined $task_by_list{$list_id});
     return values %{$task_by_list{$list_id}};
 }
@@ -120,14 +120,14 @@ sub get_tasks_by_list {
 sub get_used_models {
     ## Optional list parameter
     my $list_id = shift;
-    &Log::do_log('debug',"Getting used models for list '%s'",$list_id);
+    &Sympa::Log::do_log('debug',"Getting used models for list '%s'",$list_id);
 
     if (defined $list_id) {
 	if (defined $task_by_list{$list_id}) {
-	    &Log::do_log('debug2',"Found used models for list '%s'",$list_id);
+	    &Sympa::Log::do_log('debug2',"Found used models for list '%s'",$list_id);
 	    return keys %{$task_by_list{$list_id}}
 	}else {
-	    &Log::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
+	    &Sympa::Log::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
 	    return ();
 	}
 	
@@ -137,7 +137,7 @@ sub get_used_models {
 }
 
 sub get_task_list {
-    &Log::do_log('debug',"Getting tasks list");
+    &Sympa::Log::do_log('debug',"Getting tasks list");
     return @task_list;
 }
 

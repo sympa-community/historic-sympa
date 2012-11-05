@@ -27,6 +27,7 @@ use MIME::Parser;
 use Exporter;
 
 use Sympa::Conf;
+use Sympa::Log;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(rfc1891 corrige anabounce);
@@ -160,13 +161,13 @@ sub anabounce {
     # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
     my $tmpfile = $Sympa::Conf::Conf{'tmpdir'}.'/bounce.'.$$ ;
     unless (open (BOUNCE,"> $tmpfile")){
-&Log::do_log('err',"could not create $tmpfile");
+&Sympa::Log::do_log('err',"could not create $tmpfile");
 	return undef;
     }
     print BOUNCE     $message->{'msg'}->as_string;
     close BOUNCE;
     unless (open (BOUNCE,"$tmpfile")){
-&Log::do_log('err',"could not read $tmpfile");
+&Sympa::Log::do_log('err',"could not read $tmpfile");
 	return undef;
     }
 

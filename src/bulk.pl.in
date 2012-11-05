@@ -42,11 +42,11 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Log;
 use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::Log;
 use Sympa::Mail;
 use Sympa::Spool;
 use Sympa::SDM;
@@ -55,7 +55,7 @@ use Sympa::Tools::Daemon;
 use Sympa::Tools::DKIM;
 use Sympa::Tracking;
 
-my $daemon_name = &Log::set_daemon($0);
+my $daemon_name = &Sympa::Log::set_daemon($0);
 my $date_of_last_activity = time();
 local $main::daemon_usage = 'DAEMON_MASTER'; ## Default is to launch bulk as master daemon.
 
@@ -65,7 +65,7 @@ local $main::daemon_usage = 'DAEMON_MASTER'; ## Default is to launch bulk as mas
 ##  --mail : logs every sendmail calls
 my %options;
 unless (&GetOptions(\%main::options, 'debug|d', 'foreground|F','mail|m')) {
-    &Log::fatal_err("Unknown options.");
+    &Sympa::Log::fatal_err("Unknown options.");
 }
 
 if ($main::options{'debug'}) {
@@ -79,23 +79,23 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 # Load sympa.conf
 unless (Sympa::Conf::load($sympa_conf_file)) {
-    &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
+    &Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
 }
 
 ## Check database connectivity
 unless (&Sympa::SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Conf::Conf{'db_name'});
+    &Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Conf::Conf{'db_name'});
 }
 
-&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
+&Sympa::Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
-    &Log::set_log_level($main::options{'log_level'});
-    &Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
+    &Sympa::Log::set_log_level($main::options{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Log::set_log_level($Sympa::Conf::Conf{'log_level'});
-    &Log::do_log('info', "Configuration file read, default log level $Sympa::Conf::Conf{'log_level'}"); 
+    &Sympa::Log::set_log_level($Sympa::Conf::Conf{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Conf::Conf{'log_level'}"); 
 }
 
 ## Set the process as main bulk daemon by default.
@@ -111,11 +111,11 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
    }
    setpgrp(0, 0);
    if ((my $child_pid = fork) != 0) {
-       &Log::do_log('info',"Starting bulk master daemon, pid %s",$child_pid);
+       &Sympa::Log::do_log('info',"Starting bulk master daemon, pid %s",$child_pid);
        exit(0);
    }
 }
-&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
+&Sympa::Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
@@ -136,7 +136,7 @@ $< = $> = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
-    &Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
+    &Sympa::Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
 
 ## Sets the UMASK
@@ -144,13 +144,13 @@ umask(oct($Sympa::Conf::Conf{'umask'}));
 
 ## Change to list root
 unless (chdir($Sympa::Conf::Conf{'home'})) {
-    &Log::do_log('err','unable to change directory');
+    &Sympa::Log::do_log('err','unable to change directory');
     exit (-1);
 }
 
 my $pinfo = &Sympa::List::_apply_defaults();
 
-&Log::do_log('notice', "bulk.pl %s Started", Sympa::Constants::VERSION);
+&Sympa::Log::do_log('notice', "bulk.pl %s Started", Sympa::Constants::VERSION);
 
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
@@ -200,11 +200,11 @@ while (!$end) {
 	    my @pids_leftover = keys %dead_children;
 	    if ($#pids_leftover > -1) {
 		my @dc;
-		&Log::do_log('debug2','Some childs of current process disappeared. Checking whether they shut down cleanly or not.');
+		&Sympa::Log::do_log('debug2','Some childs of current process disappeared. Checking whether they shut down cleanly or not.');
 		my $pids_in_pfile = &Sympa::Tools::Daemon::get_pids_in_pid_file($Sympa::Conf::Conf{'pidfile_bulk'});
 		foreach my $fpid (@{$pids_in_pfile}) {
 		    if (defined $dead_children{$fpid}) {
-			&Log::do_log('err','The %s child exists in the pid file but is no longer running. Removing it and notyfying listmaster.',$fpid);
+			&Sympa::Log::do_log('err','The %s child exists in the pid file but is no longer running. Removing it and notyfying listmaster.',$fpid);
 			my $pname = $0;
 			$pname =~ s/.*\/(\w+)/$1/;
 			&Sympa::Tools::Daemon::send_crash_report(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid'=>$fpid,'pname'=>$pname, domain => $Sympa::Conf::Conf{'domain'}));
@@ -230,11 +230,11 @@ while (!$end) {
 		$dbh->disconnect; # when loading conf in database disconnect because of sharing dbh may crash bulk.pl
 		
 		if($Sympa::Conf::Conf{'bulk_max_count'} > 1) {
-		    &Log::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, $Sympa::Conf::Conf{'bulk_max_count'}-($#remaining_children+1));
+		    &Sympa::Log::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, $Sympa::Conf::Conf{'bulk_max_count'}-($#remaining_children+1));
 		    for my $process_count(1..$Sympa::Conf::Conf{'bulk_max_count'}-($#remaining_children+1)){
-			&Log::do_log('info', "Will fork: %s", $process_count);
+			&Sympa::Log::do_log('info', "Will fork: %s", $process_count);
 			if ((my $child_pid = fork) != 0) {
-			    &Log::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
+			    &Sympa::Log::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
 			    &Sympa::Tools::Daemon::write_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $child_pid, $options);
 			    $created_children{$child_pid} = 1;
@@ -245,8 +245,8 @@ while (!$end) {
 			    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
 			    $date_of_last_activity = time();
 			    $main::daemon_usage = 'DAEMON_SLAVE'; # automatic lists creation
-			    &Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
-			    &Log::do_log('info', "Bulk slave daemon started with pid %s", $$);
+			    &Sympa::Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
+			    &Sympa::Log::do_log('info', "Bulk slave daemon started with pid %s", $$);
 			    last;
 			}
 		    }
@@ -259,7 +259,7 @@ while (!$end) {
     if (($main::daemon_usage eq 'DAEMON_SLAVE') && 
 		(time() - $date_of_last_activity > $Sympa::Conf::Conf{'bulk_lazytime'}) && 
 		!(my $r_packets = &Sympa::Bulk::there_is_too_much_remaining_packets())){
-		&Log::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $$, $Sympa::Conf::Conf{'bulk_lazytime'});
+		&Sympa::Log::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $$, $Sympa::Conf::Conf{'bulk_lazytime'});
 		last;
     }
 	
@@ -272,7 +272,7 @@ while (!$end) {
 
 	    $messagekey = $bulk->{'messagekey'};
 	    $message_from_spool = $spool->get_message({'messagekey' => $bulk->{'messagekey'}});
-	    &Log::do_log('notice','Start sending message "%s" (key "%s") to list "%s@%s" (priority %s) (starting %s seconds after scheduled expedition date)',
+	    &Sympa::Log::do_log('notice','Start sending message "%s" (key "%s") to list "%s@%s" (priority %s) (starting %s seconds after scheduled expedition date)',
 			$bulk->{'messageid'},
 			$bulk->{'messagekey'},
 			$bulk->{'listname'}, 
@@ -287,9 +287,9 @@ while (!$end) {
 	    # &trace_smime($messageasstring_init,'initial');
 
 	    unless ( $messageasstring_init ) {
-		&Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
+		&Sympa::Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
 		unless (&Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-		    &Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+		    &Sympa::Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 		}
 	    }
 	    $messagekey = $bulk->{'messagekey'};
@@ -348,7 +348,7 @@ while (!$end) {
 		}
 		if (($bulk->{'merge'}) && !($message->{'protected'})) {
 		    unless(&Sympa::Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
-			&Log::do_log('err', 'Erreur d appel &Sympa::Bulk::merge_msg');
+			&Sympa::Log::do_log('err', 'Erreur d appel &Sympa::Bulk::merge_msg');
 		    }		    
 		    $messageasstring = $entity->as_string;		
 		}else{
@@ -393,12 +393,12 @@ while (!$end) {
 	
 	## Remove packet once it has been processed
 	unless (&Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-	    &Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+	    &Sympa::Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 	}
 
 	
 	if($bulk->{'priority_packet'} == $Sympa::Conf::Conf{'sympa_packet_priority'} + 5){
-	    &Log::do_log('notice','Done sending message "%s" (key "%s") to list "%s@%s" (priority %s) in %s seconds since scheduled expedition date.', 
+	    &Sympa::Log::do_log('notice','Done sending message "%s" (key "%s") to list "%s@%s" (priority %s) in %s seconds since scheduled expedition date.', 
 		    $bulk->{'messageid'}, 
 		    $bulk->{'messagekey'}, 
 		    $bulk->{'listname'}, 
@@ -418,7 +418,7 @@ while (!$end) {
 
 &Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
-&Log::do_log('notice', 'bulk.pl exited normally due to signal');
+&Sympa::Log::do_log('notice', 'bulk.pl exited normally due to signal');
 &Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $$, $options, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
@@ -427,7 +427,7 @@ exit(0);
 ## When we catch SIGTERM, just change the value of the loop
 ## variable.
 sub sigterm {
-    &Log::do_log('notice', 'signal TERM received, still processing current task');
+    &Sympa::Log::do_log('notice', 'signal TERM received, still processing current task');
     $end = 1;
 }
 
@@ -442,7 +442,7 @@ sub trace_smime {
     $trusted_ca_options .= "-CApath $Sympa::Conf::Conf{'capath'} " if ($Sympa::Conf::Conf{'capath'});
     
     unless (open (MSGDUMP, "| $Sympa::Conf::Conf{'openssl'} smime -verify  $trusted_ca_options > /dev/null")) {	
-	&Log::do_log('err', "unable to verify smime signature");
+	&Sympa::Log::do_log('err', "unable to verify smime signature");
 	return undef ;
     }
     
@@ -452,8 +452,8 @@ sub trace_smime {
     
     my $status = $?/256 ;
     unless ($status == 0) {
-	&Log::do_log('debug', "signature SMIME NOT OK   (%s)",$where);    
+	&Sympa::Log::do_log('debug', "signature SMIME NOT OK   (%s)",$where);    
     }else{
-	&Log::do_log('debug', "signature SMIME OK    (%s)",$where);    
+	&Sympa::Log::do_log('debug', "signature SMIME OK    (%s)",$where);    
     }
 }

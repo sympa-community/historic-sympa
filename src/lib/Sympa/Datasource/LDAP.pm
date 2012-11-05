@@ -27,7 +27,7 @@ use strict;
 use Exporter;
 
 use Sympa::Datasource;
-use Log;
+use Sympa::Log;
 use Sympa::Tools;
 
 our @ISA = qw(Sympa::Datasource Exporter);
@@ -38,7 +38,7 @@ sub new {
     my $pkg = shift;
     my $param = shift;
     my $self = $param;
-    &Log::do_log('debug','Creating new LDAPSource object');
+    &Sympa::Log::do_log('debug','Creating new LDAPSource object');
     ## Map equivalent parameters (depends on the calling context : included members, scenario, authN
     ## Also set defaults
     foreach my $p (keys %{$self}) {
@@ -58,19 +58,19 @@ sub new {
     
     
     unless (eval "require Net::LDAP") {
-	&Log::do_log ('err',"Unable to use LDAP library, Net::LDAP required, install perl-ldap (CPAN) first");
+	&Sympa::Log::do_log ('err',"Unable to use LDAP library, Net::LDAP required, install perl-ldap (CPAN) first");
 	return undef;
     }
     require Net::LDAP;
 
     unless (eval "require Net::LDAP::Entry") {
-	&Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
+	&Sympa::Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
 	return undef;
     }
     require Net::LDAP::Entry;
     
     unless (eval "require Net::LDAP::Message") {
-	&Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
+	&Sympa::Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
 	return undef;
     }
     require Net::LDAP::Message;
@@ -98,7 +98,7 @@ sub connect {
     ## Do we have all required parameters
     foreach my $ldap_param ('ldap_host') {
 	unless ($self->{$ldap_param}) {
-	    &Log::do_log('info','Missing parameter %s for LDAP connection', $ldap_param);
+	    &Sympa::Log::do_log('info','Missing parameter %s for LDAP connection', $ldap_param);
 	    return undef;
 	}
     }
@@ -119,7 +119,7 @@ sub connect {
 	    $self->{'ciphers'} = $self->{'ldap_ssl_ciphers'} if ($self->{'ldap_ssl_ciphers'});
 	    
 	    unless (eval "require Net::LDAPS") {
-		&Log::do_log ('err',"Unable to use LDAPS library, Net::LDAPS required");
+		&Sympa::Log::do_log ('err',"Unable to use LDAPS library, Net::LDAPS required");
 		return undef;
 	    } 
 	    require Net::LDAPS;
@@ -136,7 +136,7 @@ sub connect {
     }
 
     unless (defined $self->{'ldap_handler'} ){
-	&Log::do_log ('err',"Unable to connect to the LDAP server '%s'",$self->{'ldap_host'});
+	&Sympa::Log::do_log ('err',"Unable to connect to the LDAP server '%s'",$self->{'ldap_host'});
 	return undef;
     }
 
@@ -165,13 +165,13 @@ sub connect {
     }
     
     unless (defined($cnx) && ($cnx->code() == 0)){
-	&Log::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
+	&Sympa::Log::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
 	$self->{'ldap_handler'}->unbind;
 	return undef;
     }
-    &Log::do_log ('debug',"Bound to LDAP host '$host_entry'");
+    &Sympa::Log::do_log ('debug',"Bound to LDAP host '$host_entry'");
     
-    &Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
+    &Sympa::Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
     return $self->{'ldap_handler'};
 
 }
@@ -179,11 +179,11 @@ sub connect {
 sub query {
     my ($self, $sql_query) = @_;
     unless ($self->{'sth'} = $self->{'dbh'}->prepare($sql_query)) {
-        &Log::do_log('err','Unable to prepare SQL query : %s', $self->{'dbh'}->errstr);
+        &Sympa::Log::do_log('err','Unable to prepare SQL query : %s', $self->{'dbh'}->errstr);
         return undef;
     }
     unless ($self->{'sth'}->execute) {
-        &Log::do_log('err','Unable to perform SQL query %s : %s ',$sql_query, $self->{'dbh'}->errstr);
+        &Sympa::Log::do_log('err','Unable to perform SQL query %s : %s ',$sql_query, $self->{'dbh'}->errstr);
         return undef;
     }
 

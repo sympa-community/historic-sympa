@@ -21,9 +21,9 @@
 
 package wwslib;
 
-use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Log;
 use Sympa::Tools::Cookie;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
@@ -150,7 +150,7 @@ sub load_config {
     my $conf = \%default_conf;
 
     unless (open (FILE, $file)) {
-	&Log::do_log('err',"load_config: unable to open $file");
+	&Sympa::Log::do_log('err',"load_config: unable to open $file");
 	return undef;
     }
     
@@ -163,9 +163,9 @@ sub load_config {
 	    if (defined ($conf->{$k})) {
 		$conf->{$k} = $v;
 	    }elsif (defined $old_param{$k}) {
-		&Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
+		&Sympa::Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
 	    }else {
-		&Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
+		&Sympa::Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
 	    }
 	}
 	next;
@@ -175,15 +175,15 @@ sub load_config {
 
     ## Check binaries and directories
     if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
-	&Log::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
+	&Sympa::Log::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
     }
 
     if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
-	&Log::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
+	&Sympa::Log::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
     }
 
     if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
-	&Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
+	&Sympa::Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
     }
 
     return $conf;
@@ -200,7 +200,7 @@ sub load_mime_types {
 	next unless (-r $loc);
 
 	unless(open (CONF, $loc)) {
-	    &Log::do_log('err',"load_mime_types: unable to open $loc");
+	    &Sympa::Log::do_log('err',"load_mime_types: unable to open $loc");
 	    return undef;
 	}
     }
@@ -231,28 +231,28 @@ sub load_mime_types {
 
 ## Returns user information extracted from the cookie
 sub get_email_from_cookie {
-#    &Log::do_log('debug', 'get_email_from_cookie');
+#    &Sympa::Log::do_log('debug', 'get_email_from_cookie');
     my $cookie = shift;
     my $secret = shift;
 
     my ($email, $auth) ;
 
-    # &Log::do_log('info', "get_email_from_cookie($cookie,$secret)");
+    # &Sympa::Log::do_log('info', "get_email_from_cookie($cookie,$secret)");
     
     unless (defined $secret) {
 	&report::reject_report_web('intern','cookie_error',{},'','','',$robot);
-	&Log::do_log('info', 'parameter cookie undefined, authentication failure');
+	&Sympa::Log::do_log('info', 'parameter cookie undefined, authentication failure');
     }
 
     unless ($cookie) {
 	&report::reject_report_web('intern','cookie_error',$cookie,'get_email_from_cookie','','',$robot);
-	&Log::do_log('info', ' cookie undefined, authentication failure');
+	&Sympa::Log::do_log('info', ' cookie undefined, authentication failure');
     }
 
     ($email, $auth) = &Sympa::Tools::Cookie::check_cookie ($cookie, $secret);
     unless ( $email) {
 	&report::reject_report_web('user','auth_failed',{},'');
-	&Log::do_log('info', 'get_email_from_cookie: auth failed for user %s', $email);
+	&Sympa::Log::do_log('info', 'get_email_from_cookie: auth failed for user %s', $email);
 	return undef;
     }    
 
@@ -294,7 +294,7 @@ sub init_passwd {
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
 		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
-		&Log::do_log('info','init_passwd: update failed');
+		&Sympa::Log::do_log('info','init_passwd: update failed');
 		return undef;
 	    }
 	}
@@ -305,7 +305,7 @@ sub init_passwd {
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {
 	    &report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
-	    &Log::do_log('info','init_passwd: add failed');
+	    &Sympa::Log::do_log('info','init_passwd: add failed');
 	    return undef;
 	}
     }
@@ -334,15 +334,15 @@ sub get_my_url {
 # Uploade source file to the destination on the server
 sub upload_file_to_server {
     my $param = shift;
-    &Log::do_log('debug',"Uploading file from field %s to destination %s",$param->{'file_field'},$param->{'destination'});
+    &Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$param->{'file_field'},$param->{'destination'});
     my $fh;
     unless ($fh = $param->{'query'}->upload($param->{'file_field'})) {
-	&Log::do_log('debug',"Cannot upload file from field $param->{'file_field'}");
+	&Sympa::Log::do_log('debug',"Cannot upload file from field $param->{'file_field'}");
 	return undef;
     }	
  
     unless (open FILE, ">:bytes", $param->{'destination'}) {
-	&Log::do_log('debug',"Cannot open file $param->{'destination'} : $!");
+	&Sympa::Log::do_log('debug',"Cannot open file $param->{'destination'} : $!");
 	return undef;
     }
     while (<$fh>) {

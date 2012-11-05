@@ -34,9 +34,9 @@ use POSIX qw(strftime mkfifo strtod);
 use Sys::Hostname;
 use Text::LineFold;
 
-use Log;
 use Sympa::Constants;
 use Sympa::Language;
+use Sympa::Log;
 use Sympa::Tools::File;
 
 ## RCS identification.
@@ -72,7 +72,7 @@ my %regexp = ('email' => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
 sub _create_xss_parser {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::_create_xss_parser(%s)',$parameters{'robot'});
+    &Sympa::Log::do_log('debug3','tools::_create_xss_parser(%s)',$parameters{'robot'});
     my $hss = HTML::StripScripts::Parser->new({ Context => 'Document',
 						AllowSrc        => 1,
 						Rules => {
@@ -123,16 +123,16 @@ sub make_pictures_url {
 ## Returns sanitized version (using StripScripts) of the string provided as argument.
 sub sanitize_html {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::sanitize_html(%s,%s,%s)',$parameters{'string'},$parameters{'robot'},$parameters{'host'});
+    &Sympa::Log::do_log('debug3','tools::sanitize_html(%s,%s,%s)',$parameters{'string'},$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'string'}) {
-	&Log::do_log('err',"No string provided.");
+	&Sympa::Log::do_log('err',"No string provided.");
 	return undef;
     }
 
     my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
-	&Log::do_log('err',"Can't create StripScript parser.");
+	&Sympa::Log::do_log('err',"Can't create StripScript parser.");
 	return undef;
     }
     my $string = $hss -> filter_html($parameters{'string'});
@@ -142,16 +142,16 @@ sub sanitize_html {
 ## Returns sanitized version (using StripScripts) of the content of the file whose path is provided as argument.
 sub sanitize_html_file {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::sanitize_html_file(%s,%s)',$parameters{'robot'},$parameters{'host'});
+    &Sympa::Log::do_log('debug3','tools::sanitize_html_file(%s,%s)',$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'file'}) {
-	&Log::do_log('err',"No path to file provided.");
+	&Sympa::Log::do_log('err',"No path to file provided.");
 	return undef;
     }
 
     my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
-	&Log::do_log('err',"Can't create StripScript parser.");
+	&Sympa::Log::do_log('err',"Can't create StripScript parser.");
 	return undef;
     }
     $hss -> parse_file($parameters{'file'});
@@ -161,13 +161,13 @@ sub sanitize_html_file {
 ## Sanitize all values in the hash $var, starting from $level
 sub sanitize_var {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::sanitize_var(%s,%s,%s)',$parameters{'var'},$parameters{'level'},$parameters{'robot'});
+    &Sympa::Log::do_log('debug3','tools::sanitize_var(%s,%s,%s)',$parameters{'var'},$parameters{'level'},$parameters{'robot'});
     unless (defined $parameters{'var'}){
-	&Log::do_log('err','Missing var to sanitize.');
+	&Sympa::Log::do_log('err','Missing var to sanitize.');
 	return undef;
     }
     unless (defined $parameters{'htmlAllowedParam'} && $parameters{'htmlToFilter'}){
-	&Log::do_log('err','Missing var *** %s *** %s *** to ignore.',$parameters{'htmlAllowedParam'},$parameters{'htmlToFilter'});
+	&Sympa::Log::do_log('err','Missing var *** %s *** %s *** to ignore.',$parameters{'htmlAllowedParam'},$parameters{'htmlToFilter'});
 	return undef;
     }
     my $level = $parameters{'level'};
@@ -217,7 +217,7 @@ sub sanitize_var {
 	}
     }
     else {
-	&Log::do_log('err','Variable is neither a hash nor an array.');
+	&Sympa::Log::do_log('err','Variable is neither a hash nor an array.');
 	return undef;
     }
     return 1;
@@ -257,11 +257,11 @@ sub safefork {
    for ($i = 1; $i < 4; $i++) {
       my($pid) = fork;
       return $pid if (defined($pid));
-      &Log::do_log ('warning', "Can't create new process in safefork: %m");
+      &Sympa::Log::do_log ('warning', "Can't create new process in safefork: %m");
       ## should send a mail to the listmaster
       sleep(10 * $i);
    }
-   &Log::fatal_err("Can't create new process in safefork: %m");
+   &Sympa::Log::fatal_err("Can't create new process in safefork: %m");
    ## No return.
 }
 
@@ -290,7 +290,7 @@ sub checkcommand {
    ## Check for commands in the subject.
    my $subject = $msg->head->get('Subject');
 
-   &Log::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
+   &Sympa::Log::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
    if ($subject) {
        if ($regexp && ($subject =~ /^$regexp\b/im)) {
@@ -318,7 +318,7 @@ sub load_edit_list_conf {
     my $robot = shift;
     my $list = shift;
     my $basedir = shift;
-    &Log::do_log('debug2', 'tools::load_edit_list_conf (%s, %s, %s)',$robot, $list, $basedir);
+    &Sympa::Log::do_log('debug2', 'tools::load_edit_list_conf (%s, %s, %s)',$robot, $list, $basedir);
 
     my $file;
     my $conf ;
@@ -327,7 +327,7 @@ sub load_edit_list_conf {
 	unless ($file = get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
 
     unless (open (FILE, $file)) {
-	&Log::do_log('info','Unable to open config file %s', $file);
+	&Sympa::Log::do_log('info','Unable to open config file %s', $file);
 	return undef;
     }
 
@@ -343,7 +343,7 @@ sub load_edit_list_conf {
 		$r =~ s/^\s*(\S+)\s*$/$1/;
 		if ($r eq 'default') {
 		    $error_in_conf = 1;
-		    &Log::do_log('notice', '"default" is no more recognised');
+		    &Sympa::Log::do_log('notice', '"default" is no more recognised');
 		    foreach my $set ('owner','privileged_owner','listmaster') {
 			$conf->{$param}{$set} = $priv;
 		    }
@@ -352,14 +352,14 @@ sub load_edit_list_conf {
 		$conf->{$param}{$r} = $priv;
 	    }
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$basedir/edit_list.conf",$_ );
+	    &Sympa::Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$basedir/edit_list.conf",$_ );
 	    next;
 	}
     }
 
     if ($error_in_conf) {
 	unless (&List::send_notify_to_listmaster('edit_list_error', $robot, [$file])) {
-	    &Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
+	    &Sympa::Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
 	}
     }
     
@@ -378,12 +378,12 @@ sub load_create_list_conf {
     
     $file = get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
     unless ($file) {
-	&Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
+	&Sympa::Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
 	return undef;
     }
 
     unless (open (FILE, $file)) {
-	&Log::do_log('info','Unable to open config file %s', $file);
+	&Sympa::Log::do_log('info','Unable to open config file %s', $file);
 	return undef;
     }
 
@@ -393,7 +393,7 @@ sub load_create_list_conf {
 	if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
 	    $conf->{$1} = lc($2);
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', $file,$_ );
+	    &Sympa::Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', $file,$_ );
 	    next;
 	}
     }
@@ -464,9 +464,9 @@ sub get_templates_list {
 
     my $listdir;
 
-    &Log::do_log('debug', "get_templates_list ($type, $robot, $list)");
+    &Sympa::Log::do_log('debug', "get_templates_list ($type, $robot, $list)");
     unless (($type eq 'web')||($type eq 'mail')) {
-	&Log::do_log('info', 'get_templates_list () : internal error incorrect parameter');
+	&Sympa::Log::do_log('info', 'get_templates_list () : internal error incorrect parameter');
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
@@ -532,7 +532,7 @@ sub get_template_path {
     my $list = shift;
     my $basedir = shift;
 
-    &Log::do_log('debug', "get_templates_path ($type,$robot,$scope,$tpl,$lang,%s)", $list->{'name'});
+    &Sympa::Log::do_log('debug', "get_templates_path ($type,$robot,$scope,$tpl,$lang,%s)", $list->{'name'});
 
     my $listdir;
     if (defined $list) {
@@ -540,7 +540,7 @@ sub get_template_path {
     }
 
     unless (($type == 'web')||($type == 'mail')) {
-	&Log::do_log('info', 'get_templates_path () : internal error incorrect parameter');
+	&Sympa::Log::do_log('info', 'get_templates_path () : internal error incorrect parameter');
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
@@ -571,18 +571,18 @@ sub get_template_path {
 
 ## Make a multipart/alternative, a singlepart
 sub as_singlepart {
-    &Log::do_log('debug2', 'tools::as_singlepart()');
+    &Sympa::Log::do_log('debug2', 'tools::as_singlepart()');
     my ($msg, $preferred_type, $loops) = @_;
     my $done = 0;
     $loops++;
     
     unless (defined $msg) {
-	&Log::do_log('err', "Undefined message parameter");
+	&Sympa::Log::do_log('err', "Undefined message parameter");
 	return undef;
     }
 
     if ($loops > 4) {
-	&Log::do_log('err', 'Could not change multipart to singlepart');
+	&Sympa::Log::do_log('err', 'Could not change multipart to singlepart');
 	return undef;
     }
 
@@ -802,7 +802,7 @@ sub cookie_changed {
     my $changed = 1 ;
     if (-f "$basedir/cookies.history") {
 	unless (open COOK, "$basedir/cookies.history") {
-	    &Log::do_log('err', "Unable to read $basedir/cookies.history") ;
+	    &Sympa::Log::do_log('err', "Unable to read $basedir/cookies.history") ;
 	    return undef ; 
 	}
 	my $oldcook = <COOK>;
@@ -812,12 +812,12 @@ sub cookie_changed {
 	
 
 	if ($cookies[$#cookies] eq $current) {
-	    &Log::do_log('debug2', "cookie is stable") ;
+	    &Sympa::Log::do_log('debug2', "cookie is stable") ;
 	    $changed = 0;
 #	}else{
 #	    push @cookies, $current ;
 #	    unless (open COOK, ">$basedir/cookies.history") {
-#		&Log::do_log('err', "Unable to create $basedir/cookies.history") ;
+#		&Sympa::Log::do_log('err', "Unable to create $basedir/cookies.history") ;
 #		return undef ; 
 #	    }
 #	    printf COOK "%s",join(" ",@cookies) ;
@@ -829,7 +829,7 @@ sub cookie_changed {
 	my $umask = umask 037;
 	unless (open COOK, ">$basedir/cookies.history") {
 	    umask $umask;
-	    &Log::do_log('err', "Unable to create $basedir/cookies.history") ;
+	    &Sympa::Log::do_log('err', "Unable to create $basedir/cookies.history") ;
 	    return undef ; 
 	}
 	umask $umask;
@@ -856,7 +856,7 @@ sub crypt_password {
 sub decrypt_password {
     my $inpasswd = shift ;
     my $cookie = shift;
-    Log::do_log('debug2', 'tools::decrypt_password (%s,%s)', $inpasswd, $cookie);
+    Sympa::Log::do_log('debug2', 'tools::decrypt_password (%s,%s)', $inpasswd, $cookie);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;
@@ -865,7 +865,7 @@ sub decrypt_password {
 	$cipher = ciphersaber_installed($cookie);
     }
     if ($cipher eq 'no_cipher') {
-	&Log::do_log('info','password seems crypted while CipherSaber is not installed !');
+	&Sympa::Log::do_log('info','password seems crypted while CipherSaber is not installed !');
 	return $inpasswd ;
     }
     return ($cipher->decrypt(&MIME::Base64::decode($inpasswd)));
@@ -947,7 +947,7 @@ sub split_mail {
 
 	    ## Store body in file 
 	    unless (open OFILE, ">$dir/$pathname.$fileExt") {
-		&Log::do_log('err', "Unable to create $dir/$pathname.$fileExt : $!") ;
+		&Sympa::Log::do_log('err', "Unable to create $dir/$pathname.$fileExt : $!") ;
 		return undef ; 
 	    }
 	    
@@ -960,7 +960,7 @@ sub split_mail {
 
 		my $decoder = new MIME::Decoder $encoding;
 		unless (defined $decoder) {
-		    &Log::do_log('err', 'Cannot create decoder for %s', $encoding);
+		    &Sympa::Log::do_log('err', 'Cannot create decoder for %s', $encoding);
 		    return undef;
 		}
 		$decoder->decode(\*BODY, \*OFILE);
@@ -987,24 +987,24 @@ sub virus_infected {
     my $domain = shift;
 
     my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
-    &Log::do_log('debug2', 'Scan virus in %s', $file);
+    &Sympa::Log::do_log('debug2', 'Scan virus in %s', $file);
     
     unless ($path) {
-        &Log::do_log('debug', 'Sympa not configured to scan virus in message');
+        &Sympa::Log::do_log('debug', 'Sympa not configured to scan virus in message');
 	return 0;
     }
     my @name = split(/\//,$file);
     my $work_dir = $tmpdir.'/antivirus';
     
     unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
-	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
+	&Sympa::Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
     }
 
     $work_dir = $tmpdir.'/antivirus/'.$name[$#name];
     
     unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
-	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
+	&Sympa::Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
     }
 
@@ -1012,7 +1012,7 @@ sub virus_infected {
 
     ## Call the procedure of spliting mail
     unless (&split_mail ($mail,'msg', $work_dir)) {
-	&Log::do_log('err', 'Could not split mail %s', $mail);
+	&Sympa::Log::do_log('err', 'Could not split mail %s', $mail);
 	return undef;
     }
 
@@ -1025,7 +1025,7 @@ sub virus_infected {
 
 	# impossible to look for viruses with no option set
 	unless ($args) {
-	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
@@ -1081,7 +1081,7 @@ sub virus_infected {
 
 	# impossible to look for viruses with no option set
 	unless ($args) {
-	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
 
@@ -1104,7 +1104,7 @@ sub virus_infected {
 	}    
     }elsif($path =~ /f-prot\.sh$/) {
 
-        &Log::do_log('debug2', 'f-prot is running');    
+        &Sympa::Log::do_log('debug2', 'f-prot is running');    
 
         open (ANTIVIR,"$path $args $work_dir |") ;
         
@@ -1119,7 +1119,7 @@ sub virus_infected {
         
         my $status = $?/256 ;
         
-        &Log::do_log('debug2', 'Status: '.$status);    
+        &Sympa::Log::do_log('debug2', 'Status: '.$status);    
         
         ## f-prot status =3 (*256) => virus
         if (( $status == 3) and not($virusfound)) { 
@@ -1129,7 +1129,7 @@ sub virus_infected {
 
 	# impossible to look for viruses with no option set
 	unless ($args) {
-	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
@@ -1157,7 +1157,7 @@ sub virus_infected {
 	
         # impossible to look for viruses with no option set
 	unless ($args) {
-	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
@@ -1208,7 +1208,7 @@ sub virus_infected {
 	unless (&List::send_notify_to_listmaster('virus_scan_failed', $domain,
 						 {'filename' => $file,
 						  'error_msg' => $error_msg})) {
-	    &Log::do_log('notice',"Unable to send notify 'virus_scan_failed' to listmaster");
+	    &Sympa::Log::do_log('notice',"Unable to send notify 'virus_scan_failed' to listmaster");
 	}
 
     }
@@ -1234,14 +1234,14 @@ sub get_filename {
     my ($type, $options, $name, $robot, $object,$basedir) = @_;
     my $list;
     my $family;
-    &Log::do_log('debug3','tools::get_filename(%s,%s,%s,%s,%s,%s)', $type,  join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
+    &Sympa::Log::do_log('debug3','tools::get_filename(%s,%s,%s,%s,%s,%s)', $type,  join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
 
     
     if (ref($object) eq 'List') {
  	$list = $object;
  	if ($list->{'admin'}{'family_name'}) {
  	    unless ($family = $list->get_family()) {
- 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$list->{'name'},$list->{'admin'}{'family_name'});
+ 		&Sympa::Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$list->{'name'},$list->{'admin'}{'family_name'});
  		$list->set_status_error_config('no_list_family',$list->{'name'}, $list->{'admin'}{'family_name'});
  		return undef;
  	    }  
@@ -1292,7 +1292,7 @@ sub get_filename {
 	}
 	my @result;
 	foreach my $f (@try) {
-	    &Log::do_log('debug3','get_filename : name: %s ; dir %s', $name, $f  );
+	    &Sympa::Log::do_log('debug3','get_filename : name: %s ; dir %s', $name, $f  );
 	    if (-r $f) {
 		if ($options->{'order'} eq 'all') {
 		    push @result, $f;
@@ -1306,7 +1306,7 @@ sub get_filename {
 	}
     }
     
-    #&Log::do_log('notice','tools::get_filename: Cannot find %s in %s', $name, join(',',@try));
+    #&Sympa::Log::do_log('notice','tools::get_filename: Cannot find %s in %s', $name, join(',',@try));
     return undef;
 }
 ####################################################
@@ -1331,7 +1331,7 @@ sub make_tt2_include_path {
     } else {
 	$listname = $list;
     }
-    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir,$viewmaildir,$domain);
+    &Sympa::Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir,$viewmaildir,$domain);
 
     my @include_path;
 
@@ -1429,9 +1429,9 @@ sub qencode_hierarchy {
 	my $new_f = $f_struct->{'directory'}.'/'.$new_filename;
 
 	## Rename the file using utf8
-	&Log::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
+	&Sympa::Log::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
 	unless (rename $orig_f, $new_f) {
-	    &Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $!);
+	    &Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $!);
 	    next;
 	}
 	$count++;
@@ -1454,13 +1454,13 @@ sub valid_email {
     my $email = shift;
     
     unless ($email =~ /^$regexp{'email'}$/) {
-	&Log::do_log('err', "Invalid email address '%s'", $email);
+	&Sympa::Log::do_log('err', "Invalid email address '%s'", $email);
 	return undef;
     }
     
     ## Forbidden characters
     if ($email =~ /[\|\$\*\?\!]/) {
-	&Log::do_log('err', "Invalid email address '%s'", $email);
+	&Sympa::Log::do_log('err', "Invalid email address '%s'", $email);
 	return undef;
     }
 
@@ -1525,14 +1525,14 @@ sub change_x_sympa_to {
     
     ## Change X-Sympa-To
     unless (open FILE, $file) {
-	&Log::do_log('err', "Unable to open '%s' : %s", $file, $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", $file, $!);
 	next;
     }	 
     my @content = <FILE>;
     close FILE;
     
     unless (open FILE, ">$file") {
-	&Log::do_log('err', "Unable to open '%s' : %s", "$file", $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", "$file", $!);
 	next;
     }	 
     foreach (@content) {
@@ -1551,26 +1551,26 @@ sub add_in_blacklist {
     my $robot = shift;
     my $list =shift;
 
-    &Log::do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->{'name'});
+    &Sympa::Log::do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->{'name'});
     $entry = lc($entry);
     chomp $entry;
 
     # robot blacklist not yet availible 
     unless ($list) {
-	 &Log::do_log('info',"tools::add_in_blacklist: robot blacklist not yet availible, missing list parameter");
+	 &Sympa::Log::do_log('info',"tools::add_in_blacklist: robot blacklist not yet availible, missing list parameter");
 	 return undef;
     }
     unless (($entry)&&($robot)) {
-	 &Log::do_log('info',"tools::add_in_blacklist:  missing parameters");
+	 &Sympa::Log::do_log('info',"tools::add_in_blacklist:  missing parameters");
 	 return undef;
     }
     if ($entry =~ /\*.*\*/) {
-	&Log::do_log('info',"tools::add_in_blacklist: incorrect parameter $entry");
+	&Sympa::Log::do_log('info',"tools::add_in_blacklist: incorrect parameter $entry");
 	return undef;
     }
     my $dir = $list->{'dir'}.'/search_filters';
     unless ((-d $dir) || mkdir ($dir, 0755)) {
-	&Log::do_log('info','do_blacklist : unable to create dir %s',$dir);
+	&Sympa::Log::do_log('info','do_blacklist : unable to create dir %s',$dir);
 	return undef;
     }
     my $file = $dir.'/blacklist.txt';
@@ -1583,14 +1583,14 @@ sub add_in_blacklist {
 	    $regexp =~ s/\*/.*/ ; 
 	    $regexp = '^'.$regexp.'$';
 	    if ($entry =~ /$regexp/i) { 
-		&Log::do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
+		&Sympa::Log::do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
 		return 0;
 	    }	
 	}
 	close BLACKLIST;
     }   
     unless (open BLACKLIST, ">> $file"){
-	&Log::do_log('info','do_blacklist : append to file %s',$file);
+	&Sympa::Log::do_log('info','do_blacklist : append to file %s',$file);
 	return undef;
     }
     print BLACKLIST "$entry\n";
@@ -1737,17 +1737,17 @@ sub save_to_bad {
 
     if (! -d $queue.'/bad') {
 	unless (mkdir $queue.'/bad', 0775) {
-	    &Log::do_log('notice','Unable to create %s/bad/ directory.',$queue);
+	    &Sympa::Log::do_log('notice','Unable to create %s/bad/ directory.',$queue);
 	    unless (&List::send_notify_to_listmaster('unable_to_create_dir',$hostname),{'dir' => "$queue/bad"}) {
-		&Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
+		&Sympa::Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
 	    }
 	    return undef;
 	}
-	&Log::do_log('debug',"mkdir $queue/bad");
+	&Sympa::Log::do_log('debug',"mkdir $queue/bad");
     }
-    &Log::do_log('notice',"Saving file %s to %s", $queue.'/'.$file, $queue.'/bad/'.$file);
+    &Sympa::Log::do_log('notice',"Saving file %s to %s", $queue.'/'.$file, $queue.'/bad/'.$file);
     unless (rename($queue.'/'.$file ,$queue.'/bad/'.$file) ) {
-	&Log::do_log('notice', 'Could not rename %s to %s: %s', $queue.'/'.$file, $queue.'/bad/'.$file, $!);
+	&Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', $queue.'/'.$file, $queue.'/bad/'.$file, $!);
 	return undef;
     }
     
@@ -1805,10 +1805,10 @@ Clean all messages in spool $spool_dir older than $clean_delay.
 ############################################################## 
 sub CleanDir {
     my ($dir, $clean_delay) = @_;
-    &Log::do_log('debug', 'CleanSpool(%s,%s)', $dir, $clean_delay);
+    &Sympa::Log::do_log('debug', 'CleanSpool(%s,%s)', $dir, $clean_delay);
 
     unless (opendir(DIR, $dir)) {
-	&Log::do_log('err', "Unable to open '%s' spool : %s", $dir, $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $dir, $!);
 	return undef;
     }
 
@@ -1821,13 +1821,13 @@ sub CleanDir {
 	if ((stat "$dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {
 	    if (-f "$dir/$f") {
 		unlink ("$dir/$f") ;
-		&Log::do_log('notice', 'Deleting old file %s', "$dir/$f");
+		&Sympa::Log::do_log('notice', 'Deleting old file %s', "$dir/$f");
 	    }elsif (-d "$dir/$f") {
 		unless (&Sympa::Tools::File::remove_dir("$dir/$f")) {
-		    &Log::do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $!);
+		    &Sympa::Log::do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $!);
 		    next;
 		}
-		&Log::do_log('notice', 'Deleting old directory %s', "$dir/$f");
+		&Sympa::Log::do_log('notice', 'Deleting old directory %s', "$dir/$f");
 	    }
 	}
     }
@@ -1900,7 +1900,7 @@ sub addrencode {
 # Generate a newsletter from an HTML URL or a file path.
 sub create_html_part_from_web_page {
     my $param = shift;
-    &Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
+    &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
     my $mailHTML = new MIME::Lite::HTML(
 					{
 					    From => $param->{'From'},
@@ -1917,7 +1917,7 @@ sub create_html_part_from_web_page {
     # parse return the MIME::Lite part to send
     my $part = $mailHTML->parse($param->{'source'});
     unless (defined($part)) {
-	&Log::do_log('err', 'Unable to convert file %s to a MIME part',$param->{'source'});
+	&Sympa::Log::do_log('err', 'Unable to convert file %s to a MIME part',$param->{'source'});
 	return undef;
     }
     return $part->as_string;

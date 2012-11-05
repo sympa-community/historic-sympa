@@ -26,7 +26,7 @@ use strict;
 use POSIX qw(strftime);
 use Time::Local;
 
-use Log;
+use Sympa::Log;
 
 my $p_weekdays = 'Mon|Tue|Wed|Thu|Fri|Sat|Sun';
 my $p_Weekdays = 'Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday';
@@ -75,7 +75,7 @@ sub adate {
 sub get_midnight_time {
 
     my $epoch = $_[0];
-    &Log::do_log('debug3','Getting midnight time for: %s',$epoch);
+    &Sympa::Log::do_log('debug3','Getting midnight time for: %s',$epoch);
     my @date = localtime ($epoch);
     return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
 }
@@ -86,7 +86,7 @@ sub epoch_conv {
     my $arg = $_[0]; # argument date to convert
     my $time = $_[1] || time; # the epoch current date
 
-    &Log::do_log('debug3','tools::epoch_conv(%s, %d)', $arg, $time);
+    &Sympa::Log::do_log('debug3','tools::epoch_conv(%s, %d)', $arg, $time);
 
     my $result;
     

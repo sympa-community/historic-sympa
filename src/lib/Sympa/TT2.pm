@@ -29,9 +29,9 @@ use CGI::Util;
 use MIME::EncWords; 
 use Template;
 
-use Log;
 use Sympa::Constants;
 use Sympa::Language;
+use Sympa::Log;
 use Sympa::Template::Compat;
 
 my $current_lang;
@@ -128,7 +128,7 @@ sub maketext {
 
     ## Strangely the path is sometimes empty...
     ## TODO : investigate
-#    &Log::do_log('notice', "PATH: $path ; $template_name");
+#    &Sympa::Log::do_log('notice', "PATH: $path ; $template_name");
 
     ## Sample code to dump the STASH
     # my $s = $stash->_dump();    
@@ -265,8 +265,8 @@ sub parse_tt2 {
 
     unless ($tt2->process($template, $data, $output)) {
 	$last_error = $tt2->error();
-	&Log::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
-	&Log::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
+	&Sympa::Log::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
+	&Sympa::Log::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
 
 
 	return undef;

@@ -28,10 +28,10 @@ use strict "vars";
 use Exporter;
 use Storable;
 
-use Log;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Language;
+use Sympa::Log;
 use Sympa::List;
 use Sympa::Lock;
 use Sympa::SDM;
@@ -246,7 +246,7 @@ sub get_robot_conf {
 
 # deletes all the *.conf.bin files.
 sub delete_binaries {
-    &Log::do_log('notice',"Removing binary cache for sympa.conf, wwsympa.conf and all the robot.conf files");
+    &Sympa::Log::do_log('notice',"Removing binary cache for sympa.conf, wwsympa.conf and all the robot.conf files");
     my @files = (Sympa::Constants::CONFIG,Sympa::Constants::WWSCONFIG);
     foreach my $robot (@{&get_robots_list()}) {
         push @files, "$Conf{'etc'}/$robot/robot.conf";
@@ -257,7 +257,7 @@ sub delete_binaries {
             if (-w $binary_file) {
                 unlink $binary_file;
             }else {
-                &Log::do_log('err',"Could not remove file %s. You should remove it manually to ensure the configuration used is valid.",$binary_file);
+                &Sympa::Log::do_log('err',"Could not remove file %s. You should remove it manually to ensure the configuration used is valid.",$binary_file);
             }
         }
     }
@@ -265,7 +265,7 @@ sub delete_binaries {
 
 # Return a reference to an array containing the names of the robots on the server.
 sub get_robots_list {
-    &Log::do_log('debug2',"Retrieving the list of robots on the server");
+    &Sympa::Log::do_log('debug2',"Retrieving the list of robots on the server");
     my @robots_list;
     unless (opendir DIR,$Conf{'etc'} ) {
         printf STDERR "Conf::load_robots(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
@@ -286,7 +286,7 @@ sub get_robots_list {
 ## of the robot given as argument.
 sub get_parameters_group {
     my ($robot, $group) = @_;
-    &Log::do_log('debug3','Getting parameters for group "%s"',$group);
+    &Sympa::Log::do_log('debug3','Getting parameters for group "%s"',$group);
     my $param_hash;
     foreach my $param_name (keys %{$params_by_categories->{$group}}) {
         $param_hash->{$param_name} = &get_robot_conf($robot,$param_name);
@@ -305,7 +305,7 @@ sub get_db_conf  {
     unless ($robot) {$robot = '*'};
 
     unless ($sth = &Sympa::SDM::do_query("SELECT value_conf AS value FROM conf_table WHERE (robot_conf =%s AND label_conf =%s)", &Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
-        &Log::do_log('err','Unable retrieve value of parameter %s for robot %s from the database', $label, $robot);
+        &Sympa::Log::do_log('err','Unable retrieve value of parameter %s for robot %s from the database', $label, $robot);
         return undef;
     }
 
@@ -322,7 +322,7 @@ sub set_robot_conf  {
     my $label = shift;
     my $value = shift;
     
-    &Log::do_log('info','Set config for robot %s , %s="%s"',$robot,$label, $value);
+    &Sympa::Log::do_log('info','Set config for robot %s , %s="%s"',$robot,$label, $value);
 
     
     # set the current config before to update database.    
@@ -334,7 +334,7 @@ sub set_robot_conf  {
     }
 
     unless ($sth = &Sympa::SDM::do_query("SELECT count(*) FROM conf_table WHERE (robot_conf=%s AND label_conf =%s)", &Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
-        &Log::do_log('err','Unable to check presence of parameter %s for robot %s in database', $label, $robot);
+        &Sympa::Log::do_log('err','Unable to check presence of parameter %s for robot %s in database', $label, $robot);
         return undef;
     }
 
@@ -343,12 +343,12 @@ sub set_robot_conf  {
     
     if ($count == 0) {
         unless ($sth = &Sympa::SDM::do_query("INSERT INTO conf_table (robot_conf, label_conf, value_conf) VALUES (%s,%s,%s)",&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label), &Sympa::SDM::quote($value))) {
-            &Log::do_log('err','Unable add value %s for parameter %s in the robot %s DB conf', $value, $label, $robot);
+            &Sympa::Log::do_log('err','Unable add value %s for parameter %s in the robot %s DB conf', $value, $label, $robot);
             return undef;
         }
     }else{
         unless ($sth = &Sympa::SDM::do_query("UPDATE conf_table SET robot_conf=%s, label_conf=%s, value_conf=%s WHERE ( robot_conf  =%s AND label_conf =%s)",&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label),&Sympa::SDM::quote($value),&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
-            &Log::do_log('err','Unable set parameter %s value to %s in the robot %s DB conf', $label, $value, $robot);
+            &Sympa::Log::do_log('err','Unable set parameter %s value to %s in the robot %s DB conf', $label, $value, $robot);
             return undef;
         } 
     }
@@ -358,7 +358,7 @@ sub set_robot_conf  {
 # Store configs to database
 sub conf_2_db {
     my $config_file = shift;
-    &Log::do_log('info',"conf_2_db");
+    &Sympa::Log::do_log('info',"conf_2_db");
 
     my @conf_parameters = @Sympa::Configuration::Definition::params ;
 
@@ -396,7 +396,7 @@ sub conf_2_db {
     ## Load configuration file. Ignoring database config and get result
     my $global_conf;
     unless ($global_conf= Conf::load($config_file,1,'return_result')) {
-    &Log::fatal_err("Configuration file $config_file has errors.");  
+    &Sympa::Log::fatal_err("Configuration file $config_file has errors.");  
     }
     
     for my $i ( 0 .. $#conf_parameters ) {
@@ -414,7 +414,7 @@ sub checkfiles_as_root {
     ## Check aliases file
     unless (-f $Conf{'sendmail_aliases'} || ($Conf{'sendmail_aliases'} =~ /^none$/i)) {
     unless (open ALIASES, ">$Conf{'sendmail_aliases'}") {
-        &Log::do_log('err',"Failed to create aliases file %s", $Conf{'sendmail_aliases'});
+        &Sympa::Log::do_log('err',"Failed to create aliases file %s", $Conf{'sendmail_aliases'});
         # printf STDERR "Failed to create aliases file %s", $Conf{'sendmail_aliases'};
         return undef;
     }
@@ -422,14 +422,14 @@ sub checkfiles_as_root {
     print ALIASES "## This aliases file is dedicated to Sympa Mailing List Manager\n";
     print ALIASES "## You should edit your sendmail.mc or sendmail.cf file to declare it\n";
     close ALIASES;
-    &Log::do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
+    &Sympa::Log::do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
     unless (&Sympa::Tools::File::set_file_rights(file => $Conf{'sendmail_aliases'},
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
                     mode  => 0644,
                     ))
     {
-        &Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+        &Sympa::Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
         return undef;
     }
     }
@@ -440,7 +440,7 @@ sub checkfiles_as_root {
     my $dir = &get_robot_conf($robot, 'static_content_path');
     if ($dir ne '' && ! -d $dir){
         unless ( mkdir ($dir, 0775)) {
-        &Log::do_log('err', 'Unable to create directory %s: %s', $dir, $!);
+        &Sympa::Log::do_log('err', 'Unable to create directory %s: %s', $dir, $!);
         printf STDERR 'Unable to create directory %s: %s',$dir, $!;
         $config_err++;
         }
@@ -450,7 +450,7 @@ sub checkfiles_as_root {
                         group => Sympa::Constants::GROUP,
                         ))
         {
-        &Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+        &Sympa::Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
         return undef;
         }
     }
@@ -467,7 +467,7 @@ sub checkfiles {
     next unless $Conf{$p};
     
     unless (-x $Conf{$p}) {
-        &Log::do_log('err', "File %s does not exist or is not executable", $Conf{$p});
+        &Sympa::Log::do_log('err', "File %s does not exist or is not executable", $Conf{$p});
         $config_err++;
     }
     }
@@ -475,9 +475,9 @@ sub checkfiles {
     foreach my $qdir ('spool','queue','queueautomatic','queuedigest','queuemod','queuetopic','queueauth','queueoutgoing','queuebounce','queuesubscribe','queuetask','queuedistribute','tmpdir')
     {
     unless (-d $Conf{$qdir}) {
-        &Log::do_log('info', "creating spool $Conf{$qdir}");
+        &Sympa::Log::do_log('info', "creating spool $Conf{$qdir}");
         unless ( mkdir ($Conf{$qdir}, 0775)) {
-        &Log::do_log('err', 'Unable to create spool %s', $Conf{$qdir});
+        &Sympa::Log::do_log('err', 'Unable to create spool %s', $Conf{$qdir});
         $config_err++;
         }
             unless (&Sympa::Tools::File::set_file_rights(
@@ -485,7 +485,7 @@ sub checkfiles {
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
             )) {
-                &Log::do_log('err','Unable to set rights on %s',$Conf{$qdir});
+                &Sympa::Log::do_log('err','Unable to set rights on %s',$Conf{$qdir});
         $config_err++;
             }
     }
@@ -495,9 +495,9 @@ sub checkfiles {
     foreach my $qdir ('queue','queuedistribute','queueautomatic') {
         my $subdir = $Conf{$qdir}.'/bad';
     unless (-d $subdir) {
-        &Log::do_log('info', "creating spool $subdir");
+        &Sympa::Log::do_log('info', "creating spool $subdir");
         unless ( mkdir ($subdir, 0775)) {
-        &Log::do_log('err', 'Unable to create spool %s', $subdir);
+        &Sympa::Log::do_log('err', 'Unable to create spool %s', $subdir);
         $config_err++;
         }
             unless (&Sympa::Tools::File::set_file_rights(
@@ -505,7 +505,7 @@ sub checkfiles {
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
             )) {
-                &Log::do_log('err','Unable to set rights on %s',$subdir);
+                &Sympa::Log::do_log('err','Unable to set rights on %s',$subdir);
         $config_err++;
             }
     }
@@ -514,9 +514,9 @@ sub checkfiles {
     ## Check cafile and capath access
     if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
     unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
-        &Log::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
+        &Sympa::Log::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
         unless (&Sympa::List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
-        &Log::do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
+        &Sympa::Log::do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
         }
         $config_err++;
     }
@@ -524,9 +524,9 @@ sub checkfiles {
 
     if (defined $Conf{'capath'} && $Conf{'capath'}) {
     unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
-        &Log::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
+        &Sympa::Log::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
         unless (&Sympa::List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
-        &Log::do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
+        &Sympa::Log::do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
         }
         $config_err++;
     }
@@ -534,9 +534,9 @@ sub checkfiles {
 
     ## queuebounce and bounce_path pointing to the same directory
     if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
-    &Log::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
+    &Sympa::Log::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
     unless (&Sympa::List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
-        &Log::do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
+        &Sympa::Log::do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
     }
     $config_err++;
     }
@@ -547,7 +547,7 @@ sub checkfiles {
     if ($dir ne '' && -d $dir) {
         unless (-f $dir.'/index.html'){
         unless(open (FF, ">$dir".'/index.html')) {
-            &Log::do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $!);
+            &Sympa::Log::do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $!);
         }
         close FF;        
         }
@@ -557,7 +557,7 @@ sub checkfiles {
         my $pictures_dir = &get_robot_conf($robot, 'pictures_path');
         unless (-d $pictures_dir){
             unless (mkdir ($pictures_dir, 0775)) {
-            &Log::do_log('err', 'Unable to create directory %s',$pictures_dir);
+            &Sympa::Log::do_log('err', 'Unable to create directory %s',$pictures_dir);
             $config_err++;
             }
             chmod 0775, $pictures_dir;
@@ -565,7 +565,7 @@ sub checkfiles {
             my $index_path = $pictures_dir.'/index.html';
             unless (-f $index_path){
             unless (open (FF, ">$index_path")) {
-                &Log::do_log('err', 'Unable to create %s as an empty file to protect directory', $index_path);
+                &Sympa::Log::do_log('err', 'Unable to create %s as an empty file to protect directory', $index_path);
             }
             close FF;
             }
@@ -592,7 +592,7 @@ sub checkfiles {
     unless (-d $dir) {
         unless ( &Sympa::Tools::File::mkdir_all($dir, 0755)) {
         &Sympa::List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
-        &Log::do_log('err','Failed to create directory %s',$dir);
+        &Sympa::Log::do_log('err','Failed to create directory %s',$dir);
         return undef;
         }
     }
@@ -605,14 +605,14 @@ sub checkfiles {
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||
         (stat($css_tt2_path))[9] > (stat($dir.'/'.$css))[9]) {
-        &Log::do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
+        &Sympa::Log::do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
         
         ## Keep copy of previous file
         rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
 
         unless (open (CSS,">$dir/$css")) {
             &Sympa::List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
-            &Log::do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
+            &Sympa::Log::do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
             return undef;
         }
         
@@ -620,7 +620,7 @@ sub checkfiles {
             my $error = &Sympa::TT2::get_error();
             $param->{'tt2_error'} = $error;
             &Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
-            &Log::do_log('err', "Error while installing $dir/$css");
+            &Sympa::Log::do_log('err', "Error while installing $dir/$css");
         }
 
         $css_updated ++;
@@ -654,19 +654,19 @@ sub valid_robot {
 
     ## Missing etc directory
     unless (-d $Conf{'etc'}.'/'.$robot) {
-    &Log::do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'etc'}.'/'.$robot) unless ($options->{'just_try'});
+    &Sympa::Log::do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'etc'}.'/'.$robot) unless ($options->{'just_try'});
     return undef;
     }
 
     ## Missing expl directory
     unless (-d $Conf{'home'}.'/'.$robot) {
-    &Log::do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'home'}.'/'.$robot) unless ($options->{'just_try'});
+    &Sympa::Log::do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'home'}.'/'.$robot) unless ($options->{'just_try'});
     return undef;
     }
     
     ## Robot not loaded
     unless (defined $Conf{'robots'}{$robot}) {
-    &Log::do_log('err', 'Robot %s was not loaded by this Sympa process', $robot) unless ($options->{'just_try'});
+    &Sympa::Log::do_log('err', 'Robot %s was not loaded by this Sympa process', $robot) unless ($options->{'just_try'});
     return undef;
     }
 
@@ -683,7 +683,7 @@ sub get_sso_by_id {
     }
 
     foreach my $sso (@{$Conf{'auth_services'}{$param{'robot'}}}) {
-    &Log::do_log('notice', "SSO: $sso->{'service_id'}");
+    &Sympa::Log::do_log('notice', "SSO: $sso->{'service_id'}");
     next unless ($sso->{'service_id'} eq $param{'service_id'});
 
     return $sso;
@@ -702,7 +702,7 @@ sub _load_auth {
     my $is_main_robot = shift;
     # find appropriate auth.conf file
     my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
-    &Log::do_log('debug', 'Conf::_load_auth(%s)', $config_file);
+    &Sympa::Log::do_log('debug', 'Conf::_load_auth(%s)', $config_file);
 
     $robot ||= $Conf{'domain'};
     my $line_num = 0;
@@ -782,7 +782,7 @@ sub _load_auth {
 
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $config_file)) {
-    &Log::do_log('notice',"_load_auth: Unable to open %s: %s", $config_file, $!);
+    &Sympa::Log::do_log('notice',"_load_auth: Unable to open %s: %s", $config_file, $!);
     return undef;
     }
 
@@ -805,11 +805,11 @@ sub _load_auth {
     }elsif (/^\s*(\S+)\s+(.*\S)\s*$/o){
         my ($keyword,$value) = ($1,$2);
         unless (defined $valid_keywords{$current_paragraph->{'auth_type'}}{$keyword}) {
-        &Log::do_log('err',"_load_auth: unknown keyword '%s' in %s line %d", $keyword, $config_file, $line_num);
+        &Sympa::Log::do_log('err',"_load_auth: unknown keyword '%s' in %s line %d", $keyword, $config_file, $line_num);
         next;
         }
         unless ($value =~ /^$valid_keywords{$current_paragraph->{'auth_type'}}{$keyword}$/) {
-        &Log::do_log('err',"_load_auth: unknown format '%s' for keyword '%s' in %s line %d", $value, $keyword, $config_file,$line_num);
+        &Sympa::Log::do_log('err',"_load_auth: unknown format '%s' for keyword '%s' in %s line %d", $value, $keyword, $config_file,$line_num);
         next;
         }
 
@@ -827,13 +827,13 @@ sub _load_auth {
         
         if ($current_paragraph->{'auth_type'} eq 'cas') {
 	    unless (defined $current_paragraph->{'base_url'}) {
-            &Log::do_log('err','Incorrect CAS paragraph in auth.conf');
+            &Sympa::Log::do_log('err','Incorrect CAS paragraph in auth.conf');
             next;
             }
 
             eval "require AuthCAS";
             if ($@) {
-                &Log::do_log('err', 'Failed to load AuthCAS perl module');
+                &Sympa::Log::do_log('err', 'Failed to load AuthCAS perl module');
                 return undef;
             } 
 
@@ -854,7 +854,7 @@ sub _load_auth {
             
             $current_paragraph->{'cas_server'} = new AuthCAS(%{$cas_param});
             unless (defined $current_paragraph->{'cas_server'}) {
-            &Log::do_log('err', 'Failed to create CAS object for %s: %s', 
+            &Sympa::Log::do_log('err', 'Failed to create CAS object for %s: %s', 
                 $current_paragraph->{'base_url'}, &AuthCAS::get_errors());
             next;
             }
@@ -995,7 +995,7 @@ sub load_sql_filter {
 sub load_automatic_lists_description {
     my $robot = shift;
     my $family = shift;
-    &Log::do_log('debug2','Starting: robot %s family %s',$robot,$family);
+    &Sympa::Log::do_log('debug2','Starting: robot %s family %s',$robot,$family);
     
     my %automatic_lists_params = (
 	'class' => {
@@ -1467,7 +1467,7 @@ sub _infer_server_specific_parameter_values {
         if ($log_condition =~ /^\s*(ip|email)\s*\=\s*(.*)\s*$/i) {         
             $param->{'config_hash'}{'loging_condition'}{$1} = $2;
         }else{
-            &Log::do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
+            &Sympa::Log::do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
         }
     }    
 
@@ -1789,7 +1789,7 @@ sub _save_binary_cache {
     my $param = shift;
     my $lock = new Sympa::Lock ($param->{'target_file'});
     unless (defined $lock) {
-        &Log::do_log('err','Could not create new lock');
+        &Sympa::Log::do_log('err','Could not create new lock');
         return undef;
     }
     $lock->set_timeout(2); 
@@ -1827,7 +1827,7 @@ sub _load_binary_cache {
 
     my $lock = new Sympa::Lock ($param->{'config_file'});
     unless (defined $lock) {
-        &Log::do_log('err','Could not create new lock');
+        &Sympa::Log::do_log('err','Could not create new lock');
         return undef;
     }
     $lock->set_timeout(2); 

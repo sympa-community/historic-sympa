@@ -41,7 +41,7 @@ use OAuthConsumer;
 use JSON::XS;
 
 use Sympa::Conf;
-use Log;
+use Sympa::Log;
 use Sympa::Tools;
 
 =pod 
@@ -83,7 +83,7 @@ Creates a new VOOTConsumer object.
 
 =over 
 
-=item * &Log::do_log
+=item * &Sympa::Log::do_log
 
 =back 
 
@@ -95,7 +95,7 @@ sub new {
 	my %param = @_;
 	
 	my $consumer;
-	&Log::do_log('debug2', 'VOOTConsumer::new(%s, %s)', $param{'user'}, $param{'provider'});
+	&Sympa::Log::do_log('debug2', 'VOOTConsumer::new(%s, %s)', $param{'user'}, $param{'provider'});
 	
 	# Get oauth consumer and enpoints from provider_id
 	$consumer->{'conf'} = &_get_config_for($param{'provider'});
@@ -160,7 +160,7 @@ Get user groups
 ## Get groups for user
 sub isMemberOf {
 	my $self = shift;
-	&Log::do_log('debug2', 'VOOTConsumer::isMemberOf(%s, %s)', $self->{'user'}, $self->{'provider'});
+	&Sympa::Log::do_log('debug2', 'VOOTConsumer::isMemberOf(%s, %s)', $self->{'user'}, $self->{'provider'});
 	
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
 	return undef unless(defined $data);
@@ -212,7 +212,7 @@ Get members of a group.
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
-	&Log::do_log('debug2', 'VOOTConsumer::getGroupMembers(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $param{'group'});
+	&Sympa::Log::do_log('debug2', 'VOOTConsumer::getGroupMembers(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $param{'group'});
 	
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$param{'group'});
 	return undef unless(defined $data);
@@ -361,7 +361,7 @@ Get provider information.
 ## Get provider information
 sub _get_config_for {
 	my $provider = shift;
-	&Log::do_log('debug2', 'VOOTConsumer::_get_config_for(%s)', $provider);
+	&Sympa::Log::do_log('debug2', 'VOOTConsumer::_get_config_for(%s)', $provider);
 	
 	my $file = $Sympa::Conf::Conf{'etc'}.'/voot.conf';
 	return undef unless (-f $file);
@@ -415,7 +415,7 @@ List providers.
 
 ## List providers
 sub getProviders {
-	&Log::do_log('debug2', 'VOOTConsumer::getProviders()');
+	&Sympa::Log::do_log('debug2', 'VOOTConsumer::getProviders()');
 	
 	my $list = {};
 	
