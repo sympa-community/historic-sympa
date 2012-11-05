@@ -31,7 +31,7 @@ Sympa allows lists creation and management by sets. These are the families, sets
 
 =cut 
 
-package Family;
+package Sympa::Family;
 
 use strict;
 
@@ -122,7 +122,7 @@ sub get_available_families {
 	## If we can create a Family object with what we find in the family
 	## directory, then it is worth being added to the list.
 	foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
-	    if (my $family = new Family($subdir, $robot)) { 
+	    if (my $family = new Sympa::Family($subdir, $robot)) { 
 		$families{$subdir} = 1;
 	    }
 	}

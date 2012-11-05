@@ -62,6 +62,7 @@ use Sympa::Conf;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Datasource::LDAP;
+use Sympa::Family;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Mail;
@@ -1295,7 +1296,7 @@ my $birthday = time ;
     if (defined $automatic_list_families) {
 	foreach my $key (keys %{$automatic_list_families}){
 	    my $family;
-	    if ($family = new Family($key,$robot)) {
+	    if ($family = new Sympa::Family($key,$robot)) {
 		if ($family->is_allowed_to_create_automatic_lists(('auth_level' => 'md5', 'sender' => $session->{'email'}, 'message' => undef, 'listname' => ''))){
 		    $session->{'is_family_owner'}{$key} = 1;
 		}else{
@@ -17517,7 +17518,7 @@ sub do_sync_include {
 sub do_review_family {
     &wwslog('info', 'do_review_family');
 
-    my $family = new Family ($in{'family_name'}, $robot);
+    my $family = new Sympa::Family ($in{'family_name'}, $robot);
     unless (defined $family) {
 	&Sympa::Report::reject_report_web('user','unknown_family',{'family'=>$in{'family_name'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	&wwslog('err', 'do_review_family: incorrect family %s', $in{'family_name'});
@@ -18079,7 +18080,7 @@ sub do_automatic_lists_request {
     &wwslog('notice', 'Starting');
     # check authorization
     my $family;
-    unless ($family = new Family($in{'family'},$robot)) {
+    unless ($family = new Sympa::Family($in{'family'},$robot)) {
 	&wwslog('err', "Failed to instantiate family %s. This family does not exist.",$in{'family'});
 	&Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to instantiate family $in{'family'}. This family does not exist."]);
 	return undef;
@@ -18119,7 +18120,7 @@ sub do_automatic_lists {
     $list = new Sympa::List ($listname, $robot);
     unless (defined $list) {
 	## Automatic creation of a mailing list, based on a family
-	unless ($family = new Family($family_name,$robot)) {
+	unless ($family = new Sympa::Family($family_name,$robot)) {
 	    &Log::do_log('err', "Failed to create the dynamic list $listname: family $family_name does not exist.");
 	    &Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname: family $family_name does not exist."]);
 	    return undef;

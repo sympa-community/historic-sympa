@@ -30,7 +30,6 @@ use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
 
-use Family;
 use Log;
 use Message;
 use SDM;
@@ -39,6 +38,7 @@ use Sympa::Commands;
 use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
+use Sympa::Family;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Mail;
@@ -656,7 +656,7 @@ if ($main::options{'dump'}) {
  	exit 1;
     }
     my $family;
-    unless ($family = new Family($family_name,$robot)) {
+    unless ($family = new Sympa::Family($family_name,$robot)) {
  	print STDERR "The family $family_name does not exist, impossible instantiation\n";
  	exit 1;
     }
@@ -702,7 +702,7 @@ if ($main::options{'dump'}) {
     print STDOUT "\n************************************************************\n";
     
     my $family;
-    unless ($family = new Family($family_name,$robot)) {
+    unless ($family = new Sympa::Family($family_name,$robot)) {
  	print STDERR "The family $family_name does not exist, impossible to add a list\n";
  	exit 1;
     }
@@ -851,7 +851,7 @@ elsif ($main::options{'modify_list'}) {
     print STDOUT "\n************************************************************\n";
     
     my $family;
-    unless ($family = new Family($family_name,$robot)) {
+    unless ($family = new Sympa::Family($family_name,$robot)) {
  	print STDERR "The family $family_name does not exist, impossible to modify the list.\n";
  	exit 1;
     }
@@ -898,7 +898,7 @@ elsif ($main::options{'close_family'}) {
  	exit 1;
     }
     my $family;
-    unless ($family = new Family($family_name,$robot)) {
+    unless ($family = new Sympa::Family($family_name,$robot)) {
  	print STDERR "The family $family_name does not exist, impossible family closure\n";
  	exit 1;
     }
@@ -1208,7 +1208,7 @@ sub process_message {
 
 	    ## Automatic creation of a mailing list, based on a family
             my $dyn_family;
-            unless ($dyn_family = new Family($dyn_list_family,$robot)) {
+            unless ($dyn_family = new Sympa::Family($dyn_list_family,$robot)) {
                 &Log::do_log('err', "Failed to process message: family $dyn_list_family does not exist, impossible to create the dynamic list.");
 		&Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process message : family $dyn_list_family does not exist, impossible to create the dynamic list."]);
 		&Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');

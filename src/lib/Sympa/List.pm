@@ -35,7 +35,6 @@ use POSIX;
 use Storable;
 use Time::Local;
 
-use Family;
 use Ldap;
 use Lock;
 use Log;
@@ -47,6 +46,7 @@ use Sympa::Constants;
 use Sympa::Datasource;
 use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
+use Sympa::Family;
 use Sympa::Fetch;
 use Sympa::Language;
 use Sympa::Mail;
@@ -3003,8 +3003,8 @@ sub get_family {
     $family_name = $self->{'admin'}{'family_name'};
 	    
     my $family;
-    unless ($family = new Family($family_name,$robot) ) {
-	&Log::do_log('err', 'List::get_family(%s) : new Family(%s) impossible', $self->{'name'},$family_name);
+    unless ($family = new Sympa::Family($family_name,$robot) ) {
+	&Log::do_log('err', 'List::get_family(%s) : new Sympa::Family(%s) impossible', $self->{'name'},$family_name);
 	return undef;
     }
   	
