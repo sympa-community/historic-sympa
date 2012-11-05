@@ -53,6 +53,7 @@ use Sympa::Report;
 use Sympa::Scenario;
 use Sympa::SDM;
 use Sympa::Spool;
+use Sympa::Task;
 use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::File;
@@ -60,7 +61,6 @@ use Sympa::Tools::SMIME;
 use Sympa::Tracking;
 use Sympa::TT2;
 use Sympa::WebAgent;
-use Task;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
@@ -12312,8 +12312,8 @@ sub purge {
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     ## Remove tasks for this list
-    &Task::list_tasks($Sympa::Conf::Conf{'queuetask'});
-    foreach my $task (&Task::get_tasks_by_list($self->get_list_id())) {
+    &Sympa::Task::list_tasks($Sympa::Conf::Conf{'queuetask'});
+    foreach my $task (&Sympa::Task::get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
     

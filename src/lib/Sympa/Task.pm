@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package Task;
+package Sympa::Task;
 
 use strict;
 
@@ -96,7 +96,7 @@ sub list_tasks {
 
     ## Create Task objects
     foreach my $t (@tasks) {
-	my $task = new Task ($t);	
+	my $task = new Sympa::Task ($t);	
 	## Maintain list of tasks
 	push @task_list, $task;
 	

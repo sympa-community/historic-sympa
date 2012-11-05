@@ -46,7 +46,7 @@ use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
 use Sympa::Upgrade;
-use Task;
+use Sympa::Task;
 use wwslib;
 
 my $opt_d;
@@ -161,7 +161,7 @@ unless (chdir($Conf{'home'})) {
     exit (-1);
 }
 
-&Task::set_spool(); # force initialisation of $taskspool in module Task 
+&Sympa::Task::set_spool(); # force initialisation of $taskspool in module Task 
 
 my $pinfo = &Sympa::List::_apply_defaults();
 
@@ -271,14 +271,14 @@ while (!$end) {
     &Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 	
    ## List all tasks
-    unless (&Task::list_tasks) {
+    unless (&Sympa::Task::list_tasks) {
 	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in spool"});
 	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in spool");
 	exit -1;
     }
 
     my %used_models; # models for which a task exists
-    foreach my $model (&Task::get_used_models) {
+    foreach my $model (&Sympa::Task::get_used_models) {
 	$used_models{$model} = 1;
     }
 
@@ -312,7 +312,7 @@ while (!$end) {
 	    foreach (@list_models) { 
 		$used_list_models{$_} = undef;
 	    }	    
-	    foreach my $model (&Task::get_used_models($list->get_list_id())) {		
+	    foreach my $model (&Sympa::Task::get_used_models($list->get_list_id())) {		
 		$used_list_models{$model} = 1; 
 	    }
 	    &Sympa::Sympa::Log::do_log('debug3',"creating list task using models");my $tt= 0;
@@ -341,7 +341,7 @@ while (!$end) {
     }
     ## Execute existing tasks
     ## List all tasks
-    unless (&Task::list_tasks($spool_task)) {
+    unless (&Sympa::Task::list_tasks($spool_task)) {
 	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
 	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in %s", $spool_task);
 	exit -1;
@@ -349,7 +349,7 @@ while (!$end) {
 
     ## processing of tasks anterior to the current date
     &Sympa::Sympa::Log::do_log ('debug3', 'processing of tasks anterior to the current date');
-    foreach my $task ( &Task::get_task_list() ) {
+    foreach my $task ( &Sympa::Task::get_task_list() ) {
 	
 	last if $end;
 	last unless ($task->{'date'} < $current_date);
