@@ -35,7 +35,6 @@ use POSIX;
 use Storable;
 use Time::Local;
 
-use Message;
 use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
@@ -48,6 +47,7 @@ use Sympa::Language;
 use Sympa::Lock;
 use Sympa::Log;
 use Sympa::Mail;
+use Sympa::Message;
 use Sympa::PlainDigest;
 use Sympa::Report;
 use Sympa::Scenario;
@@ -4181,7 +4181,7 @@ sub send_msg {
 	    my $notice_msg = $saved_msg->dup;
 	    $notice_msg->bodyhandle(undef);    
 	    $notice_msg->parts([]);
-	    $new_message = new Message({'mimeentity' => $notice_msg});
+	    $new_message = new Sympa::Message({'mimeentity' => $notice_msg});
 
 	##Prepare message for txt reception mode
 	}elsif($array_name eq 'tabrcpt_txt'){
@@ -4195,7 +4195,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$txt_msg = $new_msg;
 	    }
-	    $new_message = new Message({'mimeentity' => $txt_msg});
+	    $new_message = new Sympa::Message({'mimeentity' => $txt_msg});
 
 	##Prepare message for html reception mode
 	}elsif($array_name eq 'tabrcpt_html'){
@@ -4208,7 +4208,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$html_msg = $new_msg;
 	    }
-	    $new_message = new Message({'mimeentity' => $html_msg});
+	    $new_message = new Sympa::Message({'mimeentity' => $html_msg});
 	    
 	##Prepare message for urlize reception mode
 	}elsif($array_name eq 'tabrcpt_url'){
@@ -4253,7 +4253,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$url_msg = $new_msg;
 	    } 
-	    $new_message = new Message({'mimeentity' => $url_msg});
+	    $new_message = new Sympa::Message({'mimeentity' => $url_msg});
 	}else {
 	    &Sympa::Log::do_log('err', "Unknown variable/reception mode $array_name");
 	    return undef;
@@ -4669,7 +4669,7 @@ sub archive_send_last {
    return unless ($self->is_archived());
    my $dir = $self->{'dir'}.'/archives' ;
 
-   my $mail = new Message({'file' => "$dir/last_message",'noxsympato'=>'noxsympato'});
+   my $mail = new Sympa::Message({'file' => "$dir/last_message",'noxsympato'=>'noxsympato'});
    unless (defined $mail) {
        &Sympa::Log::do_log('err', 'Unable to create Message object %s', "$dir/last_message");
        return undef;

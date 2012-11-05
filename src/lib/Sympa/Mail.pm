@@ -36,6 +36,7 @@ use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log;
 use Sympa::List;
+use Sympa::Message;
 use Sympa::Tools;
 use Sympa::Tools::SMIME;
 use Sympa::TT2;
@@ -302,7 +303,7 @@ sub mail_file {
     
     return $message_as_string if($return_message_as_string);
 
-    my $message = new Message ({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
+    my $message = new Sympa::Message ({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
     ## SENDING
     return undef unless (defined &sending('message' => $message,

@@ -35,10 +35,10 @@ use Storable;
 use Sys::Hostname;
 use Time::Local;
 
-use Message;
 use Sympa::Constants;
 use Sympa::DatabaseDescription;
 use Sympa::Log;
+use Sympa::Message;
 use Sympa::SDM;
 use Sympa::Tools::Time;
 use Task;
@@ -342,7 +342,7 @@ sub store {
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
     if ($self->{'spoolname'} ne 'task') {
-	$message = new Message({'messageasstring'=>$message_asstring});
+	$message = new Sympa::Message({'messageasstring'=>$message_asstring});
     }
     
     if($message) {

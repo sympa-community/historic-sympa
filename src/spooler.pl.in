@@ -30,12 +30,12 @@ use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
 
-use Message;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Lock;
 use Sympa::Log;
+use Sympa::Message;
 use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -377,7 +377,7 @@ while (!$signal) {
 	}
 	$meta{'type'} = $type if $type;
 	
-	my $message = new Message({'file'=>$spooldir.'/'.$filename});
+	my $message = new Sympa::Message({'file'=>$spooldir.'/'.$filename});
 
         #use Data::Dumper;
 #	my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP; 

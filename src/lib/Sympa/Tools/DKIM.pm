@@ -28,7 +28,7 @@ use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use MIME::Parser;
 
-use Message;
+use Sympa::Message;
 use Sympa::List;
 use Sympa::Log;
 
@@ -144,7 +144,7 @@ sub remove_invalid_dkim_signature {
     my $msg_as_string = shift;
 
     unless (dkim_verifier($msg_as_string, $tmpdir)){
-	my $body_as_string = &Message::get_body_from_msg_as_string ($msg_as_string);
+	my $body_as_string = &Sympa::Message::get_body_from_msg_as_string ($msg_as_string);
 
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
@@ -252,7 +252,7 @@ sub dkim_sign {
 	&Sympa::Log::do_log('err', 'Cannot sign (DKIM) message');
 	return ($msg_as_string); 
     }
-    my $message = new Message({'file'=>$temporary_file,'noxsympato'=>'noxsympato'});
+    my $message = new Sympa::Message({'file'=>$temporary_file,'noxsympato'=>'noxsympato'});
     unless ($message){
 	&Sympa::Log::do_log('err',"unable to load $temporary_file as a message objet");
 	return ($msg_as_string); 
@@ -267,7 +267,7 @@ sub dkim_sign {
     
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
-    return $message->{'msg'}->head->as_string."\n".&Message::get_body_from_msg_as_string($msg_as_string);
+    return $message->{'msg'}->head->as_string."\n".&Sympa::Message::get_body_from_msg_as_string($msg_as_string);
 }
 
 1;

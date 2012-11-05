@@ -30,13 +30,13 @@ use Fcntl;
 use MIME::EncWords;
 use Time::Local;
 
-use Message;
 use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
+use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
 use Sympa::Spool;
@@ -2030,7 +2030,7 @@ sub distribute {
 	return 'msg_not_found';
 	
     }
-    my $message = new Message({'message_in_spool'=>$message_in_spool});
+    my $message = new Sympa::Message({'message_in_spool'=>$message_in_spool});
     unless (defined $message) {
 	&Sympa::Log::do_log('err', 'Commands::distribute(): Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
@@ -2107,7 +2107,7 @@ sub confirm {
 	&Sympa::Report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 	return 'wrong_auth';
     }
-    my $message = new Message ({'message_in_spool'=>$messageinspool});    
+    my $message = new Sympa::Message ({'message_in_spool'=>$messageinspool});    
 
     unless (defined $message) {
 	&Sympa::Log::do_log('err', 'Commands::confirm(): Unable to create message object for key %s',$key);
@@ -2272,7 +2272,7 @@ sub reject {
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }
-    my $message = new Message({'message_in_spool'=> $message_in_spool});
+    my $message = new Sympa::Message({'message_in_spool'=> $message_in_spool});
     unless ($message_) {
 	&Sympa::Log::do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);

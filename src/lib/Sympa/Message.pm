@@ -32,7 +32,7 @@ While processing a message in Sympa, we need to link informations to rhe message
 
 =cut 
 
-package Message;
+package Sympa::Message;
 
 use strict;
 

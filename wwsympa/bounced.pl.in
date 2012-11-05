@@ -43,6 +43,7 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Log;
+use Sympa::Message;
 use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -214,7 +215,7 @@ while (!$end) {
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 	}
 	
-	my $message = new Message({'message_in_spool' => $bounce});
+	my $message = new Sympa::Message({'message_in_spool' => $bounce});
 	
 	my $entity = $message->{'msg'};
 	my $head = $entity->head;

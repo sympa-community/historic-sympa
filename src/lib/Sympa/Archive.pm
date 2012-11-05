@@ -29,6 +29,7 @@ use HTML::Entities qw(decode_entities);
 
 use Sympa::Conf;
 use Sympa::Log;
+use Sympa::Message;
 use Sympa::Tools::File;
 
 my $serial_number = 0; # incremented on each archived mail
@@ -111,7 +112,7 @@ sub scan_dir_archive {
 	next unless ($file =~ /^\d+$/);
 	&Sympa::Log::do_log ('debug',"archive::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file");
 
-	my $mail = new Message({'file'=>"$dir/$month/arctxt/$file",'noxsympato'=>'noxsympato'});
+	my $mail = new Sympa::Message({'file'=>"$dir/$month/arctxt/$file",'noxsympato'=>'noxsympato'});
 	unless (defined $mail) {
 	    &Sympa::Log::do_log('err', 'Unable to create Message object %s', $file);
 	    return undef;
@@ -285,7 +286,7 @@ sub clean_archived_message{
     my $output = $params->{'output'};
 
 
-    if (my $msg = new Message({'file'=>$input})){
+    if (my $msg = new Sympa::Message({'file'=>$input})){
 	if($msg->clean_html()){
 	    if(open TMP, ">$output") {
 		print TMP $msg->{'msg'}->as_string;

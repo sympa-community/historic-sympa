@@ -48,6 +48,7 @@ use Sympa::Constants;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Mail;
+use Sympa::Message;
 use Sympa::Spool;
 use Sympa::SDM;
 use Sympa::Tools;
@@ -324,7 +325,7 @@ while (!$end) {
 	    my $key ;
 	    	    
 	    foreach $rcpt (@rcpts) {
-		my $message = new Message ({'messageasstring'=>$messageasstring_init,'noxsympato'=>'noxsympato'});
+		my $message = new Sympa::Message ({'messageasstring'=>$messageasstring_init,'noxsympato'=>'noxsympato'});
 		my $entity = $message->{'msg'};
 		my $notification_id;
 		my $return_path;
@@ -337,7 +338,7 @@ while (!$end) {
 		    $return_path = $Sympa::Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
 		    $entity->head->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
 		    if (($message->{'protected'})||($message->{'smime_crypted'})){
-			my $msg_body = &Message::get_body_from_msg_as_string($messageasstring_init);
+			my $msg_body = &Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
 			$messageasstring_init = $entity->head->as_string. "\n" . $msg_body; # concat headers from entity with original body
 		    }else{
 			$messageasstring_init = $entity->as_string;
