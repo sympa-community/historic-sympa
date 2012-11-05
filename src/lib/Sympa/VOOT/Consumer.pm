@@ -33,7 +33,7 @@ handles OAuth workflow if nedeed.
 
 =cut 
 
-package VOOTConsumer;
+package Sympa::VOOT::Consumer;
 
 use strict;
 

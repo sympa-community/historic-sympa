@@ -32,7 +32,7 @@ This package provides abstraction for the VOOT workflow (server side).
 
 =cut 
 
-package VOOTProvider;
+package Sympa::VOOT::Provider;
 
 use strict;
 
