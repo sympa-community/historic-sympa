@@ -24,8 +24,8 @@ package Task;
 
 use strict;
 
-use List;
 use Log;
+use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
 
@@ -56,7 +56,7 @@ sub new {
     $task->{'domain'} = $task_in_spool->{'robot'};    
 	
     if ($task_in_spool->{'list'}) { # list task
-	$task->{'list_object'} = new List ($task_in_spool->{'list'},$task_in_spool->{'robot'});
+	$task->{'list_object'} = new Sympa::List ($task_in_spool->{'list'},$task_in_spool->{'robot'});
 	$task->{'domain'} = $task->{'list_object'}{'domain'};
     }
 

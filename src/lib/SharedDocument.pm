@@ -27,7 +27,6 @@ use strict;
 use Carp;
 use POSIX;
 
-use List;
 use Log;
 use Sympa::Tools;
 use Sympa::Tools::Data;

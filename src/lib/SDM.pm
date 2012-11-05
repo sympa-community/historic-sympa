@@ -24,12 +24,12 @@ package SDM;
 
 use strict;
 
-use Sympa::Conf;
-use List;
 use Log;
-use Sympa::Datasource::SQL;
+use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
+use Sympa::List;
 
 our $AUTOLOAD;
 
@@ -247,10 +247,10 @@ sub probe_db {
     }
     
     ## Used by List subroutines to check that the DB is available
-    $List::use_db = 1;
+    $Sympa::List::use_db = 1;
 
     ## Notify listmaster
-    &List::send_notify_to_listmaster('db_struct_updated',  &Sympa::Conf::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
+    &Sympa::List::send_notify_to_listmaster('db_struct_updated',  &Sympa::Conf::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
 
     return 1;
 }

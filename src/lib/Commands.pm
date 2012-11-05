@@ -32,10 +32,10 @@ use Time::Local;
 
 use Language;
 use Log;
-use List;
 use Message;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Report;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -188,17 +188,17 @@ sub help {
 
 	my $data = {};
 
-	my @owner = &List::get_which ($sender, $robot,'owner');
-	my @editor = &List::get_which ($sender, $robot, 'editor');
+	my @owner = &Sympa::List::get_which ($sender, $robot,'owner');
+	my @editor = &Sympa::List::get_which ($sender, $robot, 'editor');
 	
 	$data->{'is_owner'} = 1 if ($#owner > -1);
 	$data->{'is_editor'} = 1 if ($#editor > -1);
-	$data->{'user'} =  &List::get_global_user($sender);
+	$data->{'user'} =  &Sympa::List::get_global_user($sender);
 	&Language::SetLang($data->{'user'}{'lang'}) if $data->{'user'}{'lang'};
 	$data->{'subject'} = gettext("User guide");
 	$data->{'auto_submitted'} = 'auto-replied';
 
-	unless(&List::send_global_file("helpfile", $sender, $robot, $data)){
+	unless(&Sympa::List::send_global_file("helpfile", $sender, $robot, $data)){
 	    &Log::do_log('notice',"Unable to send template 'helpfile' to $sender");
 	    &Sympa::Report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 	}
@@ -207,14 +207,14 @@ sub help {
 
 	my $data = {};
 
-	my @owner = &List::get_which ($sender,$robot, 'owner');
-	my @editor = &List::get_which ($sender,$robot, 'editor');
+	my @owner = &Sympa::List::get_which ($sender,$robot, 'owner');
+	my @editor = &Sympa::List::get_which ($sender,$robot, 'editor');
 	
 	$data->{'is_owner'} = 1 if ($#owner > -1);
 	$data->{'is_editor'} = 1 if ($#editor > -1);
 	$data->{'subject'} = gettext("User guide");
 	$data->{'auto_submitted'} = 'auto-replied';
-	unless (&List::send_global_file("helpfile", $sender, $robot, $data)){
+	unless (&Sympa::List::send_global_file("helpfile", $sender, $robot, $data)){
 	    &Log::do_log('notice',"Unable to send template 'helpfile' to $sender");
 	    &Sympa::Report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 	}
@@ -256,7 +256,7 @@ sub lists {
     my $data = {};
     my $lists = {};
 
-    my $all_lists =  &List::get_lists($robot);
+    my $all_lists =  &Sympa::List::get_lists($robot);
     
     foreach my $list ( @$all_lists ) {
 	my $l = $list->{'name'};
@@ -270,7 +270,7 @@ sub lists {
 
 	unless (defined $action) {
 	    my $error = "Unable to evaluate scenario 'visibility' for list $l";
-	    &List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
+	    &Sympa::List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
 								     'who' => $sender,
 								     'cmd' => $cmd_line,
 								     'list' => $list,
@@ -288,7 +288,7 @@ sub lists {
     $data->{'lists'} = $lists;
     $data->{'auto_submitted'} = 'auto-replied';
     
-    unless (&List::send_global_file('lists', $sender, $robot, $data)){
+    unless (&Sympa::List::send_global_file('lists', $sender, $robot, $data)){
 	&Log::do_log('notice',"Unable to send template 'lists' to $sender");
 	&Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $l},$cmd_line,$sender,$robot);
     }
@@ -319,7 +319,7 @@ sub stats {
 
     &Log::do_log('debug', 'Commands::stats(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
 	&Log::do_log('info', 'STATS %s from %s refused, unknown list for robot %s', $listname, $sender,$robot);
@@ -394,7 +394,7 @@ sub getfile {
 
     &Log::do_log('debug', 'Commands::getfile(%s, %s, %s)', $which, $file, $robot);
 
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'GET %s %s from %s refused, list unknown for robot %s', $which, $file, $sender, $robot);
@@ -455,7 +455,7 @@ sub last {
 
     &Log::do_log('debug', 'Commands::last(%s, %s)', $which, $robot);
 
-    my $list = new List ($which,$robot);
+    my $list = new Sympa::List ($which,$robot);
     unless ($list)  {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'LAST %s from %s refused, list unknown for robot %s', $which, $sender, $robot);
@@ -508,7 +508,7 @@ sub index {
 
     &Log::do_log('debug', 'Commands::index(%s) robot (%s)',$which,$robot);
 
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'INDEX %s from %s refused, list unknown for robot %s', $which, $sender,$robot);
@@ -565,7 +565,7 @@ sub review {
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     my $user;
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
 
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -720,7 +720,7 @@ sub subscribe {
     
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'SUB %s from %s refused, unknown list for robot %s', $which,$sender,$robot);
@@ -843,10 +843,10 @@ sub subscribe {
 	    }
 	}
 	
-	if ($List::use_db) {
-	    my $u = &List::get_global_user($sender);
+	if ($Sympa::List::use_db) {
+	    my $u = &Sympa::List::get_global_user($sender);
 	    
-	    &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
+	    &Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
 					    'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($sender, $Sympa::Conf::Conf{'cookie'})
 					    });
 	}
@@ -902,7 +902,7 @@ sub info {
 
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
 	&Log::do_log('info', 'INFO %s from %s refused, unknown list for robot %s', $listname,$sender,$robot);
@@ -1028,7 +1028,7 @@ sub signoff {
     
     if ($which eq '*') {
 	my $success ;
-	foreach $list ( &List::get_which ($email,$robot,'member') ){	    
+	foreach $list ( &Sympa::List::get_which ($email,$robot,'member') ){	    
 	    $l = $list->{'name'};
 
 	    ## Skip hidden lists
@@ -1041,7 +1041,7 @@ sub signoff {
 	    
 	    unless (defined $action) {
 		my $error = "Unable to evaluate scenario 'visibility' for list $l";
-		&List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
+		&Sympa::List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
 									 'who' => $sender,
 									 'cmd' => $cmd_line,
 									 'list' => $list,
@@ -1059,7 +1059,7 @@ sub signoff {
 	return ($success);
     }
 
-    $list = new List ($which, $robot);
+    $list = new Sympa::List ($which, $robot);
     
     ## Is this list defined
     unless ($list) {
@@ -1210,7 +1210,7 @@ sub add {
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'ADD %s %s from %s refused, unknown list for robot %s', $which, $email,$sender,$robot);
@@ -1289,10 +1289,10 @@ sub add {
 	    &Sympa::Report::notice_report_cmd('now_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);  
 	}
 	
-	if ($List::use_db) {
-	    my $u = &List::get_global_user($email);
+	if ($Sympa::List::use_db) {
+	    my $u = &Sympa::List::get_global_user($email);
 	    
-	    &List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
+	    &Sympa::List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
 					   'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Conf::Conf{'cookie'})
 					    });
 	}
@@ -1353,7 +1353,7 @@ sub invite {
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'INVITE %s %s from %s refused, unknown list for robot', $which, $email,$sender,$robot);
@@ -1514,7 +1514,7 @@ sub remind {
     my $list;
 
     unless ($listname eq '*') {
-	$list = new List ($listname, $robot);
+	$list = new Sympa::List ($listname, $robot);
 	unless ($list) {
 	    &Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	    &Log::do_log('info', 'REMIND %s from %s refused, unknown list for robot %s', $which, $sender,$robot);
@@ -1582,7 +1582,7 @@ sub remind {
     }elsif ($action =~ /request_auth/i) {
 	&Log::do_log ('debug2',"auth requested from $sender");
 	if ($listname eq '*') {
-	    unless (&List::request_auth ($sender,'remind', $robot)){
+	    unless (&Sympa::List::request_auth ($sender,'remind', $robot)){
 		my $error = "Unable to request authentification for command 'remind'";
 		&Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$listname},$cmd_line,$sender,$robot);
 		return undef; 
@@ -1637,7 +1637,7 @@ sub remind {
 	    $context{'subject'} = gettext("Subscription summary");
 	    # this remind is a global remind.
 
-	    my $all_lists = &List::get_lists($robot);
+	    my $all_lists = &Sympa::List::get_lists($robot);
 	    foreach my $list (@$all_lists){
 		
 		my $listname = $list->{'name'};
@@ -1656,7 +1656,7 @@ sub remind {
 
 		    unless (defined $action) {
 			my $error = "Unable to evaluate scenario 'visibility' for list $listname";
-			&List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
+			&Sympa::List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
 										 'who' => $sender,
 										 'cmd' => $cmd_line,
 										 'list' => $list,
@@ -1679,7 +1679,7 @@ sub remind {
 	    &Log::do_log('debug2','Sending REMIND * to %d users', $count);
 
 	    foreach my $email (keys %global_subscription) {
-		my $user = &List::get_global_user($email);
+		my $user = &Sympa::List::get_global_user($email);
 		foreach my $key (keys %{$user}) {
 		    $global_info{$email}{$key} = $user->{$key}
 		    if ($user->{$key});
@@ -1693,7 +1693,7 @@ sub remind {
                 @{$context{'lists'}} = @{$global_subscription{$email}};
 		$context{'use_bulk'} = 1;
 
-		unless (&List::send_global_file('global_remind', $email, $robot, \%context)){
+		unless (&Sympa::List::send_global_file('global_remind', $email, $robot, \%context)){
 		    &Log::do_log('notice',"Unable to send template 'global_remind' to $email");
 		    &Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $listname},$cmd_line,$sender,$robot);
 		}
@@ -1741,7 +1741,7 @@ sub del {
     
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Log::do_log('info', 'DEL %s %s from %s refused, unknown list for robot %s', $which, $who,$sender,$robot);
@@ -1883,7 +1883,7 @@ sub set {
     ## Recursive call to subroutine
     if ($which eq "*"){
 	my $status;
-	foreach my $list  ( &List::get_which ($sender,$robot,'member')){
+	foreach my $list  ( &Sympa::List::get_which ($sender,$robot,'member')){
 	    my $l = $list->{'name'};
 
 	    ## Skip hidden lists
@@ -1896,7 +1896,7 @@ sub set {
 
 	    unless (defined $action) {
 		my $error = "Unable to evaluate scenario 'visibility' for list $l";
-		&List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
+		&Sympa::List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
 									 'who' => $sender,
 									 'cmd' => $cmd_line,
 									 'list' => $list,
@@ -1917,7 +1917,7 @@ sub set {
 
     ## Load the list if not already done, and reject
     ## if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
 
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -2002,7 +2002,7 @@ sub distribute {
     my $start_time=time; # get the time at the beginning
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
     unless ($list) {
 	&Log::do_log('info', 'DISTRIBUTE %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
 	&Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
@@ -2250,7 +2250,7 @@ sub reject {
     my $modqueue = &Sympa::Conf::get_robot_conf($robot,'queuemod');
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List ($which, $robot);
+    my $list = new Sympa::List ($which, $robot);
 
     unless ($list) {
 	&Log::do_log('info', 'REJECT %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
@@ -2336,7 +2336,7 @@ sub modindex {
     
     $name =~ y/A-Z/a-z/;
 
-    my $list = new List ($name, $robot);
+    my $list = new Sympa::List ($name, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $name},$cmd_line);	
 	&Log::do_log('info', 'MODINDEX %s from %s refused, unknown list for robot %s', $name, $sender, $robot);
@@ -2367,7 +2367,7 @@ sub modindex {
 	next if (-d "$modqueue/$i");
 
 	$i=~/\_(.+)$/;
-	$curlist = new List ($`,$robot);
+	$curlist = new Sympa::List ($`,$robot);
 	if ($curlist) {
 	    # list loaded    
 	    if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){
@@ -2454,8 +2454,8 @@ sub which {
     
     ## Subscriptions
     my $data;
-    foreach my $list (List::get_which ($sender,$robot,'member')){
-        ## wwsympa :  my $list = new List ($l);
+    foreach my $list (Sympa::List::get_which ($sender,$robot,'member')){
+        ## wwsympa :  my $list = new Sympa::List ($l);
         ##            next unless (defined $list);
 	$listname = $list->{'name'};
 
@@ -2468,7 +2468,7 @@ sub which {
 
 	unless (defined $action) {
 	    my $error = "Unable to evaluate scenario 'visibility' for list $listname";
-	    &List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
+	    &Sympa::List::send_notify_to_listmaster('intern_error',$robot, {'error' => $error,
 								     'who' => $sender,
 								     'cmd' => $cmd_line,
 								     'list' => $list,
@@ -2484,7 +2484,7 @@ sub which {
     }
 
     ## Ownership
-    if (@which = &List::get_which ($sender,$robot,'owner')){
+    if (@which = &Sympa::List::get_which ($sender,$robot,'owner')){
 	foreach my $list (@which){
 	    push @{$data->{'owner_lists'}},$list->{'name'};
 	}
@@ -2492,14 +2492,14 @@ sub which {
     }
 
     ## Editorship
-    if (@which = &List::get_which ($sender,$robot,'editor')){
+    if (@which = &Sympa::List::get_which ($sender,$robot,'editor')){
 	foreach my $list (@which){
 	    push @{$data->{'editor_lists'}},$list->{'name'};
 	}
 	$data->{'is_editor'} = 1;
     }
 
-    unless (&List::send_global_file('which',$sender,$robot,$data)){
+    unless (&Sympa::List::send_global_file('which',$sender,$robot,$data)){
 	&Log::do_log('notice',"Unable to send template 'which' to $sender");
 	&Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $listname},$cmd_line,$sender,$robot);
     }
@@ -2547,7 +2547,7 @@ sub get_auth_method {
 	    $compute= $list->compute_auth($email,$cmd);
 
 	}else {
-	    $compute= &List::compute_auth($email,$cmd);	    
+	    $compute= &Sympa::List::compute_auth($email,$cmd);	    
 	}
 	if ($auth eq $compute) {
 	    $auth_method = 'md5' ;

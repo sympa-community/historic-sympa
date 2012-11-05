@@ -45,11 +45,11 @@ use Digest::MD5;
 
 use Commands;
 use Language;
-use List;
 use Log;
 use Message;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
@@ -171,7 +171,7 @@ unless (chdir($Conf{'home'})) {
     exit (-1);
 }
 
-my $pinfo = &List::_apply_defaults();
+my $pinfo = &Sympa::List::_apply_defaults();
 
 $Language::default_lang = $Conf{'lang'};
 
@@ -187,7 +187,7 @@ my $spoolarchive = new Sympa::Spool ('archive');
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
 
-    &List::init_list_cache();
+    &Sympa::List::init_list_cache();
     sleep 1; 
     my $item = $spoolarchive->next;
 
@@ -224,7 +224,7 @@ while (!$end) {
 &Log::do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 	    
 	my $list;
-	unless ($list = new List ($listadress)) {
+	unless ($list = new Sympa::List ($listadress)) {
 	   &Log::do_log('err',"remove : unknown list $listadress");
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
 	    next;
@@ -253,7 +253,7 @@ while (!$end) {
 		next;
 	    }
 	    
-	    unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||&List::is_listmaster($sender,$list->{'domain'} )){
+	    unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||&Sympa::List::is_listmaster($sender,$list->{'domain'} )){
 		# if not list owner or list editor or listmaster,n check if sender of remove order is sender of the message to remove
 		
 		my $new_message;
@@ -303,7 +303,7 @@ while (!$end) {
 	unless (mail2arc ($item)) {
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
 	    &Log::do_log('err',"archiving_failed for message %s",$item->{'messagekey'});
-	    unless (&List::send_notify_to_listmaster('archiving_failed',$item->{'robot'})) {
+	    unless (&Sympa::List::send_notify_to_listmaster('archiving_failed',$item->{'robot'})) {
 		&Log::do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
 	    }
 	}
@@ -314,7 +314,7 @@ while (!$end) {
     }
 }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+&Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'archived exited normally due to signal');
 &Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
@@ -465,7 +465,7 @@ Rebuilds archives for the list the name of which is given in the argument $adrli
 
 =item * unset_hidden_mode
 
-=item * List::new
+=item * Sympa::List::new
 
 =item * Log::do_log
 
@@ -500,7 +500,7 @@ sub rebuild {
 
     my $tag = &get_tag($listname);
 
-    my $list = new List($listname, $hostname);
+    my $list = new Sympa::List($listname, $hostname);
     my $robot = $list->{'domain'};
     my $arcpath = &Sympa::Conf::get_robot_conf($robot,'arc_path');
     &Log::do_log('debug',"Rebuilding $adrlist archive ($2)");
@@ -694,13 +694,13 @@ Archives one message into one list archives directory.
 
 =item * unset_hidden_mode
 
-=item * List::get_arc_size
+=item * Sympa::List::get_arc_size
 
-=item * List::get_list_id
+=item * Sympa::List::get_list_id
 
-=item * List::new
+=item * Sympa::List::new
 
-=item * List::send_notify_to_owner
+=item * Sympa::List::send_notify_to_owner
 
 =item * Log::do_log
 
@@ -730,7 +730,7 @@ sub mail2arc {
 
     my $newfile;
 
-    my $list = new List($listname, $robot);
+    my $list = new Sympa::List($listname, $robot);
     my $arcpath = &Sympa::Conf::get_robot_conf($list->{'domain'},'arc_path');
 
     unless (defined $list) {
@@ -762,7 +762,7 @@ sub mail2arc {
 	if (! -d $basedir) {
 	    unless (mkdir $basedir, 0775) {
 		&Log::do_log('err', 'Cannot create directory %s', $basedir);
-		unless (&List::send_notify_to_listmaster('unable_to_create_dir',$robot,{'dir' => "$basedir"})) {
+		unless (&Sympa::List::send_notify_to_listmaster('unable_to_create_dir',$robot,{'dir' => "$basedir"})) {
 		    &Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
 		}
 	    }

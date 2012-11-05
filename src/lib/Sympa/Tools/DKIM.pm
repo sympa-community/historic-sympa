@@ -28,9 +28,9 @@ use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use MIME::Parser;
 
-use List;
 use Log;
 use Message;
+use Sympa::List;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
@@ -50,7 +50,7 @@ sub get_dkim_parameters {
     my $data ; my $keyfile ;
     if ($listname) {
 	# fetch dkim parameter in list context
-	my $list = new List ($listname,$robot);
+	my $list = new Sympa::List ($listname,$robot);
 	unless ($list){
 	    &Log::do_log('err',"Could not load list %s@%s",$listname, $robot);
 	    return undef;

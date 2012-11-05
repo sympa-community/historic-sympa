@@ -25,11 +25,11 @@ package Sympa::Auth;
 use Digest::MD5;
 
 use Language;
-use List;
 use Log;
 use SDM;
 use Sympa::Conf;
 use Sympa::Datasource::LDAP;
+use Sympa::List;
 use Sympa::Report;
 use Sympa::Session;
 
@@ -69,7 +69,7 @@ sub password_fingerprint{
 	 }
 	 if ($canonic){
 	     
-	     unless($user = &List::get_global_user($canonic)){
+	     unless($user = &Sympa::List::get_global_user($canonic)){
 		 $user = {'email' => $canonic};
 	     }
 	     return {'user' => $user,
@@ -113,7 +113,7 @@ sub authentication {
     &Log::do_log('debug', 'Auth::authentication(%s)', $email);
 
 
-    unless ($user = &List::get_global_user($email)) {
+    unless ($user = &Sympa::List::get_global_user($email)) {
 	$user = {'email' => $email };
     }    
     unless ($user->{'password'}) {
@@ -122,7 +122,7 @@ sub authentication {
     
     if ($user->{'wrong_login_count'} > &Sympa::Conf::get_robot_conf($robot, 'max_wrong_password')){
 	# too many wrong login attemp
-	&List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
+	&Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
 	&Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
 	&Log::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 	return undef;
@@ -138,7 +138,7 @@ sub authentication {
 	    my $fingerprint = &password_fingerprint ($pwd);	    	    
 	    
 	    if ($fingerprint eq $user->{'password'}) {
-		&List::update_global_user($email,{wrong_login_count => 0}) ;
+		&Sympa::List::update_global_user($email,{wrong_login_count => 0}) ;
 		return {'user' => $user,
 			'auth' => 'classic',
 			'alt_emails' => {$email => 'classic'}
@@ -146,10 +146,10 @@ sub authentication {
 	    }
 	}elsif($auth_service->{'auth_type'} eq 'ldap') {
 	    if ($canonic = &ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
-		unless($user = &List::get_global_user($canonic)){
+		unless($user = &Sympa::List::get_global_user($canonic)){
 		    $user = {'email' => $canonic};
 		}
-		&List::update_global_user($canonic,{wrong_login_count => 0}) ;
+		&Sympa::List::update_global_user($canonic,{wrong_login_count => 0}) ;
 		return {'user' => $user,
 			'auth' => 'ldap',
 			'alt_emails' => {$email => 'ldap'}
@@ -159,7 +159,7 @@ sub authentication {
     }
 
     # increment wrong login count.
-    &List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
+    &Sympa::List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
 
     &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
     &Log::do_log('err','authentication: incorrect password for user %s', $email);
@@ -308,7 +308,7 @@ sub get_email_by_net_id {
 	
 	$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 	
-	$email = &List::get_netidtoemail_db($robot, $netid_cookie, $Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
+	$email = &Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
 	
 	return $email;
     }

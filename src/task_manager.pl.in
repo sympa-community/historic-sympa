@@ -32,12 +32,12 @@ use Getopt::Long;
 use Time::Local;
 
 use Bulk;
-use List;
 use Log;
 use Scenario;
 use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Spool;
@@ -163,7 +163,7 @@ unless (chdir($Conf{'home'})) {
 
 &Task::set_spool(); # force initialisation of $taskspool in module Task 
 
-my $pinfo = &List::_apply_defaults();
+my $pinfo = &Sympa::List::_apply_defaults();
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
@@ -267,12 +267,12 @@ while (!$end) {
 
 
     ## Empty cache of the List.pm module
-    &List::init_list_cache();
-    &List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    &Sympa::List::init_list_cache();
+    &Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 	
    ## List all tasks
     unless (&Task::list_tasks) {
-	&List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in spool"});
+	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in spool"});
 	&Log::do_log ('err', "Failed to list task files in spool");
 	exit -1;
     }
@@ -300,7 +300,7 @@ while (!$end) {
     ## list tasks
     foreach my $robot (keys %{$Conf{'robots'}}) {
 	&Log::do_log('debug3',"creating list task : current bot  is $robot");
-	my $all_lists = &List::get_lists($robot);
+	my $all_lists = &Sympa::List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
 	    &Log::do_log('debug3',"creating list task : current list  is $list->{'name'}");
 	    my %data = %default_data;
@@ -342,7 +342,7 @@ while (!$end) {
     ## Execute existing tasks
     ## List all tasks
     unless (&Task::list_tasks($spool_task)) {
-	&List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
+	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
 	&Log::do_log ('err', "Failed to list task files in %s", $spool_task);
 	exit -1;
     }
@@ -389,7 +389,7 @@ while (!$end) {
     &Sympa::Mail::reaper;
 }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+&Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log ('notice', 'task_manager exited normally due to signal'); 
 &Sympa::Tools::Daemon::remove_pid($wwsconf->{'task_manager_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
@@ -437,7 +437,7 @@ sub create {
 
     # for a list
     if ($object  eq 'list') {
-	my $list = new List($list_name, $robot);
+	my $list = new Sympa::List($list_name, $robot);
 
 	$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
@@ -862,7 +862,7 @@ sub send_msg {
 	foreach my $email (keys %{$Rvars->{$var}}) {
 	    &Log::do_log ('notice', "--> message sent to $email");
  	    if (!$log) {
- 		unless (&List::send_global_file ($template, $email, ,'',$Rvars->{$var}{$email}) ) {
+ 		unless (&Sympa::List::send_global_file ($template, $email, ,'',$Rvars->{$var}{$email}) ) {
  		    &Log::do_log ('notice', "Unable to send template $template to $email");
  		}
  	    }
@@ -1054,7 +1054,7 @@ sub create_cmd {
 		'execution_date' => 'execution_date');
 
     if ($type eq 'list') {
-	my $list = new List ($object);
+	my $list = new Sympa::List ($object);
 	$data{'list'}{'name'} = $list->{'name'};
     }
     $type = '_global';
@@ -1148,7 +1148,7 @@ sub purge_tables {
     #
     my $removed = 0;
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	my $all_lists = &List::get_lists($robot);
+	my $all_lists = &Sympa::List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
 	    $removed += &Sympa::Tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
 	}
@@ -1176,7 +1176,7 @@ sub purge_user_table {
     &Log::do_log('debug2','purge_user_table()');
 
     ## Load user_table entries
-    my @users = &List::get_all_global_user();
+    my @users = &Sympa::List::get_all_global_user();
 
     ## Load known subscribers/owners/editors
     my %known_people;
@@ -1188,7 +1188,7 @@ sub purge_user_table {
 
     foreach my $r (keys %{$Conf{'robots'}}) {
 
-	my $all_lists = &List::get_lists($r);
+	my $all_lists = &Sympa::List::get_lists($r);
 	foreach my $list (@$all_lists){
 
 	    ## Owners
@@ -1224,7 +1224,7 @@ sub purge_user_table {
     }
     
     unless ($#purged_users < 0) {
-	unless (&List::delete_global_user(@purged_users)) {
+	unless (&Sympa::List::delete_global_user(@purged_users)) {
 	    &Log::do_log('err', 'purge_user_table error: Failed to delete users');
 	    return undef;
 	}
@@ -1243,7 +1243,7 @@ sub purge_orphan_bounces {
     my %bounced_users;
     my $all_lists;
     
-    unless ($all_lists = &List::get_lists('*')) {
+    unless ($all_lists = &Sympa::List::get_lists('*')) {
 	&Log::do_log('notice','No list available');
 	return 1;
     }
@@ -1299,7 +1299,7 @@ sub purge_orphan_bounces {
      my $delay = $tab[0];
 
      &Log::do_log('debug2','expire_bounce(%d)',$delay);
-     my $all_lists = &List::get_lists('*');
+     my $all_lists = &Sympa::List::get_lists('*');
      foreach my $list (@$all_lists ) {
 
 	 my $listname = $list->{'name'};
@@ -1439,7 +1439,7 @@ sub purge_orphan_bounces {
 	     $tpl_context{'auto_submitted'} = 'auto-generated';
 	     
 	     if (!$log) {
-		 unless (&List::send_global_file ($template, $_,'', \%tpl_context)) {
+		 unless (&Sympa::List::send_global_file ($template, $_,'', \%tpl_context)) {
 		     &Log::do_log ('notice', "Unable to send template $template to $_");
 		 }
 	     }
@@ -1535,7 +1535,7 @@ sub eval_bouncers {
     #################       
     my ($task, $context) = @_;
     
-    my $all_lists = &List::get_lists('*');
+    my $all_lists = &Sympa::List::get_lists('*');
     foreach my $list (@$all_lists) {
 	
 	my $listname = $list->{'name'};
@@ -1597,12 +1597,12 @@ sub process_bouncers {
 ###########################################################################
    
     ## possible actions
-    my %actions = ('remove_bouncers' => \&List::remove_bouncers,
-		   'notify_bouncers' => \&List::notify_bouncers,
+    my %actions = ('remove_bouncers' => \&Sympa::List::remove_bouncers,
+		   'notify_bouncers' => \&Sympa::List::notify_bouncers,
 		   'none'            => \&none
 		   );
 
-    my $all_lists = &List::get_lists();
+    my $all_lists = &Sympa::List::get_lists();
     foreach my $list (@$all_lists) {
 	my $listname = $list->{'name'};
 	
@@ -1655,7 +1655,7 @@ sub process_bouncers {
 
 	        if ($notification eq 'listmaster'){
 
-		    unless(&List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
+		    unless(&Sympa::List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
 			&Log::do_log('err','error while notifying listmaster');
 		    }
 		}elsif ($notification eq 'owner'){
@@ -1784,7 +1784,7 @@ sub error {
                  $message";
     &Log::do_log ('err', "$message");
     change_label ($task_id, 'ERROR') unless ($task_id eq '');
-    unless (&List::send_notify_to_listmaster ('error in task', $Conf{'domain'}, \@param)) {
+    unless (&Sympa::List::send_notify_to_listmaster ('error in task', $Conf{'domain'}, \@param)) {
     	&Log::do_log('notice','error while notifying listmaster about "error_in_task"');
     }
 }

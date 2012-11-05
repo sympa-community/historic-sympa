@@ -29,7 +29,7 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use List;
+use Sympa::List;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Upgrade;
@@ -48,8 +48,8 @@ if ($Conf{'db_name'} and $Conf{'db_type'}) {
     }
 }
 
-## Apply defaults to %List::pinfo
-&List::_apply_defaults();
+## Apply defaults to %Sympa::List::pinfo
+&Sympa::List::_apply_defaults();
 
 my $openssl = $Conf{'openssl'};
 my $home_sympa = $Conf{'home'};
@@ -76,7 +76,7 @@ if (($main::options{'help'} ne '') ||
 }else{
 
     if ($listname) {
-	my $self = new List($listname, $robot);
+	my $self = new Sympa::List($listname, $robot);
 	$cert = $self->{'dir'}.'/cert.pem';
 	$privatekey = $self->{'dir'}.'/private_key';
 	unless (-d $self->{'dir'}) {

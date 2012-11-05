@@ -39,10 +39,10 @@ use FileHandle;
 use Getopt::Long;
 use POSIX;
 
-use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -179,7 +179,7 @@ unless (chdir($Conf{'home'})) {
     exit (-1);
 }
 
-my $pinfo = &List::_apply_defaults();
+my $pinfo = &Sympa::List::_apply_defaults();
 
 &Log::do_log('notice', "bounced Started");
 
@@ -197,8 +197,8 @@ while (!$end) {
     
     sleep $Conf{'sleep'};
     
-    &List::init_list_cache();
-	&List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    &Sympa::List::init_list_cache();
+	&Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 	
     my $bounce;
     while ($bounce = $spool->next) {
@@ -206,7 +206,7 @@ while (!$end) {
 	my $listname = $bounce->{'list'};
 	my $robot = $bounce->{'robot'};
 	
-	$robot ||= &List::search_list_among_robots($listname);
+	$robot ||= &Sympa::List::search_list_among_robots($listname);
 	
 	unless ($bounce->{'messageasstring'}) {
 	   &Log::do_log ('notice',"Ignoring bounce where messagekey = %s  because empty",$bounce->{'messagekey'});
@@ -253,7 +253,7 @@ while (!$end) {
 	    
 	    if ($unique =~ /[wr]/) { # in this case the bounce result from a remind or a welcome message ;so try to remove the subscriber
 		&Log::do_log('debug', "VERP for a service message, try to remove the subscriber");
-		my $list = new List ($listname, $robot);		
+		my $list = new Sympa::List ($listname, $robot);		
 		unless($list) {
 		    &Log::do_log('notice','Skipping bounce where messagekey = %s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -294,7 +294,7 @@ while (!$end) {
 	    }# close VERP + remind or welcome block
 	}# close VERP in use block
 
-	my $list = new List ($listname, $robot);
+	my $list = new Sympa::List ($listname, $robot);
 	unless($list) {
 	    &Log::do_log('err','Skipping bounce where messagekey= %s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -574,7 +574,7 @@ while (!$end) {
 		    $listname =~ /(.*)\@(.*)/;
 		    $listname = $1;
 		    $robot = $2;
-		    my $list = new List ($listname, $robot);
+		    my $list = new Sympa::List ($listname, $robot);
 		    unless($list) {
 			&Log::do_log('err','Skipping Feedback Report (spool bounce, messagekey =%s) for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 			$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -582,7 +582,7 @@ while (!$end) {
 		    }
 		    push @lists, $list;
 		}elsif( $feedback_type =~ /opt-out/ && (defined $original_rcpt)){
-		    @lists = &List::get_which($original_rcpt,$robot,'member');
+		    @lists = &Sympa::List::get_which($original_rcpt,$robot,'member');
 		}else {
 		    &Log::do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $original_rcpt, $listname );		
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -624,7 +624,7 @@ while (!$end) {
     
 	# Fin section feedback report
 	# else (not welcome or remind) 
-	my $list = new List ($listname, $robot);
+	my $list = new Sympa::List ($listname, $robot);
 	if (! $list) {
 	    &Log::do_log('err','Skipping bounce messagekey=%s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -648,7 +648,7 @@ while (!$end) {
 	    ## Bounce directory
 	    if (! -d $bounce_dir) {
 		unless (mkdir $bounce_dir, 0777) {
-		    &List::send_notify_to_listmaster('bounce_intern_error',$Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
+		    &Sympa::List::send_notify_to_listmaster('bounce_intern_error',$Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
 		    &Log::do_log('err', 'Could not create %s: %s bounced dir, check bounce_path in wwsympa.conf', $bounce_dir, $!);
 		exit;
 		} 
@@ -695,7 +695,7 @@ while (!$end) {
 
 
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+&Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'bounced exited normally due to signal');
 &Sympa::Tools::Daemon::remove_pid($wwsconf->{'bounced_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});

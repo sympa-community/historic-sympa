@@ -28,12 +28,12 @@ use strict "vars";
 use Exporter;
 use Storable;
 
-use List;
 use Log;
 use Language;
 use SDM;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
@@ -514,7 +514,7 @@ sub checkfiles {
     if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
     unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
         &Log::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
-        unless (&List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
+        unless (&Sympa::List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
         &Log::do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
         }
         $config_err++;
@@ -524,7 +524,7 @@ sub checkfiles {
     if (defined $Conf{'capath'} && $Conf{'capath'}) {
     unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
         &Log::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
-        unless (&List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
+        unless (&Sympa::List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
         &Log::do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
         }
         $config_err++;
@@ -534,7 +534,7 @@ sub checkfiles {
     ## queuebounce and bounce_path pointing to the same directory
     if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
     &Log::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
-    unless (&List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
+    unless (&Sympa::List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
         &Log::do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
     }
     $config_err++;
@@ -590,7 +590,7 @@ sub checkfiles {
     ## Create directory if required
     unless (-d $dir) {
         unless ( &Sympa::Tools::File::mkdir_all($dir, 0755)) {
-        &List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
+        &Sympa::List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
         &Log::do_log('err','Failed to create directory %s',$dir);
         return undef;
         }
@@ -610,7 +610,7 @@ sub checkfiles {
         rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
 
         unless (open (CSS,">$dir/$css")) {
-            &List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
+            &Sympa::List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
             &Log::do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
             return undef;
         }
@@ -618,7 +618,7 @@ sub checkfiles {
         unless (&Sympa::TT2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
             my $error = &Sympa::TT2::get_error();
             $param->{'tt2_error'} = $error;
-            &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+            &Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
             &Log::do_log('err', "Error while installing $dir/$css");
         }
 
@@ -633,7 +633,7 @@ sub checkfiles {
     }
     if ($css_updated) {
     ## Notify main listmaster
-    &List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
+    &Sympa::List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
     }
 
 
@@ -1667,7 +1667,7 @@ sub _load_single_robot_config{
         printf "Conf::_load_single_robot_config(): File %s has not changed since the last cache. Using cache.\n",$config_file;
         unless (-r $config_file) {
             printf STDERR "Conf::_load_single_robot_config(): No read access on %s\n", $config_file;
-            &List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]);
+            &Sympa::List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]);
             return undef;
         }
          unless ($robot_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){

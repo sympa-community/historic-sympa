@@ -42,9 +42,9 @@ use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
 
-use List;
 use Log;
 use Sympa::Conf;
+use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
@@ -276,7 +276,7 @@ sub new {
 		$listname = $1;
 	    }
 	    
-	    my $list = new List ($listname, $robot, {'just_try' => 1});
+	    my $list = new Sympa::List ($listname, $robot, {'just_try' => 1});
 	    if ($list) {
 		$message->{'list'} = $list;
 	    }	

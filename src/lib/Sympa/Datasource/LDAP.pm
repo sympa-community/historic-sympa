@@ -27,7 +27,6 @@ use strict;
 use Exporter;
 
 use Sympa::Datasource;
-use List;
 use Log;
 use Sympa::Tools;
 

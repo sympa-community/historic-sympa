@@ -40,12 +40,12 @@ use Term::ProgressBar;
 use XML::LibXML;
 
 use Language;
-use List;
 use Log;
 use Sympa::Admin;
 use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
+use Sympa::List;
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
@@ -300,13 +300,13 @@ Adds a list to the family. List description can be passed either through a hash 
 
 =item * Family::check_param_constraint
 
-=item * List::has_include_data_sources
+=item * Sympa::List::has_include_data_sources
 
-=item * List::save_config
+=item * Sympa::List::save_config
 
-=item * List::set_status_error_config
+=item * Sympa::List::set_status_error_config
 
-=item * List::sync_include
+=item * Sympa::List::sync_include
 
 =item * Log::do_log
 
@@ -481,19 +481,19 @@ Adds a list to the family.
 
 =item * Family::check_param_constraint
 
-=item * List::has_include_data_sources
+=item * Sympa::List::has_include_data_sources
 
-=item * List::new
+=item * Sympa::List::new
 
-=item * List::save_config
+=item * Sympa::List::save_config
 
-=item * List::send_notify_to_owner
+=item * Sympa::List::send_notify_to_owner
 
-=item * List::set_status_error_config
+=item * Sympa::List::set_status_error_config
 
-=item * List::sync_include
+=item * Sympa::List::sync_include
 
-=item * List::update_config_changes
+=item * Sympa::List::update_config_changes
 
 =item * Log::do_log
 
@@ -546,7 +546,7 @@ sub modify_list {
 
     #getting list
     my $list;
-    unless ($list = new List($hash_list->{'config'}{'listname'}, $self->{'robot'})) {
+    unless ($list = new Sympa::List($hash_list->{'config'}{'listname'}, $self->{'robot'})) {
 	push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
 	return $return;
     }
@@ -739,7 +739,7 @@ Closes every list family.
 
 =item * Family::get_family_lists
 
-=item * List::set_status_family_closed
+=item * Sympa::List::set_status_family_closed
 
 =item * Log::do_log
 
@@ -847,11 +847,11 @@ Creates family lists or updates them if they exist already.
 
 =item * Family::get_hash_family_lists
 
-=item * List::new
+=item * Sympa::List::new
 
-=item * List::set_status_error_config
+=item * Sympa::List::set_status_error_config
 
-=item * List::set_status_family_closed
+=item * Sympa::List::set_status_family_closed
 
 =item * Log::do_log
 
@@ -909,7 +909,7 @@ sub instantiate {
     ## EACH FAMILY LIST
     foreach my $listname (@{$self->{'list_to_generate'}}) {
 
-	my $list = new List($listname, $self->{'robot'});
+	my $list = new Sympa::List($listname, $self->{'robot'});
 	
         ## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
 	my $xml_fh;
@@ -1026,7 +1026,7 @@ sub instantiate {
     ## PREVIOUS LIST LEFT
     foreach my $l (keys %{$previous_family_lists}) {
 	my $list;
-	unless ($list = new List ($l,$self->{'robot'})) {
+	unless ($list = new Sympa::List ($l,$self->{'robot'})) {
 	    push (@{$self->{'errors'}{'previous_list'}},$l);
 	    next;
 	}
@@ -1267,7 +1267,7 @@ Checks the parameter constraints taken from param_constraint.conf file for the L
 
 =item * Family::get_constraints
 
-=item * List::get_param_value
+=item * Sympa::List::get_param_value
 
 =item * Log::do_log
 
@@ -1618,7 +1618,7 @@ Returns a ref to an array whose values are the family lists' names.
 
 =item * Log::do_log
 
-=item * List::get_lists
+=item * Sympa::List::get_lists
 
 =back 
 
@@ -1637,7 +1637,7 @@ sub get_family_lists {
     my @list_of_lists;
     &Log::do_log('debug2','Family::get_family_lists(%s)',$self->{'name'});
 
-    my $all_lists = &List::get_lists($self->{'robot'});
+    my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
 	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
 	    push (@list_of_lists, $list);
@@ -1673,7 +1673,7 @@ Returns a ref to a hash whose keys are this family's lists' names. They are asso
 
 =item * Log::do_log
 
-=item * List::get_lists
+=item * Sympa::List::get_lists
 
 =back 
 
@@ -1692,7 +1692,7 @@ sub get_hash_family_lists {
     my %list_of_lists;
     &Log::do_log('debug2','Family::get_hash_family_lists(%s)',$self->{'name'});
 
-    my $all_lists = &List::get_lists($self->{'robot'});
+    my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
 	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
 	    $list_of_lists{$list->{'name'}} = 1;
@@ -2347,9 +2347,9 @@ Gets list customizations from the config_changes file and keeps on changes allow
 
 =item * Family::get_constraints
 
-=item * List::get_config_changes
+=item * Sympa::List::get_config_changes
 
-=item * List::_get_param_value_anywhere
+=item * Sympa::List::_get_param_value_anywhere
 
 =item * Log::do_log
 
@@ -2419,7 +2419,7 @@ sub _get_customizing {
 	    next;
 	}
 
-	$param_value = &List::_get_param_value_anywhere($changed_values,$param);
+	$param_value = &Sympa::List::_get_param_value_anywhere($changed_values,$param);
  
 	$value_error = $self->check_values($param_value,$constraint_value);
 
@@ -2489,9 +2489,9 @@ Sets changes (loads the users, installs or removes the aliases); deals with the 
 
 =item * Sympa::Adminremove_aliases
 
-=item * List::add_list_member
+=item * Sympa::List::add_list_member
 
-=item * List::_load_list_members_file
+=item * Sympa::List::_load_list_members_file
 
 =item * Log::do_log
 
@@ -2544,12 +2544,12 @@ sub _set_status_changes {
 ##    if (($old_status ne 'pending') && ($old_status ne 'open')) {
 ##	
 ##	if ($list->{'admin'}{'user_data_source'} eq 'file') {
-##	    $list->{'users'} = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
+##	    $list->{'users'} = &Sympa::List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
 ##	}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
 ##	    unless (-f "$list->{'dir'}/subscribers.closed.dump") {
 ##		&Log::do_log('notice', 'No subscribers to restore');
 ##	    }
-##	    my @users = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
+##	    my @users = &Sympa::List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
 ##	    
 ##	    ## Insert users in database
 ##	    foreach my $user (@users) {
@@ -2609,9 +2609,9 @@ Finishes to generate a list in a family context (for a new or an already existin
 
 =item * Family::check_param_constraint
 
-=item * List::save_config
+=item * Sympa::List::save_config
 
-=item * List::set_status_error_config
+=item * Sympa::List::set_status_error_config
 
 =item * Log::do_log
 
@@ -2770,7 +2770,7 @@ Loads the param_constraint.conf file into a hash
 
 =item * Log::do_log
 
-=item * List::send_notify_to_listmaster
+=item * Sympa::List::send_notify_to_listmaster
 
 =back 
 
@@ -2836,7 +2836,7 @@ sub _load_param_constraint_conf {
 	}
     }
     if ($error) {
-	unless (&List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
+	unless (&Sympa::List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
 	    &Log::do_log('notice','the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
 	}
     }
@@ -2876,7 +2876,7 @@ sub create_automatic_list {
 	&Log::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
 	return undef;
     }
-    my $list = new List ($listname, $self->{'robot'});
+    my $list = new Sympa::List ($listname, $self->{'robot'});
     unless (defined $list) {
 	&Log::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
 	return undef;

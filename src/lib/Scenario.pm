@@ -25,12 +25,12 @@ use strict;
 
 use Net::Netmask;
 
-use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
+use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
@@ -238,7 +238,7 @@ sub request_action {
     my $robot=shift;
     my $context = shift;
     my $debug = shift;
-    &Log::do_log('debug', 'List::request_action %s,%s,%s',$operation,$auth_method,$robot);
+    &Log::do_log('debug', 'Sympa::List::request_action %s,%s,%s',$operation,$auth_method,$robot);
 
     my $trace_scenario ;
 
@@ -252,7 +252,7 @@ sub request_action {
 					      $context->{'message'}->{'smime_crypted'} eq 'smime_crypted');
     ## Check that authorization method is one of those known by Sympa
     unless ( $auth_method =~ /^(smtp|md5|pgp|smime|dkim)/) {
-	&Log::do_log('info',"fatal error : unknown auth method $auth_method in List::get_action");
+	&Log::do_log('info',"fatal error : unknown auth method $auth_method in Sympa::List::get_action");
 	return undef;
     }
     my (@rules, $name, $scenario) ;
@@ -357,7 +357,7 @@ sub request_action {
 
 	$scenario = new Scenario ('robot' => $robot, 
 				  'function' => 'topics_visibility',
-				  'name' => $List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
+				  'name' => $Sympa::List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
 				  'options' => $context->{'options'});
 
     }else{	
@@ -447,7 +447,7 @@ sub request_action {
 			   };
 		    return $return;
 		}
-		unless (&List::send_notify_to_listmaster('error-performing-condition', $robot, [$context->{'listname'}."  ".$rule->{'condition'}] )) {
+		unless (&Sympa::List::send_notify_to_listmaster('error-performing-condition', $robot, [$context->{'listname'}."  ".$rule->{'condition'}] )) {
 		    &Log::do_log('notice',"Unable to send notify 'error-performing-condition' to listmaster");
 		}
 		return undef;
@@ -549,7 +549,7 @@ sub verify {
 #    }
     
     unless (defined($context->{'sender'} )) {
-	&Log::do_log('info',"internal error, no sender find in List::verify, report authors");
+	&Log::do_log('info',"internal error, no sender find in Sympa::List::verify, report authors");
 	return undef;
     }
     
@@ -557,7 +557,7 @@ sub verify {
     
     my $list;
     if ($context->{'listname'} && ! defined $context->{'list_object'}) {
-        unless ( $context->{'list_object'} = new List ($context->{'listname'}, $robot) ){
+        unless ( $context->{'list_object'} = new Sympa::List ($context->{'listname'}, $robot) ){
 	    &Log::do_log('info',"Unable to create List object for list $context->{'listname'}");
 	    return undef ;
 	}
@@ -661,12 +661,12 @@ sub verify {
 	    ## Sender's user/subscriber attributes (if subscriber)
 	}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
 	    
-	    $context->{'user'} ||= &List::get_global_user($context->{'sender'});	    
+	    $context->{'user'} ||= &Sympa::List::get_global_user($context->{'sender'});	    
 	    $value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
 	    
 	}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 	    
-	    $context->{'user'} ||= &List::get_global_user($context->{'sender'});
+	    $context->{'user'} ||= &Sympa::List::get_global_user($context->{'sender'});
 	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
 	    
 	}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
@@ -812,7 +812,7 @@ sub verify {
 	    return -1 * $negation ;
 	}
 
-	if ( &List::is_listmaster($args[0],$robot)) {
+	if ( &Sympa::List::is_listmaster($args[0],$robot)) {
 	    if ($log_it == 1) {
 		&Log::do_log('info','%s is listmaster of robot %s (rule %s)',$args[0],$robot,$condition);
 	    }
@@ -889,9 +889,9 @@ sub verify {
 
 	## The list is local or in another local robot
 	if ($args[0] =~ /\@/) {
-	    $list2 = new List ($args[0]);
+	    $list2 = new Sympa::List ($args[0]);
 	}else {
-	    $list2 = new List ($args[0], $robot);
+	    $list2 = new Sympa::List ($args[0], $robot);
 	}
 		
 	if (! $list2) {
@@ -1129,7 +1129,7 @@ sub search{
 
     my $sender = $context->{'sender'};
 
-    &Log::do_log('debug2', 'List::search(%s,%s,%s)', $filter_file, $sender, $robot);
+    &Log::do_log('debug2', 'Sympa::List::search(%s,%s,%s)', $filter_file, $sender, $robot);
     
     if ($filter_file =~ /\.sql$/) {
  
@@ -1295,13 +1295,13 @@ sub search{
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 	    }
 	    
-	$ds->disconnect() or &Log::do_log('notice','List::search_ldap.Unbind impossible');
+	$ds->disconnect() or &Log::do_log('notice','Sympa::List::search_ldap.Unbind impossible');
 	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
 	    
 	    return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
     }elsif($filter_file =~ /\.txt$/){ 
-	# &Log::do_log('info', 'List::search: eval %s', $filter_file);
+	# &Log::do_log('info', 'Sympa::List::search: eval %s', $filter_file);
 	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Conf::Conf{'etc'}); 
 
 	## Raise an error except for blacklist.txt
@@ -1316,19 +1316,19 @@ sub search{
 
 	my $sender = lc($sender);
 	foreach my $file (@files) {
-	    &Log::do_log('debug3', 'List::search: found file  %s', $file);
+	    &Log::do_log('debug3', 'Sympa::List::search: found file  %s', $file);
 	    unless (open FILE, $file) {
 		&Log::do_log('err', 'Could not open file %s', $file);
 		return undef;
 	    } 
 	    while (<FILE>) {
-		# &Log::do_log('debug3', 'List::search: eval rule %s', $_);
+		# &Log::do_log('debug3', 'Sympa::List::search: eval rule %s', $_);
 		next if (/^\s*$/o || /^[\#\;]/o);
 		my $regexp= $_ ;
 		chomp $regexp;
 		$regexp =~ s/\*/.*/ ; 
 		$regexp = '^'.$regexp.'$';
-		# &Log::do_log('debug3', 'List::search: eval  %s =~ /%s/i', $sender,$regexp);
+		# &Log::do_log('debug3', 'Sympa::List::search: eval  %s =~ /%s/i', $sender,$regexp);
 		return 1  if ($sender =~ /$regexp/i);
 	    }
 	}
@@ -1345,7 +1345,7 @@ sub verify_custom {
         my $timeout = 3600;
 	
 	my $filter = join ('*', @{$args_ref});
-	&Log::do_log('debug2', 'List::verify_custom(%s,%s,%s,%s)', $condition, $filter, $robot, $list);
+	&Log::do_log('debug2', 'Sympa::List::verify_custom(%s,%s,%s,%s)', $condition, $filter, $robot, $list);
         if (defined ($persistent_cache{'named_filter'}{$condition}{$filter}) &&
             (time <= $persistent_cache{'named_filter'}{$condition}{$filter}{'update'} + $timeout)){ ## Cache has 1hour lifetime
             &Log::do_log('notice', 'Using previous custom condition cache %s', $filter);

@@ -25,7 +25,7 @@ package Sympa::Report;
 use strict;
 
 use Language;
-use List;
+use Sympa::List;
 use Log;
 
 ######################## MESSAGE DIFFUSION REPORT #############################################
@@ -102,7 +102,7 @@ sub reject_report_msg {
 	    &Log::do_log('notice',"report::reject_report_msg(): Unable to send template 'message_report' to '$user'");
 	}
     } else {
-	unless (&List::send_global_file('message_report',$user,$robot,$param)) {
+	unless (&Sympa::List::send_global_file('message_report',$user,$robot,$param)) {
 	    &Log::do_log('notice',"report::reject_report_msg(): Unable to send template 'message_report' to '$user'");
 	}
     }
@@ -115,7 +115,7 @@ sub reject_report_msg {
 	$param->{'action'} = 'message diffusion';
 	$param->{'msg_id'} = $param->{'msg_id'};
 	$param->{'list'} = $list if (defined $list);
-	unless (&List::send_notify_to_listmaster('mail_intern_error', $robot, $param)) {
+	unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot, $param)) {
 	    &Log::do_log('notice',"report::reject_report_msg(): Unable to notify_listmaster concerning '$user'");
 	}
     }
@@ -342,7 +342,7 @@ sub send_report_cmd {
 
 		 
 
-    unless (&List::send_global_file('command_report',$sender,$robot,$data)) {
+    unless (&Sympa::List::send_global_file('command_report',$sender,$robot,$data)) {
 	&Log::do_log('notice',"report::send_report_cmd() : Unable to send template 'command_report' to $sender");
     }
     
@@ -390,7 +390,7 @@ sub global_report_cmd {
 	    $param->{'who'} = $sender;
 	    $param->{'action'} = 'Command process';
 	    
-	    unless (&List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
 		&Log::do_log('notice',"report::global_report_cmd(): Unable to notify listmaster concerning '$sender'");
 	    }
 	} else {
@@ -467,7 +467,7 @@ sub reject_report_cmd {
 	    $param->{'who'} = $sender;
 	    $param->{'action'} = 'Command process';
 
-	    unless (&List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
 		&Log::do_log('notice',"report::reject_report_cmd(): Unable to notify listmaster concerning '$sender'");
 	    }
 	} else {
@@ -761,7 +761,7 @@ sub reject_report_web {
 	    $param->{'who'} = $user;
 	    $param->{'action'} ||= 'Command process';
 
-	    unless (&List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $param)) {
 		&Log::do_log('notice',"report::reject_report_web(): Unable to notify listmaster concerning '$user'");
 	    } 
 	}else {

@@ -35,11 +35,11 @@ use Family;
 use Language;
 use Log;
 use Lock;
-use List;
 use Message;
 use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -132,8 +132,8 @@ unless (Sympa::Conf::load($config_file)) {
    
 }
 
-## Apply defaults to %List::pinfo
-&List::_apply_defaults();
+## Apply defaults to %Sympa::List::pinfo
+&Sympa::List::_apply_defaults();
 
 
 ## Main program
@@ -364,7 +364,7 @@ while (!$signal) {
 	    $priority = &Sympa::Conf::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
-	my $list =  new List ($listname, $robot, {'just_try' => 1});
+	my $list =  new Sympa::List ($listname, $robot, {'just_try' => 1});
 	if ($list) {
 	    $priority = $list->{'admin'}{'priority'};
 	}else {

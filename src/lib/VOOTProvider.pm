@@ -358,7 +358,7 @@ sub getGroupMembers {
 	
 	my @entries = ();
 	
-	my $list = new List($param{'group'}, $self->{'robot'});
+	my $list = new Sympa::List($param{'group'}, $self->{'robot'});
 	if(defined $list) {
 		my $r = $list->check_list_authz('review', 'md5', {'sender' => $self->{'user'}});
 		

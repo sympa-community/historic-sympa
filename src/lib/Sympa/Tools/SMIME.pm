@@ -26,8 +26,8 @@ use strict;
 use Exporter;
 use MIME::Parser;
 
-use List;
 use Log;
+use Sympa::List;
 use Sympa::Tools;
 
 our @ISA = qw(Exporter);
@@ -58,7 +58,7 @@ sub smime_sign {
 
     &Log::do_log('debug2', 'Tools::SMIME::smime_sign (%s,%s,%s,%s)',$in_msg,$list,$robot,$tmpdir);
 
-    my $self = new List($list, $robot);
+    my $self = new Sympa::List($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
     my $temporary_file = $tmpdir."/".$self->get_list_id().".".$$ ;    
     my $temporary_pwd = $tmpdir.'/pass.'.$$;
@@ -347,7 +347,7 @@ sub smime_encrypt {
 
     &Log::do_log('debug2', 'Tools::SMIME::smime_encrypt( %s, %s', $email, $list);
     if ($list eq 'list') {
-	my $self = new List($email);
+	my $self = new Sympa::List($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
 	my $base = "$ssl_cert_dir/".&Sympa::Tools::escape_chars($email);

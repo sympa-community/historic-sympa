@@ -235,7 +235,7 @@ sub upgrade {
 		}
 		
 		## Force Sync_admin
-		$list = new List ($list->{'name'}, $list->{'domain'}, {'force_sync_admin' => 1});
+		$list = new Sympa::List ($list->{'name'}, $list->{'domain'}, {'force_sync_admin' => 1});
 	    }
 	}
 
@@ -255,7 +255,7 @@ sub upgrade {
 
 	    next unless ($listname & $listdomain);
 
-	    my $list = new List $listname;
+	    my $list = new Sympa::List $listname;
 	    unless (defined $list) {
 		&Log::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -374,7 +374,7 @@ sub upgrade {
 	    next if ($dir =~ /\@/); ## Directory already include the list domain
 
 	    my $listname = $dir;
-	    my $list = new List $listname;
+	    my $list = new Sympa::List $listname;
 	    unless (defined $list) {
 		&Log::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -409,7 +409,7 @@ sub upgrade {
 	    
 		foreach my $index (0..$#{$list->{'admin'}{'include_list'}}) {
 		    my $incl = $list->{'admin'}{'include_list'}[$index];
-		    my $incl_list = new List ($incl);
+		    my $incl_list = new Sympa::List ($incl);
 		    
 		    if (defined $incl_list &
 			$incl_list->{'domain'} ne $list->{'domain'}) {
@@ -724,7 +724,7 @@ sub upgrade {
 	    my $valid_robot = '';
 	    my @valid_robot_candidates;
 	    foreach my $robot (@robots) {
-		if (my $list = new List($data->{'list_exclusion'},$robot)) {
+		if (my $list = new Sympa::List($data->{'list_exclusion'},$robot)) {
 		    if ($list->is_list_member($data->{'user_exclusion'})) {
 			push @valid_robot_candidates,$robot;
 		    }

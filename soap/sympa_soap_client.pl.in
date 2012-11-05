@@ -28,7 +28,6 @@ use URI;
 use Commands;
 use Family;
 use Language;
-use List;
 use Log;
 use Message;
 use Sympa::Constants;

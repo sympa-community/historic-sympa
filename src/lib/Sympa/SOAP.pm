@@ -375,7 +375,7 @@ sub amI {
   }
 
   $listname = lc($listname);  
-  my $list = new List ($listname, $robot);  
+  my $list = new Sympa::List ($listname, $robot);  
 
   &Log::do_log('debug', 'SOAP isSubscriber(%s)', $listname);
 
@@ -420,7 +420,7 @@ sub info {
 	
     &Log::do_log('notice', 'SOAP info(%s)', $listname);
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'Info %s from %s refused, list unknown', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -510,7 +510,7 @@ sub createList {
 	
     &Log::do_log('debug', 'SOAP create_list(%s,%s)', $listname,$robot);
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     if ($list) {
 	&Log::do_log('info', 'create_list %s@%s from %s refused, list already exist', $listname,$robot,$sender);
 	die SOAP::Fault->faultcode('Client')
@@ -628,7 +628,7 @@ sub closeList {
 	
     &Log::do_log('debug', 'SOAP closeList(%s,%s)', $listname,$robot);
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'closeList %s@%s from %s refused, unknown list', $listname,$robot,$sender);
 	die SOAP::Fault->faultcode('Client')
@@ -688,7 +688,7 @@ sub add {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email>');
     }
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'add %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -804,7 +804,7 @@ sub del {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email>');
     }
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'del %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -911,7 +911,7 @@ sub review {
 	
     &Log::do_log('debug', 'SOAP review(%s,%s)', $listname,$robot);
 
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
 	die SOAP::Fault->faultcode('Server')
@@ -998,7 +998,7 @@ sub fullReview {
 	
 	&Log::do_log('debug', 'SOAP fullReview(%s,%s)', $listname, $robot);
 	
-	my $list = new List($listname, $robot);
+	my $list = new Sympa::List($listname, $robot);
 	unless($list) {
 		&Log::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname, $sender, $robot);
 		die SOAP::Fault->faultcode('Server')
@@ -1110,7 +1110,7 @@ sub signoff {
     
     
     my $l;
-    my $list = new List ($listname, $robot);
+    my $list = new Sympa::List ($listname, $robot);
     
     ## Is this list defined
     unless ($list) {
@@ -1132,7 +1132,7 @@ sub signoff {
 	return SOAP::Data->name('result')->value($success);
     } 
     
-    $list = new List ($listname, $robot);
+    $list = new Sympa::List ($listname, $robot);
     
     # Part of the authorization code
     my $user = &List::get_global_user($sender);
@@ -1227,7 +1227,7 @@ sub subscribe {
   
   ## Load the list if not already done, and reject the
   ## subscription if this list is unknown to us.
-  my $list = new List ($listname, $robot);
+  my $list = new Sympa::List ($listname, $robot);
   unless ($list) {
       &Log::do_log('info', 'Subscribe to %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
       die SOAP::Fault->faultcode('Server')

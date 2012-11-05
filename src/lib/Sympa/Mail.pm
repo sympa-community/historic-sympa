@@ -33,9 +33,9 @@ use Time::Local;
 use Bulk;
 use Log;
 use Language;
-use List;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Tools;
 use Sympa::Tools::SMIME;
 use Sympa::TT2;
@@ -699,7 +699,7 @@ sub sending {
 	
 	unless (defined $bulk_code) {
 	    &Log::do_log('err', 'Failed to store message for list %s', $listname);
-	    &List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
+	    &Sympa::List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
 	    return undef;
 	}
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 

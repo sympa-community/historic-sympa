@@ -44,10 +44,10 @@ use Getopt::Long;
 
 use Bulk;
 use Commands;
-use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Mail;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -148,7 +148,7 @@ unless (chdir($Sympa::Conf::Conf{'home'})) {
     exit (-1);
 }
 
-my $pinfo = &List::_apply_defaults();
+my $pinfo = &Sympa::List::_apply_defaults();
 
 &Log::do_log('notice', "bulk.pl %s Started", Sympa::Constants::VERSION);
 
@@ -175,8 +175,8 @@ $Sympa::Conf::Conf{'maxsmtp'} = int($Sympa::Conf::Conf{'maxsmtp'}/$Sympa::Conf::
 my $spool = new Sympa::Spool('bulk');
 
 while (!$end) {
-    &List::init_list_cache();
-	&List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    &Sympa::List::init_list_cache();
+	&Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 	
     my $bulk;
     my $message_from_spool ;
@@ -317,7 +317,7 @@ while (!$end) {
         # 
  
 
-	#my $list = new List($bulk->{'listname'}, $bulk->{'robot'});
+	#my $list = new Sympa::List($bulk->{'listname'}, $bulk->{'robot'});
 	my $listname= $bulk->{'listname'}; my $robot =  $bulk->{'robot'};
 
 	if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'}eq 'dsn')||($bulk->{'tracking'}eq 'mdn')){ # message needs personalization
@@ -416,7 +416,7 @@ while (!$end) {
     
 }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+&Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'bulk.pl exited normally due to signal');
 &Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $$, $options, $Sympa::Conf::Conf{'tmpdir'});

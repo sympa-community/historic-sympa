@@ -23,7 +23,6 @@
 
 use lib '--modulesdir--';
 
-use List;
 use Log;
 use SDM;
 use Sympa::Conf;

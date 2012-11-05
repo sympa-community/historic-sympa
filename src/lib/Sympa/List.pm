@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package List;
+package Sympa::List;
 
 use strict;
 
@@ -4825,7 +4825,7 @@ sub send_notify_to_listmaster {
 	if($operation eq 'automatic_bounce_management') {
 		## Automatic action done on bouncing adresses
 		delete $data->{'alarm'};
-		my $list = new List ($data->{'list'}{'name'}, $robot);
+		my $list = new Sympa::List ($data->{'list'}{'name'}, $robot);
 		unless(defined $list) {
 			&Log::do_log('err','Parameter %s is not a valid list', $data->{'list'}{'name'});
 			return undef;
@@ -5784,7 +5784,7 @@ sub get_exclusion {
     my  $robot= shift;
     &Log::do_log('debug2', 'List::get_exclusion(%s@%s)', $name,$robot);
 
-    my $list = new List($name, $robot);
+    my $list = new Sympa::List($name, $robot);
     unless (defined $list) {
 	&Log::do_log('err','List %s@%s does not exist', $name,$robot);
 	return undef;
@@ -8089,9 +8089,9 @@ sub _include_users_list {
     
     ## The included list is local or in another local robot
     if ($includelistname =~ /\@/) {
-	$includelist = new List ($includelistname);
+	$includelist = new Sympa::List ($includelistname);
     }else {
-	$includelist = new List ($includelistname, $robot);
+	$includelist = new Sympa::List ($includelistname, $robot);
     }
 
     unless ($includelist) {
@@ -10287,7 +10287,7 @@ sub get_lists {
 	    foreach my $l (@files) {
 		next if (($l =~ /^\./o) || (! -d "$robot_dir/$l") || (! -f "$robot_dir/$l/config"));
 		
-		my $list = new List ($l, $robot, $options);
+		my $list = new Sympa::List ($l, $robot, $options);
 		
 		next unless (defined $list);
 

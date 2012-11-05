@@ -24,10 +24,10 @@
 use lib '--modulesdir--';
 
 use Language;
-use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Tools::File;
 use Sympa::Upgrade;
 use wwslib;
@@ -60,12 +60,12 @@ unless (&Sympa::Conf::load($sympa_conf_file)) {
 }
 
 if ($Conf{'db_name'} and $Conf{'db_type'}) {
-    unless ($List::use_db = &Sympa::Upgrade::probe_db()) {
+    unless ($Sympa::List::use_db = &Sympa::Upgrade::probe_db()) {
  	&die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Conf{'db_name'});
     }
 }
 
-&List::_apply_defaults();
+&Sympa::List::_apply_defaults();
 
 ## We have a parameter that should be a template to convert
 ## Output is sent to stdout
@@ -133,7 +133,7 @@ foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
     }
 
     ## Search in V. Robot Lists
-    my $listOfLists = &List::get_lists($vr);
+    my $listOfLists = &Sympa::List::get_lists($vr);
     foreach my $list ( @$listOfLists ) {
 
 	push @directories, $list->{'dir'};

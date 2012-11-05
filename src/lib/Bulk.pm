@@ -41,12 +41,12 @@ use URI::Escape;
 
 use Language;
 use Ldap;
-use List;
 use Lock;
 use Log;
 use Message;
 use SDM;
 use Sympa::Conf;
+use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::TT2;
@@ -302,7 +302,7 @@ sub merge_msg {
 #  users then parse the message. It returns the message    #
 #  personalized to bulk.pl                                 #
 #  It uses the method &Sympa::TT2::parse_tt2                      #
-#  It uses the method &List::get_list_member_no_object     #
+#  It uses the method &Sympa::List::get_list_member_no_object     #
 #  It uses the method &Sympa::Tools::get_fingerprint              #
 #                                                          #
 # IN : - rcpt : the receipient email                       #
@@ -335,7 +335,7 @@ sub merge_data {
     $user_details->{'domain'} = $robot;
     
     # get_list_member_no_object() return the user's details with the custom attributes
-    my $user = &List::get_list_member_no_object($user_details);
+    my $user = &Sympa::List::get_list_member_no_object($user_details);
 
     $user->{'escaped_email'} = &URI::Escape::uri_escape($rcpt);
     $user->{'friendly_date'} = gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));

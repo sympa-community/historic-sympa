@@ -10,10 +10,10 @@ use SOAP::Lite;
 use SOAP::Transport::HTTP;
 
 use Language;
-use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Mail;
 use Sympa::SOAP;
 use Sympa::Transport;
@@ -56,7 +56,7 @@ unless (&SDM::check_db_connect()) {
     &Log::do_log('err','SOAP server requires a RDBMS to run');
 }
 
-my $pinfo = &List::_apply_defaults();
+my $pinfo = &Sympa::List::_apply_defaults();
 
 ## The process should not fork for sending mail
 ## Messages will be spooled instead
@@ -64,7 +64,7 @@ my $pinfo = &List::_apply_defaults();
 
 ## Loading all Lists at startup, in order to increase execution speed
 
-my $all_lists = &List::get_lists('*');
+my $all_lists = &Sympa::List::get_lists('*');
 foreach my $list (@$all_lists){
     ## Nothing to do here
  }

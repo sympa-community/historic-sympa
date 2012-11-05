@@ -26,10 +26,10 @@ use strict;
 
 use Exporter;
 
+use Log;
 use Sympa::Conf;
 use Sympa::Datasource;
-use Log;
-use List;
+use Sympa::List;
 use Sympa::Tools;
 
 our @ISA = qw(Sympa::Datasource Exporter);
@@ -163,7 +163,7 @@ sub establish_connection {
     ## Check if DBD is installed
     unless (eval "require DBD::$self->{'db_type'}") {
 	&Log::do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
-	&List::send_notify_to_listmaster('missing_dbd', $Sympa::Conf::Conf{'domain'},{'db_type' => $self->{'db_type'}});
+	&Sympa::List::send_notify_to_listmaster('missing_dbd', $Sympa::Conf::Conf{'domain'},{'db_type' => $self->{'db_type'}});
 	return undef;
     }
 
@@ -208,7 +208,7 @@ sub establish_connection {
 		unless (defined $db_connections{$self->{'connect_string'}} &&
 		    $db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
     
-		    unless (&List::send_notify_to_listmaster('no_db', $Sympa::Conf::Conf{'domain'},{})) {
+		    unless (&Sympa::List::send_notify_to_listmaster('no_db', $Sympa::Conf::Conf{'domain'},{})) {
 			&Log::do_log('err',"Unable to send notify 'no_db' to listmaster");
 		    }
 		}
@@ -232,7 +232,7 @@ sub establish_connection {
 	    
 	    if ($self->{'reconnect_options'}{'warn'}) {
 	    &Log::do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
-		unless (&List::send_notify_to_listmaster('db_restored', $Sympa::Conf::Conf{'domain'},{})) {
+		unless (&Sympa::List::send_notify_to_listmaster('db_restored', $Sympa::Conf::Conf{'domain'},{})) {
 		    &Log::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
 		}
 	    }
@@ -428,7 +428,7 @@ sub disconnect {
 }
 
 sub create_db {
-    &Log::do_log('debug3', 'List::create_db()');    
+    &Log::do_log('debug3', 'Sympa::List::create_db()');    
     return 1;
 }
 
