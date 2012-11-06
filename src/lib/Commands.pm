@@ -30,14 +30,16 @@ use DB_File;
 use Time::Local;
 use MIME::EncWords;
 
-#use Conf; # no longer used directly
-use Language;
-use Log;
+#use Conf; # used in List - Site
+use Language qw(gettext gettext_strftime);
+
+#use Log; # used in List - Site - Conf
 use List;
 use Message;
 use report;
-use tools;
-use Sympa::Constants;
+
+#use tools; # used in List - Site - Conf
+#use Sympa::Constants; # used in confdef - Conf
 
 our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw($sender);
@@ -89,7 +91,7 @@ my $quiet;
 # subroutine with the arguments to the command.
 #
 # IN :-$sender (+): the command sender
-#     -$robot_id (+): robot
+#     -$robot (+): ref(Robot)
 #     -$i (+): command line
 #     -$sign_mod : 'smime'| 'dkim' -
 #
@@ -99,18 +101,21 @@ my $quiet;
 sub parse {
     &Log::do_log('debug2', '(%s, %s, %s, %s, %s)', @_);
     $sender = lc(shift);
-    my $robot_id = shift;
+    my $robot    = shift;
     my $i        = shift;
     my $sign_mod = shift;
     my $message  = shift;
 
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
+    my $j;
+
+    ## Compatibility: $robot may be a string
+    unless (ref $robot) {
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	}
     }
     return 'unknown_robot' unless $robot;
 
-    my $j;
     $cmd_line = '';
 
     &Log::do_log('notice', "Parsing: %s", $i);
@@ -144,7 +149,7 @@ sub parse {
 	    my $status;
 
 	    $cmd_line = $i;
-	    $status = &{$comms{$j}}($args, $robot_id, $sign_mod, $message);
+	    $status = &{$comms{$j}}($args, $robot, $sign_mod, $message);
 
 	    return $status;
 	}
@@ -177,75 +182,37 @@ sub finished {
 #  Sends the help file for the software
 #
 # IN : - ?
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 1 | undef
 #
 ##############################################
 sub help {
+    &Log::do_log('debug2', '(%s, %s)', @_);
     shift;
-    my $robot_id = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
+    my $robot = shift;
 
     my $sympa = $robot->sympa;
     my $etc   = $robot->etc;
 
-    &Log::do_log('debug', 'Commands::help to robot %s', $robot);
+    my $data = {};
 
-    # sa ne prends pas en compte la structure des répertoires par lang.
-    # we should make this utilize Template's chain of responsibility
-    if (-r "$etc/mail_tt2/helpfile.tt2" or
-	-r "$etc/$robot_id/mail_tt2/helpfile.tt2") {
-	my $data = {};
+    my @owner  = &List::get_which($sender, $robot, 'owner');
+    my @editor = &List::get_which($sender, $robot, 'editor');
 
-	my @owner  = &List::get_which($sender, $robot_id, 'owner');
-	my @editor = &List::get_which($sender, $robot_id, 'editor');
+    $data->{'is_owner'}  = 1 if scalar @owner;
+    $data->{'is_editor'} = 1 if scalar @editor;
+    $data->{'user'}      = User->new($sender);
+    &Language::SetLang($data->{'user'}->lang)
+	if $data->{'user'}->lang;
+    $data->{'subject'}        = gettext("User guide");
+    $data->{'auto_submitted'} = 'auto-replied';
 
-	$data->{'is_owner'}  = 1 if ($#owner > -1);
-	$data->{'is_editor'} = 1 if ($#editor > -1);
-	$data->{'user'} = User::get_global_user($sender);
-	&Language::SetLang($data->{'user'}{'lang'})
-	    if $data->{'user'}{'lang'};
-	$data->{'subject'}        = gettext("User guide");
-	$data->{'auto_submitted'} = 'auto-replied';
-
-	unless ($robot->send_file("helpfile", $sender, $data)) {
-	    &Log::do_log('notice', 'Unable to send template "helpfile" to %s',
-		$sender);
-	    &report::reject_report_cmd('intern_quiet', '', {}, $cmd_line,
-		$sender, $robot_id);
-	}
-
-    } elsif (-r Sympa::Constants::DEFAULTDIR . '/mail_tt2/helpfile.tt2') {
-
-	my $data = {};
-
-	my @owner  = &List::get_which($sender, $robot_id, 'owner');
-	my @editor = &List::get_which($sender, $robot_id, 'editor');
-
-	$data->{'is_owner'}  = 1 if ($#owner > -1);
-	$data->{'is_editor'} = 1 if ($#editor > -1);
-	$data->{'subject'}   = gettext("User guide");
-	$data->{'auto_submitted'} = 'auto-replied';
-	unless ($robot->send_file("helpfile", $sender, $data)) {
-	    &Log::do_log('notice', 'Unable to send template "helpfile" to %s',
-		$sender);
-	    &report::reject_report_cmd('intern_quiet', '', {}, $cmd_line,
-		$sender, $robot_id);
-	}
-
-    } else {
-	my $error = sprintf('Unable to read "help file" : %s', $!);
-	&report::reject_report_cmd('intern', $error, {}, $cmd_line, $sender,
-	    $robot_id);
-	&Log::do_log('info', 'HELP from %s refused, file not found', $sender,
-	);
-	return undef;
+    unless ($robot->send_file("helpfile", $sender, $data)) {
+	&Log::do_log('notice', 'Unable to send template "helpfile" to %s',
+	    $sender);
+	&report::reject_report_cmd('intern_quiet', '', {}, $cmd_line, $sender,
+	    $robot);
     }
 
     &Log::do_log('info', 'HELP from %s accepted (%d seconds)',
@@ -260,33 +227,25 @@ sub help {
 #  Sends back the list of public lists on this node.
 #
 # IN : - ?
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 1  | undef
 #
 #######################################################
 sub lists {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-    my $robot    = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
 
     my $sympa = $robot->sympa;
     my $host  = $robot->host;
 
-    &Log::do_log('debug',
-	'Commands::lists for robot %s, sign_mod %, message %s',
-	$robot, $sign_mod, $message);
-
     my $data  = {};
     my $lists = {};
 
-    my $all_lists = &List::get_lists($robot_id);
+    my $all_lists = &List::get_lists($robot->domain);
 
     foreach my $list (@$all_lists) {
 	my $l      = $list->name;
@@ -329,7 +288,7 @@ sub lists {
 	&Log::do_log('notice', 'Unable to send template "lists" to %s',
 	    $sender);
 	&report::reject_report_cmd('intern_quiet', '', {}, $cmd_line, $sender,
-	    $robot_id);
+	    $robot);
     }
 
     &Log::do_log('info', 'LISTS from %s accepted (%d seconds)',
@@ -345,20 +304,18 @@ sub lists {
 #  'stats_report'
 #
 # IN : -$listname (+): list name
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime' | 'dkim'|  -
 #
 # OUT : 'unknown_list'|'not_allowed'|1  | undef
 #
 #######################################################
 sub stats {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $listname = shift;
     my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    &Log::do_log('debug', 'Commands::stats(%s, %s, %s, %s)',
-	$listname, $robot, $sign_mod, $message);
 
     my $list = new List($listname, $robot);
     unless ($list) {
@@ -460,17 +417,15 @@ sub stats {
 # Sends back the requested archive file
 #
 # IN : -$which (+): command parameters : listname filename
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
 #
 ###############################################
 sub getfile {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
     my ($which, $file) = split(/\s+/, shift);
     my $robot = shift;
-
-    &Log::do_log('debug', 'Commands::getfile(%s, %s, %s)',
-	$which, $file, $robot);
 
     my $list = new List($which, $robot);
     unless ($list) {
@@ -535,31 +490,25 @@ sub getfile {
 #
 #
 # IN : -$which (+): listname
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
 #
 ###############################################
 sub last {
-    my $which    = shift;
-    my $robot_id = shift;
-    my $robot    = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
+    &Log::do_log('debug2', '(%s, %s)', @_);
+    my $which = shift;
+    my $robot = shift;
 
     my $sympa = $robot->sympa;
 
-    &Log::do_log('debug', 'Commands::last(%s, %s)', $which, $robot_id);
-
-    my $list = new List($which, $robot_id);
+    my $list = new List($which, $robot);
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $which}, $cmd_line);
 	&Log::do_log('info',
 	    'LAST %s from %s refused, list unknown for robot %s',
-	    $which, $sender, $robot_id);
+	    $which, $sender, $robot);
 	return 'unknownlist';
     }
 
@@ -593,7 +542,7 @@ sub last {
 	    'intern',
 	    "Unable to send archive to $sender",
 	    {'listname' => $which, 'list' => $list},
-	    $cmd_line, $sender, $robot_id
+	    $cmd_line, $sender, $robot
 	);
 	return 'no_archive';
     }
@@ -610,16 +559,15 @@ sub last {
 #  Sends the list of archived files of a list
 #
 # IN : -$which (+): list name
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknown_list'|'not_allowed'|'no_archive'|1
 #
 #############################################################
 sub index {
+    &Log::do_log('debug2', '(%s, %s)', @_);
     my $which = shift;
     my $robot = shift;
-
-    &Log::do_log('debug', 'Commands::index(%s) robot (%s)', $which, $robot);
 
     my $list = new List($which, $robot);
     unless ($list) {
@@ -676,7 +624,7 @@ sub index {
 #  Sends the list of subscribers to the requester.
 #
 # IN : -$listname (+): list name
-#      -$robot_id (+): robot
+#      -$robot_id (+): ref(Robot)
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
@@ -684,29 +632,23 @@ sub index {
 #
 ################################################################
 sub review {
+    &Log::do_log('debug2', '(%s, %s, %s, ...)', @_);
     my $listname = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-    my $robot    = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
 
-    &Log::do_log('debug', 'Commands::review(%s,%s,%s)', $listname, $robot_id,
-	$sign_mod);
     my $sympa = $robot->sympa;
 
     my $user;
-    my $list = new List($listname, $robot_id);
+    my $list = new List($listname, $robot);
 
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $listname}, $cmd_line);
 	&Log::do_log('info',
 	    'REVIEW %s from %s refused, list unknown to robot %s',
-	    $listname, $sender, $robot_id);
+	    $listname, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -740,7 +682,7 @@ sub review {
 	my $error = "Unable to evaluate scenario 'review' for list $listname";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $listname, 'list' => $list},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -751,7 +693,7 @@ sub review {
 		"Unable to request authentification for command 'review'";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $listname, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    return undef;
 	}
 	&Log::do_log('info', 'REVIEW %s from %s, auth requested (%d seconds)',
@@ -814,7 +756,7 @@ sub review {
 		"Unable to send template 'review' to $sender");
 	    &report::reject_report_cmd('intern_quiet', '',
 		{'listname' => $listname, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	}
 
 	&Log::do_log('info', 'REVIEW %s from %s accepted (%d seconds)',
@@ -827,7 +769,7 @@ sub review {
     my $error = "Unknown requested action in scenario: $action.";
     &report::reject_report_cmd('intern', $error,
 	{'listname' => $listname, 'list' => $list},
-	$cmd_line, $sender, $robot_id);
+	$cmd_line, $sender, $robot);
     return undef;
 }
 
@@ -837,18 +779,17 @@ sub review {
 #  Verify an S/MIME signature
 #
 # IN : -$listname (+): list name
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'| 'dkim' | -
 #
 # OUT : 1
 #
 #############################################################
 sub verify {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
     my $listname = shift;
     my $robot    = shift;
-
     my $sign_mod = shift;
-    &Log::do_log('debug', 'Commands::verify(%s, %s)', $sign_mod, $robot);
 
     my $list = List->new($listname, $robot);
     unless ($list) {
@@ -893,38 +834,31 @@ sub verify {
 #  be informed by template 'welcome'
 #
 # IN : -$what (+): command parameters : listname(+), comment
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'| 1 | undef
 #
 ################################################################
 sub subscribe {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $what     = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-    my $robot    = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::subscribe(%s,%s, %s, %s)',
-	$what, $robot_id, $sign_mod, $message);
 
     $what =~ /^(\S+)(\s+(.+))?\s*$/;
     my ($which, $comment) = ($1, $3);
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List($which, $robot_id);
+    my $list = new List($which, $robot);
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $which}, $cmd_line);
 	&Log::do_log('info',
 	    'SUB %s from %s refused, unknown list for robot %s',
-	    $which, $sender, $robot_id);
+	    $which, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -965,7 +899,7 @@ sub subscribe {
     unless (defined $action) {
 	my $error = "Unable to evaluate scenario 'subscribe' for list $which";
 	&report::reject_report_cmd('intern', $error, {'listname' => $which},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -1030,7 +964,7 @@ sub subscribe {
 		{'listname' => $list->name, 'list' => $list},
 		$cmd_line,
 		$sender,
-		$robot_id
+		$robot
 	    );
 	}
 	if ($list->store_subscription_request($sender, $comment)) {
@@ -1052,7 +986,7 @@ sub subscribe {
 		"Unable to request authentification for command 'subscribe'";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    return undef;
 	}
 	&Log::do_log('info', 'SUB %s from %s, auth requested (%d seconds)',
@@ -1076,7 +1010,7 @@ sub subscribe {
 		my $error = "Unable to update user $user in list $which";
 		&report::reject_report_cmd('intern', $error,
 		    {'listname' => $which, 'list' => $list},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 	} else {
@@ -1100,7 +1034,7 @@ sub subscribe {
 		    {'max_list_members_exceeded'};
 		&report::reject_report_cmd($error_type, $error,
 		    {'listname' => $which, 'list' => $list},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 	}
@@ -1152,7 +1086,7 @@ sub subscribe {
     my $error = "Unknown requested action in scenario: $action.";
     &report::reject_report_cmd('intern', $error,
 	{'listname' => $which, 'list' => $list},
-	$cmd_line, $sender, $robot_id);
+	$cmd_line, $sender, $robot);
     return undef;
 }
 
@@ -1162,7 +1096,7 @@ sub subscribe {
 #  Sends the information file to the requester
 #
 # IN : -$listname (+): concerned list
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
@@ -1171,29 +1105,21 @@ sub subscribe {
 #
 ##############################################################
 sub info {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $listname = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
 
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::info(%s,%s, %s, %s)',
-	$listname, $robot_id, $sign_mod, $message);
-
     my $sympa = $robot->sympa;
 
-    my $list = new List($listname, $robot_id);
+    my $list = new List($listname, $robot);
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $listname}, $cmd_line);
 	&Log::do_log('info',
 	    'INFO %s from %s refused, unknown list for robot %s',
-	    $listname, $sender, $robot_id);
+	    $listname, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -1227,7 +1153,7 @@ sub info {
 	my $error = "Unable to evaluate scenario 'review' for list $listname";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $listname, 'list' => $list},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -1256,7 +1182,7 @@ sub info {
 
 	foreach my $p ('subscribe', 'unsubscribe', 'send', 'review') {
 	    my $scenario = new Scenario(
-		'robot'     => $robot_id,
+		'robot'     => $robot,
 		'directory' => $list->dir,
 		'file_path' => $list->admin->{$p}{'file_path'}
 	    );
@@ -1291,7 +1217,7 @@ sub info {
 		"Unable to send template 'info_report' to $sender");
 	    &report::reject_report_cmd('intern_quiet', '',
 		{'listname' => $list->name},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	}
 
 	&Log::do_log('info', 'INFO %s from %s accepted (%d seconds)',
@@ -1305,7 +1231,7 @@ sub info {
     my $error = "Unknown requested action in scenario: $action.";
     &report::reject_report_cmd('intern', $error,
 	{'listname' => $listname, 'list' => $list},
-	$cmd_line, $sender, $robot_id);
+	$cmd_line, $sender, $robot);
     return undef;
 
 }
@@ -1317,7 +1243,7 @@ sub info {
 # command. Format was : sig list. He can be informed by template 'bye'
 #
 # IN : -$which (+): command parameters : listname(+), email(+)
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
@@ -1326,19 +1252,11 @@ sub info {
 #
 ##############################################################
 sub signoff {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $which    = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::signoff(%s,%s, %s, %s)',
-	$which, $robot_id, $sign_mod, $message);
 
     my ($email, $l, $list, $auth_method);
     my $host = $robot->host;
@@ -1354,7 +1272,7 @@ sub signoff {
 
     if ($which eq '*') {
 	my $success;
-	foreach $list (&List::get_which($email, $robot_id, 'member')) {
+	foreach $list (&List::get_which($email, $robot, 'member')) {
 	    $l = $list->name;
 
 	    ## Skip hidden lists
@@ -1388,20 +1306,20 @@ sub signoff {
 		next;
 	    }
 
-	    $result = &signoff("$l $email", $robot_id);
+	    $result = &signoff("$l $email", $robot);
 	    $success ||= $result;
 	}
 	return ($success);
     }
 
-    $list = new List($which, $robot_id);
+    $list = new List($which, $robot);
 
     ## Is this list defined
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $which}, $cmd_line);
 	&Log::do_log('info', 'SIG %s %s from %s, unknown list for robot %s',
-	    $which, $email, $sender, $robot_id);
+	    $which, $email, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -1436,7 +1354,7 @@ sub signoff {
 	    "Unable to evaluate scenario 'unsubscribe' for list $which";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $which, 'list' => $list},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -1464,7 +1382,7 @@ sub signoff {
 		"Unable to request authentification for command 'signoff'";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    return undef;
 	}
 	&Log::do_log('info', 'SIG %s from %s auth requested (%d seconds)',
@@ -1491,7 +1409,7 @@ sub signoff {
 		'intern_quiet',
 		"Unable to send sigrequest to $which list owner",
 		{'listname' => $which},
-		$cmd_line, $sender, $robot_id
+		$cmd_line, $sender, $robot
 	    );
 	}
 	&Log::do_log(
@@ -1548,7 +1466,7 @@ sub signoff {
 	    my $error = "Unable to delete user $email from list $which";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	}
 
 	## Notify the owner
@@ -1587,7 +1505,7 @@ sub signoff {
     my $error = "Unknown requested action in scenario: $action.";
     &report::reject_report_cmd('intern', $error,
 	{'listname' => $which, 'list' => $list},
-	$cmd_line, $sender, $robot_id);
+	$cmd_line, $sender, $robot);
     return undef;
 }
 
@@ -1600,7 +1518,7 @@ sub signoff {
 #
 # IN : -$what (+): command parameters : listname(+),
 #                                    email(+), comments
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
@@ -1609,13 +1527,11 @@ sub signoff {
 #
 ############################################################
 sub add {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $what     = shift;
     my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    &Log::do_log('debug', 'Commands::add(%s,%s,%s,%s)', $what, $robot,
-	$sign_mod, $message);
 
     my $email_regexp = &tools::get_regexp('email');
 
@@ -1794,7 +1710,7 @@ sub add {
 #  template 'invite'
 #
 # IN : -$what (+): listname(+), email(+) and comments
-#      -$robot_id (+): robot
+#      -$robot (+): ref($robot)
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
@@ -1803,19 +1719,11 @@ sub add {
 #
 ##############################################################
 sub invite {
+    &Log::do_log('debug', '(%s, %s, %s, %s)', @_);
     my $what     = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::invite(%s,%s,%s,%s)',
-	$what, $robot_id, $sign_mod, $message);
 
     my $sympa = $robot->sympa;
 
@@ -1824,13 +1732,13 @@ sub invite {
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List($which, $robot_id);
+    my $list = new List($which, $robot);
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $which}, $cmd_line);
 	&Log::do_log('info',
 	    'INVITE %s %s from %s refused, unknown list for robot',
-	    $which, $email, $sender, $robot_id);
+	    $which, $email, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -1863,7 +1771,7 @@ sub invite {
 	my $error = "Unable to evaluate scenario 'invite' for list $which";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $which, 'list' => $list},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -1890,7 +1798,7 @@ sub invite {
 		"Unable to request authentification for command 'invite'";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    return undef;
 	}
 
@@ -1932,7 +1840,7 @@ sub invite {
 		    "Unable to evaluate scenario 'subscribe' for list $which";
 		&report::reject_report_cmd('intern', $error,
 		    {'listname' => $which, 'list' => $list},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 
@@ -1951,7 +1859,7 @@ sub invite {
 			{'listname' => $which, 'list' => $list},
 			$cmd_line,
 			$sender,
-			$robot_id
+			$robot
 		    );
 		    return undef;
 		}
@@ -1980,7 +1888,7 @@ sub invite {
 			{'listname' => $which},
 			$cmd_line,
 			$sender,
-			$robot_id
+			$robot
 		    );
 		    return undef;
 		}
@@ -2027,7 +1935,7 @@ sub invite {
 	$which, $sender);
     my $error = "Unknown requested action in scenario: $action.";
     &report::reject_report_cmd('intern', $error, {'listname' => $which},
-	$cmd_line, $sender, $robot_id);
+	$cmd_line, $sender, $robot);
     return undef;
 }
 
@@ -2040,7 +1948,7 @@ sub invite {
 #
 #
 # IN : -$which (+): * | listname
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
@@ -2049,19 +1957,11 @@ sub invite {
 #
 ##############################################################
 sub remind {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $which    = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::remind(%s,%s,%s,%s)',
-	$which, $robot, $sign_mod, $message);
 
     my $host = $robot->host;
 
@@ -2077,13 +1977,13 @@ sub remind {
     my $list;
 
     unless ($listname eq '*') {
-	$list = new List($listname, $robot_id);
+	$list = new List($listname, $robot);
 	unless ($list) {
 	    &report::reject_report_cmd('user', 'no_existing_list',
 		{'listname' => $which}, $cmd_line);
 	    &Log::do_log('info',
 		'REMIND %s from %s refused, unknown list for robot %s',
-		$which, $sender, $robot_id);
+		$which, $sender, $robot);
 	    return 'unknown_list';
 	}
     }
@@ -2120,8 +2020,8 @@ sub remind {
     if ($listname eq '*') {
 
 	$result =
-	    &Scenario::request_action('global_remind', $auth_method,
-	    $robot_id, {'sender' => $sender});
+	    &Scenario::request_action('global_remind', $auth_method, $robot,
+	    {'sender' => $sender});
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
 
     } else {
@@ -2146,7 +2046,7 @@ sub remind {
 	my $error = "Unable to evaluate scenario 'remind' for list $listname";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $listname},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 
@@ -2173,7 +2073,7 @@ sub remind {
 		    "Unable to request authentification for command 'remind'";
 		&report::reject_report_cmd('intern', $error,
 		    {'listname' => $listname},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 	} else {
@@ -2182,7 +2082,7 @@ sub remind {
 		    "Unable to request authentification for command 'remind'";
 		&report::reject_report_cmd('intern', $error,
 		    {'listname' => $listname},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 	}
@@ -2198,7 +2098,7 @@ sub remind {
 		    {'listname' => $listname}, $cmd_line);
 		&Log::do_log('info',
 		    'REMIND %s from %s refused, unknown list for robot %s',
-		    $listname, $sender, $robot_id);
+		    $listname, $sender, $robot);
 		return 'unknown_list';
 	    }
 
@@ -2210,7 +2110,7 @@ sub remind {
 		my $error = "Unable to get subscribers for list $listname";
 		&report::reject_report_cmd('intern', $error,
 		    {'listname' => $listname},
-		    $cmd_line, $sender, $robot_id);
+		    $cmd_line, $sender, $robot);
 		return undef;
 	    }
 
@@ -2221,7 +2121,7 @@ sub remind {
 		    );
 		    &report::reject_report_cmd('intern_quiet', '',
 			{'listname' => $listname},
-			$cmd_line, $sender, $robot_id);
+			$cmd_line, $sender, $robot);
 		}
 		$total += 1;
 	    } while ($user = $list->get_next_list_member());
@@ -2248,7 +2148,7 @@ sub remind {
 
 	    # this remind is a global remind.
 
-	    my $all_lists = &List::get_lists($robot_id);
+	    my $all_lists = &List::get_lists($robot->domain);
 	    foreach my $list (@$all_lists) {
 		my $listname = $list->name;
 		my $user;
@@ -2319,7 +2219,7 @@ sub remind {
 			$email);
 		    &report::reject_report_cmd('intern_quiet', '',
 			{'listname' => $listname},
-			$cmd_line, $sender, $robot_id);
+			$cmd_line, $sender, $robot);
 		}
 	    }
 	    &report::notice_report_cmd('glob_remind', {'count' => $count},
@@ -2335,7 +2235,7 @@ sub remind {
 	my $error = "Unknown requested action in scenario: $action.";
 	&report::reject_report_cmd('intern', $error,
 	    {'listname' => $listname},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
 	return undef;
     }
 }
@@ -2348,7 +2248,7 @@ sub remind {
 # unless quiet is specified.
 #
 # IN : -$what (+): command parameters : listname(+), email(+)
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
@@ -2357,13 +2257,11 @@ sub remind {
 #
 ##############################################################
 sub del {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $what     = shift;
     my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    &Log::do_log('debug', 'Commands::del(%s,%s,%s,%s)', $what, $robot,
-	$sign_mod, $message);
 
     my $email_regexp = &tools::get_regexp('email');
 
@@ -2531,26 +2429,18 @@ sub del {
 # IN : -$what (+): command parameters : listname,
 #        reception mode (digest|digestplain|nomail|normal...)
 #        or visibility mode(conceal|noconceal)
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'syntax_error'|'unknown_list'|'not_allowed'|'failed'|1
 #
 #
 #############################################################
 sub set {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my $what     = shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::set(%s,%s,%s,%s)', $what, $robot_id,
-	$sign_mod, $message);
 
     $what =~ /^\s*(\S+)\s+(\S+)\s*$/;
     my ($which, $mode) = ($1, $2);
@@ -2570,7 +2460,7 @@ sub set {
     ## Recursive call to subroutine
     if ($which eq "*") {
 	my $status;
-	foreach my $list (&List::get_which($sender, $robot_id, 'member')) {
+	foreach my $list (&List::get_which($sender, $robot, 'member')) {
 	    my $l = $list->name;
 
 	    ## Skip hidden lists
@@ -2612,14 +2502,14 @@ sub set {
 
     ## Load the list if not already done, and reject
     ## if this list is unknown to us.
-    my $list = new List($which, $robot_id);
+    my $list = new List($which, $robot);
 
     unless ($list) {
 	&report::reject_report_cmd('user', 'no_existing_list',
 	    {'listname' => $which}, $cmd_line);
 	&Log::do_log('info',
 	    'SET %s %s from %s refused, unknown list for robot %s',
-	    $which, $mode, $sender, $robot_id);
+	    $which, $mode, $sender, $robot);
 	return 'unknown_list';
     }
 
@@ -2675,7 +2565,7 @@ sub set {
 		"Failed to change subscriber '$sender' options for list $which";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which, 'list' => $list},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    &Log::do_log('info', 'SET %s %s from %s refused, update failed',
 		$which, $mode, $sender);
 	    return 'failed';
@@ -2698,7 +2588,7 @@ sub set {
 		"Failed to change subscriber '$sender' options for list $which";
 	    &report::reject_report_cmd('intern', $error,
 		{'listname' => $which},
-		$cmd_line, $sender, $robot_id);
+		$cmd_line, $sender, $robot);
 	    &Log::do_log('info', 'SET %s %s from %s refused, update failed',
 		$which, $mode, $sender);
 	    return 'failed';
@@ -2718,21 +2608,19 @@ sub set {
 #  distributes the broadcast of a validated moderated message
 #
 # IN : -$what (+): command parameters : listname(+), authentification key(+)
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknown_list'|'msg_noty_found'| 1 | undef
 #
 ##############################################################
 sub distribute {
+    &Log::do_log('debug2', '(%s, %s)', @_);
     my $what  = shift;
     my $robot = shift;
 
     $what =~ /^\s*(\S+)\s+(.+)\s*$/;
     my ($which, $key) = ($1, $2);
-    $which =~ y/A-Z/a-z/;
-
-    &Log::do_log('debug', 'Commands::distribute(%s,%s,%s,%s)',
-	$which, $robot, $key, $what);
+    $which = lc $which;
 
     my $start_time = time;    # get the time at the beginning
     ## Load the list if not already done, and reject the
@@ -2756,12 +2644,17 @@ sub distribute {
     my $name     = $list->name;
 
     my $message_in_spool = $modspool->get_message(
-	{'list' => $list->name, 'robot' => $robot, 'authkey' => $key});
+	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
+    );
     unless ($message_in_spool) {
 	## if the message has been accepted via WWSympa, it's in spool 'validated'
 	my $validatedspool = new Sympaspool('validated');
 	$message_in_spool = $validatedspool->get_message(
-	    {'list' => $list->name, 'robot' => $robot, 'authkey' => $key});
+	    {   'list'    => $list->name,
+		'robot'   => $robot->domain,
+		'authkey' => $key
+	    }
+	);
     }
     unless ($message_in_spool) {
 	&Log::do_log(
@@ -2868,7 +2761,7 @@ sub distribute {
 #  distribution on a list
 #
 # IN : -$what (+): command parameter : authentification key
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'wrong_auth'|'msg_not_found'
 #       | 1  | undef
@@ -2876,9 +2769,9 @@ sub distribute {
 #
 ############################################################
 sub confirm {
+    &Log::do_log('debug2', '(%s, %s)', @_);
     my $what  = shift;
     my $robot = shift;
-    &Log::do_log('debug', 'Commands::confirm(%s,%s)', $what, $robot);
 
     $what =~ /^\s*(\S+)\s*$/;
     my $key = $1;
@@ -3122,25 +3015,18 @@ sub confirm {
 #  by sending template 'reject'
 #
 # IN : -$what (+): command parameter : listname and authentification key
-#      -$robot_id (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknown_list'|'wrong_auth'| 1 | undef
 #
 #
 ##############################################################
 sub reject {
-    my $what     = shift;
-    my $robot_id = shift;
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
+    my $what  = shift;
+    my $robot = shift;
     shift;
     my $editor_msg = shift;
-
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
-    return 'unknown_robot' unless $robot;
-
-    &Log::do_log('debug', 'Commands::reject(%s,%s)', $what, $robot_id);
 
     $what =~ /^(\S+)\s+(.+)\s*$/;
     my ($which, $key) = ($1, $2);
@@ -3148,15 +3034,15 @@ sub reject {
     my $modqueue = $robot->queuemod;
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new List($which, $robot_id);
+    my $list = new List($which, $robot);
 
     unless ($list) {
 	&Log::do_log('info',
 	    'REJECT %s %s from %s refused, unknown list for robot %s',
-	    $which, $key, $sender, $robot_id);
+	    $which, $key, $sender, $robot);
 	&report::reject_report_msg('user', 'list_unknown', $sender,
 	    {'listname' => $which},
-	    $robot_id, '', '');
+	    $robot, '', '');
 	return 'unknown_list';
     }
 
@@ -3166,14 +3052,15 @@ sub reject {
 
     my $modspool         = new Sympaspool('mod');
     my $message_in_spool = $modspool->get_message(
-	{'list' => $list->name, 'robot' => $robot_id, 'authkey' => $key});
+	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
+    );
 
     unless ($message_in_spool) {
 	&Log::do_log('info', 'REJECT %s %s from %s refused, auth failed',
 	    $which, $key, $sender);
 	&report::reject_report_msg('user', 'unfound_message', $sender,
 	    {'key' => $key},
-	    $robot_id, '', $list);
+	    $robot, '', $list);
 	return 'wrong_auth';
     }
     my $message = new Message({'message_in_spool' => $message_in_spool});
@@ -3187,7 +3074,7 @@ sub reject {
 	);
 	&report::reject_report_msg('user', 'unfound_message', $sender,
 	    {'key' => $key},
-	    $robot_id, '', $list);
+	    $robot, '', $list);
 	return 'wrong_auth';
     }
     my $msg          = $message->{'msg'};
@@ -3215,7 +3102,7 @@ sub reject {
 		    "Unable to send template 'reject' to $rejected_sender");
 		&report::reject_report_msg('intern_quiet', '', $sender,
 		    {'listname' => $list->name, 'message' => $msg},
-		    $robot_id, '', $list);
+		    $robot, '', $list);
 	    }
 	}
 
@@ -3223,7 +3110,7 @@ sub reject {
 	unless (
 	    &report::notice_report_msg(
 		'message_rejected', $sender,
-		{'key' => $key, 'message' => $msg}, $robot_id,
+		{'key' => $key, 'message' => $msg}, $robot,
 		$list
 	    )
 	    ) {
@@ -3240,7 +3127,8 @@ sub reject {
 	Site->viewmail_dir . '/mod/' . $list->get_list_id() . '/' . $key);
 
     $modspool->remove(
-	{'list' => $list->name, 'robot' => $robot_id, 'authkey' => $key});
+	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
+    );
 
     return 1;
 }
@@ -3253,17 +3141,17 @@ sub reject {
 #  usage :    modindex <liste>
 #
 # IN : -$name (+): listname
-#      -$robot (+): robot
+#      -$robot (+): ref(Robot)
 #
 # OUT : 'unknown_list'|'not_allowed'|'no_file'|1
 #
 #########################################################
 sub modindex {
+    &Log::do_log('debug2', '(%s, %s)', @_);
     my $name  = shift;
     my $robot = shift;
-    &Log::do_log('debug', 'Commands::modindex(%s,%s)', $name, $robot);
 
-    $name =~ y/A-Z/a-z/;
+    $name = lc $name;
 
     my $list = new List($name, $robot);
     unless ($list) {
@@ -3295,7 +3183,7 @@ sub modindex {
 
     foreach my $msg (
 	$spool->get_content(
-	    {   'selector'  => {'list' => $name, 'robot' => $robot},
+	    {   'selector'  => {'list' => $name, 'robot' => $robot->domain},
 		'selection' => '*',
 		'sortby'    => 'date',
 		'way'       => 'asc'
@@ -3346,26 +3234,23 @@ sub modindex {
 #  owner and/or editor, managed lists are also noticed.
 #
 # IN : - : ?
-#      -$robot_id (+): robot
+#      -$robot_id (+): ref(Robot)
 #
 # OUT : 1
 #
 #########################################################
 sub which {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     shift;
-    my $robot_id = shift;
+    my $robot    = shift;
     my $sign_mod = shift;
     my $message  = shift;
-    my $robot    = Robot->new($robot_id);
 
     my ($listname, @which);
 
-    &Log::do_log('debug', 'Commands::which(%s,%s,%s,%s)',
-	$listname, $robot, $sign_mod, $message);
-
     ## Subscriptions
     my $data;
-    foreach my $list (List::get_which($sender, $robot_id, 'member')) {
+    foreach my $list (List::get_which($sender, $robot, 'member')) {
 	$listname = $list->name;
 
 	my $result = $list->check_list_authz(
@@ -3400,7 +3285,7 @@ sub which {
     }
 
     ## Ownership
-    if (@which = &List::get_which($sender, $robot_id, 'owner')) {
+    if (@which = &List::get_which($sender, $robot, 'owner')) {
 	foreach my $list (@which) {
 	    push @{$data->{'owner_lists'}}, $list->name;
 	}
@@ -3408,7 +3293,7 @@ sub which {
     }
 
     ## Editorship
-    if (@which = &List::get_which($sender, $robot_id, 'editor')) {
+    if (@which = &List::get_which($sender, $robot, 'editor')) {
 	foreach my $list (@which) {
 	    push @{$data->{'editor_lists'}}, $list->name;
 	}
@@ -3420,7 +3305,7 @@ sub which {
 	    $sender);
 	&report::reject_report_cmd('intern_quiet', '',
 	    {'listname' => $listname},
-	    $cmd_line, $sender, $robot_id);
+	    $cmd_line, $sender, $robot);
     }
 
     &Log::do_log('info', 'WHICH from %s accepted (%d seconds)',
@@ -3450,24 +3335,23 @@ sub which {
 #       | undef
 ##########################################################
 sub get_auth_method {
+    &Log::do_log('debug3', "(%s, %s, %s, %s, %s)", @_);
     my ($cmd, $email, $error, $sign_mod, $list) = @_;
-    &Log::do_log('debug3', "Commands::get_auth_method()");
-    my $robot_id;
+    my $that;
     my $auth_method;
 
     if ($sign_mod eq 'smime') {
 	$auth_method = 'smime';
-
     } elsif ($auth ne '') {
-	&Log::do_log('debug', "auth received from $sender : $auth");
+	&Log::do_log('debug3', 'auth received from %s : %s', $sender, $auth);
 
 	my $compute;
-	if (ref($list) eq "List") {
+	if (ref $list eq 'List') {
 	    $compute = $list->compute_auth($email, $cmd);
-	    $robot_id = $list->robot->name;
+	    $that = $list->robot;
 	} else {
 	    $compute = Site->compute_auth($email, $cmd);
-	    $robot_id = '*';
+	    $that = 'Site';
 	}
 	if ($auth eq $compute) {
 	    $auth_method = 'md5';
@@ -3476,7 +3360,7 @@ sub get_auth_method {
 	    if ($error->{'type'} eq 'auth_failed') {
 		&report::reject_report_cmd('intern',
 		    'The authentication process failed',
-		    $error->{'data'}, $cmd_line, $sender, $robot_id);
+		    $error->{'data'}, $cmd_line, $sender, $that);
 	    } else {
 		&report::reject_report_cmd('user', $error->{'type'},
 		    $error->{'data'}, $cmd_line);

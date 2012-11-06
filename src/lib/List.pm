@@ -23,28 +23,29 @@ package List;
 
 use strict;
 use POSIX;
-use SQLSource;
-use Datasource;
-use LDAPSource;
-use SDM;
-use Robot;
-use Upgrade;
-use Lock;
-use Task;
-use Scenario;
-use Fetch;
-use WebAgent;
 use Exporter;
-use Sympaspool;
-use Archive;
 
 # xxxxxxx faut-il virer encode ? Faut en faire un use ?
 require Encode;
+# tentative
+use Data::Dumper;
 
+#use SQLSource; # used in SDM
+#use Datasource; # used in SQLSource
+use LDAPSource;
+#use SDM; # used in Conf
+use Robot;
+#use Upgrade; # no longer used
+#use Lock;
+use Task;
+#use Scenario; # used in Sympaspool
+use Fetch;
+use WebAgent;
+#use Sympaspool; # used in Task
+use Archive;
 use VOOTConsumer;
 use tt2;
-use Sympa::Constants;
-use Data::Dumper;
+#use Sympa::Constants; # used in Conf - confdef
 
 our @ISA    = qw(Site_r);           # not fully inherit Robot
 our @EXPORT = qw(%list_of_lists);
@@ -295,16 +296,16 @@ currently selected descriptor.
 
 =cut
 
-use Carp;
+use Carp qw(croak);
 
 use IO::Scalar;
 use Storable;
 use Mail::Header;
-use Archive;
-use Language;
-use Log;
+#use Archive; # duplicated
+use Language qw(gettext gettext_strftime);
+#use Log; # duplicated
 
-#XXXuse Conf;
+#use Conf; # duplicated
 use mail;
 use Ldap;
 use Time::Local;
@@ -11311,8 +11312,15 @@ sub get_which {
 	return undef;
     }
 
+    ## Compatibility: $robot may be a string
+    unless (ref $robot) {
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	}
+    }
+
     my $all_lists = &get_lists(
-	$robot,
+	$robot->domain,
 	{   'filter_query' => [
 		$role      => $email,
 		'! status' => 'closed|family_closed'
@@ -13815,9 +13823,10 @@ our $AUTOLOAD;
 sub DESTROY;
 
 sub AUTOLOAD {
+    Log::do_log('debug3', 'Autoloading %s', $AUTOLOAD);
     $AUTOLOAD =~ m/^(.*)::(.*)/;
-
     my $attr = $2;
+
     my $p;
     if (ref $_[0] and
 	grep { $_ eq $attr } qw(name robot dir admin stats as_x509_cert)) {

@@ -15,7 +15,7 @@ use warnings;
 use Carp qw(croak);
 
 use Conf;
-use Language;
+use Language qw(gettext gettext_strftime);
 use User;
 
 =head1 NAME
@@ -1144,7 +1144,9 @@ our $AUTOLOAD;
 sub DESTROY;
 
 sub AUTOLOAD {
+    Log::do_log('debug3', 'Autoloading %s', $AUTOLOAD);
     $AUTOLOAD =~ m/^(.*)::(.*)/;
+    my $pkg  = $1;
     my $attr = $2;
 
     my $type = {};
@@ -1152,18 +1154,48 @@ sub AUTOLOAD {
     $type->{'RobotAttribute'} =
 	scalar(grep { $_ eq $attr } qw(etc home name));
     ## getters for site/robot parameters.
-    $type->{'RobotParameter'} =
-	scalar(grep { $_ eq $attr }
-	    qw(list_check_regexp pictures_path request sympa)) ||
+    $type->{'RobotParameter'} = scalar(
+	grep { $_ eq $attr }
+	    qw(blacklist list_check_regexp loging_condition loging_for_module
+	    pictures_path request sympa)
+	) ||
 	scalar(grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
 	    @confdef::params);
-    ## getters for site attributes.
-    $type->{'SiteAttribute'} =
-	scalar(grep { $_ eq $attr }
-	    qw(locale2charset robots robot_by_http_host));
+    ## getters for attributes specific to global config.
+    $type->{'SiteAttribute'} = scalar(
+	grep { $_ eq $attr }
+	    qw(auth_services authentication_info_url
+	    cas_id cas_number generic_sso_id generic_sso_number
+	    ldap ldap_export ldap_number
+	    locale2charset nrcpt_by_domain
+	    robots robot_by_http_host robot_by_soap_url
+	    use_passwd)
+    );
 
-    croak "Can't locate object method \"$2\" via package \"$1\""
-	unless scalar keys %$type;
+    unless (scalar keys %$type) {
+	## getter for unknwon list attributes.
+	## XXX This code would be removed later.
+	if (index($attr, '_') != 0 and
+	    ((ref $_[0] and exists $_[0]->{$attr}) or
+		exists $Conf::Conf{$attr})
+	    ) {
+	    &Log::do_log(
+		'err',
+		'Unconcerned object method "%s" via package "%s".  Though it may not be fatal, you might want to report it developer',
+		$attr,
+		$pkg
+	    );
+	    no strict "refs";
+	    *{$AUTOLOAD} = sub {
+		croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
+		shift->{$attr};
+	    };
+	    goto &$AUTOLOAD;
+	}
+	## XXX Code above would be removed later.
+
+	croak "Can't locate object method \"$2\" via package \"$1\"";
+    }
 
     no strict "refs";
     *{$AUTOLOAD} = sub {
@@ -1182,6 +1214,7 @@ sub AUTOLOAD {
 			(ref $self) . " object";
 		}
 		croak "Can't modify \"$attr\" attribute" if scalar @_;
+
 		if ($self->{'etc'} ne Site->etc and
 		    defined Site->robots->{$self->{'name'}}{$attr}) {
 		    ##FIXME: Might "exists" be used?
@@ -1199,7 +1232,14 @@ sub AUTOLOAD {
 		unless $Site::is_initialized;
 	    croak "Can't modify \"$attr\" attribute"
 		if scalar @_ > 1;
-	    $Conf::Conf{$attr};
+
+	    my $ret = $Conf::Conf{$attr};
+
+	    # To avoid "Can't use an undefined value as a HASH reference"
+	    if (!defined $ret and $type->{'SiteAttribute'}) {
+		return {};
+	    }
+	    $ret;
 	} else {
 	    croak 'bug in logic.  Ask developer';
 	}
@@ -1258,7 +1298,38 @@ XXX @todo doc
 
 sub import {
     ## register crash handler.
-    $SIG{'__DIE__'} = \&tools::crash_handler;
+    $SIG{'__DIE__'} = \&_crash_handler;
+}
+
+## Handler for $SIG{__DIE__} to generate traceback.
+## IN : error message
+## OUT : none.  This function exits with status 255 or (if invoked from
+## inside eval) simply returns.
+sub _crash_handler {
+    return if $^S;    # invoked from inside eval.
+                      #exit 255 unless ${^GLOBAL_PHASE} eq 'RUN';
+
+    my $msg = $_[0];
+    chomp $msg;
+    &Log::do_log('err', 'DIED: %s', $msg);
+    eval { Site->send_notify_to_listmaster(undef, undef, undef, 1); };
+    eval { &SDM::db_disconnect; };    # unlock database
+    Sys::Syslog::closelog();          # flush log
+
+    ## gather traceback information
+    my @calls;
+    my @f;
+    $_[0] =~ /.+ at (.+? line \d+\.)\n$/s;
+    @calls = ($1);
+    for (my $i = 1; @f = caller($i); $i++) {
+	$calls[0] = "In $f[3] at $calls[0]";
+	unshift @calls, "$f[1] line $f[2].";
+    }
+    $calls[0] = "In (top-level) at $calls[0]";
+
+    print STDERR join "\n", "DIED: $msg", @calls;
+    print STDERR "\n";
+    exit 255;
 }
 
 ## Packages must return true.

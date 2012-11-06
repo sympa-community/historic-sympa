@@ -105,7 +105,7 @@ my $ajax;
 my $session;
 
 ## Load sympa config
-unless (defined Rebot::get_robots()) {
+unless (defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
 	Conf::get_sympa_conf()
@@ -1143,13 +1143,13 @@ my $birthday = time ;
 	 $robot = $selected_robot;
      }
      
-     $robot = $Conf{'host'} unless $robot;
+     $robot = $Conf{'host'} unless $robot; #FIXME: using wwsympa_url hostname
 
      ## Create Robot object
      $robot_object = Robot->new($robot);
 
      ## Default robot
-     if ($robot eq $Conf{'host'}) {
+     if ($robot eq $Conf{'host'}) { #FIXME
 	 $param->{'default_robot'} = 1;
      }
  
@@ -2547,6 +2547,13 @@ sub send_html {
     
     ## Retro compatibility concerns
     $param->{'active'} = 1;
+
+    ## undefined $list has been initialized to be hashref.
+    if (ref $list eq 'HASH') {
+	&Log::do_log('notice',
+	    'Someone tried to access inside of List object directly.  Fix the codes');
+	undef $list;
+    }
     
     if (defined $list) {
 	$param->{'list_conf'} = $list->{'admin'};
@@ -2558,7 +2565,7 @@ sub send_html {
  	    $param->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
 	}
     }
-    
+
     my $lang = &Language::Lang2Locale($param->{'lang'});
     my $tt2_include_path =
 	($list || $robot_object)->make_tt2_include_path('web_tt2', $lang);

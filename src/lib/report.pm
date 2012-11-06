@@ -53,8 +53,8 @@ use List;
 #
 ############################################################## 
 sub reject_report_msg {
-    my ($type,$error,$user,$param,$robot_id,$msg_string,$list) = @_;
-    &Log::do_log('debug2', "reject::reject_report_msg(%s,%s,%s)", $type,$error,$user);
+    &Log::do_log('debug2', '(%s, %s, %s, ...)', @_);
+    my ($type,$error,$user,$param,$robot,$msg_string,$list) = @_;
 
     unless ($type eq 'intern' or $type eq 'intern_quiet' or
 	    $type eq 'user' or $type eq 'auth'or $type eq 'oauth') {
@@ -67,14 +67,14 @@ sub reject_report_msg {
 	return undef;
     }
 
-    my $robot = undef;
     if (ref $list and ref $list eq 'List') {
 	$robot = $list->robot;
-    } elsif ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
- 
-    unless ($robot){
+    } elsif (! ref $robot and $robot and $robot eq 'Site') { #FIXME: used?
+	;
+    } elsif (! ref $robot and $robot and $robot ne '*') {
+	## Compatibility: $robot may be a string
+	$robot = Robot->new($robot);
+    } else {
 	&Log::do_log('err', 'unable to send template command_report.tt2 : no robot');
 	return undef;
     }
@@ -189,14 +189,14 @@ sub _get_msg_as_hash {
 # IN : -$entry (+): scalar - the entry in message_report.tt2
 #      -$user (+): scalar - the user to notify
 #      -$param : ref(HASH) - var used in message_report.tt2
-#      -$robot_id (+) : robot
+#      -$robot (+) : robot
 #      -$list : ref(List)
 #
 # OUT : 1
 #
 ############################################################## 
 sub notice_report_msg {
-    my ($entry,$user,$param,$robot_id,$list) = @_;
+    my ($entry,$user,$param,$robot,$list) = @_;
 
     $param->{'to'} = $user;
     $param->{'type'} = 'success';   
@@ -208,14 +208,14 @@ sub notice_report_msg {
 	return undef;
     }
 
-    my $robot = undef;
     if (ref $list and ref $list eq 'List') {
 	$robot = $list->robot;
-    } elsif ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
-    }
- 
-    unless ($robot) {
+    } elsif (! ref $robot and $robot and $robot eq 'Site') { #FIXME: used?
+	;
+    } elsif (! ref $robot and $robot and $robot ne '*') {
+	## Compatibility: $robot may be a string
+	$robot = Robot->new($robot);
+    } else {
 	&Log::do_log(
 	    'err', 'unable to send template message_report.tt2 : no robot');
 	return undef;
@@ -472,23 +472,26 @@ sub global_report_cmd {
 #      -$cmd : SCALAR - the rejected cmd : $xx.cmd in command_report.tt2
 #      -$sender :  required if $type eq 'intern' 
 #                  scalar - the user to notify 
-#      -$robot_id :   required if $type eq 'intern'
+#      -$robot : ref(Robot) | "Site"
+#                  required if $type eq 'intern'
 #                  scalar - to notify listmaster
 #
 # OUT : 1|| undef  
 #      
 ######################################################### 
 sub reject_report_cmd {
-    my ($type, $error, $data, $cmd, $sender, $robot_id) = @_;
+    my ($type, $error, $data, $cmd, $sender, $robot) = @_;
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user' || $type eq 'auth') {
 	&Log::do_log('err',"report::reject_report_cmd(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
 	return undef;
     }
 
-    my $robot = undef;
-    if ($robot_id and $robot_id ne '*') {
-	$robot = Robot->new($robot_id);
+    if (! ref $robot and $robot eq 'Site') {
+	;
+    } elsif (! ref $robot and $robot and $robot ne '*') {
+	## Compatibility: $robot may be a string
+	$robot = Robot->new($robot);
     }
     
     if ($type eq 'intern') {
