@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-11-07 15:55+0200\n"
+"PO-Revision-Date: 2012-11-07 16:15+0200\n"
 "Last-Translator: Cedric31 <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan <asso.oc@abuledu.org>\n"
 "Language: oc\n"
@@ -8989,13 +8989,14 @@ msgid ""
 "%s and %s have been updated.\n"
 "Previous versions have been saved as %s and %s.\n"
 msgstr ""
+"%s e %s son estats meses a jorn.\n"
+"Las versions precedentas son estadas salvadas jos %s e %s.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Bulk.pm:343
-#, fuzzy
 msgid "%d %b %Y  %H:%M"
-msgstr "%d %b %y  %H:%M"
+msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
@@ -9004,13 +9005,12 @@ msgid "%A"
 msgstr "%A"
 
 #: ../src/lib/confdef.pm:43
-#, fuzzy
 msgid "Site customization"
-msgstr "Personalizar"
+msgstr "Personalizacion del servidor"
 
 #: ../src/lib/confdef.pm:47
 msgid "Main robot hostname"
-msgstr ""
+msgstr "Nom de l'òste del robòt principal"
 
 #: ../src/lib/confdef.pm:56
 msgid "Local part of sympa email address"
@@ -9018,16 +9018,15 @@ msgstr "Partida locala de l'adreça email de Sympa"
 
 #: ../src/lib/confdef.pm:60
 msgid "Effective address will be [EMAIL]@[HOST]"
-msgstr ""
+msgstr "L'adreça efectiva serà de la forma [EMAIL]@[HOST]"
 
 #: ../src/lib/confdef.pm:65
 msgid "Gecos for service mail sent by Sympa itself"
-msgstr ""
+msgstr "Gecos pels mails de servici mandats per Sympa el-meteis"
 
 #: ../src/lib/confdef.pm:69
-#, fuzzy
 msgid "This parameter is used in mail_tt2 files"
-msgstr "Lo paramètre css_path es definit, la seuna valor es "
+msgstr "Aqueste paramètre es utilizat dins los fichièrs mail_tt2"
 
 #: ../src/lib/confdef.pm:75
 msgid "Listmasters email list comma separated"
@@ -9044,9 +9043,8 @@ msgid "Local part of listmaster email address"
 msgstr "Partida locala de l'adreça email de listmaster"
 
 #: ../src/lib/confdef.pm:90
-#, fuzzy
 msgid "URL of main Web page"
-msgstr "La pagina d'administracion de %1 es a :"
+msgstr "URL de la pagina web principala"
 
 #: ../src/lib/confdef.pm:328
 msgid ""
@@ -9068,9 +9066,8 @@ msgstr ""
 
 # nlsref 3,1
 #: ../src/lib/confdef.pm:361
-#, fuzzy
 msgid "Who is able to create lists"
-msgstr "Es pas possible de crear la lista"
+msgstr "Qual a lo drech de crear una lista"
 
 #: ../src/lib/confdef.pm:365
 msgid ""
@@ -9085,13 +9082,12 @@ msgid ""
 msgstr ""
 
 #: ../src/lib/confdef.pm:385
-#, fuzzy
 msgid "Directories"
-msgstr "Repertòri"
+msgstr "Repertòris"
 
 #: ../src/lib/confdef.pm:390
 msgid "Directory containing mailing lists subdirectories"
-msgstr ""
+msgstr "Repertòri que conten los sosrepertòris de cada lista."
 
 #: ../src/lib/confdef.pm:397
 msgid ""
@@ -9100,30 +9096,28 @@ msgid ""
 msgstr ""
 
 #: ../src/lib/confdef.pm:401
-#, fuzzy
 msgid "System related"
-msgstr "Los garbis"
+msgstr "Configuracion ligada al sistèma"
 
 #: ../src/lib/confdef.pm:406
 msgid "Syslog facility for sympa"
-msgstr ""
+msgstr "Facilitat syslog emplegada per Sympa"
 
 #: ../src/lib/confdef.pm:409
-#, fuzzy
 msgid "Do not forget to edit syslog.conf"
-msgstr "Format incorrècte de edit_list.conf"
+msgstr "Doblidetz pas d'editar edit_list.conf"
 
 #: ../src/lib/confdef.pm:414
 msgid "Log verbosity"
-msgstr ""
+msgstr "Verbositat dels logs"
 
 #: ../src/lib/confdef.pm:417
 msgid "0: normal, 2,3,4: for debug"
-msgstr ""
+msgstr "0: normal, 2,3,4: pel desbugatge"
 
 #: ../src/lib/confdef.pm:422
 msgid "Communication mode with syslogd (unix | inet)"
-msgstr ""
+msgstr "Mòde de comunicacion amb syslog (unix | inet)"
 
 #: ../src/lib/confdef.pm:428
 msgid "File containing Sympa PID while running"
@@ -9290,18 +9284,16 @@ msgstr ""
 
 # nlsref 16,203
 #: ../src/lib/confdef.pm:684
-#, fuzzy
 msgid "Quotas"
-msgstr "qüòta"
+msgstr "Quotas"
 
 #: ../src/lib/confdef.pm:689
 msgid "Default disk quota for shared repository"
-msgstr ""
+msgstr "Quota per defaut dels repertòris de documents partejats"
 
 #: ../src/lib/confdef.pm:698
-#, fuzzy
 msgid "Spool related"
-msgstr "Los garbis"
+msgstr "Configuracion dels spools"
 
 #: ../src/lib/confdef.pm:703
 msgid "Directory containing various specialized spools"
@@ -9356,27 +9348,25 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:782
 msgid "Must not be 0."
-msgstr ""
+msgstr "Deu pas valer 0"
 
 # nlsref 16,33
 #: ../src/lib/confdef.pm:821
-#, fuzzy
 msgid "Internationalization related"
-msgstr "Domèni internet"
+msgstr "Configuracion de l'internacionalizacion"
 
 #: ../src/lib/confdef.pm:826
 msgid ""
 "Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
+msgstr "Repertòri que conten los catalògs d'internacionalizacion"
 
 #: ../src/lib/confdef.pm:832
-#, fuzzy
 msgid "Supported languages"
-msgstr "Lenga"
+msgstr "Lengas suportadas"
 
 #: ../src/lib/confdef.pm:841
 msgid "Default language (one of supported languages)"
-msgstr ""
+msgstr "Lenga per defaut (una de las lengas suportadas)"
 
 #: ../src/lib/confdef.pm:852
 msgid "Bounce related"
@@ -9384,7 +9374,7 @@ msgstr "Relatiu a la gestion de las errors."
 
 #: ../src/lib/confdef.pm:862
 msgid "Welcome message return-path ( unique | owner )"
-msgstr ""
+msgstr "Adreça de retorn del messatge de benvenguda ( unica | proprietari )"
 
 #: ../src/lib/confdef.pm:864
 msgid "If set to unique, new subcriber is removed if welcome message bounce"
@@ -9414,12 +9404,11 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:933
 msgid "Not yet used in current version, Default is 50"
-msgstr ""
+msgstr "Pas encara utilizat dins aquesta version, per defaut a 50."
 
 #: ../src/lib/confdef.pm:948
-#, fuzzy
 msgid "Tuning"
-msgstr "en error"
+msgstr "Personalizacion"
 
 #: ../src/lib/confdef.pm:953
 msgid ""
@@ -9443,9 +9432,8 @@ msgstr ""
 
 # nlsref 15,7
 #: ../src/lib/confdef.pm:981
-#, fuzzy
 msgid "Default priority for list messages"
-msgstr "messatge de refús pel moderator"
+msgstr "Prioritat per defaut pels messatges de listas"
 
 #: ../src/lib/confdef.pm:986
 msgid "Database related"
@@ -9453,11 +9441,11 @@ msgstr "Banca de donadas"
 
 #: ../src/lib/confdef.pm:995
 msgid "Type of the database (mysql|Pg|Oracle|Sybase|SQLite)"
-msgstr ""
+msgstr "Tipe de la banca de donadas (mysql|Pg|Oracle|Sybase|SQLite)"
 
 #: ../src/lib/confdef.pm:998
 msgid "Be careful to the case"
-msgstr ""
+msgstr "Atencion a la cassa"
 
 #: ../src/lib/confdef.pm:1003
 msgid "Name of the database"
@@ -9537,13 +9525,12 @@ msgid "Loop prevention"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1152
-#, fuzzy
 msgid "S/MIME configuration"
-msgstr "Fichièr de configuracion"
+msgstr "Configuracion S/MIME"
 
 #: ../src/lib/confdef.pm:1157
 msgid "Path to OpenSSL"
-msgstr ""
+msgstr "Camin cap a OpenSSL"
 
 #: ../src/lib/confdef.pm:1160
 msgid "Sympa recognizes S/MIME if OpenSSL is installed"
@@ -9562,10 +9549,11 @@ msgid "Password used to crypt lists private keys"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1200
-#, fuzzy
 msgid ""
 "Insert a DKIM signature to message from the robot, from the list or both"
-msgstr "Mandadís messatges  : %1"
+msgstr ""
+"Inserir una signatura DKIM als messatges de servici, als messatges de listas "
+"o als dos."
 
 #: ../src/lib/confdef.pm:1207
 msgid ""
@@ -9586,9 +9574,8 @@ msgid ""
 msgstr ""
 
 #: ../src/lib/confdef.pm:1228
-#, fuzzy
 msgid "The selector"
-msgstr "Inversar la Seleccion"
+msgstr "Lo selector"
 
 #: ../src/lib/confdef.pm:1235
 msgid "The \"i=\" tag as defined in rfc 4871, default is null"
@@ -9632,9 +9619,8 @@ msgid ""
 msgstr ""
 
 #: ../src/lib/confdef.pm:1295
-#, fuzzy
 msgid "wwsympa.conf parameters"
-msgstr "Paramètres incorrèctes"
+msgstr "paramètres de wwsympa.conf"
 
 #: ../src/lib/confdef.pm:1300
 msgid "Directory for storing HTML archives"
@@ -9664,7 +9650,7 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1335
 msgid "HTTP cookies lifetime"
-msgstr ""
+msgstr "Durada de vida dels cookies HTTP"
 
 #: ../src/lib/confdef.pm:1341
 msgid "HTTP cookies validity domain"
@@ -9791,7 +9777,7 @@ msgstr ""
 
 #: ../src/lib/Conf.pm:967
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+msgstr "Conf::load_nrcpt_by_domain(): Error a la linha %d: %s"
 
 # nlsref 1,3
 #: ../src/lib/Conf.pm:1383
@@ -10134,13 +10120,12 @@ msgstr "percentatge dels abonats en mòde VERP"
 
 # nlsref 15,4
 #: ../src/lib/List.pm:1068
-#, fuzzy
 msgid "Message tracking feature"
-msgstr "Marcatge dels messatges (tèmas)"
+msgstr "Foncionalitat de seguiment dels messatges"
 
 #: ../src/lib/List.pm:1072
 msgid "tracking message by delivery status notification"
-msgstr ""
+msgstr "Seguir los messatges per delivery status notification (DSN)"
 
 #: ../src/lib/List.pm:1080
 msgid "tracking message by message delivery notification"
@@ -10148,9 +10133,9 @@ msgstr ""
 
 # nlsref 15,4
 #: ../src/lib/List.pm:1088
-#, fuzzy
 msgid "who can view message tracking"
-msgstr "Marcatge dels messatges (tèmas)"
+msgstr ""
+"Qual pòt veire lo seguiment dels messatges per correlacion dels vejaires ?"
 
 #: ../src/lib/List.pm:1093
 msgid "Tracking datas are removed after this number of days"
@@ -10166,9 +10151,8 @@ msgid "Return-path of the REMIND command"
 msgstr "Adreça de retorn per la comanda REMIND"
 
 #: ../src/lib/List.pm:1126
-#, fuzzy
 msgid "Notify subscribers when they are included from a data source?"
-msgstr "Lo paramètre \"subscribe\" definís las règlas per s'abonar."
+msgstr "Notificar los abonats quand son incluses dempuèi una font de donadas ?"
 
 #: ../src/lib/List.pm:1134
 msgid "Timeout for fetch of include_sql_query"
@@ -10405,9 +10389,8 @@ msgstr ""
 
 # nlsref 16,45
 #: ../src/lib/List.pm:1573
-#, fuzzy
 msgid "VOOT group inclusion"
-msgstr "Inclusion d'una requista SQL"
+msgstr "Inclusion d'un grop SQL"
 
 #: ../src/lib/List.pm:1583
 msgid "user"
@@ -10429,45 +10412,41 @@ msgstr "Expiracion de las inclusions"
 
 # nlsref 15,4
 #: ../src/lib/List.pm:1614
-#, fuzzy
 msgid "Inclusions timeout for message distribution"
-msgstr "Difusion de messatge"
+msgstr ""
+"Relambis maximum dempuèi la darrièra sincronizacion abans qu'aquela siá "
+"desenclavada pel mandadís d'un messatge"
 
 # nlsref 16,35
 #: ../src/lib/List.pm:1622
-#, fuzzy
 msgid "LDAP query custom attribute"
-msgstr "Inclusion d'una requista LDAP "
+msgstr "Extraccion d'atributs utilizaires per requèsta LDAP"
 
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
-msgstr ""
+msgstr "Nom de l'atribut email"
 
 # nlsref 16,135
 #: ../src/lib/List.pm:1729
-#, fuzzy
 msgid "LDAP 2-level query custom attribute"
-msgstr "Inclusion d'una requista LDAP (nivèl 2)"
+msgstr "Extraccion d'atributs utilizaires per requèsta LDAP"
 
 # nlsref 16,42
 #: ../src/lib/List.pm:1887
-#, fuzzy
 msgid "SQL query custom attribute"
-msgstr "atribut de traire"
+msgstr "Extraccion d'atributs utilizaires per requèsta SQL"
 
 #: ../src/lib/List.pm:1972
-#, fuzzy
 msgid "Insert DKIM signature to messages sent to the list"
-msgstr "Mandadís messatges  : %1"
+msgstr "Inserir una signatura als messatges postats per la lista."
 
 #: ../src/lib/List.pm:1983
-#, fuzzy
 msgid "DKIM configuration"
-msgstr "Fichièr de configuracion"
+msgstr "Configuracion de DKIM"
 
 #: ../src/lib/List.pm:1988
 msgid "File path for list DKIM private key"
-msgstr ""
+msgstr "Camin cap al fichièr que conten la clau privada DKIM de la lista"
 
 #: ../src/lib/List.pm:1998
 msgid "Selector for DNS lookup of DKIM public key"
@@ -10494,9 +10473,8 @@ msgid "Secret string for generating unique keys"
 msgstr "Cadena secreta per congrear de claus unencas"
 
 #: ../src/lib/List.pm:2081
-#, fuzzy
 msgid "custom parameters"
-msgstr "Paramètres incorrèctes"
+msgstr "Paramètres personalizats"
 
 # nlsref 16,88
 #: ../src/lib/List.pm:2101
@@ -10509,7 +10487,6 @@ msgstr ""
 "Expression regulara aplicada per evitar las boclas amb lo robòt de las listas"
 
 #: ../src/lib/List.pm:2142
-#, fuzzy
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr "Activar los avatars ? (una activacion al nivèl del site es obligatòri)"
 
@@ -10528,9 +10505,8 @@ msgstr ""
 
 # nlsref 16,77
 #: ../src/lib/List.pm:2183
-#, fuzzy
 msgid "who created the list"
-msgstr "qual a actualizar lo fichièr de configuracion"
+msgstr "qual a creat la lista"
 
 # nlsref 16,77
 #: ../src/lib/List.pm:2194
@@ -10553,18 +10529,17 @@ msgstr ""
 
 #: ../src/lib/List.pm:2243
 msgid "internal identifier"
-msgstr ""
+msgstr "Identificant intèrne"
 
 #: ../src/lib/List.pm:2250
 msgid "label"
-msgstr ""
+msgstr "Nom"
 
 #: ../src/lib/List.pm:2257
 msgid "additional comment"
-msgstr ""
+msgstr "comentari addicional"
 
 #: ../src/lib/List.pm:2263
-#, fuzzy
 msgid "type"
 msgstr "Tipe"
 
@@ -10574,21 +10549,20 @@ msgstr ""
 
 #: ../src/lib/List.pm:2276
 msgid "is the attribute optional?"
-msgstr ""
+msgstr "L'atribut es opcional ?"
 
 #: ../src/lib/List.pm:394
-#, fuzzy
 msgid "Owners defined in an external data source"
-msgstr "Los  proprietaris son definits via una sorga de donadas"
+msgstr "Proprietaris definits via una font de donadas extèrna"
 
 # nlsref 16,81
 #: ../src/lib/List.pm:398
 msgid "the datasource"
-msgstr "font de las donadas"
+msgstr "la font de las donadas"
 
 #: ../src/lib/List.pm:404
 msgid "datasource parameters"
-msgstr "Paramètres de la font de donadas"
+msgstr "Paramètres ligats a las fonts de donadas"
 
 #: ../src/lib/List.pm:471
 #, fuzzy
@@ -10868,8 +10842,8 @@ msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
 msgstr ""
-"-----Fin del rapòrt de non-remesa-----\n"
 "\n"
+"-----Fin del rapòrt de non-remesa-----\n"
 
 #: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
 #, fuzzy
