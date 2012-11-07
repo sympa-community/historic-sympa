@@ -8917,7 +8917,9 @@ sub _load_list_members_from_include {
     my $self     = shift;
     my $old_subs = shift;
     my $name     = $self->name;
+    my $admin    = $self->admin;
     my $dir      = $self->dir;
+    &Log::do_log('debug2', 'Loading included users for list %s',$list);
     my (%users, $depend_on, $ref);
     my $total = 0;
     my @errors;
