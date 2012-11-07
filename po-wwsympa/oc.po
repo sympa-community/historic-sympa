@@ -23,10 +23,10 @@ msgstr ""
 "PO-Revision-Date: 2012-11-07 10:32+0200\n"
 "Last-Translator: Cedric31 <cvalmary@yahoo.fr>\n"
 "Language-Team: occitan <asso.oc@abuledu.org>\n"
-"Language: oc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: oc\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -43,8 +43,8 @@ msgstr "Trobaretz, dins aquesta documentacion&#160;:"
 msgid ""
 "a <a href=\"%1/help/introduction\">general introduction</a> to mailing lists;"
 msgstr ""
-"una <a href=\"%1/help/introduction\">introduccion generala</a> a las listas de "
-"difusion&#160;;"
+"una <a href=\"%1/help/introduction\">introduccion generala</a> a las listas "
+"de difusion&#160;;"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:16
@@ -81,8 +81,8 @@ msgid ""
 "\"Frequently asked questions\">FAQ</acronym></a>."
 msgstr ""
 "Se rencontratz un problèma particular, reportatz-vos dirèctement a la <a "
-"href=\"%1/help/faqadmin\"><acronym title=\"Fèira de las questions, Frequently "
-"asked questions\">FAQ</acronym> dels administrators</a>."
+"href=\"%1/help/faqadmin\"><acronym title=\"Fèira de las questions, "
+"Frequently asked questions\">FAQ</acronym> dels administrators</a>."
 
 #: ../web_tt2/help_introduction.tt2:3
 msgid "Mailing lists - General introduction"
@@ -547,7 +547,7 @@ msgstr ""
 #: ../web_tt2/help_introduction.tt2:119
 msgid ""
 "The use of mailing lists naturally means respecting the rules of good "
-"practices as regards to email."
+"practices as regards email (the \"Netiquette\")."
 msgstr ""
 
 #. (path_cgi)
