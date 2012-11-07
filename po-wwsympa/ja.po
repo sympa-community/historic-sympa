@@ -16,13 +16,13 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, 6.0, 6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2012-09-12 18:35+0200\n"
+"PO-Revision-Date: 2012-10-05 04:37+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -655,10 +655,9 @@ msgstr ""
 # 仮訳
 # See the comment for "Good Practices".
 #: ../web_tt2/help_introduction.tt2:119
-#, fuzzy
 msgid ""
 "The use of mailing lists naturally means respecting the rules of good "
-"practices as regards email (the \"Netiquette\")."
+"practices as regards to email."
 msgstr ""
 "メーリングリストのサービスを利用するのならば、電子メールのマナーについてのと"
 "りきめを尊重するのが当然です。"
