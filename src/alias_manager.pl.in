@@ -34,10 +34,10 @@ use strict;
 use lib '--modulesdir--';
 #use Conf; # load in Site - Robot
 use POSIX;
-#use tools; # load in Conf
-#use tt2; # load in Conf
-#use Sympa::Constants; # load in confdef - Conf
 
+#use tools; # load in Conf - Robot
+use tt2;
+#use Sympa::Constants; # load in confdef - Conf
 use Robot;
 
 unless (defined Site->load) {
@@ -70,7 +70,7 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
 
 unless ($robot = Robot->new($domain)) {
     printf STDERR "Unknown robot $domain";
-    exit(255); #FIXME appropriate exit code?
+    exit(16);
 }
 
 $default_domain = Site->domain;

@@ -7,7 +7,7 @@ package Robot;
 
 use strict;
 use warnings;
-use Carp qw(croak);
+use Carp qw(carp croak);
 
 use Site;
 
@@ -212,43 +212,19 @@ sub get_id {
 
 =over 4
 
-=item is_listmaster ( WHO )
+=item is_listmaster
 
-Is the user listmaster
-
-=back
-
-=cut
-
-sub is_listmaster {
-    my $self = shift;
-    my $who = tools::clean_email(shift || '');
-    return 0 unless $who;
-
-    foreach my $listmaster (($self->listmasters,)) {
-	return 1 if $listmaster eq $who;
-    }
-    foreach my $listmaster ((Site->listmasters,)) {
-	return 1 if $listmaster eq $who;
-    }
-
-    return 0;
-}
-
-=over 4
+See L<Site/is_listmaster>.
 
 =item make_tt2_include_path
 
 make an array of include path for tt2 parsing.
 See L<Site/make_tt2_include_path>.
 
-=back
+=item send_dsn
 
-=cut
-
-## Inherited from Site class.
-
-=over 4
+Sends an delivery status notification (DSN).
+See L<Site/send_dsn>.
 
 =item send_file ( ... )
 
@@ -257,14 +233,6 @@ message to user(s).
 See L<Site/send_file>.
 
 Note: List::send_global_file() was deprecated.
-
-=back
-
-=cut
-
-## Inherited from Site::send_file().
-
-=over 4
 
 =item send_notify_to_listmaster ( OPERATION, DATA, CHECKSTACK, PURGE )
 
@@ -278,7 +246,42 @@ Note: List::send_notify_to_listmaster() was deprecated.
 
 =cut
 
-## Inherited from Site::send_notify_to_listmaster().
+## Inherited from Site class.
+
+=head3 Handling netidmap table
+
+=over 4
+
+=item get_netidtoemail_db
+
+get idp xref to locally validated email address
+
+=item set_netidtoemail_db
+
+set idp xref to locally validated email address
+
+=item update_email_netidmap_db
+
+Update netidmap table when user email address changes
+
+=back
+
+=cut
+
+sub get_netidtoemail_db {
+    my $self = shift;
+    return List::get_netidtoemail_db($self->domain, @_);
+}
+
+sub set_netidtoemail_db {
+    my $self = shift;
+    return List::set_netidtoemail_db($self->domain, @_);
+}
+
+sub update_email_netidmap_db {
+    my $self = shift;
+    return List::update_netidtoemail_db($self->domain, @_);
+}
 
 =head3 ACCESSORS
 
@@ -335,6 +338,42 @@ In array context, returns array of them.
 ## Inherited from Site class
 
 =head2 FUNCTIONS
+
+=over 4
+
+=item clean_robot ( ROBOT_OR_NAME )
+
+I<Function>.
+Warns if the argument is not a Robot object.
+Returns a Robot object, if any.
+
+I<TENTATIVE>.
+This function will be used during transition between old and object-oriented
+styles.  At last modifications have been done, this shall be removed.
+
+=back
+
+=cut
+
+sub clean_robot {
+    my $robot = shift;
+    my $maybe_site = shift;
+
+    unless (ref $robot or
+	($maybe_site and !ref $robot and $robot eq 'Site')) {
+	my $level = $Carp::CarpLevel;
+	$Carp::CarpLevel = 1;
+	carp "Deprecated usage: \"$robot\" should be a Robot object";
+	$Carp::CarpLevel = $level;
+
+	if ($robot and $robot ne '*') {
+	    $robot = Robot->new($robot);
+	} else {
+	    $robot = undef;
+	}
+    }
+    $robot;
+}
 
 =over 4
 

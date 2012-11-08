@@ -59,7 +59,7 @@ my $pinfo = &List::_apply_defaults();
 
 ## The process should not fork for sending mail
 ## Messages will be spooled instead
-&mail::set_send_spool($Conf{'queue'});
+&mail::set_send_spool(Site->queue);
 
 ## Loading all Lists at startup, in order to increase execution speed
 

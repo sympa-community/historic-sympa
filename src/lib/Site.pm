@@ -87,6 +87,45 @@ sub load {
 
 =head2 METHODS
 
+=head3 Users
+
+=over 4
+
+=item is_listmaster ( WHO )
+
+    # Is the user super listmaster?
+    if (Site->is_listmaster($email) ...
+    # Is the user normal or super listmaster?
+    if ($robot->is_listmaster($email) ...
+
+Is the user listmaster?
+
+=back
+
+=cut
+
+sub is_listmaster {
+    my $self = shift;
+    my $who = tools::clean_email(shift || '');
+    return 0 unless $who;
+
+    if (ref $self and ref $self eq 'Robot') {
+	foreach my $listmaster (($self->listmasters,)) {
+	    return 1 if $listmaster eq $who;
+	}
+    } elsif ($self eq 'Site') {
+	;
+    } else {
+	croak 'bug is logic.  Ask developer';
+    }
+
+    foreach my $listmaster ((Site->listmasters,)) {
+	return 1 if $listmaster eq $who;
+    }
+
+    return 0;
+}
+
 =head3 Handling the Authentication Token
 
 =over 4
@@ -278,17 +317,17 @@ sub get_etc_filename {
     if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
 	$default_name = $1 . '.tt2';
 	@try =
-	    map { ($_ . $name, $_ . $default_name) }
+	    map { ($_ . '/' . $name, $_ . '/' . $default_name) }
 	    @{$self->make_tt2_include_path};
     } else {
-	@try = map { $_ . $name } @{$self->make_tt2_include_path};
+	@try = map { $_ . '/' . $name } @{$self->make_tt2_include_path};
     }
 
     my @result;
     foreach my $f (@try) {
 	if (-r $f) {
 	    &Log::do_log('debug3', 'name: %s ; dir %s', $name, $f);
-	    if ($options->{'order'} eq 'all') {
+	    if ($options->{'order'} and $options->{'order'}eq 'all') {
 		push @result, $f;
 	    } else {
 		return $f;
@@ -785,7 +824,7 @@ sub send_file {
 	}
     }
 
-    $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot_id)
+    $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot)
 	unless ($data->{'boundary'});
 
     my $dkim_feature          = $robot->dkim_feature;
@@ -905,7 +944,7 @@ sub send_notify_to_listmaster {
 			operation             => $operation,
 			notification_messages => $messages{$email},
 			boundary              => '----------=_' .
-			    &tools::get_message_id($robot_id)
+			    &tools::get_message_id($robot)
 		    };
 
 		    my $options = {};
@@ -1030,7 +1069,7 @@ sub send_notify_to_listmaster {
     if ($operation eq 'loop_command') {
 	## Loop detected in Sympa
 	$data->{'boundary'} =
-	    '----------=_' . &tools::get_message_id($robot_id);
+	    '----------=_' . &tools::get_message_id($self);
 	&tt2::allow_absolute_path();
     }
 
@@ -1132,6 +1171,8 @@ See L<Robot/ACCESSORS>.
 
 =item sympa
 
+=item ... etc.
+
 I<Getters>.
 Gets derived config parameters.
 
@@ -1165,7 +1206,8 @@ sub AUTOLOAD {
     $type->{'SiteAttribute'} = scalar(
 	grep { $_ eq $attr }
 	    qw(auth_services authentication_info_url
-	    cas_id cas_number generic_sso_id generic_sso_number
+	    cas_id cas_number crawlers_detection
+	    generic_sso_id generic_sso_number
 	    ldap ldap_export ldap_number
 	    locale2charset nrcpt_by_domain
 	    robots robot_by_http_host robot_by_soap_url
@@ -1307,7 +1349,8 @@ sub import {
 ## inside eval) simply returns.
 sub _crash_handler {
     return if $^S;    # invoked from inside eval.
-                      #exit 255 unless ${^GLOBAL_PHASE} eq 'RUN';
+
+    #exit 255 unless ${^GLOBAL_PHASE} eq 'RUN';
 
     my $msg = $_[0];
     chomp $msg;
@@ -1320,9 +1363,9 @@ sub _crash_handler {
     my @calls;
     my @f;
     $_[0] =~ /.+ at (.+? line \d+\.)\n$/s;
-    @calls = ($1);
+    @calls = ($1) if $1;
     for (my $i = 1; @f = caller($i); $i++) {
-	$calls[0] = "In $f[3] at $calls[0]";
+	$calls[0] = "In $f[3] at $calls[0]" if @calls;
 	unshift @calls, "$f[1] line $f[2].";
     }
     $calls[0] = "In (top-level) at $calls[0]";

@@ -24,12 +24,12 @@ package Auth;
 
 use Digest::MD5;
 
-use Language;
-use Log;
-use Conf;
+use Language qw(gettext_strftime);
+#use Log;
+#use Conf;
 use List;
 use report;
-use SDM;
+#use SDM;
 
 ## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
 sub password_fingerprint{
@@ -58,7 +58,7 @@ sub password_fingerprint{
 	 return &authentication($robot, $auth,$pwd);
      }else{
 	 ## This is an UID
-	 foreach my $ldap (@{$Conf{'auth_services'}{$robot}}){
+	 foreach my $ldap (@{Site->auth_services->{$robot}}){
 	     # only ldap service are to be applied here
 	     next unless ($ldap->{'auth_type'} eq 'ldap');
 	     
@@ -93,7 +93,7 @@ sub may_use_sympa_native_auth {
 
     my $ok = 0;
     ## check each auth.conf paragrpah
-    foreach my $auth_service (@{$Conf{'auth_services'}{$robot}}){
+    foreach my $auth_service (@{Site->auth_services->{$robot}}){
 	next unless ($auth_service->{'auth_type'} eq 'user_table');
 
 	next if ($auth_service->{'regexp'} && ($user_email !~ /$auth_service->{'regexp'}/i));
@@ -125,7 +125,7 @@ sub authentication {
 	&Log::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 	return undef;
     }
-    foreach my $auth_service (@{$Conf{'auth_services'}{$robot}}){
+    foreach my $auth_service (@{Site->auth_services->{$robot}}){
 	next if ($auth_service->{'auth_type'} eq 'authentication_info_url');
 	next if ($email !~ /$auth_service->{'regexp'}/i);
 	next if (($email =~ /$auth_service->{'negative_regexp'}/i)&&($auth_service->{'negative_regexp'}));
@@ -182,7 +182,7 @@ sub ldap_authentication {
      }
 
      ## No LDAP entry is defined in auth.conf
-     if ($#{$Conf{'auth_services'}{$robot->domain}} < 0) {
+     if ($#{Site->auth_services->{$robot->domain}} < 0) {
 	 &Log::do_log('notice', 'Skipping empty auth.conf');
 	 return undef;
      }
@@ -303,18 +303,18 @@ sub get_email_by_net_id {
     
     &Log::do_log ('debug',"Auth::get_email_by_net_id($auth_id,$attributes->{'uid'})");
     
-    if (defined $Conf{'auth_services'}{$robot}[$auth_id]{'internal_email_by_netid'}) {
-	my $sso_config = @{$Conf{'auth_services'}{$robot}}[$auth_id];
+    if (defined Site->auth_services->{$robot}[$auth_id]{'internal_email_by_netid'}) {
+	my $sso_config = @{Site->auth_services->{$robot}}[$auth_id];
 	my $netid_cookie = $sso_config->{'netid_http_header'} ;
 	
 	$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 	
-	$email = &List::get_netidtoemail_db($robot, $netid_cookie, $Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
+	$email = &List::get_netidtoemail_db($robot, $netid_cookie, Site->auth_services->{$robot}[$auth_id]{'service_id'});
 	
 	return $email;
     }
  
-    my $ldap = @{$Conf{'auth_services'}{$robot}}[$auth_id];
+    my $ldap = @{Site->auth_services->{$robot}}[$auth_id];
 
     my $param = &tools::dup_var($ldap);
     my $ds = new LDAPSource($param);

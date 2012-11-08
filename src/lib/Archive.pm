@@ -22,6 +22,7 @@
 package Archive;
 
 use strict;
+use Carp qw(carp);
 use Cwd;
 use Encode qw(decode_utf8 encode_utf8);
 use HTML::Entities qw(decode_entities);
@@ -249,7 +250,7 @@ sub clean_archive_directory{
     &Log::do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
-    $answer->{'cleaned_dir'} = $Conf::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
+    $answer->{'cleaned_dir'} = Site->tmpdir.'/'.$params->{'dir_to_rebuild'};
     unless(my $number_of_copies = &tools::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	&Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
@@ -315,15 +316,8 @@ sub convert_single_msg_2_html {
     my $destination_dir = $data->{'destination_dir'};
     my $attachement_url = $data->{'attachement_url'};
     my $list = $data->{'list'};
-    my $robot = $data->{'robot'};
+    my $robot = Robot::clean_robot($data->{'robot'});
     my $messagekey = $data->{'messagekey'};
-
-    ## Compatibility: robot may be a string
-    unless (ref $robot) {
-	if ($robot and $robot ne '*') {
-	    $robot = Robot->new($robot);
-	}
-    }
 
     my $listname ='';
     my $msg_file;

@@ -53,15 +53,9 @@ sub new {
 	return undef;
     }
 
-    my $robot = $parameters{'robot'};
-    unless (ref $robot) {
-	if ($robot eq 'Site') { #FIXME: really used?
-	    ;
-	} elsif ($robot and $robot ne '*') {
-	    ## Compatibility: $robot may be a string
-	    $robot = Robot->new($robot);
-	}
-    }
+    ##FIXME: really may be Site?
+    my $robot = Robot::clean_robot($parameters{'robot'}, 'maybe_site');
+
     my $directory = $parameters{'directory'};
     my $file_path = $parameters{'file_path'};
     my $function = $parameters{'function'};
@@ -247,18 +241,9 @@ sub request_action {
     &Log::do_log('debug2', '(%s, %s, %s, %s, %s)', @_);
     my $operation = shift;
     my $auth_method = shift;
-    my $robot=shift;
+    my $robot = Robot::clean_robot(shift, 1); #FIXME: really may be Site?
     my $context = shift;
     my $debug = shift;
-
-    unless (ref $robot) {
-	if ($robot eq 'Site') { #FIXME: really used?
-	    ;
-	} elsif ($robot and $robot ne '*') {
-	    ## Compatibility: $robot may be a string
-	    $robot = Robot->new($robot);
-	}
-    }
 
     my $trace_scenario ;
 
@@ -1197,12 +1182,7 @@ sub search{
     } elsif (ref $robot) {
 	$that = $robot;
     } elsif ($robot) {
-	if (! ref $robot and $robot and $robot eq 'Site') { #FIXME: used?
-	    $that = $robot;
-	} elsif (! ref $robot and $robot and $robot ne '*') {
-	    ## Compatibility: $robot may be a string
-	    $that = Robot->new($robot);
-	}
+	$robot = Robot::clean_robot($robot, 1); #FIXME: really may be Site?
     }
 
     my $sender = $context->{'sender'};
@@ -1424,13 +1404,8 @@ sub verify_custom {
 	my ($condition, $args_ref, $robot, $list) = @_;
         my $timeout = 3600;
 
-    unless (ref $robot) {
-	if ($robot eq 'Site') { #FIXME: really used?
-	    ;
-	} elsif ($robot and $robot ne '*') {
-	    ## Compatibility: $robot may be a string
-	    $robot = Robot->new($robot);
-	}
+    if ($robot) {
+	$robot = Robot::clean_robot($robot, 1); #FIXME: really may be Site?
     }
 
 	my $filter = join ('*', @{$args_ref});

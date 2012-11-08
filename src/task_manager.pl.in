@@ -30,14 +30,14 @@ use strict "vars";
 use Data::Dumper;
 use Getopt::Long;
 
-use Conf;
-use List;
-use Log;
-use SDM;
-use Sympa::Constants;
+#use Conf;
+#use List;
+#use Log;
+#use SDM;
+#use Sympa::Constants;
 use Task;
-use TaskSpool;
-use tools;
+#use TaskSpool;
+#use tools;
 ##XXXuse wwslib;
 
 my $opt_d;
@@ -88,7 +88,7 @@ if ($main::options{'log_level'}) {
 
 ## Check databse connectivity
 unless (&SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Site->db_name);
 }
 
 ## Check that the data structure is uptodate
@@ -142,11 +142,12 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct($Conf{'umask'}));
+umask(oct(Site->umask));
 
 ## Change to list root
-unless (chdir($Conf{'home'})) {
-    &Log::do_log('err',"error : unable to change to directory $Conf{'home'}");
+unless (chdir(Site->home)) {
+    &Log::do_log('err', 'error : unable to change to directory %s',
+	Site->home);
     exit (-1);
 }
 

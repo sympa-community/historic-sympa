@@ -69,12 +69,10 @@ sub reject_report_msg {
 
     if (ref $list and ref $list eq 'List') {
 	$robot = $list->robot;
-    } elsif (! ref $robot and $robot and $robot eq 'Site') { #FIXME: used?
-	;
-    } elsif (! ref $robot and $robot and $robot ne '*') {
-	## Compatibility: $robot may be a string
-	$robot = Robot->new($robot);
     } else {
+	$robot = Robot::clean_robot($robot, 1); #FIXME: really may be Site?
+    }
+    unless ($robot) {
 	&Log::do_log('err', 'unable to send template command_report.tt2 : no robot');
 	return undef;
     }
@@ -210,12 +208,10 @@ sub notice_report_msg {
 
     if (ref $list and ref $list eq 'List') {
 	$robot = $list->robot;
-    } elsif (! ref $robot and $robot and $robot eq 'Site') { #FIXME: used?
-	;
-    } elsif (! ref $robot and $robot and $robot ne '*') {
-	## Compatibility: $robot may be a string
-	$robot = Robot->new($robot);
     } else {
+	$robot = Robot::clean_robot($robot, 1); #FIXME: really may be Site?
+    }
+    unless ($robot) {
 	&Log::do_log(
 	    'err', 'unable to send template message_report.tt2 : no robot');
 	return undef;
@@ -480,20 +476,18 @@ sub global_report_cmd {
 #      
 ######################################################### 
 sub reject_report_cmd {
-    my ($type, $error, $data, $cmd, $sender, $robot) = @_;
+    my $type = shift;
+    my $error = shift;
+    my $data = shift;
+    my $cmd = shift;
+    my $sender = shift;
+    my $robot = Robot::clean_robot(shift, 1); # Site or Robot
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user' || $type eq 'auth') {
 	&Log::do_log('err',"report::reject_report_cmd(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
 	return undef;
     }
 
-    if (! ref $robot and $robot eq 'Site') {
-	;
-    } elsif (! ref $robot and $robot and $robot ne '*') {
-	## Compatibility: $robot may be a string
-	$robot = Robot->new($robot);
-    }
-    
     if ($type eq 'intern') {
 	if ($robot) {
 	    my $listname;

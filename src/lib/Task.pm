@@ -31,17 +31,17 @@ use Exporter;
 use Time::Local;
 
 use Bulk;
-use Conf;
+#use Conf;
 use List;
-use Log;
-use mail;
+#use Log;
+#use mail;
 use Scenario;
 use Sympaspool;
 use TaskSpool;
 use TaskInstruction;
-use tools;
+#use tools;
 use tracking;
-use tt2;
+#use tt2;
 
 #### Task level subs ####
 ##########################

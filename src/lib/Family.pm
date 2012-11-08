@@ -111,8 +111,8 @@ sub get_available_families {
 
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . "/families",
-        $Conf::Conf{'etc'}           . "/families",
-        $Conf::Conf{'etc'}           . "/$robot/families"
+        Site->etc           . "/families",
+        Site->etc           . "/$robot/families"
      ) {
 	next unless (-d $dir);
 
@@ -909,8 +909,8 @@ sub instantiate {
 	});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $Conf::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
-    my $output_file = $Conf::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
+    my $aliasmanager_output_file = Site->tmpdir.'/aliasmanager.stdout.'.$$;
+    my $output_file = Site->tmpdir.'/instantiate_family.stdout.'.$$;
 	my $output = '';
                                          
     ## EACH FAMILY LIST
@@ -1822,8 +1822,8 @@ sub _get_directory {
     &Log::do_log('debug3','Family::_get_directory(%s)',$name);
 
     my @try = (
-        $Conf::Conf{'etc'}           . "/$robot/families",
-        $Conf::Conf{'etc'}           . "/families",
+        Site->etc           . "/$robot/families",
+        Site->etc           . "/families",
 	    Sympa::Constants::DEFAULTDIR . "/families"
     );
 
@@ -2527,20 +2527,20 @@ sub _set_status_changes {
 
     $result->{'aliases'} = 1;
 
-    unless (defined $list->{'admin'}{'status'}) {
-	$list->{'admin'}{'status'} = 'open';
+    unless (defined $list->status) {
+	$list->status('open');
     }
 
     ## aliases
-    if ($list->{'admin'}{'status'} eq 'open') {
+    if ($list->status eq 'open') {
 	unless ($old_status eq 'open') {
 	    $result->{'install_remove'} = 'install'; 
-	    $result->{'aliases'} = &admin::install_aliases($list,$self->{'robot'});
+	    $result->{'aliases'} = &admin::install_aliases($list);
 	}
     }
 
-    if (($list->{'admin'}{'status'} eq 'pending') && 
-	(($old_status eq 'open') || ($old_status eq 'error_config'))) {
+    if ($list->status eq 'pending' and
+	($old_status eq 'open' or $old_status eq 'error_config')) {
 	$result->{'install_remove'} = 'remove'; 
 	$result->{'aliases'} = &admin::remove_aliases($list,$self->{'robot'});
     }

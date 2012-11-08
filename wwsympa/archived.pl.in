@@ -85,7 +85,7 @@ unless (defined Robot::get_robots()) {
 
 ## Check databse connectivity
 unless (&SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Site->db_name);
 }
 
 ## Put ourselves in background if not in debug mode. 
@@ -119,8 +119,9 @@ if ($main::options{'log_level'}) {
     &Log::set_log_level($main::options{'log_level'});
     &Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Log::set_log_level($Conf{'log_level'});
-    &Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Log::set_log_level(Site->log_level);
+    &Log::do_log('info', 'Configuration file read, default log level %s',
+	Site->log_level); 
 }
 
 &Log::do_openlog(Site->log_facility, Site->log_socket_type, 'archived');
@@ -140,7 +141,7 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct($Conf{'umask'}));
+umask(oct(Site->umask));
 
 foreach my $robot (@{Robot::get_robots()}) {
     my $arc_dir = $robot->arc_path;
@@ -157,7 +158,7 @@ foreach my $robot (@{Robot::get_robots()}) {
 }
 
 ## Change to list root
-unless (chdir($Conf{'home'})) {
+unless (chdir(Site->home)) {
     &Log::do_log('err','unable to change directory');
     exit (-1);
 }
@@ -555,11 +556,15 @@ sub rebuild {
 	my $arcs_dir = &Archive::clean_archive_directory({'arc_root' => Site->arc_path, 'dir_to_rebuild' => "/$adrlist/$arc/arctxt"});
 	my $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'} if($arcs_dir);
 
-	my $cmd = Site->mhonarc . " -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=$Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Conf{'umask'} $dir_to_rebuild";
+	my $cmd = sprintf '%s -modifybodyaddresses -addressmodifycode \'%s\' -rcfile %s -outdir %s/%s/%s-%s  -definevars \"listname=\'%s\' hostname=%s yyyy=%s mois=%s yyyymm=%s-%s wdir=%s base=%s/arc tag=%s\" -umask %s %s',
+	    Site->mhonarc, $ENV{'M2H_ADDRESSMODIFYCODE'},
+	    $mhonarc_ressources, $arcpath, $adrlist, $yyyy, $mm,
+	    $listname, $hostname, $yyyy, $mm, $yyyy, $mm, $arcpath,
+	    Site->wwsympa_url, $tag, Site->umask, $dir_to_rebuild;
 
 	&Log::do_log('debug',"System call : $cmd");
 	my $exitcode = system($cmd);
-	$exitcode = $exitcode / 256;
+	$exitcode = $exitcode >> 8;
 
 	# Delete temporary directory containing files with escaped HTML.
 	if ($arcs_dir && -d $arcs_dir->{'cleaned_dir'}) {
@@ -620,9 +625,13 @@ sub rebuild {
 		&create_idx($arcdir);
 	    }
 
-	    my $cmd = Site->mhonarc . " -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=$Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Conf{'umask'} $dir_to_rebuild";
+	    my $cmd = sprintf '%s -modifybodyaddresses -addressmodifycode \'%s\' -rcfile %s -outdir %s -definevars \"listname=%s hostname=%s yyyy=%s mois=%s yyyymm=%s-%s wdir=%s base=%s/arc tag=%s\" -umask %s %s',
+		Site->mhonarc, $ENV{'M2H_ADDRESSMODIFYCODE'},
+		$mhonarc_ressources, $arcdir, $listname, $hostname,
+		$yyyy, $mm, $yyyy, $mm, $arcpath, Site->wwsympa_url,
+		$tag, Site->umask, $dir_to_rebuild;
 	    my $exitcode = system($cmd);
-	    $exitcode = $exitcode / 256;
+	    $exitcode = $exitcode >> 8;
 
 	    # Delete temporary directory containing files with escaped HTML.
 	    if ($arcs_dir && -d $arcs_dir->{'cleaned_dir'}) {
@@ -854,7 +863,7 @@ sub mail2arc {
 
 	# savee arctxt dump of original message.
 	my $file = $monthdir.'/arctxt/'.$newfile ;
-	my $output = $Conf::Conf{'tmpdir'}.'/arc'.$newfile;
+	my $output = Site->tmpdir.'/arc'.$newfile;
 	open (DUMP, "> $file");
 	printf DUMP $message_in_spool->{'messageasstring'};
 	close DUMP;
@@ -1086,7 +1095,7 @@ Returns a tag derived from the listname.
 sub get_tag {
     my $listname = shift;
     
-    return (substr(Digest::MD5::md5_hex(join('/', $Conf{'cookie'}, $listname)), -10)) ;
+    return (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $listname)), -10)) ;
 }
 
 

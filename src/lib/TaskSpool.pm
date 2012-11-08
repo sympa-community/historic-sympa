@@ -157,9 +157,9 @@ sub create_required_global_tasks {
     foreach my $key (keys %global_models) {	
 	&Log::do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
-	    if ($Conf::Conf{$key}) {
-		unless($task = Task::create ({'creation_date' => $param->{'current_date'},'model' => $global_models{$key}, 'flavour' => $Conf::Conf{$key}, 'data' =>$data})) {
-		    creation_error(sprintf 'Unable to create task with parameters creation_date = "%s", model = "%s", flavour = "%s", data = "%s"',$param->{'current_date'},$global_models{$key},$Conf::Conf{$key},$data);
+	    if (Site->$key) {
+		unless($task = Task::create ({'creation_date' => $param->{'current_date'},'model' => $global_models{$key}, 'flavour' => Site->$key, 'data' =>$data})) {
+		    creation_error(sprintf 'Unable to create task with parameters creation_date = "%s", model = "%s", flavour = "%s", data = "%s"',$param->{'current_date'},$global_models{$key}, Site->$key, $data);
 		}
 		$used_models{$1} = 1;
 	    }
@@ -173,7 +173,7 @@ sub create_required_lists_tasks {
     &Log::do_log('debug','Creating required tasks from list models');
 
     my $task;
-    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
+    foreach my $robot (keys %{Site->robots}) {
 	&Log::do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {

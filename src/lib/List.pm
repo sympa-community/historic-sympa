@@ -24,9 +24,8 @@ package List;
 use strict;
 use POSIX;
 use Exporter;
-
-# xxxxxxx faut-il virer encode ? Faut en faire un use ?
-require Encode;
+## xxxxxxx faut-il virer encode ? Faut en faire un use ?
+#require Encode; # load in Log
 # tentative
 use Data::Dumper;
 
@@ -2355,14 +2354,12 @@ sub new {
 	$name = $parts[0];
     }
 
-    ## Compatibility: robot may be either object or name of robot.
-    unless (ref $robot) {
-	unless (defined $robot and length $robot and $robot ne '*') {
-	    ## Look for the list if no robot was provided
-	    $robot = &search_list_among_robots($name);
-	}
-	$robot = Robot->new($robot);
+    unless ($robot) {
+	## Look for the list if no robot was provided
+	$robot = &search_list_among_robots($name);
     }
+
+    $robot = Robot::clean_robot($robot);
 
     unless ($robot) {
 	&Log::do_log('err',
@@ -2461,7 +2458,7 @@ sub set_status_error_config {
     unless ($self->admin and $self->status eq 'error_config') {
 	$self->status('error_config');
 
-	#my $host = &Conf::get_robot_conf($self->domain, 'host');
+	#my $host = $self->robot->host;
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
@@ -2486,7 +2483,7 @@ sub set_status_family_closed {
     my ($self, $message, @param) = @_;
 
     unless ($self->status eq 'family_closed') {
-	my $host = &Conf::get_robot_conf($self->domain, 'host');
+	my $host = $self->robot->host;
 	unless ($self->close_list("listmaster\@$host", 'family_closed')) {
 	    &Log::do_log('err',
 		'Impossible to set the list %s in status family_closed',
@@ -2514,9 +2511,9 @@ sub savestats {
     &Log::do_log('debug2', 'List::savestats');
 
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
-    my $dir  = $self->{'dir'};
-    return undef unless ($list_of_lists{$self->{'domain'}}{$name});
+    my $name = $self->name;
+    my $dir  = $self->dir;
+    return undef unless ($list_of_lists{$self->domain}{$name});
 
     ## Lock file
     my $lock = new Lock($dir . '/stats');
@@ -2589,11 +2586,11 @@ sub increment_msg_count {
 sub get_msg_count {
     my $self = shift;
     &Log::do_log('debug3', "Getting the number of messages for list %s",
-	$self->{'name'});
+	$self);
 
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
-    my $file = "$self->{'dir'}/stats";
+    my $name = $self->name;
+    my $file = $self->dir . '/stats';
 
     my $count = 0;
     if (open(MSG_COUNT, $file)) {
@@ -2610,18 +2607,17 @@ sub get_msg_count {
 }
 ## last date of distribution message .
 sub get_latest_distribution_date {
+    &Log::do_log('debug3', '(%s)', @_);
     my $self = shift;
-    &Log::do_log('debug3', "List::latest_distribution_date($self->{'name'})");
 
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
-    my $file = "$self->{'dir'}/msg_count";
+    my $name = $self->name;
+    my $file = $self->dir . '/msg_count';
 
     my %count;
     my $latest_date = 0;
     unless (open(MSG_COUNT, $file)) {
-	&Log::do_log('debug2',
-	    "get_latest_distribution_date: unable to open $file");
+	&Log::do_log('debug3', 'unable to open file %s', $file);
 	return undef;
     }
 
@@ -2699,15 +2695,15 @@ sub extract_verp_rcpt() {
 
 ## Dumps a copy of lists to disk, in text format
 sub dump {
+    &Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
-    &Log::do_log('debug2', 'List::dump(%s)', $self->{'name'});
 
     unless (defined $self) {
 	&Log::do_log('err', 'Unknown list');
 	return undef;
     }
 
-    my $user_file_name = "$self->{'dir'}/subscribers.db.dump";
+    my $user_file_name = $self->dir . '/subscribers.db.dump';
 
     unless ($self->_save_list_members_file($user_file_name)) {
 	&Log::do_log('err', 'Failed to save file %s', $user_file_name);
@@ -2715,9 +2711,9 @@ sub dump {
     }
 
     $self->{'mtime'} = [
-	(stat("$self->{'dir'}/config"))[9],
-	(stat("$self->{'dir'}/subscribers"))[9],
-	(stat("$self->{'dir'}/stats"))[9]
+	(stat($self->dir . '/config'))[9],
+	(stat($self->dir . '/subscribers'))[9],
+	(stat($self->dir . '/stats'))[9]
     ];
 
     return 1;
@@ -2725,17 +2721,15 @@ sub dump {
 
 ## Saves the configuration file to disk
 sub save_config {
+    &Log::do_log('debug3', '(%s, %s)', @_);
     my ($self, $email) = @_;
-    &Log::do_log('debug3', 'List::save_config(%s,%s)', $self->{'name'},
-	$email);
 
-    return undef
-	unless ($self);
+    return undef unless $self;
 
-    my $config_file_name = "$self->{'dir'}/config";
+    my $config_file_name = $self->dir . '/config';
 
     ## Lock file
-    my $lock = new Lock($self->{'dir'} . '/config');
+    my $lock = new Lock($self->dir . '/config');
     unless (defined $lock) {
 	&Log::do_log('err', 'Could not create new lock');
 	return undef;
@@ -2745,21 +2739,21 @@ sub save_config {
 	return undef;
     }
 
-    my $name                 = $self->{'name'};
-    my $old_serial           = $self->{'admin'}{'serial'};
-    my $old_config_file_name = "$self->{'dir'}/config.$old_serial";
+    my $name                 = $self->name;
+    my $old_serial           = $self->serial;
+    my $old_config_file_name = $self->dir . "/config.$old_serial";
 
     ## Update management info
-    $self->{'admin'}{'serial'}++;
-    $self->{'admin'}{'update'} = {
+    $self->serial($self->serial + 1);
+    $self->update({
 	'email'      => $email,
 	'date_epoch' => time,
 	'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
-    };
+    });
 
     unless (
 	&_save_list_config_file(
-	    $config_file_name, $old_config_file_name, $self->{'admin'}
+	    $config_file_name, $old_config_file_name, $self->admin
 	)
 	) {
 	&Log::do_log('info', 'unable to save config file %s',
@@ -2785,14 +2779,12 @@ sub load {
 
     my ($self, $name, $robot, $options) = @_;
 
-    ## Compatibility: robot may be either object or name of robot.
-    unless (ref $robot) {
-	unless (defined $robot and length $robot and $robot ne '*') {
-	    ## Look for the list if no robot was provided
-	    $robot = &search_list_among_robots($name);
-	}
-	$robot = Robot->new($robot);
+    unless ($robot) {
+	## Look for the list if no robot was provided
+	$robot = &search_list_among_robots($name);
     }
+
+    $robot = Robot::clean_robot($robot);
     unless (ref $robot) {
 	&Log::do_log('err', 'Unknown robot');
 	return undef;
@@ -3025,14 +3017,14 @@ sub get_editors_email {
 ## return the config_changes hash
 ## Used ONLY with lists belonging to a family.
 sub get_config_changes {
+    &Log::do_log('debug3', '(%s)', @_);
     my $self = shift;
-    &Log::do_log('debug3', 'List::get_config_changes(%s)', $self->{'name'});
 
-    unless ($self->{'admin'}{'family_name'}) {
+    unless ($self->family_name) {
 	&Log::do_log(
 	    'err',
-	    'List::get_config_changes(%s) is called but there is no family_name for this list.',
-	    $self->{'name'}
+	    'there is no family_name for this list %s.',
+	    $self
 	);
 	return undef;
     }
@@ -3063,12 +3055,11 @@ sub update_config_changes {
     &Log::do_log('debug2', 'List::update_config_changes(%s,%s)',
 	$self->{'name'}, $what);
 
-    unless ($self->{'admin'}{'family_name'}) {
+    unless ($self->family_name) {
 	&Log::do_log(
 	    'err',
-	    'List::update_config_changes(%s,%s,%s) is called but there is no family_name for this list.',
-	    $self->{'name'},
-	    $what
+	    'there is no family_name for this list %s.',
+	    $self
 	);
 	return undef;
     }
@@ -3162,15 +3153,15 @@ sub _save_config_changes_file {
     my $self = shift;
     ##&Log::do_log('debug3', 'List::_save_config_changes_file(%s)', $self->{'name'});
 
-    unless ($self->{'admin'}{'family_name'}) {
+    unless ($self->family_name) {
 	&Log::do_log(
 	    'err',
-	    'List::_save_config_changes_file(%s) is called but there is no family_name for this list.',
-	    $self->{'name'}
+	    'there is no family_name for this list %s.',
+	    $self
 	);
 	return undef;
     }
-    unless (open(FILE, ">$self->{'dir'}/config_changes")) {
+    unless (open(FILE, '>', $self->dir . '/config_changes')) {
 	&Log::do_log(
 	    'err',
 	    'List::_save_config_changes_file(%s) : unable to create file %s/config_changes : %s',
@@ -3224,7 +3215,7 @@ sub _get_param_value_anywhere {
     return \@values;
 }
 
-## Returns the list parameter value from $list->{'admin'}
+## Returns the list parameter value from $list
 #  the parameter is simple ($param) or composed ($param & $minor_param)
 #  the value is a scalar or a ref on an array of scalar
 # (for parameter digest : only for days)
@@ -3242,16 +3233,16 @@ sub get_param_value {
     }
 
     ## Multiple parameter (owner, custom_header, ...)
-    if ((ref($self->{'admin'}{$param}) eq 'ARRAY') &&
+    if ((ref($self->$param) eq 'ARRAY') &&
 	!$::pinfo{$param}{'split_char'}) {
 	my @values;
-	foreach my $elt (@{$self->{'admin'}{$param}}) {
+	foreach my $elt (@{$self->$param}) {
 	    push @values,
 		&_get_single_param_value($elt, $param, $minor_param);
 	}
 	$value = \@values;
     } else {
-	$value = &_get_single_param_value($self->{'admin'}{$param},
+	$value = &_get_single_param_value($self->$param,
 	    $param, $minor_param);
     }
     return $value;
@@ -3359,7 +3350,7 @@ sub distribute_msg {
 
     ## Hide the sender if the list is anonymoused
     if ($self->anonymous_sender) {
-	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
+	foreach my $field (@{Site->anonymous_header_fields || []}) {
 	    $hdr->delete($field);
 	}
 	$hdr->add('From', $self->anonymous_sender);
@@ -3605,15 +3596,14 @@ sub send_msg_digest {
     my $message_in_spool = $digestspool->next({'messagekey' => $messagekey});
 
     my $listname = $self->{'name'};
-    my $robot    = $self->{'domain'};
     &Log::do_log('debug2', 'List:send_msg_digest(%s)', $listname);
 
     my $param = {
 	'replyto'          => $self->get_list_address('owner'),
 	'to'               => $self->get_list_address(),
 	'table_of_content' => sprintf(gettext("Table of contents:")),
-	'boundary1'        => '----------=_' . &tools::get_message_id($robot),
-	'boundary2'        => '----------=_' . &tools::get_message_id($robot),
+	'boundary1'        => '----------=_' . &tools::get_message_id($self->robot),
+	'boundary2'        => '----------=_' . &tools::get_message_id($self->robot),
     };
     if ($self->get_reply_to() =~ /^list$/io) {
 	$param->{'replyto'} = "$param->{'to'}";
@@ -3676,7 +3666,7 @@ sub send_msg_digest {
 	$parser->extract_uuencode(1);
 	$parser->extract_nested_messages(1);
 
-	#   $parser->output_dir($Conf::Conf{'spool'} ."/tmp");
+	#   $parser->output_dir(Site->spool ."/tmp");
 	my $mail = $parser->parse_data($message_as_string);
 	next unless (defined $mail);
 	push @list_of_mail, $mail;
@@ -3730,7 +3720,7 @@ sub send_msg_digest {
     ## Split messages into groups of digest_max_size size
     my @group_of_msg;
     while (@all_msg) {
-	my @group = splice @all_msg, 0, $self->{'admin'}{'digest_max_size'};
+	my @group = splice @all_msg, 0, $self->digest_max_size;
 
 	push @group_of_msg, \@group;
     }
@@ -3818,9 +3808,8 @@ See L<Site/send_dsn>.
 # OUT : 1 | undef
 #
 ####################################################
-sub send_global_file {
-    croak 'DEPRECATED: Use $list->robot->send_file() or Site->send_file()';
-}
+##sub send_global_file {
+## DEPRECATED: Use $list->robot->send_file() or Site->send_file().
 
 ####################################################
 # send_file
@@ -4012,9 +4001,9 @@ sub send_msg {
 		}
 	    } elsif (
 		$message->{'smime_crypted'} &&
-		(!-r $Conf::Conf{'ssl_cert_dir'} . '/' .
+		(!-r Site->ssl_cert_dir . '/' .
 		    &tools::escape_chars($user->{'email'}) &&
-		    !-r $Conf::Conf{'ssl_cert_dir'} . '/' .
+		    !-r Site->ssl_cert_dir . '/' .
 		    &tools::escape_chars($user->{'email'} . '@enc'))
 		) {
 		## Missing User certificate
@@ -4228,7 +4217,7 @@ sub send_msg {
 	    foreach my $part ($url_msg->parts()) {
 		my $entity =
 		    &_urlize_part($part, $self, $dir1, $i, $mime_types,
-		    &Conf::get_robot_conf($robot, 'wwsympa_url'));
+		    $self->robot->wwsympa_url);
 		if (defined $entity) {
 		    push @parts, $entity;
 		} else {
@@ -4376,12 +4365,12 @@ sub send_to_editor {
     );
 
     my ($i, @rcpt);
-    my $admin = $self->{'admin'};
-    my $name  = $self->{'name'};
-    my $host  = $admin->{'host'};
-    my $robot = $self->{'domain'};
+    my $admin = $self->admin;
+    my $name  = $self->name;
+    my $host  = $self->host;
+    my $robot = $self->domain;
 
-    return unless ($name && $admin);
+    return unless $name and $admin;
 
     my @now = localtime(time);
     my $messageid =
@@ -4407,7 +4396,7 @@ sub send_to_editor {
 
 	# prepare html view of this message
 	my $destination_dir =
-	    $Conf::Conf{'viewmail_dir'} . '/mod/' . $self->get_list_id() .
+	    Site->viewmail_dir . '/mod/' . $self->get_list_id() .
 	    '/' . $modkey;
 	&Archive::convert_single_msg_2_html(
 	    {   'msg_as_string'   => $message->{'msg_as_string'},
@@ -4540,12 +4529,12 @@ sub send_auth {
     sleep(1);
 
     my ($i, @rcpt);
-    my $admin     = $self->{'admin'};
-    my $name      = $self->{'name'};
-    my $host      = $admin->{'host'};
-    my $robot     = $self->{'domain'};
-    my $authqueue = $Conf::Conf{'queueauth'};
-    return undef unless ($name && $admin);
+    my $admin     = $self->admin;
+    my $name      = $self->name;
+    my $host      = $self->host;
+    my $robot     = $self->domain;
+    my $authqueue = Site->queueauth;
+    return undef unless $name and $admin;
 
     my @now = localtime(time);
     my $messageid =
@@ -4620,9 +4609,7 @@ sub archive_send {
 
     return unless ($self->is_archived());
 
-    my $dir =
-	&Conf::get_robot_conf($self->{'domain'}, 'arc_path') . '/' .
-	$self->get_list_id();
+    my $dir = $self->robot->arc_path . '/' . $self->get_id;
     my $msg_list = Archive::scan_dir_archive($dir, $file);
 
     my $subject = 'File ' . $self->{'name'} . ' ' . $file;
@@ -4632,9 +4619,9 @@ sub archive_send {
 	'msg_list' => $msg_list
     };
 
-    $param->{'boundary1'} = &tools::get_message_id($self->{'domain'});
-    $param->{'boundary2'} = &tools::get_message_id($self->{'domain'});
-    $param->{'from'}      = &Conf::get_robot_conf($self->{'domain'}, 'sympa');
+    $param->{'boundary1'} = &tools::get_message_id($self->robot);
+    $param->{'boundary2'} = &tools::get_message_id($self->robot);
+    $param->{'from'}      = $self->robot->sympa;
 
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
     $param->{'auto_submitted'} = 'auto-replied';
@@ -4691,9 +4678,9 @@ sub archive_send_last {
 	'msg_list' => \@msglist
     };
 
-    $param->{'boundary1'} = &tools::get_message_id($self->{'domain'});
-    $param->{'boundary2'} = &tools::get_message_id($self->{'domain'});
-    $param->{'from'}      = &Conf::get_robot_conf($self->{'domain'}, 'sympa');
+    $param->{'boundary1'} = &tools::get_message_id($self->robot);
+    $param->{'boundary2'} = &tools::get_message_id($self->robot);
+    $param->{'from'}      = $self->robot->sympa;
     $param->{'auto_submitted'} = 'auto-replied';
 
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
@@ -4745,9 +4732,9 @@ sub send_notify_to_owner {
     &Log::do_log('debug2', 'List::send_notify_to_owner(%s, %s)',
 	$self->{'name'}, $operation);
 
-    my $host  = $self->{'admin'}{'host'};
+    my $host  = $self->host;
     my @to    = $self->get_owners_email();
-    my $robot = $self->{'domain'};
+    my $robot = $self->domain;
 
     unless (@to) {
 	&Log::do_log(
@@ -4755,7 +4742,7 @@ sub send_notify_to_owner {
 	    'No owner defined or all of them use nomail option in list %s ; using listmasters as default',
 	    $self->{'name'}
 	);
-	@to = split /,/, &Conf::get_robot_conf($robot, 'listmaster');
+	@to = split /,/, $self->robot->listmaster;
     }
     unless (defined $operation) {
 	&Log::do_log(
@@ -4819,8 +4806,7 @@ sub send_notify_to_owner {
 	    if ($operation eq 'sigrequest') {
 		$param->{'escaped_who'} = $param->{'who'};
 		$param->{'escaped_who'} =~ s/\s/\%20/g;
-		$param->{'sympa'} =
-		    &Conf::get_robot_conf($self->{'domain'}, 'sympa');
+		$param->{'sympa'} = $self->robot->sympa;
 
 	    } elsif ($operation eq 'bounce_rate') {
 		$param->{'rate'} = int($param->{'rate'} * 10) / 10;
@@ -4876,9 +4862,8 @@ sub delete_list_member_picture {
     my $fullfilename = undef;
     my $filename     = &tools::md5_fingerprint($email);
 
-    my $file =
-	&Conf::get_robot_conf($self->domain, 'pictures_path') . '/' .
-	$self->get_list_id() . '/' . $filename;
+    my $file = $self->robot->pictures_path . '/' .
+	$self->get_id . '/' . $filename;
     foreach my $ext ('.gif', '.jpg', '.jpeg', '.png') {
 	if (-f $file . $ext) {
 	    $fullfilename = $file . $ext;
@@ -5000,8 +4985,8 @@ sub send_notify_to_user {
     &Log::do_log('debug2', 'List::send_notify_to_user(%s, %s, %s)',
 	$self->{'name'}, $operation, $user);
 
-    my $host  = $self->{'admin'}->{'host'};
-    my $robot = $self->{'domain'};
+    my $host  = $self->host;
+    my $robot = $self->domain;
     $param->{'auto_submitted'} = 'auto-generated';
 
     unless (defined $operation) {
@@ -5104,8 +5089,8 @@ See L<Site/make_tt2_include_path>.
 sub add_parts {
     my ($self, $msg) = @_;
     my ($listname, $type) =
-	($self->{'name'}, $self->{'admin'}{'footer_type'});
-    my $listdir = $self->{'dir'};
+	($self->name, $self->footer_type);
+    my $listdir = $self->dir;
     &Log::do_log('debug2', 'List:add_parts(%s, %s, %s)',
 	$msg, $listname, $type);
 
@@ -5113,8 +5098,8 @@ sub add_parts {
     foreach my $file (
 	"$listdir/message.header",
 	"$listdir/message.header.mime",
-	"$Conf::Conf{'etc'}/mail_tt2/message.header",
-	"$Conf::Conf{'etc'}/mail_tt2/message.header.mime"
+	Site->etc . '/mail_tt2/message.header',
+	Site->etc . '/mail_tt2/message.header.mime'
 	) {
 	if (-f $file) {
 	    unless (-r $file) {
@@ -5130,8 +5115,8 @@ sub add_parts {
     foreach my $file (
 	"$listdir/message.footer",
 	"$listdir/message.footer.mime",
-	"$Conf::Conf{'etc'}/mail_tt2/message.footer",
-	"$Conf::Conf{'etc'}/mail_tt2/message.footer.mime"
+	Site->etc . '/mail_tt2/message.footer',
+	Site->etc . '/mail_tt2/message.footer.mime'
 	) {
 	if (-f $file) {
 	    unless (-r $file) {
@@ -5426,9 +5411,8 @@ sub delete_all_list_admin {
 }
 
 ## Returns the cookie for a list, if any.
-sub get_cookie {
-    return shift->{'admin'}{'cookie'};
-}
+##sub get_cookie {
+##DEPRECATED: use $list->cookie().
 
 ## Returns the maximum size allowed for a message to the list.
 sub get_max_size {
@@ -5437,12 +5421,10 @@ sub get_max_size {
 
 ## Returns an array with the Reply-To data
 sub get_reply_to {
-    my $admin = shift->{'admin'};
-
-    my $value = $admin->{'reply_to_header'}{'value'};
-
-    $value = $admin->{'reply_to_header'}{'other_email'}
-	if ($value eq 'other_email');
+    my $self = shift;
+    my $value = $self->reply_to_header->{'value'};
+    $value = $self->reply_to_header->{'other_email'}
+	if $value eq 'other_email';
 
     return $value;
 }
@@ -5972,8 +5954,8 @@ sub find_list_member_by_pattern_no_object {
 
 sub _list_member_cols {
     my $additional = '';
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ', ' . $Conf::Conf{'db_additional_subscriber_fields'};
+    if (Site->db_additional_subscriber_fields) {
+	$additional = ', ' . Site->db_additional_subscriber_fields;
     }
     return
 	sprintf
@@ -6100,7 +6082,7 @@ sub get_first_list_member {
 	    if (!$user->{'email'});
 	$user->{'reception'} ||= 'mail';
 	$user->{'reception'} =
-	    $self->{'admin'}{'default_user_options'}{'reception'}
+	    $self->default_user_options->{'reception'}
 	    unless ($self->is_available_reception_mode($user->{'reception'}));
 	$user->{'update_date'} ||= $user->{'date'};
 
@@ -6321,7 +6303,7 @@ sub get_next_list_member {
 	$user->{'reception'} ||= 'mail';
 	unless ($self->is_available_reception_mode($user->{'reception'})) {
 	    $user->{'reception'} =
-		$self->{'admin'}{'default_user_options'}{'reception'};
+		$self->default_user_options->{'reception'};
 	}
 	$user->{'update_date'} ||= $user->{'date'};
 
@@ -6619,33 +6601,33 @@ sub update_list_member {
     );
 
     ## additional DB fields
-    if (defined $Conf::Conf{'db_additional_subscriber_fields'}) {
+    if (defined Site->db_additional_subscriber_fields) {
 	foreach
-	    my $f (split ',', $Conf::Conf{'db_additional_subscriber_fields'})
+	    my $f (split ',', Site->db_additional_subscriber_fields)
 	{
 	    $map_table{$f} = 'subscriber_table';
 	    $map_field{$f} = $f;
 	}
     }
 
-    if (defined $Conf::Conf{'db_additional_user_fields'}) {
-	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
+    if (defined Site->db_additional_user_fields) {
+	foreach my $f (split ',', Site->db_additional_user_fields) {
 	    $map_table{$f} = 'user_table';
 	    $map_field{$f} = $f;
 	}
     }
 
-    &Log::do_log('debug2',
-	" custom_attribute id: $Conf::Conf{'custom_attribute'}");
-    ## custom attributes
-    if (defined $Conf::Conf{'custom_attribute'}) {
-	foreach my $f (sort keys %{$Conf::Conf{'custom_attribute'}}) {
-	    &Log::do_log('debug2',
-		"custom_attribute id: $Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} "
-	    );
-
-	}
-    }
+##    &Log::do_log('debug2',
+##	'custom_attribute id: %s', Site->custom_attribute);
+##    ## custom attributes
+##    if (defined Site->custom_attribute) {
+##	foreach my $f (sort keys %{Site->custom_attribute}) {
+##	    &Log::do_log('debug2',
+##		"custom_attribute id: Site->custom_attribute->{id} name: Site->custom_attribute->{name} type: Site->custom_attribute->{type} "
+##	    );
+##
+##	}
+##    }
 
     ## Update each table
     foreach $table ('user_table', 'subscriber_table') {
@@ -6662,7 +6644,7 @@ sub update_list_member {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = &SDM::get_canonical_write_date($value);
 		} elsif ($value eq 'NULL') {    ## get_null_value?
-		    if ($Conf::Conf{'db_type'} eq 'mysql') {
+		    if (Site->db_type eq 'mysql') {
 			$value = '\N';
 		    }
 		} else {
@@ -6742,8 +6724,7 @@ sub update_list_member {
     if ($values->{'email'}) {
 	my $file_name = &tools::md5_fingerprint($who);
 	my $picture_file_path =
-	    &Conf::get_robot_conf($self->domain, 'pictures_path') . '/' .
-	    $self->get_list_id();
+	    $self->robot->pictures_path . '/' . $self->get_id;
 
 	foreach my $extension ('gif', 'png', 'jpg', 'jpeg') {
 	    if (-f $picture_file_path . '/' . $file_name . '.' . $extension) {
@@ -6822,8 +6803,8 @@ sub update_list_admin {
     );
 #### ??
     ## additional DB fields
-    #    if (defined $Conf::Conf{'db_additional_user_fields'}) {
-    #	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
+    #    if (defined Site->db_additional_user_fields) {
+    #	foreach my $f (split ',', Site->db_additional_user_fields) {
     #	    $map_table{$f} = 'user_table';
     #	    $map_field{$f} = $f;
     #	}
@@ -6844,7 +6825,7 @@ sub update_list_admin {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = &SDM::get_canonical_write_date($value);
 		} elsif ($value eq 'NULL') {    #get_null_value?
-		    if ($Conf::Conf{'db_type'} eq 'mysql') {
+		    if (Site->db_type eq 'mysql') {
 			$value = '\N';
 		    }
 		} else {
@@ -6960,15 +6941,14 @@ sub add_list_member {
     foreach my $new_user (@new_users) {
 	my $who = &tools::clean_email($new_user->{'email'});
 	next unless $who;
-	unless ($current_list_members_count <
-	    $self->{'admin'}{'max_list_members'} ||
-	    $self->{'admin'}{'max_list_members'} == 0) {
+	unless ($current_list_members_count < $self->max_list_members or
+	    $self->max_list_members == 0) {
 	    $self->{'add_outcome'}{'errors'}{'max_list_members_exceeded'} = 1;
 	    &Log::do_log(
 		'notice',
 		'Subscription of user %s failed: max number of subscribers (%s) reached',
 		$new_user->{'email'},
-		$self->{'admin'}{'max_list_members'}
+		$self->max_list_members
 	    );
 	    last;
 	}
@@ -7088,7 +7068,7 @@ sub _create_add_error_string {
     if ($self->{'add_outcome'}{'errors'}{'max_list_members_exceeded'}) {
 	$self->{'add_outcome'}{'errors'}{'error_message'} .= sprintf &gettext(
 	    'Attempt to exceed the max number of members (%s) for this list.'
-	), $self->{'admin'}{'max_list_members'};
+	), $self->max_list_members;
     }
     if ($self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'}) {
 	$self->{'add_outcome'}{'error_message'} .=
@@ -7206,7 +7186,7 @@ sub am_i {
 	## Listmaster has all privileges except editor
 	# sa contestable.
 	if (($function eq 'owner' || $function eq 'privileged_owner') and
-	    &is_listmaster($who, $self->domain)) {
+	    $self->robot->is_listmaster($who)) {
 
 	    #$self->user('owner', $who, { 'profile' => 'privileged' });
 	    return 1;
@@ -7289,7 +7269,7 @@ sub may_edit {
     }
 
     ## What privilege?
-    if (&is_listmaster($who, $self->{'domain'})) {
+    if ($self->robot->is_listmaster($who)) {
 	$role = 'listmaster';
     } elsif ($self->am_i('privileged_owner', $who)) {
 	$role = 'privileged_owner';
@@ -7344,7 +7324,7 @@ sub may_create_parameter {
     &Log::do_log('debug3', 'List::may_create_parameter(%s, %s, %s)',
 	$parameter, $who, $robot);
 
-    if (&is_listmaster($who, $robot)) {
+    if ($self->robot->is_listmaster($who)) {
 	return 1;
     }
     my $edit_conf = &tools::load_edit_list_conf($self);
@@ -7374,8 +7354,8 @@ sub may_do {
 
     ## Just in case.
     return undef unless ($self && $action);
-    my $admin = $self->{'admin'};
-    return undef unless ($admin);
+    my $admin = $self->admin;
+    return undef unless $admin;
 
     $action =~ y/A-Z/a-z/;
     $who    =~ y/A-Z/a-z/;
@@ -7461,9 +7441,7 @@ sub archive_exist {
     &Log::do_log('debug', 'List::archive_exist (%s)', $file);
 
     return undef unless ($self->is_archived());
-    my $dir =
-	&Conf::get_robot_conf($self->{'domain'}, 'arc_path') . '/' .
-	$self->get_list_id();
+    my $dir = $self->robot->arc_path . '/' . $self->get_id;
     Archive::exist($dir, $file);
 
 }
@@ -7473,9 +7451,7 @@ sub archive_ls {
     my $self = shift;
     &Log::do_log('debug2', 'List::archive_ls');
 
-    my $dir =
-	&Conf::get_robot_conf($self->{'domain'}, 'arc_path') . '/' .
-	$self->get_list_id();
+    my $dir = $self->robot->arc_path . '/' . $self->get_id;
 
     Archive::list($dir) if ($self->is_archived());
 }
@@ -7495,7 +7471,7 @@ sub archive_msg {
 
 	#	Archive::store_last($self, $msgtostore) ;
 
-	if (($Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') &&
+	if ((Site->ignore_x_no_archive_header_feature ne 'on') &&
 	    (   ($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) ||
 		($message->{'msg'}->head->get('Restrict') =~
 		    /no\-external\-archive/i)
@@ -7556,11 +7532,11 @@ sub get_nextdigest {
     my $date = shift;    # the date epoch as stored in the spool database
 
     &Log::do_log('debug3', 'List::get_nextdigest (list = %s)',
-	$self->{'name'});
+	$self);
 
-    my $digest = $self->{'admin'}{'digest'};
+    my $digest = $self->digest;
 
-    unless ($digest) {
+    unless ($digest and scalar keys %$digest) {
 	return undef;
     }
 
@@ -7607,8 +7583,8 @@ sub load_scenario_list {
 
     foreach my $dir (
 	"$directory/scenari",
-	"$Conf::Conf{'etc'}/$robot/scenari",
-	"$Conf::Conf{'etc'}/scenari",
+	Site->etc . "/$robot/scenari",
+	Site->etc . "/scenari",
 	Sympa::Constants::DEFAULTDIR . '/scenari'
 	) {
 	next unless (-d $dir);
@@ -7667,8 +7643,8 @@ sub load_task_list {
 
     foreach my $dir (
 	"$directory/list_task_models",
-	"$Conf::Conf{'etc'}/$robot/list_task_models",
-	"$Conf::Conf{'etc'}/list_task_models",
+	Site->etc . "/$robot/list_task_models",
+	Site->etc . "/list_task_models",
 	Sympa::Constants::DEFAULTDIR . '/list_task_models'
 	) {
 
@@ -7736,8 +7712,8 @@ sub load_data_sources_list {
 
     foreach my $dir (
 	"$directory/data_sources",
-	"$Conf::Conf{'etc'}/$robot/data_sources",
-	"$Conf::Conf{'etc'}/data_sources",
+	Site->etc . "/$robot/data_sources",
+	Site->etc . "/data_sources",
 	Sympa::Constants::DEFAULTDIR . '/data_sources'
 	) {
 
@@ -7895,9 +7871,9 @@ sub _include_users_remote_sympa_list {
 	    $host, $port, $path,
 	    $cert_file,
 	    $key_file,
-	    {   'key_passwd' => $Conf::Conf{'key_passwd'},
-		'cafile'     => $Conf::Conf{'cafile'},
-		'capath'     => $Conf::Conf{'capath'}
+	    {   'key_passwd' => Site->key_passwd,
+		'cafile'     => Site->cafile,
+		'capath'     => Site->capath
 	    }
 	)
 	) {
@@ -8919,7 +8895,7 @@ sub _load_list_members_from_include {
     my $name     = $self->name;
     my $admin    = $self->admin;
     my $dir      = $self->dir;
-    &Log::do_log('debug2', 'Loading included users for list %s',$list);
+    &Log::do_log('debug2', 'Loading included users for list %s', $self);
     my (%users, $depend_on, $ref);
     my $total = 0;
     my @errors;
@@ -9677,7 +9653,7 @@ sub sync_include {
 	    foreach my $e (@errors) {
 		next unless ($e->{'type'} eq 'include_voot_group');
 		my $cfg = undef;
-		foreach my $p (@{$self->{'admin'}{'include_voot_group'}}) {
+		foreach my $p (@{$self->include_voot_group}) {
 		    $cfg = $p if ($p->{'name'} eq $e->{'name'});
 		}
 		next unless (defined $cfg);
@@ -9822,8 +9798,7 @@ sub sync_include {
 		if ($user_removed) {
 		    $users_removed++;
 		    ## Send notification if the list config authorizes it only.
-		    if ($self->{'admin'}{'inclusion_notification_feature'} eq
-			'on') {
+		    if ($self->inclusion_notification_feature eq 'on') {
 			unless ($self->send_file('removed', $email)) {
 			    &Log::do_log('err',
 				"Unable to send template 'removed' to $email"
@@ -9941,8 +9916,7 @@ sub sync_include {
 	    if ($user_added) {
 		$users_added++;
 		## Send notification if the list config authorizes it only.
-		if ($self->{'admin'}{'inclusion_notification_feature'} eq
-		    'on') {
+		if ($self->inclusion_notification_feature eq 'on') {
 		    unless ($self->send_file('welcome', $u->{'email'})) {
 			&Log::do_log('err',
 			    "Unable to send template 'welcome' to $u->{'email'}"
@@ -9984,8 +9958,7 @@ sub on_the_fly_sync_include {
     my $self    = shift;
     my %options = @_;
 
-    my $pertinent_ttl = $self->{'admin'}{'distribution_ttl'} ||
-	$self->{'admin'}{'ttl'};
+    my $pertinent_ttl = $self->distribution_ttl || $self->ttl;
     &Log::do_log('debug2', 'List::on_the_fly_sync_include(%s)',
 	$pertinent_ttl);
     if ($options{'use_ttl'} != 1 ||
@@ -10335,7 +10308,8 @@ sub _load_list_admin_from_config {
 
     &Log::do_log('debug2', '(%s) for list %s', $role, $name);
 
-    foreach my $entry (@{$self->{'admin'}{$role}}) {
+    ##FIXME: check $role argument
+    foreach my $entry (@{$self->$role}) {
 	my $email = lc($entry->{'email'});
 	my %u;
 
@@ -10940,10 +10914,10 @@ sub get_lists {
 	}
 
 	## check existence of robot directory
-	my $robot_dir = $Conf::Conf{'home'} . '/' . $robot;
-	$robot_dir = $Conf::Conf{'home'}
+	my $robot_dir = Site->home . '/' . $robot;
+	$robot_dir = Site->home
 	    unless -d $robot_dir or
-		$robot ne $Conf::Conf{'domain'};
+		$robot ne Site->domain;
 	unless (-d $robot_dir) {
 	    &Log::do_log('err', 'unknown robot %s, Unable to open %s',
 		$robot, $robot_dir);
@@ -11186,6 +11160,7 @@ sub get_robots {
 }
 
 ## get idp xref to locally validated email address
+## OBSOLETING: Use $robot->get_netidtoemail_db();
 sub get_netidtoemail_db {
     my $robot   = shift;
     my $netid   = shift;
@@ -11225,6 +11200,7 @@ sub get_netidtoemail_db {
 }
 
 ## set idp xref to locally validated email address
+## OBSOLETING: Use $robot->set_netidtoemail_db().
 sub set_netidtoemail_db {
     my $robot   = shift;
     my $netid   = shift;
@@ -11259,6 +11235,7 @@ sub set_netidtoemail_db {
 }
 
 ## Update netidmap table when user email address changes
+#OBSOLETING: Use $robot->update_email_netidmap_db().
 sub update_email_netidmap_db {
     my ($robot, $old_email, $new_email) = @_;
 
@@ -11305,20 +11282,13 @@ function to any list in ROBOT.
 sub get_which {
     &Log::do_log('debug2', '(%s, %s, %s)', @_);
     my $email = &tools::clean_email(shift);
-    my $robot = shift;
+    my $robot = Robot::clean_robot(shift);
     my $role  = shift;
 
     unless ($role eq 'member' or $role eq 'owner' or $role eq 'editor') {
 	&Log::do_log('err',
 	    'Internal error, unknown or undefined parameter "%s"', $role);
 	return undef;
-    }
-
-    ## Compatibility: $robot may be a string
-    unless (ref $robot) {
-	if ($robot and $robot ne '*') {
-	    $robot = Robot->new($robot);
-	}
     }
 
     my $all_lists = &get_lists(
@@ -11486,14 +11456,7 @@ sub lowercase_field {
 ## NOTE: this might be moved to Site package.
 sub load_topics {
     &Log::do_log('debug2', '(%s)', @_);
-    my $robot = shift;
-
-    ## Compatibility: $robot argument may be a string
-    unless (ref $robot) {
-	if ($robot and $robot ne '*') {
-	    $robot = Robot->new($robot);
-	}
-    }
+    my $robot = Robot::clean_robot(shift);
 
     my $conf_file = $robot->get_etc_filename('topics.conf');
 
@@ -11525,7 +11488,7 @@ sub load_topics {
 	my $index = 0;
 	my (@raugh_data, $topic);
 	while (<FILE>) {
-	    Encode::from_to($_, $Conf::Conf{'filesystem_encoding'}, 'utf8');
+	    Encode::from_to($_, Site->filesystem_encoding, 'utf8');
 	    if (/^([\-\w\/]+)\s*$/) {
 		$index++;
 		$topic = {
@@ -11555,7 +11518,7 @@ sub load_topics {
 
 	unless ($#raugh_data > -1) {
 	    &Log::do_log('notice', 'No topic defined in %s/topics.conf',
-		$Conf::Conf{'etc'});
+		Site->etc);
 	    return undef;
 	}
 
@@ -11948,9 +11911,9 @@ sub get_cert {
 	close CERT;
     } elsif ($format eq 'der') {
 	unless (open CERT,
-	    "$Conf::Conf{'openssl'} x509 -in $certs -outform DER|") {
+	    Site->openssl . " x509 -in $certs -outform DER|") {
 	    &Log::do_log('err',
-		"$Conf::Conf{'openssl'} x509 -in $certs -outform DER|");
+		Site->openssl . " x509 -in $certs -outform DER|");
 	    &Log::do_log('err',
 		"List::get_cert(): Unable to open get $certs in DER format: $!"
 	    );
@@ -12397,8 +12360,7 @@ sub is_available_reception_mode {
 
     return undef unless ($self && $mode);
 
-    my @available_mode =
-	@{$self->{'admin'}{'available_user_options'}{'reception'}};
+    my @available_mode = @{$self->available_user_options->{'reception'}};
 
     foreach my $m (@available_mode) {
 	if ($m eq $mode) {
@@ -12412,9 +12374,7 @@ sub is_available_reception_mode {
 # List the parameter reception of the available_user_options section
 sub available_reception_mode {
     my $self = shift;
-
-    return
-	join(' ', @{$self->{'admin'}{'available_user_options'}{'reception'}});
+    return join(' ', @{$self->available_user_options->{'reception'}});
 }
 
 ########################################################################################
@@ -12435,12 +12395,8 @@ sub available_reception_mode {
 sub is_there_msg_topic {
     my ($self) = shift;
 
-    if (defined $self->{'admin'}{'msg_topic'}) {
-	if (ref($self->{'admin'}{'msg_topic'}) eq "ARRAY") {
-	    if ($#{$self->{'admin'}{'msg_topic'}} >= 0) {
-		return 1;
-	    }
-	}
+    if (scalar @{$self->msg_topic}) {
+	return 1;
     }
     return 0;
 }
@@ -12458,10 +12414,9 @@ sub is_there_msg_topic {
 sub is_available_msg_topic {
     my ($self, $topic) = @_;
 
-    my @available_msg_topic;
-    foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
+    foreach my $msg_topic (@{$self->msg_topic}) {
 	return $topic
-	    if ($msg_topic->{'name'} eq $topic);
+	    if $msg_topic->{'name'} eq $topic;
     }
 
     return undef;
@@ -12477,10 +12432,10 @@ sub is_available_msg_topic {
 # OUT : -\@topics : ref(ARRAY)
 ####################################################
 sub get_available_msg_topic {
-    my ($self) = @_;
+    my $self = shift;
 
     my @topics;
-    foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
+    foreach my $msg_topic (@{$self->msg_topic}) {
 	if ($msg_topic->{'name'}) {
 	    push @topics, $msg_topic->{'name'};
 	}
@@ -12501,9 +12456,9 @@ sub get_available_msg_topic {
 #       | 0 - the msg can be no tagged
 ####################################################
 sub is_msg_topic_tagging_required {
-    my ($self) = @_;
+    my $self = shift;
 
-    if ($self->{'admin'}{'msg_topic_tagging'} =~ /required/) {
+    if ($self->msg_topic_tagging =~ /required/) {
 	return 1;
     } else {
 	return 0;
@@ -12578,7 +12533,7 @@ sub compute_topic {
 
     ## TAGGING BY KEYWORDS
     # getting keywords
-    foreach my $topic (@{$self->{'admin'}{'msg_topic'}}) {
+    foreach my $topic (@{$self->msg_topic}) {
 
 	my $list_keyw =
 	    &tools::get_array_from_splitted_string($topic->{'keywords'});
@@ -12591,12 +12546,12 @@ sub compute_topic {
     # getting string to parse
     # We convert it to Unicode for case-ignore match with non-ASCII keywords.
     my $mail_string = '';
-    if ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject') {
+    if ($self->msg_topic_keywords_apply_on eq 'subject') {
 	$mail_string =
 	    Encode::decode_utf8(&tools::decode_header($msg, 'Subject')) .
 	    "\n";
     }
-    unless ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject') {
+    unless ($self->msg_topic_keywords_apply_on eq 'subject') {
 
 	# get bodies of any text/* parts, not digging nested subparts.
 	my @parts;
@@ -12776,7 +12731,7 @@ sub modifying_msg_topic_for_list_members() {
     my $deleted = 0;
 
     my @old_msg_topic_name;
-    foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
+    foreach my $msg_topic (@{$self->msg_topic}) {
 	push @old_msg_topic_name, $msg_topic->{'name'};
     }
 
@@ -12805,9 +12760,7 @@ sub modifying_msg_topic_for_list_members() {
 		);
 
 		if ($#{$topics->{'intersection'}} >= 0) {
-		    my $wwsympa_url =
-			&Conf::get_robot_conf($self->{'domain'},
-			'wwsympa_url');
+		    my $wwsympa_url = $self->robot->wwsympa_url;
 		    unless (
 			$self->send_notify_to_user(
 			    'deleted_msg_topics',
@@ -12983,7 +12936,7 @@ sub _urlize_part {
     my $size = (-s $file);
 
     ## Only URLize files with a moderate size
-    if ($size < $Conf::Conf{'urlize_min_size'}) {
+    if ($size < Site->urlize_min_size) {
 	unlink "$expl/$dir/$filename";
 	return undef;
     }
@@ -13194,7 +13147,7 @@ sub get_arc_size {
 sub get_next_delivery_date {
     my $self = shift;
 
-    my $dtime = $self->{'admin'}{'delivery_time'};
+    my $dtime = $self->delivery_time;
     unless ($dtime =~ /(\d?\d)\:(\d\d)/) {
 
 	# if delivery _time if not defined, the delivery time right now
@@ -13283,11 +13236,11 @@ sub remove_task {
     my $self = shift;
     my $task = shift;
 
-    unless (opendir(DIR, $Conf::Conf{'queuetask'})) {
+    unless (opendir(DIR, Site->queuetask)) {
 	&Log::do_log(
 	    'err',
 	    "error : can't open dir %s: %s",
-	    $Conf::Conf{'queuetask'}, $!
+	    Site->queuetask, $!
 	);
 	return undef;
     }
@@ -13297,7 +13250,7 @@ sub remove_task {
     foreach my $task_file (@tasks) {
 	if ($task_file =~
 	    /^(\d+)\.\w*\.$task\.$self->{'name'}\@$self->{'domain'}$/) {
-	    unless (unlink("$Conf::Conf{'queuetask'}/$task_file")) {
+	    unless (unlink(Site->queuetask . "/$task_file")) {
 		&Log::do_log('err', 'Unable to remove task file %s : %s',
 		    $task_file, $!);
 		return undef;
@@ -13411,7 +13364,7 @@ sub purge {
 	($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
 
     ## Remove tasks for this list
-    &Task::list_tasks($Conf::Conf{'queuetask'});
+    &Task::list_tasks(Site->queuetask);
     foreach my $task (&Task::get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
@@ -13419,24 +13372,23 @@ sub purge {
     ## Close the list first, just in case...
     $self->close_list();
 
-    if ($self->{'name'}) {
-	my $arc_dir = &Conf::get_robot_conf($self->{'domain'}, 'arc_path');
-	&tools::remove_dir($arc_dir . '/' . $self->get_list_id());
+    if ($self->name) {
+	my $arc_dir = $self->robot->arc_path;
+	&tools::remove_dir($arc_dir . '/' . $self->get_id);
 	&tools::remove_dir($self->get_bounce_dir());
     }
 
     ## Clean list table if needed
-    if ($Conf::get_robot_conf{$self->domain, 'cache_list_config'} eq
-	'database') {
+    if ($self->robot->cache_list_config eq 'database') {
 	unless (defined $self->list_cache_purge) {
 	    &do_log('err', 'Cannot remove list %s from table', $self);
 	}
     }
 
     ## Clean memory cache
-    delete $list_of_lists{$self->{'domain'}}{$self->{'name'}};
+    delete $list_of_lists{$self->domain}{$self->name};
 
-    &tools::remove_dir($self->{'dir'});
+    &tools::remove_dir($self->dir);
 
     #log ind stat table to make statistics
     &Log::db_stat_log(
@@ -13460,9 +13412,9 @@ sub remove_aliases {
     return undef
 	unless ($self &&
 	($list_of_lists{$self->domain}{$self->name}) &&
-	($Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
+	(Site->sendmail_aliases !~ /^none$/i));
 
-    my $alias_manager = $Conf::Conf{'alias_manager'};
+    my $alias_manager = Site->alias_manager;
 
     unless (-x $alias_manager) {
 	&Log::do_log('err', 'Cannot run alias_manager %s', $alias_manager);
@@ -13531,16 +13483,15 @@ sub notify_bouncers {
 sub create_shared {
     my $self = shift;
 
-    my $dir = $self->{'dir'} . '/shared';
+    my $dir = $self->dir . '/shared';
 
     if (-e $dir) {
-	&Log::do_log('err', "List::create_shared : %s already exists", $dir);
+	&Log::do_log('err', '%s already exists', $dir);
 	return undef;
     }
 
     unless (mkdir($dir, 0777)) {
-	&Log::do_log('err', "List::create_shared : unable to create %s : %s ",
-	    $dir, $!);
+	&Log::do_log('err', 'unable to create %s : %s', $dir, $!);
 	return undef;
     }
 
@@ -13559,8 +13510,7 @@ sub has_include_data_sources {
 	'owner_include',             'editor_include',
 	'include_voot_group'
 	) {
-	if (ref($self->{'admin'}{$type}) eq 'ARRAY' &&
-	    $#{$self->{'admin'}{$type}} >= 0) {
+	if (ref($self->$type) eq 'ARRAY' and scalar @{$self->$type}) {
 	    return 1;
 	}
     }
@@ -13574,7 +13524,7 @@ sub move_message {
     &Log::do_log('debug2',
 	"List::move_message($file, $self->{'name'}, $queue)");
 
-    my $dir = $queue || $Conf::Conf{'queuedistribute'};
+    my $dir = $queue || Site->queuedistribute;
     my $filename = $self->get_list_id() . '.' . time . '.' . int(rand(999));
 
     unless (open OUT, ">$dir/T.$filename") {
@@ -13604,9 +13554,9 @@ sub move_message {
 sub get_bounce_dir {
     my $self = shift;
 
-    my $root_dir = &Conf::get_robot_conf($self->{'domain'}, 'bounce_path');
+    my $root_dir = $self->robot->bounce_path;
 
-    return $root_dir . '/' . $self->get_list_id();
+    return $root_dir . '/' . $self->get_id;
 }
 
 =over 4
@@ -13632,7 +13582,7 @@ sub get_list_address {
 	return $self->name . '-editor' . '@' . $self->host;
     } elsif ($type eq 'return_path') {
 	return $self->name .
-	    &Conf::get_robot_conf($self->domain, 'return_path_suffix') . '@' .
+	    $self->robot->return_path_suffix . '@' .
 	    $self->host;
     }
     &Log::do_log('err', 'Unknown type of list address "%s".  Ask developer',
@@ -13661,7 +13611,7 @@ sub get_bounce_address {
     $escwho =~ s/\@/==a==/;
 
     return sprintf('%s+%s@%s',
-	$Conf::Conf{'bounce_email_prefix'},
+	Site->bounce_email_prefix,
 	join('==', $escwho, $self->name, @opts),
 	$self->domain);
 }
@@ -13712,8 +13662,8 @@ sub add_list_header {
 	    'List-Help',
 	    sprintf(
 		'<mailto:%s@%s?subject=help>',
-		&Conf::get_robot_conf($robot, 'email'),
-		&Conf::get_robot_conf($robot, 'host')
+		$self->robot->email,
+		$self->robot->host
 	    )
 	);
     } elsif ($field eq 'unsubscribe') {
@@ -13721,8 +13671,8 @@ sub add_list_header {
 	    'List-Unsubscribe',
 	    sprintf(
 		'<mailto:%s@%s?subject=unsubscribe%%20%s>',
-		&Conf::get_robot_conf($robot, 'email'),
-		&Conf::get_robot_conf($robot, 'host'),
+		$self->robot->email,
+		$self->robot->host,
 		$self->name
 	    )
 	);
@@ -13731,8 +13681,8 @@ sub add_list_header {
 	    'List-Subscribe',
 	    sprintf(
 		'<mailto:%s@%s?subject=subscribe%%20%s>',
-		&Conf::get_robot_conf($robot, 'email'),
-		&Conf::get_robot_conf($robot, 'host'),
+		$self->robot->email,
+		$self->robot->host,
 		$self->name
 	    )
 	);
@@ -13743,26 +13693,26 @@ sub add_list_header {
 	$hdr->add('List-Owner',
 	    sprintf('<mailto:%s>', $self->get_list_address('owner')));
     } elsif ($field eq 'archive') {
-	if (&Conf::get_robot_conf($robot, 'wwsympa_url') and
+	if ($self->robot->wwsympa_url and
 	    $self->is_web_archived()) {
 	    $hdr->add(
 		'List-Archive',
 		sprintf('<%s/arc/%s>',
-		    &Conf::get_robot_conf($robot, 'wwsympa_url'),
+		    $self->robot->wwsympa_url,
 		    $self->name)
 	    );
 	} else {
 	    return 0;
 	}
     } elsif ($field eq 'archived_at') {
-	if (&Conf::get_robot_conf($robot, 'wwsympa_url') and
+	if ($self->robot->wwsympa_url and
 	    $self->is_web_archived()) {
 	    my @now  = localtime(time);
 	    my $yyyy = sprintf '%04d', 1900 + $now[5];
 	    my $mm   = sprintf '%02d', $now[4] + 1;
 	    my $archived_msg_url =
 		sprintf '%s/arcsearch_id/%s/%s-%s/%s',
-		&Conf::get_robot_conf($robot, 'wwsympa_url'),
+		$self->robot->wwsympa_url,
 		$self->name, $yyyy, $mm,
 		&tools::clean_msg_id($hdr->get('Message-Id'));
 	    $hdr->add('Archived-At', '<' . $archived_msg_url . '>');
@@ -13897,6 +13847,22 @@ sub AUTOLOAD {
 	croak "Can't locate object method \"$2\" via package \"$1\"";
     }
     goto &$AUTOLOAD;
+}
+
+
+=over 4
+
+=item defaults
+
+I<Getter/Setter>.
+XXX @todo doc
+
+=back
+
+=cut
+
+sub defaults {
+    croak "Not yet implemented";
 }
 
 =over 4
@@ -14123,8 +14089,7 @@ sub list_cache_fetch {
     my $name        = $self->name;
     my $robot       = $self->domain;
 
-    my $cache_list_config =
-	&Conf::get_robot_conf($robot, 'cache_list_config');
+    my $cache_list_config = $self->robot->cache_list_config;
     my $admin;
     my $time_config_bin;
 
@@ -14208,8 +14173,7 @@ sub list_cache_fetch {
 ## Update list cache.
 sub list_cache_update_admin {
     my ($self) = shift;
-    my $cache_list_config =
-	&Conf::get_robot_conf($self->domain, 'cache_list_config');
+    my $cache_list_config = $self->robot->cache_list_config;
 
     if ($cache_list_config eq 'binary_file') {
 	## Get a shared lock on config file first
@@ -14319,8 +14283,7 @@ sub list_cache_update_admin {
 
 sub list_cache_update_total {
     my $self = shift;
-    my $cache_list_config =
-	&Conf::get_robot_conf($self->domain, 'cache_list_config');
+    my $cache_list_config = $self->robot->cache_list_config;
 
     if ($cache_list_config eq 'database') {
 	unless (
@@ -14343,8 +14306,7 @@ sub list_cache_update_total {
 sub list_cache_purge {
     my $self = shift;
 
-    my $cache_list_config =
-	&Conf::get_robot_conf($self->domain, 'cache_list_config');
+    my $cache_list_config = $self->robot->cache_list_config;
     if ($cache_list_config eq 'binary_file' and -e $self->dir . '/config.bin')
     {
 	## Get a shared lock on config file first

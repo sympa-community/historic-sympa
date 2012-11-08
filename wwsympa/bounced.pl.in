@@ -107,7 +107,7 @@ unless (defined Robot::get_robots()) {
 
 ## Check databse connectivity
 unless (&SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Site->db_name);
 }
 
 ## Put ourselves in background if not in debug mode. 
@@ -191,7 +191,7 @@ my $spool = new Sympaspool('bounce');
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
     
-    sleep $Conf{'sleep'};
+    sleep Site->sleep;
     
     &List::init_list_cache();
     # Process grouped notifications
@@ -269,7 +269,7 @@ while (!$end) {
 		    next;
 		}
 		my $result =$list->check_list_authz('del','smtp',
-						    {'sender' => $Conf{'listmasters'}[0],
+						    {'sender' => [Site->listmasters]->[0],
 						     'email' => $who});
 		my $action;
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -728,7 +728,7 @@ sub store_bounce {
     
     &Log::do_log('debug', 'store_bounce(%s,%s,%s)', $bounce_dir,$rcpt);
 
-    my $queue = $Conf{'queuebounce'};
+    my $queue = Site->queuebounce;
 
     my $filename = &tools::escape_chars($rcpt);    
     

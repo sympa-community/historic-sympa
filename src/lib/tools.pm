@@ -39,14 +39,11 @@ use Proc::ProcessTable;
 use if (5.008 < $] && $] < 5.016), qw(Unicode::CaseFold fc);
 
 use Conf;
-use Language;
-use Log;
-use Sympa::Constants;
+#use Language;
+#use Log;
+#use Sympa::Constants;
 use Message;
-use SDM;
-
-## RCS identification.
-#my $id = '@(#)$Id$';
+#use SDM;
 
 ## global var to store a CipherSaber object 
 my $cipher;
@@ -108,7 +105,8 @@ sub set_file_rights {
     }
     if ($param{'mode'}){
 	unless (chmod($param{'mode'}, $param{'file'})){
-	    &Log::do_log('err', "Can't change rights of file %s: %s",$Conf::Conf{'db_name'}, $!);
+	    &Log::do_log('err', "Can't change rights of file %s: %s",
+		Site->db_name, $!);
 	    return undef;
 	}
     }
@@ -344,17 +342,25 @@ sub checkcommand {
    &Log::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
    if ($subject) {
-       if ($Conf::Conf{'misaddressed_commands_regexp'} && ($subject =~ /^$Conf::Conf{'misaddressed_commands_regexp'}\b/im)) {
-	   return 1;
+       if (Site->misaddressed_commands_regexp) {
+	    my $misaddressed_commands_regexp =
+		Site->misaddressed_commands_regexp;
+	    if ($subject =~ /^$misaddressed_commands_regexp\b/im) {
+		return 1;
+	    }
        }
    }
 
    return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
 
    foreach $i (@{$msg->body}) {
-       if ($Conf::Conf{'misaddressed_commands_regexp'} && ($i =~ /^$Conf::Conf{'misaddressed_commands_regexp'}\b/im)) {
-	   return 1;
-       }
+	if (Site->misaddressed_commands_regexp) {
+	    my $misaddressed_commands_regexp =
+		Site->misaddressed_commands_regexp;
+	    if ($i =~ /^$misaddressed_commands_regexp\b/im) {
+		return 1;
+	    }
+	}
 
        ## Control is only applied to first non-blank line
        last unless $i =~ /^\s*$/;
@@ -425,14 +431,7 @@ sub load_edit_list_conf {
 ## return a hash from the edit_list_conf file
 ## NOTE: This might be moved to wwslib along with get_list_list_tpl().
 sub load_create_list_conf {
-    my $robot = shift;
-
-    ## Compatibility: $robot may be a string
-    unless (ref $robot) {
-	if ($robot and $robot ne '*') {
-	    $robot = Robot->new($robot);
-	}
-    }
+    my $robot = Robot::clean_robot(shift);
 
     my $file;
     my $conf ;
@@ -454,7 +453,8 @@ sub load_create_list_conf {
 	if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
 	    $conf->{$1} = lc($2);
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$Conf::Conf{'etc'}/create_list.conf",$_ );
+	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
+		$file, $_);
 	    next;
 	}
     }
@@ -473,10 +473,11 @@ sub get_list_list_tpl {
 	return undef;
     }
     
+    ##FIXME: use $robot->make_tt2_include_path().
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . '/create_list_templates',
-        "$Conf::Conf{'etc'}/create_list_templates",
-        "$Conf::Conf{'etc'}/$robot/create_list_templates"
+        Site->etc . "/create_list_templates",
+        Site->etc . "/$robot/create_list_templates"
     ) {
 	if (opendir(DIR, $dir)) {
 	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
@@ -637,8 +638,8 @@ sub get_templates_list {
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-    my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
-    my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+    my $site_dir = Site->etc.'/'.$type.'_tt2';
+    my $robot_dir = Site->etc.'/'.$robot.'/'.$type.'_tt2';
 
     my @try;
 
@@ -711,9 +712,9 @@ sub get_template_path {
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-    my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
+    my $site_dir = Site->etc.'/'.$type.'_tt2';
     $site_dir .= '/'.$lang unless ($lang eq 'default');
-    my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+    my $robot_dir = Site->etc.'/'.$robot.'/'.$type.'_tt2';
     $robot_dir .= '/'.$lang unless ($lang eq 'default');    
 
     if ($scope eq 'list')  {
@@ -797,7 +798,7 @@ sub dkim_verifier {
 	return undef;
     }
    
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    my $temporary_file = Site->tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return undef;
@@ -880,7 +881,7 @@ sub dkim_sign {
 	return $msg_as_string;
     }
     
-    my $temporary_keyfile = $Conf::Conf{'tmpdir'}."/dkimkey.".$$ ;  
+    my $temporary_keyfile = Site->tmpdir."/dkimkey.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 	&Log::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 	return $msg_as_string;
@@ -919,7 +920,7 @@ sub dkim_sign {
 	&Log::do_log('err', 'Can\'t create Mail::DKIM::Signer');
 	return ($msg_as_string); 
     }    
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    my $temporary_file = Site->tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return ($msg_as_string); 
@@ -972,12 +973,12 @@ sub smime_sign {
     &Log::do_log('debug2', 'tools::smime_sign (%s,%s)',$in_msg,$list);
 
     my $self = new List($list, $robot);
-    my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".$self->get_list_id().".".$$ ;    
-    my $temporary_pwd = $Conf::Conf{'tmpdir'}.'/pass.'.$$;
+    my($cert, $key) = &smime_find_keys($self->dir, 'sign');
+    my $temporary_file = Site->tmpdir .'/'. $self->get_id . "." . $$;
+    my $temporary_pwd = Site->tmpdir . '/pass.' . $$;
 
     my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if ($Conf::Conf{'key_passwd'} ne '') ;
+    $pass_option = "-passin file:$temporary_pwd" if (Site->key_passwd ne '') ;
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
@@ -996,23 +997,27 @@ sub smime_sign {
     $dup_msg->print(\*MSGDUMP);
     close(MSGDUMP);
 
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if (Site->key_passwd ne '') {
 	unless ( mkfifo($temporary_pwd,0600)) {
 	    &Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    &Log::do_log('debug', "$Conf::Conf{'openssl'} smime -sign -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file");    
-    unless (open (NEWMSG,"$Conf::Conf{'openssl'} smime -sign  -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
+    my $cmd = sprintf
+	'%s smime -sign -rand %s/rand -signer %s %s -inkey %s -in %s',
+	Site->openssl, Site->tmpdir, $cert, $pass_option, $key,
+	$temporary_file;
+    &Log::do_log('debug3', '%s', $cmd);
+    unless (open NEWMSG, "$cmd |") {
     	&Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
 
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if (Site->key_passwd ne '') {
 	unless (open (FIFO,"> $temporary_pwd")) {
 	    &Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 	}
 
-	print FIFO $Conf::Conf{'key_passwd'};
+	print FIFO Site->key_passwd;
 	close FIFO;
 	unlink ($temporary_pwd);
     }
@@ -1073,15 +1078,18 @@ sub smime_sign_check {
     ## first step is the msg signing OK ; /tmp/sympa-smime.$$ is created
     ## to store the signer certificat for step two. I known, that's durty.
 
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".'smime-sender.'.$$ ;
+    my $temporary_file = Site->tmpdir."/".'smime-sender.'.$$ ;
     my $trusted_ca_options = '';
-    $trusted_ca_options = "-CAfile $Conf::Conf{'cafile'} " if ($Conf::Conf{'cafile'});
-    $trusted_ca_options .= "-CApath $Conf::Conf{'capath'} " if ($Conf::Conf{'capath'});
-    &Log::do_log('debug', "$Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer  $temporary_file");
+    $trusted_ca_options = "-CAfile " . Site->cafile . " " if Site->cafile;
+    $trusted_ca_options .= "-CApath " . Site->capath . " " if Site->capath;
+    my $cmd = sprintf '%s smime -verify %s -signer %s',
+	Site->openssl, $trusted_ca_options, $temporary_file;
+    &Log::do_log('debug3', '%s', $cmd);
 
-    unless (open (MSGDUMP, "| $Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
-
-	&Log::do_log('err', "unable to verify smime signature from $sender $verify");
+    unless (open MSGDUMP, "| $cmd > /dev/null") {
+	&Log::do_log('err',
+	    'unable to verify smime signature from %s %s',
+	    $sender, $verify);
 	return undef ;
     }
     
@@ -1119,11 +1127,13 @@ sub smime_sign_check {
 
     &Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer->{'email'}}));
     ## store the signer certificat
-    unless (-d $Conf::Conf{'ssl_cert_dir'}) {
-	if ( mkdir ($Conf::Conf{'ssl_cert_dir'}, 0775)) {
-	    &Log::do_log('info', "creating spool $Conf::Conf{'ssl_cert_dir'}");
+    unless (-d Site->ssl_cert_dir) {
+	if ( mkdir (Site->ssl_cert_dir, 0775)) {
+	    &Log::do_log('info', 'creating spool %s', Site->ssl_cert_dir);
 	}else{
-	    &Log::do_log('err', "Unable to create user certificat directory $Conf::Conf{'ssl_cert_dir'}");
+	    &Log::do_log('err',
+		'Unable to create user certificat directory %s',
+		Site->ssl_cert_dir);
 	}
     }
 
@@ -1134,8 +1144,8 @@ sub smime_sign_check {
     ## are also included), and look at the purpose:
     ## "S/MIME signing : Yes/No"
     ## "S/MIME encryption : Yes/No"
-    my $certbundle = "$Conf::Conf{tmpdir}/certbundle.$$";
-    my $tmpcert = "$Conf::Conf{tmpdir}/cert.$$";
+    my $certbundle = Site->tmpdir . "/certbundle.$$";
+    my $tmpcert = Site->tmpdir . "/cert.$$";
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
     &Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
@@ -1208,7 +1218,7 @@ sub smime_sign_check {
     ## or a pair of single-purpose. save them, as email@addr if combined,
     ## or as email@addr@sign / email@addr@enc for split certs.
     foreach my $c (keys %certs) {
-	my $fn = "$Conf::Conf{ssl_cert_dir}/" . &escape_chars(lc($sender));
+	my $fn = Site->ssl_cert_dir . '/' . &escape_chars(lc($sender));
 	if ($c ne 'both') {
 	    unlink($fn); # just in case there's an old cert left...
 	    $fn .= "\@$c";
@@ -1255,7 +1265,7 @@ sub smime_encrypt {
 	my $self = new List($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
-	my $base = "$Conf::Conf{'ssl_cert_dir'}/".&tools::escape_chars($email);
+	my $base = Site->ssl_cert_dir . '/' . &tools::escape_chars($email);
 	if(-f "$base\@enc") {
 	    $usercert = "$base\@enc";
 	} else {
@@ -1263,13 +1273,15 @@ sub smime_encrypt {
 	}
     }
     if (-r $usercert) {
-	my $temporary_file = $Conf::Conf{'tmpdir'}."/".$email.".".$$ ;
+	my $temporary_file = Site->tmpdir."/".$email.".".$$ ;
 
 	## encrypt the incomming message parse it.
-        &Log::do_log ('debug3', "tools::smime_encrypt : $Conf::Conf{'openssl'} smime -encrypt -out $temporary_file -des3 $usercert");
-
-	if (!open(MSGDUMP, "| $Conf::Conf{'openssl'} smime -encrypt -out $temporary_file -des3 $usercert")) {
-	    &Log::do_log('info', 'Can\'t encrypt message for recipient %s', $email);
+	my $cmd = sprintf '%s smime -encrypt -out %s -des3 %s',
+	    Site->openssl, $temporary_file, $usercert;
+        &Log::do_log ('debug3', '%s', $cmd);
+	if (!open(MSGDUMP, "| $cmd")) {
+	    &Log::do_log('info', 'Can\'t encrypt message for recipient %s',
+		$email);
 	}
 ## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
 ## that contains a whole header again... since MIME::Tools has got no function
@@ -1343,12 +1355,12 @@ sub smime_decrypt {
     my $list = shift ; ## the recipient of the msg
     my $from = $msg->head->get('from');
 
-    &Log::do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
+    &Log::do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list);
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
-    my $dir = $list->{'dir'};
+    my $dir = $list->dir;
     unless ($dir) {
-	$dir = $Conf::Conf{home} . '/sympa';
+	$dir = Site->home . '/sympa';
     }
     my ($certs,$keys) = smime_find_keys($dir, 'decrypt');
     unless (defined $certs && @$certs) {
@@ -1356,8 +1368,8 @@ sub smime_decrypt {
 	return undef;
     }
 
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".$list->get_list_id().".".$$ ;
-    my $temporary_pwd = $Conf::Conf{'tmpdir'}.'/pass.'.$$;
+    my $temporary_file = Site->tmpdir . '/' . $list->get_id . '.' . $$;
+    my $temporary_pwd = Site->tmpdir.'/pass.'.$$;
 
     ## dump the incomming message.
     if (!open(MSGDUMP,"> $temporary_file")) {
@@ -1367,7 +1379,7 @@ sub smime_decrypt {
     close(MSGDUMP);
     
     my ($decryptedmsg, $pass_option, $msg_as_string);
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if (Site->key_passwd ne '') {
 	# if password is define in sympa.conf pass the password to OpenSSL using
 	$pass_option = "-passin file:$temporary_pwd";	
     }
@@ -1376,22 +1388,25 @@ sub smime_decrypt {
     while (my $certfile = shift @$certs) {
 	my $keyfile = shift @$keys;
 	&Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
-	if ($Conf::Conf{'key_passwd'} ne '') {
+	if (Site->key_passwd ne '') {
 	    unless (mkfifo($temporary_pwd,0600)) {
 		&Log::do_log('err', 'Unable to make fifo for %s', $temporary_pwd);
 		return undef;
 	    }
 	}
 
-	&Log::do_log('debug',"$Conf::Conf{'openssl'} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option");
-	open (NEWMSG, "$Conf::Conf{'openssl'} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option |");
+	my $cmd = sprintf '%s smime -decrypt -in %s -recip %s -inkey %s %s',
+	    Site->openssl, $temporary_file, $certfile, $keyfile,
+	    $pass_option;
+	&Log::do_log('debug3', $cmd);
+	open (NEWMSG, "$cmd |");
 
-	if ($Conf::Conf{'key_passwd'} ne '') {
+	if (defined Site->key_passwd and Site->key_passwd ne '') {
 	    unless (open (FIFO,"> $temporary_pwd")) {
 		&Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 		return undef;
 	    }
-	    print FIFO $Conf::Conf{'key_passwd'};
+	    print FIFO Site->key_passwd;
 	    close FIFO;
 	    unlink ($temporary_pwd);
 	}
@@ -1554,7 +1569,7 @@ sub escape_docname {
     $filename = MIME::EncWords::decode_mimewords($filename);
 
     ## Decode from FS encoding to utf-8
-    #$filename = &Encode::decode($Conf::Conf{'filesystem_encoding'}, $filename);
+    #$filename = &Encode::decode(Site->filesystem_encoding, $filename);
 
     ## escapesome chars for use in URL
     return &escape_chars($filename, $except);
@@ -1674,13 +1689,13 @@ sub unescape_html {
 sub tmp_passwd {
     my $email = shift;
 
-    return ('init'.substr(Digest::MD5::md5_hex(join('/', $Conf::Conf{'cookie'}, $email)), -8)) ;
+    return ('init'.substr(Digest::MD5::md5_hex(join('/', Site->cookie, $email)), -8)) ;
 }
 
 # Check sum used to authenticate communication from wwsympa to sympa
 sub sympa_checksum {
     my $rcpt = shift;
-    return (substr(Digest::MD5::md5_hex(join('/', $Conf::Conf{'cookie'}, $rcpt)), -10)) ;
+    return (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
 }
 
 # create a cipher
@@ -1696,7 +1711,7 @@ sub ciphersaber_installed {
 
     if ($is_installed) {
 	require Crypt::CipherSaber;
-	$cipher = Crypt::CipherSaber->new($Conf::Conf{'cookie'});
+	$cipher = Crypt::CipherSaber->new(Site->cookie);
     }else{
 	$cipher = 'no_cipher';
     }
@@ -1706,9 +1721,10 @@ sub ciphersaber_installed {
 sub cookie_changed {
     my $current=shift;
     my $changed = 1 ;
-    if (-f "$Conf::Conf{'etc'}/cookies.history") {
-	unless (open COOK, "$Conf::Conf{'etc'}/cookies.history") {
-	    &Log::do_log('err', "Unable to read $Conf::Conf{'etc'}/cookies.history") ;
+    if (-f Site->etc . '/cookies.history') {
+	unless (open COOK, '<', Site->etc . '/cookies.history') {
+	    &Log::do_log('err', 'Unable to read %s/cookies.history',
+		Site->etc);
 	    return undef ; 
 	}
 	my $oldcook = <COOK>;
@@ -1722,8 +1738,8 @@ sub cookie_changed {
 	    $changed = 0;
 #	}else{
 #	    push @cookies, $current ;
-#	    unless (open COOK, ">$Conf::Conf{'etc'}/cookies.history") {
-#		&Log::do_log('err', "Unable to create $Conf::Conf{'etc'}/cookies.history") ;
+#	    unless (open COOK, '>', Site->etc . '/cookies.history') {
+#		&Log::do_log('err', "Unable to create %s/cookies.history", Site->etc);
 #		return undef ; 
 #	    }
 #	    printf COOK "%s",join(" ",@cookies) ;
@@ -1733,13 +1749,14 @@ sub cookie_changed {
 	return $changed ;
     }else{
 	my $umask = umask 037;
-	unless (open COOK, ">$Conf::Conf{'etc'}/cookies.history") {
+	unless (open COOK, '>', Site->etc . '/cookies.history') {
 	    umask $umask;
-	    &Log::do_log('err', "Unable to create $Conf::Conf{'etc'}/cookies.history") ;
+	    &Log::do_log('err', 'Unable to create %s/cookies.history',
+		Site->etc);
 	    return undef ; 
 	}
 	umask $umask;
-	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$Conf::Conf{'etc'}/cookies.history";
+	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], Site->etc . '/cookies.history';
 	print COOK "$current ";
 	close COOK;
 	return(0);
@@ -1889,19 +1906,19 @@ sub virus_infected {
     my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
     &Log::do_log('debug2', 'Scan virus in %s', $file);
     
-    unless ($Conf::Conf{'antivirus_path'} ) {
+    unless (Site->antivirus_path) {
         &Log::do_log('debug', 'Sympa not configured to scan virus in message');
 	return 0;
     }
     my @name = split(/\//,$file);
-    my $work_dir = $Conf::Conf{'tmpdir'}.'/antivirus';
+    my $work_dir = Site->tmpdir.'/antivirus';
     
     unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
 	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
     }
 
-    $work_dir = $Conf::Conf{'tmpdir'}.'/antivirus/'.$name[$#name];
+    $work_dir = Site->tmpdir.'/antivirus/'.$name[$#name];
     
     unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
 	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
@@ -1921,16 +1938,17 @@ sub virus_infected {
     my $result;
 
     ## McAfee
-    if ($Conf::Conf{'antivirus_path'} =~  /\/uvscan$/) {
-
+    if (Site->antivirus_path =~ /\/uvscan$/) {
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless (Site->antivirus_args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
-		
+
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+	open (ANTIVIR, "$cmd |");
+
 	while (<ANTIVIR>) {
 	    $result .= $_; chomp $result;
 	    if ((/^\s*Found the\s+(.*)\s*virus.*$/i) ||
@@ -1940,7 +1958,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $? / 256 ; # /
+	my $status = $? >> 8;
 
         ## uvscan status =12 or 13 (*256) => virus
         if (( $status == 13) || ($status == 12)) { 
@@ -1957,18 +1975,19 @@ sub virus_infected {
 	    if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
 
     ## Trend Micro
-    }elsif ($Conf::Conf{'antivirus_path'} =~  /\/vscan$/) {
+    }elsif (Site->antivirus_path =~ /\/vscan$/) {
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+	open (ANTIVIR, "$cmd |");
 
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
-		
 	while (<ANTIVIR>) {
 	    if (/Found virus (\S+) /i){
 		$virusfound = $1;
 	    }
 	}
 	close ANTIVIR;
-    
-	my $status = $?/256 ;
+
+	my $status = $? >> 8;
 
         ## uvscan status = 1 | 2 (*256) => virus
         if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
@@ -1976,16 +1995,17 @@ sub virus_infected {
 	}
 
     ## F-Secure
-    } elsif($Conf::Conf{'antivirus_path'} =~  /\/fsav$/) {
+    } elsif(Site->antivirus_path =~ /\/fsav$/) {
 	my $dbdir=$` ;
 
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless (Site->antivirus_args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} --databasedirectory $dbdir $Conf::Conf{'antivirus_args'} $work_dir |") ;
+	my $cmd = sprintf '%s --databasedirectory %s %s %s',
+	    Site->antivirus_path, $dbdir, Site->antivirus_args, $work_dir;
+	open (ANTIVIR, "$cmd |");
 
 	while (<ANTIVIR>) {
 
@@ -1996,45 +2016,45 @@ sub virus_infected {
 	
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $? >> 8;
 
         ## fsecure status =3 (*256) => virus
         if (( $status == 3) and not($virusfound)) { 
 	    $virusfound = "unknown";
 	}    
-    }elsif($Conf::Conf{'antivirus_path'} =~ /f-prot\.sh$/) {
+    }elsif(Site->antivirus_path =~ /f-prot\.sh$/) {
 
         &Log::do_log('debug2', 'f-prot is running');    
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+        open (ANTIVIR, "$cmd |");
 
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
-        
         while (<ANTIVIR>) {
-        
             if (/Infection:\s+(.*)/){
                 $virusfound = $1;
             }
         }
-        
+
         close ANTIVIR;
-        
-        my $status = $?/256 ;
-        
+
+        my $status = $? >> 8;
+
         &Log::do_log('debug2', 'Status: '.$status);    
         
         ## f-prot status =3 (*256) => virus
         if (( $status == 3) and not($virusfound)) { 
             $virusfound = "unknown";
         }    
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /kavscanner/) {
-
+    }elsif (Site->antivirus_path =~ /kavscanner/) {
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless (Site->antivirus_args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
-		
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+	open (ANTIVIR,"$cmd |");
+
 	while (<ANTIVIR>) {
 	    if (/infected:\s+(.*)/){
 		$virusfound = $1;
@@ -2045,7 +2065,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $? >> 8;
 
         ## uvscan status =3 (*256) => virus
         if (( $status >= 3) and not($virusfound)) { 
@@ -2053,35 +2073,36 @@ sub virus_infected {
 	}
 
         ## Sophos Antivirus... by liuk@publinet.it
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /\/sweep$/) {
-	
+    }elsif (Site->antivirus_path =~ /\/sweep$/) {
         # impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless (Site->antivirus_args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
-	
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+        open (ANTIVIR, "$cmd |");
+
 	while (<ANTIVIR>) {
 	    if (/Virus\s+(.*)/) {
 		$virusfound = $1;
 	    }
 	}       
 	close ANTIVIR;
-        
-	my $status = $?/256 ;
-        
+
+	my $status = $? >> 8;
+
 	## sweep status =3 (*256) => virus
 	if (( $status == 3) and not($virusfound)) {
 	    $virusfound = "unknown";
 	}
 
 	## Clam antivirus
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /\/clamd?scan$/) {
-	
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
-	
+    }elsif (Site->antivirus_path =~ /\/clamd?scan$/) {
+	my $cmd = sprintf '%s %s %s',
+	    Site->antivirus_path, Site->antivirus_args, $work_dir;
+        open (ANTIVIR, "$cmd |");
+
 	my $result;
 	while (<ANTIVIR>) {
 	    $result .= $_; chomp $result;
@@ -2090,9 +2111,9 @@ sub virus_infected {
 	    }
 	}       
 	close ANTIVIR;
-        
-	my $status = $?/256 ;
-        
+
+	my $status = $? >> 8;
+
 	## Clamscan status =1 (*256) => virus
 	if (( $status == 1) and not($virusfound)) {
 	    $virusfound = "unknown";
@@ -2408,7 +2429,7 @@ sub remove_pid {
 			&Log::do_log('err', "Failed to remove $pidfile: %s", $!);
 			return undef;
 		}
-		my $err_file = $Conf::Conf{'tmpdir'}.'/'.$pid.'.stderr';
+		my $err_file = Site->tmpdir.'/'.$pid.'.stderr';
 		if(-f $err_file) {
 			unless(unlink $err_file) {
 				&Log::do_log('err', "Failed to remove $err_file: %s", $!);
@@ -2431,8 +2452,8 @@ sub is_a_crawler {
 #	return ($Conf::Conf{$robot}{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}});
 #    }
 
-    # open (TMP, ">> /tmp/dump1"); print TMP "dump de la conf dans is_a_crawler : \n"; &tools::dump_var($Conf::Conf{'crawlers_detection'}, 0,\*TMP);     close TMP;
-    return $Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
+    # open (TMP, ">> /tmp/dump1"); print TMP "dump de la conf dans is_a_crawler : \n"; &tools::dump_var(Site->crawlers_detection, 0,\*TMP);     close TMP;
+    return Site->crawlers_detection->{'user_agent_string'}{$context->{'user_agent_string'}};
 }
 
 sub write_pid {
@@ -2449,7 +2470,7 @@ sub write_pid {
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::fatal_err('Unable to set rights on %s. Exiting.', $Conf::Conf{'db_name'});
+	&Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
 
     my @pids;
@@ -2523,7 +2544,7 @@ sub write_pid {
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	&Log::fatal_err('Unable to set rights on %s', $Conf::Conf{'db_name'});
+	&Log::fatal_err('Unable to set rights on %s', $pidfile);
     }
     ## Unlock pid file
     $lock->unlock();
@@ -2535,13 +2556,13 @@ sub direct_stderr_to_file {
     my %data = @_;
     ## Error output is stored in a file with PID-based name
     ## Usefull if process crashes
-    open(STDERR, '>>', $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
+    open(STDERR, '>>', Site->tmpdir.'/'.$data{'pid'}.'.stderr');
     unless(&tools::set_file_rights(
-	file => $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr',
+	file => Site->tmpdir.'/'.$data{'pid'}.'.stderr',
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::do_log('err','Unable to set rights on %s', $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
+	&Log::do_log('err','Unable to set rights on %s', Site->tmpdir.'/'.$data{'pid'}.'.stderr');
 	return undef;
     }
     return 1;
@@ -2551,7 +2572,7 @@ sub direct_stderr_to_file {
 sub send_crash_report {
     my %data = @_;
     &Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
-    my $err_file = $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
+    my $err_file = Site->tmpdir.'/'.$data{'pid'}.'.stderr';
     my (@err_output, $err_date);
     if(-f $err_file) {
 	open ERR, '<', $err_file;
@@ -2565,8 +2586,17 @@ sub send_crash_report {
 
 sub get_message_id {
     my $robot = shift;
-
-    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $robot;
+    my $domain;
+    unless ($robot) {
+	$domain = Site->domain;
+    } elsif (ref $robot and ref $robot eq 'Robot') {
+	$domain = $robot->domain;
+    } elsif ($robot eq 'Site') {
+	$domain = Site->domain;
+    } else {
+	$domain = $robot;
+    }
+    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $domain;
 
     return $id;
 }
@@ -2768,9 +2798,11 @@ sub smime_parse_cert {
     }
 
     ## Extract information from cert
-    my ($tmpfile) = $Conf::Conf{'tmpdir'}."/parse_cert.$$";
-    unless (open(PSC, "| $Conf::Conf{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
-	&Log::do_log('err', "smime_parse_cert: open |openssl: $!");
+    my ($tmpfile) = Site->tmpdir."/parse_cert.$$";
+    my $cmd = sprintf '%s x509 -email -subject -purpose -noout',
+	Site->openssl;
+    unless (open(PSC, "| $cmd > $tmpfile")) {
+	&Log::do_log('err', 'open |openssl: %s', $!);
 	return undef;
     }
     print PSC join('', @cert);
@@ -2827,9 +2859,9 @@ sub smime_extract_certs {
     &Log::do_log('debug2', "tools::smime_extract_certs(%s)",$mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
-	unless (open(MSGDUMP, "| $Conf::Conf{openssl} pkcs7 -print_certs ".
-		     "-inform der > $outfile")) {
-	    &Log::do_log('err', "unable to run openssl pkcs7: $!");
+	my $cmd = sprintf '%s pkcs7 -print_certs -inform der', Site->openssl;
+	unless (open(MSGDUMP, "| $cmd > $outfile")) {
+	    &Log::do_log('err', 'unable to run openssl pkcs7: %s', $!);
 	    return 0;
 	}
 	print MSGDUMP $mime->bodyhandle->as_string;

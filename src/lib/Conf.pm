@@ -27,20 +27,20 @@ package Conf;
 use strict;
 
 use Exporter;
-use Carp;
+#use Carp; # currently not used.
 use Storable;
+# tentative
+use Data::Dumper;
 
 #use List; # no longer used
 use SDM;
 use Log;
-use Language;
+use Language qw(gettext);
 #use wwslib; # no longer used
 use confdef;
 use tools;
 #use Sympa::Constants; # already load in confdef.
-use Lock; #FIXME: dependency loop between conf & Lock
-
-use Data::Dumper;
+use Lock;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
@@ -1686,7 +1686,8 @@ sub load_robot_conf {
     }
 
     my $result;
-    if (! $force_reload and ! $return_result and
+    if (%Conf and
+	! $force_reload and ! $return_result and
 	$conf = _load_binary_cache({ 'config_file' => $config_file })) {
 	&Log::do_log('debug3', 'got %s from serialized data',
 		     ($robot ne '*') ? "config for robot $robot" : 'main conf');
@@ -1745,6 +1746,11 @@ sub load_robot_conf {
 	    &Log::do_log('err', 'Errors while parsing main config file %s',
 			 $config_file);
 	    return undef;
+	}
+
+	## Initial load.  Now config is available.
+	if ($robot eq '*' and ! %Conf) {
+	    %Conf = %{$conf};
 	}
 
         &_store_source_file_name({ 'config_hash' => $conf, 'config_file' => $config_file });

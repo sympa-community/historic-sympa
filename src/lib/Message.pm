@@ -48,10 +48,10 @@ use MIME::Parser;
 #use List;
 ##The line above was removed to avoid dependency loop.
 ##"use List" MUST precede to "use Message".
-use tools;
-use tt2;
-use Conf;
-use Log;
+#use tools; # loaded in Conf
+#use tt2; # loaded by List
+#use Conf; # loaded in List - Site
+#use Log; # loaded in Conf
 
 =pod 
 
@@ -281,7 +281,7 @@ sub new {
 	
 	$robot = lc($robot);
 	$listname = lc($listname);
-	$robot ||= $Conf::Conf{'domain'};
+	$robot ||= Site->domain;
 	my $spam_status = &Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
 	$message->{'spam_status'} = 'unkown';
 	if(defined $spam_status) {
@@ -294,7 +294,9 @@ sub new {
 	
 	my $conf_email = &Conf::get_robot_conf($robot, 'email');
 	my $conf_host = &Conf::get_robot_conf($robot, 'host');
-	unless ($listname =~ /^(sympa|$Conf::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
+	my $site_email = Site->listmaster_email;
+	my $site_host = Site->host;
+	unless ($listname =~ /^(sympa|$site_email|$conf_email)(\@$conf_host)?$/i) {
 	    my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
 	    if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 		$listname = $1;
@@ -324,7 +326,7 @@ sub new {
     }
 
     ## S/MIME
-    if ($Conf::Conf{'openssl'}) {
+    if (Site->openssl) {
 
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
@@ -520,7 +522,7 @@ sub clean_html {
     my ($listname, $robot) = split(/\@/,$self->{'rcpt'});
     $robot = lc($robot);
     $listname = lc($listname);
-    $robot ||= $Conf::Conf{'host'};
+    $robot ||= Site->host;
     my $new_msg;
     if($new_msg = &fix_html_part($self->{'msg'},$robot)) {
 	$self->{'msg'} = $new_msg;

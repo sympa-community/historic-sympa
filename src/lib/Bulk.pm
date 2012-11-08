@@ -42,19 +42,19 @@ use constant MAX => 100_000;
 use Sys::Hostname;
 
 
-use Lock;
+#use Lock;
 use Fetch;
 use WebAgent;
-use tools;
-use tt2;
-use Language;
-use Log;
-use Conf;
-use mail;
+#use tools;
+#use tt2;
+use Language qw(gettext_strftime);
+#use Log;
+#use Conf;
+#use mail;
 use Ldap;
-use Message;
 use List;
-use SDM;
+use Message;
+#use SDM;
 
 ## Database and SQL statement handlers
 my $sth;
@@ -86,11 +86,12 @@ sub next {
     my $limit_sybase='';
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
     $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
-    if (lc($Conf::Conf{'db_type'}) eq 'mysql' || lc($Conf::Conf{'db_type'}) eq 'Pg' || lc($Conf::Conf{'db_type'}) eq 'SQLite'){
+    if (Site->db_type eq 'mysql' or Site->db_type eq 'Pg' or
+	Site->db_type eq 'SQLite') {
 	$order.=' LIMIT 1';
-    }elsif (lc($Conf::Conf{'db_type'}) eq 'Oracle'){
+    } elsif (Site->db_type eq 'Oracle') {
 	$limit_oracle = 'AND rownum<=1';
-    }elsif (lc($Conf::Conf{'db_type'}) eq 'Sybase'){
+    } elsif (Site->db_type eq 'Sybase') {
 	$limit_sybase = 'TOP 1';
     }
 

@@ -22,35 +22,35 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use strict;
-use Data::Dumper;
 use lib '--modulesdir--';
 #use Getopt::Std;
 use Getopt::Long;
-
 use Mail::Address;
 use File::Path;
+use MIME::QuotedPrint;
+use File::Copy;
+# tentative
+use Data::Dumper;
 
 use Commands;
-use Conf;
+#use Conf; # load in Site - List - Commands
 use Auth;
 use SympaSession;
-use Language;
-use Log;
-use mail;
-use MIME::QuotedPrint;
-use List;
+#use Language; # load in List
+#use Log; # load in Conf
+#use mail; # load in List - Auth
+#use List; #load in Auth
 use Message;
 use admin;
 use Config_XML;
 use Family;
-use report;
-use File::Copy;
-use tools;
-use tt2;
-use Sympa::Constants;
+#use report; # load in Auth
+#use tools;
+#use tt2; # load in List
+#use Sympa::Constants;
 use tracking;
-use Sympaspool;
-use SDM;
+#use Sympaspool; # load in List
+#use SDM;
 
 # dirty global variables
 my $is_signed = {}; 
@@ -232,17 +232,17 @@ unless (defined Robot::get_robots()) {
 
 &tools::ciphersaber_installed();
 
-if (&tools::cookie_changed($Conf{'cookie'})) {
-     &Log::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at $Conf{'etc'}/cookies.history file)");
+if (&tools::cookie_changed(Site->cookie)) {
+     &Log::fatal_err('sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at %s/cookies.history file)', Site->etc);
 }
 
 ## Set locale configuration
 $main::options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
-$Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
+$Language::default_lang = $main::options{'lang'} || Site->lang;
 
 ## Main program
-if (!chdir($Conf{'home'})) {
-   &Log::fatal_err("Can't chdir to %s: %m", $Conf{'home'});
+if (!chdir(Site->home)) {
+   &Log::fatal_err("Can't chdir to %s: %m", Site->home);
    ## Function never returns.
 }
 
@@ -312,13 +312,13 @@ if ($signal ne 'hup') {
 	}
     }
 
-    &Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'sympa');
+    &Log::do_openlog(Site->syslog, Site->log_socket_type, 'sympa');
 
     &Log::do_log('debug', "Running server $$");
     unless ($main::options{'batch'} ) {
 
 	## Create and write the pidfile
-	my $file = $Conf{'pidfile'};
+	my $file = Site->pidfile;
 	## If process is running in foreground, don't write STDERR to a dedicated file
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
@@ -343,7 +343,7 @@ if ($signal ne 'hup') {
     }
 
     # Sets the UMASK
-    umask(oct($Conf{'umask'}));
+    umask(oct(Site->umask));
 
  ## Most initializations have now been done.
     &Log::do_log('notice', "Sympa %s started", Sympa::Constants::VERSION);
@@ -392,16 +392,19 @@ if ($main::options{'dump'}) {
     exit 0;
 }elsif ($main::options{'make_alias_file'}) {
     my $all_lists = &List::get_lists('*');
-    unless (open TMP, ">$Conf{'tmpdir'}/sympa_aliases.$$") {
-	printf STDERR "Unable to create $Conf{'tmpdir'}/sympa_aliases.$$, exiting\n";
+    unless (open TMP, '>', Site->tmpdir . "/sympa_aliases.$$") {
+	printf STDERR "Unable to create " . Site->tmpdir . "/sympa_aliases.$$, exiting\n";
 	exit;
     }
     printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
     close TMP;
     foreach my $list (@$all_lists) {
-	system ("$Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Conf{'tmpdir'}/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
+	my $cmd = sprintf '%s add %s %s %s/sympa_aliases.%s',
+	    Site->alias_manager, $list->name, $list->domain,
+	    Site->tmpdir, $$;
+	system($cmd) if $list->status eq 'open';
     }
-    printf ("Sympa aliases file is $Conf{'tmpdir'}/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
+    printf "Sympa aliases file is %s/sympa_aliases.%s file made, you probably need to installed it in your SMTP engine\n", Site->tmpdir, $$;
     
     exit 0;
 }elsif ($main::options{'version'}) {
@@ -519,7 +522,7 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
+    foreach my $robot (keys %{Site->robots || {}}) {
 	
 	printf STDOUT "Doing processing for virtual robot %s...\n", $robot;
 	my ($status, $failed_for) = &admin::change_user_email(current_email => $main::options{'current_email'}, 
@@ -624,7 +627,7 @@ if ($main::options{'dump'}) {
     exit 1;
     
 }elsif ($main::options{'create_list'}) {    
-    my $robot = $main::options{'robot'} || $Conf{'host'};
+    my $robot = $main::options{'robot'} || Site->host;
     
     unless ($main::options{'input_file'}) {
  	print STDERR "Error : missing 'input_file' parameter\n";
@@ -661,7 +664,7 @@ if ($main::options{'dump'}) {
     }
 }elsif ($main::options{'instantiate_family'}) {
     
-    my $robot = $main::options{'robot'} || $Conf{'host'};
+    my $robot = $main::options{'robot'} || Site->host;
 
     my $family_name;
     unless ($family_name = $main::options{'instantiate_family'}) {
@@ -704,7 +707,7 @@ if ($main::options{'dump'}) {
     exit 0;
 }elsif ($main::options{'add_list'}) {
      
-    my $robot = $main::options{'robot'} || $Conf{'host'};
+    my $robot = $main::options{'robot'} || Site->host;
 
     my $family_name;
     unless ($family_name = $main::options{'add_list'}) {
@@ -859,7 +862,7 @@ if ($main::options{'dump'}) {
 ##########################################
 elsif ($main::options{'modify_list'}) {
     
-    my $robot = $main::options{'robot'} || $Conf{'host'};
+    my $robot = $main::options{'robot'} || Site->host;
 
     my $family_name;
     unless ($family_name = $main::options{'modify_list'}) {
@@ -909,7 +912,7 @@ elsif ($main::options{'modify_list'}) {
 ##########################################
 elsif ($main::options{'close_family'}) {
     
-    my $robot = $main::options{'robot'} || $Conf{'host'};
+    my $robot = $main::options{'robot'} || Site->host;
 
     my $family_name;
     unless ($family_name = $main::options{'close_family'}) {
@@ -991,25 +994,26 @@ while (!$signal) {
 	$index_cleanqueue=0;
 	&Log::do_log('debug','Cleaning spools');
 	my $msg_bad = new Sympaspool('msg','bad'); 
-	$msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
+	$msg_bad->clean({'delay'=>Site->clean_delay_queue});
 	my $archive_bad = new Sympaspool('archive','bad'); 
-	$archive_bad->clean({'delay'=>$Conf{'clean_delay_queueoutgoing'}});
+	$archive_bad->clean({'delay'=>Site->clean_delay_queueoutgoing});
 	my $queuebounce_bad = new Sympaspool('bounce','bad'); 
-	$queuebounce_bad->clean({'delay'=>$Conf{'clean_delay_queuebounce'}});
+	$queuebounce_bad->clean({'delay'=>Site->clean_delay_queuebounce});
 	my $queuemod = new Sympaspool('mod');
-	$queuemod->clean({'delay'=> $Conf{'clean_delay_queuemod'}});
+	$queuemod->clean({'delay'=> Site->clean_delay_queuemod});
 	my $queueauth = new Sympaspool('auth');
-	$queueauth->clean({'delay'=> $Conf{'clean_delay_queueauth'}});
+	$queueauth->clean({'delay'=> Site->clean_delay_queueauth});
 	my $queuetopic = new Sympaspool('topic');
-	$queuetopic->clean({'delay'=> $Conf{'clean_delay_queuetopic'}});
+	$queuetopic->clean({'delay'=> Site->clean_delay_queuetopic});
 	my $queuesubscribe = new Sympaspool('subscribe');
-	$queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
+	$queuesubscribe->clean({'delay'=> Site->clean_delay_queuesubscribe});
 	my $queueautomatic = new Sympaspool('automatic');
-	$queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
-	&tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
+	$queueautomatic->clean({'delay'=> Site->clean_delay_queueautomatic});
+	# this is not a message spool
+	&tools::CleanDir(Site->tmpdir, Site->clean_delay_tmpdir);
     }	    				          
     ## Cleanup in-memory msgid table, only in a while
-    if (time > $latest_msgid_table_cleanup + $Conf{'msgid_table_cleanup_frequency'}) {
+    if (time > $latest_msgid_table_cleanup + Site->msgid_table_cleanup_frequency) {
 	&clean_msgid_table();
 	$latest_msgid_table_cleanup = time;
     }
@@ -1019,7 +1023,7 @@ while (!$signal) {
     my $message_in_spool = $spool->next;
     
     unless (($message_in_spool)||($message_in_spool->{'priority'} eq 'z')) {
-	sleep($Conf{'sleep'});
+	sleep(Site->sleep);
 	next;
     }
     my $listname = $message_in_spool->{'list'};
@@ -1058,7 +1062,7 @@ SDM::db_disconnect;
 } #end of block while ($signal ne 'term'){
 
 &Log::do_log('notice', 'Sympa exited normally due to signal');
-my $file = $Conf{'pidfile'};
+my $file = Site->pidfile;
 &tools::remove_pid($file, $$);
 
 exit(0);
@@ -1145,7 +1149,7 @@ sub process_message {
     
     $robot = lc($robot);
     $listname = lc($listname);
-    $robot ||= $Conf{'host'};
+    $robot ||= Site->host;
     
     my $type;
     my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
@@ -1206,7 +1210,9 @@ sub process_message {
     }
 
     my ($list, $host, $name);   
-    if ($listname =~ /^(sympa|$Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
+    my $site_email = Site->listmaster_email;
+    my $site_host = Site->host;
+    if ($listname =~ /^(sympa|$site_email|$conf_email)(\@$conf_host)?$/i) {
 	$host = $conf_host;
 	$name = $listname;
 	$list_address = $name.'@'.$host;
@@ -1363,7 +1369,7 @@ sub process_message {
 	return undef;
     }
 
-    if ($Conf{'automatic_list_feature'} eq 'on')  {
+    if (Site->automatic_list_feature eq 'on')  {
         if ($dyn_list_family && $dyn_just_created) {
             unless (defined $list->sync_include()) {
 		&Log::do_log(
@@ -1376,7 +1382,7 @@ sub process_message {
 		#FIXME: Notify listmaster?
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'dyn_cant_sync','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
-		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
+		if (Site->automatic_list_removal =~ /if_empty/i) {
 		    $list->close_list();
 		    $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		}
@@ -1391,7 +1397,7 @@ sub process_message {
 		$list->send_dsn($message, {}, '4.2.4');
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'list_unknown','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
-		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
+		if (Site->automatic_list_removal =~ /if_empty/i) {
 		    $list->close_list();
 		    $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		}
@@ -1549,6 +1555,7 @@ sub DoForward {
     my $msg = $message->{'msg'};
     my $hdr = $msg->head;
     my $messageid = $hdr->get('Message-Id');
+    chomp $messageid;
     my $msg_string = $msg->as_string;
     my $sender = $hdr->get('From');
     chomp $sender;
@@ -1562,8 +1569,8 @@ sub DoForward {
     my ($list, $admin, $host, $recepient, $priority);
 
     if ($function eq 'listmaster') {
-	$recepient=$Conf{'listmaster_email'};
-	$host = &Conf::get_robot_conf($robot, 'host');
+        $recepient = $robot_object->listmaster_email;
+        $host = $robot_object->host;
 	$priority = 0;
     }else {
 	unless ($list = new List ($name, $robot)) {
@@ -1964,9 +1971,10 @@ sub DoCommand {
     #$hdr->decode();
     
     my $messageid = $hdr->get('Message-Id');
+    chomp $messageid;
     my ($success, $status);
     
-    &Log::do_log('debug', "Processing command with priority %s, %s", $Conf{'sympa_priority'}, $messageid );
+    &Log::do_log('debug', "Processing command with priority %s, %s", Site->sympa_priority, $messageid );
     
     my $sender = $message->{'sender'};
 
@@ -2152,7 +2160,7 @@ sub clean_msgid_table {
 	
 	foreach my $rcpt (keys %msgid_table) {
 		foreach my $msgid (keys %{$msgid_table{$rcpt}}) {
-			if (time > $msgid_table{$rcpt}{$msgid} + $Conf{'msgid_table_cleanup_ttl'}) {
+			if (time > $msgid_table{$rcpt}{$msgid} + Site->msgid_table_cleanup_ttl) {
 				delete $msgid_table{$rcpt}{$msgid};
 			}	
 		}	

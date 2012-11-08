@@ -24,18 +24,21 @@ package Upgrade;
 
 use strict;
 
-use Carp;
+#use Carp; # currently not used
 use POSIX qw(strftime);
 
-use Conf;
-use Log;
-use Sympa::Constants;
-use SDM;
+use Site;
+#use Conf; # used in Site
+#use Log; # used in Conf
+#use Sympa::Constants; # used in Conf - confdef
+#use SDM; # used in Conf
+
+# tentative
 use Data::Dumper;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
-    my $version_file = "$Conf::Conf{'etc'}/data_structure.version";
+    my $version_file = Site->etc . '/data_structure.version';
     my $previous_version;
     
     if (-f $version_file) {
@@ -59,11 +62,11 @@ sub get_previous_version {
 }
 
 sub update_version {
-    my $version_file = "$Conf::Conf{'etc'}/data_structure.version";
+    my $version_file = Site->etc . '/data_structure.version';
 
     ## Saving current version if required
     unless (open VFILE, ">$version_file") {
-	&Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Conf::Conf{'etc'}, $!);
+	&Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, Site->etc, $!);
 	return undef;
     }
     printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
@@ -117,7 +120,7 @@ sub upgrade {
 	foreach my $list ( @$all_lists ) {
 
 	    next unless (defined $list->{'admin'}{'web_archive'});
-	    my $file = $Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
+	    my $file = Site->queueoutgoing.'/.rebuild.'.$list->get_list_id();
 	    
 	    unless (open REBUILD, ">$file") {
 		&Log::do_log('err','Cannot create %s', $file);
@@ -144,15 +147,15 @@ sub upgrade {
 
 	my @directories;
 
-	if (-d "$Conf::Conf{'etc'}/web_tt2") {
-	    push @directories, "$Conf::Conf{'etc'}/web_tt2";
+	if (-d Site->etc . '/web_tt2') {
+	    push @directories, Site->etc . '/web_tt2';
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $vr (keys %{Site->robots}) {
 
-	    if (-d "$Conf::Conf{'etc'}/$vr/web_tt2") {
-		push @directories, "$Conf::Conf{'etc'}/$vr/web_tt2";
+	    if (-d Site->etc . "/$vr/web_tt2") {
+		push @directories, Site->etc . "/$vr/web_tt2";
 	    }
 	}
 
@@ -216,7 +219,7 @@ sub upgrade {
 	## Fill the robot_subscriber and robot_admin fields in DB
 	&Log::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
 
-	foreach my $r (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $r (keys %{Site->robots}) {
 	    my $all_lists = &List::get_lists($r, {'skip_sync_admin' => 1});
 	    foreach my $list ( @$all_lists ) {
 		
@@ -243,7 +246,7 @@ sub upgrade {
 	## Rename web archive directories using 'domain' instead of 'host'
 	&Log::do_log('notice','Renaming web archive directories with the list domain...');
 	
-	my $root_dir = &Conf::get_robot_conf($Conf::Conf{'domain'},'arc_path');
+	my $root_dir = Site->arc_path;
 	unless (opendir ARCDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -285,7 +288,7 @@ sub upgrade {
     ## DB fields of enum type have been changed to int
     if (&tools::lower_version($previous_version, '5.2a.1')) {
 	
-	if (&SDM::use_db && $Conf::Conf{'db_type'} eq 'mysql') {
+	if (&SDM::use_db && Site->db_type eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
 			 'included_subscriber' => 'subscriber_table',
 			 'subscribed_admin' => 'admin_table',
@@ -363,7 +366,7 @@ sub upgrade {
 
 	&Log::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
-	my $root_dir = &Conf::get_robot_conf($Conf::Conf{'domain'},'bounce_path');
+	my $root_dir = Site->bounce_path;
 	unless (opendir BOUNCEDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -429,10 +432,10 @@ sub upgrade {
     if (&tools::lower_version($previous_version, '5.3a.6')) {
 	
 	&Log::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
-	    my $etc_dir = $Conf::Conf{'etc'};
+	foreach my $vr (keys %{Site->robots}) {
+	    my $etc_dir = Site->etc;
 
-	    if ($vr ne $Conf::Conf{'domain'}) {
+	    if ($vr ne Site->domain) {
 		$etc_dir .= '/'.$vr;
 	    }
 
@@ -452,7 +455,7 @@ sub upgrade {
 	foreach my $list ( @$all_lists ) {
 
 	    next unless (defined $list->{'admin'}{'web_archive'});
-	    my $file = $Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
+	    my $file = Site->queueoutgoing.'/.rebuild.'.$list->get_list_id();
 	    
 	    unless (open REBUILD, ">$file") {
 		&Log::do_log('err','Cannot create %s', $file);
@@ -499,8 +502,8 @@ sub upgrade {
 
 	## Site level
 	foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
-	    if (-d $Conf::Conf{'etc'}.'/'.$type) {
-		push @directories, [$Conf::Conf{'etc'}.'/'.$type, $Conf::Conf{'lang'}];
+	    if (-d Site->etc.'/'.$type) {
+		push @directories, [Site->etc.'/'.$type, Site->lang];
 	    }
 	}
 
@@ -511,21 +514,21 @@ sub upgrade {
 	    Site->etc . '/auth.conf'
 	) {
 	    if (-f $f) {
-		push @files, [$f, $Conf::Conf{'lang'}];
+		push @files, [$f, Site->lang];
 	    }
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $vr (keys %{Site->robots}) {
 	    foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
-		if (-d $Conf::Conf{'etc'}.'/'.$vr.'/'.$type) {
-		    push @directories, [$Conf::Conf{'etc'}.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
+		if (-d Site->etc.'/'.$vr.'/'.$type) {
+		    push @directories, [Site->etc.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
 		}
 	    }
 
 	    foreach my $f ('robot.conf','topics.conf','auth.conf') {
-		if (-f $Conf::Conf{'etc'}.'/'.$vr.'/'.$f) {
-		    push @files, [$Conf::Conf{'etc'}.'/'.$vr.'/'.$f, $Conf::Conf{'lang'}];
+		if (-f Site->etc.'/'.$vr.'/'.$f) {
+		    push @files, [Site->etc.'/'.$vr.'/'.$f, Site->lang];
 		}
 	    }
 	}
@@ -565,7 +568,7 @@ sub upgrade {
 	    }elsif ($d =~ /(create_list_templates|families)$/) {
 		foreach my $subdir (grep(/^\w+$/, readdir DIR)) {
 		    if (-d "$d/$subdir") {
-			push @directories, ["$d/$subdir", $Conf::Conf{'lang'}];
+			push @directories, ["$d/$subdir", Site->lang];
 		    }
 		}
 		closedir DIR;
@@ -642,10 +645,10 @@ sub upgrade {
 
       ## Remove OTHER/ subdirectories in bounces
       &Log::do_log('notice', "Removing obsolete OTHER/ bounce directories");
-      if (opendir BOUNCEDIR, &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path')) {
+      if (opendir BOUNCEDIR, Site->bounce_path) {
 	
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
-	  my $other_dir = &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
+	  my $other_dir = Site->bounce_path . '/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
 	    &tools::remove_dir($other_dir);
 	    &Log::do_log('notice', "Directory $other_dir removed");
@@ -655,7 +658,7 @@ sub upgrade {
 	close BOUNCEDIR;
  
       }else {
-	&Log::do_log('err', "Failed to open directory $Conf::Conf{'queuebounce'} : $!");	
+	&Log::do_log('err', "Failed to open directory Site->queuebounce : $!");	
       }
 
    }
@@ -752,7 +755,7 @@ sub upgrade {
 	foreach my $spoolparameter (keys %spools_def ){
 	    next if ($spoolparameter eq 'queuetask'); # task is to be done later
 	    
-	    my $spooldir = $Conf::Conf{$spoolparameter};
+	    my $spooldir = Site->$spoolparameter;
 	    
 	    unless (-d $spooldir){
 		&Log::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
@@ -805,7 +808,7 @@ sub upgrade {
 		    $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
 		}elsif ($spoolparameter eq 'queuesubscribe'){
 		    my $match = 0;		    
-		    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
+		    foreach my $robot (keys %{Site->robots}) {
 			&Log::do_log('notice',"robot : $robot");
 			if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
 			    $listname = $1;
@@ -832,16 +835,17 @@ sub upgrade {
 			    $meta{'type'} = $type if $type;
 
 			    my $email = &Conf::get_robot_conf($robot, 'email');	
-			    
+			    my $host = Site->host;
+
 			    my $priority;
 			    
-			    if ($listname eq $Conf::Conf{'listmaster_email'}) {
+			    if ($listname eq Site->listmaster_email) {
 				$priority = 0;
 			    }elsif ($type eq 'request') {
 				$priority = &Conf::get_robot_conf($robot, 'request_priority');
 			    }elsif ($type eq 'owner') {
 				$priority = &Conf::get_robot_conf($robot, 'owner_priority');
-			    }elsif ($listname =~ /^(sympa|$email)(\@$Conf::Conf{'host'})?$/i) {	
+			    }elsif ($listname =~ /^(sympa|$email)(\@$host)?$/i) {	
 				$priority = &Conf::get_robot_conf($robot,'sympa_priority');
 				$listname ='';
 			    }
@@ -1216,7 +1220,7 @@ sub to_utf8 {
 					mode =>  0644,
 					))
 	{
-	    &Log::do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});
+	    &Log::do_log('err','Unable to set rights on %s',Site->db_name);
 	    next;
 	}
 	&Log::do_log('notice','Modified file %s ; original file kept as %s', $file, $file.'@'.$date);

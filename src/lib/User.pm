@@ -32,7 +32,7 @@ foreach my $k (keys %{$db_struct{'user_table'}->{'fields'}}) {
 
 =head1 NAME
 
-User - Any of Identified Users on Sympa
+User - All Users Identified by Sympa
 
 =head1 DESCRIPTION
 

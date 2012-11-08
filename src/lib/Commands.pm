@@ -23,6 +23,7 @@ package Commands;
 
 use strict;
 use warnings;
+use Carp qw(carp);
 use Exporter;
 use Digest::MD5;
 use Fcntl;
@@ -101,19 +102,13 @@ my $quiet;
 sub parse {
     &Log::do_log('debug2', '(%s, %s, %s, %s, %s)', @_);
     $sender = lc(shift);
-    my $robot    = shift;
+    my $robot    = Robot::clean_robot(shift);
     my $i        = shift;
     my $sign_mod = shift;
     my $message  = shift;
 
     my $j;
 
-    ## Compatibility: $robot may be a string
-    unless (ref $robot) {
-	if ($robot and $robot ne '*') {
-	    $robot = Robot->new($robot);
-	}
-    }
     return 'unknown_robot' unless $robot;
 
     $cmd_line = '';
@@ -379,12 +374,10 @@ sub stats {
 	return 'not_allowed';
     } else {
 	my %stats = (
-	    'msg_rcv'  => $list->{'stats'}[0],
-	    'msg_sent' => $list->{'stats'}[1],
-	    'byte_rcv' =>
-		sprintf('%9.2f', ($list->{'stats'}[2] / 1024 / 1024)),
-	    'byte_sent' =>
-		sprintf('%9.2f', ($list->{'stats'}[3] / 1024 / 1024))
+	    'msg_rcv'  => $list->stats->[0],
+	    'msg_sent' => $list->stats->[1],
+	    'byte_rcv' => sprintf('%9.2f', ($list->stats->[2] / 1024 / 1024)),
+	    'byte_sent' => sprintf('%9.2f', ($list->stats->[3] / 1024 / 1024))
 	);
 
 	unless (
@@ -392,7 +385,7 @@ sub stats {
 		'stats_report',
 		$sender,
 		{   'stats'          => \%stats,
-		    'subject'        => "STATS $list->{'name'}",
+		    'subject'        => 'STATS ' . $list->name,
 		    'auto_submitted' => 'auto-replied'
 		}
 	    )
@@ -1184,7 +1177,7 @@ sub info {
 	    my $scenario = new Scenario(
 		'robot'     => $robot,
 		'directory' => $list->dir,
-		'file_path' => $list->admin->{$p}{'file_path'}
+		'file_path' => $list->$p->{'file_path'}
 	    );
 	    my $title = $scenario->{'title'}{'gettext'};
 	    $data->{$p} = gettext($title);

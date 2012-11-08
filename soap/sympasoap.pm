@@ -24,7 +24,7 @@ package SOAP::XMLSchema1999::Serializer;
 
 package sympasoap;
 
-use strict "vars";
+use strict;
 
 use Exporter;
 use HTTP::Cookies;
@@ -215,8 +215,8 @@ sub casLogin {
     ## Validate the CAS ST against all known CAS servers defined in auth.conf
     ## CAS server response will include the user's NetID
     my ($user, @proxies, $email, $cas_id);
-    foreach my $service_id (0..$#{$Conf{'auth_services'}{$robot}}){
-	my $auth_service = $Conf{'auth_services'}{$robot}[$service_id];
+    foreach my $service_id (0..$#{Site->auth_services->{$robot}}){
+	my $auth_service = Site->auth_services->{$robot}[$service_id];
 	next unless ($auth_service->{'auth_type'} eq 'cas'); ## skip non CAS entries
 	
 	my $cas = new AuthCAS(casUrl => $auth_service->{'base_url'}, 
@@ -294,6 +294,8 @@ sub authenticateAndRun {
     $ENV{'USER_EMAIL'} = $email;
     $ENV{'SESSION_ID'} = $session_id;
 
+    no strict "refs";
+
     &{$service}($self,@$parameters);
 }
 ## request user email from http cookie
@@ -369,6 +371,9 @@ sub authenticateRemoteAppAndRun {
 	}
 	$ENV{$id}=$value	if ($proxy_vars->{$id}) ;	
     }		
+
+    no strict "refs";
+
     &{$service}($self,@$parameters);
 }
 
@@ -650,7 +655,7 @@ sub closeList {
     }
     
     # check authorization
-    unless (($list->am_i('owner', $sender)) || (&List::is_listmaster($sender))) {
+    unless (($list->am_i('owner', $sender)) || (Site->is_listmaster($sender))) {
 	&Log::do_log('info', 'closeList %s from %s not allowed',$listname,$sender);
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Not allowed')
@@ -763,7 +768,7 @@ sub add {
 	$list->add_list_member($u);
 	if (defined $list->{'add_outcome'}{'errors'}) {
 	    &Log::do_log('info', 'add %s@%s %s from %s : Unable to add user', $listname,$robot,$email,$sender);
-	    my $error = sprintf ("Unable to add user %s in list %s: %s"),$email,$listname,$list->{'add_outcome'}{'errors'}{'error_message'};
+	    my $error = sprintf 'Unable to add user %s in list %s: %s', $email, $listname, $list->{'add_outcome'}{'errors'}{'error_message'};
 	    die SOAP::Fault->faultcode('Server')
 		->faultstring('Unable to add user')
 		->faultdetail($error);
@@ -1019,7 +1024,7 @@ sub fullReview {
 			->faultdetail("List $listname unknown");
 	}
 	
-	unless($list->is_listmaster($sender, $robot) || $list->am_i('owner', $sender)) {
+	unless($list->robot->is_listmaster($sender) || $list->am_i('owner', $sender)) {
 		die SOAP::Fault->faultcode('Client')
 			->faultstring('Not enough privileges')
 			->faultdetail('Listmaster or listowner required');
@@ -1526,8 +1531,8 @@ sub struct_to_soap {
 
 
 sub get_reason_string {
-    my ($reason,$robot) = @_;
-    my $robot = Robot->new($robot) unless ref $robot; # compat.
+    my $reason = shift;
+    my $robot = Robot::clean_robot(shift);
 
     my $data = {'reason' => $reason };
     my $string;

@@ -21,7 +21,6 @@
 
 package Log;
 
-#XXXuse strict "vars";
 use strict;
 
 use Exporter;
@@ -276,15 +275,24 @@ sub db_log {
     unless($user_email) {
 	$user_email = 'anonymous';
     }
+
+    my $listname;
     unless($list) {
-	$list = '';
+	$listname = '';
+    } elsif (ref $list and ref $list eq 'List') {
+	$listname = $list->name;
+	$robot ||= $list->robot;
+    } elsif ($list =~ /(.+)\@(.+)/) {
+	#remove the robot name of the list name
+	$listname = $1;
+	$robot ||= $2;
     }
-    #remove the robot name of the list name
-    if($list =~ /(.+)\@(.+)/) {
-	$list = $1;
-	unless($robot) {
-	    $robot = $2;
-	}
+
+    my $robot_id;
+    if (ref $robot and ref $robot eq 'Robot') {
+	$robot_id = $robot->name;
+    } else {
+	$robot_id = $robot || '';
     }
 
     unless ($daemon =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
@@ -297,8 +305,8 @@ sub db_log {
     unless(&SDM::do_query( 'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
     $id, 
     $date, 
-    &SDM::quote($robot), 
-    &SDM::quote($list), 
+    &SDM::quote($robot_id), 
+    &SDM::quote($listname), 
     &SDM::quote($action), 
     &SDM::quote(substr($parameters,0,100)),
     &SDM::quote($target_email),

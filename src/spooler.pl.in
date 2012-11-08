@@ -143,7 +143,7 @@ if (Site->db_name and Site->db_type) {
 }
 
 ## Now trying to load full config (including database)
-unless (defined Site->load() and defined Robot::get_robots()) {
+unless (defined Robot::get_robots()) {
     &Log::fatal_err(
 	'Configuration file %s has errors.',
 	Conf::get_sympa_conf()
@@ -155,8 +155,8 @@ unless (defined Site->load() and defined Robot::get_robots()) {
 
 
 ## Main program
-if (!chdir($Conf{'home'})) {
-   &Log::fatal_err("Can't chdir to %s: %m", $Conf{'home'});
+if (!chdir(Site->home)) {
+   &Log::fatal_err("Can't chdir to %s: %m", Site->home);
    ## Function never returns.
 }
 
@@ -196,7 +196,8 @@ if ($signal ne 'hup') {
 	    $distinct_spools{$main::options{'queue'}}= 1;
 	}else{
 	    foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
-		$distinct_spools{$Conf{$possible_spool}} = 1 if ($Conf{$possible_spool});
+		$distinct_spools{Site->$possible_spool} = 1
+		    if Site->$possible_spool;
 	    }
 	}
 	my $master = 1;
@@ -218,14 +219,14 @@ if ($signal ne 'hup') {
 	}
 	
 
-	&Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
+	&Log::do_openlog(Site->syslog, Site->log_socket_type, 'spooler');
 
 	&Log::do_log('debug', "Running server $$ for spooler purpose ");
 
 	unless ($main::options{'batch'} ) {
 	    
 	    ## Create and write the pidfile
-	    my $file = $Conf{'pidfile_spooler'};
+	    my $file = Site->pidfile_spooler;
 	    
 	    ## If process is running in foreground, don't write STDERR to a dedicated file
 	    my $options;
@@ -249,7 +250,7 @@ if ($signal ne 'hup') {
 	}
 	
 	# Sets the UMASK
-	umask(oct($Conf{'umask'}));
+	umask(oct(Site->umask));
 	
 	## Most initializations have now been done.
 	&Log::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
@@ -369,16 +370,17 @@ while (!$signal) {
 	    ($listname, $type) = ($1, $2);
 	}
 	my $email = &Conf::get_robot_conf($robot, 'email');	
+	my $site_host = Site->host;
 
 	my $priority;
 
-	if ($listname eq $Conf{'listmaster_email'}) {
+	if ($listname eq Site->listmaster_email) {
 	    $priority = 0;
 	}elsif ($type eq 'request') {
 	    $priority = &Conf::get_robot_conf($robot, 'request_priority');
 	}elsif ($type eq 'owner') {
 	    $priority = &Conf::get_robot_conf($robot, 'owner_priority');
-	}elsif ($listname =~ /^(sympa|$email)(\@$Conf{'host'})?$/i) {	
+	}elsif ($listname =~ /^(sympa|$email)(\@$site_host)?$/i) {	
 	    $priority = &Conf::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
@@ -432,7 +434,7 @@ SDM::db_disconnect;
 
 }
 &Log::do_log('notice', 'spooler exited normally due to signal');
-my $file = $Conf{'pidfile_spooler'};
+my $file = Site->pidfile_spooler;
 &tools::remove_pid($file, $$);
 
 exit(0);

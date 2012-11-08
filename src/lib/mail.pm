@@ -21,31 +21,26 @@
 
 package mail;
 
+use strict;
 require Exporter;
-use Carp;
-@ISA = qw(Exporter);
-@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
-
-#use strict;
-use Data::Dumper;
+#use Carp; # currently not used.
 use POSIX;
 use Time::Local;
 use MIME::Charset;
 use MIME::Tools;
+# tentative
+use Data::Dumper;
+
 use Conf;
-use Log;
-use Language;
-use List;
+#use Log; # load in Conf
+use Language qw(gettext);
+#use List; # no longer used
 use Bulk;
-use tools;
-use Sympa::Constants;
+#use tools; # load in Conf
+#use Sympa::Constants; # load in confdef - Conf
 
-use strict;
-
-#use strict;
-
-## RCS identification.
-#my $id = '@(#)$Id$';
+our @ISA = qw(Exporter);
+our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
 my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
@@ -387,7 +382,7 @@ sub mail_message {
 		   length(&Conf::get_robot_conf($robot, 'sendmail_args')) +
 		   length(' -N success,delay,failure -V ') + 32 +
 		   length(" -f $from ");
-    my $db_type = $Conf::Conf{'db_type'};
+    my $db_type = Site->db_type;
 
     while (defined ($i = shift(@rcpt))) {
 	my @k = reverse(split(/[\.@]/, $i));
@@ -399,12 +394,14 @@ sub mail_message {
 	    chomp $dom;
 	}
 	$rcpt_by_dom{$dom} += 1 ;
-	&Log::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Conf::Conf{'nrcpt_by_domain'}{$dom}");
+	&Log::do_log('debug3',
+	    'domain: %s ; rcpt by dom: %s ; limit for this domain: %s',
+	    $dom, $rcpt_by_dom{$dom}, Site->nrcpt_by_domain->{$dom});
 
 	if (
 	    # number of recipients by each domain
-	    (defined $Conf::Conf{'nrcpt_by_domain'}{$dom} and
-	     $rcpt_by_dom{$dom} >= $Conf::Conf{'nrcpt_by_domain'}{$dom}) or
+	    (defined Site->nrcpt_by_domain->{$dom} and
+	     $rcpt_by_dom{$dom} >= Site->nrcpt_by_domain->{$dom}) or
 	    # number of different domains
 	    ($j and $#sendto >= &Conf::get_robot_conf($robot, 'avg') and
 	     lc "$k[0] $k[1]" ne lc "$l[0] $l[1]") or
@@ -652,7 +649,7 @@ sub sending {
     my $sign_mode = $params{'sign_mode'};
     my $sympa_email =  $params{'sympa_email'};
     my $priority_message =  $params{'priority'};
-    my $priority_packet = $Conf::Conf{'sympa_packet_priority'};
+    my $priority_packet = Site->sympa_packet_priority;
     my $delivery_date = $params{'delivery_date'};
     $delivery_date = time() unless ($delivery_date); 
     my $verp  =  $params{'verp'};
