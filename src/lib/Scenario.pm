@@ -25,11 +25,11 @@ use strict;
 use Carp qw(croak);
 use Net::Netmask;
 
-use tools;
+#use tools; # used in Conf
 use List;
-use Log;
-use Conf;
-use Sympa::Constants;
+#use Log; # used in Conf
+#use Conf; # used in List - Site
+#use Sympa::Constants; # used in Conf - confdef
 
 my %all_scenarios;
 my %persistent_cache;
@@ -298,41 +298,20 @@ sub request_action {
 
 	## The $operation refers to a list parameter of the same name
 	## The list parameter might be structured ('.' is a separator)
-	##FIXME: using eval is not a good idea.
-	my @operations = split /\./, $operation;
-	my $scenario_path;
-	
-	if ($#operations == 0) {
-	    ## Simple parameter
-	    eval {
-		my $hash = $list->$operation;
-		croak "$operations[0] scenario is not defined" unless
-		    ref $hash eq 'HASH' and
-		    exists $hash->{'file_path'};
-		$scenario_path = $hash->{'file_path'};
-	    };
-	}else{
-	    ## Structured parameter
-	    eval {
-		my $op = $operations[0];
-		my $hash = $list->$op;
-		croak "$op.$operations[1] scenario is not defined" unless
-		    ref $hash eq 'HASH' and
-		    exists $hash->{$operations[1]} and
-		    exists $hash->{$operations[1]}->{'file_path'};
-		$scenario_path = $hash->{$operations[1]}->{'file_path'};
-	    };
-	}
+	$scenario = $list->get_scenario($operation, $context->{'options'});
 
 	## List parameter might not be defined (example : web_archive.access)
-	unless (defined $scenario_path) {
+	unless ($scenario) {
 	    my $return = {'action' => 'reject',
 			  'reason' => 'parameter-not-defined',
 			  'auth_method' => '',
 			  'condition' => ''
 			  };
 	    if ($log_it){
-		 &Log::do_log('info',"$trace_scenario rejected reason parameter not defined%s", ($@ ? ": $@" : ''));
+		&Log::do_log('info',
+		    '%s rejected reason parameter not defined',
+		    $trace_scenario
+		);
 	    }
 	    return $return;
 	}
@@ -343,12 +322,6 @@ sub request_action {
 		$context->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
 	    }
 	}
-	
-	## Create Scenario object
-	$scenario = new Scenario ('robot' => $robot, 
-				  'directory' => $list->dir,
-				  'file_path' => $scenario_path,
-				  'options' => $context->{'options'});
 
 	## pending/closed lists => send/visibility are closed
 	unless ($list->status eq 'open') {
@@ -367,7 +340,8 @@ sub request_action {
 	
 	### the following lines are used by the document sharing action 
 	if (defined $context->{'scenario'}) { 
-	    
+	    my @operations = split /\./, $operation;
+
 	    # loading of the structure
 	    $scenario = new Scenario ('robot' => $robot, 
 				      'directory' => $list->dir,
@@ -386,23 +360,22 @@ sub request_action {
 
     }else{	
 	## Global scenario (ie not related to a list) ; example : create_list
-	##FIXME: using eval is not a good idea.
-	my $p;
-	eval {
-	    $p = $robot->$operation;
-	    croak "$operation is not robot parameter" if ref $p;
-	};
-	unless ($@) {
-	    $scenario = new Scenario ('robot' => $robot, 
-				      'function' => $operation,
-				      'name' => $p,
-				      'options' => $context->{'options'});
+	my @p;
+	if ((   @p =
+		grep { $_->{'name'} and $_->{'name'} eq $operation }
+		@confdef::params
+	    ) and $p[0]->{'scenario'}) {
+	    $scenario = new Scenario(
+		'robot'    => $robot,
+		'function' => $operation,
+		'name'     => $robot->$operation,
+		'options'  => $context->{'options'}
+		);
 	}
     }
 
     unless (defined $scenario and defined $scenario->{'rules'}) {
-	&Log::do_log('err', 'Failed to load scenario for "%s"%s',
-	    $operation, ($@ ? ": $@" : ''));
+	&Log::do_log('err', 'Failed to load scenario for "%s"', $operation);
 	return undef ;
     }
 
@@ -586,9 +559,9 @@ sub verify {
     } elsif ($context->{'robot_object'}) {
 	$robot = $context->{'robot_object'};
     } elsif ($context->{'robot_domain'}) {
-	$robot = Robot->new($context->{'robot_domain'});
+	$robot = Robot::clean_robot($context->{'robot_domain'});
     }
-    
+
 #    while (my($k,$v) = each %{$context}) {
 #	&Log::do_log('debug3',"verify: context->{$k} = $v");
 #    }
@@ -669,15 +642,18 @@ sub verify {
 	elsif ($value =~ /\[conf\-\>([\w\-]+)\]/i) {
 	    my $conf_key = $1;
 	    my $conf_value;
-	    eval {
-		$conf_value = $robot->$conf_key;
-	    };
-	    if (!$@ and $conf_value) {
+	    if (scalar(grep { $_->{'name'} and $_->{'name'} eq $conf_key }
+		@confdef::params) and
+		($conf_value = $robot->$conf_key)) {
 		$value =~ s/\[conf\-\>([\w\-]+)\]/$conf_value/;
 	    }else{
-		&Log::do_log('debug',"undefine variable context $value in rule $condition");
+		&Log::do_log('debug',
+		    'undefine variable context %s in rule %s',
+		    $value, $condition);
 		if ($log_it == 1) {
-		    &Log::do_log('info',"undefine variable context $value in rule $condition");
+		    &Log::do_log('info',
+			'undefine variable context %s in rule %s',
+			$value, $condition);
 		}
 		# a condition related to a undefined context variable is always false
 		return -1 * $negation;

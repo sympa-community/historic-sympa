@@ -367,10 +367,12 @@ our @params = (
         'file'     => 'sympa.conf',
         'edit'     => '1',
         'advice'   => gettext('This parameter is a scenario, check sympa documentation about scenarios if you want to define one'),
+	'scenario' => '1',
     },
     {
         'name'     => 'global_remind',
         'default'  => 'listmaster',
+	'scenario' => '1',
     },
     {
         'name'     => 'allow_subscribe_if_pending',
@@ -477,6 +479,7 @@ our @params = (
         'name'    => 'automatic_list_creation',
         'default' => 'public',
         'vhost'   => '1',
+	'scenario' => '1',
     },
     {
         'name'    => 'automatic_list_families',
@@ -1549,6 +1552,7 @@ our @params = (
         'vhost'    => '1',
         'file'     => 'sympa.conf',
         'edit'     => '1',
+	'scenario' => '1',
     },
     {
         'name'     => 'ssl_cert_dir',

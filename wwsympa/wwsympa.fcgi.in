@@ -2928,8 +2928,8 @@ sub check_param_out {
          }
      }
      
-     if ($list->name) {
-	 &wwslog('debug2', 'list-name %s', $list->name);
+    if ($list) {
+	&wwslog('debug2', 'list-name %s', $list->name);
 
 	 ## Email addresses protection
  	 if ($in{'action'} eq 'arc') {

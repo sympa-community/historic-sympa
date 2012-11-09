@@ -37,7 +37,7 @@ use Robot;
 #use Upgrade; # no longer used
 #use Lock;
 use Task;
-#use Scenario; # used in Sympaspool
+use Scenario;
 use Fetch;
 use WebAgent;
 #use Sympaspool; # used in Task
@@ -7632,6 +7632,51 @@ sub load_scenario_list {
 
     ## Return a copy of the data to prevent unwanted changes in the central scenario data structure
     return &tools::dup_var(\%list_of_scenario);
+}
+
+=over 4
+
+=item get_scenario
+
+Get Scenario object about requested operation.
+
+=back
+
+=cut
+
+sub get_scenario {
+    my $self = shift;
+    my $op = shift;
+    my $options = shift;
+
+    return undef unless $op;
+    my @op = split /\./, $op;
+
+    my $scenario_path;
+
+    if (scalar @op > 1) {
+	## Structured parameter
+	$op = $op[0];
+	return undef
+	    unless $::pinfo{$op} and
+	    ref $::pinfo{$op}->{'format'} eq 'HASH' and
+	    $::pinfo{$op}->{'format'}->{$op[1]} and
+	    $::pinfo{$op}->{'format'}->{$op[1]}->{'scenario'};
+	$scenario_path = $self->$op->{$op[1]}->{'file_path'};
+    } else {
+	## Simple parameter
+	return undef
+	    unless $::pinfo{$op} and
+	    $::pinfo{$op}->{'scenario'};
+	$scenario_path = $self->$op->{'file_path'};
+    }
+    return undef unless $scenario_path;
+
+    ## Create Scenario object
+    return new Scenario ('robot' => $self->robot,
+	'directory' => $self->dir,
+	'file_path' => $scenario_path,
+	'options' => $options);
 }
 
 sub load_task_list {
