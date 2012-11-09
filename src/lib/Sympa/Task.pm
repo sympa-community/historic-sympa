@@ -43,7 +43,7 @@ sub set_spool {
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
-    &Sympa::Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
+    &Sympa::Log::do_log('debug2', '%s::new  messagekey = %s', __PACKAGE__,$task_in_spool->{'messagekey'});
     
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
     my $host_regexp = &Sympa::Tools::get_regexp('host');

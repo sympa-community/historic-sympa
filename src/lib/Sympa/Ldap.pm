@@ -54,7 +54,7 @@ my %Ldap = ();
 sub load {
     my $config = shift;
 
-   &Sympa::Log::do_log('debug3','Ldap::load(%s)', $config);
+   &Sympa::Log::do_log('debug3', '%s::load(%s)', __PACKAGE__, $config);
 
     my $line_num = 0;
     my $config_err = 0;

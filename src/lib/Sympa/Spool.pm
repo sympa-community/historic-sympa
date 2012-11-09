@@ -48,7 +48,7 @@ my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 sub new {
     my($pkg, $spoolname, $selection_status) = @_;
     my $spool={};
-   &Sympa::Log::do_log('debug2', 'Spool::new(%s)', $spoolname);
+   &Sympa::Log::do_log('debug2', '%s::new(%s)', __PACKAGE__,$spoolname);
     
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 &Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
@@ -163,7 +163,7 @@ sub next {
     my $self = shift;
     my $selector = shift;
 
-    &Sympa::Log::do_log('debug', 'Spool::next(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
+    &Sympa::Log::do_log('debug', '%s::next(%s,%s)',__PACKAGE__,$self->{'spoolname'},$self->{'selection_status'});
     
     my $sql_where = _sqlselector($selector);
 
@@ -212,7 +212,7 @@ sub get_message {
     my $selector = shift;
 
 
-    &Sympa::Log::do_log('debug', "Spool::get_message($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
+    &Sympa::Log::do_log('debug', "%s::get_message($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})", __PACKAGE__);
     
 
     my $sqlselector = '';
@@ -256,7 +256,7 @@ sub unlock_message {
     my $self = shift;
     my $messagekey = shift;
 
-    &Sympa::Log::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
+    &Sympa::Log::do_log('debug', '%s::unlock_message(%s,%s)',__PACKAGE__, $self->{'spoolname'}, $messagekey);
     return ( $self->update({'messagekey' => $messagekey},
 			   {'messagelock' => 'NULL'}));
 }
@@ -270,7 +270,7 @@ sub update {
     my $selector = shift;
     my $values = shift;
 
-    &Sympa::Log::do_log('debug', "Spool::update($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
+    &Sympa::Log::do_log('debug', "%s::update($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}", __PACKAGE__);
 
     my $where = _sqlselector($selector);
 
@@ -335,7 +335,7 @@ sub store {
     my $sender = $metadata->{'sender'};
     $sender |= '';
 
-   &Sympa::Log::do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
+   &Sympa::Log::do_log('debug',"%s::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked", __PACKAGE__);
 
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
@@ -436,7 +436,7 @@ sub clean {
     my $bad =  $filter->{'bad'};
     
 
-    &Sympa::Log::do_log('debug', 'Spool::clean(%s,$delay)',$self->{'spoolname'},$delay);
+    &Sympa::Log::do_log('debug', '%s::clean(%s,$delay)',__PACKAGE__,$self->{'spoolname'},$delay);
     my $spoolname = $self->{'spoolname'};
     return undef unless $spoolname;
     return undef unless $delay;
@@ -469,7 +469,7 @@ sub store_test {
     my $barmax = $size_increment*$steps*($steps+1)/2;
     my $even_part = $barmax/$steps;
     
-    &Sympa::Log::do_log('debug', 'Spool::store_test()');
+    &Sympa::Log::do_log('debug', '%s::store_test()', __PACKAGE__);
 
     print "maxtest: $maxtest\n";
     print "barmax: $barmax\n";

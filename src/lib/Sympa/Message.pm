@@ -136,7 +136,7 @@ sub new {
     $input = 'messageasstring' if $messageasstring; 
     $input = 'message_in_spool' if $message_in_spool; 
     $input = 'mimeentity' if $mimeentity; 
-    &Sympa::Log::do_log('debug2', 'Message::new(input= %s, noxsympato= %s)',$input,$noxsympato);
+    &Sympa::Log::do_log('debug2', '%s::new(input= %s, noxsympato= %s)',__PACKAGE__,$input,$noxsympato);
     
     if ($mimeentity) {
 	$message->{'msg'} = $mimeentity;

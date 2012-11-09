@@ -428,7 +428,7 @@ sub disconnect {
 }
 
 sub create_db {
-    &Sympa::Log::do_log('debug3', 'Sympa::List::create_db()');    
+    &Sympa::Log::do_log('debug3', '%s::create_db()', __PACKAGE__);    
     return 1;
 }
 

@@ -80,7 +80,7 @@ sub update_version {
 sub upgrade {
     my ($previous_version, $new_version) = @_;
 
-    &Sympa::Log::do_log('notice', 'Upgrade::upgrade(%s, %s)', $previous_version, $new_version);
+    &Sympa::Log::do_log('notice', '%s::upgrade(%s, %s)', __PACKAGE__, $previous_version, $new_version);
     
     if (&Sympa::Tools::Data::lower_version($new_version, $previous_version)) {
 	&Sympa::Log::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
@@ -1023,7 +1023,7 @@ sub md5_encode_password {
 
     my $total = 0;
 
-    &Sympa::Log::do_log('notice', 'Upgrade::md5_encode_password() recoding password using md5 fingerprint');
+    &Sympa::Log::do_log('notice', '%s::md5_encode_password() recoding password using md5 fingerprint', __PACKAGE__);
     
     unless (&List::check_db_connect()) {
 	return undef;

@@ -38,10 +38,10 @@ sub new {
     my $email = $param->{'user'}{'email'};
     #$email ||= 'nobody';
     my $document = {};
-    &Sympa::Log::do_log('debug2', 'SharedDocument::new(%s, %s)', $list->{'name'}, $path);
+    &Sympa::Log::do_log('debug2', '%s::new(%s, %s)', __PACKAGE__, $list->{'name'}, $path);
     
     unless (ref($list) =~ /List/i) {
-	&Sympa::Log::do_log('err', 'SharedDocument::new : incorrect list parameter');
+	&Sympa::Log::do_log('err', '%s::new : incorrect list parameter', __PACKAGE__);
 	return undef;
     }
 
@@ -52,7 +52,7 @@ sub new {
 
     ### Document isn't a description file
     if ($document->{'path'} =~ /\.desc/) {
-	&Sympa::Log::do_log('err',"SharedDocument::new : %s : description file", $document->{'path'});
+	&Sympa::Log::do_log('err',"%s::new : %s : description file", __PACKAGE__, $document->{'path'});
 	return undef;
     }
 
@@ -72,13 +72,13 @@ sub new {
 
     ### Document exist ? 
     unless (-r $document->{'absolute_path'}) {
-	&Sympa::Log::do_log('err',"SharedDocument::new : unable to read %s : no such file or directory", $document->{'absolute_path'});
+	&Sympa::Log::do_log('err',"%s::new : unable to read %s : no such file or directory", __PACKAGE__, $document->{'absolute_path'});
 	return undef;
     }
     
     ### Document has non-size zero?
     unless (-s $document->{'absolute_path'}) {
-	&Sympa::Log::do_log('err',"SharedDocument::new : unable to read %s : empty document", $document->{'absolute_path'});
+	&Sympa::Log::do_log('err',"%s::new : unable to read %s : empty document", __PACKAGE__, $document->{'absolute_path'});
 	return undef;
     }
     
@@ -139,7 +139,7 @@ sub new {
 	if ($document->{'absolute_path'} =~ /^(([^\/]*\/)*)([^\/]+)$/) {
 	    $desc_file = $1.'.desc.'.$3;
 	}else {
-	    &Sympa::Log::do_log('err',"SharedDocument::new() : cannot determine desc file for %s", $document->{'absolute_path'});
+	    &Sympa::Log::do_log('err',"%s::new() : cannot determine desc file for %s", __PACKAGE__, $document->{'absolute_path'});
 	    return undef;
 	}
     }
@@ -209,7 +209,7 @@ sub new {
 	
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $document->{'absolute_path'}) {
-	    &Sympa::Log::do_log('err',"SharedDocument::new() : cannot open %s : %s", $document->{'absolute_path'}, $!);
+	    &Sympa::Log::do_log('err',"%s::new() : cannot open %s : %s", __PACKAGE__, $document->{'absolute_path'}, $!);
 	    return undef;
 	}
 	

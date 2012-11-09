@@ -103,7 +103,7 @@ sub parse {
    my $sign_mod = shift;
    my $message = shift;
 
-   &Sympa::Log::do_log('debug2', 'Commands::parse(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message->{'msg'}->as_string );
+   &Sympa::Log::do_log('debug2', '%s::parse(%s, %s, %s, %s, %s)', __PACKAGE__, $sender, $robot, $i, $sign_mod, $message->{'msg'}->as_string );
 
    my $j;
    $cmd_line = '';
@@ -156,7 +156,7 @@ sub parse {
 #      
 ################################################
 sub finished {
-    &Sympa::Log::do_log('debug2', 'Commands::finished');
+    &Sympa::Log::do_log('debug2', '%s::finished', __PACKAGE__);
 
     &Sympa::Report::notice_report_cmd('finished',{},$cmd_line);
     return 1;
@@ -181,7 +181,7 @@ sub help {
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
     my $etc =  &Sympa::Conf::get_robot_conf($robot, 'etc');
 
-    &Sympa::Log::do_log('debug', 'Commands::help to robot %s',$robot);
+    &Sympa::Log::do_log('debug', '%s::help to robot %s',__PACKAGE__,$robot);
 
     # sa ne prends pas en compte la structure des répertoires par lang.
     # we should make this utilize Template's chain of responsibility
@@ -253,7 +253,7 @@ sub lists {
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
     my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
 
-    &Sympa::Log::do_log('debug', 'Commands::lists for robot %s, sign_mod %, message %s', $robot,$sign_mod , $message);
+    &Sympa::Log::do_log('debug', '%s::lists for robot %s, sign_mod %, message %s', __PACKAGE__,$robot,$sign_mod , $message);
 
     my $data = {};
     my $lists = {};
@@ -319,7 +319,7 @@ sub stats {
     my $sign_mod=shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::stats(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::stats(%s, %s, %s, %s)', __PACKAGE__, $listname, $robot, $sign_mod, $message);
 
     my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
@@ -394,7 +394,7 @@ sub getfile {
     my($which, $file) = split(/\s+/, shift);
     my $robot=shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::getfile(%s, %s, %s)', $which, $file, $robot);
+    &Sympa::Log::do_log('debug', '%s::getfile(%s, %s, %s)', __PACKAGE__, $which, $file, $robot);
 
     my $list = new Sympa::List ($which, $robot);
     unless ($list) {
@@ -455,7 +455,7 @@ sub last {
 
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
-    &Sympa::Log::do_log('debug', 'Commands::last(%s, %s)', $which, $robot);
+    &Sympa::Log::do_log('debug', '%s::last(%s, %s)', __PACKAGE__, $which, $robot);
 
     my $list = new Sympa::List ($which,$robot);
     unless ($list)  {
@@ -508,7 +508,7 @@ sub index {
     my $which = shift;
     my $robot = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::index(%s) robot (%s)',$which,$robot);
+    &Sympa::Log::do_log('debug', '%s::index(%s) robot (%s)',__PACKAGE__,$which,$robot);
 
     my $list = new Sympa::List ($which, $robot);
     unless ($list) {
@@ -563,7 +563,7 @@ sub review {
     my $sign_mod = shift ;
     my $message = shift ;
 
-    &Sympa::Log::do_log('debug', 'Commands::review(%s,%s,%s)', $listname,$robot,$sign_mod );
+    &Sympa::Log::do_log('debug', '%s::review(%s,%s,%s)', __PACKAGE__,$listname,$robot,$sign_mod );
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     my $user;
@@ -673,7 +673,7 @@ sub verify {
     my $robot = shift;
 
     my $sign_mod = shift ;
-    &Sympa::Log::do_log('debug', 'Commands::verify(%s, %s)', $sign_mod, $robot);
+    &Sympa::Log::do_log('debug', '%s::verify(%s, %s)', __PACKAGE__,$sign_mod, $robot);
     
     my $user;
     
@@ -715,7 +715,7 @@ sub subscribe {
     my $sign_mod = shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::subscribe(%s,%s, %s, %s)', $what,$robot,$sign_mod,$message);
+    &Sympa::Log::do_log('debug', '%s::subscribe(%s,%s, %s, %s)', __PACKAGE__,$what,$robot,$sign_mod,$message);
 
     $what =~ /^(\S+)(\s+(.+))?\s*$/;
     my($which, $comment) = ($1, $3);
@@ -900,7 +900,7 @@ sub info {
     my $sign_mod = shift ;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::info(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::info(%s,%s, %s, %s)', __PACKAGE__,$listname,$robot, $sign_mod, $message);
 
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
@@ -1014,7 +1014,7 @@ sub signoff {
     my $sign_mod = shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::signoff(%s,%s, %s, %s)', $which,$robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::signoff(%s,%s, %s, %s)', __PACKAGE__,$which,$robot, $sign_mod, $message);
 
     my ($l,$list,$auth_method);
     my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
@@ -1203,7 +1203,7 @@ sub add {
     my $sign_mod = shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::add(%s,%s,%s,%s)', $what,$robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::add(%s,%s,%s,%s)', __PACKAGE__, $what,$robot, $sign_mod, $message);
 
     my $email_regexp = &Sympa::Tools::get_regexp('email');    
 
@@ -1346,7 +1346,7 @@ sub invite {
     my $sign_mod = shift ;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::invite(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::invite(%s,%s,%s,%s)', __PACKAGE__, $what, $robot, $sign_mod, $message);
 
     my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
@@ -1500,7 +1500,7 @@ sub remind {
     my $sign_mod = shift ;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::remind(%s,%s,%s,%s)', $which,$robot,$sign_mod,$message);
+    &Sympa::Log::do_log('debug', '%s::remind(%s,%s,%s,%s)', __PACKAGE__,$which,$robot,$sign_mod,$message);
 
     my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
     
@@ -1734,7 +1734,7 @@ sub del {
     my $sign_mod = shift ;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::del(%s,%s,%s,%s)', $what,$robot,$sign_mod,$message);
+    &Sympa::Log::do_log('debug', '%s::del(%s,%s,%s,%s)', __PACKAGE__, $what,$robot,$sign_mod,$message);
 
     my $email_regexp = &Sympa::Tools::get_regexp('email');    
 
@@ -1867,7 +1867,7 @@ sub set {
     my $sign_mod = shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::set(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::set(%s,%s,%s,%s)', __PACKAGE__, $what, $robot, $sign_mod, $message);
 
     $what =~ /^\s*(\S+)\s+(\S+)\s*$/; 
     my ($which, $mode) = ($1, $2);
@@ -1999,7 +1999,7 @@ sub distribute {
     my($which, $key) = ($1, $2);
     $which =~ y/A-Z/a-z/;
 
-    &Sympa::Log::do_log('debug', 'Commands::distribute(%s,%s,%s,%s)', $which,$robot,$key,$what);
+    &Sympa::Log::do_log('debug', '%s::distribute(%s,%s,%s,%s)', __PACKAGE__, $which,$robot,$key,$what);
 
     my $start_time=time; # get the time at the beginning
     ## Load the list if not already done, and reject the
@@ -2025,14 +2025,14 @@ sub distribute {
 	$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     }
     unless ($message_in_spool) {
-	&Sympa::Log::do_log('err', 'Commands::distribute(): Unable to find message for %s with key %s', $name, $key);
+	&Sympa::Log::do_log('err', '%s::distribute(): Unable to find message for %s with key %s', __PACKAGE__, $name, $key);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
 	
     }
     my $message = new Sympa::Message({'message_in_spool'=>$message_in_spool});
     unless (defined $message) {
-	&Sympa::Log::do_log('err', 'Commands::distribute(): Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
+	&Sympa::Log::do_log('err', '%s::distribute(): Unable to create message object for %s@%s validation key %s',__PACKAGE__,$name,$robot,$key);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
     }
@@ -2054,7 +2054,7 @@ sub distribute {
     $numsmtp =$list->distribute_msg('message'=> $message,
 				    'apply_dkim_signature'=>$apply_dkim_signature);
     unless (defined $numsmtp) {
-	&Sympa::Log::do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
+	&Sympa::Log::do_log('err','%s::distribute(): Unable to send message to list %s', __PACKAGE__, $name);
 	&Sympa::Report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
 	return undef;
     }
@@ -2065,7 +2065,7 @@ sub distribute {
     
     unless ($quiet) {
 	unless (&Sympa::Report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
-	    &Sympa::Log::do_log('notice',"Commands::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
+	    &Sympa::Log::do_log('notice',"%s::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender", __PACKAGE__);
 	}
     }
     
@@ -2092,7 +2092,7 @@ sub distribute {
 sub confirm {
     my $what = shift;
     my $robot = shift;
-    &Sympa::Log::do_log('debug', 'Commands::confirm(%s,%s)', $what, $robot);
+    &Sympa::Log::do_log('debug', '%s::confirm(%s,%s)', __PACKAGE__, $what, $robot);
 
     $what =~ /^\s*(\S+)\s*$/;
     my $key = $1; chomp $key;
@@ -2110,7 +2110,7 @@ sub confirm {
     my $message = new Sympa::Message ({'message_in_spool'=>$messageinspool});    
 
     unless (defined $message) {
-	&Sympa::Log::do_log('err', 'Commands::confirm(): Unable to create message object for key %s',$key);
+	&Sympa::Log::do_log('err', '%s::confirm(): Unable to create message object for key %s', __PACKAGE__, $key);
 	&Sympa::Report::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');
 	return 'msg_not_found';
     }
@@ -2135,7 +2135,7 @@ sub confirm {
 
 
     unless (defined $action) {
-	&Sympa::Log::do_log('err', 'Commands::confirm(): message (%s) ignored because unable to evaluate scenario for list %s',$messageid,$name);
+	&Sympa::Log::do_log('err', '%s::confirm(): message (%s) ignored because unable to evaluate scenario for list %s',__PACKAGE__,$messageid,$name);
 	&Sympa::Report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msgid,'message' => $message},
 				  $robot,$msg_string,$list);
 	return undef ;
@@ -2145,7 +2145,7 @@ sub confirm {
 	my $key = $list->send_to_editor('md5', $message);
 
 	unless (defined $key) {
-	    &Sympa::Log::do_log('err','Commands::confirm(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
+	    &Sympa::Log::do_log('err','%s::confirm(): Calling to send_to_editor() function failed for user %s in list %s', __PACKAGE__, $sender, $name);
 	    &Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
 	    return undef
 	}
@@ -2154,7 +2154,7 @@ sub confirm {
 
 	unless ($2 eq 'quiet') {
 	    unless (&Sympa::Report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
-		&Sympa::Log::do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'moderating_message' to $sender");
+		&Sympa::Log::do_log('notice',"%s::confirm(): Unable to send template 'message_report', entry 'moderating_message' to $sender", __PACKAGE__);
 	    }
 	}
 	return 1;
@@ -2163,7 +2163,7 @@ sub confirm {
 	my $key = $list->send_to_editor('smtp', $message);
 
 	unless (defined $key) {
-	    &Sympa::Log::do_log('err','Commands::confirm(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
+	    &Sympa::Log::do_log('err','%s::confirm(): Calling to send_to_editor() function failed for user %s in list %s', __PACKAGE__, $sender, $name);
 	    &Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
 	    return undef
 	}
@@ -2172,7 +2172,7 @@ sub confirm {
 	
 	unless ($2 eq 'quiet') {
 	    unless (&Sympa::Report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
-		&Sympa::Log::do_log('notice',"Commands::confirm(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender");
+		&Sympa::Log::do_log('notice',"%s::confirm(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender", __PACKAGE__);
 	    }
 	}
 	return 1;
@@ -2182,12 +2182,12 @@ sub confirm {
 	unless ($2 eq 'quiet') {
 	    if (defined $result->{'tt2'}) {
 		unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
-		    &Sympa::Log::do_log('notice',"Commands::confirm(): Unable to send template '$result->{'tt2'}' to $sender");
+		    &Sympa::Log::do_log('notice',"%s::confirm(): Unable to send template '$result->{'tt2'}' to $sender", __PACKAGE__);
 		    &Sympa::Report::reject_report_msg('auth',$result->{'reason'},$sender,{'message' => $message},$robot,$msg_string,$list);
 		}
 	    }else {
 		unless (&Sympa::Report::reject_report_msg('auth',$result->{'reason'},$sender,{'message' => $message},$robot,$msg_string,$list)) {
-		    &Sympa::Log::do_log('notice',"Commands::confirm(): Unable to send template 'message_report', type 'auth' to $sender");
+		    &Sympa::Log::do_log('notice',"%s::confirm(): Unable to send template 'message_report', type 'auth' to $sender", __PACKAGE__);
 		}
 	    }
 	}
@@ -2207,14 +2207,14 @@ sub confirm {
 					'apply_dkim_signature'=>$apply_dkim_signature);
 	
 	unless (defined $numsmtp) {
-	    &Sympa::Log::do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
+	    &Sympa::Log::do_log('err','%s::confirm(): Unable to send message to list %s', __PACKAGE__, $list->{'name'});
 	    &Sympa::Report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
 	    return undef;
 	}
 	
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    unless (&Sympa::Report::notice_report_msg('message_confirmed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
-		&Sympa::Log::do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
+		&Sympa::Log::do_log('notice',"%s::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender", __PACKAGE__);
 	    }
 	}
 	&Sympa::Log::do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
@@ -2244,7 +2244,7 @@ sub reject {
     shift;
     my $editor_msg = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::reject(%s,%s)', $what, $robot);
+    &Sympa::Log::do_log('debug', '%s::reject(%s,%s)', __PACKAGE__, $what, $robot);
 
     $what =~ /^(\S+)\s+(.+)\s*$/;
     my($which, $key) = ($1, $2);
@@ -2304,7 +2304,7 @@ sub reject {
 
 	## Notify list moderator
 	unless (&Sympa::Report::notice_report_msg('message_rejected', $sender, {'key' => $key,'message' => $msg}, $robot, $list)) {
-	    &Sympa::Log::do_log('err',"Commands::reject(): Unable to send template 'message_report', entry 'message_rejected' to $sender");
+	    &Sympa::Log::do_log('err',"%s::reject(): Unable to send template 'message_report', entry 'message_rejected' to $sender", __PACKAGE__);
 	}
 
     }
@@ -2334,7 +2334,7 @@ sub reject {
 sub modindex {
     my $name = shift;
     my $robot = shift;
-    &Sympa::Log::do_log('debug', 'Commands::modindex(%s,%s)', $name,$robot);
+    &Sympa::Log::do_log('debug', '%s::modindex(%s,%s)', __PACKAGE__,$name,$robot);
     
     $name =~ y/A-Z/a-z/;
 
@@ -2452,7 +2452,7 @@ sub which {
     my $sign_mod = shift;
     my $message = shift;
 
-    &Sympa::Log::do_log('debug', 'Commands::which(%s,%s,%s,%s)', $listname, $robot, $sign_mod, $message);
+    &Sympa::Log::do_log('debug', '%s::which(%s,%s,%s,%s)', __PACKAGE__, $listname, $robot, $sign_mod, $message);
     
     ## Subscriptions
     my $data;
@@ -2534,7 +2534,7 @@ sub which {
 ##########################################################
 sub get_auth_method {
     my ($cmd,$email,$error,$sign_mod,$list) = @_;
-    &Sympa::Log::do_log('debug3',"Commands::get_auth_method()");
+    &Sympa::Log::do_log('debug3',"%s::get_auth_method()", __PACKAGE__);
     
     my $auth_method;
 

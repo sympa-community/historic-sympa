@@ -122,7 +122,7 @@ sub new {
 		consumer_secret => $c->{'secret'}
 	};
 
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::new(%s)', $param{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '%s::new(%s)', __PACKAGE__, $param{'consumer_key'});
 	
  	$provider->{'constants'} = {
 		old_request_timeout => 600, # Max age for requests timestamps
@@ -272,7 +272,7 @@ sub checkRequest {
 	my $self = shift;
 	my %param = @_;
 	
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::checkRequest(%s)', $param{'url'});
+	&Sympa::Log::do_log('debug2', '%s::checkRequest(%s)', __PACKAGE__, $param{'url'});
 	
 	my $checktoken = defined($param{'checktoken'}) ? $param{'checktoken'} : undef;
 	unless($self->{'util'}->validate_params($self->{'params'}, $checktoken)) {
@@ -389,7 +389,7 @@ Create a temporary token
 sub generateTemporary {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::generateTemporary(%s)', $self->{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '%s::generateTemporary(%s)', __PACKAGE__, $self->{'consumer_key'});
 	
 	my $token = &_generateRandomString(32); # 9x10^62 entropy ...
 	my $secret = &_generateRandomString(32); # may be sha1-ed or such ...
@@ -458,7 +458,7 @@ Retreive a temporary token from database.
 sub getTemporary {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::getTemporary(%s)', $param{'token'});
+	&Sympa::Log::do_log('debug2', '%s::getTemporary(%s)', __PACKAGE__, $param{'token'});
 	
 	my $sth;
 	unless($sth = &Sympa::SDM::do_prepared_query(
@@ -518,7 +518,7 @@ Create the verifier for a temporary token
 sub generateVerifier {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::generateVerifier(%s, %s, %s, %s)', $param{'token'}, $param{'user'}, $param{'granted'}, $self->{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '%s::generateVerifier(%s, %s, %s, %s)', __PACKAGE__, $param{'token'}, $param{'user'}, $param{'granted'}, $self->{'consumer_key'});
 	
 	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}));
 	
@@ -596,7 +596,7 @@ Create an access token
 sub generateAccess {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::generateAccess(%s, %s, %s)', $param{'token'}, $param{'verifier'}, $self->{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '%s::generateAccess(%s, %s, %s)', __PACKAGE__, $param{'token'}, $param{'verifier'}, $self->{'consumer_key'});
 	
 	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}, timeout_type => 'verifier'));
 	return undef unless($param{'verifier'} eq $tmp->{'verifier'});
@@ -663,7 +663,7 @@ Retreive an access token from database.
 sub getAccess {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::getAccess(%s)', $param{'token'});
+	&Sympa::Log::do_log('debug2', '%s::getAccess(%s)', __PACKAGE__, $param{'token'});
 	
 	my $sth;
 	unless($sth = &Sympa::SDM::do_prepared_query(
@@ -760,7 +760,7 @@ enabled 0|1
 sub _getConsumerConfigFor {
 	my $key = shift;
 	
-	&Sympa::Log::do_log('debug2', 'OAuthProvider::_getConsumerConfig(%s)', $key);
+	&Sympa::Log::do_log('debug2', '%s::_getConsumerConfig(%s)', __PACKAGE__, $key);
 	
 	my $file = $Sympa::Conf::Conf{'etc'}.'/oauth_provider.conf';
 	return undef unless (-f $file);

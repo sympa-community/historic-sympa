@@ -42,7 +42,7 @@ my $serial_number = 0; # incremented on each archived mail
 sub store_last {
     my($list, $msg) = @_;
     
-    &Sympa::Log::do_log ('debug2','archive::store ()');
+    &Sympa::Log::do_log ('debug2','%s::store ()', __PACKAGE__);
     
     my($filename, $newfile);
     
@@ -70,18 +70,18 @@ sub store_last {
 sub list {
     my $name = shift;
 
-    &Sympa::Log::do_log ('debug',"archive::list($name)");
+    &Sympa::Log::do_log ('debug',"%s::list($name)", __PACKAGE__);
 
     my($filename, $newfile);
     my(@l, $i);
     
     unless (-d "$name") {
-	&Sympa::Log::do_log ('warning',"archive::list($name) failed, no directory $name");
+	&Sympa::Log::do_log ('warning',"%s::list($name) failed, no directory $name", __PACKAGE__);
 #      @l = ($msg::no_archives_available);
       return @l;
   }
     unless (opendir(DIR, "$name")) {
-	&Sympa::Log::do_log ('warning',"archive::list($name) failed, cannot open directory $name");
+	&Sympa::Log::do_log ('warning',"%s::list($name) failed, cannot open directory $name", __PACKAGE__);
 #	@l = ($msg::no_archives_available);
 	return @l;
     }
@@ -99,10 +99,10 @@ sub scan_dir_archive {
     
     my($dir, $month) = @_;
     
-    &Sympa::Log::do_log ('info',"archive::scan_dir_archive($dir, $month)");
+    &Sympa::Log::do_log ('info',"%s::scan_dir_archive($dir, $month)", __PACKAGE__);
 
     unless (opendir (DIR, "$dir/$month/arctxt")){
-	&Sympa::Log::do_log ('info',"archive::scan_dir_archive($dir, $month): unable to open dir $dir/$month/arctxt");
+	&Sympa::Log::do_log ('info',"%s::scan_dir_archive($dir, $month): unable to open dir $dir/$month/arctxt", __PACKAGE__);
 	return undef;
     }
     
@@ -110,7 +110,7 @@ sub scan_dir_archive {
     my $i = 0 ;
     foreach my $file (sort readdir(DIR)) {
 	next unless ($file =~ /^\d+$/);
-	&Sympa::Log::do_log ('debug',"archive::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file");
+	&Sympa::Log::do_log ('debug',"%s::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file", __PACKAGE__);
 
 	my $mail = new Sympa::Message({'file'=>"$dir/$month/arctxt/$file",'noxsympato'=>'noxsympato'});
 	unless (defined $mail) {
@@ -130,7 +130,7 @@ sub scan_dir_archive {
 
 	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
 
-	&Sympa::Log::do_log('debug','Archive::scan_dir_archive adding message %s in archive to send', $msg->{'subject'});
+	&Sympa::Log::do_log('debug','%s::scan_dir_archive adding message %s in archive to send', __PACKAGE__, $msg->{'subject'});
 
 	push @{$all_msg}, $msg ;
     }
@@ -155,18 +155,18 @@ sub search_msgid {
     
     my($dir, $msgid) = @_;
     
-    &Sympa::Log::do_log ('info',"archive::search_msgid($dir, $msgid)");
+    &Sympa::Log::do_log ('info',"%s::search_msgid($dir, $msgid)", __PACKAGE__);
 
     
     if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
 	&Sympa::Log::do_log('err','remove_arc: no message id found');return undef;
     } 
     unless ($dir =~ /\d\d\d\d\-\d\d\/arctxt/) {
-	&Sympa::Log::do_log ('err',"archive::search_msgid : dir $dir look unproper");
+	&Sympa::Log::do_log ('err',"%s::search_msgid : dir $dir look unproper", __PACKAGE__);
 	return undef;
     }
     unless (opendir (ARC, "$dir")){
-	&Sympa::Log::do_log ('err',"archive::scan_dir_archive($dir, $msgid): unable to open dir $dir");
+	&Sympa::Log::do_log ('err',"%s::scan_dir_archive($dir, $msgid): unable to open dir $dir", __PACKAGE__);
 	return undef;
     }
     chomp $msgid ;
@@ -204,7 +204,7 @@ sub last_path {
     
     my $list = shift;
 
-    &Sympa::Log::do_log('debug', 'Archived::last_path(%s)', $list->{'name'});
+    &Sympa::Log::do_log('debug', '%s::last_path(%s)', __PACKAGE__, $list->{'name'});
 
     return undef unless ($list->is_archived());
     my $file = $list->{'dir'}.'/archives/last_message';

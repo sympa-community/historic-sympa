@@ -138,7 +138,7 @@ sub load {
             printf STDERR "Binary config file loading failed while loading source file '%s'\n",$config_file;
         }
     }else{
-        printf "Conf::load(): File %s has changed since the last cache. Loading file.\n",$config_file;
+        printf "%s::load(): File %s has changed since the last cache. Loading file.\n",__PACKAGE__,$config_file;
         $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
         ## Loading the Sympa main config file.
         if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
@@ -146,7 +146,7 @@ sub load {
             %Conf = %{$config_loading_result->{'config'}};
             $config_err = $config_loading_result->{'errors'};
         }else{
-            printf STDERR  "Conf::load(): Unable to load %s. Aborting\n", $config_file;
+            printf STDERR  "%s::load(): Unable to load %s. Aborting\n", __PACKAGE__, $config_file;
             return undef;
         }
         # Returning the config file content if this is what has been asked.
@@ -184,7 +184,7 @@ sub load {
     }
 
     if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
-        printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
+        printf STDERR "%s::load(): Warning: %n required modules are missing.\n",__PACKAGE__,$missing_modules_count;
     }
 
     &_replace_file_value_by_db_value({'config_hash' => \%Conf}) unless($no_db);
@@ -268,7 +268,7 @@ sub get_robots_list {
     &Sympa::Log::do_log('debug2',"Retrieving the list of robots on the server");
     my @robots_list;
     unless (opendir DIR,$Conf{'etc'} ) {
-        printf STDERR "Conf::load_robots(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+        printf STDERR "%s::load_robots(): Unable to open directory $Conf{'etc'} for virtual robots config\n", __PACKAGE__;
         return undef;
     }
     foreach my $robot (readdir DIR) {
@@ -366,7 +366,7 @@ sub conf_2_db {
     my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
 
     unless (opendir DIR,$Conf{'etc'} ) {
-        printf STDERR "Conf::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+        printf STDERR "%s::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n", __PACKAGE__;
         return undef;
     }
 
@@ -702,7 +702,7 @@ sub _load_auth {
     my $is_main_robot = shift;
     # find appropriate auth.conf file
     my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
-    &Sympa::Log::do_log('debug', 'Conf::_load_auth(%s)', $config_file);
+    &Sympa::Log::do_log('debug', '%s::_load_auth(%s)', __PACKAGE__, $config_file);
 
     $robot ||= $Conf{'domain'};
     my $line_num = 0;
@@ -907,7 +907,7 @@ sub load_charset {
     my $config_file = &_get_config_file_name({'robot' => '', 'file' => "charset.conf"});
     if (-f $config_file) {
     unless (open CONFIG, $config_file) {
-        printf STDERR 'Conf::load_charset(): Unable to read configuration file %s: %s\n',$config_file, $!;
+        printf STDERR '%s::load_charset(): Unable to read configuration file %s: %s\n',__PACKAGE__,$config_file, $!;
         return {};
     }
     while (<CONFIG>) {
@@ -917,11 +917,11 @@ sub load_charset {
         next unless /\S/;
         my ($locale, $cset) = split(/\s+/, $_);
         unless ($cset) {
-        printf STDERR 'Conf::load_charset(): Charset name is missing in configuration file %s line %d\n',$config_file, $.;
+        printf STDERR '%s::load_charset(): Charset name is missing in configuration file %s line %d\n',__PACKAGE__,$config_file, $.;
         next;
         }
         unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
-        printf STDERR 'Conf::load_charset():  Illegal locale name in configuration file %s line %d\n',$config_file, $.;
+        printf STDERR '%s::load_charset():  Illegal locale name in configuration file %s line %d\n',__PACKAGE__,$config_file, $.;
         next;
         }
         $charset->{$locale} = $cset;
@@ -946,7 +946,7 @@ sub load_nrcpt_by_domain {
   return undef unless (-f $config_file) ;
   ## Open the configuration file or return and read the lines.
   unless (open(IN, $config_file)) {
-      printf STDERR  "Conf::load_nrcpt_by_domain(): : Unable to open %s: %s\n", $config_file, $!;
+      printf STDERR  "%s::load_nrcpt_by_domain(): : Unable to open %s: %s\n", __PACKAGE__, $config_file, $!;
       return undef;
   }
   while (<IN>) {
@@ -958,7 +958,7 @@ sub load_nrcpt_by_domain {
       $nrcpt_by_domain->{$domain} = $value;
       $valid_dom +=1;
       }else {
-      printf STDERR gettext("Conf::load_nrcpt_by_domain(): Error at line %d: %s"), $line_num, $config_file, $_;
+      printf STDERR gettext("%s::load_nrcpt_by_domain(): Error at line %d: %s"), __PACKAGE__, $line_num, $config_file, $_;
       $config_err++;
       }
   } 
@@ -1339,7 +1339,7 @@ sub _load_config_file_to_hash {
     my $line_num = 0;
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $param->{'path_to_config_file'})) {
-        printf STDERR  "Conf::_load_config_file_to_hash(): Unable to open %s: %s\n", $param->{'path_to_config_file'}, $!;
+        printf STDERR  "%s::_load_config_file_to_hash(): Unable to open %s: %s\n", __PACKAGE__, $param->{'path_to_config_file'}, $!;
         return undef;
     }
     while (<IN>) {
@@ -1374,7 +1374,7 @@ sub _load_config_file_to_hash {
                 $result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
             }
         } else {
-            printf STDERR  "Conf::_load_config_file_to_hash(): ".gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
+            printf STDERR  "%s::_load_config_file_to_hash(): ".gettext("Error at line %d: %s\n"), __PACKAGE__, $line_num, $param->{'path_to_config_file'}, $_;
             $result->{'errors'}++;
         }
     }
@@ -1389,7 +1389,7 @@ sub _remove_unvalid_robot_entry {
     my $config_hash = $param->{'config_hash'};
     foreach my $keyword(keys %$config_hash) {
         unless($valid_robot_key_words{$keyword}) {
-            printf STDERR "Conf::_remove_unvalid_robot_entry(): removing unknown robot keyword $keyword\n" unless ($param->{'quiet'});
+            printf STDERR "%s::_remove_unvalid_robot_entry(): removing unknown robot keyword $keyword\n", __PACKAGE__ unless ($param->{'quiet'});
             delete $config_hash->{$keyword};
         }
     }
@@ -1403,13 +1403,13 @@ sub _detect_unknown_parameters_in_config {
         next if (exists $params{$parameter});
         if (defined $old_params{$parameter}) {
             if ($old_params{$parameter}) {
-                printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter};
+                printf STDERR  "%s::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", __PACKAGE__, $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter};
             }else {
-                printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is now obsolete\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+                printf STDERR  "%s::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is now obsolete\n", __PACKAGE__, $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
                 next;
             }
         }else {
-            printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d, unknown field: %s in sympa.conf\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+            printf STDERR  "%s::_detect_unknown_parameters_in_config(): Line %d, unknown field: %s in sympa.conf\n", __PACKAGE__, $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
         }
         $number_of_unknown_parameters_found++;
     }
@@ -1604,7 +1604,7 @@ sub _detect_missing_mandatory_parameters {
     foreach my $parameter (keys %params) {
         next if (defined $params{$parameter}->{'file'} && $params{$parameter}->{'file'} ne $config_file_name);
         unless (defined $param->{'config_hash'}{$parameter} or defined $params{$parameter}->{'default'} or defined $params{$parameter}->{'optional'}) {
-            printf STDERR "Conf::_detect_missing_mandatory_parameters(): Required field not found in sympa.conf: %s\n", $parameter;
+            printf STDERR "%s::_detect_missing_mandatory_parameters(): Required field not found in sympa.conf: %s\n", __PACKAGE__, $parameter;
             $number_of_errors++;
             next;
         }
@@ -1625,7 +1625,7 @@ sub _check_cpan_modules_required_by_config {
     if ($param->{'config_hash'}{'lock_method'} eq 'nfs') {
         eval "require File::NFSLock";
         if ($@) {
-            printf STDERR "Conf::_check_cpan_modules_required_by_config(): Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n";
+            printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n", __PACKAGE__;
             $param->{'config_hash'}{'lock_method'} = 'flock';
             $number_of_missing_modules++;
         }
@@ -1635,7 +1635,7 @@ sub _check_cpan_modules_required_by_config {
     if ($param->{'config_hash'}{'dkim_feature'} eq 'on') {
         eval "require Mail::DKIM";
         if ($@) {
-            printf STDERR "Conf::_check_cpan_modules_required_by_config(): Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n";
+            printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n", __PACKAGE__;
             $param->{'config_hash'}{'dkim_feature'} = 'off';
             $number_of_missing_modules++;
         }
@@ -1648,7 +1648,7 @@ sub _dump_non_robot_parameters {
     foreach my $key (keys %{$param->{'config_hash'}}){
         unless($valid_robot_key_words{$key}){
             delete $param->{'config_hash'}{$key};
-            printf STDERR "Conf::_dump_non_robot_parameters(): Robot %s config: unknown robot parameter: %s\n",$param->{'robot'},$key;
+            printf STDERR "%s::_dump_non_robot_parameters(): Robot %s config: unknown robot parameter: %s\n",__PACKAGE__,$param->{'robot'},$key;
         }
     }
 }
@@ -1665,9 +1665,9 @@ sub _load_single_robot_config{
         $force_reload = 0;
     }
     if(!$force_reload) {
-        printf "Conf::_load_single_robot_config(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+        printf "%s::_load_single_robot_config(): File %s has not changed since the last cache. Using cache.\n",__PACKAGE__,$config_file;
         unless (-r $config_file) {
-            printf STDERR "Conf::_load_single_robot_config(): No read access on %s\n", $config_file;
+            printf STDERR "%s::_load_single_robot_config(): No read access on %s\n", __PACKAGE__, $config_file;
             &Sympa::List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]);
             return undef;
         }
@@ -1681,7 +1681,7 @@ sub _load_single_robot_config{
             $robot_conf = $config_loading_result->{'config'};
             $config_err = $config_loading_result->{'errors'};
         }else{
-            printf STDERR  "Conf::_load_single_robot_config(): Unable to load %s. Aborting\n", $config_file;
+            printf STDERR  "%s::_load_single_robot_config(): Unable to load %s. Aborting\n", __PACKAGE__, $config_file;
             return undef;
         }
         
@@ -1719,12 +1719,12 @@ sub _set_listmasters_entry{
                 push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
                 $number_of_valid_email++;
             }else{
-                printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: Listmaster address '%s' is not a valid email\n",$param->{'config_hash'}{'host'},$lismaster_address;
+                printf STDERR "%s::_set_listmasters_entry(): Robot %s config: Listmaster address '%s' is not a valid email\n",__PACKAGE__,$param->{'config_hash'}{'host'},$lismaster_address;
             }
         }
     }else{
         if ($param->{'main_config'}) {
-			printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: No listmaster defined. This is the main config. It MUST define at least one listmaster. Stopping here.\n.";
+			printf STDERR "%s::_set_listmasters_entry(): Robot %s config: No listmaster defined. This is the main config. It MUST define at least one listmaster. Stopping here.\n.", __PACKAGE__;
 			return undef;
 		}else{
 			$param->{'config_hash'}{'listmasters'} = $Conf{'listmasters'};
@@ -1733,7 +1733,7 @@ sub _set_listmasters_entry{
 		}
     }
     if ($number_of_email_provided > $number_of_valid_email){
-        printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$param->{'config_hash'}{'host'},$number_of_email_provided,$number_of_valid_email;
+        printf STDERR "%s::_set_listmasters_entry(): Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",__PACKAGE__,$param->{'config_hash'}{'host'},$number_of_email_provided,$number_of_valid_email;
         return undef;
     }
     return $number_of_valid_email;
@@ -1750,7 +1750,7 @@ sub _check_double_url_usage{
 
     ## Warn listmaster if another virtual host is defined with the same host+path
     if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
-      printf STDERR "Conf::_infer_robot_parameter_values(): Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'\n", $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path;
+      printf STDERR "%s::_infer_robot_parameter_values(): Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'\n", __PACKAGE__, $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path;
     }
 
     $Conf{'robot_by_http_host'}{$host}{$path} = $param->{'config_hash'}{'robot_name'} ;    
@@ -1799,7 +1799,7 @@ sub _save_binary_cache {
 
     eval {&Storable::store($param->{'conf_to_save'},$param->{'target_file'});};
     if ($@) {
-        printf STDERR  'Conf::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', $param->{'target_file'},$@;
+        printf STDERR '%s::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', __PACKAGE__, $param->{'target_file'},$@;
         unless ($lock->unlock()) {
             return undef;
         }
@@ -1807,7 +1807,7 @@ sub _save_binary_cache {
     }
     eval {chown ((getpwnam(Sympa::Constants::USER))[2], (getgrnam(Sympa::Constants::GROUP))[2], $param->{'target_file'});};
     if ($@){
-        printf STDERR  'Conf::_save_binary_cache(): Failed to change owner of the binary file %s. error: %s\n', $param->{'target_file'},$@;
+        printf STDERR  '%s::_save_binary_cache(): Failed to change owner of the binary file %s. error: %s\n', __PACKAGE__,$param->{'target_file'},$@;
         unless ($lock->unlock()) {
             return undef;
         }
@@ -1839,7 +1839,7 @@ sub _load_binary_cache {
         $result = &Storable::retrieve($param->{'config_file'});
     };
     if ($@) {
-        printf STDERR  "Conf::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", $param->{'config_file'},$@;
+        printf STDERR  "%s::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", __PACKAGE__, $param->{'config_file'},$@;
         unless ($lock->unlock()) {
             return undef;
         }
@@ -1855,7 +1855,7 @@ sub _load_binary_cache {
 sub _save_config_hash_to_binary {
     my $param = shift;
     unless(_save_binary_cache({'conf_to_save' => $param->{'config_hash'},'target_file' => $param->{'config_hash'}{'source_file'}.$binary_file_extension})){
-        printf STDERR "Conf::_save_config_hash_to_binary(): Could not save main config %s\n",$param->{'config_hash'}{'source_file'};
+        printf STDERR "%s::_save_config_hash_to_binary(): Could not save main config %s\n",__PACKAGE__,$param->{'config_hash'}{'source_file'};
     }
 }
 

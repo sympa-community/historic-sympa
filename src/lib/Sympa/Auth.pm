@@ -36,7 +36,7 @@ use Sympa::Session;
 ## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
 sub password_fingerprint{
 
-    &Sympa::Log::do_log('debug', 'Auth::password_fingerprint');
+    &Sympa::Log::do_log('debug', '%s::password_fingerprint', __PACKAGE__);
 
     my $pwd = shift;
     if(&Sympa::Conf::get_robot_conf('*','password_case') eq 'insensitive') {
@@ -52,7 +52,7 @@ sub password_fingerprint{
      my $robot = shift;
      my $auth = shift; ## User email or UID
      my $pwd = shift; ## Password
-     &Sympa::Log::do_log('debug', 'Auth::check_auth(%s)', $auth);
+     &Sympa::Log::do_log('debug', '%s::check_auth(%s)', __PACKAGE__,$auth);
 
      my ($canonic, $user);
 
@@ -110,7 +110,7 @@ sub may_use_sympa_native_auth {
 sub authentication {
     my ($robot, $email,$pwd) = @_;
     my ($user,$canonic);
-    &Sympa::Log::do_log('debug', 'Auth::authentication(%s)', $email);
+    &Sympa::Log::do_log('debug', '%s::authentication(%s)', __PACKAGE__, $email);
 
 
     unless ($user = &Sympa::List::get_global_user($email)) {
@@ -173,7 +173,7 @@ sub authentication {
 sub ldap_authentication {
      my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;
      my ($mesg, $host,$ldap_passwd,$ldap_anonymous);
-     &Sympa::Log::do_log('debug2','Auth::ldap_authentication(%s,%s,%s)', $auth,'****',$whichfilter);
+     &Sympa::Log::do_log('debug2','%s::ldap_authentication(%s,%s,%s)', __PACKAGE__, $auth,'****',$whichfilter);
      &Sympa::Log::do_log('debug3','Password used: %s',$pwd);
 
      unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Conf::Conf{'etc'})) {
@@ -300,7 +300,7 @@ sub get_email_by_net_id {
     my $auth_id = shift;
     my $attributes = shift;
     
-    &Sympa::Log::do_log ('debug',"Auth::get_email_by_net_id($auth_id,$attributes->{'uid'})");
+    &Sympa::Log::do_log ('debug',"%s::get_email_by_net_id($auth_id,$attributes->{'uid'})", __PACKAGE__);
     
     if (defined $Conf{'auth_services'}{$robot}[$auth_id]{'internal_email_by_netid'}) {
 	my $sso_config = @{$Conf{'auth_services'}{$robot}}[$auth_id];
@@ -357,7 +357,7 @@ sub get_email_by_net_id {
 sub remote_app_check_password {
     
     my ($trusted_application_name,$password,$robot) = @_;
-    &Sympa::Log::do_log('debug','Auth::remote_app_check_password (%s,%s)',$trusted_application_name,$robot);
+    &Sympa::Log::do_log('debug','%s::remote_app_check_password (%s,%s)',__PACKAGE__,$trusted_application_name,$robot);
     
     my $md5 = &Sympa::Tools::md5_fingerprint($password);
     
@@ -372,20 +372,20 @@ sub remote_app_check_password {
 	
  	if (lc($application->{'name'}) eq lc($trusted_application_name)) {
  	    if ($md5 eq $application->{'md5password'}) {
- 		# &Sympa::Log::do_log('debug', 'Auth::remote_app_check_password : authentication succeed for %s',$application->{'name'});
+ 		# &Sympa::Log::do_log('debug', '%s::remote_app_check_password : authentication succeed for %s',__PACKAGE__,$application->{'name'});
  		my %proxy_for_vars ;
  		foreach my $varname (@{$application->{'proxy_for_variables'}}) {
  		    $proxy_for_vars{$varname}=1;
  		}		
  		return (\%proxy_for_vars);
  	    }else{
- 		&Sympa::Log::do_log('info', 'Auth::remote_app_check_password: bad password from %s', $trusted_application_name);
+ 		&Sympa::Log::do_log('info', '%s::remote_app_check_password: bad password from %s', __PACKAGE__,$trusted_application_name);
  		return undef;
  	    }
  	}
     }				 
     # no matching application found
-    &Sympa::Log::do_log('info', 'Auth::remote_app-check_password: unknown application name %s', $trusted_application_name);
+    &Sympa::Log::do_log('info', '%s::remote_app-check_password: unknown application name %s', __PACKAGE__, $trusted_application_name);
     return undef;
 }
  
@@ -399,7 +399,7 @@ sub create_one_time_ticket {
     my $remote_addr = shift; ## Value may be 'mail' if the IP address is not known
 
     my $ticket = &Sympa::Session::get_random();
-    &Sympa::Log::do_log('info', 'Auth::create_one_time_ticket(%s,%s,%s,%s) value = %s',$email,$robot,$data_string,$remote_addr,$ticket);
+    &Sympa::Log::do_log('info', '%s::create_one_time_ticket(%s,%s,%s,%s) value = %s',__PACKAGE__,$email,$robot,$data_string,$remote_addr,$ticket);
 
     my $date = time;
     my $sth;
@@ -429,7 +429,7 @@ sub get_one_time_ticket {
     my $ticket = $sth->fetchrow_hashref('NAME_lc');
     
     unless ($ticket) {	
-	&Sympa::Log::do_log('info','Auth::get_one_time_ticket: Unable to find one time ticket %s', $ticket);
+	&Sympa::Log::do_log('info','%s::get_one_time_ticket: Unable to find one time ticket %s', __PACKAGE__, $ticket);
 	return {'result'=>'not_found'};
     }
     
@@ -438,10 +438,10 @@ sub get_one_time_ticket {
 
     if ($ticket->{'status'} ne 'open') {
 	$result = 'closed';
-	&Sympa::Log::do_log('info','Auth::get_one_time_ticket: ticket %s from %s has been used before (%s)',$ticket_number,$ticket->{'email'},$printable_date);
+	&Sympa::Log::do_log('info','%s::get_one_time_ticket: ticket %s from %s has been used before (%s)',__PACKAGE__,$ticket_number,$ticket->{'email'},$printable_date);
     }
     elsif (time - $ticket->{'date'} > 48 * 60 * 60) {
-	&Sympa::Log::do_log('info','Auth::get_one_time_ticket: ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
+	&Sympa::Log::do_log('info','%s::get_one_time_ticket: ticket %s from %s refused because expired (%s)',__PACKAGE__,$ticket_number,$ticket->{'email'},$printable_date);
 	$result = 'expired';
     }else{
 	$result = 'success';
@@ -450,7 +450,7 @@ sub get_one_time_ticket {
     	&Sympa::Log::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
     }
 
-    &Sympa::Log::do_log('info', 'Auth::get_one_time_ticket(%s) : result : %s',$ticket_number,$result);
+    &Sympa::Log::do_log('info', '%s::get_one_time_ticket(%s) : result : %s',__PACKAGE__,$ticket_number,$result);
     return {'result'=>$result,
 	    'date'=>$ticket->{'date'},
 	    'email'=>$ticket->{'email'},
