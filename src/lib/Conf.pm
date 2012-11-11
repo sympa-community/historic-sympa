@@ -1678,23 +1678,31 @@ sub load_robot_conf {
 
     my $config_err = 0;
     my %line_numbered_config;
+
     my $conf = undef;
+    if ($robot eq '*') {
+	$conf = \%Conf;
+    } else {
+	$conf = {};
+    }
 
     unless (-r $config_file) {
 	&Log::do_log('err', 'No read access on %s', $config_file);
 	return undef;
     }
 
+    my $cached;
     my $result;
     if (%Conf and
 	! $force_reload and ! $return_result and
-	$conf = _load_binary_cache({ 'config_file' => $config_file })) {
+	$cached = _load_binary_cache({ 'config_file' => $config_file })) {
+	%$conf = %$cached;
 	&Log::do_log('debug3', 'got %s from serialized data',
 		     ($robot ne '*') ? "config for robot $robot" : 'main conf');
     } elsif (
 	$result = &_load_config_file_to_hash({ 'config_file' => $config_file })
     ) {
-	$conf = $result->{'config'};
+	%$conf = %{$result->{'config'}};
 	&Log::do_log('debug3', 'got %s from file',
 		     ($robot ne '*') ? "config for robot $robot" : 'main conf');
 
@@ -1748,11 +1756,6 @@ sub load_robot_conf {
 	    return undef;
 	}
 
-	## Initial load.  Now config is available.
-	if ($robot eq '*' and ! %Conf) {
-	    %Conf = %{$conf};
-	}
-
         &_store_source_file_name({ 'config_hash' => $conf, 'config_file' => $config_file });
         &_save_config_hash_to_binary({ 'config_hash' => $conf, 'source_file' => $config_file });
     } else {
@@ -1780,9 +1783,7 @@ sub load_robot_conf {
     }
 
     ## Load config
-    if ($robot eq '*') {
-	%Conf = %{$conf};
-    } else {
+    unless ($robot eq '*') {
 	$Conf{'robots'} ||= {};
 	$Conf{'robots'}{$robot} = $conf;
     }

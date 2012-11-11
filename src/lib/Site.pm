@@ -686,13 +686,15 @@ sub send_file {
     unless (ref $who) {
 	$who = tools::clean_email($who);
 	my $lang = $self->lang || 'en';
-	unless ($data->{'user'}) {
+	unless ($data->{'user'} and %{$data->{'user'}}) {
 	    if ($options->{'skip_db'}) {
 		$data->{'user'} =
 		    bless {'email' => $who, 'lang' => $lang} => 'User';
 	    } else {
 		$data->{'user'} = User->new($who, 'lang' => $lang);
 	    }
+	} else {
+	    $data->{'user'} = User::clean_user($data->{'user'});
 	}
 
 	if (ref $self eq 'List') {

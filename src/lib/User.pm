@@ -3,7 +3,7 @@ package User;
 
 use strict;
 use warnings;
-use Carp qw(croak);
+use Carp qw(carp croak);
 
 #use Site; # this module is used in Site
 
@@ -549,6 +549,43 @@ sub add_global_user {
 
     return 1;
 }
+
+=head2 Miscelaneous
+
+=over 4
+
+=item clean_user ( USER_OR_HASH )
+
+I<Function>.
+Warns if the argument is not a User object.
+Returns a User object, if any.
+
+I<TENTATIVE>.
+This function will be used during transition between old and object-oriented
+styles.  At last modifications have been done, this shall be removed.
+
+=back
+
+=cut
+
+sub clean_user {
+    my $user = shift;
+
+    unless (ref $user eq 'User') {
+        my $level = $Carp::CarpLevel;
+        $Carp::CarpLevel = 1;
+	carp "Deprecated usage: \$user should be a User object";
+        $Carp::CarpLevel = $level;
+
+        if (ref $user eq 'HASH') {
+            $user = bless $user => __PACKAGE__;
+        } else {
+	    $user = undef;
+	}
+    }
+    $user;
+}
+
 
 ###### END of the User package ######
 
