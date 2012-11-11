@@ -13897,17 +13897,28 @@ sub AUTOLOAD {
 
 =over 4
 
-=item defaults
+=item defaults ( PARAMETER, VALUE )
 
-I<Getter/Setter>.
-XXX @todo doc
+I<Setter>.
+Set values to determine default values of list parameters.
+If undef is specified as VALUE, that default value will be removed.
 
 =back
 
 =cut
 
 sub defaults {
-    croak "Not yet implemented";
+    my $self = shift;
+    my $p = shift;
+    if (scalar @_) {
+	my $v = $_[0];
+	unless (defined $v) {
+	    delete $self->{'admin'}{'defaults'}{$p};
+	} else {
+	    $self->{'admin'}{'defaults'}{$p} = $v;
+	}
+    }
+    $self->{'admin'}{'defaults'}{$p};
 }
 
 =over 4

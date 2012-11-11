@@ -57,8 +57,8 @@ sub new {
 
     if (!($self = get_global_user($who))) {
 	## unauthenticated user would not be added to database.
+	$values{'email'} = $who;
 	if (scalar grep { $_ ne 'lang' and $_ ne 'email' } keys %values) {
-	    $values{'email'} = $who;
 	    unless (defined add_global_user(\%values)) {
 		return undef;
 	    }
