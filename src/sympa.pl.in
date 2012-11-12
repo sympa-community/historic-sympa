@@ -500,8 +500,8 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    if ($list->{'admin'}{'family_name'}) {
- 	unless($list->set_status_family_closed('close_list',$list->{'name'})) {
+    if ($list->family_name) {
+ 	unless($list->set_status_family_closed('close_list', $list->name)) {
  	    print STDERR "Could not close list $main::options{'close_list'}\n";
  	    exit 1;	
  	}
@@ -512,7 +512,7 @@ if ($main::options{'dump'}) {
 	}
     }
 
-    printf STDOUT "List %s has been closed, aliases have been removed\n", $list->{'name'};
+    printf STDOUT "List %s has been closed, aliases have been removed\n", $list->name;
     
     exit 0;
 }elsif ($main::options{'change_user_email'}) {
@@ -551,8 +551,8 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    if ($list->{'admin'}{'family_name'}) {
- 	unless($list->set_status_family_closed('purge_list',$list->{'name'})) {
+    if ($list->family_name) {
+ 	unless($list->set_status_family_closed('purge_list', $list->name)) {
  	    print STDERR "Could not purge list $main::options{'purge_list'}\n";
  	    exit 1;	
  	}
@@ -563,7 +563,7 @@ if ($main::options{'dump'}) {
 	}
     }
 
-    printf STDOUT "List %s has been closed, aliases have been removed\n", $list->{'name'};
+    printf STDOUT "List %s has been closed, aliases have been removed\n", $list->name;
     
     exit 0;
 }elsif ($main::options{'rename_list'}) {
@@ -817,18 +817,18 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    if (-d $list->{'dir'}.'/shared') {
+    if (-d $list->dir . '/shared') {
 	&Log::do_log('notice','  Processing list %s...', $list->get_list_address());
 	
 	## Determine default lang for this list
 	## It should tell us what character encoding was used for filenames
-	&Language::SetLang($list->{'admin'}{'lang'});
+	&Language::SetLang($list->lang);
 	my $list_encoding = &Language::GetCharset();
 	
-	my $count = &tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
+	my $count = &tools::qencode_hierarchy($list->dir . '/shared', $list_encoding);
 	
 	if ($count) {
-	    &Log::do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
+	    &Log::do_log('notice', 'List %s : %d filenames has been changed', $list, $count);
 	}
     }
     &Log::do_log('notice', "Upgrade_shared process finished.");    
@@ -945,7 +945,7 @@ elsif ($main::options{'export_list'}) {
     my $all_lists = List::get_lists($robot);
     exit 1 unless defined $all_lists;
     foreach my $list (@$all_lists) {
-	printf "%s\n", $list->{'name'};
+	printf "%s\n", $list->name;
     }
     exit 0;
 }
@@ -1292,14 +1292,14 @@ sub process_message {
             }
 	    $dyn_just_created = 1;
         }
-	$host = $list->{'admin'}{'host'};
-	$name = $list->{'name'};
+	$host = $list->host;
+	$name = $list->name;
 	$list_address = $list->get_list_address();
     }
     ## Loop prevention
-    if ($list->{'admin'}{'reject_mail_from_automates_feature'} eq 'on') {
+    if ($list->reject_mail_from_automates_feature eq 'on') {
 		my $conf_loop_prevention_regex;
-		$conf_loop_prevention_regex = $list->{'admin'}{'loop_prevention_regex'};
+		$conf_loop_prevention_regex = $list->loop_prevention_regex;
 		$conf_loop_prevention_regex ||= &Conf::get_robot_conf($robot, 'loop_prevention_regex');
 		if ($sender =~ /^($conf_loop_prevention_regex)(\@|$)/mio) {
 			&Log::do_log('err','Ignoring message which would cause a loop, sent by %s; matches loop_prevention_regex', $sender);
@@ -1566,7 +1566,7 @@ sub DoForward {
     }
 
     ##  Search for the list
-    my ($list, $admin, $host, $recepient, $priority);
+    my ($list, $host, $recepient, $priority);
 
     if ($function eq 'listmaster') {
         $recepient = $robot_object->listmaster_email;
@@ -1586,10 +1586,9 @@ sub DoForward {
 	    return undef;
 	}
 	
-	$admin = $list->{'admin'};
-	$host = $admin->{'host'};
+	$host = $list->host;
         $recepient="$name-$function";
-	$priority = $admin->{'priority'};
+	$priority = $list->priority;
     }
 
     my @rcpt;
@@ -1650,7 +1649,7 @@ sub DoForward {
 					'function' => $function,
 					'message' => $msg }
 				       ,$robot,$msg_string,$list);
-	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	    &Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	    return undef;
 	}
     }
@@ -1666,10 +1665,10 @@ sub DoForward {
 			   'function' => $function,
 			   'message' => $msg}
 			  ,$robot,$msg_string,$list);
-	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }
-    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => '','user_email' => $sender, 'client' => $ip,'daemon' => $daemon_name});
+    &Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoForward','parameters' => "$name,$function",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => '','user_email' => $sender, 'client' => $ip,'daemon' => $daemon_name});
 
     return 1;
 }
@@ -1718,20 +1717,19 @@ sub DoMessage{
 	return undef;
     }
 
-	    ($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
-	    
-	    my $start_time = time;
-	    
-	    &Language::SetLang($list->{'admin'}{'lang'});
-	    
-	    ## Now check if the sender is an authorized address.
-	    
-	    &Log::do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
-    
-    
+    ($listname, $host) = ($list->name, $list->host);
+    my $start_time = time;
+    &Language::SetLang($list->lang);
+
+    ## Now check if the sender is an authorized address.
+
+    &Log::do_log('info',
+	'Processing message for %s with priority %s, %s',
+	$list, $list->priority, $messageid);
+
     if ($msgid_table{$list->get_list_id()}{$messageid}) {
 		&Log::do_log('err', 'Found known Message-ID, ignoring message which would cause a loop');
-		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'known_message','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+		&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'known_message','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef;
     }
 	
@@ -1741,16 +1739,15 @@ sub DoMessage{
 	if (&tools::checkcommand($message->{'msg'}, $sender, $robot)) {
 	    &Log::do_log('err', 'sympa::DoMessage(): Found command in message, ignoring message');
 	    &report::reject_report_msg('user','routing_error',$sender,{'message' => $message},$robot,$msg_string,$list);
-	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'routing_error','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	    &Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'routing_error','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	    return undef;
 	}
     }
 	
-    my $admin = $list->{'admin'};
-    unless ($admin) {
+    unless ($list->admin) {
 	&Log::do_log('err', 'sympa::DoMessage(): list config is undefined');
 	&report::reject_report_msg('intern','',$sender,{'message' => $message},$robot,$msg_string,$list);
-	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }
     
@@ -1770,7 +1767,7 @@ sub DoMessage{
 			'max_size' => int($max_size / 1024) },
 		    '5.2.3'
 		);
-		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'message_too_large','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+		&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'message_too_large','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef;
    }
     
@@ -1825,22 +1822,30 @@ sub DoMessage{
 	&report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,
 			  {'msg_id' => $messageid,'message' => $message},
 			  $robot,$msg_string,$list);
-	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef ;
     }
 
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
-        $action = 'editorkey' if ($list->{'admin'}{'msg_topic_tagging'} eq 'required_moderator');
-	$action = 'request_auth' if ($list->{'admin'}{'msg_topic_tagging'} eq 'required_sender');
+	$action = 'editorkey'
+	    if $list->msg_topic_tagging eq 'required_moderator';
+	$action = 'request_auth'
+	    if $list->msg_topic_tagging eq 'required_sender';
     }
 
     if ($action =~ /^do_it/) {
 	my $apply_dkim_signature = 'off';
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->dkim_signature_apply_on, 'any');
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->dkim_signature_apply_on, 'smime_authenticated_messages') and $is_signed->{'body'};
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->dkim_signature_apply_on,'dkim_authenticated_messages');
-	
+	$apply_dkim_signature = 'on'
+	    if &tools::is_in_array($list->dkim_signature_apply_on, 'any');
+	$apply_dkim_signature = 'on'
+	    if &tools::is_in_array($list->dkim_signature_apply_on,
+		'smime_authenticated_messages') and
+	    $is_signed->{'body'};
+	$apply_dkim_signature = 'on'
+	    if &tools::is_in_array($list->dkim_signature_apply_on,
+		'dkim_authenticated_messages');
+
 	my $numsmtp;
 	eval {
 	    $numsmtp = $list->distribute_msg('message' => $message,
@@ -1930,12 +1935,12 @@ sub DoMessage{
 		}
 	    }
 	}
-	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'rejected_authorization','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'rejected_authorization','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }else {
 	&Log::do_log('err','sympa::DoMessage(): unknown action %s returned by the scenario "send"', $action);
 	&report::reject_report_msg('intern','Unknown action returned by the scenario "send"',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
-	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	&Log::db_log({'robot' => $robot,'list' => $list->name,'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }
 }
@@ -2139,16 +2144,16 @@ sub SendDigest{
 	    next;
 	}
 
-	&Language::SetLang($list->{'admin'}{'lang'});
+	&Language::SetLang($list->lang);
 
 	if ($list->get_nextdigest($digest->{'date'})){
 	    ## Blindly send the message to all users.
-	    &Log::do_log('info', "Sending digest to list %s@%s", $list->{'name'},$list->{'robot'});
+	    &Log::do_log('info', 'Sending digest to list %s', $list);
 	    my $start_time = time;
 	    $list->send_msg_digest($digest->{'messagekey'});
 
-	    &Log::do_log('info', 'Digest of the list %s sent (%d seconds)', $list->{'name'},time - $start_time);
-	    &Log::db_log({'robot' => $list->{'robot'},'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "",'target_email' => '','msg_id' => '','status' => 'success','error_type' => '','user_email' => '','client' => $ip,'daemon' => $daemon_name});
+	    &Log::do_log('info', 'Digest of the list %s sent (%d seconds)', $list, time - $start_time);
+	    &Log::db_log({'robot' => $list->{'robot'},'list' => $list->name,'action' => 'SendDigest','parameters' => "",'target_email' => '','msg_id' => '','status' => 'success','error_type' => '','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	    $digestspool->remove_message({'messagekey'=>$digest->{'messagekey'}});
 	}
     }

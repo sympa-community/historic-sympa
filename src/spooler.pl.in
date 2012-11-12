@@ -361,7 +361,7 @@ while (!$signal) {
 	if ($robot) {
 	    $robot=lc($robot);
 	}else{
-	    $robot = lc(&Conf::get_robot_conf($robot, 'host'));
+	    $robot = Site->host; ##FIXME: is "domain" better?
 	}
 
 	my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
@@ -384,9 +384,9 @@ while (!$signal) {
 	    $priority = &Conf::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
-	my $list =  new List ($listname, $robot, {'just_try' => 1});
+	$list = new List($listname, $robot, {'just_try' => 1});
 	if ($list) {
-	    $priority = $list->{'admin'}{'priority'};
+	    $priority = $list->priority;
 	}else {
 	    $priority = &Conf::get_robot_conf($robot, 'default_list_priority');
 	}
