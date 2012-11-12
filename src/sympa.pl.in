@@ -981,7 +981,7 @@ while (!$signal) {
     &List::init_list_cache();
     # Process grouped notifications
     Site->send_notify_to_listmaster(undef, undef, 1, undef);
-	
+
     ## Scan queuedigest it should be performed by task manager !
     if ($index_queuedigest++ >=$digestsleep){
 	$index_queuedigest=0;
@@ -1036,9 +1036,9 @@ while (!$signal) {
 
     ## Set NLS default lang for current message
     $Language::default_lang = $main::options{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-	
+
     my $status = &process_message($message_in_spool);
-        
+
     if (defined($status)) {
 	&Log::do_log('debug', "Message key %s  processed for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
 	# Do not remove message task_manager will purge database removing messages in spool distribute that have no links with bulkspool_stable
@@ -1149,8 +1149,8 @@ sub process_message {
     
     $robot = lc($robot);
     $listname = lc($listname);
-    $robot ||= Site->host;
-    
+    $robot ||= Site->host; #FIXME: is "domain" better?
+
     my $type;
     my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
     if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
@@ -1197,8 +1197,6 @@ sub process_message {
     $hdr->delete('X-Sympa-Family');
 
     my $list_address;
-    my $conf_email = &Conf::get_robot_conf($robot, 'email');
-    my $conf_host = &Conf::get_robot_conf($robot, 'host');
 
     my $robot_object;
     ## Unknown robot
@@ -1210,6 +1208,9 @@ sub process_message {
     }
 
     my ($list, $host, $name);   
+
+    my $conf_email = $robot_object->email;
+    my $conf_host = $robot_object->host;
     my $site_email = Site->listmaster_email;
     my $site_host = Site->host;
     if ($listname =~ /^(sympa|$site_email|$conf_email)(\@$conf_host)?$/i) {
@@ -1299,8 +1300,8 @@ sub process_message {
     ## Loop prevention
     if ($list->reject_mail_from_automates_feature eq 'on') {
 		my $conf_loop_prevention_regex;
-		$conf_loop_prevention_regex = $list->loop_prevention_regex;
-		$conf_loop_prevention_regex ||= &Conf::get_robot_conf($robot, 'loop_prevention_regex');
+	$conf_loop_prevention_regex = $list->loop_prevention_regex ||
+	    $robot_object->loop_prevention_regex;
 		if ($sender =~ /^($conf_loop_prevention_regex)(\@|$)/mio) {
 			&Log::do_log('err','Ignoring message which would cause a loop, sent by %s; matches loop_prevention_regex', $sender);
 			return undef;
@@ -1439,10 +1440,11 @@ sub process_message {
 	$loop_info{$sender}{'count'}++;
 	
 	## Sampling delay 
-	if ((time - $loop_info{$sender}{'date_init'}) < &Conf::get_robot_conf($robot, 'loop_command_sampling_delay')) {
+	if ((time - $loop_info{$sender}{'date_init'}) <
+	    Site->loop_command_sampling_delay) {
 
 	    ## Notify listmaster of first rejection
-	    if ($loop_info{$sender}{'count'} ==  &Conf::get_robot_conf($robot, 'loop_command_max')) {
+	    if ($loop_info{$sender}{'count'} == Site->loop_command_max) {
 		## Notify listmaster
 		unless ($robot_object->send_notify_to_listmaster(
 		    'loop_command', {'msg' => $file}
@@ -1455,7 +1457,7 @@ sub process_message {
 	    }
 	    
 	    ## Too many reports sent => message skipped !!
-	    if ($loop_info{$sender}{'count'} >=  &Conf::get_robot_conf($robot, 'loop_command_max')) {
+	    if ($loop_info{$sender}{'count'} >= Site->loop_command_max) {
 		&Log::do_log('err', 'Ignoring message which would cause a loop, %d messages sent to %s; loop_command_max exceeded', $loop_info{$sender}{'count'}, $sender);
 		
 		return undef;
@@ -1465,7 +1467,8 @@ sub process_message {
 	    $loop_info{$sender}{'date_init'} = time;
 
 	    ## We apply Decrease factor if a loop occured
-	    $loop_info{$sender}{'count'} *=  &Conf::get_robot_conf($robot,'loop_command_decrease_factor');
+	    $loop_info{$sender}{'count'} *=
+		Site->loop_command_decrease_factor;
 	}
 
 	## Send the reply message
@@ -1600,11 +1603,9 @@ sub DoForward {
     $hdr->delete('X-Sympa-Family');
 
     if ($function eq "listmaster") {
-	my $listmasters = &Conf::get_robot_conf($robot, 'listmasters');
-	@rcpt = @{$listmasters};
+	@rcpt = @{$robot_object->listmasters};
 	&Log::do_log('notice', 'Warning : no listmaster defined in sympa.conf') 
 	    unless (@rcpt);
-	
     }elsif ($function eq "request") {
 	@rcpt = $list->get_owners_email();
 
@@ -1656,7 +1657,7 @@ sub DoForward {
     
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;    
-    unless (&mail::mail_forward($message,&Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
+    unless (&mail::mail_forward($message, $robot_object->request, \@rcpt, $robot)) {
 	&Log::do_log('err',"Impossible to forward mail for $name-$function  ");
 	my $string = sprintf 'Impossible to forward a message for %s-%s',$name,$function;
 	&report::reject_report_msg('intern',$string,$sender,
@@ -1709,7 +1710,7 @@ sub DoMessage{
 
     my $list;
     ## List unknown
-    unless ($list = List->new($listname, $robot)) {
+    unless ($list = List->new($listname, $robot_object)) {
 	&Log::do_log('notice', 'Unknown list %s', $listname);
 	$robot_object->send_dsn(
 	    $message, {'listname' => $listname}, '5.1.1'
@@ -1734,7 +1735,7 @@ sub DoMessage{
     }
 	
     # Reject messages with commands
-    if ( &Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
+    if (Site->misaddressed_commands =~ /reject/i) {
 	## Check the message for commands and catch them.
 	if (&tools::checkcommand($message->{'msg'}, $sender, $robot)) {
 	    &Log::do_log('err', 'sympa::DoMessage(): Found command in message, ignoring message');
@@ -1753,7 +1754,7 @@ sub DoMessage{
     
 
     ## Check if the message is too large
-    # my $max_size = $list->get_max_size() ||  &Conf::get_robot_conf($robot,'max_size');
+    # my $max_size = $list->get_max_size() || $robot_object->max_size;
     my $max_size = $list->get_max_size();
 
     if ($max_size && $message->{'size'} > $max_size) {

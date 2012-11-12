@@ -308,6 +308,7 @@ while (!$signal) {
     closedir(DIR);
     my $filename;
     my $listname;
+    my $robot_id;
     my $robot;
 
     my $t_spool = $spooldir; ## in single mode we may have to supervise automatic spool
@@ -316,7 +317,7 @@ while (!$signal) {
     foreach my $filename (sort @qfile) {
 	my $type;
 	my $list;
-	my ($listname, $robot);	
+	my ($listname, $robot_id);	
 	my %meta ;
 	my $spool;
 
@@ -340,7 +341,7 @@ while (!$signal) {
 	    next;
 	}   
 
-	($listname, $robot) = split(/\@/,$1);
+	($listname, $robot_id) = split(/\@/,$1);
 	$meta{'date'} = $2;
 
 	# spooler is able to recognize if message is bounce or automatic family list creation.'
@@ -358,40 +359,42 @@ while (!$signal) {
 	}
 	
 	$listname = lc($listname);
-	if ($robot) {
-	    $robot=lc($robot);
+	if ($robot_id) {
+	    $robot_id=lc($robot_id);
 	}else{
-	    $robot = Site->host; ##FIXME: is "domain" better?
+	    $robot_id = Site->host; ##FIXME: is "domain" better?
 	}
+	$robot = Robot->new($robot_id);
 
-	my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
+	my $list_check_regexp = $robot->list_check_regexp;
 
 	if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 	    ($listname, $type) = ($1, $2);
 	}
-	my $email = &Conf::get_robot_conf($robot, 'email');	
+	my $email = $robot->email;	
 	my $site_host = Site->host;
 
 	my $priority;
 
+	##FIXME: robot addresses should be checked too.
 	if ($listname eq Site->listmaster_email) {
 	    $priority = 0;
 	}elsif ($type eq 'request') {
-	    $priority = &Conf::get_robot_conf($robot, 'request_priority');
+	    $priority = Site->request_priority;
 	}elsif ($type eq 'owner') {
-	    $priority = &Conf::get_robot_conf($robot, 'owner_priority');
+	    $priority = Site->owner_priority;
 	}elsif ($listname =~ /^(sympa|$email)(\@$site_host)?$/i) {	
-	    $priority = &Conf::get_robot_conf($robot,'sympa_priority');
+	    $priority = Site->sympa_priority;
 	    $listname ='';
 	}
 	$list = new List($listname, $robot, {'just_try' => 1});
 	if ($list) {
 	    $priority = $list->priority;
 	}else {
-	    $priority = &Conf::get_robot_conf($robot, 'default_list_priority');
+	    $priority = Site->default_list_priority;
 	}
 
-	$meta{'robot'} = $robot if $robot;
+	$meta{'robot'} = $robot_id if $robot_id;
 	$meta{'list'} = $listname if $listname;
 	if ($priority) {
 	    $meta{'priority'} = $priority ;
@@ -424,7 +427,7 @@ while (!$signal) {
     } 
 
     unless ($filename) {
-	sleep(&Conf::get_robot_conf($robot, 'sleep'));
+	sleep(Site->sleep);
 	next;
     }
 }
