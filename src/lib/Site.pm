@@ -327,7 +327,7 @@ sub get_etc_filename {
     foreach my $f (@try) {
 	if (-r $f) {
 	    &Log::do_log('debug3', 'name: %s ; dir %s', $name, $f);
-	    if ($options->{'order'} and $options->{'order'}eq 'all') {
+	    if ($options->{'order'} and $options->{'order'} eq 'all') {
 		push @result, $f;
 	    } else {
 		return $f;
@@ -686,7 +686,7 @@ sub send_file {
     unless (ref $who) {
 	$who = tools::clean_email($who);
 	my $lang = $self->lang || 'en';
-	unless ($data->{'user'} and %{$data->{'user'}}) {
+	unless (ref $data->{'user'} and $data->{'user'}{'email'}) {
 	    if ($options->{'skip_db'}) {
 		$data->{'user'} =
 		    bless {'email' => $who, 'lang' => $lang} => 'User';
@@ -730,16 +730,15 @@ sub send_file {
 		$data->{'return_path'} = $self->get_bounce_address($who, 'r');
 	    }
 	}
+    } else {
+	$who = User::clean_users($who);
     }
 
     ## Lang
-    if (ref $self eq 'List') {
-	$data->{'lang'} = $data->{'user'}{'lang'} ||
-	    $self->lang ||
-	    $robot->lang;
-    } else {
-	$data->{'lang'} = $data->{'user'}{'lang'} || $robot->lang;
-    }
+    undef $data->{'lang'};
+    $data->{'lang'} = $data->{'user'}->lang if ref $data->{'user'};
+    $data->{'lang'} ||= $self->lang if ref $self eq 'List';
+    $data->{'lang'} ||= $robot->lang;
 
     if (ref $self eq 'List') {
 	## Trying to use custom_vars
@@ -790,13 +789,10 @@ sub send_file {
     $data->{'conf'}{'version'} = $main::Version if defined $main::Version;
     $data->{'robot_domain'} = $robot_id;
     if (ref $self eq 'List') {
-	$data->{'list'}{'lang'}    = $self->lang;
-	$data->{'list'}{'name'}    = $self->name;
-	$data->{'list'}{'domain'}  = $self->domain;
-	$data->{'list'}{'host'}    = $self->host;
-	$data->{'list'}{'subject'} = $self->subject;
-	$data->{'list'}{'owner'}   = $self->get_owners();
-	$data->{'list'}{'dir'}     = $self->dir;
+	foreach my $p ('lang', 'name', 'domain', 'host', 'subject', 'dir') {
+	    $data->{'list'}{$p} = $self->$p;
+	}
+	$data->{'list'}{'owner'} = $self->get_owners();
 
 	## Sign mode
 	my $sign_mode;
@@ -827,7 +823,7 @@ sub send_file {
     }
 
     $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot)
-	unless ($data->{'boundary'});
+	unless $data->{'boundary'};
 
     my $dkim_feature          = $robot->dkim_feature;
     my $dkim_add_signature_to = $robot->dkim_add_signature_to;
@@ -1070,8 +1066,7 @@ sub send_notify_to_listmaster {
 
     if ($operation eq 'loop_command') {
 	## Loop detected in Sympa
-	$data->{'boundary'} =
-	    '----------=_' . &tools::get_message_id($self);
+	$data->{'boundary'} = '----------=_' . &tools::get_message_id($self);
 	&tt2::allow_absolute_path();
     }
 

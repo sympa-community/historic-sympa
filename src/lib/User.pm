@@ -556,13 +556,15 @@ sub add_global_user {
 
 =item clean_user ( USER_OR_HASH )
 
+=item clean_users ( ARRAYREF_OF_USERS_OR_HASHES )
+
 I<Function>.
-Warns if the argument is not a User object.
-Returns a User object, if any.
+Warn if the argument is not a User object.
+Return User object, if any.
 
 I<TENTATIVE>.
-This function will be used during transition between old and object-oriented
-styles.  At last modifications have been done, this shall be removed.
+These functions will be used during transition between old and object-oriented
+styles.  At last modifications have been done, they shall be removed.
 
 =back
 
@@ -572,20 +574,44 @@ sub clean_user {
     my $user = shift;
 
     unless (ref $user eq 'User') {
-        my $level = $Carp::CarpLevel;
-        $Carp::CarpLevel = 1;
-	carp "Deprecated usage: \$user should be a User object";
-        $Carp::CarpLevel = $level;
+	my $level = $Carp::CarpLevel;
+	$Carp::CarpLevel = 1;
+	carp "Deprecated usage: user should be a User object";
+	$Carp::CarpLevel = $level;
 
-        if (ref $user eq 'HASH') {
-            $user = bless $user => __PACKAGE__;
-        } else {
+	if (ref $user eq 'HASH') {
+	    $user = bless $user => __PACKAGE__;
+	} else {
 	    $user = undef;
 	}
     }
     $user;
 }
 
+sub clean_users {
+    my $users = shift;
+    return $users unless ref $users eq 'ARRAY';
+
+    my $warned = 0;
+    foreach my $user (@$users) {
+	unless (ref $user eq 'User') {
+	    unless ($warned) {
+		my $level = $Carp::CarpLevel;
+		$Carp::CarpLevel = 1;
+		carp "Deprecated usage: user should be a User object";
+		$Carp::CarpLevel = $level;
+
+		$warned = 1;
+	    }
+	    if (ref $user eq 'HASH') {
+		$user = bless $user => __PACKAGE__;
+	    } else {
+		$user = undef;
+	    }
+	}
+    }
+    $users;
+}
 
 ###### END of the User package ######
 
