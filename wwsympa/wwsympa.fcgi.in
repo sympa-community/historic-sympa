@@ -46,6 +46,7 @@ use Getopt::Long;
 use Archive::Zip qw(:ERROR_CODES);
 ##XXXuse strict 'vars';
 use Time::Local;
+# tentative
 use Data::Dumper;
 
 ## Sympa API
@@ -54,8 +55,8 @@ use List;
 #use Conf;
 #use confdef;
 use Commands;
-use Language;
-use Log;
+use Language qw(gettext gettext_strftime);
+#use Log; # used by Conf
 use Auth;
 use admin;
 use SharedDocument;
@@ -70,7 +71,7 @@ use cookielib;
 #use tt2;
 #use DateTime;
 use tracking;
-use Sympaspool;
+#use Sympaspool; # used in List - Task
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
@@ -1747,8 +1748,8 @@ my $birthday = time ;
  	 ## Retro compatibility concerns
  	 $param->{'active'} = 1;
  
- 	 if (defined $list) {
- 	     $param->{'list_conf'} = $list->{'admin'};
+ 	 if (ref $list eq 'List') {
+ 	     $param->{'list_conf'} = $list->admin;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
@@ -1774,8 +1775,8 @@ my $birthday = time ;
  	 ## Retro compatibility concerns
  	 $param->{'active'} = 1;
  
- 	 if (defined $list) {
- 	     $param->{'list_conf'} = $list->{'admin'};
+ 	 if (ref $list eq 'List') {
+ 	     $param->{'list_conf'} = $list->admin;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
@@ -8565,7 +8566,7 @@ sub do_install_pending_list {
      $list->status($in{'status'});
 
  #    open TMP, ">/tmp/dump1";
- #    &tools::dump_var ($list->{'admin'}, 0, \*TMP);
+ #    &tools::dump_var ($list->admin, 0, \*TMP);
  #    close TMP;
 
      unless ($list->save_config($param->{'user'}{'email'})) {
@@ -8578,7 +8579,7 @@ sub do_install_pending_list {
      }
 
  #    open TMP, ">/tmp/dump2";
- #    &tools::dump_var ($list->{'admin'}, 0, \*TMP);
+ #    &tools::dump_var ($list->admin, 0, \*TMP);
  #    close TMP;
 
      ## create the aliases
@@ -9787,13 +9788,16 @@ sub do_edit_list {
 	## If the list belongs to a family, gather all the constraints for each edited parameter.
 	if (ref($family) eq 'Family') {
 	    
-	    if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
+	    if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) {
+		# simple parameter
 		my $constraint = $family->get_param_constraint($pname);
 		
-		if (ref($constraint) eq 'HASH') { # controlled parameter        
+		if (ref($constraint) eq 'HASH') {
+		    # controlled parameter        
 		    $check_family{$pname} = $constraint;
 		    
-		} elsif ($constraint ne '0') {    # fixed parameter (free : no control)
+		} elsif ($constraint ne '0') {
+		    # fixed parameter (free : no control)
 		    next;
 		}
 	    }
@@ -9853,14 +9857,14 @@ sub do_edit_list {
 	    
 	    ## If there are less entries in the config file than were sent by the form,
 	    ## $to_index must correspond to the number of entries sent.
-	    if ($#{$list->{'admin'}{$pname}} < $last_index) {
+	    if ($#{$list->$pname} < $last_index) {
 		$to_index = $last_index;
 	    ## Otherwise, $to_index must correspond to the number of entries in the config file.
 	    }else {
-		$to_index = $#{$list->{'admin'}{$pname}};
+		$to_index = $#{$list->$pname};
 	    }	  
 	    
-	    $p = $list->{'admin'}{$pname};
+	    $p = $list->$pname;
 	    $new_p = $new_admin->{$pname};
 
 	## If the parameter can't have multiple values...
@@ -9889,7 +9893,7 @@ sub do_edit_list {
 		}
 	    }
 	    
-	    $p = [$list->{'admin'}{$pname}];
+	    $p = [$list->$pname];
 	    $new_p = [$new_admin->{$pname}];
 	}
 	
@@ -10105,7 +10109,7 @@ sub do_edit_list {
 	  my (%previous_emails, %new_emails);
 	  
 	  ## Check previous entries
-	  foreach my $entry (@{$list->{'admin'}{$admin_type}}) {	    
+	  foreach my $entry (@{$list->$admin_type}) {	    
 	    $previous_emails{$entry->{'email'}} = 1;
 	  }
 
@@ -10130,7 +10134,7 @@ sub do_edit_list {
 	    $data_source_updated = 1;
 	}
 	
-	$list->{'admin'}{$pname} = $new_admin->{$pname};
+	$list->$pname($new_admin->{$pname});
 	if (defined $new_admin->{$pname} || $pinfo->{$pname}{'internal'}) {
 	    $list->defaults($pname, undef);
 	}else {
@@ -10169,7 +10173,7 @@ sub do_edit_list {
      }
 
 
-     ## Reload config to clean some empty entries in $list->{'admin'}
+     ## Reload config to clean some empty entries in $list->admin
      $list = new List $list->name, $robot, {'reload_config' => 1};
 
       unless (defined $list) {
@@ -10318,7 +10322,7 @@ sub do_edit_list_request {
 
  #    print "Content-type: text/plain\n\n";
  #    &tools::dump_var(\%pinfo,0);
- #    &tools::dump_var($list->{'admin'},0);
+ #    &tools::dump_var($list->admin,0);
  #    &tools::dump_var($param->{'param'},0);
 
      $param->{'serial'} = $list->serial;
@@ -10465,7 +10469,7 @@ Prepares config data to be sent in the edition form. Adds to the parameters arra
 ## edition form
 sub _prepare_edit_form {
     my $list = shift;
-    my $list_config = &tools::dup_var($list->{'admin'});
+    my $list_config = &tools::dup_var($list->admin);
     my $family;
     my $is_form_editable = '0';
 
@@ -16692,23 +16696,22 @@ sub do_blacklist {
 sub do_dump_scenario {
      &wwslog('info', "do_dump_scenario($param->{'list'}), $in{'pname'}");
 
-     my $scenario = new Scenario ('function' => $in{'pname'},
-				  'robot' => $robot_id,
-				  'name' => $list->{'admin'}{$in{'pname'}}{'name'},
-				  'directory' => $list->dir);
+    my $pname = $in{'pname'};
+
+    my $scenario = $list->get_scenario($pname);
      unless (defined $scenario) {
 	 &report::reject_report_web('intern','cannot_open_file',{},$param->{'action'},$list);
 	 &wwslog('info','failed to load scenario');
 	 return undef;
      }
      ($param->{'dumped_scenario'}, $param->{'scenario_path'}) = ($scenario->{'data'}, $scenario->{'file_path'});
-     $param->{'pname'} = $in{'pname'};
-     $param->{'scenario_name'} = $list->{'admin'}{$in{'pname'}}{'name'};
+     $param->{'pname'} = $pname;
+     $param->{'scenario_name'} = $list->$pname->{'name'};
      
      if ($in{'new_scenario_name'}) {
 	 # in this case it's a submit.
 	 my $scenario_dir = $list->dir.'/scenari/';
-	 my $scenario_file = $scenario_dir.$in{'pname'}.'.'.$in{'new_scenario_name'} ;
+	 my $scenario_file = $scenario_dir.$pname.'.'.$in{'new_scenario_name'} ;
 	 if ($param->{'dumped_scenario'} eq $in{'new_scenario_content'}){
 	     &wwslog('info','do_dump_scenario: scenario unchanged');
 	     $param->{'result'} = 'unchanged';

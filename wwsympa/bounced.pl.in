@@ -36,18 +36,18 @@ use lib '--modulesdir--';
 use strict;
 
 use FileHandle;
-
-use List;
-use Conf;
-use Log;
-use mail;
 #use Getopt::Std;
 use Getopt::Long;
 use POSIX;
 
-use tt2;
-use tools;
-use Sympa::Constants;
+use List;
+#use Conf; # used in List - Site
+#use Log; # used in Conf
+#use mail; # used in List
+
+#use tt2; # used in List
+#use tools; # used in Conf
+#use Sympa::Constants; # used in Conf - confdef
 use tracking;
 
 ## Equivalents relative to RFC 1893
@@ -74,7 +74,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 
 
 use Bounce;
-##XXXuse wwslib;
+#use wwslib; # no longer used
 
 #getopts('dF');
 ## Check options
@@ -290,7 +290,7 @@ while (!$end) {
 								{'who' => $who,
 								 'by' => 'bounce manager',
 								 'reason' => 'welcome'})) {
-				&wwslog('err',"Unable to send notify 'automatic_del' to $list->{'name'} list owner");
+				&wwslog('err', 'Unable to send notify "automatic_del" to %s list owner', $list);
 			    } 
 			}
 		    }
@@ -313,9 +313,9 @@ while (!$end) {
 	#----------------------------------------------------------------------------------------------------------------------
 	# If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
 	my $tracking_in_use;
-	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'delivery_status_notification'} eq "on");
-	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on");
-	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand");
+	$tracking_in_use = 1 if ($list->tracking->{'delivery_status_notification'} eq "on");
+	$tracking_in_use = 1 if ($list->tracking->{'message_delivery_notification'} eq "on");
+	$tracking_in_use = 1 if ($list->tracking->{'message_delivery_notification'} eq "on_demand");
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($tracking_in_use)) {
 	    
 	    my @parts = $entity->parts();
@@ -420,7 +420,7 @@ while (!$end) {
 	} 
 	#-----------------------------------------------------------------------------------------------------------------------------------
 	# If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on")||($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand"))) {
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->tracking->{'message_delivery_notification'} eq "on")||($list->tracking->{'message_delivery_notification'} eq "on_demand"))) {
 	    
 	    my @parts = $entity->parts();
 	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
@@ -606,12 +606,12 @@ while (!$end) {
 			    
 				&Log::do_log ('notice',"$original_rcpt has been removed from %s because abuse feedback report",$list->name);	
 				unless ($list->send_notify_to_owner('automatic_del',{'who' => $original_rcpt, 'by' => 'listmaster'})) {
-				    &Log::do_log('notice',"Unable to send notify 'automatic_del' to $list->{'name'} list owner");
+				    &Log::do_log('notice', 'Unable to send notify "automatic_del" to %s list owner', $list);
 				}
 			    }else{
 				&Log::do_log('err','Ignore Feedback Report (bounce where messagekey =%s) for list %s@%s : user %s not subscribed',$bounce->{'messagekey'},$list->name,$robot_id,$original_rcpt);
 				unless ($list->send_notify_to_owner('warn-signoff',{'who' => $original_rcpt})) {
-				    &Log::do_log('notice',"Unable to send notify 'warn-signoff' to $list->{'name'} list owner");
+				    &Log::do_log('notice', 'Unable to send notify "warn-signoff" to %s list owner', $list);
 				}
 			    }
 			}else{
@@ -687,7 +687,7 @@ while (!$end) {
 		    &update_subscriber_bounce_history($list, 'unknown', $who); # status is undefined 
 		}else{          # no VERP and no rcpt recognized		
 		    my $escaped_from = &tools::escape_chars($from);
-		    &Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $list->{'name'});
+		    &Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $list);
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		    next;
 		}
@@ -770,7 +770,7 @@ sub update_subscriber_bounce_history {
     my $bouncefor = shift;
     my $status = shift;
     
-    &Log::do_log ('debug','&update_subscriber_bounce_history (%s,%s,%s,%s)',$list->{'name'},$rcpt,$bouncefor,$status); 
+    &Log::do_log ('debug','&update_subscriber_bounce_history (%s,%s,%s,%s)', $list, $rcpt, $bouncefor, $status); 
 
     my $first = my $last = time;
     my $count = 0;
@@ -778,7 +778,7 @@ sub update_subscriber_bounce_history {
     my $user = $list->get_list_member($bouncefor);
     
     unless ($user) {
-	&Log::do_log ('notice', 'Subscriber not found in list %s : %s', $list->{'name'}, $bouncefor); 		    
+	&Log::do_log ('notice', 'Subscriber not found in list %s : %s', $list, $bouncefor); 		    
 	return undef;
     }
     
@@ -796,7 +796,7 @@ sub update_subscriber_bounce_history {
 		      'daemon' => 'bounced'});
     }else{
 	$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status"});
-	&Log::do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list->{'name'});
+	&Log::do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list);
 	&Log::db_log({'robot' => $list->domain, 'list' => $list->name, 'action' => 'get_bounce',
 		      'target_email' => $bouncefor,'msg_id' => '','status' => 'error','error_type' => $status,
 		      'daemon' => 'bounced'});

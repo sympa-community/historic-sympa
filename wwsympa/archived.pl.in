@@ -39,23 +39,23 @@ This script must be run along with sympa. It regularly checks the 'outgoing' spo
 
 use lib '--modulesdir--';
 use strict;
+#use Getopt::Std;
+use Getopt::Long;
+use Digest::MD5;
 
 use List;
 use Message;
-use Conf;
-use Log;
+#use Conf; # used in List - Site
+#use Log; # used in Conf
 use Commands;
-#use Getopt::Std;
-use Getopt::Long;
-use Language;
-use Digest::MD5;
+#use Language; # used in List
 
-##XXXuse wwslib;
-use mail;
+#use wwslib; # no longer used
+#use mail; # used in mail
 
-use tt2;
-use tools;
-use Sympa::Constants;
+#use tt2; # used in List
+#use tools; # used in Conf
+#use Sympa::Constants; # used in Conf - confdef
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -262,7 +262,7 @@ while (!$end) {
 	    # this point : requested command is from a authorized personn (message sender or list admin or listmaster	    
 	    &remove($arclistdir,$msgid);
 	    
-	    my $url_dir = $list->{'dir'}.'/urlized/'.$msgid;
+	    my $url_dir = $list->dir.'/urlized/'.$msgid;
 	    &tools::remove_dir ($url_dir);
 	    
 	    unless (-d "$arcpath/deleted"){
@@ -505,7 +505,8 @@ sub rebuild {
 
     my $mhonarc_ressources = $list->get_etc_filename('mhonarc-ressources.tt2');
 
-    if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
+    if ($list->web_archive_spam_protection ne 'none' and
+	$list->web_archive_spam_protection ne 'cookie') {
 	&set_hidden_mode($tag);
     }else {
 	&unset_hidden_mode();
