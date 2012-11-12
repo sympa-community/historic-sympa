@@ -13811,6 +13811,10 @@ Some accessors have a bit confusing names: $list->host() gets/sets 'host'
 list parameter, not its robot name; $list->update() that gets/sets 'update'
 list parameter (actually hashref) won't update the list object itself.
 
+B<NOTE>:
+If structured parameters (such as topics, web_archive) were not defined,
+C<[]> or C<{}> will be returned instead of C<undef>.
+
 =back
 
 =cut

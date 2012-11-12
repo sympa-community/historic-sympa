@@ -75,8 +75,8 @@ use tracking;
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
-use Mail::Header;
-use Mail::Address;
+#use Mail::Header; # no need to import
+#use Mail::Address; # no longer used
 
 use OAuthProvider;
 use OAuthConsumer;
@@ -1180,8 +1180,8 @@ my $birthday = time ;
 		    'reporting_spam_script_path','automatic_list_families',
 		    ) {
 
-	 $param->{'conf'}{$p} = &Conf::get_robot_conf($robot_id, $p);
-	 $param->{$p} = &Conf::get_robot_conf($robot_id, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+	 $param->{'conf'}{$p} = $robot->$p;
+	 $param->{$p} = $robot->$p if $p =~ /_color$/ or $p =~ /color_/;
      }
      
 
@@ -5731,8 +5731,13 @@ sub do_edit_config {
 
     for my $i ( 0 .. $#editable_params ) {
 	if ($editable_params[$i]->{'name'}) {
-	    $editable_params[$i]->{'current_value'} = &Conf::get_robot_conf($robot_id, $editable_params[$i]->{'name'});
-            $editable_params[$i]->{'current_value'} = join( ",", @{$editable_params[$i]->{'current_value'}}) if (ref($editable_params[$i]->{'current_value'}) eq 'ARRAY');
+	    my $name = $editable_params[$i]->{'name'};
+	    my $v = $robot->$name;
+	    if (ref $v eq 'ARRAY') {
+		$editable_params[$i]->{'current_value'} = join ',', @$v;
+	    } else {
+		$editable_params[$i]->{'current_value'} = $v;
+	    }
 	}	     
     }
     
@@ -11019,10 +11024,12 @@ sub do_rename_list {
 	 &report::notice_report_web('pending_list',{},$param->{'action'},$list);
      }
      
-     if ($in{'new_robot'} eq '$robot_id') {
+     if ($in{'new_robot'} eq $robot_id) {
 	 $param->{'redirect_to'} = "$param->{'base_url'}$param->{'path_cgi'}/admin/$in{'new_listname'}";
      }else {
-	 $param->{'redirect_to'} = &Conf::get_robot_conf($in{'new_robot'}, 'wwsympa_url')."/admin/$in{'new_listname'}";
+	my $new_robot = Robot->new($in{'new_robot'});
+	$param->{'redirect_to'} =
+	    $new_robot->wwsympa_url ."/admin/$in{'new_listname'}";
      }
      
      $param->{'list'} = $in{'new_listname'};

@@ -32,10 +32,11 @@ use HTTP::Cookies;
 my @ISA = ('Exporter');
 my @EXPORT = ();
 
-use Conf;
-use Log;
+use List;
+#use Conf; # used in List - Site
+#use Log; # used in Conf
 use Auth;
-use Language;
+#use Language; # no longer used
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',
@@ -88,7 +89,7 @@ sub lists {
     my $all_lists = &List::get_lists($robot);
     foreach my $list ( @$all_lists ) {
 	
-	my $listname = $list->{'name'};
+	my $listname = $list->name;
 
 	my $result_item = {};
 	my $result = $list->check_list_authz('visibility','md5',
@@ -100,10 +101,10 @@ sub lists {
 	next unless ($action eq 'do_it');
 	
 	##building result packet
-	$result_item->{'listAddress'} = $listname.'@'.$list->{'admin'}{'host'};
-	$result_item->{'subject'} = $list->{'admin'}{'subject'};
+	$result_item->{'listAddress'} = $list->get_list_address();
+	$result_item->{'subject'} = $list->subject;
 	$result_item->{'subject'} =~ s/;/,/g;
-	$result_item->{'homepage'} = &Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname; 
+	$result_item->{'homepage'} = $list->robot->wwsympa_url .'/info/'.$listname; 
 	
 	my $listInfo;
 	if ($mode eq 'complex') {
@@ -116,8 +117,8 @@ sub lists {
 	if (!$topic) {
 	    push @result, $listInfo;
 	    
-	}elsif ($list->{'admin'}{'topics'}) {
-	    foreach my $list_topic (@{$list->{'admin'}{'topics'}}) {
+	}elsif (scalar @{$list->topics}) {
+	    foreach my $list_topic (@{$list->topics}) {
 		my @tree = split '/', $list_topic;
 		
 		next if (($topic) && ($tree[0] ne $topic));
@@ -444,13 +445,8 @@ sub info {
 	    ->faultdetail("List $listname unknown");
     }
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = $list->robot->sympa;
 
-    my $user;
-
-    # Part of the authorization code
-    $user = User::get_global_user($sender);
-     
     my $result = $list->check_list_authz('info','md5',
 					 {'sender' => $sender,
   					  'remote_application_name' =>  $ENV{'remote_application_name'} }
@@ -472,9 +468,9 @@ sub info {
     if ($action =~ /do_it/i) {
 	my $result_item;
 
-	$result_item->{'listAddress'} = SOAP::Data->name('listAddress')->type('string')->value($listname.'@'.$list->{'admin'}{'host'});
-	$result_item->{'subject'} = SOAP::Data->name('subject')->type('string')->value($list->{'admin'}{'subject'});
-	$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value(&Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname); 
+	$result_item->{'listAddress'} = SOAP::Data->name('listAddress')->type('string')->value($list->get_list_address());
+	$result_item->{'subject'} = SOAP::Data->name('subject')->type('string')->value($list->subject);
+	$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value($list->robot->wwsympa_url .'/info/'.$listname); 
 	
 	## determine status of user 
 	if (($list->am_i('owner',$sender) || $list->am_i('owner',$sender))) {
@@ -577,6 +573,7 @@ sub createList {
     my $param = {};
     $param->{'user'}{'email'} = $sender;
     if (User::is_global_user($param->{'user'}{'email'})) {
+	##FIXME: use User object
 	$param->{'user'} = User::get_global_user($sender);
     }
     my $parameters;
@@ -662,12 +659,12 @@ sub closeList {
 	    ->faultdetail("Not allowed");
      }      
 
-    if ($list->{'admin'}{'status'} eq 'closed') {
+    if ($list->status eq 'closed') {
 	&Log::do_log('info', 'closeList: already closed');
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('list allready closed')
 	    ->faultdetail("list $listname all ready closed");
-     }elsif($list->{'admin'}{'status'} eq 'pending') {
+     }elsif($list->status eq 'pending') {
 	 &Log::do_log('info','do_close_list: closing a pending list makes it purged');
 	 $list->purge($sender);
      }else{
@@ -757,13 +754,13 @@ sub add {
     }else {
 	my $u;
 	my $defaults = $list->get_default_user_options();
-	my $u2 = &List::get_global_user($email);
+	my $u2 = User->new($email);
 	%{$u} = %{$defaults};
 	$u->{'email'} = $email;
-	$u->{'gecos'} = $gecos || $u2->{'gecos'};
+	$u->{'gecos'} = $gecos || $u2->gecos;
 	$u->{'date'} = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->{'password'} || &tools::tmp_passwd($email) ;
-	$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
+	$u->{'password'} = $u2->password || &tools::tmp_passwd($email);
+	$u->{'lang'} = $u2->lang || $list->lang;
 
 	$list->add_list_member($u);
 	if (defined $list->{'add_outcome'}{'errors'}) {
@@ -783,13 +780,13 @@ sub add {
 	}
     }
     
-    &Log::do_log('info', 'ADD %s %s from %s accepted (%d subscribers)', $list->{'name'}, $email, $sender, $list->total);
+    &Log::do_log('info', 'ADD %s %s from %s accepted (%d subscribers)', $list->name, $email, $sender, $list->total);
     if ($action =~ /notify/i) {
 	unless ($list->send_notify_to_owner('notice',{'who' => $email, 
 						      'gecos' => $gecos,
 						      'command' => 'add',
 						      'by' => $sender})) {
-	    &Log::do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
+	    &Log::do_log('info', 'Unable to send notify "notice" to %s list owner', $list);
 	}
     }
 }
@@ -899,7 +896,7 @@ sub del {
 						      'gecos' => "", 
 						      'command' => 'del',
 						      'by' => $sender})) {
-	    &Log::do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
+	    &Log::do_log('info', 'Unable to send notify "notice" to %s list owner', $list);
 	}
     }
     return 1;
@@ -937,13 +934,10 @@ sub review {
 	    ->faultdetail("List $listname unknown");
     }
 
-    my $sympa = &Conf::get_robot_conf($robot,'sympa');
+    my $sympa = $list->robot->sympa;
 
     my $user;
 
-    # Part of the authorization code
-    $user = User::get_global_user($sender);
-     
     my $result = $list->check_list_authz('review','md5',
 					 {'sender' => $sender,
 					  'remote_application_name' =>  $ENV{'remote_application_name'} }
@@ -972,7 +966,7 @@ sub review {
 	    }
 	}
 	unless ($user = $list->get_first_list_member({'sortby' => 'email'})) {
-	    &Log::do_log('err', "SOAP : no subscribers in list '%s'", $list->{'name'});
+	    &Log::do_log('err', "SOAP : no subscribers in list %s", $list);
 	    push @resultSoap, SOAP::Data->name('result')->type('string')->value('no_subscribers');
 	    return SOAP::Data->name('return')->value(\@resultSoap);
 	}
@@ -1030,7 +1024,7 @@ sub fullReview {
 			->faultdetail('Listmaster or listowner required');
 	}
 	
-	my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+	my $sympa = $list->robot->sympa;
 	
 	my $is_owner = $list->am_i('owner', $sender);
 	
@@ -1128,7 +1122,7 @@ sub signoff {
     
     
     my $l;
-    my $list = new List ($listname, $robot);
+    my $list = new List ($listname, $robot); #FIXME: $listname may be '*'
     
     ## Is this list defined
     unless ($list) {
@@ -1138,22 +1132,19 @@ sub signoff {
 	    ->faultdetail("List $listname unknown");	
     }
     
-    my $host = &Conf::get_robot_conf($robot,'host');
+    ##my $host = $list->robot->host;
     
     if ($listname eq '*') {
 	my $success;
 	foreach my $list  ( &List::get_which ($sender,$robot,'member') ){
-	    my $l = $list->{'name'};
+	    my $l = $list->name;
 
-	    $success ||= &signoff($l,$sender);
+	    $success ||= &signoff($l,$sender); #FIXME: take care of robot
 	}
 	return SOAP::Data->name('result')->value($success);
     } 
     
     $list = new List ($listname, $robot);
-    
-    # Part of the authorization code
-    my $user = User::get_global_user($sender);
     
     my $result = $list->check_list_authz('unsubscribe','md5',
 					 {'email' => $sender,
@@ -1185,12 +1176,12 @@ sub signoff {
 	    ## Tell the owner somebody tried to unsubscribe
 	    if ($action =~ /notify/i) {
 		unless ($list->send_notify_to_owner('warn-signoff',{'who' => $sender})) {
-		    &Log::do_log('err',"Unable to send notify 'warn-signoff' to $list->{'name'} listowner");
+		    &Log::do_log('err', 'Unable to send notify "warn-signoff" to %s listowner', $list);
 		}
 	    }
 	    die SOAP::Fault->faultcode('Server')
 		->faultstring('Not allowed.')
-		->faultdetail("Email address $sender has not been found on the list $list->{'name'}. You did perhaps subscribe using a different address ?");
+		->faultdetail("Email address $sender has not been found on the list ".$list->name.". You did perhaps subscribe using a different address ?");
 	}
 	
 	## Really delete and rewrite to disk.
@@ -1200,7 +1191,7 @@ sub signoff {
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $sender,
 							  'command' => 'signoff'})) {
-		&Log::do_log('err',"Unable to send notify 'notice' to $list->{'name'} listowner");
+		&Log::do_log('err', 'Unable to send notify "notice" to %s listowner', $list);
 	    }
 	}
 
@@ -1285,12 +1276,12 @@ sub subscribe {
       my $keyauth = $list->compute_auth($sender,'add');
       unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 				   'keyauth' => $list->compute_auth($sender,'add'),
-				   'replyto' => &Conf::get_robot_conf($robot, 'sympa'),
+				   'replyto' => $list->robot->sympa,
 							'gecos' => $gecos})) {
-	  &Log::do_log('err',"Unable to send notify 'subrequest' to $list->{'name'} listowner");
+	  &Log::do_log('err', 'Unable to send notify "subrequest" to %s listowner', $list);
       }
 
-#      $list->send_sub_to_owner($sender, $keyauth, &Conf::get_robot_conf($robot, 'sympa'), $gecos);
+#      $list->send_sub_to_owner($sender, $keyauth, $list->robot->sympa, $gecos);
       $list->store_subscription_request($sender, $gecos);
       &Log::do_log('info', '%s from %s forwarded to the owners of the list',$listname,$sender);
       return SOAP::Data->name('result')->type('boolean')->value(1);
@@ -1342,10 +1333,11 @@ sub subscribe {
       }
       
       if ($Site::use_db) {
-	  my $u = User::get_global_user($sender);
-	  
-	  User::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
-					  });
+	    my $u = User->new($sender);
+	    unless ($u->lang) {
+		$u->lang($list->lang);
+		$u->save();
+	    }
       }
       
       ## Now send the welcome file to the user
@@ -1360,7 +1352,7 @@ sub subscribe {
 	  unless ($list->send_notify_to_owner('notice',{'who' => $sender,
 				       'gecos' => $gecos,
 							'command' => 'subscribe'})) {
-	      &Log::do_log('err',"Unable to send notify 'notice' to $list->{'name'} listowner");
+	      &Log::do_log('err', 'Unable to send notify "notice" to %s listowner', $list);
 	  }
       }
       &Log::do_log('info', 'SOAP subcribe : %s from %s accepted', $listname, $sender);
@@ -1422,7 +1414,7 @@ sub which {
     
     foreach my $role ('member','owner','editor') {
 	foreach my $list( &List::get_which($sender,$robot,$role) ){         
-	    my $name = $list->{'name'};
+	    my $name = $list->name;
 	    $listnames{$name} = $list;
 	}
     }
@@ -1441,10 +1433,10 @@ sub which {
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	next unless ($action =~ /do_it/i);
 
-	$result_item->{'listAddress'} = $name.'@'.$list->{'admin'}{'host'};
-	$result_item->{'subject'} = $list->{'admin'}{'subject'};
+	$result_item->{'listAddress'} = $list->get_list_address();
+	$result_item->{'subject'} = $list->subject;
 	$result_item->{'subject'} =~ s/;/,/g;
-	$result_item->{'homepage'} = &Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$name;
+	$result_item->{'homepage'} = $list->robot->wwsympa_url .'/info/'.$name;
 	 
 	## determine status of user 
 	$result_item->{'isOwner'} = 0;
