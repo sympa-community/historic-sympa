@@ -22,7 +22,7 @@
 package tools;
 
 use strict;
-
+use Carp qw(croak);
 use Time::Local;
 use File::Find;
 use Digest::MD5;
@@ -138,12 +138,12 @@ sub pictures_filename {
     my %parameters = @_;
     
     my $login = &md5_fingerprint($parameters{'email'});
-    my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
+    my $list = $parameters{'list'};
     
     my $filetype;
     my $filename = undef;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
- 	if (-f &Conf::get_robot_conf($robot,'pictures_path').'/'.$listname.'@'.$robot.'/'.$login.$ext) {
+ 	if (-f $list->robot->pictures_path . '/' . $list->get_id() . '/' . $login . $ext) {
  	    my $file = $login.$ext;
  	    $filename = $file;
  	    last;
@@ -157,11 +157,11 @@ sub pictures_filename {
 sub make_pictures_url {
     my %parameters = @_;
 
-    my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
+    my $list = $parameters{'list'};
 
     my $url;
-    if(&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'})) {
- 	$url =  &Conf::get_robot_conf($robot, 'pictures_url').$listname.'@'.$robot.'/'.&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'});
+    if(&pictures_filename('email' => $parameters{'email'}, 'list' => $list)) {
+ 	$url =  $list->robot->pictures_url . $list->get_id() . '/' . &pictures_filename('email' => $parameters{'email'}, 'list' => $list);
     }
     else {
  	$url = undef;
@@ -651,7 +651,7 @@ sub get_templates_list {
     }    
 
     if (defined $list) {
-	$listdir = $list->{'dir'}.'/'.$type.'_tt2';	
+	$listdir = $list->dir.'/'.$type.'_tt2';	
 	push @try, $listdir ;
     }
 
@@ -692,7 +692,7 @@ sub get_templates_list {
 # return the path for a specific template
 ## NOTE: this might be moved to wwslib.
 sub get_template_path {
-
+    Log::do_log('debug2', '(%s, %s. %s, %s, %s, %s)', @_);
     my $type = shift;
     my $robot = shift;
     my $scope = shift;
@@ -700,11 +700,9 @@ sub get_template_path {
     my $lang = shift || 'default';
     my $list = shift;
 
-    &Log::do_log('debug', "get_templates_path ($type,$robot,$scope,$tpl,$lang,%s)", $list->{'name'});
-
     my $listdir;
     if (defined $list) {
-	$listdir = $list->{'dir'};
+	$listdir = $list->dir;
     }
 
     unless (($type == 'web')||($type == 'mail')) {
@@ -736,42 +734,35 @@ sub get_template_path {
     return undef;
 }
 
+##NOTE: This might be moved to Site module as mutative method.
 sub get_dkim_parameters {
+    Log::do_log('debug2', '(%s)', @_);
+    my $self = shift;
 
-    my $params = shift;
-
-    my $robot = $params->{'robot'};
-    my $listname = $params->{'listname'};
-    &Log::do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
-
-    my $data ; my $keyfile ;
-    if ($listname) {
-	# fetch dkim parameter in list context
-	my $list = new List ($listname,$robot);
-	unless ($list){
-	    &Log::do_log('err',"Could not load list %s@%s",$listname, $robot);
-	    return undef;
-	}
-
-	$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
-	if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
-	    $data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
+    my $data;
+    my $keyfile;
+    if (ref $self and ref $self eq 'List') {
+	$data->{'d'} = $self->dkim_parameters->{'signer_domain'};
+	if ($self->dkim_parameters->{'signer_identity'}) {
+	    $data->{'i'} = $self->dkim_parameters->{'signer_identity'};
 	}else{
 	    # RFC 4871 (page 21) 
-	    $data->{'i'} = $list->{'name'}.'-request@'.$robot;
+	    $data->{'i'} = $self->get_address('owner');
 	}
 	
-	$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
-	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
-    }else{
+	$data->{'selector'} = $self->dkim_parameters->{'selector'};
+	$keyfile = $self->dkim_parameters->{'private_key_path'};
+    } elsif (ref $self and ref $self eq 'Robot' or $self eq 'Site') {
 	# in robot context
-	$data->{'d'} = &Conf::get_robot_conf($robot, 'dkim_signer_domain');
-	$data->{'i'} = &Conf::get_robot_conf($robot, 'dkim_signer_identity');
-	$data->{'selector'} = &Conf::get_robot_conf($robot, 'dkim_selector');
-	$keyfile = &Conf::get_robot_conf($robot, 'dkim_private_key_path');
+	$data->{'d'} = $self->dkim_signer_domain;
+	$data->{'i'} = $self->dkim_signer_identity;
+	$data->{'selector'} = $self->dkim_selector;
+	$keyfile = $self->dkim_private_key_path;
+    } else {
+	croak 'bug in logic.  Ask developer';
     }
     unless (open (KEY, $keyfile)) {
-	&Log::do_log('err',"Could not read dkim private key %s",&Conf::get_robot_conf($robot, 'dkim_signer_selector'));
+	Log::do_log('err', "Could not read dkim private key %s", $keyfile);
 	return undef;
     }
     while (<KEY>){
@@ -3316,7 +3307,7 @@ sub add_in_blacklist {
     my $robot = shift;
     my $list =shift;
 
-    &Log::do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->{'name'});
+    &Log::do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->name);
     $entry = lc($entry);
     chomp $entry;
 
@@ -3333,7 +3324,7 @@ sub add_in_blacklist {
 	&Log::do_log('info',"tools::add_in_blacklist: incorrect parameter $entry");
 	return undef;
     }
-    my $dir = $list->{'dir'}.'/search_filters';
+    my $dir = $list->dir.'/search_filters';
     unless ((-d $dir) || mkdir ($dir, 0755)) {
 	&Log::do_log('info','do_blacklist : unable to create dir %s',$dir);
 	return undef;

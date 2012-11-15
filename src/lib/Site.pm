@@ -878,7 +878,7 @@ sub send_file {
     my $dkim_feature          = $robot->dkim_feature;
     my $dkim_add_signature_to = $robot->dkim_add_signature_to;
     if ($dkim_feature eq 'on' and $dkim_add_signature_to =~ /robot/) {
-	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $robot_id});
+	$data->{'dkim'} = &tools::get_dkim_parameters($robot);
     }
 
     # use verp excepted for alarms. We should make this configurable in

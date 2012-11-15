@@ -799,7 +799,7 @@ sub reject_report_web {
 
     my $listname;
     if (ref($list) eq 'List'){
-	$listname = $list->{'name'};
+	$listname = $list->name;
     }
 
     ## Notify listmaster for internal or system errors

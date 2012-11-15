@@ -4061,8 +4061,7 @@ sub send_msg {
 
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = &tools::get_dkim_parameters(
-	    {'robot' => $self->domain, 'listname' => $self->name});
+	$dkim_parameters = &tools::get_dkim_parameters($self);
     }
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
