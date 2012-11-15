@@ -91,6 +91,56 @@ sub load {
 
 =over 4
 
+=item get_address ( [ TYPE ] )
+
+    # To get super listmaster address
+    $addr = Site->get_address('listmaster');
+    # To get normal (per-robot) listmaster address
+    $addr = $robot->get_address('listmaster');
+    # To get list addresses
+    $addr = $list->get_address();
+    $addr = $list->get_address('owner');
+
+On Site class or Robot object,
+returns the site or robot email address of type TYPE: "listmaster".
+
+On List object,
+returns the list email address of type TYPE: posting address (default),
+"owner", "editor" or (non-VERP) "return_path".
+
+=back
+
+=cut
+
+sub get_address {
+    my $self = shift;
+    my $type = shift || '';
+
+    if (ref $self and ref $self eq 'List') {
+	unless ($type) {
+	    return $self->name . '@' . $self->host;
+	} elsif ($type eq 'owner') {
+	    return $self->name . '-request' . '@' . $self->host;
+	} elsif ($type eq 'editor') {
+	    return $self->name . '-editor' . '@' . $self->host;
+	} elsif ($type eq 'return_path') {
+	    return $self->name . $self->robot->return_path_suffix . '@' .
+		$self->host;
+	}
+    } elsif (ref $self and ref $self eq 'Robot' or $self eq 'Site') {
+	if ($type eq 'listmaster') {
+	    return $self->listmaster_email . '@' . $self->host;
+	}
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+    &Log::do_log('err', 'Unknown type of address "%s".  Ask developer',
+	$type);
+    return undef;
+}
+
+=over 4
+
 =item is_listmaster ( WHO )
 
     # Is the user super listmaster?

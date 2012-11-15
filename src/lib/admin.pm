@@ -34,16 +34,16 @@ Central module for creating and editing lists.
 package admin;
 
 use strict;
+use File::Copy;
+# tentative
+use Data::Dumper;
 
 use List;
-#use Conf; # already load in List.
-use Language;
-use Log;
-use tools;
-#use Sympa::Constants; # load in Conf - List
-use File::Copy;
-
-use Data::Dumper;
+#use Conf; # already load in List - Site.
+use Language qw(gettext_strftime);
+#use Log; # used in Conf
+#use tools; # used in Conf
+#use Sympa::Constants; # load in Conf - confdef
 
 =pod 
 
@@ -210,7 +210,10 @@ sub create_list_old{
     }    
 
     if ($param->{'listname'} eq $robot->email) {
-	&do_log('err','admin::create_list : incorrect listname %s matches one of service aliases', $param->{'listname'});
+	Log::do_log('err',
+	    'incorrect listname %s matches one of service aliases',
+	    $param->{'listname'}
+	);
 	return undef;
     }
 
@@ -256,11 +259,11 @@ sub create_list_old{
     }
       
     ## Creation of the config file
-    my $host = $robot->host;
-    $param->{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $param->{'creation'}{'date_epoch'} = time;
-    $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
-    $param->{'status'} = 'open'  unless ($param->{'status'});
+    my $time = time;
+    $param->{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time;
+    $param->{'creation'}{'date_epoch'} = $time;
+    $param->{'creation_email'} ||= $robot->get_address('listmaster');
+    $param->{'status'} ||= 'open';
        
     my $tt2_include_path =
 	$robot->make_tt2_include_path('create_list_templates/' . $template);
@@ -276,7 +279,7 @@ sub create_list_old{
 	return undef;
     }
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $!);
+	Log::do_log('err','Impossible to create %s/config : %s', $list_dir, $!);
 	$lock->unlock();
 	return undef;
     }
@@ -416,7 +419,7 @@ sub create_list{
 	}
     }    
     if ($param->{'listname'} eq $robot->email) {
-	&do_log('err', 'incorrect listname %s matches one of service aliases',
+	Log::do_log('err', 'incorrect listname %s matches one of service aliases',
 	    $param->{'listname'});
 	return undef;
     }
@@ -484,7 +487,8 @@ sub create_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $!);
+	Log::do_log('err', 'Impossible to create %s/config : %s',
+	    $list_dir, $!);
 	$lock->unlock();
 	return undef;
     }
@@ -541,23 +545,12 @@ sub create_list{
     }
 
     my $time = time;
-    my $creation = {
+    $list->creation({
 	'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time),
 	'date_epoch' => $time,
-    };
-    if ($param->{'creation_email'}) {
-	$creation->{'email'} = $param->{'creation_email'};
-    } else {
-	my $email = $robot->listmaster_email;
-	my $host = $robot->host;
-	$creation->{'email'} = "$email\@$host";
-    }
-    $list->creation($creation);
-    if ($param->{'status'}) {
-	$list->status($param->{'status'});
-    } else {
-	$list->status('open');
-    }
+	'email' => ($param->{'creation_email'} || $robot->get_address('listmaster'))
+    });
+    $list->status($param->{'status'} || 'open');
     $list->family_name($family->name);
 
     my $return = {};
@@ -600,7 +593,8 @@ sub create_list{
 #######################################################
 sub update_list{
     my ($list,$param,$family,$robot) = @_;
-    &Log::do_log('info', 'admin::update_list(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
+    Log::do_log('info', '(listname=%s, family=<%s>, subject=%s)',
+	$param->{'listname'}, $family->get_id(), $param->{'subject'});
 
     ## mandatory list parameters
     foreach my $arg ('listname') {
@@ -625,7 +619,7 @@ sub update_list{
     }
 
     ## Lock config before openning the config file
-    my $lock = new Lock ($list->{'dir'}.'/config');
+    my $lock = new Lock ($list->dir.'/config');
     unless (defined $lock) {
 	&Log::do_log('err','Lock could not be created');
 	return undef;
@@ -636,8 +630,8 @@ sub update_list{
     }
 
     ## Creation of the config file
-    unless (open CONFIG, '>', "$list->{'dir'}/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $!);
+    unless (open CONFIG, '>', $list->dir . '/config') {
+	Log::do_log('err','Impossible to create %s/config : %s', $list->dir, $!);
 	$lock->unlock();
 	return undef;
     }
@@ -653,21 +647,14 @@ sub update_list{
 	return undef;
     }
 ############## ? update
-    $list->{'admin'}{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $list->{'admin'}{'creation'}{'date_epoch'} = time;
-    if ($param->{'creation_email'}) {
-	$list->{'admin'}{'creation'}{'email'} = $param->{'creation_email'};
-    } else {
-	my $host = &Conf::get_robot_conf($robot, 'host');
-	$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
-    }
-
-    if ($param->{'status'}) {
-	$list->{'admin'}{'status'} = $param->{'status'};
-    } else {
-	$list->{'admin'}{'status'} = 'open';
-    }
-    $list->{'admin'}{'family_name'} = $family->name;
+    my $time = time;
+    $list->creation({
+	'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time),
+	'date_epoch' => $time,
+	'email' => ($param->{'creation_email'} || $list->robot->get_address('listmaster'))
+    });
+    $list->status($param->{'status'} || 'open');
+    $list->family_name($family->name);
 
     ## Synchronize list members if required
     if ($list->has_include_data_sources()) {
@@ -806,12 +793,13 @@ sub rename_list{
     ## This code should be in List::rename()
     unless ($param{'mode'} eq 'copy') {     
 	 unless (move ($list->dir, $new_dir )){
-	     &Log::do_log('err',"Unable to rename $list->dir to $new_dir : $!");
+	    Log::do_log('err', 'Unable to rename %s to %s : %s',
+		$list->dir, $new_dir, $!);
 	     return 'internal';
 	 }
      
 	 ## Rename archive
-	 my $arc_dir = &Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_id;
+	 my $arc_dir = $list->robot->arc_path . '/' . $list->get_id();
 	 my $new_arc_dir = &Conf::get_robot_conf($param{'new_robot'}, 'arc_path').'/'.$param{'new_listname'}.'@'.$param{'new_robot'};
 	 if (-d $arc_dir && $arc_dir ne $new_arc_dir) {
 	     unless (move ($arc_dir,$new_arc_dir)) {
@@ -1005,7 +993,7 @@ sub clone_list_as_empty {
     chmod 0775, $new_dir;
     foreach my $subdir ('etc','web_tt2','mail_tt2','data_sources' ) {
 	if (-d $new_dir.'/'.$subdir) {
-	    unless (&tools::copy_dir($list->{'dir'}.'/'.$subdir, $new_dir.'/'.$subdir)) {
+	    unless (&tools::copy_dir($list->dir.'/'.$subdir, $new_dir.'/'.$subdir)) {
 		&Log::do_log('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $!);
 		return undef;
 	    }
@@ -1013,15 +1001,15 @@ sub clone_list_as_empty {
     }
     # copy mandatory files
     foreach my $file ('config') {
-	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+	    unless (&File::Copy::copy ($list->dir.'/'.$file, $new_dir.'/'.$file)) {
 		&Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
 		return undef;
 	    }
     }
     # copy optional files
     foreach my $file ('message.footer','message.header','info','homepage') {
-	if (-f $list->{'dir'}.'/'.$file) {
-	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+	if (-f $list->dir.'/'.$file) {
+	    unless (&File::Copy::copy ($list->dir.'/'.$file, $new_dir.'/'.$file)) {
 		&Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
 		return undef;
 	    }
@@ -1034,10 +1022,15 @@ sub clone_list_as_empty {
 	&Log::do_log('info',"Admin::clone_list_as_empty : unable to load $new_listname while renamming");
 	return undef;
     }
-    $new_list->{'admin'}{'serial'} = 0 ;
-    $new_list->{'admin'}{'creation'}{'email'} = $email if ($email);
-    $new_list->{'admin'}{'creation'}{'date_epoch'} = time;
-    $new_list->{'admin'}{'creation'}{'date'} = gettext_strftime "%d %b %y at %H:%M:%S", localtime(time);
+    $new_list->serial(0);
+    my $time = time;
+    my $creation = {
+	'date_epoch' => $time,
+	'date' => (gettext_strftime "%d %b %y at %H:%M:%S", localtime $time)
+    };
+    ##FIXME: creation.email may be empty
+    $creation->{'email'} = $email if $email;
+    $new_list->creation($creation);
     $new_list->save_config($email);
     return $new_list;
 }
@@ -1388,7 +1381,7 @@ sub change_user_email {
     ## Change email as list MEMBER
     foreach my $list ( &List::get_which($in{'current_email'},$in{'robot'}, 'member') ) {
 	 
-	 my $l = $list->{'name'};
+	 my $l = $list->name;
 	 
 	 my $user_entry = $list->get_list_member($in{'current_email'});
 	 
@@ -1412,7 +1405,7 @@ sub change_user_email {
 					      'new_email' => $in{'new_email'},
 					      'datasource' => $list->get_datasource_name($user_entry->{'id'})});
 		 push @failed_for, $list;
-		 &Log::do_log('err', 'could not change member email for list %s because member is included', $l);
+		 &Log::do_log('err', 'could not change member email for list %s because member is included', $list);
 		 next;
 	     }
 	 }
@@ -1448,17 +1441,17 @@ sub change_user_email {
 											   'new_email' => $in{'new_email'},
 											   'datasource' => $list->get_datasource_name($admin_user->{'id'})});
 		push @failed_for, $list;
-		&Log::do_log('err', 'could not change %s email for list %s because admin is included', $role, $list->{'name'});
+		&Log::do_log('err', 'could not change %s email for list %s because admin is included', $role, $list);
 		next;
 	    }
 	    
 	    ## Go through owners/editors of the list
-	    foreach my $admin (@{$list->{'admin'}{$role}}) {
+	    foreach my $admin (@{$list->$role}) {
 		next unless (lc($admin->{'email'}) eq lc($in{'current_email'}));
 		
 		## Update entry with new email address
 		$admin->{'email'} = $in{'new_email'};
-		$updated_lists{$list->{'name'}}++;
+		$updated_lists{$list->name}++;
 	    }
 	    
 	    ## Update Db cache for the list

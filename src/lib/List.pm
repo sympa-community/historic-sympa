@@ -2455,9 +2455,8 @@ sub set_status_error_config {
     unless ($self->admin and $self->status eq 'error_config') {
 	$self->status('error_config');
 
-	#my $host = $self->robot->host;
 	## No more save config in error...
-	#$self->save_config("listmaster\@$host");
+	#$self->save_config($self->robot->get_address('listmaster'));
 	#$self->savestats();
 	&Log::do_log('err',
 	    'The list %s is set in status error_config: %s(%s)',
@@ -2480,8 +2479,8 @@ sub set_status_family_closed {
     my ($self, $message, @param) = @_;
 
     unless ($self->status eq 'family_closed') {
-	my $host = $self->robot->host;
-	unless ($self->close_list("listmaster\@$host", 'family_closed')) {
+	unless ($self->close_list($self->robot->get_address('listmaster'),
+	    'family_closed')) {
 	    &Log::do_log('err',
 		'Impossible to set the list %s in status family_closed',
 		$self);
@@ -13550,33 +13549,20 @@ sub get_bounce_dir {
 
 =over 4
 
-=item get_list_address ( [ TYPE ] )
+=item get_address ( [ TYPE ] )
 
-Return the list email address of type TYPE: posting address (default),
-"owner", "editor" or (non-VERP) "return_path".
+Returns the list email address.
+See L<Site/get_address>.
 
 =back
 
 =cut
 
-sub get_list_address {
-    my $self = shift;
-    my $type = shift || '';
+##Inherited from Site_r package.
 
-    unless ($type) {
-	return $self->name . '@' . $self->host;
-    } elsif ($type eq 'owner') {
-	return $self->name . '-request' . '@' . $self->host;
-    } elsif ($type eq 'editor') {
-	return $self->name . '-editor' . '@' . $self->host;
-    } elsif ($type eq 'return_path') {
-	return $self->name .
-	    $self->robot->return_path_suffix . '@' .
-	    $self->host;
-    }
-    &Log::do_log('err', 'Unknown type of list address "%s".  Ask developer',
-	$type);
-    return undef;
+sub get_list_address {
+    ##OBSOLETED: Use $list->get_address().
+    return Site::get_address(@_);
 }
 
 =over 4

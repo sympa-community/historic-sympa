@@ -197,6 +197,19 @@ sub load {
 
 =over 4
 
+=item get_address ( [ TYPE ] )
+
+Returns the robot email address.
+See L<Site/get_address>.
+
+=back
+
+=cut
+
+##Inherited from Site class.
+
+=over 4
+
 =item get_id
 
 Get unique name of robot.
