@@ -13561,7 +13561,8 @@ See L<Site/get_address>.
 
 sub get_list_address {
     ##OBSOLETED: Use $list->get_address().
-    return Site::get_address(@_);
+    my $self = shift;
+    return $self->get_address(@_);
 }
 
 =over 4

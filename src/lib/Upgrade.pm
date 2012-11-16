@@ -476,7 +476,7 @@ sub upgrade {
 	my $all_lists = &List::get_lists('*');
 	foreach my $list ( @$all_lists ) {
 	    if (-d $list->{'dir'}.'/shared') {
-		&Log::do_log('notice','  Processing list %s...', $list->get_list_address());
+		&Log::do_log('notice','  Processing list %s...', $list);
 
 		## Determine default lang for this list
 		## It should tell us what character encoding was used for filenames
@@ -672,7 +672,7 @@ sub upgrade {
 		my $all_lists = &List::get_lists('*');
 		foreach my $list ( @$all_lists ) {
 			if (-d $list->{'dir'}.'/shared') {
-				&Log::do_log('notice','  Processing list %s...', $list->get_list_address());
+				&Log::do_log('notice','  Processing list %s...', $list);
 
 				my @all_files;
 				&tools::list_dir($list->{'dir'}, \@all_files, 'utf-8');

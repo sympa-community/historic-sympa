@@ -369,20 +369,23 @@ styles.  At last modifications have been done, this shall be removed.
 =cut
 
 sub clean_robot {
-    my $robot = shift;
+    my $robot      = shift;
     my $maybe_site = shift;
 
     unless (ref $robot or
 	($maybe_site and !ref $robot and $robot eq 'Site')) {
 	my $level = $Carp::CarpLevel;
 	$Carp::CarpLevel = 1;
-	carp "Deprecated usage: \"$robot\" should be a Robot object";
+	carp "Deprecated usage: \"$robot\" should be a Robot object" .
+	    ($maybe_site ? ' or Site class' : '');
 	$Carp::CarpLevel = $level;
 
-	if ($robot and $robot ne '*') {
+	if ($robot and $robot eq '*' and $maybe_site) {
+	    $robot = 'Site';
+	} elsif ($robot and $robot ne '*') {
 	    $robot = Robot->new($robot);
 	} else {
-	    $robot = undef;
+	    croak "Illegal robot argument: " . ($robot || '');
 	}
     }
     $robot;

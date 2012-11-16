@@ -10981,7 +10981,7 @@ sub do_rename_list {
      }elsif ($result eq 'internal') {
        &report::reject_report_web('intern','unable_to_rename_list',{'new_listname' => $in{'new_listname'}},
 				  $param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-       &wwslog('err', "can't rename list %s to %s@%s", $list->get_list_address(), $in{'new_listname'}, $in{'new_robot'});
+       &wwslog('err', "can't rename list %s to %s@%s", $list, $in{'new_listname'}, $in{'new_robot'});
        &web_db_log({'parameters' => "$in{'new_listname'},$in{'new_robot'}",
 		    'status' => 'error',
 		    'error_type' => 'internal'});

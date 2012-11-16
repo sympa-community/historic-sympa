@@ -774,9 +774,12 @@ sub sending {
 #
 ##################################################################################
 sub smtpto {
-   my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
-
-   &Log::do_log('debug2', 'smtpto( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
+    Log::do_log('debug2', '(%s, %s, %s, %s, %s)', @_);
+    my $from = shift;
+    my $rcpt = shift;
+    my $robot = Robot::clean_robot(shift, 1);
+    my $msgkey = shift;
+    my $sign_mode = shift;
 
    unless ($from) {
        &Log::do_log('err', 'Missing Return-Path in mail::smtpto()');

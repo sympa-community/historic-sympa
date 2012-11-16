@@ -563,7 +563,7 @@ sub send_dsn {
 
     my $recipient = '';
     if (ref $self and ref $self eq 'List') {
-	$recipient = $self->get_list_address;
+	$recipient = $self->get_address;
 	$status ||= '5.1.1';
     } elsif (ref $self and ref $self eq 'Robot') {
 	if ($param->{'listname'}) {
@@ -858,13 +858,13 @@ sub send_file {
 	# . a list should have several certificats and use if possible a
 	#   certificat issued by the same CA as the receipient CA if it exists
 	if ($sign_mode and $sign_mode eq 'smime') {
-	    $data->{'fromlist'} = $self->get_list_address();
-	    $data->{'replyto'}  = $self->get_list_address('owner');
+	    $data->{'fromlist'} = $self->get_address();
+	    $data->{'replyto'}  = $self->get_address('owner');
 	} else {
-	    $data->{'fromlist'} = $self->get_list_address('owner');
+	    $data->{'fromlist'} = $self->get_address('owner');
 	}
 	$data->{'from'} = $data->{'fromlist'} unless $data->{'from'};
-	$data->{'return_path'} ||= $self->get_list_address('return_path');
+	$data->{'return_path'} ||= $self->get_address('return_path');
     } else {
 	$data->{'from'} ||= $self->sympa;
 	unless ($data->{'return_path'} and $data->{'return_path'} eq '<>') {

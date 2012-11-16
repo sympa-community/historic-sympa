@@ -818,7 +818,7 @@ if ($main::options{'dump'}) {
     }
 
     if (-d $list->dir . '/shared') {
-	&Log::do_log('notice','  Processing list %s...', $list->get_list_address());
+	&Log::do_log('notice','  Processing list %s...', $list);
 	
 	## Determine default lang for this list
 	## It should tell us what character encoding was used for filenames
@@ -1298,7 +1298,7 @@ sub process_message {
 	$list_address = $list->get_list_address();
     }
     ## Loop prevention
-    if ($list->reject_mail_from_automates_feature eq 'on') {
+    if ($list and $list->reject_mail_from_automates_feature eq 'on') {
 		my $conf_loop_prevention_regex;
 	$conf_loop_prevention_regex = $list->loop_prevention_regex ||
 	    $robot_object->loop_prevention_regex;
@@ -2096,7 +2096,7 @@ sub DoCommand {
 	    $cmd_found = 1; # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
 		&Log::do_log('notice', "Unknown command found :%s", $i);
-		&report::reject_report_cmd('user','not_understood',{},$i);
+		&report::reject_report_cmd('user', 'not_understood', {}, $i, $sender, $robot);
 		&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'DoCommand','parameters' => "$rcpt,$robot,$message",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'not_understood','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		last;
 	    }	    
