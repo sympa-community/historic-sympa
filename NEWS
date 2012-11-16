@@ -3,6 +3,34 @@
 
 (See Changelog file for the full changes log)
 
+6.1.16		November 16, 2012
+
+  Bug fixes:
+
+	[7955] src/lib/PlainDigest.pm: [Reported by O. Germes and M. Thomas,
+	univ. Rennes 1] When compiling a plain digest, attachments are
+	subsituted by character strings indicating that there were attachments
+	in the message. Any text part is converted to plain text and folded
+	into 78 column text. Teh selection of parts to fold or to replace by
+	text is based on the "Content-Type:" header of a part. In some cases
+	(such as messages sent from opengroupware, for example) binary
+	attachments are embedded in text/plain parts with a
+	"content-disposition" header with value "attachment". Such parts should
+	be substitued by replacement text but, as their Content-Type is
+	"text/plain", Sympa tried to fold them to 78 columns. This led to a
+	very long loop because the Text::Linefold module splits strings to be
+	folded with special characters that your everyday PDF file contains
+	thousands times. Fixed by testing, when dealing with a text/plain part,
+	the value of the "content-disposition:" header. It if contains
+	"attachment", the part is treated as a binary-content part.
+
+	[7917] wwsympa/Auth.pm: [#8852][Submitted by F. Périchon, univ. Lille
+	2] Ldap authentication failed in wwsympa with recent version of
+	Convert-ASN1. Starting with version 0.25, Convert-ASN1 package has a
+	'use strict'. Ldap attrs were passed as a string in a ldap search call
+	in wwsympa/Auth.pm thus making LDAP authentication fail. Fixed by
+	passing attrs as an array, even when only one attribute is retrieved.
+
 6.1.15		October 04, 2012
 
   Changes:

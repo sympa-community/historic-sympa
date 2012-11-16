@@ -1,4 +1,231 @@
 ------------------------------------------------------------------------
+r7960 | sympa-authors | 2012-11-16 15:20:25 +0100 (ven 16 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7959 | sympa-authors | 2012-11-16 15:03:19 +0100 (ven 16 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7957 | sympa-authors | 2012-11-16 12:20:24 +0100 (ven 16 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7956 | sympa-authors | 2012-11-16 12:03:21 +0100 (ven 16 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7955 | david.verdin | 2012-11-16 11:39:25 +0100 (ven 16 nov 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/PlainDigest.pm
+
+[bug][Reported by O. Germes and M. Thomas, univ. Rennes 1] When compiling a plain digest, attachments are subsituted by character strings indicating that there were attachments in the message. Any text part is converted to plain text and folded into 78 column text. Teh selection of parts to fold or to replace by text is based on the "Content-Type:" header of a part. In some cases (such as messages sent from opengroupware, for example) binary attachments are embedded in text/plain parts with a "content-disposition" header with value "attachment". Such parts should be substitued by replacement text but, as their Content-Type is "text/plain", Sympa tried to fold them to 78 columns. This led to a very long loop because the Text::Linefold module splits strings to be folded with special characters that your everyday PDF file contains thousands times. Fixed by testing, when dealing with a text/plain part, the value of the "content-disposition:" header. It if contains "attachment", the part is treated as a binary-content part.
+
+------------------------------------------------------------------------
+r7922 | sympa-authors | 2012-11-07 15:43:09 +0100 (mer 07 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7921 | sympa-authors | 2012-11-07 15:24:48 +0100 (mer 07 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/oc.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7920 | sympa-authors | 2012-11-07 15:05:28 +0100 (mer 07 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/oc.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7918 | sympa-authors | 2012-11-07 12:03:03 +0100 (mer 07 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7917 | david.verdin | 2012-11-06 18:22:36 +0100 (mar 06 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/Auth.pm
+
+[bug][#8852][Submitted by F. Périchon, univ. Lille 2] Ldap authentication failed in wwsympa with recent version of Convert-ASN1. Starting with version 0.25, Convert-ASN1 package has a 'use strict'. Ldap attrs were passed as a string in a ldap search call in wwsympa/Auth.pm thus making LDAP authentication fail. Fixed by passing attrs as an array, even when only one attribute is retrieved.
+------------------------------------------------------------------------
+r7667 | sympa-authors | 2012-10-04 16:52:39 +0200 (jeu 04 oct 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.15
+------------------------------------------------------------------------
 r7666 | sympa-authors | 2012-10-04 16:46:11 +0200 (jeu 04 oct 2012) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/el.po
