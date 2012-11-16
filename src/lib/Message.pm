@@ -183,6 +183,7 @@ sub new {
 	}
 
 	# get envelope sender
+	##FIXME: currently won't work as expected.
 	my $from_ = undef;
 	if (ref $messageasstring) {
 	    if (ref $messageasstring eq 'ARRAY' and

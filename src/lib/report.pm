@@ -481,7 +481,7 @@ sub reject_report_cmd {
     my $data = shift;
     my $cmd = shift;
     my $sender = shift;
-    my $robot = Robot::clean_robot(shift, 1); # Site or Robot
+    my $robot = shift;
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user' || $type eq 'auth') {
 	&Log::do_log('err',"report::reject_report_cmd(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
@@ -489,6 +489,7 @@ sub reject_report_cmd {
     }
 
     if ($type eq 'intern') {
+	$robot = Robot::clean_robot($robot, 1); # Site or Robot
 	if ($robot) {
 	    my $listname;
 	    if (defined $data->{'listname'}) {

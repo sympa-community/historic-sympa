@@ -2096,7 +2096,7 @@ sub DoCommand {
 	    $cmd_found = 1; # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
 		&Log::do_log('notice', "Unknown command found :%s", $i);
-		&report::reject_report_cmd('user', 'not_understood', {}, $i, $sender, $robot);
+		&report::reject_report_cmd('user', 'not_understood', {}, $i);
 		&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'DoCommand','parameters' => "$rcpt,$robot,$message",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'not_understood','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		last;
 	    }	    
