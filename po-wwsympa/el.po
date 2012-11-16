@@ -18,10 +18,10 @@ msgstr ""
 "PO-Revision-Date: 2012-11-16 10:43+0200\n"
 "Last-Translator: gotsikas <gotsikas@yahoo.com>\n"
 "Language-Team: Greek, Modern (1453-) <el@li.org>\n"
-"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -330,7 +330,8 @@ msgstr ""
 msgid ""
 "perform <a href=\"%1/help/arc#arcsearch\">searches in the list archive</a>,"
 msgstr ""
-"να κάνετε <a href=\"%1/help/arc#arcsearch\">αναζητήσεις στο αρχείο λίστας</a>,"
+"να κάνετε <a href=\"%1/help/arc#arcsearch\">αναζητήσεις στο αρχείο λίστας</"
+"a>,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:53
@@ -338,8 +339,8 @@ msgid ""
 "<a href=\"%1/help/sendmsg\">send messages</a> to lists to which you are "
 "subscribed,"
 msgstr ""
-"<a href=\"%1/help/sendmsg\">στείλετε μηνύματα</a> σε λίστες στις οποίες είστε "
-"συνδρομητής,"
+"<a href=\"%1/help/sendmsg\">στείλετε μηνύματα</a> σε λίστες στις οποίες "
+"είστε συνδρομητής,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:54

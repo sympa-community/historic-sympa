@@ -9902,7 +9902,7 @@ msgstr ""
 "------ Einde origineel bericht van %s ------\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
+#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
 #, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
@@ -9912,41 +9912,41 @@ msgstr ""
 "** Opgelet: de gebruikte characterset is %S\n"
 "Sommige caracters kunnen verloren gaan of fout weergegeven worden!\n"
 
-#: ../src/lib/PlainDigest.pm:257
+#: ../src/lib/PlainDigest.pm:261
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
 
-#: ../src/lib/PlainDigest.pm:263
+#: ../src/lib/PlainDigest.pm:267
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: ../src/lib/PlainDigest.pm:265
+#: ../src/lib/PlainDigest.pm:269
 #, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
 msgstr "-----Einde Delivery Status Report-----\n"
 
-#: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
+#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:312
 msgid "[ Text converted from HTML ]\n"
 msgstr ""
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 #, fuzzy
 msgid "[ Image%s ]"
 msgstr "%Image(%s)"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 #, fuzzy
 msgid "[Image%s]"
 msgstr "%Image(%s)"

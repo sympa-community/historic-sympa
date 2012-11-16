@@ -9604,7 +9604,7 @@ msgstr ""
 "-----%s 에서 메시지의 끝-----\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
+#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
 #, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
@@ -9615,7 +9615,7 @@ msgstr ""
 "    몇몇 characters는 잃게 되거나 수정되지 않습니다. **\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:257
+#: ../src/lib/PlainDigest.pm:261
 #, fuzzy
 msgid ""
 "\n"
@@ -9624,7 +9624,7 @@ msgstr ""
 "\n"
 "(%s 유형 의 첨부 파일가 포함한)\n"
 
-#: ../src/lib/PlainDigest.pm:263
+#: ../src/lib/PlainDigest.pm:267
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -9632,14 +9632,14 @@ msgstr ""
 "\n"
 "-----배달 상태 알림-----\n"
 
-#: ../src/lib/PlainDigest.pm:265
+#: ../src/lib/PlainDigest.pm:269
 #, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
 msgstr "-----Delivery(배달) 상태 마지막 알림-----\n"
 
-#: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
+#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
 #, fuzzy
 msgid ""
 "\n"
@@ -9648,15 +9648,15 @@ msgstr ""
 "\n"
 "[** HTML 메시지 부속을 관리할 수 없음 **]\n"
 
-#: ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:312
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ HTML 에서 개조된 텍스트 ]\n"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[ Image%s ]"
 msgstr "[이미지 %s]"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 #, fuzzy
 msgid "[Image%s]"
 msgstr "[이미지 %s]"

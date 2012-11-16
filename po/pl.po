@@ -9431,7 +9431,7 @@ msgstr ""
 "-----Koniec wiadomości oryginalnej od %s-----\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
+#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
 #, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
@@ -9442,7 +9442,7 @@ msgstr ""
 "    Niektóre znaki mogły zostać utracone lub są niepoprawne **\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:257
+#: ../src/lib/PlainDigest.pm:261
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
@@ -9450,7 +9450,7 @@ msgstr ""
 "\n"
 "[Załącznik typu %s został dołączony]\n"
 
-#: ../src/lib/PlainDigest.pm:263
+#: ../src/lib/PlainDigest.pm:267
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -9458,14 +9458,14 @@ msgstr ""
 "\n"
 "-----Raport Statusu Doręczenia-----\n"
 
-#: ../src/lib/PlainDigest.pm:265
+#: ../src/lib/PlainDigest.pm:269
 #, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
 msgstr "-----Koniec Raportu Statusu Doręczenia-----\n"
 
-#: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
+#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
@@ -9473,15 +9473,15 @@ msgstr ""
 "\n"
 "[ ** Nie można przetworzyć części HTML wiadomości ** ]\n"
 
-#: ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:312
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Tekst przekonwertowany z HTML ]\n"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[ Image%s ]"
 msgstr "[ Image%s ]"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[Image%s]"
 msgstr "[Image%s]"
 

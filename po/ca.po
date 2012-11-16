@@ -9496,7 +9496,7 @@ msgstr ""
 "-----Fi dels missatge original des de %s-----\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
+#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -9506,7 +9506,7 @@ msgstr ""
 " Alguns caràcter s'han perdut o són incorrectes **\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:257
+#: ../src/lib/PlainDigest.pm:261
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
@@ -9514,7 +9514,7 @@ msgstr ""
 "\n"
 "[Un adjunt del tipus %s ha estat inclòs aquí]\n"
 
-#: ../src/lib/PlainDigest.pm:263
+#: ../src/lib/PlainDigest.pm:267
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -9522,7 +9522,7 @@ msgstr ""
 "\n"
 "-----Informe de l'estat d'entrega-----\n"
 
-#: ../src/lib/PlainDigest.pm:265
+#: ../src/lib/PlainDigest.pm:269
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
@@ -9530,7 +9530,7 @@ msgstr ""
 "\n"
 "-----Fi de l'informe de l'estat d'entrega-----\n"
 
-#: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
+#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
@@ -9538,15 +9538,15 @@ msgstr ""
 "\n"
 "[** No es possible procesar la part HTML del missatge **]\n"
 
-#: ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:312
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Text convertit des de HTML ]\n"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[ Image%s ]"
 msgstr "[ Imatge%s ]"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[Image%s]"
 msgstr "[Imatge%s]"
 

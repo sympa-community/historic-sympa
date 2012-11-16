@@ -9461,7 +9461,7 @@ msgstr ""
 "－－－－－%s发送的原来的邮件的结尾－－－－－\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
+#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
 #, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
@@ -9472,7 +9472,7 @@ msgstr ""
 "有些字符也许丢失或不正确 ＊＊\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:257
+#: ../src/lib/PlainDigest.pm:261
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
@@ -9480,7 +9480,7 @@ msgstr ""
 "\n"
 "[这包含有类型为 %s 的附件 ]\n"
 
-#: ../src/lib/PlainDigest.pm:263
+#: ../src/lib/PlainDigest.pm:267
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -9488,14 +9488,14 @@ msgstr ""
 "\n"
 "－－－－－递交情况报告－－－－－\n"
 
-#: ../src/lib/PlainDigest.pm:265
+#: ../src/lib/PlainDigest.pm:269
 #, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
 msgstr "－－－－－发送状态报告的结尾－－－－－\n"
 
-#: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
+#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
@@ -9503,15 +9503,15 @@ msgstr ""
 "\n"
 "[** 无法处理HTML邮件部分 **]\n"
 
-#: ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:312
 msgid "[ Text converted from HTML ]\n"
 msgstr "［从HTML转换的文本］\n"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[ Image%s ]"
 msgstr "［图象%s］"
 
-#: ../src/lib/PlainDigest.pm:357
+#: ../src/lib/PlainDigest.pm:361
 msgid "[Image%s]"
 msgstr "［图象%s］"
 
