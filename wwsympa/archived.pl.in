@@ -371,6 +371,8 @@ while (!$end) {
 	   }
        }
    }
+    ## Free zombie sendmail processes
+    &mail::reaper;
 }
 do_log('notice', 'archived exited normally due to signal');
 &tools::remove_pid($wwsconf->{'archived_pidfile'}, $$);
