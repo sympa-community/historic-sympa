@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision: 7745 $ ; $Date: 2012-10-15 18:08:04 +0200 (lun. 15 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -31,7 +30,6 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools::File;
 
-## Remove PID file and STDERR output
 sub remove_pid {
 	my ($pidfile, $pid, $options, $tmpdir) = @_;
 	
@@ -195,7 +193,6 @@ sub direct_stderr_to_file {
     return 1;
 }
 
-# Send content of $pid.stderr to listmaster for process whose pid is $pid.
 sub send_crash_report {
     my %data = @_;
     &Sympa::Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
@@ -210,7 +207,6 @@ sub send_crash_report {
     &Sympa::List::send_notify_to_listmaster('crash', $data{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
 }
 
-## Returns the list of pid identifiers in the pid file.
 sub get_pids_in_pid_file {
 	my $pidfile = shift;
 	unless (open(PFILE, $pidfile)) {
@@ -235,3 +231,25 @@ sub get_children_processes_list {
 }
 
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::Daemon - Daemon-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing daemons.
+
+=head1 FUNCTIONS
+
+=head2 remove_pid($pidfile, $pid, $options, $tmpdir)
+
+Remove PID file and STDERR output.
+
+=head2 send_crash_report(%params)
+
+Send content of $pid.stderr to listmaster for process whose pid is $pid.
+
+=head2 get_pids_in_pid_file($pidfile)
+
+Returns the list of pid identifiers in the pid file.
