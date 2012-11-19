@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision: 7745 $ ; $Date: 2012-10-15 18:08:04 +0200 (lun. 15 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -25,8 +24,6 @@ use strict;
 
 use POSIX qw();
 
-## This applies recursively to a data structure
-## The transformation subroutine is passed as a ref
 sub recursive_transformation {
     my ($var, $subref) = @_;
     
@@ -53,7 +50,6 @@ sub recursive_transformation {
     return;
 }
 
-## Dumps the value of each character of the inuput string
 sub dump_encoding {
     my $out = shift;
 
@@ -61,7 +57,6 @@ sub dump_encoding {
     return $out;
 }
 
-## Dump a variable's content
 sub dump_var {
     my ($var, $level, $fd) = @_;
 
@@ -90,7 +85,6 @@ sub dump_var {
     }
 }
 
-## Dump a variable's content
 sub dump_html_var {
     my ($var) = shift;
 	my $html = '';
@@ -127,7 +121,6 @@ sub dump_html_var {
     return $html;
 }
 
-## Dump a variable's content
 sub dump_html_var2 {
     my ($var) = shift;
 
@@ -191,7 +184,6 @@ sub remove_empty_entries {
     return $not_empty;
 }
 
-## Duplictate a complex variable
 sub dup_var {
     my ($var) = @_;    
 
@@ -214,18 +206,6 @@ sub dup_var {
     return $var; 
 }
 
-####################################################
-# get_array_from_splitted_string                          
-####################################################
-# return an array made on a string splited by ','.
-# It removes spaces.
-#
-# 
-# IN : -$string (+): string to split 
-#
-# OUT : -ref(ARRAY)
-#
-######################################################
 sub get_array_from_splitted_string {
     my ($string) = @_;
     my @array;
@@ -239,23 +219,6 @@ sub get_array_from_splitted_string {
     return \@array;
 }
 
-
-####################################################
-# diff_on_arrays                     
-####################################################
-# Makes set operation on arrays (seen as set, with no double) :
-#  - deleted : A \ B
-#  - added : B \ A
-#  - intersection : A /\ B
-#  - union : A \/ B
-# 
-# IN : -$setA : ref(ARRAY) - set
-#      -$setB : ref(ARRAY) - set
-#
-# OUT : -ref(HASH) with keys :  
-#          deleted, added, intersection, union
-#
-#######################################################    
 sub diff_on_arrays {
     my ($setA,$setB) = @_;
     my $result = {'intersection' => [],
@@ -315,16 +278,6 @@ sub diff_on_arrays {
     
 } 
 
-####################################################
-# is_on_array                     
-####################################################
-# Test if a value is on an array
-# 
-# IN : -$setA : ref(ARRAY) - set
-#      -$value : a serached value
-#
-# OUT : boolean
-#######################################################    
 sub is_in_array {
     my ($set,$value) = @_;
     
@@ -334,8 +287,6 @@ sub is_in_array {
     return undef;
 }
 
-
-## Compare 2 versions of Sympa
 sub higher_version {
     my ($v1, $v2) = @_;
 
@@ -372,7 +323,6 @@ sub higher_version {
     return 0;
 }
 
-## Compare 2 versions of Sympa
 sub lower_version {
     my ($v1, $v2) = @_;
 
@@ -409,10 +359,6 @@ sub lower_version {
     return 0;
 }
 
-## convert a string formated as var1="value1";var2="value2"; into a hash.
-## Used when extracting from session table some session properties or when extracting users preference from user table
-## Current encoding is NOT compatible with encoding of values with '"'
-##
 sub string_2_hash {
     my $data = shift;
     my %hash ;
@@ -427,7 +373,7 @@ sub string_2_hash {
     return (%hash);
 
 }
-## convert a hash into a string formated as var1="value1";var2="value2"; into a hash
+
 sub hash_2_string { 
     my $refhash = shift;
 
@@ -443,7 +389,6 @@ sub hash_2_string {
     return ($data_string);
 }
 
-## compare 2 scalars, string/numeric independant
 sub smart_lessthan {
     my ($stra, $strb) = @_;
     $stra =~ s/^\s+//; $stra =~ s/\s+$//;
@@ -460,7 +405,6 @@ sub smart_lessthan {
     } 
 }
 
-## Returns the counf of numbers found in the string given as argument.
 sub count_numbers_in_string {
     my $str = shift;
     my $count = 0;
@@ -469,3 +413,107 @@ sub count_numbers_in_string {
 }
 
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::Data - Datastructures-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing data structures.
+
+=head1 FUNCTIONS
+
+=head2 recursive_transformation($var, $subref)
+
+This applies recursively to a data structure. The transformation subroutine is
+passed as a ref.
+
+=head2 dump_encoding($out)
+
+Dumps the value of each character of the inuput string
+
+=head2 dump_var($var, $level, $fd)
+
+Dump a variable's content
+
+=head2 dump_html_var($var)
+
+Dump a variable's content
+
+=head2 dump_html_var2($var)
+
+Dump a variable's content
+
+=head2 dup_var($var)
+
+Duplicate a complex variable
+
+=head2 get_array_from_splitted_string($string)
+
+return an array made on a string splited by ','.
+It removes spaces.
+
+=head2 diff_on_arrays($a, $b)
+
+Makes set operation on arrays (seen as set, with no double).
+
+Parameters:
+
+=over
+
+=item I<$a>
+
+first set (arrayref)
+
+=item I<$b>
+
+second set (arrayref)
+
+=back
+
+Returns an hashref with following keys:
+
+=over
+
+=item deleted
+
+=item added
+
+=item intersection
+
+=item union
+
+=back
+
+=head2 is_on_array($set, $value)
+
+Returns a true value if value I<$value> if part of set I<$set>
+
+=head2 higher_version($v1, $v2)
+
+Compare 2 versions of Sympa
+
+=head2 lower_version($v1, $v2)
+
+Compare 2 versions of Sympa
+
+=head2 string_2_hash($string)
+
+convert a string formated as var1="value1";var2="value2"; into a hash.
+Used when extracting from session table some session properties or when
+extracting users preference from user table.
+Current encoding is NOT compatible with encoding of values with '"'
+
+=head2 hash_2_string($hash)
+
+Convert a hash into a string formated as var1="value1";var2="value2"; into a
+hash
+
+=head2 smart_lessthan($a, $b)
+
+compare 2 scalars, string/numeric independant
+
+=head2 count_numbers_in_string($string)
+
+Returns the counf of numbers found in the string given as argument.
