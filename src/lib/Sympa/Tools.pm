@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -83,12 +82,6 @@ sub _create_xss_parser {
     return $hss;
 }
 
-#*******************************************
-# Function : pictures_filename
-# Description : return the type of a pictures
-#               according to the user
-## IN : email, list, path
-#*******************************************
 sub pictures_filename {
     my %parameters = @_;
     
@@ -107,8 +100,6 @@ sub pictures_filename {
     return $filename;
 }
 
-## Creation of pictures url
-## IN : url, email, list, path
 sub make_pictures_url {
     my %parameters = @_;
 
@@ -119,7 +110,6 @@ sub make_pictures_url {
  	$parameters{'url'}.$listname.'@'.$robot.'/'.$filename : undef;
 }
 
-## Returns sanitized version (using StripScripts) of the string provided as argument.
 sub sanitize_html {
     my %parameters = @_;
     &Sympa::Log::do_log('debug3','%s::sanitize_html(%s,%s,%s)',__PACKAGE__,$parameters{'string'},$parameters{'robot'},$parameters{'host'});
@@ -138,7 +128,6 @@ sub sanitize_html {
     return $string;
 }
 
-## Returns sanitized version (using StripScripts) of the content of the file whose path is provided as argument.
 sub sanitize_html_file {
     my %parameters = @_;
     &Sympa::Log::do_log('debug3','%s::sanitize_html_file(%s,%s)',__PACKAGE__,$parameters{'robot'},$parameters{'host'});
@@ -157,7 +146,6 @@ sub sanitize_html_file {
     return $hss -> filtered_document;
 }
 
-## Sanitize all values in the hash $var, starting from $level
 sub sanitize_var {
     my %parameters = @_;
     &Sympa::Log::do_log('debug3','::sanitize_var(%s,%s,%s)',__PACKAGE__,$parameters{'var'},$parameters{'level'},$parameters{'robot'});
@@ -222,9 +210,6 @@ sub sanitize_var {
     return 1;
 }
 
-## Sorts the list of adresses by domain name
-## Input : users hash
-## Sort by domain.
 sub sortbydomain {
    my($x, $y) = @_;
    $x = join('.', reverse(split(/[@\.]/, $x)));
@@ -233,7 +218,6 @@ sub sortbydomain {
    $x cmp $y;
 }
 
-## Sort subroutine to order files in sympa spool by date
 sub by_date {
     my @a_tokens = split /\./, $a;
     my @b_tokens = split /\./, $b;
@@ -246,10 +230,6 @@ sub by_date {
 
 }
 
-## Safefork does several tries before it gives up.
-## Do 3 trials and wait 10 seconds * $i between each.
-## Exit with a fatal error is fork failed after all
-## tests have been exhausted.
 sub safefork {
    my($i, $pid);
    
@@ -264,21 +244,6 @@ sub safefork {
    ## No return.
 }
 
-####################################################
-# checkcommand                              
-####################################################
-# Checks for no command in the body of the message.
-# If there are some command in it, it return true 
-# and send a message to $sender
-# 
-# IN : -$msg (+): ref(MIME::Entity) - message to check
-#      -$sender (+): the sender of $msg
-#      -$robot (+) : robot
-#
-# OUT : -1 if there are some command in $msg
-#       -0 else
-#
-###################################################### 
 sub checkcommand {
    my($msg, $sender, $robot, $regexp) = @_;
 
@@ -310,9 +275,6 @@ sub checkcommand {
    return 0;
 }
 
-
-
-## return a hash from the edit_list_conf file
 sub load_edit_list_conf {
     my $robot = shift;
     my $list = shift;
@@ -367,8 +329,6 @@ sub load_edit_list_conf {
     return $conf;
 }
 
-
-## return a hash from the edit_list_conf file
 sub load_create_list_conf {
     my $robot = shift;
     my $basedir = shift;
@@ -520,8 +480,6 @@ sub get_templates_list {
 
 }
 
-
-# return the path for a specific template
 sub get_template_path {
 
     my $type = shift;
@@ -568,8 +526,6 @@ sub get_template_path {
     return undef;
 }
 
-
-## Make a multipart/alternative, a singlepart
 sub as_singlepart {
     &Sympa::Log::do_log('debug2', '%s::as_singlepart()', __PACKAGE__);
     my ($msg, $preferred_type, $loops) = @_;
@@ -628,8 +584,6 @@ sub as_singlepart {
     return $done;
 }
 
-## Escape characters before using a string within a regexp parameter
-## Escaped characters are : @ $ [ ] ( ) ' ! '\' * . + ?
 sub escape_regexp {
     my $s = shift;
     my @escaped = ("\\",'@','$','[',']','(',')',"'",'!','*','.','+','?');
@@ -642,7 +596,6 @@ sub escape_regexp {
     return $s;
 }
 
-## Escape weird characters
 sub escape_chars {
     my $s = shift;    
     my $except = shift; ## Exceptions
@@ -661,8 +614,6 @@ sub escape_chars {
     return $s;
 }
 
-## Escape shared document file name
-## Q-decode it first
 sub escape_docname {
     my $filename = shift;
     my $except = shift; ## Exceptions
@@ -677,7 +628,6 @@ sub escape_docname {
     return &escape_chars($filename, $except);
 }
 
-## Convert from Perl unicode encoding to UTF8
 sub unicode_to_utf8 {
     my $s = shift;
     
@@ -688,7 +638,6 @@ sub unicode_to_utf8 {
     return $s;
 }
 
-## Q-Encode web file name
 sub qencode_filename {
     my $filename = shift;
 
@@ -713,7 +662,6 @@ sub qencode_filename {
     return $filename;
 }
 
-## Q-Decode web file name
 sub qdecode_filename {
     my $filename = shift;
     
@@ -726,7 +674,6 @@ sub qdecode_filename {
     return $filename;
 }
 
-## Unescape weird characters
 sub unescape_chars {
     my $s = shift;
 
@@ -767,14 +714,12 @@ sub tmp_passwd {
     return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
 }
 
-# Check sum used to authenticate communication from wwsympa to sympa
 sub sympa_checksum {
     my $rcpt = shift;
     my $cookie = shift;
     return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
 }
 
-# create a cipher
 sub ciphersaber_installed {
     my $cookie = shift;
 
@@ -794,7 +739,6 @@ sub ciphersaber_installed {
     }
 }
 
-# create a cipher
 sub cookie_changed {
     my $current=shift;
     my $basedir = shift;
@@ -840,7 +784,6 @@ sub cookie_changed {
     }
 }
 
-## encrypt a password
 sub crypt_password {
     my $inpasswd = shift ;
     my $cookie = shift;
@@ -852,7 +795,6 @@ sub crypt_password {
     return ("crypt.".&MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
 }
 
-## decrypt a password
 sub decrypt_password {
     my $inpasswd = shift ;
     my $cookie = shift;
@@ -1229,8 +1171,6 @@ sub virus_infected {
    
 }
 
-## Look for a file in the list > robot > server > default locations
-## Possible values for $options : order=all
 sub get_filename {
     my ($type, $options, $name, $robot, $object,$basedir) = @_;
     my $list;
@@ -1310,19 +1250,7 @@ sub get_filename {
     #&Sympa::Log::do_log('notice','%s::get_filename: Cannot find %s in %s', __PACKAGE__, $name, join(',',@try));
     return undef;
 }
-####################################################
-# make_tt2_include_path
-####################################################
-# make an array of include path for tt2 parsing
-# 
-# IN -$robot(+) : robot
-#    -$dir : directory ending each path
-#    -$lang : lang
-#    -$list : ref(List)
-#
-# OUT : ref(ARRAY) of tt2 include path
-#
-######################################################
+
 sub make_tt2_include_path {
     my ($robot,$dir,$lang,$list,$basedir,$viewmaildir,$domain) = @_;
 
@@ -1405,8 +1333,6 @@ sub make_tt2_include_path {
 
 }
 
-## Q-encode a complete file hierarchy
-## Usefull to Q-encode subshared documents
 sub qencode_hierarchy {
     my $dir = shift; ## Root directory
     my $original_encoding = shift; ## Suspected original encoding of filenames
@@ -1450,7 +1376,6 @@ sub get_message_id {
 }
 
 
-## Basic check of an email address
 sub valid_email {
     my $email = shift;
     
@@ -1468,7 +1393,6 @@ sub valid_email {
     return 1;
 }
 
-## Clean email address
 sub clean_email {
     my $email = shift;
 
@@ -1482,8 +1406,6 @@ sub clean_email {
     return $email;
 }
 
-## Return canonical email address (lower-cased + space cleanup)
-## It could also support alternate email
 sub get_canonical_email {
     my $email = shift;
 
@@ -1496,16 +1418,6 @@ sub get_canonical_email {
     return $email;
 }
 
-####################################################
-# clean_msg_id
-####################################################
-# clean msg_id to use it without  \n, \s or <,>
-# 
-# IN : -$msg_id (+) : the msg_id
-#
-# OUT : -$msg_id : the clean msg_id
-#
-######################################################
 sub clean_msg_id {
     my $msg_id = shift;
     
@@ -1518,9 +1430,6 @@ sub clean_msg_id {
     return $msg_id;
 }
 
-
-
-## Change X-Sympa-To: header field in the message
 sub change_x_sympa_to {
     my ($file, $value) = @_;
     
@@ -1599,25 +1508,6 @@ sub add_in_blacklist {
 
 }
 
-############################################################
-#  get_fingerprint                                         #
-############################################################
-#  Used in 2 cases :                                       #
-#  - check the md5 in the url                              #
-#  - create an md5 to put in a url                         #
-#                                                          #
-#  Use : get_db_random()                                   #
-#        init_db_random()                                  #
-#        md5_fingerprint()                                 #
-#                                                          #  
-# IN : $email : email of the subscriber                    #
-#      $fingerprint : the fingerprint in the url (1st case)#
-#                                                          # 
-# OUT : $fingerprint : a md5 for create an url             #
-#     | 1 : if the md5 in the url is true                  #
-#     | undef                                              #
-#                                                          #
-############################################################
 sub get_fingerprint {
     
     my $email = shift;
@@ -1643,19 +1533,6 @@ sub get_fingerprint {
     }
 }
 
-############################################################
-#  md5_fingerprint                                         #
-############################################################
-#  The algorithm MD5 (Message Digest 5) is a cryptographic #
-#  hash function which permit to obtain                    #
-#  the fingerprint of a file/data                          #
-#                                                          #
-# IN : a string                                            #
-#                                                          #
-# OUT : md5 digest                                         #
-#     | undef                                              #
-#                                                          #
-############################################################
 sub md5_fingerprint {
     
     my $input_string = shift;
@@ -1672,7 +1549,6 @@ sub get_separator {
     return $separator;
 }
 
-## Return the Sympa regexp corresponding to the input param
 sub get_regexp {
     my $type = shift;
 
@@ -1683,42 +1559,6 @@ sub get_regexp {
     }
 
 }
-
-=pod 
-
-=head2 sub save_to_bad(HASH $param)
-
-Saves a message file to the "bad/" spool of a given queue. Creates this directory if not found.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<param> : a hash containing all the arguments, which means:
-
-=over 4
-
-=item * I<file> : the characters string of the path to the file to copy to bad;
-
-=item * I<hostname> : the characters string of the name of the virtual host concerned;
-
-=item * I<queue> : the characters string of the name of the queue.
-
-=back
-
-=back 
-
-=head3 Return 
-
-=over
-
-=item * 1 if the file was correctly saved to the "bad/" directory;
-
-=item * undef if something went wrong.
-
-=back 
-
-=cut 
 
 sub save_to_bad {
 
@@ -1748,47 +1588,6 @@ sub save_to_bad {
     return 1;
 }
 
-=pod 
-
-=head2 sub CleanSpool(STRING $spool_dir, INT $clean_delay)
-
-Clean all messages in spool $spool_dir older than $clean_delay.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<spool_dir> : a string corresponding to the path to the spool to clean;
-
-=item * I<clean_delay> : the delay between the moment we try to clean spool and the last modification date of a file.
-
-=back
-
-=back 
-
-=head3 Return 
-
-=over
-
-=item * 1 if the spool was cleaned withou troubles.
-
-=item * undef if something went wrong.
-
-=back 
-
-=cut 
-
-############################################################
-#  CleanDir
-############################################################
-#  Cleans files older than $clean_delay from spool $spool_dir
-#  
-# IN : -$dir (+): the spool directory
-#      -$clean_delay (+): delay in days 
-#
-# OUT : 1
-#
-############################################################## 
 sub CleanDir {
     my ($dir, $clean_delay) = @_;
     &Sympa::Log::do_log('debug', 'CleanSpool(%s,%s)', $dir, $clean_delay);
@@ -1820,17 +1619,10 @@ sub CleanDir {
     return 1;
 }
 
-
-# return a lockname that is a uniq id of a processus (hostname + pid) ; hostname (20) and pid(10) are truncated in order to store lockname in database varchar(30)
 sub get_lockname (){
     return substr(substr(hostname(), 0, 20).$$,0,30);   
 }
 
-#*******************************************
-# Function : wrap_text
-# Description : return line-wrapped text.
-## IN : text, init, subs, cols
-#*******************************************
 sub wrap_text {
     my $text = shift;
     my $init = shift;
@@ -1849,11 +1641,6 @@ sub wrap_text {
     return $text;
 }
 
-#*******************************************
-# Function : addrencode
-# Description : return formatted (and encoded) name-addr as RFC5322 3.4.
-## IN : addr, [phrase, [charset]]
-#*******************************************
 sub addrencode {
     my $addr = shift;
     my $phrase = (shift || '');
@@ -1883,7 +1670,6 @@ sub addrencode {
     }
 }
 
-# Generate a newsletter from an HTML URL or a file path.
 sub create_html_part_from_web_page {
     my $param = shift;
     &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
@@ -1909,13 +1695,6 @@ sub create_html_part_from_web_page {
     return $part->as_string;
 }
 
-#*******************************************
-# Function : decode_header
-# Description : return header value decoded to UTF-8 or undef.
-#               trailing newline will be removed.
-#               If sep is given, return all occurrances joined by it.
-## IN : msg, tag, [sep]
-#*******************************************
 sub decode_header {
     my $msg = shift;
     my $tag = shift;
@@ -1949,3 +1728,493 @@ sub decode_header {
 sub fix_children {
 }
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools - Generic functions
+
+=head1 DESCRIPTION
+
+This module provides various generic functions.
+
+=head1 FUNCTIONS
+
+=head2 pictures_filename(%params)
+
+Return the type of a pictures according to the user.
+
+Parameters (hash keys):
+
+=over
+
+=item I<email>
+
+=item I<list>
+
+=item I<path>
+
+=back
+
+=head2 make_pictures_url(%params)
+
+Creation of pictures url.
+
+Parameters (hash keys):
+
+=over
+
+=item I<url>
+
+=item I<email>
+
+=item I<list>
+
+=item I<path>
+
+=back
+
+=head2 sanitize_html(%params)
+
+Returns sanitized version (using StripScripts) of the string provided as
+argument.
+
+Parameters (hash keys):
+
+=over
+
+=item I<string>
+
+=item I<robot>
+
+=item I<host>
+
+=back
+
+=head2 sanitize_html_file(%params)
+
+Returns sanitized version (using StripScripts) of the content of the file whose
+path is provided as argument.
+
+Parameters (hash keys):
+
+=over
+
+=item I<file>
+
+=item I<robot>
+
+=item I<host>
+
+=back
+
+=head2 sanitize_var(%params)
+
+Sanitize all values in the hash $var, starting from $level
+
+Parameters (hash keys):
+
+=over
+
+=item I<var>
+
+=item I<level>
+
+=item I<robot>
+
+=item I<htmlAllowedParam>
+
+=item I<htmlToFilter>
+
+=back
+
+=head2 sortbydomain($x, $y)
+
+Sorts the list of adresses by domain name.
+
+Input : users hash
+Sort by domain.
+
+=head2 by_date()
+
+Sort subroutine to order files in sympa spool by date
+
+=head2 safefork($i, $pid);
+
+Safefork does several tries before it gives up. Do 3 trials and wait 10 seconds
+* $i between each. Exit with a fatal error is fork failed after all tests have
+been exhausted.
+
+=head2 checkcommand($msg, $sender, $robot, $regexp)
+
+Checks for no command in the body of the message. If there are some command in
+it, it return true and send a message to $sender.
+
+Parameters:
+
+=over
+
+=item I<$msg>
+
+message to check (MIME::Entity object)
+
+=item I<$sender>
+
+the sender
+
+=item I<$robot>
+
+the robot
+
+=back
+
+Returns true if there are some command in $msg, false otherwise.
+
+=head2 load_edit_list_conf($robot, $list, $basedir)
+
+Return a hash from the edit_list_conf file
+
+Parameters:
+
+=over
+
+=item I<$robot>
+
+=item I<$list>
+
+=item I<$basedir>
+
+=back
+
+=head2 load_create_list_conf($robot, $basedir)
+
+Return a hash from the create_list_conf file
+
+Parameters:
+
+=over
+
+=item I<$robot>
+
+=item I<$basedir>
+
+=back
+
+=head2 get_template_path($type, $robot, $scope, $tpl, $lang, $list, $basedir)
+
+Return the path for a specific template
+
+Parameters:
+
+=over
+
+=item I<$type>
+
+=item I<$robot>
+
+=item I<$scope>
+
+=item I<$tpl>
+
+=item I<$lang>
+
+=item I<$list>
+
+=item I<$basedir>
+
+=back
+
+=head2 as_singlepart($msg, $preferred_type, $loops)
+
+Make a multipart/alternative, a singlepart
+
+=over
+
+=item I<$msg>
+
+=item I<$preferred_type>
+
+=item I<$loops>
+
+=back
+
+=head2 escape_regexp($string)
+
+Escape characters before using a string within a regexp parameter
+Escaped characters are : @ $ [ ] ( ) ' ! '\' * . + ?
+
+=head2 escape_chars()
+
+Escape weird characters.
+
+=head2 unescape_chars($string, $except)
+
+Unescape weird characters
+
+=head2 escape_docname($filename, $except)
+
+Escape shared document file name
+Q-decode it first
+
+=head2 unicode_to_utf8($string)
+
+Convert from Perl unicode encoding to UTF8
+
+=head2 qencode_filename($filename)
+
+Q-Encode web file name
+
+=head2 qdecode_filename($filename)
+
+Q-Decode web file name
+
+=head2 qencode_hierarchy($dir)
+
+Q-encode a complete file hierarchy. Usefull to Q-encode subshared documents
+
+=head2 sympa_checksum($rcpt, $cookie)
+
+Check sum used to authenticate communication from wwsympa to sympa
+
+=head2 ciphersaber_installed($cookie)
+
+Create a cipher.
+
+=head2 cookie_changed($current, $basedir)
+
+Create a cipher.
+
+=head2 crypt_password($inpasswd, $cookie)
+
+Encrypt a password.
+
+=head2 decrypt_password($inpasswd, $cookie)
+
+Decrypt a password.
+
+=head2 get_filename($type, $options, $name, $robot, $object, $basedir)
+
+Look for a file in the list > robot > server > default locations
+Possible values for $options : order=all
+
+=over
+
+=item I<$type>
+
+=item I<$options>
+
+=item I<$name>
+
+=item I<$robot>
+
+=item I<$object>
+
+=item I<$basedir>
+
+=back
+
+=head2 make_tt2_include_path($robot, $dir, $lang, $list, $basedir, $viewmaildir, $domain)
+
+Make an array of include path for tt2 parsing.
+
+Parameters:
+
+=over
+
+=item I<$robot>
+
+robot
+
+=item I<$dir>
+
+directory ending each path
+
+=item I<$lang>
+
+lang
+
+=item I<$list>
+
+list
+
+=item I<$basedir>
+
+=item I<$viewmaildir>
+
+=item I<$domain>
+
+=back
+
+Returns an arrayref of tt2 include path
+
+=head2 valid_email($email)
+
+Basic check of an email address
+
+=head2 clean_email($email)
+
+Clean email address
+
+=head2 get_canonical_email($email)
+
+Return canonical email address (lower-cased + space cleanup)
+It could also support alternate email
+
+=head2 clean_msg_id($msg_id)
+
+clean msg_id to use it without  \n, \s or <,>
+
+Parameters:
+
+=over
+
+=item I<$msg_id>
+
+the message id.
+
+=back
+
+Returns the clean message id.
+
+=head2 change_x_sympa_to($file, $value)
+
+Change X-Sympa-To: header field in the message
+
+=head2 get_fingerprint($email, $fingerprint, $random, $random_email)
+
+Used in 2 cases :
+- check the md5 in the url
+- create an md5 to put in a url
+
+Use:
+- get_db_random()
+- init_db_random()
+- md5_fingerprint()
+
+Parameters:
+
+=over
+
+=item I<$email>
+
+email of the subscriber
+
+=item I<$fingerprint>
+
+the fingerprint in the url (1st case)
+
+=item I<$random>
+
+=item I<$random_email>
+
+=back
+
+Returns an md5 for creating an URL if $fingerprint is defined, otherwise a true
+value if the the md5 in the URL is true.
+
+=head2 md5_fingerprint($string)
+
+The algorithm MD5 (Message Digest 5) is a cryptographic hash function which
+permit to obtain the fingerprint of a file/data.
+
+Returns the md5 digest in hexadecimal format of given string.
+
+=head2 get_regexp($type)
+
+Return the Sympa regexp corresponding to the given type.
+
+=head2 save_to_bad($param)
+
+Saves a message file to the "bad/" spool of a given queue. Creates this
+directory if not found.
+
+Parameters (hashref keys):
+
+=over
+
+=item I<file>
+
+the characters string of the path to the file to copy to bad;
+
+=item I<hostname>
+
+the characters string of the name of the virtual host concerned;
+
+=item I<queue>
+
+the characters string of the name of the queue.
+
+=back
+
+=over
+
+Returns a true value if the file was correctly saved to the "bad/" directory, a
+false value otherwise.
+
+=head2 CleanSpool($spool_dir, $clean_delay)
+
+Clean all messages in spool $spool_dir older than $clean_delay.
+
+Parameters:
+
+=over
+
+=item I<$spool_dir>
+
+a string corresponding to the path to the spool to clean;
+
+=item I<$clean_delay>
+
+the delay between the moment we try to clean spool and the last modification
+date of a file.
+
+=back
+
+Returns a true value if the spool was cleaned, a false value otherwise. 
+
+=head2 CleanDir($dir, $clean_delay)
+
+Cleans files older than $clean_delay from spool $spool_dir
+
+Parameters:
+
+=over
+
+Returns a true value.
+
+=head2 get_lockname()
+
+Return a lockname that is a uniq id of a processus (hostname + pid) ; hostname
+(20) and pid(10) are truncated in order to store lockname in database
+varchar(30)
+
+=head2 wrap_text($text, $init, $subs, $cols)
+
+Return line-wrapped text.
+
+=head2 addrencode($addr, $phrase, $charset)
+
+Return formatted (and encoded) name-addr as RFC5322 3.4.
+
+Parameters:
+
+=over
+
+=item I<$addr>
+
+=item I<$phrase>
+
+=item I<$charset>
+
+(default: utf8)
+
+=back
+
+=head2 create_html_part_from_web_page($param)
+
+Generate a newsletter from an HTML URL or a file path.
+
+=head2 decode_header($msg, $tag, $sep)
+
+Return header value decoded to UTF-8 or undef.
+trailing newline will be removed.
+If sep is given, return all occurrances joined by it.
