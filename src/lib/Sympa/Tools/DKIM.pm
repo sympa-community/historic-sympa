@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision: 7686 $ ; $Date: 2012-10-08 17:37:46 +0200 (lun. 08 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -85,7 +84,6 @@ sub get_dkim_parameters {
     return $data;
 }
 
-# input a msg as string, output the dkim status
 sub dkim_verifier {
     my $msg_as_string = shift;
     my $tmpdir = shift;
@@ -137,7 +135,6 @@ sub dkim_verifier {
     return undef;
 }
 
-# input a msg as string, output idem without signature if invalid
 sub remove_invalid_dkim_signature {
     my ($tmpdir) = @_;
     &Sympa::Log::do_log('debug',"removing invalide dkim signature");
@@ -161,7 +158,6 @@ sub remove_invalid_dkim_signature {
     }
 }
 
-# input object msg and listname, output signed message object
 sub dkim_sign {
     # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
     my $msg_as_string = shift;
@@ -271,3 +267,25 @@ sub dkim_sign {
 }
 
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::DKIM - DKIM-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing DKIM.
+
+=head1 FUNCTIONS
+
+=head2 dkim_verifier($msg, $tmpdir)
+
+Input a msg as string, output the dkim status
+
+=head2 remove_invalid_dkim_signature($tmpdir, $msg)
+
+Input a msg as string, output idem without signature if invalid
+
+=head2 dkim_sign($msg, $data, $tmpdir)
+
+Input object msg and listname, output signed message object
