@@ -1718,14 +1718,6 @@ Saves a message file to the "bad/" spool of a given queue. Creates this director
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * List::send_notify_to_listmaster
-
-=back 
-
 =cut 
 
 sub save_to_bad {
@@ -1781,14 +1773,6 @@ Clean all messages in spool $spool_dir older than $clean_delay.
 =item * 1 if the spool was cleaned withou troubles.
 
 =item * undef if something went wrong.
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * tools::remove_dir
 
 =back 
 

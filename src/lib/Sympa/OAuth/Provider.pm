@@ -86,14 +86,6 @@ Creates a new OAuthProvider object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=back 
-
 =cut 
 
 ## Creates a new object
@@ -189,14 +181,6 @@ Seek various request aspects for parameters
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=back 
-
 =cut 
 
 ## Seek various request aspects for parameters
@@ -254,14 +238,6 @@ if(my $http_code = $provider->checkRequest()) {
 =item * I<!= 1>, if request is NOT valid (http error code)
 
 =item * I<undef>, if request is valid
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -375,14 +351,6 @@ Create a temporary token
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Create a temporary token
@@ -444,14 +412,6 @@ Retreive a temporary token from database.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Retreive a temporary token from database
@@ -501,14 +461,6 @@ Create the verifier for a temporary token
 =item * I<string> redirect url
 
 =item * I<undef>, if token does not exist or is not valid anymore
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -582,14 +534,6 @@ Create an access token
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Create an access token
@@ -649,14 +593,6 @@ Retreive an access token from database.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Retreive an access token from database
@@ -702,14 +638,6 @@ Create a random string
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut
 
 ## Generate a random string
@@ -743,14 +671,6 @@ enabled 0|1
 =over 
 
 =item * I<string>
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 

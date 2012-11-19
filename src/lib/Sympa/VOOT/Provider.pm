@@ -88,14 +88,6 @@ Creates a new VOOTProvider object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=back 
-
 =cut 
 
 ## Creates a new object
@@ -156,14 +148,6 @@ if(my $http_code = $provider->checkRequest()) {
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Check if a request is valid
@@ -207,14 +191,6 @@ Respond to a request (parse url, build json), assumes that request is valid
 =item * I<string>
 
 =item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -267,14 +243,6 @@ Get user groups
 =item * I<a reference to an array> contains groups definitions
 
 =item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -338,14 +306,6 @@ Get members of a group.
 =item * I<a reference to a hash> contains members definitions
 
 =item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 

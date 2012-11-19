@@ -79,14 +79,6 @@ Creates a new VOOTConsumer object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=back 
-
 =cut 
 
 ## Creates a new object
@@ -147,14 +139,6 @@ Get user groups
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Get groups for user
@@ -198,14 +182,6 @@ Get members of a group.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Get group members
@@ -239,14 +215,6 @@ Fetch groups from response items.
 =over 
 
 =item * I<a reference to a hash>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -287,14 +255,6 @@ Fetch members from response items.
 =over 
 
 =item * I<a reference to an array>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -348,14 +308,6 @@ Get provider information.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Get provider information
@@ -400,14 +352,6 @@ List providers.
 =over 
 
 =item * I<a reference to a hash>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 

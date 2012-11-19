@@ -87,36 +87,6 @@ Creates a new Message object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=item * Sympa::Conf::get_robot_conf
-
-=item * List::new
-
-=item * Mail::Address::parse
-
-=item * MIME::EncWords::decode_mimewords
-
-=item * MIME::Entity::as_string
-
-=item * MIME::Head::get
-
-=item * MIME::Parser::output_to_core
-
-=item * MIME::Parser::read
-
-=item * tools::valid_email
-
-=item * tools::smime_decrypt
-
-=item * tools::smime_sign_check
-
-=back 
-
 =cut 
 
 ## Creates a new object
@@ -368,14 +338,6 @@ Dump a Message object to a stream.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Dump the Message object
@@ -424,14 +386,6 @@ Add topic and put header X-Sympa-Topic.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * MIME::Head::add
-
-=back 
-
 =cut 
 
 ## Add topic and put header X-Sympa-Topic
@@ -467,14 +421,6 @@ Add topic and put header X-Sympa-Topic.
 =item * I<the topic>, if it exists
 
 =item * I<empty string>, otherwise
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * MIME::Head::add
 
 =back 
 

@@ -87,14 +87,6 @@ Creates a new OAuthConsumer object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Sympa::Log::do_log
-
-=back 
-
 =cut 
 
 ## Creates a new object
@@ -190,14 +182,6 @@ Check if user has an access token already and fetch ressource
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Check if user has an access token already and fetch ressource
@@ -264,14 +248,6 @@ Check if user has an access token already, triggers OAuth workflow otherwise
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
 ## Check if user has an access token already, triggers OAuth workflow if none found
@@ -308,14 +284,6 @@ Triggers OAuth authorization workflow, call only in web env.
 =over 
 
 =item * I<1>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 
@@ -388,14 +356,6 @@ Try to obtain access token from verifier.
 =item * I<1>, if the token was retreived successfully
 
 =item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
 
 =back 
 

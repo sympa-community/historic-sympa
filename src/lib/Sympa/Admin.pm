@@ -105,36 +105,6 @@ Creates a list. Used by the create_list() sub in sympa.pl and the do_create_list
 
 =back 
 
-=head3 Calls 
-
-=item * check_owner_defined
-
-=item * check_topics
-
-=item * install_aliases
-
-=item * list_check_smtp
-
-=item * Sympa::Conf::get_robot_conf
-
-=item * Language::gettext_strftime
-
-=item * Sympa::List::create_shared
-
-=item * Sympa::List::has_include_data_sources
-
-=item * Sympa::List::sync_includetools::get_filename
-
-=item * Sympa::Log::do_log
-
-=item * tools::get_regexp
-
-=item * tools::make_tt2_include_path
-
-=item * Sympa::TT2::parse_tt2 
-
-=back 
-
 =cut 
 
 ########################################################
