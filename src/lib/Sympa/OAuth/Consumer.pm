@@ -1,4 +1,3 @@
-# OAuthConsumer.pm - This module implements OAuth consumer facilities
 #<!-- RCS Identication ; $Revision: 7207 $ ; $Date: 2011-09-05 15:33:26 +0200 (lun 05 sep 2011) $ --> 
 
 #
@@ -20,16 +19,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<OAuthConsumer.pm> - OAuth consumer facilities for internal use in Sympa
+Sympa::OAuth::Consumer - OAuth consumer facilities for Sympa
 
 =head1 DESCRIPTION 
 
-This package provides abstraction from the OAuth workflow (client side) when performing authorization request,
-handles token retrieving as well as database storage.
+This package provides abstraction from the OAuth workflow (client side) when
+performing authorization request, handles token retrieving as well as database
+storage.  
 
 =cut 
 
@@ -44,52 +42,36 @@ use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Tools;
 
-=pod 
+=head1 CLASS METHODS
 
-=head1 SUBFUNCTIONS 
+=head2 Sympa::OAuth::Consumer->new(%params)
 
-This is the description of the subfunctions contained by OAuthConsumer.pm
+Creates a new L<Sympa::OAuth::Consumer> object.
 
-=cut 
-
-
-=pod 
-
-=head2 sub new
-
-Creates a new OAuthConsumer object.
-
-=head3 Arguments 
+=head3 Parameters (hash keys)
 
 =over 
 
-=item * I<$user>, a user email
+=item * I<user>: a user email
 
-=item * I<$provider>, the OAuth provider key
+=item * I<provider>: the OAuth provider key
 
-=item * I<$provider_secret>, the OAuth provider shared secret
+=item * I<provider_secret>: the OAuth provider shared secret
 
-=item * I<$request_token_path>, the temporary token request URL
+=item * I<request_token_path>: the temporary token request URL
 
-=item * I<$access_token_path>, the access token request URL
+=item * I<access_token_path>: the access token request URL
 
-=item * I<$authorize_path>, the authorization URL
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a OAuthConsumer object>, if created
-
-=item * I<undef>, if something went wrong
+=item * I<authorize_path>: the authorization URL
 
 =back 
+
+=head3 Return value
+
+A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
 
 =cut 
 
-## Creates a new object
 sub new {
 	my $pkg = shift;
 	my %param = @_;
@@ -154,37 +136,28 @@ sub mustRedirect {
 	return $self->{'redirect_url'};
 }
 
-=pod 
+=head1 INSTANCE METHODS
 
-=head2 sub fetchRessource
+=head2 $object->fetchRessource(%params)
 
-Check if user has an access token already and fetch ressource
+Check if user has an access token already and fetch ressource.
 
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the OAuthConsumer object to test.
-
-=item * I<$url>, the ressource url.
-
-=item * I<$params>, (optionnal) the request parameters.
-
-=back 
-
-=head3 Return 
+=head3 parameters (hash keys)
 
 =over 
 
-=item * I<string>, ressource body
+=item * I<url>: the ressource url
 
-=item * I<undef>, if something went wrong
+=item * I<params>: the request parameters (optional)
 
-=back 
+=back
+
+=head3 Return value
+
+The ressource body, as a string, or undef if something went wrong.
 
 =cut 
 
-## Check if user has an access token already and fetch ressource
 sub fetchRessource {
 	my $self = shift;
 	my %param = @_;
@@ -224,33 +197,16 @@ sub fetchRessource {
 	return $res->decoded_content || $res->content;
 }
 
-=pod 
-
-=head2 sub hasAccess
+=head2 $object->hasAccess()
 
 Check if user has an access token already, triggers OAuth workflow otherwise
 
-=head3 Arguments 
+=head3 Return value
 
-=over 
-
-=item * I<$self>, the OAuthConsumer object to test.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<reference to a hash>, if there is a known access token
-
-=item * I<undef>, if no access token found
-
-=back 
+An hashref, if there is a known access token, undef otherwise.
 
 =cut 
 
-## Check if user has an access token already, triggers OAuth workflow if none found
 sub hasAccess {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '%s::hasAccess(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
@@ -265,31 +221,16 @@ sub hasAccess {
 	return $self->{'session'}{'access'};
 }
 
-=pod 
-
-=head2 sub triggerFlow
+=head2 $object->triggerFlow()
 
 Triggers OAuth authorization workflow, call only in web env.
 
-=head3 Arguments 
+=head3 Return value
 
-=over 
-
-=item * I<$self>, the OAuthConsumer to use.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1>, if everything's alright
-
-=back 
+A true value, if everything's alright.
 
 =cut 
 
-## Triggers OAuth workflow, call only in web env.
 sub triggerFlow {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '%s::triggerFlow(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
@@ -335,33 +276,16 @@ sub triggerFlow {
 	return 1;
 }
 
-=pod 
-
-=head2 sub getAccessToken
+=head2 head2 $object->getAccessToken(%params)
 
 Try to obtain access token from verifier.
 
-=head3 Arguments 
+=head3 Return value
 
-=over 
-
-=item * I<$self>, the OAuthConsumer object to test.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1>, if the token was retreived successfully
-
-=item * I<undef>, if something went wrong
-
-=back 
+A true value if the token was retreived successfully, undef otherwise.
 
 =cut 
 
-## Try to obtain access token from verifier
 sub getAccessToken {
 	my $self = shift;
 	my %param = @_;
@@ -389,7 +313,6 @@ sub getAccessToken {
 
 ## Packages must return true.
 1;
-=pod 
 
 =head1 AUTHORS 
 
