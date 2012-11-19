@@ -6,6 +6,7 @@ use vars qw(@ISA);
 use SOAP::Transport::HTTP;
 
 use Sympa::Conf;
+use Sympa::List;
 use Sympa::Log;
 use Sympa::Session;
 use Sympa::Tools::Cookie;
@@ -28,7 +29,7 @@ sub request {
 	}
 
 	## Empty cache of the List.pm module
-	&List::init_list_cache();
+	&Sympa::List::init_list_cache();
 	
 	my $session;
 	## Existing session or new one

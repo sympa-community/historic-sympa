@@ -496,7 +496,7 @@ sub store_test {
 	unless ($testing->store($msg,{list=>'notalist',robot=>'notaboot'})) {
 	    return (($z-1)*$size_increment);
 	}
-	my $messagekey = &Spool::_get_messagekey($msg);
+	my $messagekey = &get_messagekey($msg);
 	unless ( $testing->remove_message({'messagekey'=>$messagekey,'listname'=>'notalist','robot'=>'notarobot'}) ) {
 	    &Sympa::Log::do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);	    
 	}

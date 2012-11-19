@@ -789,7 +789,7 @@ sub rename_list{
 
     ## If we are in 'copy' mode, create en new list
     if ($param{'mode'} eq 'copy') {	 
-	 unless ( $list = &admin::clone_list_as_empty($list->{'name'},$list->{'domain'},$param{'new_listname'},$param{'new_robot'},$param{'user_email'})){
+	 unless ( $list = &clone_list_as_empty($list->{'name'},$list->{'domain'},$param{'new_listname'},$param{'new_robot'},$param{'user_email'})){
 	     &Sympa::Log::do_log('err',"Unable to load $param{'new_listname'} while renaming");
 	     return 'internal';
 	 }	 
@@ -878,7 +878,7 @@ sub rename_list{
      }
 
      if ($list->{'admin'}{'status'} eq 'open') {
-      	 $param{'aliases'} = &admin::install_aliases($list,$robot);
+      	 $param{'aliases'} = &install_aliases($list,$robot);
      } 
      
      unless ($param{'mode'} eq 'copy') {

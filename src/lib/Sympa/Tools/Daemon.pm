@@ -27,6 +27,7 @@ use Proc::ProcessTable;
 use Sys::Hostname;
 
 use Sympa::Lock;
+use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools::File;
 
@@ -206,7 +207,7 @@ sub send_crash_report {
 	close ERR;
 	$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
     }
-    &List::send_notify_to_listmaster('crash', $data{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
+    &Sympa::List::send_notify_to_listmaster('crash', $data{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
 }
 
 ## Returns the list of pid identifiers in the pid file.

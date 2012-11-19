@@ -61,7 +61,7 @@ sub create {
     $challenge->{'date'} = time;
     $challenge->{'robot'} = $robot; 
     $challenge->{'data'} = $context;
-    return undef unless (&Challenge::store($challenge));
+    return undef unless (&store($challenge));
     return $challenge->{'id_challenge'}     
 }
     

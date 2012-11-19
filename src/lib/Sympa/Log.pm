@@ -65,7 +65,7 @@ sub fatal_err {
     my $m  = shift;
     my $errno  = $!;
 
-    require List;
+    require Sympa::List;
     
     eval {
 	syslog('err', $m, @_);
@@ -73,7 +73,7 @@ sub fatal_err {
     };
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(&List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
+	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -82,7 +82,7 @@ sub fatal_err {
     my $full_msg = sprintf $m,@_;
 
     ## Notify listmaster
-    unless (&List::send_notify_to_listmaster('sympa_died', $Sympa::Conf::Conf{'domain'}, [$full_msg])) {
+    unless (&Sympa::List::send_notify_to_listmaster('sympa_died', $Sympa::Conf::Conf{'domain'}, [$full_msg])) {
 	&do_log('err',"Unable to send notify 'sympa died' to listmaster");
     }
 
@@ -157,8 +157,8 @@ sub do_log {
 
     if ($@ && ($warning_date < time - $warning_timeout)) {
         $warning_date = time + $warning_timeout;
-        require List;
-        &List::send_notify_to_listmaster(
+        require Sympa::List;
+        &Sympa::List::send_notify_to_listmaster(
             'logs_failed', $Sympa::Conf::Conf{'domain'}, [$@]
         );
     };
@@ -198,7 +198,7 @@ sub do_connect {
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
         require List;
-	unless(&List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
+	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };

@@ -130,7 +130,7 @@ sub load {
     my %line_numbered_config;
 
     if(_source_has_not_changed({'config_file' => $config_file}) && !$return_result) {
-        ##printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+        ##printf "load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
         if (my $tmp_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
             %Conf = %{$tmp_conf};
             $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
@@ -384,7 +384,7 @@ sub conf_2_db {
             if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
             if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage 
                 ($config->{$conf_parameters[$i]->{'name'}})){
-                &Conf::set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
+                &set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
             }
             }
         }
@@ -395,13 +395,13 @@ sub conf_2_db {
     
     ## Load configuration file. Ignoring database config and get result
     my $global_conf;
-    unless ($global_conf= Conf::load($config_file,1,'return_result')) {
+    unless ($global_conf= load($config_file,1,'return_result')) {
     &Sympa::Log::fatal_err("Configuration file $config_file has errors.");  
     }
     
     for my $i ( 0 .. $#conf_parameters ) {
     if (($conf_parameters[$i]->{'edit'} eq '1') && $global_conf->{$conf_parameters[$i]->{'name'}}) {
-        &Conf::set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
+        &set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
     }       
     }
 }
@@ -582,7 +582,7 @@ sub checkfiles {
     ## Get colors for parsing
     my $param = {};
     foreach my $p (%params) {
-        $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+        $param->{$p} = &get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
     }
 
     ## Set TT2 path
@@ -1029,7 +1029,7 @@ sub load_automatic_lists_description {
     return undef unless  (-r $config);
     my $description = &load_generic_conf_file($config,\%automatic_lists_params);
 
-    ## Now doing some structuration work because Conf::load_automatic_lists_description() can't handle
+    ## Now doing some structuration work because load_automatic_lists_description() can't handle
     ## data structured beyond one level of hash. This needs to be changed.
     my @structured_data;
     foreach my $class (@{$description->{'class'}}){
@@ -1884,7 +1884,7 @@ sub _get_config_file_name {
 }
 
 sub _create_robot_like_config_for_main_robot {
-    return if (defined $Conf::Conf{'robots'}{$Conf::Conf{'domain'}});
+    return if (defined $Conf{'robots'}{$Conf{'domain'}});
     my $main_conf_no_robots = &Sympa::Tools::Data::dup_var(\%Conf);
     delete $main_conf_no_robots->{'robots'};
     &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });

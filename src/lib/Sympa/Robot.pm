@@ -6,6 +6,7 @@
 package Sympa::Robot;
 
 use Sympa::Conf;
+use Sympa::List;
 use Sympa::Log;
 
 ## Constructor of a Robot instance
@@ -44,7 +45,7 @@ sub new {
 sub get_lists {
     my $self = shift;
 
-    return &List::get_lists($self->{'name'});
+    return &Sympa::List::get_lists($self->{'name'});
 }
 
 

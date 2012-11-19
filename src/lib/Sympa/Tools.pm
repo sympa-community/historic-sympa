@@ -357,7 +357,8 @@ sub load_edit_list_conf {
     }
 
     if ($error_in_conf) {
-	unless (&List::send_notify_to_listmaster('edit_list_error', $robot, [$file])) {
+        require Sympa::List;
+	unless (&Sympa::List::send_notify_to_listmaster('edit_list_error', $robot, [$file])) {
 	    &Sympa::Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
 	}
     }
@@ -1204,7 +1205,8 @@ sub virus_infected {
 
     ## Error while running antivir, notify listmaster
     if ($error_msg) {
-	unless (&List::send_notify_to_listmaster('virus_scan_failed', $domain,
+        require Sympa::List;
+	unless (&Sympa::List::send_notify_to_listmaster('virus_scan_failed', $domain,
 						 {'filename' => $file,
 						  'error_msg' => $error_msg})) {
 	    &Sympa::Log::do_log('notice',"Unable to send notify 'virus_scan_failed' to listmaster");
@@ -1737,7 +1739,8 @@ sub save_to_bad {
     if (! -d $queue.'/bad') {
 	unless (mkdir $queue.'/bad', 0775) {
 	    &Sympa::Log::do_log('notice','Unable to create %s/bad/ directory.',$queue);
-	    unless (&List::send_notify_to_listmaster('unable_to_create_dir',$hostname),{'dir' => "$queue/bad"}) {
+            require Sympa::List;
+	    unless (&Sympa::List::send_notify_to_listmaster('unable_to_create_dir',$hostname),{'dir' => "$queue/bad"}) {
 		&Sympa::Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
 	    }
 	    return undef;

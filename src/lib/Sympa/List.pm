@@ -2411,7 +2411,7 @@ sub set_status_error_config {
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
 	&Sympa::Log::do_log('err', 'The list "%s" is set in status error_config',$self->{'name'});
-	unless (&List::send_notify_to_listmaster($message, $self->{'domain'},\@param)) {
+	unless (&send_notify_to_listmaster($message, $self->{'domain'},\@param)) {
 	    &Sympa::Log::do_log('notice',"Unable to send notify '$message' to listmaster");
 	};
     }
@@ -3161,14 +3161,14 @@ sub _get_param_value_anywhere {
     if ((ref ($new_admin->{$param}) eq 'ARRAY') &&
 	!($::pinfo{$param}{'split_char'})) {
 	foreach my $elt (@{$new_admin->{$param}}) {
-	    my $val = &List::_get_single_param_value($elt,$param,$minor_p);
+	    my $val = &_get_single_param_value($elt,$param,$minor_p);
 	    if (defined $val) {
 		push @values,$val;
 	    }
 	}
 
     }else {
-	my $val = &List::_get_single_param_value($new_admin->{$param},$param,$minor_p);
+	my $val = &_get_single_param_value($new_admin->{$param},$param,$minor_p);
 	if (defined $val) {
 	    push @values,$val;
 	}
@@ -4434,7 +4434,7 @@ sub send_to_editor {
        }
        # create a one time ticket that will be used as un md5 URL credential
        
-       unless ($param->{'one_time_ticket'} = &Auth::create_one_time_ticket($recipient,$robot,'modindex/'.$name,'mail')){
+       unless ($param->{'one_time_ticket'} = &Sympa::Auth::create_one_time_ticket($recipient,$robot,'modindex/'.$name,'mail')){
 	   &Sympa::Log::do_log('notice',"Unable to create one_time_ticket for $recipient, service modindex/$name");
        }else{
 	   &Sympa::Log::do_log('debug',"ticket $param->{'one_time_ticket'} created");
@@ -4595,7 +4595,7 @@ sub request_auth {
 
     }else {
 	if ($cmd eq 'remind'){
-	    my $keyauth = &List::compute_auth('',$cmd);
+	    my $keyauth = &compute_auth('',$cmd);
 	    $data->{'command'} = "auth $keyauth $cmd *";
 	    $data->{'command_escaped'} = &Sympa::TT2::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
@@ -4728,14 +4728,14 @@ sub send_notify_to_listmaster {
 	my ($operation, $robot, $data, $checkstack, $purge) = @_;
 	
 	if($checkstack or $purge) {
-		foreach my $robot (keys %List::listmaster_messages_stack) {
-			foreach my $operation (keys %{$List::listmaster_messages_stack{$robot}}) {
-				my $first_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'first'};
-				my $last_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'last'};
+		foreach my $robot (keys %listmaster_messages_stack) {
+			foreach my $operation (keys %{$listmaster_messages_stack{$robot}}) {
+				my $first_age = time - $listmaster_messages_stack{$robot}{$operation}{'first'};
+				my $last_age = time - $listmaster_messages_stack{$robot}{$operation}{'last'};
 				next unless($purge or ($last_age > 30) or ($first_age > 60)); # not old enough to send and first not too old
-				next unless($List::listmaster_messages_stack{$robot}{$operation}{'messages'});
+				next unless($listmaster_messages_stack{$robot}{$operation}{'messages'});
 				
-				my %messages = %{$List::listmaster_messages_stack{$robot}{$operation}{'messages'}};
+				my %messages = %{$listmaster_messages_stack{$robot}{$operation}{'messages'}};
 				&Sympa::Log::do_log('info', 'got messages about "%s" (%s)', $operation, join(', ', keys %messages));
 				
 				##### bulk send
@@ -4760,17 +4760,17 @@ sub send_notify_to_listmaster {
 				}
 				
 				&Sympa::Log::do_log('info', 'cleaning stacked notifications');
-				delete $List::listmaster_messages_stack{$robot}{$operation};
+				delete $listmaster_messages_stack{$robot}{$operation};
 			}
 		}
 		return 1;
 	}
 	
 	my $stack = 0;
-	$List::listmaster_messages_stack{$robot}{$operation}{'first'} = time unless($List::listmaster_messages_stack{$robot}{$operation}{'first'});
-	$List::listmaster_messages_stack{$robot}{$operation}{'counter'}++;
-	$List::listmaster_messages_stack{$robot}{$operation}{'last'} = time;
-	if($List::listmaster_messages_stack{$robot}{$operation}{'counter'} > 3) { # stack if too much messages w/ same code
+	$listmaster_messages_stack{$robot}{$operation}{'first'} = time unless($List::listmaster_messages_stack{$robot}{$operation}{'first'});
+	$listmaster_messages_stack{$robot}{$operation}{'counter'}++;
+	$listmaster_messages_stack{$robot}{$operation}{'last'} = time;
+	if($listmaster_messages_stack{$robot}{$operation}{'counter'} > 3) { # stack if too much messages w/ same code
 		$stack = 1;
 	}
 	
@@ -4851,7 +4851,7 @@ sub send_notify_to_listmaster {
 	if(($operation eq 'request_list_creation') or ($operation eq 'request_list_renaming')) {
 		foreach my $email (split (/\,/, $listmaster)) {
 			my $cdata = &Sympa::Tools::Data::dup_var($data);
-			$cdata->{'one_time_ticket'} = &Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$cdata->{'ip'});
+			$cdata->{'one_time_ticket'} = &Sympa::Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$cdata->{'ip'});
 			push @tosend, {
 				email => $email,
 				data => $cdata
@@ -4869,7 +4869,7 @@ sub send_notify_to_listmaster {
 		my $r = &send_global_file('listmaster_notification', $ts->{'email'}, $robot, $ts->{'data'}, $options);
 		if($stack) {
 			&Sympa::Log::do_log('info', 'stacking message about "%s" for %s (%s)', $operation, $ts->{'email'}, $robot);
-			push @{$List::listmaster_messages_stack{$robot}{$operation}{'messages'}{$ts->{'email'}}}, $r;
+			push @{$listmaster_messages_stack{$robot}{$operation}{'messages'}{$ts->{'email'}}}, $r;
 			return 1;
 		}
 		
@@ -4928,7 +4928,7 @@ sub send_notify_to_owner {
 	    $param->{'escaped_who'} = $param->{'who'};
 	    $param->{'escaped_who'} =~ s/\s/\%20/g;
 	    foreach my $owner (@to) {
-		$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($owner,$robot,'search/'.$self->{'name'}.'/'.$param->{'escaped_who'},$param->{'ip'});
+		$param->{'one_time_ticket'} = &Sympa::Auth::create_one_time_ticket($owner,$robot,'search/'.$self->{'name'}.'/'.$param->{'escaped_who'},$param->{'ip'});
 		unless ($self->send_file('listowner_notification',[$owner], $robot,$param)) {
 		    &Sympa::Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner $owner");		    
 		}
@@ -4939,7 +4939,7 @@ sub send_notify_to_owner {
 	    $param->{'escaped_who'} = $param->{'who'};
 	    $param->{'escaped_who'} =~ s/\s/\%20/g;
 	    foreach my $owner (@to) {
-		$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($owner,$robot,'subindex/'.$self->{'name'},$param->{'ip'});
+		$param->{'one_time_ticket'} = &Sympa::Auth::create_one_time_ticket($owner,$robot,'subindex/'.$self->{'name'},$param->{'ip'});
 		unless ($self->send_file('listowner_notification',[$owner], $robot,$param)) {
 		    &Sympa::Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner $owner");		    
 		}
@@ -7008,7 +7008,7 @@ sub update_global_user {
     $who = &Sympa::Tools::clean_email($who);
 
     ## use md5 fingerprint to store password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
+    $values->{'password'} = &Sympa::Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
 
     my ($field, $value);
     
@@ -7068,7 +7068,7 @@ sub add_global_user {
     my ($user, $statement, $table);
     
     ## encrypt password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
+    $values->{'password'} = &Sympa::Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
     
     return undef unless (my $who = &Sympa::Tools::clean_email($values->{'email'}));
     
@@ -7841,7 +7841,7 @@ sub load_task_list {
 	    
 	    $list_of_task{$name}{'name'} = $name;
 
-	    my $titles = &List::_load_task_title ($file);
+	    my $titles = &_load_task_title ($file);
 
 	    ## Set the title in the current language
 	    if (defined  $titles->{&Sympa::Language::GetLang()}) {
@@ -9472,7 +9472,7 @@ sub sync_include {
 		if($#errors > -1) {
 			&Sympa::Log::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
 			$errors_occurred = 1;
-			unless (&List::send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
+			unless (&send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
 			&Sympa::Log::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
 			}
 			foreach my $e (@errors) {
@@ -9763,7 +9763,7 @@ sub sync_include_admin {
 	    ## Use DB cache instead
 	    unless (defined $new_admin_users_include) {
 		&Sympa::Log::do_log('err', 'Could not get %ss from an include source for list %s', $role, $name);
-		unless (&List::send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
+		unless (&send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
 		    &Sympa::Log::do_log('notice',"Unable to send notify 'sync_include_admmin_failed' to listmaster");
 		}
 		return undef;

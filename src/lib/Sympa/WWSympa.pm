@@ -24,6 +24,8 @@ package Sympa::WWSympa;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Log;
+use Sympa::List;
+use Sympa::Report;
 use Sympa::Tools::Cookie;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
@@ -240,18 +242,18 @@ sub get_email_from_cookie {
     # &Sympa::Log::do_log('info', "get_email_from_cookie($cookie,$secret)");
     
     unless (defined $secret) {
-	&report::reject_report_web('intern','cookie_error',{},'','','',$robot);
+	&Sympa::Report::reject_report_web('intern','cookie_error',{},'','','',$robot);
 	&Sympa::Log::do_log('info', 'parameter cookie undefined, authentication failure');
     }
 
     unless ($cookie) {
-	&report::reject_report_web('intern','cookie_error',$cookie,'get_email_from_cookie','','',$robot);
+	&Sympa::Report::reject_report_web('intern','cookie_error',$cookie,'get_email_from_cookie','','',$robot);
 	&Sympa::Log::do_log('info', ' cookie undefined, authentication failure');
     }
 
     ($email, $auth) = &Sympa::Tools::Cookie::check_cookie ($cookie, $secret);
     unless ( $email) {
-	&report::reject_report_web('user','auth_failed',{},'');
+	&Sympa::Report::reject_report_web('user','auth_failed',{},'');
 	&Sympa::Log::do_log('info', '%s::get_email_from_cookie: auth failed for user %s', __PACKAGE__, $email);
 	return undef;
     }    
@@ -282,29 +284,29 @@ sub init_passwd {
     
     my ($passwd, $user);
     
-    if (&List::is_global_user($email)) {
-	$user = &List::get_global_user($email);
+    if (&Sympa::List::is_global_user($email)) {
+	$user = &Sympa::List::get_global_user($email);
 	
 	$passwd = $user->{'password'};
 	
 	unless ($passwd) {
 	    $passwd = &new_passwd();
 	    
-	    unless ( &List::update_global_user($email,
+	    unless ( &Sympa::List::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
-		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
+		&Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
 		&Sympa::Log::do_log('info','%s::init_passwd: update failed', __PACKAGE__);
 		return undef;
 	    }
 	}
     }else {
 	$passwd = &new_passwd();
-	unless ( &List::add_global_user({'email' => $email,
+	unless ( &Sympa::List::add_global_user({'email' => $email,
 				     'password' => $passwd,
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {
-	    &report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
+	    &Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
 	    &Sympa::Log::do_log('info','%s::init_passwd: add failed', __PACKAGE__);
 	    return undef;
 	}

@@ -18,8 +18,10 @@ use strict "vars";
 
 use HTTP::Cookies;
 
+use Sympa::Admin;
 use Sympa::Auth;
 use Sympa::Conf;
+use Sympa::List;
 use Sympa::Log;
 use Sympa::Scenario;
 use Sympa::Session;
@@ -74,7 +76,7 @@ sub lists {
     
     &Sympa::Log::do_log('info', '%s::lists(%s,%s)', __PACKAGE__, $topic, $subtopic);
    
-    my $all_lists = &List::get_lists($robot);
+    my $all_lists = &Sympa::List::get_lists($robot);
     foreach my $list ( @$all_lists ) {
 	
 	my $listname = $list->{'name'};
@@ -433,7 +435,7 @@ sub info {
     my $user;
 
     # Part of the authorization code
-    $user = &List::get_global_user($sender);
+    $user = &Sympa::List::get_global_user($sender);
      
     my $result = $list->check_list_authz('info','md5',
 					 {'sender' => $sender,
@@ -560,8 +562,8 @@ sub createList {
     # prepare parameters
     my $param = {};
     $param->{'user'}{'email'} = $sender;
-    if (&List::is_global_user($param->{'user'}{'email'})) {
-	$param->{'user'} = &List::get_global_user($sender);
+    if (&Sympa::List::is_global_user($param->{'user'}{'email'})) {
+	$param->{'user'} = &Sympa::List::get_global_user($sender);
     }
     my $parameters;
     $parameters->{'creation_email'} =$sender;
@@ -582,7 +584,7 @@ sub createList {
     }
     
      ## create liste
-     my $resul = &admin::create_list_old($parameters,$template,$robot,"soap");
+     my $resul = &Sympa::Admin::create_list_old($parameters,$template,$robot,"soap");
      unless(defined $resul) {
 	 &Sympa::Log::do_log('info', 'unable to create list %s@%s from %s ', $listname,$robot,$sender);
 	 die SOAP::Fault->faultcode('Server')
@@ -592,7 +594,7 @@ sub createList {
      
      ## notify listmaster
      if ($param->{'create_action'} =~ /notify/) {
-         if(&List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
+         if(&Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
 	     &Sympa::Log::do_log('info','notify listmaster for list creation');
 	 }else{
 	     &Sympa::Log::do_log('notice',"Unable to send notify 'request_list_creation' to listmaster");
@@ -637,7 +639,7 @@ sub closeList {
     }
     
     # check authorization
-    unless (($list->am_i('owner', $sender)) || (&List::is_listmaster($sender))) {
+    unless (($list->am_i('owner', $sender)) || (&Sympa::List::is_listmaster($sender))) {
 	&Sympa::Log::do_log('info', 'closeList %s from %s not allowed',$listname,$sender);
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Not allowed')
@@ -739,7 +741,7 @@ sub add {
     }else {
 	my $u;
 	my $defaults = $list->get_default_user_options();
-	my $u2 = &List::get_user_db($email);
+	my $u2 = &Sympa::List::get_user_db($email);
 	%{$u} = %{$defaults};
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos || $u2->{'gecos'};
@@ -924,7 +926,7 @@ sub review {
     my $user;
 
     # Part of the authorization code
-    $user = &List::get_global_user($sender);
+    $user = &Sympa::List::get_global_user($sender);
      
     my $result = $list->check_list_authz('review','md5',
 					 {'sender' => $sender,
@@ -1124,7 +1126,7 @@ sub signoff {
     
     if ($listname eq '*') {
 	my $success;
-	foreach my $list  ( &List::get_which ($sender,$robot,'member') ){
+	foreach my $list  ( &Sympa::List::get_which ($sender,$robot,'member') ){
 	    my $l = $list->{'name'};
 
 	    $success ||= &signoff($l,$sender);
@@ -1135,7 +1137,7 @@ sub signoff {
     $list = new Sympa::List ($listname, $robot);
     
     # Part of the authorization code
-    my $user = &List::get_global_user($sender);
+    my $user = &Sympa::List::get_global_user($sender);
     
     my $result = $list->check_list_authz('unsubscribe','md5',
 					 {'email' => $sender,
@@ -1323,10 +1325,10 @@ sub subscribe {
 		      unless $list->add_list_member($u);
       }
       
-      if ($List::use_db) {
-	  my $u = &List::get_global_user($sender);
+      if ($Sympa::List::use_db) {
+	  my $u = &Sympa::List::get_global_user($sender);
 	  
-	  &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
+	  &Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
 					  });
       }
       
@@ -1403,7 +1405,7 @@ sub which {
 
     
     foreach my $role ('member','owner','editor') {
-	foreach my $list( &List::get_which($sender,$robot,$role) ){         
+	foreach my $list( &Sympa::List::get_which($sender,$robot,$role) ){         
 	    my $name = $list->{'name'};
 	    $listnames{$name} = $list;
 	}
@@ -1521,7 +1523,7 @@ sub get_reason_string {
 
     unless (&Sympa::TT2parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &Sympa::TT2get_error();
-	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	&Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	&Sympa::Log::do_log('info', "get_reason_string : error parsing");
 	return '';
     }

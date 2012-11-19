@@ -38,6 +38,7 @@ use strict;
 
 use JSON::XS;
 
+use Sympa::List;
 use Sympa::Log;
 use Sympa::OAuth::Provider;
 use Sympa::Tools;
@@ -286,15 +287,15 @@ sub getGroups {
 	
 	my @entries = ();
 	
-	#foreach my $list (&List::get_which($self->{'user'}, $self->{'robot'}, 'owner')) {
+	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'owner')) {
 	#	push(@entries, $self->_list_to_group($list, 'admin'));
 	#}
 	
-	#foreach my $list (&List::get_which($self->{'user'}, $self->{'robot'}, 'editor')) {
+	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'editor')) {
 	#	push(@entries, $self->_list_to_group($list, '???'));
 	#}
 	
-	foreach my $list (&List::get_which($self->{'user'}, $self->{'robot'}, 'member')) {
+	foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'member')) {
 		push(@entries, $self->_list_to_group($list, 'member'));
 	}
 	
