@@ -1378,8 +1378,10 @@ sub change_user_email {
 	return undef;
     }
 
+    my $robot = Robot::clean_robot($in{'robot'});
+
     ## Change email as list MEMBER
-    foreach my $list ( &List::get_which($in{'current_email'},$in{'robot'}, 'member') ) {
+    foreach my $list ( &List::get_which($in{'current_email'}, $robot, 'member') ) {
 	 
 	 my $l = $list->name;
 	 
@@ -1393,7 +1395,7 @@ sub change_user_email {
 	     my $use_external_data_sources;
 	     foreach my $datasource_id (split(/,/, $user_entry->{'id'})) {
 		 my $datasource = $list->search_datasource($datasource_id);
-		 if (!defined $datasource || $datasource->{'type'} ne 'include_list' || ($datasource->{'def'} =~ /\@(.+)$/ && $1 ne $in{'robot'})) {
+		 if (!defined $datasource || $datasource->{'type'} ne 'include_list' || ($datasource->{'def'} =~ /\@(.+)$/ && $1 ne $robot->domain)) {
 		     $use_external_data_sources = 1;
 		     last;
 		 }
@@ -1430,13 +1432,13 @@ sub change_user_email {
     ## Change email as list OWNER/MODERATOR
     my %updated_lists;
     foreach my $role ('owner', 'editor') { 
-	foreach my $list ( &List::get_which($in{'current_email'},$in{'robot'}, $role) ) {
+	foreach my $list ( &List::get_which($in{'current_email'}, $robot, $role) ) {
 	    
 	    ## Check if admin is include via an external datasource
 	    my $admin_user = $list->get_list_admin($role, $in{'current_email'});
 	    if ($admin_user->{'included'}) {
 		## Notify listmaster
-		$list->robot->send_notify_to_listmaster('failed_to_change_included_admin', {'list' => $list,
+		$robot->send_notify_to_listmaster('failed_to_change_included_admin', {'list' => $list,
 											   'current_email' => $in{'current_email'}, 
 											   'new_email' => $in{'new_email'},
 											   'datasource' => $list->get_datasource_name($admin_user->{'id'})});
@@ -1461,7 +1463,7 @@ sub change_user_email {
     }
     ## Notify listmasters that list owners/moderators email have changed
     if (keys %updated_lists) {
-	Robot->new($in{'robot'})->send_notify_to_listmaster(
+	$robot->send_notify_to_listmaster(
 	    'listowner_email_changed',
 					 {'previous_email' => $in{'current_email'},
 					  'new_email' => $in{'new_email'},
@@ -1478,7 +1480,7 @@ sub change_user_email {
     }
     
     ## Update netidmap_table
-    unless ( &List::update_email_netidmap_db($in{'robot'}, $in{'current_email'}, $in{'new_email'}) ){
+    unless ( $robot->update_email_netidmap_db($in{'current_email'}, $in{'new_email'}) ){
 	&Log::do_log('err','change_email: update failed');
 	return undef;
     }

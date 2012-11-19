@@ -173,7 +173,7 @@ sub create_required_lists_tasks {
     &Log::do_log('debug','Creating required tasks from list models');
 
     my $task;
-    foreach my $robot (keys %{Site->robots}) {
+    foreach my $robot (keys %{Site->robots_config}) {
 	&Log::do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {

@@ -66,7 +66,6 @@ use Family; #FIXME: dependency loop between List and Family
 use PlainDigest;
 
 our @ISA    = qw(Site_r);           # not fully inherit Robot
-our @EXPORT = qw(%list_of_lists);
 
 =encoding utf-8
 
@@ -316,7 +315,6 @@ currently selected descriptor.
 my ($sth, @sth_stack);
 
 my %list_cache;
-my %list_cache_filled = ();
 
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
@@ -2319,7 +2317,6 @@ my %alias = (
 );
 
 ## This is the generic hash which keeps all lists in memory.
-my %list_of_lists = ();
 our %list_of_topics = ();
 my %edit_list_conf = ();
 
@@ -2344,64 +2341,65 @@ sub new {
     my $options = shift || {};
     my $list;
 
-    ## Allow robot in the name
-    if ($name =~ /\@/) {
-	my @parts = split /\@/, $name;
-	$robot ||= $parts[1];
-	$name = $parts[0];
-    }
+    unless ($options->{'skip_name_check'}) {
+	## Allow robot in the name
+	if ($name =~ /\@/) {
+	    my @parts = split /\@/, $name;
+	    $robot ||= $parts[1];
+	    $name = $parts[0];
+	}
 
-    unless ($robot) {
-	## Look for the list if no robot was provided
-	$robot = &search_list_among_robots($name);
-    }
+	unless ($robot) {
+	    ## Look for the list if no robot was provided
+	    $robot = &search_list_among_robots($name);
+	}
 
-    $robot = Robot::clean_robot($robot);
+	$robot = Robot::clean_robot($robot);
 
-    unless ($robot) {
-	&Log::do_log('err',
-	    'Missing robot parameter, cannot create list object for %s',
-	    $name)
-	    unless ($options->{'just_try'});
-	return undef;
-    }
-
-    ## Only process the list if the name is valid.
-    my $listname_regexp = &tools::get_regexp('listname');
-    unless ($name and ($name =~ /^($listname_regexp)$/io)) {
-	&Log::do_log('err', 'Incorrect listname "%s"', $name)
-	    unless $options->{'just_try'};
-	return undef;
-    }
-    ## Lowercase the list name.
-    $name = lc $1;
-
-    ## Reject listnames with reserved list suffixes
-    my $regx = $robot->list_check_regexp;
-    if ($regx) {
-	my $result = eval { $name =~ /^(\S+)-($regx)$/; };
-	if ($@) {
-	    &Log::do_log('err', 'Incorrect list_check_regexp: %s', $@);
-	    return undef;
-	} elsif ($result) {
-	    &Log::do_log(
-		'err',
-		'Incorrect name: listname "%s" matches one of service aliases',
-		$name
-	    ) unless ($options->{'just_try'});
+	unless ($robot) {
+	    &Log::do_log('err',
+		'Missing robot parameter, cannot create list object for %s',
+		$name)
+		unless ($options->{'just_try'});
 	    return undef;
 	}
+
+	## Only process the list if the name is valid.
+	my $listname_regexp = &tools::get_regexp('listname');
+	unless ($name and ($name =~ /^($listname_regexp)$/io)) {
+	    &Log::do_log('err', 'Incorrect listname "%s"', $name)
+		unless $options->{'just_try'};
+	    return undef;
+	}
+	## Lowercase the list name.
+	$name = lc $1;
+
+	## Reject listnames with reserved list suffixes
+	my $regx = $robot->list_check_regexp;
+	if ($regx) {
+	    my $result = eval { $name =~ /^(\S+)-($regx)$/; };
+	    if ($@) {
+		&Log::do_log('err', 'Incorrect list_check_regexp: %s', $@);
+		return undef;
+	    } elsif ($result) {
+		&Log::do_log(
+		    'err',
+		    'Incorrect name: listname "%s" matches one of service aliases',
+		     $name
+		    ) unless ($options->{'just_try'});
+		return undef;
+	    }
+	}
+    } else {
+	$robot = Robot::clean_robot($robot);
     }
 
     my $status;
     ## If list already in memory and not previously purged by another process
-    if ($list_of_lists{$robot->domain}{$name} and
-	-d $list_of_lists{$robot->domain}{$name}->dir) {
-
+    if ($robot->lists($name) and -d $robot->lists($name)->dir) {
 	# use the current list in memory and update it
-	$list = $list_of_lists{$robot->domain}{$name};
+	$list = $robot->lists($name);
     } else {
-
 	# create a new object list
 	$list = bless {} => $pkg;
     }
@@ -2509,7 +2507,7 @@ sub savestats {
     ## Be sure the list has been loaded.
     my $name = $self->name;
     my $dir  = $self->dir;
-    return undef unless ($list_of_lists{$self->domain}{$name});
+    return undef unless $self->robot->lists($name);
 
     ## Lock file
     my $lock = new Lock($dir . '/stats');
@@ -2886,7 +2884,7 @@ sub load {
     }
 
     $self->{'mtime'} = [$m1, $m2, $m3];
-    $list_of_lists{$robot->domain}{$name} = $self;
+    $robot->lists($name, $self);
     return $admin ? 1 : 0;
 }
 
@@ -7192,9 +7190,10 @@ sub check_list_authz {
 
 ## Initialize internal list cache
 sub init_list_cache {
-    &Log::do_log('debug2', 'List::init_list_cache()');
-
-    undef %list_cache;
+    &Log::do_log('debug2', '()');
+    foreach my $robot (@{Robot::get_robots() || []}) {
+	$robot->init_list_cache();
+    }
 }
 
 ## May the indicated user edit the indicated list parameter or not?
@@ -10501,16 +10500,16 @@ sub store_digest {
 
 =over 4
 
-=item get_lists( [ ROBOT, [ OPTIONS, [ REQUESTED_LISTS ] ] ] )
+=item get_lists( [ CONTEXT, [ OPTIONS ] ] )
 
 I<Function>.
-List of lists hosted a robot
+List of lists hosted by a family, a robot or whole site.
 
 =over 4
 
-=item ROBOT
+=item CONTEXT
 
-Name of robot or C<'*'> (default).
+Robot object, Family object or Site class (default).
 
 =item OPTIONS
 
@@ -10620,9 +10619,13 @@ FIXME @todo doc
 
 =back
 
-=item REQUESTED_LISTS
+=begin comment 
 
-Arrayref to name of requested lists, if any.
+##=item REQUESTED_LISTS
+##
+##Arrayref to name of requested lists, if any.
+
+=end comment
 
 =back
 
@@ -10633,14 +10636,25 @@ Returns a ref to an array of List objects.
 =cut
 
 sub get_lists {
-    &Log::do_log('debug2', '(%s, %s, %s)', @_);
+    Log::do_log('debug2', '(%s, %s)', @_);
+    my $that    = shift || 'Site';
+    my $options = shift || {};
 
-    my $robot_context = shift || '*';
-    my $options       = shift || {};
-    my $requested_lists =
-	shift;    ## Optional parameter to load only a subset of all lists
+    my (@lists, @robots, $family_name);
 
-    my (@lists, @robots);
+    if (ref $that and ref $that eq 'Family') {
+	@robots = ($that->robot);
+	$family_name = $that->name;
+    } else {
+	$that = Robot::clean_robot($that, 1);
+	if (ref $that and ref $that eq 'Robot') {
+	    @robots = ($that);
+	} elsif ($that eq 'Site') {
+	    @robots = @{Robot::get_robots()};
+	} else {
+	    croak 'bug in logic.  Ask developer';
+	}
+    }
 
     $options->{'reload_config'} = 1 if $options->{'use_files'};  # For compat.
 
@@ -10652,6 +10666,16 @@ sub get_lists {
     my @query       = (@{$options->{'filter_query'} || []});
     my @clause_perl = ();
     my @clause_sql  = ();
+
+    ## get family lists
+    if ($family_name) {
+	push @clause_perl,
+	    sprintf('$list->family_name and $list->family_name eq "%s"',
+		quotemeta $family_name);
+	push @clause_sql,
+	    sprintf('family_list = %s', SDM::quote($family_name));
+    }
+
     while (1 < scalar @query) {
 	my @expr_perl = ();
 	my @expr_sql  = ();
@@ -10795,6 +10819,7 @@ sub get_lists {
 		($negate ? 'NOT ' : '') . '(' . join(' OR ', @expr_sql) . ')';
 	}
     }
+
     if (scalar @clause_perl) {
 	$cond_perl = join ' && ',  @clause_perl;
 	$cond_sql  = join ' AND ', @clause_sql;
@@ -10855,40 +10880,15 @@ sub get_lists {
     $order_sql = join(', ', @keys_sql);
     &Log::do_log('debug3', 'order %s; %s', $order_perl, $order_sql);
 
-    if ($robot_context eq '*') {
-	@robots = sort &get_robots;
-    } else {
-	@robots = ($robot_context);
-    }
     foreach my $robot (@robots) {
-	## Load only requested lists if $requested_list is set
-	## otherwise load all lists
-	my %requested_lists = ();
-	if (defined $requested_lists) {
-	    my $robot_re = $robot;
-	    $robot_re =~ s/(\W)/\\$1/g;
-	    %requested_lists =
-		map { ($_ => 1) }
-		grep { index($_, '@') < 0 or s/\@${robot_re}$// }
-		sort @{$requested_lists};
-	    ## none requested on this robot.
-	    next unless %requested_lists;    # foreach my $robot
-	}
-
 	## Check on-memory cache first
-	if (!defined $which_role and $list_cache_filled{$robot}) {
+	my @all_lists;
+	if (!defined $which_role and (@all_lists = $robot->lists)) {
 	    ## filter list if required.
 	    my @l = ();
-	    my @all_lists = map { $list_of_lists{$robot}{$_} }
-		sort keys %{$list_of_lists{$robot}};
-	    if (defined $cond_perl or %requested_lists) {
+	    if (defined $cond_perl) {
 		foreach my $list (@all_lists) {
-		    if (%requested_lists) {
-			next unless $requested_lists{$list->name};
-		    }
-		    if (defined $cond_perl) {
-			next unless eval $cond_perl;
-		    }
+		    next unless eval $cond_perl;
 		    push @l, $list;
 		}
 	    } else {
@@ -10908,21 +10908,14 @@ sub get_lists {
 	}
 
 	## check existence of robot directory
-	my $robot_dir = Site->home . '/' . $robot;
-	$robot_dir = Site->home
-	    unless -d $robot_dir or
-		$robot ne Site->domain;
-	unless (-d $robot_dir) {
-	    &Log::do_log('err', 'unknown robot %s, Unable to open %s',
-		$robot, $robot_dir);
-	    return undef;
-	}
+	my $robot_dir = $robot->home;
 
 	## Files are used instead of list_table DB cache.
 
-	if (&Conf::get_robot_conf($robot, 'cache_list_config') ne 'database'
-	    or
+	if ($robot->cache_list_config ne 'database' or
 	    $options->{'reload_config'}) {
+	    my %requested_lists = ();
+
 	    ## filter by role
 	    if (defined $which_role) {
 		my %r = ();
@@ -10932,12 +10925,12 @@ sub get_lists {
 		if ($which_role eq 'member') {
 		    $sth = &SDM::do_prepared_query(
 			'SELECT list_subscriber FROM subscriber_table WHERE robot_subscriber = ? AND user_subscriber = ?',
-			$robot, $which_user
+			$robot->domain, $which_user
 		    );
 		} else {
 		    $sth = &SDM::do_prepared_query(
 			'SELECT list_admin FROM admin_table WHERE robot_admin = ? AND user_admin = ? AND role_admin = ?',
-			$robot, $which_user, $which_role);
+			$robot->domain, $which_user, $which_role);
 		}
 		unless ($sth) {
 		    &Log::do_log(
@@ -10953,9 +10946,6 @@ sub get_lists {
 		my @row;
 		while (@row = $sth->fetchrow_array) {
 		    my $listname = $row[0];
-		    if (%requested_lists) {
-			next unless $requested_lists{$listname};
-		    }
 		    $r{$listname} = 1;
 		}
 		$sth->finish;
@@ -10976,7 +10966,7 @@ sub get_lists {
 		unless (
 		    $sth = &SDM::do_prepared_query(
 			'SELECT name_list FROM list_table WHERE robot_list = ?',
-			$robot
+			$robot->domain
 		    )
 		    ) {
 		    &Log::do_log('err', 'Failed to get lists from database');
@@ -11002,7 +10992,7 @@ sub get_lists {
 		next unless -d "$robot_dir/$listname";
 		next unless -f "$robot_dir/$listname/config";
 
-		## filter list by requested_lists (and role).
+		## filter lists by role.
 		if (%requested_lists) {
 		    next unless $requested_lists{$listname};
 		}
@@ -11023,7 +11013,7 @@ sub get_lists {
 	    closedir DIR;
 
 	    ## All lists are in memory cache
-	    $list_cache_filled{$robot} = 1 unless %requested_lists;
+	    $robot->lists_ok(1) unless %requested_lists;
 
 	    ## sort
 	    if ($order_perl) {
@@ -11042,7 +11032,7 @@ sub get_lists {
 			$name, $robot);
 		    &SDM::do_prepared_query(
 			'DELETE from list_table WHERE name_list = ? AND robot_list = ?',
-			$name, $robot
+			$name, $robot->domain
 		    );
 		}
 	    }
@@ -11081,7 +11071,7 @@ sub get_lists {
 		$cols,
 		$table,
 		$cond,
-		&SDM::quote($robot),
+		&SDM::quote($robot->domain),
 		$cond_sql,
 		$order_sql
 	    );
@@ -11091,7 +11081,7 @@ sub get_lists {
 		    'SELECT name_list AS name%s FROM %s WHERE %s robot_list = ? ORDER BY %s',
 		    $cols, $table, $cond, $order_sql
 		),
-		$robot
+		$robot->domain
 	    );
 	}
 	unless ($sth) {
@@ -11104,9 +11094,6 @@ sub get_lists {
 	my @l = ();
 	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
 	    ## filter by requested_lists
-	    if (%requested_lists) {
-		next unless $requested_lists{$l->{'name'}};
-	    }
 	    push @l, $l;
 	}
 	$sth->finish;
@@ -11114,20 +11101,10 @@ sub get_lists {
 	$sth = pop @sth_stack;
 
 	foreach my $l (@l) {
-	    ## renew object on memory.
-	    ## If list already in memory and
-	    ## not previously purged by another process
-	    if ($list_of_lists{$robot}{$l->{'name'}} and
-		-d $list_of_lists{$robot}{$l->{'name'}}->dir) {
-
-		# use the current list in memory and update it
-		$list = $list_of_lists{$robot}{$l->{'name'}};
-	    } else {
-
-		# create a new List object
-		$list = bless {} => __PACKAGE__;
+	    unless ($list = __PACKAGE__->new($l->{'name'}, $robot,
+		{%$options, 'skip_name_check' => 1, 'skip_sync_admin' => 1})) {
+		next;
 	    }
-	    next unless defined $list->load($l->{'name'}, $robot, $options);
 
 	    ## save subscriber/admin information to memory cache.
 	    if (defined $which_role) {
@@ -11138,10 +11115,8 @@ sub get_lists {
 	    push @lists, $list;
 	}
 
-	$list_cache_filled{$robot} = 1
-	    unless defined $which_role or
-		defined $cond_sql or
-		%requested_lists;
+	$robot->lists_ok(1)
+	    unless defined $which_role or defined $cond_sql;
     }
     return \@lists;
 }
@@ -13255,9 +13230,7 @@ sub close_list {
     &Log::do_log('debug2', '(%s, %s, %s)', @_);
     my ($self, $email, $status) = @_;
 
-    return undef
-	unless $self and
-	    $list_of_lists{$self->domain}{$self->name};
+    return undef unless $self->robot->lists($self->name);
 
     ## If list is included by another list, then it cannot be removed
     ## TODO : we should also check owner_include and editor_include, but a bit more tricky
@@ -13347,9 +13320,7 @@ sub close_list {
 sub purge {
     my ($self, $email) = @_;
 
-    return undef
-	unless ($self &&
-	($list_of_lists{$self->domain}{$self->name}));
+    return undef unless $self->robot->lists($self->name);
 
     ## Remove tasks for this list
     &Task::list_tasks(Site->queuetask);
@@ -13374,7 +13345,7 @@ sub purge {
     }
 
     ## Clean memory cache
-    delete $list_of_lists{$self->domain}{$self->name};
+    $self->robot->lists($self->name, undef);
 
     &tools::remove_dir($self->dir);
 
@@ -13397,13 +13368,9 @@ sub purge {
 sub remove_aliases {
     my $self = shift;
 
-    return undef
-	unless ($self &&
-	($list_of_lists{$self->domain}{$self->name}) &&
-	(Site->sendmail_aliases !~ /^none$/i));
+    return undef if lc(Site->sendmail_aliases) eq 'none';
 
     my $alias_manager = Site->alias_manager;
-
     unless (-x $alias_manager) {
 	&Log::do_log('err', 'Cannot run alias_manager %s', $alias_manager);
 	return undef;
@@ -14092,10 +14059,10 @@ sub list_cache_fetch {
 	unless (
 	    $sth = &SDM::do_prepared_query(
 		q{SELECT cache_epoch_list AS epoch, total_list AS total,
-		     config_list AS admin
-	      FROM list_table
-	      WHERE name_list = ? AND robot_list = ? AND
-		    cache_epoch_list > ? AND ? <= cache_epoch_list},
+			 config_list AS admin
+		  FROM list_table
+		  WHERE name_list = ? AND robot_list = ? AND
+			cache_epoch_list > ? AND ? <= cache_epoch_list},
 		$name, $robot, $m1, $time_config
 	    ) and
 	    $sth->rows
@@ -14203,6 +14170,14 @@ sub list_cache_update_admin {
     my $searchkey   = tools::foldcase($self->subject);
     my $status      = $self->status;
     my $robot       = $self->domain;
+
+    my $family;
+    if ($self->family) {
+	$family = $self->family->name;
+    } else {
+	$family = undef;
+    }
+
     my $web_archive = $self->is_web_archived ? 1 : 0;
     my $topics =
 	join(',', grep { $_ and $_ ne 'others' } @{$self->topics || []});
@@ -14233,13 +14208,14 @@ sub list_cache_update_admin {
     unless (
 	$sth = &SDM::do_prepared_query(
 	    q{UPDATE list_table
-	  SET status_list = ?, name_list = ?, robot_list = ?,
+	      SET status_list = ?, name_list = ?, robot_list = ?,
+	      family_list = ?,
 	      creation_epoch_list = ?, creation_email_list = ?,
 	      update_epoch_list = ?, update_email_list = ?,
 	      searchkey_list = ?, web_archive_list = ?, topics_list = ?,
 	      cache_epoch_list = ?, config_list = ?
-	  WHERE robot_list = ? AND name_list = ?},
-	    $status,         $name,        $robot,
+	      WHERE robot_list = ? AND name_list = ?},
+	    $status,         $name,        $robot,       $family,
 	    $creation_epoch, $creation_email,
 	    $update_epoch,   $update_email,
 	    $searchkey,      $web_archive, $topics,
@@ -14249,13 +14225,14 @@ sub list_cache_update_admin {
 	$sth->rows or
 	$sth = &SDM::do_prepared_query(
 	    q{INSERT INTO list_table
-	  (status_list, name_list, robot_list,
-	   creation_epoch_list, creation_email_list,
-	   update_epoch_list, update_email_list,
-	   searchkey_list, web_archive_list, topics_list,
-	   cache_epoch_list, config_list)
-	  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
-	    $status,         $name,        $robot,
+	      (status_list, name_list, robot_list,
+	       family_list,
+	       creation_epoch_list, creation_email_list,
+	       update_epoch_list, update_email_list,
+	       searchkey_list, web_archive_list, topics_list,
+	       cache_epoch_list, config_list)
+	      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
+	    $status,         $name,        $robot,       $family,
 	    $creation_epoch, $creation_email,
 	    $update_epoch,   $update_email,
 	    $searchkey,      $web_archive, $topics,
@@ -14281,8 +14258,8 @@ sub list_cache_update_total {
 	unless (
 	    &SDM::do_prepared_query(
 		q{UPDATE list_table
-	      SET total_list = ?
-	      WHERE name_list = ? AND robot_list = ?},
+		  SET total_list = ?
+		  WHERE name_list = ? AND robot_list = ?},
 		$self->{'total'}, $self->name, $self->domain
 	    )
 	    ) {

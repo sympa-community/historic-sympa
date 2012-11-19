@@ -152,7 +152,7 @@ sub upgrade {
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{Site->robots}) {
+	foreach my $vr (keys %{Site->robots_config}) {
 
 	    if (-d Site->etc . "/$vr/web_tt2") {
 		push @directories, Site->etc . "/$vr/web_tt2";
@@ -219,7 +219,7 @@ sub upgrade {
 	## Fill the robot_subscriber and robot_admin fields in DB
 	&Log::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
 
-	foreach my $r (keys %{Site->robots}) {
+	foreach my $r (keys %{Site->robots_config}) {
 	    my $all_lists = &List::get_lists($r, {'skip_sync_admin' => 1});
 	    foreach my $list ( @$all_lists ) {
 		
@@ -432,7 +432,7 @@ sub upgrade {
     if (&tools::lower_version($previous_version, '5.3a.6')) {
 	
 	&Log::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
-	foreach my $vr (keys %{Site->robots}) {
+	foreach my $vr (keys %{Site->robots_config}) {
 	    my $etc_dir = Site->etc;
 
 	    if ($vr ne Site->domain) {
@@ -519,7 +519,7 @@ sub upgrade {
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{Site->robots}) {
+	foreach my $vr (keys %{Site->robots_config}) {
 	    foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
 		if (-d Site->etc.'/'.$vr.'/'.$type) {
 		    push @directories, [Site->etc.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
@@ -808,7 +808,7 @@ sub upgrade {
 		    $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
 		}elsif ($spoolparameter eq 'queuesubscribe'){
 		    my $match = 0;		    
-		    foreach my $robot (keys %{Site->robots}) {
+		    foreach my $robot (keys %{Site->robots_config}) {
 			&Log::do_log('notice',"robot : $robot");
 			if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
 			    $listname = $1;

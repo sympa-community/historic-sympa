@@ -1109,36 +1109,41 @@ my %full_db_struct = (
 	    },
 	    'robot_list' => {
 		'struct' => 'varchar(100)',
-		'doc' => 'Robot (domain) the list belongs to',
+		'doc' => 'Name of the robot (domain) the list belongs to',
 		'order' => 2,
 		'primary'=>1,
 		'not_null'=>1,
 	    },
 	    ## basic profile
+	    'family_list' => {
+		'struct' => 'varchar(100)',
+		'doc' => 'Name of the family the list belongs to',
+		'order' => 3,
+	    },
 	    'status_list' => {
 		'struct' => "enum('open','closed','pending','error_config','family_closed')",
 		'doc' => 'Status of the list',
-		'order' => 3,
+		'order' => 4,
 	    },
 	    'creation_email_list' => {
 		'struct' => 'varchar(100)',
 		'doc' => 'Email of user who created the list',
-		'order' => 4,
+		'order' => 5,
 	    },
 	    'creation_epoch_list' => {
 		'struct' => 'int(11)',
 		'doc' => 'UNIX time when the list was created',
-		'order' => 5,
+		'order' => 6,
 	    },
 	    'update_email_list' => {
 		'struct' => 'varchar(100)',
 		'doc' => 'Email of user who updated the list',
-		'order' => 6,
+		'order' => 7,
 	    },
 	    'update_epoch_list' => {
 		'struct' => 'int(11)',
 		'doc' => 'UNIX time when the list was updated',
-		'order' => 7,
+		'order' => 8,
 	    },
 	    ## Other indices to help searching lists
 	    'searchkey_list' => {

@@ -522,7 +522,7 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    foreach my $robot (keys %{Site->robots || {}}) {
+    foreach my $robot (keys %{Site->robots_config}) {
 	
 	printf STDOUT "Doing processing for virtual robot %s...\n", $robot;
 	my ($status, $failed_for) = &admin::change_user_email(current_email => $main::options{'current_email'}, 

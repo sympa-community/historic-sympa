@@ -19,6 +19,8 @@ use overload
     'bool' => sub {1},
     '""'   => sub { croak "object Robot <$_[0]->{'name'}> is not a string"; };
 
+our %list_of_robots;
+
 =encoding utf-8
 
 =head1 NAME
@@ -47,7 +49,7 @@ sub new {
     my $name    = shift;
     my %options = @_;
 
-    $name = '*' unless defined $name and length $name;
+    ##XXX$name = '*' unless defined $name and length $name;
 
     ## load global config if needed
     Site->load(%options)
@@ -57,24 +59,22 @@ sub new {
 
     my $robot;
     ## If robot already in memory
-    if ($Site::list_of_robots{$name}) {
-
+    if ($list_of_robots{$name}) {
 	# use the current robot in memory and update it
-	$robot = $Site::list_of_robots{$name};
+	$robot = $list_of_robots{$name};
     } else {
-
 	# create a new object robot
 	$robot = bless {} => $pkg;
     }
     my $status = $robot->load($name, %options);
     unless (defined $status) {
-	delete Site->robots->{$name} if defined Site->robots;
-	delete $Site::list_of_robots{$name};
+	delete $list_of_robots{$name};
+	delete Site->robots_config->{$name};
 	return undef;
     }
 
     ## Initialize internal list cache
-##    undef %list_cache;    #FIXME
+    $robot->init_list_cache();
 
     return $robot;
 }
@@ -169,8 +169,8 @@ sub load {
 	unless ($self->domain eq $name) {
 	    &Log::do_log('err', 'Robot name "%s" is not same as domain "%s"',
 		$name, $self->domain);
-	    delete Site->robots->{$self->domain};
-	    delete $Site::list_of_robots{$name};
+	    delete $list_of_robots{$name};
+	    delete Site->robots_config->{$self->domain};
 	    return undef;
 	}
     }
@@ -189,7 +189,7 @@ sub load {
 	}
     }
 
-    $Site::list_of_robots{$name} = $self;
+    $list_of_robots{$name} = $self;
     return 1;
 }
 
@@ -296,6 +296,116 @@ sub update_email_netidmap_db {
     return List::update_netidtoemail_db($self->domain, @_);
 }
 
+=head3 Handling Memory Caches
+
+=over 4
+
+=item families ( [ NAME, [ FAMILY ] ] )
+
+Handles cached information of families on memory.
+
+I<Getter>.
+Gets cached family/ies on memory.  If memory cache is missed, returns C<undef>.
+
+I<Setter>.
+Updates memory cache.
+If C<undef> was given as FAMILY, cache entry on the memory will be removed.
+
+=back
+
+=cut
+
+sub families {
+    my $self = shift;
+    my $name = shift;
+
+    if (scalar @_) {
+	my $v = shift;
+	unless (defined $v) {
+	    delete $self->{'families'}{$name};
+	} else {
+	    $self->{'families'} ||= {};
+	    $self->{'families'}{$name} = $v;
+	}
+    }
+    $self->{'families'}{$name};
+}
+
+=over 4
+
+=item init_list_cache
+
+=back
+
+=cut
+
+sub init_list_cache {
+    my $self = shift;
+    delete $self->{'lists'};
+    delete $self->{'lists_ok'};
+}
+
+=over 4
+
+=item lists ( [ NAME, [ LIST ] ] )
+
+Handles cached information of lists on memory.
+
+I<Getter>.
+Gets cached list(s) on memory.
+
+When NAME and LIST are not given, and if lists_ok is true, returns an array of
+all cached lists.
+
+When NAME is given, returns cached list.
+If memory cache is missed, returns C<undef>.
+
+I<Setter>.
+Updates memory cache.
+If C<undef> was given as LIST, cache entry on the memory will be removed.
+
+=back
+
+=cut
+
+sub lists {
+    my $self = shift;
+    unless (scalar @_) {
+	return map { $self->{'lists'}->{$_} } sort keys %{$self->{'lists'}}
+	    if $self->{'lists_ok'};
+	return ();
+    }
+
+    my $name = shift;
+    if (scalar @_) {
+	my $v = shift;
+	unless (defined $v) {
+	    delete $self->{'lists'}{$name};
+	} else {
+	    $self->{'lists'} ||= {};
+	    $self->{'lists'}{$name} = $v;
+	}
+    }
+    $self->{'lists'}{$name};
+}
+
+=over 4
+
+=item lists_ok
+
+I<Setter>.
+XXX @todo doc
+
+=back
+
+=cut
+
+sub lists_ok {
+    my $self = shift;
+    $self->{'lists_ok'} = shift if scalar @_;
+    $self->{'lists_ok'};
+}
+
 =head3 ACCESSORS
 
 =over 4
@@ -331,7 +441,6 @@ Gets derived config parameters.
 
 =cut
 
-#XXXour $AUTOLOAD;
 ## AUTOLOAD method will be inherited from Site class
 
 sub DESTROY;
@@ -412,7 +521,6 @@ sub get_robots {
     my %orphan;
     my $got_default = 0;
     my $dir;
-    my $exiting = 0;
 
     ## load global config if needed
     Site->load(%options)
@@ -421,7 +529,7 @@ sub get_robots {
     return undef unless $Site::is_initialized;
 
     ## get all robots
-    %orphan = map { $_ => 1 } keys %{Site->robots || {}};
+    %orphan = map { $_ => 1 } keys %{Site->robots_config};
 
     unless (opendir $dir, Site->etc) {
 	&Log::do_log('err',
@@ -435,12 +543,7 @@ sub get_robots {
 	next unless -d $vhost_etc;
 	next unless -f $vhost_etc . '/robot.conf';
 
-	unless ($robot = Robot->new($name, %options)) {
-	    closedir $dir;
-	    return undef;
-	    $exiting = 1;
-	    next;
-	} else {
+	if ($robot = Robot->new($name, %options)) {
 	    $got_default = 1 if $robot->domain eq Site->domain;
 	    push @robots, $robot;
 	    delete $orphan{$robot->domain};
@@ -449,10 +552,7 @@ sub get_robots {
     closedir $dir;
 
     unless ($got_default) {
-	unless ($robot = Robot->new(Site->domain, %options)) {
-	    return undef;
-	    $exiting = 1;
-	} else {
+	if ($robot = Robot->new(Site->domain, %options)) {
 	    push @robots, $robot;
 	    delete $orphan{$robot->domain};
 	}
@@ -461,8 +561,7 @@ sub get_robots {
     ## purge orphan robots
     foreach my $domain (keys %orphan) {
 	&Log::do_log('debug3', 'removing orphan robot %s', $orphan{$domain});
-	delete Site->robots->{$domain} if defined Site->robots;
-	delete $Site::list_of_robots{$domain};
+	delete $list_of_robots{$domain};
     }
 
     return \@robots;

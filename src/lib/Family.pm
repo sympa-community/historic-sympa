@@ -49,7 +49,6 @@ use Config_XML;
 
 our @ISA = qw(Site_r); # not fully inherit Robot.
 
-my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
 
 =pod 
@@ -71,7 +70,7 @@ This is the description of the subfunctions contained by Family.pm
 
 =pod 
 
-=head2 sub get_available_families(STRING $robot)
+=head2 sub get_available_families(Robot $robot)
 
 Returns the list of existing families in the Sympa installation.
 
@@ -79,7 +78,7 @@ Returns the list of existing families in the Sympa installation.
 
 =over 
 
-=item * I<$robot>, the name of the robot the family list of which we want to get.
+=item * I<$robot>, the robot the family list of which we want to get.
 
 =back 
 
@@ -103,17 +102,13 @@ Returns the list of existing families in the Sympa installation.
 
 =cut
 
-sub get_available_families {
-    my $robot = shift;
+sub get_families {
+    my $robot = Robot::clean_robot(shift);
 
-    my %families;
+    my @families;
 
-    foreach my $dir (
-        Sympa::Constants::DEFAULTDIR . "/families",
-        Site->etc           . "/families",
-        Site->etc           . "/$robot/families"
-     ) {
-	next unless (-d $dir);
+    foreach my $dir (reverse @{$robot->make_tt2_include_path('families')}) {
+	next unless -d $dir;
 
 	unless (opendir FAMILIES, $dir) {
 	    &Log::do_log ('err', "error : can't open dir %s: %s", $dir, $!);
@@ -124,13 +119,18 @@ sub get_available_families {
 	## directory, then it is worth being added to the list.
 	foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
 	    if (my $family = new Family($subdir, $robot)) { 
-		$families{$subdir} = 1;
+		push @families, $family;
 	    }
 	}
     }
-    
-    return keys %families;
+
+    return \@families;
 }
+
+sub get_available_families {
+    return { map { $_->name => $_ } get_families() };
+}
+
 =pod 
 
 =head1 Instance methods 
@@ -202,17 +202,17 @@ sub new {
 
     my $class = shift;
     my $name = shift;
-    my $robot = shift;
+    my $robot = Robot::clean_robot(shift);
 
     my $self = {};
 
     
-    if ($list_of_families{$robot}{$name}) {
+    if ($robot->families($name)) {
         # use the current family in memory and update it
-	$self = $list_of_families{$robot}{$name};
+	$self = $robot->families($name);
 ###########
 	# the robot can be different from latest new ...
-	if ($robot eq $self->{'robot'}) {
+	if ($robot->domain eq $self->domain) {
 	    return $self;
 	}else {
 	    $self = {};
@@ -220,7 +220,7 @@ sub new {
     }
     # create a new object family
     bless $self, $class;
-    $list_of_families{$robot}{$name} = $self;
+    $robot->families($name, $self);
 
     my $family_name_regexp = &tools::get_regexp('family_name');
 
@@ -231,13 +231,13 @@ sub new {
     }
 
     ## Lowercase the family name.
-    $name =~ tr/A-Z/a-z/;
+    $name = lc $name;
     $self->{'name'} = $name;
 
-    $self->{'robot'} = $robot;
+    $self->{'robot'} = $robot->domain;
 
     ## Adding configuration related to automatic lists.
-    my $all_families_config = &Conf::get_robot_conf($robot,'automatic_list_families');
+    my $all_families_config = $robot->automatic_list_families;
     my $family_config = $all_families_config->{$name};
     foreach my $key (keys %{$family_config}) {
 	$self->{$key} = $family_config->{$key};
@@ -783,7 +783,7 @@ sub close_family {
     Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    my $family_lists = $self->get_family_lists();
+    my $family_lists = List::get_lists($self);
     my @impossible_close;
     my @close_ok;
 
@@ -1625,31 +1625,8 @@ sub get_param_constraint {
 
 Returns a ref to an array whose values are the family lists' names.
 
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<\@list_of_lists>, a ref to the array containing the family lists' names.
-
-=back 
-
-=head3 Calls
-
-=over 
-
-=item * Log::do_log
-
-=item * List::get_lists
-
-=back 
+B<DEPRECATED>.
+Use L<List/get_lists>;
 
 =cut
 
@@ -1661,19 +1638,7 @@ Returns a ref to an array whose values are the family lists' names.
 # IN  : -$self
 # OUT : -\@list_of_list 
 #########################################    
-sub get_family_lists {
-    &Log::do_log('debug2', '(%s)', @_);
-    my $self = shift;
-    my @list_of_lists;
-
-    my $all_lists = &List::get_lists($self->{'robot'});
-    foreach my $list ( @$all_lists ) {
-	if (defined $list->family_name and $list->family_name eq $self->name) {
-	    push (@list_of_lists, $list);
-	}
-    }
-    return \@list_of_lists;
-}
+##DEPRECATED: Use List::get_lists($family);
 
 =pod 
 
@@ -1720,7 +1685,7 @@ Returns a ref to a hash whose keys are this family's lists' names. They are asso
 sub get_hash_family_lists {
     &Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
-    return { ( map { $_->name => $_ } $self->get_family_lists ) };
+    return { ( map { $_->name => $_ } @{List::get_lists($self)} ) };
 }
 
 =pod 

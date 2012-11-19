@@ -886,7 +886,7 @@ sub send_file {
     $data->{'use_bulk'} = 1
 	unless ($data->{'alarm'});
     my $r =
-	&mail::mail_file($filename, $who, $data, $robot_id,
+	&mail::mail_file($filename, $who, $data, $robot,
 	$options->{'parse_and_return'});
     return $r if $options->{'parse_and_return'};
 
@@ -1187,7 +1187,6 @@ our @ISA = qw(Site_r);
 ####
 our $is_initialized;
 our $use_db;
-our %list_of_robots = ();
 
 =head3 ACCESSORS
 
@@ -1211,8 +1210,6 @@ See L<Robot/ACCESSORS>.
 =item pictures_path
 
 =item request
-
-=item robots
 
 =item robot_by_http_host
 
@@ -1257,7 +1254,7 @@ sub AUTOLOAD {
 	    generic_sso_id generic_sso_number
 	    ldap ldap_export ldap_number
 	    locale2charset nrcpt_by_domain
-	    robots robot_by_http_host robot_by_soap_url
+	    robot_by_http_host robot_by_soap_url
 	    use_passwd)
     );
 
@@ -1298,16 +1295,16 @@ sub AUTOLOAD {
 	    } elsif ($type->{'RobotParameter'}) {
 		## getters for robot parameters.
 		unless ($self->{'etc'} eq Site->etc or
-		    defined Site->robots->{$self->{'name'}}) {
+		    defined Site->robots_config->{$self->{'name'}}) {
 		    croak "Can't call method \"$attr\" on uninitialized " .
 			(ref $self) . " object";
 		}
 		croak "Can't modify \"$attr\" attribute" if scalar @_;
 
 		if ($self->{'etc'} ne Site->etc and
-		    defined Site->robots->{$self->{'name'}}{$attr}) {
+		    defined Site->robots_config->{$self->{'name'}}{$attr}) {
 		    ##FIXME: Might "exists" be used?
-		    Site->robots->{$self->{'name'}}{$attr};
+		    Site->robots_config->{$self->{'name'}}{$attr};
 		} else {
 		    Site->$attr;
 		}
@@ -1355,9 +1352,9 @@ sub listmasters {
     croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
     if (ref $self and ref $self eq 'Robot') {
 	if (wantarray) {
-	    @{Site->robots->{$self->domain}{'listmasters'} || []};
+	    @{Site->robots_config->{$self->domain}{'listmasters'} || []};
 	} else {
-	    Site->robots->{$self->domain}{'listmasters'};
+	    Site->robots_config->{$self->domain}{'listmasters'};
 	}
     } elsif ($self eq 'Site') {
 	croak "Can't call method \"listmasters\" on uninitialized $self class"
@@ -1420,6 +1417,24 @@ sub _crash_handler {
     print STDERR join "\n", "DIED: $msg", @calls;
     print STDERR "\n";
     exit 255;
+}
+
+=over 4
+
+=item robots_config
+
+Get C<'robots'> item of loaded config.
+
+I<NOT RECOMMENDED>.
+This class method is prepared for backward compatibility.
+L<Robot/get_robots> should be used.
+
+=back
+
+=cut
+
+sub robots_config {
+    return $Conf::Conf{'robots'} || {};
 }
 
 ## Packages must return true.

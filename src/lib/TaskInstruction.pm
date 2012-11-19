@@ -642,7 +642,7 @@ sub purge_tables {
     &Log::do_log('notice','%s rows removed in bulkspool_table',$removed);    
     #
     my $removed = 0;
-    foreach my $robot (keys %{Site->robots}) {
+    foreach my $robot (keys %{Site->robots_config}) {
 		my $all_lists = &List::get_lists($robot);
 		foreach my $list ( @$all_lists ) {
 			$removed += &tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
@@ -684,7 +684,7 @@ sub purge_user_table {
 	$known_people{$l} = 1;
     }
 
-    foreach my $r (keys %{Site->robots}) {
+    foreach my $r (keys %{Site->robots_config}) {
 
 		my $all_lists = &List::get_lists($r);
 		foreach my $list (@$all_lists){

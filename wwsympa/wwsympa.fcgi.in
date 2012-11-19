@@ -10916,7 +10916,7 @@ sub do_rename_list_request {
 
      ## Super listmaster can move a list to another robot
      if ($robot->is_listmaster($param->{'user'}{'email'})) {
-	 foreach (keys %{Site->robots}) {
+	 foreach (keys %{Site->robots_config}) {
 	     if ($_ eq $robot_id) {
 		 $param->{'robots'}{$_} = 'selected="selected"';
 	     }else {
@@ -17552,7 +17552,7 @@ sub do_review_family {
 	return undef;	
     }
 
-    my $all_lists = $family->get_family_lists();
+    my $all_lists = List::get_lists($family);
     foreach my $flist (@{$all_lists}) {
 	my $l = $list->name;
 	
@@ -18063,7 +18063,7 @@ sub get_server_details {
      ## All Robots are shown to super listmaster
      if (Site->is_listmaster($param->{'user'}{'email'})) {
 	 $param->{'main_robot'} = 1;
-	 $param->{'robots'} = Site->robots;
+	 $param->{'robots'} = Site->robots_config;
      }
 
      ## Families
