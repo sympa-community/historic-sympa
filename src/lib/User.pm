@@ -42,7 +42,7 @@ User - All Users Identified by Sympa
 
 =item new ( EMAIL, [ KEY => VAL, ... ] )
 
-XXX @todo doc
+Create new User object.
 
 =back
 
@@ -75,7 +75,7 @@ sub new {
 
 =item expire
 
-XXX @todo doc
+Remove user information from user_table.
 
 =back
 
@@ -89,7 +89,7 @@ sub expire {
 
 =item get_id
 
-XXX @todo doc
+Get unique identifier of object.
 
 =back
 
@@ -104,7 +104,7 @@ sub get_id {
 
 =item moveto
 
-XXX @todo doc
+Change email of user.
 
 =back
 
@@ -149,7 +149,7 @@ sub moveto {
 
 =item save
 
-XXX @todo doc
+Save user information to user_table.
 
 =back
 

@@ -867,7 +867,7 @@ Creates family lists or updates them if they exist already.
 
 =item * Family::_update_existing_list
 
-=item * Family::get_hash_family_lists
+=item * List::get_lists
 
 =item * List::new
 
@@ -906,7 +906,8 @@ sub instantiate {
     $self->state('no_check');
 	
     ## get the currently existing lists in the family
-    my $previous_family_lists = $self->get_hash_family_lists();
+    my $previous_family_lists =
+	{ ( map { $_->name => $_ } @{List::get_lists($self)} ) };
 
     ## Splits the family description XML file into a set of list description xml files
     ## and collects lists to be created in $self->{'list_to_generate'}.
@@ -1646,31 +1647,8 @@ Use L<List/get_lists>;
 
 Returns a ref to a hash whose keys are this family's lists' names. They are associated to the value "1".
 
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<\%list_of_list>, a ref to a hash the keys of which are the family's lists' names.
-
-=back 
-
-=head3 Calls
-
-=over 
-
-=item * Log::do_log
-
-=item * List::get_lists
-
-=back 
+I<DEPRECATED>.
+Use L<List/get_lists>.
 
 =cut
 
@@ -1682,11 +1660,7 @@ Returns a ref to a hash whose keys are this family's lists' names. They are asso
 # IN  : -$self
 # OUT : -\%list_of_list 
 #########################################    
-sub get_hash_family_lists {
-    &Log::do_log('debug2', '(%s)', @_);
-    my $self = shift;
-    return { ( map { $_->name => $_ } @{List::get_lists($self)} ) };
-}
+##DECPRECATED: Use List::get_lists().
 
 =pod 
 

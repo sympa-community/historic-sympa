@@ -26,6 +26,8 @@ Site - Sympa Site
 
 =cut
 
+our %robots;
+our $robots_ok;
 our %listmaster_messages_stack;
 
 =head2 INITIALIZER
@@ -76,6 +78,10 @@ sub load {
     }
 
     my $result = Conf::load_robot_conf(\%opts);
+
+    ## Robot cache must be reloaded if Site config had been reloaded.
+    Site->init_robot_cache() if !ref $self and $self eq 'Site' and $result;
+
     return undef unless defined $result;
     return $result if $opts{'return_result'};
 
@@ -1165,6 +1171,77 @@ sub send_notify_to_listmaster {
     }
 
     return 1;
+}
+
+=head3 Handling Memory Caches
+
+=over 4
+
+=item init_robot_cache
+
+Clear robot cache on memory.
+
+=back
+
+=cut
+
+sub init_robot_cache {
+    %robots    = ();
+    $robots_ok = undef;
+}
+
+=over 4
+
+=item robots ( [ NAME, [ ROBOT ] )
+
+Handles cached information of robots on memory.
+
+I<Getter>.
+Gets cached robot(s) on memory.  If memory cache is missed, returns C<undef>.
+Note: To ensure that all robots are cached, check L<robots_ok>.
+
+I<Setter>.
+Updates memory cache.
+If C<undef> was given as ROBOT, cache entry on the memory will be removed.
+
+=back
+
+=cut
+
+sub robots {
+    my $self = shift;
+    unless (scalar @_) {
+	return map { $robots{$_} } sort keys %robots;
+    }
+
+    my $name = shift;
+    if (scalar @_) {
+	my $v = shift;
+	unless (defined $v) {
+	    delete $robots{$name};
+	    delete Site->robots_config->{$name};
+	} else {
+	    $robots{$name} = $v;
+	}
+    }
+    $robots{$name};
+}
+
+=over 4
+
+=item robots_ok
+
+I<Setter>.
+XXX @todo doc
+
+=back
+
+=cut
+
+sub robots_ok {
+    my $self = shift;
+    $robots_ok = shift if scalar @_;
+    $robots_ok;
 }
 
 ###### END of the Site_r package ######

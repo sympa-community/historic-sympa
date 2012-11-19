@@ -19,8 +19,6 @@ use overload
     'bool' => sub {1},
     '""'   => sub { croak "object Robot <$_[0]->{'name'}> is not a string"; };
 
-our %list_of_robots;
-
 =encoding utf-8
 
 =head1 NAME
@@ -59,18 +57,19 @@ sub new {
 
     my $robot;
     ## If robot already in memory
-    if ($list_of_robots{$name}) {
+    if (Site->robots($name)) {
+
 	# use the current robot in memory and update it
-	$robot = $list_of_robots{$name};
+	$robot = Site->robots($name);
     } else {
+
 	# create a new object robot
 	$robot = bless {} => $pkg;
-    }
-    my $status = $robot->load($name, %options);
-    unless (defined $status) {
-	delete $list_of_robots{$name};
-	delete Site->robots_config->{$name};
-	return undef;
+	my $status = $robot->load($name, %options);
+	unless (defined $status) {
+	    Site->robots($name, undef);
+	    return undef;
+	}
     }
 
     ## Initialize internal list cache
@@ -169,8 +168,8 @@ sub load {
 	unless ($self->domain eq $name) {
 	    &Log::do_log('err', 'Robot name "%s" is not same as domain "%s"',
 		$name, $self->domain);
-	    delete $list_of_robots{$name};
-	    delete Site->robots_config->{$self->domain};
+	    Site->robots($name, undef);
+	    ##delete Site->robots_config->{$self->domain};
 	    return undef;
 	}
     }
@@ -189,7 +188,7 @@ sub load {
 	}
     }
 
-    $list_of_robots{$name} = $self;
+    Site->robots($name, $self);
     return 1;
 }
 
@@ -335,6 +334,8 @@ sub families {
 
 =item init_list_cache
 
+Clear list cache on memory.
+
 =back
 
 =cut
@@ -354,8 +355,8 @@ Handles cached information of lists on memory.
 I<Getter>.
 Gets cached list(s) on memory.
 
-When NAME and LIST are not given, and if lists_ok is true, returns an array of
-all cached lists.
+When NAME and LIST are not given, returns an array of all cached lists.
+Note: To ensure all lists are cached, check L<lists_ok>.
 
 When NAME is given, returns cached list.
 If memory cache is missed, returns C<undef>.
@@ -371,9 +372,8 @@ If C<undef> was given as LIST, cache entry on the memory will be removed.
 sub lists {
     my $self = shift;
     unless (scalar @_) {
-	return map { $self->{'lists'}->{$_} } sort keys %{$self->{'lists'}}
-	    if $self->{'lists_ok'};
-	return ();
+	return map { $self->{'lists'}->{$_} }
+	    sort keys %{$self->{'lists'} || {}};
     }
 
     my $name = shift;
@@ -528,6 +528,12 @@ sub get_robots {
 	    $options{'force_reload'};
     return undef unless $Site::is_initialized;
 
+    ## Check memory cache first.
+    if (Site->robots_ok) {
+	@robots = Site->robots;
+	return \@robots;
+    }
+
     ## get all robots
     %orphan = map { $_ => 1 } keys %{Site->robots_config};
 
@@ -560,9 +566,11 @@ sub get_robots {
 
     ## purge orphan robots
     foreach my $domain (keys %orphan) {
-	&Log::do_log('debug3', 'removing orphan robot %s', $orphan{$domain});
-	delete $list_of_robots{$domain};
+	&Log::do_log('debug3', 'removing orphan robot %s', $domain);
+	Site->robots($domain, undef);
     }
+
+    Site->robots_ok(1);
 
     return \@robots;
 }

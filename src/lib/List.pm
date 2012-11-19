@@ -10543,7 +10543,7 @@ Creation date is equal to, earlier than or later than the date (epoch).
 
 =item 'editor' => EMAIL
 
-XXX @todo doc
+Specified user is a subscriber, owner or editor of the list.
 
 =item 'name' => STRING
 
@@ -10601,7 +10601,7 @@ Available keys are:
 
 =item C<'creation'>
 
-FIXME @todo doc
+Creation date.
 
 =item C<'name'>
 
@@ -10613,7 +10613,7 @@ Estimated number of subscribers.
 
 =item C<'update'>
 
-FIXME @todo doc
+Date of last update.
 
 =back
 
@@ -10882,8 +10882,8 @@ sub get_lists {
 
     foreach my $robot (@robots) {
 	## Check on-memory cache first
-	my @all_lists;
-	if (!defined $which_role and (@all_lists = $robot->lists)) {
+	if (!defined $which_role and $robot->lists_ok) {
+	    my @all_lists = $robot->lists;
 	    ## filter list if required.
 	    my @l = ();
 	    if (defined $cond_perl) {
@@ -14033,13 +14033,8 @@ sub user {
 ##                       LIST CACHE FUNCTIONS                             ##
 ############################################################################
 
-##package ListCache;
-##
-##sub new {
-##    my $pkg = shift;
-##    my $list = shift;
-##    bless { 'list' => $list } => $pkg;
-##}
+## There below are functions to handle external caches.
+## They would like to be moved to generalized package.
 
 sub list_cache_fetch {
     my $self        = shift;
