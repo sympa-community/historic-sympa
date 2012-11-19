@@ -1,4 +1,3 @@
-# bounce-lib.pl - This module includes functions for analysing non-delivery reports
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -32,7 +31,6 @@ use Sympa::Log;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(rfc1891 corrige anabounce);
 
-## RFC1891 compliance check
 sub rfc1891 {
     my ($message, $result, $from) = @_;
     local $/ = "\n";
@@ -101,8 +99,6 @@ sub rfc1891 {
     return $nbrcpt;
 }
 
-
-## Corrige une adresse SMTP
 sub corrige {
 
     my ($adr, $from) = @_;
@@ -147,11 +143,7 @@ sub corrige {
 
     }
 }
-## Analyse d'un rapport de non-remise
-## Param 1 : descripteur du fichier contenant le bounce
-## //    2 : reference d'un hash pour retourner @ en erreur
-## //    3 : reference d'un tableau pour retourner des stats
-## //    4 : reference d'un tableau pour renvoyer le bounce
+
 sub anabounce {
 
     my ($message, $result, $from) = @_;
@@ -919,3 +911,47 @@ sub anabounce {
 }
 
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::Bounce - Bounce-related functions
+
+=head1 DESCRIPTION
+
+This module provides functions for analysing non-delivery reports.
+
+=head1 FUNCTIONS
+
+=head2 rfc1891($message, $result, $from)
+
+RFC1891 compliance check
+
+=head2 corrige($adr, $from)
+
+Corrige une adresse SMTP
+
+=head2 anabounce($message, $result, $from)
+
+Analyse d'un rapport de non-remise
+
+Parameters:
+
+=over
+
+=item
+
+descripteur du fichier contenant le bounce
+
+=item
+
+reference d'un hash pour retourner @ en erreur
+
+=item
+
+reference d'un tableau pour retourner des stats
+
+=item
+
+reference d'un tableau pour renvoyer le bounce
+
+=back
