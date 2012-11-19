@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision: 7745 $ ; $Date: 2012-10-15 18:08:04 +0200 (lun. 15 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -51,7 +50,6 @@ my %WDay2Num = (
     'friday', 5, 'saturday', 6,
 );
 
-## convert an epoch date into a readable date scalar
 sub epoch2yyyymmjj_hhmmss {
 
     my $epoch = $_[0];
@@ -61,7 +59,6 @@ sub epoch2yyyymmjj_hhmmss {
     return $date;
 }
 
-## convert an epoch date into a readable date scalar
 sub adate {
 
     my $epoch = $_[0];
@@ -71,7 +68,6 @@ sub adate {
     return $date;
 }
 
-## Return the epoch date corresponding to the last midnight before date given as argument.
 sub get_midnight_time {
 
     my $epoch = $_[0];
@@ -80,7 +76,6 @@ sub get_midnight_time {
     return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
 }
 
-## convert a human format date into an epoch date
 sub epoch_conv {
 
     my $arg = $_[0]; # argument date to convert
@@ -172,34 +167,6 @@ sub duration_conv {
     return $duration;
 }
 
-##---------------------------------------------------------------------------
-##	parse_date takes a string date specified like the output of
-##	date(1) into its components.  Parsing a string for a date is
-##	ugly since we have to watch out for differing formats.
-##
-##	The following date formats are looked for:
-##
-##	    Wdy DD Mon YY HH:MM:SS Zone
-##	    DD Mon YY HH:MM:SS Zone
-##	    Wdy Mon DD HH:MM:SS Zone YYYY
-##	    Wdy Mon DD HH:MM:SS YYYY
-##
-##	The routine keys off of the day of time field "HH:MM:SS" and
-##	scans realtive to its location.
-##
-##	If the parse fails, a null array is returned. Thus the routine
-##	may be used as follows:
-##
-##          if ( (@x = &parse_date($date)) ) { Success }
-##          else { Fail }
-##
-##	If success the array contents are as follows:
-##
-##	    (Weekday (0-6), Day of the month (1-31), Month (0-11),
-##	     Year, Hour, Minutes, Seconds, Time Zone)
-##
-##	Contributer(s): Frank J. Manion <FJ_Manion@fccc.edu>
-##
 sub parse_date {
     my($date) = $_[0];
     my($wday, $mday, $mon, $yr, $time, $hr, $min, $sec, $zone);
@@ -270,3 +237,66 @@ sub parse_date {
 }
 
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::Time - Time-related functions
+
+=head1 DESCRIPTION
+
+This module provides various time-releated functions.
+
+=head1 FUNCTIONS
+
+=head2 epoch2yyyymmjj_hhmmss($epoch)
+
+Convert an epoch date into a readable date scalar.
+
+=head2 adate($epoch)
+
+Convert an epoch date into a readable date scalar.
+
+=head2 get_midnight_time($epoch)
+
+Return the epoch date corresponding to the last midnight before date given as
+argument.
+
+=head2 epoch_conv($arg, $time)
+
+Convert a human format date into an epoch date.
+
+=head2 parse_date($date)
+
+Takes a string date specified like the output of date(1) into its components.
+Parsing a string for a date is ugly since we have to watch out for differing
+formats.
+
+The following date formats are looked for:
+
+=over
+
+=item Wdy DD Mon YY HH:MM:SS Zone
+
+=item DD Mon YY HH:MM:SS Zone
+
+=item Wdy Mon DD HH:MM:SS Zone YYYY
+
+=item Wdy Mon DD HH:MM:SS YYYY
+
+=back
+
+The routine keys off of the day of time field "HH:MM:SS" and scans realtive to
+its location.
+
+If the parse fails, a null array is returned. Thus the routine
+may be used as follows:
+
+    if ( (@x = &parse_date($date)) ) { Success }
+    else { Fail }
+
+If success the array contents are as follows:
+
+(Weekday (0-6), Day of the month (1-31), Month (0-11), Year, Hour, Minutes,
+Seconds, Time Zone)
+
+Contributer(s): Frank J. Manion <FJ_Manion@fccc.edu>
