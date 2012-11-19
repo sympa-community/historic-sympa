@@ -1,4 +1,3 @@
-# tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision: 7686 $ ; $Date: 2012-10-08 17:37:46 +0200 (lun. 08 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -48,7 +47,6 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 		      4 => 'an error occurred decrypting or verifying the message',
 		      5 => 'the message was verified correctly but an error occurred writing out the signers certificates');
 
-# input object msg and listname, output signed message object
 sub smime_sign {
     my $in_msg = shift;
     my $list = shift;
@@ -143,7 +141,6 @@ sub smime_sign {
 
     return $signed_msg;
 }
-
 
 sub smime_sign_check {
     my $message = shift;
@@ -331,7 +328,6 @@ sub smime_sign_check {
     return $is_signed;
 }
 
-# input : msg object, return a new message object encrypted
 sub smime_encrypt {
     my $msg_header = shift;
     my $msg_body = shift;
@@ -433,7 +429,6 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
     return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
 }
 
-# input : msg object for a list, return a new message object decrypted
 sub smime_decrypt {
     my $msg = shift;
     my $list = shift ; ## the recipient of the msg
@@ -551,14 +546,6 @@ sub smime_decrypt {
     return ($decryptedmsg, \$msg_as_string);
 }
 
-## find the appropriate S/MIME keys/certs for $oper in $dir.
-## $oper can be:
-## 'sign' -> return the preferred signing key/cert
-## 'decrypt' -> return a list of possible decryption keys/certs
-## 'encrypt' -> return the preferred encryption key/cert
-## returns ($certs, $keys)
-## for 'sign' and 'encrypt', these are strings containing the absolute filename
-## for 'decrypt', these are arrayrefs containing absolute filenames
 sub smime_find_keys {
     my($dir, $oper) = @_;
     &Sympa::Log::do_log('debug', '%s::smime_find_keys(%s, %s)', __PACKAGE__, $dir, $oper);
@@ -618,15 +605,6 @@ sub smime_find_keys {
     return ($certs,$keys);
 }
 
-# IN: hashref:
-# file => filename
-# text => PEM-encoded cert
-# OUT: hashref
-# email => email address from cert
-# subject => distinguished name
-# purpose => hashref
-#  enc => true if v3 purpose is encryption
-#  sign => true if v3 purpose is signing
 sub smime_parse_cert {
     my($arg) = @_;
     &Sympa::Log::do_log('debug', '%s::smime_parse_cert(%s)', __PACKAGE__, join('/',%{$arg}));
@@ -727,3 +705,97 @@ sub smime_extract_certs {
     }
 }
 1;
+__END__
+=head1 NAME
+
+Sympa::Tools::DKIM - SMIME-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing SMIME.
+
+=head1 FUNCTIONS
+
+=head2 smime_sign($in_msg, $list, $robot, $tmpdir, $key_passwd, $openssl)
+
+input object msg and listname, output signed message object
+
+=head2 smime_encrypt($msg_header, $msg_body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
+
+msg object, return a new message object encrypted
+
+=head2 smime_decrypt($msg, $list, $tmpdir, $home, $key_passwd, $openssl)
+
+msg object for a list, return a new message object decrypted
+
+=head2 smime_find_keys($dir, $oper)
+
+find the appropriate S/MIME keys/certs for $oper in $dir.
+
+$oper can be:
+
+=over
+
+=item sign
+
+Return the preferred signing key/cert
+
+=item decrypt
+
+return a list of possible decryption keys/certs
+
+=item encrypt
+
+return the preferred encryption key/cert
+
+=back
+
+returns ($certs, $keys)
+for 'sign' and 'encrypt', these are strings containing the absolute filename
+for 'decrypt', these are arrayrefs containing absolute filenames
+
+=head2 smime_parse_cert($arg)
+
+Parameters (hashref keys):
+
+=over
+
+=item I<file>
+
+filename
+
+=item I<text>
+
+PEM-encoded cert
+
+=back
+
+Returns an hashref with the following keys:
+
+=over
+
+=item I<email>
+
+email address from cert
+
+=item I<subject>
+
+distinguished name
+
+=item I<purpose>
+
+Hashref with the following keys:
+
+=over
+
+=item I<enc>
+
+true if v3 purpose is encryption
+
+=item I<sign>
+
+true if v3 purpose is signing
+
+=back
+
+=back
