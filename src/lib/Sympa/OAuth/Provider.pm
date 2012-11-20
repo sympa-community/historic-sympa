@@ -1,4 +1,3 @@
-# OAuthProvider.pm - This module implements OAuth provider facilities
 #<!-- RCS Identication ; $Revision: 7207 $ ; $Date: 2011-09-05 15:33:26 +0200 (lun 05 sep 2011) $ --> 
 
 #
@@ -20,16 +19,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<OAuthProvider.pm> - OAuth provider facilities for internal use in Sympa
+Sympa::OAuth::Provider - OAuth provider facilities for Sympa
 
 =head1 DESCRIPTION 
 
-This package provides abstraction from the OAuth workflow (server side) when getting requests for temporary/access tokens,
-handles database storage and provides helpers.
+This package provides abstraction from the OAuth workflow (server side) when
+getting requests for temporary/access tokens, handles database storage and
+provides helpers.
 
 =cut 
 
@@ -45,50 +43,34 @@ use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Tools;
 
-=pod 
+=head1 CLASS METHODS
 
-=head1 SUBFUNCTIONS 
+=head2 Sympa::OAuth::Provider->new(%parameters)
 
-This is the description of the subfunctions contained by OAuthProvider.pm
+Creates a new L<Sympa::OAuth::Provider> object.
 
-=cut 
-
-
-=pod 
-
-=head2 sub new
-
-Creates a new OAuthProvider object.
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$method>, http method
+=item * I<method>: http method
 
-=item * I<$url>, request url
+=item * I<url>: request url
 
-=item * I<$authorization_header>
+=item * I<authorization_header>
 
-=item * I<$request_parameters>
+=item * I<request_parameters>
 
-=item * I<$request_body>
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a OAuthProvider object>, if created
-
-=item * I<undef>, if something went wrong
+=item * I<request_body>
 
 =back 
+
+=head3 Return value
+
+A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 
 =cut 
 
-## Creates a new object
 sub new {
 	my $pkg = shift;
 	my %param = @_;
@@ -153,37 +135,14 @@ sub consumerFromToken {
 	return $data->{'consumer'};
 }
 
-=pod 
+# _findParameters(%parameters)
+# Seek various request aspects for parameters
+# Parameters:
+# - authorization_header
+# - request_parameters
+# - request_body
+# Returns an hashref, or undef if something went wrong
 
-=head2 sub _findParameters
-
-Seek various request aspects for parameters
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$authorization_header>
-
-=item * I<$request_parameters>
-
-=item * I<$request_body>
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>
-
-=item * I<undef>, if something went wrong
-
-=back 
-
-=cut 
-
-## Seek various request aspects for parameters
 sub _findParameters {
 	my %param = @_;
 	
@@ -210,40 +169,30 @@ sub _findParameters {
 	return $p;
 }
 
+=head1 INSTANCE METHODS
 
-=pod 
+=head2 $provider->checkRequest(%parameters)
 
-=head2 sub checkRequest
+Check if a request is valid.
 
-Check if a request is valid
-
-if(my $http_code = $provider->checkRequest()) {
+    if(my $http_code = $provider->checkRequest()) {
 	$server->error($http_code, $provider->{'util'}->errstr);
-}
+    }
 
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the OAuthProvider object to test.
-
-=item * I<$checktoken>, boolean
-
-=back 
-
-=head3 Return 
+=head3 Parameters
 
 =over 
 
-=item * I<!= 1>, if request is NOT valid (http error code)
-
-=item * I<undef>, if request is valid
+=item * I<checktoken>: boolean
 
 =back 
+
+=head3 Return value
+
+The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
 =cut 
 
-## Check if a request is valid
 sub checkRequest {
 	my $self = shift;
 	my %param = @_;
@@ -327,33 +276,24 @@ sub checkRequest {
 	return undef;
 }
 
-=pod 
+=head2 $provider->generateTemporary(%parameters)
 
-=head2 sub generateTemporary
+Create a temporary token.
 
-Create a temporary token
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthProvider object.
-
-=item * I<$authorize>, the authorization url.
+=item * I<authorize>: the authorization url
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<string> response body
-
-=back 
+The response body, as a string.
 
 =cut 
 
-## Create a temporary token
 sub generateTemporary {
 	my $self = shift;
 	my %param = @_;
@@ -384,37 +324,26 @@ sub generateTemporary {
 	return $r;
 }
 
-=pod 
-
-=head2 sub getTemporary
+=head2 $provider->getTemporary(%parameters)
 
 Retreive a temporary token from database.
 
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthProvider to use.
+=item * I<token>: the token key
 
-=item * I<$token>, the token key.
-
-=item * I<$timeout_type>, the timeout key, temporary or verifier.
+=item * I<timeout_type>: the timeout key, temporary or verifier
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=item * I<undef>, if token does not exist or is not valid anymore
-
-=back 
+An hashref, or I<undef> if the token does not exist or is not valid anymore.
 
 =cut 
 
-## Retreive a temporary token from database
 sub getTemporary {
 	my $self = shift;
 	my %param = @_;
@@ -436,37 +365,27 @@ sub getTemporary {
 	return $data;
 }
 
-=pod 
+=head2 $provider->generateVerifier(%parameters)
 
-=head2 sub generateVerifier
+Create the verifier for a temporary token.
 
-Create the verifier for a temporary token
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthProvider object.
+=item * I<token>: the token
 
-=item * I<$token>, the token.
-
-=item * I<$user>, the user.
+=item * I<user>: the user
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<string> redirect url
-
-=item * I<undef>, if token does not exist or is not valid anymore
-
-=back 
+A redirect URL, as a string, or I<undef> if the token does not exist or is not
+valid anymore.
 
 =cut 
 
-## Create the verifier for a temporary token
 sub generateVerifier {
 	my $self = shift;
 	my %param = @_;
@@ -506,37 +425,27 @@ sub generateVerifier {
 	return $r;
 }
 
-=pod 
+=head2 $provider->generateAccess(%parameters)
 
-=head2 sub generateAccess
+Create an access token.
 
-Create an access token
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthProvider object.
+=item * I<token>: the temporary token
 
-=item * I<$token>, the temporary token.
-
-=item * I<$verifier>, the verifier.
+=item * I<verifier>: the verifier
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<string> response body
-
-=item * I<undef>, if temporary token does not exist or is not valid anymore
-
-=back 
+The response body as a string, or I<undef> if the temporary token does not
+exist or is not valid anymore.
 
 =cut 
 
-## Create an access token
 sub generateAccess {
 	my $self = shift;
 	my %param = @_;
@@ -567,35 +476,25 @@ sub generateAccess {
 	return $r;
 }
 
-=pod 
-
-=head2 sub getAccess
+=head2 $provider->getAccess(%parameters)
 
 Retreive an access token from database.
 
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthProvider to use.
-
-=item * I<$token>, the token key.
+=item * I<token>: the token
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=item * I<undef>, if token does not exist or is not valid anymore
-
-=back 
+An hashref if everything's alright, or I<undef> if the token does not exist or
+is not valid anymore.
 
 =cut 
 
-## Retreive an access token from database
 sub getAccess {
 	my $self = shift;
 	my %param = @_;
@@ -616,67 +515,24 @@ sub getAccess {
 	return $data;
 }
 
-=pod 
+# _generateRandomString($size)
+#
+# Generate a random string from given size
 
-=head2 sub _generateRandomString
-
-Create a random string
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$size>, the string length.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string>
-
-=back 
-
-=cut
-
-## Generate a random string
 sub _generateRandomString {
 	return join('', map { (0..9, 'a'..'z', 'A'..'Z')[rand 62] } (1..shift));
 }
 
-=pod 
+# _getConsumerConfigFor($key)
+#
+# Retreive the configuration for a consumer, as an hashref
+#
+# the configuration file looks like:
+# # comment
+# <consumer_key>
+# secret <consumer_secret>
+# enabled 0|1
 
-=head2 sub _getConsumerConfigFor
-
-Retreive config for a consumer
-
-Config file is like :
-# comment
-
-<consumer_key>
-secret <consumer_secret>
-enabled 0|1
-
-=head3 Arguments 
-
-=over 
-
-=item * I<string>, the consumer key.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string>
-
-=back 
-
-=cut
-
-## Generate a random string
 sub _getConsumerConfigFor {
 	my $key = shift;
 	
@@ -705,7 +561,6 @@ sub _getConsumerConfigFor {
 
 ## Packages must return true.
 1;
-=pod 
 
 =head1 AUTHORS 
 

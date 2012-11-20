@@ -1,4 +1,3 @@
-# VOOTProvider.pm - This module implements VOOT provider facilities
 #<!-- RCS Identication ; $Revision: 7207 $ ; $Date: 2011-09-05 15:33:26 +0200 (lun 05 sep 2011) $ --> 
 
 #
@@ -20,11 +19,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<VOOTProvider.pm> - VOOT provider facilities for internal use in Sympa
+Sympa::VOOT::Provider - VOOT provider facilities for Sympa
 
 =head1 DESCRIPTION 
 
@@ -43,54 +40,38 @@ use Sympa::Log;
 use Sympa::OAuth::Provider;
 use Sympa::Tools;
 
-=pod 
+=head1 CLASS METHODS
 
-=head1 SUBFUNCTIONS 
+=head2 Sympa::VOOT::Provider->new(%parameters)
 
-This is the description of the subfunctions contained by VOOTProvider.pm
+Creates a new L<Sympa::VOOT::Provider> object.
 
-=cut 
-
-
-=pod 
-
-=head2 sub new
-
-Creates a new VOOTProvider object.
-
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
-=item * I<$voot_path>, VOOT path, as array
+=item * I<voot_path>: VOOT path, as array
 
-=item * I<$method>, http method
+=item * I<method>: http method
 
-=item * I<$url>, request url
+=item * I<url>: request url
 
-=item * I<$authorization_header>
+=item * I<authorization_header>
 
-=item * I<$request_parameters>
+=item * I<request_parameters>
 
-=item * I<$request_body>
+=item * I<request_body>
 
-=item * I<$robot>
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a VOOTProvider object>, if created
-
-=item * I<undef>, if something went wrong
+=item * I<robot>
 
 =back 
+
+=head3 Return value
+
+A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 
 =cut 
 
-## Creates a new object
 sub new {
 	my $pkg = shift;
 	my %param = @_;
@@ -119,38 +100,26 @@ sub getOAuthProvider {
 	return $self->{'oauth_provider'};
 }
 
+=head1 INSTANCE METHODS
 
-=pod 
+=head2 $provider->checkRequest()
 
-=head2 sub checkRequest
+Check if a request is valid.
 
-Check if a request is valid
+    if(my $http_code = $provider->checkRequest()) {
+            $server->error($http_code, $provider->getOAuthProvider()->{'util'}->errstr);
+    }
 
-if(my $http_code = $provider->checkRequest()) {
-	$server->error($http_code, $provider->getOAuthProvider()->{'util'}->errstr);
-}
+=head3 Parameters 
 
-=head3 Arguments 
+None.
 
-=over 
+=head3 Return value
 
-=item * I<$self>, the VOOTProvider object to test.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<!= 1>, if request is NOT valid (http error code)
-
-=item * I<undef>, if request is valid
-
-=back 
+The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
 =cut 
 
-## Check if a request is valid
 sub checkRequest {
 	my $self = shift;
 	my %param = @_;
@@ -169,34 +138,20 @@ sub checkRequest {
 	return undef;
 }
 
-
-=pod 
-
-=head2 sub response
+=head2 $provider->response()
 
 Respond to a request (parse url, build json), assumes that request is valid
 
-=head3 Arguments 
+=head3 Parameters 
 
-=over 
+None.
 
-=item * I<$self>, the VOOTProvider object.
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string>
-
-=item * I<undef>, if something went wrong
-
-=back 
+A string, or I<undef> if something went wrong.
 
 =cut 
 
-## Respond to a request (parse url, build json), assumes that request is valid
 sub response {
 	my $self = shift;
 	my %param = @_;
@@ -222,33 +177,20 @@ sub response {
 	return encode_json($r);
 }
 
-=pod 
+=head2 $provider->getGroups()
 
-=head2 sub getGroups
+Get user groups.
 
-Get user groups
+=head3 Parameters 
 
-=head3 Arguments 
+None.
 
-=over 
+=head3 Return value
 
-=item * None
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to an array> contains groups definitions
-
-=item * I<undef>, if something went wrong
-
-=back 
+An hashref containing groups definitions, or I<undef> if something went wrong
 
 =cut 
 
-## Get groups for user
 sub getGroups {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '%s::getGroups(%s)', __PACKAGE__, $self->{'user'});
@@ -283,35 +225,24 @@ sub _list_to_group {
 	};
 }
 
-=pod 
-
-=head2 sub getGroupMembers
+=head2 $provider->getGroupMembers(%parameters)
 
 Get members of a group.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
-=item * I<$self>, the OAuthProvider to use.
-
-=item * I<$group>, the group ID.
+=item * I<group>: the group ID.
 
 =back 
 
-=head3 Return 
+=head3 Return value 
 
-=over 
-
-=item * I<a reference to a hash> contains members definitions
-
-=item * I<undef>, if something went wrong
-
-=back 
+An hashref containing members definitions, or I<undef> if something went wrong.
 
 =cut 
 
-## Get group members
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
@@ -349,7 +280,6 @@ sub _subscriber_to_member {
 
 ## Packages must return true.
 1;
-=pod 
 
 =head1 AUTHORS 
 

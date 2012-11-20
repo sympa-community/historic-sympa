@@ -1,4 +1,3 @@
-# VOOTConsumer.pm - This module implements VOOT consumer facilities
 #<!-- RCS Identication ; $Revision: 7207 $ ; $Date: 2011-09-05 15:33:26 +0200 (lun 05 sep 2011) $ --> 
 
 #
@@ -20,16 +19,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<VOOTConsumer.pm> - VOOT consumer facilities for internal use in Sympa
+Sympa::VOOT::Consumer - VOOT consumer facilities for Sympa
 
 =head1 DESCRIPTION 
 
-This package provides abstraction for the VOOT workflow (client side),
-handles OAuth workflow if nedeed.
+This package provides abstraction for the VOOT workflow (client side), handles
+OAuth workflow if nedeed.
 
 =cut 
 
@@ -44,44 +41,28 @@ use Sympa::Log;
 use Sympa::OAuth::Consumer;
 use Sympa::Tools;
 
-=pod 
+=head1 CLASS METHODS
 
-=head1 SUBFUNCTIONS 
+=head2 Sympa::VOOT::Consumer->new(%parameters)
 
-This is the description of the subfunctions contained by VOOTConsumer.pm
+Creates a new L<Sympa::VOOT::Consumer> object.
 
-=cut 
-
-
-=pod 
-
-=head2 sub new
-
-Creates a new VOOTConsumer object.
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$user>, a user email
+=item * I<user>: a user email
 
-=item * I<$provider>, the VOOT provider key
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a VOOTConsumer object>, if created
-
-=item * I<undef>, if something went wrong
+=item * I<provider>: the VOOT provider key
 
 =back 
+
+=head3 Return value
+
+A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 
 =cut 
 
-## Creates a new object
 sub new {
 	my $pkg = shift;
 	my %param = @_;
@@ -115,33 +96,22 @@ sub getOAuthConsumer {
 	return $self->{'oauth_consumer'};
 }
 
-=pod 
+=head1 INSTANCE METHODS
 
-=head2 sub isMemberOf
+=head2 $consumer->isMemberOf()
 
-Get user groups
+Get user groups.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * None
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash> contains groups definitions
-
-=item * I<undef>, if something went wrong
-
-=back 
+An hashref containing groups definitions, or I<undef> if something went wrong.
 
 =cut 
 
-## Get groups for user
 sub isMemberOf {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '%s::isMemberOf(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'provider'});
@@ -156,35 +126,24 @@ sub check {
 	return $self->isMemberOf();
 }
 
-=pod 
-
-=head2 sub getGroupMembers
+=head2 $consumer->getGroupMembers(%parameters)
 
 Get members of a group.
 
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the OAuthConsumer to use.
-
-=item * I<$group>, the group ID.
+=item * I<group>: the group ID
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<a reference to a hash> contains members definitions
-
-=item * I<undef>, if something went wrong
-
-=back 
+An hashref containing members definitions, or I<undef> if something went wrong.
 
 =cut 
 
-## Get group members
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
@@ -196,31 +155,10 @@ sub getGroupMembers {
 	return &_get_members(decode_json($data));
 }
 
-=pod 
+# _get_groups($response)
+# Fetch groups from response items.
+# Return an hashref
 
-=head2 sub _get_groups
-
-Fetch groups from response items.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$data>, the parsed request response.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=back 
-
-=cut 
-
-## Fetch groups from response items
 sub _get_groups {
 	my $data = shift;
 	my $groups = {};
@@ -236,31 +174,10 @@ sub _get_groups {
 	return $groups;
 }
 
-=pod 
+# _get_members($response)
+# Fetch members from response items.
+# Return an hashref
 
-=head2 sub _get_members
-
-Fetch members from response items.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$data>, the parsed request response.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to an array>, if everything's alright
-
-=back 
-
-=cut 
-
-## Fetch members from response items
 sub _get_members {
 	my $data = shift;
 	my $members = [];
@@ -286,31 +203,10 @@ sub _get_members {
 	return $members;
 }
 
-=pod 
+# _get_config_for($provider)
+# Get provider information.
+# Return an hashref
 
-=head2 sub _get_config_for
-
-Get provider information.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$provider>, the provider to get info about.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=back 
-
-=cut 
-
-## Get provider information
 sub _get_config_for {
 	my $provider = shift;
 	&Sympa::Log::do_log('debug2', '%s::_get_config_for(%s)', __PACKAGE__, $provider);
@@ -332,32 +228,22 @@ sub _get_config_for {
 	return undef;
 }
 
+=head1 FUNCTIONS
 
-=pod 
-
-=head2 sub getProviders
+=head2 getProviders()
 
 List providers.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * None.
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=back 
+An hashref.
 
 =cut 
 
-## List providers
 sub getProviders {
 	&Sympa::Log::do_log('debug2', '%s::getProviders()', __PACKAGE__);
 	
@@ -381,7 +267,6 @@ sub getProviders {
 
 ## Packages must return true.
 1;
-=pod 
 
 =head1 AUTHORS 
 

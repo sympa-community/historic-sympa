@@ -44,11 +44,11 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::OAuth::Consumer->new(%params)
+=head2 Sympa::OAuth::Consumer->new(%parameters)
 
 Creates a new L<Sympa::OAuth::Consumer> object.
 
-=head3 Parameters (hash keys)
+=head3 Parameters
 
 =over 
 
@@ -138,11 +138,11 @@ sub mustRedirect {
 
 =head1 INSTANCE METHODS
 
-=head2 $object->fetchRessource(%params)
+=head2 $consumer->fetchRessource(%parameters)
 
 Check if user has an access token already and fetch ressource.
 
-=head3 parameters (hash keys)
+=head3 parameters
 
 =over 
 
@@ -197,9 +197,13 @@ sub fetchRessource {
 	return $res->decoded_content || $res->content;
 }
 
-=head2 $object->hasAccess()
+=head2 $consumer->hasAccess()
 
 Check if user has an access token already, triggers OAuth workflow otherwise
+
+=head3 Parameters
+
+None.
 
 =head3 Return value
 
@@ -221,9 +225,13 @@ sub hasAccess {
 	return $self->{'session'}{'access'};
 }
 
-=head2 $object->triggerFlow()
+=head2 $consumer->triggerFlow()
 
 Triggers OAuth authorization workflow, call only in web env.
+
+=head3 Parameters
+
+None.
 
 =head3 Return value
 
@@ -276,9 +284,19 @@ sub triggerFlow {
 	return 1;
 }
 
-=head2 head2 $object->getAccessToken(%params)
+=head2 head2 $consumer->getAccessToken(%parameters)
 
 Try to obtain access token from verifier.
+
+=head3 Parameters
+
+=over
+
+=item * I<verifier>
+
+=item * I<token>
+
+=back 
 
 =head3 Return value
 
