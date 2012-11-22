@@ -12,6 +12,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::SOAP - SOAP facilities for Sympa
+
+=head1 DESCRIPTION
+
+This package provides abstraction for the VOOT workflow (server side).
+
+=cut
+
 package Sympa::SOAP;
 
 use strict "vars";
@@ -39,6 +49,16 @@ my %types = ('listType' => {'listAddress' => 'string',
 			    'gecos' => 'string'}
 	     );
 
+=head1 CLASS METHODS
+
+=head2 Sympa::SOAP->checkCookie()
+
+=head3 Parameters
+
+None
+
+=cut
+
 sub checkCookie {
     my $class = shift;
 
@@ -54,6 +74,22 @@ sub checkCookie {
     
     return SOAP::Data->name('result')->type('string')->value($sender);
 }
+
+=head1 INSTANCE METHODS
+
+=head2 $soap->lists($topic, $subtopic, $mode)
+
+=head3 Parameters
+
+=item * I<$topic>
+
+=item * I<$subtopic>
+
+=item * I<$mode>
+
+=back
+
+=cut
 
 sub lists {
     my $self = shift; #$self is a service object
@@ -124,6 +160,20 @@ sub lists {
     return SOAP::Data->name('listInfo')->value(\@result);
 }
 
+=head1 CLASS METHODS
+
+=head2 Sympa::SOAP->login($email, $password)
+
+=head3 Parameters
+
+=item * I<$email>
+
+=item * I<$password>
+
+=back
+
+=cut
+
 sub login {
     my $class = shift;
     my $email = shift;
@@ -179,6 +229,16 @@ sub login {
     ## Also return the cookie value
     return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
 }
+
+=head2 Sympa::SOAP->casLogin($proxyTicket)
+
+=head3 Parameters
+
+=item * I<$proxyTicket>
+
+=back
+
+=cut
 
 sub casLogin {
     my $class = shift;
@@ -255,8 +315,26 @@ sub casLogin {
     return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
 }
 
-## Used to call a service as an authenticated user without using HTTP cookies
-## First parameter is the secret contained in the cookie
+=head1 INSTANCE METHODS
+
+=head2 $soap->authenticateAndRun($email, $cookie, $service, $parameters)
+
+Used to call a service as an authenticated user without using HTTP cookies.
+
+=head3 Parameters
+
+=item * I<$email>
+
+=item * I<$cookie>: secret contained in the cookie
+
+=item * I<$service>
+
+=item * I<$parameters>
+
+=back
+
+=cut
+
 sub authenticateAndRun {
     my ($self, $email, $cookie, $service, $parameters) = @_;
 
@@ -287,8 +365,19 @@ sub authenticateAndRun {
 
     &{$service}($self,@$parameters);
 }
-## request user email from http cookie
-##
+
+=head2 $soap->getUserEmailByCookie($cookie)
+
+Request user email from http cookie.
+
+=head3 Parameters
+
+=item * I<$cookie>
+
+=back
+
+=cut
+
 sub getUserEmailByCookie {
     my ($self, $cookie) = @_;
 
@@ -314,12 +403,30 @@ sub getUserEmailByCookie {
     return SOAP::Data->name('result')->type('string')->value($session->{'email'});
     
 }
-## Used to call a service from a remote proxy application
-## First parameter is the application name as defined in the trusted_applications.conf file
-##   2nd parameter is remote application password
-##   3nd a string with multiple cars definition comma separated (var=value,var=value,...) 
-##   4nd is service name requested
-##   5nd service parameters
+
+=head2 $soap->authenticateRemoteAppAndRun($appname, $apppassword, $vars, $service, $parameters)
+
+Call a service from a remote proxy application.
+
+=head3 Parameters
+
+=over
+
+=item * I<$appname>: remot application name
+
+=item * I<$apppassword>: remote application password
+
+=item * I<$vars>: comma separated list of variable definitions
+(var=value,var=value,...)
+
+=item * I<$service>: service name requested
+
+=item * I<$parameters>: service parameters
+
+=back
+
+=cut
+
 sub authenticateRemoteAppAndRun {
     my ($self, $appname, $apppassword, $vars, $service, $parameters) = @_;
     my $robot = $ENV{'SYMPA_ROBOT'};
@@ -363,6 +470,24 @@ sub authenticateRemoteAppAndRun {
     &{$service}($self,@$parameters);
 }
 
+=head1 CLASS METHODS
+
+=head2 Sympa::SOAP->amI($listname, $function, $user)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=item * I<$function>
+
+=item * I<$user>
+
+=back
+
+=cut
+
 sub amI {
   my ($class,$listname,$function,$user)=@_;
 
@@ -398,6 +523,18 @@ sub amI {
   }
 
 }
+
+=head2 Sympa::SOAP->info($listname)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=back
+
+=cut
 
 sub info {
     my $class = shift;
@@ -481,6 +618,27 @@ sub info {
 	->faultstring('Unknown requested action')
 	    ->faultdetail("%s::info: %s from %s aborted because unknown requested action in scenario",__PACKAGE__,$listname,$sender);
 }
+
+=head2 Sympa::SOAP->createList($listname, $subject, $template, $description,
+$topics)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=item * I<$subject>
+
+=item * I<$template>
+
+=item * I<$description>
+
+=item * I<$topics>
+
+=back
+
+=cut
 
 sub createList {
     my $class = shift;
@@ -604,6 +762,18 @@ sub createList {
 
 }
 
+=head2 Sympa::SOAP->closeList($listname)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=back
+
+=cut
+
 sub closeList {
     my $class = shift;
     my $listname  = shift;
@@ -660,6 +830,24 @@ sub closeList {
      }     
      return 1;
 }
+
+=head2 Sympa::SOAP->add($listname, $email, $gecos, $quiet)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=item * I<$email>
+
+=item * I<$gecos>
+
+=item * I<$quiet>
+
+=back
+
+=cut
 
 sub add {
     my $class = shift;
@@ -778,6 +966,22 @@ sub add {
     }
 }
 
+=head2 Sympa::SOAP->del($listname, $email, $quiet)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=item * I<$email>
+
+=item * I<$quiet>
+
+=back
+
+=cut
+
 sub del {
     my $class = shift;
     my $listname  = shift;
@@ -889,6 +1093,18 @@ sub del {
     return 1;
 }
 
+=head2 Sympa::SOAP->review($listname)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=back
+
+=cut
+
 sub review {
     my $class = shift;
     my $listname  = shift;
@@ -978,6 +1194,18 @@ sub review {
 	->faultstring('Unknown requested action')
 	    ->faultdetail("%s::review: %s from %s aborted because unknown requested action in scenario",__PACKAGE__,$listname,$sender);
 }
+
+=head2 Sympa::SOAP->fullReview($listname)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=back
+
+=cut
 
 sub fullReview {
 	my $class = shift;
@@ -1089,6 +1317,18 @@ sub fullReview {
 	&Sympa::Log::do_log('info', '%s::fullReview: %s from %s accepted', __PACKAGE__, $listname, $sender);
 	return SOAP::Data->name('return')->value(\@result);
 }
+
+=head2 Sympa::SOAP->signoff($listname)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=back
+
+=cut
 
 sub signoff {
     my ($class,$listname)=@_;
@@ -1204,6 +1444,20 @@ sub signoff {
       ->faultstring('Undef')
 	  ->faultdetail("Sign off %s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
+
+=head2 Sympa::SOAP->subscribe($listname, $gecos)
+
+=head3 Parameters
+
+=over
+
+=item * I<$listname>
+
+=item * I<$gecos>
+
+=back
+
+=cut
 
 sub subscribe {
   my ($class,$listname,$gecos)=@_;
@@ -1360,8 +1614,20 @@ sub subscribe {
       ->faultdetail("%s::subscribe: %s from %s aborted because unknown requested action in scenario",__PACKAGE__, $listname,$sender);
 }
 
- ## Which list the user is subscribed to 
- ## TODO (pour listmaster, toutes les listes)
+=head1 INSTANCE METHODS
+
+=head2 $soap->complexWhich()
+
+Which list the user is subscribed to.
+
+TODO: all the lists, for listmaster.
+
+=head3 Parameters
+
+None.
+
+=cut
+
  sub complexWhich {
      my $self = shift;
      my @result;
@@ -1370,6 +1636,20 @@ sub subscribe {
 
      $self->which('complex');
  }
+
+=head2 $soap->complexLists($topic, $subtopic)
+
+=head3 Parameters
+
+=over
+
+=item * I<$topic>
+
+=item * I<$subtopic>
+
+=back
+
+=cut
 
  sub complexLists {
      my $self = shift;
@@ -1382,9 +1662,22 @@ sub subscribe {
      $self->lists($topic, $subtopic, 'complex');
  }
 
-## Which list the user is subscribed to 
-## TODO (pour listmaster, toutes les listes)
-## Simplified return structure
+=head2 $soap->which($mode)
+
+Which list the user is subscribed to, with a simplified return structure.
+
+TODO: all the lists, for listmaster.
+
+=head3 Parameters
+
+=over
+
+=item * I<$mode>
+
+=back
+
+=cut
+
 sub which {
     my $self = shift;
     my $mode = shift;
@@ -1473,8 +1766,25 @@ sub which {
     return SOAP::Data->name('return')->value(\@result);
 }
 
-## Return a structure in SOAP data format
-## either flat (string) or structured (complexType)
+=head1 FUNCTIONS
+
+=head2 struct_to_soap($data, $format)
+
+Return a structure in SOAP data format
+either flat (string) or structured (complexType)
+
+=head3 Parameters
+
+=over
+
+=item * I<$data>
+
+=item * I<$format>
+
+=back
+
+=cut
+
 sub struct_to_soap {
     my ($data, $format) = @_;
     my $soap_data;
@@ -1513,6 +1823,19 @@ sub struct_to_soap {
     return $soap_data;
 }
 
+=head2 get_reason_string($data, $format)
+
+=head3 Parameters
+
+=over
+
+=item * I<$reason>
+
+=item * I<$robot>
+
+=back
+
+=cut
 
 sub get_reason_string {
     my ($reason,$robot) = @_;
