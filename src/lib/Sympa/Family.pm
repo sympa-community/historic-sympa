@@ -1,4 +1,3 @@
-# Family.pm - This module manages list families
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,17 +18,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
+=head1 NAME
 
-=head1 NAME 
-
-I<Family.pm> - Handles list families
+Sympa::Family - A list family
 
 =head1 DESCRIPTION 
 
-Sympa allows lists creation and management by sets. These are the families, sets of lists sharing common properties. This module gathers all the family-specific operations.
+Sympa allows lists creation and management by sets. These are the families,
+sets of lists sharing common properties. This module gathers all the
+family-specific operations.
 
-=cut 
+=cut
 
 package Sympa::Family;
 
@@ -51,44 +50,24 @@ use Sympa::Scenario;
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
 
-=pod 
+=head1 FUNCTIONS
 
-=head1 SUBFUNCTIONS 
-
-This is the description of the subfunctions contained by Family.pm
-
-=cut 
-
-=pod 
-
-=head1 Class methods 
-
-=cut 
-
-## Class methods
-################
-
-=pod 
-
-=head2 sub get_available_families(STRING $robot)
+=head2 get_available_families($robot)
 
 Returns the list of existing families in the Sympa installation.
 
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$robot>, the name of the robot the family list of which we want to get.
+=item * I<$robot>: the name of the robot the family list of which we want to
+get
 
 =back 
 
 =head3 Return 
 
-=over 
-
-=item * I<an array> containing all the robot's families names.
-
-=back 
+An array  containing all the robot's families names.
 
 =cut
 
@@ -120,55 +99,30 @@ sub get_available_families {
     
     return keys %families;
 }
-=pod 
 
-=head1 Instance methods 
+=head1 CLASS METHODS
 
-=cut 
+=head2 Sympa::Family->new($name, $robot)
 
-## Instance methods
-###################
+Creates a new L<Sympa::Family> object of name $name, belonging to the robot
+$robot.
 
-=pod 
+=head3 Parameters
 
-=head2 sub new(STRING $name, STRING $robot)
+=over
 
-Creates a new Family object of name $name, belonging to the robot $robot.
+=item * I<$name>: the family name
 
-=head3 Arguments 
+=item * I<$robot>: the robot which the family is/will be installed in
 
-=over 
+=back
 
-=item * I<$class>, the class in which we're supposed to create the object (namely "Family"),
+=head3 Return value
 
-=item * I<$name>, a character string containing the family name,
-
-=item * I<$robot>, a character string containing the name of the robot which the family is/will be installed in.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$self>, the Family object 
-
-=back 
+A new L<Sympa::Family> object.
 
 =cut
 
-#########################################
-# new                                   
-#########################################
-# constructor of the class Family :
-#   check family existence (required files
-#   and directory)
-#
-# IN : -$class 
-#      -$name : family name
-#      -robot : family robot
-# OUT : -$self
-#########################################
 sub new {
     my $class = shift;
     my $name = shift;
@@ -238,47 +192,30 @@ sub new {
     $self->{'state'} = 'normal';
     return $self;
 }
-     
-=pod 
 
-=head2 sub add_list(FILE_HANDLE $data, BOOLEAN $abort_on_error)
+=head1 INSTANCE METHODS
+
+=head2 $family->add_list($data, $abort_on_error)
 
 Adds a list to the family. List description can be passed either through a hash of data or through a file handle.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the Family object,
+=item * I<$data>: a file handle on an XML B<list> description file or a hash of data
 
-=item * I<$data>, a file handle on an XML B<list> description file or a hash of data,
+=item * I<$abort_on_error>: if true, the function won't create lists in status error_config
 
-=item * I<$abort_on_error>: if true, the function won't create lists in status error_config.
+=back
 
-=back 
+=head3 Return value
 
-=head3 Return 
-
-=over 
-
-=item * I<$return>, a hash containing the execution state of the method. If everything went well, the "ok" key must be associated to the value "1".
-
-=back 
+An hash containing the execution state of the method. If everything went well,
+the "ok" key must be associated to the value "1".
 
 =cut
 
-#########################################
-# add_list                                
-#########################################
-# add a list to the family under to current robot:
-# (list described by the xml file)
-#  
-# IN : -$self
-#      -$data : file handle on an xml file or hash of data
-#      -$abort_on_error : if true won't create list in status error_config
-# OUT : -$return->{'ok'} = 1(pas d'erreur fatale) or undef(erreur fatale)
-#       -$return->{'string'} : string of results 
-#########################################
 sub add_list {
     my ($self, $data, $abort_on_error) = @_;
 
@@ -388,44 +325,25 @@ sub add_list {
     return $return;
 }
 
-=pod 
-
-=head2 sub modify_list(FILE_HANDLE $fh)
+=head2 $family->modify_list($fh)
 
 Adds a list to the family.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the Family object,
+=item * I<$fh>: a file handle on the XML B<list> configuration file
 
-=item * I<$fh>, a file handle on the XML B<list> configuration file.
+=back
 
-=back 
+=head3 Return value
 
-=head3 Return 
-
-=over 
-
-=item * I<$return>, a ref to a hash containing the execution state of the method. If everything went well, the "ok" key must be associated to the value "1".
-
-=back 
+An hash containing the execution state of the method. If everything went well,
+the "ok" key must be associated to the value "1".
 
 =cut
 
-#########################################
-# modify_list                                
-#########################################
-# modify a list that belongs to the family
-#  under to current robot:
-# (the list modifications are described by the xml file)
-#  
-# IN : -$self
-#      -$fh : file handle on the xml file
-# OUT : -$return->{'ok'} = 1(pas d'erreur fatale) or undef(erreur fatale)
-#       -$return->{'string'} : string of results 
-#########################################
 sub modify_list {
     my $self = shift;
     my $fh = shift;
@@ -624,39 +542,21 @@ sub modify_list {
     return $return;
 }
 
-=pod 
-
-=head2 sub close_family()
+=head2 $family->close_family()
 
 Closes every list family.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * I<$self>, the Family object
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$string>, a character string containing a message to display describing the results of the sub.
-
-=back 
+A character string containing a message to display describing the results of
+the methods.
 
 =cut
 
-#########################################
-# close_family                                 
-#########################################
-# closure family action :
-#  - close every list family
-#  
-# IN : -$self
-# OUT : -$string
-#########################################
 sub close_family {
     my $self = shift;
     &Sympa::Log::do_log('info','(%s)',$self->{'name'});
@@ -698,48 +598,26 @@ sub close_family {
     return $string;
 }
 
-
-
-=pod 
-
-=head2 sub instantiate(FILEHANDLE $fh, BOOLEAN $close_unknown)
+=head2 $family->instantiate($fh, $close_unknown)
 
 Creates family lists or updates them if they exist already.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the Family object corresponding to the family to create / update
+=item * I<$fh>: a file handle on the XML B<list> configuration file
 
-=back 
+=item * I<$close_unknown>: if true, the function will close old lists undefined in the new instantiation
 
-=head3 Return 
+=back
 
-=over 
+=head3 Return value
 
-=item * I<$string>, a character string containing a message to display describing the results of the sub,
-
-=item * I<$fh>, a file handle on the B<family> XML file,
-
-=item * I<$close_unknown>: if true, the function will close old lists undefined in the new instantiation.
-
-=back 
+A true value, or I<undef> if something went wrong.
 
 =cut
 
-#########################################
-# instantiate                                   
-#########################################
-# instantiate family action :
-#  - create family lists if they are not
-#  - update family lists if they already exist
-#  
-# IN : -$self
-#      -$xml_fh : file handle on the xml file
-#      -$close_unknown : true if must close old lists undefined in new instantiation
-# OUT : -1 or undef
-#########################################
 sub instantiate {
     my $self = shift;
     my $xml_file = shift;
@@ -948,39 +826,20 @@ sub instantiate {
     return 1;
 }
 
-=pod 
-
-=head2 sub get_instantiation_results()
+=head2 $family->get_instantiation_results()
 
 Returns a string with informations summarizing the instantiation results.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * I<$self>, the Family object.
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$string>, a character string containing a message to display.
-
-=back 
+A string containing a message to display.
 
 =cut
 
-#########################################
-# get_instantiation_results
-#########################################
-# return a string of instantiation results
-#  
-# IN : -$self
-#
-# OUT : -$string
-#########################################
 sub get_instantiation_results {
     my ($self, $result) = @_;
     &Sympa::Log::do_log('debug3','%s::get_instantiation_results(%s)',__PACKAGE__,$self->{'name'});
@@ -1090,27 +949,21 @@ sub get_instantiation_results {
 
 }
 
-
-
-=pod 
-
-=head2 sub check_param_constraint(LIST $list)
+=head2 $family->check_param_constraint($list)
 
 Checks the parameter constraints taken from param_constraint.conf file for the List object $list.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the Family object
+=item * I<$list>: the list to check (L<Sympa::List> object)
 
-=item * I<$list>, a List object corresponding to the list to chek.
+=back
 
-=back 
+=head3 Return value
 
-=head3 Return 
-
-=over 
+=over
 
 =item * I<1> if everything goes well,
 
@@ -1118,25 +971,10 @@ Checks the parameter constraints taken from param_constraint.conf file for the L
 
 =item * I<\@error>, a ref on an array containing parameters conflicting with constraints.
 
-=back 
+=back
 
 =cut
 
-#########################################
-# check_param_constraint                                   
-#########################################
-# check the parameter constraint from 
-# param_constraint.conf file, of the given 
-# list (constraint on param digest is only on days)
-# (take care of $self->{'state'}) 
-#  
-# IN  : -$self
-#       -$list : ref on the list  
-# OUT : -1 (if ok) or 
-#        \@error (ref on array of parameters 
-#          in conflict with constraints) or 
-#        undef 
-#########################################
 sub check_param_constraint {
     my $self = shift;
     my $list = shift;
@@ -1195,39 +1033,20 @@ sub check_param_constraint {
     }
 }
 
-=pod 
-
-=head2 sub get_constraints()
+=head2 $family->get_constraints()
 
 Returns a hash containing the values found in the param_constraint.conf file.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * I<$self>, the Family object
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$self->{'param_constraint_conf'}>, a hash containing the values found in the param_constraint.conf file.
-
-=back 
+An hash containing the values found in the param_constraint.conf file.
 
 =cut
 
-#########################################
-# get_constraints
-#########################################
-# return the hash constraint from 
-# param_constraint.conf file
-#  
-# IN  : -$self
-# OUT : -$self->{'param_constraint_conf'}
-#########################################
 sub get_constraints {
     my $self = shift;
     &Sympa::Log::do_log('debug3','%s::get_constraints(%s)',__PACKAGE__,$self->{'name'});
@@ -1246,46 +1065,30 @@ sub get_constraints {
     return $self->{'param_constraint_conf'};
 }
 
-=pod 
-
-=head2 sub check_values(SCALAR $param_value, SCALAR $constraint_value)
+=head2 $family->check_values($param_value, $constraint_value)
 
 Returns 0 if all the value(s) found in $param_value appear also in $constraint_value. Otherwise the function returns an array containing the unmatching values.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the family
+=item * I<$param_value>: a scalar or a ref to a list (which is also a scalar after all)
 
-=item * I<$param_value>, a scalar or a ref to a list (which is also a scalar after all)
+=item * I<$constraint_value>: a scalar or a ref to a list
 
-=item * I<$constraint_value>, a scalar or a ref to a list
+=back
 
-=back 
+=head3 Return
 
-=head3 Return 
-
-=over 
+=over
 
 =item * I<\@error>, a ref to an array containing the values in $param_value which don't match those in $constraint_value.
 
-=back 
+=back
 
 =cut
 
-#########################################
-# check_values                                  
-#########################################
-# check the parameter value(s) with 
-# param_constraint value(s).
-#  
-# IN  : -$self
-#       -$param_value 
-#       -$constraint_value
-# OUT : -\@error (ref on array of forbidden values) 
-#        or '0' for free parameters
-#########################################
 sub check_values {
     my ($self,$param_value,$constraint_value) = @_;
     &Sympa::Log::do_log('debug3','%s::check_values()', __PACKAGE__);
@@ -1346,25 +1149,21 @@ sub check_values {
 }
 
 
-=pod 
-
-=head2 sub get_param_constraint(STRING $param)
+=head2 $family->get_param_constraint($param)
 
 Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+=over
 
-=item * I<$self>, the Family object
+=item * I<$param>: the name of the parameter for which we want to gather constraints.
 
-=item * I<$param>, a character string corresponding to the name of the parameter for which we want to gather constraints.
+=back
 
-=back 
+=head3 Return value
 
-=head3 Return 
-
-=over 
+=over
 
 =item * I<0> if there are no constraints on the parameter,
 
@@ -1374,26 +1173,10 @@ Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 
 =item * I<undef> if something went wrong.
 
-=back 
+=back
 
 =cut
 
-#########################################
-# get_param_constraint                                   
-#########################################
-# get the parameter constraint from 
-# param_constraint.conf file
-#  (constraint on param digest is only on days)
-#  
-# IN  : -$self
-#       -$param : parameter requested  
-# OUT : -'0' if the parameter is free or 
-#        the parameter value if the 
-#          parameter is fixed or
-#        a ref on a hash of possible parameter 
-#          values or 
-#        undef 
-#########################################
 sub get_param_constraint {
     my $self = shift;
     my $param  = shift;
@@ -1411,38 +1194,20 @@ sub get_param_constraint {
     }
 }
 	
-=pod 
-
-=head2 sub get_family_lists()
+=head2 $family->get_family_lists()
 
 Returns a ref to an array whose values are the family lists' names.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * I<$self>, the Family object
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<\@list_of_lists>, a ref to the array containing the family lists' names.
-
-=back 
+An arrayref containing the family lists names.
 
 =cut
 
-#########################################
-# get_family_lists                                 
-#########################################
-# return the family's lists into an array
-#  
-# IN  : -$self
-# OUT : -\@list_of_list 
-#########################################    
 sub get_family_lists {
     my $self = shift;
     my @list_of_lists;
@@ -1457,37 +1222,21 @@ sub get_family_lists {
     return \@list_of_lists;
 }
 
-=pod 
+=head2 $family->get_hash_family_lists()
 
-=head2 sub get_hash_family_lists()
+Returns a ref to a hash whose keys are this family's lists' names. They are
+associated to the value "1".
 
-Returns a ref to a hash whose keys are this family's lists' names. They are associated to the value "1".
+=head3 Parameters
 
-=head3 Arguments 
+None.
 
-=over 
+=head3 Return value
 
-=item * I<$self>, the Family object
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<\%list_of_list>, a ref to a hash the keys of which are the family's lists' names.
-
-=back 
+An hashref whose keys are the family's lists' names.
 
 =cut
 
-#########################################
-# get_hash_family_lists                                 
-#########################################
-# return the family's lists into a hash
-#  
-# IN  : -$self
-# OUT : -\%list_of_list 
-#########################################    
 sub get_hash_family_lists {
     my $self = shift;
     my %list_of_lists;
@@ -1502,40 +1251,20 @@ sub get_hash_family_lists {
     return \%list_of_lists;
 }
 
-=pod 
-
-=head2 sub get_uncompellable_param()
+=head2 $family->get_uncompellable_param()
 
 Returns a reference to hash whose keys are the uncompellable parameters.
 
-=head3 Arguments 
+=head3 Parameters
 
-=over 
+None.
 
-=item * I<none>
+=head3 Return value
 
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<\%list_of_param> a ref to a hash the keys of which are the uncompellable parameters names.
-
-=back 
+An hashref whose keys are the uncompellable parameters names.
 
 =cut
 
-#########################################
-# get_uncompellable_param
-#########################################
-# return the uncompellable parameters 
-#  into a hash
-#  
-# IN  : -
-# OUT : -\%list_of_param  
-#       
-#########################################    
 sub get_uncompellable_param {
     my %list_of_param;
     &Sympa::Log::do_log('debug3','%s::get_uncompellable_param()', __PACKAGE__);
@@ -1552,49 +1281,14 @@ sub get_uncompellable_param {
     return \%list_of_param;
 }
 
-=pod
+# $family->_get_directory()
 
-=head1 Private methods
-
-=cut
-
-############################# PRIVATE METHODS ##############################
-
-=pod 
-
-=head2 sub _get_directory()
-
-Gets the family directory, look for it in the robot, then in the site and finally in the distrib.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a string> containing the family directory name
-
-=item * I<undef> if no directory is found.
-
-=back 
-
-=cut
-
-#####################################################
-# _get_directory                                   
-#####################################################
 # get the family directory, look for it in the robot,
 # then in the site and finally in the distrib
-# IN :  -$self
-# OUT : -directory name or 
-#        undef if the directory does not exist  
-#####################################################
+#
+# Return value:
+# the directory name, or undef if the directory does not exist
+
 sub _get_directory {
     my $self = shift;
     my $robot = $self->{'robot'};
@@ -1616,44 +1310,17 @@ sub _get_directory {
 }
 
 
-=pod 
-
-=head2 sub _check_mandatory_files()
-
-Checks the existence of the mandatory files (param_constraint.conf and config.tt2) in the family directory.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the family
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$string>, a character string containing the missing file(s)' name(s), separated by white spaces.
-
-=item * I<0> if all the files are found.
-
-=back 
-
-=cut
-
-#####################################################
-# _check_mandatory_files                                   
-#####################################################
+# $family->_check_mandatory_files()
+#
 # check existence of mandatory files in the family
 # directory:
 #  - param_constraint.conf
 #  - config.tt2
 #
-# IN  : -$self
-# OUT : -0 (if OK) or 
-#        $string containing missing file names
-#####################################################
+# Return value
+# I<0> if everything is OK, the missing file names
+# otherwise
+
 sub _check_mandatory_files {
     my $self = shift;
     my $dir = $self->{'dir'};
@@ -1673,41 +1340,14 @@ sub _check_mandatory_files {
     }
 }
 
-
-
-=pod 
-
-=head2 sub _initialize_instantiation()
-
-Initializes all the values used for instantiation and results description to empty values.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1>
-
-=back 
-
-=cut
-
-#####################################################
-# _initialize_instantiation                                   
-#####################################################
+# $family->_initialize_instantiation()
+#
 # initialize vars for instantiation and result
 # then to make a string result
 #
-# IN  : -$self
-# OUT : -1 
-#####################################################
+# Return value
+# A true value
+
 sub _initialize_instantiation() {
     my $self = shift;
     &Sympa::Log::do_log('debug3','%s::_initialize_instantiation(%s)',__PACKAGE__,$self->{'name'});
@@ -1759,47 +1399,19 @@ sub _initialize_instantiation() {
 }
 
 
-=pod 
-
-=head2 sub _split_xml_file(FILE_HANDLE $xml_fh)
-
-Splits the XML family file into XML list files. New list names are put in the array referenced by $self->{'list_to_generate'} and new files are put in the family directory.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$xml_fh>, a handle to the XML B<family> description file.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1> if everything goes well
-
-=item * I<0> if something goes wrong
-
-=back 
-
-=cut
-
-#####################################################
-# _split_xml_file                                   
-#####################################################
+# $family->_split_xml_file($fh)
+#
 # split the xml family file into xml list files. New
 # list names are put in the array reference
 # $self->{'list_to_generate'} and new files are put in
 # the family directory
 #
-# IN : -$self
-#      -$xml_fh : file handle on xml file containing description
+# Parameters
+# - $fh: file handle on xml file containing description
 #               of the family lists 
-# OUT : -1 (if OK) or undef 
-#####################################################
+# Return value
+# A true value, or undef if something went wrong
+
 sub _split_xml_file {
     my $self = shift;
     my $xml_file = shift;
@@ -1874,47 +1486,17 @@ sub _split_xml_file {
     return 1;
 }
 
-=pod 
-
-=head2 sub _update_existing_list()
-
-Updates an already existing list in the new family context
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$list>, a List object corresponding to the list to update
-
-=item * I<$hash_list>, a reference to a hash containing data to create the list config file.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$list>, the updated List object, if everything goes well
-
-=item * I<undef>, if something goes wrong.
-
-=back 
-
-=cut
-
-#####################################################
-# _update_existing_list
-#####################################################
+# $family->_update_existing_list($list, $hash_list)
+#
 # update an already existing list in the new family context
 #
-# IN : -$self
-#      -$list : the list to update
-#      -hash_list : data to create the list config
+# Parameters
+# - $list: the list to update
+# - $hash_list: data to create the list config
 #
-# OUT : -$list : the new list (or undef)
-#####################################################
+# Return value
+# The new list (or undef)
+
 sub _update_existing_list {
     my ($self,$list,$hash_list) = @_;
     &Sympa::Log::do_log('debug3','%s::_update_existing_list(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
@@ -2028,58 +1610,19 @@ sub _update_existing_list {
     return $list;
 }
 
-=pod 
-
-=head2 sub _get_customizing()
-
-Gets list customizations from the config_changes file and keeps on changes allowed by param_constraint.conf
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$list>, a List object corresponding to the list we want to check
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$result>, a reference to a hash containing:
-
-=over 4
-
-=item * $result->{'config_changes'} : the list config_changes
-
-=item * $result->{'allowed'}, a hash of allowed parameters: ($param,$values)
-
-=item * $result->{'forbidden'}{'param'} = \@
-
-=item * $result->{'forbidden'}{'file'} = \@ (not working)
-
-=back
-
-=back 
-
-=cut
-
-#####################################################
-# _get_customizing                                   
-#####################################################
+# $family->_get_customizing($list)
+#
 # gets list customizing from config_changes file and
 # keep on changes that are allowed by param_constraint.conf 
 #
-# IN : -$self
-#      -$list
-# OUT :- $result->{'config_changes'} : the list config_changes
-#      - $result->{'allowed'}
-#           hash of allowed param : ($param,$values)
-#      - $result->{'forbidden'}{'param'} = \@ 
-#                              {'file'} = \@ (no working)
-#####################################################
+# Parameters
+# - $list: the list to check (Sympa::List object)
+#
+# Return value
+# An hash with the following keys:
+# - config_changes: the list config_changes
+# - allowed: hash of allowed param : ($param,$values)
+
 sub _get_customizing {
     my ($self,$list) = @_;
     &Sympa::Log::do_log('debug3','%s::_get_customizing(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
@@ -2156,57 +1699,22 @@ sub _get_customizing {
     return $result;
 }
 
-=pod 
-
-=head2 sub _set_status_changes()
-
-Sets changes (loads the users, installs or removes the aliases); deals with the new and old_status (for already existing lists).
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$list>, a List object corresponding to the list the changes of which we want to set.
-
-=item * I<$old_status>, a character string corresponding to the list status before family instantiation.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$result>, a reference to a hash containing:
-
-=over 4
-
-=item * $result->{'install_remove'} = "install" or "remove"
-
-=item * $result->{'aliases'} = 1 if install or remove is done or a string of aliases needed to be installed or removed
-
-=back
-
-=back 
-
-=cut
-
-#####################################################
-# _set_status_changes
-#####################################################
+# $family->_set_status_changes($list, $old_status)
+#
 # set changes (load the users, install or removes the
 # aliases) dealing with the new and old_status (for 
 # already existing lists)
-# IN : -$self
-#      -$list : the new list
-#      -$old_status : the list status before instantiation
-#                     family
 #
-# OUT :-$result->{'install_remove'} ='install' or 'remove'
-#      -$result->{'aliases'} = 1 (if install or remove is done) or
+# Parameters
+# - $list: the new list
+# - $old_status: the list status before instantiation family
+#
+# Return value
+# An hash with the following keys:
+# - install_remove: 'install' |  'remove'
+# - aliases: 1 (if install or remove is done) or
 #        a string of aliases needed to be installed or removed 
-#####################################################
+
 sub _set_status_changes {
     my ($self,$list,$old_status) = @_;
     &Sympa::Log::do_log('debug3','%s::_set_status_changes(%s,%s,%s)',__PACKAGE__,$self->{'name'},$list);
@@ -2254,59 +1762,19 @@ sub _set_status_changes {
     return $result;
 }
 
-
-
-=pod 
-
-=head2 sub _end_update_list()
-
-Finishes to generate a list in a family context (for a new or an already existing list). This means: checking that the list config respects the family constraints and copying its XML description file into the 'instance.xml' file contained in the list directory.  If errors occur, the list is set in status error_config.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$list>, a List object corresponding to the list we want to finish the update.
-
-=item * I<$xml_file>, a boolean:
-
-=over 4
-
-=item * if = 0, don't copy XML file (into instance.xml),
-
-=item *  if = 1, copy XML file
-
-=back
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1> if everything goes well
-
-=item * I<undef>, if something goes wrong
-
-=back 
-
-=cut
-
-#####################################################
-# _end_update_list
-#####################################################
+# $family->_end_update_list($list, $xml_file)
+#
 # finish to generate a list in a family context 
 # (for a new or an already existing list)
 # if there are error, list are set in status error_config
 #
-# IN : -$self
-#      -$list 
-#      -$xml_file : 0 (no copy xml file)or 1 (copy xml file)
+# Parameters:
+# - $list list directory
+# - $xml_file : 0 (no copy xml file)or 1 (copy xml file)
 #
-# OUT : -1 or undef
-#####################################################
+# Return value:
+# A true value, or undef if something went wrong
+
 sub _end_update_list {
     my ($self,$list,$xml_file) = @_;
     &Sympa::Log::do_log('debug3','%s::_end_update_list(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
@@ -2344,47 +1812,18 @@ sub _end_update_list {
     return 1;
 }
 
-=pod 
-
-=head2 sub _copy_files()
-
-Copies the instance.xml file into the list directory. This file contains the current list description.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=item * I<$list_dir>, a character string corresponding to the list directory
-
-=item * I<$file>, a character string corresponding to an XML file name (optional)
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1> if everything goes well
-
-=item * I<undef>, if something goes wrong
-
-=back 
-
-=cut
-
-#####################################################
-# _copy_files                                   
-#####################################################
+# $family->_copy_files($list_dir, $file)
+#
 # copy files in the list directory :
 #   - instance.xml (xml data defining list)
 #
-# IN : -$self
-#      -$list_dir list directory
-#      -$file : xml file : optional
-# OUT : -1 or undef 
-#####################################################
+# Parameters
+# - $list_dir: list directory
+# - $file : xml file : optional
+#
+# Return value
+# A true value, or undef if something went wrong
+
 sub _copy_files {
     my $self = shift;
     my $list_dir = shift;
@@ -2405,41 +1844,13 @@ sub _copy_files {
     return 1;
 }
 
-=pod 
-
-=head2 sub _load_param_constraint_conf()
-
-Loads the param_constraint.conf file into a hash
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Family object
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<$constraint>, a ref to a hash containing the data found in param_constraint.conf
-
-=item * I<undef> if something went wrong
-
-=back 
-
-=cut
-
-#########################################
-# _load_param_constraint_conf()                                   
-#########################################
-# load the param_constraint.conf file in 
-# a hash
+# $family->_load_param_constraint_conf()
+#
+# load the param_constraint.conf file in a hash
 #  
-# IN :  -$self
-# OUT : -$constraint : ref on a hash or undef
-#########################################
+# Return value
+# An hashref containing the data found in param_constraint.conf, or undef if something went wrong.
+
 sub _load_param_constraint_conf {
     my $self = shift;
     &Sympa::Log::do_log('debug2','%s::_load_param_constraint_conf(%s)',__PACKAGE__,$self->{'name'});
@@ -2539,7 +1950,12 @@ sub create_automatic_list {
     return $list;
 }
 
-# Returns 1 if the user is allowed to create lists based on the family.
+=head2 $family->is_allowed_to_create_automatic_lists(%parameters)
+
+Returns 1 if the user is allowed to create lists based on the family.
+
+=cut
+
 sub is_allowed_to_create_automatic_lists {
     my $self = shift;
     my %param = @_;
@@ -2575,8 +1991,6 @@ sub is_allowed_to_create_automatic_lists {
     
     return 1;
 }
-=pod 
-
 =head1 AUTHORS 
 
 =over 
