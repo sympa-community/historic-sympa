@@ -1,5 +1,3 @@
-# Bulk.pm - This module includes bulk mailer subroutines
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -16,6 +14,16 @@
 #
 # You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Bulk - Bulk mailer functions
+
+=head1 DESCRIPTION
+
+This module includes bulk mailer functions.
+
+=cut
 
 package Sympa::Bulk;
 
@@ -66,6 +74,12 @@ my $last_stored_message_key;
 # get next packet to process, order is controled by priority_message, then by priority_packet, then by creation date.
 # Packets marked as being sent with VERP will be treated last.
 # Next lock the packetb to prevent multiple proccessing of a single packet 
+
+=head1 FUNCTIONS
+
+=head2 next()
+
+=cut
 
 sub next {
     &Sympa::Log::do_log('debug', 'Bulk::next');
@@ -125,8 +139,12 @@ sub next {
 
 }
 
+=head2 remove($messagekey, $packetid)
 
-# remove a packet from database by packet id. return undef if packet does not exist
+Remove a packet from database by packet id. return undef if packet does not
+exist
+
+=cut
 
 sub remove {
     my $messagekey = shift;
@@ -163,9 +181,13 @@ sub messageasstring {
     }
     return $msg;
 }
-#################################"
-# fetch message from bulkspool_table by key 
-#
+
+=head2 message_from_spool($messagekey)
+
+Fetch message from bulkspool_table by key.
+
+=cut
+
 sub message_from_spool {
     my $messagekey = shift;
     &Sympa::Log::do_log('debug', '(messagekey : %s)',$messagekey);
@@ -187,19 +209,22 @@ sub message_from_spool {
 
 }
 
-############################################################
-#  merge_msg                                               #
-############################################################
-#  Merge a message with custom attributes of a user.       #
-#                                                          #
-#                                                          #
-#  IN : - MIME:Entity                                      #
-#       - $rcpt : a receipient                             #
-#       - $bulk : HASH                                     #
-#       - $data : HASH with user's data                    #
-#  OUT : 1 | undef                                         #
-#                                                          #
-############################################################
+=head2 merge_msg($entity, $rcpt, $bulk, $data)
+
+Merge a message with custom attributes of a user.
+
+=head3 Parameters
+MIME:Entity                                      #
+$rcpt : a receipient                             #
+$bulk : HASH                                     #
+$data : HASH with user's data                    #
+
+=head3 Return value
+
+1 | undef
+
+=cut
+
 sub merge_msg {
 
     my $entity = shift;
@@ -291,27 +316,26 @@ sub merge_msg {
 
 }
 
-############################################################
-#  merge_data                                              #
-############################################################
-#  This function retrieves the customized data of the      #
-#  users then parse the message. It returns the message    #
-#  personalized to bulk.pl                                 #
-#  It uses the method &Sympa::TT2::parse_tt2                      #
-#  It uses the method &Sympa::List::get_list_member_no_object     #
-#  It uses the method &Sympa::Tools::get_fingerprint              #
-#                                                          #
-# IN : - rcpt : the receipient email                       #
-#      - listname : the name of the list                   #
-#      - robot : the host                                  #
-#      - data : HASH with many data                        #
-#      - body : message with the TT2                       #
-#      - message_output : object, IO::Scalar               #
-#                                                          #
-# OUT : - message_output : customized message              #
-#     | undef                                              #
-#                                                          #
-############################################################ 
+=head2 merge_data(%parameterss)
+
+This function retrieves the customized data of the users then parse the
+message. It returns the message personalized to bulk.pl
+
+=head3 Parameters
+
+rcpt : the receipient email
+listname : the name of the list
+robot : the host
+data : HASH with many data
+body : message with the TT2
+message_output : object, IO::Scalar
+
+=head3 Return value
+- message_output : customized message              #
+    | undef                                              #
+
+=cut
+
 sub merge_data {
 
     my %params = @_;
@@ -354,7 +378,6 @@ sub merge_data {
     return 1;
 }
 
-## 
 sub store { 
     my %data = @_;
     
@@ -491,7 +514,16 @@ sub store {
     return 1;
 }
 
-## remove file that are not referenced by any packet
+=head2 purge_bulkspool()
+
+Remove file that are not referenced by any packet.
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub purge_bulkspool {
     &Sympa::Log::do_log('debug', 'purge_bulkspool');
 
@@ -526,7 +558,17 @@ sub remove_bulkspool_message {
 
     return 1;
 }
-## Return the number of remaining packets in the bulkmailer table.
+
+=head2 get_remaining_packets_count()
+
+Return the number of remaining packets in the bulkmailer table.
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub get_remaining_packets_count {
     &Sympa::Log::do_log('debug3', 'get_remaining_packets_count');
 
@@ -542,8 +584,17 @@ sub get_remaining_packets_count {
     return $result[0];
 }
 
-## Returns 1 if the number of remaining packets in the bulkmailer table exceeds
-## the value of the 'bulk_fork_threshold' config parameter.
+=head2 there_is_too_much_remaining_packets()
+
+Returns 1 if the number of remaining packets in the bulkmailer table exceeds
+the value of the 'bulk_fork_threshold' config parameter.
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub there_is_too_much_remaining_packets {
     &Sympa::Log::do_log('debug3', 'there_is_too_much_remaining_packets');
     my $remaining_packets = &get_remaining_packets_count();
@@ -554,16 +605,20 @@ sub there_is_too_much_remaining_packets {
     }
 }
 
-############################################################
-#  This function returns $random                           #
-#  which is stored in the database                         #
-#                                                          #  
-# IN : -                                                   #
-#                                                          #
-# OUT : $random : the random stored in the database        #
-#     | undef                                              #
-#                                                          #
-############################################################
+=head2 get_db_random()
+
+This function returns $random which is stored in the database.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+The random stored in the database, or I<undef> if something went wrong.
+
+=cut
+
 sub get_db_random {
     
     my $sth;
@@ -577,18 +632,21 @@ sub get_db_random {
 
 }
 
-############################################################
-#  init_db_random                                          #
-############################################################
-#  This function initializes $random used in               #
-#  get_fingerprint if there is no value in the database    #
-#                                                          #  
-# IN : -                                                   #
-#                                                          #
-# OUT : $random : the random initialized in the database   #
-#     | undef                                              #
-#                                                          #
-############################################################
+=head2 init_db_random()
+
+This function initializes $random used in get_fingerprint if there is no value
+in the database.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+The random initialized in the database, or I<undef> if something went wrong.
+
+=cut
+
 sub init_db_random {
 
     my $range = 89999999999999999999;
