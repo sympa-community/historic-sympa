@@ -1,4 +1,3 @@
-# admin.pm - This module includes administrative function for the lists
 # RCS Identication ; $Revision: 7781 $ ; $Date: 2012-10-22 17:40:42 +0200 (lun. 22 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,11 +18,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<admin.pm> - This module includes administrative function for the lists.
+Sympa::Admin - Administrative function for the lists
 
 =head1 DESCRIPTION 
 
@@ -49,89 +46,54 @@ use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
 
-=pod 
+=head1 FUNCTIONS
 
-=head1 SUBFUNCTIONS 
+=head2 create_list_old($param, $template, $robot, $origin, $user_mail)
 
-This is the description of the subfunctions contained by admin.pm 
+Creates a list, without family concept.
 
-=cut 
-
-=pod 
-
-=head2 sub create_list_old(HASHRef,STRING,STRING)
-
-Creates a list. Used by the create_list() sub in sympa.pl and the do_create_list() sub in wwsympa.fcgi.
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$param>, a ref on a hash containing parameters of the config list. The following keys are mandatory:
+=item * I<$param>: an hashref containing configuration parameters, as the
+following keys:
 
 =over 4
 
-=item - I<$param-E<gt>{'listname'}>,
+=item - I<listname>,
 
-=item - I<$param-E<gt>{'subject'}>,
+=item - I<subject>,
 
-=item - I<$param-E<gt>{'owner'}>, (or owner_include): array of hashes, with key email mandatory
+=item - I<owner>: array of hashes, with key email mandatory
 
-=item - I<$param-E<gt>{'owner_include'}>, array of hashes, with key source mandatory
+=item - I<owner_include>: array of hashes, with key source mandatory
 
 =back
 
-=item * I<$template>, a string containing the list creation template
+=item * I<$template>: the list creation template
 
-=item * I<$robot>, a string containing the name of the robot the list will be hosted by.
+=item * I<$robot>: the list robot
+
+=item * I<$origin>: the source of the command : web, soap or command_line (no
+longer used)
 
 =back 
 
-=head3 Return 
+=head3 Return value
+
+An hashref with the following keys, or I<undef> if something went wrong:
 
 =over 
 
-=item * I<undef>, if something prevents the list creation
+=item * I<list>: the just created L<Sympa::List> object
 
-=item * I<a reference to a hash>, if the list is normally created. This hash contains two keys:
-
-=over 4
-
-=item - I<list>, the list object corresponding to the list just created
-
-=item - I<aliases>, undef if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
+=item * I<aliases>: I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
 
 =back
 
-=back 
-
 =cut 
 
-########################################################
-# create_list_old                                       
-########################################################  
-# Create a list : used by sympa.pl--create_list and 
-#                 wwsympa.fcgi--do_create_list
-# without family concept
-# 
-# IN  : - $param : ref on parameters of the config list
-#         with obligatory :
-#         $param->{'listname'}
-#         $param->{'subject'}
-#         $param->{'owner'} (or owner_include): 
-#          array of hash,with key email obligatory
-#         $param->{'owner_include'} array of hash :
-#              with key source obligatory
-#       - $template : the create list template 
-#       - $robot : the list's robot       
-#       - $origin : the source of the command : web, soap or command_line  
-#              no longer used
-# OUT : - hash with keys :
-#          -list :$list
-#          -aliases : undef if not applicable; 1 (if ok) or
-#           $aliases : concated string of alias if they 
-#           are not installed or 1(in status open)
-#######################################################
 sub create_list_old{
     my ($param,$template,$robot,$origin, $user_mail) = @_;
     &Sympa::Log::do_log('debug', '%s::create_list_old(%s,%s)',__PACKAGE__,$param->{'listname'},$robot,$origin);
@@ -325,31 +287,52 @@ sub create_list_old{
    return $return;
 }
 
-########################################################
-# create_list                                      
-########################################################  
-# Create a list : used by sympa.pl--instantiate_family 
-# with family concept
-# 
-# IN  : - $param : ref on parameters of the config list
-#         with obligatory :
-#         $param->{'listname'}
-#         $param->{'subject'}
-#         $param->{'owner'} (or owner_include): 
-#          array of hash,with key email obligatory
-#         $param->{'owner_include'} array of hash :
-#              with key source obligatory
-#       - $family : the family object 
-#       - $robot : the list's robot         
-#       - $abort_on_error : won't create the list directory on
-#          tt2 process error (usefull for dynamic lists that
-#          throw exceptions)
-# OUT : - hash with keys :
-#          -list :$list
-#          -aliases : undef if not applicable; 1 (if ok) or
-#           $aliases : concated string of alias if they 
-#           are not installed or 1(in status open)
-#######################################################
+=head2 create_list($param, $family, $robot, $abort_on_error)
+
+Create a list, with family concept.
+
+=head3 Parameters
+
+=over 
+
+=item * I<$param>: an hashref containing configuration parameters, as the
+following keys:
+
+=over 4
+
+=item - I<listname>,
+
+=item - I<subject>,
+
+=item - I<owner>: array of hashes, with key email mandatory
+
+=item - I<owner_include>: array of hashes, with key source mandatory
+
+=back
+
+=item * I<$family>: the list family (L<Sympa::Family> object)
+
+=item * I<$robot>: the list robot
+
+=item * I<$abort_on_error>:  won't create the list directory on tt2 process
+error (usefull for dynamic lists that throw exceptions)
+
+=back 
+
+=head3 Return value
+
+An hashref with the following keys, or I<undef> if something went wrong:
+
+=over 
+
+=item * I<list>: the just created L<Sympa::List> object
+
+=item * I<aliases>: I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
+
+=back
+
+=cut 
+
 sub create_list{
     my ($param,$family,$robot, $abort_on_error) = @_;
     &Sympa::Log::do_log('info', '%s::create_list(%s,%s,%s)',__PACKAGE__,$param->{'listname'},$family->{'name'},$param->{'subject'});
@@ -553,26 +536,42 @@ sub create_list{
     return $return;
 }
 
-########################################################
-# update_list                                      
-########################################################  
-# update a list : used by sympa.pl--instantiate_family 
-# with family concept when the list already exists
-# 
-# IN  : - $list : the list to update
-#       - $param : ref on parameters of the new 
-#          config list with obligatory :
-#         $param->{'listname'}
-#         $param->{'subject'}
-#         $param->{'owner'} (or owner_include): 
-#          array of hash,with key email obligatory
-#         $param->{'owner_include'} array of hash :
-#              with key source obligatory
-#       - $family : the family object 
-#       - $robot : the list's robot         
-#
-# OUT : - $list : the updated list or undef
-#######################################################
+=head2 update_list($list, $param, $family, $robot)
+
+Update a list with family concept when the list already exists.
+
+=head3 Parameters
+
+=over 
+
+=item * I<$list>: the list to update
+
+=item * I<$param>: an hashref containing the new config parameters, as the following keys:
+
+=over 4
+
+=item - I<listname>,
+
+=item - I<subject>,
+
+=item - I<owner>: array of hashes, with key email mandatory
+
+=item - I<owner_include>: array of hashes, with key source mandatory
+
+=back
+
+=item * I<$family>: the list family (L<Sympa::Family> object)
+
+=item * I<$robot>: the list robot
+
+=back
+
+=head3 Return value
+
+The updated L<Sympa::List> object.
+
+=cut 
+
 sub update_list{
     my ($list,$param,$family,$robot) = @_;
     &Sympa::Log::do_log('info', '%s::update_list(%s,%s,%s)',__PACKAGE__,$param->{'listname'},$family->{'name'},$param->{'subject'});
@@ -653,30 +652,40 @@ sub update_list{
     return $list;
 }
 
-########################################################
-# rename_list                                      
-########################################################  
-# Rename a list or move a list to another virtual host
-# 
-# IN  : - list
-#       - new_listname
-#       - new_robot
-#       - mode  : 'copy' 
-#       - auth_method
-#       - user_email
-#       - remote_host
-#       - remote_addr
-#       - options : 'skip_authz' to skip authorization scenarios eval
-#       
-# OUT via reference :
-#       - aliases
-#       - status : 'pending'
-#
-# OUT : - scalar
-#           undef  : error
-#           1      : success
-#           string : error code
-#######################################################
+=head2 rename_list(%parameters)
+
+Rename a list or move a list to another virtual host.
+
+=head3 Parameters
+
+=over
+
+=item * I<list>
+
+=item * I<new_listname>
+
+=item * I<new_robot>
+
+=item * I<mode>: 'copy' 
+
+=item * I<auth_method>
+
+=item * I<user_email>
+
+=item * I<remote_host>
+
+=item * I<remote_addr>
+
+=item * I<options>: 'skip_authz' to skip authorization scenarios eval
+
+=back
+
+=head3 Return value
+      
+I<1> in case of success, an error string otherwise.
+
+=cut
+
 sub rename_list{
     my (%param) = @_;
     &Sympa::Log::do_log('info', '',);
@@ -913,20 +922,35 @@ sub rename_list{
     return 1;
   }
 
-########################################################
-# clone_list_as_empty {                          
-########################################################  
-# Clone a list config including customization, templates, scenario config
-# but without archives, subscribers and shared
-# 
-# IN  : - $source_list_name : the list to clone
-#       - $source_robot : robot of the list to clone
-#       - $new_listname : the target listname         
-#       - $new_robot : the target list's robot
-#       - $email : the email of the requestor : used in config as admin->last_update->email         
-#
-# OUT : - $list : the updated list or undef
-##
+=head2 clone_list_as_empty($source_list_name, $source_robot, $new_listname,
+$new_robot, $email)
+
+Clone a list config including customization, templates, scenario config
+but without archives, subscribers and shared
+
+=head3 Parameters
+
+=over
+
+=item * I<$source_list_name>: the list to clone
+
+=item * I<$source_robot>: robot of the list to clone
+
+=item * I<$new_listname>: the target list name         
+
+=item * I<$new_robot>: the target list robot
+
+=item * I<$email>: the email of the requestor : used in config as
+admin->last_update->email         
+
+=back
+
+=head3 Return value
+
+The updated L<Sympa::List> object.
+
+=cut
+
 sub clone_list_as_empty {
     
     my $source_list_name =shift;
@@ -998,25 +1022,29 @@ sub clone_list_as_empty {
 }
 
 
-########################################################
-# check_owner_defined                                     
-########################################################  
-# verify if they are any owner defined : it must exist
-# at least one param owner(in $owner) or one param 
-# owner_include (in $owner_include)
-# the owner param must have sub param email
-# the owner_include param must have sub param source
-# 
-# IN  : - $owner : ref on array of hash
-#                  or
-#                  ref on hash
-#       - $owner_include : ref on array of hash
-#                          or
-#                          ref on hash
-# OUT : - 1 if exists owner(s)
-#         or
-#         undef if no owner defined
-######################################################### 
+=head2 check_owner_defined($owner,$owner_include)
+
+Verify if they are any owner defined : it must exist at least one param
+owner(in I<$owner>) or one param owner_include (in I<$owner_include>) the owner
+param must have sub param email the owner_include param must have sub param
+source
+
+=head3 Parameters
+
+=over
+
+=item I<$owner>: arrayref of hashes or hashref
+
+=item I<$owner_include>: arrayref of hashes
+
+=back
+
+=head3 Return value
+
+A true value if the owner exists, I<undef> otherwise.
+
+=cut
+
 sub check_owner_defined {
     my ($owner,$owner_include) = @_;
     &Sympa::Log::do_log('debug2',"%s::check_owner_defined()", __PACKAGE__);
@@ -1092,16 +1120,26 @@ sub check_owner_defined {
 }
 
 
-#####################################################
-# list_check_smtp
-#####################################################  
-# check if the requested list exists already using 
-#   smtp 'rcpt to'
-#
-# IN  : - $list : name of the list
-#       - $robot : list's robot
-# OUT : - Net::SMTP object or 0 
-#####################################################
+=head2 list_check_smtp($list, $robot)
+
+Check if the requested list exists already using smtp 'rcpt to'
+
+=head3 Parameters
+
+=over
+
+=item * I<$list>: list name
+
+=item * I<$robot>: list robot
+
+=back
+
+=head3 Return value
+
+Net::SMTP object or 0 
+
+=cut
+
  sub list_check_smtp {
      my $list = shift;
      my $robot = shift;
@@ -1145,17 +1183,26 @@ sub check_owner_defined {
     return undef;
  }
 
+=head2 install_aliases($list, $robot)
 
-##########################################################
-# install_aliases
-##########################################################  
-# Install sendmail aliases for $list
-#
-# IN  : - $list : object list
-#       - $robot : the list's robot
-# OUT : - undef if not applicable or aliases not installed
-#         1 (if ok) or
-##########################################################
+Install sendmail aliases for I<$list>.
+
+=head3 Parameters
+
+=over
+
+=item * I<$list>: list 
+
+=item * I<$robot>: list robot
+
+=back
+
+=head3 Return value
+
+A true value if the alias have been installed, I<undef> otherwise.
+
+=cut
+
 sub install_aliases {
     my $list = shift;
     my $robot = shift;
@@ -1219,17 +1266,25 @@ sub install_aliases {
 }
 
 
-#########################################################
-# remove_aliases
-#########################################################  
-# Remove sendmail aliases for $list
-#
-# IN  : - $list : object list
-#       - $robot : the list's robot
-# OUT : - undef if not applicable
-#         1 (if ok) or
-#         $aliases : concated string of alias not removed
-#########################################################
+=head2 remove_aliases($list, $robot)
+
+Remove sendmail aliases for I<$list>.
+
+=head3 Parameters
+
+=over
+
+=item * I<$list>: list 
+
+=item * I<$robot>: list robot
+
+=back
+
+=head3 Return value
+
+I<1> in case of success, the aliases definition as a string otherwise.
+
+=cut
 
  sub remove_aliases {
      my $list = shift;
@@ -1265,16 +1320,26 @@ EOF
      return 1;
  }
 
+=head2 check_topics($topic, $robot)
 
-#####################################################
-# check_topics
-#####################################################  
-# Check $topic in the $robot conf
-#
-# IN  : - $topic : id of the topic
-#       - $robot : the list's robot
-# OUT : - 1 if the topic is in the robot conf or undef
-#####################################################
+Check $topic in the $robot conf
+
+=head3 Parameters
+
+=over
+
+=item * I<$topic>: topic id
+
+=item * I<$robot>: the list robot
+
+=back
+
+=head3 Return value
+
+A true value if the topic is in the robot conf, I<undef> otherwise.
+
+=cut
+
 sub check_topics {
     my $topic = shift;
     my $robot = shift;
@@ -1296,15 +1361,28 @@ sub check_topics {
     return undef;
 }
 
-# change a user email address for both his memberships and ownerships
-# 
-# IN  : - current_email : current user email address
-#       - new_email     : new user email address
-#       - robot         : virtual robot
-#
-# OUT : - status(scalar)          : status of the subroutine
-#       - failed_for(arrayref)    : list of lists for which the change could not be done (because user was
-#                                   included or for authorization reasons)                 
+=head2 change_user_email(%parameters)
+
+Change a user email address for both his memberships and ownerships.
+
+=head3 Parameters
+
+=over
+
+=item * I<current_email>: current user email address
+
+=item * I<new_email>: new user email address
+
+=item * I<$robot>: virtual robot
+
+=back
+
+=head3 Return value
+
+I<1>, and the list of lists for which the changes could not be achieved.
+
+=cut
+
 sub change_user_email {
     my %in = @_;
 
@@ -1423,8 +1501,6 @@ sub change_user_email {
     
     return (1,\@failed_for);
 }
-
-=pod 
 
 =head1 AUTHORS 
 
