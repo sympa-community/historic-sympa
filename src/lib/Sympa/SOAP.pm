@@ -75,9 +75,7 @@ sub checkCookie {
     return SOAP::Data->name('result')->type('string')->value($sender);
 }
 
-=head1 INSTANCE METHODS
-
-=head2 $soap->lists($topic, $subtopic, $mode)
+=head2 Sympa::SOAP->lists($topic, $subtopic, $mode)
 
 =head3 Parameters
 
@@ -92,7 +90,7 @@ sub checkCookie {
 =cut
 
 sub lists {
-    my $self = shift; #$self is a service object
+    my $class = shift;
     my $topic = shift;
     my $subtopic = shift;
     my $mode = shift;
@@ -159,8 +157,6 @@ sub lists {
     
     return SOAP::Data->name('listInfo')->value(\@result);
 }
-
-=head1 CLASS METHODS
 
 =head2 Sympa::SOAP->login($email, $password)
 
