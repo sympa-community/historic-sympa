@@ -1,4 +1,3 @@
-# Message.pm - This module includes Message processing functions
 #<!-- RCS Identication ; $Revision$ ; $Date$ --> 
 
 #
@@ -20,15 +19,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=pod 
-
 =head1 NAME 
 
-I<Message.pm> - mail message embedding for internal use in Sympa
+Sympa::Message - A mail message
 
 =head1 DESCRIPTION 
 
-While processing a message in Sympa, we need to link informations to rhe message, mdify headers and such. This was quite a problem when a message was signed, as modifying anything in the message body would alter its MD5 footprint. And probably make the message to be rejected by clients verifying its identity (which is somehow a good thing as it is the reason why people use MD5 after all). With such messages, the process was complex. We then decided to embed any message treated in a "Message" object, thus making the process easier.
+While processing a message in Sympa, we need to link informations to rhe
+message, mdify headers and such. This was quite a problem when a message was
+signed, as modifying anything in the message body would alter its MD5
+footprint. And probably make the message to be rejected by clients verifying
+its identity (which is somehow a good thing as it is the reason why people use
+MD5 after all). With such messages, the process was complex. We then
+decided to embed any message treated in a "Message" object, thus making the
+process easier.
 
 =cut 
 
@@ -50,20 +54,11 @@ use Sympa::Tools;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
 
-=pod 
+=head1 CLASS METHODS
 
-=head1 SUBFUNCTIONS 
+=head2 Sympa::Message->new()
 
-This is the description of the subfunctions contained by Message.pm
-
-=cut 
-
-
-=pod 
-
-=head2 sub new
-
-Creates a new Message object.
+Creates a new L<Sympa::Message> object.
 
 =head3 Arguments 
 
@@ -79,17 +74,10 @@ Creates a new Message object.
 
 =head3 Return 
 
-=over 
-
-=item * I<a Message object>, if created
-
-=item * I<undef>, if something went wrong
-
-=back 
+A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 
 =cut 
 
-## Creates a new object
 sub new {
     
     my $pkg =shift;
@@ -314,33 +302,24 @@ sub new {
     return $message;
 }
 
-=pod 
+=head2 $message->dump($output)
 
-=head2 sub dump
+Dump this object to a stream.
 
-Dump a Message object to a stream.
-
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the Message object to dump
-
-=item * I<$output>, the stream to which dump the object
+=item * I<$output>: the stream to which dump the object
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<1>, if everything's alright
-
-=back 
+A true value.
 
 =cut 
 
-## Dump the Message object
 sub dump {
     my ($self, $output) = @_;
 #    my $output ||= \*STDERR;
@@ -362,33 +341,24 @@ sub dump {
     return 1;
 }
 
-=pod 
-
-=head2 sub add_topic
+=head2 $message->add_topic($topic)
 
 Add topic and put header X-Sympa-Topic.
 
-=head3 Arguments 
+=head3 Parameters
 
 =over 
 
-=item * I<$self>, the Message object to which add a topic
-
-=item * I<$output>, the string containing the topic to add
+=item * I<$topic>: the topic to add
 
 =back 
 
-=head3 Return 
+=head3 Return value
 
-=over 
-
-=item * I<1>, if everything's alright
-
-=back 
+A true value.
 
 =cut 
 
-## Add topic and put header X-Sympa-Topic
 sub add_topic {
     my ($self,$topic) = @_;
 
@@ -400,33 +370,12 @@ sub add_topic {
 }
 
 
-=pod 
+=head2 sub $message->get_topic()
 
-=head2 sub add_topic
-
-Add topic and put header X-Sympa-Topic.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Message object whose topic is retrieved
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<the topic>, if it exists
-
-=item * I<empty string>, otherwise
-
-=back 
+Get topic.
 
 =cut 
 
-## Get topic
 sub get_topic {
     my ($self) = @_;
 
@@ -501,8 +450,14 @@ sub fix_html_part {
     return $part;
 }
 
-# extract body as string from msg_as_string
-# do NOT use Mime::Entity in order to preserveB64 encoding form and so preserve S/MIME signature
+=head1 FUNCTIONS
+
+=head2 get_body_from_msg_as_string($message)
+
+Extract body as string from I<$message>. Do NOT use Mime::Entity in order to
+preserveB64 encoding form and so preserve S/MIME signature.
+
+=cut 
 sub get_body_from_msg_as_string {
     my $msg =shift;
 
@@ -514,8 +469,6 @@ sub get_body_from_msg_as_string {
 
 ## Packages must return true.
 1;
-=pod 
-
 =head1 AUTHORS 
 
 =over 
