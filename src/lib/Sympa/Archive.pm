@@ -1,4 +1,3 @@
-# Archive.pm - This module does the archiving job for a mailing lists.
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,6 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Archive - Archiving functions
+
+=head1 DESCRIPTION
+
+This module does the archiving job for a mailing lists.
+
+=cut
+
 package Sympa::Archive;
 
 use strict;
@@ -36,8 +45,14 @@ my $serial_number = 0; # incremented on each archived mail
 
 ## RCS identification.
 
-## Does the real job : stores the message given as an argument into
-## the indicated directory.
+=head1 FUNCTIONS
+
+=head2 store_last($list, $msg)
+
+Does the real job : stores the message given as an argument into
+the indicated directory.
+
+=cut
 
 sub store_last {
     my($list, $msg) = @_;
@@ -65,8 +80,14 @@ sub store_last {
     
 }
 
-## Lists the files included in the archive, preformatted for printing
-## Returns an array.
+=head2 lists($name)
+
+Lists the files included in the archive, preformatted for printing.
+
+Returns an array.
+
+=cut
+
 sub list {
     my $name = shift;
 
@@ -139,17 +160,25 @@ sub scan_dir_archive {
     return $all_msg;
 }
 
-#####################################################
-#  search_msgid                  
-####################################################
-#  
-# find a message in archive specified by arcpath and msgid
-# 
-# IN : arcpath and msgid
-#
-# OUT : undef | #message in arctxt
-#
-#################################################### 
+=head2 search_msgid($dir, $msgid)
+
+Find a message in archive specified by I<$dir> and I<$msgid>.
+
+=head3 Parameters
+
+=over
+
+=item * I<$dir>
+
+=item * I<$msgid>
+
+=back
+
+=head3 Return value
+
+undef | #message in arctxt
+
+=cut
 
 sub search_msgid {
     
@@ -199,7 +228,12 @@ sub exist {
 }
 
 
-# return path for latest message distributed in the list
+=head2 last_path($list)
+    
+Return path for latest message distributed in the list.
+
+=cut
+
 sub last_path {
     
     my $list = shift;
@@ -214,8 +248,22 @@ sub last_path {
 
 }
 
-## Load an archived message, returns the mhonarc metadata
-## IN : file_path
+=head2 load_html_message(%parameters)
+
+Load an archived message, returns the mhonarc metadata
+
+=head3 Parameters
+
+=over
+
+=item * I<file_path>
+
+=back
+
+=head3 Return value
+
+=cut 
+
 sub load_html_message {
     my %parameters = @_;
 
@@ -306,11 +354,14 @@ sub clean_archived_message{
     }
 }
 
-#############################
-# convert a messsage to html. 
-#    result is stored in $destination_dir
-#    attachement_url is used to link attachement
-#    
+=head2 convert_single_msg_2_html($data)
+    
+Convert a messsage to html. 
+Result is stored in $destination_dir
+Attachement_url is used to link attachement
+
+=cut
+
 sub convert_single_msg_2_html {
     
     my $data =shift;
