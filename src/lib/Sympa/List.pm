@@ -1,4 +1,3 @@
-# list.pm - This module includes all list processing functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -17,6 +16,16 @@
 #
 # You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::List
+
+=head1 DESCRIPTION 
+
+This module includes all list processing functions.
+
+=cut
 
 package Sympa::List;
 
@@ -64,189 +73,6 @@ use Sympa::WebAgent;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
-
-=head1 CONSTRUCTOR
-
-=item new( [PHRASE] )
-
- List->new();
-
-Creates a new object which will be used for a list and
-eventually loads the list if a name is given. Returns
-a List object.
-
-=back
-
-=head1 METHODS
-
-=over 4
-
-=item load ( LIST )
-
-Loads the indicated list into the object.
-
-=item save ( LIST )
-
-Saves the indicated list object to the disk files.
-
-=item savestats ()
-
-Saves updates the statistics file on disk.
-
-=item update_stats( BYTES )
-
-Updates the stats, argument is number of bytes, returns the next
-sequence number. Does nothing if no stats.
-
-=item send_sub_to_owner ( WHO, COMMENT )
-Send a message to the list owners telling that someone
-wanted to subscribe to the list.
-
-=item send_to_editor ( MSG )
-    
-Send a Mail::Internet type object to the editor (for approval).
-
-=item send_msg ( MSG )
-
-Sends the Mail::Internet message to the list.
-
-=item send_file ( FILE, USER, GECOS )
-
-Sends the file to the USER. FILE may only be welcome for now.
-
-=item delete_list_member ( ARRAY )
-
-Delete the indicated users from the list.
- 
-=item delete_list_admin ( ROLE, ARRAY )
-
-Delete the indicated admin user with the predefined role from the list.
-
-=item get_cookie ()
-
-Returns the cookie for a list, if available.
-
-=item get_max_size ()
-
-Returns the maximum allowed size for a message.
-
-=item get_reply_to ()
-
-Returns an array with the Reply-To values.
-
-=item get_default_user_options ()
-
-Returns a default option of the list for subscription.
-
-=item get_total ()
-
-Returns the number of subscribers to the list.
-
-
-=item get_global_user ( USER )
-
-Returns a hash with the information regarding the indicated
-user.
-
-=item get_list_member ( USER )
-
-Returns a subscriber of the list.
-
-=item get_list_admin ( ROLE, USER)
-
-Return an admin user of the list with predefined role
-
-=item get_first_list_member ()
-
-Returns a hash to the first user on the list.
-
-=item get_first_list_admin ( ROLE )
-
-Returns a hash to the first admin user with predefined role on the list.
-
-=item get_next_list_member ()
-
-Returns a hash to the next users, until we reach the end of
-the list.
-
-=item get_next_list_admin ()
-
-Returns a hash to the next admin users, until we reach the end of
-the list.
-
-=item update_list_member ( USER, HASHPTR )
-
-Sets the new values given in the hash for the user.
-
-=item update_list_admin ( USER, ROLE, HASHPTR )
-
-Sets the new values given in the hash for the admin user.
-
-=item add_list_member ( USER, HASHPTR )
-
-Adds a new user to the list. May overwrite existing
-entries.
-
-=item add_admin_user ( USER, ROLE, HASHPTR )
-
-Adds a new admin user to the list. May overwrite existing
-entries.
-
-=item is_list_member ( USER )
-
-Returns true if the indicated user is member of the list.
- 
-=item am_i ( FUNCTION, USER )
-
-Returns true is USER has FUNCTION (owner, editor) on the
-list.
-
-=item get_state ( FLAG )
-
-Returns the value for a flag : sig or sub.
-
-=item may_do ( ACTION, USER )
-
-Chcks is USER may do the ACTION for the list. ACTION can be
-one of following : send, review, index, getm add, del,
-reconfirm, purge.
-
-=item is_moderated ()
-
-Returns true if the list is moderated.
-
-=item archive_exist ( FILE )
-
-Returns true if the indicated file exists.
-
-=item archive_send ( WHO, FILE )
-
-Send the indicated archive file to the user, if it exists.
-
-=item archive_ls ()
-
-Returns the list of available files, if any.
-
-=item archive_msg ( MSG )
-
-Archives the Mail::Internet message given as argument.
-
-=item is_archived ()
-
-Returns true is the list is configured to keep archives of
-its messages.
-
-=item get_stats ( OPTION )
-
-Returns either a formatted printable strings or an array whith
-the statistics. OPTION can be 'text' or 'array'.
-
-=item print_info ( FDNAME )
-
-Print the list information to the given file descriptor, or the
-currently selected descriptor.
-
-=cut
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
@@ -2295,7 +2121,15 @@ $DB_BTREE->{compare} = \&_compare_addresses;
 
 our %listmaster_messages_stack;
 
-## Creates an object.
+=head1 CLASS METHODS
+
+=head2 Sympa::List->new($name, $robot, $options)
+
+Creates a new L<Sympa::List> object, and
+eventually loads the list if a name is given.
+
+=cut
+
 sub new {
     my($pkg, $name, $robot, $options) = @_;
     my $list={};
@@ -2375,7 +2209,14 @@ sub new {
     return $list;
 }
 
-## When no robot is specified, look for a list among robots
+=head1 FUNCTIONS
+
+=head2 search_list_among_robots($listname)
+
+When no robot is specified, look for a list among robots
+
+=cut
+
 sub search_list_among_robots {
     my $listname = shift;
     
@@ -2398,7 +2239,14 @@ sub search_list_among_robots {
      return 0;
 }
 
-## set the list in status error_config and send a notify to listmaster
+=head1 INSTANCE METHODS
+
+=head2 $list->status_error_config($message, @param)
+
+set the list in status error_config and send a notify to listmaster.
+
+=cut
+
 sub set_status_error_config {
     my ($self, $message, @param) = @_;
     &Sympa::Log::do_log('debug3', '%s::set_status_error_config', __PACKAGE__);
@@ -2417,7 +2265,12 @@ sub set_status_error_config {
     }
 }
 
-## set the list in status family_closed and send a notify to owners
+=head2 $list->set_status_family_closed($message, @param)
+
+Set the list in status family_closed and send a notify to owners.
+
+=cut
+
 sub set_status_family_closed {
     my ($self, $message, @param) = @_;
     &Sympa::Log::do_log('debug2', '%s::set_status_family_closed', __PACKAGE__);
@@ -2439,7 +2292,12 @@ sub set_status_family_closed {
     return 1;
 }
 
-## Saves the statistics data to disk.
+=head2 $list->savestats()
+
+Saves updates the statistics file on disk.
+
+=cut
+
 sub savestats {
     my $self = shift;
     &Sympa::Log::do_log('debug2', '%s::savestats', __PACKAGE__);
@@ -2473,7 +2331,12 @@ sub savestats {
     return 1;
 }
 
-## msg count.
+=head2 $list->increment_msg_count()
+
+Msg count.
+
+=cut
+
 sub increment_msg_count {
     my $self = shift;
     &Sympa::Log::do_log('debug2', "%s::increment_msg_count($self->{'name'})", __PACKAGE__);
@@ -2514,7 +2377,12 @@ sub increment_msg_count {
     return 1;
 }
 
-# Returns the number of messages sent to the list
+=head2 $list->get_msg_count()
+
+Return the number of messages sent to the list.
+
+=cut
+
 sub get_msg_count {
     my $self = shift;
     &Sympa::Log::do_log('debug3', "Getting the number of messages for list %s",$self->{'name'});
@@ -2536,7 +2404,13 @@ sub get_msg_count {
     return $count;
 
 }
-## last date of distribution message .
+
+=head2 $list->get_latest_distribution_date()
+
+Rerturn the last date of distribution message.
+
+=cut
+
 sub get_latest_distribution_date {
     my $self = shift;
     &Sympa::Log::do_log('debug3', "%s::latest_distribution_date($self->{'name'})", __PACKAGE__);
@@ -2563,9 +2437,13 @@ sub get_latest_distribution_date {
     return $latest_date ;
 }
 
-## Update the stats struct 
-## Input  : num of bytes of msg
-## Output : num of msgs sent
+=head2 $list->update_stats($bytes)
+
+Updates the stats, argument is number of bytes, returns the next
+sequence number. Does nothing if no stats.
+
+=cut
+
 sub update_stats {
     my($self, $bytes) = @_;
     &Sympa::Log::do_log('debug2', '%s::update_stats(%d)', __PACKAGE__, $bytes);
@@ -2582,12 +2460,33 @@ sub update_stats {
     return $stats->[0];
 }
 
-## Extract a set of rcpt for which verp must be use from a rcpt_tab.
-## Input  :  percent : the rate of subscribers that must be threaded using verp
-##           xseq    : the message sequence number
-##           @rcpt   : a tab of emails
-## return :  a tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
-##           input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
+=head1 FUNCTIONS
+
+=head2 extract_verp_rcpt($percent, $xseq, $refrcpt, $refrcptverp)
+
+Extract a set of rcpt for which verp must be use from a rcpt_tab.
+
+=head3 Parameters
+
+=over
+
+=item * I<$percent>: the rate of subscribers that must be threaded using verp
+
+=item * I<$xseq>: the message sequence number
+
+=item * I<$refrcpt>
+
+=item * I<$refrcptverp>
+
+=back
+
+=head3 Return value
+
+A tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
+input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
+
+=cut
+
 sub extract_verp_rcpt() {
     my $percent = shift;
     my $xseq = shift;
@@ -2619,9 +2518,14 @@ sub extract_verp_rcpt() {
     return ( @result ) ;
 }
 
+=head1 INSTANCE METHODS
 
+=head2 $list->dump()
 
-## Dumps a copy of lists to disk, in text format
+Dump a copy of lists to disk, in text format
+
+=cut
+
 sub dump {
     my $self = shift;
     &Sympa::Log::do_log('debug2', '%s::dump(%s)', __PACKAGE__, $self->{'name'});
@@ -2643,7 +2547,12 @@ sub dump {
     return 1;
 }
 
-## Saves the configuration file to disk
+=head2 $list->save_config($email)
+
+Saves the configuration file to disk.
+
+=cut
+
 sub save_config {
     my ($self, $email) = @_;
     &Sympa::Log::do_log('debug3', '%s::save_config(%s,%s)', __PACKAGE__, $self->{'name'}, $email);
@@ -2705,7 +2614,12 @@ sub save_config {
     return 1;
 }
 
-## Loads the administrative data for a list
+=head2 $list->load($name, $robot, $options)
+
+Loads the administrative data for a list
+
+=cut
+
 sub load {
     my ($self, $name, $robot, $options) = @_;
     &Sympa::Log::do_log('debug2', '%s::load(%s, %s, %s)', __PACKAGE__, $name, $robot, join('/',keys %$options));
@@ -2881,7 +2795,12 @@ sub load {
     return $config_reloaded;
 }
 
-## Return a list of hash's owners and their param
+=head2 $list->get_owners()
+
+Return a list of hash's owners and their param.
+
+=cut
+
 sub get_owners {
     my($self) = @_;
     &Sympa::Log::do_log('debug3', '%s::get_owners(%s)', __PACKAGE__, $self->{'name'});
@@ -2896,6 +2815,10 @@ sub get_owners {
     return $owners;
 }
 
+=head2 $list->get_nb_owners()
+
+=cut
+
 sub get_nb_owners {
     my($self) = @_;
     &Sympa::Log::do_log('debug3', '%s::get_nb_owners(%s)', __PACKAGE__, $self->{'name'});
@@ -2909,7 +2832,12 @@ sub get_nb_owners {
     return $resul;
 }
 
-## Return a hash of list's editors and their param(empty if there isn't any editor)
+=head2 $list->get_editors()
+
+Return the list of editors, as an arrayref.
+
+=cut
+
 sub get_editors {
     my($self) = @_;
     &Sympa::Log::do_log('debug3', '%s::get_editors(%s)', __PACKAGE__, $self->{'name'});
@@ -2924,8 +2852,12 @@ sub get_editors {
     return $editors;
 }
 
+=head2 $list->get_owners_email($param)
 
-## Returns an array of owners' email addresses
+Return the list of owners email addresses.
+
+=cut
+
 sub get_owners_email {
     my($self,$param) = @_;
     &Sympa::Log::do_log('debug3', '%s::get_owners_email(%s,%s)', __PACKAGE__, $self->{'name'}, $param -> {'ignore_nomail'});
@@ -2952,8 +2884,13 @@ sub get_owners_email {
     return @rcpt;
 }
 
-## Returns an array of editors' email addresses
-#  or owners if there isn't any editors'email adress
+=head2 $list->get_editors_email($param)
+
+Return the list of editors email addresses, or owners if there isn't any
+editors.
+
+=cut
+
 sub get_editors_email {
     my($self,$param) = @_;
     &Sympa::Log::do_log('debug3', '%s::get_editors_email(%s,%s)', __PACKAGE__, $self->{'name'}, $param -> {'ignore_nomail'});
@@ -2981,8 +2918,12 @@ sub get_editors_email {
     return @rcpt;
 }
 
-## Returns an object Family if the list belongs to a family
-#  or undef
+=head2 $list->get_family()
+
+Return the family this list belongs to.
+
+=cut
+
 sub get_family {
     my $self = shift;
     &Sympa::Log::do_log('debug3', '%s::get_family(%s)', __PACKAGE__, $self->{'name'});
@@ -3011,8 +2952,13 @@ sub get_family {
     return $family;
 }
 
-## return the config_changes hash
-## Used ONLY with lists belonging to a family.
+=head2 $list->get_config_changes()
+
+return the config_changes hash
+Used ONLY with lists belonging to a family.
+
+=cut
+
 sub get_config_changes {
     my $self = shift;
     &Sympa::Log::do_log('debug3', '%s::get_config_changes(%s)', __PACKAGE__, $self->{'name'});
@@ -3033,9 +2979,13 @@ sub get_config_changes {
     return $self->{'config_changes'};
 }
 
+=head2 $list->update_config_changes($what)
 
-## update file config_changes if the list belongs to a family by
-#  writing the $what(file or param) name 
+Update file config_changes if the list belongs to a family by writing the
+$what(file or param) name.
+
+=cut
+
 sub update_config_changes {
     my $self = shift;
     my $what = shift;
@@ -3177,10 +3127,15 @@ sub _get_param_value_anywhere {
 }
 
 
-## Returns the list parameter value from $list->{'admin'}
-#  the parameter is simple ($param) or composed ($param & $minor_param)
-#  the value is a scalar or a ref on an array of scalar
-# (for parameter digest : only for days)
+=head2 $list->get_param_value($param)
+
+Returns the list parameter value from $list->{'admin'}
+the parameter is simple ($param) or composed ($param & $minor_param)
+the value is a scalar or a ref on an array of scalar
+(for parameter digest : only for days).
+
+=cut
+
 sub get_param_value {
     my $self = shift;
     my $param = shift; 
@@ -3242,37 +3197,46 @@ sub _get_single_param_value {
     }
 }
 
+=head2 $list->distribute_msg($message, $apply_dkim_signature)
 
+Prepares and distributes a message to a list, do some of these :
 
-########################################################################################
-#                       FUNCTIONS FOR MESSAGE SENDING                                  #
-########################################################################################
-#                                                                                      #
-#  -list distribution   
-#  -template sending                                                                   #
-#  -service messages
-#  -notification sending(listmaster, owner, editor, user)                              #
-#                                                                 #
+=over
 
-                                             
-#########################   LIST DISTRIBUTION  #########################################
+=item * stats
 
+=item * hidding sender
 
-####################################################
-# distribute_msg                              
-####################################################
-#  prepares and distributes a message to a list, do 
-#  some of these :
-#  stats, hidding sender, adding custom subject, 
-#  archive, changing the replyto, removing headers, 
-#  adding headers, storing message in digest
-# 
-#  
-# IN : -$self (+): ref(List)
-#      -$message (+): ref(Message)
-#      -$apply_dkim_signature : on | off
-# OUT : -$numsmtp : number of sendmail process
-####################################################
+=item * adding custom subject
+
+=item * archive
+
+=item * changing the replyto
+
+=item * removing headers
+
+=item * adding headers
+
+=item * storing message in digest
+
+=back
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>: message (L<Sympa::Message> object)
+
+=item * I<$apply_dkim_signature>: I<on> | I<off>
+
+=back
+
+=head3 Return value
+
+The number of sendmail processes.
+
+=cut
+
 sub distribute_msg {
     my $self = shift;
     my %param = @_;
@@ -3501,18 +3465,27 @@ sub distribute_msg {
     return $numsmtp;
 }
 
-####################################################
-# send_msg_digest                              
-####################################################
-# Send a digest message to the subscribers with 
-# reception digest, digestplain or summary
-# 
-# IN : -$self(+) : ref(List)
-#      $message_in_spool : an digest spool entry in database
-# OUT : 1 : ok
-#       | 0 if no subscriber for sending digest
-#       | undef
-####################################################
+=head2 $list->send_msg_digest($messagekey)
+
+Send a digest message to the subscribers with reception digest, digestplain or
+summary.
+
+
+=head3 Parameters
+
+=over
+
+=item * I<$messagekey>: a digest spool entry in database
+
+=back
+
+=head3 Return value
+
+Return <1> if everything is OK, I<0> if there is no subscriber for sending digest,
+I<undef> if something went wrong.
+
+=cut
+
 sub send_msg_digest {
     my $self = shift;
     my $messagekey = shift;
@@ -3677,35 +3650,50 @@ sub send_msg_digest {
     return 1;
 }
 
+=head1 FUNCTIONS
 
-#########################   TEMPLATE SENDING  ##########################################
+=head2 send_global_file($tpl, $who, $robot, $context, $options)
 
+Send a global (not relative to a list) message to a user. Find the tt2 file
+according to $tpl, set up $data for the next parsing (with $context and
+configuration).
 
-####################################################
-# send_global_file                              
-####################################################
-#  Send a global (not relative to a list) 
-#  message to a user.
-#  Find the tt2 file according to $tpl, set up 
-#  $data for the next parsing (with $context and
-#  configuration )
-#  
-# IN : -$tpl (+): template file name (file.tt2),
-#         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
-#      -$robot (+): robot
-#      -$context : ref(HASH) - for the $data set up 
-#         to parse file tt2, keys can be :
-#         -user : ref(HASH), keys can be :
-#           -email
-#           -lang
-#           -password
-#         -auto_submitted auto-generated|auto-replied|auto-forwarded
-#         -...
-#      -$options : ref(HASH) - options
-# OUT : 1 | undef
-#       
-####################################################
+=head3 Parameters
+
+=over
+
+=item * I<$tpl>: template file name, without extension
+
+=item * I<$who>: recipient(s)
+
+=item * I<$robot>: robot
+
+=item * I<$context>: context (hashref), with the following keys:
+
+=over
+
+=item - I<user>
+
+=item - I<lang>
+
+=back
+
+=item * I<$options>: options (hashref), with the following keys:
+
+=over
+
+=item - I<parse_and_return>
+
+=back
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_global_file {
     my($tpl, $who, $robot, $context, $options) = @_;
     &Sympa::Log::do_log('debug2', '%s::send_global_file(%s, %s, %s)', __PACKAGE__, $tpl, $who, $robot);
@@ -3777,31 +3765,42 @@ sub send_global_file {
     return 1;
 }
 
-####################################################
-# send_file                              
-####################################################
-#  Send a message to a user, relative to a list.
-#  Find the tt2 file according to $tpl, set up 
-#  $data for the next parsing (with $context and
-#  configuration)
-#  Message is signed if the list has a key and a 
-#  certificate
-#  
-# IN : -$self (+): ref(List)
-#      -$tpl (+): template file name (file.tt2),
-#         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
-#      -$robot (+): robot
-#      -$context : ref(HASH) - for the $data set up 
-#         to parse file tt2, keys can be :
-#         -user : ref(HASH), keys can be :
-#           -email
-#           -lang
-#           -password
-#         -auto_submitted auto-generated|auto-replied|auto-forwarded
-#         -...
-# OUT : 1 | undef
-####################################################
+=head1 INSTANCE METHODS
+
+=head2 $list->send_file($tpl, $who, $robot, $context)
+
+Send a message to a user, relative to a list. Find the tt2 file according to
+$tpl, set up $data for the next parsing (with $context and configuration).
+Message is signed if the list has a key and a certificate.
+
+=head3 Parameters
+
+=over
+
+=item * I<$tpl>: template file name, without extension
+
+=item * I<$who>: recipient(s)
+
+=item * I<$robot>: robot
+
+=item * I<$context>: context (hashref), with the following keys:
+
+=over
+
+=item - I<user>
+
+=item - I<lang>
+
+=back
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_file {
     my($self, $tpl, $who, $robot, $context) = @_;
     &Sympa::Log::do_log('debug2', '%s::send_file(%s, %s, %s)', __PACKAGE__, $tpl, $who, $robot);
@@ -3935,22 +3934,32 @@ sub send_file {
     return 1;
 }
 
-####################################################
-# send_msg                              
-####################################################
-# selects subscribers according to their reception 
-# mode in order to distribute a message to a list
-# and sends the message to them. For subscribers in reception mode 'mail', 
-# and in a msg topic context, selects only one who are subscribed to the topic
-# of the message.
-# 
-#  
-# IN : -$self (+): ref(List)  
-#      -$message (+): ref(Message)
-# OUT : -$numsmtp : number of sendmail process 
-#       | 0 : no subscriber for sending message in list
-#       | undef 
-####################################################
+=head2 $list->send_msg(%parameters)
+
+Selects subscribers according to their reception mode in order to distribute a
+message to a list and sends the message to them. For subscribers in reception
+mode 'mail', and in a msg topic context, selects only one who are subscribed to
+the topic of the message.
+
+=head3 Parameters
+
+=over
+
+=item * I<message>: the message to send (L<Sympa::Message> object)
+
+=item * I<apply_dkim_signature>
+
+=item * I<apply_tracking>
+
+=back
+
+=head3 Return value
+
+The number of sendmail processes, or I<0> if they are no subscriber for sending
+message in list.
+
+=cut
+
 sub send_msg {
 
     my $self = shift;
@@ -4333,25 +4342,31 @@ sub send_msg {
     return $nbr_smtp;
 }
 
-#########################   SERVICE MESSAGES   ##########################################
+=head2 $list->send_to_editor($method, $message)
 
-###############################################################
-# send_to_editor
-###############################################################
-# Sends a message to the list editor to ask him for moderation 
-# ( in moderation context : editor or editorkey). The message 
-# to moderate is set in spool queuemod with name containing
-# a key (reference send to editor for moderation)
-# In context of msg_topic defined the editor must tag it 
-# for the moderation (on Web interface)
-#  
-# IN : -$self(+) : ref(List)
-#      -$method : 'md5' - for "editorkey" | 'smtp' - for "editor"
-#      -$message(+) : ref(Message) - the message to moderatte
-# OUT : $modkey : the moderation key for naming message waiting 
-#         for moderation in spool queuemod
-#       | undef
-#################################################################
+Sends a message to the list editor to ask him for moderation (in moderation
+context : editor or editorkey). The message to moderate is set in spool
+queuemod with name containing a key (reference send to editor for moderation)
+In context of msg_topic defined the editor must tag it for the moderation (on
+Web interface).
+
+=head3 Parameters
+
+=over
+
+=item * I<$method>: I<'md5'> for "editorkey" | I<'smtp'> for "editor"
+
+=item * I<$message>: the message to moderate (L<Sympa::Message> object)
+
+=back
+
+=head3 Return value
+
+The key for the message waiting for moderation in moderation spool, or I<undef>
+if something went wrong.
+
+=cut
+
 sub send_to_editor {
    my($self, $method, $message) = @_;
    my $msg = $message->{'msg'};
@@ -4450,23 +4465,28 @@ sub send_to_editor {
    return $modkey;
 }
 
-####################################################
-# send_auth                              
-####################################################
-# Sends an authentication request for a sent message to distribute.
-# The message for distribution is copied in the authqueue 
-# spool in order to wait for confirmation by its sender.
-# This message is named with a key.
-# In context of msg_topic defined, the sender must tag it 
-# for the confirmation
-#  
-# IN : -$self (+): ref(List)
-#      -$message (+): ref(Message)
-#
-# OUT : $authkey : the key for naming message waiting 
-#         for confirmation (or tagging) in spool queueauth
-#       | undef
-####################################################
+=head3 $list->send_auth(message))
+
+Sends an authentication request for a sent message to distribute. The message
+for distribution is copied in the authqueue spool in order to wait for
+confirmation by its sender. This message is named with a key. In context of
+msg_topic defined, the sender must tag it for the confirmation.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>: the message to authenticate (L<Sympa::Message> object)
+
+=back
+
+=head3 Return value
+
+The key for the message waiting for confirmation (or tagging) in authentication
+spool, or I<undef> if something went wrong.
+
+=cut
+
 sub send_auth {
    my($self, $message) = @_;
    my ($sender, $msg, $file) = ($message->{'sender'}, $message->{'msg'}, $message->{'filename'});
@@ -4530,6 +4550,7 @@ sub send_auth {
 # OUT : 1 | undef
 #
 ####################################################
+# FIXME: awful interface
 sub request_auth {
     &Sympa::Log::do_log('debug2', '%s::request_auth(%s, %s, %s, %s)', __PACKAGE__, @_);
     my $first_param = shift;
@@ -4612,19 +4633,26 @@ sub request_auth {
     return 1;
 }
 
+=head2 $list->archive_send($who, $file)
 
-####################################################
-# archive_send                              
-####################################################
-# sends an archive file to someone (text archive
-# file : independant from web archives)
-#  
-# IN : -$self(+) : ref(List)
-#      -$who(+) : recepient
-#      -file(+) : name of the archive file to send
-# OUT : - | undef
-#
-######################################################
+Send the indicated archive file to the user, if it exists.
+
+=head3 Parameters
+
+=over
+
+=item * I<$who>: recipient
+
+=item * I<$file>: archive file to send
+
+=back
+
+=head3 Return value
+
+I<undef> if something went wrong.
+
+=cut
+
 sub archive_send {
    my($self, $who, $file) = @_;
    &Sympa::Log::do_log('debug', '%s::archive_send(%s, %s)', __PACKAGE__, $who, $file);
@@ -4652,16 +4680,22 @@ $param->{'auto_submitted'} = 'auto-replied';
 
 }
 
-####################################################
-# archive_send_last                              
-####################################################
-# sends last archive file
-#  
-# IN : -$self(+) : ref(List)
-#      -$who(+) : recepient
-# OUT : - | undef
-#
-######################################################
+=head2 $list->archive_send_last($who)
+
+=head3 Parameters
+
+=over
+
+=item * I<$who>: recipient
+
+=back
+
+=head3 Return value
+
+I<undef> if something went wrong.
+
+=cut
+
 sub archive_send_last {
    my($self, $who) = @_;
    &Sympa::Log::do_log('debug', '%s::archive_send_last(%s, %s)', __PACKAGE__, $self->{'listname'}, $who);
@@ -4706,24 +4740,34 @@ sub archive_send_last {
 
 }
 
+=head1 FUNCTIONS
 
-#########################   NOTIFICATION SENDING  ######################################
+=head2 send_notify_to_listmaster($operation, $robot, $data, $checkstack, $purge)
 
+Sends a notice to listmaster by parsing listmaster_notification.tt2 template.
 
-####################################################
-# send_notify_to_listmaster                         
-####################################################
-# Sends a notice to listmaster by parsing
-# listmaster_notification.tt2 template
-#  
-# IN : -$operation (+): notification type
-#      -$robot (+): robot
-#      -$param(+) : ref(HASH) | ref(ARRAY)
-#       values for template parsing
-#    
-# OUT : 1 | undef
-#       
-###################################################### 
+=head3 Parameters
+
+=over
+
+=item * I<$operation>: notification type
+
+=item * I<$robot>: the roboto
+
+=item * I<$data>: values for template parsing
+
+=item * I<$checkstack>
+
+=item * I<$purge>
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_notify_to_listmaster {
 	my ($operation, $robot, $data, $checkstack, $purge) = @_;
 	
@@ -4882,21 +4926,28 @@ sub send_notify_to_listmaster {
 	return 1;
 }
 
+=head1 INSTANCE METHODS
 
-####################################################
-# send_notify_to_owner                              
-####################################################
-# Sends a notice to list owner(s) by parsing
-# listowner_notification.tt2 template
-# 
-# IN : -$self (+): ref(List)
-#      -$operation (+): notification type
-#      -$param(+) : ref(HASH) | ref(ARRAY)
-#       values for template parsing
-#
-# OUT : 1 | undef
-#    
-######################################################
+=head2 $list->send_notify_to_owner($operation, $data)
+
+Sends a notice to list owner(s) by parsing listowner_notification.tt2 template.
+
+=head3 Parameters
+
+=over
+
+=item * I<$operation>: notification type
+
+=item * I<$data>: values for template parsing
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_notify_to_owner {
     
     my ($self,$operation,$param) = @_;
@@ -4980,11 +5031,12 @@ sub send_notify_to_owner {
     return 1;
 }
 
-#########################
-## Delete a member's picture file
-#########################
-# remove picture from user $2 in list $1 
-#########################
+=head2 $list->delete_list_member_picture($email)
+
+Delete a member's picture file.
+
+=cut
+
 sub delete_list_member_picture {
     my ($self,$email) = @_;    
     &Sympa::Log::do_log('debug2', '(%s)', $email);
@@ -5014,21 +5066,27 @@ sub delete_list_member_picture {
     return 1;
 }
 
+=head2 $list->send_notify_to_editor($operation, $data)
 
-####################################################
-# send_notify_to_editor                             
-####################################################
-# Sends a notice to list editor(s) or owner (if no editor)
-# by parsing listeditor_notification.tt2 template
-# 
-# IN : -$self (+): ref(List)
-#      -$operation (+): notification type
-#      -$param(+) : ref(HASH) | ref(ARRAY)
-#       values for template parsing
-#
-# OUT : 1 | undef
-#    
-######################################################
+Sends a notice to list editor(s) or owner (if no editor) by parsing
+listeditor_notification.tt2 template.
+
+=head3 Parameters
+
+=over
+
+=item * I<$operation>: notification type
+
+=item * I<$data>: values for template parsing
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_notify_to_editor {
 
     my ($self,$operation,$param) = @_;
@@ -5076,22 +5134,29 @@ sub send_notify_to_editor {
     return 1;
 }
 
+=head2 $list->send_notify_to_user($operation, $user, $data)
 
-####################################################
-# send_notify_to_user                             
-####################################################
-# Send a notice to a user (sender, subscriber ...)
-# by parsing user_notification.tt2 template
-# 
-# IN : -$self (+): ref(List)
-#      -$operation (+): notification type
-#      -$user(+): email of notified user
-#      -$param(+) : ref(HASH) | ref(ARRAY)
-#       values for template parsing
-#
-# OUT : 1 | undef
-#    
-######################################################
+Send a notice to a user (sender, subscriber ...) by parsing
+user_notification.tt2 template.
+
+=head3 Parameters
+
+=over
+
+=item * I<$operation>: notification type
+
+=item * I<$user>: email of notified user
+
+=item * I<$data>: values for template parsing
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_notify_to_user{
 
     my ($self,$operation,$user,$param) = @_;
@@ -5143,14 +5208,9 @@ sub send_notify_to_user{
     }
     return 1;
 }
-#                                                                                       #             
-#                                                                                       #  
-#                                                                                       #
-######################### END functions for sending messages ############################
-
-
 
 ## genererate a md5 checksum using private cookie and parameters
+# FIXME: awful interface
 sub compute_auth {
     &Sympa::Log::do_log('debug3', '%s::compute_auth(%s, %s, %s)', __PACKAGE__, @_);
 
@@ -5182,8 +5242,12 @@ sub compute_auth {
     return $key;
 }
 
+=head2 $list->add_parts($message)
 
-## Add footer/header to a message
+Add footer/header to a message
+
+=cut
+
 sub add_parts {
     my ($self, $msg) = @_;
     my ($listname,$type) = ($self->{'name'}, $self->{'admin'}{'footer_type'});
@@ -5382,7 +5446,14 @@ sub _append_parts {
     return undef;
 }
 
-## Delete a user in the user_table
+=head1 FUNCTIONS
+
+=head2 delete_global_user(@users)
+
+Delete a user in the user_table.
+
+=cut
+
 sub delete_global_user {
     my @users = @_;
     
@@ -5403,12 +5474,22 @@ sub delete_global_user {
     return $#users + 1;
 }
 
-## Delete the indicate list member 
+=head1 INSTANCE METHODS
+
+=head2 $list->delete_list_member(%parameters)
+
+Delete the indicated users from the list.
+
+=head3 Parameters
+
 ## IN : - ref to array 
 ##      - option exclude
 ##
 ## $list->delete_list_member('users' => \@u, 'exclude' => 1)
 ## $list->delete_list_member('users' => [$email], 'exclude' => 1)
+
+=cut
+
 sub delete_list_member {
     my $self = shift;
     my %param = @_;
@@ -5457,8 +5538,12 @@ sub delete_list_member {
 
 }
 
+=head2 $list->delete_list_admin($role, @u)
 
-## Delete the indicated admin users from the list.
+Delete the indicated admin user with the predefined role from the list.
+
+=cut
+
 sub delete_list_admin {
     my($self, $role, @u) = @_;
     &Sympa::Log::do_log('debug2', '', $role); 
@@ -5488,7 +5573,14 @@ sub delete_list_admin {
     return (-1 * $total);
 }
 
-## Delete all admin_table entries
+=head1 FUNCTIONS
+
+=head2 delete_all_list_admin()
+
+Delete all admin_table entries.
+
+=cut
+
 sub delete_all_list_admin {
     &Sympa::Log::do_log('debug2', ''); 
 	    
@@ -5503,18 +5595,34 @@ sub delete_all_list_admin {
     return 1;
 }
 
+=head1 INSTANCE METHODS
 
-## Returns the cookie for a list, if any.
+=head2 $list->get_cookie()
+
+Returns the cookie for a list, if available.
+
+=cut
+
 sub get_cookie {
    return shift->{'admin'}{'cookie'};
 }
 
-## Returns the maximum size allowed for a message to the list.
+=head2 $list->get_max_size()
+
+Returns the maximum allowed size for a message.
+
+=cut
+
 sub get_max_size {
    return shift->{'admin'}{'max_size'};
 }
 
-## Returns an array with the Reply-To data
+=head2 $list->get_reply_to()
+
+Returns an array with the Reply-To values.
+
+=cut
+
 sub get_reply_to {
     my $admin = shift->{'admin'};
 
@@ -5525,7 +5633,12 @@ sub get_reply_to {
     return $value
 }
 
-## Returns a default user option
+=head2 $list->get_default_user_options()
+
+Returns a default option of the list for subscription.
+
+=cut
+
 sub get_default_user_options {
     my $self = shift->{'admin'};
     my $what = shift;
@@ -5537,7 +5650,12 @@ sub get_default_user_options {
     return undef;
 }
 
-## Returns the number of subscribers to the list
+=head2 $list->get_total()
+
+Returns the number of subscribers to the list.
+
+=cut
+
 sub get_total {
     my $self = shift;
     my $name = $self->{'name'};
@@ -5551,7 +5669,15 @@ sub get_total {
     return $self->{'total'};
 }
 
-## Returns a hash for a given user
+=head1 FUNCTIONS
+
+=head2 get_global_user($user)
+
+Returns a hash with the information regarding the indicated
+user.
+
+=cut
+
 sub get_global_user {
     my $who = &Sympa::Tools::clean_email(shift);
     &Sympa::Log::do_log('debug2', '(%s)', $who);
@@ -5601,7 +5727,12 @@ sub get_global_user {
     return $user;
 }
 
-## Returns an array of all users in User table hash for a given user
+=head2 get_all_global_user
+
+Returns a list of all users in User table hash for a given user
+
+=cut
+
 sub get_all_global_user {
     &Sympa::Log::do_log('debug2', '');
 
@@ -5625,19 +5756,33 @@ sub get_all_global_user {
     return @users;
 }
 
-######################################################################
-###  suspend_subscription                                            #
-## Suspend an user from list(s)                                      #
-######################################################################
-# IN:                                                                #
-#   - email : the subscriber email                                   #
-#   - list : the name of the list                                    #
-#   - data : start_date and end_date                                 #
-#   - robot : domain                                                 #
-# OUT:                                                               #
-#   - undef if something went wrong.                                 #
-#   - 1 if user is suspended from the list                           #
-######################################################################
+
+=head1 FUNCTIONS
+
+=head2 suspend_subscription($email, $list, $data, $robot)
+
+Suspend an user from list(s).
+
+=head3 Parameters
+
+=over
+
+=item * I<$email>: the subscriber email
+
+=item * I<$list>: the list name
+
+=item * I<$data>: start_date and end_date
+
+=item * I<$robot>: the robot
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub suspend_subscription {
     
     my $email = shift;
@@ -5659,18 +5804,28 @@ sub suspend_subscription {
     return 1;
 }
 
-######################################################################
-###  restore_suspended_subscription                                  #
-## Restore the subscription of an user from list(s)                  #
-######################################################################
-# IN:                                                                #
-#   - email : the subscriber email                                   #
-#   - list : the name of the list                                    #
-#   - robot : domain                                                 #
-# OUT:                                                               #
-#   - undef if something went wrong.                                 #
-#   - 1 if his/her subscription is restored                          #
-######################################################################
+=head2 restore_suspended_subscription($email, $list, $robot)
+
+Restore the subscription of an user from list(s).
+
+=head3 Parameters
+
+=over
+
+=item * I<$email>: the subscriber email
+
+=item * I<$list>: the list name
+
+=item * I<$robot>: the robot
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub restore_suspended_subscription {
 
     my $email = shift;
@@ -5689,19 +5844,29 @@ sub restore_suspended_subscription {
     return 1;
 }
 
-######################################################################
-###  insert_delete_exclusion                                         #
-## Update the exclusion_table                                        #
-######################################################################
-# IN:                                                                #
-#   - email : the subscriber email                                   #
-#   - list : the name of the list                                    #
-#   - robot : the name of the domain                                 #
-#   - action : insert or delete                                      #
-# OUT:                                                               #
-#   - undef if something went wrong.                                 #
-#   - 1                                                              #
-######################################################################
+=head2 insert_delete_exclusion($email, $list, $robot, $action, $family)
+
+Update the exclusion_table
+
+=head3 Parameters
+
+=over
+
+=item * I<$email>: the subscriber email
+
+=item * I<$list>: the list name
+
+=item * I<$robot>: the robot
+
+=item * I<$action>: I<'insert'> | I<'delete'>
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
 sub insert_delete_exclusion {
 
     my $email = shift;
@@ -5769,14 +5934,27 @@ sub insert_delete_exclusion {
     return $r;
 }
 
-######################################################################
-###  get_exclusion                                                   #
-## Returns a hash with those excluded from the list and the date.    #
-##                                                                   # 
-# IN:  - name : the name of the list                                 #
-# OUT: - data_exclu : * %data_exclu->{'emails'}->[]                  #
-#                     * %data_exclu->{'date'}->[]                    # 
-######################################################################
+=head2 get_exclusion($list, $robot)
+
+Returns a hash with those excluded from the list and the date.
+
+=head3 Parameters
+
+=over
+
+=item * I<$list>: the list name
+
+=item * I<$robot>: the robot
+
+=back
+
+=head3 Return value
+
+ data_exclu : * %data_exclu->{'emails'}->[]
+              * %data_exclu->{'date'}->[]
+
+=cut
+
 sub get_exclusion {
     
     my  $name= shift;
@@ -5828,12 +6006,18 @@ sub get_exclusion {
     return $data_exclu;
 }
 
-######################################################################
-###  get_list_member                                                  #
-## Returns a subscriber of the list.  
-## Options : 
-##    probe : don't log error if user does not exist                             #
-######################################################################
+=head1 INSTANCE METHODS
+
+=head2 $list->get_list_member()
+
+Returns a subscriber of the list.
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub get_list_member {
     my  $self= shift;
     my  $email = &Sympa::Tools::clean_email(shift);
@@ -5872,15 +6056,28 @@ sub get_list_member {
     return $user;
 }
 
-#######################################################################
-# IN
-#   - a single reference to a hash with the following keys:          #
-#     * email : the subscriber email                                 #
-#     * name: the name of the list                                   #
-#     * domain: the virtual host under which the list is installed.  #
-#
-# OUT : undef if something wrong
-#       a hash of tab of ressembling emails
+=head1 FUNCTIONS
+
+=head2 get_ressembling_list_members_no_object($parameters)
+
+=head3 Parameters
+
+=over
+
+=item * I<email>: the subscriber email
+
+=item * I<name>: the list name
+
+=item * I<domain>: the virtual host under which the list is installed
+
+=back
+
+=head3 Return value
+
+An arrayref of ressembling emails, or I<undef> if something went wrong.
+
+=cut
+
 sub get_ressembling_list_members_no_object {
     my $options = shift;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
@@ -5987,19 +6184,27 @@ sub get_ressembling_list_members_no_object {
 
 }
 
+=head2 find_list_member_by_pattern_no_object($parameters)
 
-######################################################################
-###  find_list_member_by_pattern_no_object                            #
-## Get details regarding a subscriber.                               #
-# IN:                                                                #
-#   - a single reference to a hash with the following keys:          #
-#     * email pattern : the subscriber email patern looking for      #
-#     * name: the name of the list                                   #
-#     * domain: the virtual host under which the list is installed.  #
-# OUT:                                                               #
-#   - undef if something went wrong.                                 #
-#   - a hash containing the user details otherwise                   #
-######################################################################
+Get details regarding a subscriber.
+
+=head3 Parameters
+
+=over
+
+=item * I<email_pattern>: the subscriber email pattern
+
+=item * I<name>: the list name
+
+=item * I<domain>: the virtual host under which the list is installed
+
+=back
+
+=head3 Return value
+
+A list of ressembling emails, or I<undef> if something went wrong.
+
+=cut
 
 sub find_list_member_by_pattern_no_object {
     my $options = shift;
@@ -6048,18 +6253,27 @@ sub find_list_member_by_pattern_no_object {
     return @ressembling_users;
 }
 
-######################################################################
-###  get_list_member_no_object                                        #
-## Get details regarding a subscriber.                               #
-# IN:                                                                #
-#   - a single reference to a hash with the following keys:          #
-#     * email : the subscriber email                                 #
-#     * name: the name of the list                                   #
-#     * domain: the virtual host under which the list is installed.  #
-# OUT:                                                               #
-#   - undef if something went wrong.                                 #
-#   - a hash containing the user details otherwise                   #
-######################################################################
+=head2 get_list_member_no_object($parameters)
+
+Get details regarding a subscriber.
+
+=head3 Parameters
+
+=over
+
+=item * I<email>: the subscriber email
+
+=item * I<name>: the list name
+
+=item * I<domain>: the virtual host under which the list is installed
+
+=back
+
+=head3 Return value
+
+An hash containing the user details, or I<undef> if something went wrong.
+
+=cut
 
 sub get_list_member_no_object {
     my $options = shift;
@@ -6118,7 +6332,14 @@ sub get_list_member_no_object {
     return $user;
 }
 
-## Returns an admin user of the list.
+=head1 INSTANCE METHODS
+
+=head2 $list->get_list_admin($role, $user)
+
+Return an admin user of the list with predefined role
+
+=cut
+
 sub get_list_admin {
     my  $self= shift;
     my  $role= shift;
@@ -6164,8 +6385,12 @@ sub get_list_admin {
     
 }
 
+=head2 $list->get_first_list_member($data)
 
-## Returns the first user for the list.
+Returns a hash to the first user on the list.
+
+=cut
+
 sub get_first_list_member {
     my ($self, $data) = @_;
 
@@ -6338,7 +6563,12 @@ sub createXMLCustomAttribute {
 	return $XMLstr ;
 }
 
-## Returns the first admin_user with $role for the list.
+=head2 $list->get_first_list_admin($role, $data)
+
+Returns a hash to the first admin user with predefined role on the list.
+
+=cut
+
 sub get_first_list_admin {
     my ($self, $role, $data) = @_;
 
@@ -6442,8 +6672,14 @@ sub get_first_list_admin {
 
     return $admin_user;
 }
+
+=head2 $list->get_next_list_member()
+
+Returns a hash to the next users, until we reach the end of
+the list.
+
+=cut
     
-## Loop for all subsequent users.
 sub get_next_list_member {
     my $self = shift;
     &Sympa::Log::do_log('debug2', '');
@@ -6489,7 +6725,12 @@ sub get_next_list_member {
     return $user;
 }
 
-## Loop for all subsequent admin users with the role defined in get_first_list_admin.
+=head2 $list->get_next_list_admin()
+
+Returns a hash to the next admin users, until we reach the end of the list.
+
+=cut
+
 sub get_next_list_admin {
     my $self = shift;
     &Sympa::Log::do_log('debug2', ''); 
@@ -6681,7 +6922,12 @@ sub is_global_user {
    return $is_user;
 }
 
-## Is the indicated person a subscriber to the list?
+=head2 $list->is_list_member($user)
+
+Returns true if the indicated user is member of the list.
+
+=cut
+
 sub is_list_member {
     my ($self, $who) = @_;
     $who = &Sympa::Tools::clean_email($who);
@@ -6716,7 +6962,12 @@ sub is_list_member {
     return $is_user;
 }
 
-## Sets new values for the given user (except gecos)
+=head2 $list->update_list_member($who, $values)
+
+Sets the new values given in the hash for the user (except gecos)
+
+=cut
+
 sub update_list_member {
     my($self, $who, $values) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $who);
@@ -6875,8 +7126,12 @@ sub update_list_member {
     return 1;
 }
 
+=head2 $list->update_list_admin($who,$role, $values)
 
-## Sets new values for the given admin user (except gecos)
+Sets the new values given in the hash for the admin user (except gecos).
+
+=cut
+
 sub update_list_admin {
     my($self, $who,$role, $values) = @_;
     &Sympa::Log::do_log('debug2', '(%s,%s)', $role, $who); 
@@ -7116,7 +7371,13 @@ sub add_global_user {
     return 1;
 }
 
-## Adds a list member ; no overwrite.
+=head2 $list->add_list_member(@new_users, $daemon)
+
+Adds a new user to the list. May overwrite existing
+entries.
+
+=cut
+
 sub add_list_member {
     my($self, @new_users, $daemon) = @_;
     &Sympa::Log::do_log('debug2', '%s', $self->{'name'});
@@ -7336,8 +7597,14 @@ sub rename_list_db {
     return 1;
 }
 
+=head1 FUNCTIONS
 
-## Is the user listmaster
+=head2 is_listmaster($who, $robot)
+
+Is the user listmaster ?
+
+=cut
+
 sub is_listmaster {
     my $who = shift;
     my $robot = shift;
@@ -7357,7 +7624,15 @@ sub is_listmaster {
     return 0;
 }
 
-## Does the user have a particular function in the list?
+=head1 INSTANCE METHODS
+
+=head2 $list->am_i($function, $who, $options)
+
+Returns true is USER has FUNCTION (owner, editor) on the
+list.
+
+=cut
+
 sub am_i {
     my($self, $function, $who, $options) = @_;
     &Sympa::Log::do_log('debug2', '%s::am_i(%s, %s, %s)', __PACKAGE__, $function, $self->{'name'}, $who);
@@ -7451,8 +7726,13 @@ sub am_i {
     }
 }
 
-## Check list authorizations
-## Higher level sub for request_action
+=head2 $list->check_list_authz($operation, $auth_method, $context, $debug)
+
+Check list authorizations
+Higher level sub for request_action
+
+=cut
+
 sub check_list_authz {
     my $self = shift;
     my $operation = shift;
@@ -7466,14 +7746,28 @@ sub check_list_authz {
     return &Sympa::Scenario::request_action($operation, $auth_method, $self->{'domain'}, $context, $debug);
 }
 
-## Initialize internal list cache
+=head1 FUNCTIONS
+
+=head2 init_list_cache()
+
+Initialize internal list cache
+
+=cut
+
 sub init_list_cache {
     &Sympa::Log::do_log('debug2', '%s::init_list_cache()', __PACKAGE__);
     
     undef %list_cache;
 }
 
-## May the indicated user edit the indicated list parameter or not?
+=head1 INSTANCE METHODS
+
+=head2 $list->may_edit($parameter, $who)
+
+May the indicated user edit the indicated list parameter or not?
+
+=cut
+
 sub may_edit {
 
     my($self,$parameter, $who) = @_;
@@ -7539,9 +7833,13 @@ sub may_edit {
     return ('user','hidden');
 }
 
+=head2 $list->may_create_parameter($parameter, $who,$robot)
 
-## May the indicated user edit a paramter while creating a new list
-## Dev note: This sub is never called. Shall we remove it?
+May the indicated user edit a paramter while creating a new list.
+Dev note: This sub is never called. Shall we remove it?
+
+=cut
+
 sub may_create_parameter {
 
     my($self, $parameter, $who,$robot) = @_;
@@ -7564,10 +7862,14 @@ sub may_create_parameter {
 
 }
 
+=head2 $list->may_do($action, $user)
 
-## May the indicated user do something with the list or not?
-## Action can be : send, review, index, get
-##                 add, del, reconfirm, purge
+Chcks is USER may do the ACTION for the list. ACTION can be
+one of following : send, review, index, getm add, del,
+reconfirm, purge.
+
+=cut
+
 sub may_do {
    my($self, $action, $who) = @_;
    &Sympa::Log::do_log('debug3', '%s::may_do(%s, %s)', __PACKAGE__, $action, $who);
@@ -7643,12 +7945,22 @@ sub may_do {
    return undef;
 }
 
-## Does the list support digest mode
+=head2 $list->is_digest()
+
+Returns true if the list support digest mode.
+
+=cut
+
 sub is_digest {
    return (shift->{'admin'}{'digest'});
 }
 
-## Does the file exist?
+=head2 $list->archive_exist($file)
+
+Returns true if the indicated file exists.
+
+=cut
+
 sub archive_exist {
    my($self, $file) = @_;
    &Sympa::Log::do_log('debug', '%s::archive_exist (%s)', __PACKAGE__, $file);
@@ -7659,8 +7971,12 @@ sub archive_exist {
 
 }
 
+=head2 $list->archive_ls()
 
-## List the archived files
+Returns the list of available files, if any.
+
+=cut
+
 sub archive_ls {
    my $self = shift;
    &Sympa::Log::do_log('debug2', '%s::archive_ls', __PACKAGE__);
@@ -7670,7 +7986,12 @@ sub archive_ls {
    Sympa::Archive::list($dir) if ($self->is_archived());
 }
 
-## Archive 
+=head2 $list->archive_msg($message)
+
+Archives the Mail::Internet message given as argument.
+
+=cut
+
 sub archive_msg {
     my($self, $message ) = @_;
    &Sympa::Log::do_log('debug', '%s::archive_msg for %s', __PACKAGE__, $self->{'name'});
@@ -7700,13 +8021,24 @@ sub archive_msg {
     }
 }
 
-## Is the list moderated?                                                          
+=head2 $list->is_moderated()
+
+Returns true if the list is moderated.
+
+=cut
+
 sub is_moderated {
     return 1 if (defined shift->{'admin'}{'editor'});                                                          
     return 0;
 }
 
-## Is the list archived?
+=head2 $list->is_archived()
+
+Returns true is the list is configured to keep archives of
+its messages.
+
+=cut
+
 sub is_archived {
     if (shift->{'admin'}{'web_archive'}{'access'}) {&Sympa::Log::do_log('debug', '%s::is_archived : 1', __PACKAGE__); return 1 ;}  
     return undef;
@@ -11797,20 +12129,25 @@ sub load_msg_topic {
     return undef;
 }
 
+=head2 $list->modifying_msg_topic_for_list_members($new_msg_topic)
 
-####################################################
-# modifying_msg_topic_for_list_members()
-####################################################
-#  Deletes topics subscriber that does not exist anymore
-#  and send a notify to concerned subscribers.
-# 
-# IN : -$self (+): ref(List)
-#      -$new_msg_topic (+): ref(ARRAY) - new state 
-#        of msg_topic parameters
-#
-# OUT : -0 if no subscriber topics have been deleted
-#       -1 if some subscribers topics have been deleted 
-##################################################### 
+Deletes topics subscriber that does not exist anymore and send a notify to
+concerned subscribers.
+
+=head3 Parameters
+
+=over
+
+=item * I<$new_msg_topic>: new state of msg_topic parameters (arrayref)
+
+=back
+
+=head3 Return value
+
+I<1> if some subscribers topics have been deleted, I<0> otherwise.
+
+=cut
+
 sub modifying_msg_topic_for_list_members(){
     my ($self,$new_msg_topic) = @_;
     &Sympa::Log::do_log('debug3',"($self->{'name'}");
@@ -11856,22 +12193,29 @@ sub modifying_msg_topic_for_list_members(){
     return 0;
 }
 
-####################################################
-# select_list_members_for_topic
-####################################################
-# Select users subscribed to a topic that is in
-# the topic list incoming when reception mode is 'mail', 'notice', 'not_me', 'txt', 'html' or 'urlize', and the other
-# subscribers (recpetion mode different from 'mail'), 'mail' and no topic subscription
-# 
-# IN : -$self(+) : ref(List)
-#      -$string_topic(+) : string splitted by ','
-#                          topic list
-#      -$subscribers(+) : ref(ARRAY) - list of subscribers(emails)
-#
-# OUT : @selected_users
-#     
-#
-####################################################
+=head2 $listst->select_list_members_for_topic($topics, $subscribers)
+
+Select users subscribed to a topic that is in the topic list incoming when
+reception mode is 'mail', 'notice', 'not_me', 'txt', 'html' or 'urlize', and
+the other subscribers (recpetion mode different from 'mail'), 'mail' and no
+topic subscription.
+
+=head3 Parameters
+
+=over
+
+=item * I<$topics>: comma-separated list of topics
+
+=item * I<$subscribers>: list of subscribers
+
+=back
+
+=head3 Return value
+
+The list of selected users.
+
+=cut
+
 sub select_list_members_for_topic {
     my ($self,$string_topic,$subscribers) = @_;
     &Sympa::Log::do_log('debug3', '(%s, %s)', $self->{'name'},$string_topic); 
@@ -11912,14 +12256,6 @@ sub select_list_members_for_topic {
     }
     return @selected_users;
 }
-
-#                                                                                         #
-#                                                                                         # 
-#                                                                                         #
-########## END - functions for message topics #############################################
-
-
-
 
 sub _urlize_part {
     my $message = shift;
@@ -12127,7 +12463,12 @@ sub get_arc_size {
     return Sympa::Tools::File::get_dir_size($dir.'/'.$self->get_list_id());
 }
 
-# return the date epoch for next delivery planified for a list
+=head2 $list->get_next_delivery_date()
+
+Return the date epoch for next delivery planified for a list.
+
+=cut
+
 sub  get_next_delivery_date {
     my $self = shift;
 
@@ -12159,8 +12500,12 @@ sub  get_next_delivery_date {
     }
 }
 
+=head2 $list->search_datasource($id)
 
-## Searches the include datasource corresponding to the provided ID
+Searches the include datasource corresponding to the provided ID.
+
+=cut
+
 sub search_datasource {
     my ($self, $id) = @_;
     &Sympa::Log::do_log('debug2','%s::search_datasource(%s,%s)', __PACKAGE__, $self->{'name'}, $id);
@@ -12180,10 +12525,24 @@ sub search_datasource {
     return undef;
 }
 
-## Return the names of datasources, given a coma-separated list of source ids
-# IN : -$class 
-#      -$id : datasource ids (coma-separated)
-# OUT : -$name : datasources names (scalar)
+=head2 $list->get_datasource_name($ids)
+
+Return the names of datasources, given a coma-separated list of source ids.
+
+=head3 Parameters
+
+=over
+
+=item * I<$ids>: comma-separated list of datasource id
+
+=back
+
+=head3 Return value
+
+The names of datasources.
+
+=cut
+
 sub get_datasource_name {
     my ($self, $id) = @_;
     &Sympa::Log::do_log('debug2','(%s,%s)', $self->{'name'}, $id);
@@ -12207,7 +12566,12 @@ sub get_datasource_name {
     return join(', ', values %sources);
 }
 
-## Remove a task in the tasks spool
+=head2 $list->remove_task($task)
+
+Remove a task in the tasks spool.
+
+=cut
+
 sub remove_task {
     my $self = shift;
     my $task = shift;
@@ -12232,7 +12596,12 @@ sub remove_task {
     return 1;
 }
 
-## Close the list (remove from DB, remove aliases, change status to 'closed' or 'family_closed')
+=head2 $list->close_list($email, $status)
+
+Close the list (remove from DB, remove aliases, change status to 'closed' or 'family_closed').
+
+=cut
+
 sub close_list {
     my ($self, $email, $status) = @_;
 
@@ -12304,7 +12673,12 @@ sub close_list {
     return 1;
 }
 
-## Remove the list
+=head2 $list->purge($email)
+
+Remove the list.
+
+=cut
+
 sub purge {
     my ($self, $email) = @_;
 
@@ -12345,7 +12719,12 @@ sub purge {
     return 1;
 }
 
-## Remove list aliases
+=head2 $list->remove_aliases()
+
+Remove list aliases
+
+=cut
+
 sub remove_aliases {
     my $self = shift;
 
@@ -12373,12 +12752,12 @@ sub remove_aliases {
 }
 
 
-##
-## bounce management actions
-##
+=head2 $list->remove_bouncers($users)
 
-# Sub for removing user
-#
+Remove users
+
+=cut
+
 sub remove_bouncers {
     my $self = shift;
     my $reftab = shift;
@@ -12396,8 +12775,13 @@ sub remove_bouncers {
     return 1;
 }
 
-#Sub for notifying users : "Be carefull,You're bouncing"
 #
+=head2 $list->notify_bouncers($users)
+
+Notify users : "Be carefull,You're bouncing"
+
+=cut
+
 sub notify_bouncers{
     my $self = shift;
     my $reftab = shift;
@@ -12412,7 +12796,12 @@ sub notify_bouncers{
     return 1;
 }
 
-## Create the document repository
+=head2 $list->create_shared()
+
+Create the document repository
+
+=cut
+
 sub create_shared {
     my $self = shift;
 
@@ -12431,7 +12820,12 @@ sub create_shared {
     return 1;
 }
 
-## check if a list  has include-type data sources
+=head2 $list->has_include_data_sources()
+
+Check if a list  has include-type data sources.
+
+=cut
+
 sub has_include_data_sources {
     my $self = shift;
 
@@ -12445,7 +12839,12 @@ sub has_include_data_sources {
     return 0
 }
 
-# move a message to a queue or distribute spool
+=head2 $list->move_message($file, $queue)
+
+Move a message to a queue or distribute spool.
+
+=cut
+
 sub move_message {
     my ($self, $file, $queue) = @_;
     &Sympa::Log::do_log('debug2', "%s::move_message($file, $self->{'name'}, $queue)", __PACKAGE__);
@@ -12471,7 +12870,12 @@ sub move_message {
     return 1;
 }
 
-## Return the path to the list bounce directory, where bounces are stored
+=head2 $list->get_bounce_dir()
+
+Return the path to the list bounce directory, where bounces are stored
+
+=cut
+
 sub get_bounce_dir {
     my $self = shift;
 
@@ -12480,21 +12884,37 @@ sub get_bounce_dir {
     return $root_dir.'/'.$self->get_list_id();
 }
 
-## Return the list email address
+=head2 $list->get_list_address()
+
+Return the list email address.
+
+=cut
 sub get_list_address {
     my $self = shift;
 
     return $self->{'name'}.'@'.$self->{'admin'}{'host'};
 }
 
-## Return the list ID, different from the list address (uses the robot name)
+=head2 $list->get_list_id()
+
+Return the list ID, different from the list address (uses the robot name).
+
+=cut
+
 sub get_list_id {
     my $self = shift;
 
     return $self->{'name'}.'@'.$self->{'domain'};
 }
- 
-##connect to stat_counter_table and extract data.
+
+=head1 FUNCTIONS
+
+=head2 get_data($data, $robotname, $listname)
+
+Connect to stat_counter_table and extract data.
+
+=cut
+
 sub get_data {
     my ($data, $robotname, $listname) = @_;
 
@@ -12506,7 +12926,12 @@ sub get_data {
     return $res;
 }
 
-## Support for list config caching in database
+=head2 get_lists_db($where)
+
+support for list config caching in database
+
+=cut
+
 sub get_lists_db {
     my $where = shift || '';
     &Sympa::Log::do_log('debug2', '%s::get_lists_db(%s)', __PACKAGE__, $where);
