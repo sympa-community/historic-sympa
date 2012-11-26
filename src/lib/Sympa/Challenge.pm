@@ -1,4 +1,3 @@
-# Challenge.pm - This module includes functions managing email challenges
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -18,6 +17,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Challenge - Email challenges functions
+
+=head1 DESCRIPTION
+
+This module includes functions managing email challenges.
+
+=cut
 
 package Sympa::Challenge;
 
@@ -37,8 +45,14 @@ use Sympa::Tools::Data;
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %challenge_hard_attributes = ('id_challenge' => 1, 'date' => 1, 'robot'  => 1,'email' => 1, 'list' => 1);
 
+=head1 FUNCTIONS
 
-# create a challenge context and store it in challenge table
+=head2 create($robot, $email, $context)
+
+Create a challenge context and store it in challenge table.
+
+=cut
+
 sub create {
     my ($robot, $email, $context) = @_;
 
@@ -64,8 +78,6 @@ sub create {
     return undef unless (&store($challenge));
     return $challenge->{'id_challenge'}     
 }
-    
-
 
 sub load {
 
@@ -109,7 +121,6 @@ sub load {
     return ('expired') if (time - $challenge_datas->{'date'} >= &Sympa::Tools::Time::duration_conv($Conf{'challenge_table_ttl'}));
     return ($challenge_datas);
 }
-
 
 sub store {
 
