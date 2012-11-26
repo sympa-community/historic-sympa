@@ -1,4 +1,3 @@
-# Command.pm - this module does the mail commands processing
 # RCS Identication ; $Revision$ ; $Date$ 
 
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -18,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Commands - Mail commands processing
+
+=head1 DESCRIPTION
+
+This module does the mail commands processing.
+
+=cut
 
 package Sympa::Commands;
 
@@ -81,21 +90,33 @@ my $auth;
 # boolean says if quiet is in the cmd line
 my $quiet;
 
+=head1 FUNCTIONS
 
-##############################################
-#  parse
-##############################################
-# Parses the command and calls the adequate 
-# subroutine with the arguments to the command. 
-# 
-# IN :-$sender (+): the command sender
-#     -$robot (+): robot
-#     -$i (+): command line
-#     -$sign_mod : 'smime'| 'dkim' -
-#
-# OUT : $status |'unknown_cmd'
-#      
-##############################################
+=head2 parse($sender, $robot, $i, $sign_mod, $message)
+
+Parses the command and calls the adequate subroutine with the arguments to the
+command.
+
+=head3 Parameters
+
+=over
+
+=item * I<$sender> (+): the command sender
+
+=item * I<$robot> (+): robot
+
+=item * I<$i> (+): command line
+
+=item * I<$sign_mod> : 'smime'| 'dkim' -
+
+=back
+
+=head3 Return value
+
+$status |'unknown_cmd'
+
+=cut
+
 sub parse {
    $sender = lc(shift);
    my $robot = shift;
@@ -145,16 +166,20 @@ sub parse {
    return 'unknown_cmd';  
 }
 
-##############################################
-#  finished
-##############################################
-#  Do not process what is after this line
-# 
-# IN : -
-#
-# OUT : 1 
-#      
-################################################
+=head2 finished()
+
+Do not process what is after this line
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A true value.
+
+=cut
+
 sub finished {
     &Sympa::Log::do_log('debug2', '%s::finished', __PACKAGE__);
 
@@ -162,17 +187,27 @@ sub finished {
     return 1;
 }
 
-##############################################
-#  help
-##############################################
-#  Sends the help file for the software
-# 
-# IN : - ? 
-#      -$robot (+): robot 
-#
-# OUT : 1 | undef
-#      
-##############################################
+
+=head2 help(undef, $robot)
+
+Sends the help file for the software
+
+=head3 Parameters
+
+=over
+
+=item * I<undef>
+
+=item * I<$robot>: robot 
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub help {
 
     shift;
@@ -233,17 +268,29 @@ sub help {
     return 1;
 }
 
-#####################################################
-#  lists
-#####################################################
-#  Sends back the list of public lists on this node.
-# 
-# IN : - ? 
-#      -$robot (+): robot 
-#
-# OUT : 1  | undef
-#      
-####################################################### 
+
+=head2 lists(undef, $robot, $sign_mod, $message)
+
+Sends back the list of public lists on this node.
+
+=head3 Parameters
+
+=over
+
+=item * I<undef>
+
+=item * I<$robot>: robot 
+
+=item * I<$sign_mod>
+
+=item * I<$message>
+
+=back
+
+=head3 Return value
+
+=cut
+
 sub lists {
     shift; 
     my $robot=shift;
@@ -300,19 +347,30 @@ sub lists {
     return 1;
 }
 
-#####################################################
-#  stats
-#####################################################
-#  Sends the statistics about a list using template
-#  'stats_report'
-# 
-# IN : -$listname (+): list name
-#      -$robot (+): robot 
-#      -$sign_mod : 'smime' | 'dkim'|  -
-#
-# OUT : 'unknown_list'|'not_allowed'|1  | undef
-#      
-####################################################### 
+=head2 stats($listname, $robot, $sign_mod, $message)
+
+Sends the statistics about a list using template 'stats_report'.
+
+=head3 Parameters
+
+=over
+
+=item * I<listname>: list name
+
+=item * I<$robot>: robot
+
+=item * I<$sign_mod>: 'smime' | 'dkim'
+
+=item * I<$message>
+
+=back
+
+=head3 Return value
+
+OUT : 'unknown_list'|'not_allowed'|1  | undef
+
+=cut
+
 sub stats {
     my $listname = shift;
     my $robot=shift;
@@ -379,17 +437,21 @@ sub stats {
 }
 
 
-###############################################
-#  getfile
-##############################################
-# Sends back the requested archive file
-# 
+=head2 getfile($command, $robot)
+
+Sends back the requested archive file
+
+=head3 Parameters
+
 # IN : -$which (+): command parameters : listname filename
 #      -$robot (+): robot 
-#
-# OUT : 'unknownlist'|'no_archive'|'not_allowed'|1 
-#      
-############################################### 
+
+=head3 Return value
+
+OUT : 'unknownlist'|'no_archive'|'not_allowed'|1 
+
+=cut
+
 sub getfile {
     my($which, $file) = split(/\s+/, shift);
     my $robot=shift;
@@ -437,18 +499,26 @@ sub getfile {
     return 1;
 }
 
-###############################################
-#  last
-##############################################
-# Sends back the last archive file
-# 
-# 
-# IN : -$which (+): listname 
-#      -$robot (+): robot 
-#
-# OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
-#      
-############################################### 
+=head2 last($which, $robot)
+
+Sends back the last archive file.
+
+=head3 Parameters
+
+=over
+
+=item * I<$which>: listname
+
+=item * I<$robot>: robot
+
+=back
+
+=head3 Return value
+
+'unknownlist'|'no_archive'|'not_allowed'|1
+
+=cut
+
 sub last {
     my $which = shift;
     my $robot = shift;
