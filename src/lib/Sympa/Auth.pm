@@ -1,4 +1,3 @@
-# Auth.pm - This module provides web authentication functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,6 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Auth - Web authentication functions
+
+=head1 DESCRIPTION 
+
+This module provides web authentication functions.
+
+=cut
 
 package Sympa::Auth;
 
@@ -33,7 +41,15 @@ use Sympa::Report;
 use Sympa::SDM;
 use Sympa::Session;
 
-## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
+=head1 FUNCTIONS
+
+=head2 password_fingerprint($pwd)
+
+Return the password finger print (this proc allow futur replacement of md5 by
+sha1 or ....)
+
+=cut
+
 sub password_fingerprint{
 
     &Sympa::Log::do_log('debug', '%s::password_fingerprint', __PACKAGE__);
@@ -46,8 +62,12 @@ sub password_fingerprint{
     }    
 }
 
+=head2 check_auth($robot, $auth, $pwd)
 
-## authentication : via email or uid
+Authentication via email or uid.
+
+=cut
+
  sub check_auth{
      my $robot = shift;
      my $auth = shift; ## User email or UID
@@ -85,11 +105,28 @@ sub password_fingerprint{
      }
  }
 
-## This subroutine if Sympa may use its native authentication for a given user
-## It might not if no user_table paragraph is found in auth.conf or if the regexp or
-## negative_regexp exclude this user
-## IN : robot, user email
-## OUT : boolean
+=head2 may_use_sympa_native_auth($robot, $user_email)
+
+This subroutine if Sympa may use its native authentication for a given user
+It might not if no user_table paragraph is found in auth.conf or if the regexp
+or negative_regexp exclude this user
+
+=head3 Parameters
+
+=over
+
+=item * I<$robot>
+
+=item * I<$user_email>
+
+=back
+
+=head3 Return value
+
+boolean
+
+=cut
+
 sub may_use_sympa_native_auth {
     my ($robot, $user_email) = @_;
 
@@ -292,8 +329,26 @@ sub ldap_authentication {
      } 
 }
 
+=head2 get_email_by_net_id($robot, $auth_id, $attributes)
 
-# fetch user email using his cas net_id and the paragrapah number in auth.conf
+Fetch user email using his cas net_id and the paragrapah number in auth.conf.
+
+=head3 Parameters
+
+=over
+
+=item * I<$robot>
+
+=item * I<$auth_id>
+
+=item * I<$attributes>
+
+=back
+
+=head3 Return value
+
+=cut
+
 sub get_email_by_net_id {
     
     my $robot = shift;
@@ -353,7 +408,28 @@ sub get_email_by_net_id {
 
  }
 
-# check trusted_application_name et trusted_application_password : return 1 or undef;
+=head2 remote_app_check_password($trusted_application_name,$password,$robot)
+
+Check trusted_application_name et trusted_application_password
+
+=head3 Parameters
+
+=over
+
+=item * I<$trusted_application_name>
+
+=item * I<$password>
+
+=item * I<$robot>
+
+=back
+
+=head3 Return value
+
+return 1 or I<undef>.
+
+=cut
+
 sub remote_app_check_password {
     
     my ($trusted_application_name,$password,$robot) = @_;
@@ -388,9 +464,29 @@ sub remote_app_check_password {
     &Sympa::Log::do_log('info', '%s::remote_app-check_password: unknown application name %s', __PACKAGE__, $trusted_application_name);
     return undef;
 }
- 
-# create new entry in one_time_ticket table using a rand as id so later access is authenticated
-#
+
+=head2 create_one_time_ticket($email, $robot, $data_string, $remote_addr)
+
+Create new entry in one_time_ticket table using a rand as id so later access is
+authenticated
+
+=head3 Parameters
+
+=over
+
+=item * I<$email>
+
+=item * I<$robot>
+
+=item * I<$data_string>
+
+=item * I<$remote_addr>
+
+=back
+
+=head3 Return value
+
+=cut
 
 sub create_one_time_ticket {
     my $email = shift;
@@ -411,8 +507,24 @@ sub create_one_time_ticket {
     return $ticket;
 }
 
-# read one_time_ticket from table and remove it
-#
+=head2 get_one_time_ticket($ticket_number, $addr)
+
+Read one_time_ticket from table and remove it
+
+=head3 Parameters
+
+=over
+
+=item * I<$ticket_number>
+
+=item * I<$addr>
+
+=back
+
+=head3 Return value
+
+=cut
+
 sub get_one_time_ticket {
     my $ticket_number = shift;
     my $addr = shift; 
