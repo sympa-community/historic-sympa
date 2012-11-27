@@ -1,4 +1,3 @@
-# LDAPSource.pm - This module includes common LDAP related functions
 #<!-- RCS Identication ; $Revision: 1.3 $ --> 
 
 #
@@ -20,6 +19,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Datasource::LDAP - LDAP data source object
+
+=head1 DESCRIPTION
+
+This class implements an LDAP data source.
+
+=cut
+
 package Sympa::Datasource::LDAP;
 
 use strict;
@@ -33,6 +42,28 @@ use Sympa::Tools;
 our @ISA = qw(Sympa::Datasource Exporter);
 our @EXPORT = qw(%date_format);
 our @EXPORT_OK = qw(connect query disconnect fetch ping quote set_fetch_timeout);
+
+=head1 CLASS METHODS
+
+=head2 Sympa::Datasource::LDAP->new($params)
+
+Create a new L<Sympa::Datasource::LDAP> object.
+
+=head3 Parameters
+
+=over
+
+=item * I<user>:
+
+=item * I<password>:
+
+=back
+
+=head3 Return value
+
+A new L<Sympa::Datasource::LDAP> object, or I<undef> if something went wrong.
+
+=cut
 
 sub new {
     my $pkg = shift;
@@ -77,20 +108,25 @@ sub new {
     return $self;
 }
 
-############################################################
-#  connect
-############################################################
-#  Connect to an LDAP directory. This could be called as
-#  a LDAPSource object member, or as a static sub. 
-#  
+=head1 INSTANCE METHODS
+
+=head2 $source->connect($options)
+
+Connect to an LDAP directory.
+
+=head3 Parameters
+ 
 # IN : -$options : ref to a hash. Options for the connection process.
 #         currently accepts 'keep_trying' : wait and retry until
 #         db connection is ok (boolean) ; 'warn' : warn
 #         listmaster if connection fails (boolean)
-# OUT : $self->{'ldap_handler'}
-#     | undef
-#
-##############################################################
+
+=head3 Return value
+
+An L<Net::LDAP> object.
+
+=cut
+
 sub connect {
     my $self = shift;
     my $options = shift;
@@ -176,6 +212,10 @@ sub connect {
 
 }
 
+=head2 $source->query($query)
+
+=cut
+
 sub query {
     my ($self, $sql_query) = @_;
     unless ($self->{'sth'} = $self->{'dbh'}->prepare($sql_query)) {
@@ -189,20 +229,39 @@ sub query {
 
 }
 
-## Does not make sense in LDAP context
+=head2 $source->ping()
+
+Does not make sense in LDAP context
+
+=cut
+
 sub ping {
 }
 
-## Does not make sense in LDAP context
+=head2 $source->quote()
+
+Does not make sense in LDAP context
+
+=cut
+
 sub quote {
 }
+
+=head2 $source->fetcj()
+
+=cut
 
 sub fetch {
     my $self = shift;
     return $self->{'sth'}->fetchrow_arrayref;
 }
 
-## Does not make sense in LDAP context
+=head2 $source->create_db()
+
+Does not make sense in LDAP context
+
+=cut
+
 sub create_db {
 }
 
@@ -211,7 +270,12 @@ sub disconnect {
     $self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
 }
 
-## Does not make sense in LDAP context
+=head2 $source->set_fetch_timeout()
+
+Does not make sense in LDAP context
+
+=cut
+
 sub set_fetch_timeout {
 }
 

@@ -24,7 +24,7 @@ Sympa::Archive - Archiving functions
 
 =head1 DESCRIPTION
 
-This module does the archiving job for a mailing lists.
+This module provides archiving-related functions.
 
 =cut
 

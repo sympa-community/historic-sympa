@@ -1,5 +1,3 @@
-# Scenario.pm - This module includes functions for autorization scenarios processing
-
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -18,6 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME 
+
+Sympa::Scenario - Authorization scenario object
+
+=head1 DESCRIPTION 
+
+This class implement an authorization scenario.
+
+=cut 
 
 package Sympa::Scenario;
 

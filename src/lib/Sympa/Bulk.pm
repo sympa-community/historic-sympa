@@ -21,7 +21,7 @@ Sympa::Bulk - Bulk mailer functions
 
 =head1 DESCRIPTION
 
-This module includes bulk mailer functions.
+This module provides bulk mailer functions.
 
 =cut
 

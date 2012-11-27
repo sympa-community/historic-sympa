@@ -20,13 +20,11 @@
 
 =head1 NAME
 
-Sympa::Family - A list family
+Sympa::Family - List family class
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
-Sympa allows lists creation and management by sets. These are the families,
-sets of lists sharing common properties. This module gathers all the
-family-specific operations.
+This class implements a list family, a set of lists sharing common properties.
 
 =cut
 

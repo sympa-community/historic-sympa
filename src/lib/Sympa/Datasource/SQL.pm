@@ -1,4 +1,3 @@
-# SQLSource.pm - This module includes SQL DB related functions
 #<!-- RCS Identication ; $Revision$ --> 
 
 #
@@ -19,6 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Datasource::SQL - SQL data source object
+
+=head1 DESCRIPTION
+
+This class implements an SQL data source.
+
+=cut
 
 package Sympa::Datasource::SQL;
 
@@ -42,6 +51,34 @@ our @EXPORT_OK = qw(connect query disconnect fetch create_db ping quote set_fetc
 ## "status" can have value 'failed'
 ## 'first_try' contains an epoch date
 my %db_connections;
+
+=head1 CLASS METHODS
+
+=head2 Sympa::Datasource::SQL->new($params)
+
+Create a new L<Sympa::Datasource::SQL> object.
+
+=head3 Parameters
+
+=over
+
+=item * I<host>
+
+=item * I<user>
+
+=item * I<passwd>
+
+=item * I<connect_options>
+
+=item * I<db_type>
+
+=back
+
+=head3 Return value
+
+A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
+
+=cut
 
 sub new {
     my $pkg = shift;
@@ -112,6 +149,18 @@ sub new {
     bless $self, $actualclass;
     return $self;
 }
+
+=head1 INSTANCE METHODS
+
+=head2 $source->connect()
+
+Connect to a SQL database.
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
 
 sub connect {
     my $self = shift;

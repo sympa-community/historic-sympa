@@ -19,11 +19,11 @@
 
 =head1 NAME
 
-Sympa::List
+Sympa::List - List object
 
 =head1 DESCRIPTION 
 
-This module includes all list processing functions.
+This class implements a list.
 
 =cut
 

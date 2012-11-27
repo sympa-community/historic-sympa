@@ -20,11 +20,11 @@
 
 =head1 NAME
 
-Sympa::Commands - Mail commands processing
+Sympa::Commands - Mail commands processing functions
 
 =head1 DESCRIPTION
 
-This module does the mail commands processing.
+This module provides mail commands processing functions.
 
 =cut
 

@@ -21,11 +21,11 @@
 
 =head1 NAME 
 
-Sympa::VOOT::Provider - VOOT provider facilities for Sympa
+Sympa::VOOT::Provider - VOOT provider object
 
 =head1 DESCRIPTION 
 
-This package provides abstraction for the VOOT workflow (server side).
+This class implements the server side of VOOT workflow.
 
 =cut 
 

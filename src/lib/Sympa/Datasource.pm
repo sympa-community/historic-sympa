@@ -1,4 +1,3 @@
-# Datasource.pm - This module includes external datasources related functions
 #<!-- RCS Identication ; $Revision$ --> 
 
 #
@@ -20,26 +19,36 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Datasource - Abstract data source object
+
+=head1 DESCRIPTION
+
+This class implements an abstract data source. 
+
+=cut
+
 package Sympa::Datasource;
 
 use strict;
 
 use Sympa::Log;
 
-############################################################
-#  constructor
-############################################################
-#  Create a new datasource object. Handle SQL source only
-#  at this moment. 
-#  
-# IN : -$type (+): the type of datasource to create
-#         'SQL' or 'MAIN' for main sympa database
-#      -$param_ref (+): ref to a Hash of config data
-#
-# OUT : instance of Datasource
-#     | undef
-#
-##############################################################
+=head1 CLASS METHODS
+
+=head2 Sympa::Datasource->new($params)
+
+Create a new L<Sympa::Datasource> object.
+
+=head3 Parameters
+
+=head3 Return value
+
+A new L<Sympa::Datasource> object, or I<undef> if something went wrong.
+
+=cut
+
 sub new {
 
     my($pkg, $param) = @_;

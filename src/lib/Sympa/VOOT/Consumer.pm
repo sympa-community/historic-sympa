@@ -21,12 +21,11 @@
 
 =head1 NAME 
 
-Sympa::VOOT::Consumer - VOOT consumer facilities for Sympa
+Sympa::VOOT::Consumer - VOOT consumer object
 
 =head1 DESCRIPTION 
 
-This package provides abstraction for the VOOT workflow (client side), handles
-OAuth workflow if nedeed.
+This class implements the client side of VOOT workflow.
 
 =cut 
 

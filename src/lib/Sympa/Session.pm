@@ -1,4 +1,3 @@
-# SympaSession.pm - This module includes functions managing HTTP sessions in Sympa
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -18,6 +17,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Session - HTTP session object
+
+=head1 DESCRIPTION
+
+This class implements an HTTP session.
+
+=cut
 
 package Sympa::Session;
 

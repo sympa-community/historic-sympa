@@ -1,4 +1,3 @@
-# Upgrade.pm - This module gathers all subroutines used to upgrade Sympa data structures
 #<!-- RCS Identication ; $Revision$ --> 
 
 #
@@ -19,6 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Upgrade - Upgrade functions
+
+=head1 DESCRIPTION
+
+This module provides functions to upgrade Sympa data structures.
+
+=cut
 
 package Sympa::Upgrade;
 

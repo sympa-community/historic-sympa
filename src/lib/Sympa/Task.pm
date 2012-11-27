@@ -1,4 +1,3 @@
-# Task.pm - This module includes Task processing functions, used by task_manager.pl
 #<!-- RCS Identication ; $Revision$ ; $Date$ --> 
 
 #
@@ -19,6 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME 
+
+Sympa::Task - Task object
+
+=head1 DESCRIPTION 
+
+This class implement a task.
+
+=cut 
 
 package Sympa::Task;
 

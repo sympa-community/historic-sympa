@@ -20,11 +20,11 @@
 
 =head1 NAME 
 
-Sympa::Admin - Administrative function for the lists
+Sympa::Admin - Administrative functions
 
 =head1 DESCRIPTION 
 
-Central module for creating and editing lists.
+This module provides creation and edition functions.
 
 =cut 
 

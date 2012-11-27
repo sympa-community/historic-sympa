@@ -2,9 +2,6 @@
 #                      PlainDigest                            #
 # version: 0.4.0rc6                                           #
 #                                                             #
-# PlainDigest provides an extension to the MIME::Entity       #
-# class that returns a plain text version of an email         #
-# message, suitable for use in plain text digests.            #
 #                                                             #
 # SYNOPSIS:                                                   #
 # (assuming an existing MIME::Entity object as $mail)         #
@@ -75,6 +72,17 @@
 # - Use MIME::Charset OO to handle vendor-defined encodings.
 # - Use MIME::EncWords instead of MIME::WordDecoder.
 # - Now HTML::FormatText is mandatory.  Remove Lynx support.
+
+=head1 NAME 
+
+Sympa::PlainDigest - MIME::Entity extension
+
+=head1 DESCRIPTION 
+
+PlainDigest provides an extension to the MIME::Entity class that returns a
+plain text version of an email message, suitable for use in plain text digests.
+
+=cut 
  
 package Sympa::PlainDigest;
 

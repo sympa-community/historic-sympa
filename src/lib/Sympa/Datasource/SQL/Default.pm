@@ -1,5 +1,3 @@
-# DBManipulatorDefault.pm - This module contains default manipulation functions.
-# they are used if not defined in the DBManipulator<*> subclasses.
 #<!-- RCS Identication ; $Revision: 7016 $ --> 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Datasource::SQL::Default - Generic SQL data source object
+
+=head1 DESCRIPTION
+
+This class implements a generic SQL data source.
+
+=cut
 
 package Sympa::Datasource::SQL::Default;
 

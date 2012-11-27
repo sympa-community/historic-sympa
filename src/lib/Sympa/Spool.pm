@@ -1,4 +1,3 @@
-# list.pm - This module includes all list processing functions
 # RCS Identication ; $Revision: 6646 $ ; $Date: 2010-08-19 10:32:08 +0200 (jeu 19 aoû 2010) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -18,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Spool - Mail spool object
+
+=head1 DESCRIPTION
+
+This class implements a mail spool.
+
+=cut
 
 package Sympa::Spool;
 

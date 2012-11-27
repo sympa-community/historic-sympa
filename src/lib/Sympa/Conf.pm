@@ -1,4 +1,3 @@
-# Conf.pm - This module does the sympa.conf and robot.conf parsing
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,7 +18,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## This module handles the configuration file for Sympa.
+=head1 NAME
+
+Sympa::Conf - Configuration file handling
+
+=head1 DESCRIPTION
+
+This module handles the configuration files for Sympa.
+
+=cut
 
 package Sympa::Conf;
 

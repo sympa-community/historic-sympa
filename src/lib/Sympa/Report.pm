@@ -1,5 +1,3 @@
-# report.pm - This module provides various tools for command and message 
-# diffusion report
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Report - Reporting functions
+
+=head1 DESCRIPTION
+
+This module provides functions for command and message diffusion report.
+
+=cut
 
 package Sympa::Report;
 

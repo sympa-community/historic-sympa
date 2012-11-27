@@ -21,6 +21,16 @@
 # TT2 adapter for sympa's template system - Chia-liang Kao <clkao@clkao.org>
 # usage: replace require 'parser.pl' in wwwsympa and other .pl
 
+=head1 NAME
+
+Sympa::TT2 - Template functions
+
+=head1 DESCRIPTION
+
+This module provides template-related functions.
+
+=cut
+
 package Sympa::TT2;
 
 use strict;

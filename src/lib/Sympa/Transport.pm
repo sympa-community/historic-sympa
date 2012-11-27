@@ -1,3 +1,13 @@
+=head1 NAME
+
+Sympa::Transport - SOAP::Transport::HTTP::FCGI extension
+
+=head1 DESCRIPTION
+
+This class implements a specialized SOAP HTTP transport. 
+
+=cut
+
 package Sympa::Transport;
 
 use strict;

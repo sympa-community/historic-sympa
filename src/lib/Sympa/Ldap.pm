@@ -1,4 +1,3 @@
-# Ldap.pm - This module includes most LDAP-related functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -18,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Ldap - LDAP functions
+
+=head1 DESCRIPTION
+
+This module provides LDAP-related functions.
+
+=cut
 
 package Sympa::Ldap;
 

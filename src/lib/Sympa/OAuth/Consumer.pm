@@ -21,13 +21,13 @@
 
 =head1 NAME 
 
-Sympa::OAuth::Consumer - OAuth consumer facilities for Sympa
+Sympa::OAuth::Consumer - OAuth consumer object
 
 =head1 DESCRIPTION 
 
-This package provides abstraction from the OAuth workflow (client side) when
-performing authorization request, handles token retrieving as well as database
-storage.  
+This class implements the client side of the OAuth workflow.
+
+It handles authorization request, token retrieving and database storage.  
 
 =cut 
 

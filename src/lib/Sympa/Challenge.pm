@@ -23,7 +23,7 @@ Sympa::Challenge - Email challenges functions
 
 =head1 DESCRIPTION
 
-This module includes functions managing email challenges.
+This module provides email challenges functions.
 
 =cut
 

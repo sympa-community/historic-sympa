@@ -21,13 +21,13 @@
 
 =head1 NAME 
 
-Sympa::OAuth::Provider - OAuth provider facilities for Sympa
+Sympa::OAuth::Provider - OAuth provider object
 
 =head1 DESCRIPTION 
 
-This package provides abstraction from the OAuth workflow (server side) when
-getting requests for temporary/access tokens, handles database storage and
-provides helpers.
+This class implements the server side of the OAuth workflow.
+
+It handles requests for temporary/access tokens and database storage.
 
 =cut 
 

@@ -1,8 +1,13 @@
-## This package handles Sympa virtual robots
-## It should :
-##   * provide access to global conf parameters,
-##   * deliver the list of lists
-##   * determine the current robot, given a host
+=head1 NAME 
+
+Sympa::Robot - Virtual robot object
+
+=head1 DESCRIPTION 
+
+This class implement a virtual robot.
+
+=cut 
+
 package Sympa::Robot;
 
 use Sympa::Conf;
