@@ -18,6 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Tools::Bounce - Bounce-related functions
+
+=head1 DESCRIPTION
+
+This module provides functions for analysing non-delivery reports.
+
+=cut
+
 package Sympa::Tools::Bounce;
 
 use strict;
@@ -30,6 +40,14 @@ use Sympa::Log;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(rfc1891 corrige anabounce);
+
+=head1 FUNCTIONS
+
+=head2 rfc1891($message, $result, $from)
+
+RFC1891 compliance check
+
+=cut
 
 sub rfc1891 {
     my ($message, $result, $from) = @_;
@@ -99,6 +117,12 @@ sub rfc1891 {
     return $nbrcpt;
 }
 
+=head2 corrige($adr, $from)
+
+Corrige une adresse SMTP
+
+=cut
+
 sub corrige {
 
     my ($adr, $from) = @_;
@@ -143,6 +167,34 @@ sub corrige {
 
     }
 }
+
+=head2 anabounce($message, $result, $from)
+
+Analyse d'un rapport de non-remise
+
+Parameters:
+
+=over
+
+=item
+
+descripteur du fichier contenant le bounce
+
+=item
+
+reference d'un hash pour retourner @ en erreur
+
+=item
+
+reference d'un tableau pour retourner des stats
+
+=item
+
+reference d'un tableau pour renvoyer le bounce
+
+=back
+
+=cut
 
 sub anabounce {
 
@@ -911,47 +963,3 @@ sub anabounce {
 }
 
 1;
-__END__
-=head1 NAME
-
-Sympa::Tools::Bounce - Bounce-related functions
-
-=head1 DESCRIPTION
-
-This module provides functions for analysing non-delivery reports.
-
-=head1 FUNCTIONS
-
-=head2 rfc1891($message, $result, $from)
-
-RFC1891 compliance check
-
-=head2 corrige($adr, $from)
-
-Corrige une adresse SMTP
-
-=head2 anabounce($message, $result, $from)
-
-Analyse d'un rapport de non-remise
-
-Parameters:
-
-=over
-
-=item
-
-descripteur du fichier contenant le bounce
-
-=item
-
-reference d'un hash pour retourner @ en erreur
-
-=item
-
-reference d'un tableau pour retourner des stats
-
-=item
-
-reference d'un tableau pour renvoyer le bounce
-
-=back

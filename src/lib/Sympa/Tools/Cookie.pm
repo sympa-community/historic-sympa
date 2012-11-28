@@ -18,6 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Tools::Cookie - Cookie-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing HTTP cookies.
+
+=cut
+
 package Sympa::Tools::Cookie;
 
 use strict "vars";
@@ -26,6 +36,14 @@ use CGI::Cookie;
 use Digest::MD5;
 
 use Sympa::Log;
+
+=head1 FUNCTIONS
+
+=head2 generic_set_cookie(%param)
+
+Generic subroutine to set a cookie
+
+=cut
 
 sub generic_set_cookie {
     my %param = @_;
@@ -46,6 +64,12 @@ sub generic_set_cookie {
    
     return 1;
 }
+
+=head2 set_cookie_soap($session_id, $http_domain, $expire)
+
+Sets an HTTP cookie to be sent to a SOAP client
+
+=cut
     
 sub set_cookie_soap {
     my ($session_id,$http_domain,$expire) = @_ ;
@@ -69,6 +93,12 @@ sub set_cookie_soap {
     ## Return the cookie value
     return $cookie;
 }
+
+=head2 get_mac($email, $secret)
+
+Returns Message Authentication Check code
+
+=cut
 
 sub get_mac {
         my $email = shift ;
@@ -126,6 +156,12 @@ sub set_cookie_extern {
     return 1;
 }
 
+=head2 generic_get_cookie($http_cookie, $cookie_name)
+
+Generic subroutine to get a cookie value
+
+=cut
+
 sub generic_get_cookie {
     my $http_cookie = shift;
     my $cookie_name = shift;
@@ -140,6 +176,12 @@ sub generic_get_cookie {
     }
     return (undef);
 }
+
+=head2 check_cookie($http_cookie, $secret)
+
+Returns user information extracted from the cookie
+
+=cut
 
 sub check_cookie {
     my $http_cookie = shift;
@@ -185,33 +227,3 @@ sub check_cookie_extern {
 }
 
 1;
-__END__
-=head1 NAME
-
-Sympa::Tools::Cookie - Cookie-related functions
-
-=head1 DESCRIPTION
-
-This module provides various functions for managing HTTP cookies.
-
-=head1 FUNCTIONS
-
-=head2 generic_set_cookie(%param)
-
-Generic subroutine to set a cookie
-
-=head2 generic_get_cookie($http_cookie, $cookie_name)
-
-Generic subroutine to get a cookie value
-
-=head2 set_cookie_soap($session_id, $http_domain, $expire)
-
-Sets an HTTP cookie to be sent to a SOAP client
-
-=head2 get_mac($email, $secret)
-
-Returns Message Authentication Check code
-
-=head2 check_cookie($http_cookie, $secret)
-
-Returns user information extracted from the cookie

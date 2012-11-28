@@ -18,6 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Tools::DKIM - DKIM-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing DKIM.
+
+=cut
+
 package Sympa::Tools::DKIM;
 
 use strict;
@@ -84,6 +94,14 @@ sub get_dkim_parameters {
     return $data;
 }
 
+=head1 FUNCTIONS
+
+=head2 dkim_verifier($msg, $tmpdir)
+
+Input a msg as string, output the dkim status
+
+=cut
+
 sub dkim_verifier {
     my $msg_as_string = shift;
     my $tmpdir = shift;
@@ -135,6 +153,12 @@ sub dkim_verifier {
     return undef;
 }
 
+=head2 remove_invalid_dkim_signature($tmpdir, $msg)
+
+Input a msg as string, output idem without signature if invalid
+
+=cut
+
 sub remove_invalid_dkim_signature {
     my ($tmpdir) = @_;
     &Sympa::Log::do_log('debug',"removing invalide dkim signature");
@@ -157,6 +181,12 @@ sub remove_invalid_dkim_signature {
 	return ($msg_as_string); # sgnature is valid.
     }
 }
+
+=head2 dkim_sign($msg, $data, $tmpdir)
+
+Input object msg and listname, output signed message object
+
+=cut
 
 sub dkim_sign {
     # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
@@ -267,25 +297,3 @@ sub dkim_sign {
 }
 
 1;
-__END__
-=head1 NAME
-
-Sympa::Tools::DKIM - DKIM-related functions
-
-=head1 DESCRIPTION
-
-This module provides various functions for managing DKIM.
-
-=head1 FUNCTIONS
-
-=head2 dkim_verifier($msg, $tmpdir)
-
-Input a msg as string, output the dkim status
-
-=head2 remove_invalid_dkim_signature($tmpdir, $msg)
-
-Input a msg as string, output idem without signature if invalid
-
-=head2 dkim_sign($msg, $data, $tmpdir)
-
-Input object msg and listname, output signed message object

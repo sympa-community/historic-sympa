@@ -18,6 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Tools::File - File-related functions
+
+=head1 DESCRIPTION
+
+This module provides various file-releated functions.
+
+=cut
+
 package Sympa::Tools::File;
 
 use strict;
@@ -28,6 +38,14 @@ use File::Find;
 use POSIX qw();
 
 use Sympa::Log;
+
+=head1 FUNCTIONS
+
+=head2 set_file_rights(%param)
+
+Sets owner and/or access rights on a file.
+
+=cut
 
 sub set_file_rights {
     my %param = @_;
@@ -62,6 +80,12 @@ sub set_file_rights {
     return 1;
 }
 
+=head2 copy_dir($dir1, $dir2)
+
+Copy a directory and its content
+
+=cut
+
 sub copy_dir {
     my $dir1 = shift;
     my $dir2 = shift;
@@ -73,6 +97,12 @@ sub copy_dir {
     }
     return (&File::Copy::Recursive::dircopy($dir1,$dir2)) ;
 }
+
+=head2 del_dir($dir)
+
+Delete a directory and its content.
+
+=cut
 
 sub del_dir {
     my $dir = shift;
@@ -92,6 +122,12 @@ sub del_dir {
     }
 }
 
+=head2 mk_parent_dir($file)
+
+To be used before creating a file in a directory that may not exist already. 
+
+=cut
+
 sub mk_parent_dir {
     my $file = shift;
     $file =~ /^(.*)\/([^\/])*$/ ;
@@ -100,6 +136,12 @@ sub mk_parent_dir {
     return 1 if (-d $dir);
     &mkdir_all($dir, 0755);
 }
+
+=head2 mkdir_all($path, $mode)
+
+Recursively create directory and all parent directories
+
+=cut
 
 sub mkdir_all {
     my ($path, $mode) = @_;
@@ -134,6 +176,13 @@ sub mkdir_all {
 
     return $status;
 }
+
+=head2 shift_file($file, $count)
+
+Shift file renaming it with date. If count is defined, keep $count file and
+unlink others
+
+=cut
 
 sub shift_file {
     my $file = shift;
@@ -175,6 +224,12 @@ sub shift_file {
     return ($file.'.'.$file_extention);
 }
 
+=head2 find_file($filename, @directories)
+
+Find a file in an ordered list of directories
+
+=cut
+
 sub find_file {
     my ($filename, @directories) = @_;
     &Sympa::Log::do_log('debug3','tools::find_file(%s,%s)', $filename, join(':',@directories));
@@ -187,6 +242,13 @@ sub find_file {
     
     return undef;
 }
+
+=head2 list_dir($dir, $all)
+
+Recursively list the content of a directory
+Return an array of hash, each entry with directory + filename + encoding
+
+=cut
 
 sub list_dir {
     my $dir = shift;
@@ -242,6 +304,15 @@ sub get_dir_size {
     return $size;
 }
 
+=head2 remove_dir(@directories)
+
+Function for Removing a non-empty directory.
+It takes a variale number of arguments : 
+it can be a list of directory
+or few direcoty paths
+
+=cut
+
 sub remove_dir {
     
     &Sympa::Log::do_log('debug2','remove_dir()');
@@ -270,6 +341,12 @@ sub LOCK_SH {1};
 sub LOCK_EX {2};
 sub LOCK_NB {4};
 sub LOCK_UN {8};
+
+=head2 lock($file)
+
+Lock a file.
+
+=cut
 
 sub lock {
     my $lock_file = shift;
@@ -337,6 +414,12 @@ sub lock {
     return \*FH;
 }
 
+=head2 unlock($file, $handle)
+
+Unlock a file. 
+
+=cut
+
 sub unlock {
     my $lock_file = shift;
     my $fh = shift;
@@ -350,6 +433,30 @@ sub unlock {
     
     return 1;
 }
+
+=head2 a_is_older_than_b($param)
+
+Compares the last modifications date of two files
+
+Parameters (hashref keys):
+
+=over
+
+=item I<a_file>
+
+full path to a file
+
+=item I<b_file>
+
+full path to a file
+
+=back
+
+Returns the string 'true' if the last modification date of first file is older
+than second file, the 'false' string otherwise, and undef if the comparison
+could not be carried on.
+
+=cut
 
 sub a_is_older_than_b {
     my $param = shift;
@@ -378,84 +485,3 @@ sub a_is_older_than_b {
 }
 
 1;
-__END__
-=head1 NAME
-
-Sympa::Tools::File - File-related functions
-
-=head1 DESCRIPTION
-
-This module provides various file-releated functions.
-
-=head1 FUNCTIONS
-
-=head2 set_file_rights(%param)
-
-Sets owner and/or access rights on a file.
-
-=head2 copy_dir($dir1, $dir2)
-
-Copy a directory and its content
-
-=head2 del_dir($dir)
-
-Delete a directory and its content.
-
-=head2 mk_parent_dir($file)
-
-To be used before creating a file in a directory that may not exist already. 
-
-=head2 mkdir_all($path, $mode)
-
-Recursively create directory and all parent directories
-
-=head shift_file($file, $count)
-
-Shift file renaming it with date. If count is defined, keep $count file and
-unlink others
-
-=head2 find_file($filename, @directories)
-
-Find a file in an ordered list of directories
-
-=head2 list_dir($dir, $all)
-
-Recursively list the content of a directory
-Return an array of hash, each entry with directory + filename + encoding
-
-=head2 remove_dir(@directories)
-
-Function for Removing a non-empty directory.
-It takes a variale number of arguments : 
-it can be a list of directory
-or few direcoty paths
-
-=head2 lock($file)
-
-Lock a file.
-
-=head2 unlock($file, $handle)
-
-Unlock a file. 
-
-=head2 a_is_older_than_b($param)
-
-Compares the last modifications date of two files
-
-Parameters (hashref keys):
-
-=over
-
-=item I<a_file>
-
-full path to a file
-
-=item I<b_file>
-
-full path to a file
-
-=back
-
-Returns the string 'true' if the last modification date of first file is older
-than second file, the 'false' string otherwise, and undef if the comparison
-could not be carried on.

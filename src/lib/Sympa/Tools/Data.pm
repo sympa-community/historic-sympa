@@ -18,11 +18,28 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+Sympa::Tools::Data - Datastructures-related functions
+
+=head1 DESCRIPTION
+
+This module provides various functions for managing data structures.
+
+=cut
+
 package Sympa::Tools::Data;
 
 use strict;
 
 use POSIX qw();
+
+=head1 FUNCTIONS
+
+=head2 recursive_transformation($var, $subref)
+
+This applies recursively to a data structure. The transformation subroutine is
+passed as a ref.
 
 sub recursive_transformation {
     my ($var, $subref) = @_;
@@ -50,12 +67,24 @@ sub recursive_transformation {
     return;
 }
 
+=head2 dump_encoding($out)
+
+Dumps the value of each character of the inuput string
+
+=cut
+
 sub dump_encoding {
     my $out = shift;
 
     $out =~ s/./sprintf('%02x', ord($&)).' '/eg;
     return $out;
 }
+
+=head2 dump_var($var, $level, $fd)
+
+Dump a variable's content
+
+=cut
 
 sub dump_var {
     my ($var, $level, $fd) = @_;
@@ -84,6 +113,12 @@ sub dump_var {
 	}
     }
 }
+
+=head2 dump_html_var($var)
+
+Dump a variable's content
+
+=cut
 
 sub dump_html_var {
     my ($var) = shift;
@@ -120,6 +155,12 @@ sub dump_html_var {
     }
     return $html;
 }
+
+=head2 dump_html_var2($var)
+
+Dump a variable's content
+
+=cut
 
 sub dump_html_var2 {
     my ($var) = shift;
@@ -184,6 +225,12 @@ sub remove_empty_entries {
     return $not_empty;
 }
 
+=head2 dup_var($var)
+
+Duplicate a complex variable
+
+=cut
+
 sub dup_var {
     my ($var) = @_;    
 
@@ -206,6 +253,13 @@ sub dup_var {
     return $var; 
 }
 
+=head2 get_array_from_splitted_string($string)
+
+return an array made on a string splited by ','.
+It removes spaces.
+
+=cut
+
 sub get_array_from_splitted_string {
     my ($string) = @_;
     my @array;
@@ -218,6 +272,40 @@ sub get_array_from_splitted_string {
 
     return \@array;
 }
+
+=head2 diff_on_arrays($a, $b)
+
+Makes set operation on arrays (seen as set, with no double).
+
+Parameters:
+
+=over
+
+=item I<$a>
+
+first set (arrayref)
+
+=item I<$b>
+
+second set (arrayref)
+
+=back
+
+Returns an hashref with following keys:
+
+=over
+
+=item deleted
+
+=item added
+
+=item intersection
+
+=item union
+
+=back
+
+=cut
 
 sub diff_on_arrays {
     my ($setA,$setB) = @_;
@@ -278,6 +366,12 @@ sub diff_on_arrays {
     
 } 
 
+=head2 is_on_array($set, $value)
+
+Returns a true value if value I<$value> if part of set I<$set>
+
+=cut
+
 sub is_in_array {
     my ($set,$value) = @_;
     
@@ -286,6 +380,12 @@ sub is_in_array {
     }
     return undef;
 }
+
+=head2 higher_version($v1, $v2)
+
+Compare 2 versions of Sympa
+
+=cut
 
 sub higher_version {
     my ($v1, $v2) = @_;
@@ -323,6 +423,12 @@ sub higher_version {
     return 0;
 }
 
+=head2 lower_version($v1, $v2)
+
+Compare 2 versions of Sympa
+
+=cut
+
 sub lower_version {
     my ($v1, $v2) = @_;
 
@@ -359,6 +465,15 @@ sub lower_version {
     return 0;
 }
 
+=head2 string_2_hash($string)
+
+convert a string formated as var1="value1";var2="value2"; into a hash.
+Used when extracting from session table some session properties or when
+extracting users preference from user table.
+Current encoding is NOT compatible with encoding of values with '"'
+
+=cut
+
 sub string_2_hash {
     my $data = shift;
     my %hash ;
@@ -374,6 +489,13 @@ sub string_2_hash {
 
 }
 
+=head2 hash_2_string($hash)
+
+Convert a hash into a string formated as var1="value1";var2="value2"; into a
+hash
+
+=cut
+
 sub hash_2_string { 
     my $refhash = shift;
 
@@ -388,6 +510,12 @@ sub hash_2_string {
     }
     return ($data_string);
 }
+
+=head2 smart_lessthan($a, $b)
+
+compare 2 scalars, string/numeric independant
+
+=cut
 
 sub smart_lessthan {
     my ($stra, $strb) = @_;
@@ -405,6 +533,12 @@ sub smart_lessthan {
     } 
 }
 
+=head2 count_numbers_in_string($string)
+
+Returns the counf of numbers found in the string given as argument.
+
+=cut
+
 sub count_numbers_in_string {
     my $str = shift;
     my $count = 0;
@@ -413,107 +547,3 @@ sub count_numbers_in_string {
 }
 
 1;
-__END__
-=head1 NAME
-
-Sympa::Tools::Data - Datastructures-related functions
-
-=head1 DESCRIPTION
-
-This module provides various functions for managing data structures.
-
-=head1 FUNCTIONS
-
-=head2 recursive_transformation($var, $subref)
-
-This applies recursively to a data structure. The transformation subroutine is
-passed as a ref.
-
-=head2 dump_encoding($out)
-
-Dumps the value of each character of the inuput string
-
-=head2 dump_var($var, $level, $fd)
-
-Dump a variable's content
-
-=head2 dump_html_var($var)
-
-Dump a variable's content
-
-=head2 dump_html_var2($var)
-
-Dump a variable's content
-
-=head2 dup_var($var)
-
-Duplicate a complex variable
-
-=head2 get_array_from_splitted_string($string)
-
-return an array made on a string splited by ','.
-It removes spaces.
-
-=head2 diff_on_arrays($a, $b)
-
-Makes set operation on arrays (seen as set, with no double).
-
-Parameters:
-
-=over
-
-=item I<$a>
-
-first set (arrayref)
-
-=item I<$b>
-
-second set (arrayref)
-
-=back
-
-Returns an hashref with following keys:
-
-=over
-
-=item deleted
-
-=item added
-
-=item intersection
-
-=item union
-
-=back
-
-=head2 is_on_array($set, $value)
-
-Returns a true value if value I<$value> if part of set I<$set>
-
-=head2 higher_version($v1, $v2)
-
-Compare 2 versions of Sympa
-
-=head2 lower_version($v1, $v2)
-
-Compare 2 versions of Sympa
-
-=head2 string_2_hash($string)
-
-convert a string formated as var1="value1";var2="value2"; into a hash.
-Used when extracting from session table some session properties or when
-extracting users preference from user table.
-Current encoding is NOT compatible with encoding of values with '"'
-
-=head2 hash_2_string($hash)
-
-Convert a hash into a string formated as var1="value1";var2="value2"; into a
-hash
-
-=head2 smart_lessthan($a, $b)
-
-compare 2 scalars, string/numeric independant
-
-=head2 count_numbers_in_string($string)
-
-Returns the counf of numbers found in the string given as argument.
