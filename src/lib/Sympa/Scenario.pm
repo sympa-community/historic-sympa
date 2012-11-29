@@ -37,7 +37,7 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
-use Sympa::Ldap;
+use Sympa::LDAP;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
@@ -1237,7 +1237,7 @@ sub search{
 	my $time = time;
 	my %ldap_conf;
     
-	return undef unless (%ldap_conf = &Sympa::Ldap::load($file));
+	return undef unless (%ldap_conf = &Sympa::LDAP::load($file));
 
 	my $filter = $ldap_conf{'filter'};	
 

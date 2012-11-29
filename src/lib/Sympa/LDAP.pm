@@ -20,7 +20,7 @@
 
 =head1 NAME
 
-Sympa::Ldap - LDAP functions
+Sympa::LDAP - LDAP functions
 
 =head1 DESCRIPTION
 
@@ -28,7 +28,7 @@ This module provides LDAP-related functions.
 
 =cut
 
-package Sympa::Ldap;
+package Sympa::LDAP;
 
 use strict "vars";
 
