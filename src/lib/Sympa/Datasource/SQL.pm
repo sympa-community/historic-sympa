@@ -102,13 +102,13 @@ sub new {
 	
 	$actualclass = "Sympa::Datasource::SQL::SQLite";
     }elsif ($param->{'db_type'} =~ /^pg$/i) {
-	unless ( eval "require Sympa::Datasource::SQL::Postgres" ){
-	    &Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Postgres module");
+	unless ( eval "require Sympa::Datasource::SQL::PostgreSQL" ){
+	    &Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::PostgreSQL module");
 	    return undef;
 	}
-	require Sympa::Datasource::SQL::Postgres;
+	require Sympa::Datasource::SQL::PostgreSQL;
 	
-	$actualclass = "Sympa::Datasource::SQL::Postgres";
+	$actualclass = "Sympa::Datasource::SQL::PostgreSQL";
     }elsif ($param->{'db_type'} =~ /^oracle$/i) {
 	unless ( eval "require Sympa::Datasource::SQL::Oracle" ){
 	    &Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Oracle module");

@@ -20,15 +20,15 @@
 
 =head1 NAME
 
-Sympa::Datasource::SQL::Postgres - Postgres data source object
+Sympa::Datasource::SQL::PostgreSQL - PostgreSQL data source object
 
 =head1 DESCRIPTION
 
-This class implements a Potsgres data source.
+This class implements a PotsgreSQL data source.
 
 =cut
 
-package Sympa::Datasource::SQL::Postgres;
+package Sympa::Datasource::SQL::PostgreSQL;
 
 use strict;
 
