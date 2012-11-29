@@ -94,19 +94,19 @@ sub _create_xss_parser {
 
 =head1 FUNCTIONS
 
-=head2 pictures_filename(%params)
+=head2 pictures_filename(%parameters)
 
 Return the type of a pictures according to the user.
 
-Parameters (hash keys):
+=head3 Parameters
 
 =over
 
-=item I<email>
+=item * I<email>
 
-=item I<list>
+=item * I<list>
 
-=item I<path>
+=item * I<path>
 
 =back
 
@@ -130,21 +130,21 @@ sub pictures_filename {
     return $filename;
 }
 
-=head2 make_pictures_url(%params)
+=head2 make_pictures_url(%parameters)
 
 Creation of pictures url.
 
-Parameters (hash keys):
+=head3 Parameters
 
 =over
 
-=item I<url>
+=item * I<url>
 
-=item I<email>
+=item * I<email>
 
-=item I<list>
+=item * I<list>
 
-=item I<path>
+=item * I<path>
 
 =back
 
@@ -160,20 +160,20 @@ sub make_pictures_url {
  	$parameters{'url'}.$listname.'@'.$robot.'/'.$filename : undef;
 }
 
-=head2 sanitize_html(%params)
+=head2 sanitize_html(%parameters)
 
 Returns sanitized version (using StripScripts) of the string provided as
 argument.
 
-Parameters (hash keys):
+=head3 Parameters
 
 =over
 
-=item I<string>
+=item * I<string>
 
-=item I<robot>
+=item * I<robot>
 
-=item I<host>
+=item * I<host>
 
 =back
 
@@ -197,20 +197,20 @@ sub sanitize_html {
     return $string;
 }
 
-=head2 sanitize_html_file(%params)
+=head2 sanitize_html_file(%parameters)
 
 Returns sanitized version (using StripScripts) of the content of the file whose
 path is provided as argument.
 
-Parameters (hash keys):
+=head3 Parameters
 
 =over
 
-=item I<file>
+=item * I<file>
 
-=item I<robot>
+=item * I<robot>
 
-=item I<host>
+=item * I<host>
 
 =back
 
@@ -234,23 +234,23 @@ sub sanitize_html_file {
     return $hss -> filtered_document;
 }
 
-=head2 sanitize_var(%params)
+=head2 sanitize_var(%parameters)
 
 Sanitize all values in the hash $var, starting from $level
 
-Parameters (hash keys):
+=head3 Parameters
 
 =over
 
-=item I<var>
+=item * I<var>
 
-=item I<level>
+=item * I<level>
 
-=item I<robot>
+=item * I<robot>
 
-=item I<htmlAllowedParam>
+=item * I<htmlAllowedParam>
 
-=item I<htmlToFilter>
+=item * I<htmlToFilter>
 
 =back
 
@@ -382,25 +382,21 @@ sub safefork {
 Checks for no command in the body of the message. If there are some command in
 it, it return true and send a message to $sender.
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$msg>
+=item * I<$msg>: message to check (MIME::Entity object)
 
-message to check (MIME::Entity object)
+=item * I<$sender>: the sender
 
-=item I<$sender>
-
-the sender
-
-=item I<$robot>
-
-the robot
+=item * I<$robot>: the robot
 
 =back
 
-Returns true if there are some command in $msg, false otherwise.
+=head3 Return value
+
+true if there are some command in $msg, false otherwise.
 
 =cut
 
@@ -439,15 +435,15 @@ sub checkcommand {
 
 Return a hash from the edit_list_conf file
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$robot>
+=item * I<$robot>
 
-=item I<$list>
+=item * I<$list>
 
-=item I<$basedir>
+=item * I<$basedir>
 
 =back
 
@@ -511,13 +507,13 @@ sub load_edit_list_conf {
 
 Return a hash from the create_list_conf file
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$robot>
+=item * I<$robot>
 
-=item I<$basedir>
+=item * I<$basedir>
 
 =back
 
@@ -678,23 +674,23 @@ sub get_templates_list {
 
 Return the path for a specific template
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$type>
+=item * I<$type>
 
-=item I<$robot>
+=item * I<$robot>
 
-=item I<$scope>
+=item * I<$scope>
 
-=item I<$tpl>
+=item * I<$tpl>
 
-=item I<$lang>
+=item * I<$lang>
 
-=item I<$list>
+=item * I<$list>
 
-=item I<$basedir>
+=item * I<$basedir>
 
 =back
 
@@ -750,13 +746,15 @@ sub get_template_path {
 
 Make a multipart/alternative, a singlepart
 
+=head3 Parameters
+
 =over
 
-=item I<$msg>
+=item * I<$msg>
 
-=item I<$preferred_type>
+=item * I<$preferred_type>
 
-=item I<$loops>
+=item * I<$loops>
 
 =back
 
@@ -1486,19 +1484,21 @@ sub virus_infected {
 Look for a file in the list > robot > server > default locations
 Possible values for $options : order=all
 
+=head3 Parameters
+
 =over
 
-=item I<$type>
+=item * I<$type>
 
-=item I<$options>
+=item * I<$options>
 
-=item I<$name>
+=item * I<$name>
 
-=item I<$robot>
+=item * I<$robot>
 
-=item I<$object>
+=item * I<$object>
 
-=item I<$basedir>
+=item * I<$basedir>
 
 =back
 
@@ -1588,35 +1588,29 @@ sub get_filename {
 
 Make an array of include path for tt2 parsing.
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$robot>
+=item * I<$robot>: robot
 
-robot
+=item * I<$dir>: directory ending each path
 
-=item I<$dir>
+=item * I<$lang>: lang
 
-directory ending each path
+=item * I<$list>: list
 
-=item I<$lang>
+=item * I<$basedir> 
 
-lang
+=item * I<$viewmaildir> 
 
-=item I<$list>
-
-list
-
-=item I<$basedir>
-
-=item I<$viewmaildir>
-
-=item I<$domain>
+=item * I<$domain>
 
 =back
 
-Returns an arrayref of tt2 include path
+=head3 Return value
+
+An arrayref of tt2 include path
 
 =cut
 
@@ -1815,17 +1809,17 @@ sub get_canonical_email {
 
 clean msg_id to use it without  \n, \s or <,>
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$msg_id>
-
-the message id.
+=item * I<$msg_id>: the message id.
 
 =back
 
-Returns the clean message id.
+=head3 Return value
+
+The clean message id.
 
 =cut
 
@@ -1936,25 +1930,23 @@ Use:
 - init_db_random()
 - md5_fingerprint()
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$email>
+=item * I<$email>: email of the subscriber
 
-email of the subscriber
+=item * I<$fingerprint>: the fingerprint in the url (1st case)
 
-=item I<$fingerprint>
+=item * I<$random>
 
-the fingerprint in the url (1st case)
-
-=item I<$random>
-
-=item I<$random_email>
+=item * I<$random_email>
 
 =back
 
-Returns an md5 for creating an URL if $fingerprint is defined, otherwise a true
+=head3 Return value
+
+An md5 for creating an URL if $fingerprint is defined, otherwise a true
 value if the the md5 in the URL is true.
 
 =cut
@@ -2031,25 +2023,21 @@ sub get_regexp {
 Saves a message file to the "bad/" spool of a given queue. Creates this
 directory if not found.
 
-Parameters (hashref keys):
+=head3 Parameters
 
 =over
 
-=item I<file>
+=item * I<file>: the characters string of the path to the file to copy to bad
 
-the characters string of the path to the file to copy to bad;
+=item * I<hostname>: the characters string of the name of the virtual host concerned
 
-=item I<hostname>
-
-the characters string of the name of the virtual host concerned;
-
-=item I<queue>
-
-the characters string of the name of the queue.
+=item * I<queue>: the characters string of the name of the queue.
 
 =back
 
-Returns a true value if the file was correctly saved to the "bad/" directory, a
+=head3 Return value
+
+A true value if the file was correctly saved to the "bad/" directory, a
 false value otherwise.
 
 =cut
@@ -2086,22 +2074,19 @@ sub save_to_bad {
 
 Clean all messages in spool $spool_dir older than $clean_delay.
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$spool_dir>
+=item * I<$spool_dir>: a string corresponding to the path to the spool to clean;
 
-a string corresponding to the path to the spool to clean;
-
-=item I<$clean_delay>
-
-the delay between the moment we try to clean spool and the last modification
-date of a file.
+=item * I<$clean_delay>: the delay between the moment we try to clean spool and the last modification date of a file.
 
 =back
 
-Returns a true value if the spool was cleaned, a false value otherwise. 
+=head3 Return value
+
+A true value if the spool was cleaned, a false value otherwise. 
 
 =head2 CleanDir($dir, $clean_delay)
 
@@ -2182,17 +2167,15 @@ sub wrap_text {
 
 Return formatted (and encoded) name-addr as RFC5322 3.4.
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$addr>
+=item * I<$addr>
 
-=item I<$phrase>
+=item * I<$phrase>
 
-=item I<$charset>
-
-(default: utf8)
+=item * I<$charset> (default: utf8)
 
 =back
 

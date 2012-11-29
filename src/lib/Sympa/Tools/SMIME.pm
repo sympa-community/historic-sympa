@@ -663,47 +663,35 @@ sub smime_find_keys {
     return ($certs,$keys);
 }
 
-=head2 smime_parse_cert($arg)
+=head2 smime_parse_cert($parameters)
 
-Parameters (hashref keys):
+=head3 Parameters
 
 =over
 
-=item I<file>
+=item * I<file>: filename
 
-filename
-
-=item I<text>
-
-PEM-encoded cert
+=item * I<text>: PEM-encoded cert
 
 =back
 
-Returns an hashref with the following keys:
+=head3 Return value
+
+An hashref with the following keys:
 
 =over
 
-=item I<email>
+=item * I<email>: email address from cert
 
-email address from cert
+=item * I<subject>: distinguished name
 
-=item I<subject>
-
-distinguished name
-
-=item I<purpose>
-
-Hashref with the following keys:
+=item * I<purpose>: hashref with the following keys:
 
 =over
 
-=item I<enc>
+=item * I<enc>: true if v3 purpose is encryption
 
-true if v3 purpose is encryption
-
-=item I<sign>
-
-true if v3 purpose is signing
+=item * I<sign>: true if v3 purpose is signing
 
 =back
 

@@ -172,25 +172,15 @@ sub corrige {
 
 Analyse d'un rapport de non-remise
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item
+=item * I<$message>: descripteur du fichier contenant le bounce
 
-descripteur du fichier contenant le bounce
+=item * I<$result>: reference d'un hash pour retourner @ en erreur
 
-=item
-
-reference d'un hash pour retourner @ en erreur
-
-=item
-
-reference d'un tableau pour retourner des stats
-
-=item
-
-reference d'un tableau pour renvoyer le bounce
+=item * I<$from>: reference d'un tableau pour retourner des stats
 
 =back
 

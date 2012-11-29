@@ -277,31 +277,29 @@ sub get_array_from_splitted_string {
 
 Makes set operation on arrays (seen as set, with no double).
 
-Parameters:
+=head3 Parameters
 
 =over
 
-=item I<$a>
+=item * I<$a>: first set (arrayref)
 
-first set (arrayref)
-
-=item I<$b>
-
-second set (arrayref)
+=item * I<$b>: second set (arrayref)
 
 =back
 
-Returns an hashref with following keys:
+=head3 Return value
+
+An hashref with following keys:
 
 =over
 
-=item deleted
+=item * I<deleted>
 
-=item added
+=item * I<added>
 
-=item intersection
+=item * I<intersection>
 
-=item union
+=item * I<union>
 
 =back
 

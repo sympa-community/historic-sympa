@@ -211,7 +211,7 @@ sub direct_stderr_to_file {
     return 1;
 }
 
-=head2 send_crash_report(%params)
+=head2 send_crash_report(%parameters)
 
 Send content of $pid.stderr to listmaster for process whose pid is $pid.
 

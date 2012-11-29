@@ -434,25 +434,23 @@ sub unlock {
     return 1;
 }
 
-=head2 a_is_older_than_b($param)
+=head2 a_is_older_than_b($parameters)
 
 Compares the last modifications date of two files
 
-Parameters (hashref keys):
+=head3 Parameters
 
 =over
 
-=item I<a_file>
+=item * I<a_file>: full path to a file
 
-full path to a file
-
-=item I<b_file>
-
-full path to a file
+=item * I<b_file>: full path to a file
 
 =back
 
-Returns the string 'true' if the last modification date of first file is older
+=head3 Return value
+
+The string 'true' if the last modification date of first file is older
 than second file, the 'false' string otherwise, and undef if the comparison
 could not be carried on.
 
