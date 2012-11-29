@@ -175,19 +175,20 @@ sub connect {
     }
 }
 
-############################################################
-#  establish_connection
-############################################################
-#  Connect to an SQL database.
-#  
-# IN : $options : ref to a hash. Options for the connection process.
-#         currently accepts 'keep_trying' : wait and retry until
-#         db connection is ok (boolean) ; 'warn' : warn
-#         listmaster if connection fails (boolean)
-# OUT : $self->{'dbh'}
-#     | undef
-#
-##############################################################
+=head2 $source->establish_connection()
+
+Connect to a SQL database.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A DBI database handle object, or I<undef> if something went wrong.
+
+=cut
+
 sub establish_connection {
     my $self = shift;
 
@@ -325,6 +326,22 @@ sub establish_connection {
     }
 }
 
+=head2 $source->do_query($query, @params)
+
+=head3 Parameters
+
+=over
+
+=item * I<$query>
+
+=back
+
+=head3 Return value
+
+A DBI statement handle object, or I<undef> if something went wrong.
+
+=cut
+
 sub do_query {
     my $self = shift;
     my $query = shift;
@@ -375,6 +392,22 @@ sub do_query {
 
     return $self->{'sth'};
 }
+
+=head2 $source->do_prepared_query($query, @params)
+
+=head3 Parameters
+
+=over
+
+=item * I<$query>
+
+=back
+
+=head3 Return value
+
+A DBI statement handle object, or I<undef> if something went wrong.
+
+=cut
 
 sub do_prepared_query {
     my $self = shift;
@@ -428,6 +461,22 @@ sub do_prepared_query {
     return $self->{'cached_prepared_statements'}{$query};
 }
 
+=head2 $source->prepare_query_log_values(@values)
+
+=head3 Parameters
+
+=over
+
+=item * I<@values>
+
+=back
+
+=head3 Return value
+
+The list of cropped values, as an arrayref.
+
+=cut
+
 sub prepare_query_log_values {
     my $self = shift;
     my @result;
@@ -440,6 +489,16 @@ sub prepare_query_log_values {
     }
     return \@result;
 }
+
+=head2 $source->fetch()
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+=cut
 
 sub fetch {
     my $self = shift;
@@ -469,6 +528,18 @@ sub fetch {
     return $array_of_users;
 }
 
+=head2 $source->disconnect()
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub disconnect {
     my $self = shift;
     $self->{'sth'}->finish if $self->{'sth'};
@@ -476,42 +547,96 @@ sub disconnect {
     delete $db_connections{$self->{'connect_string'}};
 }
 
+=head2 $source->create_db()
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A true value.
+
+=cut
+
 sub create_db {
     &Sympa::Log::do_log('debug3', '%s::create_db()', __PACKAGE__);    
     return 1;
 }
+
+=head2 $source->ping()
+
+Ping underlying data source.
+
+See L<DBI> for details.
+
+=cut
 
 sub ping {
     my $self = shift;
     return $self->{'dbh'}->ping; 
 }
 
+=head2 $source->quote($string, $datatype)
+
+Quote a string literal for use in an SQL statement.
+
+See L<DBI> for details.
+
+=cut
+
 sub quote {
     my ($self, $string, $datatype) = @_;
     return $self->{'dbh'}->quote($string, $datatype); 
 }
+
+=head2 $source->set_fetch_timeout($timeout)
+
+Set a timeout for fetch operations.
+
+=cut
 
 sub set_fetch_timeout {
     my ($self, $timeout) = @_;
     return $self->{'fetch_timeout'} = $timeout;
 }
 
-## Returns a character string corresponding to the expression to use in
-## a read query (e.g. SELECT) for the field given as argument.
-## This sub takes a single argument: the name of the field to be used in
-## the query.
-##
+=head2 $source->get_canonical_write_date($field)
+
+Returns a character string corresponding to the expression to use in a read
+query (e.g. SELECT) for the field given as argument.
+
+=head3 Parameters
+
+=over
+
+=item * I<$field>: field to be used in the query
+
+=back
+
+=cut
+
 sub get_canonical_write_date {
     my $self = shift;
     my $field = shift;
     return $self->get_formatted_date({'mode'=>'write','target'=>$field});
 }
 
-## Returns a character string corresponding to the expression to use in 
-## a write query (e.g. UPDATE or INSERT) for the value given as argument.
-## This sub takes a single argument: the value of the date to be used in
-## the query.
-##
+=head2 $source->get_canonical_read_date($value)
+
+Returns a character string corresponding to the expression to use in 
+a write query (e.g. UPDATE or INSERT) for the value given as argument.
+
+=head3 Parameters
+
+=over
+
+=item * I<$value>: value to be used in the query
+
+=back
+
+=cut
+
 sub get_canonical_read_date {
     my $self = shift;
     my $value = shift;

@@ -38,20 +38,31 @@ use Sympa::Log;
 
 our @ISA = qw(Sympa::Datasource::SQL);
 
-############################
-#### Section containing generic functions          #
-#### without anything related to a specific RDBMS. #
-############################
+=head1 INSTANCE METHODS
 
-# Returns the primary keys for all the tables in the database.
-#
-# IN: Nothing. Uses all the tables found in the databse of the SQLSource.
-#
-# OUT: - Returns a ref to a two level-hash:
-#	* The keys of the first level are the database's tables name.
-#	* The keys of the second level are the name of the primary keys for the table whose name is
-# 	  given by the first level key.
-#      - Returns undef if something went wrong.
+=head2 $source->get_all_primary_keys()
+
+Returns the primary keys for all the tables in the database.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+An hashref with the following keys, or I<undef> if something went wrong:
+
+=over
+
+=item * The keys of the first level are the database's tables name.
+
+=item * The keys of the second level are the name of the primary keys for the
+table whose name is  given by the first level key.
+
+=back
+
+=cut
+
 sub get_all_primary_keys {
     my $self = shift;
     &Sympa::Log::do_log('debug','Retrieving all primary keys in database %s',$self->{'db_name'});
@@ -65,15 +76,28 @@ sub get_all_primary_keys {
     return \%found_keys;
 }
 
-# Returns the indexes for all the tables in the database.
-#
-# IN: Nothing. Uses all the tables found in the databse of the SQLSource.
-#
-# OUT: - Returns a ref to a two level-hash:
-#	* The keys of the first level are the database's tables name.
-#	* The keys of the second level are the name of the indexes for the table whose name is
-# 	  given by the first level key.
-#      - Returns undef if something went wrong.
+=head2 $source->get_all_indexes()
+
+Returns the indexes for all the tables in the database.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+An hashref with the following keys, or I<undef> if something went wrong:
+
+=over
+
+=item * The keys of the first level are the database's tables name.
+
+=item * The keys of the second level are the name of the indexes for the table whose name is given by the first level key.
+
+=back
+
+=cut
+
 sub get_all_indexes {
     my $self = shift;
     &Sympa::Log::do_log('debug','Retrieving all indexes in database %s',$self->{'db_name'});
@@ -87,17 +111,23 @@ sub get_all_indexes {
     return \%found_indexes;
 }
 
-# Checks the compliance of a key of a table compared to what it is supposed to reference.
-#
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which we want to check the primary key
-#	* 'key_name' : the kind of key tested:
-#		- if the value is 'primary', the key tested will be the table primary key
-#		- for any other value, the index whose name is this value will be tested.
-#	* 'expected_keys' : A ref to an array containing the list of fields that we
-#	   expect to be part of the key.
-#
-# OUT: - Returns a ref likely to contain the following values:
+=head2 $source->check_key($parameters)
+
+Checks the compliance of a key of a table compared to what it is supposed to
+reference.
+
+=head3 Parameters
+
+* 'table' : the name of the table for which we want to check the primary key
+* 'key_name' : the kind of key tested:
+	- if the value is 'primary', the key tested will be the table primary key
+		- for any other value, the index whose name is this value will be tested.
+	* 'expected_keys' : A ref to an array containing the list of fields that we
+	   expect to be part of the key.
+
+=head3 Return value
+
+A ref likely to contain the following values:
 #	* 'empty': if this key is defined, then no key was found for the table
 #	* 'existing_key_correct': if this key's value is 1, then a key
 #	   exists and is fair to the structure defined in the 'expected_keys' parameter hash.
@@ -109,6 +139,9 @@ sub get_all_indexes {
 #	   key that don't belong to the list provided in the 'expected_keys' parameter hash.
 #	   The value associated to this key is a hash whose keys are the names of the fields
 #	   unexpectedely found.
+
+=cut
+
 sub check_key {
     my $self = shift;
     my $param = shift;
