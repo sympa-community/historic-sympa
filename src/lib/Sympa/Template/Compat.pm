@@ -21,6 +21,16 @@
 # TT2 adapter for sympa's template system - Chia-liang Kao <clkao@clkao.org>
 # usage: replace require 'parser.pl' in wwwsympa and other .pl
 
+=head1 NAME
+
+Sympa::Template::Compat - Template::Provider extension
+
+=head1 DESCRIPTION
+
+This class implements a specialized template provider.
+
+=cut
+
 package Sympa::Template::Compat;
 
 use strict;
