@@ -53,8 +53,8 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Spool;
+use Sympa::Template;
 use Sympa::Tools;
-use Sympa::TT2;
 
 ## Database and SQL statement handlers
 my $sth;
@@ -370,7 +370,7 @@ sub merge_data {
     $data->{'listname'} = $listname;
 
     # Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
-    unless (&Sympa::TT2::parse_tt2($data,\$body, $message_output, '', $options)) {
+    unless (&Sympa::Template::parse_tt2($data,\$body, $message_output, '', $options)) {
 	&Sympa::Log::do_log('err','Unable to parse body : "%s"', \$body);
 	return undef;
     }

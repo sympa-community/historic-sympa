@@ -44,7 +44,7 @@ use Sympa::Lock;
 use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::File;
-use Sympa::TT2;
+use Sympa::Template;
 use Sympa::WWSympa;
 
 our @ISA = qw(Exporter);
@@ -623,8 +623,8 @@ sub checkfiles {
             return undef;
         }
         
-        unless (&Sympa::TT2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
-            my $error = &Sympa::TT2::get_error();
+        unless (&Sympa::Template::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
+            my $error = &Sympa::Template::get_error();
             $param->{'tt2_error'} = $error;
             &Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
             &Sympa::Log::do_log('err', "Error while installing $dir/$css");

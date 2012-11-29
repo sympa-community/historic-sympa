@@ -23,7 +23,7 @@
 
 =head1 NAME
 
-Sympa::TT2 - Template functions
+Sympa::Template - Template functions
 
 =head1 DESCRIPTION
 
@@ -31,7 +31,7 @@ This module provides template-related functions.
 
 =cut
 
-package Sympa::TT2;
+package Sympa::Template;
 
 use strict;
 

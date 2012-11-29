@@ -42,9 +42,9 @@ use Sympa::Lock;
 use Sympa::Log;
 use Sympa::Scenario;
 use Sympa::SDM;
+use Sympa::Template;
 use Sympa::Tools;
 use Sympa::Tools::File;
-use Sympa::TT2;
 
 =head1 FUNCTIONS
 
@@ -227,7 +227,7 @@ sub create_list_old{
     ## Use an intermediate handler to encode to filesystem_encoding
     my $config = '';
     my $fd = new IO::Scalar \$config;    
-    &Sympa::TT2::parse_tt2($param, 'config.tt2', $fd, $tt2_include_path);
+    &Sympa::Template::parse_tt2($param, 'config.tt2', $fd, $tt2_include_path);
 #    Encode::from_to($config, 'utf8', $Sympa::Conf::Conf{'filesystem_encoding'});
     print CONFIG $config;
 
@@ -403,7 +403,7 @@ sub create_list{
     my $family_config = &Sympa::Conf::get_robot_conf($robot,'automatic_list_families');
     $param->{'family_config'} = $family_config->{$family->{'name'}};
     my $conf;
-    my $tt_result = &Sympa::TT2::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
+    my $tt_result = &Sympa::Template::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
     unless (defined $tt_result || !$abort_on_error) {
       &Sympa::Log::do_log('err', '%s::create_list : abort on tt2 error. List %s from family %s@%s', __PACKAGE__,
                 $param->{'listname'}, $family->{'name'},$robot);
@@ -454,7 +454,7 @@ sub create_list{
 	$lock->unlock();
 	return undef;
     }
-    #&Sympa::TT2::parse_tt2($param, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
+    #&Sympa::Template::parse_tt2($param, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
     print CONFIG $conf;
     close CONFIG;
     
@@ -478,7 +478,7 @@ sub create_list{
 	my $template_file = &Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Sympa::Conf::Conf{'etc'});
 	if (defined $template_file) {
 	    my $file_content;
-	    my $tt_result = &Sympa::TT2::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
+	    my $tt_result = &Sympa::Template::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
 	    unless (defined $tt_result) {
 		&Sympa::Log::do_log('err', '%s::create_list : tt2 error. List %s from family %s@%s, file %s', __PACKAGE__,
 			$param->{'listname'}, $family->{'name'},$robot,$file);
@@ -615,7 +615,7 @@ sub update_list{
 	$lock->unlock();
 	return undef;
     }
-    &Sympa::TT2::parse_tt2($param, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
+    &Sympa::Template::parse_tt2($param, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
     close CONFIG;
 
     ## Unlock config file

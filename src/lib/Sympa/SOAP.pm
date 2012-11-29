@@ -35,8 +35,8 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Scenario;
 use Sympa::Session;
+use Sympa::Template;
 use Sympa::Tools;
-use Sympa::TT2;
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',
@@ -1840,8 +1840,8 @@ sub get_reason_string {
     my $string;
     my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
-    unless (&Sympa::TT2parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
-	my $error = &Sympa::TT2get_error();
+    unless (&Sympa::Template::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
+	my $error = &Sympa::Template::get_error();
 	&Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	&Sympa::Log::do_log('info', "get_reason_string : error parsing");
 	return '';
