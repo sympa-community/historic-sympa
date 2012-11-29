@@ -59,7 +59,26 @@ my %Default_Conf =
 
 my %Ldap = ();
 
-## Loads and parses the configuration file. Reports errors if any.
+=head1 FUNCTIONS
+
+=head2 load($config)
+
+Loads and parses the configuration file. Reports errors if any.
+
+=head3 Parameters
+
+=over
+
+=item * I<$config>: the configuration file
+
+=back
+
+=head3 Return value
+
+The configuration, as an hash.
+
+=cut
+
 sub load {
     my $config = shift;
 
