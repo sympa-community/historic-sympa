@@ -32,6 +32,13 @@ package Sympa::Configuration;
 
 use strict "vars";
 
+use constant {
+    DAEMON_MESSAGE  => 1,
+    DAEMON_COMMAND  => 2,
+    DAEMON_CREATION => 4,
+    DAEMON_ALL      => 7
+};
+
 use Exporter;
 use Storable;
 
@@ -49,11 +56,6 @@ use Sympa::WWSympa;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
-
-sub DAEMON_MESSAGE {1};
-sub DAEMON_COMMAND {2};
-sub DAEMON_CREATION {4};
-sub DAEMON_ALL {7};
 
 ## Database and SQL statement handlers
 my $sth;
