@@ -53,7 +53,7 @@ use Sympa::Admin;
 use Sympa::Archive;
 use Sympa::Auth;
 use Sympa::Configuration;
-use Sympa::Configurationiguration::Definition;
+use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Datasource::LDAP;
 use Sympa::Family;
@@ -5676,7 +5676,7 @@ sub do_serveradmin {
 
 sub do_edit_config {
 
-    my @editable_params = @Sympa::Configurationiguration::Definition::params ;
+    my @editable_params = @Sympa::Configuration::Definition::params ;
 
     &get_server_details;
 
