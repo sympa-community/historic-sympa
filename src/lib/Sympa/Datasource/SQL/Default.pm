@@ -31,12 +31,9 @@ This class implements a generic SQL data source.
 package Sympa::Datasource::SQL::Default;
 
 use strict;
-
-use Sympa::Datasource::SQL;
+use base qw(Sympa::Datasource::SQL);
 
 use Sympa::Log;
-
-our @ISA = qw(Sympa::Datasource::SQL);
 
 =head1 INSTANCE METHODS
 

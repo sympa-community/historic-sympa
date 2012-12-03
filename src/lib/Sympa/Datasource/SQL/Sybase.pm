@@ -31,13 +31,11 @@ This class implements a Sybase data source.
 package Sympa::Datasource::SQL::Sybase;
 
 use strict;
+use base qw(Sympa::Datasource::SQL::Default);
 
 use Data::Dumper;
 
 use Sympa::Log;
-use Sympa::Datasource::SQL::Default;
-
-our @ISA = qw(Sympa::Datasource::SQL::Default);
 
 #######################################################
 ####### Beginning the RDBMS-specific code. ############

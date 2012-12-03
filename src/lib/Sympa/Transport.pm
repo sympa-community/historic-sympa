@@ -13,7 +13,6 @@ This class implements a specialized SOAP HTTP transport.
 package Sympa::Transport;
 
 use strict;
-use vars qw(@ISA);
 
 use SOAP::Transport::HTTP;
 
@@ -23,7 +22,8 @@ use Sympa::Log;
 use Sympa::Session;
 use Sympa::Tools::Cookie;
 
-@ISA = qw(SOAP::Transport::HTTP::FCGI);
+# 'base' pragma doesn't work here
+our @ISA = qw(SOAP::Transport::HTTP::FCGI);
 
 sub request {
     my $self = shift;

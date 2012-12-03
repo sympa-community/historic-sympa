@@ -31,14 +31,12 @@ This class implements an SQL data source.
 package Sympa::Datasource::SQL;
 
 use strict;
+use base qw(Sympa::Datasource);
 
 use Sympa::Configuration;
-use Sympa::Datasource;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
-
-our @ISA = qw(Sympa::Datasource);
 
 ## Structure to keep track of active connections/connection status
 ## Key : connect_string (includes server+port+dbname+DB type)

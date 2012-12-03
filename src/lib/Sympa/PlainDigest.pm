@@ -88,6 +88,8 @@ plain text version of an email message, suitable for use in plain text digests.
  
 package Sympa::PlainDigest;
 
+use base qw(MIME::Entity);
+
 use Mail::Internet;
 use Mail::Address;
 use MIME::Parser;
@@ -98,8 +100,6 @@ use HTML::TreeBuilder;
 use Sympa::HTML::FormatText;
 use Sympa::Language;
 use Sympa::Tools;
-
-@ISA = qw(MIME::Entity);
  
 sub plain_body_as_string {
  

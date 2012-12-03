@@ -31,13 +31,11 @@ This class implements an Oracle data source.
 package Sympa::Datasource::SQL::Oracle;
 
 use strict;
+use base qw(Sympa::Datasource::SQL::Default);
 
 use Data::Dumper;
 
-use Sympa::Datasource::SQL::Default;
 use Sympa::Log;
-
-our @ISA = qw(Sympa::Datasource::SQL::Default);
 
 #######################################################
 ####### Beginning the RDBMS-specific code. ############

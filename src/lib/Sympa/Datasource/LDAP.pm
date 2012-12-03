@@ -31,12 +31,10 @@ This class implements an LDAP data source.
 package Sympa::Datasource::LDAP;
 
 use strict;
+use base qw(Sympa::Datasource);
 
-use Sympa::Datasource;
 use Sympa::Log;
 use Sympa::Tools;
-
-our @ISA = qw(Sympa::Datasource);
 
 =head1 CLASS METHODS
 

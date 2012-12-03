@@ -31,12 +31,9 @@ This class implements a specialized LWP user agent.
 package Sympa::WebAgent;
 
 use strict "vars";
-
-use LWP::UserAgent;
+use base qw(LWP::UserAgent);
 
 ## Good documentation : http://articles.mongueurs.net/magazines/linuxmag57.html
-
-our @ISA = qw (LWP::UserAgent);
 
 my ($web_user, $web_passwd);
 

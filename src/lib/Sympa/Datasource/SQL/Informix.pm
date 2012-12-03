@@ -31,10 +31,7 @@ This class implements an Informix data source.
 package Sympa::Datasource::SQL::Informix;
 
 use strict;
-
-use Sympa::Datasource::SQL::Default;
-
-our @ISA = qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL::Default);
 
 sub build_connect_string{
     my $self = shift;

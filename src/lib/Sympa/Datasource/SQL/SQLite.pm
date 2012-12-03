@@ -31,13 +31,11 @@ This class implements an SQLite data source.
 package Sympa::Datasource::SQL::SQLite;
 
 use strict;
+use base qw(Sympa::Datasource::SQL::Default);
 
 use Data::Dumper;
 
 use Sympa::Log;
-use Sympa::Datasource::SQL::Default;
-
-our @ISA = qw(Sympa::Datasource::SQL::Default);
 
 #######################################################
 ####### Beginning the RDBMS-specific code. ############

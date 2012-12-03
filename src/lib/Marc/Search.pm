@@ -1,14 +1,12 @@
 package Marc::Search;
 
 use strict;
+use base qw(Marc);
 
 use File::Find;
 use HTML::Entities qw(decode_entities encode_entities);
 use Encode qw(decode_utf8 encode_utf8 is_utf8);
 
-use Marc;
-
-our @ISA     = qw(Marc);
 our $VERSION = "4.3";
 our ($AUTOLOAD, @MSGFILES);
 

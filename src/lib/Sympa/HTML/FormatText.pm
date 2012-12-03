@@ -7,9 +7,9 @@ package Sympa::HTML::FormatText;
      
 use strict;
 
-use Sympa::Language;
+use base qw(HTML::FormatText);
 
-our @ISA = qw(HTML::FormatText);
+use Sympa::Language;
 
 sub img_start   {
   my($self,$node) = @_;
