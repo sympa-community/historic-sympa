@@ -105,21 +105,21 @@ unless (Sympa::Configuration::load($config_file,1)) {
 
 
 ## Open the syslog and say we're read out stuff.
-&Sympa::Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
+&Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
     &Sympa::Log::set_log_level($main::options{'log_level'});
     &Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Sympa::Log::set_log_level($Conf{'log_level'});
-    &Sympa::Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}"); 
 }
 
 ## Probe Db if defined
-if ($Conf{'db_name'} and $Conf{'db_type'}) {
+if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
     unless (&Sympa::Upgrade::probe_db()) {
-	&Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Conf{'db_name'});
+	&Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
     }
 }
 
@@ -134,8 +134,8 @@ unless (Sympa::Configuration::load($config_file)) {
 
 
 ## Main program
-if (!chdir($Conf{'home'})) {
-   &Sympa::Log::fatal_err("Can't chdir to %s: %m", $Conf{'home'});
+if (!chdir($Sympa::Configuration::Conf{'home'})) {
+   &Sympa::Log::fatal_err("Can't chdir to %s: %m", $Sympa::Configuration::Conf{'home'});
    ## Function never returns.
 }
 
@@ -175,7 +175,7 @@ if ($signal ne 'hup') {
 	    $distinct_spools{$main::options{'queue'}}= 1;
 	}else{
 	    foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
-		$distinct_spools{$Conf{$possible_spool}} = 1 if ($Conf{$possible_spool});
+		$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
 	    }
 	}
 	my $master = 1;
@@ -197,14 +197,14 @@ if ($signal ne 'hup') {
 	}
 	
 
-	&Sympa::Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
+	&Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
 	&Sympa::Log::do_log('debug', "Running server $$ for spooler purpose ");
 
 	unless ($main::options{'batch'} ) {
 	    
 	    ## Create and write the pidfile
-	    my $file = $Conf{'pidfile_spooler'};
+	    my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
 	    
 	    ## If process is running in foreground, don't write STDERR to a dedicated file
 	    my $options;
@@ -228,7 +228,7 @@ if ($signal ne 'hup') {
 	}
 	
 	# Sets the UMASK
-	umask(oct($Conf{'umask'}));
+	umask(oct($Sympa::Configuration::Conf{'umask'}));
 	
 	## Most initializations have now been done.
 	&Sympa::Log::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
@@ -351,13 +351,13 @@ while (!$signal) {
 
 	my $priority;
 
-	if ($listname eq $Conf{'listmaster_email'}) {
+	if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
 	    $priority = 0;
 	}elsif ($type eq 'request') {
 	    $priority = &Sympa::Configuration::get_robot_conf($robot, 'request_priority');
 	}elsif ($type eq 'owner') {
 	    $priority = &Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
-	}elsif ($listname =~ /^(sympa|$email)(\@$Conf{'host'})?$/i) {	
+	}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {	
 	    $priority = &Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
@@ -412,7 +412,7 @@ Sympa::SDM::db_disconnect;
 
 }
 &Sympa::Log::do_log('notice', 'spooler exited normally due to signal');
-my $file = $Conf{'pidfile_spooler'};
+my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
 &Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);

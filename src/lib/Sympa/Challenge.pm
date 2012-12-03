@@ -119,7 +119,7 @@ sub load {
 	return undef;
     }
 
-    return ('expired') if (time - $challenge_datas->{'date'} >= &Sympa::Tools::Time::duration_conv($Conf{'challenge_table_ttl'}));
+    return ('expired') if (time - $challenge_datas->{'date'} >= &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'challenge_table_ttl'}));
     return ($challenge_datas);
 }
 

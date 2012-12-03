@@ -55,7 +55,7 @@ use Sympa::Template;
 use Sympa::WWSympa;
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw(%params %Conf);
+our @EXPORT = qw(%params);
 
 ## Database and SQL statement handlers
 my $sth;

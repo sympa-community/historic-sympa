@@ -241,8 +241,8 @@ sub purge_old_sessions {
 
     &Sympa::Log::do_log('info', '%s::purge_old_sessions(%s,%s)',__PACKAGE__,$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Conf{'session_table_ttl'}) ; 
-    my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Conf{'anonymous_session_table_ttl'}) ; 
+    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ; 
+    my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ; 
 
     unless ($delay) { &Sympa::Log::do_log('info', '%s::purge_old_session(%s) exit with delay null',__PACKAGE__,$robot); return;}
     unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s::purge_old_session(%s) exit with anonymous delay null',__PACKAGE__,$robot); return;}
@@ -304,7 +304,7 @@ sub purge_old_tickets {
 
     &Sympa::Log::do_log('info', '%s::purge_old_tickets(%s,%s)',__PACKAGE__,$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Conf{'one_time_ticket_table_ttl'}) ; 
+    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ; 
 
     unless ($delay) { &Sympa::Log::do_log('info', '%s::purge_old_tickets(%s) exit with delay null',__PACKAGE__,$robot); return;}
 

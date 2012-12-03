@@ -35,7 +35,7 @@ unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
    exit(1);
 }
 
-my $manager_conf_file = $Conf{etc}.'/ldap_alias_manager.conf';
+my $manager_conf_file = $Sympa::Configuration::Conf{etc}.'/ldap_alias_manager.conf';
 
 ## LDAP configuration
 my %ldap_params;
@@ -71,7 +71,7 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
     exit(2);
 }
 
-$default_domain = $Conf{'domain'};
+$default_domain = $Sympa::Configuration::Conf{'domain'};
 
 my %data;
 $data{'date'} =  &POSIX::strftime("%d %b %Y", localtime(time));
@@ -83,8 +83,8 @@ $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
 $data{'return_path_suffix'} = &Sympa::Configuration::get_robot_conf($domain, 'return_path_suffix');
 my @aliases ;
 
-my $tt2_include_path = [$Conf{'etc'}.'/'.$domain,
-                        $Conf{'etc'},
+my $tt2_include_path = [$Sympa::Configuration::Conf{'etc'}.'/'.$domain,
+                        $Sympa::Configuration::Conf{'etc'},
                         Sympa::Constants::DEFAULTDIR];
 
 my $aliases_dump;

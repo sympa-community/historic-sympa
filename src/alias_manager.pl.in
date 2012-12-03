@@ -45,7 +45,7 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 unless (Sympa::Configuration::load($sympa_conf_file)) {
    &Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
 }
-my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;
+my $tmp_alias_file = $Sympa::Configuration::Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
 
 my $default_domain;
@@ -62,10 +62,10 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
     exit(2);
 }
 
-$default_domain = $Conf{'domain'};
+$default_domain = $Sympa::Configuration::Conf{'domain'};
 
 my $alias_file;
-$alias_file = $Conf{'sendmail_aliases'} || Sympa::Constants::SENDMAIL_ALIASES;
+$alias_file = $Sympa::Configuration::Conf{'sendmail_aliases'} || Sympa::Constants::SENDMAIL_ALIASES;
 $alias_file = $file if ($file);
 
 unless (-w "$alias_file") {

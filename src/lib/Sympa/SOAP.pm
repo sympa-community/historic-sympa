@@ -270,8 +270,8 @@ sub casLogin {
     ## Validate the CAS ST against all known CAS servers defined in auth.conf
     ## CAS server response will include the user's NetID
     my ($user, @proxies, $email, $cas_id);
-    foreach my $service_id (0..$#{$Conf{'auth_services'}{$robot}}){
-	my $auth_service = $Conf{'auth_services'}{$robot}[$service_id];
+    foreach my $service_id (0..$#{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
+	my $auth_service = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$service_id];
 	next unless ($auth_service->{'auth_type'} eq 'cas'); ## skip non CAS entries
 	
 	my $cas = new AuthCAS(casUrl => $auth_service->{'base_url'}, 

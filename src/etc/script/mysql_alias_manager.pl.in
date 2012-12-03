@@ -42,8 +42,8 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
     exit(2);
 }
 
-$default_domain = $Conf{'domain'};
-$return_path_suffix = $Conf{'return_path_suffix'};
+$default_domain = $Sympa::Configuration::Conf{'domain'};
+$return_path_suffix = $Sympa::Configuration::Conf{'return_path_suffix'};
 
 my %data;
 $data{'date'} =  &POSIX::strftime("%d %b %Y", localtime(time));

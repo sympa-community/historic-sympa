@@ -87,7 +87,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 
 ## Check databse connectivity
 unless (&Sympa::SDM::check_db_connect()) {
-    &Sympa::Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Sympa::Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
 ## Check that the data structure is uptodate
@@ -128,16 +128,16 @@ unless ($options->{'stderr_to_tty'}) {
 }
 
 
-$wwsconf->{'log_facility'}||= $Conf{'syslog'};
-&Sympa::Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'task_manager');
+$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
+&Sympa::Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'task_manager');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
     &Sympa::Sympa::Log::set_log_level($main::options{'log_level'});
     &Sympa::Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Sympa::Sympa::Log::set_log_level($Conf{'log_level'});
-    &Sympa::Sympa::Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Sympa::Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
+    &Sympa::Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}"); 
 }
 
 ## Set the UserID & GroupID for the process
@@ -154,11 +154,11 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct($Conf{'umask'}));
+umask(oct($Sympa::Configuration::Conf{'umask'}));
 
 ## Change to list root
-unless (chdir($Conf{'home'})) {
-    &Sympa::Sympa::Log::do_log('err',"error : unable to change to directory $Conf{'home'}");
+unless (chdir($Sympa::Configuration::Conf{'home'})) {
+    &Sympa::Sympa::Log::do_log('err',"error : unable to change to directory $Sympa::Configuration::Conf{'home'}");
     exit (-1);
 }
 
@@ -172,8 +172,8 @@ my $end = 0;
 
 ###### VARIABLES DECLARATION ######
 
-my $spool_task = $Conf{'queuetask'};
-my $cert_dir = $Conf{'ssl_cert_dir'};
+my $spool_task = $Sympa::Configuration::Conf{'queuetask'};
+my $cert_dir = $Sympa::Configuration::Conf{'ssl_cert_dir'};
 my @tasks; # list of tasks in the spool
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log
@@ -273,7 +273,7 @@ while (!$end) {
 	
    ## List all tasks
     unless (&Sympa::Task::list_tasks) {
-	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in spool"});
+	&Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool"});
 	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in spool");
 	exit -1;
     }
@@ -290,16 +290,16 @@ while (!$end) {
     foreach my $key (keys %global_models) {	
 	&Sympa::Sympa::Log::do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
-	    if ($Conf{$key}) { 
+	    if ($Sympa::Configuration::Conf{$key}) { 
 		my %data = %default_data; # hash of datas necessary to the creation of tasks
-		create ($current_date, '', $global_models{$key}, $Conf{$key}, \%data);
+		create ($current_date, '', $global_models{$key}, $Sympa::Configuration::Conf{$key}, \%data);
 		$used_models{$1} = 1;
 	    }
 	}
     }    	
     
     ## list tasks
-    foreach my $robot (keys %{$Conf{'robots'}}) {
+    foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 	&Sympa::Sympa::Log::do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &Sympa::List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
@@ -343,7 +343,7 @@ while (!$end) {
     ## Execute existing tasks
     ## List all tasks
     unless (&Sympa::Task::list_tasks($spool_task)) {
-	&Sympa::List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
+	&Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
 	&Sympa::Sympa::Log::do_log ('err', "Failed to list task files in %s", $spool_task);
 	exit -1;
     }
@@ -430,7 +430,7 @@ sub create {
  
      # for global model
     if ($object eq '_global') {
-	unless ($model_file = &Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", $Conf{'host'}, $Sympa::Configuration::Conf{'etc'})) {
+	unless ($model_file = &Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", $Sympa::Configuration::Conf{'host'}, $Sympa::Configuration::Conf{'etc'})) {
 	    &Sympa::Sympa::Log::do_log ('err', "error : unable to find $model_name, creation aborted");
 	    return undef;
 	}
@@ -904,7 +904,7 @@ sub next_cmd {
 	$type = '_global';
 	foreach my $key (keys %global_models) {
 	    if ($global_models{$key} eq $model) {
-		$model_choice = $Conf{$key};
+		$model_choice = $Sympa::Configuration::Conf{$key};
 		last;
 	    }
 	}
@@ -1011,7 +1011,7 @@ sub delete_subs_cmd {
 
 	&Sympa::Sympa::Log::do_log ('notice', "email : $email");
 	my $result = $list->check_list_authz('del', 'smime',
-					     {'sender'   => $Conf{'listmaster'},
+					     {'sender'   => $Sympa::Configuration::Conf{'listmaster'},
 					      'email'    => $email,
 					  });
 	my $action;
@@ -1124,7 +1124,7 @@ sub purge_logs_table {
     return 1;
 }
 
-## remove sessions from session_table if older than $Conf{'session_table_ttl'}
+## remove sessions from session_table if older than $Sympa::Configuration::Conf{'session_table_ttl'}
 sub purge_session_table {    
 
     &Sympa::Sympa::Log::do_log('info','task_manager::purge_session_table()');
@@ -1148,7 +1148,7 @@ sub purge_tables {
     &Sympa::Sympa::Log::do_log('notice','%s rows removed in bulkspool_table',$removed);    
     #
     my $removed = 0;
-    foreach my $robot (keys %{$Conf{'robots'}}) {
+    foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 	my $all_lists = &Sympa::List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
 	    $removed += &Sympa::Tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
@@ -1159,7 +1159,7 @@ sub purge_tables {
     return 1;
 }
 
-## remove one time ticket table if older than $Conf{'one_time_ticket_table_ttl'}
+## remove one time ticket table if older than $Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}
 sub purge_one_time_ticket_table {    
 
     &Sympa::Sympa::Log::do_log('info','task_manager::purge_one_time_ticket_table()');
@@ -1183,11 +1183,11 @@ sub purge_user_table {
     my %known_people;
 
     ## Listmasters
-    foreach my $l (@{$Conf{'listmasters'}}) {
+    foreach my $l (@{$Sympa::Configuration::Conf{'listmasters'}}) {
 	$known_people{$l} = 1;
     }
 
-    foreach my $r (keys %{$Conf{'robots'}}) {
+    foreach my $r (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 
 	my $all_lists = &Sympa::List::get_lists($r);
 	foreach my $list (@$all_lists){
@@ -1458,7 +1458,7 @@ sub purge_orphan_bounces {
 
      my @tab = @{$Rarguments};
      my $limit = &Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
-     my $CA_file = "$Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
+     my $CA_file = "$Sympa::Configuration::Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
      &Sympa::Sympa::Log::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
      # building of CA list
@@ -1474,12 +1474,12 @@ sub purge_orphan_bounces {
      close (FILE);
 
      # updating of crl files
-     my $crl_dir = "$Conf{'crl_dir'}";
-     unless (-d $Conf{'crl_dir'}) {
-	 if ( mkdir ($Conf{'crl_dir'}, 0775)) {
-	     &Sympa::Sympa::Log::do_log('notice', "creating spool $Conf{'crl_dir'}");
+     my $crl_dir = "$Sympa::Configuration::Conf{'crl_dir'}";
+     unless (-d $Sympa::Configuration::Conf{'crl_dir'}) {
+	 if ( mkdir ($Sympa::Configuration::Conf{'crl_dir'}, 0775)) {
+	     &Sympa::Sympa::Log::do_log('notice', "creating spool $Sympa::Configuration::Conf{'crl_dir'}");
 	 }else{
-	     &Sympa::Sympa::Log::do_log('err', "Unable to create CRLs directory $Conf{'crl_dir'}");
+	     &Sympa::Sympa::Log::do_log('err', "Unable to create CRLs directory $Sympa::Configuration::Conf{'crl_dir'}");
 	     return undef;
 	 }
      }
@@ -1678,14 +1678,14 @@ sub get_score {
 
     &Sympa::Sympa::Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
 
-    my $min_period = $Conf{'minimum_bouncing_period'};
-    my $min_msg_count = $Conf{'minimum_bouncing_count'};
+    my $min_period = $Sympa::Configuration::Conf{'minimum_bouncing_period'};
+    my $min_msg_count = $Sympa::Configuration::Conf{'minimum_bouncing_count'};
 	
     # Analizing bounce_subscriber_field and keep usefull infos for notation
     $user_ref->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
 
-    my $BO_period = int($1 / 86400) - $Conf{'bounce_delay'};
-    my $EO_period = int($2 / 86400) - $Conf{'bounce_delay'};
+    my $BO_period = int($1 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
+    my $EO_period = int($2 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
     my $bounce_count = $3;
     my $bounce_type = $4;
 
@@ -1785,7 +1785,7 @@ sub error {
                  $message";
     &Sympa::Sympa::Log::do_log ('err', "$message");
     change_label ($task_id, 'ERROR') unless ($task_id eq '');
-    unless (&Sympa::List::send_notify_to_listmaster ('error in task', $Conf{'domain'}, \@param)) {
+    unless (&Sympa::List::send_notify_to_listmaster ('error in task', $Sympa::Configuration::Conf{'domain'}, \@param)) {
     	&Sympa::Sympa::Log::do_log('notice','error while notifying listmaster about "error_in_task"');
     }
 }

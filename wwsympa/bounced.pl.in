@@ -116,7 +116,7 @@ unshift @INC, $wwsconf->{'wws_path'};
 
 ## Check databse connectivity
 unless (&Sympa::SDM::check_db_connect()) {
-    &Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
+    &Sympa::Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
 ## Put ourselves in background if not in debug mode. 
@@ -151,12 +151,12 @@ if ($main::options{'log_level'}) {
     &Sympa::Log::set_log_level($main::options{'log_level'});
     &Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}"); 
 }else{
-    &Sympa::Log::set_log_level($Conf{'log_level'});
-    &Sympa::Log::do_log('info', "Configuration file read, default log level $Conf{'log_level'}"); 
+    &Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
+    &Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}"); 
 }
 
-$wwsconf->{'log_facility'}||= $Conf{'syslog'};
-&Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'bounced');
+$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
+&Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'bounced');
 
 ## Set the UserID & GroupID for the process
 $( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -172,10 +172,10 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct($Conf{'umask'}));
+umask(oct($Sympa::Configuration::Conf{'umask'}));
 
 ## Change to list root
-unless (chdir($Conf{'home'})) {
+unless (chdir($Sympa::Configuration::Conf{'home'})) {
      &Sympa::Log::do_log('info','Unable to change directory');
     exit (-1);
 }
@@ -196,7 +196,7 @@ my $spool = new Sympa::Spool('bounce');
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
     
-    sleep $Conf{'sleep'};
+    sleep $Sympa::Configuration::Conf{'sleep'};
     
     &Sympa::List::init_list_cache();
 	&Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
@@ -224,11 +224,11 @@ while (!$end) {
 	my $who;
 	my $distribution_id;
 	chomp $to;	
-	&Sympa::Log::do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%',$to,$Conf{'bounce_email_prefix'});
+	&Sympa::Log::do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%',$to,$Sympa::Configuration::Conf{'bounce_email_prefix'});
 		
 	$to =~ s/<//;
 	$to =~ s/>//;
-	if ($to =~ /^$Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
+	if ($to =~ /^$Sympa::Configuration::Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
 	    my $local_part = $1;
 	    my $robot = $2;
 	    my $unique;
@@ -261,7 +261,7 @@ while (!$end) {
 		    next;
 		}
 		my $result =$list->check_list_authz('del','smtp',
-						    {'sender' => $Conf{'listmasters'}[0],
+						    {'sender' => $Sympa::Configuration::Conf{'listmasters'}[0],
 						     'email' => $who});
 		my $action;
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -649,7 +649,7 @@ while (!$end) {
 	    ## Bounce directory
 	    if (! -d $bounce_dir) {
 		unless (mkdir $bounce_dir, 0777) {
-		    &Sympa::List::send_notify_to_listmaster('bounce_intern_error',$Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
+		    &Sympa::List::send_notify_to_listmaster('bounce_intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
 		    &Sympa::Log::do_log('err', 'Could not create %s: %s bounced dir, check bounce_path in wwsympa.conf', $bounce_dir, $!);
 		exit;
 		} 
@@ -719,7 +719,7 @@ sub store_bounce {
     
     &Sympa::Log::do_log('debug', 'store_bounce(%s,%s,%s)', $bounce_dir,$rcpt);
 
-    my $queue = $Conf{'queuebounce'};
+    my $queue = $Sympa::Configuration::Conf{'queuebounce'};
 
     my $filename = &Sympa::Tools::escape_chars($rcpt);    
     

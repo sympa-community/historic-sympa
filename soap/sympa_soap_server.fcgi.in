@@ -37,13 +37,13 @@ unless (&Sympa::Configuration::load($sympa_conf_file)) {
     &Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
-&Sympa::Log::set_log_level($Conf{'log_level'}) if ($Conf{'log_level'}); 
+&Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'}) if ($Sympa::Configuration::Conf{'log_level'}); 
 
 
 ## Open log
-$wwsconf->{'log_facility'}||= $Conf{'syslog'};
+$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
 
-&Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'soap');
+&Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'soap');
 &Sympa::Log::do_log('info', 'SOAP server launched');
 
 ## We set the real UID with the effective UID value
@@ -60,7 +60,7 @@ my $pinfo = &Sympa::List::_apply_defaults();
 
 ## The process should not fork for sending mail
 ## Messages will be spooled instead
-&Sympa::Mail::set_send_spool($Conf{'queue'});
+&Sympa::Mail::set_send_spool($Sympa::Configuration::Conf{'queue'});
 
 ## Loading all Lists at startup, in order to increase execution speed
 

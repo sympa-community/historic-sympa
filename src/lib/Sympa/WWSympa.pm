@@ -143,7 +143,7 @@ sub load_config {
     my $file = pop;
 
     ## Old params
-    my %old_param = ('alias_manager' => 'No more used, using '.$Conf{'alias_manager'},
+    my %old_param = ('alias_manager' => 'No more used, using '.$Sympa::Configuration::Conf{'alias_manager'},
 		     'wws_path' => 'No more used',
 		     'icons_url' => 'No more used. Using static_content/icons instead.',
 		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
@@ -205,7 +205,7 @@ sub load_mime_types {
     my $types = {};
 
     @localisation = ('/etc/mime.types', '/usr/local/apache/conf/mime.types',
-		     '/etc/httpd/conf/mime.types',$Conf{'etc'}.'/mime.types');
+		     '/etc/httpd/conf/mime.types',$Sympa::Configuration::Conf{'etc'}.'/mime.types');
 
     foreach my $loc (@localisation) {
 	next unless (-r $loc);
