@@ -4,7 +4,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Bulk.pm \
 		      Sympa/Challenge.pm \
 		      Sympa/Commands.pm \
-		      Sympa/Conf.pm \
+		      Sympa/Configuration.pm \
 		      Sympa/Configuration/XML.pm \
 		      Sympa/Configuration/Definition.pm \
 		      Sympa/Constants.pm \
@@ -16,14 +16,14 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Datasource/SQL/Informix.pm \
 		      Sympa/Datasource/SQL/MySQL.pm \
 		      Sympa/Datasource/SQL/Oracle.pm \
-		      Sympa/Datasource/SQL/Postgres.pm \
+		      Sympa/Datasource/SQL/PostgreSQL.pm \
 		      Sympa/Datasource/SQL/SQLite.pm \
 		      Sympa/Datasource/SQL/Sybase.pm \
 		      Sympa/Family.pm \
 		      Sympa/Fetch.pm \
 		      Sympa/HTML/FormatText.pm \
 		      Sympa/Language.pm \
-		      Sympa/Ldap.pm \
+		      Sympa/LDAP.pm \
 		      Sympa/List.pm \
 		      Sympa/Lock.pm \
 		      Sympa/Log.pm \
@@ -41,6 +41,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/SOAP.pm \
 		      Sympa/Spool.pm \
 		      Sympa/Task.pm \
+		      Sympa/Template.pm \
 		      Sympa/Template/Compat.pm \
 		      Sympa/Tools.pm \
 		      Sympa/Tools/Bounce.pm \
@@ -53,7 +54,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Tools/Time.pm \
 		      Sympa/Tracking.pm \
 		      Sympa/Transport.pm \
-		      Sympa/TT2.pm \
 		      Sympa/Upgrade.pm \
 		      Sympa/VOOT/Consumer.pm \
 		      Sympa/VOOT/Provider.pm \
