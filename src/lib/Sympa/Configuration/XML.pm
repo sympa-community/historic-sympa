@@ -1,5 +1,3 @@
-# Config_XML.pm - Parse XML file and extract a hash structure
-# used to create a list.
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -19,6 +17,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+Sympa::Configuration::XML - XML configuration file handling
+
+=head1 DESCRIPTION
+
+This class implements an XML configuration file parser.
+
+=cut
 
 package Sympa::Configuration::XML;
 
