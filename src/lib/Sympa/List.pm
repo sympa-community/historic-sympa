@@ -31,8 +31,7 @@ package Sympa::List;
 
 use strict;
 
-# xxxxxxx faut-il virer encode ? Faut en faire un use ? 
-require Encode;
+use Encode;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;
 use Mail::Header;
