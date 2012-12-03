@@ -1,5 +1,5 @@
-# RCS Identication ; $Revision: 7781 $ ; $Date: 2012-10-22 17:40:42 +0200 (lun. 22 oct. 2012) $ 
-#
+# $Id$
+
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel

@@ -1,3 +1,5 @@
+# $Id$
+
 =head1 NAME 
 
 Sympa::Robot - Virtual robot object

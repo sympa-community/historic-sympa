@@ -1,3 +1,5 @@
+# $Id$
+
 =head1 NAME
 
 Sympa::Transport - SOAP::Transport::HTTP::FCGI extension

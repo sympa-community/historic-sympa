@@ -1,3 +1,5 @@
+# $Id$
+
 package Sympa::HTML::FormatText;
 
 # This is a subclass of the HTML::FormatText object. 
