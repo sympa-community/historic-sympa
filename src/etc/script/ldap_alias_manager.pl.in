@@ -26,7 +26,7 @@ use POSIX qw();
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Tools;
-use Sympa::TT2;
+use Sympa::Template;
 
 $ENV{'PATH'} = '';
 
@@ -88,7 +88,7 @@ my $tt2_include_path = [$Conf{'etc'}.'/'.$domain,
                         Sympa::Constants::DEFAULTDIR];
 
 my $aliases_dump;
-&Sympa::TT2::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
+&Sympa::Template::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
 
 @aliases = split /\n/, $aliases_dump;
 
@@ -133,7 +133,7 @@ foreach my $alias (@aliases) {
     $data{'list'}{'alias'} = $alias_value;
     $data{'list'}{'command'} = $command_value;
     $data{'list'}{'maildrop'} = $maildrop;
-    &Sympa::TT2::parse_tt2(\%data, 'ldap_alias_entry.tt2',\$ldif_dump, $tt2_include_path);
+    &Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2',\$ldif_dump, $tt2_include_path);
     my @attribute_lines = split /\n/, $ldif_dump;
 
     # We create the new LDAP entry.
@@ -191,7 +191,7 @@ elsif ($operation eq 'del') {
 
 	my $ldif_dump;
 	$data{'list'}{'alias'} = $alias_value;
-	&Sympa::TT2::parse_tt2(\%data, 'ldap_alias_entry.tt2', \$ldif_dump, $tt2_include_path);
+	&Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2', \$ldif_dump, $tt2_include_path);
 	my $value = (grep(/^dn:/, split(/\n/, $ldif_dump)))[0];
 	$value =~ s/^dn:\s*//;
 

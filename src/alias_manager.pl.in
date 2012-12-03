@@ -39,7 +39,7 @@ use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Log;
 use Sympa::Tools;
-use Sympa::TT2;
+use Sympa::Template;
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 unless (Sympa::Configuration::load($sympa_conf_file)) {
@@ -89,7 +89,7 @@ my @aliases ;
 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
 my $aliases_dump;
-&Sympa::TT2::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
+&Sympa::Template::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
 
 @aliases = split /\n/, $aliases_dump;
 
