@@ -29,9 +29,9 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Sympa::List;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::List;
 use Sympa::Upgrade;
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;

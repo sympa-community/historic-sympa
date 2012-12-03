@@ -1,8 +1,8 @@
 #!--PERL--
 
 use strict;
-
 use lib '--modulesdir--';
+
 use Getopt::Long;
 
 use Sympa::Configuration;

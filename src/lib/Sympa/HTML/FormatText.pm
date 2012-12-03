@@ -4,11 +4,12 @@ package Sympa::HTML::FormatText;
 
 # This is a subclass of the HTML::FormatText object. 
 # This subclassing is done to allow internationalisation of some strings
+     
+use strict;
+
+use Sympa::Language;
 
 our @ISA = qw(HTML::FormatText);
-     
-use Sympa::Language;
-use strict;
 
 sub img_start   {
   my($self,$node) = @_;

@@ -25,8 +25,8 @@ use POSIX qw();
 
 use Sympa::Configuration;
 use Sympa::Constants;
-use Sympa::Tools;
 use Sympa::Template;
+use Sympa::Tools;
 
 $ENV{'PATH'} = '';
 

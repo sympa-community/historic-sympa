@@ -71,15 +71,15 @@ use Sympa::Session;
 use Sympa::SDM;
 use Sympa::SharedDocument;
 use Sympa::Spool;
+use Sympa::Template;
 use Sympa::Tools;
 use Sympa::Tools::Cookie;
 use Sympa::Tools::Data;
 use Sympa::Tools::Time;
 use Sympa::Tracking;
-use Sympa::Template;
-use Sympa::WWSympa;
 use Sympa::VOOT::Provider;
 use Sympa::VOOT::Consumer;
+use Sympa::WWSympa;
 
 my $crypt_openssl_x509_ok;
 BEGIN {
