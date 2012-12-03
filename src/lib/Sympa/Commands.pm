@@ -34,7 +34,6 @@ use strict 'subs';
 
 use DB_File;
 use Digest::MD5;
-use Exporter;
 use Fcntl;
 use MIME::EncWords;
 use Time::Local;
@@ -51,9 +50,6 @@ use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
-
-our @ISA = qw(Exporter);
-our @EXPORT_OK = qw($sender);
 
 my %comms =  ('add' =>			   	     'add',
 	      'con|confirm' =>	                     'confirm',
