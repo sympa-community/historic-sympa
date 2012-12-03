@@ -35,7 +35,7 @@ use strict;
 use MIME::Parser;
 use Exporter;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Log;
 
 our @ISA = qw(Exporter);
@@ -193,7 +193,7 @@ sub anabounce {
 
     # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
     # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
-    my $tmpfile = $Sympa::Conf::Conf{'tmpdir'}.'/bounce.'.$$ ;
+    my $tmpfile = $Sympa::Configuration::Conf{'tmpdir'}.'/bounce.'.$$ ;
     unless (open (BOUNCE,"> $tmpfile")){
 &Sympa::Log::do_log('err',"could not create $tmpfile");
 	return undef;

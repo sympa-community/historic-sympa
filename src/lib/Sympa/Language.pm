@@ -36,7 +36,7 @@ use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 use POSIX qw();
 
-#use Sympa::Conf; FIXME
+#use Sympa::Configuration; FIXME
 use Sympa::Constants;
 use Sympa::Log;
 
@@ -121,7 +121,7 @@ sub GetSupportedLanguages {
     my $robot = shift;
     my @lang_list;
     
-    foreach my $l (split /,/,&Sympa::Conf::get_robot_conf($robot, 'supported_lang')) {
+    foreach my $l (split /,/,&Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
 	push @lang_list, $lang2locale{$l}||$l;
     }
     return \@lang_list;
@@ -204,7 +204,7 @@ sub SetLang {
 
     $current_lang = $lang;
     $current_locale = $locale;
-    my $locale2charset = &Sympa::Conf::get_robot_conf('', 'locale2charset');
+    my $locale2charset = &Sympa::Configuration::get_robot_conf('', 'locale2charset');
     $current_charset = $locale2charset->{$locale} || 'utf-8';
 
     return $locale;

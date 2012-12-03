@@ -33,7 +33,7 @@ use strict;
 
 use Net::Netmask;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
@@ -84,7 +84,7 @@ sub new {
 
     }else {
 	## We can't use &Sympa::Tools::get_filename() because we don't have a List object yet ; it's being constructed
-	my @dirs = ($Sympa::Conf::Conf{'etc'}.'/'.$parameters{'robot'}, $Sympa::Conf::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
+	my @dirs = ($Sympa::Configuration::Conf{'etc'}.'/'.$parameters{'robot'}, $Sympa::Configuration::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
 	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
 	foreach my $dir (@dirs) {
 	    my $tmp_path = $dir.'/scenari/'.$parameters{'function'}.'.'.$parameters{'name'};
@@ -267,14 +267,14 @@ sub request_action {
     my (@rules, $name, $scenario) ;
 
     my $log_it ; # this var is defined to control if log scenario is activated or not
-    my $loging_targets = &Sympa::Conf::get_robot_conf($robot,'loging_for_module');
+    my $loging_targets = &Sympa::Configuration::get_robot_conf($robot,'loging_for_module');
     if ($loging_targets->{'scenario'} == 1){
 	#activate log if no condition is defined
-	unless (&Sympa::Conf::get_robot_conf($robot,'loging_condition')) {
+	unless (&Sympa::Configuration::get_robot_conf($robot,'loging_condition')) {
 	    $log_it = 1;
 	}else {
 	    #activate log if ip or email match
-	    my $loging_conditions = &Sympa::Conf::get_robot_conf($robot,'loging_condition');
+	    my $loging_conditions = &Sympa::Configuration::get_robot_conf($robot,'loging_condition');
 	    if ($loging_conditions->{'ip'} =~ /$context->{'remote_addr'}/ || $loging_conditions->{'email'} =~ /$context->{'email'}/i) {
 		&Sympa::Log::do_log('info','Will log scenario process for user with email: "%s", IP: "%s"',$context->{'email'},$context->{'remote_addr'});
 		$log_it = 1;
@@ -372,7 +372,7 @@ sub request_action {
     }else{	
 	## Global scenario (ie not related to a list) ; example : create_list
 	
-	my $p = &Sympa::Conf::get_robot_conf($robot, $operation);
+	my $p = &Sympa::Configuration::get_robot_conf($robot, $operation);
 	$scenario = new Sympa::Scenario ('robot' => $robot, 
 				  'function' => $operation,
 				  'name' => $p,
@@ -421,7 +421,7 @@ sub request_action {
     }
     
     ## Include a Blacklist rules if configured for this action
-    if ($Sympa::Conf::Conf{'blacklist'}{$operation}) {
+    if ($Sympa::Configuration::Conf{'blacklist'}{$operation}) {
 	foreach my $auth ('smtp','dkim','md5','pgp','smime'){
 	    my $blackrule = {'condition' => "search('blacklist.txt',[sender])",
 			     'action' => 'reject,quiet',
@@ -631,7 +631,7 @@ sub verify {
 	
 	## Config param
 	elsif ($value =~ /\[conf\-\>([\w\-]+)\]/i) {
-	    if (my $conf_value = &Sympa::Conf::get_robot_conf($robot, $1)) {
+	    if (my $conf_value = &Sympa::Configuration::get_robot_conf($robot, $1)) {
 		
 		$value =~ s/\[conf\-\>([\w\-]+)\]/$conf_value/;
 	    }else{
@@ -966,7 +966,7 @@ sub verify {
 	}
 
 	if ($regexp =~ /\[host\]/) {
-	    my $reghost = &Sympa::Conf::get_robot_conf($robot, 'host');
+	    my $reghost = &Sympa::Configuration::get_robot_conf($robot, 'host');
             $reghost =~ s/\./\\./g ;
             $regexp =~ s/\[host\]/$reghost/g ;
 	}
@@ -1142,13 +1142,13 @@ sub search{
     
     if ($filter_file =~ /\.sql$/) {
  
-	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 	
         my $timeout = 3600;
         my ($sql_conf, $tsth);
         my $time = time;
 	
-        unless ($sql_conf = &Sympa::Conf::load_sql_filter($file)) {
+        unless ($sql_conf = &Sympa::Configuration::load_sql_filter($file)) {
             $list->send_notify_to_owner('named_filter',{'filter' => $filter_file})
                 if (defined $list && ref($list) eq 'List');
             return undef;
@@ -1226,7 +1226,7 @@ sub search{
  
      }elsif ($filter_file =~ /\.ldap$/) {	
 	## Determine full path of the filter file
-	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 	
 	unless ($file) {
 	    &Sympa::Log::do_log('err', 'Could not find search filter %s', $filter_file);
@@ -1311,7 +1311,7 @@ sub search{
 
     }elsif($filter_file =~ /\.txt$/){ 
 	# &Sympa::Log::do_log('info', 'Sympa::List::search: eval %s', $filter_file);
-	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Conf::Conf{'etc'}); 
+	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'}); 
 
 	## Raise an error except for blacklist.txt
 	unless (@files) {
@@ -1362,8 +1362,8 @@ sub verify_custom {
         }
 
     	# use this if your want per list customization (be sure you know what you are doing)
-	#my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list, $Sympa::Conf::Conf{'etc'});
-	my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, undef, $Sympa::Conf::Conf{'etc'});
+	#my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list, $Sympa::Configuration::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, undef, $Sympa::Configuration::Conf{'etc'});
 	unless ($file) {
 	    &Sympa::Log::do_log('err', 'No module found for %s custom condition', $condition);
 	    return undef;

@@ -23,14 +23,14 @@ use Net::LDAP;
 use Net::LDAPS;
 use POSIX qw();
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::TT2;
 
 $ENV{'PATH'} = '';
 
-unless (Sympa::Conf::load(Sympa::Constants::CONFIG)) {
+unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
    print gettext("The configuration file contains errors.\n");
    exit(1);
 }
@@ -80,7 +80,7 @@ $data{'list'}{'name'} = $listname;
 $data{'default_domain'} = $default_domain;
 $data{'ldap_base_dn'} = $ldap_base_dn;
 $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
-$data{'return_path_suffix'} = &Sympa::Conf::get_robot_conf($domain, 'return_path_suffix');
+$data{'return_path_suffix'} = &Sympa::Configuration::get_robot_conf($domain, 'return_path_suffix');
 my @aliases ;
 
 my $tt2_include_path = [$Conf{'etc'}.'/'.$domain,

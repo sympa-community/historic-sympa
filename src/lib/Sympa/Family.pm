@@ -37,7 +37,7 @@ use Term::ProgressBar;
 use XML::LibXML;
 
 use Sympa::Admin;
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
 use Sympa::Language;
@@ -76,8 +76,8 @@ sub get_available_families {
 
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . "/families",
-        $Sympa::Conf::Conf{'etc'}           . "/families",
-        $Sympa::Conf::Conf{'etc'}           . "/$robot/families"
+        $Sympa::Configuration::Conf{'etc'}           . "/families",
+        $Sympa::Configuration::Conf{'etc'}           . "/$robot/families"
      ) {
 	next unless (-d $dir);
 
@@ -160,7 +160,7 @@ sub new {
     $self->{'robot'} = $robot;
 
     ## Adding configuration related to automatic lists.
-    my $all_families_config = &Sympa::Conf::get_robot_conf($robot,'automatic_list_families');
+    my $all_families_config = &Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
     my $family_config = $all_families_config->{$name};
     foreach my $key (keys %{$family_config}) {
 	$self->{$key} = $family_config->{$key};
@@ -277,7 +277,7 @@ sub add_list {
     }
     close FILE;
  
-    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
 
     # info parameters
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
@@ -496,7 +496,7 @@ sub modify_list {
     $list->update_config_changes('file',\@kept_files);
 
 
-    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
 
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
@@ -647,8 +647,8 @@ sub instantiate {
 	});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $Sympa::Conf::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
-    my $output_file = $Sympa::Conf::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
+    my $aliasmanager_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
+    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
 	my $output = '';
                                          
     ## EACH FAMILY LIST
@@ -1294,8 +1294,8 @@ sub _get_directory {
     &Sympa::Log::do_log('debug3','%s::_get_directory(%s)',__PACKAGE__,$name);
 
     my @try = (
-        $Sympa::Conf::Conf{'etc'}           . "/$robot/families",
-        $Sympa::Conf::Conf{'etc'}           . "/families",
+        $Sympa::Configuration::Conf{'etc'}           . "/$robot/families",
+        $Sympa::Configuration::Conf{'etc'}           . "/families",
 	    Sympa::Constants::DEFAULTDIR . "/families"
     );
 
@@ -1777,7 +1777,7 @@ sub _end_update_list {
     my ($self,$list,$xml_file) = @_;
     &Sympa::Log::do_log('debug3','%s::_end_update_list(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
     
-    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;

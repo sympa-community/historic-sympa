@@ -40,7 +40,7 @@ use POSIX qw();
 use Time::Local;
 
 use Sympa::Bulk;
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log;
@@ -226,7 +226,7 @@ sub mail_file {
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
 	    $headers .= "From: ".MIME::EncWords::encode_mimewords(
-		sprintf("SYMPA <%s>",&Sympa::Conf::get_robot_conf($robot, 'sympa')),
+		sprintf("SYMPA <%s>",&Sympa::Configuration::get_robot_conf($robot, 'sympa')),
 		'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
 		)."\n";
 	} else {
@@ -308,7 +308,7 @@ sub mail_file {
     my $dump = &Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP;
 
     ## Set it in case it was not set
-    $data->{'return_path'} ||= &Sympa::Conf::get_robot_conf($robot, 'request');
+    $data->{'return_path'} ||= &Sympa::Configuration::get_robot_conf($robot, 'request');
     
     return $message_as_string if($return_message_as_string);
 
@@ -320,7 +320,7 @@ sub mail_file {
 					  'from' => $data->{'return_path'},
 					  'robot' => $robot,
 					  'listname' => $listname,
-					  'priority' => &Sympa::Conf::get_robot_conf($robot,'sympa_priority'),
+					  'priority' => &Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
 					  'sign_mode' => $sign_mode,
 					  'use_bulk' => $data->{'use_bulk'},
 					  'dkim' => $data->{'dkim'},
@@ -361,7 +361,7 @@ sub mail_message {
 
 
     # normal return_path (ie used if verp is not enabled)
-    my $from = $list->{'name'}.&Sympa::Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
+    my $from = $list->{'name'}.&Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
     
     &Sympa::Log::do_log('debug', '%s::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', __PACKAGE__, $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
     return 0 if ($#rcpt == -1);
@@ -390,11 +390,11 @@ sub mail_message {
     my @sendto;
     my @sendtobypacket;
 
-    my $cmd_size = length(&Sympa::Conf::get_robot_conf($robot, 'sendmail')) + 1 +
-		   length(&Sympa::Conf::get_robot_conf($robot, 'sendmail_args')) +
+    my $cmd_size = length(&Sympa::Configuration::get_robot_conf($robot, 'sendmail')) + 1 +
+		   length(&Sympa::Configuration::get_robot_conf($robot, 'sendmail_args')) +
 		   length(' -N success,delay,failure -V ') + 32 +
 		   length(" -f $from ");
-    my $db_type = $Sympa::Conf::Conf{'db_type'};
+    my $db_type = $Sympa::Configuration::Conf{'db_type'};
 
     while (defined ($i = shift(@rcpt))) {
 	my @k = reverse(split(/[\.@]/, $i));
@@ -406,19 +406,19 @@ sub mail_message {
 	    chomp $dom;
 	}
 	$rcpt_by_dom{$dom} += 1 ;
-	&Sympa::Log::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Sympa::Conf::Conf{'nrcpt_by_domain'}{$dom}");
+	&Sympa::Log::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom}");
 
 	if (
 	    # number of recipients by each domain
-	    (defined $Sympa::Conf::Conf{'nrcpt_by_domain'}{$dom} and
-	     $rcpt_by_dom{$dom} >= $Sympa::Conf::Conf{'nrcpt_by_domain'}{$dom}) or
+	    (defined $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom} and
+	     $rcpt_by_dom{$dom} >= $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom}) or
 	    # number of different domains
-	    ($j and $#sendto >= &Sympa::Conf::get_robot_conf($robot, 'avg') and
+	    ($j and $#sendto >= &Sympa::Configuration::get_robot_conf($robot, 'avg') and
 	     lc "$k[0] $k[1]" ne lc "$l[0] $l[1]") or
 	    # number of recipients in general, and ARG_MAX limitation
 	    ($#sendto >= 0 and
 	     ($cmd_size + $size + length($i) + 5 > $max_arg or
-	      $nrcpt >= &Sympa::Conf::get_robot_conf($robot, 'nrcpt'))) or
+	      $nrcpt >= &Sympa::Configuration::get_robot_conf($robot, 'nrcpt'))) or
 	    # length of recipients field stored into bulkmailer table
 	    # (these limits might be relaxed by future release of Sympa)
 	    ($db_type eq 'mysql' and $size + length($i) + 5 > 65535) or
@@ -491,7 +491,7 @@ sub mail_forward {
 			     'rcpt' => $rcpt,
 			     'from' => $from,
 			     'robot' => $robot,
-			     'priority'=> &Sympa::Conf::get_robot_conf($robot, 'request_priority'),
+			     'priority'=> &Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
 			     )) {
 	&Sympa::Log::do_log('err', '%s::mail_forward from %s impossible to send', __PACKAGE__, $from);
 	return undef;
@@ -586,7 +586,7 @@ sub sendto {
 		    &Sympa::Log::do_log('err',"incorrect call for encrypt with incorrect number of recipient"); 
 		    return undef;
 		}
-		unless ($message->{'msg_as_string'} = smime_encrypt ($msg_header, $msg_body, $email, undef, $Sympa::Conf::Conf{'tmpdir'}, $Sympa::Conf::Conf{'ssl_cert_dir'}, $Sympa::Conf::Conf{'openssl'})){
+		unless ($message->{'msg_as_string'} = smime_encrypt ($msg_header, $msg_body, $email, undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'})){
     		    &Sympa::Log::do_log('err',"Failed to encrypt message"); 
 		    return undef;
                 }	
@@ -659,7 +659,7 @@ sub sending {
     my $sign_mode = $params{'sign_mode'};
     my $sympa_email =  $params{'sympa_email'};
     my $priority_message =  $params{'priority'};
-    my $priority_packet = $Sympa::Conf::Conf{'sympa_packet_priority'};
+    my $priority_packet = $Sympa::Configuration::Conf{'sympa_packet_priority'};
     my $delivery_date = $params{'delivery_date'};
     $delivery_date = time() unless ($delivery_date); 
     my $verp  =  $params{'verp'};
@@ -672,7 +672,7 @@ sub sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	if ($signed_msg = smime_sign($message->{'msg'},$listname, $robot, $Sympa::Conf::Conf{'tmpdir'}, $Sympa::Conf::Conf{'key_passwd'}, $Sympa::Conf::Conf{'openssl'})) {
+	if ($signed_msg = smime_sign($message->{'msg'},$listname, $robot, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'})) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
 	    &Sympa::Log::do_log('notice', '%s::sending : unable to sign message from %s', __PACKAGE__, $listname);
@@ -715,7 +715,7 @@ sub sending {
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 
 	&Sympa::Log::do_log('debug',"NOT USING BULK");
 
-	$sympa_email = &Sympa::Conf::get_robot_conf($robot, 'sympa');	
+	$sympa_email = &Sympa::Configuration::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
 	unless (open TMP, ">$sympa_file") {
 	    &Sympa::Log::do_log('notice', '%s::sending Cannot create %s : %s', __PACKAGE__, $sympa_file, $!);
@@ -732,7 +732,7 @@ sub sending {
 	}
 	printf TMP "X-Sympa-To: %s\n", $all_rcpt;
 	printf TMP "X-Sympa-From: %s\n", $from;
-	printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Conf::Conf{'cookie'});
+	printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Configuration::Conf{'cookie'});
 
 	print TMP $message->{'msg_as_string'} ;
 	close TMP;
@@ -803,7 +803,7 @@ sub smtpto {
    ## to terminate and then do our job.
 
    &Sympa::Log::do_log('debug3',"Open = $opensmtp");
-   while ($opensmtp > &Sympa::Conf::get_robot_conf($robot, 'maxsmtp')) {
+   while ($opensmtp > &Sympa::Configuration::get_robot_conf($robot, 'maxsmtp')) {
        &Sympa::Log::do_log('debug3', "%s::smtpto: too many open SMTP ($opensmtp), calling reaper", __PACKAGE__ );
        last if (&reaper(0) == -1); ## Blocking call to the reaper.
        }
@@ -817,8 +817,8 @@ sub smtpto {
    $pid = &Sympa::Tools::safefork();
    $pid{$pid} = 0;
        
-   my $sendmail = &Sympa::Conf::get_robot_conf($robot, 'sendmail');
-   my $sendmail_args = &Sympa::Conf::get_robot_conf($robot, 'sendmail_args');
+   my $sendmail = &Sympa::Configuration::get_robot_conf($robot, 'sendmail');
+   my $sendmail_args = &Sympa::Configuration::get_robot_conf($robot, 'sendmail_args');
    if ($msgkey) {
        $sendmail_args .= ' -N success,delay,failure -V '.$msgkey;
    }
@@ -853,7 +853,7 @@ sub smtpto {
        return undef;
    }
    $opensmtp++;
-   select(undef, undef,undef, 0.3) if ($opensmtp < &Sympa::Conf::get_robot_conf($robot, 'maxsmtp'));
+   select(undef, undef,undef, 0.3) if ($opensmtp < &Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'));
    return("$fh"); ## Symbol for the write descriptor.
 }
 
@@ -881,11 +881,11 @@ sub send_in_spool {
     &Sympa::Log::do_log('debug3', '%s::send_in_spool(%s,%s, %s)',__PACKAGE__,$XSympaFrom,$rcpt);
     
     unless ($sympa_email) {
-	$sympa_email = &Sympa::Conf::get_robot_conf($robot, 'sympa');
+	$sympa_email = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
    }
    
     unless ($XSympaFrom) {
-	$XSympaFrom = &Sympa::Conf::get_robot_conf($robot, 'sympa'); 
+	$XSympaFrom = &Sympa::Configuration::get_robot_conf($robot, 'sympa'); 
     }
 
     my $sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
@@ -904,7 +904,7 @@ sub send_in_spool {
 
     printf TMP "X-Sympa-To: %s\n", $all_rcpt;
     printf TMP "X-Sympa-From: %s\n", $XSympaFrom;
-    printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Conf::Conf{'cookie'});
+    printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Configuration::Conf{'cookie'});
     
     my $return;
     $return->{'filename'} = $sympa_file;     

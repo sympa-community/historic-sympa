@@ -15,7 +15,7 @@ use vars qw(@ISA);
 
 use SOAP::Transport::HTTP;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Session;
@@ -30,12 +30,12 @@ sub request {
     if (my $request = $_[0]) {	
 	
 	## Select appropriate robot
-	if ($Sympa::Conf::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
-	  $ENV{'SYMPA_ROBOT'} = $Sympa::Conf::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
+	if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
+	  $ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 	  &Sympa::Log::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 	}else {
 	  &Sympa::Log::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-	  $ENV{'SYMPA_ROBOT'} =  $Sympa::Conf::Conf{'host'} ;
+	  $ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
 	}
 
 	## Empty cache of the List.pm module

@@ -23,14 +23,14 @@
 
 use lib '--modulesdir--';
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::SDM;
 
 ## Load sympa config
-&Sympa::Conf::load(Sympa::Constants::CONFIG) || die 'config_error';
+&Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
-chdir $Sympa::Conf::Conf{'home'};
+chdir $Sympa::Configuration::Conf{'home'};
 
 &Sympa::SDM::db_connect() || die "Can't connect to database";
 

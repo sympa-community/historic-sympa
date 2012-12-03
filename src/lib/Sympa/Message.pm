@@ -39,7 +39,7 @@ use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Scenario;
@@ -209,7 +209,7 @@ sub new {
 	
 	$robot = lc($robot);
 	$listname = lc($listname);
-	$robot ||= $Sympa::Conf::Conf{'domain'};
+	$robot ||= $Sympa::Configuration::Conf{'domain'};
 	my $spam_status = &Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
 	$message->{'spam_status'} = 'unkown';
 	if(defined $spam_status) {
@@ -220,10 +220,10 @@ sub new {
 	    }
 	}
 	
-	my $conf_email = &Sympa::Conf::get_robot_conf($robot, 'email');
-	my $conf_host = &Sympa::Conf::get_robot_conf($robot, 'host');
-	unless ($listname =~ /^(sympa|$Sympa::Conf::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
-	    my $list_check_regexp = &Sympa::Conf::get_robot_conf($robot,'list_check_regexp');
+	my $conf_email = &Sympa::Configuration::get_robot_conf($robot, 'email');
+	my $conf_host = &Sympa::Configuration::get_robot_conf($robot, 'host');
+	unless ($listname =~ /^(sympa|$Sympa::Configuration::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
+	    my $list_check_regexp = &Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
 	    if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 		$listname = $1;
 	    }
@@ -234,8 +234,8 @@ sub new {
 	    }	
 	}
 	# verify DKIM signature
-	if (&Sympa::Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){
-	    $message->{'dkim_pass'} = dkim_verifier($message->{'msg_as_string'}, $Sympa::Conf::Conf{'tmpdir'});
+	if (&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
+	    $message->{'dkim_pass'} = dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
 	}
     }
         
@@ -244,7 +244,7 @@ sub new {
 	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
 	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-	if ($chksum eq &Sympa::Tools::sympa_checksum($rcpt, $Sympa::Conf::Conf{'cookie'})) {
+	if ($chksum eq &Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
 	    $message->{'md5_check'} = 1 ;
 	}else{
 	    &Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");	
@@ -252,12 +252,12 @@ sub new {
     }
 
     ## S/MIME
-    if ($Sympa::Conf::Conf{'openssl'}) {
+    if ($Sympa::Configuration::Conf{'openssl'}) {
 
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
-	    my ($dec, $dec_as_string) = smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Conf::Conf{'tmpdir'}, $Sympa::Conf::Conf{'home'}, $Sympa::Conf::Conf{'key_passwd'}, $Sympa::Conf::Conf{'openssl'});
+	    my ($dec, $dec_as_string) = smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
 	    
 	    unless (defined $dec) {
 		&Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
@@ -276,7 +276,7 @@ sub new {
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
-	    my $signed = smime_sign_check ($message, $Sympa::Conf::Conf{'tmpdir'},$Sympa::Conf::Conf{'cafile'},$Sympa::Conf::Conf{'capath'}, $Sympa::Conf::Conf{'openssl'}, $Sympa::Conf::Conf{'ssl_cert_dir'});
+	    my $signed = smime_sign_check ($message, $Sympa::Configuration::Conf{'tmpdir'},$Sympa::Configuration::Conf{'cafile'},$Sympa::Configuration::Conf{'capath'}, $Sympa::Configuration::Conf{'openssl'}, $Sympa::Configuration::Conf{'ssl_cert_dir'});
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};
@@ -385,7 +385,7 @@ sub clean_html {
     my ($listname, $robot) = split(/\@/,$self->{'rcpt'});
     $robot = lc($robot);
     $listname = lc($listname);
-    $robot ||= $Sympa::Conf::Conf{'host'};
+    $robot ||= $Sympa::Configuration::Conf{'host'};
     my $new_msg;
     if($new_msg = &fix_html_part($self->{'msg'},$robot)) {
 	$self->{'msg'} = $new_msg;
@@ -429,7 +429,7 @@ sub fix_html_part {
 	my $filtered_body = &Sympa::Tools::sanitize_html(
             'string' => $body,
             'robot'=> $robot,
-            'host' => Sympa::Conf::get_robot_conf($robot,'http_host')
+            'host' => Sympa::Configuration::get_robot_conf($robot,'http_host')
         );
 
 	my $io = $bodyh->open("w");

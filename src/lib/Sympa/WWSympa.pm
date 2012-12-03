@@ -30,7 +30,7 @@ This module provides functions for wwsympa.
 
 package Sympa::WWSympa;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Log;
 use Sympa::List;
@@ -152,9 +152,9 @@ sub load_config {
     my %default_conf = ();
 
     ## Valid params
-    foreach my $key (keys %Sympa::Conf::params) {
-	if (defined $Sympa::Conf::params{$key}{'file'} && $Sympa::Conf::params{$key}{'file'} eq 'wwsympa.conf') {
-	    $default_conf{$key} = $Sympa::Conf::params{$key}{'default'};
+    foreach my $key (keys %Sympa::Configuration::params) {
+	if (defined $Sympa::Configuration::params{$key}{'file'} && $Sympa::Configuration::params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $Sympa::Configuration::params{$key}{'default'};
 	}
     }
 

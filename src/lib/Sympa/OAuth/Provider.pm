@@ -38,7 +38,7 @@ use strict;
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Tools;
@@ -538,7 +538,7 @@ sub _getConsumerConfigFor {
 	
 	&Sympa::Log::do_log('debug2', '%s::_getConsumerConfig(%s)', __PACKAGE__, $key);
 	
-	my $file = $Sympa::Conf::Conf{'etc'}.'/oauth_provider.conf';
+	my $file = $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf';
 	return undef unless (-f $file);
 	
 	my $c = {};

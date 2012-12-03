@@ -20,7 +20,7 @@
 
 =head1 NAME
 
-Sympa::Conf - Configuration file handling
+Sympa::Configuration - Configuration file handling
 
 =head1 DESCRIPTION
 
@@ -28,7 +28,7 @@ This module handles the configuration files for Sympa.
 
 =cut
 
-package Sympa::Conf;
+package Sympa::Configuration;
 
 use strict "vars";
 

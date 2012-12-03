@@ -37,7 +37,7 @@ use Exporter;
 use POSIX qw();
 use Sys::Syslog;
 
-#use Sympa::Conf; # FIXME
+#use Sympa::Configuration; # FIXME
 #use Sympa::SDM; # FIXME
 use Sympa::Tools::Time;
 
@@ -82,7 +82,7 @@ sub fatal_err {
     };
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
+	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Configuration::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -91,7 +91,7 @@ sub fatal_err {
     my $full_msg = sprintf $m,@_;
 
     ## Notify listmaster
-    unless (&Sympa::List::send_notify_to_listmaster('sympa_died', $Sympa::Conf::Conf{'domain'}, [$full_msg])) {
+    unless (&Sympa::List::send_notify_to_listmaster('sympa_died', $Sympa::Configuration::Conf{'domain'}, [$full_msg])) {
 	&do_log('err',"Unable to send notify 'sympa died' to listmaster");
     }
 
@@ -168,7 +168,7 @@ sub do_log {
         $warning_date = time + $warning_timeout;
         require Sympa::List;
         &Sympa::List::send_notify_to_listmaster(
-            'logs_failed', $Sympa::Conf::Conf{'domain'}, [$@]
+            'logs_failed', $Sympa::Configuration::Conf{'domain'}, [$@]
         );
     };
 
@@ -207,7 +207,7 @@ sub do_connect {
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
         require List;
-	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Conf::Conf{'domain'}, [$@])) {
+	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Configuration::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -390,7 +390,7 @@ sub db_stat_counter_log {
 
 # delete logs in RDBMS
 sub db_log_del {
-    my $exp = &Sympa::Conf::get_robot_conf('*','logs_expiration_period');
+    my $exp = &Sympa::Configuration::get_robot_conf('*','logs_expiration_period');
     my $date = time - ($exp * 30 * 24 * 60 * 60);
 
     unless(&Sympa::SDM::do_query( "DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)", &Sympa::SDM::quote($date))) {

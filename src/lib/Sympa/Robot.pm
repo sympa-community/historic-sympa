@@ -10,7 +10,7 @@ This class implement a virtual robot.
 
 package Sympa::Robot;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 
@@ -21,16 +21,16 @@ sub new {
     my $robot = {'name' => $name};
     &Sympa::Log::do_log('debug2', '');
     
-    unless (defined $name && $Sympa::Conf::Conf{'robots'}{$name}) {
+    unless (defined $name && $Sympa::Configuration::Conf{'robots'}{$name}) {
 	&Sympa::Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
     ## The default robot
-    if ($name eq $Sympa::Conf::Conf{'domain'}) {
-	$robot->{'home'} = $Sympa::Conf::Conf{'home'};
+    if ($name eq $Sympa::Configuration::Conf{'domain'}) {
+	$robot->{'home'} = $Sympa::Configuration::Conf{'home'};
     }else {
-	$robot->{'home'} = $Sympa::Conf::Conf{'home'}.'/'.$name;
+	$robot->{'home'} = $Sympa::Configuration::Conf{'home'}.'/'.$name;
 	unless (-d $robot->{'home'}) {
 	    &Sympa::Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
 	    return undef;

@@ -23,7 +23,7 @@
 
 use lib '--modulesdir--';
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::SDM;
 use Sympa::Tools;
@@ -33,9 +33,9 @@ unless (require Crypt::CipherSaber) {
 }
 
 ## Load sympa config
-&Sympa::Conf::load(Sympa::Constants::CONFIG) || die 'config_error';
+&Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
-chdir $Sympa::Conf::Conf{'home'};
+chdir $Sympa::Configuration::Conf{'home'};
 
 &Sympa::SDM::db_connect() || die "Can't connect to database";
 
@@ -56,7 +56,7 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
     printf "\n%s", $user->{'email_user'};
 
-    my $crypted_password = &Sympa::Tools::crypt_password($user->{'password_user'}, $Sympa::Conf::Conf{'cookie'});
+    my $crypted_password = &Sympa::Tools::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
 
     printf " => %s", $crypted_password;
 

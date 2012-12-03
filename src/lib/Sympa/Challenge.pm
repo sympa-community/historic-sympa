@@ -36,7 +36,7 @@ use CGI::Cookie;
 use Digest::MD5;
 use Time::Local;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Tools::Time;

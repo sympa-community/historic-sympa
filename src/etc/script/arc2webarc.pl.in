@@ -26,7 +26,7 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Upgrade;
@@ -91,22 +91,22 @@ unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf_file)) {
 }
 
 ## Load sympa config
-unless (&Sympa::Conf::load($sympa_conf_file)) {
+unless (&Sympa::Configuration::load($sympa_conf_file)) {
     die 'config_error';
 }
 
 &Sympa::Upgrade::probe_db();
 
-chdir $Sympa::Conf::Conf{'home'};
+chdir $Sympa::Configuration::Conf{'home'};
 
 my $list = new Sympa::List($listname, $robot) 
     or die 'Cannot create List object';
 
 my $home_sympa;
 if ($robot) {
-    $home_sympa = $Sympa::Conf::Conf{'home'}.'/'.$robot;
+    $home_sympa = $Sympa::Configuration::Conf{'home'}.'/'.$robot;
 }else {
-    $home_sympa = $Sympa::Conf::Conf{'home'};
+    $home_sympa = $Sympa::Configuration::Conf{'home'};
 }
 my $dest_dir = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
 
@@ -192,7 +192,7 @@ print STDERR "\nFound $msg_count messages\n";
 ## Rebuild web archives
 print STDERR "Rebuilding HTML\n";
 my $list_id = $list->get_list_id();
-`touch $Sympa::Conf::Conf{'queueoutgoing'}/.rebuild.$list_id`;
+`touch $Sympa::Configuration::Conf{'queueoutgoing'}/.rebuild.$list_id`;
 
 print STDERR "\nHave a look in $dest_dir/-/ directory for messages dateless
 Now, you should add a web_archive parameter in the config file to make it accessible from the web\n";

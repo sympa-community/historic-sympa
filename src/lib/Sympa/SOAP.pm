@@ -30,7 +30,7 @@ use HTTP::Cookies;
 
 use Sympa::Admin;
 use Sympa::Auth;
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Scenario;
@@ -128,7 +128,7 @@ sub lists {
 	$result_item->{'listAddress'} = $listname.'@'.$list->{'admin'}{'host'};
 	$result_item->{'subject'} = $list->{'admin'}{'subject'};
 	$result_item->{'subject'} =~ s/;/,/g;
-	$result_item->{'homepage'} = &Sympa::Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname; 
+	$result_item->{'homepage'} = &Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname; 
 	
 	my $listInfo;
 	if ($mode eq 'complex') {
@@ -270,7 +270,7 @@ sub casLogin {
 			  #CAFile => '/usr/local/apache/conf/ssl.crt/ca-bundle.crt',
 			  );
 	
-	($user, @proxies) = $cas->validatePT(&Sympa::Conf::get_robot_conf($robot,'soap_url'), $proxyTicket);
+	($user, @proxies) = $cas->validatePT(&Sympa::Configuration::get_robot_conf($robot,'soap_url'), $proxyTicket);
 	unless (defined $user) {
 	    &Sympa::Log::do_log('err', 'CAS ticket %s not validated by server %s : %s', $proxyTicket, $auth_service->{'base_url'}, &AuthCAS::get_errors());
 	    next;
@@ -563,7 +563,7 @@ sub info {
 	    ->faultdetail("List $listname unknown");
     }
 
-    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
 
     my $user;
 
@@ -593,7 +593,7 @@ sub info {
 
 	$result_item->{'listAddress'} = SOAP::Data->name('listAddress')->type('string')->value($listname.'@'.$list->{'admin'}{'host'});
 	$result_item->{'subject'} = SOAP::Data->name('subject')->type('string')->value($list->{'admin'}{'subject'});
-	$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value(&Sympa::Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname); 
+	$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value(&Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname); 
 	
 	## determine status of user 
 	if (($list->am_i('owner',$sender) || $list->am_i('owner',$sender))) {
@@ -930,7 +930,7 @@ sub add {
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos || $u2->{'gecos'};
 	$u->{'date'} = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Conf::Conf{'cookie'}) ;
+	$u->{'password'} = $u2->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'}) ;
 	$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 	$list->add_list_member($u);
@@ -1133,7 +1133,7 @@ sub review {
 	    ->faultdetail("List $listname unknown");
     }
 
-    my $sympa = &Sympa::Conf::get_robot_conf($robot,'sympa');
+    my $sympa = &Sympa::Configuration::get_robot_conf($robot,'sympa');
 
     my $user;
 
@@ -1238,7 +1238,7 @@ sub fullReview {
 			->faultdetail('Listmaster or listowner required');
 	}
 	
-	my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
+	my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
 	
 	my $is_owner = $list->am_i('owner', $sender);
 	
@@ -1358,7 +1358,7 @@ sub signoff {
 	    ->faultdetail("List $listname unknown");	
     }
     
-    my $host = &Sympa::Conf::get_robot_conf($robot,'host');
+    my $host = &Sympa::Configuration::get_robot_conf($robot,'host');
     
     if ($listname eq '*') {
 	my $success;
@@ -1519,12 +1519,12 @@ sub subscribe {
       my $keyauth = $list->compute_auth($sender,'add');
       unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 				   'keyauth' => $list->compute_auth($sender,'add'),
-				   'replyto' => &Sympa::Conf::get_robot_conf($robot, 'sympa'),
+				   'replyto' => &Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 							'gecos' => $gecos})) {
 	  &Sympa::Log::do_log('err',"Unable to send notify 'subrequest' to $list->{'name'} listowner");
       }
 
-#      $list->send_sub_to_owner($sender, $keyauth, &Sympa::Conf::get_robot_conf($robot, 'sympa'), $gecos);
+#      $list->send_sub_to_owner($sender, $keyauth, &Sympa::Configuration::get_robot_conf($robot, 'sympa'), $gecos);
       $list->store_subscription_request($sender, $gecos);
       &Sympa::Log::do_log('info', '%s from %s forwarded to the owners of the list',$listname,$sender);
       return SOAP::Data->name('result')->type('boolean')->value(1);
@@ -1717,7 +1717,7 @@ sub which {
 	$result_item->{'listAddress'} = $name.'@'.$list->{'admin'}{'host'};
 	$result_item->{'subject'} = $list->{'admin'}{'subject'};
 	$result_item->{'subject'} =~ s/;/,/g;
-	$result_item->{'homepage'} = &Sympa::Conf::get_robot_conf($robot,'wwsympa_url').'/info/'.$name;
+	$result_item->{'homepage'} = &Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$name;
 	 
 	## determine status of user 
 	$result_item->{'isOwner'} = 0;
@@ -1838,7 +1838,7 @@ sub get_reason_string {
 
     my $data = {'reason' => $reason };
     my $string;
-    my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+    my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     unless (&Sympa::Template::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &Sympa::Template::get_error();

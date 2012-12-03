@@ -35,7 +35,7 @@ use CGI::Cookie;
 use Digest::MD5;
 use Time::Local;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::SDM;
 use Sympa::Language;
 use Sympa::Log;
@@ -473,7 +473,7 @@ sub is_a_crawler {
     my $robot = shift;
     my $context = shift;
 
-    return $Sympa::Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
+    return $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
 }
 
 1;

@@ -32,7 +32,7 @@ package Sympa::SDM;
 
 use strict;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
@@ -105,7 +105,7 @@ sub check_db_connect {
     
     #&Sympa::Log::do_log('debug2', 'Checking connection to the Sympa database');
     ## Is the Database defined
-    unless (&Sympa::Conf::get_robot_conf('*','db_name')) {
+    unless (&Sympa::Configuration::get_robot_conf('*','db_name')) {
 	&Sympa::Log::do_log('err', 'No db_name defined in configuration file');
 	return undef;
     }
@@ -128,7 +128,7 @@ sub connect_sympa_database {
 
     ## We keep trying to connect if this is the first attempt
     ## Unless in a web context, because we can't afford long response time on the web interface
-    my $db_conf = &Sympa::Conf::get_parameters_group('*','Database related');
+    my $db_conf = &Sympa::Configuration::get_parameters_group('*','Database related');
     $db_conf->{'reconnect_options'} = {'keep_trying'=>($option ne 'just_try' && ( !$db_source->{'connected'} && !$ENV{'HTTP_HOST'})),
 						 'warn'=>1 };
     unless ($db_source = new Sympa::Datasource::SQL($db_conf)) {
@@ -144,7 +144,7 @@ sub connect_sympa_database {
 	&Sympa::Log::do_log('err', 'Unable to connect to the Sympa database');
 	return undef;
     }
-    &Sympa::Log::do_log('debug2','Connected to Database %s',&Sympa::Conf::get_robot_conf('*','db_name'));
+    &Sympa::Log::do_log('debug2','Connected to Database %s',&Sympa::Configuration::get_robot_conf('*','db_name'));
 
     return 1;
 }
@@ -154,7 +154,7 @@ sub db_disconnect {
     &Sympa::Log::do_log('debug', 'Disconnecting from Sympa database');
 
     unless ($db_source->{'dbh'}->disconnect()) {
-	&Sympa::Log::do_log('err','Can\'t disconnect from Database %s : %s',&Sympa::Conf::get_robot_conf('*','db_name'), $db_source->{'dbh'}->errstr);
+	&Sympa::Log::do_log('err','Can\'t disconnect from Database %s : %s',&Sympa::Configuration::get_robot_conf('*','db_name'), $db_source->{'dbh'}->errstr);
 	return undef;
     }
 
@@ -190,7 +190,7 @@ sub probe_db {
 	unless ($found) {
 	    if (my $rep = $db_source->add_table({'table'=>$t1})) {
 		push @report, $rep;
-		&Sympa::Log::do_log('notice', 'Table %s created in database %s', $t1, &Sympa::Conf::get_robot_conf('*','db_name'));
+		&Sympa::Log::do_log('notice', 'Table %s created in database %s', $t1, &Sympa::Configuration::get_robot_conf('*','db_name'));
 		push @tables, $t1;
 		$real_struct{$t1} = {};
 	    }
@@ -206,7 +206,7 @@ sub probe_db {
 
 	foreach my $t (keys %{$db_struct{'mysql'}}) {
 	    unless ($real_struct{$t}) {
-		&Sympa::Log::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, &Sympa::Conf::get_robot_conf('*','db_name'), &Sympa::Conf::get_robot_conf('*','db_type'));
+		&Sympa::Log::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, &Sympa::Configuration::get_robot_conf('*','db_name'), &Sympa::Configuration::get_robot_conf('*','db_type'));
 		return undef;
 	    }
 	    unless (&check_fields({'table' => $t,'report' => \@report,'real_struct' => \%real_struct})) {
@@ -222,7 +222,7 @@ sub probe_db {
 		delete $real_struct{$t}{'temporary'};
 	    }
 
-	    if ((&Sympa::Conf::get_robot_conf('*','db_type') eq 'mysql')||(&Sympa::Conf::get_robot_conf('*','db_type') eq 'Pg')||(&Sympa::Conf::get_robot_conf('*','db_type') eq 'SQLite')) {
+	    if ((&Sympa::Configuration::get_robot_conf('*','db_type') eq 'mysql')||(&Sympa::Configuration::get_robot_conf('*','db_type') eq 'Pg')||(&Sympa::Configuration::get_robot_conf('*','db_type') eq 'SQLite')) {
 		## Check that primary key has the right structure.
 		unless (&check_primary_key({'table' => $t,'report' => \@report})) {
 		    &Sympa::Log::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
@@ -258,7 +258,7 @@ sub probe_db {
     $Sympa::List::use_db = 1;
 
     ## Notify listmaster
-    &Sympa::List::send_notify_to_listmaster('db_struct_updated',  &Sympa::Conf::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
+    &Sympa::List::send_notify_to_listmaster('db_struct_updated',  &Sympa::Configuration::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
 
     return 1;
 }
@@ -269,16 +269,16 @@ sub check_fields {
     my %real_struct = %{$param->{'real_struct'}};
     my $report_ref = $param->{'report'};
 
-    foreach my $f (sort keys %{$db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}}) {
+    foreach my $f (sort keys %{$db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}}) {
 	unless ($real_struct{$t}{$f}) {
-	    push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, &Sympa::Conf::get_robot_conf('*','db_name'));
-	    &Sympa::Log::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, &Sympa::Conf::get_robot_conf('*','db_name'));
+	    push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'));
+	    &Sympa::Log::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'));
 
 	    my $rep;
 	    if ($rep = $db_source->add_field({
 		'table' => $t,
 		'field' => $f,
-		'type' => $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f},
+		'type' => $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
 		'notnull' => $not_null{$f},
 		'autoinc' => ( $autoincrement{$t} eq $f),
 		'primary' => ( $autoincrement{$t} eq $f),
@@ -293,18 +293,18 @@ sub check_fields {
 	}
 	
 	## Change DB types if different and if update_db_types enabled
-	if (&Sympa::Conf::get_robot_conf('*','update_db_field_types') eq 'auto' && &Sympa::Conf::get_robot_conf('*','db_type') ne 'SQLite') {
+	if (&Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && &Sympa::Configuration::get_robot_conf('*','db_type') ne 'SQLite') {
 	    unless (&check_db_field_type(effective_format => $real_struct{$t}{$f},
-					 required_format => $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f})) {
-		push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, &Sympa::Conf::get_robot_conf('*','db_name'), $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f});
+					 required_format => $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f})) {
+		push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f});
 		
-		&Sympa::Log::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, &Sympa::Conf::get_robot_conf('*','db_name'), $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
+		&Sympa::Log::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
 		
 		my $rep;
 		if ($rep = $db_source->update_field({
 		    'table' => $t,
 		    'field' => $f,
-		    'type' => $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f},
+		    'type' => $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
 		    'notnull' => $not_null{$f},
 		    })){
 			push @{$report_ref}, $rep;
@@ -314,8 +314,8 @@ sub check_fields {
 		}
 	    }
 	}else {
-	    unless ($real_struct{$t}{$f} eq $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f}) {
-		&Sympa::Log::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, &Sympa::Conf::get_robot_conf('*','db_name'), $db_struct{&Sympa::Conf::get_robot_conf('*','db_type')}{$t}{$f});
+	    unless ($real_struct{$t}{$f} eq $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f}) {
+		&Sympa::Log::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f});
 		&Sympa::Log::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 		return undef;
 	    }
@@ -451,7 +451,7 @@ sub check_indexes {
 ## Check if data structures are uptodate
 ## If not, no operation should be performed before the upgrade process is run
 sub data_structure_uptodate {
-     my $version_file = "&Sympa::Conf::get_robot_conf('*','etc')/data_structure.version";
+     my $version_file = "&Sympa::Configuration::get_robot_conf('*','etc')/data_structure.version";
      my $data_structure_version;
 
      if (-f $version_file) {

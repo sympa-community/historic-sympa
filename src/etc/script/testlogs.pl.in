@@ -5,7 +5,7 @@ use strict;
 use lib '--modulesdir--';
 use Getopt::Long;
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Log;
 
 my %options;
@@ -13,7 +13,7 @@ my %options;
 
 my $config_file = $main::options{'config'} || '/etc/sympa.conf';
 ## Load configuration file
-unless (Sympa::Conf::load($config_file)) {
+unless (Sympa::Configuration::load($config_file)) {
    &Sympa::Log::fatal_err("Configuration file $config_file has errors.");
 }
 

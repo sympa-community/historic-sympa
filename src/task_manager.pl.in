@@ -33,7 +33,7 @@ use POSIX qw();
 use Time::Local;
 
 use Sympa::Bulk;
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Log;
@@ -81,7 +81,7 @@ unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf)) {
 }
 
 # Load sympa.conf
-unless (Sympa::Conf::load($sympa_conf_file)) {
+unless (Sympa::Configuration::load($sympa_conf_file)) {
     &Sympa::Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -96,7 +96,7 @@ unless (&Sympa::Upgrade::data_structure_uptodate()) {
 }
 
 ## Check for several files.
-unless (&Sympa::Conf::checkfiles()) {
+unless (&Sympa::Configuration::checkfiles()) {
     &Sympa::Sympa::Log::fatal_err("Missing files. Aborting.");
     ## No return.                                         
 }
@@ -124,7 +124,7 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 &Sympa::Tools::Daemon::write_pid($wwsconf->{'task_manager_pidfile'}, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
-    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
+    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
 }
 
 
@@ -393,7 +393,7 @@ while (!$end) {
 &Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Sympa::Sympa::Log::do_log ('notice', 'task_manager exited normally due to signal'); 
-&Sympa::Tools::Daemon::remove_pid($wwsconf->{'task_manager_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($wwsconf->{'task_manager_pidfile'}, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);
 
@@ -430,7 +430,7 @@ sub create {
  
      # for global model
     if ($object eq '_global') {
-	unless ($model_file = &Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", $Conf{'host'}, $Sympa::Conf::Conf{'etc'})) {
+	unless ($model_file = &Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", $Conf{'host'}, $Sympa::Configuration::Conf{'etc'})) {
 	    &Sympa::Sympa::Log::do_log ('err', "error : unable to find $model_name, creation aborted");
 	    return undef;
 	}
@@ -442,7 +442,7 @@ sub create {
 
 	$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
-	unless ($model_file = &Sympa::Tools::get_filename('etc', {},"list_task_models/$model_name", $list->{'domain'}, $list, $Sympa::Conf::Conf{'etc'})) {
+	unless ($model_file = &Sympa::Tools::get_filename('etc', {},"list_task_models/$model_name", $list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'})) {
 	    &Sympa::Sympa::Log::do_log ('err', "error : unable to find $model_name, for list $list_name creation aborted");
 	    return undef;
 	}
