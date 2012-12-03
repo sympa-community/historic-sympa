@@ -55,7 +55,7 @@ use Sympa::Template;
 use Sympa::WWSympa;
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
+our @EXPORT = qw(%params %Conf);
 
 ## Database and SQL statement handlers
 my $sth;
