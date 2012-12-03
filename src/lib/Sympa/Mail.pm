@@ -55,7 +55,7 @@ my $fh = 'fh0000000000';	## File handle for the stream.
 my $max_arg = eval { &POSIX::_SC_ARG_MAX; };
 if ($@) {
     $max_arg = 4096;
-    printf STDERR gettext("Your system does not conform to the POSIX P1003.1 standard, or\nyour Perl system does not define the _SC_ARG_MAX constant in its POSIX\nlibrary. You must modify the smtp.pm module in order to set a value\nfor variable %s.\n"), $max_arg;
+    printf STDERR Sympa::Language::gettext("Your system does not conform to the POSIX P1003.1 standard, or\nyour Perl system does not define the _SC_ARG_MAX constant in its POSIX\nlibrary. You must modify the smtp.pm module in order to set a value\nfor variable %s.\n"), $max_arg;
 } else {
     $max_arg = POSIX::sysconf($max_arg);
 }
@@ -805,7 +805,7 @@ sub smtpto {
    
 
    if (!pipe(IN, OUT)) {
-       &Sympa::Log::fatal_err(sprintf gettext("Unable to create a channel in smtpto: %s"), "$!"); ## No return
+       &Sympa::Log::fatal_err(sprintf Sympa::Language::gettext("Unable to create a channel in smtpto: %s"), "$!"); ## No return
    }
    $pid = &Sympa::Tools::safefork();
    $pid{$pid} = 0;

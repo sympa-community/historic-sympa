@@ -273,7 +273,7 @@ sub edit_configuration {
         }elsif ($file eq 'sympa.conf') {
             $desc = \@new_sympa_conf;
         }else{
-            printf STDERR gettext("Incorrect parameter definition: %s\n"),
+            printf STDERR Sympa::Language::gettext("Incorrect parameter definition: %s\n"),
                           $file;
         }
 

@@ -232,7 +232,7 @@ sub help {
 	$data->{'is_editor'} = 1 if ($#editor > -1);
 	$data->{'user'} =  &Sympa::List::get_global_user($sender);
 	&Sympa::Language::SetLang($data->{'user'}{'lang'}) if $data->{'user'}{'lang'};
-	$data->{'subject'} = gettext("User guide");
+	$data->{'subject'} = Sympa::Language::gettext("User guide");
 	$data->{'auto_submitted'} = 'auto-replied';
 
 	unless(&Sympa::List::send_global_file("helpfile", $sender, $robot, $data)){
@@ -249,7 +249,7 @@ sub help {
 	
 	$data->{'is_owner'} = 1 if ($#owner > -1);
 	$data->{'is_editor'} = 1 if ($#editor > -1);
-	$data->{'subject'} = gettext("User guide");
+	$data->{'subject'} = Sympa::Language::gettext("User guide");
 	$data->{'auto_submitted'} = 'auto-replied';
 	unless (&Sympa::List::send_global_file("helpfile", $sender, $robot, $data)){
 	    &Sympa::Log::do_log('notice',"Unable to send template 'helpfile' to $sender");
@@ -1029,7 +1029,7 @@ sub info {
 				       'file_path' => $list->{'admin'}{$p}{'file_path'}
 				      );
 	  my $title = $scenario->{'title'}{'gettext'};
-	  $data->{$p} = gettext($title); 
+	  $data->{$p} =Sympa::Language::gettext($title); 
 	}
 
 	## Digest
@@ -1037,7 +1037,7 @@ sub info {
 	if (defined $list->{'admin'}{'digest'}) {
 	    
 	    foreach my $d (@{$list->{'admin'}{'digest'}{'days'}}) {
-		push @days, (gettext_strftime "%A", localtime(0 + ($d +3) * (3600 * 24)));
+		push @days, (Sympa::Language::gettext_strftime "%A", localtime(0 + ($d +3) * (3600 * 24)));
 		}
 	    $data->{'digest'} = join (',', @days).' '.$list->{'admin'}{'digest'}{'hour'}.':'.$list->{'admin'}{'digest'}{'minute'};
 	}
@@ -1706,7 +1706,7 @@ sub remind {
 	    my %global_info;
 	    my $count = 0 ;
 
-	    $context{'subject'} = gettext("Subscription summary");
+	    $context{'subject'} =Sympa::Language::gettext("Subscription summary");
 	    # this remind is a global remind.
 
 	    my $all_lists = &Sympa::List::get_lists($robot);

@@ -965,7 +965,7 @@ sub load_nrcpt_by_domain {
       $nrcpt_by_domain->{$domain} = $value;
       $valid_dom +=1;
       }else {
-      printf STDERR gettext("%s::load_nrcpt_by_domain(): Error at line %d: %s"), __PACKAGE__, $line_num, $config_file, $_;
+      printf STDERR Sympa::Language::gettext("%s::load_nrcpt_by_domain(): Error at line %d: %s"), __PACKAGE__, $line_num, $config_file, $_;
       $config_err++;
       }
   } 
@@ -1381,7 +1381,7 @@ sub _load_config_file_to_hash {
                 $result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
             }
         } else {
-            printf STDERR  "%s::_load_config_file_to_hash(): ".gettext("Error at line %d: %s\n"), __PACKAGE__, $line_num, $param->{'path_to_config_file'}, $_;
+            printf STDERR  "%s::_load_config_file_to_hash(): ".Sympa::Language::gettext("Error at line %d: %s\n"), __PACKAGE__, $line_num, $param->{'path_to_config_file'}, $_;
             $result->{'errors'}++;
         }
     }

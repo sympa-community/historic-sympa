@@ -281,7 +281,7 @@ sub add_list {
 
     # info parameters
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
     $list->save_config("listmaster\@$host");
     $list->{'family'} = $self;
@@ -499,7 +499,7 @@ sub modify_list {
     my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
 
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
     $list->save_config("listmaster\@$host");
     $list->{'family'} = $self;
@@ -1779,7 +1779,7 @@ sub _end_update_list {
     
     my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
     $list->save_config("listmaster\@$host");
     $list->{'family'} = $self;

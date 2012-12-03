@@ -32,16 +32,12 @@ package Sympa::Language;
 
 use strict;
 
-use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 use POSIX qw();
 
 #use Sympa::Configuration; FIXME
 use Sympa::Constants;
 use Sympa::Log;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(&gettext gettext_strftime);
 
 BEGIN {
     ## Using the Pure Perl implementation of gettext

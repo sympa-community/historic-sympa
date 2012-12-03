@@ -189,11 +189,11 @@ sub _do_message {
   my $msgent = $topent->parts(0);
 
   unless ($msgent) {
-      $outstring .= sprintf(gettext("----- Malformed message ignored -----\n\n"));
+      $outstring .= sprintf(Sympa::Language::gettext("----- Malformed message ignored -----\n\n"));
       return undef;
   }
   
-  my $from = $msgent->head->get('From') ? tools::decode_header($msgent, 'From') : gettext("[Unknown]");
+  my $from = $msgent->head->get('From') ? tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
   my $subject = $msgent->head->get('Subject') ? tools::decode_header($msgent, 'Subject') : '';
   my $date = $msgent->head->get('Date') ? tools::decode_header($msgent, 'Date') : '';
   my $to = $msgent->head->get('To') ? tools::decode_header($msgent, 'To', ', ') : '';
@@ -215,19 +215,19 @@ sub _do_message {
   }
   $name ||= $from;
 
-  $outstring .= gettext("\n[Attached message follows]\n-----Original message-----\n"); 
+  $outstring .= Sympa::Language::gettext("\n[Attached message follows]\n-----Original message-----\n"); 
   my $headers = '';
-  $headers .= sprintf(gettext("Date: %s\n") , $date) if $date;
-  $headers .= sprintf(gettext("From: %s\n"), $from) if $from;
-  $headers .= sprintf(gettext("To: %s\n"), $to) if $to;
-  $headers .= sprintf(gettext("Cc: %s\n"), $cc) if $cc;
-  $headers .= sprintf(gettext("Subject: %s\n"),$subject ) if $subject;
+  $headers .= sprintf(Sympa::Language::gettext("Date: %s\n") , $date) if $date;
+  $headers .= sprintf(Sympa::Language::gettext("From: %s\n"), $from) if $from;
+  $headers .= sprintf(Sympa::Language::gettext("To: %s\n"), $to) if $to;
+  $headers .= sprintf(Sympa::Language::gettext("Cc: %s\n"), $cc) if $cc;
+  $headers .= sprintf(Sympa::Language::gettext("Subject: %s\n"),$subject ) if $subject;
   $headers .= "\n";
   $outstring .= &Sympa::Tools::wrap_text($headers, '', '    ');
   
   _do_toplevel ($msgent);
   
-  $outstring .= sprintf(gettext("-----End of original message from %s-----\n\n"), $name);
+  $outstring .= sprintf(Sympa::Language::gettext("-----End of original message from %s-----\n\n"), $name);
   return 1;
 }
 
@@ -249,7 +249,7 @@ sub _do_text_plain {
   };
   if ($@) {
     # mmm, what to do if it fails?
-    $outstring .= sprintf (gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
+    $outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
     $thispart =~ s/[^\x00-\x7F]/?/g;
   }
     
@@ -266,15 +266,15 @@ sub _do_text_plain {
 sub _do_other {
   # just add a note that attachment was stripped.
   my $entity = shift;
-  $outstring .= sprintf (gettext("\n[An attachment of type %s was included here]\n"), $entity->mime_type);
+  $outstring .= sprintf (Sympa::Language::gettext("\n[An attachment of type %s was included here]\n"), $entity->mime_type);
   return 1;
 }
  
 sub _do_dsn {
    my $entity = shift;
-   $outstring .= sprintf (gettext("\n-----Delivery Status Report-----\n"));
+   $outstring .= sprintf (Sympa::Language::gettext("\n-----Delivery Status Report-----\n"));
    _do_text_plain ($entity);
-   $outstring .= sprintf (gettext("\n-----End of Delivery Status Report-----\n"));
+   $outstring .= sprintf (Sympa::Language::gettext("\n-----End of Delivery Status Report-----\n"));
 }
 
 sub _do_text_html {
@@ -284,7 +284,7 @@ sub _do_text_html {
   my $have_mods = 1;
   
   unless (defined $entity->bodyhandle) {
-    $outstring .= gettext("\n[** Unable to process HTML message part **]\n");
+    $outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
     return undef;
   }
   
@@ -302,7 +302,7 @@ sub _do_text_html {
         $body =  $charset->decode($body);
       } else {
         # mmm, what to do if it fails?
-        $outstring .= sprintf (gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
+        $outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
         $body =~ s/[^\x00-\x7F]/?/g;
       }           
       my $tree = HTML::TreeBuilder->new->parse($body);
@@ -313,11 +313,11 @@ sub _do_text_html {
       $text = Encode::encode_utf8($text);
   } ;
   if ($@) {
-      $outstring .= gettext("\n[** Unable to process HTML message part **]\n");
+      $outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
       return 1;
   }      
 
-  $outstring .= sprintf(gettext ("[ Text converted from HTML ]\n"));
+  $outstring .= sprintf(Sympa::Language::gettext("[ Text converted from HTML ]\n"));
   
   # deal with 30 hyphens (RFC 1153)
   $text =~ s/\n-{30}(\n|$)/\n -----------------------------\n/g;

@@ -2576,7 +2576,7 @@ sub save_config {
     $self->{'admin'}{'serial'}++;
     $self->{'admin'}{'update'} = {'email' => $email,
 				  'date_epoch' => time,
-				  'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
+				  'date' => (Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
 				  };
 
     unless (&_save_list_config_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
@@ -3497,7 +3497,7 @@ sub send_msg_digest {
     
     my $param = {'replyto' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
 		 'to' => $self->get_list_address(),
-		 'table_of_content' => sprintf(gettext("Table of contents:")),
+		 'table_of_content' => sprintf(Sympa::Language::gettext("Table of contents:")),
 		 'boundary1' => '----------=_'.&Sympa::Tools::get_message_id($robot),
 		 'boundary2' => '----------=_'.&Sympa::Tools::get_message_id($robot),
 		 };
@@ -3597,8 +3597,8 @@ sub send_msg_digest {
     }
     
     my @now  = localtime(time);
-    $param->{'datetime'} = gettext_strftime "%a, %d %b %Y %H:%M:%S", @now;
-    $param->{'date'} = gettext_strftime "%a, %d %b %Y", @now;
+    $param->{'datetime'} = Sympa::Language::gettext_strftime "%a, %d %b %Y %H:%M:%S", @now;
+    $param->{'date'} = Sympa::Language::gettext_strftime "%a, %d %b %Y", @now;
 
     ## Split messages into groups of digest_max_size size
     my @group_of_msg;
@@ -3824,12 +3824,12 @@ sub send_file {
 	$data->{'subscriber'} = $self->get_list_member($who);
 	
 	if ($data->{'subscriber'}) {
-	    $data->{'subscriber'}{'date'} = gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'date'});
-	    $data->{'subscriber'}{'update_date'} = gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'update_date'});
+	    $data->{'subscriber'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'date'});
+	    $data->{'subscriber'}{'update_date'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'update_date'});
 	    if ($data->{'subscriber'}{'bounce'}) {
 		$data->{'subscriber'}{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
 		
-		$data->{'subscriber'}{'first_bounce'} = gettext_strftime "%d %b %Y", localtime($1);
+		$data->{'subscriber'}{'first_bounce'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($1);
 	    }
 	}
 	
@@ -7476,12 +7476,12 @@ sub _create_add_error_string {
     my $self = shift;
     $self->{'add_outcome'}{'errors'}{'error_message'} = '';
     if ($self->{'add_outcome'}{'errors'}{'max_list_members_exceeded'}) {
-	$self->{'add_outcome'}{'errors'}{'error_message'} .= sprintf &gettext('Attempt to exceed the max number of members (%s) for this list.'), $self->{'admin'}{'max_list_members'} ;
+	$self->{'add_outcome'}{'errors'}{'error_message'} .= sprintf &Sympa::Language::gettext('Attempt to exceed the max number of members (%s) for this list.'), $self->{'admin'}{'max_list_members'} ;
     }
     if ($self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'}) {
-	$self->{'add_outcome'}{'error_message'} .= ' '.&gettext('Attempts to add some users in database failed.');
+	$self->{'add_outcome'}{'error_message'} .= ' '.&Sympa::Language::gettext('Attempts to add some users in database failed.');
     }
-    $self->{'add_outcome'}{'errors'}{'error_message'} .= ' '.sprintf &gettext('Added %s users out of %s required.'),$self->{'add_outcome'}{'added_members'},$self->{'add_outcome'}{'expected_number_of_added_users'};
+    $self->{'add_outcome'}{'errors'}{'error_message'} .= ' '.sprintf &Sympa::Language::gettext('Added %s users out of %s required.'),$self->{'add_outcome'}{'added_members'},$self->{'add_outcome'}{'expected_number_of_added_users'};
 }
     
 ## Adds a new list admin user, no overwrite.
@@ -8130,9 +8130,9 @@ sub load_scenario_list {
 	    if (defined  $scenario->{'title'}{&Sympa::Language::GetLang()}) {
 		$list_of_scenario{$name}{'web_title'} = $scenario->{'title'}{&Sympa::Language::GetLang()};
 	    }elsif (defined $scenario->{'title'}{'gettext'}) {
-		$list_of_scenario{$name}{'web_title'} = gettext($scenario->{'title'}{'gettext'});
+		$list_of_scenario{$name}{'web_title'} = Sympa::Language::gettext($scenario->{'title'}{'gettext'});
 	    }elsif (defined $scenario->{'title'}{'us'}) {
-		$list_of_scenario{$name}{'web_title'} = gettext($scenario->{'title'}{'us'});
+		$list_of_scenario{$name}{'web_title'} = Sympa::Language::gettext($scenario->{'title'}{'us'});
 	    }else {
 		$list_of_scenario{$name}{'web_title'} = $name;		     
 	    }
@@ -8174,9 +8174,9 @@ sub load_task_list {
 	    if (defined  $titles->{&Sympa::Language::GetLang()}) {
 		$list_of_task{$name}{'title'} = $titles->{&Sympa::Language::GetLang()};
 	    }elsif (defined $titles->{'gettext'}) {
-		$list_of_task{$name}{'title'} = gettext( $titles->{'gettext'});
+		$list_of_task{$name}{'title'} = Sympa::Language::gettext( $titles->{'gettext'});
 	    }elsif (defined $titles->{'us'}) {
-		$list_of_task{$name}{'title'} = gettext( $titles->{'us'});		
+		$list_of_task{$name}{'title'} = Sympa::Language::gettext( $titles->{'us'});		
 	    }else {
 		$list_of_task{$name}{'title'} = $name;		     
 	    }

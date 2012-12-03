@@ -360,7 +360,7 @@ sub merge_data {
     my $user = &Sympa::List::get_list_member_no_object($user_details);
 
     $user->{'escaped_email'} = &URI::Escape::uri_escape($rcpt);
-    $user->{'friendly_date'} = gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
+    $user->{'friendly_date'} = Sympa::Language::gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
 
     # this method as been removed because some users may forward authentication link
     # my $random = get_db_random();
