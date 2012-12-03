@@ -10316,7 +10316,7 @@ sub _check_new_values {
     my $new_admin = shift;
     &wwslog('debug3', '_check_new_values(%s)',$pname);
     
-    my $uncompellable_param = &Family::get_uncompellable_param();
+    my $uncompellable_param = &Sympa::Family::get_uncompellable_param();
 
     if (ref($::pinfo{$pname}{'format'}) eq 'HASH') { #composed parameter
 
@@ -18039,7 +18039,7 @@ sub get_server_details {
      }
 
      ## Families
-     my @families = &Family::get_available_families($robot);
+     my @families = &Sympa::Family::get_available_families($robot);
 
      if (@families) {
 	 $param->{'families'} = \@families;
