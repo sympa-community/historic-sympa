@@ -282,7 +282,7 @@ sub new {
 		$message->{'smime_subject'} = $signed->{'subject'};
 		&Sympa::Log::do_log('debug', "message %s is signed, signature is checked", $file);
 	    }
-	    ## Il faudrait traiter les cas d'erreur (0 différent de undef)
+	    ## Il faudrait traiter les cas d'erreur (0 diffÃ©rent de undef)
 	}
     }
     ## TOPICS
@@ -468,7 +468,7 @@ sub get_body_from_msg_as_string {
 
 =item * Serge Aumont <sa AT cru.fr> 
 
-=item * Olivier Salaün <os AT cru.fr> 
+=item * Olivier SalaÃ¼n <os AT cru.fr> 
 
 =back 
 

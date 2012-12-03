@@ -8469,8 +8469,8 @@ sub _include_users_list {
 ## include a lists owners lists privileged_owners or lists_editors.
 sub _include_users_admin {
     my ($users, $selection, $role, $default_user_options,$tied) = @_;
-#   il faut préparer une liste de hash avec le nom de liste, le nom de robot, le répertoire de la liset pour appeler
-#    load_admin_file décommanter le include_admin
+#   il faut prÂÃ©parer une liste de hash avec le nom de liste, le nom de robot, le rÂÃ©pertoire de la liset pour appeler
+#    load_admin_file dÂÃ©commanter le include_admin
     my $lists;
     
     unless ($role eq 'listmaster') {
@@ -11292,7 +11292,7 @@ sub _save_list_param {
     }else {
 	if (($::pinfo{$key}{'occurrence'} =~ /n$/)
 	    && $::pinfo{$key}{'split_char'}) {
-	    ################" avant de debugger do_edit_list qui crée des nouvelles entrées vides
+	    ################" avant de debugger do_edit_list qui crÂÂÃ©e des nouvelles entrÂÂÃ©es vides
  	    my $string = join($::pinfo{$key}{'split_char'}, @{$p});
  	    $string =~ s/\,\s*$//;
 	    

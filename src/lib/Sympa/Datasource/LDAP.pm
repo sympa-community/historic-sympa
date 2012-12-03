@@ -176,7 +176,7 @@ sub connect {
 	return undef;
     }
 
-    ## Using startçtls() will convert the existing connection to using Transport Layer Security (TLS), which pro-
+    ## Using startÃ§tls() will convert the existing connection to using Transport Layer Security (TLS), which pro-
     ## vides an encrypted connection. This is only possible if the connection uses LDAPv3, and requires that the
     ## server advertizes support for LDAP_EXTENSION_START_TLS. Use "supported_extension" in Net::LDAP::RootDSE to
     ## check this.

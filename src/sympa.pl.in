@@ -1331,9 +1331,9 @@ sub process_message {
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
 		    $list->close_list(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		    # but what about list_of_lists ?
-		    if (exists $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
+		    if (exists $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test Ã  virer si ok
 		      delete $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &Sympa::Log::do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
+		      &Sympa::Log::do_log('err', 'la liste a Ã©tÃ© trouvÃ©e dans la list_of_lists',$listname, $dyn_list_family);
 		    }
 		}
                 return undef;
@@ -1346,9 +1346,9 @@ sub process_message {
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
 		    $list->close_list(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		    # but what about list_of_lists ?
-		    if (exists $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
+		    if (exists $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test Ã  virer si ok
 		      delete $Sympa::List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &Sympa::Log::do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
+		      &Sympa::Log::do_log('err', 'la liste a Ã©tÃ© trouvÃ©e dans la list_of_lists',$listname, $dyn_list_family);
 		    }
 		}
                 return undef;
