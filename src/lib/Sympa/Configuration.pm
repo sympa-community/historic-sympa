@@ -39,7 +39,6 @@ use constant {
     DAEMON_ALL      => 7
 };
 
-use Exporter;
 use Storable;
 
 use Sympa::Configuration::Definition;
@@ -53,9 +52,6 @@ use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::Template;
 use Sympa::WWSympa;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(%params);
 
 ## Database and SQL statement handlers
 my $sth;
