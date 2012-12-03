@@ -364,7 +364,7 @@ sub diff_on_arrays {
     
 } 
 
-=head2 is_on_array($set, $value)
+=head2 is_in_array($set, $value)
 
 Returns a true value if value I<$value> if part of set I<$set>
 
