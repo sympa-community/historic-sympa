@@ -32,17 +32,13 @@ package Sympa::Datasource::SQL;
 
 use strict;
 
-use Exporter;
-
 use Sympa::Configuration;
 use Sympa::Datasource;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
 
-our @ISA = qw(Sympa::Datasource Exporter);
-our @EXPORT = qw(%date_format);
-our @EXPORT_OK = qw(connect query disconnect fetch create_db ping quote set_fetch_timeout);
+our @ISA = qw(Sympa::Datasource);
 
 ## Structure to keep track of active connections/connection status
 ## Key : connect_string (includes server+port+dbname+DB type)

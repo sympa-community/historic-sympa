@@ -33,16 +33,12 @@ package Sympa::Log;
 use strict "vars";
 
 use Encode;
-use Exporter;
 use POSIX qw();
 use Sys::Syslog;
 
 #use Sympa::Configuration; # FIXME
 #use Sympa::SDM; # FIXME
 use Sympa::Tools::Time;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw($log_level %levels);
 
 my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack,$rows_nb);
 # When logs are not available, period of time to wait before sending another warning to listmaster.

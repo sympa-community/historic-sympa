@@ -33,7 +33,6 @@ use strict;
 
 # xxxxxxx faut-il virer encode ? Faut en faire un use ? 
 require Encode;
-use Exporter;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;
 use Mail::Header;
@@ -70,9 +69,6 @@ use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
 use Sympa::WebAgent;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(%list_of_lists);
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);

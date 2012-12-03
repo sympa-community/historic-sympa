@@ -33,7 +33,6 @@ package Sympa::Mail;
 use strict;
 
 use Data::Dumper;
-use Exporter;
 use MIME::Charset;
 use MIME::Tools;
 use POSIX qw();
@@ -49,9 +48,6 @@ use Sympa::Message;
 use Sympa::Template;
 use Sympa::Tools;
 use Sympa::Tools::SMIME;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
 my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
