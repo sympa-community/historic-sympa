@@ -37,10 +37,6 @@ use Data::Dumper;
 
 use Sympa::Log;
 
-#######################################################
-####### Beginning the RDBMS-specific code. ############
-#######################################################
-
 our %date_format = (
 		   'read' => {
 		       'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
