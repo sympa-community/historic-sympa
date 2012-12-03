@@ -52,8 +52,8 @@ use Marc::Search;
 use Sympa::Admin;
 use Sympa::Archive;
 use Sympa::Auth;
-use Sympa::Conf;
-use Sympa::Configuration::Definition;
+use Sympa::Configuration;
+use Sympa::Configurationiguration::Definition;
 use Sympa::Constants;
 use Sympa::Datasource::LDAP;
 use Sympa::Family;
@@ -114,7 +114,7 @@ my $ajax;
 my $session;
 
 ## Load sympa config
-unless (&Sympa::Conf::load( $sympa_conf_file )) {
+unless (&Sympa::Configuration::load( $sympa_conf_file )) {
     &Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -141,7 +141,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 }
 my $mime_types = &Sympa::WWSympa::load_mime_types();
 
-if (&Sympa::Conf::get_robot_conf('*','voot_feature') eq 'on') {
+if (&Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     unless ( eval "require Sympa::OAuth::Provider" ){
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $@");
 	return undef;
@@ -1061,7 +1061,7 @@ unless (&Upgrade::data_structure_uptodate()) {
     &Sympa::Log::do_log('err',"Web interface set to maintenance mode ; you should run sympa.pl --upgrade");
 }
 
-&Sympa::Tools::ciphersaber_installed($Sympa::Conf::Conf{'cookie'});
+&Sympa::Tools::ciphersaber_installed($Sympa::Configuration::Conf{'cookie'});
 
 our %changed_params;
 
@@ -1165,7 +1165,7 @@ my $birthday = time ;
 	 $param->{'default_robot'} = 1;
      }
  
-     $param->{'cookie_domain'} = &Sympa::Conf::get_robot_conf($robot,'cookie_domain');
+     $param->{'cookie_domain'} = &Sympa::Configuration::get_robot_conf($robot,'cookie_domain');
 
      $ip = $ENV{'REMOTE_HOST'};
      $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
@@ -1178,7 +1178,7 @@ my $birthday = time ;
          &wwslog('notice', 'Cookie_domain(%s) does NOT match HTTP_HOST; setting cookie_domain to %s', $param->{'cookie_domain'}, $http_host);
          $param->{'cookie_domain'} = $http_host;
      }
-     &Sympa::Log::set_log_level(&Sympa::Conf::get_robot_conf($robot, 'log_level'));
+     &Sympa::Log::set_log_level(&Sympa::Configuration::get_robot_conf($robot, 'log_level'));
 
      ## Sympa parameters in $param->{'conf'}
      $param->{'conf'} = {};
@@ -1191,8 +1191,8 @@ my $birthday = time ;
 		    'reporting_spam_script_path','automatic_list_families',
 		    ) {
 
-	 $param->{'conf'}{$p} = &Sympa::Conf::get_robot_conf($robot, $p);
-	 $param->{$p} = &Sympa::Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+	 $param->{'conf'}{$p} = &Sympa::Configuration::get_robot_conf($robot, $p);
+	 $param->{$p} = &Sympa::Configuration::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
      }
      
 
@@ -1261,11 +1261,11 @@ my $birthday = time ;
      &get_parameters();
 
      # Static content
-     $param->{'static_content_url'} = &Sympa::Conf::get_robot_conf($robot, 'static_content_url');
+     $param->{'static_content_url'} = &Sympa::Configuration::get_robot_conf($robot, 'static_content_url');
 
      ## CSS related
-     $param->{'css_path'} = &Sympa::Conf::get_robot_conf($robot, 'css_path');
-     $param->{'css_url'} = &Sympa::Conf::get_robot_conf($robot, 'css_url');
+     $param->{'css_path'} = &Sympa::Configuration::get_robot_conf($robot, 'css_path');
+     $param->{'css_url'} = &Sympa::Configuration::get_robot_conf($robot, 'css_url');
      ## If CSS file not found, let Sympa do the job...
      unless (-f $param->{'css_path'}.'/style.css') {
  	 &wwslog('err','Could not find CSS file %s, using default CSS', $param->{'css_path'}.'/style.css') if ($param->{'css_path'}); ## Notice only if path was defined
@@ -1292,7 +1292,7 @@ my $birthday = time ;
 	 }
 
     $session->{'is_family_owner'} = undef;
-    my $automatic_list_families = &Sympa::Conf::get_robot_conf($robot,'automatic_list_families');
+    my $automatic_list_families = &Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
     if (defined $automatic_list_families) {
 	foreach my $key (keys %{$automatic_list_families}){
 	    my $family;
@@ -1466,7 +1466,7 @@ my $birthday = time ;
  	 $session->{'redirect_url'} = $param->{'base_url'}.$param->{'path_cgi'}.$ENV{'PATH_INFO'};
      }
 
-     $action ||= &Sympa::Conf::get_robot_conf($robot, 'default_home');
+     $action ||= &Sympa::Configuration::get_robot_conf($robot, 'default_home');
      $param->{'remote_addr'} = $ENV{'REMOTE_ADDR'} ;
      $param->{'remote_host'} = $ENV{'REMOTE_HOST'};
      $param->{'http_user_agent'} = $ENV{'HTTP_USER_AGENT'};
@@ -1495,7 +1495,7 @@ my $birthday = time ;
 	     ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
 	     $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) eq 'List');
 	     $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});	     
-	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');	     
+	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || &Sympa::Configuration::get_robot_conf($robot, 'lang');	     
 
 	     $param->{'locale'} = &Sympa::Language::SetLang($param->{'lang'});
 	     
@@ -1565,7 +1565,7 @@ my $birthday = time ;
 
      $param->{'action_type'} = 'none' unless (($param->{'is_priv'})||($param->{'action_type'} eq 'serveradmin'));
      $param->{'lang'} ||= $param->{'user'}{'lang'} if (defined $param->{'user'});
-     $param->{'lang'} ||= &Sympa::Conf::get_robot_conf($robot, 'lang');
+     $param->{'lang'} ||= &Sympa::Configuration::get_robot_conf($robot, 'lang');
 
      if ($param->{'list'}) {
 	 $param->{'list_title'} = $list->{'admin'}{'subject'};
@@ -1578,7 +1578,7 @@ my $birthday = time ;
 	 }
 
      }else {
-	 $param->{'main_title'} = $param->{'title'} = &Sympa::Conf::get_robot_conf($robot,'title');
+	 $param->{'main_title'} = $param->{'title'} = &Sympa::Configuration::get_robot_conf($robot,'title');
 	 $param->{'title_clear_txt'} = $param->{'title'};
      }
      
@@ -1747,7 +1747,7 @@ my $birthday = time ;
  	 print "Content-Type: application/rss+xml; charset=utf-8\n\n";
  
  	 ## Icons
- 	 $param->{'icons_url'} = &Sympa::Conf::get_robot_conf($robot, 'static_content_url').'/icons';
+ 	 $param->{'icons_url'} = &Sympa::Configuration::get_robot_conf($robot, 'static_content_url').'/icons';
  
  	 ## Retro compatibility concerns
  	 $param->{'active'} = 1;
@@ -1757,7 +1757,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 	 
  	 unless (&Sympa::Template::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &Sympa::Template::get_error();
@@ -1782,7 +1782,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 	 
  	 unless (&Sympa::Template::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &Sympa::Template::get_error();
@@ -2111,7 +2111,7 @@ sub get_parameters {
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
 	     $tmpparam = &Sympa::Tools::sanitize_html('robot' => $robot,
-	                                       'host' => Sympa::Conf::get_robot_conf($robot,'http_host'),
+	                                       'host' => Sympa::Configuration::get_robot_conf($robot,'http_host'),
 					       'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -2124,7 +2124,7 @@ sub get_parameters {
 	     if ($one_p !~ /^$regexp$/s ||
 		 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
 		 ## Dump parameters in a tmp file for later analysis
-		 my $dump_file =  &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
+		 my $dump_file =  &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
 		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
 		 }
@@ -2358,7 +2358,7 @@ sub get_parameters_old {
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
 	     $tmpparam = &Sympa::Tools::sanitize_html('robot' => $robot,
-	                                       'host'  => Sympa::Conf::get_robot_conf($robot,'http_host'),
+	                                       'host'  => Sympa::Configuration::get_robot_conf($robot,'http_host'),
 					       'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -2372,7 +2372,7 @@ sub get_parameters_old {
 	     if ($one_p !~ /^$regexp$/s ||
 		 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
 		 ## Dump parameters in a tmp file for later analysis
-		 my $dump_file =  &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
+		 my $dump_file =  &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
 		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
 		 }
@@ -2518,7 +2518,7 @@ sub send_html {
     print "X-UA-Compatible: IE=7\n";
 
     ## Icons
-    $param->{'icons_url'} = &Sympa::Conf::get_robot_conf($robot, 'static_content_url').'/icons';
+    $param->{'icons_url'} = &Sympa::Configuration::get_robot_conf($robot, 'static_content_url').'/icons';
     
     
     ## Retro compatibility concerns
@@ -2536,7 +2536,7 @@ sub send_html {
     }
     
     my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
     
     # XSS escaping applied to all outgoing parameters.
     my $param_copy = &Sympa::Tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
@@ -2725,7 +2725,7 @@ sub check_param_in {
 	    $param->{'is_owner'} = $param->{'is_privileged_owner'} || $list->am_i('owner', $param->{'user'}{'email'});
 	    $param->{'is_editor'} = $list->am_i('editor', $param->{'user'}{'email'});
 	    $param->{'is_priv'} = $param->{'is_owner'} || $param->{'is_editor'};
-	    $param->{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Conf::get_robot_conf($robot, 'pictures_url'), 'email' => $param->{'user'}{'email'}, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'));
+	    $param->{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Configuration::get_robot_conf($robot, 'pictures_url'), 'email' => $param->{'user'}{'email'}, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'));
 
 	    ## Checks if the user can post in this list.
 	    my $result = $list->check_list_authz('send',$param->{'auth_method'},
@@ -2869,9 +2869,9 @@ sub check_param_out {
 	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = '@';	$param->{'hidden_end'} = '';
          }
      }else {
-         if (&Sympa::Conf::get_robot_conf($robot,'spam_protection') eq 'at') {
+         if (&Sympa::Configuration::get_robot_conf($robot,'spam_protection') eq 'at') {
       	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
-         }elsif(&Sympa::Conf::get_robot_conf($robot,'spam_protection') eq 'javascript') {
+         }elsif(&Sympa::Configuration::get_robot_conf($robot,'spam_protection') eq 'javascript') {
 	     $param->{'protection_type'} = 'javascript';
 	     $param->{'hidden_head'} = '
  <script type="text/javascript">
@@ -3145,10 +3145,10 @@ sub do_login {
 	 $next_action = $in{'previous_action'};
 	 $in{'list'} = $in{'previous_list'};
      }else {
-	$next_action = &Sympa::Conf::get_robot_conf($robot, 'default_home');
+	$next_action = &Sympa::Configuration::get_robot_conf($robot, 'default_home');
      }
     # never return to login or logout when login.
-    $next_action = &Sympa::Conf::get_robot_conf($robot, 'default_home')
+    $next_action = &Sympa::Configuration::get_robot_conf($robot, 'default_home')
 	if $in{'next_action'} =~ /^(login|logout)$/;
 
      if ($param->{'user'}{'email'}) {
@@ -3174,7 +3174,7 @@ sub do_login {
 		      'status' => 'error',
 		      'error_type' => "no_email"});		      
 	 return $in{'previous_action'} ||
-		&Sympa::Conf::get_robot_conf($robot, 'default_home');
+		&Sympa::Configuration::get_robot_conf($robot, 'default_home');
      }
 
      $session->{'unauthenticated_email'} = $param->{'unauthenticated_email'} = $in{'email'};
@@ -3222,7 +3222,7 @@ sub do_login {
 		      'status' => 'error',
 		      'error_type' => 'authentication'});
 	 my $unauthenticated_user = &Sympa::List::get_global_user($in{'email'});
-	 if ($unauthenticated_user->{'wrong_login_count'} > &Sympa::Conf::get_robot_conf($robot, 'max_wrong_password')){
+	 if ($unauthenticated_user->{'wrong_login_count'} > &Sympa::Configuration::get_robot_conf($robot, 'max_wrong_password')){
 	     $param->{'login_error'} = 'password_reset';
 	 }else{
 	     $param->{'login_error'} = 'wrong_password';
@@ -3274,7 +3274,7 @@ sub do_login {
 	 &Sympa::List::update_global_user($param->{'user'}{'email'},{lang=>$session->{'lang'}}) ;
 	 $param->{'lang'} = $session->{'lang'};
      }else{                      # user did not choose a specific language, apply user pref for this session. 
-	 $param->{'lang'} = $user->{'lang'} || $list->{'admin'}{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
+	 $param->{'lang'} = $user->{'lang'} || $list->{'admin'}{'lang'} || &Sympa::Configuration::get_robot_conf($robot, 'lang');
 	 $session->{'lang'} = $param->{'lang'} ;
      }
 
@@ -3331,7 +3331,7 @@ sub do_sso_login {
 	&web_db_log({'parameters' => $in{'auth_service_name'},
 		     'status' => 'error',
 		     'error_type' => "already_login"});
-	return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+	return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
     }
     
     
@@ -3519,7 +3519,7 @@ sub do_sso_login {
 				     'target_email' => $in{'email'},
 				     'status' => 'error',
 				     'error_type' => 'internal'});
-			return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+			return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
 		    }
 		    
 		}else {
@@ -3672,7 +3672,7 @@ sub is_ldap_user {
      my $auth = shift; ## User email or UID
      &wwslog('debug2',"is_ldap_user ($auth)");
 
-     unless (&Sympa::Tools::get_filename('etc',{}, 'auth.conf', $robot, undef, $Sympa::Conf::Conf{'etc'})) {
+     unless (&Sympa::Tools::get_filename('etc',{}, 'auth.conf', $robot, undef, $Sympa::Configuration::Conf{'etc'})) {
 	 return undef;
      }
 
@@ -3817,7 +3817,7 @@ sub do_logout {
      $session->{'email'} = 'nobody' ;
 
      # no reason to alter the lang because user perform logout
-     # $param->{'lang'} = $param->{'cookie_lang'} = &Sympa::Tools::Cookie::check_lang_cookie($ENV{'HTTP_COOKIE'}) || $list->{'admin'}{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
+     # $param->{'lang'} = $param->{'cookie_lang'} = &Sympa::Tools::Cookie::check_lang_cookie($ENV{'HTTP_COOKIE'}) || $list->{'admin'}{'lang'} || &Sympa::Configuration::get_robot_conf($robot, 'lang');
 
      if (defined $session->{'cas_server'} && (defined $Conf{'auth_services'}{$robot}[$session->{'cas_server'}])) {
 	 # this user was logged using CAS
@@ -3836,7 +3836,7 @@ sub do_logout {
 	 
 	 ## Check if logout_url is known for this SSO
 	 my $sso;
-	 unless ($sso = &Sympa::Conf::get_sso_by_id(robot => $robot, service_id => $session->{'sso_id'})) {
+	 unless ($sso = &Sympa::Configuration::get_sso_by_id(robot => $robot, service_id => $session->{'sso_id'})) {
 	      
 	   &wwslog('err',"unknown SSO service_id '%s'", $session->{'sso_id'});
 	     return undef   ;
@@ -3865,7 +3865,7 @@ sub do_logout {
 	 $param->{'referer'} = &Sympa::Tools::escape_chars($in{'previous_list'});
      }
 
-    return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+    return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
  }
 
 sub sendssopasswd {
@@ -5031,7 +5031,7 @@ sub do_subscribe {
 
 	    unless ($list->send_notify_to_owner('subrequest',{'who' => $param->{'user'}{'email'},
 							      'keyauth' => $list->compute_auth($param->{'user'}{'email'}, 'add'),
-							      'replyto' => &Sympa::Conf::get_robot_conf($robot, 'sympa'),
+							      'replyto' => &Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 							      'custom_attribute' => $in{custom_attribute},
 							      'gecos' => $param->{'user'}{'gecos'},
 							      'ip'=>$ip})) {
@@ -5290,7 +5290,7 @@ sub do_subrequest {
 sub do_auto_signoff {
      &wwslog('info', 'do_auto_signoff');
      ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
-     return &Sympa::Conf::get_robot_conf($robot, 'default_home') unless $in{'email'};
+     return &Sympa::Configuration::get_robot_conf($robot, 'default_home') unless $in{'email'};
 
      ## If unsubscribe is forbidden, reject the request. Other
 
@@ -5333,7 +5333,7 @@ sub do_auto_signoff {
 	 return undef;
        }
    }else{
-	return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+	return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
    }
      $param->{'signing_off_email'} = $in {'email'};
      ## If OK, return the page displaying the informations to the user.
@@ -5343,7 +5343,7 @@ sub do_auto_signoff {
 sub do_family_signoff_request {
     &wwslog('info', 'do_family_signoff_request');
     ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
-    return &Sympa::Conf::get_robot_conf($robot, 'default_home') unless $in{'email'};
+    return &Sympa::Configuration::get_robot_conf($robot, 'default_home') unless $in{'email'};
 
     my $ticket = &Sympa::Auth::create_one_time_ticket($in{'email'},$robot,'family_signoff/'.$in{'family'}.'/'.$in{'email'},$ip);
 
@@ -5434,7 +5434,7 @@ sub do_signoff {
     }else{
 	&Sympa::Report::reject_report_web($result{'category_error'},$result{'reason_error'},{%{$result{'reason_error'}},'list'=>$list->{'name'}},$param->{'action'},$list);
     }
-    return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+    return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
  }
 
 ## Unsubscribe current user from a list.
@@ -5676,7 +5676,7 @@ sub do_serveradmin {
 
 sub do_edit_config {
 
-    my @editable_params = @Sympa::Configuration::Definition::params ;
+    my @editable_params = @Sympa::Configurationiguration::Definition::params ;
 
     &get_server_details;
 
@@ -5687,7 +5687,7 @@ sub do_edit_config {
 
     for my $i ( 0 .. $#editable_params ) {
 	if ($editable_params[$i]->{'name'}) {
-	    $editable_params[$i]->{'current_value'} = &Sympa::Conf::get_robot_conf($robot, $editable_params[$i]->{'name'});
+	    $editable_params[$i]->{'current_value'} = &Sympa::Configuration::get_robot_conf($robot, $editable_params[$i]->{'name'});
             $editable_params[$i]->{'current_value'} = join( ",", @{$editable_params[$i]->{'current_value'}}) if (ref($editable_params[$i]->{'current_value'}) eq 'ARRAY');
 	}	     
     }
@@ -5706,7 +5706,7 @@ sub do_edit_config {
 		last;
 	    }else{
 		$editable_params[$i]->{'current_value'} = $in{'conf_new_value'};
-		&Sympa::Conf::set_robot_conf($robot, $in{'conf_parameter_name'}, $in{'conf_new_value'});
+		&Sympa::Configuration::set_robot_conf($robot, $in{'conf_parameter_name'}, $in{'conf_new_value'});
 		&Sympa::Log::do_log ('notice','setting parameter %s to value %s', $in{'conf_parameter_name'}, $in{'conf_new_value'});
 		last;
 	    }
@@ -5798,9 +5798,9 @@ sub do_ls_templates  {
     $in{'webormail'} ||= 'web';
     
     if (defined $list) {
-	$param->{'templates'} = &Sympa::Tools::get_templates_list($in{'webormail'},$robot,$list,undef,$Sympa::Conf::Conf{'etc'});
+	$param->{'templates'} = &Sympa::Tools::get_templates_list($in{'webormail'},$robot,$list,undef,$Sympa::Configuration::Conf{'etc'});
     }else{
-	$param->{'templates'} = &Sympa::Tools::get_templates_list($in{'webormail'},$robot, undef,undef,$Sympa::Conf::Conf{'etc'});
+	$param->{'templates'} = &Sympa::Tools::get_templates_list($in{'webormail'},$robot, undef,undef,$Sympa::Configuration::Conf{'etc'});
     }
     
     ## List of lang per type
@@ -5840,9 +5840,9 @@ sub do_remove_template {
     my $template_path ;
 
     if ($in{'scope'} eq 'list') { 
-	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Conf::Conf{'etc'});
+	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Configuration::Conf{'etc'});
     }else{
-	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Sympa::Conf::Conf{'etc'});
+	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Sympa::Configuration::Conf{'etc'});
     }
         
     my $template_old_path = &Sympa::Tools::File::shift_file($template_path,10);
@@ -5874,9 +5874,9 @@ sub do_view_template {
     my $template_path ;
  
     if ($in{'scope'} eq 'list') { 
-	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Conf::Conf{'etc'});
+	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Configuration::Conf{'etc'});
     }else{
-	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Sympa::Conf::Conf{'etc'});
+	$template_path = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Sympa::Configuration::Conf{'etc'});
     }
 
     unless (open (TPL,$template_path)) {
@@ -5927,7 +5927,7 @@ sub do_copy_template {
 		return undef;
 	    }
 	    
-	    $param->{'template_path_out'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$list_out,$Sympa::Conf::Conf{'etc'});
+	    $param->{'template_path_out'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$list_out,$Sympa::Configuration::Conf{'etc'});
 	}else{
 	    &Sympa::Report::reject_report_web('user','missing_arg',{'argument' => 'list'},$param->{'action'});
 	    &wwslog('err','do_copy_template: missing parameter webormail');
@@ -5937,7 +5937,7 @@ sub do_copy_template {
 	    return 1;
 	}
     }else{
-	$param->{'template_path_out'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$Sympa::Conf::Conf{'etc'});
+	$param->{'template_path_out'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$Sympa::Configuration::Conf{'etc'});
     }
     
     unless (&Sympa::Tools::File::mk_parent_dir($param->{'template_path_out'})) {
@@ -5984,9 +5984,9 @@ sub do_manage_template {
     if  ($in{'message_template'}) {		
 	my $escaped_template_path = $in{'message_template'};
 	$escaped_template_path =~ s/\s/_/g ;
-	$param->{'template_path'} = &Sympa::Tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Sympa::Conf::Conf{'etc'});
+	$param->{'template_path'} = &Sympa::Tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Sympa::Configuration::Conf{'etc'});
     }
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
     my $default_file = &Sympa::Tools::File::find_file('reject.tt2',@{$tt2_include_path});
 
 
@@ -6023,7 +6023,7 @@ sub do_manage_template {
 	    return undef;  
 	}
 	my $escaped_template_path = $in{'new_template_name'};$escaped_template_path =~ s/\s/_/g ;
-	my $new_template_path = &Sympa::Tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Sympa::Conf::Conf{'etc'});
+	my $new_template_path = &Sympa::Tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Sympa::Configuration::Conf{'etc'});
 
 	if (-f $new_template_path) {
 	    &Sympa::Report::reject_report_web('intern','template already exist',{'path' => $new_template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -6040,9 +6040,9 @@ sub do_manage_template {
 	    return undef;
 	}	
 
-	my $default_file =  &Sympa::Tools::get_template_path('mail',$robot,'robot', ,'reject.tt2','',$list,$Sympa::Conf::Conf{'etc'});
-	$default_file = &Sympa::Tools::get_template_path('mail',$robot,'site', ,'reject.tt2','',$list,$Sympa::Conf::Conf{'etc'}) unless (-f $default_file);
-	$default_file = &Sympa::Tools::get_template_path('mail',$robot,'distrib', ,'reject.tt2','',$list,$Sympa::Conf::Conf{'etc'})unless (-f $default_file);
+	my $default_file =  &Sympa::Tools::get_template_path('mail',$robot,'robot', ,'reject.tt2','',$list,$Sympa::Configuration::Conf{'etc'});
+	$default_file = &Sympa::Tools::get_template_path('mail',$robot,'site', ,'reject.tt2','',$list,$Sympa::Configuration::Conf{'etc'}) unless (-f $default_file);
+	$default_file = &Sympa::Tools::get_template_path('mail',$robot,'distrib', ,'reject.tt2','',$list,$Sympa::Configuration::Conf{'etc'})unless (-f $default_file);
 
 	unless(open (DEFAULT, $default_file)){
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -6111,7 +6111,7 @@ sub do_manage_template {
 	&Sympa::Report::notice_report_web('performed',{},$in{'subaction'});
     }
     ## Build the list of available templates
-    my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Conf::Conf{'etc'});
+    my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Configuration::Conf{'etc'});
     foreach $file (keys %$available_files) { 
 	if ($file eq 'reject.tt2') {
 	    my $base = $list->{'dir'}.'/mail_tt2/';
@@ -6170,7 +6170,7 @@ sub do_edit_template  {
     }
     if ($in{'scope'} eq 'list') { 
 	if ($in{'list'}) {
-	    $param->{'template_path'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Conf::Conf{'etc'});
+	    $param->{'template_path'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$list,$Sympa::Configuration::Conf{'etc'});
 	}else{
 	    &Sympa::Report::reject_report_web('user','listname_needed',{},$param->{'action'});
 	    &wwslog('info',"edit_template : no output lisname while output scope is list");
@@ -6180,7 +6180,7 @@ sub do_edit_template  {
 	    return undef;
 	}
     }else {
-	$param->{'template_path'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$Sympa::Conf::Conf{'etc'});
+	$param->{'template_path'} = &Sympa::Tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$Sympa::Configuration::Conf{'etc'});
     }
     
     unless (open (TPLOUT,'>'.$param->{'template_path'})) {
@@ -6219,8 +6219,8 @@ sub do_skinsedit {
     &wwslog('info', 'do_skinsedit');
     my $f;
     
-    my $dir = &Sympa::Conf::get_robot_conf($robot, 'css_path');
-    my $css_url  = &Sympa::Conf::get_robot_conf($robot, 'css_url');
+    my $dir = &Sympa::Configuration::get_robot_conf($robot, 'css_path');
+    my $css_url  = &Sympa::Configuration::get_robot_conf($robot, 'css_url');
 	
     ## Checking families and other virtual hosts.
     &get_server_details();
@@ -6260,16 +6260,16 @@ sub do_skinsedit {
     if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
 	my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
-	my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+	my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
 	my $date= time;
 	my $style_file;
 
 	# update config
 	foreach my $colornumber (0..15){
-	    &Sympa::Conf::set_robot_conf($robot, 'color_'.$colornumber, $session->{'color_'.$colornumber}) if ($session->{'color_'.$colornumber});
+	    &Sympa::Configuration::set_robot_conf($robot, 'color_'.$colornumber, $session->{'color_'.$colornumber}) if ($session->{'color_'.$colornumber});
 	}
-	$param->{'conf'}=$Sympa::Conf::Conf;
+	$param->{'conf'}=$Sympa::Configuration::Conf;
 
 	foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 	    $param->{'css'} = $css;
@@ -6359,7 +6359,7 @@ sub do_add {
      my %user;
      
      ## If a list is not 'open' and allow_subscribe_if_pending has been set to 'off' returns undef.
-     unless (($list->{'admin'}{'status'} eq 'open') || (&Sympa::Conf::get_robot_conf($robot, 'allow_subscribe_if_pending') eq 'on')) {
+     unless (($list->{'admin'}{'status'} eq 'open') || (&Sympa::Configuration::get_robot_conf($robot, 'allow_subscribe_if_pending') eq 'on')) {
 	 &Sympa::Report::reject_report_web('user','list_not_open',{'status' =>  $list->{'admin'}{'status'}},$param->{'action'});
 	 &wwslog('info','list not open');
 	 &web_db_log({'target_email' => $in{'email'}||$in{'pending_email'},
@@ -6664,7 +6664,7 @@ sub do_modindex {
 	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
      }
 
-     my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Conf::Conf{'etc'});
+     my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Configuration::Conf{'etc'});
      foreach my $file (keys %$available_files) {
 
 	 if ($file eq 'reject.tt2') {
@@ -7146,11 +7146,11 @@ sub do_distribute {
 
 	 }
 	 # clean html view of the message
-	 &Sympa::Tools::File::remove_dir ( $Sympa::Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$id);	
+	 &Sympa::Tools::File::remove_dir ( $Sympa::Configuration::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$id);	
      }
 
      $data->{'not_auto_submitted'} = 1;
-     unless (&Sympa::Mail::mail_file('',&Sympa::Conf::get_robot_conf($robot, 'sympa'), $data, $robot)) {
+     unless (&Sympa::Mail::mail_file('',&Sympa::Configuration::get_robot_conf($robot, 'sympa'), $data, $robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_distribute',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_distribute: failed to send message for list %s, id %s', $list->{'name'},$in{'id'});
@@ -7185,7 +7185,7 @@ sub do_viewmod {
      my $msg;
 
 
-     my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Conf::Conf{'etc'});
+     my $available_files = &Sympa::Tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Sympa::Configuration::Conf{'etc'});
      foreach my $file (keys %$available_files) {
 	 next unless($file =~ /^reject_/);
 	 $file =~ s/^reject_//;
@@ -7193,7 +7193,7 @@ sub do_viewmod {
 	 push (@{$param->{'available_files'}},$file); 
      }
      
-     my $html_dir = $Sympa::Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$in{'id'};
+     my $html_dir = $Sympa::Configuration::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$in{'id'};
 
      unless (-d $html_dir) {
 	 &Sympa::Report::reject_report_web('intern','no_html_message_available',{'dir' => $html_dir},$param->{'action'});
@@ -7211,7 +7211,7 @@ sub do_viewmod {
 	 &Sympa::Template::add_include_path($html_dir) ;
      }
 
-     $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};     
+     $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};     
      $param->{'id'} = $in{'id'};
 
      if ($list->is_there_msg_topic()) {
@@ -7299,7 +7299,7 @@ sub do_editfile {
 	 #$file =~ s/\.tpl$/\.$list->{'admin'}{'lang'}\.tpl/;
 
 	 ## Look for the template
-	 $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.$file,$robot, $list, $Sympa::Conf::Conf{'etc'});
+	 $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.$file,$robot, $list, $Sympa::Configuration::Conf{'etc'});
 
 	 ## There might be no matching file if default template not provided with Sympa
 	 if (defined $param->{'filepath'}) {
@@ -7326,7 +7326,7 @@ sub do_editfile {
 	 ## Default for 'homepage' is 'info'
 	 if (($in{'file'} eq 'homepage') &&
 	     ! $param->{'filepath'}) {
-	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.'info',$robot, $list, $Sympa::Conf::Conf{'etc'});
+	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.'info',$robot, $list, $Sympa::Configuration::Conf{'etc'});
 	 }
      }else {
 	 unless (&Sympa::List::is_listmaster($param->{'user'}{'email'},$robot)) {
@@ -7342,12 +7342,12 @@ sub do_editfile {
 
 	 ## Look for the template
 	 if ($file eq 'list_aliases.tt2') {
-	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$file,$robot,$list,$Sympa::Conf::Conf{'etc'});
+	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$file,$robot,$list,$Sympa::Configuration::Conf{'etc'});
 	 }else {
-	     #my $lang = &Sympa::Conf::get_robot_conf($robot, 'lang');
+	     #my $lang = &Sympa::Configuration::get_robot_conf($robot, 'lang');
 	     #$file =~ s/\.tpl$/\.$lang\.tpl/;
 
-	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.$file,$robot,$list,$Sympa::Conf::Conf{'etc'});
+	     $param->{'filepath'} = &Sympa::Tools::get_filename('etc',{},$subdir.$file,$robot,$list,$Sympa::Configuration::Conf{'etc'});
 	 }
      }
 
@@ -7536,7 +7536,7 @@ sub do_arc {
 	return 'arc_protect'  unless ($session->{'archive_sniffer'} eq 'false') ;
     }
     
-    my $arc_path = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+    my $arc_path = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
     ## Calendar
     unless (opendir ARC, $arc_path) {
 	&Sympa::Report::reject_report_web('user','empty_archives',{},$param->{'action'},$list);
@@ -7613,7 +7613,7 @@ sub do_arc {
 	if ($in{'arc_file'} =~ /^(msg\d+)\.html$/) {
 	    ## If the file is a message, load the metadata to find out who is the author of the message
 	    my $metadata = &Sympa::Archive::load_html_message('file_path' => $arc_file_path);
-	    $param->{'include_picture'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Conf::get_robot_conf($robot, 'pictures_url'), 'email' => $metadata->{'X-From'}, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'));
+	    $param->{'include_picture'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Configuration::get_robot_conf($robot, 'pictures_url'), 'email' => $metadata->{'X-From'}, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'));
 	    
 	    $param->{'subtitle'} = $metadata->{'X-Subject'};
 	}
@@ -7684,7 +7684,7 @@ sub do_latest_arc {
 	 $nb_arc = $NB_ARC_MAX;
      }       
 
-     my $arc_path = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+     my $arc_path = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
     unless (opendir ARC_DIR, $arc_path) {
 	 &Sympa::Report::reject_report_web('user','empty_archives',{},$param->{'action'},$list);
 	 &wwslog('err','do_latest_arc: no directory %s', $arc_path);
@@ -7854,7 +7854,7 @@ sub get_timelocal_from_date {
 sub do_remove_arc {
     &wwslog('info', 'do_remove_arc : list %s, yyyy %s, mm %s, #message %s', $in{'list'}, $in{'yyyy'}, $in{'month'});
 
-    my $arcpath = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
+    my $arcpath = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
 
     ## Access control
 
@@ -7919,7 +7919,7 @@ sub do_send_me {
 	 return undef;
      } 
      ## 
-     my $arcpath = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
+     my $arcpath = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
 
      opendir ARC, "$arcpath/arctxt";
      my $msgfile;
@@ -7952,7 +7952,7 @@ sub do_send_me {
 	     &wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
 	     return undef;
 	 }
-	 unless (&Sympa::Mail::mail_forward($message,&Sympa::Conf::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot)) {
+	 unless (&Sympa::Mail::mail_forward($message,&Sympa::Configuration::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot)) {
 	     $param->{'status'} = 'message_err';
 	     &wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
 	     return undef;
@@ -8000,7 +8000,7 @@ sub do_view_source   {
 	 return undef;
      } 
      ## 
-     my $arcpath = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
+     my $arcpath = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$in{'yyyy'}.'-'.$in{'month'};
 
      opendir ARC, "$arcpath/arctxt";
      my $msgfile;
@@ -8120,7 +8120,7 @@ sub do_arcsearch_form {
      ## Access control
      return undef unless (defined &check_authz('do_arcsearch_form', 'web_archive.access'));
 
-     my $search_base = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+     my $search_base = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
      opendir ARC, "$search_base";
      foreach my $dir (sort {$b cmp $a} grep(!/^\./,readdir ARC)) {
 	 if ($dir =~ /^(\d{4})-(\d{2})$/) {
@@ -8143,8 +8143,8 @@ sub do_arcsearch {
      return undef unless (defined &check_authz('do_arcsearch', 'web_archive.access'));
 
      my $search = new Marc::Search;
-     $search->search_base (&Sympa::Conf::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
-     $search->base_href (&Sympa::Conf::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
+     $search->search_base (&Sympa::Configuration::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
+     $search->base_href (&Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
      $search->archive_name ($in{'archive_name'});
 
      unless (defined($in{'directories'})) {
@@ -8153,7 +8153,7 @@ sub do_arcsearch {
 	$archive_name = POSIX::strftime '%Y-%m', localtime(time)
 	    unless $archive_name =~ /^\d{4}-\d{2}$/;
 	my @directories = ();
-	 my $search_base = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+	 my $search_base = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
 	 opendir ARC, "$search_base";
 	 foreach my $dir (sort {$b cmp $a} grep(!/^\./,readdir ARC)) {
 	     if ($dir =~ /^(\d{4})-(\d{2})$/) {
@@ -8279,8 +8279,8 @@ sub do_arcsearch_id {
 
 
      my $search = new Marc::Search;
-     $search->search_base (&Sympa::Conf::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
-     $search->base_href (&Sympa::Conf::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
+     $search->search_base (&Sympa::Configuration::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
+     $search->base_href (&Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
 
      $search->archive_name ($in{'archive_name'});
 
@@ -8566,7 +8566,7 @@ sub do_install_pending_list {
 
      ## Notify listmasters
      my @listmasters = split /\s*,\s*/,
-			     &Sympa::Conf::get_robot_conf($robot, 'listmaster');
+			     &Sympa::Configuration::get_robot_conf($robot, 'listmaster');
      if ($in{'status'} eq 'open') {
 	 unless ($list->send_file('list_created', \@listmasters, $robot, {})) {
 	     &wwslog('notice',"Unable to send template 'list_created' to listmaster");
@@ -8890,7 +8890,7 @@ sub do_create_list_request {
 		}
 	}
 
-     unless ($param->{'list_list_tpl'} = &Sympa::Tools::get_list_list_tpl($robot, $Sympa::Conf::Conf{'etc'})) {
+     unless ($param->{'list_list_tpl'} = &Sympa::Tools::get_list_list_tpl($robot, $Sympa::Configuration::Conf{'etc'})) {
 	 &Sympa::Report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
      }	
 
@@ -8967,7 +8967,7 @@ sub do_editsubscriber {
      $param->{'current_subscriber'}{'escaped_bounce_address'} = &Sympa::Tools::escape_html($param->{'current_subscriber'}{'bounce_address'});
      $param->{'current_subscriber'}{'date'} = gettext_strftime "%d %b %Y", localtime($subscriber->{'date'});
      $param->{'current_subscriber'}{'update_date'} = gettext_strftime "%d %b %Y", localtime($subscriber->{'update_date'});
-     $param->{'current_subscriber'}{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Conf::get_robot_conf($robot, 'pictures_url'), 'email' => $subscriber->{'email'}, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'));
+     $param->{'current_subscriber'}{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Configuration::get_robot_conf($robot, 'pictures_url'), 'email' => $subscriber->{'email'}, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'));
 
      ## Prefs
      $param->{'current_subscriber'}{'reception'} ||= 'mail';
@@ -11002,7 +11002,7 @@ sub do_rename_list {
      if ($in{'new_robot'} eq '$robot') {
 	 $param->{'redirect_to'} = "$param->{'base_url'}$param->{'path_cgi'}/admin/$in{'new_listname'}";
      }else {
-	 $param->{'redirect_to'} = &Sympa::Conf::get_robot_conf($in{'new_robot'}, 'wwsympa_url')."/admin/$in{'new_listname'}";
+	 $param->{'redirect_to'} = &Sympa::Configuration::get_robot_conf($in{'new_robot'}, 'wwsympa_url')."/admin/$in{'new_listname'}";
      }
      
      $param->{'list'} = $in{'new_listname'};
@@ -13851,7 +13851,7 @@ sub creation_shared_file {
     ## XSS Protection for HTML files.
     if (lc($fname) =~ /\.html?/) {
 	my $sanitized_file = &Sympa::Tools::sanitize_html_file('robot' => $robot,
-	                                                'host' => Sympa::Conf::get_robot_conf($robot,'http_host'),
+	                                                'host' => Sympa::Configuration::get_robot_conf($robot,'http_host'),
 							'file' => "$shareddir/$path/$fname");
 	if (defined $sanitized_file) {
 	    open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
@@ -14424,7 +14424,7 @@ sub d_copy_file {
 	## XSS Protection for HTML files.
 	if (lc($fname) =~ /\.html?/) {
 	    my $sanitized_file = &Sympa::Tools::sanitize_html_file('robot' => $robot,
-	                                                    'host'  => Sympa::Conf::get_robot_conf($robot,'http_host'),
+	                                                    'host'  => Sympa::Configuration::get_robot_conf($robot,'http_host'),
 							    'file' => "$dest_dir/$fname");
 	    if (defined $sanitized_file) {
 		open HTMLFILE,  ">:bytes", "$dest_dir/$fname";
@@ -15428,7 +15428,7 @@ sub do_remind {
 		 'body' => $mail_command};
 
      $data->{'not_auto_submitted'} = 1;
-     unless (&Sympa::Mail::mail_file('',&Sympa::Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
+     unless (&Sympa::Mail::mail_file('',&Sympa::Configuration::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_remind',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_remind: failed to send message for command REMIND');
@@ -15514,7 +15514,7 @@ sub do_upload_pictures {
     
     #check if there is not already a file for the user with a different extension 
     foreach my $ext ('.gif','.png','.jpg','.jpeg') {
-	my $file = &Sympa::Conf::get_robot_conf($robot,'pictures_path').'/'.$in{'list'}.'@'.$robot.'/'.$filename;
+	my $file = &Sympa::Configuration::get_robot_conf($robot,'pictures_path').'/'.$in{'list'}.'@'.$robot.'/'.$filename;
 	if(-f $file.$ext) {
 	    rename($file.$ext,$file.$ext.'.tmp');
 	    $filetmp = $file.$ext;
@@ -15522,12 +15522,12 @@ sub do_upload_pictures {
 	}
     }
     
-    unless(&creation_picture_file(&Sympa::Conf::get_robot_conf($robot,'pictures_path'),$param->{'list'}.'@'.$robot,$fullfilename)) {
+    unless(&creation_picture_file(&Sympa::Configuration::get_robot_conf($robot,'pictures_path'),$param->{'list'}.'@'.$robot,$fullfilename)) {
 	&Sympa::Report::reject_report_web('user','upload_failed', {'path' => $fullfilename},$param->{'action'});
-	&wwslog('err','do_upload_pictures : Failed to create file %s/%s@%s%s',&Sympa::Conf::get_robot_conf($robot,'pictures_path'),$param->{'list'},$robot,$filename);
+	&wwslog('err','do_upload_pictures : Failed to create file %s/%s@%s%s',&Sympa::Configuration::get_robot_conf($robot,'pictures_path'),$param->{'list'},$robot,$filename);
 	return 'suboptions';	 
     }
-    my $uploadedfile = &Sympa::Conf::get_robot_conf($robot,'pictures_path').'/'.$in{'list'}.'@'.$robot.'/'.$fullfilename;
+    my $uploadedfile = &Sympa::Configuration::get_robot_conf($robot,'pictures_path').'/'.$in{'list'}.'@'.$robot.'/'.$fullfilename;
     my @info = stat($uploadedfile);
     my $size = $info[7];
     
@@ -15554,15 +15554,15 @@ sub do_delete_pictures {
     my $email = $param->{'user'}{'email'};
     
     #deleted file must exist 
-    unless(&Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'))) {
+    unless(&Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'))) {
  	&Sympa::Report::reject_report_web('user','no_name',{},$param->{'action'},$list);
  	&wwslog('err',"do_delete_pictures : No file exists to delete");
  	return 'suboptions';
     }
     
     unless($list->delete_list_member_picture($email)) { 
- 	&Sympa::Report::reject_report_web('intern','erase_file',{'file' => &Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'))},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
- 	&wwslog('err',"do_delete_pictures : Failed to erase ".&Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path')));
+ 	&Sympa::Report::reject_report_web('intern','erase_file',{'file' => &Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'))},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+ 	&wwslog('err',"do_delete_pictures : Failed to erase ".&Sympa::Tools::pictures_filename('email' => $email, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path')));
  	return undef;  
     }
     else {
@@ -15965,9 +15965,9 @@ sub do_compose_mail {
 	return undef;
     }
 
-    $param->{'use_html_editor'} = &Sympa::Conf::get_robot_conf($robot, 'use_html_editor');
-    $param->{'html_editor_file'} = &Sympa::Conf::get_robot_conf($robot, 'html_editor_file');
-    $param->{'html_editor_init'} = &Sympa::Conf::get_robot_conf($robot, 'html_editor_init');
+    $param->{'use_html_editor'} = &Sympa::Configuration::get_robot_conf($robot, 'use_html_editor');
+    $param->{'html_editor_file'} = &Sympa::Configuration::get_robot_conf($robot, 'html_editor_file');
+    $param->{'html_editor_init'} = &Sympa::Configuration::get_robot_conf($robot, 'html_editor_init');
     
     # Set the subaction to html_news_letter or undef
     $param->{'subaction'} = $in{'subaction'};
@@ -16106,7 +16106,7 @@ sub do_send_mail {
 	}
 	my $page_source = $in{'url'};
 	if ($in{'uploaded_file'} =~ /\S/) {
-	    $page_source = &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/'.$in{'uploaded_file'};
+	    $page_source = &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$in{'uploaded_file'};
 	    unless(&Sympa::WWSympa::upload_file_to_server({
 		'query' => $query,
 		'file_field' => 'uploaded_file',
@@ -16124,7 +16124,7 @@ sub do_send_mail {
 	my $html_part_body = &Sympa::Tools::create_html_part_from_web_page({'From' => $from,
 								     'To' => $to,
 								     'Headers' => {'In-Reply-To' => $in{'in_reply_to'}, 'Message-ID' => $in{'message_id'}},
-								     'return_path' => &Sympa::Conf::get_robot_conf($robot, 'sympa'),
+								     'return_path' => &Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 								     'Subject' => $in{'subject'},
 								     'source' => $page_source,
 								 });
@@ -16150,7 +16150,7 @@ sub do_send_mail {
     
     my $data = {'headers' => {'Message-ID' => $in{'message_id'}}, 
 		'subject' => $in{'subject'},
-		'return_path' => &Sympa::Conf::get_robot_conf($robot, 'sympa'),
+		'return_path' => &Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 		'to' => $to,
 		'body' => "From: $from\n" . $in{'body'},
 		'sign_mode' => '',
@@ -16312,7 +16312,7 @@ sub do_tag_topic_by_sender {
      $data->{'not_auto_submitted'} = 1;
 
 
-     unless (&Sympa::Mail::mail_file('',&Sympa::Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
+     unless (&Sympa::Mail::mail_file('',&Sympa::Configuration::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_tag_topic_by_sender: failed to send message for list %s@%s authenticated by key %s',$listname,$robot,$in{'authkey'} );
@@ -16411,7 +16411,7 @@ sub do_set_lang {
        return $in{'previous_action'};
      }
 
-     return &Sympa::Conf::get_robot_conf($robot, 'default_home');
+     return &Sympa::Configuration::get_robot_conf($robot, 'default_home');
  }
  ## Function do_attach
 sub do_attach {
@@ -16501,7 +16501,7 @@ sub do_stats {
      &wwslog('info', 'do_stats');
 
      $param->{'shared_size'} = int (($list->get_shared_size + 512)/1024);
-     $param->{'arc_size'} = int (($list->get_arc_size(&Sympa::Conf::get_robot_conf($robot, 'arc_path')) + 512)/1024);
+     $param->{'arc_size'} = int (($list->get_arc_size(&Sympa::Configuration::get_robot_conf($robot, 'arc_path')) + 512)/1024);
 
     my $stats;
     my @stats_to_display;
@@ -17092,7 +17092,7 @@ sub do_viewspool_message {
     # the following code is not executed because of a bug. It should be able to disply message as html....
 
 
-    my $destination_dir = $Sympa::Conf::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
+    my $destination_dir = $Sympa::Configuration::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
 
     unless (-d $destination_dir) {
 	&Sympa::Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
@@ -17153,7 +17153,7 @@ sub do_viewspool_message_dump {
     }
 
 
-    $param->{'msg_file'} = &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+    $param->{'msg_file'} = &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
     
 
     unless (open(OUT, ">$param->{'msg_file'}")) {
@@ -17268,7 +17268,7 @@ sub do_arc_manage {
 	return undef;
     }
     
-    my $search_base = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+    my $search_base = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
     opendir ARC, "$search_base";
     foreach my $dir (sort {$b cmp $a} grep(!/^\./,readdir ARC)) {
 	if ($dir =~ /^(\d{4})-(\d{2})$/) {
@@ -17310,7 +17310,7 @@ sub do_arc_download {
 	    $dir = $1;
 	}
 
-	my $abs_dir = &Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$dir.'/arctxt';
+	my $abs_dir = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$dir.'/arctxt';
 	##check arc directory
 	unless (-d $abs_dir) {
 	    &Sympa::Report::reject_report_web('intern','arc_not_found',{'arc_file' => $dir,
@@ -17410,7 +17410,7 @@ sub do_arc_delete {
   
     
     foreach my $dir (split/\0/, $in{'directories'}) {
-	push(@abs_dirs ,&Sympa::Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$dir);
+	push(@abs_dirs ,&Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$dir);
     }
 
     unless (Sympa::Tools::File::remove_dir(@abs_dirs)) {
@@ -17430,7 +17430,7 @@ sub do_css {
     $param->{'css'} = $in{'file'}; 
 
     my $lang = &Sympa::Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     unless (&Sympa::Template::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &Sympa::Template::get_error();
@@ -17453,11 +17453,11 @@ sub do_rss_request {
         $args  = 'count='.$in{'count'}.'&' if ($in{'count'}) ;
         $args .= 'for='.$in{'for'} if ($in{'for'});
 	if ($list ) {
-   		$param->{'latest_arc_url'} = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_arc/".$list->{'name'}."?".$args;
-		$param->{'latest_d_read_url'} = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_d_read/".$list->{'name'}."?".$args;
+   		$param->{'latest_arc_url'} = &Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_arc/".$list->{'name'}."?".$args;
+		$param->{'latest_d_read_url'} = &Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_d_read/".$list->{'name'}."?".$args;
 	}
-	$param->{'active_lists_url'} = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/active_lists?".$args;
-	$param->{'latest_lists_url'} = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_lists?".$args;	
+	$param->{'active_lists_url'} = &Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')."/rss/active_lists?".$args;
+	$param->{'latest_lists_url'} = &Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_lists?".$args;	
 
 	$param->{'output'} = 1;
 	return 1;
@@ -17466,7 +17466,7 @@ sub do_rss_request {
 sub do_wsdl {
   
     &wwslog('info', "do_wsdl ()");
-    my $sympawsdl = &Sympa::Tools::get_filename('etc',{}, 'sympa.wsdl', $robot, undef, $Sympa::Conf::Conf{'etc'});
+    my $sympawsdl = &Sympa::Tools::get_filename('etc',{}, 'sympa.wsdl', $robot, undef, $Sympa::Configuration::Conf{'etc'});
 
     unless (-r $sympawsdl){
       	&Sympa::Report::reject_report_web('intern','err_404',{},$param->{'action'});
@@ -17474,7 +17474,7 @@ sub do_wsdl {
 	return undef;
     }
 
-    my $soap_url= &Sympa::Conf::get_robot_conf($robot,'soap_url');
+    my $soap_url= &Sympa::Configuration::get_robot_conf($robot,'soap_url');
     unless (defined $soap_url) {
 	&Sympa::Report::reject_report_web('user','no_soap_service',{},$param->{'action'});
 	&wwslog('err','No SOAP service was defined in sympa.conf (soap_url parameter)');
@@ -17549,7 +17549,7 @@ sub _ca_get_file {
 	my $robot = shift;
 	my $list = shift;
 	
-	my $file = &Sympa::Tools::get_filename('etc', {}, 'custom_actions/'.$custom_action, $robot, $list, $Sympa::Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc', {}, 'custom_actions/'.$custom_action, $robot, $list, $Sympa::Configuration::Conf{'etc'});
 	return undef unless($file);
 	
 	&_ca_add_file_path_to_tt2_include_path($file);
@@ -17751,7 +17751,7 @@ sub _prepare_subscriber {
     
     $user->{'email'} =~ /\@(.+)$/;
     $user->{'domain'} = $1;
-    $user->{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Conf::get_robot_conf($robot, 'pictures_url'), 'email' => $user->{'email'}, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'));
+    $user->{'pictures_url'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Configuration::get_robot_conf($robot, 'pictures_url'), 'email' => $user->{'email'}, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'));
 
     ## Escape some weird chars
     $user->{'escaped_email'} = &Sympa::Tools::escape_chars($user->{'email'});
@@ -18066,7 +18066,7 @@ sub do_maintenance {
 
 sub do_automatic_lists_management_request {
     &wwslog('notice', 'Starting');
-    $param->{'automatic_lists_description'} = &Sympa::Conf::load_automatic_lists_description();
+    $param->{'automatic_lists_description'} = &Sympa::Configuration::load_automatic_lists_description();
     return 1;
 }
 
@@ -18102,7 +18102,7 @@ sub do_automatic_lists {
     my $family;
     
     my @list_name_parts;
-    my $families_config = &Sympa::Conf::get_robot_conf($robot,'automatic_list_families');
+    my $families_config = &Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
     my $family_config = $families_config->{$family_name};
     my $listname = $family_config->{'prefix'}.$family_config->{'prefix_separator'};
     foreach my $input (keys %in) {

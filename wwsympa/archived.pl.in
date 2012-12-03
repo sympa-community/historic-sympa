@@ -44,7 +44,7 @@ use Getopt::Long;
 use Digest::MD5;
 
 use Sympa::Archive;
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
@@ -88,7 +88,7 @@ unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf)) {
 }
 
 # Load sympa.conf
-unless (Sympa::Conf::load($sympa_conf_file)) {
+unless (Sympa::Configuration::load($sympa_conf_file)) {
     &Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file has errors.");
 }
 
@@ -120,7 +120,7 @@ $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 ## Create and write the pidfile
 &Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
-    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
+    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
 }
 
 # setting log_level using conf unless it is set by calling option
@@ -152,8 +152,8 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 ## Sets the UMASK
 umask(oct($Conf{'umask'}));
 
-foreach my $robot (@{&Sympa::Conf::get_robots_list()}) {
-    my $arc_dir = &Sympa::Conf::get_robot_conf($robot,'arc_path');
+foreach my $robot (@{&Sympa::Configuration::get_robots_list()}) {
+    my $arc_dir = &Sympa::Configuration::get_robot_conf($robot,'arc_path');
     ## Create arc_path if required
     if ($arc_dir) {
 	unless (&directory_check($arc_dir)) {
@@ -318,7 +318,7 @@ while (!$end) {
 &Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Sympa::Log::do_log('notice', 'archived exited normally due to signal');
-&Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);
 
@@ -425,7 +425,7 @@ sub remove {
     unless(&Sympa::Log::db_log({'robot' => $robot,'list' => $adrlist,'action' => 'remove','parameters' => $msgid.','.$adrlist,'target_email' => '','msg_id' => $msgid,'status' => 'succes','error_type' => '','user_email' =>'','client' => $ip,'daemon' => $daemon_name})){
 	&Sympa::Log::do_log('error','archived::remove: unable to log event');
     }
-    my $arcpath = &Sympa::Conf::get_robot_conf($robot,'arc_path');
+    my $arcpath = &Sympa::Configuration::get_robot_conf($robot,'arc_path');
     $arc =~ /^(\d{4})-(\d{2})$/ ;
     my $yyyy = $1 ;
     my $mm = $2 ;
@@ -503,10 +503,10 @@ sub rebuild {
 
     my $list = new Sympa::List($listname, $hostname);
     my $robot = $list->{'domain'};
-    my $arcpath = &Sympa::Conf::get_robot_conf($robot,'arc_path');
+    my $arcpath = &Sympa::Configuration::get_robot_conf($robot,'arc_path');
     &Sympa::Log::do_log('debug',"Rebuilding $adrlist archive ($2)");
 
-    my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Conf::Conf{'etc'});
+    my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
 
     if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 	&set_hidden_mode($tag);
@@ -732,7 +732,7 @@ sub mail2arc {
     my $newfile;
 
     my $list = new Sympa::List($listname, $robot);
-    my $arcpath = &Sympa::Conf::get_robot_conf($list->{'domain'},'arc_path');
+    my $arcpath = &Sympa::Configuration::get_robot_conf($list->{'domain'},'arc_path');
 
     unless (defined $list) {
 	&Sympa::Log::do_log('err', 'Unknown list %s@%s', $listname, $robot);
@@ -752,7 +752,7 @@ sub mail2arc {
 
 
     if ($wwsconf->{'custom_archiver'}) {
-	my $file = $Sympa::Conf::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'} ;
+	my $file = $Sympa::Configuration::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'} ;
 	open (DUMP, "> $file");
 	printf DUMP $message_in_spool->{'messageasstring'};	
 	`$wwsconf->{'custom_archiver'} --list=$listname\@$robot --file=$file`;
@@ -839,7 +839,7 @@ sub mail2arc {
 
 	# savee arctxt dump of original message.
 	my $file = $monthdir.'/arctxt/'.$newfile ;
-	my $output = $Sympa::Conf::Conf{'tmpdir'}.'/arc'.$newfile;
+	my $output = $Sympa::Configuration::Conf{'tmpdir'}.'/arc'.$newfile;
 	open (DUMP, "> $file");
 	printf DUMP $message_in_spool->{'messageasstring'};
 	close DUMP;
@@ -852,7 +852,7 @@ sub mail2arc {
 	    next;
 	}
 
-	my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Conf::Conf{'etc'});
+	my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
 	
 	&Sympa::Log::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
 	
