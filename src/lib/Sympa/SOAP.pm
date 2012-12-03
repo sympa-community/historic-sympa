@@ -81,6 +81,8 @@ sub checkCookie {
 
 =head3 Parameters
 
+=over
+
 =item * I<$topic>
 
 =item * I<$subtopic>
@@ -164,6 +166,8 @@ sub lists {
 
 =head3 Parameters
 
+=over
+
 =item * I<$email>
 
 =item * I<$password>
@@ -231,6 +235,8 @@ sub login {
 =head2 Sympa::SOAP->casLogin($proxyTicket)
 
 =head3 Parameters
+
+=over
 
 =item * I<$proxyTicket>
 
@@ -321,6 +327,8 @@ Used to call a service as an authenticated user without using HTTP cookies.
 
 =head3 Parameters
 
+=over
+
 =item * I<$email>
 
 =item * I<$cookie>: secret contained in the cookie
@@ -369,6 +377,8 @@ sub authenticateAndRun {
 Request user email from http cookie.
 
 =head3 Parameters
+
+=over
 
 =item * I<$cookie>
 
