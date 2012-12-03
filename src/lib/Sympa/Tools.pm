@@ -33,7 +33,7 @@ package Sympa::Tools;
 use strict;
 
 use Digest::MD5;
-use Encode::Guess; ## Usefull when encoding should be guessed
+use Encode::Guess; ## Useful when encoding should be guessed
 use File::Copy::Recursive;
 use File::Find;
 use HTML::StripScripts::Parser;
@@ -319,7 +319,7 @@ sub sanitize_var {
 
 =head2 sortbydomain($x, $y)
 
-Sorts the list of adresses by domain name.
+Sorts the list of addresses by domain name.
 
 Input : users hash
 Sort by domain.
@@ -1695,7 +1695,7 @@ sub make_tt2_include_path {
 
 =head2 qencode_hierarchy($dir)
 
-Q-encode a complete file hierarchy. Usefull to Q-encode subshared documents
+Q-encode a complete file hierarchy. Useful to Q-encode subshared documents
 
 =cut
 

@@ -7835,7 +7835,7 @@ sub may_edit {
 
 =head2 $list->may_create_parameter($parameter, $who,$robot)
 
-May the indicated user edit a paramter while creating a new list.
+May the indicated user edit a parameter while creating a new list.
 Dev note: This sub is never called. Shall we remove it?
 
 =cut

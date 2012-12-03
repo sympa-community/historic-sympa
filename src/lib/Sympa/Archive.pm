@@ -354,7 +354,7 @@ sub clean_archived_message{
 
 =head2 convert_single_msg_2_html($data)
     
-Convert a messsage to html. 
+Convert a message to html. 
 Result is stored in $destination_dir
 Attachement_url is used to link attachement
 

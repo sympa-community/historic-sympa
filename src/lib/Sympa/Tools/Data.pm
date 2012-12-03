@@ -511,7 +511,7 @@ sub hash_2_string {
 
 =head2 smart_lessthan($a, $b)
 
-compare 2 scalars, string/numeric independant
+compare 2 scalars, string/numeric independent
 
 =cut
 

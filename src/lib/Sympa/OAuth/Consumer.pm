@@ -139,13 +139,13 @@ sub mustRedirect {
 
 =head2 $consumer->fetchRessource(%parameters)
 
-Check if user has an access token already and fetch ressource.
+Check if user has an access token already and fetch resource.
 
 =head3 parameters
 
 =over 
 
-=item * I<url>: the ressource url
+=item * I<url>: the resource url
 
 =item * I<params>: the request parameters (optional)
 
@@ -153,7 +153,7 @@ Check if user has an access token already and fetch ressource.
 
 =head3 Return value
 
-The ressource body, as a string, or undef if something went wrong.
+The resource body, as a string, or undef if something went wrong.
 
 =cut 
 

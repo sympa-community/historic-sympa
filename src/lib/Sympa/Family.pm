@@ -254,11 +254,11 @@ sub add_list {
     #list creation
     my $result = &Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
     unless (defined $result) {
-	push @{$return->{'string_error'}}, "Error during list creation, see logs for more informations";
+	push @{$return->{'string_error'}}, "Error during list creation, see logs for more information";
 	return $return;
     }
     unless (defined $result->{'list'}) {
-	push @{$return->{'string_error'}}, "Errors : no created list, see logs for more informations";
+	push @{$return->{'string_error'}}, "Errors : no created list, see logs for more information";
 	return $return;
     }
     my $list = $result->{'list'};
@@ -293,7 +293,7 @@ sub add_list {
     
     unless (defined $error) {
 	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
+	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 	return $return;
     }
     
@@ -511,7 +511,7 @@ sub modify_list {
     
     unless (defined $error) {
 	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
+	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 	return $return;
     }
     
@@ -826,7 +826,7 @@ sub instantiate {
 
 =head2 $family->get_instantiation_results()
 
-Returns a string with informations summarizing the instantiation results.
+Returns a string with information summarizing the instantiation results.
 
 =head3 Parameters
 
