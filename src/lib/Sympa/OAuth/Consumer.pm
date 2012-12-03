@@ -328,7 +328,6 @@ sub getAccessToken {
 	return $self->{'session'}{'access'};
 }
 
-## Packages must return true.
 1;
 
 =head1 AUTHORS 

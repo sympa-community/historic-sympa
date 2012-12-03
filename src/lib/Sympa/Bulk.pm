@@ -663,5 +663,4 @@ sub init_db_random {
     return $random;
 }
 
-## Packages must return true.
 1;

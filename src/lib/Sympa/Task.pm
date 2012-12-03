@@ -160,6 +160,4 @@ sub epoch_sort {
     $date1 <=> $date2;
 }
 
-
-## Packages must return true.
 1;

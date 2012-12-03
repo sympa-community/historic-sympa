@@ -396,5 +396,4 @@ sub _unlock_nfs {
     return 1;
 }
 
-## Packages must return true.
 1;

@@ -277,7 +277,6 @@ sub _subscriber_to_member {
 	};
 }
 
-## Packages must return true.
 1;
 
 =head1 AUTHORS 

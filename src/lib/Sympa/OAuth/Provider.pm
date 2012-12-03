@@ -558,7 +558,6 @@ sub _getConsumerConfigFor {
 	return $c;
 }
 
-## Packages must return true.
 1;
 
 =head1 AUTHORS 

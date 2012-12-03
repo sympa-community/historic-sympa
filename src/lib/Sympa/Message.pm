@@ -458,9 +458,8 @@ sub get_body_from_msg_as_string {
     return (join ("\n\n",@bodysection));  # convert it back as string
 }
 
-
-## Packages must return true.
 1;
+
 =head1 AUTHORS 
 
 =over 

@@ -581,8 +581,4 @@ sub _sqlselector {
     return $sqlselector;
 }
 
-
-###### END of the Sympapool package ######
-
-## Packages must return true.
 1;

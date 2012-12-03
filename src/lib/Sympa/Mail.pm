@@ -53,9 +53,6 @@ use Sympa::Tools::SMIME;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
-## RCS identification.
-#my $id = '@(#)$Id$';
-
 my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
 

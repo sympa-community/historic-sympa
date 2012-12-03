@@ -47,9 +47,6 @@ use Sympa::Language;
 use Sympa::Log;
 use Sympa::Tools::File;
 
-## RCS identification.
-#my $id = '@(#)$Id$';
-
 ## global var to store a CipherSaber object 
 my $cipher;
 

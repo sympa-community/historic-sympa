@@ -55,8 +55,4 @@ sub get_lists {
     return &Sympa::List::get_lists($self->{'name'});
 }
 
-
-###### END of the Robot package ######
-
-## Packages must return true.
 1;

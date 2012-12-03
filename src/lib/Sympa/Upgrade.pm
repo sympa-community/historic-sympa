@@ -1093,6 +1093,4 @@ sub md5_encode_password {
     return $total;
 }
 
- 
-## Packages must return true.
 1;

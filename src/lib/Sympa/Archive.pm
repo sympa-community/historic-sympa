@@ -43,8 +43,6 @@ use Sympa::Tools::File;
 
 my $serial_number = 0; # incremented on each archived mail
 
-## RCS identification.
-
 =head1 FUNCTIONS
 
 =head2 store_last($list, $msg)

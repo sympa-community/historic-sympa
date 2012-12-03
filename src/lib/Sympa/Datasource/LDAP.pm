@@ -278,5 +278,4 @@ Does not make sense in LDAP context
 sub set_fetch_timeout {
 }
 
-## Packages must return true.
 1;

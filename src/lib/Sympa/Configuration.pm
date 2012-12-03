@@ -1911,5 +1911,4 @@ sub _get_parameters_names_by_category {
     return $param_by_categories;
 }
 
-## Packages must return true.
 1;

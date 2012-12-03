@@ -263,7 +263,6 @@ sub getProviders {
 	return $list;
 }
 
-## Packages must return true.
 1;
 
 =head1 AUTHORS 
