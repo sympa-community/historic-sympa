@@ -33,13 +33,9 @@ package Sympa::Tools::Bounce;
 use strict;
 
 use MIME::Parser;
-use Exporter;
 
 use Sympa::Configuration;
 use Sympa::Log;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(rfc1891 corrige anabounce);
 
 =head1 FUNCTIONS
 
