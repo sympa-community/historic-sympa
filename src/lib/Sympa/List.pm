@@ -3743,7 +3743,7 @@ sub send_global_file {
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
 
     if ((&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Sympa::Configuration::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = get_dkim_parameters({
+	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({
             'robot'           => $robot,
             'signer_domain'   => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
             'signer_identity' => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
@@ -3921,7 +3921,7 @@ sub send_file {
     $data->{'sign_mode'} = $sign_mode;
     
     if ((&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = get_dkim_parameters({'robot' => $self->{'domain'}});
+	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
           # use Data::Dumper;
@@ -4123,7 +4123,7 @@ sub send_msg {
     my $dkim_parameters ;
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
+	$dkim_parameters = Sympa::Tools::DKIM::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
@@ -4437,7 +4437,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'}); 
+	   my $cryptedmsg = Sympa::Tools::SMIME::smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'}); 
 	   unless ($cryptedmsg) {
 	       &Sympa::Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing
@@ -11382,7 +11382,7 @@ sub get_cert {
     # it will have the respective cert attached anyways.
     # (the problem is that netscape, opera and IE can't only
     # read the first cert in a file)
-    my($certs,$keys) = smime_find_keys($self->{dir},'encrypt');
+    my($certs,$keys) = Sympa::Tools::SMIME::smime_find_keys($self->{dir},'encrypt');
 
     my @cert;
     if ($format eq 'pem') {

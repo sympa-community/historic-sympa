@@ -32,24 +32,12 @@ package Sympa::Tools::SMIME;
 
 use strict;
 
-use Exporter;
 use MIME::Parser;
 use POSIX qw();
 
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(
-    smime_sign
-    smime_sign_check
-    smime_encrypt
-    smime_decrypt
-    smime_find_keys
-    smime_parse_cert
-    smime_extract_certs
-);
 
 my %openssl_errors = (1 => 'an error occurred parsing the command options',
 		      2 => 'one of the input files could not be read',

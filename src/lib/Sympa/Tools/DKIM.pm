@@ -32,7 +32,6 @@ package Sympa::Tools::DKIM;
 
 use strict;
 
-use Exporter;
 use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use MIME::Parser;
@@ -40,14 +39,6 @@ use MIME::Parser;
 use Sympa::Message;
 use Sympa::List;
 use Sympa::Log;
-
-our @ISA = qw(Exporter);
-our @EXPORT = qw(
-    get_dkim_parameters
-    dkim_verifier
-    remove_invalid_dkim_signature
-    dkim_sign
-);
 
 sub get_dkim_parameters {
     my $params = shift;

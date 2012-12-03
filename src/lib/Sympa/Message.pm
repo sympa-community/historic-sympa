@@ -234,7 +234,7 @@ sub new {
 	}
 	# verify DKIM signature
 	if (&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
-	    $message->{'dkim_pass'} = dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
+	    $message->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
 	}
     }
         
@@ -256,7 +256,7 @@ sub new {
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
-	    my ($dec, $dec_as_string) = smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
+	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
 	    
 	    unless (defined $dec) {
 		&Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
@@ -275,7 +275,7 @@ sub new {
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
-	    my $signed = smime_sign_check ($message, $Sympa::Configuration::Conf{'tmpdir'},$Sympa::Configuration::Conf{'cafile'},$Sympa::Configuration::Conf{'capath'}, $Sympa::Configuration::Conf{'openssl'}, $Sympa::Configuration::Conf{'ssl_cert_dir'});
+	    my $signed = Sympa::Tools::SMIME::smime_sign_check ($message, $Sympa::Configuration::Conf{'tmpdir'},$Sympa::Configuration::Conf{'cafile'},$Sympa::Configuration::Conf{'capath'}, $Sympa::Configuration::Conf{'openssl'}, $Sympa::Configuration::Conf{'ssl_cert_dir'});
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};

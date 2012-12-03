@@ -583,7 +583,7 @@ sub sendto {
 		    &Sympa::Log::do_log('err',"incorrect call for encrypt with incorrect number of recipient"); 
 		    return undef;
 		}
-		unless ($message->{'msg_as_string'} = smime_encrypt ($msg_header, $msg_body, $email, undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'})){
+		unless ($message->{'msg_as_string'} = Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'})){
     		    &Sympa::Log::do_log('err',"Failed to encrypt message"); 
 		    return undef;
                 }	
@@ -669,7 +669,7 @@ sub sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	if ($signed_msg = smime_sign($message->{'msg'},$listname, $robot, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'})) {
+	if ($signed_msg = Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'})) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
 	    &Sympa::Log::do_log('notice', '%s::sending : unable to sign message from %s', __PACKAGE__, $listname);
