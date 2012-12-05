@@ -126,7 +126,7 @@ sub GetSupportedLanguages {
 ## Keep the previous lang ; can be restored with PopLang
 sub PushLang {
     my $locale = shift;
-    &Sympa::Log::do_log('debug', '%s::PushLang(%s)', __PACKAGE__, $locale);
+    &Sympa::Log::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
     &SetLang($locale);
@@ -146,12 +146,12 @@ sub PopLang {
 sub SetLang {
 ###########
     my $locale = shift;
-    &Sympa::Log::do_log('debug2', '%s::SetLang(%s)', __PACKAGE__, $locale);
+    &Sympa::Log::do_log('debug2', '(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
 
     unless ($lang) {
-	&Sympa::Log::do_log('err', '%s::SetLang(), missing locale parameter', __PACKAGE__);
+	&Sympa::Log::do_log('err', 'missing locale parameter');
 	return undef;
     }
 
@@ -280,7 +280,7 @@ sub sympa_dgettext {
     my $textdomain = shift;
     my @param = @_;
 
-    &Sympa::Log::do_log('debug3', '%s::sympa_dgettext(%s)', __PACKAGE__, $param[0]);
+    &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
@@ -317,7 +317,7 @@ sub sympa_dgettext {
 sub gettext {
     my @param = @_;
 
-    &Sympa::Log::do_log('debug3', '%s::gettext(%s)', __PACKAGE__, $param[0]);
+    &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {

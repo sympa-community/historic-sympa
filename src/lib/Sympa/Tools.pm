@@ -77,7 +77,7 @@ my %regexp = ('email' => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
 sub _create_xss_parser {
     my %parameters = @_;
-    &Sympa::Log::do_log('debug3', '%s::_create_xss_parser(%s)', __PACKAGE__, $parameters{'robot'});
+    &Sympa::Log::do_log('debug3', '(%s)', $parameters{'robot'});
     my $hss = HTML::StripScripts::Parser->new({ Context => 'Document',
 						AllowSrc        => 1,
 						Rules => {
@@ -178,7 +178,7 @@ argument.
 
 sub sanitize_html {
     my %parameters = @_;
-    &Sympa::Log::do_log('debug3','%s::sanitize_html(%s,%s,%s)',__PACKAGE__,$parameters{'string'},$parameters{'robot'},$parameters{'host'});
+    &Sympa::Log::do_log('debug3','(%s,%s,%s)',$parameters{'string'},$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'string'}) {
 	&Sympa::Log::do_log('err',"No string provided.");
@@ -215,7 +215,7 @@ path is provided as argument.
 
 sub sanitize_html_file {
     my %parameters = @_;
-    &Sympa::Log::do_log('debug3','%s::sanitize_html_file(%s,%s)',__PACKAGE__,$parameters{'robot'},$parameters{'host'});
+    &Sympa::Log::do_log('debug3','(%s,%s)',$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'file'}) {
 	&Sympa::Log::do_log('err',"No path to file provided.");
@@ -255,7 +255,7 @@ Sanitize all values in the hash $var, starting from $level
 
 sub sanitize_var {
     my %parameters = @_;
-    &Sympa::Log::do_log('debug3','::sanitize_var(%s,%s,%s)',__PACKAGE__,$parameters{'var'},$parameters{'level'},$parameters{'robot'});
+    &Sympa::Log::do_log('debug3','(%s,%s,%s)',$parameters{'var'},$parameters{'level'},$parameters{'robot'});
     unless (defined $parameters{'var'}){
 	&Sympa::Log::do_log('err','Missing var to sanitize.');
 	return undef;
@@ -407,7 +407,7 @@ sub checkcommand {
    ## Check for commands in the subject.
    my $subject = $msg->head->get('Subject');
 
-   &Sympa::Log::do_log('debug3', '%s::checkcommand(msg->head->get(subject): %s,%s)', __PACKAGE__, $subject, $sender);
+   &Sympa::Log::do_log('debug3', '(msg->head->get(subject): %s,%s)', $subject, $sender);
 
    if ($subject) {
        if ($regexp && ($subject =~ /^$regexp\b/im)) {
@@ -450,7 +450,7 @@ sub load_edit_list_conf {
     my $robot = shift;
     my $list = shift;
     my $basedir = shift;
-    &Sympa::Log::do_log('debug2', '%s::load_edit_list_conf (%s, %s, %s)',__PACKAGE__,$robot, $list, $basedir);
+    &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $robot, $list, $basedir);
 
     my $file;
     my $conf ;
@@ -758,7 +758,7 @@ Make a multipart/alternative, a singlepart
 =cut
 
 sub as_singlepart {
-    &Sympa::Log::do_log('debug2', '%s::as_singlepart()', __PACKAGE__);
+    &Sympa::Log::do_log('debug2', '()');
     my ($msg, $preferred_type, $loops) = @_;
     my $done = 0;
     $loops++;
@@ -1103,7 +1103,7 @@ Decrypt a password.
 sub decrypt_password {
     my $inpasswd = shift ;
     my $cookie = shift;
-    Sympa::Log::do_log('debug2', '%s::decrypt_password (%s,%s)', __PACKAGE__, $inpasswd, $cookie);
+    Sympa::Log::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;
@@ -1505,7 +1505,7 @@ sub get_filename {
     my ($type, $options, $name, $robot, $object,$basedir) = @_;
     my $list;
     my $family;
-    &Sympa::Log::do_log('debug3','%s::get_filename(%s,%s,%s,%s,%s,%s)', __PACKAGE__, $type, join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
+    &Sympa::Log::do_log('debug3','(%s,%s,%s,%s,%s,%s)', $type, join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
 
     
     if (ref($object) eq 'List') {
@@ -1577,7 +1577,7 @@ sub get_filename {
 	}
     }
     
-    #&Sympa::Log::do_log('notice','%s::get_filename: Cannot find %s in %s', __PACKAGE__, $name, join(',',@try));
+    #&Sympa::Log::do_log('notice','Cannot find %s in %s', $name, join(',',@try));
     return undef;
 }
 
@@ -1620,7 +1620,7 @@ sub make_tt2_include_path {
     } else {
 	$listname = $list;
     }
-    &Sympa::Log::do_log('debug3', '%s::make_tt2_include_path(%s,%s,%s,%s,%s,%s,%s)', __PACKAGE__, $robot, $dir, $lang, $listname, $basedir,$viewmaildir,$domain);
+    &Sympa::Log::do_log('debug3', '(%s,%s,%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir,$viewmaildir,$domain);
 
     my @include_path;
 
@@ -1869,21 +1869,21 @@ sub add_in_blacklist {
     my $robot = shift;
     my $list =shift;
 
-    &Sympa::Log::do_log('info',"%s::add_in_blacklist(%s,%s,%s)",__PACKAGE__,$entry,$robot,$list->{'name'});
+    &Sympa::Log::do_log('info',"(%s,%s,%s)",$entry,$robot,$list->{'name'});
     $entry = lc($entry);
     chomp $entry;
 
     # robot blacklist not yet availible 
     unless ($list) {
-	 &Sympa::Log::do_log('info',"%s::add_in_blacklist: robot blacklist not yet availible, missing list parameter", __PACKAGE__);
+	 &Sympa::Log::do_log('info',"robot blacklist not yet availible, missing list parameter");
 	 return undef;
     }
     unless (($entry)&&($robot)) {
-	 &Sympa::Log::do_log('info',"%s::add_in_blacklist:  missing parameters", __PACKAGE__);
+	 &Sympa::Log::do_log('info',"missing parameters");
 	 return undef;
     }
     if ($entry =~ /\*.*\*/) {
-	&Sympa::Log::do_log('info',"%s::add_in_blacklist: incorrect parameter $entry", __PACKAGE__);
+	&Sympa::Log::do_log('info',"incorrect parameter $entry");
 	return undef;
     }
     my $dir = $list->{'dir'}.'/search_filters';

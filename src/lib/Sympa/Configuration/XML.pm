@@ -48,7 +48,7 @@ use Sympa::Log;
 sub new {
     my $class = shift;
     my $fh = shift;
-    &Sympa::Log::do_log('debug2','%s::new()', __PACKAGE__);
+    &Sympa::Log::do_log('debug2','()');
     
     my $self = {};
     my $parser = XML::LibXML->new();
@@ -74,22 +74,22 @@ sub new {
 ################################################
 sub createHash {
     my $self = shift;
-    &Sympa::Log::do_log('debug2','%s::createHash()', __PACKAGE__);
+    &Sympa::Log::do_log('debug2','()');
 
     unless ($self->{'root'}->nodeName eq 'list') {
-	&Sympa::Log::do_log('err',"%s::createHash() : the root element must be called \"list\" ", __PACKAGE__);
+	&Sympa::Log::do_log('err',"the root element must be called \"list\" ");
 	return undef;
     }
 
     unless (defined $self->_getRequiredElements()){
-	&Sympa::Log::do_log('err',"%s::createHash() : error in required elements ", __PACKAGE__);
+	&Sympa::Log::do_log('err',"error in required elements ");
 	return undef;
     }
     
     if ($self->{'root'}->hasChildNodes()) {
 	my $hash = &_getChildren($self->{'root'});
 	unless (defined $hash){
-	    &Sympa::Log::do_log('err',"%s::createHash() : error in list elements ", __PACKAGE__);
+	    &Sympa::Log::do_log('err',"error in list elements ");
 	    return undef;
 	}
 	if (ref($hash) eq "HASH") {
@@ -101,7 +101,7 @@ sub createHash {
 		}
 	    }
 	}elsif ($hash ne "") { # a string
-	    &Sympa::Log::do_log('err','%s::createHash() : the list\'s children are not homogeneous', __PACKAGE__);
+	    &Sympa::Log::do_log('err','the list\'s children are not homogeneous');
 	    return undef;
 	}
     }
@@ -120,7 +120,7 @@ sub createHash {
 #########################################
 sub getHash {
     my $self = shift;
-    &Sympa::Log::do_log('debug2','%s::getHash()', __PACKAGE__);
+    &Sympa::Log::do_log('debug2','()');
 
     my $hash = {};
 
@@ -146,7 +146,7 @@ sub getHash {
 #################################################################
 sub _getRequiredElements {
     my $self = shift;
-    &Sympa::Log::do_log('debug3','%s::_getRequiredElements()', __PACKAGE__);
+    &Sympa::Log::do_log('debug3','()');
     my $error = 0;
 
     # listname element is obligatory
@@ -172,7 +172,7 @@ sub _getMultipleAndRequiredChild {
     my $self = shift;
     my $nodeName = shift;
     my $childName = shift;
-    &Sympa::Log::do_log('debug3','%s::_getMultipleAndRequiredChild(%s,%s)',__PACKAGE__,$nodeName,$childName);
+    &Sympa::Log::do_log('debug3','(%s,%s)',$nodeName,$childName);
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
 
@@ -189,7 +189,7 @@ sub _getMultipleAndRequiredChild {
 	
 	my $hash = &_getChildren($o);	    
 	unless (defined $hash) {
-	     &Sympa::Log::do_log('err','%s::_getMultipleAndRequiredChild() : error on _getChildren(%s) ',__PACKAGE__,$o->nodeName);
+	     &Sympa::Log::do_log('err','error on _getChildren(%s) ',$o->nodeName);
 	     return undef;
 	 } 
 	    
@@ -213,7 +213,7 @@ sub _getMultipleAndRequiredChild {
 sub _getRequiredSingle {
     my $self = shift;
     my $nodeName = shift;
-    &Sympa::Log::do_log('debug3','%s::_getRequiredSingle(%s)',__PACKAGE__,$nodeName);
+    &Sympa::Log::do_log('debug3','(%s)',$nodeName);
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
  
@@ -252,7 +252,7 @@ sub _getRequiredSingle {
     }else {
 	my $values = &_getChildren($node);
 	unless (defined $values) {
-	     &Sympa::Log::do_log('err','%s::_getRequiredSingle() : error on _getChildren(%s) ',__PACKAGE__,$node->nodeName);
+	     &Sympa::Log::do_log('err','error on _getChildren(%s) ',$node->nodeName);
 	     return undef;
 	 } 
 
@@ -286,7 +286,7 @@ sub _getRequiredSingle {
 ##############################################
 sub _getChildren {
     my $node = shift;
-    &Sympa::Log::do_log('debug3','%s::_getChildren(%s)',__PACKAGE__,$node->nodeName);
+    &Sympa::Log::do_log('debug3','(%s)',$node->nodeName);
 
     my %error_nodes;
     ## return value
@@ -311,7 +311,7 @@ sub _getChildren {
 	if ($type == 1) {
 	    my $values = &_getChildren($child);
 	    unless (defined $values) {
-		&Sympa::Log::do_log('err','%s::_getChildren() : error on _getChildren(%s)',__PACKAGE__,$childName);
+		&Sympa::Log::do_log('err','error on _getChildren(%s)',$childName);
 		return undef;
 	    } 
 	    
@@ -359,7 +359,7 @@ sub _getChildren {
 	
 	## error
 	if ($error) {
-	    &Sympa::Log::do_log('err','%s::_getChildren(%s) : the children are not homogeneous, line %s',__PACKAGE__,$node->nodeName,$node->line_number());
+	    &Sympa::Log::do_log('err','(%s): the children are not homogeneous, line %s',$node->nodeName,$node->line_number());
 	    return undef;
 	}
     }
@@ -393,7 +393,7 @@ sub _getChildren {
 ##################################################
 sub _verify_single_nodes {
     my $nodeList = shift;
-    &Sympa::Log::do_log('debug3','%s::_verify_single_nodes()', __PACKAGE__);
+    &Sympa::Log::do_log('debug3','()');
     
     my $error = 0;
     my %error_nodes;
@@ -433,7 +433,7 @@ sub _verify_single_nodes {
 ###############################################
 sub _find_lines {
     my $nodeList = shift;
-    &Sympa::Log::do_log('debug3','%s::_find_lines()', __PACKAGE__);
+    &Sympa::Log::do_log('debug3','()');
     my $hash = {};
 
     foreach my $node (@$nodeList) {

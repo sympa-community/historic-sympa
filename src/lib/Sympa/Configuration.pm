@@ -707,7 +707,7 @@ sub _load_auth {
     my $is_main_robot = shift;
     # find appropriate auth.conf file
     my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
-    &Sympa::Log::do_log('debug', '%s::_load_auth(%s)', __PACKAGE__, $config_file);
+    &Sympa::Log::do_log('debug', '(%s)', $config_file);
 
     $robot ||= $Conf{'domain'};
     my $line_num = 0;

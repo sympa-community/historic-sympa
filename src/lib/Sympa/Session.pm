@@ -65,7 +65,7 @@ sub new {
     my $rss = $context->{'rss'};
     my $ajax =  $context->{'ajax'};
 
-    &Sympa::Log::do_log('debug', '%s::new(%s,%s,%s)', __PACKAGE__, $robot,$cookie,$action);
+    &Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
     my $session={};
     bless $session, $pkg;
     
@@ -90,7 +90,7 @@ sub new {
 	    return undef;
 	}
 	if ($status eq 'not_found') {
-	    &Sympa::Log::do_log('info',"%s::new ignoring unknown session cookie '$cookie'", __PACKAGE__ ); # start a new session (may ne a fake cookie)
+	    &Sympa::Log::do_log('info',"ignoring unknown session cookie '$cookie'"); # start a new session (may ne a fake cookie)
 	    return (new Sympa::Session ($robot));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
@@ -118,10 +118,10 @@ sub load {
     my $self = shift;
     my $cookie = shift;
 
-    &Sympa::Log::do_log('debug', '%s::load(%s)', __PACKAGE__, $cookie);
+    &Sympa::Log::do_log('debug', '(%s)', $cookie);
 
     unless ($cookie) {
-	&Sympa::Log::do_log('err', '%s::load() : internal error, called with undef id_session', __PACKAGE__);
+	&Sympa::Log::do_log('err', 'internal error, called with undef id_session');
 	return undef;
     }
     
@@ -239,13 +239,13 @@ sub purge_old_sessions {
 
     my $robot = shift;
 
-    &Sympa::Log::do_log('info', '%s::purge_old_sessions(%s,%s)',__PACKAGE__,$robot);
+    &Sympa::Log::do_log('info', '(%s)',$robot);
 
     my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ; 
     my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ; 
 
-    unless ($delay) { &Sympa::Log::do_log('info', '%s::purge_old_session(%s) exit with delay null',__PACKAGE__,$robot); return;}
-    unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s::purge_old_session(%s) exit with anonymous delay null',__PACKAGE__,$robot); return;}
+    unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
+    unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
 
     my @sessions ;
     my  $sth;
@@ -272,7 +272,7 @@ sub purge_old_sessions {
     
     my $total =  $sth->fetchrow;
     if ($total == 0) {
-	&Sympa::Log::do_log('debug','%s::purge_old_sessions no sessions to expire', __PACKAGE__);
+	&Sympa::Log::do_log('debug','no sessions to expire');
     }else{
 	unless ($sth = &Sympa::SDM::do_query($statement)) {
 	    &Sympa::Log::do_log('err','Unable to purge old sessions for robot %s', $robot);
@@ -285,7 +285,7 @@ sub purge_old_sessions {
     }
     my $anonymous_total =  $sth->fetchrow;
     if ($anonymous_total == 0) {
-	&Sympa::Log::do_log('debug','%s::purge_old_sessions no anonymous sessions to expire', __PACKAGE__);
+	&Sympa::Log::do_log('debug','no anonymous sessions to expire');
 	return $total ;
     }
     unless ($sth = &Sympa::SDM::do_query($anonymous_statement)) {
@@ -302,11 +302,11 @@ sub purge_old_tickets {
 
     my $robot = shift;
 
-    &Sympa::Log::do_log('info', '%s::purge_old_tickets(%s,%s)',__PACKAGE__,$robot);
+    &Sympa::Log::do_log('info', '(%s)',$robot);
 
     my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ; 
 
-    unless ($delay) { &Sympa::Log::do_log('info', '%s::purge_old_tickets(%s) exit with delay null',__PACKAGE__,$robot); return;}
+    unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
 
     my @tickets ;
     my  $sth;
@@ -324,7 +324,7 @@ sub purge_old_tickets {
     
     my $total =  $sth->fetchrow;
     if ($total == 0) {
-	&Sympa::Log::do_log('debug','%s::purge_old_tickets no tickets to expire', __PACKAGE__);
+	&Sympa::Log::do_log('debug','no tickets to expire');
     }else{
 	unless ($sth = &Sympa::SDM::do_query($statement)) {
 	    &Sympa::Log::do_log('err','Unable to delete expired one time tickets for robot %s',$robot);
@@ -340,7 +340,7 @@ sub list_sessions {
     my $robot = shift;
     my $connected_only = shift;
 
-    &Sympa::Log::do_log('debug', '%s::list_session(%s,%s,%s)',__PACKAGE__,$delay,$robot,$connected_only);
+    &Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
 
     my @sessions ;
     my $sth;
@@ -355,7 +355,7 @@ sub list_sessions {
     $condition = $condition.$and2.$condition3 ;
 
     my $statement = sprintf "SELECT remote_addr_session, email_session, robot_session, date_session, start_date_session, hit_session FROM session_table WHERE $condition";
-    &Sympa::Log::do_log('debug', '%s::list_session() : statement = %s',__PACKAGE__,$statement);
+    &Sympa::Log::do_log('debug', 'statement = %s',$statement);
 
     unless ($sth = &Sympa::SDM::do_query($statement)) {
 	&Sympa::Log::do_log('err','Unable to get the list of sessions for robot %s',$robot);
@@ -398,7 +398,7 @@ sub get_session_cookie {
 ## Set user $email cookie, ckecksum use $secret, expire=(now|session|#sec) domain=(localhost|<a domain>)
 sub set_cookie {
     my ($self, $http_domain, $expires,$use_ssl) = @_ ;
-    &Sympa::Log::do_log('debug','%s::set_cookie(%s,%s,secure= %s)',__PACKAGE__,$http_domain, $expires,$use_ssl );
+    &Sympa::Log::do_log('debug','%s,%s,secure= %s',$http_domain, $expires,$use_ssl );
 
     my $expiration;
     if ($expires =~ /now/i) {
@@ -439,7 +439,7 @@ sub set_cookie {
     
 
 sub get_random {
-    &Sympa::Log::do_log('debug', '%s::random ', __PACKAGE__);
+    &Sympa::Log::do_log('debug', '');
      my $random = int(rand(10**7)).int(rand(10**7)); ## Concatenates 2 integers for a better entropy
      $random =~ s/^0(\.|\,)//;
      return ($random)

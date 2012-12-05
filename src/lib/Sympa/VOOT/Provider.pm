@@ -75,7 +75,7 @@ sub new {
 	my $pkg = shift;
 	my %param = @_;
 	
-	&Sympa::Log::do_log('debug2', '%s::new()', __PACKAGE__);
+	&Sympa::Log::do_log('debug2', '()');
 	
 	my $provider = {
 		oauth_provider => new Sympa::OAuth::Provider(
@@ -192,7 +192,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong
 
 sub getGroups {
 	my $self = shift;
-	&Sympa::Log::do_log('debug2', '%s::getGroups(%s)', __PACKAGE__, $self->{'user'});
+	&Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
 	
 	my @entries = ();
 	
@@ -245,7 +245,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', '%s::getGroupMembers(%s, %s)', __PACKAGE__, $self->{'user'}, $param{'group'});
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $param{'group'});
 	
 	my @entries = ();
 	

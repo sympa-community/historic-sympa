@@ -85,7 +85,7 @@ sub new {
 		authorize_path => $param{'authorize_path'},
 		redirect_url => undef
  	};
-	&Sympa::Log::do_log('debug2', '%s::new(%s, %s, %s)', __PACKAGE__, $param{'user'}, $param{'provider'}, $param{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $param{'user'}, $param{'provider'}, $param{'consumer_key'});
 	
 	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
 		consumer_key => $param{'consumer_key'},
@@ -161,7 +161,7 @@ sub fetchRessource {
 	my $self = shift;
 	my %param = @_;
 	
-	&Sympa::Log::do_log('debug2', '%s::fetchRessource(%s)', __PACKAGE__, $param{'url'});
+	&Sympa::Log::do_log('debug2', '(%s)', $param{'url'});
 	
 	# Get access token, return 1 if it exists
 	my $token = $self->hasAccess();
@@ -212,7 +212,7 @@ An hashref, if there is a known access token, undef otherwise.
 
 sub hasAccess {
 	my $self = shift;
-	&Sympa::Log::do_log('debug2', '%s::hasAccess(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	unless(defined $self->{'session'}{'access'}) {
 		if($self->{'here_path'}) { # We are running in web env.
@@ -240,7 +240,7 @@ A true value, if everything's alright.
 
 sub triggerFlow {
 	my $self = shift;
-	&Sympa::Log::do_log('debug2', '%s::triggerFlow(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	my $ticket = &Sympa::Auth::create_one_time_ticket(
 		$self->{'user'},
@@ -306,7 +306,7 @@ A true value if the token was retreived successfully, undef otherwise.
 sub getAccessToken {
 	my $self = shift;
 	my %param = @_;
-	&Sympa::Log::do_log('debug2', '%s::getAccessToken(%s, %s)', __PACKAGE__, $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});
 	
