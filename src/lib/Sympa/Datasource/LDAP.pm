@@ -87,17 +87,6 @@ sub new {
     }
     require Net::LDAP;
 
-    unless (eval "require Net::LDAP::Entry") {
-	&Sympa::Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
-	return undef;
-    }
-    require Net::LDAP::Entry;
-    
-    unless (eval "require Net::LDAP::Message") {
-	&Sympa::Log::do_log ('err',"Unable to use LDAP library,Net::LDAP::Entry required install perl-ldap (CPAN) first");
-	return undef;
-    }
-    require Net::LDAP::Message;
     return $self;
 }
 
