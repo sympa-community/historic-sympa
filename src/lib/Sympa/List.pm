@@ -31,6 +31,7 @@ package Sympa::List;
 
 use strict;
 
+use DB_File;
 use Encode;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;
@@ -2108,9 +2109,6 @@ my %edit_list_conf = ();
 
 ## Last modification times
 my %mtime;
-
-use Fcntl;
-use DB_File;
 
 $DB_BTREE->{compare} = \&_compare_addresses;
 
