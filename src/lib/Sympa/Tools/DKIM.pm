@@ -99,10 +99,6 @@ sub dkim_verifier {
     my $dkim;
 
     &Sympa::Log::do_log('debug',"dkim verifier");
-    unless (eval "require Mail::DKIM::Verifier") {
-	&Sympa::Log::do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
-	return undef;
-    }
     
     unless ( $dkim = Mail::DKIM::Verifier->new() ){
 	&Sympa::Log::do_log('err', 'Could not create Mail::DKIM::Verifier');
@@ -212,10 +208,6 @@ sub dkim_sign {
     print MSGDUMP $dkim_privatekey ;
     close(MSGDUMP);
 
-    unless (eval "require Mail::DKIM::Signer") {
-	&Sympa::Log::do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
-	return ($msg_as_string); 
-    }
     unless (eval "require Mail::DKIM::TextWrap") {
 	&Sympa::Log::do_log('err', "Failed to load Mail::DKIM::TextWrap perl module, signature will not be pretty");
     }
