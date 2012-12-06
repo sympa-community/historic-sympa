@@ -16,7 +16,26 @@ use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 
-## Constructor of a Robot instance
+=head1 CLASS METHODS
+
+=head2 Sympa::Robot->new($name)
+
+Creates a new L<Sympa::Robot> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<$name>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Robot> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
     my($pkg, $name) = @_;
 

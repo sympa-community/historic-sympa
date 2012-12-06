@@ -39,7 +39,30 @@ use Sympa::Log;
 use Sympa::Tools;
 use Sympa::Tools::Data;
 
-## Creates a new object
+=head1 CLASS METHODS
+
+=head2 Sympa::SharedDocument->new($list, $path, $param)
+
+Creates a new L<Sympa::SharedDocument> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<$list>
+
+=item * I<$path>
+
+=item * I<$param>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::SharedDocument> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
     my($pkg, $list, $path, $param) = @_;
 

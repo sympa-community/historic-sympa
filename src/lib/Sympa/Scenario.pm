@@ -48,9 +48,36 @@ use Sympa::Tools::Data;
 my %all_scenarios;
 my %persistent_cache;
 
-## Creates a new object
-## Supported parameters : function, robot, name, directory, file_path, options
-## Output object has the following entries : name, file_path, rules, date, title, struct, data
+=head1 CLASS METHODS
+
+=head2 Sympa::Scenario->new(%parameters)
+
+Creates a new L<Sympa::Scenario> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<function>
+
+=item * I<robot>
+
+=item * I<name>
+
+=item * I<directory>
+
+=item * I<file_path>
+
+=item * I<options>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Scenario> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
    my($pkg, @args) = @_;
     my %parameters = @args;

@@ -47,7 +47,38 @@ sub set_spool {
     $taskspool = new Sympa::Spool('task');
 }
 
-## Creates a new Task object
+=head1 CLASS METHODS
+
+=head2 Sympa::Task->new($parameters)
+
+Creates a new L<Sympa::Task> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<messagekey>
+
+=item * I<taskasstring>
+
+=item * I<task_date>
+
+=item * I<task_label>
+
+=item * I<task_model>
+
+=item * I<robot>
+
+=item * I<list>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Task> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;

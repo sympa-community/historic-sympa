@@ -43,7 +43,26 @@ use Sympa::Tools::File;
 my %list_of_locks;
 my $default_timeout = 60 * 20; ## After this period a lock can be stolen
 
-## Creates a new object
+=head1 CLASS METHODS
+
+=head2 Sympa::Lock->new($path)
+
+Creates a new L<Sympa::Lock> object.
+
+=head3 Parameters
+
+=over
+
+=item * I<$path>
+
+=back
+
+=head3 Return value
+
+A new L<Sympa::Lock> object, or I<undef> if something went wrong.
+
+=cut
+
 sub new {
     my($pkg, $filepath) = @_;
     &Sympa::Log::do_log('debug', '%s::new(%s)',__PACKAGE__,$filepath);

@@ -53,7 +53,28 @@ use Sympa::Tools::Time;
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
-## Creates an object.
+=head1 CLASS METHODS
+
+=head2 Sympa::Spool->new($name, $selectionstatus)
+
+Creates a new L<Sympa::Spool> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<$name>
+
+=item * I<$selection_status>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
     my($pkg, $spoolname, $selection_status) = @_;
     my $spool={};

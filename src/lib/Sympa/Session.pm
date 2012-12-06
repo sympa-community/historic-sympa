@@ -54,6 +54,27 @@ my %session_hard_attributes = ('id_session' => 1,
 			       'new_session' => 1,
 			      );
 
+=head1 CLASS METHODS
+
+=head2 Sympa::Session->new($robot, $context)
+
+Creates a new L<Sympa::Session> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<$robot>
+
+=item * I<$context>
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Session> object, or I<undef>, if something went wrong.
+
+=cut
 
 sub new {
     my $pkg = shift; 
