@@ -41,6 +41,8 @@ use POSIX qw();
 This applies recursively to a data structure. The transformation subroutine is
 passed as a ref.
 
+=cut
+
 sub recursive_transformation {
     my ($var, $subref) = @_;
     
