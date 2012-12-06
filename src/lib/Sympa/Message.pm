@@ -48,7 +48,7 @@ use Sympa::Tools::SMIME;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Message->new()
+=head2 Sympa::Message->new($parameters)
 
 Creates a new L<Sympa::Message> object.
 
@@ -56,11 +56,15 @@ Creates a new L<Sympa::Message> object.
 
 =over 
 
-=item * I<$pkg>, a package name 
+=item * I<file>: the message file
 
-=item * I<$file>, the message file
+=item * I<noxsympato>: a boolean
 
-=item * I<$noxsympato>, a boolean
+=item * I<messageastring>
+
+=item * I<mimeentity>
+
+=item * I<message_in_spool>
 
 =back 
 
