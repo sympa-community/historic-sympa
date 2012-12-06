@@ -34,6 +34,7 @@ use strict;
 
 use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
+use Mail::DKIM::TextWrap;
 use MIME::Parser;
 
 use Sympa::Message;
@@ -208,9 +209,6 @@ sub dkim_sign {
     print MSGDUMP $dkim_privatekey ;
     close(MSGDUMP);
 
-    unless (eval "require Mail::DKIM::TextWrap") {
-	&Sympa::Log::do_log('err', "Failed to load Mail::DKIM::TextWrap perl module, signature will not be pretty");
-    }
     my $dkim ;
     if ($dkim_i) {
     # create a signer object
