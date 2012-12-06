@@ -125,7 +125,7 @@ sub new {
     my $class = shift;
     my $name = shift;
     my $robot = shift;
-    &Sympa::Log::do_log('debug2','%s::new(%s,%s)',__PACKAGE__,$name,$robot);
+    &Sympa::Log::do_log('debug2','(%s,%s)',$name,$robot);
     
     my $self = {};
 
@@ -169,13 +169,13 @@ sub new {
     ## family directory
     $self->{'dir'} = $self->_get_directory();
     unless (defined $self->{'dir'}) {
-	&Sympa::Log::do_log('err','%s::new(%s,%s) : the family directory does not exist',__PACKAGE__,$name,$robot);
+	&Sympa::Log::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
 	return undef;
     }
 
     ## family files
     if (my $file_names = $self->_check_mandatory_files()) {
-	&Sympa::Log::do_log('err','%s::new(%s,%s) : Definition family files are missing : %s',__PACKAGE__,$name,$robot,$file_names);
+	&Sympa::Log::do_log('err','(%s,%s) : Definition family files are missing : %s',$name,$robot,$file_names);
 	return undef;
     }
 
@@ -217,7 +217,7 @@ the "ok" key must be associated to the value "1".
 sub add_list {
     my ($self, $data, $abort_on_error) = @_;
 
-    &Sympa::Log::do_log('info','%s::add_list(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
     $self->{'state'} = 'no_check';
     my $return;
@@ -232,7 +232,7 @@ sub add_list {
     } else {
 	#copy the xml file in another file
 	unless (open (FIC, '>', "$self->{'dir'}/_new_list.xml")) {
-	    &Sympa::Log::do_log('err','%s::add_list(%s) : impossible to create the temp file %s/_new_list.xml : %s',__PACKAGE__,$self->{'name'},$self->{'dir'},$!);
+	    &Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_new_list.xml : %s',$self->{'name'},$self->{'dir'},$!);
 	}
 	while (<$data>) {
 	    print FIC ($_);
@@ -345,7 +345,7 @@ the "ok" key must be associated to the value "1".
 sub modify_list {
     my $self = shift;
     my $fh = shift;
-    &Sympa::Log::do_log('info','%s::modify_list(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
     $self->{'state'} = 'no_check';
     my $return;
@@ -355,7 +355,7 @@ sub modify_list {
 
     #copy the xml file in another file
     unless (open (FIC, '>', "$self->{'dir'}/_mod_list.xml")) {
-	&Sympa::Log::do_log('err','%s::modify_list(%s) : impossible to create the temp file %s/_mod_list.xml : %s',__PACKAGE__,$self->{'name'},$self->{'dir'},$!);
+	&Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_mod_list.xml : %s',$self->{'name'},$self->{'dir'},$!);
     }
     while (<$fh>) {
 	print FIC ($_);
@@ -620,7 +620,7 @@ sub instantiate {
     my $self = shift;
     my $xml_file = shift;
     my $close_unknown = shift;
-    &Sympa::Log::do_log('debug2','%s::instantiate(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     ## all the description variables are emptied.
     $self->_initialize_instantiation();
@@ -724,7 +724,7 @@ sub instantiate {
 	    
 	    # config_changes
 	    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-		&Sympa::Log::do_log('err','%s::instantiate : impossible to create file %s/config_changes : %s',__PACKAGE__,$list->{'dir'},$!);
+		&Sympa::Log::do_log('err','impossible to create file %s/config_changes : %s',$list->{'dir'},$!);
 		push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
 		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
 	    }
@@ -840,7 +840,7 @@ A string containing a message to display.
 
 sub get_instantiation_results {
     my ($self, $result) = @_;
-    &Sympa::Log::do_log('debug3','%s::get_instantiation_results(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
  
     $result->{'errors'} = ();
     $result->{'warn'} = ();
@@ -976,7 +976,7 @@ Checks the parameter constraints taken from param_constraint.conf file for the L
 sub check_param_constraint {
     my $self = shift;
     my $list = shift;
-    &Sympa::Log::do_log('debug2','%s::check_param_constraint(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
+    &Sympa::Log::do_log('debug2','(%s,%s)',$self->{'name'},$list->{'name'});
 
     if ($self->{'state'} eq 'no_check') {
 	return 1;
@@ -990,7 +990,7 @@ sub check_param_constraint {
     ## checking
     my $constraint = $self->get_constraints();
     unless (defined $constraint) {
-	&Sympa::Log::do_log('err','%s::check_param_constraint(%s,%s) : unable to get family constraints',__PACKAGE__,$self->{'name'},$list->{'name'});
+	&Sympa::Log::do_log('err','(%s,%s) : unable to get family constraints',$self->{'name'},$list->{'name'});
 	return undef;
     }
     foreach my $param (keys %{$constraint}) {
@@ -1047,7 +1047,7 @@ An hash containing the values found in the param_constraint.conf file.
 
 sub get_constraints {
     my $self = shift;
-    &Sympa::Log::do_log('debug3','%s::get_constraints(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 
     ## load param_constraint.conf
     my $time_file = (stat("$self->{'dir'}/param_constraint.conf"))[9];
@@ -1089,7 +1089,7 @@ Returns 0 if all the value(s) found in $param_value appear also in $constraint_v
 
 sub check_values {
     my ($self,$param_value,$constraint_value) = @_;
-    &Sympa::Log::do_log('debug3','%s::check_values()', __PACKAGE__);
+    &Sympa::Log::do_log('debug3','()');
     
     my @param_values;
     my @error;
@@ -1178,7 +1178,7 @@ Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 sub get_param_constraint {
     my $self = shift;
     my $param  = shift;
-    &Sympa::Log::do_log('debug3','%s::get_param_constraint(%s,%s)',__PACKAGE__,$self->{'name'},$param);
+    &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$param);
  
     unless(defined $self->get_constraints()) {
 	return undef;
@@ -1209,7 +1209,7 @@ An arrayref containing the family lists names.
 sub get_family_lists {
     my $self = shift;
     my @list_of_lists;
-    &Sympa::Log::do_log('debug2','%s::get_family_lists(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
@@ -1238,7 +1238,7 @@ An hashref whose keys are the family's lists' names.
 sub get_hash_family_lists {
     my $self = shift;
     my %list_of_lists;
-    &Sympa::Log::do_log('debug2','%s::get_hash_family_lists(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
@@ -1265,7 +1265,7 @@ An hashref whose keys are the uncompellable parameters names.
 
 sub get_uncompellable_param {
     my %list_of_param;
-    &Sympa::Log::do_log('debug3','%s::get_uncompellable_param()', __PACKAGE__);
+    &Sympa::Log::do_log('debug3','()');
 
     foreach my $param (@uncompellable_param) {
 	if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
@@ -1291,7 +1291,7 @@ sub _get_directory {
     my $self = shift;
     my $robot = $self->{'robot'};
     my $name = $self->{'name'};
-    &Sympa::Log::do_log('debug3','%s::_get_directory(%s)',__PACKAGE__,$name);
+    &Sympa::Log::do_log('debug3','(%s)',$name);
 
     my @try = (
         $Sympa::Configuration::Conf{'etc'}           . "/$robot/families",
@@ -1323,7 +1323,7 @@ sub _check_mandatory_files {
     my $self = shift;
     my $dir = $self->{'dir'};
     my $string = "";
-    &Sympa::Log::do_log('debug3','%s::_check_mandatory_files(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 
     foreach my $f ('config.tt2') {
 	unless (-f "$dir/$f") {
@@ -1348,7 +1348,7 @@ sub _check_mandatory_files {
 
 sub _initialize_instantiation() {
     my $self = shift;
-    &Sympa::Log::do_log('debug3','%s::_initialize_instantiation(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 
     ### info vars for instantiate  ###
     ### returned by                ###
@@ -1414,7 +1414,7 @@ sub _split_xml_file {
     my $self = shift;
     my $xml_file = shift;
     my $root;
-    &Sympa::Log::do_log('debug2','%s::_split_xml_file(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     ## parse file
     my $parser = XML::LibXML->new();
@@ -1422,14 +1422,14 @@ sub _split_xml_file {
     my $doc;
 
     unless ($doc = $parser->parse_file($xml_file)) {
-	&Sympa::Log::do_log('err',"%s::_split_xml_file() : failed to parse XML file", __PACKAGE__);
+	&Sympa::Log::do_log('err',"failed to parse XML file");
 	return undef;
     }
     
     ## the family document
     $root = $doc->documentElement();
     unless ($root->nodeName eq 'family') {
-	&Sympa::Log::do_log('err',"%s::_split_xml_file() : the root element must be called \"family\" ", __PACKAGE__);
+	&Sympa::Log::do_log('err',"the root element must be called \"family\" ");
 	return undef;
     }
 
@@ -1438,7 +1438,7 @@ sub _split_xml_file {
 
 	if ($list_elt->nodeType == 1) {# ELEMENT_NODE
 	    unless ($list_elt->nodeName eq 'list') {
-		&Sympa::Log::do_log('err','%s::_split_xml_file() : elements contained in the root element must be called "list", line %s',__PACKAGE__,$list_elt->line_number());
+		&Sympa::Log::do_log('err','elements contained in the root element must be called "list", line %s',$list_elt->line_number());
 		return undef;
 	    }
 	}else {
@@ -1449,7 +1449,7 @@ sub _split_xml_file {
 	my @children = $list_elt->getChildrenByTagName('listname');
 
 	if ($#children <0) {
-	    &Sympa::Log::do_log('err','%s::_split_xml_file() : "listname" element is required in "list" element, line : %s',__PACKAGE__,$list_elt->line_number());
+	    &Sympa::Log::do_log('err','"listname" element is required in "list" element, line : %s',$list_elt->line_number());
 	    return undef;
 	}
 	if ($#children > 0) {
@@ -1457,7 +1457,7 @@ sub _split_xml_file {
 	    foreach my $i (@children) {
 		push (@error,$i->line_number());    
 	    }
-	    &Sympa::Log::do_log('err','%s::_split_xml_file() : Only one "listname" element is allowed for "list" element, lines : %s',__PACKAGE__,join(", ",@error));
+	    &Sympa::Log::do_log('err','Only one "listname" element is allowed for "list" element, lines : %s',join(", ",@error));
 	    return undef;
 	    my $minor_param = $2;
 	}
@@ -1474,7 +1474,7 @@ sub _split_xml_file {
 
 	## creating the list xml file
 	unless ($list_doc->toFile("$self->{'dir'}/$filename",0)) {
-	    &Sympa::Log::do_log('err','%s::_split_xml_file() : cannot create list file %s', __PACKAGE__,
+	    &Sympa::Log::do_log('err','cannot create list file %s',
 		    $self->{'dir'}.'/'.$filename,$list_elt->line_number());
 	    return undef;
 	}
@@ -1497,7 +1497,7 @@ sub _split_xml_file {
 
 sub _update_existing_list {
     my ($self,$list,$hash_list) = @_;
-    &Sympa::Log::do_log('debug3','%s::_update_existing_list(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
+    &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
     ## get allowed and forbidden list customizing
     my $custom = $self->_get_customizing($list);
@@ -1623,7 +1623,7 @@ sub _update_existing_list {
 
 sub _get_customizing {
     my ($self,$list) = @_;
-    &Sympa::Log::do_log('debug3','%s::_get_customizing(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
+    &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
     my $result;
     my $config_changes = $list->get_config_changes;
@@ -1715,7 +1715,7 @@ sub _get_customizing {
 
 sub _set_status_changes {
     my ($self,$list,$old_status) = @_;
-    &Sympa::Log::do_log('debug3','%s::_set_status_changes(%s,%s,%s)',__PACKAGE__,$self->{'name'},$list);
+    &Sympa::Log::do_log('debug3','(%s,%s,%s)',$self->{'name'},$list);
 
     my $result;
 
@@ -1775,7 +1775,7 @@ sub _set_status_changes {
 
 sub _end_update_list {
     my ($self,$list,$xml_file) = @_;
-    &Sympa::Log::do_log('debug3','%s::_end_update_list(%s,%s)',__PACKAGE__,$self->{'name'},$list->{'name'});
+    &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
     
     my $host = &Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
@@ -1827,12 +1827,12 @@ sub _copy_files {
     my $list_dir = shift;
     my $file = shift;
     my $dir = $self->{'dir'};
-    &Sympa::Log::do_log('debug3','%s::_copy_files(%s,%s)',__PACKAGE__,$self->{'name'},$list_dir);
+    &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list_dir);
 
     # instance.xml
     if (defined $file) {
 	unless (&File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
-	    &Sympa::Log::do_log('err','%s::_copy_files(%s) : impossible to copy %s/%s into %s/instance.xml : %s',__PACKAGE__,$self->{'name'},$dir,$file,$list_dir,$!);
+	    &Sympa::Log::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$!);
 	    return undef;
 	}
     }
@@ -1851,7 +1851,7 @@ sub _copy_files {
 
 sub _load_param_constraint_conf {
     my $self = shift;
-    &Sympa::Log::do_log('debug2','%s::_load_param_constraint_conf(%s)',__PACKAGE__,$self->{'name'});
+    &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     my $file = "$self->{'dir'}/param_constraint.conf";
     
@@ -1881,7 +1881,7 @@ sub _load_param_constraint_conf {
 	    my @values = split /,/, $value;
 	    
 	    unless(($param =~ /^([\w-]+)\.([\w-]+)$/) || ($param =~ /^([\w-]+)$/)) {
-		&Sympa::Log::do_log ('err', '%s::_load_param_constraint_conf(%s) : unknown parameter "%s" in %s',__PACKAGE__,$self->{'name'},$_,$file);
+		&Sympa::Log::do_log ('err', '(%s) : unknown parameter "%s" in %s',$self->{'name'},$_,$file);
 		$error = 1;
 		next;
 	    }
@@ -1894,7 +1894,7 @@ sub _load_param_constraint_conf {
 		}
 	    }
 	} else {
-	    &Sympa::Log::do_log ('err', '%s::_load_param_constraint_conf(%s) : bad line : %s in %s',__PACKAGE__,$self->{'name'},$_,$file);
+	    &Sympa::Log::do_log ('err', '(%s) : bad line : %s in %s',$self->{'name'},$_,$file);
 	    $error = 1;
 	    next;
 	}
