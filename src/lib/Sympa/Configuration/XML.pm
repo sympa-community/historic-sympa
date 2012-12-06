@@ -36,15 +36,26 @@ use XML::LibXML;
 
 use Sympa::Log;
 
-#########################################
-# new                                   
-#########################################
-# constructor of the class Config_XML :
-#   parse the xml file
-#
-# IN : -$class 
-#      -$fh :  file handler on the xml file 
-#########################################
+=head1 CLASS METHODS
+
+=head2 Sympa::Configuration::XML->new($handle)
+
+Creates a new L<Sympa::Configuration::XML> object.
+
+=head3 Arguments
+
+=over
+
+=item * I<$handle>: file handler on the xml file 
+
+=back
+
+=head3 Return
+
+A new L<Sympa::Configuration::XML> object, or I<undef>, if something went wrong.
+
+=cut
+
 sub new {
     my $class = shift;
     my $fh = shift;
