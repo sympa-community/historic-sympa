@@ -202,7 +202,7 @@ sub do_connect {
     eval {openlog("$log_service\[$$\]", 'ndelay,nofatal', $log_facility)};
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-        require List;
+        require Sympa::List;
 	unless(&Sympa::List::send_notify_to_listmaster('logs_failed', $Sympa::Configuration::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
