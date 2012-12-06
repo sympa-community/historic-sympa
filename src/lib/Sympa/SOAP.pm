@@ -28,6 +28,7 @@ package Sympa::SOAP;
 
 use strict "vars";
 
+use Encode;
 use HTTP::Cookies;
 
 use Sympa::Admin;
@@ -1809,10 +1810,7 @@ sub struct_to_soap {
 	    
 	    ## Decode from the current charset to perl internal charset
 	    ## Then encode strings to UTF-8
-	    if (require "Encode.pm") {
-		# $one_data = &Encode::decode(&Sympa::Language::GetCharset(), $one_data);
-		$one_data = &Encode::encode('utf-8', $one_data);
-	    }
+            $one_data = &Encode::encode('utf-8', $one_data);
 
 	    push @all, $one_data;
 	}
