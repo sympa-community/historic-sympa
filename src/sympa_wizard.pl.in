@@ -703,7 +703,9 @@ sub check_modules {
 
         printf ("%-20s %-15s", $mod, $cpan_modules->{$mod}{package_name});
 
-        eval "require $mod";
+        eval {
+            require $mod;
+        };
         if ($@) {
             ### not installed
             print "was not found on this system.\n";
@@ -793,8 +795,10 @@ sub install_module {
     CPAN::Shell->install($module); ## Could use CPAN::Shell->force('install') if make test failed
 
     ## Check if module has been successfuly installed
-    unless (eval "require $module") {
-
+    eval {
+        require $module;
+    };
+    unless ($@) {
         ## Prevent recusive calls if already in force mode
         if ($options->{'force'}) {
             print  "Installation of $module still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";

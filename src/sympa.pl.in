@@ -248,26 +248,37 @@ unless ($main::options{'upgrade'} || $main::options{'help'}) {
 
 
 if (&Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
-    unless ( eval "require Sympa::OAuth::Provider" ){
+    eval {
+        require Sympa::OAuth::Provider;
+    };
+    if ($@) {
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $@");
 	return undef;
     }
-    require Sympa::OAuth::Provider;
-    unless ( eval "require Sympa::OAuth::Consumer" ){
+
+    eval {
+        require Sympa::OAuth::Consumer;
+    };
+    if ($@) {
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $@");
 	return undef;
     }
-    require Sympa::OAuth::Consumer;
-    unless ( eval "require Sympa::VOOT::Provider" ){
+
+    eval {
+        require Sympa::VOOT::Provider;
+    };
+    if ($@) {
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Provider module: $@");
 	return undef;
     }
-    require Sympa::VOOT::Provider;
-    unless ( eval "require VOOTConsumer" ){
+
+    eval {
+        require VOOTConsumer;
+    };
+    if ($@) {
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load module: $@");
 	return undef;
     }
-    require Sympa::VOOT::Consumer;
 }else {
     &Sympa::Log::do_log('err','Sympa is configured to use VOOT but the required modules are not accessible.');
 }

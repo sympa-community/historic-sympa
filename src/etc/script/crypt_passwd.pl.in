@@ -1,4 +1,4 @@
-#! --PERL--
+e! --PERL--
 
 # crypt_passwd.pl - This script crypts uncrypted passwords in DB
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -28,9 +28,10 @@ use Sympa::Constants;
 use Sympa::SDM;
 use Sympa::Tools;
 
-unless (require Crypt::CipherSaber) {
-    die "Crypt::CipherSaber not installed ; cannot crypt passwords";
-}
+eval {
+    require Crypt::CipherSaber;
+};
+die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $@;
 
 ## Load sympa config
 &Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';

@@ -1164,7 +1164,9 @@ Net::SMTP object or 0
      }
      push @addresses,"$list\@" . $domain;
 
-     eval { require Net::SMTP; };
+     eval {
+         require Net::SMTP;
+     };
      if ($@) {
 	 &Sympa::Log::do_log ('err',"%s::list_check_smtp : Unable to use Net library, Net::SMTP required, install it (CPAN) first", __PACKAGE__);
 	 return undef;

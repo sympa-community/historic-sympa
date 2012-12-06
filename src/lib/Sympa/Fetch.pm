@@ -53,17 +53,21 @@ sub get_https{
 	    return undef;
 	}
 
-	unless (eval "require IO::Socket::SSL") {
+        eval {
+            require IO::Socket::SSL;
+        };
+        if ($@) {
 	    &Sympa::Log::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
 	    return undef;
 	}
-	require IO::Socket::SSL;
 	
-	unless (eval "require LWP::UserAgent") {
+        eval {
+            require LWP::UserAgent;
+        };
+        if ($@) {
 	    &Sympa::Log::do_log('err',"Unable to use LWP library, LWP::UserAgent required, install LWP (CPAN) first");
 	    return undef;
 	}
-	require LWP::UserAgent;
 
 	my $ssl_socket;
 
@@ -134,17 +138,21 @@ sub get_https2{
 	    return undef;
 	}
 
-	unless (eval "require IO::Socket::SSL") {
+        eval {
+            require IO::Socket::SSL;
+        };
+        if ($@) {
 	    &Sympa::Log::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
 	    return undef;
 	}
-	require IO::Socket::SSL;
 	
-	unless (eval "require LWP::UserAgent") {
+        eval {
+            require LWP::UserAgent;
+        };
+        if ($@) {
 	    &Sympa::Log::do_log('err',"Unable to use LWP library, LWP::UserAgent required, install LWP (CPAN) first");
 	    return undef;
 	}
-	require LWP::UserAgent;
 
 	my $ssl_socket;
 

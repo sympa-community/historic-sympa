@@ -836,7 +836,9 @@ sub _load_auth {
             next;
             }
 
-            eval "require AuthCAS";
+            eval {
+                require AuthCAS;
+            };
             if ($@) {
                 &Sympa::Log::do_log('err', 'Failed to load AuthCAS perl module');
                 return undef;
@@ -1628,7 +1630,9 @@ sub _check_cpan_modules_required_by_config {
     my $param = shift;
     my $number_of_missing_modules = 0;
     if ($param->{'config_hash'}{'lock_method'} eq 'nfs') {
-        eval "require File::NFSLock";
+        eval {
+            require File::NFSLock;
+        };
         if ($@) {
             printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n", __PACKAGE__;
             $param->{'config_hash'}{'lock_method'} = 'flock';
@@ -1638,7 +1642,9 @@ sub _check_cpan_modules_required_by_config {
          
     ## Some parameters require CPAN modules
     if ($param->{'config_hash'}{'dkim_feature'} eq 'on') {
-        eval "require Mail::DKIM";
+        eval {
+            require Mail::DKIM;
+        };
         if ($@) {
             printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n", __PACKAGE__;
             $param->{'config_hash'}{'dkim_feature'} = 'off';

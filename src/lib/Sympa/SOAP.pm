@@ -261,7 +261,10 @@ sub casLogin {
 	    ->faultdetail('Use : <HTTP host> <proxyTicket>');
     }
     
-	unless ( eval "require AuthCAS" ){
+	eval {
+            require AuthCAS;
+        };
+        if ($@) {
 		&Sympa::Log::do_log('err',"Unable to use AuthCAS library, install AuthCAS (CPAN) first");
 		return undef ;
     }
