@@ -34,7 +34,6 @@ use strict;
 
 use MIME::Parser;
 
-use Sympa::Configuration;
 use Sympa::Log;
 
 =head1 FUNCTIONS
@@ -184,12 +183,12 @@ Analyse d'un rapport de non-remise
 
 sub anabounce {
 
-    my ($message, $result, $from) = @_;
+    my ($message, $result, $from, $tmpdir) = @_;
 
 
     # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
     # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
-    my $tmpfile = $Sympa::Configuration::Conf{'tmpdir'}.'/bounce.'.$$ ;
+    my $tmpfile = $tmpdir.'/bounce.'.$$ ;
     unless (open (BOUNCE,"> $tmpfile")){
 &Sympa::Log::do_log('err',"could not create $tmpfile");
 	return undef;

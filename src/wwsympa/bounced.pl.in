@@ -641,7 +641,7 @@ while (!$end) {
 	    
 	    unless ($bounce_count) {
 		## Analysis of bounced message
-		&Sympa::Tools::Bounce::anabounce($message, \%hash, \$from);
+		&Sympa::Tools::Bounce::anabounce($message, \%hash, \$from, $Sympa::Configuration::Conf{'tmpdir'});
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
 		# &updatedatabase(%hash);
 	    }
