@@ -39,7 +39,7 @@ use FileHandle;
 use Getopt::Long;
 use POSIX qw();
 
-use Sympa::Conf;
+use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Log;
