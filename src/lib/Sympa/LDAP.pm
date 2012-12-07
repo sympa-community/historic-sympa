@@ -77,7 +77,7 @@ The configuration, as an hash.
 sub load {
     my $config = shift;
 
-   &Sympa::Log::do_log('debug3', '%s::load(%s)', __PACKAGE__, $config);
+   &Sympa::Log::do_log('debug3', '(%s)', $config);
 
     my $line_num = 0;
     my $config_err = 0;
