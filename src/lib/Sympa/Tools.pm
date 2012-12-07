@@ -317,23 +317,6 @@ sub sanitize_var {
     return 1;
 }
 
-=head2 sortbydomain($x, $y)
-
-Sorts the list of addresses by domain name.
-
-Input : users hash
-Sort by domain.
-
-=cut
-
-sub sortbydomain {
-   my($x, $y) = @_;
-   $x = join('.', reverse(split(/[@\.]/, $x)));
-   $y = join('.', reverse(split(/[@\.]/, $y)));
-   #print "$x $y\n";
-   $x cmp $y;
-}
-
 =head2 by_date()
 
 Sort subroutine to order files in sympa spool by date
