@@ -275,7 +275,7 @@ sub request_action {
     my $robot=shift;
     my $context = shift;
     my $debug = shift;
-    &Sympa::Log::do_log('debug', '%s::request_action %s,%s,%s',__PACKAGE__,$operation,$auth_method,$robot);
+    &Sympa::Log::do_log('debug', '%s,%s,%s',$operation,$auth_method,$robot);
 
     my $trace_scenario ;
 
@@ -289,7 +289,7 @@ sub request_action {
 					      $context->{'message'}->{'smime_crypted'} eq 'smime_crypted');
     ## Check that authorization method is one of those known by Sympa
     unless ( $auth_method =~ /^(smtp|md5|pgp|smime|dkim)/) {
-	&Sympa::Log::do_log('info',"fatal error : unknown auth method $auth_method in %s::request_action", __PACKAGE__);
+	&Sympa::Log::do_log('info',"fatal error : unknown auth method $auth_method");
 	return undef;
     }
     my (@rules, $name, $scenario) ;
@@ -586,7 +586,7 @@ sub verify {
 #    }
     
     unless (defined($context->{'sender'} )) {
-	&Sympa::Log::do_log('info',"internal error, no sender find in %s::verify, report authors", __PACKAGE__);
+	&Sympa::Log::do_log('info',"internal error, no sender find, report authors");
 	return undef;
     }
     
@@ -1166,7 +1166,7 @@ sub search{
 
     my $sender = $context->{'sender'};
 
-    &Sympa::Log::do_log('debug2', '%s::search(%s,%s,%s)', __PACKAGE__, $filter_file, $sender, $robot);
+    &Sympa::Log::do_log('debug2', '(%s,%s,%s)', $filter_file, $sender, $robot);
     
     if ($filter_file =~ /\.sql$/) {
  
@@ -1332,7 +1332,7 @@ sub search{
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 	    }
 	    
-	$ds->disconnect() or &Sympa::Log::do_log('notice','%s::search_ldap.Unbind impossible', __PACKAGE__);
+	$ds->disconnect() or &Sympa::Log::do_log('notice','Unbind impossible');
 	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
 	    
 	    return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
@@ -1353,7 +1353,7 @@ sub search{
 
 	my $sender = lc($sender);
 	foreach my $file (@files) {
-	    &Sympa::Log::do_log('debug3', '%s::search: found file  %s', __PACKAGE__, $file);
+	    &Sympa::Log::do_log('debug3', 'found file  %s', $file);
 	    unless (open FILE, $file) {
 		&Sympa::Log::do_log('err', 'Could not open file %s', $file);
 		return undef;
@@ -1382,7 +1382,7 @@ sub verify_custom {
         my $timeout = 3600;
 	
 	my $filter = join ('*', @{$args_ref});
-	&Sympa::Log::do_log('debug2', '%s::verify_custom(%s,%s,%s,%s)', __PACKAGE__, $condition, $filter, $robot, $list);
+	&Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $condition, $filter, $robot, $list);
         if (defined ($persistent_cache{'named_filter'}{$condition}{$filter}) &&
             (time <= $persistent_cache{'named_filter'}{$condition}{$filter}{'update'} + $timeout)){ ## Cache has 1hour lifetime
             &Sympa::Log::do_log('notice', 'Using previous custom condition cache %s', $filter);
