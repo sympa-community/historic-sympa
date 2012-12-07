@@ -96,30 +96,30 @@ An hashref with the following keys, or I<undef> if something went wrong:
 
 sub create_list_old{
     my ($param,$template,$robot,$origin, $user_mail) = @_;
-    &Sympa::Log::do_log('debug', '%s::create_list_old(%s,%s)',__PACKAGE__,$param->{'listname'},$robot,$origin);
+    &Sympa::Log::do_log('debug', '(%s,%s)',$param->{'listname'},$robot,$origin);
 
      ## obligatory list parameters 
     foreach my $arg ('listname','subject') {
 	unless ($param->{$arg}) {
-	    &Sympa::Log::do_log('err','%s::create_list_old : missing list param %s', __PACKAGE__, $arg);
+	    &Sympa::Log::do_log('err','missing list param %s', $arg);
 	    return undef;
 	}
     }
     # owner.email || owner_include.source
     unless (&check_owner_defined($param->{'owner'},$param->{'owner_include'})) {
-	&Sympa::Log::do_log('err','%s::create_list_old : problem in owner definition in this list creation', __PACKAGE__);
+	&Sympa::Log::do_log('err','problem in owner definition in this list creation');
 	return undef;
     }
 
 
     # template
     unless ($template) {
-	&Sympa::Log::do_log('err','%s::create_list_old : missing param "template"', __PACKAGE__, $template);
+	&Sympa::Log::do_log('err','missing param "template"', $template);
 	return undef;
     }
     # robot
     unless ($robot) {
-	&Sympa::Log::do_log('err','%s::create_list_old : missing param "robot"', __PACKAGE__, $robot);
+	&Sympa::Log::do_log('err','missing param "robot"', $robot);
 	return undef;
     }
    
@@ -128,34 +128,34 @@ sub create_list_old{
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
 
     unless ($param->{'listname'} =~ /^$listname_regexp$/i) {
-	&Sympa::Log::do_log('err','%s::create_list_old : incorrect listname %s', __PACKAGE__, $param->{'listname'});
+	&Sympa::Log::do_log('err','incorrect listname %s', $param->{'listname'});
 	return undef;
     }
 
     my $regx = &Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
     if( $regx ) {
 	if ($param->{'listname'} =~ /^(\S+)-($regx)$/) {
-	    &Sympa::Log::do_log('err','%s::create_list_old : incorrect listname %s matches one of service aliases', __PACKAGE__, $param->{'listname'});
+	    &Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	    return undef;
 	}
     }    
 
     if ($param->{'listname'} eq &Sympa::Configuration::get_robot_conf($robot,'email')) {
-	&do_log('err','%s::create_list : incorrect listname %s matches one of service aliases', __PACKAGE__, $param->{'listname'});
+	&do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	return undef;
     }
 
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
     unless (defined $res) {
-	&Sympa::Log::do_log('err', "%s::create_list_old : can't check list %.128s on %s", __PACKAGE__,
+	&Sympa::Log::do_log('err', "can't check list %.128s on %s", 
 		$param->{'listname'}, $robot);
 	return undef;
     }
     
     ## Check this listname doesn't exist already.
     if( $res || new Sympa::List ($param->{'listname'}, $robot, {'just_try' => 1})) {
-	&Sympa::Log::do_log('err', '%s::create_list_old : could not create already existing list %s on %s for ', __PACKAGE__, 
+	&Sympa::Log::do_log('err', 'could not create already existing list %s on %s for ', 
 		$param->{'listname'}, $robot);
 	foreach my $o (@{$param->{'owner'}}){
 	    &Sympa::Log::do_log('err',$o->{'email'});
@@ -178,7 +178,7 @@ sub create_list_old{
      if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
 	 unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
 	     unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-		 &Sympa::Log::do_log('err', '%s::create_list_old : unable to create %s/%s : %s', __PACKAGE__,$Sympa::Configuration::Conf{'home'},$robot,$?);
+		 &Sympa::Log::do_log('err', 'unable to create %s/%s : %s', $Sympa::Configuration::Conf{'home'},$robot,$?);
 		 return undef;
 	     }    
 	 }
@@ -189,14 +189,14 @@ sub create_list_old{
 
     ## Check the privileges on the list directory
      unless (mkdir ($list_dir,0777)) {
-	 &Sympa::Log::do_log('err', '%s::create_list_old : unable to create %s : %s',__PACKAGE__,$list_dir,$?);
+	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$?);
 	 return undef;
      }    
     
     ## Check topics
     if ($param->{'topics'}){
 	unless (&check_topics($param->{'topics'},$robot)){
-	    &Sympa::Log::do_log('err', '%s::create_list_old : topics param %s not defined in topics.conf',__PACKAGE__,$param->{'topics'});
+	    &Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
       
@@ -253,7 +253,7 @@ sub create_list_old{
     ## Create list object
     my $list;
     unless ($list = new Sympa::List ($param->{'listname'}, $robot)) {
-	&Sympa::Log::do_log('err','%s::create_list_old : unable to create list %s', __PACKAGE__,$param->{'listname'});
+	&Sympa::Log::do_log('err','unable to create list %s', $param->{'listname'});
 	return undef;
     }
 
@@ -335,24 +335,24 @@ An hashref with the following keys, or I<undef> if something went wrong:
 
 sub create_list{
     my ($param,$family,$robot, $abort_on_error) = @_;
-    &Sympa::Log::do_log('info', '%s::create_list(%s,%s,%s)',__PACKAGE__,$param->{'listname'},$family->{'name'},$param->{'subject'});
+    &Sympa::Log::do_log('info', '(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
     ## mandatory list parameters 
     foreach my $arg ('listname') {
 	unless ($param->{$arg}) {
-	    &Sympa::Log::do_log('err','%s::create_list : missing list param %s', __PACKAGE__, $arg);
+	    &Sympa::Log::do_log('err','missing list param %s', $arg);
 	    return undef;
 	}
     }
 
     unless ($family) {
-	&Sympa::Log::do_log('err','%s::create_list : missing param "family"', __PACKAGE__);
+	&Sympa::Log::do_log('err','missing param "family"');
 	return undef;
     }
 
     #robot
     unless ($robot) {
-	&Sympa::Log::do_log('err','%s::create_list : missing param "robot"', __PACKAGE__, $robot);
+	&Sympa::Log::do_log('err','missing param "robot"', $robot);
 	return undef;
     }
    
@@ -361,32 +361,32 @@ sub create_list{
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
 
     unless ($param->{'listname'} =~ /^$listname_regexp$/i) {
-	&Sympa::Log::do_log('err','%s::create_list : incorrect listname %s', __PACKAGE__, $param->{'listname'});
+	&Sympa::Log::do_log('err','incorrect listname %s', $param->{'listname'});
 	return undef;
     }
 
     my $regx = &Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
     if( $regx ) {
 	if ($param->{'listname'} =~ /^(\S+)-($regx)$/) {
-	    &Sympa::Log::do_log('err','%s::create_list : incorrect listname %s matches one of service aliases', __PACKAGE__, $param->{'listname'});
+	    &Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	    return undef;
 	}
     }    
     if ($param->{'listname'} eq &Sympa::Configuration::get_robot_conf($robot,'email')) {
-	&do_log('err','%s::create_list : incorrect listname %s matches one of service aliases', __PACKAGE__, $param->{'listname'});
+	&do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	return undef;
     }
 
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
     unless (defined $res) {
-	&Sympa::Log::do_log('err', "%s::create_list : can't check list %.128s on %s", __PACKAGE__,
+	&Sympa::Log::do_log('err', "can't check list %.128s on %s", 
 		$param->{'listname'}, $robot);
 	return undef;
     }
 
     if ($res) {
-	&Sympa::Log::do_log('err', '%s::create_list : could not create already existing list %s on %s for ', __PACKAGE__, $param->{'listname'}, $robot);
+	&Sympa::Log::do_log('err', 'could not create already existing list %s on %s for ', $param->{'listname'}, $robot);
 	foreach my $o (@{$param->{'owner'}}){
 	    &Sympa::Log::do_log('err',$o->{'email'});
 	}
@@ -396,7 +396,7 @@ sub create_list{
     ## template file
     my $template_file = &Sympa::Tools::get_filename('etc',{},'config.tt2', $robot,$family, $Sympa::Configuration::Conf{'etc'});
     unless (defined $template_file) {
-	&Sympa::Log::do_log('err', '%s::create_list : no config template from family %s@%s',__PACKAGE__,$family->{'name'},$robot);
+	&Sympa::Log::do_log('err', 'no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
     }
 
@@ -405,7 +405,7 @@ sub create_list{
     my $conf;
     my $tt_result = &Sympa::Template::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
     unless (defined $tt_result || !$abort_on_error) {
-      &Sympa::Log::do_log('err', '%s::create_list : abort on tt2 error. List %s from family %s@%s', __PACKAGE__,
+      &Sympa::Log::do_log('err', 'abort on tt2 error. List %s from family %s@%s', 
                 $param->{'listname'}, $family->{'name'},$robot);
       return undef;
     }
@@ -416,7 +416,7 @@ sub create_list{
     if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
 	unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
 	    unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-		&Sympa::Log::do_log('err', '%s::create_list : unable to create %s/%s : %s',__PACKAGE__,$Sympa::Configuration::Conf{'home'},$robot,$?);
+		&Sympa::Log::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$?);
 		return undef;
 	    }    
 	}
@@ -426,14 +426,14 @@ sub create_list{
     }
 
      unless (-r $list_dir || mkdir ($list_dir,0777)) {
-	 &Sympa::Log::do_log('err', '%s::create_list : unable to create %s : %s',__PACKAGE__,$list_dir,$?);
+	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$?);
 	 return undef;
      }    
     
     ## Check topics
     if (defined $param->{'topics'}){
 	unless (&check_topics($param->{'topics'},$robot)){
-	    &Sympa::Log::do_log('err', '%s::create_list : topics param %s not defined in topics.conf',__PACKAGE__,$param->{'topics'});
+	    &Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
       
@@ -480,7 +480,7 @@ sub create_list{
 	    my $file_content;
 	    my $tt_result = &Sympa::Template::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
 	    unless (defined $tt_result) {
-		&Sympa::Log::do_log('err', '%s::create_list : tt2 error. List %s from family %s@%s, file %s', __PACKAGE__,
+		&Sympa::Log::do_log('err', 'tt2 error. List %s from family %s@%s, file %s', 
 			$param->{'listname'}, $family->{'name'},$robot,$file);
 	    }
 	    unless (open FILE, '>', "$list_dir/$file") {
@@ -494,7 +494,7 @@ sub create_list{
     ## Create list object
     my $list;
     unless ($list = new Sympa::List ($param->{'listname'}, $robot)) {
-	&Sympa::Log::do_log('err','%s::create_list : unable to create list %s', __PACKAGE__, $param->{'listname'});
+	&Sympa::Log::do_log('err','unable to create list %s', $param->{'listname'});
 	return undef;
     }
 
@@ -574,12 +574,12 @@ The updated L<Sympa::List> object.
 
 sub update_list{
     my ($list,$param,$family,$robot) = @_;
-    &Sympa::Log::do_log('info', '%s::update_list(%s,%s,%s)',__PACKAGE__,$param->{'listname'},$family->{'name'},$param->{'subject'});
+    &Sympa::Log::do_log('info', '(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
     ## mandatory list parameters
     foreach my $arg ('listname') {
 	unless ($param->{$arg}) {
-	    &Sympa::Log::do_log('err','%s::update_list : missing list param %s', __PACKAGE__, $arg);
+	    &Sympa::Log::do_log('err','missing list param %s', $arg);
 	    return undef;
 	}
     }
@@ -587,14 +587,14 @@ sub update_list{
     ## template file
     my $template_file = &Sympa::Tools::get_filename('etc',{}, 'config.tt2', $robot,$family, $Sympa::Configuration::Conf{'etc'});
     unless (defined $template_file) {
-	&Sympa::Log::do_log('err', '%s::update_list : no config template from family %s@%s',__PACKAGE__,$family->{'name'},$robot);
+	&Sympa::Log::do_log('err', 'no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
     }
 
     ## Check topics
     if (defined $param->{'topics'}){
 	unless (&check_topics($param->{'topics'},$robot)){
-	    &Sympa::Log::do_log('err', '%s::update_list : topics param %s not defined in topics.conf',__PACKAGE__,$param->{'topics'});
+	    &Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
 
@@ -623,7 +623,7 @@ sub update_list{
 
     ## Create list object
     unless ($list = new Sympa::List ($param->{'listname'}, $robot)) {
-	&Sympa::Log::do_log('err','%s::create_list : unable to create list %s', __PACKAGE__, $param->{'listname'});
+	&Sympa::Log::do_log('err','unable to create list %s',  $param->{'listname'});
 	return undef;
     }
 ############## ? update
@@ -1047,7 +1047,7 @@ A true value if the owner exists, I<undef> otherwise.
 
 sub check_owner_defined {
     my ($owner,$owner_include) = @_;
-    &Sympa::Log::do_log('debug2',"%s::check_owner_defined()", __PACKAGE__);
+    &Sympa::Log::do_log('debug2',"()");
     
     if (ref($owner) eq "ARRAY") {
 	if (ref($owner_include) eq "ARRAY") {
@@ -1143,7 +1143,7 @@ Net::SMTP object or 0
  sub list_check_smtp {
      my $list = shift;
      my $robot = shift;
-     &Sympa::Log::do_log('debug2', '%s::list_check_smtp(%s,%s)',__PACKAGE__,$list,$robot);
+     &Sympa::Log::do_log('debug2', '(%s,%s)',$list,$robot);
 
      my $conf = '';
      my $smtp;
@@ -1168,7 +1168,7 @@ Net::SMTP object or 0
          require Net::SMTP;
      };
      if ($@) {
-	 &Sympa::Log::do_log ('err',"%s::list_check_smtp : Unable to use Net library, Net::SMTP required, install it (CPAN) first", __PACKAGE__);
+	 &Sympa::Log::do_log ('err',"Unable to use Net library, Net::SMTP required, install it (CPAN) first");
 	 return undef;
      }
      if( $smtp = Net::SMTP->new($smtp_relay,
@@ -1208,7 +1208,7 @@ A true value if the alias have been installed, I<undef> otherwise.
 sub install_aliases {
     my $list = shift;
     my $robot = shift;
-    &Sympa::Log::do_log('debug', "%s::install_aliases($list->{'name'},__PACKAGE__,$robot)");
+    &Sympa::Log::do_log('debug', "($list->{'name'},$robot)");
 
     return 1
 	if ($Sympa::Configuration::Conf{'sendmail_aliases'} =~ /^none$/i);
@@ -1216,16 +1216,16 @@ sub install_aliases {
     my $alias_manager = $Sympa::Configuration::Conf{'alias_manager' };
     my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
     my $error_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stderr.'.$$;
-    &Sympa::Log::do_log('debug2',"%s::install_aliases : $alias_manager add $list->{'name'} $list->{'admin'}{'host'}", __PACKAGE__);
+    &Sympa::Log::do_log('debug2',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
  
     unless (-x $alias_manager) {
-		&Sympa::Log::do_log('err','%s::install_aliases : Failed to install aliases: %s', __PACKAGE__, $!);
+		&Sympa::Log::do_log('err','Failed to install aliases: %s', $!);
 		return undef;
 	}
 	 system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'} >$output_file 2>  $error_output_file") ;
 	 my $status = $? / 256;
 	 if ($status == 0) {
-	     &Sympa::Log::do_log('info','%s::install_aliases : Aliases installed successfully', __PACKAGE__) ;
+	     &Sympa::Log::do_log('info','Aliases installed successfully') ;
 	     return 1;
      }
 
@@ -1241,27 +1241,27 @@ sub install_aliases {
      if ($status == 1) {
 		&Sympa::Log::do_log('err','Configuration file %s has errors : %s', Sympa::Constants::CONFIG, $error_output);
      }elsif ($status == 2)  {
-         &Sympa::Log::do_log('err','%s::install_aliases : Internal error : Incorrect call to alias_manager : %s', __PACKAGE__, $error_output);
+         &Sympa::Log::do_log('err','Internal error : Incorrect call to alias_manager : %s', $error_output);
      }elsif ($status == 3)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Could not read sympa config file, report to httpd error_log: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Could not read sympa config file, report to httpd error_log: %s', $error_output) ;
 	 }elsif ($status == 4)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Could not get default domain, report to httpd error_log: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Could not get default domain, report to httpd error_log: %s', $error_output) ;
 	 }elsif ($status == 5)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Unable to append to alias file: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Unable to append to alias file: %s', $error_output) ;
 	 }elsif ($status == 6)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Unable to run newaliases: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Unable to run newaliases: %s', $error_output) ;
 	 }elsif ($status == 7)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Unable to read alias file, report to httpd error_log: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Unable to read alias file, report to httpd error_log: %s', $error_output) ;
 	 }elsif ($status == 8)  {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Could not create temporay file, report to httpd error_log: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Could not create temporay file, report to httpd error_log: %s', $error_output) ;
 	 }elsif ($status == 13) {
-	     &Sympa::Log::do_log('info','%s::install_aliases : Some of list aliases already exist: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('info','Some of list aliases already exist: %s', $error_output) ;
 	 }elsif ($status == 14) {
-	     &Sympa::Log::do_log('err','%s::install_aliases : Can not open lock file, report to httpd error_log: %s', __PACKAGE__, $error_output) ;
+	     &Sympa::Log::do_log('err','Can not open lock file, report to httpd error_log: %s', $error_output) ;
 	 }elsif ($status == 15) {
 	     &Sympa::Log::do_log('err','The parser returned empty aliases: %s', $error_output) ;
 	 }else {
-	     &Sympa::Log::do_log('err',"%s::install_aliases : Unknown error $status while running alias manager $alias_manager : %s", __PACKAGE__, $error_output);
+	     &Sympa::Log::do_log('err',"Unknown error $status while running alias manager $alias_manager : %s", $error_output);
 	 } 
     
     return undef;
@@ -1345,13 +1345,13 @@ A true value if the topic is in the robot conf, I<undef> otherwise.
 sub check_topics {
     my $topic = shift;
     my $robot = shift;
-    &Sympa::Log::do_log('info', "%s::check_topics($topic,$robot)", __PACKAGE__);
+    &Sympa::Log::do_log('info', "($topic,$robot)");
 
     my ($top, $subtop) = split /\//, $topic;
 
     my %topics;
     unless (%topics = &Sympa::List::load_topics($robot)) {
-	&Sympa::Log::do_log('err','%s::check_topics : unable to load list of topics', __PACKAGE__);
+	&Sympa::Log::do_log('err','unable to load list of topics');
     }
 
     if ($subtop) {
