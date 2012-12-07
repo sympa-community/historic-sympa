@@ -553,7 +553,7 @@ A true value.
 =cut
 
 sub create_db {
-    &Sympa::Log::do_log('debug3', '%s::create_db()', __PACKAGE__);    
+    &Sympa::Log::do_log('debug3', '()');    
     return 1;
 }
 
