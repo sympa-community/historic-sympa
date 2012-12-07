@@ -57,7 +57,7 @@ Create a challenge context and store it in challenge table.
 sub create {
     my ($robot, $email, $context) = @_;
 
-    &Sympa::Log::do_log('debug', '%s::new(%s, %s, %s)', __PACKAGE__, $challenge_id, $email, $robot);
+    &Sympa::Log::do_log('debug', '(%s, %s, %s)', $challenge_id, $email, $robot);
 
     my $challenge={};
     
@@ -84,10 +84,10 @@ sub load {
 
     my $id_challenge = shift;
 
-    &Sympa::Log::do_log('debug', '%s::load(%s)', __PACKAGE__, $id_challenge);
+    &Sympa::Log::do_log('debug', '(%s)', $id_challenge);
 
     unless ($challenge_id) {
-	&Sympa::Log::do_log('err', '%s::load() : internal error, Sympa::Session::load called with undef id_challenge', __PACKAGE__);
+	&Sympa::Log::do_log('err', 'internal error, Sympa::Session::load called with undef id_challenge');
 	return undef;
     }
     
@@ -113,7 +113,7 @@ sub load {
     $challenge_datas->{'robot'} = $challenge->{'robot'};
     $challenge_datas->{'email'} = $challenge->{'email'};
 
-    &Sympa::Log::do_log('debug3', '%s::load(): removing existing challenge del_statement = %s',__PACKAGE__,$del_statement);	
+    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$del_statement);	
     unless(&Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
 	&Sympa::Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
 	return undef;
@@ -126,7 +126,7 @@ sub load {
 sub store {
 
     my $challenge = shift;
-    &Sympa::Log::do_log('debug', '%s::store()', __PACKAGE__);
+    &Sympa::Log::do_log('debug', '()');
 
     return undef unless ($challenge->{'id_challenge'});
 
