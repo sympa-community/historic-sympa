@@ -210,7 +210,7 @@ if ($signal ne 'hup') {
 	    my $options;
 	    $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 	    $options->{'multiple_process'} = 1 ;
-	    &Sympa::Tools::Daemon::write_pid($file, $$, $options);
+	    &Sympa::Tools::Daemon::write_pid($file, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 	}	
 	
 	
@@ -308,7 +308,9 @@ while (!$signal) {
 
 
 	## Lock file
-	my $lock = new Sympa::Lock ($spooldir.'/'.$filename);
+	my $lock = new Sympa::Lock (
+            $spooldir.'/'.$filename, $Sympa::Configuration::Conf{'lock_method'}
+        );
 	unless (defined $lock) {
 	    &Sympa::Log::do_log('err','Could not create new lock');
 	    next;

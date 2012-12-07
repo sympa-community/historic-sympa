@@ -1798,7 +1798,7 @@ sub _replace_file_value_by_db_value {
 # Returns 1 or undef if something went wrong.
 sub _save_binary_cache {
     my $param = shift;
-    my $lock = new Sympa::Lock ($param->{'target_file'});
+    my $lock = new Sympa::Lock ($param->{'target_file'}, $Conf{'lock_method'});
     unless (defined $lock) {
         &Sympa::Log::do_log('err','Could not create new lock');
         return undef;
@@ -1836,7 +1836,7 @@ sub _load_binary_cache {
     my $param = shift;
     my $result = undef;
 
-    my $lock = new Sympa::Lock ($param->{'config_file'});
+    my $lock = new Sympa::Lock ($param->{'config_file'}, $Conf{'lock_method'});
     unless (defined $lock) {
         &Sympa::Log::do_log('err','Could not create new lock');
         return undef;

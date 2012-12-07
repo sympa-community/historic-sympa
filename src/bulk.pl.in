@@ -123,7 +123,7 @@ $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 $options->{'multiple_process'} = 0;
 
 # Saves the pid number
-&Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $$, $options);
+&Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 unless ($options->{'stderr_to_tty'}) {
     &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
 }
@@ -217,7 +217,7 @@ while (!$end) {
 	    }
 	    my $pids_in_pfile = &Sympa::Tools::Daemon::get_pids_in_pid_file($Sympa::Configuration::Conf{'pidfile_bulk'});
 	    unless (defined($pids_in_pfile)){
-		&Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $$, $options);
+		&Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 		close STDERR;
 		&Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
 		$pids_in_pfile = [$$];
@@ -237,7 +237,7 @@ while (!$end) {
 			if ((my $child_pid = fork) != 0) {
 			    &Sympa::Log::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
-			    &Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $child_pid, $options);
+			    &Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $child_pid, $options, $Sympa::Configuration::Conf{'lock_method'});
 			    $created_children{$child_pid} = 1;
 			    sleep 1;
 			}else{

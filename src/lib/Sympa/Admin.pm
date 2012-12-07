@@ -210,7 +210,10 @@ sub create_list_old{
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     ## Lock config before openning the config file
-    my $lock = new Sympa::Lock ($list_dir.'/config');
+    my $lock = new Sympa::Lock (
+        $list_dir.'/config',
+        $Sympa::Configuration::Conf{'lock_method'}
+    );
     unless (defined $lock) {
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;
@@ -438,7 +441,10 @@ sub create_list{
     }
       
     ## Lock config before openning the config file
-    my $lock = new Sympa::Lock ($list_dir.'/config');
+    my $lock = new Sympa::Lock (
+        $list_dir.'/config',
+        $Sympa::Configuration::Conf{'lock_method'}
+    );
     unless (defined $lock) {
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;
@@ -599,7 +605,10 @@ sub update_list{
     }
 
     ## Lock config before openning the config file
-    my $lock = new Sympa::Lock ($list->{'dir'}.'/config');
+    my $lock = new Sympa::Lock (
+        $list->{'dir'}.'/config',
+        $Sympa::Configuration::Conf{'lock_method'}
+    );
     unless (defined $lock) {
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;

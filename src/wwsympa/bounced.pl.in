@@ -142,7 +142,7 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 
 ## Create and write the pidfile
-&Sympa::Tools::Daemon::write_pid($wwsconf->{'bounced_pidfile'}, $$, $options);
+&Sympa::Tools::Daemon::write_pid($wwsconf->{'bounced_pidfile'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 unless ($options->{'stderr_to_tty'}) {
     &Sympa::Tools::Daemon::direct_stderr_to_file((tmpdir => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
 }

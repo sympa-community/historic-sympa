@@ -122,7 +122,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-&Sympa::Tools::Daemon::write_pid($wwsconf->{'task_manager_pidfile'}, $$, $options);
+&Sympa::Tools::Daemon::write_pid($wwsconf->{'task_manager_pidfile'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 unless ($options->{'stderr_to_tty'}) {
     &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
 }

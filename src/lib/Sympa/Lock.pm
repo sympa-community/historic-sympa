@@ -35,7 +35,6 @@ use strict;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 
-use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Log;
 use Sympa::Tools::File;
@@ -64,11 +63,14 @@ A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my($pkg, $filepath) = @_;
+    my($pkg, $filepath, $method) = @_;
     &Sympa::Log::do_log('debug', '(%s)',$filepath);
     
     my $lock_filename = $filepath.'.lock';
-    my $lock = {'lock_filename' => $lock_filename};
+    my $lock = {
+        'lock_filename' => $lock_filename,
+        'method'        => $method
+    };
 
     ## Create include.lock if needed
     my $fh;
@@ -220,7 +222,7 @@ sub add_lock {
     }
     &Sympa::Log::do_log('debug3', 'Adding lock to file %s in mode %s with a timeout of: %s',$self->{'lock_filename'}, $mode, $timeout);
     my ($fh, $nfs_lock);
-    if ($Sympa::Configuration::Conf{'lock_method'} eq 'nfs') {
+    if ($self->{'method'} eq 'nfs') {
 	($fh, $nfs_lock) = _lock_nfs($self->{'lock_filename'}, $mode, $timeout);
 	return undef unless (defined $fh && defined $nfs_lock);
 	$list_of_locks{$self->{'lock_filename'}}{'fh'} = $fh;
@@ -244,7 +246,7 @@ sub remove_lock {
     my $fh = $list_of_locks{$self->{'lock_filename'}}{'fh'};
     my $previous_mode;
     
-    if ($Sympa::Configuration::Conf{'lock_method'} eq 'nfs') {
+    if ($self->{'method'} eq 'nfs') {
 	my $nfs_lock = $list_of_locks{$self->{'lock_filename'}}{'nfs_lock'};
 	unless (defined $fh && defined $nfs_lock && &_unlock_nfs($self->{'lock_filename'}, $fh, $nfs_lock)) {
 	    &Sympa::Log::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});

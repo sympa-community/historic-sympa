@@ -100,7 +100,7 @@ sub remove_pid {
 }
 
 sub write_pid {
-    my ($pidfile, $pid, $options) = @_;
+    my ($pidfile, $pid, $options, $method) = @_;
 
     my $piddir = $pidfile;
     $piddir =~ s/\/[^\/]+$//;
@@ -119,7 +119,7 @@ sub write_pid {
     my @pids;
 
     # Lock pid file
-    my $lock = new Sympa::Lock ($pidfile);
+    my $lock = new Sympa::Lock ($pidfile, $method);
     unless (defined $lock) {
 	&Sympa::Log::fatal_err('Lock could not be created. Exiting.');
     }
