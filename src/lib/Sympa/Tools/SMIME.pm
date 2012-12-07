@@ -61,7 +61,7 @@ sub smime_sign {
     my $key_passwd = shift;
     my $openssl = shift;
 
-    &Sympa::Log::do_log('debug2', '%s::smime_sign (%s,%s,%s,%s)', __PACKAGE__, $in_msg,$list,$robot,$tmpdir);
+    &Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $in_msg,$list,$robot,$tmpdir);
 
     my $self = new Sympa::List($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
@@ -158,7 +158,7 @@ sub smime_sign_check {
 
     my $sender = $message->{'sender'};
 
-    &Sympa::Log::do_log('debug', '%s::smime_sign_check (message, %s, %s)', __PACKAGE__, $sender, $message->{'filename'});
+    &Sympa::Log::do_log('debug', '(message, %s, %s)', $sender, $message->{'filename'});
 
     my $is_signed = {};
     $is_signed->{'body'} = undef;   
@@ -354,7 +354,7 @@ sub smime_encrypt {
     my $cryptedmsg;
     my $encrypted_body;    
 
-    &Sympa::Log::do_log('debug2', '%s::smime_encrypt( %s, %s', __PACKAGE__, $email, $list);
+    &Sympa::Log::do_log('debug2', '(%s, %s', $email, $list);
     if ($list eq 'list') {
 	my $self = new Sympa::List($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
@@ -370,7 +370,7 @@ sub smime_encrypt {
 	my $temporary_file = $tmpdir."/".$email.".".$$ ;
 
 	## encrypt the incomming message parse it.
-        &Sympa::Log::do_log ('debug3', "%s::smime_encrypt : $openssl smime -encrypt -out $temporary_file -des3 $usercert", __PACKAGE__);
+        &Sympa::Log::do_log ('debug3', "$openssl smime -encrypt -out $temporary_file -des3 $usercert");
 
 	if (!open(MSGDUMP, "| $openssl smime -encrypt -out $temporary_file -des3 $usercert")) {
 	    &Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $email);
@@ -456,7 +456,7 @@ sub smime_decrypt {
     my $openssl = shift;
     my $from = $msg->head->get('from');
 
-    &Sympa::Log::do_log('debug2', '%s::smime_decrypt message msg from %s,%s', __PACKAGE__, $from, $list->{'name'});
+    &Sympa::Log::do_log('debug2', 'message msg from %s,%s', $from, $list->{'name'});
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};
@@ -594,7 +594,7 @@ for 'decrypt', these are arrayrefs containing absolute filenames
 
 sub smime_find_keys {
     my($dir, $oper) = @_;
-    &Sympa::Log::do_log('debug', '%s::smime_find_keys(%s, %s)', __PACKAGE__, $dir, $oper);
+    &Sympa::Log::do_log('debug', '(%s, %s)', $dir, $oper);
 
     my(%certs, %keys);
     my $ext = ($oper eq 'sign' ? 'sign' : 'enc');
@@ -689,7 +689,7 @@ An hashref with the following keys:
 
 sub smime_parse_cert {
     my($arg) = @_;
-    &Sympa::Log::do_log('debug', '%s::smime_parse_cert(%s)', __PACKAGE__, join('/',%{$arg}));
+    &Sympa::Log::do_log('debug', '(%s)', join('/',%{$arg}));
 
     unless (ref($arg)) {
 	&Sympa::Log::do_log('err', "smime_parse_cert: must be called with hashref, not %s", ref($arg));
@@ -769,7 +769,7 @@ sub smime_parse_cert {
 
 sub smime_extract_certs {
     my($mime, $outfile, $openssl) = @_;
-    &Sympa::Log::do_log('debug2', "%s::smime_extract_certs(%s)",__PACKAGE__,$mime->mime_type);
+    &Sympa::Log::do_log('debug2', "(%s)", $mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
 	unless (open(MSGDUMP, "| $openssl pkcs7 -print_certs ".
