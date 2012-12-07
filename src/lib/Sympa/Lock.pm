@@ -65,7 +65,7 @@ A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 
 sub new {
     my($pkg, $filepath) = @_;
-    &Sympa::Log::do_log('debug', '%s::new(%s)',__PACKAGE__,$filepath);
+    &Sympa::Log::do_log('debug', '(%s)',$filepath);
     
     my $lock_filename = $filepath.'.lock';
     my $lock = {'lock_filename' => $lock_filename};
@@ -267,7 +267,7 @@ sub _lock_file {
     my $lock_file = shift;
     my $mode = shift; ## read or write
     my $timeout = shift;
-    &Sympa::Log::do_log('debug3', '%s::_lock_file(%s,%s,%d)',__PACKAGE__,$lock_file, $mode,$timeout);
+    &Sympa::Log::do_log('debug3', '(%s,%s,%d)',$lock_file, $mode,$timeout);
 
     my $operation;
     my $open_mode;
@@ -341,7 +341,7 @@ sub _lock_file {
 sub _unlock_file {
     my $lock_file = shift;
     my $fh = shift;
-    &Sympa::Log::do_log('debug3', '%s::_unlock_file(%s)',__PACKAGE__,$lock_file);
+    &Sympa::Log::do_log('debug3', '(%s)',$lock_file);
    
     unless (flock($fh,LOCK_UN)) {
 	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
@@ -358,7 +358,7 @@ sub _lock_nfs {
     my $lock_file = shift;
     my $mode = shift; ## read or write
     my $timeout = shift;
-    &Sympa::Log::do_log('debug3', "%s::_lock_nfs($lock_file, $mode, $timeout)", __PACKAGE__);
+    &Sympa::Log::do_log('debug3', "($lock_file, $mode, $timeout)");
     
     ## TODO should become a configuration parameter, used with or without NFS
     my $hold = 30; 
@@ -402,7 +402,7 @@ sub _unlock_nfs {
     my $lock_file = shift;
     my $fh = shift;
     my $nfs_lock = shift;
-    &Sympa::Log::do_log('debug3', "%s::_unlock_nfs($lock_file, $fh)", __PACKAGE__);
+    &Sympa::Log::do_log('debug3', "($lock_file, $fh)");
     
     unless (defined $nfs_lock and $nfs_lock->unlock()) {
 	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
