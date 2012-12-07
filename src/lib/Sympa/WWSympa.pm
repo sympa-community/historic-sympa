@@ -161,7 +161,7 @@ sub load_config {
     my $conf = \%default_conf;
 
     unless (open (FILE, $file)) {
-	&Sympa::Log::do_log('err',"%s::load_config: unable to open $file", __PACKAGE__);
+	&Sympa::Log::do_log('err',"unable to open $file");
 	return undef;
     }
     
@@ -211,7 +211,7 @@ sub load_mime_types {
 	next unless (-r $loc);
 
 	unless(open (CONF, $loc)) {
-	    &Sympa::Log::do_log('err',"%s::load_mime_types: unable to open $loc", __PACKAGE__);
+	    &Sympa::Log::do_log('err',"unable to open $loc");
 	    return undef;
 	}
     }
@@ -263,7 +263,7 @@ sub get_email_from_cookie {
     ($email, $auth) = &Sympa::Tools::Cookie::check_cookie ($cookie, $secret);
     unless ( $email) {
 	&Sympa::Report::reject_report_web('user','auth_failed',{},'');
-	&Sympa::Log::do_log('info', '%s::get_email_from_cookie: auth failed for user %s', __PACKAGE__, $email);
+	&Sympa::Log::do_log('info', 'auth failed for user %s', $email);
 	return undef;
     }    
 
@@ -305,7 +305,7 @@ sub init_passwd {
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
 		&Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
-		&Sympa::Log::do_log('info','%s::init_passwd: update failed', __PACKAGE__);
+		&Sympa::Log::do_log('info','update failed');
 		return undef;
 	    }
 	}
@@ -316,7 +316,7 @@ sub init_passwd {
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {
 	    &Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
-	    &Sympa::Log::do_log('info','%s::init_passwd: add failed', __PACKAGE__);
+	    &Sympa::Log::do_log('info','add failed');
 	    return undef;
 	}
     }
