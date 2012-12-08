@@ -273,7 +273,7 @@ if (&Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     }
 
     eval {
-        require VOOTConsumer;
+        require Sympa::VOOT::Consumer;
     };
     if ($@) {
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load module: $@");
