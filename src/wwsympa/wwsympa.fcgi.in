@@ -62,8 +62,6 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Mail;
 use Sympa::Message;
-use Sympa::OAuth::Consumer;
-use Sympa::OAuth::Provider;
 use Sympa::Report;
 use Sympa::Robot;
 use Sympa::Scenario;
@@ -77,8 +75,6 @@ use Sympa::Tools::Cookie;
 use Sympa::Tools::Data;
 use Sympa::Tools::Time;
 use Sympa::Tracking;
-use Sympa::VOOT::Provider;
-use Sympa::VOOT::Consumer;
 use Sympa::WWSympa;
 
 my $crypt_openssl_x509_ok;
