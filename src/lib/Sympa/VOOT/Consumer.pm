@@ -34,7 +34,6 @@ use strict;
 
 use JSON::XS;
 
-use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::OAuth::Consumer;
 use Sympa::Tools;
@@ -53,6 +52,8 @@ Creates a new L<Sympa::VOOT::Consumer> object.
 
 =item * I<provider>: the VOOT provider key
 
+=item * I<config>: the VOOT configuration file
+
 =back 
 
 =head3 Return value
@@ -69,7 +70,7 @@ sub new {
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $param{'user'}, $param{'provider'});
 	
 	# Get oauth consumer and enpoints from provider_id
-	$consumer->{'conf'} = &_get_config_for($param{'provider'});
+	$consumer->{'conf'} = &_get_config_for($param{'provider'}, $param{'config'});
 	return undef unless(defined $consumer->{'conf'});
 	
 	$consumer->{'user'} = $param{'user'};
@@ -207,9 +208,9 @@ sub _get_members {
 
 sub _get_config_for {
 	my $provider = shift;
+	my $file = shift;
 	&Sympa::Log::do_log('debug2', '(%s)', $provider);
 	
-	my $file = $Sympa::Configuration::Conf{'etc'}.'/voot.conf';
 	return undef unless (-f $file);
 	
 	open(my $fh, '<', $file) or return undef;
@@ -228,13 +229,17 @@ sub _get_config_for {
 
 =head1 FUNCTIONS
 
-=head2 getProviders()
+=head2 getProviders($config)
 
 List providers.
 
 =head3 Parameters
 
-None.
+=over
+
+=item * I<$config>: the VOOT configuration file
+
+=back
 
 =head3 Return value
 
@@ -243,11 +248,11 @@ An hashref.
 =cut 
 
 sub getProviders {
-	&Sympa::Log::do_log('debug2', '()');
+	my ($file) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $file);
 	
 	my $list = {};
 	
-	my $file = $Sympa::Configuration::Conf{'etc'}.'/voot.conf';
 	return $list unless (-f $file);
 	
 	open(my $fh, '<', $file) or return $list;

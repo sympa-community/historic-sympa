@@ -9360,7 +9360,11 @@ sub do_oauth_check {
 	$param->{'oauth_provider_ok'} = 1;
 	
 	if($type eq 'voot') {
-		$consumer = Sympa::VOOT::Consumer->new(user => $param->{'user'}{'email'}, provider => $provider);
+		$consumer = Sympa::VOOT::Consumer->new(
+			user     => $param->{'user'}{'email'},
+			provider => $provider,
+			config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
+		);
 	}#elsif($type eq 'foo') {
 	#	$consumer = FOOConsumer->new(user => $param->{'user'}{'email'}, provider => $provider);
 	#}
@@ -9401,7 +9405,11 @@ sub do_oauth_ready {
 	my $consumer = undef;
 	
 	if($type eq 'voot') {
-		$consumer = Sympa::VOOT::Consumer->new(user => $param->{'user'}{'email'}, provider => $provider);
+		$consumer = Sympa::VOOT::Consumer->new(
+			user     => $param->{'user'}{'email'},
+			provider => $provider,
+			config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
+		);
 	}#elsif($type eq 'foo') {
 	#	$consumer = FOOConsumer->new(user => $param->{'user'}{'email'}, provider => $provider);
 	#}
@@ -9461,7 +9469,9 @@ sub do_voot {
 sub do_select_voot_provider_request {
 	&wwslog('info', 'do_select_voot_provider_request()');
 	
-	$param->{'voot_providers'} = &Sympa::VOOT::Consumer::getProviders();
+	$param->{'voot_providers'} = &Sympa::VOOT::Consumer::getProviders(
+	-	$Sympa::Configuration::Conf{'etc'}.'/voot.conf'
+	);
 	
 	return 1;
 }
@@ -9473,8 +9483,9 @@ sub do_select_voot_groups_request {
 	$param->{'voot_provider'} = $in{'voot_provider'};
 	
 	my $consumer = new Sympa::VOOT::Consumer(
-		user => $param->{'user'}{'email'},
-		provider => $in{'voot_provider'}
+		user     => $param->{'user'}{'email'},
+		provider => $in{'voot_provider'},
+		config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
 	);
 	return undef unless(defined $consumer);
 	$consumer->getOAuthConsumer()->setWebEnv(
