@@ -83,7 +83,8 @@ sub new {
 			url => $param{'url'},
 			authorization_header => $param{'authorization_header'},
 			request_parameters => $param{'request_parameters'},
-			request_body => $param{'request_body'}
+			request_body => $param{'request_body'},
+			config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 		),
 		robot => $param{'robot'},
 		voot_path => $param{'voot_path'}

@@ -37,7 +37,6 @@ use strict;
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
-use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Tools;
@@ -62,6 +61,8 @@ Creates a new L<Sympa::OAuth::Provider> object.
 
 =item * I<request_body>
 
+=item * I<config>
+
 =back 
 
 =head3 Return value
@@ -82,7 +83,7 @@ sub new {
 	return undef unless(defined($p));
 	return undef unless(defined($p->{'oauth_consumer_key'}));
 	
-	my $c = &_getConsumerConfigFor($p->{'oauth_consumer_key'});
+	my $c = &_getConsumerConfigFor($p->{'oauth_consumer_key'}, $param{config});
 	return undef unless(defined($c));
 	return undef unless(defined($c->{'enabled'}));
 	return undef unless($c->{'enabled'} eq '1');
@@ -534,10 +535,10 @@ sub _generateRandomString {
 
 sub _getConsumerConfigFor {
 	my $key = shift;
+	my $file = shift;
 	
 	&Sympa::Log::do_log('debug2', '(%s)', $key);
 	
-	my $file = $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf';
 	return undef unless (-f $file);
 	
 	my $c = {};

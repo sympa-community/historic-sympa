@@ -9251,7 +9251,8 @@ sub do_oauth_temporary {
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_temporary',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
-		request_parameters => \%in
+		request_parameters => \%in,
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 	
 	my $bad = defined($provider) ? $provider->checkRequest() : 400;
@@ -9298,7 +9299,8 @@ sub do_oauth_authorize {
 		request_parameters => {
 			oauth_token => $in{'oauth_token'},
 			oauth_consumer_key => $key
-		}
+		},
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 	return undef unless($provider);
 	
@@ -9325,7 +9327,8 @@ sub do_oauth_access {
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_access',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
-		request_parameters => \%in
+		request_parameters => \%in,
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 	
 	my $bad = defined($provider) ? $provider->checkRequest(checktoken => 1) : 400;
