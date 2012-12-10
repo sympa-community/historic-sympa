@@ -39,32 +39,6 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 generic_set_cookie(%param)
-
-Generic subroutine to set a cookie
-
-=cut
-
-sub generic_set_cookie {
-    my %param = @_;
-
-    my %cookie_param;
-    foreach my $p ('name','value','expires','domain','path') {
-	$cookie_param{'-'.$p} = $param{$p}; ## CGI::Cookie expects -param => value
-    }
-
-    if ($cookie_param{'-domain'} eq 'localhost') {
-	$cookie_param{'-domain'} = '';
-    }
-
-    my $cookie = new CGI::Cookie(%cookie_param);
-
-    ## Send cookie to the client
-    printf "Set-Cookie:  %s\n", $cookie->as_string;
-   
-    return 1;
-}
-
 =head2 set_cookie_soap($session_id, $http_domain, $expire)
 
 Sets an HTTP cookie to be sent to a SOAP client

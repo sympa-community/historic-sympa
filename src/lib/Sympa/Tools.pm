@@ -1899,63 +1899,6 @@ sub add_in_blacklist {
 
 }
 
-=head2 get_fingerprint($email, $fingerprint, $random, $random_email)
-
-Used in 2 cases :
-- check the md5 in the url
-- create an md5 to put in a url
-
-Use:
-- get_db_random()
-- init_db_random()
-- md5_fingerprint()
-
-=head3 Parameters
-
-=over
-
-=item * I<$email>: email of the subscriber
-
-=item * I<$fingerprint>: the fingerprint in the url (1st case)
-
-=item * I<$random>
-
-=item * I<$random_email>
-
-=back
-
-=head3 Return value
-
-An md5 for creating an URL if $fingerprint is defined, otherwise a true
-value if the the md5 in the URL is true.
-
-=cut
-
-sub get_fingerprint {
-    
-    my $email = shift;
-    my $fingerprint = shift;
-    my $random = shift;
-    my $random_email;
-     
-    $random_email = ($random.$email);
- 
-    if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
-
-	if($fingerprint eq &md5_fingerprint($random_email)){
-	    return 1;
-	}else{
-	    return undef;
-	}
-
-    }else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
-
-	$fingerprint = &md5_fingerprint($random_email);
-	return $fingerprint;
-
-    }
-}
-
 =head2 md5_fingerprint($string)
 
 The algorithm MD5 (Message Digest 5) is a cryptographic hash function which
@@ -1996,58 +1939,6 @@ sub get_regexp {
 	return '\w+'; ## default is a very strict regexp
     }
 
-}
-
-=head2 save_to_bad($param)
-
-Saves a message file to the "bad/" spool of a given queue. Creates this
-directory if not found.
-
-=head3 Parameters
-
-=over
-
-=item * I<file>: the characters string of the path to the file to copy to bad
-
-=item * I<hostname>: the characters string of the name of the virtual host concerned
-
-=item * I<queue>: the characters string of the name of the queue.
-
-=back
-
-=head3 Return value
-
-A true value if the file was correctly saved to the "bad/" directory, a
-false value otherwise.
-
-=cut
-
-sub save_to_bad {
-
-    my $param = shift;
-    
-    my $file = $param->{'file'};
-    my $hostname = $param->{'hostname'};
-    my $queue = $param->{'queue'};
-
-    if (! -d $queue.'/bad') {
-	unless (mkdir $queue.'/bad', 0775) {
-	    &Sympa::Log::do_log('notice','Unable to create %s/bad/ directory.',$queue);
-            require Sympa::List;
-	    unless (&Sympa::List::send_notify_to_listmaster('unable_to_create_dir',$hostname),{'dir' => "$queue/bad"}) {
-		&Sympa::Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
-	    }
-	    return undef;
-	}
-	&Sympa::Log::do_log('debug',"mkdir $queue/bad");
-    }
-    &Sympa::Log::do_log('notice',"Saving file %s to %s", $queue.'/'.$file, $queue.'/bad/'.$file);
-    unless (rename($queue.'/'.$file ,$queue.'/bad/'.$file) ) {
-	&Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', $queue.'/'.$file, $queue.'/bad/'.$file, $!);
-	return undef;
-    }
-    
-    return 1;
 }
 
 =head2 CleanSpool($spool_dir, $clean_delay)
@@ -2259,6 +2150,4 @@ sub decode_header {
     }
 }
 
-sub fix_children {
-}
 1;
