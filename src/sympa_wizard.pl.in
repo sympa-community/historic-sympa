@@ -98,12 +98,12 @@ exit 0;
 sub create_configuration {
 
     eval {
-	require Conf;
-	require tools;
+	require Sympa::Configuration;
+	require Sympa::Tools;
     };
     if ($@) {
 	*{Sympa::Language::gettext} = sub { shift };
-	*{tools::wrap_text} = sub { "$_[1]$_[0]\n" };
+	*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
     } else {
 	Sympa::Language::SetLang('');
     }
@@ -148,11 +148,11 @@ sub create_configuration {
 
         next unless (defined $param->{'default'} || defined $param->{'sample'});
 
-        print NEWF tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
+        print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
                                     '## ', '## ')
             if (defined $param->{'query'});
 
-        print NEWF tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
+        print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
                                     '## ', '## ')
             if (defined $param->{'advice'});
 
@@ -249,8 +249,8 @@ sub edit_configuration {
         my $new_value;
         if ($param->{'edit'} eq '1') {
             print "\n";
-            print tools::wrap_text($query, '* ', '  ');
-            print tools::wrap_text($advice, '  ... ', '  ') if $advice;
+            print Sympa::Tools::wrap_text($query, '* ', '  ');
+            print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
             printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
             $new_value = <STDIN> ;
             chomp $new_value;
@@ -280,17 +280,17 @@ sub edit_configuration {
         if ($new_value eq '') {
             next unless $sample;
 
-            push @{$desc}, tools::wrap_text($query, '## ', '## ');
+            push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
 
             unless ($advice eq '') {
-                push @{$desc}, tools::wrap_text($advice, '## ', '## ');
+                push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
             }
 
             push @{$desc}, "# $name\t$sample\n\n";
         }else {
-            push @{$desc}, tools::wrap_text($query, '## ', '## ');
+            push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
             unless ($advice eq '') {
-                push @{$desc}, tools::wrap_text($advice, '## ', '## ');
+                push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
             }
 
             if ($current_value ne $new_value) {
