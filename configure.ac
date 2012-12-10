@@ -504,6 +504,7 @@ AC_SUBST(POSTMAP_ARG)
 AC_CONFIG_FILES([
     Makefile
     src/Makefile
+    src/sbin/Makefile
     src/etc/Makefile
     src/bin/Makefile
     src/www/Makefile
