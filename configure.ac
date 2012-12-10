@@ -506,7 +506,8 @@ AC_CONFIG_FILES([
     src/Makefile
     src/etc/Makefile
     src/bin/Makefile
-    src/bin/js/Makefile
+    src/www/Makefile
+    src/www/js/Makefile
     src/lib/Makefile
     src/soap/Makefile
     src/wwsympa/Makefile
