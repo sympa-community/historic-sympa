@@ -55,7 +55,6 @@ use Sympa::Auth;
 use Sympa::Configuration;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
-use Sympa::Datasource::LDAP;
 use Sympa::Family;
 use Sympa::Language;
 use Sympa::List;
@@ -3663,6 +3662,7 @@ sub is_ldap_user {
 	 next unless ($auth =~ /$ldap->{'regexp'}/i);
 
 	 my $param = &Sympa::Tools::dup_var($ldap);
+	 require Sympa::Datasource::LDAP;
 	 my $ds = new Sympa::Datasource::LDAP($param);
 
 	 unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
