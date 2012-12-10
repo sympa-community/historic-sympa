@@ -19,8 +19,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SUBDIRS = icons
-
 sbin_SCRIPTS = bounced.pl archived.pl
 execcgi_SCRIPTS = wwsympa.fcgi
 execcgi_PROGRAMS = wwsympa-wrapper.fcgi
