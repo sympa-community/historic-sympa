@@ -1178,7 +1178,7 @@ sub search{
 	
         unless ($sql_conf = &Sympa::Configuration::load_sql_filter($file)) {
             $list->send_notify_to_owner('named_filter',{'filter' => $filter_file})
-                if (defined $list && ref($list) eq 'List');
+                if (defined $list && ref($list) eq 'Sympa::List');
             return undef;
         }
 	

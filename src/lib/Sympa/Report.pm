@@ -105,7 +105,7 @@ sub reject_report_msg {
 	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
      }
 
-    if (ref($list) eq "List") {
+    if (ref($list) eq "Sympa::List") {
 	unless ($list->send_file('message_report',$user,$robot,$param)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
@@ -218,7 +218,7 @@ sub notice_report_msg {
 	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
      }
 
-    if (ref($list) eq "List") {
+    if (ref($list) eq "Sympa::List") {
 	unless ($list->send_file('message_report',$user,$robot,$param)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
@@ -755,7 +755,7 @@ sub reject_report_web {
     }
     
     my $listname;
-    if (ref($list) eq 'List'){
+    if (ref($list) eq 'Sympa::List'){
 	$listname = $list->{'name'};
     }
 
