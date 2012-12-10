@@ -2172,7 +2172,7 @@ sub get_parameters {
 		     $tokens[$i] = &Sympa::Tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars()) replaces '/' with %A5 ('¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering_action eq 'unescape_html') {
@@ -2404,7 +2404,7 @@ sub get_parameters_old {
 		     $tokens[$i] = &Sympa::Tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars()) replaces '/' with %A5 ('¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering{$in{'action'}}{$p} eq 'fix_escape_uri') {
@@ -16099,11 +16099,11 @@ sub do_request_topic {
      my $msg = $message->{'msg'};
      my $head = $msg->head();
      # headers will be encoded later.
-     $param->{'subject'} = tools::decode_header($head, 'Subject');
+     $param->{'subject'} = Sympa::Tools::decode_header($head, 'Subject');
      $param->{'subject'} = &Sympa::Tools::escape_html($param->{'subject'});
-     $param->{'from'} = tools::decode_header($head, 'From');
+     $param->{'from'} = Sympa::Tools::decode_header($head, 'From');
      $param->{'from'} = &Sympa::Tools::escape_html($param->{'from'});
-     $param->{'date'} = tools::decode_header($head, 'Date');
+     $param->{'date'} = Sympa::Tools::decode_header($head, 'Date');
      $param->{'date'} =  &Sympa::Tools::escape_html($param->{'date'});
      $param->{'message_id'} = &Sympa::Tools::clean_msg_id($head->get('Message-Id'));
 

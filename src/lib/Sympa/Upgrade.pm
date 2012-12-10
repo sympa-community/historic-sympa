@@ -41,6 +41,7 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Spool;
+use Sympa::Tools;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
 
@@ -774,7 +775,7 @@ sub upgrade {
 	    if (!opendir(DIR, $spooldir)) {
 		&Sympa::Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
 	    }
-	    my @qfile = sort tools::by_date grep (!/^\./,readdir(DIR));
+	    my @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
 	    closedir(DIR);
 	    my $filename;
 	    my $listname;

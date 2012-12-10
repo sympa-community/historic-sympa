@@ -3329,7 +3329,7 @@ sub distribute_msg {
 	$subject_field =~ s/\s+$//;
 
 	# truncate multiple "Re:" and equivalents.
-	my $re_regexp = tools::get_regexp('re');
+	my $re_regexp = Sympa::Tools::get_regexp('re');
 	if ($subject_field =~ /^\s*($re_regexp\s*)($re_regexp\s*)*/) {
 	    ($before_tag, $after_tag) = ($1, $'); #'
 	} else {
@@ -4426,7 +4426,7 @@ sub send_to_editor {
        }
    }
 
-   my $subject = tools::decode_header($hdr, 'Subject');
+   my $subject = Sympa::Tools::decode_header($hdr, 'Subject');
    my $param = {'modkey' => $modkey,
 		'boundary' => $boundary,
 		'msg_from' => $message->{'sender'},
@@ -7877,7 +7877,7 @@ sub may_create_parameter {
     my $edit_conf = &Sympa::Tools::load_edit_list_conf($robot,$self,$Sympa::Configuration::Conf{'etc'});
     $edit_conf->{$parameter} ||= $edit_conf->{'default'};
     if (! $edit_conf->{$parameter}) {
-	&Sympa::Log::do_log('notice','tools::load_edit_list_conf privilege for parameter $parameter undefined');
+	&Sympa::Log::do_log('notice','Sympa::Tools::load_edit_list_conf privilege for parameter $parameter undefined');
 	return undef;
     }
     if ($edit_conf->{$parameter}  =~ /^(owner|privileged_owner)$/i ) {

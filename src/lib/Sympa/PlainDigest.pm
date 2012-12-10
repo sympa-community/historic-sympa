@@ -70,7 +70,7 @@
 # - moved repeated code to get charset into sub _getCharset
 # - added use of MIME::Charset to check charset aliases
 # 20100810 - S. Ikeda
-# - Remove dependency on Text::Wrap: use common utility tools::wrap_text().
+# - Remove dependency on Text::Wrap: use common utility Sympa::Tools::wrap_text().
 # - Use MIME::Charset OO to handle vendor-defined encodings.
 # - Use MIME::EncWords instead of MIME::WordDecoder.
 # - Now HTML::FormatText is mandatory.  Remove Lynx support.
@@ -193,11 +193,11 @@ sub _do_message {
       return undef;
   }
   
-  my $from = $msgent->head->get('From') ? tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
-  my $subject = $msgent->head->get('Subject') ? tools::decode_header($msgent, 'Subject') : '';
-  my $date = $msgent->head->get('Date') ? tools::decode_header($msgent, 'Date') : '';
-  my $to = $msgent->head->get('To') ? tools::decode_header($msgent, 'To', ', ') : '';
-  my $cc = $msgent->head->get('Cc') ? tools::decode_header($msgent, 'Cc', ', ') : '';
+  my $from = $msgent->head->get('From') ? Sympa::Tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
+  my $subject = $msgent->head->get('Subject') ? Sympa::Tools::decode_header($msgent, 'Subject') : '';
+  my $date = $msgent->head->get('Date') ? Sympa::Tools::decode_header($msgent, 'Date') : '';
+  my $to = $msgent->head->get('To') ? Sympa::Tools::decode_header($msgent, 'To', ', ') : '';
+  my $cc = $msgent->head->get('Cc') ? Sympa::Tools::decode_header($msgent, 'Cc', ', ') : '';
   
   chomp $from;
   chomp $to;
