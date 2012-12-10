@@ -319,7 +319,7 @@ sub db_stat_log{
     my $id = $date.$random;
     my $read = 0; 
 
-    if (ref($list) =~ /List/i) {
+    if (ref($list) && $list->isa('Sympa::List')) {
 	$list = $list->{'name'};
     }
     if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name

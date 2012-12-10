@@ -347,7 +347,7 @@ sub mail_message {
     my $host = $list->{'admin'}{'host'};
     my $robot = $list->{'domain'};
     
-    unless (defined $message && ref($message) eq 'Sympa::Message') {
+    unless (ref($message) && $message->isa('Sympa::Message')) {
 	&Sympa::Log::do_log('err', 'Invalid message parameter');
 	return undef;	
     }
@@ -473,7 +473,7 @@ sub mail_forward {
     my($message,$from,$rcpt,$robot)=@_;
     &Sympa::Log::do_log('debug2', "($from,$rcpt)");
     
-    unless (ref($message) eq 'Sympa::Message') {
+    unless (ref($message) && $message->('Sympa::Message')) {
 	&Sympa::Log::do_log('err',"Unespected parameter type: %s.",ref($message));
 	return undef;
     }
@@ -963,7 +963,7 @@ sub reformat_message($;$$) {
     }
     $parser->output_to_core(1);
 
-    if (ref($message) eq 'MIME::Entity') {
+    if (ref($message) && $message->isa('MIME::Entity')) {
 	$msg = $message;
     } else {
 	eval {

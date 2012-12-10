@@ -86,7 +86,7 @@ sub dump_var {
 		print $fd "\t"x$level.$index."\n";
 		&dump_var($var->[$index], $level+1, $fd);
 	    }
-	}elsif (ref($var) eq 'HASH' || ref($var) eq 'Sympa::Scenario' || ref($var) eq 'Sympa::List' || ref($var) eq 'CGI::Fast') {
+	}elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List') || $var->isa('CGI::Fast')) {
 	    foreach my $key (sort keys %{$var}) {
 		print $fd "\t"x$level.'_'.$key.'_'."\n";
 		&dump_var($var->{$key}, $level+1, $fd);
@@ -124,7 +124,7 @@ sub dump_html_var {
 		$html .= '</li>';
 	    }
 	    $html .= '</ul>';
-	}elsif (ref($var) eq 'HASH' || ref($var) eq 'Sympa::Scenario' || ref($var) eq 'Sympa::List') {
+	}elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List')) {
 	    $html .= '<ul>';
 	    foreach my $key (sort keys %{$var}) {
 		$html .= '<li>'.$key.'=' ;

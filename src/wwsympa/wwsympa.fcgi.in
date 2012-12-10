@@ -1491,12 +1491,12 @@ my $birthday = time ;
 		 last;
 	     }
 	     
-	     $param->{'host'} = $list->{'admin'}{'host'} if (ref($list) eq 'Sympa::List');
+	     $param->{'host'} = $list->{'admin'}{'host'} if (ref($list) && $list->isa('Sympa::List'));
 	     $param->{'host'} ||= $robot;
-	     $param->{'domain'} = $list->{'domain'} if (ref($list) eq 'Sympa::List');
+	     $param->{'domain'} = $list->{'domain'} if (ref($list) && $list->isa('Sympa::List'));
 	     
 	     ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
-	     $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) eq 'Sympa::List');
+	     $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) && $list->isa('Sympa::List'));
 	     $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});	     
 	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || &Sympa::Configuration::get_robot_conf($robot, 'lang');	     
 
@@ -9706,7 +9706,7 @@ sub do_edit_list {
 	next unless ($list->may_edit($pname,$param->{'user'}{'email'}) eq 'write');
 	
 	## If the list belongs to a family, gather all the constraints for each edited parameter.
-	if (ref($family) eq 'Sympa::Family') {
+	if (ref($family) && $family->isa('Sympa::Family')) {
 	    
 	    if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
 		my $constraint = $family->get_param_constraint($pname);
@@ -9841,7 +9841,7 @@ sub do_edit_list {
 		    next unless ($list->may_edit("$pname.$key",$param->{'user'}{'email'}) eq 'write');
 		    
 		    ## If the list belongs to a family, check the possible constraints on this parameter component.
-		    if (ref($family) eq 'Sympa::Family') {
+		    if (ref($family) && $family->isa('Sympa::Family')) {
 			## Test constraints only if the parameter component is not a complex structure.
 			if (!ref($key)) {
 			    my $constraint = $family->get_param_constraint("$pname.$key");
@@ -10501,7 +10501,7 @@ sub _prepare_data {
     ## Check if some family constraint modify the editing rights.
     my $restrict = 0;
     my $constraint;
-    if ((ref($family) eq 'Sympa::Family') && ($may_edit eq 'write')) {
+    if ((ref($family) && $family->isa('Sympa::Family')) && ($may_edit eq 'write')) {
 	
  	if ($main_p && defined $::pinfo{$main_p}) { 
  	    if (ref($::pinfo{$main_p}{'format'}) eq 'HASH') { # composed parameter

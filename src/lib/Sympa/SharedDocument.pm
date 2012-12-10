@@ -71,7 +71,7 @@ sub new {
     my $document = {};
     &Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
     
-    unless (ref($list) =~ /List/i) {
+    unless (ref($list) && $list->isa('Sympa::List')) {
 	&Sympa::Log::do_log('err', 'incorrect list parameter');
 	return undef;
     }

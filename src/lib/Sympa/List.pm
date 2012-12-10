@@ -2933,7 +2933,7 @@ sub get_family {
     my $self = shift;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
     
-    if (ref($self->{'family'}) eq 'Sympa::Family') {
+    if (ref($self->{'family'}) && $self->{'family'}->isa('Sympa::Family')) {
 	return $self->{'family'};
     }
 
@@ -3988,7 +3988,7 @@ sub send_msg {
 	$sender_hash{lc($email->address)} = 1;
     }
    
-    unless (defined $message && ref($message) eq 'Sympa::Message') {
+    unless (ref($message) && $message->isa('Sympa::Message')) {
 	&Sympa::Log::do_log('err', 'Invalid message paramater');
 	return undef;	
     }
@@ -4561,7 +4561,7 @@ sub request_auth {
     my $first_param = shift;
     my ($self, $email, $cmd, $robot, @param);
 
-    if (ref($first_param) eq 'Sympa::List') {
+    if (ref($first_param) && $first_param->isa('Sympa::List')) {
 	$self = $first_param;
 	$email= shift;
     }else {
@@ -4577,7 +4577,7 @@ sub request_auth {
     my $data = {'to' => $email};
 
 
-    if (ref($self) eq 'Sympa::List') {
+    if (ref($self) && $self->isa('Sympa::List')) {
 	my $listname = $self->{'name'};
 	$data->{'list_context'} = 1;
 
@@ -4859,7 +4859,7 @@ sub send_notify_to_listmaster {
 	$data->{'auto_submitted'} = 'auto-generated';
 	$data->{'alarm'} = 1;
 	
-	if($data->{'list'} && ref($data->{'list'}) eq 'Sympa::List') {
+	if(ref($data->{'list'}) && $data->{'list'}->isa('Sympa::List')) {
 		my $list = $data->{'list'};
 		$data->{'list'} = {
 			'name' => $list->{'name'},
@@ -5222,7 +5222,7 @@ sub compute_auth {
     my $first_param = shift;
     my ($self, $email, $cmd);
     
-    if (ref($first_param) eq 'Sympa::List') {
+    if (ref($first_param) && $first_param->isa('Sympa::List')) {
 	$self = $first_param;
 	$email= shift;
     }else {
@@ -9166,7 +9166,7 @@ sub _include_users_sql {
 
     &Sympa::Log::do_log('debug','');
     
-    unless (ref($source) =~ /Sympa::Datasource::SQL::/) {
+    unless (ref($source) && $source->isa('Sympa::Datasource::SQL')) {
 	&Sympa::Log::do_log('err','source object has not a Sympa::Datasource::SQL type : %s',$source);
         return undef;
     }

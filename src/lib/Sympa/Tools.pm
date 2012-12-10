@@ -1491,7 +1491,7 @@ sub get_filename {
     &Sympa::Log::do_log('debug3','(%s,%s,%s,%s,%s,%s)', $type, join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
 
     
-    if (ref($object) eq 'Sympa::List') {
+    if ($object->isa('Sympa::List')) {
  	$list = $object;
  	if ($list->{'admin'}{'family_name'}) {
  	    unless ($family = $list->get_family()) {
@@ -1500,7 +1500,7 @@ sub get_filename {
  		return undef;
  	    }  
  	}
-    }elsif (ref($object) eq 'Sympa::Family') {
+    }elsif ($object->isa('Sympa::Family')) {
  	$family = $object;
     }
     
@@ -1598,7 +1598,7 @@ sub make_tt2_include_path {
     my ($robot,$dir,$lang,$list,$basedir,$viewmaildir,$domain) = @_;
 
     my $listname;
-    if (ref $list eq 'Sympa::List') {
+    if (ref $list && $list->isa('Sympa::List')) {
 	$listname = $list->{'name'};
     } else {
 	$listname = $list;
@@ -1617,7 +1617,7 @@ sub make_tt2_include_path {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR . "/$dir";
 	$path_etcdir = "$basedir/".$dir;
 	$path_robot = "$basedir/".$robot.'/'.$dir if (lc($robot) ne lc($domain));
-	if (ref($list) eq 'Sympa::List'){
+	if (ref($list) && $list->isa('Sympa::List')){
 	    $path_list = $list->{'dir'}.'/'.$dir;
 	    if (defined $list->{'admin'}{'family_name'}) {
 		my $family = $list->get_family();
@@ -1628,7 +1628,7 @@ sub make_tt2_include_path {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
 	$path_etcdir = $basedir;
 	$path_robot = "$basedir/".$robot if (lc($robot) ne lc($domain));
-	if (ref($list) eq 'Sympa::List') {
+	if (ref($list) && $list->isa('Sympa::List')) {
 	    $path_list = $list->{'dir'} ;
 	    if (defined $list->{'admin'}{'family_name'}) {
 		my $family = $list->get_family();
@@ -2126,11 +2126,11 @@ sub decode_header {
     my $sep = shift || undef;
 
     my $head;
-    if (ref $msg eq 'Sympa::Message') {
+    if ($msg->isa('Sympa::Message')) {
 	$head = $msg->{'msg'}->head;
-    } elsif (ref $msg eq 'MIME::Entity') {
+    } elsif ($msg->('MIME::Entity')) {
 	$head = $msg->head;
-    } elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
+    } elsif ($msg->isa('MIME::Head') or $msg->isa('Mail::Header')) {
 	$head = $msg;
     }
     if (defined $sep) {

@@ -105,7 +105,7 @@ sub reject_report_msg {
 	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
      }
 
-    if (ref($list) eq "Sympa::List") {
+    if (ref($list) && $list->isa('Sympa::List')) {
 	unless ($list->send_file('message_report',$user,$robot,$param)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
@@ -149,9 +149,9 @@ sub _get_msg_as_hash {
 
     my ($msg_entity, $msg_hash);
 
-    if (ref($msg_object) =~ /^MIME::Entity/) { ## MIME-ttols object
+    if ($msg_object->isa('MIME::Entity')) { ## MIME-ttols object
 	$msg_entity = $msg_object;
-    }elsif (ref($msg_object) =~ /^Message/) { ## Sympa's own Message object
+    }elsif ($msg_object->isa('Sympa::Message')) { ## Sympa's own Message object
 	$msg_entity = $msg_object->{'msg'};
     }else {
 	&Sympa::Log::do_log('err', "reject_report_msg: wrong type for msg parameter");
@@ -218,7 +218,7 @@ sub notice_report_msg {
 	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
      }
 
-    if (ref($list) eq "Sympa::List") {
+    if (ref($list) && $list->isa('Sympa::List')) {
 	unless ($list->send_file('message_report',$user,$robot,$param)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
@@ -755,7 +755,7 @@ sub reject_report_web {
     }
     
     my $listname;
-    if (ref($list) eq 'Sympa::List'){
+    if (ref($list) && $list->isa('Sympa::List')){
 	$listname = $list->{'name'};
     }
 

@@ -2611,7 +2611,7 @@ sub get_auth_method {
 	&Sympa::Log::do_log('debug',"auth received from $sender : $auth");	
       
 	my $compute;
-	if (ref($list) eq "Sympa::List"){
+	if (ref($list) && $list->isa('Sympa::List')){
 	    $compute= $list->compute_auth($email,$cmd);
 
 	}else {

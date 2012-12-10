@@ -235,7 +235,7 @@ sub merge_msg {
     my $data = shift;
 
     ## Test MIME::Entity
-    unless (defined $entity && ref($entity) eq 'MIME::Entity') {
+    unless (ref($entity) && $entity->isa('MIME::Entity')) {
 	&Sympa::Log::do_log('err', 'echec entity');
 	return undef;
     }
@@ -488,7 +488,7 @@ sub store {
 	}
 	my $packetid =  &Sympa::Tools::md5_fingerprint($rcptasstring);
 	my $packet_already_exist;
-	if (ref($listname) =~ /List/i) {
+	if (ref($listname) && $listname->isa('Sympa::List')) {
 	    $listname = $listname->{'name'};
 	}
 	if ($message_already_on_spool) {

@@ -62,7 +62,7 @@ sub new {
 sub _get_datasource_id {
     my ($source) = shift;
 	&Sympa::Log::do_log('debug2',"Getting datasource id for source '%s'",$source);
-    if (ref($source) eq 'Sympa::Datasource') {
+    if (ref($source) && $source->isa('Sympa::Datasource')) {
     	$source = shift;
     }
 

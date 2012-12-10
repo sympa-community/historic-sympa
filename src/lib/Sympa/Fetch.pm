@@ -90,7 +90,7 @@ sub get_https{
 	}
 	&Sympa::Log::do_log ('debug','connected to https://%s:%s/',&IO::Socket::SSL::errstr,$host,$port);
 
-	if( ref($ssl_socket) eq "IO::Socket::SSL") {
+	if( ref($ssl_socket) && $ssl_socket->isa('IO::Socket::SSL')) {
 	   my $subject_name = $ssl_socket->peer_certificate("subject");
 	   my $issuer_name = $ssl_socket->peer_certificate("issuer");
 	   my $cipher = $ssl_socket->get_cipher();
