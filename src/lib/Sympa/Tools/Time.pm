@@ -119,7 +119,7 @@ sub epoch_conv {
     my $arg = $_[0]; # argument date to convert
     my $time = $_[1] || time; # the epoch current date
 
-    &Sympa::Log::do_log('debug3','tools::epoch_conv(%s, %d)', $arg, $time);
+    &Sympa::Log::do_log('debug3','(%s, %d)', $arg, $time);
 
     my $result;
     
