@@ -21,7 +21,7 @@
 
 AC_PREREQ(2.60)
 AC_INIT(sympa, 6.2a.32, sympa-authors@cru.fr)
-AM_INIT_AUTOMAKE([foreign -Wall -Werror 1.9 tar-pax])
+AM_INIT_AUTOMAKE([foreign -Wall 1.9 tar-pax])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_PO_SUBDIRS
 
@@ -505,8 +505,8 @@ AC_CONFIG_FILES([
     Makefile
     src/Makefile
     src/etc/Makefile
-    src/etc/script/Makefile
-    src/etc/script/js/Makefile
+    src/bin/Makefile
+    src/bin/js/Makefile
     src/lib/Makefile
     src/soap/Makefile
     src/wwsympa/Makefile
