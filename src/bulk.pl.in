@@ -357,7 +357,7 @@ while (!$end) {
 		}
 
 		if (&Sympa::Configuration::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
-		    $messageasstring = remove_invalid_dkim_signature($messageasstring, $Sympa::Configuration::Conf{'tmpdir'});
+		    $messageasstring = Sympa::Tools::DKIM::remove_invalid_dkim_signature($messageasstring, $Sympa::Configuration::Conf{'tmpdir'});
 		}
 		if ($message_from_spool->{'dkim_d'}){ # apply dkim signature AFTER any other message transformation.
 		    $messageasstring = dkim_sign($messageasstring,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
@@ -379,7 +379,7 @@ while (!$end) {
 	    }
 	    # Initial message
 	    if ($message_from_spool->{'dkim_d'}){
-		$messageasstring_init = dkim_sign($messageasstring_init,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
+		$messageasstring_init = Sympa::Tools::DKIM::dkim_sign($messageasstring_init,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 										 'dkim_i'=>           $message_from_spool->{'dkim_i'},
 										 'dkim_selector'=>    $message_from_spool->{'dkim_selector'},
 										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, }, $Sympa::Configuration::Conf{'tmpdir'} );
