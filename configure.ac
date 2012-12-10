@@ -56,6 +56,7 @@ if test "$fhs" = "yes"; then
     execcgidir=$libdir/sympa/cgi
     expldir=$localstatedir/lib/sympa/list_data
     staticdir=$localstatedir/lib/sympa/static_content
+    jsdir=$staticdir/js
     spooldir=$localstatedir/spool/sympa
     arcdir=$localstatedir/lib/sympa/arc
     bouncedir=$localstatedir/lib/sympa/bounce
@@ -89,6 +90,7 @@ else
     expldir=$prefix/list_data
     spooldir=$prefix/spool
     staticdir=$prefix/static_content
+    jsdir=$staticdir/js
     arcdir=$prefix/arc
     bouncedir=$prefix/bounce
     confdir=/etc
@@ -107,6 +109,7 @@ AC_SUBST(execcgidir)
 AC_SUBST(expldir)
 AC_SUBST(spooldir)
 AC_SUBST(staticdir)
+AC_SUBST(jsdir)
 AC_SUBST(arcdir)
 AC_SUBST(bouncedir)
 AC_SUBST(localedir)
