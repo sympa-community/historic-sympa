@@ -64,7 +64,6 @@ use Sympa::Spool;
 use Sympa::Task;
 use Sympa::Template;
 use Sympa::Tools::Data;
-use Sympa::Tools::DKIM;
 use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
@@ -3748,6 +3747,8 @@ sub send_global_file {
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
 
     if ((&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Sympa::Configuration::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
+	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
+	require Sympa::Tools::DKIM;
 	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({
             'robot'           => $robot,
             'signer_domain'   => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
@@ -3926,6 +3927,8 @@ sub send_file {
     $data->{'sign_mode'} = $sign_mode;
     
     if ((&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
+	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
+	require Sympa::Tools::DKIM;
 	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -4128,6 +4131,8 @@ sub send_msg {
     my $dkim_parameters ;
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
+	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
+	require Sympa::Tools::DKIM;
 	$dkim_parameters = Sympa::Tools::DKIM::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
     ## Storing the not empty subscribers' arrays into a hash.

@@ -53,7 +53,6 @@ use Sympa::Spool;
 use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use Sympa::Tools::DKIM;
 use Sympa::Tracking;
 
 my $daemon_name = &Sympa::Log::set_daemon($0);
@@ -357,6 +356,9 @@ while (!$end) {
 		}
 
 		if (&Sympa::Configuration::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
+		    # assume Sympa::Tools::DKIM can be loaded if the setting is
+		    # still on
+		    require Sympa::Tools::DKIM;
 		    $messageasstring = Sympa::Tools::DKIM::remove_invalid_dkim_signature($messageasstring, $Sympa::Configuration::Conf{'tmpdir'});
 		}
 		if ($message_from_spool->{'dkim_d'}){ # apply dkim signature AFTER any other message transformation.
@@ -379,6 +381,9 @@ while (!$end) {
 	    }
 	    # Initial message
 	    if ($message_from_spool->{'dkim_d'}){
+		# assume Sympa::Tools::DKIM can be loaded if there is a message
+		# in this spool
+		require Sympa::Tools::DKIM;
 		$messageasstring_init = Sympa::Tools::DKIM::dkim_sign($messageasstring_init,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 										 'dkim_i'=>           $message_from_spool->{'dkim_i'},
 										 'dkim_selector'=>    $message_from_spool->{'dkim_selector'},

@@ -43,7 +43,6 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Scenario;
 use Sympa::Tools;
-use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
 
 =head1 CLASS METHODS
@@ -238,6 +237,8 @@ sub new {
 	}
 	# verify DKIM signature
 	if (&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
+	    # assume Sympa::Tools::DKIM can be loaded if the setting is still on
+	    require Sympa::Tools::DKIM;
 	    $message->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
 	}
     }
