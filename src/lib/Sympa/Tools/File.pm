@@ -106,7 +106,7 @@ Delete a directory and its content.
 
 sub del_dir {
     my $dir = shift;
-    &Sympa::Log::do_log('debug','del_dir %s',$dir);
+    &Sympa::Log::do_log('debug','%s',$dir);
     
     if(opendir DIR, $dir){
 	for (readdir DIR) {
@@ -187,10 +187,10 @@ unlink others
 sub shift_file {
     my $file = shift;
     my $count = shift;
-    &Sympa::Log::do_log('debug', "shift_file ($file,$count)");
+    &Sympa::Log::do_log('debug', "($file,$count)");
 
     unless (-f $file) {
-	&Sympa::Log::do_log('info', "shift_file : unknown file $file");
+	&Sympa::Log::do_log('info', "unknown file $file");
 	return undef;
     }
     
@@ -198,7 +198,7 @@ sub shift_file {
     my $file_extention = POSIX::strftime("%Y:%m:%d:%H:%M:%S", @date);
     
     unless (rename ($file,$file.'.'.$file_extention)) {
-	&Sympa::Log::do_log('err', "shift_file : Cannot rename file $file to $file.$file_extention" );
+	&Sympa::Log::do_log('err', "Cannot rename file $file to $file.$file_extention" );
 	return undef;
     }
     if ($count) {
@@ -206,7 +206,7 @@ sub shift_file {
 	my $dir = $1;
 
 	unless (opendir(DIR, $dir)) {
-	    &Sympa::Log::do_log('err', "shift_file : Cannot read dir $dir" );
+	    &Sympa::Log::do_log('err', "Cannot read dir $dir" );
 	    return ($file.'.'.$file_extention);
 	}
 	my $i = 0 ;
@@ -214,9 +214,9 @@ sub shift_file {
 	    $i ++;
 	    if ($count lt $i) {
 		if (unlink ($oldfile)) { 
-		    &Sympa::Log::do_log('info', "shift_file : unlink $oldfile");
+		    &Sympa::Log::do_log('info', "unlink $oldfile");
 		}else{
-		    &Sympa::Log::do_log('info', "shift_file : unable to unlink $oldfile");
+		    &Sympa::Log::do_log('info', "unable to unlink $oldfile");
 		}
 	    }
 	}
@@ -232,7 +232,7 @@ Find a file in an ordered list of directories
 
 sub find_file {
     my ($filename, @directories) = @_;
-    &Sympa::Log::do_log('debug3','tools::find_file(%s,%s)', $filename, join(':',@directories));
+    &Sympa::Log::do_log('debug3','(%s,%s)', $filename, join(':',@directories));
 
     foreach my $d (@directories) {
 	if (-f "$d/$filename") {
@@ -315,7 +315,7 @@ or few direcoty paths
 
 sub remove_dir {
     
-    &Sympa::Log::do_log('debug2','remove_dir()');
+    &Sympa::Log::do_log('debug2','()');
     
     foreach my $current_dir (@_){
 	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
