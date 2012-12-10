@@ -40,6 +40,45 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
+=head2 Sympa::VOOT::Consumer->getProviders($config)
+
+List providers.
+
+=head3 Parameters
+
+=over
+
+=item * I<$config>: the VOOT configuration file
+
+=back
+
+=head3 Return value
+
+An hashref.
+
+=cut 
+
+sub getProviders {
+	my ($class, $file) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $file);
+	
+	my $list = {};
+	
+	return $list unless (-f $file);
+	
+	open(my $fh, '<', $file) or return $list;
+	my @ctn = <$fh>;
+	chomp @ctn;
+	close $fh;
+	
+	my $conf = decode_json(join('', @ctn)); # Returns array ref
+	foreach my $item (@$conf) {
+		$list->{$item->{'voot.ProviderID'}} = $item->{'voot.ProviderID'};
+	}
+	
+	return $list;
+}
+
 =head2 Sympa::VOOT::Consumer->new(%parameters)
 
 Creates a new L<Sympa::VOOT::Consumer> object.
@@ -225,47 +264,6 @@ sub _get_config_for {
 	}
 	
 	return undef;
-}
-
-=head1 FUNCTIONS
-
-=head2 getProviders($config)
-
-List providers.
-
-=head3 Parameters
-
-=over
-
-=item * I<$config>: the VOOT configuration file
-
-=back
-
-=head3 Return value
-
-An hashref.
-
-=cut 
-
-sub getProviders {
-	my ($file) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $file);
-	
-	my $list = {};
-	
-	return $list unless (-f $file);
-	
-	open(my $fh, '<', $file) or return $list;
-	my @ctn = <$fh>;
-	chomp @ctn;
-	close $fh;
-	
-	my $conf = decode_json(join('', @ctn)); # Returns array ref
-	foreach my $item (@$conf) {
-		$list->{$item->{'voot.ProviderID'}} = $item->{'voot.ProviderID'};
-	}
-	
-	return $list;
 }
 
 1;

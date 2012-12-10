@@ -9464,7 +9464,7 @@ sub do_voot {
 sub do_select_voot_provider_request {
 	&wwslog('info', 'do_select_voot_provider_request()');
 	
-	$param->{'voot_providers'} = &Sympa::VOOT::Consumer::getProviders(
+	$param->{'voot_providers'} = Sympa::VOOT::Consumer->getProviders(
 	-	$Sympa::Configuration::Conf{'etc'}.'/voot.conf'
 	);
 	
