@@ -33,7 +33,6 @@ package Sympa::Auth;
 use Digest::MD5;
 
 use Sympa::Configuration;
-use Sympa::Datasource::LDAP;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
@@ -238,6 +237,7 @@ sub ldap_authentication {
      
      ## bind in order to have the user's DN
      my $param = &Sympa::Tools::Data::dup_var($ldap);
+     require Sympa::Datasource::LDAP;
      my $ds = new Sympa::Datasource::LDAP($param);
      
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
@@ -269,6 +269,7 @@ sub ldap_authentication {
      $param->{'ldap_bind_dn'} = $DN[0];
      $param->{'ldap_bind_password'} = $pwd;
      
+     require Sympa::Datasource::LDAP;
      $ds = new Sympa::Datasource::LDAP($param);
      
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
@@ -371,6 +372,7 @@ sub get_email_by_net_id {
     my $ldap = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
 
     my $param = &Sympa::Tools::Data::dup_var($ldap);
+    require Sympa::Datasource::LDAP;
     my $ds = new Sympa::Datasource::LDAP($param);
     my $ldap_anonymous;
     

@@ -36,9 +36,6 @@ use Net::Netmask;
 
 use Sympa::Configuration;
 use Sympa::Constants;
-use Sympa::Datasource::SQL;
-use Sympa::Datasource::LDAP;
-use Sympa::LDAP;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
@@ -1223,6 +1220,7 @@ sub search{
             return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
         }
 	
+	require Sympa::Datasource::SQL;
 	my $ds = new Sympa::Datasource::SQL($sql_conf->{'sql_named_filter_query'});
 	unless (defined $ds && $ds->connect() && $ds->ping) {
             &Sympa::Log::do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
@@ -1265,6 +1263,7 @@ sub search{
 	my $time = time;
 	my %ldap_conf;
     
+	require Sympa::LDAP;
 	return undef unless (%ldap_conf = &Sympa::LDAP::load($file));
 
 	my $filter = $ldap_conf{'filter'};	
@@ -1303,6 +1302,7 @@ sub search{
 	
 	my $ldap;
 	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
+	require Sympa::Datasource::LDAP;
 	my $ds = new Sympa::Datasource::LDAP($param);
 	    
 	unless (defined $ds && ($ldap = $ds->connect())) {

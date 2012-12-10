@@ -47,8 +47,6 @@ use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Datasource;
-use Sympa::Datasource::SQL;
-use Sympa::Datasource::LDAP;
 use Sympa::Family;
 use Sympa::Fetch;
 use Sympa::Language;
@@ -9272,6 +9270,7 @@ sub _load_list_members_from_include {
 	    ## Verify if we can syncronize sources. If it's allowed OR there are new sources, we update the list, and can add subscribers.
 		## Else if we can't syncronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
+			require Sympa::Datasource::SQL;
 			my $source = new Sympa::Datasource::SQL($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				&Sympa::Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
@@ -9443,12 +9442,15 @@ sub _load_list_admin_from_include {
 		## get the list of admin users
 		## does it need to define a 'default_admin_user_option'?
 		if ($type eq 'include_sql_query') {
+		    require Sympa::Datasource::SQL;
 		    my $source = new Sympa::Datasource::SQL($incl);
 		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'}); 
 		}elsif ($type eq 'include_ldap_query') {
+		    require Sympa::Datasource::LDAP;
 		    my $source = new Sympa::Datasource::LDAP($incl);
 		    $included = _include_users_ldap(\%admin_users, $incl,$source,\%option); 
 		}elsif ($type eq 'include_ldap_2level_query') {
+		    require Sympa::Datasource::LDAP;
 		    my $source = new Sympa::Datasource::LDAP($incl);
 		    my $result = _include_users_ldap_2level(\%admin_users, $incl,$source,\%option); 
 		    if (defined $result) {
@@ -9721,8 +9723,10 @@ sub sync_include_ca {
 			my $source = undef;
 			my $srcca = undef;
 			if ($type eq 'include_sql_ca') {
+				require Sympa::Datasource::SQL;
 				$source = new Sympa::Datasource::SQL($incl);
 			}elsif(($type eq 'include_ldap_ca') or ($type eq 'include_ldap_2level_ca')) {
+				require Sympa::Datasource::LDAP;
 				$source = new Sympa::Datasource::LDAP($incl);
 			}
 			next unless(defined($source));
