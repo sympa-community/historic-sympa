@@ -493,7 +493,7 @@ sub check {
 
     my $task_as_string = shift; # the task to check
 
-    &Sympa::Sympa::Log::do_log ('debug2', "check($task_as_string)" );
+    &Sympa::Sympa::Log::do_log ('debug2', "($task_as_string)" );
     my %result; # stores the result of the chk_line subroutine
     my $lnb = 0; # line number
     my %used_labels; # list of labels used as parameter in commands
@@ -570,7 +570,7 @@ sub chk_line {
     ## just in case...
     chomp $line;
 
-    &Sympa::Sympa::Log::do_log('debug2', 'chk_line(%s, %s)', $line, $Rhash->{'nature'});
+    &Sympa::Sympa::Log::do_log('debug2', '(%s, %s)', $line, $Rhash->{'nature'});
         
     $Rhash->{'nature'} = undef;
   
@@ -652,7 +652,7 @@ sub chk_cmd {
     my $Rused_labels = $_[3];
     my $Rused_vars = $_[4];
 
-    &Sympa::Sympa::Log::do_log('debug2', 'chk_cmd(%s, %d, %s)', $cmd, $lnb, join(',',@{$Rargs}));
+    &Sympa::Sympa::Log::do_log('debug2', '(%s, %d, %s)', $cmd, $lnb, join(',',@{$Rargs}));
     
     if (defined $commands{$cmd}) {
 	
@@ -776,7 +776,7 @@ sub cmd_process {
 
     my $taskasstring = $task->{'taskasstring'};
 
-    &Sympa::Sympa::Log::do_log('debug2', 'cmd_process(%s, %d)', $command, $lnb);
+    &Sympa::Sympa::Log::do_log('debug2', '(%s, %d)', $command, $lnb);
 
      # building of %context
     my %context = ('line_number' => $lnb);
@@ -1087,9 +1087,9 @@ sub purge_logs_table {
     my $execution_date = $task->{'date'};
     my @slots = ();
     
-    &Sympa::Sympa::Log::do_log('debug2','purge_logs_table()');
+    &Sympa::Sympa::Log::do_log('debug2','()');
     unless(&Sympa::Sympa::Log::db_log_del()) {
-	&Sympa::Sympa::Log::do_log('err','purge_logs_table(): Failed to delete logs');
+	&Sympa::Sympa::Log::do_log('err','Failed to delete logs');
 	return undef;
     }
 
@@ -1120,27 +1120,27 @@ sub purge_logs_table {
     }
     #-------------------------------------------------------------------
 
-    &Sympa::Sympa::Log::do_log('notice','purge_logs_table(): logs purged');
+    &Sympa::Sympa::Log::do_log('notice','logs purged');
     return 1;
 }
 
 ## remove sessions from session_table if older than $Sympa::Configuration::Conf{'session_table_ttl'}
 sub purge_session_table {    
 
-    &Sympa::Sympa::Log::do_log('info','task_manager::purge_session_table()');
+    &Sympa::Sympa::Log::do_log('info','()');
     my $removed = &Sympa::Session::purge_old_sessions('*');
     unless(defined $removed) {
-	&Sympa::Sympa::Log::do_log('err','&Sympa::Session::purge_old_sessions(): Failed to remove old sessions');
+	&Sympa::Sympa::Log::do_log('err','Failed to remove old sessions');
 	return undef;
     }
-    &Sympa::Sympa::Log::do_log('notice','purge_session_table(): %s row removed in session_table',$removed);
+    &Sympa::Sympa::Log::do_log('notice','%s row removed in session_table',$removed);
     return 1;
 }
 
 ## remove messages from bulkspool table when no more packet have any pointer to this message
 sub purge_tables {    
 
-    &Sympa::Sympa::Log::do_log('info','task_manager::purge_tables()');
+    &Sympa::Sympa::Log::do_log('info','');
     my $removed = &Sympa::Bulk::purge_bulkspool();
     unless(defined $removed) {
 	&Sympa::Sympa::Log::do_log('err','Failed to purge bulkspool');
@@ -1162,19 +1162,19 @@ sub purge_tables {
 ## remove one time ticket table if older than $Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}
 sub purge_one_time_ticket_table {    
 
-    &Sympa::Sympa::Log::do_log('info','task_manager::purge_one_time_ticket_table()');
+    &Sympa::Sympa::Log::do_log('info','()');
     my $removed = &Sympa::Session::purge_old_tickets('*');
     unless(defined $removed) {
-	&Sympa::Sympa::Log::do_log('err','&Sympa::Session::purge_old_tickets(): Failed to remove old tickets');
+	&Sympa::Sympa::Log::do_log('err','Failed to remove old tickets');
 	return undef;
     }
-    &Sympa::Sympa::Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
+    &Sympa::Sympa::Log::do_log('notice','%s row removed in one_time_ticket_table',$removed);
     return 1;
 }
 
 sub purge_user_table {
     my ($task, $Rarguments, $context) = @_;
-    &Sympa::Sympa::Log::do_log('debug2','purge_user_table()');
+    &Sympa::Sympa::Log::do_log('debug2','()');
 
     ## Load user_table entries
     my @users = &Sympa::List::get_all_global_user();
@@ -1238,7 +1238,7 @@ sub purge_user_table {
 sub purge_orphan_bounces {
     my($task, $context) = @_;
     
-    &Sympa::Sympa::Log::do_log('info','purge_orphan_bounces()');
+    &Sympa::Sympa::Log::do_log('info','()');
     
     ## Hash {'listname' => 'bounced address' => 1}
     my %bounced_users;
@@ -1299,7 +1299,7 @@ sub purge_orphan_bounces {
      my @tab = @{$Rarguments};
      my $delay = $tab[0];
 
-     &Sympa::Sympa::Log::do_log('debug2','expire_bounce(%d)',$delay);
+     &Sympa::Sympa::Log::do_log('debug2','(%d)',$delay);
      my $all_lists = &Sympa::List::get_lists('*');
      foreach my $list (@$all_lists ) {
 
@@ -1309,7 +1309,7 @@ sub purge_orphan_bounces {
 	 # the latest_distribution_date is the date of last distribution #days from 01 01 1970
 
 	 unless ($list->get_latest_distribution_date()) {
-	     &Sympa::Sympa::Log::do_log('debug2','bounce expiration : skipping list %s because could not get latest distribution date',$listname);
+	     &Sympa::Sympa::Log::do_log('debug2','skipping list %s because could not get latest distribution date',$listname);
 	     next;
 	 }
 	 my $refdate = (($list->get_latest_distribution_date() - $delay) * 3600 * 24);
@@ -1321,12 +1321,12 @@ sub purge_orphan_bounces {
 		 my $email = $u->{'email'};
 
 		 unless ( $list->is_list_member($email) ) {
-		     &Sympa::Sympa::Log::do_log('info','expire_bounce: %s not subscribed', $email);
+		     &Sympa::Sympa::Log::do_log('info','%s not subscribed', $email);
 		     next;
 		 }
 
 		 unless( $list->update_list_member($email, {'bounce' => 'NULL'},{'bounce_address' => 'NULL'})) {
-		     &Sympa::Sympa::Log::do_log('info','expire_bounce: failed update database for %s', $email);
+		     &Sympa::Sympa::Log::do_log('info','failed update database for %s', $email);
 		     next;
 		 }
 		 my $escaped_email = &Sympa::Tools::escape_chars($email);
@@ -1334,7 +1334,7 @@ sub purge_orphan_bounces {
 		 my $bounce_dir = $list->get_bounce_dir();
 
 		 unless (unlink $bounce_dir.'/'.$escaped_email) {
-		     &Sympa::Sympa::Log::do_log('info','expire_bounce: failed deleting %s', $bounce_dir.'/'.$escaped_email);
+		     &Sympa::Sympa::Log::do_log('info','failed deleting %s', $bounce_dir.'/'.$escaped_email);
 		     next;
 		 }
 		 &Sympa::Sympa::Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
@@ -1362,7 +1362,7 @@ sub purge_orphan_bounces {
 
      ## building of certificate list
      unless (opendir(DIR, $cert_dir)) {
-	 error ($task->{'filepath'}, "error in chk_cert_expiration command : can't open dir $cert_dir");
+	 error ($task->{'filepath'}, "can't open dir $cert_dir");
 	 return undef;
      }
      my @certificates = grep !/^(\.\.?)|(.+expired)$/, readdir DIR;
@@ -1379,7 +1379,7 @@ sub purge_orphan_bounces {
 	 chomp ($date);
 
 	 unless ($date) {
-	     &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
+	     &Sympa::Sympa::Log::do_log ('err', "can't get expiration date for $_ by using the x509 openssl command");
 	     next;
 	 }
 
@@ -1417,7 +1417,7 @@ sub purge_orphan_bounces {
 	      !(-e $soon_expired_file) ) {
 
 	     unless (open (FILE, ">$cert_dir/$soon_expired_file")) {
-		 &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration : can't create $soon_expired_file");
+		 &Sympa::Sympa::Log::do_log ('err', "can't create $soon_expired_file");
 		 next;
 	     } else {close (FILE);}
 
@@ -1429,7 +1429,7 @@ sub purge_orphan_bounces {
 	     chomp ($id);
 
 	     unless ($id) {
-		 &Sympa::Sympa::Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
+		 &Sympa::Sympa::Log::do_log ('err', "can't get expiration date for $_ by using the x509 openssl command");
 		 next;
 	     }
 
@@ -1464,7 +1464,7 @@ sub purge_orphan_bounces {
      # building of CA list
      my @CA;
      unless (open (FILE, $CA_file)) {
-	 error ($task->{'filepath'}, "error in update_crl command : can't open $CA_file file");
+	 error ($task->{'filepath'}, "can't open $CA_file file");
 	 return undef;
      }
      while (<FILE>) {
@@ -1503,7 +1503,7 @@ sub purge_orphan_bounces {
 	 chomp ($date);
 
 	 unless ($date) {
-	     &Sympa::Sympa::Log::do_log ('err', "error in update_crl command : can't get expiration date for $file crl file by using the crl openssl command");
+	     &Sympa::Sympa::Log::do_log ('err', "can't get expiration date for $file crl file by using the crl openssl command");
 	     next;
 	 }
 
@@ -1542,7 +1542,7 @@ sub eval_bouncers {
 	my $listname = $list->{'name'};
 	my $list_traffic = {};
 	
-	&Sympa::Sympa::Log::do_log('info','eval_bouncers(%s)',$listname);
+	&Sympa::Sympa::Log::do_log('info','(%s)',$listname);
 	
 	## Analizing file Msg-count and fill %$list_traffic
 	unless (open(COUNT,$list->{'dir'}.'/msg_count')){
@@ -1563,7 +1563,7 @@ sub eval_bouncers {
 	    
 	    ## copying score into DataBase
 	    unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {
-		&Sympa::Sympa::Log::do_log('err','Task eval_bouncers :Error while updating DB for user %s',$user_ref->{'email'});
+		&Sympa::Sympa::Log::do_log('err','Error while updating DB for user %s',$user_ref->{'email'});
 		next;
 	    }
 	}
@@ -1676,7 +1676,7 @@ sub get_score {
     my $user_ref = shift;
     my $list_traffic = shift;
 
-    &Sympa::Sympa::Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
+    &Sympa::Sympa::Log::do_log('debug','(%s) ',$user_ref->{'email'});
 
     my $min_period = $Sympa::Configuration::Conf{'minimum_bouncing_period'};
     my $min_msg_count = $Sympa::Configuration::Conf{'minimum_bouncing_count'};
@@ -1793,7 +1793,7 @@ sub error {
 sub sync_include {
     my ($task, $context) = @_;
 
-    &Sympa::Sympa::Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
+    &Sympa::Sympa::Log::do_log('debug2', '(%s)', $task->{'id'});
 
     my $list = $task->{'list_object'};
 
