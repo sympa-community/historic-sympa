@@ -31,7 +31,7 @@ js_DATA = jqplot.barRenderer.min.js \
 EXTRA_DIST = $(js_DATA) tinymce
 
 install-data-hook:
-	if [ ! -d $(DESTDIR)$(staticdir)/js/tinymce ] ; then \
-		echo "Creating $(DESTDIR)$(staticdir)/js/tinymce"; \
-		mv tinymce $(DESTDIR)$(staticdir)/js; \
+	if [ ! -d $(DESTDIR)$(sjsdir)/tinymce ] ; then \
+		echo "Creating $(DESTDIR)$(jsdir)/tinymce"; \
+		cp -r tinymce $(DESTDIR)$(jsdir); \
 	fi;
