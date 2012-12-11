@@ -238,9 +238,7 @@ sub merge_msg {
 	$body      = $entity->bodyhandle->as_string;
     }
     ## Get the Content-Type / Charset / Content-Transfer-encoding of a message
-    my $type      = $entity->mime_type;
     my $charset   = &MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
-    my $encoding  = &MIME::WordDecoder::unmime($entity->head->mime_encoding);
 
     my $message_output;
     my $IO;
@@ -566,8 +564,6 @@ None.
 
 sub get_remaining_packets_count {
     &Sympa::Log::do_log('debug3', 'get_remaining_packets_count');
-
-    my $m_count = 0;
 
     unless ($sth = &Sympa::SDM::do_prepared_query( "SELECT COUNT(*) FROM bulkmailer_table WHERE lock_bulkmailer IS NULL")) {
 	&Sympa::Log::do_log('err','Unable to count remaining packets in bulkmailer_table');
