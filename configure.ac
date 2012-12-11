@@ -512,7 +512,7 @@ AC_CONFIG_FILES([
     src/www/icons/Makefile
     src/lib/Makefile
     src/soap/Makefile
-    src/wwsympa/Makefile
+    src/cgi/Makefile
     doc/Makefile
     doc/man8/Makefile
     doc/sample/Makefile
