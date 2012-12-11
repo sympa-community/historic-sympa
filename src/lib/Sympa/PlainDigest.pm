@@ -88,6 +88,8 @@ plain text version of an email message, suitable for use in plain text digests.
  
 package Sympa::PlainDigest;
 
+use strict;
+
 use base qw(MIME::Entity);
 
 use Mail::Address;
@@ -98,10 +100,12 @@ use HTML::TreeBuilder;
 use Sympa::HTML::FormatText;
 use Sympa::Language;
 use Sympa::Tools;
+
+my $outstring;
  
 sub plain_body_as_string {
  
-  local $outstring = "";
+  $outstring = "";
   my ($topent, @paramlist) = @_;
   my %params = @paramlist;
   
@@ -142,7 +146,7 @@ sub _do_multipart {
   my $topent = shift;
 
   # cycle through each part and process accordingly
-  foreach $subent ($topent->parts) {    
+  foreach my $subent ($topent->parts) {    
      if ($subent->effective_type =~ /^text\/plain$/i || $subent->effective_type =~ /^text\/enriched/i) {
        _do_text_plain($subent);
      }
