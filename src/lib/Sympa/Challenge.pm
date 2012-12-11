@@ -31,7 +31,6 @@ This module provides email challenges functions.
 package Sympa::Challenge;
 
 use strict;
-no strict "vars";
 
 use CGI::Cookie;
 use Digest::MD5;
@@ -57,7 +56,7 @@ Create a challenge context and store it in challenge table.
 sub create {
     my ($robot, $email, $context) = @_;
 
-    &Sympa::Log::do_log('debug', '(%s, %s, %s)', $challenge_id, $email, $robot);
+    &Sympa::Log::do_log('debug', '(%s, %s, %s)', undef, $email, $robot);
 
     my $challenge={};
     
@@ -86,15 +85,15 @@ sub load {
 
     &Sympa::Log::do_log('debug', '(%s)', $id_challenge);
 
-    unless ($challenge_id) {
+    unless ($id_challenge) {
 	&Sympa::Log::do_log('err', 'internal error, Sympa::Session::load called with undef id_challenge');
 	return undef;
     }
     
     my $sth;
 
-    unless($sth = &Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $cookie)) {
-	&Sympa::Log::do_log('err','Unable to retrieve challenge %s from database',$cookie);
+    unless($sth = &Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $id_challenge)) {
+	&Sympa::Log::do_log('err','Unable to retrieve challenge %s from database',$id_challenge);
 	return undef;
     }
 
@@ -113,7 +112,7 @@ sub load {
     $challenge_datas->{'robot'} = $challenge->{'robot'};
     $challenge_datas->{'email'} = $challenge->{'email'};
 
-    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$del_statement);	
+    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$id_challenge);	
     unless(&Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
 	&Sympa::Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
 	return undef;
