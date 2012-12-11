@@ -84,9 +84,6 @@ sub new {
     my $task;
     &Sympa::Log::do_log('debug2', 'messagekey = %s', $task_in_spool->{'messagekey'});
     
-    my $listname_regexp = &Sympa::Tools::get_regexp('listname');
-    my $host_regexp = &Sympa::Tools::get_regexp('host');
-    
     $task->{'messagekey'} = $task_in_spool->{'messagekey'};    
     $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};    
     $task->{'date'} = $task_in_spool->{'task_date'};    
