@@ -29,6 +29,7 @@ This module contains all installation-related variables.
 =cut
 
 package Sympa::Constants;
+
 use strict;
 
 use constant VERSION => '--VERSION--';

@@ -27,6 +27,7 @@ Sympa::DatabaseDescription
 =cut
 
 package Sympa::DatabaseDescription;
+
 use strict;
 
 our %not_null = &not_null;
