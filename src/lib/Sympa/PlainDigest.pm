@@ -90,9 +90,7 @@ package Sympa::PlainDigest;
 
 use base qw(MIME::Entity);
 
-use Mail::Internet;
 use Mail::Address;
-use MIME::Parser;
 use MIME::EncWords;
 use MIME::Charset;
 use HTML::TreeBuilder;
