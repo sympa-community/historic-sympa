@@ -26,5 +26,5 @@ my @files = all_pm_files('src/lib');
 plan tests => scalar @files;
 
 foreach my $file (@files) {
-    vars_ok($file);
+    vars_ok($file, ignore_vars => { '$class' => 1 });
 }
