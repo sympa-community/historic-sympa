@@ -567,8 +567,6 @@ sub sendto {
     my $delivery_date =  $params{'delivery_date'};
     $delivery_date = time() unless $delivery_date; # if not specified, delivery tile is right now (used for sympa messages etc)
 
-    my $msg;
-
     if ($encrypt eq 'smime_crypted') {
         # encrypt message for each rcpt and send the message
 	# this MUST be moved to the bulk mailer. This way, merge will be applied after the SMIME encryption is applied ! This is a bug !
@@ -661,7 +659,6 @@ sub sending {
     my $dkim = $params{'dkim'};
     my $tag_as_last = $params{'tag_as_last'};
     my $sympa_file;
-    my $fh;
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
