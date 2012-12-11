@@ -334,7 +334,7 @@ sub by_date {
 
 }
 
-=head2 safefork($i, $pid);
+=head2 safefork()
 
 Safefork does several tries before it gives up. Do 3 trials and wait 10 seconds
 * $i between each. Exit with a fatal error is fork failed after all tests have
@@ -343,9 +343,7 @@ been exhausted.
 =cut
 
 sub safefork {
-   my($i);
-   
-   for ($i = 1; $i < 4; $i++) {
+   for (my $i = 1; $i < 4; $i++) {
       my($pid) = fork;
       return $pid if (defined($pid));
       &Sympa::Log::do_log ('warning', "Can't create new process in safefork: %m");
