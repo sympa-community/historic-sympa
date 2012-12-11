@@ -32,7 +32,6 @@ package Sympa::Fetch;
 
 use strict;
 
-use Sympa::Configuration;
 use Sympa::Log;
 
 # request a document using https, return status and content
