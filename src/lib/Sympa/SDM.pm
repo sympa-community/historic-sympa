@@ -163,10 +163,7 @@ sub db_disconnect {
 
 sub probe_db {
     &Sympa::Log::do_log('debug3', 'Checking database structure');    
-    my (%checked, $table);
     
-    my $dbh = &db_get_handler();
-
     ## Database structure
     ## Report changes to listmaster
     my @report;
@@ -180,7 +177,7 @@ sub probe_db {
 	@tables = ();
     }
 
-    my ( $fields, %real_struct);
+    my %real_struct;
 	## Check required tables
     foreach my $t1 (keys %{$db_struct{'mysql'}}) {
 	my $found;
