@@ -133,8 +133,6 @@ sub maketext {
     my $stash = $context->stash();
     my $component = $stash->get('component');
     my $template_name = $component->{'name'};
-    my ($provider) = grep { $_->{HEAD}[2] eq $component } @{ $context->{LOAD_TEMPLATES} };
-    my $path = $provider->{HEAD}[1] if $provider;
 
     ## Strangely the path is sometimes empty...
     ## TODO : investigate
@@ -155,7 +153,7 @@ sub maketext {
 # OUT:
 #    Subref to generate formatted (i18n'ized) date/time.
 sub locdatetime {
-    my ($fmt, $arg) = @_;
+    my (undef, $arg) = @_;
     if ($arg !~ /^(\d{4})\D(\d\d?)(?:\D(\d\d?)(?:\D(\d\d?)\D(\d\d?)(?:\D(\d\d?))?)?)?/) {
 	return sub { Sympa::Language::gettext("(unknown date)"); };
     } else {
@@ -172,7 +170,7 @@ sub locdatetime {
 # OUT:
 #    Subref to generate folded text.
 sub wrap {
-    my ($context, $init, $subs, $cols) = @_;
+    my (undef, $init, $subs, $cols) = @_;
     $init = '' unless defined $init;
     $init = ' ' x $init if $init =~ /^\d+$/;
     $subs = '' unless defined $subs;
@@ -224,8 +222,6 @@ sub parse_tt2 {
     ## Add directories that may have been added
     push @{$include_path}, @other_include_path;
     @other_include_path = (); ## Reset it
-
-    my $wantarray;
 
     ## An array can be used as a template (instead of a filename)
     if (ref($template) eq 'ARRAY') {
