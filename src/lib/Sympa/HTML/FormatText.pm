@@ -1,10 +1,18 @@
 # $Id$
 
+=head1 NAME
+
+Sympa::HTML::FormatText - HTML::FormatText extension
+
+=head1 DESCRIPTION
+
+This class implements a specialized HTML formatter, to allow
+internationalisation of some strings.
+
+=cut
+
 package Sympa::HTML::FormatText;
 
-# This is a subclass of the HTML::FormatText object. 
-# This subclassing is done to allow internationalisation of some strings
-     
 use strict;
 
 use base qw(HTML::FormatText);
