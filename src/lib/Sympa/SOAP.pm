@@ -250,7 +250,6 @@ sub casLogin {
     my $proxyTicket = shift;
 
     my $http_host = $ENV{'SERVER_NAME'};
-    my $sender = $ENV{'USER_EMAIL'};
     my $robot = $ENV{'SYMPA_ROBOT'};
     &Sympa::Log::do_log('notice', 'casLogin(%s)', $proxyTicket);
     
@@ -357,8 +356,6 @@ sub authenticateAndRun {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email> <cookie> <service>');
     }
-    my $auth ;
-    
 
     ## Provided email is not trusted, we fetch the user email from the session_table instead
     my $session = new Sympa::Session($ENV{'SYMPA_ROBOT'},{'cookie' => $session_id});
@@ -561,8 +558,6 @@ sub info {
 	    ->faultdetail('You should login first');
     }    
 
-    my @resultSoap;
-
     unless ($listname) {
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Incorrect number of parameters')
@@ -578,8 +573,6 @@ sub info {
 	    ->faultstring('Unknown list')
 	    ->faultdetail("List $listname unknown");
     }
-
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
 
     my $user;
 
@@ -671,8 +664,6 @@ sub createList {
 	    ->faultstring('User not specified')
 	    ->faultdetail('Use a trusted proxy or login first ');
     }
-
-    my @resultSoap;
 
     unless ($listname) {
 	die SOAP::Fault->faultcode('Client')
@@ -801,8 +792,6 @@ sub closeList {
 	    ->faultstring('User not specified')
 	    ->faultdetail('Use a trusted proxy or login first ');
     }
-
-    my @resultSoap;
 
     unless ($listname) {
 	die SOAP::Fault->faultcode('Client')
@@ -1070,9 +1059,6 @@ sub del {
 		->faultdetail('Not member of list or not subscribed');
 	}
     
-    my $gecos = $user_entry->{'gecos'};
-    
-    
     ## Really delete and rewrite to disk.
     my $u;
     unless ($u = $list->delete_list_member('users' => [$email], 'exclude' =>' 1')){
@@ -1148,8 +1134,6 @@ sub review {
 	    ->faultstring('Unknown list')
 	    ->faultdetail("List $listname unknown");
     }
-
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot,'sympa');
 
     my $user;
 
@@ -1253,10 +1237,6 @@ sub fullReview {
 			->faultstring('Not enough privileges')
 			->faultdetail('Listmaster or listowner required');
 	}
-	
-	my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
-	
-	my $is_owner = $list->am_i('owner', $sender);
 	
 	## Members list synchronization if include is in use
 	if($list->has_include_data_sources()) {
@@ -1363,7 +1343,6 @@ sub signoff {
     }
     
     
-    my $l;
     my $list = new Sympa::List ($listname, $robot);
     
     ## Is this list defined
@@ -1373,8 +1352,6 @@ sub signoff {
 	    ->faultstring('Unknown list.')
 	    ->faultdetail("List $listname unknown");	
     }
-    
-    my $host = &Sympa::Configuration::get_robot_conf($robot,'host');
     
     if ($listname eq '*') {
 	my $success;
@@ -1389,8 +1366,6 @@ sub signoff {
     $list = new Sympa::List ($listname, $robot);
     
     # Part of the authorization code
-    my $user = &Sympa::List::get_global_user($sender);
-    
     my $result = $list->check_list_authz('unsubscribe','md5',
 					 {'email' => $sender,
 					  'sender' => $sender,
@@ -1642,7 +1617,6 @@ None.
 
  sub complexWhich {
      my $self = shift;
-     my @result;
      my $sender = $ENV{'USER_EMAIL'};
      &Sympa::Log::do_log('notice', 'xx complexWhich(%s)',$sender);
 
@@ -1667,7 +1641,6 @@ None.
      my $self = shift;
      my $topic = shift || '';
      my $subtopic = shift || '';
-     my @result;
      my $sender = $ENV{'USER_EMAIL'};
      &Sympa::Log::do_log('notice', 'complexLists(%s)',$sender);
 
@@ -1719,7 +1692,6 @@ sub which {
     foreach my $name (keys %listnames) {
 	my $list = $listnames{$name};
 
-	my $list_address;
 	my $result_item;
 
 	my $result = $list->check_list_authz('visibility', 'md5',
