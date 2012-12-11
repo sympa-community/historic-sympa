@@ -33,20 +33,13 @@ use strict;
 use constant MAX => 100_000;
 
 use Encode;
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;
-use Mail::Header;
 use Mail::Address;
-use MIME::Entity;
-use MIME::EncWords;
 use MIME::WordDecoder;
 use MIME::Parser;
 use MIME::Base64;
-use Storable;
 use Sys::Hostname;
-use Term::ProgressBar;
 use Time::HiRes qw(time);
-use Time::Local;
 use URI::Escape;
 
 use Sympa::Configuration;
