@@ -30,6 +30,8 @@ This module provides web authentication functions.
 
 package Sympa::Auth;
 
+use strict;
+
 use Digest::MD5;
 
 use Sympa::Configuration;
@@ -200,8 +202,6 @@ sub authentication {
     &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
     &Sympa::Log::do_log('err','authentication: incorrect password for user %s', $email);
 
-    $param->{'init_email'} = $email;
-    $param->{'escaped_init_email'} = &Sympa::Tools::escape_chars($email);
     return undef;
 }
 
@@ -364,7 +364,7 @@ sub get_email_by_net_id {
 	
 	$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 	
-	$email = &Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
+	my $email = &Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
 	
 	return $email;
     }
@@ -395,7 +395,7 @@ sub get_email_by_net_id {
 	my $count = $emails->count();
 
 	if ($emails->count() == 0) {
-	    &Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s", $host);
+	    &Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s");
 	$ds->disconnect();
 	return undef;
 	}
