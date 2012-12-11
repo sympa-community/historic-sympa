@@ -57,8 +57,6 @@ sub store_last {
     
     &Sympa::Log::do_log ('debug2','()');
     
-    my($filename, $newfile);
-    
     return unless $list->is_archived();
     my $dir = $list->{'dir'}.'/archives';
     
@@ -241,7 +239,7 @@ sub last_path {
     return undef unless ($list->is_archived());
     my $file = $list->{'dir'}.'/archives/last_message';
 
-    return ($list->{'dir'}.'/archives/last_message') if (-f $list->{'dir'}.'/archives/last_message'); 
+    return $file if (-f $file); 
     return undef;
 
 }
