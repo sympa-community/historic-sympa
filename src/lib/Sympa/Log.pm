@@ -30,7 +30,7 @@ This module provides logging-related functions
 
 package Sympa::Log;
 
-use strict "vars";
+use strict;
 
 use Encode;
 use POSIX qw();

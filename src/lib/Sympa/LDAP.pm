@@ -30,7 +30,7 @@ This module provides LDAP-related functions.
 
 package Sympa::LDAP;
 
-use strict "vars";
+use strict;
 
 use Sympa::Log;
 

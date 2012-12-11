@@ -26,7 +26,7 @@ This package provides abstraction for the VOOT workflow (server side).
 
 package Sympa::SOAP;
 
-use strict "vars";
+use strict;
 
 use Encode;
 use HTTP::Cookies;

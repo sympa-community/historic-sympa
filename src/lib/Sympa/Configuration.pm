@@ -30,7 +30,7 @@ This module handles the configuration files for Sympa.
 
 package Sympa::Configuration;
 
-use strict "vars";
+use strict;
 
 use constant {
     DAEMON_MESSAGE  => 1,

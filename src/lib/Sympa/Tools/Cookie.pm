@@ -30,7 +30,7 @@ This module provides various functions for managing HTTP cookies.
 
 package Sympa::Tools::Cookie;
 
-use strict "vars";
+use strict;
 
 use CGI::Cookie;
 use Digest::MD5;

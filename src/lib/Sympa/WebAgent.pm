@@ -30,7 +30,7 @@ This class implements a specialized LWP user agent.
 
 package Sympa::WebAgent;
 
-use strict "vars";
+use strict;
 use base qw(LWP::UserAgent);
 
 ## Good documentation : http://articles.mongueurs.net/magazines/linuxmag57.html

@@ -30,7 +30,7 @@ FIXME
 
 package Sympa::Configuration::Definition;
 
-use strict "vars";
+use strict;
 
 use Sympa::Constants;
 
