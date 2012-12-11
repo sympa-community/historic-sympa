@@ -361,4 +361,3 @@ sub gettext_strftime {
 }
 
 1;
-

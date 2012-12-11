@@ -578,4 +578,4 @@ sub get_canonical_read_date {
     }
 }
 
-return 1;
+1;
