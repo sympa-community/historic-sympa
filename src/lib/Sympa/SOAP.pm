@@ -1507,7 +1507,6 @@ sub subscribe {
   if ($action =~ /owner/i) {
        
       ## Send a notice to the owners.
-      my $keyauth = $list->compute_auth($sender,'add');
       unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 				   'keyauth' => $list->compute_auth($sender,'add'),
 				   'replyto' => &Sympa::Configuration::get_robot_conf($robot, 'sympa'),
