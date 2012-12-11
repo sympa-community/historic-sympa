@@ -158,7 +158,6 @@ sub getHash {
 sub _getRequiredElements {
     my $self = shift;
     &Sympa::Log::do_log('debug3','()');
-    my $error = 0;
 
     # listname element is obligatory
     unless ($self->_getRequiredSingle('listname')){
@@ -299,7 +298,6 @@ sub _getChildren {
     my $node = shift;
     &Sympa::Log::do_log('debug3','(%s)',$node->nodeName);
 
-    my %error_nodes;
     ## return value
     my $hash = {};
     my $string = "";

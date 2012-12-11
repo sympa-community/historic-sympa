@@ -115,7 +115,6 @@ sub pictures_filename {
     my $login = &md5_fingerprint($parameters{'email'});
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
     
-    my $filetype;
     my $filename = undef;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
  	if (-f $parameters{'path'}.'/'.$listname.'@'.$robot.'/'.$login.$ext) {
@@ -344,7 +343,7 @@ been exhausted.
 =cut
 
 sub safefork {
-   my($i, $pid);
+   my($i);
    
    for ($i = 1; $i < 4; $i++) {
       my($pid) = fork;
@@ -381,11 +380,9 @@ true if there are some command in $msg, false otherwise.
 =cut
 
 sub checkcommand {
-   my($msg, $sender, $robot, $regexp) = @_;
+   my($msg, $sender, undef, $regexp) = @_;
 
-   my($avoid, $i);
-
-   my $hdr = $msg->head;
+   my $i;
 
    ## Check for commands in the subject.
    my $subject = $msg->head->get('Subject');
@@ -1147,7 +1144,6 @@ sub split_mail {
     my $dir = shift ;
 
     my $head = $message->head ;
-    my $body = $message->body ;
     my $encoding = $head->mime_encoding ;
 
     if ($message->is_multipart
@@ -1170,7 +1166,6 @@ sub split_mail {
 		my $mime_types = &load_mime_types();
 
 		$fileExt=$mime_types->{$head->mime_type};
-		my $var=$head->mime_type;
 	    }
 	
 	    
@@ -1450,7 +1445,7 @@ sub virus_infected {
 	my @list = readdir(DIR);
 	closedir (DIR);
         foreach (@list) {
-	    my $nbre = unlink ("$work_dir/$_")  ;
+	    unlink ("$work_dir/$_")  ;
 	}
 	rmdir ($work_dir) ;
     }
@@ -1979,7 +1974,6 @@ sub CleanDir {
     my @qfile = sort grep (!/^\.+$/,readdir(DIR));
     closedir DIR;
     
-    my ($curlist,$moddelay);
     foreach my $f (sort @qfile) {
 
 	if ((stat "$dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {

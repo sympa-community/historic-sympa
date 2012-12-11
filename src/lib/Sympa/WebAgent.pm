@@ -38,7 +38,7 @@ use base qw(LWP::UserAgent);
 my ($web_user, $web_passwd);
 
 sub get_basic_credentials {
-    my ( $self, $realm, $uri ) = @_;
+    my ( $self, undef, undef) = @_;
 
     return ( $web_user, $web_passwd );
 }

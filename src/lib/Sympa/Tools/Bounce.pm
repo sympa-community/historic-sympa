@@ -138,7 +138,7 @@ sub corrige {
 	    
 	$newadr = $x400{PN} || "$x400{s}";
 	$newadr = "$x400{g}.".$newadr if $x400{g};
-	my ($l, $d) =  split /\@/, $from;
+	my (undef, $d) =  split /\@/, $from;
 
 	$newadr .= "\@$d";
 
@@ -155,7 +155,7 @@ sub corrige {
 
     }else {
 
-	my ($l, $d) =  split /\@/, $from;
+	my (undef, $d) =  split /\@/, $from;
 	my $newadr = "$adr\@$d";
 
 	return $newadr;
@@ -238,7 +238,6 @@ sub anabounce {
 	    
 	    $champ{from} =~ s/^.*<(.+)[\>]$/$1/;
 	    $champ{from} =~  y/[A-Z]/[a-z]/;
-	    my ($local, $domaine) = split /\@/, $champ{from};
 	    
 	    if ($champ{subject} =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
 		$info{$2}{error} = $1;

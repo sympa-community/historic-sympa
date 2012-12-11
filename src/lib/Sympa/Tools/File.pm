@@ -255,8 +255,6 @@ sub list_dir {
     my $all = shift;
     my $original_encoding = shift; ## Suspected original encoding of filenames
 
-    my $size=0;
-
     if (opendir(DIR, $dir)) {
 	foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
 

@@ -418,7 +418,7 @@ sub fix_html_part {
 	my $cset = MIME::Charset->new($part->head->mime_attr('Content-Type.Charset') || '');
 	unless ($cset->decoder) {
 	    # Charset is unknown.  Detect 7-bit charset.
-	    my ($dummy, $charset) =
+	    my (undef, $charset) =
 		MIME::Charset::body_encode($body, '', Detect7Bit => 'YES');
 	    $cset = MIME::Charset->new($charset);
 	}
