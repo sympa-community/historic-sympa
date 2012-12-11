@@ -12,6 +12,8 @@ This class implement a virtual robot.
 
 package Sympa::Robot;
 
+use strict;
+
 use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
@@ -59,7 +61,7 @@ sub new {
     }
 
     ## Initialize internal list cache
-    undef %list_cache;
+    undef %Sympa::List::list_cache;
 
     # create a new Robot object
     bless $robot, $pkg;
