@@ -32,9 +32,7 @@ package Sympa::Message;
 
 use strict;
 
-use Mail::Header;
 use Mail::Address;
-use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
 
