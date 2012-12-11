@@ -325,7 +325,7 @@ sub dump {
     select $output;
 
     foreach my $key (keys %{$self}) {
-	if (ref($self->{$key}) eq 'MIME::Entity') {
+	if (ref($self->{$key}) && $self->{$key}->isa('MIME::Entity')) {
 	    printf "%s =>\n", $key;
 	    $self->{$key}->print;
 	}else {
