@@ -32,7 +32,6 @@ package Sympa::Log;
 
 use strict;
 
-use Encode;
 use POSIX qw();
 use Sys::Syslog;
 
