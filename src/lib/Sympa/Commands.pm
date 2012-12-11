@@ -32,12 +32,6 @@ package Sympa::Commands;
 
 use strict;
 
-use DB_File;
-use Digest::MD5;
-use Fcntl;
-use MIME::EncWords;
-use Time::Local;
-
 use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
