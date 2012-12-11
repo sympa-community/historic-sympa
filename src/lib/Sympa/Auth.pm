@@ -206,7 +206,7 @@ sub authentication {
 
 sub ldap_authentication {
      my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;
-     my ($mesg, $host,$ldap_passwd,$ldap_anonymous);
+     my ($mesg, $ldap_passwd,$ldap_anonymous);
      &Sympa::Log::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
      &Sympa::Log::do_log('debug3','Password used: %s',$pwd);
 
@@ -390,8 +390,6 @@ sub get_email_by_net_id {
 				      timeout => $ldap->{'ldap_timeout'},
 				      attrs =>  $ldap->{'ldap_email_attribute'}
 				      );
-	my $count = $emails->count();
-
 	if ($emails->count() == 0) {
 	    &Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s");
 	$ds->disconnect();
@@ -437,7 +435,6 @@ sub remote_app_check_password {
     
     my $md5 = &Sympa::Tools::md5_fingerprint($password);
     
-    my $vars;
     # seach entry for trusted_application in Conf
     my @trusted_apps ;
     
