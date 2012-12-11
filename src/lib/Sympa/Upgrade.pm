@@ -216,7 +216,6 @@ sub upgrade {
 	&Sympa::Log::do_log('notice','Rename archives/log. files...');
 	my $all_lists = &Sympa::List::get_lists('*');
 	foreach my $list ( @$all_lists ) {
-	    my $l = $list->{'name'}; 
 	    if (-f $list->{'dir'}.'/archives/log.') {
 		rename $list->{'dir'}.'/archives/log.', $list->{'dir'}.'/archives/log.00';
 	    }
@@ -557,7 +556,7 @@ sub upgrade {
 
 	## Search language directories
 	foreach my $pair (@directories) {
-	    my ($d, $lang) = @$pair;
+	    my ($d, undef) = @$pair;
 	    unless (opendir DIR, $d) {
 		next;
 	    }
@@ -777,9 +776,6 @@ sub upgrade {
 	    }
 	    my @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
 	    closedir(DIR);
-	    my $filename;
-	    my $listname;
-	    my $robot;
 
 	    my $ignored = '';
 	    my $performed = '';
@@ -787,7 +783,6 @@ sub upgrade {
 	    ## Scans files in queue
 	    foreach my $filename (sort @qfile) {
 		my $type;
-		my $list;
 		my ($listname, $robot);	
 		my %meta ;
 
