@@ -204,7 +204,6 @@ sub help {
     shift;
     my $robot=shift;
 
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
     my $etc =  &Sympa::Configuration::get_robot_conf($robot, 'etc');
 
     &Sympa::Log::do_log('debug', 'to robot %s',$robot);
@@ -287,9 +286,6 @@ sub lists {
     my $robot=shift;
     my $sign_mod = shift;
     my $message = shift;
-
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
-    my $host = &Sympa::Configuration::get_robot_conf($robot, 'host');
 
     &Sympa::Log::do_log('debug', 'for robot %s, sign_mod %, message %s', $robot,$sign_mod , $message);
 
@@ -515,8 +511,6 @@ sub last {
     my $which = shift;
     my $robot = shift;
 
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
-
     &Sympa::Log::do_log('debug', '(%s, %s)', $which, $robot);
 
     my $list = new Sympa::List ($which,$robot);
@@ -626,7 +620,6 @@ sub review {
     my $message = shift ;
 
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $listname,$robot,$sign_mod );
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
 
     my $user;
     my $list = new Sympa::List ($listname, $robot);
@@ -736,8 +729,6 @@ sub verify {
 
     my $sign_mod = shift ;
     &Sympa::Log::do_log('debug', '(%s, %s)', $sign_mod, $robot);
-    
-    my $user;
     
     my $list = new Sympa::List ($listname, $robot);
     &Sympa::Language::SetLang($list->{'admin'}{'lang'});
@@ -962,8 +953,6 @@ sub info {
     my $message = shift;
 
     &Sympa::Log::do_log('debug', '(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
-
-    my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
 
     my $list = new Sympa::List ($listname, $robot);
     unless ($list) {
@@ -1870,10 +1859,6 @@ sub del {
 	    return 'not_allowed';
 	}
 	
-	## Get gecos before deletion
-	my $gecos = $user_entry->{'gecos'};
-	
-	
 	## Really delete and rewrite to disk.
 	my $u;
 	unless ($u = $list->delete_list_member('users' => [$who], 'exclude' =>' 1', 'parameter' => 'deletd by admin')){
@@ -2158,7 +2143,6 @@ sub confirm {
 
     $what =~ /^\s*(\S+)\s*$/;
     my $key = $1; chomp $key;
-    my $start_time = time; # get the time at the beginning
 
     my $spool = new Sympa::Spool ('auth');
 
@@ -2182,7 +2166,6 @@ sub confirm {
     &Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
     my $name = $list->{'name'};
-    my $bytes = $message->{'size'};
     my $hdr= $msg->head;
 
     my $msgid = $hdr->get('Message-Id');
@@ -2311,7 +2294,6 @@ sub reject {
     $what =~ /^(\S+)\s+(.+)\s*$/;
     my($which, $key) = ($1, $2);
     $which =~ y/A-Z/a-z/;
-    my $modqueue = &Sympa::Configuration::get_robot_conf($robot,'queuemod');
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
     my $list = new Sympa::List ($which, $robot);
@@ -2341,10 +2323,6 @@ sub reject {
 	return 'wrong_auth';
     }
     my $msg = $message->{'msg'};    
-    my $bytes = $message->{'size'};    
-    my $hdr= $msg->head;
-    my $customheader = $list->{'admin'}{'custom_header'};
-    my $to_field = $hdr->get('To');
     
     my @sender_hdr = Mail::Address->parse($message->head->get('From'));
     unless  ($#sender_hdr == -1) {
