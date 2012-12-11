@@ -84,7 +84,6 @@ sub new {
     my $cookie = $context->{'cookie'};
     my $action = $context->{'action'};
     my $rss = $context->{'rss'};
-    my $ajax =  $context->{'ajax'};
 
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
     my $session={};
@@ -237,7 +236,6 @@ sub renew {
 	next unless ($var);
 	$hash{$var} = $self->{$var};
     }
-    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
 
     ## Renew the session ID in order to prevent session hijacking
     my $new_id = &get_random();
@@ -268,7 +266,6 @@ sub purge_old_sessions {
     unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
     unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
 
-    my @sessions ;
     my  $sth;
 
     my $robot_condition = sprintf "robot_session = %s", &Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
@@ -329,7 +326,6 @@ sub purge_old_tickets {
 
     unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
 
-    my @tickets ;
     my  $sth;
 
     my $robot_condition = sprintf "robot_one_time_ticket = %s", &Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
@@ -492,7 +488,7 @@ sub is_anonymous {
 # initial version based on rawlers_dtection.conf file only
 # later : use Session table to identify those who create a lot of sessions 
 sub is_a_crawler {
-    my $robot = shift;
+    shift;
     my $context = shift;
 
     return $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
