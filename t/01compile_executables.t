@@ -16,9 +16,9 @@ if ($EVAL_ERROR) {
     plan(skip_all => $msg);
 }
 
-my @files = map { './src/' . $_ } qw/
+my @files = map { './src/sbin/' . $_ } qw/
     alias_manager.pl bulk.pl spooler.pl sympa.pl sympa_wizard.pl
 /;
 
-$ENV{PERL5LIB} = $ENV{PERL5LIB} ? "$ENV{PERL5LIB}:/src/lib" : "src/lib";
+$ENV{PERL5LIB} = $ENV{PERL5LIB} ? "$ENV{PERL5LIB}:src/lib" : "src/lib";
 all_pl_files_ok(@files);
