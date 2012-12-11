@@ -68,7 +68,7 @@ use Sympa::WebAgent;
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
 
-my %list_cache;
+our %list_cache;
 
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
