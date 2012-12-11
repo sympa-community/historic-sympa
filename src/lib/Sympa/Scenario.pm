@@ -188,7 +188,7 @@ sub new {
 
 ## Parse scenario rules
 sub _parse_scenario {
-    my ($function, $robot, $scenario_name, $paragraph, $directory ) = @_;
+    my ($function, $robot, $scenario_name, $paragraph) = @_;
     &Sympa::Log::do_log('debug2', "($function, $scenario_name, $robot)");
     
     my $structure = {};
@@ -1170,8 +1170,7 @@ sub search{
 	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 	
         my $timeout = 3600;
-        my ($sql_conf, $tsth);
-        my $time = time;
+        my $sql_conf;
 	
         unless ($sql_conf = &Sympa::Configuration::load_sql_filter($file)) {
             $list->send_notify_to_owner('named_filter',{'filter' => $filter_file})
@@ -1259,8 +1258,6 @@ sub search{
 	    return undef;
 	}   
 	my $timeout = 3600;	
-	my $var;
-	my $time = time;
 	my %ldap_conf;
     
 	require Sympa::LDAP;
