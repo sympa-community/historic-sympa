@@ -30,6 +30,8 @@ This module provides file fetching functions.
 
 package Sympa::Fetch;
 
+use strict;
+
 use Sympa::Configuration;
 use Sympa::Log;
 
