@@ -32,8 +32,6 @@ package Sympa::Auth;
 
 use strict;
 
-use Digest::MD5;
-
 use Sympa::Configuration;
 use Sympa::Language;
 use Sympa::List;
