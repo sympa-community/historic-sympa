@@ -136,7 +136,6 @@ sub store {
 	$hash{$var} = $challenge->{$var};
     }
     my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
-    my $sth;
 
     unless(&Sympa::SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
 	&Sympa::Log::do_log('err','Unable to store challenge %s informations in database (robot: %s, user: %s)',$challenge->{'id_challenge'},$challenge->{'robot'},$challenge->{'email'});
