@@ -59,7 +59,6 @@ sub get_recipients_status {
         &Sympa::Log::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
         my $sth;
-        my $pk;
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
         unless($sth = &Sympa::SDM::do_query("SELECT recipient_notification AS recipient,  reception_option_notification AS reception_option, status_notification AS status, arrival_date_notification AS arrival_date, type_notification as type, message_notification as notification_message FROM notification_table WHERE (list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))",&Sympa::SDM::quote($listname),&Sympa::SDM::quote($robot),&Sympa::SDM::quote($msgid),&Sympa::SDM::quote($msgid),&Sympa::SDM::quote('<'.$msgid.'>'))) {
@@ -172,7 +171,6 @@ sub find_notification_id_by_message{
     my $robot = shift;
 
     &Sympa::Log::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
-    my $pk;
     
     my $sth;
 
