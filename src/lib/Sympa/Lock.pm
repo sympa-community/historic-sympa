@@ -244,7 +244,6 @@ sub remove_lock {
     &Sympa::Log::do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
 
     my $fh = $list_of_locks{$self->{'lock_filename'}}{'fh'};
-    my $previous_mode;
     
     if ($self->{'method'} eq 'nfs') {
 	my $nfs_lock = $list_of_locks{$self->{'lock_filename'}}{'nfs_lock'};
