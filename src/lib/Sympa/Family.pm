@@ -1108,8 +1108,6 @@ sub check_values {
     
     foreach my $p_val (@param_values) { 
 	
-	my $found = 0;
-
 	## multiple values
 	if(ref($p_val) eq 'ARRAY') { 
 	    
@@ -1459,7 +1457,6 @@ sub _split_xml_file {
 	    }
 	    &Sympa::Log::do_log('err','Only one "listname" element is allowed for "list" element, lines : %s',join(", ",@error));
 	    return undef;
-	    my $minor_param = $2;
 	}
 	my $listname_elt = shift @children;
 	my $listname = $listname_elt->textContent();
@@ -1682,7 +1679,6 @@ sub _get_customizing {
     
     # keep allowed values
     foreach my $param (@{$result->{'forbidden'}{'param'}}) {
-	my $minor_p;
 	if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
 	    $param = $1;
 	}
@@ -1924,9 +1920,7 @@ sub _load_param_constraint_conf {
 sub create_automatic_list {
     my $self = shift;
     my %param = @_;
-    my $auth_level = $param{'auth_level'};
     my $sender = $param{'sender'};
-    my $message = $param{'message'};
     my $listname = $param{'listname'};
 
     unless ($self->is_allowed_to_create_automatic_lists(%param)){
