@@ -246,7 +246,6 @@ sub get_message {
     
 
     my $sqlselector = '';
-    my %db_struct  = &Sympa::DatabaseDescription::db_struct();
 
     foreach my $field (keys %$selector){
 #	unless (defined %{$db_struct{'mysql'}{'spool_table'}{$field.'_spool'}}) {
