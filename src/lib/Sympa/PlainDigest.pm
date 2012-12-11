@@ -106,8 +106,7 @@ my $outstring;
 sub plain_body_as_string {
  
   $outstring = "";
-  my ($topent, @paramlist) = @_;
-  my %params = @paramlist;
+  my ($topent) = @_;
   
   _do_toplevel ($topent);
   
@@ -283,7 +282,6 @@ sub _do_text_html {
  # get a plain text representation of an HTML part
   my $entity = shift;
   my $text;
-  my $have_mods = 1;
   
   unless (defined $entity->bodyhandle) {
     $outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
