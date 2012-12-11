@@ -222,7 +222,6 @@ sub load_robots {
     }
     my $exiting = 0;
     foreach my $robot (@robots) {
-        my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
         my $robot_conf = undef;
         unless ($robot_conf = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}, 'force_reload' => $param->{'force_reload'}})) {
             printf STDERR "The config for robot %s contain errors: it could not be correctly loaded.\n";
@@ -368,7 +367,7 @@ sub conf_2_db {
     my @conf_parameters = @Sympa::Configuration::Definition::params ;
 
     # store in database robots parameters.
-    my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
+    &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
 
     unless (opendir DIR,$Conf{'etc'} ) {
         printf STDERR "%s::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n", __PACKAGE__;
@@ -704,16 +703,13 @@ sub get_sso_by_id {
 sub _load_auth {
     
     my $robot = shift;
-    my $is_main_robot = shift;
     # find appropriate auth.conf file
     my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
     &Sympa::Log::do_log('debug', '(%s)', $config_file);
 
     $robot ||= $Conf{'domain'};
     my $line_num = 0;
-    my $config_err = 0;
     my @paragraphs;
-    my %result;
     my $current_paragraph ;
 
     my %valid_keywords = ('ldap' => {'regexp' => '.*',
@@ -1304,7 +1300,7 @@ sub load_generic_conf_file {
 ### load_a_param
 # 
 sub _load_a_param {
-    my ($key, $value, $p) = @_;
+    my (undef, $value, $p) = @_;
     
     ## Empty value
     if ($value =~ /^\s*$/) {
