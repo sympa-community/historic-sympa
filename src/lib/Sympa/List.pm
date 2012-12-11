@@ -33,9 +33,7 @@ use strict;
 
 use DB_File;
 use Encode;
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;
-use Mail::Header;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
