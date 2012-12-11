@@ -218,9 +218,6 @@ sub set_daemon {
 }
 
 sub get_log_date {
-    my $date_from,
-    my $date_to;
-
     my $sth;
     my @dates;
     foreach my $query('MIN','MAX') {
@@ -398,8 +395,6 @@ sub db_log_del {
 
 # Scan log_table with appropriate select 
 sub get_first_db_log {
-    my $dbh = &Sympa::SDM::db_get_handler();
-
     my $select = shift;
 
     my %action_type = ('message' => ['reject','distribute','arc_delete','arc_download',
