@@ -2333,7 +2333,6 @@ sub increment_msg_count {
     &Sympa::Log::do_log('debug2', "($self->{'name'}");
    
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
     my $file = "$self->{'dir'}/msg_count";
     
     my %count ; 
@@ -2379,7 +2378,6 @@ sub get_msg_count {
     &Sympa::Log::do_log('debug3', "Getting the number of messages for list %s",$self->{'name'});
 
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
     my $file = "$self->{'dir'}/stats";
     
     my $count = 0 ;
@@ -2407,10 +2405,8 @@ sub get_latest_distribution_date {
     &Sympa::Log::do_log('debug3', "($self->{'name'})");
    
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
     my $file = "$self->{'dir'}/msg_count";
     
-    my %count ; 
     my $latest_date = 0 ; 
     unless (open(MSG_COUNT, $file)) {
 	&Sympa::Log::do_log('debug2',"get_latest_distribution_date: unable to open $file");
@@ -2567,7 +2563,6 @@ sub save_config {
 	return undef;
     }
 
-    my $name = $self->{'name'};    
     my $old_serial = $self->{'admin'}{'serial'};
     my $old_config_file_name = "$self->{'dir'}/config.$old_serial";
 
@@ -2666,7 +2661,6 @@ sub load {
 
     my $time_config = (stat("$self->{'dir'}/config"))[9];
     my $time_config_bin = (stat("$self->{'dir'}/config.bin"))[9];
-    my $time_subscribers; 
     my $time_stats = (stat("$self->{'dir'}/stats"))[9];
     my $config_reloaded = 0;
     my $admin;
@@ -3978,7 +3972,6 @@ sub send_msg {
     my $original_message_id = $hdr->get('Message-Id');
     my $name = $self->{'name'};
     my $robot = $self->{'domain'};
-    my $admin = $self->{'admin'};
     my $total = $self->get_total('nocache');
     my $sender_line = $hdr->get('From');
     my @sender_hdr = Mail::Address->parse($sender_line);
@@ -4495,18 +4488,16 @@ spool, or I<undef> if something went wrong.
 
 sub send_auth {
    my($self, $message) = @_;
-   my ($sender, $msg, $file) = ($message->{'sender'}, $message->{'msg'}, $message->{'filename'});
+   my ($sender, $file) = ($message->{'sender'}, $message->{'filename'});
    &Sympa::Log::do_log('debug3', '%s, %s', $sender, $file);
 
    ## Ensure 1 second elapsed since last message
    sleep (1);
 
-   my($i, @rcpt);
    my $admin = $self->{'admin'};
    my $name = $self->{'name'};
    my $host = $admin->{'host'};
    my $robot = $self->{'domain'};
-   my $authqueue = $Sympa::Configuration::Conf{'queueauth'};
    return undef unless ($name && $admin);
   
 
@@ -4959,7 +4950,6 @@ sub send_notify_to_owner {
     my ($self,$operation,$param) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s', $self->{'name'}, $operation);
 
-    my $host = $self->{'admin'}{'host'};
     my @to = $self->get_owners_email();
     my $robot = $self->{'domain'};
 
@@ -5168,7 +5158,6 @@ sub send_notify_to_user{
     my ($self,$operation,$user,$param) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s, %s', $self->{'name'}, $operation, $user);
 
-    my $host = $self->{'admin'}->{'host'};
     my $robot = $self->{'domain'};
     $param->{'auto_submitted'} = 'auto-generated';
 
@@ -5260,7 +5249,7 @@ sub add_parts {
     my $listdir = $self->{'dir'};
     &Sympa::Log::do_log('debug2', 'List:add_parts(%s, %s, %s)', $msg, $listname, $type);
 
-    my ($header, $headermime);
+    my $header;
     foreach my $file ("$listdir/message.header", 
 		      "$listdir/message.header.mime",
 		      "$Sympa::Configuration::Conf{'etc'}/mail_tt2/message.header", 
@@ -5275,7 +5264,7 @@ sub add_parts {
 	} 
     }
 
-    my ($footer, $footermime);
+    my $footer;
     foreach my $file ("$listdir/message.footer", 
 		      "$listdir/message.footer.mime",
 		      "$Sympa::Configuration::Conf{'etc'}/mail_tt2/message.footer", 
@@ -5559,7 +5548,6 @@ sub delete_list_admin {
     
     foreach my $who (@u) {
 	$who = &Sympa::Tools::clean_email($who);
-	my $statement;
 	
 	$list_cache{'is_admin_user'}{$self->{'domain'}}{$name}{$who} = undef;    
 	    
@@ -5590,8 +5578,6 @@ Delete all admin_table entries.
 sub delete_all_list_admin {
     &Sympa::Log::do_log('debug2', ''); 
 	    
-    my $total = 0;
-    
     ## Delete record in ADMIN
     unless($sth = &Sympa::SDM::do_query("DELETE FROM admin_table")) {
 	&Sympa::Log::do_log('err','Unable to remove all admin from database');
@@ -6087,7 +6073,6 @@ An arrayref of ressembling emails, or I<undef> if something went wrong.
 sub get_ressembling_list_members_no_object {
     my $options = shift;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
-    my $name = $options->{'name'};
     my @output;
 
 
@@ -7000,9 +6985,7 @@ sub update_list_member {
     &Sympa::Log::do_log('debug2', '(%s)', $who);
     $who = &Sympa::Tools::clean_email($who);    
 
-    my ($field, $value);
-    
-    my ($user, $statement, $table);
+    my ($table, $field, $value);
     my $name = $self->{'name'};
     
     ## mapping between var and field names
@@ -7164,9 +7147,8 @@ sub update_list_admin {
     &Sympa::Log::do_log('debug2', '(%s,%s)', $role, $who); 
     $who = &Sympa::Tools::clean_email($who);    
 
-    my ($field, $value);
+    my ($table, $field, $value);
     
-    my ($admin_user, $statement, $table);
     my $name = $self->{'name'};
     
     ## mapping between var and field names
@@ -8495,7 +8477,7 @@ sub _include_users_list {
 
 ## include a lists owners lists privileged_owners or lists_editors.
 sub _include_users_admin {
-    my ($users, $selection, $role, $default_user_options,$tied) = @_;
+    my (undef, $selection, $role) = @_;
 #   il faut préparer une liste de hash avec le nom de liste, le nom de robot, le répertoire de la liset pour appeler
 #    load_admin_file décommanter le include_admin
     my $lists;
@@ -8504,15 +8486,11 @@ sub _include_users_admin {
 	
 	if ($selection =~ /^\*\@(\S+)$/) {
 	    $lists = &get_lists($1);
-	    my $robot = $1;
 	}else{
 	    $selection =~ /^(\S+)@(\S+)$/ ;
 	    $lists->[0] = $1;
 	}
 	
-	foreach my $list (@$lists) {
-	    #my $admin = _load_list_config_file($dir, $domain, 'config');
-	}
     }
 }
     
@@ -8664,8 +8642,6 @@ sub _include_users_remote_file {
 		    %u = split "\n",$users->{$email};
 		}else{
 		    %u = %{$users->{$email}};
-		    foreach my $k (keys %u) {
-		    }
 		}
 	    }else {
 		%u = %{$default_user_options};
@@ -8722,13 +8698,12 @@ sub _include_users_voot_group {
 	
 	my $members = $consumer->getGroupMembers(group => $param->{'group'});
 	unless(defined $members) {
-		my $url = $consumer->getOAuthConsumer()->mustRedirect();
 		# Report error with redirect url
+                #my $url = $consumer->getOAuthConsumer()->mustRedirect();
 		#return &do_redirect($url) if(defined $url);
 		return undef;
 	}
 	
-	my $email_regexp = &Sympa::Tools::get_regexp('email');
 	my $total = 0;
 	
 	foreach my $member (@$members) {
@@ -8777,8 +8752,6 @@ sub _include_users_ldap {
     my ($users, $id, $source, $default_user_options, $tied) = @_;
     &Sympa::Log::do_log('debug2', '');
     
-    my $user = $source->{'user'};
-    my $passwd = $source->{'passwd'};
     my $ldap_suffix = $source->{'suffix'};
     my $ldap_filter = $source->{'filter'};
     my $ldap_attrs = $source->{'attrs'};
@@ -8789,7 +8762,7 @@ sub _include_users_ldap {
     push @ldap_attrs, $gecos_attr if($gecos_attr);
     
     ## LDAP and query handler
-    my ($ldaph, $fetch);
+    my $fetch;
 
     ## Connection timeout (default is 120)
     #my $timeout = 30; 
@@ -8811,7 +8784,6 @@ sub _include_users_ldap {
     
     ## Counters.
     my $total = 0;
-    my $dn; 
     my @emails;
     my %emailsViewed;
 
@@ -8902,8 +8874,6 @@ sub _include_users_ldap_2level {
     my ($users, $id, $source, $default_user_options,$tied) = @_;
     &Sympa::Log::do_log('debug2', '');
     
-    my $user = $source->{'user'};
-    my $passwd = $source->{'passwd'};
     my $ldap_suffix1 = $source->{'suffix1'};
     my $ldap_filter1 = $source->{'filter1'};
     my $ldap_attrs1 = $source->{'attrs1'};
@@ -8943,7 +8913,6 @@ sub _include_users_ldap_2level {
     
     ## Counters.
     my $total = 0;
-    my $dn; 
    
     ## returns a reference to a HASH where the keys are the DNs
     ##  the second level hash's hold the attributes
@@ -9245,7 +9214,7 @@ sub _load_list_members_from_include {
     my $admin = $self->{'admin'};
     my $dir = $self->{'dir'};
     &Sympa::Log::do_log('debug2', '%s', $name);
-    my (%users, $depend_on, $ref);
+    my (%users, $depend_on);
     my $total = 0;
     my @errors;
     my $result;
@@ -9383,7 +9352,7 @@ sub _load_list_admin_from_include {
    
     &Sympa::Log::do_log('debug2', '(%s) for list %s',$role, $name); 
 
-    my (%admin_users, $depend_on, $ref);
+    my (%admin_users, $depend_on);
     my $total = 0;
     my $list_admin = $self->{'admin'};
     my $dir = $self->{'dir'};
@@ -9694,7 +9663,6 @@ sub get_list_of_sources_id {
 			$old_subs_id{$raw} = 1;
 		}
 	}
-	my $ids = join(',',keys %old_subs_id);
 	return \%old_subs_id;
 }
 
@@ -10399,7 +10367,7 @@ sub is_update_param {
 
 sub _inclusion_loop {
 
-    my $name = shift;
+    shift;
     my $incl = shift;
     my $depend_on = shift;
 
@@ -10501,7 +10469,6 @@ sub store_digest {
 
     my($self,$message) = @_;
    &Sympa::Log::do_log('debug', '(list= %s)',$self->{'name'});
-    my $separator = &Sympa::Tools::get_separator();  
 
     my @now  = localtime(time);
 
@@ -10762,7 +10729,7 @@ sub get_netidtoemail_db {
     my $idpname = shift;
     &Sympa::Log::do_log('debug', '(%s, %s)', $netid, $idpname);
 
-    my ($l, %which, $email);
+    my $email;
 
     push @sth_stack, $sth;
 
@@ -10787,8 +10754,6 @@ sub set_netidtoemail_db {
     my $idpname = shift;
     my $email = shift; 
     &Sympa::Log::do_log('debug', '(%s, %s, %s)', $netid, $idpname, $email);
-
-    my ($l, %which);
 
     unless (&Sympa::SDM::do_query( "INSERT INTO netidmap_table (netid_netidmap,serviceid_netidmap,email_netidmap,robot_netidmap) VALUES (%s, %s, %s, %s)", &Sympa::SDM::quote($netid), &Sympa::SDM::quote($idpname), &Sympa::SDM::quote($email), &Sympa::SDM::quote($robot))) {
 	&Sympa::Log::do_log('err','Unable to set email address %s in netidmap_table for id %s, service %s, robot %s', $email, $netid, $idpname, $robot);
@@ -11421,7 +11386,7 @@ sub get_cert {
     # it will have the respective cert attached anyways.
     # (the problem is that netscape, opera and IE can't only
     # read the first cert in a file)
-    my($certs,$keys) = Sympa::Tools::SMIME::smime_find_keys($self->{dir},'encrypt');
+    my($certs, undef) = Sympa::Tools::SMIME::smime_find_keys($self->{dir},'encrypt');
 
     my @cert;
     if ($format eq 'pem') {
@@ -11893,7 +11858,6 @@ sub is_there_msg_topic {
 sub is_available_msg_topic {
     my ($self,$topic) = @_;
     
-    my @available_msg_topic;
     foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
 	return $topic
 	    if ($msg_topic->{'name'} eq $topic);
@@ -12428,7 +12392,7 @@ sub get_subscription_requests {
     my $subscription_request_spool = new Sympa::Spool ('subscribe');
     my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
 
-    foreach my $subrequest ( $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'})) {
+    foreach my $subrequest (@subrequests) {
 
 	my $email = $subrequest->{'sender'};
 	my $gecos; my $customattributes;
