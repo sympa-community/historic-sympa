@@ -200,46 +200,6 @@ sub load_config {
     return $conf;
 }
 
-## Load HTTPD MIME Types
-sub load_mime_types {
-    my $types = {};
-
-    @localisation = ('/etc/mime.types', '/usr/local/apache/conf/mime.types',
-		     '/etc/httpd/conf/mime.types',$Sympa::Configuration::Conf{'etc'}.'/mime.types');
-
-    foreach my $loc (@localisation) {
-	next unless (-r $loc);
-
-	unless(open (CONF, $loc)) {
-	    &Sympa::Log::do_log('err',"unable to open $loc");
-	    return undef;
-	}
-    }
-    
-    while (<CONF>) {
-	next if /^\s*\#/;
-	
-	if (/^(\S+)\s+(.+)\s*$/i) {
-	    my ($k, $v) = ($1, $2);
-	    
-	    my @extensions = split / /, $v;
-	
-	    ## provides file extention, given the content-type
-	    if ($#extensions >= 0) {
-		$types->{$k} = $extensions[0];
-	    }
-    
-	    foreach my $ext (@extensions) {
-		$types->{$ext} = $k;
-	    }
-	    next;
-	}
-    }
-    
-    close FILE;
-    return $types;
-}
-
 ## Returns user information extracted from the cookie
 sub get_email_from_cookie {
 #    &Sympa::Log::do_log('debug', 'get_email_from_cookie');

@@ -124,7 +124,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 }else {
     require CGI;
 }
-my $mime_types = &Sympa::WWSympa::load_mime_types();
+my $mime_types = &Sympa::Tools::load_mime_types($Sympa::Configuration::Conf{'etc'});
 
 if (&Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     eval {
