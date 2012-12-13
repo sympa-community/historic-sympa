@@ -34,6 +34,7 @@ use strict;
 use DB_File;
 use Encode;
 use IO::Scalar;
+use LWP::UserAgent;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
@@ -63,7 +64,6 @@ use Sympa::Tools::Data;
 use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
-use Sympa::WebAgent;
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
@@ -8585,17 +8585,8 @@ sub _include_users_remote_file {
     my $total = 0;
     my $id = Sympa::Datasource::_get_datasource_id($param);
 
-    ## Sympa::WebAgent package is part of Fetch.pm and inherites from LWP::UserAgent
-
-    my $fetch = Sympa::WebAgent->new (agent => 'Sympa/'. Sympa::Constants::VERSION);
-
-    my $req = HTTP::Request->new(GET => $url);
-    
-    if (defined $param->{'user'} && defined $param->{'passwd'}) {
-	&Sympa::WebAgent::set_basic_credentials($param->{'user'},$param->{'passwd'});
-    }
-
-    my $res = $fetch->request($req);  
+    my $agent = LWP::UserAgent->new (agent => 'Sympa/'. Sympa::Constants::VERSION);
+    my $res = $agent->get($url);
 
     # check the outcome
     if ($res->is_success) {
@@ -8664,12 +8655,12 @@ sub _include_users_remote_file {
 	}
     }
     else {
+        # TODO: handle authentication required result, to retrieve the realm
+        # and set proper credentials
+
 	&Sympa::Log::do_log ('err',"Unable to fetch remote file $url : %s", $res->message());
 	return undef; 
     }
-
-    ## Reset http credentials
-    &Sympa::WebAgent::set_basic_credentials('','');
 
     &Sympa::Log::do_log('info',"include %d users from remote file %s",$total,$url);
     return $total ;
