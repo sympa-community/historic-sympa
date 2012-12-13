@@ -41,6 +41,24 @@ use Sympa::Message;
 use Sympa::List;
 use Sympa::Log;
 
+=head1 FUNCTIONS
+
+=head2 get_dkim_parameters($params)
+
+=head3 Parameters
+
+=over
+
+=item * I<robot>
+
+=item * I<listname>
+
+=back
+
+=head3 Return value
+
+=cut
+
 sub get_dkim_parameters {
     my $params = shift;
 
@@ -85,8 +103,6 @@ sub get_dkim_parameters {
 
     return $data;
 }
-
-=head1 FUNCTIONS
 
 =head2 dkim_verifier($msg, $tmpdir)
 
