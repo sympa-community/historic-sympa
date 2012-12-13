@@ -4240,7 +4240,9 @@ sub send_msg {
 		printf "Unable to create urlized directory $expl/$dir1";
 		return 0;
 	    }
-	    my $mime_types = &Sympa::Tools::load_mime_types();
+	    my $mime_types = &Sympa::Tools::load_mime_types(
+                $Sympa::Configuration::Conf{'etc'}
+            );
 	    my @parts = ();
 	    my $i = 0;
 	    foreach my $part ($url_msg->parts()) {
