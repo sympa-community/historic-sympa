@@ -69,7 +69,18 @@ sub new {
     return $robot;
 }
 
-## load all lists belonging to this robot
+=head1 INSTANCE METHODS
+
+=head2 $robot->get_lists()
+
+Load all lists belonging to this robot
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub get_lists {
     my $self = shift;
 
