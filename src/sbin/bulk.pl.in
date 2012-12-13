@@ -1,8 +1,6 @@
 #!--PERL--
+# $Id$
 
-# bulk.pl - This script does the mail sending for Sympa
-# RCS Identication ; $Revision: 4985 $ ; $Date: 2008-05-02 12:06:27 +0200 (Fri, 02 May 2008) $ 
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -21,21 +19,25 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## Options :  F         -> do not detach TTY
-##         :  d		-> debug -d is equiv to -dF
-## Now, it is impossible to use -dF but you have to write it -d -F
+=head1 NAME
 
-=pod 
+bulk.pl - Sympa bulk mail manager
 
-=head1 NAME 
+=head1 DESCRIPTION
 
-I<bulk.pl> - Daemon for submitting to smtp engine bulkmailer_table content.
+This script runs as a daemon and regulary submit messages found in the database
+to an SMTP server. Multiple instances can be run simultaneously to distribute
+traffic.
 
-=head1 DESCRIPTION 
+=head1 SYNOPSIS
 
-This script must be run along with sympa. It regularly checks the bulkmailer_table content and submit the messages it finds in it to the sendmail engine. Several deamon should be used on deferent server for hugue traffic.
+bulk.pl [options]
 
-=cut 
+Available options:
+  -F do not detach TTY
+  -d debug
+
+=cut
 
 use strict;
 use lib '--modulesdir--';

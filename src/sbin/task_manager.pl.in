@@ -1,8 +1,6 @@
 #! --PERL--
+# $Id$
 
-# task_manager.pl - This script runs as a daemon and processes periodical Sympa tasks
-# RCS Identication ; $Revision$ ; $Date$ 
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -21,8 +19,23 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## Options :  F         -> do not detach TTY
-##         :  d		-> debug -d is equiv to -dF
+=head1 NAME
+
+task_manager.pl - Sympa task manager
+
+=head1 DESCRIPTION
+
+This script runs as a daemon and processes periodical Sympa tasks.
+
+=head1 SYNOPSIS
+
+task_manager.pl [options]
+
+Available options:
+  -F do not detach TTY
+  -d debug
+
+=cut
 
 use lib '--modulesdir--';
 use strict "vars";

@@ -1,8 +1,6 @@
 #!--PERL--
-# sympa.pl - This script is the main one ; it runs as a daemon and does
-# the messages/commands processing
-# RCS Identication ; $Revision: 6671 $ ; $Date: 2010-09-07 11:03:18 +0200 (mar 07 sep 2010) $ 
-#
+# $Id$
+
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -20,6 +18,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+=head1 NAME
+
+spooler.pl
+
+=cut
 
 use strict;
 use lib '--modulesdir--';
