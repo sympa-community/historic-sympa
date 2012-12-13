@@ -96,6 +96,24 @@ sub new {
     return $lock;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 $lock->set_timeout($timeout)
+
+=head3 Parameters
+
+=over
+
+=item * I<$timeout>
+
+=back
+
+=head3 Return value
+
+A true value on sucess, I<undef> otherwise.
+
+=cut
+
 sub set_timeout {
     my $self = shift;
     my $delay = shift;
@@ -107,17 +125,45 @@ sub set_timeout {
     return 1;
 }
 
+=head1 CLASS METHODS
+
+=head2 Sympa::Lock->get_lock_count()
+
+=cut
+
 sub get_lock_count {
     my $self = shift;
 
     return $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1;
 }
 
+=head2 Sympa::Lock->get_file_handle()
+
+=cut
+
 sub get_file_handle {
     my $self = shift;
 
     return $list_of_locks{$self->{'lock_filename'}}{'fh'};
 }
+
+=head1 INSTANCE METHODS
+
+=head2 $lock->lock($mode)
+
+=head3 Parameters
+
+=over
+
+=item * I<$mode>
+
+=back
+
+=head3 Return value
+
+A true value on sucess, I<undef> otherwise.
+
+=cut
 
 sub lock {
     my $self = shift;
@@ -166,6 +212,18 @@ sub lock {
     }
     return 1;
 }
+
+=head2 $lock->unlock()
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A true value on sucess, I<undef> otherwise.
+
+=cut
 
 sub unlock {
     my $self = shift;
