@@ -1318,7 +1318,8 @@ sub process_message {
         $Sympa::Configuration::Conf{'antivirus_path'},
         $Sympa::Configuration::Conf{'antivirus_args'},
         $Sympa::Configuration::Conf{'tmpdir'},
-        $Sympa::Configuration::Conf{'domain'}
+        $Sympa::Configuration::Conf{'domain'},
+        $Sympa::Configuration::Conf{'etc'}
     );
     if ($rc) {
 	if ( &Sympa::Configuration::get_robot_conf($robot,'antivirus_notify') eq 'sender') {

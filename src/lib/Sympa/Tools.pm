@@ -1097,11 +1097,13 @@ sub decrypt_password {
 }
 
 sub load_mime_types {
+    my ($confdir) = @_;
+
     my $types = {};
 
     my @localisation = ('/etc/mime.types',
 			'/usr/local/apache/conf/mime.types',
-			'/etc/httpd/conf/mime.types','mime.types');
+			'/etc/httpd/conf/mime.types',$confdir . '/mime.types');
 
     foreach my $loc (@localisation) {
         next unless (-r $loc);
@@ -1140,6 +1142,7 @@ sub split_mail {
     my $message = shift ; 
     my $pathname = shift ;
     my $dir = shift ;
+    my $confdir = shift;
 
     my $head = $message->head ;
     my $encoding = $head->mime_encoding ;
@@ -1148,7 +1151,7 @@ sub split_mail {
 	|| ($message->mime_type eq 'message/rfc822')) {
 
         for (my $i=0 ; $i < $message->parts ; $i++) {
-            &split_mail ($message->parts ($i), $pathname.'.'.$i, $dir) ;
+            &split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir) ;
         }
     }
     else { 
@@ -1161,7 +1164,7 @@ sub split_mail {
 		$fileExt = $1 ;
 	    }
 	    else {
-		my $mime_types = &load_mime_types();
+		my $mime_types = &load_mime_types($confdir);
 
 		$fileExt=$mime_types->{$head->mime_type};
 	    }
@@ -1208,6 +1211,7 @@ sub virus_infected {
     my $args = shift;
     my $tmpdir = shift;
     my $domain = shift;
+    my $confdir = shift;
 
     my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
     &Sympa::Log::do_log('debug2', 'Scan virus in %s', $file);
@@ -1234,7 +1238,7 @@ sub virus_infected {
     #$mail->dump_skeleton;
 
     ## Call the procedure of spliting mail
-    unless (&split_mail ($mail,'msg', $work_dir)) {
+    unless (&split_mail ($mail,'msg', $work_dir, $confdir)) {
 	&Sympa::Log::do_log('err', 'Could not split mail %s', $mail);
 	return undef;
     }
