@@ -51,7 +51,7 @@ use Sympa::Tools::SMIME;
 
 Creates a new L<Sympa::Message> object.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 

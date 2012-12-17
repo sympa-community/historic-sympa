@@ -62,7 +62,7 @@ my %session_hard_attributes = ('id_session' => 1,
 
 Creates a new L<Sympa::Session> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

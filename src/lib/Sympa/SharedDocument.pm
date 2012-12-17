@@ -47,7 +47,7 @@ use Sympa::Tools::Data;
 
 Creates a new L<Sympa::SharedDocument> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

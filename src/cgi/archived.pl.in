@@ -337,7 +337,7 @@ This is the description of the subfunctions contained by archived.pl.
 
 Switches the loop control variable $end value to 1 when SIGTERM signal is caught.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -367,7 +367,7 @@ sub sigterm {
 
 Removes the message having the identifier $msgid from the list named $adrlist.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -422,7 +422,7 @@ sub remove {
 
 Rebuilds archives for the list the name of which is given in the argument $adrlist.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -613,7 +613,7 @@ sub rebuild {
 
 Archives one message into one list archives directory.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -821,7 +821,7 @@ sub mail2arc {
 
 Sets the value of $ENV{'M2H_ADDRESSMODIFYCODE'} and $ENV{'M2H_MODIFYBODYADDRESSES'}
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -853,7 +853,7 @@ sub set_hidden_mode {
 
 Empties $ENV{'M2H_ADDRESSMODIFYCODE'}.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -883,7 +883,7 @@ sub unset_hidden_mode {
 
 Saves the archives index file
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -939,7 +939,7 @@ sub create_idx {
 
 Returns a tag derived from the listname.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 

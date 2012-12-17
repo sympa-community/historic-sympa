@@ -55,7 +55,7 @@ sub set_spool {
 
 Creates a new L<Sympa::Task> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

@@ -61,7 +61,7 @@ my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
 Creates a new L<Sympa::Spool> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

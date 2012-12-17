@@ -44,7 +44,7 @@ use Sympa::Log;
 
 Creates a new L<Sympa::Configuration::XML> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

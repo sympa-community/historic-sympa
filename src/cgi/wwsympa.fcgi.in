@@ -2594,7 +2594,7 @@ sub prepare_report_user {
 Checks parameters contained in the global variable $in. It is the process used to analyze the incoming parameters.
 Use it to create a List object and initialize output parameters.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -8576,7 +8576,7 @@ sub do_install_pending_list {
 
 Creates a list using a list template
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -8745,7 +8745,7 @@ sub do_create_list {
 
 Sends back the list creation edition form. 
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -10194,7 +10194,7 @@ sub _shift_var {
 
 Sends back the list config edition form. 
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -10322,7 +10322,7 @@ sub _check_new_values {
 
 Prepares config data to be sent in the edition form. Adds to the parameters array a hash for each parameter to be edited.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 
@@ -10458,7 +10458,7 @@ sub _prepare_edit_form {
 
 Returns a reference to a hash containing the data used to edit the parameter (of name $name, corresponding to the structure $struct in pinfo, with the $may_edit editing status) containing the data in the Sympa web interface.
 
-=head3 Arguments 
+=head3 Parameters 
 
 =over 
 

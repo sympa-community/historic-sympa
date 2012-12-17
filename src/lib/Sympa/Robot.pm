@@ -26,7 +26,7 @@ use Sympa::Log;
 
 Creates a new L<Sympa::Robot> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 

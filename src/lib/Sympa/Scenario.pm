@@ -53,7 +53,7 @@ my %persistent_cache;
 
 Creates a new L<Sympa::Scenario> object.
 
-=head3 Arguments
+=head3 Parameters
 
 =over
 
