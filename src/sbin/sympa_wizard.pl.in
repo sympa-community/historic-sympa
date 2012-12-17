@@ -617,41 +617,43 @@ sub check_modules {
     print "perl module          from CPAN       STATUS\n";
     print "-----------          ---------       ------\n";
 
-    foreach my $mod (sort keys %$modules) {
+    foreach my $module_name (sort keys %$modules) {
+	my $module = $modules->{$module_name};
+	$module->{name} = $module_name;
 
-        printf ("%-20s %-15s", $mod, $modules->{$mod}{package_name});
+        printf ("%-20s %-15s", $module->{name}, $module->{package_name});
 
-        eval "require $mod";
+        eval "require $module->{name}";
         if ($@) {
             ### not installed
             print "was not found on this system.\n";
-            install_module($mod, {'default' => $default}, $modules);
+            install_module($module, {'default' => $default});
         } else {
 
 	  my ($vs, $v);
 
 	  ## MHonArc module does not provide its version the standard way
-	  if ($mod =~ /^MHonArc/i) {
+	  if ($module->{name} =~ /^MHonArc/i) {
 	    require "mhamain.pl";
 	    $v = $mhonarc::VERSION;
 	  }else {
 
-	    $vs = "$mod" . "::VERSION";
+	    $vs = $module->{name} . "::VERSION";
 	    {
 	      no strict 'refs';
 	      $v = $$vs;
 	    }
 	  }
 
-	  my $rv = $modules->{$mod}{required_version} || "1.0" ;
+	  my $rv = $module->{required_version} || "1.0" ;
 	  ### OK: check version
 	  if ($v ge $rv) {
 	    printf ("OK (%-6s >= %s)\n", $v, $rv);
 	    next;
 	  } else {
 	    print "version is too old ($v < $rv).\n";
-	    print ">>>>>>> You must update \"$modules->{$mod}{package_name}\" to version \"$modules->{$mod}{required_version}}\" <<<<<<.\n";
-	    install_module($mod, {'default' => $default}, $modules);
+	    print ">>>>>>> You must update \"$module->{package_name}\" to version \"$module->{required_version}}\" <<<<<<.\n";
+	    install_module($module, {'default' => $default});
 	  }
         }
     }
@@ -661,7 +663,7 @@ sub check_modules {
 # Install a CPAN module
 ##----------------------
 sub install_module {
-  my ($module, $options, $modules) = @_;
+  my ($module, $options) = @_;
 
     my $default = $options->{'default'};
 
@@ -675,16 +677,16 @@ sub install_module {
     $ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
 
     unless ($EUID == 0) {
-        print "\#\# You need root privileges to install $module module. \#\#\n";
+        print "\#\# You need root privileges to install $module->{name} module. \#\#\n";
         print "\#\# Press the Enter key to continue checking modules. \#\#\n";
         my $t = <STDIN>;
         return undef;
     }
 
     unless ($options->{'force'}) {
-        printf "-> Usage of this module: %s\n", $modules->{$module}{usage} if ($modules->{$module}{usage});
-        printf "-> Prerequisites: %s\n", $modules->{$module}{prerequisites} if ($modules->{$module}{prerequisites});
-	print "-> Install module $module ? [$default]";
+        printf "-> Usage of this module: %s\n", $module->{usage} if ($module->{usage});
+        printf "-> Prerequisites: %s\n", $module->{prerequisites} if ($module->{prerequisites});
+	print "-> Install module $module->{name} ? [$default]";
         my $answer = <STDIN>; chomp $answer;
         $answer ||= $default;
         return unless ($answer =~ /^y$/i);
@@ -699,28 +701,28 @@ sub install_module {
 
     #CPAN::Shell->clean($module) if ($options->{'force'});
 
-    CPAN::Shell->make($module);
+    CPAN::Shell->make($module->{name});
 
     if ($options->{'force'}) {
-        CPAN::Shell->force('test', $module);
+        CPAN::Shell->force('test', $module->{name});
     }else {
-        CPAN::Shell->test($module);
+        CPAN::Shell->test($module->{name});
     }
 
-    CPAN::Shell->install($module); ## Could use CPAN::Shell->force('install') if make test failed
+    CPAN::Shell->install($module->{name}); ## Could use CPAN::Shell->force('install') if make test failed
 
     ## Check if module has been successfuly installed
-    eval "require $module";
+    eval "require $module->{name}";
     unless ($@) {
         ## Prevent recusive calls if already in force mode
         if ($options->{'force'}) {
-            print  "Installation of $module still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
+            print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
             my $answer = <STDIN>;
         }else {
-            print  "Installation of $module FAILED. Do you want to force the installation of this module? (y/N) ";
+            print  "Installation of $module->{name} FAILED. Do you want to force the installation of this module? (y/N) ";
             my $answer = <STDIN>; chomp $answer;
             if ($answer =~ /^y/i) {
-                install_module($module, {'force' => 1}, $modules);
+                install_module($module, {'force' => 1});
             }
         }
     }
