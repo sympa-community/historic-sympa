@@ -83,7 +83,7 @@ my $sympa_conf   = Sympa::Constants::CONFIG;
 
 my %options;
 GetOptions(
-    \%options, 
+    \%options,
     'target=s',
     'create=s',
     'check',
@@ -209,14 +209,14 @@ sub edit_configuration {
 	Sympa::Language::SetLang('en_US');
     }
 
-    ## Load config 
+    ## Load config
     unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf)) {
-	&Sympa::Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
+	&Sympa::Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
     }
 
     ## Load sympa config (but not using database)
     unless (Sympa::Configuration::load( $sympa_conf,'nodb')) {
-	&Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
+	&Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
     }
 
     my (@new_wwsympa_conf, @new_sympa_conf);
@@ -236,20 +236,20 @@ sub edit_configuration {
                 sprintf "###\\\\\\\\ %s ////###\n\n", $title;
 
             next;
-        }    
+        }
 
         my $file = $param->{'file'} ;
-        my $name = $param->{'name'} ; 
+        my $name = $param->{'name'} ;
         my $query = $param->{'query'} ;
         $query = Sympa::Language::gettext($query) if $query;
         my $advice = $param->{'advice'} ;
         $advice = Sympa::Language::gettext($advice) if $advice;
         my $sample = $param->{'sample'} ;
         my $current_value ;
-        if ($file eq 'wwsympa.conf') {	
+        if ($file eq 'wwsympa.conf') {
             $current_value = $wwsconf->{$name} ;
         } elsif ($file eq 'sympa.conf') {
-            $current_value = $Sympa::Configuration::Conf{$name}; 
+            $current_value = $Sympa::Configuration::Conf{$name};
         } else {
             next;
         }
@@ -427,7 +427,7 @@ sub check_cpan {
 			'Email::Simple' => {
 					    required_version =>'2.100',
 					    package_name => 'Email-Simple',
-					    mandatory => 1, 
+					    mandatory => 1,
 					    usage => 'Used for email tracking',
 					   },
 			'Encode' => {
@@ -495,7 +495,7 @@ sub check_cpan {
 			'MHonArc::UTF8' => {
 					    required_version =>'2.6.0',
 					    package_name => 'MHonArc',
-					    mandatory => 1, 
+					    mandatory => 1,
 					    usage => 'mhonarc is used to build Sympa web archives',
 					   },
 			'MIME::Base64' => {
@@ -514,7 +514,7 @@ sub check_cpan {
 					     required_version =>'1.010',
 					     package_name => 'MIME-EncWords',
 					     mandatory => 1,
-					     usage => 'required to decode/encode SMTP header fields without breaking character encoding', 
+					     usage => 'required to decode/encode SMTP header fields without breaking character encoding',
 					    },
 			'MIME::Lite::HTML' => {
 					       required_version =>'1.23',
@@ -529,13 +529,13 @@ sub check_cpan {
 					  usage => 'provides libraries for manipulating MIME messages',
 					 },
 			'Net::LDAP' => {
-					required_version =>'0.27', 
+					required_version =>'0.27',
 					prerequisites => 'openldap-devel is needed to build the Perl code',
 					package_name => 'perl-ldap',
 					usage => 'required to query LDAP directories. Sympa can do LDAP-based authentication ; it can also build mailing lists with LDAP-extracted members.',
 				       },
 			'Net::Netmask' => {
-					   required_version =>'1.9015', 
+					   required_version =>'1.9015',
 					   package_name => 'Net-Netmask',
 					   mandatory => 1,
 					   usage => 'used to check netmask within Sympa autorization scenario rules',
@@ -546,7 +546,7 @@ sub check_cpan {
 				       },
 			'OAuth::Lite' => {
 					package_name => 'OAuth-Lite',
-					required_version =>'1.31', 
+					required_version =>'1.31',
 					usage => 'This is required if you want to use the VOOT protocol.',
 				       },
 			'perl' => {
@@ -554,7 +554,7 @@ sub check_cpan {
 				  },
 			'Proc::ProcessTable' => {
 				       package_name => 'Proc-ProcessTable',
-				       required_version =>'0.44', 
+				       required_version =>'0.44',
 				       mandatory => 1,
 				       usage => 'Used by the bulk.pl daemon to check the number of slave bulks running.',
 				      },
@@ -571,7 +571,7 @@ sub check_cpan {
 			'Term::ProgressBar' => {
 						required_version =>'2.09',
 						package_name => 'Term-ProgressBar',
-						mandatory => 1,	
+						mandatory => 1,
 						usage => 'used while checking the RDBMS buffer size',
 					       },
 			'Text::LineFold' => {
@@ -601,12 +601,12 @@ sub check_cpan {
 			'Mail::DKIM' => { required_version =>'0.36',
 					  package_name => 'Mail-DKIM',
 					  usage => 'required in order to use DKIM features (both for signature verification and signature insertion)',
-				      } 
+				      }
 		       );
 
     print "##########################################################################################
 # This process will help you install all Perl (CPAN) modules required by Sympa software.
-# Sympa requires from 50 to 65 additional Perl modules to run properly. 
+# Sympa requires from 50 to 65 additional Perl modules to run properly.
 # The whole installation process should take around 15 minutes.
 # You'll first have to configure the CPAN shell itself and select your favourite CPAN server.
 # Note that you might prefer to install the required Perl modules using your favourite DEB/RPM mechanism.
@@ -693,18 +693,18 @@ sub check_modules {
 #    my($default, $todo, $versions, $opt_features) = @_;
     my($default, $cpan_modules, $type) = @_;
 
-    print "perl module          from CPAN       STATUS\n"; 
+    print "perl module          from CPAN       STATUS\n";
     print "-----------          ---------       ------\n";
 
     foreach my $mod (sort keys %$cpan_modules) {
-      
+
       ## Only check modules of the expected type
       if ($type eq 'mandatory') {
 	next unless ($cpan_modules->{$mod}{mandatory});
       }elsif ($type eq 'optional') {
 	next if ($cpan_modules->{$mod}{mandatory});
       }
-      
+
       ## Skip perl itself to prevent a huge upgrade
       next if ($mod eq 'perl');
 
@@ -720,13 +720,13 @@ sub check_modules {
         } else {
 
 	  my ($vs, $v);
-	  
+
 	  ## MHonArc module does not provide its version the standard way
 	  if ($mod =~ /^MHonArc/i) {
 	    require "mhamain.pl";
 	    $v = $mhonarc::VERSION;
 	  }else {
-           
+
 	    $vs = "$mod" . "::VERSION";
 	    {
 	      no strict 'refs';
@@ -782,8 +782,8 @@ sub install_module {
         return unless ($answer =~ /^y$/i);
     }
 
-  $CPAN::Config->{'inactivity_timeout'} = 0; ## disable timeout to prevent timeout during modules installation 
-  $CPAN::Config->{'colorize_output'} = 1; 
+  $CPAN::Config->{'inactivity_timeout'} = 0; ## disable timeout to prevent timeout during modules installation
+  $CPAN::Config->{'colorize_output'} = 1;
   $CPAN::Config->{'build_requires_install_policy'} = 'yes';  ## automatically installed prerequisites without asking
   $CPAN::Config->{'prerequisites_policy'} = 'follow'; ## build prerequisites automatically
   $CPAN::Config->{'load_module_verbosity'} = 'none';  ## minimum verbosity during module loading
