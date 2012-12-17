@@ -1,3 +1,5 @@
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
 # $Id$
 
 # Sympa - SYsteme de Multi-Postage Automatique
