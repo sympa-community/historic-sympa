@@ -95,12 +95,18 @@ sub new {
 	return bless $provider, $pkg;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 $provider->getOAuthProvider()
+
+Get the underlying OAuth provider.
+
+=cut
+
 sub getOAuthProvider {
 	my $self = shift;
 	return $self->{'oauth_provider'};
 }
-
-=head1 INSTANCE METHODS
 
 =head2 $provider->checkRequest()
 

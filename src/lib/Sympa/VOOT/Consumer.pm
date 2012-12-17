@@ -129,12 +129,16 @@ sub new {
 	return bless $consumer, $pkg;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 $consumer->getOAuthConsumer()
+
+=cut
+
 sub getOAuthConsumer {
 	my $self = shift;
 	return $self->{'oauth_consumer'};
 }
-
-=head1 INSTANCE METHODS
 
 =head2 $consumer->isMemberOf()
 
@@ -159,6 +163,13 @@ sub isMemberOf {
 	
 	return &_get_groups(decode_json($data));
 }
+
+=head2 $consumer->check()
+
+An alias for $consumer->isMemberOf();
+
+=cut
+
 sub check {
 	my $self = shift;
 	return $self->isMemberOf();
