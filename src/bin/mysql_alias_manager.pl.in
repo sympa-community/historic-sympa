@@ -1,6 +1,6 @@
 #!--PERL--
 # -*- indent-tabs-mode: t; -*-
-# vim:ft=perl:noet:wrap:textwidth=78
+# vim:ft=perl:noet:sw=8:wrap:textwidth=78
 
 ## This version of alias_manager.pl has been customized by Bea.
 ## It has the ability to add/remove list aliases in a MySQL database for vpopmail
