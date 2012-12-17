@@ -26,5 +26,8 @@ plan tests => scalar @modules;
 foreach my $module (@modules) {
     pod_coverage_ok(
         $module,
+        {
+            coverage_class => 'Pod::Coverage::CountParents',
+        }
     );
 }
