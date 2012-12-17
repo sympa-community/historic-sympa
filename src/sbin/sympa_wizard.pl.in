@@ -620,9 +620,7 @@ EOM
 
     my $rep = <STDIN>;
 
-    ### main:
     print "******* Check perl for SYMPA ********\n";
-    ### REQ perl version
     print "\nChecking for PERL version:\n-----------------------------\n";
     if ($] >= $perl_version){
         print "your version of perl is OK ($] >= $perl_version)\n";
@@ -632,6 +630,7 @@ EOM
 
     print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
     check_modules('y', \%cpan_modules, 'mandatory');
+
     print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
     check_modules('n', \%cpan_modules, 'optional');
 
@@ -641,15 +640,9 @@ You can retrieve all theses modules from any CPAN server
 (for example ftp://ftp.pasteur.fr/pub/computing/CPAN/CPAN.html)
 EOM
 
-###--------------------------
-# reports modules status
-# $cpan_modules is the cpan_modules structure
-# $type is the type of modules (mandatory | optional) that should be installed
-###--------------------------
 }
 
 sub check_modules {
-#    my($default, $todo, $versions, $opt_features) = @_;
     my($default, $cpan_modules, $type) = @_;
 
     print "perl module          from CPAN       STATUS\n";
@@ -706,7 +699,6 @@ sub check_modules {
 # Install a CPAN module
 ##----------------------
 sub install_module {
-#    my ($module, $options, $opt_features) = @_;
   my ($module, $options, $cpan_modules) = @_;
 
     my $default = $options->{'default'};
