@@ -286,8 +286,6 @@ sub _subscriber_to_member {
 	};
 }
 
-1;
-
 =head1 AUTHORS 
 
 =over 
@@ -297,3 +295,5 @@ sub _subscriber_to_member {
 =back 
 
 =cut 
+
+1;

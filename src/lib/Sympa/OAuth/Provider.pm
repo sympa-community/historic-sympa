@@ -567,8 +567,6 @@ sub _getConsumerConfigFor {
 	return $c;
 }
 
-1;
-
 =head1 AUTHORS 
 
 =over 
@@ -578,3 +576,5 @@ sub _getConsumerConfigFor {
 =back 
 
 =cut 
+
+1;

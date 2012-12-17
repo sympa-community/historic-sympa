@@ -181,8 +181,6 @@ sub check_key {
     return $result;
 }
 
-return 1;
-
 =head2 source->build_connect_string()
 
 Builds the string to be used by the DBI to connect to the database.
@@ -501,3 +499,7 @@ Sets an index in a table.
 =head3 Return value
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=cut
+
+1;

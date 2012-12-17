@@ -279,8 +279,6 @@ sub _get_config_for {
 	return undef;
 }
 
-1;
-
 =head1 AUTHORS 
 
 =over 
@@ -290,3 +288,5 @@ sub _get_config_for {
 =back 
 
 =cut 
+
+1;

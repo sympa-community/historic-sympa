@@ -316,4 +316,4 @@ sub set_index {
     return $report;
 }
 
-return 1;
+1;

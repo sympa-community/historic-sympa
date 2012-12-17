@@ -354,8 +354,6 @@ sub getAccessToken {
 	return $self->{'session'}{'access'};
 }
 
-1;
-
 =head1 AUTHORS 
 
 =over 
@@ -365,3 +363,5 @@ sub getAccessToken {
 =back 
 
 =cut 
+
+1;
