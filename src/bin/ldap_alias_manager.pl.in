@@ -1,4 +1,7 @@
 #!--PERL--
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
+
 #Author: Philippe Baumgart
 #Company: BT
 #License: GPL 

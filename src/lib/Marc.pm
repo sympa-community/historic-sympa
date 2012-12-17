@@ -1,3 +1,6 @@
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
+
 package Marc;
 
 use strict;

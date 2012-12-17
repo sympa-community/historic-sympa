@@ -1,3 +1,5 @@
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
 # $Id$
 
 =head1 NAME

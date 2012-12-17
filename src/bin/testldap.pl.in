@@ -1,4 +1,6 @@
 #!--PERL--
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
 
 # testldap.pl - This script aims at testing LDAP queries
 # RCS Identication ; $Revision$ ; $Date$ 

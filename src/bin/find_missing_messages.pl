@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
+
 # find_missing_messages.pl
 # This script finds error and notice messages missing from wwsympa.fcgi, and outputs them 
 # in a form similar to these files so you can simply copy-paste it. Don't forget to set the dir variable!

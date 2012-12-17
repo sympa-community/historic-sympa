@@ -1,4 +1,6 @@
 #! --PERL--
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
 
 # tpl2tt2.pl - This script will concert existing templates (mail and web) from the old native
 # Sympa template format to the TT2 format

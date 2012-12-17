@@ -1,4 +1,6 @@
 #! --PERL--
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:wrap:textwidth=78
 
 # init_comment.pl - This script initializes subscriber comments in DB
 # RCS Identication ; $Revision$ ; $Date$ 
