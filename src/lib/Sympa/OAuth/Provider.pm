@@ -121,6 +121,12 @@ sub new {
 	return bless $provider, $pkg;
 }
 
+=head1 FUNCTIONS
+
+=head2 consumerFromToken($token)
+
+=cut
+
 sub consumerFromToken {
 	my $token = shift;
 	

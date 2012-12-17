@@ -121,6 +121,24 @@ sub new {
 	return bless $consumer, $pkg;
 }
 
+=head1 INSTANCE METHODS
+
+=head2 $consumer->setWebEnv(%parameters)
+
+=head3 Parameters
+
+=over 
+
+=item * I<robot>
+
+=item * I<here_path>
+
+=item * I<base_path>
+
+=back
+
+=cut
+
 sub setWebEnv {
 	my $self = shift;
 	my %param = @_;
@@ -130,12 +148,18 @@ sub setWebEnv {
 	$self->{'base_path'} = $param{'base_path'};
 }
 
+=head2 $consumer->mustRedirect()
+
+=head3 Parameters
+
+None.
+
+=cut
+
 sub mustRedirect {
 	my $self = shift;
 	return $self->{'redirect_url'};
 }
-
-=head1 INSTANCE METHODS
 
 =head2 $consumer->fetchRessource(%parameters)
 
