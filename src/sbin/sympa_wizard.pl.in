@@ -84,34 +84,159 @@ my $sympa_conf   = Sympa::Constants::CONFIG;
 my $perl_version = '5.008';
 
 ## assume required_version = 1.0 if not specified.
-my %cpan_modules = (
+my %mandatory_modules = (
 	'Archive::Zip' => {
 		required_version => '1.05',
 		package_name     => 'Archive-Zip',
-		mandatory        => 1,
 		usage            => 'this module provides zip/unzip for archive and shared document download/upload',
 	},
+	'CGI' => {
+		required_version => '3.35',
+		package_name     => 'CGI',
+		usage            => 'required to run Sympa web interface',
+	},
+	'DB_File' => {
+		required_version => '1.75',
+		package_name     => 'DB_FILE',
+		usage            => ' used for maintaining snapshots of list members',
+	},
+	'DBD::mysql' => {
+		required_version => '4.008',
+		prerequisites    => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
+		package_name     => 'Msql-Mysql-modules',
+		usage            => 'Mysql database driver, required if you connect to a Mysql database.\nYou first need to install the Mysql server and have it started before installing the Perl DBD module.',
+	},
+	'DBI' => {
+		required_version => '1.48',
+		package_name     => 'DBI',
+		usage            => 'a generic Database Driver, required by Sympa to access Subscriber information and User preferences. An additional Database Driver is required for each database type you wish to connect to.',
+	},
+	'Digest::MD5' => {
+		required_version => '2.00',
+		package_name     => 'Digest-MD5',
+		usage            => 'used to compute MD5 digests for passwords, etc',
+	},
+	'Email::Simple' => {
+		required_version => '2.100',
+		package_name     => 'Email-Simple',
+		usage            => 'Used for email tracking',
+	},
+	'FCGI' => {
+		required_version => '0.67',
+		package_name     => 'FCGI',
+		usage            => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
+	},
+	'File::Copy::Recursive' => {
+		required_version => '0.36',
+		package_name     => 'File-Copy-Recursive',
+		usage            => 'used to copy file hierarchies',
+	},
+	'HTML::FormatText' => {
+		package_name => 'HTML-Format',
+		usage        => 'used to compute plaindigest messages from HTML',
+	},
+	'HTML::StripScripts::Parser' => {
+		required_version => '1.03',
+		package_name     => 'HTML-StripScripts-Parser',
+		usage            => 'required for XSS protection on the web interface',
+	},
+	'HTML::TreeBuilder' => {
+		package_name => 'HTML-Tree',
+		usage        => 'used to compute plaindigest messages from HTML',
+	},
+	'IO::Scalar' => {
+		package_name => 'IO-stringy',
+		usage        => 'internal use for string processing',
+	},
+	'Locale::TextDomain' => {
+		package_name => 'libintl-perl',
+		usage        => 'internationalization functions',
+	},
+	'LWP' => {
+		package_name => 'libwww-per',
+		usage        => 'required when including members of a remote list',
+	},
+	'MHonArc::UTF8' => {
+		required_version => '2.6.0',
+		package_name     => 'MHonArc',
+		usage            => 'mhonarc is used to build Sympa web archives',
+	},
+	'MIME::Base64' => {
+		required_version => '3.03',
+		package_name     => 'MIME-Base64',
+		usage            => 'required to compute digest for password and emails',
+	},
+	'MIME::Charset' => {
+		required_version => '1.006.2',
+		package_name     => 'MIME-Charset',
+		usage            => 'used to encode mail body using a different charset',
+	},
+	'MIME::EncWords' => {
+		required_version => '1.010',
+		package_name     => 'MIME-EncWords',
+		usage            => 'required to decode/encode SMTP header fields without breaking character encoding',
+	},
+	'MIME::Lite::HTML' => {
+		required_version => '1.23',
+		package_name     => 'MIME-Lite-HTML',
+		usage            => 'used to compose HTML mail from the web interface',
+	},
+	'MIME::Tools' => {
+		required_version => '5.423',
+		package_name     => 'MIME-tools',
+		usage            => 'provides libraries for manipulating MIME messages',
+	},
+	'Net::Netmask' => {
+		required_version => '1.9015',
+		package_name     => 'Net-Netmask',
+		usage            => 'used to check netmask within Sympa autorization scenario rules',
+	},
+	'Proc::ProcessTable' => {
+		package_name     => 'Proc-ProcessTable',
+		required_version => '0.44',
+		usage            => 'Used by the bulk.pl daemon to check the number of slave bulks running.',
+	},
+	'Template' => {
+		package_name => 'Template-Toolkit',
+		usage        => 'Sympa template format, used for web pages and other mail, config file templates. See http://template-toolkit.org/.',
+	},
+	'Term::ProgressBar' => {
+		required_version => '2.09',
+		package_name     => 'Term-ProgressBar',
+		usage            => 'used while checking the RDBMS buffer size',
+	},
+	'Text::LineFold' => {
+		required_version => '2011.05',
+		package_name     => 'Unicode-LineBreak',
+		usage            => 'used to fold lines in HTML mail composer and system messages, prior to Text::Wrap',
+	},
+	'Time::HiRes' => {
+		required_version => '1.29',
+		package_name     => 'Time-HiRes',
+		usage            => 'used by sympa.pl --test_database_message_buffer to test database performances',
+	},
+	'URI::Escape' => {
+		required_version => '1.35',
+		package_name     => 'URI-Escape',
+		usage            => 'Used to create URI containing non URI-canonical characters.',
+	},
+	'XML::LibXML' => {
+		prerequisites => 'libxml2-devel is needed to build the Perl code',
+		package_name  => 'XML-LibXML',
+		usage         => 'used to parse list configuration templates and instanciate list families',
+	},
+);
+
+my %optional_modules = (
 	'AuthCAS' => {
 		required_version => '1.4',
 		package_name     => 'AuthCAS',
 		usage            => 'CAS Single Sign-On client libraries. Required if you configure Sympa to delegate web authentication to a CAS server.',
 	},
-	'CGI' => {
-		required_version => '3.35',
-		package_name     => 'CGI',
-		mandatory        => 1,
-		usage            => 'required to run Sympa web interface',
-	},
 	'Crypt::CipherSaber' => {
 		required_version => '0.50',
 		package_name     => 'CipherSaber',
 		usage            => 'this module provides reversible encryption of user passwords in the database.usefull only when updating from old version with password reversible encryption.',
-	},
-	'DB_File' => {
-		required_version => '1.75',
-		package_name     => 'DB_FILE',
-		mandatory        => 1,
-		usage            => ' used for maintaining snapshots of list members',
 	},
 	'DBD::Oracle' => {
 		required_version => '0.90',
@@ -135,72 +260,9 @@ my %cpan_modules = (
 		package_name     => 'DBD-Sybase',
 		usage            => 'Sybase database driver, required if you connect to a Sybase database.',
 	},
-	'DBD::mysql' => {
-		required_version => '4.008',
-		prerequisites    => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
-		package_name     => 'Msql-Mysql-modules',
-		mandatory        => 1,
-		usage            => 'Mysql database driver, required if you connect to a Mysql database.\nYou first need to install the Mysql server and have it started before installing the Perl DBD module.',
-	},
-	'DBI' => {
-		required_version => '1.48',
-		package_name     => 'DBI',
-		mandatory        => 1,
-		usage            => 'a generic Database Driver, required by Sympa to access Subscriber information and User preferences. An additional Database Driver is required for each database type you wish to connect to.',
-	},
-	'Digest::MD5' => {
-		required_version => '2.00',
-		package_name     => 'Digest-MD5',
-		mandatory        => 1,
-		usage            => 'used to compute MD5 digests for passwords, etc',
-	},
-	'Email::Simple' => {
-		required_version => '2.100',
-		package_name     => 'Email-Simple',
-		mandatory        => 1,
-		usage            => 'Used for email tracking',
-	},
-	'Encode' => {
-		package_name => 'Encode',
-		mandatory    => 1,
-		usage        => 'module for character encoding processing',
-	},
-	'FCGI' => {
-		required_version => '0.67',
-		package_name     => 'FCGI',
-		mandatory        => 1,
-		usage            => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
-	},
-	'File::Copy::Recursive' => {
-		required_version => '0.36',
-		package_name     => 'File-Copy-Recursive',
-		mandatory        => 1,
-		usage            => 'used to copy file hierarchies',
-	},
 	'File::NFSLock' => {
 		package_name => 'File-NFSLock',
 		usage        => 'required to perform NFS lock ; see also lock_method sympa.conf parameter'
-	},
-	'HTML::FormatText' => {
-		package_name => 'HTML-Format',
-		mandatory    => 1,
-		usage        => 'used to compute plaindigest messages from HTML',
-	},
-	'HTML::StripScripts::Parser' => {
-		required_version => '1.03',
-		package_name     => 'HTML-StripScripts-Parser',
-		mandatory        => 1,
-		usage            => 'required for XSS protection on the web interface',
-	},
-	'HTML::TreeBuilder' => {
-		package_name => 'HTML-Tree',
-		mandatory    => 1,
-		usage        => 'used to compute plaindigest messages from HTML',
-	},
-	'IO::Scalar' => {
-		package_name => 'IO-stringy',
-		mandatory    => 1,
-		usage        => 'internal use for string processing',
 	},
 	'IO::Socket::SSL' => {
 		required_version => '0.90',
@@ -212,63 +274,11 @@ my %cpan_modules = (
 		package_name     => 'JSON-XS',
 		usage            => 'required when using the VOOT protocol',
 	},
-	'Locale::TextDomain' => {
-		package_name => 'libintl-perl',
-		mandatory    => 1,
-		usage        => 'internationalization functions',
-	},
-	'LWP' => {
-		package_name => 'libwww-per',
-		mandatory    => 1,
-		usage        => 'required when including members of a remote list',
-	},
-	'MHonArc::UTF8' => {
-		required_version => '2.6.0',
-		package_name     => 'MHonArc',
-		mandatory        => 1,
-		usage            => 'mhonarc is used to build Sympa web archives',
-	},
-	'MIME::Base64' => {
-		required_version => '3.03',
-		package_name     => 'MIME-Base64',
-		mandatory        => 1,
-		usage            => 'required to compute digest for password and emails',
-	},
-	'MIME::Charset' => {
-		required_version => '1.006.2',
-		package_name     => 'MIME-Charset',
-		mandatory        => 1,
-		usage            => 'used to encode mail body using a different charset',
-	},
-	'MIME::EncWords' => {
-		required_version => '1.010',
-		package_name     => 'MIME-EncWords',
-		mandatory        => 1,
-		usage            => 'required to decode/encode SMTP header fields without breaking character encoding',
-	},
-	'MIME::Lite::HTML' => {
-		required_version => '1.23',
-		package_name     => 'MIME-Lite-HTML',
-		mandatory        => 1,
-		usage            => 'used to compose HTML mail from the web interface',
-	},
-	'MIME::Tools' => {
-		required_version => '5.423',
-		package_name     => 'MIME-tools',
-		mandatory        => 1,
-		usage            => 'provides libraries for manipulating MIME messages',
-	},
 	'Net::LDAP' => {
 		required_version => '0.27',
 		prerequisites    => 'openldap-devel is needed to build the Perl code',
 		package_name     => 'perl-ldap',
 		usage            => 'required to query LDAP directories. Sympa can do LDAP-based authentication ; it can also build mailing lists with LDAP-extracted members.',
-	},
-	'Net::Netmask' => {
-		required_version => '1.9015',
-		package_name     => 'Net-Netmask',
-		mandatory        => 1,
-		usage            => 'used to check netmask within Sympa autorization scenario rules',
 	},
 	'Net::SMTP' => {
 		package_name => 'libnet',
@@ -279,51 +289,10 @@ my %cpan_modules = (
 		required_version => '1.31',
 		usage            => 'This is required if you want to use the VOOT protocol.',
 	},
-	'Proc::ProcessTable' => {
-		package_name     => 'Proc-ProcessTable',
-		required_version => '0.44',
-		mandatory        => 1,
-		usage            => 'Used by the bulk.pl daemon to check the number of slave bulks running.',
-	},
 	'SOAP::Lite' => {
 		required_version => '0.712',
 		package_name     => 'SOAP-Lite',
 		usage            => 'required if you want to run the Sympa SOAP server that provides ML services via a "web service"',
-	},
-	'Template' => {
-		package_name => 'Template-Toolkit',
-		mandatory    => 1,
-		usage        => 'Sympa template format, used for web pages and other mail, config file templates. See http://template-toolkit.org/.',
-	},
-	'Term::ProgressBar' => {
-		required_version => '2.09',
-		package_name     => 'Term-ProgressBar',
-		mandatory        => 1,
-		usage            => 'used while checking the RDBMS buffer size',
-	},
-	'Text::LineFold' => {
-		required_version => '2011.05',
-		package_name     => 'Unicode-LineBreak',
-		mandatory        => 1,
-		usage            => 'used to fold lines in HTML mail composer and system messages, prior to Text::Wrap',
-	},
-	'Time::HiRes' => {
-		required_version => '1.29',
-		package_name     => 'Time-HiRes',
-		mandatory        => 1,
-		usage            => 'used by sympa.pl --test_database_message_buffer to test database performances',
-	},
-	'URI::Escape' => {
-		required_version => '1.35',
-		package_name     => 'URI-Escape',
-		mandatory        => 1,
-		usage            => 'Used to create URI containing non URI-canonical characters.',
-	},
-	'XML::LibXML' => {
-		prerequisites => 'libxml2-devel is needed to build the Perl code',
-		package_name  => 'XML-LibXML',
-		mandatory     => 1,
-		usage         => 'used to parse list configuration templates and instanciate list families',
 	},
 	'Mail::DKIM' => {
 		required_version => '0.36',
@@ -629,10 +598,10 @@ EOM
     }
 
     print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
-    check_modules('y', \%cpan_modules, 'mandatory');
+    check_modules('y', \%mandatory_modules);
 
     print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
-    check_modules('n', \%cpan_modules, 'optional');
+    check_modules('n', \%optional_modules);
 
     print <<EOM;
 ******* NOTE *******
@@ -643,27 +612,20 @@ EOM
 }
 
 sub check_modules {
-    my($default, $cpan_modules, $type) = @_;
+    my($default, $modules) = @_;
 
     print "perl module          from CPAN       STATUS\n";
     print "-----------          ---------       ------\n";
 
-    foreach my $mod (sort keys %$cpan_modules) {
+    foreach my $mod (sort keys %$modules) {
 
-      ## Only check modules of the expected type
-      if ($type eq 'mandatory') {
-	next unless ($cpan_modules->{$mod}{mandatory});
-      }elsif ($type eq 'optional') {
-	next if ($cpan_modules->{$mod}{mandatory});
-      }
-
-        printf ("%-20s %-15s", $mod, $cpan_modules->{$mod}{package_name});
+        printf ("%-20s %-15s", $mod, $modules->{$mod}{package_name});
 
         eval "require $mod";
         if ($@) {
             ### not installed
             print "was not found on this system.\n";
-            install_module($mod, {'default' => $default}, $cpan_modules);
+            install_module($mod, {'default' => $default}, $modules);
         } else {
 
 	  my ($vs, $v);
@@ -681,15 +643,15 @@ sub check_modules {
 	    }
 	  }
 
-	  my $rv = $cpan_modules->{$mod}{required_version} || "1.0" ;
+	  my $rv = $modules->{$mod}{required_version} || "1.0" ;
 	  ### OK: check version
 	  if ($v ge $rv) {
 	    printf ("OK (%-6s >= %s)\n", $v, $rv);
 	    next;
 	  } else {
 	    print "version is too old ($v < $rv).\n";
-	    print ">>>>>>> You must update \"$cpan_modules->{$mod}{package_name}\" to version \"$cpan_modules->{$mod}{required_version}}\" <<<<<<.\n";
-	    install_module($mod, {'default' => $default}, $cpan_modules);
+	    print ">>>>>>> You must update \"$modules->{$mod}{package_name}\" to version \"$modules->{$mod}{required_version}}\" <<<<<<.\n";
+	    install_module($mod, {'default' => $default}, $modules);
 	  }
         }
     }
@@ -699,7 +661,7 @@ sub check_modules {
 # Install a CPAN module
 ##----------------------
 sub install_module {
-  my ($module, $options, $cpan_modules) = @_;
+  my ($module, $options, $modules) = @_;
 
     my $default = $options->{'default'};
 
@@ -720,8 +682,8 @@ sub install_module {
     }
 
     unless ($options->{'force'}) {
-        printf "-> Usage of this module: %s\n", $cpan_modules->{$module}{usage} if ($cpan_modules->{$module}{usage});
-        printf "-> Prerequisites: %s\n", $cpan_modules->{$module}{prerequisites} if ($cpan_modules->{$module}{prerequisites});
+        printf "-> Usage of this module: %s\n", $modules->{$module}{usage} if ($modules->{$module}{usage});
+        printf "-> Prerequisites: %s\n", $modules->{$module}{prerequisites} if ($modules->{$module}{prerequisites});
 	print "-> Install module $module ? [$default]";
         my $answer = <STDIN>; chomp $answer;
         $answer ||= $default;
@@ -758,7 +720,7 @@ sub install_module {
             print  "Installation of $module FAILED. Do you want to force the installation of this module? (y/N) ";
             my $answer = <STDIN>; chomp $answer;
             if ($answer =~ /^y/i) {
-                install_module($module, {'force' => 1}, $cpan_modules);
+                install_module($module, {'force' => 1}, $modules);
             }
         }
     }
