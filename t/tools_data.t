@@ -24,25 +24,6 @@ my @hash_2_string_tests = (
     [ { var1 => "value1", var2 => "value2" } => ';var1="value1";var2="value2"' ]
 );
 
-my @lower_version_ok_tests = (
-    [ [ qw/1.0  2.0 / ] ],
-    [ [ qw/2.0  2.1 / ] ],
-    [ [ qw/2.1  2.10/ ] ],
-    [ [ qw/1.0a 1.0 / ] ],
-    [ [ qw/1.0b 1.0 / ] ],
-    [ [ qw/1.0a 1.0b/ ] ],
-);
-
-my @lower_version_nok_tests = (
-    [ [ qw/2.0  1.0 / ] ],
-    [ [ qw/2.1  2.0 / ] ],
-    [ [ qw/2.10 2.1 / ] ],
-    [ [ qw/1.0  1.0a/ ] ],
-    [ [ qw/1.0  1.0b/ ] ],
-    [ [ qw/1.0b 1.0a/ ] ],
-    [ [ qw/1.0  1.0 / ] ],
-);
-
 my @smart_lessthan_ok_tests = (
     [ [ "", "1" ] ],
     [ [ "1", "2" ] ],
@@ -115,8 +96,6 @@ plan tests =>
     @array_from_string_tests       +
     @string_2_hash_tests           +
     @hash_2_string_tests           +
-    @lower_version_ok_tests        +
-    @lower_version_nok_tests       +
     @smart_lessthan_ok_tests       +
     @smart_lessthan_nok_tests      +
     @diff_on_arrays_tests          +
@@ -143,20 +122,6 @@ foreach my $test (@hash_2_string_tests) {
         Sympa::Tools::Data::hash_2_string($test->[0]),
         $test->[1],
         "hash_2_string $test->[0]"
-    );
-}
-
-foreach my $test (@lower_version_ok_tests) {
-    ok(
-        Sympa::Tools::Data::lower_version(@{$test->[0]}),
-        "lower_version $test->[0]->[0], $test->[0]->[1]"
-    );
-}
-
-foreach my $test (@lower_version_nok_tests) {
-    ok(
-        !Sympa::Tools::Data::lower_version(@{$test->[0]}),
-        "!lower_version $test->[0]->[0], $test->[0]->[1]"
     );
 }
 
