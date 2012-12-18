@@ -35,6 +35,8 @@ package Sympa::Datasource::SQL;
 use strict;
 use base qw(Sympa::Datasource);
 
+use DBI;
+
 use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
@@ -135,12 +137,6 @@ sub new {
     $self->{'db_passwd'} ||= $self->{'passwd'};
     $self->{'db_options'} ||= $self->{'connect_options'};
     
-    unless ( eval "require DBI" ){
-	&Sympa::Log::do_log('err',"Unable to use DBI library, install DBI (CPAN) first");
-	return undef ;
-    }
-    require DBI;
-
     bless $self, $actualclass;
     return $self;
 }
