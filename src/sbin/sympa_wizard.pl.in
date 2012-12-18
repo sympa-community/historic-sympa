@@ -121,11 +121,6 @@ my %mandatory_modules = (
 		distribution => 'Email-Simple',
 		usage        => 'Used for email tracking',
 	},
-	'FCGI' => {
-		version      => '0.67',
-		distribution => 'FCGI',
-		usage        => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
-	},
 	'File::Copy::Recursive' => {
 		version      => '0.36',
 		distribution => 'File-Copy-Recursive',
@@ -259,6 +254,11 @@ my %optional_modules = (
 		version      => '0.90',
 		distribution => 'DBD-Sybase',
 		usage        => 'Sybase database driver, required if you connect to a Sybase database.',
+	},
+	'FCGI' => {
+		version      => '0.67',
+		distribution => 'FCGI',
+		usage        => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
 	},
 	'File::NFSLock' => {
 		distribution => 'File-NFSLock',
