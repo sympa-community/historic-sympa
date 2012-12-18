@@ -72,6 +72,7 @@ use Sympa::Template;
 use Sympa::Tools;
 use Sympa::Tools::Cookie;
 use Sympa::Tools::Data;
+use Sympa::Tools::Password;
 use Sympa::Tools::Time;
 use Sympa::Tracking;
 use Sympa::WWSympa;
@@ -1057,7 +1058,7 @@ unless (&Upgrade::data_structure_uptodate()) {
     &Sympa::Log::do_log('err',"Web interface set to maintenance mode ; you should run sympa.pl --upgrade");
 }
 
-&Sympa::Tools::ciphersaber_installed($Sympa::Configuration::Conf{'cookie'});
+&Sympa::Tools::Password::ciphersaber_installed($Sympa::Configuration::Conf{'cookie'});
 
 our %changed_params;
 
@@ -3863,7 +3864,7 @@ sub sendssopasswd {
 	## Create a password if none
 	unless ($param->{'newuser'}{'password'}) {
 	    unless ( &Sympa::List::update_global_user($email,
-					   {'password' => &Sympa::Tools::tmp_passwd($email) 
+					   {'password' => &Sympa::Tools::Password::tmp_passwd($email) 
 					    })) {
 		&Sympa::Report::reject_report_web('intern','db_update_failed',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 		&wwslog('info','sendssopasswd: update failed');
@@ -3873,7 +3874,7 @@ sub sendssopasswd {
 			     'error_type' => "internal"});		      	
 		return undef;
 	    }
-	    $param->{'newuser'}{'password'} = &Sympa::Tools::tmp_passwd($email);
+	    $param->{'newuser'}{'password'} = &Sympa::Tools::Password::tmp_passwd($email);
 	}
 	
 	$param->{'newuser'}{'escaped_email'} =  &Sympa::Tools::escape_chars($param->{'newuser'}{'email'});
@@ -3882,7 +3883,7 @@ sub sendssopasswd {
 	
 	$param->{'newuser'} = {'email' => $email,
 			       'escaped_email' => &Sympa::Tools::escape_chars($email),
-			       'password' => &Sympa::Tools::tmp_passwd($email) 
+			       'password' => &Sympa::Tools::Password::tmp_passwd($email) 
 			       };
 	
     }
@@ -6418,7 +6419,7 @@ sub do_add {
 	 $u->{'email'} = $email;
 	 $u->{'gecos'} = $user{$email} || $u2->{'gecos'};
 	 $u->{'date'} = $u->{'update_date'} = time;
-	 $u->{'password'} = $u2->{'password'} || &Sympa::Tools::tmp_passwd($email) ;
+	 $u->{'password'} = $u2->{'password'} || &Sympa::Tools::Password::tmp_passwd($email) ;
 	 $u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 	 if ($comma_emails) {
 	     $comma_emails = $comma_emails .','. $email;

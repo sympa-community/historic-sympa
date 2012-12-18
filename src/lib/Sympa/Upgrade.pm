@@ -44,6 +44,7 @@ use Sympa::Log;
 use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
+use Sympa::Tools::Password;
 use Sympa::Tools::File;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
@@ -1064,7 +1065,7 @@ sub md5_encode_password {
 	next if ($user->{'password_user'} =~ /^$/);
 
 	if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
-	    $clear_password = &Sympa::Tools::decrypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
+	    $clear_password = &Sympa::Tools::Password::decrypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
 	}else{ ## Old style cleartext passwords
 	    $clear_password = $user->{'password_user'};
 	}

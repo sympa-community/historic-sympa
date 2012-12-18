@@ -42,6 +42,7 @@ use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::Template;
 use Sympa::Tools;
+use Sympa::Tools::Password;
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',
@@ -937,7 +938,7 @@ sub add {
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos || $u2->{'gecos'};
 	$u->{'date'} = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'}) ;
+	$u->{'password'} = $u2->{'password'} || &Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'}) ;
 	$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 	$list->add_list_member($u);

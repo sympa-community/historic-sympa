@@ -49,9 +49,6 @@ use Sympa::Language;
 use Sympa::Log;
 use Sympa::Tools::File;
 
-## global var to store a CipherSaber object 
-my $cipher;
-
 my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------";
 
 ## Regexps for list params
@@ -943,13 +940,6 @@ sub unescape_html {
     return $s;
 }
 
-sub tmp_passwd {
-    my $email = shift;
-    my $cookie = shift;
-
-    return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
-}
-
 =head2 sympa_checksum($rcpt, $cookie)
 
 Check sum used to authenticate communication from wwsympa to sympa
@@ -960,31 +950,6 @@ sub sympa_checksum {
     my $rcpt = shift;
     my $cookie = shift;
     return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
-}
-
-=head2 ciphersaber_installed($cookie)
-
-Create a cipher.
-
-=cut
-
-sub ciphersaber_installed {
-    my $cookie = shift;
-
-    my $is_installed;
-    foreach my $dir (@INC) {
-	if (-f "$dir/Crypt/CipherSaber.pm") {
-	    $is_installed = 1;
-	    last;
-	}
-    }
-
-    if ($is_installed) {
-	require Crypt::CipherSaber;
-	$cipher = Crypt::CipherSaber->new($cookie);
-    }else{
-	$cipher = 'no_cipher';
-    }
 }
 
 =head2 cookie_changed($current, $basedir)
@@ -1036,47 +1001,6 @@ sub cookie_changed {
 	close COOK;
 	return(0);
     }
-}
-
-=head2 crypt_password($inpasswd, $cookie)
-
-Encrypt a password.
-
-=cut
-
-sub crypt_password {
-    my $inpasswd = shift ;
-    my $cookie = shift;
-
-    unless (defined($cipher)){
-	$cipher = ciphersaber_installed($cookie);
-    }
-    return $inpasswd if ($cipher eq 'no_cipher') ;
-    return ("crypt.".&MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
-}
-
-=head2 decrypt_password($inpasswd, $cookie)
-
-Decrypt a password.
-
-=cut
-
-sub decrypt_password {
-    my $inpasswd = shift ;
-    my $cookie = shift;
-    Sympa::Log::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
-
-    return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
-    $inpasswd = $1;
-
-    unless (defined($cipher)){
-	$cipher = ciphersaber_installed($cookie);
-    }
-    if ($cipher eq 'no_cipher') {
-	&Sympa::Log::do_log('info','password seems crypted while CipherSaber is not installed !');
-	return $inpasswd ;
-    }
-    return ($cipher->decrypt(&MIME::Base64::decode($inpasswd)));
 }
 
 sub load_mime_types {

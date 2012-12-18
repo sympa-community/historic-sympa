@@ -37,6 +37,7 @@ use Sympa::Constants;
 use Sympa::Log;
 use Sympa::List;
 use Sympa::Report;
+use Sympa::Tools::Password;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
 		   'digest' => {'gettext_id' => 'digest MIME format'},
@@ -201,17 +202,6 @@ sub load_config {
     return $conf;
 }
 
-sub new_passwd {
-
-    my $passwd;
-    my $nbchar = int(rand 5) + 6;
-    foreach my $i (0..$nbchar) {
-	$passwd .= chr(int(rand 26) + ord('a'));
-    }
-
-    return 'init'.$passwd;
-}
-
 sub init_passwd {
     my ($email, $data) = @_;
     
@@ -223,7 +213,7 @@ sub init_passwd {
 	$passwd = $user->{'password'};
 	
 	unless ($passwd) {
-	    $passwd = &new_passwd();
+	    $passwd = &Sympa::Tools::Password::new_passwd();
 	    
 	    unless ( &Sympa::List::update_global_user($email,
 					   {'password' => $passwd,
@@ -234,7 +224,7 @@ sub init_passwd {
 	    }
 	}
     }else {
-	$passwd = &new_passwd();
+	$passwd = &Sympa::Tools::Password::new_passwd();
 	unless ( &Sympa::List::add_global_user({'email' => $email,
 				     'password' => $passwd,
 				     'lang' => $data->{'lang'},

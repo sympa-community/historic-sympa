@@ -28,7 +28,7 @@ use lib '--modulesdir--';
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::SDM;
-use Sympa::Tools;
+use Sympa::Tools::Password;
 
 eval {
     require Crypt::CipherSaber;
@@ -59,7 +59,7 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
     printf "\n%s", $user->{'email_user'};
 
-    my $crypted_password = &Sympa::Tools::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
+    my $crypted_password = &Sympa::Tools::Password::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
 
     printf " => %s", $crypted_password;
 

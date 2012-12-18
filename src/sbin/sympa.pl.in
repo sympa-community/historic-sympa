@@ -59,6 +59,7 @@ use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
+use Sympa::Tools::Password;
 use Sympa::Upgrade;
 
 # durty global variables
@@ -228,7 +229,7 @@ unless (Sympa::Configuration::load($config_file)) {
 ## Apply defaults to %Sympa::List::pinfo
 &Sympa::List::_apply_defaults();
 
-&Sympa::Tools::ciphersaber_installed($Sympa::Configuration::Conf{'cookie'});
+&Sympa::Tools::Password::ciphersaber_installed($Sympa::Configuration::Conf{'cookie'});
 
 if (&Sympa::Tools::cookie_changed($Sympa::Configuration::Conf{'cookie'}, $Sympa::Configuration::Conf{'etc'})) {
      &Sympa::Log::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at $Sympa::Configuration::Conf{'etc'}/cookies.history file)");

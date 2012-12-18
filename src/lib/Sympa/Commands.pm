@@ -46,6 +46,7 @@ use Sympa::Scenario;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
+use Sympa::Tools::Password;
 
 my %comms =  ('add' =>			   	     'add',
 	      'con|confirm' =>	                     'confirm',
@@ -903,7 +904,8 @@ sub subscribe {
 	    my $u = &Sympa::List::get_global_user($sender);
 	    
 	    &Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					    'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($sender, $Sympa::Configuration::Conf{'cookie'})
+					    'password' => $u->{'password'} ||
+					    &Sympa::Tools::Password::tmp_passwd($sender, $Sympa::Configuration::Conf{'cookie'})
 					    });
 	}
 	
@@ -1347,7 +1349,8 @@ sub add {
 	    my $u = &Sympa::List::get_global_user($email);
 	    
 	    &Sympa::List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					   'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'})
+					   'password' => $u->{'password'} ||
+					   &Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'})
 					    });
 	}
 	

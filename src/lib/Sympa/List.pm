@@ -64,6 +64,7 @@ use Sympa::Task;
 use Sympa::Template;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
+use Sympa::Tools::Password;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
 
@@ -3705,7 +3706,7 @@ sub send_global_file {
     }
     
     unless ($data->{'user'}{'password'}) {
-	$data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Sympa::Configuration::Conf{'cookie'});
+	$data->{'user'}{'password'} = &Sympa::Tools::Password::tmp_passwd($who, $Sympa::Configuration::Conf{'cookie'});
     }
 
     ## Lang
@@ -3837,7 +3838,7 @@ sub send_file {
 	}
 	
 	unless ($data->{'user'}{'password'}) {
-	    $data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Sympa::Configuration::Conf{'cookie'});
+	    $data->{'user'}{'password'} = &Sympa::Tools::Password::tmp_passwd($who, $Sympa::Configuration::Conf{'cookie'});
 	}
 	
 	## Unique return-path VERP
@@ -5703,7 +5704,7 @@ sub get_global_user {
     if (defined $user) {
 	## decrypt password
 	if ($user->{'password'}) {
-	    $user->{'password'} = &Sympa::Tools::decrypt_password($user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
+	    $user->{'password'} = &Sympa::Tools::Password::decrypt_password($user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
 	}
 
 	## Turn user_attributes into a hash
@@ -7428,7 +7429,7 @@ sub add_list_member {
 	
 	## Crypt password if it was not crypted
 	unless ($new_user->{'password'} =~ /^crypt/) {
-		$new_user->{'password'} = &Sympa::Tools::crypt_password($new_user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
+		$new_user->{'password'} = &Sympa::Tools::Password::crypt_password($new_user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
 	}
 	
 	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
