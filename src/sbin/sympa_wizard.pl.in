@@ -205,11 +205,6 @@ my %mandatory_modules = (
 		distribution => 'Unicode-LineBreak',
 		usage        => 'used to fold lines in HTML mail composer and system messages, prior to Text::Wrap',
 	},
-	'Time::HiRes' => {
-		version      => '1.29',
-		distribution => 'Time-HiRes',
-		usage        => 'used by sympa.pl --test_database_message_buffer to test database performances',
-	},
 	'URI::Escape' => {
 		version      => '1.35',
 		distribution => 'URI-Escape',
