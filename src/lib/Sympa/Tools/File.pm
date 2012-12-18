@@ -283,6 +283,12 @@ sub list_dir {
     return 1;
 }
 
+=head2 get_dir_size($dir)
+
+Get the total size for the given directory. 
+
+=cut
+
 sub get_dir_size {
     my $dir =shift;
     
@@ -316,11 +322,8 @@ or few direcoty paths
 sub remove_dir {
     
     &Sympa::Log::do_log('debug2','()');
-    
-    foreach my $current_dir (@_){
-	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
-    }
-    sub del {
+
+    my $callback = sub  {
 	my $name = $File::Find::name;
 
 	if (!-l && -d _) {
@@ -332,7 +335,12 @@ sub remove_dir {
 		&Sympa::Log::do_log('err','Error while removing file  %s',$name);
 	    }
 	}
+    };
+    
+    foreach my $current_dir (@_){
+	finddepth({wanted => $callback, no_chdir => 1},$current_dir);
     }
+
     return 1;
 }
 
