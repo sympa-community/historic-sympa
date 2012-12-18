@@ -21,6 +21,14 @@ use base qw(HTML::FormatText);
 
 use Sympa::Language;
 
+=head1 INSTANCE METHODS
+
+=head2 $formatter->img_start($node)
+
+Called foreach img element found.
+
+=cut
+
 sub img_start   {
   my($self,$node) = @_;
   my $alt = $node->attr('alt');
