@@ -5382,7 +5382,7 @@ sub do_signoff {
 	 }
 
 	 ## No passwd
-	 &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
+	 &Sympa::WWSympa::init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
 
 	 $param->{'user'}{'email'} = $in{'email'};
      }
