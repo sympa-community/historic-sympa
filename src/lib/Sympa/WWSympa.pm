@@ -37,7 +37,6 @@ use Sympa::Constants;
 use Sympa::Log;
 use Sympa::List;
 use Sympa::Report;
-use Sympa::Tools::Cookie;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
 		   'digest' => {'gettext_id' => 'digest MIME format'},
@@ -202,36 +201,6 @@ sub load_config {
     return $conf;
 }
 
-## Returns user information extracted from the cookie
-sub get_email_from_cookie {
-#    &Sympa::Log::do_log('debug', 'get_email_from_cookie');
-    my $cookie = shift;
-    my $secret = shift;
-
-    my ($email, $auth) ;
-
-    # &Sympa::Log::do_log('info', "get_email_from_cookie($cookie,$secret)");
-    
-    unless (defined $secret) {
-	&Sympa::Report::reject_report_web('intern','cookie_error',{},'','','',$robot);
-	&Sympa::Log::do_log('info', 'parameter cookie undefined, authentication failure');
-    }
-
-    unless ($cookie) {
-	&Sympa::Report::reject_report_web('intern','cookie_error',$cookie,'get_email_from_cookie','','',$robot);
-	&Sympa::Log::do_log('info', ' cookie undefined, authentication failure');
-    }
-
-    ($email, $auth) = &Sympa::Tools::Cookie::check_cookie ($cookie, $secret);
-    unless ( $email) {
-	&Sympa::Report::reject_report_web('user','auth_failed',{},'');
-	&Sympa::Log::do_log('info', 'auth failed for user %s', $email);
-	return undef;
-    }    
-
-    return ($email, $auth);
-}
-
 sub new_passwd {
 
     my $passwd;
@@ -241,13 +210,6 @@ sub new_passwd {
     }
 
     return 'init'.$passwd;
-}
-
-## Basic check of an email address
-sub valid_email {
-    my $email = shift;
-    
-    $email =~ /^([\w\-\_\.\/\+\=]+|\".*\")\@[\w\-]+(\.[\w\-]+)+$/;
 }
 
 sub init_passwd {
