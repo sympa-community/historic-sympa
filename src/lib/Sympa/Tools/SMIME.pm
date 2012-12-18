@@ -49,9 +49,27 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 
 =head1 FUNCTIONS
 
-=head2 smime_sign($in_msg, $list, $robot, $tmpdir, $key_passwd, $openssl)
+=head2 smime_sign($message, $list, $robot, $tmpdir, $key_passwd, $openssl)
 
-input object msg and listname, output signed message object
+Sign a message.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>:
+
+=item * I<$list>:
+
+=item * I<$robot>:
+
+=item * I<$tmpdir>: temporary directory
+
+=item * I<$key_passwd>:
+
+=item * I<$openssl>: path to openssl binary
+
+=back
 
 =cut
 
@@ -149,6 +167,31 @@ sub smime_sign {
 
     return $signed_msg;
 }
+
+=head2 smime_sign_check($message, $tmpdir, $cafile, $capath, $openssl,
+$ssl_cert_dir)
+
+Check if a message is signed.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>:
+
+=item * I<$tmpdir>: temporary directory
+
+=item * I<$cafile>:
+
+=item * I<$capath>:
+
+=item * I<$openssl>: path to openssl binary
+
+=item * I<$ssl_cert_dir>:
+
+=back
+
+=cut
 
 sub smime_sign_check {
     my $message = shift;
@@ -336,9 +379,29 @@ sub smime_sign_check {
     return $is_signed;
 }
 
-=head2 smime_encrypt($msg_header, $msg_body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
+=head2 smime_encrypt($header, $body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
 
-msg object, return a new message object encrypted
+Encrypt a message.
+
+=head3 Parameters
+
+=over
+
+=item * I<$header>:
+
+=item * I<$body>:
+
+=item * I<$email>:
+
+=item * I<$list>:
+
+=item * I<$tmpdir>: temporary directory
+
+=item * I<$ssl_cert_dir>:
+
+=item * I<$openssl>: path to openssl binary
+
+=back
 
 =cut
 
@@ -443,15 +506,35 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
     return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
 }
 
-=head2 smime_decrypt($msg, $list, $tmpdir, $home, $key_passwd, $openssl)
+=head2 smime_decrypt($message, $list, $tmpdir, $home, $key_passwd, $openssl)
 
-msg object for a list, return a new message object decrypted
+Decrypt a message.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>:
+
+=item * I<$list>: message recipient
+
+=item * I<$tmpdir>: temporary directory
+
+=item * I<$home>:
+
+=item * I<$key_passwd>:
+
+=item * I<$openssl>: path to openssl binary
+
+=back
+
+=head3 Return value
 
 =cut
 
 sub smime_decrypt {
     my $msg = shift;
-    my $list = shift ; ## the recipient of the msg
+    my $list = shift;
     my $tmpdir = shift;
     my $home = shift;
     my $key_passwd = shift;
@@ -768,6 +851,24 @@ sub smime_parse_cert {
     unlink($tmpfile);
     return \%res;
 }
+
+=head2 smime_extract_certs($message, $outfile, $openssl)
+
+Extract certificate from message.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>: (MIME::Entity instance)
+
+=item * I<$outfile>:
+
+=item * I<$openssl>: path to openssl binary
+
+=back
+
+=cut
 
 sub smime_extract_certs {
     my($mime, $outfile, $openssl) = @_;

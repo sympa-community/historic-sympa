@@ -150,6 +150,12 @@ sub epoch_conv {
     return $result;
 }
 
+=head2 date_conv($arg)
+
+Convert a formated date string into a unix timestamp.
+
+=cut
+
 sub date_conv {
    
     my $arg = $_[0];
@@ -179,6 +185,12 @@ sub date_conv {
     
     return time;
 }
+
+=head2 duration_conv($arg, $start_date)
+
+Convert a formated duration string into a second number.
+
+=cut
 
 sub duration_conv {
     
