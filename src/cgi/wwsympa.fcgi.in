@@ -4520,7 +4520,7 @@ sub do_search {
     ## Regexp
     $param->{'filter'} = $in{'filter'};
     ## Decode regexp to Unicode for case-insensitive match.
-    my $regexp = &Sympa::Tools::escape_regexp(Encode::decode_utf8($param->{'filter'} || ''));
+    my $regexp = quotemeta(Encode::decode_utf8($param->{'filter'} || ''));
 
     my $record = 0;
     ## Maximum size of selection
@@ -8165,7 +8165,7 @@ sub do_arcsearch {
      my @clean_words = split(/\s+/, $in{'key_word'});
      my @words = @clean_words;
      foreach my $w (@words) {
-	 $w = &Sympa::Tools::escape_regexp($w);
+	 $w = quotemeta($w);
 	 $w =~ s,/,\\/,g;
 	 $w = '\b' . $w . '\b'
 	     if $in{'match'} eq 'exact';
@@ -8276,7 +8276,7 @@ sub do_arcsearch_id {
      $search->clean_words ($in{'msgid'});
      my @words = split(/\s+/, $in{'msgid'});
      foreach my $w (@words) {
-	$w = &Sympa::Tools::escape_regexp($w);
+	$w = quotemeta($w);
 	$w =~ s,/,\\/,g;
      }
      $search->words (\@words);
@@ -9558,7 +9558,7 @@ sub do_search_list {
 
      ## Regexp
      $param->{'filter'} = $in{'filter'};
-     $param->{'regexp'} = &Sympa::Tools::escape_regexp($param->{'filter'});
+     $param->{'regexp'} = quotemeta($param->{'filter'});
 
      ## Members list
      my $record = 0;

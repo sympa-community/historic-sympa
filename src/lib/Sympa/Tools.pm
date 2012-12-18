@@ -795,25 +795,6 @@ sub as_singlepart {
     return $done;
 }
 
-=head2 escape_regexp($string)
-
-Escape characters before using a string within a regexp parameter
-Escaped characters are : @ $ [ ] ( ) ' ! '\' * . + ?
-
-=cut
-
-sub escape_regexp {
-    my $s = shift;
-    my @escaped = ("\\",'@','$','[',']','(',')',"'",'!','*','.','+','?');
-    my $backslash = "\\"; ## required in regexp
-
-    foreach my $escaped_char (@escaped) {
-	$s =~ s/$backslash$escaped_char/\\$escaped_char/g;
-    }
-
-    return $s;
-}
-
 =head2 escape_chars()
 
 Escape weird characters.

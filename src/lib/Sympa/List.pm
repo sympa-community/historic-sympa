@@ -12020,7 +12020,7 @@ sub compute_topic {
     foreach my $keyw (keys %keywords) {
 	my $k = $keywords{$keyw};
 	$keyw = Encode::decode_utf8($keyw);
-	$keyw = &Sympa::Tools::escape_regexp($keyw);
+	$keyw = quotemeta($keyw);
 	if ($mail_string =~ /$keyw/i){
 	    $topic_hash{$k} = 1;
 	}
