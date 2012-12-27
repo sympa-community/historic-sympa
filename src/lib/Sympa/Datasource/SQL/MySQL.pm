@@ -203,17 +203,13 @@ sub add_field {
 	my ($self, $param) = @_;
 
 	&Sympa::Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$param->{'field'},$param->{'table'},$param->{'type'},$param->{'notnull'},$param->{'autoinc'},$param->{'primary'});
-	my $options;
-	# To prevent "Cannot add a NOT NULL column with default value NULL" errors
-	if ($param->{'notnull'}) {
-		$options .= 'NOT NULL ';
-	}
-	if ( $param->{'autoinc'}) {
-		$options .= ' AUTO_INCREMENT ';
-	}
-	if ( $param->{'primary'}) {
-		$options .= ' PRIMARY KEY ';
-	}
+
+	my $options = join(' ',
+		$param->{notnull} ? 'NOT NULL'       : (),
+		$param->{autoinc} ? 'AUTO_INCREMENT' : (),
+		$param->{primary} ? 'PRIMARY KEY'    : (),
+	);
+
 	my $result = $self->do_query(
 		"ALTER TABLE %s ADD %s %s %s",
 		$param->{'table'},
@@ -226,8 +222,8 @@ sub add_field {
 		return undef;
 	}
 
-	my $report = sprintf('Field %s added to table %s (options : %s)', $param->{'field'}, $param->{'table'}, $options);
-	&Sympa::Log::do_log('info', 'Field %s added to table %s  (options : %s)', $param->{'field'}, $param->{'table'}, $options);
+	my $report = sprintf('Field %s added to table %s (options: %s)', $param->{'field'}, $param->{'table'}, $options);
+	&Sympa::Log::do_log('info', 'Field %s added to table %s  (options: %s)', $param->{'field'}, $param->{'table'}, $options);
 
 	return $report;
 }
