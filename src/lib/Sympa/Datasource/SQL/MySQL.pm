@@ -211,6 +211,10 @@ sub add_field {
 
 	&Sympa::Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$param->{'field'},$param->{'table'},$param->{'type'},$param->{'notnull'},$param->{'autoinc'},$param->{'primary'});
 
+	# specific issues:
+	# - an auto column must be defined as primary key
+	# - impossible to add more than one auto column
+
 	my $options = join(' ',
 		$param->{notnull} ? 'NOT NULL'       : (),
 		$param->{autoinc} ? 'AUTO_INCREMENT' : (),
