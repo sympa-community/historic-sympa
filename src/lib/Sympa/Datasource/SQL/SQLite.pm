@@ -130,19 +130,20 @@ sub set_autoinc {
 sub get_tables {
 	my ($self) = @_;
 
-	my @raw_tables;
-	my @result;
-	unless (@raw_tables = $self->{'dbh'}->tables()) {
+	my $sth = $self->do_query(
+		"SELECT name FROM sqlite_master WHERE type='table'"
+	);
+	unless ($sth) {
 		&Sympa::Log::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 		return undef;
 	}
 
-	foreach my $t (@raw_tables) {
-		$t =~ s/^"main"\.//; # needed for SQLite 3
-		$t =~ s/^.*\"([^\"]+)\"$/$1/;
-		push @result, $t;
-	}
-	return \@result;
+	my @tables;
+	while (my $row = $sth->fetchrow_arrayref()) {
+	    push @tables, $row->[0];
+    }
+
+    return \@tables;
 }
 
 sub add_table {
