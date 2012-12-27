@@ -14,6 +14,9 @@ use Sympa::Lock;
 plan tests => 6;
 
 my $lock;
+my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+my $main_file = $temp_dir . '/file';
+my $lock_file = $main_file . '.lock';
 
 throws_ok {
     $lock = Sympa::Lock->new();
@@ -22,13 +25,11 @@ throws_ok {
 
 throws_ok {
     $lock = Sympa::Lock->new(
-        File::Temp->new(),
+        $main_file
     );
 } qr/^missing method parameter/,
 'missing method parameter';
 
-my $main_file = File::Temp->new();
-my $lock_file = $main_file . '.lock';
 ok(!-f $lock_file, "underlying lock file doesn't exist");
 
 lives_ok {
