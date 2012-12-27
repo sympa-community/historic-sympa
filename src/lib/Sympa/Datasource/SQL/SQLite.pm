@@ -96,17 +96,16 @@ sub is_autoinc {
 
 	&Sympa::Log::do_log('debug','Checking whether field %s.%s is autoincremental',$param->{'field'},$param->{'table'});
 
-	my $sth = $self->do_query(
-		"SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",
-		$param->{'table'},
-		$param->{'field'}
-	);
+	my $sth = $self->do_query("PRAGMA table_info(%s)",$param->{'table'});
 	unless ($sth) {
-		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
+		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	my $ref = $sth->fetchrow_hashref() ;
-	return ($ref->{'field'} eq $param->{'field'});
+
+	while (my $row = $sth->fetchrow_arrayref()) {
+		next unless $row->[1] eq $param->{'field'};
+		return $row->[2] =~ /AUTO_INCREMENT/;
+	}
 }
 
 sub set_autoinc {
