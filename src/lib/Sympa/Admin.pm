@@ -35,6 +35,7 @@ package Sympa::Admin;
 use strict;
 
 use File::Copy;
+use IO::Scalar;
 
 use Sympa::Configuration;
 use Sympa::Constants;
