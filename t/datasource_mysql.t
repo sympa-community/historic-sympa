@@ -284,9 +284,11 @@ SKIP: {
 		'indexes list after field deletion'
 	);
 
-	my $tables = $source->get_tables();
-	foreach my $table (@$tables) {
-		$dbh->do("DROP TABLE $table");
+	if (!$ENV{TEST_DEBUG}) {
+		my $tables = $source->get_tables();
+		foreach my $table (@$tables) {
+			$dbh->do("DROP TABLE $table");
+		}
 	}
 };
 
