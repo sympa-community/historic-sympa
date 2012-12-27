@@ -35,8 +35,6 @@ package Sympa::Datasource::SQL::PostgreSQL;
 use strict;
 use base qw(Sympa::Datasource::SQL);
 
-use Data::Dumper;
-
 use Sympa::Log;
 
 our %date_format = (
@@ -306,7 +304,6 @@ sub get_indexes {
 			$found_indexes{$ref->{'relname'}}{$member} = 1;
 		}
 	}
-	open TMP, ">>/tmp/found_indexes"; print TMP &Dumper(\%found_indexes); close TMP;
 return \%found_indexes;
 }
 
