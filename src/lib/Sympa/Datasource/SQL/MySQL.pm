@@ -222,8 +222,13 @@ sub add_field {
 		return undef;
 	}
 
-	my $report = sprintf('Field %s added to table %s (options: %s)', $param->{'field'}, $param->{'table'}, $options);
-	&Sympa::Log::do_log('info', 'Field %s added to table %s  (options: %s)', $param->{'field'}, $param->{'table'}, $options);
+	my $report = sprintf(
+		'Field %s added to table %s (options: %s)',
+		$param->{'field'},
+		$param->{'table'},
+		$options
+	);
+	&Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
