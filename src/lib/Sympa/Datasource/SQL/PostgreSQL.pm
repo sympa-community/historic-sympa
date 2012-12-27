@@ -70,9 +70,12 @@ sub get_limit_clause {
 	my ($self, $param) = @_;
 
 	if ($param->{'offset'}) {
-		return "LIMIT ".$param->{'rows_count'}." OFFSET ".$param->{'offset'};
-	}else{
-		return "LIMIT ".$param->{'rows_count'};
+		return sprintf "LIMIT %s OFFSET %s",
+			$param->{'rows_count'},
+			$param->{'offset'};
+	} else {
+		return sprintf "LIMIT %s",
+			$param->{'rows_count'};
 	}
 }
 
