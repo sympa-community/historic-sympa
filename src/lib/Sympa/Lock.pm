@@ -65,7 +65,7 @@ A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my($pkg, $filepath, $method) = @_edie
+    my($pkg, $filepath, $method) = @_;
 
     croak "missing filepath parameter" unless $filepath;
     croak "missing method parameter" unless $method;
