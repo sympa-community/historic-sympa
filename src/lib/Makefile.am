@@ -12,7 +12,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Datasource.pm \
 		      Sympa/Datasource/LDAP.pm \
 		      Sympa/Datasource/SQL.pm \
-		      Sympa/Datasource/SQL/Default.pm \
 		      Sympa/Datasource/SQL/Informix.pm \
 		      Sympa/Datasource/SQL/MySQL.pm \
 		      Sympa/Datasource/SQL/Oracle.pm \

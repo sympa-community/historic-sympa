@@ -33,7 +33,7 @@ This class implements a MySQL data source.
 package Sympa::Datasource::SQL::MySQL;
 
 use strict;
-use base qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL);
 
 use Sympa::Log;
 

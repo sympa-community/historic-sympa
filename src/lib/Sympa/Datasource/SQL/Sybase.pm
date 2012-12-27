@@ -33,7 +33,7 @@ This class implements a Sybase data source.
 package Sympa::Datasource::SQL::Sybase;
 
 use strict;
-use base qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL);
 
 use Data::Dumper;
 

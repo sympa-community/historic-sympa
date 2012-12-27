@@ -33,7 +33,7 @@ This class implements an SQLite data source.
 package Sympa::Datasource::SQL::SQLite;
 
 use strict;
-use base qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL);
 
 use Sympa::Log;
 

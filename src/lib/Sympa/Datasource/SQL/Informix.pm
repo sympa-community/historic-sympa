@@ -33,7 +33,7 @@ This class implements an Informix data source.
 package Sympa::Datasource::SQL::Informix;
 
 use strict;
-use base qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL);
 
 sub build_connect_string{
 	my ($self) = @_;

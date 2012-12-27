@@ -33,7 +33,7 @@ This class implements a PotsgreSQL data source.
 package Sympa::Datasource::SQL::PostgreSQL;
 
 use strict;
-use base qw(Sympa::Datasource::SQL::Default);
+use base qw(Sympa::Datasource::SQL);
 
 use Data::Dumper;
 
