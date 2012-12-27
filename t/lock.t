@@ -11,7 +11,7 @@ use Test::Exception;
 
 use Sympa::Lock;
 
-plan tests => 4;
+plan tests => 6;
 
 my $lock;
 
@@ -27,12 +27,18 @@ throws_ok {
 } qr/^missing method parameter/,
 'missing method parameter';
 
+my $main_file = File::Temp->new();
+my $lock_file = $main_file . '.lock';
+ok(!-f $lock_file, "underlying lock file doesn't exist");
+
 lives_ok {
     $lock = Sympa::Lock->new(
-        File::Temp->new(),
+        $main_file,
         'anything'
     );
 }
 'all parameters OK';
 
 isa_ok($lock, 'Sympa::Lock');
+
+ok(-f $lock_file, "underlying lock file does exist");
