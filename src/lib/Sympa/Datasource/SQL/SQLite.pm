@@ -198,8 +198,16 @@ sub update_field {
 	if ($param->{'notnull'}) {
 		$options .= ' NOT NULL ';
 	}
-	my $report = sprintf("ALTER TABLE %s CHANGE %s %s %s %s",$param->{'table'},$param->{'field'},$param->{'field'},$param->{'type'},$options);
-	&Sympa::Log::do_log('notice', "ALTER TABLE %s CHANGE %s %s %s %s",$param->{'table'},$param->{'field'},$param->{'field'},$param->{'type'},$options);
+	my $report = sprintf(
+		"ALTER TABLE %s CHANGE %s %s %s %s",
+		$param->{'table'},
+		$param->{'field'},
+		$param->{'field'},
+		$param->{'type'},
+		$options
+	);
+	&Sympa::Log::do_log('notice', $report);
+
 	my $result = $self->do_query(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
 		$param->{'table'},
@@ -212,8 +220,13 @@ sub update_field {
 		&Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$param->{'field'}, $param->{'table'});
 		return undef;
 	}
-	$report .= sprintf('\nField %s in table %s, structure updated', $param->{'field'}, $param->{'table'});
-	&Sympa::Log::do_log('info', 'Field %s in table %s, structure updated', $param->{'field'}, $param->{'table'});
+	$report .= sprintf(
+		'\nField %s in table %s, structure updated',
+		$param->{'field'},
+		$param->{'table'}
+	);
+	&Sympa::Log::do_log('info', $report);
+
 	return $report;
 }
 
@@ -240,8 +253,13 @@ sub add_field {
 		return undef;
 	}
 
-	my $report = sprintf('Field %s added to table %s (options: %s)', $param->{'field'}, $param->{'table'}, $options);
-	&Sympa::Log::do_log('info', 'Field %s added to table %s  (options: %s)', $param->{'field'}, $param->{'table'}, $options);
+	my $report = sprintf(
+		'Field %s added to table %s (options: %s)',
+		$param->{'field'},
+		$param->{'table'},
+		$options
+	);
+	&Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
@@ -261,8 +279,12 @@ sub delete_field {
 		return undef;
 	}
 
-	my $report = sprintf('Field %s removed from table %s', $param->{'field'}, $param->{'table'});
-	&Sympa::Log::do_log('info', 'Field %s removed from table %s', $param->{'field'}, $param->{'table'});
+	my $report = sprintf(
+		'Field %s removed from table %s',
+		$param->{'field'},
+		$param->{'table'}
+	);
+	&Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
@@ -302,7 +324,7 @@ sub unset_primary_key {
 		return undef;
 	}
 	my $report = "Table $param->{'table'}, PRIMARY KEY dropped";
-	&Sympa::Log::do_log('info', 'Table %s, PRIMARY KEY dropped', $param->{'table'});
+	&Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
@@ -323,7 +345,8 @@ sub set_primary_key {
 		return undef;
 	}
 	my $report = "Table $param->{'table'}, PRIMARY KEY set on $fields";
-	&Sympa::Log::do_log('info', 'Table %s, PRIMARY KEY set on %s', $param->{'table'},$fields);
+	&Sympa::Log::do_log('info', $report);
+
 	return $report;
 }
 
@@ -364,7 +387,7 @@ sub unset_index {
 		return undef;
 	}
 	my $report = "Table $param->{'table'}, index $param->{'index'} dropped";
-	&Sympa::Log::do_log('info', 'Table %s, index %s dropped', $param->{'table'},$param->{'index'});
+	&Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
@@ -386,7 +409,8 @@ sub set_index {
 		return undef;
 	}
 	my $report = "Table $param->{'table'}, index %s set using $fields";
-	&Sympa::Log::do_log('info', 'Table %s, index %s set using fields %s',$param->{'table'}, $param->{'index_name'}, $fields);
+	&Sympa::Log::do_log('info', $report);
+
 	return $report;
 }
 
