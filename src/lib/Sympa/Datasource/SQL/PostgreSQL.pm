@@ -51,21 +51,18 @@ our %date_format = (
 sub build_connect_string{
 	my ($self) = @_;
 
-	&Sympa::Log::do_log('debug','Building connect string');
 	$self->{'connect_string'} = "DBI:Pg:dbname=$self->{'db_name'};host=$self->{'db_host'}";
 }
 
 sub get_substring_clause {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug2','Building a substring clause');
 	return "SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}.")";
 }
 
 sub get_limit_clause {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building limit clause');
 	if ($param->{'offset'}) {
 		return "LIMIT ".$param->{'rows_count'}." OFFSET ".$param->{'offset'};
 	}else{
@@ -76,7 +73,6 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building SQL date formatting');
 	if (lc($param->{'mode'}) eq 'read') {
 		return sprintf 'date_part(\'epoch\',%s)',$param->{'target'};
 	}elsif(lc($param->{'mode'}) eq 'write') {

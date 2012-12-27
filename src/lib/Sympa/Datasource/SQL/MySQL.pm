@@ -42,21 +42,18 @@ use Sympa::Log;
 sub build_connect_string {
 	my ($self) = @_;
 
-	&Sympa::Log::do_log('debug','Building connection string to database %s',$self->{'db_name'});
 	$self->{'connect_string'} = "DBI:$self->{'db_type'}:$self->{'db_name'}:$self->{'db_host'}";
 }
 
 sub get_substring_clause {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building substring caluse');
 	return "REVERSE(SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}."))";
 }
 
 sub get_limit_clause {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building limit 1 caluse');
 	if ($param->{'offset'}) {
 		return "LIMIT ".$param->{'offset'}.",".$param->{'rows_count'};
 	}else{
@@ -67,7 +64,6 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building SQL date formatting');
 	if (lc($param->{'mode'}) eq 'read') {
 		return sprintf 'UNIX_TIMESTAMP(%s)',$param->{'target'};
 	}elsif(lc($param->{'mode'}) eq 'write') {
