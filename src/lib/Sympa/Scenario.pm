@@ -179,7 +179,6 @@ sub new {
     $scenario->{'title'} = $scenario_struct->{'title'};
     $scenario->{'struct'} = $scenario_struct;
 
-    ## Bless Message object
     bless $scenario, $pkg;
 
     ## Keep the scenario in memory

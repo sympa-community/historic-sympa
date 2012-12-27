@@ -55,7 +55,6 @@ sub new {
     my($pkg, $param) = @_;
     &Sympa::Log::do_log('debug', '');
     my $self = $param;
-    ## Bless Message object
     bless $self, $pkg;
     return $self;
 }

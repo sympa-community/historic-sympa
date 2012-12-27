@@ -101,7 +101,6 @@ sub new {
     $task->{'id'} = $task->{'list_object'}{'name'};
     $task->{'id'} .= '@'.$task->{'domain'} if (defined $task->{'domain'});
 
-    ## Bless Task object
     bless $task, $pkg;
 
     return $task;

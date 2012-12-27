@@ -260,7 +260,6 @@ sub new {
 
     $document->{'list'} = $list;
 	
-    ## Bless Message object
     bless $document, $pkg;
     
     return $document;

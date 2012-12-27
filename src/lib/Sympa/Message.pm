@@ -95,7 +95,6 @@ sub new {
 	$message->{'msg'} = $mimeentity;
 	$message->{'altered'} = '_ALTERED';
 
-	## Bless Message object
 	bless $message, $pkg;
 	
 	return $message;
