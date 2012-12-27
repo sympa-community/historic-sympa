@@ -272,24 +272,9 @@ sub delete_field {
 
 	&Sympa::Log::do_log('debug','Deleting field %s from table %s',$param->{'field'},$param->{'table'});
 
-	my $sth = $self->do_query(
-		"ALTER TABLE %s DROP COLUMN `%s`",
-		$param->{'table'},
-		$param->{'field'}
-	);
-	unless ($sth) {
-		&Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf(
-		'Field %s removed from table %s',
-		$param->{'field'},
-		$param->{'table'}
-	);
-	&Sympa::Log::do_log('info', $report);
-
-	return $report;
+	# unsupported
+	&Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
+	return undef;
 }
 
 sub get_primary_key {
