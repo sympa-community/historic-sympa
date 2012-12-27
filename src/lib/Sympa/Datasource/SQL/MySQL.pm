@@ -106,14 +106,14 @@ sub set_autoinc {
 	&Sympa::Log::do_log('debug','Setting field %s.%s as autoincremental',$param->{'field'},$param->{'table'});
 
 	my $field_type = defined ($param->{'field_type'}) ? $param->{'field_type'} : 'BIGINT( 20 )';
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE `%s` CHANGE `%s` `%s` %s NOT NULL AUTO_INCREMENT",
 		$param->{'table'},
 		$param->{'field'},
 		$param->{'field'},
 		$field_type
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err','Unable to set field %s in table %s as autoincrement',$param->{'field'},$param->{'table'});
 		return undef;
 	}
@@ -138,11 +138,11 @@ sub add_table {
 
 	&Sympa::Log::do_log('debug','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"CREATE TABLE %s (temporary INT) DEFAULT CHARACTER SET utf8",
 		$param->{'table'}
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -184,7 +184,7 @@ sub update_field {
 	);
 	&Sympa::Log::do_log('notice', $report);
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
 		$param->{'table'},
 		$param->{'field'},
@@ -192,7 +192,7 @@ sub update_field {
 		$param->{'type'},
 		$options
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$param->{'field'}, $param->{'table'});
 		return undef;
 	}
@@ -217,14 +217,14 @@ sub add_field {
 		$param->{primary} ? 'PRIMARY KEY'    : (),
 	);
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s ADD %s %s %s",
 		$param->{'table'},
 		$param->{'field'},
 		$param->{'type'},
 		$options
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not add field %s to table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -245,12 +245,12 @@ sub delete_field {
 
 	&Sympa::Log::do_log('debug','Deleting field %s from table %s',$param->{'field'},$param->{'table'});
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s DROP COLUMN `%s`",
 		$param->{'table'},
 		$param->{'field'}
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
