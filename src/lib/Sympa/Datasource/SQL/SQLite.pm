@@ -398,9 +398,9 @@ sub set_index {
 	&Sympa::Log::do_log('debug', 'Setting index %s for table %s using fields %s', $param->{'index_name'},$param->{'table'}, $fields);
 
 	my $sth = $self->do_query(
-		"ALTER TABLE %s ADD INDEX %s (%s)",
-		$param->{'table'},
+		"CREATE INDEX %s ON %s (%s)",
 		$param->{'index_name'},
+		$param->{'table'},
 		$fields
 	);
 	unless ($sth) {
