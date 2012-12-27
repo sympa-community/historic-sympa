@@ -57,7 +57,12 @@ sub build_connect_string{
 sub get_substring_clause {
 	my ($self, $param) = @_;
 
-	return "substr(".$param->{'source_field'}.",func_index(".$param->{'source_field'}.",'".$param->{'separator'}."')+1,".$param->{'substring_length'}.")";
+	return sprintf
+		"substr(%s,func_index(%s,'%s')+1,%s)",
+		$param->{'source_field'},
+		$param->{'source_field'},
+		$param->{'separator'},
+		$param->{'substring_length'};
 }
 
 

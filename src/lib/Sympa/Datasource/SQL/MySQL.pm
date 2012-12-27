@@ -48,7 +48,12 @@ sub build_connect_string {
 sub get_substring_clause {
 	my ($self, $param) = @_;
 
-	return "REVERSE(SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}."))";
+	return sprintf
+		"REVERSE(SUBSTRING(%s FROM position('%s' IN %s) FOR %s))",
+		$param->{'source_field'},
+		$param->{'separator'},
+		$param->{'source_field'},
+		$param->{'substring_length'};
 }
 
 sub get_limit_clause {

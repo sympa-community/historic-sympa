@@ -60,7 +60,11 @@ sub build_connect_string{
 sub get_substring_clause {
 	my ($self, $param) = @_;
 
-	return "substr(".$param->{'source_field'}.",instr(".$param->{'source_field'}.",'".$param->{'separator'}."')+1)";
+	return sprintf
+		"substr(%s,instr(%s,'%s')+1)",
+		$param->{'source_field'},
+		$param->{'source_field'},
+		$param->{'separator'};
 }
 
 sub get_limit_clause {
