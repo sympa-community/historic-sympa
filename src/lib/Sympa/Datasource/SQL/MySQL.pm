@@ -35,8 +35,6 @@ package Sympa::Datasource::SQL::MySQL;
 use strict;
 use base qw(Sympa::Datasource::SQL::Default);
 
-use Data::Dumper;
-
 use Sympa::Log;
 
 sub build_connect_string {
@@ -334,8 +332,7 @@ sub get_indexes {
 			$indexes{$index_name}{$field_name} = 1;
 		}
 	}
-	open TMP, ">>/tmp/toto"; print TMP &Dumper(\%indexes); close TMP;
-return \%indexes;
+	return \%indexes;
 }
 
 sub unset_index {

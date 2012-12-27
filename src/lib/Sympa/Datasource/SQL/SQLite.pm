@@ -35,8 +35,6 @@ package Sympa::Datasource::SQL::SQLite;
 use strict;
 use base qw(Sympa::Datasource::SQL::Default);
 
-use Data::Dumper;
-
 use Sympa::Log;
 
 our %date_format = (
@@ -351,7 +349,6 @@ sub get_indexes {
 			$indexes{$index_name}{$field_name} = 1;
 		}
 	}
-	open TMP, ">>/tmp/toto"; print TMP &Dumper(\%indexes); close TMP;
 	return \%indexes;
 }
 
