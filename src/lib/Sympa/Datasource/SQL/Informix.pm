@@ -36,8 +36,8 @@ use strict;
 use base qw(Sympa::Datasource::SQL::Default);
 
 sub build_connect_string{
-    my $self = shift;
-    $self->{'connect_string'} = "DBI:Informix:".$self->{'db_name'}."@".$self->{'db_host'};
+	my $self = shift;
+	$self->{'connect_string'} = "DBI:Informix:".$self->{'db_name'}."@".$self->{'db_host'};
 }
 
 1;
