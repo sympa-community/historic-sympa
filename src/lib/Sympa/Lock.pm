@@ -34,6 +34,7 @@ package Sympa::Lock;
 
 use strict;
 
+use Carp;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 
@@ -65,6 +66,10 @@ A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 
 sub new {
     my($pkg, $filepath, $method) = @_;
+
+    croak "missing filepath parameter" unless $filepath;
+    croak "missing method parameter" unless $method;
+
     &Sympa::Log::do_log('debug', '(%s)',$filepath);
     
     my $lock_filename = $filepath.'.lock';
