@@ -124,19 +124,13 @@ sub get_tables {
 	my ($self) = @_;
 
 	&Sympa::Log::do_log('debug','Retrieving all tables in database %s',$self->{'db_name'});
-	my @raw_tables;
-	unless (@raw_tables = $self->{'dbh'}->tables()) {
-		&Sympa::Log::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
-		return undef;
-	}
+	my @tables = $self->{'dbh'}->tables();
 
-	my @result;
-	foreach my $t (@raw_tables) {
-		$t =~ s/^\`[^\`]+\`\.//;# Clean table names that would look like `databaseName`.`tableName` (mysql)
-		$t =~ s/^\`(.+)\`$/$1/;# Clean table names that could be surrounded by `` (recent DBD::mysql release)
-		push @result, $t;
+	foreach my $table (@tables) {
+		$table =~ s/^\`[^\`]+\`\.//; # drop db name prefix
+		$table =~ s/^\`(.+)\`$/$1/;  # drop quotes
 	}
-	return \@result;
+	return \@tables;
 }
 
 sub add_table {
