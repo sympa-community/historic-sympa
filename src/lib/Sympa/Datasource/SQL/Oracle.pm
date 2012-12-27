@@ -76,11 +76,12 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, $param) = @_;
 
-	if (lc($param->{'mode'}) eq 'read') {
+	my $mode = lc($param->{'mode'});
+	if ($mode eq 'read') {
 		return sprintf 'UNIX_TIMESTAMP(%s)',$param->{'target'};
-	}elsif(lc($param->{'mode'}) eq 'write') {
+	} elsif ($mode eq 'write') {
 		return sprintf 'FROM_UNIXTIME(%d)',$param->{'target'};
-	}else {
+	} else {
 		&Sympa::Log::do_log('err',"Unknown date format mode %s", $param->{'mode'});
 		return undef;
 	}
