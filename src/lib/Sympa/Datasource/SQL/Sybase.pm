@@ -51,7 +51,8 @@ our %date_format = (
 sub build_connect_string{
 	my ($self) = @_;
 
-	$self->{'connect_string'} = "DBI:Sybase:database=$self->{'db_name'};server=$self->{'db_host'}";
+	$self->{'connect_string'} =
+		"DBI:Sybase:database=$self->{'db_name'};server=$self->{'db_host'}";
 }
 
 sub get_substring_clause {
