@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:wrap:textwidth=78
+# $Id$
 
 use strict;
 use warnings;
