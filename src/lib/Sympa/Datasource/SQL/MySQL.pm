@@ -333,11 +333,8 @@ sub get_indexes {
 	}
 	my %indexes;
 	while(my $row = $sth->fetchrow_hashref('NAME_lc')) {
-		if ($row->{'key_name'} ne "PRIMARY" ) {
-			my $index_name = $row->{'key_name'};
-			my $field_name = $row->{'column_name'};
-			$indexes{$index_name}{$field_name} = 1;
-		}
+		next if $row->{'key_name'} eq "PRIMARY";
+		$indexes{$row->{'key_name'}}->{$row->{'column_name'}} = 1;
 	}
 	return \%indexes;
 }
