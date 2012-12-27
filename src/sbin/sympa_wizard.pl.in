@@ -95,11 +95,6 @@ my %mandatory_modules = (
 		distribution => 'CGI',
 		usage        => 'required to run Sympa web interface',
 	},
-	'DB_File' => {
-		version      => '1.75',
-		distribution => 'DB_FILE',
-		usage        => ' used for maintaining snapshots of list members',
-	},
 	'DBD::mysql' => {
 		version       => '4.008',
 		prerequisites => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
