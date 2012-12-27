@@ -180,8 +180,16 @@ sub update_field {
 	if ($param->{'notnull'}) {
 		$options .= ' NOT NULL ';
 	}
-	my $report = sprintf("ALTER TABLE %s CHANGE %s %s %s %s",$param->{'table'},$param->{'field'},$param->{'field'},$param->{'type'},$options);
-	&Sympa::Log::do_log('notice', "ALTER TABLE %s CHANGE %s %s %s %s",$param->{'table'},$param->{'field'},$param->{'field'},$param->{'type'},$options);
+	my $report = sprintf(
+		"ALTER TABLE %s CHANGE %s %s %s %s",
+		$param->{'table'},
+		$param->{'field'},
+		$param->{'field'},
+		$param->{'type'},
+		$options
+	);
+	&Sympa::Log::do_log('notice', $report);
+
 	my $result = $self->do_query(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
 		$param->{'table'},
@@ -194,8 +202,13 @@ sub update_field {
 		&Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$param->{'field'}, $param->{'table'});
 		return undef;
 	}
-	$report .= sprintf('\nField %s in table %s, structure updated', $param->{'field'}, $param->{'table'});
-	&Sympa::Log::do_log('info', 'Field %s in table %s, structure updated', $param->{'field'}, $param->{'table'});
+	$report .= sprintf(
+		'\nField %s in table %s, structure updated',
+		$param->{'field'},
+		$param->{'table'}
+	);
+	&Sympa::Log::do_log('info', $report);
+
 	return $report;
 }
 
