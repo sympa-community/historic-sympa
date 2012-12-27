@@ -113,13 +113,13 @@ sub set_autoinc {
 
 	&Sympa::Log::do_log('debug','Setting field %s.%s as autoincremental',$param->{'field'},$param->{'table'});
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE `%s` CHANGE `%s` `%s` BIGINT( 20 ) NOT NULL AUTO_INCREMENT",
 		$param->{'table'},
 		$param->{'field'},
 		$param->{'field'}
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err','Unable to set field %s in table %s as autoincrement',$param->{'field'},$param->{'table'});
 		return undef;
 	}
@@ -150,11 +150,11 @@ sub add_table {
 
 	&Sympa::Log::do_log('debug','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"CREATE TABLE %s (temporary INT)",
 		$param->{'table'}
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -171,20 +171,20 @@ sub get_fields {
 	}
 
 	my %result;
-	while (my $field = $sth->fetchrow_arrayref()) {
+	while (my $row = $sth->fetchrow_arrayref()) {
 		# http://www.sqlite.org/datatype3.html
-		if($field->[2] =~ /int/) {
-			$field->[2]="integer";
-		} elsif ($field->[2] =~ /char|clob|text/) {
-			$field->[2]="text";
-		} elsif ($field->[2] =~ /blob/) {
-			$field->[2]="none";
-		} elsif ($field->[2] =~ /real|floa|doub/) {
-			$field->[2]="real";
+		if($row->[2] =~ /int/) {
+			$row->[2]="integer";
+		} elsif ($row->[2] =~ /char|clob|text/) {
+			$row->[2]="text";
+		} elsif ($row->[2] =~ /blob/) {
+			$row->[2]="none";
+		} elsif ($row->[2] =~ /real|floa|doub/) {
+			$row->[2]="real";
 		} else {
-			$field->[2]="numeric";
+			$row->[2]="numeric";
 		}
-		$result{$field->[1]} = $field->[2];
+		$result{$row->[1]} = $row->[2];
 	}
 	return \%result;
 }
@@ -207,7 +207,7 @@ sub update_field {
 	);
 	&Sympa::Log::do_log('notice', $report);
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
 		$param->{'table'},
 		$param->{'field'},
@@ -215,7 +215,7 @@ sub update_field {
 		$param->{'type'},
 		$options
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$param->{'field'}, $param->{'table'});
 		return undef;
 	}
@@ -240,14 +240,14 @@ sub add_field {
 		$param->{primary} ? 'PRIMARY KEY'    : (),
 	);
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s ADD %s %s %s",
 		$param->{'table'},
 		$param->{'field'},
 		$param->{'type'},
 		$options
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not add field %s to table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -268,12 +268,12 @@ sub delete_field {
 
 	&Sympa::Log::do_log('debug','Deleting field %s from table %s',$param->{'field'},$param->{'table'});
 
-	my $result = $self->do_query(
+	my $sth = $self->do_query(
 		"ALTER TABLE %s DROP COLUMN `%s`",
 		$param->{'table'},
 		$param->{'field'}
 	);
-	unless ($result) {
+	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $param->{'field'}, $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}

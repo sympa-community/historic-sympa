@@ -96,8 +96,8 @@ sub is_autoinc {
 		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 		return undef;
 	}
-	my $ref = $sth->fetchrow_hashref('NAME_lc') ;
-	return ($ref->{'field'} eq $param->{'field'});
+	my $row = $sth->fetchrow_hashref('NAME_lc') ;
+	return ($row->{'field'} eq $param->{'field'});
 }
 
 sub set_autoinc {
@@ -160,8 +160,8 @@ sub get_fields {
 	}
 
 	my %result;
-	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
-		$result{$ref->{'field'}} = $ref->{'type'};
+	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+		$result{$row->{'field'}} = $row->{'type'};
 	}
 	return \%result;
 }
@@ -332,11 +332,10 @@ sub get_indexes {
 		return undef;
 	}
 	my %indexes;
-	my $index_part;
-	while($index_part = $sth->fetchrow_hashref('NAME_lc')) {
-		if ( $index_part->{'key_name'} ne "PRIMARY" ) {
-			my $index_name = $index_part->{'key_name'};
-			my $field_name = $index_part->{'column_name'};
+	while(my $row = $sth->fetchrow_hashref('NAME_lc')) {
+		if ($row->{'key_name'} ne "PRIMARY" ) {
+			my $index_name = $row->{'key_name'};
+			my $field_name = $row->{'column_name'};
 			$indexes{$index_name}{$field_name} = 1;
 		}
 	}
