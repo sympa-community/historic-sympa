@@ -78,8 +78,8 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my $pkg = shift;
-	my $param = shift;
+	my ($pkg, $param) = @_;
+
 	my $self = $param;
 	&Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
 	my $actualclass;
@@ -154,7 +154,8 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub connect {
-	my $self = shift;
+	my ($self) = @_;
+
 	&Sympa::Log::do_log('debug3',"Checking connection to database %s",$self->{'db_name'});
 	if ($self->{'dbh'} && $self->{'dbh'}->ping) {
 		&Sympa::Log::do_log('debug3','Connection to database %s already available',$self->{'db_name'});
@@ -181,7 +182,7 @@ A DBI database handle object, or I<undef> if something went wrong.
 =cut
 
 sub establish_connection {
-	my $self = shift;
+	my ($self) = @_;
 
 	&Sympa::Log::do_log('debug','Creating connection to database %s',$self->{'db_name'});
 	## Do we have db_xxx required parameters
@@ -334,9 +335,7 @@ A DBI statement handle object, or I<undef> if something went wrong.
 =cut
 
 sub do_query {
-	my $self = shift;
-	my $query = shift;
-	my @params = @_;
+	my ($self, $query, @params) = @_;
 
 	my $statement = sprintf $query, @params;
 
@@ -401,9 +400,7 @@ A DBI statement handle object, or I<undef> if something went wrong.
 =cut
 
 sub do_prepared_query {
-	my $self = shift;
-	my $query = shift;
-	my @params = @_;
+	my ($self, $query, @params) = @_;
 
 	my $sth;
 
@@ -469,7 +466,8 @@ The list of cropped values, as an arrayref.
 =cut
 
 sub prepare_query_log_values {
-	my $self = shift;
+	my ($self) = @_;
+
 	my @result;
 	foreach my $value (@_) {
 		my $cropped = substr($value,0,100);
@@ -492,7 +490,7 @@ None.
 =cut
 
 sub fetch {
-	my $self = shift;
+	my ($self) = @_;
 
 	## call to fetchrow_arrayref() uses eval to set a timeout
 	## this prevents one data source to make the process wait forever if SELECT does not respond
@@ -532,7 +530,8 @@ None.
 =cut
 
 sub disconnect {
-	my $self = shift;
+	my ($self) = @_;
+
 	$self->{'sth'}->finish if $self->{'sth'};
 	if ($self->{'dbh'}) {$self->{'dbh'}->disconnect;}
 	delete $db_connections{$self->{'connect_string'}};
@@ -564,7 +563,8 @@ See L<DBI> for details.
 =cut
 
 sub ping {
-	my $self = shift;
+	my ($self) = @_;
+
 	return $self->{'dbh'}->ping;
 }
 
@@ -578,6 +578,7 @@ See L<DBI> for details.
 
 sub quote {
 	my ($self, $string, $datatype) = @_;
+
 	return $self->{'dbh'}->quote($string, $datatype);
 }
 
@@ -589,6 +590,7 @@ Set a timeout for fetch operations.
 
 sub set_fetch_timeout {
 	my ($self, $timeout) = @_;
+
 	return $self->{'fetch_timeout'} = $timeout;
 }
 
@@ -608,8 +610,8 @@ query (e.g. SELECT) for the field given as argument.
 =cut
 
 sub get_canonical_write_date {
-	my $self = shift;
-	my $field = shift;
+	my ($self, $field) = @_;
+
 	return $self->get_formatted_date({'mode'=>'write','target'=>$field});
 }
 

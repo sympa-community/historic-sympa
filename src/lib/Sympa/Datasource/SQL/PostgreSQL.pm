@@ -49,21 +49,22 @@ our %date_format = (
 );
 
 sub build_connect_string{
-	my $self = shift;
+	my ($self) = @_;
+
 	&Sympa::Log::do_log('debug','Building connect string');
 	$self->{'connect_string'} = "DBI:Pg:dbname=$self->{'db_name'};host=$self->{'db_host'}";
 }
 
 sub get_substring_clause {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug2','Building a substring clause');
 	return "SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}.")";
 }
 
 sub get_limit_clause {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Building limit clause');
 	if ($param->{'offset'}) {
 		return "LIMIT ".$param->{'rows_count'}." OFFSET ".$param->{'offset'};
@@ -73,8 +74,8 @@ sub get_limit_clause {
 }
 
 sub get_formatted_date {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Building SQL date formatting');
 	if (lc($param->{'mode'}) eq 'read') {
 		return sprintf 'date_part(\'epoch\',%s)',$param->{'target'};
@@ -87,8 +88,8 @@ sub get_formatted_date {
 }
 
 sub is_autoinc {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Checking whether field %s.%s is an autoincrement',$param->{'table'},$param->{'field'});
 	my $seqname = $param->{'table'}.'_'.$param->{'field'}.'_seq';
 	my $sth;
@@ -101,8 +102,8 @@ sub is_autoinc {
 }
 
 sub set_autoinc {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Setting field %s.%s as an auto increment',$param->{'table'},$param->{'field'});
 	my $seqname = $param->{'table'}.'_'.$param->{'field'}.'_seq';
 	unless ($self->do_query("CREATE SEQUENCE %s",$seqname)) {
@@ -125,7 +126,8 @@ sub set_autoinc {
 }
 
 sub get_tables {
-	my $self = shift;
+	my ($self) = @_;
+
 	&Sympa::Log::do_log('debug','Getting the list of tables in database %s',$self->{'db_name'});
 	my @raw_tables;
 	unless (@raw_tables = $self->{'dbh'}->tables(undef,'public',undef,'TABLE',{pg_noprefix => 1} )) {
@@ -136,8 +138,8 @@ sub get_tables {
 }
 
 sub add_table {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Adding table %s',$param->{'table'});
 	unless ($self->do_query("CREATE TABLE %s (temporary INT)",$param->{'table'})) {
 		&Sympa::Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
@@ -147,8 +149,8 @@ sub add_table {
 }
 
 sub get_fields {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Getting the list of fields in table %s, database %s',$param->{'table'}, $self->{'db_name'});
 	my $sth;
 	my %result;
@@ -168,8 +170,8 @@ sub get_fields {
 }
 
 sub update_field {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Updating field %s in table %s (%s, %s)',$param->{'field'},$param->{'table'},$param->{'type'},$param->{'notnull'});
 	my $options;
 	if ($param->{'notnull'}) {
@@ -187,8 +189,8 @@ sub update_field {
 }
 
 sub add_field {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$param->{'field'},$param->{'table'},$param->{'type'},$param->{'notnull'},$param->{'autoinc'},$param->{'primary'});
 	my $options;
 	# To prevent "Cannot add a NOT NULL column with default value NULL" errors
@@ -210,8 +212,8 @@ sub add_field {
 }
 
 sub delete_field {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Deleting field %s from table %s',$param->{'field'},$param->{'table'});
 
 	unless ($self->do_query("ALTER TABLE %s DROP COLUMN %s",$param->{'table'},$param->{'field'})) {
@@ -226,8 +228,7 @@ sub delete_field {
 }
 
 sub get_primary_key {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
 
 	&Sympa::Log::do_log('debug','Getting primary key for table %s',$param->{'table'});
 	my %found_keys;
@@ -244,8 +245,8 @@ sub get_primary_key {
 }
 
 sub unset_primary_key {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Removing primary key from table %s',$param->{'table'});
 
 	my $sth;
@@ -260,8 +261,7 @@ sub unset_primary_key {
 }
 
 sub set_primary_key {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
 
 	my $sth;
 	my $fields = join ',',@{$param->{'fields'}};
@@ -276,8 +276,7 @@ sub set_primary_key {
 }
 
 sub get_indexes {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
 
 	&Sympa::Log::do_log('debug','Getting the indexes defined on table %s',$param->{'table'});
 	my %found_indexes;
@@ -306,8 +305,8 @@ return \%found_indexes;
 }
 
 sub unset_index {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Removing index %s from table %s',$param->{'index'},$param->{'table'});
 
 	my $sth;
@@ -322,8 +321,7 @@ sub unset_index {
 }
 
 sub set_index {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
 
 	my $sth;
 	my $fields = join ',',@{$param->{'fields'}};

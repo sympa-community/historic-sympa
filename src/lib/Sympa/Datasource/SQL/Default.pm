@@ -63,7 +63,8 @@ table whose name is  given by the first level key.
 =cut
 
 sub get_all_primary_keys {
-	my $self = shift;
+	my ($self) = @_;
+
 	&Sympa::Log::do_log('debug','Retrieving all primary keys in database %s',$self->{'db_name'});
 	my %found_keys = undef;
 	foreach my $table (@{$self->get_tables()}) {
@@ -98,7 +99,8 @@ An hashref with the following keys, or I<undef> if something went wrong:
 =cut
 
 sub get_all_indexes {
-	my $self = shift;
+	my ($self) = @_;
+
 	&Sympa::Log::do_log('debug','Retrieving all indexes in database %s',$self->{'db_name'});
 	my %found_indexes;
 	foreach my $table (@{$self->get_tables()}) {
@@ -142,8 +144,8 @@ A ref likely to contain the following values:
 =cut
 
 sub check_key {
-	my $self = shift;
-	my $param = shift;
+	my ($self, $param) = @_;
+
 	&Sympa::Log::do_log('debug','Checking %s key structure for table %s',$param->{'key_name'},$param->{'table'});
 	my $keysFound;
 	my $result;
