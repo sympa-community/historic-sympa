@@ -508,7 +508,7 @@ sub store_test {
                                          count => $barmax,
                                          ETA   => 'linear', });
 
-    my $testing = Spool->new('bad');
+    my $testing = Sympa::Spool->new('bad');
     
     my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";
     $progress->max_update_rate(1);

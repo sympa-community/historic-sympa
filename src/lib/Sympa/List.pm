@@ -8679,8 +8679,8 @@ sub _include_users_voot_group {
 
 	my $id = Sympa::Datasource::_get_datasource_id($param);
 	
-	require VOOTConsumer;
-	my $consumer = VOOTConsumer->new(
+	require Sympa::VOOTConsumer;
+	my $consumer = Sympa::VOOTConsumer->new(
 		user => $param->{'user'},
 		provider => $param->{'provider'}
 	);
