@@ -37,7 +37,6 @@ use strict;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 
-use Sympa::Constants;
 use Sympa::Log;
 use Sympa::Tools::File;
 
@@ -84,14 +83,6 @@ sub new {
 	close $fh;
    }
     
-    unless(&Sympa::Tools::File::set_file_rights(
-	file => $lock_filename,
-	user  => Sympa::Constants::USER,
-	group => Sympa::Constants::GROUP,
-    )) {
-	&Sympa::Log::fatal_err('Unable to set rights on %s', $lock_filename);
-    }
-	
     ## Bless Message object
     bless $lock, $pkg;
     
