@@ -222,8 +222,8 @@ sub establish_connection {
 	}
 
 	## First check if we have an active connection with this server
-	if (defined $db_connections{$self->{'connect_string'}} && 
-		defined $db_connections{$self->{'connect_string'}}{'dbh'} && 
+	if (defined $db_connections{$self->{'connect_string'}} &&
+		defined $db_connections{$self->{'connect_string'}}{'dbh'} &&
 		$db_connections{$self->{'connect_string'}}{'dbh'}->ping()) {
 
 		&Sympa::Log::do_log('debug', "Use previous connection");
@@ -247,7 +247,7 @@ sub establish_connection {
 			## Unless the 'failed' status was set earlier
 			if ($self->{'reconnect_options'}{'warn'}) {
 				unless (defined $db_connections{$self->{'connect_string'}} &&
-					$db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
+					$db_connections{$self->{'connect_string'}}{'status'} eq 'failed') {
 
 					unless (&Sympa::List::send_notify_to_listmaster('no_db', $Sympa::Configuration::Conf{'domain'},{})) {
 						&Sympa::Log::do_log('err',"Unable to send notify 'no_db' to listmaster");
@@ -288,14 +288,14 @@ sub establish_connection {
 			$self->{'db_type'} eq 'Pg') {
 			&Sympa::Log::do_log('debug','Setting client encoding to UTF-8');
 			$self->{'dbh'}->do("SET NAMES 'utf8'");
-		}elsif ($self->{'db_type'} eq 'oracle') { 
+		}elsif ($self->{'db_type'} eq 'oracle') {
 			$ENV{'NLS_LANG'} = 'UTF8';
-		}elsif ($self->{'db_type'} eq 'Sybase') { 
+		}elsif ($self->{'db_type'} eq 'Sybase') {
 			$ENV{'SYBASE_CHARSET'} = 'utf8';
 		}
 
 		## added sybase support
-		if ($self->{'db_type'} eq 'Sybase') { 
+		if ($self->{'db_type'} eq 'Sybase') {
 			my $dbname;
 			$dbname="use $self->{'db_name'}";
 			$self->{'dbh'}->do ($dbname);
@@ -310,7 +310,7 @@ sub establish_connection {
 			if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
 		}
 
-		$self->{'connect_string'} = $self->{'connect_string'} if $self;     
+		$self->{'connect_string'} = $self->{'connect_string'} if $self;
 		$db_connections{$self->{'connect_string'}}{'dbh'} = $self->{'dbh'};
 		&Sympa::Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
 		return $self->{'dbh'};
@@ -423,7 +423,7 @@ sub do_prepared_query {
 		$self->{'cached_prepared_statements'}{$query} = $sth;
 	}else {
 		&Sympa::Log::do_log('debug3','Reusing prepared statement for %s',$query);
-	}	
+	}
 	unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
 		# Check database connection in case it would be the cause of the problem.
 		unless($self->connect()) {
@@ -499,7 +499,7 @@ sub fetch {
 	my $array_of_users;
 	$array_of_users = eval {
 		local $SIG{ALRM} = sub { die "TIMEOUT\n" }; # NB: \n required
-		alarm $self->{'fetch_timeout'}; 
+		alarm $self->{'fetch_timeout'};
 
 		## Inner eval just in case the fetchall_arrayref call would die, thus leaving the alarm trigered
 		my $status = eval {
@@ -551,7 +551,7 @@ A true value.
 =cut
 
 sub create_db {
-	&Sympa::Log::do_log('debug3', '()');    
+	&Sympa::Log::do_log('debug3', '()');
 	return 1;
 }
 
@@ -565,7 +565,7 @@ See L<DBI> for details.
 
 sub ping {
 	my $self = shift;
-	return $self->{'dbh'}->ping; 
+	return $self->{'dbh'}->ping;
 }
 
 =head2 $source->quote($string, $datatype)
@@ -578,7 +578,7 @@ See L<DBI> for details.
 
 sub quote {
 	my ($self, $string, $datatype) = @_;
-	return $self->{'dbh'}->quote($string, $datatype); 
+	return $self->{'dbh'}->quote($string, $datatype);
 }
 
 =head2 $source->set_fetch_timeout($timeout)
@@ -615,7 +615,7 @@ sub get_canonical_write_date {
 
 =head2 $source->get_canonical_read_date($value)
 
-Returns a character string corresponding to the expression to use in 
+Returns a character string corresponding to the expression to use in
 a write query (e.g. UPDATE or INSERT) for the value given as argument.
 
 =head3 Parameters

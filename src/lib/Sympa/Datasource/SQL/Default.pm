@@ -169,7 +169,7 @@ sub check_key {
 				$result->{'missing_key'}{$field} = 1;
 				$result->{'existing_key_correct'} = 0;
 			}
-		}		
+		}
 		foreach my $field (keys %{$keysFound}) {
 			unless ($expected_keys{$field}) {
 				&Sympa::Log::do_log('info','Table %s: Found unexpected key part %s in %s key.',$param->{'table'},$field,$param->{'key_name'});

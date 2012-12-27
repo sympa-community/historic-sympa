@@ -87,7 +87,7 @@ sub is_autoinc {
 	unless ($sth = $self->do_query("SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",$param->{'table'},$param->{'field'})) {
 		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 		return undef;
-	}	    
+	}
 	my $ref = $sth->fetchrow_hashref('NAME_lc') ;
 	return ($ref->{'field'} eq $param->{'field'});
 }
@@ -112,7 +112,7 @@ sub get_tables {
 		return undef;
 	}
 	while (my $table= $sth->fetchrow()) {
-		push @raw_tables, lc ($table);   	
+		push @raw_tables, lc ($table);
 	}
 	return \@raw_tables;
 }
@@ -138,7 +138,7 @@ sub get_fields {
 		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {		
+	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 		$result{$ref->{'field'}} = $ref->{'type'};
 	}
 	return \%result;

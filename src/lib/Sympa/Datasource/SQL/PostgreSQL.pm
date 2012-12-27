@@ -95,8 +95,8 @@ sub is_autoinc {
 	unless ($sth = $self->do_query("SELECT relname FROM pg_class WHERE relname = '%s' AND relkind = 'S'  AND relnamespace IN ( SELECT oid  FROM pg_namespace WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema' )",$seqname)) {
 		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 		return undef;
-	}	    
-	my $field = $sth->fetchrow();	    
+	}
+	my $field = $sth->fetchrow();
 	return ($field eq $seqname);
 }
 
@@ -156,7 +156,7 @@ sub get_fields {
 		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {		
+	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 		my $length = $ref->{'length'} - 4; # What a dirty method ! We give a Sympa tee shirt to anyone that suggest a clean solution ;-)
 		if ( $ref->{'type'} eq 'varchar') {
 			$result{$ref->{'field'}} = $ref->{'type'}.'('.$length.')';
@@ -239,7 +239,7 @@ sub get_primary_key {
 
 	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 		$found_keys{$ref->{'field'}} = 1;
-	}	    
+	}
 	return \%found_keys;
 }
 

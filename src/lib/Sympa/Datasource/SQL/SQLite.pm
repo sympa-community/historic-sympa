@@ -92,7 +92,7 @@ sub is_autoinc {
 	unless ($sth = $self->do_query("SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",$param->{'table'},$param->{'field'})) {
 		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 		return undef;
-	}	    
+	}
 	my $ref = $sth->fetchrow_hashref('NAME_lc') ;
 	return ($ref->{'field'} eq $param->{'field'});
 }
@@ -145,7 +145,7 @@ sub get_fields {
 		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	while (my $field = $sth->fetchrow_arrayref('NAME_lc')) {		
+	while (my $field = $sth->fetchrow_arrayref('NAME_lc')) {
 		# http://www.sqlite.org/datatype3.html
 		if($field->[2] =~ /int/) {
 			$field->[2]="integer";
