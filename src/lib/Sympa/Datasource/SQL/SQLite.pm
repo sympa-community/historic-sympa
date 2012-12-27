@@ -353,20 +353,21 @@ sub get_indexes {
 
 	&Sympa::Log::do_log('debug','Looking for indexes in %s',$param->{'table'});
 
-	my $sth = $self->do_query("SHOW INDEX FROM %s",$param->{'table'});
+	my $sth = $self->do_query(
+		"SELECT name,sql FROM sqlite_master WHERE type='index'"
+	);
 	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not get the list of indexes from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
 	my %indexes;
-	my $index_part;
-	while($index_part = $sth->fetchrow_hashref()) {
-		if ( $index_part->{'key_name'} ne "PRIMARY" ) {
-			my $index_name = $index_part->{'key_name'};
-			my $field_name = $index_part->{'column_name'};
-			$indexes{$index_name}{$field_name} = 1;
+	while (my $row = $sth->fetchrow_arrayref()) {
+		my ($fields) = $row->[1] =~ /\( ([^)]+) \)$/x;
+		foreach my $field (split(/,/, $fields)) {
+			$indexes{$row->[0]}->{$field} = 1;
 		}
 	}
+
 	return \%indexes;
 }
 
