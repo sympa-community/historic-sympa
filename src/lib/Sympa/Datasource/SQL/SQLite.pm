@@ -167,11 +167,12 @@ sub get_fields {
 	my ($self, $param) = @_;
 
 	my $sth = $self->do_query("PRAGMA table_info(%s)", $param->{'table'});
-	my %result;
 	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
+
+	my %result;
 	while (my $field = $sth->fetchrow_arrayref()) {
 		# http://www.sqlite.org/datatype3.html
 		if($field->[2] =~ /int/) {
@@ -276,20 +277,20 @@ sub get_primary_key {
 
 	&Sympa::Log::do_log('debug','Getting primary key for table %s',$param->{'table'});
 
-	my %found_keys;
 	my $sth = $self->do_query("SHOW COLUMNS FROM %s",$param->{'table'});
 	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not get field list from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
+	my %keys;
 	my $test_request_result = $sth->fetchall_hashref('field');
 	foreach my $scannedResult ( keys %$test_request_result ) {
 		if ( $test_request_result->{$scannedResult}{'key'} eq "PRI" ) {
-			$found_keys{$scannedResult} = 1;
+			$keys{$scannedResult} = 1;
 		}
 	}
-	return \%found_keys;
+	return \%keys;
 }
 
 sub unset_primary_key {
@@ -336,22 +337,22 @@ sub get_indexes {
 
 	&Sympa::Log::do_log('debug','Looking for indexes in %s',$param->{'table'});
 
-	my %found_indexes;
 	my $sth = $self->do_query("SHOW INDEX FROM %s",$param->{'table'});
 	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not get the list of indexes from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
+	my %indexes;
 	my $index_part;
 	while($index_part = $sth->fetchrow_hashref()) {
 		if ( $index_part->{'key_name'} ne "PRIMARY" ) {
 			my $index_name = $index_part->{'key_name'};
 			my $field_name = $index_part->{'column_name'};
-			$found_indexes{$index_name}{$field_name} = 1;
+			$indexes{$index_name}{$field_name} = 1;
 		}
 	}
-	open TMP, ">>/tmp/toto"; print TMP &Dumper(\%found_indexes); close TMP;
-return \%found_indexes;
+	open TMP, ">>/tmp/toto"; print TMP &Dumper(\%indexes); close TMP;
+	return \%indexes;
 }
 
 sub unset_index {
