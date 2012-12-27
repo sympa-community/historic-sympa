@@ -93,7 +93,7 @@ sub is_autoinc {
 		&Sympa::Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 		return undef;
 	}
-	my $ref = $sth->fetchrow_hashref('NAME_lc') ;
+	my $ref = $sth->fetchrow_hashref() ;
 	return ($ref->{'field'} eq $param->{'field'});
 }
 
@@ -145,7 +145,7 @@ sub get_fields {
 		&Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	while (my $field = $sth->fetchrow_arrayref('NAME_lc')) {
+	while (my $field = $sth->fetchrow_arrayref()) {
 		# http://www.sqlite.org/datatype3.html
 		if($field->[2] =~ /int/) {
 			$field->[2]="integer";
@@ -289,7 +289,7 @@ sub get_indexes {
 		return undef;
 	}
 	my $index_part;
-	while($index_part = $sth->fetchrow_hashref('NAME_lc')) {
+	while($index_part = $sth->fetchrow_hashref()) {
 		if ( $index_part->{'key_name'} ne "PRIMARY" ) {
 			my $index_name = $index_part->{'key_name'};
 			my $field_name = $index_part->{'column_name'};
