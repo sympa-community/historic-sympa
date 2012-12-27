@@ -293,19 +293,18 @@ sub get_primary_key {
 
 	&Sympa::Log::do_log('debug','Getting primary key for table %s',$param->{'table'});
 
-	my $sth = $self->do_query("SHOW COLUMNS FROM %s",$param->{'table'});
+	my $sth = $self->do_query("PRAGMA table_info(%s)", $param->{'table'});
 	unless ($sth) {
 		&Sympa::Log::do_log('err', 'Could not get field list from table %s in database %s', $param->{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
 	my %keys;
-	my $test_request_result = $sth->fetchall_hashref('field');
-	foreach my $scannedResult ( keys %$test_request_result ) {
-		if ( $test_request_result->{$scannedResult}{'key'} eq "PRI" ) {
-			$keys{$scannedResult} = 1;
-		}
+	while (my $row = $sth->fetchrow_arrayref()) {
+		next unless $row->[5];
+		$keys{$row->[0]} = 1;
 	}
+
 	return \%keys;
 }
 
