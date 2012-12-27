@@ -79,7 +79,6 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, $param) = @_;
 
-	&Sympa::Log::do_log('debug','Building SQL date formatting');
 	if (lc($param->{'mode'}) eq 'read') {
 		return sprintf 'UNIX_TIMESTAMP(%s)',$param->{'target'};
 	}elsif(lc($param->{'mode'}) eq 'write') {
