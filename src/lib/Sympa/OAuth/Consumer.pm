@@ -109,11 +109,11 @@ sub new {
 		access => undef
 	};
 	if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
-		$consumer->{'session'}{'tmp'} = new OAuth::Lite::Token(
+		$consumer->{'session'}{'tmp'} = OAuth::Lite::Token->new(
 			token => $data->{'tmp_token'},
 			secret => $data->{'tmp_secret'}
 		) if($data->{'tmp_token'});
-		$consumer->{'session'}{'access'} = new OAuth::Lite::Token(
+		$consumer->{'session'}{'access'} = OAuth::Lite::Token->new(
 			token => $data->{'access_token'},
 			secret => $data->{'access_secret'}
 		) if($data->{'access_token'});

@@ -83,7 +83,7 @@ sub smime_sign {
 
     &Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $in_msg,$list,$robot,$tmpdir);
 
-    my $self = new Sympa::List($list, $robot);
+    my $self = Sympa::List->new($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
     my $temporary_file = $tmpdir."/".$self->get_list_id().".".$$ ;    
     my $temporary_pwd = $tmpdir.'/pass.'.$$;
@@ -129,7 +129,7 @@ sub smime_sign {
 	unlink ($temporary_pwd);
     }
 
-    my $parser = new MIME::Parser;
+    my $parser = MIME::Parser->new;
 
     $parser->output_to_core(1);
     unless ($signed_msg = $parser->read(\*NEWMSG)) {
@@ -421,7 +421,7 @@ sub smime_encrypt {
 
     &Sympa::Log::do_log('debug2', '(%s, %s', $email, $list);
     if ($list eq 'list') {
-	my $self = new Sympa::List($email);
+	my $self = Sympa::List->new($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
 	my $base = "$ssl_cert_dir/".&Sympa::Tools::escape_chars($email);
@@ -462,7 +462,7 @@ sub smime_encrypt {
 
         ## Get as MIME object
 	open (NEWMSG, $temporary_file);
-	my $parser = new MIME::Parser;
+	my $parser = MIME::Parser->new;
 	$parser->output_to_core(1);
 	unless ($cryptedmsg = $parser->read(\*NEWMSG)) {
 	    &Sympa::Log::do_log('notice', 'Unable to parse message');
@@ -607,7 +607,7 @@ sub smime_decrypt {
 	
 	unlink ($temporary_file) unless ($main::options{'debug'}) ;
 	
-	my $parser = new MIME::Parser;
+	my $parser = MIME::Parser->new;
 	$parser->output_to_core(1);
 	unless ($decryptedmsg = $parser->parse_data($msg_as_string)) {
 	    &Sympa::Log::do_log('notice', 'Unable to parse message');

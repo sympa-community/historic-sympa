@@ -46,7 +46,7 @@ my %task_by_model;
 my $taskspool ;
 
 sub set_spool {
-    $taskspool = new Sympa::Spool('task');
+    $taskspool = Sympa::Spool->new('task');
 }
 
 =head1 CLASS METHODS
@@ -94,7 +94,7 @@ sub new {
     $task->{'domain'} = $task_in_spool->{'robot'};    
 	
     if ($task_in_spool->{'list'}) { # list task
-	$task->{'list_object'} = new Sympa::List ($task_in_spool->{'list'},$task_in_spool->{'robot'});
+	$task->{'list_object'} = Sympa::List->new($task_in_spool->{'list'},$task_in_spool->{'robot'});
 	$task->{'domain'} = $task->{'list_object'}{'domain'};
     }
 
@@ -129,12 +129,12 @@ sub list_tasks {
     undef %task_by_model;
 
     # fetch all task
-    my $taskspool = new Sympa::Spool ('task');
+    my $taskspool = Sympa::Spool->new('task');
     my @tasks = $taskspool->get_content({'selector'=>{}});
 
     ## Create Task objects
     foreach my $t (@tasks) {
-	my $task = new Sympa::Task ($t);	
+	my $task = Sympa::Task->new($t);	
 	## Maintain list of tasks
 	push @task_list, $task;
 	

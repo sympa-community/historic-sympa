@@ -307,7 +307,7 @@ sub mail_file {
     
     return $message_as_string if($return_message_as_string);
 
-    my $message = new Sympa::Message ({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
+    my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
     ## SENDING
     return undef unless (defined &sending('message' => $message,
@@ -955,7 +955,7 @@ sub reformat_message($;$$) {
     my $defcharset = shift;
     my $msg;
 
-    my $parser = new MIME::Parser;
+    my $parser = MIME::Parser->new();
     unless (defined $parser) {
 	&Sympa::Log::do_log('err', "Failed to create MIME parser");
 	return undef;

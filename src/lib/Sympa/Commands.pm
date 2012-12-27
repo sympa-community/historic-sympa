@@ -370,7 +370,7 @@ sub stats {
 
     &Sympa::Log::do_log('debug', '(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
 
-    my $list = new Sympa::List ($listname, $robot);
+    my $list = Sympa::List->new($listname, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
 	&Sympa::Log::do_log('info', 'STATS %s from %s refused, unknown list for robot %s', $listname, $sender,$robot);
@@ -449,7 +449,7 @@ sub getfile {
 
     &Sympa::Log::do_log('debug', '(%s, %s, %s)', $which, $file, $robot);
 
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'GET %s %s from %s refused, list unknown for robot %s', $which, $file, $sender, $robot);
@@ -516,7 +516,7 @@ sub last {
 
     &Sympa::Log::do_log('debug', '(%s, %s)', $which, $robot);
 
-    my $list = new Sympa::List ($which,$robot);
+    my $list = Sympa::List->new($which,$robot);
     unless ($list)  {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'LAST %s from %s refused, list unknown for robot %s', $which, $sender, $robot);
@@ -569,7 +569,7 @@ sub index {
 
     &Sympa::Log::do_log('debug', '(%s) robot (%s)',$which,$robot);
 
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'INDEX %s from %s refused, list unknown for robot %s', $which, $sender,$robot);
@@ -625,7 +625,7 @@ sub review {
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $listname,$robot,$sign_mod );
 
     my $user;
-    my $list = new Sympa::List ($listname, $robot);
+    my $list = Sympa::List->new($listname, $robot);
 
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -733,7 +733,7 @@ sub verify {
     my $sign_mod = shift ;
     &Sympa::Log::do_log('debug', '(%s, %s)', $sign_mod, $robot);
     
-    my $list = new Sympa::List ($listname, $robot);
+    my $list = Sympa::List->new($listname, $robot);
     &Sympa::Language::SetLang($list->{'admin'}{'lang'});
     
     if  ($sign_mod) {
@@ -777,7 +777,7 @@ sub subscribe {
     
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'SUB %s from %s refused, unknown list for robot %s', $which,$sender,$robot);
@@ -958,7 +958,7 @@ sub info {
 
     &Sympa::Log::do_log('debug', '(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
 
-    my $list = new Sympa::List ($listname, $robot);
+    my $list = Sympa::List->new($listname, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
 	&Sympa::Log::do_log('info', 'INFO %s from %s refused, unknown list for robot %s', $listname,$sender,$robot);
@@ -1008,7 +1008,7 @@ sub info {
 	}
 
 	foreach my $p ('subscribe','unsubscribe','send','review') {
-	  my $scenario = new Sympa::Scenario ('robot' => $robot,
+	  my $scenario = Sympa::Scenario->new('robot' => $robot,
 				       'directory' => $list->{'dir'},
 				       'file_path' => $list->{'admin'}{$p}{'file_path'}
 				      );
@@ -1116,7 +1116,7 @@ sub signoff {
 	return ($success);
     }
 
-    $list = new Sympa::List ($which, $robot);
+    $list = Sympa::List->new($which, $robot);
     
     ## Is this list defined
     unless ($list) {
@@ -1266,7 +1266,7 @@ sub add {
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'ADD %s %s from %s refused, unknown list for robot %s', $which, $email,$sender,$robot);
@@ -1410,7 +1410,7 @@ sub invite {
 
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'INVITE %s %s from %s refused, unknown list for robot', $which, $email,$sender,$robot);
@@ -1571,7 +1571,7 @@ sub remind {
     my $list;
 
     unless ($listname eq '*') {
-	$list = new Sympa::List ($listname, $robot);
+	$list = Sympa::List->new($listname, $robot);
 	unless ($list) {
 	    &Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	    &Sympa::Log::do_log('info', 'REMIND %s from %s refused, unknown list for robot %s', $which, $sender,$robot);
@@ -1798,7 +1798,7 @@ sub del {
     
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
 	&Sympa::Log::do_log('info', 'DEL %s %s from %s refused, unknown list for robot %s', $which, $who,$sender,$robot);
@@ -1970,7 +1970,7 @@ sub set {
 
     ## Load the list if not already done, and reject
     ## if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
 
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -2055,7 +2055,7 @@ sub distribute {
     my $start_time=time; # get the time at the beginning
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
     unless ($list) {
 	&Sympa::Log::do_log('info', 'DISTRIBUTE %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
 	&Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
@@ -2066,13 +2066,13 @@ sub distribute {
 
     #read the moderation queue and purge it
 
-    my $modspool = new Sympa::Spool ('mod');
+    my $modspool = Sympa::Spool->new('mod');
     my $name = $list->{'name'};
 
     my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     unless ($message_in_spool) {
 	## if the message has been accepted via WWSympa, it's in spool 'validated' 
-	my $validatedspool = new Sympa::Spool ('validated');
+	my $validatedspool = Sympa::Spool->new('validated');
 	$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     }
     unless ($message_in_spool) {
@@ -2081,7 +2081,7 @@ sub distribute {
 	return 'msg_not_found';
 	
     }
-    my $message = new Sympa::Message({'message_in_spool'=>$message_in_spool});
+    my $message = Sympa::Message->new({'message_in_spool'=>$message_in_spool});
     unless (defined $message) {
 	&Sympa::Log::do_log('err', 'Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
@@ -2149,7 +2149,7 @@ sub confirm {
     $what =~ /^\s*(\S+)\s*$/;
     my $key = $1; chomp $key;
 
-    my $spool = new Sympa::Spool ('auth');
+    my $spool = Sympa::Spool->new('auth');
 
     my $messageinspool = $spool->get_message({'authkey'=>$key});
 
@@ -2158,7 +2158,7 @@ sub confirm {
 	&Sympa::Report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 	return 'wrong_auth';
     }
-    my $message = new Sympa::Message ({'message_in_spool'=>$messageinspool});    
+    my $message = Sympa::Message->new({'message_in_spool'=>$messageinspool});    
 
     unless (defined $message) {
 	&Sympa::Log::do_log('err', 'Unable to create message object for key %s', $key);
@@ -2301,7 +2301,7 @@ sub reject {
     $which =~ y/A-Z/a-z/;
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
-    my $list = new Sympa::List ($which, $robot);
+    my $list = Sympa::List->new($which, $robot);
 
     unless ($list) {
 	&Sympa::Log::do_log('info', 'REJECT %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
@@ -2313,7 +2313,7 @@ sub reject {
 
     my $name = "$list->{'name'}";
 
-    my $modspool = new Sympa::Spool('mod');
+    my $modspool = Sympa::Spool->new('mod');
     my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
     unless ($message_in_spool) {
@@ -2321,7 +2321,7 @@ sub reject {
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }
-    my $message = new Sympa::Message({'message_in_spool'=> $message_in_spool});
+    my $message = Sympa::Message->new({'message_in_spool'=> $message_in_spool});
     unless ($message) {
 	&Sympa::Log::do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
 	&Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
@@ -2383,7 +2383,7 @@ sub modindex {
     
     $name =~ y/A-Z/a-z/;
 
-    my $list = new Sympa::List ($name, $robot);
+    my $list = Sympa::List->new($name, $robot);
     unless ($list) {
 	&Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $name},$cmd_line);	
 	&Sympa::Log::do_log('info', 'MODINDEX %s from %s refused, unknown list for robot %s', $name, $sender, $robot);
@@ -2414,7 +2414,7 @@ sub modindex {
 	next if (-d "$modqueue/$i");
 
 	$i=~/\_(.+)$/;
-	$curlist = new Sympa::List ($`,$robot);
+	$curlist = Sympa::List->new($`,$robot);
 	if ($curlist) {
 	    # list loaded    
 	    if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){
@@ -2502,7 +2502,7 @@ sub which {
     ## Subscriptions
     my $data;
     foreach my $list (Sympa::List::get_which ($sender,$robot,'member')){
-        ## wwsympa :  my $list = new Sympa::List ($l);
+        ## wwsympa :  my $list = Sympa::List->new($l);
         ##            next unless (defined $list);
 	$listname = $list->{'name'};
 

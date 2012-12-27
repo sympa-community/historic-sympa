@@ -121,7 +121,7 @@ sub write_pid {
     my @pids;
 
     # Lock pid file
-    my $lock = new Sympa::Lock ($pidfile, $method);
+    my $lock = Sympa::Lock->new($pidfile, $method);
     unless (defined $lock) {
 	&Sympa::Log::fatal_err('Lock could not be created. Exiting.');
     }
@@ -254,7 +254,7 @@ sub get_pids_in_pid_file {
 sub get_children_processes_list {
     &Sympa::Log::do_log('debug3','');
     my @children;
-    for my $p (@{new Proc::ProcessTable->table}){
+    for my $p (@{Proc::ProcessTable->new()->table}){
 	if($p->ppid == $$) {
 	    push @children, $p->pid;
 	}

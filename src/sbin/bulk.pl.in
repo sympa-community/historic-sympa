@@ -176,7 +176,7 @@ $options->{'multiple_process'} = 1;
 $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmtp'}/$Sympa::Configuration::Conf{'bulk_max_count'});
 
 
-my $spool = new Sympa::Spool('bulk');
+my $spool = Sympa::Spool->new('bulk');
 
 while (!$end) {
     &Sympa::List::init_list_cache();
@@ -321,14 +321,14 @@ while (!$end) {
         #
 
 
-	#my $list = new Sympa::List($bulk->{'listname'}, $bulk->{'robot'});
+	#my $list = Sympa::List->new($bulk->{'listname'}, $bulk->{'robot'});
 	my $listname= $bulk->{'listname'}; my $robot =  $bulk->{'robot'};
 
 	if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'}eq 'dsn')||($bulk->{'tracking'}eq 'mdn')){ # message needs personalization
 	    my $key ;
 
 	    foreach $rcpt (@rcpts) {
-		my $message = new Sympa::Message ({'messageasstring'=>$messageasstring_init,'noxsympato'=>'noxsympato'});
+		my $message = Sympa::Message->new({'messageasstring'=>$messageasstring_init,'noxsympato'=>'noxsympato'});
 		my $entity = $message->{'msg'};
 		my $notification_id;
 		my $return_path;

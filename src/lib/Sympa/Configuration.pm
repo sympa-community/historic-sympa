@@ -857,7 +857,7 @@ sub _load_auth {
             $cas_param->{'proxyValidatePath'} = $current_paragraph->{'proxy_validate_path'} 
             if (defined $current_paragraph->{'proxy_validate_path'});
             
-            $current_paragraph->{'cas_server'} = new AuthCAS(%{$cas_param});
+            $current_paragraph->{'cas_server'} = AuthCAS->new(%{$cas_param});
             unless (defined $current_paragraph->{'cas_server'}) {
             &Sympa::Log::do_log('err', 'Failed to create CAS object for %s: %s', 
                 $current_paragraph->{'base_url'}, &AuthCAS::get_errors());
@@ -1796,7 +1796,7 @@ sub _replace_file_value_by_db_value {
 # Returns 1 or undef if something went wrong.
 sub _save_binary_cache {
     my $param = shift;
-    my $lock = new Sympa::Lock ($param->{'target_file'}, $Conf{'lock_method'});
+    my $lock = Sympa::Lock->new($param->{'target_file'}, $Conf{'lock_method'});
     unless (defined $lock) {
         &Sympa::Log::do_log('err','Could not create new lock');
         return undef;
@@ -1834,7 +1834,7 @@ sub _load_binary_cache {
     my $param = shift;
     my $result = undef;
 
-    my $lock = new Sympa::Lock ($param->{'config_file'}, $Conf{'lock_method'});
+    my $lock = Sympa::Lock->new($param->{'config_file'}, $Conf{'lock_method'});
     unless (defined $lock) {
         &Sympa::Log::do_log('err','Could not create new lock');
         return undef;

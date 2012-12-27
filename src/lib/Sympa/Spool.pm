@@ -371,7 +371,7 @@ sub store {
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
     if ($self->{'spoolname'} ne 'task') {
-	$message = new Sympa::Message({'messageasstring'=>$message_asstring});
+	$message = Sympa::Message->new({'messageasstring'=>$message_asstring});
     }
     
     if($message) {
@@ -508,7 +508,7 @@ sub store_test {
                                          count => $barmax,
                                          ETA   => 'linear', });
 
-    my $testing = new Spool('bad');
+    my $testing = Spool->new('bad');
     
     my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";
     $progress->max_update_rate(1);

@@ -238,7 +238,7 @@ sub ldap_authentication {
      ## bind in order to have the user's DN
      my $param = &Sympa::Tools::Data::dup_var($ldap);
      require Sympa::Datasource::LDAP;
-     my $ds = new Sympa::Datasource::LDAP($param);
+     my $ds = Sympa::Datasource::LDAP->new($param);
      
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
        &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
@@ -270,7 +270,7 @@ sub ldap_authentication {
      $param->{'ldap_bind_password'} = $pwd;
      
      require Sympa::Datasource::LDAP;
-     $ds = new Sympa::Datasource::LDAP($param);
+     $ds = Sympa::Datasource::LDAP->new($param);
      
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
        &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'host'});
@@ -373,7 +373,7 @@ sub get_email_by_net_id {
 
     my $param = &Sympa::Tools::Data::dup_var($ldap);
     require Sympa::Datasource::LDAP;
-    my $ds = new Sympa::Datasource::LDAP($param);
+    my $ds = Sympa::Datasource::LDAP->new($param);
     my $ldap_anonymous;
     
     unless (defined $ds && ($ldap_anonymous = $ds->connect())) {

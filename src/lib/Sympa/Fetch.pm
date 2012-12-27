@@ -74,7 +74,7 @@ sub get_https{
 
 	my $ssl_socket;
 
-	$ssl_socket = new IO::Socket::SSL(SSL_use_cert => 1,
+	$ssl_socket = IO::Socket::SSL->new(SSL_use_cert => 1,
 					  SSL_verify_mode => 0x01,
 					  SSL_cert_file => $client_cert,
 					  SSL_key_file => $client_key,

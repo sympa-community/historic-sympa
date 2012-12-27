@@ -253,7 +253,7 @@ sub new {
 
 	foreach my $d (@{$dir}) {
 
-	    my $sub_document = new Sympa::SharedDocument ($list, $document->{'path'}.'/'.$d, $param);	    
+	    my $sub_document = Sympa::SharedDocument->new($list, $document->{'path'}.'/'.$d, $param);	    
 	    push @{$document->{'subdir'}}, $sub_document;
 	}
     }

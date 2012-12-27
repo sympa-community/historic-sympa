@@ -357,7 +357,7 @@ sub request_action {
 	}
 	
 	## Create Scenario object
-	$scenario = new Sympa::Scenario ('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot, 
 				  'directory' => $list->{'dir'},
 				  'file_path' => $scenario_path,
 				  'options' => $context->{'options'});
@@ -381,7 +381,7 @@ sub request_action {
 	if (defined $context->{'scenario'}) { 
 	    
 	    # loading of the structure
-	    $scenario = new Sympa::Scenario ('robot' => $robot, 
+	    $scenario = Sympa::Scenario->new('robot' => $robot, 
 				      'directory' => $list->{'dir'},
 				      'function' => $operations[$#operations],
 				      'name' => $context->{'scenario'},
@@ -391,7 +391,7 @@ sub request_action {
     }elsif ($context->{'topicname'}) {
 	## Topics
 
-	$scenario = new Sympa::Scenario ('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot, 
 				  'function' => 'topics_visibility',
 				  'name' => $Sympa::List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
 				  'options' => $context->{'options'});
@@ -400,7 +400,7 @@ sub request_action {
 	## Global scenario (ie not related to a list) ; example : create_list
 	
 	my $p = &Sympa::Configuration::get_robot_conf($robot, $operation);
-	$scenario = new Sympa::Scenario ('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot, 
 				  'function' => $operation,
 				  'name' => $p,
 				  'options' => $context->{'options'});
@@ -425,7 +425,7 @@ sub request_action {
 		 'name' => $operation.'.header',
 		 'options' => $context->{'options'});
     $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-    my $include_scenario = new Sympa::Scenario %param;
+    my $include_scenario = Sympa::Scenario->new(%param);
     if (defined $include_scenario) {
 	## Add rules at the beginning of the array
 	unshift @rules, @{$include_scenario->{'rules'}};
@@ -439,7 +439,7 @@ sub request_action {
 			 'name' => $include_file,
 			 'options' => $context->{'options'});
 	    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-	    my $include_scenario = new Sympa::Scenario %param;
+	    my $include_scenario = Sympa::Scenario->new(%param);
 	    if (defined $include_scenario) {
 		## Removes the include directive and replace it with included rules
 		splice @rules, $index, 1, @{$include_scenario->{'rules'}};
@@ -593,7 +593,7 @@ sub verify {
     
     my $list;
     if ($context->{'listname'} && ! defined $context->{'list_object'}) {
-        unless ( $context->{'list_object'} = new Sympa::List ($context->{'listname'}, $robot) ){
+        unless ( $context->{'list_object'} = Sympa::List->new($context->{'listname'}, $robot) ){
 	    &Sympa::Log::do_log('info',"Unable to create List object for list $context->{'listname'}");
 	    return undef ;
 	}
@@ -925,9 +925,9 @@ sub verify {
 
 	## The list is local or in another local robot
 	if ($args[0] =~ /\@/) {
-	    $list2 = new Sympa::List ($args[0]);
+	    $list2 = Sympa::List->new($args[0]);
 	}else {
-	    $list2 = new Sympa::List ($args[0], $robot);
+	    $list2 = Sympa::List->new($args[0], $robot);
 	}
 		
 	if (! $list2) {
@@ -1222,7 +1222,7 @@ sub search{
         }
 	
 	require Sympa::Datasource::SQL;
-	my $ds = new Sympa::Datasource::SQL($sql_conf->{'sql_named_filter_query'});
+	my $ds = Sympa::Datasource::SQL->new($sql_conf->{'sql_named_filter_query'});
 	unless (defined $ds && $ds->connect() && $ds->ping) {
             &Sympa::Log::do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
             return undef;
@@ -1302,7 +1302,7 @@ sub search{
 	my $ldap;
 	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
 	require Sympa::Datasource::LDAP;
-	my $ds = new Sympa::Datasource::LDAP($param);
+	my $ds = Sympa::Datasource::LDAP->new($param);
 	    
 	unless (defined $ds && ($ldap = $ds->connect())) {
 	    &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'ldap_host'});

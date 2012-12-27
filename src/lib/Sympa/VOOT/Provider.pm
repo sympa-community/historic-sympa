@@ -80,7 +80,7 @@ sub new {
 	&Sympa::Log::do_log('debug2', '()');
 	
 	my $provider = {
-		oauth_provider => new Sympa::OAuth::Provider(
+		oauth_provider => Sympa::OAuth::Provider->new(
 			method => $param{'method'},
 			url => $param{'url'},
 			authorization_header => $param{'authorization_header'},
@@ -258,7 +258,7 @@ sub getGroupMembers {
 	
 	my @entries = ();
 	
-	my $list = new Sympa::List($param{'group'}, $self->{'robot'});
+	my $list = Sympa::List->new($param{'group'}, $self->{'robot'});
 	if(defined $list) {
 		my $r = $list->check_list_authz('review', 'md5', {'sender' => $self->{'user'}});
 		

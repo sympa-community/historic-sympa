@@ -1091,7 +1091,7 @@ sub split_mail {
 
 		open BODY, "$dir/$pathname.$fileExt.$encoding";
 
-		my $decoder = new MIME::Decoder $encoding;
+		my $decoder = MIME::Decoder->new($encoding);
 		unless (defined $decoder) {
 		    &Sympa::Log::do_log('err', 'Cannot create decoder for %s', $encoding);
 		    return undef;
@@ -1818,7 +1818,7 @@ sub md5_fingerprint {
     return undef unless (defined $input_string);
     chomp $input_string;
     
-    my $digestmd5 = new Digest::MD5;
+    my $digestmd5 = Digest::MD5->new();
     $digestmd5->reset;
     $digestmd5->add($input_string);
     return (unpack("H*", $digestmd5->digest));
@@ -1993,7 +1993,7 @@ Generate a newsletter from an HTML URL or a file path.
 sub create_html_part_from_web_page {
     my $param = shift;
     &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
-    my $mailHTML = new MIME::Lite::HTML(
+    my $mailHTML = MIME::Lite::HTML->new(
 					{
 					    From => $param->{'From'},
 					    To => $param->{'To'},

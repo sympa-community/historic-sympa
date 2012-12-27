@@ -2299,7 +2299,7 @@ sub savestats {
     return undef unless ($list_of_lists{$self->{'domain'}}{$name});
     
     ## Lock file
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $dir.'/stats',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -2553,7 +2553,7 @@ sub save_config {
     my $config_file_name = "$self->{'dir'}/config";
 
     ## Lock file
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $self->{'dir'}.'/config',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -2674,7 +2674,7 @@ sub load {
 	! $options->{'reload_config'}) { 
 
 	## Get a shared lock on config file first 
-	my $lock = new Sympa::Lock (
+	my $lock = Sympa::Lock->new(
             $self->{'dir'}.'/config',
             $Sympa::Configuration::Conf{'lock_method'}
         );
@@ -2705,7 +2705,7 @@ sub load {
 	$admin = _load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
 
 	## Get a shared lock on config file first 
-	my $lock = new Sympa::Lock (
+	my $lock = Sympa::Lock->new(
             $self->{'dir'}.'/config',
             $Sympa::Configuration::Conf{'lock_method'}
         );
@@ -2940,8 +2940,8 @@ sub get_family {
     $family_name = $self->{'admin'}{'family_name'};
 	    
     my $family;
-    unless ($family = new Sympa::Family($family_name,$robot) ) {
-	&Sympa::Log::do_log('err', '%s: new Sympa::Family(%s) impossible', $self->{'name'},$family_name);
+    unless ($family = Sympa::Family->new($family_name,$robot) ) {
+	&Sympa::Log::do_log('err', '%s: Sympa::Family->new(%s) impossible', $self->{'name'},$family_name);
 	return undef;
     }
   	
@@ -3274,7 +3274,7 @@ sub distribute_msg {
 	
 	# rename update topic content id of the message
 	if ($info_msg_topic) {
-	    my $topicspool = new Sympa::Spool ('topic');	    
+	    my $topicspool = Sympa::Spool->new('topic');	    
 	    $topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});	
 	}
 	## TODO remove S/MIME and PGP signature if any
@@ -3489,7 +3489,7 @@ sub send_msg_digest {
    &Sympa::Log::do_log('debug',"send_msg_disgest(%s)",$messagekey);
 
     # fetch and lock message. 
-    my $digestspool = new Sympa::Spool ('digest');
+    my $digestspool = Sympa::Spool->new('digest');
 
     my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
 
@@ -3551,7 +3551,7 @@ sub send_msg_digest {
     my @messages_as_string = split (/$separator/,$message_in_spool->{'messageasstring'}); 
 
     foreach my $message_as_string (@messages_as_string){  
-	my $parser = new MIME::Parser;
+	my $parser = MIME::Parser->new();
 	$parser->output_to_core(1);
 	$parser->extract_uuencode(1);  
 	$parser->extract_nested_messages(1);
@@ -4192,7 +4192,7 @@ sub send_msg {
 	    my $notice_msg = $saved_msg->dup;
 	    $notice_msg->bodyhandle(undef);    
 	    $notice_msg->parts([]);
-	    $new_message = new Sympa::Message({'mimeentity' => $notice_msg});
+	    $new_message = Sympa::Message->new({'mimeentity' => $notice_msg});
 
 	##Prepare message for txt reception mode
 	}elsif($array_name eq 'tabrcpt_txt'){
@@ -4206,7 +4206,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$txt_msg = $new_msg;
 	    }
-	    $new_message = new Sympa::Message({'mimeentity' => $txt_msg});
+	    $new_message = Sympa::Message->new({'mimeentity' => $txt_msg});
 
 	##Prepare message for html reception mode
 	}elsif($array_name eq 'tabrcpt_html'){
@@ -4219,7 +4219,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$html_msg = $new_msg;
 	    }
-	    $new_message = new Sympa::Message({'mimeentity' => $html_msg});
+	    $new_message = Sympa::Message->new({'mimeentity' => $html_msg});
 	    
 	##Prepare message for urlize reception mode
 	}elsif($array_name eq 'tabrcpt_url'){
@@ -4266,7 +4266,7 @@ sub send_msg {
 	    if (defined $new_msg) {
 		$url_msg = $new_msg;
 	    } 
-	    $new_message = new Sympa::Message({'mimeentity' => $url_msg});
+	    $new_message = Sympa::Message->new({'mimeentity' => $url_msg});
 	}else {
 	    &Sympa::Log::do_log('err', "Unknown variable/reception mode $array_name");
 	    return undef;
@@ -4393,7 +4393,7 @@ sub send_to_editor {
    
    if ($method eq 'md5'){  
        # move message to spool  mod
-       my $spoolmod = new Sympa::Spool('mod');
+       my $spoolmod = Sympa::Spool->new('mod');
        $spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
        # prepare html view of this message
@@ -4513,7 +4513,7 @@ sub send_auth {
    my $authkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
    chomp $authkey;
   
-   my $spool = new Sympa::Spool('auth');
+   my $spool = Sympa::Spool->new('auth');
    $spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
    my $param = {'authkey' => $authkey,
 		'boundary' => "----------------- Message-Id: \<$messageid\>",
@@ -4705,7 +4705,7 @@ sub archive_send_last {
    return unless ($self->is_archived());
    my $dir = $self->{'dir'}.'/archives' ;
 
-   my $mail = new Sympa::Message({'file' => "$dir/last_message",'noxsympato'=>'noxsympato'});
+   my $mail = Sympa::Message->new({'file' => "$dir/last_message",'noxsympato'=>'noxsympato'});
    unless (defined $mail) {
        &Sympa::Log::do_log('err', 'Unable to create Message object %s', "$dir/last_message");
        return undef;
@@ -4870,7 +4870,7 @@ sub send_notify_to_listmaster {
 	if($operation eq 'automatic_bounce_management') {
 		## Automatic action done on bouncing adresses
 		delete $data->{'alarm'};
-		my $list = new Sympa::List ($data->{'list'}{'name'}, $robot);
+		my $list = Sympa::List->new($data->{'list'}{'name'}, $robot);
 		unless(defined $list) {
 			&Sympa::Log::do_log('err','Parameter %s is not a valid list', $data->{'list'}{'name'});
 			return undef;
@@ -5312,7 +5312,7 @@ sub add_parts {
 	}
     } else {
 	## MIME footer/header
-	my $parser = new MIME::Parser;
+	my $parser = MIME::Parser->new();
 	$parser->output_to_core(1);
 
 	my $content_type = $msg->effective_type || 'text/plain';
@@ -5958,7 +5958,7 @@ sub get_exclusion {
     my  $robot= shift;
     &Sympa::Log::do_log('debug2', '(%s@%s)', $name,$robot);
 
-    my $list = new Sympa::List($name, $robot);
+    my $list = Sympa::List->new($name, $robot);
     unless (defined $list) {
 	&Sympa::Log::do_log('err','List %s@%s does not exist', $name,$robot);
 	return undef;
@@ -6398,7 +6398,7 @@ sub get_first_list_member {
     $rows = $data->{'rows'};
     $sql_regexp = $data->{'sql_regexp'};
     
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $self->{'dir'}.'/include',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -6582,7 +6582,7 @@ sub get_first_list_admin {
 
     &Sympa::Log::do_log('debug2', '(%s,%s,%s,%d,%d)', $self->{'name'},$role, $sortby, $offset, $rows);
 
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $self->{'dir'}.'/include_admin_user',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -6661,7 +6661,7 @@ sub get_first_list_admin {
         $sth = pop @sth_stack;
 
 	## Release the Shared lock
-	my $lock = new Sympa::Lock(
+	my $lock = Sympa::Lock->new(
             $self->{'dir'}.'/include_admin_user',
             $Sympa::Configuration::Conf{'lock_method'}
         );
@@ -6717,7 +6717,7 @@ sub get_next_list_member {
 		$sth = pop @sth_stack;
 	
 		## Release lock
-		my $lock = new Sympa::Lock (
+		my $lock = Sympa::Lock->new(
                     $self->{'dir'}.'/include',
                     $Sympa::Configuration::Conf{'lock_method'}
                 );
@@ -6759,7 +6759,7 @@ sub get_next_list_admin {
 		$sth = pop @sth_stack;
 	
 		## Release the Shared lock
-		my $lock = new Sympa::Lock(
+		my $lock = Sympa::Lock->new(
                     $self->{'dir'}.'/include_admin_user',
                     $Sympa::Configuration::Conf{'lock_method'}
                 );
@@ -6783,7 +6783,7 @@ sub get_first_bouncing_list_member {
     my $self = shift;
     &Sympa::Log::do_log('debug2', '');
 
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $self->{'dir'}.'/include',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -6858,7 +6858,7 @@ sub get_next_bouncing_list_member {
 		$sth = pop @sth_stack;
 	
 		## Release the Shared lock
-		my $lock = new Sympa::Lock (
+		my $lock = Sympa::Lock->new(
                     $self->{'dir'}.'/include',
                     $Sympa::Configuration::Conf{'lock_method'}
                 );
@@ -8022,7 +8022,7 @@ sub archive_msg {
 	    ## ignoring message with a no-archive flag	    
 	   &Sympa::Log::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 	}else{
-	    my $spoolarchive = new Sympa::Spool ('archive');
+	    my $spoolarchive = Sympa::Spool->new('archive');
 	    unless ($message->{'messagekey'}) {
 	&Sympa::Log::do_log('err', "could not store message in archive spool, messagekey missing");
 		return undef;
@@ -8139,7 +8139,7 @@ sub load_scenario_list {
 	    next if (defined $list_of_scenario{$name});
 	    next if (defined $skip_scenario{$name});
 
-	    my $scenario = new Sympa::Scenario ('robot' => $robot,
+	    my $scenario = Sympa::Scenario->new('robot' => $robot,
 					 'directory' => $directory,
 					 'function' => $action,
 					 'name' => $name);
@@ -8434,9 +8434,9 @@ sub _include_users_list {
     
     ## The included list is local or in another local robot
     if ($includelistname =~ /\@/) {
-	$includelist = new Sympa::List ($includelistname);
+	$includelist = Sympa::List->new($includelistname);
     }else {
-	$includelist = new Sympa::List ($includelistname, $robot);
+	$includelist = Sympa::List->new($includelistname, $robot);
     }
 
     unless ($includelist) {
@@ -8680,7 +8680,7 @@ sub _include_users_voot_group {
 	my $id = Sympa::Datasource::_get_datasource_id($param);
 	
 	require VOOTConsumer;
-	my $consumer = new VOOTConsumer(
+	my $consumer = VOOTConsumer->new(
 		user => $param->{'user'},
 		provider => $param->{'provider'}
 	);
@@ -9234,7 +9234,7 @@ sub _load_list_members_from_include {
 		## Else if we can't syncronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
 			require Sympa::Datasource::SQL;
-			my $source = new Sympa::Datasource::SQL($incl);
+			my $source = Sympa::Datasource::SQL->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				&Sympa::Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
 				$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
@@ -9252,7 +9252,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 	    }elsif ($type eq 'include_ldap_query') {
-			my $source = new Sympa::Datasource::LDAP($incl);
+			my $source = Sympa::Datasource::LDAP->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				$included = _include_users_ldap(\%users, $source_id, $source, $admin->{'default_user_options'});
 				unless (defined $included){
@@ -9269,7 +9269,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 		}elsif ($type eq 'include_ldap_2level_query') {
-			my $source = new Sympa::Datasource::LDAP($incl);
+			my $source = Sympa::Datasource::LDAP->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				my $result = _include_users_ldap_2level(\%users,$source_id, $source, $admin->{'default_user_options'});
 				if (defined $result) {
@@ -9406,15 +9406,15 @@ sub _load_list_admin_from_include {
 		## does it need to define a 'default_admin_user_option'?
 		if ($type eq 'include_sql_query') {
 		    require Sympa::Datasource::SQL;
-		    my $source = new Sympa::Datasource::SQL($incl);
+		    my $source = Sympa::Datasource::SQL->new($incl);
 		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'}); 
 		}elsif ($type eq 'include_ldap_query') {
 		    require Sympa::Datasource::LDAP;
-		    my $source = new Sympa::Datasource::LDAP($incl);
+		    my $source = Sympa::Datasource::LDAP->new($incl);
 		    $included = _include_users_ldap(\%admin_users, $incl,$source,\%option); 
 		}elsif ($type eq 'include_ldap_2level_query') {
 		    require Sympa::Datasource::LDAP;
-		    my $source = new Sympa::Datasource::LDAP($incl);
+		    my $source = Sympa::Datasource::LDAP->new($incl);
 		    my $result = _include_users_ldap_2level(\%admin_users, $incl,$source,\%option); 
 		    if (defined $result) {
 			$included = $result->{'total'};
@@ -9686,10 +9686,10 @@ sub sync_include_ca {
 			my $srcca = undef;
 			if ($type eq 'include_sql_ca') {
 				require Sympa::Datasource::SQL;
-				$source = new Sympa::Datasource::SQL($incl);
+				$source = Sympa::Datasource::SQL->new($incl);
 			}elsif(($type eq 'include_ldap_ca') or ($type eq 'include_ldap_2level_ca')) {
 				require Sympa::Datasource::LDAP;
-				$source = new Sympa::Datasource::LDAP($incl);
+				$source = Sympa::Datasource::LDAP->new($incl);
 			}
 			next unless(defined($source));
 			if($source->is_allowed_to_sync()) {
@@ -9880,7 +9880,7 @@ sub sync_include {
     my $users_updated = 0;
 
     ## Get an Exclusive lock
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $self->{'dir'}.'/include',
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -10114,7 +10114,7 @@ sub sync_include_admin {
 	my $admin_users_updated = 0;
 	
 	## Get an Exclusive lock
-	my $lock = new Sympa::Lock (
+	my $lock = Sympa::Lock->new(
             $self->{'dir'}.'/include_admin_user',
             $Sympa::Configuration::Conf{'lock_method'}
         );
@@ -10468,7 +10468,7 @@ sub store_digest {
 
     my @now  = localtime(time);
 
-    my $digestspool = new Sympa::Spool('digest');
+    my $digestspool = Sympa::Spool->new('digest');
     my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
     my $message_as_string;
 
@@ -10620,7 +10620,7 @@ sub get_lists {
 	    foreach my $l (@files) {
 		next if (($l =~ /^\./o) || (! -d "$robot_dir/$l") || (! -f "$robot_dir/$l/config"));
 		
-		my $list = new Sympa::List ($l, $robot, $options);
+		my $list = Sympa::List->new($l, $robot, $options);
 		
 		next unless (defined $list);
 
@@ -10858,7 +10858,7 @@ sub get_mod_spool_size {
     my $self = shift;
     &Sympa::Log::do_log('debug3', '()');    
 
-    my $spool = new Sympa::Spool('mod');
+    my $spool = Sympa::Spool->new('mod');
     my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'} },
 				      'selection'=>'count'});
     
@@ -11337,7 +11337,7 @@ sub _load_list_param {
     ## Scenario
     if ($p->{'scenario'}) {
 	$value =~ y/,/_/;
-	my $scenario = new Sympa::Scenario ('function' => $p->{'scenario'},
+	my $scenario = Sympa::Scenario->new('function' => $p->{'scenario'},
 				     'robot' => $robot, 
 				     'name' => $value, 
 				     'directory' => $directory);
@@ -11442,7 +11442,7 @@ sub _load_list_config_file {
     }
 
     ## Lock file
-    my $lock = new Sympa::Lock (
+    my $lock = Sympa::Lock->new(
         $config_file,
         $Sympa::Configuration::Conf{'lock_method'}
     );
@@ -11756,7 +11756,7 @@ sub _save_list_config_file {
 	return undef;
     }
     my $config = '';
-    my $fd = new IO::Scalar \$config;
+    my $fd = IO::Scalar->new(\$config);
     
     foreach my $c (@{$admin->{'comment'}}) {
 	$fd->print(sprintf "%s\n", $c);
@@ -12062,7 +12062,7 @@ sub tag_topic {
 
     my $topic_item =  sprintf  "TOPIC   $topic_list\n";
     $topic_item .= sprintf  "METHOD  $method\n";
-    my $topicspool = new Sympa::Spool ('topic');
+    my $topicspool = Sympa::Spool->new('topic');
     
     return ($topicspool->store($topic_item,{'list'=>$self->{'name'},'robot'=> $self->{'domain'},'messageid'=>$msg_id}));
 }
@@ -12091,7 +12091,7 @@ sub load_msg_topic {
     my ($self,$msg_id,$robot) = @_;
 
     &Sympa::Log::do_log('debug','(%s,%s)',$self->{'name'},$msg_id);    
-    my  $topicspool = new Sympa::Spool('topic');
+    my  $topicspool = Sympa::Spool->new('topic');
 
     my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
     unless ($topics_from_spool) {
@@ -12319,7 +12319,7 @@ sub _urlize_part {
 	close TMP;
 
 	open BODY, "$expl/$dir/$filename.$encoding";
-	my $decoder = new MIME::Decoder $encoding;
+	my $decoder = MIME::Decoder->new($encoding);
 	$decoder->decode(\*BODY, \*OFILE);
 	unlink "$expl/$dir/$filename.$encoding";
     }else {
@@ -12341,7 +12341,7 @@ sub _urlize_part {
     (my $file_name = $filename) =~ s/\./\_/g;
     my $file_url = "$wwsympa_url/attach/$listname".&Sympa::Tools::escape_chars("$dir/$filename",'/'); # do NOT escape '/' chars
 
-    my $parser = new MIME::Parser;
+    my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
     my $new_part;
 
@@ -12367,7 +12367,7 @@ sub store_subscription_request {
     my ($self, $email, $gecos, $custom_attr) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
 
-    my $subscription_request_spool = new Sympa::Spool ('subscribe');
+    my $subscription_request_spool = Sympa::Spool->new('subscribe');
     
     if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
 	&Sympa::Log::do_log('notice', 'Subscription already requested by %s', $email);
@@ -12385,7 +12385,7 @@ sub get_subscription_requests {
 
     my %subscriptions;
 
-    my $subscription_request_spool = new Sympa::Spool ('subscribe');
+    my $subscription_request_spool = Sympa::Spool->new('subscribe');
     my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
 
     foreach my $subrequest (@subrequests) {
@@ -12428,7 +12428,7 @@ sub get_subscription_requests {
 sub get_subscription_request_count {
     my ($self) = shift;
 
-    my $subscription_request_spool = new Sympa::Spool ('subscribe');    
+    my $subscription_request_spool = Sympa::Spool->new('subscribe');    
     return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
 } 
 
@@ -12437,7 +12437,7 @@ sub delete_subscription_request {
     my ($self, @list_of_email) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'name'}, join(',',@list_of_email));
 
-    my $subscription_request_spool = new Sympa::Spool ('subscribe');
+    my $subscription_request_spool = Sympa::Spool->new('subscribe');
 
     my $removed = 0;
     foreach my $email (@list_of_email) {

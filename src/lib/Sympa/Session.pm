@@ -113,13 +113,13 @@ sub new {
 	}
 	if ($status eq 'not_found') {
 	    &Sympa::Log::do_log('info',"ignoring unknown session cookie '$cookie'"); # start a new session (may ne a fake cookie)
-	    return (new Sympa::Session ($robot));
+	    return (Sympa::Session->new($robot));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method
 	# if($session->{'remote_addr'} ne $ENV{'REMOTE_ADDR'}){
 	#    &Sympa::Log::do_log('info','SympaSession::new ignoring session cookie because remote host %s is not the original host %s', $ENV{'REMOTE_ADDR'},$session->{'remote_addr'}); # start a new session
-	#    return (new SympaSession ($robot));
+	#    return (SympaSession->new($robot));
 	#}
     }else{
 	# create a new session context
@@ -433,7 +433,7 @@ sub set_cookie {
 
     my $cookie;
     if ($expires =~ /session/i) {
-	$cookie = new CGI::Cookie (-name    => 'sympa_session',
+	$cookie = CGI::Cookie->new(-name    => 'sympa_session',
 				   -value   => $self->{'id_session'},
 				   -domain  => $http_domain,
 				   -path    => '/',
@@ -441,7 +441,7 @@ sub set_cookie {
 				   -httponly => 1 
 				   );
     }else {
-	$cookie = new CGI::Cookie (-name    => 'sympa_session',
+	$cookie = CGI::Cookie->new(-name    => 'sympa_session',
 				   -value   => $self->{'id_session'},
 				   -expires => $expiration,
 				   -domain  => $http_domain,

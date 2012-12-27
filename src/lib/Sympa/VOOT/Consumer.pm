@@ -117,7 +117,7 @@ sub new {
 	$consumer->{'user'} = $param{'user'};
 	$consumer->{'provider'} = $param{'provider'};
 	
-	$consumer->{'oauth_consumer'} = new Sympa::OAuth::Consumer(
+	$consumer->{'oauth_consumer'} = Sympa::OAuth::Consumer->new(
 		user => $param{'user'},
 		provider => 'voot:'.$param{'provider'},
 		consumer_key => $consumer->{'conf'}{'oauth.ConsumerKey'},

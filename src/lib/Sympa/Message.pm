@@ -101,7 +101,7 @@ sub new {
 	return $message;
     }
 
-    my $parser = new MIME::Parser;
+    my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
     
     my $msg;
@@ -230,7 +230,7 @@ sub new {
 		$listname = $1;
 	    }
 	    
-	    my $list = new Sympa::List ($listname, $robot, {'just_try' => 1});
+	    my $list = Sympa::List->new($listname, $robot, {'just_try' => 1});
 	    if ($list) {
 		$message->{'list'} = $list;
 	    }	
