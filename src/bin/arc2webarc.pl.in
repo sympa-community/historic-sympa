@@ -67,7 +67,7 @@ my $msg_count = 0;
 # this line is necessary - without it the new Sympa::List fails.
 my $pinfo = &Sympa::List::_apply_defaults();
 
-$| = 1;
+$OUTPUT_AUTOFLUSH = 1;
 
 my %opt;
 unless (&GetOptions(\%opt, 'input-directory=s')) {

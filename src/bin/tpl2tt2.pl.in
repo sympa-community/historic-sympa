@@ -43,7 +43,7 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 my %options;
 
-$| = 1;
+$OUTPUT_AUTOFLUSH = 1;
 
 ## Check UID
 #unless (getlogin() eq Sympa::Constants::USER) {
