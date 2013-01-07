@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::VOOT::Provider - VOOT provider object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implements the server side of VOOT workflow.
 
-=cut 
+=cut
 
 package Sympa::VOOT::Provider;
 
@@ -47,9 +47,9 @@ use Sympa::Tools;
 
 Creates a new L<Sympa::VOOT::Provider> object.
 
-=head3 Parameters 
+=head3 Parameters
 
-=over 
+=over
 
 =item * I<voot_path>: VOOT path, as array
 
@@ -65,20 +65,20 @@ Creates a new L<Sympa::VOOT::Provider> object.
 
 =item * I<robot>
 
-=back 
+=back
 
 =head3 Return value
 
 A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub new {
 	my $pkg = shift;
 	my %param = @_;
-	
+
 	&Sympa::Log::do_log('debug2', '()');
-	
+
 	my $provider = {
 		oauth_provider => Sympa::OAuth::Provider->new(
 			method => $param{'method'},
@@ -91,9 +91,9 @@ sub new {
 		robot => $param{'robot'},
 		voot_path => $param{'voot_path'}
 	};
-	
+
  	return undef unless(defined($provider->{'oauth_provider'}));
- 	
+
 	return bless $provider, $pkg;
 }
 
@@ -118,7 +118,7 @@ Check if a request is valid.
             $server->error($http_code, $provider->getOAuthProvider()->{'util'}->errstr);
     }
 
-=head3 Parameters 
+=head3 Parameters
 
 None.
 
@@ -126,23 +126,23 @@ None.
 
 The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
-=cut 
+=cut
 
 sub checkRequest {
 	my $self = shift;
 	my %param = @_;
-	
+
 	my $r = $self->{'oauth_provider'}->checkRequest(checktoken => 1);
 	return $r if($r);
-	
+
 	my $access = $self->{'oauth_provider'}->getAccess(
 		token => $self->{'oauth_provider'}{'params'}{'oauth_token'}
 	);
 	return 401 unless($access->{'user'});
 	return 403 unless($access->{'accessgranted'});
-	
+
 	$self->{'user'} = $access->{'user'};
-	
+
 	return undef;
 }
 
@@ -150,7 +150,7 @@ sub checkRequest {
 
 Respond to a request (parse url, build json), assumes that request is valid
 
-=head3 Parameters 
+=head3 Parameters
 
 None.
 
@@ -158,30 +158,30 @@ None.
 
 A string, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub response {
 	my $self = shift;
 	my %param = @_;
-	
+
 	my $r = {
 		startIndex => 0,
 		totalResults => 0,
 		itemsPerPage => 3,
 		entry => [],
 	};
-	
+
 	if(defined($self->{'user'}) && $self->{'user'} ne '') {
 		my @args = split('/', $self->{'voot_path'});;
 		return undef if($#args < 1);
 		return undef unless($args[1] eq '@me');
 		return undef unless($args[0] eq 'groups' || $args[0] eq 'people');
 		return undef if($args[0] eq 'people' && ($#args < 2 || $args[2] eq ''));
-		
+
 		$r->{'entry'} = ($args[0] eq 'groups') ? $self->getGroups() : $self->getGroupMembers(group => $args[2]);
 		$r->{'totalResults'} = $#{$r->{'entry'}} + 1;
 	}
-	
+
 	return encode_json($r);
 }
 
@@ -189,7 +189,7 @@ sub response {
 
 Get user groups.
 
-=head3 Parameters 
+=head3 Parameters
 
 None.
 
@@ -197,26 +197,26 @@ None.
 
 An hashref containing groups definitions, or I<undef> if something went wrong
 
-=cut 
+=cut
 
 sub getGroups {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
-	
+
 	my @entries = ();
-	
+
 	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'owner')) {
 	#	push(@entries, $self->_list_to_group($list, 'admin'));
 	#}
-	
+
 	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'editor')) {
 	#	push(@entries, $self->_list_to_group($list, '???'));
 	#}
-	
+
 	foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'member')) {
 		push(@entries, $self->_list_to_group($list, 'member'));
 	}
-	
+
 	return \@entries;
 }
 
@@ -224,7 +224,7 @@ sub _list_to_group {
 	my $self = shift;
 	my $list = shift;
 	my $role = shift;
-	
+
 	return {
 		id => $list->{'name'},
 		title => $list->{'admin'}{'subject'},
@@ -237,31 +237,31 @@ sub _list_to_group {
 
 Get members of a group.
 
-=head3 Parameters 
+=head3 Parameters
 
-=over 
+=over
 
 =item * I<group>: the group ID.
 
-=back 
+=back
 
-=head3 Return value 
+=head3 Return value
 
 An hashref containing members definitions, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $param{'group'});
-	
+
 	my @entries = ();
-	
+
 	my $list = Sympa::List->new($param{'group'}, $self->{'robot'});
 	if(defined $list) {
 		my $r = $list->check_list_authz('review', 'md5', {'sender' => $self->{'user'}});
-		
+
 		if(ref($r) ne 'HASH' || $r->{'action'} !~ /do_it/i) {
 			$self->{'error'} = '403 Forbiden';
 		}else{
@@ -270,7 +270,7 @@ sub getGroupMembers {
 			}
 		}
 	}
-	
+
 	return \@entries;
 }
 
@@ -278,7 +278,7 @@ sub _subscriber_to_member {
 	my $self = shift;
 	my $user = shift;
 	my $role = shift;
-	
+
 	return {
 		displayName => $user->{'gecos'},
 		emails => [$user->{'email'}],
@@ -286,14 +286,14 @@ sub _subscriber_to_member {
 	};
 }
 
-=head1 AUTHORS 
+=head1 AUTHORS
 
-=over 
+=over
 
-=item * Etienne Meleard <etienne.meleard AT renater.fr> 
+=item * Etienne Meleard <etienne.meleard AT renater.fr>
 
-=back 
+=back
 
-=cut 
+=cut
 
 1;

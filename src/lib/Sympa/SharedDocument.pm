@@ -73,7 +73,7 @@ sub new {
     #$email ||= 'nobody';
     my $document = {};
     &Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
-    
+
     unless (ref($list) && $list->isa('Sympa::List')) {
 	&Sympa::Log::do_log('err', 'incorrect list parameter');
 	return undef;
@@ -104,25 +104,25 @@ sub new {
     ## The path has been checked ##
     ###############################
 
-    ### Document exist ? 
+    ### Document exist ?
     unless (-r $document->{'absolute_path'}) {
 	&Sympa::Log::do_log('err',"unable to read %s : no such file or directory", $document->{'absolute_path'});
 	return undef;
     }
-    
+
     ### Document has non-size zero?
     unless (-s $document->{'absolute_path'}) {
 	&Sympa::Log::do_log('err',"unable to read %s : empty document", $document->{'absolute_path'});
 	return undef;
     }
-    
+
     $document->{'visible_path'} = &main::make_visible_path($document->{'path'});
-    
+
     ## Date
     my @info = stat $document->{'absolute_path'};
     $document->{'date'} =  &POSIX::strftime("%d %b %Y", localtime($info[9]));
     $document->{'date_epoch'} =  $info[9];
-    
+
     # Size of the doc
     $document->{'size'} = (-s $document->{'absolute_path'}) / 1000;
 
@@ -145,7 +145,7 @@ sub new {
 	$document->{'father_path'} = '';
     }
     $document->{'escaped_father_path'} = &Sympa::Tools::escape_chars($document->{'father_path'}, '/');
-    
+
 
     ### File, directory or URL ?
     if (! (-d $document->{'absolute_path'})) {
@@ -155,7 +155,7 @@ sub new {
 	}elsif ($document->{'filename'} =~ /^.*\.(\w+)$/) {
 	    $document->{'file_extension'} = $1;
 	 }
-	
+
 	if ($document->{'file_extension'} eq 'url') {
 	    $document->{'type'} = 'url';
 	}else {
@@ -181,12 +181,12 @@ sub new {
     if ($document->{'path'} && (-e $desc_file)) {
 	my @info = stat $desc_file;
 	$document->{'serial_desc'} = $info[9];
-	
+
 	my %desc_hash = &main::get_desc_file($desc_file);
 	$document->{'owner'} = $desc_hash{'email'};
 	    $document->{'title'} = $desc_hash{'title'};
 	$document->{'escaped_title'} = &Sympa::Tools::escape_html($document->{'title'});
-	
+
 	# Author
 	if ($desc_hash{'email'}) {
 	    $document->{'author'} = $desc_hash{'email'};
@@ -198,15 +198,15 @@ sub new {
 
    ### File, directory or URL ?
     if ($document->{'type'} eq 'url') {
-	
+
 	$document->{'icon'} = &main::get_icon('url');
-	
+
 	open DOC, $document->{'absolute_path'};
 	my $url = <DOC>;
 	close DOC;
 	chomp $url;
 	$document->{'url'} = $url;
-	
+
 	if ($document->{'filename'} =~ /^(.+)\.url/) {
 	    $document->{'anchor'} = $1;
 	}
@@ -229,40 +229,40 @@ sub new {
 	    # unknown file type
 	    $document->{'icon'} = &main::get_icon('unknown');
 	}
-	
+
 	## HTML file
-	if ($document->{'file_extension'} =~ /^html?$/i) { 
+	if ($document->{'file_extension'} =~ /^html?$/i) {
 	    $document->{'html'} = 1;
 	    $document->{'icon'} = &main::get_icon('text');
 	}
 
 	## Directory
     }else {
-	
+
 	$document->{'icon'} = &main::get_icon('folder');
-	
+
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $document->{'absolute_path'}) {
 	    &Sympa::Log::do_log('err',"cannot open %s : %s", $document->{'absolute_path'}, $ERRNO);
 	    return undef;
 	}
-	
-	# array of entry of the directory DIR 
+
+	# array of entry of the directory DIR
 	my @tmpdir = readdir DIR; closedir DIR;
-	
+
 	my $dir = &main::get_directory_content(\@tmpdir, $email, $list, $document->{'absolute_path'});
 
 	foreach my $d (@{$dir}) {
 
-	    my $sub_document = Sympa::SharedDocument->new($list, $document->{'path'}.'/'.$d, $param);	    
+	    my $sub_document = Sympa::SharedDocument->new($list, $document->{'path'}.'/'.$d, $param);
 	    push @{$document->{'subdir'}}, $sub_document;
 	}
     }
 
     $document->{'list'} = $list;
-	
+
     bless $document, $pkg;
-    
+
     return $document;
 }
 
@@ -294,7 +294,7 @@ sub dup {
  #             (author(A) || author(B))
  #  edit = idem read
  #  control (A/B) : author(A) || author(B)
- #  + (set owner A/B) if (empty directory &&   
+ #  + (set owner A/B) if (empty directory &&
  #                        control A)
 
 
@@ -304,7 +304,7 @@ sub check_access_control {
     # if mode->{'read'} control access only for read
     # if mode->{'edit'} control access only for edit
     # if mode->{'control'} control access only for control
-    
+
     # return the hash (
     # $result{'may'}{'read'} == $result{'may'}{'edit'} == $result{'may'}{'control'}  if is_author else :
     # $result{'may'}{'read'} = 0 or 1 (right or not)
@@ -314,14 +314,14 @@ sub check_access_control {
     # $result{'reason'}{'edit'} = string for authorization_reject.tt2 when may_edit == 0
     # $result{'scenario'}{'read'} = scenario name for the document
     # $result{'scenario'}{'edit'} = scenario name for the document
-    
-    
+
+
     # Result
     my %result;
     $result{'reason'} = {};
-    
-    # Control 
-    
+
+    # Control
+
     # Arguments
     my $self = shift;
     my $param = shift;
@@ -332,39 +332,39 @@ sub check_access_control {
 
     # Control for editing
     my $may_read = 1;
-    my $why_not_read = ''; 
+    my $why_not_read = '';
     my $may_edit = 1;
-    my $why_not_edit = ''; 
-    
+    my $why_not_edit = '';
+
     ## First check privileges on the root shared directory
     $result{'scenario'}{'read'} = $list->{'admin'}{'shared_doc'}{'d_read'}{'name'};
     $result{'scenario'}{'edit'} = $list->{'admin'}{'shared_doc'}{'d_edit'}{'name'};
-    
+
     ## Privileged owner has all privileges
     if ($param->{'is_privileged_owner'}) {
 	$result{'may'}{'read'} = 1;
 	$result{'may'}{'edit'} = 1;
-	$result{'may'}{'control'} = 1; 
+	$result{'may'}{'control'} = 1;
 
 	$self->{'access'} = \%result;
 	return 1;
     }
-    
+
     # if not privileged owner
     if (1) {
 	my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
 					     {'sender' => $param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
-					      'remote_addr' => $param->{'remote_addr'}});    
+					      'remote_addr' => $param->{'remote_addr'}});
 	my $action;
 	if (ref($result) eq 'HASH') {
-	    $action = $result->{'action'};   
-	    $why_not_read = $result->{'reason'}; 
-	}	     
-	
+	    $action = $result->{'action'};
+	    $why_not_read = $result->{'reason'};
+	}
+
 	$may_read = ($action =~ /do_it/i);
     }
-    
+
     if (1) {
 	my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
 					     {'sender' => $param->{'user'}{'email'},
@@ -372,62 +372,62 @@ sub check_access_control {
 					      'remote_addr' => $param->{'remote_addr'}});
 	my $action;
 	if (ref($result) eq 'HASH') {
-	    $action = $result->{'action'};   
-	    $why_not_edit = $result->{'reason'}; 
-	}	 
-	
+	    $action = $result->{'action'};
+	    $why_not_edit = $result->{'reason'};
+	}
+
 	#edit = 0, 0.5 or 1
-	$may_edit = &main::find_edit_mode($action);	 
+	$may_edit = &main::find_edit_mode($action);
 	$why_not_edit = '' if ($may_edit);
     }
-    
+
     ## Only authenticated users can edit files
     unless ($param->{'user'}{'email'}) {
 	$may_edit = 0;
 	$why_not_edit = 'not_authenticated';
     }
-    
+
     my $current_path = $self->{'path'};
     my $current_document;
     my %desc_hash;
     my $user = $param->{'user'}{'email'} || 'nobody';
-    
+
     while ($current_path ne "") {
 	# no description file found yet
 	my $def_desc_file = 0;
 	my $desc_file;
-	
-	$current_path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/; 
+
+	$current_path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/;
 	$current_document = $3;
 	my $next_path = $1;
-	
+
 	# opening of the description file appropriated
 	if (-d $self->{'root_path'}.'/'.$current_path) {
 	    # case directory
-	    
+
 	    #		unless ($slash) {
 	    $current_path = $current_path.'/';
 	    #		}
-	    
+
 	    if (-e "$self->{'root_path'}/$current_path.desc"){
 		$desc_file = $self->{'root_path'}.'/'.$current_path.".desc";
 		$def_desc_file = 1;
 	    }
-	    
+
 	}else {
 	    # case file
 	    if (-e "$self->{'root_path'}/$next_path.desc.$3"){
 		$desc_file = $self->{'root_path'}.'/'.$next_path.".desc.".$3;
 		$def_desc_file = 1;
-	    } 
+	    }
 	}
-	
+
 	if ($def_desc_file) {
 	    # a description file was found
 	    # loading of acces information
-	    
+
 	    %desc_hash = &main::get_desc_file($desc_file);
-	    
+
 	    ## Author has all privileges
 	    if ($user eq $desc_hash{'email'}) {
 		$result{'may'}{'read'} = 1;
@@ -436,10 +436,10 @@ sub check_access_control {
 
 		$self->{'access'} = \%result;
 		return 1;
-	    } 
-	    
+	    }
+
 	    if (1) {
-		
+
 		my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
 						     {'sender' => $param->{'user'}{'email'},
 						      'remote_host' => $param->{'remote_host'},
@@ -447,14 +447,14 @@ sub check_access_control {
 						      'scenario'=> $desc_hash{'read'}});
 		my $action;
 		if (ref($result) eq 'HASH') {
-		    $action = $result->{'action'};   
-		    $why_not_read = $result->{'reason'}; 
-		}	     
-		
+		    $action = $result->{'action'};
+		    $why_not_read = $result->{'reason'};
+		}
+
 		$may_read = $may_read && ( $action=~ /do_it/i);
 		$why_not_read = '' if ($may_read);
 	    }
-	    
+
 	    if (1) {
 		my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
 						     {'sender' => $param->{'user'}{'email'},
@@ -463,46 +463,46 @@ sub check_access_control {
 						      'scenario'=> $desc_hash{'edit'}});
 		my $action_edit;
 		if (ref($result) eq 'HASH') {
-		    $action_edit = $result->{'action'};   
-		    $why_not_edit = $result->{'reason'}; 
+		    $action_edit = $result->{'action'};
+		    $why_not_edit = $result->{'reason'};
 		}
-		
-		
+
+
 		# $may_edit = 0, 0.5 or 1
 		my $may_action_edit = &main::find_edit_mode($action_edit);
-		$may_edit = &main::merge_edit($may_edit,$may_action_edit); 
+		$may_edit = &main::merge_edit($may_edit,$may_action_edit);
 		$why_not_edit = '' if ($may_edit);
-		
-		
+
+
 	    }
-	    
+
 	    ## Only authenticated users can edit files
 	    unless ($param->{'user'}{'email'}) {
 		$may_edit = 0;
 		$why_not_edit = 'not_authenticated';
 	    }
-	    
+
 	    unless (defined $result{'scenario'}{'read'}) {
 		$result{'scenario'}{'read'} = $desc_hash{'read'};
 		$result{'scenario'}{'edit'} = $desc_hash{'edit'};
 	    }
-	    
+
 	}
-	
-	# truncate the path for the while   
-	$current_path = $next_path; 
+
+	# truncate the path for the while
+	$current_path = $next_path;
     }
-    
+
     if (1) {
 	$result{'may'}{'read'} = $may_read;
 	$result{'reason'}{'read'} = $why_not_read;
     }
-    
+
     if (1) {
 	  $result{'may'}{'edit'} = $may_edit;
 	  $result{'reason'}{'edit'} = $why_not_edit;
       }
-    
+
     $self->{'access'} = \%result;
     return 1;
 }

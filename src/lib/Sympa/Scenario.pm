@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::Scenario - Authorization scenario object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implement an authorization scenario.
 
-=cut 
+=cut
 
 package Sympa::Scenario;
 
@@ -82,13 +82,13 @@ sub new {
    my($pkg, @args) = @_;
     my %parameters = @args;
     &Sympa::Log::do_log('debug2', '');
- 
+
     my $scenario = {};
 
     ## Check parameters
     ## Need either file_path or function+name
     ## Parameter 'directory' is optional, used in List context only
-    unless ($parameters{'robot'} && 
+    unless ($parameters{'robot'} &&
 	    ($parameters{'file_path'} || ($parameters{'function'} && $parameters{'name'}))) {
 	&Sympa::Log::do_log('err', 'Missing parameter');
 	return undef;
@@ -158,10 +158,10 @@ sub new {
     }elsif ($parameters{'function'} eq 'include') {
 	## include.xx not found will not raise an error message
 	return undef;
-	
+
     }else {
 	## Default rule is 'true() smtp -> reject'
-	&Sympa::Log::do_log('err',"Unable to find scenario file '$parameters{'function'}.$parameters{'name'}', please report to listmaster"); 
+	&Sympa::Log::do_log('err',"Unable to find scenario file '$parameters{'function'}.$parameters{'name'}', please report to listmaster");
 	$scenario_struct = &_parse_scenario($parameters{'function'}, $parameters{'robot'}, $parameters{'name'}, 'true() smtp -> reject', $parameters{'directory'});
 	$scenario->{'file_path'} = 'ERROR'; ## special value
 	$scenario->{'data'} = 'true() smtp -> reject';
@@ -192,13 +192,13 @@ sub new {
 sub _parse_scenario {
     my ($function, $robot, $scenario_name, $paragraph) = @_;
     &Sympa::Log::do_log('debug2', "($function, $scenario_name, $robot)");
-    
+
     my $structure = {};
     $structure->{'name'} = $scenario_name ;
     my @scenario;
     my @rules = split /\n/, $paragraph;
 
-    foreach my $current_rule (@rules) {	
+    foreach my $current_rule (@rules) {
 	my @auth_methods_list;
 	next if ($current_rule =~ /^\s*\w+\s*$/o); # skip paragraph name
 	my $rule = {};
@@ -211,7 +211,7 @@ sub _parse_scenario {
 	    $structure->{'title'}{$1} = $2;
 	    next;
 	}
-        
+
 	if ($current_rule =~ /\s*(include\s*\(?\'?(.*)\'?\)?)\s*$/i) {
 	    $rule->{'condition'} = $1;
 	    push(@scenario, $rule);
@@ -230,7 +230,7 @@ sub _parse_scenario {
 
 	## Duplicate the rule for each mentionned authentication method
 	foreach my $auth_method (@auth_methods_list) {
-	    push(@scenario,{'condition' => $rule->{condition}, 
+	    push(@scenario,{'condition' => $rule->{condition},
                             'auth_method' => $auth_method,
                             'action' => $rule->{action}});
 	}
@@ -238,14 +238,14 @@ sub _parse_scenario {
 
     $structure->{'rules'} = \@scenario;
 
-    return $structure; 
+    return $structure;
 }
 
 
 ####################################################
 # request_action
 ####################################################
-# Return the action to perform for 1 sender 
+# Return the action to perform for 1 sender
 # using 1 auth method to perform 1 operation
 #
 # IN : -$operation (+) : scalar
@@ -253,22 +253,22 @@ sub _parse_scenario {
 #      -$robot (+) : scalar
 #      -$context (+) : ref(HASH) containing information
 #        to evaluate scenario (scenario var)
-#      -$debug : adds keys in the returned HASH 
+#      -$debug : adds keys in the returned HASH
 #
 # OUT : undef | ref(HASH) containing keys :
 #        -action : 'do_it'|'reject'|'request_auth'
 #           |'owner'|'editor'|'editorkey'|'listmaster'
-#        -reason : defined if action == 'reject' 
+#        -reason : defined if action == 'reject'
 #           and in scenario : reject(reason='...')
 #           key for template authorization_reject.tt2
-#        -tt2 : defined if action == 'reject'  
+#        -tt2 : defined if action == 'reject'
 #           and in scenario : reject(tt2='...') or reject('...tt2')
 #           match a key in authorization_reject.tt2
-#        -condition : the checked condition 
+#        -condition : the checked condition
 #           (defined if $debug)
-#        -auth_method : the checked auth_method 
+#        -auth_method : the checked auth_method
 #           (defined if $debug)
-###################################################### 
+######################################################
 sub request_action {
     my $operation = shift;
     my $auth_method = shift;
@@ -285,7 +285,7 @@ sub request_action {
     $context->{'remote_host'} ||= 'unknown_host' ;
     $context->{'robot_domain'} = $robot ;
     $context->{'msg'} = $context->{'message'}->{'msg'} if (defined $context->{'message'});
-    $context->{'msg_encrypted'} = 'smime' if (defined $context->{'message'} && 
+    $context->{'msg_encrypted'} = 'smime' if (defined $context->{'message'} &&
 					      $context->{'message'}->{'smime_crypted'} eq 'smime_crypted');
     ## Check that authorization method is one of those known by Sympa
     unless ( $auth_method =~ /^(smtp|md5|pgp|smime|dkim)/) {
@@ -319,7 +319,7 @@ sub request_action {
 	    &Sympa::Log::do_log('info','Will evaluate scenario %s for robot %s',$operation,$robot);
 	}
     }
-    
+
     ## The current action relates to a list
     if (defined $context->{'list_object'}) {
 	my $list = $context->{'list_object'};
@@ -328,7 +328,7 @@ sub request_action {
 	## The list parameter might be structured ('.' is a separator)
 	my @operations = split /\./, $operation;
 	my $scenario_path;
-	
+
 	if ($#operations == 0) {
 	    ## Simple parameter
 	    $scenario_path = $list->{'admin'}{$operation}{'file_path'};
@@ -356,9 +356,9 @@ sub request_action {
 		$context->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
 	    }
 	}
-	
+
 	## Create Scenario object
-	$scenario = Sympa::Scenario->new('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot,
 				  'directory' => $list->{'dir'},
 				  'file_path' => $scenario_path,
 				  'options' => $context->{'options'});
@@ -377,12 +377,12 @@ sub request_action {
 		return $return;
 	    }
 	}
-	
-	### the following lines are used by the document sharing action 
-	if (defined $context->{'scenario'}) { 
-	    
+
+	### the following lines are used by the document sharing action
+	if (defined $context->{'scenario'}) {
+
 	    # loading of the structure
-	    $scenario = Sympa::Scenario->new('robot' => $robot, 
+	    $scenario = Sympa::Scenario->new('robot' => $robot,
 				      'directory' => $list->{'dir'},
 				      'function' => $operations[$#operations],
 				      'name' => $context->{'scenario'},
@@ -392,16 +392,16 @@ sub request_action {
     }elsif ($context->{'topicname'}) {
 	## Topics
 
-	$scenario = Sympa::Scenario->new('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot,
 				  'function' => 'topics_visibility',
 				  'name' => $Sympa::List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
 				  'options' => $context->{'options'});
 
-    }else{	
+    }else{
 	## Global scenario (ie not related to a list) ; example : create_list
-	
+
 	my $p = &Sympa::Configuration::get_robot_conf($robot, $operation);
-	$scenario = Sympa::Scenario->new('robot' => $robot, 
+	$scenario = Sympa::Scenario->new('robot' => $robot,
 				  'function' => $operation,
 				  'name' => $p,
 				  'options' => $context->{'options'});
@@ -422,7 +422,7 @@ sub request_action {
 
     ## Include include.<action>.header if found
     my %param = ('function' => 'include',
-		 'robot' => $robot, 
+		 'robot' => $robot,
 		 'name' => $operation.'.header',
 		 'options' => $context->{'options'});
     $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
@@ -436,7 +436,7 @@ sub request_action {
 	if ($rules[$index]{'condition'} =~ /^\s*include\s*\(?\'?([\w\.]+)\'?\)?\s*$/i) {
 	    my $include_file = $1;
 	    my %param = ('function' => 'include',
-			 'robot' => $robot, 
+			 'robot' => $robot,
 			 'name' => $include_file,
 			 'options' => $context->{'options'});
 	    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
@@ -444,16 +444,16 @@ sub request_action {
 	    if (defined $include_scenario) {
 		## Removes the include directive and replace it with included rules
 		splice @rules, $index, 1, @{$include_scenario->{'rules'}};
-	    }	    
+	    }
 	}
     }
-    
+
     ## Include a Blacklist rules if configured for this action
     if ($Sympa::Configuration::Conf{'blacklist'}{$operation}) {
 	foreach my $auth ('smtp','dkim','md5','pgp','smime'){
 	    my $blackrule = {'condition' => "search('blacklist.txt',[sender])",
 			     'action' => 'reject,quiet',
-			     'auth_method' => $auth};	
+			     'auth_method' => $auth};
 	    ## Add rules at the beginning of the array
 	    unshift @rules, ($blackrule);
 	}
@@ -475,7 +475,7 @@ sub request_action {
 	    if (! defined ($result)) {
 		&Sympa::Log::do_log('info',"error in $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'}" );
 		&Sympa::Log::do_log('info', 'Error in %s scenario, in list %s', $context->{'scenario'}, $context->{'listname'});
-		
+
 		if ($debug) {
 		    $return = {'action' => 'reject',
 			       'reason' => 'error-performing-condition',
@@ -489,7 +489,7 @@ sub request_action {
 		}
 		return undef;
 	    }
-	    
+
 	    ## Rule returned false
 	    if ($result == -1) {
 		if ($log_it){
@@ -497,31 +497,31 @@ sub request_action {
 		}
 		next;
 	    }
-	    
+
 	    my $action = $rule->{'action'};
 
             ## reject : get parameters
 	    if ($action =~ /^(ham|spam|unsure)/) {
-		$action = $1 ;		
+		$action = $1 ;
 	    }
 	    if ($action =~/^reject(\((.+)\))?(\s?,\s?(quiet))?/) {
 
-		if ($4 eq 'quiet') { 
+		if ($4 eq 'quiet') {
 		    $action = 'reject,quiet';
 		} else{
-		    $action = 'reject';	
+		    $action = 'reject';
 		}
 		my @param = split /,/,$2;
-		
+
        		foreach my $p (@param){
 		    if  ($p =~ /^reason=\'?(\w+)\'?/){
 			$return->{'reason'} = $1;
 			next;
-			
+
 		    }elsif ($p =~ /^tt2=\'?(\w+)\'?/){
 			$return->{'tt2'} = $1;
 			next;
-			
+
 		    }
 		    if ($p =~ /^\'?[^=]+\'?/){
 			$return->{'tt2'} = $p;
@@ -532,11 +532,11 @@ sub request_action {
 	    }
 
 	    $return->{'action'} = $action;
-	    
+
 	    if ($log_it){
 		&Sympa::Log::do_log('info',"$trace_scenario condition $rule->{'condition'} with authentication method $rule->{'auth_method'} issued result : $action");
-	    }	    
-	    
+	    }
+
 	    if ($result == 1) {
 		if ($log_it){
 		     &Sympa::Log::do_log('info',"rule '%s %s -> %s' accepted",$rule->{'condition'},$rule->{'auth_method'},$rule->{'action'});
@@ -564,7 +564,7 @@ sub request_action {
 
     if ($log_it){
 	&Sympa::Log::do_log('info',"$trace_scenario : no rule match request rejected");
-    }	    
+    }
 
     $return = {'action' => 'reject',
 	       'reason' => 'no-rule-match',
@@ -578,44 +578,44 @@ sub request_action {
 sub verify {
     my ($context, $condition, $log_it) = @_;
     &Sympa::Log::do_log('debug2', 'condition %s, log %s', $condition, $log_it);
-    
+
     my $robot = $context->{'robot_domain'};
-    
+
 #    while (my($k,$v) = each %{$context}) {
 #	&Sympa::Log::do_log('debug3',"verify: context->{$k} = $v");
 #    }
-    
+
     unless (defined($context->{'sender'} )) {
 	&Sympa::Log::do_log('info',"internal error, no sender find, report authors");
 	return undef;
     }
-    
+
     $context->{'execution_date'} = time unless ( defined ($context->{'execution_date'}) );
-    
+
     my $list;
     if ($context->{'listname'} && ! defined $context->{'list_object'}) {
         unless ( $context->{'list_object'} = Sympa::List->new($context->{'listname'}, $robot) ){
 	    &Sympa::Log::do_log('info',"Unable to create List object for list $context->{'listname'}");
 	    return undef ;
 	}
-    }    
-    
+    }
+
     if (defined ($context->{'list_object'})) {
 	$list = $context->{'list_object'};
 	$context->{'listname'} = $list->{'name'};
-	
+
 	$context->{'host'} = $list->{'admin'}{'host'};
     }
-    
+
     if (defined ($context->{'msg'})) {
 	my $header = $context->{'msg'}->head;
-	unless (($header->get('to') && (join(', ', $header->get('to')) =~ /$context->{'listname'}/i)) || 
+	unless (($header->get('to') && (join(', ', $header->get('to')) =~ /$context->{'listname'}/i)) ||
 		($header->get('cc') && (join(', ', $header->get('cc')) =~ /$context->{'listname'}/i))) {
 	    $context->{'is_bcc'} = 1;
 	}else{
 	    $context->{'is_bcc'} = 0;
 	}
-	
+
     }
     unless ($condition =~ /(\!)?\s*(true|is_listmaster|verify_netmask|is_editor|is_owner|is_subscriber|less_than|match|equal|message|older|newer|all|search|customcondition\:\:\w+)\s*\(\s*(.*)\s*\)\s*/i) {
 	&Sympa::Log::do_log('err', "error rule syntaxe: unknown condition $condition");
@@ -625,11 +625,11 @@ sub verify {
     if ($1 eq '!') {
 	$negation = -1 ;
     }
-    
+
     my $condition_key = lc($2);
     my $arguments = $3;
     my @args;
-    
+
     ## The expression for regexp is tricky because we don't allow the '/' character (that indicates the end of the regexp
     ## but we allow any number of \/ escape sequence)
     while ($arguments =~ s/^\s*(
@@ -646,21 +646,21 @@ sub verify {
 				|(\w+)\.sql
 				)\s*,?//x) {
 	my $value=$1;
-	
+
 	## Custom vars
 	if ($value =~ /\[custom_vars\-\>([\w\-]+)\]/i) {
 	    $value =~ s/\[custom_vars\-\>([\w\-]+)\]/$context->{'custom_vars'}{$1}/;
 	}
-	
+
 	## Family vars
 	if ($value =~ /\[family\-\>([\w\-]+)\]/i) {
 	    $value =~ s/\[family\-\>([\w\-]+)\]/$context->{'family'}{$1}/;
 	}
-	
+
 	## Config param
 	elsif ($value =~ /\[conf\-\>([\w\-]+)\]/i) {
 	    if (my $conf_value = &Sympa::Configuration::get_robot_conf($robot, $1)) {
-		
+
 		$value =~ s/\[conf\-\>([\w\-]+)\]/$conf_value/;
 	    }else{
 		&Sympa::Log::do_log('debug',"undefine variable context $value in rule $condition");
@@ -670,7 +670,7 @@ sub verify {
 		# a condition related to a undefined context variable is always false
 		return -1 * $negation;
 	    }
-	    
+
 	    ## List param
 	}elsif ($value =~ /\[list\-\>([\w\-]+)\]/i) {
 	    my $param = $1;
@@ -680,7 +680,7 @@ sub verify {
 	    }elsif ($param eq 'address') {
 		my $list_address = $list->get_list_address();
 		$value =~ s/\[list\-\>([\w\-]+)\]/$list_address/;
-	    
+
 	    }elsif ($list->{'admin'}{$param} and (!ref($list->{'admin'}{$param})) ) {
 		$value =~ s/\[list\-\>([\w\-]+)\]/$list->{'admin'}{$param}/;
 	    }else{
@@ -690,27 +690,27 @@ sub verify {
 		}
 		return undef;
 	    }
-	    
+
 	}elsif ($value =~ /\[env\-\>([\w\-]+)\]/i) {
-	    
+
 	    $value =~ s/\[env\-\>([\w\-]+)\]/$ENV{$1}/;
-	    
+
 	    ## Sender's user/subscriber attributes (if subscriber)
 	}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
-	    
-	    $context->{'user'} ||= &Sympa::List::get_global_user($context->{'sender'});	    
+
+	    $context->{'user'} ||= &Sympa::List::get_global_user($context->{'sender'});
 	    $value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
-	    
+
 	}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
-	    
+
 	    $context->{'user'} ||= &Sympa::List::get_global_user($context->{'sender'});
 	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
-	    
+
 	}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
-	    
+
 	    $context->{'subscriber'} ||= $list->get_list_member($context->{'sender'});
 	    $value =~ s/\[subscriber\-\>([\w\-]+)\]/$context->{'subscriber'}{$1}/;
-	    
+
 	    ## SMTP Header field
 	}elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
 	    my $field_name = $2;
@@ -724,7 +724,7 @@ sub verify {
 		unless (@fields) {
 		    @fields = ('');
 		}
-		
+
 		$value = \@fields;
 	    }else {
 		if ($log_it == 1) {
@@ -732,7 +732,7 @@ sub verify {
 		}
 		return -1 * $negation;
 	    }
-	    
+
 	}elsif ($value =~ /\[msg_body\]/i) {
 	    unless (defined ($context->{'msg'}) && defined ($context->{'msg'}->effective_type() =~ /^text/) && defined ($context->{'msg'}->bodyhandle)) {
 		if ($log_it == 1) {
@@ -740,9 +740,9 @@ sub verify {
 		}
 		return -1 * $negation;
 	    }
-	    
+
 	    $value = $context->{'msg'}->bodyhandle->as_string();
-	    
+
 	}elsif ($value =~ /\[msg_part\-\>body\]/i) {
 	    unless (defined ($context->{'msg'})) {
 		if ($log_it == 1) {
@@ -750,17 +750,17 @@ sub verify {
 		}
 		return -1 * $negation;
 	    }
-	    
+
 	    my @bodies;
 	    ## FIXME:Should be recurcive...
 	    foreach my $part ($context->{'msg'}->parts) {
 		next unless ($part->effective_type() =~ /^text/);
 		next unless (defined $part->bodyhandle);
-		
+
 		push @bodies, $part->bodyhandle->as_string();
 	    }
 	    $value = \@bodies;
-	    
+
 	}elsif ($value =~ /\[msg_part\-\>type\]/i) {
 	    unless (defined ($context->{'msg'})) {
 		if ($log_it == 1) {
@@ -768,7 +768,7 @@ sub verify {
 		}
 		return -1 * $negation;
 	    }
-	    
+
 	    my @types;
 	    foreach my $part ($context->{'msg'}->parts) {
 		push @types, $part->effective_type();
@@ -778,7 +778,7 @@ sub verify {
 	}elsif ($value =~ /\[current_date\]/i) {
 	    my $time = time;
 	    $value =~ s/\[current_date\]/$time/;
-	    
+
 	    ## Quoted string
 	}elsif ($value =~ /\[(\w+)\]/i) {
 
@@ -792,38 +792,38 @@ sub verify {
 		# a condition related to a undefined context variable is always false
 		return -1 * $negation;
 	    }
-	    
+
 	}elsif ($value =~ /^'(.*)'$/ || $value =~ /^"(.*)"$/) {
 	    $value = $1;
 	}
 	push (@args,$value);
-	
+
     }
     # Getting rid of spaces.
     $condition_key =~ s/^\s*//g;
     $condition_key =~ s/\s*$//g;
     # condition that require 0 argument
     if ($condition_key =~ /^(true|all)$/i) {
-	unless ($#args == -1){ 
-	    &Sympa::Log::do_log('err',"error rule syntaxe : incorrect number of argument or incorrect argument syntaxe $condition") ; 
+	unless ($#args == -1){
+	    &Sympa::Log::do_log('err',"error rule syntaxe : incorrect number of argument or incorrect argument syntaxe $condition") ;
 	    return undef ;
 	}
 	# condition that require 1 argument
     }elsif ($condition_key =~ /^(is_listmaster|verify_netmask)$/) {
-	unless ($#args == 0) { 
-	     &Sympa::Log::do_log('err',"error rule syntaxe : incorrect argument number for condition $condition_key") ; 
+	unless ($#args == 0) {
+	     &Sympa::Log::do_log('err',"error rule syntaxe : incorrect argument number for condition $condition_key") ;
 	    return undef ;
 	}
 	# condition that require 1 or 2 args (search : historical reasons)
     }elsif ($condition_key =~ /^search$/o) {
 	unless ($#args == 1 || $#args == 0) {
-	    &Sympa::Log::do_log('err',"error rule syntaxe : Incorrect argument number for condition $condition_key") ; 
+	    &Sympa::Log::do_log('err',"error rule syntaxe : Incorrect argument number for condition $condition_key") ;
 	    return undef ;
 	}
 	# condition that require 2 args
     }elsif ($condition_key =~ /^(is_owner|is_editor|is_subscriber|less_than|match|equal|message|newer|older)$/o) {
 	unless ($#args == 1) {
-	    &Sympa::Log::do_log('err',"error rule syntaxe : incorrect argument number (%d instead of %d) for condition $condition_key", $#args+1, 2) ; 
+	    &Sympa::Log::do_log('err',"error rule syntaxe : incorrect argument number (%d instead of %d) for condition $condition_key", $#args+1, 2) ;
 	    return undef ;
 	}
     }elsif ($condition_key !~ /^customcondition::/o) {
@@ -841,7 +841,7 @@ sub verify {
     }
     ##### condition is_listmaster
     if ($condition_key eq 'is_listmaster') {
-	
+
 	if ($args[0] eq 'nobody') {
 	    if ($log_it == 1) {
 		&Sympa::Log::do_log('info','%s is not listmaster of robot %s (rule %s)',$args[0],$robot,$condition);
@@ -863,7 +863,7 @@ sub verify {
     }
 
     ##### condition verify_netmask
-    if ($condition_key eq 'verify_netmask') {       	
+    if ($condition_key eq 'verify_netmask') {
 
 	## Check that the IP address of the client is available
 	## Means we are in a web context
@@ -874,7 +874,7 @@ sub verify {
 	    return -1; ## always skip this rule because we can't evaluate it
 	}
 	my $block;
-	unless ($block = new2 Net::Netmask ($args[0])) { 
+	unless ($block = new2 Net::Netmask ($args[0])) {
 	    &Sympa::Log::do_log('err', "error rule syntaxe : failed to parse netmask '$args[0]'");
 	    return undef;
 	}
@@ -893,11 +893,11 @@ sub verify {
 
     ##### condition older
     if ($condition_key =~ /^(older|newer)$/) {
-	 
+
 	$negation *= -1 if ($condition_key eq 'newer');
  	my $arg0 = &Sympa::Tools::Time::epoch_conv($args[0]);
  	my $arg1 = &Sympa::Tools::Time::epoch_conv($args[1]);
- 
+
 	&Sympa::Log::do_log('debug3', '%s(%d, %d)', $condition_key, $arg0, $arg1);
  	if ($arg0 <= $arg1 ) {
 	    if ($log_it == 1) {
@@ -930,7 +930,7 @@ sub verify {
 	}else {
 	    $list2 = Sympa::List->new($args[0], $robot);
 	}
-		
+
 	if (! $list2) {
 	    &Sympa::Log::do_log('err',"unable to create list object \"$args[0]\"");
 	    return -1 * $negation ;
@@ -984,7 +984,7 @@ sub verify {
 	    return undef;
 	}
 	my $regexp = $1;
-	
+
 	# Nothing can match an empty regexp.
 	if ($regexp =~ /^$/) {
 	    if ($log_it == 1) {
@@ -1049,7 +1049,7 @@ sub verify {
 	    return -1 * $negation ;
 	}
     }
-    
+
     ## search rule
     if ($condition_key eq 'search') {
 	my $val_search;
@@ -1102,7 +1102,7 @@ sub verify {
     ## custom perl module
     if ($condition_key =~ /^customcondition::(\w+)/o ) {
     	my $condition = $1;
-    	
+
     	my $res = &verify_custom($condition, \@args, $robot, $list);
 	unless (defined $res) {
 	    if ($log_it == 1) {
@@ -1127,7 +1127,7 @@ sub verify {
 	}
 	return $res * $negation ;
     }
-    
+
     ## less_than
     if ($condition_key eq 'less_than') {
 	if (ref($args[0])) {
@@ -1148,7 +1148,7 @@ sub verify {
 		return $negation ;
 	    }
 	}
-	
+
 	if ($log_it == 1) {
 	    &Sympa::Log::do_log('info',"'%s' is NOT less than '%s' (rule %s)",$args[0], $args[1],$condition);
 	}
@@ -1167,30 +1167,30 @@ sub search{
     my $sender = $context->{'sender'};
 
     &Sympa::Log::do_log('debug2', '(%s,%s,%s)', $filter_file, $sender, $robot);
-    
+
     if ($filter_file =~ /\.sql$/) {
- 
+
 	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
-	
+
         my $timeout = 3600;
         my $sql_conf;
-	
+
         unless ($sql_conf = &Sympa::Configuration::load_sql_filter($file)) {
             $list->send_notify_to_owner('named_filter',{'filter' => $filter_file})
                 if (ref($list) && $list->isa('Sympa::List'));
             return undef;
         }
-	
+
         my $statement = $sql_conf->{'sql_named_filter_query'}->{'statement'};
         my $filter = $statement;
 	my @statement_args; ## Useful to later quote parameters
-	
+
 	## Minimalist variable parser ; only parse [x] or [x->y]
 	## should be extended with the code from verify()
 	while ($filter =~ /\[(\w+(\-\>[\w\-]+)?)\]/x) {
 	    my ($full_var) = ($1);
 	    my ($var, $key) = split /\-\>/, $full_var;
-	    
+
 	    unless (defined $context->{$var}) {
 		&Sympa::Log::do_log('err', "Failed to parse variable '%s' in filter '%s'", $var, $file);
 		return undef;
@@ -1215,20 +1215,20 @@ sub search{
 
 #        $statement =~ s/\[sender\]/%s/g;
 #        $filter =~ s/\[sender\]/$sender/g;
- 
+
         if (defined ($persistent_cache{'named_filter'}{$filter_file}{$filter}) &&
             (time <= $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} + $timeout)){ ## Cache has 1hour lifetime
             &Sympa::Log::do_log('notice', 'Using previous SQL named filter cache');
             return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
         }
-	
+
 	require Sympa::Datasource::SQL;
 	my $ds = Sympa::Datasource::SQL->new($sql_conf->{'sql_named_filter_query'});
 	unless (defined $ds && $ds->connect() && $ds->ping) {
             &Sympa::Log::do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
             return undef;
         }
-	
+
 	## Quote parameters
 	foreach (@statement_args) {
 	    $_ = $ds->quote($_);
@@ -1239,11 +1239,11 @@ sub search{
             &Sympa::Log::do_log('debug','%s named filter cancelled', $file);
             return undef;
         }
- 
+
         my $res = $ds->fetch;
         $ds->disconnect();
         &Sympa::Log::do_log('debug2','Result of SQL query : %d = %s', $res->[0], $statement);
- 
+
         if ($res->[0] == 0){
             $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 0;
         }else {
@@ -1251,29 +1251,29 @@ sub search{
        }
         $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
         return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
- 
-     }elsif ($filter_file =~ /\.ldap$/) {	
+
+     }elsif ($filter_file =~ /\.ldap$/) {
 	## Determine full path of the filter file
 	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
-	
+
 	unless ($file) {
 	    &Sympa::Log::do_log('err', 'Could not find search filter %s', $filter_file);
 	    return undef;
-	}   
-	my $timeout = 3600;	
+	}
+	my $timeout = 3600;
 	my %ldap_conf;
-    
+
 	require Sympa::LDAP;
 	return undef unless (%ldap_conf = &Sympa::LDAP::load($file));
 
-	my $filter = $ldap_conf{'filter'};	
+	my $filter = $ldap_conf{'filter'};
 
 	## Minimalist variable parser ; only parse [x] or [x->y]
 	## should be extended with the code from verify()
 	while ($filter =~ /\[(\w+(\-\>[\w\-]+)?)\]/x) {
 	    my ($full_var) = ($1);
 	    my ($var, $key) = split /\-\>/, $full_var;
-	    
+
 	    unless (defined $context->{$var}) {
 		&Sympa::Log::do_log('err', "Failed to parse variable '%s' in filter '%s'", $var, $file);
 		return undef;
@@ -1293,24 +1293,24 @@ sub search{
 	}
 
 #	$filter =~ s/\[sender\]/$sender/g;
-	
+
 	if (defined ($persistent_cache{'named_filter'}{$filter_file}{$filter}) &&
 	    (time <= $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} + $timeout)){ ## Cache has 1hour lifetime
 	    &Sympa::Log::do_log('notice', 'Using previous LDAP named filter cache');
 	    return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 	}
-	
+
 	my $ldap;
 	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
 	require Sympa::Datasource::LDAP;
 	my $ds = Sympa::Datasource::LDAP->new($param);
-	    
+
 	unless (defined $ds && ($ldap = $ds->connect())) {
 	    &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'ldap_host'});
 	    return undef;
 	    }
-	    
-	## The 1.1 OID correponds to DNs ; it prevents the LDAP server from 
+
+	## The 1.1 OID correponds to DNs ; it prevents the LDAP server from
 	## preparing/providing too much data
 	    my $mesg = $ldap->search(base => "$ldap_conf{'suffix'}" ,
 				     filter => "$filter",
@@ -1319,7 +1319,7 @@ sub search{
 	    unless ($mesg) {
 		&Sympa::Log::do_log('err',"Unable to perform LDAP search");
 		return undef;
-	    }    
+	    }
 	    unless ($mesg->code == 0) {
 		&Sympa::Log::do_log('err','Ldap search failed');
 		return undef;
@@ -1327,19 +1327,19 @@ sub search{
 
 	    if ($mesg->count() == 0){
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 0;
-		
+
 	    }else {
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 	    }
-	    
+
 	$ds->disconnect() or &Sympa::Log::do_log('notice','Unbind impossible');
 	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
-	    
+
 	    return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
-    }elsif($filter_file =~ /\.txt$/){ 
+    }elsif($filter_file =~ /\.txt$/){
 	# &Sympa::Log::do_log('info', 'Sympa::List::search: eval %s', $filter_file);
-	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'}); 
+	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 
 	## Raise an error except for blacklist.txt
 	unless (@files) {
@@ -1357,13 +1357,13 @@ sub search{
 	    unless (open FILE, $file) {
 		&Sympa::Log::do_log('err', 'Could not open file %s', $file);
 		return undef;
-	    } 
+	    }
 	    while (<FILE>) {
 		# &Sympa::Log::do_log('debug3', 'Sympa::List::search: eval rule %s', $_);
 		next if (/^\s*$/o || /^[\#\;]/o);
 		my $regexp= $_ ;
 		chomp $regexp;
-		$regexp =~ s/\*/.*/ ; 
+		$regexp =~ s/\*/.*/ ;
 		$regexp = '^'.$regexp.'$';
 		# &Sympa::Log::do_log('debug3', 'Sympa::List::search: eval  %s =~ /%s/i', $sender,$regexp);
 		return 1  if ($sender =~ /$regexp/i);
@@ -1380,7 +1380,7 @@ sub search{
 sub verify_custom {
 	my ($condition, $args_ref, $robot, $list) = @_;
         my $timeout = 3600;
-	
+
 	my $filter = join ('*', @{$args_ref});
 	&Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $condition, $filter, $robot, $list);
         if (defined ($persistent_cache{'named_filter'}{$condition}{$filter}) &&
@@ -1410,7 +1410,7 @@ sub verify_custom {
 	}
 
 	return undef unless defined $res;
-	
+
         $persistent_cache{'named_filter'}{$condition}{$filter}{'value'} = ($res == 1 ? 1 : 0);
         $persistent_cache{'named_filter'}{$condition}{$filter}{'update'} = time;
         return $persistent_cache{'named_filter'}{$condition}{$filter}{'value'};

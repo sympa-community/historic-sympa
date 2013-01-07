@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::Task - Task object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implement a task.
 
-=cut 
+=cut
 
 package Sympa::Task;
 
@@ -85,14 +85,14 @@ sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
     &Sympa::Log::do_log('debug2', 'messagekey = %s', $task_in_spool->{'messagekey'});
-    
-    $task->{'messagekey'} = $task_in_spool->{'messagekey'};    
-    $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};    
-    $task->{'date'} = $task_in_spool->{'task_date'};    
-    $task->{'label'} = $task_in_spool->{'task_label'};    
-    $task->{'model'} = $task_in_spool->{'task_model'};    
-    $task->{'domain'} = $task_in_spool->{'robot'};    
-	
+
+    $task->{'messagekey'} = $task_in_spool->{'messagekey'};
+    $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};
+    $task->{'date'} = $task_in_spool->{'task_date'};
+    $task->{'label'} = $task_in_spool->{'task_label'};
+    $task->{'model'} = $task_in_spool->{'task_model'};
+    $task->{'domain'} = $task_in_spool->{'robot'};
+
     if ($task_in_spool->{'list'}) { # list task
 	$task->{'list_object'} = Sympa::List->new($task_in_spool->{'list'},$task_in_spool->{'robot'});
 	$task->{'domain'} = $task->{'list_object'}{'domain'};
@@ -133,16 +133,16 @@ sub list_tasks {
 
     ## Create Task objects
     foreach my $t (@tasks) {
-	my $task = Sympa::Task->new($t);	
+	my $task = Sympa::Task->new($t);
 	## Maintain list of tasks
 	push @task_list, $task;
-	
+
 	my $list_id = $task->{'id'};
 	my $model = $task->{'model'};
 
 	$task_by_model{$model}{$list_id} = $task;
 	$task_by_list{$list_id}{$model} = $task;
-    }    
+    }
     return 1;
 }
 
@@ -167,7 +167,7 @@ sub get_used_models {
 	    &Sympa::Log::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
 	    return ();
 	}
-	
+
     }else {
 	return keys %task_by_model;
     }
@@ -185,7 +185,7 @@ sub epoch_sort {
     my $date1 = $1;
     $b =~ /(\d+)\..+/;
     my $date2 = $1;
-    
+
     $date1 <=> $date2;
 }
 

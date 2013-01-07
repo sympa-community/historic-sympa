@@ -104,7 +104,7 @@ our @params = (
         'file'     => 'sympa.conf',
         'edit'     => '1',
     },
-    { 
+    {
         name    => 'pidfile_spooler',
         default => Sympa::Constants::PIDDIR . '/spooler.pid',
 	file    => 'sympa.conf',
@@ -512,14 +512,14 @@ our @params = (
     },
     {
         'name'    => 'automatic_list_families',
-        'query'   => 'Defines the name of the family the automatic lists are based on.', 
+        'query'   => 'Defines the name of the family the automatic lists are based on.',
         'file'    => 'sympa.conf',
         'optional' => '1',
         vhost   => '1',
     },
     {
         'name'    => 'automatic_list_prefix',
-        'query'   => 'Defines the prefix allowing to recognize that a list is an automatic list.', 
+        'query'   => 'Defines the prefix allowing to recognize that a list is an automatic list.',
         'file'    => 'sympa.conf',
         'optional' => '1',
     },
@@ -733,9 +733,9 @@ our @params = (
 	##name => 'dkim_header_list',
         ##vhost => '1',
 	##file   => 'sympa.conf',
-        ##query   => 'list of headers to be included ito the message for signature', 
-        ##default => 'from:sender:reply-to:subject:date:message-id:to:cc:list-id:list-help:list-unsubscribe:list-subscribe:list-post:list-owner:list-archive:in-reply-to:references:resent-date:resent-from:resent-sender:resent-to:resent-cc:resent-message-id:mime-version:content-type:content-transfer-encoding:content-id:content-description', 
-    ##}, 
+        ##query   => 'list of headers to be included ito the message for signature',
+        ##default => 'from:sender:reply-to:subject:date:message-id:to:cc:list-id:list-help:list-unsubscribe:list-subscribe:list-post:list-owner:list-archive:in-reply-to:references:resent-date:resent-from:resent-sender:resent-to:resent-cc:resent-message-id:mime-version:content-type:content-transfer-encoding:content-id:content-description',
+    ##},
     { 'title' => 'S/MIME pluggin' },
     {
         'name'     => 'queuemod',

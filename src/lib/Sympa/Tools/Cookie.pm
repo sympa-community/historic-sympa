@@ -46,7 +46,7 @@ use Sympa::Log;
 Sets an HTTP cookie to be sent to a SOAP client
 
 =cut
-    
+
 sub set_cookie_soap {
     my ($session_id,$http_domain,$expire) = @_ ;
     my $cookie;
@@ -55,7 +55,7 @@ sub set_cookie_soap {
     # WARNING : to check the cookie the SOAP services does not gives
     # all the cookie, only it's value so we need ':'
     $value = $session_id;
-  
+
     ## With set-cookie2 max-age of 0 means removing the cookie
     ## Maximum cookie lifetime is the session
     $expire ||= 600; ## 10 minutes
@@ -78,7 +78,7 @@ Returns Message Authentication Check code
 
 sub get_mac {
         my $email = shift ;
-	my $secret = shift ;	
+	my $secret = shift ;
 	&Sympa::Log::do_log('debug3', "get_mac($email, $secret)");
 
 	unless ($secret) {
@@ -114,7 +114,7 @@ sub set_cookie_extern {
     my $emails = join(',',@mails);
 
     $value = sprintf '%s&%s',$emails,&get_mac($emails,$secret);
- 
+
     if ($http_domain eq 'localhost') {
 	$http_domain="";
     }
@@ -161,19 +161,19 @@ Returns user information extracted from the cookie
 sub check_cookie {
     my $http_cookie = shift;
     my $secret = shift;
-    
+
     my $user = &generic_get_cookie($http_cookie, 'sympauser');
 
-    my @values = split /:/, $user; 
+    my @values = split /:/, $user;
     if ($#values >= 1) {
 	my ($email, $mac, $auth) = @values;
 	$auth ||= 'classic';
-	
+
 	## Check the MAC
 	if (&get_mac($email,$secret) eq $mac) {
 	    return ($email, $auth);
 	}
-    }	
+    }
 
     return undef;
 }
@@ -182,16 +182,16 @@ sub check_cookie_extern {
     my ($http_cookie,$secret,$user_email) = @_;
 
     my $extern_value = &generic_get_cookie($http_cookie, 'sympa_altemails');
- 
+
     if ($extern_value =~ /^(\S+)&(\w+)$/) {
 	return undef unless (&get_mac($1,$secret) eq $2) ;
-		
+
 	my %alt_emails ;
 	foreach my $element (split(/,/,$1)){
 	    my @array = split(/:/,$element);
 	    $alt_emails{$array[0]} = $array[1];
 	}
-	      
+
 	my $e = lc($user_email);
 	unless ($alt_emails{$e}) {
 	    return undef;

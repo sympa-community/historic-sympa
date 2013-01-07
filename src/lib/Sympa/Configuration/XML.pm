@@ -48,7 +48,7 @@ Creates a new L<Sympa::Configuration::XML> object.
 
 =over
 
-=item * I<$handle>: file handler on the xml file 
+=item * I<$handle>: file handler on the xml file
 
 =back
 
@@ -62,24 +62,24 @@ sub new {
     my $class = shift;
     my $fh = shift;
     &Sympa::Log::do_log('debug2','()');
-    
+
     my $self = {};
     my $parser = XML::LibXML->new();
     $parser->line_numbers(1);
     my $doc = $parser->parse_fh($fh);
-    
+
     $self->{'root'} = $doc->documentElement();
-    
+
     bless $self, $class;
     return $self;
 }
 
 
 ################################################
-# createHash                                   
+# createHash
 ################################################
-# Create a hash used to create a list. Check 
-#  elements unicity when their are not 
+# Create a hash used to create a list. Check
+#  elements unicity when their are not
 #  declared multiple
 #
 # IN : -$self
@@ -98,7 +98,7 @@ sub createHash {
 	&Sympa::Log::do_log('err',"error in required elements ");
 	return undef;
     }
-    
+
     if ($self->{'root'}->hasChildNodes()) {
 	my $hash = &_getChildren($self->{'root'});
 	unless (defined $hash){
@@ -108,7 +108,7 @@ sub createHash {
 	if (ref($hash) eq "HASH") {
 	    foreach my $k (keys %$hash) {
 		if ($k eq "type") { ## the list template creation without family context
-		    $self->{'type'} = $hash->{'type'};  
+		    $self->{'type'} = $hash->{'type'};
 		}else {
 		    $self->{'config'}{$k} = $hash->{$k};
 		}
@@ -123,7 +123,7 @@ sub createHash {
 
 
 #########################################
-# getHash                                 
+# getHash
 #########################################
 # return the hash structure containing :
 #   type, config
@@ -138,8 +138,8 @@ sub getHash {
     my $hash = {};
 
     $hash->{'type'} = $self->{'type'} if (defined $self->{'type'}); ## the list template creation without family context
-    $hash->{'config'} = $self->{'config'}; 
-  
+    $hash->{'config'} = $self->{'config'};
+
     return $hash;
 }
 
@@ -148,10 +148,10 @@ sub getHash {
 
 
 #################################################################
-# _getRequiredElements                                 
+# _getRequiredElements
 #################################################################
 # get all obligatory elements and store them :
-#  single : listname 
+#  single : listname
 # remove it in order to the later recursive call
 #
 # IN : -$self
@@ -170,14 +170,14 @@ sub _getRequiredElements {
 
 
 ####################################################
-# _getMultipleAndRequiredChild  : no used anymore                          
+# _getMultipleAndRequiredChild  : no used anymore
 ####################################################
 # get all nodes with name $nodeName and check if
 #  they contain the child $childName and store them
 #
 # IN : -$self
-#      -$nodeName 
-#      -$childName 
+#      -$nodeName
+#      -$childName
 # OUT : - the number of node with the name $nodeName
 ####################################################
 sub _getMultipleAndRequiredChild {
@@ -198,13 +198,13 @@ sub _getMultipleAndRequiredChild {
 	    &Sympa::Log::do_log('err','Element "%s" is required for element "%s", line : %s',$childName,$nodeName,$o->line_number());
 	    return undef;
 	}
-	
-	my $hash = &_getChildren($o);	    
+
+	my $hash = &_getChildren($o);
 	unless (defined $hash) {
 	     &Sympa::Log::do_log('err','error on _getChildren(%s) ',$o->nodeName);
 	     return undef;
-	 } 
-	    
+	 }
+
 	push @{$self->{'config'}{$nodeName}},$hash;
 	$self->{'root'}->removeChild($o);
     }
@@ -213,9 +213,9 @@ sub _getMultipleAndRequiredChild {
 
 
 ############################################
-# _getRequiredSingle                                
+# _getRequiredSingle
 ############################################
-# get the node with name $nodeName and check 
+# get the node with name $nodeName and check
 #  its unicity and store it
 #
 # IN : -$self
@@ -228,7 +228,7 @@ sub _getRequiredSingle {
     &Sympa::Log::do_log('debug3','(%s)',$nodeName);
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
- 
+
     unless (&_verify_single_nodes(\@nodes)) {
 	return undef;
     }
@@ -237,36 +237,36 @@ sub _getRequiredSingle {
 	&Sympa::Log::do_log('err','Element "%s" is required for the list ',$nodeName);
 	return undef;
     }
-	
+
     if ($#nodes > 0) {
 	my @error;
 	foreach my $i (@nodes) {
-	    push (@error,$i->line_number());    
+	    push (@error,$i->line_number());
 	}
 	&Sympa::Log::do_log('err','Only one element "%s" is allowed for the list, lines : %s',$nodeName,join(", ",@error));
 	return undef;
     }
 
     my $node = shift(@nodes);
-    
+
     if ($node->getAttribute('multiple')){
 	&Sympa::Log::do_log('err','Attribute multiple=1 not allowed for the element "%s"',$nodeName);
 	return undef;
     }
-    
+
     if ($nodeName eq "type") {## the list template creation without family context
 
 	my $value = $node->textContent;
 	$value =~ s/^\s*//;
 	$value =~ s/\s*$//;
 	$self->{$nodeName} = $value;
-    
+
     }else {
 	my $values = &_getChildren($node);
 	unless (defined $values) {
 	     &Sympa::Log::do_log('err','error on _getChildren(%s) ',$node->nodeName);
 	     return undef;
-	 } 
+	 }
 
 	if (ref($values) eq "HASH") {
 	    foreach my $k (keys %$values) {
@@ -274,26 +274,26 @@ sub _getRequiredSingle {
 	    }
 	}else {
 	    $self->{'config'}{$nodeName} = $values;
-	}   
-    }	
-    
+	}
+    }
+
     $self->{'root'}->removeChild($node);
     return 1;
 }
 
 
 ##############################################
-# _getChildren                                   
+# _getChildren
 ##############################################
-# get $node's children (elements, text, 
+# get $node's children (elements, text,
 # cdata section) and their values
 #  it is a recursive call
-# 
-# IN :  -$node 
-# OUT : -$hash : hash of children and 
+#
+# IN :  -$node
+# OUT : -$hash : hash of children and
 #         their contents if elements
 #        or
-#        $string : value of cdata section 
+#        $string : value of cdata section
 #         or of text content
 ##############################################
 sub _getChildren {
@@ -304,7 +304,7 @@ sub _getChildren {
     my $hash = {};
     my $string = "";
     my $return = "empty"; # "hash", "string", "empty"
-    
+
     my $error = 0; # children not homogeneous
     my $multiple_nodes = {};
 
@@ -316,7 +316,7 @@ sub _getChildren {
 
     foreach my $child (@nodeList) {
 	my $type = $child->nodeType;
-	my $childName = $child->nodeName; 
+	my $childName = $child->nodeName;
 
         # ELEMENT_NODE
 	if ($type == 1) {
@@ -324,13 +324,13 @@ sub _getChildren {
 	    unless (defined $values) {
 		&Sympa::Log::do_log('err','error on _getChildren(%s)',$childName);
 		return undef;
-	    } 
-	    
-	    ## multiple 
+	    }
+
+	    ## multiple
 	    if ($child->getAttribute('multiple')){
 		push @{$multiple_nodes->{$childName}},$values;
 
-	    ## single	
+	    ## single
 	    }else {
 		if (ref($values) eq "HASH") {
 		    foreach my $k (keys %$values) {
@@ -340,12 +340,12 @@ sub _getChildren {
 		    $hash->{$childName} = $values;
 		}
 	    }
-	    
+
 	    if ($return eq "string") {
 		$error = 1;
 	    }
 	    $return = "hash";
-	    
+
 	# TEXT_NODE
 	}elsif ($type == 3) {
 	    my $value = Encode::encode_utf8($child->nodeValue);
@@ -360,14 +360,14 @@ sub _getChildren {
 
 
 	# CDATA_SECTION_NODE
-	}elsif ($type == 4) { 
+	}elsif ($type == 4) {
 	    $string = $string . Encode::encode_utf8($child->nodeValue);
 	    if ($return eq "hash") {
 		$error = 1;
 	    }
 	    $return = "string";
 	}
-	
+
 	## error
 	if ($error) {
 	    &Sympa::Log::do_log('err','(%s): the children are not homogeneous, line %s',$node->nodeName,$node->line_number());
@@ -393,19 +393,19 @@ sub _getChildren {
 
 
 ##################################################
-# _verify_single_nodes                        
+# _verify_single_nodes
 ##################################################
-# check the uniqueness(in a node list) for a node not 
+# check the uniqueness(in a node list) for a node not
 #  declared  multiple.
-# (no attribute multiple = "1") 
-# 
+# (no attribute multiple = "1")
+#
 # IN :  -$nodeList : ref on the array of nodes
 # OUT : -1 or undef
 ##################################################
 sub _verify_single_nodes {
     my $nodeList = shift;
     &Sympa::Log::do_log('debug3','()');
-    
+
     my $error = 0;
     my %error_nodes;
     my $nodeLines = &_find_lines($nodeList);
@@ -415,7 +415,7 @@ sub _verify_single_nodes {
 	    unless ($node->getAttribute("multiple")) {
 		my $name = $node->nodeName;
 		if ($#{$nodeLines->{$name}} > 0) {
-		    $error_nodes{$name} = 1; 
+		    $error_nodes{$name} = 1;
 		}
 	    }
 	}
@@ -434,11 +434,11 @@ sub _verify_single_nodes {
 
 
 ###############################################
-# _find_lines                             
+# _find_lines
 ###############################################
-# make a hash : keys are node names, values 
-#  are arrays of their line occurrences 
-#  
+# make a hash : keys are node names, values
+#  are arrays of their line occurrences
+#
 # IN  : - $nodeList : ref on a array of nodes
 # OUT : - $hash : ref on the hash defined
 ###############################################
@@ -455,6 +455,6 @@ sub _find_lines {
     return $hash;
 }
 
- 
+
 ######################################################
 1;

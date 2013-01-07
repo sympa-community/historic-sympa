@@ -2,15 +2,15 @@
 # vim:ft=perl:noet:sw=8:wrap:textwidth=78
 # $Id$
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::Robot - Virtual robot object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implement a virtual robot.
 
-=cut 
+=cut
 
 package Sympa::Robot;
 
@@ -45,7 +45,7 @@ sub new {
 
     my $robot = {'name' => $name};
     &Sympa::Log::do_log('debug2', '');
-    
+
     unless (defined $name && $Sympa::Configuration::Conf{'robots'}{$name}) {
 	&Sympa::Log::do_log('err',"Unknown robot '$name'");
 	return undef;

@@ -56,10 +56,10 @@ use Sympa::Tools::Password;
 ## Cookie expiration periods with corresponding entry in NLS
 %cookie_period = (0     => {'gettext_id' => "session"},
 		  10    => {'gettext_id' => "10 minutes"},
-		  30    => {'gettext_id' => "30 minutes"}, 
+		  30    => {'gettext_id' => "30 minutes"},
 		  60    => {'gettext_id' => "1 hour"},
 		  360   => {'gettext_id' => "6 hours"},
-		  1440  => {'gettext_id' => "1 day"}, 
+		  1440  => {'gettext_id' => "1 day"},
 		  10800 => {'gettext_id' => "1 week"},
 		  43200 => {'gettext_id' => "30 days"});
 
@@ -168,7 +168,7 @@ sub load_config {
 	&Sympa::Log::do_log('err',"unable to open $file");
 	return undef;
     }
-    
+
     while (<FILE>) {
 	next if /^\s*\#/;
 
@@ -185,7 +185,7 @@ sub load_config {
 	}
 	next;
     }
-    
+
     close FILE;
 
     ## Check binaries and directories
@@ -206,17 +206,17 @@ sub load_config {
 
 sub init_passwd {
     my ($email, $data) = @_;
-    
+
     my ($passwd, $user);
-    
+
     if (&Sympa::List::is_global_user($email)) {
 	$user = &Sympa::List::get_global_user($email);
-	
+
 	$passwd = $user->{'password'};
-	
+
 	unless ($passwd) {
 	    $passwd = &Sympa::Tools::Password::new_passwd();
-	    
+
 	    unless ( &Sympa::List::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
@@ -236,21 +236,21 @@ sub init_passwd {
 	    return undef;
 	}
     }
-    
+
     return 1;
 }
 
 sub get_my_url {
-    
-		 
+
+
     my $return_url;
-    
+
     ## Mod_ssl sets SSL_PROTOCOL ; apache-ssl sets SSL_PROTOCOL_VERSION
     if ($ENV{'HTTPS'} eq 'on') {
 	$return_url = 'https';
     }else{
-	$return_url = 'http';	
-    }	     
+	$return_url = 'http';
+    }
 
     $return_url .= '://'.&main::get_header_field('HTTP_HOST');
     $return_url .= ':'.$ENV{'SERVER_PORT'} unless (($ENV{'SERVER_PORT'} eq '80')||($ENV{'SERVER_PORT'} eq '443'));
@@ -266,8 +266,8 @@ sub upload_file_to_server {
     unless ($fh = $param->{'query'}->upload($param->{'file_field'})) {
 	&Sympa::Log::do_log('debug',"Cannot upload file from field $param->{'file_field'}");
 	return undef;
-    }	
- 
+    }
+
     unless (open FILE, ">:bytes", $param->{'destination'}) {
 	&Sympa::Log::do_log('debug',"Cannot open file $param->{'destination'} : $ERRNO");
 	return undef;

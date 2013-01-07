@@ -72,7 +72,7 @@ sub get_limit_clause {
 			$param->{'rows_count'},
 			$param->{'offset'};
 	} else {
-		return sprintf "LIMIT %s", 
+		return sprintf "LIMIT %s",
 			$param->{'rows_count'};
 	}
 }

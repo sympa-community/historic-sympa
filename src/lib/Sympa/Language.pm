@@ -48,7 +48,7 @@ BEGIN {
 }
 
 my %msghash;     # Hash organization is like Messages file: File>>Sections>>Messages
-my %set_comment; #sets-of-messages comment   
+my %set_comment; #sets-of-messages comment
 
 ## The lang is the NLS catalogue name ; locale is the locale preference
 ## Ex: lang = fr ; locale = fr_FR
@@ -113,12 +113,12 @@ my %template2textdomain = ('help_admin.tt2' => 'web_help',
 			   'help.tt2' => 'web_help',
 			   'help_user_options.tt2' => 'web_help',
 			   'help_user.tt2' => 'web_help',
-			   );			   
+			   );
 
 sub GetSupportedLanguages {
     my $robot = shift;
     my @lang_list;
-    
+
     foreach my $l (split /,/,&Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
 	push @lang_list, $lang2locale{$l}||$l;
     }
@@ -168,7 +168,7 @@ sub SetLang {
 	## Get the NLS equivalent for the lang
 	$lang = &Locale2Lang($locale);
     }
-   
+
     ## Set Locale::Messages context
     my $locale_dashless = $locale.'.utf-8';
     $locale_dashless =~ s/-//g;
@@ -183,14 +183,14 @@ sub SetLang {
 	    if (&POSIX::setlocale($type, $try)) {
 		$success = 1;
 		last;
-	    }	
+	    }
 	}
 	unless ($success) {
 	    &Sympa::Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
 	    return undef;
 	}
     }
-    
+
     $ENV{'LANGUAGE'}=$locale;
     ## Define what catalogs are used
     &Locale::Messages::textdomain("sympa");
@@ -217,7 +217,7 @@ sub GetLangName {
     &SetLang($lang);
     my $name = gettext('_language_');
     &SetLang($saved_lang);
-    
+
     return $name;
 }
 
@@ -239,7 +239,7 @@ sub Locale2Lang {
     if (defined $language_equiv{$locale}) {
 	$lang = $language_equiv{$locale};
     }else {
-	## remove the country part 
+	## remove the country part
 	$lang = $locale;
 	$lang =~ s/_\w{2}$//;
     }
@@ -261,7 +261,7 @@ sub maketext {
 
     my $translation;
     my $textdomain = $template2textdomain{$template_file};
-    
+
     if ($textdomain) {
 	$translation = &sympa_dgettext ($textdomain, $msg);
     }else {
@@ -287,7 +287,7 @@ sub sympa_dgettext {
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
 	return '';
-	
+
 	## return meta information on the catalogue (language, charset, encoding,...)
     }elsif ($param[0] =~ '^_(\w+)_$') {
 	my $var = $1;
@@ -324,7 +324,7 @@ sub gettext {
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
 	return '';
-	
+
 	## return meta information on the catalogue (language, charset, encoding,...)
     }elsif ($param[0] =~ '^_(\w+)_$') {
 	my $var = $1;

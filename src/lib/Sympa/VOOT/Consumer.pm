@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::VOOT::Consumer - VOOT consumer object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implements the client side of VOOT workflow.
 
-=cut 
+=cut
 
 package Sympa::VOOT::Consumer;
 
@@ -58,26 +58,26 @@ List providers.
 
 An hashref.
 
-=cut 
+=cut
 
 sub getProviders {
 	my ($class, $file) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $file);
-	
+
 	my $list = {};
-	
+
 	return $list unless (-f $file);
-	
+
 	open(my $fh, '<', $file) or return $list;
 	my @ctn = <$fh>;
 	chomp @ctn;
 	close $fh;
-	
+
 	my $conf = decode_json(join('', @ctn)); # Returns array ref
 	foreach my $item (@$conf) {
 		$list->{$item->{'voot.ProviderID'}} = $item->{'voot.ProviderID'};
 	}
-	
+
 	return $list;
 }
 
@@ -87,7 +87,7 @@ Creates a new L<Sympa::VOOT::Consumer> object.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<user>: a user email
 
@@ -95,28 +95,28 @@ Creates a new L<Sympa::VOOT::Consumer> object.
 
 =item * I<config>: the VOOT configuration file
 
-=back 
+=back
 
 =head3 Return value
 
 A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub new {
 	my $pkg = shift;
 	my %param = @_;
-	
+
 	my $consumer;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $param{'user'}, $param{'provider'});
-	
+
 	# Get oauth consumer and enpoints from provider_id
 	$consumer->{'conf'} = &_get_config_for($param{'provider'}, $param{'config'});
 	return undef unless(defined $consumer->{'conf'});
-	
+
 	$consumer->{'user'} = $param{'user'};
 	$consumer->{'provider'} = $param{'provider'};
-	
+
 	$consumer->{'oauth_consumer'} = Sympa::OAuth::Consumer->new(
 		user => $param{'user'},
 		provider => 'voot:'.$param{'provider'},
@@ -127,7 +127,7 @@ sub new {
         authorize_path => $consumer->{'conf'}{'oauth.AuthorizationURL'},
         here_path => $consumer->{'here_path'}
 	);
-	
+
 	return bless $consumer, $pkg;
 }
 
@@ -154,15 +154,15 @@ None.
 
 An hashref containing groups definitions, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub isMemberOf {
 	my $self = shift;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'provider'});
-	
+
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
 	return undef unless(defined $data);
-	
+
 	return &_get_groups(decode_json($data));
 }
 
@@ -183,26 +183,26 @@ Get members of a group.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<group>: the group ID
 
-=back 
+=back
 
 =head3 Return value
 
 An hashref containing members definitions, or I<undef> if something went wrong.
 
-=cut 
+=cut
 
 sub getGroupMembers {
 	my $self = shift;
 	my %param = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $param{'group'});
-	
+
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$param{'group'});
 	return undef unless(defined $data);
-	
+
 	return &_get_members(decode_json($data));
 }
 
@@ -213,7 +213,7 @@ sub getGroupMembers {
 sub _get_groups {
 	my $data = shift;
 	my $groups = {};
-	
+
 	foreach my $grp (@{$data->{'entry'}}) {
 		$groups->{$grp->{'id'}} = {
 			name => $grp->{'name'} || $grp->{'id'},
@@ -221,7 +221,7 @@ sub _get_groups {
 			voot_membership_role => (defined $grp->{'voot_membership_role'}) ? $grp->{'voot_membership_role'} : undef
 		};
 	}
-	
+
 	return $groups;
 }
 
@@ -233,7 +233,7 @@ sub _get_members {
 	my $data = shift;
 	my $members = [];
 	my $i;
-	
+
 	foreach my $mmb (@{$data->{'entry'}}) {
 		next unless(defined $mmb->{'emails'}); # Skip members without email data that are useless for Sympa
 		my $member = {
@@ -250,7 +250,7 @@ sub _get_members {
 		}
 		push(@$members, $member);
 	}
-	
+
 	return $members;
 }
 
@@ -262,31 +262,31 @@ sub _get_config_for {
 	my $provider = shift;
 	my $file = shift;
 	&Sympa::Log::do_log('debug2', '(%s)', $provider);
-	
+
 	return undef unless (-f $file);
-	
+
 	open(my $fh, '<', $file) or return undef;
 	my @ctn = <$fh>;
 	chomp @ctn;
 	close $fh;
-	
+
 	my $conf = decode_json(join('', @ctn)); # Returns array ref
 	foreach my $item (@$conf) {
 		next unless($item->{'voot.ProviderID'} eq $provider);
 		return $item;
 	}
-	
+
 	return undef;
 }
 
-=head1 AUTHORS 
+=head1 AUTHORS
 
-=over 
+=over
 
-=item * Etienne Meleard <etienne.meleard AT renater.fr> 
+=item * Etienne Meleard <etienne.meleard AT renater.fr>
 
-=back 
+=back
 
-=cut 
+=cut
 
 1;

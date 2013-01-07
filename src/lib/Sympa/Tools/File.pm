@@ -110,7 +110,7 @@ Delete a directory and its content.
 sub del_dir {
     my $dir = shift;
     &Sympa::Log::do_log('debug','%s',$dir);
-    
+
     if(opendir DIR, $dir){
 	for (readdir DIR) {
 	    next if /^\.{1,2}$/;
@@ -127,7 +127,7 @@ sub del_dir {
 
 =head2 mk_parent_dir($file)
 
-To be used before creating a file in a directory that may not exist already. 
+To be used before creating a file in a directory that may not exist already.
 
 =cut
 
@@ -196,10 +196,10 @@ sub shift_file {
 	&Sympa::Log::do_log('info', "unknown file $file");
 	return undef;
     }
-    
+
     my @date = localtime (time);
     my $file_extention = POSIX::strftime("%Y:%m:%d:%H:%M:%S", @date);
-    
+
     unless (rename ($file,$file.'.'.$file_extention)) {
 	&Sympa::Log::do_log('err', "Cannot rename file $file to $file.$file_extention" );
 	return undef;
@@ -216,7 +216,7 @@ sub shift_file {
 	foreach my $oldfile (reverse (sort (grep (/^$file\./,readdir(DIR))))) {
 	    $i ++;
 	    if ($count lt $i) {
-		if (unlink ($oldfile)) { 
+		if (unlink ($oldfile)) {
 		    &Sympa::Log::do_log('info', "unlink $oldfile");
 		}else{
 		    &Sympa::Log::do_log('info', "unable to unlink $oldfile");
@@ -242,7 +242,7 @@ sub find_file {
 	    return "$d/$filename";
 	}
     }
-    
+
     return undef;
 }
 
@@ -286,13 +286,13 @@ sub list_dir {
 
 =head2 get_dir_size($dir)
 
-Get the total size for the given directory. 
+Get the total size for the given directory.
 
 =cut
 
 sub get_dir_size {
     my $dir =shift;
-    
+
     my $size=0;
 
     if (opendir(DIR, $dir)) {
@@ -314,14 +314,14 @@ sub get_dir_size {
 =head2 remove_dir(@directories)
 
 Function for Removing a non-empty directory.
-It takes a variale number of arguments : 
+It takes a variale number of arguments :
 it can be a list of directory
 or few direcoty paths
 
 =cut
 
 sub remove_dir {
-    
+
     &Sympa::Log::do_log('debug2','()');
 
     my $callback = sub  {
@@ -337,7 +337,7 @@ sub remove_dir {
 	    }
 	}
     };
-    
+
     foreach my $current_dir (@_){
 	finddepth({wanted => $callback, no_chdir => 1},$current_dir);
     }

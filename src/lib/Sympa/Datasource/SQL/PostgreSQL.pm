@@ -57,7 +57,7 @@ sub get_substring_clause {
 	my ($self, $param) = @_;
 
 	return sprintf
-		"SUBSTRING(%s FROM position('%s' IN %s) FOR %s)", 
+		"SUBSTRING(%s FROM position('%s' IN %s) FOR %s)",
 		$param->{'source_field'},
 		$param->{'separator'},
 		$param->{'source_field'},

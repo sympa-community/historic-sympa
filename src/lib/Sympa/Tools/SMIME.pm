@@ -86,7 +86,7 @@ sub smime_sign {
 
     my $self = Sympa::List->new($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
-    my $temporary_file = $tmpdir."/".$self->get_list_id().".".$PID ;    
+    my $temporary_file = $tmpdir."/".$self->get_list_id().".".$PID ;
     my $temporary_pwd = $tmpdir.'/pass.'.$PID;
 
     my ($signed_msg,$pass_option );
@@ -99,7 +99,7 @@ sub smime_sign {
          next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
          $dup_msg->head->delete($field);
     }
-	    
+
 
     ## dump the incomming message.
     if (!open(MSGDUMP,"> $temporary_file")) {
@@ -114,7 +114,7 @@ sub smime_sign {
 	    &Sympa::Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    &Sympa::Log::do_log('debug', "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file");    
+    &Sympa::Log::do_log('debug', "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file");
     unless (open (NEWMSG, "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
     	&Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
@@ -140,16 +140,16 @@ sub smime_sign {
     unless (close NEWMSG){
 	&Sympa::Log::do_log('notice', 'Cannot sign message (close pipe)');
 	return undef;
-    } 
+    }
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
 	&Sympa::Log::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
-	return undef;	
+	return undef;
     }
 
     unlink ($temporary_file) unless ($main::options{'debug'}) ;
-    
+
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
@@ -163,7 +163,7 @@ sub smime_sign {
 	$signed_msg->head->add($tag, $val)
 	    unless $predefined_headers->{lc $tag};
     }
-    
+
     my $messageasstring = $signed_msg->as_string ;
 
     return $signed_msg;
@@ -207,7 +207,7 @@ sub smime_sign_check {
     &Sympa::Log::do_log('debug', '(message, %s, %s)', $sender, $message->{'filename'});
 
     my $is_signed = {};
-    $is_signed->{'body'} = undef;   
+    $is_signed->{'body'} = undef;
     $is_signed->{'subject'} = undef;
 
     my $verify ;
@@ -226,7 +226,7 @@ sub smime_sign_check {
 	&Sympa::Log::do_log('err', "unable to verify smime signature from $sender $verify");
 	return undef ;
     }
-    
+
     if ($message->{'smime_crypted'}){
 	$message->{'msg'}->head->print(\*MSGDUMP);
 	print MSGDUMP "\n";
@@ -250,7 +250,7 @@ sub smime_sign_check {
 	return undef ;
     }
     ## second step is the message signer match the sender
-    ## a better analyse should be performed to extract the signer email. 
+    ## a better analyse should be performed to extract the signer email.
     my $signer = smime_parse_cert({tmpdir => $tmpdir, file => $temporary_file, openssl => $openssl});
 
     unless ($signer->{'email'}{lc($sender)}) {
@@ -290,7 +290,7 @@ sub smime_sign_check {
 	    last if $extracted;
 	}
     }
-    
+
     unless($extracted) {
 	&Sympa::Log::do_log('err', "No application/x-pkcs7-* parts found");
 	return undef;
@@ -300,7 +300,7 @@ sub smime_sign_check {
 	&Sympa::Log::do_log('err', "Can't open cert bundle $certbundle: $ERRNO");
 	return undef;
     }
-    
+
     ## read it in, split on "-----END CERTIFICATE-----"
     my $cert = '';
     my(%certs);
@@ -324,7 +324,7 @@ sub smime_sign_check {
 		&Sympa::Log::do_log('debug', "No email in cert for $parsed->{subject}, skipping");
 		next;
 	    }
-	    
+
 	    &Sympa::Log::do_log('debug2', "Found cert for <%s>", join(',', keys %{$parsed->{'email'}}));
 	    if ($parsed->{'email'}{lc($sender)}) {
 		if ($parsed->{'purpose'}{'sign'} && $parsed->{'purpose'}{'enc'}) {
@@ -374,7 +374,7 @@ sub smime_sign_check {
     }
 
     $is_signed->{'body'} = 'smime';
-    
+
     # futur version should check if the subject was part of the SMIME signature.
     $is_signed->{'subject'} = $signer;
     return $is_signed;
@@ -418,7 +418,7 @@ sub smime_encrypt {
     my $usercert;
     my $dummy;
     my $cryptedmsg;
-    my $encrypted_body;    
+    my $encrypted_body;
 
     &Sympa::Log::do_log('debug2', '(%s, %s', $email, $list);
     if ($list eq 'list') {
@@ -475,12 +475,12 @@ sub smime_encrypt {
 	open (NEWMSG, $temporary_file);
         my $in_header = 1 ;
 	while (<NEWMSG>) {
-	   if ( !$in_header)  { 
-	     $encrypted_body .= $_;       
+	   if ( !$in_header)  {
+	     $encrypted_body .= $_;
 	   }else {
-	     $in_header = 0 if (/^$/); 
+	     $in_header = 0 if (/^$/);
 	   }
-	}						    
+	}
 	close NEWMSG;
 
 unlink ($temporary_file) unless ($main::options{'debug'}) ;
@@ -489,13 +489,13 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
         ## crypted message, add this header in the crypted form.
 	my $predefined_headers ;
 	foreach my $header ($cryptedmsg->head->tags) {
-	    $predefined_headers->{lc $header} = 1 
+	    $predefined_headers->{lc $header} = 1
 	        if ($cryptedmsg->head->get($header)) ;
 	}
 	foreach my $header (split /\n(?![ \t])/, $msg_header->as_string) {
 	    next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	    my ($tag, $val) = ($1, $2);
-	    $cryptedmsg->head->add($tag, $val) 
+	    $cryptedmsg->head->add($tag, $val)
 	        unless $predefined_headers->{lc $tag};
 	}
 
@@ -503,7 +503,7 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 	&Sympa::Log::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$email,$usercert);
 	return undef;
     }
-        
+
     return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
 }
 
@@ -564,11 +564,11 @@ sub smime_decrypt {
     }
     $msg->print(\*MSGDUMP);
     close(MSGDUMP);
-    
+
     my ($decryptedmsg, $pass_option, $msg_as_string);
     if ($key_passwd ne '') {
 	# if password is define in sympa.conf pass the password to OpenSSL using
-	$pass_option = "-passin file:$temporary_pwd";	
+	$pass_option = "-passin file:$temporary_pwd";
     }
 
     ## try all keys/certs until one decrypts.
@@ -594,20 +594,20 @@ sub smime_decrypt {
 	    close FIFO;
 	    unlink ($temporary_pwd);
 	}
-	
+
 	while (<NEWMSG>) {
 	    $msg_as_string .= $_;
 	}
 	close NEWMSG ;
 	my $status = $CHILD_ERROR/256;
-	
+
 	unless ($status == 0) {
 	    &Sympa::Log::do_log('notice', 'Unable to decrypt S/MIME message : %s', $openssl_errors{$status});
 	    next;
 	}
-	
+
 	unlink ($temporary_file) unless ($main::options{'debug'}) ;
-	
+
 	my $parser = MIME::Parser->new;
 	$parser->output_to_core(1);
 	unless ($decryptedmsg = $parser->parse_data($msg_as_string)) {
@@ -615,7 +615,7 @@ sub smime_decrypt {
 	    last;
 	}
     }
-	
+
     unless (defined $decryptedmsg) {
       &Sympa::Log::do_log('err', 'Message could not be decrypted');
       return undef;
@@ -626,7 +626,7 @@ sub smime_decrypt {
     my $line;
     do {$line = shift(@msg_tab)} while ($line !~ /^\s*$/);
     $msg_as_string = join("\n", @msg_tab);
-    
+
     ## foreach header defined in the incomming message but undefined in the
     ## decrypted message, add this header in the decrypted form.
     my $predefined_headers ;
@@ -836,13 +836,13 @@ sub smime_parse_cert {
 	  }elsif ($purpose_section) {
 		if (/^S\/MIME signing : (\S+)/) {
 			$res{purpose}->{sign} = ($1 eq 'Yes');
-	  
+
 		}elsif (/^S\/MIME encryption : (\S+)/) {
 			$res{purpose}->{enc} = ($1 eq 'Yes');
 		}
       }
     }
-    
+
     ## OK, so there's CAs which put the email in the subjectAlternateName only
     ## and ones that put it in the DN only...
     if(!$res{email} && ($res{subject} =~ /\/email(address)?=([^\/]+)/)) {

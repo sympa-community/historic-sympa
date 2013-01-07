@@ -65,7 +65,7 @@ sub get_https{
 	    &Sympa::Log::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
 	    return undef;
 	}
-	
+
         eval {
             require LWP::UserAgent;
         };
@@ -88,7 +88,7 @@ sub get_https{
 					  Proto => 'tcp',
 					  Timeout => '5'
 					  );
-	
+
 	unless ($ssl_socket) {
 	    &Sympa::Log::do_log ('err','error %s unable to connect https://%s:%s/',&IO::Socket::SSL::errstr,$host,$port);
 	    return undef;
@@ -114,12 +114,12 @@ sub get_https{
 	my @result;
 	while (my $line = $ssl_socket->getline) {
 	    push  @result, $line;
-	} 
-	
-	$ssl_socket->close(SSL_no_shutdown => 1);	
+	}
+
+	$ssl_socket->close(SSL_no_shutdown => 1);
 	&Sympa::Log::do_log ('debug',"disconnected");
 
-	return (@result);	
+	return (@result);
 }
 
 1;

@@ -112,7 +112,7 @@ sub load {
 	if ($current_line =~ /^(\S+)\s+(.+)$/io) {
 	    my($keyword, $value) = ($1, $2);
 	    $value =~ s/\s*$//;
-	
+
 	    $o{$keyword} = [ $value, $line_num ];
 	}else {
 #	    printf STDERR Msg(1, 3, "Malformed line %d: %s"), $config, $_;
@@ -125,7 +125,7 @@ sub load {
     ## Check if we have unknown values.
     foreach $i (sort keys %o) {
 	$Ldap{$i} = $o{$i}[0] || $Default_Conf{$i};
-	
+
 	unless ($valid_options{$i}) {
 	    &Sympa::Log::do_log('err',"Line %d, unknown field: %s \n", $o{$i}[1], $i);
 	    $config_err++;

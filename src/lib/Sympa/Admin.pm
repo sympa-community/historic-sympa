@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::Admin - Administrative functions
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This module provides creation and edition functions.
 
-=cut 
+=cut
 
 package Sympa::Admin;
 
@@ -58,7 +58,7 @@ Creates a list, without family concept.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<$param>: an hashref containing configuration parameters, as the
 following keys:
@@ -82,13 +82,13 @@ following keys:
 =item * I<$origin>: the source of the command : web, soap or command_line (no
 longer used)
 
-=back 
+=back
 
 =head3 Return value
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
-=over 
+=over
 
 =item * I<list>: the just created L<Sympa::List> object
 
@@ -96,13 +96,13 @@ An hashref with the following keys, or I<undef> if something went wrong:
 
 =back
 
-=cut 
+=cut
 
 sub create_list_old{
     my ($param,$template,$robot,$origin, $user_mail) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s)',$param->{'listname'},$robot,$origin);
 
-     ## obligatory list parameters 
+     ## obligatory list parameters
     foreach my $arg ('listname','subject') {
 	unless ($param->{$arg}) {
 	    &Sympa::Log::do_log('err','missing list param %s', $arg);
@@ -126,7 +126,7 @@ sub create_list_old{
 	&Sympa::Log::do_log('err','missing param "robot"', $robot);
 	return undef;
     }
-   
+
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
@@ -142,7 +142,7 @@ sub create_list_old{
 	    &Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	    return undef;
 	}
-    }    
+    }
 
     if ($param->{'listname'} eq &Sympa::Configuration::get_robot_conf($robot,'email')) {
 	&do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
@@ -152,14 +152,14 @@ sub create_list_old{
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
     unless (defined $res) {
-	&Sympa::Log::do_log('err', "can't check list %.128s on %s", 
+	&Sympa::Log::do_log('err', "can't check list %.128s on %s",
 		$param->{'listname'}, $robot);
 	return undef;
     }
-    
+
     ## Check this listname doesn't exist already.
     if( $res || Sympa::List->new($param->{'listname'}, $robot, {'just_try' => 1})) {
-	&Sympa::Log::do_log('err', 'could not create already existing list %s on %s for ', 
+	&Sympa::Log::do_log('err', 'could not create already existing list %s on %s for ',
 		$param->{'listname'}, $robot);
 	foreach my $o (@{$param->{'owner'}}){
 	    &Sympa::Log::do_log('err',$o->{'email'});
@@ -184,7 +184,7 @@ sub create_list_old{
 	     unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
 		 &Sympa::Log::do_log('err', 'unable to create %s/%s : %s', $Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
 		 return undef;
-	     }    
+	     }
 	 }
 	 $list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
      }else {
@@ -195,22 +195,22 @@ sub create_list_old{
      unless (mkdir ($list_dir,0777)) {
 	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
 	 return undef;
-     }    
-    
+     }
+
     ## Check topics
     if ($param->{'topics'}){
 	unless (&check_topics($param->{'topics'},$robot)){
 	    &Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
-      
+
     ## Creation of the config file
     my $host = &Sympa::Configuration::get_robot_conf($robot, 'host');
     $param->{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $param->{'creation'}{'date_epoch'} = time;
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
-       
+
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     ## Lock config before openning the config file
@@ -222,7 +222,7 @@ sub create_list_old{
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;
     }
-    $lock->set_timeout(5); 
+    $lock->set_timeout(5);
     unless ($lock->lock('write')) {
 	return undef;
     }
@@ -239,11 +239,11 @@ sub create_list_old{
     print CONFIG $config;
 
     close CONFIG;
-    
+
     ## Unlock config file
     $lock->unlock();
 
-    ## Creation of the info file 
+    ## Creation of the info file
     # remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
     $param->{'description'} =~ s/\r\n|\r/\n/g;
 
@@ -256,7 +256,7 @@ sub create_list_old{
 	print INFO $param->{'description'};
     }
     close INFO;
-    
+
     ## Create list object
     my $list;
     unless ($list = Sympa::List->new($param->{'listname'}, $robot)) {
@@ -289,7 +289,7 @@ sub create_list_old{
 	&Sympa::Log::do_log('notice', "Synchronizing list members...");
 	$list->sync_include();
     }
-    
+
     $list->save_config;
    return $return;
 }
@@ -300,7 +300,7 @@ Create a list, with family concept.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<$param>: an hashref containing configuration parameters, as the
 following keys:
@@ -324,13 +324,13 @@ following keys:
 =item * I<$abort_on_error>:  won't create the list directory on tt2 process
 error (usefull for dynamic lists that throw exceptions)
 
-=back 
+=back
 
 =head3 Return value
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
-=over 
+=over
 
 =item * I<list>: the just created L<Sympa::List> object
 
@@ -338,13 +338,13 @@ An hashref with the following keys, or I<undef> if something went wrong:
 
 =back
 
-=cut 
+=cut
 
 sub create_list{
     my ($param,$family,$robot, $abort_on_error) = @_;
     &Sympa::Log::do_log('info', '(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
-    ## mandatory list parameters 
+    ## mandatory list parameters
     foreach my $arg ('listname') {
 	unless ($param->{$arg}) {
 	    &Sympa::Log::do_log('err','missing list param %s', $arg);
@@ -362,7 +362,7 @@ sub create_list{
 	&Sympa::Log::do_log('err','missing param "robot"', $robot);
 	return undef;
     }
-   
+
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
@@ -378,7 +378,7 @@ sub create_list{
 	    &Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	    return undef;
 	}
-    }    
+    }
     if ($param->{'listname'} eq &Sympa::Configuration::get_robot_conf($robot,'email')) {
 	&do_log('err','incorrect listname %s matches one of service aliases', $param->{'listname'});
 	return undef;
@@ -387,7 +387,7 @@ sub create_list{
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
     unless (defined $res) {
-	&Sympa::Log::do_log('err', "can't check list %.128s on %s", 
+	&Sympa::Log::do_log('err', "can't check list %.128s on %s",
 		$param->{'listname'}, $robot);
 	return undef;
     }
@@ -412,11 +412,11 @@ sub create_list{
     my $conf;
     my $tt_result = &Sympa::Template::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
     unless (defined $tt_result || !$abort_on_error) {
-      &Sympa::Log::do_log('err', 'abort on tt2 error. List %s from family %s@%s', 
+      &Sympa::Log::do_log('err', 'abort on tt2 error. List %s from family %s@%s',
                 $param->{'listname'}, $family->{'name'},$robot);
       return undef;
     }
-    
+
      ## Create the list directory
      my $list_dir;
 
@@ -425,7 +425,7 @@ sub create_list{
 	    unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
 		&Sympa::Log::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
 		return undef;
-	    }    
+	    }
 	}
 	$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
     }else {
@@ -435,15 +435,15 @@ sub create_list{
      unless (-r $list_dir || mkdir ($list_dir,0777)) {
 	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
 	 return undef;
-     }    
-    
+     }
+
     ## Check topics
     if (defined $param->{'topics'}){
 	unless (&check_topics($param->{'topics'},$robot)){
 	    &Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$param->{'topics'});
 	}
     }
-      
+
     ## Lock config before openning the config file
     my $lock = Sympa::Lock->new(
         $list_dir.'/config',
@@ -453,7 +453,7 @@ sub create_list{
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;
     }
-    $lock->set_timeout(5); 
+    $lock->set_timeout(5);
     unless ($lock->lock('write')) {
 	return undef;
     }
@@ -467,11 +467,11 @@ sub create_list{
     #&Sympa::Template::parse_tt2($param, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
     print CONFIG $conf;
     close CONFIG;
-    
+
     ## Unlock config file
     $lock->unlock();
 
-    ## Creation of the info file 
+    ## Creation of the info file
     # remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
     $param->{'description'} =~ s/\r\n|\r/\n/g;
 
@@ -490,7 +490,7 @@ sub create_list{
 	    my $file_content;
 	    my $tt_result = &Sympa::Template::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
 	    unless (defined $tt_result) {
-		&Sympa::Log::do_log('err', 'tt2 error. List %s from family %s@%s, file %s', 
+		&Sympa::Log::do_log('err', 'tt2 error. List %s from family %s@%s, file %s',
 			$param->{'listname'}, $family->{'name'},$robot,$file);
 	    }
 	    unless (open FILE, '>', "$list_dir/$file") {
@@ -511,8 +511,8 @@ sub create_list{
     ## Create shared if required
     if (defined $list->{'admin'}{'shared_doc'}) {
 	$list->create_shared();
-    }   
-    
+    }
+
     $list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'creation'}{'date_epoch'} = time;
     if ($param->{'creation_email'}) {
@@ -552,7 +552,7 @@ Update a list with family concept when the list already exists.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<$list>: the list to update
 
@@ -580,7 +580,7 @@ Update a list with family concept when the list already exists.
 
 The updated L<Sympa::List> object.
 
-=cut 
+=cut
 
 sub update_list{
     my ($list,$param,$family,$robot) = @_;
@@ -617,7 +617,7 @@ sub update_list{
 	&Sympa::Log::do_log('err','Lock could not be created');
 	return undef;
     }
-    $lock->set_timeout(5); 
+    $lock->set_timeout(5);
     unless ($lock->lock('write')) {
 	return undef;
     }
@@ -679,7 +679,7 @@ Rename a list or move a list to another virtual host.
 
 =item * I<new_robot>
 
-=item * I<mode>: 'copy' 
+=item * I<mode>: 'copy'
 
 =item * I<auth_method>
 
@@ -694,7 +694,7 @@ Rename a list or move a list to another virtual host.
 =back
 
 =head3 Return value
-      
+
 I<1> in case of success, an error string otherwise.
 
 =cut
@@ -710,25 +710,25 @@ sub rename_list{
     # check new listname syntax
     my $new_listname = lc ($param{'new_listname'});
     my $listname_regexp = &Sympa::Tools::get_regexp('listname');
-    
+
     unless ($new_listname =~ /^$listname_regexp$/i) {
       &Sympa::Log::do_log('err','incorrect listname %s', $new_listname);
       return 'incorrect_listname';
     }
-    
+
     ## Evaluate authorization scenario unless run as listmaster (sympa.pl)
-    my ($result, $r_action, $reason); 
+    my ($result, $r_action, $reason);
     unless ($param{'options'}{'skip_authz'}) {
       $result = &Sympa::Scenario::request_action ('create_list',$param{'auth_method'},$param{'new_robot'},
 					   {'sender' => $param{'user_email'},
 					    'remote_host' => $param{'remote_host'},
 					    'remote_addr' => $param{'remote_addr'}});
-      
+
       if (ref($result) eq 'HASH') {
 	$r_action = $result->{'action'};
 	$reason = $result->{'reason'};
       }
-      
+
       unless ($r_action =~ /do_it|listmaster/) {
 	&Sympa::Log::do_log('err','authorization error');
 	return 'authorization';
@@ -743,13 +743,13 @@ sub rename_list{
       return 'internal';
     }
 
-    if( $res || 
+    if( $res ||
 	($list->{'name'} ne $param{'new_listname'}) && ## Do not test if listname did not change
 	(Sympa::List->new($param{'new_listname'}, $param{'new_robot'}, {'just_try' => 1}))) {
       &Sympa::Log::do_log('err', 'Could not rename list %s on %s: new list %s on %s already existing list', $list->{'name'}, $robot, $param{'new_listname'}, 	$param{'new_robot'});
       return 'list_already_exists';
     }
-    
+
     my $regx = &Sympa::Configuration::get_robot_conf($param{'new_robot'},'list_check_regexp');
     if( $regx ) {
       if ($param{'new_listname'} =~ /^(\S+)-($regx)$/) {
@@ -760,10 +760,10 @@ sub rename_list{
 
      unless ($param{'mode'} eq 'copy') {
          $list->savestats();
-	 
+
 	 ## Dump subscribers
 	 $list->_save_list_members_file("$list->{'dir'}/subscribers.closed.dump");
-	 
+
 	 $param{'aliases'} = &remove_aliases($list, $list->{'domain'});
      }
 
@@ -780,17 +780,17 @@ sub rename_list{
      }
 
     ## If we are in 'copy' mode, create en new list
-    if ($param{'mode'} eq 'copy') {	 
+    if ($param{'mode'} eq 'copy') {
 	 unless ( $list = &clone_list_as_empty($list->{'name'},$list->{'domain'},$param{'new_listname'},$param{'new_robot'},$param{'user_email'})){
 	     &Sympa::Log::do_log('err',"Unable to load $param{'new_listname'} while renaming");
 	     return 'internal';
-	 }	 
+	 }
      }
 
     # set list status to pending if creation list is moderated
     if ($r_action =~ /listmaster/) {
       $list->{'admin'}{'status'} = 'pending' ;
-      &Sympa::List::send_notify_to_listmaster('request_list_renaming',$list->{'domain'}, 
+      &Sympa::List::send_notify_to_listmaster('request_list_renaming',$list->{'domain'},
 				       {'list' => $list,
 					'new_listname' => $param{'new_listname'},
 					'old_listname' => $old_listname,
@@ -798,17 +798,17 @@ sub rename_list{
 					'mode' => $param{'mode'}});
       $param{'status'} = 'pending';
     }
-     
+
     ## Save config file for the new() later to reload it
     $list->save_config($param{'user_email'});
-     
+
     ## This code should be in Sympa::List::rename()
-    unless ($param{'mode'} eq 'copy') {     
+    unless ($param{'mode'} eq 'copy') {
 	 unless (move ($list->{'dir'}, $new_dir )){
 	     &Sympa::Log::do_log('err',"Unable to rename $list->{'dir'} to $new_dir : $ERRNO");
 	     return 'internal';
 	 }
-     
+
 	 ## Rename archive
 	 my $arc_dir = &Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
 	 my $new_arc_dir = &Sympa::Configuration::get_robot_conf($param{'new_robot'}, 'arc_path').'/'.$param{'new_listname'}.'@'.$param{'new_robot'};
@@ -828,26 +828,26 @@ sub rename_list{
 		 &Sympa::Log::do_log('err',"Unable to rename bounces from $bounce_dir to $new_bounce_dir");
 	     }
 	 }
-	 
+
 	 # if subscribtion are stored in database rewrite the database
 	 &Sympa::List::rename_list_db($list, $param{'new_listname'},
 			       $param{'new_robot'});
      }
      ## Move stats
-    unless (&Sympa::SDM::do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )", 
-    &Sympa::SDM::quote($param{'new_listname'}), 
-    &Sympa::SDM::quote($param{'new_robot'}), 
-    &Sympa::SDM::quote($list->{'name'}), 
+    unless (&Sympa::SDM::do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )",
+    &Sympa::SDM::quote($param{'new_listname'}),
+    &Sympa::SDM::quote($param{'new_robot'}),
+    &Sympa::SDM::quote($list->{'name'}),
     &Sympa::SDM::quote($robot)
     )) {
 	&Sympa::Log::do_log('err','Unable to transfer stats from list %s@%s to list %s@%s',$param{'new_listname'}, $param{'new_robot'}, $list->{'name'}, $robot);
     }
 
      ## Move stat counters
-    unless (&Sympa::SDM::do_query("UPDATE stat_counter_table SET list_counter=%s, robot_counter=%s WHERE (list_counter = %s AND robot_counter = %s )", 
-    &Sympa::SDM::quote($param{'new_listname'}), 
-    &Sympa::SDM::quote($param{'new_robot'}), 
-    &Sympa::SDM::quote($list->{'name'}), 
+    unless (&Sympa::SDM::do_query("UPDATE stat_counter_table SET list_counter=%s, robot_counter=%s WHERE (list_counter = %s AND robot_counter = %s )",
+    &Sympa::SDM::quote($param{'new_listname'}),
+    &Sympa::SDM::quote($param{'new_robot'}),
+    &Sympa::SDM::quote($list->{'name'}),
     &Sympa::SDM::quote($robot)
     )) {
 	&Sympa::Log::do_log('err','Unable to transfer stat counter from list %s@%s to list %s@%s',$param{'new_listname'}, $param{'new_robot'}, $list->{'name'}, $robot);
@@ -855,24 +855,24 @@ sub rename_list{
 
      ## Install new aliases
      $param{'listname'} = $param{'new_listname'};
-     
+
      unless ($list = Sympa::List->new($param{'new_listname'}, $param{'new_robot'},{'reload_config' => 1})) {
 	 &Sympa::Log::do_log('err',"Unable to load $param{'new_listname'} while renaming");
 	 return 'internal';
      }
-     
+
      ## Check custom_subject
      if (defined $list->{'admin'}{'custom_subject'} &&
 	 $list->{'admin'}{'custom_subject'} =~ /$old_listname/) {
 	 $list->{'admin'}{'custom_subject'} =~ s/$old_listname/$param{'new_listname'}/g;
 
-	 $list->save_config($param{'user_email'});	
+	 $list->save_config($param{'user_email'});
      }
 
      if ($list->{'admin'}{'status'} eq 'open') {
       	 $param{'aliases'} = &install_aliases($list,$robot);
-     } 
-     
+     }
+
      unless ($param{'mode'} eq 'copy') {
 
 	 ## Rename files in spools
@@ -882,7 +882,7 @@ sub rename_list{
 	     unless (opendir(DIR, $Sympa::Configuration::Conf{$spool})) {
 		 &Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $Sympa::Configuration::Conf{$spool}, $ERRNO);
 	     }
-	     
+
 	     foreach my $file (sort readdir(DIR)) {
 		 next unless ($file =~ /^$old_listname\_/ ||
 			      $file =~ /^$old_listname\./ ||
@@ -890,7 +890,7 @@ sub rename_list{
 			      $file =~ /^\.$old_listname\@$robot\_/ ||
 			      $file =~ /^$old_listname\@$robot\_/ ||
 			      $file =~ /\.$old_listname$/);
-		 
+
 		 my $newfile = $file;
 		 if ($file =~ /^$old_listname\_/) {
 		     $newfile =~ s/^$old_listname\_/$param{'new_listname'}\_/;
@@ -905,19 +905,19 @@ sub rename_list{
 		 }elsif ($file =~ /\.$old_listname$/) {
 		     $newfile =~ s/\.$old_listname$/\.$param{'new_listname'}/;
 		 }
-		 
+
 		 ## Rename file
 		 unless (move "$Sympa::Configuration::Conf{$spool}/$file", "$Sympa::Configuration::Conf{$spool}/$newfile") {
 		     &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{$spool}/$newfile", "$Sympa::Configuration::Conf{$spool}/$newfile", $ERRNO);
 		     next;
 		 }
-		 
+
 		 ## Change X-Sympa-To
 		 &Sympa::Tools::change_x_sympa_to("$Sympa::Configuration::Conf{$spool}/$newfile", "$param{'new_listname'}\@$param{'new_robot'}");
 	     }
-	     
+
 	     close DIR;
-	 } 
+	 }
 	 ## Digest spool
 	 if (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname") {
 	     unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}") {
@@ -929,7 +929,7 @@ sub rename_list{
 		 &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}", $ERRNO);
 		 next;
 	     }
-	 }     
+	 }
      }
 
     return 1;
@@ -949,12 +949,12 @@ but without archives, subscribers and shared
 
 =item * I<$source_robot>: robot of the list to clone
 
-=item * I<$new_listname>: the target list name         
+=item * I<$new_listname>: the target list name
 
 =item * I<$new_robot>: the target list robot
 
 =item * I<$email>: the email of the requestor : used in config as
-admin->last_update->email         
+admin->last_update->email
 
 =back
 
@@ -965,7 +965,7 @@ The updated L<Sympa::List> object.
 =cut
 
 sub clone_list_as_empty {
-    
+
     my $source_list_name =shift;
     my $source_robot =shift;
     my $new_listname = shift;
@@ -976,10 +976,10 @@ sub clone_list_as_empty {
     unless ($list = Sympa::List->new($source_list_name, $source_robot)) {
 	&Sympa::Log::do_log('err','Admin::clone_list_as_empty : new list failed %s %s',$source_list_name, $source_robot);
 	return undef;;
-    }    
-    
+    }
+
     &Sympa::Log::do_log('info',"Admin::clone_list_as_empty ($source_list_name, $source_robot,$new_listname,$new_robot,$email)");
-    
+
     my $new_dir;
     if (-d $Sympa::Configuration::Conf{'home'}.'/'.$new_robot) {
 	$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$new_robot.'/'.$new_listname;
@@ -989,7 +989,7 @@ sub clone_list_as_empty {
 	&Sympa::Log::do_log('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
 	return undef;
     }
-    
+
     unless (mkdir $new_dir, 0775) {
 	&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to create directory %s : %s',$new_dir, $ERRNO);
 	return undef;;
@@ -1061,7 +1061,7 @@ A true value if the owner exists, I<undef> otherwise.
 sub check_owner_defined {
     my ($owner,$owner_include) = @_;
     &Sympa::Log::do_log('debug2',"()");
-    
+
     if (ref($owner) eq "ARRAY") {
 	if (ref($owner_include) eq "ARRAY") {
 	    if (($#{$owner} < 0) && ($#{$owner_include} <0)) {
@@ -1087,10 +1087,10 @@ sub check_owner_defined {
 	    }
 	}
     }
-    
+
     if (ref($owner) eq "ARRAY") {
 	foreach my $o (@{$owner}) {
-	    unless($o){ 
+	    unless($o){
 		&Sympa::Log::do_log('err','empty param "owner"');
 		return undef;
 	    }
@@ -1107,11 +1107,11 @@ sub check_owner_defined {
     } elsif (defined $owner) {
 	&Sympa::Log::do_log('err','missing sub param "email" for param "owner"');
 	return undef;
-    }	
-    
+    }
+
     if (ref($owner_include) eq "ARRAY") {
 	foreach my $o (@{$owner_include}) {
-	    unless($o){ 
+	    unless($o){
 		&Sympa::Log::do_log('err','empty param "owner_include"');
 		return undef;
 	    }
@@ -1119,7 +1119,7 @@ sub check_owner_defined {
 		&Sympa::Log::do_log('err','missing sub param "source" for param "owner_include"');
 		return undef;
 	    }
-	} 
+	}
     }elsif (ref($owner_include) eq "HASH"){
 	unless ($owner_include->{'source'}) {
 	    &Sympa::Log::do_log('err','missing sub param "source" for param "owner_include"');
@@ -1128,7 +1128,7 @@ sub check_owner_defined {
     } elsif (defined $owner_include) {
 	&Sympa::Log::do_log('err','missing sub param "source" for param "owner_include"');
 	return undef;
-    }	
+    }
     return 1;
 }
 
@@ -1149,7 +1149,7 @@ Check if the requested list exists already using smtp 'rcpt to'
 
 =head3 Return value
 
-Net::SMTP object or 0 
+Net::SMTP object or 0
 
 =cut
 
@@ -1166,7 +1166,7 @@ Net::SMTP object or 0
      my $smtp_helo = &Sympa::Configuration::get_robot_conf($robot, 'list_check_helo') || $smtp_relay;
      $smtp_helo =~ s/:[-\w]+$//;
      my $suffixes = &Sympa::Configuration::get_robot_conf($robot, 'list_check_suffixes');
-     return 0 
+     return 0
 	 unless ($smtp_relay && $suffixes);
      my $domain = &Sympa::Configuration::get_robot_conf($robot, 'host');
      &Sympa::Log::do_log('debug2', 'list_check_smtp(%s,%s)', $list, $robot);
@@ -1206,7 +1206,7 @@ Install sendmail aliases for I<$list>.
 
 =over
 
-=item * I<$list>: list 
+=item * I<$list>: list
 
 =item * I<$robot>: list robot
 
@@ -1230,7 +1230,7 @@ sub install_aliases {
     my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
     my $error_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stderr.'.$$;
     &Sympa::Log::do_log('debug2',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
- 
+
     unless (-x $alias_manager) {
 		&Sympa::Log::do_log('err','Failed to install aliases: %s', $ERRNO);
 		return undef;
@@ -1275,8 +1275,8 @@ sub install_aliases {
 	     &Sympa::Log::do_log('err','The parser returned empty aliases: %s', $error_output) ;
 	 }else {
 	     &Sympa::Log::do_log('err',"Unknown error $status while running alias manager $alias_manager : %s", $error_output);
-	 } 
-    
+	 }
+
     return undef;
 }
 
@@ -1289,7 +1289,7 @@ Remove sendmail aliases for I<$list>.
 
 =over
 
-=item * I<$list>: list 
+=item * I<$list>: list
 
 =item * I<$robot>: list robot
 
@@ -1326,7 +1326,7 @@ $list->{'name'}$suffix: "|$libexecdir/bouncequeue $list->{'name'}"
 $list->{'name'}-unsubscribe: "|$libexecdir/queue $list->{'name'}-unsubscribe"
 # $list->{'name'}-subscribe: "|$libexecdir/queue $list->{'name'}-subscribe"
 EOF
-	 
+
 	 return $aliases;
      }
 
@@ -1410,11 +1410,11 @@ sub change_user_email {
 
     ## Change email as list MEMBER
     foreach my $list ( &Sympa::List::get_which($in{'current_email'},$in{'robot'}, 'member') ) {
-	 
+
 	 my $l = $list->{'name'};
-	 
+
 	 my $user_entry = $list->get_list_member($in{'current_email'});
-	 
+
 	 if ($user_entry->{'included'} == 1) {
 	     ## Check the type of data sources
 	     ## If only include_list of local mailing lists, then no problem
@@ -1431,7 +1431,7 @@ sub change_user_email {
 	     if ($use_external_data_sources) {
 		 ## Notify list owner
 		 $list->send_notify_to_owner('failed_to_change_included_member',
-					     {'current_email' => $in{'current_email'}, 
+					     {'current_email' => $in{'current_email'},
 					      'new_email' => $in{'new_email'},
 					      'datasource' => $list->get_datasource_name($user_entry->{'id'})});
 		 push @failed_for, $list;
@@ -1445,45 +1445,45 @@ sub change_user_email {
 	 if ($list->is_list_member($in{'new_email'})) {
 	     unless ($list->delete_list_member('users' => [$in{'current_email'}]) ) {
 		 push @failed_for, $list;
-		 &Sympa::Log::do_log('info', 'could not remove email from list %s', $l);		 
+		 &Sympa::Log::do_log('info', 'could not remove email from list %s', $l);
 	     }
-	     
+
 	 }else {
-	     
+
 	     unless ($list->update_list_member($in{'current_email'}, {'email' => $in{'new_email'}, 'update_date' => time}) ) {
 		 push @failed_for, $list;
 		 &Sympa::Log::do_log('err', 'could not change email for list %s', $l);
 	     }
 	 }
      }
-    
+
     ## Change email as list OWNER/MODERATOR
     my %updated_lists;
-    foreach my $role ('owner', 'editor') { 
+    foreach my $role ('owner', 'editor') {
 	foreach my $list ( &Sympa::List::get_which($in{'current_email'},$in{'robot'}, $role) ) {
-	    
+
 	    ## Check if admin is include via an external datasource
 	    my $admin_user = $list->get_list_admin($role, $in{'current_email'});
 	    if ($admin_user->{'included'}) {
 		## Notify listmaster
 		&Sympa::List::send_notify_to_listmaster('failed_to_change_included_admin',$in{'robot'},{'list' => $list,
-											   'current_email' => $in{'current_email'}, 
+											   'current_email' => $in{'current_email'},
 											   'new_email' => $in{'new_email'},
 											   'datasource' => $list->get_datasource_name($admin_user->{'id'})});
 		push @failed_for, $list;
 		&Sympa::Log::do_log('err', 'could not change %s email for list %s because admin is included', $role, $list->{'name'});
 		next;
 	    }
-	    
+
 	    ## Go through owners/editors of the list
 	    foreach my $admin (@{$list->{'admin'}{$role}}) {
 		next unless (lc($admin->{'email'}) eq lc($in{'current_email'}));
-		
+
 		## Update entry with new email address
 		$admin->{'email'} = $in{'new_email'};
 		$updated_lists{$list->{'name'}}++;
 	    }
-	    
+
 	    ## Update Db cache for the list
 	    $list->sync_include_admin();
 	    $list->save_config();
@@ -1491,42 +1491,42 @@ sub change_user_email {
     }
     ## Notify listmasters that list owners/moderators email have changed
     if (keys %updated_lists) {
-	&Sympa::List::send_notify_to_listmaster('listowner_email_changed',$in{'robot'}, 
+	&Sympa::List::send_notify_to_listmaster('listowner_email_changed',$in{'robot'},
 					 {'previous_email' => $in{'current_email'},
 					  'new_email' => $in{'new_email'},
 					  'updated_lists' => keys %updated_lists})
     }
-    
+
     ## Update User_table and remove existing entry first (to avoid duplicate entries)
     &Sympa::List::delete_global_user($in{'new_email'},);
-    
+
     unless ( &Sympa::List::update_global_user($in{'current_email'},
-				       {'email' => $in{'new_email'},					
+				       {'email' => $in{'new_email'},
 				       })) {
 	&Sympa::Log::do_log('err','change_email: update failed');
 	return undef;
     }
-    
+
     ## Update netidmap_table
     unless ( &Sympa::List::update_email_netidmap_db($in{'robot'}, $in{'current_email'}, $in{'new_email'}) ){
 	&Sympa::Log::do_log('err','change_email: update failed');
 	return undef;
     }
-    
-    
+
+
     return (1,\@failed_for);
 }
 
-=head1 AUTHORS 
+=head1 AUTHORS
 
-=over 
+=over
 
-=item * Serge Aumont <sa AT cru.fr> 
+=item * Serge Aumont <sa AT cru.fr>
 
-=item * Olivier Salaun <os AT cru.fr> 
+=item * Olivier Salaun <os AT cru.fr>
 
-=back 
+=back
 
-=cut 
+=cut
 
 1;

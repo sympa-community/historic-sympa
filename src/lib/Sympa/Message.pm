@@ -20,15 +20,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-=head1 NAME 
+=head1 NAME
 
 Sympa::Message - Message object
 
-=head1 DESCRIPTION 
+=head1 DESCRIPTION
 
 This class implement a message.
 
-=cut 
+=cut
 
 package Sympa::Message;
 
@@ -52,9 +52,9 @@ use Sympa::Tools::SMIME;
 
 Creates a new L<Sympa::Message> object.
 
-=head3 Parameters 
+=head3 Parameters
 
-=over 
+=over
 
 =item * I<file>: the message file
 
@@ -66,16 +66,16 @@ Creates a new L<Sympa::Message> object.
 
 =item * I<message_in_spool>
 
-=back 
+=back
 
-=head3 Return 
+=head3 Return
 
 A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 
-=cut 
+=cut
 
 sub new {
-    
+
     my $pkg =shift;
     my $datas = shift;
 
@@ -87,23 +87,23 @@ sub new {
 
     my $message;
     my $input = 'file' if $file;
-    $input = 'messageasstring' if $messageasstring; 
-    $input = 'message_in_spool' if $message_in_spool; 
-    $input = 'mimeentity' if $mimeentity; 
+    $input = 'messageasstring' if $messageasstring;
+    $input = 'message_in_spool' if $message_in_spool;
+    $input = 'mimeentity' if $mimeentity;
     &Sympa::Log::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
-    
+
     if ($mimeentity) {
 	$message->{'msg'} = $mimeentity;
 	$message->{'altered'} = '_ALTERED';
 
 	bless $message, $pkg;
-	
+
 	return $message;
     }
 
     my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
-    
+
     my $msg;
 
     if ($message_in_spool){
@@ -124,7 +124,7 @@ sub new {
 	}
 	close(FILE);
         # use Data::Dumper;
-	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP; 
+	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP;
     }
     if($messageasstring){
 	if (ref ($messageasstring)){
@@ -132,15 +132,15 @@ sub new {
 	}else{
 	    $msg = $parser->parse_data(\$messageasstring);
 	}
-    }  
-     
+    }
+
     unless ($msg){
-	&Sympa::Log::do_log('err',"could not parse message"); 
+	&Sympa::Log::do_log('err',"could not parse message");
 	return undef;
     }
     $message->{'msg'} = $msg;
-#    $message->{'msg_as_string'} = $msg->as_string; 
-    $message->{'msg_as_string'} = $messageasstring; 
+#    $message->{'msg_as_string'} = $msg->as_string;
+    $message->{'msg_as_string'} = $messageasstring;
     $message->{'size'} = length($msg->as_string);
 
     my $hdr = $message->{'msg'}->head;
@@ -149,7 +149,7 @@ sub new {
     unless ($hdr->get('From')) {
 	&Sympa::Log::do_log('err', 'No From found in message %s, skipping.', $file);
 	return undef;
-    }   
+    }
     my @sender_hdr = Mail::Address->parse($hdr->get('From'));
     if ($#sender_hdr == -1) {
 	&Sympa::Log::do_log('err', 'No valid address in From: field in %s, skipping', $file);
@@ -205,10 +205,10 @@ sub new {
 	    &Sympa::Log::do_log('err', 'no X-Sympa-To found, ignoring message file %s', $file);
 	    return undef;
 	}
-	    
+
 	## get listname & robot
 	my ($listname, $robot) = split(/\@/,$message->{'rcpt'});
-	
+
 	$robot = lc($robot);
 	$listname = lc($listname);
 	$robot ||= $Sympa::Configuration::Conf{'domain'};
@@ -221,7 +221,7 @@ sub new {
 		$message->{'spam_status'} = $spam_status ;
 	    }
 	}
-	
+
 	my $conf_email = &Sympa::Configuration::get_robot_conf($robot, 'email');
 	my $conf_host = &Sympa::Configuration::get_robot_conf($robot, 'host');
 	unless ($listname =~ /^(sympa|$Sympa::Configuration::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
@@ -229,11 +229,11 @@ sub new {
 	    if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 		$listname = $1;
 	    }
-	    
+
 	    my $list = Sympa::List->new($listname, $robot, {'just_try' => 1});
 	    if ($list) {
 		$message->{'list'} = $list;
-	    }	
+	    }
 	}
 	# verify DKIM signature
 	if (&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
@@ -242,7 +242,7 @@ sub new {
 	    $message->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
 	}
     }
-        
+
     ## valid X-Sympa-Checksum prove the message comes from web interface with authenticated sender
     if ( $hdr->get('X-Sympa-Checksum')) {
 	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
@@ -251,7 +251,7 @@ sub new {
 	if ($chksum eq &Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
 	    $message->{'md5_check'} = 1 ;
 	}else{
-	    &Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");	
+	    &Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");
 	}
     }
 
@@ -262,7 +262,7 @@ sub new {
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
 	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
-	    
+
 	    unless (defined $dec) {
 		&Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
 		return undef;
@@ -276,7 +276,7 @@ sub new {
 	    $hdr = $dec->head;
 	    &Sympa::Log::do_log('debug', "message %s has been decrypted", $file);
 	}
-	
+
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
@@ -305,17 +305,17 @@ Dump this object to a stream.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<$output>: the stream to which dump the object
 
-=back 
+=back
 
 =head3 Return value
 
 A true value.
 
-=cut 
+=cut
 
 sub dump {
     my ($self, $output) = @_;
@@ -332,7 +332,7 @@ sub dump {
 	    printf "%s => %s\n", $key, $self->{$key};
 	}
     }
-    
+
     select $old_output;
 
     return 1;
@@ -344,17 +344,17 @@ Add topic and put header X-Sympa-Topic.
 
 =head3 Parameters
 
-=over 
+=over
 
 =item * I<$topic>: the topic to add
 
-=back 
+=back
 
 =head3 Return value
 
 A true value.
 
-=cut 
+=cut
 
 sub add_topic {
     my ($self,$topic) = @_;
@@ -371,7 +371,7 @@ sub add_topic {
 
 Get topic.
 
-=cut 
+=cut
 
 sub get_topic {
     my ($self) = @_;
@@ -454,7 +454,7 @@ sub fix_html_part {
 Extract body as string from I<$message>. Do NOT use Mime::Entity in order to
 preserveB64 encoding form and so preserve S/MIME signature.
 
-=cut 
+=cut
 sub get_body_from_msg_as_string {
     my $msg =shift;
 
@@ -463,16 +463,16 @@ sub get_body_from_msg_as_string {
     return (join ("\n\n",@bodysection));  # convert it back as string
 }
 
-=head1 AUTHORS 
+=head1 AUTHORS
 
-=over 
+=over
 
-=item * Serge Aumont <sa AT cru.fr> 
+=item * Serge Aumont <sa AT cru.fr>
 
-=item * Olivier Salaün <os AT cru.fr> 
+=item * Olivier Salaün <os AT cru.fr>
 
-=back 
+=back
 
-=cut 
+=cut
 
 1;

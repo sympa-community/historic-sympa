@@ -14,11 +14,11 @@ our $VERSION = "4.3";
 ##------------------------------------------------------------------------##
 ## Constructor
 
-sub new 
+sub new
 {
 	my $class     = shift;
 	my $fields_ref = shift;
-	my $self = 
+	my $self =
    	{
 		directory_labels => {},
 		permitted        => $fields_ref,

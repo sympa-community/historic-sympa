@@ -48,7 +48,7 @@ passed as a ref.
 
 sub recursive_transformation {
     my ($var, $subref) = @_;
-    
+
     return unless (ref($var));
 
     if (ref($var) eq 'ARRAY') {
@@ -66,9 +66,9 @@ sub recursive_transformation {
 	    }else {
 		$var->{$key} = &{$subref}($var->{$key});
 	    }
-	}    
+	}
     }
-    
+
     return;
 }
 
@@ -93,7 +93,7 @@ sub dump_var {
 	    foreach my $key (sort keys %{$var}) {
 		print $fd "\t"x$level.'_'.$key.'_'."\n";
 		&dump_var($var->{$key}, $level+1, $fd);
-	    }    
+	    }
 	}else {
 	    printf $fd "\t"x$level."'%s'"."\n", ref($var);
 	}
@@ -116,7 +116,7 @@ sub dump_html_var {
     my ($var) = shift;
 	my $html = '';
 
-    
+
     if (ref($var)) {
 
 	if (ref($var) eq 'ARRAY') {
@@ -155,25 +155,25 @@ Duplicate a complex variable
 =cut
 
 sub dup_var {
-    my ($var) = @_;    
+    my ($var) = @_;
 
     if (ref($var)) {
 	if (ref($var) eq 'ARRAY') {
 	    my $new_var = [];
 	    foreach my $index (0..$#{$var}) {
 		$new_var->[$index] = &dup_var($var->[$index]);
-	    }	    
+	    }
 	    return $new_var;
 	}elsif (ref($var) eq 'HASH') {
 	    my $new_var = {};
 	    foreach my $key (sort keys %{$var}) {
 		$new_var->{$key} = &dup_var($var->{$key});
-	    }    
+	    }
 	    return $new_var;
 	}
     }
-    
-    return $var; 
+
+    return $var;
 }
 
 =head2 get_array_from_splitted_string($string)
@@ -238,20 +238,20 @@ sub diff_on_arrays {
     my %added;
     my %intersection;
     my %union;
-    
+
     my %hashA;
     my %hashB;
-    
+
     foreach my $eltA (@$setA) {
 	$hashA{$eltA} = 1;
 	$deleted{$eltA} = 1;
 	$union{$eltA} = 1;
     }
-    
+
     foreach my $eltB (@$setB) {
 	$hashB{$eltB} = 1;
 	$added{$eltB} = 1;
-	
+
 	if ($hashA{$eltB}) {
 	    $intersection{$eltB} = 1;
 	    $deleted{$eltB} = 0;
@@ -259,13 +259,13 @@ sub diff_on_arrays {
 	    $union{$eltB} = 1;
 	}
     }
-    
+
     foreach my $eltA (@$setA) {
 	if ($hashB{$eltA}) {
-	    $added{$eltA} = 0; 
+	    $added{$eltA} = 0;
 	}
     }
-    
+
     foreach my $elt (keys %deleted) {
 	next unless $elt;
 	push @{$result->{'deleted'}},$elt if ($deleted{$elt});
@@ -281,11 +281,11 @@ sub diff_on_arrays {
     foreach my $elt (keys %union) {
 	next unless $elt;
 	push @{$result->{'union'}},$elt if ($union{$elt});
-    } 
-    
+    }
+
     return $result;
-    
-} 
+
+}
 
 =head2 is_in_array($set, $value)
 
@@ -295,7 +295,7 @@ Returns a true value if value I<$value> if part of set I<$set>
 
 sub is_in_array {
     my ($set,$value) = @_;
-    
+
     foreach my $elt (@$set) {
 	return 1 if ($elt eq $value);
     }
@@ -314,13 +314,13 @@ Current encoding is NOT compatible with encoding of values with '"'
 sub string_2_hash {
     my $data = shift;
     my %hash ;
-    
+
     pos($data) = 0;
     while ($data =~ /\G;?(\w+)\=\"((\\[\"\\]|[^\"])*)\"(?=(;|\z))/g) {
 	my ($var, $val) = ($1, $2);
 	$val =~ s/\\([\"\\])/$1/g;
-	$hash{$var} = $val; 
-    }    
+	$hash{$var} = $val;
+    }
 
     return (%hash);
 
@@ -333,7 +333,7 @@ hash
 
 =cut
 
-sub hash_2_string { 
+sub hash_2_string {
     my $refhash = shift;
 
     return undef unless ((ref($refhash))&& (ref($refhash) eq 'HASH')) ;
@@ -367,7 +367,7 @@ sub smart_lessthan {
 	return $stra lt $strb;
     } else {
         return $stra < $strb;
-    } 
+    }
 }
 
 1;

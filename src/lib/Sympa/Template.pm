@@ -39,7 +39,7 @@ use strict;
 
 use CGI::Util;
 use English qw(-no_match_vars);
-use MIME::EncWords; 
+use MIME::EncWords;
 use Template;
 
 use Sympa::Constants;
@@ -56,7 +56,7 @@ my $allow_absolute;
 sub qencode {
     my $string = shift;
     # We are not able to determine the name of header field, so assume
-    # longest (maybe) one.    
+    # longest (maybe) one.
     return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
 					    Encoding=>'A',
 					    Charset=>&Sympa::Language::GetCharset(),
@@ -66,36 +66,36 @@ sub qencode {
 sub escape_url {
 
     my $string = shift;
-    
+
     $string =~ s/[\s+]/sprintf('%%%02x', ord($&))/eg;
-    # Some MUAs aren't able to decode ``%40'' (escaped ``@'') in e-mail 
-    # address of mailto: URL, or take ``@'' in query component for a 
+    # Some MUAs aren't able to decode ``%40'' (escaped ``@'') in e-mail
+    # address of mailto: URL, or take ``@'' in query component for a
     # delimiter to separate URL from the rest.
     my ($body, $query) = split(/\?/, $string, 2);
     if (defined $query) {
 	$query =~ s/\@/sprintf('%%%02x', ord($&))/eg;
 	$string = $body.'?'.$query;
     }
-    
+
     return $string;
 }
 
 sub escape_xml {
     my $string = shift;
-    
-    $string =~ s/&/&amp;/g; 
+
+    $string =~ s/&/&amp;/g;
     $string =~ s/</&lt;/g;
     $string =~ s/>/&gt;/g;
     $string =~ s/\'/&apos;/g;
     $string =~ s/\"/&quot;/g;
-    
+
     return $string;
 }
 
 sub escape_quote {
     my $string = shift;
 
-    $string =~ s/\'/\\\'/g; 
+    $string =~ s/\'/\\\'/g;
     $string =~ s/\"/\\\"/g;
 
     return $string;
@@ -142,11 +142,11 @@ sub maketext {
 #    &Sympa::Log::do_log('notice', "PATH: $path ; $template_name");
 
     ## Sample code to dump the STASH
-    # my $s = $stash->_dump();    
+    # my $s = $stash->_dump();
 
     return sub {
 	&Sympa::Language::maketext($template_name, $_[0],  @arg);
-    }	
+    }
 }
 
 # IN:
@@ -212,9 +212,9 @@ sub get_error {
 }
 
 ## The main parsing sub
-## Parameters are   
-## data: a HASH ref containing the data   
-## template : a filename or a ARRAY ref that contains the template   
+## Parameters are
+## data: a HASH ref containing the data
+## template : a filename or a ARRAY ref that contains the template
 ## output : a Filedescriptor or a SCALAR ref for the output
 
 sub parse_tt2 {
@@ -238,7 +238,7 @@ sub parse_tt2 {
 	INCLUDE_PATH => $include_path,
 #	PRE_CHOMP  => 1,
 	UNICODE => 0, # Prevent BOM auto-detection
-	
+
 	FILTERS => {
 	    unescape => \&CGI::Util::unescape,
 	    l => [\&maketext, 1],
@@ -254,7 +254,7 @@ sub parse_tt2 {
 	    encode_utf8 => [\&encode_utf8, 0]
 	    }
     };
-    
+
     unless($options->{'is_not_template'}){
 	$config->{'INCLUDE_PATH'} = $include_path;
     }
@@ -279,7 +279,7 @@ sub parse_tt2 {
 
 
 	return undef;
-    } 
+    }
 
     return 1;
 }

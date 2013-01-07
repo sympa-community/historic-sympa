@@ -82,10 +82,10 @@ sub get_dkim_parameters {
 	if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
 	    $data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
 	}else{
-	    # RFC 4871 (page 21) 
+	    # RFC 4871 (page 21)
 	    $data->{'i'} = $list->{'name'}.'-request@'.$robot;
 	}
-	
+
 	$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
 	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
     }else{
@@ -119,22 +119,22 @@ sub dkim_verifier {
     my $dkim;
 
     &Sympa::Log::do_log('debug',"dkim verifier");
-    
+
     unless ( $dkim = Mail::DKIM::Verifier->new() ){
 	&Sympa::Log::do_log('err', 'Could not create Mail::DKIM::Verifier');
 	return undef;
     }
-   
-    my $temporary_file = $tmpdir."/dkim.".$PID ;  
+
+    my $temporary_file = $tmpdir."/dkim.".$PID ;
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Sympa::Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return undef;
     }
     print MSGDUMP $msg_as_string ;
 
-    unless (close(MSGDUMP)){ 
-	&Sympa::Log::do_log('err',"unable to dump message in temporary file $temporary_file"); 
-	return undef; 
+    unless (close(MSGDUMP)){
+	&Sympa::Log::do_log('err',"unable to dump message in temporary file $temporary_file");
+	return undef;
     }
 
     unless (open (MSGDUMP, "$temporary_file")) {
@@ -153,7 +153,7 @@ sub dkim_verifier {
     $dkim->CLOSE;
     close(MSGDUMP);
     unlink ($temporary_file);
-    
+
     foreach my $signature ($dkim->signatures) {
 	return 1 if  ($signature->result_detail eq "pass");
     }
@@ -196,11 +196,11 @@ Input object msg and listname, output signed message object
 =cut
 
 sub dkim_sign {
-    # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
+    # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail
     my $msg_as_string = shift;
     my $data = shift;
     my $tmpdir = shift;
-    my $dkim_d = $data->{'dkim_d'};    
+    my $dkim_d = $data->{'dkim_d'};
     my $dkim_i = $data->{'dkim_i'};
     my $dkim_selector = $data->{'dkim_selector'};
     my $dkim_privatekey = $data->{'dkim_privatekey'};
@@ -219,8 +219,8 @@ sub dkim_sign {
 	&Sympa::Log::do_log('err',"DKIM d= tag is undefined, could not sign message");
 	return $msg_as_string;
     }
-    
-    my $temporary_keyfile = $tmpdir."/dkimkey.".$PID ;  
+
+    my $temporary_keyfile = $tmpdir."/dkimkey.".$PID ;
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 	&Sympa::Log::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 	return $msg_as_string;
@@ -250,12 +250,12 @@ sub dkim_sign {
     }
     unless ($dkim) {
 	&Sympa::Log::do_log('err', 'Can\'t create Mail::DKIM::Signer');
-	return ($msg_as_string); 
-    }    
-    my $temporary_file = $tmpdir."/dkim.".$PID ;  
+	return ($msg_as_string);
+    }
+    my $temporary_file = $tmpdir."/dkim.".$PID ;
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Sympa::Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
-	return ($msg_as_string); 
+	return ($msg_as_string);
     }
     print MSGDUMP $msg_as_string ;
     close(MSGDUMP);
@@ -276,12 +276,12 @@ sub dkim_sign {
     close MSGDUMP;
     unless ($dkim->CLOSE) {
 	&Sympa::Log::do_log('err', 'Cannot sign (DKIM) message');
-	return ($msg_as_string); 
+	return ($msg_as_string);
     }
     my $message = Sympa::Message->new({'file'=>$temporary_file,'noxsympato'=>'noxsympato'});
     unless ($message){
 	&Sympa::Log::do_log('err',"unable to load $temporary_file as a message objet");
-	return ($msg_as_string); 
+	return ($msg_as_string);
     }
 
     if ($main::options{'debug'}) {
@@ -290,7 +290,7 @@ sub dkim_sign {
 	unlink ($temporary_file);
     }
     unlink ($temporary_keyfile);
-    
+
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
     return $message->{'msg'}->head->as_string."\n".&Sympa::Message::get_body_from_msg_as_string($msg_as_string);

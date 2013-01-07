@@ -61,12 +61,12 @@ sub create {
     &Sympa::Log::do_log('debug', '(%s, %s, %s)', undef, $email, $robot);
 
     my $challenge={};
-    
+
     unless ($robot) {
 	&Sympa::Log::do_log('err', 'Missing robot parameter, cannot create challenge object') ;
 	return undef;
     }
-    
+
     unless ($email) {
 	&Sympa::Log::do_log('err', 'Missing email parameter, cannot create challenge object') ;
 	return undef;
@@ -75,10 +75,10 @@ sub create {
     $challenge->{'id_challenge'} = &get_random();
     $challenge->{'email'} = $email;
     $challenge->{'date'} = time;
-    $challenge->{'robot'} = $robot; 
+    $challenge->{'robot'} = $robot;
     $challenge->{'data'} = $context;
     return undef unless (&store($challenge));
-    return $challenge->{'id_challenge'}     
+    return $challenge->{'id_challenge'}
 }
 
 sub load {
@@ -91,7 +91,7 @@ sub load {
 	&Sympa::Log::do_log('err', 'internal error, Sympa::Session::load called with undef id_challenge');
 	return undef;
     }
-    
+
     my $sth;
 
     unless($sth = &Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $id_challenge)) {
@@ -100,21 +100,21 @@ sub load {
     }
 
     my $challenge = $sth->fetchrow_hashref('NAME_lc');
-    
+
     unless ($challenge) {
 	return 'not_found';
     }
     my $challenge_datas;
 
     my %datas= &Sympa::Tools::Data::string_2_hash($challenge->{'data'});
-    foreach my $key (keys %datas) {$challenge_datas->{$key} = $datas{$key};} 
+    foreach my $key (keys %datas) {$challenge_datas->{$key} = $datas{$key};}
 
     $challenge_datas->{'id_challenge'} = $challenge->{'id_challenge'};
     $challenge_datas->{'date'} = $challenge->{'date'};
     $challenge_datas->{'robot'} = $challenge->{'robot'};
     $challenge_datas->{'email'} = $challenge->{'email'};
 
-    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$id_challenge);	
+    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$id_challenge);
     unless(&Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
 	&Sympa::Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
 	return undef;
@@ -131,7 +131,7 @@ sub store {
 
     return undef unless ($challenge->{'id_challenge'});
 
-    my %hash ;    
+    my %hash ;
     foreach my $var (keys %$challenge ) {
 	next if ($challenge_hard_attributes{$var});
 	next unless ($var);

@@ -76,7 +76,7 @@ sub epoch2yyyymmjj_hhmmss {
     my $epoch = $_[0];
     my @date = localtime ($epoch);
     my $date = POSIX::strftime ("%Y-%m-%d  %H:%M:%S", @date);
-    
+
     return $date;
 }
 
@@ -91,7 +91,7 @@ sub adate {
     my $epoch = $_[0];
     my @date = localtime ($epoch);
     my $date = POSIX::strftime ("%e %a %b %Y  %H h %M min %S s", @date);
-    
+
     return $date;
 }
 
@@ -124,7 +124,7 @@ sub epoch_conv {
     &Sympa::Log::do_log('debug3','(%s, %d)', $arg, $time);
 
     my $result;
-    
+
      # decomposition of the argument date
     my $date;
     my $duration;
@@ -157,7 +157,7 @@ Convert a formated date string into a unix timestamp.
 =cut
 
 sub date_conv {
-   
+
     my $arg = $_[0];
 
     if ( ($arg eq 'execution_date') ){ # execution date
@@ -167,7 +167,7 @@ sub date_conv {
     if ($arg =~ /^\d+$/) { # already an epoch date
 	return $arg;
     }
-	
+
     if ($arg =~ /^(\d\d\d\dy)(\d+m)?(\d+d)?(\d+h)?(\d+min)?(\d+sec)?$/) { # absolute date
 
 	my @date = ("$6", "$5", "$4", "$3", "$2", "$1");
@@ -179,10 +179,10 @@ sub date_conv {
 	$date[3] = 1 if ($date[3] == 0);
 	$date[4]-- if ($date[4] != 0);
 	$date[5] -= 1900;
-	
+
 	return timelocal (@date);
     }
-    
+
     return time;
 }
 
@@ -193,20 +193,20 @@ Convert a formated duration string into a second number.
 =cut
 
 sub duration_conv {
-    
+
     my $arg = $_[0];
     my $start_date = $_[1];
 
     return 0 unless $arg;
-  
+
     $arg =~ /(\d+y)?(\d+m)?(\d+w)?(\d+d)?(\d+h)?(\d+min)?(\d+sec)?$/i ;
     my @date = ("$1", "$2", "$3", "$4", "$5", "$6", "$7");
     for (my $i = 0; $i < 7; $i++) {
       $date[$i] =~ s/[a-z]+$//; ## Remove trailing units
     }
-    
+
     my $duration = $date[6]+60*($date[5]+60*($date[4]+24*($date[3]+7*$date[2]+365*$date[0])));
-	
+
     # specific processing for the months because their duration varies
     my @months = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
 		  31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -214,7 +214,7 @@ sub duration_conv {
     for (my $i = 0; $i < $date[1]; $i++) {
 	$duration += $months[$start + $i] * 60 * 60 * 24;
     }
-	
+
     return $duration;
 }
 

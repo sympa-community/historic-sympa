@@ -57,17 +57,17 @@ the indicated directory.
 
 sub store_last {
     my($list, $msg) = @_;
-    
+
     &Sympa::Log::do_log ('debug2','()');
-    
+
     return unless $list->is_archived();
     my $dir = $list->{'dir'}.'/archives';
-    
+
     ## Create the archive directory if needed
     mkdir ($dir, "0775") if !(-d $dir);
     chmod 0774, $dir;
-    
-    
+
+
     ## erase the last  message and replace it by the current one
     open(OUT, "> $dir/last_message");
     if (ref ($msg)) {
@@ -76,7 +76,7 @@ sub store_last {
  	print OUT $msg;
     }
     close(OUT);
-    
+
 }
 
 =head2 lists($name)
@@ -94,7 +94,7 @@ sub list {
 
     my($filename, $newfile);
     my(@l, $i);
-    
+
     unless (-d "$name") {
 	&Sympa::Log::do_log ('warning',"no directory $name");
 #      @l = ($msg::no_archives_available);
@@ -116,16 +116,16 @@ sub list {
 }
 
 sub scan_dir_archive {
-    
+
     my($dir, $month) = @_;
-    
+
     &Sympa::Log::do_log ('info',"($dir, $month)");
 
     unless (opendir (DIR, "$dir/$month/arctxt")){
 	&Sympa::Log::do_log ('info',"($dir, $month): unable to open dir $dir/$month/arctxt");
 	return undef;
     }
-    
+
     my $all_msg = [];
     my $i = 0 ;
     foreach my $file (sort readdir(DIR)) {
@@ -137,7 +137,7 @@ sub scan_dir_archive {
 	    &Sympa::Log::do_log('err', 'Unable to create Message object %s', $file);
 	    return undef;
 	}
-	
+
 	&Sympa::Log::do_log('debug',"MAIL object : $mail");
 
 	$i++;
@@ -180,15 +180,15 @@ undef | #message in arctxt
 =cut
 
 sub search_msgid {
-    
+
     my($dir, $msgid) = @_;
-    
+
     &Sympa::Log::do_log ('info',"($dir, $msgid)");
 
-    
+
     if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
 	&Sympa::Log::do_log('err','remove_arc: no message id found');return undef;
-    } 
+    }
     unless ($dir =~ /\d\d\d\d\-\d\d\/arctxt/) {
 	&Sympa::Log::do_log ('err',"dir $dir look unproper");
 	return undef;
@@ -221,20 +221,20 @@ sub search_msgid {
 sub exist {
     my($name, $file) = @_;
     my $fn = "$name/$file";
-    
+
     return $fn if (-r $fn && -f $fn);
     return undef;
 }
 
 
 =head2 last_path($list)
-    
+
 Return path for latest message distributed in the list.
 
 =cut
 
 sub last_path {
-    
+
     my $list = shift;
 
     &Sympa::Log::do_log('debug', '(%s)', $list->{'name'});
@@ -242,7 +242,7 @@ sub last_path {
     return undef unless ($list->is_archived());
     my $file = $list->{'dir'}.'/archives/last_message';
 
-    return $file if (-f $file); 
+    return $file if (-f $file);
     return undef;
 
 }
@@ -261,7 +261,7 @@ Load an archived message, returns the mhonarc metadata
 
 =head3 Return value
 
-=cut 
+=cut
 
 sub load_html_message {
     my %parameters = @_;
@@ -290,7 +290,7 @@ sub load_html_message {
     }
 
     close ARC;
-    
+
     return \%metadata;
 }
 
@@ -308,9 +308,9 @@ sub clean_archive_directory{
     if(opendir ARCDIR,$answer->{'cleaned_dir'}){
 	my $files_left_uncleaned = 0;
 	foreach my $file (readdir(ARCDIR)){
-	    next if($file =~ /^\./);	    
+	    next if($file =~ /^\./);
 	    $file = $answer->{'cleaned_dir'}.'/'.$file;
-	    $files_left_uncleaned++ unless(&clean_archived_message({'input'=>$file ,'output'=>$file})); 
+	    $files_left_uncleaned++ unless(&clean_archived_message({'input'=>$file ,'output'=>$file}));
 	}
 	closedir DIR;
 	if ($files_left_uncleaned) {
@@ -354,15 +354,15 @@ sub clean_archived_message{
 }
 
 =head2 convert_single_msg_2_html($data)
-    
-Convert a message to html. 
+
+Convert a message to html.
 Result is stored in $destination_dir
 Attachement_url is used to link attachement
 
 =cut
 
 sub convert_single_msg_2_html {
-    
+
     my $data =shift;
     my $msg_as_string = $data->{'msg_as_string'};
     my $destination_dir = $data->{'destination_dir'};
@@ -382,7 +382,7 @@ sub convert_single_msg_2_html {
 	$msg_file = &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
     }
 
-    my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it    
+    my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
     unless (open(OUT, ">$msg_file")) {
 &Sympa::Log::do_log('notice', 'Could Not open %s', $msg_file);
 	return undef;
@@ -397,7 +397,7 @@ sub convert_single_msg_2_html {
 	}
     }
     my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Sympa::Configuration::Conf{'etc'});
-    
+
     unless ($mhonarc_ressources) {
 &Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
 	return undef;
@@ -419,8 +419,8 @@ sub convert_single_msg_2_html {
     #close ARCMOD;
     `$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
 
-    # restore current wd 
-    chdir $pwd;		
+    # restore current wd
+    chdir $pwd;
 
     return 1;
 }

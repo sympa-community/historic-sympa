@@ -58,7 +58,7 @@ use Sympa::Tools;
 my $sth;
 
 
-# last message stored in spool, this global var is used to prevent multiple stored of the same message in spool table 
+# last message stored in spool, this global var is used to prevent multiple stored of the same message in spool table
 my $last_stored_message_key;
 
 # create an empty Bulk
@@ -68,10 +68,10 @@ my $last_stored_message_key;
 #    bless \$packet, $pkg;
 #    return $packet
 #}
-## 
+##
 # get next packet to process, order is controled by priority_message, then by priority_packet, then by creation date.
 # Packets marked as being sent with VERP will be treated last.
-# Next lock the packetb to prevent multiple proccessing of a single packet 
+# Next lock the packetb to prevent multiple proccessing of a single packet
 
 =head1 FUNCTIONS
 
@@ -105,7 +105,7 @@ sub next {
     }
 
     my $packet;
-    unless($packet = $sth->fetchrow_hashref('NAME_lc')){	
+    unless($packet = $sth->fetchrow_hashref('NAME_lc')){
 	return undef;
     }
 
@@ -115,7 +115,7 @@ sub next {
 	&Sympa::Log::do_log('err','Unable to lock packet %s for message %s',$packet->{'packetid'}, $packet->{'messagekey'});
 	return undef;
     }
-    
+
     if ($rv < 0) {
 	&Sympa::Log::do_log('err','Unable to lock packet %s for message %s, though the query succeeded',$packet->{'packetid'}, $packet->{'messagekey'});
 	return undef;
@@ -130,9 +130,9 @@ sub next {
 	&Sympa::Log::do_log('err','Unable to retrieve informations for packet %s of message %s',$packet->{'packetid'}, $packet->{'messagekey'});
 	return undef;
     }
-    
+
     my $result = $sth->fetchrow_hashref('NAME_lc');
-   
+
     return $result;
 
 }
@@ -160,7 +160,7 @@ sub remove {
 sub messageasstring {
     my $messagekey = shift;
     &Sympa::Log::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
-    
+
     unless ($sth = &Sympa::SDM::do_query( "SELECT message_bulkspool AS message FROM bulkspool_table WHERE messagekey_bulkspool = %s",&Sympa::SDM::quote($messagekey))) {
 	&Sympa::Log::do_log('err','Unable to retrieve message %s text representation from database', $messagekey);
 	return undef;
@@ -174,7 +174,7 @@ sub messageasstring {
     }
     my $msg = MIME::Base64::decode($messageasstring->{'message'});
     unless ($msg){
-	&Sympa::Log::do_log('err',"could not decode message $messagekey extrated from spool (base64)"); 
+	&Sympa::Log::do_log('err',"could not decode message $messagekey extrated from spool (base64)");
 	return undef;
     }
     return $msg;
@@ -189,7 +189,7 @@ Fetch message from bulkspool_table by key.
 sub message_from_spool {
     my $messagekey = shift;
     &Sympa::Log::do_log('debug', '(messagekey : %s)',$messagekey);
-    
+
     unless ($sth = &Sympa::SDM::do_query( "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",&Sympa::SDM::quote($messagekey))) {
 	&Sympa::Log::do_log('err','Unable to retrieve message %s full data from database', $messagekey);
 	return undef;
@@ -245,24 +245,24 @@ sub merge_msg {
 
     my $message_output;
     my $IO;
-    
+
     ## If Content-Type is a text/*
     if($entity->mime_type =~ /^text/){
-	
+
 	if(defined $body){
 	    ## --------- Initial Charset to UTF-8 --------- ##
 	    ## We use find_encoding() to ensure that's a valid charset
-	    if ($charset && ref Encode::find_encoding($charset)) { 
+	    if ($charset && ref Encode::find_encoding($charset)) {
 		unless($charset =~ /UTF-8/){
 		    # Put the charset to UTF-8
 		    Encode::from_to($body, $charset, 'UTF-8');
-		  }       
+		  }
 	    }else {
 		&Sympa::Log::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
 	    }
 
 	    ## PARSAGE ##
-	    
+
 	    &merge_data('rcpt' => $rcpt,
 			'messageid' => $bulk->{'messageid'},
 			'listname' => $bulk->{'listname'},
@@ -270,15 +270,15 @@ sub merge_msg {
 			'data' => $data,
 			'body' => $body,
 			'message_output' => \$message_output,
-			); 
+			);
 	    $body = $message_output;
 
 	    ## We use find_encoding() to ensure that's a valid charset
-	    if ($charset && ref Encode::find_encoding($charset)) { 
+	    if ($charset && ref Encode::find_encoding($charset)) {
 		unless($charset =~ /UTF-8/){
 		    # Put the charset to UTF-8
 			Encode::from_to($body, 'UTF-8',$charset);
-		  }       
+		  }
 	    }else {
 		&Sympa::Log::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
 	    }
@@ -298,14 +298,14 @@ sub merge_msg {
 	    }
 	}
     }
-    
+
     ##--- Recursive call of the method. ---##
-    ## Course on the different parts of the message at all levels. 
+    ## Course on the different parts of the message at all levels.
     foreach my $part ($entity->parts) {
 	unless(&merge_msg($part, $rcpt, $bulk, $data)){
 	    &Sympa::Log::do_log('err', "Failed to merge message part.");
 	    return undef;
-	}  
+	}
     }
 
     return 1;
@@ -341,15 +341,15 @@ sub merge_data {
     my $data = $params{'data'},
     my $body = $params{'body'},
     my $message_output = $params{'message_output'},
-    
+
     my $options;
     $options->{'is_not_template'} = 1;
-    
+
     my $user_details;
     $user_details->{'email'} = $rcpt;
     $user_details->{'name'} = $listname;
     $user_details->{'domain'} = $robot;
-    
+
     # get_list_member_no_object() return the user's details with the custom attributes
     my $user = &Sympa::List::get_list_member_no_object($user_details);
 
@@ -374,9 +374,9 @@ sub merge_data {
     return 1;
 }
 
-sub store { 
+sub store {
     my %data = @_;
-    
+
     my $message = $data{'message'};
     my $msg_id = $message->{'msg'}->head->get('Message-ID'); chomp $msg_id;
     my $rcpts = $data{'rcpts'};
@@ -400,7 +400,7 @@ sub store {
 
     $priority_message = &Sympa::Configuration::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
     $priority_packet = &Sympa::Configuration::get_robot_conf($robot,'sympa_packet_priority') unless ($priority_packet);
-    
+
     #creation of a MIME entity to extract the real sender of a message
     my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
@@ -414,9 +414,9 @@ sub store {
     my $message_sender = $sender_hdr[0]->address;
 
 
-    # first store the message in spool_table 
+    # first store the message in spool_table
     # because as soon as packet are created bulk.pl may distribute the
-    # $last_stored_message_key is a global var used in order to detcect if a message as been allready stored    
+    # $last_stored_message_key is a global var used in order to detcect if a message as been allready stored
     my $message_already_on_spool ;
     my $bulkspool = Sympa::Spool->new('bulk');
 
@@ -442,10 +442,10 @@ sub store {
 	    }
 	}
 	$last_stored_message_key = $message->{'messagekey'};
-	
+
 	#log in stat_table to make statistics...
 	unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
-	    unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests			
+	    unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests
 		&Sympa::Log::db_stat_log({'robot' => $robot, 'list' => $listname, 'operation' => 'send_mail', 'parameter' => length($msg),
 				   'mail' => $message_sender, 'client' => '', 'daemon' => 'sympa.pl'});
 	    }
@@ -453,7 +453,7 @@ sub store {
     }
 
     my $current_date = int(time);
-    
+
     # second : create each receipient packet in bulkmailer_table
     my $type = ref $rcpts;
 
@@ -486,18 +486,18 @@ sub store {
 	    $listname = $listname->{'name'};
 	}
 	if ($message_already_on_spool) {
-	    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message 
+	    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
 	    unless ($sth = &Sympa::SDM::do_query( "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", &Sympa::SDM::quote($message->{'messagekey'}),&Sympa::SDM::quote($packetid))) {
 		&Sympa::Log::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
 		return undef;
-	    }	
+	    }
 	    $packet_already_exist = $sth->fetchrow;
 	    $sth->finish();
 	}
-	
+
 	if ($packet_already_exist) {
 	    &Sympa::Log::do_log('err','Duplicate message not stored in bulmailer_table');
-	    
+
 	}else {
 	    unless (&Sympa::SDM::do_query( "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", &Sympa::SDM::quote($message->{'messagekey'}),&Sympa::SDM::quote($msg_id),&Sympa::SDM::quote($packetid),&Sympa::SDM::quote($rcptasstring),&Sympa::SDM::quote($from),&Sympa::SDM::quote($robot),&Sympa::SDM::quote($listname),$verp,&Sympa::SDM::quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date)) {
 		&Sympa::Log::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
@@ -529,11 +529,11 @@ sub purge_bulkspool {
     }
 
     my $count = 0;
-    while (my $key = $sth->fetchrow_hashref('NAME_lc')) {	
+    while (my $key = $sth->fetchrow_hashref('NAME_lc')) {
 	if ( &remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
 	    $count++;
 	}else{
-	    &Sympa::Log::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});	    
+	    &Sympa::Log::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});
 	}
    }
     $sth->finish;
@@ -574,7 +574,7 @@ sub get_remaining_packets_count {
     }
 
     my @result = $sth->fetchrow_array();
-    
+
     return $result[0];
 }
 
@@ -614,7 +614,7 @@ The random stored in the database, or I<undef> if something went wrong.
 =cut
 
 sub get_db_random {
-    
+
     my $sth;
     unless ($sth = &Sympa::SDM::do_query("SELECT random FROM fingerprint_table")) {
 	&Sympa::Log::do_log('err','Unable to retrieve random value from fingerprint_table');

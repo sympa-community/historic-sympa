@@ -45,13 +45,13 @@ use Sympa::Log;
 
 our $AUTOLOAD;
 
-# db structure description has moved in Sympa/Constant.pm 
+# db structure description has moved in Sympa/Constant.pm
 my %db_struct = &Sympa::DatabaseDescription::db_struct();
 
 my %not_null = &Sympa::DatabaseDescription::not_null();
 
 my %primary =  &Sympa::DatabaseDescription::primary() ;
-	       
+
 my %autoincrement = &Sympa::DatabaseDescription::autoincrement() ;
 
 ## List the required INDEXES
@@ -106,17 +106,17 @@ sub db_get_handler {
 
 ## Just check if DB connection is ok
 sub check_db_connect {
-    
+
     #&Sympa::Log::do_log('debug2', 'Checking connection to the Sympa database');
     ## Is the Database defined
     unless (&Sympa::Configuration::get_robot_conf('*','db_name')) {
 	&Sympa::Log::do_log('err', 'No db_name defined in configuration file');
 	return undef;
     }
-    
+
     unless ($db_source->{'dbh'} && $db_source->{'dbh'}->ping()) {
 	unless (&connect_sympa_database('just_try')) {
-	    &Sympa::Log::do_log('err', 'Failed to connect to database');	   
+	    &Sympa::Log::do_log('err', 'Failed to connect to database');
 	    return undef;
 	}
     }
@@ -166,8 +166,8 @@ sub db_disconnect {
 }
 
 sub probe_db {
-    &Sympa::Log::do_log('debug3', 'Checking database structure');    
-    
+    &Sympa::Log::do_log('debug3', 'Checking database structure');
+
     ## Database structure
     ## Report changes to listmaster
     my @report;
@@ -229,13 +229,13 @@ sub probe_db {
 		    &Sympa::Log::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
 		    return undef;
 		}
-		
+
 		unless (&check_indexes({'table' => $t,'report' => \@report})) {
 		    &Sympa::Log::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
 		    return undef;
 		}
-		
-	    }   
+
+	    }
 	}
 	# add autoincrement if needed
 	foreach my $table (keys %autoincrement) {
@@ -254,7 +254,7 @@ sub probe_db {
 	&Sympa::Log::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
 	return undef;
     }
-    
+
     ## Used by List subroutines to check that the DB is available
     $Sympa::List::use_db = 1;
 
@@ -285,22 +285,22 @@ sub check_fields {
 		'primary' => ( $autoincrement{$t} eq $f),
 		})){
 		push @{$report_ref}, $rep;
-		
+
 	    }else {
 		&Sympa::Log::do_log('err', 'Addition of fields in database failed. Aborting.');
 		return undef;
 	    }
 	    next;
 	}
-	
+
 	## Change DB types if different and if update_db_types enabled
 	if (&Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && &Sympa::Configuration::get_robot_conf('*','db_type') ne 'SQLite') {
 	    unless (&check_db_field_type(effective_format => $real_struct{$t}{$f},
 					 required_format => $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f})) {
 		push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f});
-		
+
 		&Sympa::Log::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, &Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
-		
+
 		my $rep;
 		if ($rep = $db_source->update_field({
 		    'table' => $t,
@@ -396,9 +396,9 @@ sub check_indexes {
 	    }
 	}
     }
-    
+
     ## Create required indexes
-    foreach my $idx (keys %{$indexes{$t}}){ 
+    foreach my $idx (keys %{$indexes{$t}}){
 	## Add indexes
 	unless ($index_columns{$idx}) {
 	    &Sympa::Log::do_log('notice','Index %s on table %s does not exist. Adding it.',$idx,$t);
@@ -445,7 +445,7 @@ sub check_indexes {
 		push @{$report_ref}, $rep;
 	    }
 	}
-    }	 
+    }
     return 1;
 }
 
@@ -563,7 +563,7 @@ sub get_canonical_write_date {
     }
 }
 
-## Returns a character string corresponding to the expression to use in 
+## Returns a character string corresponding to the expression to use in
 ## a write query (e.g. UPDATE or INSERT) for the value given as argument.
 ## This sub takes a single argument: the value of the date to be used in
 ## the query.

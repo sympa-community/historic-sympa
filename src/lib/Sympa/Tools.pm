@@ -53,12 +53,12 @@ use Sympa::Tools::File;
 my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------";
 
 ## Regexps for list params
-## Caution : if this regexp changes (more/less parenthesis), then regexp using it should 
+## Caution : if this regexp changes (more/less parenthesis), then regexp using it should
 ## also be changed
 my $time_regexp = '[012]?[0-9](?:\:[0-5][0-9])?';
 my $time_range_regexp = $time_regexp.'-'.$time_regexp;
 my %regexp = ('email' => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
-	      'family_name' => '[a-z0-9][a-z0-9\-\.\+_]*', 
+	      'family_name' => '[a-z0-9][a-z0-9\-\.\+_]*',
 	      'template_name' => '[a-zA-Z0-9][a-zA-Z0-9\-\.\+_\s]*', ## Allow \s
 	      'host' => '[\w\.\-]+',
 	      'multiple_host_with_port' => '[\w\.\-]+(:\d+)?(,[\w\.\-]+(:\d+)?)*',
@@ -111,10 +111,10 @@ Return the type of a pictures according to the user.
 
 sub pictures_filename {
     my %parameters = @_;
-    
+
     my $login = &md5_fingerprint($parameters{'email'});
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
-    
+
     my $filename = undef;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
  	if (-f $parameters{'path'}.'/'.$listname.'@'.$robot.'/'.$login.$ext) {
@@ -265,7 +265,7 @@ sub sanitize_var {
     }
     my $level = $parameters{'level'};
     $level |= 0;
-    
+
     if(ref($parameters{'var'})) {
 	if(ref($parameters{'var'}) eq 'ARRAY') {
 	    foreach my $index (0..$#{$parameters{'var'}}) {
@@ -305,7 +305,7 @@ sub sanitize_var {
 			}
 		    }
 		}
-		
+
 	    }
 	}
     }
@@ -432,8 +432,8 @@ sub load_edit_list_conf {
 
     my $file;
     my $conf ;
-    
-    return undef 
+
+    return undef
 	unless ($file = get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
 
     unless (open (FILE, $file)) {
@@ -473,7 +473,7 @@ sub load_edit_list_conf {
 	    &Sympa::Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
 	}
     }
-    
+
     close FILE;
     return $conf;
 }
@@ -500,7 +500,7 @@ sub load_create_list_conf {
 
     my $file;
     my $conf ;
-    
+
     $file = get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
     unless ($file) {
 	&Sympa::Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
@@ -522,7 +522,7 @@ sub load_create_list_conf {
 	    next;
 	}
     }
-    
+
     close FILE;
     return $conf;
 }
@@ -549,7 +549,7 @@ sub get_list_list_tpl {
     unless ($list_conf = &load_create_list_conf($robot)) {
 	return undef;
     }
-    
+
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . '/create_list_templates',
         "$directory/create_list_templates",
@@ -605,10 +605,10 @@ sub get_templates_list {
 	push @try, $distrib_dir ;
 	push @try, $site_dir ;
 	push @try, $robot_dir;
-    }    
+    }
 
     if (defined $list) {
-	$listdir = $list->{'dir'}.'/'.$type.'_tt2';	
+	$listdir = $list->{'dir'}.'/'.$type.'_tt2';
 	push @try, $listdir ;
     }
 
@@ -617,7 +617,7 @@ sub get_templates_list {
 
     foreach my $dir (@try) {
 	next unless opendir (DIR, $dir);
-	foreach my $file ( grep (!/^\./,readdir(DIR))) {	    
+	foreach my $file ( grep (!/^\./,readdir(DIR))) {
 	    ## Subdirectory for a lang
 	    if (-d $dir.'/'.$file) {
 		my $lang = $file;
@@ -696,7 +696,7 @@ sub get_template_path {
     my $site_dir = $basedir.'/'.$type.'_tt2';
     $site_dir .= '/'.$lang unless ($lang eq 'default');
     my $robot_dir = $basedir.'/'.$robot.'/'.$type.'_tt2';
-    $robot_dir .= '/'.$lang unless ($lang eq 'default');    
+    $robot_dir .= '/'.$lang unless ($lang eq 'default');
 
     if ($scope eq 'list')  {
 	my $dir = $listdir.'/'.$type.'_tt2';
@@ -740,7 +740,7 @@ sub as_singlepart {
     my ($msg, $preferred_type, $loops) = @_;
     my $done = 0;
     $loops++;
-    
+
     unless (defined $msg) {
 	&Sympa::Log::do_log('err', "Undefined message parameter");
 	return undef;
@@ -771,15 +771,15 @@ sub as_singlepart {
 	my @parts = $msg->parts();
 	## Only keep the first part
 	$msg->parts([$parts[0]]);
-	$msg->make_singlepart();       
+	$msg->make_singlepart();
 
 	$done ||= &as_singlepart($msg, $preferred_type, $loops);
 
     }elsif ($msg->effective_type() =~ /^multipart/) {
 	foreach my $part ($msg->parts) {
-            
+
             next unless (defined $part); ## Skip empty parts
- 
+
 	    if ($part->effective_type() =~ /^multipart\/alternative/) {
 		if (&as_singlepart($part, $preferred_type, $loops)) {
 		    $msg->parts([$part]);
@@ -787,7 +787,7 @@ sub as_singlepart {
 		    $done = 1;
 		}
 	    }
-	}    
+	}
     }
 
     return $done;
@@ -800,7 +800,7 @@ Escape weird characters.
 =cut
 
 sub escape_chars {
-    my $s = shift;    
+    my $s = shift;
     my $except = shift; ## Exceptions
     my $ord_except = ord($except) if (defined $except);
 
@@ -846,7 +846,7 @@ Convert from Perl unicode encoding to UTF8
 
 sub unicode_to_utf8 {
     my $s = shift;
-    
+
     if (&Encode::is_utf8($s)) {
 	return &Encode::encode_utf8($s);
     }
@@ -876,11 +876,11 @@ sub qencode_filename {
 	$trailing = $1 if ($part =~ s/((\.\w+)+)$//); ## trailing .xx
 
 	my $encoded_part = MIME::EncWords::encode_mimewords($part, Charset => 'utf8', Encoding => 'q', MaxLineLen => 1000, Minimal => 'NO');
-	
+
 
 	$filename = $leading.$encoded_part.$trailing;
     }
-    
+
     return $filename;
 }
 
@@ -892,13 +892,13 @@ Q-Decode web file name
 
 sub qdecode_filename {
     my $filename = shift;
-    
+
     ## We don't use MIME::Words here because it does not encode properly Unicode
     ## Check if string is already Q-encoded first
     #if ($filename =~ /\=\?UTF-8\?/) {
     $filename = Encode::encode_utf8(&Encode::decode('MIME-Q', $filename));
     #}
-    
+
     return $filename;
 }
 
@@ -927,7 +927,7 @@ sub escape_html {
     $s =~ s/\"/\&quot\;/gm;
     $s =~ s/\</&lt\;/gm;
     $s =~ s/\>/&gt\;/gm;
-    
+
     return $s;
 }
 
@@ -937,7 +937,7 @@ sub unescape_html {
     $s =~ s/\&quot\;/\"/g;
     $s =~ s/&lt\;/\</g;
     $s =~ s/&gt\;/\>/g;
-    
+
     return $s;
 }
 
@@ -967,13 +967,13 @@ sub cookie_changed {
     if (-f "$basedir/cookies.history") {
 	unless (open COOK, "$basedir/cookies.history") {
 	    &Sympa::Log::do_log('err', "Unable to read $basedir/cookies.history") ;
-	    return undef ; 
+	    return undef ;
 	}
 	my $oldcook = <COOK>;
 	close COOK;
 
 	my @cookies = split(/\s+/,$oldcook );
-	
+
 
 	if ($cookies[$#cookies] eq $current) {
 	    &Sympa::Log::do_log('debug2', "cookie is stable") ;
@@ -982,10 +982,10 @@ sub cookie_changed {
 #	    push @cookies, $current ;
 #	    unless (open COOK, ">$basedir/cookies.history") {
 #		&Sympa::Log::do_log('err', "Unable to create $basedir/cookies.history") ;
-#		return undef ; 
+#		return undef ;
 #	    }
 #	    printf COOK "%s",join(" ",@cookies) ;
-#	    
+#
 #	    close COOK;
 	}
 	return $changed ;
@@ -994,7 +994,7 @@ sub cookie_changed {
 	unless (open COOK, ">$basedir/cookies.history") {
 	    umask $umask;
 	    &Sympa::Log::do_log('err', "Unable to create $basedir/cookies.history") ;
-	    return undef ; 
+	    return undef ;
 	}
 	umask $umask;
 	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$basedir/cookies.history";
@@ -1021,33 +1021,33 @@ sub load_mime_types {
             return undef;
         }
     }
-    
+
     while (<CONF>) {
         next if /^\s*\#/;
-        
+
         if (/^(\S+)\s+(.+)\s*$/i) {
             my ($k, $v) = ($1, $2);
-            
+
             my @extensions = split / /, $v;
-        
+
             ## provides file extention, given the content-type
             if ($#extensions >= 0) {
                 $types->{$k} = $extensions[0];
             }
-    
+
             foreach my $ext (@extensions) {
                 $types->{$ext} = $k;
             }
             next;
         }
     }
-    
+
     close FILE;
     return $types;
 }
 
 sub split_mail {
-    my $message = shift ; 
+    my $message = shift ;
     my $pathname = shift ;
     my $dir = shift ;
     my $confdir = shift;
@@ -1062,7 +1062,7 @@ sub split_mail {
             &split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir) ;
         }
     }
-    else { 
+    else {
 	    my $fileExt ;
 
 	    if ($head->mime_attr("content_type.name") =~ /\.(\w+)\s*\"*$/) {
@@ -1076,15 +1076,15 @@ sub split_mail {
 
 		$fileExt=$mime_types->{$head->mime_type};
 	    }
-	
-	    
 
-	    ## Store body in file 
+
+
+	    ## Store body in file
 	    unless (open OFILE, ">$dir/$pathname.$fileExt") {
 		&Sympa::Log::do_log('err', "Unable to create $dir/$pathname.$fileExt : $ERRNO") ;
-		return undef ; 
+		return undef ;
 	    }
-	    
+
 	    if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
 		open TMP, ">$dir/$pathname.$fileExt.$encoding";
 		$message->print_body (\*TMP);
@@ -1105,11 +1105,11 @@ sub split_mail {
 	    }
 	    close (OFILE);
 	    printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
-	    
+
 	    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-	    $message->purge ;	
+	    $message->purge ;
     }
-    
+
     return 1;
 }
 
@@ -1121,23 +1121,23 @@ sub virus_infected {
     my $domain = shift;
     my $confdir = shift;
 
-    my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
+    my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
     &Sympa::Log::do_log('debug2', 'Scan virus in %s', $file);
-    
+
     unless ($path) {
         &Sympa::Log::do_log('debug', 'Sympa not configured to scan virus in message');
 	return 0;
     }
     my @name = split(/\//,$file);
     my $work_dir = $tmpdir.'/antivirus';
-    
+
     unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
 	&Sympa::Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
     }
 
     $work_dir = $tmpdir.'/antivirus/'.$name[$#name];
-    
+
     unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
 	&Sympa::Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
@@ -1151,7 +1151,7 @@ sub virus_infected {
 	return undef;
     }
 
-    my $virusfound = 0; 
+    my $virusfound = 0;
     my $error_msg;
     my $result;
 
@@ -1163,9 +1163,9 @@ sub virus_infected {
 	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
-	open (ANTIVIR,"$path $args $work_dir |") ; 
-		
+
+	open (ANTIVIR,"$path $args $work_dir |") ;
+
 	while (<ANTIVIR>) {
 	    $result .= $_; chomp $result;
 	    if ((/^\s*Found the\s+(.*)\s*virus.*$/i) ||
@@ -1174,11 +1174,11 @@ sub virus_infected {
 	    }
 	}
 	close ANTIVIR;
-    
+
 	my $status = $CHILD_ERROR / 256 ; # /
 
         ## uvscan status =12 or 13 (*256) => virus
-        if (( $status == 13) || ($status == 12)) { 
+        if (( $status == 13) || ($status == 12)) {
 	    $virusfound ||= "unknown";
 	}
 
@@ -1194,19 +1194,19 @@ sub virus_infected {
     ## Trend Micro
     }elsif ($path =~  /\/vscan$/) {
 
-	open (ANTIVIR,"$path $args $work_dir |") ; 
-		
+	open (ANTIVIR,"$path $args $work_dir |") ;
+
 	while (<ANTIVIR>) {
 	    if (/Found virus (\S+) /i){
 		$virusfound = $1;
 	    }
 	}
 	close ANTIVIR;
-    
+
 	my $status = $CHILD_ERROR/256 ;
 
         ## uvscan status = 1 | 2 (*256) => virus
-        if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
+        if ((( $status == 1) or ( $status == 2)) and not($virusfound)) {
 	    $virusfound = "unknown";
 	}
 
@@ -1228,38 +1228,38 @@ sub virus_infected {
 		$virusfound = $1;
 	    }
 	}
-	
+
 	close ANTIVIR;
-    
+
 	my $status = $CHILD_ERROR/256 ;
 
         ## fsecure status =3 (*256) => virus
-        if (( $status == 3) and not($virusfound)) { 
+        if (( $status == 3) and not($virusfound)) {
 	    $virusfound = "unknown";
-	}    
+	}
     }elsif($path =~ /f-prot\.sh$/) {
 
-        &Sympa::Log::do_log('debug2', 'f-prot is running');    
+        &Sympa::Log::do_log('debug2', 'f-prot is running');
 
         open (ANTIVIR,"$path $args $work_dir |") ;
-        
+
         while (<ANTIVIR>) {
-        
+
             if (/Infection:\s+(.*)/){
                 $virusfound = $1;
             }
         }
-        
+
         close ANTIVIR;
-        
+
         my $status = $CHILD_ERROR/256 ;
-        
-        &Sympa::Log::do_log('debug2', 'Status: '.$status);    
-        
+
+        &Sympa::Log::do_log('debug2', 'Status: '.$status);
+
         ## f-prot status =3 (*256) => virus
-        if (( $status == 3) and not($virusfound)) { 
+        if (( $status == 3) and not($virusfound)) {
             $virusfound = "unknown";
-        }    
+        }
     }elsif ($path =~ /kavscanner/) {
 
 	# impossible to look for viruses with no option set
@@ -1267,9 +1267,9 @@ sub virus_infected {
 	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
-	open (ANTIVIR,"$path $args $work_dir |") ; 
-		
+
+	open (ANTIVIR,"$path $args $work_dir |") ;
+
 	while (<ANTIVIR>) {
 	    if (/infected:\s+(.*)/){
 		$virusfound = $1;
@@ -1279,34 +1279,34 @@ sub virus_infected {
 	    }
 	}
 	close ANTIVIR;
-    
+
 	my $status = $CHILD_ERROR/256 ;
 
         ## uvscan status =3 (*256) => virus
-        if (( $status >= 3) and not($virusfound)) { 
+        if (( $status >= 3) and not($virusfound)) {
 	    $virusfound = "unknown";
 	}
 
         ## Sophos Antivirus... by liuk@publinet.it
     }elsif ($path =~ /\/sweep$/) {
-	
+
         # impossible to look for viruses with no option set
 	unless ($args) {
 	    &Sympa::Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
-    
+
         open (ANTIVIR,"$path $args $work_dir |") ;
-	
+
 	while (<ANTIVIR>) {
 	    if (/Virus\s+(.*)/) {
 		$virusfound = $1;
 	    }
-	}       
+	}
 	close ANTIVIR;
-        
+
 	my $status = $CHILD_ERROR/256 ;
-        
+
 	## sweep status =3 (*256) => virus
 	if (( $status == 3) and not($virusfound)) {
 	    $virusfound = "unknown";
@@ -1314,20 +1314,20 @@ sub virus_infected {
 
 	## Clam antivirus
     }elsif ($path =~ /\/clamd?scan$/) {
-	
+
         open (ANTIVIR,"$path $args $work_dir |") ;
-	
+
 	my $result;
 	while (<ANTIVIR>) {
 	    $result .= $_; chomp $result;
 	    if (/^\S+:\s(.*)\sFOUND$/) {
 		$virusfound = $1;
 	    }
-	}       
+	}
 	close ANTIVIR;
-        
+
 	my $status = $CHILD_ERROR/256 ;
-        
+
 	## Clamscan status =1 (*256) => virus
 	if (( $status == 1) and not($virusfound)) {
 	    $virusfound = "unknown";
@@ -1336,7 +1336,7 @@ sub virus_infected {
 	$error_msg = $result
 	    if ($status != 0 && $status != 1);
 
-    }         
+    }
 
     ## Error while running antivir, notify listmaster
     if ($error_msg) {
@@ -1359,9 +1359,9 @@ sub virus_infected {
 	}
 	rmdir ($work_dir) ;
     }
-   
+
     return $virusfound;
-   
+
 }
 
 =head2 get_filename($type, $options, $name, $robot, $object, $basedir)
@@ -1395,7 +1395,7 @@ sub get_filename {
     my $family;
     &Sympa::Log::do_log('debug3','(%s,%s,%s,%s,%s,%s)', $type, join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
 
-    
+
     if ($object->isa('Sympa::List')) {
  	$list = $object;
  	if ($list->{'admin'}{'family_name'}) {
@@ -1403,20 +1403,20 @@ sub get_filename {
  		&Sympa::Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$list->{'name'},$list->{'admin'}{'family_name'});
  		$list->set_status_error_config('no_list_family',$list->{'name'}, $list->{'admin'}{'family_name'});
  		return undef;
- 	    }  
+ 	    }
  	}
     }elsif ($object->isa('Sympa::Family')) {
  	$family = $object;
     }
-    
+
     if ($type eq 'etc') {
 	my (@try, $default_name);
-	
+
 	## template refers to a language
 	## => extend search to default tpls
 	if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
 	    $default_name = $1.'.tt2';
-	    
+
 	    @try = (
             $basedir . "/$robot/$name",
 		    $basedir . "/$robot/$default_name",
@@ -1431,22 +1431,22 @@ sub get_filename {
 		    Sympa::Constants::DEFAULTDIR . "/$name"
         );
 	}
-	
+
 	if ($family) {
  	    ## Default tpl
  	    if ($default_name) {
 		unshift @try, $family->{'dir'}.'/'.$default_name;
 	    }
 	}
-	
+
 	unshift @try, $family->{'dir'}.'/'.$name;
-    
+
 	if ($list->{'name'}) {
 	    ## Default tpl
 	    if ($default_name) {
 		unshift @try, $list->{'dir'}.'/'.$default_name;
 	    }
-	    
+
 	    unshift @try, $list->{'dir'}.'/'.$name;
 	}
 	my @result;
@@ -1464,7 +1464,7 @@ sub get_filename {
 	    return @result ;
 	}
     }
-    
+
     #&Sympa::Log::do_log('notice','Cannot find %s in %s', $name, join(',',@try));
     return undef;
 }
@@ -1485,9 +1485,9 @@ Make an array of include path for tt2 parsing.
 
 =item * I<$list>: list
 
-=item * I<$basedir> 
+=item * I<$basedir>
 
-=item * I<$viewmaildir> 
+=item * I<$viewmaildir>
 
 =item * I<$domain>
 
@@ -1528,7 +1528,7 @@ sub make_tt2_include_path {
 		my $family = $list->get_family();
 	        $path_family = $family->{'dir'}.'/'.$dir;
 	    }
-	} 
+	}
     }else {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
 	$path_etcdir = $basedir;
@@ -1557,8 +1557,8 @@ sub make_tt2_include_path {
 	    if ($path_family) {
 		unshift @include_path,$path_family;
 		unshift @include_path,$path_family.'/'.$lang;
-	    }	
-	    
+	    }
+
 	}
     }else {
 	@include_path = ($path_etcdir,
@@ -1569,7 +1569,7 @@ sub make_tt2_include_path {
 	}
 	if ($path_list) {
 	    unshift @include_path,$path_list;
-	   
+
 	    if ($path_family) {
 		unshift @include_path,$path_family;
 	    }
@@ -1596,16 +1596,16 @@ sub qencode_hierarchy {
     &Sympa::Tools::File::list_dir($dir, \@all_files, $original_encoding);
 
     foreach my $f_struct (reverse @all_files) {
-    
+
 	next unless ($f_struct->{'filename'} =~ /[^\x00-\x7f]/); ## At least one 8bit char
 
 	my $new_filename = $f_struct->{'filename'};
 	my $encoding = $f_struct->{'encoding'};
 	Encode::from_to($new_filename, $encoding, 'utf8') if $encoding;
-    
+
 	## Q-encode filename to escape chars with accents
 	$new_filename = qencode_filename($new_filename);
-    
+
 	my $orig_f = $f_struct->{'directory'}.'/'.$f_struct->{'filename'};
 	my $new_f = $f_struct->{'directory'}.'/'.$new_filename;
 
@@ -1637,12 +1637,12 @@ Basic check of an email address
 
 sub valid_email {
     my $email = shift;
-    
+
     unless ($email =~ /^$regexp{'email'}$/) {
 	&Sympa::Log::do_log('err', "Invalid email address '%s'", $email);
 	return undef;
     }
-    
+
     ## Forbidden characters
     if ($email =~ /[\|\$\*\?\!]/) {
 	&Sympa::Log::do_log('err', "Invalid email address '%s'", $email);
@@ -1710,7 +1710,7 @@ The clean message id.
 
 sub clean_msg_id {
     my $msg_id = shift;
-    
+
     chomp $msg_id;
 
     if ($msg_id =~ /\<(.+)\>/) {
@@ -1728,19 +1728,19 @@ Change X-Sympa-To: header field in the message
 
 sub change_x_sympa_to {
     my ($file, $value) = @_;
-    
+
     ## Change X-Sympa-To
     unless (open FILE, $file) {
 	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", $file, $ERRNO);
 	next;
-    }	 
+    }
     my @content = <FILE>;
     close FILE;
-    
+
     unless (open FILE, ">$file") {
 	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", "$file", $ERRNO);
 	next;
-    }	 
+    }
     foreach (@content) {
 	if (/^X-Sympa-To:/i) {
 	    $_ = "X-Sympa-To: $value\n";
@@ -1748,7 +1748,7 @@ sub change_x_sympa_to {
 	print FILE;
     }
     close FILE;
-    
+
     return 1;
 }
 
@@ -1761,7 +1761,7 @@ sub add_in_blacklist {
     $entry = lc($entry);
     chomp $entry;
 
-    # robot blacklist not yet availible 
+    # robot blacklist not yet availible
     unless ($list) {
 	 &Sympa::Log::do_log('info',"robot blacklist not yet availible, missing list parameter");
 	 return undef;
@@ -1780,21 +1780,21 @@ sub add_in_blacklist {
 	return undef;
     }
     my $file = $dir.'/blacklist.txt';
-    
+
     if (open BLACKLIST, "$file"){
 	while(<BLACKLIST>) {
 	    next if (/^\s*$/o || /^[\#\;]/o);
 	    my $regexp= $_ ;
 	    chomp $regexp;
-	    $regexp =~ s/\*/.*/ ; 
+	    $regexp =~ s/\*/.*/ ;
 	    $regexp = '^'.$regexp.'$';
-	    if ($entry =~ /$regexp/i) { 
+	    if ($entry =~ /$regexp/i) {
 		&Sympa::Log::do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
 		return 0;
-	    }	
+	    }
 	}
 	close BLACKLIST;
-    }   
+    }
     unless (open BLACKLIST, ">> $file"){
 	&Sympa::Log::do_log('info','do_blacklist : append to file %s',$file);
 	return undef;
@@ -1814,11 +1814,11 @@ Returns the md5 digest in hexadecimal format of given string.
 =cut
 
 sub md5_fingerprint {
-    
+
     my $input_string = shift;
     return undef unless (defined $input_string);
     chomp $input_string;
-    
+
     my $digestmd5 = Digest::MD5->new();
     $digestmd5->reset;
     $digestmd5->add($input_string);
@@ -1862,7 +1862,7 @@ Clean all messages in spool $spool_dir older than $clean_delay.
 
 =head3 Return value
 
-A true value if the spool was cleaned, a false value otherwise. 
+A true value if the spool was cleaned, a false value otherwise.
 
 =head2 CleanDir($dir, $clean_delay)
 
@@ -1883,7 +1883,7 @@ sub CleanDir {
 
     my @qfile = sort grep (!/^\.+$/,readdir(DIR));
     closedir DIR;
-    
+
     foreach my $f (sort @qfile) {
 
 	if ((stat "$dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {
@@ -1911,7 +1911,7 @@ varchar(30)
 =cut
 
 sub get_lockname (){
-    return substr(substr(hostname(), 0, 20).$$,0,30);   
+    return substr(substr(hostname(), 0, 20).$$,0,30);
 }
 
 =head2 wrap_text($text, $init, $subs, $cols)

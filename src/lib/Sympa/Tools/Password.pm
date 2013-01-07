@@ -39,7 +39,7 @@ use MIME::Base64;
 
 use Sympa::Log;
 
-## global var to store a CipherSaber object 
+## global var to store a CipherSaber object
 my $cipher;
 
 sub tmp_passwd {

@@ -53,7 +53,7 @@ Remove PID file and STDERR output.
 
 sub remove_pid {
 	my ($pidfile, $pid, $options, $tmpdir) = @_;
-	
+
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
 	if($options->{'multiple_process'}) {
@@ -63,10 +63,10 @@ sub remove_pid {
 			return undef;
 		}
 		my $l = <PFILE>;
-		close PFILE;	
+		close PFILE;
 		my @pids = grep {/[0-9]+/} split(/\s+/, $l);
 		@pids = grep {!/^$pid$/} @pids;
-		
+
 		## If no PID left, then remove the file
 		if($#pids < 0) {
 			## Release the lock
@@ -126,7 +126,7 @@ sub write_pid {
     unless (defined $lock) {
 	&Sympa::Log::fatal_err('Lock could not be created. Exiting.');
     }
-    $lock->set_timeout(5); 
+    $lock->set_timeout(5);
     unless ($lock->lock('write')) {
 	&Sympa::Log::fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
     }
@@ -135,7 +135,7 @@ sub write_pid {
 	# Read pid file
 	open(PFILE, $pidfile);
 	my $l = <PFILE>;
-	close PFILE;	
+	close PFILE;
 	@pids = grep {/[0-9]+/} split(/\s+/, $l);
     }
 
@@ -167,7 +167,7 @@ sub write_pid {
 	    $pname =~ s/.*\/(\w+)/$1/;
 	    &send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
 	}
-	
+
 	unless(open(PIDFILE, '> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
@@ -178,7 +178,7 @@ sub write_pid {
 	    $lock->unlock();
 	    &Sympa::Log::fatal_err('Could not truncate %s, exiting.', $pidfile);
 	}
-	
+
 	print PIDFILE $pid."\n";
 	close(PIDFILE);
     }

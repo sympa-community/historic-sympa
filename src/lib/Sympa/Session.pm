@@ -46,12 +46,12 @@ use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
-my %session_hard_attributes = ('id_session' => 1, 
-			       'date' => 1, 
+my %session_hard_attributes = ('id_session' => 1,
+			       'date' => 1,
 			       'remote_addr'  => 1,
 			       'robot'  => 1,
-			       'email' => 1, 
-			       'start_date' => 1, 
+			       'email' => 1,
+			       'start_date' => 1,
 			       'hit' => 1,
 			       'new_session' => 1,
 			      );
@@ -79,7 +79,7 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my $pkg = shift; 
+    my $pkg = shift;
     my $robot = shift;
     my $context = shift;
 
@@ -90,14 +90,14 @@ sub new {
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
     my $session={};
     bless $session, $pkg;
-    
+
     unless ($robot) {
 	&Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
 	return undef;
     }
 
 #   passive_session are session not stored in the database, they are used for crawler bots and action such as css, wsdl, ajax and rss
-    
+
     if (is_a_crawler($robot,{'user_agent_string' => $ENV{'HTTP_USER_AGENT'}})) {
 	$session->{'is_a_crawler'} = 1;
 	$session->{'passive_session'} = 1;
@@ -130,7 +130,7 @@ sub new {
 	$session->{'date'} = time;
 	$session->{'start_date'} = time;
 	$session->{'hit'} = 1;
-	$session->{'robot'} = $robot; 
+	$session->{'robot'} = $robot;
 	$session->{'data'} = '';
     }
     return $session;
@@ -146,7 +146,7 @@ sub load {
 	&Sympa::Log::do_log('err', 'internal error, called with undef id_session');
 	return undef;
     }
-    
+
     my $sth;
 
     unless ($sth = &Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
@@ -166,13 +166,13 @@ sub load {
 	$session = $new_session;
 	$counter ++;
     }
-    
+
     unless ($session) {
 	return 'not_found';
     }
-    
+
     my %datas= &Sympa::Tools::Data::string_2_hash($session->{'data'});
-    foreach my $key (keys %datas) {$self->{$key} = $datas{$key};} 
+    foreach my $key (keys %datas) {$self->{$key} = $datas{$key};}
 
     $self->{'id_session'} = $session->{'id_session'};
     $self->{'date'} = $session->{'date'};
@@ -180,7 +180,7 @@ sub load {
     $self->{'hit'} = $session->{'hit'} +1 ;
     $self->{'remote_addr'} = $session->{'remote_addr'};
     $self->{'robot'} = $session->{'robot'};
-    $self->{'email'} = $session->{'email'};    
+    $self->{'email'} = $session->{'email'};
 
     return ($self);
 }
@@ -192,10 +192,10 @@ sub store {
     &Sympa::Log::do_log('debug', '');
 
     return undef unless ($self->{'id_session'});
-    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers; 
-    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication; 
+    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
+    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
 
-    my %hash ;    
+    my %hash ;
     foreach my $var (keys %$self ) {
 	next if ($session_hard_attributes{$var});
 	next unless ($var);
@@ -209,30 +209,30 @@ sub store {
 	unless(&Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",&Sympa::SDM::quote($self->{'id_session'}),time,&Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),&Sympa::SDM::quote($self->{'robot'}),&Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, &Sympa::SDM::quote($data_string))) {
 	    &Sympa::Log::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
 	    return undef;
-	}   
+	}
       ## If the session already exists in DB, then perform an UPDATE
     }else {
 	## Update the new session in the DB
 	unless(&Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,&Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),&Sympa::SDM::quote($self->{'robot'}),&Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, &Sympa::SDM::quote($data_string), &Sympa::SDM::quote($self->{'id_session'}))) {
 	    &Sympa::Log::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
 	    return undef;
-	}    
+	}
     }
 
     return 1;
 }
 
-## This method will renew the session ID 
+## This method will renew the session ID
 sub renew {
 
     my $self = shift;
     &Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
 
     return undef unless ($self->{'id_session'});
-    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers; 
-    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication; 
+    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
+    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
 
-    my %hash ;    
+    my %hash ;
     foreach my $var (keys %$self ) {
 	next if ($session_hard_attributes{$var});
 	next unless ($var);
@@ -246,7 +246,7 @@ sub renew {
     unless(&Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",&Sympa::SDM::quote($new_id), &Sympa::SDM::quote($self->{'id_session'}))) {
 	&Sympa::Log::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
 	return undef;
-    }	 
+    }
 
     ## Renew the session ID in order to prevent session hijacking
     $self->{'id_session'} = $new_id;
@@ -255,15 +255,15 @@ sub renew {
 }
 
 ## remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
-## 
+##
 sub purge_old_sessions {
 
     my $robot = shift;
 
     &Sympa::Log::do_log('info', '(%s)',$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ; 
-    my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ; 
+    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ;
+    my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ;
 
     unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
     unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
@@ -289,7 +289,7 @@ sub purge_old_sessions {
 	&Sympa::Log::do_log('err','Unable to count old session for robot %s',$robot);
 	return undef;
     }
-    
+
     my $total =  $sth->fetchrow;
     if ($total == 0) {
 	&Sympa::Log::do_log('debug','no sessions to expire');
@@ -317,14 +317,14 @@ sub purge_old_sessions {
 
 
 ## remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
-## 
+##
 sub purge_old_tickets {
 
     my $robot = shift;
 
     &Sympa::Log::do_log('info', '(%s)',$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ; 
+    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ;
 
     unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
 
@@ -340,7 +340,7 @@ sub purge_old_tickets {
 	&Sympa::Log::do_log('err','Unable to count old one time tickets for robot %s',$robot);
 	return undef;
     }
-    
+
     my $total =  $sth->fetchrow;
     if ($total == 0) {
 	&Sympa::Log::do_log('debug','no tickets to expire');
@@ -380,7 +380,7 @@ sub list_sessions {
 	&Sympa::Log::do_log('err','Unable to get the list of sessions for robot %s',$robot);
 	return undef;
     }
-    
+
     while (my $session = ($sth->fetchrow_hashref('NAME_lc'))) {
 
 	$session->{'formated_date'} = &Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
@@ -438,7 +438,7 @@ sub set_cookie {
 				   -domain  => $http_domain,
 				   -path    => '/',
 				   -secure => $use_ssl,
-				   -httponly => 1 
+				   -httponly => 1
 				   );
     }else {
 	$cookie = CGI::Cookie->new(-name    => 'sympa_session',
@@ -447,7 +447,7 @@ sub set_cookie {
 				   -domain  => $http_domain,
 				   -path    => '/',
 				   -secure => $use_ssl,
-				   -httponly => 1 
+				   -httponly => 1
 				   );
     }
 
@@ -455,7 +455,7 @@ sub set_cookie {
     printf "Set-Cookie: %s\n", $cookie->as_string;
     return 1;
 }
-    
+
 
 sub get_random {
     &Sympa::Log::do_log('debug', '');
@@ -468,11 +468,11 @@ sub get_random {
 sub as_hashref {
   my $self = shift;
   my $data;
-  
+
   foreach my $key (keys %{$self}) {
     $data->{$key} = $self->{$key};
   }
-  
+
   return $data;
 }
 
@@ -488,7 +488,7 @@ sub is_anonymous {
 
 # input user agent string and IP. return 1 if suspected to be a crawler.
 # initial version based on rawlers_dtection.conf file only
-# later : use Session table to identify those who create a lot of sessions 
+# later : use Session table to identify those who create a lot of sessions
 sub is_a_crawler {
     shift;
     my $context = shift;

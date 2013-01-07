@@ -81,8 +81,8 @@ sub new {
 
     $self = $pkg->SUPER::new($self);
     bless $self, $pkg;
-    
-    
+
+
     unless (eval "require Net::LDAP") {
 	&Sympa::Log::do_log ('err',"Unable to use LDAP library, Net::LDAP required, install perl-ldap (CPAN) first");
 	return undef;
@@ -99,7 +99,7 @@ sub new {
 Connect to an LDAP directory.
 
 =head3 Parameters
- 
+
 # IN : -$options : ref to a hash. Options for the connection process.
 #         currently accepts 'keep_trying' : wait and retry until
 #         db connection is ok (boolean) ; 'warn' : warn
@@ -137,13 +137,13 @@ sub connect {
 	if ($self->{'ldap_use_ssl'} eq 'yes' || $self->{'ldap_use_ssl'} eq '1') {
 	    $self->{'sslversion'} = $self->{'ldap_ssl_version'} if ($self->{'ldap_ssl_version'});
 	    $self->{'ciphers'} = $self->{'ldap_ssl_ciphers'} if ($self->{'ldap_ssl_ciphers'});
-	    
+
 	    unless (eval "require Net::LDAPS") {
 		&Sympa::Log::do_log ('err',"Unable to use LDAPS library, Net::LDAPS required");
 		return undef;
-	    } 
+	    }
 	    require Net::LDAPS;
-	    
+
 	    $self->{'ldap_handler'} = Net::LDAPS->new($host, port => $port, %{$self});
 	}else {
 	    $self->{'ldap_handler'} = Net::LDAP->new($host, %{$self});
@@ -183,14 +183,14 @@ sub connect {
     }else {
 	$cnx = $self->{'ldap_handler'}->bind;
     }
-    
+
     unless (defined($cnx) && ($cnx->code() == 0)){
 	&Sympa::Log::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
 	$self->{'ldap_handler'}->unbind;
 	return undef;
     }
     &Sympa::Log::do_log ('debug',"Bound to LDAP host '$host_entry'");
-    
+
     &Sympa::Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
     return $self->{'ldap_handler'};
 

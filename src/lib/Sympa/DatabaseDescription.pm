@@ -64,11 +64,11 @@ my %full_db_struct = (
 	    },
 	    'reception_subscriber' => {
 		'struct'=> 'varchar(20)',
-		'doc'=>'reception format option of subscriber (digest, summary, etc.)',				
+		'doc'=>'reception format option of subscriber (digest, summary, etc.)',
 		'order'=>4,
 	    },
 	    'suspend_subscriber' => {
-		'struct'=> 'int(1)',				
+		'struct'=> 'int(1)',
 		'doc'=>'boolean set to 1 if subscription is suspended',
 		'order'=>5,
 	    },
@@ -354,7 +354,7 @@ my %full_db_struct = (
 	    },
 	},
 	'doc'=>'This table is created in version 6.2. It replace most of spools on file system for clustering purpose',
-	'order'=>3,	    
+	'order'=>3,
     },
     'bulkmailer_table' => {
 	'fields' => {
@@ -621,7 +621,7 @@ my %full_db_struct = (
 	    'date_notification' => {
 		'struct'=> 'int(11)',
 		'doc'=>'FIXME',
-		'not_null'=>1},		    
+		'not_null'=>1},
 	},
 	'doc' => 'used for message tracking feature. If the list is configured for tracking, outgoing messages include a delivery status notification request and optionnaly a return receipt request.When DSN MDN are received by Syamp, they are store in this table in relation with the related list and message_id',
 	'order' => 8,
@@ -816,7 +816,7 @@ my %full_db_struct = (
 	'doc' => 'Use in conjunction with stat_table for users statistics',
 	'order' => 11,
     },
-    
+
     'admin_table' => {
 	'fields' => {
 
@@ -1166,14 +1166,14 @@ my %full_db_struct = (
 );
 return %full_db_struct;
 }
-    
+
 
 sub db_struct {
 
   my %db_struct;
   my %full_db_struct = &full_db_struct();
 
-  foreach my $table ( keys %full_db_struct  ) { 
+  foreach my $table ( keys %full_db_struct  ) {
       foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
 	  my $trans = $full_db_struct{$table}{'fields'}{$field}{
 		'struct'};
@@ -1181,15 +1181,15 @@ sub db_struct {
 	  my $trans_pg = $trans;
 	  my $trans_syb = $trans;
 	  my $trans_sq = $trans;
-# Oracle	
-	  $trans_o =~ s/^varchar/varchar2/g;	
-	  $trans_o =~ s/^int.*/number/g;	
-	  $trans_o =~ s/^bigint.*/number/g;	
-	  $trans_o =~ s/^smallint.*/number/g;	
-	  $trans_o =~ s/^enum.*/varchar2(20)/g;	
-	  $trans_o =~ s/^text.*/varchar2(500)/g;	
-	  $trans_o =~ s/^longtext.*/long/g;	
-	  $trans_o =~ s/^datetime.*/date/g;	
+# Oracle
+	  $trans_o =~ s/^varchar/varchar2/g;
+	  $trans_o =~ s/^int.*/number/g;
+	  $trans_o =~ s/^bigint.*/number/g;
+	  $trans_o =~ s/^smallint.*/number/g;
+	  $trans_o =~ s/^enum.*/varchar2(20)/g;
+	  $trans_o =~ s/^text.*/varchar2(500)/g;
+	  $trans_o =~ s/^longtext.*/long/g;
+	  $trans_o =~ s/^datetime.*/date/g;
 #Postgresql
 	  $trans_pg =~ s/^int(1)/smallint/g;
 	  $trans_pg =~ s/^int\(?.*\)?/int4/g;
@@ -1200,14 +1200,14 @@ sub db_struct {
 	  $trans_pg =~ s/^longtext.*/text/g;
 	  $trans_pg =~ s/^datetime.*/timestamptz/g;
 	  $trans_pg =~ s/^enum.*/varchar(15)/g;
-#Sybase		
+#Sybase
 	  $trans_syb =~ s/^int.*/numeric/g;
 	  $trans_syb =~ s/^text.*/varchar(500)/g;
 	  $trans_syb =~ s/^smallint.*/numeric/g;
 	  $trans_syb =~ s/^bigint.*/numeric/g;
 	  $trans_syb =~ s/^longtext.*/text/g;
 	  $trans_syb =~ s/^enum.*/varchar(15)/g;
-#Sqlite		
+#Sqlite
 	  $trans_sq =~ s/^varchar.*/text/g;
 	  $trans_sq =~ s/^int\(1\).*/numeric/g;
 	  $trans_sq =~ s/^int.*/integer/g;
@@ -1215,15 +1215,15 @@ sub db_struct {
 	  $trans_sq =~ s/^bigint.*/integer/g;
 	  $trans_sq =~ s/^smallint.*/integer/g;
 	  $trans_sq =~ s/^datetime.*/numeric/g;
-	  $trans_sq =~ s/^enum.*/text/g;	 
-	  
+	  $trans_sq =~ s/^enum.*/text/g;
+
 	  $db_struct{'mysql'}{$table}{$field} = $trans;
 	  $db_struct{'Pg'}{$table}{$field} = $trans_pg;
 	  $db_struct{'Oracle'}{$table}{$field} = $trans_o;
 	  $db_struct{'Sybase'}{$table}{$field} = $trans_syb;
 	  $db_struct{'SQLite'}{$table}{$field} = $trans_sq;
       }
-  }   
+  }
   return %db_struct;
 }
 
@@ -1233,7 +1233,7 @@ sub not_null {
     my %full_db_struct = &full_db_struct() ;
     foreach my $table ( keys %full_db_struct  ) {
 	foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-	    $not_null{'$field'} = $full_db_struct{$table}{'fields'}{$field}{'not_null'}; 
+	    $not_null{'$field'} = $full_db_struct{$table}{'fields'}{$field}{'not_null'};
 	}
     }
     return %not_null;
@@ -1242,9 +1242,9 @@ sub not_null {
 sub autoincrement {
     my %autoincrement;
     my %full_db_struct = &full_db_struct() ;
-    foreach my $table ( keys %full_db_struct  ) {		
+    foreach my $table ( keys %full_db_struct  ) {
 	foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-	    $autoincrement{$table} = $field if ($full_db_struct{$table}{'fields'}{$field}{'autoincrement'}); 
+	    $autoincrement{$table} = $field if ($full_db_struct{$table}{'fields'}{$field}{'autoincrement'});
 	}
     }
     return %autoincrement;
@@ -1257,10 +1257,10 @@ sub primary {
     foreach my $table ( keys %full_db_struct ) {
 	my @primarykey;
 	foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-	    push (@primarykey,$field) if ($full_db_struct{$table}{'fields'}{$field}{'primary'}); 
+	    push (@primarykey,$field) if ($full_db_struct{$table}{'fields'}{$field}{'primary'});
 	}
-	
-	$primary{$table} = \@primarykey;					    
+
+	$primary{$table} = \@primarykey;
     }
     return %primary;
 }
