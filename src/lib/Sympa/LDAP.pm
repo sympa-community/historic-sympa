@@ -34,6 +34,8 @@ package Sympa::LDAP;
 
 use strict;
 
+use English qw(-no_match_vars);
+
 use Sympa::Log;
 
 my @valid_options = qw(host suffix filter scope bind_dn bind_password);
@@ -87,7 +89,7 @@ sub load {
 
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $config)) {
-	&Sympa::Log::do_log('err','Unable to open %s: %s', $config, $!);
+	&Sympa::Log::do_log('err','Unable to open %s: %s', $config, $ERRNO);
 	return undef;
     }
 

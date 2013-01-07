@@ -36,6 +36,7 @@ use strict;
 
 use Cwd;
 use Encode qw(decode_utf8 encode_utf8);
+use English qw(-no_match_vars);
 use HTML::Entities qw(decode_entities);
 
 use Sympa::Configuration;
@@ -269,7 +270,7 @@ sub load_html_message {
     my %metadata;
 
     unless (open ARC, $parameters{'file_path'}) {
-	&Sympa::Log::do_log('err', "Failed to load message '%s' : $!", $parameters{'file_path'});
+	&Sympa::Log::do_log('err', "Failed to load message '%s' : $ERRNO", $parameters{'file_path'});
 	return undef;
     }
 
@@ -317,7 +318,7 @@ sub clean_archive_directory{
 	}
 	$answer->{'dir_to_rebuild'} = $answer->{'cleaned_dir'};
     }else{
-	&Sympa::Log::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$!);
+	&Sympa::Log::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$ERRNO);
 	&Sympa::Tools::File::del_dir($answer->{'cleaned_dir'});
 	return undef;
     }

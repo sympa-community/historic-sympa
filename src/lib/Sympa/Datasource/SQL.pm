@@ -35,6 +35,7 @@ package Sympa::Datasource::SQL;
 use strict;
 use base qw(Sympa::Datasource);
 
+use English qw(-no_match_vars);
 use DBI;
 
 use Sympa::Configuration;
@@ -85,7 +86,7 @@ sub new {
 	my $actualclass;
 	if ($param->{'db_type'} =~ /^mysql$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::MySQL" ){
-			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $@");
+			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $EVAL_ERROR");
 			return undef;
 		}
 		require Sympa::Datasource::SQL::MySQL;
@@ -504,10 +505,10 @@ sub fetch {
 		alarm 0;
 		return $status;
 	};
-	if ( $@ eq "TIMEOUT\n" ) {
+	if ( $EVAL_ERROR eq "TIMEOUT\n" ) {
 		&Sympa::Log::do_log('err','Fetch timeout on remote SQL database');
 		return undef;
-	}elsif ($@) {
+	}elsif ($EVAL_ERROR) {
 		&Sympa::Log::do_log('err','Fetch failed on remote SQL database');
 		return undef;
 	}

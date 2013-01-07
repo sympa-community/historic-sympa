@@ -25,6 +25,8 @@
 
 use lib '--modulesdir--';
 
+use English qw(-no_match_vars);
+
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Language;
@@ -153,7 +155,7 @@ foreach my $vr (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 foreach my $d (@directories) {
 
     unless (opendir DIR, $d) {
-	printf STDERR "Error: Cannot read %s directory : %s\n", $d, $!;
+	printf STDERR "Error: Cannot read %s directory : %s\n", $d, $ERRNO;
 	next;
     }
     
@@ -221,7 +223,7 @@ foreach my $tpl (@templates) {
     unless (-d $dest_path) {
 	printf "Creating $dest_path directory\n";
 	unless (&my_mkdir ($dest_path)) {
-	    printf STDERR "Error : Cannot create $dest_path directory : $!\n";
+	    printf STDERR "Error : Cannot create $dest_path directory : $ERRNO\n";
 	    next;
 	}
 	unless (&Sympa::Tools::File::set_file_rights(file => $dest_path,
@@ -242,7 +244,7 @@ foreach my $tpl (@templates) {
     
     ## Rename old files to .converted
     unless (rename $tpl, "$tpl.converted") {
-	printf STDERR "Error : failed to rename $tpl to $tpl.converted : $!\n";
+	printf STDERR "Error : failed to rename $tpl to $tpl.converted : $ERRNO\n";
 	next;
     }
 }
@@ -255,12 +257,12 @@ sub convert {
 
     ## Convert tpl file
     unless (open TPL, $in_file) {
-	print STDERR "Cannot open $in_filel : $!\n";
+	print STDERR "Cannot open $in_filel : $ERRNO\n";
 	return undef;
     }
     if ($out_file) {
 	unless (open TT2, ">$out_file") {
-	    print STDERR "Cannot create $out_file : $!\n";
+	    print STDERR "Cannot create $out_file : $ERRNO\n";
 	    return undef;
 	}
     }
@@ -301,13 +303,13 @@ sub my_mkdir {
 
 	unless (-d $root_path) {
 	    unless (mkdir ($root_path, 0777)) {
-		printf STDERR "Error : Cannot create $root_path directory : $!\n";
+		printf STDERR "Error : Cannot create $root_path directory : $ERRNO\n";
 		return undef;
 	    }
 	}
 	
 	unless (mkdir ($path, 0777)) {
-	    printf STDERR "Error : Cannot create $path directory : $!\n";
+	    printf STDERR "Error : Cannot create $path directory : $ERRNO\n";
 	    return undef;
 	}
     }else {

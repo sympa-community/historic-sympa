@@ -34,6 +34,7 @@ package Sympa::Scenario;
 
 use strict;
 
+use English qw(-no_match_vars);
 use Net::Netmask;
 
 use Sympa::Configuration;
@@ -221,7 +222,8 @@ sub _parse_scenario {
 	    $auth_methods=~ s/\s//g;
 	    @auth_methods_list = split ',', $auth_methods;
 	}else {
-	    &Sympa::Log::do_log('err', "error rule syntaxe in scenario $function rule line $. expected : <condition> <auth_mod> -> <action>");
+	    &Sympa::Log::do_log('err', "error rule syntaxe in scenario
+		    $function rule line $NR expected : <condition> <auth_mod> -> <action>");
 	    &Sympa::Log::do_log('err',"error parsing $current_rule");
 	    return undef;
 	}
@@ -1015,8 +1017,8 @@ sub verify {
 		}
 	    };
 	}
-	if ($@) {
-	    &Sympa::Log::do_log('err', 'cannot evaluate match: %s', $@);
+	if ($EVAL_ERROR) {
+	    &Sympa::Log::do_log('err', 'cannot evaluate match: %s', $EVAL_ERROR);
 	    return undef;
 	}
 	if ($r) {
@@ -1396,14 +1398,14 @@ sub verify_custom {
 	}
 	&Sympa::Log::do_log('notice', 'Use module %s for custom condition', $file);
 	eval { require "$file"; };
-	if ($@) {
-	    &Sympa::Log::do_log('err', 'Error requiring %s : %s (%s)', $condition, "$@", ref($@));
+	if ($EVAL_ERROR) {
+	    &Sympa::Log::do_log('err', 'Error requiring %s : %s (%s)', $condition, "$EVAL_ERROR", ref($EVAL_ERROR));
 	    return undef;
 	}
 	my $res;
 	eval "\$res = CustomCondition::${condition}::verify(\@{\$args_ref});";
-	if ($@) {
-	    &Sympa::Log::do_log('err', 'Error evaluating %s : %s (%s)', $condition, "$@", ref($@));
+	if ($EVAL_ERROR) {
+	    &Sympa::Log::do_log('err', 'Error evaluating %s : %s (%s)', $condition, "$EVAL_ERROR", ref($EVAL_ERROR));
 	    return undef;
 	}
 

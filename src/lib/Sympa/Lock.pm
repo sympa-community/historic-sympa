@@ -35,6 +35,7 @@ package Sympa::Lock;
 use strict;
 
 use Carp;
+use English qw(-no_match_vars);
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 
@@ -82,7 +83,7 @@ sub new {
     my $fh;
     unless (-f $lock_filename) {
 	unless (open $fh, ">>$lock_filename") {
-	    &Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_filename, $!);
+	    &Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_filename, $ERRNO);
 	    return undef;
 	}
 	close $fh;
@@ -339,7 +340,7 @@ sub _lock_file {
     my $fh;
     my $untainted_lock_mode = sprintf("%s%s",$open_mode,$lock_file);
     unless (open $fh, $untainted_lock_mode) {
-	&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 	return undef;
     }
     
@@ -355,12 +356,12 @@ sub _lock_file {
 	if ( (time - (stat($lock_file))[9] ) >= $timeout) {
 	    &Sympa::Log::do_log('debug3','Removing lock file %s', $lock_file);
 	    unless (unlink $lock_file) {
-		&Sympa::Log::do_log('err', 'Cannot remove %s: %s', $lock_file, $!);
+		&Sympa::Log::do_log('err', 'Cannot remove %s: %s', $lock_file, $ERRNO);
 		return undef;	    		
 	    }
 	    
 	    unless (open $fh, ">$lock_file") {
-		&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
+		&Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 		return undef;	    
 	    }
 	}
@@ -386,7 +387,7 @@ sub _lock_file {
 	    print $fh "$$\n";
 	}
     }else {
-	&Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $ERRNO);
 	return undef;
     }
 
@@ -400,7 +401,7 @@ sub _unlock_file {
     &Sympa::Log::do_log('debug3', '(%s)',$lock_file);
    
     unless (flock($fh,LOCK_UN)) {
-	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $ERRNO);
 	return undef;
     }
     close $fh;
@@ -439,14 +440,14 @@ sub _lock_nfs {
 	## Read access to prevent "Bad file number" error on Solaris
 	$FH = FileHandle->new();
 	unless (open $FH, $open_mode.$lock_file) {
-	    &Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $!);
+	    &Sympa::Log::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 	    return undef;
 	}
 	
 	&Sympa::Log::do_log('debug3', 'Got lock for %s on %s', $mode, $lock_file);
 	return ($FH, $nfs_lock);
     } else {
-	&Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $ERRNO);
 	return undef;
 	}
         
@@ -461,7 +462,7 @@ sub _unlock_nfs {
     &Sympa::Log::do_log('debug3', "($lock_file, $fh)");
     
     unless (defined $nfs_lock and $nfs_lock->unlock()) {
-	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $!);
+	&Sympa::Log::do_log('err', 'Failed UNlocking %s: %s', $lock_file, $ERRNO);
 	return undef;
     }
     close $fh;

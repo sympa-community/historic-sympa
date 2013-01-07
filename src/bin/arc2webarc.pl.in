@@ -26,6 +26,7 @@
 
 use lib '--modulesdir--';
 
+use English qw(-no_match_vars);
 use Getopt::Long;
 
 use Sympa::Configuration;
@@ -77,7 +78,7 @@ my $listname = $ARGV[0];
 my $robot = $ARGV[1];
 
 ## Check UID
-unless ([getpwuid $<]->[0] eq Sympa::Constants::USER) {
+unless ([getpwuid $UID]->[0] eq Sympa::Constants::USER) {
     printf
         "You should run this script as user \"%s\", ignore ? (y/CR)",
         Sympa::Constants::USER;

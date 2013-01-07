@@ -31,6 +31,7 @@ package Sympa::SOAP;
 use strict;
 
 use Encode;
+use English qw(-no_match_vars);
 use HTTP::Cookies;
 
 use Sympa::Admin;
@@ -266,7 +267,7 @@ sub casLogin {
 	eval {
             require AuthCAS;
         };
-        if ($@) {
+        if ($EVAL_ERROR) {
 		&Sympa::Log::do_log('err',"Unable to use AuthCAS library, install AuthCAS (CPAN) first");
 		return undef ;
     }

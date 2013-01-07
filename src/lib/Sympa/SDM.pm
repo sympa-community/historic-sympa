@@ -34,6 +34,8 @@ package Sympa::SDM;
 
 use strict;
 
+use English qw(-no_match_vars);
+
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Datasource::SQL;
@@ -455,7 +457,7 @@ sub data_structure_uptodate {
 
      if (-f $version_file) {
 	 unless (open VFILE, $version_file) {
-	     &Sympa::Log::do_log('err', "Unable to open %s : %s", $version_file, $!);
+	     &Sympa::Log::do_log('err', "Unable to open %s : %s", $version_file, $ERRNO);
 	     return undef;
 	 }
 	 while (<VFILE>) {

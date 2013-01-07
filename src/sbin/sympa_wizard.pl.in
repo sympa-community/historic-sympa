@@ -318,7 +318,7 @@ sub create_configuration {
 	require Sympa::Configuration;
 	require Sympa::Tools;
     };
-    if ($@) {
+    if ($EVAL_ERROR) {
 	*{Sympa::Language::gettext} = sub { shift };
 	*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
     } else {
@@ -341,7 +341,7 @@ sub create_configuration {
     }
 
     unless (open (NEWF,"> $conf")){
-        die "Unable to open $conf : $!";
+        die "Unable to open $conf : $ERRNO";
     };
 
     if ($options{create} eq 'sympa.conf') {
@@ -398,7 +398,7 @@ sub edit_configuration {
         require Conf;
         require tools;
     };
-    if ($@) {
+    if ($EVAL_ERROR) {
         die "Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check\n";
     }
 
@@ -527,25 +527,25 @@ sub edit_configuration {
         ## Keep old config files
         unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
             warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-                         $wwsympa_conf, $!);
+                         $wwsympa_conf, $ERRNO);
         }
 
         unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
             warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-                         $sympa_conf, $!);
+                         $sympa_conf, $ERRNO);
         }
 
         ## Write new config files
         unless (open (WWSYMPA,"> $wwsympa_conf")){
             die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-                        $wwsympa_conf, $!);
+                        $wwsympa_conf, $ERRNO);
         };
 
         my $umask = umask 037;
         unless (open (SYMPA,"> $sympa_conf")){
             umask $umask;
             die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-                        $sympa_conf, $!);
+                        $sympa_conf, $ERRNO);
         };
         umask $umask;
         chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
@@ -616,7 +616,7 @@ EOM
         printf ("%-27s %-27s", $module->{name}, $module->{distribution});
 
         eval "require $module->{name}";
-        if ($@) {
+        if ($EVAL_ERROR) {
             ### not installed
             print "not found\n";
             install_module($module, {'default' => $default});
@@ -705,7 +705,7 @@ sub install_module {
 
     ## Check if module has been successfuly installed
     eval "require $module->{name}";
-    unless ($@) {
+    unless ($EVAL_ERROR) {
         ## Prevent recusive calls if already in force mode
         if ($options->{'force'}) {
             print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";

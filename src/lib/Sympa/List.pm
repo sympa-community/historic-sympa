@@ -35,6 +35,7 @@ use strict;
 
 use DB_File;
 use Encode;
+use English;
 use IO::Scalar;
 use LWP::UserAgent;
 use MIME::Entity;
@@ -2355,7 +2356,7 @@ sub increment_msg_count {
     }
     
     unless (open(MSG_COUNT, ">$file.$$")) {
-	&Sympa::Log::do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $!);
+	&Sympa::Log::do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $ERRNO);
 	return undef;
     }
     foreach my $key (sort {$a <=> $b} keys %count) {
@@ -2364,7 +2365,7 @@ sub increment_msg_count {
     close MSG_COUNT ;
     
     unless (rename("$file.$$", $file)) {
-	&Sympa::Log::do_log('err', "Unable to write '%s' : %s", $file, $!);
+	&Sympa::Log::do_log('err', "Unable to write '%s' : %s", $file, $ERRNO);
 	return undef;
     }
     return 1;
@@ -2585,8 +2586,8 @@ sub save_config {
     ## Also update the binary version of the data structure
     if (&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
 	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
-	if ($@) {
-	    &Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
+	if ($EVAL_ERROR) {
+	    &Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	}
     }
 
@@ -2690,8 +2691,8 @@ sub load {
 	## Load a binary version of the data structure
 	## unless config is more recent than config.bin
 	eval {$admin = &Storable::retrieve("$self->{'dir'}/config.bin")};
-	if ($@) {
-	    &Sympa::Log::do_log('err', 'Failed to load the binary config %s, error: %s', "$self->{'dir'}/config.bin",$@);
+	if ($EVAL_ERROR) {
+	    &Sympa::Log::do_log('err', 'Failed to load the binary config %s, error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	    $lock->unlock();
 	    return undef;
 	}	    
@@ -2721,8 +2722,8 @@ sub load {
 	## update the binary version of the data structure
 	if (&Sympa::Configuration::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
 	    eval {&Storable::store($admin,"$self->{'dir'}/config.bin")};
-	    if ($@) {
-		&Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
+	    if ($EVAL_ERROR) {
+		&Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	    }
 	}
 
@@ -3323,7 +3324,7 @@ sub distribute_msg {
 	# truncate multiple "Re:" and equivalents.
 	my $re_regexp = Sympa::Tools::get_regexp('re');
 	if ($subject_field =~ /^\s*($re_regexp\s*)($re_regexp\s*)*/) {
-	    ($before_tag, $after_tag) = ($1, $'); #'
+	    ($before_tag, $after_tag) = ($1, $POSTMATCH); #'
 	} else {
 	    ($before_tag, $after_tag) = ('', $subject_field);
 	}
@@ -5327,7 +5328,7 @@ sub add_parts {
 	    if ($header =~ /\.mime$/) {
 		my $header_part;
 		eval { $header_part = $parser->parse_in($header); };
-		if ($@) {
+		if ($EVAL_ERROR) {
 		    &Sympa::Log::do_log('err', 'Failed to parse MIME data %s: %s',
 				 $header, $parser->last_error);
 		} else {
@@ -5351,7 +5352,7 @@ sub add_parts {
 	    if ($footer =~ /\.mime$/) {
 		my $footer_part;
 		eval { $footer_part = $parser->parse_in($footer); };
-		if ($@) {
+		if ($EVAL_ERROR) {
 		    &Sympa::Log::do_log('err', 'Failed to parse MIME data %s: %s',
 				 $footer, $parser->last_error);
 		} else {
@@ -5399,11 +5400,11 @@ sub _append_parts {
 	    eval {
 		$header_msg = $cset->encode($header_msg, 1);
 	    };
-	    $header_msg = '' if $@;
+	    $header_msg = '' if $EVAL_ERROR;
 	    eval {
 		$footer_msg = $cset->encode($footer_msg, 1);
 	    };
-	    $footer_msg = '' if $@;
+	    $footer_msg = '' if $EVAL_ERROR;
 	} else {
 	    $header_msg = '' if $header_msg =~ /[^\x01-\x7F]/;
 	    $footer_msg = '' if $footer_msg =~ /[^\x01-\x7F]/;
@@ -5417,7 +5418,7 @@ sub _append_parts {
 
 	    my $io = $part->bodyhandle->open('w');
 	    unless (defined $io) {
-		&Sympa::Log::do_log('err', "Failed to save message : $!");
+		&Sympa::Log::do_log('err', "Failed to save message : $ERRNO");
 		return undef;
 	    }
 	    $io->print($header_msg);
@@ -6531,7 +6532,7 @@ sub parseCustomAttribute {
 	}
 
 	unless (defined $tree) {
-	    &Sympa::Log::do_log('err', "Failed to parse XML data: %s", $@);
+	    &Sympa::Log::do_log('err', "Failed to parse XML data: %s", $EVAL_ERROR);
 	    return undef;
 	}
 
@@ -6880,7 +6881,7 @@ sub get_info {
     my $info;
     
     unless (open INFO, "$self->{'dir'}/info") {
-	&Sympa::Log::do_log('err', 'Could not open %s : %s', $self->{'dir'}.'/info', $!);
+	&Sympa::Log::do_log('err', 'Could not open %s : %s', $self->{'dir'}.'/info', $ERRNO);
 	return undef;
     }
     
@@ -7129,7 +7130,7 @@ sub update_list_member {
 	    if (-f $picture_file_path.'/'.$file_name.'.'.$extension) {
 		my $new_file_name = &Sympa::Tools::md5_fingerprint($values->{'email'});
 		unless (rename $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension) {
-		    &Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension, $!);
+		    &Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension, $ERRNO);
 		}
 	    }
 	}
@@ -9495,7 +9496,7 @@ sub _load_include_admin_user_file {
 	}
 	
 	## Just in case...
-	local $/ = "\n";
+	local $RS = "\n";
 	
 	## Split in paragraphs
 	my $i = 0;
@@ -10908,7 +10909,7 @@ sub sort_dir_to_get_mod {
     
     # listing of all the shared documents of the directory
     unless (opendir DIR, "$dir") {
-	&Sympa::Log::do_log('err',"sort_dir_to_get_mod : cannot open $dir : $!");
+	&Sympa::Log::do_log('err',"sort_dir_to_get_mod : cannot open $dir : $ERRNO");
 	return undef;
     }
     
@@ -11387,7 +11388,7 @@ sub get_cert {
     my @cert;
     if ($format eq 'pem') {
 	unless(open(CERT, $certs)) {
-	    &Sympa::Log::do_log('err', "Unable to open $certs: $!");
+	    &Sympa::Log::do_log('err', "Unable to open $certs: $ERRNO");
 	    return undef;
 	}
 	
@@ -11409,7 +11410,7 @@ sub get_cert {
     }elsif ($format eq 'der') {
 	unless (open CERT, "$Sympa::Configuration::Conf{'openssl'} x509 -in $certs -outform DER|") {
 	    &Sympa::Log::do_log('err', "$Sympa::Configuration::Conf{'openssl'} x509 -in $certs -outform DER|");
-	    &Sympa::Log::do_log('err', "Unable to open get $certs in DER format: $!");
+	    &Sympa::Log::do_log('err', "Unable to open get $certs in DER format: $ERRNO");
 	    return undef;
 	}
 
@@ -11434,7 +11435,7 @@ sub _load_list_config_file {
     my (@paragraphs);
 
     ## Just in case...
-    local $/ = "\n";
+    local $RS = "\n";
 
     ## Set defaults to 1
     foreach my $pname (keys %::pinfo) {
@@ -12009,7 +12010,7 @@ sub compute_topic {
 		eval {
 		    $converted = $charset->decode($body);
 		};
-		if ($@) {
+		if ($EVAL_ERROR) {
 		    $converted = Encode::decode('US-ASCII', $body);
 		}
 		$mail_string .= $converted."\n";
@@ -12579,7 +12580,7 @@ sub remove_task {
     my $task = shift;
 
     unless (opendir(DIR, $Sympa::Configuration::Conf{'queuetask'})) {
-	&Sympa::Log::do_log ('err', "error : can't open dir %s: %s", $Sympa::Configuration::Conf{'queuetask'}, $!);
+	&Sympa::Log::do_log ('err', "error : can't open dir %s: %s", $Sympa::Configuration::Conf{'queuetask'}, $ERRNO);
 	return undef;
     }
     my @tasks = grep !/^\.\.?$/, readdir DIR;
@@ -12588,7 +12589,7 @@ sub remove_task {
     foreach my $task_file (@tasks) {
 	if ($task_file =~ /^(\d+)\.\w*\.$task\.$self->{'name'}\@$self->{'domain'}$/) {
 	    unless (unlink("$Sympa::Configuration::Conf{'queuetask'}/$task_file")) {
-		&Sympa::Log::do_log('err', 'Unable to remove task file %s : %s', $task_file, $!);
+		&Sympa::Log::do_log('err', 'Unable to remove task file %s : %s', $task_file, $ERRNO);
 		return undef;
 	    }
 	    &Sympa::Log::do_log('notice', 'Removing task file %s', $task_file);
@@ -12742,9 +12743,9 @@ sub remove_aliases {
     }
     
     system (sprintf '%s del %s %s', $alias_manager, $self->{'name'}, $self->{'admin'}{'host'});
-    my $status = $? >> 8;
+    my $status = $CHILD_ERROR >> 8;
     unless ($status == 0) {
-	&Sympa::Log::do_log('err','Failed to remove aliases ; status %d : %s', $status, $!);
+	&Sympa::Log::do_log('err','Failed to remove aliases ; status %d : %s', $status, $ERRNO);
 	return undef;
     }
     
@@ -12815,7 +12816,7 @@ sub create_shared {
     }
 
     unless (mkdir ($dir, 0777)) {
-	&Sympa::Log::do_log('err',"unable to create %s : %s ", $dir, $!);
+	&Sympa::Log::do_log('err',"unable to create %s : %s ", $dir, $ERRNO);
 	return undef;
     }
 

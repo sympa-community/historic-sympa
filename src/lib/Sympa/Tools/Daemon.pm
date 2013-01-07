@@ -34,6 +34,7 @@ package Sympa::Tools::Daemon;
 
 use strict;
 
+use English qw(-no_match_vars);
 use Proc::ProcessTable;
 use Sys::Hostname;
 
@@ -70,13 +71,13 @@ sub remove_pid {
 		if($#pids < 0) {
 			## Release the lock
 			unless(unlink $pidfile) {
-				&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $!);
+				&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $ERRNO);
 				return undef;
 			}
 		}else{
 			if(-f $pidfile) {
 				unless(open(PFILE, '> '.$pidfile)) {
-					&Sympa::Log::do_log('err', "Failed to open $pidfile: %s", $!);
+					&Sympa::Log::do_log('err', "Failed to open $pidfile: %s", $ERRNO);
 					return undef;
 				}
 				print PFILE join(' ', @pids)."\n";
@@ -87,13 +88,13 @@ sub remove_pid {
 		}
 	}else{
 		unless(unlink $pidfile) {
-			&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $!);
+			&Sympa::Log::do_log('err', "Failed to remove $pidfile: %s", $ERRNO);
 			return undef;
 		}
 		my $err_file = $tmpdir.'/'.$pid.'.stderr';
 		if(-f $err_file) {
 			unless(unlink $err_file) {
-				&Sympa::Log::do_log('err', "Failed to remove $err_file: %s", $!);
+				&Sympa::Log::do_log('err', "Failed to remove $err_file: %s", $ERRNO);
 				return undef;
 			}
 		}
@@ -144,7 +145,7 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$!);
+	    &Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$ERRNO);
 	}
 	## Print other pids + this one
 	push(@pids, $pid);
@@ -242,7 +243,7 @@ Returns the list of pid identifiers in the pid file.
 sub get_pids_in_pid_file {
 	my $pidfile = shift;
 	unless (open(PFILE, $pidfile)) {
-		&Sympa::Log::do_log('err', "unable to open pidfile %s:%s",$pidfile,$!);
+		&Sympa::Log::do_log('err', "unable to open pidfile %s:%s",$pidfile,$ERRNO);
 		return undef;
 	}
 	my $l = <PFILE>;
@@ -255,7 +256,7 @@ sub get_children_processes_list {
     &Sympa::Log::do_log('debug3','');
     my @children;
     for my $p (@{Proc::ProcessTable->new()->table}){
-	if($p->ppid == $$) {
+	if($p->ppid == $PID) {
 	    push @children, $p->pid;
 	}
     }

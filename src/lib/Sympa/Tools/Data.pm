@@ -34,6 +34,7 @@ package Sympa::Tools::Data;
 
 use strict;
 
+use English qw(-no_match_vars);
 use POSIX qw();
 
 =head1 FUNCTIONS
@@ -357,12 +358,12 @@ sub smart_lessthan {
     my ($stra, $strb) = @_;
     $stra =~ s/^\s+//; $stra =~ s/\s+$//;
     $strb =~ s/^\s+//; $strb =~ s/\s+$//;
-    $! = 0;
+    $ERRNO = 0;
     my(undef, $unparsed) = POSIX::strtod($stra);
     my $numb;
     $numb = POSIX::strtod($strb)
-    	unless ($! || $unparsed !=0);
-    if (($stra eq '') || ($strb eq '') || ($unparsed != 0) || $!) {
+    	unless ($ERRNO || $unparsed !=0);
+    if (($stra eq '') || ($strb eq '') || ($unparsed != 0) || $ERRNO) {
 	return $stra lt $strb;
     } else {
         return $stra < $strb;

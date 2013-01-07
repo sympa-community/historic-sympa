@@ -38,6 +38,7 @@ $ENV{'PATH'} = '';
 use strict;
 use lib '--modulesdir--';
 
+use English qw(-no_match_vars);
 use POSIX qw();
 
 use Sympa::Configuration;
@@ -130,7 +131,7 @@ if ($operation eq 'add') {
     ## Newaliases
     unless ($file) {
 	unless (system($alias_wrapper) == 0) {
-	    print STDERR "Failed to execute newaliases: $!\n";
+	    print STDERR "Failed to execute newaliases: $ERRNO\n";
 	    exit(6)
 	    }
     }
@@ -201,7 +202,7 @@ if ($operation eq 'add') {
     ## Newaliases
     unless ($file) {
 	unless (system($alias_wrapper) == 0) {
-	    print STDERR "Failed to execute newaliases: $!\n";
+	    print STDERR "Failed to execute newaliases: $ERRNO\n";
 	exit (6);
 	}
     }

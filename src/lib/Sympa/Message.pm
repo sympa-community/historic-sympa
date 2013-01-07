@@ -34,6 +34,7 @@ package Sympa::Message;
 
 use strict;
 
+use English qw(-no_match_vars);
 use Mail::Address;
 use MIME::EncWords;
 use MIME::Parser;
@@ -115,7 +116,7 @@ sub new {
 	## Parse message as a MIME::Entity
 	$message->{'filename'} = $file;
 	unless (open FILE, "$file") {
-	    &Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $file, $!);
+	    &Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $file, $ERRNO);
 	    return undef;
 	}
 	while (<FILE>){
@@ -437,7 +438,7 @@ sub fix_html_part {
 
 	my $io = $bodyh->open("w");
 	unless (defined $io) {
-	    &Sympa::Log::do_log('err', "Failed to save message : $!");
+	    &Sympa::Log::do_log('err', "Failed to save message : $ERRNO");
 	    return undef;
 	}
 	$io->print($filtered_body);

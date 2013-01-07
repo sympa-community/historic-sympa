@@ -7,6 +7,7 @@ package Marc::Search;
 use strict;
 use base qw(Marc);
 
+use English qw(-no_match_vars);
 use File::Find;
 use HTML::Entities qw(decode_entities encode_entities);
 use Encode qw(decode_utf8 encode_utf8 is_utf8);
@@ -290,7 +291,7 @@ sub search
 		my ($subj,$from,$date,$id,$body_ref);
 		unless (open FH, '<:utf8', $file)
 		{
-#			$self->error("Couldn't open file $file, $!");
+#			$self->error("Couldn't open file $file, $ERRNO");
 		}
 
 		# Need this loop because newer versions of MHonArc put a version
@@ -365,7 +366,7 @@ sub search
 		}
 		unless (close FH)
 		{
-#            $self->error("Couldn't close file $file, $!");
+#            $self->error("Couldn't close file $file, $ERRNO");
 		}
 
 		# Decode entities
@@ -434,7 +435,7 @@ EOCODE
     }
   $code .= "}\n";
   my $function = eval $code;
-  die "bad pattern: $@" if $@;
+  die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
   return $function;
 }
 
@@ -467,7 +468,7 @@ EOCODE
 EOCODE
 #	print "<PRE>$code</pre>";	# used for debugging
   my $function = eval $code;
-  die "bad pattern: $@" if $@;
+  die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
   return $function;
 }
 
@@ -486,7 +487,7 @@ sub match_all
   }
   my $code =	"sub { use utf8; /" . join ("$sep", @_) . $tail;
   my $function = eval $code;
-  die "bad pattern: $@" if $@;
+  die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
   return $function;
 }
 
@@ -498,7 +499,7 @@ sub match_this
   $string = '(?i)' . $string if ($self->case);
   my $code = "sub { use utf8; /" . $string . "/ }";
   my $function = eval $code;
-  die "bad pattern: $@" if $@;
+  die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
   return $function;
 }
 

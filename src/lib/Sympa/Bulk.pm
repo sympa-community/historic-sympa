@@ -35,6 +35,7 @@ use strict;
 use constant MAX => 100_000;
 
 use Encode;
+use English qw(-no_match_vars);
 use IO::Scalar;
 use Mail::Address;
 use MIME::WordDecoder;
@@ -283,7 +284,7 @@ sub merge_msg {
 	    }
 
 	    # Write the new body in the entity
-	    unless($IO = $entity->bodyhandle->open("w") || die "open body: $!"){
+	    unless($IO = $entity->bodyhandle->open("w") || die "open body: $ERRNO"){
 		&Sympa::Log::do_log('err', "Can't open Entity");
 		return undef;
 	    }
@@ -291,7 +292,7 @@ sub merge_msg {
 		&Sympa::Log::do_log('err', "Can't write in Entity");
 		return undef;
 	    }
-	    unless($IO->close || die "close I/O handle: $!"){
+	    unless($IO->close || die "close I/O handle: $ERRNO"){
 		&Sympa::Log::do_log('err', "Can't close Entity");
 		return undef;
 	    }

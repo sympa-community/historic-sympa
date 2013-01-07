@@ -34,6 +34,8 @@ package Sympa::Fetch;
 
 use strict;
 
+use English qw(-no_match_vars);
+
 use Sympa::Log;
 
 # request a document using https, return status and content
@@ -59,7 +61,7 @@ sub get_https{
         eval {
             require IO::Socket::SSL;
         };
-        if ($@) {
+        if ($EVAL_ERROR) {
 	    &Sympa::Log::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
 	    return undef;
 	}
@@ -67,7 +69,7 @@ sub get_https{
         eval {
             require LWP::UserAgent;
         };
-        if ($@) {
+        if ($EVAL_ERROR) {
 	    &Sympa::Log::do_log('err',"Unable to use LWP library, LWP::UserAgent required, install LWP (CPAN) first");
 	    return undef;
 	}

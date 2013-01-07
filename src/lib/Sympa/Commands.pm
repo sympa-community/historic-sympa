@@ -34,6 +34,8 @@ package Sympa::Commands;
 
 use strict;
 
+use English;
+
 use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -250,7 +252,7 @@ sub help {
 	}
 
     }else{
-	my $error = sprintf('Unable to read "help file" : %s',$!);
+	my $error = sprintf('Unable to read "help file" : %s',$ERRNO);
 	&Sympa::Report::reject_report_cmd('intern',$error,{},$cmd_line,$sender,$robot);
 	&Sympa::Log::do_log('info', 'HELP from %s refused, file not found', $sender,);
 	return undef;
@@ -2414,7 +2416,7 @@ sub modindex {
 	next if (-d "$modqueue/$i");
 
 	$i=~/\_(.+)$/;
-	$curlist = Sympa::List->new($`,$robot);
+	$curlist = Sympa::List->new($PREMATCH,$robot);
 	if ($curlist) {
 	    # list loaded    
 	    if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){

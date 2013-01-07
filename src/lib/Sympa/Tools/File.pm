@@ -35,6 +35,7 @@ package Sympa::Tools::File;
 use strict;
 
 use Encode::Guess;
+use English qw(-no_match_vars);
 use File::Copy::Recursive;
 use File::Find;
 use POSIX qw();
@@ -70,12 +71,12 @@ sub set_file_rights {
 	$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
     }
     unless (chown($uid,$gid, $param{'file'})){
-	&Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$param{'file'},$param{'user'},$param{'group'}, $!);
+	&Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$param{'file'},$param{'user'},$param{'group'}, $ERRNO);
 	return undef;
     }
     if ($param{'mode'}){
 	unless (chmod($param{'mode'}, $param{'file'})){
-	    &Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $!);
+	    &Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $ERRNO);
 	    return undef;
 	}
     }
@@ -118,9 +119,9 @@ sub del_dir {
 	    del_dir($path) if -d $path;
 	}
 	closedir DIR;
-	unless(rmdir $dir) {&Sympa::Log::do_log('err','Unable to delete directory %s: $!',$dir);}
+	unless(rmdir $dir) {&Sympa::Log::do_log('err','Unable to delete directory %s: $ERRNO',$dir);}
     }else{
-	&Sympa::Log::do_log('err','Unable to open directory %s to delete the files it contains: $!',$dir);
+	&Sympa::Log::do_log('err','Unable to open directory %s to delete the files it contains: $ERRNO',$dir);
     }
 }
 

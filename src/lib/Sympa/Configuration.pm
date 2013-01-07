@@ -41,6 +41,7 @@ use constant {
     DAEMON_ALL      => 7
 };
 
+use English;
 use Storable;
 
 use Sympa::Configuration::Definition;
@@ -446,8 +447,8 @@ sub checkfiles_as_root {
     my $dir = &get_robot_conf($robot, 'static_content_path');
     if ($dir ne '' && ! -d $dir){
         unless ( mkdir ($dir, 0775)) {
-        &Sympa::Log::do_log('err', 'Unable to create directory %s: %s', $dir, $!);
-        printf STDERR 'Unable to create directory %s: %s',$dir, $!;
+        &Sympa::Log::do_log('err', 'Unable to create directory %s: %s', $dir, $ERRNO);
+        printf STDERR 'Unable to create directory %s: %s',$dir, $ERRNO;
         $config_err++;
         }
 
@@ -553,7 +554,7 @@ sub checkfiles {
     if ($dir ne '' && -d $dir) {
         unless (-f $dir.'/index.html'){
         unless(open (FF, ">$dir".'/index.html')) {
-            &Sympa::Log::do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $!);
+            &Sympa::Log::do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $ERRNO);
         }
         close FF;        
         }
@@ -597,7 +598,7 @@ sub checkfiles {
     ## Create directory if required
     unless (-d $dir) {
         unless ( &Sympa::Tools::File::mkdir_all($dir, 0755)) {
-        &Sympa::List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
+        &Sympa::List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $ERRNO"]);
         &Sympa::Log::do_log('err','Failed to create directory %s',$dir);
         return undef;
         }
@@ -617,7 +618,7 @@ sub checkfiles {
         rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
 
         unless (open (CSS,">$dir/$css")) {
-            &Sympa::List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
+            &Sympa::List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $ERRNO"]);
             &Sympa::Log::do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
             return undef;
         }
@@ -785,7 +786,7 @@ sub _load_auth {
 
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $config_file)) {
-    &Sympa::Log::do_log('notice',"_load_auth: Unable to open %s: %s", $config_file, $!);
+    &Sympa::Log::do_log('notice',"_load_auth: Unable to open %s: %s", $config_file, $ERRNO);
     return undef;
     }
 
@@ -837,7 +838,7 @@ sub _load_auth {
             eval {
                 require AuthCAS;
             };
-            if ($@) {
+            if ($EVAL_ERROR) {
                 &Sympa::Log::do_log('err', 'Failed to load AuthCAS perl module');
                 return undef;
             } 
@@ -912,7 +913,7 @@ sub load_charset {
     my $config_file = &_get_config_file_name({'robot' => '', 'file' => "charset.conf"});
     if (-f $config_file) {
     unless (open CONFIG, $config_file) {
-        printf STDERR '%s::load_charset(): Unable to read configuration file %s: %s\n',__PACKAGE__,$config_file, $!;
+        printf STDERR '%s::load_charset(): Unable to read configuration file %s: %s\n',__PACKAGE__,$config_file, $ERRNO;
         return {};
     }
     while (<CONFIG>) {
@@ -925,7 +926,7 @@ sub load_charset {
         printf STDERR '%s::load_charset(): Charset name is missing in configuration file %s line %d\n',__PACKAGE__,$config_file, $.;
         next;
         }
-        unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
+        unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$POSTMATCH/ei) { #'
         printf STDERR '%s::load_charset():  Illegal locale name in configuration file %s line %d\n',__PACKAGE__,$config_file, $.;
         next;
         }
@@ -951,7 +952,7 @@ sub load_nrcpt_by_domain {
   return undef unless (-f $config_file) ;
   ## Open the configuration file or return and read the lines.
   unless (open(IN, $config_file)) {
-      printf STDERR  "%s::load_nrcpt_by_domain(): : Unable to open %s: %s\n", __PACKAGE__, $config_file, $!;
+      printf STDERR  "%s::load_nrcpt_by_domain(): : Unable to open %s: %s\n", __PACKAGE__, $config_file, $ERRNO;
       return undef;
   }
   while (<IN>) {
@@ -1133,7 +1134,7 @@ sub load_generic_conf_file {
     my (@paragraphs);
     
     ## Just in case...
-    local $/ = "\n";
+    local $RS = "\n";
     
     ## Set defaults to 1
     foreach my $pname (keys %structure) {       
@@ -1344,7 +1345,7 @@ sub _load_config_file_to_hash {
     my $line_num = 0;
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $param->{'path_to_config_file'})) {
-        printf STDERR  "%s::_load_config_file_to_hash(): Unable to open %s: %s\n", __PACKAGE__, $param->{'path_to_config_file'}, $!;
+        printf STDERR  "%s::_load_config_file_to_hash(): Unable to open %s: %s\n", __PACKAGE__, $param->{'path_to_config_file'}, $ERRNO;
         return undef;
     }
     while (<IN>) {
@@ -1631,7 +1632,7 @@ sub _check_cpan_modules_required_by_config {
         eval {
             require File::NFSLock;
         };
-        if ($@) {
+        if ($EVAL_ERROR) {
             printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n", __PACKAGE__;
             $param->{'config_hash'}{'lock_method'} = 'flock';
             $number_of_missing_modules++;
@@ -1643,7 +1644,7 @@ sub _check_cpan_modules_required_by_config {
         eval {
             require Mail::DKIM;
         };
-        if ($@) {
+        if ($EVAL_ERROR) {
             printf STDERR "%s::_check_cpan_modules_required_by_config(): Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n", __PACKAGE__;
             $param->{'config_hash'}{'dkim_feature'} = 'off';
             $number_of_missing_modules++;
@@ -1807,16 +1808,16 @@ sub _save_binary_cache {
     }   
 
     eval {&Storable::store($param->{'conf_to_save'},$param->{'target_file'});};
-    if ($@) {
-        printf STDERR '%s::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', __PACKAGE__, $param->{'target_file'},$@;
+    if ($EVAL_ERROR) {
+        printf STDERR '%s::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', __PACKAGE__, $param->{'target_file'},$EVAL_ERROR;
         unless ($lock->unlock()) {
             return undef;
         }
         return undef;
     }
     eval {chown ((getpwnam(Sympa::Constants::USER))[2], (getgrnam(Sympa::Constants::GROUP))[2], $param->{'target_file'});};
-    if ($@){
-        printf STDERR  '%s::_save_binary_cache(): Failed to change owner of the binary file %s. error: %s\n', __PACKAGE__,$param->{'target_file'},$@;
+    if ($EVAL_ERROR){
+        printf STDERR  '%s::_save_binary_cache(): Failed to change owner of the binary file %s. error: %s\n', __PACKAGE__,$param->{'target_file'},$EVAL_ERROR;
         unless ($lock->unlock()) {
             return undef;
         }
@@ -1847,8 +1848,8 @@ sub _load_binary_cache {
     eval {
         $result = &Storable::retrieve($param->{'config_file'});
     };
-    if ($@) {
-        printf STDERR  "%s::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", __PACKAGE__, $param->{'config_file'},$@;
+    if ($EVAL_ERROR) {
+        printf STDERR  "%s::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", __PACKAGE__, $param->{'config_file'},$EVAL_ERROR;
         unless ($lock->unlock()) {
             return undef;
         }

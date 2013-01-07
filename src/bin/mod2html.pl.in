@@ -28,8 +28,8 @@ if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_t
 &Sympa::List::_apply_defaults(); # else reading of a List configuration won't work 
 
 # Set the UserID & GroupID for the process
-$( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
-$< = $> = (getpwnam(Sympa::Constants::USER))[2];
+$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
+$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 # Sets the UMASK
 umask(oct($Sympa::Configuration::Conf{'umask'}));

@@ -22,6 +22,7 @@
 use strict;
 use lib '--modulesdir--';
 
+use English qw(-no_match_vars);
 use Net::LDAP;
 use Net::LDAPS;
 use POSIX qw();
@@ -283,14 +284,16 @@ sub initialize_ldap {
     	{
     		unless ($ldap_connection = Net::LDAPS->new($ldap_host), version => 3, verify => 'require', sslversion=> 'sslv3',
         		                  cafile => $ldap_cachain) {
-			print STDERR "Can't connect to LDAP server using SSL or unable to verify Server certificate for $ldap_host: $@\n";
+			print STDERR "Can't connect to LDAP server using SSL
+				or unable to verify Server certificate for
+			$ldap_host: $EVAL_ERROR\n";
 			return 0;
     		}
     	}
     	else
     	{
     		unless ($ldap_connection = Net::LDAPS->new($ldap_host), version => 3, verify => 'none', sslversion=> 'sslv3') {
-			print STDERR "Can't connect to LDAP server using SSL for $ldap_host: $@\n";
+			print STDERR "Can't connect to LDAP server using SSL for $ldap_host: $EVAL_ERROR\n";
 			return 0;
     		}
     	}
@@ -298,7 +301,7 @@ sub initialize_ldap {
     else 
     {
     	unless ($ldap_connection = Net::LDAP->new($ldap_host), version => 3) {
-		print STDERR "Can't connect to LDAP server $ldap_host: $@\n";
+		print STDERR "Can't connect to LDAP server $ldap_host: $EVAL_ERROR\n";
 		return 0;
     	}
     }

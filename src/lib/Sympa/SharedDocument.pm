@@ -35,6 +35,7 @@ package Sympa::SharedDocument;
 use strict;
 
 use Carp;
+use English qw(-no_match_vars);
 use POSIX qw();
 
 use Sympa::Log;
@@ -242,7 +243,7 @@ sub new {
 	
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $document->{'absolute_path'}) {
-	    &Sympa::Log::do_log('err',"cannot open %s : %s", $document->{'absolute_path'}, $!);
+	    &Sympa::Log::do_log('err',"cannot open %s : %s", $document->{'absolute_path'}, $ERRNO);
 	    return undef;
 	}
 	

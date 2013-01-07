@@ -35,6 +35,7 @@ package Sympa::Mail;
 use strict;
 
 use Data::Dumper;
+use English qw(-no_match_vars);
 use MIME::Charset;
 use MIME::Tools;
 use POSIX qw();
@@ -55,7 +56,7 @@ my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
 
 my $max_arg = eval { &POSIX::_SC_ARG_MAX; };
-if ($@) {
+if ($EVAL_ERROR) {
     $max_arg = 4096;
     printf STDERR Sympa::Language::gettext("Your system does not conform to the POSIX P1003.1 standard, or\nyour Perl system does not define the _SC_ARG_MAX constant in its POSIX\nlibrary. You must modify the smtp.pm module in order to set a value\nfor variable %s.\n"), $max_arg;
 } else {
@@ -710,7 +711,7 @@ sub sending {
 	$sympa_email = &Sympa::Configuration::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
 	unless (open TMP, ">$sympa_file") {
-	    &Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $!);
+	    &Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);
 	    return undef;
 	}
 	
@@ -732,7 +733,7 @@ sub sending {
 	$new_file =~ s/T\.//g;
 	
 	unless (rename $sympa_file, $new_file) {
-	    &Sympa::Log::do_log('notice', 'Cannot rename %s to %s : %s', $sympa_file, $new_file, $!);
+	    &Sympa::Log::do_log('notice', 'Cannot rename %s to %s : %s', $sympa_file, $new_file, $ERRNO);
 	    return undef;
 	}
     }else{ # send it now
@@ -804,7 +805,7 @@ sub smtpto {
    
 
    if (!pipe(IN, OUT)) {
-       &Sympa::Log::fatal_err(sprintf Sympa::Language::gettext("Unable to create a channel in smtpto: %s"), "$!"); ## No return
+       &Sympa::Log::fatal_err(sprintf Sympa::Language::gettext("Unable to create a channel in smtpto: %s"), "$ERRNO"); ## No return
    }
    $pid = &Sympa::Tools::safefork();
    $pid{$pid} = 0;
@@ -890,7 +891,7 @@ sub send_in_spool {
        }
     
     unless (open TMP, ">$sympa_file") {
-	&Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $!);
+	&Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);
 	return undef;
    }
 
@@ -968,7 +969,7 @@ sub reformat_message($;$$) {
 	eval {
 	    $msg = $parser->parse_data($message);
 	};
-	if ($@) {
+	if ($EVAL_ERROR) {
 	    &Sympa::Log::do_log('err', "Failed to parse MIME data");
 	    return undef;
 	}
@@ -1005,7 +1006,7 @@ sub fix_part($$$$) {
 	    eval {
 		$data = $parser->parse_data($data);
 	    };
-	    if ($@) {
+	    if ($EVAL_ERROR) {
 		&Sympa::Log::do_log('notice',"Failed to parse MIME data");
 		$data = $parser->parse_data('');
 	    }
@@ -1056,7 +1057,7 @@ sub fix_part($$$$) {
 	my $io = $bodyh->open("w");
 
 	unless (defined $io) {
-	    &Sympa::Log::do_log('err', "Failed to save message : $!");
+	    &Sympa::Log::do_log('err', "Failed to save message : $ERRNO");
 	    return undef;
 	}
 

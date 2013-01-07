@@ -42,8 +42,9 @@ This script must be run along with sympa. It regularly checks the 'outgoing' spo
 use strict;
 use lib '--modulesdir--';
 
-use Getopt::Long;
 use Digest::MD5;
+use English qw(-no_match_vars);
+use Getopt::Long;
 
 use Sympa::Archive;
 use Sympa::Configuration;
@@ -122,7 +123,7 @@ $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 ## Create and write the pidfile
 &Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 unless ($options->{'stderr_to_tty'}) {
-    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $$));
+    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $PID));
 }
 
 # setting log_level using conf unless it is set by calling option
@@ -138,8 +139,8 @@ $wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
 &Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'archived');
 
 ## Set the UserID & GroupID for the process
-$( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
-$< = $> = (getpwnam(Sympa::Constants::USER))[2];
+$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
+$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
@@ -147,7 +148,7 @@ $< = $> = (getpwnam(Sympa::Constants::USER))[2];
 &POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
-unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
+unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
     &Sympa::Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
 
@@ -279,7 +280,7 @@ while (!$end) {
 	    
 	    unless (-d "$arcpath/deleted"){
 		unless (mkdir ("$arcpath/deleted",0777)) {
-		   &Sympa::Log::do_log('info',"remove_arc: unable to create $arcpath/deleted : $!");
+		   &Sympa::Log::do_log('info',"remove_arc: unable to create $arcpath/deleted : $ERRNO");
 		    last;
 		}
 	    }

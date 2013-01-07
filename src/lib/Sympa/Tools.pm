@@ -36,6 +36,7 @@ use strict;
 
 use Digest::MD5;
 use Encode::Guess; ## Useful when encoding should be guessed
+use English;
 use File::Copy::Recursive;
 use File::Find;
 use HTML::StripScripts::Parser;
@@ -1080,7 +1081,7 @@ sub split_mail {
 
 	    ## Store body in file 
 	    unless (open OFILE, ">$dir/$pathname.$fileExt") {
-		&Sympa::Log::do_log('err', "Unable to create $dir/$pathname.$fileExt : $!") ;
+		&Sympa::Log::do_log('err', "Unable to create $dir/$pathname.$fileExt : $ERRNO") ;
 		return undef ; 
 	    }
 	    
@@ -1174,7 +1175,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $? / 256 ; # /
+	my $status = $CHILD_ERROR / 256 ; # /
 
         ## uvscan status =12 or 13 (*256) => virus
         if (( $status == 13) || ($status == 12)) { 
@@ -1202,7 +1203,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $CHILD_ERROR/256 ;
 
         ## uvscan status = 1 | 2 (*256) => virus
         if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
@@ -1211,7 +1212,7 @@ sub virus_infected {
 
     ## F-Secure
     } elsif($path =~  /\/fsav$/) {
-	my $dbdir=$` ;
+	my $dbdir=$PREMATCH;
 
 	# impossible to look for viruses with no option set
 	unless ($args) {
@@ -1230,7 +1231,7 @@ sub virus_infected {
 	
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $CHILD_ERROR/256 ;
 
         ## fsecure status =3 (*256) => virus
         if (( $status == 3) and not($virusfound)) { 
@@ -1251,7 +1252,7 @@ sub virus_infected {
         
         close ANTIVIR;
         
-        my $status = $?/256 ;
+        my $status = $CHILD_ERROR/256 ;
         
         &Sympa::Log::do_log('debug2', 'Status: '.$status);    
         
@@ -1279,7 +1280,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $CHILD_ERROR/256 ;
 
         ## uvscan status =3 (*256) => virus
         if (( $status >= 3) and not($virusfound)) { 
@@ -1304,7 +1305,7 @@ sub virus_infected {
 	}       
 	close ANTIVIR;
         
-	my $status = $?/256 ;
+	my $status = $CHILD_ERROR/256 ;
         
 	## sweep status =3 (*256) => virus
 	if (( $status == 3) and not($virusfound)) {
@@ -1325,7 +1326,7 @@ sub virus_infected {
 	}       
 	close ANTIVIR;
         
-	my $status = $?/256 ;
+	my $status = $CHILD_ERROR/256 ;
         
 	## Clamscan status =1 (*256) => virus
 	if (( $status == 1) and not($virusfound)) {
@@ -1611,7 +1612,7 @@ sub qencode_hierarchy {
 	## Rename the file using utf8
 	&Sympa::Log::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
 	unless (rename $orig_f, $new_f) {
-	    &Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $!);
+	    &Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $ERRNO);
 	    next;
 	}
 	$count++;
@@ -1623,7 +1624,7 @@ sub qencode_hierarchy {
 sub get_message_id {
     my $robot = shift;
 
-    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $robot;
+    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $PID, int(rand(999)), $robot;
 
     return $id;
 }
@@ -1730,14 +1731,14 @@ sub change_x_sympa_to {
     
     ## Change X-Sympa-To
     unless (open FILE, $file) {
-	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", $file, $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", $file, $ERRNO);
 	next;
     }	 
     my @content = <FILE>;
     close FILE;
     
     unless (open FILE, ">$file") {
-	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", "$file", $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' : %s", "$file", $ERRNO);
 	next;
     }	 
     foreach (@content) {
@@ -1876,7 +1877,7 @@ sub CleanDir {
     &Sympa::Log::do_log('debug', 'CleanSpool(%s,%s)', $dir, $clean_delay);
 
     unless (opendir(DIR, $dir)) {
-	&Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $dir, $!);
+	&Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $dir, $ERRNO);
 	return undef;
     }
 
@@ -1891,7 +1892,7 @@ sub CleanDir {
 		&Sympa::Log::do_log('notice', 'Deleting old file %s', "$dir/$f");
 	    }elsif (-d "$dir/$f") {
 		unless (&Sympa::Tools::File::remove_dir("$dir/$f")) {
-		    &Sympa::Log::do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $!);
+		    &Sympa::Log::do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $ERRNO);
 		    next;
 		}
 		&Sympa::Log::do_log('notice', 'Deleting old directory %s', "$dir/$f");

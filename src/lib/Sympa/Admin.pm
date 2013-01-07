@@ -34,6 +34,7 @@ package Sympa::Admin;
 
 use strict;
 
+use English qw(-no_match_vars);
 use File::Copy;
 use IO::Scalar;
 
@@ -181,7 +182,7 @@ sub create_list_old{
      if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
 	 unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
 	     unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-		 &Sympa::Log::do_log('err', 'unable to create %s/%s : %s', $Sympa::Configuration::Conf{'home'},$robot,$?);
+		 &Sympa::Log::do_log('err', 'unable to create %s/%s : %s', $Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
 		 return undef;
 	     }    
 	 }
@@ -192,7 +193,7 @@ sub create_list_old{
 
     ## Check the privileges on the list directory
      unless (mkdir ($list_dir,0777)) {
-	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$?);
+	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
 	 return undef;
      }    
     
@@ -226,7 +227,7 @@ sub create_list_old{
 	return undef;
     }
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $!);
+	&do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -248,7 +249,7 @@ sub create_list_old{
 
     ## info file creation.
     unless (open INFO, '>', "$list_dir/info") {
-	&Sympa::Log::do_log('err','Impossible to create %s/info : %s',$list_dir,$!);
+	&Sympa::Log::do_log('err','Impossible to create %s/info : %s',$list_dir,$ERRNO);
     }
     if (defined $param->{'description'}) {
 	Encode::from_to($param->{'description'}, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
@@ -422,7 +423,7 @@ sub create_list{
     if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
 	unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
 	    unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-		&Sympa::Log::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$?);
+		&Sympa::Log::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
 		return undef;
 	    }    
 	}
@@ -432,7 +433,7 @@ sub create_list{
     }
 
      unless (-r $list_dir || mkdir ($list_dir,0777)) {
-	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$?);
+	 &Sympa::Log::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
 	 return undef;
      }    
     
@@ -459,7 +460,7 @@ sub create_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $!);
+	&do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -475,7 +476,7 @@ sub create_list{
     $param->{'description'} =~ s/\r\n|\r/\n/g;
 
     unless (open INFO, '>', "$list_dir/info") {
-	&Sympa::Log::do_log('err','Impossible to create %s/info : %s', $list_dir, $!);
+	&Sympa::Log::do_log('err','Impossible to create %s/info : %s', $list_dir, $ERRNO);
     }
     if (defined $param->{'description'}) {
 	print INFO $param->{'description'};
@@ -493,7 +494,7 @@ sub create_list{
 			$param->{'listname'}, $family->{'name'},$robot,$file);
 	    }
 	    unless (open FILE, '>', "$list_dir/$file") {
-		&Sympa::Log::do_log('err','Impossible to create %s/%s : %s',$list_dir,$file,$!);
+		&Sympa::Log::do_log('err','Impossible to create %s/%s : %s',$list_dir,$file,$ERRNO);
 	    }
 	    print FILE $file_content;
 	    close FILE;
@@ -623,7 +624,7 @@ sub update_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list->{'dir'}/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $!);
+	&do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -804,7 +805,7 @@ sub rename_list{
     ## This code should be in Sympa::List::rename()
     unless ($param{'mode'} eq 'copy') {     
 	 unless (move ($list->{'dir'}, $new_dir )){
-	     &Sympa::Log::do_log('err',"Unable to rename $list->{'dir'} to $new_dir : $!");
+	     &Sympa::Log::do_log('err',"Unable to rename $list->{'dir'} to $new_dir : $ERRNO");
 	     return 'internal';
 	 }
      
@@ -879,7 +880,7 @@ sub rename_list{
 	 foreach my $spool ('queueauth','queuemod','queuetask','queuebounce',
 			'queue','queueoutgoing','queuesubscribe','queueautomatic') {
 	     unless (opendir(DIR, $Sympa::Configuration::Conf{$spool})) {
-		 &Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $Sympa::Configuration::Conf{$spool}, $!);
+		 &Sympa::Log::do_log('err', "Unable to open '%s' spool : %s", $Sympa::Configuration::Conf{$spool}, $ERRNO);
 	     }
 	     
 	     foreach my $file (sort readdir(DIR)) {
@@ -907,7 +908,7 @@ sub rename_list{
 		 
 		 ## Rename file
 		 unless (move "$Sympa::Configuration::Conf{$spool}/$file", "$Sympa::Configuration::Conf{$spool}/$newfile") {
-		     &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{$spool}/$newfile", "$Sympa::Configuration::Conf{$spool}/$newfile", $!);
+		     &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{$spool}/$newfile", "$Sympa::Configuration::Conf{$spool}/$newfile", $ERRNO);
 		     next;
 		 }
 		 
@@ -920,12 +921,12 @@ sub rename_list{
 	 ## Digest spool
 	 if (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname") {
 	     unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}") {
-		 &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}", $!);
+		 &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}", $ERRNO);
 		 next;
 	     }
 	 }elsif (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot") {
 	     unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}") {
-		 &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}", $!);
+		 &Sympa::Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}", $ERRNO);
 		 next;
 	     }
 	 }     
@@ -990,14 +991,14 @@ sub clone_list_as_empty {
     }
     
     unless (mkdir $new_dir, 0775) {
-	&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to create directory %s : %s',$new_dir, $!);
+	&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to create directory %s : %s',$new_dir, $ERRNO);
 	return undef;;
     }
     chmod 0775, $new_dir;
     foreach my $subdir ('etc','web_tt2','mail_tt2','data_sources' ) {
 	if (-d $new_dir.'/'.$subdir) {
 	    unless (&Sympa::Tools::File::copy_dir($list->{'dir'}.'/'.$subdir, $new_dir.'/'.$subdir)) {
-		&Sympa::Log::do_log('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $!);
+		&Sympa::Log::do_log('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $ERRNO);
 		return undef;
 	    }
 	}
@@ -1005,7 +1006,7 @@ sub clone_list_as_empty {
     # copy mandatory files
     foreach my $file ('config') {
 	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
-		&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
+		&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $ERRNO);
 		return undef;
 	    }
     }
@@ -1013,7 +1014,7 @@ sub clone_list_as_empty {
     foreach my $file ('message.footer','message.header','info','homepage') {
 	if (-f $list->{'dir'}.'/'.$file) {
 	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
-		&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
+		&Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $ERRNO);
 		return undef;
 	    }
 	}
@@ -1179,7 +1180,7 @@ Net::SMTP object or 0
      eval {
          require Net::SMTP;
      };
-     if ($@) {
+     if ($EVAL_ERROR) {
 	 &Sympa::Log::do_log ('err',"Unable to use Net library, Net::SMTP required, install it (CPAN) first");
 	 return undef;
      }
@@ -1231,11 +1232,11 @@ sub install_aliases {
     &Sympa::Log::do_log('debug2',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
  
     unless (-x $alias_manager) {
-		&Sympa::Log::do_log('err','Failed to install aliases: %s', $!);
+		&Sympa::Log::do_log('err','Failed to install aliases: %s', $ERRNO);
 		return undef;
 	}
 	 system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'} >$output_file 2>  $error_output_file") ;
-	 my $status = $? / 256;
+	 my $status = $CHILD_ERROR / 256;
 	 if ($status == 0) {
 	     &Sympa::Log::do_log('info','Aliases installed successfully') ;
 	     return 1;

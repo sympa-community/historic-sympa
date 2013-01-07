@@ -94,6 +94,8 @@ use strict;
 
 use base qw(MIME::Entity);
 
+use English qw(-no_match_vars);
+
 use Mail::Address;
 use MIME::EncWords;
 use MIME::Charset;
@@ -250,7 +252,7 @@ sub _do_text_plain {
     $charset->encoder('utf8');
     $thispart = $charset->encode($thispart);
   };
-  if ($@) {
+  if ($EVAL_ERROR) {
     # mmm, what to do if it fails?
     $outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
     $thispart =~ s/[^\x00-\x7F]/?/g;
@@ -314,7 +316,7 @@ sub _do_text_html {
       $tree->delete();
       $text = Encode::encode_utf8($text);
   } ;
-  if ($@) {
+  if ($EVAL_ERROR) {
       $outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
       return 1;
   }      

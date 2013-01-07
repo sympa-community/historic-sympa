@@ -46,6 +46,7 @@ use lib '--modulesdir--';
 
 use Archive::Zip;
 use Data::Dumper;
+use English qw(-no_match_vars);
 use Mail::Header;
 use Mail::Address;
 use MIME::Parser;
@@ -134,32 +135,32 @@ if (&Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     eval {
 	require Sympa::OAuth::Provider;
     };
-    if ($@) {
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $@");
+    if ($EVAL_ERROR) {
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
 	require Sympa::OAuth::Consumer;
     };
-    if ($@) {
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $@");
+    if ($EVAL_ERROR) {
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
 	require Sympa::VOOT::Provider;
     };
-    if ($@) {
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Provider module: $@");
+    if ($EVAL_ERROR) {
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
 	require Sympa::VOOT::Consumer;
     };
-    if ($@) {
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Consumer module: $@");
+    if ($EVAL_ERROR) {
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Consumer module: $EVAL_ERROR");
 	return undef;
     }
 }else {
@@ -1101,17 +1102,17 @@ my $birthday = time ;
      &Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
      ## Check effective ID
-     unless ($> eq (getpwnam(Sympa::Constants::USER))[2]) {
+     unless ($EUID eq (getpwnam(Sympa::Constants::USER))[2]) {
 	 $maintenance_mode = 1;
 	 &Sympa::Report::reject_report_web('intern_quiet','incorrect_server_config',{},'','');
-	 &wwslog('err','Config error: wwsympa should run with UID %s (instead of %s). *** Switching to maintenance mode. ***', (getpwnam(Sympa::Constants::USER))[2], $>);
+	 &wwslog('err','Config error: wwsympa should run with UID %s (instead of %s). *** Switching to maintenance mode. ***', (getpwnam(Sympa::Constants::USER))[2], $EUID);
      }
 
      ## We set the real UID with the effective UID value
      ## It is usefull to allow execution of scripts like alias_manager
      ## that otherwise might loose the benefit of SetUID
-     $< = $>; ## UID
-     $( = $); ## GID
+     $UID = $EUID; ## UID
+     $GID = $EGID; ## GID
 
 
     unless (&Sympa::SDM::check_db_connect()) {
@@ -1120,7 +1121,7 @@ my $birthday = time ;
      }
 
      ## If in maintenance mode, check if the data structure is now uptodate
-     if ($maintenance_mode && (&Upgrade::data_structure_uptodate() && ($> eq (getpwnam(Sympa::Constants::USER))[2]))) {
+     if ($maintenance_mode && (&Upgrade::data_structure_uptodate() && ($EUID eq (getpwnam(Sympa::Constants::USER))[2]))) {
 	 $maintenance_mode = undef;
 	 &Sympa::Log::do_log('notice',"Data structure seem updated, setting OFF maintenance mode");
      }
@@ -2132,7 +2133,7 @@ sub get_parameters {
 		 ## Dump parameters in a tmp file for later analysis
 		 my $dump_file =  &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
-		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
+		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $ERRNO);		     
 		 }
 		 &Sympa::Tools::Data::dump_var(\%in, 0, \*DUMP);
 		 close DUMP;
@@ -2380,7 +2381,7 @@ sub get_parameters_old {
 		 ## Dump parameters in a tmp file for later analysis
 		 my $dump_file =  &Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
-		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
+		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $ERRNO);		     
 		 }
 		 &Sympa::Tools::Data::dump_var(\%in, 0, \*DUMP);
 		 close DUMP;
@@ -4306,7 +4307,7 @@ sub do_info {
 	 my $file_path = $list->{'dir'}.'/homepage';
 	 unless (open FILE, "<", $file_path) {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $file_path},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err','do_info: failed to open file %s: %s', $file_path,$!);
+	     &wwslog('err','do_info: failed to open file %s: %s', $file_path,$ERRNO);
 	     &web_db_log({'parameters' => $file_path,
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -4324,7 +4325,7 @@ sub do_info {
 	 my $file_path = $list->{'dir'}.'/info';
 	 unless (open FILE, "<", $file_path) {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $file_path},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err','do_info: failed to open file %s: %s', $file_path,$!);
+	     &wwslog('err','do_info: failed to open file %s: %s', $file_path,$ERRNO);
 	     &web_db_log({'parameters' => $file_path,
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -5907,7 +5908,7 @@ sub do_copy_template {
     
     unless (&Sympa::Tools::File::mk_parent_dir($param->{'template_path_out'})) {
       &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path_out'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-      &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path_out'}, $!);
+      &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path_out'}, $ERRNO);
       &web_db_log({'parameters' => $param->{'template_name_out'},
 		   'status' => 'error',
 		   'error_type' => 'internal'});
@@ -5916,7 +5917,7 @@ sub do_copy_template {
 
     unless (open (TPLOUT,'>'.$param->{'template_path_out'})) {
 	&Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path_out'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	&wwslog('err',"can't open file %s : %s", $param->{'template_path_out'}, $!);
+	&wwslog('err',"can't open file %s : %s", $param->{'template_path_out'}, $ERRNO);
 	&web_db_log({'parameters' => $param->{'template_name_out'},
 		     'status' => 'error',
 		     'error_type' => 'internal'});
@@ -5959,7 +5960,7 @@ sub do_manage_template {
 	## create the parent directory if it doesn't already exist
 	unless (&Sympa::Tools::File::mk_parent_dir($param->{'template_path'})) {
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $!);
+	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $ERRNO);
 	    &web_db_log({'parameters' => $param->{'template_name'},
 			 'status' => 'error',
 			 'error_type' => 'internal'});
@@ -5968,7 +5969,7 @@ sub do_manage_template {
 	## open the template
 	unless (open (TPLOUT ,'>' ,$param->{'template_path'})) {
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $!);
+	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $ERRNO);
 	    &web_db_log({'parameters' => $in{'template_name'},
 			 'status' => 'error',
 			 'error_type' => 'internal'});
@@ -5998,7 +5999,7 @@ sub do_manage_template {
 	unless (&Sympa::Tools::File::mk_parent_dir($new_template_path)) {
 
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $!);
+	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $ERRNO);
 	    &web_db_log({'parameters' => $param->{'template_name'},
 			 'status' => 'error',
 			 'error_type' => 'internal'});
@@ -6011,13 +6012,13 @@ sub do_manage_template {
 
 	unless(open (DEFAULT, $default_file)){
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't open file %s : %s", $default_file, $!);
+	    &wwslog('err',"can't open file %s : %s", $default_file, $ERRNO);
 	    return undef;
 	}
 
 	unless(open (TPL, '> '.$new_template_path)){
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $new_template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't open file %s : %s", $new_template_path, $!);
+	    &wwslog('err',"can't open file %s : %s", $new_template_path, $ERRNO);
 	    return undef;
 	}
 
@@ -6034,7 +6035,7 @@ sub do_manage_template {
 	
 	unless(open (FILE, $param->{'template_path'})){
 	    &Sympa::Report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"can't open file MODIFY %s : %s", $param->{'template_path'}, $!);
+	    &wwslog('err',"can't open file MODIFY %s : %s", $param->{'template_path'}, $ERRNO);
 	    &web_db_log({'parameters' => $param->{'template_path'},
 			 'status' => 'error',
 			 'error_type' => 'internal'});
@@ -6067,7 +6068,7 @@ sub do_manage_template {
 
 	unless(unlink $param->{'template_path'}) {
 	    &Sympa::Report::reject_report_web('intern','cannot_delete',{'file_del' => $param->{'template_path'}},'','','',$robot);
-	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $!);
+	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $ERRNO);
 	    &web_db_log({'parameters' => $param->{'template_path'},
 			 'status' => 'error',
 			 'error_type' => 'internal'});
@@ -6248,7 +6249,7 @@ sub do_skinsedit {
 	    unless (-d $dir) {
 		unless (mkdir $dir, 0775) {
 		    &Sympa::Report::reject_report_web('intern',"mkdir_failed",{'path' => $dir}, $param->{'action'},'',$param->{'user'}{'email'},$robot);
- 		    &wwslog('err','skinsedit : failed to create directory %s : %s',$dir, $!);
+ 		    &wwslog('err','skinsedit : failed to create directory %s : %s',$dir, $ERRNO);
   		    return undef;
   		}
  		chmod 0775, $dir;
@@ -6776,7 +6777,7 @@ sub do_d_install_shared {
 		     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir$slash_path$new_fname", 
 									'new'=>"$shareddir$slash_path$new_fname.old" },
 						$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		     &wwslog('err',"do_d_install_shared : Failed to rename $shareddir$slash_path$new_fname to .old : %s",$!);
+		     &wwslog('err',"do_d_install_shared : Failed to rename $shareddir$slash_path$new_fname to .old : %s",$ERRNO);
 		     &web_db_log({'status' => 'error',
 				  'error_type' => 'internal'});
 		     return undef;
@@ -6785,7 +6786,7 @@ sub do_d_install_shared {
 		     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir$slash_path.desc.$new_fname", 
 									'new'=>"$shareddir$slash_path.desc.$new_fname.old"},
 						$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		     &wwslog('err',"do_d_install_shared : Failed to rename shareddir$slash_path.desc.$new_fname to .old : %s",$!);
+		     &wwslog('err',"do_d_install_shared : Failed to rename shareddir$slash_path.desc.$new_fname to .old : %s",$ERRNO);
 		     &web_db_log({'status' => 'error',
 				  'error_type' => 'internal'});
 		     return undef;
@@ -6797,7 +6798,7 @@ sub do_d_install_shared {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir$id", 
 								    'new'=>"$shareddir$slash_path$new_fname"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_install_shared : Failed to rename $file to $shareddir$slash_path$new_fname : $!");
+		 &wwslog('err',"do_d_install_shared : Failed to rename $file to $shareddir$slash_path$new_fname : $ERRNO");
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
 		 return undef; 
@@ -6806,7 +6807,7 @@ sub do_d_install_shared {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir$slash_path.desc.$fname",
 								    'new'=>"$shareddir$slash_path.desc.$new_fname"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_install_shared : Failed to rename $file to $shareddir$slash_path$new_fname : $!");
+		 &wwslog('err',"do_d_install_shared : Failed to rename $file to $shareddir$slash_path$new_fname : $ERRNO");
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
 		 return undef; 
@@ -7272,7 +7273,7 @@ sub do_editfile {
 	     ## It allows to us the correct file encoding
 	     unless (open FILE, "<", $param->{'filepath'}) {
 		 &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $param->{'filepath'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err','do_editfile: failed to open file %s: %s', $param->{'filepath'},$!);
+		 &wwslog('err','do_editfile: failed to open file %s: %s', $param->{'filepath'},$ERRNO);
 		 &web_db_log({'parameters' => $in{'file'},
 			      'status' => 'error',
 			      'error_type' => 'internal'});
@@ -7421,7 +7422,7 @@ sub do_savefile {
 	 unless (-d $dir) {
 	     unless (mkdir $dir, 0777) {
 		 &Sympa::Report::reject_report_web('intern','cannot_mkdir',{'dir' => $dir},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err','do_savefile: failed to create directory %s: %s', $dir,$!);
+		 &wwslog('err','do_savefile: failed to create directory %s: %s', $dir,$ERRNO);
 		 &web_db_log({'parameters' => $in{'file'},
 			      'status' => 'error',
 			      'error_type' => 'internal'});
@@ -7432,7 +7433,7 @@ sub do_savefile {
 	 ## Save new file
 	 unless (open FILE, ">", $param->{'filepath'}) {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $param->{'filepath'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err','do_savefile: failed to save file %s: %s', $param->{'filepath'},$!);
+	     &wwslog('err','do_savefile: failed to save file %s: %s', $param->{'filepath'},$ERRNO);
 	     &web_db_log({'parameters' => $in{'file'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -11619,7 +11620,7 @@ sub do_d_read {
 	 # listing of all the shared documents of the directory
          unless (opendir DIR, "$doc") {
              &Sympa::Report::reject_report_web('intern','cannot_open_dir',{'dir' => $doc },$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"d_read : cannot open $doc : $!");
+	     &wwslog('err',"d_read : cannot open $doc : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -12176,7 +12177,7 @@ sub directory_browsing {
 
      ## listing of all the shared documents of the directory
      unless (opendir DIR, "$path_dir") {
-	 &wwslog('err',"directory_browsing($dir) : cannot open the directory : $!");
+	 &wwslog('err',"directory_browsing($dir) : cannot open the directory : $ERRNO");
 	 return undef;
      }
 
@@ -12706,7 +12707,7 @@ sub do_d_describe {
 
 	     # fill the description file
 	     unless (open DESC,">$desc_file") {
-		 &wwslog('info',"do_d_describe : cannot open $desc_file : $!");
+		 &wwslog('info',"do_d_describe : cannot open $desc_file : $ERRNO");
 		 &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 &web_db_log({'parameters' => $in{'path'},
 			      'status' => 'error',
@@ -12730,7 +12731,7 @@ sub do_d_describe {
 	     # Creation of a description file 
 	     unless (open (DESC,">$desc_file")) {
 		 &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('info',"d_describe : Cannot create description file $desc_file : $!");
+		 &wwslog('info',"d_describe : Cannot create description file $desc_file : $ERRNO");
 		 &web_db_log({'parameters' => $in{'path'},
 			      'status' => 'error',
 			      'error_type' => 'internal'});
@@ -12869,7 +12870,7 @@ sub do_d_savefile {
 	     &Sympa::Report::reject_report_web('user','cannot_overwrite', {'reason' => $1,
 								    'path' => $visible_path }
 					,$param->{'action'},$list);
-	     &wwslog('err',"do_d_savefile : Cannot open for replace $shareddir/$path : $!");
+	     &wwslog('err',"do_d_savefile : Cannot open for replace $shareddir/$path : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -12932,7 +12933,7 @@ sub do_d_savefile {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir/$path",
 								'new'=>"$shareddir/$dir.$file.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_savefile : Failed to rename  $path to $dir.$file.moderate : $!");
+	     &wwslog('err',"do_d_savefile : Failed to rename  $path to $dir.$file.moderate : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -12941,7 +12942,7 @@ sub do_d_savefile {
 	      &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir/$dir.desc.$file",
 								 'new'=>"$shareddir/$dir.desc..$file.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_savefile : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $!");
+	     &wwslog('err',"do_d_savefile : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -13078,10 +13079,10 @@ sub do_d_overwrite {
 
      # Creation of the shared file
      unless (open FILE, ">:bytes", "$shareddir/$path") {
-	 &Sympa::Report::reject_report_web('user','cannot_overwrite', {'reason' => $!,
+	 &Sympa::Report::reject_report_web('user','cannot_overwrite', {'reason' => $ERRNO,
 								'path' => $visible_path }
 				    ,$param->{'action'},$list);
-	 &wwslog('err',"d_overwrite : Cannot open for replace $shareddir/$path : $!");
+	 &wwslog('err',"d_overwrite : Cannot open for replace $shareddir/$path : $ERRNO");
 	 &web_db_log({'parameters' => $in{'path'},
 		      'status' => 'error',
 		      'error_type' => 'cannot_overwrite'});
@@ -13145,7 +13146,7 @@ sub do_d_overwrite {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir/$path",
 								'new'=>"$shareddir/$dir.$file.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_overwrite : Failed to rename  $path to $dir.$file.moderate : $!");
+	     &wwslog('err',"do_d_overwrite : Failed to rename  $path to $dir.$file.moderate : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -13155,7 +13156,7 @@ sub do_d_overwrite {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir/$dir.desc.$file",
 								'new'=>"$shareddir/$dir.desc..$file.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_overwrite : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $!");
+	     &wwslog('err',"do_d_overwrite : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $ERRNO");
 	     &web_db_log({'parameters' => $in{'path'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
@@ -13433,7 +13434,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longgoodname",
 								    'new'=>"$longgoodname.old"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to .old : %s",$longgoodname, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to .old : %s",$longgoodname, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 		 return undef;
 	     }
@@ -13445,7 +13446,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longgooddesc",
 								    'new'=>"$longgooddesc.old"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to .old : %s", $longgooddesc, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to .old : %s", $longgooddesc, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 
@@ -13454,7 +13455,7 @@ sub do_d_upload {
 		  &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpname",
 								     'new'=>"$longgoodname"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longgoodname, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longgoodname, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	     
@@ -13463,7 +13464,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpdesc",
 								    'new'=>"$longgooddesc"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longgooddesc, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longgooddesc, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 
@@ -13473,7 +13474,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpname",
 								    'new'=>"$longmodname"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longmodname, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longmodname, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	     
@@ -13481,7 +13482,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpdesc",
 								    'new'=>"$longmoddesc"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longmoddesc, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longmoddesc, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	       
@@ -13562,7 +13563,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpname",
 								    'new'=>"$longnewname"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longnewname, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpname, $longnewname, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	     
@@ -13573,7 +13574,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpdesc",
 								    'new'=>"$longnewdesc"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longnewdesc, $!);
+		 &wwslog('err',"do_d_upload : Failed to rename %s to %s : %s", $longtmpdesc, $longnewdesc, $ERRNO);
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	 
@@ -13583,7 +13584,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpname",
 								    'new'=>"$shareddir/$path/.$in{'new_name'}.moderate"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename $longtmpname to $shareddir/$path/.$in{'new_name'}.moderate : $!");
+		 &wwslog('err',"do_d_upload : Failed to rename $longtmpname to $shareddir/$path/.$in{'new_name'}.moderate : $ERRNO");
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 	     
@@ -13591,7 +13592,7 @@ sub do_d_upload {
 		 &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$longtmpdesc",
 								    'new'=>"$shareddir/$path/.desc..$in{'new_name'}.moderate"},
 					    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_upload : Failed to rename $longtmpdesc to $shareddir/$path/.desc..$in{'new_name'}.moderate: $!");
+		 &wwslog('err',"do_d_upload : Failed to rename $longtmpdesc to $shareddir/$path/.desc..$in{'new_name'}.moderate: $ERRNO");
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$visible_path,$visible_fname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     }
 
@@ -13692,7 +13693,7 @@ sub creation_picture_file {
     my $fh = $query->upload('uploaded_file');
     unless (open FILE, ">:bytes", "$root_dir/$path/$fname") {
 	&Sympa::Report::reject_report_web('intern','cannot_upload',{'path' => "$path/$fname"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	&wwslog('err',"creation_picture_file : Cannot open file $root_dir/$path/$fname : $!");
+	&wwslog('err',"creation_picture_file : Cannot open file $root_dir/$path/$fname : $ERRNO");
 	return undef;
     }
     while (<$fh>) {
@@ -13868,7 +13869,7 @@ sub do_d_unzip {
 
      unless (mkdir ("$zip_abs_dir",0777)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_mkdir',{'dir' => $zip_abs_dir},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err',"do_d_unzip($path/$fname) : Unable to create $zip_abs_dir : $!");
+	 &wwslog('err',"do_d_unzip($path/$fname) : Unable to create $zip_abs_dir : $ERRNO");
 	 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
      }
@@ -13876,7 +13877,7 @@ sub do_d_unzip {
  ### directory for unzipped files
      unless (mkdir ("$zip_abs_dir"."/zip",0777)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_mkdir',{'dir' => "$zip_abs_dir"."/zip"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err',"do_d_unzip($path/$fname) : Unable to create $zip_abs_dir/zip : $!");
+	 &wwslog('err',"do_d_unzip($path/$fname) : Unable to create $zip_abs_dir/zip : $ERRNO");
 	 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
      }
@@ -13885,7 +13886,7 @@ sub do_d_unzip {
      my $fh = $query->upload('unzipped_file');
      unless (open FILE, ">:bytes", "$zip_abs_dir/$fname") {
 	 &Sympa::Report::reject_report_web('intern','cannot_upload',{'path' => "$path/$fname"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err',"do_d_unzip($path/$fname) : Cannot open file $zip_abs_dir/$fname : $!");
+	 &wwslog('err',"do_d_unzip($path/$fname) : Cannot open file $zip_abs_dir/$fname : $ERRNO");
 	 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
      }
@@ -14085,7 +14086,7 @@ sub d_copy_rec_dir {
 	## directory creation
 	unless (mkdir ("$dest_dir/$dname",0777)) {
 	    &Sympa::Report::reject_report_web('user','directory_no_copied',{'name'=> "$dname"},$param->{'action'},$list);
-	    &wwslog('err',"d_copy_rec_dir : Unable to create directory $dest_dir/$dname : $!");
+	    &wwslog('err',"d_copy_rec_dir : Unable to create directory $dest_dir/$dname : $ERRNO");
 	    &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$from,$path,$dest_dir,$dname",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	    return 1;
 	}
@@ -14289,7 +14290,7 @@ sub d_copy_file {
  	unless (open DEST_FILE, ">$dest_dir/$fname") {
 	    &Sympa::Report::reject_report_web('user','file_no_copied',{'name'=> "$path/$visible_fname"},
 				       $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	    &wwslog('err',"d_copy_file : Cannot create file $dest_dir/$fname : $!");
+	    &wwslog('err',"d_copy_file : Cannot create file $dest_dir/$fname : $ERRNO");
 	    &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$from,$path,$dest_dir,$fname,$access_dir",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'file_no_copied','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	    return 1;
 	}
@@ -14463,7 +14464,7 @@ sub do_d_delete {
 	 if (-e "$doc/\.desc") {
 	     unless (unlink("$doc/.desc")) {
 		 &Sympa::Report::reject_report_web('intern','erase_file',{'file' => "$doc/.desc"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &wwslog('err',"do_d_delete : Failed to erase $doc/.desc : $!");
+		 &wwslog('err',"do_d_delete : Failed to erase $doc/.desc : $ERRNO");
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 		 return undef;
 	     }
@@ -14593,7 +14594,7 @@ sub do_d_rename {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>$doc,
 								'new'=>"$shareddir/$current_directory/.$in{'new_name'}.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_rename : Failed to rename %s to %s : %s", $doc, "$shareddir/$current_directory/$in{'new_name'}", $!);
+	     &wwslog('err',"do_d_rename : Failed to rename %s to %s : %s", $doc, "$shareddir/$current_directory/$in{'new_name'}", $ERRNO);
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -14603,7 +14604,7 @@ sub do_d_rename {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>$doc,
 								'new'=>"$shareddir/$current_directory/$in{'new_name'}"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_rename : Failed to rename %s to %s : %s", $doc, "$shareddir/$current_directory/$in{'new_name'}", $!);
+	     &wwslog('err',"do_d_rename : Failed to rename %s to %s : %s", $doc, "$shareddir/$current_directory/$in{'new_name'}", $ERRNO);
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -14622,7 +14623,7 @@ sub do_d_rename {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>$desc_file,
 								'new'=> $new_desc_file},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_rename : Failed to rename $desc_file : $!");
+	     &wwslog('err',"do_d_rename : Failed to rename $desc_file : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -14751,7 +14752,7 @@ sub do_d_create_dir {
 	 # Creation of the new directory
 	 unless (mkdir ("$document",0777)) {
 	     &Sympa::Report::reject_report_web('intern','cannot_mkdir',{'dir' => $document},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_create_dir : Unable to create $document : $!");
+	     &wwslog('err',"do_d_create_dir : Unable to create $document : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -14762,7 +14763,7 @@ sub do_d_create_dir {
 	 # Creation of the new file
 	 unless (open FILE, ">$document") {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => "$path/$name_doc"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_create_dir : Unable to create $document : $!");
+	     &wwslog('err',"do_d_create_dir : Unable to create $document : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -14795,7 +14796,7 @@ sub do_d_create_dir {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>"$shareddir/$path/$name_doc",
 								'new'=>"$shareddir/$path/.$name_doc.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_create_dir : Failed to rename $path/$name_doc to $path/.$name_doc.moderate : $!");
+	     &wwslog('err',"do_d_create_dir : Failed to rename $path/$name_doc to $path/.$name_doc.moderate : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 }
 	 
@@ -14803,7 +14804,7 @@ sub do_d_create_dir {
 	     &Sympa::Report::reject_report_web('intern','rename_file',{'old'=>$desc_file,
 								'new'=>"$shareddir/$path/.desc..$name_doc.moderate"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err',"do_d_create_dir : Failed to rename $desc_file to $path/.desc..$name_doc.moderate : $!");
+	     &wwslog('err',"do_d_create_dir : Failed to rename $desc_file to $path/.desc..$name_doc.moderate : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 }
 
@@ -15066,7 +15067,7 @@ sub do_d_change_access {
 	 }
 
 	 unless (open DESC,">$desc_file") {
-	     &wwslog('info',"d_change_access : cannot open $desc_file : $!");
+	     &wwslog('info',"d_change_access : cannot open $desc_file : $ERRNO");
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
@@ -15091,7 +15092,7 @@ sub do_d_change_access {
 	 # Creation of a description file 
 	 unless (open (DESC,">$desc_file")) {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('info',"d_change_access : Cannot create description file $desc_file : $!");
+	     &wwslog('info',"d_change_access : Cannot create description file $desc_file : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -15198,7 +15199,7 @@ sub do_d_set_owner {
 	 }
 
 	 unless (open DESC,">$desc_file") {
-	     &wwslog('info',"d_set_owner : cannot open $desc_file : $!");
+	     &wwslog('info',"d_set_owner : cannot open $desc_file : $ERRNO");
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
@@ -15223,7 +15224,7 @@ sub do_d_set_owner {
 	 # Creation of a description file 
 	 unless (open (DESC,">$desc_file")) {
 	     &Sympa::Report::reject_report_web('intern','cannot_open_file',{'file' => $desc_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('info',"d_set_owner : Cannot create description file $desc_file : $!");
+	     &wwslog('info',"d_set_owner : Cannot create description file $desc_file : $ERRNO");
 	     &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'name_doc'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	     return undef;
 	 }
@@ -16582,7 +16583,7 @@ sub do_dump_scenario {
 	 }
 	 unless (-d $scenario_dir) {
 	     unless (mkdir ($scenario_dir, 0777)) {
-		 &Sympa::Log::do_log('err',"do_dump_scenario: cannot_create_dir %s : %s ", $scenario_dir, $!);
+		 &Sympa::Log::do_log('err',"do_dump_scenario: cannot_create_dir %s : %s ", $scenario_dir, $ERRNO);
 		 &Sympa::Report::reject_report_web('intern','cannot_create_dir',{'file' => $scenario_dir,$param->{'action'},'',$param->{'user'}{'email'}},$robot);
 		 return undef;
 	     }
@@ -17454,16 +17455,16 @@ sub _ca_process {
 	return undef unless($file);
 	
 	eval { require "$file"; };
-	if($@) {
-		&Sympa::Log::do_log('err', 'Error requiring %s : %s (%s)', $custom_action, "$@", ref($@));
+	if($EVAL_ERROR) {
+		&Sympa::Log::do_log('err', 'Error requiring %s : %s (%s)', $custom_action, "$EVAL_ERROR", ref($EVAL_ERROR));
 		return undef;
 	}
 	
 	unshift @{$cap}, $list if($list);
 	my $res;
 	eval "\$res = ".$custom_action."_plugin::process(\@{\$cap});";
-	if($@) {
-		&Sympa::Log::do_log('err', 'Error evaluating %s : %s (%s)', $custom_action, "$@", ref($@));
+	if($EVAL_ERROR) {
+		&Sympa::Log::do_log('err', 'Error evaluating %s : %s (%s)', $custom_action, "$EVAL_ERROR", ref($EVAL_ERROR));
 		return undef;
 	}
 	
@@ -17671,7 +17672,7 @@ sub new_d_read {
 
      unless (defined $document) {
 	 &Sympa::Report::reject_report_web('intern','new_document_failed',{'path'=>$in{'path'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err',"d_read : cannot open $document->{'absolute_path'} : $!");
+	 &wwslog('err',"d_read : cannot open $document->{'absolute_path'} : $ERRNO");
 	 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'path'}",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;	 
      }

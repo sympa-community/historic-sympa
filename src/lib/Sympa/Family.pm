@@ -34,6 +34,7 @@ package Sympa::Family;
 
 use strict;
 
+use English qw(-no_match_vars);
 use File::Copy;
 use Term::ProgressBar;
 use XML::LibXML;
@@ -84,7 +85,7 @@ sub get_available_families {
 	next unless (-d $dir);
 
 	unless (opendir FAMILIES, $dir) {
-	    &Sympa::Log::do_log ('err', "error : can't open dir %s: %s", $dir, $!);
+	    &Sympa::Log::do_log ('err', "error : can't open dir %s: %s", $dir, $ERRNO);
 	    next;
 	}
 
@@ -234,7 +235,7 @@ sub add_list {
     } else {
 	#copy the xml file in another file
 	unless (open (FIC, '>', "$self->{'dir'}/_new_list.xml")) {
-	    &Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_new_list.xml : %s',$self->{'name'},$self->{'dir'},$!);
+	    &Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_new_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
 	}
 	while (<$data>) {
 	    print FIC ($_);
@@ -275,7 +276,7 @@ sub add_list {
     # config_changes
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $!, the list is set in status error_config";
+	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config";
     }
     close FILE;
  
@@ -357,7 +358,7 @@ sub modify_list {
 
     #copy the xml file in another file
     unless (open (FIC, '>', "$self->{'dir'}/_mod_list.xml")) {
-	&Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_mod_list.xml : %s',$self->{'name'},$self->{'dir'},$!);
+	&Sympa::Log::do_log('err','(%s) : impossible to create the temp file %s/_mod_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
     }
     while (<$fh>) {
 	print FIC ($_);
@@ -426,7 +427,7 @@ sub modify_list {
 	$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
 	
 	unless (open INFO, '>', "$list->{'dir'}/info") {
-	    push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $!";
+	    push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $ERRNO";
 	}
 	print INFO $hash_list->{'config'}{'description'};
 	close INFO; 
@@ -488,7 +489,7 @@ sub modify_list {
 
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $!, the list is set in status error_config.";
+	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config.";
     }
     close FILE;
 
@@ -726,7 +727,7 @@ sub instantiate {
 	    
 	    # config_changes
 	    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-		&Sympa::Log::do_log('err','impossible to create file %s/config_changes : %s',$list->{'dir'},$!);
+		&Sympa::Log::do_log('err','impossible to create file %s/config_changes : %s',$list->{'dir'},$ERRNO);
 		push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
 		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
 	    }
@@ -1530,7 +1531,7 @@ sub _update_existing_list {
 	$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
 	
 	unless (open INFO, '>', "$list->{'dir'}/info") {
-	    &Sympa::Log::do_log('err','Impossible to open %s/info : %s',$list->{'dir'},$!);
+	    &Sympa::Log::do_log('err','Impossible to open %s/info : %s',$list->{'dir'},$ERRNO);
 	}
 	print INFO $hash_list->{'config'}{'description'};
 	close INFO; 
@@ -1592,7 +1593,7 @@ sub _update_existing_list {
     }
 
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	&Sympa::Log::do_log('err','impossible to open file %s/config_changes : %s',$list->{'dir'},$!);
+	&Sympa::Log::do_log('err','impossible to open file %s/config_changes : %s',$list->{'dir'},$ERRNO);
 	push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
 	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
     }
@@ -1830,7 +1831,7 @@ sub _copy_files {
     # instance.xml
     if (defined $file) {
 	unless (&File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
-	    &Sympa::Log::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$!);
+	    &Sympa::Log::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$ERRNO);
 	    return undef;
 	}
     }
@@ -1868,7 +1869,7 @@ sub _load_param_constraint_conf {
     my $error = 0;
 
     ## Just in case...
-    local $/ = "\n";
+    local $RS = "\n";
 
     while (<FILE>) {
 	next if /^\s*(\#.*|\s*)$/;

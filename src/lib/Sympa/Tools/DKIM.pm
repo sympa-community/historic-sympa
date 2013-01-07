@@ -34,6 +34,7 @@ package Sympa::Tools::DKIM;
 
 use strict;
 
+use English qw(-no_match_vars);
 use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use Mail::DKIM::TextWrap;
@@ -124,7 +125,7 @@ sub dkim_verifier {
 	return undef;
     }
    
-    my $temporary_file = $tmpdir."/dkim.".$$ ;  
+    my $temporary_file = $tmpdir."/dkim.".$PID ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Sympa::Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return undef;
@@ -219,7 +220,7 @@ sub dkim_sign {
 	return $msg_as_string;
     }
     
-    my $temporary_keyfile = $tmpdir."/dkimkey.".$$ ;  
+    my $temporary_keyfile = $tmpdir."/dkimkey.".$PID ;  
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 	&Sympa::Log::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 	return $msg_as_string;
@@ -251,7 +252,7 @@ sub dkim_sign {
 	&Sympa::Log::do_log('err', 'Can\'t create Mail::DKIM::Signer');
 	return ($msg_as_string); 
     }    
-    my $temporary_file = $tmpdir."/dkim.".$$ ;  
+    my $temporary_file = $tmpdir."/dkim.".$PID ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Sympa::Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return ($msg_as_string); 

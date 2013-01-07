@@ -32,6 +32,8 @@ This module provides functions for wwsympa.
 
 package Sympa::WWSympa;
 
+use English qw(-no_match_vars);
+
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Log;
@@ -267,7 +269,7 @@ sub upload_file_to_server {
     }	
  
     unless (open FILE, ">:bytes", $param->{'destination'}) {
-	&Sympa::Log::do_log('debug',"Cannot open file $param->{'destination'} : $!");
+	&Sympa::Log::do_log('debug',"Cannot open file $param->{'destination'} : $ERRNO");
 	return undef;
     }
     while (<$fh>) {

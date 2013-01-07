@@ -25,6 +25,8 @@
 
 use lib '--modulesdir--';
 
+use English qw(-no_match_vars);
+
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::SDM;
@@ -33,7 +35,7 @@ use Sympa::Tools::Password;
 eval {
     require Crypt::CipherSaber;
 };
-die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $@;
+die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $EVAL_ERROR;
 
 ## Load sympa config
 &Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';

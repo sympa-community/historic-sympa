@@ -38,6 +38,7 @@ package Sympa::Template;
 use strict;
 
 use CGI::Util;
+use English qw(-no_match_vars);
 use MIME::EncWords; 
 use Template;
 
@@ -122,7 +123,7 @@ sub decode_utf8 {
 	eval {
 	    $string = &Encode::decode('utf8', $string, Encode::FB_CROAK);
 	};
-	$@ = '';
+	$EVAL_ERROR = '';
     }
 
     return $string;

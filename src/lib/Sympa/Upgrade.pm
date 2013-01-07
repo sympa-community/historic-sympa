@@ -34,6 +34,7 @@ package Sympa::Upgrade;
 
 use strict;
 
+use English qw(-no_match_vars);
 use POSIX qw();
 
 use Sympa::Configuration;
@@ -54,7 +55,7 @@ sub get_previous_version {
     
     if (-f $version_file) {
 	unless (open VFILE, $version_file) {
-	    &Sympa::Log::do_log('err', "Unable to open %s : %s", $version_file, $!);
+	    &Sympa::Log::do_log('err', "Unable to open %s : %s", $version_file, $ERRNO);
 	    return undef;
 	}
 	while (<VFILE>) {
@@ -77,7 +78,7 @@ sub update_version {
 
     ## Saving current version if required
     unless (open VFILE, ">$version_file") {
-	&Sympa::Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Sympa::Configuration::Conf{'etc'}, $!);
+	&Sympa::Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Sympa::Configuration::Conf{'etc'}, $ERRNO);
 	return undef;
     }
     printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
@@ -182,7 +183,7 @@ sub upgrade {
 
 	foreach my $d (@directories) {
 	    unless (opendir DIR, $d) {
-		printf STDERR "Error: Cannot read %s directory : %s", $d, $!;
+		printf STDERR "Error: Cannot read %s directory : %s", $d, $ERRNO;
 		next;
 	    }
 	    
@@ -195,7 +196,7 @@ sub upgrade {
 
 	foreach my $tpl (@templates) {
 	    unless (rename $tpl, "$tpl.oldtemplate") {
-		printf STDERR "Error : failed to rename $tpl to $tpl.oldtemplate : $!\n";
+		printf STDERR "Error : failed to rename $tpl to $tpl.oldtemplate : $ERRNO\n";
 		next;
 	    }
 
@@ -256,7 +257,7 @@ sub upgrade {
 	
 	my $root_dir = &Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'},'arc_path');
 	unless (opendir ARCDIR, $root_dir) {
-	    &Sympa::Log::do_log('err',"Unable to open $root_dir : $!");
+	    &Sympa::Log::do_log('err',"Unable to open $root_dir : $ERRNO");
 	    return undef;
 	}
 	
@@ -282,7 +283,7 @@ sub upgrade {
 		    next;
 		}else {
 		    unless (rename $old_path, $new_path) {
-			&Sympa::Log::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $!);
+			&Sympa::Log::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $ERRNO);
 			next;
 		    }
 		    &Sympa::Log::do_log('notice', "Renamed %s to %s", $old_path, $new_path);
@@ -376,7 +377,7 @@ sub upgrade {
 	
 	my $root_dir = &Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'},'bounce_path');
 	unless (opendir BOUNCEDIR, $root_dir) {
-	    &Sympa::Log::do_log('err',"Unable to open $root_dir : $!");
+	    &Sympa::Log::do_log('err',"Unable to open $root_dir : $ERRNO");
 	    return undef;
 	}
 	
@@ -400,7 +401,7 @@ sub upgrade {
 		next;
 	    }else {
 		unless (rename $old_path, $new_path) {
-		    &Sympa::Log::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $!);
+		    &Sympa::Log::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $ERRNO);
 		    next;
 		}
 		&Sympa::Log::do_log('notice', "Renamed %s to %s", $old_path, $new_path);
@@ -664,7 +665,7 @@ sub upgrade {
 	close BOUNCEDIR;
  
       }else {
-	&Sympa::Log::do_log('err', "Failed to open directory $Sympa::Configuration::Conf{'queuebounce'} : $!");	
+	&Sympa::Log::do_log('err', "Failed to open directory $Sympa::Configuration::Conf{'queuebounce'} : $ERRNO");	
       }
 
    }
@@ -696,7 +697,7 @@ sub upgrade {
 						my $new_f = $f_struct->{'directory'}.'/'.$new_filename;
 						&Sympa::Log::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
 						unless (rename $orig_f, $new_f) {
-							&Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $!);
+							&Sympa::Log::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $ERRNO);
 							next;
 						}
 						$count++;
@@ -871,7 +872,7 @@ sub upgrade {
 		$meta{'priority'} = 1 unless $meta{'priority'};
 		
 		unless (open FILE, $spooldir.'/'.$filename) {
-		    &Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $filename, $!);
+		    &Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $filename, $ERRNO);
 		    return undef;
 		}
 		my $messageasstring;
@@ -894,7 +895,7 @@ sub upgrade {
 		&Sympa::Log::do_log('notice','source %s, goal %s',$source,$goal);
 		# unless (&File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
 		unless (&File::Copy::copy($source, $goal)) {
-		    &Sympa::Log::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $!);
+		    &Sympa::Log::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $ERRNO);
 		    exit;
 		}
 		
@@ -979,12 +980,12 @@ sub to_utf8 {
 	    eval {
 		&Encode::decode('UTF-8', $t, Encode::FB_CROAK);
 	      };
-	    if ($@) {
+	    if ($EVAL_ERROR) {
 		eval {
 		    $t = $text;
 		    &Encode::from_to($t, $charset, "UTF-8", Encode::FB_CROAK);
 		};
-		if ($@) {
+		if ($EVAL_ERROR) {
 		    &Sympa::Log::do_log('err',"Template %s cannot be converted from %s to UTF-8", $charset, $file);
 		} else {
 		    $text = $t;
