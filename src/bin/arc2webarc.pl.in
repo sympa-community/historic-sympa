@@ -24,6 +24,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+use strict;
 use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
@@ -35,8 +36,8 @@ use Sympa::List;
 use Sympa::Upgrade;
 use Sympa::WWSympa;
 
-$wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
-$sympa_conf_file = Sympa::Constants::CONFIG;
+my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 my %month_idx = qw(jan 1 
 		   fev 2
@@ -139,7 +140,6 @@ if ($opt{'input-directory'}) {
     foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
 	open ARCFILE, $opt{'input-directory'}.'/'.$file;
 	my @msg = <ARCFILE>;
-	push @msgs, \@msg;
 	$msg_count++;
 	close ARCFILE;
     }

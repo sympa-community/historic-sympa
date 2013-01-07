@@ -23,6 +23,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+use strict;
 use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
@@ -36,8 +37,8 @@ use Sympa::Tools::File;
 use Sympa::Upgrade;
 use Sympa::WWSympa;
 
-$wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
-$sympa_conf_file = Sympa::Constants::CONFIG;
+my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 
 my %options;
@@ -257,7 +258,7 @@ sub convert {
 
     ## Convert tpl file
     unless (open TPL, $in_file) {
-	print STDERR "Cannot open $in_filel : $ERRNO\n";
+	print STDERR "Cannot open $in_file : $ERRNO\n";
 	return undef;
     }
     if ($out_file) {

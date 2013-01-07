@@ -6,7 +6,10 @@
 ## It is now created by sympa.pl when the message is received. 
 ## This script will create all missing HTML files in the moderation spool
 
+use strict;
 use lib '--modulesdir--';
+
+use English qw(-no_match_vars);
 
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -39,7 +42,7 @@ unless (opendir SPOOL, $Sympa::Configuration::Conf{'queuemod'}) {
     die "Unable to read spool";
 }
 
-foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
+foreach my $msg ( sort grep(!/^\./, readdir SPOOL )) {
     
     next if ($msg =~ /^\./);
     
