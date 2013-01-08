@@ -116,7 +116,8 @@ my %template2textdomain = ('help_admin.tt2' => 'web_help',
 			   );
 
 sub GetSupportedLanguages {
-    my $robot = shift;
+    my ($robot) = @_;
+
     my @lang_list;
 
     foreach my $l (split /,/,&Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
@@ -127,7 +128,7 @@ sub GetSupportedLanguages {
 
 ## Keep the previous lang ; can be restored with PopLang
 sub PushLang {
-    my $locale = shift;
+    my ($locale) = @_;
     &Sympa::Log::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
@@ -146,8 +147,7 @@ sub PopLang {
 }
 
 sub SetLang {
-###########
-    my $locale = shift;
+    my ($locale) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
@@ -211,7 +211,7 @@ sub SetLang {
 
 ## Get the name of the language, ie the one defined in the catalog
 sub GetLangName {
-    my $lang = shift;
+    my ($lang) = @_;
 
     my $saved_lang = $current_lang;
     &SetLang($lang);
@@ -222,7 +222,6 @@ sub GetLangName {
 }
 
 sub GetLang {
-############
 
     return $current_lang;
 }
@@ -233,7 +232,8 @@ sub GetCharset {
 }
 
 sub Locale2Lang {
-    my $locale = shift;
+    my ($locale) = @_;
+
     my $lang;
 
     if (defined $language_equiv{$locale}) {
@@ -248,14 +248,13 @@ sub Locale2Lang {
 }
 
 sub Lang2Locale {
-    my $lang = shift;
+    my ($lang) = @_;
 
     return $lang2locale{$lang} || $lang;
 }
 
 sub maketext {
-    my $template_file = shift;
-    my $msg = shift;
+    my ($template_file, $msg) = @_;
 
 #    &Sympa::Log::do_log('notice','Maketext: %s', $msg);
 
@@ -279,9 +278,7 @@ sub maketext {
 
 
 sub sympa_dgettext {
-    my $textdomain = shift;
-    my @param = @_;
-
+    my ($textdomain, @param) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
@@ -317,8 +314,7 @@ sub sympa_dgettext {
 }
 
 sub gettext {
-    my @param = @_;
-
+    my (@param) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
@@ -354,7 +350,8 @@ sub gettext {
 }
 
 sub gettext_strftime {
-    my $format = shift;
+    my ($format) = @_;
+
     return POSIX::strftime($format, @_) unless $current_charset;
 
     $format = gettext($format);

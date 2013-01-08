@@ -74,9 +74,7 @@ A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my $pkg = shift;
-	my %param = @_;
-
+	my ($pkg, %param) = @_;
 	&Sympa::Log::do_log('debug2', '()');
 
 	my $provider = {
@@ -106,7 +104,8 @@ Get the underlying OAuth provider.
 =cut
 
 sub getOAuthProvider {
-	my $self = shift;
+	my ($self) = @_;
+
 	return $self->{'oauth_provider'};
 }
 
@@ -129,8 +128,7 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 =cut
 
 sub checkRequest {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 
 	my $r = $self->{'oauth_provider'}->checkRequest(checktoken => 1);
 	return $r if($r);
@@ -161,8 +159,7 @@ A string, or I<undef> if something went wrong.
 =cut
 
 sub response {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 
 	my $r = {
 		startIndex => 0,
@@ -200,7 +197,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong
 =cut
 
 sub getGroups {
-	my $self = shift;
+	my ($self) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
 
 	my @entries = ();
@@ -221,9 +218,7 @@ sub getGroups {
 }
 
 sub _list_to_group {
-	my $self = shift;
-	my $list = shift;
-	my $role = shift;
+	my ($self, $list, $role) = @_;
 
 	return {
 		id => $list->{'name'},
@@ -252,8 +247,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 =cut
 
 sub getGroupMembers {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $param{'group'});
 
 	my @entries = ();
@@ -275,9 +269,7 @@ sub getGroupMembers {
 }
 
 sub _subscriber_to_member {
-	my $self = shift;
-	my $user = shift;
-	my $role = shift;
+	my ($self, $user, $role) = @_;
 
 	return {
 		displayName => $user->{'gecos'},

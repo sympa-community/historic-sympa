@@ -75,9 +75,7 @@ A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-
-    my $pkg =shift;
-    my $datas = shift;
+    my ($pkg, $datas) = @_;
 
     my $file = $datas->{'file'};
     my $noxsympato = $datas->{'noxsympato'};
@@ -357,7 +355,7 @@ A true value.
 =cut
 
 sub add_topic {
-    my ($self,$topic) = @_;
+    my ($self, $topic) = @_;
 
     $self->{'topic'} = $topic;
     my $hdr = $self->{'msg'}->head;
@@ -385,7 +383,8 @@ sub get_topic {
 }
 
 sub clean_html {
-    my $self = shift;
+    my ($self) = @_;
+
     my ($listname, $robot) = split(/\@/,$self->{'rcpt'});
     $robot = lc($robot);
     $listname = lc($listname);
@@ -399,8 +398,8 @@ sub clean_html {
 }
 
 sub fix_html_part {
-    my $part = shift;
-    my $robot = shift;
+    my ($part, $robot) = @_;
+
     return $part unless $part;
     my $eff_type = $part->head->mime_attr("Content-Type");
     if ($part->parts) {
@@ -456,7 +455,7 @@ preserveB64 encoding form and so preserve S/MIME signature.
 
 =cut
 sub get_body_from_msg_as_string {
-    my $msg =shift;
+    my ($msg) = @_;
 
     my @bodysection =split("\n\n",$msg );    # convert it as a tab with headers as first element
     shift @bodysection;                      # remove headers

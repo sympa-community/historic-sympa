@@ -145,9 +145,7 @@ exist
 =cut
 
 sub remove {
-    my $messagekey = shift;
-    my $packetid= shift;
-
+    my ($messagekey, $packetid) = @_;
     &Sympa::Log::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
     unless ($sth = &Sympa::SDM::do_query( "DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",&Sympa::SDM::quote($packetid),&Sympa::SDM::quote($messagekey))) {
@@ -158,7 +156,7 @@ sub remove {
 }
 
 sub messageasstring {
-    my $messagekey = shift;
+    my ($messagekey) = @_;
     &Sympa::Log::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
 
     unless ($sth = &Sympa::SDM::do_query( "SELECT message_bulkspool AS message FROM bulkspool_table WHERE messagekey_bulkspool = %s",&Sympa::SDM::quote($messagekey))) {
@@ -187,7 +185,7 @@ Fetch message from bulkspool_table by key.
 =cut
 
 sub message_from_spool {
-    my $messagekey = shift;
+    my ($messagekey) = @_;
     &Sympa::Log::do_log('debug', '(messagekey : %s)',$messagekey);
 
     unless ($sth = &Sympa::SDM::do_query( "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",&Sympa::SDM::quote($messagekey))) {
@@ -224,11 +222,7 @@ $data : HASH with user's data                    #
 =cut
 
 sub merge_msg {
-
-    my $entity = shift;
-    my $rcpt = shift;
-    my $bulk = shift;
-    my $data = shift;
+    my ($entity, $rcpt, $bulk, $data) = @_;
 
     ## Test MIME::Entity
     unless (ref($entity) && $entity->isa('MIME::Entity')) {
@@ -541,8 +535,7 @@ sub purge_bulkspool {
 }
 
 sub remove_bulkspool_message {
-    my $spool = shift;
-    my $messagekey = shift;
+    my ($spool, $messagekey) = @_;
 
     my $table = $spool.'_table';
     my $key = 'messagekey_'.$spool ;

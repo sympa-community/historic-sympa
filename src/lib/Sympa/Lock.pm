@@ -113,8 +113,7 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub set_timeout {
-    my $self = shift;
-    my $delay = shift;
+    my ($self, $delay) = @_;
 
     return undef unless (defined $delay);
 
@@ -130,7 +129,7 @@ sub set_timeout {
 =cut
 
 sub get_lock_count {
-    my $self = shift;
+    my ($self) = @_;
 
     return $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1;
 }
@@ -140,7 +139,7 @@ sub get_lock_count {
 =cut
 
 sub get_file_handle {
-    my $self = shift;
+    my ($self) = @_;
 
     return $list_of_locks{$self->{'lock_filename'}}{'fh'};
 }
@@ -153,7 +152,7 @@ sub get_file_handle {
 
 =over
 
-=item * I<$mode>
+=item * I<$mode>: read | write
 
 =back
 
@@ -164,8 +163,7 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub lock {
-    my $self = shift;
-    my $mode = shift; ## read | write
+    my ($self, $mode) = @_;
     &Sympa::Log::do_log('debug', 'Trying to put a lock on %s in mode %s',$self->{'lock_filename'}, $mode);
 
     ## If file was already locked by this process, we will add a new lock.
@@ -224,7 +222,7 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub unlock {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug', 'Removing lock on %s',$self->{'lock_filename'});
 
     unless (defined $list_of_locks{$self->{'lock_filename'}}) {
@@ -266,9 +264,7 @@ sub unlock {
 
 ## Called by lock() or unlock() when these function need to add a lock (i.e. on the file system or NFS).
 sub add_lock {
-    my $self = shift;
-    my $mode = shift;
-    my $timeout = shift;
+    my ($self, $mode, $timeout) = @_;
 
     ## If the $timeout value is -1, it means that we will try to put a lock only once. This is to be used when we are
     ## changing the lock mode (from write to read and reverse) and we then  release the file lock to create a new one AND
@@ -296,7 +292,7 @@ sub add_lock {
 
 ## Called by lock() or unlock() when these function need to remove a lock (i.e. on the file system or NFS).
 sub remove_lock {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
 
     my $fh = $list_of_locks{$self->{'lock_filename'}}{'fh'};
@@ -321,9 +317,7 @@ sub remove_lock {
 
 ## Locks a file - pure interface with the filesystem
 sub _lock_file {
-    my $lock_file = shift;
-    my $mode = shift; ## read or write
-    my $timeout = shift;
+    my ($lock_file, $mode, $timeout) = @_;
     &Sympa::Log::do_log('debug3', '(%s,%s,%d)',$lock_file, $mode,$timeout);
 
     my $operation;
@@ -396,8 +390,7 @@ sub _lock_file {
 
 ## Unlocks a file - pure interface with the filesystem
 sub _unlock_file {
-    my $lock_file = shift;
-    my $fh = shift;
+    my ($lock_file, $fh) = @_;
     &Sympa::Log::do_log('debug3', '(%s)',$lock_file);
 
     unless (flock($fh,LOCK_UN)) {
@@ -412,9 +405,7 @@ sub _unlock_file {
 
 # Locks on NFS - pure interface with NFS
 sub _lock_nfs {
-    my $lock_file = shift;
-    my $mode = shift; ## read or write
-    my $timeout = shift;
+    my ($lock_file, $mode, $timeout) = @_;
     &Sympa::Log::do_log('debug3', "($lock_file, $mode, $timeout)");
 
     ## TODO should become a configuration parameter, used with or without NFS
@@ -456,9 +447,7 @@ sub _lock_nfs {
 
 # Unlocks on NFS - pure interface with NFS
 sub _unlock_nfs {
-    my $lock_file = shift;
-    my $fh = shift;
-    my $nfs_lock = shift;
+    my ($lock_file, $fh, $nfs_lock) = @_;
     &Sympa::Log::do_log('debug3', "($lock_file, $fh)");
 
     unless (defined $nfs_lock and $nfs_lock->unlock()) {

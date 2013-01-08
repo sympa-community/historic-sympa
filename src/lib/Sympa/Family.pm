@@ -73,7 +73,7 @@ An array  containing all the robot's families names.
 =cut
 
 sub get_available_families {
-    my $robot = shift;
+    my ($robot) = @_;
 
     my %families;
 
@@ -125,9 +125,7 @@ A new L<Sympa::Family> object.
 =cut
 
 sub new {
-    my $class = shift;
-    my $name = shift;
-    my $robot = shift;
+    my ($class, $name, $robot) = @_;
     &Sympa::Log::do_log('debug2','(%s,%s)',$name,$robot);
 
     my $self = {};
@@ -346,8 +344,7 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub modify_list {
-    my $self = shift;
-    my $fh = shift;
+    my ($self, $fh) = @_;
     &Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
     $self->{'state'} = 'no_check';
@@ -559,7 +556,7 @@ the methods.
 =cut
 
 sub close_family {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
     my $family_lists = $self->get_family_lists();
@@ -620,9 +617,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub instantiate {
-    my $self = shift;
-    my $xml_file = shift;
-    my $close_unknown = shift;
+    my ($self, $xml_file, $close_unknown) = @_;
     &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     ## all the description variables are emptied.
@@ -977,8 +972,7 @@ Checks the parameter constraints taken from param_constraint.conf file for the L
 =cut
 
 sub check_param_constraint {
-    my $self = shift;
-    my $list = shift;
+    my ($self, $list) = @_;
     &Sympa::Log::do_log('debug2','(%s,%s)',$self->{'name'},$list->{'name'});
 
     if ($self->{'state'} eq 'no_check') {
@@ -1049,7 +1043,7 @@ An hash containing the values found in the param_constraint.conf file.
 =cut
 
 sub get_constraints {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 
     ## load param_constraint.conf
@@ -1177,8 +1171,7 @@ Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 =cut
 
 sub get_param_constraint {
-    my $self = shift;
-    my $param  = shift;
+    my ($self, $param) = @_;
     &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$param);
 
     unless(defined $self->get_constraints()) {
@@ -1208,9 +1201,10 @@ An arrayref containing the family lists names.
 =cut
 
 sub get_family_lists {
-    my $self = shift;
-    my @list_of_lists;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
+
+    my @list_of_lists;
 
     my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
@@ -1237,9 +1231,10 @@ An hashref whose keys are the family's lists' names.
 =cut
 
 sub get_hash_family_lists {
-    my $self = shift;
-    my %list_of_lists;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
+
+    my %list_of_lists;
 
     my $all_lists = &Sympa::List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
@@ -1289,7 +1284,8 @@ sub get_uncompellable_param {
 # the directory name, or undef if the directory does not exist
 
 sub _get_directory {
-    my $self = shift;
+    my ($self) = @_;
+
     my $robot = $self->{'robot'};
     my $name = $self->{'name'};
     &Sympa::Log::do_log('debug3','(%s)',$name);
@@ -1321,7 +1317,8 @@ sub _get_directory {
 # otherwise
 
 sub _check_mandatory_files {
-    my $self = shift;
+    my ($self) = @_;
+
     my $dir = $self->{'dir'};
     my $string = "";
     &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
@@ -1348,7 +1345,7 @@ sub _check_mandatory_files {
 # A true value
 
 sub _initialize_instantiation() {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 
     ### info vars for instantiate  ###
@@ -1412,10 +1409,10 @@ sub _initialize_instantiation() {
 # A true value, or undef if something went wrong
 
 sub _split_xml_file {
-    my $self = shift;
-    my $xml_file = shift;
-    my $root;
+    my ($self, $xml_file) = @_;
     &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
+
+    my $root;
 
     ## parse file
     my $parser = XML::LibXML->new();
@@ -1822,11 +1819,10 @@ sub _end_update_list {
 # A true value, or undef if something went wrong
 
 sub _copy_files {
-    my $self = shift;
-    my $list_dir = shift;
-    my $file = shift;
-    my $dir = $self->{'dir'};
+    my ($self, $list_dir, $file) = @_;
     &Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list_dir);
+
+    my $dir = $self->{'dir'};
 
     # instance.xml
     if (defined $file) {
@@ -1849,7 +1845,7 @@ sub _copy_files {
 # An hashref containing the data found in param_constraint.conf, or undef if something went wrong.
 
 sub _load_param_constraint_conf {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     my $file = "$self->{'dir'}/param_constraint.conf";
@@ -1921,8 +1917,8 @@ sub _load_param_constraint_conf {
 }
 
 sub create_automatic_list {
-    my $self = shift;
-    my %param = @_;
+    my ($self, %param) = @_;
+
     my $sender = $param{'sender'};
     my $listname = $param{'listname'};
 
@@ -1952,8 +1948,7 @@ Returns 1 if the user is allowed to create lists based on the family.
 =cut
 
 sub is_allowed_to_create_automatic_lists {
-    my $self = shift;
-    my %param = @_;
+    my ($self, %param) = @_;
 
     my $auth_level = $param{'auth_level'};
     my $sender = $param{'sender'};

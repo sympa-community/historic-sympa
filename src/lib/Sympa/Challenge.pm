@@ -82,9 +82,7 @@ sub create {
 }
 
 sub load {
-
-    my $id_challenge = shift;
-
+    my ($id_challenge) = @_;
     &Sympa::Log::do_log('debug', '(%s)', $id_challenge);
 
     unless ($id_challenge) {
@@ -125,8 +123,7 @@ sub load {
 }
 
 sub store {
-
-    my $challenge = shift;
+    my ($challenge) = @_;
     &Sympa::Log::do_log('debug', '()');
 
     return undef unless ($challenge->{'id_challenge'});

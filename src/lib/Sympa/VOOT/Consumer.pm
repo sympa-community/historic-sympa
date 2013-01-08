@@ -104,8 +104,7 @@ A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my $pkg = shift;
-	my %param = @_;
+	my ($pkg, %param) = @_;
 
 	my $consumer;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $param{'user'}, $param{'provider'});
@@ -138,7 +137,8 @@ sub new {
 =cut
 
 sub getOAuthConsumer {
-	my $self = shift;
+	my ($self) = @_;
+
 	return $self->{'oauth_consumer'};
 }
 
@@ -157,7 +157,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong.
 =cut
 
 sub isMemberOf {
-	my $self = shift;
+	my ($self) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'provider'});
 
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
@@ -173,7 +173,8 @@ An alias for $consumer->isMemberOf();
 =cut
 
 sub check {
-	my $self = shift;
+	my ($self) = @_;
+
 	return $self->isMemberOf();
 }
 
@@ -196,8 +197,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 =cut
 
 sub getGroupMembers {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $param{'group'});
 
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$param{'group'});
@@ -211,7 +211,8 @@ sub getGroupMembers {
 # Return an hashref
 
 sub _get_groups {
-	my $data = shift;
+	my ($data) = @_;
+
 	my $groups = {};
 
 	foreach my $grp (@{$data->{'entry'}}) {
@@ -230,7 +231,8 @@ sub _get_groups {
 # Return an hashref
 
 sub _get_members {
-	my $data = shift;
+	my ($data) = @_;
+
 	my $members = [];
 	my $i;
 
@@ -259,8 +261,7 @@ sub _get_members {
 # Return an hashref
 
 sub _get_config_for {
-	my $provider = shift;
-	my $file = shift;
+	my ($provider, $file) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $provider);
 
 	return undef unless (-f $file);

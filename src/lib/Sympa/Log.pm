@@ -69,7 +69,8 @@ our $last_date_aggregation;
 ##}
 ##
 sub fatal_err {
-    my $m  = shift;
+    my ($m) = @_;
+
     my $errno  = $ERRNO;
 
     require Sympa::List;
@@ -99,13 +100,10 @@ sub fatal_err {
 }
 
 sub do_log {
-    my $level = shift;
+    my ($level, $message, @param) = @_;
 
     # do not log if log level if too high regarding the log requested by user
     return if ($levels{$level} > $log_level);
-
-    my $message = shift;
-    my @param = @_;
 
     my $errno = $ERRNO;
 
@@ -213,7 +211,8 @@ sub do_connect {
 
 # return the name of the used daemon
 sub set_daemon {
-    my $daemon_tmp = shift;
+    my ($daemon_tmp) = @_;
+
     my @path = split(/\//, $daemon_tmp);
     my $daemon = $path[$#path];
     $daemon =~ s/(\.[^\.]+)$//;
@@ -239,7 +238,7 @@ sub get_log_date {
 
 # add log in RDBMS
 sub db_log {
-    my $arg = shift;
+    my ($arg) = @_;
 
     my $list = $arg->{'list'};
     my $robot = $arg->{'robot'};
@@ -304,7 +303,7 @@ sub db_log {
 
 #insert data in stats table
 sub db_stat_log{
-    my $arg = shift;
+    my ($arg) = @_;
 
     my $list = $arg->{'list'};
     my $operation = $arg->{'operation'};
@@ -347,7 +346,7 @@ sub db_stat_log{
 }#end sub
 
 sub db_stat_counter_log {
-    my $arg = shift;
+    my ($arg) = @_;
 
     my $date_deb = $arg->{'begin_date'};
     my $date_fin = $arg->{'end_date'};
@@ -398,7 +397,7 @@ sub db_log_del {
 
 # Scan log_table with appropriate select
 sub get_first_db_log {
-    my $select = shift;
+    my ($select) = @_;
 
     my %action_type = ('message' => ['reject','distribute','arc_delete','arc_download',
 				     'sendMessage','remove','record_email','send_me',
@@ -531,7 +530,9 @@ sub get_next_db_log {
 }
 
 sub set_log_level {
-    $log_level = shift;
+    my ($level) = @_;
+
+    $log_level = $level;
 }
 
 sub get_log_level {
@@ -715,8 +716,8 @@ sub aggregate_data {
 #called by subroutine aggregate_data
 #get in parameter the result of db request and put in an hash data we need.
 sub deal_data {
+    my ($result_request) = @_;
 
-    my $result_request = shift;
     my %data;
 
 
@@ -1000,8 +1001,9 @@ sub get_last_date_aggregation {
 }
 
 sub agregate_daily_data {
-    my $param = shift;
+    my ($param) = @_;
     &do_log('debug2','Agregating data');
+
     my $result;
     my $first_date = $param->{'first_date'} || time;
     my $last_date = $param->{'last_date'} || time;

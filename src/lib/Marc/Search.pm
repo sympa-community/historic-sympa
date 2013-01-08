@@ -51,9 +51,8 @@ my %fields =
    words            => undef,
   );
 
-sub new
-{
-  my $class = shift;
+sub new {
+  my ($class) = @_;
   my $self  = Marc->new(\%fields);
   bless $self, $class;
   return $self;
@@ -65,46 +64,51 @@ sub new
 
 sub body_count
 {
-  my $self  = shift;
-  my $count = shift || 0;
+  my ($self, $count) = @_;
+  $count ||= 0;
+
   return $self->{body_count} += $count;
 }
 
 sub id_count
 {
-  my $self = shift;
-  my $count = shift || 0;
+  my ($self, $count) = @_;
+  $count ||= 0;
+
   return $self->{id_count} += $count;
 }
 
 sub date_count
 {
-  my $self = shift;
-  my $count = shift || 0;
+  my ($self, $count) = @_;
+  $count ||= 0;
+
   return $self->{date_count} += $count;
 }
 
 sub from_count
 {
-  my $self = shift;
-  my $count = shift || 0;
+  my ($self, $count) = @_;
+  $count ||= 0;
+
   return $self->{from_count} += $count;
 }
 
 sub subj_count
 {
-  my $self = shift;
-  my $count = shift || 0;
+  my ($self, $count) = @_;
+  $count ||= 0;
+
   return $self->{subj_count} += $count;
 }
 
 sub key_word
 {
-  my $self = shift;
+  my ($self, @keywords) = @_;
 
-  if (scalar @_)
+  if (scalar @keywords)
   {
-    my $key_word = shift;
+    my $key_word = shift @keywords;
     if (defined $key_word)
     {
       $key_word = decode_utf8($key_word) unless is_utf8($key_word);
@@ -124,7 +128,8 @@ sub key_word
 
 sub _find_match
 {
-  my($self,$file,$subj,$from,$date,$id,$body_ref) = @_;
+  my ($self, $file, $subj, $from, $date, $id, $body_ref) = @_;
+
   my $body_string = '';
   my $match       = 0;
   my $res         = undef;
@@ -258,7 +263,8 @@ sub _find_match
 
 sub search
 {
-	my $self         = shift;
+	my ($self) = @_;
+
 	my $limit	   	 = $self->limit;
 	my $previous     = $self->previous     || 0;
 	my $directories  = $self->directories;
@@ -417,7 +423,8 @@ sub _get_file_list
 ## PUBLIC METHOD
 sub match_any
 {
-  my $self = shift;
+  my ($self, @patterns) = @_;
+
   my ($tail,$pat);
   if ($self->case) {$tail = '/i'} else {$tail = '/'};
   my $code = <<EOCODE;
@@ -427,7 +434,7 @@ EOCODE
   $code .= <<EOCODE if @_ > 5;
       study;
 EOCODE
-  for $pat (@_)
+  for $pat (@patterns)
     {
       $code .= <<EOCODE;
       return 1 if /$pat$tail;
@@ -440,9 +447,9 @@ EOCODE
 }
 
 ## PUBLIC METHOD
-sub body_match_all
-{
-  my($self,@ret) = @_;
+sub body_match_all {
+  my ($self, @ret) = @_;
+
   my($len) = ($#ret + 1) / 2;
   my(@pat) = splice(@ret,$len);
   my $tail;
@@ -475,7 +482,8 @@ EOCODE
 ## PUBLIC METHOD
 sub match_all
 {
-  my $self = shift;
+  my ($self, @patterns) = @_;
+
   my ($sep,$tail);
   if ($self->case) {
     $sep = "/i && /";
@@ -485,7 +493,7 @@ sub match_all
     $sep = "/ && /";
     $tail = "/ }";
   }
-  my $code =	"sub { use utf8; /" . join ("$sep", @_) . $tail;
+  my $code =	"sub { use utf8; /" . join ("$sep", @patterns) . $tail;
   my $function = eval $code;
   die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
   return $function;
@@ -494,8 +502,9 @@ sub match_all
 ## PUBLIC METHOD
 sub match_this
 {
-  my $self = shift;
-  my $string = join(' ', @_);
+  my ($self, @patterns) = @_;
+
+  my $string = join(' ', @patterns);
   $string = '(?i)' . $string if ($self->case);
   my $code = "sub { use utf8; /" . $string . "/ }";
   my $function = eval $code;

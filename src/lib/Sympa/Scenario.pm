@@ -79,8 +79,7 @@ A new L<Sympa::Scenario> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-   my($pkg, @args) = @_;
-    my %parameters = @args;
+   my ($pkg, %parameters) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $scenario = {};
@@ -270,11 +269,7 @@ sub _parse_scenario {
 #           (defined if $debug)
 ######################################################
 sub request_action {
-    my $operation = shift;
-    my $auth_method = shift;
-    my $robot=shift;
-    my $context = shift;
-    my $debug = shift;
+    my ($operation, $auth_method, $robot, $context, $debug) = @_;
     &Sympa::Log::do_log('debug', '%s,%s,%s',$operation,$auth_method,$robot);
 
     my $trace_scenario ;
@@ -1159,13 +1154,9 @@ sub verify {
 
 ## Verify if a given user is part of an LDAP, SQL or TXT search filter
 sub search{
-    my $filter_file = shift;
-    my $context = shift;
-    my $robot = shift;
-    my $list = shift;
+    my ($filter_file, $context, $robot, $list) = @_;
 
     my $sender = $context->{'sender'};
-
     &Sympa::Log::do_log('debug2', '(%s,%s,%s)', $filter_file, $sender, $robot);
 
     if ($filter_file =~ /\.sql$/) {

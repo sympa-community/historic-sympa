@@ -63,7 +63,7 @@ use Sympa::Log;
 #
 ##############################################################
 sub reject_report_msg {
-    my ($type,$error,$user,$param,$robot,$msg_string,$list) = @_;
+    my ($type, $error, $user, $param, $robot, $msg_string, $list) = @_;
     &Sympa::Log::do_log('debug2', "(%s,%s,%s)", $type,$error,$user);
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user'|| $type eq 'auth'|| $type eq 'oauth') {
@@ -147,7 +147,7 @@ sub reject_report_msg {
 ##############################################################
 
 sub _get_msg_as_hash {
-    my $msg_object = shift;
+    my ($msg_object) = @_;
 
     my ($msg_entity, $msg_hash);
 
@@ -198,7 +198,7 @@ sub _get_msg_as_hash {
 #
 ##############################################################
 sub notice_report_msg {
-    my ($entry,$user,$param,$robot,$list) = @_;
+    my ($entry, $user, $param, $robot, $list) = @_;
 
     $param->{'to'} = $user;
     $param->{'type'} = 'success';
@@ -309,7 +309,7 @@ sub is_there_any_report_cmd {
 #
 #########################################################
 sub send_report_cmd {
-    my ($sender,$robot) = @_;
+    my ($sender, $robot) = @_;
 
     unless ($sender){
 	&Sympa::Log::do_log('err',"unable to send template command_report.tt2 : no user to notify");
@@ -383,7 +383,8 @@ sub send_report_cmd {
 #
 #########################################################
 sub global_report_cmd {
-    my ($type,$error,$data,$sender,$robot,$now) = @_;
+    my ($type, $error,  $data, $sender, $robot, $now) = @_;
+
     my $entry;
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user') {
@@ -454,7 +455,7 @@ sub global_report_cmd {
 #
 #########################################################
 sub reject_report_cmd {
-    my ($type,$error,$data,$cmd,$sender,$robot) = @_;
+    my ($type, $error, $data, $cmd, $sender, $robot) = @_;
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user' || $type eq 'auth') {
 	&Sympa::Log::do_log('err',"error to prepare parsing 'command_report' template to $sender : not a valid error type");
@@ -520,9 +521,9 @@ sub reject_report_cmd {
 #
 #########################################################
 sub notice_report_cmd {
-    my ($entry,$data,$cmd) = @_;
-
+    my ($entry, $data, $cmd) = @_;
     $data ||= {};
+
     $data->{'cmd'} = $cmd;
     $data->{'entry'} = $entry;
     push @notice_cmd, $data;

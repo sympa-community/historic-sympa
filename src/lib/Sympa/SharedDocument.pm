@@ -67,7 +67,7 @@ A new L<Sympa::SharedDocument> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my($pkg, $list, $path, $param) = @_;
+    my ($pkg, $list, $path, $param) = @_;
 
     my $email = $param->{'user'}{'email'};
     #$email ||= 'nobody';
@@ -267,15 +267,14 @@ sub new {
 }
 
 sub dump {
-    my $self = shift;
-    my $fd = shift;
+    my ($self, $fd) = @_;
 
     &Sympa::Tools::Data::dump_var($self, 0, $fd);
 
 }
 
 sub dup {
-    my $self = shift;
+    my ($self) = @_;
 
     my $copy = {};
 
@@ -299,6 +298,9 @@ sub dup {
 
 
 sub check_access_control {
+    my ($self, $param) = @_;
+    &Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
+
     # Arguments:
     # (\%mode,$path)
     # if mode->{'read'} control access only for read
@@ -315,20 +317,13 @@ sub check_access_control {
     # $result{'scenario'}{'read'} = scenario name for the document
     # $result{'scenario'}{'edit'} = scenario name for the document
 
-
     # Result
     my %result;
     $result{'reason'} = {};
 
     # Control
 
-    # Arguments
-    my $self = shift;
-    my $param = shift;
-
     my $list = $self->{'list'};
-
-    &Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
 
     # Control for editing
     my $may_read = 1;

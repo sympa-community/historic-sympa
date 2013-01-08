@@ -72,8 +72,8 @@ Convert an epoch date into a readable date scalar.
 =cut
 
 sub epoch2yyyymmjj_hhmmss {
+    my ($epoch) = @_;
 
-    my $epoch = $_[0];
     my @date = localtime ($epoch);
     my $date = POSIX::strftime ("%Y-%m-%d  %H:%M:%S", @date);
 
@@ -87,8 +87,8 @@ Convert an epoch date into a readable date scalar.
 =cut
 
 sub adate {
+    my ($epoch) = @_;
 
-    my $epoch = $_[0];
     my @date = localtime ($epoch);
     my $date = POSIX::strftime ("%e %a %b %Y  %H h %M min %S s", @date);
 
@@ -103,9 +103,9 @@ argument.
 =cut
 
 sub get_midnight_time {
-
-    my $epoch = $_[0];
+    my ($epoch) = @_;
     &Sympa::Log::do_log('debug3','Getting midnight time for: %s',$epoch);
+
     my @date = localtime ($epoch);
     return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
 }
@@ -114,14 +114,22 @@ sub get_midnight_time {
 
 Convert a human format date into an epoch date.
 
+=head3 Parameters
+
+=over
+
+=item * I<$arg>: argument date to convert
+
+=item * I<$time>: the epoch current date
+
+=back
+
 =cut
 
 sub epoch_conv {
-
-    my $arg = $_[0]; # argument date to convert
-    my $time = $_[1] || time; # the epoch current date
-
+    my ($arg, $time) = @_;
     &Sympa::Log::do_log('debug3','(%s, %d)', $arg, $time);
+    $time = time if !$time;
 
     my $result;
 
@@ -157,8 +165,7 @@ Convert a formated date string into a unix timestamp.
 =cut
 
 sub date_conv {
-
-    my $arg = $_[0];
+    my ($arg) = @_;
 
     if ( ($arg eq 'execution_date') ){ # execution date
 	return time;
@@ -193,9 +200,7 @@ Convert a formated duration string into a second number.
 =cut
 
 sub duration_conv {
-
-    my $arg = $_[0];
-    my $start_date = $_[1];
+    my ($arg, $start_date) = @_;
 
     return 0 unless $arg;
 
@@ -257,7 +262,8 @@ Contributer(s): Frank J. Manion <FJ_Manion@fccc.edu>
 =cut
 
 sub parse_date {
-    my($date) = $_[0];
+    my ($date) = @_;
+
     my($wday, $mday, $mon, $yr, $time, $hr, $min, $sec, $zone);
     my(@array);
     my($start, $rest);

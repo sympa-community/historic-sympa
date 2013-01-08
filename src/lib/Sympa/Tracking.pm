@@ -54,10 +54,7 @@ use Sympa::SDM;
 #
 ##############################################
 sub get_recipients_status {
-        my $msgid  = shift;
-	my $listname = shift;
-        my $robot =shift;
-
+        my ($msgid, $listname, $robot) = @_;
         &Sympa::Log::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
         my $sth;
@@ -93,8 +90,8 @@ sub get_recipients_status {
 #
 ##############################################
 sub db_init_notification_table{
+    my (%params) = @_;
 
-    my %params = @_;
     my $msgid =  $params{'msgid'}; chomp $msgid;
     my $listname =  $params{'listname'};
     my $robot =  $params{'robot'};
@@ -141,7 +138,6 @@ sub db_init_notification_table{
 ##############################################
 sub db_insert_notification {
     my ($notification_id, $type, $status, $arrival_date ,$notification_as_string  ) = @_;
-
     &Sympa::Log::do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status);
 
     chomp $arrival_date;
@@ -167,11 +163,8 @@ sub db_insert_notification {
 ##############################################
 
 sub find_notification_id_by_message{
-    my $recipient = shift;
-    my $msgid = shift;	chomp $msgid;
-    my $listname = shift;
-    my $robot = shift;
-
+    my ($recipient, $msgid, $listname, $robot) = @_;
+	chomp $msgid;
     &Sympa::Log::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
     my $sth;
@@ -204,11 +197,9 @@ sub find_notification_id_by_message{
 #
 ##############################################
 sub remove_message_by_id{
-    my $msgid =shift;
-    my $listname =shift;
-    my $robot =shift;
-
+    my ($msgid, $listname, $robot) = @_;
     &Sympa::Log::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
+
     my $sth;
     unless($sth = &Sympa::SDM::do_query("DELETE FROM notification_table WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s", &Sympa::SDM::quote($msgid),&Sympa::SDM::quote($listname),&Sympa::SDM::quote($robot))) {
 	&Sympa::Log::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
@@ -231,11 +222,9 @@ sub remove_message_by_id{
 #
 ##############################################
 sub remove_message_by_period{
-    my $period =shift;
-    my $listname =shift;
-    my $robot =shift;
-
+    my ($period, $listname, $robot) = @_;
     &Sympa::Log::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
+
     my $sth;
 
     my $limit = time - ($period * 24 * 60 * 60);

@@ -75,12 +75,7 @@ Sign a message.
 =cut
 
 sub smime_sign {
-    my $in_msg = shift;
-    my $list = shift;
-    my $robot = shift;
-    my $tmpdir = shift;
-    my $key_passwd = shift;
-    my $openssl = shift;
+    my ($in_msg, $list, $robot, $tmpdir, $key_passwd, $openssl) = @_;
 
     &Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $in_msg,$list,$robot,$tmpdir);
 
@@ -195,12 +190,7 @@ Check if a message is signed.
 =cut
 
 sub smime_sign_check {
-    my $message = shift;
-    my $tmpdir = shift;
-    my $cafile = shift;
-    my $capath = shift;
-    my $openssl = shift;
-    my $ssl_cert_dir = shift;
+    my ($message, $tmpdir, $cafile, $capath, $openssl, $ssl_cert_dir) = @_;
 
     my $sender = $message->{'sender'};
 
@@ -407,13 +397,8 @@ Encrypt a message.
 =cut
 
 sub smime_encrypt {
-    my $msg_header = shift;
-    my $msg_body = shift;
-    my $email = shift ;
-    my $list = shift ;
-    my $tmpdir = shift ;
-    my $ssl_cert_dir = shift ;
-    my $openssl = shift ;
+    my ($msg_header, $msg_body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
+	    = @_;
 
     my $usercert;
     my $dummy;
@@ -534,12 +519,8 @@ Decrypt a message.
 =cut
 
 sub smime_decrypt {
-    my $msg = shift;
-    my $list = shift;
-    my $tmpdir = shift;
-    my $home = shift;
-    my $key_passwd = shift;
-    my $openssl = shift;
+    my ($msg, $list, $tmpdir, $home, $key_passwd, $openssl) = @_;
+
     my $from = $msg->head->get('from');
 
     &Sympa::Log::do_log('debug2', 'message msg from %s,%s', $from, $list->{'name'});
@@ -774,7 +755,7 @@ An hashref with the following keys:
 =cut
 
 sub smime_parse_cert {
-    my($arg) = @_;
+    my ($arg) = @_;
     &Sympa::Log::do_log('debug', '(%s)', join('/',%{$arg}));
 
     unless (ref($arg)) {
@@ -872,7 +853,7 @@ Extract certificate from message.
 =cut
 
 sub smime_extract_certs {
-    my($mime, $outfile, $openssl) = @_;
+    my ($mime, $outfile, $openssl) = @_;
     &Sympa::Log::do_log('debug2', "(%s)", $mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {

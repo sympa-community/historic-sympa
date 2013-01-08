@@ -79,8 +79,7 @@ The configuration, as an hash.
 =cut
 
 sub load {
-    my $config = shift;
-
+    my ($config) = @_;
    &Sympa::Log::do_log('debug3', '(%s)', $config);
 
     my $line_num = 0;

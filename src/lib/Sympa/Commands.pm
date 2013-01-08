@@ -205,9 +205,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub help {
-
-    shift;
-    my $robot=shift;
+    my (undef, $robot) = @_;
 
     my $etc =  &Sympa::Configuration::get_robot_conf($robot, 'etc');
 
@@ -287,11 +285,7 @@ Sends back the list of public lists on this node.
 =cut
 
 sub lists {
-    shift;
-    my $robot=shift;
-    my $sign_mod = shift;
-    my $message = shift;
-
+    my (undef, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', 'for robot %s, sign_mod %, message %s', $robot,$sign_mod , $message);
 
     my $data = {};
@@ -365,11 +359,7 @@ OUT : 'unknown_list'|'not_allowed'|1  | undef
 =cut
 
 sub stats {
-    my $listname = shift;
-    my $robot=shift;
-    my $sign_mod=shift;
-    my $message = shift;
-
+    my ($listname, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
 
     my $list = Sympa::List->new($listname, $robot);
@@ -446,9 +436,9 @@ OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
 =cut
 
 sub getfile {
-    my($which, $file) = split(/\s+/, shift);
-    my $robot=shift;
+    my ($arg, $robot) = @_;
 
+    my ($which, $file) = split(/\s+/, $arg);
     &Sympa::Log::do_log('debug', '(%s, %s, %s)', $which, $file, $robot);
 
     my $list = Sympa::List->new($which, $robot);
@@ -513,9 +503,7 @@ Sends back the last archive file.
 =cut
 
 sub last {
-    my $which = shift;
-    my $robot = shift;
-
+    my ($which, $robot) = @_;
     &Sympa::Log::do_log('debug', '(%s, %s)', $which, $robot);
 
     my $list = Sympa::List->new($which,$robot);
@@ -566,9 +554,7 @@ sub last {
 #
 #############################################################
 sub index {
-    my $which = shift;
-    my $robot = shift;
-
+    my ($which, $robot) = @_;
     &Sympa::Log::do_log('debug', '(%s) robot (%s)',$which,$robot);
 
     my $list = Sympa::List->new($which, $robot);
@@ -619,11 +605,7 @@ sub index {
 #
 ################################################################
 sub review {
-    my $listname  = shift;
-    my $robot = shift;
-    my $sign_mod = shift ;
-    my $message = shift ;
-
+    my ($listname, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $listname,$robot,$sign_mod );
 
     my $user;
@@ -729,10 +711,7 @@ sub review {
 #
 #############################################################
 sub verify {
-    my $listname = shift ;
-    my $robot = shift;
-
-    my $sign_mod = shift ;
+    my ($listname, $robot, $sign_mod) = @_;
     &Sympa::Log::do_log('debug', '(%s, %s)', $sign_mod, $robot);
 
     my $list = Sympa::List->new($listname, $robot);
@@ -767,11 +746,7 @@ sub verify {
 #
 ################################################################
 sub subscribe {
-    my $what = shift;
-    my $robot = shift;
-    my $sign_mod = shift;
-    my $message = shift;
-
+    my ($what, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s, %s, %s)', $what,$robot,$sign_mod,$message);
 
     $what =~ /^(\S+)(\s+(.+))?\s*$/;
@@ -953,11 +928,7 @@ sub subscribe {
 #
 ##############################################################
 sub info {
-    my $listname = shift;
-    my $robot = shift;
-    my $sign_mod = shift ;
-    my $message = shift;
-
+    my ($listname, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
 
     my $list = Sympa::List->new($listname, $robot);
@@ -1065,11 +1036,7 @@ sub info {
 #
 ##############################################################
 sub signoff {
-    my $which = shift;
-    my $robot = shift;
-    my $sign_mod = shift;
-    my $message = shift;
-
+    my ($which, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s, %s, %s)', $which,$robot, $sign_mod, $message);
 
     my ($l,$list,$auth_method);
@@ -1254,11 +1221,7 @@ sub signoff {
 #
 ############################################################
 sub add {
-    my $what = shift;
-    my $robot = shift;
-    my $sign_mod = shift;
-    my $message = shift;
-
+    my ($what, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $what,$robot, $sign_mod, $message);
 
     my $email_regexp = &Sympa::Tools::get_regexp('email');
@@ -1398,11 +1361,7 @@ sub add {
 #
 ##############################################################
 sub invite {
-    my $what = shift;
-    my $robot=shift;
-    my $sign_mod = shift ;
-    my $message = shift;
-
+    my ($what, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
     my $sympa = &Sympa::Configuration::get_robot_conf($robot, 'sympa');
@@ -1552,11 +1511,7 @@ sub invite {
 #
 ##############################################################
 sub remind {
-    my $which = shift;
-    my $robot = shift;
-    my $sign_mod = shift ;
-    my $message = shift;
-
+    my ($which, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $which,$robot,$sign_mod,$message);
 
     my $host = &Sympa::Configuration::get_robot_conf($robot, 'host');
@@ -1786,11 +1741,7 @@ sub remind {
 #
 ##############################################################
 sub del {
-    my $what = shift;
-    my $robot = shift;
-    my $sign_mod = shift ;
-    my $message = shift;
-
+    my ($what, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $what,$robot,$sign_mod,$message);
 
     my $email_regexp = &Sympa::Tools::get_regexp('email');
@@ -1915,11 +1866,7 @@ sub del {
 #
 #############################################################
 sub set {
-    my $what = shift;
-    my $robot = shift;
-    my $sign_mod = shift;
-    my $message = shift;
-
+    my ($what, $robot, $sign_mod, $message) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
     $what =~ /^\s*(\S+)\s+(\S+)\s*$/;
@@ -2045,8 +1992,7 @@ sub set {
 #
 ##############################################################
 sub distribute {
-    my $what =shift;
-    my $robot = shift;
+    my ($what, $robot) = @_;
 
     $what =~ /^\s*(\S+)\s+(.+)\s*$/;
     my($which, $key) = ($1, $2);
@@ -2144,8 +2090,7 @@ sub distribute {
 #
 ############################################################
 sub confirm {
-    my $what = shift;
-    my $robot = shift;
+    my ($what, $robot) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s)', $what, $robot);
 
     $what =~ /^\s*(\S+)\s*$/;
@@ -2291,11 +2236,7 @@ sub confirm {
 #
 ##############################################################
 sub reject {
-    my $what = shift;
-    my $robot = shift;
-    shift;
-    my $editor_msg = shift;
-
+    my ($what, $robot, undef, $editor_msg) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s)', $what, $robot);
 
     $what =~ /^(\S+)\s+(.+)\s*$/;
@@ -2379,8 +2320,7 @@ sub reject {
 #
 #########################################################
 sub modindex {
-    my $name = shift;
-    my $robot = shift;
+    my ($name, $robot) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s)',$name,$robot);
 
     $name =~ y/A-Z/a-z/;
@@ -2493,13 +2433,10 @@ sub modindex {
 #
 #########################################################
 sub which {
-    my($listname, @which);
-    shift;
-    my $robot = shift;
-    my $sign_mod = shift;
-    my $message = shift;
+    my (undef, $robot, $sign_mod, $message) = @_;
+    &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', '', $robot, $sign_mod, $message);
 
-    &Sympa::Log::do_log('debug', '(%s,%s,%s,%s)', $listname, $robot, $sign_mod, $message);
+    my($listname, @which);
 
     ## Subscriptions
     my $data;

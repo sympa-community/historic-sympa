@@ -92,7 +92,6 @@ sub update_version {
 ## Upgrade data structure from one version to another
 sub upgrade {
     my ($previous_version, $new_version) = @_;
-
     &Sympa::Log::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
     if (&lower_version($new_version, $previous_version)) {
@@ -923,7 +922,7 @@ sub data_structure_uptodate {
 ## also add X-Attach header field if template requires it
 ## IN : - arrayref with list of filepath/lang pairs
 sub to_utf8 {
-    my $files = shift;
+    my ($files) = @_;
 
     my $with_attachments = qr{ archive.tt2 | digest.tt2 | get_archive.tt2 | listmaster_notification.tt2 |
 				   message_report.tt2 | moderate.tt2 |  modindex.tt2 | send_auth.tt2 }x;
@@ -1028,10 +1027,9 @@ sub to_utf8 {
 # md5_encode_password : Version later than 5.4 uses md5 fingerprint instead of symetric crypto to store password.
 #  This require to rewrite paassword in database. This upgrade IS NOT REVERSIBLE
 sub md5_encode_password {
+    &Sympa::Log::do_log('notice', '() recoding password using md5 fingerprint');
 
     my $total = 0;
-
-    &Sympa::Log::do_log('notice', '() recoding password using md5 fingerprint');
 
     unless (&Sympa::List::check_db_connect()) {
 	return undef;

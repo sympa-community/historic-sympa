@@ -40,12 +40,7 @@ use Sympa::Log;
 
 # request a document using https, return status and content
 sub get_https{
-	my $host = shift;
-	my $port = shift;
-	my $path = shift;
-    	my $client_cert = shift;
-	my $client_key = shift;
-	my $ssl_data= shift;
+	my ($host, $port, $path, $client_cert, $client_key, $ssl_data) = @_;
 
 	my $key_passwd = $ssl_data->{'key_passwd'};
 	my $trusted_ca_file = $ssl_data->{'cafile'};

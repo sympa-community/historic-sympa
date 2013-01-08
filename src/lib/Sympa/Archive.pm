@@ -88,8 +88,7 @@ Returns an array.
 =cut
 
 sub list {
-    my $name = shift;
-
+    my ($name) = @_;
     &Sympa::Log::do_log ('debug',"($name)");
 
     my($filename, $newfile);
@@ -234,9 +233,7 @@ Return path for latest message distributed in the list.
 =cut
 
 sub last_path {
-
-    my $list = shift;
-
+    my ($list) = @_;
     &Sympa::Log::do_log('debug', '(%s)', $list->{'name'});
 
     return undef unless ($list->is_archived());
@@ -296,8 +293,9 @@ sub load_html_message {
 
 
 sub clean_archive_directory{
-    my $params = shift;
+    my ($params) = @_;
     &Sympa::Log::do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
+
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
     $answer->{'cleaned_dir'} = $Sympa::Configuration::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
@@ -326,7 +324,7 @@ sub clean_archive_directory{
 }
 
 sub clean_archived_message{
-    my $params = shift;
+    my ($params) = @_;
     &Sympa::Log::do_log('debug',"Cleaning HTML parts of a message input %s , output  %s ",$params->{'input'},$params->{'output'});
 
     my $input = $params->{'input'};
@@ -362,8 +360,8 @@ Attachement_url is used to link attachement
 =cut
 
 sub convert_single_msg_2_html {
+    my ($data) = @_;
 
-    my $data =shift;
     my $msg_as_string = $data->{'msg_as_string'};
     my $destination_dir = $data->{'destination_dir'};
     my $attachement_url = $data->{'attachement_url'};

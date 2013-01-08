@@ -99,7 +99,7 @@ An hashref with the following keys, or I<undef> if something went wrong:
 =cut
 
 sub create_list_old{
-    my ($param,$template,$robot,$origin, $user_mail) = @_;
+    my ($param, $template, $robot, $origin, $user_mail) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s)',$param->{'listname'},$robot,$origin);
 
      ## obligatory list parameters
@@ -341,7 +341,7 @@ An hashref with the following keys, or I<undef> if something went wrong:
 =cut
 
 sub create_list{
-    my ($param,$family,$robot, $abort_on_error) = @_;
+    my ($param, $family, $robot, $abort_on_error) = @_;
     &Sympa::Log::do_log('info', '(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
     ## mandatory list parameters
@@ -583,7 +583,7 @@ The updated L<Sympa::List> object.
 =cut
 
 sub update_list{
-    my ($list,$param,$family,$robot) = @_;
+    my ($list, $param, $family, $robot) = @_;
     &Sympa::Log::do_log('info', '(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
     ## mandatory list parameters
@@ -965,12 +965,8 @@ The updated L<Sympa::List> object.
 =cut
 
 sub clone_list_as_empty {
-
-    my $source_list_name =shift;
-    my $source_robot =shift;
-    my $new_listname = shift;
-    my $new_robot = shift;
-    my $email = shift;
+    my ($source_list_name, $source_robot, $new_listname, $new_robot, $email) 
+        = @_;
 
     my $list;
     unless ($list = Sympa::List->new($source_list_name, $source_robot)) {
@@ -1059,7 +1055,7 @@ A true value if the owner exists, I<undef> otherwise.
 =cut
 
 sub check_owner_defined {
-    my ($owner,$owner_include) = @_;
+    my ($owner, $owner_include) = @_;
     &Sympa::Log::do_log('debug2',"()");
 
     if (ref($owner) eq "ARRAY") {
@@ -1154,8 +1150,7 @@ Net::SMTP object or 0
 =cut
 
  sub list_check_smtp {
-     my $list = shift;
-     my $robot = shift;
+     my ($list, $robot) = @_;
      &Sympa::Log::do_log('debug2', '(%s,%s)',$list,$robot);
 
      my $conf = '';
@@ -1219,8 +1214,7 @@ A true value if the alias have been installed, I<undef> otherwise.
 =cut
 
 sub install_aliases {
-    my $list = shift;
-    my $robot = shift;
+    my ($list, $robot) = @_;
     &Sympa::Log::do_log('debug', "($list->{'name'},$robot)");
 
     return 1
@@ -1302,8 +1296,7 @@ I<1> in case of success, the aliases definition as a string otherwise.
 =cut
 
  sub remove_aliases {
-     my $list = shift;
-     my $robot = shift;
+     my ($list, $robot) = @_;
      &Sympa::Log::do_log('info', "_remove_aliases($list->{'name'},$robot");
 
     return 1
@@ -1356,8 +1349,7 @@ A true value if the topic is in the robot conf, I<undef> otherwise.
 =cut
 
 sub check_topics {
-    my $topic = shift;
-    my $robot = shift;
+    my ($topic, $robot) = @_;
     &Sympa::Log::do_log('info', "($topic,$robot)");
 
     my ($top, $subtop) = split /\//, $topic;
@@ -1399,7 +1391,7 @@ I<1>, and the list of lists for which the changes could not be achieved.
 =cut
 
 sub change_user_email {
-    my %in = @_;
+    my (%in) = @_;
 
     my @failed_for;
 

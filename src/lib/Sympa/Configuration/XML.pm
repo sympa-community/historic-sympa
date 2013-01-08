@@ -59,8 +59,7 @@ A new L<Sympa::Configuration::XML> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my $class = shift;
-    my $fh = shift;
+    my ($class, $fh) = @_;
     &Sympa::Log::do_log('debug2','()');
 
     my $self = {};
@@ -86,7 +85,7 @@ sub new {
 # OUT : -1 or undef
 ################################################
 sub createHash {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2','()');
 
     unless ($self->{'root'}->nodeName eq 'list') {
@@ -132,7 +131,7 @@ sub createHash {
 # OUT : -$hash
 #########################################
 sub getHash {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2','()');
 
     my $hash = {};
@@ -158,7 +157,7 @@ sub getHash {
 # OUT : -1 or undef
 #################################################################
 sub _getRequiredElements {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3','()');
 
     # listname element is obligatory
@@ -181,9 +180,7 @@ sub _getRequiredElements {
 # OUT : - the number of node with the name $nodeName
 ####################################################
 sub _getMultipleAndRequiredChild {
-    my $self = shift;
-    my $nodeName = shift;
-    my $childName = shift;
+    my ($self, $nodeName, $childName) = @_;
     &Sympa::Log::do_log('debug3','(%s,%s)',$nodeName,$childName);
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
@@ -223,8 +220,7 @@ sub _getMultipleAndRequiredChild {
 # OUT : -1 or undef
 ############################################
 sub _getRequiredSingle {
-    my $self = shift;
-    my $nodeName = shift;
+    my ($self, $nodeName) = @_;
     &Sympa::Log::do_log('debug3','(%s)',$nodeName);
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
@@ -297,7 +293,7 @@ sub _getRequiredSingle {
 #         or of text content
 ##############################################
 sub _getChildren {
-    my $node = shift;
+    my ($node) = @_;
     &Sympa::Log::do_log('debug3','(%s)',$node->nodeName);
 
     ## return value
@@ -403,7 +399,7 @@ sub _getChildren {
 # OUT : -1 or undef
 ##################################################
 sub _verify_single_nodes {
-    my $nodeList = shift;
+    my ($nodeList) = @_;
     &Sympa::Log::do_log('debug3','()');
 
     my $error = 0;
@@ -443,8 +439,9 @@ sub _verify_single_nodes {
 # OUT : - $hash : ref on the hash defined
 ###############################################
 sub _find_lines {
-    my $nodeList = shift;
+    my ($nodeList) = @_;
     &Sympa::Log::do_log('debug3','()');
+
     my $hash = {};
 
     foreach my $node (@$nodeList) {

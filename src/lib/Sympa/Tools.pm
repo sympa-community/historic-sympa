@@ -425,9 +425,7 @@ Return a hash from the edit_list_conf file
 =cut
 
 sub load_edit_list_conf {
-    my $robot = shift;
-    my $list = shift;
-    my $basedir = shift;
+    my ($robot, $list, $basedir) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $robot, $list, $basedir);
 
     my $file;
@@ -495,8 +493,7 @@ Return a hash from the create_list_conf file
 =cut
 
 sub load_create_list_conf {
-    my $robot = shift;
-    my $basedir = shift;
+    my ($robot, $basedir) = @_;
 
     my $file;
     my $conf ;
@@ -541,8 +538,7 @@ sub _add_topic {
 }
 
 sub get_list_list_tpl {
-    my $robot = shift;
-    my $directory = shift;
+    my ($robot, $directory) = @_;
 
     my $list_conf;
     my $list_templates ;
@@ -580,12 +576,7 @@ sub get_list_list_tpl {
 }
 
 sub get_templates_list {
-
-    my $type = shift;
-    my $robot = shift;
-    my $list = shift;
-    my $options = shift;
-    my $basedir = shift;
+    my ($type, $robot, $list, $options, $basedir) = @_;
 
     my $listdir;
 
@@ -672,14 +663,8 @@ Return the path for a specific template
 =cut
 
 sub get_template_path {
-
-    my $type = shift;
-    my $robot = shift;
-    my $scope = shift;
-    my $tpl = shift;
-    my $lang = shift || 'default';
-    my $list = shift;
-    my $basedir = shift;
+    my ($type, $robot, $scope, $tpl, $lang, $list, $basedir) = @_;
+    $lang = 'default' if !defined $lang;
 
     &Sympa::Log::do_log('debug', "get_templates_path ($type,$robot,$scope,$tpl,$lang,%s)", $list->{'name'});
 
@@ -736,8 +721,8 @@ Make a multipart/alternative, a singlepart
 =cut
 
 sub as_singlepart {
-    &Sympa::Log::do_log('debug2', '()');
     my ($msg, $preferred_type, $loops) = @_;
+    &Sympa::Log::do_log('debug2', '()');
     my $done = 0;
     $loops++;
 
@@ -800,8 +785,8 @@ Escape weird characters.
 =cut
 
 sub escape_chars {
-    my $s = shift;
-    my $except = shift; ## Exceptions
+    my ($s, $except) = @_;
+
     my $ord_except = ord($except) if (defined $except);
 
     ## Escape chars
@@ -825,8 +810,7 @@ Q-decode it first
 =cut
 
 sub escape_docname {
-    my $filename = shift;
-    my $except = shift; ## Exceptions
+    my ($filename, $except) = @_;
 
     ## Q-decode
     $filename = MIME::EncWords::decode_mimewords($filename);
@@ -845,7 +829,7 @@ Convert from Perl unicode encoding to UTF8
 =cut
 
 sub unicode_to_utf8 {
-    my $s = shift;
+    my ($s) = @_;
 
     if (&Encode::is_utf8($s)) {
 	return &Encode::encode_utf8($s);
@@ -861,7 +845,7 @@ Q-Encode web file name
 =cut
 
 sub qencode_filename {
-    my $filename = shift;
+    my ($filename) = @_;
 
     ## We don't use MIME::Words here because it does not encode properly Unicode
     ## Check if string is already Q-encoded first
@@ -891,7 +875,7 @@ Q-Decode web file name
 =cut
 
 sub qdecode_filename {
-    my $filename = shift;
+    my ($filename) = @_;
 
     ## We don't use MIME::Words here because it does not encode properly Unicode
     ## Check if string is already Q-encoded first
@@ -909,7 +893,7 @@ Unescape weird characters
 =cut
 
 sub unescape_chars {
-    my $s = shift;
+    my ($s) = @_;
 
     $s =~ s/%a5/\//g;  ## Special traetment for '/'
     foreach my $i (0x20..0x2c,0x3a..0x3f,0x5b,0x5d,0x80..0x9f,0xa0..0xff) {
@@ -922,7 +906,7 @@ sub unescape_chars {
 }
 
 sub escape_html {
-    my $s = shift;
+    my ($s) = @_;
 
     $s =~ s/\"/\&quot\;/gm;
     $s =~ s/\</&lt\;/gm;
@@ -932,7 +916,7 @@ sub escape_html {
 }
 
 sub unescape_html {
-    my $s = shift;
+    my ($s) = @_;
 
     $s =~ s/\&quot\;/\"/g;
     $s =~ s/&lt\;/\</g;
@@ -948,8 +932,8 @@ Check sum used to authenticate communication from wwsympa to sympa
 =cut
 
 sub sympa_checksum {
-    my $rcpt = shift;
-    my $cookie = shift;
+    my ($rcpt, $cookie) = @_;
+
     return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
 }
 
@@ -960,8 +944,7 @@ Create a cipher.
 =cut
 
 sub cookie_changed {
-    my $current=shift;
-    my $basedir = shift;
+    my ($current, $basedir) = @_;
 
     my $changed = 1 ;
     if (-f "$basedir/cookies.history") {
@@ -1047,10 +1030,7 @@ sub load_mime_types {
 }
 
 sub split_mail {
-    my $message = shift ;
-    my $pathname = shift ;
-    my $dir = shift ;
-    my $confdir = shift;
+    my ($message, $pathname, $dir, $confdir) = @_;
 
     my $head = $message->head ;
     my $encoding = $head->mime_encoding ;
@@ -1114,12 +1094,7 @@ sub split_mail {
 }
 
 sub virus_infected {
-    my $mail = shift ;
-    my $path = shift;
-    my $args = shift;
-    my $tmpdir = shift;
-    my $domain = shift;
-    my $confdir = shift;
+    my ($mail, $path, $args, $tmpdir, $domain, $confdir) = @_;
 
     my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
     &Sympa::Log::do_log('debug2', 'Scan virus in %s', $file);
@@ -1585,11 +1560,20 @@ sub make_tt2_include_path {
 
 Q-encode a complete file hierarchy. Useful to Q-encode subshared documents
 
+=head3 Parameters
+
+=over
+
+=item * I<$dir>: root directory
+
+=item * I<$original_encoding>: suspected original encoding of filenames
+
+=back
+
 =cut
 
 sub qencode_hierarchy {
-    my $dir = shift; ## Root directory
-    my $original_encoding = shift; ## Suspected original encoding of filenames
+    my ($dir, $original_encoding) = @_;
 
     my $count;
     my @all_files;
@@ -1622,7 +1606,7 @@ sub qencode_hierarchy {
 }
 
 sub get_message_id {
-    my $robot = shift;
+    my ($robot) = @_;
 
     my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $PID, int(rand(999)), $robot;
 
@@ -1636,7 +1620,7 @@ Basic check of an email address
 =cut
 
 sub valid_email {
-    my $email = shift;
+    my ($email) = @_;
 
     unless ($email =~ /^$regexp{'email'}$/) {
 	&Sympa::Log::do_log('err', "Invalid email address '%s'", $email);
@@ -1659,7 +1643,7 @@ Clean email address
 =cut
 
 sub clean_email {
-    my $email = shift;
+    my ($email) = @_;
 
     ## Lower-case
     $email = lc($email);
@@ -1679,7 +1663,7 @@ It could also support alternate email
 =cut
 
 sub get_canonical_email {
-    my $email = shift;
+    my ($email) = @_;
 
     ## Remove leading and trailing white spaces
     $email =~ s/^\s*(\S.*\S)\s*$/$1/;
@@ -1709,7 +1693,7 @@ The clean message id.
 =cut
 
 sub clean_msg_id {
-    my $msg_id = shift;
+    my ($msg_id) = @_;
 
     chomp $msg_id;
 
@@ -1753,9 +1737,7 @@ sub change_x_sympa_to {
 }
 
 sub add_in_blacklist {
-    my $entry = shift;
-    my $robot = shift;
-    my $list =shift;
+    my ($entry, $robot, $list) = @_;
 
     &Sympa::Log::do_log('info',"(%s,%s,%s)",$entry,$robot,$list->{'name'});
     $entry = lc($entry);
@@ -1814,8 +1796,8 @@ Returns the md5 digest in hexadecimal format of given string.
 =cut
 
 sub md5_fingerprint {
+    my ($input_string) = @_;
 
-    my $input_string = shift;
     return undef unless (defined $input_string);
     chomp $input_string;
 
@@ -1836,7 +1818,7 @@ Return the Sympa regexp corresponding to the given type.
 =cut
 
 sub get_regexp {
-    my $type = shift;
+    my ($type) = @_;
 
     if (defined $regexp{$type}) {
 	return $regexp{$type};
@@ -1921,10 +1903,8 @@ Return line-wrapped text.
 =cut
 
 sub wrap_text {
-    my $text = shift;
-    my $init = shift;
-    my $subs = shift;
-    my $cols = shift;
+    my ($text, $init, $subs, $cols) = @_;
+
     $cols = 78 unless defined $cols;
     return $text unless $cols;
 
@@ -1957,9 +1937,9 @@ Return formatted (and encoded) name-addr as RFC5322 3.4.
 =cut
 
 sub addrencode {
-    my $addr = shift;
-    my $phrase = (shift || '');
-    my $charset = (shift || 'utf8');
+    my ($addr, $phrase, $charset) = @_;
+    $phrase = '' unless $phrase;
+    $charset = 'utf8' unless $charset;
 
     return undef unless $addr =~ /\S/;
 
@@ -1992,8 +1972,9 @@ Generate a newsletter from an HTML URL or a file path.
 =cut
 
 sub create_html_part_from_web_page {
-    my $param = shift;
+    my ($param) = @_;
     &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
+
     my $mailHTML = MIME::Lite::HTML->new(
 					{
 					    From => $param->{'From'},
@@ -2025,9 +2006,7 @@ If sep is given, return all occurrances joined by it.
 =cut
 
 sub decode_header {
-    my $msg = shift;
-    my $tag = shift;
-    my $sep = shift || undef;
+    my ($msg, $tag, $sep) = @_;
 
     my $head;
     if ($msg->isa('Sympa::Message')) {

@@ -2123,9 +2123,10 @@ eventually loads the list if a name is given.
 =cut
 
 sub new {
-    my($pkg, $name, $robot, $options) = @_;
-    my $list={};
+    my ($pkg, $name, $robot, $options) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $name, $robot, join('/',keys %$options));
+
+    my $list={};
 
     ## Allow robot in the name
     if ($name =~ /\@/) {
@@ -2210,7 +2211,7 @@ When no robot is specified, look for a list among robots
 =cut
 
 sub search_list_among_robots {
-    my $listname = shift;
+    my ($listname) = @_;
 
     unless ($listname) {
  	&Sympa::Log::do_log('err', 'Missing list parameter');
@@ -2291,7 +2292,7 @@ Saves updates the statistics file on disk.
 =cut
 
 sub savestats {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     ## Be sure the list has been loaded.
@@ -2333,7 +2334,7 @@ Msg count.
 =cut
 
 sub increment_msg_count {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', "($self->{'name'}");
 
     ## Be sure the list has been loaded.
@@ -2378,7 +2379,7 @@ Return the number of messages sent to the list.
 =cut
 
 sub get_msg_count {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', "Getting the number of messages for list %s",$self->{'name'});
 
     ## Be sure the list has been loaded.
@@ -2405,7 +2406,7 @@ Rerturn the last date of distribution message.
 =cut
 
 sub get_latest_distribution_date {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', "($self->{'name'})");
 
     ## Be sure the list has been loaded.
@@ -2436,7 +2437,7 @@ sequence number. Does nothing if no stats.
 =cut
 
 sub update_stats {
-    my($self, $bytes) = @_;
+    my ($self, $bytes) = @_;
     &Sympa::Log::do_log('debug2', '(%d)', $bytes);
 
     my $stats = $self->{'stats'};
@@ -2479,11 +2480,7 @@ input table @rcpt is spliced : rcpt for which verp must be used are extracted fr
 =cut
 
 sub extract_verp_rcpt() {
-    my $percent = shift;
-    my $xseq = shift;
-    my $refrcpt = shift;
-    my $refrcptverp = shift;
-
+    my ($percent, $xseq, $refrcpt, $refrcptverp) = @_;
     &Sympa::Log::do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
 
     my @result;
@@ -2518,7 +2515,7 @@ Dump a copy of lists to disk, in text format
 =cut
 
 sub dump {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $self->{'name'});
 
     unless (defined $self) {
@@ -2800,7 +2797,7 @@ Return a list of hash's owners and their param.
 =cut
 
 sub get_owners {
-    my($self) = @_;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
 
     my $owners = ();
@@ -2818,7 +2815,7 @@ sub get_owners {
 =cut
 
 sub get_nb_owners {
-    my($self) = @_;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s',$self->{'name'});
 
     my $resul = 0;
@@ -2837,7 +2834,7 @@ Return the list of editors, as an arrayref.
 =cut
 
 sub get_editors {
-    my($self) = @_;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
 
     my $editors = ();
@@ -2857,7 +2854,7 @@ Return the list of owners email addresses.
 =cut
 
 sub get_owners_email {
-    my($self,$param) = @_;
+    my ($self,$param) = @_;
     &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $param -> {'ignore_nomail'});
 
     my @rcpt;
@@ -2890,7 +2887,7 @@ editors.
 =cut
 
 sub get_editors_email {
-    my($self,$param) = @_;
+    my ($self,$param) = @_;
     &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $param -> {'ignore_nomail'});
 
     my @rcpt;
@@ -2923,7 +2920,7 @@ Return the family this list belongs to.
 =cut
 
 sub get_family {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
 
     if (ref($self->{'family'}) && $self->{'family'}->isa('Sympa::Family')) {
@@ -2958,7 +2955,7 @@ Used ONLY with lists belonging to a family.
 =cut
 
 sub get_config_changes {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s',$self->{'name'});
 
     unless ($self->{'admin'}{'family_name'}) {
@@ -2985,10 +2982,7 @@ $what(file or param) name.
 =cut
 
 sub update_config_changes {
-    my $self = shift;
-    my $what = shift;
-    # one param or a ref on array of param
-    my $name = shift;
+    my ($self, $what, $name) = @_;
     &Sympa::Log::do_log('debug2', '%s,%s', $self->{'name'},$what);
 
     unless ($self->{'admin'}{'family_name'}) {
@@ -3029,7 +3023,7 @@ sub update_config_changes {
 
 ## return a hash of config_changes file
 sub _load_config_changes_file {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
 
     my $config_changes = {};
@@ -3068,7 +3062,7 @@ sub _load_config_changes_file {
 
 ## save config_changes file in the list directory
 sub _save_config_changes_file {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '%s', $self->{'name'});
 
     unless ($self->{'admin'}{'family_name'}) {
@@ -3094,9 +3088,9 @@ sub _save_config_changes_file {
 
 
 sub _get_param_value_anywhere {
-    my $new_admin = shift;
-    my $param = shift;
+    my ($new_admin, $param) = @_;
     &Sympa::Log::do_log('debug3', '_get_param_value_anywhere(%s %s)',$param);
+
     my $minor_p;
     my @values;
 
@@ -3135,9 +3129,9 @@ the value is a scalar or a ref on an array of scalar
 =cut
 
 sub get_param_value {
-    my $self = shift;
-    my $param = shift;
+    my ($self, $param) = @_;
     &Sympa::Log::do_log('debug3', '%s,%s', $self->{'name'},$param);
+
     my $minor_param;
     my $value;
 
@@ -3236,7 +3230,7 @@ The number of sendmail processes.
 =cut
 
 sub distribute_msg {
-    my $self = shift;
+    my ($self) = @_;
     my %param = @_;
 
     my $message = $param{'message'};
@@ -3485,8 +3479,7 @@ I<undef> if something went wrong.
 =cut
 
 sub send_msg_digest {
-    my $self = shift;
-    my $messagekey = shift;
+    my ($self, $messagekey) = @_;
    &Sympa::Log::do_log('debug',"send_msg_disgest(%s)",$messagekey);
 
     # fetch and lock message.
@@ -3693,7 +3686,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub send_global_file {
-    my($tpl, $who, $robot, $context, $options) = @_;
+    my ($tpl, $who, $robot, $context, $options) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s, %s', $tpl, $who, $robot);
 
     my $data = &Sympa::Tools::Data::dup_var($context);
@@ -3802,7 +3795,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub send_file {
-    my($self, $tpl, $who, $robot, $context) = @_;
+    my ($self, $tpl, $who, $robot, $context) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s, %s', $tpl, $who, $robot);
 
     my $name = $self->{'name'};
@@ -3964,7 +3957,7 @@ message in list.
 
 sub send_msg {
 
-    my $self = shift;
+    my ($self) = @_;
     my %param = @_;
 
     my $message = $param{'message'};
@@ -4373,7 +4366,8 @@ if something went wrong.
 =cut
 
 sub send_to_editor {
-   my($self, $method, $message) = @_;
+   my ($self, $method, $message) = @_;
+
    my $msg = $message->{'msg'};
    my $encrypt = 'smime_crypted' if ($message->{'smime_crypted'});
   &Sympa::Log::do_log('debug', "messagekey: $message->{'messagekey'}, method : $method, encrypt : $encrypt");
@@ -4493,7 +4487,8 @@ spool, or I<undef> if something went wrong.
 =cut
 
 sub send_auth {
-   my($self, $message) = @_;
+   my ($self, $message) = @_;
+
    my ($sender, $file) = ($message->{'sender'}, $message->{'filename'});
    &Sympa::Log::do_log('debug3', '%s, %s', $sender, $file);
 
@@ -4657,7 +4652,7 @@ I<undef> if something went wrong.
 =cut
 
 sub archive_send {
-   my($self, $who, $file) = @_;
+   my ($self, $who, $file) = @_;
    &Sympa::Log::do_log('debug', '%s, %s', $who, $file);
 
    return unless ($self->is_archived());
@@ -4700,7 +4695,7 @@ I<undef> if something went wrong.
 =cut
 
 sub archive_send_last {
-   my($self, $who) = @_;
+   my ($self, $who) = @_;
    &Sympa::Log::do_log('debug', '%s, %s', $self->{'listname'}, $who);
 
    return unless ($self->is_archived());
@@ -4952,8 +4947,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub send_notify_to_owner {
-
-    my ($self,$operation,$param) = @_;
+    my ($self, $operation, $param) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s', $self->{'name'}, $operation);
 
     my @to = $self->get_owners_email();
@@ -5040,7 +5034,7 @@ Delete a member's picture file.
 =cut
 
 sub delete_list_member_picture {
-    my ($self,$email) = @_;
+    my ($self, $email) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $email);
 
     my $fullfilename = undef;
@@ -5090,8 +5084,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub send_notify_to_editor {
-
-    my ($self,$operation,$param) = @_;
+    my ($self, $operation, $param) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s', $self->{'name'}, $operation);
 
     my @to = $self->get_editors_email();
@@ -5160,8 +5153,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub send_notify_to_user{
-
-    my ($self,$operation,$user,$param) = @_;
+    my ($self, $operation, $user, $param) = @_;
     &Sympa::Log::do_log('debug2', '%s, %s, %s', $self->{'name'}, $operation, $user);
 
     my $robot = $self->{'domain'};
@@ -5251,6 +5243,7 @@ Add footer/header to a message
 
 sub add_parts {
     my ($self, $msg) = @_;
+
     my ($listname,$type) = ($self->{'name'}, $self->{'admin'}{'footer_type'});
     my $listdir = $self->{'dir'};
     &Sympa::Log::do_log('debug2', 'List:add_parts(%s, %s, %s)', $msg, $listname, $type);
@@ -5378,9 +5371,9 @@ sub add_parts {
 }
 
 sub _append_parts {
-    my $part = shift;
-    my $header_msg = shift || '';
-    my $footer_msg = shift || '';
+    my ($part, $header_msg, $footer_msg) = @_;
+    $header_msg ||= '';
+    $footer_msg ||= '';
 
     my $eff_type = $part->effective_type || 'text/plain';
 
@@ -5456,8 +5449,7 @@ Delete a user in the user_table.
 =cut
 
 sub delete_global_user {
-    my @users = @_;
-
+    my (@users) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     return undef unless ($#users >= 0);
@@ -5492,8 +5484,8 @@ Delete the indicated users from the list.
 =cut
 
 sub delete_list_member {
-    my $self = shift;
-    my %param = @_;
+    my ($self, %param) = @_;
+
     my @u = @{$param{'users'}};
     my $exclude = $param{'exclude'};
     my $parameter = $param{'parameter'};#case of deleting : bounce? manual signoff or deleted by admin?
@@ -5546,7 +5538,7 @@ Delete the indicated admin user with the predefined role from the list.
 =cut
 
 sub delete_list_admin {
-    my($self, $role, @u) = @_;
+    my ($self, $role, @u) = @_;
     &Sympa::Log::do_log('debug2', '', $role);
 
     my $name = $self->{'name'};
@@ -5602,7 +5594,9 @@ Returns the cookie for a list, if available.
 =cut
 
 sub get_cookie {
-   return shift->{'admin'}{'cookie'};
+    my ($self) = @_;
+
+   return $self->{'admin'}{'cookie'};
 }
 
 =head2 $list->get_max_size()
@@ -5612,7 +5606,9 @@ Returns the maximum allowed size for a message.
 =cut
 
 sub get_max_size {
-   return shift->{'admin'}{'max_size'};
+    my ($self) = @_;
+
+   return $self->{'admin'}{'max_size'};
 }
 
 =head2 $list->get_reply_to()
@@ -5622,11 +5618,11 @@ Returns an array with the Reply-To values.
 =cut
 
 sub get_reply_to {
-    my $admin = shift->{'admin'};
+    my ($self) = @_;
 
-    my $value = $admin->{'reply_to_header'}{'value'};
+    my $value = $self->{'admin'}->{'reply_to_header'}{'value'};
 
-    $value = $admin->{'reply_to_header'}{'other_email'} if ($value eq 'other_email');
+    $value = $self->{'admin'}->{'reply_to_header'}{'other_email'} if ($value eq 'other_email');
 
     return $value
 }
@@ -5638,11 +5634,10 @@ Returns a default option of the list for subscription.
 =cut
 
 sub get_default_user_options {
-    my $self = shift->{'admin'};
-    my $what = shift;
+    my ($self, $what) = @_;
     &Sympa::Log::do_log('debug3', '%s', $what);
 
-    if ($self) {
+    if ($self->{'admin'}) {
 	return $self->{'default_user_options'};
     }
     return undef;
@@ -5655,9 +5650,9 @@ Returns the number of subscribers to the list.
 =cut
 
 sub get_total {
-    my $self = shift;
+    my ($self, $option) = @_;
+
     my $name = $self->{'name'};
-    my $option = shift;
     &Sympa::Log::do_log('debug3','%s', $name);
 
     if ($option eq 'nocache') {
@@ -5677,7 +5672,8 @@ user.
 =cut
 
 sub get_global_user {
-    my $who = &Sympa::Tools::clean_email(shift);
+    my ($who) = @_;
+    $who = &Sympa::Tools::clean_email($who);
     &Sympa::Log::do_log('debug2', '(%s)', $who);
 
     ## Additional subscriber fields
@@ -5782,11 +5778,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub suspend_subscription {
-
-    my $email = shift;
-    my $list = shift;
-    my $data = shift;
-    my $robot = shift;
+    my ($email, $list, $data, $robot) = @_;
     &Sympa::Log::do_log('debug2', '"%s", "%s", "%s"', $email, $list, $data);
 
     unless (&Sympa::SDM::do_query("UPDATE subscriber_table SET suspend_subscriber='1', suspend_start_date_subscriber=%s, suspend_end_date_subscriber=%s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",
@@ -5825,10 +5817,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub restore_suspended_subscription {
-
-    my $email = shift;
-    my $list = shift;
-    my $robot = shift;
+    my ($email, $list, $robot) = @_;
     &Sympa::Log::do_log('debug2', '("%s", "%s", "%s")', $email, $list, $robot);
 
     unless (&Sympa::SDM::do_query("UPDATE subscriber_table SET suspend_subscriber='0', suspend_start_date_subscriber=NULL, suspend_end_date_subscriber=NULL WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",
@@ -5866,12 +5855,7 @@ A true value, or I<undef> if something went wrong.
 
 =cut
 sub insert_delete_exclusion {
-
-    my $email = shift;
-    my $list = shift;
-    my $robot = shift;
-    my $action = shift;
-    my $family = shift;
+    my ($email, $list, $robot, $action, $family) = @_;
     &Sympa::Log::do_log('info', '("%s", "%s", "%s", "%s", "%s")', $email, $list, $robot, $action, $family);
 
     my $r = 1;
@@ -5954,9 +5938,7 @@ Returns a hash with those excluded from the list and the date.
 =cut
 
 sub get_exclusion {
-
-    my  $name= shift;
-    my  $robot= shift;
+    my ($name, $robot) = @_;
     &Sympa::Log::do_log('debug2', '(%s@%s)', $name,$robot);
 
     my $list = Sympa::List->new($name, $robot);
@@ -6017,10 +5999,8 @@ None.
 =cut
 
 sub get_list_member {
-    my  $self= shift;
-    my  $email = &Sympa::Tools::clean_email(shift);
-    my %options = @_;
-
+    my ($self, $email, %options) = @_;
+    $email = &Sympa::Tools::clean_email($email);
     &Sympa::Log::do_log('debug2', '(%s)', $email);
 
     my $name = $self->{'name'};
@@ -6077,7 +6057,7 @@ An arrayref of ressembling emails, or I<undef> if something went wrong.
 =cut
 
 sub get_ressembling_list_members_no_object {
-    my $options = shift;
+    my ($options) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
     my @output;
 
@@ -6204,7 +6184,7 @@ A list of ressembling emails, or I<undef> if something went wrong.
 =cut
 
 sub find_list_member_by_pattern_no_object {
-    my $options = shift;
+    my ($options) = @_;
 
     my $name = $options->{'name'};
 
@@ -6273,7 +6253,7 @@ An hash containing the user details, or I<undef> if something went wrong.
 =cut
 
 sub get_list_member_no_object {
-    my $options = shift;
+    my ($options) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
 
     my $name = $options->{'name'};
@@ -6338,10 +6318,8 @@ Return an admin user of the list with predefined role
 =cut
 
 sub get_list_admin {
-    my  $self= shift;
-    my  $role= shift;
-    my  $email = &Sympa::Tools::clean_email(shift);
-
+    my ($self, $role, $email) = @_;
+    $email = &Sympa::Tools::clean_email($email);
     &Sympa::Log::do_log('debug2', '(%s,%s)', $role,$email);
 
     my $name = $self->{'name'};
@@ -6518,7 +6496,7 @@ sub get_first_list_member {
 # IN : File handle or a string, XML formed data as stored in database
 # OUT : HASH data storing custome attributes.
 sub parseCustomAttribute {
-	my $xmldoc = shift ;
+	my ($xmldoc) = @_;
 	return undef if ! defined $xmldoc or $xmldoc eq '';
 
 	my $parser = XML::LibXML->new();
@@ -6552,7 +6530,7 @@ sub parseCustomAttribute {
 # IN : HASH data storing custome attributes
 # OUT : string, XML formed data to be stored in database
 sub createXMLCustomAttribute {
-	my $custom_attr = shift ;
+	my ($custom_attr) = @_;
 	return '<?xml version="1.0" encoding="UTF-8" ?><custom_attributes></custom_attributes>' if (not defined $custom_attr) ;
 	my $XMLstr = '<?xml version="1.0" encoding="UTF-8" ?><custom_attributes>';
 	foreach my $k (sort keys %{$custom_attr} ) {
@@ -6687,7 +6665,7 @@ the list.
 =cut
 
 sub get_next_list_member {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     unless (defined $sth) {
@@ -6741,7 +6719,7 @@ Returns a hash to the next admin users, until we reach the end of the list.
 =cut
 
 sub get_next_list_admin {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     unless (defined $sth) {
@@ -6781,7 +6759,7 @@ sub get_next_list_admin {
 
 ## Returns the first bouncing user
 sub get_first_bouncing_list_member {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $lock = Sympa::Lock->new(
@@ -6837,7 +6815,7 @@ sub get_first_bouncing_list_member {
 
 ## Loop for all subsequent bouncing users.
 sub get_next_bouncing_list_member {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     unless (defined $sth) {
@@ -6876,7 +6854,7 @@ sub get_next_bouncing_list_member {
 }
 
 sub get_info {
-    my $self = shift;
+    my ($self) = @_;
 
     my $info;
 
@@ -6895,7 +6873,7 @@ sub get_info {
 
 ## Total bouncing subscribers
 sub get_total_bouncing {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $name = $self->{'name'};
@@ -6919,7 +6897,8 @@ sub get_total_bouncing {
 
 ## Is the person in user table (db only)
 sub is_global_user {
-   my $who = &Sympa::Tools::clean_email(pop);
+   my ($who) = @_;
+   $who = &Sympa::Tools::clean_email($who);
    &Sympa::Log::do_log('debug3', '(%s)', $who);
 
    return undef unless ($who);
@@ -6987,9 +6966,9 @@ Sets the new values given in the hash for the user (except gecos)
 =cut
 
 sub update_list_member {
-    my($self, $who, $values) = @_;
-    &Sympa::Log::do_log('debug2', '(%s)', $who);
+    my ($self, $who, $values) = @_;
     $who = &Sympa::Tools::clean_email($who);
+    &Sympa::Log::do_log('debug2', '(%s)', $who);
 
     my ($table, $field, $value);
     my $name = $self->{'name'};
@@ -7149,9 +7128,9 @@ Sets the new values given in the hash for the admin user (except gecos).
 =cut
 
 sub update_list_admin {
-    my($self, $who,$role, $values) = @_;
-    &Sympa::Log::do_log('debug2', '(%s,%s)', $role, $who);
+    my ($self, $who, $role, $values) = @_;
     $who = &Sympa::Tools::clean_email($who);
+    &Sympa::Log::do_log('debug2', '(%s,%s)', $role, $who);
 
     my ($table, $field, $value);
 
@@ -7272,10 +7251,9 @@ sub update_list_admin {
 
 ## Sets new values for the given user in the Database
 sub update_global_user {
-    my($who, $values) = @_;
-    &Sympa::Log::do_log('debug', '(%s)', $who);
-
+    my ($who, $values) = @_;
     $who = &Sympa::Tools::clean_email($who);
+    &Sympa::Log::do_log('debug', '(%s)', $who);
 
     ## use md5 fingerprint to store password
     $values->{'password'} = &Sympa::Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
@@ -7331,7 +7309,7 @@ sub update_global_user {
 
 ## Adds a user to the user_table
 sub add_global_user {
-    my($values) = @_;
+    my ($values) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my ($field, $value);
@@ -7394,7 +7372,7 @@ entries.
 =cut
 
 sub add_list_member {
-    my($self, @new_users, $daemon) = @_;
+    my ($self, @new_users, $daemon) = @_;
     &Sympa::Log::do_log('debug2', '%s', $self->{'name'});
 
     my $name = $self->{'name'};
@@ -7493,7 +7471,8 @@ sub add_list_member {
 }
 
 sub _create_add_error_string {
-    my $self = shift;
+    my ($self) = @_;
+
     $self->{'add_outcome'}{'errors'}{'error_message'} = '';
     if ($self->{'add_outcome'}{'errors'}{'max_list_members_exceeded'}) {
 	$self->{'add_outcome'}{'errors'}{'error_message'} .= sprintf &Sympa::Language::gettext('Attempt to exceed the max number of members (%s) for this list.'), $self->{'admin'}{'max_list_members'} ;
@@ -7506,7 +7485,7 @@ sub _create_add_error_string {
 
 ## Adds a new list admin user, no overwrite.
 sub add_list_admin {
-    my($self, $role, @new_admin_users) = @_;
+    my ($self, $role, @new_admin_users) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $name = $self->{'name'};
@@ -7569,7 +7548,7 @@ sub add_list_admin {
 
 ## Update subscribers and admin users (used while renaming a list)
 sub rename_list_db {
-    my($self, $new_listname, $new_robot) = @_;
+    my ($self, $new_listname, $new_robot) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $self->{'name'},$new_listname, $new_robot);
 
     my $statement_subscriber;
@@ -7621,8 +7600,7 @@ Is the user listmaster ?
 =cut
 
 sub is_listmaster {
-    my $who = shift;
-    my $robot = shift;
+    my ($who, $robot) = @_;
 
     $who =~ y/A-Z/a-z/;
 
@@ -7649,7 +7627,7 @@ list.
 =cut
 
 sub am_i {
-    my($self, $function, $who, $options) = @_;
+    my ($self, $function, $who, $options) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $function, $self->{'name'}, $who);
 
     return undef unless ($self && $who);
@@ -7749,11 +7727,7 @@ Higher level sub for request_action
 =cut
 
 sub check_list_authz {
-    my $self = shift;
-    my $operation = shift;
-    my $auth_method = shift;
-    my $context = shift;
-    my $debug = shift;
+    my ($self, $operation, $auth_method, $context, $debug) = @_;
     &Sympa::Log::do_log('debug', '%s,%s', $operation,$auth_method);
 
     $context->{'list_object'} = $self;
@@ -7784,8 +7758,7 @@ May the indicated user edit the indicated list parameter or not?
 =cut
 
 sub may_edit {
-
-    my($self,$parameter, $who) = @_;
+    my ($self,$parameter, $who) = @_;
     &Sympa::Log::do_log('debug3', '(%s, %s)', $parameter, $who);
 
     my $role;
@@ -7856,8 +7829,7 @@ Dev note: This sub is never called. Shall we remove it?
 =cut
 
 sub may_create_parameter {
-
-    my($self, $parameter, $who,$robot) = @_;
+    my ($self, $parameter, $who, $robot) = @_;
     &Sympa::Log::do_log('debug3', '(%s, %s, %s)', $parameter, $who,$robot);
 
     if ( &is_listmaster($who,$robot)) {
@@ -7886,7 +7858,7 @@ reconfirm, purge.
 =cut
 
 sub may_do {
-   my($self, $action, $who) = @_;
+   my ($self, $action, $who) = @_;
    &Sympa::Log::do_log('debug3', '(%s, %s)', $action, $who);
 
    my $i;
@@ -7967,7 +7939,9 @@ Returns true if the list support digest mode.
 =cut
 
 sub is_digest {
-   return (shift->{'admin'}{'digest'});
+   my ($self) = @_;
+
+   return ($self->{'admin'}{'digest'});
 }
 
 =head2 $list->archive_exist($file)
@@ -7977,7 +7951,7 @@ Returns true if the indicated file exists.
 =cut
 
 sub archive_exist {
-   my($self, $file) = @_;
+   my ($self, $file) = @_;
    &Sympa::Log::do_log('debug', '(%s)', $file);
 
    return undef unless ($self->is_archived());
@@ -7993,7 +7967,7 @@ Returns the list of available files, if any.
 =cut
 
 sub archive_ls {
-   my $self = shift;
+   my ($self) = @_;
    &Sympa::Log::do_log('debug2', '');
 
    my $dir = &Sympa::Configuration::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
@@ -8008,7 +7982,7 @@ Archives the Mail::Internet message given as argument.
 =cut
 
 sub archive_msg {
-    my($self, $message ) = @_;
+    my ($self, $message ) = @_;
    &Sympa::Log::do_log('debug', 'for %s', $self->{'name'});
 
     if ($self->is_archived()){
@@ -8043,7 +8017,9 @@ Returns true if the list is moderated.
 =cut
 
 sub is_moderated {
-    return 1 if (defined shift->{'admin'}{'editor'});
+    my ($self) = @_;
+
+    return 1 if (defined $self->{'admin'}{'editor'});
     return 0;
 }
 
@@ -8055,22 +8031,25 @@ its messages.
 =cut
 
 sub is_archived {
-    if (shift->{'admin'}{'web_archive'}{'access'}) {&Sympa::Log::do_log('debug', '1'); return 1 ;}
+    my ($self) = @_;
+
+    if ($self->{'admin'}{'web_archive'}{'access'}) {&Sympa::Log::do_log('debug', '1'); return 1 ;}
     return undef;
 }
 
 ## Is the list web archived?
 sub is_web_archived {
-    return 1 if (shift->{'admin'}{'web_archive'}{'access'}) ;
+    my ($self) = @_;
+
+    return 1 if ($self->{'admin'}{'web_archive'}{'access'}) ;
     return undef;
 
 }
 
 ## Returns 1 if the  digest  must be send
+# the date epoch as stored in the spool database
 sub get_nextdigest {
-    my $self = shift;
-    my $date = shift;   # the date epoch as stored in the spool database
-
+    my ($self, $date) = @_;
    &Sympa::Log::do_log('debug3', '(list = %s)', $self->{'name'});
 
     my $digest = $self->{'admin'}{'digest'};
@@ -8165,7 +8144,7 @@ sub load_scenario_list {
 }
 
 sub load_task_list {
-    my ($self, $action,$robot) = @_;
+    my ($self, $action, $robot) = @_;
     &Sympa::Log::do_log('debug2', '(%s,%s)', $action,$robot);
 
     my $directory = "$self->{'dir'}";
@@ -8208,8 +8187,9 @@ sub load_task_list {
 }
 
 sub _load_task_title {
-    my $file = shift;
+    my ($file) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $file);
+
     my $title = {};
 
     unless (open TASK, $file) {
@@ -8265,7 +8245,7 @@ sub load_data_sources_list {
 
 ## Loads the statistics information
 sub _load_stats_file {
-    my $file = shift;
+    my ($file) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $file);
 
    ## Create the initial stats array.
@@ -8298,7 +8278,7 @@ sub _load_stats_file {
 
 ## Loads the list of subscribers.
 sub _load_list_members_file {
-    my $file = shift;
+    my ($file) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $file);
 
     ## Open the file and switch to paragraph mode.
@@ -8674,8 +8654,7 @@ sub _include_users_remote_file {
 
 ## Includes users from voot group
 sub _include_users_voot_group {
-	my($users, $param, $default_user_options, $tied) = @_;
-
+	my ($users, $param, $default_user_options, $tied) = @_;
 	&Sympa::Log::do_log('debug', "(%s, %s, %s)", $param->{'user'}, $param->{'provider'}, $param->{'group'});
 
 	my $id = Sympa::Datasource::_get_datasource_id($param);
@@ -9040,7 +9019,7 @@ sub _include_users_ldap_2level {
 }
 
 sub _include_sql_ca {
-	my $source = shift;
+	my ($source) = @_;
 
 	return {} unless($source->connect());
 
@@ -9059,7 +9038,7 @@ sub _include_sql_ca {
 }
 
 sub _include_ldap_ca {
-	my $source = shift;
+	my ($source) = @_;
 
 	return {} unless($source->connect());
 
@@ -9092,7 +9071,7 @@ sub _include_ldap_ca {
 }
 
 sub _include_ldap_level2_ca {
-	my $source = shift;
+	my ($source) = @_;
 
 	return {} unless($source->connect());
 
@@ -9205,8 +9184,8 @@ sub _include_users_sql {
 
 ## Loads the list of subscribers from an external include source
 sub _load_list_members_from_include {
-    my $self = shift;
-    my $old_subs = shift;
+    my ($self, $old_subs) = @_;
+
     my $name = $self->{'name'};
     my $admin = $self->{'admin'};
     my $dir = $self->{'dir'};
@@ -9343,10 +9322,9 @@ sub _load_list_members_from_include {
 
 ## Loads the list of admin users from an external include source
 sub _load_list_admin_from_include {
-    my $self = shift;
-    my $role = shift;
-    my $name = $self->{'name'};
+    my ($self, $role) = @_;
 
+    my $name = $self->{'name'};
     &Sympa::Log::do_log('debug2', '(%s) for list %s',$role, $name);
 
     my (%admin_users, $depend_on);
@@ -9650,8 +9628,7 @@ sub _load_include_admin_user_file {
 
 ## Returns a ref to an array containing the ids (as computed by Datasource::_get_datasource_id) of the list of memebers given as argument.
 sub get_list_of_sources_id {
-	my $self = shift;
-	my $list_of_subscribers = shift;
+	my ($self, $list_of_subscribers) = @_;
 
 	my %old_subs_id;
 	foreach my $old_sub (keys %{$list_of_subscribers}) {
@@ -9665,9 +9642,9 @@ sub get_list_of_sources_id {
 
 
 sub sync_include_ca {
-	my $self = shift;
+	my ($self, $purge) = @_;
+
 	my $admin = $self->{'admin'};
-	my $purge = shift;
 	my %users;
 	my %changed;
 
@@ -9730,7 +9707,7 @@ sub sync_include_ca {
 
 ### Purge synced custom attributes from user records, only keep user writable ones
 sub purge_ca {
-	my $self = shift;
+	my ($self) = @_;
 	my $admin = $self->{'admin'};
 	my %userattributes;
 	my %users;
@@ -9763,8 +9740,8 @@ sub purge_ca {
 }
 
 sub sync_include {
-    my ($self) = shift;
-    my $option = shift;
+    my ($self, $option) = @_;
+
     my $name=$self->{'name'};
     &Sympa::Log::do_log('debug', 'List:sync_include(%s)', $name);
     my %old_subscribers;
@@ -10050,7 +10027,7 @@ sub sync_include {
 ## the normal task_manager.pl functionning.
 
 sub on_the_fly_sync_include {
-    my $self = shift;
+    my ($self) = @_;
     my %options = @_;
 
     my $pertinent_ttl = $self->{'admin'}{'distribution_ttl'}||$self->{'admin'}{'ttl'};
@@ -10070,8 +10047,7 @@ sub on_the_fly_sync_include {
 }
 
 sub sync_include_admin {
-    my ($self) = shift;
-    my $option = shift;
+    my ($self, $option) = @_;
 
     my $name=$self->{'name'};
     &Sympa::Log::do_log('debug2', 'List:sync_include_admin(%s)', $name);
@@ -10306,8 +10282,8 @@ sub sync_include_admin {
 
 ## Load param admin users from the config of the list
 sub _load_list_admin_from_config {
-    my $self = shift;
-    my $role = shift;
+    my ($self, $role) = @_;
+
     my $name = $self->{'name'};
     my %admin_users;
 
@@ -10333,8 +10309,7 @@ sub _load_list_admin_from_config {
 #  $new_param is changed to return only entries that need to
 # be updated (only deals with admin user parameters, editor or owner)
 sub is_update_param {
-    my $new_param = shift;
-    my $old_param = shift;
+    my ($new_param, $old_param) = @_;
     my $resul = {};
     my $update = 0;
 
@@ -10363,10 +10338,7 @@ sub is_update_param {
 
 
 sub _inclusion_loop {
-
-    shift;
-    my $incl = shift;
-    my $depend_on = shift;
+	my ($undef, $incl, $depend_on) = @_;
 
     return 1 if ($depend_on->{$incl}) ;
 
@@ -10374,8 +10346,7 @@ sub _inclusion_loop {
 }
 
 sub _load_total_db {
-    my $self = shift;
-    my $option = shift;
+    my ($self, $option) = @_;
     &Sympa::Log::do_log('debug2', '(%s)', $self->{'name'});
 
     ## Use session cache
@@ -10405,11 +10376,7 @@ sub _load_total_db {
 
 ## Writes to disk the stats data for a list.
 sub _save_stats_file {
-    my $file = shift;
-    my $stats = shift;
-    my $total = shift;
-    my $last_sync = shift;
-    my $last_sync_admin_user = shift;
+    my ($file, $stats, $total, $last_sync, $last_sync_admin_user) = @_;
 
     unless (defined $stats && ref ($stats) eq 'ARRAY') {
 	&Sympa::Log::do_log('err', 'List_save_stats_file() : incorrect parameter');
@@ -10425,7 +10392,7 @@ sub _save_stats_file {
 
 ## Writes the user list to disk
 sub _save_list_members_file {
-    my($self, $file) = @_;
+    my ($self, $file) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $file);
 
     my($k, $s);
@@ -10463,8 +10430,7 @@ sub _compare_addresses {
 ## Store the message in spool digest  by creating a new enrty for it or updating an existing one for this list
 ##
 sub store_digest {
-
-    my($self,$message) = @_;
+    my ($self,$message) = @_;
    &Sympa::Log::do_log('debug', '(list= %s)',$self->{'name'});
 
     my @now  = localtime(time);
@@ -10500,10 +10466,12 @@ sub store_digest {
 
 ## List of lists hosted a robot
 ## Returns a ref to an array of List objects
+## Optional parameter to load only a subset of all lists
 sub get_lists {
-    my $robot_context = shift || '*';
-    my $options = shift || {};
-    my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
+    my ($robot_context, $options, $requested_lists) = @_;
+    my $robot_context ||= '*';
+    my $options       ||= {};
+
     my $use_files;
     my $cond_perl;
     my $cond_sql;
@@ -10645,9 +10613,9 @@ sub get_lists {
 
 ## List of robots hosted by Sympa
 sub get_robots {
-
-    my(@robots, $r);
     &Sympa::Log::do_log('debug2', '()');
+
+    my (@robots, $r);
 
     unless (opendir(DIR, $Sympa::Configuration::Conf{'etc'})) {
 	&Sympa::Log::do_log('err',"Unable to open $Sympa::Configuration::Conf{'etc'}");
@@ -10669,8 +10637,7 @@ sub get_robots {
 ## List of lists in database mode which e-mail parameter is member of
 ## Results concern ALL robots
 sub get_which_db {
-    my $email = shift;
-    my $function = shift;
+    my ($email, $function) = @_;
     &Sympa::Log::do_log('debug3', '(%s,%s)', $email, $function);
 
     my ($l, %which);
@@ -10721,9 +10688,7 @@ sub get_which_db {
 
 ## get idp xref to locally validated email address
 sub get_netidtoemail_db {
-    my $robot = shift;
-    my $netid = shift;
-    my $idpname = shift;
+    my ($robot, $netid, $idpname) = @_;
     &Sympa::Log::do_log('debug', '(%s, %s)', $netid, $idpname);
 
     my $email;
@@ -10746,10 +10711,7 @@ sub get_netidtoemail_db {
 
 ## set idp xref to locally validated email address
 sub set_netidtoemail_db {
-    my $robot = shift;
-    my $netid = shift;
-    my $idpname = shift;
-    my $email = shift;
+    my ($robot, $netid, $idpname, $email) = @_;
     &Sympa::Log::do_log('debug', '(%s, %s, %s)', $netid, $idpname, $email);
 
     unless (&Sympa::SDM::do_query( "INSERT INTO netidmap_table (netid_netidmap,serviceid_netidmap,email_netidmap,robot_netidmap) VALUES (%s, %s, %s, %s)", &Sympa::SDM::quote($netid), &Sympa::SDM::quote($idpname), &Sympa::SDM::quote($email), &Sympa::SDM::quote($robot))) {
@@ -10783,9 +10745,7 @@ sub update_email_netidmap_db{
 ## Get lists of lists where <email> assumes this <type> (owner, editor or member) of
 ## function to any list in <robot>.
 sub get_which {
-    my $email = shift;
-    my $robot =shift;
-    my $function = shift;
+    my ($email, $robot, $function) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s)', $email, $function);
 
     my ($l, @which);
@@ -10856,7 +10816,7 @@ sub get_which {
 
 ## return total of messages awaiting moderation
 sub get_mod_spool_size {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '()');
 
     my $spool = Sympa::Spool->new('mod');
@@ -10874,7 +10834,7 @@ sub get_mod_spool_size {
 
 # return the status of the shared
 sub get_shared_status {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '(%s)', $self->{'name'});
 
     if (-e $self->{'dir'}.'/shared') {
@@ -10888,7 +10848,7 @@ sub get_shared_status {
 
 # return the list of documents shared waiting for moderation
 sub get_shared_moderated {
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug3', '()');
     my $shareddir = $self->{'dir'}.'/shared';
 
@@ -10903,8 +10863,7 @@ sub get_shared_moderated {
 
 # return the list of documents awaiting for moderation in a dir and its subdirs
 sub sort_dir_to_get_mod {
-    #dir to explore
-    my $dir = shift;
+    my ($dir) = @_;
     &Sympa::Log::do_log('debug3', '()');
 
     # listing of all the shared documents of the directory
@@ -10992,8 +10951,7 @@ sub lowercase_field {
 
 ## Loads the list of topics if updated
 sub load_topics {
-
-    my $robot = shift ;
+    my ($robot) = @_;
     &Sympa::Log::do_log('debug2', '(%s)',$robot);
 
     my $conf_file = &Sympa::Tools::get_filename('etc',{},'topics.conf',$robot, undef, $Sympa::Configuration::Conf{'etc'});
@@ -11101,7 +11059,7 @@ sub load_topics {
 }
 
 sub _get_topic_titles {
-    my $topic = shift;
+    my ($topic) = @_;
 
     my $title;
     foreach my $key (%{$topic}) {
@@ -11369,13 +11327,8 @@ sub _load_list_param {
 
 ## Load the certificat file
 sub get_cert {
-
-    my $self = shift;
-    my $format = shift;
-
-    ## Default format is PEM (can be DER)
+    my ($self, $format) = @_;
     $format ||= 'pem';
-
     &Sympa::Log::do_log('debug2', '(%s)',$self->{'name'});
 
     # we only send the encryption certificate: this is what the user
@@ -11807,7 +11760,7 @@ sub is_available_reception_mode {
 
 # List the parameter reception of the available_user_options section
 sub available_reception_mode {
-  my $self = shift;
+  my ($self) = @_;
 
   return join (' ',@{$self->{'admin'}{'available_user_options'}{'reception'}});
 }
@@ -11829,7 +11782,7 @@ sub available_reception_mode {
 # OUT : 1 - some are defined | 0 - not defined
 ####################################################
 sub is_there_msg_topic {
-    my ($self) = shift;
+    my ($self) = @_;
 
     if (defined $self->{'admin'}{'msg_topic'}) {
 	if (ref($self->{'admin'}{'msg_topic'}) eq "ARRAY") {
@@ -12261,16 +12214,11 @@ sub select_list_members_for_topic {
 }
 
 sub _urlize_part {
-    my $message = shift;
-    my $list = shift;
+    my ($message, $list, $dir, $i, $mime_types, $wwsympa_url) = @_;
+
     my $expl = $list->{'dir'}.'/urlized';
     my $robot = $list->{'domain'};
-    my $dir = shift;
-    my $i = shift;
-    my $mime_types = shift;
     my $listname = $list->{'name'};
-    my $wwsympa_url = shift;
-
     my $head = $message->head ;
     my $encoding = $head->mime_encoding ;
 
@@ -12381,7 +12329,7 @@ sub store_subscription_request {
 }
 
 sub get_subscription_requests {
-    my ($self) = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug2', '(%s)',$self->{'name'});
 
     my %subscriptions;
@@ -12427,7 +12375,7 @@ sub get_subscription_requests {
 }
 
 sub get_subscription_request_count {
-    my ($self) = shift;
+    my ($self) = @_;
 
     my $subscription_request_spool = Sympa::Spool->new('subscribe');
     return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
@@ -12454,14 +12402,13 @@ sub delete_subscription_request {
 
 
 sub get_shared_size {
-    my $self = shift;
+    my ($self) = @_;
 
     return Sympa::Tools::File::get_dir_size("$self->{'dir'}/shared");
 }
 
 sub get_arc_size {
-    my $self = shift;
-    my $dir = shift;
+    my ($self, $dir) = @_;
 
     return Sympa::Tools::File::get_dir_size($dir.'/'.$self->get_list_id());
 }
@@ -12473,7 +12420,7 @@ Return the date epoch for next delivery planified for a list.
 =cut
 
 sub  get_next_delivery_date {
-    my $self = shift;
+    my ($self) = @_;
 
     my $dtime = $self->{'admin'}{'delivery_time'} ;
     unless ($dtime =~ /(\d?\d)\:(\d\d)/ ) {
@@ -12576,8 +12523,7 @@ Remove a task in the tasks spool.
 =cut
 
 sub remove_task {
-    my $self = shift;
-    my $task = shift;
+    my ($self, $task) = @_;
 
     unless (opendir(DIR, $Sympa::Configuration::Conf{'queuetask'})) {
 	&Sympa::Log::do_log ('err', "error : can't open dir %s: %s", $Sympa::Configuration::Conf{'queuetask'}, $ERRNO);
@@ -12729,7 +12675,7 @@ Remove list aliases
 =cut
 
 sub remove_aliases {
-    my $self = shift;
+    my ($self) = @_;
 
     return undef
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}})
@@ -12762,8 +12708,7 @@ Remove users
 =cut
 
 sub remove_bouncers {
-    my $self = shift;
-    my $reftab = shift;
+    my ($self, $reftab) = @_;
     &Sympa::Log::do_log('debug','(%s)',$self->{'name'});
 
     ## Log removal
@@ -12786,8 +12731,7 @@ Notify users : "Be carefull,You're bouncing"
 =cut
 
 sub notify_bouncers{
-    my $self = shift;
-    my $reftab = shift;
+    my ($self, $reftab) = @_;
     &Sympa::Log::do_log('debug','(%s)', $self->{'name'});
 
     foreach my $user (@$reftab){
@@ -12806,7 +12750,7 @@ Create the document repository
 =cut
 
 sub create_shared {
-    my $self = shift;
+    my ($self) = @_;
 
     my $dir = $self->{'dir'}.'/shared';
 
@@ -12830,7 +12774,7 @@ Check if a list  has include-type data sources.
 =cut
 
 sub has_include_data_sources {
-    my $self = shift;
+    my ($self) = @_;
 
     foreach my $type ('include_file','include_list','include_remote_sympa_list','include_sql_query','include_remote_file',
 		      'include_ldap_query','include_ldap_2level_query','include_admin','owner_include','editor_include', 'include_voot_group') {
@@ -12880,7 +12824,7 @@ Return the path to the list bounce directory, where bounces are stored
 =cut
 
 sub get_bounce_dir {
-    my $self = shift;
+    my ($self) = @_;
 
     my $root_dir = &Sympa::Configuration::get_robot_conf($self->{'domain'}, 'bounce_path');
 
@@ -12893,7 +12837,7 @@ Return the list email address.
 
 =cut
 sub get_list_address {
-    my $self = shift;
+    my ($self) = @_;
 
     return $self->{'name'}.'@'.$self->{'admin'}{'host'};
 }
@@ -12905,7 +12849,7 @@ Return the list ID, different from the list address (uses the robot name).
 =cut
 
 sub get_list_id {
-    my $self = shift;
+    my ($self) = @_;
 
     return $self->{'name'}.'@'.$self->{'domain'};
 }
@@ -12936,7 +12880,8 @@ support for list config caching in database
 =cut
 
 sub get_lists_db {
-    my $where = shift || '';
+    my ($where) = @_;
+    $where ||= '';
     &Sympa::Log::do_log('debug2', '(%s)', $where);
 
     unless ($Sympa::SDM::use_db) {
@@ -12963,9 +12908,9 @@ sub get_lists_db {
     return \@lists;
 }
 
-sub _update_list_db
-{
-    my ($self) = shift;
+sub _update_list_db {
+    my ($self) = @_;
+
     my @admins;
     my $i;
     my $adm_txt;
@@ -13027,9 +12972,9 @@ sub _update_list_db
 	return 1;
 }
 
-sub _flush_list_db
-{
-    my ($listname) = shift;
+sub _flush_list_db {
+    my ($listname) = @_;
+
     my $statement;
     unless ($listname) {
 	if ($Sympa::Configuration::Conf{'db_type'} eq 'SQLite') {

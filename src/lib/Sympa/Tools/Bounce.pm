@@ -49,6 +49,7 @@ RFC1891 compliance check
 
 sub rfc1891 {
     my ($message, $result, $from) = @_;
+
     local $RS = "\n";
 
     my $nbrcpt;
@@ -122,7 +123,6 @@ Corrige une adresse SMTP
 =cut
 
 sub corrige {
-
     my ($adr, $from) = @_;
 
     ## adresse X400
@@ -185,9 +185,7 @@ Analyse d'un rapport de non-remise
 =cut
 
 sub anabounce {
-
     my ($message, $result, $from, $tmpdir) = @_;
-
 
     # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
     # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !

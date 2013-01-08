@@ -74,8 +74,7 @@ A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
 =cut
 
 sub new {
-	my $pkg = shift;
-	my %param = @_;
+	my ($pkg, %param) = @_;
 
 	my $consumer = {
 		user => $param{'user'},
@@ -142,8 +141,7 @@ sub new {
 =cut
 
 sub setWebEnv {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 
 	$self->{'robot'} = $param{'robot'};
 	$self->{'here_path'} = $param{'here_path'};
@@ -159,7 +157,8 @@ None.
 =cut
 
 sub mustRedirect {
-	my $self = shift;
+	my ($self) = @_;
+
 	return $self->{'redirect_url'};
 }
 
@@ -184,9 +183,7 @@ The resource body, as a string, or undef if something went wrong.
 =cut
 
 sub fetchRessource {
-	my $self = shift;
-	my %param = @_;
-
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $param{'url'});
 
 	# Get access token, return 1 if it exists
@@ -237,7 +234,7 @@ An hashref, if there is a known access token, undef otherwise.
 =cut
 
 sub hasAccess {
-	my $self = shift;
+	my ($self) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	unless(defined $self->{'session'}{'access'}) {
@@ -265,7 +262,7 @@ A true value, if everything's alright.
 =cut
 
 sub triggerFlow {
-	my $self = shift;
+	my ($self) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	my $ticket = &Sympa::Auth::create_one_time_ticket(
@@ -330,8 +327,7 @@ A true value if the token was retreived successfully, undef otherwise.
 =cut
 
 sub getAccessToken {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});

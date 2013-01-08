@@ -43,8 +43,7 @@ use Sympa::Log;
 my $cipher;
 
 sub tmp_passwd {
-    my $email = shift;
-    my $cookie = shift;
+    my ($email, $cookie) = @_;
 
     return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
 }
@@ -56,7 +55,7 @@ Create a cipher.
 =cut
 
 sub ciphersaber_installed {
-    my $cookie = shift;
+    my ($cookie) = @_;
 
     my $is_installed;
     foreach my $dir (@INC) {
@@ -81,8 +80,7 @@ Encrypt a password.
 =cut
 
 sub crypt_password {
-    my $inpasswd = shift ;
-    my $cookie = shift;
+    my ($inpasswd, $cookie) = @_;
 
     unless (defined($cipher)){
 	$cipher = ciphersaber_installed($cookie);
@@ -98,8 +96,7 @@ Decrypt a password.
 =cut
 
 sub decrypt_password {
-    my $inpasswd = shift ;
-    my $cookie = shift;
+    my ($inpasswd, $cookie) = @_;
     Sympa::Log::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;

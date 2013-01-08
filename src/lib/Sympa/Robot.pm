@@ -41,7 +41,7 @@ A new L<Sympa::Robot> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my($pkg, $name) = @_;
+    my ($pkg, $name) = @_;
 
     my $robot = {'name' => $name};
     &Sympa::Log::do_log('debug2', '');
@@ -84,7 +84,7 @@ None.
 =cut
 
 sub get_lists {
-    my $self = shift;
+    my ($self) = @_;
 
     return &Sympa::List::get_lists($self->{'name'});
 }

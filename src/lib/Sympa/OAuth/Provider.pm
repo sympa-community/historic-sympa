@@ -74,8 +74,7 @@ A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my $pkg = shift;
-	my %param = @_;
+	my ($pkg, %param) = @_;
 
 	my $p = &_findParameters(
 		authorization_header => $param{'authorization_header'},
@@ -130,7 +129,7 @@ sub new {
 =cut
 
 sub consumerFromToken {
-	my $token = shift;
+	my ($token) = @_;
 
 	my $sth;
 	unless($sth = &Sympa::SDM::do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
@@ -152,7 +151,7 @@ sub consumerFromToken {
 # Returns an hashref, or undef if something went wrong
 
 sub _findParameters {
-	my %param = @_;
+	my (%param) = @_;
 
 	my $p = {};
 	if(defined($param{'authorization_header'}) && $param{'authorization_header'} =~ /^OAuth /) {
@@ -202,9 +201,7 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 =cut
 
 sub checkRequest {
-	my $self = shift;
-	my %param = @_;
-
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $param{'url'});
 
 	my $checktoken = defined($param{'checktoken'}) ? $param{'checktoken'} : undef;
@@ -303,8 +300,7 @@ The response body, as a string.
 =cut
 
 sub generateTemporary {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $self->{'consumer_key'});
 
 	my $token = &_generateRandomString(32); # 9x10^62 entropy ...
@@ -353,8 +349,7 @@ An hashref, or I<undef> if the token does not exist or is not valid anymore.
 =cut
 
 sub getTemporary {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $param{'token'});
 
 	my $sth;
@@ -395,8 +390,7 @@ valid anymore.
 =cut
 
 sub generateVerifier {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s, %s, %s)', $param{'token'}, $param{'user'}, $param{'granted'}, $self->{'consumer_key'});
 
 	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}));
@@ -455,8 +449,7 @@ exist or is not valid anymore.
 =cut
 
 sub generateAccess {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $param{'token'}, $param{'verifier'}, $self->{'consumer_key'});
 
 	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}, timeout_type => 'verifier'));
@@ -504,8 +497,7 @@ is not valid anymore.
 =cut
 
 sub getAccess {
-	my $self = shift;
-	my %param = @_;
+	my ($self, %param) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $param{'token'});
 
 	my $sth;
@@ -542,9 +534,7 @@ sub _generateRandomString {
 # enabled 0|1
 
 sub _getConsumerConfigFor {
-	my $key = shift;
-	my $file = shift;
-
+	my ($key, $file) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $key);
 
 	return undef unless (-f $file);

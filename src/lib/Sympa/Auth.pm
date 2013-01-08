@@ -52,10 +52,9 @@ sha1 or ....)
 =cut
 
 sub password_fingerprint{
-
+    my ($pwd) = @_;
     &Sympa::Log::do_log('debug', '');
 
-    my $pwd = shift;
     if(&Sympa::Configuration::get_robot_conf('*','password_case') eq 'insensitive') {
 	return &Sympa::Tools::md5_fingerprint(lc($pwd));
     }else{
@@ -67,12 +66,22 @@ sub password_fingerprint{
 
 Authentication via email or uid.
 
+=head3 Parameters
+
+=over
+
+=item * I<$robot>
+
+=item * I<$auth>: user email or UID
+
+=item * I<$pwd>: password
+
+=back
+
 =cut
 
  sub check_auth{
-     my $robot = shift;
-     my $auth = shift; ## User email or UID
-     my $pwd = shift; ## Password
+     my ($robot, $auth, $pwd) = @_;
      &Sympa::Log::do_log('debug', '(%s)', $auth);
 
      my ($canonic, $user);
@@ -146,10 +155,10 @@ sub may_use_sympa_native_auth {
 }
 
 sub authentication {
-    my ($robot, $email,$pwd) = @_;
-    my ($user,$canonic);
+    my ($robot, $email, $pwd) = @_;
     &Sympa::Log::do_log('debug', '(%s)', $email);
 
+    my ($user,$canonic);
 
     unless ($user = &Sympa::List::get_global_user($email)) {
 	$user = {'email' => $email };
@@ -208,9 +217,10 @@ sub authentication {
 
 sub ldap_authentication {
      my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;
-     my ($mesg, $ldap_passwd,$ldap_anonymous);
      &Sympa::Log::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
      &Sympa::Log::do_log('debug3','Password used: %s',$pwd);
+
+     my ($mesg, $ldap_passwd,$ldap_anonymous);
 
      unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Configuration::Conf{'etc'})) {
 	 return undef;
@@ -351,10 +361,7 @@ Fetch user email using his cas net_id and the paragrapah number in auth.conf.
 =cut
 
 sub get_email_by_net_id {
-
-    my $robot = shift;
-    my $auth_id = shift;
-    my $attributes = shift;
+    my ($robot, $auth_id, $attributes) = @_;
 
     &Sympa::Log::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
@@ -431,8 +438,7 @@ return 1 or I<undef>.
 =cut
 
 sub remote_app_check_password {
-
-    my ($trusted_application_name,$password,$robot) = @_;
+    my ($trusted_application_name, $password, $robot) = @_;
     &Sympa::Log::do_log('debug','(%s,%s)',$trusted_application_name,$robot);
 
     my $md5 = &Sympa::Tools::md5_fingerprint($password);
@@ -479,7 +485,7 @@ authenticated
 
 =item * I<$data_string>
 
-=item * I<$remote_addr>
+=item * I<$remote_addr> Value may be 'mail' if the IP address is not known
 
 =back
 
@@ -488,10 +494,7 @@ authenticated
 =cut
 
 sub create_one_time_ticket {
-    my $email = shift;
-    my $robot = shift;
-    my $data_string = shift;
-    my $remote_addr = shift; ## Value may be 'mail' if the IP address is not known
+    my ($email,  $robot, $data_string, $remote_addr) = @_;
 
     my $ticket = &Sympa::Session::get_random();
     &Sympa::Log::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
@@ -525,9 +528,7 @@ Read one_time_ticket from table and remove it
 =cut
 
 sub get_one_time_ticket {
-    my $ticket_number = shift;
-    my $addr = shift;
-
+    my ($ticket_number, $addr) = @_;
     &Sympa::Log::do_log('debug2', '(%s)',$ticket_number);
 
     my $sth;

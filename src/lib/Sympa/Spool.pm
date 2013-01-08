@@ -79,9 +79,9 @@ A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
 
 sub new {
     my($pkg, $spoolname, $selection_status) = @_;
-    my $spool={};
    &Sympa::Log::do_log('debug2', '(%s)', $spoolname);
 
+    my $spool={};
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 &Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
@@ -100,8 +100,7 @@ sub new {
 
 # total spool_table count : not object oriented, just a subroutine
 sub global_count {
-
-    my $message_status = shift;
+    my ($message_status) = @_;
 
     push @sth_stack, $sth;
     $sth = &Sympa::SDM::do_query ("SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'");
@@ -114,7 +113,8 @@ sub global_count {
 }
 
 sub count {
-    my $self = shift;
+    my ($self) = @_;
+
     return ($self->get_content({'selection'=>'count'}));
 }
 
@@ -123,9 +123,8 @@ sub count {
 #  get_content return the content an array of hash describing the spool content
 #
 sub get_content {
+    my ($self, $data) = @_;
 
-    my $self = shift;
-    my $data= shift;
     my $selector=$data->{'selector'};     # hash field->value used as filter  WHERE sql query
     my $selection=$data->{'selection'};   # the list of field to select. possible values are :
                                           #    -  a comma separated list of field to select.
@@ -191,9 +190,7 @@ sub get_content {
 #  next : return next spool entry ordered by priority next lock the message_in_spool that is returned
 #
 sub next {
-
-    my $self = shift;
-    my $selector = shift;
+    my ($self, $selector) = @_;
 
     &Sympa::Log::do_log('debug', '(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
 
@@ -239,11 +236,7 @@ sub next {
 # return one message from related spool using a specified selector
 #
 sub get_message {
-
-    my $self = shift;
-    my $selector = shift;
-
-
+    my ($self, $selector) = @_;
     &Sympa::Log::do_log('debug', "($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
 
 
@@ -283,9 +276,7 @@ sub get_message {
 # lock one message from related spool using a specified selector
 #
 sub unlock_message {
-
-    my $self = shift;
-    my $messagekey = shift;
+    my ($self, $messagekey) = @_;
 
     &Sympa::Log::do_log('debug', '(%s,%s)', $self->{'spoolname'}, $messagekey);
     return ( $self->update({'messagekey' => $messagekey},
@@ -296,11 +287,7 @@ sub unlock_message {
 #
 #  update spool entries that match selector with values
 sub update {
-
-    my $self = shift;
-    my $selector = shift;
-    my $values = shift;
-
+    my ($self, $selector, $values) = @_;
     &Sympa::Log::do_log('debug', "($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
 
     my $where = _sqlselector($selector);
@@ -357,12 +344,11 @@ sub update {
 ################"
 # store a message in database spool
 #
+#    I<$metadata>: a set of attributes related to the spool
+#   I<$locked>: if define message must stay locked after store
 sub store {
+    my ($self, $message_asstring, $metadata, $locked) = @_;
 
-    my $self = shift;
-    my $message_asstring = shift;
-    my $metadata = shift; # a set of attributes related to the spool
-    my $locked = shift;   # if define message must stay locked after store
     my $sender = $metadata->{'sender'};
     $sender |= '';
 
@@ -428,9 +414,8 @@ sub store {
 # remove a message in database spool using (messagekey,list,robot) which are a unique id in the spool
 #
 sub remove_message {
+    my ($self, $selector) = @_;
 
-    my $self = shift;
-    my $selector = shift;
     my $robot = $selector->{'robot'};
     my $messagekey = $selector->{'messagekey'};
     my $listname = $selector->{'listname'};
@@ -460,8 +445,7 @@ sub remove_message {
 #
 
 sub clean {
-    my $self = shift;
-    my $filter = shift;
+    my ($self, $filter) = @_;
 
     my $delay = $filter->{'delay'};
     my $bad =  $filter->{'bad'};
@@ -492,7 +476,8 @@ sub clean {
 
 # test the maximal message size the database will accept
 sub store_test {
-    my $value_test = shift;
+    my ($value_test) = @_;
+
     my $divider = 100;
     my $steps = 50;
     my $maxtest = $value_test/$divider;
@@ -550,7 +535,7 @@ sub store_test {
 # return a SQL SELECT substring in ordder to select choosen fields from spool table
 # selction is comma separated list of field, '*' or '*_but_message'. in this case skip message_spool field
 sub _selectfields{
-    my $selection = shift;  # default all valid fields from spool table
+    my ($selection) = @_;
 
     $selection = '*' unless $selection;
     my $select ='';
@@ -582,8 +567,8 @@ sub _selectfields{
 # selector is a hash where key is a column name and value is column value expected.****
 #   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(
 sub _sqlselector {
+    my ($selector) = @_;
 
-    my $selector = shift;
     my $sqlselector = '';
 
     foreach my $field (keys %$selector) {

@@ -199,7 +199,8 @@ sub write_pid {
 }
 
 sub direct_stderr_to_file {
-    my %data = @_;
+    my (%data) = @_;
+
     ## Error output is stored in a file with PID-based name
     ## Usefull if process crashes
     open(STDERR, '>>', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
@@ -221,8 +222,9 @@ Send content of $pid.stderr to listmaster for process whose pid is $pid.
 =cut
 
 sub send_crash_report {
-    my %data = @_;
+    my (%data) = @_;
     &Sympa::Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
+
     my $err_file = $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
     my (@err_output, $err_date);
     if(-f $err_file) {
@@ -241,7 +243,8 @@ Returns the list of pid identifiers in the pid file.
 =cut
 
 sub get_pids_in_pid_file {
-	my $pidfile = shift;
+	my ($pidfile) = @_;
+
 	unless (open(PFILE, $pidfile)) {
 		&Sympa::Log::do_log('err', "unable to open pidfile %s:%s",$pidfile,$ERRNO);
 		return undef;
@@ -254,6 +257,7 @@ sub get_pids_in_pid_file {
 
 sub get_children_processes_list {
     &Sympa::Log::do_log('debug3','');
+
     my @children;
     for my $p (@{Proc::ProcessTable->new()->table}){
 	if($p->ppid == $PID) {

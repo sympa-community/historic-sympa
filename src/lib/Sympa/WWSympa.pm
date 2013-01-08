@@ -144,7 +144,7 @@ my $cipher;
 
 ## Load WWSympa configuration file
 sub load_config {
-    my $file = pop;
+    my ($file) = @_;
 
     ## Old params
     my %old_param = ('alias_manager' => 'No more used, using '.$Sympa::Configuration::Conf{'alias_manager'},
@@ -260,8 +260,9 @@ sub get_my_url {
 
 # Uploade source file to the destination on the server
 sub upload_file_to_server {
-    my $param = shift;
+    my ($param) = @_;
     &Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$param->{'file_field'},$param->{'destination'});
+
     my $fh;
     unless ($fh = $param->{'query'}->upload($param->{'file_field'})) {
 	&Sympa::Log::do_log('debug',"Cannot upload file from field $param->{'file_field'}");

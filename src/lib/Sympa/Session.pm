@@ -79,9 +79,7 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my $pkg = shift;
-    my $robot = shift;
-    my $context = shift;
+    my ($pkg, $robot, $context) = @_;
 
     my $cookie = $context->{'cookie'};
     my $action = $context->{'action'};
@@ -137,9 +135,7 @@ sub new {
 }
 
 sub load {
-    my $self = shift;
-    my $cookie = shift;
-
+    my ($self, $cookie) = @_;
     &Sympa::Log::do_log('debug', '(%s)', $cookie);
 
     unless ($cookie) {
@@ -187,8 +183,7 @@ sub load {
 
 ## This method will both store the session information in the database
 sub store {
-
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug', '');
 
     return undef unless ($self->{'id_session'});
@@ -224,8 +219,7 @@ sub store {
 
 ## This method will renew the session ID
 sub renew {
-
-    my $self = shift;
+    my ($self) = @_;
     &Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
 
     return undef unless ($self->{'id_session'});
@@ -257,9 +251,7 @@ sub renew {
 ## remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
 ##
 sub purge_old_sessions {
-
-    my $robot = shift;
-
+    my ($robot) = @_;
     &Sympa::Log::do_log('info', '(%s)',$robot);
 
     my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ;
@@ -319,9 +311,7 @@ sub purge_old_sessions {
 ## remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
 ##
 sub purge_old_tickets {
-
-    my $robot = shift;
-
+    my ($robot) = @_;
     &Sympa::Log::do_log('info', '(%s)',$robot);
 
     my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ;
@@ -355,10 +345,7 @@ sub purge_old_tickets {
 
 # list sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
 sub list_sessions {
-    my $delay = shift;
-    my $robot = shift;
-    my $connected_only = shift;
-
+    my ($delay, $robot, $connected_only) = @_;
     &Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
 
     my @sessions ;
@@ -398,7 +385,7 @@ sub list_sessions {
 
 ## Generic subroutine to get a cookie value
 sub get_session_cookie {
-    my $http_cookie = shift;
+    my ($http_cookie) = @_;
 
     if ($http_cookie =~/\S+/g) {
 	my %cookies = parse CGI::Cookie($http_cookie);
@@ -466,7 +453,8 @@ sub get_random {
 
 ## Return the session object content, as a hashref
 sub as_hashref {
-  my $self = shift;
+  my ($self) = @_;
+
   my $data;
 
   foreach my $key (keys %{$self}) {
@@ -478,7 +466,8 @@ sub as_hashref {
 
 ## Return 1 if the Session object corresponds to an anonymous session.
 sub is_anonymous {
-    my $self = shift;
+    my ($self) = @_;
+
     if($self->{'email'} eq 'nobody' || $self->{'email'} eq '') {
 	return 1;
     }else{
@@ -490,8 +479,7 @@ sub is_anonymous {
 # initial version based on rawlers_dtection.conf file only
 # later : use Session table to identify those who create a lot of sessions
 sub is_a_crawler {
-    shift;
-    my $context = shift;
+    my (undef, $context) = @_;
 
     return $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
 }

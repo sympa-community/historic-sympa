@@ -61,10 +61,10 @@ sub new {
 
 # Returns a unique ID for an include datasource
 sub _get_datasource_id {
-    my ($source) = shift;
+    my ($source, $other_source) = @_;
 	&Sympa::Log::do_log('debug2',"Getting datasource id for source '%s'",$source);
     if (ref($source) && $source->isa('Sympa::Datasource')) {
-    	$source = shift;
+    	$source = $other_source;
     }
 
     if (ref ($source)) {
@@ -84,7 +84,8 @@ sub _get_datasource_id {
 }
 
 sub is_allowed_to_sync {
-	my $self = shift;
+	my ($self) = @_;
+
 	my $ranges = $self->{'nosync_time_ranges'};
 	$ranges =~ s/^\s+//;
 	$ranges =~ s/\s+$//;

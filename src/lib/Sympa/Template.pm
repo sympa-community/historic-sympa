@@ -54,7 +54,8 @@ my $allow_absolute;
 
 
 sub qencode {
-    my $string = shift;
+    my ($string) = @_;
+
     # We are not able to determine the name of header field, so assume
     # longest (maybe) one.
     return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
@@ -64,8 +65,7 @@ sub qencode {
 }
 
 sub escape_url {
-
-    my $string = shift;
+    my ($string) = @_;
 
     $string =~ s/[\s+]/sprintf('%%%02x', ord($&))/eg;
     # Some MUAs aren't able to decode ``%40'' (escaped ``@'') in e-mail
@@ -81,7 +81,7 @@ sub escape_url {
 }
 
 sub escape_xml {
-    my $string = shift;
+    my ($string) = @_;
 
     $string =~ s/&/&amp;/g;
     $string =~ s/</&lt;/g;
@@ -93,7 +93,7 @@ sub escape_xml {
 }
 
 sub escape_quote {
-    my $string = shift;
+    my ($string) = @_;
 
     $string =~ s/\'/\\\'/g;
     $string =~ s/\"/\\\"/g;
@@ -102,7 +102,7 @@ sub escape_quote {
 }
 
 sub encode_utf8 {
-    my $string = shift;
+    my ($string) = @_;
 
     ## Skip if already internally tagged utf8
     if (&Encode::is_utf8($string)) {
@@ -114,7 +114,7 @@ sub encode_utf8 {
 }
 
 sub decode_utf8 {
-    my $string = shift;
+    my ($string) = @_;
 
     ## Skip if already internally tagged utf8
     unless (&Encode::is_utf8($string)) {
@@ -157,6 +157,7 @@ sub maketext {
 #    Subref to generate formatted (i18n'ized) date/time.
 sub locdatetime {
     my (undef, $arg) = @_;
+
     if ($arg !~ /^(\d{4})\D(\d\d?)(?:\D(\d\d?)(?:\D(\d\d?)\D(\d\d?)(?:\D(\d\d?))?)?)?/) {
 	return sub { Sympa::Language::gettext("(unknown date)"); };
     } else {
@@ -174,6 +175,7 @@ sub locdatetime {
 #    Subref to generate folded text.
 sub wrap {
     my (undef, $init, $subs, $cols) = @_;
+
     $init = '' unless defined $init;
     $init = ' ' x $init if $init =~ /^\d+$/;
     $subs = '' unless defined $subs;
@@ -190,7 +192,7 @@ sub wrap {
 
 ## To add a directory to the TT2 include_path
 sub add_include_path {
-    my $path = shift;
+    my ($path) = @_;
 
     push @other_include_path, $path;
 }
@@ -207,7 +209,6 @@ sub allow_absolute_path {
 
 ## Return the last error message
 sub get_error {
-
     return $last_error;
 }
 

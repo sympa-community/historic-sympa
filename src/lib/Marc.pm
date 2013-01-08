@@ -16,8 +16,8 @@ our $VERSION = "4.3";
 
 sub new
 {
-	my $class     = shift;
-	my $fields_ref = shift;
+	my ($class, $fields_ref) = @_;
+
 	my $self =
    	{
 		directory_labels => {},

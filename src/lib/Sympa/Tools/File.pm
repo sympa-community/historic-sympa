@@ -51,7 +51,8 @@ Sets owner and/or access rights on a file.
 =cut
 
 sub set_file_rights {
-    my %param = @_;
+    my (%param) = @_;
+
     my ($uid, $gid);
 
     if ($param{'user'}){
@@ -90,8 +91,7 @@ Copy a directory and its content
 =cut
 
 sub copy_dir {
-    my $dir1 = shift;
-    my $dir2 = shift;
+    my ($dir1, $dir2) = @_;
     &Sympa::Log::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
 
     unless (-d $dir1){
@@ -108,7 +108,7 @@ Delete a directory and its content.
 =cut
 
 sub del_dir {
-    my $dir = shift;
+    my ($dir) = @_;
     &Sympa::Log::do_log('debug','%s',$dir);
 
     if(opendir DIR, $dir){
@@ -132,7 +132,8 @@ To be used before creating a file in a directory that may not exist already.
 =cut
 
 sub mk_parent_dir {
-    my $file = shift;
+    my ($file) = @_;
+
     $file =~ /^(.*)\/([^\/])*$/ ;
     my $dir = $1;
 
@@ -148,6 +149,7 @@ Recursively create directory and all parent directories
 
 sub mkdir_all {
     my ($path, $mode) = @_;
+
     my $status = 1;
 
     ## Change umask to fully apply modes of mkdir()
@@ -188,8 +190,7 @@ unlink others
 =cut
 
 sub shift_file {
-    my $file = shift;
-    my $count = shift;
+    my ($file, $count) = @_;
     &Sympa::Log::do_log('debug', "($file,$count)");
 
     unless (-f $file) {
@@ -254,9 +255,7 @@ Return an array of hash, each entry with directory + filename + encoding
 =cut
 
 sub list_dir {
-    my $dir = shift;
-    my $all = shift;
-    my $original_encoding = shift; ## Suspected original encoding of filenames
+    my ($dir, $all, $original_encoding) = @_;
 
     if (opendir(DIR, $dir)) {
 	foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
@@ -291,7 +290,7 @@ Get the total size for the given directory.
 =cut
 
 sub get_dir_size {
-    my $dir =shift;
+    my ($dir) = @_;
 
     my $size=0;
 
@@ -368,7 +367,8 @@ could not be carried on.
 =cut
 
 sub a_is_older_than_b {
-    my $param = shift;
+    my ($param) = @_;
+
     my ($a_file_readable, $b_file_readable) = (0,0);
     my $answer = undef;
     if (-r $param->{'a_file'}) {

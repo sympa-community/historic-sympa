@@ -121,8 +121,8 @@ sub plain_body_as_string {
 }
 
 sub _do_toplevel {
+  my ($topent) = @_;
 
-  my $topent = shift;
   if ($topent->effective_type =~ /^text\/plain$/i || $topent->effective_type =~ /^text\/enriched/i) {
     _do_text_plain($topent);
   }
@@ -145,8 +145,7 @@ sub _do_toplevel {
  }
 
 sub _do_multipart {
-
-  my $topent = shift;
+  my ($topent) = @_;
 
   # cycle through each part and process accordingly
   foreach my $subent ($topent->parts) {
@@ -190,7 +189,8 @@ sub _do_multipart {
 }
 
 sub _do_message {
-  my $topent = shift;
+  my ($topent) = @_;
+
   my $msgent = $topent->parts(0);
 
   unless ($msgent) {
@@ -237,7 +237,7 @@ sub _do_message {
 }
 
 sub _do_text_plain {
-  my $entity = shift;
+  my ($entity) = @_;
 
   my $thispart = $entity->bodyhandle->as_string;
 
@@ -268,23 +268,26 @@ sub _do_text_plain {
   return 1;
 }
 
+# just add a note that attachment was stripped.
 sub _do_other {
-  # just add a note that attachment was stripped.
-  my $entity = shift;
+  my ($entity) = @_;
+
   $outstring .= sprintf (Sympa::Language::gettext("\n[An attachment of type %s was included here]\n"), $entity->mime_type);
   return 1;
 }
 
 sub _do_dsn {
-   my $entity = shift;
+  my ($entity) = @_;
+
    $outstring .= sprintf (Sympa::Language::gettext("\n-----Delivery Status Report-----\n"));
    _do_text_plain ($entity);
    $outstring .= sprintf (Sympa::Language::gettext("\n-----End of Delivery Status Report-----\n"));
 }
 
+# get a plain text representation of an HTML part
 sub _do_text_html {
- # get a plain text representation of an HTML part
-  my $entity = shift;
+  my ($entity) = @_;
+
   my $text;
 
   unless (defined $entity->bodyhandle) {
@@ -334,9 +337,10 @@ sub _do_text_html {
   return 1;
 }
 
+# tell if an entity has text/plain children
 sub _hasTextPlain {
-   # tell if an entity has text/plain children
-   my $topent = shift;
+   my ($topent) = @_;
+
    my @subents = $topent->parts;
    foreach my $subent (@subents) {
      if ($subent->effective_type =~ /^text\/plain$/i) {
@@ -347,7 +351,7 @@ sub _hasTextPlain {
 }
 
 sub _getCharset {
-   my $entity = shift;
+   my ($entity) = @_;
 
    my $charset = $entity->head->mime_attr('content-type.charset')?$entity->head->mime_attr('content-type.charset'):'us-ascii';
    # malformed mail with single quotes around charset?

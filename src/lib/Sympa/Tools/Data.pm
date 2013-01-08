@@ -113,7 +113,8 @@ Dump a variable's content
 =cut
 
 sub dump_html_var {
-    my ($var) = shift;
+    my ($var) = @_;
+
 	my $html = '';
 
 
@@ -185,6 +186,7 @@ It removes spaces.
 
 sub get_array_from_splitted_string {
     my ($string) = @_;
+
     my @array;
 
     foreach my $word (split /,/,$string) {
@@ -229,7 +231,8 @@ An hashref with following keys:
 =cut
 
 sub diff_on_arrays {
-    my ($setA,$setB) = @_;
+    my ($setA, $setB) = @_;
+
     my $result = {'intersection' => [],
 	          'union' => [],
 	          'added' => [],
@@ -294,7 +297,7 @@ Returns a true value if value I<$value> if part of set I<$set>
 =cut
 
 sub is_in_array {
-    my ($set,$value) = @_;
+    my ($set, $value) = @_;
 
     foreach my $elt (@$set) {
 	return 1 if ($elt eq $value);
@@ -312,7 +315,8 @@ Current encoding is NOT compatible with encoding of values with '"'
 =cut
 
 sub string_2_hash {
-    my $data = shift;
+    my ($data) = @_;
+
     my %hash ;
 
     pos($data) = 0;
@@ -334,7 +338,7 @@ hash
 =cut
 
 sub hash_2_string {
-    my $refhash = shift;
+    my ($refhash) = @_;
 
     return undef unless ((ref($refhash))&& (ref($refhash) eq 'HASH')) ;
 
@@ -356,6 +360,7 @@ compare 2 scalars, string/numeric independent
 
 sub smart_lessthan {
     my ($stra, $strb) = @_;
+
     $stra =~ s/^\s+//; $stra =~ s/\s+$//;
     $strb =~ s/^\s+//; $strb =~ s/\s+$//;
     $ERRNO = 0;

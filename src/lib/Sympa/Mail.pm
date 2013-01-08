@@ -508,7 +508,8 @@ sub mail_forward {
 # OUT : $i
 #####################################################################
 sub reaper {
-   my $block = shift;
+   my ($block) = @_;
+
    my $i;
 
    $block = 1 unless (defined($block));
@@ -548,7 +549,7 @@ sub reaper {
 #
 ####################################################
 sub sendto {
-    my %params = @_;
+    my (%params) = @_;
 
     my $message = $params{'message'};
     my $msg_header = $message->{'msg'}->head;
@@ -951,9 +952,9 @@ sub send_in_spool {
 ##  Sub-messages are gathered from template context paramenters.
 
 sub reformat_message($;$$) {
-    my $message = shift;
-    my $attachments = shift || [];
-    my $defcharset = shift;
+    my ($message, $attachments, $defcharset) = @_;
+    my $attachments ||= [];
+
     my $msg;
 
     my $parser = MIME::Parser->new();
@@ -981,10 +982,9 @@ sub reformat_message($;$$) {
 }
 
 sub fix_part($$$$) {
-    my $part = shift;
-    my $parser = shift;
-    my $attachments = shift || [];
-    my $defcharset = shift;
+    my ($part, $parser, $attachments, $defcharset) = @_;
+    $attachments ||= [];
+
     return $part unless $part;
 
     my $enc = $part->head->mime_attr("Content-Transfer-Encoding");

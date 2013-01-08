@@ -48,7 +48,8 @@ Sets an HTTP cookie to be sent to a SOAP client
 =cut
 
 sub set_cookie_soap {
-    my ($session_id,$http_domain,$expire) = @_ ;
+    my ($session_id, $http_domain, $expire) = @_ ;
+
     my $cookie;
     my $value;
 
@@ -77,8 +78,7 @@ Returns Message Authentication Check code
 =cut
 
 sub get_mac {
-        my $email = shift ;
-	my $secret = shift ;
+        my ($email, $secret) = @_;
 	&Sympa::Log::do_log('debug3', "get_mac($email, $secret)");
 
 	unless ($secret) {
@@ -102,7 +102,8 @@ sub get_mac {
 }
 
 sub set_cookie_extern {
-    my ($secret,$http_domain,%alt_emails) = @_ ;
+    my ($secret, $http_domain, %alt_emails) = @_ ;
+
     my $cookie;
     my $value;
 
@@ -138,8 +139,7 @@ Generic subroutine to get a cookie value
 =cut
 
 sub generic_get_cookie {
-    my $http_cookie = shift;
-    my $cookie_name = shift;
+    my ($http_cookie, $cookie_name) = @_;
 
     if ($http_cookie =~/\S+/g) {
 	my %cookies = parse CGI::Cookie($http_cookie);
@@ -159,8 +159,7 @@ Returns user information extracted from the cookie
 =cut
 
 sub check_cookie {
-    my $http_cookie = shift;
-    my $secret = shift;
+    my ($http_cookie, $secret) = @_;
 
     my $user = &generic_get_cookie($http_cookie, 'sympauser');
 
@@ -179,7 +178,7 @@ sub check_cookie {
 }
 
 sub check_cookie_extern {
-    my ($http_cookie,$secret,$user_email) = @_;
+    my ($http_cookie, $secret, $user_email) = @_;
 
     my $extern_value = &generic_get_cookie($http_cookie, 'sympa_altemails');
 

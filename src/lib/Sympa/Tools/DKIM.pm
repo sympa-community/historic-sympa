@@ -63,7 +63,7 @@ use Sympa::Log;
 =cut
 
 sub get_dkim_parameters {
-    my $params = shift;
+    my ($params) = @_;
 
     my $robot = $params->{'robot'};
     my $listname = $params->{'listname'};
@@ -114,9 +114,7 @@ Input a msg as string, output the dkim status
 =cut
 
 sub dkim_verifier {
-    my $msg_as_string = shift;
-    my $tmpdir = shift;
-    my $dkim;
+    my ($msg_as_string, $tmpdir, $dkim) = @_;
 
     &Sympa::Log::do_log('debug',"dkim verifier");
 
@@ -167,9 +165,8 @@ Input a msg as string, output idem without signature if invalid
 =cut
 
 sub remove_invalid_dkim_signature {
-    my ($tmpdir) = @_;
+    my ($tmpdir, $msg_as_string) = @_;
     &Sympa::Log::do_log('debug',"removing invalide dkim signature");
-    my $msg_as_string = shift;
 
     unless (dkim_verifier($msg_as_string, $tmpdir)){
 	my $body_as_string = &Sympa::Message::get_body_from_msg_as_string ($msg_as_string);
@@ -197,9 +194,8 @@ Input object msg and listname, output signed message object
 
 sub dkim_sign {
     # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail
-    my $msg_as_string = shift;
-    my $data = shift;
-    my $tmpdir = shift;
+    my ($msg_as_string, $data, $tmpdir) = @_;
+
     my $dkim_d = $data->{'dkim_d'};
     my $dkim_i = $data->{'dkim_i'};
     my $dkim_selector = $data->{'dkim_selector'};

@@ -67,8 +67,8 @@ our $db_source;
 our $use_db;
 
 sub do_query {
-    my $query = shift;
-    my @params = @_;
+    my ($query, @params) = @_;
+
     my $sth;
 
     unless ($sth = $db_source->do_query($query,@params)) {
@@ -80,8 +80,8 @@ sub do_query {
 }
 
 sub do_prepared_query {
-    my $query = shift;
-    my @params = @_;
+    my ($query, @params) = @_;
+
     my $sth;
 
     unless ($sth = $db_source->do_prepared_query($query,@params)) {
@@ -126,7 +126,7 @@ sub check_db_connect {
 
 ## Connect to Database
 sub connect_sympa_database {
-    my $option = shift;
+    my ($option) = @_;
 
     &Sympa::Log::do_log('debug', 'Connecting to Sympa database');
 
@@ -265,7 +265,8 @@ sub probe_db {
 }
 
 sub check_fields {
-    my $param = shift;
+    my ($param) = @_;
+
     my $t = $param->{'table'};
     my %real_struct = %{$param->{'real_struct'}};
     my $report_ref = $param->{'report'};
@@ -326,7 +327,8 @@ sub check_fields {
 }
 
 sub check_primary_key {
-    my $param = shift;
+    my ($param) = @_;
+
     my $t = $param->{'table'};
     my $report_ref = $param->{'report'};
     &Sympa::Log::do_log('debug','Checking primary key for table %s',$t);
@@ -377,7 +379,8 @@ sub check_primary_key {
 }
 
 sub check_indexes {
-    my $param = shift;
+    my ($param) = @_;
+
     my $t = $param->{'table'};
     my $report_ref = $param->{'report'};
     &Sympa::Log::do_log('debug','Checking indexes for table %s',$t);
@@ -483,7 +486,7 @@ sub data_structure_uptodate {
 ## Input : required_format, effective_format
 ## Output : return 1 if field type is appropriate AND size >= required size
 sub check_db_field_type {
-    my %param = @_;
+    my (%param) = @_;
 
     my ($required_type, $required_size, $effective_type, $effective_size);
 
@@ -503,7 +506,8 @@ sub check_db_field_type {
 }
 
 sub quote {
-    my $param = shift;
+    my ($param) = @_;
+
     if (defined $db_source) {
 	return $db_source->quote($param);
     }else{
@@ -517,7 +521,8 @@ sub quote {
 }
 
 sub get_substring_clause {
-    my $param = shift;
+    my ($param) = @_;;
+
     if (defined $db_source) {
 	return $db_source->get_substring_clause($param);
      }else{
@@ -531,7 +536,8 @@ sub get_substring_clause {
 }
 
 sub get_limit_clause {
-    my $param = shift;
+    my ($param) = @_;
+
     if (defined $db_source) {
 	return ' '.$db_source->get_limit_clause($param).' ';
     }else{
@@ -550,7 +556,8 @@ sub get_limit_clause {
 ## the query.
 ##
 sub get_canonical_write_date {
-    my $param = shift;
+    my ($param) = @_;
+
     if (defined $db_source) {
 	return $db_source->get_canonical_write_date($param);
     }else{
@@ -569,7 +576,8 @@ sub get_canonical_write_date {
 ## the query.
 ##
 sub get_canonical_read_date {
-    my $param = shift;
+    my ($param) = @_;
+
     if (defined $db_source) {
 	return $db_source->get_canonical_read_date($param);
     }else{
