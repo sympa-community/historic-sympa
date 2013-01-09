@@ -52,7 +52,6 @@ use Mail::Address;
 use MIME::Parser;
 use Time::Local;
 
-use Marc::Search;
 use Sympa::Admin;
 use Sympa::Archive;
 use Sympa::Auth;
@@ -64,6 +63,7 @@ use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Mail;
+use Sympa::Marc::Search;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Robot;
@@ -8108,7 +8108,7 @@ sub do_arcsearch {
      ## Access control
      return undef unless (defined &check_authz('do_arcsearch', 'web_archive.access'));
 
-     my $search = Marc::Search->new();
+     my $search = Sympa::Marc::Search->new();
      $search->search_base (&Sympa::Configuration::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
      $search->base_href (&Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
      $search->archive_name ($in{'archive_name'});
@@ -8244,7 +8244,7 @@ sub do_arcsearch_id {
      return undef unless (defined &check_authz('do_arcsearch_id', 'web_archive.access'));
 
 
-     my $search = Marc::Search->new();
+     my $search = Sympa::Marc::Search->new();
      $search->search_base (&Sympa::Configuration::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
      $search->base_href (&Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
 
