@@ -1217,7 +1217,7 @@ sub is_purely_closed {
     my $self = shift;
     foreach my $rule (@{$self->{'rules'}}) {
 	if ($rule->{'condition'} ne 'true' && $rule->{'action'} !~ /reject/) {
-	    Log::do_log('trace','Scenario %s is not purely closed.',$self->{'title'});
+	    Log::do_log('debug2','Scenario %s is not purely closed.',$self->{'title'});
 	    return 0;
 	}
     }
