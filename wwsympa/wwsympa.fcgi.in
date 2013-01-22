@@ -1405,7 +1405,7 @@ my $birthday = time ;
 		    delete($param->{'action'});
 		    last;
 		}else{
-		    &report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
+		    &report::reject_report_web('user','authorization_reject',{},$param->{'action'},'');
 		}
 	     }
 	 
@@ -2256,7 +2256,7 @@ sub check_action_parameters {
       }elsif ($arg_name eq 'param.user.email') {
 	unless (defined $param->{'user'} && $param->{'user'}{'email'}) {
 	    if(prevent_visibility_bypass()) {
-		&report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
+		&report::reject_report_web('user','authorization_reject',{},$param->{'action'},'');
 	    }
 	  &report::reject_report_web('user','no_user',{},$action);
 	  &wwslog('err','user not logged in');
@@ -2284,7 +2284,7 @@ sub check_action_parameters {
 	  $in{$arg_name} =~ s/\|/,/g;
 	  
 	    if(prevent_visibility_bypass()) {
-		&report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
+		&report::reject_report_web('user','authorization_reject',{'list' => $in{'list'}},$param->{'action'},'');
 	    }
 	  &report::reject_report_web('user','missing_arg',{'argument' => $arg_name},$action);
 	  &wwslog('info',"missing parameter '$arg_name'");
