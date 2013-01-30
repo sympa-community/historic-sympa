@@ -112,13 +112,13 @@ eval { require DBD::mysql; };
 
 SKIP: {
 	if      ($EVAL_ERROR) {
-		skip 'DBD::mysql required',                 17;
+		skip 'DBD::mysql required',                 20;
 	} elsif (!$ENV{DB_NAME}) {
-		skip 'DB_NAME environment variable needed', 17;
+		skip 'DB_NAME environment variable needed', 20;
 	} elsif (!$ENV{DB_HOST}) {
-		skip 'DB_HOST environment variable needed', 17;
+		skip 'DB_HOST environment variable needed', 20;
 	} elsif (!$ENV{DB_USER}) {
-		skip 'DB_USER environment variable needed', 17;
+		skip 'DB_USER environment variable needed', 20;
 	}
 
 	$source = Sympa::Datasource::SQL->new({
