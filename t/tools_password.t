@@ -42,18 +42,24 @@ ok(
     "passwords for different user and same cookie differ"
 );
 
-my $password = 'password';
-my $cookie   = 'cookie';
-my $crypted_password = Sympa::Tools::Password::crypt_password($password, $cookie);
-ok(
-    $password ne $crypted_password,
-    "encrypted password differs from original password"
-);
+eval { require Crypt::CipherSaber; };
 
-my $decrypted_password = Sympa::Tools::Password::decrypt_password(
-    $crypted_password, $cookie
-);
-ok(
-    $password eq $decrypted_password,
-    "decrypted password is equal to original password"
-);
+SKIP: {
+	skip 'Crypt::CipherSaber required', 2 if $EVAL_ERROR;
+
+	my $password = 'password';
+	my $cookie   = 'cookie';
+	my $crypted_password = Sympa::Tools::Password::crypt_password($password, $cookie);
+	ok(
+	    $password ne $crypted_password,
+	    "encrypted password differs from original password"
+	);
+
+	my $decrypted_password = Sympa::Tools::Password::decrypt_password(
+	    $crypted_password, $cookie
+	);
+	ok(
+	    $password eq $decrypted_password,
+	    "decrypted password is equal to original password"
+	);
+};
