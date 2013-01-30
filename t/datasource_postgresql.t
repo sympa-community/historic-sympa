@@ -14,7 +14,7 @@ use Test::Without::Module qw(DBD::Pg);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 14;
+plan tests => 16;
 
 my $source = Sympa::Datasource::SQL->new({db_type => 'Pg', db_name => 'foo'});
 ok($source, 'source is defined');
