@@ -1,0 +1,4363 @@
+Return-Path: bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr
+Received: from zfront1.inria.fr (LHLO zfront1.inria.fr) (193.51.193.147) by
+ zmbs4.inria.fr with LMTP; Fri, 16 Nov 2012 17:00:20 +0100 (CET)
+Received: from mail1-relais-roc.national.inria.fr (mail1-relais-roc.national.inria.fr [192.134.164.82])
+	by zfront1.inria.fr (Postfix) with ESMTPS id 67008238041
+	for <rousse@zimbra.inria.fr>; Fri, 16 Nov 2012 17:00:20 +0100 (CET)
+Received-SPF: None (mail1-smtp-roc.national.inria.fr: no sender
+  authenticity information available from domain of
+  sympa-announce-request@listes.renater.fr) identity=pra;
+  client-ip=195.220.94.131;
+  receiver=mail1-smtp-roc.national.inria.fr;
+  envelope-from="bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr";
+  x-sender="sympa-announce-request@listes.renater.fr";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (mail1-smtp-roc.national.inria.fr: domain of
+  bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr
+  designates 195.220.94.131 as permitted sender)
+  identity=mailfrom; client-ip=195.220.94.131;
+  receiver=mail1-smtp-roc.national.inria.fr;
+  envelope-from="bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr";
+  x-sender="bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr";
+  x-conformance=sidf_compatible; x-record-type="v=spf1"
+Received-SPF: None (mail1-smtp-roc.national.inria.fr: no sender
+  authenticity information available from domain of
+  postmaster@smtp1.cru.fr) identity=helo;
+  client-ip=195.220.94.131;
+  receiver=mail1-smtp-roc.national.inria.fr;
+  envelope-from="bounce+guillaume.rousse==a==inria.fr==sympa-announce@listes.renater.fr";
+  x-sender="postmaster@smtp1.cru.fr";
+  x-conformance=sidf_compatible
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: AmkCAABiplDD3F6DlGdsb2JhbABEgkmDVbtRdyMBAQEBCQsJCRQGIYIgAQUBASAKEAkIIA4DAQEHAicBARkBCQICAgEBExo0CwUECwYDBIdwB6tOkmWOGYIUgRMDiCWHeIVfj2aDTQ
+X-IronPort-AV: E=Sophos;i="4.83,265,1352070000"; 
+   d="scan'208,217,150";a="181870211"
+Received: from smtp1.cru.fr ([195.220.94.131])
+  by mail1-smtp-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-SHA; 16 Nov 2012 17:00:19 +0100
+Received: from listes.cru.fr (listes.cru.fr [195.220.94.165])
+	by smtp1.cru.fr (8.13.8/8.13.8) with ESMTP id qAGG0IlD015903
+	for <guillaume.rousse@inria.fr>; Fri, 16 Nov 2012 17:00:18 +0100
+Received: from listes.cru.fr (localhost.localdomain [127.0.0.1])
+	by listes.cru.fr (8.13.8/8.13.8/8.12-CW) with ESMTP id qAGG0BQ3029413
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+	for <guillaume.rousse@inria.fr>; Fri, 16 Nov 2012 17:00:14 +0100
+Received: (from sympa@localhost)
+	by listes.cru.fr (8.13.8/8.13.8/Submit) id qAGG08lx029275
+	for guillaume.rousse@inria.fr; Fri, 16 Nov 2012 17:00:08 +0100
+X-Sympa-From: sympa@listes.renater.fr
+To: sympa-announce@listes.renater.fr
+Message-ID: <sympa.1353081293.10950.160@listes.renater.fr>
+From: <david.verdin@renater.fr>
+MIME-Version: 1.0
+Date: Fri, 16 Nov 2012 16:59:14 +0100
+X-Mailer: Sympa 6.2a.32
+Subject: [sympa-announce] Sympa 6.1.16 released
+Reply-To: sympa-authors@listes.renater.fr
+X-Loop: sympa-announce@listes.renater.fr
+X-Sequence: 61
+Errors-to: sympa-announce-owner@listes.renater.fr
+Precedence: list
+Precedence: bulk
+Sender: sympa-announce-request@listes.renater.fr
+X-no-archive: yes
+List-Id: <sympa-announce.listes.renater.fr>
+List-Archive: <https://listes.renater.fr/sympa/arc/sympa-announce>
+List-Help: <mailto:sympa@listes.renater.fr?subject=help>
+List-Owner: <mailto:sympa-announce-request@listes.renater.fr>
+List-Post: <mailto:sympa-announce@listes.renater.fr>
+List-Unsubscribe: <mailto:sympa@listes.renater.fr?subject=unsubscribe%20sympa-announce>
+Archived-At: <https://listes.renater.fr/sympa/arcsearch_id/sympa-announce/2012-11/sympa.1353081293.10950.160@listes.renater.fr>
+Content-type: multipart/mixed; boundary="----------=_1353081571-28045-0"
+
+This is a multi-part message in MIME format...
+
+------------=_1353081571-28045-0
+Content-Transfer-Encoding: binary
+Content-Type: multipart/related; boundary="_----------=_1353081554233880"
+
+This is a multi-part message in MIME format.
+
+--_----------=_1353081554233880
+MIME-Version: 1.0
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/html; charset="ISO-8859-1"
+Date: Fri, 16 Nov 2012 16:59:14 +0100
+Content-length: 86289
+
+=0D
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"=0D
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">=0D
+=0D
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xml:lang=3D"en"=0D
+ lang=3D"en" dir=3D"ltr">=0D
+<head>=0D
+  <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8" =
+>=0D
+  <title>=0D
+    Sympa 6.1.16 released    [Sympa mailing list server]=0D
+  </title>=0D
+=0D
+=0D
+<style type=3D"text/css">
+<!--
+=0D
+a.interwiki { background: transparent url(/ferme/sympa/lib/images/interwiki=
+.png) 0px 1px no-repeat; padding-left: 16px;}=0D
+a.iw_wp {  background-image: url(/ferme/sympa/lib/images/interwiki/wp.gif)}=
+=0D
+a.iw_wpde {  background-image: url(/ferme/sympa/lib/images/interwiki/wpde.g=
+if)}=0D
+a.iw_wpmeta {  background-image: url(/ferme/sympa/lib/images/interwiki/wpme=
+ta.gif)}=0D
+a.iw_doku {  background-image: url(/ferme/sympa/lib/images/interwiki/doku.g=
+if)}=0D
+a.iw_sb {  background-image: url(/ferme/sympa/lib/images/interwiki/sb.gif)}=
+=0D
+a.iw_amazon {  background-image: url(/ferme/sympa/lib/images/interwiki/amaz=
+on.gif)}=0D
+a.iw_amazon_de {  background-image: url(/ferme/sympa/lib/images/interwiki/a=
+mazon.de.gif)}=0D
+a.iw_amazon_uk {  background-image: url(/ferme/sympa/lib/images/interwiki/a=
+mazon.uk.gif)}=0D
+a.iw_phpfn {  background-image: url(/ferme/sympa/lib/images/interwiki/phpfn=
+.gif)}=0D
+a.iw_bug {  background-image: url(/ferme/sympa/lib/images/interwiki/bug.gif=
+)}=0D
+a.iw_coral {  background-image: url(/ferme/sympa/lib/images/interwiki/coral=
+.gif)}=0D
+a.iw_google {  background-image: url(/ferme/sympa/lib/images/interwiki/goog=
+le.gif)}=0D
+a.iw_meatball {  background-image: url(/ferme/sympa/lib/images/interwiki/me=
+atball.gif)}=0D
+a.iw_wiki {  background-image: url(/ferme/sympa/lib/images/interwiki/wiki.g=
+if)}=0D
+a.mediafile { background: transparent url(/ferme/sympa/lib/images/fileicons=
+/file.png) 0px 1px no-repeat; padding-left: 18px; padding-bottom: 1px;}=0D
+a.mf_jpg {  background-image: url(/ferme/sympa/lib/images/fileicons/jpg.png=
+)}=0D
+a.mf_jpeg {  background-image: url(/ferme/sympa/lib/images/fileicons/jpeg.p=
+ng)}=0D
+a.mf_gif {  background-image: url(/ferme/sympa/lib/images/fileicons/gif.png=
+)}=0D
+a.mf_png {  background-image: url(/ferme/sympa/lib/images/fileicons/png.png=
+)}=0D
+a.mf_tgz {  background-image: url(/ferme/sympa/lib/images/fileicons/tgz.png=
+)}=0D
+a.mf_tar {  background-image: url(/ferme/sympa/lib/images/fileicons/tar.png=
+)}=0D
+a.mf_gz {  background-image: url(/ferme/sympa/lib/images/fileicons/gz.png)}=
+=0D
+a.mf_zip {  background-image: url(/ferme/sympa/lib/images/fileicons/zip.png=
+)}=0D
+a.mf_pdf {  background-image: url(/ferme/sympa/lib/images/fileicons/pdf.png=
+)}=0D
+a.mf_txt {  background-image: url(/ferme/sympa/lib/images/fileicons/txt.png=
+)}=0D
+a.mf_html {  background-image: url(/ferme/sympa/lib/images/fileicons/html.p=
+ng)}=0D
+a.mf_htm {  background-image: url(/ferme/sympa/lib/images/fileicons/htm.png=
+)}=0D
+a.mf_ps {  background-image: url(/ferme/sympa/lib/images/fileicons/ps.png)}=
+=0D
+a.mf_doc {  background-image: url(/ferme/sympa/lib/images/fileicons/doc.png=
+)}=0D
+a.mf_xls {  background-image: url(/ferme/sympa/lib/images/fileicons/xls.png=
+)}=0D
+a.mf_ppt {  background-image: url(/ferme/sympa/lib/images/fileicons/ppt.png=
+)}=0D
+a.mf_rtf {  background-image: url(/ferme/sympa/lib/images/fileicons/rtf.png=
+)}=0D
+a.mf_xml {  background-image: url(/ferme/sympa/lib/images/fileicons/xml.png=
+)}=0D
+a.mf_swf {  background-image: url(/ferme/sympa/lib/images/fileicons/swf.png=
+)}=0D
+a.mf_rpm {  background-image: url(/ferme/sympa/lib/images/fileicons/rpm.png=
+)}=0D
+a.mf_deb {  background-image: url(/ferme/sympa/lib/images/fileicons/deb.png=
+)}=0D
+a.mf_conf {  background-image: url(/ferme/sympa/lib/images/fileicons/conf.p=
+ng)}=0D
+a.mf_sxw {  background-image: url(/ferme/sympa/lib/images/fileicons/sxw.png=
+)}=0D
+a.mf_sxc {  background-image: url(/ferme/sympa/lib/images/fileicons/sxc.png=
+)}=0D
+a.mf_sxi {  background-image: url(/ferme/sympa/lib/images/fileicons/sxi.png=
+)}=0D
+a.mf_sxd {  background-image: url(/ferme/sympa/lib/images/fileicons/sxd.png=
+)}=0D
+a.mf_odc {  background-image: url(/ferme/sympa/lib/images/fileicons/odc.png=
+)}=0D
+a.mf_odf {  background-image: url(/ferme/sympa/lib/images/fileicons/odf.png=
+)}=0D
+a.mf_odg {  background-image: url(/ferme/sympa/lib/images/fileicons/odg.png=
+)}=0D
+a.mf_odi {  background-image: url(/ferme/sympa/lib/images/fileicons/odi.png=
+)}=0D
+a.mf_odp {  background-image: url(/ferme/sympa/lib/images/fileicons/odp.png=
+)}=0D
+a.mf_ods {  background-image: url(/ferme/sympa/lib/images/fileicons/ods.png=
+)}=0D
+a.mf_odt {  background-image: url(/ferme/sympa/lib/images/fileicons/odt.png=
+)}=0D
+=0D
+=0D
+/**=0D
+ * Basic styles. These styles are needed for basic DokuWiki functions=0D
+ * regardless of the used template. Templates can override them of course=
+=0D
+ */=0D
+=0D
+div.clearer {=0D
+  clear: both;=0D
+  line-height: 0;=0D
+  height: 0;=0D
+  overflow:hidden;=0D
+}=0D
+=0D
+div.no {=0D
+  display: inline;=0D
+  margin: 0;=0D
+  padding: 0;=0D
+}=0D
+=0D
+div.error {=0D
+  background: #fcc url(/lib/styles/../images/error.png) 0.5em 1em no-repeat=
+;=0D
+  color: #000;=0D
+  text-align:center;=0D
+  border-bottom: 1px solid #faa;=0D
+  font-size: 230%;=0D
+  height: 2em;=0D
+  margin: 0;=0D
+  padding-top: 1em;=0D
+  overflow: hidden;=0D
+}=0D
+=0D
+div.info {=0D
+  background: #ccf url(/ferme/sympa/lib/styles/../images/info.png) 0.5em 0p=
+x no-repeat;=0D
+  color: #000;=0D
+  border-bottom: 1px solid #aaf;=0D
+  font-size: 90%;=0D
+  margin: 0;=0D
+  padding-left: 3em;=0D
+  overflow: hidden;=0D
+}=0D
+=0D
+div.success {=0D
+  background: #cfc url(/ferme/sympa/lib/styles/../images/success.png) 0.5em=
+ 0px no-repeat;=0D
+  color: #000;=0D
+  border-bottom: 1px solid #afa;=0D
+  font-size: 90%;=0D
+  margin: 0;=0D
+  padding-left: 3em;=0D
+  overflow: hidden;=0D
+}=0D
+=0D
+div.notify {=0D
+  background: #ffc url(/ferme/sympa/lib/styles/../images/notify.png) 0.5em =
+0px no-repeat;=0D
+  color: #000;=0D
+  border-bottom: 1px solid #ffa;=0D
+  font-size: 90%;=0D
+  margin: 0;=0D
+  padding-left: 3em;=0D
+  overflow: hidden;=0D
+}=0D
+=0D
+=0D
+/* image alignment */=0D
+.medialeft {=0D
+  float: left;=0D
+}=0D
+.mediaright {=0D
+  float: right;=0D
+}=0D
+.mediacenter {=0D
+  display: block;=0D
+  margin-left: auto;=0D
+  margin-right: auto;=0D
+}=0D
+=0D
+.leftalign {text-align: left;}=0D
+.centeralign {text-align: center;}=0D
+.rightalign {text-align: right;}=0D
+=0D
+em.u {=0D
+  font-style: normal;=0D
+  text-decoration: underline;=0D
+}=0D
+=0D
+=0D
+/* syntax highlighting code */=0D
+.code .br0  { color: #66cc66; }=0D
+.code .co1  { color: #808080; font-style: italic; }=0D
+.code .co2  { color: #808080; font-style: italic; }=0D
+.code .coMULTI  { color: #808080; font-style: italic; }=0D
+.code .es0  { color: #000099; font-weight: bold; }=0D
+.code .kw1  { color: #b1b100; }=0D
+.code .kw2  { color: #000000; font-weight: bold; }=0D
+.code .kw3  { color: #000066; }=0D
+.code .kw4  { color: #993333; }=0D
+.code .kw5  { color: #0000ff; }=0D
+.code .me0  { color: #006600; }=0D
+.code .nu0  { color: #cc66cc; }=0D
+.code .re0  { color: #0000ff; }=0D
+.code .re1  { color: #0000ff; }=0D
+.code .re2  { color: #0000ff; }=0D
+.code .re4  { color: #009999; }=0D
+.code .sc0  { color: #00bbdd; }=0D
+.code .sc1  { color: #ddbb00; }=0D
+.code .sc2  { color: #009900; }=0D
+.code .st0  { color: #ff0000; }=0D
+=0D
+/**=0D
+ * Basic styles for the spellchecker. Only included when the spellcheck opt=
+ion=0D
+ * is enabled. These styles are the absolute minimum to make the spellcheck=
+er=0D
+ * work. Templates should add addional styles for making it look nice.=0D
+ */=0D
+=0D
+div.dokuwiki div#spell__suggest {=0D
+  position: absolute;=0D
+  left: 0;=0D
+  top: 0;=0D
+  display: none;=0D
+  z-index: 2;=0D
+}=0D
+=0D
+div.dokuwiki div#spell__result {=0D
+  display:none;=0D
+  font-family:monospace;=0D
+  overflow: auto;=0D
+  z-index: 1;=0D
+}=0D
+=0D
+#acl__manager label {=0D
+  text-align: left;=0D
+  font-weight: normal;=0D
+  display: inline;=0D
+}=0D
+#acl__manager table {=0D
+  margin-left: 10%;=0D
+  width: 80%;=0D
+}=0D
+=0D
+/* plugin:configmanager */=0D
+#config__manager {margin: 1em;}=0D
+#config__manager div.success,=0D
+#config__manager div.error,=0D
+#config__manager div.info {=0D
+  background-position: 0.5em;=0D
+  padding: 0.5em;=0D
+  text-align:center=0D
+}=0D
+=0D
+#config__manager form { }=0D
+#config__manager table {margin: 1em 0;}=0D
+#config__manager td input.edit {width: 30em;}=0D
+#config__manager td select.edit { }=0D
+#config__manager td textarea.edit {width: 27.5em; height: 4em;}=0D
+=0D
+#config__manager tr.default .input,=0D
+#config__manager tr.default input,=0D
+#config__manager tr.default textarea,=0D
+#config__manager tr.default select {=0D
+  background-color: #ccddff;=0D
+}=0D
+=0D
+#config__manager tr.protected .input,=0D
+#config__manager tr.protected input,=0D
+#config__manager tr.default textarea,=0D
+#config__manager tr.protected select {=0D
+  background-color: #ffcccc;=0D
+}=0D
+=0D
+#config__manager td.error  {background-color: red;}=0D
+/* end plugin:configmanager */=0D
+=0D
+=0D
+/*=0D
+ * admin plugin extension - style additions=0D
+ *=0D
+ * @author  Christopher Smith  chris@jalakai.co.uk=0D
+ * @link    http://wiki.jalakai.co.uk/dokuwiki/doku.php/tutorials/adminplug=
+in=0D
+ */=0D
+/* overall containing div */=0D
+#plugin__manager {}=0D
+=0D
+#plugin__manager h2 { margin-left: 0;}=0D
+#plugin__manager form { display: block; margin: 0; padding: 0;}=0D
+#plugin__manager legend { display: none;}=0D
+#plugin__manager fieldset { width: auto;}=0D
+#plugin__manager .button { margin: 0;}=0D
+#plugin__manager p, #plugin__manager label { text-align: left;}=0D
+#plugin__manager .hidden { display: none;}=0D
+#plugin__manager .new { background: #dee7ec;}=0D
+#plugin__manager input[disabled] { color: #ccc; border-color: #ccc;}  /* IE=
+ won't understand but doesn't require it */=0D
+=0D
+#plugin__manager .pm_menu, #plugin__manager .pm_info { margin-left: 0; text=
+-align: left; }=0D
+#plugin__manager .pm_menu { float: left; width: 48%; }=0D
+#plugin__manager .pm_info { float: right; width: 50%; }=0D
+=0D
+#plugin__manager .common { }=0D
+#plugin__manager .common form { }=0D
+#plugin__manager .common fieldset { margin: 0; padding: 0 0 1.0em 0; text-a=
+lign: left; border: none;}=0D
+#plugin__manager .common label { padding: 0 0 0.5em 0;}=0D
+#plugin__manager .common input {  }=0D
+#plugin__manager .common input.edit { width: 24em; margin: 0.5em;}=0D
+#plugin__manager .common .button { }=0D
+=0D
+#plugin__manager .plugins { }=0D
+#plugin__manager .plugins form { }=0D
+#plugin__manager .plugins fieldset { text-align: right; border-top:0; borde=
+r-right:0; border-left:0;}=0D
+#plugin__manager .plugins .legend { color: black; display: block; margin: 0=
+; padding: 0; font-size: 1em; line-height: 1.4em; font-weight: normal; text=
+-align: left; float: left; padding: 0;}=0D
+#plugin__manager .plugins .button { width: 5em; font-size: 95%;}=0D
+=0D
+#plugin__manager .pm_info h3 { margin-left: 0; }=0D
+#plugin__manager .pm_info dl { margin: 1em 0; padding: 0;}=0D
+#plugin__manager .pm_info dt { width: 6em; float: left; clear: left; margin=
+:0; padding: 0;}=0D
+#plugin__manager .pm_info dd { margin:0 0 0 7em; padding: 0;}=0D
+/* end admin plugin styles */=0D
+=0D
+=0D
+/* User Manager specific styles */=0D
+#user__manager tr.disabled {=0D
+  color: #6f6f6f;=0D
+  background: #e4e4e4;=0D
+}=0D
+#user__manager tr.user_info {=0D
+  vertical-align: top;=0D
+}=0D
+#user__manager div.edit_user {=0D
+  width: 46%;=0D
+  float: left;=0D
+  margin-top: 2em;=0D
+}=0D
+#user__manager input.button[disabled] {=0D
+  color: #ccc!important;=0D
+  border-color: #ccc!important;=0D
+}=0D
+/* IE won't understand but doesn't require it */=0D
+#pl_si_throbber {=0D
+    visibility: hidden;=0D
+}=0D
+=0D
+.pl_si_out {=0D
+    margin: 1em auto 1em auto;=0D
+    vertical-align: middle;=0D
+    width: 80%;=0D
+    text-align: left;=0D
+}=0D
+=0D
+// Setup VIM: ex: et ts=3D4 enc=3Dutf-8 :=0D
+div.dokuwiki div.include {=0D
+  font-size: 95%;=0D
+  padding: 0.5em 0.5em 0.5em 0;=0D
+  margin-top: 1em;=0D
+  margin-left: -1px;=0D
+  margin-bottom: 0.2em;=0D
+  border: 1px dotted #dee7ec;=0D
+}=0D
+=0D
+/* Tree */=0D
+div.tree {=0D
+  margin-right: 2em;=0D
+  margin-left: 2em;=0D
+  margin-top: 0.5em;=0D
+  margin-bottom: 0.5em;=0D
+  float: left;=0D
+}=0D
+=0D
+div.treeheader {=0D
+  border: 1px solid #8cacbb;=0D
+  background-color: #dee7ec;=0D
+  padding: 3px;=0D
+  font-weight:bold;=0D
+}=0D
+=0D
+div.treecontent {=0D
+  border: 1px solid #8cacbb;=0D
+  background-color: #fff;=0D
+  padding: 3px;=0D
+  white-space: nowrap;=0D
+}=0D
+=0D
+.dtree {=0D
+	white-space: nowrap;=0D
+}=0D
+=0D
+.dtree img {=0D
+	border: 0px;=0D
+	vertical-align: middle;=0D
+}=0D
+=0D
+.dtree a.node, .dtree a.nodeSel {=0D
+	white-space: nowrap;=0D
+	padding: 1px 2px 1px 2px;=0D
+}=0D
+=0D
+.dtree .clip {=0D
+	overflow: hidden;=0D
+}=0D
+a.diagbutton {=0D
+  border: 1px solid #8cacbb;=0D
+  color: Green;=0D
+  background-color: white;=0D
+  vertical-align: middle;=0D
+  text-decoration:none;=0D
+  margin: 0px;=0D
+  padding: 0px;=0D
+  font-size: 10px;=0D
+  cursor: pointer;=0D
+  height: 15px !important;=0D
+  max-height: 15px !important;=0D
+  min-height: 15px !important;=0D
+/*  float:right;*/=0D
+  display: inline;=0D
+}=0D
+=0D
+=0D
+/**=0D
+ * Stylesheet for dokuwiki-calendar-plugin=0D
+ *=0D
+ * Author:      Michael Klier chi@chimeric.de=0D
+ * Homepage:    http://www.chimeric.de=0D
+ */=0D
+=0D
+table.plugin_calendar tr:hover { =0D
+  background:none; =0D
+}=0D
+=0D
+table.plugin_calendar th.month {=0D
+  text-align:center;=0D
+  height:2em;=0D
+  vertical-align:middle;=0D
+  color: #000;=0D
+}=0D
+=0D
+table.plugin_calendar td {=0D
+  border:1px solid #666;=0D
+}=0D
+=0D
+table.plugin_calendar td.weekday {=0D
+  font-weight:bold;=0D
+  text-align:center;=0D
+  background: #8cacbb;=0D
+  color: #000;=0D
+}=0D
+=0D
+table.plugin_calendar td.day,=0D
+table.plugin_calendar td.today {=0D
+  padding:0.2em;=0D
+}=0D
+=0D
+table.plugin_calendar td.blank {=0D
+  border:none;=0D
+}=0D
+=0D
+table.plugin_calendar td.day:hover,=0D
+table.plugin_calendar td.today:hover {=0D
+  background: #f5f5f5;=0D
+}=0D
+=0D
+table.plugin_calendar div.noevent,=0D
+table.plugin_calendar div.isevent {=0D
+  width:7em;=0D
+  height:3em;=0D
+  padding:0.2em;=0D
+  float:right;=0D
+}=0D
+=0D
+table.plugin_calendar td.today div.noevent,=0D
+table.plugin_calendar td.today div.isevent {=0D
+  background:#efccb0;=0D
+}=0D
+=0D
+table.plugin_calendar td.day div.isevent {=0D
+  background:#c5d4aa;=0D
+}=0D
+=0D
+table.plugin_calendar td.day div.noevent {=0D
+}=0D
+=0D
+table.plugin_calendar div.content h1,=0D
+table.plugin_calendar div.content h2,=0D
+table.plugin_calendar div.content h3,=0D
+table.plugin_calendar div.content h4,=0D
+table.plugin_calendar div.content h5,=0D
+table.plugin_calendar div.content h6 {=0D
+  font-size:1.1em;=0D
+  font-weight:bold;=0D
+  padding:0;=0D
+  margin:0;=0D
+}=0D
+=0D
+table.plugin_calendar div.day_num {=0D
+  text-align:right;=0D
+  font-weight:bold;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_next_month,=0D
+table.plugin_calendar input.btn_prev_month, =0D
+table.plugin_calendar input.btn_add_day,=0D
+table.plugin_calendar input.btn_edit_day,=0D
+table.plugin_calendar input.btn_view_day {=0D
+  width:16px;=0D
+  height:16px;=0D
+  text-decoration:none;=0D
+  border:none;=0D
+  cursor:pointer;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_next_month {=0D
+  background:url(/ferme/sympa/lib/plugins/calendar/images/next_month.png) n=
+o-repeat;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_prev_month {=0D
+  background:url(/ferme/sympa/lib/plugins/calendar/images/prev_month.png) n=
+o-repeat;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_add_day {=0D
+  background:url(/ferme/sympa/lib/plugins/calendar/images/add_day.png) no-r=
+epeat;=0D
+  float:right;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_edit_day { =0D
+  background:url(/ferme/sympa/lib/plugins/calendar/images/edit_day.png) no-=
+repeat;=0D
+  float:right;=0D
+}=0D
+=0D
+table.plugin_calendar input.btn_view_day {=0D
+  background:url(/ferme/sympa/lib/plugins/calendar/images/view_day.png) no-=
+repeat;=0D
+  float:right;=0D
+}=0D
+=0D
+=0D
+/* plugin: definitionlist */=0D
+dl, dt, dd {margin: 0; padding: 0}=0D
+=0D
+dl {=0D
+  font-size: 90%;=0D
+  padding-top: 1px;=0D
+}=0D
+=0D
+html>body dl {=0D
+  padding-bottom: 0.5em;=0D
+  border-bottom: 1px dashed #e0e0e0;=0D
+}=0D
+=0D
+dl:after {=0D
+  content: '.';=0D
+  display: block;=0D
+  clear: both;=0D
+  height: 0;=0D
+  visibility: hidden;=0D
+}=0D
+=0D
+dt {=0D
+  clear: left;=0D
+  margin-top: 0.5em;=0D
+}=0D
+=0D
+dt+dt {=0D
+  margin-top: 0;=0D
+}=0D
+=0D
+dd+dt {=0D
+  border-top: 1px dashed #e0e0e0;=0D
+  padding-top: 0.5em;=0D
+}=0D
+=0D
+dt span.term {=0D
+  float: left;=0D
+  width: 10em;=0D
+}=0D
+=0D
+dd {=0D
+  margin-left: 10.3em;=0D
+  padding-left: 0.8em;=0D
+  background: url(/ferme/sympa/lib/plugins/definitionlist/images/bullet.gif=
+) no-repeat 0 0.4em;=0D
+}=0D
+ =0D
+dd p {=0D
+  margin: 0;=0D
+  padding: 0;=0D
+}=0D
+=0D
+* html dl { height: 1px; }=0D
+=0D
+/* reset above style to prevent messing up plugin manager */=0D
+#plugin_manager dd { background-image: none;}=0D
+/* end plugin: definitionlist */=0D
+=0D
+=0D
+div.dokuwiki div.include {=0D
+  font-size: 95%;=0D
+  padding: 0.5em;=0D
+  margin-top: 1em;=0D
+  margin-bottom: 0.2em;=0D
+  border: 1px solid #eef3f8;=0D
+}=0D
+=0D
+div.dokuwiki div.include div.secedit {=0D
+  height: 16px;=0D
+}=0D
+=0D
+div.dokuwiki div.blogmeta {=0D
+  color: #666;=0D
+  font-size: 80%;=0D
+  line-height: 1.25;=0D
+  margin-bottom: 2em;=0D
+}=0D
+=0D
+div.dokuwiki div.blog_tags {=0D
+  padding-top: 0.5em;=0D
+  border-top: 2px dotted #eef3f8;=0D
+  font-size: 95%;=0D
+  text-align: right;=0D
+  clear: both;=0D
+}=0D
+=0D
+div.dokuwiki div.blogmeta div.blog_tags {=0D
+  padding-top: 0;=0D
+  border-top: 0;=0D
+  font-size: 100%;=0D
+  float: right;=0D
+}=0D
+=0D
+div.dokuwiki table.archive {=0D
+  border: 0;=0D
+  padding: 0;=0D
+  border-spacing: 0px;=0D
+  border-collapse: collapse;=0D
+}=0D
+=0D
+div.dokuwiki table.archive td {=0D
+  padding: 1px 2em 1px 0;=0D
+  border-bottom: 1px solid #eef3f8;=0D
+}=0D
+=0D
+div.dokuwiki table.archive td.date, div.dokuwiki table.archive td.user {=0D
+  color: #666;=0D
+  font-size: 80%;=0D
+}=0D
+=0D
+div.dokuwiki #blog__comment_form { clear: both; }=0D
+div.dokuwiki #blog__comment_form label input.edit { width: 61%; }=0D
+div.dokuwiki #blog__newentry_form label input.edit { width: 61%; }=0D
+=0D
+div.dokuwiki a.feed {=0D
+  background: transparent url(/ferme/sympa/lib/plugins/blog/images/rss_icon=
+.png) 0px 1px no-repeat;=0D
+  padding: 1px 0px 1px 16px;=0D
+  color: #c60;=0D
+=0D
+  text-decoration: none;=0D
+}=0D
+=0D
+div.dokuwiki a.feed:hover {=0D
+  color: #c60;=0D
+  text-decoration: underline;=0D
+}acronym.term {=0D
+  border-bottom: 1px dashed;=0D
+}=0D
+=0D
+.folder {=0D
+    padding-left: 2px;=0D
+    padding-right: 2px;=0D
+}=0D
+=0D
+.folder img {=0D
+  cursor: pointer;=0D
+}=0D
+=0D
+div.folded {=0D
+    display: block;=0D
+    padding: 0.4em;=0D
+    border: 1px dotted #dee7ec;=0D
+}=0D
+=0D
+span.folded {=0D
+    border: 1px dotted #dee7ec;=0D
+}=0D
+=0D
+div.dokuwiki table.inline td.okay {=0D
+  background-color: #afa;=0D
+  text-align: center;=0D
+}=0D
+=0D
+div.dokuwiki table.inline td.notokay {=0D
+  background-color: #fcc;=0D
+  text-align: center;=0D
+}=0D
+div.dokuwiki table.blind {=0D
+  border: 0;=0D
+}=0D
+=0D
+div.dokuwiki table.blind td {=0D
+  padding: 1px 1em 1px 0;=0D
+}=0D
+=0D
+div.dokuwiki div.poll_bar {=0D
+  border: 1px solid #8cacbb;=0D
+  padding: 0;=0D
+  height: 12px;=0D
+  width: 200px;=0D
+}=0D
+=0D
+div.dokuwiki div.poll_full {=0D
+  background-color: #eef3f8;=0D
+  font-size: 10px;=0D
+  height: 12px;=0D
+  border-right: 1px solid #8cacbb;=0D
+}=0D
+=0D
+div.dokuwiki fieldset.poll {=0D
+  width: 90%;=0D
+  margin-bottom: 1.5em;=0D
+}=0D
+=0D
+=0D
+/**=0D
+ * Tableless Layout for cru template=0D
+ *=0D
+ * @author Andreas Gohr <andi@splitbrain.org>=0D
+ * @author moraes <moraes@tipos.com.br>=0D
+ */=0D
+=0D
+/* -------------- top row --------------- */=0D
+div.dokuwiki .header {=0D
+  padding: 3px 0 0 2px;=0D
+  height: 5em;=0D
+  border: 1px solid #007e50;=0D
+  border-width: 0 1px 1px 0;=0D
+  background: url(/ferme/sympa/lib/tpl/sympa/images/head.png) repeat ;=0D
+  margin-bottom: 1em;  =0D
+  -moz-border-radius:15px ;=0D
+  -webkit-border-radius:15px;=0D
+  -KHTML-border-radius:15px;=0D
+  -icab-border-radius:15px;=0D
+  border-radius:15px;=0D
+}=0D
+=0D
+div.dokuwiki .pagename {=0D
+  float: left;=0D
+  font-size: 130%;=0D
+  font-weight: bolder;=0D
+  color: #f5f5f5;=0D
+  text-align: left;=0D
+  vertical-align: middle;=0D
+  padding: 0em 0 0 1.5em;=0D
+  margin: -1em 0 0 0;=0D
+}=0D
+=0D
+div.dokuwiki .pagename a {=0D
+  color: #f8f8f8 !important;=0D
+  text-decoration: none !important;=0D
+}=0D
+=0D
+div.dokuwiki .logo, .logo a, .logo a:visited {=0D
+  font-size: 120%;=0D
+  font-weight: bolder;=0D
+  text-align: center;=0D
+  vertical-align: middle;=0D
+  padding: 0.8em 0 0 0 ;=0D
+  margin: 0 0 0 -2em;      =0D
+  text-decoration: none !important;=0D
+  font-variant: normal;=0D
+  letter-spacing: 2pt;=0D
+  color: #f8f8f8 !important;  =0D
+}=0D
+=0D
+div.dokuwiki .logo .legende, .logo .legende a {=0D
+  font-size: 90%;=0D
+  font-weight: bolder;=0D
+  text-align: center;      =0D
+  text-decoration: none !important;=0D
+  font-variant: normal;=0D
+  letter-spacing: 2pt;=0D
+  color: #000!important;  =0D
+}=0D
+=0D
+div.dokuwiki .logo .legende a:hover {=0D
+  color: #ff1b1b!important;  =0D
+}=0D
+=0D
+=0D
+div.dokuwiki .contacts {=0D
+  float: right;=0D
+  color:#fff;=0D
+  font-family:Arial, Helvetica, sans-serif;=0D
+  font-size: 0.9em;=0D
+  text-align: center;=0D
+  margin: -0.1em 0.6em 0.1em 0 ;=0D
+  padding:0 0.2em 0.1em 0.2em;=0D
+}=0D
+div.dokuwiki .contacts a {=0D
+  font-weight: bolder;=0D
+  color: #fff!important;=0D
+  text-decoration:underline;=0D
+}=0D
+div.dokuwiki .contacts a:hover {=0D
+  font-weight: bolder;=0D
+  color:#DB0016!important;=0D
+  text-decoration:none;=0D
+}=0D
+div.dokuwiki .contacts a:visited {=0D
+  color:#fff;=0D
+}=0D
+=0D
+div.dokuwiki div.breadcrumbs {=0D
+  background: none;=0D
+  color: #666;=0D
+  font-size: 80%;=0D
+  padding: 0 0.5em 0.4em 0;=0D
+  margin:-0.6em 0 0 0 ;=0D
+  display:inline;=0D
+}=0D
+=0D
+=0D
+div.dokuwiki .actionlinks {=0D
+  background: none;=0D
+  width:100%;=0D
+  color: #333!important;=0D
+  margin: -0.4em 0 0 0 ;=0D
+  padding:0 0 0 0 ;=0D
+  z-index:100;=0D
+  text-align: right!important;=0D
+}=0D
+=0D
+/* div.dokuwiki .actionlinks ul{ margin:0; padding:0; font: 0.9em Arial, He=
+lvetica, sans-serif; }=0D
+div.dokuwiki .actionlinks li{display:inline; margin:0; padding:0; line-heig=
+ht:0;} */=0D
+=0D
+div.dokuwiki div.actionlinks a, a:visited{ =0D
+ color: #ff1b1b /*#c37439*/ !important;=0D
+}=0D
+=0D
+/* ---------------  top and bottom bar ---------------- */=0D
+div.dokuwiki .bar {=0D
+  border-top: none;=0D
+  border-bottom: 1px solid #333;=0D
+  clear: both;=0D
+  padding: 2px;=0D
+  height: 2.3em;  =0D
+=0D
+}=0D
+=0D
+div.dokuwiki .bar-left {=0D
+  float: left;=0D
+=0D
+}=0D
+=0D
+/* \*/=0D
+* html .bar-right { height: 0; }=0D
+/* */=0D
+div.dokuwiki .bar-right {=0D
+  float: right;=0D
+  text-align: right;=0D
+}=0D
+=0D
+div.dokuwiki #bar__top1 {=0D
+  background: none;=0D
+}=0D
+=0D
+div.dokuwiki #bar__top2 {=0D
+  background: none;=0D
+}=0D
+=0D
+div.dokuwiki #bar__bottom {=0D
+  margin-bottom:3px;=0D
+  background: none;=0D
+}=0D
+=0D
+div.dokuwiki #bar__bottom a, #bar__bottom a:visited, #bar__bottom a:hover{=
+=0D
+  color: #ff1b1b!important;=0D
+}=0D
+=0D
+=0D
+div.dokuwiki .bar_search {=0D
+  border-top: none;=0D
+  border-bottom: 1px solid #ff1b1b;=0D
+  clear: both;  =0D
+  padding: 0.2em;=0D
+  height: 2em;=0D
+}=0D
+=0D
+/* ------------- File Metadata ----------------------- */=0D
+div.dokuwiki div.meta {=0D
+  clear: both;=0D
+  margin-top: 1em;=0D
+  color: #638c9c;=0D
+  font-size: 70%;=0D
+  padding-left: 0.5em;=0D
+  padding-right: 0.5em;  =0D
+}=0D
+=0D
+div.dokuwiki div.meta div.user {=0D
+  float: left;=0D
+}=0D
+=0D
+div.dokuwiki div.meta div.doc {=0D
+  text-align: right;=0D
+}=0D
+=0D
+=0D
+=0D
+/* -------------- general elements --------------- */=0D
+=0D
+* { padding: 0; margin: 0; }=0D
+=0D
+body {=0D
+  font: 0.8125em "Trebuchet MS", Myriad, "Gill Sans", "Century Gothic",  "B=
+itstream Vera Sans", verdana, lucida, arial, helvetica, sans-serif; /*Verda=
+na, "Lucida Grande", Lucida, Helvetica, Arial, sans-serif;*/=0D
+  color: #333;=0D
+  margin: 1.5em 1em 1em 1em;=0D
+  line-height: 150%;=0D
+  /*background: url(/lib/tpl/sympa/images/fond.png) repeat ;*/=0D
+  background: #80bfa8 url(/lib/tpl/sympa/images/fond.png) 0 0 repeat-x;=0D
+}=0D
+=0D
+div#wrapper {=0D
+  margin: auto;=0D
+  width: 99%;=0D
+  border: 1px solid #007e50;=0D
+  background: #fff;=0D
+  padding: 0.5em;=0D
+  -moz-border-radius:15px;=0D
+  -webkit-border-radius:15px;=0D
+  -KHTML-border-radius:15px;=0D
+  -icab-border-radius:15px;=0D
+  border-radius:15px;=0D
+}=0D
+=0D
+div.dokuwiki div.missing {=0D
+  text-align: center!important;=0D
+  padding-top: 0.5em;=0D
+  font-size:110%;=0D
+  font-weight:bold;=0D
+}=0D
+div.dokuwiki div.missing h1 {  color: #333 /*759EB7*/; font-size:120%; font=
+-weight:normal; border-bottom: 1px solid #F57A00; border-top: 1px solid #F5=
+7A00; padding: 0.3em 0 0.3em 0; margin: 0.5em 0 1em 0; }=0D
+=0D
+div.dokuwiki div.left_sidebar {=0D
+  float: left;=0D
+  width: 25%;=0D
+  padding-top: 1.5em;=0D
+  padding-right: 0.5em;=0D
+/*  border-right: 1px solid  #ccc;*/=0D
+=0D
+}=0D
+=0D
+div.dokuwiki div.right_sidebar {=0D
+  float: right;=0D
+  width: 40%;=0D
+  padding-top: 2.5em;=0D
+  padding-left: 0;=0D
+  margin:0;=0D
+}=0D
+=0D
+div.dokuwiki div.page {=0D
+  text-align: justify;=0D
+  padding-top: 0.5em;=0D
+}=0D
+=0D
+div.dokuwiki div.right_page {=0D
+  text-align: justify;=0D
+  float: left;=0D
+  width: 70%;=0D
+  padding: 0 2% 2% 2%;=0D
+  margin-top:1em;=0D
+}=0D
+=0D
+div.dokuwiki div.left_page {=0D
+  text-align: justify;=0D
+  float: left;=0D
+  width: 60%;=0D
+  padding: 1em 0 0 0;=0D
+=0D
+}=0D
+=0D
+div.footerinc {=0D
+  border: 1px solid #007e50;=0D
+  border-width: 0 1px 1px 0;=0D
+  background: url(/ferme/sympa/lib/tpl/sympa/images/footer.png) repeat ;=0D
+  margin-top:1em;=0D
+  height: 5em;=0D
+  text-align: center;=0D
+  color:#333;=0D
+  font-family:serif !important;=0D
+  font-variant:small-caps !important;=0D
+  font-weight:bold;=0D
+  font-size:0.8em;=0D
+  padding:0.5em 0;=0D
+  -moz-border-radius:15px ;=0D
+  -webkit-border-radius:15px;=0D
+  -KHTML-border-radius:15px;=0D
+  -icab-border-radius:15px;=0D
+  border-radius:15px;=0D
+}=0D
+=0D
+div.footerinc a {=0D
+color:#fff!important;=0D
+text-decoration:none;=0D
+}=0D
+=0D
+div.footerinc a:hover {=0D
+  font-weight: bolder;=0D
+  color:#DB0016!important;=0D
+}=0D
+=0D
+div.footerinc a.cru {=0D
+color:#DB0016!important;=0D
+text-decoration:none;=0D
+}=0D
+=0D
+div.footerinc a.cru:hover {=0D
+  font-weight: bolder;=0D
+  color:#fff!important;=0D
+}=0D
+=0D
+div.footerinc a:visited {=0D
+  color:#fff;=0D
+}=0D
+=0D
+div.footerinc p {=0D
+margin-top:1em!important;=0D
+}=0D
+=0D
+div.footerinc a.otherlink {=0D
+  font-size:0.9em;=0D
+}=0D
+=0D
+=0D
+=0D
+/* -------------- the sidebar --------------- */=0D
+=0D
+div.dokuwiki div.left_sidebar div.secedit,=0D
+div.dokuwiki div.right_sidebar div.secedit {=0D
+    text-align: right;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar div.breadcrumbs,=0D
+div.dokuwiki div.right_sidebar div.breadcrumbs {=0D
+    margin-left: 0;=0D
+}=0D
+=0D
+=0D
+div.dokuwiki div.left_sidebar div.secedit input.button,=0D
+div.dokuwiki div.right_sidebar div.secedit input.button {=0D
+    float: none;=0D
+    margin: 0.1em;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar h1,=0D
+div.dokuwiki div.left_sidebar h2,=0D
+div.dokuwiki div.left_sidebar h3,=0D
+div.dokuwiki div.left_sidebar h4,=0D
+div.dokuwiki div.left_sidebar h5,=0D
+div.dokuwiki div.left_sidebar h6,=0D
+div.dokuwiki div.right_sidebar h1,=0D
+div.dokuwiki div.right_sidebar h2,=0D
+div.dokuwiki div.right_sidebar h3,=0D
+div.dokuwiki div.right_sidebar h4,=0D
+div.dokuwiki div.right_sidebar h5,=0D
+div.dokuwiki div.right_sidebar h6 =0D
+{=0D
+  font-size: 100%;=0D
+  font-family: Myriad, "Gill Sans", "Century Gothic", "Trebuchet MS", "Bits=
+tream Vera Sans", verdana, lucida, arial, helvetica, sans-serif;=0D
+  font-weight: bold;=0D
+  padding: 0.1em;=0D
+  border: none;=0D
+  margin-bottom: 0.2em;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar h1,=0D
+div.dokuwiki div.right_sidebar h1=0D
+{=0D
+  background: #dee7ec;=0D
+  padding-left: 0.2em;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar ul,=0D
+div.dokuwiki div.right_sidebar ul =0D
+{=0D
+	margin-top: 0;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar div.i_sidebar,=0D
+div.dokuwiki div.left_sidebar div.m_sidebar,=0D
+div.dokuwiki div.left_sidebar div.u_sidebar,=0D
+div.dokuwiki div.left_sidebar div.g_sidebar,=0D
+div.dokuwiki div.left_sidebar div.ns_sidebar,=0D
+div.dokuwiki div.left_sidebar div.bc_sidebar,=0D
+div.dokuwiki div.right_sidebar div.i_sidebar,=0D
+div.dokuwiki div.right_sidebar div.m_sidebar,=0D
+div.dokuwiki div.right_sidebar div.u_sidebar,=0D
+div.dokuwiki div.right_sidebar div.g_sidebar,=0D
+div.dokuwiki div.right_sidebar div.ns_sidebar,=0D
+div.dokuwiki div.right_sidebar div.bc_sidebar=0D
+{=0D
+  margin-bottom: 0.2em;=0D
+  padding: 0;=0D
+}=0D
+div.dokuwiki div.ns_sidebar {=0D
+=0D
+}=0D
+/* div.dokuwiki div.ns_sidebar h1, div.ns_sidebar h2{color:#333; margin:0; =
+background:none; text-align:center!important; margin: 0 0 0.5em 0; padding:=
+ 1em!important;}=0D
+div.dokuwiki div.ns_sidebar h1 a, div.ns_sidebar h2 a{color:#333; font-weig=
+ht: bolder!important;}=0D
+=0D
+div.ns_sidebar ul{=0D
+margin:0.2em 0 0 0.5em!important;=0D
+padding: 0 0.2em 0 0.2em!important;=0D
+list-style: none;=0D
+text-align:left;=0D
+}=0D
+=0D
+div.ns_sidebar li{=0D
+margin:0.2em 0 0 0!important;=0D
+list-style: none;=0D
+line-height: 2em;=0D
+padding: 0!important;=0D
+font-size:90%;=0D
+}=0D
+=0D
+div.ns_sidebar li a{color: #ff3333; font-weight:bold; display: block;}=0D
+div.ns_sidebar li a:hover, div.ns_sidebar li a.wikilink1:hover{color: #ffff=
+ff!important; font-weight:bold; background:#DB0016!important; text-decorati=
+on:none; opacity: 0.7}=0D
+div.ns_sidebar li a:focus {background: #DB0016;color: #fff!important;}=0D
+=0D
+div.ns_sidebar a.urlextern {=0D
+  background: none!important;=0D
+  padding: 0!important;=0D
+} */ =0D
+=0D
+/* -------------- Fin sidebar --------------- */=0D
+=0D
+=0D
+/* the document */=0D
+div.dokuwiki div.page {=0D
+  margin: 4px 2em 0 1em;=0D
+  text-align: justify;=0D
+}=0D
+=0D
+div.search{=0D
+border-bottom: 1px solid #ccc;=0D
+text-align:right;=0D
+}=0D
+=0D
+div.dokuwiki table {=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+div.dokuwiki tr,=0D
+div.dokuwiki td,=0D
+div.dokuwiki th {=0D
+}=0D
+=0D
+div.dokuwiki img {=0D
+  border: 0;=0D
+}=0D
+=0D
+div.dokuwiki p,=0D
+div.dokuwiki blockquote,=0D
+div.dokuwiki table,=0D
+div.dokuwiki pre {=0D
+  margin: 0 0 0.8em 0;=0D
+}=0D
+=0D
+div.dokuwiki hr {=0D
+  border: 0px;=0D
+  border-top: 1px solid #ccc;=0D
+  text-align: center;=0D
+  height: 0px;=0D
+}=0D
+=0D
+div.dokuwiki div.nothing {=0D
+  text-align: center;=0D
+  margin: 2em;=0D
+}=0D
+=0D
+=0D
+/* ------------- Page elements ----------------- */=0D
+=0D
+div.dokuwiki div.preview {=0D
+  background-color: #f5f5f5;=0D
+  margin: 0 0 0 2em;=0D
+  padding: 4px;=0D
+  border: 1px dashed #333;=0D
+}=0D
+=0D
+div.dokuwiki div.breadcrumbs {=0D
+  background: none;=0D
+  color: #666;=0D
+  font-size: 80%;=0D
+  padding: 0 0.5em 0 0;=0D
+  margin:-0.1em 0 0 0 ;=0D
+  =0D
+}=0D
+=0D
+div.dokuwiki div.breadcrumbs a, a:visited{ =0D
+ color: #ff1b1b /*#c37439*/ !important;=0D
+}=0D
+=0D
+div.dokuwiki span.user {=0D
+  color: #ccc;=0D
+  font-size: 90%;=0D
+}=0D
+=0D
+div.dokuwiki li.minor {=0D
+  color: #666;=0D
+  font-style: italic;=0D
+}=0D
+=0D
+/* embedded images */=0D
+div.dokuwiki img.media {=0D
+  margin: 3px;=0D
+}=0D
+=0D
+div.dokuwiki img.medialeft {=0D
+  border: 0;=0D
+  float: left;=0D
+  margin: 0 1.5em 0 0;=0D
+}=0D
+=0D
+div.dokuwiki img.mediaright {=0D
+  border: 0;=0D
+  float: right;=0D
+  margin: 0 0 0 1.5em;=0D
+}=0D
+=0D
+div.dokuwiki img.mediacenter {=0D
+  border: 0;=0D
+  display: block;=0D
+  margin: 0 auto;=0D
+}=0D
+=0D
+/* smileys */=0D
+div.dokuwiki img.middle {=0D
+  vertical-align: middle;=0D
+}=0D
+=0D
+div.dokuwiki acronym {=0D
+  cursor: help;=0D
+  border-bottom: 1px dotted #333;=0D
+}=0D
+=0D
+/* general headline setup */=0D
+div.dokuwiki h1,=0D
+div.dokuwiki h2,=0D
+div.dokuwiki h3,=0D
+div.dokuwiki h4,=0D
+div.dokuwiki h5 {=0D
+    background-color: inherit;=0D
+    font-size: 100%;=0D
+    font-weight: normal;=0D
+    margin: 0 0 1em 0;=0D
+    padding: 1em 0 0.1em 0;=0D
+   /*border-bottom: 1px solid #ccc;*/ =0D
+    clear: left;=0D
+}=0D
+=0D
+div.dokuwiki h1{border-bottom: 1px solid #ff1b1b; }=0D
+div.dokuwiki h2{border-bottom: 1px solid #333;}=0D
+=0D
+/* special headlines */=0D
+div.dokuwiki h1 {font-size: 150%; margin-left: 0px; font-weight: bold;}=0D
+div.dokuwiki h2 {font-size: 140%; margin-left: 20px;}=0D
+div.dokuwiki h3 {font-size: 130%; margin-left: 40px; border-bottom: none; f=
+ont-weight: lighter;}=0D
+div.dokuwiki h4 {font-size: 110%; margin-left: 60px; border-bottom: none; f=
+ont-weight: bold;}=0D
+div.dokuwiki h5 {font-size: 100%; margin-left: 80px; border-bottom: none; f=
+ont-weight: bold;}=0D
+=0D
+=0D
+/* indent different sections */=0D
+div.dokuwiki div.level1 {margin-left: 3px;}=0D
+div.dokuwiki div.level2 {margin-left: 23px;}=0D
+div.dokuwiki div.level3 {margin-left: 43px;}=0D
+div.dokuwiki div.level4 {margin-left: 63px;}=0D
+div.dokuwiki div.level5 {margin-left: 83px;}=0D
+=0D
+/* unordered lists */=0D
+div.dokuwiki ul {=0D
+  line-height: 1.5em;=0D
+  list-style-type: square;=0D
+  list-style-image: none;=0D
+  margin: 0 0 0.5em 1.5em;=0D
+  color: #638c9c;=0D
+}=0D
+=0D
+/* ordered lists */=0D
+div.dokuwiki ol {=0D
+  line-height: 1.5em;=0D
+  list-style-image: none;=0D
+  margin: 0 0 0.5em 1.5em;=0D
+  color: #638c9c;=0D
+  font-weight: bold;=0D
+}=0D
+=0D
+/* the list items overriding the ul/ol definition */=0D
+div.dokuwiki .li {=0D
+  color: #333;=0D
+  font-weight: normal;=0D
+}=0D
+=0D
+div.dokuwiki ol {list-style-type: decimal}=0D
+div.dokuwiki ol ol {list-style-type: upper-roman}=0D
+div.dokuwiki ol ol ol {list-style-type: lower-alpha}=0D
+div.dokuwiki ol ol ol ol {list-style-type: lower-greek}=0D
+=0D
+div.dokuwiki li.open {=0D
+  list-style-image: url(/ferme/sympa/lib/tpl/sympa/sympa/images/open.gif);=
+=0D
+    /*list-style-type: circle;*/=0D
+}=0D
+=0D
+div.dokuwiki li.closed {=0D
+  list-style-image: url(/ferme/sympa/lib/tpl/sympa/sympa/images/closed.gif)=
+;=0D
+    /*list-style-type: disc;*/=0D
+}=0D
+=0D
+div.dokuwiki blockquote {=0D
+  border-left: 2px solid #ccc;=0D
+  padding-left: 3px;=0D
+}=0D
+=0D
+div.dokuwiki pre {=0D
+  font-size: 120%;=0D
+  padding: 0.5em;=0D
+  border: 1px dashed #ccc;=0D
+  color: #333;=0D
+  overflow: auto;=0D
+}=0D
+=0D
+/* code blocks by indention */=0D
+div.dokuwiki pre.pre {=0D
+  background-color: #f7f9fa;=0D
+}=0D
+=0D
+/* code blocks by code tag */=0D
+div.dokuwiki pre.code {=0D
+  background-color: #f7f9fa;=0D
+}=0D
+=0D
+/* inline code words */=0D
+div.dokuwiki code {=0D
+  font-size: 120%;=0D
+}=0D
+=0D
+/* code blocks by file tag */=0D
+div.dokuwiki pre.file {=0D
+  background-color: #dee7ec;=0D
+}=0D
+=0D
+/* inline tables */=0D
+div.dokuwiki table.inline {=0D
+  background-color: #fff;=0D
+  border-spacing: 1px;=0D
+  border-collapse: collapse;=0D
+}=0D
+=0D
+div.dokuwiki table.inline th {=0D
+  padding: 3px 5px;=0D
+  border: 3px double #dee7ec;=0D
+  background-color: #4D4D4D;=0D
+  color:#fff;=0D
+  text-align:center;=0D
+}=0D
+=0D
+div.dokuwiki table.inline td {=0D
+  padding: 3px 5px;=0D
+  border: 3px double #dee7ec;=0D
+}=0D
+=0D
+=0D
+=0D
+=0D
+=0D
+=0D
+=0D
+/* ---------------- forms ------------------------ */=0D
+div.dokuwiki form {=0D
+  border: none;=0D
+  display: inline;=0D
+}=0D
+=0D
+div.dokuwiki label.block {=0D
+  display: block;=0D
+  text-align: right;=0D
+  font-weight: bold;=0D
+}=0D
+=0D
+div.dokuwiki label.simple {=0D
+  display: block;=0D
+  text-align: left;=0D
+  font-weight: normal;=0D
+}=0D
+=0D
+div.dokuwiki label.block input.edit {=0D
+  width: 50%;=0D
+}=0D
+div.dokuwiki fieldset {=0D
+  width: 300px;=0D
+  text-align: center;=0D
+  border: 1px solid #c3c3c3;=0D
+  padding: 0.5em;=0D
+  margin: auto;=0D
+}=0D
+=0D
+div.dokuwiki textarea.edit {=0D
+  font-family: monospace;=0D
+  font-size: 14px;=0D
+  color: #333;=0D
+  background-color: #fff;=0D
+  border: 1px solid #c3c3c3;=0D
+  padding: 0.3em 0 0 0.3em;=0D
+  width: 100%;=0D
+}=0D
+=0D
+/* nice alphatransparency background except for IE <7 */=0D
+html>body div.dokuwiki textarea.edit {=0D
+  background:  #fff url(/ferme/sympa/lib/tpl/sympa/sympa/images/inputshadow=
+.png) repeat-x top;=0D
+}=0D
+=0D
+div.dokuwiki input.edit,=0D
+div.dokuwiki select.edit {=0D
+  font-size: 100%;=0D
+  border: 1px solid #c3c3c3;=0D
+  color: #333;=0D
+  background-color: #fff;=0D
+  vertical-align: middle;=0D
+  margin: 1px;=0D
+  padding: 0.20em 0.3em;=0D
+  display: inline;=0D
+}=0D
+=0D
+/* nice alphatransparency background except for IE <7 */=0D
+html>body div.dokuwiki input.edit,=0D
+html>body div.dokuwiki select.edit {=0D
+  background:  #fff url(/ferme/sympa/lib/tpl/sympa/sympa/images/inputshadow=
+.png) repeat-x top;=0D
+}=0D
+=0D
+div.dokuwiki select.edit {=0D
+  padding: 0.1em 0;=0D
+}=0D
+=0D
+div.dokuwiki input.missing {=0D
+  font-size: 100%;=0D
+  border: 1px solid #c3c3c3;=0D
+  color: #333;=0D
+  background-color: #ffcccc;=0D
+  vertical-align: middle;=0D
+  margin: 1px;=0D
+  padding: 0.20em 0.3em;=0D
+  display: inline;=0D
+}=0D
+=0D
+/* disabled style - not understood by IE */=0D
+div.dokuwiki textarea.edit[disabled],=0D
+div.dokuwiki textarea.edit[readonly],=0D
+div.dokuwiki input.edit[disabled],=0D
+div.dokuwiki input.edit[readonly],=0D
+div.dokuwiki select.edit[disabled] {=0D
+  background-color: #f5f5f5!important;=0D
+  color: #666!important;=0D
+}=0D
+=0D
+=0D
+div.dokuwiki div.left_sidebar form#dw__search,=0D
+div.dokuwiki div.right_sidebar form#dw__search {=0D
+  margin-bottom: 0.2em;=0D
+  display: block;=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+div.dokuwiki div.left_sidebar form#dw__search input.edit,=0D
+div.dokuwiki div.right_sidebar form#dw__search input.edit {=0D
+  margin-left: 0;=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+=0D
+/* edit form */=0D
+div.dokuwiki div.toolbar,=0D
+div.dokuwiki div#wiki__editbar {=0D
+   margin: 2px 0;=0D
+   text-align: left;=0D
+}=0D
+div.dokuwiki div#size__ctl {=0D
+   float: right;=0D
+   width: 60px;=0D
+   height: 2.7em;=0D
+}=0D
+div.dokuwiki #size__ctl img {=0D
+   cursor: pointer;=0D
+}=0D
+div.dokuwiki div#wiki__editbar div.editButtons {=0D
+   float: left;=0D
+   padding: 0 1.0em 0.7em 0;=0D
+}=0D
+div.dokuwiki div#wiki__editbar div.summary {=0D
+   float: left;=0D
+}=0D
+div.dokuwiki .nowrap {=0D
+   white-space: nowrap;=0D
+}=0D
+div.dokuwiki div#draft__status {=0D
+  float: right;=0D
+  color: #638c9c;=0D
+}=0D
+=0D
+=0D
+/* --------- buttons ------------------- */=0D
+=0D
+=0D
+div.dokuwiki input.button,=0D
+div.dokuwiki button.button {=0D
+  border: 1px solid #ccc;=0D
+  color: #333;=0D
+  background-color: #fff;=0D
+  vertical-align: middle;=0D
+  text-decoration: none;=0D
+  font-size: 100%;=0D
+  cursor: pointer;=0D
+  margin: 1px;=0D
+  padding: 0.125em 0.4em;=0D
+}=0D
+=0D
+/* nice alphatransparency background except for IE <7 */=0D
+html>body div.dokuwiki input.button,=0D
+html>body div.dokuwiki button.button {=0D
+  background:  #fff url(/ferme/sympa/lib/tpl/sympa/sympa/images/buttonshado=
+w.png) repeat-x bottom;=0D
+}=0D
+=0D
+* html div.dokuwiki input.button,=0D
+* html div.dokuwiki button.button {=0D
+  height: 1.8em;=0D
+}=0D
+=0D
+div.dokuwiki div.secedit input.button {=0D
+  border: 1px solid #ccc;=0D
+  color: #333;=0D
+  background-color: #fff;=0D
+  vertical-align: middle;=0D
+  text-decoration: none;=0D
+  margin: 0;=0D
+  padding: 0;=0D
+  font-size: 10px;=0D
+  cursor: pointer;=0D
+  float: right;=0D
+  display: inline;=0D
+}=0D
+=0D
+/* ----------- page navigator ------------- */=0D
+=0D
+div.dokuwiki div.pagenav {=0D
+    margin: 1em 0 0 0;=0D
+}=0D
+=0D
+div.dokuwiki div.pagenav-prev {=0D
+    text-align: right;=0D
+    float: left;=0D
+    width: 49%=0D
+}=0D
+=0D
+div.dokuwiki div.pagenav-next {=0D
+    text-align: left;=0D
+    float: right;=0D
+    width: 49%=0D
+}=0D
+=0D
+/* --------------- Links ------------------ */=0D
+div.dokuwiki a.action {=0D
+  color: #ff1b1b;=0D
+}=0D
+=0D
+div.dokuwiki .bar a.action {=0D
+  margin-left: 0.3em;=0D
+  margin-right: 0.3em;=0D
+  height: 24px;=0D
+  padding-top: 3px;=0D
+ /* float: left; */=0D
+}=0D
+=0D
+div.dokuwiki a:link,=0D
+div.dokuwiki a:visited {=0D
+  color: #ff1b1b;=0D
+  text-decoration: none;=0D
+}=0D
+div.dokuwiki a:hover,=0D
+div.dokuwiki a:active {=0D
+  color: #007e50;=0D
+  text-decoration: underline;=0D
+}=0D
+=0D
+div.dokuwiki h1 a {=0D
+  display: block;=0D
+}=0D
+=0D
+/* general headline setup */=0D
+div.dokuwiki h1 a{  color: #007e50 /*#333*/ ; font-weight:normal} =0D
+div.dokuwiki h1 a:hover {text-decoration:none;}=0D
+=0D
+div.dokuwiki h2 a,=0D
+div.dokuwiki h3 a,=0D
+div.dokuwiki h4 a,=0D
+div.dokuwiki h5 a,=0D
+div.dokuwiki a.nolink {=0D
+  color: #333 !important;=0D
+  letter-spacing:2px;=0D
+  font-weight: lighter;=0D
+  text-decoration: none !important;=0D
+}=0D
+=0D
+/* external link */=0D
+div.dokuwiki a.urlextern {=0D
+  background: transparent url(/ferme/sympa/lib/tpl/sympa/sympa/images/link_=
+icon.gif) 0px 1px no-repeat;=0D
+  padding: 1px 0px 1px 16px;=0D
+}=0D
+=0D
+/* windows share */=0D
+div.dokuwiki a.windows {=0D
+    background: transparent url(/ferme/sympa/lib/tpl/sympa/sympa/images/url=
+extern.png) 0px 1px no-repeat;=0D
+  padding: 1px 0px 1px 18px;=0D
+}=0D
+=0D
+=0D
+/* interwiki link (icon are set by dokuwiki) */=0D
+div.dokuwiki a.interwiki {=0D
+}=0D
+=0D
+/* link to some embedded media =0D
+div.dokuwiki a.media {=0D
+}=0D
+=0D
+div.dokuwiki a.urlextern:link,=0D
+div.dokuwiki a.windows:link,=0D
+div.dokuwiki a.interwiki:link {=0D
+  color: #669999; =0D
+}=0D
+=0D
+div.dokuwiki a.urlextern:visited,=0D
+div.dokuwiki a.windows:visited,=0D
+div.dokuwiki a.interwiki:visited {=0D
+  color: #F57A00; =0D
+}=0D
+div.dokuwiki a.urlextern:hover,=0D
+div.dokuwiki a.urlextern:active,=0D
+div.dokuwiki a.windows:hover,=0D
+div.dokuwiki a.windows:active,=0D
+div.dokuwiki a.interwiki:hover,=0D
+div.dokuwiki a.interwiki:active {=0D
+  color: #ff3333;=0D
+}*/=0D
+=0D
+/* email link */=0D
+div.dokuwiki a.mail {=0D
+  background: transparent url(/ferme/sympa/lib/tpl/sympa/sympa/images/mail_=
+icon.gif) 0px 1px no-repeat;=0D
+  padding: 1px 0px 1px 16px;=0D
+}=0D
+=0D
+=0D
+=0D
+/* existing wikipage =0D
+div.dokuwiki a.wikilink1 {=0D
+  color: #669999;=0D
+}=0D
+=0D
+div.dokuwiki a.wikilink1:hover{=0D
+  color: #ff3333!important;=0D
+}*/=0D
+=0D
+=0D
+=0D
+/* not existing wikipage */=0D
+div.dokuwiki a.wikilink2 {=0D
+  color: #F57A00!important;=0D
+}=0D
+=0D
+=0D
+=0D
+/* ---------- table of contents ------------------- */=0D
+=0D
+div.dokuwiki div.toc {=0D
+  margin: 1.2em 0 0 2em;=0D
+  float: right;=0D
+  width: 200px;=0D
+  font-size: 80%;=0D
+  clear: both;=0D
+}=0D
+=0D
+div.dokuwiki div.tocheader {=0D
+  border: 1px solid #ccc;=0D
+  background-color: #ff1b1b;=0D
+  opacity: 0.8;=0D
+  text-align: left;=0D
+  color:#fff;=0D
+  font-weight: bold;=0D
+  letter-spacing: 0.2em;=0D
+  padding: 3px 0 3px 10px;=0D
+  margin-bottom: 2px;=0D
+  -moz-border-radius:10px 10px 0 0 ;=0D
+  -webkit-border-radius:10px 10px 0 0;=0D
+  -KHTML-border-radius:10px 10px 0 0;=0D
+  -icab-border-radius:10px 10px 0 0;=0D
+  border-radius:10px 10px 0 0;=0D
+}=0D
+=0D
+div.dokuwiki div.tocheader img {=0D
+  width: 0.8em;=0D
+  height: 0.8em;=0D
+  float: right;=0D
+  margin: 0.3em 3px 0 0;=0D
+  cursor: pointer;=0D
+}=0D
+=0D
+div.dokuwiki #toc__inside {=0D
+  border: 1px solid #ccc;=0D
+  background: #fff;=0D
+  opacity: 1;=0D
+  text-align: left;=0D
+  padding: 0.5em 0 0.7em 0;=0D
+  -moz-border-radius:0 0 10px 10px;=0D
+  -webkit-border-radius:0 0 10px 10px;=0D
+  -KHTML-border-radius:0 0 10px 10px;=0D
+  -icab-border-radius:0 0 10px 10px;=0D
+  border-radius:0 0 10px 10px;=0D
+}=0D
+=0D
+div.dokuwiki ul.toc {=0D
+  list-style-type: none;=0D
+  list-style-image: none;=0D
+  line-height: 1.2em;=0D
+  padding-left: 1em;=0D
+  margin: 0;=0D
+}=0D
+=0D
+div.dokuwiki ul.toc li {=0D
+  background: transparent url(/ferme/sympa/lib/tpl/sympa/sympa/images/tocdo=
+t2.gif) 0 0.6em no-repeat;=0D
+  padding-left: 0.4em;=0D
+  margin-bottom:0.2em;=0D
+}=0D
+=0D
+div.dokuwiki ul.toc li.clear {=0D
+  background-image: none;=0D
+  padding-left: 0.4em;=0D
+}=0D
+=0D
+div.dokuwiki a.toc:link,=0D
+div.dokuwiki a.toc:visited {=0D
+  color: #007e50 /*#669999*/;=0D
+}=0D
+=0D
+div.dokuwiki a.toc:hover,=0D
+div.dokuwiki a.toc:active {=0D
+  color: #ff1b1b!important; =0D
+}=0D
+=0D
+/* ---------------------------- Diff rendering --------------------------*/=
+=0D
+div.dokuwiki table.diff {=0D
+  background-color: #fff;=0D
+  width: 100%;=0D
+}=0D
+div.dokuwiki td.diff-blockheader {=0D
+  font-weight: bold;=0D
+}=0D
+div.dokuwiki table.diff th {=0D
+  border-bottom: 1px solid #ccc;=0D
+  font-size: 120%;=0D
+  width: 50%;=0D
+  font-weight: normal;=0D
+  text-align: left;=0D
+}=0D
+div.dokuwiki table.diff td {=0D
+  font-family: monospace;=0D
+  font-size: 100%;=0D
+}=0D
+div.dokuwiki td.diff-addedline {=0D
+  background-color: #ddffdd;=0D
+}=0D
+div.dokuwiki td.diff-deletedline {=0D
+    background-color: #ffffbb;=0D
+}=0D
+div.dokuwiki td.diff-context {=0D
+    background-color: #f5f5f5;=0D
+}=0D
+div.dokuwiki span.diffchange {=0D
+  color: red;=0D
+}=0D
+=0D
+/* --------------------- footnotes -------------------------------- */=0D
+=0D
+div.dokuwiki div.footnotes {=0D
+  clear: both;=0D
+  border-top: 1px solid #ccc;=0D
+  padding-left: 1em;=0D
+  margin-top: 1em;=0D
+}=0D
+=0D
+div.dokuwiki div.fn {=0D
+  font-size: 90%;=0D
+}=0D
+=0D
+div.dokuwiki a.fn_top {=0D
+  vertical-align: super;=0D
+  font-size: 80%;=0D
+}=0D
+=0D
+div.dokuwiki a.fn_bot {=0D
+  vertical-align: super;=0D
+  font-size: 80%;=0D
+  font-weight: bold;=0D
+}=0D
+=0D
+/* insitu-footnotes */=0D
+div.insitu-footnote {=0D
+  font-size: 80%;=0D
+  line-height: 1.2em;=0D
+  border: 1px solid #ccc;=0D
+  background-color: #f7f9fa;=0D
+  text-align: left;=0D
+  padding: 4px;=0D
+  max-width: 40%;    /* IE's width is handled in javascript */=0D
+}=0D
+=0D
+/* overcome IE issue with one line code or file boxes which require h. scro=
+lling */=0D
+* html .insitu-footnote pre.code,=0D
+* html .insitu-footnote pre.file {=0D
+  padding-bottom: 18px;=0D
+}=0D
+=0D
+/* --------------- search result formating --------------- */=0D
+div.dokuwiki .search_result {=0D
+  margin-bottom: 6px;=0D
+  padding: 0 10px 0 30px;=0D
+}=0D
+=0D
+div.dokuwiki .search_snippet {=0D
+  color: #ccc;=0D
+  font-size: 12px;=0D
+  margin-left: 20px;=0D
+}=0D
+=0D
+div.dokuwiki .search_sep {=0D
+  color: #333;=0D
+}=0D
+=0D
+div.dokuwiki .search_hit {=0D
+  color: #333;=0D
+  background-color: #ff9;=0D
+}=0D
+=0D
+div.dokuwiki div.search_quickresult {=0D
+  margin: 0 0 15px 30px;=0D
+  padding: 0 10px 10px 0;=0D
+  border-bottom: 1px dashed #ccc;=0D
+}=0D
+div.dokuwiki div.search_quickresult h3 {=0D
+  margin: 0 0 1.0em 0;=0D
+  font-size: 1em;=0D
+  font-weight: bold;=0D
+}=0D
+=0D
+div.dokuwiki ul.search_quickhits {=0D
+  margin: 0 0 0.5em 1.0em;=0D
+}=0D
+=0D
+div.dokuwiki ul.search_quickhits li {=0D
+  margin: 0 1.0em 0 1.0em;=0D
+  float:left;=0D
+  width: 30%;=0D
+}=0D
+=0D
+=0D
+/* ---------- AJAX quicksearch ----------- */=0D
+=0D
+div.dokuwiki div.ajax_qsearch {=0D
+  position: absolute;=0D
+  right: 237px;;=0D
+  width: 200px;=0D
+  opacity: 0.9;=0D
+  display: none;=0D
+  font-size: 80%;=0D
+  line-height: 1.2em;=0D
+  border: 1px solid #ccc;=0D
+  background-color: #f7f9fa;=0D
+  text-align: left;=0D
+  padding: 4px;=0D
+}=0D
+=0D
+/* --------- Toolbar -------------------- */=0D
+button.toolbutton {=0D
+  background-color: #fff;=0D
+  padding: 0px;=0D
+  margin: 0 1px 0 0;=0D
+  border: 1px solid #ccc;=0D
+  cursor: pointer;=0D
+}=0D
+=0D
+/* nice alphatransparency background except for IE <7 */=0D
+html>body button.toolbutton {=0D
+  background:  #fff url(/ferme/sympa/lib/tpl/sympa/sympa/images/buttonshado=
+w.png) repeat-x bottom;=0D
+}=0D
+=0D
+div.picker {=0D
+  width: 250px;=0D
+  border: 1px solid #ccc;=0D
+  background-color: #dee7ec;=0D
+}=0D
+=0D
+button.pickerbutton {=0D
+  padding: 0px;=0D
+  margin: 0 1px 1px 0;=0D
+  border: 0;=0D
+  background-color: transparent;=0D
+  font-size: 80%;=0D
+  cursor: pointer;=0D
+}=0D
+=0D
+/* ---------- Spellchecking ------------- */=0D
+=0D
+div.dokuwiki a.spell_error {=0D
+  color: #f00;=0D
+  text-decoration: underline;=0D
+}=0D
+=0D
+div.dokuwiki div#spell__suggest {=0D
+  background-color: #fff;=0D
+  padding: 2px;=0D
+  border: 1px solid #333;=0D
+  font-size: 80%;=0D
+  display: none;=0D
+}=0D
+=0D
+div.dokuwiki div#spell__result {=0D
+  border: 1px solid #ccc;=0D
+  color: #333;=0D
+  font-size: 14px;=0D
+  padding: 3px;=0D
+  background-color: #f7f9fa;=0D
+  display: none;=0D
+}=0D
+=0D
+div.dokuwiki span.spell_noerr {=0D
+  color: #093;=0D
+}=0D
+=0D
+div.dokuwiki span.spell_wait {=0D
+  color: #06c;=0D
+}=0D
+=0D
+/* ---------------  Image Details  ----------------- */=0D
+=0D
+div.dokuwiki div.img_big {=0D
+  float: left;=0D
+  margin-right: 0.5em;=0D
+}=0D
+=0D
+div.dokuwiki dl.img_tags dt {=0D
+  font-weight: bold;=0D
+  background-color: #dee7ec;=0D
+}=0D
+div.dokuwiki dl.img_tags dd {=0D
+  background-color: #f5f5f5;=0D
+}=0D
+=0D
+div.dokuwiki div.imagemeta {=0D
+  color: #666;=0D
+  font-size: 70%;=0D
+  line-height: 95%;=0D
+}=0D
+=0D
+div.dokuwiki div.imagemeta img.thumb {=0D
+  float:left;=0D
+  margin-right: 0.1em;=0D
+}=0D
+=0D
+=0D
+/*div et  Boites coins arrondis */=0D
+#news {=0D
+  margin: 0em 0 1em 2em;=0D
+  text-align: justify;=0D
+  line-height:1.5em;=0D
+  padding: 0em;=0D
+}=0D
+=0D
+#news h1{=0D
+margin:0 4em 0.5em 0.5em; letter-spacing:6px; font-style:oblique; font-size=
+:1.3em; font-weight:bolder; color:#DB0016; border-bottom:#DB0016 solid 1px;=
+ padding:0.5em 0 0 0;=0D
+}=0D
+=0D
+/* style boite pour les news */=0D
+#xsnazzy {color:#333;width:90%; background: transparent; margin: 1em;}=0D
+#xsnazzy h1 {color:#ff1b1b;margin:0; letter-spacing:1px;font-size:1em; colo=
+r:#333; font-weight:bolder; text-align:left; border:none; padding:0 0 0 0.5=
+em;}=0D
+#xsnazzy h1 a:link {color:#ff1b1b; font-weight:bolder; }=0D
+#xsnazzy h1 a:hover {color:#F57A00; text-decoration:none}=0D
+#xsnazzy p {padding-bottom:0em;}=0D
+=0D
+.xtop, .xbottom {display:block; background:transparent; font-size:1px;}=0D
+.xb1, .xb2, .xb3, .xb4 {display:block; overflow:hidden;}=0D
+.xb1, .xb2, .xb3 {height:1px;}=0D
+.xb2, .xb3, .xb4 {background:#fff; border-left:1px solid #F6F6F6; border-ri=
+ght:2px solid #333;}=0D
+.xb1 {margin:0 5px; background:#333;}=0D
+.xb2 {margin:0 3px; border-width:0 2px;}=0D
+.xb3 {margin:0 2px;}=0D
+.xb4 {height:2px; margin:0 1px;}=0D
+=0D
+.xboxcontent {display:block; font-size: 1em;  background: url(/ferme/sympa/=
+lib/tpl/sympa/images/gris.png) repeat ;  border-right:2px solid #333; paddi=
+ng:0 0.5em 0 0.5em;}=0D
+.xboxcontent h1 {font-size: 0.9em!important}=0D
+.xboxcontent table{width: 97%; margin: 0; padding:0 0.1em }=0D
+.xboxcontent td.date{color:#007e50; font-size: 0.9em; letter-spacing:0}=0D
+.xboxcontent ul{color:#333!important; font-size: 1em; letter-spacing:0; tex=
+t-align:justify; margin:0; padding:0 2em 0 0.5em}=0D
+=0D
+.xboxcontent .date{color:#007e50; font-size: 0.9em; letter-spacing:0; text-=
+align:left; width:19%;margin-left:81%}=0D
+.xboxcontent .date{_margin-left:0; _float:right;}=0D
+.xboxcontent .titre{font-size: 1em; text-align:left; float:left; width:78%;=
+ }=0D
+.xboxcontent .titre{ _left:3% }=0D
+.xboxcontent .img {margin-right:0.5em;float:left; margin:0 0 0 0.3em; width=
+:3%}=0D
+.xboxcontent .descriptif{width: 90%;color:#333; font-size: 0.9em; letter-sp=
+acing:0; text-align:justify; margin:0; padding:0 1.5em; clear:both}=0D
+=0D
+=0D
+.xboxcontent_sidebar {display:block;  background: url(/ferme/sympa/lib/tpl/=
+sympa/images/gris_sidebar.png) repeat ;  border-right:2px solid #333; paddi=
+ng:0 0 0.5em 0;}=0D
+.xtop_sidebar, .xbottom_sidebar {display:block; background:transparent; fon=
+t-size:1px; }=0D
+.xbottom_sidebar {_margin-right:3em; }=0D
+=0D
+.grisclair {background:#F6F6F6;}=0D
+.grisfonce {background:#E4E4E4;}=0D
+=0D
+=0D
+/* fin style boite pour les news */=0D
+=0D
+/* style boite pour activites */=0D
+#activites {=0D
+  margin: 0 0 0 0 ;=0D
+  padding: 0;=0D
+  width:100%;=0D
+}=0D
+=0D
+#activites .virgule {=0D
+  /* Mozilla ignores crazy MS image filters, so it will skip the following =
+*/=0D
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=3Dtrue,=
+ sizingMethod=3Dscale src=3D'../sympa_accueil/images/test.png');=0D
+margin: 1em 5% 1em 5%;=0D
+}=0D
+=0D
+#activites .virgule[class] {=0D
+/* IE ignores styles with [attributes], so it will skip the following. */=
+=0D
+background:url(../sympa_accueil/images/test.png) no-repeat left;=0D
+}=0D
+=0D
+#activites li{=0D
+margin:0.2em 0.5em 0 0;=0D
+list-style: none;=0D
+line-height: 2em;=0D
+padding: 0 0 0 2.5em;=0D
+font-size:1em;=0D
+}=0D
+=0D
+#activites li a{color: #ff1b1b; font-weight:bold;}=0D
+#activites li a:hover{color: #fff!important; background:#DB0016;}=0D
+=0D
+#activites li.un{margin-left:1em;}=0D
+#activites li.deux{margin-left:2em;}=0D
+#activites li.trois{margin-left:3em;}=0D
+#activites li.quatre{margin-left:4em;}=0D
+#activites li.cinq{margin-left:5em;}=0D
+=0D
+#activites a:hover{=0D
+text-decoration: none;=0D
+background: #ff1b1b;=0D
+color:#fff;=0D
+}=0D
+=0D
+#activites h1{color:#333; margin:0; background:none/*#000*/; padding: 0 0.5=
+em 0.3em 1em;}=0D
+=0D
+.xtopactiv, .xbottomactiv {display:block; background:transparent; font-size=
+:1px;}=0D
+.xbottomactiv {_margin: 0 3em 0 0}=0D
+.xb1activ, .xb2activ, .xb3activ, .xb4activ {display:block; overflow:hidden;=
+}=0D
+.xb1activ, .xb2activ, .xb3activ {height:1px;}=0D
+.xb2activ, .xb3activ, .xb4activ {background:#fff; border-left:1px solid #EC=
+F4FA; border-right:2px solid #ff1b1b;}=0D
+.xb1activ {margin:0 5px; background:#ff1b1b;}=0D
+.xb2activ {margin:0 3px; border-width:0 2px;}=0D
+.xb3activ {margin:0 2px;}=0D
+.xb4activ {height:2px; margin:0 1px;}=0D
+=0D
+.xboxcontent_activites {display:block;  background: url(/ferme/sympa/lib/tp=
+l/sympa/images/bleu.png) repeat ;  border-right:2px solid #ff1b1b;padding:0=
+.5em 1.5em 0.5em 1em;}=0D
+=0D
+.bleuclair {background:#ECF4FA;}=0D
+.bleufonce {background:#CAE7FB;}=0D
+/* fin style boite pour activites */=0D
+=0D
+/* style boite pour publications */=0D
+#publications{=0D
+  margin: 1em 0 0 0;=0D
+  padding: 0;=0D
+}=0D
+=0D
+#publications ul {=0D
+margin: 1em 0 0.5em 0;=0D
+}=0D
+=0D
+#publications li{=0D
+margin:0.5em 0.5em 0.5em 0;=0D
+list-style: none;=0D
+line-height: 1em;=0D
+padding: 0 0 0 1em;=0D
+font-size:1em;=0D
+}=0D
+=0D
+#publications li a{color: #ff1b1b; font-weight:bold; font-size:1em;}=0D
+=0D
+#publications h1{color:#333; background:none /*#669999*/; padding: 0 0.5em =
+0.3em 1em; }=0D
+#publications p{color:#333; font-size: 80%;font-weight: normal; text-align:=
+justify; margin: 0 1em 0 1em; }=0D
+#publications p a:link{color:#333;}=0D
+#publications p a:hover{text-decoration:underline!important}=0D
+=0D
+.xtoppub, .xbottompub {display:block; background:transparent; font-size:1px=
+; }=0D
+.xbottompub {_margin: 0 3em 0 0}=0D
+.xb1pub, .xb2pub, .xb3pub, .xb4pub {display:block; overflow:hidden;}=0D
+.xb1pub, .xb2pub, .xb3pub {height:1px;}=0D
+.xb2pub, .xb3pub, .xb4pub {background:#fff; border-left:1px solid #E9FDB6; =
+border-right:2px solid #007e50;}=0D
+.xb1pub {margin:0 5px; background:#007e50;}=0D
+.xb2pub {margin:0 3px; border-width:0 2px;}=0D
+.xb3pub {margin:0 2px;}=0D
+.xb4pub {height:2px; margin:0 1px;}=0D
+=0D
+.xboxcontent_publications {display:block; background: url(/ferme/sympa/lib/=
+tpl/sympa/images/vert.png) repeat ; border-right: 2px solid #007e50; paddin=
+g:0 0 0.5em 0;}=0D
+=0D
+.vertclair {background:#E9FDB6;}=0D
+.vertfonce {background:#DCFD84;}=0D
+/* fin style boite pour publications */=0D
+=0D
+/* Fin div et  Boites coins arrondis */=0D
+=0D
+=0D
+/**=0D
+ * Design Elements - additional  CSS for the arctic-template=0D
+ *=0D
+ * @author Michael Klier <chi@chimeric.de>=0D
+ */=0D
+=0D
+=0D
+=0D
+=0D
+/* --------- buttons ------------------- */=0D
+=0D
+div.dokuwiki input.button, div.dokuwiki button.button{=0D
+  border-color: #c3c3c3;=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+div.dokuwiki div.secedit input.button {=0D
+  border-color: #c3c3c3;=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+div.dokuwiki .bar input.button {=0D
+  height: 20px;=0D
+}=0D
+=0D
+/* ---------- table of contents ------------------- */=0D
+div.dokuwiki div.toc {=0D
+  width: 22em;=0D
+}=0D
+=0D
+div.dokuwiki div.tocheader {=0D
+  border-color: #333;=0D
+}=0D
+=0D
+div.dokuwiki div.tocheader img {=0D
+  margin-top: 0.6em;=0D
+}=0D
+=0D
+div.dokuwiki #toc__inside {=0D
+  border-color:#333;=0D
+}=0D
+=0D
+div.dokuwiki a.toc:hover {=0D
+  color: #007e50; /*#436976;*/=0D
+}=0D
+=0D
+/* ---------- AJAX quicksearch ----------- */=0D
+div.dokuwiki div.left_sidebar div.ajax_qsearch,=0D
+div.dokuwiki div.right_sidebar div.ajax_qsearch {=0D
+  position: relative;=0D
+  left: 1px;=0D
+  top: 2px;=0D
+  display: none;=0D
+  background: none;=0D
+  background: #f5f5f5;=0D
+  border-left: none;=0D
+  border-top: none;=0D
+  border-right: none;=0D
+  font-size: 85%;=0D
+  float: left;=0D
+  width: 96%;=0D
+  margin-top: 0.2em;=0D
+  margin-bottom: 0.5em;=0D
+}=0D
+=0D
+div.dokuwiki div#bar__top div.ajax_qsearch {=0D
+  position: absolute;=0D
+  /*left: 30.5em;=0D
+  top:12.9em;*/=0D
+  left: 5.5em;=0D
+  margin-top: 5px;=0D
+  width: 200px;=0D
+  opacity: 0.9;=0D
+  display: none;=0D
+  border: 1px solid #ccc;=0D
+  background: #f5f5f5;=0D
+  text-align: left;=0D
+  padding: 0.2em;=0D
+  font-size: 85%;=0D
+}=0D
+=0D
+div.dokuwiki  div.ajax_qsearch strong {=0D
+  font-size: 115%;=0D
+  background: #007e50; /*dee7ec;*/=0D
+  opacity: 0.9;=0D
+  padding: 0.2em;=0D
+  display: block;=0D
+  color : #ffffff;=0D
+}=0D
+=0D
+/* code blocks by indention */=0D
+div.dokuwiki pre.code,=0D
+div.dokuwiki pre.file {=0D
+  width: auto !important;=0D
+  width: 98%;=0D
+  font-size: 100%;=0D
+}=0D
+=0D
+=0D
+/* =0D
+setup vim: ts=3D2 sw=3D2: =0D
+*/=0D
+/**=0D
+ * The CSS in here cotrols the appearance of the media manager=0D
+ */=0D
+=0D
+#media__manager {=0D
+    height: 100%;=0D
+    overflow: hidden;=0D
+}=0D
+=0D
+#media__left {=0D
+    width: 30%;=0D
+    border-right: solid 1px #ccc;=0D
+=0D
+    height: 100%;=0D
+    overflow: auto;=0D
+    position: absolute;=0D
+    left: 0;=0D
+}=0D
+=0D
+#media__right {=0D
+    width: 69.7%;=0D
+=0D
+    height: 100%;=0D
+    overflow: auto;=0D
+    position: absolute;=0D
+    right: 0;=0D
+}=0D
+=0D
+#media__manager h1 {=0D
+    margin: 0;=0D
+    padding: 0;=0D
+    margin-bottom: 0.5em;=0D
+}=0D
+=0D
+/* --- Tree formatting --- */=0D
+=0D
+#media__tree img {=0D
+    float:left;=0D
+    padding: 0.5em 0.3em 0 0;=0D
+}=0D
+=0D
+#media__tree ul {=0D
+    list-style-type: none;=0D
+    list-style-image: none;=0D
+}=0D
+=0D
+#media__tree li {=0D
+    clear: left;=0D
+    list-style-type: none;=0D
+    list-style-image: none;=0D
+}=0D
+* html #media__tree li {=0D
+    border: 1px solid #fff;=0D
+}/* I don't understand this, but this fixes a style bug in IE;=0D
+it's dirty, so any "real" fixes are welcome */=0D
+=0D
+/* --- options --- */=0D
+=0D
+#media__opts {=0D
+    padding-left: 1em;=0D
+    margin-bottom: 0.5em;=0D
+}=0D
+=0D
+=0D
+#media__opts input {=0D
+    float: left;=0D
+    position: absolute;=0D
+}=0D
+* html #media__opts input {=0D
+    position: static;=0D
+}=0D
+=0D
+#media__opts label {=0D
+    display: block;=0D
+    float: left;=0D
+    margin-left: 30px;=0D
+}=0D
+* html #media__opts label {=0D
+    margin-left: 10px;=0D
+}=0D
+=0D
+#media__opts br {=0D
+    clear: left;=0D
+}=0D
+=0D
+/* --- file list --- */=0D
+=0D
+#media__content img.load {=0D
+    margin: 1em auto;=0D
+}=0D
+=0D
+#media__content #scroll__here {=0D
+    border: 1px dashed #ccc;=0D
+}=0D
+=0D
+#media__content .odd {=0D
+    background-color: #f7f9fa;=0D
+    padding: 0.4em;=0D
+}=0D
+=0D
+#media__content .even {=0D
+    padding: 0.4em;=0D
+}=0D
+=0D
+#media__content a.mediafile {=0D
+    margin-right: 1.5em;=0D
+    font-weight: bold;=0D
+}=0D
+=0D
+#media__content div.detail {=0D
+    padding: 0.3em 0 0.3em 2em;=0D
+}=0D
+=0D
+#media__content div.detail div.thumb {=0D
+    float: left;=0D
+    width: 130px;=0D
+    text-align: center;=0D
+    margin-right: 0.4em;=0D
+}=0D
+=0D
+=0D
+#media__content img.btn {=0D
+    vertical-align: text-bottom;=0D
+}=0D
+=0D
+#media__content div.example {=0D
+    color: #666;=0D
+    margin-left: 1em;=0D
+}=0D
+=0D
+/* --- upload form --- */=0D
+=0D
+#media__content div.upload {=0D
+    font-size: 90%;=0D
+    padding: 0 0.5em 0.5em 0.5em;=0D
+}=0D
+=0D
+#media__content form.upload {=0D
+    display: block;=0D
+    border-bottom: solid 1px #ccc;=0D
+    padding: 0 0.5em 1em 0.5em;=0D
+}=0D
+#media__content form.upload fieldset {=0D
+    padding: 0;=0D
+    margin: 0;=0D
+    border: none;=0D
+    width: auto;=0D
+}=0D
+#media__content form.upload p {=0D
+    clear: left;=0D
+    text-align: left;=0D
+    padding: 0.25em 0;=0D
+    margin: 0;=0D
+    line-height: 1.0em;=0D
+}=0D
+#media__content form.upload label {=0D
+    float: left;=0D
+    width: 30%;=0D
+}=0D
+#media__content form.upload label.check {=0D
+    float: none;=0D
+    width: auto;=0D
+}=0D
+#media__content form.upload input.check {=0D
+    margin-left: 30%;=0D
+}=0D
+=0D
+/* --- meta edit form --- */=0D
+=0D
+#media__content form.meta {=0D
+    display: block;=0D
+    padding: 0 0 1em 0;=0D
+}=0D
+=0D
+#media__content form.meta label {=0D
+    display: block;=0D
+    width: 25%;=0D
+    float: left;=0D
+    font-weight: bold;=0D
+    margin-left: 1em;=0D
+    clear: left;=0D
+}=0D
+=0D
+#media__content form.meta .edit {=0D
+    font: 100% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-ser=
+if;=0D
+    float: left;=0D
+    width: 70%;=0D
+    padding-right: 0;=0D
+    padding-left: 0.2em;=0D
+    margin: 2px;=0D
+}=0D
+=0D
+#media__content form.meta textarea.edit {=0D
+    height: 8em;=0D
+}=0D
+=0D
+#media__content form.meta div.metafield {=0D
+    clear: left;=0D
+}=0D
+=0D
+#media__content form.meta div.buttons {=0D
+    clear: left;=0D
+    margin-left: 20%;=0D
+    padding-left: 1em;=0D
+}=0D
+/**=0D
+ * File:    =0D
+ * @author Michael Klier <chi@chimeric.de>=0D
+ */=0D
+=0D
+=0D
+#media__left,=0D
+#media__right {=0D
+  background: #fff;=0D
+}=0D
+=0D
+=0D
+=0D
+/* plugin emphasis */=0D
+span.emphasis1 {font-weight:bold; color:orange}=0D
+span.emphasis2 {font-weight:bold; color:blue}=0D
+span.emphasis3 {font-weight:bold; color:red}=0D
+/* fin plugin emphasis */=0D
+=0D
+=0D
+=0D
+=0D
+=0D
+/* Test pour menu vertical */=0D
+=0D
+/* =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =0D
+This copyright notice must be untouched at all times.=0D
+=0D
+The original version of this stylesheet and the associated (x)html=0D
+is available at http://www.stunicholls.com/menu/tree_frog_vertical.html=0D
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.=0D
+This stylesheet and the associated (x)html may be modified in any =0D
+way to fit your requirements.=0D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D */=0D
+=0D
+#monmenu {list-style-type:none; padding:0!important; margin:1em!important; =
+width:60%; /* top:70px; left:0;*/   /*z-index:100;*/}=0D
+#monmenu ul {list-style-type:none; padding:0; margin:0; width:102%; positio=
+n:relative;}=0D
+#monmenu li {float:left; background:inherit; position:relative; border-top:=
+1px solid #fff}=0D
+=0D
+=0D
+#monmenu ul li, #monmenu ul li a{font-size:90%!important; color:#333!import=
+ant; margin:0 0 0 2em;letter-spacing:0; border-bottom:none!important;=0D
+margin-bottom:0!important }=0D
+#monmenu ul li ul li, #monmenu ul li ul li a {font-size:95%!important; marg=
+in-left:2.5em; }=0D
+=0D
+#monmenu ul li a, #monmenu ul li ul li a{border-left: 1px solid #ff1b1b; }=
+=0D
+#monmenu ul li a:hover, #monmenu ul li ul li a:hover{background:#ff1b1b; op=
+acity: 0.8;color:#fff!important;}=0D
+=0D
+=0D
+#monmenu li.sub {background: url(/ferme/lib/tpl/sympa/images/frog_arrow_ver=
+tical.png) no-repeat top right; }=0D
+=0D
+#monmenu li, #monmenu li a {display:block; color:#333; line-height:24px; wi=
+dth:89%; text-decoration:none;  cursor:pointer; font-weight:bold; text-inde=
+nt:5px;}=0D
+=0D
+=0D
+#monmenu ul,=0D
+#monmenu li.click ul ul,=0D
+#monmenu li.click ul li.hover ul ul {display:block;}=0D
+=0D
+#monmenu li.hover {color:#333; letter-spacing:0.1em; z-index:500;font-size:=
+120%; border-bottom: 1px solid #ff1b1b;margin-bottom:0.5em}=0D
+#monmenu li.click {color:#333;}=0D
+=0D
+#monmenu li.click ul {display:block;}=0D
+#monmenu li.click ul li.hover ul, =0D
+#monmenu li.click ul li.hover ul li.hover ul {display:block; position:absol=
+ute; left:100%; top:-1px;}=0D
+=0D
+#monmenu li.click ul li.fly, #monmenu li.click ul li.fly:hover {background:=
+ url(/ferme/lib/tpl/sympa/images/frog_arrow.png) no-repeat top right;}=0D
+#monmenu li.click ul li.hover {inherit}=0D
+=0D
+#monmenu li.click ul li.hover ul {width:75%}=0D
+#monmenu li.click ul li.hover ul li {background:#fff; }=0D
+#monmenu li.click ul li.hover ul li.hover ul li {background:#780; z-index:5=
+00;}=0D
+=0D
+#monmenu li.click ul li.hover ul li.fly {background: #c60 url(/ferme/lib/tp=
+l/sympa/images/frog_arrow.png) no-repeat top right;}=0D
+/* #monmenu li.click ul li.hover ul li.hover { background:#fa4;}=0D
+#monmenu li.click ul li.hover ul li.hover a {color:#000;}=0D
+=0D
+#monmenu li.click ul li.hover ul li.hover ul li.hover {background:#aa0;}*/=
+=0D
+#monmenu li.click ul li.hover ul li.hover ul li.hover a {color:#333;}=0D
+=0D
+/* fin test menu*/=0D
+=0D
+/* ajout plugin wrap*/=0D
+div.dokuwiki .wrap_bgdownload {=0D
+ background-image: url(/ferme/lib/tpl/sympa/images/sympa_download.png);=0D
+ background-repeat:no-repeat;=0D
+ height:121px;=0D
+ width:401px;=0D
+ padding-top: 35px;=0D
+ padding-left: 175px;=0D
+}=0D
+=0D
+div.dokuwiki .wrap_bgdownload a {=0D
+ font-size: 1.5em;=0D
+ font-weight: bold;=0D
+ font-family: ;=0D
+ color: #ff1b1b; =0D
+ }
+-->
+</style>
+=0D
+<style type=3D"text/css">
+<!--
+/* CSS Document */=0D
+=0D
+/* \*/=0D
+* html #menu { height: 0; }=0D
+/* */=0D
+#menu {list-style-type:none; margin:0 auto 2px auto; padding:0; width:200%;=
+ }=0D
+#menu li {float:left; padding:0; margin:0; position:relative; width:11em; h=
+eight:1em; font-family: "Trebuchet MS", Myriad, "Gill Sans", "Century Gothi=
+c", "Bitstream Vera Sans", verdana, lucida, arial, helvetica, sans-serif; z=
+-index:100;}=0D
+=0D
+#menu li dl {position:absolute; top:0; left:0; padding-bottom:0;}=0D
+#menu li a, #menu li a:visited {text-decoration:none;}=0D
+#menu li dd {display:none; font-weight:bold;}=0D
+#menu li a:hover {border:0;}=0D
+#menu li:hover dd, #menu li a:hover dd {display:block;}=0D
+#menu li:hover dl, #menu li a:hover dl {padding-bottom:10px;}=0D
+=0D
+#menu table {border-collapse:collapse; padding:0; margin:0 ; font-size:1.1e=
+m; position:absolute;  }=0D
+#menu li table {padding:0; margin:0 0 0 0; width:13em; height:0; font-famil=
+y: "Trebuchet MS", Myriad, "Gill Sans", "Century Gothic", "Bitstream Vera S=
+ans", verdana, lucida, arial, helvetica, sans-serif; z-index:100;}=0D
+#menu li table dt{padding:0; margin:0 0 0 0em;}=0D
+#menu li table dl{width:11em;}=0D
+#menu li table dl dd{width:11em;}=0D
+#menu dl {width:12em; margin: 0; padding: 0; background: transparent;}=0D
+#menu dt {margin:0; padding: 0;}=0D
+=0D
+#menu dd {margin:0; padding:0; color: #fff; font-size: 1em; text-align:left=
+;}=0D
+=0D
+#menu dt a, #menu dt a:visited {display:block; font-size: 1em; color: #333!=
+important; font-variant: normal; text-align:center; border:2px solid #ff1b1=
+b; border-width:0 1px 1px 0; background: url(/ferme/sympa/lib/tpl/sympa/ima=
+ges/entete_menu.png) repeat-x;  padding:0.1em 0 0.3em 0;}=0D
+=0D
+#menu li:hover dt a, #menu a:hover dt a {color:#fff!important; font-weight:=
+ bold; background: url(/ferme/sympa/lib/tpl/sympa/images/entete_menu_hover.=
+png) repeat-x; border-right:1px solid #ff1b1b; border-bottom: #fff solid 1p=
+x; }=0D
+=0D
+#menu dd a, #menu dd a:visited {background:#007e50; color:#fff!important; o=
+pacity:1; padding:0.5em 0; text-decoration:none; display:block; text-align:=
+center;border-right:1px solid #ff1b1b;}=0D
+=0D
+#menu dd a:hover {background: #80bfa8; color:#fff!important; font-weight:bo=
+ld; }=0D
+=0D
+#menu b {display:block; overflow:hidden; height:1px;}=0D
+=0D
+#menu b.p1 {background:#E4E4E4;margin:0 5px;}=0D
+#menu b.p2 {background:#E4E4E4 /*d4d4d4*/; border-right:2px solid #ff1b1b; =
+border-width:0 1px; margin:0 3px;}=0D
+#menu b.p3 {background:#E4E4E4 /*d4d4d4*/; margin:0 2px; border-right:2px s=
+olid #ff1b1b; border-width:0 1px;}=0D
+#menu b.p4 {height:2px; background:#E4E4E4/*d4d4d4*/; margin:0 1px; border-=
+right:2px solid #ff1b1b; border-width:0 1px;}=0D
+#menu b.p5 {background:#007e50; opacity:1; margin:0 5px; }=0D
+#menu b.p6 {background:#007e50; opacity:1;margin:0 3px; }=0D
+#menu b.p7 {background:#007e50; opacity:1;margin:0 2px;}=0D
+#menu b.p8 {background:#007e50; opacity:1;margin:0 1px;}=0D
+#menu b.p9 {background:#007e50; opacity:1; height:11px; margin:0 0px; borde=
+r:1px solid #007e50;}=0D
+=0D
+#menu li:hover b.p1, #menu a:hover b.p1,=0D
+#menu li:hover b.p2, #menu a:hover b.p2,=0D
+#menu li:hover b.p3, #menu a:hover b.p3, =0D
+#menu li:hover b.p4, #menu a:hover b.p4 {background:#80bfa8; opacity:1; bor=
+der-right:1px solid #ff1b1b;}=0D
+#menu li:hover b.p5, #menu a:hover b.p5,=0D
+#menu li:hover b.p6, #menu a:hover b.p6,=0D
+#menu li:hover b.p7, #menu a:hover b.p7,=0D
+#menu li:hover b.p8, #menu a:hover b.p8,=0D
+#menu li:hover b.p9, #menu a:hover b.p9 {background:#007e50; opacity:1; bor=
+der-right:1px solid #ff1b1b;}=0D
+
+-->
+</style>
+=0D
+<style type=3D"text/css">
+<!--
+/* CSS Document */=0D
+a.interwiki {=0D
+background: transparent url(/ferme/sympa/lib/images/interwiki.png) 0px 1px =
+no-repeat;=0D
+padding-left: 16px;=0D
+}=0D
+=0D
+a.iw_wp {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/wp.gif)=0D
+}=0D
+=0D
+a.iw_wpde {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/wpde.gif)=0D
+}=0D
+=0D
+a.iw_wpmeta {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/wpmeta.gif)=0D
+}=0D
+=0D
+a.iw_doku {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/doku.gif)=0D
+}=0D
+=0D
+a.iw_sb {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/sb.gif)=0D
+}=0D
+=0D
+a.iw_amazon {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/amazon.gif)}=0D
+a.iw_amazon_de {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/amazon.de.gif)=0D
+}=0D
+=0D
+a.iw_amazon_uk {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/amazon.uk.gif)=0D
+}=0D
+=0D
+a.iw_phpfn {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/phpfn.gif)=0D
+}=0D
+=0D
+a.iw_bug {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/bug.gif)=0D
+}=0D
+=0D
+a.iw_coral {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/coral.gif)=0D
+}=0D
+=0D
+a.iw_google {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/google.gif)=0D
+}=0D
+=0D
+a.iw_meatball {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/meatball.gif)=0D
+}=0D
+=0D
+a.iw_wiki {=0D
+background-image: url(/ferme/sympa/lib/images/interwiki/wiki.gif)=0D
+}=0D
+=0D
+a.mediafile {=0D
+background: transparent url(/ferme/sympa/lib/images/fileicons/file.png) 0px=
+ 1px no-repeat;=0D
+padding-left: 18px;=0D
+padding-bottom: 1px;=0D
+}=0D
+=0D
+a.mf_jpg {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/jpg.png)=0D
+}=0D
+=0D
+a.mf_jpeg {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/jpeg.png)=0D
+}=0D
+=0D
+a.mf_gif {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/gif.png)=0D
+}=0D
+=0D
+a.mf_png {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/png.png)=0D
+}=0D
+=0D
+a.mf_tgz {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/tgz.png)=0D
+}=0D
+=0D
+a.mf_tar {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/tar.png)=0D
+}=0D
+=0D
+a.mf_gz {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/gz.png)=0D
+}=0D
+=0D
+a.mf_zip {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/zip.png)=0D
+}=0D
+=0D
+a.mf_pdf {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/pdf.png)=0D
+}=0D
+=0D
+a.mf_txt {=0D
+ background-image: url(/ferme/sympa/lib/images/fileicons/txt.png)=0D
+}=0D
+=0D
+a.mf_html {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/html.png)=0D
+}=0D
+=0D
+a.mf_htm {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/htm.png)=0D
+}=0D
+=0D
+a.mf_ps {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/ps.png)=0D
+}=0D
+=0D
+a.mf_doc {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/doc.png)=0D
+}=0D
+=0D
+a.mf_xls {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/xls.png)=0D
+}=0D
+=0D
+a.mf_ppt {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/ppt.png)=0D
+}=0D
+=0D
+a.mf_rtf {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/rtf.png)=0D
+}=0D
+=0D
+a.mf_xml {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/xml.png)=0D
+}=0D
+=0D
+a.mf_swf {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/swf.png)=0D
+}=0D
+=0D
+a.mf_rpm {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/rpm.png)=0D
+}=0D
+=0D
+a.mf_deb {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/deb.png)=0D
+}=0D
+=0D
+a.mf_conf {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/conf.png)=0D
+}=0D
+=0D
+a.mf_sxw {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/sxw.png)=0D
+}=0D
+=0D
+a.mf_sxc {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/sxc.png)=0D
+}=0D
+=0D
+a.mf_sxi {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/sxi.png)=0D
+}=0D
+=0D
+a.mf_sxd {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/sxd.png)=0D
+}=0D
+=0D
+a.mf_odc {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odc.png)=0D
+}=0D
+=0D
+a.mf_odf {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odf.png)=0D
+}=0D
+=0D
+a.mf_odg {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odg.png)=0D
+}=0D
+a.mf_odi {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odi.png)=0D
+}=0D
+=0D
+a.mf_odp {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odp.png)=0D
+}=0D
+=0D
+a.mf_ods {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/ods.png)=0D
+}=0D
+=0D
+a.mf_odt {=0D
+background-image: url(/ferme/sympa/lib/images/fileicons/odt.png)}=0D
+=0D
+#blog__comment_form { display:none; }=0D
+#blog__newentry_form { display:none; }=0D
+=0D
+body {=0D
+  font: 10pt "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif=
+;=0D
+  background-color: White;=0D
+  color: Black;=0D
+}=0D
+=0D
+table {=0D
+  font-size: 100%;=0D
+  padding:0;=0D
+  margin:0;=0D
+}=0D
+=0D
+tr,td,th {padding:0; margin:0;}=0D
+=0D
+img {border:0}=0D
+=0D
+a {=0D
+  color:#000000;=0D
+  text-decoration:none;=0D
+  background: none !important;=0D
+}=0D
+=0D
+=0D
+div.meta {=0D
+  clear:both;=0D
+  margin-top: 1em;=0D
+  font-size:70%;=0D
+  text-align:right;=0D
+}=0D
+=0D
+div.breadcrumbs{=0D
+  display:none;=0D
+}=0D
+=0D
+div.secedit{=0D
+  display:none;=0D
+}=0D
+=0D
+/* --------------------- Text formating -------------------------------- */=
+=0D
+=0D
+/* external link */=0D
+a.urlextern:after {=0D
+   content: " [" attr(href) "]";=0D
+   font-size: 90%;=0D
+}=0D
+=0D
+/* interwiki link */=0D
+a.interwiki:after {=0D
+   content: " [" attr(href) "]";=0D
+   font-size: 90%;=0D
+}=0D
+=0D
+/* email link */=0D
+a.mail:after {=0D
+   content: " [" attr(href) "]";=0D
+   font-size: 90%;=0D
+}=0D
+=0D
+/* existing wikilink */=0D
+a.wikilink1    {text-decoration:underline }=0D
+=0D
+/* the document */=0D
+div.page {=0D
+  text-align: left;=0D
+}=0D
+=0D
+/* general headline setup */=0D
+h1, h2, h3, h4, h5 {=0D
+    color: Black;=0D
+    background-color: transparent;=0D
+    font-family: "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-s=
+erif;=0D
+    font-size: 100%;=0D
+    font-weight: normal;=0D
+    margin-left:    0;=0D
+    margin-right:   0;=0D
+    margin-top:     0;=0D
+    margin-bottom:  1em;=0D
+    padding-left:   0;=0D
+    padding-right:  0;=0D
+    padding-top:    0.5em;=0D
+    padding-bottom: 0;=0D
+    border-bottom: 1px solid #000000;=0D
+    clear:left;=0D
+}=0D
+=0D
+/* special headlines */=0D
+h1 {font-size: 160%; font-weight: bold;}=0D
+h2 {font-size: 150%; }=0D
+h3 {font-size: 140%; border-bottom: none; }=0D
+h4 {font-size: 120%; border-bottom: none; }=0D
+h5 {font-size: 100%; border-bottom: none; }=0D
+=0D
+/* embedded images */=0D
+img.media {=0D
+  margin: 3px;=0D
+}=0D
+=0D
+img.medialeft {=0D
+  border: 0;=0D
+  float: left;=0D
+  margin: 0 1.5em 0 0;=0D
+}=0D
+=0D
+img.mediaright {=0D
+  border: 0;=0D
+  float: right;=0D
+  margin: 0 0 0 1.5em;=0D
+}=0D
+=0D
+/* unordered lists */=0D
+ul {=0D
+    line-height: 1.5em;=0D
+    list-style-type: square;=0D
+    margin: 0 0 0.5em 1.5em;=0D
+    padding: 0;=0D
+=0D
+}=0D
+=0D
+/* ordered lists */=0D
+ol {=0D
+    line-height: 1.5em;=0D
+    margin: 0 0 0.5em 2.5em;=0D
+    padding: 0;=0D
+    font-weight: normal;=0D
+}=0D
+ol ol {=0D
+    margin: 0 0 0.5em 1.5em;=0D
+}=0D
+=0D
+div.dokuwiki ol {list-style-type: decimal}=0D
+div.dokuwiki ol ol {list-style-type: upper-roman}=0D
+div.dokuwiki ol ol ol {list-style-type: lower-alpha}=0D
+div.dokuwiki ol ol ol ol {list-style-type: lower-greek}=0D
+=0D
+/* the list items overriding the ol definition */=0D
+span.li {=0D
+    font-weight: normal;=0D
+}=0D
+=0D
+/* code blocks by indention */=0D
+pre.pre {=0D
+  font-size: 8pt;=0D
+  padding: 0.5em;=0D
+  border: 1px dashed #000000;=0D
+  color: Black;=0D
+  overflow: visible;=0D
+}=0D
+=0D
+/* code blocks by code tag */=0D
+pre.code {=0D
+  font-size: 8pt;=0D
+  padding: 0.5em;=0D
+  border: 1px dashed #000000;=0D
+  color: Black;=0D
+  overflow: visible;=0D
+}=0D
+=0D
+/* inline code words */=0D
+code {=0D
+  font-size: 120%;=0D
+}=0D
+=0D
+/* code blocks by file tag */=0D
+pre.file {=0D
+  font-size: 8pt;=0D
+  padding: 0.5em;=0D
+  border: 1px dotted #000000;=0D
+  color: Black;=0D
+  overflow: visible;=0D
+}=0D
+=0D
+/* footnotes */=0D
+div.footnotes{=0D
+  clear:both;=0D
+  border-top: 1px solid #000000;=0D
+  padding-left: 1em;=0D
+  margin-top: 1em;=0D
+}=0D
+=0D
+div.fn{=0D
+  font-size:90%;=0D
+}=0D
+=0D
+a.fn_top{=0D
+  vertical-align:super;=0D
+  font-size:80%;=0D
+}=0D
+=0D
+a.fn_bot{=0D
+  vertical-align:super;=0D
+  font-size:80%;=0D
+  font-weight:bold;=0D
+}=0D
+=0D
+acronym{=0D
+  border: 0;=0D
+}=0D
+=0D
+/* ---------- inline tables ------------------- */=0D
+=0D
+table.inline {=0D
+  font-size: 80%;=0D
+  background-color: #ffffff;=0D
+  border-spacing: 0px;=0D
+  border-collapse: collapse;=0D
+}=0D
+=0D
+table.inline th {=0D
+  padding: 3px;=0D
+  border: 1px solid #000000;=0D
+  border-bottom: 2px solid #000000;=0D
+}=0D
+=0D
+table.inline td {=0D
+  padding: 3px;=0D
+  border: 1px solid #000000;=0D
+}=0D
+=0D
+.leftalign{=0D
+  text-align: left;=0D
+}=0D
+=0D
+.centeralign{=0D
+  text-align: center;=0D
+}=0D
+=0D
+.rightalign{=0D
+  text-align: right;=0D
+}=0D
+=0D
+.toc, .footerinc, .header, .bar, .user {display:none}=0D
+=0D
+#sidebar {display:none}=0D
+/**=0D
+ * print additional CSS for the artic template=0D
+ * @author Michael Klier <chi@chimeric.de>=0D
+ */=0D
+=0D
+div.dokuwiki div.left_sidebar,=0D
+div.dokuwiki div.right_sidebar {=0D
+  display:none;=0D
+}=0D
+=0D
+=0D
+=0D
+/**=0D
+ * print additional CSS for the artic template=0D
+ * @author Michael Klier <chi@chimeric.de>=0D
+ */=0D
+=0D
+div.dokuwiki div.left_sidebar,=0D
+div.dokuwiki div.right_sidebar {=0D
+  display:none;=0D
+}=0D
+
+-->
+</style>
+=0D
+=0D
+  <link rel=3D"shortcut icon"  href=3D"/ferme/sympa/lib/tpl/sympa/images/fa=
+vicon.ico" />=0D
+=0D
+=0D
+=0D
+=0D
+  </head>=0D
+=0D
+<body>=0D
+<div id=3D"wrapper">=0D
+  <div class=3D"dokuwiki">=0D
+=0D
+    <div class=3D"stylehead">=0D
+=0D
+      <div class=3D"header">=0D
+        <div class=3D"pagename">=0D
+          <a href=3D"https://www.sympa.org/"><img  src=3D"https://www.sympa=
+.org/ferme/sympa/lib/tpl/sympa/images/logo_sympa_small.png" border=3D"0" />=
+</a></a> </div>=0D
+        <div class=3D"logo">=0D
+          <a href=3D"#">Sympa announces</a> =0D
+        </div>=0D
+      </div>=0D
+=0D
+      </div>=0D
+=0D
+=0D
+      <div class=3D"page">=0D
+      <!-- wikipage start -->=0D
+=20=20=20=20=20=20=20=20
+
+
+<h1><a name=3D"sympa_6116_released" id=3D"sympa_6116_released">Sympa 6.1.16=
+ released</a></h1>
+<div class=3D"level1">
+
+<p>
+
+<a href=3D"http://www.sympa.org" class=3D"media" title=3D"http://www.sympa.=
+org"  rel=3D"nofollow"><img  src=3D"https://www.sympa.org/_media/authors/an=
+nonces/envoi/logo_sympa_couleur.png" class=3D"medialeft" align=3D"left" alt=
+=3D"" /></a> (Apologies for the previous unformatted message, sent from the=
+ plain text composing interface instead of the <acronym title=3D"HyperText =
+Markup Language">HTML</acronym> newsletter posting interface).
+</p>
+
+<p>
+Here is Sympa 6.1.16, the latest stable version of Sympa.<br/>
+
+
+</p>
+<ul>
+<li class=3D"level1"><div class=3D"li"><a href=3D"http://www.sympa.org/dist=
+ribution/sympa-6.1.15.tar.gz" class=3D"urlextern" title=3D"http://www.sympa=
+.org/distribution/sympa-6.1.15.tar.gz"  rel=3D"nofollow">Download sources</=
+a></div>
+</li>
+<li class=3D"level1"><div class=3D"li"><a href=3D"http://www.sympa.org/dist=
+ribution/latest-stable/NEWS" class=3D"urlextern" title=3D"http://www.sympa.=
+org/distribution/latest-stable/NEWS"  rel=3D"nofollow">Check the release no=
+tes</a></div>
+</li>
+</ul>
+
+<p>
+
+This release includes two bug fixes. One that could make CAS authentication=
+ fail and the other one making digest composing fail and sympa being stalle=
+d.
+</p>
+
+<p>
+These two bugs were reported - and for one of them, fixed, thanks Fran=E7oi=
+s - by the community.
+</p>
+
+<p>
+It looks like a good place for a short reminder:  the lists sym&#x70;&#97;&=
+#45;&#x75;s&#101;r&#x73;&#x40;&#x6c;i&#x73;t&#x65;&#x73;&#46;&#x72;&#x65;n&=
+#97;&#116;&#x65;r&#46;f&#114; and &#x73;&#x79;m&#x70;&#x61;&#45;f&#x72;&#x4=
+0;l&#x69;&#x73;&#116;&#x65;&#115;&#x2e;re&#x6e;&#x61;&#116;&#101;r&#x2e;&#1=
+02;r (French speaking) are the good places to report weird behaviours and t=
+o get help.
+</p>
+
+<p>
+If you&#039;re sure you found a bug, please fill a bug request on our track=
+er: <a href=3D"https://sourcesup.renater.fr/tracker/?group_id=3D23" class=
+=3D"urlextern" title=3D"https://sourcesup.renater.fr/tracker/?group_id=3D23=
+"  rel=3D"nofollow">https://sourcesup.renater.fr/tracker/?group_id=3D23</a>
+</p>
+
+<p>
+So, in short, the 6.1.16 upgrade from 6.1.15 will be:
+</p>
+<ul>
+<li class=3D"level1"><div class=3D"li"> seamless as very little parts of th=
+e code moved;</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> useful.</div>
+</li>
+</ul>
+
+<p>
+
+This release also includes updated translations for the following languages=
+. we will never thank enough the Sympa translators whose work is so valuabl=
+e to help Sympa to spread around the world:
+
+</p>
+<ul>
+<li class=3D"level1"><div class=3D"li"> Greek (thanks to gotsikas)</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Occitan (thanks to Ana ribas)</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Dutch</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Catalan (thanks to C. Valmary)</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> German </div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Spanish (thanks to D. V. Ulriksen)<=
+/div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Japanese (thanks to S. Ikeda)</div>
+</li>
+<li class=3D"level1"><div class=3D"li"> Brasilian Portuguese (thanks to R. =
+Manola)</div>
+</li>
+</ul>
+
+</div>
+
+		=0D
+      <!-- wikipage stop -->=0D
+      </div>=0D
+=0D
+ =0D
+  =0D
+=0D
+    <div class=3D"clearer"></div>=0D
+=0D
+<div align=3D"center" class=3D"footerinc">=0D
+=0D
+<p>The Sympa software is provided by <a class=3D"cru" href=3D"http://www.re=
+nater.fr" target=3D"_blank" title=3D"RENATER">RENATER</a> <br />   <a class=
+=3D"otherlink" href=3D"https://www.sympa.org/faq/">Faq</a> | <a class=3D"ot=
+herlink" href=3D"https://www.sympa.org/">News</a> | <a class=3D"otherlink" =
+href=3D"https://www.sympa.org/users/authors#contact_authors">Contact</a> | =
+<a class=3D"otherlink" href=3D"http://www.cru.fr/documentation/notices-lega=
+les/mention" target=3D"_blank" title=3D"Legal Notices">Legal Notices</a></p=
+>=0D
+=0D
+</div>=0D
+ <div align=3D"center" class=3D"echo_footerinc">=0D
+<!-- <a target=3D"_blank" href=3D"http://www.chimeric.de" title=3D"chimeric=
+.de=3Dchi`s home"><img  src=3D"https://www.sympa.org/lib/tpl/sympa/multitem=
+plate/../sympa_annonces/images/button-chimeric-de.png" width=3D"80" height=
+=3D"15" alt=3D"chimeric.de =3D chi`s home" border=3D"0" /></a>=0D
+=0D
+  <a target=3D"_blank" href=3D"http://creativecommons.org/licenses/by-nc-sa=
+/2.0/" rel=3D"license" title=3D"Creative Commons License"><img  src=3D"http=
+s://www.sympa.org/lib/tpl/sympa/multitemplate/../sympa_annonces/images/butt=
+on-cc.gif" width=3D"80" height=3D"15" alt=3D"Creative Commons License" bord=
+er=3D"0" /></a>=0D
+=0D
+  <a target=3D"_blank" href=3D"http://jigsaw.w3.org/css-validator/check/ref=
+erer" title=3D"Valid CSS"><img  src=3D"https://www.sympa.org/lib/tpl/sympa/=
+multitemplate/../sympa_annonces/images/button-css.png" width=3D"80" height=
+=3D"15" alt=3D"Valid CSS" border=3D"0" /></a>=0D
+=0D
+  <a target=3D"_blank" href=3D"http://wiki.splitbrain.org/wiki:dokuwiki" ti=
+tle=3D"Driven by DokuWiki"><img  src=3D"https://www.sympa.org/lib/tpl/sympa=
+/multitemplate/../sympa_annonces/images/button-dw.png" width=3D"80" height=
+=3D"15" alt=3D"Driven by DokuWiki" border=3D"0" /></a>=0D
+=0D
+  <a target=3D"_blank" href=3D"http://www.firefox-browser.de" title=3D"do y=
+ourself a favour and use a real browser - get firefox"><img  src=3D"https:/=
+/www.sympa.org/lib/tpl/sympa/multitemplate/../sympa_annonces/images/button-=
+firefox.png" width=3D"80" height=3D"15" alt=3D"do yourself a favour and use=
+ a real browser - get firefox!!" border=3D"0" /></a>=0D
+  =0D
+  <a target=3D"_blank" href=3D"/feed.php" title=3D"Recent changes RSS feed"=
+><img  src=3D"https://www.sympa.org/lib/tpl/sympa/multitemplate/../sympa_an=
+nonces/images/button-rss.png" width=3D"80" height=3D"15" alt=3D"Recent chan=
+ges RSS feed" border=3D"0" /></a>=0D
+=0D
+  <a target=3D"_blank" href=3D"http://validator.w3.org/check/referer" title=
+=3D"Valid XHTML 1.0"><img  src=3D"https://www.sympa.org/lib/tpl/sympa/multi=
+template/../sympa_annonces/images/button-xhtml.png" width=3D"80" height=3D"=
+15" alt=3D"Valid XHTML 1.0" border=3D"0" /></a> -->=0D
+=0D
+=0D
+=0D
+<!--=0D
+=0D
+<rdf:RDF xmlns=3D"http://web.resource.org/cc/"=0D
+    xmlns:dc=3D"http://purl.org/dc/elements/1.1/"=0D
+    xmlns:rdf=3D"http://www.w3.org/1999/02/22-rdf-syntax-ns#">=0D
+<Work rdf:about=3D"">=0D
+   <dc:type rdf:resource=3D"http://purl.org/dc/dcmitype/Text" />=0D
+   <license rdf:resource=3D"http://creativecommons.org/licenses/by-nc-sa/2.=
+0/" />=0D
+</Work>=0D
+=0D
+<License rdf:about=3D"http://creativecommons.org/licenses/by-nc-sa/2.0/">=
+=0D
+   <permits rdf:resource=3D"http://web.resource.org/cc/Reproduction" />=0D
+   <permits rdf:resource=3D"http://web.resource.org/cc/Distribution" />=0D
+   <requires rdf:resource=3D"http://web.resource.org/cc/Notice" />=0D
+   <requires rdf:resource=3D"http://web.resource.org/cc/Attribution" />=0D
+   <prohibits rdf:resource=3D"http://web.resource.org/cc/CommercialUse" />=
+=0D
+   <permits rdf:resource=3D"http://web.resource.org/cc/DerivativeWorks" />=
+=0D
+   <requires rdf:resource=3D"http://web.resource.org/cc/ShareAlike" />=0D
+</License>=0D
+=0D
+</rdf:RDF>=0D
+=0D
+-->=0D
+</div>=0D
+  </div>=0D
+</div>=0D
+=0D
+<div class=3D"no"></div>=0D
+=0D
+</body>=0D
+</html>=0D
+
+--_----------=_1353081554233880
+MIME-Version: 1.0
+Content-Location: https://www.sympa.org/ferme/sympa/lib/tpl/sympa/images/logo_sympa_small.png
+Content-Transfer-Encoding: base64
+Content-Type: image/png
+Date: Fri, 16 Nov 2012 16:59:14 +0100
+Content-length: 17845
+
+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
+MIT/D6E2MQzNPu32AAAAAElFTkSuQmCC
+
+--_----------=_1353081554233880
+MIME-Version: 1.0
+Content-Location: https://www.sympa.org/_media/authors/annonces/envoi/logo_sympa_couleur.png
+Content-Transfer-Encoding: base64
+Content-Type: image/png
+Date: Fri, 16 Nov 2012 16:59:14 +0100
+Content-length: 32546
+
+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
+VkZhYSFSSp588klqa2tJpVIMGzaMk08+mfHjx2PbNuvXrycUCjFmzBj8vXuG
+Ll++nJUrVzJ37lwmTpxIXV0dq1at4v3336ekpIRx48Zx6KGHUlVVlWvnli1b
+WL16NRs3bsTv9zNjxgymTZvG5Px8UqkQmzZtoqGhgWAwSEFBQe5BuVwupJQE
+AgHa2tp45JFHKC8vZ+7cubhcLlatWsWqVatoa2tjypQpTJ8+nTFjxlBYWEhD
+QwMbN27E6/USCoXIz88nLy8Pr9eL2+3up551XUcpRUNDA++++y5r164lGAyy
+3377MWPGDCzL4qmnnmLNmjUceOCBHHfccbhcLl599VXcbjeFhYWUlJTkyJmV
+XADcdBMZKe0/er2bESKmIAJ0K6U6pW132RDWpIwYhpGIZjJpfyplFre1WfXO
+rHFHB0DO1mqy/60JMfvHpYjCAbNT27ZzDbj99tv5yU9+QiqVYsyYMYwbN67f
+mzUQr732Wk5iNDQ0EAqFWLZsGXPmzOGhhx7i3HPPBcDlcrFx40ZGjRrFww8/
+jN/v58gjj6SoqIgLLriA+wYkhfp8PpYuXcqcOXNYunQpQgiOOuooIpEIhx56
+KOvWrctdW1BQQDgc3qFtBQUFzJ8/n0MPPZQ77riDf/3rX4waNQrLstiyZUvO
+RjzuuOO4//77KS8vp7m5mTVr1hAMBikuLiYUCuH3+wkGg9x4441ce+21uZfN
+5/NhWdagL9/IkSNZtGgRhx9+OD09Pbz99ttYlkVJSQnFxcUUFBTkpG+WBCtW
+rODss89m06ZNO5SnaRper5d4PJ47d+GFF3L33Xfz0Ucf8eqrr1JeXk5lZSXl
+5eWEQiG8Xq+j/l99Fc44gyUeT/31Pt9ahOgGOpUQbdh2s7DtFtOy2qXX222m
+0xGZySTDUmYqNm+2Xgd70KffG7dsm6nktRaIF+M7fA84DL/zzjtZsGAB+++/
+P88//zzz589n8uTJ7LXXXjs9gkFHBCYSCf7yl78gpcydu/fee3P1GIbBPb2L
+trZt09zcTCgUoqWlhYceegiAffbZh8Je514ymeT7vckLxcXFOdvh/vvv70cq
+YFBSZc9fd911/PSnP+U73/kOf/rTnzj//PO5+OKLWbJkCU8//TQHHHAAS5cu
+ZcqUKfz973+noqKCSZMmUVdXR1NTE52dnei6TiqV4qabbiKTyeDz+TjzzDPJ
+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
+x8P/B5vrcK0bOdX+AAAAAElFTkSuQmCC
+
+--_----------=_1353081554233880--
+
+
+------------=_1353081571-28045-0
+Content-Type: text/plain; charset="UTF-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+This mailing list automatically includes members of other Sympa-related mailing lists (sympa-users, sympa-dev, sympa-fr, sympa-translation).
+
+To unsubscribe from this list, clik here: https://listes.renater.fr/sympa/auto_signoff/sympa-announce/guillaume.rousse%40inria.fr
+------------=_1353081571-28045-0--

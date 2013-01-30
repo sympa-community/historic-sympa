@@ -1,0 +1,18 @@
+X-Mozilla-Status: 0801
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+FCC: imap://Guillaume.Rousse@zimbra.inria.fr/Sent
+X-Identity-Key: id5
+X-Account-Key: account5
+Message-ID: <510780E6.8090702@inria.fr>
+Date: Tue, 29 Jan 2013 08:57:26 +0100
+From: Guillaume Rousse <Guillaume.Rousse@inria.fr>
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130114 Thunderbird/17.0.2
+MIME-Version: 1.0
+To: sympa-developpers@listes.renater.fr
+Subject: unsigned test
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+this is an unsigned test message.
