@@ -5,7 +5,9 @@
 
 use strict;
 use warnings;
-use lib 'src/lib';
+
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 
 use English qw(-no_match_vars);
 use Test::More;
@@ -20,6 +22,8 @@ eval {
 plan(skip_all => 'Test::TrailingSpace required') if $EVAL_ERROR;
 
 plan tests => 2;
+
+chdir "$Bin/..";
            
 my $finder;
 

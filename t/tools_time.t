@@ -5,7 +5,9 @@
 
 use strict;
 use warnings;
-use lib 'src/lib';
+
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 
 use POSIX qw(setlocale LC_ALL LC_CTYPE);
 use Test::More;

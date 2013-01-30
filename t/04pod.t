@@ -5,7 +5,9 @@
 
 use strict;
 use warnings;
-use lib 'src/lib';
+
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 
 use English qw(-no_match_vars);
 use Test::More;
@@ -18,6 +20,8 @@ eval {
     Test::Pod->import();
 };
 plan(skip_all => 'Test::Pod required') if $EVAL_ERROR;
+
+chdir "$Bin/..";
 
 my @files = all_pod_files('src/lib');
 

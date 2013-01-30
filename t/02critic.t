@@ -5,7 +5,9 @@
 
 use strict;
 use warnings;
-use lib 'src/lib';
+
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 
 use English qw(-no_match_vars);
 use Test::More;
@@ -18,5 +20,7 @@ eval {
     Test::Perl::Critic->import();
 };
 plan(skip_all => 'Test::Perl::Critic required') if $EVAL_ERROR;
+
+chdir "$Bin/..";
 
 all_critic_ok('src/lib');

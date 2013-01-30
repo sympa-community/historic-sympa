@@ -6,6 +6,9 @@
 use strict;
 use warnings;
 
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
+
 use English qw(-no_match_vars);
 use Test::More;
 
@@ -23,6 +26,8 @@ eval {
     Test::Vars->import();
 };
 plan(skip_all => 'Test::Vars required') if $EVAL_ERROR;
+
+chdir "$Bin/..";
 
 my @files = all_pm_files('src/lib');
 

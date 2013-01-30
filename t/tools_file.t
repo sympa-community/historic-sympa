@@ -5,7 +5,9 @@
 
 use strict;
 use warnings;
-use lib 'src/lib';
+
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 
 use Test::More;
 use English qw(-no_match_vars);

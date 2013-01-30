@@ -5,6 +5,9 @@
 
 use strict;
 
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
+
 use File::Temp;
 use Test::More;
 use Test::Exception;
