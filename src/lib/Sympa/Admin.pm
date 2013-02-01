@@ -145,7 +145,7 @@ sub create_list_old{
     }
 
     if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
-	do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
+	Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 	return undef;
     }
 
@@ -227,7 +227,7 @@ sub create_list_old{
 	return undef;
     }
     unless (open CONFIG, '>', "$list_dir/config") {
-	do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+	Sympa::Log::do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -380,7 +380,7 @@ sub create_list{
 	}
     }
     if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
-	do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
+	Sympa::Log::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 	return undef;
     }
 
@@ -460,7 +460,7 @@ sub create_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list_dir/config") {
-	do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+	Sympa::Log::do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -624,7 +624,7 @@ sub update_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list->{'dir'}/config") {
-	do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $ERRNO);
+	Sympa::Log::do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
