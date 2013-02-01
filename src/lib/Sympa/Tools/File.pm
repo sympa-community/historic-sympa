@@ -98,7 +98,7 @@ sub copy_dir {
 	Sympa::Log::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
 	return undef;
     }
-    return (&File::Copy::Recursive::dircopy($dir1,$dir2)) ;
+    return (File::Copy::Recursive::dircopy($dir1,$dir2)) ;
 }
 
 =head2 del_dir($dir)
@@ -138,7 +138,7 @@ sub mk_parent_dir {
     my $dir = $1;
 
     return 1 if (-d $dir);
-    &mkdir_all($dir, 0755);
+    mkdir_all($dir, 0755);
 }
 
 =head2 mkdir_all($path, $mode)
@@ -165,7 +165,7 @@ sub mkdir_all {
     my $parent_path = join '/', @token;
 
     unless (-d $parent_path) {
-	unless (&mkdir_all($parent_path, $mode)) {
+	unless (mkdir_all($parent_path, $mode)) {
 	    $status = undef;
 	}
     }
@@ -262,7 +262,7 @@ sub list_dir {
 
 	    ## Guess filename encoding
 	    my ($encoding, $guess);
-	    my $decoder = &Encode::Guess::guess_encoding($file, $original_encoding, 'utf-8');
+	    my $decoder = Encode::Guess::guess_encoding($file, $original_encoding, 'utf-8');
 	    if (ref $decoder) {
 		$encoding = $decoder->name;
 	    }else {
@@ -274,7 +274,7 @@ sub list_dir {
 			 'encoding' => $encoding,
 			 'guess' => $guess};
 	    if (-d "$dir/$file") {
-		&list_dir($dir.'/'.$file, $all, $original_encoding);
+		list_dir($dir.'/'.$file, $all, $original_encoding);
 	    }
 	}
         closedir DIR;

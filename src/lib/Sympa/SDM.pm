@@ -96,7 +96,7 @@ sub do_prepared_query {
 sub db_get_handler {
     Sympa::Log::do_log('debug3', 'Returning handle to sympa database');
 
-    if(&check_db_connect()) {
+    if(check_db_connect()) {
 	return $db_source->{'dbh'};
     }else {
 	Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
@@ -115,7 +115,7 @@ sub check_db_connect {
     }
 
     unless ($db_source->{'dbh'} && $db_source->{'dbh'}->ping()) {
-	unless (&connect_sympa_database('just_try')) {
+	unless (connect_sympa_database('just_try')) {
 	    Sympa::Log::do_log('err', 'Failed to connect to database');
 	    return undef;
 	}
@@ -210,7 +210,7 @@ sub probe_db {
 		Sympa::Log::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, Sympa::Configuration::get_robot_conf('*','db_name'), Sympa::Configuration::get_robot_conf('*','db_type'));
 		return undef;
 	    }
-	    unless (&check_fields({'table' => $t,'report' => \@report,'real_struct' => \%real_struct})) {
+	    unless (check_fields({'table' => $t,'report' => \@report,'real_struct' => \%real_struct})) {
 		Sympa::Log::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
 		return undef;
 	    }
@@ -225,12 +225,12 @@ sub probe_db {
 
 	    if ((Sympa::Configuration::get_robot_conf('*','db_type') eq 'mysql')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'Pg')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'SQLite')) {
 		## Check that primary key has the right structure.
-		unless (&check_primary_key({'table' => $t,'report' => \@report})) {
+		unless (check_primary_key({'table' => $t,'report' => \@report})) {
 		    Sympa::Log::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
 		    return undef;
 		}
 
-		unless (&check_indexes({'table' => $t,'report' => \@report})) {
+		unless (check_indexes({'table' => $t,'report' => \@report})) {
 		    Sympa::Log::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
 		    return undef;
 		}
@@ -296,7 +296,7 @@ sub check_fields {
 
 	## Change DB types if different and if update_db_types enabled
 	if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && Sympa::Configuration::get_robot_conf('*','db_type') ne 'SQLite') {
-	    unless (&check_db_field_type(effective_format => $real_struct{$t}{$f},
+	    unless (check_db_field_type(effective_format => $real_struct{$t}{$f},
 					 required_format => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f})) {
 		push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f});
 
@@ -511,7 +511,7 @@ sub quote {
     if (defined $db_source) {
 	return $db_source->quote($param);
     }else{
-	if(&check_db_connect()) {
+	if(check_db_connect()) {
 	    return $db_source->quote($param);
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
@@ -526,7 +526,7 @@ sub get_substring_clause {
     if (defined $db_source) {
 	return $db_source->get_substring_clause($param);
      }else{
-	if(&check_db_connect()) {
+	if(check_db_connect()) {
 	    return $db_source->get_substring_clause($param);
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
@@ -541,7 +541,7 @@ sub get_limit_clause {
     if (defined $db_source) {
 	return ' '.$db_source->get_limit_clause($param).' ';
     }else{
-	if(&check_db_connect()) {
+	if(check_db_connect()) {
 	    return ' '.$db_source->get_limit_clause($param).' ';
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
@@ -561,7 +561,7 @@ sub get_canonical_write_date {
     if (defined $db_source) {
 	return $db_source->get_canonical_write_date($param);
     }else{
-	if(&check_db_connect()) {
+	if(check_db_connect()) {
 	    return $db_source->get_canonical_write_date($param);
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
@@ -581,7 +581,7 @@ sub get_canonical_read_date {
     if (defined $db_source) {
 	return $db_source->get_canonical_read_date($param);
     }else{
-	if(&check_db_connect()) {
+	if(check_db_connect()) {
 	    return $db_source->get_canonical_read_date($param);
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');

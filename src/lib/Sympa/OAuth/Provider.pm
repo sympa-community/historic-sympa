@@ -76,7 +76,7 @@ A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	my $p = &_findParameters(
+	my $p = _findParameters(
 		authorization_header => $params{'authorization_header'},
 		request_parameters => $params{'request_parameters'},
 		request_body => $params{'request_body'}
@@ -84,7 +84,7 @@ sub new {
 	return undef unless(defined($p));
 	return undef unless(defined($p->{'oauth_consumer_key'}));
 
-	my $c = &_getConsumerConfigFor($p->{'oauth_consumer_key'}, $params{config});
+	my $c = _getConsumerConfigFor($p->{'oauth_consumer_key'}, $params{config});
 	return undef unless(defined($c));
 	return undef unless(defined($c->{'enabled'}));
 	return undef unless($c->{'enabled'} eq '1');
@@ -303,8 +303,8 @@ sub generateTemporary {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $self->{'consumer_key'});
 
-	my $token = &_generateRandomString(32); # 9x10^62 entropy ...
-	my $secret = &_generateRandomString(32); # may be sha1-ed or such ...
+	my $token = _generateRandomString(32); # 9x10^62 entropy ...
+	my $secret = _generateRandomString(32); # may be sha1-ed or such ...
 
 	unless(Sympa::SDM::do_query(
 		'INSERT INTO oauthprovider_sessions_table(token_oauthprovider, secret_oauthprovider, isaccess_oauthprovider, accessgranted_oauthprovider, consumer_oauthprovider, user_oauthprovider, firsttime_oauthprovider, lasttime_oauthprovider, verifier_oauthprovider, callback_oauthprovider) VALUES (%s, %s, NULL, NULL, %s, NULL, %d, %d, NULL, %s)',
@@ -395,7 +395,7 @@ sub generateVerifier {
 
 	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}));
 
-	my $verifier = &_generateRandomString(32);
+	my $verifier = _generateRandomString(32);
 
 	unless(Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE user_oauthprovider=%s AND consumer_oauthprovider=%s AND isaccess_oauthprovider=1',
@@ -455,8 +455,8 @@ sub generateAccess {
 	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout_type => 'verifier'));
 	return undef unless($params{'verifier'} eq $tmp->{'verifier'});
 
-	my $token = &_generateRandomString(32);
-	my $secret = &_generateRandomString(32);
+	my $token = _generateRandomString(32);
+	my $secret = _generateRandomString(32);
 
 	unless(Sympa::SDM::do_query(
 		'UPDATE oauthprovider_sessions_table SET token_oauthprovider=%s, secret_oauthprovider=%s, isaccess_oauthprovider=1, lasttime_oauthprovider=%d, verifier_oauthprovider=NULL, callback_oauthprovider=NULL WHERE token_oauthprovider=%s AND verifier_oauthprovider=%s',

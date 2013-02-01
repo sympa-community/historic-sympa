@@ -81,7 +81,7 @@ sub new {
 
     $document->{'root_path'} = $list->{'dir'}.'/shared';
 
-    $document->{'path'} = &main::no_slash_end($path);
+    $document->{'path'} = main::no_slash_end($path);
     $document->{'escaped_path'} = Sympa::Tools::escape_chars($document->{'path'}, '/');
 
     ### Document isn't a description file
@@ -98,7 +98,7 @@ sub new {
     }
 
     ## Check access control
-    &check_access_control($document, $params);
+    check_access_control($document, $params);
 
     ###############################
     ## The path has been checked ##
@@ -116,11 +116,11 @@ sub new {
 	return undef;
     }
 
-    $document->{'visible_path'} = &main::make_visible_path($document->{'path'});
+    $document->{'visible_path'} = main::make_visible_path($document->{'path'});
 
     ## Date
     my @info = stat $document->{'absolute_path'};
-    $document->{'date'} =  &POSIX::strftime("%d %b %Y", localtime($info[9]));
+    $document->{'date'} =  POSIX::strftime("%d %b %Y", localtime($info[9]));
     $document->{'date_epoch'} =  $info[9];
 
     # Size of the doc
@@ -182,7 +182,7 @@ sub new {
 	my @info = stat $desc_file;
 	$document->{'serial_desc'} = $info[9];
 
-	my %desc_hash = &main::get_desc_file($desc_file);
+	my %desc_hash = main::get_desc_file($desc_file);
 	$document->{'owner'} = $desc_hash{'email'};
 	    $document->{'title'} = $desc_hash{'title'};
 	$document->{'escaped_title'} = Sympa::Tools::escape_html($document->{'title'});
@@ -190,7 +190,7 @@ sub new {
 	# Author
 	if ($desc_hash{'email'}) {
 	    $document->{'author'} = $desc_hash{'email'};
-	    $document->{'author_mailto'} = &main::mailto($list,$desc_hash{'email'});
+	    $document->{'author_mailto'} = main::mailto($list,$desc_hash{'email'});
 	    $document->{'author_known'} = 1;
 	}
     }
@@ -199,7 +199,7 @@ sub new {
    ### File, directory or URL ?
     if ($document->{'type'} eq 'url') {
 
-	$document->{'icon'} = &main::get_icon('url');
+	$document->{'icon'} = main::get_icon('url');
 
 	open DOC, $document->{'absolute_path'};
 	my $url = <DOC>;
@@ -212,7 +212,7 @@ sub new {
 	}
     }elsif ($document->{'type'} eq 'file') {
 
-	if (my $type = &main::get_mime_type($document->{'file_extension'})) {
+	if (my $type = main::get_mime_type($document->{'file_extension'})) {
 	    # type of the file and apache icon
 	    if ($type =~ /^([\w\-]+)\/([\w\-]+)$/) {
 		my ($mimet, $subt) = ($1, $2);
@@ -223,23 +223,23 @@ sub new {
 			}
 			$type = "$subt file";
 		    }
-		$document->{'icon'} = &main::get_icon($mimet) || &main::get_icon('unknown');
+		$document->{'icon'} = main::get_icon($mimet) || main::get_icon('unknown');
 	    }
 	} else {
 	    # unknown file type
-	    $document->{'icon'} = &main::get_icon('unknown');
+	    $document->{'icon'} = main::get_icon('unknown');
 	}
 
 	## HTML file
 	if ($document->{'file_extension'} =~ /^html?$/i) {
 	    $document->{'html'} = 1;
-	    $document->{'icon'} = &main::get_icon('text');
+	    $document->{'icon'} = main::get_icon('text');
 	}
 
 	## Directory
     }else {
 
-	$document->{'icon'} = &main::get_icon('folder');
+	$document->{'icon'} = main::get_icon('folder');
 
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $document->{'absolute_path'}) {
@@ -250,7 +250,7 @@ sub new {
 	# array of entry of the directory DIR
 	my @tmpdir = readdir DIR; closedir DIR;
 
-	my $dir = &main::get_directory_content(\@tmpdir, $email, $list, $document->{'absolute_path'});
+	my $dir = main::get_directory_content(\@tmpdir, $email, $list, $document->{'absolute_path'});
 
 	foreach my $d (@{$dir}) {
 
@@ -373,7 +373,7 @@ sub check_access_control {
 	}
 
 	#edit = 0, 0.5 or 1
-	$may_edit = &main::find_edit_mode($action);
+	$may_edit = main::find_edit_mode($action);
 	$why_not_edit = '' if ($may_edit);
     }
 
@@ -422,7 +422,7 @@ sub check_access_control {
 	    # a description file was found
 	    # loading of acces information
 
-	    %desc_hash = &main::get_desc_file($desc_file);
+	    %desc_hash = main::get_desc_file($desc_file);
 
 	    ## Author has all privileges
 	    if ($user eq $desc_hash{'email'}) {
@@ -467,8 +467,8 @@ sub check_access_control {
 
 
 		# $may_edit = 0, 0.5 or 1
-		my $may_action_edit = &main::find_edit_mode($action_edit);
-		$may_edit = &main::merge_edit($may_edit,$may_action_edit);
+		my $may_action_edit = main::find_edit_mode($action_edit);
+		$may_edit = main::merge_edit($may_edit,$may_action_edit);
 		$why_not_edit = '' if ($may_edit);
 
 

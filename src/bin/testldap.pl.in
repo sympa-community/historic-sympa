@@ -27,7 +27,7 @@ use Getopt::Long;
 use Net::LDAP;
 
 my %opt;
-unless (&GetOptions(\%opt, 'host=s', 'suffix=s', 'filter=s','attrs=s', 'ssl=s', 'scope=s')) {
+unless (GetOptions(\%opt, 'host=s', 'suffix=s', 'filter=s','attrs=s', 'ssl=s', 'scope=s')) {
     die "Unknown options.";
 }
 

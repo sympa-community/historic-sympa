@@ -153,13 +153,13 @@ sub _do_multipart {
        _do_text_plain($subent);
      }
      elsif ($subent->effective_type =~ /^multipart\/related$/i){
-       if ($topent->effective_type =~ /^multipart\/alternative$/i && &_hasTextPlain($topent)) {
+       if ($topent->effective_type =~ /^multipart\/alternative$/i && _hasTextPlain($topent)) {
          # this is a rare case - /related nested inside /alternative.
          # If there's also a text/plain alternative just ignore it
          next;
        } else {
          # just treat like any other multipart
-         &_do_multipart ($subent);
+         _do_multipart ($subent);
        }
      }
      elsif ($subent->effective_type =~ /^multipart\/.*/i) {
@@ -247,7 +247,7 @@ sub _do_text_plain {
 
   ## normalise body to UTF-8
   # get charset
-  my $charset = &_getCharset($entity);
+  my $charset = _getCharset($entity);
   eval {
     $charset->encoder('utf8');
     $thispart = $charset->encode($thispart);
@@ -301,7 +301,7 @@ sub _do_text_html {
   # qp encodes them
   $body =~ s/\r\n/\n/g;
 
-  my $charset = &_getCharset($entity);
+  my $charset = _getCharset($entity);
 
   eval {
       # normalise body to internal unicode

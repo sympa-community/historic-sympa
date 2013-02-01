@@ -74,7 +74,7 @@ foreach my $hash(@Sympa::Configuration::Definition::params){
     $optional_key_words{$hash->{'name'}} = 1 if ($hash->{'optional'});
 }
 
-our $params_by_categories = &_get_parameters_names_by_category();
+our $params_by_categories = _get_parameters_names_by_category();
 
 my %old_params = (
     trusted_ca_options     => 'capath,cafile',
@@ -147,7 +147,7 @@ sub load {
         printf "%s::load(): File %s has changed since the last cache. Loading file.\n",__PACKAGE__,$config_file;
         $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
         ## Loading the Sympa main config file.
-        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+        if(my $config_loading_result = _load_config_file_to_hash({'path_to_config_file' => $config_file})) {
             %line_numbered_config = %{$config_loading_result->{'numbered_config'}};
             %Conf = %{$config_loading_result->{'config'}};
             $config_err = $config_loading_result->{'errors'};
@@ -160,7 +160,7 @@ sub load {
 
         # Users may define parameters with a typo or other errors. Check that the parameters
         # we found in the config file are all well defined Sympa parameters.
-        $config_err += &_detect_unknown_parameters_in_config(
+        $config_err += _detect_unknown_parameters_in_config(
                                 {
                                     'config_hash' => \%Conf,
                                     'config_file_line_numbering_reference' => \%line_numbered_config,
@@ -168,41 +168,41 @@ sub load {
 
         # Some parameter values are hardcoded. In that case, ignore what was
         #  set in the config file and simply use the hardcoded value.
-        %Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
+        %Ignored_Conf = %{_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
 
-        &_set_listmasters_entry({'config_hash' => \%Conf, 'main_config' => 1});
+        _set_listmasters_entry({'config_hash' => \%Conf, 'main_config' => 1});
 
         ## Some parameters must have a value specifically defined in the config. If not, it is an error.
-        $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,'file_to_check' => $config_file});
+        $config_err += _detect_missing_mandatory_parameters({'config_hash' => \%Conf,'file_to_check' => $config_file});
 
         # Some parameters need special treatments to get their final values.
-        &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
+        _infer_server_specific_parameter_values({'config_hash' => \%Conf,});
 
-        &_infer_robot_parameter_values({'config_hash' => \%Conf});
+        _infer_robot_parameter_values({'config_hash' => \%Conf});
 
         if ($config_err) {
             printf STDERR "Errors while parsing main config file %s\n",$config_file;
             return undef;
         }
 
-        &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
-        &_save_config_hash_to_binary({'config_hash' => \%Conf,});
+        _store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
+        _save_config_hash_to_binary({'config_hash' => \%Conf,});
     }
 
-    if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
+    if (my $missing_modules_count = _check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
         printf STDERR "%s::load(): Warning: %n required modules are missing.\n",__PACKAGE__,$missing_modules_count;
     }
 
-    &_replace_file_value_by_db_value({'config_hash' => \%Conf}) unless($no_db);
-    &_load_server_specific_secondary_config_files({'config_hash' => \%Conf,});
-    &_load_robot_secondary_config_files({'config_hash' => \%Conf});
+    _replace_file_value_by_db_value({'config_hash' => \%Conf}) unless($no_db);
+    _load_server_specific_secondary_config_files({'config_hash' => \%Conf,});
+    _load_robot_secondary_config_files({'config_hash' => \%Conf});
 
     ## Load robot.conf files
-    unless (&load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload})){
+    unless (load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload})){
         printf STDERR "Unable to load robots\n";
         return undef;
     }
-    ##&_create_robot_like_config_for_main_robot();
+    ##_create_robot_like_config_for_main_robot();
     return 1;
 }
 
@@ -211,7 +211,7 @@ sub load_robots {
     my ($params) = @_;
     my @robots;
 
-    my $robots_list_ref = &get_robots_list();
+    my $robots_list_ref = get_robots_list();
     unless (defined $robots_list_ref) {
         printf STDERR "robots config loading failed.\n";
         return undef;
@@ -224,13 +224,13 @@ sub load_robots {
     my $exiting = 0;
     foreach my $robot (@robots) {
         my $robot_conf = undef;
-        unless ($robot_conf = &_load_single_robot_config({'robot' => $robot, 'no_db' => $params->{'no_db'}, 'force_reload' => $params->{'force_reload'}})) {
+        unless ($robot_conf = _load_single_robot_config({'robot' => $robot, 'no_db' => $params->{'no_db'}, 'force_reload' => $params->{'force_reload'}})) {
             printf STDERR "The config for robot %s contain errors: it could not be correctly loaded.\n";
             $exiting = 1;
         }else{
             $params->{'config_hash'}{'robots'}{$robot} = $robot_conf;
         }
-        &_check_double_url_usage({'config_hash' => $params->{'config_hash'}{'robots'}{$robot}});
+        _check_double_url_usage({'config_hash' => $params->{'config_hash'}{'robots'}{$robot}});
     }
     return undef if ($exiting);
     return 1;
@@ -253,7 +253,7 @@ sub get_robot_conf {
 sub delete_binaries {
     Sympa::Log::do_log('notice',"Removing binary cache for sympa.conf, wwsympa.conf and all the robot.conf files");
     my @files = (Sympa::Constants::CONFIG,Sympa::Constants::WWSCONFIG);
-    foreach my $robot (@{&get_robots_list()}) {
+    foreach my $robot (@{get_robots_list()}) {
         push @files, "$Conf{'etc'}/$robot/robot.conf";
     }
     foreach my $c_file (@files) {
@@ -294,7 +294,7 @@ sub get_parameters_group {
     Sympa::Log::do_log('debug3','Getting parameters for group "%s"',$group);
     my $param_hash;
     foreach my $param_name (keys %{$params_by_categories->{$group}}) {
-        $param_hash->{$param_name} = &get_robot_conf($robot,$param_name);
+        $param_hash->{$param_name} = get_robot_conf($robot,$param_name);
     }
     return $param_hash;
 }
@@ -363,7 +363,7 @@ sub conf_2_db {
     my @conf_parameters = @Sympa::Configuration::Definition::params ;
 
     # store in database robots parameters.
-    &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults).
+    load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults).
 
     unless (opendir DIR,$Conf{'etc'} ) {
         printf STDERR "%s::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n", __PACKAGE__;
@@ -378,13 +378,13 @@ sub conf_2_db {
         if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
             $config = $result_of_config_loading->{'config'};
         }
-        &_remove_unvalid_robot_entry($config);
+        _remove_unvalid_robot_entry($config);
 
         for my $i ( 0 .. $#conf_parameters ) {
             if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
             if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage
                 ($config->{$conf_parameters[$i]->{'name'}})){
-                &set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
+                set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
             }
             }
         }
@@ -401,7 +401,7 @@ sub conf_2_db {
 
     for my $i ( 0 .. $#conf_parameters ) {
     if (($conf_parameters[$i]->{'edit'} eq '1') && $global_conf->{$conf_parameters[$i]->{'name'}}) {
-        &set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
+        set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
     }
     }
 }
@@ -437,7 +437,7 @@ sub checkfiles_as_root {
     foreach my $robot (keys %{$Conf{'robots'}}) {
 
     # create static content directory
-    my $dir = &get_robot_conf($robot, 'static_content_path');
+    my $dir = get_robot_conf($robot, 'static_content_path');
     if ($dir ne '' && ! -d $dir){
         unless ( mkdir ($dir, 0775)) {
         Sympa::Log::do_log('err', 'Unable to create directory %s: %s', $dir, $ERRNO);
@@ -543,7 +543,7 @@ sub checkfiles {
 
     #  create pictures dir if usefull for each robot
     foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'static_content_path');
+    my $dir = get_robot_conf($robot, 'static_content_path');
     if ($dir ne '' && -d $dir) {
         unless (-f $dir.'/index.html'){
         unless(open (FF, ">$dir".'/index.html')) {
@@ -553,8 +553,8 @@ sub checkfiles {
         }
 
         # create picture dir
-        if ( &get_robot_conf($robot, 'pictures_feature') eq 'on') {
-        my $pictures_dir = &get_robot_conf($robot, 'pictures_path');
+        if ( get_robot_conf($robot, 'pictures_feature') eq 'on') {
+        my $pictures_dir = get_robot_conf($robot, 'pictures_path');
         unless (-d $pictures_dir){
             unless (mkdir ($pictures_dir, 0775)) {
             Sympa::Log::do_log('err', 'Unable to create directory %s',$pictures_dir);
@@ -577,12 +577,12 @@ sub checkfiles {
     # create or update static CSS files
     my $css_updated = undef;
     foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'css_path');
+    my $dir = get_robot_conf($robot, 'css_path');
 
     ## Get colors for parsing
     my $params = {};
     foreach my $p (%params) {
-        $params->{$p} = &get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+        $params->{$p} = get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
     }
 
     ## Set TT2 path
@@ -699,7 +699,7 @@ sub _load_auth {
     my ($robot) = @_;
 
     # find appropriate auth.conf file
-    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
+    my $config_file = _get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
     Sympa::Log::do_log('debug', '(%s)', $config_file);
 
     $robot ||= $Conf{'domain'};
@@ -853,7 +853,7 @@ sub _load_auth {
             $current_paragraph->{'cas_server'} = AuthCAS->new(%{$cas_param});
             unless (defined $current_paragraph->{'cas_server'}) {
             Sympa::Log::do_log('err', 'Failed to create CAS object for %s: %s',
-                $current_paragraph->{'base_url'}, &AuthCAS::get_errors());
+                $current_paragraph->{'base_url'}, AuthCAS::get_errors());
             next;
             }
 
@@ -902,7 +902,7 @@ sub _load_auth {
 sub load_charset {
     my $charset = {};
 
-    my $config_file = &_get_config_file_name({'robot' => '', 'file' => "charset.conf"});
+    my $config_file = _get_config_file_name({'robot' => '', 'file' => "charset.conf"});
     if (-f $config_file) {
     unless (open CONFIG, $config_file) {
         printf STDERR '%s::load_charset(): Unable to read configuration file %s: %s\n',__PACKAGE__,$config_file, $ERRNO;
@@ -934,7 +934,7 @@ sub load_charset {
 
 ## load nrcpt file (limite receipient par domain
 sub load_nrcpt_by_domain {
-  my $config_file = &_get_config_file_name({'robot' => '', 'file' => "nrcpt_by_domain.conf"});
+  my $config_file = _get_config_file_name({'robot' => '', 'file' => "nrcpt_by_domain.conf"});
   return undef unless  (-r $config_file);
   my $line_num = 0;
   my $config_err = 0;
@@ -986,7 +986,7 @@ sub load_sql_filter {
 
     return undef unless  (-r $file);
 
-    return (&load_generic_conf_file($file,\%sql_named_filter_params, 'abort'));
+    return (load_generic_conf_file($file,\%sql_named_filter_params, 'abort'));
 }
 
 ## load automatic_list_description.conf configuration file
@@ -1024,7 +1024,7 @@ sub load_automatic_lists_description {
 	$config = $Conf{'etc'}.'/families/'.$family.'/automatic_lists_description.conf';
     }
     return undef unless  (-r $config);
-    my $description = &load_generic_conf_file($config,\%automatic_lists_params);
+    my $description = load_generic_conf_file($config,\%automatic_lists_params);
 
     ## Now doing some structuration work because load_automatic_lists_description() can't handle
     ## data structured beyond one level of hash. This needs to be changed.
@@ -1065,13 +1065,13 @@ sub load_trusted_application {
     my ($robot) = @_;
 
     # find appropriate trusted-application.conf file
-    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "trusted_applications.conf"});
+    my $config_file = _get_config_file_name({'robot' => $robot, 'file' => "trusted_applications.conf"});
     return undef unless  (-r $config_file);
     # print STDERR "load_trusted_applications $config_file ($robot)\n";
 
     return undef unless  (-r $config_file);
-    # open TMP, ">/tmp/dump1";Sympa::Tools::Data::dump_var(&load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
-    return (&load_generic_conf_file($config_file,\%trusted_applications));
+    # open TMP, ">/tmp/dump1";Sympa::Tools::Data::dump_var(load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
+    return (load_generic_conf_file($config_file,\%trusted_applications));
 
 }
 
@@ -1084,9 +1084,9 @@ sub load_crawlers_detection {
                           'format' => '.+'
                           } );
 
-    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "crawlers_detection.conf"});
+    my $config_file = _get_config_file_name({'robot' => $robot, 'file' => "crawlers_detection.conf"});
     return undef unless  (-r $config_file);
-    my $hashtab = &load_generic_conf_file($config_file,\%crawlers_detection_conf);
+    my $hashtab = load_generic_conf_file($config_file,\%crawlers_detection_conf);
     my $hashhash ;
 
 
@@ -1226,7 +1226,7 @@ sub load_generic_conf_file {
                     next;
                 }
 
-                $hash{$key} = &_load_a_param($key, $1, $structure{$pname}{'format'}{$key});
+                $hash{$key} = _load_a_param($key, $1, $structure{$pname}{'format'}{$key});
             }
 
 
@@ -1236,7 +1236,7 @@ sub load_generic_conf_file {
                 ## Default value
                 unless (defined $hash{$k}) {
                     if (defined $structure{$pname}{'format'}{$k}{'default'}) {
-                        $hash{$k} = &_load_a_param($k, 'default', $structure{$pname}{'format'}{$k});
+                        $hash{$k} = _load_a_param($k, 'default', $structure{$pname}{'format'}{$k});
                     }
                 }
                 ## Required fields
@@ -1273,7 +1273,7 @@ sub load_generic_conf_file {
                 next;
             }
 
-            my $value = &_load_a_param($pname, $1, $structure{$pname});
+            my $value = _load_a_param($pname, $1, $structure{$pname});
 
             delete $admin{'defaults'}{$pname};
 
@@ -1495,14 +1495,14 @@ sub _load_server_specific_secondary_config_files {
 
     ## Load charset.conf file if necessary.
     if($params->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
-        $params->{'config_hash'}{'locale2charset'} = &load_charset ();
+        $params->{'config_hash'}{'locale2charset'} = load_charset ();
     }else{
         $params->{'config_hash'}{'locale2charset'} = {};
     }
 
     ## Load nrcpt_by_domain.conf
-    $params->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
-    $params->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($params->{'config_hash'}{'robot_name'});
+    $params->{'config_hash'}{'nrcpt_by_domain'} = load_nrcpt_by_domain () ;
+    $params->{'config_hash'}{'crawlers_detection'} = load_crawlers_detection($params->{'config_hash'}{'robot_name'});
 
 }
 
@@ -1561,13 +1561,13 @@ sub _infer_robot_parameter_values {
         $params->{'config_hash'}{'automatic_list_families'} = \%families_description;
     }
 
-    &_parse_custom_robot_parameters({'config_hash' => $params->{'config_hash'}});
+    _parse_custom_robot_parameters({'config_hash' => $params->{'config_hash'}});
 }
 
 sub _load_robot_secondary_config_files {
     my ($params) = @_;
 
-    my $trusted_applications = &load_trusted_application($params->{'config_hash'}{'robot_name'});
+    my $trusted_applications = load_trusted_application($params->{'config_hash'}{'robot_name'});
     $params->{'config_hash'}{'trusted_applications'} = undef;
     if (defined $trusted_applications) {
         $params->{'config_hash'}{'trusted_applications'} = $trusted_applications->{'trusted_application'};
@@ -1575,10 +1575,10 @@ sub _load_robot_secondary_config_files {
     my $robot_name_for_auth_storing  = $params->{'config_hash'}{'robot_name'} || $Conf{'domain'};
     my $is_main_robot = 0;
     $is_main_robot = 1 unless ($params->{'config_hash'}{'robot_name'});
-    $Conf{'auth_services'}{$robot_name_for_auth_storing} = &_load_auth($params->{'config_hash'}{'robot_name'}, $is_main_robot);
+    $Conf{'auth_services'}{$robot_name_for_auth_storing} = _load_auth($params->{'config_hash'}{'robot_name'}, $is_main_robot);
     if (defined $params->{'config_hash'}{'automatic_list_families'}) {
         foreach my $family (keys %{$params->{'config_hash'}{'automatic_list_families'}}) {
-            $params->{'config_hash'}{'automatic_list_families'}{$family}{'description'} = &load_automatic_lists_description($params->{'config_hash'}{'robot_name'},$params->{'config_hash'}{'automatic_list_families'}{$family}{'name'});
+            $params->{'config_hash'}{'automatic_list_families'}{$family}{'description'} = load_automatic_lists_description($params->{'config_hash'}{'robot_name'},$params->{'config_hash'}{'automatic_list_families'}{$family}{'name'});
         }
     }
     return 1;
@@ -1671,7 +1671,7 @@ sub _load_single_robot_config{
    my $config_err;
     my $config_file = "$Conf{'etc'}/$robot/robot.conf";
     my $force_reload = $params->{'force_reload'};
-    if(!$force_reload && &_source_has_not_changed({'config_file' => $config_file})) {
+    if(!$force_reload && _source_has_not_changed({'config_file' => $config_file})) {
         $force_reload = 0;
     }
     if(!$force_reload) {
@@ -1687,7 +1687,7 @@ sub _load_single_robot_config{
         }
     }
     if($force_reload){
-        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+        if(my $config_loading_result = _load_config_file_to_hash({'path_to_config_file' => $config_file})) {
             $robot_conf = $config_loading_result->{'config'};
             $config_err = $config_loading_result->{'errors'};
         }else{
@@ -1696,22 +1696,22 @@ sub _load_single_robot_config{
         }
 
         # Remove entries which are not supposed to be defined at the robot level.
-        &_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
+        _dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
 
         ## Default for 'host' is the domain
         $robot_conf->{'host'} ||= $robot;
         $robot_conf->{'robot_name'} ||= $robot;
 
-        &_set_listmasters_entry({'config_hash' => $robot_conf});
+        _set_listmasters_entry({'config_hash' => $robot_conf});
 
-        &_infer_robot_parameter_values({'config_hash' => $robot_conf});
+        _infer_robot_parameter_values({'config_hash' => $robot_conf});
 
-        &_store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
-        &_save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
+        _store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
+        _save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
         return undef if ($config_err);
     }
-    &_replace_file_value_by_db_value({'config_hash' => $robot_conf}) unless $params->{'no_db'};
-    &_load_robot_secondary_config_files({'config_hash' => $robot_conf});
+    _replace_file_value_by_db_value({'config_hash' => $robot_conf}) unless $params->{'no_db'};
+    _load_robot_secondary_config_files({'config_hash' => $robot_conf});
     return $robot_conf;
 }
 
@@ -1790,7 +1790,7 @@ sub _replace_file_value_by_db_value {
     $robot = '*' if ($params->{'config_hash'}{'robot_name'} eq '');
     foreach my $label (keys %db_storable_parameters) {
         next unless ($robot ne '*' && $valid_robot_key_words{$label} == 1);
-        my $value = &get_db_conf($robot, $label);
+        my $value = get_db_conf($robot, $label);
         if (defined $value) {
             $params->{'config_hash'}{$label} = $value ;
         }
@@ -1811,7 +1811,7 @@ sub _save_binary_cache {
         return undef;
     }
 
-    eval {&Storable::store($params->{'conf_to_save'},$params->{'target_file'});};
+    eval {Storable::store($params->{'conf_to_save'},$params->{'target_file'});};
     if ($EVAL_ERROR) {
         printf STDERR '%s::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', __PACKAGE__, $params->{'target_file'},$EVAL_ERROR;
         unless ($lock->unlock()) {
@@ -1849,7 +1849,7 @@ sub _load_binary_cache {
     }
 
     eval {
-        $result = &Storable::retrieve($params->{'config_file'});
+        $result = Storable::retrieve($params->{'config_file'});
     };
     if ($EVAL_ERROR) {
         printf STDERR  "%s::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", __PACKAGE__, $params->{'config_file'},$EVAL_ERROR;
@@ -1904,7 +1904,7 @@ sub _create_robot_like_config_for_main_robot {
     return if (defined $Conf{'robots'}{$Conf{'domain'}});
     my $main_conf_no_robots = Sympa::Tools::Data::dup_var(\%Conf);
     delete $main_conf_no_robots->{'robots'};
-    &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
+    _remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
     $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
 }
 

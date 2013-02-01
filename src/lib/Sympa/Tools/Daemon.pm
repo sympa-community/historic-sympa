@@ -165,7 +165,7 @@ sub write_pid {
 	    Sympa::Log::do_log('notice', "Previous process %s died suddenly ; notifying listmaster", $other_pid);
 	    my $pname = $0;
 	    $pname =~ s/.*\/(\w+)/$1/;
-	    &send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
+	    send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
 	}
 
 	unless(open(PIDFILE, '> '.$pidfile)) {

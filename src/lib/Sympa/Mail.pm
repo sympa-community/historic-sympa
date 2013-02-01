@@ -55,7 +55,7 @@ use Sympa::Tools::SMIME;
 my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
 
-my $max_arg = eval { &POSIX::_SC_ARG_MAX; };
+my $max_arg = eval { POSIX::_SC_ARG_MAX; };
 if ($EVAL_ERROR) {
     $max_arg = 4096;
     printf STDERR Sympa::Language::gettext("Your system does not conform to the POSIX P1003.1 standard, or\nyour Perl system does not define the _SC_ARG_MAX constant in its POSIX\nlibrary. You must modify the smtp.pm module in order to set a value\nfor variable %s.\n"), $max_arg;
@@ -152,7 +152,7 @@ sub mail_file {
 	my $output;
 	my @path = split /\//, $filename;
 	Sympa::Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
-	my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP;
+	my $dump = Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP;
 	Sympa::Template::parse_tt2($data, $path[$#path], \$output);
 	Sympa::Language::PopLang() if (defined $data->{'lang'});
 	$message_as_string .= join('',$output);
@@ -298,10 +298,10 @@ sub mail_file {
 	$listname = $data->{'list'};
     }
 
-    unless ($message_as_string = &reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
+    unless ($message_as_string = reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
     	Sympa::Log::do_log('err', 'Failed to reformat message');
     }
-    my $dump = &Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP;
+    my $dump = Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP;
 
     ## Set it in case it was not set
     $data->{'return_path'} ||= Sympa::Configuration::get_robot_conf($robot, 'request');
@@ -311,7 +311,7 @@ sub mail_file {
     my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
     ## SENDING
-    return undef unless (defined &sending('message' => $message,
+    return undef unless (defined sending('message' => $message,
 					  'rcpt' => $rcpt,
 					  'from' => $data->{'return_path'},
 					  'robot' => $robot,
@@ -439,7 +439,7 @@ sub mail_message {
     }
 
 
-    unless (&sendto('message' => $message,
+    unless (sendto('message' => $message,
 		    'from' => $from,
 		    'rcpt' => \@sendtobypacket,
 		    'listname' => $list->{'name'},
@@ -483,7 +483,7 @@ sub mail_forward {
     ## Add an Auto-Submitted header field according to  http://www.tools.ietf.org/html/draft-palme-autosub-01
     $message->{'msg'}->head->add('Auto-Submitted', 'auto-forwarded');
 
-    unless (defined &sending('message' => $message,
+    unless (defined sending('message' => $message,
 			     'rcpt' => $rcpt,
 			     'from' => $from,
 			     'robot' => $robot,
@@ -513,7 +513,7 @@ sub reaper {
    my $i;
 
    $block = 1 unless (defined($block));
-   while (($i = waitpid(-1, $block ? &POSIX::WNOHANG : 0)) > 0) {
+   while (($i = waitpid(-1, $block ? POSIX::WNOHANG : 0)) > 0) {
       $block = 1;
       if (!defined($pid{$i})) {
          Sympa::Log::do_log('debug2', "Reaper waited $i, unknown process to me");
@@ -586,7 +586,7 @@ sub sendto {
 		    return undef;
                 }
 
-		unless (&sending('message' => $message,
+		unless (sending('message' => $message,
 				 'rcpt' => $email,
 				 'from' => $from,
 				 'listname' => $listname,
@@ -603,7 +603,7 @@ sub sendto {
 	}
     }else{
 	$message->{'msg_as_string'} = $msg_header->as_string . "\n" . $msg_body;
-	my $result = &sending('message' => $message,
+	my $result = sending('message' => $message,
 			      'rcpt' => $rcpt,
 			      'from' => $from,
 			      'listname' => $listname,
@@ -739,7 +739,7 @@ sub sending {
 	}
     }else{ # send it now
 	Sympa::Log::do_log('debug',"NOT USING BULK");
-	*SMTP = &smtpto($from, $rcpt, $robot);
+	*SMTP = smtpto($from, $rcpt, $robot);
 	print SMTP $message->{'msg'}->as_string ;
 	unless (close SMTP) {
 	    Sympa::Log::do_log('err', 'could not close safefork to sendmail');
@@ -799,7 +799,7 @@ sub smtpto {
    Sympa::Log::do_log('debug3',"Open = $opensmtp");
    while ($opensmtp > Sympa::Configuration::get_robot_conf($robot, 'maxsmtp')) {
        Sympa::Log::do_log('debug3', "too many open SMTP ($opensmtp), calling reaper");
-       last if (&reaper(0) == -1); ## Blocking call to the reaper.
+       last if (reaper(0) == -1); ## Blocking call to the reaper.
        }
 
    *IN = ++$fh; *OUT = ++$fh;
@@ -976,7 +976,7 @@ sub reformat_message($;$$) {
 	}
     }
     $msg->head->delete("X-Mailer");
-    $msg = &fix_part($msg, $parser, $attachments, $defcharset);
+    $msg = fix_part($msg, $parser, $attachments, $defcharset);
     $msg->head->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
     return $msg->as_string;
 }
@@ -1016,7 +1016,7 @@ sub fix_part($$$$) {
     } elsif ($part->parts) {
 	my @newparts = ();
 	foreach ($part->parts) {
-	    push @newparts, &fix_part($_, $parser, $attachments, $defcharset);
+	    push @newparts, fix_part($_, $parser, $attachments, $defcharset);
 	}
 	$part->parts(\@newparts);
     } elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {

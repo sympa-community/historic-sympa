@@ -122,7 +122,7 @@ sub new {
     }else{
 	# create a new session context
 	$session->{'new_session'} = 1; ## Tag this session as new, ie no data in the DB exist
-        $session->{'id_session'} = &get_random();
+        $session->{'id_session'} = get_random();
 	$session->{'email'} = 'nobody';
         $session->{'remote_addr'} = $ENV{'REMOTE_ADDR'};
 	$session->{'date'} = time;
@@ -234,7 +234,7 @@ sub renew {
     }
 
     ## Renew the session ID in order to prevent session hijacking
-    my $new_id = &get_random();
+    my $new_id = get_random();
 
     ## First remove the DB entry for the previous session ID
     unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {

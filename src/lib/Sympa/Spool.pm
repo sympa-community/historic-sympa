@@ -151,7 +151,7 @@ sub get_content {
 	# just return the selected count, not all the values
 	$statement = 'SELECT COUNT(*) ';
     }else{
-	$statement = 'SELECT '.&_selectfields($selection);
+	$statement = 'SELECT '._selectfields($selection);
     }
 
     $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,Sympa::SDM::quote($self->{'spoolname'});
@@ -212,7 +212,7 @@ sub next {
     $sth = Sympa::SDM::do_query($statement);
     return undef unless ($sth->rows); # spool is empty
 
-    my $star_select = &_selectfields();
+    my $star_select = _selectfields();
     my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($self->{'selection_status'}),Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch);
 
     $sth = Sympa::SDM::do_query($statement);
@@ -255,7 +255,7 @@ sub get_message {
 	}
 	$sqlselector = $sqlselector.' '.$field.'_spool = '.Sympa::SDM::quote($selector->{$field});
     }
-    my $all = &_selectfields();
+    my $all = _selectfields();
     my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,Sympa::SDM::quote($self->{'spoolname'});
 
     push @sth_stack, $sth;
@@ -427,7 +427,7 @@ sub remove_message {
 		return undef;
     }
 
-    my $sqlselector = &_sqlselector($selector);
+    my $sqlselector = _sqlselector($selector);
     #my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($messagekey),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot);
     my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",Sympa::SDM::quote($self->{'spoolname'}),$sqlselector;
 
@@ -512,7 +512,7 @@ sub store_test {
 	unless ($testing->store($msg,{list=>'notalist',robot=>'notaboot'})) {
 	    return (($z-1)*$size_increment);
 	}
-	my $messagekey = &get_messagekey($msg);
+	my $messagekey = get_messagekey($msg);
 	unless ( $testing->remove_message({'messagekey'=>$messagekey,'listname'=>'notalist','robot'=>'notarobot'}) ) {
 	    Sympa::Log::do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);
 	}

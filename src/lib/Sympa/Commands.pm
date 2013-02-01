@@ -369,7 +369,7 @@ sub stats {
 	return 'unknown_list';
     }
 
-    my $auth_method = &get_auth_method('stats',$sender,{'type'=>'auth_failed',
+    my $auth_method = get_auth_method('stats',$sender,{'type'=>'auth_failed',
 							'data'=>{},
 							'msg'=> "STATS $listname from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -621,7 +621,7 @@ sub review {
 
     $list->on_the_fly_sync_include('use_ttl' => 1);
 
-    my $auth_method = &get_auth_method('review','',{'type'=>'auth_failed',
+    my $auth_method = get_auth_method('review','',{'type'=>'auth_failed',
 						    'data'=>{},
 						    'msg'=> "REVIEW $listname from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -770,7 +770,7 @@ sub subscribe {
 
     ## Now check if the user may subscribe to the list
 
-    my $auth_method = &get_auth_method('subscribe',$sender,{'type'=>'wrong_email_confirm',
+    my $auth_method = get_auth_method('subscribe',$sender,{'type'=>'wrong_email_confirm',
 							    'data'=>{'command'=>'subscription'},
 							    'msg'=> "SUB $which from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -940,7 +940,7 @@ sub info {
 
     Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
-    my $auth_method = &get_auth_method('info','',{'type'=>'auth_failed',
+    my $auth_method = get_auth_method('info','',{'type'=>'auth_failed',
 						  'data'=>{},
 						  'msg'=> "INFO $listname from $sender"},$sign_mod,$list);
 
@@ -1079,7 +1079,7 @@ sub signoff {
 		next;
 	    }
 
-	    $result = &signoff("$l $email", $robot);
+	    $result = signoff("$l $email", $robot);
             $success ||= $result;
 	}
 	return ($success);
@@ -1096,7 +1096,7 @@ sub signoff {
 
     Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
-    $auth_method = &get_auth_method('signoff',$email,{'type'=>'wrong_email_confirm',
+    $auth_method = get_auth_method('signoff',$email,{'type'=>'wrong_email_confirm',
 							 'data'=>{'command'=>'unsubscription'},
 							 'msg'=> "SIG $which from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -1240,7 +1240,7 @@ sub add {
 
     Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
-    my $auth_method = &get_auth_method('add',$email,{'type'=>'wrong_email_confirm',
+    my $auth_method = get_auth_method('add',$email,{'type'=>'wrong_email_confirm',
 						     'data'=>{'command'=>'addition'},
 						     'msg'=> "ADD $which $email from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -1380,7 +1380,7 @@ sub invite {
 
     Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
-    my $auth_method = &get_auth_method('invite',$email,{'type'=>'wrong_email_confirm',
+    my $auth_method = get_auth_method('invite',$email,{'type'=>'wrong_email_confirm',
 							'data'=>{'command'=>'invitation'},
 							'msg'=> "INVITE $which $email from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -1539,11 +1539,11 @@ sub remind {
     my $auth_method;
 
     if ($listname eq '*') {
-	$auth_method = &get_auth_method('remind','',{'type'=>'auth_failed',
+	$auth_method = get_auth_method('remind','',{'type'=>'auth_failed',
 						     'data'=>{},
 						     'msg'=> "REMIND $listname from $sender"},$sign_mod);
     }else {
-	$auth_method = &get_auth_method('remind','',{'type'=>'auth_failed',
+	$auth_method = get_auth_method('remind','',{'type'=>'auth_failed',
 						     'data'=>{},
 						     'msg'=> "REMIND $listname from $sender"},$sign_mod,$list);
     }
@@ -1760,7 +1760,7 @@ sub del {
 
     Sympa::Language::SetLang($list->{'admin'}{'lang'});
 
-    my $auth_method = &get_auth_method('del',$who,{'type'=>'wrong_email_confirm',
+    my $auth_method = get_auth_method('del',$who,{'type'=>'wrong_email_confirm',
 						   'data'=>{'command'=>'delete'},
 						   'msg'=> "DEL $which $who from $sender"},$sign_mod,$list);
     return 'wrong_auth'
@@ -1911,7 +1911,7 @@ sub set {
 		next;
 	    }
 
-	    my $current_status = &set ("$l $mode");
+	    my $current_status = set ("$l $mode");
 	    $status ||= $current_status;
 	}
 	return $status;

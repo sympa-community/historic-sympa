@@ -66,7 +66,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
     unless ($Sympa::List::use_db = Sympa::Upgrade::probe_db()) {
- 	&die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
+ 	die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
     }
 }
 
@@ -80,7 +80,7 @@ if ($#ARGV >=0) {
 	die "unable to find file $f";
     }
     
-    &convert($f);
+    convert($f);
 
     exit 0;
 }
@@ -223,7 +223,7 @@ foreach my $tpl (@templates) {
     ## Create directory if required
     unless (-d $dest_path) {
 	printf "Creating $dest_path directory\n";
-	unless (&my_mkdir ($dest_path)) {
+	unless (my_mkdir ($dest_path)) {
 	    printf STDERR "Error : Cannot create $dest_path directory : $ERRNO\n";
 	    next;
 	}
@@ -240,7 +240,7 @@ foreach my $tpl (@templates) {
 
     my $tt2 = "$dest_path/$dest_file";
 
-    &convert($tpl, $tt2);
+    convert($tpl, $tt2);
     $total++;
     
     ## Rename old files to .converted

@@ -134,7 +134,7 @@ sub reject_report_msg {
 
     ## Prepare the original message if provided
     if (defined $params->{'message'}) {
-	$params->{'original_msg'} = &_get_msg_as_hash($params->{'message'});
+	$params->{'original_msg'} = _get_msg_as_hash($params->{'message'});
      }
 
     if (ref($list) && $list->isa('Sympa::List')) {
@@ -249,7 +249,7 @@ sub notice_report_msg {
 
     ## Prepare the original message if provided
     if (defined $params->{'message'}) {
-	$params->{'original_msg'} = &_get_msg_as_hash($params->{'message'});
+	$params->{'original_msg'} = _get_msg_as_hash($params->{'message'});
      }
 
     if (ref($list) && $list->isa('Sympa::List')) {
@@ -257,7 +257,7 @@ sub notice_report_msg {
 	    Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     } else {
-	unless (&List->send_global_file('message_report',$user,$robot,$params)) {
+	unless (List->send_global_file('message_report',$user,$robot,$params)) {
 	    Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     }
@@ -391,7 +391,7 @@ sub send_report_cmd {
 	Sympa::Log::do_log('notice',"Unable to send template 'command_report' to $sender");
     }
 
-    &init_report_cmd();
+    init_report_cmd();
 }
 
 =head2 global_report_cmd($type, $error,  $data, $sender, $robot, $now)
@@ -480,7 +480,7 @@ sub global_report_cmd {
 	    Sympa::Log::do_log('err',"unable to send template command_report now : no sender or robot");
 	    return undef;
 	}
-	&send_report_cmd($sender,$robot);
+	send_report_cmd($sender,$robot);
 
     }
 }

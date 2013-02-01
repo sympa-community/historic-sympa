@@ -110,7 +110,7 @@ sub create_list_old{
 	}
     }
     # owner.email || owner_include.source
-    unless (&check_owner_defined($params->{'owner'},$params->{'owner_include'})) {
+    unless (check_owner_defined($params->{'owner'},$params->{'owner_include'})) {
 	Sympa::Log::do_log('err','problem in owner definition in this list creation');
 	return undef;
     }
@@ -145,12 +145,12 @@ sub create_list_old{
     }
 
     if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
-	&do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
+	do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 	return undef;
     }
 
     ## Check listname on SMTP server
-    my $res = &list_check_smtp($params->{'listname'}, $robot);
+    my $res = list_check_smtp($params->{'listname'}, $robot);
     unless (defined $res) {
 	Sympa::Log::do_log('err', "can't check list %.128s on %s",
 		$params->{'listname'}, $robot);
@@ -199,7 +199,7 @@ sub create_list_old{
 
     ## Check topics
     if ($params->{'topics'}){
-	unless (&check_topics($params->{'topics'},$robot)){
+	unless (check_topics($params->{'topics'},$robot)){
 	    Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$params->{'topics'});
 	}
     }
@@ -227,7 +227,7 @@ sub create_list_old{
 	return undef;
     }
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+	do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -279,7 +279,7 @@ sub create_list_old{
     $return->{'list'} = $list;
 
     if ($list->{'admin'}{'status'} eq 'open') {
-	$return->{'aliases'} = &install_aliases($list,$robot);
+	$return->{'aliases'} = install_aliases($list,$robot);
     }else{
     $return->{'aliases'} = 1;
     }
@@ -380,12 +380,12 @@ sub create_list{
 	}
     }
     if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
-	&do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
+	do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 	return undef;
     }
 
     ## Check listname on SMTP server
-    my $res = &list_check_smtp($params->{'listname'}, $robot);
+    my $res = list_check_smtp($params->{'listname'}, $robot);
     unless (defined $res) {
 	Sympa::Log::do_log('err', "can't check list %.128s on %s",
 		$params->{'listname'}, $robot);
@@ -439,7 +439,7 @@ sub create_list{
 
     ## Check topics
     if (defined $params->{'topics'}){
-	unless (&check_topics($params->{'topics'},$robot)){
+	unless (check_topics($params->{'topics'},$robot)){
 	    Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$params->{'topics'});
 	}
     }
@@ -460,7 +460,7 @@ sub create_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list_dir/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+	do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -532,7 +532,7 @@ sub create_list{
     $return->{'list'} = $list;
 
     if ($list->{'admin'}{'status'} eq 'open') {
-	$return->{'aliases'} = &install_aliases($list,$robot);
+	$return->{'aliases'} = install_aliases($list,$robot);
     }else{
     $return->{'aliases'} = 1;
     }
@@ -603,7 +603,7 @@ sub update_list{
 
     ## Check topics
     if (defined $params->{'topics'}){
-	unless (&check_topics($params->{'topics'},$robot)){
+	unless (check_topics($params->{'topics'},$robot)){
 	    Sympa::Log::do_log('err', 'topics param %s not defined in topics.conf',$params->{'topics'});
 	}
     }
@@ -624,7 +624,7 @@ sub update_list{
 
     ## Creation of the config file
     unless (open CONFIG, '>', "$list->{'dir'}/config") {
-	&do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $ERRNO);
+	do_log('err','Impossible to create %s/config : %s', $list->{'dir'}, $ERRNO);
 	$lock->unlock();
 	return undef;
     }
@@ -764,7 +764,7 @@ sub rename_list{
 	 ## Dump subscribers
 	 $list->_save_list_members_file("$list->{'dir'}/subscribers.closed.dump");
 
-	 $params{'aliases'} = &remove_aliases($list, $list->{'domain'});
+	 $params{'aliases'} = remove_aliases($list, $list->{'domain'});
      }
 
      ## Rename or create this list directory itself
@@ -781,7 +781,7 @@ sub rename_list{
 
     ## If we are in 'copy' mode, create en new list
     if ($params{'mode'} eq 'copy') {
-	 unless ( $list = &clone_list_as_empty($list->{'name'},$list->{'domain'},$params{'new_listname'},$params{'new_robot'},$params{'user_email'})){
+	 unless ( $list = clone_list_as_empty($list->{'name'},$list->{'domain'},$params{'new_listname'},$params{'new_robot'},$params{'user_email'})){
 	     Sympa::Log::do_log('err',"Unable to load $params{'new_listname'} while renaming");
 	     return 'internal';
 	 }
@@ -870,7 +870,7 @@ sub rename_list{
      }
 
      if ($list->{'admin'}{'status'} eq 'open') {
-      	 $params{'aliases'} = &install_aliases($list,$robot);
+      	 $params{'aliases'} = install_aliases($list,$robot);
      }
 
      unless ($params{'mode'} eq 'copy') {
@@ -1001,7 +1001,7 @@ sub clone_list_as_empty {
     }
     # copy mandatory files
     foreach my $file ('config') {
-	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+	    unless (File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
 		Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $ERRNO);
 		return undef;
 	    }
@@ -1009,7 +1009,7 @@ sub clone_list_as_empty {
     # copy optional files
     foreach my $file ('message.footer','message.header','info','homepage') {
 	if (-f $list->{'dir'}.'/'.$file) {
-	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+	    unless (File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
 		Sympa::Log::do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $ERRNO);
 		return undef;
 	    }

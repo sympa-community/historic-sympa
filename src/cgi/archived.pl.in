@@ -68,7 +68,7 @@ my $ip = $ENV{'REMOTE_HOST'};
 
 ## Check options
 my %options;
-unless (&GetOptions(\%main::options, 'debug|d', 'foreground|F')) {
+unless (GetOptions(\%main::options, 'debug|d', 'foreground|F')) {
     Sympa::Log::fatal_err("Unknown options.");
 }
 
@@ -144,8 +144,8 @@ $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
@@ -159,7 +159,7 @@ foreach my $robot (@{Sympa::Configuration::get_robots_list()}) {
     my $arc_dir = Sympa::Configuration::get_robot_conf($robot,'arc_path');
     ## Create arc_path if required
     if ($arc_dir) {
-	unless (&directory_check($arc_dir)) {
+	unless (directory_check($arc_dir)) {
 	    Sympa::Log::do_log('err','No vailable directory to store archives. Exiting.');
 	    exit -1;
 	}
@@ -204,7 +204,7 @@ while (!$end) {
     if ($orders[0] =~ /^rebuild\s*$/ ) {
 	Sympa::Log::do_log('debug',"rebuild found ");
 	if ($item->{'list'} && $item->{'robot'}) {	
-	    &rebuild($item->{'list'}.'@'.$item->{'robot'});
+	    rebuild($item->{'list'}.'@'.$item->{'robot'});
 	    $spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
 	}else{
 	   Sympa::Log::do_log('err',"unable to rebuild archive for unkown list/robot.Move to bad");
@@ -273,7 +273,7 @@ Sympa::Log::do_log('debug',"remove found : for $arclistdir");
 		}
 	    }
 	    # this point : requested command is from a authorized personn (message sender or list admin or listmaster	    
-	    &remove($arclistdir,$msgid);
+	    remove($arclistdir,$msgid);
 	    
 	    my $url_dir = $list->{'dir'}.'/urlized/'.$msgid;
 	    Sympa::Tools::File::remove_dir ($url_dir);
@@ -464,7 +464,7 @@ sub rebuild {
 	       return undef;
     }
 
-    my $tag = &get_tag($listname);
+    my $tag = get_tag($listname);
 
     my $list = Sympa::List->new($listname, $hostname);
     my $robot = $list->{'domain'};
@@ -474,9 +474,9 @@ sub rebuild {
     my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
 
     if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
-	&set_hidden_mode($tag);
+	set_hidden_mode($tag);
     }else {
-	&unset_hidden_mode();
+	unset_hidden_mode();
     }
 
     Sympa::Log::do_log('notice',"Rebuilding  $arc with M2H_ADDRESSMODIFYCODE : %s",$ENV{'M2H_ADDRESSMODIFYCODE'});
@@ -501,12 +501,12 @@ sub rebuild {
 
 	    ## index file was removed ; recreate it
 	    my $index = $files[$#files];
-	    &save_idx($arcdir.'/index', $index+1);
+	    save_idx($arcdir.'/index', $index+1);
 	}
 	
 	## recreate index file if needed
 	unless (-f $arcdir.'/index') {
-	    &create_idx($arcdir);
+	    create_idx($arcdir);
 	}
 
 	## Remove .mhonarc.db
@@ -581,7 +581,7 @@ sub rebuild {
 	    }
 	    ## recreate index file if needed
 	    unless (-f $arcdir.'/index') {
-		&create_idx($arcdir);
+		create_idx($arcdir);
 	    }
 
 	    my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=$Sympa::Configuration::Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Sympa::Configuration::Conf{'umask'} $dir_to_rebuild";
@@ -676,12 +676,12 @@ sub mail2arc {
 	return undef;
     }
 
-    my $tag = &get_tag($listname);
+    my $tag = get_tag($listname);
 
     if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
-	&set_hidden_mode($tag);
+	set_hidden_mode($tag);
     }else {
-	&unset_hidden_mode();
+	unset_hidden_mode();
     } 
 
    Sympa::Log::do_log('debug',"mail2arc  for %s yyyy:$yyyy, mm:$mm dd:$dd hh:$hh min$min ss:$ss", $list->get_list_id());
@@ -771,7 +771,7 @@ sub mail2arc {
 	    close IDX;
 	}else{
 	    ## recreate index file if needed and update it
-	    $newfile = &create_idx($monthdir) + 1;
+	    $newfile = create_idx($monthdir) + 1;
 	}
 
 	# savee arctxt dump of original message.
@@ -813,7 +813,7 @@ sub mail2arc {
 	    Sympa::Log::do_log('err',"Command $cmd failed with exit code $exitcode");
 	}
 	
-	&save_idx("$monthdir/index",$newfile);
+	save_idx("$monthdir/index",$newfile);
     }
 }
 
@@ -929,7 +929,7 @@ sub create_idx {
 
     my @files = (sort { $a <=> $b;}  grep(/^\d+$/,(readdir DIR ))) ;
     my $index = $files[$#files];
-    &save_idx($arc_dir.'/index', $index);
+    save_idx($arc_dir.'/index', $index);
 
     closedir DIR;
 

@@ -2136,7 +2136,7 @@ sub new {
     }
 
     ## Look for the list if no robot was provided
-    $robot ||= &search_list_among_robots($name);
+    $robot ||= search_list_among_robots($name);
 
     unless ($robot) {
 	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create list object for %s',  $name) unless ($options->{'just_try'});
@@ -2252,7 +2252,7 @@ sub set_status_error_config {
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
 	Sympa::Log::do_log('err', 'The list "%s" is set in status error_config',$self->{'name'});
-	unless (&send_notify_to_listmaster($message, $self->{'domain'},\@param)) {
+	unless (send_notify_to_listmaster($message, $self->{'domain'},\@param)) {
 	    Sympa::Log::do_log('notice',"Unable to send notify '$message' to listmaster");
 	};
     }
@@ -2479,9 +2479,9 @@ input table @rcpt is spliced : rcpt for which verp must be used are extracted fr
 
 =cut
 
-sub extract_verp_rcpt() {
+sub extract_verp_rcpt {
     my ($percent, $xseq, $refrcpt, $refrcptverp) = @_;
-    Sympa::Log::do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
+    Sympa::Log::do_log('debug','extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
 
     my @result;
 
@@ -2574,7 +2574,7 @@ sub save_config {
 				  'date' => (Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
 				  };
 
-    unless (&_save_list_config_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
+    unless (_save_list_config_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
 	Sympa::Log::do_log('info', 'unable to save config file %s', $config_file_name);
 	$lock->unlock();
 	return undef;
@@ -2582,7 +2582,7 @@ sub save_config {
 
     ## Also update the binary version of the data structure
     if (Sympa::Configuration::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
-	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
+	eval {Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
 	if ($EVAL_ERROR) {
 	    Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	}
@@ -2596,7 +2596,7 @@ sub save_config {
     }
 
     if ($Sympa::SDM::use_db) {
-        unless (&_update_list_db) {
+        unless (_update_list_db()) {
             Sympa::Log::do_log('err', "Unable to update list_table");
         }
     }
@@ -2687,7 +2687,7 @@ sub load {
 
 	## Load a binary version of the data structure
 	## unless config is more recent than config.bin
-	eval {$admin = &Storable::retrieve("$self->{'dir'}/config.bin")};
+	eval {$admin = Storable::retrieve("$self->{'dir'}/config.bin")};
 	if ($EVAL_ERROR) {
 	    Sympa::Log::do_log('err', 'Failed to load the binary config %s, error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	    $lock->unlock();
@@ -2718,7 +2718,7 @@ sub load {
 
 	## update the binary version of the data structure
 	if (Sympa::Configuration::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
-	    eval {&Storable::store($admin,"$self->{'dir'}/config.bin")};
+	    eval {Storable::store($admin,"$self->{'dir'}/config.bin")};
 	    if ($EVAL_ERROR) {
 		Sympa::Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$EVAL_ERROR);
 	    }
@@ -3103,14 +3103,14 @@ sub _get_param_value_anywhere {
     if ((ref ($new_admin->{$param}) eq 'ARRAY') &&
 	!($::pinfo{$param}{'split_char'})) {
 	foreach my $elt (@{$new_admin->{$param}}) {
-	    my $val = &_get_single_param_value($elt,$param,$minor_p);
+	    my $val = _get_single_param_value($elt,$param,$minor_p);
 	    if (defined $val) {
 		push @values,$val;
 	    }
 	}
 
     }else {
-	my $val = &_get_single_param_value($new_admin->{$param},$param,$minor_p);
+	my $val = _get_single_param_value($new_admin->{$param},$param,$minor_p);
 	if (defined $val) {
 	    push @values,$val;
 	}
@@ -3145,11 +3145,11 @@ sub get_param_value {
 	! $::pinfo{$param}{'split_char'}) {
 	my @values;
 	foreach my $elt (@{$self->{'admin'}{$param}}) {
-	    push @values,&_get_single_param_value($elt,$param,$minor_param)
+	    push @values,_get_single_param_value($elt,$param,$minor_param)
 	}
 	$value = \@values;
     }else {
-	$value = &_get_single_param_value($self->{'admin'}{$param},$param,$minor_param);
+	$value = _get_single_param_value($self->{'admin'}{$param},$param,$minor_param);
     }
     return $value;
 }
@@ -3513,7 +3513,7 @@ sub send_msg_digest {
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $self->{'name'};
 	$options->{'domain'} = $self->{'domain'};
-	my $user_data = &get_list_member_no_object($options);
+	my $user_data = get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
 	if ($user_data->{'suspend'} eq '1'){
@@ -3521,7 +3521,7 @@ sub send_msg_digest {
 		next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		## If end date is < time, update the BDD by deleting the suspending's data
-		&restore_suspended_subscription($user->{'email'},$self->{'name'},$self->{'domain'});
+		restore_suspended_subscription($user->{'email'},$self->{'name'},$self->{'domain'});
 	    }
 	}
 	if ($user->{'reception'} eq "digest") {
@@ -3581,7 +3581,7 @@ sub send_msg_digest {
 	$msg->{'plain_body'} = $mail->Sympa::PlainDigest::plain_body_as_string();
 	#$msg->{'body'} = $mail->bodyhandle->as_string();
 	chomp $msg->{'from'};
-	$msg->{'month'} = &POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
+	$msg->{'month'} = POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
 	$msg->{'message_id'} = Sympa::Tools::clean_msg_id($mail->head->get('Message-Id'));
 
 	## Clean up Message-ID
@@ -3691,7 +3691,7 @@ sub send_global_file {
     my $data = Sympa::Tools::Data::dup_var($context);
 
     unless ($data->{'user'}) {
-	$data->{'user'} = &get_global_user($who) unless ($options->{'skip_db'});
+	$data->{'user'} = get_global_user($who) unless ($options->{'skip_db'});
 	$data->{'user'}{'email'} = $who unless (defined $data->{'user'});;
     }
     unless ($data->{'user'}{'lang'}) {
@@ -3812,7 +3812,7 @@ sub send_file {
     ## Unless multiple recipients
     unless (ref ($who)) {
 	unless ($data->{'user'}) {
-	    unless ($data->{'user'} = &get_global_user($who)) {
+	    unless ($data->{'user'} = get_global_user($who)) {
 		$data->{'user'}{'email'} = $who;
 		$data->{'user'}{'lang'} = $self->{'admin'}{'lang'};
 	    }
@@ -3919,7 +3919,7 @@ sub send_file {
     }
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
           # use Data::Dumper;
-	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP;
+	  # my $dump = Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP;
     unless (Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	Sympa::Log::do_log('err',"could not send template $filename to $who");
 	return undef;
@@ -4018,7 +4018,7 @@ sub send_msg {
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $name;
 	$options->{'domain'} = $robot;
-	my $user_data = &get_list_member_no_object($options);
+	my $user_data = get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
 	if (defined $user_data && $user_data->{'suspend'} eq '1'){
@@ -4026,7 +4026,7 @@ sub send_msg {
 		push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		## If end date is < time, update the BDD by deleting the suspending's data
-		&restore_suspended_subscription($user->{'email'}, $name, $robot);
+		restore_suspended_subscription($user->{'email'}, $name, $robot);
 	    }
 	}
 	if ($user->{'reception'} eq 'digestplain') { # digest digestplain, nomail and summary reception option are initialized for tracking feature only
@@ -4240,7 +4240,7 @@ sub send_msg {
 	    my @parts = ();
 	    my $i = 0;
 	    foreach my $part ($url_msg->parts()) {
-		my $entity = &_urlize_part($part, $self, $dir1, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'));
+		my $entity = _urlize_part($part, $self, $dir1, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'));
 		if (defined $entity) {
 		    push @parts, $entity;
 		} else {
@@ -4286,7 +4286,7 @@ sub send_msg {
 	}
 
 	## Preparing VERP receipients.
-	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
+	my @verp_selected_tabrcpt = extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
 	my $verp= 'off';
 
 	my $result = Sympa::Mail::mail_message('message'=>$new_message,
@@ -4611,14 +4611,14 @@ sub request_auth {
 
     }else {
 	if ($cmd eq 'remind'){
-	    my $keyauth = &compute_auth('',$cmd);
+	    my $keyauth = compute_auth('',$cmd);
 	    $data->{'command'} = "auth $keyauth $cmd *";
 	    $data->{'command_escaped'} = Sympa::Template::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
 
 	}
 	$data->{'auto_submitted'} = 'auto-replied';
-	unless (&send_global_file('request_auth',$email,$robot,$data)) {
+	unless (send_global_file('request_auth',$email,$robot,$data)) {
 	    Sympa::Log::do_log('notice',"Unable to send template 'request_auth' to $email");
 	    return undef;
 	}
@@ -4792,7 +4792,7 @@ sub send_notify_to_listmaster {
 					$options->{'skip_db'} = 1 if(($operation eq 'no_db') || ($operation eq 'db_restored'));
 
 					Sympa::Log::do_log('info', 'send messages to %s', $email);
-					unless(&send_global_file('listmaster_groupednotifications', $email, $robot, $param, $options)) {
+					unless(send_global_file('listmaster_groupednotifications', $email, $robot, $param, $options)) {
 						Sympa::Log::do_log('notice',"Unable to send template 'listmaster_notification' to $email") unless($operation eq 'logs_failed');
 						return undef;
 					}
@@ -4905,7 +4905,7 @@ sub send_notify_to_listmaster {
 
 	foreach my $ts (@tosend) {
 		$options->{'parse_and_return'} = 1 if($stack);
-		my $r = &send_global_file('listmaster_notification', $ts->{'email'}, $robot, $ts->{'data'}, $options);
+		my $r = send_global_file('listmaster_notification', $ts->{'email'}, $robot, $ts->{'data'}, $options);
 		if($stack) {
 			Sympa::Log::do_log('info', 'stacking message about "%s" for %s (%s)', $operation, $ts->{'email'}, $robot);
 			push @{$listmaster_messages_stack{$robot}{$operation}{'messages'}{$ts->{'email'}}}, $r;
@@ -5296,7 +5296,7 @@ sub add_parts {
 	    $footer_msg = '' unless $footer_msg =~ /\S/;
 	}
 	if (length $header_msg or length $footer_msg) {
-	    if (&_append_parts($msg, $header_msg, $footer_msg)) {
+	    if (_append_parts($msg, $header_msg, $footer_msg)) {
 		$msg->sync_headers(Length => 'COMPUTE')
 		    if $msg->head->get('Content-Length');
 	    }
@@ -5422,13 +5422,13 @@ sub _append_parts {
     } elsif ($eff_type eq 'multipart/mixed') {
 	## Append to first part if text/plain
 	if ($part->parts and
-	    &_append_parts($part->parts(0), $header_msg, $footer_msg)) {
+	    _append_parts($part->parts(0), $header_msg, $footer_msg)) {
 	    return 1;
 	}
     } elsif ($eff_type eq 'multipart/alternative') {
 	## Append to first text/plain part
 	foreach my $p ($part->parts) {
-	    if (&_append_parts($p, $header_msg, $footer_msg)) {
+	    if (_append_parts($p, $header_msg, $footer_msg)) {
 		return 1;
 	    }
 	}
@@ -5498,7 +5498,7 @@ sub delete_list_member {
 	## Include in exclusion_table only if option is set.
 	if($exclude == 1){
 	    ## Insert in exclusion_table if $user->{'included'} eq '1'
-	    &insert_delete_exclusion($who, $name, $self->{'domain'}, 'insert');
+	    insert_delete_exclusion($who, $name, $self->{'domain'}, 'insert');
 
 	}
 
@@ -5523,7 +5523,7 @@ sub delete_list_member {
 
     $self->{'total'} += $total;
     $self->savestats();
-    &delete_list_member_picture($self,shift(@u));
+    delete_list_member_picture($self,shift(@u));
     return (-1 * $total);
 
 }
@@ -5864,7 +5864,7 @@ sub insert_delete_exclusion {
 	$options->{'email'} = $email;
 	$options->{'name'} = $list;
 	$options->{'domain'} = $robot;
-	my $user = &get_list_member_no_object($options);
+	my $user = get_list_member_no_object($options);
 	my $date = time;
 
 	if ($user->{'included'} eq '1' or defined $family) {
@@ -5877,7 +5877,7 @@ sub insert_delete_exclusion {
 
     }elsif($action eq 'delete') {
 	## If $email is in exclusion_table, delete it.
-	my $data_excluded = &get_exclusion($list,$robot);
+	my $data_excluded = get_exclusion($list,$robot);
 	my @users_excluded;
 
 	my $key =0;
@@ -6012,7 +6012,7 @@ sub get_list_member {
     $options->{'name'} = $self->{'name'};
     $options->{'domain'} = $self->{'domain'};
 
-    my $user = &get_list_member_no_object($options);
+    my $user = get_list_member_no_object($options);
 
     unless(defined $user){
 	return undef;
@@ -6077,14 +6077,14 @@ sub get_ressembling_list_members_no_object {
     # is subscriber a plused email ?
     if ($local_part =~ /^(.*)\+(.*)$/) {
 
-	foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $1.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $1.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
 	    next if ($subscribers_email{$subscriber->{'email'}});
 	    $subscribers_email{$subscriber->{'email'}} = 1;
 	    push @output,$subscriber;
 	}
     }
     # is some subscriber ressembling with a plused email ?
-    foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'+%@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+    foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'+%@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
     	next if ($subscribers_email{$subscriber->{'email'}});
        $subscribers_email{ $subscriber->{'email'} } = 1;
     	push @output,$subscriber;
@@ -6092,14 +6092,14 @@ sub get_ressembling_list_members_no_object {
 
     # ressembling local part
     # try to compare firstname.name@domain with name@domain
-        foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => '%'.$local_part.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+        foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => '%'.$local_part.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
     	next if ($subscribers_email{$subscriber->{'email'}});
     	$subscribers_email{ $subscriber->{'email'} } = 1;
     	push @output,$subscriber;
     }
 
     if ($local_part =~ /^(.*)\.(.*)$/) {
-	foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $2.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $2.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
 	    next if ($subscribers_email{$subscriber->{'email'}});
 	    $subscribers_email{ $subscriber->{'email'} } = 1;
 	    push @output,$subscriber;
@@ -6113,14 +6113,14 @@ sub get_ressembling_list_members_no_object {
 	my $upperdomain = $1;
 	if ($upperdomain =~ /\./) {
             # remove first token if there is still at least 2 tokens try to find a subscriber with that domain
-	    foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@'.$upperdomain,'name'=>$listname,'domain'=>$robot})){
+	    foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@'.$upperdomain,'name'=>$listname,'domain'=>$robot})){
 	    	next if ($subscribers_email{$subscriber->{'email'}});
 	    	$subscribers_email{ $subscriber->{'email'} } = 1;
 	    	push @output,$subscriber;
 	    }
 	}
     }
-    foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@%'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+    foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@%'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
     	next if ($subscribers_email{$subscriber->{'email'}});
     	$subscribers_email{ $subscriber->{'email'} } = 1;
     	push @output,$subscriber;
@@ -6137,7 +6137,7 @@ sub get_ressembling_list_members_no_object {
 	if ($name =~ /^([a-z])/){
 	    $initial = $initial.$1;
 	}
-	foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $initial.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $initial.'@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
 	    next if ($subscribers_email{$subscriber->{'email'}});
 	    $subscribers_email{ $subscriber->{'email'} } = 1;
 	    push @output,$subscriber;
@@ -6148,7 +6148,7 @@ sub get_ressembling_list_members_no_object {
 
     #### users in the same local part in any other domain
     #
-    foreach my $subscriber (&find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@%','name'=>$listname,'domain'=>$robot})){
+    foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'@%','name'=>$listname,'domain'=>$robot})){
 	next if ($subscribers_email{$subscriber->{'email'}});
 	$subscribers_email{ $subscriber->{'email'} } = 1;
 	push @output,$subscriber;
@@ -6215,7 +6215,7 @@ sub find_list_member_by_pattern_no_object {
 	    $user->{'escaped_email'} = Sympa::Tools::escape_chars($user->{'email'});
 	    $user->{'update_date'} ||= $user->{'date'};
 	    if (defined $user->{custom_attribute}) {
-		$user->{'custom_attribute'} = &parseCustomAttribute($user->{'custom_attribute'});
+		$user->{'custom_attribute'} = parseCustomAttribute($user->{'custom_attribute'});
 	    }
 	push @ressembling_users, $user;
 	}
@@ -6287,7 +6287,7 @@ sub get_list_member_no_object {
 	$user->{'update_date'} ||= $user->{'date'};
 	Sympa::Log::do_log('debug2', 'custom_attribute  = (%s)', $user->{custom_attribute});
 	if (defined $user->{custom_attribute}) {
-	    $user->{'custom_attribute'} = &parseCustomAttribute($user->{'custom_attribute'});
+	    $user->{'custom_attribute'} = parseCustomAttribute($user->{'custom_attribute'});
 	}
 
     }else {
@@ -6465,7 +6465,7 @@ sub get_first_list_member {
 
 		############################################################################
 		if (defined $user->{custom_attribute}) {
-			$user->{'custom_attribute'} = &parseCustomAttribute($user->{'custom_attribute'});
+			$user->{'custom_attribute'} = parseCustomAttribute($user->{'custom_attribute'});
 		}
     }
     else {
@@ -6683,7 +6683,7 @@ sub get_next_list_member {
 
 		Sympa::Log::do_log('debug2', '(email = %s)', $user->{'email'});
 		if (defined $user->{custom_attribute}) {
-			my $custom_attr = &parseCustomAttribute($user->{'custom_attribute'});
+			my $custom_attr = parseCustomAttribute($user->{'custom_attribute'});
 			unless (defined $custom_attr) {
 				Sympa::Log::do_log('err',"Failed to parse custom attributes for user %s, list %s", $user->{'email'}, $self->get_list_id());
 			}
@@ -6827,7 +6827,7 @@ sub get_next_bouncing_list_member {
 		Sympa::Log::do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) if (! $user->{'email'});
 
 		if (defined $user->{custom_attribute}) {
-		    $user->{'custom_attribute'} = &parseCustomAttribute($user->{'custom_attribute'});
+		    $user->{'custom_attribute'} = parseCustomAttribute($user->{'custom_attribute'});
 		}
 
     }else {
@@ -7392,7 +7392,7 @@ sub add_list_member {
 	}
 
 	# Delete from exclusion_table and force a sync_include if new_user was excluded
-	if(&insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete')) {
+	if(insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete')) {
 		$self->sync_include();
 		next if($self->is_list_member($who));
 	}
@@ -7401,7 +7401,7 @@ sub add_list_member {
 	$new_user->{'update_date'} ||= $new_user->{'date'};
 
 	my %custom_attr = %{ $subscriptions->{$who}{'custom_attribute'} } if (defined $subscriptions->{$who}{'custom_attribute'} );
-	$new_user->{'custom_attribute'} ||= &createXMLCustomAttribute(\%custom_attr) ;
+	$new_user->{'custom_attribute'} ||= createXMLCustomAttribute(\%custom_attr) ;
 	Sympa::Log::do_log('debug2', 'custom_attribute = %s', $new_user->{'custom_attribute'});
 
 	## Crypt password if it was not crypted
@@ -7637,7 +7637,7 @@ sub am_i {
     unless (defined $options and $options->{'strict'}) {
 	## Listmaster has all privileges except editor
 	# sa contestable.
-	if (($function eq 'owner' || $function eq 'privileged_owner') and &is_listmaster($who,$self->{'domain'})) {
+	if (($function eq 'owner' || $function eq 'privileged_owner') and is_listmaster($who,$self->{'domain'})) {
 	    $list_cache{'am_i'}{$function}{$self->{'domain'}}{$self->{'name'}}{$who} = 1;
 	    return 1;
 	}
@@ -7776,7 +7776,7 @@ sub may_edit {
     }
 
     ## What privilege?
-    if (&is_listmaster($who,$self->{'domain'})) {
+    if (is_listmaster($who,$self->{'domain'})) {
 	$role = 'listmaster';
     }elsif ( $self->am_i('privileged_owner',$who) ) {
 	$role = 'privileged_owner';
@@ -7830,7 +7830,7 @@ sub may_create_parameter {
     my ($self, $parameter, $who, $robot) = @_;
     Sympa::Log::do_log('debug3', '(%s, %s, %s)', $parameter, $who,$robot);
 
-    if ( &is_listmaster($who,$robot)) {
+    if ( is_listmaster($who,$robot)) {
 	return 1;
     }
     my $edit_conf = Sympa::Tools::load_edit_list_conf($robot,$self,$Sympa::Configuration::Conf{'etc'});
@@ -8165,7 +8165,7 @@ sub load_task_list {
 
 	    $list_of_task{$name}{'name'} = $name;
 
-	    my $titles = &_load_task_title ($file);
+	    my $titles = _load_task_title ($file);
 
 	    ## Set the title in the current language
 	    if (defined  $titles->{Sympa::Language::GetLang()}) {
@@ -8469,7 +8469,7 @@ sub _include_users_admin {
     unless ($role eq 'listmaster') {
 
 	if ($selection =~ /^\*\@(\S+)$/) {
-	    $lists = &get_lists($1);
+	    $lists = get_lists($1);
 	}else{
 	    $selection =~ /^(\S+)@(\S+)$/ ;
 	    $lists->[0] = $1;
@@ -8674,7 +8674,7 @@ sub _include_users_voot_group {
 	unless(defined $members) {
 		# Report error with redirect url
                 #my $url = $consumer->getOAuthConsumer()->mustRedirect();
-		#return &do_redirect($url) if(defined $url);
+		#return do_redirect($url) if(defined $url);
 		return undef;
 	}
 
@@ -9277,7 +9277,7 @@ sub _load_list_members_from_include {
 		}
 	    }elsif ($type eq 'include_list') {
 		$depend_on->{$name} = 1 ;
-		if (&_inclusion_loop ($name,$incl,$depend_on)) {
+		if (_inclusion_loop ($name,$incl,$depend_on)) {
 		    Sympa::Log::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		}else{
 		    $depend_on->{$incl} = 1;
@@ -9360,7 +9360,7 @@ sub _load_list_admin_from_include {
 	    my $include_path = $include_file;
 	    if ($include_path =~ s/$name$//) {
 		$parsing{'include_path'} = $include_path;
-		$include_admin_user = &_load_include_admin_user_file($self->{'domain'},$include_path,\%parsing);
+		$include_admin_user = _load_include_admin_user_file($self->{'domain'},$include_path,\%parsing);
 	    } else {
 		Sympa::Log::do_log('err', 'errors to get path of the the file %s.incl',$entry->{'source'});
 		return undef;
@@ -9368,7 +9368,7 @@ sub _load_list_admin_from_include {
 
 
 	} else {
-	    $include_admin_user = &_load_include_admin_user_file($self->{'domain'},$include_file);
+	    $include_admin_user = _load_include_admin_user_file($self->{'domain'},$include_file);
 	}
 	foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file', 'include_voot_group') {
 	    last unless (defined $total);
@@ -9405,7 +9405,7 @@ sub _load_list_admin_from_include {
 		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$self->{'domain'},\%option);
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
-		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
+		    if (_inclusion_loop ($name,$incl,$depend_on)) {
 			Sympa::Log::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
 			$depend_on->{$incl} = 1;
@@ -9568,7 +9568,7 @@ sub _load_include_admin_user_file {
 		    next;
 		}
 
-		$hash{$key} = &_load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key});
+		$hash{$key} = _load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key});
 	    }
 
 	    ## Apply defaults & Check required keys
@@ -9578,7 +9578,7 @@ sub _load_include_admin_user_file {
 		## Default value
 		unless (defined $hash{$k}) {
 		    if (defined $::pinfo{$pname}{'file_format'}{$k}{'default'}) {
-			$hash{$k} = &_load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k});
+			$hash{$k} = _load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k});
 		    }
 		}
 		## Required fields
@@ -9610,7 +9610,7 @@ sub _load_include_admin_user_file {
 		next;
 	    }
 
-	    my $value = &_load_list_param($robot,$pname, $1, $::pinfo{$pname});
+	    my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname});
 
 	    if (($::pinfo{$pname}{'occurrence'} =~ /n$/)
 		&& ! (ref ($value) =~ /^ARRAY/)) {
@@ -9693,7 +9693,7 @@ sub sync_include_ca {
 	}
 
 	foreach my $email (keys %changed) {
-		if($self->update_list_member($email, {'custom_attribute' => &createXMLCustomAttribute($users{$email})})) {
+		if($self->update_list_member($email, {'custom_attribute' => createXMLCustomAttribute($users{$email})})) {
 			Sympa::Log::do_log('debug', 'Updated user %s', $email);
 		}else{
 			Sympa::Log::do_log('error', 'could not update user %s', $email);
@@ -9727,7 +9727,7 @@ sub purge_ca {
 	}
 
 	foreach my $email (keys %users) {
-		if($self->update_list_member($email, {'custom_attribute' => &createXMLCustomAttribute($users{$email})})) {
+		if($self->update_list_member($email, {'custom_attribute' => createXMLCustomAttribute($users{$email})})) {
 			Sympa::Log::do_log('debug', 'Updated user %s', $email);
 		}else{
 			Sympa::Log::do_log('error', 'could not update user %s', $email);
@@ -9777,7 +9777,7 @@ sub sync_include {
 		if($#errors > -1) {
 			Sympa::Log::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
 			$errors_occurred = 1;
-			unless (&send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
+			unless (send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
 			Sympa::Log::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
 			}
 			foreach my $e (@errors) {
@@ -9844,7 +9844,7 @@ sub sync_include {
 	my @subscriber_exclusion;
 
 	## Gathering a list of emails for a the list in 'exclusion_table'
-	$data_exclu = &get_exclusion($name,$self->{'domain'});
+	$data_exclu = get_exclusion($name,$self->{'domain'});
 
 	my $key =0;
 	while ($data_exclu->{'emails'}->[$key]){
@@ -10070,7 +10070,7 @@ sub sync_include_admin {
 	    ## Use DB cache instead
 	    unless (defined $new_admin_users_include) {
 		Sympa::Log::do_log('err', 'Could not get %ss from an include source for list %s', $role, $name);
-		unless (&send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
+		unless (send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
 		    Sympa::Log::do_log('notice',"Unable to send notify 'sync_include_admmin_failed' to listmaster");
 		}
 		return undef;
@@ -10121,7 +10121,7 @@ sub sync_include_admin {
 		    $param->{'id'} = $new_admin_users_include->{$email}{'id'};
 		    $param->{'subscribed'} = 1;
 
-		    my $param_update = &is_update_param($param,$old_admin_users->{$email});
+		    my $param_update = is_update_param($param,$old_admin_users->{$email});
 
 		    # updating
 		    if (defined $param_update) {
@@ -10165,7 +10165,7 @@ sub sync_include_admin {
 		    $param->{'id'} = $new_admin_users_include->{$email}{'id'};
 		    $param->{'subscribed'} = 0;
 
-		    my $param_update = &is_update_param($param,$old_admin_users->{$email});
+		    my $param_update = is_update_param($param,$old_admin_users->{$email});
 
 		    # updating
 		    if (defined $param_update) {
@@ -10204,7 +10204,7 @@ sub sync_include_admin {
 		$param->{'included'} = 0;
 		$param->{'id'} = '';
 		$param->{'subscribed'} = 1;
-		my $param_update = &is_update_param($param,$old_admin_users->{$email});
+		my $param_update = is_update_param($param,$old_admin_users->{$email});
 
 		# updating
 		if (defined $param_update) {
@@ -10537,7 +10537,7 @@ sub get_lists {
     }
 
     if ($robot_context eq '*') {
-	@robots = &get_robots ;
+	@robots = get_robots() ;
     }else{
 	push @robots, $robot_context ;
     }
@@ -10580,7 +10580,7 @@ sub get_lists {
 		if (defined $cond_sql) {
 		    $where .= " AND $cond_sql";
 		}
-		my $files = &get_lists_db($where);
+		my $files = get_lists_db($where);
 		@files = @{$files};
 	    }
 
@@ -10739,7 +10739,7 @@ sub update_email_netidmap_db{
     return 1;
 }
 
-## &get_which(<email>,<robot>,<type>)
+## get_which(<email>,<robot>,<type>)
 ## Get lists of lists where <email> assumes this <type> (owner, editor or member) of
 ## function to any list in <robot>.
 sub get_which {
@@ -10749,12 +10749,12 @@ sub get_which {
     my ($l, @which);
 
     ## WHICH in Database
-    my $db_which = &get_which_db($email,  $function);
+    my $db_which = get_which_db($email,  $function);
     my $requested_lists;
     @{$requested_lists} = keys %{$db_which->{$robot}};
 
     ## This call is required too
-    my $all_lists = &get_lists($robot, {}, $requested_lists);
+    my $all_lists = get_lists($robot, {}, $requested_lists);
 
     foreach my $list (@$all_lists){
 
@@ -10855,7 +10855,7 @@ sub get_shared_moderated {
     }
 
     ## sort of the shared
-    my @mod_dir = &sort_dir_to_get_mod("$shareddir");
+    my @mod_dir = sort_dir_to_get_mod("$shareddir");
     return \@mod_dir;
 }
 
@@ -10892,7 +10892,7 @@ sub sort_dir_to_get_mod {
 	}
 
 	if (-d $path_d) {
-	    push(@moderate_dir,&sort_dir_to_get_mod($path_d));
+	    push(@moderate_dir,sort_dir_to_get_mod($path_d));
 	}
     }
 
@@ -11021,19 +11021,19 @@ sub load_topics {
 		my $title = _get_topic_titles($topic);
 		$list_of_topics{$robot}{$tree[0]}{'title'} = $title;
 		$list_of_topics{$robot}{$tree[0]}{'visibility'} = $topic->{'visibility'}||'default';
-		#$list_of_topics{$robot}{$tree[0]}{'visibility'} = &_load_scenario_file('topics_visibility', $robot,$topic->{'visibility'}||'default');
+		#$list_of_topics{$robot}{$tree[0]}{'visibility'} = _load_scenario_file('topics_visibility', $robot,$topic->{'visibility'}||'default');
 		$list_of_topics{$robot}{$tree[0]}{'order'} = $topic->{'order'};
 	    }else {
 		my $subtopic = join ('/', @tree[1..$#tree]);
 		my $title = _get_topic_titles($topic);
-		$list_of_topics{$robot}{$tree[0]}{'sub'}{$subtopic} = &_add_topic($subtopic,$title);
+		$list_of_topics{$robot}{$tree[0]}{'sub'}{$subtopic} = _add_topic($subtopic,$title);
 	    }
 	}
 
 	## Set undefined Topic (defined via subtopic)
 	foreach my $t (keys %{$list_of_topics{$robot}}) {
 	    unless (defined $list_of_topics{$robot}{$t}{'visibility'}) {
-		#$list_of_topics{$robot}{$t}{'visibility'} = &_load_scenario_file('topics_visibility', $robot,'default');
+		#$list_of_topics{$robot}{$t}{'visibility'} = _load_scenario_file('topics_visibility', $robot,'default');
 	    }
 
 	    unless (defined $list_of_topics{$robot}{$t}{'title'}) {
@@ -11079,7 +11079,7 @@ sub _add_topic {
     if ($#tree == 0) {
 	return {'title' => $title};
     }else {
-	$topic->{'sub'}{$name} = &_add_topic(join ('/', @tree[1..$#tree]), $title);
+	$topic->{'sub'}{$name} = _add_topic(join ('/', @tree[1..$#tree]), $title);
 	return $topic;
     }
 }
@@ -11509,7 +11509,7 @@ sub _load_list_config_file {
 		    next;
 		}
 
-		$hash{$key} = &_load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key}, $directory);
+		$hash{$key} = _load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key}, $directory);
 	    }
 
 	    ## Apply defaults & Check required keys
@@ -11519,7 +11519,7 @@ sub _load_list_config_file {
 		## Default value
 		unless (defined $hash{$k}) {
 		    if (defined $::pinfo{$pname}{'file_format'}{$k}{'default'}) {
-			$hash{$k} = &_load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k}, $directory);
+			$hash{$k} = _load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k}, $directory);
 		    }
 		}
 
@@ -11554,7 +11554,7 @@ sub _load_list_config_file {
 		next;
 	    }
 
-	    my $value = &_load_list_param($robot,$pname, $1, $::pinfo{$pname}, $directory);
+	    my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname}, $directory);
 
 	    delete $admin{'defaults'}{$pname};
 
@@ -11583,7 +11583,7 @@ sub _load_list_config_file {
 
 	    ## Simple (versus structured) parameter case
 	    if (defined $::pinfo{$p}{'default'}) {
-		$admin{$p} = &_load_list_param($robot,$p, $::pinfo{$p}{'default'}, $::pinfo{$p}, $directory);
+		$admin{$p} = _load_list_param($robot,$p, $::pinfo{$p}{'default'}, $::pinfo{$p}, $directory);
 
 	    ## Sructured parameters case : the default values are defined at the next level
 	    }elsif ((ref $::pinfo{$p}{'format'} eq 'HASH')
@@ -11598,7 +11598,7 @@ sub _load_list_config_file {
 			next;
 		    }
 
-		    $hash->{$key} = &_load_list_param($robot,$key, $::pinfo{$p}{'format'}{$key}{'default'}, $::pinfo{$p}{'format'}{$key}, $directory);
+		    $hash->{$key} = _load_list_param($robot,$key, $::pinfo{$p}{'format'}{$key}{'default'}, $::pinfo{$p}{'format'}{$key}, $directory);
 		}
 
 		$admin{$p} = $hash if (defined $hash);
@@ -11677,8 +11677,8 @@ sub _load_list_config_file {
 #    if ($admin{'status'} ne 'open') {
 #	## requested and closed list are just list hidden using visibility parameter
 #	## and with send parameter set to closed.
-#	$admin{'send'} = &_load_list_param('.','send', 'closed', $::pinfo{'send'}, $directory);
-#	$admin{'visibility'} = &_load_list_param('.','visibility', 'conceal', $::pinfo{'visibility'}, $directory);
+#	$admin{'send'} = _load_list_param('.','send', 'closed', $::pinfo{'send'}, $directory);
+#	$admin{'visibility'} = _load_list_param('.','visibility', 'conceal', $::pinfo{'visibility'}, $directory);
 #    }
 
     ## reception of default_user_options must be one of reception of
@@ -11724,10 +11724,10 @@ sub _save_list_config_file {
 	if ((ref ($admin->{$key}) eq 'ARRAY') &&
 	    ! $::pinfo{$key}{'split_char'}) {
 	    foreach my $elt (@{$admin->{$key}}) {
-		&_save_list_param($key, $elt, $admin->{'defaults'}{$key}, $fd);
+		_save_list_param($key, $elt, $admin->{'defaults'}{$key}, $fd);
 	    }
 	}else {
-	    &_save_list_param($key, $admin->{$key}, $admin->{'defaults'}{$key}, $fd);
+	    _save_list_param($key, $admin->{$key}, $admin->{'defaults'}{$key}, $fd);
 	}
 
     }
@@ -12236,7 +12236,7 @@ sub _urlize_part {
           $message->head->replace('Content-Type', $content_type);
           my @parts = $message->parts();
           foreach my $i (0..$#parts) {
-              my $entity = &_urlize_part ($message->parts ($i), $list, $dir, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')) ;
+              my $entity = _urlize_part ($message->parts ($i), $list, $dir, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')) ;
               if (defined $entity) {
                 $parts[$i] = $entity;
               }
@@ -12355,7 +12355,7 @@ sub get_subscription_requests {
 	    next;
 	}
 	## Following lines may contain custom attributes in an XML format
-	my $xml = &parseCustomAttribute($customattributes) ;
+	my $xml = parseCustomAttribute($customattributes) ;
 
 	$subscriptions{$email} = {'gecos' => $gecos,
 				  'custom_attribute' => $xml};
@@ -12918,7 +12918,7 @@ sub _update_list_db {
     my $subject = $self->{'admin'}{'subject'} || '';
     my $status = $self->{'admin'}{'status'};
     my $robot = $self->{'domain'};
-    my $web_archive  = &is_web_archived($self) || 0;
+    my $web_archive  = is_web_archived($self) || 0;
     my $topics = '';
     if ($self->{'admin'}{'topics'}) {
        $topics = join(',',@{$self->{'admin'}{'topics'}});

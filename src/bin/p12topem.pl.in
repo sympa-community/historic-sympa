@@ -46,7 +46,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 ## Probe Db if defined
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
     unless (Sympa::Upgrade::probe_db()) {
-	&die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
+	die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
     }
 }
 
@@ -60,7 +60,7 @@ my $etc_dir = $Sympa::Configuration::Conf{'etc'};
 
 ## Check option
 my %options;
-&GetOptions(\%main::options, 'pkcs12=s','listname=s', 'robot=s', 'help|h');
+GetOptions(\%main::options, 'pkcs12=s','listname=s', 'robot=s', 'help|h');
 
 $main::options{'foreground'} = 1;
 my $listname = $main::options{'listname'};
@@ -74,7 +74,7 @@ if (($main::options{'help'} ne '') ||
     !(-r $main::options{'pkcs12'}) || 
     (($main::options{'listname'} ne '') && ($main::options{'robot'} ne ''))
    ){
-    &print_usage(); 
+    print_usage(); 
 }else{
 
     if ($listname) {

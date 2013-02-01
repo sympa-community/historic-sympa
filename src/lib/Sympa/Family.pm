@@ -1826,7 +1826,7 @@ sub _copy_files {
 
     # instance.xml
     if (defined $file) {
-	unless (&File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
+	unless (File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
 	    Sympa::Log::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$ERRNO);
 	    return undef;
 	}

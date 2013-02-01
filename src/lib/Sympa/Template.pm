@@ -105,8 +105,8 @@ sub encode_utf8 {
     my ($string) = @_;
 
     ## Skip if already internally tagged utf8
-    if (&Encode::is_utf8($string)) {
-	return &Encode::encode_utf8($string);
+    if (Encode::is_utf8($string)) {
+	return Encode::encode_utf8($string);
     }
 
     return $string;
@@ -117,11 +117,11 @@ sub decode_utf8 {
     my ($string) = @_;
 
     ## Skip if already internally tagged utf8
-    unless (&Encode::is_utf8($string)) {
+    unless (Encode::is_utf8($string)) {
 	## Wrapped with eval to prevent Sympa process from dying
 	## FB_CROAK is used instead of FB_WARN to pass $string intact to succeeding processes it operation fails
 	eval {
-	    $string = &Encode::decode('utf8', $string, Encode::FB_CROAK);
+	    $string = Encode::decode('utf8', $string, Encode::FB_CROAK);
 	};
 	$EVAL_ERROR = '';
     }
@@ -241,7 +241,7 @@ sub parse_tt2 {
 	UNICODE => 0, # Prevent BOM auto-detection
 
 	FILTERS => {
-	    unescape => \&CGI::Util::unescape,
+	    unescape => \CGI::Util::unescape,
 	    l => [\&maketext, 1],
 	    loc => [\&maketext, 1],
 	    helploc => [\&maketext, 1],

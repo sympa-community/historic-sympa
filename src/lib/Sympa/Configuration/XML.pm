@@ -99,7 +99,7 @@ sub createHash {
     }
 
     if ($self->{'root'}->hasChildNodes()) {
-	my $hash = &_getChildren($self->{'root'});
+	my $hash = _getChildren($self->{'root'});
 	unless (defined $hash){
 	    Sympa::Log::do_log('err',"error in list elements ");
 	    return undef;
@@ -185,7 +185,7 @@ sub _getMultipleAndRequiredChild {
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
 
-    unless (defined &_verify_single_nodes(\@nodes)) {
+    unless (defined _verify_single_nodes(\@nodes)) {
 	return undef;
     }
 
@@ -196,7 +196,7 @@ sub _getMultipleAndRequiredChild {
 	    return undef;
 	}
 
-	my $hash = &_getChildren($o);
+	my $hash = _getChildren($o);
 	unless (defined $hash) {
 	     Sympa::Log::do_log('err','error on _getChildren(%s) ',$o->nodeName);
 	     return undef;
@@ -225,7 +225,7 @@ sub _getRequiredSingle {
 
     my @nodes = $self->{'root'}->getChildrenByTagName($nodeName);
 
-    unless (&_verify_single_nodes(\@nodes)) {
+    unless (_verify_single_nodes(\@nodes)) {
 	return undef;
     }
 
@@ -258,7 +258,7 @@ sub _getRequiredSingle {
 	$self->{$nodeName} = $value;
 
     }else {
-	my $values = &_getChildren($node);
+	my $values = _getChildren($node);
 	unless (defined $values) {
 	     Sympa::Log::do_log('err','error on _getChildren(%s) ',$node->nodeName);
 	     return undef;
@@ -306,7 +306,7 @@ sub _getChildren {
 
     my @nodeList = $node->childNodes();
 
-    unless (&_verify_single_nodes(\@nodeList)) {
+    unless (_verify_single_nodes(\@nodeList)) {
 	return undef;
     }
 
@@ -316,7 +316,7 @@ sub _getChildren {
 
         # ELEMENT_NODE
 	if ($type == 1) {
-	    my $values = &_getChildren($child);
+	    my $values = _getChildren($child);
 	    unless (defined $values) {
 		Sympa::Log::do_log('err','error on _getChildren(%s)',$childName);
 		return undef;
@@ -404,7 +404,7 @@ sub _verify_single_nodes {
 
     my $error = 0;
     my %error_nodes;
-    my $nodeLines = &_find_lines($nodeList);
+    my $nodeLines = _find_lines($nodeList);
 
     foreach my $node (@$nodeList) {
 	if ($node->nodeType == 1) { # ELEMENT_NODE

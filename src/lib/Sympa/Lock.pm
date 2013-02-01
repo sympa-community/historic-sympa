@@ -299,13 +299,13 @@ sub remove_lock {
 
     if ($self->{'method'} eq 'nfs') {
 	my $nfs_lock = $list_of_locks{$self->{'lock_filename'}}{'nfs_lock'};
-	unless (defined $fh && defined $nfs_lock && &_unlock_nfs($self->{'lock_filename'}, $fh, $nfs_lock)) {
+	unless (defined $fh && defined $nfs_lock && _unlock_nfs($self->{'lock_filename'}, $fh, $nfs_lock)) {
 	    Sympa::Log::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
 	    $list_of_locks{$self->{'lock_filename'}} = undef; ## Clean the list of locks anyway
 	    return undef;
 	}
     }else {
-	unless (defined $fh && &_unlock_file($self->{'lock_filename'}, $fh)) {
+	unless (defined $fh && _unlock_file($self->{'lock_filename'}, $fh)) {
 	    Sympa::Log::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
 	    $list_of_locks{$self->{'lock_filename'}} = undef; ## Clean the list of locks anyway
 	    return undef;

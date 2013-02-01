@@ -72,12 +72,12 @@ sub create {
 	return undef;
     }
 
-    $challenge->{'id_challenge'} = &get_random();
+    $challenge->{'id_challenge'} = get_random();
     $challenge->{'email'} = $email;
     $challenge->{'date'} = time;
     $challenge->{'robot'} = $robot;
     $challenge->{'data'} = $context;
-    return undef unless (&store($challenge));
+    return undef unless (store($challenge));
     return $challenge->{'id_challenge'}
 }
 

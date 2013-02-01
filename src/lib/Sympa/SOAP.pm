@@ -287,7 +287,7 @@ sub casLogin {
 
 	($user, @proxies) = $cas->validatePT(Sympa::Configuration::get_robot_conf($robot,'soap_url'), $proxyTicket);
 	unless (defined $user) {
-	    Sympa::Log::do_log('err', 'CAS ticket %s not validated by server %s : %s', $proxyTicket, $auth_service->{'base_url'}, &AuthCAS::get_errors());
+	    Sympa::Log::do_log('err', 'CAS ticket %s not validated by server %s : %s', $proxyTicket, $auth_service->{'base_url'}, AuthCAS::get_errors());
 	    next;
 	}
 
@@ -595,7 +595,7 @@ sub info {
 	unless (defined $action);
 
     if ($action =~ /reject/i) {
-	my $reason_string = &get_reason_string($result->{'reason'},$robot);
+	my $reason_string = get_reason_string($result->{'reason'},$robot);
 	Sympa::Log::do_log('info', '%s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
@@ -916,7 +916,7 @@ sub add {
     }
 
     unless ($action =~ /do_it/) {
-	my $reason_string = &get_reason_string($reason,$robot);
+	my $reason_string = get_reason_string($reason,$robot);
 	Sympa::Log::do_log('info', '%s@%s %s from %s refused (not allowed)', $listname,$robot,$email,$sender);
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Not allowed')
@@ -1048,7 +1048,7 @@ sub del {
     }
 
     unless ($action =~ /do_it/) {
-	my $reason_string = &get_reason_string($reason,$robot);
+	my $reason_string = get_reason_string($reason,$robot);
 	Sympa::Log::do_log('info', '%s@%s %s from %s by %srefused (not allowed)', $listname,$robot,$email,$sender,$ENV{'remote_application_name'});
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Not allowed')
@@ -1156,7 +1156,7 @@ sub review {
 	unless (defined $action);
 
     if ($action =~ /reject/i) {
-	my $reason_string = &get_reason_string($result->{'reason'},$robot);
+	my $reason_string = get_reason_string($result->{'reason'},$robot);
 	Sympa::Log::do_log('info', '%s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
@@ -1362,7 +1362,7 @@ sub signoff {
 	foreach my $list  ( Sympa::List::get_which ($sender,$robot,'member') ){
 	    my $l = $list->{'name'};
 
-	    $success ||= &signoff($l,$sender);
+	    $success ||= signoff($l,$sender);
 	}
 	return SOAP::Data->name('result')->value($success);
     }
@@ -1383,7 +1383,7 @@ sub signoff {
 	unless (defined $action);
 
     if ($action =~ /reject/i) {
-	my $reason_string = &get_reason_string($result->{'reason'},$robot);
+	my $reason_string = get_reason_string($result->{'reason'},$robot);
 	Sympa::Log::do_log('info', 'from %s for the email %s of the user %s refused (not allowed)',
 		     $listname,$sender,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -1502,7 +1502,7 @@ sub subscribe {
   Sympa::Log::do_log('debug2', 'action : %s', $action);
 
   if ($action =~ /reject/i) {
-      my $reason_string = &get_reason_string($result->{'reason'},$robot);
+      my $reason_string = get_reason_string($result->{'reason'},$robot);
       Sympa::Log::do_log('info', 'to %s from %s refused (not allowed)', $listname,$sender);
       die SOAP::Fault->faultcode('Server')
 	  ->faultstring('Not allowed.')
@@ -1788,7 +1788,7 @@ sub struct_to_soap {
 
 	    ## Decode from the current charset to perl internal charset
 	    ## Then encode strings to UTF-8
-            $one_data = &Encode::encode('utf-8', $one_data);
+            $one_data = Encode::encode('utf-8', $one_data);
 
 	    push @all, $one_data;
 	}

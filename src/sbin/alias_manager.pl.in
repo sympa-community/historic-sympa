@@ -80,7 +80,7 @@ unless (-w "$alias_file") {
 }
 
 my %data;
-$data{'date'} =  &POSIX::strftime("%d %b %Y", localtime(time));
+$data{'date'} =  POSIX::strftime("%d %b %Y", localtime(time));
 
 
 $data{'list'}{'domain'} = $data{'robot'} = $domain;
@@ -113,7 +113,7 @@ if ($operation eq 'add') {
     flock LF, 2;
 
     ## Check existing aliases
-    if (&already_defined(@aliases)) {
+    if (already_defined(@aliases)) {
 	printf STDERR "some alias already exist\n";
 	exit(13);
     }

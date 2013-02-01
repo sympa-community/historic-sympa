@@ -249,7 +249,7 @@ its location.
 If the parse fails, a null array is returned. Thus the routine
 may be used as follows:
 
-    if ( (@x = &parse_date($date)) ) { Success }
+    if ( (@x = parse_date($date)) ) { Success }
     else { Fail }
 
 If success the array contents are as follows:

@@ -122,7 +122,7 @@ sub new {
 	}
 	close(FILE);
         # use Data::Dumper;
-	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP;
+	# my $dump = Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP;
     }
     if($messageasstring){
 	if (ref ($messageasstring)){
@@ -390,7 +390,7 @@ sub clean_html {
     $listname = lc($listname);
     $robot ||= $Sympa::Configuration::Conf{'host'};
     my $new_msg;
-    if($new_msg = &fix_html_part($self->{'msg'},$robot)) {
+    if($new_msg = fix_html_part($self->{'msg'},$robot)) {
 	$self->{'msg'} = $new_msg;
 	return 1;
     }
@@ -405,7 +405,7 @@ sub fix_html_part {
     if ($part->parts) {
 	my @newparts = ();
 	foreach ($part->parts) {
-	    push @newparts, &fix_html_part($_,$robot);
+	    push @newparts, fix_html_part($_,$robot);
 	}
 	$part->parts(\@newparts);
     } elsif ($eff_type =~ /^text\/html/i) {

@@ -82,7 +82,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 #getopts('dF');
 ## Check options
 my %options;
-unless (&GetOptions(\%main::options, 'debug|d','log_level=s','foreground|F')) {
+unless (GetOptions(\%main::options, 'debug|d','log_level=s','foreground|F')) {
     Sympa::Log::fatal_err("Unknown options.");
 }
 
@@ -167,8 +167,8 @@ $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
 $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
@@ -286,7 +286,7 @@ while (!$end) {
 								{'who' => $who,
 								 'by' => 'bounce manager',
 								 'reason' => 'welcome'})) {
-				&wwslog('err',"Unable to send notify 'automatic_del' to $list->{'name'} list owner");
+				wwslog('err',"Unable to send notify 'automatic_del' to $list->{'name'} list owner");
 			    } 
 			}
 		    }
@@ -647,7 +647,7 @@ while (!$end) {
 		## Analysis of bounced message
 		Sympa::Tools::Bounce::anabounce($message, \%hash, \$from, $Sympa::Configuration::Conf{'tmpdir'});
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
-		# &updatedatabase(%hash);
+		# updatedatabase(%hash);
 	    }
 	    
 	    ## Bounce directory
@@ -668,16 +668,16 @@ while (!$end) {
 		my $bouncefor = $who;
 		$bouncefor ||= $rcpt;
 	    
-		next unless (&store_bounce ($bounce_dir,$bounce->{'messageasstring'},$bouncefor));
-		next unless (&update_subscriber_bounce_history($list, $rcpt, $bouncefor, &canonicalize_status ($status)));
+		next unless (store_bounce ($bounce_dir,$bounce->{'messageasstring'},$bouncefor));
+		next unless (update_subscriber_bounce_history($list, $rcpt, $bouncefor, canonicalize_status ($status)));
 	    }
 	    
 	    ## No address found in the bounce itself
 	    unless ($adr_count) {
 		
 		if ( $who ) {	# rcpt not recognized in the bounce but VERP was used
-		    &store_bounce ($bounce_dir,$bounce->{'messageasstring'},$who);
-		    &update_subscriber_bounce_history($list, 'unknown', $who); # status is undefined 
+		    store_bounce ($bounce_dir,$bounce->{'messageasstring'},$who);
+		    update_subscriber_bounce_history($list, 'unknown', $who); # status is undefined 
 		}else{          # no VERP and no rcpt recognized		
 		    my $escaped_from = Sympa::Tools::escape_chars($from);
 		    Sympa::Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $list->{'name'});
@@ -693,7 +693,7 @@ while (!$end) {
 	    last;
 	}
 	## Free zombie sendmail processes
-	#    &mail::reaper;
+	#    mail::reaper;
     }
 }
 
@@ -765,7 +765,7 @@ sub update_subscriber_bounce_history {
     my $bouncefor = shift;
     my $status = shift;
     
-    Sympa::Log::do_log ('debug','&update_subscriber_bounce_history (%s,%s,%s,%s)',$list->{'name'},$rcpt,$bouncefor,$status); 
+    Sympa::Log::do_log ('debug','update_subscriber_bounce_history (%s,%s,%s,%s)',$list->{'name'},$rcpt,$bouncefor,$status); 
 
     my $first = my $last = time;
     my $count = 0;
@@ -783,7 +783,7 @@ sub update_subscriber_bounce_history {
     $count++;
     if ($rcpt ne $bouncefor) {
 	Sympa::Log::do_log('notice','Bouncing address identified with VERP : %s / %s', $rcpt, $bouncefor);
-	Sympa::Log::do_log ('debug','&update_subscribe (%s, bounce-> %s %s %s %s,bounce_address->%s)',$bouncefor,$first,$last,$count,$status,$rcpt); 
+	Sympa::Log::do_log ('debug','update_subscribe (%s, bounce-> %s %s %s %s,bounce_address->%s)',$bouncefor,$first,$last,$count,$status,$rcpt); 
 	$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status",
 				       'bounce_address' => $rcpt});
 	Sympa::Log::db_log({'robot' => $list->{'domain'},'list' => $list->{'name'},'action' => 'get_bounce','parameters' => "address=$rcpt",

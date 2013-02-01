@@ -70,7 +70,7 @@ my $opt_d;
 my $opt_F;
 my %options;
 
-unless (&GetOptions(\%main::options, 'debug|d', 'log_level=s', 'foreground')) {
+unless (GetOptions(\%main::options, 'debug|d', 'log_level=s', 'foreground')) {
     Sympa::Log::fatal_err("Unknown options.");
 }
 
@@ -162,8 +162,8 @@ $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
 $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
@@ -495,8 +495,8 @@ sub create {
     }
 
     #use Data::Dumper;
-    #my $dump = &Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP;
-    #my $dump = &Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP;
+    #my $dump = Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP;
+    #my $dump = Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP;
 
     Sympa::Log::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
     $taskspool->store($task_as_string,\%meta);
@@ -758,13 +758,13 @@ sub execute {
 
 	# processing of the assignments
 	if ($result{'nature'} eq 'assignment') {
-	    $status = $vars{$result{'var'}} = &cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
+	    $status = $vars{$result{'var'}} = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
 	    last unless defined($status);
 	}
 
 	# processing of the commands
 	if ($result{'nature'} eq 'command') {
-	    $status = &cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
+	    $status = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
 	    last unless (defined($status) && $status >= 0);
 	}
     }
@@ -1356,8 +1356,8 @@ sub purge_orphan_bounces {
 		 }
 		 Sympa::Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
 			$email,$listname,
-			&POSIX::strftime("%d %b %Y", localtime($list->get_latest_distribution_date() * 3600 * 24)),
-			&POSIX::strftime("%d %b %Y", localtime($u->{'last_bounce'})));
+			POSIX::strftime("%d %b %Y", localtime($list->get_latest_distribution_date() * 3600 * 24)),
+			POSIX::strftime("%d %b %Y", localtime($u->{'last_bounce'})));
 
 	     }
 	 }
@@ -1576,7 +1576,7 @@ sub eval_bouncers {
 
 	#for each bouncing user
 	for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()){
-	    my $score = &get_score($user_ref,$list_traffic) || 0;
+	    my $score = get_score($user_ref,$list_traffic) || 0;
 
 	    ## copying score into DataBase
 	    unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {

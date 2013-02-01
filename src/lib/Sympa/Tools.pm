@@ -112,7 +112,7 @@ Return the type of a pictures according to the user.
 sub pictures_filename {
     my %parameters = @_;
 
-    my $login = &md5_fingerprint($parameters{'email'});
+    my $login = md5_fingerprint($parameters{'email'});
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
 
     my $filename = undef;
@@ -184,7 +184,7 @@ sub sanitize_html {
 	return undef;
     }
 
-    my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
+    my $hss = _create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
 	Sympa::Log::do_log('err',"Can't create StripScript parser.");
 	return undef;
@@ -221,7 +221,7 @@ sub sanitize_html_file {
 	return undef;
     }
 
-    my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
+    my $hss = _create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
 	Sympa::Log::do_log('err',"Can't create StripScript parser.");
 	return undef;
@@ -270,7 +270,7 @@ sub sanitize_var {
 	if(ref($parameters{'var'}) eq 'ARRAY') {
 	    foreach my $index (0..$#{$parameters{'var'}}) {
 		if ((ref($parameters{'var'}->[$index]) eq 'ARRAY') || (ref($parameters{'var'}->[$index]) eq 'HASH')) {
-		    &sanitize_var('var' => $parameters{'var'}->[$index],
+		    sanitize_var('var' => $parameters{'var'}->[$index],
 				  'level' => $level+1,
 				  'robot' => $parameters{'robot'},
 				  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
@@ -279,7 +279,7 @@ sub sanitize_var {
 		}
 		else {
 		    if (defined $parameters{'var'}->[$index]) {
-			$parameters{'var'}->[$index] = &escape_html($parameters{'var'}->[$index]);
+			$parameters{'var'}->[$index] = escape_html($parameters{'var'}->[$index]);
 		    }
 		}
 	    }
@@ -287,7 +287,7 @@ sub sanitize_var {
 	elsif(ref($parameters{'var'}) eq 'HASH') {
 	    foreach my $key (keys %{$parameters{'var'}}) {
 		if ((ref($parameters{'var'}->{$key}) eq 'ARRAY') || (ref($parameters{'var'}->{$key}) eq 'HASH')) {
-		    &sanitize_var('var' => $parameters{'var'}->{$key},
+		    sanitize_var('var' => $parameters{'var'}->{$key},
 				  'level' => $level+1,
 				  'robot' => $parameters{'robot'},
 				  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
@@ -297,10 +297,10 @@ sub sanitize_var {
 		else {
 		    if (defined $parameters{'var'}->{$key}) {
 			unless ($parameters{'htmlAllowedParam'}{$key}||$parameters{'htmlToFilter'}{$key}) {
-			    $parameters{'var'}->{$key} = &escape_html($parameters{'var'}->{$key});
+			    $parameters{'var'}->{$key} = escape_html($parameters{'var'}->{$key});
 			}
 			if ($parameters{'htmlToFilter'}{$key}) {
-			    $parameters{'var'}->{$key} = &sanitize_html('string' => $parameters{'var'}->{$key},
+			    $parameters{'var'}->{$key} = sanitize_html('string' => $parameters{'var'}->{$key},
 									'robot' =>$parameters{'robot'} );
 			}
 		    }
@@ -532,7 +532,7 @@ sub _add_topic {
     if ($#tree == 0) {
 	return {'title' => $title};
     }else {
-	$topic->{'sub'}{$name} = &_add_topic(join ('/', @tree[1..$#tree]), $title);
+	$topic->{'sub'}{$name} = _add_topic(join ('/', @tree[1..$#tree]), $title);
 	return $topic;
     }
 }
@@ -542,7 +542,7 @@ sub get_list_list_tpl {
 
     my $list_conf;
     my $list_templates ;
-    unless ($list_conf = &load_create_list_conf($robot)) {
+    unless ($list_conf = load_create_list_conf($robot)) {
 	return undef;
     }
 
@@ -758,7 +758,7 @@ sub as_singlepart {
 	$msg->parts([$parts[0]]);
 	$msg->make_singlepart();
 
-	$done ||= &as_singlepart($msg, $preferred_type, $loops);
+	$done ||= as_singlepart($msg, $preferred_type, $loops);
 
     }elsif ($msg->effective_type() =~ /^multipart/) {
 	foreach my $part ($msg->parts) {
@@ -766,7 +766,7 @@ sub as_singlepart {
             next unless (defined $part); ## Skip empty parts
 
 	    if ($part->effective_type() =~ /^multipart\/alternative/) {
-		if (&as_singlepart($part, $preferred_type, $loops)) {
+		if (as_singlepart($part, $preferred_type, $loops)) {
 		    $msg->parts([$part]);
 		    $msg->make_singlepart();
 		    $done = 1;
@@ -816,10 +816,10 @@ sub escape_docname {
     $filename = MIME::EncWords::decode_mimewords($filename);
 
     ## Decode from FS encoding to utf-8
-    #$filename = &Encode::decode($Sympa::Configuration::Conf{'filesystem_encoding'}, $filename);
+    #$filename = Encode::decode($Sympa::Configuration::Conf{'filesystem_encoding'}, $filename);
 
     ## escapesome chars for use in URL
-    return &escape_chars($filename, $except);
+    return escape_chars($filename, $except);
 }
 
 =head2 unicode_to_utf8($string)
@@ -831,8 +831,8 @@ Convert from Perl unicode encoding to UTF8
 sub unicode_to_utf8 {
     my ($s) = @_;
 
-    if (&Encode::is_utf8($s)) {
-	return &Encode::encode_utf8($s);
+    if (Encode::is_utf8($s)) {
+	return Encode::encode_utf8($s);
     }
 
     return $s;
@@ -880,7 +880,7 @@ sub qdecode_filename {
     ## We don't use MIME::Words here because it does not encode properly Unicode
     ## Check if string is already Q-encoded first
     #if ($filename =~ /\=\?UTF-8\?/) {
-    $filename = Encode::encode_utf8(&Encode::decode('MIME-Q', $filename));
+    $filename = Encode::encode_utf8(Encode::decode('MIME-Q', $filename));
     #}
 
     return $filename;
@@ -1039,7 +1039,7 @@ sub split_mail {
 	|| ($message->mime_type eq 'message/rfc822')) {
 
         for (my $i=0 ; $i < $message->parts ; $i++) {
-            &split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir) ;
+            split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir) ;
         }
     }
     else {
@@ -1052,7 +1052,7 @@ sub split_mail {
 		$fileExt = $1 ;
 	    }
 	    else {
-		my $mime_types = &load_mime_types($confdir);
+		my $mime_types = load_mime_types($confdir);
 
 		$fileExt=$mime_types->{$head->mime_type};
 	    }
@@ -1121,7 +1121,7 @@ sub virus_infected {
     #$mail->dump_skeleton;
 
     ## Call the procedure of spliting mail
-    unless (&split_mail ($mail,'msg', $work_dir, $confdir)) {
+    unless (split_mail ($mail,'msg', $work_dir, $confdir)) {
 	Sympa::Log::do_log('err', 'Could not split mail %s', $mail);
 	return undef;
     }
@@ -1910,7 +1910,7 @@ sub wrap_text {
 
     $text = Text::LineFold->new(
 	    Language => Sympa::Language::GetLang(),
-	    OutputCharset => (&Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
+	    OutputCharset => (Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
 	    Prep => 'NONBREAKURI',
 	    ColumnsMax => $cols
 	)->fold($init, $subs, $text);

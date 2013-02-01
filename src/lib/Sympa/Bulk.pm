@@ -64,7 +64,7 @@ my $last_stored_message_key;
 # create an empty Bulk
 #sub new {
 #    my $class = shift;
-#    my $packet = &Bulk::next();;
+#    my $packet = Bulk::next();;
 #    bless \$packet, $class;
 #    return $packet
 #}
@@ -235,7 +235,7 @@ sub merge_msg {
 	$body      = $entity->bodyhandle->as_string;
     }
     ## Get the Content-Type / Charset / Content-Transfer-encoding of a message
-    my $charset   = &MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
+    my $charset   = MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
 
     my $message_output;
     my $IO;
@@ -257,7 +257,7 @@ sub merge_msg {
 
 	    ## PARSAGE ##
 
-	    &merge_data('rcpt' => $rcpt,
+	    merge_data('rcpt' => $rcpt,
 			'messageid' => $bulk->{'messageid'},
 			'listname' => $bulk->{'listname'},
 			'robot' => $bulk->{'robot'},
@@ -296,7 +296,7 @@ sub merge_msg {
     ##--- Recursive call of the method. ---##
     ## Course on the different parts of the message at all levels.
     foreach my $part ($entity->parts) {
-	unless(&merge_msg($part, $rcpt, $bulk, $data)){
+	unless(merge_msg($part, $rcpt, $bulk, $data)){
 	    Sympa::Log::do_log('err', "Failed to merge message part.");
 	    return undef;
 	}
@@ -347,7 +347,7 @@ sub merge_data {
     # get_list_member_no_object() return the user's details with the custom attributes
     my $user = Sympa::List::get_list_member_no_object($user_details);
 
-    $user->{'escaped_email'} = &URI::Escape::uri_escape($rcpt);
+    $user->{'escaped_email'} = URI::Escape::uri_escape($rcpt);
     $user->{'friendly_date'} = Sympa::Language::gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
 
     # this method as been removed because some users may forward authentication link
@@ -524,7 +524,7 @@ sub purge_bulkspool {
 
     my $count = 0;
     while (my $key = $sth->fetchrow_hashref('NAME_lc')) {
-	if ( &remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
+	if ( remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
 	    $count++;
 	}else{
 	    Sympa::Log::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});
@@ -584,7 +584,7 @@ None.
 
 sub there_is_too_much_remaining_packets {
     Sympa::Log::do_log('debug3', 'there_is_too_much_remaining_packets');
-    my $remaining_packets = &get_remaining_packets_count();
+    my $remaining_packets = get_remaining_packets_count();
     if ($remaining_packets > Sympa::Configuration::get_robot_conf('*','bulk_fork_threshold')) {
 	return $remaining_packets;
     }else{

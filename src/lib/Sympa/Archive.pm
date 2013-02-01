@@ -308,7 +308,7 @@ sub clean_archive_directory{
 	foreach my $file (readdir(ARCDIR)){
 	    next if($file =~ /^\./);
 	    $file = $answer->{'cleaned_dir'}.'/'.$file;
-	    $files_left_uncleaned++ unless(&clean_archived_message({'input'=>$file ,'output'=>$file}));
+	    $files_left_uncleaned++ unless(clean_archived_message({'input'=>$file ,'output'=>$file}));
 	}
 	closedir DIR;
 	if ($files_left_uncleaned) {

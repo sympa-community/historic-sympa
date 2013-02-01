@@ -153,7 +153,7 @@ sub new {
 	## Keep rough scenario
 	$scenario->{'data'} = $data;
 
-	$scenario_struct = &_parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, $data, $params{'directory'});
+	$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, $data, $params{'directory'});
     }elsif ($params{'function'} eq 'include') {
 	## include.xx not found will not raise an error message
 	return undef;
@@ -161,7 +161,7 @@ sub new {
     }else {
 	## Default rule is 'true() smtp -> reject'
 	Sympa::Log::do_log('err',"Unable to find scenario file '$params{'function'}.$params{'name'}', please report to listmaster");
-	$scenario_struct = &_parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, 'true() smtp -> reject', $params{'directory'});
+	$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, 'true() smtp -> reject', $params{'directory'});
 	$scenario->{'file_path'} = 'ERROR'; ## special value
 	$scenario->{'data'} = 'true() smtp -> reject';
     }
@@ -464,7 +464,7 @@ sub request_action {
 	    if ($log_it){
 		 Sympa::Log::do_log('info', 'Context uses auth method %s',$rule->{'auth_method'});
 	    }
-	    my $result =  &verify ($context,$rule->{'condition'},$log_it);
+	    my $result =  verify ($context,$rule->{'condition'},$log_it);
 
 	    ## Cope with errors
 	    if (! defined ($result)) {
@@ -1050,9 +1050,9 @@ sub verify {
 	my $val_search;
  	# we could search in the family if we got ref on Family object
  	if (defined $list){
- 	    $val_search = &search($args[0],$context,$robot,$list);
+ 	    $val_search = search($args[0],$context,$robot,$list);
  	}else {
- 	    $val_search = &search($args[0],$context,$robot);
+ 	    $val_search = search($args[0],$context,$robot);
  	}
 	return undef unless defined $val_search;
 	if($val_search == 1) {
@@ -1098,7 +1098,7 @@ sub verify {
     if ($condition_key =~ /^customcondition::(\w+)/o ) {
     	my $condition = $1;
 
-    	my $res = &verify_custom($condition, \@args, $robot, $list);
+    	my $res = verify_custom($condition, \@args, $robot, $list);
 	unless (defined $res) {
 	    if ($log_it == 1) {
 		my $args_as_string = '';

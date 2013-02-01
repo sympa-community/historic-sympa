@@ -110,7 +110,7 @@ sub new {
 	Sympa::Log::do_log('debug2', '(%s, %s)', $params{'user'}, $params{'provider'});
 
 	# Get oauth consumer and enpoints from provider_id
-	$consumer->{'conf'} = &_get_config_for($params{'provider'}, $params{'config'});
+	$consumer->{'conf'} = _get_config_for($params{'provider'}, $params{'config'});
 	return undef unless(defined $consumer->{'conf'});
 
 	$consumer->{'user'} = $params{'user'};
@@ -163,7 +163,7 @@ sub isMemberOf {
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
 	return undef unless(defined $data);
 
-	return &_get_groups(decode_json($data));
+	return _get_groups(decode_json($data));
 }
 
 =head2 $consumer->check()
@@ -203,7 +203,7 @@ sub getGroupMembers {
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$params{'group'});
 	return undef unless(defined $data);
 
-	return &_get_members(decode_json($data));
+	return _get_members(decode_json($data));
 }
 
 # _get_groups($response)

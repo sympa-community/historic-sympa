@@ -69,7 +69,7 @@ local $main::daemon_usage = 'DAEMON_MASTER'; ## Default is to launch bulk as mas
 ##  --foreground : prevents the script from beeing daemonized
 ##  --mail : logs every sendmail calls
 my %options;
-unless (&GetOptions(\%main::options, 'debug|d', 'foreground|F','mail|m')) {
+unless (GetOptions(\%main::options, 'debug|d', 'foreground|F','mail|m')) {
     Sympa::Log::fatal_err("Unknown options.");
 }
 
@@ -136,8 +136,8 @@ $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
 $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
@@ -288,8 +288,8 @@ while (!$end) {
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 
             #use Data::Dumper;
-	    #my $dump = &Dumper($messageasstring_init); open (DUMP,">>/tmp/dumper"); printf DUMP 'messageasstring recup par bulk \n%s',$dump ; close DUMP;
-	    # &trace_smime($messageasstring_init,'initial');
+	    #my $dump = Dumper($messageasstring_init); open (DUMP,">>/tmp/dumper"); printf DUMP 'messageasstring recup par bulk \n%s',$dump ; close DUMP;
+	    # trace_smime($messageasstring_init,'initial');
 
 	    unless ( $messageasstring_init ) {
 		Sympa::Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
@@ -347,7 +347,7 @@ while (!$end) {
 		    }else{
 			$messageasstring_init = $entity->as_string;
 		    }
-		    # &trace_smime($messageasstring,'tracking');
+		    # trace_smime($messageasstring,'tracking');
 		}else{  # VERP
 		    $return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
 		}
@@ -373,7 +373,7 @@ while (!$end) {
 									   'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, }, $Sympa::Configuration::Conf{'tmpdir'});
 		}
 
-		# &trace_smime($messageasstring,'dkim');
+		# trace_smime($messageasstring,'dkim');
 
 		*SMTP = Sympa::Mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
 		# Message with customized data
@@ -395,7 +395,7 @@ while (!$end) {
 										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, }, $Sympa::Configuration::Conf{'tmpdir'} );
 	    }
 
-	    # &trace_smime($messageasstring_init,'dkim 2');
+	    # trace_smime($messageasstring_init,'dkim 2');
 
 	    *SMTP = Sympa::Mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
 	    print SMTP $messageasstring_init;

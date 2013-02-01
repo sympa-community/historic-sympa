@@ -87,14 +87,14 @@ Authentication via email or uid.
      my ($canonic, $user);
 
      if( Sympa::Tools::valid_email($auth)) {
-	 return &authentication($robot, $auth,$pwd);
+	 return authentication($robot, $auth,$pwd);
      }else{
 	 ## This is an UID
 	 foreach my $ldap (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
 	     # only ldap service are to be applied here
 	     next unless ($ldap->{'auth_type'} eq 'ldap');
 
-	     $canonic = &ldap_authentication($robot, $ldap, $auth,$pwd,'uid_filter');
+	     $canonic = ldap_authentication($robot, $ldap, $auth,$pwd,'uid_filter');
 	     last if ($canonic); ## Stop at first match
 	 }
 	 if ($canonic){
@@ -182,7 +182,7 @@ sub authentication {
 	## Only 'user_table' and 'ldap' backends will need that Sympa collects the user passwords
 	## Other backends are Single Sign-On solutions
 	if ($auth_service->{'auth_type'} eq 'user_table') {
-	    my $fingerprint = &password_fingerprint ($pwd);
+	    my $fingerprint = password_fingerprint ($pwd);
 
 	    if ($fingerprint eq $user->{'password'}) {
 		Sympa::List::update_global_user($email,{wrong_login_count => 0}) ;
@@ -192,7 +192,7 @@ sub authentication {
 			};
 	    }
 	}elsif($auth_service->{'auth_type'} eq 'ldap') {
-	    if ($canonic = &ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
+	    if ($canonic = ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
 		unless($user = Sympa::List::get_global_user($canonic)){
 		    $user = {'email' => $canonic};
 		}

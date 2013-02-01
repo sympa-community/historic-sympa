@@ -132,7 +132,7 @@ sub PushLang {
     Sympa::Log::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
-    &SetLang($locale);
+    SetLang($locale);
 
     return 1;
 }
@@ -141,7 +141,7 @@ sub PopLang {
     Sympa::Log::do_log('debug', '');
 
     my $locale = pop @previous_locale;
-    &SetLang($locale);
+    SetLang($locale);
 
     return 1;
 }
@@ -166,13 +166,13 @@ sub SetLang {
 	$locale = join '_', @items;
 
 	## Get the NLS equivalent for the lang
-	$lang = &Locale2Lang($locale);
+	$lang = Locale2Lang($locale);
     }
 
     ## Set Locale::Messages context
     my $locale_dashless = $locale.'.utf-8';
     $locale_dashless =~ s/-//g;
-    foreach my $type (&POSIX::LC_ALL, &POSIX::LC_TIME) {
+    foreach my $type (POSIX::LC_ALL, POSIX::LC_TIME) {
 	my $success;
 	foreach my $try ($locale.'.utf-8',
 			 $locale.'.UTF-8',  ## UpperCase required for FreeBSD
@@ -180,7 +180,7 @@ sub SetLang {
 			 $locale,
 			 $lang
 			 ) {
-	    if (&POSIX::setlocale($type, $try)) {
+	    if (POSIX::setlocale($type, $try)) {
 		$success = 1;
 		last;
 	    }
@@ -193,9 +193,9 @@ sub SetLang {
 
     $ENV{'LANGUAGE'}=$locale;
     ## Define what catalogs are used
-    &Locale::Messages::textdomain("sympa");
-    &Locale::Messages::bindtextdomain('sympa',Sympa::Constants::LOCALEDIR);
-    &Locale::Messages::bindtextdomain('web_help',Sympa::Constants::LOCALEDIR);
+    Locale::Messages::textdomain("sympa");
+    Locale::Messages::bindtextdomain('sympa',Sympa::Constants::LOCALEDIR);
+    Locale::Messages::bindtextdomain('web_help',Sympa::Constants::LOCALEDIR);
     # Get translations by internal encoding.
     bind_textdomain_codeset sympa => 'utf-8';
     bind_textdomain_codeset web_help => 'utf-8';
@@ -214,9 +214,9 @@ sub GetLangName {
     my ($lang) = @_;
 
     my $saved_lang = $current_lang;
-    &SetLang($lang);
+    SetLang($lang);
     my $name = gettext('_language_');
-    &SetLang($saved_lang);
+    SetLang($saved_lang);
 
     return $name;
 }
@@ -262,11 +262,11 @@ sub maketext {
     my $textdomain = $template2textdomain{$template_file};
 
     if ($textdomain) {
-	$translation = &sympa_dgettext ($textdomain, $msg);
+	$translation = sympa_dgettext ($textdomain, $msg);
     }else {
-	$translation = &gettext ($msg);
+	$translation = gettext ($msg);
     }
-#    $translation = &gettext ($msg);
+#    $translation = gettext ($msg);
 
     ## replace parameters in string
     $translation =~ s/\%\%/'_ESCAPED_'.'%_'/eg; ## First escape '%%'
@@ -288,7 +288,7 @@ sub sympa_dgettext {
 	## return meta information on the catalogue (language, charset, encoding,...)
     }elsif ($param[0] =~ '^_(\w+)_$') {
 	my $var = $1;
-	foreach (split /\n/,&Locale::Messages::gettext('')) {
+	foreach (split /\n/,Locale::Messages::gettext('')) {
 	    if ($var eq 'language') {
 		if (/^Language-Team:\s*(.+)$/i) {
 		    my $language = $1;
@@ -309,7 +309,7 @@ sub sympa_dgettext {
 	return '';
     }
 
-    return &Locale::Messages::dgettext($textdomain, @param);
+    return Locale::Messages::dgettext($textdomain, @param);
 
 }
 
@@ -324,7 +324,7 @@ sub gettext {
 	## return meta information on the catalogue (language, charset, encoding,...)
     }elsif ($param[0] =~ '^_(\w+)_$') {
 	my $var = $1;
-	foreach (split /\n/,&Locale::Messages::gettext('')) {
+	foreach (split /\n/,Locale::Messages::gettext('')) {
 	    if ($var eq 'language') {
 		if (/^Language-Team:\s*(.+)$/i) {
 		    my $language = $1;
@@ -345,7 +345,7 @@ sub gettext {
 	return '';
     }
 
-    return &Locale::Messages::gettext(@param);
+    return Locale::Messages::gettext(@param);
 
 }
 

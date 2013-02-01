@@ -140,7 +140,7 @@ encryption.
 
 ## Check --dump option
 my %options;
-unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground','config|f=s',
+unless (GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground','config|f=s',
             'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','sync_list_db','md5_encode_password',
 		    'close_list=s','rename_list=s','new_listname=s','new_listrobot=s','purge_list=s','create_list','instantiate_family=s',
 		    'robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s','change_user_email','current_email=s','new_email=s',
@@ -345,8 +345,8 @@ if ($signal ne 'hup') {
     $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
     ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-    &POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-    &POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+    POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+    POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
     ## Check if the UID has correctly been set (usefull on OS X)
     unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
@@ -995,7 +995,7 @@ while (!$signal) {
     ## Scan queuedigest it should be performed by task manager !
     if ($index_queuedigest++ >=$digestsleep){
 	$index_queuedigest=0;
-	&SendDigest();
+	SendDigest();
     }
 
     # it should be performed by task manager !
@@ -1023,7 +1023,7 @@ while (!$signal) {
     }
     ## Cleanup in-memory msgid table, only in a while
     if (time > $latest_msgid_table_cleanup + $Sympa::Configuration::Conf{'msgid_table_cleanup_frequency'}) {
-	&clean_msgid_table();
+	clean_msgid_table();
 	$latest_msgid_table_cleanup = time;
     }
 
@@ -1046,7 +1046,7 @@ while (!$signal) {
     ## Set NLS default lang for current message
     $Sympa::Language::default_lang = $main::options{'lang'} || Sympa::Configuration::get_robot_conf($robot, 'lang');
 
-    my $status = &process_message($message_in_spool);
+    my $status = process_message($message_in_spool);
 
     if (defined($status)) {
 	Sympa::Log::do_log('debug', "Message key %s  processed for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
@@ -1168,8 +1168,8 @@ sub process_message {
     if ( $message->{'md5_check'} ) {
 	# message contain a valid checksum, it comes from wwsympa, so
         #  mail it without other proceding unless it is for a valid list
-	return (&DoSendMessage ($message,$robot)) unless(Sympa::Configuration::valid_robot($robot, {'just_try' => 1})) ;
-	return (&DoSendMessage ($message,$robot)) unless( Sympa::List->new($listname, $robot, {'just_try' => 1}));
+	return (DoSendMessage ($message,$robot)) unless(Sympa::Configuration::valid_robot($robot, {'just_try' => 1})) ;
+	return (DoSendMessage ($message,$robot)) unless( Sympa::List->new($listname, $robot, {'just_try' => 1}));
     }
 
     # setting log_level using conf unless it is set by calling option
@@ -1383,12 +1383,12 @@ sub process_message {
     }
 
     if ($rcpt =~ /^listmaster(\@(\S+))?$/) {
-	$status = &DoForward('sympa', 'listmaster', $robot, $message);
+	$status = DoForward('sympa', 'listmaster', $robot, $message);
 
 	## Mail adressed to the robot and mail
 	## to <list>-subscribe or <list>-unsubscribe are commands
     }elsif (($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o)) {
-	$status = &DoCommand($rcpt, $robot, $message);
+	$status = DoCommand($rcpt, $robot, $message);
 
 	## forward mails to <list>-request <list>-owner etc
     }elsif ($type =~ /^(request|owner|editor)$/o) {
@@ -1397,12 +1397,12 @@ sub process_message {
 	if (($type eq 'request') and ($subject_field =~ /^\s*(subscribe|unsubscribe)(\s*$listname)?\s*$/i) ) {
 	    my $command = $1;
 
-	    $status = &DoCommand("$listname-$command", $robot, $message);
+	    $status = DoCommand("$listname-$command", $robot, $message);
 	}else {
-	    $status = &DoForward($listname, $type, $robot, $message);
+	    $status = DoForward($listname, $type, $robot, $message);
 	}
     }else {
-	$status =  &DoMessage($rcpt, $message, $robot);
+	$status =  DoMessage($rcpt, $message, $robot);
     }
 
     ## Mail back the result.
@@ -1545,7 +1545,7 @@ sub DoForward {
 	    my $sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
 	    unless (Sympa::List::send_global_file('list_unknown', $sender, $robot,
 					    {'list' => $name,
-					     'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
+					     'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
 					     'boundary' => $sympa_email.time,
 					     'header' => $hdr->as_string(),
 					     'auto_submitted' => 'auto-replied'
@@ -1687,7 +1687,7 @@ sub DoMessage{
 
 		unless (Sympa::List::send_global_file('list_unknown', $sender, $robot,
 						{'list' => $which,
-						 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
+						 'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
 						 'boundary' => $sympa_email.time,
 						 'header' => $hdr->as_string(),
 						 'auto_submitted' => 'auto-replied'

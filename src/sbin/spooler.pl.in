@@ -79,8 +79,8 @@ This demon is the Sympa spooler that load into database (table spool_table) mess
 
 ## Check --dump option
 my %options;
-unless (&GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keepcopy|k=s', 'queue=s', 'help', 'version')) {
-    &fatal_err("Unknown options.");
+unless (GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keepcopy|k=s', 'queue=s', 'help', 'version')) {
+    fatal_err("Unknown options.");
 }
 
 if ($main::options{'debug'}) {
@@ -107,7 +107,7 @@ my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
 unless (Sympa::Configuration::load($config_file,1)) {
-   &fatal_err("Configuration file $config_file has errors.");
+   fatal_err("Configuration file $config_file has errors.");
 }
 
 
@@ -226,12 +226,12 @@ if ($signal ne 'hup') {
 	$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 	## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-	&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-	&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+	POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+	POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 	## Check if the UID has correctly been set (usefull on OS X)
 	unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
-	    &fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
+	    fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 	}
 
 	# Sets the UMASK
@@ -389,7 +389,7 @@ while (!$signal) {
 	my $message = Sympa::Message->new({'file'=>$spooldir.'/'.$filename});
 
         #use Data::Dumper;
-#	my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP;
+#	my $dump = Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP;
 	my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
 	unless($messagekey) {
 	   Sympa::Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
@@ -397,7 +397,7 @@ while (!$signal) {
 	}
 
 	if ($main::options{'keepcopy'}) {
-	    unless (&File::Copy::copy($t_spool.'/'.$filename, $main::options{'keepcopy'}.'/'.$filename) ) {
+	    unless (File::Copy::copy($t_spool.'/'.$filename, $main::options{'keepcopy'}.'/'.$filename) ) {
  		Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $ERRNO);
 	    }
 	}

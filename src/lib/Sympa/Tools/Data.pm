@@ -54,7 +54,7 @@ sub recursive_transformation {
     if (ref($var) eq 'ARRAY') {
 	foreach my $index (0..$#{$var}) {
 	    if (ref($var->[$index])) {
-		&recursive_transformation($var->[$index], $subref);
+		recursive_transformation($var->[$index], $subref);
 	    }else {
 		$var->[$index] = &{$subref}($var->[$index]);
 	    }
@@ -62,7 +62,7 @@ sub recursive_transformation {
     }elsif (ref($var) eq 'HASH') {
 	foreach my $key (sort keys %{$var}) {
 	    if (ref($var->{$key})) {
-		&recursive_transformation($var->{$key}, $subref);
+		recursive_transformation($var->{$key}, $subref);
 	    }else {
 		$var->{$key} = &{$subref}($var->{$key});
 	    }
@@ -87,12 +87,12 @@ sub dump_var {
 	if (ref($var) eq 'ARRAY') {
 	    foreach my $index (0..$#{$var}) {
 		print $fd "\t"x$level.$index."\n";
-		&dump_var($var->[$index], $level+1, $fd);
+		dump_var($var->[$index], $level+1, $fd);
 	    }
 	}elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List') || $var->isa('CGI::Fast')) {
 	    foreach my $key (sort keys %{$var}) {
 		print $fd "\t"x$level.'_'.$key.'_'."\n";
-		&dump_var($var->{$key}, $level+1, $fd);
+		dump_var($var->{$key}, $level+1, $fd);
 	    }
 	}else {
 	    printf $fd "\t"x$level."'%s'"."\n", ref($var);
@@ -124,7 +124,7 @@ sub dump_html_var {
 	    $html .= '<ul>';
 	    foreach my $index (0..$#{$var}) {
 		$html .= '<li> '.$index.':';
-		$html .= &dump_html_var($var->[$index]);
+		$html .= dump_html_var($var->[$index]);
 		$html .= '</li>';
 	    }
 	    $html .= '</ul>';
@@ -132,7 +132,7 @@ sub dump_html_var {
 	    $html .= '<ul>';
 	    foreach my $key (sort keys %{$var}) {
 		$html .= '<li>'.$key.'=' ;
-		$html .=  &dump_html_var($var->{$key});
+		$html .=  dump_html_var($var->{$key});
 		$html .= '</li>';
 	    }
 	    $html .= '</ul>';
@@ -141,7 +141,7 @@ sub dump_html_var {
 	}
     }else{
 	if (defined $var) {
-	    $html .= &escape_html($var);
+	    $html .= escape_html($var);
 	}else {
 	    $html .= 'UNDEF';
 	}
@@ -162,13 +162,13 @@ sub dup_var {
 	if (ref($var) eq 'ARRAY') {
 	    my $new_var = [];
 	    foreach my $index (0..$#{$var}) {
-		$new_var->[$index] = &dup_var($var->[$index]);
+		$new_var->[$index] = dup_var($var->[$index]);
 	    }
 	    return $new_var;
 	}elsif (ref($var) eq 'HASH') {
 	    my $new_var = {};
 	    foreach my $key (sort keys %{$var}) {
-		$new_var->{$key} = &dup_var($var->{$key});
+		$new_var->{$key} = dup_var($var->{$key});
 	    }
 	    return $new_var;
 	}
