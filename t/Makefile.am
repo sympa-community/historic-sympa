@@ -1,11 +1,11 @@
-TESTS = 00compile_modules.t \
-	01compile_executables.t \
-	02critic.t \
-	03var.t \
-	04pod.t \
-	05pod-coverage.t \
-	06spelling.t \
-	07space.t \
+TESTS = compile_modules.t \
+	compile_executables.t \
+	critic.t \
+	var.t \
+	pod-syntax.t \
+	pod-coverage.t \
+	pod-spelling.t \
+	space.t \
 	datasource_mysql.t \
 	datasource_oracle.t \
 	datasource_postgresql.t \

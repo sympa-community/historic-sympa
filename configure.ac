@@ -334,6 +334,10 @@ AC_PATH_PROGS([SED], [sed gsed])
 #AC_PROG_SED
 AC_PROG_LN_S
 
+# Test suite
+AC_PROG_AWK
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
+
 AC_ARG_WITH(
     [perl],
     AS_HELP_STRING(
@@ -520,6 +524,7 @@ AC_CONFIG_FILES([
     mail_tt2/Makefile
     po/Makefile.in
     po-wwsympa/Makefile.in
+    t/Makefile
     sympa.spec
 ])
 AC_OUTPUT
