@@ -26,7 +26,16 @@ Sympa::Report - Reporting functions
 
 =head1 DESCRIPTION
 
-This module provides functions for command and message diffusion report.
+This module provides functions for events notications.
+
+reject_report_msg() and notice_report_msg() functions deliver an immediate
+notification of an event to an user by mail.
+
+global_report_cmd(), reject_report_cmd() and notice_report_cmd() functions
+push events into a queue, to be notified later by mail using send_report_cmd().
+
+reject_report_web() and notice_report_web() functions push events into another
+queue.
 
 =cut
 
@@ -38,30 +47,51 @@ use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
 
-######################## MESSAGE DIFFUSION REPORT #############################################
+=head1 FUNCTIONS
 
+=head2 reject_report_msg($type, $error, $user, $param, $robot, $msg_string, $list)
 
-############################################################
-#  reject_report_msg
-############################################################
-#  Send a notification to the user about an error rejecting
-#  its message diffusion, using mail_tt2/message_report.tt2
-#
-# IN : -$type (+): 'intern'||'intern_quiet'||'user'||auth' - the error type
-#      -$error : scalar - the entry in message_report.tt2 if $type = 'user'
-#                       - string error for listmaster if $type = 'intern'
-#                       - the entry in authorization reject (called by message_report.tt2)
-#                               if $type = 'auth'
-#      -$user (+): scalar - the user to notify
-#      -$param : ref(HASH) - var used in message_report.tt2
-#         $param->msg_id (+) if $type='intern'
-#      -$robot (+): robot
-#      -$msg_string : string - rejected msg
-#      -$list : ref(List)
-#
-# OUT : 1
-#
-##############################################################
+Send a notification of message rejection to an user, using
+I<message_report.tt2> mail template.
+
+For I<intern> type, the listmaster is also notified.
+
+=head3 Parameters
+
+=over
+
+=item * I<$type>: 'intern' || 'intern_quiet' || 'user' || 'auth'
+
+=item * I<$error>:
+
+=over
+
+=item - the entry in template if $type = 'user',
+
+=item - string error for listmaster if $type = 'intern',
+
+=item - the entry in authorization reject (called by template) if $type = 'auth'
+
+=back
+
+=item * I<$user>: the user to notify
+
+=item * I<$param>: variables used in template (hashref)
+
+=item * I<$robot>: robot
+
+=item * I<$msg_string>: rejected msg
+
+=item * I<$list>: list (Sympa::List object)
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub reject_report_msg {
     my ($type, $error, $user, $param, $robot, $msg_string, $list) = @_;
     &Sympa::Log::do_log('debug2', "(%s,%s,%s)", $type,$error,$user);
@@ -132,19 +162,9 @@ sub reject_report_msg {
     return 1;
 }
 
-
-
-############################################################
-#  _get_msg_as_hash
-############################################################
-#  Internal subroutine
-#  Provide useful parts of a message as a hash entries
-#
-# IN : -$msg_object (+): ref(HASH) - the MIME::Entity or Message object
-#
-# OUT : $msg_hash : ref(HASH) - the hashref
-#
-##############################################################
+# _get_msg_as_hash($msg)
+# Provide useful parts of a message as a hash entries
+# Return an hashred
 
 sub _get_msg_as_hash {
     my ($msg_object) = @_;
@@ -182,21 +202,33 @@ sub _get_msg_as_hash {
     return $msg_hash;
 }
 
-############################################################
-#  notice_report_msg
-############################################################
-#  Send a notification to the user about a success for its
-#   message diffusion, using mail_tt2/message_report.tt2
-#
-# IN : -$entry (+): scalar - the entry in message_report.tt2
-#      -$user (+): scalar - the user to notify
-#      -$param : ref(HASH) - var used in message_report.tt2
-#      -$robot (+) : robot
-#      -$list : ref(List)
-#
-# OUT : 1
-#
-##############################################################
+=head2 notice_report_msg($entry, $user, $param, $robot, $list)
+
+Send a notification of message diffusion to an user, using
+I<message_report.tt2> mail template.
+
+=head3 Parameters
+
+=over
+
+=item * I<$entry>: the entry in template
+
+=item * I<$user>: the user to notify
+
+=item * I<$param>: variables used in template (hashref)
+
+=item * I<$robot>: robot
+
+=item * I<$list>: list (Sympa::List object)
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub notice_report_msg {
     my ($entry, $user, $param, $robot, $list) = @_;
 
@@ -233,12 +265,6 @@ sub notice_report_msg {
     return 1;
 }
 
-
-
-
-########################### MAIL COMMAND REPORT #############################################
-
-
 # for rejected command because of internal error
 my @intern_error_cmd;
 # for rejected command because of user error
@@ -250,19 +276,20 @@ my @auth_reject_cmd;
 # for command notice
 my @notice_cmd;
 
+=head2 init_report_cmd()
 
+Flush the events queue for category I<cmd>.
 
-#########################################################
-# init_report_cmd
-#########################################################
-#  init arrays for mail command reports :
-#
-#
-# IN : -
-#
-# OUT : -
-#
-#########################################################
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub init_report_cmd {
 
     undef @intern_error_cmd;
@@ -272,17 +299,20 @@ sub init_report_cmd {
     undef @notice_cmd;
 }
 
+=head2 is_there_any_report_cmd()
 
-#########################################################
-# is_there_any_report_cmd
-#########################################################
-#  Look for some mail command report in one of arrays report
-#
-# IN : -
-#
-# OUT : 1 if there are some reports to send
-#
-#########################################################
+Look for error events of category I<cmd> in the events queue.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A true value if there is any such event in the queue.
+
+=cut
+
 sub is_there_any_report_cmd {
 
     return (@intern_error_cmd ||
@@ -292,22 +322,27 @@ sub is_there_any_report_cmd {
 	    @notice_cmd );
 }
 
+=head2 send_report_cmd($sender, $robot)
 
-#########################################################
-# send_report_cmd
-#########################################################
-#  Send the template command_report to $sender
-#   with global arrays :
-#  @intern_error_cmd,@user_error_cmd,@global_error_cmd,
-#   @auth_reject_cmd,@notice_cmd.
-#
-#
-# IN : -$sender (+): SCALAR
-#      -$robot (+): SCALAR
-#
-# OUT : 1 if there are some reports to send
-#
-#########################################################
+Send a mail report of all events of category I<cmd> in the queue, using
+I<command_report.tt2> mail template, and flushes the queue of such events.
+
+=head3 Parameters
+
+=over
+
+=item * I<$sender>
+
+=item * I<$robot>: robot
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub send_report_cmd {
     my ($sender, $robot) = @_;
 
@@ -359,29 +394,49 @@ sub send_report_cmd {
     &init_report_cmd();
 }
 
+=head2 global_report_cmd($type, $error,  $data, $sender, $robot, $now)
 
-#########################################################
-# global_report_cmd
-#########################################################
-#  puts global report of mail with commands in
-#  @global_report_cmd  used to send message with template
-#  mail_tt2/command_report.tt2
-#  if $now , the template is sent now
-#  if $type eq 'intern', the listmaster is notified
-#
-# IN : -$type (+): 'intern'||'intern_quiet||'user'
-#      -$error : scalar - $glob.entry in command_report.tt2 if $type = 'user'
-#                          - string error for listmaster if $type = 'intern'
-#      -$data : ref(HASH) - var used in command_report.tt2
-#      -$sender :  required if $type eq 'intern' or if $now
-#                  scalar - the user to notify
-#      -$robot :   required if $type eq 'intern' or if $now
-#                  scalar - to notify useror listmaster
-#      -$now : send now if true
-#
-# OUT : 1|| undef
-#
-#########################################################
+Push an event of type I<intern> or I<user> in the command execution events
+queue.
+
+If I<$now> is true, send_report_cmd() is called immediatly.
+
+For I<intern> type, the listmaster is notified immediatly.
+
+=head3 Parameters
+
+=over
+
+=item * I<$type>: 'intern' || 'intern_quiet' || 'user'
+
+=item * I<$error>:
+
+=over
+
+=item - $glob.entry in template if $type = 'user'
+
+=item - string error for listmaster if $type = 'intern'
+
+=back
+
+=item * I<$data>: variables used in template (hashref)
+
+=item * I<$sender>: the user to notify (required if $type eq 'intern' or if
+      I<$now> is true)
+
+=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or 
+      if I<$now> is true)
+
+=item * I<$now>: send now if true
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub global_report_cmd {
     my ($type, $error,  $data, $sender, $robot, $now) = @_;
 
@@ -430,30 +485,47 @@ sub global_report_cmd {
     }
 }
 
+=head2 reject_report_cmd($type, $error, $data, $cmd, $sender, $robot)
 
-#########################################################
-# reject_report_cmd
-#########################################################
-#  puts errors reports of processed commands in
-#  @user/intern_error_cmd, @auth_reject_cmd
-#  used to send message with template
-#  mail_tt2/command_report.tt2
-#  if $type eq 'intern', the listmaster is notified
-#
-# IN : -$type (+): 'intern'||'intern_quiet||'user'||'auth'
-#      -$error : scalar - $u_err.entry in command_report.tt2 if $type = 'user'
-#                       - $auth.entry in command_report.tt2 if $type = 'auth'
-#                       - string error for listmaster if $type = 'intern'
-#      -$data : ref(HASH) - var used in command_report.tt2
-#      -$cmd : SCALAR - the rejected cmd : $xx.cmd in command_report.tt2
-#      -$sender :  required if $type eq 'intern'
-#                  scalar - the user to notify
-#      -$robot :   required if $type eq 'intern'
-#                  scalar - to notify listmaster
-#
-# OUT : 1|| undef
-#
-#########################################################
+Push an event of category I<cmd>, type I<auth>, I<user> or I<intern> in the
+events queue.
+
+For I<intern> type, the listmaster is notified immediatly.
+
+=head3 Parameters
+
+=over
+
+=item * I<$type>: 'intern' || 'intern_quiet' || 'user' || 'auth'
+
+=item * I<$error>:
+
+=over
+
+=item - $u_err.entry in template if $type = 'user'
+
+=item - $auth.entry in template if $type = 'auth'
+
+=item - string error for listmaster if $type = 'intern'
+
+=back
+
+=item * I<$data>: variables used in template (hashref)
+
+=item * I<$cmd>: the rejected cmd ($xx.cmd in template)
+
+=item * I<$sender>: the user to notify (required if $type eq 'intern')
+
+=item * I<$robot>: to notify listmaster (required if $type eq 'intern')
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub reject_report_cmd {
     my ($type, $error, $data, $cmd, $sender, $robot) = @_;
 
@@ -505,21 +577,28 @@ sub reject_report_cmd {
 
 }
 
-#########################################################
-# notice_report_cmd
-#########################################################
-#  puts notices reports of processed commands in
-#  @notice_cmd used to send message with template
-#  mail_tt2/command_report.tt2
-#
-# IN : -$entry : $notice.entry to select string in
-#               command_report.tt2
-#      -$data : ref(HASH) - var used in command_report.tt2
-#      -$cmd : SCALAR - the noticed cmd
-#
-# OUT : 1
-#
-#########################################################
+=head2 notice_report_cmd($entry, $data, $cmd)
+
+Push an event of category I<cmd>, type I<notice> in the events queue.
+
+=head3 Parameters
+
+=over
+
+=item * I<$entry>: $notice.entry to select string in template
+
+=item * I<$data>: variables used in template (hashref)
+
+=item * I<$cmd>: the noticed cmd
+
+=back
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub notice_report_cmd {
     my ($entry, $data, $cmd) = @_;
     $data ||= {};
@@ -528,11 +607,6 @@ sub notice_report_cmd {
     $data->{'entry'} = $entry;
     push @notice_cmd, $data;
 }
-
-
-
-########################### WEB COMMAND REPORT #############################################
-
 
 # for rejected web command because of internal error
 my @intern_error_web;
@@ -545,18 +619,20 @@ my @auth_reject_web;
 # for web command notice
 my @notice_web;
 
+=head2 init_report_web()
 
-#########################################################
-# init_report_web
-#########################################################
-#  init arrays for web reports :
-#
-#
-# IN : -
-#
-# OUT : -
-#
-#########################################################
+Flush the events queue for category I<web>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub init_report_web {
 
     undef @intern_error_web;
@@ -566,18 +642,20 @@ sub init_report_web {
     undef @notice_web;
 }
 
+=head2 is_there_any_reject_report_web()
 
-#########################################################
-# is_there_any_reject_report_web
-#########################################################
-#  Look for some web reports in one of web
-#  arrays reject report
-#
-# IN : -
-#
-# OUT : 1 if there are some reports to send
-#
-#########################################################
+Look for error events of category I<web> in the events queue.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A true value if there is any such event in the queue.
+
+=cut
+
 sub is_there_any_reject_report_web {
 
     return (@intern_error_web ||
@@ -587,17 +665,20 @@ sub is_there_any_reject_report_web {
 }
 
 
+=head2 get_intern_error_web()
 
-#########################################################
-# get_intern_error_web
-#########################################################
-#  return array of web intern error
-#
-# IN : -
-#
-# OUT : ref(ARRAY) - clone of \@intern_error_web
-#
-#########################################################
+Get the list of reports for category I<web>, type I<intern>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A list of error reports, as an arrayref.
+
+=cut
+
 sub get_intern_error_web {
     my @intern_err;
 
@@ -607,17 +688,20 @@ sub get_intern_error_web {
     return \@intern_err;
 }
 
+=head2 get_system_error_web()
 
-#########################################################
-# get_system_error_web
-#########################################################
-#  return array of web system error
-#
-# IN : -
-#
-# OUT : ref(ARRAY) - clone of \@system_error_web
-#
-#########################################################
+Get the list of reports for category I<web>, type I<system>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A list of reports, as an arrayref.
+
+=cut
+
 sub get_system_error_web {
     my @system_err;
 
@@ -628,16 +712,20 @@ sub get_system_error_web {
 }
 
 
-#########################################################
-# get_user_error_web
-#########################################################
-#  return array of web user error
-#
-# IN : -
-#
-# OUT : ref(ARRAY) - clone of \@user_error_web
-#
-#########################################################
+=head2 get_user_error_web()
+
+Get the list of reports for category I<web>, type I<user>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A list of reports, as an arrayref.
+
+=cut
+
 sub get_user_error_web {
     my @user_err;
 
@@ -648,16 +736,20 @@ sub get_user_error_web {
 }
 
 
-#########################################################
-# get_auth_reject_web
-#########################################################
-#  return array of web authorisation reject
-#
-# IN : -
-#
-# OUT : ref(ARRAY) - clone of \@auth_reject_web
-#
-#########################################################
+=head2 get_auth_reject_web()
+
+Get the list of reports for category I<web>, type I<auth>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A list of reports, as an arrayref.
+
+=cut
+
 sub get_auth_reject_web {
     my @auth_rej;
 
@@ -668,16 +760,20 @@ sub get_auth_reject_web {
 }
 
 
-#########################################################
-# get_notice_web
-#########################################################
-#  return array of web notice
-#
-# IN : -
-#
-# OUT : ref(ARRAY) - clone of \@notice_web
-#
-#########################################################
+=head2 get_notice_web()
+
+Get the list of reports for category I<web>, type I<notice>.
+
+=head3 Parameters
+
+None.
+
+=head3 Return value
+
+A list of reports, as an arrayref.
+
+=cut
+
 sub get_notice_web {
     my @notice;
 
@@ -694,22 +790,28 @@ sub get_notice_web {
 
 }
 
+=head2 notice_report_web($msg, $data, $action)
 
-#########################################################
-# notice_report_web
-#########################################################
-#  puts notices reports of web commands in
-#  @notice_web used to notice user with template
-#  web_tt2/notice.tt2
-#
-# IN : -$msg : $notice.msg to select string in
-#               web/notice.tt2
-#      -$data : ref(HASH) - var used in web_tt2/notices.tt2
-#      -$action : SCALAR - the noticed action $notice.action in web_tt2/notices.tt2
-#
-# OUT : 1
-#
-#########################################################
+Push an event of category I<web>, type <notice>, in the events queue.
+
+=head3 Parameters
+
+=over
+
+=item * I<$msg>: $notice.msg to select string in template
+
+=item * I<$data>: variables used in template (hashref)
+
+=item * I<$action>: the noticed action $notice.action in template
+
+=back
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub notice_report_web {
     my ($msg,$data,$action) = @_;
 
@@ -720,34 +822,58 @@ sub notice_report_web {
 
 }
 
-#########################################################
-# reject_report_web
-#########################################################
-#  puts errors reports of web commands in
-#  @intern/user/system_error_web, @auth_reject_web
-#   used to send message with template  web_tt2/error.tt2
-#  if $type = 'intern'||'system', the listmaster is notified
-#  (with 'web_intern_error' || 'web_system_error')
-#
-# IN : -$type (+): 'intern'||'intern_quiet||'system'||'system_quiet'||user'||'auth'
-#      -$error (+): scalar  - $u_err.msg in error.tt2 if $type = 'user'
-#                           - $auth.msg in error.tt2 if $type = 'auth'
-#                           - $s_err.msg in error.tt2 if $type = 'system'||'system_quiet'
-#                           - $i_err.msg in error.tt2 if $type = 'intern' || 'intern_quiet'
-#                           - $error in listmaster_notification if $type = 'system'||'intern'
-#      -$data : ref(HASH) - var used in web_tt2/error.tt2
-#      -$action(+) : SCALAR - the rejected action :
-#            $xx.action in web_tt2/error.tt2
-#            $action in listmaster_notification.tt2 if needed
-#      -$list : ref(List) || ''
-#      -$user :  required if $type eq 'intern'||'system'
-#                  scalar - the concerned user to notify listmaster
-#      -$robot :   required if $type eq 'intern'||'system'
-#                  scalar - the robot to notify listmaster
-#
-# OUT : 1|| undef
-#
-#########################################################
+=head2 reject_report_web($type, $error, $data, $action, $list, $user, $robot)
+
+Push an event of category I<web>, type I<intern>, I<system>, I<user> or
+I<auth> in the events queue.
+
+For I<intern> or I<system> types, the listmaster is notified immediatly.
+
+=head3 Parameters
+
+=over
+
+=item * I<$type>: 'intern' || 'intern_quiet' || 'system' || 'system_quiet' ||
+'user' || 'auth'
+  
+=item * I<$error>:
+
+=over
+
+=item - $u_err.msg in template if $type = 'user'
+
+=item - $auth.msg in template if $type = 'auth'
+
+=item - $s_err.msg in template if $type = 'system'||'system_quiet'
+
+=item - $i_err.msg in template if $type = 'intern' || 'intern_quiet'
+
+=item - $error in listmaster_notification if $type = 'system'||'intern'
+
+=back
+
+=item * I<$data>: variables used in template (hashref)
+
+=item * I<$action>: the rejected action :
+            $xx.action in template
+            $action in listmaster_notification.tt2 if needed
+
+=item * I<$list>: Sympa::List object
+
+=item * I<$user>: the user to notify listmaster (required if $type eq 'intern'
+or 'system')
+
+=item * I<$robot>: the robot to notify listmaster (required if $type eq
+'intern' or 'system')
+
+=back
+
+=head3 Return value
+
+A true value, or I<undef> if something went wrong.
+
+=cut
+
 sub reject_report_web {
     my ($type,$error,$data,$action,$list,$user,$robot) = @_;
 
@@ -800,12 +926,5 @@ sub reject_report_web {
 
     }
 }
-
-
-#############################################
-
-
-
-
 
 1;
