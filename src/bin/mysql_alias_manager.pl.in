@@ -57,10 +57,10 @@ $data{'is_default_domain'} = 1;
 $data{'return_path_suffix'} = $return_path_suffix;
 my @aliases ;
 
-my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
+my $tt2_include_path = Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
 my $aliases_dump;
-&Sympa::Template::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
+Sympa::Template::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
 
 @aliases = split /\n/, $aliases_dump;
 

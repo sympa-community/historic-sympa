@@ -31,13 +31,13 @@ use Sympa::Constants;
 use Sympa::SDM;
 
 ## Load sympa config
-&Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
+Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
 chdir $Sympa::Configuration::Conf{'home'};
 
-&Sympa::SDM::db_connect() || die "Can't connect to database";
+Sympa::SDM::db_connect() || die "Can't connect to database";
 
-my $dbh = &Sympa::SDM::db_get_handler();
+my $dbh = Sympa::SDM::db_get_handler();
 
 my $sth =  $dbh->prepare("SELECT user_subscriber, comment_subscriber FROM subscriber_table") || die "Can't prepare SQL statement";
 

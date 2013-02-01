@@ -60,7 +60,7 @@ sub qencode {
     # longest (maybe) one.
     return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
 					    Encoding=>'A',
-					    Charset=>&Sympa::Language::GetCharset(),
+					    Charset=>Sympa::Language::GetCharset(),
 					    Field=>"message-id");
 }
 
@@ -139,13 +139,13 @@ sub maketext {
 
     ## Strangely the path is sometimes empty...
     ## TODO : investigate
-#    &Sympa::Log::do_log('notice', "PATH: $path ; $template_name");
+#    Sympa::Log::do_log('notice', "PATH: $path ; $template_name");
 
     ## Sample code to dump the STASH
     # my $s = $stash->_dump();
 
     return sub {
-	&Sympa::Language::maketext($template_name, $_[0],  @arg);
+	Sympa::Language::maketext($template_name, $_[0],  @arg);
     }
 }
 
@@ -184,7 +184,7 @@ sub wrap {
     return sub {
         my $text = shift;
         my $nl = $text =~ /\n$/;
-        my $ret = &Sympa::Tools::wrap_text($text, $init, $subs, $cols);
+        my $ret = Sympa::Tools::wrap_text($text, $init, $subs, $cols);
         $ret =~ s/\n$// unless $nl;
         $ret;
     };
@@ -232,7 +232,7 @@ sub parse_tt2 {
 	$template = \join('', @$template);
     }
 
-    &Sympa::Language::SetLang($data->{lang}) if ($data->{'lang'});
+    Sympa::Language::SetLang($data->{lang}) if ($data->{'lang'});
 
     my $config = {
 	# ABSOLUTE => 1,
@@ -275,8 +275,8 @@ sub parse_tt2 {
 
     unless ($tt2->process($template, $data, $output)) {
 	$last_error = $tt2->error();
-	&Sympa::Log::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
-	&Sympa::Log::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
+	Sympa::Log::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
+	Sympa::Log::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
 
 
 	return undef;

@@ -79,14 +79,14 @@ Returns Message Authentication Check code
 
 sub get_mac {
         my ($email, $secret) = @_;
-	&Sympa::Log::do_log('debug3', "get_mac($email, $secret)");
+	Sympa::Log::do_log('debug3', "get_mac($email, $secret)");
 
 	unless ($secret) {
-	    &Sympa::Log::do_log('err', 'get_mac : failure missing server secret for cookie MD5 digest');
+	    Sympa::Log::do_log('err', 'get_mac : failure missing server secret for cookie MD5 digest');
 	    return undef;
 	}
 	unless ($email) {
-	    &Sympa::Log::do_log('err', 'get_mac : failure missing email adresse or cookie MD5 digest');
+	    Sympa::Log::do_log('err', 'get_mac : failure missing email adresse or cookie MD5 digest');
 	    return undef;
 	}
 
@@ -128,7 +128,7 @@ sub set_cookie_extern {
 				   );
     ## Send cookie to the client
     printf "Set-Cookie: %s\n", $cookie->as_string;
-    #&Sympa::Log::do_log('notice',"set_cookie_extern : %s",$cookie->as_string);
+    #Sympa::Log::do_log('notice',"set_cookie_extern : %s",$cookie->as_string);
     return 1;
 }
 

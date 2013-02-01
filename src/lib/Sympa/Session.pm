@@ -85,12 +85,12 @@ sub new {
     my $action = $context->{'action'};
     my $rss = $context->{'rss'};
 
-    &Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
+    Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
     my $session={};
     bless $session, $class;
 
     unless ($robot) {
-	&Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
+	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
 	return undef;
     }
 
@@ -110,13 +110,13 @@ sub new {
 	    return undef;
 	}
 	if ($status eq 'not_found') {
-	    &Sympa::Log::do_log('info',"ignoring unknown session cookie '$cookie'"); # start a new session (may ne a fake cookie)
+	    Sympa::Log::do_log('info',"ignoring unknown session cookie '$cookie'"); # start a new session (may ne a fake cookie)
 	    return (Sympa::Session->new($robot));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method
 	# if($session->{'remote_addr'} ne $ENV{'REMOTE_ADDR'}){
-	#    &Sympa::Log::do_log('info','SympaSession::new ignoring session cookie because remote host %s is not the original host %s', $ENV{'REMOTE_ADDR'},$session->{'remote_addr'}); # start a new session
+	#    Sympa::Log::do_log('info','SympaSession::new ignoring session cookie because remote host %s is not the original host %s', $ENV{'REMOTE_ADDR'},$session->{'remote_addr'}); # start a new session
 	#    return (SympaSession->new($robot));
 	#}
     }else{
@@ -136,17 +136,17 @@ sub new {
 
 sub load {
     my ($self, $cookie) = @_;
-    &Sympa::Log::do_log('debug', '(%s)', $cookie);
+    Sympa::Log::do_log('debug', '(%s)', $cookie);
 
     unless ($cookie) {
-	&Sympa::Log::do_log('err', 'internal error, called with undef id_session');
+	Sympa::Log::do_log('err', 'internal error, called with undef id_session');
 	return undef;
     }
 
     my $sth;
 
-    unless ($sth = &Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
-	&Sympa::Log::do_log('err','Unable to load session %s', $cookie);
+    unless ($sth = Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
+	Sympa::Log::do_log('err','Unable to load session %s', $cookie);
 	return undef;
     }
 
@@ -155,7 +155,7 @@ sub load {
     my $counter = 0;
     while ($new_session = $sth->fetchrow_hashref('NAME_lc')) {
 	if ( $counter > 0){
-	    &Sympa::Log::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql?");
+	    Sympa::Log::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql?");
 	    $session->{'email'} = '';
 	    last;
 	}
@@ -167,7 +167,7 @@ sub load {
 	return 'not_found';
     }
 
-    my %datas= &Sympa::Tools::Data::string_2_hash($session->{'data'});
+    my %datas= Sympa::Tools::Data::string_2_hash($session->{'data'});
     foreach my $key (keys %datas) {$self->{$key} = $datas{$key};}
 
     $self->{'id_session'} = $session->{'id_session'};
@@ -184,7 +184,7 @@ sub load {
 ## This method will both store the session information in the database
 sub store {
     my ($self) = @_;
-    &Sympa::Log::do_log('debug', '');
+    Sympa::Log::do_log('debug', '');
 
     return undef unless ($self->{'id_session'});
     return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
@@ -196,20 +196,20 @@ sub store {
 	next unless ($var);
 	$hash{$var} = $self->{$var};
     }
-    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
+    my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
 
     ## If this is a new session, then perform an INSERT
     if ($self->{'new_session'}) {
 	## Store the new session ID in the DB
-	unless(&Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",&Sympa::SDM::quote($self->{'id_session'}),time,&Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),&Sympa::SDM::quote($self->{'robot'}),&Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, &Sympa::SDM::quote($data_string))) {
-	    &Sympa::Log::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
+	unless(Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",Sympa::SDM::quote($self->{'id_session'}),time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string))) {
+	    Sympa::Log::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
 	    return undef;
 	}
       ## If the session already exists in DB, then perform an UPDATE
     }else {
 	## Update the new session in the DB
-	unless(&Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,&Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),&Sympa::SDM::quote($self->{'robot'}),&Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, &Sympa::SDM::quote($data_string), &Sympa::SDM::quote($self->{'id_session'}))) {
-	    &Sympa::Log::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
+	unless(Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string), Sympa::SDM::quote($self->{'id_session'}))) {
+	    Sympa::Log::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
 	    return undef;
 	}
     }
@@ -220,7 +220,7 @@ sub store {
 ## This method will renew the session ID
 sub renew {
     my ($self) = @_;
-    &Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
+    Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
 
     return undef unless ($self->{'id_session'});
     return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
@@ -237,8 +237,8 @@ sub renew {
     my $new_id = &get_random();
 
     ## First remove the DB entry for the previous session ID
-    unless(&Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",&Sympa::SDM::quote($new_id), &Sympa::SDM::quote($self->{'id_session'}))) {
-	&Sympa::Log::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
+    unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {
+	Sympa::Log::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
 	return undef;
     }
 
@@ -252,17 +252,17 @@ sub renew {
 ##
 sub purge_old_sessions {
     my ($robot) = @_;
-    &Sympa::Log::do_log('info', '(%s)',$robot);
+    Sympa::Log::do_log('info', '(%s)',$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ;
-    my $anonymous_delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ;
+    my $delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ;
+    my $anonymous_delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ;
 
-    unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
-    unless ($anonymous_delay) { &Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
+    unless ($delay) { Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
+    unless ($anonymous_delay) { Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
 
     my  $sth;
 
-    my $robot_condition = sprintf "robot_session = %s", &Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
+    my $robot_condition = sprintf "robot_session = %s", Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
 
     my $delay_condition = time-$delay.' > date_session' if ($delay);
     my $anonymous_delay_condition = time-$anonymous_delay.' > date_session' if ($anonymous_delay);
@@ -277,31 +277,31 @@ sub purge_old_sessions {
     my $statement = sprintf "DELETE FROM session_table WHERE $robot_condition $and $delay_condition";
     my $anonymous_statement = sprintf "DELETE FROM session_table WHERE $robot_condition $anonymous_and $anonymous_delay_condition AND email_session = 'nobody' AND hit_session = '1'";
 
-    unless ($sth = &Sympa::SDM::do_query($count_statement)) {
-	&Sympa::Log::do_log('err','Unable to count old session for robot %s',$robot);
+    unless ($sth = Sympa::SDM::do_query($count_statement)) {
+	Sympa::Log::do_log('err','Unable to count old session for robot %s',$robot);
 	return undef;
     }
 
     my $total =  $sth->fetchrow;
     if ($total == 0) {
-	&Sympa::Log::do_log('debug','no sessions to expire');
+	Sympa::Log::do_log('debug','no sessions to expire');
     }else{
-	unless ($sth = &Sympa::SDM::do_query($statement)) {
-	    &Sympa::Log::do_log('err','Unable to purge old sessions for robot %s', $robot);
+	unless ($sth = Sympa::SDM::do_query($statement)) {
+	    Sympa::Log::do_log('err','Unable to purge old sessions for robot %s', $robot);
 	    return undef;
 	}
     }
-    unless ($sth = &Sympa::SDM::do_query($anonymous_count_statement)) {
-	&Sympa::Log::do_log('err','Unable to count anonymous sessions for robot %s', $robot);
+    unless ($sth = Sympa::SDM::do_query($anonymous_count_statement)) {
+	Sympa::Log::do_log('err','Unable to count anonymous sessions for robot %s', $robot);
 	return undef;
     }
     my $anonymous_total =  $sth->fetchrow;
     if ($anonymous_total == 0) {
-	&Sympa::Log::do_log('debug','no anonymous sessions to expire');
+	Sympa::Log::do_log('debug','no anonymous sessions to expire');
 	return $total ;
     }
-    unless ($sth = &Sympa::SDM::do_query($anonymous_statement)) {
-	&Sympa::Log::do_log('err','Unable to purge anonymous sessions for robot %s',$robot);
+    unless ($sth = Sympa::SDM::do_query($anonymous_statement)) {
+	Sympa::Log::do_log('err','Unable to purge anonymous sessions for robot %s',$robot);
 	return undef;
     }
     return $total+$anonymous_total;
@@ -312,31 +312,31 @@ sub purge_old_sessions {
 ##
 sub purge_old_tickets {
     my ($robot) = @_;
-    &Sympa::Log::do_log('info', '(%s)',$robot);
+    Sympa::Log::do_log('info', '(%s)',$robot);
 
-    my $delay = &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ;
+    my $delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ;
 
-    unless ($delay) { &Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
+    unless ($delay) { Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
 
     my  $sth;
 
-    my $robot_condition = sprintf "robot_one_time_ticket = %s", &Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
+    my $robot_condition = sprintf "robot_one_time_ticket = %s", Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
     my $delay_condition = time-$delay.' > date_one_time_ticket' if ($delay);
     my $and = ' AND ' if (($delay_condition) && ($robot_condition));
     my $count_statement = sprintf "SELECT count(*) FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
     my $statement = sprintf "DELETE FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
 
-    unless ($sth = &Sympa::SDM::do_query($count_statement)) {
-	&Sympa::Log::do_log('err','Unable to count old one time tickets for robot %s',$robot);
+    unless ($sth = Sympa::SDM::do_query($count_statement)) {
+	Sympa::Log::do_log('err','Unable to count old one time tickets for robot %s',$robot);
 	return undef;
     }
 
     my $total =  $sth->fetchrow;
     if ($total == 0) {
-	&Sympa::Log::do_log('debug','no tickets to expire');
+	Sympa::Log::do_log('debug','no tickets to expire');
     }else{
-	unless ($sth = &Sympa::SDM::do_query($statement)) {
-	    &Sympa::Log::do_log('err','Unable to delete expired one time tickets for robot %s',$robot);
+	unless ($sth = Sympa::SDM::do_query($statement)) {
+	    Sympa::Log::do_log('err','Unable to delete expired one time tickets for robot %s',$robot);
 	    return undef;
 	}
     }
@@ -346,12 +346,12 @@ sub purge_old_tickets {
 # list sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
 sub list_sessions {
     my ($delay, $robot, $connected_only) = @_;
-    &Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
+    Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
 
     my @sessions ;
     my $sth;
 
-    my $condition = sprintf "robot_session = %s", &Sympa::SDM::quote($robot) unless ($robot eq '*');
+    my $condition = sprintf "robot_session = %s", Sympa::SDM::quote($robot) unless ($robot eq '*');
     my $condition2 = time-$delay.' < date_session ' if ($delay);
     my $and = ' AND ' if (($condition) && ($condition2));
     $condition = $condition.$and.$condition2 ;
@@ -361,17 +361,17 @@ sub list_sessions {
     $condition = $condition.$and2.$condition3 ;
 
     my $statement = sprintf "SELECT remote_addr_session, email_session, robot_session, date_session, start_date_session, hit_session FROM session_table WHERE $condition";
-    &Sympa::Log::do_log('debug', 'statement = %s',$statement);
+    Sympa::Log::do_log('debug', 'statement = %s',$statement);
 
-    unless ($sth = &Sympa::SDM::do_query($statement)) {
-	&Sympa::Log::do_log('err','Unable to get the list of sessions for robot %s',$robot);
+    unless ($sth = Sympa::SDM::do_query($statement)) {
+	Sympa::Log::do_log('err','Unable to get the list of sessions for robot %s',$robot);
 	return undef;
     }
 
     while (my $session = ($sth->fetchrow_hashref('NAME_lc'))) {
 
-	$session->{'formated_date'} = &Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
-	$session->{'formated_start_date'} = &Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
+	$session->{'formated_date'} = Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
+	$session->{'formated_start_date'} = Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
 
 	push @sessions, $session;
     }
@@ -404,7 +404,7 @@ sub get_session_cookie {
 ## Set user $email cookie, ckecksum use $secret, expire=(now|session|#sec) domain=(localhost|<a domain>)
 sub set_cookie {
     my ($self, $http_domain, $expires,$use_ssl) = @_ ;
-    &Sympa::Log::do_log('debug','%s,%s,secure= %s',$http_domain, $expires,$use_ssl );
+    Sympa::Log::do_log('debug','%s,%s,secure= %s',$http_domain, $expires,$use_ssl );
 
     my $expiration;
     if ($expires =~ /now/i) {
@@ -445,7 +445,7 @@ sub set_cookie {
 
 
 sub get_random {
-    &Sympa::Log::do_log('debug', '');
+    Sympa::Log::do_log('debug', '');
      my $random = int(rand(10**7)).int(rand(10**7)); ## Concatenates 2 integers for a better entropy
      $random =~ s/^0(\.|\,)//;
      return ($random)

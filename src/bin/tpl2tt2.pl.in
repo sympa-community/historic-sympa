@@ -55,22 +55,22 @@ $OUTPUT_AUTOFLUSH = 1;
 my $wwsconf = {};
 
 ## Load config 
-unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf_file)) {
+unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf_file)) {
     die 'unable to load config file';
 }
 
 ## Load sympa config
-unless (&Sympa::Configuration::load($sympa_conf_file)) {
+unless (Sympa::Configuration::load($sympa_conf_file)) {
     die 'config_error';
 }
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-    unless ($Sympa::List::use_db = &Sympa::Upgrade::probe_db()) {
+    unless ($Sympa::List::use_db = Sympa::Upgrade::probe_db()) {
  	&die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
     }
 }
 
-&Sympa::List::_apply_defaults();
+Sympa::List::_apply_defaults();
 
 ## We have a parameter that should be a template to convert
 ## Output is sent to stdout
@@ -138,7 +138,7 @@ foreach my $vr (keys %{$Sympa::Configuration::Conf{'robots'}}) {
     }
 
     ## Search in V. Robot Lists
-    my $listOfLists = &Sympa::List::get_lists($vr);
+    my $listOfLists = Sympa::List::get_lists($vr);
     foreach my $list ( @$listOfLists ) {
 
 	push @directories, $list->{'dir'};
@@ -212,7 +212,7 @@ foreach my $tpl (@templates) {
     if ($dest_file =~ /^([\w\-]+)\.(\w+)\.tt2$/) {
 	my $lang = $2;
 	$dest_file =~ s/^([\w\-]+)\.(\w+)\.tt2$/$1\.tt2/;
-	$dest_path .= '/'.&Sympa::Language::Lang2Locale($lang);
+	$dest_path .= '/'.Sympa::Language::Lang2Locale($lang);
     }
 
     ## If file has no extension
@@ -227,13 +227,13 @@ foreach my $tpl (@templates) {
 	    printf STDERR "Error : Cannot create $dest_path directory : $ERRNO\n";
 	    next;
 	}
-	unless (&Sympa::Tools::File::set_file_rights(file => $dest_path,
+	unless (Sympa::Tools::File::set_file_rights(file => $dest_path,
 					user => Sympa::Constants::USER,
 					group => Sympa::Constants::GROUP,
 					mode => 0755,
 					))
 	{
-	    &Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
+	    Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
 	    next;
 	}
     }
@@ -280,12 +280,12 @@ sub convert {
 
     printf "Template file $in_file has been converted to $out_file\n";
     
-    unless (&Sympa::Tools::File::set_file_rights(file => $out_file,
+    unless (Sympa::Tools::File::set_file_rights(file => $out_file,
 				    user => Sympa::Constants::USER,
 				    group => Sympa::Constants::GROUP
 				    ))
     {
-	&Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
+	Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
 	return undef;
     }
 }

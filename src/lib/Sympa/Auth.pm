@@ -53,12 +53,12 @@ sha1 or ....)
 
 sub password_fingerprint{
     my ($pwd) = @_;
-    &Sympa::Log::do_log('debug', '');
+    Sympa::Log::do_log('debug', '');
 
-    if(&Sympa::Configuration::get_robot_conf('*','password_case') eq 'insensitive') {
-	return &Sympa::Tools::md5_fingerprint(lc($pwd));
+    if(Sympa::Configuration::get_robot_conf('*','password_case') eq 'insensitive') {
+	return Sympa::Tools::md5_fingerprint(lc($pwd));
     }else{
-	return &Sympa::Tools::md5_fingerprint($pwd);
+	return Sympa::Tools::md5_fingerprint($pwd);
     }
 }
 
@@ -82,11 +82,11 @@ Authentication via email or uid.
 
  sub check_auth{
      my ($robot, $auth, $pwd) = @_;
-     &Sympa::Log::do_log('debug', '(%s)', $auth);
+     Sympa::Log::do_log('debug', '(%s)', $auth);
 
      my ($canonic, $user);
 
-     if( &Sympa::Tools::valid_email($auth)) {
+     if( Sympa::Tools::valid_email($auth)) {
 	 return &authentication($robot, $auth,$pwd);
      }else{
 	 ## This is an UID
@@ -99,7 +99,7 @@ Authentication via email or uid.
 	 }
 	 if ($canonic){
 
-	     unless($user = &Sympa::List::get_global_user($canonic)){
+	     unless($user = Sympa::List::get_global_user($canonic)){
 		 $user = {'email' => $canonic};
 	     }
 	     return {'user' => $user,
@@ -108,8 +108,8 @@ Authentication via email or uid.
 		 };
 
 	 }else{
-	     &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
-	     &Sympa::Log::do_log('err', "Incorrect Ldap password");
+	     Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
+	     Sympa::Log::do_log('err', "Incorrect Ldap password");
 	     return undef;
 	 }
      }
@@ -156,22 +156,22 @@ sub may_use_sympa_native_auth {
 
 sub authentication {
     my ($robot, $email, $pwd) = @_;
-    &Sympa::Log::do_log('debug', '(%s)', $email);
+    Sympa::Log::do_log('debug', '(%s)', $email);
 
     my ($user,$canonic);
 
-    unless ($user = &Sympa::List::get_global_user($email)) {
+    unless ($user = Sympa::List::get_global_user($email)) {
 	$user = {'email' => $email };
     }
     unless ($user->{'password'}) {
 	$user->{'password'} = '';
     }
 
-    if ($user->{'wrong_login_count'} > &Sympa::Configuration::get_robot_conf($robot, 'max_wrong_password')){
+    if ($user->{'wrong_login_count'} > Sympa::Configuration::get_robot_conf($robot, 'max_wrong_password')){
 	# too many wrong login attemp
-	&Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
-	&Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
-	&Sympa::Log::do_log('err','login is blocked : too many wrong password submission for %s', $email);
+	Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
+	Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
+	Sympa::Log::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 	return undef;
     }
     foreach my $auth_service (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
@@ -185,7 +185,7 @@ sub authentication {
 	    my $fingerprint = &password_fingerprint ($pwd);
 
 	    if ($fingerprint eq $user->{'password'}) {
-		&Sympa::List::update_global_user($email,{wrong_login_count => 0}) ;
+		Sympa::List::update_global_user($email,{wrong_login_count => 0}) ;
 		return {'user' => $user,
 			'auth' => 'classic',
 			'alt_emails' => {$email => 'classic'}
@@ -193,10 +193,10 @@ sub authentication {
 	    }
 	}elsif($auth_service->{'auth_type'} eq 'ldap') {
 	    if ($canonic = &ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
-		unless($user = &Sympa::List::get_global_user($canonic)){
+		unless($user = Sympa::List::get_global_user($canonic)){
 		    $user = {'email' => $canonic};
 		}
-		&Sympa::List::update_global_user($canonic,{wrong_login_count => 0}) ;
+		Sympa::List::update_global_user($canonic,{wrong_login_count => 0}) ;
 		return {'user' => $user,
 			'auth' => 'ldap',
 			'alt_emails' => {$email => 'ldap'}
@@ -206,10 +206,10 @@ sub authentication {
     }
 
     # increment wrong login count.
-    &Sympa::List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
+    Sympa::List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
 
-    &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
-    &Sympa::Log::do_log('err','authentication: incorrect password for user %s', $email);
+    Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
+    Sympa::Log::do_log('err','authentication: incorrect password for user %s', $email);
 
     return undef;
 }
@@ -217,18 +217,18 @@ sub authentication {
 
 sub ldap_authentication {
      my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;
-     &Sympa::Log::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
-     &Sympa::Log::do_log('debug3','Password used: %s',$pwd);
+     Sympa::Log::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
+     Sympa::Log::do_log('debug3','Password used: %s',$pwd);
 
      my ($mesg, $ldap_passwd,$ldap_anonymous);
 
-     unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Configuration::Conf{'etc'})) {
+     unless (Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Configuration::Conf{'etc'})) {
 	 return undef;
      }
 
      ## No LDAP entry is defined in auth.conf
      if ($#{$Sympa::Configuration::Conf{'auth_services'}{$robot}} < 0) {
-	 &Sympa::Log::do_log('notice', 'Skipping empty auth.conf');
+	 Sympa::Log::do_log('notice', 'Skipping empty auth.conf');
 	 return undef;
      }
 
@@ -246,12 +246,12 @@ sub ldap_authentication {
      $filter =~ s/\[sender\]/$auth/ig;
 
      ## bind in order to have the user's DN
-     my $params = &Sympa::Tools::Data::dup_var($ldap);
+     my $params = Sympa::Tools::Data::dup_var($ldap);
      require Sympa::Datasource::LDAP;
      my $ds = Sympa::Datasource::LDAP->new($params);
 
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
-       &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
+       Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
        return undef;
      }
 
@@ -262,7 +262,7 @@ sub ldap_authentication {
 				     timeout => $ldap->{'timeout'});
 
      if ($mesg->count() == 0) {
-       &Sympa::Log::do_log('notice','No entry in the Ldap Directory Tree of %s for %s',$ldap->{'host'},$auth);
+       Sympa::Log::do_log('notice','No entry in the Ldap Directory Tree of %s for %s',$ldap->{'host'},$auth);
        $ds->disconnect();
        return undef;
      }
@@ -275,7 +275,7 @@ sub ldap_authentication {
 
      ## Duplicate structure first
      ## Then set the bind_dn and password according to the current user
-     $params = &Sympa::Tools::Data::dup_var($ldap);
+     $params = Sympa::Tools::Data::dup_var($ldap);
      $params->{'ldap_bind_dn'} = $DN[0];
      $params->{'ldap_bind_password'} = $pwd;
 
@@ -283,7 +283,7 @@ sub ldap_authentication {
      $ds = Sympa::Datasource::LDAP->new($params);
 
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
-       &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'",
+       Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'",
 	       $params->{'host'});
        return undef;
      }
@@ -295,7 +295,7 @@ sub ldap_authentication {
 				 );
 
      if ($mesg->count() == 0 || $mesg->code() != 0) {
-       &Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s", $ldap->{'host'});
+       Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s", $ldap->{'host'});
        $ds->disconnect();
        return undef;
      }
@@ -330,11 +330,11 @@ sub ldap_authentication {
        $params->{'alt_emails'}{$alt} = $previous->{$alt};
      }
 
-     $ds->disconnect() or &Sympa::Log::do_log('notice', "unable to unbind");
-     &Sympa::Log::do_log('debug3',"canonic: $canonic_email[0]");
+     $ds->disconnect() or Sympa::Log::do_log('notice', "unable to unbind");
+     Sympa::Log::do_log('debug3',"canonic: $canonic_email[0]");
      ## If the identifier provided was a valid email, return the provided email.
      ## Otherwise, return the canonical email guessed after the login.
-     if( &Sympa::Tools::valid_email($auth) && !&Sympa::Configuration::get_robot_conf($robot,'ldap_force_canonical_email')) {
+     if( Sympa::Tools::valid_email($auth) && !Sympa::Configuration::get_robot_conf($robot,'ldap_force_canonical_email')) {
 	 return ($auth);
      }else{
 	 return lc($canonic_email[0]);
@@ -364,7 +364,7 @@ Fetch user email using his cas net_id and the paragrapah number in auth.conf.
 sub get_email_by_net_id {
     my ($robot, $auth_id, $attributes) = @_;
 
-    &Sympa::Log::do_log ('debug',"($auth_id,$attributes->{'uid'})");
+    Sympa::Log::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
     if (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'internal_email_by_netid'}) {
 	my $sso_config = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
@@ -372,20 +372,20 @@ sub get_email_by_net_id {
 
 	$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 
-	my $email = &Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
+	my $email = Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
 
 	return $email;
     }
 
     my $ldap = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
 
-    my $param = &Sympa::Tools::Data::dup_var($ldap);
+    my $param = Sympa::Tools::Data::dup_var($ldap);
     require Sympa::Datasource::LDAP;
     my $ds = Sympa::Datasource::LDAP->new($param);
     my $ldap_anonymous;
 
     unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
-	&Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'ldap_host'});
+	Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'ldap_host'});
 	return undef;
     }
 
@@ -401,7 +401,7 @@ sub get_email_by_net_id {
 				      attrs =>  $ldap->{'ldap_email_attribute'}
 				      );
 	if ($emails->count() == 0) {
-	    &Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s");
+	    Sympa::Log::do_log('notice',"No entry in the Ldap Directory Tree of %s");
 	$ds->disconnect();
 	return undef;
 	}
@@ -440,34 +440,34 @@ return 1 or I<undef>.
 
 sub remote_app_check_password {
     my ($trusted_application_name, $password, $robot) = @_;
-    &Sympa::Log::do_log('debug','(%s,%s)',$trusted_application_name,$robot);
+    Sympa::Log::do_log('debug','(%s,%s)',$trusted_application_name,$robot);
 
-    my $md5 = &Sympa::Tools::md5_fingerprint($password);
+    my $md5 = Sympa::Tools::md5_fingerprint($password);
 
     # seach entry for trusted_application in Conf
     my @trusted_apps ;
 
     # select trusted_apps from robot context or sympa context
-    @trusted_apps = @{&Sympa::Configuration::get_robot_conf($robot,'trusted_applications')};
+    @trusted_apps = @{Sympa::Configuration::get_robot_conf($robot,'trusted_applications')};
 
     foreach my $application (@trusted_apps){
 
  	if (lc($application->{'name'}) eq lc($trusted_application_name)) {
  	    if ($md5 eq $application->{'md5password'}) {
- 		# &Sympa::Log::do_log('debug', 'authentication succeed for %s',$application->{'name'});
+ 		# Sympa::Log::do_log('debug', 'authentication succeed for %s',$application->{'name'});
  		my %proxy_for_vars ;
  		foreach my $varname (@{$application->{'proxy_for_variables'}}) {
  		    $proxy_for_vars{$varname}=1;
  		}
  		return (\%proxy_for_vars);
  	    }else{
- 		&Sympa::Log::do_log('info', 'bad password from %s', $trusted_application_name);
+ 		Sympa::Log::do_log('info', 'bad password from %s', $trusted_application_name);
  		return undef;
  	    }
  	}
     }
     # no matching application found
-    &Sympa::Log::do_log('info', 'unknown application name %s', $trusted_application_name);
+    Sympa::Log::do_log('info', 'unknown application name %s', $trusted_application_name);
     return undef;
 }
 
@@ -497,14 +497,14 @@ authenticated
 sub create_one_time_ticket {
     my ($email,  $robot, $data_string, $remote_addr) = @_;
 
-    my $ticket = &Sympa::Session::get_random();
-    &Sympa::Log::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
+    my $ticket = Sympa::Session::get_random();
+    Sympa::Log::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
     my $date = time;
     my $sth;
 
-    unless (&Sympa::SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",&Sympa::SDM::quote($ticket),&Sympa::SDM::quote($robot),&Sympa::SDM::quote($email),time,&Sympa::SDM::quote($data_string),&Sympa::SDM::quote($remote_addr),&Sympa::SDM::quote('open'))) {
-	&Sympa::Log::do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
+    unless (Sympa::SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",Sympa::SDM::quote($ticket),Sympa::SDM::quote($robot),Sympa::SDM::quote($email),time,Sympa::SDM::quote($data_string),Sympa::SDM::quote($remote_addr),Sympa::SDM::quote('open'))) {
+	Sympa::Log::do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
 	return undef;
     }
     return $ticket;
@@ -530,19 +530,19 @@ Read one_time_ticket from table and remove it
 
 sub get_one_time_ticket {
     my ($ticket_number, $addr) = @_;
-    &Sympa::Log::do_log('debug2', '(%s)',$ticket_number);
+    Sympa::Log::do_log('debug2', '(%s)',$ticket_number);
 
     my $sth;
 
-    unless ($sth = &Sympa::SDM::do_query("SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ", &Sympa::SDM::quote($ticket_number))) {
-	&Sympa::Log::do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
+    unless ($sth = Sympa::SDM::do_query("SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ", Sympa::SDM::quote($ticket_number))) {
+	Sympa::Log::do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
 	return {'result'=>'error'};
     }
 
     my $ticket = $sth->fetchrow_hashref('NAME_lc');
 
     unless ($ticket) {
-	&Sympa::Log::do_log('info','Unable to find one time ticket %s', $ticket);
+	Sympa::Log::do_log('info','Unable to find one time ticket %s', $ticket);
 	return {'result'=>'not_found'};
     }
 
@@ -551,19 +551,19 @@ sub get_one_time_ticket {
 
     if ($ticket->{'status'} ne 'open') {
 	$result = 'closed';
-	&Sympa::Log::do_log('info','ticket %s from %s has been used before (%s)',$ticket_number,$ticket->{'email'},$printable_date);
+	Sympa::Log::do_log('info','ticket %s from %s has been used before (%s)',$ticket_number,$ticket->{'email'},$printable_date);
     }
     elsif (time - $ticket->{'date'} > 48 * 60 * 60) {
-	&Sympa::Log::do_log('info','ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
+	Sympa::Log::do_log('info','ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
 	$result = 'expired';
     }else{
 	$result = 'success';
     }
-    unless (&Sympa::SDM::do_query("UPDATE one_time_ticket_table SET status_one_time_ticket = %s WHERE (ticket_one_time_ticket=%s)", &Sympa::SDM::quote($addr), &Sympa::SDM::quote($ticket_number))) {
-    	&Sympa::Log::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
+    unless (Sympa::SDM::do_query("UPDATE one_time_ticket_table SET status_one_time_ticket = %s WHERE (ticket_one_time_ticket=%s)", Sympa::SDM::quote($addr), Sympa::SDM::quote($ticket_number))) {
+    	Sympa::Log::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
     }
 
-    &Sympa::Log::do_log('info', '(%s): result : %s',$ticket_number,$result);
+    Sympa::Log::do_log('info', '(%s): result : %s',$ticket_number,$result);
     return {'result'=>$result,
 	    'date'=>$ticket->{'date'},
 	    'email'=>$ticket->{'email'},

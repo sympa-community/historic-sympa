@@ -79,11 +79,11 @@ A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
 
 sub new {
     my ($class, $spoolname, $selection_status) = @_;
-   &Sympa::Log::do_log('debug2', '(%s)', $spoolname);
+   Sympa::Log::do_log('debug2', '(%s)', $spoolname);
 
     my $spool={};
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
-&Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
+Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
     $spool->{'spoolname'} = $spoolname;
@@ -103,7 +103,7 @@ sub global_count {
     my ($message_status) = @_;
 
     push @sth_stack, $sth;
-    $sth = &Sympa::SDM::do_query ("SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'");
+    $sth = Sympa::SDM::do_query ("SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'");
 
     my @result = $sth->fetchrow_array();
     $sth->finish();
@@ -154,7 +154,7 @@ sub get_content {
 	$statement = 'SELECT '.&_selectfields($selection);
     }
 
-    $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,&Sympa::SDM::quote($self->{'spoolname'});
+    $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,Sympa::SDM::quote($self->{'spoolname'});
 
     if ($orderby) {
 	$statement = $statement. ' ORDER BY '.$orderby.'_spool ';
@@ -165,15 +165,15 @@ sub get_content {
     }
 
     push @sth_stack, $sth;
-    $sth = &Sympa::SDM::do_query($statement);
+    $sth = Sympa::SDM::do_query($statement);
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
 	return $result[0];
     }else{
 	my @messages;
 	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
-	    $message->{'date_asstring'} = &Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
-	    $message->{'lockdate_asstring'} = &Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
+	    $message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
+	    $message->{'lockdate_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
 	    $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
 	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 	    $message->{'status'} = $self->{'selection_status'};
@@ -192,7 +192,7 @@ sub get_content {
 sub next {
     my ($self, $selector) = @_;
 
-    &Sympa::Log::do_log('debug', '(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
+    Sympa::Log::do_log('debug', '(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
 
     my $sql_where = _sqlselector($selector);
 
@@ -206,27 +206,27 @@ sub next {
     my $lock = $$.'@'.hostname();
     my $epoch=time; # should we use milli or nano seconds ?
 
-    my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", &Sympa::SDM::quote($lock),&Sympa::SDM::quote($epoch),&Sympa::SDM::quote($self->{'spoolname'}),$sql_where;
+    my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch),Sympa::SDM::quote($self->{'spoolname'}),$sql_where;
     push @sth_stack, $sth;
 
-    $sth = &Sympa::SDM::do_query($statement);
+    $sth = Sympa::SDM::do_query($statement);
     return undef unless ($sth->rows); # spool is empty
 
     my $star_select = &_selectfields();
-    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,&Sympa::SDM::quote($self->{'spoolname'}),&Sympa::SDM::quote($self->{'selection_status'}),&Sympa::SDM::quote($lock),&Sympa::SDM::quote($epoch);
+    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($self->{'selection_status'}),Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch);
 
-    $sth = &Sympa::SDM::do_query($statement);
+    $sth = Sympa::SDM::do_query($statement);
     my $message = $sth->fetchrow_hashref('NAME_lc');
     $sth->finish();
     $sth = pop @sth_stack;
 
     unless ($message->{'message'}){
-&Sympa::Log::do_log('err',"INTERNAL Could not find message previouly locked");
+Sympa::Log::do_log('err',"INTERNAL Could not find message previouly locked");
 	return undef;
     }
     $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'});
     unless ($message->{'messageasstring'}){
-&Sympa::Log::do_log('err',"Could not decode %s",$message->{'message'});
+Sympa::Log::do_log('err',"Could not decode %s",$message->{'message'});
 	return undef;
     }
     return $message  ;
@@ -237,14 +237,14 @@ sub next {
 #
 sub get_message {
     my ($self, $selector) = @_;
-    &Sympa::Log::do_log('debug', "($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
+    Sympa::Log::do_log('debug', "($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
 
 
     my $sqlselector = '';
 
     foreach my $field (keys %$selector){
 #	unless (defined %{$db_struct{'mysql'}{'spool_table'}{$field.'_spool'}}) {
-#	   &Sympa::Log::do_log ('err',"internal error : invalid selector field $field locking for message in spool_table");
+#	   Sympa::Log::do_log ('err',"internal error : invalid selector field $field locking for message in spool_table");
 #	    return undef;
 #	}
 
@@ -253,13 +253,13 @@ sub get_message {
 	if ($field eq 'messageid') {
 	    $selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 	}
-	$sqlselector = $sqlselector.' '.$field.'_spool = '.&Sympa::SDM::quote($selector->{$field});
+	$sqlselector = $sqlselector.' '.$field.'_spool = '.Sympa::SDM::quote($selector->{$field});
     }
     my $all = &_selectfields();
-    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,&Sympa::SDM::quote($self->{'spoolname'});
+    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,Sympa::SDM::quote($self->{'spoolname'});
 
     push @sth_stack, $sth;
-    $sth = &Sympa::SDM::do_query($statement);
+    $sth = Sympa::SDM::do_query($statement);
 
     my $message = $sth->fetchrow_hashref('NAME_lc');
     if ($message) {
@@ -278,7 +278,7 @@ sub get_message {
 sub unlock_message {
     my ($self, $messagekey) = @_;
 
-    &Sympa::Log::do_log('debug', '(%s,%s)', $self->{'spoolname'}, $messagekey);
+    Sympa::Log::do_log('debug', '(%s,%s)', $self->{'spoolname'}, $messagekey);
     return ( $self->update({'messagekey' => $messagekey},
 			   {'messagelock' => 'NULL'}));
 }
@@ -288,7 +288,7 @@ sub unlock_message {
 #  update spool entries that match selector with values
 sub update {
     my ($self, $selector, $values) = @_;
-    &Sympa::Log::do_log('debug', "($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
+    Sympa::Log::do_log('debug', "($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
 
     my $where = _sqlselector($selector);
 
@@ -311,7 +311,7 @@ sub update {
 	    # SQL set  xx = NULL and set xx = 'NULL' is not the same !
 	    $set = $set .$meta.'_spool = NULL';
 	}else{
-	    $set = $set .$meta.'_spool = '.&Sympa::SDM::quote($values->{$meta});
+	    $set = $set .$meta.'_spool = '.Sympa::SDM::quote($values->{$meta});
 	}
 	if ($meta eq 'messagelock') {
 	    if ($values->{'messagelock'} eq 'NULL'){
@@ -319,23 +319,23 @@ sub update {
 		$set =  $set .', lockdate_spool = NULL ';
 	    }else{
 		# when setting a lock always set the lockdate
-		$set =  $set .', lockdate_spool = '.&Sympa::SDM::quote(time);
+		$set =  $set .', lockdate_spool = '.Sympa::SDM::quote(time);
 	    }
 	}
     }
 
     unless ($set) {
-&Sympa::Log::do_log('err',"No value to update"); return undef;
+Sympa::Log::do_log('err',"No value to update"); return undef;
     }
     unless ($where) {
-&Sympa::Log::do_log('err',"No selector for an update"); return undef;
+Sympa::Log::do_log('err',"No selector for an update"); return undef;
     }
 
     ## Updating Db
     my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
-    unless (&Sympa::SDM::do_query($statement)) {
-&Sympa::Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    unless (Sympa::SDM::do_query($statement)) {
+Sympa::Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
     return 1;
@@ -352,7 +352,7 @@ sub store {
     my $sender = $metadata->{'sender'};
     $sender |= '';
 
-   &Sympa::Log::do_log('debug',"($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
+   Sympa::Log::do_log('debug',"($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
@@ -385,17 +385,17 @@ sub store {
     my $insertpart1; my $insertpart2;
     foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
-	$insertpart2 = $insertpart2. ', '.&Sympa::SDM::quote($metadata->{$meta});
+	$insertpart2 = $insertpart2. ', '.Sympa::SDM::quote($metadata->{$meta});
     }
     my $lock = $$.'@'.hostname() ;
 
     push @sth_stack, $sth;
-    my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,&Sympa::SDM::quote($self->{'spoolname'}),&Sympa::SDM::quote($lock),&Sympa::SDM::quote($b64msg), $insertpart2;
+    my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($lock),Sympa::SDM::quote($b64msg), $insertpart2;
 
-    $sth = &Sympa::SDM::do_query ($statement);
+    $sth = Sympa::SDM::do_query ($statement);
 
-    $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&Sympa::SDM::quote($lock),&Sympa::SDM::quote($metadata->{'date'});
-    $sth = &Sympa::SDM::do_query ($statement);
+    $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",Sympa::SDM::quote($lock),Sympa::SDM::quote($metadata->{'date'});
+    $sth = Sympa::SDM::do_query ($statement);
     # this query returns the autoinc primary key as result of this insert
 
     my $inserted_message = $sth->fetchrow_hashref('NAME_lc');
@@ -419,20 +419,20 @@ sub remove_message {
     my $robot = $selector->{'robot'};
     my $messagekey = $selector->{'messagekey'};
     my $listname = $selector->{'listname'};
-   &Sympa::Log::do_log('debug',"remove_message ($self->{'spoolname'},$listname,$robot,$messagekey)");
+   Sympa::Log::do_log('debug',"remove_message ($self->{'spoolname'},$listname,$robot,$messagekey)");
 
     ## search if this message is already in spool database : mailfile may perform multiple submission of exactly the same message
     unless ($self->get_message($selector)){
-	&Sympa::Log::do_log('err',"message not in spool");
+	Sympa::Log::do_log('err',"message not in spool");
 		return undef;
     }
 
     my $sqlselector = &_sqlselector($selector);
-    #my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",&Sympa::SDM::quote($self->{'spoolname'}),&Sympa::SDM::quote($messagekey),&Sympa::SDM::quote($listname),&Sympa::SDM::quote($robot);
-    my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",&Sympa::SDM::quote($self->{'spoolname'}),$sqlselector;
+    #my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($messagekey),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot);
+    my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",Sympa::SDM::quote($self->{'spoolname'}),$sqlselector;
 
     push @sth_stack, $sth;
-    $sth = &Sympa::SDM::do_query ($statement);
+    $sth = Sympa::SDM::do_query ($statement);
 
     $sth-> finish;
     $sth = pop @sth_stack;
@@ -451,14 +451,14 @@ sub clean {
     my $bad =  $filter->{'bad'};
 
 
-    &Sympa::Log::do_log('debug', '(%s,$delay)',$self->{'spoolname'},$delay);
+    Sympa::Log::do_log('debug', '(%s,$delay)',$self->{'spoolname'},$delay);
     my $spoolname = $self->{'spoolname'};
     return undef unless $spoolname;
     return undef unless $delay;
 
     my $freshness_date = time - ($delay * 60 * 60 * 24);
 
-    my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",&Sympa::SDM::quote($spoolname),&Sympa::SDM::quote($freshness_date);
+    my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($spoolname),Sympa::SDM::quote($freshness_date);
     if ($bad) {
 	$sqlquery  = 	$sqlquery . " AND bad_spool IS NOTNULL ";
     }else{
@@ -466,9 +466,9 @@ sub clean {
     }
 
     push @sth_stack, $sth;
-    &Sympa::SDM::do_query($sqlquery);
+    Sympa::SDM::do_query($sqlquery);
     $sth-> finish;
-   &Sympa::Log::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
+   Sympa::Log::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
     $sth = pop @sth_stack;
     return 1;
 }
@@ -485,7 +485,7 @@ sub store_test {
     my $barmax = $size_increment*$steps*($steps+1)/2;
     my $even_part = $barmax/$steps;
 
-    &Sympa::Log::do_log('debug', '()');
+    Sympa::Log::do_log('debug', '()');
 
     print "maxtest: $maxtest\n";
     print "barmax: $barmax\n";
@@ -514,7 +514,7 @@ sub store_test {
 	}
 	my $messagekey = &get_messagekey($msg);
 	unless ( $testing->remove_message({'messagekey'=>$messagekey,'listname'=>'notalist','robot'=>'notarobot'}) ) {
-	    &Sympa::Log::do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);
+	    Sympa::Log::do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);
 	}
 	$total += $z*$size_increment;
         $progress->message(sprintf ".........[OK. Done in %.2f sec]", time() - $time);
@@ -542,7 +542,7 @@ sub _selectfields{
 
     if (($selection eq '*_but_message')||($selection eq '*')) {
 
-	my %db_struct = &Sympa::DatabaseDescription::db_struct();
+	my %db_struct = Sympa::DatabaseDescription::db_struct();
 
 	foreach my $field ( keys %{ $db_struct{'mysql'}{'spool_table'}} ) {
 	    next if (($selection eq '*_but_message') && ($field eq 'message_spool')) ;
@@ -580,9 +580,9 @@ sub _sqlselector {
 	}
 
 	if ($sqlselector) {
-	    $sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.&Sympa::SDM::quote($selector->{$field});
+	    $sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
 	}else{
-	    $sqlselector = ' '.$field.'_spool '.$compare_operator.' '.&Sympa::SDM::quote($selector->{$field});
+	    $sqlselector = ' '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
 	}
     }
     return $sqlselector;

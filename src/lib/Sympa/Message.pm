@@ -88,7 +88,7 @@ sub new {
     $input = 'messageasstring' if $messageasstring;
     $input = 'message_in_spool' if $message_in_spool;
     $input = 'mimeentity' if $mimeentity;
-    &Sympa::Log::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
+    Sympa::Log::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
 
     if ($mimeentity) {
 	$message->{'msg'} = $mimeentity;
@@ -114,7 +114,7 @@ sub new {
 	## Parse message as a MIME::Entity
 	$message->{'filename'} = $file;
 	unless (open FILE, "$file") {
-	    &Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $file, $ERRNO);
+	    Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $file, $ERRNO);
 	    return undef;
 	}
 	while (<FILE>){
@@ -133,7 +133,7 @@ sub new {
     }
 
     unless ($msg){
-	&Sympa::Log::do_log('err',"could not parse message");
+	Sympa::Log::do_log('err',"could not parse message");
 	return undef;
     }
     $message->{'msg'} = $msg;
@@ -145,18 +145,18 @@ sub new {
 
     ## Extract sender address
     unless ($hdr->get('From')) {
-	&Sympa::Log::do_log('err', 'No From found in message %s, skipping.', $file);
+	Sympa::Log::do_log('err', 'No From found in message %s, skipping.', $file);
 	return undef;
     }
     my @sender_hdr = Mail::Address->parse($hdr->get('From'));
     if ($#sender_hdr == -1) {
-	&Sympa::Log::do_log('err', 'No valid address in From: field in %s, skipping', $file);
+	Sympa::Log::do_log('err', 'No valid address in From: field in %s, skipping', $file);
 	return undef;
     }
     $message->{'sender'} = lc($sender_hdr[0]->address);
 
-    unless (&Sympa::Tools::valid_email($message->{'sender'})) {
-	&Sympa::Log::do_log('err', "Invalid From: field '%s'", $message->{'sender'});
+    unless (Sympa::Tools::valid_email($message->{'sender'})) {
+	Sympa::Log::do_log('err', "Invalid From: field '%s'", $message->{'sender'});
 	return undef;
     }
 
@@ -200,7 +200,7 @@ sub new {
     chomp $message->{'rcpt'};
     unless (defined $noxsympato) { # message.pm can be used not only for message comming from queue
 	unless ($message->{'rcpt'}) {
-	    &Sympa::Log::do_log('err', 'no X-Sympa-To found, ignoring message file %s', $file);
+	    Sympa::Log::do_log('err', 'no X-Sympa-To found, ignoring message file %s', $file);
 	    return undef;
 	}
 
@@ -210,7 +210,7 @@ sub new {
 	$robot = lc($robot);
 	$listname = lc($listname);
 	$robot ||= $Sympa::Configuration::Conf{'domain'};
-	my $spam_status = &Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
+	my $spam_status = Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
 	$message->{'spam_status'} = 'unkown';
 	if(defined $spam_status) {
 	    if (ref($spam_status ) eq 'HASH') {
@@ -220,10 +220,10 @@ sub new {
 	    }
 	}
 
-	my $conf_email = &Sympa::Configuration::get_robot_conf($robot, 'email');
-	my $conf_host = &Sympa::Configuration::get_robot_conf($robot, 'host');
+	my $conf_email = Sympa::Configuration::get_robot_conf($robot, 'email');
+	my $conf_host = Sympa::Configuration::get_robot_conf($robot, 'host');
 	unless ($listname =~ /^(sympa|$Sympa::Configuration::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
-	    my $list_check_regexp = &Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+	    my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
 	    if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 		$listname = $1;
 	    }
@@ -234,7 +234,7 @@ sub new {
 	    }
 	}
 	# verify DKIM signature
-	if (&Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
+	if (Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
 	    # assume Sympa::Tools::DKIM can be loaded if the setting is still on
 	    require Sympa::Tools::DKIM;
 	    $message->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
@@ -246,10 +246,10 @@ sub new {
 	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
 	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-	if ($chksum eq &Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
+	if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
 	    $message->{'md5_check'} = 1 ;
 	}else{
-	    &Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");
+	    Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");
 	}
     }
 
@@ -262,7 +262,7 @@ sub new {
 	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
 
 	    unless (defined $dec) {
-		&Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
+		Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
 		return undef;
 		## We should the sender and/or the listmaster
 	    }
@@ -272,7 +272,7 @@ sub new {
 	    $message->{'msg'} = $dec;
 	    $message->{'msg_as_string'} = $dec_as_string;
 	    $hdr = $dec->head;
-	    &Sympa::Log::do_log('debug', "message %s has been decrypted", $file);
+	    Sympa::Log::do_log('debug', "message %s has been decrypted", $file);
 	}
 
 	## Check S/MIME signatures
@@ -282,7 +282,7 @@ sub new {
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};
-		&Sympa::Log::do_log('debug', "message %s is signed, signature is checked", $file);
+		Sympa::Log::do_log('debug', "message %s is signed, signature is checked", $file);
 	    }
 	    ## Il faudrait traiter les cas d'erreur (0 différent de undef)
 	}
@@ -429,7 +429,7 @@ sub fix_html_part {
 	    $body = $cset->encode($body);
 	}
 
-	my $filtered_body = &Sympa::Tools::sanitize_html(
+	my $filtered_body = Sympa::Tools::sanitize_html(
             'string' => $body,
             'robot'=> $robot,
             'host' => Sympa::Configuration::get_robot_conf($robot,'http_host')
@@ -437,7 +437,7 @@ sub fix_html_part {
 
 	my $io = $bodyh->open("w");
 	unless (defined $io) {
-	    &Sympa::Log::do_log('err', "Failed to save message : $ERRNO");
+	    Sympa::Log::do_log('err', "Failed to save message : $ERRNO");
 	    return undef;
 	}
 	$io->print($filtered_body);

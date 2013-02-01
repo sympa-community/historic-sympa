@@ -58,17 +58,17 @@ Create a challenge context and store it in challenge table.
 sub create {
     my ($robot, $email, $context) = @_;
 
-    &Sympa::Log::do_log('debug', '(%s, %s, %s)', undef, $email, $robot);
+    Sympa::Log::do_log('debug', '(%s, %s, %s)', undef, $email, $robot);
 
     my $challenge={};
 
     unless ($robot) {
-	&Sympa::Log::do_log('err', 'Missing robot parameter, cannot create challenge object') ;
+	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create challenge object') ;
 	return undef;
     }
 
     unless ($email) {
-	&Sympa::Log::do_log('err', 'Missing email parameter, cannot create challenge object') ;
+	Sympa::Log::do_log('err', 'Missing email parameter, cannot create challenge object') ;
 	return undef;
     }
 
@@ -83,17 +83,17 @@ sub create {
 
 sub load {
     my ($id_challenge) = @_;
-    &Sympa::Log::do_log('debug', '(%s)', $id_challenge);
+    Sympa::Log::do_log('debug', '(%s)', $id_challenge);
 
     unless ($id_challenge) {
-	&Sympa::Log::do_log('err', 'internal error, Sympa::Session::load called with undef id_challenge');
+	Sympa::Log::do_log('err', 'internal error, Sympa::Session::load called with undef id_challenge');
 	return undef;
     }
 
     my $sth;
 
-    unless($sth = &Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $id_challenge)) {
-	&Sympa::Log::do_log('err','Unable to retrieve challenge %s from database',$id_challenge);
+    unless($sth = Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $id_challenge)) {
+	Sympa::Log::do_log('err','Unable to retrieve challenge %s from database',$id_challenge);
 	return undef;
     }
 
@@ -104,7 +104,7 @@ sub load {
     }
     my $challenge_datas;
 
-    my %datas= &Sympa::Tools::Data::string_2_hash($challenge->{'data'});
+    my %datas= Sympa::Tools::Data::string_2_hash($challenge->{'data'});
     foreach my $key (keys %datas) {$challenge_datas->{$key} = $datas{$key};}
 
     $challenge_datas->{'id_challenge'} = $challenge->{'id_challenge'};
@@ -112,19 +112,19 @@ sub load {
     $challenge_datas->{'robot'} = $challenge->{'robot'};
     $challenge_datas->{'email'} = $challenge->{'email'};
 
-    &Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$id_challenge);
-    unless(&Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
-	&Sympa::Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
+    Sympa::Log::do_log('debug3', 'removing existing challenge del_statement = %s',$id_challenge);
+    unless(Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
+	Sympa::Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
 	return undef;
     }
 
-    return ('expired') if (time - $challenge_datas->{'date'} >= &Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'challenge_table_ttl'}));
+    return ('expired') if (time - $challenge_datas->{'date'} >= Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'challenge_table_ttl'}));
     return ($challenge_datas);
 }
 
 sub store {
     my ($challenge) = @_;
-    &Sympa::Log::do_log('debug', '()');
+    Sympa::Log::do_log('debug', '()');
 
     return undef unless ($challenge->{'id_challenge'});
 
@@ -134,10 +134,10 @@ sub store {
 	next unless ($var);
 	$hash{$var} = $challenge->{$var};
     }
-    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
+    my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
 
-    unless(&Sympa::SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
-	&Sympa::Log::do_log('err','Unable to store challenge %s informations in database (robot: %s, user: %s)',$challenge->{'id_challenge'},$challenge->{'robot'},$challenge->{'email'});
+    unless(Sympa::SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
+	Sympa::Log::do_log('err','Unable to store challenge %s informations in database (robot: %s, user: %s)',$challenge->{'id_challenge'},$challenge->{'robot'},$challenge->{'email'});
 	return undef;
     }
 }

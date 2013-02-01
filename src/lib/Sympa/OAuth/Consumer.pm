@@ -86,7 +86,7 @@ sub new {
 		authorize_path => $params{'authorize_path'},
 		redirect_url => undef
  	};
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
+	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
 	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
 		consumer_key => $params{'consumer_key'},
@@ -97,8 +97,8 @@ sub new {
 	);
 
 	my $sth;
-	unless($sth = &Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'})) {
-		&Sympa::Log::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
+	unless($sth = Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'})) {
+		Sympa::Log::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
 		return undef;
     }
 
@@ -184,7 +184,7 @@ The resource body, as a string, or undef if something went wrong.
 
 sub fetchRessource {
 	my ($self, %params) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
+	Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
 
 	# Get access token, return 1 if it exists
 	my $token = $self->hasAccess();
@@ -235,7 +235,7 @@ An hashref, if there is a known access token, undef otherwise.
 
 sub hasAccess {
 	my ($self) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	unless(defined $self->{'session'}{'access'}) {
 		if($self->{'here_path'}) { # We are running in web env.
@@ -263,9 +263,9 @@ A true value, if everything's alright.
 
 sub triggerFlow {
 	my ($self) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
-	my $ticket = &Sympa::Auth::create_one_time_ticket(
+	my $ticket = Sympa::Auth::create_one_time_ticket(
 		$self->{'user'},
 		$self->{'robot'},
 		$self->{'here_path'},
@@ -278,18 +278,18 @@ sub triggerFlow {
 	);
 
 	unless(defined $tmp) {
-		&Sympa::Log::do_log('err', 'Unable to get tmp token for %s %s %s', $self->{'user'}, $self->{'provider'}, $self->{'handler'}->errstr);
+		Sympa::Log::do_log('err', 'Unable to get tmp token for %s %s %s', $self->{'user'}, $self->{'provider'}, $self->{'handler'}->errstr);
 		return undef;
 	}
 
 	if(defined $self->{'session'}{'defined'}) {
-		unless(&Sympa::SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=%s, tmp_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', &Sympa::SDM::quote($tmp->{'token'}), &Sympa::SDM::quote($tmp->{'secret'}), &Sympa::SDM::quote($self->{'user'}), &Sympa::SDM::quote($self->{'provider'}))) {
-			&Sympa::Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
+		unless(Sympa::SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=%s, tmp_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', Sympa::SDM::quote($tmp->{'token'}), Sympa::SDM::quote($tmp->{'secret'}), Sympa::SDM::quote($self->{'user'}), Sympa::SDM::quote($self->{'provider'}))) {
+			Sympa::Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;
 		}
 	}else{
-		unless(&Sympa::SDM::do_query('INSERT INTO oauthconsumer_sessions_table(user_oauthconsumer, provider_oauthconsumer, tmp_token_oauthconsumer, tmp_secret_oauthconsumer) VALUES (%s, %s, %s, %s)', &Sympa::SDM::quote($self->{'user'}), &Sympa::SDM::quote($self->{'provider'}), &Sympa::SDM::quote($tmp->{'token'}), &Sympa::SDM::quote($tmp->{'secret'}))) {
-			&Sympa::Log::do_log('err', 'Unable to add new token record %s %s in database', $self->{'user'}, $self->{'provider'});
+		unless(Sympa::SDM::do_query('INSERT INTO oauthconsumer_sessions_table(user_oauthconsumer, provider_oauthconsumer, tmp_token_oauthconsumer, tmp_secret_oauthconsumer) VALUES (%s, %s, %s, %s)', Sympa::SDM::quote($self->{'user'}), Sympa::SDM::quote($self->{'provider'}), Sympa::SDM::quote($tmp->{'token'}), Sympa::SDM::quote($tmp->{'secret'}))) {
+			Sympa::Log::do_log('err', 'Unable to add new token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;
 		}
 	}
@@ -300,7 +300,7 @@ sub triggerFlow {
 		token => $tmp
 	);
 
-	&Sympa::Log::do_log('info', 'Ask for redirect to %s with callback %s for %s', $url, $callback, $self->{'here_path'});
+	Sympa::Log::do_log('info', 'Ask for redirect to %s with callback %s for %s', $url, $callback, $self->{'here_path'});
 	$self->{'redirect_url'} = $url;
 
 	return 1;
@@ -328,7 +328,7 @@ A true value if the token was retreived successfully, undef otherwise.
 
 sub getAccessToken {
 	my ($self, %params) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});
 
@@ -342,8 +342,8 @@ sub getAccessToken {
 	$self->{'session'}{'access'} = $access;
 	$self->{'session'}{'tmp'} = undef;
 
-	unless(&Sympa::SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=NULL, tmp_secret_oauthconsumer=NULL, access_token_oauthconsumer=%s, access_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', &Sympa::SDM::quote($access->{'token'}), &Sympa::SDM::quote($access->{'secret'}), &Sympa::SDM::quote($self->{'user'}), &Sympa::SDM::quote($self->{'provider'}))) {
-		&Sympa::Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
+	unless(Sympa::SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=NULL, tmp_secret_oauthconsumer=NULL, access_token_oauthconsumer=%s, access_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', Sympa::SDM::quote($access->{'token'}), Sympa::SDM::quote($access->{'secret'}), Sympa::SDM::quote($self->{'user'}), Sympa::SDM::quote($self->{'provider'}))) {
+		Sympa::Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 		return undef;
 	}
 

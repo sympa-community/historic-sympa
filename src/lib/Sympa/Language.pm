@@ -120,7 +120,7 @@ sub GetSupportedLanguages {
 
     my @lang_list;
 
-    foreach my $l (split /,/,&Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
+    foreach my $l (split /,/,Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
 	push @lang_list, $lang2locale{$l}||$l;
     }
     return \@lang_list;
@@ -129,7 +129,7 @@ sub GetSupportedLanguages {
 ## Keep the previous lang ; can be restored with PopLang
 sub PushLang {
     my ($locale) = @_;
-    &Sympa::Log::do_log('debug', '(%s)', $locale);
+    Sympa::Log::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
     &SetLang($locale);
@@ -138,7 +138,7 @@ sub PushLang {
 }
 
 sub PopLang {
-    &Sympa::Log::do_log('debug', '');
+    Sympa::Log::do_log('debug', '');
 
     my $locale = pop @previous_locale;
     &SetLang($locale);
@@ -148,12 +148,12 @@ sub PopLang {
 
 sub SetLang {
     my ($locale) = @_;
-    &Sympa::Log::do_log('debug2', '(%s)', $locale);
+    Sympa::Log::do_log('debug2', '(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
 
     unless ($lang) {
-	&Sympa::Log::do_log('err', 'missing locale parameter');
+	Sympa::Log::do_log('err', 'missing locale parameter');
 	return undef;
     }
 
@@ -186,7 +186,7 @@ sub SetLang {
 	    }
 	}
 	unless ($success) {
-	    &Sympa::Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
+	    Sympa::Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
 	    return undef;
 	}
     }
@@ -202,7 +202,7 @@ sub SetLang {
 
     $current_lang = $lang;
     $current_locale = $locale;
-    my $locale2charset = &Sympa::Configuration::get_robot_conf('', 'locale2charset');
+    my $locale2charset = Sympa::Configuration::get_robot_conf('', 'locale2charset');
     $current_charset = $locale2charset->{$locale} || 'utf-8';
 
     return $locale;
@@ -256,7 +256,7 @@ sub Lang2Locale {
 sub maketext {
     my ($template_file, $msg) = @_;
 
-#    &Sympa::Log::do_log('notice','Maketext: %s', $msg);
+#    Sympa::Log::do_log('notice','Maketext: %s', $msg);
 
     my $translation;
     my $textdomain = $template2textdomain{$template_file};
@@ -279,7 +279,7 @@ sub maketext {
 
 sub sympa_dgettext {
     my ($textdomain, @param) = @_;
-    &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
+    Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
@@ -315,7 +315,7 @@ sub sympa_dgettext {
 
 sub gettext {
     my (@param) = @_;
-    &Sympa::Log::do_log('debug3', '(%s)', $param[0]);
+    Sympa::Log::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {

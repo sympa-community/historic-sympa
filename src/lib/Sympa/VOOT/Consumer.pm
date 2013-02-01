@@ -62,7 +62,7 @@ An hashref.
 
 sub getProviders {
 	my ($class, $file) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $file);
+	Sympa::Log::do_log('debug2', '(%s)', $file);
 
 	my $list = {};
 
@@ -107,7 +107,7 @@ sub new {
 	my ($class, %params) = @_;
 
 	my $consumer;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $params{'user'}, $params{'provider'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $params{'user'}, $params{'provider'});
 
 	# Get oauth consumer and enpoints from provider_id
 	$consumer->{'conf'} = &_get_config_for($params{'provider'}, $params{'config'});
@@ -158,7 +158,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong.
 
 sub isMemberOf {
 	my ($self) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'provider'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'provider'});
 
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
 	return undef unless(defined $data);
@@ -198,7 +198,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 
 sub getGroupMembers {
 	my ($self, %params) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $params{'group'});
+	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $params{'group'});
 
 	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$params{'group'});
 	return undef unless(defined $data);
@@ -262,7 +262,7 @@ sub _get_members {
 
 sub _get_config_for {
 	my ($provider, $file) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $provider);
+	Sympa::Log::do_log('debug2', '(%s)', $provider);
 
 	return undef unless (-f $file);
 

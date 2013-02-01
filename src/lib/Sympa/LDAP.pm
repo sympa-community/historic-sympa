@@ -80,7 +80,7 @@ The configuration, as an hash.
 
 sub load {
     my ($config) = @_;
-   &Sympa::Log::do_log('debug3', '(%s)', $config);
+   Sympa::Log::do_log('debug3', '(%s)', $config);
 
     my $line_num = 0;
     my $config_err = 0;
@@ -88,7 +88,7 @@ sub load {
 
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $config)) {
-	&Sympa::Log::do_log('err','Unable to open %s: %s', $config, $ERRNO);
+	Sympa::Log::do_log('err','Unable to open %s: %s', $config, $ERRNO);
 	return undef;
     }
 
@@ -126,14 +126,14 @@ sub load {
 	$Ldap{$i} = $o{$i}[0] || $Default_Conf{$i};
 
 	unless ($valid_options{$i}) {
-	    &Sympa::Log::do_log('err',"Line %d, unknown field: %s \n", $o{$i}[1], $i);
+	    Sympa::Log::do_log('err',"Line %d, unknown field: %s \n", $o{$i}[1], $i);
 	    $config_err++;
 	}
     }
     ## Do we have all required values ?
     foreach $i (keys %required_options) {
 	unless (defined $o{$i} or defined $Default_Conf{$i}) {
-	    &Sympa::Log::do_log('err',"Required field not found : %s\n", $i);
+	    Sympa::Log::do_log('err',"Required field not found : %s\n", $i);
 	    $config_err++;
 	    next;
 	}

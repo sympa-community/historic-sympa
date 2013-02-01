@@ -106,7 +106,7 @@ sub decrypt_password {
 	$cipher = ciphersaber_installed($cookie);
     }
     if ($cipher eq 'no_cipher') {
-	&Sympa::Log::do_log('info','password seems crypted while CipherSaber is not installed !');
+	Sympa::Log::do_log('info','password seems crypted while CipherSaber is not installed !');
 	return $inpasswd ;
     }
     return ($cipher->decrypt(&MIME::Base64::decode($inpasswd)));

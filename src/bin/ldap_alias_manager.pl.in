@@ -84,7 +84,7 @@ $data{'list'}{'name'} = $listname;
 $data{'default_domain'} = $default_domain;
 $data{'ldap_base_dn'} = $ldap_base_dn;
 $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
-$data{'return_path_suffix'} = &Sympa::Configuration::get_robot_conf($domain, 'return_path_suffix');
+$data{'return_path_suffix'} = Sympa::Configuration::get_robot_conf($domain, 'return_path_suffix');
 my @aliases ;
 
 my $tt2_include_path = [$Sympa::Configuration::Conf{'etc'}.'/'.$domain,
@@ -92,7 +92,7 @@ my $tt2_include_path = [$Sympa::Configuration::Conf{'etc'}.'/'.$domain,
                         Sympa::Constants::DEFAULTDIR];
 
 my $aliases_dump;
-&Sympa::Template::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
+Sympa::Template::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
 
 @aliases = split /\n/, $aliases_dump;
 
@@ -137,7 +137,7 @@ foreach my $alias (@aliases) {
     $data{'list'}{'alias'} = $alias_value;
     $data{'list'}{'command'} = $command_value;
     $data{'list'}{'maildrop'} = $maildrop;
-    &Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2',\$ldif_dump, $tt2_include_path);
+    Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2',\$ldif_dump, $tt2_include_path);
     my @attribute_lines = split /\n/, $ldif_dump;
 
     # We create the new LDAP entry.
@@ -195,7 +195,7 @@ elsif ($operation eq 'del') {
 
 	my $ldif_dump;
 	$data{'list'}{'alias'} = $alias_value;
-	&Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2', \$ldif_dump, $tt2_include_path);
+	Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2', \$ldif_dump, $tt2_include_path);
 	my $value = (grep(/^dn:/, split(/\n/, $ldif_dump)))[0];
 	$value =~ s/^dn:\s*//;
 

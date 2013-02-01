@@ -104,7 +104,7 @@ argument.
 
 sub get_midnight_time {
     my ($epoch) = @_;
-    &Sympa::Log::do_log('debug3','Getting midnight time for: %s',$epoch);
+    Sympa::Log::do_log('debug3','Getting midnight time for: %s',$epoch);
 
     my @date = localtime ($epoch);
     return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
@@ -128,7 +128,7 @@ Convert a human format date into an epoch date.
 
 sub epoch_conv {
     my ($arg, $time) = @_;
-    &Sympa::Log::do_log('debug3','(%s, %d)', $arg, $time);
+    Sympa::Log::do_log('debug3','(%s, %d)', $arg, $time);
     $time = time if !$time;
 
     my $result;

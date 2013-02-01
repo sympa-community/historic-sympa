@@ -72,21 +72,21 @@ sub new {
     my $email = $params->{'user'}{'email'};
     #$email ||= 'nobody';
     my $document = {};
-    &Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
+    Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
 
     unless (ref($list) && $list->isa('Sympa::List')) {
-	&Sympa::Log::do_log('err', 'incorrect list parameter');
+	Sympa::Log::do_log('err', 'incorrect list parameter');
 	return undef;
     }
 
     $document->{'root_path'} = $list->{'dir'}.'/shared';
 
     $document->{'path'} = &main::no_slash_end($path);
-    $document->{'escaped_path'} = &Sympa::Tools::escape_chars($document->{'path'}, '/');
+    $document->{'escaped_path'} = Sympa::Tools::escape_chars($document->{'path'}, '/');
 
     ### Document isn't a description file
     if ($document->{'path'} =~ /\.desc/) {
-	&Sympa::Log::do_log('err',"%s: description file", $document->{'path'});
+	Sympa::Log::do_log('err',"%s: description file", $document->{'path'});
 	return undef;
     }
 
@@ -106,13 +106,13 @@ sub new {
 
     ### Document exist ?
     unless (-r $document->{'absolute_path'}) {
-	&Sympa::Log::do_log('err',"unable to read %s : no such file or directory", $document->{'absolute_path'});
+	Sympa::Log::do_log('err',"unable to read %s : no such file or directory", $document->{'absolute_path'});
 	return undef;
     }
 
     ### Document has non-size zero?
     unless (-s $document->{'absolute_path'}) {
-	&Sympa::Log::do_log('err',"unable to read %s : empty document", $document->{'absolute_path'});
+	Sympa::Log::do_log('err',"unable to read %s : empty document", $document->{'absolute_path'});
 	return undef;
     }
 
@@ -136,7 +136,7 @@ sub new {
 	$document->{'visible_filename'} = $1;
     }
 
-    $document->{'escaped_filename'} =  &Sympa::Tools::escape_chars($document->{'filename'});
+    $document->{'escaped_filename'} =  Sympa::Tools::escape_chars($document->{'filename'});
 
     ## Father dir
     if ($document->{'path'} =~ /^(([^\/]*\/)*)([^\/]+)$/) {
@@ -144,7 +144,7 @@ sub new {
     }else {
 	$document->{'father_path'} = '';
     }
-    $document->{'escaped_father_path'} = &Sympa::Tools::escape_chars($document->{'father_path'}, '/');
+    $document->{'escaped_father_path'} = Sympa::Tools::escape_chars($document->{'father_path'}, '/');
 
 
     ### File, directory or URL ?
@@ -173,7 +173,7 @@ sub new {
 	if ($document->{'absolute_path'} =~ /^(([^\/]*\/)*)([^\/]+)$/) {
 	    $desc_file = $1.'.desc.'.$3;
 	}else {
-	    &Sympa::Log::do_log('err',"cannot determine desc file for %s", $document->{'absolute_path'});
+	    Sympa::Log::do_log('err',"cannot determine desc file for %s", $document->{'absolute_path'});
 	    return undef;
 	}
     }
@@ -185,7 +185,7 @@ sub new {
 	my %desc_hash = &main::get_desc_file($desc_file);
 	$document->{'owner'} = $desc_hash{'email'};
 	    $document->{'title'} = $desc_hash{'title'};
-	$document->{'escaped_title'} = &Sympa::Tools::escape_html($document->{'title'});
+	$document->{'escaped_title'} = Sympa::Tools::escape_html($document->{'title'});
 
 	# Author
 	if ($desc_hash{'email'}) {
@@ -243,7 +243,7 @@ sub new {
 
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $document->{'absolute_path'}) {
-	    &Sympa::Log::do_log('err',"cannot open %s : %s", $document->{'absolute_path'}, $ERRNO);
+	    Sympa::Log::do_log('err',"cannot open %s : %s", $document->{'absolute_path'}, $ERRNO);
 	    return undef;
 	}
 
@@ -270,7 +270,7 @@ sub new {
 sub dump {
     my ($self, $fd) = @_;
 
-    &Sympa::Tools::Data::dump_var($self, 0, $fd);
+    Sympa::Tools::Data::dump_var($self, 0, $fd);
 
 }
 
@@ -300,7 +300,7 @@ sub dup {
 
 sub check_access_control {
     my ($self, $params) = @_;
-    &Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
+    Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
 
     # Arguments:
     # (\%mode,$path)

@@ -165,7 +165,7 @@ sub load_config {
     my $conf = \%default_conf;
 
     unless (open (FILE, $file)) {
-	&Sympa::Log::do_log('err',"unable to open $file");
+	Sympa::Log::do_log('err',"unable to open $file");
 	return undef;
     }
 
@@ -178,9 +178,9 @@ sub load_config {
 	    if (defined ($conf->{$k})) {
 		$conf->{$k} = $v;
 	    }elsif (defined $old_param{$k}) {
-		&Sympa::Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
+		Sympa::Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
 	    }else {
-		&Sympa::Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
+		Sympa::Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
 	    }
 	}
 	next;
@@ -190,15 +190,15 @@ sub load_config {
 
     ## Check binaries and directories
     if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
-	&Sympa::Log::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
+	Sympa::Log::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
     }
 
     if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
-	&Sympa::Log::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
+	Sympa::Log::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
     }
 
     if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
-	&Sympa::Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
+	Sympa::Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
     }
 
     return $conf;
@@ -209,30 +209,30 @@ sub init_passwd {
 
     my ($passwd, $user);
 
-    if (&Sympa::List::is_global_user($email)) {
-	$user = &Sympa::List::get_global_user($email);
+    if (Sympa::List::is_global_user($email)) {
+	$user = Sympa::List::get_global_user($email);
 
 	$passwd = $user->{'password'};
 
 	unless ($passwd) {
-	    $passwd = &Sympa::Tools::Password::new_passwd();
+	    $passwd = Sympa::Tools::Password::new_passwd();
 
-	    unless ( &Sympa::List::update_global_user($email,
+	    unless ( Sympa::List::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
-		&Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
-		&Sympa::Log::do_log('info','update failed');
+		Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
+		Sympa::Log::do_log('info','update failed');
 		return undef;
 	    }
 	}
     }else {
-	$passwd = &Sympa::Tools::Password::new_passwd();
-	unless ( &Sympa::List::add_global_user({'email' => $email,
+	$passwd = Sympa::Tools::Password::new_passwd();
+	unless ( Sympa::List::add_global_user({'email' => $email,
 				     'password' => $passwd,
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {
-	    &Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
-	    &Sympa::Log::do_log('info','add failed');
+	    Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
+	    Sympa::Log::do_log('info','add failed');
 	    return undef;
 	}
     }
@@ -261,16 +261,16 @@ sub get_my_url {
 # Uploade source file to the destination on the server
 sub upload_file_to_server {
     my ($params) = @_;
-    &Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$params->{'file_field'},$params->{'destination'});
+    Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$params->{'file_field'},$params->{'destination'});
 
     my $fh;
     unless ($fh = $params->{'query'}->upload($params->{'file_field'})) {
-	&Sympa::Log::do_log('debug',"Cannot upload file from field $params->{'file_field'}");
+	Sympa::Log::do_log('debug',"Cannot upload file from field $params->{'file_field'}");
 	return undef;
     }
 
     unless (open FILE, ">:bytes", $params->{'destination'}) {
-	&Sympa::Log::do_log('debug',"Cannot open file $params->{'destination'} : $ERRNO");
+	Sympa::Log::do_log('debug',"Cannot open file $params->{'destination'} : $ERRNO");
 	return undef;
     }
     while (<$fh>) {

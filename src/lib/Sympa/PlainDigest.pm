@@ -117,7 +117,7 @@ sub plain_body_as_string {
   # clean up after ourselves
   $topent->purge;
 
-  return &Sympa::Tools::wrap_text($outstring, '', '');
+  return Sympa::Tools::wrap_text($outstring, '', '');
 }
 
 sub _do_toplevel {
@@ -228,7 +228,7 @@ sub _do_message {
   $headers .= sprintf(Sympa::Language::gettext("Cc: %s\n"), $cc) if $cc;
   $headers .= sprintf(Sympa::Language::gettext("Subject: %s\n"),$subject ) if $subject;
   $headers .= "\n";
-  $outstring .= &Sympa::Tools::wrap_text($headers, '', '    ');
+  $outstring .= Sympa::Tools::wrap_text($headers, '', '    ');
 
   _do_toplevel ($msgent);
 

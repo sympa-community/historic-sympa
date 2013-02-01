@@ -44,10 +44,10 @@ sub new {
     my ($class, $name) = @_;
 
     my $robot = {'name' => $name};
-    &Sympa::Log::do_log('debug2', '');
+    Sympa::Log::do_log('debug2', '');
 
     unless (defined $name && $Sympa::Configuration::Conf{'robots'}{$name}) {
-	&Sympa::Log::do_log('err',"Unknown robot '$name'");
+	Sympa::Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
@@ -57,7 +57,7 @@ sub new {
     }else {
 	$robot->{'home'} = $Sympa::Configuration::Conf{'home'}.'/'.$name;
 	unless (-d $robot->{'home'}) {
-	    &Sympa::Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
+	    Sympa::Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
 	    return undef;
 	}
     }
@@ -86,7 +86,7 @@ None.
 sub get_lists {
     my ($self) = @_;
 
-    return &Sympa::List::get_lists($self->{'name'});
+    return Sympa::List::get_lists($self->{'name'});
 }
 
 1;

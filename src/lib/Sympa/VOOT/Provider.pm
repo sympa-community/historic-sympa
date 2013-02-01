@@ -75,7 +75,7 @@ A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 
 sub new {
 	my ($class, %params) = @_;
-	&Sympa::Log::do_log('debug2', '()');
+	Sympa::Log::do_log('debug2', '()');
 
 	my $provider = {
 		oauth_provider => Sympa::OAuth::Provider->new(
@@ -198,19 +198,19 @@ An hashref containing groups definitions, or I<undef> if something went wrong
 
 sub getGroups {
 	my ($self) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
+	Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
 
 	my @entries = ();
 
-	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'owner')) {
+	#foreach my $list (Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'owner')) {
 	#	push(@entries, $self->_list_to_group($list, 'admin'));
 	#}
 
-	#foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'editor')) {
+	#foreach my $list (Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'editor')) {
 	#	push(@entries, $self->_list_to_group($list, '???'));
 	#}
 
-	foreach my $list (&Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'member')) {
+	foreach my $list (Sympa::List::get_which($self->{'user'}, $self->{'robot'}, 'member')) {
 		push(@entries, $self->_list_to_group($list, 'member'));
 	}
 
@@ -248,7 +248,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 
 sub getGroupMembers {
 	my ($self, %params) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
+	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
 
 	my @entries = ();
 

@@ -36,19 +36,19 @@ sub request {
 	## Select appropriate robot
 	if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
 	  $ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
-	  &Sympa::Log::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
+	  Sympa::Log::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 	}else {
-	  &Sympa::Log::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
+	  Sympa::Log::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
 	  $ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
 	}
 
 	## Empty cache of the List.pm module
-	&Sympa::List::init_list_cache();
+	Sympa::List::init_list_cache();
 
 	my $session;
 	## Existing session or new one
-	if (&Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'})) {
-	  $session = Sympa::Session->new($ENV{'SYMPA_ROBOT'}, {'cookie'=>&Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'})});
+	if (Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'})) {
+	  $session = Sympa::Session->new($ENV{'SYMPA_ROBOT'}, {'cookie'=>Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'})});
 	}else {
 	  $session = Sympa::Session->new($ENV{'SYMPA_ROBOT'},{});
 	  $session->store() if (defined $session);
@@ -73,7 +73,7 @@ sub response {
     if (my $response = $_[0]) {
 	if (defined $ENV{'SESSION_ID'}) {
 	    my $expire = $main::param->{'user'}{'cookie_delay'} || $main::wwsconf->{'cookie_expire'};
-	    my $cookie = &Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
+	    my $cookie = Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
 
 	    $response->headers->push_header('Set-Cookie2' => $cookie);
 	  }
