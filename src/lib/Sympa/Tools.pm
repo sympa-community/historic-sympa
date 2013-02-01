@@ -1892,7 +1892,7 @@ varchar(30)
 
 =cut
 
-sub get_lockname (){
+sub get_lockname {
     return substr(substr(hostname(), 0, 20).$$,0,30);
 }
 

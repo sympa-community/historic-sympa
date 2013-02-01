@@ -1344,7 +1344,7 @@ sub _check_mandatory_files {
 # Return value
 # A true value
 
-sub _initialize_instantiation() {
+sub _initialize_instantiation {
     my ($self) = @_;
     Sympa::Log::do_log('debug3','(%s)',$self->{'name'});
 

@@ -12102,7 +12102,7 @@ I<1> if some subscribers topics have been deleted, I<0> otherwise.
 
 =cut
 
-sub modifying_msg_topic_for_list_members(){
+sub modifying_msg_topic_for_list_members {
     my ($self,$new_msg_topic) = @_;
     Sympa::Log::do_log('debug3',"($self->{'name'}");
     my $deleted = 0;
