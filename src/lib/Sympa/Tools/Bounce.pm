@@ -41,14 +41,14 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 rfc1891($message, $result, $from)
+=head2 rfc1891($message, $result)
 
 RFC1891 compliance check
 
 =cut
 
 sub rfc1891 {
-    my ($message, $result, $from) = @_;
+    my ($message, $result) = @_;
 
     local $RS = "\n";
 
@@ -58,9 +58,6 @@ sub rfc1891 {
     return undef    unless ($entity) ;
 
     my $head = $entity->head;
-    $$from = $head->get('From', 0);
-
-    $$from =~ s/^.*<(.*)>.*$/$1/;
 
     my @parts = $entity->parts();
 
@@ -178,14 +175,12 @@ Analyse d'un rapport de non-remise
 
 =item * I<$result>: reference d'un hash pour retourner @ en erreur
 
-=item * I<$from>: reference d'un tableau pour retourner des stats
-
 =back
 
 =cut
 
 sub anabounce {
-    my ($message, $result, $from, $tmpdir) = @_;
+    my ($message, $result, $tmpdir) = @_;
 
     # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
     # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
@@ -203,6 +198,7 @@ Sympa::Log::do_log('err',"could not read $tmpfile");
 
     my $entete = 1;
     my $type;
+    my $from;
     my %info;
     my ($qmail, $type_9, $type_18, $exchange, $ibm_vm, $lotus, $sendmail_5, $yahoo, $type_21, $exim, $vines,
 	$mercury_143, $altavista, $mercury_131, $type_31, $type_32,$exim_173, $type_38, $type_39,
@@ -230,12 +226,12 @@ Sympa::Log::do_log('err',"could not read $tmpfile");
 		    $champ{$champ_courant} .= " $1";
 		}
 
-		## Le champ From:
-		if($champ{from} =~ /([^\s<]+@[^\s>]+)/){
-		    $$from = $1;
-		}
 	    }
 	    local $RS = '';
+
+	    if($champ{from} =~ /([^\s<]+@[^\s>]+)/){
+	    	$from = $1;
+	    }
 
 	    $champ{from} =~ s/^.*<(.+)[\>]$/$1/;
 	    $champ{from} =~  y/[A-Z]/[a-z]/;
@@ -933,7 +929,7 @@ Sympa::Log::do_log('err',"could not read $tmpfile");
 
 	}
 
-	$a3 = corrige($a2, $$from);
+	$a3 = corrige($a2, $from);
 #        print "CORRECTION : $a2 --> $a3\n" if $a2 ne $a3;
 
         $a3 =~ y/[A-Z]/[a-z]/;

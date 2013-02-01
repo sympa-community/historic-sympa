@@ -637,15 +637,16 @@ while (!$end) {
 	}else{
 	    Sympa::Log::do_log('debug',"Processing bounce messagekey=%s for list $listname",$bounce->{'messagekey'});      
 	    
-	    my (%hash, $from);
+	    my %hash;
 	    my $bounce_dir = $list->get_bounce_dir();
-	    
+	    my $from = $message->{'sender'};
+
 	    ## RFC1891 compliance check
-	    my $bounce_count = Sympa::Tools::Bounce::rfc1891($message, \%hash, \$from);
+	    my $bounce_count = Sympa::Tools::Bounce::rfc1891($message, \%hash);
 	    
 	    unless ($bounce_count) {
 		## Analysis of bounced message
-		Sympa::Tools::Bounce::anabounce($message, \%hash, \$from, $Sympa::Configuration::Conf{'tmpdir'});
+		Sympa::Tools::Bounce::anabounce($message, \%hash, $Sympa::Configuration::Conf{'tmpdir'});
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
 		# updatedatabase(%hash);
 	    }
