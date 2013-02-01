@@ -51,11 +51,10 @@ A new L<Sympa::Datasource> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-
-    my($pkg, $param) = @_;
+    my ($class, $param) = @_;
     &Sympa::Log::do_log('debug', '');
     my $self = $param;
-    bless $self, $pkg;
+    bless $self, $class;
     return $self;
 }
 

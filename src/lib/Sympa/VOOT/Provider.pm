@@ -74,7 +74,7 @@ A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($pkg, %param) = @_;
+	my ($class, %param) = @_;
 	&Sympa::Log::do_log('debug2', '()');
 
 	my $provider = {
@@ -92,7 +92,7 @@ sub new {
 
  	return undef unless(defined($provider->{'oauth_provider'}));
 
-	return bless $provider, $pkg;
+	return bless $provider, $class;
 }
 
 =head1 INSTANCE METHODS

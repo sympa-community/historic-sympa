@@ -63,9 +63,9 @@ my $last_stored_message_key;
 
 # create an empty Bulk
 #sub new {
-#    my $pkg = shift;
+#    my $class = shift;
 #    my $packet = &Bulk::next();;
-#    bless \$packet, $pkg;
+#    bless \$packet, $class;
 #    return $packet
 #}
 ##

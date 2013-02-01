@@ -75,7 +75,7 @@ A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($pkg, $datas) = @_;
+    my ($class, $datas) = @_;
 
     my $file = $datas->{'file'};
     my $noxsympato = $datas->{'noxsympato'};
@@ -94,7 +94,7 @@ sub new {
 	$message->{'msg'} = $mimeentity;
 	$message->{'altered'} = '_ALTERED';
 
-	bless $message, $pkg;
+	bless $message, $class;
 
 	return $message;
     }
@@ -293,7 +293,7 @@ sub new {
 	$message->{'topic'} = $topics;
     }
 
-    bless $message, $pkg;
+    bless $message, $class;
     return $message;
 }
 

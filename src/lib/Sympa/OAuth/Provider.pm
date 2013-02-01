@@ -74,7 +74,7 @@ A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($pkg, %param) = @_;
+	my ($class, %param) = @_;
 
 	my $p = &_findParameters(
 		authorization_header => $param{'authorization_header'},
@@ -119,7 +119,7 @@ sub new {
 		return undef;
 	}
 
-	return bless $provider, $pkg;
+	return bless $provider, $class;
 }
 
 =head1 FUNCTIONS

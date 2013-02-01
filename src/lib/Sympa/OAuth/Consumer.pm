@@ -74,7 +74,7 @@ A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
 =cut
 
 sub new {
-	my ($pkg, %param) = @_;
+	my ($class, %param) = @_;
 
 	my $consumer = {
 		user => $param{'user'},
@@ -119,7 +119,7 @@ sub new {
 		$consumer->{'session'}{'defined'} = 1;
 	}
 
-	return bless $consumer, $pkg;
+	return bless $consumer, $class;
 }
 
 =head1 INSTANCE METHODS

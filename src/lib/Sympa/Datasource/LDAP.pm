@@ -61,7 +61,7 @@ A new L<Sympa::Datasource::LDAP> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my $pkg = shift;
+    my $class = shift;
     my $param = shift;
     my $self = $param;
     &Sympa::Log::do_log('debug','Creating new LDAPSource object');
@@ -79,8 +79,8 @@ sub new {
     $self->{'ldap_bind_dn'} = $self->{'user'};
     $self->{'ldap_bind_password'} = $self->{'passwd'};
 
-    $self = $pkg->SUPER::new($self);
-    bless $self, $pkg;
+    $self = $class->SUPER::new($self);
+    bless $self, $class;
 
 
     unless (eval "require Net::LDAP") {

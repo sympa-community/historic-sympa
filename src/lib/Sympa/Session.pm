@@ -79,7 +79,7 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($pkg, $robot, $context) = @_;
+    my ($class, $robot, $context) = @_;
 
     my $cookie = $context->{'cookie'};
     my $action = $context->{'action'};
@@ -87,7 +87,7 @@ sub new {
 
     &Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
     my $session={};
-    bless $session, $pkg;
+    bless $session, $class;
 
     unless ($robot) {
 	&Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;

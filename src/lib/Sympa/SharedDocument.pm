@@ -67,7 +67,7 @@ A new L<Sympa::SharedDocument> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($pkg, $list, $path, $param) = @_;
+    my ($class, $list, $path, $param) = @_;
 
     my $email = $param->{'user'}{'email'};
     #$email ||= 'nobody';
@@ -261,7 +261,7 @@ sub new {
 
     $document->{'list'} = $list;
 
-    bless $document, $pkg;
+    bless $document, $class;
 
     return $document;
 }

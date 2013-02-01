@@ -41,7 +41,7 @@ A new L<Sympa::Robot> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($pkg, $name) = @_;
+    my ($class, $name) = @_;
 
     my $robot = {'name' => $name};
     &Sympa::Log::do_log('debug2', '');
@@ -66,7 +66,7 @@ sub new {
     undef %Sympa::List::list_cache;
 
     # create a new Robot object
-    bless $robot, $pkg;
+    bless $robot, $class;
 
     return $robot;
 }

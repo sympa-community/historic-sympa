@@ -78,7 +78,7 @@ A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my($pkg, $spoolname, $selection_status) = @_;
+    my ($class, $spoolname, $selection_status) = @_;
    &Sympa::Log::do_log('debug2', '(%s)', $spoolname);
 
     my $spool={};
@@ -93,7 +93,7 @@ sub new {
 	$spool->{'selection_status'} =  'ok';
     }
 
-    bless $spool, $pkg;
+    bless $spool, $class;
 
     return $spool;
 }

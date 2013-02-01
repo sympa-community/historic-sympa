@@ -104,7 +104,7 @@ A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($pkg, %param) = @_;
+	my ($class, %param) = @_;
 
 	my $consumer;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $param{'user'}, $param{'provider'});
@@ -127,7 +127,7 @@ sub new {
         here_path => $consumer->{'here_path'}
 	);
 
-	return bless $consumer, $pkg;
+	return bless $consumer, $class;
 }
 
 =head1 INSTANCE METHODS

@@ -2123,7 +2123,7 @@ eventually loads the list if a name is given.
 =cut
 
 sub new {
-    my ($pkg, $name, $robot, $options) = @_;
+    my ($class, $name, $robot, $options) = @_;
     &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $name, $robot, join('/',keys %$options));
 
     my $list={};
@@ -2175,7 +2175,7 @@ sub new {
 	$status = $list->load($name, $robot, $options);
     }else{
 	# create a new object list
-	bless $list, $pkg;
+	bless $list, $class;
 
 	$options->{'first_access'} = 1;
 	$status = $list->load($name, $robot, $options);

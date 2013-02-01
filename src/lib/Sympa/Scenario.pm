@@ -79,7 +79,7 @@ A new L<Sympa::Scenario> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-   my ($pkg, %parameters) = @_;
+   my ($class, %parameters) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $scenario = {};
@@ -179,7 +179,7 @@ sub new {
     $scenario->{'title'} = $scenario_struct->{'title'};
     $scenario->{'struct'} = $scenario_struct;
 
-    bless $scenario, $pkg;
+    bless $scenario, $class;
 
     ## Keep the scenario in memory
     $all_scenarios{$scenario->{'file_path'}} = $scenario;

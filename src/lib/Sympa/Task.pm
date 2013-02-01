@@ -82,7 +82,7 @@ A new L<Sympa::Task> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my($pkg,$task_in_spool) = @_;
+    my ($class, $task_in_spool) = @_;
     my $task;
     &Sympa::Log::do_log('debug2', 'messagekey = %s', $task_in_spool->{'messagekey'});
 
@@ -101,7 +101,7 @@ sub new {
     $task->{'id'} = $task->{'list_object'}{'name'};
     $task->{'id'} .= '@'.$task->{'domain'} if (defined $task->{'domain'});
 
-    bless $task, $pkg;
+    bless $task, $class;
 
     return $task;
 }

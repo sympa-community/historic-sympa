@@ -79,7 +79,7 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($pkg, $param) = @_;
+	my ($class, $param) = @_;
 
 	my $self = $param;
 	&Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
@@ -129,7 +129,7 @@ sub new {
 		## like CSV
 		$actualclass = "Sympa::Datasource::SQL";
 	}
-	$self = $pkg->SUPER::new($param);
+	$self = $class->SUPER::new($param);
 
 	$self->{'db_host'} ||= $self->{'host'};
 	$self->{'db_user'} ||= $self->{'user'};
