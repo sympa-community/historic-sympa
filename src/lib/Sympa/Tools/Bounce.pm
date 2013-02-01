@@ -41,7 +41,7 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 rfc1891($message, $result)
+=head2 parse_rfc1891($message, $result)
 
 RFC1891 compliance check
 
@@ -180,19 +180,11 @@ Analyse d'un rapport de non-remise
 =cut
 
 sub anabounce {
-    my ($message, $result, $tmpdir) = @_;
+    my ($message, $result) = @_;
 
-    # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
-    # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
-    my $tmpfile = $tmpdir.'/bounce.'.$PID ;
-    unless (open (BOUNCE,"> $tmpfile")){
-Sympa::Log::do_log('err',"could not create $tmpfile");
-	return undef;
-    }
-    print BOUNCE     $message->{'msg'}->as_string;
-    close BOUNCE;
-    unless (open (BOUNCE,"$tmpfile")){
-Sympa::Log::do_log('err',"could not read $tmpfile");
+    my $string = $message->{'msg'}->as_string();
+    unless (open (BOUNCE, '<', \$string)){
+	Sympa::Log::do_log('err',"could not read $message content");
 	return undef;
     }
 
