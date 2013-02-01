@@ -5,7 +5,7 @@
 package Sympa::Marc::Search;
 
 use strict;
-use base qw(Marc);
+use base qw(Sympa::Marc);
 
 use English qw(-no_match_vars);
 use File::Find;
