@@ -3230,8 +3230,7 @@ The number of sendmail processes.
 =cut
 
 sub distribute_msg {
-    my ($self) = @_;
-    my %params = @_;
+    my ($self, %params) = @_;
 
     my $message = $params{'message'};
     my $apply_dkim_signature = $params{'apply_dkim_signature'};
@@ -3956,9 +3955,7 @@ message in list.
 =cut
 
 sub send_msg {
-
-    my ($self) = @_;
-    my %params = @_;
+    my ($self, %params) = @_;
 
     my $message = $params{'message'};
     my $apply_dkim_signature = $params{'apply_dkim_signature'};
