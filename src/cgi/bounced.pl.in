@@ -641,12 +641,16 @@ while (!$end) {
 	    my $bounce_dir = $list->get_bounce_dir();
 	    my $from = $message->{'sender'};
 
-	    ## RFC1891 compliance check
-	    my $bounce_count = Sympa::Tools::Bounce::rfc1891($message, \%hash);
+	    my $bounce_count =
+		    Sympa::Tools::Bounce::parse_compliant_notification(
+			    $message, \%hash
+		    );
 	    
 	    unless ($bounce_count) {
 		## Analysis of bounced message
-		Sympa::Tools::Bounce::anabounce($message, \%hash);
+		Sympa::Tools::Bounce::parse_uncompliant_notification(
+			$message, \%hash
+		);
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
 		# updatedatabase(%hash);
 	    }

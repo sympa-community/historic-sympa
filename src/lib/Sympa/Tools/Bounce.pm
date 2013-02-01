@@ -41,13 +41,27 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 parse_rfc1891($message, $result)
+=head2 parse_compliant_notification($message, $result)
 
-RFC1891 compliance check
+Parse a RFC1891-compliant non-delivery notification.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>: message object
+
+=item * I<$result>: hashref for storing result, as recipients => status
+
+=back
+
+=head3 Return value
+
+The number of ?
 
 =cut
 
-sub rfc1891 {
+sub parse_compliant_notification {
     my ($message, $result) = @_;
 
     local $RS = "\n";
@@ -163,23 +177,27 @@ sub corrige {
     }
 }
 
-=head2 anabounce($message, $result, $from)
+=head2 parse_uncompliant_notification($message, $result)
 
-Analyse d'un rapport de non-remise
+Parse a non RFC1891-compliant non-delivery notification.
 
 =head3 Parameters
 
 =over
 
-=item * I<$message>: descripteur du fichier contenant le bounce
+=item * I<$message>: message object
 
-=item * I<$result>: reference d'un hash pour retourner @ en erreur
+=item * I<$result>: hashref for storing result, as recipients => status
 
 =back
 
+=head3 Return value
+
+The number of ?
+
 =cut
 
-sub anabounce {
+sub parse_uncompliant_notification {
     my ($message, $result) = @_;
 
     my $string = $message->{'msg'}->as_string();
