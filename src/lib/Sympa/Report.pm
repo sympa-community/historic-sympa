@@ -49,7 +49,7 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 reject_report_msg($type, $error, $user, $param, $robot, $msg_string, $list)
+=head2 reject_report_msg($type, $error, $user, $params, $robot, $msg_string, $list)
 
 Send a notification of message rejection to an user, using
 I<message_report.tt2> mail template.
@@ -93,7 +93,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub reject_report_msg {
-    my ($type, $error, $user, $param, $robot, $msg_string, $list) = @_;
+    my ($type, $error, $user, $params, $robot, $msg_string, $list) = @_;
     &Sympa::Log::do_log('debug2', "(%s,%s,%s)", $type,$error,$user);
 
     unless ($type eq 'intern' || $type eq 'intern_quiet' || $type eq 'user'|| $type eq 'auth'|| $type eq 'oauth') {
@@ -112,50 +112,50 @@ sub reject_report_msg {
     }
 
     chomp($user);
-    $param->{'to'} = $user;
-    $param->{'msg'} = $msg_string;
-    $param->{'auto_submitted'} = 'auto-replied';
+    $params->{'to'} = $user;
+    $params->{'msg'} = $msg_string;
+    $params->{'auto_submitted'} = 'auto-replied';
 
     if ($type eq 'user') {
-	$param->{'entry'} = $error;
-	$param->{'type'} = 'user_error';
+	$params->{'entry'} = $error;
+	$params->{'type'} = 'user_error';
 
     } elsif ($type eq 'auth') {
-	$param->{'entry'} = $error;
-	$param->{'type'} = 'authorization_reject';
+	$params->{'entry'} = $error;
+	$params->{'type'} = 'authorization_reject';
 
     } elsif ($type eq 'oauth') {
-	$param->{'entry'} = $error;
-	$param->{'type'} = 'oauth';
+	$params->{'entry'} = $error;
+	$params->{'type'} = 'oauth';
 
     } else {
-	$param->{'type'} = 'intern_error';
+	$params->{'type'} = 'intern_error';
     }
 
     ## Prepare the original message if provided
-    if (defined $param->{'message'}) {
-	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
+    if (defined $params->{'message'}) {
+	$params->{'original_msg'} = &_get_msg_as_hash($params->{'message'});
      }
 
     if (ref($list) && $list->isa('Sympa::List')) {
-	unless ($list->send_file('message_report',$user,$robot,$param)) {
+	unless ($list->send_file('message_report',$user,$robot,$params)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     } else {
-	unless (&Sympa::List::send_global_file('message_report',$user,$robot,$param)) {
+	unless (&Sympa::List::send_global_file('message_report',$user,$robot,$params)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     }
     if ($type eq 'intern') {
-	chomp($param->{'msg_id'});
+	chomp($params->{'msg_id'});
 
-	$param ||= {};
-	$param->{'error'} =  &Sympa::Language::gettext($error);
-	$param->{'who'} = $user;
-	$param->{'action'} = 'message diffusion';
-	$param->{'msg_id'} = $param->{'msg_id'};
-	$param->{'list'} = $list if (defined $list);
-	unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot, $param)) {
+	$params ||= {};
+	$params->{'error'} =  &Sympa::Language::gettext($error);
+	$params->{'who'} = $user;
+	$params->{'action'} = 'message diffusion';
+	$params->{'msg_id'} = $params->{'msg_id'};
+	$params->{'list'} = $list if (defined $list);
+	unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot, $params)) {
 	    &Sympa::Log::do_log('notice',"%s::reject_report_msg(): Unable to notify_listmaster concerning '$user'");
 	}
     }
@@ -202,7 +202,7 @@ sub _get_msg_as_hash {
     return $msg_hash;
 }
 
-=head2 notice_report_msg($entry, $user, $param, $robot, $list)
+=head2 notice_report_msg($entry, $user, $params, $robot, $list)
 
 Send a notification of message diffusion to an user, using
 I<message_report.tt2> mail template.
@@ -230,12 +230,12 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub notice_report_msg {
-    my ($entry, $user, $param, $robot, $list) = @_;
+    my ($entry, $user, $params, $robot, $list) = @_;
 
-    $param->{'to'} = $user;
-    $param->{'type'} = 'success';
-    $param->{'entry'} = $entry;
-    $param->{'auto_submitted'} = 'auto-replied';
+    $params->{'to'} = $user;
+    $params->{'type'} = 'success';
+    $params->{'entry'} = $entry;
+    $params->{'auto_submitted'} = 'auto-replied';
 
     unless ($user){
 	&Sympa::Log::do_log('err',"unable to send template message_report.tt2 : no user to notify");
@@ -248,16 +248,16 @@ sub notice_report_msg {
     }
 
     ## Prepare the original message if provided
-    if (defined $param->{'message'}) {
-	$param->{'original_msg'} = &_get_msg_as_hash($param->{'message'});
+    if (defined $params->{'message'}) {
+	$params->{'original_msg'} = &_get_msg_as_hash($params->{'message'});
      }
 
     if (ref($list) && $list->isa('Sympa::List')) {
-	unless ($list->send_file('message_report',$user,$robot,$param)) {
+	unless ($list->send_file('message_report',$user,$robot,$params)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     } else {
-	unless (&List->send_global_file('message_report',$user,$robot,$param)) {
+	unless (&List->send_global_file('message_report',$user,$robot,$params)) {
 	    &Sympa::Log::do_log('notice',"Unable to send template 'message_report' to '$user'");
 	}
     }
@@ -450,13 +450,13 @@ sub global_report_cmd {
     if ($type eq 'intern') {
 
 	if ($robot){
-	    my $param = $data;
-	    $param ||= {};
-	    $param->{'error'} = &Sympa::Language::gettext($error);
-	    $param->{'who'} = $sender;
-	    $param->{'action'} = 'Command process';
+	    my $params = $data;
+	    $params ||= {};
+	    $params->{'error'} = &Sympa::Language::gettext($error);
+	    $params->{'who'} = $sender;
+	    $params->{'action'} = 'Command process';
 
-	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$params)) {
 		&Sympa::Log::do_log('notice',"Unable to notify listmaster concerning '$sender'");
 	    }
 	} else {
@@ -542,15 +542,15 @@ sub reject_report_cmd {
 		$listname = $data->{'listname'};
 	    }
 
-	    my $param = $data;
-	    $param ||= {};
-	    $param->{'error'} = &Sympa::Language::gettext($error);
-	    $param->{'cmd'} = $cmd;
-	    $param->{'listname'} = $listname;
-	    $param->{'who'} = $sender;
-	    $param->{'action'} = 'Command process';
+	    my $params = $data;
+	    $params ||= {};
+	    $params->{'error'} = &Sympa::Language::gettext($error);
+	    $params->{'cmd'} = $cmd;
+	    $params->{'listname'} = $listname;
+	    $params->{'who'} = $sender;
+	    $params->{'action'} = 'Command process';
 
-	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('mail_intern_error', $robot,$params)) {
 		&Sympa::Log::do_log('notice',"Unable to notify listmaster concerning '$sender'");
 	    }
 	} else {
@@ -891,14 +891,14 @@ sub reject_report_web {
     ## Notify listmaster for internal or system errors
     if ($type eq 'intern'|| $type eq 'system') {
 	if ($robot){
-	    my $param = $data;
-	    $param ||= {};
-	    $param->{'error'} = &Sympa::Language::gettext($error);
-	    $param->{'list'} = $list if (defined $list);
-	    $param->{'who'} = $user;
-	    $param->{'action'} ||= 'Command process';
+	    my $params = $data;
+	    $params ||= {};
+	    $params->{'error'} = &Sympa::Language::gettext($error);
+	    $params->{'list'} = $list if (defined $list);
+	    $params->{'who'} = $user;
+	    $params->{'action'} ||= 'Command process';
 
-	    unless (&Sympa::List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $param)) {
+	    unless (&Sympa::List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $params)) {
 		&Sympa::Log::do_log('notice',"Unable to notify listmaster concerning '$user'");
 	    }
 	}else {

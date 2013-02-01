@@ -79,19 +79,19 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, $param) = @_;
+	my ($class, $params) = @_;
 
-	my $self = $param;
-	&Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
+	my $self = $params;
+	&Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params->{'db_type'});
 	my $actualclass;
-	if ($param->{'db_type'} =~ /^mysql$/i) {
+	if ($params->{'db_type'} =~ /^mysql$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::MySQL" ){
 			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $EVAL_ERROR");
 			return undef;
 		}
 		require Sympa::Datasource::SQL::MySQL;
 		$actualclass = "Sympa::Datasource::SQL::MySQL";
-	}elsif ($param->{'db_type'} =~ /^sqlite$/i) {
+	}elsif ($params->{'db_type'} =~ /^sqlite$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::SQLite" ){
 			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::SQLite module");
 			return undef;
@@ -99,7 +99,7 @@ sub new {
 		require Sympa::Datasource::SQL::SQLite;
 
 		$actualclass = "Sympa::Datasource::SQL::SQLite";
-	}elsif ($param->{'db_type'} =~ /^pg$/i) {
+	}elsif ($params->{'db_type'} =~ /^pg$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::PostgreSQL" ){
 			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::PostgreSQL module");
 			return undef;
@@ -107,7 +107,7 @@ sub new {
 		require Sympa::Datasource::SQL::PostgreSQL;
 
 		$actualclass = "Sympa::Datasource::SQL::PostgreSQL";
-	}elsif ($param->{'db_type'} =~ /^oracle$/i) {
+	}elsif ($params->{'db_type'} =~ /^oracle$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::Oracle" ){
 			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Oracle module");
 			return undef;
@@ -115,7 +115,7 @@ sub new {
 		require Sympa::Datasource::SQL::Oracle;
 
 		$actualclass = "Sympa::Datasource::SQL::Oracle";
-	}elsif ($param->{'db_type'} =~ /^sybase$/i) {
+	}elsif ($params->{'db_type'} =~ /^sybase$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::Sybase" ){
 			&Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Sybase module");
 			return undef;
@@ -129,7 +129,7 @@ sub new {
 		## like CSV
 		$actualclass = "Sympa::Datasource::SQL";
 	}
-	$self = $class->SUPER::new($param);
+	$self = $class->SUPER::new($params);
 
 	$self->{'db_host'} ||= $self->{'host'};
 	$self->{'db_user'} ||= $self->{'user'};
@@ -740,16 +740,16 @@ A ref likely to contain the following values:
 =cut
 
 sub check_key {
-	my ($self, $param) = @_;
+	my ($self, $params) = @_;
 
-	&Sympa::Log::do_log('debug','Checking %s key structure for table %s',$param->{'key_name'},$param->{'table'});
+	&Sympa::Log::do_log('debug','Checking %s key structure for table %s',$params->{'key_name'},$params->{'table'});
 	my $keysFound;
 	my $result;
-	if (lc($param->{'key_name'}) eq 'primary') {
-		return undef unless ($keysFound = $self->get_primary_key({'table'=>$param->{'table'}}));
+	if (lc($params->{'key_name'}) eq 'primary') {
+		return undef unless ($keysFound = $self->get_primary_key({'table'=>$params->{'table'}}));
 	}else {
-		return undef unless ($keysFound = $self->get_indexes({'table'=>$param->{'table'}}));
-		$keysFound = $keysFound->{$param->{'key_name'}};
+		return undef unless ($keysFound = $self->get_indexes({'table'=>$params->{'table'}}));
+		$keysFound = $keysFound->{$params->{'key_name'}};
 	}
 
 	my @keys_list = keys %{$keysFound};
@@ -758,19 +758,19 @@ sub check_key {
 	}else{
 		$result->{'existing_key_correct'} = 1;
 		my %expected_keys;
-		foreach my $expected_field (@{$param->{'expected_keys'}}){
+		foreach my $expected_field (@{$params->{'expected_keys'}}){
 			$expected_keys{$expected_field} = 1;
 		}
-		foreach my $field (@{$param->{'expected_keys'}}) {
+		foreach my $field (@{$params->{'expected_keys'}}) {
 			unless ($keysFound->{$field}) {
-				&Sympa::Log::do_log('info','Table %s: Missing expected key part %s in %s key.',$param->{'table'},$field,$param->{'key_name'});
+				&Sympa::Log::do_log('info','Table %s: Missing expected key part %s in %s key.',$params->{'table'},$field,$params->{'key_name'});
 				$result->{'missing_key'}{$field} = 1;
 				$result->{'existing_key_correct'} = 0;
 			}
 		}
 		foreach my $field (keys %{$keysFound}) {
 			unless ($expected_keys{$field}) {
-				&Sympa::Log::do_log('info','Table %s: Found unexpected key part %s in %s key.',$param->{'table'},$field,$param->{'key_name'});
+				&Sympa::Log::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params->{'table'},$field,$params->{'key_name'});
 				$result->{'unexpected_key'}{$field} = 1;
 				$result->{'existing_key_correct'} = 0;
 			}

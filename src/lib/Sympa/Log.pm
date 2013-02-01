@@ -1001,22 +1001,22 @@ sub get_last_date_aggregation {
 }
 
 sub agregate_daily_data {
-    my ($param) = @_;
+    my ($params) = @_;
     &do_log('debug2','Agregating data');
 
     my $result;
-    my $first_date = $param->{'first_date'} || time;
-    my $last_date = $param->{'last_date'} || time;
-    foreach my $begin_date (sort keys %{$param->{'hourly_data'}}) {
+    my $first_date = $params->{'first_date'} || time;
+    my $last_date = $params->{'last_date'} || time;
+    foreach my $begin_date (sort keys %{$params->{'hourly_data'}}) {
 	my $reftime = Sympa::Tools::Time::get_midnight_time($begin_date);
-	unless (defined $param->{'first_date'}) {
+	unless (defined $params->{'first_date'}) {
 	    $first_date = $reftime if ($reftime < $first_date);
 	}
-	next if ($begin_date < $first_date || $param->{'hourly_data'}{$begin_date}{'end_date_counter'} > $last_date);
+	next if ($begin_date < $first_date || $params->{'hourly_data'}{$begin_date}{'end_date_counter'} > $last_date);
 	if(defined $result->{$reftime}) {
-	    $result->{$reftime} += $param->{'hourly_data'}{$begin_date}{'variation_counter'};
+	    $result->{$reftime} += $params->{'hourly_data'}{$begin_date}{'variation_counter'};
 	}else{
-	    $result->{$reftime} = $param->{'hourly_data'}{$begin_date}{'variation_counter'};
+	    $result->{$reftime} = $params->{'hourly_data'}{$begin_date}{'variation_counter'};
 	}
     }
     for (my $date = $first_date; $date < $last_date; $date += 86400) {

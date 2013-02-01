@@ -246,9 +246,9 @@ sub ldap_authentication {
      $filter =~ s/\[sender\]/$auth/ig;
 
      ## bind in order to have the user's DN
-     my $param = &Sympa::Tools::Data::dup_var($ldap);
+     my $params = &Sympa::Tools::Data::dup_var($ldap);
      require Sympa::Datasource::LDAP;
-     my $ds = Sympa::Datasource::LDAP->new($param);
+     my $ds = Sympa::Datasource::LDAP->new($params);
 
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
        &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
@@ -275,15 +275,16 @@ sub ldap_authentication {
 
      ## Duplicate structure first
      ## Then set the bind_dn and password according to the current user
-     $param = &Sympa::Tools::Data::dup_var($ldap);
-     $param->{'ldap_bind_dn'} = $DN[0];
-     $param->{'ldap_bind_password'} = $pwd;
+     $params = &Sympa::Tools::Data::dup_var($ldap);
+     $params->{'ldap_bind_dn'} = $DN[0];
+     $params->{'ldap_bind_password'} = $pwd;
 
      require Sympa::Datasource::LDAP;
-     $ds = Sympa::Datasource::LDAP->new($param);
+     $ds = Sympa::Datasource::LDAP->new($params);
 
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
-       &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'host'});
+       &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'",
+	       $params->{'host'});
        return undef;
      }
 
@@ -304,29 +305,29 @@ sub ldap_authentication {
 
      ## Keep previous alt emails not from LDAP source
      my $previous = {};
-     foreach my $alt (keys %{$param->{'alt_emails'}}) {
-       $previous->{$alt} = $param->{'alt_emails'}{$alt} if ($param->{'alt_emails'}{$alt} ne 'ldap');
+     foreach my $alt (keys %{$params->{'alt_emails'}}) {
+       $previous->{$alt} = $params->{'alt_emails'}{$alt} if ($params->{'alt_emails'}{$alt} ne 'ldap');
      }
-     $param->{'alt_emails'} = {};
+     $params->{'alt_emails'} = {};
 
      my $entry = $mesg->entry(0);
      @canonic_email = $entry->get_value($attrs, 'alloptions' => 1);
      foreach my $email (@canonic_email){
        my $e = lc($email);
-       $param->{'alt_emails'}{$e} = 'ldap' if ($e);
+       $params->{'alt_emails'}{$e} = 'ldap' if ($e);
      }
 
      foreach my $attribute_value (@alternative_conf){
        @alternative = $entry->get_value($attribute_value, 'alloptions' => 1);
        foreach my $alter (@alternative){
 	 my $a = lc($alter);
-	 $param->{'alt_emails'}{$a} = 'ldap' if($a) ;
+	 $params->{'alt_emails'}{$a} = 'ldap' if($a) ;
        }
      }
 
      ## Restore previous emails
      foreach my $alt (keys %{$previous}) {
-       $param->{'alt_emails'}{$alt} = $previous->{$alt};
+       $params->{'alt_emails'}{$alt} = $previous->{$alt};
      }
 
      $ds->disconnect() or &Sympa::Log::do_log('notice', "unable to unbind");

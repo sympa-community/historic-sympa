@@ -1917,12 +1917,12 @@ sub _load_param_constraint_conf {
 }
 
 sub create_automatic_list {
-    my ($self, %param) = @_;
+    my ($self, %params) = @_;
 
-    my $sender = $param{'sender'};
-    my $listname = $param{'listname'};
+    my $sender = $params{'sender'};
+    my $listname = $params{'listname'};
 
-    unless ($self->is_allowed_to_create_automatic_lists(%param)){
+    unless ($self->is_allowed_to_create_automatic_lists(%params)){
 	&Sympa::Log::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation of list %s@%s by user %s.', $listname,$self->{'robot'},$sender);
 	return undef;
     }
@@ -1948,12 +1948,12 @@ Returns 1 if the user is allowed to create lists based on the family.
 =cut
 
 sub is_allowed_to_create_automatic_lists {
-    my ($self, %param) = @_;
+    my ($self, %params) = @_;
 
-    my $auth_level = $param{'auth_level'};
-    my $sender = $param{'sender'};
-    my $message = $param{'message'};
-    my $listname = $param{'listname'};
+    my $auth_level = $params{'auth_level'};
+    my $sender = $params{'sender'};
+    my $message = $params{'message'};
+    my $listname = $params{'listname'};
 
     # check authorization
     my $result = &Sympa::Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},

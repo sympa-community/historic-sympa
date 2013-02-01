@@ -74,20 +74,20 @@ A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, %param) = @_;
+	my ($class, %params) = @_;
 	&Sympa::Log::do_log('debug2', '()');
 
 	my $provider = {
 		oauth_provider => Sympa::OAuth::Provider->new(
-			method => $param{'method'},
-			url => $param{'url'},
-			authorization_header => $param{'authorization_header'},
-			request_parameters => $param{'request_parameters'},
-			request_body => $param{'request_body'},
+			method => $params{'method'},
+			url => $params{'url'},
+			authorization_header => $params{'authorization_header'},
+			request_parameters => $params{'request_parameters'},
+			request_body => $params{'request_body'},
 			config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 		),
-		robot => $param{'robot'},
-		voot_path => $param{'voot_path'}
+		robot => $params{'robot'},
+		voot_path => $params{'voot_path'}
 	};
 
  	return undef unless(defined($provider->{'oauth_provider'}));
@@ -128,7 +128,7 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 =cut
 
 sub checkRequest {
-	my ($self, %param) = @_;
+	my ($self, %params) = @_;
 
 	my $r = $self->{'oauth_provider'}->checkRequest(checktoken => 1);
 	return $r if($r);
@@ -159,7 +159,7 @@ A string, or I<undef> if something went wrong.
 =cut
 
 sub response {
-	my ($self, %param) = @_;
+	my ($self, %params) = @_;
 
 	my $r = {
 		startIndex => 0,
@@ -247,12 +247,12 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 =cut
 
 sub getGroupMembers {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $param{'group'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
 
 	my @entries = ();
 
-	my $list = Sympa::List->new($param{'group'}, $self->{'robot'});
+	my $list = Sympa::List->new($params{'group'}, $self->{'robot'});
 	if(defined $list) {
 		my $r = $list->check_list_authz('review', 'md5', {'sender' => $self->{'user'}});
 

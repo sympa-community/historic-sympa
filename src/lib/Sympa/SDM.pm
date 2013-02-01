@@ -265,11 +265,11 @@ sub probe_db {
 }
 
 sub check_fields {
-    my ($param) = @_;
+    my ($params) = @_;
 
-    my $t = $param->{'table'};
-    my %real_struct = %{$param->{'real_struct'}};
-    my $report_ref = $param->{'report'};
+    my $t = $params->{'table'};
+    my %real_struct = %{$params->{'real_struct'}};
+    my $report_ref = $params->{'report'};
 
     foreach my $f (sort keys %{$db_struct{&Sympa::Configuration::get_robot_conf('*','db_type')}{$t}}) {
 	unless ($real_struct{$t}{$f}) {
@@ -327,10 +327,10 @@ sub check_fields {
 }
 
 sub check_primary_key {
-    my ($param) = @_;
+    my ($params) = @_;
 
-    my $t = $param->{'table'};
-    my $report_ref = $param->{'report'};
+    my $t = $params->{'table'};
+    my $report_ref = $params->{'report'};
     &Sympa::Log::do_log('debug','Checking primary key for table %s',$t);
 
     my $list_of_keys = join ',',@{$primary{$t}};
@@ -379,10 +379,10 @@ sub check_primary_key {
 }
 
 sub check_indexes {
-    my ($param) = @_;
+    my ($params) = @_;
 
-    my $t = $param->{'table'};
-    my $report_ref = $param->{'report'};
+    my $t = $params->{'table'};
+    my $report_ref = $params->{'report'};
     &Sympa::Log::do_log('debug','Checking indexes for table %s',$t);
     ## drop previous index if this index is not a primary key and was defined by a previous Sympa version
     my %index_columns = %{$db_source->get_indexes({'table' => $t})};
@@ -486,15 +486,15 @@ sub data_structure_uptodate {
 ## Input : required_format, effective_format
 ## Output : return 1 if field type is appropriate AND size >= required size
 sub check_db_field_type {
-    my (%param) = @_;
+    my (%params) = @_;
 
     my ($required_type, $required_size, $effective_type, $effective_size);
 
-    if ($param{'required_format'} =~ /^(\w+)(\((\d+)\))?$/) {
+    if ($params{'required_format'} =~ /^(\w+)(\((\d+)\))?$/) {
 	($required_type, $required_size) = ($1, $3);
     }
 
-    if ($param{'effective_format'} =~ /^(\w+)(\((\d+)\))?$/) {
+    if ($params{'effective_format'} =~ /^(\w+)(\((\d+)\))?$/) {
 	($effective_type, $effective_size) = ($1, $3);
     }
 

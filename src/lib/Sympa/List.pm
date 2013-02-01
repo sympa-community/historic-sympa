@@ -2854,15 +2854,15 @@ Return the list of owners email addresses.
 =cut
 
 sub get_owners_email {
-    my ($self,$param) = @_;
-    &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $param -> {'ignore_nomail'});
+    my ($self, $params) = @_;
+    &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params->{'ignore_nomail'});
 
     my @rcpt;
     my $owners = ();
 
     $owners = $self->get_owners();
 
-    if ($param -> {'ignore_nomail'}) {
+    if ($params->{'ignore_nomail'}) {
 	foreach my $o (@{$owners}) {
 	    push (@rcpt, lc($o->{'email'}));
 	}
@@ -2887,15 +2887,15 @@ editors.
 =cut
 
 sub get_editors_email {
-    my ($self,$param) = @_;
-    &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $param -> {'ignore_nomail'});
+    my ($self, $params) = @_;
+    &Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params->{'ignore_nomail'});
 
     my @rcpt;
     my $editors = ();
 
     $editors = $self->get_editors();
 
-    if ($param -> {'ignore_nomail'}) {
+    if ($params->{'ignore_nomail'}) {
 	foreach my $e (@{$editors}) {
 	    push (@rcpt, lc($e->{'email'}));
 	}
@@ -2908,7 +2908,7 @@ sub get_editors_email {
     }
     unless (@rcpt) {
 	&Sympa::Log::do_log('notice','Warning : no editor found for list %s, getting owners', $self->{'name'} );
-	@rcpt = $self->get_owners_email($param);
+	@rcpt = $self->get_owners_email($params);
     }
     return @rcpt;
 }
@@ -3231,10 +3231,10 @@ The number of sendmail processes.
 
 sub distribute_msg {
     my ($self) = @_;
-    my %param = @_;
+    my %params = @_;
 
-    my $message = $param{'message'};
-    my $apply_dkim_signature = $param{'apply_dkim_signature'};
+    my $message = $params{'message'};
+    my $apply_dkim_signature = $params{'apply_dkim_signature'};
 
     &Sympa::Log::do_log('debug2', '%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
 
@@ -3958,11 +3958,11 @@ message in list.
 sub send_msg {
 
     my ($self) = @_;
-    my %param = @_;
+    my %params = @_;
 
-    my $message = $param{'message'};
-    my $apply_dkim_signature = $param{'apply_dkim_signature'};
-    my $apply_tracking = $param{'apply_tracking'};
+    my $message = $params{'message'};
+    my $apply_dkim_signature = $params{'apply_dkim_signature'};
+    my $apply_tracking = $params{'apply_tracking'};
 
     &Sympa::Log::do_log('debug2', 'filname = %s, smime_crypted = %s,apply_dkim_signature = %s', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
     my $hdr = $message->{'msg'}->head;
@@ -5484,12 +5484,12 @@ Delete the indicated users from the list.
 =cut
 
 sub delete_list_member {
-    my ($self, %param) = @_;
+    my ($self, %params) = @_;
 
-    my @u = @{$param{'users'}};
-    my $exclude = $param{'exclude'};
-    my $parameter = $param{'parameter'};#case of deleting : bounce? manual signoff or deleted by admin?
-    my $daemon_name = $param{'daemon'};
+    my @u = @{$params{'users'}};
+    my $exclude = $params{'exclude'};
+    my $parameter = $params{'parameter'};#case of deleting : bounce? manual signoff or deleted by admin?
+    my $daemon_name = $params{'daemon'};
     &Sympa::Log::do_log('debug2', '');
 
     my $name = $self->{'name'};
@@ -6057,15 +6057,16 @@ An arrayref of ressembling emails, or I<undef> if something went wrong.
 =cut
 
 sub get_ressembling_list_members_no_object {
-    my ($options) = @_;
-    &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
+    my ($params) = @_;
+    &Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params->{'name'},
+	    $params->{'email'}, $params->{'domain'});
     my @output;
 
 
 
-    my $email = &Sympa::Tools::clean_email($options->{'email'});
-    my $robot = $options->{'domain'};
-    my $listname = $options->{'name'};
+    my $email = &Sympa::Tools::clean_email($params->{'email'});
+    my $robot = $params->{'domain'};
+    my $listname = $params->{'name'};
 
 
     $email =~ /^(.*)\@(.*)$/;
@@ -7758,7 +7759,7 @@ May the indicated user edit the indicated list parameter or not?
 =cut
 
 sub may_edit {
-    my ($self,$parameter, $who) = @_;
+    my ($self, $parameter, $who) = @_;
     &Sympa::Log::do_log('debug3', '(%s, %s)', $parameter, $who);
 
     my $role;

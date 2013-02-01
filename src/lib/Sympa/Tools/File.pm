@@ -51,33 +51,33 @@ Sets owner and/or access rights on a file.
 =cut
 
 sub set_file_rights {
-    my (%param) = @_;
+    my (%params) = @_;
 
     my ($uid, $gid);
 
-    if ($param{'user'}){
-	unless ($uid = (getpwnam($param{'user'}))[2]) {
-	    &Sympa::Log::do_log('err', "User %s can't be found in passwd file",$param{'user'});
+    if ($params{'user'}){
+	unless ($uid = (getpwnam($params{'user'}))[2]) {
+	    &Sympa::Log::do_log('err', "User %s can't be found in passwd file",$params{'user'});
 	    return undef;
 	}
     }else {
 	$uid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
     }
-    if ($param{'group'}) {
-	unless ($gid = (getgrnam($param{'group'}))[2]) {
-	    &Sympa::Log::do_log('err', "Group %s can't be found",$param{'group'});
+    if ($params{'group'}) {
+	unless ($gid = (getgrnam($params{'group'}))[2]) {
+	    &Sympa::Log::do_log('err', "Group %s can't be found",$params{'group'});
 	    return undef;
 	}
     }else {
 	$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
     }
-    unless (chown($uid,$gid, $param{'file'})){
-	&Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$param{'file'},$param{'user'},$param{'group'}, $ERRNO);
+    unless (chown($uid,$gid, $params{'file'})){
+	&Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$params{'file'},$params{'user'},$params{'group'}, $ERRNO);
 	return undef;
     }
-    if ($param{'mode'}){
-	unless (chmod($param{'mode'}, $param{'file'})){
-	    &Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $ERRNO);
+    if ($params{'mode'}){
+	unless (chmod($params{'mode'}, $params{'file'})){
+	    &Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$params{'file'}, $ERRNO);
 	    return undef;
 	}
     }
@@ -367,23 +367,23 @@ could not be carried on.
 =cut
 
 sub a_is_older_than_b {
-    my ($param) = @_;
+    my ($params) = @_;
 
     my ($a_file_readable, $b_file_readable) = (0,0);
     my $answer = undef;
-    if (-r $param->{'a_file'}) {
+    if (-r $params->{'a_file'}) {
 	$a_file_readable = 1;
     }else{
-	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'a_file'});
+	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params->{'a_file'});
     }
-    if (-r $param->{'b_file'}) {
+    if (-r $params->{'b_file'}) {
 	$b_file_readable = 1;
     }else{
-	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $param->{'b_file'});
+	&Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params->{'b_file'});
     }
     if ($a_file_readable && $b_file_readable) {
-	my @a_stats = stat ($param->{'a_file'});
-	my @b_stats = stat ($param->{'b_file'});
+	my @a_stats = stat ($params->{'a_file'});
+	my @b_stats = stat ($params->{'b_file'});
 	if($a_stats[9] < $b_stats[9]){
 	    $answer = 1;
 	}else{

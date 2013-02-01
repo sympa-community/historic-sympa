@@ -1965,22 +1965,22 @@ sub addrencode {
     }
 }
 
-=head2 create_html_part_from_web_page($param)
+=head2 create_html_part_from_web_page($params)
 
 Generate a newsletter from an HTML URL or a file path.
 
 =cut
 
 sub create_html_part_from_web_page {
-    my ($param) = @_;
-    &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
+    my ($params) = @_;
+    &Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$params->{'source'});
 
     my $mailHTML = MIME::Lite::HTML->new(
 					{
-					    From => $param->{'From'},
-					    To => $param->{'To'},
-					    Headers => $param->{'Headers'},
-					    Subject => $param->{'Subject'},
+					    From => $params->{'From'},
+					    To => $params->{'To'},
+					    Headers => $params->{'Headers'},
+					    Subject => $params->{'Subject'},
 					    HTMLCharset => 'utf-8',
 					    TextCharset => 'utf-8',
 					    TextEncoding => '8bit',
@@ -1989,9 +1989,10 @@ sub create_html_part_from_web_page {
 					}
 					);
     # parse return the MIME::Lite part to send
-    my $part = $mailHTML->parse($param->{'source'});
+    my $part = $mailHTML->parse($params->{'source'});
     unless (defined($part)) {
-	&Sympa::Log::do_log('err', 'Unable to convert file %s to a MIME part',$param->{'source'});
+	&Sympa::Log::do_log('err', 'Unable to convert file %s to a MIME
+		part',$params->{'source'});
 	return undef;
     }
     return $part->as_string;

@@ -104,21 +104,21 @@ A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, %param) = @_;
+	my ($class, %params) = @_;
 
 	my $consumer;
-	&Sympa::Log::do_log('debug2', '(%s, %s)', $param{'user'}, $param{'provider'});
+	&Sympa::Log::do_log('debug2', '(%s, %s)', $params{'user'}, $params{'provider'});
 
 	# Get oauth consumer and enpoints from provider_id
-	$consumer->{'conf'} = &_get_config_for($param{'provider'}, $param{'config'});
+	$consumer->{'conf'} = &_get_config_for($params{'provider'}, $params{'config'});
 	return undef unless(defined $consumer->{'conf'});
 
-	$consumer->{'user'} = $param{'user'};
-	$consumer->{'provider'} = $param{'provider'};
+	$consumer->{'user'} = $params{'user'};
+	$consumer->{'provider'} = $params{'provider'};
 
 	$consumer->{'oauth_consumer'} = Sympa::OAuth::Consumer->new(
-		user => $param{'user'},
-		provider => 'voot:'.$param{'provider'},
+		user => $params{'user'},
+		provider => 'voot:'.$params{'provider'},
 		consumer_key => $consumer->{'conf'}{'oauth.ConsumerKey'},
 		consumer_secret => $consumer->{'conf'}{'oauth.ConsumerSecret'},
 		request_token_path => $consumer->{'conf'}{'oauth.RequestURL'},
@@ -197,10 +197,10 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 =cut
 
 sub getGroupMembers {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $param{'group'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $params{'group'});
 
-	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$param{'group'});
+	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$params{'group'});
 	return undef unless(defined $data);
 
 	return &_get_members(decode_json($data));

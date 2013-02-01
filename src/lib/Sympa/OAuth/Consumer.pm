@@ -74,31 +74,31 @@ A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
 =cut
 
 sub new {
-	my ($class, %param) = @_;
+	my ($class, %params) = @_;
 
 	my $consumer = {
-		user => $param{'user'},
-		provider => $param{'provider'},
-		consumer_key => $param{'consumer_key'},
-		consumer_secret => $param{'consumer_secret'},
-		request_token_path => $param{'request_token_path'},
-		access_token_path  => $param{'access_token_path'},
-		authorize_path => $param{'authorize_path'},
+		user => $params{'user'},
+		provider => $params{'provider'},
+		consumer_key => $params{'consumer_key'},
+		consumer_secret => $params{'consumer_secret'},
+		request_token_path => $params{'request_token_path'},
+		access_token_path  => $params{'access_token_path'},
+		authorize_path => $params{'authorize_path'},
 		redirect_url => undef
  	};
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $param{'user'}, $param{'provider'}, $param{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
 	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
-		consumer_key => $param{'consumer_key'},
-		consumer_secret => $param{'consumer_secret'},
-		request_token_path => $param{'request_token_path'},
-        access_token_path  => $param{'access_token_path'},
-        authorize_path => $param{'authorize_path'}
+		consumer_key => $params{'consumer_key'},
+		consumer_secret => $params{'consumer_secret'},
+		request_token_path => $params{'request_token_path'},
+        access_token_path  => $params{'access_token_path'},
+        authorize_path => $params{'authorize_path'}
 	);
 
 	my $sth;
-	unless($sth = &Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $param{'user'}, $param{'provider'})) {
-		&Sympa::Log::do_log('err','Unable to load token data %s %s', $param{'user'}, $param{'provider'});
+	unless($sth = &Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'})) {
+		&Sympa::Log::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
 		return undef;
     }
 
@@ -141,11 +141,11 @@ sub new {
 =cut
 
 sub setWebEnv {
-	my ($self, %param) = @_;
+	my ($self, %params) = @_;
 
-	$self->{'robot'} = $param{'robot'};
-	$self->{'here_path'} = $param{'here_path'};
-	$self->{'base_path'} = $param{'base_path'};
+	$self->{'robot'} = $params{'robot'};
+	$self->{'here_path'} = $params{'here_path'};
+	$self->{'base_path'} = $params{'base_path'};
 }
 
 =head2 $consumer->mustRedirect()
@@ -183,8 +183,8 @@ The resource body, as a string, or undef if something went wrong.
 =cut
 
 sub fetchRessource {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $param{'url'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
 
 	# Get access token, return 1 if it exists
 	my $token = $self->hasAccess();
@@ -192,9 +192,9 @@ sub fetchRessource {
 
 	my $res = $self->{'handler'}->request(
 		method => 'GET',
-		url    => $param{'url'},
+		url    => $params{'url'},
 		token  => $token,
-		params => $param{'params'},
+		params => $params{'params'},
 	);
 
 	unless($res->is_success) {
@@ -327,16 +327,16 @@ A true value if the token was retreived successfully, undef otherwise.
 =cut
 
 sub getAccessToken {
-	my ($self, %param) = @_;
+	my ($self, %params) = @_;
 	&Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});
 
-	return undef unless(defined $self->{'session'}{'tmp'} && $self->{'session'}{'tmp'}->token eq $param{'token'} && defined $param{'verifier'} && $param{'verifier'} ne '');
+	return undef unless(defined $self->{'session'}{'tmp'} && $self->{'session'}{'tmp'}->token eq $params{'token'} && defined $params{'verifier'} && $params{'verifier'} ne '');
 
 	my $access = $self->{'handler'}->get_access_token(
 		token => $self->{'session'}{'tmp'},
-		verifier => $param{'verifier'}
+		verifier => $params{'verifier'}
 	);
 
 	$self->{'session'}{'access'} = $access;

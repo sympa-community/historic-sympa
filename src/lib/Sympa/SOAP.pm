@@ -725,16 +725,16 @@ sub createList {
     }
 
     # prepare parameters
-    my $param = {};
-    $param->{'user'}{'email'} = $sender;
-    if (&Sympa::List::is_global_user($param->{'user'}{'email'})) {
-	$param->{'user'} = &Sympa::List::get_global_user($sender);
+    my $params = {};
+    $params->{'user'}{'email'} = $sender;
+    if (&Sympa::List::is_global_user($params->{'user'}{'email'})) {
+	$params->{'user'} = &Sympa::List::get_global_user($sender);
     }
     my $parameters;
     $parameters->{'creation_email'} =$sender;
     my %owner;
-    $owner{'email'} = $param->{'user'}{'email'};
-    $owner{'gecos'} = $param->{'user'}{'gecos'};
+    $owner{'email'} = $params->{'user'}{'email'};
+    $owner{'gecos'} = $params->{'user'}{'gecos'};
     push @{$parameters->{'owner'}},\%owner;
 
     $parameters->{'listname'} = $listname;
@@ -743,9 +743,9 @@ sub createList {
     $parameters->{'topics'} = $topics;
 
     if ($r_action =~ /listmaster/i) {
-	$param->{'status'} = 'pending' ;
+	$params->{'status'} = 'pending' ;
     }elsif  ($r_action =~ /do_it/i) {
-	$param->{'status'} = 'open' ;
+	$params->{'status'} = 'open' ;
     }
 
      ## create liste
@@ -758,7 +758,7 @@ sub createList {
      }
 
      ## notify listmaster
-     if ($param->{'create_action'} =~ /notify/) {
+     if ($params->{'create_action'} =~ /notify/) {
          if(&Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
 	     &Sympa::Log::do_log('info','notify listmaster for list creation');
 	 }else{

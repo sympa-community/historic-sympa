@@ -79,7 +79,7 @@ A new L<Sympa::Scenario> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-   my ($class, %parameters) = @_;
+   my ($class, %params) = @_;
     &Sympa::Log::do_log('debug2', '');
 
     my $scenario = {};
@@ -87,34 +87,34 @@ sub new {
     ## Check parameters
     ## Need either file_path or function+name
     ## Parameter 'directory' is optional, used in List context only
-    unless ($parameters{'robot'} &&
-	    ($parameters{'file_path'} || ($parameters{'function'} && $parameters{'name'}))) {
+    unless ($params{'robot'} &&
+	    ($params{'file_path'} || ($params{'function'} && $params{'name'}))) {
 	&Sympa::Log::do_log('err', 'Missing parameter');
 	return undef;
     }
 
     ## Determine the file path of the scenario
 
-    if ($parameters{'file_path'} eq 'ERROR') {
+    if ($params{'file_path'} eq 'ERROR') {
 	return $all_scenarios{$scenario->{'file_path'}};
     }
 
-    if (defined $parameters{'file_path'}) {
-	$scenario->{'file_path'} = $parameters{'file_path'};
-	my @tokens = split /\//, $parameters{'file_path'};
+    if (defined $params{'file_path'}) {
+	$scenario->{'file_path'} = $params{'file_path'};
+	my @tokens = split /\//, $params{'file_path'};
 	my $filename = $tokens[$#tokens];
 	unless ($filename =~ /^([^\.]+)\.(.+)$/) {
-	    &Sympa::Log::do_log('err',"Failed to determine scenario type and name from '$parameters{'file_path'}'");
+	    &Sympa::Log::do_log('err',"Failed to determine scenario type and name from '$params{'file_path'}'");
 	    return undef;
 	}
-	($parameters{'function'}, $parameters{'name'}) = ($1, $2);
+	($params{'function'}, $params{'name'}) = ($1, $2);
 
     }else {
 	## We can't use &Sympa::Tools::get_filename() because we don't have a List object yet ; it's being constructed
-	my @dirs = ($Sympa::Configuration::Conf{'etc'}.'/'.$parameters{'robot'}, $Sympa::Configuration::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
-	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
+	my @dirs = ($Sympa::Configuration::Conf{'etc'}.'/'.$params{'robot'}, $Sympa::Configuration::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
+	unshift @dirs, $params{'directory'} if (defined $params{'directory'});
 	foreach my $dir (@dirs) {
-	    my $tmp_path = $dir.'/scenari/'.$parameters{'function'}.'.'.$parameters{'name'};
+	    my $tmp_path = $dir.'/scenari/'.$params{'function'}.'.'.$params{'name'};
 	    if (-r $tmp_path) {
 		$scenario->{'file_path'} = $tmp_path;
 		last;
@@ -129,7 +129,7 @@ sub new {
 
 	## Option 'dont_reload_scenario' prevents scenario reloading
 	## Usefull for performances reasons
-	if ($parameters{'options'}{'dont_reload_scenario'}) {
+	if ($params{'options'}{'dont_reload_scenario'}) {
 	    return $all_scenarios{$scenario->{'file_path'}};
 	}
 
@@ -153,15 +153,15 @@ sub new {
 	## Keep rough scenario
 	$scenario->{'data'} = $data;
 
-	$scenario_struct = &_parse_scenario($parameters{'function'}, $parameters{'robot'}, $parameters{'name'}, $data, $parameters{'directory'});
-    }elsif ($parameters{'function'} eq 'include') {
+	$scenario_struct = &_parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, $data, $params{'directory'});
+    }elsif ($params{'function'} eq 'include') {
 	## include.xx not found will not raise an error message
 	return undef;
 
     }else {
 	## Default rule is 'true() smtp -> reject'
-	&Sympa::Log::do_log('err',"Unable to find scenario file '$parameters{'function'}.$parameters{'name'}', please report to listmaster");
-	$scenario_struct = &_parse_scenario($parameters{'function'}, $parameters{'robot'}, $parameters{'name'}, 'true() smtp -> reject', $parameters{'directory'});
+	&Sympa::Log::do_log('err',"Unable to find scenario file '$params{'function'}.$params{'name'}', please report to listmaster");
+	$scenario_struct = &_parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, 'true() smtp -> reject', $params{'directory'});
 	$scenario->{'file_path'} = 'ERROR'; ## special value
 	$scenario->{'data'} = 'true() smtp -> reject';
     }
@@ -170,7 +170,7 @@ sub new {
     $scenario->{'date'} = time;
 
     unless (ref($scenario_struct) eq 'HASH') {
-	&Sympa::Log::do_log('err',"Failed to load scenario '$parameters{'function'}.$parameters{'name'}'");
+	&Sympa::Log::do_log('err',"Failed to load scenario '$params{'function'}.$params{'name'}'");
 	return undef;
     }
 
@@ -416,12 +416,12 @@ sub request_action {
     }
 
     ## Include include.<action>.header if found
-    my %param = ('function' => 'include',
+    my %params = ('function' => 'include',
 		 'robot' => $robot,
 		 'name' => $operation.'.header',
 		 'options' => $context->{'options'});
-    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-    my $include_scenario = Sympa::Scenario->new(%param);
+    $params{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
+    my $include_scenario = Sympa::Scenario->new(%params);
     if (defined $include_scenario) {
 	## Add rules at the beginning of the array
 	unshift @rules, @{$include_scenario->{'rules'}};
@@ -430,12 +430,12 @@ sub request_action {
     foreach my $index (0..$#rules) {
 	if ($rules[$index]{'condition'} =~ /^\s*include\s*\(?\'?([\w\.]+)\'?\)?\s*$/i) {
 	    my $include_file = $1;
-	    my %param = ('function' => 'include',
+	    my %params = ('function' => 'include',
 			 'robot' => $robot,
 			 'name' => $include_file,
 			 'options' => $context->{'options'});
-	    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
-	    my $include_scenario = Sympa::Scenario->new(%param);
+	    $params{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
+	    my $include_scenario = Sympa::Scenario->new(%params);
 	    if (defined $include_scenario) {
 		## Removes the include directive and replace it with included rules
 		splice @rules, $index, 1, @{$include_scenario->{'rules'}};
@@ -1292,12 +1292,13 @@ sub search{
 	}
 
 	my $ldap;
-	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
+	my $params = &Sympa::Tools::Data::dup_var(\%ldap_conf);
 	require Sympa::Datasource::LDAP;
-	my $ds = Sympa::Datasource::LDAP->new($param);
+	my $ds = Sympa::Datasource::LDAP->new($params);
 
 	unless (defined $ds && ($ldap = $ds->connect())) {
-	    &Sympa::Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'ldap_host'});
+	    &Sympa::Log::do_log('err',"Unable to connect to the LDAP server
+		    '%s'", $params->{'ldap_host'});
 	    return undef;
 	    }
 

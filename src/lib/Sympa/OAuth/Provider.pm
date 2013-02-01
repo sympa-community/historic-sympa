@@ -74,30 +74,30 @@ A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, %param) = @_;
+	my ($class, %params) = @_;
 
 	my $p = &_findParameters(
-		authorization_header => $param{'authorization_header'},
-		request_parameters => $param{'request_parameters'},
-		request_body => $param{'request_body'}
+		authorization_header => $params{'authorization_header'},
+		request_parameters => $params{'request_parameters'},
+		request_body => $params{'request_body'}
 	);
 	return undef unless(defined($p));
 	return undef unless(defined($p->{'oauth_consumer_key'}));
 
-	my $c = &_getConsumerConfigFor($p->{'oauth_consumer_key'}, $param{config});
+	my $c = &_getConsumerConfigFor($p->{'oauth_consumer_key'}, $params{config});
 	return undef unless(defined($c));
 	return undef unless(defined($c->{'enabled'}));
 	return undef unless($c->{'enabled'} eq '1');
 
 	my $provider = {
-		method => $param{'method'},
-		url => $param{'url'},
+		method => $params{'method'},
+		url => $params{'url'},
 		params => $p,
 		consumer_key => $p->{'oauth_consumer_key'},
 		consumer_secret => $c->{'secret'}
 	};
 
-	&Sympa::Log::do_log('debug2', '(%s)', $param{'consumer_key'});
+	&Sympa::Log::do_log('debug2', '(%s)', $params{'consumer_key'});
 
  	$provider->{'constants'} = {
 		old_request_timeout => 600, # Max age for requests timestamps
@@ -151,23 +151,23 @@ sub consumerFromToken {
 # Returns an hashref, or undef if something went wrong
 
 sub _findParameters {
-	my (%param) = @_;
+	my (%params) = @_;
 
 	my $p = {};
-	if(defined($param{'authorization_header'}) && $param{'authorization_header'} =~ /^OAuth /) {
-		foreach my $b (split(/,\s*/, $param{'authorization_header'})) {
+	if(defined($params{'authorization_header'}) && $params{'authorization_header'} =~ /^OAuth /) {
+		foreach my $b (split(/,\s*/, $params{'authorization_header'})) {
 			next unless($b =~ /^(OAuth\s)?\s*(x?oauth_[^=]+)="([^"]*)"\s*$/);
 			$p->{$2} = uri_unescape($3);
 		}
-	}elsif(defined($param{'request_body'})) {
-		foreach my $k (keys(%{$param{'request_body'}})) {
+	}elsif(defined($params{'request_body'})) {
+		foreach my $k (keys(%{$params{'request_body'}})) {
 			next unless($k =~ /^x?oauth_/);
-			$p->{$k} = uri_unescape($param{'request_body'}{$k});
+			$p->{$k} = uri_unescape($params{'request_body'}{$k});
 		}
-	}elsif(defined($param{'request_parameters'})) {
-		foreach my $k (keys(%{$param{'request_parameters'}})) {
+	}elsif(defined($params{'request_parameters'})) {
+		foreach my $k (keys(%{$params{'request_parameters'}})) {
 			next unless($k =~ /^x?oauth_/);
-			$p->{$k} = uri_unescape($param{'request_parameters'}{$k});
+			$p->{$k} = uri_unescape($params{'request_parameters'}{$k});
 		}
 	}else{
 		return undef;
@@ -201,10 +201,10 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 =cut
 
 sub checkRequest {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $param{'url'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
 
-	my $checktoken = defined($param{'checktoken'}) ? $param{'checktoken'} : undef;
+	my $checktoken = defined($params{'checktoken'}) ? $params{'checktoken'} : undef;
 	unless($self->{'util'}->validate_params($self->{'params'}, $checktoken)) {
 		return 400;
 	}
@@ -300,7 +300,7 @@ The response body, as a string.
 =cut
 
 sub generateTemporary {
-	my ($self, %param) = @_;
+	my ($self, %params) = @_;
 	&Sympa::Log::do_log('debug2', '(%s)', $self->{'consumer_key'});
 
 	my $token = &_generateRandomString(32); # 9x10^62 entropy ...
@@ -322,7 +322,7 @@ sub generateTemporary {
 	my $r = 'oauth_token='.uri_escape($token);
 	$r .= '&oauth_token_secret='.uri_escape($secret);
 	$r .= '&oauth_expires_in='.$self->{'constants'}{'temporary_timeout'};
-	$r .= '&xoauth_request_auth_url='.$param{'authorize'} if(defined($param{'authorize'}));
+	$r .= '&xoauth_request_auth_url='.$params{'authorize'} if(defined($params{'authorize'}));
 	$r .= '&oauth_callback_confirmed=true';
 
 	return $r;
@@ -349,20 +349,20 @@ An hashref, or I<undef> if the token does not exist or is not valid anymore.
 =cut
 
 sub getTemporary {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $param{'token'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $params{'token'});
 
 	my $sth;
 	unless($sth = &Sympa::SDM::do_prepared_query(
-		'SELECT id_oauthprovider AS id, token_oauthprovider AS token, secret_oauthprovider AS secret, firsttime_oauthprovider AS firsttime, lasttime_oauthprovider AS lasttime, callback_oauthprovider AS callback, verifier_oauthprovider AS verifier FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $param{'token'})) {
-		&Sympa::Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $param{'token'});
+		'SELECT id_oauthprovider AS id, token_oauthprovider AS token, secret_oauthprovider AS secret, firsttime_oauthprovider AS firsttime, lasttime_oauthprovider AS lasttime, callback_oauthprovider AS callback, verifier_oauthprovider AS verifier FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {
+		&Sympa::Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $params{'token'});
 		return undef;
 	}
 
 	my $data = $sth->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 
-	my $timeout = $self->{'constants'}{(defined($param{'timeout_type'}) ? $param{'timeout_type'} : 'temporary').'_timeout'};
+	my $timeout = $self->{'constants'}{(defined($params{'timeout_type'}) ? $params{'timeout_type'} : 'temporary').'_timeout'};
 	return undef unless($data->{'lasttime'} + $timeout >= time);
 
 	return $data;
@@ -390,30 +390,30 @@ valid anymore.
 =cut
 
 sub generateVerifier {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s, %s)', $param{'token'}, $param{'user'}, $param{'granted'}, $self->{'consumer_key'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s, %s, %s, %s)', $params{'token'}, $params{'user'}, $params{'granted'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}));
+	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}));
 
 	my $verifier = &_generateRandomString(32);
 
 	unless(&Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE user_oauthprovider=%s AND consumer_oauthprovider=%s AND isaccess_oauthprovider=1',
-		&Sympa::SDM::quote($param{'user'}),
+		&Sympa::SDM::quote($params{'user'}),
 		&Sympa::SDM::quote($self->{'consumer_key'})
 	)) {
-		&Sympa::Log::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', &Sympa::SDM::quote($param{'user'}), $self->{'consumer_key'});
+		&Sympa::Log::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', &Sympa::SDM::quote($params{'user'}), $self->{'consumer_key'});
 		return undef;
 	}
 
 	unless(&Sympa::SDM::do_query(
 		'UPDATE oauthprovider_sessions_table SET verifier_oauthprovider=%s, user_oauthprovider=%s, accessgranted_oauthprovider=%d, lasttime_oauthprovider=%d WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=%s AND token_oauthprovider=%s',
 		&Sympa::SDM::quote($verifier),
-		&Sympa::SDM::quote($param{'user'}),
-		$param{'granted'} ? 1 : 0,
+		&Sympa::SDM::quote($params{'user'}),
+		$params{'granted'} ? 1 : 0,
 		time,
 		&Sympa::SDM::quote($self->{'consumer_key'}),
-		&Sympa::SDM::quote($param{'token'})
+		&Sympa::SDM::quote($params{'token'})
 	)) {
 		&Sympa::Log::do_log('err', 'Unable to set token verifier %s %s in database', $tmp->{'token'}, $self->{'consumer_key'});
 		return undef;
@@ -449,11 +449,11 @@ exist or is not valid anymore.
 =cut
 
 sub generateAccess {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $param{'token'}, $param{'verifier'}, $self->{'consumer_key'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'token'}, $params{'verifier'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $param{'token'}, timeout_type => 'verifier'));
-	return undef unless($param{'verifier'} eq $tmp->{'verifier'});
+	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout_type => 'verifier'));
+	return undef unless($params{'verifier'} eq $tmp->{'verifier'});
 
 	my $token = &_generateRandomString(32);
 	my $secret = &_generateRandomString(32);
@@ -463,8 +463,8 @@ sub generateAccess {
 		&Sympa::SDM::quote($token),
 		&Sympa::SDM::quote($secret),
 		time,
-		&Sympa::SDM::quote($param{'token'}),
-		&Sympa::SDM::quote($param{'verifier'})
+		&Sympa::SDM::quote($params{'token'}),
+		&Sympa::SDM::quote($params{'verifier'})
 	)) {
 		&Sympa::Log::do_log('err', 'Unable to transform temporary token into access token record %s %s in database', &Sympa::SDM::quote($tmp->{'token'}), $self->{'consumer_key'});
 		return undef;
@@ -497,13 +497,13 @@ is not valid anymore.
 =cut
 
 sub getAccess {
-	my ($self, %param) = @_;
-	&Sympa::Log::do_log('debug2', '(%s)', $param{'token'});
+	my ($self, %params) = @_;
+	&Sympa::Log::do_log('debug2', '(%s)', $params{'token'});
 
 	my $sth;
 	unless($sth = &Sympa::SDM::do_prepared_query(
-		'SELECT token_oauthprovider AS token, secret_oauthprovider AS secret, lasttime_oauthprovider AS lasttime, user_oauthprovider AS user, accessgranted_oauthprovider AS accessgranted FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider=1 AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $param{'token'})) {
-		&Sympa::Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $param{'token'});
+		'SELECT token_oauthprovider AS token, secret_oauthprovider AS secret, lasttime_oauthprovider AS lasttime, user_oauthprovider AS user, accessgranted_oauthprovider AS accessgranted FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider=1 AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {
+		&Sympa::Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $params{'token'});
 		return undef;
     }
 

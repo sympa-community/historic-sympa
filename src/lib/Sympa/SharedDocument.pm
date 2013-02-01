@@ -44,7 +44,7 @@ use Sympa::Tools::Data;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::SharedDocument->new($list, $path, $param)
+=head2 Sympa::SharedDocument->new($list, $path, $params)
 
 Creates a new L<Sympa::SharedDocument> object.
 
@@ -56,7 +56,7 @@ Creates a new L<Sympa::SharedDocument> object.
 
 =item * I<$path>
 
-=item * I<$param>
+=item * I<$params>
 
 =back
 
@@ -67,9 +67,9 @@ A new L<Sympa::SharedDocument> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $list, $path, $param) = @_;
+    my ($class, $list, $path, $params) = @_;
 
-    my $email = $param->{'user'}{'email'};
+    my $email = $params->{'user'}{'email'};
     #$email ||= 'nobody';
     my $document = {};
     &Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
@@ -98,7 +98,7 @@ sub new {
     }
 
     ## Check access control
-    &check_access_control($document, $param);
+    &check_access_control($document, $params);
 
     ###############################
     ## The path has been checked ##
@@ -254,7 +254,8 @@ sub new {
 
 	foreach my $d (@{$dir}) {
 
-	    my $sub_document = Sympa::SharedDocument->new($list, $document->{'path'}.'/'.$d, $param);
+	    my $sub_document = Sympa::SharedDocument->new($list,
+		    $document->{'path'}.'/'.$d, $params);
 	    push @{$document->{'subdir'}}, $sub_document;
 	}
     }
@@ -298,7 +299,7 @@ sub dup {
 
 
 sub check_access_control {
-    my ($self, $param) = @_;
+    my ($self, $params) = @_;
     &Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
 
     # Arguments:
@@ -336,7 +337,7 @@ sub check_access_control {
     $result{'scenario'}{'edit'} = $list->{'admin'}{'shared_doc'}{'d_edit'}{'name'};
 
     ## Privileged owner has all privileges
-    if ($param->{'is_privileged_owner'}) {
+    if ($params->{'is_privileged_owner'}) {
 	$result{'may'}{'read'} = 1;
 	$result{'may'}{'edit'} = 1;
 	$result{'may'}{'control'} = 1;
@@ -347,10 +348,10 @@ sub check_access_control {
 
     # if not privileged owner
     if (1) {
-	my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-					     {'sender' => $param->{'user'}{'email'},
-					      'remote_host' => $param->{'remote_host'},
-					      'remote_addr' => $param->{'remote_addr'}});
+	my $result = $list->check_list_authz('shared_doc.d_read',$params->{'auth_method'},
+					     {'sender' => $params->{'user'}{'email'},
+					      'remote_host' => $params->{'remote_host'},
+					      'remote_addr' => $params->{'remote_addr'}});
 	my $action;
 	if (ref($result) eq 'HASH') {
 	    $action = $result->{'action'};
@@ -361,10 +362,10 @@ sub check_access_control {
     }
 
     if (1) {
-	my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-					     {'sender' => $param->{'user'}{'email'},
-					      'remote_host' => $param->{'remote_host'},
-					      'remote_addr' => $param->{'remote_addr'}});
+	my $result = $list->check_list_authz('shared_doc.d_edit',$params->{'auth_method'},
+					     {'sender' => $params->{'user'}{'email'},
+					      'remote_host' => $params->{'remote_host'},
+					      'remote_addr' => $params->{'remote_addr'}});
 	my $action;
 	if (ref($result) eq 'HASH') {
 	    $action = $result->{'action'};
@@ -377,7 +378,7 @@ sub check_access_control {
     }
 
     ## Only authenticated users can edit files
-    unless ($param->{'user'}{'email'}) {
+    unless ($params->{'user'}{'email'}) {
 	$may_edit = 0;
 	$why_not_edit = 'not_authenticated';
     }
@@ -385,7 +386,7 @@ sub check_access_control {
     my $current_path = $self->{'path'};
     my $current_document;
     my %desc_hash;
-    my $user = $param->{'user'}{'email'} || 'nobody';
+    my $user = $params->{'user'}{'email'} || 'nobody';
 
     while ($current_path ne "") {
 	# no description file found yet
@@ -435,10 +436,11 @@ sub check_access_control {
 
 	    if (1) {
 
-		my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-						     {'sender' => $param->{'user'}{'email'},
-						      'remote_host' => $param->{'remote_host'},
-						      'remote_addr' => $param->{'remote_addr'},
+		my $result =
+		$list->check_list_authz('shared_doc.d_read',$params->{'auth_method'},
+						     {'sender' => $params->{'user'}{'email'},
+						      'remote_host' => $params->{'remote_host'},
+						      'remote_addr' => $params->{'remote_addr'},
 						      'scenario'=> $desc_hash{'read'}});
 		my $action;
 		if (ref($result) eq 'HASH') {
@@ -451,10 +453,11 @@ sub check_access_control {
 	    }
 
 	    if (1) {
-		my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-						     {'sender' => $param->{'user'}{'email'},
-						      'remote_host' => $param->{'remote_host'},
-						      'remote_addr' => $param->{'remote_addr'},
+		my $result =
+		$list->check_list_authz('shared_doc.d_edit',$params->{'auth_method'},
+						     {'sender' => $params->{'user'}{'email'},
+						      'remote_host' => $params->{'remote_host'},
+						      'remote_addr' => $params->{'remote_addr'},
 						      'scenario'=> $desc_hash{'edit'}});
 		my $action_edit;
 		if (ref($result) eq 'HASH') {
@@ -472,7 +475,7 @@ sub check_access_control {
 	    }
 
 	    ## Only authenticated users can edit files
-	    unless ($param->{'user'}{'email'}) {
+	    unless ($params->{'user'}{'email'}) {
 		$may_edit = 0;
 		$why_not_edit = 'not_authenticated';
 	    }
