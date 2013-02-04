@@ -11,9 +11,7 @@ use Carp;
 our $AUTOLOAD;
 our $VERSION = "4.3";
 
-##------------------------------------------------------------------------##
 ## Constructor
-
 sub new {
 	my ($class, $fields_ref) = @_;
 
@@ -28,9 +26,7 @@ sub new {
 	return $self;
 }
 
-##------------------------------------------------------------------------##
 ## The AUTOLOAD function allows for the dynamic creation of accessor methods
-
 sub AUTOLOAD {
 	my $self = shift;
 	my $type = ref($self) or croak "$self is not an object";

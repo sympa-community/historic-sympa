@@ -15,9 +15,6 @@ use Encode qw(decode_utf8 encode_utf8 is_utf8);
 our $VERSION = "4.3";
 our ($AUTOLOAD, @MSGFILES);
 
-##------------------------------------------------------------------------##
-## Constructor
-
 my %fields = (
    age              => 0,
    archive_name     => undef,
@@ -50,6 +47,7 @@ my %fields = (
    words            => undef,
   );
 
+## Constructor
 sub new {
   my ($class) = @_;
   my $self  = Marc->new(\%fields);
@@ -57,10 +55,7 @@ sub new {
   return $self;
 }
 
-##------------------------------------------------------------------------##
 ## These accessor methods keep a running count of matches in each area
-## PUBLIC METHOD
-
 sub body_count
 {
   my ($self, $count) = @_;
@@ -117,10 +112,7 @@ sub key_word
   return $self->{'key_word'};
 }
 
-##------------------------------------------------------------------------##
 ## Handle Actual Search
-## PRIVATE METHOD
-
 sub _find_match
 {
   my ($self, $file, $subj, $from, $date, $id, $body_ref) = @_;
@@ -235,12 +227,9 @@ sub _find_match
   return $match;		# 1 if match suceeds; 0 otherwise
 }
 
-##------------------------------------------------------------------------##
 ## Build up a list of files to search; read in the relevant portions;
 ## pass those parts off for checking (and printing if there's a match)
 ## by the _find_match method
-## PUBLIC METHOD
-
 sub search {
 	my ($self) = @_;
 
@@ -377,18 +366,12 @@ sub search {
 	return $self->file_count + 1;
 }
 
-##------------------------------------------------------------------------##
 ## Function for use with File::Find -- recursive
-## PRIVATE METHOD
-
 sub _get_file_list {
   /^msg/ && push @MSGFILES,$File::Find::name;
 }
 
-##------------------------------------------------------------------------##
 ## Eval anonymous pattern match functions based on user search terms
-
-## PUBLIC METHOD
 sub match_any {
   my ($self, @patterns) = @_;
 
@@ -412,7 +395,6 @@ EOCODE
   return $function;
 }
 
-## PUBLIC METHOD
 sub body_match_all {
   my ($self, @ret) = @_;
 
@@ -444,7 +426,6 @@ EOCODE
   return $function;
 }
 
-## PUBLIC METHOD
 sub match_all {
   my ($self, @patterns) = @_;
 
@@ -462,7 +443,6 @@ sub match_all {
   return $function;
 }
 
-## PUBLIC METHOD
 sub match_this {
   my ($self, @patterns) = @_;
 
