@@ -317,7 +317,7 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^Hi\. This is the qmail-send program/m) {
 			# Qmail
 			while ($paragraph = shift @paragraphes) {
-				if ($paragraph =~ /^<(\S+)>:\n(.*)/m) {
+				if ($paragraph =~ /^<(\S+)>:.*\(#($status_pattern)\)$/ms) {
 					$info{$1}{error} = $2;
 				}
 				last if $paragraph =~ /^[^<]/;
