@@ -65,19 +65,17 @@ sub parse_rfc1891_notification {
     my $entity = $message->{'msg'};
     return undef    unless ($entity) ;
 
-    my $head = $entity->head;
-
     my @parts = $entity->parts();
 
     my $result;
 
-    foreach my $p (@parts) {
-	my $h = $p->head();
-	my $content = $h->get('Content-type');
+    foreach my $part ($entity->parts()) {
+	my $head = $part->head();
+	my $content = $head->get('Content-type');
 
 	next unless ($content =~ /message\/delivery-status/i);
 
-	my $body = $p->body();
+	my $body = $part->body();
 	# the body is a list of CRLF-separated lines, with each
 	# paragraph separated by an empty line
 	foreach my $paragraph (split /\r\n\r\n/, (join '', @$body)) {
@@ -104,6 +102,7 @@ sub parse_rfc1891_notification {
 		}
 	}
     }
+
     return $result;
 }
 
