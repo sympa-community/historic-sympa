@@ -39,6 +39,8 @@ use MIME::Parser;
 
 use Sympa::Log;
 
+my $status_pattern = qr/\d\.\d\.\d/;
+
 =head1 FUNCTIONS
 
 =head2 parse_compliant_notification($message)
@@ -81,7 +83,7 @@ sub parse_rfc1891_notification {
 		foreach my $paragraph (split /\r\n\r\n/, (join '', @$body)) {
 			my ($status, $recipient);
 
-			if ($paragraph =~ /^Status: \s+ (\d+\.\d+\.\d+)/mx) {
+			if ($paragraph =~ /^Status: \s+ ($status_pattern)/mx) {
 				$status = $1;
 			}
 
@@ -574,7 +576,7 @@ sub parse_notification {
 			while ($paragraph = shift @paragraphes) {
 				if ($paragraph =~ /^<(\S+)>(?: \(expanded from <\S+>\))?:\s(.*)/ms) {
 					my ($addr, $error) = ($1, $2);
-					if ($error =~ /^host \s [^:]* said: \s \d+ \s (\d+\.\d+\.\d+)/x) {
+					if ($error =~ /^host \s [^:]* said: \s \d+ \s ($status_pattern)/x) {
 						$info{$addr}{error} = $1;
 					}
 					elsif ($error =~ /^([^:]+):/) {
@@ -595,7 +597,7 @@ sub parse_notification {
 				}
 			}
 
-		} elsif ($paragraph =~ /^(\S+); Action: Failed; Status: \d.\d.\d \((.*)\)/m) {
+		} elsif ($paragraph =~ /^(\S+); Action: Failed; Status: $status_pattern \((.*)\)/m) {
 			# Wanadoo
 			$info{$1}{error} = $2;
 		}
