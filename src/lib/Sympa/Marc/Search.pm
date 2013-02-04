@@ -56,48 +56,42 @@ sub new {
 }
 
 ## These accessor methods keep a running count of matches in each area
-sub body_count
-{
+sub body_count {
   my ($self, $count) = @_;
   $count ||= 0;
 
   return $self->{body_count} += $count;
 }
 
-sub id_count
-{
+sub id_count {
   my ($self, $count) = @_;
   $count ||= 0;
 
   return $self->{id_count} += $count;
 }
 
-sub date_count
-{
+sub date_count {
   my ($self, $count) = @_;
   $count ||= 0;
 
   return $self->{date_count} += $count;
 }
 
-sub from_count
-{
+sub from_count {
   my ($self, $count) = @_;
   $count ||= 0;
 
   return $self->{from_count} += $count;
 }
 
-sub subj_count
-{
+sub subj_count {
   my ($self, $count) = @_;
   $count ||= 0;
 
   return $self->{subj_count} += $count;
 }
 
-sub key_word
-{
+sub key_word {
   my ($self, @keywords) = @_;
 
   if (scalar @keywords) {
@@ -113,8 +107,7 @@ sub key_word
 }
 
 ## Handle Actual Search
-sub _find_match
-{
+sub _find_match {
   my ($self, $file, $subj, $from, $date, $id, $body_ref) = @_;
 
   my $body_string = '';
