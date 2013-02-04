@@ -33,7 +33,9 @@ my %tests_rfc1891 = (
 );
 
 my %tests = (
-	'error1.eml' => undef,
+	'error1.eml' => {
+		'fnasser@redhat.com' => '5.7.1'
+	},
 	'error2.eml' => {
 		'aris@samizdat.net' => 'user unknown'
 	},
