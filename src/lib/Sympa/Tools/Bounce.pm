@@ -346,7 +346,7 @@ sub parse_notification {
 	 }
 
       } elsif (
-	 $paragraph =~ /^The following recipient\(s\) could not be reached:/m or
+	 $paragraph =~ /^The following recipient\(s\) could not be reached:/m ||
 	 /^did not reach the following recipient\(s\):/m
       ) {
 	 # Exchange
@@ -428,8 +428,8 @@ sub parse_notification {
 	    }
 	 }
       } elsif (
-	 $paragraph =~ /^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m or
-	 $paragraph =~ /^Your message has encountered delivery problems\s+to (\S+)\.$/m or
+	 $paragraph =~ /^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m ||
+	 $paragraph =~ /^Your message has encountered delivery problems\s+to (\S+)\.$/m ||
 	 $paragraph =~ /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m
       ) {
 	 my $adr = $2 || $1;
@@ -440,7 +440,7 @@ sub parse_notification {
 	 $type = 23;
 
       } elsif (
-	 $paragraph =~ /^A message that you sent could not be delivered to all of its recipients/m or
+	 $paragraph =~ /^A message that you sent could not be delivered to all of its recipients/m ||
 	 /^The following address\(es\) failed:/m
       ) {
 	 # Exim
@@ -588,7 +588,7 @@ sub parse_notification {
 	 }
 
       } elsif (
-	 $paragraph =~ /^Your message cannot be delivered to the following recipients:/m or
+	 $paragraph =~ /^Your message cannot be delivered to the following recipients:/m ||
 	 /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m
       ) {
 	 # PMDF
@@ -647,7 +647,7 @@ sub parse_notification {
       next unless ($a1 and ref ($info{$a1}));
       my ($a2, $a3);
       $a2 = $a1;
-      unless (! $info{$a1}{expanded} or ($a1 =~ /\@/ and $info{$a1}{expanded} !~ /\@/) ) {
+      unless (! $info{$a1}{expanded} || ($a1 =~ /\@/ and $info{$a1}{expanded} !~ /\@/) ) {
 	 $a2 = $info{$a1}{expanded};
 
       }
