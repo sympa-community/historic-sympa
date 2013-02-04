@@ -21,7 +21,7 @@ eval {
 };
 plan(skip_all => 'Test::TrailingSpace required') if $EVAL_ERROR;
 
-plan tests => 2;
+plan tests => 4;
 
 chdir "$Bin/..";
            
@@ -32,11 +32,25 @@ $finder = Test::TrailingSpace->new({
     filename_regex => qr/\.pm$/,
 });
 
-$finder->no_trailing_space("No trailing space was found.");
+$finder->no_trailing_space("No trailing space was found in libraries");
 
 $finder = Test::TrailingSpace->new({
     root           => 'src/sbin',
     filename_regex => qr/\.pl\.in$/,
 });
 
-$finder->no_trailing_space("No trailing space was found.");
+$finder->no_trailing_space("No trailing space was found in main executables");
+
+$finder = Test::TrailingSpace->new({
+    root           => 'src/cgi',
+    filename_regex => qr/\.(pl|fcgi)\.in$/,
+});
+
+$finder->no_trailing_space("No trailing space was found in CGI executables");
+
+$finder = Test::TrailingSpace->new({
+    root           => 'src/bin',
+    filename_regex => qr/\.pl\.in$/,
+});
+
+$finder->no_trailing_space("No trailing space was found in other executables");
