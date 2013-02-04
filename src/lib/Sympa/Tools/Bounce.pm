@@ -63,7 +63,7 @@ sub parse_rfc1891_notification {
    my ($message) = @_;
 
    my $entity = $message->{'msg'};
-   return undef    unless ($entity) ;
+   return undef unless ($entity) ;
 
    my @parts = $entity->parts();
 
@@ -172,7 +172,7 @@ sub parse_notification {
    my ($message) = @_;
 
    my $entity = $message->{'msg'};
-   return undef    unless ($entity) ;
+   return undef unless ($entity) ;
 
    my $type;
    my %info;
@@ -193,7 +193,7 @@ sub parse_notification {
       $type = 34;
    }
 
-   my $recipients =  $head->get('X-Failed-Recipients');
+   my $recipients = $head->get('X-Failed-Recipients');
    if ($recipients) {
       if ($recipients =~ /^\s*(\S+)$/) {
 	 $info{$1}{error} = "";
@@ -225,6 +225,7 @@ sub parse_notification {
 	       $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	    }
 	 }
+
       } elsif ($paragraph =~ /^\s+-+\sTranscript of session follows\s-+/m) {
 	 my $adr;
 	 my @lines = split(/\n/, $paragraph);
@@ -250,7 +251,7 @@ sub parse_notification {
 	       $adr = $1;
 	       my $cause = $2;
 	       $cause =~ s/^(.*) [\(\:].*$/$1/;
-	       foreach $a(split /,/, $adr) {
+	       foreach $a (split /,/, $adr) {
 		  $a =~ s/^[\"\<](.+)[\"\>]$/$1/;
 		  $info{$a}{error} = $cause;
 		  $type = 2;
@@ -267,14 +268,13 @@ sub parse_notification {
 	 }
 
       } elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
-	 my ($cause,$adr);
+	 my ($cause, $adr);
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
 	    if ($line =~ /^(Unknown QuickMail recipient\(s\)):/) {
 	       $cause = $1;
 	       $type = 4;
 	    } elsif ($line =~ /^\s+(.*)$/ and $cause) {
-
 	       $adr = $1;
 	       $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	       $info{$adr}{error} = $cause;
@@ -402,6 +402,7 @@ sub parse_notification {
 	       $type = 18;
 	    }
 	 }
+
       } elsif ($paragraph =~ /unable to deliver following mail to recipient\(s\):/m) {
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
@@ -427,6 +428,7 @@ sub parse_notification {
 	       $type = 21;
 	    }
 	 }
+
       } elsif (
 	 $paragraph =~ /^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m ||
 	 $paragraph =~ /^Your message has encountered delivery problems\s+to (\S+)\.$/m ||
@@ -435,6 +437,7 @@ sub parse_notification {
 	 my $adr = $2 || $1;
 	 $info{$adr}{error} = "";
 	 $type = 22;
+
       } elsif ($paragraph =~ /^(The user return_address (\S+) does not exist)/) {
 	 $info{$2}{error} = $1;
 	 $type = 23;
