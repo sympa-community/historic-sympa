@@ -62,8 +62,6 @@ A list of recipients/status pairs, as an hasref.
 sub parse_rfc1891_notification {
     my ($message) = @_;
 
-    local $RS = "\n";
-
     my $entity = $message->{'msg'};
     return undef    unless ($entity) ;
 
@@ -80,32 +78,18 @@ sub parse_rfc1891_notification {
 	next unless ($content =~ /message\/delivery-status/i);
 
 	my $body = $p->body();
-
-	## Fork, communicate with child via BODY
-	my $pid = open BODY, "-|";
-
-	unless (defined($pid)) {
-	    die 'Fork failed';
-	}
-
-	if (! $pid) {
-	    ## Child process
-	    print STDOUT @$body;
-	    exit;
-	}else {
-	    ## Multiline paragraph separator
-	    local $RS = '';
-
-	    while (<BODY>) {
-
+	# the body is a list of CRLF-separated lines, with each
+	# paragraph separated by an empty line
+	foreach my $paragraph (split /\r\n\r\n/, (join '', @$body)) {
 		my ($status, $recipient);
-		if (/^Status: \s+ (\d+\.\d+\.\d+)/mx) {
+
+		if ($paragraph =~ /^Status: \s+ (\d+\.\d+\.\d+)/mx) {
 		    $status = $1;
 		}
 
 		if (
-			/^Original-Recipient: \s+ rfc822; \s* (\S+)/mx ||
-			/^Final-Recipient: \s+ rfc822; \s* (\S+)/mx
+			$paragraph =~ /^Original-Recipient: \s+ rfc822; \s* (\S+)/mx ||
+			$paragraph =~ /^Final-Recipient: \s+ rfc822; \s* (\S+)/mx
 		) {
 		    $recipient = $1;
 		    if ($recipient =~ /\@.+:(.+)$/) {
@@ -118,9 +102,6 @@ sub parse_rfc1891_notification {
 		if ($recipient and $status) {
 		    $result->{$recipient} = $status;
 		}
-	    }
-	    local $RS = "\n";
-	    close BODY;
 	}
     }
     return $result;
