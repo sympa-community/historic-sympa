@@ -68,8 +68,5 @@ foreach my $test (sort keys %tests) {
 		Sympa::Tools::Bounce::parse_notification($message),
 		$tests{$test},
 		"$test message parsing as arbitrary notification"
-	) or print Dumper(Sympa::Tools::Bounce::parse_notification($message));
+	);
 }
-
-use Data::Dumper;
-
