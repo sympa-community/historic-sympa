@@ -572,9 +572,9 @@ sub parse_notification {
 		) {
 			# Postfix
 			while ($paragraph = shift @paragraphes) {
-				if ($paragraph =~ /^<(\S+)>:\s(.*)/m) {
-					my ($addr,$error) = ($1,$2);
-					if ($error =~ /^host\s[^:]*said:\s(\d+)/) {
+				if ($paragraph =~ /^<(\S+)>(?: \(expanded from <\S+>\))?:\s(.*)/ms) {
+					my ($addr, $error) = ($1, $2);
+					if ($error =~ /^host \s [^:]* said: \s \d+ \s (\d+\.\d+\.\d+)/x) {
 						$info{$addr}{error} = $1;
 					}
 					elsif ($error =~ /^([^:]+):/) {
