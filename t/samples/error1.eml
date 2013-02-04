@@ -1,0 +1,122 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 706F11CAA49
+	for <root@zarb.org>; Fri,  1 Feb 2013 08:00:50 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id K01j0HBF1Jwp for <root@zarb.org>;
+	Fri,  1 Feb 2013 08:00:48 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5EEDC1CAA47
+	for <root@zarb.org>; Fri,  1 Feb 2013 08:00:48 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 725851CAA47; Fri,  1 Feb 2013 08:00:46 +0100 (CET)
+Date: Fri,  1 Feb 2013 08:00:46 +0100 (CET)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="BA9881CAA4D.1359702046/ryu.zarb.org"
+Message-Id: <20130201070046.725851CAA47@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--BA9881CAA4D.1359702046/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<fnasser@redhat.com> (expanded from <jpackage@zarb.org>): host
+    mx1.redhat.com[209.132.183.28] said: 554 5.7.1 This was rejected because it
+    looks like spam (in reply to end of DATA command)
+
+--BA9881CAA4D.1359702046/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: BA9881CAA4D
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Fri,  1 Feb 2013 08:00:27 +0100 (CET)
+
+Final-Recipient: rfc822; fnasser@redhat.com
+Original-Recipient: rfc822;jpackage@zarb.org
+Action: failed
+Status: 5.7.1
+Remote-MTA: dns; mx1.redhat.com
+Diagnostic-Code: smtp; 554 5.7.1 This was rejected because it looks like spam
+
+--BA9881CAA4D.1359702046/ryu.zarb.org
+Content-Description: Undelivered Message Headers
+Content-Type: text/rfc822-headers
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: by ryu.zarb.org (Postfix)
+	id BA9881CAA4D; Fri,  1 Feb 2013 08:00:27 +0100 (CET)
+Delivered-To: fnasser@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id A78C81CAA4E; Fri,  1 Feb 2013 08:00:27 +0100 (CET)
+Delivered-To: jpackage@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 970E41CAA4B
+	for <jpackage@zarb.org>; Fri,  1 Feb 2013 08:00:27 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id x5Y9fefItrR2 for <jpackage@zarb.org>;
+	Fri,  1 Feb 2013 08:00:27 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 4F5E91CAA56
+	for <jpackage@zarb.org>; Fri,  1 Feb 2013 08:00:18 +0100 (CET)
+X-Original-To: jpackage-discuss-owner@zarb.org
+Delivered-To: jpackage-discuss-owner@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8A0611CAA53
+	for <jpackage-discuss-owner@zarb.org>;
+	Fri,  1 Feb 2013 08:00:16 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id HaoIOyF91IOm for <jpackage-discuss-owner@zarb.org>;
+	Fri,  1 Feb 2013 08:00:03 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8C5CA1CAA47
+	for <jpackage-discuss-owner@zarb.org>;
+	Fri,  1 Feb 2013 08:00:03 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: 303 JPackage-discuss moderator request(s) waiting
+From: jpackage-discuss-bounces@zarb.org
+To: jpackage-discuss-owner@zarb.org
+Message-ID: <mailman.0.1359702002.10008.jpackage-discuss@zarb.org>
+Date: Fri, 01 Feb 2013 08:00:02 +0100
+Precedence: bulk
+X-BeenThere: jpackage-discuss@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: Discussion about JPackage project <jpackage-discuss.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+--BA9881CAA4D.1359702046/ryu.zarb.org--

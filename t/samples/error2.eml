@@ -1,0 +1,121 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 3CD931CAA3A
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:57 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id N4IRQ+PlhSRh for <root@zarb.org>;
+	Fri,  1 Feb 2013 05:20:57 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id C9FA81CAA4B
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:51 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 452C71CAA4B
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:20:50 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 0WSp+WvE0ZDl for <mailman-bounces@zarb.org>;
+	Fri,  1 Feb 2013 05:20:48 +0100 (CET)
+Received: from samizdat.net (samizdat.net [80.67.174.41])
+	by ryu.zarb.org (Postfix) with ESMTPS id 1FA3A1CAAB9
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:18:40 +0100 (CET)
+Received: from localhost (localhost)
+	by samizdat.net (8.14.4/jtpda-5.4) id r114IdqI028490
+	; Fri, 1 Feb 2013 05:18:39 +0100
+Date: Fri, 1 Feb 2013 05:18:39 +0100
+From: Mailer-Daemon@samizdat.net (Mail Delivery Subsystem)
+Subject: Returned mail: see transcript for details
+Message-Id: <201302010418.r114IdqI028490@samizdat.net>
+To: <mailman-bounces@zarb.org>
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="r114IdqI028490.1359692319/samizdat.net"
+Auto-Submitted: auto-generated (failure)
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message
+
+--r114IdqI028490.1359692319/samizdat.net
+
+The original message was received at Fri, 1 Feb 2013 05:18:38 +0100
+from ryu.zarb.org [212.85.158.22]
+
+   ----- The following addresses had permanent fatal errors -----
+<aris@samizdat.net>
+    (reason: 550 5.1.1 User unknown)
+aris 
+    (reason: 550 5.1.1 User unknown)
+    (expanded from: <aris@samizdat.net>)
+
+   ----- Transcript of session follows -----
+550 5.1.1 aris ... User unknown
+550 5.1.1 <aris@samizdat.net>... User unknown
+
+--r114IdqI028490.1359692319/samizdat.net
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; samizdat.net
+Received-From-MTA: dns; ryu.zarb.org
+Arrival-Date: Fri, 1 Feb 2013 05:18:38 +0100
+
+Original-Recipient: rfc822;aris@samizdat.net
+Final-Recipient: rfc822; aris@samizdat.net
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: smtp; 550 5.1.1 User unknown
+Last-Attempt-Date: Fri, 1 Feb 2013 05:18:39 +0100
+
+Original-Recipient: rfc822;aris@samizdat.net
+Final-Recipient: rfc822; aris@samizdat.net
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: smtp; 550 5.1.1 User unknown
+Last-Attempt-Date: Fri, 1 Feb 2013 05:18:39 +0100
+
+--r114IdqI028490.1359692319/samizdat.net
+Content-Type: text/rfc822-headers
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from ryu.zarb.org (ryu.zarb.org [212.85.158.22])
+          by samizdat.net (8.14.4/jtpda-5.4) with ESMTP id r114IcqJ028481
+          for <aris@samizdat.net>; Fri, 1 Feb 2013 05:18:38 +0100
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id D1D761CAAB9
+	for <aris@samizdat.net>; Fri,  1 Feb 2013 05:18:37 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 36Ylr+6yQ1-i for <aris@samizdat.net>;
+	Fri,  1 Feb 2013 05:18:36 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 18BA81CB13E
+	for <aris@samizdat.net>; Fri,  1 Feb 2013 05:02:00 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: aris@samizdat.net
+X-No-Archive: yes
+Message-ID: <mailman.1906.1359691255.15398.mailman@zarb.org>
+Date: Fri, 01 Feb 2013 05:00:55 +0100
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD
+	autolearn=ham version=3.3.2
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on slut.samizdat.net
+
+--r114IdqI028490.1359692319/samizdat.net--
+

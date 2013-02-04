@@ -1,0 +1,125 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 3CB111CAA3A
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id ogdfMuGSSYd8 for <root@zarb.org>;
+	Fri,  1 Feb 2013 05:20:56 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id B884F1CAA47
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:51 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id A5C821CAA47
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:20:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id M1AkwM6FWPRn for <mailman-bounces@zarb.org>;
+	Fri,  1 Feb 2013 05:20:48 +0100 (CET)
+Received: from kcin02.prserv.net (kcin02.prserv.net [12.154.55.42])
+	by ryu.zarb.org (Postfix) with ESMTP id 818651CAAC2
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:18:38 +0100 (CET)
+Received: from prserv.net (localhost[127.0.0.1])
+	by prserv.net (kcin02) with ESMTP
+	id <2013020104180110200hgo5ke>; Fri, 1 Feb 2013 04:18:01 +0000
+X-Originating-IP: [127.0.0.1]
+From: Mail Delivery Subsystem <mailer-daemon@prserv.net>
+Subject: Returned mail: delivery problems encountered
+Message-Id: <20130201041801102009qf00e@A@000000000000@prserv.net>
+Date: 1 Feb 2013  4:18:01 +0000
+To: <mailman-bounces@zarb.org>
+Mime-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="_510b41f9.274f.0+prserv.net=_"
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+--_510b41f9.274f.0+prserv.net=_
+Content-Type: text/plain
+
+A message (from <mailman-bounces@zarb.org>) was received at 1 Feb 2013  4:18:00 +0000.
+
+The following addresses had delivery problems:
+
+<tclapes@attglobal.net>
+	Permanent Failure: 522_mailbox_full;_group_quota_sz=37748397/37748736_ct=1356/100000
+	Delivery last attempted at Fri,  1 Feb 2013 04:18:00 -0000
+
+--_510b41f9.274f.0+prserv.net=_
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; prserv.net
+Arrival-Date: 1 Feb 2013  4:18:00 +0000
+
+Final-Recipient: rfc822; <tclapes@attglobal.net>
+Action: failed
+Status: 5.0.0 522_mailbox_full;
+	_group_quota_sz=37748397/37748736_ct=1356/100000
+Diagnostic-Code: smtp; Permanent Failure: Other undefined Status
+Last-Attempt-Date: Fri,  1 Feb 2013 04:18:00 -0000
+
+--_510b41f9.274f.0+prserv.net=_
+Content-Type: message/rfc822
+
+Received: from ryu.zarb.org ([212.85.158.22]) by prserv.net (kcin02) with ESMTP
+	id <20130201041758102007j810e>; Fri, 1 Feb 2013 04:18:00 +0000
+X-Originating-IP: [212.85.158.22]
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 9BC461CAAB7
+	for <tclapes@attglobal.net>; Fri,  1 Feb 2013 05:17:57 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Z4pgYON-DYSY for <tclapes@attglobal.net>;
+	Fri,  1 Feb 2013 05:17:56 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id B9D911CB0F8
+	for <tclapes@attglobal.net>; Fri,  1 Feb 2013 05:01:56 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: tclapes@attglobal.net
+X-No-Archive: yes
+Message-ID: <mailman.1832.1359691253.15398.mailman@zarb.org>
+Date: Fri, 01 Feb 2013 05:00:53 +0100
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for tclapes@attglobal.net:
+
+List                                     Password // URL
+----                                     --------  
+plf-announce@zarb.org                    XXXXXX    
+https://www.zarb.org/mailman/options/plf-announce/tclapes%40attglobal.net
+
+--_510b41f9.274f.0+prserv.net=_--

@@ -1,0 +1,129 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8EADC1CAA49
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:55 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id kA0XwPII5nRM for <root@zarb.org>;
+	Fri,  1 Feb 2013 05:20:55 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 39A7E1CAA4E
+	for <root@zarb.org>; Fri,  1 Feb 2013 05:20:26 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 4827F1CAA58
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:20:24 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Edz74sTHxdjS for <mailman-bounces@zarb.org>;
+	Fri,  1 Feb 2013 05:20:21 +0100 (CET)
+Received: from nic.upatras.gr (nic.upatras.gr [150.140.129.30])
+	by ryu.zarb.org (Postfix) with ESMTP id D3FB11CAA9C
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 05:14:10 +0100 (CET)
+Received: from localhost (nic.upatras.gr [127.0.0.1])
+	by nic.upatras.gr (Postfix) with ESMTP id EA2D52758D2
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 06:14:09 +0200 (EET)
+X-Virus-Scanned: amavisd-new at upatras.gr
+Received: from nic.upatras.gr ([127.0.0.1])
+	by localhost (nic.upatras.gr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 73A6Bn-99sed for <mailman-bounces@zarb.org>;
+	Fri,  1 Feb 2013 06:14:09 +0200 (EET)
+Received: from rea.chemeng.upatras.gr (rea.chemeng.upatras.gr [150.140.190.9])
+	by nic.upatras.gr (Postfix) with ESMTP
+	for <mailman-bounces@zarb.org>; Fri,  1 Feb 2013 06:14:09 +0200 (EET)
+Received: (qmail 5294 invoked for bounce); 1 Feb 2013 04:15:23 -0000
+Date: 1 Feb 2013 04:15:23 -0000
+From: MAILER-DAEMON@rea.chemeng.upatras.gr
+To: mailman-bounces@zarb.org
+Subject: failure notice
+Message-Id: <20130201042024.4827F1CAA58@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+Hi. This is the qmail-send program at rea.chemeng.upatras.gr.
+I'm afraid I wasn't able to deliver your message to the following addresses.
+This is a permanent error; I've given up. Sorry it didn't work out.
+For further assistance, contact support@chemeng.upatras.gr
+
+<efthimeros@chemeng.upatras.gr>:
+Sorry, no mailbox here by that name. (#5.1.1)
+
+--- Below this line is a copy of the message.
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: (qmail 5291 invoked by uid 512); 1 Feb 2013 04:15:23 -0000
+Received: from 150.140.129.28 by rea.chemeng.upatras.gr (envelope-from <mailman-bounces@zarb.org>, uid 501) with qmail-scanner-2.01st 
+ (clamdscan: 0.96/16601. spamassassin: 3.1.6. perlscan: 2.01st.  
+ Clear:RC:1(150.140.129.28):. 
+ Processed in 0.03135 secs); 01 Feb 2013 04:15:23 -0000
+Received: from unknown (HELO albatross.upnet.gr) ([150.140.129.28])
+          (envelope-sender <mailman-bounces@zarb.org>)
+          by rea.chemeng.upatras.gr (qmail-ldap-1.03) with SMTP
+          for <efthimeros@chemeng.upatras.gr>; 1 Feb 2013 04:15:23 -0000
+Received: from localhost (albatross.upnet.gr [127.0.0.1])
+	by albatross.upnet.gr (Postfix) with ESMTP id A72C2275AF3
+	for <efthimeros@chemeng.upatras.gr>; Fri,  1 Feb 2013 06:14:08 +0200 (EET)
+X-Virus-Scanned: amavisd-new at upnet.gr
+Received: from albatross.upnet.gr ([127.0.0.1])
+	by localhost (albatross.upnet.gr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Qt40Lxxh3iNr for <efthimeros@chemeng.upatras.gr>;
+	Fri,  1 Feb 2013 06:14:07 +0200 (EET)
+Received: from ryu.zarb.org (ryu.zarb.org [212.85.158.22])
+	by albatross.upnet.gr (Postfix) with ESMTP
+	for <efthimeros@chemeng.upatras.gr>; Fri,  1 Feb 2013 06:14:07 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 19D171CAA9B
+	for <efthimeros@chemeng.upatras.gr>; Fri,  1 Feb 2013 05:14:07 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id kOzVrCkf-SQx for <efthimeros@chemeng.upatras.gr>;
+	Fri,  1 Feb 2013 05:14:06 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 173E61CAF75
+	for <efthimeros@chemeng.upatras.gr>; Fri,  1 Feb 2013 05:01:37 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: efthimeros@chemeng.upatras.gr
+X-No-Archive: yes
+Message-ID: <mailman.1416.1359691240.15398.mailman@zarb.org>
+Date: Fri, 01 Feb 2013 05:00:40 +0100
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for efthimeros@chemeng.upatras.gr:
+
+List                                     Password // URL
+----                                     --------  
+plf-announce@zarb.org                    XXXXXX    
+https://www.zarb.org/mailman/options/plf-announce/efthimeros%40chemeng.upatras.gr
