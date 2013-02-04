@@ -126,13 +126,8 @@ sub parse_rfc1891_notification {
     return $result;
 }
 
-=head2 corrige($adr, $from)
-
-Corrige une adresse SMTP
-
-=cut
-
-sub corrige {
+# fix an SMTP address
+sub _fix_address {
     my ($adr, $from) = @_;
 
     ## adresse X400
@@ -938,7 +933,7 @@ sub parse_notification {
 
 	}
 
-	$a3 = corrige($a2, $from);
+	$a3 = _fix_address($a2, $from);
 #        print "CORRECTION : $a2 --> $a3\n" if $a2 ne $a3;
 
         $a3 =~ y/[A-Z]/[a-z]/;
