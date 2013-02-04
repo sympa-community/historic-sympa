@@ -286,11 +286,11 @@ sub parse_notification {
 	 my $adr;
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
-	    if (/^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
+	    if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
 	       $adr = $1;
 	       $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	       $type = 5;
-	    }else{
+	    } else {
 	       /^(.*)$/;
 	       $info{$adr}{error} = $1;
 	       $type = 5;
@@ -332,7 +332,7 @@ sub parse_notification {
 	 do {
 	    $paragraph = shift @paragraphes;
 	 } until $paragraph =~ /^[^<]/;
-	 if (/^<(\S+)>:\n(.*)/m) {
+	 if ($paragraph =~ /^<(\S+)>:\n(.*)/m) {
 	    $info{$1}{error} = $2;
 	    $type = 8;
 	 }
@@ -340,7 +340,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /^Your message was not delivered to the following recipients:/m) {
 	 ## Sendmail
 	 $paragraph = shift @paragraphes;
-	 if (/^\s*(\S+):\s+(.*)$/m) {
+	 if ($paragraph =~ /^\s*(\S+):\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 9;
 	 }
@@ -351,7 +351,7 @@ sub parse_notification {
       ) {
 	 # Exchange
 	 $paragraph = shift @paragraphes;
-	 if (/^\s*(\S+).*\n\s+(.*)$/m) {
+	 if ($paragraph =~ /^\s*(\S+).*\n\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 10;
 	 }
@@ -359,7 +359,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /^Your mail item could not be delivered to the following users/m) {
 	 ## IBM VM
 	 $paragraph = shift @paragraphes;
-	 if (/^(.*)\s+\---->\s(\S+)$/m) {
+	 if ($paragraph =~ /^(.*)\s+\---->\s(\S+)$/m) {
 	    $info{$2}{error} = $1;
 	    $type = 12;
 	 }
@@ -367,7 +367,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /^-+\s+Failure Reasons\s+-+/m) {
 	 # Lotus SMTP
 	 $paragraph = shift @paragraphes;
-	 if (/^(.*)\n(\S+)$/m) {
+	 if ($paragraph =~ /^(.*)\n(\S+)$/m) {
 	    $info{$2}{error} = $1;
 	    $type = 13;
 	 }
@@ -375,7 +375,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /^\-+\sTranscript of session follows\s\-+/m) {
 	 # Sendmail 5
 	 $paragraph = shift @paragraphes;
-	 if (/<(\S+)>\n\S+, (.*)$/m) {
+	 if ($paragraph =~ /<(\S+)>\n\S+, (.*)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 14;
 	 }
@@ -414,7 +414,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /^Unable to deliver message to the following address\(es\)/m) {
 	 # Yahoo
 	 $paragraph = shift @paragraphes;
-	 if (/^<(\S+)>:\s(.+)$/m) {
+	 if ($paragraph =~ /^<(\S+)>:\s(.+)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 20;
 	 }
@@ -441,21 +441,21 @@ sub parse_notification {
 
       } elsif (
 	 $paragraph =~ /^A message that you sent could not be delivered to all of its recipients/m ||
-	 /^The following address\(es\) failed:/m
+	 $paragraph =~ /^The following address\(es\) failed:/m
       ) {
 	 # Exim
 	 $paragraph = shift @paragraphes;
-	 if (/^\s*(\S+):\s+(.*)$/m) {
+	 if ($paragraph =~ /^\s*(\S+):\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 24;
-	 } elsif (/^\s*(\S+)$/m) {
+	 } elsif ($paragraph =~ /^\s*(\S+)$/m) {
 	    $info{$1}{error} = "";
 	 }
 
       } elsif ($paragraph =~ /^Message not delivered to recipients below/m) {
 	 # VINES-ISMTP
 	 $paragraph = shift @paragraphes;
-	 if (/^\s+\S+:.*\s+(\S+)$/m) {
+	 if ($paragraph =~ /^\s+\S+:.*\s+(\S+)$/m) {
 	    $info{$1}{error} = "";
 	    $type = 25;
 	 }
@@ -474,7 +474,7 @@ sub parse_notification {
       } elsif ($paragraph =~ /unable to deliver mail to the following recipient\(s\):/m) {
 	 $paragraph = shift @paragraphes;
 	 # AltaVista Mail
-	 if (/^(\S+):\n.*\n\s*(.*)$/m) {
+	 if ($paragraph =~ /^(\S+):\n.*\n\s*(.*)$/m) {
 	    $info{$1}{error} = $2;
 	    $type = 27;
 	 }
@@ -486,7 +486,7 @@ sub parse_notification {
 
       } elsif ($paragraph =~ /^The following recipients did not receive this message:$/m) {
 	 $paragraph = shift @paragraphes;
-	 if (/^\s+<(\S+)>/) {
+	 if ($paragraph =~ /^\s+<(\S+)>/) {
 	    $info{$1}{error} = "";
 	    $type = 29;
 	 }
@@ -571,25 +571,25 @@ sub parse_notification {
 
       } elsif ($paragraph =~ /Your message could not be delivered to:/m) {
 	 $paragraph = shift @paragraphes;
-	 if (/^(\S+)/) {
+	 if ($paragraph =~ /^(\S+)/) {
 	    $info{$1}{error} = "";
 	    $type = 39;
 	 }
       } elsif ($paragraph =~ /Session Transcription follow:/m) {
-	 if (/^<+\s+\d+\s+(.*) for \((.*)\)$/m) {
+	 if ($paragraph =~ /^<+\s+\d+\s+(.*) for \((.*)\)$/m) {
 	    $info{$2}{error} = $1;
 	    $type = 43;
 	 }
       } elsif ($paragraph =~ /^This message was returned to you for the following reasons:/m) {
 	 $paragraph = shift @paragraphes;
-	 if (/^\s+(.*): (\S+)/) {
+	 if ($paragraph =~ /^\s+(.*): (\S+)/) {
 	    $info{$2}{error} = $1;
 	    $type = 40;
 	 }
 
       } elsif (
 	 $paragraph =~ /^Your message cannot be delivered to the following recipients:/m ||
-	 /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m
+	 $paragraph =~ /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m
       ) {
 	 # PMDF
 	 $paragraph = shift @paragraphes;
@@ -616,7 +616,7 @@ sub parse_notification {
 	 do {
 	    $paragraph = shift @paragraphes;
 	 } until $paragraph =~ /THIS IS A WARNING/;
-	 if (/^<(\S+)>:\s(.*)/m) {
+	 if ($paragraph =~ /^<(\S+)>:\s(.*)/m) {
 	    my ($addr,$error) = ($1,$2);
 	    if ($error =~ /^host\s[^:]*said:\s(\d+)/) {
 	       $info{$addr}{error} = $1;
