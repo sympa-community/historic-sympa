@@ -47,7 +47,7 @@ plan tests => (scalar keys %tests_rfc1891) + (scalar keys %tests);
 
 chdir "$Bin/..";
 
-foreach my $test (keys %tests_rfc1891) {
+foreach my $test (sort keys %tests_rfc1891) {
 	my $message = Sympa::Message->new({
 		file       => "t/samples/$test",
 		noxsympato => 1
@@ -59,7 +59,7 @@ foreach my $test (keys %tests_rfc1891) {
 	);
 }
 
-foreach my $test (keys %tests) {
+foreach my $test (sort keys %tests) {
 	my $message = Sympa::Message->new({
 		file       => "t/samples/$test",
 		noxsympato => 1
