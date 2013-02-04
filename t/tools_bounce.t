@@ -42,7 +42,7 @@ foreach my $test (keys %tests) {
 		noxsympato => 1
 	});
 	is_deeply(
-		Sympa::Tools::Bounce::parse_compliant_notification($message),
+		Sympa::Tools::Bounce::parse_rfc1891_notification($message),
 		$tests{$test},
 		"$test message parsing"
 	);

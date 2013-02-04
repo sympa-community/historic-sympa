@@ -59,7 +59,7 @@ A list of recipients/status pairs, as an hasref.
 
 =cut
 
-sub parse_compliant_notification {
+sub parse_rfc1891_notification {
     my ($message) = @_;
 
     local $RS = "\n";
@@ -176,9 +176,9 @@ sub corrige {
     }
 }
 
-=head2 parse_uncompliant_notification($message, $result)
+=head2 parse_notification($message, $result)
 
-Parse a non RFC1891-compliant non-delivery notification.
+Parse a non-delivery notification.
 
 =head3 Parameters
 
@@ -196,7 +196,7 @@ The number of ?
 
 =cut
 
-sub parse_uncompliant_notification {
+sub parse_notification {
     my ($message, $result) = @_;
 
     my $string = $message->{'msg'}->as_string();

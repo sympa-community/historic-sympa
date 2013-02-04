@@ -641,14 +641,14 @@ while (!$end) {
 	    my $from = $message->{'sender'};
 
 	    my $result =
-		    Sympa::Tools::Bounce::parse_compliant_notification(
+		    Sympa::Tools::Bounce::parse_rfc1891_notification(
 			    $message
 		    );
 
 	    unless ($result) {
 		## Analysis of bounced message
 		my %hash;
-		Sympa::Tools::Bounce::parse_uncompliant_notification(
+		Sympa::Tools::Bounce::parse_notification(
 			$message, \%hash
 		);
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
