@@ -637,17 +637,17 @@ while (!$end) {
 	}else{
 	    Sympa::Log::do_log('debug',"Processing bounce messagekey=%s for list $listname",$bounce->{'messagekey'});
 
-	    my %hash;
 	    my $bounce_dir = $list->get_bounce_dir();
 	    my $from = $message->{'sender'};
 
-	    my $bounce_count =
+	    my $result =
 		    Sympa::Tools::Bounce::parse_compliant_notification(
-			    $message, \%hash
+			    $message
 		    );
 
-	    unless ($bounce_count) {
+	    unless ($result) {
 		## Analysis of bounced message
+		my %hash;
 		Sympa::Tools::Bounce::parse_uncompliant_notification(
 			$message, \%hash
 		);

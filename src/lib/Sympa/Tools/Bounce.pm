@@ -41,7 +41,7 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 parse_compliant_notification($message, $result)
+=head2 parse_compliant_notification($message)
 
 Parse a RFC1891-compliant non-delivery notification.
 
@@ -51,22 +51,18 @@ Parse a RFC1891-compliant non-delivery notification.
 
 =item * I<$message>: message object
 
-=item * I<$result>: hashref for storing result, as recipients => status
-
 =back
 
 =head3 Return value
 
-The number of ?
+A list of recipients/status pairs, as an hasref.
 
 =cut
 
 sub parse_compliant_notification {
-    my ($message, $result) = @_;
+    my ($message) = @_;
 
     local $RS = "\n";
-
-    my $nbrcpt;
 
     my $entity = $message->{'msg'};
     return undef    unless ($entity) ;
@@ -74,6 +70,8 @@ sub parse_compliant_notification {
     my $head = $entity->head;
 
     my @parts = $entity->parts();
+
+    my $result;
 
     foreach my $p (@parts) {
 	my $h = $p->head();
@@ -119,14 +117,13 @@ sub parse_compliant_notification {
 
 		if ($recipient and $status) {
 		    $result->{$recipient} = $status;
-		    $nbrcpt++;
 		}
 	    }
 	    local $RS = "\n";
 	    close BODY;
 	}
     }
-    return $nbrcpt;
+    return $result;
 }
 
 =head2 corrige($adr, $from)
