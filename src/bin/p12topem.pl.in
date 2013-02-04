@@ -5,7 +5,7 @@
 # p12topem.pl - This script installs a List X509 cert and
 # the associated private key in list directory
 # Input is PKCS#12 file
-# RCS Identication ; $Revision$ ; $Date$ 
+# RCS Identication ; $Revision$ ; $Date$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -70,11 +70,11 @@ my $p12input = $main::options{'pkcs12'};
 
 my ($cert,$privatekey,$inpass,$key);
 
-if (($main::options{'help'} ne '') || 
-    !(-r $main::options{'pkcs12'}) || 
+if (($main::options{'help'} ne '') ||
+    !(-r $main::options{'pkcs12'}) ||
     (($main::options{'listname'} ne '') && ($main::options{'robot'} ne ''))
    ){
-    print_usage(); 
+    print_usage();
 }else{
 
     if ($listname) {
@@ -91,7 +91,7 @@ if (($main::options{'help'} ne '') ||
 	    $privatekey = $Sympa::Configuration::Conf{'etc'}.'/'.$robot.'/private_key';
 	}else{
 	    $cert = $Sympa::Configuration::Conf{'etc'}.'/cert.pem';
-	    $privatekey = $Sympa::Configuration::Conf{'etc'}.'/private_key';	    
+	    $privatekey = $Sympa::Configuration::Conf{'etc'}.'/private_key';
 	}
     }
 
@@ -103,12 +103,12 @@ if (($main::options{'help'} ne '') ||
 	printf "$privatekey already exist\n";
 	die;
     }
-    
+
     unless ($openssl) {
 	printf "You must first configure Sympa to use openssl. Check the parameter openssl in sympa.conf\n";
 	die;
     }
-    
+
     system 'stty', '-echo';
     printf "password to access to $p12input :";
     chop($inpass = <STDIN>);
@@ -117,7 +117,7 @@ if (($main::options{'help'} ne '') ||
     open  PASS, "| $openssl pkcs12 -in $p12input -out $cert -nokeys -clcerts -passin stdin";
     print PASS "$inpass\n";
     close PASS ;
-    
+
     unless ($outpass) {
 	system 'stty', '-echo';
 	printf "sympa password to protect list private_key $key:";
@@ -128,7 +128,7 @@ if (($main::options{'help'} ne '') ||
     open  PASS, "| $openssl pkcs12 -in $p12input -out $privatekey -nocerts -passin stdin -des3 -passout stdin";
     print PASS "$inpass\n$outpass\n";
     close PASS ;
-    
+
     printf "$privatekey and  $cert created.\n";
     exit;
 }
@@ -147,12 +147,12 @@ using a web interface so the certificat is stored in your browser.
 
 When exporting a certificate from a browser (Netscape, IE, Mozilla etc)
 the result is stored using PKCS#12 format.Sympa requires a pair of PEM
-certificat and private key. You must then convert your pkcs#12 into PEM. 
+certificat and private key. You must then convert your pkcs#12 into PEM.
 
 For a list certificat, the file will be installed in
 $home_sympa/<listname>/cert.pem and $home_sympa/<listname>/private_key
 
-For Sympa itself a certificate will be installed in 
+For Sympa itself a certificate will be installed in
 $Sympa::Configuration::Conf{'etc'}/<robot>/cert.pem and  $Sympa::Configuration::Conf{'etc'}/<robot>/private_key or
 $Sympa::Configuration::Conf{'etc'}/cert.pem and Conf{'etc'}/private_key
 
@@ -163,5 +163,5 @@ unless ($outpass) {
 printf "Because you did not configure Sympa's password \"key_passwd\"  in
 sympa.conf you will also be prompted for the password used by sympa to access
 to the list private key)\n";
-} 
+}
 }

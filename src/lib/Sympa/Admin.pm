@@ -965,7 +965,7 @@ The updated L<Sympa::List> object.
 =cut
 
 sub clone_list_as_empty {
-    my ($source_list_name, $source_robot, $new_listname, $new_robot, $email) 
+    my ($source_list_name, $source_robot, $new_listname, $new_robot, $email)
         = @_;
 
     my $list;

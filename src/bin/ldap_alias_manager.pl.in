@@ -4,7 +4,7 @@
 
 #Author: Philippe Baumgart
 #Company: BT
-#License: GPL 
+#License: GPL
 #Version: 1.0
 ## This version of alias_manager.pl has been customized by Ludovic Marcotte, Kazuo Moriwaka and Francis Lachapelle
 ## Modified by Philippe Baumgart:
@@ -160,7 +160,7 @@ foreach my $alias (@aliases) {
 			$entry->add($hash_key, $hash_value);
 	    }
 	}
-	
+
 	if ($simulation_mode) {
 		$entry->dump;
 	} else {
@@ -178,7 +178,7 @@ finalize_ldap();
 
 } # end if add
 elsif ($operation eq 'del') {
-    
+
     if (!initialize_ldap()) {
 	print STDERR "Can't bind to LDAP server\n";
 	exit(7);
@@ -188,8 +188,8 @@ elsif ($operation eq 'del') {
 	if ($alias =~ /^\#/) {
 	    next;
 	}
-	
-	$alias =~ /^([^:]+):/; 
+
+	$alias =~ /^([^:]+):/;
 	my $alias_value = $1;
 	$alias_value =~ s/\+/\-/g;
 
@@ -215,15 +215,15 @@ else {
 
 exit 0;
 
-## Check if an alias is already defined  
+## Check if an alias is already defined
 sub already_defined {
-    
+
     my @aliases = @_;
 
     initialize_ldap();
 
     foreach my $alias (@aliases) {
-	
+
 	$alias =~ /^([^:]+):/;
 
 	my $source_result = $ldap_connection->search(filter => "(".$ldap_mail_attribute."=".$1."\@".$domain.")",
@@ -234,7 +234,7 @@ sub already_defined {
 	    return 1;
 	}
     }
-    
+
     finalize_ldap();
     return 0;
 }
@@ -251,13 +251,13 @@ sub GetLdapParameter {
         	if ($_ =~ /^\s*\#/)
         	{
         		next;
-        	}        	
+        	}
         	elsif ($_  =~ /^\s*(\w+)\s+(.+)\s*$/)
         	{
-        		
+
         		my ($param_name, $param_value) = ($1, $2);
         		$ldap_params{$param_name}=$param_value;
-        		#print "$param_name: $ldap_params{$param_name}\n";     		
+        		#print "$param_name: $ldap_params{$param_name}\n";
         	}
         	#we skip the blank line
         	elsif ($_  =~ /^\s*$/)
@@ -267,17 +267,17 @@ sub GetLdapParameter {
         	else
         	{
         		print STDERR "Unknown syntax in config file $manager_conf_file\n" and return 0;
-        	}        
-        
+        	}
+
         }
-         
+
 }
-	
+
 
 ## Initialize the LDAP connection
 sub initialize_ldap {
-    
-    
+
+
     if ($ldap_ssl eq '1')
     {
     	if ($ldap_cachain)
@@ -297,16 +297,16 @@ sub initialize_ldap {
 			return 0;
     		}
     	}
-    }        
-    else 
+    }
+    else
     {
     	unless ($ldap_connection = Net::LDAP->new($ldap_host), version => 3) {
 		print STDERR "Can't connect to LDAP server $ldap_host: $EVAL_ERROR\n";
 		return 0;
     	}
     }
-    
-    
+
+
     my $msg = $ldap_connection->bind($ldap_bind_dn, password => $ldap_bind_pwd);
     if ($msg->is_error()) {
 	print STDERR "Can't bind to server $ldap_host: ",$msg->error(),"\n";

@@ -54,7 +54,7 @@ $OUTPUT_AUTOFLUSH = 1;
 
 my $wwsconf = {};
 
-## Load config 
+## Load config
 unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf_file)) {
     die 'unable to load config file';
 }
@@ -79,7 +79,7 @@ if ($#ARGV >=0) {
     unless (-f $f) {
 	die "unable to find file $f";
     }
-    
+
     convert($f);
 
     exit 0;
@@ -108,7 +108,7 @@ if (-f "$Sympa::Configuration::Conf{'etc'}/mhonarc-ressources") {
 if (-d $Sympa::Configuration::Conf{'etc'}.'/create_list_templates') {
     foreach my $dir (<$Sympa::Configuration::Conf{'etc'}/create_list_templates/*>) {
 	next unless (-d $dir);
-	push @directories, $dir;       
+	push @directories, $dir;
     }
 }
 
@@ -133,7 +133,7 @@ foreach my $vr (keys %{$Sympa::Configuration::Conf{'robots'}}) {
     if (-d $Sympa::Configuration::Conf{'etc'}.'/'.$vr.'/create_list_templates') {
 	foreach my $dir (<$Sympa::Configuration::Conf{'etc'}/$vr/create_list_templates/*>) {
 	    next unless (-d $dir);
-	    push @directories, $dir;       
+	    push @directories, $dir;
 	}
     }
 
@@ -142,7 +142,7 @@ foreach my $vr (keys %{$Sympa::Configuration::Conf{'robots'}}) {
     foreach my $list ( @$listOfLists ) {
 
 	push @directories, $list->{'dir'};
-	
+
 	if (-d "$list->{'dir'}/templates") {
 	    push @directories, "$list->{'dir'}/templates";
 	}
@@ -159,11 +159,11 @@ foreach my $d (@directories) {
 	printf STDERR "Error: Cannot read %s directory : %s\n", $d, $ERRNO;
 	next;
     }
-    
+
     foreach my $tpl (sort grep(/\.tpl$/,readdir DIR)) {
 	push @templates, "$d/$tpl";
     }
-    
+
     closedir DIR;
 }
 
@@ -186,7 +186,7 @@ foreach my $tpl (@templates) {
 	printf STDERR "Error : Incorrect Path %s\n", $tpl;
 	next;
     }
-    
+
     my ($path, $file) = ($1, $2);
     my ($dest_path, $dest_file);
 
@@ -242,7 +242,7 @@ foreach my $tpl (@templates) {
 
     convert($tpl, $tt2);
     $total++;
-    
+
     ## Rename old files to .converted
     unless (rename $tpl, "$tpl.converted") {
 	printf STDERR "Error : failed to rename $tpl to $tpl.converted : $ERRNO\n";
@@ -279,7 +279,7 @@ sub convert {
     close TPL;
 
     printf "Template file $in_file has been converted to $out_file\n";
-    
+
     unless (Sympa::Tools::File::set_file_rights(file => $out_file,
 				    user => Sympa::Constants::USER,
 				    group => Sympa::Constants::GROUP
@@ -308,14 +308,14 @@ sub my_mkdir {
 		return undef;
 	    }
 	}
-	
+
 	unless (mkdir ($path, 0777)) {
 	    printf STDERR "Error : Cannot create $path directory : $ERRNO\n";
 	    return undef;
 	}
     }else {
 	return undef;
-    }    
-    
+    }
+
     return 1;
 }

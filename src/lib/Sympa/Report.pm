@@ -424,7 +424,7 @@ For I<intern> type, the listmaster is notified immediatly.
 =item * I<$sender>: the user to notify (required if $type eq 'intern' or if
       I<$now> is true)
 
-=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or 
+=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or
       if I<$now> is true)
 
 =item * I<$now>: send now if true
@@ -835,7 +835,7 @@ For I<intern> or I<system> types, the listmaster is notified immediatly.
 
 =item * I<$type>: 'intern' || 'intern_quiet' || 'system' || 'system_quiet' ||
 'user' || 'auth'
-  
+
 =item * I<$error>:
 
 =over

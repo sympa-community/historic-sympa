@@ -4,7 +4,7 @@
 
 # arc2webarc.pl - This script will concert existing Sympa mail archives
 # to Sympa web archives
-# RCS Identication ; $Revision$ ; $Date$ 
+# RCS Identication ; $Revision$ ; $Date$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -39,7 +39,7 @@ use Sympa::WWSympa;
 my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 
-my %month_idx = qw(jan 1 
+my %month_idx = qw(jan 1
 		   fev 2
 		   feb 2
 		   fv  2
@@ -89,7 +89,7 @@ unless ([getpwuid $UID]->[0] eq Sympa::Constants::USER) {
 
 my $wwsconf = {};
 
-## Load config 
+## Load config
 unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf_file)) {
     die 'unable to load config file';
 }
@@ -103,7 +103,7 @@ Sympa::Upgrade::probe_db();
 
 chdir $Sympa::Configuration::Conf{'home'};
 
-my $list = new Sympa::List($listname, $robot) 
+my $list = new Sympa::List($listname, $robot)
     or die 'Cannot create List object';
 
 my $home_sympa;
@@ -152,7 +152,7 @@ if ($opt{'input-directory'}) {
 	my ($first, $new);
 	my $msg = [];
 	my @msgs;
-	
+
 	## Split the archives file
 	print '.';
 	open ARCFILE, $arc_file;
@@ -176,16 +176,16 @@ if ($opt{'input-directory'}) {
 	    }
 	}
 	close ARCFILE;
-	
+
 	##Dump
 	#foreach my $i (0..$#msgs) {
 	#    printf "******** Message %d *******\n", $i;
 	#    print @{$msgs[$i]};
 	#}
-	
+
 	## Store messages in web arc
-	store_messages(\@msgs, $dest_dir);      
-	
+	store_messages(\@msgs, $dest_dir);
+
     }
 }
 
@@ -213,40 +213,40 @@ sub store_messages {
     foreach my $msg (@msgs) {
 	my $incorrect = 0;
 	my ($date, $year, $month);
-	
+
 	print '.';
 	foreach (@{$msg}) {
 	    if (/^Date:\s+(.*)$/) {
 		#print STDERR "#$_#\n";
 		$date = $1;
-		
+
 		# Date type : Mon, 8 Dec 97 13:33:47 +0100
 		if ($date =~ /^\w{2,3},\s+\d{1,2}\s+([\wéû]{2,3})\s+(\d{2,4})/) {
 		    $month = $1;
 		    $year =$2;
 		    #print STDERR "$month/$year\n";
-		    
+
 		    # Date type : 8 Dec 97 13:33:47+0100
 		}elsif ($date =~ /^\d{1,2}\s+(\w{3}) (\d{2,4})/) {
 		    $month = $1;
 		    $year =$2;
-		    
+
 		    # Date type : 8-DEC-1997 13:33:47 +0100
 		}elsif ($date =~ /^\d{1,2}-(\w{3})-(\d{4})/) {
 		    $month = $1;
 		    $year =$2;
-		    
+
 		    # Date type : Mon Dec 8 13:33:47 1997
 		}elsif ($date =~ /^\w+\s+(\w+)\s+\d{1,2} \d+:\d+:\d+ (GMT )?(\d{4})/) {
 		    $month = $1;
 		    $year =$3;
-		    
+
 		    # unknown date format
 		}else {
 		    $incorrect = 1;
 		    last;
 		}
-		
+
 		# Month format
 		if ($month !~ /^\d+$/) {
 		    $month =~ y/éûA-Z/eua-z/;
@@ -259,17 +259,17 @@ sub store_messages {
 		    $incorrect = 1;
 		}
 		$month = "0".$month if $month =~ /^\d$/;
-		
+
 		# Checking Year format
 		if ($year =~ /^[89]\d$/) {
 		    $year = "19".$year;
 		}elsif ($year !~ /^19[89]\d|20[0-9][0-9]$/) {
 		    $incorrect = 1;
 		}
-		
+
 		last;
 	    }
-	    
+
 	    # empty line => end of header
 	    if (/^\s*$/) {
 		last;
@@ -281,19 +281,19 @@ sub store_messages {
 	    $year = 'UN';
 	    $month = 'KNOWN';
 	}
-	
+
 	# New month
 	if (!-d "$dest_dir/$year-$month") {
 	    print "\nNew directory $year-$month\n";
 	    `mkdir $dest_dir/$year-$month`;
 	}
-	
+
 	if (!-d "$dest_dir/$year-$month/arctxt") {
 	    `mkdir $dest_dir/$year-$month/arctxt`;
 	}
-	
+
 	$nummsg{$year}{$month}++ while (-e "$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}");
-	
+
 	# Save message
 	open DESTFILE, ">$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}";
 	print DESTFILE @{$msg};

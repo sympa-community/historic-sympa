@@ -86,7 +86,7 @@ if ($operation eq 'add') {
 	if ($alias =~ /^\#/) {
 	    next;
 	}
-	
+
 	$alias =~ /^([^:]+):\s*(\".*\")$/;
 	my $alias_value = $1;
 	my $command_value = $2;
@@ -103,7 +103,7 @@ if ($operation eq 'add') {
 
 }
 elsif ($operation eq 'del') {
-    
+
     if (!initialize_mysql()) {
 	print STDERR "Can't connect to MySQL database\n";
 	exit(7);
@@ -113,8 +113,8 @@ elsif ($operation eq 'del') {
 	if ($alias =~ /^\#/) {
 	    next;
 	}
-	
-	$alias =~ /^([^:]+):/; 
+
+	$alias =~ /^([^:]+):/;
 	my $alias_value = $1;
 	$alias_value =~ s/\+/\-/g;
 
@@ -131,9 +131,9 @@ else {
 
 exit 0;
 
-## Check if an alias is already defined  
+## Check if an alias is already defined
 sub already_defined {
-    
+
     my @aliases = @_;
 
     initialize_mysql();
@@ -142,11 +142,11 @@ sub already_defined {
         if ($alias =~ /^\#/) {
 	    next;
 	}
-	
-	$alias =~ /^([^:]+):/; 
+
+	$alias =~ /^([^:]+):/;
 	my $alias_value = $1;
-	$alias_value =~ s/\+/\-/g;	
-    
+	$alias_value =~ s/\+/\-/g;
+
         $sql = "SELECT COUNT(alias) as e_alias FROM valias where alias = '".$alias_value."' and domain = '".$domain."'";
         $dbh->do($sql) or die "$sql : $DBI::errstr";
 
@@ -157,7 +157,7 @@ sub already_defined {
 	    return 1;
 	}
     }
-    
+
     finalize_mysql();
     return 0;
 }

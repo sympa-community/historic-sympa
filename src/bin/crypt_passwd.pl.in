@@ -3,7 +3,7 @@
 # vim:ft=perl:noet:sw=8:wrap:textwidth=78
 
 # crypt_passwd.pl - This script crypts uncrypted passwords in DB
-# RCS Identication ; $Revision$ ; $Date$ 
+# RCS Identication ; $Revision$ ; $Date$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
