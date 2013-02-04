@@ -318,10 +318,9 @@ sub parse_notification {
 
       } elsif ($paragraph =~ /^The requested destination was:\s+(.*)$/m) {
 	 # NTMail
-	 $type = 7;
-
-      } elsif (($type == 7) && (/^\s+(\S+)/)) {
-	 undef $type;
+	 do {
+	    $paragraph = shift @paragraphes;
+	 } until $paragraph =~ /^\s+(\S+)/;
 	 my $adr =$1;
 	 $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	 next unless $adr;
