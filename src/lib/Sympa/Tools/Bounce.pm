@@ -140,7 +140,6 @@ sub _fix_address {
 
 	    my ($var, $val) = split /=/;
 	    $x400{$var} = $val;
-	    #print "\t$var <=> $val\n";
 
 	}
 
@@ -264,11 +263,9 @@ sub parse_notification {
 		    $adr = $1;
 		    my $error = $2;
 		    $adr =~ s/^[\"\<](.+)[\"\>]\s*$/$1/;
-		    #print "\tADR : #$adr#\n";
 		    $info{$adr}{error} = $error;
 		    $type = 1;
 		}elsif (/^\s+\(expanded from: (.+)\)/) {
-		    #print "\tEXPANDED $adr : $1\n";
 		    $info{$adr}{expanded} = $1;
 		    $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	        }
@@ -934,16 +931,13 @@ sub parse_notification {
 	}
 
 	$a3 = _fix_address($a2, $from);
-#        print "CORRECTION : $a2 --> $a3\n" if $a2 ne $a3;
 
         $a3 =~ y/[A-Z]/[a-z]/;
         $a3 =~ s/^<(.*)>$/$1/;
 
-#        $result->{$a3}{error} = $info{$a1}{error};
          $result->{$a3} = lc ($info{$a1}{error});
     }
 
-#   print "$b\n" if ! $type;
     return $count;
 }
 
