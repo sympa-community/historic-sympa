@@ -303,21 +303,22 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^The requested destination was:\s+/m) {
 			# NTMail
-			do {
-				$paragraph = shift @paragraphes;
-			} until $paragraph =~ /^\s+(\S+)/;
-			my $adr =$1;
-			$adr =~ s/^["<](.+)[">]$/$1/;
-			next unless $adr;
-			$info{$adr}{'error'} = '';
+			while ($paragraph = shift @paragraphes) {
+				next unless $paragraph =~ /^\s+(\S+)/;
+				my $adr = $1;
+				$adr =~ s/^["<](.+)[">]$/$1/;
+				next unless $adr;
+				$info{$adr}{'error'} = '';
+				last;
+			}
 
 		} elsif ($paragraph =~ /^Hi\. This is the qmail-send program/m) {
 			# Qmail
-			do {
-				$paragraph = shift @paragraphes;
-			} until $paragraph =~ /^[^<]/;
-			if ($paragraph =~ /^<(\S+)>:\n(.*)/m) {
-				$info{$1}{error} = $2;
+			while ($paragraph = shift @paragraphes) {
+				if ($paragraph =~ /^<(\S+)>:\n(.*)/m) {
+					$info{$1}{error} = $2;
+				}
+				last if $paragraph =~ /^[^<]/;
 			}
 
 		} elsif ($paragraph =~ /^Your message was not delivered to the following recipients:/m) {
@@ -570,20 +571,21 @@ sub parse_notification {
 			$paragraph =~ /^This is the mail system at host/m
 		) {
 			# Postfix
-			do {
-				$paragraph = shift @paragraphes;
-			} until $paragraph =~ /THIS IS A WARNING/;
-			if ($paragraph =~ /^<(\S+)>:\s(.*)/m) {
-				my ($addr,$error) = ($1,$2);
-				if ($error =~ /^host\s[^:]*said:\s(\d+)/) {
-					$info{$addr}{error} = $1;
+			while ($paragraph = shift @paragraphes) {
+				if ($paragraph =~ /^<(\S+)>:\s(.*)/m) {
+					my ($addr,$error) = ($1,$2);
+					if ($error =~ /^host\s[^:]*said:\s(\d+)/) {
+						$info{$addr}{error} = $1;
+					}
+					elsif ($error =~ /^([^:]+):/) {
+						$info{$addr}{error} = $1;
+					}else {
+						$info{$addr}{error} = $error;
+					}
 				}
-				elsif ($error =~ /^([^:]+):/) {
-					$info{$addr}{error} = $1;
-				}else {
-					$info{$addr}{error} = $error;
-				}
+				last if $paragraph =~ /THIS IS A WARNING/;
 			}
+
 		} elsif ($paragraph =~ /^The message that you sent was undeliverable to the following:/ ) {
 			$paragraph = shift @paragraphes;
 			my @lines = split(/\n/, $paragraph);
