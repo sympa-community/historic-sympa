@@ -186,7 +186,7 @@ sub parse_notification {
 	my $subject = $head->get('Subject');
 	if ($subject =~ /^Returned mail: Quota exceeded for user (\S+)$/) {
 		$info{$1}{error} = 'Quota exceeded for user';
-	} elsif ($subject =~ /^Returned mail: message not deliverable: \<(\S+)\>$/) {
+	} elsif ($subject =~ /^Returned mail: message not deliverable: <(\S+)>$/) {
 		$info{$1}{error} = 'message not deliverable';
 	}
 
@@ -214,11 +214,11 @@ sub parse_notification {
 				if ($line =~ /^(\S[^\(]*)/) {
 					$adr = $1;
 					my $error = $2;
-					$adr =~ s/^[\"\<](.+)[\"\>]\s*$/$1/;
+					$adr =~ s/^["<](.+)[">]\s*$/$1/;
 					$info{$adr}{error} = $error;
 				} elsif ($line =~ /^\s+\(expanded from: (.+)\)/) {
 					$info{$adr}{expanded} = $1;
-					$info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
+					$info{$adr}{expanded} =~ s/^["<](.+)[">]$/$1/;
 				}
 			}
 
@@ -226,19 +226,19 @@ sub parse_notification {
 			my $adr;
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
-				if ($line =~ /^(\d{3}\s)?(\S+|\".*\")\.{3}\s(.+)$/) {
+				if ($line =~ /^(\d{3}\s)?(\S+|".*")\.{3}\s(.+)$/) {
 					$adr = $2;
 					my $cause = $3;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
 					foreach $a(split /,/, $adr) {
-						$a =~ s/^[\"\<]([^\"\>]+)[\"\>]$/$1/;
+						$a =~ s/^["<]([^">]+)[">]$/$1/;
 						$info{$a}{error} = $cause;
 					}
 				} elsif ($line =~ /^\d{3}\s(too many hops).*to\s(.*)$/i) {
 					$adr = $2;
 					my $cause = $1;
 					foreach $a (split /,/, $adr) {
-						$a =~ s/^[\"\<](.+)[\"\>]$/$1/;
+						$a =~ s/^["<](.+)[">]$/$1/;
 						$info{$a}{error} = $cause;
 					}
 				} elsif ($line =~ /^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
@@ -246,7 +246,7 @@ sub parse_notification {
 					my $cause = $2;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
 					foreach $a (split /,/, $adr) {
-						$a =~ s/^[\"\<](.+)[\"\>]$/$1/;
+						$a =~ s/^["<](.+)[">]$/$1/;
 						$info{$a}{error} = $cause;
 					}
 				}
@@ -267,7 +267,7 @@ sub parse_notification {
 					$cause = 'Unknown QuickMail recipient(s)';
 				} elsif ($line =~ /^\s+(.*)$/ and $cause) {
 					$adr = $1;
-					$adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
+					$adr =~ s/^["<](.+)[">]$/$1/;
 					$info{$adr}{error} = $cause;
 				}
 			}
@@ -278,7 +278,7 @@ sub parse_notification {
 			foreach my $line (@lines) {
 				if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
 					$adr = $1;
-					$adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
+					$adr =~ s/^["<](.+)[">]$/$1/;
 				} else {
 					/^(.*)$/;
 					$info{$adr}{error} = $1;
@@ -307,7 +307,7 @@ sub parse_notification {
 				$paragraph = shift @paragraphes;
 			} until $paragraph =~ /^\s+(\S+)/;
 			my $adr =$1;
-			$adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
+			$adr =~ s/^["<](.+)[">]$/$1/;
 			next unless $adr;
 			$info{$adr}{'error'} = '';
 
