@@ -174,7 +174,6 @@ sub parse_notification {
    my $entity = $message->{'msg'};
    return undef unless ($entity) ;
 
-   my $type;
    my %info;
 
    # header
@@ -187,10 +186,8 @@ sub parse_notification {
    my $subject = $head->get('Subject');
    if ($subject =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
       $info{$2}{error} = $1;
-      $type = 27;
    } elsif ($subject =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
       $info{$2}{error} = $1;
-      $type = 34;
    }
 
    my $recipients = $head->get('X-Failed-Recipients');
@@ -219,7 +216,6 @@ sub parse_notification {
 	       my $error = $2;
 	       $adr =~ s/^[\"\<](.+)[\"\>]\s*$/$1/;
 	       $info{$adr}{error} = $error;
-	       $type = 1;
 	    } elsif ($line =~ /^\s+\(expanded from: (.+)\)/) {
 	       $info{$adr}{expanded} = $1;
 	       $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
@@ -237,7 +233,6 @@ sub parse_notification {
 	       foreach $a(split /,/, $adr) {
 		  $a =~ s/^[\"\<]([^\"\>]+)[\"\>]$/$1/;
 		  $info{$a}{error} = $cause;
-		  $type = 2;
 	       }
 	    } elsif ($line =~ /^\d{3}\s(too many hops).*to\s(.*)$/i) {
 	       $adr = $2;
@@ -245,7 +240,6 @@ sub parse_notification {
 	       foreach $a (split /,/, $adr) {
 		  $a =~ s/^[\"\<](.+)[\"\>]$/$1/;
 		  $info{$a}{error} = $cause;
-		  $type = 2;
 	       }
 	    } elsif ($line =~ /^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
 	       $adr = $1;
@@ -254,7 +248,6 @@ sub parse_notification {
 	       foreach $a (split /,/, $adr) {
 		  $a =~ s/^[\"\<](.+)[\"\>]$/$1/;
 		  $info{$a}{error} = $cause;
-		  $type = 2;
 	       }
 	    }
 	 }
@@ -264,7 +257,6 @@ sub parse_notification {
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
 	    $info{$2}{error} = $1 if /^(.*): (\S+)/;
-	    $type = 3;
 	 }
 
       } elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
@@ -273,12 +265,10 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /^(Unknown QuickMail recipient\(s\)):/) {
 	       $cause = $1;
-	       $type = 4;
 	    } elsif ($line =~ /^\s+(.*)$/ and $cause) {
 	       $adr = $1;
 	       $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	       $info{$adr}{error} = $cause;
-	       $type = 4;
 	    }
 	 }
 
@@ -289,11 +279,9 @@ sub parse_notification {
 	    if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
 	       $adr = $1;
 	       $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
-	       $type = 5;
 	    } else {
 	       /^(.*)$/;
 	       $info{$adr}{error} = $1;
-	       $type = 5;
 	    }
 	 }
 
@@ -302,19 +290,16 @@ sub parse_notification {
 	 my ($adr, $error) = ($1, $2);
 	 $error =~ s/Your message.*$//;
 	 $info{$adr}{error} = $error;
-	 $type = 6;
 
       } elsif ($paragraph =~ /^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 	 # X400
 	 my ($adr, $error) = ($1, $2);
 	 $error =~ s/\(.*$//;
 	 $info{$adr}{error} = $error;
-	 $type = 6;
 
       } elsif ($paragraph =~/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
 	 # X400
 	 $info{$1}{error} = $2;
-	 $type = 16;
 
       } elsif ($paragraph =~ /^The requested destination was:\s+(.*)$/m) {
 	 # NTMail
@@ -333,7 +318,6 @@ sub parse_notification {
 	 } until $paragraph =~ /^[^<]/;
 	 if ($paragraph =~ /^<(\S+)>:\n(.*)/m) {
 	    $info{$1}{error} = $2;
-	    $type = 8;
 	 }
 
       } elsif ($paragraph =~ /^Your message was not delivered to the following recipients:/m) {
@@ -341,7 +325,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s*(\S+):\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 9;
 	 }
 
       } elsif (
@@ -352,7 +335,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s*(\S+).*\n\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 10;
 	 }
 
       } elsif ($paragraph =~ /^Your mail item could not be delivered to the following users/m) {
@@ -360,7 +342,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^(.*)\s+\---->\s(\S+)$/m) {
 	    $info{$2}{error} = $1;
-	    $type = 12;
 	 }
 
       } elsif ($paragraph =~ /^-+\s+Failure Reasons\s+-+/m) {
@@ -368,7 +349,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^(.*)\n(\S+)$/m) {
 	    $info{$2}{error} = $1;
-	    $type = 13;
 	 }
 
       } elsif ($paragraph =~ /^\-+\sTranscript of session follows\s\-+/m) {
@@ -376,7 +356,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /<(\S+)>\n\S+, (.*)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 14;
 	 }
 
       } elsif ($paragraph =~ /^\s+-+ Transcript of Report follows -+/) {
@@ -387,7 +366,6 @@ sub parse_notification {
 	    if ($line =~ /^Rejected-For: (\S+),/) {
 	       $adr = $1;
 	       $info{$adr}{error} = "";
-	       $type = 17;
 	    } elsif ($line =~ /^\s+explanation (.*)$/) {
 	       $info{$adr}{error} = $1;
 	    }
@@ -398,7 +376,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~/^\s*(\S+)\s+(.*)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 18;
 	    }
 	 }
 
@@ -407,7 +384,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /^\d+ <(\S+)>\.{3} (.+)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 19;
 	    }
 	 }
 
@@ -416,7 +392,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^<(\S+)>:\s(.+)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 20;
 	 }
       } elsif ($paragraph =~ /^Content-Description: Session Transcript/m) {
 	 $paragraph = shift @paragraphes;
@@ -424,7 +399,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /<(\S+)>\.{3} (.*)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 21;
 	    }
 	 }
 
@@ -435,11 +409,9 @@ sub parse_notification {
       ) {
 	 my $adr = $2 || $1;
 	 $info{$adr}{error} = "";
-	 $type = 22;
 
       } elsif ($paragraph =~ /^(The user return_address (\S+) does not exist)/) {
 	 $info{$2}{error} = $1;
-	 $type = 23;
 
       } elsif (
 	 $paragraph =~ /^A message that you sent could not be delivered to all of its recipients/m ||
@@ -449,7 +421,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s*(\S+):\s+(.*)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 24;
 	 } elsif ($paragraph =~ /^\s*(\S+)$/m) {
 	    $info{$1}{error} = "";
 	 }
@@ -459,7 +430,6 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s+\S+:.*\s+(\S+)$/m) {
 	    $info{$1}{error} = "";
-	    $type = 25;
 	 }
 
       } elsif ($paragraph =~ /^The local mail transport system has reported the following problems/m) {
@@ -469,7 +439,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /<(\S+)>\s+(.*)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 26;
 	    }
 	 }
 
@@ -478,19 +447,16 @@ sub parse_notification {
 	 # AltaVista Mail
 	 if ($paragraph =~ /^(\S+):\n.*\n\s*(.*)$/m) {
 	    $info{$1}{error} = $2;
-	    $type = 27;
 	 }
 
       } elsif ($paragraph =~ /^(User mailbox exceeds allowed size): (\S+)$/m) {
 	 # SMTP32
 	 $info{$2}{error} = $1;
-	 $type = 28;
 
       } elsif ($paragraph =~ /^The following recipients did not receive this message:$/m) {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s+<(\S+)>/) {
 	    $info{$1}{error} = "";
-	    $type = 29;
 	 }
 
       } elsif ($paragraph =~ /^One or more addresses in your message have failed with the following/m) {
@@ -500,7 +466,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /<(\S+)>\s+(.*)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 30;
 	    }
 	 }
 
@@ -510,7 +475,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /(\S+)$/) {
 	       $info{$1}{error} = "";
-	       $type = 31;
 	    }
 	 }
 
@@ -520,7 +484,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /<(\S+)>/) {
 	       $info{$1}{error} = "";
-	       $type = 32;
 	    }
 	 }
 
@@ -529,10 +492,8 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /^(\S+)$/) {
 	       $info{$1}{error} = "";
-	       $type = 33;
 	    } elsif ($line =~ /<(\S+)>\.{3} (.*)$/) {
 	       $info{$1}{error} = $2;
-	       $type = 33;
 	    }
 	 }
 
@@ -552,7 +513,6 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /(\S+)/) {
 	       $info{$1}{error} = "";
-	       $type = 37;
 	    }
 	 }
 
@@ -564,10 +524,8 @@ sub parse_notification {
 	 foreach my $line (@lines) {
 	    if ($line =~ /\s+Recipient:\s+<(\S+)>/) {
 	       $info{$1}{error} = "";
-	       $type = 38;
 	    } elsif ($line =~ /\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
 	       $info{$1}{error} = $2;
-	       $type = 38;
 	    }
 	 }
 
@@ -575,18 +533,15 @@ sub parse_notification {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^(\S+)/) {
 	    $info{$1}{error} = "";
-	    $type = 39;
 	 }
       } elsif ($paragraph =~ /Session Transcription follow:/m) {
 	 if ($paragraph =~ /^<+\s+\d+\s+(.*) for \((.*)\)$/m) {
 	    $info{$2}{error} = $1;
-	    $type = 43;
 	 }
       } elsif ($paragraph =~ /^This message was returned to you for the following reasons:/m) {
 	 $paragraph = shift @paragraphes;
 	 if ($paragraph =~ /^\s+(.*): (\S+)/) {
 	    $info{$2}{error} = $1;
-	    $type = 40;
 	 }
 
       } elsif (
@@ -601,17 +556,14 @@ sub parse_notification {
 	    if ($line =~ /\s+Recipient address:\s+(\S+)/) {
 	       $adr = $1;
 	       $info{$adr}{error} = "";
-	       $type = 41;
 	    } elsif ($line =~ /\s+Reason:\s+(.*)$/) {
 	       $info{$adr}{error} = $1;
-	       $type = 41;
 	    }
 	 }
 
       } elsif ($paragraph =~ /^(\S+) - (no such user here)\.$/m) {
 	 # MDaemon
 	 $info{$1}{error} = $2;
-	 $type = 42;
 
       } elsif ($paragraph =~ /^This is the Postfix program/m || /^This is the mail system at host/m) {
 	 # Postfix
