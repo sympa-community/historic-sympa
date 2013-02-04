@@ -14,12 +14,10 @@ our $VERSION = "4.3";
 ##------------------------------------------------------------------------##
 ## Constructor
 
-sub new
-{
+sub new {
 	my ($class, $fields_ref) = @_;
 
-	my $self =
-   	{
+	my $self = {
 		directory_labels => {},
 		permitted        => $fields_ref,
 		sort_function    => 'sub { $a cmp $b }',
@@ -33,8 +31,7 @@ sub new
 ##------------------------------------------------------------------------##
 ## The AUTOLOAD function allows for the dynamic creation of accessor methods
 
-sub AUTOLOAD
-{
+sub AUTOLOAD {
 	my $self = shift;
 	my $type = ref($self) or croak "$self is not an object";
 	my $name = $AUTOLOAD;
@@ -44,18 +41,14 @@ sub AUTOLOAD
 	# Remove the package name.
 	$name =~ s/^.*://;
 
-	unless (exists($self->{permitted}->{$name}))
-	{
+	unless (exists($self->{permitted}->{$name})) {
 		message('arcsearch_marc_autoload_no_access');
 		wwslog('info','arcsearch_marc: Can not access %s field in object of class %s', $name, $type);
 		return undef;
 	}
-	if (@_)
-	{
+	if (@_) {
 		return $self->{$name} = shift;
-	}
-	else
-	{
+	} else {
 		return $self->{$name};
 	}
 }
