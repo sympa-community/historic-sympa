@@ -347,7 +347,7 @@ sub parse_notification {
 
       } elsif (
 	 $paragraph =~ /^The following recipient\(s\) could not be reached:/m ||
-	 /^did not reach the following recipient\(s\):/m
+	 $paragraph =~ /^did not reach the following recipient\(s\):/m
       ) {
 	 # Exchange
 	 $paragraph = shift @paragraphes;
