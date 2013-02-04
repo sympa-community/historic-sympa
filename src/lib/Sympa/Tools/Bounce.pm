@@ -565,7 +565,10 @@ sub parse_notification {
 	 # MDaemon
 	 $info{$1}{error} = $2;
 
-      } elsif ($paragraph =~ /^This is the Postfix program/m || /^This is the mail system at host/m) {
+      } elsif (
+		$paragraph =~ /^This is the Postfix program/m ||
+		$paragraph =~ /^This is the mail system at host/m
+	) {
 	 # Postfix
 	 do {
 	    $paragraph = shift @paragraphes;
