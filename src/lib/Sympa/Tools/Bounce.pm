@@ -518,16 +518,16 @@ sub parse_notification {
 			}
 
 		} elsif ($paragraph =~ /^This Message was undeliverable due to the following reason:/m) {
-			do {
-				$paragraph = shift @paragraphes;
-			} until $paragraph =~ /Recipient:/;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
-				if ($line =~ /\s+Recipient:\s+<(\S+)>/) {
-					$info{$1}{error} = "";
-				} elsif ($line =~ /\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
-					$info{$1}{error} = $2;
+			while ($paragraph = shift @paragraphes) {
+				my @lines = split(/\n/, $paragraph);
+				foreach my $line (@lines) {
+					if ($line =~ /\s+Recipient:\s+<(\S+)>/) {
+						$info{$1}{error} = "";
+					} elsif ($line =~ /\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
+						$info{$1}{error} = $2;
+					}
 				}
+				last if $paragraph =~ /Recipient:/;
 			}
 
 		} elsif ($paragraph =~ /Your message could not be delivered to:/m) {
