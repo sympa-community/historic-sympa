@@ -101,12 +101,14 @@ sub parse_compliant_notification {
 	    while (<BODY>) {
 
 		my ($status, $recipient);
-		if (/^Status:\s*(\d+\.\d+\.\d+)(\s|$)/mi) {
+		if (/^Status: \s+ (\d+\.\d+\.\d+)/mx) {
 		    $status = $1;
 		}
 
-		if (/^Original-Recipient:\s*rfc822\s*;\s*(.*)$/mi ||
-		    /^Final-Recipient:\s*rfc822\s*;\s*(.*)$/mi) {
+		if (
+			/^Original-Recipient: \s+ rfc822; \s* (\S+)/mx ||
+			/^Final-Recipient: \s+ rfc822; \s* (\S+)/mx
+		) {
 		    $recipient = $1;
 		    if ($recipient =~ /\@.+:(.+)$/) {
 			$recipient = $1;
