@@ -214,26 +214,24 @@ sub parse_notification {
 
 	if ($paragraph =~ /^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
 	    my $adr;
-	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $paragraph;
-	    foreach (@paragraphe) {
-		if (/^(\S[^\(]*)/) {
+ 	    my @lines = split(/\n/, $paragraph);
+	    foreach my $line (@lines) {
+		if ($line =~ /^(\S[^\(]*)/) {
 		    $adr = $1;
 		    my $error = $2;
 		    $adr =~ s/^[\"\<](.+)[\"\>]\s*$/$1/;
 		    $info{$adr}{error} = $error;
 		    $type = 1;
-		}elsif (/^\s+\(expanded from: (.+)\)/) {
+		}elsif ($line =~ /^\s+\(expanded from: (.+)\)/) {
 		    $info{$adr}{expanded} = $1;
 		    $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	        }
 	    }
 	} elsif ($paragraph =~ /^\s+-+\sTranscript of session follows\s-+/m) {
 	    my $adr;
-	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $paragraph;
-	    foreach (@paragraphe) {
-		if (/^(\d{3}\s)?(\S+|\".*\")\.{3}\s(.+)$/) {
+ 	    my @lines = split(/\n/, $paragraph);
+	    foreach my $line (@lines) {
+		if ($line =~ /^(\d{3}\s)?(\S+|\".*\")\.{3}\s(.+)$/) {
 		    $adr = $2;
 		    my $cause = $3;
 		    $cause =~ s/^(.*) [\(\:].*$/$1/;
@@ -242,7 +240,7 @@ sub parse_notification {
 			       $info{$a}{error} = $cause;
 			       $type = 2;
 			}
-		}elsif (/^\d{3}\s(too many hops).*to\s(.*)$/i) {
+		}elsif ($line =~ /^\d{3}\s(too many hops).*to\s(.*)$/i) {
 		    $adr = $2;
 		    my $cause = $1;
 		    foreach $a (split /,/, $adr) {
@@ -250,7 +248,7 @@ sub parse_notification {
 			$info{$a}{error} = $cause;
 			$type = 2;
 		    }
-		}elsif (/^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
+		}elsif ($line =~ /^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
 		    $adr = $1;
 		    my $cause = $2;
 		    $cause =~ s/^(.*) [\(\:].*$/$1/;
@@ -265,9 +263,8 @@ sub parse_notification {
 	    ## Rapport Compuserve
 	}elsif ($paragraph =~ /^Receiver not found:/m) {
 
-	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $paragraph;
-	    foreach (@paragraphe) {
+ 	    my @lines = split(/\n/, $paragraph);
+	    foreach my $line (@lines) {
 
 		$info{$2}{error} = $1 if /^(.*): (\S+)/;
 		$type = 3;
@@ -278,15 +275,14 @@ sub parse_notification {
 
 	    my ($cause,$adr);
 
-	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $paragraph;
-	    foreach (@paragraphe) {
+ 	    my @lines = split(/\n/, $paragraph);
+	    foreach my $line (@lines) {
 
-		if (/^(Unknown QuickMail recipient\(s\)):/) {
+		if ($line =~ /^(Unknown QuickMail recipient\(s\)):/) {
 		    $cause = $1;
 		    $type = 4;
 
-		}elsif (/^\s+(.*)$/ and $cause) {
+		}elsif ($line =~ /^\s+(.*)$/ and $cause) {
 
 		    $adr = $1;
 		    $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
@@ -300,9 +296,8 @@ sub parse_notification {
 
 	    my $adr;
 
-            ## Parcour du paragraphe
- 	    my @paragraphe = split /\n/, $paragraph;
-	    foreach (@paragraphe) {
+ 	    my @lines = split(/\n/, $paragraph);
+	    foreach my $line (@lines) {
 
 		if (/^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
 		    $adr = $1;
@@ -413,14 +408,13 @@ sub parse_notification {
 	 ## Rapport Smap
 	 }elsif ($paragraph =~ /^\s+-+ Transcript of Report follows -+/) {
 	     my $adr;
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-		 if (/^Rejected-For: (\S+),/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /^Rejected-For: (\S+),/) {
 		     $adr = $1;
 		     $info{$adr}{error} = "";
 		     $type = 17;
-		 }elsif (/^\s+explanation (.*)$/) {
+		 }elsif ($line =~ /^\s+explanation (.*)$/) {
 		     $info{$adr}{error} = $1;
 		 }
 	     }
@@ -428,11 +422,10 @@ sub parse_notification {
 	     $type_18 = 1;
 	 }elsif ($type_18) {
 	     undef $type_18;
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/^\s*(\S+)\s+(.*)$/) {
+		 if ($line =~/^\s*(\S+)\s+(.*)$/) {
 
 		     $info{$1}{error} = $2;
 		     $type = 18;
@@ -440,11 +433,9 @@ sub parse_notification {
 		 }
 	     }
 	 }elsif ($paragraph =~ /unable to deliver following mail to recipient\(s\):/m) {
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-
-		 if (/^\d+ <(\S+)>\.{3} (.+)$/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /^\d+ <(\S+)>\.{3} (.+)$/) {
 		     $info{$1}{error} = $2;
 		     $type = 19;
 		 }
@@ -466,10 +457,9 @@ sub parse_notification {
 	 }elsif ($type_21) {
 	     undef $type_21;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-		 if (/<(\S+)>\.{3} (.*)$/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /<(\S+)>\.{3} (.*)$/) {
 		     $info{$1}{error} = $2;
 		     $type = 21;
 		 }
@@ -524,11 +514,10 @@ sub parse_notification {
 
 	     undef $mercury_143;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/<(\S+)>\s+(.*)$/) {
+		 if ($line =~ /<(\S+)>\s+(.*)$/) {
 
 		     $info{$1}{error} = $2;
 		     $type = 26;
@@ -583,11 +572,10 @@ sub parse_notification {
 
 	     undef $mercury_131;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/<(\S+)>\s+(.*)$/) {
+		 if ($line =~ /<(\S+)>\s+(.*)$/) {
 
 		     $info{$1}{error} = $2;
 		     $type = 30;
@@ -602,11 +590,10 @@ sub parse_notification {
 
 	     undef $type_31;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/(\S+)$/) {
+		 if ($line =~ /(\S+)$/) {
 
 		     $info{$1}{error} = "";
 		     $type = 31;
@@ -621,11 +608,10 @@ sub parse_notification {
 
 	     undef $type_32;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/<(\S+)>/) {
+		 if ($line =~ /<(\S+)>/) {
 
 		     $info{$1}{error} = "";
 		     $type = 32;
@@ -633,17 +619,14 @@ sub parse_notification {
 	     }
 
          }elsif ($paragraph =~ /^-+Transcript of session follows\s-+$/m) {
-
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-
-		 if (/^(\S+)$/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /^(\S+)$/) {
 
 		     $info{$1}{error} = "";
 		     $type = 33;
 
-		 }elsif (/<(\S+)>\.{3} (.*)$/) {
+		 }elsif ($line =~ /<(\S+)>\.{3} (.*)$/) {
 
 		     $info{$1}{error} = $2;
 		     $type = 33;
@@ -676,12 +659,9 @@ sub parse_notification {
 	 }elsif ($exim_173) {
 
 	     undef $exim_173;
-
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-
-		 if (/(\S+)/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /(\S+)/) {
 
 		     $info{$1}{error} = "";
 		     $type = 37;
@@ -696,16 +676,14 @@ sub parse_notification {
 
 	     undef $type_38 if /Recipient:/;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
-
-		 if (/\s+Recipient:\s+<(\S+)>/) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
+		 if ($line =~ /\s+Recipient:\s+<(\S+)>/) {
 
 		     $info{$1}{error} = "";
 		     $type = 38;
 
-		 }elsif (/\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
+		 }elsif ($line =~ /\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
 
 		     $info{$1}{error} = $2;
 		     $type = 38;
@@ -762,17 +740,16 @@ sub parse_notification {
              my $adr;
              undef $pmdf;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		 if (/\s+Recipient address:\s+(\S+)/) {
+		 if ($line =~ /\s+Recipient address:\s+(\S+)/) {
 
 		     $adr = $1;
 		     $info{$adr}{error} = "";
 		     $type = 41;
 
-		 }elsif (/\s+Reason:\s+(.*)$/) {
+		 }elsif ($line =~ /\s+Reason:\s+(.*)$/) {
 
 		     $info{$adr}{error} = $1;
 		     $type = 41;
@@ -814,11 +791,10 @@ sub parse_notification {
 
              undef $groupwise7;
 
-	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $paragraph;
-	     foreach (@paragraphe) {
+ 	     my @lines = split(/\n/, $paragraph);
+	     foreach my $line (@lines) {
 
-		if ( /^\s+(\S*) \((.+)\)/ ) {
+		if ($line =~ /^\s+(\S*) \((.+)\)/ ) {
 
 		     $info{$1}{error} = $2;
 
