@@ -345,7 +345,10 @@ sub parse_notification {
 	    $type = 9;
 	 }
 
-      } elsif ($paragraph =~ /^The following recipient\(s\) could not be reached:/m or /^did not reach the following recipient\(s\):/m) {
+      } elsif (
+	 $paragraph =~ /^The following recipient\(s\) could not be reached:/m or
+	 /^did not reach the following recipient\(s\):/m
+      ) {
 	 # Exchange
 	 $paragraph = shift @paragraphes;
 	 if (/^\s*(\S+).*\n\s+(.*)$/m) {
