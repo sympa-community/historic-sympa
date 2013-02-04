@@ -150,7 +150,7 @@ sub _fix_address {
     }
 }
 
-=head2 parse_notification($message, $result)
+=head2 parse_notification($message)
 
 Parse a non-delivery notification.
 
@@ -160,18 +160,16 @@ Parse a non-delivery notification.
 
 =item * I<$message>: message object
 
-=item * I<$result>: hashref for storing result, as recipients => status
-
 =back
 
 =head3 Return value
 
-The number of ?
+A list of recipients/status pairs, as an hasref.
 
 =cut
 
 sub parse_notification {
-    my ($message, $result) = @_;
+    my ($message) = @_;
 
     my $string = $message->{'msg'}->as_string();
     unless (open (BOUNCE, '<', \$string)){
@@ -893,13 +891,13 @@ sub parse_notification {
 
 
     close BOUNCE;
-    my $count=0;
+
+    my $result;
     ## On met les adresses au clair
     foreach my $a1 (keys %info) {
 
 	next unless ($a1 and ref ($info{$a1}));
 
-        $count++;
 	my ($a2, $a3);
 
 	$a2 = $a1;
@@ -918,7 +916,7 @@ sub parse_notification {
          $result->{$a3} = lc ($info{$a1}{error});
     }
 
-    return $count;
+    return $result;
 }
 
 1;

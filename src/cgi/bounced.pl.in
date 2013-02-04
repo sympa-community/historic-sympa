@@ -647,10 +647,7 @@ while (!$end) {
 
 	    unless ($result) {
 		## Analysis of bounced message
-		my %hash;
-		Sympa::Tools::Bounce::parse_notification(
-			$message, \%hash
-		);
+		$result = Sympa::Tools::Bounce::parse_notification($message);
 		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
 		# updatedatabase(%hash);
 	    }
