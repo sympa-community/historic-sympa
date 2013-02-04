@@ -37,8 +37,6 @@ use strict;
 use English qw(-no_match_vars);
 use MIME::Parser;
 
-use Sympa::Log;
-
 my $status_pattern = qr/\d\.\d\.\d/;
 
 =head1 FUNCTIONS
