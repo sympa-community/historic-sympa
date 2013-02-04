@@ -171,71 +171,51 @@ A list of recipients/status pairs, as an hasref.
 sub parse_notification {
     my ($message) = @_;
 
-    my $string = $message->{'msg'}->as_string();
-    unless (open (BOUNCE, '<', \$string)){
-	Sympa::Log::do_log('err',"could not read $message content");
-	return undef;
-    }
+    my $entity = $message->{'msg'};
+    return undef    unless ($entity) ;
 
-    my $entete = 1;
     my $type;
-    my $from;
     my %info;
     my ($qmail, $type_9, $type_18, $exchange, $ibm_vm, $lotus, $sendmail_5, $yahoo, $type_21, $exim, $vines,
 	$mercury_143, $altavista, $mercury_131, $type_31, $type_32,$exim_173, $type_38, $type_39,
 	$type_40, $pmdf, $following_recipients, $postfix, $groupwise7);
 
-    ## Le champ separateur de paragraphe est un ensemble
-    ## de lignes vides
-    local $RS = '';
+    # header
+    my $head = $entity->head();
 
-    ## Parcour du bounce, paragraphe par paragraphe
-    foreach (<BOUNCE>) {
-	if ($entete) {
-	    undef $entete;
-	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $_;
-	    local $RS = "\n";
-	    my ($champ_courant, %champ);
-	    foreach (@paragraphe) {
+    my $from = $head->get('From');
+    $from =~ s/^.*<(.+)[\>]$/$1/;
+    $from =~  y/[A-Z]/[a-z]/;
 
-		if (/^(\S+):\s*(.*)$/) {
-		    $champ_courant = $1;
-		    $champ_courant =~ y/[A-Z]/[a-z]/;
-		    $champ{$champ_courant} = $2;
-		}elsif (/^\s+(.*)$/) {
-		    $champ{$champ_courant} .= " $1";
-		}
+    my $subject = $head->get('Subject');
+    if ($subject =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
+	$info{$2}{error} = $1;
+	$type = 27;
+    } elsif ($subject =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
+	$info{$2}{error} = $1;
+	$type = 34;
+    }
 
-	    }
-	    local $RS = '';
+    my $recipients =  $head->get('X-Failed-Recipients');
+    if ($recipients) {
+       if ($recipients =~ /^\s*(\S+)$/) {
+	   $info{$1}{error} = "";
+       } elsif ($recipients =~ /^\s*(\S+),/) {
+	   for my $xfr (split (/\s*,\s*/, $recipients)) {
+	       $info{$xfr}{error} = "";
+	   }
+       }
+    }
 
-	    if($champ{from} =~ /([^\s<]+@[^\s>]+)/){
-	    	$from = $1;
-	    }
+   my $body = $entity->body();
+   # the body is a list of CRLF-separated lines, with each
+   # paragraph separated by an empty line
+   foreach my $paragraph (split /\r\n\r\n/, (join '', @$body)) {
 
-	    $champ{from} =~ s/^.*<(.+)[\>]$/$1/;
-	    $champ{from} =~  y/[A-Z]/[a-z]/;
-
-	    if ($champ{subject} =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
-		$info{$2}{error} = $1;
-		$type = 27;
-	    }elsif ($champ{subject} =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
-		$info{$2}{error} = $1;
-		$type = 34;
-	    }
-	    if ($champ{'x-failed-recipients'} =~ /^\s*(\S+)$/) {
-		$info{$1}{error} = "";
-	    } elsif ($champ{'x-failed-recipients'} =~ /^\s*(\S+),/) {
-		for my $xfr (split (/\s*,\s*/, $champ{'x-failed-recipients'})) {
-		    $info{$xfr}{error} = "";
-		}
-	    }
-	}elsif (/^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
+	if ($paragraph =~ /^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
 	    my $adr;
 	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $_;
-	    local $RS = "\n";
+	    my @paragraphe = split /\n/, $paragraph;
 	    foreach (@paragraphe) {
 		if (/^(\S[^\(]*)/) {
 		    $adr = $1;
@@ -248,12 +228,10 @@ sub parse_notification {
 		    $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	        }
 	    }
-	    local $RS = '';
-	}elsif (/^\s+-+\sTranscript of session follows\s-+/m) {
+	} elsif ($paragraph =~ /^\s+-+\sTranscript of session follows\s-+/m) {
 	    my $adr;
 	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $_;
-	    local $RS = "\n";
+	    my @paragraphe = split /\n/, $paragraph;
 	    foreach (@paragraphe) {
 		if (/^(\d{3}\s)?(\S+|\".*\")\.{3}\s(.+)$/) {
 		    $adr = $2;
@@ -283,29 +261,25 @@ sub parse_notification {
 		    }
 		}
 	    }
-	    local $RS = '';
 
 	    ## Rapport Compuserve
-	}elsif (/^Receiver not found:/m) {
+	}elsif ($paragraph =~ /^Receiver not found:/m) {
 
 	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $_;
-	    local $RS = "\n";
+	    my @paragraphe = split /\n/, $paragraph;
 	    foreach (@paragraphe) {
 
 		$info{$2}{error} = $1 if /^(.*): (\S+)/;
 		$type = 3;
 
 	    }
-	    local $RS = '';
 
-	}elsif (/^\s*-+ Special condition follows -+/m) {
+	}elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
 
 	    my ($cause,$adr);
 
 	    ## Parcour du paragraphe
-	    my @paragraphe = split /\n/, $_;
-	    local $RS = "\n";
+	    my @paragraphe = split /\n/, $paragraph;
 	    foreach (@paragraphe) {
 
 		if (/^(Unknown QuickMail recipient\(s\)):/) {
@@ -321,15 +295,13 @@ sub parse_notification {
 
 		}
 	    }
-	    local $RS = '';
 
-	}elsif (/^Your message adressed to .* couldn\'t be delivered/m) {
+	}elsif ($paragraph =~ /^Your message adressed to .* couldn\'t be delivered/m) {
 
 	    my $adr;
 
             ## Parcour du paragraphe
- 	    my @paragraphe = split /\n/, $_;
- 	    local $RS = "\n";
+ 	    my @paragraphe = split /\n/, $paragraph;
 	    foreach (@paragraphe) {
 
 		if (/^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
@@ -345,10 +317,9 @@ sub parse_notification {
 
 		}
 	    }
-	    local $RS = '';
 
 	## Rapport X400
-	}elsif (/^Your message was not delivered to:\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
+	} elsif ($paragraph =~ /^Your message was not delivered to:\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 
 	    my ($adr, $error) = ($1, $2);
 	    $error =~ s/Your message.*$//;
@@ -356,7 +327,7 @@ sub parse_notification {
 	    $type = 6;
 
 	## Rapport X400
-	}elsif (/^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
+	} elsif ($paragraph =~ /^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 
 	    my ($adr, $error) = ($1, $2);
 	    $error =~ s/\(.*$//;
@@ -364,22 +335,22 @@ sub parse_notification {
 	    $type = 6;
 
 	## Rapport X400
-	}elsif (/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
+	} elsif ($paragraph =~/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
 
 	    $info{$1}{error} = $2;
 	    $type = 16;
 
         ## Rapport NTMail
-	}elsif (/^The requested destination was:\s+(.*)$/m) {
+	} elsif ($paragraph =~ /^The requested destination was:\s+(.*)$/m) {
 	    $type = 7;
-	}elsif (($type == 7) && (/^\s+(\S+)/)) {
+	} elsif (($type == 7) && (/^\s+(\S+)/)) {
 	    undef $type;
 	    my $adr =$1;
 	    $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
 	    next unless $adr;
 	    $info{$adr}{'error'} = '';
 	## Rapport Qmail dans prochain paragraphe
-	}elsif (/^Hi\. This is the qmail-send program/m) {
+	}elsif ($paragraph =~ /^Hi\. This is the qmail-send program/m) {
 	    $qmail = 1;
 	## Rapport Qmail
 	}elsif ($qmail) {
@@ -388,9 +359,8 @@ sub parse_notification {
 		 $info{$1}{error} = $2;
 		 $type = 8;
 	     }
-	     local $RS = '';
 	## Sendmail
-	}elsif (/^Your message was not delivered to the following recipients:/m) {
+	}elsif ($paragraph =~ /^Your message was not delivered to the following recipients:/m) {
 	     $type_9 = 1;
 	}elsif ($type_9) {
 	    undef $type_9;
@@ -400,7 +370,7 @@ sub parse_notification {
 	     }
 
         ## Rapport Exchange dans prochain paragraphe
-	}elsif (/^The following recipient\(s\) could not be reached:/m or /^did not reach the following recipient\(s\):/m) {
+	}elsif ($paragraph =~ /^The following recipient\(s\) could not be reached:/m or /^did not reach the following recipient\(s\):/m) {
 	     $exchange = 1;
 	 ## Rapport Exchange
 	 }elsif ($exchange) {
@@ -411,7 +381,7 @@ sub parse_notification {
 	     }
 
 	 ## IBM VM dans prochain paragraphe
-         }elsif (/^Your mail item could not be delivered to the following users/m) {
+         }elsif ($paragraph =~ /^Your mail item could not be delivered to the following users/m) {
 	     $ibm_vm = 1;
 	 ## Rapport IBM VM
 	 }elsif ($ibm_vm) {
@@ -421,7 +391,7 @@ sub parse_notification {
 		 $type = 12;
 	     }
 	 ## Rapport Lotus SMTP dans prochain paragraphe
-         }elsif (/^-+\s+Failure Reasons\s+-+/m) {
+         }elsif ($paragraph =~ /^-+\s+Failure Reasons\s+-+/m) {
 	     $lotus = 1;
 	 ## Rapport Lotus SMTP
 	 }elsif ($lotus) {
@@ -431,7 +401,7 @@ sub parse_notification {
 		 $type = 13;
 	     }
 	 ## Rapport Sendmail 5 dans prochain paragraphe
-	 }elsif (/^\-+\sTranscript of session follows\s\-+/m) {
+	 }elsif ($paragraph =~ /^\-+\sTranscript of session follows\s\-+/m) {
 	     $sendmail_5 = 1;
 	 ## Rapport  Sendmail 5
          }elsif ($sendmail_5) {
@@ -441,11 +411,10 @@ sub parse_notification {
 		 $type = 14;
 	     }
 	 ## Rapport Smap
-	 }elsif (/^\s+-+ Transcript of Report follows -+/) {
+	 }elsif ($paragraph =~ /^\s+-+ Transcript of Report follows -+/) {
 	     my $adr;
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 		 if (/^Rejected-For: (\S+),/) {
 		     $adr = $1;
@@ -455,14 +424,12 @@ sub parse_notification {
 		     $info{$adr}{error} = $1;
 		 }
 	     }
-	     local $RS = '';
-	 }elsif (/^\s*-+Message not delivered to the following:/) {
+	 }elsif ($paragraph =~ /^\s*-+Message not delivered to the following:/) {
 	     $type_18 = 1;
 	 }elsif ($type_18) {
 	     undef $type_18;
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/^\s*(\S+)\s+(.*)$/) {
@@ -472,11 +439,9 @@ sub parse_notification {
 
 		 }
 	     }
-	     local $RS = '';
-	 }elsif (/unable to deliver following mail to recipient\(s\):/m) {
+	 }elsif ($paragraph =~ /unable to deliver following mail to recipient\(s\):/m) {
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/^\d+ <(\S+)>\.{3} (.+)$/) {
@@ -484,9 +449,8 @@ sub parse_notification {
 		     $type = 19;
 		 }
 	     }
-	     local $RS = '';
 	 ## Rapport de Yahoo dans paragraphe suivant
-	 }elsif (/^Unable to deliver message to the following address\(es\)/m) {
+	 }elsif ($paragraph =~ /^Unable to deliver message to the following address\(es\)/m) {
 	     $yahoo = 1;
 	 ## Rapport Yahoo
 	 }elsif ($yahoo) {
@@ -497,31 +461,29 @@ sub parse_notification {
 		 $type = 20;
 
 	     }
-	 }elsif (/^Content-Description: Session Transcript/m) {
+	 }elsif ($paragraph =~ /^Content-Description: Session Transcript/m) {
 	     $type_21 = 1;
 	 }elsif ($type_21) {
 	     undef $type_21;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 		 if (/<(\S+)>\.{3} (.*)$/) {
 		     $info{$1}{error} = $2;
 		     $type = 21;
 		 }
 	     }
-	     local $RS = '';
-	 }elsif (/^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m or /^Your message has encountered delivery problems\s+to (\S+)\.$/m or /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m) {
+	 }elsif ( $paragraph =~ /^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m or $paragraph =~ /^Your message has encountered delivery problems\s+to (\S+)\.$/m or $paragraph =~ /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m) {
 
 	     my $adr = $2 || $1;
 	     $info{$adr}{error} = "";
 	     $type = 22;
-           }elsif (/^(The user return_address (\S+) does not exist)/) {
+           }elsif ($paragraph =~ /^(The user return_address (\S+) does not exist)/) {
 	     $info{$2}{error} = $1;
 	     $type = 23;
 	 ## Rapport Exim paragraphe suivant
-	 }elsif (/^A message that you sent could not be delivered to all of its recipients/m or /^The following address\(es\) failed:/m) {
+	 }elsif ($paragraph =~ /^A message that you sent could not be delivered to all of its recipients/m or /^The following address\(es\) failed:/m) {
 	     $exim = 1;
 	 ## Rapport Exim
 	 }elsif ($exim) {
@@ -536,7 +498,7 @@ sub parse_notification {
 	     }
 
 	 ## Rapport VINES-ISMTP par. suivant
-	 }elsif (/^Message not delivered to recipients below/m) {
+	 }elsif ($paragraph =~ /^Message not delivered to recipients below/m) {
 
 	     $vines = 1;
 
@@ -553,7 +515,7 @@ sub parse_notification {
 	     }
 
 	 ## Rapport Mercury 1.43 par. suivant
-	 }elsif (/^The local mail transport system has reported the following problems/m) {
+	 }elsif ($paragraph =~ /^The local mail transport system has reported the following problems/m) {
 
 	     $mercury_143 = 1;
 
@@ -563,8 +525,7 @@ sub parse_notification {
 	     undef $mercury_143;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/<(\S+)>\s+(.*)$/) {
@@ -573,10 +534,9 @@ sub parse_notification {
 		     $type = 26;
 		 }
 	     }
-	     local $RS = '';
 
 	 ## Rapport de AltaVista Mail dans paragraphe suivant
-	 }elsif (/unable to deliver mail to the following recipient\(s\):/m) {
+	 }elsif ($paragraph =~ /unable to deliver mail to the following recipient\(s\):/m) {
 
 	     $altavista = 1;
 
@@ -593,12 +553,12 @@ sub parse_notification {
 	     }
 
 	 ## Rapport SMTP32
-	 }elsif (/^(User mailbox exceeds allowed size): (\S+)$/m) {
+	 }elsif ($paragraph =~ /^(User mailbox exceeds allowed size): (\S+)$/m) {
 
 	     $info{$2}{error} = $1;
 	     $type = 28;
 
-	 }elsif (/^The following recipients did not receive this message:$/m) {
+	 }elsif ($paragraph =~ /^The following recipients did not receive this message:$/m) {
 
 	     $following_recipients = 1;
 
@@ -614,7 +574,7 @@ sub parse_notification {
 	     }
 
 	 ## Rapport Mercury 1.31 par. suivant
-	 }elsif (/^One or more addresses in your message have failed with the following/m) {
+	 }elsif ($paragraph =~ /^One or more addresses in your message have failed with the following/m) {
 
 	     $mercury_131 = 1;
 
@@ -624,8 +584,7 @@ sub parse_notification {
 	     undef $mercury_131;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/<(\S+)>\s+(.*)$/) {
@@ -634,9 +593,8 @@ sub parse_notification {
 		     $type = 30;
 		 }
 	     }
-	     local $RS = '';
 
-	 }elsif (/^The following recipients haven\'t received this message:/m) {
+	 }elsif ($paragraph =~ /^The following recipients haven\'t received this message:/m) {
 
 	     $type_31 = 1;
 
@@ -645,8 +603,7 @@ sub parse_notification {
 	     undef $type_31;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/(\S+)$/) {
@@ -655,9 +612,8 @@ sub parse_notification {
 		     $type = 31;
 		 }
 	     }
-	     local $RS = '';
 
-	 }elsif (/^The following destination addresses were unknown/m) {
+	 }elsif ($paragraph =~ /^The following destination addresses were unknown/m) {
 
 	     $type_32 = 1;
 
@@ -666,8 +622,7 @@ sub parse_notification {
 	     undef $type_32;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/<(\S+)>/) {
@@ -676,13 +631,11 @@ sub parse_notification {
 		     $type = 32;
 		 }
 	     }
-	     local $RS = '';
 
-         }elsif (/^-+Transcript of session follows\s-+$/m) {
+         }elsif ($paragraph =~ /^-+Transcript of session follows\s-+$/m) {
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/^(\S+)$/) {
@@ -697,26 +650,25 @@ sub parse_notification {
 
 		 }
 	     }
-         local $RS = '';
 
           ## Rapport Bigfoot
-         }elsif (/^The message you tried to send to <(\S+)>/m) {
+         }elsif ($paragraph =~ /^The message you tried to send to <(\S+)>/m) {
 	      $info{$1}{error} = "destination mailbox unavailable";
 
-	  }elsif (/^The destination mailbox (\S+) is unavailable/m) {
+	  }elsif ($paragraph =~ /^The destination mailbox (\S+) is unavailable/m) {
 
 	     $info{$1}{error} = "destination mailbox unavailable";
 
-	 }elsif (/^The following message could not be delivered because the address (\S+) does not exist/m) {
+	 }elsif ($paragraph =~ /^The following message could not be delivered because the address (\S+) does not exist/m) {
 
 	     $info{$1}{error} = "user unknown";
 
-	 }elsif (/^Error-For:\s+(\S+)\s/) {
+	 }elsif ($paragraph =~ /^Error-For:\s+(\S+)\s/) {
 
              $info{$1}{error} = "";
 
          ## Rapport Exim 1.73 dans proc. paragraphe
-	 }elsif (/^The address to which the message has not yet been delivered is:/m) {
+	 }elsif ($paragraph =~ /^The address to which the message has not yet been delivered is:/m) {
 
 	     $exim_173 = 1;
 
@@ -726,8 +678,7 @@ sub parse_notification {
 	     undef $exim_173;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/(\S+)/) {
@@ -736,9 +687,8 @@ sub parse_notification {
 		     $type = 37;
 		 }
 	     }
-	     local $RS = '';
 
-	 }elsif (/^This Message was undeliverable due to the following reason:/m) {
+	 }elsif ($paragraph =~ /^This Message was undeliverable due to the following reason:/m) {
 
 	     $type_38 = 1;
 
@@ -747,8 +697,7 @@ sub parse_notification {
 	     undef $type_38 if /Recipient:/;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/\s+Recipient:\s+<(\S+)>/) {
@@ -763,9 +712,8 @@ sub parse_notification {
 
 		 }
 	     }
-	     local $RS = '';
 
-	 }elsif (/Your message could not be delivered to:/m) {
+	 }elsif ($paragraph =~ /Your message could not be delivered to:/m) {
 
 	     $type_39 = 1;
 
@@ -779,7 +727,7 @@ sub parse_notification {
 		 $type = 39;
 
 	     }
-	 }elsif (/Session Transcription follow:/m) {
+	 }elsif ($paragraph =~  /Session Transcription follow:/m) {
 
              if (/^<+\s+\d+\s+(.*) for \((.*)\)$/m) {
 
@@ -788,7 +736,7 @@ sub parse_notification {
 
 	     }
 
-	 }elsif (/^This message was returned to you for the following reasons:/m) {
+	 }elsif ($paragraph =~ /^This message was returned to you for the following reasons:/m) {
 
 	     $type_40 = 1;
 
@@ -804,7 +752,7 @@ sub parse_notification {
 	     }
 
          ## Rapport PMDF dans proc. paragraphe
-	 }elsif (/^Your message cannot be delivered to the following recipients:/m or /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m) {
+	 }elsif ($paragraph =~ /^Your message cannot be delivered to the following recipients:/m or /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m) {
 
          $pmdf = 1;
 
@@ -815,8 +763,7 @@ sub parse_notification {
              undef $pmdf;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		 if (/\s+Recipient address:\s+(\S+)/) {
@@ -832,16 +779,15 @@ sub parse_notification {
 
 		 }
 	     }
-	     local $RS = '';
 
          ## Rapport MDaemon
-	 }elsif (/^(\S+) - (no such user here)\.$/m) {
+	 }elsif ($paragraph =~ /^(\S+) - (no such user here)\.$/m) {
 
 	     $info{$1}{error} = $2;
 	     $type = 42;
 
          # Postfix dans le prochain paragraphe
-         }elsif (/^This is the Postfix program/m || /^This is the mail system at host/m) {
+         }elsif ($paragraph =~ /^This is the Postfix program/m || /^This is the mail system at host/m) {
              $postfix = 1;
 	 ## Rapport Postfix
          }elsif ($postfix) {
@@ -860,8 +806,7 @@ sub parse_notification {
 		     $info{$addr}{error} = $error;
 		 }
 	     }
-	     local $RS = '';
-	 }elsif ( /^The message that you sent was undeliverable to the following:/ ) {
+	 }elsif ($paragraph =~ /^The message that you sent was undeliverable to the following:/ ) {
 
              $groupwise7 = 1;
 
@@ -870,8 +815,7 @@ sub parse_notification {
              undef $groupwise7;
 
 	     ## Parcour du paragraphe
-	     my @paragraphe = split /\n/, $_;
-	     local $RS = "\n";
+	     my @paragraphe = split /\n/, $paragraph;
 	     foreach (@paragraphe) {
 
 		if ( /^\s+(\S*) \((.+)\)/ ) {
@@ -881,16 +825,11 @@ sub parse_notification {
 		}
 	     }
 
-	     local $RS = '';
-
 	 ## Wanadoo
-	 }elsif (/^(\S+); Action: Failed; Status: \d.\d.\d \((.*)\)/m) {
+	 }elsif ($paragraph =~ /^(\S+); Action: Failed; Status: \d.\d.\d \((.*)\)/m) {
 	     $info{$1}{error} = $2;
 	 }
     }
-
-
-    close BOUNCE;
 
     my $result;
     ## On met les adresses au clair

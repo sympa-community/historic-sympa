@@ -35,11 +35,7 @@ my %tests_rfc1891 = (
 my %tests = (
 	'error1.eml' => undef,
 	'error2.eml' => {
-		'the original message was received at fri, 1 feb 2013 05:18:38 +0100@samizdat.net' => '',
-		'550 5.1.1 aris ... user unknown@samizdat.net' => '',
-		'550 5.1.1 <aris@samizdat.net>... user unknown' => '',
-		'from ryu.zarb.org [212.85.158.22]@samizdat.net' => '',
-		'aris@samizdat.net' => ''
+		'aris@samizdat.net' => 'user unknown'
 	},
 	'error3.eml' => undef,
 	'error4.eml' => undef,
@@ -72,6 +68,8 @@ foreach my $test (keys %tests) {
 		Sympa::Tools::Bounce::parse_notification($message),
 		$tests{$test},
 		"$test message parsing as arbitrary notification"
-	);
+	) or print Dumper(Sympa::Tools::Bounce::parse_notification($message));
 }
+
+use Data::Dumper;
 
