@@ -42,7 +42,9 @@ my %tests = (
 	'error3.eml' => undef,
 	'error4.eml' => undef,
 	'error5.eml' => undef,
-	'error6.eml' => undef
+	'error6.eml' => {
+		'efthimeros@chemeng.upatras.gr' => '5.1.1'
+	}
 );
 
 plan tests => (scalar keys %tests_rfc1891) + (scalar keys %tests);
