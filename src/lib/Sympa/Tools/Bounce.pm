@@ -184,10 +184,10 @@ sub parse_notification {
    $from =~  y/[A-Z]/[a-z]/;
 
    my $subject = $head->get('Subject');
-   if ($subject =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
-      $info{$2}{error} = $1;
-   } elsif ($subject =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
-      $info{$2}{error} = $1;
+   if ($subject =~ /^Returned mail: Quota exceeded for user (\S+)$/) {
+      $info{$1}{error} = 'Quota exceeded for user';
+   } elsif ($subject =~ /^Returned mail: message not deliverable: \<(\S+)\>$/) {
+      $info{$1}{error} = 'message not deliverable';
    }
 
    my $recipients = $head->get('X-Failed-Recipients');
@@ -207,7 +207,7 @@ sub parse_notification {
    my @paragraphes = split /\r\n\r\n/, (join '', @$body);
    while (my $paragraph = shift @paragraphes) {
 
-      if ($paragraph =~ /^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
+      if ($paragraph =~ /^\s*-+ The following addresses (?:had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
 	 my $adr;
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
@@ -263,8 +263,8 @@ sub parse_notification {
 	 my ($cause, $adr);
 	 my @lines = split(/\n/, $paragraph);
 	 foreach my $line (@lines) {
-	    if ($line =~ /^(Unknown QuickMail recipient\(s\)):/) {
-	       $cause = $1;
+	    if ($line =~ /^Unknown QuickMail recipient\(s\):/) {
+	       $cause = 'Unknown QuickMail recipient(s)';
 	    } elsif ($line =~ /^\s+(.*)$/ and $cause) {
 	       $adr = $1;
 	       $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
@@ -301,7 +301,7 @@ sub parse_notification {
 	 # X400
 	 $info{$1}{error} = $2;
 
-      } elsif ($paragraph =~ /^The requested destination was:\s+(.*)$/m) {
+      } elsif ($paragraph =~ /^The requested destination was:\s+/m) {
 	 # NTMail
 	 do {
 	    $paragraph = shift @paragraphes;
