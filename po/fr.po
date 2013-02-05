@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-11-06 18:15+0200\n"
+"PO-Revision-Date: 2013-02-05 12:43+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "Projct-Id-Version: fr\n"
@@ -807,9 +807,8 @@ msgstr "Gestion des listes automatiques"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-#, fuzzy
 msgid "The automatic lists are based on the %1 family"
-msgstr "Les listes automatiques sont fondées sur la famille $1"
+msgstr "Les listes automatiques sont fondées sur la famille %1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
@@ -2087,13 +2086,12 @@ msgstr "Erreurs de syntaxe pour les paramètres suivants : %1"
 
 #: ../web_tt2/error.tt2:47
 msgid "Authorization rejected. Maybe you forgot to log in?"
-msgstr ""
+msgstr "Accès refusé. Peut-être ne vous êtes vous pas authentifié ?"
 
 #. (u_err.list)
 #: ../web_tt2/error.tt2:48
-#, fuzzy
 msgid "List %1 not found"
-msgstr "Fichier non trouvé."
+msgstr "Liste %1 non trouvée."
 
 #. (u_err.new_robot)
 #: ../web_tt2/error.tt2:49
@@ -8754,11 +8752,13 @@ msgstr "Mise à jour des membres "
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:1
 msgid "Confidential list setup"
-msgstr ""
+msgstr "Liste confidentielle"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:3
 msgid "No subscription / unsubscription: only the list owner can add members"
 msgstr ""
+"Abonnement / désabonnement interdits. Seuls les propriétaires de la liste "
+"peuvent ajouter des membres."
 
 # nlsref 16,83
 #: ../src/etc/create_list_templates/confidential/comment.tt2:4
@@ -8768,13 +8768,14 @@ msgid "private archives"
 msgstr "archives privées"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:5
-#, fuzzy
 msgid "list visible to list members only"
-msgstr "Nombre maximum d'abonnés"
+msgstr "Liste visible aux seuls abonnés"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:6
 msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
 msgstr ""
+"Seuls abonnés peuvent poster des messages. LES AUTRES MESSAGES SONT REJETÉS "
+"SANS NOTIFICATION."
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
