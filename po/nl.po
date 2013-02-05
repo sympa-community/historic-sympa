@@ -10147,11 +10147,6 @@ msgstr "geen mail (handig voor vakanties)"
 msgid "you do not receive your own posts"
 msgstr "U ontvangt niet uw eigen e-mails"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "De automatische lijsten zijn gebaseerd op de $1 familie"
-
 #: ../web_tt2/list_panel.tt2:17
 msgid "(review)"
 msgstr ""
@@ -11062,6 +11057,9 @@ msgid ""
 "password\n"
 "in the setup wizard to complete your account configuration."
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "De automatische lijsten zijn gebaseerd op de $1 familie"
 
 #, fuzzy
 #~ msgid "%1: unknown list"

@@ -9695,10 +9695,8 @@ msgstr "sem correio (útil em caso de férias)"
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "As listas automáticas são baseadas na família $1"
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "As listas automáticas são baseadas na família $1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: lista desconhecida"

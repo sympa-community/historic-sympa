@@ -9747,11 +9747,6 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Las listas automáticas están basadas en la familia $1"
-
 #: ../src/lib/confdef.pm:924
 msgid "Bouncing email rate for warn list owner"
 msgstr ""
@@ -10096,6 +10091,9 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Las listas automáticas están basadas en la familia $1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1 : lista desconocida"

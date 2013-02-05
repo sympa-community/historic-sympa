@@ -10009,11 +10009,6 @@ msgstr "ei posteja (hyödyllinen lomien aikana)"
 msgid "you do not receive your own posts"
 msgstr "et vastaanota lähettämiäsi viestejä"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Automaattiset listat perustuvat $1-perheeseen"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10843,6 +10838,9 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Automaattiset listat perustuvat $1-perheeseen"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: tuntematon lista"

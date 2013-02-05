@@ -9781,10 +9781,8 @@ msgstr "κανένα μήνυμα (χρήσιμο για περίοδο διακ
 msgid "you do not receive your own posts"
 msgstr "δεν θα λαμβάνετε τα δικά σας μηνύματα"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Οι αυτόματες λίστες είναι βασισμένες στην οικογένεια %1"
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Οι αυτόματες λίστες είναι βασισμένες στην οικογένεια %1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: άγνωστη λίστα"

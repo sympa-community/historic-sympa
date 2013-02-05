@@ -9766,10 +9766,8 @@ msgstr "sense correu (útil per vacances)"
 msgid "you do not receive your own posts"
 msgstr "no podeu rebre els vostres propis missatges"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Les llistes automàtiques es basen en la família $1"
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Les llistes automàtiques es basen en la família $1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: llista desconeguda"

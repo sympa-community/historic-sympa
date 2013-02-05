@@ -15,10 +15,10 @@ msgstr ""
 "PO-Revision-Date: 2013-02-05 12:45+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: 日本語\n"
-"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -9661,11 +9661,6 @@ msgstr "受け取らない (休暇中など)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "$1設定族による自動リスト"
-
 #: ../web_tt2/notice.tt2:16
 msgid "You're not allowed to make sync, time limit in action"
 msgstr ""
@@ -9673,6 +9668,9 @@ msgstr ""
 #: ../web_tt2/stats.tt2:16 ../web_tt2/stats.tt2:22
 msgid "[% o.title %]"
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "$1設定族による自動リスト"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: そういうリストは知りません"

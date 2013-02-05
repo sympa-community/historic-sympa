@@ -9783,11 +9783,6 @@ msgstr "keine Nachricht (nützlich für Urlaube)"
 msgid "you do not receive your own posts"
 msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Die automatischen Listen basieren auf der Familie $1"
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -9864,6 +9859,9 @@ msgstr ""
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Die automatischen Listen basieren auf der Familie $1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: unbekannte Liste"

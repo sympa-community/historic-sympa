@@ -9911,11 +9911,6 @@ msgstr "interrompre la recepcion dels messatges (util pendent las vacanças)"
 msgid "you do not receive your own posts"
 msgstr "Recebre pas vòstres pròpris messatges"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr "Las listas automaticas son fondadas sus la familha $1"
-
 #: ../web_tt2/error.tt2:56 ../web_tt2/error.tt2:57
 msgid ""
 "You specified both an URL and a file to upload. Sympa can't choose which one "
@@ -10579,6 +10574,9 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid "The automatic lists are based on the $1 family"
+#~ msgstr "Las listas automaticas son fondadas sus la familha $1"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1 : lista es desconeguda"
