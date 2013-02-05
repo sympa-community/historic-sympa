@@ -820,7 +820,7 @@ msgstr "黑名單管理"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+msgid "The automatic lists are based on the %1 family"
 msgstr ""
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1838,7 +1838,7 @@ msgstr "情景來源"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr ""
@@ -2094,30 +2094,34 @@ msgstr "未知行動"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "下列參量語法錯誤：%1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
 #, fuzzy
-msgid "%1: unknown list"
-msgstr "%1：未知郵件列表"
+msgid "List %1 not found"
+msgstr "沒有匹配文件。"
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 #, fuzzy
 msgid "%1: unknown robot"
 msgstr "%1：未知郵件系統"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 #, fuzzy
 msgid "%1: unknown family"
 msgstr "%1：未知配置"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "You are already logged in as %1"
 msgstr "您已經作為%1登錄"
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 #, fuzzy
 msgid ""
 "You can not get a password reminder; probably because your password is "
@@ -2126,388 +2130,388 @@ msgstr ""
 "您無法得到口令提醒；也許因為您的口令是在Sympa的外部被處理。（唯一的Sign-On系"
 "統或LDAP目錄）。"
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid "Please provide email address"
 msgstr "請輸入電子郵件地址"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Missing argument %1"
 msgstr "缺少參量%1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Wrong value for parameter %1"
 msgstr "參量%1的錯誤值"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "您需要登錄"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 msgid "Address \"%1\" is incorrect"
 msgstr "地址〞%1〞是錯誤的"
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Provided password is incorrect"
 msgstr "輸入的口令不正確"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr "您沒有選擇口令，請求初始口令的提醒"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
 msgstr "您的口令存放在LDAP目錄中，因此Sympa無法給您發送提醒"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr "間隔太長（%1天）"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "郵件列表沒有訂閱者"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "No page %1"
 msgstr "沒有%1頁"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "Missing filter"
 msgstr "缺少過濾"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 msgid "Not subscribed: %1"
 msgstr "並非訂閱者：%1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "You are not subscribed to list %1"
 msgstr "您沒有訂閱郵件列表%1"
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 #, fuzzy
 msgid "Check the additional information"
 msgstr "HTTPS身份驗證信息"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "%1不是一個可提供的接收模式"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 #, fuzzy
 msgid "%1: file not editable"
 msgstr "%1：文件不可編輯"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "You are already subscribed to the list %1"
 msgstr "您已經被訂閱對郵件列表%1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1已經訂閱了郵件列表%2"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "Please provide your password"
 msgstr "請提供口令"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "The passwords you typed do not match"
 msgstr "您鍵入的口令不匹配"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "Provided path is incorrect for template '%1'"
 msgstr "為模板〞%1〞提供的路徑不正確"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Cannot open file '%1'"
 msgstr "不能打開文件〞%1〞"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "You need to provide list name"
 msgstr "您需要提供郵件列表名稱"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 #, fuzzy
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr "監管郵件出錯；它可能由另一位監管員監管了。"
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr "這張郵件列表要求角注郵件"
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "這張郵件列表的歸檔是空的"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr "您還沒有選擇一個要執行的行動"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "No bounce for user  %1"
 msgstr "用戶%1沒有退信"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "List has no bouncing subscribers"
 msgstr "郵件列表沒有退信的訂閱者"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 #, fuzzy
 msgid "No parameter was edited"
 msgstr "參量值"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr "配置文件已經被 %1 修改。無法應用您的修改"
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr "主題〞other〞是一個保留字"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr ""
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr "參量〞%1〞必須有值"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 #, fuzzy
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "參量%1值錯誤：〞%2〞"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "The list '%1' is already closed"
 msgstr "郵件列表〞%1〞已經是閉合的"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is not closed"
 msgstr "郵件列表〞%1〞不是閉合的"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 #, fuzzy
 msgid "'%1': bad listname"
 msgstr "〞%1〞：錯誤的郵件列表名稱"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "〞%1〞郵件列表已經存在"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 #, fuzzy
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr "不正確的郵件列表名稱〞%1〞：符合一個服務別名"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 #, fuzzy
 msgid "Failed to remove list aliases for list %1"
 msgstr "無法為郵件列表〞%1〞包含管理員"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 #, fuzzy
 msgid "%1: No such file or directory"
 msgstr "%1：沒有此文件或目錄"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 #, fuzzy
 msgid "Unable to read %1: empty document"
 msgstr "無法讀取%1：空文件"
 
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "There is no shared documents"
 msgstr "沒有共享文檔"
 
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "The shared document space is empty"
 msgstr "共享文檔空間是空的"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr "共享目錄不能有任何描述"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "No description specified"
 msgstr "沒有指定的描述"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "無法描述，文檔〞%1〞不存在"
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr "磁盤數據已經改變。無法應用修改"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 #, fuzzy
 msgid "%1: incorrect name"
 msgstr "%1：不正確名稱"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 #, fuzzy
 msgid "Failed: your content is empty"
 msgstr "發生了錯誤：內容是空的"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 #, fuzzy
 msgid "Cannot overwrite file %1:"
 msgstr "無法重寫文件%1"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 #, fuzzy
 msgid "A directory named '%1' already exists:"
 msgstr "名為〞%1〞的目錄已經存在"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 #, fuzzy
 msgid "This is an already existing document: '%1'"
 msgstr "這是一個已經存在的文件：〞%1〞"
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "No name specified"
 msgstr "沒有指定名稱"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr "文檔庫超出盤配額。"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 #, fuzzy
 msgid "Cannot upload file %1:"
 msgstr "無法上傳文件〞%1〞"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "您沒有被批準在%1上傳INDEX.HTML"
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr "加載出錯，再試一次"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 #, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "目錄%1和它的內容不能被復制：%2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 #, fuzzy
 msgid "File %1 was not copied: %2 "
 msgstr "文件%1未被復制：%2"
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 #, fuzzy
 msgid "Failed: %1 not empty"
 msgstr "發生了錯誤：%1不空"
 
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "No certificate for this list"
 msgstr "這張郵件列表沒有證書"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "This list has no message topic"
 msgstr "這張郵件列表沒有郵件主題"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr "這張郵件列表要求角注郵件主題"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "No entry for user '%1'"
 msgstr "用戶〞%1〞沒有詞條"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "Please select archive months"
 msgstr "請選擇歸檔月"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr "沒有SOAP服務"
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "Authentication failed"
 msgstr "身份驗證過程失敗"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr ""
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 #, fuzzy
 msgid "This Template '%1' already exists"
 msgstr "文件%1已經存在"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 #, fuzzy
 msgid "Cannot delete this file '%1'"
 msgstr "不能打開文件〞%1〞"
 
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 #, fuzzy
 msgid "Invalid filename: '%1'"
 msgstr "無法讀取文件：〞%1〞。"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "授權拒絕（%1）"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 #, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
@@ -5036,7 +5040,7 @@ msgstr "查找間隔："
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -8077,7 +8081,8 @@ msgstr "僅限郵件列表所有者"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "僅限訂閱者"
 
@@ -8558,6 +8563,29 @@ msgstr "提醒郵件每年發送到訂閱者"
 msgid "Update of list members based on the TTL"
 msgstr "基于TTL的郵件列表成員更新"
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+msgid "private archives"
+msgstr "不公開的歸檔"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr "新的郵件列表"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr "公開討論郵件列表"
@@ -8578,11 +8606,6 @@ msgstr "熱線郵件列表"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
 msgstr "每位用戶都能張貼"
-
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-msgid "private archives"
-msgstr "不公開的歸檔"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -8642,7 +8665,7 @@ msgstr "%Y年%m月%d日　%H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr "%A"
 
@@ -8660,9 +8683,9 @@ msgstr "%d：%s行有錯誤"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y年%m月%d日 %H時%M分%S秒"
 
@@ -9388,18 +9411,18 @@ msgstr "%Y年%m月%d日（%a）"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9547,34 +9570,34 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr "%Y年%m月%d日　%H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "請求轉發到了郵件列表所有者"
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "您要求從郵件列表%1退訂"
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "我退訂郵件列表%1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9732,6 +9755,11 @@ msgstr "不接收郵件（用于假期）"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr ""
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
@@ -10641,6 +10669,10 @@ msgid "Log intensity"
 msgstr ""
 
 #, fuzzy
+#~ msgid "%1: unknown list"
+#~ msgstr "%1：未知郵件列表"
+
+#, fuzzy
 #~ msgid "Statistics"
 #~ msgstr "狀態"
 
@@ -10970,10 +11002,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Directory for subscription spool"
 #~ msgstr "您訂閱的 %1的提醒"
-
-#, fuzzy
-#~ msgid "Maximum number of list members"
-#~ msgstr "新的郵件列表"
 
 #, fuzzy
 #~ msgid "Message tracking feature"
@@ -12516,3 +12544,7 @@ msgstr ""
 
 #~ msgid "Everything about this list:"
 #~ msgstr "所有關于這張郵件列表："
+
+#, fuzzy
+#~ msgid "Maximum number of list members"
+#~ msgstr "新的郵件列表"

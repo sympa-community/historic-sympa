@@ -832,7 +832,7 @@ msgstr "블랙리스트 관리"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+msgid "The automatic lists are based on the %1 family"
 msgstr ""
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1858,7 +1858,7 @@ msgstr "시나리오 원본"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr ""
@@ -2118,30 +2118,34 @@ msgstr "확인 불가 작업"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "다음 매개 변수에 구문 에러: %1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
 #, fuzzy
-msgid "%1: unknown list"
-msgstr "%1 : 확인 불가 리스트 (확인안됨)"
+msgid "List %1 not found"
+msgstr "파일을 찾을 수 없습니다."
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 #, fuzzy
 msgid "%1: unknown robot"
 msgstr "%1 : 확인 불가 해당장치(robot)"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 #, fuzzy
 msgid "%1: unknown family"
 msgstr "%1 : 확인 불가 종류 (종류 확인안됨)"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "You are already logged in as %1"
 msgstr "%1 로 이미 로그인됩니다."
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 #, fuzzy
 msgid ""
 "You can not get a password reminder; probably because your password is "
@@ -2150,39 +2154,39 @@ msgstr ""
 "패스워드 미리 알림를 받올 수 없습니다; 패스워드가 이기 때문에 아마관리했든 외"
 "부 Sympa를 (단 하나 개시 미리 알림 체계 또는 LDAP 디렉토리)."
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid "Please provide email address"
 msgstr "이메일 주소 를 임륙하십시오"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Missing argument %1"
 msgstr "%1 인수 없음"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Wrong value for parameter %1"
 msgstr "매개 변수 %1 를 위한 틀린 값"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "로그인 필요가 있습니다"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 msgid "Address \"%1\" is incorrect"
 msgstr "\"%1\" 주소는 잘 못 되었습니다."
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Provided password is incorrect"
 msgstr "제공했든 패스워드를 잘못됩니다"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr "패스워드 선택하지 않를, 요청하는 처음 패스워드의 미리 알림"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
@@ -2191,350 +2195,350 @@ msgstr ""
 "알림"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr "기간 너무 깁니다 ( %1 일)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "리스트가 가입자 없음"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "No page %1"
 msgstr "%1 란 페이지 없음"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "Missing filter"
 msgstr "필터 없음"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 msgid "Not subscribed: %1"
 msgstr "등록구독되지 않는: %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "You are not subscribed to list %1"
 msgstr "%1 메일링 리스트를 등록구독되지 않습니다."
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 #, fuzzy
 msgid "Check the additional information"
 msgstr "HTTPS 인증 정보"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "%1는 받기 모드(reception mode)가 가능하지 않습니다."
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 #, fuzzy
 msgid "%1: file not editable"
 msgstr "%1 : 파일 수정불가"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "You are already subscribed to the list %1"
 msgstr "%1 메일링 리스트를 이미 등록구독됩니다."
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1가 이미 %2메일링 리스트에 등록 되었습니다"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "Please provide your password"
 msgstr "패스워드를 임륙하십시오"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "The passwords you typed do not match"
 msgstr "입력한 패스워드 일치하지 않습니다"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "Provided path is incorrect for template '%1'"
 msgstr "제공했든 경로를 템플렛 '%1'를 위해 잘못됩니다."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Cannot open file '%1'"
 msgstr "'%1' 파일를 열 수 없습니다"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "You need to provide list name"
 msgstr "리스트 이름 를 입력해야 합니다"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 #, fuzzy
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr ""
 "메시지를 살펴보기 실패했습니다. 다른 중재자 살펴보기 되었을 수 있습니다니다."
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr "메시지를 태그를 붙이는 이 리스트를 위해 요청됩니다"
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "보관(저장)이 이 리스트를 위해 비워있습니다"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr "수행하기 위해 선택하지 않았 작업을"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "No bounce for user  %1"
 msgstr "%1 가 반송된 메시지 없음"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "List has no bouncing subscribers"
 msgstr "리스트가 반송된 가입자 없음"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 #, fuzzy
 msgid "No parameter was edited"
 msgstr "매개 변수 값"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr "구성 파일은 %1에 의해 변경됐습니다. 변경요청은 적용할 수 없습니다."
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr "화제 \"other\" 은 예약된 단어입니다"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr ""
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr "매개 변수 '%1' 에는 값 가 있어야 합니다"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 #, fuzzy
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "매개 변수 '%1' 는 틀린 값이 잘못되었습니다 : %2"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "The list '%1' is already closed"
 msgstr "'%1' 리스트 이미 종료되었습니다"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is not closed"
 msgstr "'%1' 리스트 닫히지 않습니다"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 #, fuzzy
 msgid "'%1': bad listname"
 msgstr "'%1' : 적합하지 않은 리스트 이름"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "'%1'리스트는 이미 있습니다"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 #, fuzzy
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr "잘못된 리스트 이름 '%1' : 서비스 별명 중 하나와 동일함"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 #, fuzzy
 msgid "Failed to remove list aliases for list %1"
 msgstr "리스트 '%1' 위한 관리자(들)을 포함하기 실패했습니다"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 #, fuzzy
 msgid "%1: No such file or directory"
 msgstr "%1 : 다음과 같은 파일 또는 디렉토리 없음"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 #, fuzzy
 msgid "Unable to read %1: empty document"
 msgstr "%1 를 읽을 수 없음 : 빈 문서"
 
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "There is no shared documents"
 msgstr "공용 문서 가 없음"
 
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "The shared document space is empty"
 msgstr "공용 문서 공간 빕니다"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr "공용 디렉토리가 묘사 가질 수 없습니다"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "No description specified"
 msgstr "지정된 묘사 없음"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "기술할 수 없음 는 , 문서 '%1' 존재하지 않습니다"
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr "데이터는 디스크에 변경되었습니다. 당신의 변경은 적용할 수 없습니다"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 #, fuzzy
 msgid "%1: incorrect name"
 msgstr "%1 : 잘못된 이름"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 #, fuzzy
 msgid "Failed: your content is empty"
 msgstr "실패: 내용은 빕니다"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 #, fuzzy
 msgid "Cannot overwrite file %1:"
 msgstr "파일 %1 를 중복해 쓸 수 없습니다."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 #, fuzzy
 msgid "A directory named '%1' already exists:"
 msgstr "'%1' 라는 디렉토리 이미 있습니다"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 #, fuzzy
 msgid "This is an already existing document: '%1'"
 msgstr "다음 문서가 이미 있습니다 : '%1'"
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "No name specified"
 msgstr "지정된 이름 없음"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr "문서 창고가 디스크 할당량 초과합니다."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 #, fuzzy
 msgid "Cannot upload file %1:"
 msgstr "파일 %1 를 업로드할 수 없습니다."
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "%1 에 INDEX.HTML를 업로드하는 인증되지 않았습니다."
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr "업로드 실패하고, 다시 시도 그것에 가"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 #, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "디렉토리 %1 와 내용은 복사할 수 없었습니다 : %2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 #, fuzzy
 msgid "File %1 was not copied: %2 "
 msgstr "파일 %1 는 복사할 수 없습니다 : %2 "
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 #, fuzzy
 msgid "Failed: %1 not empty"
 msgstr "실패: %1 는 비지 않음"
 
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "No certificate for this list"
 msgstr "리스트의 인증서 없음"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "This list has no message topic"
 msgstr "이 리스트가 메시지 화제 없습니다"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr "화제에 태그 메시지 이 리스트를 위해 요청됩니다"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "No entry for user '%1'"
 msgstr "사용자 '%1' 를 위한 입장 없음"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "Please select archive months"
 msgstr "보관 달 선택하십시오"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr "SOAP 서비스 없음"
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "Authentication failed"
 msgstr "인증이 실패 되었습니다"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr ""
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 #, fuzzy
 msgid "This Template '%1' already exists"
 msgstr "파일 %1 이미 있습니다"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 #, fuzzy
 msgid "Cannot delete this file '%1'"
 msgstr "'%1' 파일를 열 수 없습니다"
 
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 #, fuzzy
 msgid "Invalid filename: '%1'"
 msgstr "파일을 읽을 수 없음 : '%1'."
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "허가 거부 (%1)"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 #, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
@@ -5084,7 +5088,7 @@ msgstr "검색 기간: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y년%m월%d일 %H:%M:%S"
 
@@ -8199,7 +8203,8 @@ msgstr "리스트 소유자으로 제한됩니다"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "가입자만 에 제한됩니다"
 
@@ -8682,6 +8687,29 @@ msgstr "매년마다 가입자들에 보내진 알림 메시지"
 msgid "Update of list members based on the TTL"
 msgstr "TTL에 근거하는 리스트 가입자의 업데이트"
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+msgid "private archives"
+msgstr "개인 보관"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr " 새로운 리스트들 "
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr "공용 토론 리스트"
@@ -8702,11 +8730,6 @@ msgstr "핫라인 리스트"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
 msgstr "누구나 포스트할 수 있습니다"
-
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-msgid "private archives"
-msgstr "개인 보관"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -8766,7 +8789,7 @@ msgstr "%y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr "%a"
 
@@ -8784,9 +8807,9 @@ msgstr "에러 (%d 행) : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y년%m월%d일 %H시%M분%S초"
 
@@ -9514,18 +9537,18 @@ msgstr "%Y년%m월%d일 (%a)"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr "%Y년%m월%d일"
 
@@ -9674,34 +9697,34 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr "%y/%m/%d %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "리스트 소유자으로 요청 전달되었습니다"
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "%1 메일링 리스트 에서 가입되지 않 요청했습니다."
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "%1 메일링 리스트에서 등록취소"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9859,6 +9882,11 @@ msgstr "메일 없음 (휴가 동안 유용한)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "사용자의 포스트를 받지 않습니다"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr ""
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
@@ -10768,6 +10796,10 @@ msgid "Log intensity"
 msgstr ""
 
 #, fuzzy
+#~ msgid "%1: unknown list"
+#~ msgstr "%1 : 확인 불가 리스트 (확인안됨)"
+
+#, fuzzy
 #~ msgid "Statistics"
 #~ msgstr "상태"
 
@@ -11097,10 +11129,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Directory for subscription spool"
 #~ msgstr "%1 메일링 리스트에 구독의 미리 알림"
-
-#, fuzzy
-#~ msgid "Maximum number of list members"
-#~ msgstr " 새로운 리스트들 "
 
 #, fuzzy
 #~ msgid "Message tracking feature"
@@ -12648,3 +12676,7 @@ msgstr ""
 
 #~ msgid "Everything about this list:"
 #~ msgstr "이 메일링 리스트에 관해 모두:"
+
+#, fuzzy
+#~ msgid "Maximum number of list members"
+#~ msgstr " 새로운 리스트들 "

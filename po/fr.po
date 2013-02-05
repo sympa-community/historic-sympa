@@ -807,7 +807,8 @@ msgstr "Gestion des listes automatiques"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+#, fuzzy
+msgid "The automatic lists are based on the %1 family"
 msgstr "Les listes automatiques sont fondées sur la famille $1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1834,7 +1835,7 @@ msgstr "code source du scénario"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr " :"
@@ -2084,27 +2085,32 @@ msgstr "Opération incorrecte"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Erreurs de syntaxe pour les paramètres suivants : %1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
-msgid "%1: unknown list"
-msgstr "%1 : cette liste est inconnue"
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
+#, fuzzy
+msgid "List %1 not found"
+msgstr "Fichier non trouvé."
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 msgid "%1: unknown robot"
 msgstr "%1 : ce robot est inconnu"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 msgid "%1: unknown family"
 msgstr "%1 : famille inconnue"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "You are already logged in as %1"
 msgstr "Vous êtes déjà connecté avec l'adresse %1"
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
@@ -2113,41 +2119,41 @@ msgstr ""
 "que votre mot de passe est géré en dehors de Sympa (service de SSO ou "
 "annuaire LDAP)."
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid "Please provide email address"
 msgstr "Vous devez fournir votre adresse email"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Missing argument %1"
 msgstr "%1 : paramètre manquant"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Wrong value for parameter %1"
 msgstr "Valeurs incorrectes du paramètre %1"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "Vous devez vous connecter"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 msgid "Address \"%1\" is incorrect"
 msgstr "L'adresse \"%1\" est incorrecte"
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Provided password is incorrect"
 msgstr "Mot de passe saisi incorrect"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 "Vous n'avez pas défini de mot de passe, demandez un rappel du mot de passe "
 "initial"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
@@ -2156,321 +2162,321 @@ msgstr ""
 "vous le rappeler"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr "La période est trop longue (%1 jours)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "La liste ne comporte aucun abonné"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "No page %1"
 msgstr "Pas de page %1"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "Missing filter"
 msgstr "Aucun filtre spécifié"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 msgid "Not subscribed: %1"
 msgstr "Pas abonné : %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "You are not subscribed to list %1"
 msgstr "Vous n'êtes pas abonné à la liste %1"
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 msgid "Check the additional information"
 msgstr "Vérifiez vos informations supplémentaires"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "Le mode de réception %1 n'est pas disponible"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 msgid "%1: file not editable"
 msgstr "%1 : fichier non éditable"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "You are already subscribed to the list %1"
 msgstr "Vous êtes déjà abonné à la liste %1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1 est déjà abonné à la liste %2"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "Please provide your password"
 msgstr "Vous devez fournir votre mot de passe"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "The passwords you typed do not match"
 msgstr "Les deux mots de passe saisis sont différents"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "Provided path is incorrect for template '%1'"
 msgstr "Chemin du fichier '%1' incorrect"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Cannot open file '%1'"
 msgstr "Impossible d'ouvrir le fichier '%1'"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "You need to provide list name"
 msgstr "Vous devez fournir le nom de la liste"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr ""
 "Le message n'a pas pu être modéré ; il a probablement déjà été traité par un "
 "autre modérateur"
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr "Le marquage des message est obligatoire pour cette liste"
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "Les archives de cette liste sont vides"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr "Vous n'avez pas sélectionné l'opération à effectuer"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "No bounce for user  %1"
 msgstr "Aucun rapport de non remise pour l'utilisateur %1"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "List has no bouncing subscribers"
 msgstr "La liste ne comporte aucun abonné en erreur"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 msgid "No parameter was edited"
 msgstr "Aucun paramètre n'a été modifié"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "Le fichier de configuration a été modifié par %1. Impossible d'appliquer vos "
 "modifications"
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr "Le thème \"autre\" est un mot réservé"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr "Le paramètre '%1' est obligatoire. Suppression ignorée."
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr "Le paramètre '%1' doit être renseigné"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "Le paramètre '%1' a une valeur incorrecte : '%2'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "The list '%1' is already closed"
 msgstr "La liste '%1' est déjà fermée"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is not closed"
 msgstr "La liste '%1' n'est pas fermée"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 msgid "'%1': bad listname"
 msgstr "'%1' : nom de liste incorrect"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "La liste '%1' existe déjà"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr ""
 "Adresse de liste incorrecte '%1' : conflit avec une autre adresse de service"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 msgid "Failed to remove list aliases for list %1"
 msgstr "Problème de suppression des alias pour la liste '%1'"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 msgid "%1: No such file or directory"
 msgstr "%1 : fichier ou répertoire inexistant"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 msgid "Unable to read %1: empty document"
 msgstr "Impossible de lire %1 : document vide"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "There is no shared documents"
 msgstr "Aucun document partagé"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "The shared document space is empty"
 msgstr "L'espace des documents partagés est vide "
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr "Le dossier racine ne peut pas faire l'objet d'une description"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "No description specified"
 msgstr "Aucune description spécifiée"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "Impossible de décrire le document '%1' ; il n'existe pas"
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr ""
 "Les données ont changé sur le disque. Impossible d'appliquer vos "
 "modifications"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 msgid "%1: incorrect name"
 msgstr "%1 : nom incorrect"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 msgid "Failed: your content is empty"
 msgstr "Échec : votre zone d'édition est vide"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 msgid "Cannot overwrite file %1:"
 msgstr "Impossible de remplacer le fichier %1 :"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 msgid "A directory named '%1' already exists:"
 msgstr "Le dossier '%1' existe déjà :"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 msgid "This is an already existing document: '%1'"
 msgstr "Le document existe déjà : '%1'"
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "No name specified"
 msgstr "Aucun nom spécifié"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr "Le quota d'espace disque pour les documents partagés est dépassé."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 msgid "Cannot upload file %1:"
 msgstr "Problème de dépot du fichier %1 :"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Vous n'êtes pas autorisé à déposer un fichier INDEX.HTML dans %1"
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr "Le téléchargement a échoué, veuillez réessayer"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "Le dossier %1 et son contenu n'ont pu être copiés : %2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 msgid "File %1 was not copied: %2 "
 msgstr "Le fichier %1 n'a pas été copié : %2"
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 msgid "Failed: %1 not empty"
 msgstr "Échec : le répertoire %1 n'est pas vide"
 
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "No certificate for this list"
 msgstr "Aucun certificat disponible pour cette liste"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "This list has no message topic"
 msgstr "Cette liste ne comporte aucun thème"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr "Le marquage des messages est requis pour cette liste"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "No entry for user '%1'"
 msgstr "Pas d'entrée correspondant à l'utilisateur '%1'"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "Please select archive months"
 msgstr "Veuillez sélectionner les mois d'archives"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr "Pas de service SOAP"
 
 # nlsref 6,15
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "Authentication failed"
 msgstr "La phase d'authentification a échoué"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr "Service indisponible car la liste a le statut '%1'"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 msgid "This Template '%1' already exists"
 msgstr "Le modèle '%1' existe déjà"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 msgid "Cannot delete this file '%1'"
 msgstr "Impossible de supprimer le fichier '%1'"
 
 # nlsref 6,2
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 msgid "Invalid filename: '%1'"
 msgstr "Nom de fichier invalide :' %1'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
@@ -2478,7 +2484,7 @@ msgstr ""
 "propriétaire a été notifié."
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
@@ -2486,12 +2492,12 @@ msgstr ""
 "propriétaire a été notifié."
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "ACCES REFUSE (%1)"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
@@ -5043,7 +5049,7 @@ msgstr "Période explorée :"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -8257,7 +8263,8 @@ msgstr "réservé aux propriétaires"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "limité aux abonnés"
 
@@ -8745,6 +8752,30 @@ msgstr "envoi d'un message de rappel tous les ans aux abonnés de la liste"
 msgid "Update of list members based on the TTL"
 msgstr "Mise à jour des membres "
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+# nlsref 16,83
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+msgid "private archives"
+msgstr "archives privées"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr "Nombre maximum d'abonnés"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr "Liste de discussion publique"
@@ -8766,12 +8797,6 @@ msgstr "Liste de type hotline"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
 msgstr "droit de poster des messages ouvert à tous"
-
-# nlsref 16,83
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-msgid "private archives"
-msgstr "archives privées"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -8831,7 +8856,7 @@ msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr "%A"
 
@@ -8849,9 +8874,9 @@ msgstr "Erreur ligne %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9679,18 +9704,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9831,35 +9856,35 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Votre demande de désabonnement de la liste %s a été soumise à son "
 "gestionnaire."
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Vous avez été désabonné(e) de la liste %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Votre demande de désabonnement de la liste %s a échoué : le désabonnement de "
 "cette liste est interdit."
 
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 msgid "Unsubscription from list %s failed."
 msgstr "Un désabonnement de la liste %s a échoué."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
@@ -10043,6 +10068,14 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "Ne pas recevoir mes propres messages"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr "Les listes automatiques sont fondées sur la famille $1"
+
+#~ msgid "%1: unknown list"
+#~ msgstr "%1 : cette liste est inconnue"
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
@@ -11155,9 +11188,6 @@ msgstr "Ne pas recevoir mes propres messages"
 #~ msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 #~ msgstr "Conf::load_nrcpt_by_domain(): Erreur à la ligne %d: %s"
 
-#~ msgid "Maximum number of list members"
-#~ msgstr "Nombre maximum d'abonnés"
-
 # nlsref 15,4
 #~ msgid "Message tracking feature"
 #~ msgstr "Fonctionnalité de suivi des messages"
@@ -11438,3 +11468,6 @@ msgstr "Ne pas recevoir mes propres messages"
 
 #~ msgid "hovered hyperlinks;"
 #~ msgstr "liens survolés ;"
+
+#~ msgid "Maximum number of list members"
+#~ msgstr "Nombre maximum d'abonnés"

@@ -23,10 +23,10 @@ msgstr ""
 "PO-Revision-Date: 2013-01-23 11:38+0200\n"
 "Last-Translator: Cedric31 <cvalmary@yahoo.fr>\n"
 "Language-Team: occitan <asso.oc@abuledu.org>\n"
-"Language: oc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: oc\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -271,8 +271,8 @@ msgid ""
 "change your <a href=\"%1/help/user#options\">subscriber options</a> list by "
 "list,"
 msgstr ""
-"modificar vòstras <a href=\"%1/help/user#options\">opcions d'abonat</a> lista "
-"per lista,"
+"modificar vòstras <a href=\"%1/help/user#options\">opcions d'abonat</a> "
+"lista per lista,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:46
@@ -300,16 +300,16 @@ msgid ""
 "read the <a href=\"%1/help/arc\">archive of lists to which you are "
 "subscribed</a>,"
 msgstr ""
-"consultar los <a href=\"%1/help/arc\">archius de las listas a las qualas sètz "
-"abonat</a>,"
+"consultar los <a href=\"%1/help/arc\">archius de las listas a las qualas "
+"sètz abonat</a>,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:52
 msgid ""
 "perform <a href=\"%1/help/arc#arcsearch\">searches in the list archive</a>,"
 msgstr ""
-"efectuar de <a href=\"%1/help/arc#arcsearch\">recèrcas dins los archius de las "
-"listas</a>,"
+"efectuar de <a href=\"%1/help/arc#arcsearch\">recèrcas dins los archius de "
+"las listas</a>,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:53
@@ -317,8 +317,8 @@ msgid ""
 "<a href=\"%1/help/sendmsg\">send messages</a> to lists to which you are "
 "subscribed,"
 msgstr ""
-"<a href=\"%1/help/sendmsg\">mandar de messatges</a> a las listas a las qualas "
-"sètz abonat,"
+"<a href=\"%1/help/sendmsg\">mandar de messatges</a> a las listas a las "
+"qualas sètz abonat,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:54
@@ -326,8 +326,8 @@ msgid ""
 "<a href=\"%1/help/shared#shared_read\">download documents</a> from the "
 "shared document web space,"
 msgstr ""
-"<a href=\"%1/help/shared#shared_read\">telecargar de documents</a> a partir de "
-"l'espaci d'emmagazinatge partejat,"
+"<a href=\"%1/help/shared#shared_read\">telecargar de documents</a> a partir "
+"de l'espaci d'emmagazinatge partejat,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:55 ../web_tt2/help_user.tt2:81
@@ -335,8 +335,8 @@ msgid ""
 "<a href=\"%1/help/shared#shared_upload\">upload documents</a> in the shared "
 "document web space;"
 msgstr ""
-"<a href=\"%1/help/shared#publishdoc\">publicar de documents</a> dins l'espaci "
-"partejat&#160;;"
+"<a href=\"%1/help/shared#publishdoc\">publicar de documents</a> dins "
+"l'espaci partejat&#160;;"
 
 #: ../web_tt2/help_introduction.tt2:57
 msgid "manage mailing lists"
@@ -436,8 +436,8 @@ msgstr ""
 msgid ""
 "<strong>define the general orientations of the mailing list service</strong>:"
 msgstr ""
-"<strong>definir las orientacions generalas del servici de "
-"listas</strong>&#160;:"
+"<strong>definir las orientacions generalas del servici de listas</"
+"strong>&#160;:"
 
 #: ../web_tt2/help_introduction.tt2:84
 msgid "who will be allowed to ask for the creation of a new list,"

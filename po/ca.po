@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2013-01-13 19:41+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Català <projectek2@upcnet.es>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -797,7 +797,8 @@ msgstr "Gestió automàtica de les llistes"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+#, fuzzy
+msgid "The automatic lists are based on the %1 family"
 msgstr "Les llistes automàtiques es basen en la família $1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1803,7 +1804,7 @@ msgstr "font de l'escenari"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr ":"
@@ -2049,27 +2050,32 @@ msgstr "Acció desconeguda"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Errors de sintaxi en els següents paràmetres: %1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
-msgid "%1: unknown list"
-msgstr "%1: llista desconeguda"
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
+#, fuzzy
+msgid "List %1 not found"
+msgstr "No s'ha trobat el fitxer."
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 msgid "%1: unknown robot"
 msgstr "%1: robot desconegut"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 msgid "%1: unknown family"
 msgstr "%1: família desconeguda"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "You are already logged in as %1"
 msgstr "Esteu validat com a %1"
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
@@ -2078,41 +2084,41 @@ msgstr ""
 "vostra contrasenya està gestionada per un altre sistema (amb un sistema "
 "d'identificació únic o un directori LDAP)."
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid "Please provide email address"
 msgstr "Introduïu una adreça electrònica"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Missing argument %1"
 msgstr "Falta el paràmetre %1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Wrong value for parameter %1"
 msgstr "Valor incorrecta del paràmetre %1"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "Necessiteu validar-vos"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 msgid "Address \"%1\" is incorrect"
 msgstr "L'adreça \"%1\" és incorrecta"
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Provided password is incorrect"
 msgstr "La contrasenya és incorrecta"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 "No ha canviat mai la contrasenya, sol·liciti un recordatori de la "
 "contrasenya inicial"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
@@ -2121,315 +2127,315 @@ msgstr ""
 "vos un recordatori"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr "El període és massa llarg (%1 dies)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "La llista no té cap subscriptor"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "No page %1"
 msgstr "Cap pàgina %1"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "Missing filter"
 msgstr "Filtre absent"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 msgid "Not subscribed: %1"
 msgstr "No donat d'alta: %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "You are not subscribed to list %1"
 msgstr "No esteu donat d'alta a la llista %1"
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 msgid "Check the additional information"
 msgstr "Verifiqueu la informació addicional"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "%1 no és un mode de recepció vàlid"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 msgid "%1: file not editable"
 msgstr "%1: fitxer no editable"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "You are already subscribed to the list %1"
 msgstr "Ja esteu subscrit a la llista %1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1 ja està subscrit a la llista %2"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "Please provide your password"
 msgstr "Heu d'introduir una contrasenya"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "The passwords you typed do not match"
 msgstr "Les contrasenyes no coincideixen"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "Provided path is incorrect for template '%1'"
 msgstr "El camí de la plantilla '%1' és incorrecte"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Cannot open file '%1'"
 msgstr "El fitxer '%1' no es pot obrir"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "You need to provide list name"
 msgstr "Heu d'indicar un nom de llista"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr ""
 "Error al moderar un missatge; probablement ha estat moderat per un altre "
 "moderador"
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr "L'etiquetatge dels missatges és obligatori en aquesta llista"
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "El arxius d'aquesta llista estan buits"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr "No heu seleccionat cap acció"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "No bounce for user  %1"
 msgstr "Cap missatge retornat per l'usuari %1"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "List has no bouncing subscribers"
 msgstr "Aquesta llista no té cap missatge retornat"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 msgid "No parameter was edited"
 msgstr "No s'ha modificat cap paràmetre"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "El fitxer de configuració ha estat modificat per %1. Els vostres canvis no "
 "es poden aplicar"
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr "El tema \"altres\" és una paraula reservada"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr "El paràmetre '%1' és obligatori. Aquest no s'ha elimat."
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr "El paràmetre '%1' ha de tenir valors"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "El paràmetre '%1' té un valor incorrecte: '%2'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "The list '%1' is already closed"
 msgstr "La llista '%1' ja està tancada"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is not closed"
 msgstr "La llista '%1' no està tancada"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 msgid "'%1': bad listname"
 msgstr "'%1': nom de llista incorrecte"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "la llista '%1' ja existeix"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr ""
 "Nom de la llista incorrecte '%1': coincideix amb un dels àlies del servei"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 msgid "Failed to remove list aliases for list %1"
 msgstr "L'eliminació de l'àlies de la llista %1 ha fallat"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 msgid "%1: No such file or directory"
 msgstr "%1: Fitxer o carpeta inexistent"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 msgid "Unable to read %1: empty document"
 msgstr "No es pot llegir %1: el document és buit"
 
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "There is no shared documents"
 msgstr "No hi ha documents compartits"
 
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "The shared document space is empty"
 msgstr "La carpeta compartida de documents és buida"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr "La carpeta compartida no pot tenir cap descripció"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "No description specified"
 msgstr "No s'ha especificat cap descripció"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "No es pot descriure, el document '%1' no existeix"
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr "Les dades del disc han canviat. Els canvis no es poden aplicar"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 msgid "%1: incorrect name"
 msgstr "%1: nom incorrete"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 msgid "Failed: your content is empty"
 msgstr "Error: el contingut és buit"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 msgid "Cannot overwrite file %1:"
 msgstr "El fitxer %1 no es pot sobreescriure:"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 msgid "A directory named '%1' already exists:"
 msgstr "La carpeta '%1' ja existeix:"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 msgid "This is an already existing document: '%1'"
 msgstr "Aquest document ja existeix: '%1'"
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "No name specified"
 msgstr "No s'ha especificat cap nom"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr "Quota de disc superada."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 msgid "Cannot upload file %1:"
 msgstr "No es pot pujar el fitxer %1:"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "No teniu permís per pujar el fitxer INDEX.HTML a %1"
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr "No es pot baixar el fitxer. Torneu a intentar-ho"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "No s'ha pogut copiar la carpeta %1 i el seu contingut: %2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 msgid "File %1 was not copied: %2 "
 msgstr "El fitxer %1 no s'ha copiat: %2 "
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 msgid "Failed: %1 not empty"
 msgstr "Error: %1 no és buit"
 
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "No certificate for this list"
 msgstr "Cap certificat per la llista"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "This list has no message topic"
 msgstr "Aquesta llista no té cap tema"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr "Cal etiquetar els missatges amb un tema en aquesta llista"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "No entry for user '%1'"
 msgstr "No hi ha cap entrada a nom de '%1'"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "Please select archive months"
 msgstr "Seleccioneu els mesos dels arxius"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr "Servei SOAP no disponible"
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "Authentication failed"
 msgstr "Error d'autenticació"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr "Servei no disponible perquè l'estatus de la llista és '%1'"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 msgid "This Template '%1' already exists"
 msgstr "La plantilla '%1' ja existeix"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 msgid "Cannot delete this file '%1'"
 msgstr "No es pot eliminar aquest fitxer '%1'"
 
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 msgid "Invalid filename: '%1'"
 msgstr "Nom invàlid de fitxer: '%1'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
@@ -2437,7 +2443,7 @@ msgstr ""
 "'%1'. El propietari de la llista n'ha estat informat."
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
@@ -2445,12 +2451,12 @@ msgstr ""
 "llista '%1'. El propietari de la llista n'ha estat informat."
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "AUTORITZACIÓ REFUSADA (%1)"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
@@ -4939,7 +4945,7 @@ msgstr "Cerca per període: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -8094,7 +8100,8 @@ msgstr "restringit a la llista d'administradors"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "restringit als subscriptors"
 
@@ -8585,6 +8592,29 @@ msgstr "missatge recordatori enviat als subscriptors cada any"
 msgid "Update of list members based on the TTL"
 msgstr "Actualització de la llista de membres basat en el TTL"
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+msgid "private archives"
+msgstr "arxius privats"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr "Nombre màxim de membres de la llista"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr "Llista de distribució de discussió pública"
@@ -8605,11 +8635,6 @@ msgstr "Llistes de correu Hotline"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
 msgstr "qualsevol pot enviar"
-
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-msgid "private archives"
-msgstr "arxius privats"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -8672,7 +8697,7 @@ msgstr "%d %b %Y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr "%A"
 
@@ -8688,9 +8713,9 @@ msgstr "Error a la línia %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9408,18 +9433,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9557,35 +9582,35 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "La vostra petició de baixa de la llista %s s'ha enviat al propietari de la "
 "llista."
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Heu estat donat de baixa correctament de la llista %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Denegada la baixa de la llista %s: La desubscripció a aquesta llista està "
 "tancada."
 
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 msgid "Unsubscription from list %s failed."
 msgstr "Ha fallat la baixa de la llista %s."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
@@ -9740,6 +9765,14 @@ msgstr "sense correu (útil per vacances)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "no podeu rebre els vostres propis missatges"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr "Les llistes automàtiques es basen en la família $1"
+
+#~ msgid "%1: unknown list"
+#~ msgstr "%1: llista desconeguda"
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
@@ -10836,9 +10869,6 @@ msgstr "no podeu rebre els vostres propis missatges"
 
 #~ msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 #~ msgstr "Conf::load_nrcpt_by_domain(): Error a la línia %d: %s"
-
-#~ msgid "Maximum number of list members"
-#~ msgstr "Nombre màxim de membres de la llista"
 
 #~ msgid "Message tracking feature"
 #~ msgstr "Funcionalitat de seguiment de missatges"
@@ -11986,3 +12016,6 @@ msgstr "no podeu rebre els vostres propis missatges"
 
 #~ msgid "Everything about this list:"
 #~ msgstr "Qualsevol cosa sobre aquesta llista:"
+
+#~ msgid "Maximum number of list members"
+#~ msgstr "Nombre màxim de membres de la llista"

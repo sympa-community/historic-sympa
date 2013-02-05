@@ -817,7 +817,8 @@ msgstr "Automaattinen listojen hallinta"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+#, fuzzy
+msgid "The automatic lists are based on the %1 family"
 msgstr "Automaattiset listat perustuvat $1-perheeseen"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1824,7 +1825,7 @@ msgstr "scenario -lähdekoodi"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr ":"
@@ -2075,27 +2076,32 @@ msgstr "Tunnistamaton toiminto"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Muotovirheitä seuraavissa parametreissa: %1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
-msgid "%1: unknown list"
-msgstr "%1: tuntematon lista"
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
+#, fuzzy
+msgid "List %1 not found"
+msgstr "Toggle Selection"
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 msgid "%1: unknown robot"
 msgstr "%1: tuntematon listarobotti"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 msgid "%1: unknown family"
 msgstr "%1: tuntematon family (listan ryhmä)"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "You are already logged in as %1"
 msgstr "Olet jo kirjautunut sisään käyttäjänä %1"
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
@@ -2103,40 +2109,40 @@ msgstr ""
 "Salasanamuistutus ei ole mahdollinen, koska salasanasi on todennäköisesti "
 "tallennettu ulkoiseen järjestelmään (esim. Single Sign-On tai LDAP)."
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid "Please provide email address"
 msgstr "Ole hyvä ja anna sähköpostiosoite"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Missing argument %1"
 msgstr "Puuttuva argumentti %1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Wrong value for parameter %1"
 msgstr "Väärä arvo parametrille %1"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "Sinun täytyy sisäänkirjautua"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 msgid "Address \"%1\" is incorrect"
 msgstr "Osoite \"%1\" on virheellinen"
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Provided password is incorrect"
 msgstr "Annettu salasana on virheellinen"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 "Salasanaa ei ole määritelty. Tilaa muistutus määrittääksesi uuden salasanan"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
@@ -2145,82 +2151,82 @@ msgstr ""
 "sinulle salasanamuistutusta"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr "Aikaväli on liian pitkä (%1 päivää)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "Listalla ei ole tilaajia"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "No page %1"
 msgstr "Sivua %1 ei ole"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "Missing filter"
 msgstr "Puuttuva suodatin"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 msgid "Not subscribed: %1"
 msgstr "%1 ei ole tilaaja"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "You are not subscribed to list %1"
 msgstr "Et ole tilannut listaa %1"
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 msgid "Check the additional information"
 msgstr "Tarkista lisätiedot"
 
 # nlsref 16,19
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "%1-vastaanottotila ei ole käytössä"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 msgid "%1: file not editable"
 msgstr "%1: tiedostoon ei voi muokattavissa"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "You are already subscribed to the list %1"
 msgstr "Olet jo tilannut listan %1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1 on jo listan %2 tilaaja"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "Please provide your password"
 msgstr "Anna salasanasi"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "The passwords you typed do not match"
 msgstr "Antamasi salasanat eivät ole samat"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "Provided path is incorrect for template '%1'"
 msgstr "Annettu polku on väärä '%1 -mallille'"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Cannot open file '%1'"
 msgstr "Tiedostoa '%1 ei voi avata'"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "You need to provide list name"
 msgstr "Sinun pitää antaa listan nimi"
 
 # nlsref 4,38
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr ""
@@ -2228,241 +2234,241 @@ msgstr ""
 "jo käsitellyt viestin."
 
 # tagging?
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr "Tämä lista vaatii viestin taggaamisen."
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "Listan arkistot ovat tyhjät"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr "Et valinnut toteutettavaa toimintoa"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "No bounce for user  %1"
 msgstr "Ei toimittamattomia viestejä käyttäjällä %1"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "List has no bouncing subscribers"
 msgstr "Listalla ei ole tavoittamattomia tilaajia"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 msgid "No parameter was edited"
 msgstr "Yhtään parametriä ei muutettu"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr "%1 on muutanut asetustiedostoa. Muutoksiasi ei voi tallentaa."
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr "Aihe ”muu” on varattu sana"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr "Parametri '%1' on pakollinen. Ohitetaan poistaminen."
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr "Parametrillä '%1' täytyy olla arvo"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "Parametrin '%1' arvo '%2' on virheellinen"
 
 # nlsref 16,70
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "The list '%1' is already closed"
 msgstr "Lista '%1' on jo suljettu"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is not closed"
 msgstr "Lista '%1' ei ole suljettu"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 msgid "'%1': bad listname"
 msgstr "'%1': virheellinen listannimi"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "lista '%1' on jo olemassa"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr "Virheellinen listanimi '%1': sama kuin yksi palvelualiaksista"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 msgid "Failed to remove list aliases for list %1"
 msgstr "Lista-aliaksien poistaminen listalta %1 epäonnistui"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 msgid "%1: No such file or directory"
 msgstr "%1: Tiedostoa tai hakemistoa ei ole"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 msgid "Unable to read %1: empty document"
 msgstr "Tiedoston %1 lukeminen epäonnistui: tyhjä tiedosto"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "There is no shared documents"
 msgstr "Jaettuja tiedostoja ei ole"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "The shared document space is empty"
 msgstr "Jaettujen tiedostojen alue on tyhjä"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr "Jaetulla hakemistolla ei voi olla kuvausta"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "No description specified"
 msgstr "Ei kuvausta"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "Kuvauksen laatiminen ei onnistu, tiedostoa '%1' ei ole olemassa"
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr ""
 "Levylle tallennettua tietoa on muutettu. Tekemiäsi muutoksia ei voida "
 "tallentaa."
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 msgid "%1: incorrect name"
 msgstr "%1: virheellinen nimi"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 msgid "Failed: your content is empty"
 msgstr "Epäonnistui: sisältö on tyhjä"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 msgid "Cannot overwrite file %1:"
 msgstr "Tiedostoa %1 ei voi ylikirjoittaa:"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 msgid "A directory named '%1' already exists:"
 msgstr "Hakemisto %1 on jo olemassa:"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 msgid "This is an already existing document: '%1'"
 msgstr "Tiedosto '%1 on jo olemassa"
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "No name specified"
 msgstr "Nimeä ei määritelty"
 
 # ylittää vai ylitti?
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr "Tiedostovaraston levytilarajoitus on saavutettu."
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 msgid "Cannot upload file %1:"
 msgstr "Tiedostoa %1 ei voida lähettää:"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Sinulla ei ole oikeuksia ladata INDEX.HTML-tiedostoa hakemistoon %1"
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr "Tiedoston lähettäminen epäonnistui, yritä uudestaan"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "Hakemistoa %1 ja sen sisältöä ei voitu kopioida: %2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 msgid "File %1 was not copied: %2 "
 msgstr "Tiedostoa %1 ei kopioitu: %2"
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 msgid "Failed: %1 not empty"
 msgstr "Epäonnistui: %1 ei ole tyhjä"
 
 # nlsref 16,74
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "No certificate for this list"
 msgstr "Tällä listalla ei ole varmennetta"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "This list has no message topic"
 msgstr "Listalla ei ole viestiaihetta"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr "Tämä lista vaatii viestin aiheen syöttämisen"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "No entry for user '%1'"
 msgstr "Ei tietoja käyttäjästä '%1'"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "Please select archive months"
 msgstr "Valitse arkistokuukaudet"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr "Ei SOAP-palvelua"
 
 # nlsref 6,15
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "Authentication failed"
 msgstr "Tunnistus epäonnistui"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr "Palvelu ei ole käytettävissä koska listan tila on '%1'"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 msgid "This Template '%1' already exists"
 msgstr "Malli %1 on jo olemassa"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 msgid "Cannot delete this file '%1'"
 msgstr "Tiedostoa '%1' ei voi poistaa"
 
 # nlsref 6,2
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 msgid "Invalid filename: '%1'"
 msgstr "Kelvoton tiedostonimi: %1"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
@@ -2470,7 +2476,7 @@ msgstr ""
 "omistajalle on ilmoitettu asiasta."
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
@@ -2478,12 +2484,12 @@ msgstr ""
 "Listan omistajalle on ilmoitettu asiasta."
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "VALTUUTUS HYLÄTTY (%1)"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
@@ -4993,7 +4999,7 @@ msgstr "Hakujakso:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d.%m.%Y %H.%M.%S"
 
@@ -8187,7 +8193,8 @@ msgstr "rajoitettu listan omistajille"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "rajoitettu tilaajille"
 
@@ -8685,6 +8692,30 @@ msgstr ""
 msgid "Update of list members based on the TTL"
 msgstr ""
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+# nlsref 16,83
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+msgid "private archives"
+msgstr "yksityiset arkistot"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr "Hallitse listan jäseniä"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr "Julkinen keskustelulista"
@@ -8707,12 +8738,6 @@ msgstr "Kuuma linja"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
 msgstr "kaikki voivat lähettää"
-
-# nlsref 16,83
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-msgid "private archives"
-msgstr "yksityiset arkistot"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -8774,7 +8799,7 @@ msgstr "%d.%m.%Y %H.%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr ""
 
@@ -8792,9 +8817,9 @@ msgstr "Virhe rivillä %d: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
 
@@ -9623,18 +9648,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9768,23 +9793,23 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 # nlsref 6,18
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Pyyntösi listan %s tilauksen perumisesta lähetettiin listan omistajalle."
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Listan %1 tilauksesi peruttiin."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
@@ -9792,13 +9817,13 @@ msgstr ""
 "on suljettu."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 msgid "Unsubscription from list %s failed."
 msgstr "Listan %s tilauksen peruminen epäonnistui."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9983,6 +10008,11 @@ msgstr "ei posteja (hyödyllinen lomien aikana)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "et vastaanota lähettämiäsi viestejä"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr "Automaattiset listat perustuvat $1-perheeseen"
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
@@ -10814,6 +10844,9 @@ msgstr ""
 msgid "Log intensity"
 msgstr ""
 
+#~ msgid "%1: unknown list"
+#~ msgstr "%1: tuntematon lista"
+
 #, fuzzy
 #~ msgid "Statistics"
 #~ msgstr "Tila"
@@ -11226,10 +11259,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Directory for subscription spool"
 #~ msgstr "Muistutus tilauksestasi listalle %1"
-
-#, fuzzy
-#~ msgid "Maximum number of list members"
-#~ msgstr "Hallitse listan jäseniä"
 
 # nlsref 15,4
 #, fuzzy
@@ -12499,10 +12528,6 @@ msgstr ""
 #~ " (sinun ei tarvitse tehdä mitään)\n"
 
 #, fuzzy
-#~ msgid "File not found"
-#~ msgstr "Toggle Selection"
-
-#, fuzzy
 #~ msgid "For further assistance, please contact %1@%2"
 #~ msgstr "Lisätietoja saat ottamalla yhteyttä listmaster@%1"
 
@@ -13546,3 +13571,11 @@ msgstr ""
 
 #~ msgid "Sort by author"
 #~ msgstr "Lajittele tekijän mukaan"
+
+#, fuzzy
+#~ msgid "Maximum number of list members"
+#~ msgstr "Hallitse listan jäseniä"
+
+#, fuzzy
+#~ msgid "File not found"
+#~ msgstr "Toggle Selection"

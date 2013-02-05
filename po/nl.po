@@ -21,10 +21,10 @@ msgstr ""
 "PO-Revision-Date: 2013-01-10 21:19+0200\n"
 "Last-Translator: Kwadro Naut <kwadronaut@autistici.org>\n"
 "Language-Team: Nederlands\n"
-"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "plural-forms: nplurals=2; plural=n != 1\n"
@@ -804,8 +804,8 @@ msgid ""
 "Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
 "Search</a></em>, search engine of MHonArc archives"
 msgstr ""
-"Gebaseerd op <em><a href=\"http://www.mhonarc.org/contrib/marc-search "
-"/\">Marc-Search</a></em>, zoekmachine van MHonArc archieven"
+"Gebaseerd op <em><a href=\"http://www.mhonarc.org/contrib/marc-search /"
+"\">Marc-Search</a></em>, zoekmachine van MHonArc archieven"
 
 #. (archive_name)
 #: ../web_tt2/arcsearch.tt2:142
@@ -819,7 +819,8 @@ msgstr "Automatisch lijstbeheer"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
+#, fuzzy
+msgid "The automatic lists are based on the %1 family"
 msgstr "De automatische lijsten zijn gebaseerd op de $1 familie"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
@@ -1853,7 +1854,7 @@ msgstr "Scenario test module"
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
 msgstr ""
@@ -2122,69 +2123,73 @@ msgstr "%1 : onbekende actie"
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Syntax fout met de volgende parameters : %1"
 
-#. (u_err.list)
 #: ../web_tt2/error.tt2:47
+msgid "Authorization rejected. Maybe you forgot to log in?"
+msgstr ""
+
+#. (u_err.list)
+#: ../web_tt2/error.tt2:48
 #, fuzzy
-msgid "%1: unknown list"
-msgstr "%1 : onbekende lijst"
+msgid "List %1 not found"
+msgstr "Wissel selectie"
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 #, fuzzy
 msgid "%1: unknown robot"
 msgstr "%1 : onbekende robot"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 #, fuzzy
 msgid "%1: unknown family"
 msgstr "%1 : onbekende familie"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 #, fuzzy
 msgid "You are already logged in as %1"
 msgstr "U bent al ingelogd als %1"
 
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
 msgstr ""
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 #, fuzzy
 msgid "Please provide email address"
 msgstr "Geeft u a.u.b. uw emailadres"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 #, fuzzy
 msgid "Missing argument %1"
 msgstr "Missend argument %1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 #, fuzzy
 msgid "Wrong value for parameter %1"
 msgstr "Data bronnen configuratie"
 
-#: ../web_tt2/error.tt2:144 ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
 msgid "You need to login"
 msgstr "U moet nog inloggen"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:57
 #, fuzzy
 msgid "Address \"%1\" is incorrect"
 msgstr "Adres \"%1\" is incorrect"
 
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 #, fuzzy
 msgid "Provided password is incorrect"
 msgstr "Het ingegeven wachtwoord is incorrect"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 #, fuzzy
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
@@ -2192,336 +2197,336 @@ msgstr ""
 "U heeft geen wachtwoord gekozen, kies een herinering voor uw eerste "
 "wachtwoord"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
 msgstr ""
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid "The period is too long (%1 days)"
 msgstr ""
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
 #, fuzzy
 msgid "List has no subscribers"
 msgstr "De lijst heeft geen abonnees"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 #, fuzzy
 msgid "No page %1"
 msgstr "Geen pagina %1"
 
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 #, fuzzy
 msgid "Missing filter"
 msgstr "Missend filter"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:65
+#: ../web_tt2/error.tt2:66
 #, fuzzy
 msgid "Not subscribed: %1"
 msgstr "Niet geabonneerd: %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 #, fuzzy
 msgid "You are not subscribed to list %1"
 msgstr "U bent niet geabonneerd op de lijst %1"
 
-#: ../web_tt2/error.tt2:68
+#: ../web_tt2/error.tt2:69
 #, fuzzy
 msgid "Check the additional information"
 msgstr "HTTPS authenticatie informatie"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "%1 is not an available reception mode"
 msgstr "%1 is geen beschikbare ontvangstmodus"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 #, fuzzy
 msgid "%1: file not editable"
 msgstr "%1 : bestand is niet te wijzigen"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 #, fuzzy
 msgid "You are already subscribed to the list %1"
 msgstr "U bent al geabonneerd op de lijst %1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1 is al geabonneerd op de lijst %2"
 
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 #, fuzzy
 msgid "Please provide your password"
 msgstr "Geeft u uw wachtwoord"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 #, fuzzy
 msgid "The passwords you typed do not match"
 msgstr "De wachtwoorden die u ingaf zijn ongelijk"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 #, fuzzy
 msgid "Provided path is incorrect for template '%1'"
 msgstr "Het ingegeven wachtwoord is incorrect"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 #, fuzzy
 msgid "Cannot open file '%1'"
 msgstr "kan bestand niet uploaden %1"
 
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 #, fuzzy
 msgid "You need to provide list name"
 msgstr "U moet nog inloggen"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 #, fuzzy
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr "Uw bericht voor lijst %s is doorgestuurd naar de editor(s)\n"
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid "Tagging message is required for this list"
 msgstr ""
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Archives are empty for this list"
 msgstr "Archieven zijn leeg voor deze lijst"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "You did not select an action to perform"
 msgstr ""
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 #, fuzzy
 msgid "No bounce for user  %1"
 msgstr "Geen bounces voor gebruiker  %1"
 
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 #, fuzzy
 msgid "List has no bouncing subscribers"
 msgstr "De lijst geeft geen abonnees met bounces"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 #, fuzzy
 msgid "No parameter was edited"
 msgstr "part"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 #, fuzzy
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "Het configuratiebestand is veranderd door %1. Kan uw wijzigingen niet "
 "doorvoeren"
 
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Topic \"other\" is a reserved word"
 msgstr ""
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr ""
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' must have values"
 msgstr ""
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 #, fuzzy
 msgid "The list '%1' is already closed"
 msgstr "Gedeelde documenten"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 #, fuzzy
 msgid "The list '%1' is not closed"
 msgstr "Bestand %1 opgeslagen"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 #, fuzzy
 msgid "'%1': bad listname"
 msgstr "'%1' : foute lijstnaam"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1' list already exists"
 msgstr "Lijst '%1' bestaat al"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 #, fuzzy
 msgid "Failed to remove list aliases for list %1"
 msgstr "Kon email voor lijst %1 niet veranderen"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 #, fuzzy
 msgid "%1: No such file or directory"
 msgstr "%1 : Bestand of map niet gevonden"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 #, fuzzy
 msgid "Unable to read %1: empty document"
 msgstr "Unable to read %1 : leeg document"
 
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 #, fuzzy
 msgid "There is no shared documents"
 msgstr "Nieuwste gedeelde documenten"
 
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 #, fuzzy
 msgid "The shared document space is empty"
 msgstr "Nieuwste gedeelde documenten"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared directory cannot have any description"
 msgstr ""
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 #, fuzzy
 msgid "No description specified"
 msgstr "Geen omschrijving gegeven"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr ""
 
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 #, fuzzy
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr "Data is veranderd op de disk, kan uw wijzigingen niet doorvoeren"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 #, fuzzy
 msgid "%1: incorrect name"
 msgstr "%1 : foute naam"
 
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 #, fuzzy
 msgid "Failed: your content is empty"
 msgstr "Fout: Uw inhoud is leeg"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 #, fuzzy
 msgid "Cannot overwrite file %1:"
 msgstr "kan bestand niet overschrijven %1"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 #, fuzzy
 msgid "A directory named '%1' already exists:"
 msgstr "Verwijder geselecteerde lijsten"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 msgid "This is an already existing document: '%1'"
 msgstr ""
 
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 #, fuzzy
 msgid "No name specified"
 msgstr "Geen naam gegeven"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "The document repository exceed disk quota."
 msgstr ""
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 #, fuzzy
 msgid "Cannot upload file %1:"
 msgstr "kan bestand niet uploaden %1"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 #, fuzzy
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "U bent niet geautoriseerd om een INDEX.HTML te uploaden in %1"
 
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "The upload failed, try it again"
 msgstr ""
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 #, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "Map %1 en de inhoud is niet gecopieerd"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 #, fuzzy
 msgid "File %1 was not copied: %2 "
 msgstr "Bestand %1 is niet gecopieerd"
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 #, fuzzy
 msgid "Failed: %1 not empty"
 msgstr "Fout : %1 niet leeg"
 
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 #, fuzzy
 msgid "No certificate for this list"
 msgstr "Onderwerpen voor de lijst"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 #, fuzzy
 msgid "This list has no message topic"
 msgstr "Lijst aliassen zijn verwijderd."
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "Tag message with topic is required for this list"
 msgstr ""
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 #, fuzzy
 msgid "No entry for user '%1'"
 msgstr "Geen bounces voor gebruiker  %1"
 
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 #, fuzzy
 msgid "Please select archive months"
 msgstr "Verwijder de geselecteerde maand(en)"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "No SOAP service"
 msgstr ""
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 #, fuzzy
 msgid "Authentication failed"
 msgstr ""
@@ -2529,47 +2534,47 @@ msgstr ""
 "\n"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Service unavailable because list status is '%1'"
 msgstr ""
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 #, fuzzy
 msgid "This Template '%1' already exists"
 msgstr "Verwijder geselecteerde lijsten"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 #, fuzzy
 msgid "Cannot delete this file '%1'"
 msgstr "kan bestand niet uploaden %1"
 
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 #, fuzzy
 msgid "Invalid filename: '%1'"
 msgstr "Het helpbestand kan niet gelezen worden : %s\n"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:138
+#: ../web_tt2/error.tt2:139
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr ""
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:140
+#: ../web_tt2/error.tt2:141
 #, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
@@ -5161,7 +5166,7 @@ msgstr "Zoek Gebruiker"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -8434,7 +8439,8 @@ msgstr "beperkt to lijst eigenaren"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
-#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.private:1
+#: ../src/etc/scenari/review.private:1 ../src/etc/scenari/send.confidential:1
+#: ../src/etc/scenari/send.private:1
 msgid "restricted to subscribers"
 msgstr "beperkt tot abonnees"
 
@@ -8924,6 +8930,30 @@ msgstr ""
 msgid "Update of list members based on the TTL"
 msgstr ""
 
+#: ../src/etc/create_list_templates/confidential/comment.tt2:1
+msgid "Confidential list setup"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:3
+msgid "No subscription / unsubscription: only the list owner can add members"
+msgstr ""
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:4
+#: ../src/etc/create_list_templates/hotline/comment.tt2:4
+#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+#, fuzzy
+msgid "private archives"
+msgstr "Web archieven"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:5
+#, fuzzy
+msgid "list visible to list members only"
+msgstr "Mailing lijsten"
+
+#: ../src/etc/create_list_templates/confidential/comment.tt2:6
+msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
+msgstr ""
+
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
 msgstr ""
@@ -8948,12 +8978,6 @@ msgstr "Mailing lijsten"
 #, fuzzy
 msgid "everyone can post"
 msgstr "iedereen kan het !"
-
-#: ../src/etc/create_list_templates/hotline/comment.tt2:4
-#: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
-#, fuzzy
-msgid "private archives"
-msgstr "Web archieven"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
@@ -9019,7 +9043,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
 msgid "%A"
 msgstr ""
 
@@ -9037,9 +9061,9 @@ msgstr "Fout in regel %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3054
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
+#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
+#: ../wwsympa/wwsympa.fcgi.in:3066
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
 
@@ -9782,18 +9806,18 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129
-#: ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678
-#: ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136
-#: ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626
-#: ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347
-#: ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971
-#: ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559
-#: ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133
-#: ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182
-#: ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621
-#: ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656
-#: ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
+#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
+#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
+#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
+#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
+#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
+#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
+#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
+#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
+#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
+#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
+#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
+#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
 msgid "%d %b %Y"
 msgstr ""
 
@@ -9932,35 +9956,35 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045
-#: ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
+#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
+#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15311
+#: ../wwsympa/wwsympa.fcgi.in:15327
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Uw inschrijving voor lijst %s is ongedaan gemaakt."
 
-#: ../wwsympa/wwsympa.fcgi.in:15313
+#: ../wwsympa/wwsympa.fcgi.in:15329
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "U vroeg om u uit te schrijven van de %1 mailinglijst"
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15333
 #, fuzzy
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr "Aanvraag voor uitschrijven bij lijst %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:15319
+#: ../wwsympa/wwsympa.fcgi.in:15335
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Aanvraag voor uitschrijven bij lijst %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
+#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -10122,6 +10146,11 @@ msgstr "geen mail (handig voor vakanties)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "U ontvangt niet uw eigen e-mails"
+
+#. (automatic_lists_description.family_name)
+#: ../web_tt2/automatic_lists_management_request.tt2:4
+msgid "The automatic lists are based on the $1 family"
+msgstr "De automatische lijsten zijn gebaseerd op de $1 familie"
 
 #: ../web_tt2/list_panel.tt2:17
 msgid "(review)"
@@ -11034,6 +11063,10 @@ msgid ""
 "in the setup wizard to complete your account configuration."
 msgstr ""
 
+#, fuzzy
+#~ msgid "%1: unknown list"
+#~ msgstr "%1 : onbekende lijst"
+
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
 #~ "subscribed"
@@ -11376,10 +11409,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Directory for subscription spool"
 #~ msgstr "Herinnering voor uw abonnement op %1"
-
-#, fuzzy
-#~ msgid "Maximum number of list members"
-#~ msgstr "Mailing lijsten"
 
 #, fuzzy
 #~ msgid "Message tracking feature"
@@ -12482,10 +12511,6 @@ msgstr ""
 #~ " (geen actie benodigd)\n"
 
 #, fuzzy
-#~ msgid "File not found"
-#~ msgstr "Wissel selectie"
-
-#, fuzzy
 #~ msgid "For further assistance, please contact %1@%2"
 #~ msgstr "Heeft u verder nog vragen, stuur dan een email naar listmaster@%1"
 
@@ -13394,3 +13419,11 @@ msgstr ""
 
 #~ msgid "Sort by author"
 #~ msgstr "Sort by author"
+
+#, fuzzy
+#~ msgid "Maximum number of list members"
+#~ msgstr "Mailing lijsten"
+
+#, fuzzy
+#~ msgid "File not found"
+#~ msgstr "Wissel selectie"

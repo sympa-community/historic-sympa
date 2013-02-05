@@ -18,10 +18,10 @@ msgstr ""
 "PO-Revision-Date: 2013-01-08 12:33+0200\n"
 "Last-Translator: gotsikas <gotsikas@yahoo.com>\n"
 "Language-Team: Greek, Modern (1453-) <el@li.org>\n"
-"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -372,13 +372,14 @@ msgid ""
 "<a href=\"%1/help/admin#create_list\">create new lists</a> (restricted "
 "access) - subject to authorization,"
 msgstr ""
-"<a href=\"%1/help/admin#create_list\">δημιουργία νέων λιστών</a>(περιορισμένη "
-"πρόσβαση) - υπόκειται σε εξουσιοδότηση,"
+"<a href=\"%1/help/admin#create_list\">δημιουργία νέων λιστών</a>"
+"(περιορισμένη πρόσβαση) - υπόκειται σε εξουσιοδότηση,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:60
 msgid "<a href=\"%1/help/admin#edit_list\">configure lists</a> you own,"
-msgstr "<a href=\"%1/help/admin#edit_list\">ρυθμίσετε λίστες</a> που σας ανήκουν,"
+msgstr ""
+"<a href=\"%1/help/admin#edit_list\">ρυθμίσετε λίστες</a> που σας ανήκουν,"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:61
@@ -400,8 +401,8 @@ msgid ""
 "<a href=\"%1/help/admin#moderate\">moderate lists</a> for which you are a "
 "moderator."
 msgstr ""
-"<a href=\"%1/help/admin#moderate\">διαχείριση λιστών</a> για τις οποίες είστε "
-"συντονιστής."
+"<a href=\"%1/help/admin#moderate\">διαχείριση λιστών</a> για τις οποίες "
+"είστε συντονιστής."
 
 #: ../web_tt2/help_introduction.tt2:67
 msgid "How the mailing list service works: roles and responsibilities"
@@ -484,7 +485,8 @@ msgstr "τι θα περιέχουν τα πρότυπα αρχεία (δημι�
 
 #: ../web_tt2/help_introduction.tt2:87
 msgid "what will the mailing list web interface look like;"
-msgstr "πως θα φαίνεται το Περιβάλλον web της λίστας ηλεκτρονικής αλληλογραφίας"
+msgstr ""
+"πως θα φαίνεται το Περιβάλλον web της λίστας ηλεκτρονικής αλληλογραφίας"
 
 #: ../web_tt2/help_introduction.tt2:89
 msgid ""
@@ -499,8 +501,8 @@ msgstr ""
 #: ../web_tt2/help_introduction.tt2:90
 msgid "<strong>approve of requests of mailing list creations</strong>;"
 msgstr ""
-"<strong>έγκριση αιτημάτων δημιουργίας λίστας ηλεκτρονικής "
-"αλληλογραφίας</strong>·"
+"<strong>έγκριση αιτημάτων δημιουργίας λίστας ηλεκτρονικής αλληλογραφίας</"
+"strong>·"
 
 #: ../web_tt2/help_introduction.tt2:91
 msgid ""
@@ -562,8 +564,8 @@ msgid ""
 "<strong>appoint one or several <a href=\"%1/help/listconfig#description"
 "\">moderators</a></strong>;"
 msgstr ""
-"<strong>διορίστε έναν ή περισσότερους <a href=\"%"
-"1/help/listconfig#description\">συντονιστές</a></strong>·"
+"<strong>διορίστε έναν ή περισσότερους <a href=\"%1/help/"
+"listconfig#description\">συντονιστές</a></strong>·"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:101
@@ -581,8 +583,8 @@ msgid ""
 "admin#manage_shared\">shared document web space</a></strong> at the "
 "subscribers' disposal;"
 msgstr ""
-"<strong>αποφασίσετε αν είναι πρέπων να τοποθετήσετε ένα <a href=\"%"
-"1/help/admin#manage_shared\">χώρο web κοινόχρηστων εγγράφων</a></strong> στη "
+"<strong>αποφασίσετε αν είναι πρέπων να τοποθετήσετε ένα <a href=\"%1/help/"
+"admin#manage_shared\">χώρο web κοινόχρηστων εγγράφων</a></strong> στη "
 "διάθεση των συνδρομητών·"
 
 #: ../web_tt2/help_introduction.tt2:103
