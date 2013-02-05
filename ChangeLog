@@ -1,4 +1,190 @@
 ------------------------------------------------------------------------
+r8593 | sympa-authors | 2013-02-05 15:22:23 +0100 (mar 05 fév 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r8590 | sympa-authors | 2013-02-05 15:04:23 +0100 (mar 05 fév 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ja.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r8588 | sympa-authors | 2013-02-05 10:58:04 +0100 (mar 05 fév 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r8587 | sympa-authors | 2013-02-05 10:39:34 +0100 (mar 05 fév 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r8485 | david.verdin | 2013-01-24 14:38:37 +0100 (jeu 24 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-bug] wwsympa::prevent_visibility_bypass would crash when called in off-list context.
+
+------------------------------------------------------------------------
+r8482 | david.verdin | 2013-01-23 17:02:58 +0100 (mer 23 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/Makefile.am
+
+[-bug] Forgot to add send.confidential in Makefile.am
+
+------------------------------------------------------------------------
+r8465 | david.verdin | 2013-01-22 13:18:20 +0100 (mar 22 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/automatic_lists_management_request.tt2
+
+[bug][Submitted by M. Overmeer, overmeer.net] Typo in a string prevented the family from being displayed.
+
+------------------------------------------------------------------------
+r8463 | david.verdin | 2013-01-22 11:18:33 +0100 (mar 22 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/error.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Modifiying error when visibility bypass is prevented. Switching from "list unknown" to "authorization reject" which is less confuding.
+
+------------------------------------------------------------------------
+r8457 | sikeda | 2013-01-19 02:59:19 +0100 (sam 19 jan 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tt2.pm
+
+[-bug] Use as_string() instead of confusing "".
+------------------------------------------------------------------------
+r8456 | sikeda | 2013-01-19 02:54:40 +0100 (sam 19 jan 2013) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tt2.pm
+
+[-bug] reverted r8450: tt2->error() is actually an object.  Enclosing "" stringifys it.
+------------------------------------------------------------------------
+r8454 | sympa-authors | 2013-01-18 17:08:17 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/footer.tt2
+   M /branches/sympa-6.1-branch/web_tt2/tt2_error.tt2
+
+[change] Removing references to the Sympa version in web pages to avoid pages to be searched by bad guys willing to exploit known vulnerabilities on out of date servers.
+
+------------------------------------------------------------------------
+r8453 | david.verdin | 2013-01-18 16:17:05 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-bug] Adding a test to prevent wwsympa.fcgi from crashing when prevent_visibility_bypass is called out of list context.
+
+------------------------------------------------------------------------
+r8452 | david.verdin | 2013-01-18 16:04:55 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[dev] Removing development traces.
+
+------------------------------------------------------------------------
+r8451 | david.verdin | 2013-01-18 15:52:26 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/Makefile.am
+   A /branches/sympa-6.1-branch/src/etc/create_list_templates/confidential
+   A /branches/sympa-6.1-branch/src/etc/create_list_templates/confidential/comment.tt2
+   A /branches/sympa-6.1-branch/src/etc/create_list_templates/confidential/config.tt2
+   A /branches/sympa-6.1-branch/src/etc/scenari/send.confidential
+
+[feature] New "confidential" list model. These lists are used for groups who don't want any publicity around their activities; All possible restrictions are applied to prevent unauthorized users to know these lists exist and to learn anything about them.
+
+------------------------------------------------------------------------
+r8450 | david.verdin | 2013-01-18 15:50:16 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tt2.pm
+
+[-bug] Removed useless double quote around a variable name in a Log::do_log statement.
+
+------------------------------------------------------------------------
+r8449 | david.verdin | 2013-01-18 15:49:31 +0100 (ven 18 jan 2013) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+   M /branches/sympa-6.1-branch/web_tt2/error.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] For lists which should not be visible to users, some actions still displayed the list side menus, granting informations regarding the list: number of users and identity of list owners and moderators. Fixed by short-cutting some parts of the code to prevent this display when an action is attempted. If privileges for an action are not granted and the list should not be visible to the user who requested them, the user is redirected to the main home page and list is decalred as "not found". In addition, subscribe and sigrequest will not display a form to unauthenticated users if, respectively, subscribe or unsubscribe scenarios are set to "closed", i.e.: any subscription or unsubscription request would be rejected.
+
+------------------------------------------------------------------------
+r7965 | david.verdin | 2012-11-19 10:41:47 +0100 (lun 19 nov 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+
+[bug][#8569][Submitted by T. Merritt, univ. Arizona] archived.pl did not systematically reaped the sendmail processes it created. Fixed by calling mail::reaper at the end of each loop.
+
+------------------------------------------------------------------------
+r7961 | sympa-authors | 2012-11-16 15:41:56 +0100 (ven 16 nov 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.16
+------------------------------------------------------------------------
 r7960 | sympa-authors | 2012-11-16 15:20:25 +0100 (ven 16 nov 2012) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po-wwsympa/fr.po

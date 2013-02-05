@@ -3,6 +3,55 @@
 
 (See Changelog file for the full changes log)
 
+6.1.17		February 05, 2013
+
+  Features:
+
+	[8451] src/etc/Makefile.am, src/etc/create_list_templates/confidential,
+	src/etc/create_list_templates/confidential/comment.tt2,
+	src/etc/create_list_templates/confidential/config.tt2,
+	src/etc/scenari/send.confidential:  New "confidential" list model.
+	These lists are used for groups who don't want any publicity around
+	their activities; All possible restrictions are applied to prevent
+	unauthorized users to know these lists exist and to learn anything
+	about them.
+
+
+
+  Changes:
+
+	[8454] web_tt2/footer.tt2, web_tt2/tt2_error.tt2:  Removing references
+	to the Sympa version in web pages to avoid pages to be searched by bad
+	guys willing to exploit known vulnerabilities on out of date servers.
+
+  Bug fixes:
+
+	[8465] web_tt2/automatic_lists_management_request.tt2: [Submitted by M.
+	Overmeer, overmeer.net] Typo in a string prevented the family from
+	being displayed.
+
+	[8463] web_tt2/error.tt2, wwsympa/wwsympa.fcgi.in:  Modifiying error
+	when visibility bypass is prevented. Switching from "list unknown" to
+	"authorization reject" which is less confuding.
+
+	[8449] src/lib/Scenario.pm, web_tt2/error.tt2, wwsympa/wwsympa.fcgi.in:
+	 For lists which should not be visible to users, some actions still
+	displayed the list side menus, granting informations regarding the
+	list: number of users and identity of list owners and moderators. Fixed
+	by short-cutting some parts of the code to prevent this display when an
+	action is attempted. If privileges for an action are not granted and
+	the list should not be visible to the user who requested them, the user
+	is redirected to the main home page and list is decalred as "not
+	found". In addition, subscribe and sigrequest will not display a form
+	to unauthenticated users if, respectively, subscribe or unsubscribe
+	scenarios are set to "closed", i.e.: any subscription or unsubscription
+	request would be rejected.
+
+	[7965] wwsympa/archived.pl.in: [#8569][Submitted by T. Merritt, univ.
+	Arizona] archived.pl did not systematically reaped the sendmail
+	processes it created. Fixed by calling mail::reaper at the end of each
+	loop.
+
 6.1.16		November 16, 2012
 
   Bug fixes:
