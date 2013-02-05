@@ -18,20 +18,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-11-02 20:04+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2013-01-10 21:19+0200\n"
+"Last-Translator: Kwadro Naut <kwadronaut@autistici.org>\n"
 "Language-Team: Nederlands\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "plural-forms: nplurals=2; plural=n != 1\n"
 
 #: ../web_tt2/home.tt2:2
 msgid "Mailing lists server"
-msgstr "Mailing lijsten server"
+msgstr "Mailinglijsten server"
 
 #: ../web_tt2/home.tt2:4
 msgid ""
@@ -40,7 +40,7 @@ msgid ""
 "archive, list moderation, list configuration."
 msgstr ""
 "Deze server geeft je toegang tot je persoonlijke omgeving. Vanaf deze "
-"webpagina, kan je je abonnement opties aanpassen, je uitschrijven, "
+"webpagina, kan je je abonnementsopties aanpassen, je uitschrijven, "
 "archieven, lijstbeheer en lijstconfiguratie."
 
 #: ../web_tt2/home.tt2:7
@@ -163,7 +163,6 @@ msgstr "administratie"
 
 #: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:77
 #: ../web_tt2/your_lists.tt2:23
-#, fuzzy
 msgid "No mailing list available."
 msgstr "Geen mailinglijsten beschikbaar."
 
@@ -288,7 +287,6 @@ msgstr ""
 "van uw permissies."
 
 #: ../web_tt2/admin.tt2:9
-#, fuzzy
 msgid "Customizing: "
 msgstr "Aanpassen: "
 
@@ -331,18 +329,16 @@ msgid "Bounces:"
 msgstr "Weigeringen:"
 
 #: ../web_tt2/admin.tt2:18
-#, fuzzy
 msgid "Manages non-delivery reports (also called bounces)."
-msgstr "Beheert non-delivery reports (zogenaamde bounces)."
+msgstr "Beheert breichten over mislukte bezorging (zogenaamde bounces)."
 
 #: ../web_tt2/admin.tt2:21
 msgid "Logs:"
 msgstr "Logboeken:"
 
 #: ../web_tt2/admin.tt2:21
-#, fuzzy
 msgid "A tool for exploring the list logs."
-msgstr "Een hulpmiddel voor het verkennen van de lijst logboeken."
+msgstr "Een hulpmiddel voor het nagaan van de logboekenlijst."
 
 #: ../web_tt2/admin.tt2:26
 msgid "Drastic operations"
@@ -414,36 +410,30 @@ msgstr "Terugzetten gedeeld"
 
 #. (listname)
 #: ../web_tt2/admin.tt2:63
-#, fuzzy
 msgid "Are you sure you wish to delete the shared documents for list %1?"
-msgstr "Weet u zeker dat u lijst %1 wilt sluiten ?"
+msgstr ""
+"Weet u zeker dat u de gedeelde documenten van lijst %1 wilt verwijderen?"
 
 #: ../web_tt2/admin.tt2:63
-#, fuzzy
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
 msgstr ""
-"<strong>Verwijder gedeeld</strong>: sluit het.  Het kan terug gezet worden "
-"door de knop \"Herstel gedeeld\" te gebruiken."
+"Verwijder de gedeelde document webruimte. Het kan teruggezet worden met de "
+"knop \"Herstel gedeelde documenten\"."
 
 #: ../web_tt2/admin.tt2:67
-#, fuzzy
 msgid "Restore Shared"
-msgstr "Zet terug"
+msgstr "Herstel gedeelde documenten"
 
 #: ../web_tt2/admin.tt2:67
-#, fuzzy
 msgid "Restores the previously closed shared document web space."
-msgstr ""
-"<strong>Create Shared</strong>: maak de \"gedeelde documenten\" webruimte "
-"aan..\n"
-"                        "
+msgstr "Herstelt de eerder gesloten gedeelde documenten webruimte."
 
 #. (count)
 #: ../web_tt2/active_lists.tt2:17 ../web_tt2/active_lists.tt2:5
 msgid " The %1 most active lists "
-msgstr "De %1 meest active lijsten"
+msgstr " De %1 meest actieve lijsten "
 
 #: ../web_tt2/active_lists.tt2:7
 msgid " Active lists "
@@ -457,17 +447,14 @@ msgid " for %1 days "
 msgstr " gedurende %1 dag(en)"
 
 #: ../web_tt2/active_lists.tt2:19
-#, fuzzy
 msgid "List name"
-msgstr "Lijst naam"
+msgstr "Lijstnaam"
 
 #: ../web_tt2/active_lists.tt2:20 ../web_tt2/get_inactive_lists.tt2:11
-#, fuzzy
 msgid "Number of messages"
-msgstr "samenvattings bericht"
+msgstr "Aantal berichten"
 
 #: ../web_tt2/active_lists.tt2:21
-#, fuzzy
 msgid "Average per day"
 msgstr "Gemiddelde per dag"
 
@@ -485,11 +472,11 @@ msgstr "Onderwerp"
 
 #: ../web_tt2/add_request.tt2:7
 msgid "email1@dom1 Name1"
-msgstr ""
+msgstr "email1@dom1 Name1"
 
 #: ../web_tt2/add_request.tt2:8
 msgid "email2@dom2 Name2"
-msgstr ""
+msgstr "email2@dom2 Name2"
 
 #: ../web_tt2/add_request.tt2:12
 msgid "Add subscribers"
@@ -500,7 +487,7 @@ msgstr "Voeg abonnees toe"
 #: ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127
 #: ../web_tt2/search_user.tt2:56
 msgid "quiet"
-msgstr "quiet"
+msgstr "stil"
 
 #: ../web_tt2/admin_menu.tt2:4
 msgid "List Administration Panel"
@@ -513,18 +500,17 @@ msgstr "Abonnees"
 #: ../web_tt2/admin_menu.tt2:24 ../web_tt2/admin_menu.tt2:29
 #: ../web_tt2/lists.tt2:36 ../web_tt2/nav.tt2:64
 msgid "Edit List Config"
-msgstr "Wijzig Lijst Configuratie"
+msgstr "Wijzig Lijst-configuratie"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
 #: ../web_tt2/lists.tt2:37 ../web_tt2/nav.tt2:67
 msgid "Customizing"
-msgstr "Modereren"
+msgstr "Aanpassen"
 
 #: ../web_tt2/admin_menu.tt2:67 ../web_tt2/admin_menu.tt2:73
 #: ../web_tt2/nav.tt2:77
-#, fuzzy
 msgid "Manage Archives"
-msgstr "Archives"
+msgstr "Archieven beheren"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
 #: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
@@ -535,22 +521,20 @@ msgstr "Bounce Instellingen"
 
 #: ../web_tt2/admin_menu.tt2:102
 msgid "Restore shared"
-msgstr "Zet terug"
+msgstr "Herstel gedeeld"
 
 #. (list)
 #: ../web_tt2/admin_menu.tt2:122 ../web_tt2/admin_menu.tt2:124
-#, fuzzy
 msgid "Are you sure you wish to close %1 list?"
-msgstr "Weet u zeker dat u lijst %1 wilt sluiten ?"
+msgstr "Weet u zeker dat u lijst %1 wilt sluiten?"
 
 #: ../web_tt2/admin_menu.tt2:139
 msgid "List Definition"
 msgstr "Lijst definitie"
 
 #: ../web_tt2/admin_menu.tt2:143
-#, fuzzy
 msgid "Sending/Receiving"
-msgstr "Sturen/ontvangen"
+msgstr "Verzenden/ontvangen"
 
 #: ../web_tt2/admin_menu.tt2:147 ../web_tt2/edit_list_request.tt2:13
 #: ../web_tt2/nav.tt2:97
@@ -577,7 +561,7 @@ msgstr "Data Bron"
 
 #: ../web_tt2/admin_menu.tt2:172
 msgid "Attribute optionnal/required"
-msgstr ""
+msgstr "Attribuut optioneel/verplicht"
 
 # #-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/arc_manage.tt2:4
@@ -601,12 +585,14 @@ msgstr "Archief management"
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
 #: ../web_tt2/subscriber_table.tt2:118
 msgid "Open in a new window"
-msgstr ""
+msgstr "openen in nieuw scherm"
 
 #: ../web_tt2/arc_manage.tt2:6
 msgid ""
 "Select below Archives months you want to delete or download (ZiP format):"
 msgstr ""
+"Kies hieronder het maandelijkse archief dat u wil verwijderen of downloaden "
+"(in ZIP formaat)"
 
 #: ../web_tt2/arc_manage.tt2:12
 #, fuzzy
@@ -622,14 +608,12 @@ msgid "Delete Selected Month(s)"
 msgstr "Verwijder de geselecteerde maand(en)"
 
 #: ../web_tt2/arc_manage.tt2:24
-#, fuzzy
 msgid "Do you really want to delete Selected Archives?"
-msgstr "Wilt u het volgende %1 echt verwijderen?"
+msgstr "Bent u zeker dat u de geselecteerde archieven wilt verwijderen?"
 
 #: ../web_tt2/arc_manage.tt2:24
-#, fuzzy
 msgid "Do you want to DownLoad a Zip of the selected Archives?"
-msgstr "Wilt u het volgende %1 echt verwijderen?"
+msgstr "Wilt u een ZIP-bestand downloaden van de geselecteerde archieven? "
 
 #: ../web_tt2/arc_protect.tt2:7
 msgid "I am not a spammer"
@@ -641,19 +625,18 @@ msgid ""
 msgstr "Deze knop probeert de archieven te beveiligen tegen Spam Harvester."
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
-#, fuzzy
 msgid "List archive"
-msgstr "Text archieven"
+msgstr "Lijstarchief"
 
 #: ../web_tt2/arcsearch_form.tt2:4
-#, fuzzy
 msgid "Advanced archive search"
-msgstr "Geavanceerd zoeken"
+msgstr "Geavanceerd zoeken in het archief"
 
+# Probably the text in a search box?
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
 #, fuzzy
 msgid "Search field:"
-msgstr "Search field :"
+msgstr "Zoek:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
 #: ../web_tt2/review.tt2:89 ../web_tt2/reviewbouncing.tt2:13
@@ -661,44 +644,36 @@ msgid "Search"
 msgstr "Zoek"
 
 #: ../web_tt2/arcsearch_form.tt2:19
-#, fuzzy
 msgid "Search:"
-msgstr "Zoek"
+msgstr "Zoek:"
 
 #: ../web_tt2/arcsearch_form.tt2:20
-#, fuzzy
 msgid "this sentence"
-msgstr "(deze zin,"
+msgstr "deze zin"
 
 #: ../web_tt2/arcsearch_form.tt2:21
-#, fuzzy
 msgid "all of these words"
-msgstr "(All woorden,"
+msgstr "al deze woorden"
 
 #: ../web_tt2/arcsearch_form.tt2:22
-#, fuzzy
 msgid "one of these words"
-msgstr "(All woorden,"
+msgstr "één van deze woorden"
 
 #: ../web_tt2/arcsearch_form.tt2:25
-#, fuzzy
 msgid "Prefer:"
-msgstr "Voorkeur"
+msgstr "Voorkeur:"
 
 #: ../web_tt2/arcsearch_form.tt2:26
-#, fuzzy
 msgid "newest messages"
 msgstr "Nieuwste berichten eerst"
 
 #: ../web_tt2/arcsearch_form.tt2:27
-#, fuzzy
 msgid "oldest messages"
 msgstr "Oudste berichten eerst"
 
 #: ../web_tt2/arcsearch_form.tt2:30
-#, fuzzy
 msgid "Case:"
-msgstr "Hoofd- en kleine letters"
+msgstr "Hoofd- en kleine letters:"
 
 #: ../web_tt2/arcsearch_form.tt2:31
 msgid "insensitive"
@@ -709,24 +684,20 @@ msgid "sensitive"
 msgstr "gevoelig"
 
 #: ../web_tt2/arcsearch_form.tt2:35
-#, fuzzy
 msgid "Check:"
-msgstr "Controleer"
+msgstr "Controleer:"
 
 #: ../web_tt2/arcsearch_form.tt2:36
-#, fuzzy
 msgid "part of word"
-msgstr "van woord"
+msgstr "woorddeel"
 
 #: ../web_tt2/arcsearch_form.tt2:37
-#, fuzzy
 msgid "entire word"
-msgstr "entire"
+msgstr "volledig woord"
 
 #: ../web_tt2/arcsearch_form.tt2:40
-#, fuzzy
 msgid "Layout:"
-msgstr "Layout"
+msgstr "Opmaak:"
 
 #: ../web_tt2/arcsearch_form.tt2:41 ../web_tt2/arcsearch_form.tt2:42
 #: ../web_tt2/arcsearch_form.tt2:43
@@ -734,9 +705,8 @@ msgid "results by page"
 msgstr "resultaten per pagina"
 
 #: ../web_tt2/arcsearch_form.tt2:46
-#, fuzzy
 msgid "Search area:"
-msgstr "Zoek gebied"
+msgstr "Zoekgebied:"
 
 #: ../web_tt2/arcsearch_form.tt2:47
 msgid "Sender"
@@ -753,9 +723,8 @@ msgid "Body"
 msgstr "Inhoud"
 
 #: ../web_tt2/arcsearch_form.tt2:54
-#, fuzzy
 msgid "Extend search field:"
-msgstr "Uitgebreid zoek veld"
+msgstr "Uitgebreid zoekveld:"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
@@ -763,11 +732,8 @@ msgstr "Resultaat van uw zoekopdracht in het archief"
 
 #. (key_word)
 #: ../web_tt2/arcsearch.tt2:13
-#, fuzzy
 msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
-msgstr ""
-"Deze zoekopdracht bevatte: <b> &quot;%1&quot; </b>\n"
-"                        "
+msgstr "Deze zoekopdracht bevatte: <strong> &quot;%1&quot;:</strong>"
 
 #: ../web_tt2/arcsearch.tt2:17
 msgid "(This sentence,"
@@ -834,13 +800,12 @@ msgid "New search"
 msgstr "Nieuwe zoekopdracht"
 
 #: ../web_tt2/arcsearch.tt2:139
-#, fuzzy
 msgid ""
 "Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
 "Search</a></em>, search engine of MHonArc archives"
 msgstr ""
-"Gebaseerd op <em><a href=\"http://www.mhonarc.org/contrib/marc-search /"
-"\">Marc-Search</a></em>, search engine of MHonArc archives"
+"Gebaseerd op <em><a href=\"http://www.mhonarc.org/contrib/marc-search "
+"/\">Marc-Search</a></em>, zoekmachine van MHonArc archieven"
 
 #. (archive_name)
 #: ../web_tt2/arcsearch.tt2:142
@@ -849,25 +814,23 @@ msgstr "Terug naar archief %1"
 
 # #-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/automatic_lists_management_request.tt2:3
-#, fuzzy
 msgid "Automatic lists management"
-msgstr "Bounces management"
+msgstr "Automatisch lijstbeheer"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
-msgstr ""
+msgstr "De automatische lijsten zijn gebaseerd op de $1 familie"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
 "In this form, you will be able to create and / or access lists created on "
 "the basis of parameters you will defined."
-msgstr ""
+msgstr "Met dit formulier kunt u lijsten aanmaken en bewerken."
 
 #: ../web_tt2/automatic_lists_request.tt2:13
-#, fuzzy
 msgid "Go to list"
-msgstr "Restoren"
+msgstr "Ga naar de lijst"
 
 #: ../web_tt2/automatic_lists.tt2:3
 #, fuzzy
@@ -881,9 +844,8 @@ msgstr "Geen abonneer aanvraag"
 
 #. (signing_off_email,list)
 #: ../web_tt2/auto_signoff.tt2:2
-#, fuzzy
 msgid "You clicked a link to unsubscribe the address %1 from list %2."
-msgstr "U vroeg om u uit te schrijven van de %1 mailinglijst"
+msgstr "U vroeg om %1 uit te schrijven van mailinglijst %2."
 
 #. (list)
 #: ../web_tt2/auto_signoff.tt2:3
@@ -891,12 +853,13 @@ msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from list %1"
 msgstr ""
+"Een bevestiging is verstuurd aan dit adres. Door het klikken op de link die "
+"daar in staat vermeldt, wordt u definitief uitgeschreven van de lijst %1"
 
 # #-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/blacklist.tt2:4
-#, fuzzy
 msgid "Blacklist management"
-msgstr "Bounces management"
+msgstr "Zwarte lijst beheren"
 
 #: ../web_tt2/blacklist.tt2:8
 msgid ""
@@ -904,19 +867,21 @@ msgid ""
 "rejected. The\n"
 "blacklist is in use for the following operation:"
 msgstr ""
+"De opdracht van een gebruiker wiens email in de blacklist staat is "
+"verworpen.  De blacklist wordt\n"
+"gebruikt voor de volgende opdracht: "
 
 #: ../web_tt2/blacklist.tt2:10
-#, fuzzy
 msgid "Syntax:"
-msgstr "Status : %1"
+msgstr "Syntaxis:"
 
 #: ../web_tt2/blacklist.tt2:12
 msgid "only one email or expression by line"
-msgstr ""
+msgstr "slechts een email of expressie per regel"
 
 #: ../web_tt2/blacklist.tt2:13
 msgid "char # introduce a comment"
-msgstr ""
+msgstr "Commentaar begint met een #-teken"
 
 #: ../web_tt2/blacklist.tt2:14
 msgid ""
@@ -1800,18 +1765,20 @@ msgid "Added in distributed messages"
 msgstr "Wie kan berichten sturen"
 
 #: ../web_tt2/editfile.tt2:69
-#, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
-msgstr "                        "
+msgstr ""
+"Voetnoot bericht: wanneer dit bestand niet leeg is, wordt het als MIME "
+"bijlage aan het einde van ieder bericht toegevoegd wat over de lijst gaat."
 
 #: ../web_tt2/editfile.tt2:72
-#, fuzzy
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
-msgstr "                        "
+msgstr ""
+"Bericht hoofd: als dit bestand niet leeg is, wordt het als MIME bijlage aan "
+"het begin van ieder bericht toegevoegd wat over de lijst gaat."
 
 #: ../web_tt2/editfile.tt2:81
 #, fuzzy

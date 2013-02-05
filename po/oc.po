@@ -13,13 +13,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-11-07 16:15+0200\n"
+"PO-Revision-Date: 2013-01-23 11:37+0200\n"
 "Last-Translator: Cedric31 <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan <asso.oc@abuledu.org>\n"
+"Language: oc\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: oc\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -287,12 +287,10 @@ msgstr ""
 "privilègis."
 
 #: ../web_tt2/admin.tt2:9
-#, fuzzy
 msgid "Customizing: "
 msgstr "Personalizar"
 
 #: ../web_tt2/admin.tt2:9
-#, fuzzy
 msgid "Editing of various files and messages attached to your list."
 msgstr ""
 "<strong>Personalizar</strong> : Edicion dels diferents fichièrs ligats a "
@@ -1091,9 +1089,8 @@ msgstr ""
 "personalizat nomenat «organization»."
 
 #: ../web_tt2/compose_mail.tt2:78
-#, fuzzy
 msgid "URL:"
-msgstr "URL"
+msgstr "URL :"
 
 #: ../web_tt2/copy_template.tt2:3
 msgid "Copying template"
@@ -1735,6 +1732,9 @@ msgid ""
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
+"Messatge de reget : quand un messatge es regetat per un moderator, una "
+"notificacion pòt èsser mandada a son autor. Podètz preparar mantun messatge "
+"de reget tipes."
 
 #: ../web_tt2/editfile.tt2:54
 msgid ""
@@ -1977,8 +1977,8 @@ msgid ""
 "(This template is the default for all languages unless it is redefined for a "
 "specific language.)"
 msgstr ""
-"(Aqueste garbi es definit per las lengas totas levat s'es tornat definit per "
-"una lenga especifica)"
+"(Aqueste modèl es definit per totas las lengas levat s'es redefinit per una "
+"lenga especifica)"
 
 #. (i_err.action)
 #: ../web_tt2/error.tt2:9
@@ -2004,7 +2004,7 @@ msgstr "es pas possible de cargar la lista de los tèmas."
 # nlsref 6,2
 #: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
 msgid "Unable to load create_list templates."
-msgstr "Impossible de cargar los garbis de listas"
+msgstr "Impossible de cargar los modèls de listas"
 
 #: ../web_tt2/error.tt2:14
 msgid "Failed to inlude members"
@@ -2614,9 +2614,8 @@ msgstr "Data de la demanda"
 
 # nlsref 16,61
 #: ../web_tt2/info.tt2:8
-#, fuzzy
 msgid "List informations"
-msgstr "informacions privadas"
+msgstr "informacions sus la lista"
 
 #: ../web_tt2/install_pending_list.tt2:11 ../web_tt2/scenario_test.tt2:13
 #: ../web_tt2/set_pending_list_request.tt2:7
@@ -2756,9 +2755,8 @@ msgstr "Uèi"
 
 #. (+cpt)
 #: ../web_tt2/javascript.tt2:1067
-#, fuzzy
 msgid "microcal"
-msgstr "Localament"
+msgstr "microcal"
 
 #: ../web_tt2/javascript.tt2:1107
 msgid "\"+src.id+\"_cal"
@@ -3083,14 +3081,12 @@ msgid "Server default rejection message"
 msgstr "Messatge de reget per defaut del servidor"
 
 #: ../web_tt2/modindex.tt2:39
-#, fuzzy
 msgid "Reject without notification "
-msgstr "qual se vòl sens cap d'autentificacion"
+msgstr "Regetar sens notificacion"
 
 #: ../web_tt2/modindex.tt2:41
-#, fuzzy
 msgid "Add to blacklist"
-msgstr "editar la lista nègra"
+msgstr "Apondre a la lista negra"
 
 #: ../web_tt2/modindex.tt2:52
 msgid ""
@@ -3117,7 +3113,7 @@ msgstr "Refusar e apondre a la lista nègra"
 
 #: ../web_tt2/modindex.tt2:128
 msgid "Toggle spams"
-msgstr ""
+msgstr "Bascuolar la seleccion dels spams"
 
 #: ../web_tt2/modindex.tt2:143
 msgid "Listing of shared documents to moderate"
@@ -5036,16 +5032,16 @@ msgid ""
 "( this template is the default for all lists of robot %1 unless it is "
 "redefined for a specific list )"
 msgstr ""
-"(Aqueste garbi es mes per defaut per las listas totas del robòt %1 levat "
-"s'es definit al nivèl d'una lista)"
+"(Aqueste modèl es definit per totas las listas del robòt %1 levat s'es "
+"redefinit al nivèl d'una lista)"
 
 #: ../web_tt2/view_template.tt2:17
 msgid ""
 "( this template is the default used by all robots unless redefined for a "
 "specific robot )"
 msgstr ""
-"(Aqueste garbi es definit per los robòts totes levat s'es tornat definit al "
-"nivèl d'un robòt especific)"
+"(Aqueste modèl es definit per totes los robòts levat s'es redefinit al nivèl "
+"d'un robòt especific)"
 
 #: ../mail_tt2/authorization_reject.tt2:5
 msgid "Web archives are closed."

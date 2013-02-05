@@ -17,19 +17,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sympa-es\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-07-10 10:18+0200\n"
-"Last-Translator: Daniel Viñar Ulriksen <dani@belvil.net>\n"
+"PO-Revision-Date: 2012-12-19 10:23+0200\n"
+"Last-Translator: Alfonso Marin <amm44@alu.um.es>\n"
 "Language-Team: Español <sympa-users@sympa.org>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
 #: ../web_tt2/home.tt2:2
 msgid "Mailing lists server"
-msgstr "Listas de correo"
+msgstr "Servidor de Listas de correo"
 
 #: ../web_tt2/home.tt2:4
 msgid ""
@@ -817,30 +817,29 @@ msgstr "Volver a los archivos %1"
 
 # #-#-#-#-#  es.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/automatic_lists_management_request.tt2:3
-#, fuzzy
 msgid "Automatic lists management"
-msgstr "Manejo de la lista negra"
+msgstr "Gestión automática de listas"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
-msgstr ""
+msgstr "Las listas automáticas están basadas en la familia $1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
 "In this form, you will be able to create and / or access lists created on "
 "the basis of parameters you will defined."
 msgstr ""
+"Desde este formulario podrás crear y/o acceder a listas creadas en b ase a "
+"los parámetros que definas"
 
 #: ../web_tt2/automatic_lists_request.tt2:13
-#, fuzzy
 msgid "Go to list"
-msgstr "a la lista"
+msgstr "Ir a la lista"
 
 #: ../web_tt2/automatic_lists.tt2:3
-#, fuzzy
 msgid "Automatic lists result"
-msgstr "Mensajes automáticos"
+msgstr "Resultados de listas automáticas"
 
 #: ../web_tt2/auto_signoff.tt2:1
 msgid "Unsubscription request"
@@ -1792,13 +1791,12 @@ msgstr ""
 "directamente o a través del módulo de gestión de errores."
 
 #: ../web_tt2/editfile.tt2:91
-#, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
 "which a virus was found."
 msgstr ""
-"Mensaje de de-suscripción: Enviado a las personas que se dan de baja de la "
-"lista."
+"Mensaje infectado por virus: Este mensaje se envía al remitente de un "
+"mensaje en el que se haya encontrado un virus."
 
 #: ../web_tt2/edit_list_request.tt2:4
 msgid "Configuring the list"
@@ -2494,37 +2492,32 @@ msgstr ""
 "suscripción:"
 
 #: ../web_tt2/family_signoff.tt2:1 ../web_tt2/family_signoff_request2.tt2:1
-#, fuzzy
 msgid "Global unsubscription"
-msgstr "Sin suscripción."
+msgstr "Suscripción global"
 
 #. (signing_off_email,family)
 #: ../web_tt2/family_signoff.tt2:2 ../web_tt2/family_signoff_request2.tt2:2
-#, fuzzy
 msgid "You successfully unsubscribed the address %1 from family %2."
-msgstr "Pulsaste un enlace para dar de baja la dirección '%1' de la lista %2."
+msgstr "Diste de baja correctamente la dirección %1 de la familia %2"
 
 #: ../web_tt2/family_signoff_request.tt2:1
-#, fuzzy
 msgid "Global unsubscription request"
-msgstr "Ninguna solicitud de suscripción"
+msgstr "Solicitud de baja global"
 
 #. (signing_off_email,family)
 #: ../web_tt2/family_signoff_request.tt2:2
-#, fuzzy
 msgid "You clicked a link to unsubscribe the address %1 from family %2."
-msgstr "Pulsaste un enlace para dar de baja la dirección '%1' de la lista %2."
+msgstr "Has pulsado un enlace para dar de baja la dirección %1 de la familia %2"
 
 #. (family)
 #: ../web_tt2/family_signoff_request.tt2:3
-#, fuzzy
 msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from all the lists from "
 "family %1"
 msgstr ""
 "Una confirmación se envió a esta dirección. Pulsando el enlace que contiene, "
-"estará definitivamente dado de baja de la lista %1"
+"estarás definitivamente dado de baja de la lista %1"
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:10
@@ -4177,27 +4170,22 @@ msgid "Sessions list"
 msgstr "Lista de las sesiones"
 
 #: ../web_tt2/show_sessions.tt2:3
-#, fuzzy
 msgid "last hit date"
 msgstr "Última actualización"
 
 #: ../web_tt2/show_sessions.tt2:3
-#, fuzzy
 msgid "start date"
 msgstr "Fecha de inicio"
 
 #: ../web_tt2/show_sessions.tt2:3
-#, fuzzy
 msgid "hit count"
-msgstr "Cuenta"
+msgstr "Cuenta destino"
 
 #: ../web_tt2/show_sessions.tt2:3
-#, fuzzy
 msgid "remote address"
-msgstr "Dirección IP remota:"
+msgstr "dirección remota"
 
 #: ../web_tt2/show_sessions.tt2:3
-#, fuzzy
 msgid "User email"
 msgstr "Dirección del usuario"
 
@@ -4789,9 +4777,8 @@ msgid "%1's picture"
 msgstr "Avatar de %1"
 
 #: ../web_tt2/subscriber_table.tt2:137 ../web_tt2/subscriber_table.tt2:139
-#, fuzzy
 msgid "subscribed"
-msgstr "Darse de baja"
+msgstr "suscrito"
 
 #: ../web_tt2/suspend_request.tt2:13
 msgid "Suspended"
@@ -7457,14 +7444,14 @@ msgstr ""
 "página siguiente:"
 
 #: ../mail_tt2/moderate.tt2:27
-#, fuzzy
 msgid ""
 "Because the new message is suspected to be a spam it is not attached to this "
 "one. You must use\n"
 "the web interface to reject or validate it."
 msgstr ""
 "Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
-"este. Debe utilizar la interfaz web para rechazarlo o validarlo."
+"este. Debe utilizar\n"
+" la interfaz web para rechazarlo o validarlo."
 
 #. (list.name)
 #: ../mail_tt2/moderate.tt2:29
@@ -7865,7 +7852,6 @@ msgstr ""
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:53
-#, fuzzy
 msgid ""
 "You have requested to be removed from list %1. To confirm and get removed "
 "from the list, please click the link below: "
@@ -7875,13 +7861,11 @@ msgstr ""
 
 #. (family)
 #: ../mail_tt2/user_notification.tt2:58
-#, fuzzy
 msgid "Unsubscribing from family %1"
-msgstr "Darse de baja de la lista %1"
+msgstr "Darse de baja de la familia %1"
 
 #. (family,ip)
 #: ../mail_tt2/user_notification.tt2:62
-#, fuzzy
 msgid ""
 "Somebody (probably you) requested to unsubscribe you from family %1.\n"
 "This query was issued from the IP number '%2'.\n"
@@ -7894,7 +7878,6 @@ msgstr ""
 
 #. (family)
 #: ../mail_tt2/user_notification.tt2:64
-#, fuzzy
 msgid ""
 "You have requested to be removed from family %1. To confirm and get removed "
 "from all the lists of this family, please click the link below: "
@@ -8065,9 +8048,8 @@ msgid "add performed by owner does not need authentication (notification)"
 msgstr "Agregado por el dueño, no necesita autenticación (notificación)"
 
 #: ../src/etc/scenari/automatic_list_creation.family_owner:1
-#, fuzzy
 msgid "Restricted to people subscribed to the list of family owners."
-msgstr "reservado a suscriptores o usuarios del dominio local"
+msgstr "Reservado a suscriptores o usuarios del dominio local"
 
 #: ../src/etc/scenari/automatic_list_creation.listmaster:1
 #: ../src/etc/scenari/create_list.listmaster:1
@@ -9433,9 +9415,8 @@ msgstr ""
 "valor de la variable %s.\n"
 
 #: ../src/lib/mail.pm:837
-#, fuzzy
 msgid "Unable to create a channel in smtpto: %s"
-msgstr "Imposible crear un canal en smtpto: %m"
+msgstr "Imposible crear un canal en smtpto: %s"
 
 #: ../src/lib/PlainDigest.pm:180
 msgid ""
@@ -9617,9 +9598,8 @@ msgid "1 week"
 msgstr "1 semana"
 
 #: ../wwsympa/wwslib.pm:48
-#, fuzzy
 msgid "30 days"
-msgstr "días"
+msgstr "30 días"
 
 #: ../wwsympa/wwslib.pm:50
 msgid "listed in the list review page"
@@ -9744,27 +9724,33 @@ msgstr "No recibir mis propios mensajes"
 #: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
+"Las búsquedas están limiatadas a 50 resultados, excepto cuando utilices una "
+"máscara @dominio"
 
 #. (notification_messages.size,operation)
 #: ../mail_tt2/listmaster_groupednotifications.tt2:6
 msgid "You have %1 \"%2\" tagged notifications"
-msgstr ""
+msgstr "Tienes %1 \"%2\" notificaciones etiquetadas"
 
 #. (notification_messages.size,operation)
 #: ../mail_tt2/listmaster_groupednotifications.tt2:13
 msgid ""
 "%1 \"%2\" tagged notifications adressed to you are attached to this message."
 msgstr ""
+"%1 \"%2\" notificaciones etiquetadas enviadas a tí se han adjuntado a este "
+"mensaje."
 
 #: ../src/lib/confdef.pm:871
 msgid ""
 "If set to unique, subcriber is removed if remind message bounce, use with "
 "care"
 msgstr ""
+"Si se establece a unique,el suscripor se eliminará si obtiene un mensaje de "
+"rebote, utilizar con cautela."
 
 #: ../src/lib/confdef.pm:880
 msgid "Task name for expiration of old bounces"
-msgstr ""
+msgstr "Nombre de la tarea para expirar viejos rebotes"
 
 #: ../src/lib/confdef.pm:924
 msgid "Bouncing email rate for warn list owner"
