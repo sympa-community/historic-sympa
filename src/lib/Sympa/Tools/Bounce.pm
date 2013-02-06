@@ -110,14 +110,14 @@ sub parse_rfc1891_notification {
 
 # fix an SMTP address
 sub _fix_address {
-	my ($adr, $from) = @_;
+	my ($address, $from) = @_;
 
 	# X400
-	if ($adr =~ /^\//) {
+	if ($address =~ /^\//) {
 
 		my (%x400, $newadr);
 
-		my @detail = split /\//, $adr;
+		my @detail = split /\//, $address;
 		foreach (@detail) {
 
 			my ($var, $val) = split /=/;
@@ -133,19 +133,19 @@ sub _fix_address {
 
 		return $newadr;
 
-	} elsif ($adr =~ /\@/) {
+	} elsif ($address =~ /\@/) {
 
-		return $adr;
+		return $address;
 
-	} elsif ($adr =~ /\!/) {
+	} elsif ($address =~ /\!/) {
 
-		my ($dom, $loc) = split /\!/, $adr;
+		my ($dom, $loc) = split /\!/, $address;
 		return "$loc\@$dom";
 
 	}else {
 
 		my (undef, $d) =  split /\@/, $from;
-		my $newadr = "$adr\@$d";
+		my $newadr = "$address\@$d";
 
 		return $newadr;
 
@@ -225,31 +225,30 @@ sub parse_notification {
 			}
 
 		} elsif ($paragraph =~ /^\s+-+\sTranscript of session follows\s-+/m) {
-			my $adr;
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($line =~ /^($smtp_status_pattern\s)?(\S+|".*")\.{3}\s(.+)$/) {
-					$adr = $2;
+					my $addresses = $2;
 					my $cause = $3;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
-					foreach $a(split /,/, $adr) {
-						$a =~ s/^["<]([^">]+)[">]$/$1/;
-						$info{$a}{error} = $cause;
+					foreach my $address (split /,/, $addresses) {
+						$address =~ s/^["<]([^">]+)[">]$/$1/;
+						$info{$address}{error} = $cause;
 					}
 				} elsif ($line =~ /^$smtp_status_pattern\s(too many hops).*to\s(.*)$/i) {
-					$adr = $2;
+					my $addresses = $2;
 					my $cause = $1;
-					foreach $a (split /,/, $adr) {
-						$a =~ s/^["<](.+)[">]$/$1/;
-						$info{$a}{error} = $cause;
+					foreach my $address (split /,/, $addresses) {
+						$address =~ s/^["<](.+)[">]$/$1/;
+						$info{$address}{error} = $cause;
 					}
 				} elsif ($line =~ /^$smtp_status_pattern\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
-					$adr = $1;
+					my $addresses = $1;
 					my $cause = $2;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
-					foreach $a (split /,/, $adr) {
-						$a =~ s/^["<](.+)[">]$/$1/;
-						$info{$a}{error} = $cause;
+					foreach my $address (split /,/, $addresses) {
+						$address =~ s/^["<](.+)[">]$/$1/;
+						$info{$address}{error} = $cause;
 					}
 				}
 			}
@@ -262,42 +261,42 @@ sub parse_notification {
 			}
 
 		} elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
-			my ($cause, $adr);
+			my ($cause, $address);
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($line =~ /^Unknown QuickMail recipient\(s\):/) {
 					$cause = 'Unknown QuickMail recipient(s)';
 				} elsif ($line =~ /^\s+(.*)$/ and $cause) {
-					$adr = $1;
-					$adr =~ s/^["<](.+)[">]$/$1/;
-					$info{$adr}{error} = $cause;
+					$address = $1;
+					$address =~ s/^["<](.+)[">]$/$1/;
+					$info{$address}{error} = $cause;
 				}
 			}
 
 		} elsif ($paragraph =~ /^Your message adressed to .* couldn\'t be delivered/m) {
-			my $adr;
+			my $address;
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
-					$adr = $1;
-					$adr =~ s/^["<](.+)[">]$/$1/;
+					$address = $1;
+					$address =~ s/^["<](.+)[">]$/$1/;
 				} else {
 					/^(.*)$/;
-					$info{$adr}{error} = $1;
+					$info{$address}{error} = $1;
 				}
 			}
 
 		} elsif ($paragraph =~ /^Your message was not delivered to:\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 			# X400
-			my ($adr, $error) = ($1, $2);
+			my ($address, $error) = ($1, $2);
 			$error =~ s/Your message.*$//;
-			$info{$adr}{error} = $error;
+			$info{$address}{error} = $error;
 
 		} elsif ($paragraph =~ /^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 			# X400
-			my ($adr, $error) = ($1, $2);
+			my ($address, $error) = ($1, $2);
 			$error =~ s/\(.*$//;
-			$info{$adr}{error} = $error;
+			$info{$address}{error} = $error;
 
 		} elsif ($paragraph =~/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
 			# X400
@@ -307,10 +306,10 @@ sub parse_notification {
 			# NTMail
 			while ($paragraph = shift @paragraphes) {
 				next unless $paragraph =~ /^\s+(\S+)/;
-				my $adr = $1;
-				$adr =~ s/^["<](.+)[">]$/$1/;
-				next unless $adr;
-				$info{$adr}{'error'} = '';
+				my $address = $1;
+				$address =~ s/^["<](.+)[">]$/$1/;
+				next unless $address;
+				$info{$address}{'error'} = '';
 				last;
 			}
 
@@ -363,14 +362,14 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^\s+-+ Transcript of Report follows -+/) {
 			# Smap
-			my $adr;
+			my $address;
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($line =~ /^Rejected-For: (\S+),/) {
-					$adr = $1;
-					$info{$adr}{error} = "";
+					$address = $1;
+					$info{$address}{error} = "";
 				} elsif ($line =~ /^\s+explanation (.*)$/) {
-					$info{$adr}{error} = $1;
+					$info{$address}{error} = $1;
 				}
 			}
 		} elsif ($paragraph =~ /^\s*-+Message not delivered to the following:/) {
@@ -410,8 +409,8 @@ sub parse_notification {
 			$paragraph =~ /^Your message has encountered delivery problems\s+to (\S+)\.$/m ||
 			$paragraph =~ /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m
 		) {
-			my $adr = $2 || $1;
-			$info{$adr}{error} = "";
+			my $address = $2 || $1;
+			$info{$address}{error} = "";
 
 		} elsif ($paragraph =~ /^(The user return_address (\S+) does not exist)/) {
 			$info{$2}{error} = $1;
@@ -554,14 +553,14 @@ sub parse_notification {
 		) {
 			# PMDF
 			$paragraph = shift @paragraphes;
-			my $adr;
+			my $address;
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($line =~ /\s+Recipient address:\s+(\S+)/) {
-					$adr = $1;
-					$info{$adr}{error} = "";
+					$address = $1;
+					$info{$address}{error} = "";
 				} elsif ($line =~ /\s+Reason:\s+(.*)$/) {
-					$info{$adr}{error} = $1;
+					$info{$address}{error} = $1;
 				}
 			}
 
