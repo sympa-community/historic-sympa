@@ -63,25 +63,25 @@ use Pod::Usage;
 my %options;
 GetOptions(
 	\%options,
-	'host=s',
-	'suffix=s',
-	'filter=s',
-	'attrs=s',
-	'ssl=s',
-	'scope=s',
-	'help|h'
+'host=s',
+'suffix=s',
+'filter=s',
+'attrs=s',
+'ssl=s',
+'scope=s',
+'help|h'
 ) or pod2usage(-verbose => 0); 
 
 pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
 pod2usage(-message => 'no host given, aborting', -verbose => 0)
-	unless $options{'host'};
+unless $options{'host'};
 
 pod2usage(-message => 'no suffix given, aborting', -verbose => 0)
-	unless $options{'suffix'};
+unless $options{'suffix'};
 
 pod2usage(-message => 'no filter given, aborting', -verbose => 0)
-	unless $options{'filter'};
+unless $options{'filter'};
 
 printf "host : $options{'host'}\nsuffix : $options{'suffix'}\nfilter: $options{'filter'}\n";
 
@@ -90,23 +90,23 @@ $arg{'scope'} = $options{'scope'};
 
 
 if ($options{'ssl'} eq 'on') {
-    eval "require Net::LDAPS";
+	eval "require Net::LDAPS";
 
-    $arg{'sslversion'} = 'sslv3';
-    $arg{'sslciphers'} = 'ALL';
+	$arg{'sslversion'} = 'sslv3';
+	$arg{'sslciphers'} = 'ALL';
 
-    $ldap=Net::LDAPS->new($options{'host'},%arg) or print "connect impossible\n";
+	$ldap=Net::LDAPS->new($options{'host'},%arg) or print "connect impossible\n";
 }else {
-    $ldap=Net::LDAP->new($options{'host'},%arg) or print "connect impossible\n";
+	$ldap=Net::LDAP->new($options{'host'},%arg) or print "connect impossible\n";
 }
 
 $ldap->bind or print "bind impossible \n";
 
 #$mesg = $ldap->search ( base => "$options{'suffix'}", filter => "(cn=$nom)" )
 $mesg = $ldap->search ( base => $options{'suffix'},
-			filter => $options{'filter'},
-			attrs => [$options{'attrs'}] )
-or  print "Search  impossible \n";
+	filter => $options{'filter'},
+	attrs => [$options{'attrs'}] )
+	or  print "Search  impossible \n";
 
 # $mesg->code or  print "code chjie\n";
 
@@ -124,18 +124,18 @@ $res = $mesg->as_struct ;
 
 foreach $dn (keys %$res) {
 
-   my $hash = $res->{$dn};
-   print "#$dn\n";
+	my $hash = $res->{$dn};
+	print "#$dn\n";
 
-   foreach my $k (keys %$hash) {
-     my $array = $hash->{$k};
-     if ((ref($array) eq 'ARRAY') and ($k ne 'jpegphoto')) {
-        printf "\t%s => %s\n", $k, join(',', @$array);
-     }else {
-       printf "\t%s => %s\n", $k, $array;
-     }
-   }
-  $cpt++;
+	foreach my $k (keys %$hash) {
+		my $array = $hash->{$k};
+		if ((ref($array) eq 'ARRAY') and ($k ne 'jpegphoto')) {
+			printf "\t%s => %s\n", $k, join(',', @$array);
+		}else {
+			printf "\t%s => %s\n", $k, $array;
+		}
+	}
+	$cpt++;
 }
 
 print "Total : $cpt\n";

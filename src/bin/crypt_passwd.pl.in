@@ -34,7 +34,7 @@ use Sympa::SDM;
 use Sympa::Tools::Password;
 
 eval {
-    require Crypt::CipherSaber;
+	require Crypt::CipherSaber;
 };
 die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $EVAL_ERROR;
 
@@ -58,20 +58,20 @@ my $user;
 my $count = 0;
 
 while ($user = $sth->fetchrow_hashref('NAME_lc')) {
-    next unless $user->{'password_user'};
+	next unless $user->{'password_user'};
 
-    printf "\n%s", $user->{'email_user'};
+	printf "\n%s", $user->{'email_user'};
 
-    my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
+	my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
 
-    printf " => %s", $crypted_password;
+	printf " => %s", $crypted_password;
 
-    my $statement = sprintf "UPDATE user_table SET password_user=%s WHERE (email_user=%s)", $dbh->quote($crypted_password), $dbh->quote($user->{'email_user'});
-    my $sth2 =  $dbh->prepare($statement) || die "Can't prepare SQL statement";
-    $sth2->execute || die "Unable to execute SQL statement";
-    $sth2->finish();
+	my $statement = sprintf "UPDATE user_table SET password_user=%s WHERE (email_user=%s)", $dbh->quote($crypted_password), $dbh->quote($user->{'email_user'});
+	my $sth2 =  $dbh->prepare($statement) || die "Can't prepare SQL statement";
+	$sth2->execute || die "Unable to execute SQL statement";
+	$sth2->finish();
 
-    $count++;
+	$count++;
 }
 
 $sth->finish();
