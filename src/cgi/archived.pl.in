@@ -72,12 +72,12 @@ unless (GetOptions(\%main::options, 'debug|d', 'foreground|F')) {
     Sympa::Log::fatal_err("Unknown options.");
 }
 
-if ($main::options{'debug'}) {
-    $main::options{'log_level'} = 2 unless ($main::options{'log_level'});
+if ($options{'debug'}) {
+    $options{'log_level'} = 2 unless ($options{'log_level'});
 }
 
-$main::options{'foreground'} = 1 if ($main::options{'debug'});
-$main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
+$options{'foreground'} = 1 if ($options{'debug'});
+$options{'log_to_stderr'} = 1 if ($options{'debug'} || $options{'foreground'});
 
 my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
@@ -101,7 +101,7 @@ unless (Sympa::SDM::check_db_connect()) {
 }
 
 ## Put ourselves in background if not in debug mode.
-unless ($main::options{'debug'} || $main::options{'foreground'}) {
+unless ($options{'debug'} || $options{'foreground'}) {
    open(STDERR, ">> /dev/null");
    open(STDOUT, ">> /dev/null");
    if (open(TTY, "/dev/tty")) {
@@ -118,7 +118,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
 
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
-$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
+$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 
 ## Create and write the pidfile
 Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
@@ -127,9 +127,9 @@ unless ($options->{'stderr_to_tty'}) {
 }
 
 # setting log_level using conf unless it is set by calling option
-if ($main::options{'log_level'}) {
-    Sympa::Log::set_log_level($main::options{'log_level'});
-    Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}");
+if ($options{'log_level'}) {
+    Sympa::Log::set_log_level($options{'log_level'});
+    Sympa::Log::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 }else{
     Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
     Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");

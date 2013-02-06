@@ -1967,14 +1967,14 @@ sub _split_params {
     if ($params[0] =~ /debug(\d)?/) {
 	shift @params;
 	if ($1) {
-	    $main::options{'debug_level'} = $1 if ($1);
+	    $options{'debug_level'} = $1 if ($1);
 	}else{
-	    $main::options{'debug_level'} = 1 ;
+	    $options{'debug_level'} = 1 ;
 	}
     }else{
-	$main::options{'debug_level'} = 0 ;
+	$options{'debug_level'} = 0 ;
     }
-    Sympa::Log::do_log ('debug2', "debug level $main::options{'debug_level'}");
+    Sympa::Log::do_log ('debug2', "debug level $options{'debug_level'}");
 
     ## rss mode
     if ($params[0] eq 'rss') {
@@ -2238,14 +2238,14 @@ sub get_parameters_old {
 	if ($params[0] =~ /debug(\d)?/) {
 	    shift @params;
 	    if ($1) {
-		$main::options{'debug_level'} = $1 if ($1);
+		$options{'debug_level'} = $1 if ($1);
 	    }else{
-		$main::options{'debug_level'} = 1 ;
+		$options{'debug_level'} = 1 ;
 	    }
 	}else{
-	    $main::options{'debug_level'} = 0 ;
+	    $options{'debug_level'} = 0 ;
 	}
-	Sympa::Log::do_log ('debug2', "debug level $main::options{'debug_level'}");
+	Sympa::Log::do_log ('debug2', "debug level $options{'debug_level'}");
 
 
 

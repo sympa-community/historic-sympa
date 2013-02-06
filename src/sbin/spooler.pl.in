@@ -83,16 +83,16 @@ unless (GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keep
     fatal_err("Unknown options.");
 }
 
-if ($main::options{'debug'}) {
-    $main::options{'log_level'} = 2 unless ($main::options{'log_level'});
+if ($options{'debug'}) {
+    $options{'log_level'} = 2 unless ($options{'log_level'});
 }
 ## Batch mode, ie NOT daemon
-$main::options{'batch'} = 1 if ($main::options{'help'}||$main::options{'version'});
+$options{'batch'} = 1 if ($options{'help'}||$options{'version'});
 
 # Some option force foreground mode
-$main::options{'foreground'} = 1 if ($main::options{'debug'} || $main::options{'batch'});
+$options{'foreground'} = 1 if ($options{'debug'} || $options{'batch'});
 
-$main::options{'log_to_stderr'} = 1 unless ($main::options{'batch'});
+$options{'log_to_stderr'} = 1 unless ($options{'batch'});
 
 my %loop_info;
 
@@ -103,7 +103,7 @@ local $main::daemon_usage;
 
 while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
-my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
+my $config_file = $options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
 unless (Sympa::Configuration::load($config_file,1)) {
@@ -115,9 +115,9 @@ unless (Sympa::Configuration::load($config_file,1)) {
 Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
 # setting log_level using conf unless it is set by calling option
-if ($main::options{'log_level'}) {
-    Sympa::Log::set_log_level($main::options{'log_level'});
-    Sympa::Log::do_log('info', "Configuration file read, log level set using options : $main::options{'log_level'}");
+if ($options{'log_level'}) {
+    Sympa::Log::set_log_level($options{'log_level'});
+    Sympa::Log::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 }else{
     Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
     Sympa::Log::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
@@ -153,7 +153,7 @@ unless (Sympa::Configuration::checkfiles_as_root()) {
 }
 
 ## Check that the data structure is uptodate
-unless ($main::options{'upgrade'} || $main::options{'help'}) {
+unless ($options{'upgrade'} || $options{'help'}) {
     unless (Sympa::Upgrade::data_structure_uptodate()) {
 	Sympa::Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
     }
@@ -165,7 +165,7 @@ if ($signal ne 'hup') {
     ## works on many systems, although, it seems that Unix conceptors have
     ## decided that there won't be a single and easy way to detach a process
     ## from its controlling tty.
-    unless ($main::options{'foreground'}) {
+    unless ($options{'foreground'}) {
 	if (open(TTY, "/dev/tty")) {
 	    ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
 	    #       ioctl(TTY, &TIOCNOTTY, 0);
@@ -178,8 +178,8 @@ if ($signal ne 'hup') {
 	setpgrp(0, 0);
 	# start a spooler.pl daemon for the spool location specified by option --queue= or for each distinct spool find in sympa.conf
 
-	if ($main::options{'queue'}){
-	    $distinct_spools{$main::options{'queue'}}= 1;
+	if ($options{'queue'}){
+	    $distinct_spools{$options{'queue'}}= 1;
 	}else{
 	    foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
 		$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
@@ -208,14 +208,14 @@ if ($signal ne 'hup') {
 
 	Sympa::Log::do_log('debug', "Running server $$ for spooler purpose ");
 
-	unless ($main::options{'batch'} ) {
+	unless ($options{'batch'} ) {
 
 	    ## Create and write the pidfile
 	    my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
 
 	    ## If process is running in foreground, don't write STDERR to a dedicated file
 	    my $options;
-	    $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
+	    $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 	    $options->{'multiple_process'} = 1 ;
 	    Sympa::Tools::Daemon::write_pid($file, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
 	}
@@ -254,21 +254,21 @@ if ($main::daemon_usage == Sympa::Configuration::DAEMON_ALL) {
 }else {
     sleep 1; ## wait until main process has created required directories
 }
-if ($main::options{'help'}) {
+if ($options{'help'}) {
     print $usage_string;
     exit 0;
-}elsif ($main::options{'version'}) {
+}elsif ($options{'version'}) {
     print $version_string;
     exit 0;
 }
 ## Do we have right access in the directory
-if ($main::options{'keepcopy'}) {
-    if (! -d $main::options{'keepcopy'}) {
-	Sympa::Log::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $main::options{'keepcopy'});
-	delete $main::options{'keepcopy'};
-    }elsif (! -w $main::options{'keepcopy'}) {
-	Sympa::Log::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $main::options{'keepcopy'});
-	delete $main::options{'keepcopy'};
+if ($options{'keepcopy'}) {
+    if (! -d $options{'keepcopy'}) {
+	Sympa::Log::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $options{'keepcopy'});
+	delete $options{'keepcopy'};
+    }elsif (! -w $options{'keepcopy'}) {
+	Sympa::Log::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $options{'keepcopy'});
+	delete $options{'keepcopy'};
     }
 }
 
@@ -396,9 +396,9 @@ while (!$signal) {
 	    next;
 	}
 
-	if ($main::options{'keepcopy'}) {
-	    unless (File::Copy::copy($t_spool.'/'.$filename, $main::options{'keepcopy'}.'/'.$filename) ) {
- 		Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $ERRNO);
+	if ($options{'keepcopy'}) {
+	    unless (File::Copy::copy($t_spool.'/'.$filename, $options{'keepcopy'}.'/'.$filename) ) {
+ 		Sympa::Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $options{'keepcopy'}."/$filename", $ERRNO);
 	    }
 	}
 
@@ -456,12 +456,12 @@ sub sigterm {
 #
 ###########################################################
 sub sighup {
-    if ($main::options{'mail'}) {
+    if ($options{'mail'}) {
 	Sympa::Log::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
-	undef $main::options{'mail'};
+	undef $options{'mail'};
     }else{
 	Sympa::Log::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
-	$main::options{'mail'} = 1;
+	$options{'mail'} = 1;
     }
     $signal = 'hup';
 }
