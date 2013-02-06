@@ -23,43 +23,89 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+testldap.pl - FIXME
+
+=head1 SYNOPSIS
+
+  testldap.pl [--host=<host>] [--ssl=on|off] [--suffix=<suffix>]
+  [--scope=base|one|sub] [--filter=<filter>] [--attrs=<attrs>]
+
+=head1 DESCRIPTION
+
+FIXME.
+
+=head1 OPTIONS
+
+=over
+
+=item B<--host>
+
+=item B<--ssl>
+
+=item B<--suffix>
+
+=item B<--scope>
+
+=item B<--filter>
+
+=item B<--attrs>
+
+=back
+
+=cut
+
 use Getopt::Long;
 use Net::LDAP;
+use Pod::Usage;
 
-my %opt;
-unless (GetOptions(\%opt, 'host=s', 'suffix=s', 'filter=s','attrs=s', 'ssl=s', 'scope=s')) {
-    die "Unknown options.";
-}
+my %options;
+GetOptions(
+	\%options,
+	'host=s',
+	'suffix=s',
+	'filter=s',
+	'attrs=s',
+	'ssl=s',
+	'scope=s',
+	'help|h'
+) or pod2usage(-verbose => 0); 
 
-unless (defined $opt{'host'} &&
-	defined $opt{'suffix'} &&
-	defined $opt{'filter'}) {
-    die "Usage $ARGV[-1] --host=<host> --ssl=on|off --suffix=<suffix> --scope=base|one|sub --filter=<filter> --attrs=<attrs>";
-}
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
-printf "host : $opt{'host'}\nsuffix : $opt{'suffix'}\nfilter: $opt{'filter'}\n";
+pod2usage(-message => 'no host given, aborting', -verbose => 0)
+	unless $options{'host'};
+
+pod2usage(-message => 'no suffix given, aborting', -verbose => 0)
+	unless $options{'suffix'};
+
+pod2usage(-message => 'no filter given, aborting', -verbose => 0)
+	unless $options{'filter'};
+
+printf "host : $options{'host'}\nsuffix : $options{'suffix'}\nfilter: $options{'filter'}\n";
 
 my %arg;
-$arg{'scope'} = $opt{'scope'};
+$arg{'scope'} = $options{'scope'};
 
 
-if ($opt{'ssl'} eq 'on') {
+if ($options{'ssl'} eq 'on') {
     eval "require Net::LDAPS";
 
     $arg{'sslversion'} = 'sslv3';
     $arg{'sslciphers'} = 'ALL';
 
-    $ldap=Net::LDAPS->new($opt{'host'},%arg) or print "connect impossible\n";
+    $ldap=Net::LDAPS->new($options{'host'},%arg) or print "connect impossible\n";
 }else {
-    $ldap=Net::LDAP->new($opt{'host'},%arg) or print "connect impossible\n";
+    $ldap=Net::LDAP->new($options{'host'},%arg) or print "connect impossible\n";
 }
 
 $ldap->bind or print "bind impossible \n";
 
-#$mesg = $ldap->search ( base => "$opt{'suffix'}", filter => "(cn=$nom)" )
-$mesg = $ldap->search ( base => $opt{'suffix'},
-			filter => $opt{'filter'},
-			attrs => [$opt{'attrs'}] )
+#$mesg = $ldap->search ( base => "$options{'suffix'}", filter => "(cn=$nom)" )
+$mesg = $ldap->search ( base => $options{'suffix'},
+			filter => $options{'filter'},
+			attrs => [$options{'attrs'}] )
 or  print "Search  impossible \n";
 
 # $mesg->code or  print "code chjie\n";
@@ -95,9 +141,3 @@ foreach $dn (keys %$res) {
 print "Total : $cpt\n";
 
 $ldap->unbind or print "unbind impo \n";
-
-
-
-
-
-

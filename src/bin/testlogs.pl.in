@@ -2,30 +2,56 @@
 # -*- indent-tabs-mode: t; -*-
 # vim:ft=perl:noet:sw=8:wrap:textwidth=78
 
+=head1 NAME
+
+testlogs.pl - FIXME
+
+=head1 SYNOPSIS
+
+  testlogs.pl [-d|--debug] [-f|--config=<file>] [--log_level=<level>]
+
+=head1 DESCRIPTION
+
+FIXME.
+
+=head1 OPTIONS
+
+FIXME.
+
+=cut
+
 use strict;
 use lib '--modulesdir--';
 
 use Getopt::Long;
+use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Log;
 
 my %options;
-GetOptions(\%main::options, 'debug|d', 'log_level=s', 'config|f=s');
+GetOptions(
+	\%options,
+	'debug|d',
+	'log_level=s',
+	'config|f=s',
+	'help|h'
+) or pod2usage(-verbose => 0);
 
-my $config_file = $main::options{'config'} || '/etc/sympa.conf';
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
+
+my $config_file = $options{'config'} || '/etc/sympa.conf';
 ## Load configuration file
 unless (Sympa::Configuration::load($config_file)) {
    Sympa::Log::fatal_err("Configuration file $config_file has errors.");
 }
 
-
 ## Open the syslog and say we're read out stuff.
 Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'sympa');
 
 # setting log_level using conf unless it is set by calling option
-if ($main::options{'log_level'}) {
-    do_log('info', "Logs seems OK, log level set using options : $main::options{'log_level'}");
+if ($options{'log_level'}) {
+    do_log('info', "Logs seems OK, log level set using options : $options{'log_level'}");
 }else{
     Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'});
     do_log('info', "Logs seems OK, default log level $Sympa::Configuration::Conf{'log_level'}");
@@ -33,5 +59,3 @@ if ($main::options{'log_level'}) {
 printf "Ok, now check logs \n";
 
 1;
-
-

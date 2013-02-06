@@ -24,11 +24,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
+
+arc2webarc.pl - FIXME
+
+=head1 SYNOPSIS
+
+  arc2webarc.pl [--input-directory=<directory>] <listname> [robot]
+
+=head1 DESCRIPTION
+
+FIXME.
+
+=head1 OPTIONS
+
+FIXME.
+
+=cut
+
 use strict;
 use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
+use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -69,14 +88,19 @@ my $pinfo = Sympa::List::_apply_defaults();
 
 $OUTPUT_AUTOFLUSH = 1;
 
-my %opt;
-unless (GetOptions(\%opt, 'input-directory=s')) {
-    die("Unknown options.");
-}
+my %options;
+GetOptions(
+	\%options,
+	'input-directory=s',
+	'help|h'
+) or pod2usage(-verbose => 0);
 
-die "Usage : $ARGV[-1] [-input-directory=<directory containing individual messages>] <listname> [robot]" unless ($#ARGV >= 0);
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
+
 my $listname = $ARGV[0];
 my $robot = $ARGV[1];
+pod2usage(-message => 'no list name given, aborting', -verbose => 0)
+	unless $listname;
 
 ## Check UID
 unless ([getpwuid $UID]->[0] eq Sympa::Constants::USER) {
@@ -130,15 +154,14 @@ if (-d $dest_dir) {
     mkdir $dest_dir, 0755 or die;
 }
 
-
-if ($opt{'input-directory'}) {
-    unless (-d $opt{'input-directory'}) {
-	die "Parameter input-directory (%s) is not a directory", $opt{'input-directory'};
+if ($options{'input-directory'}) {
+    unless (-d $options{'input-directory'}) {
+	die "Parameter input-directory (%s) is not a directory", $options{'input-directory'};
     }
 
-    opendir DIR, $opt{'input-directory'} || die;
+    opendir DIR, $options{'input-directory'} || die;
     foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
-	open ARCFILE, $opt{'input-directory'}.'/'.$file;
+	open ARCFILE, $options{'input-directory'}.'/'.$file;
 	my @msg = <ARCFILE>;
 	$msg_count++;
 	close ARCFILE;
@@ -304,4 +327,3 @@ sub store_messages {
 
     return 1;
 }
-
