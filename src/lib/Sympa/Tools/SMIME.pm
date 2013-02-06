@@ -340,7 +340,7 @@ sub smime_sign_check {
     ## or a pair of single-purpose. save them, as email@addr if combined,
     ## or as email@addr@sign / email@addr@enc for split certs.
     foreach my $c (keys %certs) {
-	my $fn = "$ssl_cert_dir/" . escape_chars(lc($sender));
+	my $fn = "$ssl_cert_dir/" . Sympa::Tools::escape_chars(lc($sender));
 	if ($c ne 'both') {
 	    unlink($fn); # just in case there's an old cert left...
 	    $fn .= "\@$c";
