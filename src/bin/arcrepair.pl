@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 # -*- indent-tabs-mode: t; -*-
-# vim:ft=perl:noet:wrap:textwidth=78
+# vim:ft=perl:noet:textwidth=78
 
 ## This script should be run on server where Sympa 4.1 has been running
 ## Sympa 4.1 included a bug that lead to incorrect archiving of messages
