@@ -2705,13 +2705,13 @@ sub check_param_in {
 					     {'sender' =>$param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
-	$main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	if (! $param->{'user'}{'email'}) {
-	    $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	    $param->{'may_signoff'} = 1 if ($action =~ /do_it|owner|request_auth/);
 
 	}elsif ($param->{'is_subscriber'}) {
-	    $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	    $param->{'may_signoff'} = 1 if ($action =~ /do_it|owner|request_auth/);
 	    $param->{'may_suboptions'} = 1;
 	}
 
@@ -2720,9 +2720,9 @@ sub check_param_in {
 					     {'sender' =>$param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
-	$main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 
-	$param->{'may_subscribe'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	$param->{'may_subscribe'} = 1 if ($action =~ /do_it|owner|request_auth/);
 
 
     	## Check if the current user can read the shared documents.
@@ -2958,14 +2958,14 @@ sub check_param_out {
 					      {'sender' =>$param->{'user'}{'email'},
 						  'remote_host' => $param->{'remote_host'},
 					       'remote_addr' => $param->{'remote_addr'}});
-	 $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	 if (! $param->{'user'}{'email'}) {
-	     $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	     $param->{'may_signoff'} = 1 if ($action =~ /do_it|owner|request_auth/);
 
 	 }elsif ($param->{'is_subscriber'} &&
 		 ($param->{'subscriber'}{'subscribed'} == 1)) {
-	     $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	     $param->{'may_signoff'} = 1 if ($action =~ /do_it|owner|request_auth/);
 	     $param->{'may_suboptions'} = 1;
 	 }
 
@@ -2974,9 +2974,9 @@ sub check_param_out {
 					      {'sender' =>$param->{'user'}{'email'},
 					       'remote_host' => $param->{'remote_host'},
 					       'remote_addr' => $param->{'remote_addr'}});
-	 $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');
 
-	 $param->{'may_subscribe'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
+	 $param->{'may_subscribe'} = 1 if ($action =~ /do_it|owner|request_auth/);
 
 
 
