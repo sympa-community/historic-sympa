@@ -3,8 +3,6 @@
 # vim:ft=perl:noet:sw=8:textwidth=78
 # $Id$
 
-# wwsympa.fcgi - This script provides the web interface to Sympa
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997-2003 Comite Reseau des Universites
 #
@@ -21,14 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-
-## Copyright 1999 Comité Réseaux des Universités
-## web interface to Sympa mailing lists manager
-## Sympa: http://www.sympa.org/
-## Authors :
-##           Serge Aumont <sa AT cru.fr>
-##           Olivier Salaün <os AT cru.fr>
-=pod
 
 =head1 NAME
 
