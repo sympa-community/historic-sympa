@@ -982,6 +982,8 @@ Returns a tag derived from the listname.
 
 =back
 
+=back
+
 =cut
 
 sub get_tag {
@@ -1016,7 +1018,6 @@ sub directory_check {
     }
     return 1;
 }
-=pod
 
 =head1 AUTHORS
 
@@ -1027,5 +1028,3 @@ sub directory_check {
 =item * Olivier Salaun <os AT cru.fr>
 
 =back
-
-=cut

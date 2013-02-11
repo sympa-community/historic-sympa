@@ -30,8 +30,6 @@ sympa_wizard.pl - Sympa configuration wizard
   sympa_wizard.pl [--target file] --create <sympa.conf|wwsympa.conf>
   sympa_wizard.pl --check
 
-=back
-
 =head1 DESCRIPTION
 
 This script helps to perform sympa initial setup.
