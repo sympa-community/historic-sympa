@@ -2034,7 +2034,7 @@ sub get_parameters {
     $param->{'path_info'} = $ENV{'PATH_INFO'};
     $param->{'http_method'} = $ENV{'REQUEST_METHOD'}; ## Usefull to skip previous_action when using POST
     if ($ENV{'REQUEST_METHOD'} eq 'GET') {
-	&_split_params ($ENV{'PATH_INFO'});
+	_split_params ($ENV{'PATH_INFO'});
     }elsif ($ENV{'REQUEST_METHOD'} eq 'POST') {
 	    ## POST
 
@@ -3071,7 +3071,7 @@ sub do_ticket {
 	    wwslog('err', 'do_ticket(%s) : Unable to evaluate the ticket validity (status: %s)', $in{'ticket'}, $param->{'ticket_context'}{'result'});
 	    return 1;
 	}
-    &_split_params($param->{'ticket_context'}{'data'});
+    _split_params($param->{'ticket_context'}{'data'});
     return $in{'action'} ;
 
 }
@@ -4427,7 +4427,7 @@ sub do_review {
 	 }
 
 	 ## Add user
-	 &_prepare_subscriber($i, \@additional_fields, \%sources);
+	 _prepare_subscriber($i, \@additional_fields, \%sources);
 
 	 push @{$param->{'members'}}, $i;
      }
@@ -4522,7 +4522,7 @@ sub do_search {
 		 and (! $param->{'is_owner'}) );
 
 	## Add user
-	&_prepare_subscriber($i, \@additional_fields, \%sources);
+	_prepare_subscriber($i, \@additional_fields, \%sources);
 
 	 $record++;
 	push @{$param->{'members'}}, $i;
@@ -9540,7 +9540,7 @@ sub do_edit_list {
 	my @token = split (/\./, $name);
 
 	## make it an entry in $new_admin
-	my $var = &_shift_var(0, $new_admin, @token);
+	my $var = _shift_var(0, $new_admin, @token);
 	$$var = $value;
     }
 
@@ -9923,7 +9923,7 @@ sub do_edit_list {
 	}
 
 	if (defined $check_family{$pname}) { # $pname is CONTROLLED
-	    &_check_new_values(\%check_family,$pname,$new_admin);
+	    _check_new_values(\%check_family,$pname,$new_admin);
 	}
 
 	## If datasource config changed
@@ -10062,7 +10062,7 @@ sub _shift_var {
 
      if ($#tokens > -1) {
 	 $i++;
-	 return &_shift_var($i, $newvar, @tokens);
+	 return _shift_var($i, $newvar, @tokens);
      }
      return $newvar;
  }
@@ -10080,7 +10080,7 @@ sub do_edit_list_request {
 
      if ($in{'group'}) {
 	 $param->{'group'} = $in{'group'};
-	 &_prepare_edit_form ($list);
+	 _prepare_edit_form ($list);
      }
 
  #    print "Content-type: text/plain\n\n";
@@ -10218,7 +10218,7 @@ sub _prepare_edit_form {
 	 }
 
 	 ## Store in $p a reference to the hash containing the informations relative to the parameter editing.
-	 my $p = &_prepare_data($pname, $pinfo->{$pname}, $list_config->{$pname},$may_edit,$family);
+	 my $p = _prepare_data($pname, $pinfo->{$pname}, $list_config->{$pname},$may_edit,$family);
 
 	 ## Store if the parameter is still at its default value or not.
 	 $p->{'default'} = $list_config->{'defaults'}{$pname};
@@ -10238,7 +10238,7 @@ sub _prepare_edit_form {
 	     my %list_of_topics = Sympa::List::load_topics($robot);
 
 	     if (defined $p->{'constraint'}) {
-		 &_restrict_values(\%list_of_topics,$p->{'constraint'});
+		 _restrict_values(\%list_of_topics,$p->{'constraint'});
 	     }
 
 	     foreach my $topic (keys %list_of_topics) {
@@ -10421,7 +10421,7 @@ sub _prepare_data {
 	     $p->{'value'} = $list_of_scenario;
 
 	     if ($restrict) {
-		 &_restrict_values($p->{'value'},$constraint);
+		 _restrict_values($p->{'value'},$constraint);
 	     }
 
 	 }elsif ($struct->{'task'}) {
@@ -10433,7 +10433,7 @@ sub _prepare_data {
 	     $p->{'value'} = $list_of_task;
 
 	     if ($restrict) {
-		 &_restrict_values($p->{'value'},$constraint);
+		 _restrict_values($p->{'value'},$constraint);
 	     }
 
 	 }elsif ($struct->{'datasource'}) {
@@ -10445,7 +10445,7 @@ sub _prepare_data {
 	     $p->{'value'} = $list_of_data_sources;
 
 	     if ($restrict) {
-		 &_restrict_values($p->{'value'},$constraint);
+		 _restrict_values($p->{'value'},$constraint);
 	     }
 
 	 }elsif (ref ($struct->{'format'}) eq 'HASH') {
@@ -10458,7 +10458,7 @@ sub _prepare_data {
 			    keys %{$struct->{'format'}}) {
 		 ## Prepare data recursively
 		 my $m_e = $list->may_edit("$name.$k",$param->{'user'}{'email'});
-		 my $v = &_prepare_data($k, $struct->{'format'}{$k}, $d->{$k},$m_e,$family,$name);
+		 my $v = _prepare_data($k, $struct->{'format'}{$k}, $d->{$k},$m_e,$family,$name);
 
 		 push @{$p->{'value'}}, $v;
 	     }
@@ -10489,7 +10489,7 @@ sub _prepare_data {
 	     }
 
 	     if ($restrict) {
-		 &_restrict_values($p_glob->{'value'},$constraint);
+		 _restrict_values($p_glob->{'value'},$constraint);
 	     }
 
 	 }else {
@@ -17116,7 +17116,7 @@ sub _ca_get_file {
 	my $file = Sympa::Tools::get_filename('etc', {}, 'custom_actions/'.$custom_action, $robot, $list, $Sympa::Configuration::Conf{'etc'});
 	return undef unless($file);
 
-	&_ca_add_file_path_to_tt2_include_path($file);
+	_ca_add_file_path_to_tt2_include_path($file);
 
 	return $file;
 }
@@ -17135,7 +17135,7 @@ sub _ca_process {
 	my $robot = shift;
 	my $list = shift;
 
-	my $file = &_ca_get_file($custom_action.'.pm', $robot, $list);
+	my $file = _ca_get_file($custom_action.'.pm', $robot, $list);
 	return undef unless($file);
 
 	eval { require "$file"; };
@@ -17190,7 +17190,7 @@ sub do_ca {
 	$param->{'custom_action'} = $custom_action;
 	$param->{'cap'} = $cap;
 
-	my $res = &_ca_process($custom_action, $cap, $robot);
+	my $res = _ca_process($custom_action, $cap, $robot);
 
 	if($res) {
 		my $next_action = 1;
@@ -17208,14 +17208,14 @@ sub do_ca {
 
 		if($next_action =~ /^l?ca:(.+)$/) { # other custom action tt2
 			$param->{'custom_action'} = $1;
-			&_ca_get_file($1.'.tt2', $robot);
+			_ca_get_file($1.'.tt2', $robot);
 			return 1;
 		}
 
 		return $next_action; # global action
 	}
 
-	my $file = &_ca_get_file($custom_action.'.tt2', $robot);
+	my $file = _ca_get_file($custom_action.'.tt2', $robot);
 	return 1 if($file);
 
 	Sympa::Log::do_log('err', 'Plugin not found : %s', $custom_action);
@@ -17258,7 +17258,7 @@ sub do_lca {
 	$param->{'custom_action'} = $custom_action;
 	$param->{'cap'} = $cap;
 
-	my $res = &_ca_process($custom_action, $cap, $robot, $list);
+	my $res = _ca_process($custom_action, $cap, $robot, $list);
 
 	if($res) {
 		my $next_action = 1;
@@ -17276,14 +17276,14 @@ sub do_lca {
 
 		if($next_action =~ /^l?ca:(.+)$/) { # other custom action tt2
 			$param->{'custom_action'} = $1;
-			&_ca_get_file($1.'.tt2', $robot, $list);
+			_ca_get_file($1.'.tt2', $robot, $list);
 			return 1;
 		}
 
 		return $next_action; # global action
 	}
 
-	my $file = &_ca_get_file($custom_action.'.tt2', $robot, $list);
+	my $file = _ca_get_file($custom_action.'.tt2', $robot, $list);
 	return 1 if($file);
 
 	Sympa::Log::do_log('err', 'Plugin not found : %s', $custom_action);
