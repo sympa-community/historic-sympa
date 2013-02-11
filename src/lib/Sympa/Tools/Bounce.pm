@@ -35,7 +35,6 @@ package Sympa::Tools::Bounce;
 use strict;
 
 use English qw(-no_match_vars);
-use MIME::Parser;
 
 my $smtp_status_pattern     = qr/\d\d\d/;
 my $enhanced_status_pattern = qr/\d\.\d\.\d/;
