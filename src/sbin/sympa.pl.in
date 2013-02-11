@@ -119,7 +119,7 @@ Remove a list definitively.
 
 =item B<--modify_list>
 
-Modify and existing list, using an XML configuration file. 
+Modify and existing list, using an XML configuration file.
 
 =item B<--rename_list>
 
