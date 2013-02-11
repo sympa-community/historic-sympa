@@ -45,7 +45,6 @@ use lib '--modulesdir--';
 #use open ':utf8'; ## Default is to consider files utf8
 
 use Archive::Zip;
-use Data::Dumper;
 use English qw(-no_match_vars);
 use Mail::Header;
 use Mail::Address;
