@@ -50,6 +50,16 @@ Do not detach from TTY.
 
 =back
 
+=head1 AUTHORS
+
+=over
+
+=item * Serge Aumont <sa AT cru.fr>
+
+=item * Olivier Salaun <os AT cru.fr>
+
+=back
+
 =cut
 
 use strict;
@@ -341,71 +351,16 @@ Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Sym
 
 exit(0);
 
-
-=pod
-
-=head1 SUBFUNCTIONS
-
-This is the description of the subfunctions contained by archived.pl.
-
-=cut
-
-=pod
-
-=head2 sub sigterm()
-
-Switches the loop control variable $end value to 1 when SIGTERM signal is caught.
-
-=head3 Parameters
-
-=over
-
-=item * I<none>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<none>
-
-=back
-
-=cut
-
-## When we catch SIGTERM, just change the value of the loop
-## variable.
+# When we catch SIGTERM, just change the value of the loop # variable
 sub sigterm {
     $end = 1;
 }
 
-=pod
-
-=head2 sub remove(STRING $adrlist, STRING $msgid)
-
-Removes the message having the identifier $msgid from the list named $adrlist.
-
-=head3 Parameters
-
-=over
-
-=item * I<$adrlist>, a character string containing the list name.
-
-=item * I<$msgid> , a character string containing the message identifier.
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<none>
-
-=back
-
-=cut
-
+# Removes a message from a list.
+#
+# Parameters:
+# * $adrlist: the list name
+# * $msgid: the message identifier
 sub remove {
     my $adrlist = shift;
     my $msgid = shift;
@@ -435,30 +390,13 @@ sub remove {
     system "$wwsconf->{'mhonarc'}  -outdir $arcpath/$adrlist/$yyyy-$mm -rmm $msgid";
 }
 
-=pod
+# Rebuilds archives for a list
+#
+# Parameters:
+# * $adrlist: a string containing the name of the list the archives of which we want to rebuild.
 
-=head2 sub rebuild(STRING $adrlist)
-
-Rebuilds archives for the list the name of which is given in the argument $adrlist.
-
-=head3 Parameters
-
-=over
-
-=item * I<$adrlist>, a character string containing the name of the list the archives of which we want to rebuild.
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<undef> if something goes wrong.
-
-=back
-
-=cut
-
+# Return value:
+# undef if something goes wrong.
 sub rebuild {
 
     my $adrlist = shift;
@@ -626,47 +564,21 @@ sub rebuild {
 }
 
 
-=pod
-
-=head2 sub mail2arc(STRING $file,STRING $listname,STRING $hostname,STRING $yyyy,STRING $mm,STRING $dd,STRING $hh,STRING $min,STRING $ss)
-
-Archives one message into one list archives directory.
-
-=head3 Parameters
-
-=over
-
-=item * I<$file>: a character string containing the message filename.
-
-=item * I<$listname>: a character string containing the name of the list in which to archive the message
-
-=item * I<$hostname>: a character string containing the name of the virtual robot hosting the list.
-
-=item * I<$yyyy>: a character string containing the year of the date when the message is archived (i.e. now)
-
-=item * I<$mm>: a character string containing the month of the date when the message is archived (i.e. now)
-
-=item * I<$dd>: a character string containing the day of the date when the message is archived (i.e. now)
-
-=item * I<$hh>: a character string containing the hour of the date when the message is archived (i.e. now)
-
-=item * I<$min>: a character string containing the minute of the date when the message is archived (i.e. now)
-
-=item * I<$ss>: a character string containing the second of the date when the message is archived (i.e. now)
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<undef> if something goes wrong.
-
-=back
-
-=cut
-
-
+# Archives one message into one list archives directory.
+#
+# Parameters:
+# * $file: a string containing the message filename.
+# * $listname: a string containing the name of the list in which to archive the message
+# * $hostname: a string containing the name of the virtual robot hosting the list.
+# * $yyyy: a string containing the year of the date when the message is archived (i.e. now)
+# * $mm: a string containing the month of the date when the message is archived (i.e. now)
+# * $dd: a string containing the day of the date when the message is archived (i.e. now)
+# * $hh: a string containing the hour of the date when the message is archived (i.e. now)
+# * $min: a string containing the minute of the date when the message is archived (i.e. now)
+# * $ss: a string containing the second of the date when the message is archived (i.e. now)
+#
+# Return value:
+# undef if something goes wrong.
 sub mail2arc {
 
     my $message_in_spool = shift;
@@ -834,30 +746,10 @@ sub mail2arc {
 }
 
 
-=pod
-
-=head2 sub set_hidden_mode(STRING $tag)
-
-Sets the value of $ENV{'M2H_ADDRESSMODIFYCODE'} and $ENV{'M2H_MODIFYBODYADDRESSES'}
-
-=head3 Parameters
-
-=over
-
-=item * I<$tag> a character string (containing the result of get_tag($listname))
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<none>
-
-=back
-
-=cut
-
+# Sets the value of $ENV{'M2H_ADDRESSMODIFYCODE'} and $ENV{'M2H_MODIFYBODYADDRESSES'}
+#
+# Parameters:
+# * $tag: a string (containing the result of get_tag($listname))
 sub set_hidden_mode {
     my $tag = shift; ## tag is used as variable elements in tags to prevent message contents to be parsed
 
@@ -866,62 +758,18 @@ sub set_hidden_mode {
     $ENV{'M2H_MODIFYBODYADDRESSES'} = 1;
 }
 
-=pod
-
-=head2 sub unset_hidden_mode()
-
-Empties $ENV{'M2H_ADDRESSMODIFYCODE'}.
-
-=head3 Parameters
-
-=over
-
-=item * I<none>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<none>
-
-=back
-
-=cut
-
+# Empties $ENV{'M2H_ADDRESSMODIFYCODE'}.
 sub unset_hidden_mode {
 
     ## Be carefull, the .mhonarc.db file keeps track of previous M2H_ADDRESSMODIFYCODE setup
     $ENV{'M2H_ADDRESSMODIFYCODE'} = '';
 }
 
-=pod
-
-=head2 sub save_idx(STRING $index,STRING $lst)
-
-Saves the archives index file
-
-=head3 Parameters
-
-=over
-
-=item * I<$index>, a string corresponding to the file name to which save an index.
-
-=item * I<$lst>, a character string
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<none>
-
-=back
-
-=cut
-
+# Saves the archives index file
+#
+# Parameters:
+# * $index: a string corresponding to the file name to which save an index.
+# * $lst: a string
 sub save_idx {
     my ($index,$lst) = @_;
 #    Sympa::Log::do_log('notice', "save_idx($index,$lst)");
@@ -932,7 +780,7 @@ sub save_idx {
     #   Sympa::Log::do_log('debug',"last arc entry for $index is $lst");
 }
 
-## Create the 'index' file for one archive subdir
+# Create the 'index' file for one archive subdir
 sub create_idx {
     my $arc_dir = shift; ## corresponds to the yyyy-mm directory
 
@@ -952,46 +800,21 @@ sub create_idx {
     return $index;
 }
 
-=pod
-
-=head2 sub get_tag(STRING $listname)
-
-Returns a tag derived from the listname.
-
-=head3 Parameters
-
-=over
-
-=item * I<$listname>, a character string correspondiong to the list name.
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<a character string>, corresponding to the 10 last characters of a 32 bytes string containing the MD5 digest of the concatenation of the following strings (in this order):
-
-=over 4
-
-=item - the cookie config parameter
-
-=item - a slash: "/"
-
-=item - the I<$listname> argument
-
-=back
-
-=back
-
-=cut
-
+# Returns a tag derived from the list name.
+#
+# Parameters:
+# * $listname: the list name
+#
+# Return value:
+# A string>, corresponding to the 10 last characters of a 32 bytes string containing the MD5 digest of the concatenation of the following strings (in this order):
+# * the cookie config parameter
+# * a slash: "/"
+# * the list name
 sub get_tag {
     my $listname = shift;
 
     return (substr(Digest::MD5::md5_hex(join('/', $Sympa::Configuration::Conf{'cookie'}, $listname)), -10)) ;
 }
-
 
 # Checks if directory exists and we have write and read accec to it.
 sub directory_check {
@@ -1018,13 +841,3 @@ sub directory_check {
     }
     return 1;
 }
-
-=head1 AUTHORS
-
-=over
-
-=item * Serge Aumont <sa AT cru.fr>
-
-=item * Olivier Salaun <os AT cru.fr>
-
-=back

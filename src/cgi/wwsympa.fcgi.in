@@ -38,6 +38,16 @@ I<wwsympa.fcgi> - Sympa web interface
 
 This fcgi script completely handles all aspects of the Sympa web interface
 
+=head1 AUTHORS
+
+=over
+
+=item * Serge Aumont <sa AT cru.fr>
+
+=item * Olivier Salaun <os AT cru.fr>
+
+=back
+
 =cut
 
 use strict 'vars';
@@ -1818,12 +1828,7 @@ my $birthday = time ;
 
 Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
-##############################################################
- #-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/
- ##############################################################
-
-
- ## Write to log
+# Write to log
 sub wwslog {
      my $facility = shift;
 
@@ -1888,7 +1893,6 @@ sub web_db_log {
     return 1;
 }
 
-###################################
 # log in stat_table via web interface
 sub web_db_stat_log {
 
@@ -1906,8 +1910,6 @@ sub web_db_stat_log {
 	}
 	return 1;
 }
-
-####################################
 
 sub new_loop {
      $loop++;
@@ -2502,7 +2504,7 @@ sub check_action_parameters {
   return 1;
 }
 
-## Send HTML output
+# Send HTML output
 sub send_html {
 
     my $tt2_file = shift;
@@ -2589,37 +2591,15 @@ sub prepare_report_user {
     $param->{'errors'} = Sympa::Report::is_there_any_reject_report_web();
 }
 
-
-
-
-=pod
-
-=head2 sub check_param_in
-
-Checks parameters contained in the global variable $in. It is the process used to analyze the incoming parameters.
-Use it to create a List object and initialize output parameters.
-
-=head3 Parameters
-
-=over
-
-=item * I<None>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<undef> if the process encounters problems.
-
-=item * I<1> if everything goes well
-
-=back
-
-=cut
-
- ## Analysis of incoming parameters
+# Checks parameters contained in the global variable $in. It is the process
+# used to analyze the incoming parameters.
+# Use it to create a List object and initialize output parameters.
+#
+# Parameters:
+# none
+#
+# Return value:
+# A true value on sucess, undef otherwise.
 sub check_param_in {
      wwslog('debug2', 'check_param_in');
 
@@ -2790,7 +2770,7 @@ sub check_param_in {
 
  }
 
- ## Prepare outgoing params
+# Prepare outgoing params
 sub check_param_out {
      wwslog('debug2', 'check_param_out');
 
@@ -3064,7 +3044,7 @@ sub check_param_out {
 
  }
 
-## ticket : this action is used if someone submits a one time ticket
+# this action is used if someone submits a one time ticket
 sub do_ticket {
     wwslog('info', 'do_ticket(%s)', $in{'ticket'});
 
@@ -3097,7 +3077,7 @@ sub do_ticket {
 }
 
 
- ## Login WWSympa
+# Login WWSympa
 sub do_login {
      wwslog('info', 'do_login(%s)', $in{'email'});
      my $user;
@@ -3273,17 +3253,17 @@ sub do_login {
 
  }
 
-## Login WWSympa
-## The sso_login action is made of 4 subactions that make a complete workflow.
-## Note that this comlexe workflow is only used if the SSO server does not provide
-## the user email address or if this email address is not trusted and therefore
-## needs to be checked.
-## The workflow:
-##  1) init: determine if email address needs to be collected/checked
-##  2) requestemail: collect the user email address in a web form. Note that form may be initialized with
-##     one email address provided by the SSO server
-##  3) validateemail: a challenge is sent to the email address to validate it
-##  4) confirmemail: user confirms his email address with the challenge
+# Login WWSympa
+# The sso_login action is made of 4 subactions that make a complete workflow.
+# Note that this comlexe workflow is only used if the SSO server does not provide
+# the user email address or if this email address is not trusted and therefore
+# needs to be checked.
+# The workflow:
+#  1) init: determine if email address needs to be collected/checked
+#  2) requestemail: collect the user email address in a web form. Note that form may be initialized with
+#     one email address provided by the SSO server
+#  3) validateemail: a challenge is sent to the email address to validate it
+#  4) confirmemail: user confirms his email address with the challenge
 sub do_sso_login {
     wwslog('info', 'do_sso_login(%s)', $in{'auth_service_name'});
 
@@ -3706,7 +3686,7 @@ sub is_ldap_user {
      }
  }
 
- ## send back login form
+# send back login form
 sub do_loginrequest {
      wwslog('info','do_loginrequest');
 
@@ -3733,7 +3713,7 @@ sub do_loginrequest {
      return 1;
  }
 
- ## Help / about WWSympa
+# Help / about WWSympa
 sub do_help {
      wwslog('info','do_help(%s)', $in{'help_topic'});
 
@@ -3775,7 +3755,7 @@ sub do_redirect {
     return 1;
 }
 
- ## Logout from WWSympa
+# Logout from WWSympa
 sub do_logout {
      wwslog('info','do_logout(%s)', $param->{'user'}{'email'});
 
@@ -3910,7 +3890,8 @@ sub do_firstpasswd {
     $param->{'requestpasswd_context'} = 'firstpasswd';
     return 'renewpasswd';
 }
- ## send a ticket for choosing a new password
+
+# send a ticket for choosing a new password
 sub do_renewpasswd {
      wwslog('info', 'do_renewpasswd(%s)', $in{'email'});
 
@@ -3942,16 +3923,13 @@ sub do_renewpasswd {
      return 1;
  }
 
-####################################################
-# do_requestpasswd
-####################################################
-#  Sends a message to the user containing user password.
+# Sends a message to the user containing user password.
 #
-# IN : -
+# Parameters:
+# * none
 #
-# OUT : 'renewpasswd' |  1 | 'loginrequest' | undef
-#
-####################################################
+# Return value:
+# 'renewpasswd' |  1 | 'loginrequest' | undef
 sub do_requestpasswd {
      wwslog('info', 'do_requestpasswd(%s)', $in{'email'});
      my ($passwd, $user);
@@ -4006,8 +3984,8 @@ sub do_requestpasswd {
      return $param->{'previous_action'};
  }
 
- ## Which list the user is subscribed to
- ## TODO (pour listmaster, toutes les listes)
+# Which list the user is subscribed to
+# TODO (pour listmaster, toutes les listes)
 sub do_which {
      my $which = {};
 
@@ -4054,7 +4032,7 @@ sub do_which {
      return 1;
  }
 
- ## The list of list
+# The list of list
 sub do_lists {
      my @lists;
      wwslog('info', 'do_lists(%s,%s)', $in{'topic'}, $in{'subtopic'});
@@ -4141,7 +4119,7 @@ sub do_lists {
      return 1;
  }
 
- ## The list of latest created lists
+# The list of latest created lists
 sub do_latest_lists {
      wwslog('info', "do_latest_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})");
 
@@ -4201,7 +4179,7 @@ sub do_latest_lists {
  }
 
 
- ## The list of the most active lists
+# The list of the most active lists
 sub do_active_lists {
      wwslog('info', "do_active_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})");
 
@@ -4292,7 +4270,7 @@ sub count_total_msg_since {
      return $total;
  }
 
- ## List information page
+# List information page
 sub do_info {
      wwslog('info', 'do_info');
 
@@ -4345,7 +4323,7 @@ sub do_info {
  }
 
 
- ## List subcriber count page
+# List subcriber count page
 sub do_subscriber_count {
      wwslog('info', 'do_subscriber_count');
 
@@ -4363,7 +4341,7 @@ sub do_subscriber_count {
  }
 
 
- ## Subscribers' list
+# Subscribers' list
 sub do_review {
      wwslog('info', 'do_review(%s)', $in{'page'});
      my $record;
@@ -4490,7 +4468,7 @@ sub do_review {
      return 1;
  }
 
-## Show the table of exclude
+# Show the table of exclude
 sub do_show_exclude {
 
     wwslog('info', 'do_exclude()');
@@ -4511,7 +4489,7 @@ sub do_show_exclude {
     return 1;
 }
 
-## Search in subscribers and in exclude
+# Search in subscribers and in exclude
 sub do_search {
     wwslog('info', 'do_search(%s)', $in{'filter'});
 
@@ -4589,7 +4567,7 @@ sub do_search {
     return 1;
 }
 
-## Access to user preferences
+# Access to user preferences
 sub do_pref {
      wwslog('info', 'do_pref');
 
@@ -4616,7 +4594,7 @@ sub do_pref {
      return 1;
  }
 
- ## Set the initial password
+# Set the initial password
 sub do_choosepasswd {
      wwslog('info', 'do_choosepasswd');
 
@@ -4653,15 +4631,13 @@ sub do_choosepasswd {
      return 1;
  }
 
-####################################################
-# do_set
-####################################################
 # Changes subscription parameter (reception or visibility)
 #
-# IN : -
+# Parameters:
+# * none
 #
-# OUT :'loginrequest'|'info' | undef
-
+# Return value:
+# 'loginrequest'|'info' | undef
 sub do_set {
      wwslog('info', 'do_set(%s, %s)', $in{'reception'}, $in{'visibility'});
 
@@ -4815,8 +4791,8 @@ sub do_set {
  }
 
 
-## checks if each element of the custom attribute is conform to the list's
-## definition
+# checks if each element of the custom attribute is conform to the list's
+# definition
 sub check_custom_attribute {
 
         my @custom_attributes = @{$list->{'admin'}{'custom_attribute'}} ;
@@ -4856,7 +4832,7 @@ sub check_custom_attribute {
 }
 
 
- ## Update of user preferences
+# Update of user preferences
 sub do_setpref {
      wwslog('info', 'do_setpref');
      my $changes = {};
@@ -4906,7 +4882,7 @@ sub do_setpref {
      }
  }
 
- ## Prendre en compte les défauts
+# Prendre en compte les défauts
 sub do_viewfile {
      wwslog('info', 'do_viewfile');
 
@@ -4929,18 +4905,16 @@ sub do_viewfile {
      return 1;
  }
 
-
-####################################################
-# do_subscribe
-####################################################
 # Subscribes a user to the list
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT :'subrequest'|'login'|'info'|$in{'previous_action'}
-#     | undef
-####################################################
-## TOTO: accepter nouveaux users
+# Return value:
+# 'subrequest'|'login'|'info'|$in{'previous_action'}|undef
+#
+# TODO:
+# accepter nouveaux users
 sub do_subscribe {
     wwslog('info', 'do_subscribe(%s)', $in{'email'});
 
@@ -5087,17 +5061,13 @@ sub do_subscribe {
     return 'info';
 }
 
-
-####################################################
-# do_multiple_subscribe
-####################################################
 # Subscribes a user to each lists
 #
-# IN : lists a array of lists
+# Parameters:
+# lists a array of lists
 #
-# OUT :'subrequest'|'login'|'info'|$in{'previous_action'}
-#     | undef
-####################################################
+# Return value:
+# 'subrequest'|'login'|'info'|$in{'previous_action'}| undef
 sub do_multiple_subscribe {
     wwslog('info', 'do_multiple_subscribe(%s)', $in{'email'});
 
@@ -5120,7 +5090,7 @@ sub do_multiple_subscribe {
     }
 }
 
-## Subscription request (user not authenticated)
+# Subscription request (user not authenticated)
 sub do_suboptions {
     wwslog('info', 'do_suboptions()');
 
@@ -5187,7 +5157,7 @@ sub do_suboptions {
     return 1;
 }
 
-## Subscription request (user not authenticated)
+# Subscription request (user not authenticated)
 sub do_subrequest {
     wwslog('info', 'do_subrequest(%s,%s)', $in{'email'},$in{'custom_attribute'});
 
@@ -5349,17 +5319,14 @@ sub do_family_signoff {
     }
     return 1;
 }
-####################################################
-# do_signoff
-####################################################
+
 # Unsubcribes a user from a list
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : 'sigrequest' | 'login' | 'info'
-#
-####################################################
- ## Unsubscribe from list
+# Return value:
+# 'sigrequest' | 'login' | 'info'
 sub do_signoff {
      wwslog('info', 'do_signoff');
 
@@ -5403,7 +5370,7 @@ sub do_signoff {
     return Sympa::Configuration::get_robot_conf($robot, 'default_home');
  }
 
-## Unsubscribe current user from a list.
+# Unsubscribe current user from a list.
 sub unsubscribe {
     my $authenticated_email_address = shift;
     my $list = shift;
@@ -5485,7 +5452,7 @@ sub unsubscribe {
     return %report;
 }
 
- ## Unsubscription request (user not authenticated)
+# Unsubscription request (user not authenticated)
 sub do_sigrequest {
      wwslog('info', 'do_sigrequest(%s)', $in{'email'});
 
@@ -5531,7 +5498,7 @@ sub do_sigrequest {
  }
 
 
- ## Update of password
+# Update of password
 sub do_setpasswd {
      wwslog('info', 'do_setpasswd');
      my $user;
@@ -5587,7 +5554,7 @@ sub do_setpasswd {
      }
  }
 
- ## List admin page
+# List admin page
 sub do_admin {
      wwslog('info', 'do_admin');
 
@@ -5610,7 +5577,7 @@ sub do_admin {
      return 1;
  }
 
- ## Server admin page
+# Server admin page
 sub do_serveradmin {
      wwslog('info', 'do_serveradmin');
 
@@ -5684,7 +5651,7 @@ sub do_edit_config {
 
 }
 
-## Change log_level for the current session
+# Change log_level for the current session
 sub do_set_loglevel {
     wwslog('info', 'do_set_loglevel');
 
@@ -5692,7 +5659,7 @@ sub do_set_loglevel {
     return 'serveradmin';
 }
 
-## activate dump var feature
+# activate dump var feature
 sub do_set_dumpvars {
     wwslog('info', 'do_set_dumpvars');
 
@@ -5701,7 +5668,7 @@ sub do_set_dumpvars {
     $param->{'redirect_to'} = $param->{'base_url'}.$param->{'path_cgi'}.'/serveradmin';
     return '1';
 }
-## un-activate dump var feature
+# un-activate dump var feature
 sub do_unset_dumpvars {
     wwslog('info', 'do_unset_dumpvars');
 
@@ -5710,7 +5677,7 @@ sub do_unset_dumpvars {
     $param->{'redirect_to'} = $param->{'base_url'}.$param->{'path_cgi'}.'/serveradmin';
     return '1';
 }
-## un-activate dump var feature
+# un-activate dump var feature
 sub do_show_sessions {
     wwslog('info', 'do_show_sessions');
 
@@ -5721,7 +5688,7 @@ sub do_show_sessions {
 }
 
 
-## Change user email
+# Change user email
 sub do_set_session_email {
     wwslog('info', 'do_set_session_email');
 
@@ -5741,7 +5708,7 @@ sub do_set_session_email {
     }
 }
 
-## Change user email
+# Change user email
 sub do_restore_email {
     wwslog('info', 'do_restore_email');
     wwslog('debug2', 'do_restore_email from %s to %s',$session->{'email'},$session->{'restore_email'} );
@@ -5757,7 +5724,7 @@ sub do_restore_email {
     return 'home';
 }
 
-## list available templates
+# list available templates
 sub do_ls_templates  {
     wwslog('info', 'do_ls_templates');
 
@@ -5867,7 +5834,7 @@ sub do_view_template {
     return 1;
 }
 
-##  template copy
+# template copy
 sub do_copy_template {
     wwslog('info', 'do_copy_template');
 
@@ -5938,8 +5905,7 @@ sub do_copy_template {
     return ('edit_template');
 }
 
-
-## manage the rejection templates
+# manage the rejection templates
 sub do_manage_template {
     wwslog('info', '(%s,%s)', $in{'subaction'}, $in{'message_template'});
 
@@ -6121,7 +6087,7 @@ sub do_manage_template {
     return 1;
 }
 
-## online template edition
+# online template edition
 sub do_edit_template  {
 
     $in{'subdir'} ||= 'default';
@@ -6176,11 +6142,7 @@ sub do_edit_template  {
 
 }
 
-
-   ## Server show colors, and install static css in future edit colors etc
-
-
-   ## Server show colors, and install static css in futur edit colors etc
+# Server show colors, and install static css in futur edit colors etc
 sub do_skinsedit {
     wwslog('info', 'do_skinsedit');
     my $f;
@@ -6295,7 +6257,7 @@ sub do_skinsedit {
     return 1;
 }
 
- ## Multiple add
+# Multiple add
 sub do_add_request {
      wwslog('info', 'do_add_request(%s)', $in{'email'});
 
@@ -6305,19 +6267,16 @@ sub do_add_request {
      return 1;
  }
 
-
-####################################################
-#  do_add
-####################################################
-#  Adds a user to a list (requested by an other user)
+# Adds a user to a list (requested by an other user)
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : 'loginrequest'
-#      | ($in{'previous_action'} || 'review')
-#      | undef
-####################################################
-## TODO: vérifier validité email
+# Return value:
+# 'loginrequest' | ($in{'previous_action'} || 'review') | undef
+#
+# TODO:
+# check email validity
 sub do_add {
      wwslog('info', 'do_add(%s)', $in{'email'}||$in{'pending_email'});
      my $subscriptions = $list->get_subscription_requests();
@@ -6471,20 +6430,16 @@ sub do_add {
      return $in{'previous_action'} || 'review';
  }
 
-
-
-####################################################
-#  do_del
-####################################################
-#  Deletes a user from a list (requested by an other user)
+# Deletes a user from a list (requested by an other user)
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : 'loginrequest'
-#      | ($in{'previous_action'} || 'review') | undef
+# Return value:
+# 'loginrequest' | ($in{'previous_action'} || 'review') | undef
 #
-####################################################
- ## TODO: vérifier validité email
+# TODO:
+# check email validity
 sub do_del {
      wwslog('info', 'do_del()');
 
@@ -6583,18 +6538,14 @@ sub do_del {
      return $in{'previous_action'} || 'review';
  }
 
-
-####################################################
-#  do_modindex
-####################################################
-#  Web page for an editor to moderate documents and
-#  and/or to tag message in message topic context
+# Web page for an editor to moderate documents and
+# and/or to tag message in message topic context
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : 'loginrequest' | 'admin' | '1' | undef
-#
-#######################################################
+# Return value:
+# 'loginrequest' | 'admin' | '1' | undef
 sub do_modindex {
      wwslog('info', 'do_modindex');
      my $msg;
@@ -6711,7 +6662,7 @@ sub do_modindex {
      return 1;
  }
 
-### installation of moderated documents of shared
+# installation of moderated documents of shared
 sub do_d_install_shared {
      wwslog('info', 'do_d_install_shared(%s)', $in{'id'});
 
@@ -6835,7 +6786,7 @@ sub do_d_install_shared {
      return 'modindex';
  }
 
-### reject moderated documents of shared
+# reject moderated documents of shared
 sub do_d_reject_shared {
      wwslog('info', 'do_d_reject_shared(%s)', $in{'id'});
 
@@ -6898,19 +6849,14 @@ sub do_d_reject_shared {
      return 'modindex';
  }
 
-
-
-####################################################
-#  do_reject
-####################################################
-#  Moderation of messages : rejects messages and notifies
-#  their senders. If in{'blacklist'} add sender to list blacklist
+# Moderation of messages : rejects messages and notifies
+# their senders. If in{'blacklist'} add sender to list blacklist
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : 'loginrequest' | 'modindex' | undef
-#
-####################################################
+# Return value:
+# 'loginrequest' | 'modindex' | undef
 sub do_reject {
 
      # toggle selection javascript have a distinction of spam and ham base on the checkbox name . It is not useful here so join id list and idspam list.
@@ -7028,17 +6974,14 @@ sub do_reject {
      return 'modindex';
  }
 
-####################################################
-#  do_distribute
-####################################################
-#  Moderation of messages : distributes moderated
-#  messages and tag it in message moderation context
+# Moderation of messages : distributes moderated
+# messages and tag it in message moderation context
 #
-# IN : - id of message to distribute. This value can also be in idspam parameter
+# Parameters:
+# * id of message to distribute. This value can also be in idspam parameter
 #
-# OUT : 'loginrequest' | 'modindex' | undef
-#
-######################################################
+# Return value:
+# 'loginrequest' | 'modindex' | undef
 sub do_distribute {
 
      $in{'id'} .= ','.$in{'idspam'} if ( $in{'idspam'});
@@ -7134,17 +7077,14 @@ sub do_distribute {
      return 'modindex';
 }
 
-####################################################
-#  do_viewmod
-####################################################
-#  Web page for an editor to moderate a mail and/or
-#  to tag it in message topic context
+# Web page for an editor to moderate a mail and/or
+# to tag it in message topic context
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'login,request' | '1' | undef
-#
-####################################################
+# Return value:
+# 'login,request' | '1' | undef
 sub do_viewmod {
      wwslog('info', 'do_viewmod(%s,%s)', $in{'id'},$in{'file'});
 
@@ -7195,10 +7135,10 @@ sub do_viewmod {
      return 1;
  }
 
-## Edition of list/sympa files
-## No list -> sympa files (helpfile,...)
-## TODO : upload
-## TODO : edit family file ???
+# Edition of list/sympa files
+# No list -> sympa files (helpfile,...)
+# TODO : upload
+# TODO : edit family file ???
 sub do_editfile {
      wwslog('info', 'do_editfile(%s)', $in{'file'});
 
@@ -7332,13 +7272,7 @@ sub do_editfile {
      return 1;
  }
 
-
-
-
-
-#####################################################################################
-
- ## Saving of list files
+# Saving of list files
 sub do_savefile {
      wwslog('info', 'do_savefile(%s)', $in{'file'});
 
@@ -7459,7 +7393,7 @@ sub do_savefile {
      return $pa;
  }
 
- ## Access to web archives
+# Access to web archives
 sub do_arc {
     wwslog('info', 'do_arc(%s, %s)', $in{'month'}, $in{'arc_file'});
     my $latest;
@@ -7618,7 +7552,7 @@ sub do_arc {
     return 1;
 }
 
- ## Access to latest web archives
+# Access to latest web archives
 sub do_latest_arc {
      wwslog('info', 'do_latest_arc(%s,%s,%s)', $in{'list'}, $in{'for'}, $in{'count'});
 
@@ -7802,21 +7736,17 @@ sub get_timelocal_from_date {
 
 }
 
-
-
-####################################################
-#  do_remove_arc
-####################################################
+# request by list owner or message sender to remove message from archive
+# Create in the outgoing spool a file containing the message-id of mesage to be removed
 #
-#  request by list owner or message sender to remove message from archive
-#  Create in the outgoing spool a file containing the message-id of mesage to be removed
+# Parameters:
+# * list@host
+# * yyyy
+# * month
+# * a tab of msgid
 #
-# IN : list@host yyyy month and a tab of msgid
-#
-# OUT :  1 | undef
-#
-####################################################
-
+# Return value:
+# 1 | undef
 sub do_remove_arc {
     wwslog('info', 'do_remove_arc : list %s, yyyy %s, mm %s, #message %s', $in{'list'}, $in{'yyyy'}, $in{'month'});
 
@@ -7861,19 +7791,14 @@ sub do_remove_arc {
     return 1;
 }
 
-
-####################################################
-#  do_send_me
-####################################################
-#  Sends a web archive message to a
-#  requesting user
-#  It uses Sympa::Mail::mail_forward() to do it.
+# Sends a web archive message to a requesting user
+# It uses Sympa::Mail::mail_forward() to do it.
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'arc' | 1 | undef
-#
-####################################################
+# Return value:
+# 'arc' | 1 | undef
 sub do_send_me {
      wwslog('info', 'do_send_me(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
@@ -7937,16 +7862,13 @@ sub do_send_me {
      return 1;
  }
 
-####################################################
-#  do_view_source
-####################################################
-#  Display message as text/plain in archives
+# Display message as text/plain in archives
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'arc' | 1 | undef
-#
-####################################################
+# Return value:
+# 'arc' | 1 | undef
 sub do_view_source   {
      wwslog('info', 'do_view_source(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
@@ -8013,17 +7935,13 @@ sub do_view_source   {
      return 1;
  }
 
-
-####################################################
-#  do_tracking
-####################################################
-#  Display notifications status when a recipient is not usually delivered
+# Display notifications status when a recipient is not usually delivered
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'arc' | 1 | undef
-#
-####################################################
+# Return value:
+# 'arc' | 1 | undef
 sub do_tracking   {
      wwslog('info', 'do_tracking(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
@@ -8079,7 +7997,7 @@ sub do_tracking   {
      return 1;
  }
 
- ## Output an initial form to search in web archives
+# Output an initial form to search in web archives
 sub do_arcsearch_form {
      wwslog('info', 'do_arcsearch_form(%s)', $param->{'list'});
 
@@ -8101,7 +8019,7 @@ sub do_arcsearch_form {
      return 1;
  }
 
- ## Search in web archives
+# Search in web archives
 sub do_arcsearch {
      wwslog('info', 'do_arcsearch(%s)', $param->{'list'});
 
@@ -8236,7 +8154,7 @@ sub do_arcsearch {
      return 1;
  }
 
- ## Search message-id in web archives
+# Search message-id in web archives
 sub do_arcsearch_id {
      wwslog('info', 'do_arcsearch_id(%s,%s,%s)', $param->{'list'},$in{'archive_name'},$in{'msgid'});
 
@@ -8313,7 +8231,7 @@ sub do_arcsearch_id {
      return 1;
  }
 
- # get pendings lists
+# get pendings lists
 sub do_get_pending_lists {
 
      wwslog('info', 'get_pending_lists');
@@ -8332,7 +8250,7 @@ sub do_get_pending_lists {
      return 1;
  }
 
- # get closed lists
+# get closed lists
 sub do_get_closed_lists {
 
      wwslog('info', 'get_closed_lists');
@@ -8350,7 +8268,7 @@ sub do_get_closed_lists {
      return 1;
  }
 
- # get ordered latest lists
+# get ordered latest lists
 sub do_get_latest_lists {
 
      wwslog('info', 'get_latest_lists');
@@ -8429,7 +8347,7 @@ sub do_get_inactive_lists {
      return 1;
  }
 
- # get ordered biggest lists
+# get ordered biggest lists
 sub do_get_biggest_lists {
 	wwslog('info', 'get_biggest_lists');
 
@@ -8455,7 +8373,7 @@ sub do_get_biggest_lists {
 	return 1;
 }
 
-## show a list parameters
+# show a list parameters
 sub do_set_pending_list_request {
      wwslog('info', 'set_pending_list(%s)',$in{'list'});
 
@@ -8477,7 +8395,7 @@ sub do_set_pending_list_request {
      return 1;
  }
 
- ## show a list parameters
+# show a list parameters
 sub do_install_pending_list {
      wwslog('info', 'do_install_pending_list(%s,%s,%s)',$in{'list'},$in{'status'},$in{'notify'});
 
@@ -8574,36 +8492,14 @@ sub do_install_pending_list {
      return 1;
  }
 
-
-=pod
-
-=head2 sub do_create_list
-
-Creates a list using a list template
-
-=head3 Parameters
-
-=over
-
-=item * I<None>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<1>, if no problem is encountered
-
-=item * I<undef>, if anything goes wrong
-
-=item * I<'loginrequest'> if no user is logged in at the time the function is called.
-
-=back
-
-=cut
-
-## create a liste using a list template.
+# Creates a list using a list template
+#
+# Parameters:
+# none
+#
+# Return value:
+# A true value on sucess, undef if something went wrong, or 'loginrequest'> if
+# no user is # logged in at the time the function is called
 sub do_create_list {
 
      wwslog('info', 'do_create_list(%s,%s,%s)',$in{'listname'},$in{'subject'},$in{'template'});
@@ -8744,35 +8640,14 @@ sub do_create_list {
      return 1;
  }
 
-=pod
-
-=head2 sub do_create_list_request
-
-Sends back the list creation edition form.
-
-=head3 Parameters
-
-=over
-
-=item * I<None>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<1>, if no problem is encountered
-
-=item * I<undef>, if anything goes wrong
-
-=item * I<'loginrequest'> if no user is logged in at the time the function is called.
-
-=back
-
-=cut
-
- ## Return the creation form
+# Sends back the list creation edition form.
+#
+# Parameters:
+# none
+#
+# Return value:
+# A true value on sucess, undef if something went wrong, or 'loginrequest'> if
+# no user is # logged in at the time the function is called
 sub do_create_list_request {
      wwslog('info', 'do_create_list_request()');
 
@@ -8836,7 +8711,7 @@ sub do_create_list_request {
 
  }
 
-## WWSympa Home-Page
+# WWSympa Home-Page
 sub do_home {
     wwslog('info', 'do_home');
 
@@ -8996,7 +8871,7 @@ sub do_viewbounce {
      return 1;
  }
 
- ## some help for listmaster and developpers
+# some help for listmaster and developpers
 sub do_scenario_test {
      wwslog('info', 'do_scenario_test');
 
@@ -9050,7 +8925,7 @@ sub do_scenario_test {
      return 1;
  }
 
- ## Bouncing addresses review
+# Bouncing addresses review
 sub do_reviewbouncing {
      wwslog('info', 'do_reviewbouncing(%s)', $in{'page'});
      my $size = $in{'size'} || $wwsconf->{'review_page_size'};
@@ -9169,7 +9044,7 @@ sub do_resetbounce {
      return $in{'previous_action'} || 'review';
  }
 
- ## Rebuild an archive using arctxt/
+# Rebuild an archive using arctxt/
 sub do_rebuildarc {
      wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
 
@@ -9191,7 +9066,7 @@ sub do_rebuildarc {
      return 'admin';
 }
 
-## Rebuild all archives using arctxt/
+# Rebuild all archives using arctxt/
 sub do_rebuildallarc {
     wwslog('info', 'do_rebuildallarc');
 
@@ -9540,14 +9415,14 @@ sub do_select_voot_groups {
 	}
 }
 
- ## Search among lists
+# Search among lists
 sub do_edit_attributes {
      wwslog('info', 'do_edit_attributes(%s)', $in{'filter'});
 
      return 1;
  }
 
- ## Search among lists
+# Search among lists
 sub do_search_list {
      wwslog('info', 'do_search_list(%s)', $in{'filter'});
 
@@ -10144,8 +10019,7 @@ sub do_edit_list {
      return 'edit_list_request';
  }
 
- ## Shift tokens to get a reference to the desired
- ## entry in $var (recursive)
+# Shift tokens to get a reference to the desired entry in $var (recursive)
 sub _shift_var {
      my ($i, $var, @tokens) = @_;
      wwslog('debug3','shift_var(%s,%s,%s)',$i, $var, join('.',@tokens));
@@ -10193,35 +10067,14 @@ sub _shift_var {
      return $newvar;
  }
 
-=pod
-
-=head2 sub do_edit_list_request
-
-Sends back the list config edition form.
-
-=head3 Parameters
-
-=over
-
-=item * I<None>
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<1>, if no problem is encountered
-
-=item * I<undef>, if anything goes wrong
-
-=item * I<'loginrequest'> if no user is logged in at the time the function is called.
-
-=back
-
-=cut
-
- ## Send back the list config edition form
+# Sends back the list config edition form.
+#
+# Parameters:
+# none
+#
+# Return value:
+# A true value on sucess, undef if something went wrong, or 'loginrequest'> if
+# no user is # logged in at the time the function is called
 sub do_edit_list_request {
      wwslog('info', 'do_edit_list_request(%s)', $in{'group'});
 
@@ -10321,34 +10174,14 @@ sub _check_new_values {
     }
 }
 
-=pod
-
-=head2 sub _prepare_edit_form(LIST)
-
-Prepares config data to be sent in the edition form. Adds to the parameters array a hash for each parameter to be edited.
-
-=head3 Parameters
-
-=over
-
-=item * I<$list>, a List object
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<1>, if no problem is encountered
-
-=item * I<undef>, if anything goes wrong
-
-=back
-
-=cut
-
-## Prepare config data to be sent in the
-## edition form
+# Prepares config data to be sent in the edition form. Adds to the parameters
+# array a hash for each parameter to be edited.
+#
+# Parameters
+# * list: a list object
+#
+# Return value:
+# A true value on sucess, undef otherwise.
 sub _prepare_edit_form {
     my $list = shift;
     my $list_config = Sympa::Tools::dup_var($list->{'admin'});
@@ -10457,40 +10290,20 @@ sub _prepare_edit_form {
     return 1;
  }
 
-=pod
-
-=head2 sub _prepare_data(STRING $name, HASH_Ref $struct, SCALAR $data, STRING $may_edit, FAMILY $family, STRING $main_p)
-
-Returns a reference to a hash containing the data used to edit the parameter (of name $name, corresponding to the structure $struct in pinfo, with the $may_edit editing status) containing the data in the Sympa web interface.
-
-=head3 Parameters
-
-=over
-
-=item * I<$name> (STRING), the name of the parameter processed
-
-=item * I<$struct> (HASH_Ref), a ref to the hash describing this parameter in %Sympa::List::pinfo
-
-=item * I<$data> (), the value(s) taken by this parameter in the current list. Can be a reference to a list or the value of a single parameter.
-
-=item * I<$may_edit> (STRING), the editing status of this parameter in the current context.
-
-=item * I<$family> (FAMILY), the family the list belongs to.
-
-=item * I<$main_p> (STRING), the prefix composing the complete name of the parameter.
-
-=back
-
-=head3 Return
-
-=over
-
-=item * I<$p_glob>, a reference to a hash containing the data used to edit the parameter.
-
-=back
-
-=cut
-
+# Returns a reference to a hash containing the data used to edit the parameter
+# (of name $name, corresponding to the structure $struct in pinfo, with the
+# $may_edit editing status) containing the data in the Sympa web interface.
+#
+# Parameters:
+# * $name: (STRING), the name of the parameter processed
+# * $struct: (HASH_Ref), a ref to the hash describing this parameter in %Sympa::List::pinfo
+# * $data: the value(s) taken by this parameter in the current list. Can be a reference to a list or the value of a single parameter.
+# * $may_edit: (STRING), the editing status of this parameter in the current context.
+# * $family: (FAMILY), the family the list belongs to.
+# * $main_p: (STRING), the prefix composing the complete name of the parameter.
+#
+# Return value:
+# An hashref containing the data used to edit the parameter.
 sub _prepare_data {
     my ($name, $struct,$data,$may_edit,$family,$main_p) = @_;
     #    wwslog('debug2', '_prepare_data(%s, %s)', $name, $data);
@@ -10721,7 +10534,7 @@ sub _prepare_data {
      return $p_glob;
  }
 
-## Restrict allowed values in the hash
+# Restrict allowed values in the hash
 sub _restrict_values {
     my $values = shift;    #ref on hash of values
     my $allowed = shift;   #ref on hash of allowed values
@@ -10734,7 +10547,7 @@ sub _restrict_values {
     }
 }
 
- ## NOT USED anymore (expect chinese)
+# NOT USED anymore (expect chinese)
 sub do_close_list_request {
      wwslog('info', 'do_close_list_request()');
 
@@ -10748,7 +10561,7 @@ sub do_close_list_request {
  }
 
 
- # in order to rename a list you must be list owner and you must be allowed to create new list
+# in order to rename a list you must be list owner and you must be allowed to create new list
 sub do_rename_list_request {
      wwslog('info', 'do_rename_list_request()');
 
@@ -11054,9 +10867,8 @@ sub show_cert {
      return 1;
  }
 
- ## Function synchronize
- ## Return true if the file in parameter can be overwrited
- ## false if it has changes since the parameter date_epoch
+# Return true if the file in parameter can be overwrited
+# false if it has changes since the parameter date_epoch
 sub synchronize {
      # args : 'path' , 'date_epoch'
      my $path = shift;
@@ -11068,43 +10880,36 @@ sub synchronize {
  }
 
 
- #*******************************************
- # Function : d_access_control
- # Description : return a hash with privileges
- #               in read, edit, control
- #               if first parameter require
- #               it
- #******************************************
+# return a hash with privileges in read, edit, control
+# if first parameter require it
+#
+# Parameters:
+# (\%mode,$path)
+# if mode->{'read'} control access only for read
+# if mode->{'edit'} control access only for edit
+# if mode->{'control'} control access only for control
 
- ## Regulars
- #  read(/) = default (config list)
- #  edit(/) = default (config list)
- #  control(/) = not defined
+# Return value:
+# $result{'may'}{'read'} == $result{'may'}{'edit'} == $result{'may'}{'control'}  if is_author else :
+# $result{'may'}{'read'} = 0 or 1 (right or not)
+# $result{'may'}{'edit'} = 0(not may edit) or 0.5(may edit with moderation) or 1(may edit ) : it is not a boolean anymore
+# $result{'may'}{'control'} = 0 or 1 (right or not)
+# $result{'reason'}{'read'} = string for authorization_reject.tt2 when may_read == 0
+# $result{'reason'}{'edit'} = string for authorization_reject.tt2 when may_edit == 0
+# $result{'scenario'}{'read'} = scenario name for the document
+# $result{'scenario'}{'edit'} = scenario name for the document
+#
+# Regulars
+#  read(/) = default (config list)
+#  edit(/) = default (config list)
+#  control(/) = not defined
 #  read(A/B)= (read(A) && read(B)) ||
- #             (author(A) || author(B))
- #  edit = idem read
- #  control (A/B) : author(A) || author(B)
- #  + (set owner A/B) if (empty directory &&
- #                        control A)
-
-
+#             (author(A) || author(B))
+#  edit = idem read
+#  control (A/B) : author(A) || author(B)
+#  + (set owner A/B) if (empty directory &&
+#                        control A)
 sub d_access_control {
-     # Arguments:
-     # (\%mode,$path)
-     # if mode->{'read'} control access only for read
-     # if mode->{'edit'} control access only for edit
-     # if mode->{'control'} control access only for control
-
-     # return the hash (
-     # $result{'may'}{'read'} == $result{'may'}{'edit'} == $result{'may'}{'control'}  if is_author else :
-     # $result{'may'}{'read'} = 0 or 1 (right or not)
-     # $result{'may'}{'edit'} = 0(not may edit) or 0.5(may edit with moderation) or 1(may edit ) : it is not a boolean anymore
-     # $result{'may'}{'control'} = 0 or 1 (right or not)
-     # $result{'reason'}{'read'} = string for authorization_reject.tt2 when may_read == 0
-     # $result{'reason'}{'edit'} = string for authorization_reject.tt2 when may_edit == 0
-     # $result{'scenario'}{'read'} = scenario name for the document
-     # $result{'scenario'}{'edit'} = scenario name for the document
-
 
      # Result
      my %result;
@@ -11323,7 +11128,7 @@ sub d_access_control {
       return %result;
   }
 
-## return the mode of editing included in $action : 0, 0.5 or 1
+# return the mode of editing included in $action : 0, 0.5 or 1
 sub find_edit_mode{
     my $action=shift;
 
@@ -11338,7 +11143,7 @@ sub find_edit_mode{
     return $result;
 }
 
-## return the mode of editing : 0, 0.5 or 1 :
+# return the mode of editing : 0, 0.5 or 1 :
 #  do the merging between 2 args of right access edit  : "0" > "0.5" > "1"
 #  instead of a "and" between two booleans : the most restrictive right is
 #  imposed
@@ -11357,10 +11162,7 @@ sub merge_edit{
     return $result;
 }
 
-
-
-
- # create the root shared document
+# create the root shared document
 sub do_d_admin {
      wwslog('info', 'do_d_admin(%s,%s)', $in{'list'}, $in{'d_admin'});
 
@@ -11453,8 +11255,7 @@ sub do_d_admin {
      return 'admin';
  }
 
- # Function which sorts a hash of documents
- # Sort by various parameters
+# Sort by various parameters
 sub by_order {
      my $order = shift;
      my $hash = shift;
@@ -11481,13 +11282,7 @@ sub by_order {
      }
  }
 
-
- #*******************************************
-# Function : do_d_read
- # Description : reads a file or a directory
- #******************************************
-##
-## Function do_d_read
+# reads a file or a directory
 sub do_d_read {
      wwslog('info', 'do_d_read(%s)', $in{'path'});
 
@@ -12005,7 +11800,7 @@ sub do_d_read {
      return 1;
 }
 
-## return a ref on an array of file (or subdirecties) to show to user
+# return a ref on an array of file (or subdirecties) to show to user
 sub get_directory_content {
     my $tmpdir = shift;
     my $user = shift;
@@ -12032,7 +11827,7 @@ sub get_directory_content {
 }
 
 
-## return an array that contains only file from @$refdir that belongs to $user
+# return an array that contains only file from @$refdir that belongs to $user
 sub select_my_files {
     my ($user,$path,$refdir)=@_;
     my @new_dir;
@@ -12048,8 +11843,7 @@ sub select_my_files {
     return @new_dir;
 }
 
- ## Useful function to get off the slash at the end of the path
- ## at its end
+# Useful function to get off the slash at the end of the path at its end
 sub no_slash_end {
      my $path = shift;
 
@@ -12059,7 +11853,7 @@ sub no_slash_end {
      return $path;
  }
 
-## return a visible path from a moderated file or not
+# return a visible path from a moderated file or not
 sub make_visible_path {
     my $path = shift;
 
@@ -12086,7 +11880,7 @@ sub make_visible_path {
 }
 
 
- ## Access to latest shared documents
+# Access to latest shared documents
 sub do_latest_d_read {
      wwslog('info', 'do_latest_d_read(%s,%s,%s)', $in{'list'}, $in{'for'}, $in{'count'});
 
@@ -12166,7 +11960,7 @@ sub do_latest_d_read {
      return 1;
  }
 
-##  browse a directory recursively and return documents younger than $oldest_day
+# browse a directory recursively and return documents younger than $oldest_day
 sub directory_browsing {
      my ($dir,$oldest_day,$may_control) = @_;
      wwslog('debug2',"directory_browsing($dir,$oldest_day)");
@@ -12335,12 +12129,7 @@ sub directory_browsing {
 
  }
 
- #*******************************************
- # Function : do_d_editfile
- # Description : prepares the parameters to
- #               edit a file
- #*******************************************
-
+# prepares the parameters to edit a file
 sub do_d_editfile {
      wwslog('info', 'do_d_editfile(%s)', $in{'path'});
 
@@ -12478,12 +12267,7 @@ sub do_d_editfile {
      return 1;
  }
 
-  #*******************************************
- # Function : do_d_properties
- # Description : prepares the parameters to
- #               change a file properties
- #*******************************************
-
+# prepares the parameters to change a file properties
 sub do_d_properties {
      wwslog('info', 'do_d_properties(%s)', $in{'path'});
 
@@ -12611,12 +12395,7 @@ sub do_d_properties {
      return 1;
  }
 
- #*******************************************
- # Function : do_d_describe
- # Description : Saves the description of
- #               the file
- #******************************************
-
+# Saves the description of the file
 sub do_d_describe {
      wwslog('info', 'do_d_describe(%s)', $in{'path'});
 
@@ -12762,12 +12541,7 @@ sub do_d_describe {
 
  }
 
- #*******************************************
- # Function : do_d_savefile
- # Description : Saves a file edited in a
- #               text area
- #******************************************
-
+# Saves a file edited in a text area
 sub do_d_savefile {
      wwslog('info', 'do_d_savefile(%s)', $in{'path'});
 
@@ -12976,12 +12750,7 @@ sub do_d_savefile {
       }
  }
 
- #*******************************************
- # Function : do_d_overwrite
- # Description : Overwrites a file with a
- #               uploaded file
- #******************************************
-
+# Overwrites a file with a uploaded file
 sub do_d_overwrite {
      wwslog('info', 'do_d_overwrite(%s)', $in{'path'});
 
@@ -13182,12 +12951,7 @@ sub do_d_overwrite {
      return 'd_editfile';
  }
 
- #*******************************************
- # Function : do_d_upload
- # Description : Creates a new file with a
- #               uploaded file
-#******************************************
-
+# Creates a new file with a uploaded file
 sub do_d_upload {
      # Parameters of the uploaded file (from d_read.tt2)
      my $fn = $in{'uploaded_file'};
@@ -13671,7 +13435,7 @@ sub do_d_upload {
      return 'd_read';
  }
 
-## Creation of a picture file
+# Creation of a picture file
 sub creation_picture_file {
     my($root_dir, $path ,$fname)=@_;
 
@@ -13704,7 +13468,7 @@ sub creation_picture_file {
 }
 
 
-## Creation of a shared file
+# Creation of a shared file
 sub creation_shared_file {
     my($shareddir,$path,$fname)=@_;
 
@@ -13745,7 +13509,7 @@ sub creation_shared_file {
 
 }
 
-## Creation of the description file
+# Creation of the description file
 sub creation_desc_file {
     my($shareddir,$path,$fname,%access)=@_;
 
@@ -13763,12 +13527,7 @@ sub creation_desc_file {
      close DESC;
 }
 
- #*******************************************
- # Function : do_d_unzip
- # Description : unzip a file or a tree structure
- #               from an uploaded zip file
- #******************************************
-
+# Description : unzip a file or a tree structure from an uploaded zip file
 sub do_d_unzip {
      # Parameters of the uploaded file (from d_read.tt2)
      my $fn = $in{'unzipped_file'};
@@ -13927,7 +13686,7 @@ sub do_d_unzip {
      return 'd_read'
  }
 
-## unzip a shared file in the tmp directory
+# unzip a shared file in the tmp directory
 sub d_unzip_shared_file {
     my ($zip_abs_dir,$fname) = @_;
     wwslog('info', 'd_unzip_shared_file(%s/%s)', $zip_abs_dir,$fname);
@@ -13962,7 +13721,7 @@ sub d_unzip_shared_file {
     return $status;
 }
 
-## Install file hierarchy from $tmp_dir directory to $shareddir/$path directory
+# Install file hierarchy from $tmp_dir directory to $shareddir/$path directory
 sub d_install_file_hierarchy {
     my ($tmp_dir,$shareddir,$path,$access_dir)=@_;
     wwslog('debug2', 'd_install_file_hierarchy(%s,%s)',$tmp_dir,$path);
@@ -14027,7 +13786,7 @@ sub d_install_file_hierarchy {
     }
 }
 
-## copy $dname from $from to $list->{shared}/$path if rights are ok
+# copy $dname from $from to $list->{shared}/$path if rights are ok
 sub d_copy_rec_dir {
     my ($from,$path,$dest_dir,$dname) = @_;
     wwslog('debug3', 'd_copy_rec_dir(%s,%s,%s)',$from,$dest_dir,$dname);
@@ -14180,7 +13939,7 @@ sub d_copy_rec_dir {
     }
 }
 
-## copy $from/$fname to $list->{shared}/$path if rights are ok
+# copy $from/$fname to $list->{shared}/$path if rights are ok
 sub d_copy_file {
     my ($from,$path,$dest_dir,$fname,$access_dir) = @_;
     wwslog('debug3', 'd_copy_file(%s,%s,%s',$from,$dest_dir,$fname);
@@ -14347,7 +14106,7 @@ sub d_copy_file {
     return 1;
 }
 
-## return information on file or dir : existing and edit rights for the user in $param
+# return information on file or dir : existing and edit rights for the user in $param
 sub d_test_existing_and_rights {
     my ($path,$name,$dest_dir) = @_;
 
@@ -14376,13 +14135,7 @@ sub d_test_existing_and_rights {
     return $return;
 }
 
-
- #*******************************************
- # Function : do_d_delete
- # Description : Delete an existing document
- #               (file or directory)
- #******************************************
-
+# Description : Delete an existing document (file or directory)
 sub do_d_delete {
      wwslog('info', 'do_d_delete(%s)', $in{'path'});
 
@@ -14500,12 +14253,7 @@ sub do_d_delete {
      return 'd_read';
  }
 
- #*******************************************
- # Function : do_d_rename
- # Description : Rename a document
- #               (file or directory)
- #******************************************
-
+# Description : Rename a document (file or directory)
 sub do_d_rename {
      wwslog('info', 'do_d_rename(%s)', $in{'path'});
 
@@ -14638,10 +14386,7 @@ sub do_d_rename {
      return 'd_read';
  }
 
- #*******************************************
- # Function : do_d_create_dir
- # Description : Creates a new file / directory
- #******************************************
+# Description : Creates a new file / directory
 sub do_d_create_dir {
      wwslog('info', 'do_d_create_dir(%s)', $in{'name_doc'});
 
@@ -14844,15 +14589,7 @@ sub do_d_create_dir {
      return 'd_editfile';
  }
 
- ############## Control
-
-
- #*******************************************
- # Function : do_d_control
- # Description : prepares the parameters
- #               to edit access for a doc
- #*******************************************
-
+# prepares the parameters to edit access for a doc
 sub do_d_control {
      wwslog('info', "do_d_control $in{'path'}");
 
@@ -14991,12 +14728,7 @@ sub do_d_control {
  }
 
 
- #*******************************************
- # Function : do_d_change_access
- # Description : Saves the description of
- #               the file
- #******************************************
-
+# Saves the description of the file
 sub do_d_change_access {
      wwslog('info', 'do_d_change_access(%s)', $in{'path'});
 
@@ -15260,16 +14992,13 @@ sub do_arc_protect {
      return 1;
  }
 
-####################################################
-#  do_remind
-####################################################
 #  Sends a remind command to sympa.pl.
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'loginrequest' | 'admin' | undef
-#
-#####################################################
+# Return value:
+# 'loginrequest' | 'admin' | undef
 sub do_remind {
      wwslog('info', 'do_remind()');
 
@@ -15348,13 +15077,7 @@ sub do_load_cert {
      return 1;
  }
 
-
-#*******************************************
-# Function : do_upload_pictures
-# Description : Creates a new pictures with a
-#               uploaded file
-#******************************************
-
+# Creates a new pictures with a uploaded file
 sub do_upload_pictures {
     # Parameters of the uploaded file (from suboptions.tt2)
     my $fn = $query->param('uploaded_file');
@@ -15427,7 +15150,7 @@ sub do_upload_pictures {
 
 }
 
-## Delete a picture file
+# Delete a picture file
 sub do_delete_pictures {
     wwslog('info', 'do_delete_pictures(%s,%s,%s)', $param->{'list'},$robot,$param->{'user'}{'email'});
 
@@ -15451,20 +15174,14 @@ sub do_delete_pictures {
     }
 }
 
-
-####################################################
-#  do_change_email_request
-####################################################
-#  Checks a user's new email address and passes it
-#  to 'change_email'
+# Checks a users new email address by sending a ticket to the new email address
+# and demanding that they click it to verify. Leads to 'change_email'
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : '1' | 'change_email'
-#
-####################################################
-## Checks a users new email address by sending a ticket to the new email address
-## and demanding that they click it to verify. Leads to 'change_email'
+# Return value:
+# '1' | 'change_email'
 sub do_change_email_request {
     wwslog('info','do_change_email_request(%s)', $in{'new_email'});
 
@@ -15487,19 +15204,13 @@ sub do_change_email_request {
     return '1';
 }
 
-
-
-####################################################
-#  do_change_email
-####################################################
-#  Changes a user's email address in Sympa environment
+# Changes a user's email address in Sympa environment
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : '1' | 'pref' | undef
-#
-####################################################
-## Change a user's email address in Sympa environment
+# Return value:
+# '1' | 'pref' | undef
 sub do_change_email {
      wwslog('info','do_change_email(%s)', $in{'email'});
 
@@ -15585,19 +15296,14 @@ sub do_change_email {
 
  }
 
-####################################################
-#  do_suspend_request
-####################################################
-#  Suspend a subscription to one or more lists     #
-#  for a given period: start date and end date     #
-#  (or unlimited). The user may at any time        #
-#  stop the suspension.                            #
-#                                                  #
-#  IN : -                                          #
-#  OUT : 'loginrequest'                            #
-#      | 'info' | undef                            #
-#                                                  #
-####################################################
+# Suspend a subscription to one or more lists for a given period: start date
+# and end date (or unlimited). The user may at any time stop the suspension.
+#
+# Parameters:
+# none
+#
+# Return value:
+# 'loginrequest' | 'info' | undef
 sub do_suspend_request {
 
     wwslog('info', 'do_suspend_request', $in{'action'}); #Action = suspend_request
@@ -15661,16 +15367,12 @@ sub do_suspend_request {
     return 1;
 }
 
-####################################################
-#  do_suspend_request_action
-####################################################
-#  Suspend a subscription for lists.               #
-#  Action from the suspend form.                   #
+# Suspend a subscription for lists.               #
+# Action from the suspend form.                   #
 #                                                  #
 #  IN : %in : HASH with the form's values          #
 #  OUT : 'pref' : action                           #
 #      | 'info' | undef                            #
-####################################################
 sub do_suspend_request_action {
 
     wwslog('info', 'do_suspend_request_action', $in{'action'});
@@ -15832,9 +15534,6 @@ sub do_suspend_request_action {
     return 'suspend_request';
 }
 
-####################################################
-#  do_compose_mail
-####################################################
 sub do_compose_mail {
 
     wwslog('info', 'do_compose_mail', $in{'subaction'});
@@ -15883,19 +15582,14 @@ sub do_compose_mail {
     return 1;
  }
 
-####################################################
-#  do_send_mail
-####################################################
-#  Sends a message to a list by the Web interface
-#  or an html page getting its url.
-#  It uses Sympa::Mail::mail_file() to do it.
+# Sends a message to a list by the Web interface or an html page getting its
+# url. It uses Sympa::Mail::mail_file() to do it.
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'loginrequest'
-#      | 'info' | undef
-#
-####################################################
+# Return value:
+# 'loginrequest' | 'info' | undef
 sub do_send_mail {
 
     wwslog('info', 'do_send_mail');
@@ -16059,17 +15753,13 @@ sub do_send_mail {
 	}
 }
 
-####################################################
-#  do_request_topic
-####################################################
-#  Web page for a sender to tag his mail in message
-#  topic context.
+# Web page for a sender to tag his mail in message topic context.
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : '1' | 'loginrequest' | undef
-#
-####################################################
+# Return value:
+# '1' | 'loginrequest' | undef
 sub do_request_topic {
      wwslog('info', 'do_request_topic(%s)', $in{'authkey'});
 
@@ -16123,17 +15813,13 @@ sub do_request_topic {
      return 1;
  }
 
-####################################################
-#  do_tag_topic_by_sender
-####################################################
-#  Tag a mail by its sender : tag the mail and
-#  send a command CONFIRM for it
+# Tag a mail by its sender : tag the mail and  send a command CONFIRM for it
 #
-# IN : -
+# Parameters:
+# none
 #
-# OUT : 'loginrequest' | 'info' | undef
-#
-####################################################
+# Return value:
+# 'loginrequest' | 'info' | undef
 sub do_tag_topic_by_sender {
      wwslog('info', 'do_tag_topic_by_sender');
 
@@ -16257,7 +15943,7 @@ sub do_search_user {
      return 1;
  }
 
- ## Set language
+# Set language
 sub do_set_lang {
      wwslog('info', 'do_set_lang(%s)', $in{'lang'});
 
@@ -16293,7 +15979,7 @@ sub do_set_lang {
 
      return Sympa::Configuration::get_robot_conf($robot, 'default_home');
  }
- ## Function do_attach
+
 sub do_attach {
      wwslog('info', 'do_attach(%s,%s)', $in{'dir'},$in{'file'});
 
@@ -16432,7 +16118,7 @@ sub do_stats {
 }
 
 
-## setting the topics list for templates
+# setting the topics list for templates
 sub export_topics {
 
      my $robot = shift;
@@ -16605,7 +16291,7 @@ sub do_dump_scenario {
      return 1 ;
 }
 
- ## Subscribers' list
+# Subscribers' list
 sub do_dump {
      wwslog('info', "do_dump($param->{'list'})");
 
@@ -16675,7 +16361,7 @@ sub do_dump {
  }
 
 
-## returns a mailto according to list spam protection parameter
+# returns a mailto according to list spam protection parameter
 sub mailto {
 
     my $list = shift;
@@ -16734,7 +16420,7 @@ sub mailto {
 
 }
 
-## Returns a spam-protected form of email address
+# Returns a spam-protected form of email address
 sub get_protected_email_address {
     my ($local_part, $domain_part) = @_;
 
@@ -16753,10 +16439,9 @@ sub get_protected_email_address {
 
 }
 
- ## view logs stored in RDBMS
- ## this function as been writen in order to allow list owner and listmater to views logs
- ## of there robot or there is real problems with privacy policy and law in such services.
- ##
+# view logs stored in RDBMS
+# this function as been writen in order to allow list owner and listmater to views logs
+# of there robot or there is real problems with privacy policy and law in such services.
 sub do_viewlogs {
 	wwslog('info', 'do_viewlogs(%s)', $in{'page'});
 
@@ -16830,10 +16515,9 @@ sub do_viewlogs {
 	return 1;
 }
 
- ## view logs stored in RDBMS
- ## this function as been writen in order to allow list owner and listmater to views logs
- ## of there robot or there is real problems with privacy policy and law in such services.
- ##
+# view logs stored in RDBMS
+# this function as been writen in order to allow list owner and listmater to views logs
+# of there robot or there is real problems with privacy policy and law in such services.
 sub do_viewspools {
 
     my $spoolname = 'msg';
@@ -16925,7 +16609,7 @@ sub do_viewspools {
     return 1;
 }
 
- ## deliver a view of an message identified by the spoolname and the messagekey
+# deliver a view of an message identified by the spoolname and the messagekey
 sub do_viewspool_message {
 
     my $messagekey = $in{'messagekey'};
@@ -17000,7 +16684,7 @@ sub do_viewspool_message {
     return 1;
 }
 
- ## deliver a view of an message identified by the spoolname and the messagekey
+# deliver a view of an message identified by the spoolname and the messagekey
 sub do_viewspool_message_dump {
 
     my $messagekey = $in{'messagekey'};
@@ -17048,7 +16732,7 @@ sub do_viewspool_message_dump {
 }
 
 
- ## remove a message identified by the spoolname and the messagekey
+# remove a message identified by the spoolname and the messagekey
 sub do_viewspool_message_remove {
 
     my $messagekey = $in{'messagekey'};
@@ -17084,7 +16768,7 @@ sub do_viewspool_message_remove {
 }
 
 
-## Move a message from a spool to another one
+# Move a message from a spool to another one
 sub do_viewspool_message_mv {
 
     my $messagekey = $in{'messagekey'};
@@ -17160,7 +16844,7 @@ sub do_arc_manage {
     return 1;
 }
 
-## create a zip file with archives from (list,month)
+# create a zip file with archives from (list,month)
 sub do_arc_download {
 
     wwslog('info', "do_arc_download ($in{'list'})");
@@ -17382,7 +17066,7 @@ sub do_wsdl {
     return 1;
 }
 
-## Synchronize list members with data sources
+# Synchronize list members with data sources
 sub do_sync_include {
     wwslog('info', "do_sync_include($in{'list'})");
 
@@ -17394,7 +17078,7 @@ sub do_sync_include {
     return 'review';
 }
 
-## Review lists from a family
+# Review lists from a family
 sub do_review_family {
     wwslog('info', 'do_review_family');
 
@@ -17471,36 +17155,33 @@ sub _ca_process {
 	return $res;
 }
 
-################################################################
-## do_ca : executes a custom action
-##
-## IN:
-##    - 'custom_action': ther name of the custom action (and subsequent tt2 file to use, see below)
-##    - '@cap': an array of parameters.
-##
-## Custom actions are used to run specific code and/or display user defined templates.
-## You can create a <your_action>.pm module under etc/custom_actions or etc/<robot>/custom_actions (<your_action>_plugin package) with a "process" sub to add custom processing.
-## You can also create a <your_action>.tt2 file at the same place to display your template. You don't need the <head/> section or the <body/> tag.
-## The HTML code in '<your_action>.tt2' can make use of the parameters this way: [% cap.1 %] for param1, [% cap.2 %] for param, and so on.
-## If the module is not defined the template is displayed.
-##
-## You can even have a robot-common <your_action>.pm module with a specific <your_action>.tt2 for each robot as the file (.pm or .tt2) is conducted in this order :
-##   - expl/<robot>/<list>/custom_actions (if list context and robot support)
-##   - expl/<list>/custom_actions (if list context and no robot support)
-##   - etc/<robot>/custom_actions (if robot support)
-##   - etc/custom_actions
-##
-## Your custom action is reachable using URL: http://your-sympa-server-root-url/ca/your_action/param2/param2/param3/...
-##
-## The module process sub receive @cap entries as arguments
-##
-## The module process sub return value can be either :
-## 	1 to parse and display the custom action related tt2
-## 	<a global action name> to display its template
-## 	ca:<other_custom_action> to parse and display another custom action related tt2
-## 	a hash which entries will override $param ones, in case "custom_action" or "next_action" are present they act as described above.
-##
-###############################################################
+# executes a custom action
+#
+# Parameters:
+# * 'custom_action': ther name of the custom action (and subsequent tt2 file to use, see below)
+# * '@cap': an array of parameters.
+#
+# Custom actions are used to run specific code and/or display user defined templates.
+# You can create a <your_action>.pm module under etc/custom_actions or etc/<robot>/custom_actions (<your_action>_plugin package) with a "process" sub to add custom processing.
+# You can also create a <your_action>.tt2 file at the same place to display your template. You don't need the <head/> section or the <body/> tag.
+# The HTML code in '<your_action>.tt2' can make use of the parameters this way: [% cap.1 %] for param1, [% cap.2 %] for param, and so on.
+# If the module is not defined the template is displayed.
+#
+# You can even have a robot-common <your_action>.pm module with a specific <your_action>.tt2 for each robot as the file (.pm or .tt2) is conducted in this order :
+#   - expl/<robot>/<list>/custom_actions (if list context and robot support)
+#   - expl/<list>/custom_actions (if list context and no robot support)
+#   - etc/<robot>/custom_actions (if robot support)
+#   - etc/custom_actions
+#
+# Your custom action is reachable using URL: http://your-sympa-server-root-url/ca/your_action/param2/param2/param3/...
+#
+# The module process sub receive @cap entries as arguments
+#
+# The module process sub return value can be either :
+# 	1 to parse and display the custom action related tt2
+# 	<a global action name> to display its template
+# 	ca:<other_custom_action> to parse and display another custom action related tt2
+# 	a hash which entries will override $param ones, in case "custom_action" or "next_action" are present they act as described above.
 sub do_ca {
 	wwslog('info', 'custom action: %s (robot %s) with params: (%s, %s, %s, %s, %s)',$in{'custom_action'},$robot,$in{'cap'});
 
@@ -17541,37 +17222,34 @@ sub do_ca {
 	return undef;
 }
 
-################################################################
-## do_ca : executes a custom action in list context
-##
-## IN:
-##    - 'custom_action': ther name of the custom action (and subsequent tt2 file to use, see below)
-##    - 'list': the nalme of the list (without the '@robot' part) in the context of which the action is executed.
-##    - '@lcap': an array of parameters.
-##
-## Custom actions are used to run specific code and/or display user defined templates.
-## You can create a <your_action>.pm module under etc/custom_actions or etc/<robot>/custom_actions or expl(/<robot>)?/<list>/custom_actions (<your_action>_plugin package) with a "process" sub to add custom processing.
-## You can also create a <your_action>.tt2 file at the same place to display your template. You don't need the <head/> section or the <body/> tag.
-## The HTML code in '<your_action>.tt2' can make use of the parameters this way: [% cap.1 %] for param1, [% cap.2 %] for param, and so on.
-## If the module is not defined the template is displayed.
-##
-## You can even have a robot-common <your_action>.pm module with a specific <your_action>.tt2 for each robot as the file (.pm or .tt2) is conducted in this order :
-##   - expl/<robot>/<list>/custom_actions (if list context and robot support)
-##   - expl/<list>/custom_actions (if list context and no robot support)
-##   - etc/<robot>/custom_actions (if robot support)
-##   - etc/custom_actions
-##
-## Your custom action is reachable using URL: http://your-sympa-server-root-url/lca/your_action/listname/param2/param2/param3/...
-##
-## The module process sub receive the List object and @cap entries as arguments
-##
-## The module process sub return value can be either :
-## 	1 to parse and display the custom action related tt2
-## 	<a global action name> to display its template
-## 	ca:<other_custom_action> to parse and display another custom action related tt2
-## 	a hash which entries will override $param ones, in case "custom_action" or "next_action" are present they act as described above.
-##
-###############################################################
+# executes a custom action in list context
+#
+# Parameters:
+# * 'custom_action': ther name of the custom action (and subsequent tt2 file to use, see below)
+# * 'list': the nalme of the list (without the '@robot' part) in the context of which the action is executed.
+# * '@lcap': an array of parameters.
+#
+# Custom actions are used to run specific code and/or display user defined templates.
+# You can create a <your_action>.pm module under etc/custom_actions or etc/<robot>/custom_actions or expl(/<robot>)?/<list>/custom_actions (<your_action>_plugin package) with a "process" sub to add custom processing.
+# You can also create a <your_action>.tt2 file at the same place to display your template. You don't need the <head/> section or the <body/> tag.
+# The HTML code in '<your_action>.tt2' can make use of the parameters this way: [% cap.1 %] for param1, [% cap.2 %] for param, and so on.
+# If the module is not defined the template is displayed.
+#
+# You can even have a robot-common <your_action>.pm module with a specific <your_action>.tt2 for each robot as the file (.pm or .tt2) is conducted in this order :
+#   - expl/<robot>/<list>/custom_actions (if list context and robot support)
+#   - expl/<list>/custom_actions (if list context and no robot support)
+#   - etc/<robot>/custom_actions (if robot support)
+#   - etc/custom_actions
+#
+# Your custom action is reachable using URL: http://your-sympa-server-root-url/lca/your_action/listname/param2/param2/param3/...
+#
+# The module process sub receive the List object and @cap entries as arguments
+#
+# The module process sub return value can be either :
+# 	1 to parse and display the custom action related tt2
+# 	<a global action name> to display its template
+# 	ca:<other_custom_action> to parse and display another custom action related tt2
+# 	a hash which entries will override $param ones, in case "custom_action" or "next_action" are present they act as described above.
 sub do_lca {
 	wwslog('info', 'List custom action: %s for list %s (robot %s) with params: (%s, %s, %s, %s, %s)',$in{'custom_action'},$in{'list'},$robot,$in{'lcap'});
 
@@ -17612,8 +17290,8 @@ sub do_lca {
 	return undef;
 }
 
-## Prepare subscriber data to be prompted on the web interface
-## Used by review, search,...
+# Prepare subscriber data to be prompted on the web interface
+# Used by review, search,...
 sub _prepare_subscriber {
     my $user = shift;
     my $additional_fields = shift;
@@ -17650,11 +17328,11 @@ sub _prepare_subscriber {
     return 1;
 }
 
-## New d_read function using SharedDocument module
-## The following features should be tested :
-##      * inheritance on privileges
-##      X moderation
-##      * escaping special chars
+# New d_read function using SharedDocument module
+# The following features should be tested :
+#      * inheritance on privileges
+#      X moderation
+#      * escaping special chars
 sub new_d_read {
      wwslog('info', 'new_d_read(%s)', $in{'path'});
 
@@ -17885,9 +17563,9 @@ sub new_d_read {
 }
 
 
-## Check authorizations to the current action
-## used in common cases where actions fails unless result is 'do_it'
-## It does not apply to actions that can be moderated
+# Check authorizations to the current action
+# used in common cases where actions fails unless result is 'do_it'
+# It does not apply to actions that can be moderated
 sub check_authz {
     my ($subname, $action) = @_;
 
@@ -18016,16 +17694,3 @@ sub do_automatic_lists {
     $in{'list'} = $listname;
     return 'compose_mail';
 }
-=pod
-
-=head1 AUTHORS
-
-=over
-
-=item * Serge Aumont <sa AT cru.fr>
-
-=item * Olivier Salaun <os AT cru.fr>
-
-=back
-
-=cut
