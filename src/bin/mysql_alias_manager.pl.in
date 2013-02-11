@@ -175,4 +175,3 @@ sub initialize_mysql {
 sub finalize_mysql {
 	$dbh->disconnect;
 }
-

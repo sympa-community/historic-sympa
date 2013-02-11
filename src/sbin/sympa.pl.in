@@ -2322,5 +2322,3 @@ sub clean_msgid_table {
 
 	return 1;
 }
-
-1;

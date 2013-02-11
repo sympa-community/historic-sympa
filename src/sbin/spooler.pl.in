@@ -501,5 +501,3 @@ sub sighup {
     }
     $signal = 'hup';
 }
-
-1;

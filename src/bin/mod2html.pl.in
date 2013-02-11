@@ -92,5 +92,3 @@ foreach my $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	}
 }
 closedir SPOOL;
-
-
