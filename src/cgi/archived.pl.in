@@ -3,8 +3,6 @@
 # vim:ft=perl:noet:sw=8:textwidth=78
 # $Id$
 
-# archived.pl - This script does the web archives building for Sympa
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -23,19 +21,34 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## Options :  F         -> do not detach TTY
-##         :  d		-> debug -d is equiv to -dF
-## Now, it is impossible to use -dF but you have to write it -d -F
-
-=pod
-
 =head1 NAME
 
-I<archived.pl> - Daemon running the web archive building.
+archived.pl - Web archive manager
+
+=head1 SYNOPSIS
+
+  archived.pl [-d|--debug] [-F|--foreground]
 
 =head1 DESCRIPTION
 
-This script must be run along with sympa. It regularly checks the 'outgoing' spool and picks the messages it finds in it. It then calls MHonArc to build the HTML version of archives and add an SMTP text version (i.e. an ASCII file including headers and body) to the appropriate directory.
+This daemon regularly checks the 'outgoing' spool and picks the messages it
+finds in it. It then calls MHonArc to build the HTML version of archives and
+add an SMTP text version (i.e. an ASCII file including headers and body) to
+the appropriate directory.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Set debug mode (implies -F)
+
+=item B<-F>, B<--foreground>
+
+Do not detach from TTY.
+
+=back
 
 =cut
 
@@ -45,6 +58,7 @@ use lib '--modulesdir--';
 use Digest::MD5;
 use English qw(-no_match_vars);
 use Getopt::Long;
+use Pod::Usage;
 
 use Sympa::Archive;
 use Sympa::Configuration;
@@ -68,9 +82,11 @@ my $ip = $ENV{'REMOTE_HOST'};
 
 ## Check options
 my %options;
-unless (GetOptions(\%main::options, 'debug|d', 'foreground|F')) {
-    Sympa::Log::fatal_err("Unknown options.");
-}
+GetOptions(
+	\%options,
+	'debug|d',
+	'foreground|F'
+) or pod2usage(-verbose => 0);
 
 if ($options{'debug'}) {
     $options{'log_level'} = 2 unless ($options{'log_level'});

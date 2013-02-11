@@ -25,10 +25,220 @@
 
 sympa.pl - Sympa main process
 
+=head1 SYNOPSIS
+
+ Daemon mode:
+  sympa.pl [-d|--debug] [--foreground] [--log_level=<level>]
+  [-k|--keepcopy=<path>] [-f|--config=<file>] [-l|--lang=<language>]
+  [-m|--mail]
+
+ Batch mode:
+  sympa.pl --close_list=<list>
+  sympa.pl --purge_list=<list>
+  sympa.pl --modify_list=<family> --robot=<robot> --input_file=<file>
+  sympa.pl --rename_list=<list> --new_listname=<name> --new_listrobot=<robot>
+  sympa.pl --create_list [--robot=<robot>] [--input_file=<file>]
+  sympa.pl --add_list=<family> [--robot=<robot>] [--input_file=<file>]
+  sympa.pl --instantiate_family=<family> [--robot=<robot>]
+  [--input_file=<file>] [--close_unknown] [--quiet]
+  sympa.pl --close_family=<family> --robot=<robot>]
+  sympa.pl --dump=<list|ALL>
+  sympa.pl --import=<list>
+  sympa.pl --make_alias_file
+  sympa.pl --lowercase
+  sympa.pl --md5_encode_password
+  sympa.pl --md5_digest=<password>
+  sympa.pl --upgrade [--from=<version>] [--to=<version>]
+  sympa.pl --upgrade_shared [--listname=<list>] [--robot=<robot>]
+  sympa.pl --test_database_message_buffer
+  sympa.pl --conf_2_db
+  sympa.pl --reload_list_config --list=<list>
+  sympa.pl --sync_include=<list>
+  sympa.pl --sync_list_db --list=<list>
+  sympa.pl --change_user_email [--current_email=<email>] [--new_email=<email>]
+
 =head1 DESCRIPTION
 
-This script is the main one. It runs as a daemon and does the messages/commands
-processing.
+This daemon handles the messages processing.
+
+Alternatively, it can be run in batch mode to handle administrative commands.
+
+=head1 DAEMON OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Set debug mode.
+
+=item B<-F>, B<--foreground>
+
+Do not detach from TTY.
+
+=item B<--log_level>
+
+Set the log level.
+
+=item B<-k>, B<--keepcopy>
+
+Keep a copy of incoming message.
+
+=item B<-f>, B<--config>
+
+Uses an alternative configuration file.
+
+=item B<-l>, B<--lang>
+
+Uses an alternative language.
+
+=item B<-m>, B<--mail>
+
+Log every sendmail command invocation.
+
+=item B<--help>
+
+Print this help and exit.
+
+=item B<--version>
+
+Print version and exit.
+
+=back
+
+=head1 BATCH MODE OPTIONS
+
+=over
+
+=item B<--close_list>
+
+Close a list.
+
+=item B<--purge_list>
+
+Remove a list definitively.
+
+=item B<--modify_list>
+
+Modify and existing list, using an XML configuration file. 
+
+=item B<--rename_list>
+
+Rename a list or move it to another robot.
+
+=item B<--sync_include>
+
+=item B<--create_list>
+
+Create a list from an XML configuration file.
+
+=item B<--add_list>
+
+Add a list described by an XML configuration file to a family.
+
+=item B<--instantiate_family>
+
+Instantiate a list family from an XML configuration file.
+
+=item B<--close_family>
+
+Close all lists of a family.
+
+=item B<--dump>
+
+Dump members of a list.
+
+=item B<--import>
+
+Import members of a list.
+
+=item B<--make_alias_file>
+
+Create an alias file in /tmp directory.
+
+=item B<--lowercase>
+
+Lowercase email addresses in database.
+
+=item B<--md5_encode_password>
+
+Rewrite passwords in database using MD5 fingerprint.
+
+=item B<--md5_digest>
+
+Output the MD5 digest of a password.
+
+=item B<--upgrade>
+
+Run Sympa maintenance script to upgrade from a previous version.
+
+=item B<--upgrade_shared>
+
+Rename files in shared.
+
+=item B<--test_database_messsage_buffer>
+
+Test the database message buffer size.
+
+=item B<--conf_2_db>
+
+Load all configuration in database.
+
+=item B<--reload_list_config>
+
+Sync the binary configuration files with plaintext configuration files. You
+should run this command if you edit authorization scenarios.
+
+=item B<--sync_list_db>
+
+Sync the list database with plaintext list configuration files.
+
+=item B<--sync_include>
+
+Trigger the list members update.
+
+=item B<--change_user_email>
+
+Changes a user email address in all Sympa databases for all virtual robots.
+
+=item B<--list>
+
+=item B<--listname>
+
+=item B<--robot>
+
+=item B<--input_file>
+
+=item B<--new_listname>
+
+New list name.
+
+=item B<--new_listrobot>
+
+New list robot.
+
+=item B<--new_email>
+
+New user email.
+
+=item B<--current_email>
+
+Current user email.
+
+=item B<--from>
+
+Version to upgrade from.
+
+=item B<--to>
+
+Version to upgrade to.
+
+=item B<--close_unknown>
+
+Automatically close undefined lists when instantiating a family.
+
+=item B<--quiet>
+
+Do not print report when instanciating a family.
 
 =cut
 
@@ -41,6 +251,7 @@ use File::Path;
 use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
+use Pod::Usage;
 use POSIX qw();
 
 use Sympa::Admin;
@@ -82,70 +293,58 @@ my $ip;
 $ip = $ENV{'REMOTE_HOST'};
 $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
 
-my $usage_string = "Usage:
-   $0 [OPTIONS]
-
-Options:
-   --add_list=family_name --robot=robot_name --input_file=/path/to/file.xml
-                                         : add the list described by the file.xml under robot_name, to the family
-                                           family_name.
-   --change_user_email --current_email=xx --new_email=xx : changes a user email address in all Sympa
-                                           databases (subscriber_table, list config, etc) for all virtual robots.
-   --close_family=family_name --robot=robot_name
-                                         : close lists of family_name family under robot_name.
-
-   --close_list=listname\@robot          : close a list
-   --conf_2_db			         : load in database, sympa;conf, wwsympa.conf and each robot.conf
-   --config=FILE, -f                     : uses an alternative configuration file
-   --create_list --robot=robot_name --input_file=/path/to/file.xml
-                                         : create a list with the xml file under robot_name
-   --debug, -d                           : sets Sympa in debug mode
-   --dump=list\@dom|ALL                  : dumps subscribers
-   --foreground                          : the process remains attached to the TTY
-   --help, -h                            : print this help
-   --import=list\@dom                    : import subscribers (read from STDIN)
-   --instantiate_family=family_name  --robot=robot_name --input_file=/path/to/file.xml [--close_unknown] [--quiet]
-                                         : instantiate family_name lists described in the file.xml under robot_name,
-                                           the family directory must exist ;
-                                           automatically close undefined lists in a new instantation if --close_unknown specified,
-                                           do not print report if --quiet specified.
-   --keepcopy=dir, -k                    : keep a copy of incoming message
-   --lang=LANG, -l                       : use a language catalog for Sympa
-   --log_level=LEVEL                     : sets Sympa log level
-   --lowercase                           : lowercase email addresses in database
-   --mail, -m                            : log calls to sendmail
-   --make_alias_file                     : create file in /tmp with all aliases (usefull when aliases.tpl is changed)
-   --md5_digest=password                 : output a MD5 digest of a password (usefull for SOAP client trusted application)
-   --md5_encode_password                 : rewrite password in database using md5 fingerprint. YOU CAN'T UNDO unless you save this table first
-   --modify_list=family_name --robot=robot_name --input_file=/path/to/file.xml
-                                         : modify the existing list installed under the robot_name robot and that
-                                           belongs to family_name family. The new description is in the file.xml
-   --purge_list=listname\@robot          : remove a list no backup is possible
-   --reload_list_config --list=mylist\@mydom  : recreates all config.bin files. You should run this command if you edit
-                                                authorization scenarios. The list parameter is optional.
-   --rename_list=listname\@robot --new_listname=newlistname --new_listrobot=newrobot : renames a list or move it to another virtual robot
-   --service=process_command|process_message|process_creation  : process dedicated to messages distribution, commands or to automatic lists creation (default three of them)
-   --sync_include=listname\@robot        : trigger the list members update
-   --sync_list_db [--list=listname]      : syncs filesystem list configs to the database cache of list configs, optionally sync an individual list if specified.
-   --test_database_message_buffer        : test the database message buffer size
-   --upgrade [--from=X] [--to=Y]             : runs Sympa maintenance script to upgrade from version X to version Y
-   --upgrade_shared  --[listname=X] --[robot=Y] : rename files in shared.
-   --version                         : print version number
-
-Sympa is a mailinglists manager and comes with a complete (user and admin)
-web interface. Sympa  can be linked to an LDAP directory or an RDBMS to
-create dynamic mailing lists. Sympa provides S/MIME and HTTPS based authentication and
-encryption.
-";
-
-## Check --dump option
 my %options;
-unless (GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground','config|f=s',
-            'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','sync_list_db','md5_encode_password',
-		    'close_list=s','rename_list=s','new_listname=s','new_listrobot=s','purge_list=s','create_list','instantiate_family=s',
-		    'robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s','change_user_email','current_email=s','new_email=s',
-		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer','conf_2_db')) {
-    Sympa::Log::fatal_err("Unknown options.");
+GetOptions(
+	\%options,
+	'dump=s',
+	'debug|d',
+	'log_level=s',
+	'foreground',
+	'config|f=s',
+	'lang|l=s',
+	'mail|m',
+	'keepcopy|k=s',
+	'import=s',
+	'make_alias_file',
+	'lowercase',
+	'sync_list_db',
+	'md5_encode_password',
+	'close_list=s',
+	'rename_list=s',
+	'new_listname=s',
+	'new_listrobot=s',
+	'purge_list=s',
+	'create_list',
+	'instantiate_family=s',
+	'robot=s',
+	'add_list=s',
+	'modify_list=s',
+	'close_family=s',
+	'md5_digest=s',
+	'change_user_email',
+	'current_email=s',
+	'new_email=s',
+	'input_file=s',
+	'sync_include=s',
+	'upgrade',
+	'upgrade_shared',
+	'from=s',
+	'to=s',
+	'reload_list_config',
+	'list=s',
+	'quiet',
+	'close_unknown',
+	'test_database_message_buffer',
+	'conf_2_db',
+	'help',
+	'version'
+) or pod2usage(-verbose => 0);
+
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
+
+if ($options{'version'}) {
+    print $version_string;
+    exit 0;
 }
 
 if ($options{'debug'}) {
@@ -153,8 +352,6 @@ if ($options{'debug'}) {
 }
 ## Batch mode, ie NOT daemon
 $options{'batch'} = 1 if ($options{'dump'} ||
-				$options{'help'} ||
-				$options{'version'} ||
 				$options{'import'} ||
 				$options{'make_alias_file'} ||
 				$options{'lowercase'} ||
@@ -253,7 +450,7 @@ unless (Sympa::Configuration::checkfiles_as_root()) {
 }
 
 ## Check that the data structure is uptodate
-unless ($options{'upgrade'} || $options{'help'}) {
+unless ($options{'upgrade'}) {
     unless (Sympa::Upgrade::data_structure_uptodate()) {
 	Sympa::Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
     }
@@ -398,9 +595,6 @@ if ($options{'dump'}) {
     }
 
     exit 0;
-}elsif ($options{'help'}) {
-    print $usage_string;
-    exit 0;
 }elsif ($options{'make_alias_file'}) {
     my $all_lists = Sympa::List::get_lists('*');
     unless (open TMP, ">$Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$") {
@@ -413,10 +607,6 @@ if ($options{'dump'}) {
 	system ("$Sympa::Configuration::Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
     }
     printf ("Sympa aliases file is $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
-
-    exit 0;
-}elsif ($options{'version'}) {
-    print $version_string;
 
     exit 0;
 }elsif ($options{'md5_digest'}) {
@@ -919,7 +1109,7 @@ elsif ($options{'close_family'}) {
 
     my $family_name;
     unless ($family_name = $options{'close_family'}) {
- 	print STDERR $usage_string;
+ 	pod2usage(-verbose => 0);
  	exit 1;
     }
     my $family;

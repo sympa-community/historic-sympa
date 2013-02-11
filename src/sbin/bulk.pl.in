@@ -25,19 +25,32 @@
 
 bulk.pl - Sympa bulk mail manager
 
-=head1 DESCRIPTION
-
-This script runs as a daemon and regulary submit messages found in the database
-to an SMTP server. Multiple instances can be run simultaneously to distribute
-traffic.
-
 =head1 SYNOPSIS
 
-bulk.pl [options]
+  bulk.pl [-d|--debug] [-F|--foreground] [-m|--mail]
 
-Available options:
-  -F do not detach TTY
-  -d debug
+=head1 DESCRIPTION
+
+This daemon regulary submit messages found in the database to an SMTP server.
+Multiple instances can be run simultaneously to distribute traffic.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Set debug mode (implies -F)
+
+=item B<-F>, B<--foreground>
+
+Do not detach TTY
+
+=item B<-m>, B<--mail>
+
+Log every sendmail command invocation.
+
+=back
 
 =cut
 
@@ -46,6 +59,7 @@ use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
 use Getopt::Long;
+use Pod::Usage;
 
 use Sympa::Bulk;
 use Sympa::Configuration;
@@ -64,14 +78,13 @@ my $daemon_name = Sympa::Log::set_daemon($0);
 my $date_of_last_activity = time();
 local $main::daemon_usage = 'DAEMON_MASTER'; ## Default is to launch bulk as master daemon.
 
-## Check options
-##  --debug : sets the debug mode
-##  --foreground : prevents the script from beeing daemonized
-##  --mail : logs every sendmail calls
 my %options;
-unless (GetOptions(\%main::options, 'debug|d', 'foreground|F','mail|m')) {
-    Sympa::Log::fatal_err("Unknown options.");
-}
+GetOptions(
+	\%options,
+	'debug|d',
+	'foreground|F',
+	'mail|m'
+) or pod2usage(-verbose => 0);
 
 if ($options{'debug'}) {
     $options{'log_level'} = 2 unless ($options{'log_level'});

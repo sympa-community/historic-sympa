@@ -25,17 +25,31 @@
 
 task_manager.pl - Sympa task manager
 
-=head1 DESCRIPTION
-
-This script runs as a daemon and processes periodical Sympa tasks.
-
 =head1 SYNOPSIS
 
-task_manager.pl [options]
+  task_manager.pl [-d|--debug] [-F|--foreground] [--log_level=<level>]
 
-Available options:
-  -F do not detach TTY
-  -d debug
+=head1 DESCRIPTION
+
+This daemon processes Sympa tasks periodically.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Set debug mode (implies -F)
+
+=item B<-F>, B<--foreground>
+
+Do not detach from TTY.
+
+=item B<--log_level>
+
+Set the log level.
+
+=back
 
 =cut
 
@@ -45,6 +59,7 @@ use strict "vars";
 use English qw(-no_match_vars);
 use Digest::MD5;
 use Getopt::Long;
+use Pod::Usage;
 use POSIX qw();
 use Time::Local;
 
@@ -70,9 +85,12 @@ my $opt_d;
 my $opt_F;
 my %options;
 
-unless (GetOptions(\%main::options, 'debug|d', 'log_level=s', 'foreground')) {
-    Sympa::Log::fatal_err("Unknown options.");
-}
+GetOptions(
+	\%options,
+	'debug|d',
+	'log_level=s',
+	'foreground'
+) or pod2usage(-verbose => 0);
 
 # $options{'debug2'} = 1 if ($options{'debug'});
 

@@ -23,7 +23,50 @@
 
 =head1 NAME
 
-spooler.pl
+spooler.pl - Sympa spool manager
+
+=head1 SYNOPSIS
+
+  spooler.pl [-d|--debug] [--foreground] [--log_level=<level>]
+  [-k|--keepcopy=<path>] [--queue=<path>] [--help] [--version]
+
+=head1 DESCRIPTION
+
+This demon load messages from incoming spool into database.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Set debug mode (implies -F)
+
+=item B<-F>, B<--foreground>
+
+Do not detach from TTY.
+
+=item B<--log_level>
+
+Set the log level.
+
+=item B<-k>, B<--keepcopy>
+
+Keep a copy of incoming message.
+
+=item B<--queue>
+
+Overright queue sympa parameter in order to choose spool location.
+
+=item B<--help>
+
+Print this help and exit.
+
+=item B<--version>
+
+Print version and exit.
+
+=back
 
 =cut
 
@@ -36,6 +79,7 @@ use File::Path;
 use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
+use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -61,26 +105,24 @@ my $version_string =
 
 my $daemon_name = Sympa::Log::set_daemon($0);
 
-my $usage_string = "Usage:
-   $0 [OPTIONS]
-
-Options:
-   -d, --debug                           : sets Sympa in debug mode
-   -f, --config=FILE                     : uses an alternative configuration file
-   --foreground                          : the process remains attached to the TTY
-   -k, --keepcopy=dir                    : keep a copy of incoming message
-   --log_level=LEVEL                     : sets Sympa log level
-   --queue=PATH_TO_SPOOL                 : overright queue sympa parameter in order to choose spool location.
-   -h, --help                            : print this help
-   -v, --version                         : print version number
-
-This demon is the Sympa spooler that load into database (table spool_table) messages from incomming spool
-";
-
 ## Check --dump option
 my %options;
-unless (GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keepcopy|k=s', 'queue=s', 'help', 'version')) {
-    fatal_err("Unknown options.");
+GetOptions(
+	\%options,
+	'debug|d',
+	'log_level=s',
+	'foreground',
+	'keepcopy|k=s',
+	'queue=s',
+	'help',
+	'version'
+) or pod2usage(-verbose => 0);
+
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
+
+if ($options{'version'}) {
+    print $version_string;
+    exit 0;
 }
 
 if ($options{'debug'}) {
@@ -254,13 +296,7 @@ if ($main::daemon_usage == Sympa::Configuration::DAEMON_ALL) {
 }else {
     sleep 1; ## wait until main process has created required directories
 }
-if ($options{'help'}) {
-    print $usage_string;
-    exit 0;
-}elsif ($options{'version'}) {
-    print $version_string;
-    exit 0;
-}
+
 ## Do we have right access in the directory
 if ($options{'keepcopy'}) {
     if (! -d $options{'keepcopy'}) {

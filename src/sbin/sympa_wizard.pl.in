@@ -24,29 +24,39 @@
 
 sympa_wizard.pl - Sympa configuration wizard
 
+=head1 SYNOPSIS
+
+  sympa_wizard.pl
+  sympa_wizard.pl [--target file] --create <sympa.conf|wwsympa.conf>
+  sympa_wizard.pl --check
+
+=back
+
 =head1 DESCRIPTION
 
 This script helps to perform sympa initial setup.
 
-=head1 SYNOPSIS
+When run without option, it edits current configuration file.
+
+When run with B<--create> option, it creates a new configuration file.
+
+When run with B<--check> option, it checks CPAN needed modules.
+
+=head1 OPTIONS
 
 =over
 
-=item sympa_wizard.pl
+=item B<--target>
 
-Edit current sympa configuration
+File to create.
 
-=item sympa_wizard.pl [--target file] --create <sympa.conf|wwsympa.conf>
+=item B<--create>
 
-Creates a new sympa or wwsympa configuration file
+Creates a new sympa or wwsympa configuration file.
 
-=item sympa_wizard.pl --check
+=item B<--check>
 
 check CPAN modules needed for running sympa
-
-=item sympa_wizard.pl --help
-
-Display usage instructions
 
 =back
 
@@ -298,7 +308,7 @@ GetOptions(
     'create=s',
     'check',
     'help'
-);
+) or pod2usage(-verbose => 0);
 
 if ($options{help}) {
     pod2usage();

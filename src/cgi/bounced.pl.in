@@ -3,9 +3,6 @@
 # vim:ft=perl:noet:sw=8:textwidth=78
 # $Id$
 
-# bounced.pl - This script runs as a daemon ; it does the incoming
-# non-delivery reports analysis and storage
-#
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
 # Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
@@ -24,16 +21,37 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=head1 NAME
 
-## Worl Wide Sympa is a front-end to Sympa Mailing Lists Manager
-## Copyright Comite Reseau des Universites
+bounced.pl - Non-delivery notifications manager
 
-## Patch 2001.07.24 by nablaphi <nablaphi@bigfoot.com>
-## Change the Getopt::Std to Getopt::Long
+=head1 SYNOPSIS
 
-## Options :  F         -> do not detach TTY
-##         :  d		-> debug -d is equiv to -dF
-## Now, it is impossible to use -dF but you have to write it -d -F
+  bounced.pl [-d|--debug] [-F|--foreground] [--log_level=<level>]
+
+=head1 DESCRIPTION
+
+FIXME.
+
+=head1 OPTIONS
+
+=over
+
+=item B<-d>, B<--debug>
+
+Debug mode (implies -F)
+
+=item B<-F>, B<--foreground>
+
+Do not detach from TTY.
+
+=item B<--log_level>
+
+Set the log level.
+
+=back
+
+=cut
 
 use strict;
 use lib '--modulesdir--';
@@ -42,6 +60,7 @@ use English qw(-no_match_vars);
 use FileHandle;
 use Getopt::Long;
 use POSIX qw();
+use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -79,12 +98,14 @@ my %equiv = ( "user unknown" => '5.1.1',
 	      "User's Disk Quota Exceeded:" => '4.2.2');
 
 
-#getopts('dF');
 ## Check options
 my %options;
-unless (GetOptions(\%main::options, 'debug|d','log_level=s','foreground|F')) {
-    Sympa::Log::fatal_err("Unknown options.");
-}
+GetOptions(
+	\%options,
+	'debug|d',
+	'log_level=s',
+	'foreground|F'
+) or pod2usage(-verbose => 0);
 
 # $options{'debug2'} = 1 if ($options{'debug'});
 
