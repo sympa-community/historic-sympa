@@ -23,6 +23,11 @@ plan(skip_all => 'Test::Pod required') if $EVAL_ERROR;
 
 chdir "$Bin/..";
 
-my @files = all_pod_files('src/lib');
+my @files = all_pod_files(
+	'src/lib',
+	'src/bin',
+	'src/sbin',
+	'src/cgi',
+);
 
 all_pod_files_ok(@files);
