@@ -463,34 +463,15 @@ Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Configuration::Conf{'
 exit(0);
 }
 
-############################################################
-# sigterm
-############################################################
-#  When we catch SIGTERM, just changes the value of the $signal
-#  loop variable.
-#
-# IN : -
-#
-# OUT : -
-#
-############################################################
+# When we catch SIGTERM, just changes the value of the $signal
+# loop variable.
 sub sigterm {
     Sympa::Log::do_log('notice', 'signal TERM received, still processing current task');
     $signal = 'term';
 }
 
-
-############################################################
-# sighup
-############################################################
-#  When we catch SIGHUP, changes the value of the $signal
-#  loop variable and puts the "-mail" logging option
-#
-# IN : -
-#
-# OUT : -
-#
-###########################################################
+# When we catch SIGHUP, changes the value of the $signal
+# loop variable and puts the "-mail" logging option
 sub sighup {
     if ($options{'mail'}) {
 	Sympa::Log::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');

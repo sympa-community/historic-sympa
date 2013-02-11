@@ -448,8 +448,7 @@ Sympa::Tools::Daemon::remove_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $$
 exit(0);
 
 
-## When we catch SIGTERM, just change the value of the loop
-## variable.
+# When we catch SIGTERM, just change the value of the loop variable.
 sub sigterm {
     Sympa::Log::do_log('notice', 'signal TERM received, still processing current task');
     $end = 1;

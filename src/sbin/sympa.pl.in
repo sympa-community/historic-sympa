@@ -1265,35 +1265,16 @@ Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Configuration::Conf{'
 
 exit(0);
 
-
-############################################################
-# sigterm
-############################################################
-#  When we catch SIGTERM, just changes the value of the $signal
-#  loop variable.
-#
-# IN : -
-#
-# OUT : -
-#
-############################################################
+# When we catch SIGTERM, just changes the value of the $signal
+# loop variable.
 sub sigterm {
     Sympa::Log::do_log('notice', 'signal TERM received, still processing current task');
     $signal = 'term';
 }
 
 
-############################################################
-# sighup
-############################################################
-#  When we catch SIGHUP, changes the value of the $signal
-#  loop variable and puts the "-mail" logging option
-#
-# IN : -
-#
-# OUT : -
-#
-###########################################################
+# When we catch SIGHUP, changes the value of the $signal
+# loop variable and puts the "-mail" logging option
 sub sighup {
     if ($options{'mail'}) {
 	Sympa::Log::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
@@ -1305,23 +1286,17 @@ sub sighup {
     $signal = 'hup';
 }
 
-
-
-############################################################
-#  process_message
-############################################################
-#  Handles a file received and files in the queue directory.
-#  This will read the file, separate the header and the body
-#  of the message and call the adequate function wether we
-#  have received a command or a message to be redistributed
-#  to a list.
+# Handles a file received and files in the queue directory.
+# This will read the file, separate the header and the body
+# of the message and call the adequate function wether we
+# have received a command or a message to be redistributed
+# to a list.
 #
-# IN : -$file (+): the file to handle
+# Parameters:
+# * $file: the file to handle
 #
-# OUT : $status
-#     | undef
-#
-##############################################################
+# Return value:
+# $status | undef
 sub process_message {
     my $message_in_spool = shift;
     Sympa::Log::do_log('debug', '()');
@@ -1638,19 +1613,14 @@ sub process_message {
     return $status;
 }
 
-
-############################################################
-#  DoSendMessage
-############################################################
-#  Send a message pushed in spool by another process.
+# Send a message pushed in spool by another process.
 #
-# IN : -$msg (+): ref(MIME::Entity)
-#      -$robot (+) :robot
+# Parameters:
+# * $msg: ref(MIME::Entity)
+# * $robot: robot
 #
-# OUT : 1
-#     | undef
-#
-##############################################################
+# Return value:
+# 1 | undef
 sub DoSendMessage {
     my $message = shift;
     my $robot = shift;
@@ -1690,22 +1660,18 @@ sub DoSendMessage {
     return 1;
 }
 
-############################################################
-#  DoForward
-############################################################
-#  Handles a message sent to [list]-editor : the list editor,
-#  [list]-request : the list owner or the listmaster.
-#  Message is forwarded according to $function
+# Handles a message sent to [list]-editor : the list editor,
+# [list]-request : the list owner or the listmaster.
+# Message is forwarded according to $function
 #
-# IN : -$name : list name (+) if ($function <> 'listmaster')
-#      -$function (+): 'listmaster'|'request'|'editor'
-#      -$robot (+): robot
-#      -$msg (+): ref(message object).
+# Parameters:
+# * $name : list name (+) if ($function <> 'listmaster')
+# * $function (+): 'listmaster'|'request'|'editor'
+# * $robot (+): robot
+# * $msg (+): ref(message object).
 #
-# OUT : 1
-#     | undef
-#
-############################################################
+# Return value:
+# 1 | undef
 sub DoForward {
     my($name, $function, $robot, $message) = @_;
     Sympa::Log::do_log('debug', '(%s, %s)', $name, $function);
@@ -1833,21 +1799,17 @@ sub DoForward {
     return 1;
 }
 
-####################################################
-#  DoMessage
-####################################################
-#  Handles a message sent to a list. (Those that can
-#  make loop and those containing a command are
-#  rejected)
+# Handles a message sent to a list. (Those that can
+# make loop and those containing a command are
+# rejected)
 #
-# IN : -$which (+): 'listname@hostname' - concerned list
-#      -$message (+): ref(Message) - sent message
-#      -$robot (+): robot
+# Parameters:
+# * $which (+): 'listname@hostname' - concerned list
+# * $message (+): ref(Message) - sent message
+# * $robot (+): robot
 #
-# OUT : 1 if ok (in order to remove the file from the queue)
-#     | undef
-#
-####################################################
+# Return value:
+# 1 if ok (in order to remove the file from the queue) | undef
 sub DoMessage{
     my($which, $message, $robot) = @_;
     Sympa::Log::do_log('debug', '(%s, %s, %s, msg from %s, %s, %s)', $which, $message->{'msg'}, $robot, $message->{'sender'}, $message->{'size'},  $message->{'smime_crypted'});
@@ -2096,21 +2058,17 @@ sub DoMessage{
     }
 }
 
-############################################################
-#  DoCommand
-############################################################
-#  Handles a command sent to the list manager.
+# Handles a command sent to the list manager.
 #
-# IN : -$rcpt : recepient | <listname>-<subscribe|unsubscribe>
-#      -$robot (+): robot
-#      -$message : ref(Message) with :
-#        ->msg (+): ref(MIME::Entity) : message containing command
-#        ->filename (+): file containing message
+# Parameters:
+# -$rcpt : recepient | <listname>-<subscribe|unsubscribe>
+# -$robot (+): robot
+# -$message : ref(Message) with :
+#  - msg (+): ref(MIME::Entity) : message containing command
+#  - filename (+): file containing message
 #
-# OUT : $success
-#     | undef
-#
-##############################################################
+# Return value:
+# $success | undef
 sub DoCommand {
     my($rcpt, $robot, $message) = @_;
     my $msg = $message->{'msg'};
@@ -2268,18 +2226,14 @@ sub DoCommand {
     return $success;
 }
 
-############################################################
-#  SendDigest
-############################################################
-#  Read the queuedigest and send old digests to the subscriber
-#  with the digest option.
+# Read the queuedigest and send old digests to the subscriber
+# with the digest option.
 #
-# IN : -
+# Parameters:
+# None
 #
-# OUT : -
-#     | undef
-#
-##############################################################
+# Return value:
+# - | undef
 sub SendDigest{
     Sympa::Log::do_log('debug', '()');
 
@@ -2308,8 +2262,8 @@ sub SendDigest{
     }
 }
 
-## Cleanup the msgid_table every 'msgid_table_cleanup_frequency' sec
-## Removes all entries older than 'msgid_table_cleanup_ttl' sec
+# Cleanup the msgid_table every 'msgid_table_cleanup_frequency' sec
+# Removes all entries older than 'msgid_table_cleanup_ttl' sec
 sub clean_msgid_table {
 
 	foreach my $rcpt (keys %msgid_table) {

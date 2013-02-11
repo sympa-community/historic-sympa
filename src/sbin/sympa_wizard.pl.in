@@ -659,9 +659,7 @@ EOM
     }
 }
 
-##----------------------
 # Install a CPAN module
-##----------------------
 sub install_module {
   my ($module, $options) = @_;
 
