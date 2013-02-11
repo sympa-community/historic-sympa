@@ -21,7 +21,24 @@
 
 AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
-sbin_SCRIPTS = sympa.pl bulk.pl spooler.pl alias_manager.pl task_manager.pl sympa_wizard.pl bounced.pl archived.pl
+sbin_SCRIPTS = sympa.pl \
+	       bulk.pl \
+	       spooler.pl \
+	       alias_manager.pl \
+	       task_manager.pl \
+	       sympa_wizard.pl \
+	       bounced.pl \
+	       archived.pl
+
+man8_MANS = sympa.pl.8 \
+	    bulk.pl.8 \
+	    spooler.pl.8 \
+	    alias_manager.pl.8 \
+	    task_manager.pl.8 \
+	    sympa_wizard.pl.8 \
+	    bounced.pl.8 \
+	    archived.pl.8
+
 sbin_PROGRAMS = aliaswrapper virtualwrapper
 aliaswrapper_SOURCES = aliaswrapper.c
 aliaswrapper_CPPFLAGS = $(AM_CPPFLAGS) \
@@ -50,7 +67,7 @@ EXTRA_DIST = $(modules_DATA) \
 	     archived.pl.in \
 	     bounced.pl.in
 
-CLEANFILES = $(sbin_SCRIPTS)
+CLEANFILES = $(sbin_SCRIPTS) $(man8_MANS)
 
 install-exec-hook:
 	-chown $(USER) $(DESTDIR)$(libexecdir)/queue
@@ -89,3 +106,35 @@ sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
 task_manager.pl: $(srcdir)/task_manager.pl.in
 archived.pl: $(srcdir)/archived.pl.in
 bounced.pl: $(srcdir)/bounced.pl.in
+
+sympa.pl.8: sympa.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 sympa.pl sympa.pl.8
+
+bounced.pl.8: bounced.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 bounced.pl bounced.pl.8
+
+archived.pl.8: archived.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 archived.pl archived.pl.8
+
+bulk.pl.8: bulk.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 bulk.pl bulk.pl.8
+
+spooler.pl.8: spooler.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 spooler.pl spooler.pl.8
+
+alias_manager.pl.8: alias_manager.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 alias_manager.pl alias_manager.pl.8
+
+task_manager.pl.8: task_manager.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 task_manager.pl task_manager.pl.8
+
+sympa_wizard.pl.8: sympa_wizard.pl
+	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
+           --section=8 sympa_wizard.pl sympa_wizard.pl.8
