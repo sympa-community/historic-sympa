@@ -1,0 +1,127 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 182C41CAA43
+	for <root@zarb.org>; Sat,  9 Feb 2013 05:30:01 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Q4f4vg2qq+C8 for <root@zarb.org>;
+	Sat,  9 Feb 2013 05:30:00 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 3BF3C1CAA41
+	for <root@zarb.org>; Sat,  9 Feb 2013 05:30:00 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 5A6431CAA41; Sat,  9 Feb 2013 05:29:58 +0100 (CET)
+Date: Sat,  9 Feb 2013 05:29:58 +0100 (CET)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="93B561CAA97.1360384198/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130209042958.5A6431CAA41@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--93B561CAA97.1360384198/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<ftpmaster@t-online.fr>: connect to mailx.tcommerce.de[193.158.123.94]:25:
+    Connection timed out
+
+--93B561CAA97.1360384198/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: 93B561CAA97
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Fri,  1 Feb 2013 05:13:40 +0100 (CET)
+
+Final-Recipient: rfc822; ftpmaster@t-online.fr
+Original-Recipient: rfc822;ftpmaster@t-online.fr
+Action: failed
+Status: 4.4.1
+Diagnostic-Code: X-Postfix; connect to mailx.tcommerce.de[193.158.123.94]:25:
+	Connection timed out
+
+--93B561CAA97.1360384198/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 93B561CAA97
+	for <ftpmaster@t-online.fr>; Fri,  1 Feb 2013 05:13:40 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id ddxyBPboA6cy for <ftpmaster@t-online.fr>;
+	Fri,  1 Feb 2013 05:13:39 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id EFCC91CAF49
+	for <ftpmaster@t-online.fr>; Fri,  1 Feb 2013 05:01:34 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: ftpmaster@t-online.fr
+X-No-Archive: yes
+Message-ID: <mailman.1371.1359691239.15398.mailman@zarb.org>
+Date: Fri, 01 Feb 2013 05:00:39 +0100
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for ftpmaster@t-online.fr:
+
+List                                     Password // URL
+----                                     --------  
+plf-mirrors@zarb.org                     XXXXXX
+https://www.zarb.org/mailman/options/plf-mirrors/ftpmaster%40t-online.fr
+
+--93B561CAA97.1360384198/ryu.zarb.org--

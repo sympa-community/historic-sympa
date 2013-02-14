@@ -1,0 +1,245 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 277671CAA29
+	for <root@zarb.org>; Sun, 10 Feb 2013 13:08:59 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id tOYo3ef+ktrj for <root@zarb.org>;
+	Sun, 10 Feb 2013 13:08:57 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 94A651CAA28
+	for <root@zarb.org>; Sun, 10 Feb 2013 13:08:57 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 103A11CAA28; Sun, 10 Feb 2013 13:08:56 +0100 (CET)
+Date: Sun, 10 Feb 2013 13:08:56 +0100 (CET)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="B321D1CAA31.1360498136/ryu.zarb.org"
+Message-Id: <20130210120856.103A11CAA28@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--B321D1CAA31.1360498136/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<fnasser@zarb.org> (expanded from <jpackage@zarb.org>): unknown user: "fnasser"
+
+<nim@zarb.org> (expanded from <jpackage@zarb.org>): unknown user: "nim"
+
+--B321D1CAA31.1360498136/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: B321D1CAA31
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Sun, 10 Feb 2013 13:08:55 +0100 (CET)
+
+Final-Recipient: rfc822; fnasser@zarb.org
+Original-Recipient: rfc822;jpackage@zarb.org
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: X-Postfix; unknown user: "fnasser"
+
+Final-Recipient: rfc822; nim@zarb.org
+Original-Recipient: rfc822;jpackage@zarb.org
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: X-Postfix; unknown user: "nim"
+
+--B321D1CAA31.1360498136/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: by ryu.zarb.org (Postfix)
+	id B321D1CAA31; Sun, 10 Feb 2013 13:08:55 +0100 (CET)
+Delivered-To: jpackage@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id ACF301CAA29
+	for <jpackage@zarb.org>; Sun, 10 Feb 2013 13:08:55 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id MPrB9H092Kev for <jpackage@zarb.org>;
+	Sun, 10 Feb 2013 13:08:55 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 745C31CAA28
+	for <jpackage@zarb.org>; Sun, 10 Feb 2013 13:08:55 +0100 (CET)
+X-Original-To: jpackage-discuss-owner@zarb.org
+Delivered-To: jpackage-discuss-owner@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id A2FEA1CAA28
+	for <jpackage-discuss-owner@zarb.org>;
+	Sun, 10 Feb 2013 13:08:53 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id trQgxm3gALIs for <jpackage-discuss-owner@zarb.org>;
+	Sun, 10 Feb 2013 13:08:52 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 541471CAA29
+	for <jpackage-discuss-owner@zarb.org>;
+	Sun, 10 Feb 2013 13:08:52 +0100 (CET)
+Subject: JPackage-discuss post from zaizxinaizxooaiaiso78@msn.com requires
+	approval
+From: jpackage-discuss-owner@zarb.org
+To: jpackage-discuss-owner@zarb.org
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0429813307=="
+Message-ID: <mailman.1062.1360498130.7883.jpackage-discuss@zarb.org>
+Date: Sun, 10 Feb 2013 13:08:50 +0100
+Precedence: bulk
+X-BeenThere: jpackage-discuss@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: Discussion about JPackage project <jpackage-discuss.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+--===============0429813307==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+As list administrator, your authorization is requested for the
+following mailing list posting:
+
+    List:    JPackage-discuss@zarb.org
+    From:    zaizxinaizxooaiaiso78@msn.com
+    Subject: Digital Photo Editing Services - Photo Cutout - Photo Retouching
+    Reason:  Post by non-member to a members-only list
+
+At your convenience, visit:
+
+    https://www.zarb.org/mailman/admindb/jpackage-discuss
+        
+to approve or deny the request.
+
+--===============0429813307==
+Content-Type: message/rfc822
+MIME-Version: 1.0
+
+Return-Path: <zaizxinaizxooaiaiso78@msn.com>
+X-Original-To: jpackage-discuss@zarb.org
+Delivered-To: jpackage-discuss@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 70D3B1CAA29
+	for <jpackage-discuss@zarb.org>; Sun, 10 Feb 2013 13:08:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+X-Spam-Flag: NO
+X-Spam-Score: 3.422
+X-Spam-Level: ***
+X-Spam-Status: No, score=3.422 tagged_above=1 required=4.9
+	tests=[BAYES_05=-1.11, FORGED_MUA_OUTLOOK=3.116,
+	MSOE_MID_WRONG_CASE=0.82, SPF_SOFTFAIL=0.596] autolearn=no
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 0c4vjQot8FZ5 for <jpackage-discuss@zarb.org>;
+	Sun, 10 Feb 2013 13:08:46 +0100 (CET)
+Received: from cthulhu.zarb.org (cthulhu.zarb.org [IPv6:2002:d455:9e18::1])
+	by ryu.zarb.org (Postfix) with ESMTP id A3A0D1CAA28
+	for <jpackage-discuss@zarb.org>; Sun, 10 Feb 2013 13:08:46 +0100 (CET)
+X-Greylist: delayed 640 seconds by postgrey-1.32 at cthulhu.zarb.org;
+	Sun, 10 Feb 2013 13:08:46 CET
+Received: from oc-teh-ecc-01.oh-isp.com (relay.oh-isp.com [31.222.209.3])
+	by cthulhu.zarb.org (Postfix) with ESMTP id 6D55526EC81
+	for <jpackage-discuss@zarb.org>; Sun, 10 Feb 2013 13:08:46 +0100 (CET)
+Received: from host3 ([61.135.242.229])
+	by oc-teh-ecc-01.oh-isp.com with ESMTP id r1ABvNDk025111-r1ABvNDl025111;
+	Sun, 10 Feb 2013 11:57:28 GMT
+Message-Id: <201302101157.r1ABvNDk025111-r1ABvNDl025111@oc-teh-ecc-01.oh-isp.com>
+Date: Sun, 10 Feb 2013 19:57:28 +0800
+From: "Rick" <zaizxinaizxooaiaiso78@msn.com>
+To: "jpace" <jpace@beverlyfarm.org>
+Reply-To: <ibretouching@163.com>
+Subject: =?GB2312?B?RGlnaXRhbCBQaG90byBFZGl0aW5nIFNlcg==?=
+	=?GB2312?B?dmljZXMgLSBQaG90byBDdXRvdXQgLSBQaA==?=
+	=?GB2312?B?b3RvIFJldG91Y2hpbmc=?=
+MIME-Version: 1.0
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2800.1158
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
+Content-Type: text/plain;
+	charset="GB2312"
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+SGksDQoNCldlIGFyZSBvbmUgb2YgdGhlIGJlc3QgZGlnaXRhbCBpbWFnZXMgcmV0b3VjaGluZy9l
+ZGl0aW5nIHByb2Zlc3Npb25hbHMgbG9jYXRlZCBpbiBDaGluYS4gV2UgcHJvdmlkZSBhbGwga2lu
+ZHMgb2YgaW1hZ2UgZWRpdGluZyBzb2x1dGlvbnMgdG8gZGlmZmVyZW50IENvbXBhbmllcyBhbGwg
+b3ZlciB0aGUgd29ybGQuDQoNCldlIHByb3ZpZGUgYmVzdCBxdWFsaXR5IHNlcnZpY2UgaW4gYmVz
+dCBwcmljZS4NCg0KT3VyIGltYWdlIGVkaXRpbmcgc2VydmljZXMgYXJlOiAtDQoNCiAuIEN1dCBv
+dXQvbWFza2luZywgY2xpcHBpbmcgcGF0aCwgZGVlcCBldGNoaW5nLCB0cmFuc3BhcmVudCBiYWNr
+Z3JvdW5kDQoNCiAuIER1c3QgY2xlYW5pbmcsIHNwb3QgY2xlYW5pbmcNCiAuIENvbG91ciBjb3Jy
+ZWN0aW9uLCBibGFjayBhbmQgd2hpdGUsIGxpZ2h0IGFuZCBzaGFkb3dzIGV0Yy4NCiAuIEJlYXV0
+eSByZXRvdWNoaW5nLCBza2luIHJldG91Y2hpbmcsIGZhY2UgcmV0b3VjaGluZywgYm9keSByZXRv
+dWNoaW5nDQoNCiAuIEZhc2hpb24vQmVhdXR5IEltYWdlIFJldG91Y2hpbmcNCg0KIC4gUHJvZHVj
+dCBpbWFnZSBSZXRvdWNoaW5nDQogLiBKZXdlbGxlcnkgaW1hZ2UgUmV0b3VjaGluZw0KIC4gUmVh
+bCBlc3RhdGUgaW1hZ2UgUmV0b3VjaGluZw0KIC4gUG9ydHJhaXQgaW1hZ2UgUmV0b3VjaGluZw0K
+IC4gUmVzdG9yYXRpb24gYW5kIHJlcGFpciBvbGQgaW1hZ2VzDQogLiBXZWRkaW5nICYgRXZlbnQg
+QWxidW0gRGVzaWduLg0KDQpZb3UgY2FuIHRyeSB1cyBieSBzZW5kaW5nIGEgc2FtcGxlIGltYWdl
+IGZvciBmcmVlIHRlc3QgdG8ganVkZ2Ugb3VyIHF1YWxpdHkgd29yay4NCg0KV2UgYXJlIHdhaXRp
+bmcgZm9yIHlvdXIgcmVwbHkuDQoNClRoYW5rcyAmIFJlZ2FyZHMsDQpSaWNrDQpSb25kcmRhbmlu
+IEltYWdpbmcgUHJvZmVzc2lvbmFscw0KQ29udGFjdDogY29udGFjdGVkaXRAMTI2LmNvbQ0KDQoN
+Cg0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoN
+ClRoaXMgZS1tYWlsIChhbmQgYW55IGF0dGFjaG1lbnRzKSBpcyBjb25maWRlbnRpYWwgYW5kIG1h
+eSBjb250YWluDQpwZXJzb25hbCB2aWV3cyB3aGljaCBhcmUgbm90IHRoZSB2aWV3cyBvZiB1cy4g
+dW5sZXNzIHNwZWNpZmljYWxseSBzdGF0ZWQuIElmIHlvdSBoYXZlIHJlY2VpdmVkDQppdCBpbiBl
+cnJvciwgcGxlYXNlIGRlbGV0ZSBpdCBmcm9tIHlvdXIgc3lzdGVtLCBkbyBub3QgdXNlLCBjb3B5
+IG9yDQpkaXNjbG9zZSB0aGUgaW5mb3JtYXRpb24gaW4gYW55IHdheSBub3IgYWN0IGluIHJlbGlh
+bmNlIG9uIGl0IGFuZA0Kbm90aWZ5IHRoZSBzZW5kZXIgaW1tZWRpYXRlbHkuDQoNClVOU1VCU0NS
+SUJFIElOU1RSVUNUSU9OUw0KSWYgeW91IGRvIG5vdCB3aXNoIHRvIHJlY2VpdmUgb3VyIG5ld3Ns
+ZXR0ZXIsIHBscyBzZW5kIGFkZHJlc3MgdG8gaW1yZW1vdmVAeWVhaC5uZXQgZm9yIHJlbW92ZS4N
+CkJlZm9yZSBwcmludGluZyB0aGluayBhYm91dCB0aGUgRW52aXJvbm1lbnQuDQoNCgogICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIA==
+
+--===============0429813307==
+Content-Type: message/rfc822
+MIME-Version: 1.0
+
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: confirm bc439f1b68567c9f80527403fdcd541363d6f7f7
+Sender: jpackage-discuss-request@zarb.org
+From: jpackage-discuss-request@zarb.org
+Date: Sun, 10 Feb 2013 13:08:50 +0100
+Message-ID: <mailman.1061.1360498130.7883.jpackage-discuss@zarb.org>
+
+If you reply to this message, keeping the Subject: header intact,
+Mailman will discard the held message.  Do this if the message is
+spam.  If you reply to this message and include an Approved: header
+with the list password in it, the message will be approved for posting
+to the list.  The Approved: header can also appear in the first line
+of the body of the reply.
+--===============0429813307==--
+
+--B321D1CAA31.1360498136/ryu.zarb.org--

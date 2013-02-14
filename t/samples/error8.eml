@@ -1,0 +1,138 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 7ED161CAA3D
+	for <root@zarb.org>; Mon,  4 Feb 2013 06:05:49 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id N7TjCRHuQ1W9 for <root@zarb.org>;
+	Mon,  4 Feb 2013 06:05:46 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id CCBA01CAA3A
+	for <root@zarb.org>; Mon,  4 Feb 2013 06:05:46 +0100 (CET)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 376691CAA3D
+	for <mailman-bounces@zarb.org>; Mon,  4 Feb 2013 06:05:45 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id UTIGtz4EYUZb for <mailman-bounces@zarb.org>;
+	Mon,  4 Feb 2013 06:05:43 +0100 (CET)
+Received: from incoming1.louisville.edu (incoming1.louisville.edu
+	[136.165.233.224])
+	by ryu.zarb.org (Postfix) with ESMTP id 46E381CAA3A
+	for <mailman-bounces@zarb.org>; Mon,  4 Feb 2013 06:05:43 +0100 (CET)
+Received: from localhost by incoming1.louisville.edu;
+	04 Feb 2013 00:05:42 -0500
+Message-Id: <93ea7c$c35s0u@c360prod1.louisville.edu>
+Date: 04 Feb 2013 00:05:42 -0500
+To: mailman-bounces@zarb.org
+From: "Mail Delivery System" <noreply@louisville.edu>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="O7SOo.4rDyBVoAZ.1dTBAf.3Zg+vwl"
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+--O7SOo.4rDyBVoAZ.1dTBAf.3Zg+vwl
+content-type: text/plain;
+    charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The following message to <chuck@cvip.uofl.edu> was undeliverable.
+The reason for the problem:
+5.4.7 - Delivery expired (message too old) '[Errno 61] Connection refused'
+
+--O7SOo.4rDyBVoAZ.1dTBAf.3Zg+vwl
+content-type: message/delivery-status
+
+Reporting-MTA: dns; c360prod1.louisville.edu
+
+Final-Recipient: rfc822;chuck@cvip.uofl.edu
+Action: failed
+Status: 5.0.0 (permanent failure)
+Diagnostic-Code: smtp; 5.4.7 - Delivery expired (message too old) '[Errno 61]
+	Connection refused' (delivery attempts: 0)
+
+--O7SOo.4rDyBVoAZ.1dTBAf.3Zg+vwl
+content-type: message/rfc822
+
+Received: from mail-db3.bigfish.com (HELO mail97-db3-R.bigfish.com)
+	([213.199.154.134])
+	by queue1.louisville.edu with ESMTP; 31 Jan 2013 23:06:44 -0500
+Received: from mail97-db3 (localhost [127.0.0.1])
+	by mail97-db3-R.bigfish.com (Postfix) with ESMTP id CAE44160211
+	for <chuck@cvip.uofl.edu>; Fri,  1 Feb 2013 04:06:37 +0000 (UTC)
+X-Forefront-Antispam-Report: CIP:212.85.158.22; KIP:(null); UIP:(null); IPV:NLI;
+	H:ryu.zarb.org; RD:ryu.zarb.org; EFVD:NLI
+X-SpamScore: -4
+X-BigFish: vps-4(z4c5Iz103dKd772hzz1ee6h1de0h1202h1e76h1d1ah1d2ahzz8275dhz2dh2a8h668h839h944hd24he5bh1220h1288h12a5h12a9h12bdh137ah13b6h13eah1441h14ddh1504h1537h153bh162dh1631h1758h18e1h1946h1155h)
+Received: from mail97-db3 (localhost.localdomain [127.0.0.1]) by mail97-db3
+	(MessageSwitch) id 1359691584572783_18908;
+	Fri,  1 Feb 2013 04:06:24 +0000 (UTC)
+Received: from DB3EHSMHS019.bigfish.com (unknown [10.3.81.245])
+	by mail97-db3.bigfish.com (Postfix) with ESMTP id 89750602B0
+	for <chuck@cvip.uofl.edu>; Fri,  1 Feb 2013 04:06:24 +0000 (UTC)
+Received: from ryu.zarb.org (212.85.158.22) by DB3EHSMHS019.bigfish.com
+	(10.3.87.119) with Microsoft SMTP Server (TLS) id 14.1.225.23;
+	Fri, 1 Feb 2013 04:06:19 +0000
+Received: from localhost (localhost [127.0.0.1])	by ryu.zarb.org (Postfix)
+	with ESMTP id 2EA321CAA6D	for <chuck@cvip.uofl.edu>; Fri,  1 Feb 2013
+	05:06:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])	by localhost (ryu.zarb.org
+	[127.0.0.1]) (amavisd-new, port 10025)	with ESMTP id DAJch06q0++A for
+	<chuck@cvip.uofl.edu>;	Fri,  1 Feb 2013 05:06:17 +0100 (CET)
+Received: from ryu.zarb.org (localhost [127.0.0.1])	by ryu.zarb.org (Postfix)
+	with ESMTP id 0CCE91CAC6E	for <chuck@cvip.uofl.edu>; Fri,  1 Feb 2013
+	05:00:43 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: <mailman-owner@mageia.org>
+To: <chuck@cvip.uofl.edu>
+X-No-Archive: yes
+Message-ID: <mailman.582.1359691217.15398.mailman@zarb.org>
+Date: Fri, 1 Feb 2013 05:00:17 +0100
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: <mailman-bounces@zarb.org>
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for chuck@cvip.uofl.edu:
+
+List                                     Password // URL
+----                                     --------  
+mageia-announce@mageia.org               XXXXXX    
+https://www.mageia.org/mailman/options/mageia-announce/chuck%40cvip.uofl.edu
+
+
+--O7SOo.4rDyBVoAZ.1dTBAf.3Zg+vwl--
+
+
