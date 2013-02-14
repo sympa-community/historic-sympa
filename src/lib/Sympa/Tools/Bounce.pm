@@ -94,8 +94,8 @@ sub parse_rfc1891_notification {
 				if ($recipient =~ /\@.+:(.+)$/) {
 					$recipient = $1;
 				}
-				$recipient =~ s/^<(.*)>$/$1/;
-				$recipient =~ y/[A-Z]/[a-z]/;
+				$recipient = _unquote_address($recipient);
+				$recipient = lc($recipient);
 			}
 
 			if ($recipient and $status) {
@@ -149,6 +149,15 @@ sub _fix_address {
 		return $newadr;
 
 	}
+}
+
+sub _unquote_address {
+	my ($address) = @_;
+
+	return
+		$address =~ /^<($address_pattern)>$/ ? $1 :
+		$address =~ /^"($address_pattern)"$/ ? $1 :
+							$address;
 }
 
 =head2 parse_notification($message)
@@ -215,11 +224,10 @@ sub parse_notification {
 				if ($line =~ /^(\S[^\(]*)/) {
 					$adr = $1;
 					my $error = $2;
-					$adr =~ s/^["<](.+)[">]\s*$/$1/;
+					$adr = _unquote_address($adr);
 					$info{$adr}{error} = $error;
 				} elsif ($line =~ /^\s+\(expanded from: (.+)\)/) {
-					$info{$adr}{expanded} = $1;
-					$info{$adr}{expanded} =~ s/^["<](.+)[">]$/$1/;
+					$info{$adr}{expanded} = _unquote_address($1);
 				}
 			}
 
@@ -231,14 +239,14 @@ sub parse_notification {
 					my $cause = $3;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
 					foreach my $address (split /,/, $addresses) {
-						$address =~ s/^["<]([^">]+)[">]$/$1/;
+						$address = _unquote_address($address);
 						$info{$address}{error} = $cause;
 					}
 				} elsif ($line =~ /^$smtp_status_pattern\s(too many hops).*to\s(.*)$/i) {
 					my $addresses = $2;
 					my $cause = $1;
 					foreach my $address (split /,/, $addresses) {
-						$address =~ s/^["<](.+)[">]$/$1/;
+						$address = _unquote_address($1);
 						$info{$address}{error} = $cause;
 					}
 				} elsif ($line =~ /^$smtp_status_pattern\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
@@ -246,7 +254,7 @@ sub parse_notification {
 					my $cause = $2;
 					$cause =~ s/^(.*) [\(\:].*$/$1/;
 					foreach my $address (split /,/, $addresses) {
-						$address =~ s/^["<](.+)[">]$/$1/;
+						$address = _unquote_address($1);
 						$info{$address}{error} = $cause;
 					}
 				}
@@ -266,8 +274,7 @@ sub parse_notification {
 				if ($line =~ /^Unknown QuickMail recipient\(s\):/) {
 					$cause = 'Unknown QuickMail recipient(s)';
 				} elsif ($line =~ /^\s+(.*)$/ and $cause) {
-					$address = $1;
-					$address =~ s/^["<](.+)[">]$/$1/;
+					$address = _unquote_address($1);
 					$info{$address}{error} = $cause;
 				}
 			}
@@ -277,8 +284,7 @@ sub parse_notification {
 			my @lines = split(/\n/, $paragraph);
 			foreach my $line (@lines) {
 				if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
-					$address = $1;
-					$address =~ s/^["<](.+)[">]$/$1/;
+					$address = _unquote_address($1);
 				} else {
 					/^(.*)$/;
 					$info{$address}{error} = $1;
@@ -305,8 +311,7 @@ sub parse_notification {
 			# NTMail
 			while ($paragraph = shift @paragraphes) {
 				next unless $paragraph =~ /^\s+(\S+)/;
-				my $address = $1;
-				$address =~ s/^["<](.+)[">]$/$1/;
+				my $address = _unquote_address($1);
 				next unless $address;
 				$info{$address}{'error'} = '';
 				last;
@@ -613,9 +618,8 @@ sub parse_notification {
 		}
 
 		$a3 = _fix_address($a2, $from);
-
-		$a3 =~ y/[A-Z]/[a-z]/;
-		$a3 =~ s/^<(.*)>$/$1/;
+		$a3 = _unquote_address($a3);
+		$a3 = lc($a3);
 
 		$result->{$a3} = lc ($info{$a1}{error});
 	}
