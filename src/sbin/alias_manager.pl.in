@@ -34,6 +34,16 @@ alias_manager.pl - Sympa alias manager
 This script allows to add or remove aliases in an SMTP server configuration
 file. Alternative implementations for LDAP or SQL support are also available.
 
+=head1 OPTIONS
+
+=over
+
+=item B<-h>, B<--help>
+
+Print this help and exit.
+
+=back
+
 =cut
 
 $ENV{'PATH'} = '';
@@ -43,6 +53,7 @@ use strict;
 use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
+use Getopt::Long;
 use POSIX qw();
 use Pod::Usage;
 
@@ -64,6 +75,14 @@ my $alias_wrapper       = Sympa::Constants::SBINDIR . '/aliaswrapper';
 my $lock_file           = Sympa::Constants::EXPLDIR . '/alias_manager.lock';
 my $path_to_queue       = Sympa::Constants::LIBEXECDIR . '/queue';
 my $path_to_bouncequeue = Sympa::Constants::LIBEXECDIR .'/bouncequeue';
+
+my %options;
+GetOptions(
+	\%options,
+	'help|h',
+) or pod2usage(-verbose => 0);
+
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
 my ($operation, $listname, $domain, $file) = @ARGV;
 

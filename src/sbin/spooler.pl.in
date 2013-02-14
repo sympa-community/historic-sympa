@@ -58,7 +58,7 @@ Keep a copy of incoming message.
 
 Overright queue sympa parameter in order to choose spool location.
 
-=item B<--help>
+=item B<-h>, B<--help>
 
 Print this help and exit.
 
@@ -114,7 +114,7 @@ GetOptions(
 	'foreground',
 	'keepcopy|k=s',
 	'queue=s',
-	'help',
+	'help|h',
 	'version'
 ) or pod2usage(-verbose => 0);
 

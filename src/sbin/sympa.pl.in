@@ -95,7 +95,7 @@ Uses an alternative language.
 
 Log every sendmail command invocation.
 
-=item B<--help>
+=item B<-h>, B<--help>
 
 Print this help and exit.
 
@@ -336,7 +336,7 @@ GetOptions(
 	'close_unknown',
 	'test_database_message_buffer',
 	'conf_2_db',
-	'help',
+	'help|h',
 	'version'
 ) or pod2usage(-verbose => 0);
 

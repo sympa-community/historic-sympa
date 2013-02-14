@@ -49,6 +49,10 @@ Do not detach from TTY.
 
 Set the log level.
 
+=item B<-h>, B<--help>
+
+Print this help and exit.
+
 =back
 
 =cut
@@ -104,8 +108,11 @@ GetOptions(
 	\%options,
 	'debug|d',
 	'log_level=s',
-	'foreground|F'
+	'foreground|F',
+	'help|h',
 ) or pod2usage(-verbose => 0);
+
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
 # $options{'debug2'} = 1 if ($options{'debug'});
 

@@ -48,6 +48,10 @@ Set debug mode (implies -F)
 
 Do not detach from TTY.
 
+=item B<-h>, B<--help>
+
+Print this help and exit.
+
 =back
 
 =head1 AUTHORS
@@ -95,8 +99,11 @@ my %options;
 GetOptions(
 	\%options,
 	'debug|d',
-	'foreground|F'
+	'foreground|F',
+	'help|h'
 ) or pod2usage(-verbose => 0);
+
+pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
 if ($options{'debug'}) {
     $options{'log_level'} = 2 unless ($options{'log_level'});
