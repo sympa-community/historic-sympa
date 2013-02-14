@@ -1065,7 +1065,7 @@ Sympa::Tools::Password::ciphersaber_installed($Sympa::Configuration::Conf{'cooki
 
 our %changed_params;
 
-my (%in, $query);
+my (%in, $query, $action);
 
 my $birthday = time ;
 
