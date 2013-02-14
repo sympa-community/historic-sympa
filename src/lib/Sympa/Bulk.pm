@@ -417,7 +417,7 @@ sub store {
     if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {
 	$message_already_on_spool = 1;
     }else{
-	my $lock = $$.'@'.hostname() ;
+	my $lock = $PID.'@'.hostname() ;
 	if ($message->{'messagekey'}) {
 	    # move message to spool bulk and keep it locked
 	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});

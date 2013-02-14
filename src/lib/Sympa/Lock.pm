@@ -378,7 +378,7 @@ sub _lock_file {
 
 	## Keep track of the locking PID
 	if ($mode eq 'write') {
-	    print $fh "$$\n";
+	    print $fh "$PID\n";
 	}
     }else {
 	Sympa::Log::do_log('err', 'Failed locking %s: %s', $lock_file, $ERRNO);

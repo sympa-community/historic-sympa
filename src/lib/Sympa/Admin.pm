@@ -1221,8 +1221,8 @@ sub install_aliases {
 	if ($Sympa::Configuration::Conf{'sendmail_aliases'} =~ /^none$/i);
 
     my $alias_manager = $Sympa::Configuration::Conf{'alias_manager' };
-    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
-    my $error_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stderr.'.$$;
+    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$PID;
+    my $error_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stderr.'.$PID;
     Sympa::Log::do_log('debug2',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
 
     unless (-x $alias_manager) {

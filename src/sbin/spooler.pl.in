@@ -234,7 +234,7 @@ if ($signal ne 'hup') {
 		if ((my $child_pid = fork) != 0) {
 		   Sympa::Log::do_log('debug', "Master daemon fork child %s",$child_pid);
 		}else{
-		   Sympa::Log::do_log('info', "Child process PID %s spooler for spool %s",$$,$spooldir);
+		   Sympa::Log::do_log('info', "Child process PID %s spooler for spool %s",$PID,$spooldir);
 		    $master = 0;
 		    last;
 		}
@@ -248,7 +248,7 @@ if ($signal ne 'hup') {
 
 	Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
-	Sympa::Log::do_log('debug', "Running server $$ for spooler purpose ");
+	Sympa::Log::do_log('debug', "Running server $PID for spooler purpose ");
 
 	unless ($options{'batch'} ) {
 
@@ -259,7 +259,7 @@ if ($signal ne 'hup') {
 	    my $options;
 	    $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 	    $options->{'multiple_process'} = 1 ;
-	    Sympa::Tools::Daemon::write_pid($file, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
+	    Sympa::Tools::Daemon::write_pid($file, $PID, $options, $Sympa::Configuration::Conf{'lock_method'});
 	}
 
 
@@ -458,7 +458,7 @@ Sympa::SDM::db_disconnect;
 }
 Sympa::Log::do_log('notice', 'spooler exited normally due to signal');
 my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
-Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid($file, $PID, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);
 }

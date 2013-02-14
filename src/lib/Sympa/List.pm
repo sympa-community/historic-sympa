@@ -2356,8 +2356,8 @@ sub increment_msg_count {
 	$count{$today} = 1;
     }
 
-    unless (open(MSG_COUNT, ">$file.$$")) {
-	Sympa::Log::do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $ERRNO);
+    unless (open(MSG_COUNT, ">$file.$PID")) {
+	Sympa::Log::do_log('err', "Unable to create '%s.%s' : %s", $file,$PID, $ERRNO);
 	return undef;
     }
     foreach my $key (sort {$a <=> $b} keys %count) {
@@ -2365,7 +2365,7 @@ sub increment_msg_count {
     }
     close MSG_COUNT ;
 
-    unless (rename("$file.$$", $file)) {
+    unless (rename("$file.$PID", $file)) {
 	Sympa::Log::do_log('err', "Unable to write '%s' : %s", $file, $ERRNO);
 	return undef;
     }

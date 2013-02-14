@@ -645,8 +645,8 @@ sub instantiate {
 	});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
-    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
+    my $aliasmanager_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$PID;
+    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$PID;
 	my $output = '';
 
     ## EACH FAMILY LIST

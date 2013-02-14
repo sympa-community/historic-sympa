@@ -35,6 +35,7 @@ package Sympa::Spool;
 use strict;
 
 require Encode;
+use English qw(-no_match_vars);
 use IO::Scalar;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Mail::Header;
@@ -203,7 +204,7 @@ sub next {
     }
     $sql_where =~ s/^\s*AND//;
 
-    my $lock = $$.'@'.hostname();
+    my $lock = $PID.'@'.hostname();
     my $epoch=time; # should we use milli or nano seconds ?
 
     my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch),Sympa::SDM::quote($self->{'spoolname'}),$sql_where;
@@ -387,7 +388,7 @@ sub store {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
 	$insertpart2 = $insertpart2. ', '.Sympa::SDM::quote($metadata->{$meta});
     }
-    my $lock = $$.'@'.hostname() ;
+    my $lock = $PID.'@'.hostname() ;
 
     push @sth_stack, $sth;
     my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,Sympa::SDM::quote($self->{'spoolname'}),Sympa::SDM::quote($lock),Sympa::SDM::quote($b64msg), $insertpart2;

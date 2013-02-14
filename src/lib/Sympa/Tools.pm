@@ -1893,7 +1893,7 @@ varchar(30)
 =cut
 
 sub get_lockname {
-    return substr(substr(hostname(), 0, 20).$$,0,30);
+    return substr(substr(hostname(), 0, 20).$PID,0,30);
 }
 
 =head2 wrap_text($text, $init, $subs, $cols)

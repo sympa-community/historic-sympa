@@ -154,7 +154,7 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 
 ## Create and write the pidfile
-Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
+Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $PID, $options, $Sympa::Configuration::Conf{'lock_method'});
 unless ($options->{'stderr_to_tty'}) {
     Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $PID));
 }
@@ -354,7 +354,7 @@ Sympa::Log::do_log('notice',"Archiving message %s for list %s@%s",$item->{'messa
 Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 Sympa::Log::do_log('notice', 'archived exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $PID, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);
 

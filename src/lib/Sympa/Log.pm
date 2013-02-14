@@ -199,7 +199,7 @@ sub do_connect {
     }
     # close log may be usefull : if parent processus did open log child process inherit the openlog with parameters from parent process
     closelog ;
-    eval {openlog("$log_service\[$$\]", 'ndelay,nofatal', $log_facility)};
+    eval {openlog("$log_service\[$PID\]", 'ndelay,nofatal', $log_facility)};
     if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
         require Sympa::List;

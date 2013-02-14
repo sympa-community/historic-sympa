@@ -2122,7 +2122,8 @@ sub get_parameters {
 	     if ($one_p !~ /^$regexp$/s ||
 		 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
 		 ## Dump parameters in a tmp file for later analysis
-		 my $dump_file =  Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
+		 my $dump_file =  Sympa::Configuration::get_robot_conf($robot,
+			 'tmpdir').'/sympa_dump.'.time.'.'.$PID;
 		 unless (open DUMP, ">$dump_file") {
 		     wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $ERRNO);
 		 }
@@ -2541,7 +2542,7 @@ sub check_param_out {
 
      $param->{'loop_count'} = $loop_count;
      $param->{'start_time'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime($start_time);
-     $param->{'process_id'} = $$;
+     $param->{'process_id'} = $PID;
 
      ## listmaster has owner and editor privileges for the list
      if (Sympa::List::is_listmaster($param->{'user'}{'email'},$robot)) {
@@ -13388,7 +13389,7 @@ sub do_d_unzip {
 
      # directory for the uploaded file
      my $date = time;
-     my $zip_dir_name = $listname.$date.$$;
+     my $zip_dir_name = $listname.$date.$PID;
      my $zip_abs_dir = $Sympa::Configuration::Conf{'tmpdir'}.'/'.$zip_dir_name;
 
      unless (mkdir ("$zip_abs_dir",0777)) {
@@ -16482,7 +16483,7 @@ sub do_viewspool_message_dump {
     }
 
 
-    $param->{'msg_file'} = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+    $param->{'msg_file'} = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$PID;
 
 
     unless (open(OUT, ">$param->{'msg_file'}")) {

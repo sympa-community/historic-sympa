@@ -522,7 +522,7 @@ if ($signal ne 'hup') {
 
     Sympa::Log::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'sympa');
 
-    Sympa::Log::do_log('debug', "Running server $$");
+    Sympa::Log::do_log('debug', "Running server $PID");
     unless ($options{'batch'} ) {
 
 	## Create and write the pidfile
@@ -530,7 +530,7 @@ if ($signal ne 'hup') {
 	## If process is running in foreground, don't write STDERR to a dedicated file
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
-	Sympa::Tools::Daemon::write_pid($file, $$, $options, $Sympa::Configuration::Conf{'lock_method'});
+	Sympa::Tools::Daemon::write_pid($file, $PID, $options, $Sympa::Configuration::Conf{'lock_method'});
 	unless ($options->{'stderr_to_tty'}) {
 	    Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $PID));
 	}
@@ -597,16 +597,16 @@ if ($options{'dump'}) {
     exit 0;
 }elsif ($options{'make_alias_file'}) {
     my $all_lists = Sympa::List::get_lists('*');
-    unless (open TMP, ">$Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$") {
-	printf STDERR "Unable to create $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$, exiting\n";
+    unless (open TMP, ">$Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$PID") {
+	printf STDERR "Unable to create $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$PID, exiting\n";
 	exit;
     }
     printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
     close TMP;
     foreach my $list (@$all_lists) {
-	system ("$Sympa::Configuration::Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
+	system ("$Sympa::Configuration::Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$PID") if ($list->{'admin'}{'status'} eq 'open');
     }
-    printf ("Sympa aliases file is $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
+    printf ("Sympa aliases file is $Sympa::Configuration::Conf{'tmpdir'}/sympa_aliases.$PID file made, you probably need to installed it in your SMTP engine\n");
 
     exit 0;
 }elsif ($options{'md5_digest'}) {
@@ -1261,7 +1261,7 @@ Sympa::SDM::db_disconnect;
 
 Sympa::Log::do_log('notice', 'Sympa exited normally due to signal');
 my $file = $Sympa::Configuration::Conf{'pidfile'};
-Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid($file, $PID, undef, $Sympa::Configuration::Conf{'tmpdir'});
 
 exit(0);
 

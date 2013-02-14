@@ -375,9 +375,9 @@ sub convert_single_msg_2_html {
 	$host = $list->{'admin'}{'host'};
 	$robot = $list->{'robot'};
 	$listname = $list->{'name'};
-	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
+	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$PID;
     }else{
-	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$PID;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
