@@ -211,7 +211,7 @@ sub smime_sign_check {
     $trusted_ca_options .= "-CApath $capath " if ($capath);
     Sympa::Log::do_log('debug', "$openssl smime -verify  $trusted_ca_options -signer  $temporary_file");
 
-    unless (open (MSGDUMP, "| $openssl smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
+    unless (open (MSGDUMP, "| $openssl smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null 2>&1")) {
 
 	Sympa::Log::do_log('err', "unable to verify smime signature from $sender $verify");
 	return undef ;
