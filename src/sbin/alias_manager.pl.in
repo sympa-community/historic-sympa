@@ -25,6 +25,10 @@
 
 alias_manager.pl - Sympa alias manager
 
+=head1 SYNOPSIS
+  alias_manager.pl add <list> <domain> [<file>]
+  alias_manager.pl del <list> <domain> [<file>]
+
 =head1 DESCRIPTION
 
 This script allows to add or remove aliases in an SMTP server configuration
@@ -40,6 +44,7 @@ use lib '--modulesdir--';
 
 use English qw(-no_match_vars);
 use POSIX qw();
+use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Constants;
@@ -62,11 +67,11 @@ my $path_to_bouncequeue = Sympa::Constants::LIBEXECDIR .'/bouncequeue';
 
 my ($operation, $listname, $domain, $file) = @ARGV;
 
-
-if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
-    printf STDERR "Usage: $0 <add|del> <listname> <robot> [<file>]\n";
-    exit(2);
-}
+pod2usage(-message => 'missing operation', exit => 2) unless $operation;
+pod2usage(-message => 'missing list', exit => 2) unless $operation;
+pod2usage(-message => 'missing domain', exit => 2) unless $domain;
+pod2usage(-message => "invalid operation $operation", exit => 2)
+	unless $operation eq 'add' || $operation eq 'del';
 
 $default_domain = $Sympa::Configuration::Conf{'domain'};
 
