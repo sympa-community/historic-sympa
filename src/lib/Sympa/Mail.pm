@@ -66,58 +66,95 @@ my %pid = ();
 
 my $send_spool; ## for calling context
 
+=head1 FUNCTIONS
 
+=head2 set_send_spool($spool)
 
-#################################### PUBLIC FUNCTIONS ##############################################
+Set in global $send_spool, the concerned spool for sending message when it is
+not done by smtpto
 
+=head3 Parameters
 
-####################################################
-# public set_send_spool
-####################################################
-# set in global $send_spool, the concerned spool for
-# sending message when it is not done by smtpto
-#
-# IN : $spool (+): spool concerned by sending
-# OUT :
-#
-####################################################
+=over
+
+=item * I<$spool>: spool to use
+
+=back
+
+=head3 Return value
+
+None.
+
+=cut
+
 sub set_send_spool {
     my $spool = pop;
 
     $send_spool = $spool;
 }
 
-####################################################
-# public mail_file
-####################################################
-# send a tt2 file
-#
-#
-# IN : -$filename(+) : tt2 filename (with .tt2) | ''
-#      -$rcpt(+) : SCALAR |ref(ARRAY) : SMTP "RCPT To:" field
-#      -$data(+) : used to parse tt2 file, ref(HASH) with keys :
-#         -return_path(+) : SMTP "MAIL From:" field if send by smtp,
-#                           "X-Sympa-From:" field if send by spool
-#         -to : "To:" header field
-#         -lang : tt2 language if $filename
-#         -list :  ref(HASH) if $sign_mode = 'smime', keys are :
-#            -name
-#            -dir
-#         -from : "From:" field if not a full msg
-#         -subject : "Subject:" field if not a full msg
-#         -replyto : "Reply-to:" field if not a full msg
-#         -body  : body message if not $filename
-#         -headers : ref(HASH) with keys are headers mail
-#         -dkim : a set of parameters for appying DKIM signature
-#            -d : d=tag
-#            -i : i=tag (optionnal)
-#            -selector : dkim dns selector
-#            -key : the RSA private key
-#      -$robot(+)
-#      -$sign_mode :'smime' | '' | undef
-#
-# OUT : 1 | undef
-####################################################
+=head2 mail_file($filename, $rcpt, $data, $robot, $return_message_as_string,
+$priority, $priority_packet)
+
+send a tt2 file.
+
+=head3 Parameters
+
+=over
+
+=item * I<$filename>: tt2 filename (with .tt2) | ''
+
+=item * I<$rcpt>: SCALAR |ref(ARRAY) : SMTP "RCPT To:" field
+
+=item * I<$data>: used to parse tt2 file, ref(HASH) with keys :
+
+=over
+
+=item * I<return_path>: SMTP "MAIL From:" field if send by smtp,
+                           "X-Sympa-From:" field if send by spool
+
+=item * I<to>: "To:" header field
+
+=item * I<lang>: tt2 language if $filename
+
+=item * I<list>:  ref(HASH) if $sign_mode = 'smime', keys are :
+            -name
+            -dir
+
+=item * I<from>: "From:" field if not a full msg
+
+=item * I<subject>: "Subject:" field if not a full msg
+
+=item * I<replyto>: "Reply-to:" field if not a full msg
+
+=item * I<body>: body message if not $filename
+
+=item * I<headers> : ref(HASH) with keys are headers mail
+
+=item * I<dkim>: a set of parameters for appying DKIM signature
+            -d : d=tag
+            -i : i=tag (optionnal)
+            -selector : dkim dns selector
+            -key : the RSA private key
+
+=back
+
+=item * I<$robot>
+
+=item * I<$sign_mode>: 'smime' | '' | undef
+
+=item * I<$priority>
+
+=item * I<$priority_packet>
+
+=back
+
+=head3 Return value
+
+A true value on sucess, I<undef> otherwise.
+
+=cut
+
 sub mail_file {
 
     my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet) = @_;
@@ -323,19 +360,34 @@ sub mail_file {
     return 1;
 }
 
-####################################################
-# public mail_message
-####################################################
-# distribute a message to a list, Crypting if needed
-#
-# IN : -$message(+) : ref(Message)
-#      -$from(+) : message from
-#      -$robot(+) : robot
-#      -{verp=>[on|off]} : a hash to introduce verp parameters, starting just on or off, later will probably introduce optionnal parameters
-#      -@rcpt(+) : recepients
-# OUT : -$numsmtp : number of sendmail process | undef
-#
-####################################################
+=head2 mail_message(%parameters)
+
+Distribute a message to a list, crypting if needed.
+
+=head3 Parameters
+
+=over
+
+=item * I<message>: the message
+
+=item * I<from>: message sendef
+
+=item * I<rcpt>: message recipients, as a listref
+
+=item * I<robot>: the robot
+
+=item * I<verp>: verp parameters, as an hashref
+
+=item * I<priority_packet>
+
+=back
+
+=head3 Return value
+
+A number of sendmail process on success, I<undef> otherwise.
+
+=cut
+
 sub mail_message {
 
     my %params = @_;
@@ -460,18 +512,34 @@ sub mail_message {
     return $numsmtp;
 }
 
-####################################################
-# public mail_forward
-####################################################
-# forward a message.
-#
-# IN : -$mmessage(+) : ref(Message)
-#      -$from(+) : message from
-#      -$rcpt(+) : ref(SCALAR) | ref(ARRAY)  - recepients
-#      -$robot(+) : robot
-# OUT : 1 | undef
-#
-####################################################
+=head2 mail_forward($message,$from,$rcpt,$robot, $priority,$priority_packet)
+
+Forward a message.
+
+=head3 Parameters
+
+=over
+
+=item * I<$message>: the message
+
+=item * I<$from>: message sender
+
+=item * I<$rcpt>: message recipients, as a listref
+
+=item * I<robot>: the robot
+
+=item * I<priority>
+
+=item * I<priority_packet>
+
+=back
+
+=head3 Return value
+
+A true value on success, I<undef> otherwise.
+
+=cut
+
 sub mail_forward {
     my($message,$from,$rcpt,$robot, $priority,$priority_packet)=@_;
     Sympa::Log::do_log('debug2', "($from,$rcpt)");
@@ -496,18 +564,23 @@ sub mail_forward {
     return 1;
 }
 
-#####################################################################
-# public reaper
-#####################################################################
-# Non blocking function called by : smtpto(), sympa::main_loop
-#  task_manager::INFINITE_LOOP scanning the queue,
-#  bounced::infinite_loop scanning the queue,
-# just to clean the defuncts list by waiting to any processes and
-#  decrementing the counter.
-#
-# IN : $block
-# OUT : $i
-#####################################################################
+=head2 reaper($block)
+
+Non blocking function called to clean the defuncts list by waiting to any
+processes and decrementing the counter.
+
+=head3 Parameters
+
+=over
+
+=item * I<$block>
+
+=back
+
+=head3 Return value
+
+=cut
+
 sub reaper {
    my ($block) = @_;
 
@@ -527,28 +600,25 @@ sub reaper {
    return $i;
 }
 
-
-#################################### PRIVATE FUNCTIONS ##############################################
-
-####################################################
-# _sendto
-####################################################
+# _sendto(%parameters)
+#
 # send messages, S/MIME encryption if needed,
 # grouped sending (or not if encryption)
 #
-# IN: $msg_header (+): message header : MIME::Head object
-#     $msg_body (+): message body
-#     $from (+): message from
-#     $rcpt(+) : ref(SCALAR) | ref(ARRAY) - message recepients
-#     $listname : use only to format return_path if VERP on
-#     $robot(+) : robot
-#     $encrypt : 'smime_crypted' | undef
-#     $verp : 1| undef
-#     $use_bulk : if defined,  send message using bulk
+# Parameters:
+# * msg_header (+): message header : MIME::Head object
+# * msg_body (+): message body
+# * from (+): message from
+# * rcpt(+) : ref(SCALAR) | ref(ARRAY) - message recepients
+# * listname : use only to format return_path if VERP on
+# * robot(+) : robot
+# * encrypt : 'smime_crypted' | undef
+# * verp : 1| undef
+# * use_bulk : if defined,  send message using bulk
 #
-# OUT : 1 - call to sending
-#
-####################################################
+# Return value:
+# 1 - call to sending
+
 sub _sendto {
     my (%params) = @_;
 
@@ -625,29 +695,26 @@ sub _sendto {
     return 1;
 }
 
-####################################################
-# sending
-####################################################
+# _sending(%parameters)
+#
 # send a message using smpto function or puting it
 # in spool according to the context
 # Signing if needed
 #
+# Parameters:
+# * msg(+) : ref(MIME::Entity) | string - message to send
+# * rcpt(+) : ref(SCALAR) | ref(ARRAY) - recepients
+#   (for SMTP : "RCPT To:" field)
+# * from(+) : for SMTP "MAIL From:" field , for spool sending : "X-Sympa-From" field
+# * robot(+) : robot
+# * listname : listname | ''
+# * sign_mode(+) : 'smime' | 'none' for signing
+# * verp
+# * kim : a hash for dkim parameters
 #
-# IN : -$msg(+) : ref(MIME::Entity) | string - message to send
-#      -$rcpt(+) : ref(SCALAR) | ref(ARRAY) - recepients
-#       (for SMTP : "RCPT To:" field)
-#      -$from(+) : for SMTP "MAIL From:" field , for
-#        spool sending : "X-Sympa-From" field
-#      -$robot(+) : robot
-#      -$listname : listname | ''
-#      -$sign_mode(+) : 'smime' | 'none' for signing
-#      -$verp
-#      -dkim : a hash for dkim parameters
-#
-# OUT : 1 - call to smtpto (sendmail) | 0 - push in spool
-#           | undef
-#
-####################################################
+# Return value:
+# 1 - call to smtpto (sendmail) | 0 - push in spool | undef
+
 sub _sending {
     my %params = @_;
     my $message = $params{'message'};
@@ -753,21 +820,21 @@ sub _sending {
     return 1;
 }
 
-##################################################################################
-# _smtpto
-##################################################################################
+# _smtpto($from, $rcpt, $robot, $msgkey, $sign_mode)
+#
 # Makes a sendmail ready for the recipients given as argument, uses a file
 # descriptor in the smtp table which can be imported by other parties.
 # Before, waits for number of children process < number allowed by sympa.conf
 #
-# IN : $from :(+) for SMTP "MAIL From:" field
-#      $rcpt :(+) ref(SCALAR)|ref(ARRAY)- for SMTP "RCPT To:" field
-#      $robot :(+) robot
-#      $msgkey : a id of this message submission in notification table
-# OUT : $fh - file handle on opened file for ouput, for SMTP "DATA" field
-#       | undef
+# Parameters:
+# * $from: for SMTP "MAIL From:" field
+# * $rcpt: ref(SCALAR)|ref(ARRAY)- for SMTP "RCPT To:" field
+# * $robot: robot
+# * $msgkey: a id of this message submission in notification table
 #
-##################################################################################
+# Return value:
+# $fh - file handle on opened file for ouput, for SMTP "DATA" field | undef
+
 sub _smtpto {
    my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
 
@@ -855,25 +922,21 @@ sub _smtpto {
    return("$fh"); ## Symbol for the write descriptor.
 }
 
-
-
-
-
-####################################################
-# _send_in_spool      : not used but if needed ...
-####################################################
+# _send_in_spool($rcpt,$robot,$sympa_email,$XSympaFrom)
+#
 # send a message by putting it in global $send_spool
 #
-# IN : $rcpt (+): ref(SCALAR)|ref(ARRAY) - recepients
-#      $robot(+) : robot
-#      $sympa_email : for the file name
-#      $XSympaFrom : for "X-Sympa-From" field
-# OUT : $return->
-#        -filename : name of temporary file
-#         needing to be renamed
-#        -fh : file handle opened for writing
-#         on
-####################################################
+# Parameters:
+# * $rcpt (+): ref(SCALAR)|ref(ARRAY) - recepients
+# * $robot(+) : robot
+# * $sympa_email : for the file name
+# * $XSympaFrom : for "X-Sympa-From" field
+#
+# Return value:
+# -filename : name of temporary file needing to be renamed
+# -fh : file handle opened for writing
+# on
+
 sub _send_in_spool {
     my ($rcpt,$robot,$sympa_email,$XSympaFrom) = @_;
     Sympa::Log::do_log('debug3', '(%s,%s, %s)',$XSympaFrom,$rcpt);
@@ -911,23 +974,21 @@ sub _send_in_spool {
     return $return;
 }
 
-#####################################################################
-
-
-####################################################
-# _reformat_message
-####################################################
+# _reformat_message($message, $attachments, $defcharset)
+#
 # Reformat bodies of text parts contained in the message using
 # recommended encoding schema and/or charsets defined by MIME::Charset.
 #
 # MIME-compliant headers are appended / modified.  And custom X-Mailer:
 # header is appended :).
 #
-# IN : $msg: ref(MIME::Entity) | string - message to reformat
-#      $attachments: ref(ARRAY) - messages to be attached as subparts.
-# OUT : string
-#
-####################################################
+# Parameters:
+# * $msg: ref(MIME::Entity) | string - message to reformat
+# * $attachments: ref(ARRAY) - messages to be attached as subparts.
+# * $defcharset
+# 
+# Return value:
+# a string
 
 ####################################################
 ## Comments from Soji Ikeda below

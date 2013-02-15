@@ -48,7 +48,22 @@ use Sympa::Tools;
 use Sympa::Tools::Password;
 use Sympa::Tools::File;
 
-## Return the previous Sympa version, ie the one listed in data_structure.version
+=head1 FUNCTIONS
+
+=head2 get_previous_version()
+
+Return the previous Sympa version, ie the one listed in data_structure.version
+
+=head3 Parameters
+
+None
+
+=head3 Return value
+
+A version number.
+
+=cut
+
 sub get_previous_version {
     my $version_file = "$Sympa::Configuration::Conf{'etc'}/data_structure.version";
     my $previous_version;
