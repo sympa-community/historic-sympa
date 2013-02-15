@@ -922,58 +922,6 @@ sub _smtpto {
    return("$fh"); ## Symbol for the write descriptor.
 }
 
-# _send_in_spool($rcpt,$robot,$sympa_email,$XSympaFrom)
-#
-# send a message by putting it in global $send_spool
-#
-# Parameters:
-# * $rcpt (+): ref(SCALAR)|ref(ARRAY) - recepients
-# * $robot(+) : robot
-# * $sympa_email : for the file name
-# * $XSympaFrom : for "X-Sympa-From" field
-#
-# Return value:
-# -filename : name of temporary file needing to be renamed
-# -fh : file handle opened for writing
-# on
-
-sub _send_in_spool {
-    my ($rcpt,$robot,$sympa_email,$XSympaFrom) = @_;
-    Sympa::Log::do_log('debug3', '(%s,%s, %s)',$XSympaFrom,$rcpt);
-
-    unless ($sympa_email) {
-	$sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
-   }
-
-    unless ($XSympaFrom) {
-	$XSympaFrom = Sympa::Configuration::get_robot_conf($robot, 'sympa');
-    }
-
-    my $sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
-
-    my $all_rcpt;
-    if (ref($rcpt) eq "ARRAY") {
-	$all_rcpt = join (',', @$rcpt);
-    } else {
-	$all_rcpt = $$rcpt;
-       }
-
-    unless (open TMP, ">$sympa_file") {
-	Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);
-	return undef;
-   }
-
-    printf TMP "X-Sympa-To: %s\n", $all_rcpt;
-    printf TMP "X-Sympa-From: %s\n", $XSympaFrom;
-    printf TMP "X-Sympa-Checksum: %s\n", Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Configuration::Conf{'cookie'});
-
-    my $return;
-    $return->{'filename'} = $sympa_file;
-    $return->{'fh'} = \*TMP;
-
-    return $return;
-}
-
 # _reformat_message($message, $attachments, $defcharset)
 #
 # Reformat bodies of text parts contained in the message using
