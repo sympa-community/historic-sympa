@@ -3918,8 +3918,6 @@ sub send_file {
 	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
     }
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
-          # use Data::Dumper;
-	  # my $dump = Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP;
     unless (Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'}, undef, Sympa::Configuration::get_robot_conf($robot,'sympa_priority'), $Sympa::Configuration::Conf{'sympa_packet_priority'})) {
 	Sympa::Log::do_log('err',"could not send template $filename to $who");
 	return undef;
