@@ -11096,7 +11096,9 @@ sub _apply_defaults {
     Sympa::Log::do_log('debug3', '()');
 
     ## List of available languages
-    $::pinfo{'lang'}{'format'} = Sympa::Language::GetSupportedLanguages();
+    $::pinfo{'lang'}{'format'} = Sympa::Language::GetSupportedLanguages(
+	    Sympa::Configuration::get_robot_conf('', 'supported_lang')
+    );
 
     ## Parameter order
     foreach my $index (0..$#param_order) {

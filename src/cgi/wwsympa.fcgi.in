@@ -1680,7 +1680,9 @@ my $birthday = time ;
      my $saved_lang = Sympa::Language::GetLang();
 
 
-     foreach my $l (@{Sympa::Language::GetSupportedLanguages($robot)}) {
+     foreach my $l (@{Sympa::Language::GetSupportedLanguages(
+	     Sympa::Configuration::get_robot_conf($robot, 'supported_lang')
+     )}) {
 	 Sympa::Language::SetLang($l) || next;
 
 	 if (Sympa::Language::gettext("_language_")) {

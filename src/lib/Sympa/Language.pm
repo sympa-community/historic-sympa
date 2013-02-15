@@ -116,11 +116,11 @@ my %template2textdomain = ('help_admin.tt2' => 'web_help',
 			   );
 
 sub GetSupportedLanguages {
-    my ($robot) = @_;
+    my ($supported_languages) = @_;
 
     my @lang_list;
 
-    foreach my $l (split /,/,Sympa::Configuration::get_robot_conf($robot, 'supported_lang')) {
+    foreach my $l (split(/,/, $supported_languages)) {
 	push @lang_list, $lang2locale{$l}||$l;
     }
     return \@lang_list;
