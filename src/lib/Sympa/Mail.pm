@@ -120,7 +120,7 @@ sub set_send_spool {
 ####################################################
 sub mail_file {
 
-    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority) = @_;
+    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet) = @_;
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
 
@@ -314,6 +314,7 @@ sub mail_file {
 					  'robot' => $robot,
 					  'listname' => $listname,
 					  'priority' => $priority,
+					  'priority_packet' => $priority_packet,
 					  'sign_mode' => $sign_mode,
 					  'use_bulk' => $data->{'use_bulk'},
 					  'dkim' => $data->{'dkim'},
@@ -344,6 +345,7 @@ sub mail_message {
     my @rcpt =  @{$params{'rcpt'}};
     my $dkim  =  $params{'dkim_parameters'};
     my $tag_as_last = $params{'tag_as_last'};
+    my $priority_packet = $params{'priority_packet'};
     my $host = $list->{'admin'}{'host'};
     my $robot = $list->{'domain'};
 
@@ -441,6 +443,7 @@ sub mail_message {
 		    'rcpt' => \@sendtobypacket,
 		    'listname' => $list->{'name'},
 		    'priority' => $list->{'admin'}{'priority'},
+		    'priority_packet' => $priority_packet,
 		    'delivery_date' => $list->get_next_delivery_date,
 		    'robot' => $robot,
 		    'encrypt' => $message->{'smime_crypted'},
@@ -470,7 +473,7 @@ sub mail_message {
 #
 ####################################################
 sub mail_forward {
-    my($message,$from,$rcpt,$robot, $priority)=@_;
+    my($message,$from,$rcpt,$robot, $priority,$priority_packet)=@_;
     Sympa::Log::do_log('debug2', "($from,$rcpt)");
 
     unless (ref($message) && $message->('Sympa::Message')) {
@@ -484,7 +487,8 @@ sub mail_forward {
 			     'rcpt' => $rcpt,
 			     'from' => $from,
 			     'robot' => $robot,
-			     'priority'=> $priority
+			     'priority'=> $priority,
+			     'priority_packet'=> $priority_packet
 			     )) {
 	Sympa::Log::do_log('err', 'forward from %s impossible to send', $from);
 	return undef;
@@ -556,6 +560,7 @@ sub sendto {
     my $listname = $params{'listname'};
     my $robot = $params{'robot'};
     my $priority =  $params{'priority'};
+    my $priority_packet =  $params{'priority_packet'};
     my $encrypt = $params{'encrypt'};
     my $verp = $params{'verp'};
     my $merge = $params{'merge'};
@@ -589,6 +594,7 @@ sub sendto {
 				 'listname' => $listname,
 				 'robot' => $robot,
 				 'priority' => $priority,
+				 'priority_packet' => $priority_packet,
 				 'delivery_date' =>  $delivery_date,
 				 'use_bulk' => $use_bulk,
 				 'tag_as_last' => $tag_as_last)) {
@@ -606,6 +612,7 @@ sub sendto {
 			      'listname' => $listname,
 			      'robot' => $robot,
 			      'priority' => $priority,
+			      'priority_packet' => $priority_packet,
 			      'delivery_date' =>  $delivery_date,
 			      'verp' => $verp,
 			      'merge' => $merge,
@@ -650,8 +657,8 @@ sub sending {
     my $listname = $params{'listname'};
     my $sign_mode = $params{'sign_mode'};
     my $sympa_email =  $params{'sympa_email'};
-    my $priority_message =  $params{'priority'};
-    my $priority_packet = $Sympa::Configuration::Conf{'sympa_packet_priority'};
+    my $priority_message = $params{'priority'};
+    my $priority_packet = $params{'priority_packet'};
     my $delivery_date = $params{'delivery_date'};
     $delivery_date = time() unless ($delivery_date);
     my $verp  =  $params{'verp'};

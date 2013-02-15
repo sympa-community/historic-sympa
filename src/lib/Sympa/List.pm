@@ -3746,7 +3746,7 @@ sub send_global_file {
 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
 
-    my $r = Sympa::Mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'},Sympa::Configuration::get_robot_conf($robot,'sympa_priority'));
+    my $r = Sympa::Mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'},Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),$Sympa::Configuration::Conf{'sympa_packet_priority'});
     return $r if($options->{'parse_and_return'});
 
     unless ($r) {
@@ -3920,7 +3920,7 @@ sub send_file {
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
           # use Data::Dumper;
 	  # my $dump = Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP;
-    unless (Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'})) {
+    unless (Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'}, undef, Sympa::Configuration::get_robot_conf($robot,'sympa_priority'), $Sympa::Configuration::Conf{'sympa_packet_priority'})) {
 	Sympa::Log::do_log('err',"could not send template $filename to $who");
 	return undef;
     }
@@ -4294,7 +4294,9 @@ sub send_msg {
 					 'list'=>$self,
 					 'verp' => $verp,
 					 'dkim_parameters'=>$dkim_parameters,
-					 'tag_as_last' => $tags_to_use->{'tag_noverp'});
+					 'tag_as_last' => $tags_to_use->{'tag_noverp'},
+					 'priority_packet' => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+				 );
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
 	    return undef;
@@ -4325,7 +4327,10 @@ sub send_msg {
 				      'list'=> $self,
 				      'verp' => $verp,
 				      'dkim_parameters'=>$dkim_parameters,
-				      'tag_as_last' => $tags_to_use->{'tag_verp'});
+				      'tag_as_last' => $tags_to_use->{'tag_verp'},
+				      'priority_packet' => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+
+			      );
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp enabled)");
 	    return undef;
