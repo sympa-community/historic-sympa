@@ -7611,7 +7611,7 @@ sub do_send_me {
 	     wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
 	     return undef;
 	 }
-	 unless (Sympa::Mail::mail_forward($message,Sympa::Configuration::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot)) {
+	 unless (Sympa::Mail::mail_forward($message,Sympa::Configuration::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot,Sympa::Configuration::get_robot_conf($robot, 'request_priority'))) {
 	     $param->{'status'} = 'message_err';
 	     wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
 	     return undef;

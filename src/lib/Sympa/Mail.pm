@@ -473,7 +473,7 @@ sub mail_message {
 #
 ####################################################
 sub mail_forward {
-    my($message,$from,$rcpt,$robot)=@_;
+    my($message,$from,$rcpt,$robot, $priority)=@_;
     Sympa::Log::do_log('debug2', "($from,$rcpt)");
 
     unless (ref($message) && $message->('Sympa::Message')) {
@@ -487,7 +487,7 @@ sub mail_forward {
 			     'rcpt' => $rcpt,
 			     'from' => $from,
 			     'robot' => $robot,
-			     'priority'=> Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+			     'priority'=> $priority
 			     )) {
 	Sympa::Log::do_log('err', 'forward from %s impossible to send', $from);
 	return undef;
