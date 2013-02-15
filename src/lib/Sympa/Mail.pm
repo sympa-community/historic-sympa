@@ -296,7 +296,7 @@ sub mail_file {
 	$listname = $data->{'list'};
     }
 
-    unless ($message_as_string = reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
+    unless ($message_as_string = _reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
     	Sympa::Log::do_log('err', 'Failed to reformat message');
     }
 
@@ -308,7 +308,7 @@ sub mail_file {
     my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
     ## SENDING
-    return undef unless (defined sending('message' => $message,
+    return undef unless (defined _sending('message' => $message,
 					  'rcpt' => $rcpt,
 					  'from' => $data->{'return_path'},
 					  'robot' => $robot,
@@ -438,7 +438,7 @@ sub mail_message {
     }
 
 
-    unless (sendto('message' => $message,
+    unless (_sendto('message' => $message,
 		    'from' => $from,
 		    'rcpt' => \@sendtobypacket,
 		    'listname' => $list->{'name'},
@@ -483,7 +483,7 @@ sub mail_forward {
     ## Add an Auto-Submitted header field according to  http://www.tools.ietf.org/html/draft-palme-autosub-01
     $message->{'msg'}->head->add('Auto-Submitted', 'auto-forwarded');
 
-    unless (defined sending('message' => $message,
+    unless (defined _sending('message' => $message,
 			     'rcpt' => $rcpt,
 			     'from' => $from,
 			     'robot' => $robot,
@@ -531,7 +531,7 @@ sub reaper {
 #################################### PRIVATE FUNCTIONS ##############################################
 
 ####################################################
-# sendto
+# _sendto
 ####################################################
 # send messages, S/MIME encryption if needed,
 # grouped sending (or not if encryption)
@@ -549,7 +549,7 @@ sub reaper {
 # OUT : 1 - call to sending
 #
 ####################################################
-sub sendto {
+sub _sendto {
     my (%params) = @_;
 
     my $message = $params{'message'};
@@ -588,7 +588,7 @@ sub sendto {
 		    return undef;
                 }
 
-		unless (sending('message' => $message,
+		unless (_sending('message' => $message,
 				 'rcpt' => $email,
 				 'from' => $from,
 				 'listname' => $listname,
@@ -606,7 +606,7 @@ sub sendto {
 	}
     }else{
 	$message->{'msg_as_string'} = $msg_header->as_string . "\n" . $msg_body;
-	my $result = sending('message' => $message,
+	my $result = _sending('message' => $message,
 			      'rcpt' => $rcpt,
 			      'from' => $from,
 			      'listname' => $listname,
@@ -648,7 +648,7 @@ sub sendto {
 #           | undef
 #
 ####################################################
-sub sending {
+sub _sending {
     my %params = @_;
     my $message = $params{'message'};
     my $rcpt = $params{'rcpt'};
@@ -743,7 +743,7 @@ sub sending {
 	}
     }else{ # send it now
 	Sympa::Log::do_log('debug',"NOT USING BULK");
-	*SMTP = smtpto($from, $rcpt, $robot);
+	*SMTP = _smtpto($from, $rcpt, $robot);
 	print SMTP $message->{'msg'}->as_string ;
 	unless (close SMTP) {
 	    Sympa::Log::do_log('err', 'could not close safefork to sendmail');
@@ -754,7 +754,7 @@ sub sending {
 }
 
 ##################################################################################
-# smtpto
+# _smtpto
 ##################################################################################
 # Makes a sendmail ready for the recipients given as argument, uses a file
 # descriptor in the smtp table which can be imported by other parties.
@@ -768,7 +768,7 @@ sub sending {
 #       | undef
 #
 ##################################################################################
-sub smtpto {
+sub _smtpto {
    my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
 
    Sympa::Log::do_log('debug2', 'smtpto( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
@@ -860,7 +860,7 @@ sub smtpto {
 
 
 ####################################################
-# send_in_spool      : not used but if needed ...
+# _send_in_spool      : not used but if needed ...
 ####################################################
 # send a message by putting it in global $send_spool
 #
@@ -874,7 +874,7 @@ sub smtpto {
 #        -fh : file handle opened for writing
 #         on
 ####################################################
-sub send_in_spool {
+sub _send_in_spool {
     my ($rcpt,$robot,$sympa_email,$XSympaFrom) = @_;
     Sympa::Log::do_log('debug3', '(%s,%s, %s)',$XSympaFrom,$rcpt);
 
@@ -915,7 +915,7 @@ sub send_in_spool {
 
 
 ####################################################
-# reformat_message
+# _reformat_message
 ####################################################
 # Reformat bodies of text parts contained in the message using
 # recommended encoding schema and/or charsets defined by MIME::Charset.
@@ -955,7 +955,7 @@ sub send_in_spool {
 ##
 ##  Sub-messages are gathered from template context paramenters.
 
-sub reformat_message($;$$) {
+sub _reformat_message($;$$) {
     my ($message, $attachments, $defcharset) = @_;
     my $attachments ||= [];
 
@@ -980,12 +980,12 @@ sub reformat_message($;$$) {
 	}
     }
     $msg->head->delete("X-Mailer");
-    $msg = fix_part($msg, $parser, $attachments, $defcharset);
+    $msg = _fix_part($msg, $parser, $attachments, $defcharset);
     $msg->head->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
     return $msg->as_string;
 }
 
-sub fix_part($$$$) {
+sub _fix_part($$$$) {
     my ($part, $parser, $attachments, $defcharset) = @_;
     $attachments ||= [];
 
@@ -1020,7 +1020,7 @@ sub fix_part($$$$) {
     } elsif ($part->parts) {
 	my @newparts = ();
 	foreach ($part->parts) {
-	    push @newparts, fix_part($_, $parser, $attachments, $defcharset);
+	    push @newparts, _fix_part($_, $parser, $attachments, $defcharset);
 	}
 	$part->parts(\@newparts);
     } elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {
