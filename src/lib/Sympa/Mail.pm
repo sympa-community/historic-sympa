@@ -34,7 +34,6 @@ package Sympa::Mail;
 
 use strict;
 
-use Data::Dumper;
 use English qw(-no_match_vars);
 use MIME::Charset;
 use MIME::Tools;
@@ -152,7 +151,6 @@ sub mail_file {
 	my $output;
 	my @path = split /\//, $filename;
 	Sympa::Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
-	my $dump = Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP;
 	Sympa::Template::parse_tt2($data, $path[$#path], \$output);
 	Sympa::Language::PopLang() if (defined $data->{'lang'});
 	$message_as_string .= join('',$output);
@@ -301,7 +299,6 @@ sub mail_file {
     unless ($message_as_string = reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
     	Sympa::Log::do_log('err', 'Failed to reformat message');
     }
-    my $dump = Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP;
 
     ## Set it in case it was not set
     $data->{'return_path'} ||= Sympa::Configuration::get_robot_conf($robot, 'request');
