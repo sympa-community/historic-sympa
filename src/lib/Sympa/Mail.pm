@@ -121,7 +121,7 @@ sub set_send_spool {
 ####################################################
 sub mail_file {
 
-    my ($filename, $rcpt, $data, $robot, $return_message_as_string) = @_;
+    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority) = @_;
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
 
@@ -316,7 +316,7 @@ sub mail_file {
 					  'from' => $data->{'return_path'},
 					  'robot' => $robot,
 					  'listname' => $listname,
-					  'priority' => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+					  'priority' => $priority,
 					  'sign_mode' => $sign_mode,
 					  'use_bulk' => $data->{'use_bulk'},
 					  'dkim' => $data->{'dkim'},
