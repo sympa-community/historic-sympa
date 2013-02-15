@@ -241,7 +241,7 @@ sub smime_sign_check {
     }
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email.
-    my $signer = smime_parse_cert({tmpdir => $tmpdir, file => $temporary_file, openssl => $openssl});
+    my $signer = _parse_cert({tmpdir => $tmpdir, file => $temporary_file, openssl => $openssl});
 
     unless ($signer->{'email'}{lc($sender)}) {
 	unlink($temporary_file) unless ($main::options{'debug'}) ;
@@ -272,11 +272,11 @@ sub smime_sign_check {
     my $extracted = 0;
     Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
     if($nparts == 0) { # could be opaque signing...
-	$extracted +=smime_extract_certs($message->{msg}, $certbundle, $openssl);
+	$extracted += _extract_certs($message->{msg}, $certbundle, $openssl);
     } else {
 	for (my $i = 0; $i < $nparts; $i++) {
 	    my $part = $message->{msg}->parts($i);
-	    $extracted += smime_extract_certs($part, $certbundle, $openssl);
+	    $extracted += _extract_certs($part, $certbundle, $openssl);
 	    last if $extracted;
 	}
     }
@@ -305,9 +305,9 @@ sub smime_sign_check {
 	    }
 	    print CERT $workcert;
 	    close(CERT);
-	    my($parsed) = smime_parse_cert({tmpdir => $tmpdir, file => $tmpcert, openssl => $openssl});
+	    my($parsed) = _parse_cert({tmpdir => $tmpdir, file => $tmpcert, openssl => $openssl});
 	    unless($parsed) {
-		Sympa::Log::do_log('err', 'No result from smime_parse_cert');
+		Sympa::Log::do_log('err', 'No result from _parse_cert');
 		return undef;
 	    }
 	    unless($parsed->{'email'}) {
@@ -718,48 +718,26 @@ sub smime_find_keys {
     return ($certs,$keys);
 }
 
-=head2 smime_parse_cert($parameters)
+# _parse_cert($parameters)
+#
+# Parameters:
+# * file: filename
+# * text: PEM-encoded cert
+#
+# Return value
+# An hashref with the following keys:
+# * email: email address from cert
+# * subject: distinguished name
+# * purpose: hashref with the following keys:
+#  - enc: true if v3 purpose is encryption
+#  - sign: true if v3 purpose is signing
 
-=head3 Parameters
-
-=over
-
-=item * I<file>: filename
-
-=item * I<text>: PEM-encoded cert
-
-=back
-
-=head3 Return value
-
-An hashref with the following keys:
-
-=over
-
-=item * I<email>: email address from cert
-
-=item * I<subject>: distinguished name
-
-=item * I<purpose>: hashref with the following keys:
-
-=over
-
-=item * I<enc>: true if v3 purpose is encryption
-
-=item * I<sign>: true if v3 purpose is signing
-
-=back
-
-=back
-
-=cut
-
-sub smime_parse_cert {
+sub _parse_cert {
     my ($arg) = @_;
     Sympa::Log::do_log('debug', '(%s)', join('/',%{$arg}));
 
     unless (ref($arg)) {
-	Sympa::Log::do_log('err', "smime_parse_cert: must be called with hashref, not %s", ref($arg));
+	Sympa::Log::do_log('err', "_parse_cert: must be called with hashref, not %s", ref($arg));
 	return undef;
     }
 
@@ -769,31 +747,31 @@ sub smime_parse_cert {
 	@cert = ($arg->{'text'});
     }elsif ($arg->{file}) {
 	unless (open(PSC, "$arg->{file}")) {
-	    Sympa::Log::do_log('err', "smime_parse_cert: open %s: $ERRNO", $arg->{file});
+	    Sympa::Log::do_log('err', "_parse_cert: open %s: $ERRNO", $arg->{file});
 	    return undef;
 	}
 	@cert = <PSC>;
 	close(PSC);
     }else {
-	Sympa::Log::do_log('err', 'smime_parse_cert: neither "text" nor "file" given');
+	Sympa::Log::do_log('err', '_parse_cert: neither "text" nor "file" given');
 	return undef;
     }
 
     ## Extract information from cert
     my ($tmpfile) = $arg->{tmpdir}."/parse_cert.$PID";
     unless (open(PSC, "| $arg->{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
-	Sympa::Log::do_log('err', "smime_parse_cert: open |openssl: $ERRNO");
+	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
     print PSC join('', @cert);
 
     unless (close(PSC)) {
-	Sympa::Log::do_log('err', "smime_parse_cert: close openssl: $ERRNO, $EVAL_ERROR");
+	Sympa::Log::do_log('err', "_parse_cert: close openssl: $ERRNO, $EVAL_ERROR");
 	return undef;
     }
 
     unless (open(PSC, "$tmpfile")) {
-	Sympa::Log::do_log('err', "smime_parse_cert: open $tmpfile: $ERRNO");
+	Sympa::Log::do_log('err', "_parse_cert: open $tmpfile: $ERRNO");
 	return undef;
     }
 
@@ -834,25 +812,16 @@ sub smime_parse_cert {
     return \%res;
 }
 
-=head2 smime_extract_certs($message, $outfile, $openssl)
+# _extract_certs($message, $outfile, $openssl)
+#
+# Extract certificate from message.
+#
+# Parameters:
+# * $message: (MIME::Entity instance)
+# * $outfile:
+# * $openssl: path to openssl binary
 
-Extract certificate from message.
-
-=head3 Parameters
-
-=over
-
-=item * I<$message>: (MIME::Entity instance)
-
-=item * I<$outfile>:
-
-=item * I<$openssl>: path to openssl binary
-
-=back
-
-=cut
-
-sub smime_extract_certs {
+sub _extract_certs {
     my ($mime, $outfile, $openssl) = @_;
     Sympa::Log::do_log('debug2', "(%s)", $mime->mime_type);
 
