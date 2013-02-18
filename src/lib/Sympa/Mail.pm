@@ -94,7 +94,7 @@ sub set_send_spool {
 }
 
 =head2 mail_file($filename, $rcpt, $data, $robot, $return_message_as_string,
-$priority, $priority_packet)
+$priority, $priority_packet, $sympa)
 
 send a tt2 file.
 
@@ -156,8 +156,7 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub mail_file {
-
-    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet) = @_;
+    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet, $sympa) = @_;
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
 
@@ -257,7 +256,7 @@ sub mail_file {
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
 	    $headers .= "From: ".MIME::EncWords::encode_mimewords(
-		sprintf("SYMPA <%s>",Sympa::Configuration::get_robot_conf($robot, 'sympa')),
+		sprintf("SYMPA <%s>", $sympa),
 		'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
 		)."\n";
 	} else {

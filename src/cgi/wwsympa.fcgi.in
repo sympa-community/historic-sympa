@@ -6834,7 +6834,8 @@ sub do_distribute {
 	$robot,
 	undef,
 	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'}
+	$Sympa::Configuration::Conf{'sympa_packet_priority'},
+	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
 
      unless (defined $result) {
@@ -14831,7 +14832,8 @@ sub do_remind {
 	$robot,
 	undef,
 	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'}
+	$Sympa::Configuration::Conf{'sympa_packet_priority'},
+	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
     
     unless (defined $result) {
@@ -15537,7 +15539,8 @@ sub do_send_mail {
 	$robot,
 	undef,
 	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'}
+	$Sympa::Configuration::Conf{'sympa_packet_priority'},
+	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
     
     unless (defined $result) {
@@ -15692,7 +15695,8 @@ sub do_tag_topic_by_sender {
 	$robot,
 	undef,
 	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'}
+	$Sympa::Configuration::Conf{'sympa_packet_priority'},
+	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
     
     unless (defined $result) {
