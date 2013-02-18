@@ -4321,6 +4321,7 @@ sub send_msg {
 		avg             => Sympa::Configuration::get_robot_conf($robot, 'avg'),
 		nrcpt           => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
 		nrcpt_by_dom    => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
+		db_type         => $Sympa::Configuration::Conf{'db_type'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");

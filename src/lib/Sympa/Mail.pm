@@ -391,6 +391,8 @@ Distribute a message to a list, crypting if needed.
 
 =item * I<nrcpt_by_dom>
 
+=item * I<db_type>
+
 =back
 
 =head3 Return value
@@ -452,7 +454,6 @@ sub mail_message {
 		   length($params{sendmail_args}) +
 		   length(' -N success,delay,failure -V ') + 32 +
 		   length(" -f $from ");
-    my $db_type = $Sympa::Configuration::Conf{'db_type'};
 
     while (defined ($i = shift(@rcpt))) {
 	my @k = reverse(split(/[\.@]/, $i));
@@ -479,8 +480,8 @@ sub mail_message {
 	      $nrcpt >= $params{nrcpt})) or
 	    # length of recipients field stored into bulkmailer table
 	    # (these limits might be relaxed by future release of Sympa)
-	    ($db_type eq 'mysql' and $size + length($i) + 5 > 65535) or
-	    ($db_type !~ /^(mysql|SQLite)$/ and $size + length($i) + 5 > 500)
+	    ($params{db_type} eq 'mysql' and $size + length($i) + 5 > 65535) or
+	    ($params{db_type} !~ /^(mysql|SQLite)$/ and $size + length($i) + 5 > 500)
 	   ) {
 	    undef %rcpt_by_dom;
 	    # do not replace this line by "push @sendtobypacket, \@sendto" !!!
