@@ -221,18 +221,8 @@ sub check_signature {
     if ($message->{'smime_crypted'}){
 	$message->{'msg'}->head->print(\*MSGDUMP);
 	print MSGDUMP "\n";
-	print MSGDUMP $message->{'msg_as_string'};
-    }elsif (! $message->{'filename'}) {
-	print MSGDUMP $message->{'msg_as_string'};
-    }else{
-	unless (open MSG, $message->{'filename'}) {
-	    Sympa::Log::do_log('err', 'Unable to open file %s: %s', $message->{'filename'}, $ERRNO);
-	    return undef;
-
-	}
-	print MSGDUMP <MSG>;
-	close MSG;
     }
+    print MSGDUMP $message->{'msg_as_string'};
     close MSGDUMP;
 
     my $status = $CHILD_ERROR/256 ;
