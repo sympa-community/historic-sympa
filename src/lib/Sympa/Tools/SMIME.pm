@@ -35,6 +35,7 @@ package Sympa::Tools::SMIME;
 use strict;
 
 use English qw(-no_match_vars);
+use File::Temp;
 use MIME::Parser;
 use POSIX qw();
 
@@ -164,7 +165,7 @@ sub smime_sign {
     return $signed_msg;
 }
 
-=head2 smime_sign_check($message, $tmpdir, $cafile, $capath, $openssl,
+=head2 smime_sign_check($message, $cafile, $capath, $openssl,
 $ssl_cert_dir)
 
 Check if a message is signed.
@@ -174,8 +175,6 @@ Check if a message is signed.
 =over
 
 =item * I<$message>:
-
-=item * I<$tmpdir>: temporary directory
 
 =item * I<$cafile>:
 
@@ -190,7 +189,7 @@ Check if a message is signed.
 =cut
 
 sub smime_sign_check {
-    my ($message, $tmpdir, $cafile, $capath, $openssl, $ssl_cert_dir) = @_;
+    my ($message, $cafile, $capath, $openssl, $ssl_cert_dir) = @_;
 
     my $sender = $message->{'sender'};
 
@@ -205,7 +204,9 @@ sub smime_sign_check {
     ## first step is the msg signing OK ; /tmp/sympa-smime.$PID is created
     ## to store the signer certificat for step two. I known, that's durty.
 
-    my $temporary_file = $tmpdir."/".'smime-sender.'.$PID ;
+    my $temporary_file = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
     my $trusted_ca_options = '';
     $trusted_ca_options = "-CAfile $cafile " if ($cafile);
     $trusted_ca_options .= "-CApath $capath " if ($capath);
@@ -241,10 +242,9 @@ sub smime_sign_check {
     }
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email.
-    my $signer = _parse_cert({tmpdir => $tmpdir, file => $temporary_file, openssl => $openssl});
+    my $signer = _parse_cert({file => $temporary_file, openssl => $openssl});
 
     unless ($signer->{'email'}{lc($sender)}) {
-	unlink($temporary_file) unless ($main::options{'debug'}) ;
 	Sympa::Log::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$sender, join(',', keys %{$signer->{'email'}}));
 	return undef;
     }
@@ -266,8 +266,12 @@ sub smime_sign_check {
     ## are also included), and look at the purpose:
     ## "S/MIME signing : Yes/No"
     ## "S/MIME encryption : Yes/No"
-    my $certbundle = "$tmpdir/certbundle.$PID";
-    my $tmpcert = "$tmpdir/cert.$PID";
+    my $certbundle = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
+    my $tmpcert = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
     Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
@@ -305,7 +309,7 @@ sub smime_sign_check {
 	    }
 	    print CERT $workcert;
 	    close(CERT);
-	    my($parsed) = _parse_cert({tmpdir => $tmpdir, file => $tmpcert, openssl => $openssl});
+	    my($parsed) = _parse_cert({file => $tmpcert, openssl => $openssl});
 	    unless($parsed) {
 		Sympa::Log::do_log('err', 'No result from _parse_cert');
 		return undef;
@@ -355,12 +359,6 @@ sub smime_sign_check {
 	}
 	print CERT $certs{$c};
 	close(CERT);
-    }
-
-    unless ($main::options{'debug'}) {
-	unlink($temporary_file);
-	unlink($tmpcert);
-	unlink($certbundle);
     }
 
     $is_signed->{'body'} = 'smime';
@@ -758,7 +756,7 @@ sub _parse_cert {
     }
 
     ## Extract information from cert
-    my ($tmpfile) = $arg->{tmpdir}."/parse_cert.$PID";
+    my $tmpfile = File::Temp->new(CLEANUP => 1);
     unless (open(PSC, "| $arg->{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
 	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
