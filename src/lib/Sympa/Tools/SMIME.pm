@@ -745,29 +745,26 @@ sub _parse_cert {
     }
 
     ## Extract information from cert
-    my $tmpfile = File::Temp->new(CLEANUP => 1);
+    my $file = File::Temp->new(CLEANUP => 1);
     my $command =
-	    "$params{openssl} x509 -email -subject -purpose -noout > $tmpfile";
-    my $handle;
-    unless (open($handle, '|-', $command)) {
+	    "$params{openssl} x509 -email -subject -purpose -noout > $file";
+    my $pipe_handle;
+    unless (open($pipe_handle, '|-', $command)) {
 	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
-    print $handle $cert_string;
+    print $pipe_handle $cert_string;
+    close($pipe_handle);
 
-    unless (close($handle)) {
-	Sympa::Log::do_log('err', "_parse_cert: close openssl: $ERRNO, $EVAL_ERROR");
-	return undef;
-    }
-
-    unless (open($handle, '<', "$tmpfile")) {
-	Sympa::Log::do_log('err', "_parse_cert: open $tmpfile: $ERRNO");
+    my $file_handle;
+    unless (open($file_handle, '<', $file)) {
+	Sympa::Log::do_log('err', "_parse_cert: open $file: $ERRNO");
 	return undef;
     }
 
     my (%res, $purpose_section);
 
-    while (my $line = <$handle>) {
+    while (my $line = <$file_handle>) {
       ## First lines before subject are the email address(es)
 
       if ($line =~ /^subject=\s+(\S.+)\s*$/) {
@@ -797,7 +794,7 @@ sub _parse_cert {
     if(!$res{email} && ($res{subject} =~ /\/email(address)?=([^\/]+)/)) {
 	$res{email} = $1;
     }
-    close($handle);
+    close($file_handle);
     return \%res;
 }
 
