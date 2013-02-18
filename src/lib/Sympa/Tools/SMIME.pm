@@ -730,17 +730,15 @@ sub _parse_cert {
     Sympa::Log::do_log('debug', '(%s)', join('/',%params));
 
     ## Load certificate
-    my @cert;
+    my $cert_string;
     if($params{'text'}) {
-	@cert = ($params{'text'});
+	$cert_string = $params{'text'};
     }elsif ($params{file}) {
-	    my $handle;
-	unless (open($handle, '<', $params{file})) {
-	    Sympa::Log::do_log('err', "_parse_cert: open %s: $ERRNO", $params{file});
+	$cert_string = Sympa::Tools::File::slurp_file($params{file});
+	unless ($cert_string) {
+	    Sympa::Log::do_log('err', "unable to read %s: $ERRNO", $params{file});
 	    return undef;
 	}
-	@cert = <$handle>;
-	close($handle);
     }else {
 	Sympa::Log::do_log('err', '_parse_cert: neither "text" nor "file" given');
 	return undef;
@@ -755,7 +753,7 @@ sub _parse_cert {
 	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
-    print $handle join('', @cert);
+    print $handle $cert_string;
 
     unless (close($handle)) {
 	Sympa::Log::do_log('err', "_parse_cert: close openssl: $ERRNO, $EVAL_ERROR");
