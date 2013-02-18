@@ -381,6 +381,10 @@ Distribute a message to a list, crypting if needed.
 
 =item * I<return_path_suffix>
 
+=item * I<sendmail>
+
+=item * I<sendmail_args>
+
 =back
 
 =head3 Return value
@@ -438,8 +442,8 @@ sub mail_message {
     my @sendto;
     my @sendtobypacket;
 
-    my $cmd_size = length(Sympa::Configuration::get_robot_conf($robot, 'sendmail')) + 1 +
-		   length(Sympa::Configuration::get_robot_conf($robot, 'sendmail_args')) +
+    my $cmd_size = length($params{sendmail}) + 1 +
+		   length($params{sendmail_args}) +
 		   length(' -N success,delay,failure -V ') + 32 +
 		   length(" -f $from ");
     my $db_type = $Sympa::Configuration::Conf{'db_type'};

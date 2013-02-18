@@ -4316,6 +4316,8 @@ sub send_msg {
 		tag_as_last     => $tags_to_use->{'tag_noverp'},
 		priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
 		return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
+		sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+		sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
