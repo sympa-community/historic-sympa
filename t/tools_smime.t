@@ -31,7 +31,6 @@ my $unsigned_message = Sympa::Message->new({
 ok(
 	!defined Sympa::Tools::SMIME::smime_sign_check(
 		$unsigned_message,
-		$tmp_dir,
 		't/pki/ca.pem',
 		undef,
 		'/usr/bin/openssl',
@@ -48,7 +47,6 @@ my $signed_message = Sympa::Message->new({
 is_deeply(
 	Sympa::Tools::SMIME::smime_sign_check(
 		$signed_message,
-		$tmp_dir,
 		't/pki/ca.pem',
 		undef,
 		'/usr/bin/openssl',
@@ -73,7 +71,6 @@ is_deeply(
 is_deeply(
 	Sympa::Tools::SMIME::smime_sign_check(
 		$signed_message,
-		$tmp_dir,
 		undef,
 		't/pki/ca',
 		'/usr/bin/openssl',
