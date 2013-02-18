@@ -519,6 +519,8 @@ sub mail_message {
 	dkim            => $dkim,
 	merge           => $list->{'admin'}{'merge_feature'},
 	tag_as_last     => $tag_as_last
+	sendmail        => $params{sendmail},
+	sendmail_args   => $params{sendmail_args}
     );
 
     if (!defined $result) {
@@ -692,6 +694,8 @@ sub _sendto {
 			delivery_date   => $delivery_date,
 			use_bulk        => $use_bulk,
 			tag_as_last     => $tag_as_last
+			sendmail        => $params{sendmail},
+			sendmail_args   => $params{sendmail_args}
 		);
 
 		if (!defined $result) {
@@ -717,6 +721,8 @@ sub _sendto {
 		use_bulk        => $use_bulk,
 		dkim            => $dkim,
 		tag_as_last     => $tag_as_last
+		sendmail        => $params{sendmail},
+		sendmail_args   => $params{sendmail_args}
 	);
 	return $result;
 
