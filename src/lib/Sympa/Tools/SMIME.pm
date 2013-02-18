@@ -257,9 +257,6 @@ sub check_signature {
     my $certbundle = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
-    my $tmpcert = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
-    );
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
     Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
@@ -299,16 +296,9 @@ sub check_signature {
 	$cert .= $line;
 
 	next unless $line =~ /^-----END CERTIFICATE-----$/;
-	my $workcert = $cert;
-	$cert = '';
-	unless(open(CERT, ">$tmpcert")) {
-		Sympa::Log::do_log('err', "Can't create $tmpcert: $ERRNO");
-		return undef;
-	}
-	print CERT $workcert;
-	close(CERT);
+
 	my($parsed) = _parse_cert(
-		file => $tmpcert,
+		text    => $cert,
 		openssl => $params{openssl}
 	);
 	unless($parsed) {
@@ -323,18 +313,19 @@ sub check_signature {
 	Sympa::Log::do_log('debug2', "Found cert for <%s>", join(',', keys %{$parsed->{'email'}}));
 	if ($parsed->{'email'}{lc($message->{sender})}) {
 		if ($parsed->{'purpose'}{'sign'} && $parsed->{'purpose'}{'enc'}) {
-		 $certs{'both'} = $workcert;
+		 $certs{'both'} = $cert;
 		    Sympa::Log::do_log('debug', 'Found a signing + encryption cert');
 		}elsif ($parsed->{'purpose'}{'sign'}) {
-		    $certs{'sign'} = $workcert;
+		    $certs{'sign'} = $cert;
 		    Sympa::Log::do_log('debug', 'Found a signing cert');
 		} elsif($parsed->{'purpose'}{'enc'}) {
-		    $certs{'enc'} = $workcert;
+		    $certs{'enc'} = $cert;
 		    Sympa::Log::do_log('debug', 'Found an encryption cert');
 		}
 	}
 
 	last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
+	$cert = '';
     }
     close($bundle_handle);
 
