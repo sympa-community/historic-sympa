@@ -800,7 +800,6 @@ sub _parse_cert {
 	$res{email} = $1;
     }
     close($handle);
-    unlink($tmpfile);
     return \%res;
 }
 
