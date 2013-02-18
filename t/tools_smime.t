@@ -14,15 +14,11 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 3;
+plan tests => 5;
 
 chdir "$Bin/..";
 
-my $top_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
-my $tmp_dir = "$top_dir/tmp";
-my $crt_dir = "$top_dir/crt";
-mkdir($tmp_dir);
-mkdir($crt_dir);
+my ($crt_dir, $crt_file);
 
 my $unsigned_message = Sympa::Message->new({
 	file       => "t/samples/unsigned.eml",
@@ -31,10 +27,6 @@ my $unsigned_message = Sympa::Message->new({
 ok(
 	!defined Sympa::Tools::SMIME::check_signature(
 		message  => $unsigned_message,
-		cafile   => 't/pki/ca.pem',
-		capath   => undef,
-		openssl  => '/usr/bin/openssl',
-		cert_dir => $crt_dir
 	),
 	"unsigned message"
 );
@@ -44,6 +36,8 @@ my $signed_message = Sympa::Message->new({
 	noxsympato => 1
 });
 
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+$crt_file = $crt_dir . '/guillaume.rousse@inria.fr';
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
 		message  => $signed_message,
@@ -68,6 +62,10 @@ is_deeply(
 	"signed message, CA file"
 );
 
+ok(-f $crt_file, 'certificate file created');
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+$crt_file = $crt_dir . '/guillaume.rousse@inria.fr';
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
 		message  => $signed_message,
@@ -91,3 +89,4 @@ is_deeply(
 	},
 	"signed message, CA directory"
 );
+ok(-f $crt_file, 'certificate file created');
