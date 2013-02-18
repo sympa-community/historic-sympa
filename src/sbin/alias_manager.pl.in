@@ -26,6 +26,7 @@
 alias_manager.pl - Sympa alias manager
 
 =head1 SYNOPSIS
+
   alias_manager.pl add <list> <domain> [<file>]
   alias_manager.pl del <list> <domain> [<file>]
 
@@ -63,19 +64,6 @@ use Sympa::Log;
 use Sympa::Tools;
 use Sympa::Template;
 
-my $sympa_conf_file = Sympa::Constants::CONFIG;
-unless (Sympa::Configuration::load($sympa_conf_file)) {
-   Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
-}
-my $tmp_alias_file = $Sympa::Configuration::Conf{'tmpdir'}.'/sympa_aliases.'.time;
-
-
-my $default_domain;
-my $alias_wrapper       = Sympa::Constants::SBINDIR . '/aliaswrapper';
-my $lock_file           = Sympa::Constants::EXPLDIR . '/alias_manager.lock';
-my $path_to_queue       = Sympa::Constants::LIBEXECDIR . '/queue';
-my $path_to_bouncequeue = Sympa::Constants::LIBEXECDIR .'/bouncequeue';
-
 my %options;
 GetOptions(
 	\%options,
@@ -91,6 +79,19 @@ pod2usage(-message => 'missing list', exit => 2) unless $operation;
 pod2usage(-message => 'missing domain', exit => 2) unless $domain;
 pod2usage(-message => "invalid operation $operation", exit => 2)
 	unless $operation eq 'add' || $operation eq 'del';
+
+my $sympa_conf_file = Sympa::Constants::CONFIG;
+unless (Sympa::Configuration::load($sympa_conf_file)) {
+   Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
+}
+my $tmp_alias_file = $Sympa::Configuration::Conf{'tmpdir'}.'/sympa_aliases.'.time;
+
+my $default_domain;
+my $alias_wrapper       = Sympa::Constants::SBINDIR . '/aliaswrapper';
+my $lock_file           = Sympa::Constants::EXPLDIR . '/alias_manager.lock';
+my $path_to_queue       = Sympa::Constants::LIBEXECDIR . '/queue';
+my $path_to_bouncequeue = Sympa::Constants::LIBEXECDIR .'/bouncequeue';
+
 
 $default_domain = $Sympa::Configuration::Conf{'domain'};
 
