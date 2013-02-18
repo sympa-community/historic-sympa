@@ -344,20 +344,20 @@ sub mail_file {
 
     my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
-    ## SENDING
-    return undef unless (defined _sending('message' => $message,
-					  'rcpt' => $rcpt,
-					  'from' => $data->{'return_path'},
-					  'robot' => $robot,
-					  'listname' => $listname,
-					  'priority' => $priority,
-					  'priority_packet' => $priority_packet,
-					  'sign_mode' => $sign_mode,
-					  'use_bulk' => $data->{'use_bulk'},
-					  'dkim' => $data->{'dkim'},
-					  )
-			 );
-    return 1;
+    my $result = _sending(
+	message         => $message,
+	rcpt            => $rcpt,
+	from            => $data->{'return_path'},
+	robot           => $robot,
+	listname        => $listname,
+	priority        => $priority,
+	priority_packet => $priority_packet,
+	sign_mode       => $sign_mode,
+	use_bulk        => $data->{'use_bulk'},
+	dkim            => $data->{'dkim'},
+    );
+
+    return defined $result ? 1 : undef;
 }
 
 =head2 mail_message(%parameters)
@@ -490,23 +490,26 @@ sub mail_message {
     }
 
 
-    unless (_sendto('message' => $message,
-		    'from' => $from,
-		    'rcpt' => \@sendtobypacket,
-		    'listname' => $list->{'name'},
-		    'priority' => $list->{'admin'}{'priority'},
-		    'priority_packet' => $priority_packet,
-		    'delivery_date' => $list->get_next_delivery_date,
-		    'robot' => $robot,
-		    'encrypt' => $message->{'smime_crypted'},
-		    'use_bulk' => 1,
-		    'verp' => $verp,
-		    'dkim' => $dkim,
-		    'merge' => $list->{'admin'}{'merge_feature'},
-		    'tag_as_last' => $tag_as_last
-		    )) {
-	Sympa::Log::do_log ('err',"Failed to send message to list %s", $list->{'name'});
-	return undef;
+    my $result = _sendto(
+	message         => $message,
+	from            => $from,
+	rcpt            => \@sendtobypacket,
+	listname        => $list->{'name'},
+	priority        => $list->{'admin'}{'priority'},
+	priority_packet => $priority_packet,
+	delivery_date   => $list->get_next_delivery_date,
+	robot           => $robot,
+	encrypt         => $message->{'smime_crypted'},
+	use_bulk        => 1,
+	verp            => $verp,
+	dkim            => $dkim,
+	merge           => $list->{'admin'}{'merge_feature'},
+	tag_as_last     => $tag_as_last
+    );
+
+    if (!defined $result) {
+	    Sympa::Log::do_log('err',"Failed to send message to list %s", $list->{'name'});
+	    return undef;
     }
 
     return $numsmtp;
@@ -551,16 +554,20 @@ sub mail_forward {
     ## Add an Auto-Submitted header field according to  http://www.tools.ietf.org/html/draft-palme-autosub-01
     $message->{'msg'}->head->add('Auto-Submitted', 'auto-forwarded');
 
-    unless (defined _sending('message' => $message,
-			     'rcpt' => $rcpt,
-			     'from' => $from,
-			     'robot' => $robot,
-			     'priority'=> $priority,
-			     'priority_packet'=> $priority_packet
-			     )) {
-	Sympa::Log::do_log('err', 'forward from %s impossible to send', $from);
-	return undef;
+    my $result = _sending(
+	message         => $message,
+	rcpt            => $rcpt,
+	from            => $from,
+	robot           => $robot,
+	priority        => $priority,
+	priority_packet => $priority_packet
+    );
+
+    if (!defined $result) {
+	    Sympa::Log::do_log('err', 'forward from %s impossible to send', $from);
+	    return undef;
     }
+
     return 1;
 }
 
@@ -658,37 +665,43 @@ sub _sendto {
 		    return undef;
                 }
 
-		unless (_sending('message' => $message,
-				 'rcpt' => $email,
-				 'from' => $from,
-				 'listname' => $listname,
-				 'robot' => $robot,
-				 'priority' => $priority,
-				 'priority_packet' => $priority_packet,
-				 'delivery_date' =>  $delivery_date,
-				 'use_bulk' => $use_bulk,
-				 'tag_as_last' => $tag_as_last)) {
-		    Sympa::Log::do_log('err',"Failed to send encrypted message");
-		    return undef;
+		my $result = _sending(
+			message         => $message,
+			rcpt            => $email,
+			from            => $from,
+			listname        => $listname,
+			robot           => $robot,
+			priority        => $priority,
+			priority_packet => $priority_packet,
+			delivery_date   => $delivery_date,
+			use_bulk        => $use_bulk,
+			tag_as_last     => $tag_as_last
+		);
+
+		if (!defined $result) {
+			Sympa::Log::do_log('err',"Failed to send encrypted message");
+			return undef;
 		}
 		$tag_as_last = 0;
 	    }
 	}
     }else{
 	$message->{'msg_as_string'} = $msg_header->as_string . "\n" . $msg_body;
-	my $result = _sending('message' => $message,
-			      'rcpt' => $rcpt,
-			      'from' => $from,
-			      'listname' => $listname,
-			      'robot' => $robot,
-			      'priority' => $priority,
-			      'priority_packet' => $priority_packet,
-			      'delivery_date' =>  $delivery_date,
-			      'verp' => $verp,
-			      'merge' => $merge,
-			      'use_bulk' => $use_bulk,
-			      'dkim' => $dkim,
-			      'tag_as_last' => $tag_as_last);
+	my $result = _sending(
+		message         => $message,
+		rcpt            => $rcpt,
+		from            => $from,
+		listname        => $listname,
+		robot           => $robot,
+		priority        => $priority,
+		priority_packet => $priority_packet,
+		delivery_date   => $delivery_date,
+		verp            => $verp,
+		merge           => $merge,
+		use_bulk        => $use_bulk,
+		dkim            => $dkim,
+		tag_as_last     => $tag_as_last
+	);
 	return $result;
 
     }

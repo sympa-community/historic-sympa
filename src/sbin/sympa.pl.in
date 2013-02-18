@@ -1646,7 +1646,15 @@ sub DoSendMessage {
     ## Multiple recepients
     my @rcpts = split /,/,$rcpt; #/
 
-    unless (Sympa::Mail::mail_forward($message,$from,\@rcpts,$robot,Sympa::Configuration::get_robot_conf($robot, 'request_priority'))) {
+    my $result = Sympa::Mail::mail_forward(
+	$message,
+	$from,
+	\@rcpts,
+	$robot,
+	Sympa::Configuration::get_robot_conf($robot, 'request_priority')
+    );
+
+    unless (defined $result) {
 	Sympa::Log::do_log('err',"Impossible to forward mail from $from");
 	Sympa::Report::reject_report_msg('intern','Impossible to forward a message pushed in spool by another process than sympa.pl.',$sender,
 			  {'msg_id' => $msg_id,'message' => $message->{'msg'}},$robot,$string,'');

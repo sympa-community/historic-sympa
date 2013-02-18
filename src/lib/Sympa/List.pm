@@ -3746,10 +3746,18 @@ sub send_global_file {
 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
 
-    my $r = Sympa::Mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'},Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),$Sympa::Configuration::Conf{'sympa_packet_priority'});
-    return $r if($options->{'parse_and_return'});
+    my $result = Sympa::Mail::mail_file(
+	    $filename,
+	    $who,
+	    $data,
+	    $robot,
+	    $options->{'parse_and_return'},
+	    Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	    $Sympa::Configuration::Conf{'sympa_packet_priority'}
+    );
+    return $result if($options->{'parse_and_return'});
 
-    unless ($r) {
+    unless (defined $result) {
 	Sympa::Log::do_log('err', "could not send template $filename to $who");
 	return undef;
     }
@@ -3918,7 +3926,17 @@ sub send_file {
 	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
     }
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
-    unless (Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'}, undef, Sympa::Configuration::get_robot_conf($robot,'sympa_priority'), $Sympa::Configuration::Conf{'sympa_packet_priority'})) {
+    my $result = Sympa::Mail::mail_file(
+	$filename,
+	$who,
+	$data,
+	$self->{'domain'},
+	undef,
+	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	$Sympa::Configuration::Conf{'sympa_packet_priority'}
+    );
+    
+    unless (defined $result) {
 	Sympa::Log::do_log('err',"could not send template $filename to $who");
 	return undef;
     }
@@ -4287,14 +4305,15 @@ sub send_msg {
 	my @verp_selected_tabrcpt = extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
 	my $verp= 'off';
 
-	my $result = Sympa::Mail::mail_message('message'=>$new_message,
-					 'rcpt'=> \@selected_tabrcpt,
-					 'list'=>$self,
-					 'verp' => $verp,
-					 'dkim_parameters'=>$dkim_parameters,
-					 'tag_as_last' => $tags_to_use->{'tag_noverp'},
-					 'priority_packet' => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-				 );
+	my $result = Sympa::Mail::mail_message(
+		message         => $new_message,
+		rcpt            => \@selected_tabrcpt,
+		list            => $self,
+		verp            => $verp,
+		dkim_parameters => $dkim_parameters,
+		tag_as_last     => $tags_to_use->{'tag_noverp'},
+		priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	 );
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
 	    return undef;
@@ -4320,15 +4339,15 @@ sub send_msg {
 	next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
 
 	## prepare VERP sending.
-	$result = Sympa::Mail::mail_message('message'=> $new_message,
-				      'rcpt'=> \@verp_selected_tabrcpt,
-				      'list'=> $self,
-				      'verp' => $verp,
-				      'dkim_parameters'=>$dkim_parameters,
-				      'tag_as_last' => $tags_to_use->{'tag_verp'},
-				      'priority_packet' => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-
-			      );
+	$result = Sympa::Mail::mail_message(
+		message         => $new_message,
+		rcpt            => \@verp_selected_tabrcpt,
+		list            => $self,
+		verp            => $verp,
+		dkim_parameters => $dkim_parameters,
+		tag_as_last     => $tags_to_use->{'tag_verp'},
+		priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp enabled)");
 	    return undef;
