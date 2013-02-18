@@ -93,8 +93,7 @@ sub set_send_spool {
     $send_spool = $spool;
 }
 
-=head2 mail_file($filename, $rcpt, $data, $robot, $return_message_as_string,
-$priority, $priority_packet, $sympa)
+=head2 mail_file(%parameters)
 
 send a tt2 file.
 
@@ -102,11 +101,11 @@ send a tt2 file.
 
 =over
 
-=item * I<$filename>: tt2 filename (with .tt2) | ''
+=item * I<filename>: tt2 filename (with .tt2) | ''
 
-=item * I<$rcpt>: SCALAR |ref(ARRAY) : SMTP "RCPT To:" field
+=item * I<recipient>: SCALAR |ref(ARRAY) : SMTP "RCPT To:" field
 
-=item * I<$data>: used to parse tt2 file, ref(HASH) with keys :
+=item * I<data>: used to parse tt2 file, ref(HASH) with keys :
 
 =over
 
@@ -139,13 +138,19 @@ send a tt2 file.
 
 =back
 
-=item * I<$robot>
+=item * I<robot>
 
-=item * I<$sign_mode>: 'smime' | '' | undef
+=item * I<return_message_as_string>
 
-=item * I<$priority>
+=item * I<priority>
 
-=item * I<$priority_packet>
+=item * I<priority_packet>
+
+=item * I<sympa>
+
+=item * I<sendmail>
+
+=item * I<sendmail_args>
 
 =back
 
@@ -156,11 +161,13 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub mail_file {
-    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet, $sympa, $sendmail, $sendmail_args) = @_;
+    my (%params) = @_;
+
+    my $data = $params{data};
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
 
-    Sympa::Log::do_log('debug2', '(%s, %s, %s)', $filename, $rcpt, $sign_mode);
+    Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{filename}, $params{recipient}, $sign_mode);
 
     my ($to,$message_as_string);
 
@@ -170,8 +177,8 @@ sub mail_file {
     my $existing_headers = 0;# the message already contains headers
 
     ## We may receive a list a recepients
-    if (ref ($rcpt)) {
-	unless (ref ($rcpt) eq 'ARRAY') {
+    if (ref ($params{recipient})) {
+	unless (ref ($params{recipient}) eq 'ARRAY') {
 	    Sympa::Log::do_log('notice', 'Wrong type of reference for rcpt');
 	    return undef;
 	}
@@ -183,9 +190,9 @@ sub mail_file {
     Sympa::Language::PopLang() if defined $data->{'lang'};
 
     ## TT2 file parsing
-    if ($filename =~ /\.tt2$/) {
+    if ($params{filename} =~ /\.tt2$/) {
 	my $output;
-	my @path = split /\//, $filename;
+	my @path = split /\//, $params{filename};
 	Sympa::Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
 	Sympa::Template::parse_tt2($data, $path[$#path], \$output);
 	Sympa::Language::PopLang() if (defined $data->{'lang'});
@@ -242,21 +249,21 @@ sub mail_file {
     unless ($header_ok{'to'}) {
 	# Currently, bare e-mail address is assumed.  Complex ones such as
 	# "phrase" <email> won't be allowed.
-	if (ref ($rcpt)) {
+	if (ref ($params{recipient})) {
 	    if ($data->{'to'}) {
 		$to = $data->{'to'};
 	    }else {
-		$to = join(",\n   ", @{$rcpt});
+		$to = join(",\n   ", @{$params{recipient}});
 	    }
 	}else{
-	    $to = $rcpt;
+	    $to = $params{recipient};
 	}
 	$headers .= "To: $to\n";
     }
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
 	    $headers .= "From: ".MIME::EncWords::encode_mimewords(
-		sprintf("SYMPA <%s>", $sympa),
+		sprintf("SYMPA <%s>", $params{sympa}),
 		'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
 		)."\n";
 	} else {
@@ -337,25 +344,25 @@ sub mail_file {
     }
 
     ## Set it in case it was not set
-    $data->{'return_path'} ||= Sympa::Configuration::get_robot_conf($robot, 'request');
+    $data->{'return_path'} ||= Sympa::Configuration::get_robot_conf($params{robot}, 'request');
 
-    return $message_as_string if($return_message_as_string);
+    return $message_as_string if($params{return_message_as_string});
 
     my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
 
     my $result = _sending(
 	message         => $message,
-	rcpt            => $rcpt,
+	rcpt            => $params{recipient},
 	from            => $data->{'return_path'},
-	robot           => $robot,
+	robot           => $params{robot},
 	listname        => $listname,
-	priority        => $priority,
-	priority_packet => $priority_packet,
-	sign_mode       => $sign_mode,
+	priority        => $params{priority},
+	priority_packet => $params{priority_packet},
+	sign_mode       => $params{sign_mode},
 	use_bulk        => $data->{'use_bulk'},
 	dkim            => $data->{'dkim'},
-	sendmail        => $sendmail,
-	sendmail_args   => $sendmail_args
+	sendmail        => $params{sendmail},
+	sendmail_args   => $params{sendmail_args}
     );
 
     return defined $result ? 1 : undef;
@@ -531,7 +538,7 @@ sub mail_message {
     return $numsmtp;
 }
 
-=head2 mail_forward($message,$from,$rcpt,$robot, $priority,$priority_packet)
+=head2 mail_forward(%parameters)
 
 Forward a message.
 
@@ -539,11 +546,11 @@ Forward a message.
 
 =over
 
-=item * I<$message>: the message
+=item * I<message>: the message
 
-=item * I<$from>: message sender
+=item * I<from>: message sender
 
-=item * I<$rcpt>: message recipients, as a listref
+=item * I<recipient>: message recipients, as a listref
 
 =item * I<robot>: the robot
 
@@ -560,8 +567,10 @@ A true value on success, I<undef> otherwise.
 =cut
 
 sub mail_forward {
-    my($message,$from,$rcpt,$robot, $priority,$priority_packet,$sendmail,$sendmail_args)=@_;
-    Sympa::Log::do_log('debug2', "($from,$rcpt)");
+    my (%params) = @_;
+    Sympa::Log::do_log('debug2', "($params{from},$params{recipient})");
+
+    my $message = $params{message};
 
     unless (ref($message) && $message->('Sympa::Message')) {
 	Sympa::Log::do_log('err',"Unespected parameter type: %s.",ref($message));
@@ -572,17 +581,17 @@ sub mail_forward {
 
     my $result = _sending(
 	message         => $message,
-	rcpt            => $rcpt,
-	from            => $from,
-	robot           => $robot,
-	priority        => $priority,
-	priority_packet => $priority_packet,
-	sendmail        => $sendmail,
-	sendmail_args   => $sendmail_args
+	rcpt            => $params{recipient},
+	from            => $params{from},
+	robot           => $params{robot},
+	priority        => $params{priority},
+	priority_packet => $params{priority_packet},
+	sendmail        => $params{sendmail},
+	sendmail_args   => $params{sendmail_args}
     );
 
     if (!defined $result) {
-	    Sympa::Log::do_log('err', 'forward from %s impossible to send', $from);
+	    Sympa::Log::do_log('err', 'forward from %s impossible to send', $params{from});
 	    return undef;
     }
 

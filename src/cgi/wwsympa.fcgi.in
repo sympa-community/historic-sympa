@@ -6828,16 +6828,16 @@ sub do_distribute {
 
      $data->{'not_auto_submitted'} = 1;
      my $result = Sympa::Mail::mail_file(
-	'',
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	$data,
-	$robot,
-	undef,
-	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'},
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	filename        => '',
+	recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	data            => $data,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	return_message_as_string => undef,
     );
 
      unless (defined $result) {
@@ -7625,14 +7625,14 @@ sub do_send_me {
 	     return undef;
 	 }
 	 my $result = Sympa::Mail::mail_forward(
-		$message,
-		Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-		\$param->{'user'}{'email'},
-		$robot,
-		Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-		$Sympa::Configuration::Conf{'sympa_packet_priority'},
-		Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-		Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+		message         => $message,
+		from            => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+		recipient       => \$param->{'user'}{'email'},
+		robot           => $robot,
+		priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+		packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+		sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+		sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	);
 
 	unless (defined $result) {
@@ -14830,16 +14830,16 @@ sub do_remind {
 
      $data->{'not_auto_submitted'} = 1;
      my $result = Sympa::Mail::mail_file(
-	'',
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	$data,
-	$robot,
-	undef,
-	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'},
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	filename        => '',
+	recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	data            => $data,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	return_message_as_string => undef,
     );
     
     unless (defined $result) {
@@ -15539,16 +15539,16 @@ sub do_send_mail {
     $data->{'not_auto_submitted'} = 1;
     $data->{'not_a_list'} = 1 if($in{'sub_action'} eq 'sendmailtome');
     my $result = Sympa::Mail::mail_file(
-	'',
-	$to,
-	$data,
-	$robot,
-	undef,
-	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'},
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	filename        => '',
+	recipient       => $to,
+	data            => $data,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	return_message_as_string => undef,
     );
     
     unless (defined $result) {
@@ -15697,14 +15697,14 @@ sub do_tag_topic_by_sender {
 
 
      my $result = Sympa::Mail::mail_file(
-	'',
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	$data,
-	$robot,
-	undef,
-	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'},
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	filename        => '',
+	recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	data            => $data,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	return_message_as_string => undef,
     );
     
     unless (defined $result) {

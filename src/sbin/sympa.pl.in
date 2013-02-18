@@ -1647,13 +1647,14 @@ sub DoSendMessage {
     my @rcpts = split /,/,$rcpt; #/
 
     my $result = Sympa::Mail::mail_forward(
-	$message,
-	$from,
-	\@rcpts,
-	$robot,
-	Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	message          => $message,
+	from             => $from,
+	recipient        => \@rcpts,
+	robot            => $robot,
+	priority         => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+	priority_packet  => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sendmail         => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args    => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
     );
 
     unless (defined $result) {
@@ -1793,14 +1794,14 @@ sub DoForward {
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;
     my $result = Sympa::Mail::mail_forward(
-	    $message,
-	    Sympa::Configuration::get_robot_conf($robot, 'request'),
-	    \@rcpt,
-	    $robot,
-	    Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-	    $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	    Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	    Sympa::Configuration::get_robot_conf($robot, 'sendmail_args')
+	    message         => $message,
+	    from            => Sympa::Configuration::get_robot_conf($robot, 'request'),
+	    recipient       => \@rcpt,
+	    robot           => $robot,
+	    priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+	    packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	    sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	    sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args')
     );
     
     unless ($result) {

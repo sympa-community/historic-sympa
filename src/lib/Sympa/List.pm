@@ -3747,16 +3747,16 @@ sub send_global_file {
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
 
     my $result = Sympa::Mail::mail_file(
-	    $filename,
-	    $who,
-	    $data,
-	    $robot,
-	    $options->{'parse_and_return'},
-	    Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	    $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	    Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	    Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	    Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	    filename        => $filename,
+	    recipient       => $who,
+	    data            => $data,
+	    robot           => $robot,
+	    priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	    packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	    sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	    sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	    sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	    return_message_as_string => $options->{'parse_and_return'},
     );
     return $result if($options->{'parse_and_return'});
 
@@ -3930,16 +3930,16 @@ sub send_file {
     }
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
     my $result = Sympa::Mail::mail_file(
-	$filename,
-	$who,
-	$data,
-	$self->{'domain'},
-	undef,
-	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
-	$Sympa::Configuration::Conf{'sympa_packet_priority'},
-	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	filename        => $filename,
+	recipient       => $who,
+	data            => $data,
+	robot           => $self->{'domain'},
+	priority        => Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
+	packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	return_message_as_string => undef,
     );
     
     unless (defined $result) {
