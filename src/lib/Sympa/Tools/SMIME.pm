@@ -194,16 +194,14 @@ sub check_signature {
 
     Sympa::Log::do_log('debug', '(message, %s, %s)', $message->{sender}, $message->{'filename'});
 
-    ## first step is the msg signing OK ; /tmp/sympa-smime.$PID is created
-    ## to store the signer certificat for step two. I known, that's durty.
-
-    my $temporary_file = File::Temp->new(
+    # extract the signer certificate in a file
+    my $signer_cert_file = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
     my $command = 
-	    "$params{openssl} smime -verify -signer $temporary_file " .
-	    ($params{cafile} ? "-CAfile $params{cafile}" : '')        .
-	    ($params{capath} ? "-CApath $params{capath}" : '')        .
+	    "$params{openssl} smime -verify -signer $signer_cert_file " .
+	    ($params{cafile} ? "-CAfile $params{cafile}" : '')          .
+	    ($params{capath} ? "-CApath $params{capath}" : '')          .
 	    ">/dev/null 2>&1";
     Sympa::Log::do_log('debug', $command);
 
@@ -226,20 +224,22 @@ sub check_signature {
 	Sympa::Log::do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
 	return undef ;
     }
-    ## second step is the message signer match the sender
-    ## a better analyse should be performed to extract the signer email.
-    my $signer = _parse_cert(
-	    file    => $temporary_file,
+
+    # check if the certificate matches the sender
+    # a better analyse should be performed to extract the signer email.
+    my $signer_cert = _parse_cert(
+	    file    => $signer_cert_file,
 	    openssl => $params{openssl}
     );
 
-    unless ($signer->{'email'}{lc($message->{sender})}) {
-	Sympa::Log::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$message->{sender}, join(',', keys %{$signer->{'email'}}));
+    unless ($signer_cert->{'email'}{lc($message->{sender})}) {
+	Sympa::Log::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$message->{sender}, join(',', keys %{$signer_cert->{'email'}}));
 	return undef;
     }
 
-    Sympa::Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer->{'email'}}));
-    ## store the signer certificat
+    Sympa::Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer_cert->{'email'}}));
+
+    # create certificate storage directory if needed
     unless (-d $params{cert_dir}) {
 	if ( mkdir ($params{cert_dir}, 0775)) {
 	    Sympa::Log::do_log('info', "creating spool $params{cert_dir}");
@@ -248,14 +248,10 @@ sub check_signature {
 	}
     }
 
-    ## It gets a bit complicated now. openssl smime -signer only puts
-    ## the _signing_ certificate into the given file; to get all included
-    ## certs, we need to extract them from the signature proper, and then
-    ## we need to check if they are for our user (CA and intermediate certs
-    ## are also included), and look at the purpose:
-    ## "S/MIME signing : Yes/No"
-    ## "S/MIME encryption : Yes/No"
-    my $certbundle = File::Temp->new(
+    # openssl smime -signer only extract the signer certificate
+    # In order to get all included certs, we need to extract and analyse them
+    # manually
+    my $certs_bundle_file = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
     my $nparts = $message->{msg}->parts;
@@ -264,7 +260,7 @@ sub check_signature {
     if($nparts == 0) { # could be opaque signing...
 	$extracted += _extract_certs(
 		entity  => $message->{msg},
-		file    => $certbundle,
+		file    => $certs_bundle_file,
 		openssl => $params{openssl}
 	);
     } else {
@@ -272,7 +268,7 @@ sub check_signature {
 	    my $part = $message->{msg}->parts($i);
 	    $extracted += _extract_certs(
 		    entity  => $part,
-		    file    => $certbundle,
+		    file    => $certs_bundle_file,
 		    openssl => $params{openssl}
 	    );
 	    last if $extracted;
@@ -285,14 +281,14 @@ sub check_signature {
     }
 
     my $bundle_handle;
-    unless(open($bundle_handle, '<', $certbundle)) {
-	Sympa::Log::do_log('err', "Can't open cert bundle $certbundle: $ERRNO");
+    unless(open($bundle_handle, '<', $certs_bundle_file)) {
+	Sympa::Log::do_log('err', "Can't open cert bundle $certs_bundle_file: $ERRNO");
 	return undef;
     }
 
     ## read it in, split on "-----END CERTIFICATE-----"
     my $cert_string = '';
-    my(%certs);
+    my %certs;
     while (my $line = <$bundle_handle>) {
 	$cert_string .= $line;
 
@@ -332,36 +328,39 @@ sub check_signature {
     close($bundle_handle);
 
     if(!($certs{both} || ($certs{sign} || $certs{enc}))) {
-	Sympa::Log::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer->{'email'}}));
+	Sympa::Log::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer_cert->{'email'}}));
 	return undef;
     }
-    ## OK, now we have the certs, either a combined sign+encryption one
-    ## or a pair of single-purpose. save them, as email@addr if combined,
-    ## or as email@addr@sign / email@addr@enc for split certs.
-    foreach my $c (keys %certs) {
-	my $fn = "$params{cert_dir}/" . Sympa::Tools::escape_chars(lc($message->{sender}));
-	if ($c ne 'both') {
-	    unlink($fn); # just in case there's an old cert left...
-	    $fn .= "\@$c";
+
+    # store all extracted certs in certificate storage directory,
+    # in a single file for dual-purpose certificates,
+    # or as distinct files for single-purpose certificates
+    foreach my $category (keys %certs) {
+	my $cert_file = 
+		"$params{cert_dir}/" .
+		Sympa::Tools::escape_chars(lc($message->{sender}));
+	if ($category ne 'both') {
+	    unlink($cert_file); # just in case there's an old cert left...
+	    $cert_file .= "\@$category";
 	}else {
-	    unlink("$fn\@enc");
-	    unlink("$fn\@sign");
+	    unlink("$cert_file\@enc");
+	    unlink("$cert_file\@sign");
 	}
-	Sympa::Log::do_log('debug', "Saving $c cert in $fn");
-	my $fn_handle;
-	unless (open($fn_handle, '>', $fn)) {
-	    Sympa::Log::do_log('err', "Unable to create certificate file $fn: $ERRNO");
+	Sympa::Log::do_log('debug', "Saving $category cert in $cert_file");
+	my $cert_handle;
+	unless (open($cert_handle, '>', $cert_file)) {
+	    Sympa::Log::do_log('err', "Unable to create certificate file $cert_file: $ERRNO");
 	    return undef;
 	}
-	print $fn_handle $certs{$c};
-	close($fn_handle);
+	print $cert_handle $certs{$category};
+	close($cert_handle);
     }
 
     # futur version should check if the subject was part of the SMIME signature.
     
     return {
 	    body    => 'smime',
-	    subject => $signer
+	    subject => $signer_cert
     };
 }
 
