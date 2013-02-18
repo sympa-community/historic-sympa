@@ -818,7 +818,7 @@ sub _extract_certs {
 
     my $entity = $params{entity};
 
-    return unless $entity->mime_type =~ /application\/(x-)?pkcs7-/;
+    return unless $entity->mime_type() =~ /application\/(x-)?pkcs7-/;
 
     my $command =
 	    "$params{openssl} pkcs7 -print_certs -inform der " .
@@ -829,7 +829,7 @@ sub _extract_certs {
 	return 0;
     }
 
-    print $handle $entity->bodyhandle->as_string;
+    print $handle $entity->bodyhandle()->as_string();
     close($handle);
 
     if ($CHILD_ERROR) {
