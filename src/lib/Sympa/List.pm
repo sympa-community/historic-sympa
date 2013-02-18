@@ -4318,6 +4318,9 @@ sub send_msg {
 		return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
 		sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 		sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+		avg             => Sympa::Configuration::get_robot_conf($robot, 'avg'),
+		nrcpt           => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
+		nrcpt_by_dom    => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");

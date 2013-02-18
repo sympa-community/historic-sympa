@@ -385,6 +385,12 @@ Distribute a message to a list, crypting if needed.
 
 =item * I<sendmail_args>
 
+=item * I<avg>
+
+=item * I<nrcpt>
+
+=item * I<nrcpt_by_dom>
+
 =back
 
 =head3 Return value
@@ -458,19 +464,19 @@ sub mail_message {
 	    chomp $dom;
 	}
 	$rcpt_by_dom{$dom} += 1 ;
-	Sympa::Log::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom}");
+	Sympa::Log::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $params{nrcpt_by_domain}{$dom}");
 
 	if (
 	    # number of recipients by each domain
-	    (defined $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom} and
-	     $rcpt_by_dom{$dom} >= $Sympa::Configuration::Conf{'nrcpt_by_domain'}{$dom}) or
+	    (defined $params{nrcpt_by_domain}{$dom} and
+	     $rcpt_by_dom{$dom} >= $params{nrcpt_by_domain}{$dom}) or
 	    # number of different domains
-	    ($j and $#sendto >= Sympa::Configuration::get_robot_conf($robot, 'avg') and
+	    ($j and $#sendto >= $params{avg} and
 	     lc "$k[0] $k[1]" ne lc "$l[0] $l[1]") or
 	    # number of recipients in general, and ARG_MAX limitation
 	    ($#sendto >= 0 and
 	     ($cmd_size + $size + length($i) + 5 > $max_arg or
-	      $nrcpt >= Sympa::Configuration::get_robot_conf($robot, 'nrcpt'))) or
+	      $nrcpt >= $params{nrcpt})) or
 	    # length of recipients field stored into bulkmailer table
 	    # (these limits might be relaxed by future release of Sympa)
 	    ($db_type eq 'mysql' and $size + length($i) + 5 > 65535) or
