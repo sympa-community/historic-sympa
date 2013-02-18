@@ -278,7 +278,7 @@ sub new {
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
-	    my $signed = Sympa::Tools::SMIME::smime_sign_check ($message, $Sympa::Configuration::Conf{'cafile'},$Sympa::Configuration::Conf{'capath'}, $Sympa::Configuration::Conf{'openssl'}, $Sympa::Configuration::Conf{'ssl_cert_dir'});
+	    my $signed = Sympa::Tools::SMIME::check_signature($message, $Sympa::Configuration::Conf{'cafile'},$Sympa::Configuration::Conf{'capath'}, $Sympa::Configuration::Conf{'openssl'}, $Sympa::Configuration::Conf{'ssl_cert_dir'});
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};

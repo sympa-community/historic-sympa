@@ -165,7 +165,7 @@ sub smime_sign {
     return $signed_msg;
 }
 
-=head2 smime_sign_check($message, $cafile, $capath, $openssl,
+=head2 check_signature($message, $cafile, $capath, $openssl,
 $ssl_cert_dir)
 
 Check if a message is signed.
@@ -188,7 +188,7 @@ Check if a message is signed.
 
 =cut
 
-sub smime_sign_check {
+sub check_signature {
     my ($message, $cafile, $capath, $openssl, $ssl_cert_dir) = @_;
 
     my $sender = $message->{'sender'};

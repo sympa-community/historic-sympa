@@ -78,10 +78,7 @@ my %tests = (
 	'error9.eml' => {
 		'emmanuel.delaborde@citycampus.com' => 'conversation with
     citycampus.com[199.59.243.118] timed out while receiving the initial server
-    greeting
-
---e3fa81caa57.1360385469/ryu.zarb.org
-content-description'
+    greeting'
 	},
 	'error10.eml' => {
 		'aiolia@maciste.it' => 'connect to mx2.maciste.it[62.149.198.62]'

@@ -29,7 +29,7 @@ my $unsigned_message = Sympa::Message->new({
 	noxsympato => 1
 });
 ok(
-	!defined Sympa::Tools::SMIME::smime_sign_check(
+	!defined Sympa::Tools::SMIME::check_signature(
 		$unsigned_message,
 		't/pki/ca.pem',
 		undef,
@@ -45,7 +45,7 @@ my $signed_message = Sympa::Message->new({
 });
 
 is_deeply(
-	Sympa::Tools::SMIME::smime_sign_check(
+	Sympa::Tools::SMIME::check_signature(
 		$signed_message,
 		't/pki/ca.pem',
 		undef,
@@ -69,7 +69,7 @@ is_deeply(
 );
 
 is_deeply(
-	Sympa::Tools::SMIME::smime_sign_check(
+	Sympa::Tools::SMIME::check_signature(
 		$signed_message,
 		undef,
 		't/pki/ca',
