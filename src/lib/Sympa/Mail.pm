@@ -156,7 +156,7 @@ A true value on sucess, I<undef> otherwise.
 =cut
 
 sub mail_file {
-    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet, $sympa) = @_;
+    my ($filename, $rcpt, $data, $robot, $return_message_as_string, $priority, $priority_packet, $sympa, $sendmail, $sendmail_args) = @_;
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
 
@@ -354,6 +354,8 @@ sub mail_file {
 	sign_mode       => $sign_mode,
 	use_bulk        => $data->{'use_bulk'},
 	dkim            => $data->{'dkim'},
+	sendmail        => $sendmail,
+	sendmail_args   => $sendmail_args
     );
 
     return defined $result ? 1 : undef;
@@ -556,7 +558,7 @@ A true value on success, I<undef> otherwise.
 =cut
 
 sub mail_forward {
-    my($message,$from,$rcpt,$robot, $priority,$priority_packet)=@_;
+    my($message,$from,$rcpt,$robot, $priority,$priority_packet,$sendmail,$sendmail_args)=@_;
     Sympa::Log::do_log('debug2', "($from,$rcpt)");
 
     unless (ref($message) && $message->('Sympa::Message')) {
@@ -572,7 +574,9 @@ sub mail_forward {
 	from            => $from,
 	robot           => $robot,
 	priority        => $priority,
-	priority_packet => $priority_packet
+	priority_packet => $priority_packet,
+	sendmail        => $sendmail,
+	sendmail_args   => $sendmail_args
     );
 
     if (!defined $result) {
@@ -835,7 +839,7 @@ sub _sending {
 	}
     }else{ # send it now
 	Sympa::Log::do_log('debug',"NOT USING BULK");
-	*SMTP = _smtpto($from, $rcpt, $robot);
+	*SMTP = _smtpto($from, $rcpt, $robot, undef, undef, $params{sendmail}, $params{sendmail_args});
 	print SMTP $message->{'msg'}->as_string ;
 	unless (close SMTP) {
 	    Sympa::Log::do_log('err', 'could not close safefork to sendmail');
@@ -861,7 +865,7 @@ sub _sending {
 # $fh - file handle on opened file for ouput, for SMTP "DATA" field | undef
 
 sub _smtpto {
-   my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
+   my($from, $rcpt, $robot, $msgkey, $sign_mode, $sendmail, $sendmail_args) = @_;
 
    Sympa::Log::do_log('debug2', 'smtpto( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
 
@@ -907,8 +911,6 @@ sub _smtpto {
    $pid = Sympa::Tools::safefork();
    $pid{$pid} = 0;
 
-   my $sendmail = Sympa::Configuration::get_robot_conf($robot, 'sendmail');
-   my $sendmail_args = Sympa::Configuration::get_robot_conf($robot, 'sendmail_args');
    if ($msgkey) {
        $sendmail_args .= ' -N success,delay,failure -V '.$msgkey;
    }

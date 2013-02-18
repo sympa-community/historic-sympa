@@ -3755,6 +3755,8 @@ sub send_global_file {
 	    Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
 	    $Sympa::Configuration::Conf{'sympa_packet_priority'},
 	    Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	    Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	    Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
     );
     return $result if($options->{'parse_and_return'});
 
@@ -3936,6 +3938,8 @@ sub send_file {
 	Sympa::Configuration::get_robot_conf($robot,'sympa_priority'),
 	$Sympa::Configuration::Conf{'sympa_packet_priority'},
 	Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
     );
     
     unless (defined $result) {

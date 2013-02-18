@@ -1651,7 +1651,9 @@ sub DoSendMessage {
 	$from,
 	\@rcpts,
 	$robot,
-	Sympa::Configuration::get_robot_conf($robot, 'request_priority')
+	Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+	Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
     );
 
     unless (defined $result) {
@@ -1790,7 +1792,7 @@ sub DoForward {
 
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;
-    unless (Sympa::Mail::mail_forward($message,Sympa::Configuration::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
+    unless (Sympa::Mail::mail_forward($message,Sympa::Configuration::get_robot_conf($robot, 'request'),\@rcpt,$robot,Sympa::Configuration::get_robot_conf($robot, 'request_priority'),$Sympa::Configuration::Conf{'sympa_packet_priority'},Sympa::Configuration::get_robot_conf($robot, 'sendmail'),Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'))) {
 	Sympa::Log::do_log('err',"Impossible to forward mail for $name-$function  ");
 	my $string = sprintf 'Impossible to forward a message for %s-%s',$name,$function;
 	Sympa::Report::reject_report_msg('intern',$string,$sender,
