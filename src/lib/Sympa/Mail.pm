@@ -379,6 +379,8 @@ Distribute a message to a list, crypting if needed.
 
 =item * I<priority_packet>
 
+=item * I<return_path_suffix>
+
 =back
 
 =head3 Return value
@@ -407,7 +409,7 @@ sub mail_message {
 
 
     # normal return_path (ie used if verp is not enabled)
-    my $from = $list->{'name'}.Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
+    my $from = $list->{'name'}. $params{return_path_suffix} . '@' . $host;
 
     Sympa::Log::do_log('debug', '(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
     return 0 if ($#rcpt == -1);
