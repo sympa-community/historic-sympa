@@ -242,7 +242,10 @@ sub check_signature {
     }
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email.
-    my $signer = _parse_cert({file => $temporary_file, openssl => $params{openssl}});
+    my $signer = _parse_cert(
+	    file => $temporary_file,
+	    openssl => $params{openssl}
+    );
 
     unless ($signer->{'email'}{lc($message->{sender})}) {
 	Sympa::Log::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$message->{sender}, join(',', keys %{$signer->{'email'}}));
@@ -276,11 +279,19 @@ sub check_signature {
     my $extracted = 0;
     Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
     if($nparts == 0) { # could be opaque signing...
-	$extracted += _extract_certs($message->{msg}, $certbundle, $params{openssl});
+	$extracted += _extract_certs(
+		message => $message->{msg},
+		bundle  => $certbundle,
+		openssl => $params{openssl}
+	);
     } else {
 	for (my $i = 0; $i < $nparts; $i++) {
 	    my $part = $message->{msg}->parts($i);
-	    $extracted += _extract_certs($part, $certbundle, $params{openssl});
+	    $extracted += _extract_certs(
+		    message => $part,
+		    bundle  => $certbundle,
+		    openssl => $params{openssl}
+	    );
 	    last if $extracted;
 	}
     }
@@ -731,21 +742,16 @@ sub smime_find_keys {
 #  - sign: true if v3 purpose is signing
 
 sub _parse_cert {
-    my ($arg) = @_;
-    Sympa::Log::do_log('debug', '(%s)', join('/',%{$arg}));
-
-    unless (ref($arg)) {
-	Sympa::Log::do_log('err', "_parse_cert: must be called with hashref, not %s", ref($arg));
-	return undef;
-    }
+    my (%params) = @_;
+    Sympa::Log::do_log('debug', '(%s)', join('/',%params));
 
     ## Load certificate
     my @cert;
-    if($arg->{'text'}) {
-	@cert = ($arg->{'text'});
-    }elsif ($arg->{file}) {
-	unless (open(PSC, "$arg->{file}")) {
-	    Sympa::Log::do_log('err', "_parse_cert: open %s: $ERRNO", $arg->{file});
+    if($params{'text'}) {
+	@cert = ($params{'text'});
+    }elsif ($params{file}) {
+	unless (open(PSC, "$params{file}")) {
+	    Sympa::Log::do_log('err', "_parse_cert: open %s: $ERRNO", $params{file});
 	    return undef;
 	}
 	@cert = <PSC>;
@@ -757,7 +763,7 @@ sub _parse_cert {
 
     ## Extract information from cert
     my $tmpfile = File::Temp->new(CLEANUP => 1);
-    unless (open(PSC, "| $arg->{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
+    unless (open(PSC, "| $params{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
 	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
@@ -810,17 +816,17 @@ sub _parse_cert {
     return \%res;
 }
 
-# _extract_certs($message, $outfile, $openssl)
+# _extract_certs(%parameters)
 #
 # Extract certificate from message.
 #
 # Parameters:
-# * $message: (MIME::Entity instance)
-# * $outfile:
-# * $openssl: path to openssl binary
+# * message: (MIME::Entity instance)
+# * outfile:
+# * openssl: path to openssl binary
 
 sub _extract_certs {
-    my ($mime, $outfile, $openssl) = @_;
+    my (%params) = @_;
     Sympa::Log::do_log('debug2', "(%s)", $mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
