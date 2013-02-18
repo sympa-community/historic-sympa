@@ -194,8 +194,6 @@ sub check_signature {
 
     Sympa::Log::do_log('debug', '(message, %s, %s)', $message->{sender}, $message->{'filename'});
 
-    my $verify ;
-
     ## first step is the msg signing OK ; /tmp/sympa-smime.$PID is created
     ## to store the signer certificat for step two. I known, that's durty.
 
@@ -210,7 +208,7 @@ sub check_signature {
 
     unless (open (MSGDUMP, "| $command > /dev/null 2>&1")) {
 
-	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender} $verify");
+	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender}");
 	return undef ;
     }
 
