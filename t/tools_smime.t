@@ -30,11 +30,11 @@ my $unsigned_message = Sympa::Message->new({
 });
 ok(
 	!defined Sympa::Tools::SMIME::check_signature(
-		$unsigned_message,
-		't/pki/ca.pem',
-		undef,
-		'/usr/bin/openssl',
-		$crt_dir
+		message  => $unsigned_message,
+		cafile   => 't/pki/ca.pem',
+		capath   => undef,
+		openssl  => '/usr/bin/openssl',
+		cert_dir => $crt_dir
 	),
 	"unsigned message"
 );
@@ -46,11 +46,11 @@ my $signed_message = Sympa::Message->new({
 
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
-		$signed_message,
-		't/pki/ca.pem',
-		undef,
-		'/usr/bin/openssl',
-		$crt_dir
+		message  => $signed_message,
+		cafile   => 't/pki/ca.pem',
+		capath   => undef,
+		openssl  => '/usr/bin/openssl',
+		cert_dir => $crt_dir
 	),
 	{
 		body => 'smime',
@@ -70,11 +70,11 @@ is_deeply(
 
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
-		$signed_message,
-		undef,
-		't/pki/ca',
-		'/usr/bin/openssl',
-		$crt_dir
+		message  => $signed_message,
+		cafile   => undef,
+		capath   => 't/pki/ca',
+		openssl  => '/usr/bin/openssl',
+		cert_dir => $crt_dir
 	),
 	{
 		body => 'smime',
