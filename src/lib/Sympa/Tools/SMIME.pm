@@ -243,7 +243,7 @@ sub check_signature {
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email.
     my $signer = _parse_cert(
-	    file => $temporary_file,
+	    file    => $temporary_file,
 	    openssl => $params{openssl}
     );
 
@@ -280,16 +280,16 @@ sub check_signature {
     Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
     if($nparts == 0) { # could be opaque signing...
 	$extracted += _extract_certs(
-		message => $message->{msg},
-		bundle  => $certbundle,
+		entity  => $message->{msg},
+		file    => $certbundle,
 		openssl => $params{openssl}
 	);
     } else {
 	for (my $i = 0; $i < $nparts; $i++) {
 	    my $part = $message->{msg}->parts($i);
 	    $extracted += _extract_certs(
-		    message => $part,
-		    bundle  => $certbundle,
+		    entity  => $part,
+		    file    => $certbundle,
 		    openssl => $params{openssl}
 	    );
 	    last if $extracted;
@@ -320,7 +320,10 @@ sub check_signature {
 	    }
 	    print CERT $workcert;
 	    close(CERT);
-	    my($parsed) = _parse_cert({file => $tmpcert, openssl => $params{openssl}});
+	    my($parsed) = _parse_cert(
+		    file => $tmpcert,
+		    openssl => $params{openssl}
+	    );
 	    unless($parsed) {
 		Sympa::Log::do_log('err', 'No result from _parse_cert');
 		return undef;
@@ -821,21 +824,23 @@ sub _parse_cert {
 # Extract certificate from message.
 #
 # Parameters:
-# * message: (MIME::Entity instance)
-# * outfile:
+# * entity: (MIME::Entity instance)
+# * file:
 # * openssl: path to openssl binary
 
 sub _extract_certs {
     my (%params) = @_;
-    Sympa::Log::do_log('debug2', "(%s)", $mime->mime_type);
+    Sympa::Log::do_log('debug', '(%s)', join('/',%params));
 
-    if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
-	unless (open(MSGDUMP, "| $openssl pkcs7 -print_certs ".
-		     "-inform der > $outfile")) {
+    my $entity = $params{entity};
+
+    if ($entity->mime_type =~ /application\/(x-)?pkcs7-/) {
+	unless (open(MSGDUMP, "| $params{openssl} pkcs7 -print_certs ".
+		     "-inform der > $params{file}")) {
 	    Sympa::Log::do_log('err', "unable to run openssl pkcs7: $ERRNO");
 	    return 0;
 	}
-	print MSGDUMP $mime->bodyhandle->as_string;
+	print MSGDUMP $entity->bodyhandle->as_string;
 	close(MSGDUMP);
 	if ($CHILD_ERROR) {
 	    Sympa::Log::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
