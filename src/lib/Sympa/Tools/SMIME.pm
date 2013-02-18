@@ -194,10 +194,6 @@ sub check_signature {
 
     Sympa::Log::do_log('debug', '(message, %s, %s)', $message->{sender}, $message->{'filename'});
 
-    my $is_signed = {};
-    $is_signed->{'body'} = undef;
-    $is_signed->{'subject'} = undef;
-
     my $verify ;
 
     ## first step is the msg signing OK ; /tmp/sympa-smime.$PID is created
@@ -365,11 +361,12 @@ sub check_signature {
 	close(CERT);
     }
 
-    $is_signed->{'body'} = 'smime';
-
     # futur version should check if the subject was part of the SMIME signature.
-    $is_signed->{'subject'} = $signer;
-    return $is_signed;
+    
+    return {
+	    body    => 'smime',
+	    subject => $signer
+    };
 }
 
 =head2 smime_encrypt($header, $body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
