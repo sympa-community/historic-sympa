@@ -393,4 +393,34 @@ sub a_is_older_than_b {
     return $answer;
 }
 
+=head2 slurp_file($file)
+
+Read the whole content of a file.
+
+=head3 Parameters
+
+=over
+
+=item * I<$file>: file to read
+
+=back
+
+=head3 Return value
+
+The file content as a string on success, I<undef> otherwise.
+
+=cut
+
+sub slurp_file {
+	my ($file) = @_;
+
+	open(my $handle, '<', $file)
+		or return undef;
+	local $RS; # enable localized slurp mode
+	my $content = <$handle>;
+	close($handle);
+
+	return $content;
+}
+
 1;
