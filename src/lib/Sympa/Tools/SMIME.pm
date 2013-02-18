@@ -167,7 +167,7 @@ sub smime_sign {
 
 =head2 check_signature(%parameters)
 
-Check if a message is signed.
+Check if a message is signed, and store the sender certificates in certificate storage directory.
 
 =head3 Parameters
 
@@ -184,6 +184,10 @@ Check if a message is signed.
 =item * I<ssl_cert_dir>:
 
 =back
+
+=head3 Return value
+
+A data structure corresponding to the signer certificate on success, I<undef> otherwise.
 
 =cut
 
@@ -239,9 +243,9 @@ sub check_signature {
 
     Sympa::Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer_cert->{'email'}}));
 
-    # openssl smime -signer only extract the signer certificate
-    # In order to get all included certs, we need to extract and analyse them
-    # manually
+    # openssl smime -signer only extract the signature certificate
+    # In order to also retrieve encryption certificate, if distinct,
+    # we need to extract to extract and analyse certificates manually
     my $certs_bundle_file = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
