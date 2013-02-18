@@ -518,7 +518,7 @@ sub mail_message {
 	verp            => $verp,
 	dkim            => $dkim,
 	merge           => $list->{'admin'}{'merge_feature'},
-	tag_as_last     => $tag_as_last
+	tag_as_last     => $tag_as_last,
 	sendmail        => $params{sendmail},
 	sendmail_args   => $params{sendmail_args}
     );
@@ -693,7 +693,7 @@ sub _sendto {
 			priority_packet => $priority_packet,
 			delivery_date   => $delivery_date,
 			use_bulk        => $use_bulk,
-			tag_as_last     => $tag_as_last
+			tag_as_last     => $tag_as_last,
 			sendmail        => $params{sendmail},
 			sendmail_args   => $params{sendmail_args}
 		);
@@ -720,7 +720,7 @@ sub _sendto {
 		merge           => $merge,
 		use_bulk        => $use_bulk,
 		dkim            => $dkim,
-		tag_as_last     => $tag_as_last
+		tag_as_last     => $tag_as_last,
 		sendmail        => $params{sendmail},
 		sendmail_args   => $params{sendmail_args}
 	);
