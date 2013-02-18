@@ -818,23 +818,25 @@ sub _extract_certs {
 
     my $entity = $params{entity};
 
-    if ($entity->mime_type =~ /application\/(x-)?pkcs7-/) {
-	    my $command =
-		    "$params{openssl} pkcs7 -print_certs -inform der " .
-		    "> $params{file}";
-	    my $handle;
-	unless (open($handle, '|-', $command)) {
-	    Sympa::Log::do_log('err', "unable to run openssl pkcs7: $ERRNO");
-	    return 0;
-	}
-	print $handle $entity->bodyhandle->as_string;
-	close($handle);
+    return unless $entity->mime_type =~ /application\/(x-)?pkcs7-/;
 
-	if ($CHILD_ERROR) {
-	    Sympa::Log::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
-	    return 0;
-	}
-	return 1;
+    my $command =
+	    "$params{openssl} pkcs7 -print_certs -inform der " .
+	    "> $params{file}";
+    my $handle;
+    unless (open($handle, '|-', $command)) {
+	Sympa::Log::do_log('err', "unable to run openssl pkcs7: $ERRNO");
+	return 0;
     }
+
+    print $handle $entity->bodyhandle->as_string;
+    close($handle);
+
+    if ($CHILD_ERROR) {
+	Sympa::Log::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
+	return 0;
+    }
+
+    return 1;
 }
 1;
