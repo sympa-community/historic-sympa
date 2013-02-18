@@ -297,32 +297,33 @@ sub check_signature {
     my(%certs);
     while (my $line = <$bundle_handle>) {
 	$cert .= $line;
-	if ($line =~ /^-----END CERTIFICATE-----$/) {
-	    my $workcert = $cert;
-	    $cert = '';
-	    unless(open(CERT, ">$tmpcert")) {
+
+	next unless $line =~ /^-----END CERTIFICATE-----$/;
+	my $workcert = $cert;
+	$cert = '';
+	unless(open(CERT, ">$tmpcert")) {
 		Sympa::Log::do_log('err', "Can't create $tmpcert: $ERRNO");
 		return undef;
-	    }
-	    print CERT $workcert;
-	    close(CERT);
-	    my($parsed) = _parse_cert(
-		    file => $tmpcert,
-		    openssl => $params{openssl}
-	    );
-	    unless($parsed) {
+	}
+	print CERT $workcert;
+	close(CERT);
+	my($parsed) = _parse_cert(
+		file => $tmpcert,
+		openssl => $params{openssl}
+	);
+	unless($parsed) {
 		Sympa::Log::do_log('err', 'No result from _parse_cert');
 		return undef;
-	    }
-	    unless($parsed->{'email'}) {
+	}
+	unless($parsed->{'email'}) {
 		Sympa::Log::do_log('debug', "No email in cert for $parsed->{subject}, skipping");
 		next;
-	    }
+	}
 
-	    Sympa::Log::do_log('debug2', "Found cert for <%s>", join(',', keys %{$parsed->{'email'}}));
-	    if ($parsed->{'email'}{lc($message->{sender})}) {
+	Sympa::Log::do_log('debug2', "Found cert for <%s>", join(',', keys %{$parsed->{'email'}}));
+	if ($parsed->{'email'}{lc($message->{sender})}) {
 		if ($parsed->{'purpose'}{'sign'} && $parsed->{'purpose'}{'enc'}) {
-		    $certs{'both'} = $workcert;
+		 $certs{'both'} = $workcert;
 		    Sympa::Log::do_log('debug', 'Found a signing + encryption cert');
 		}elsif ($parsed->{'purpose'}{'sign'}) {
 		    $certs{'sign'} = $workcert;
@@ -331,9 +332,9 @@ sub check_signature {
 		    $certs{'enc'} = $workcert;
 		    Sympa::Log::do_log('debug', 'Found an encryption cert');
 		}
-	    }
-	    last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
 	}
+
+	last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
     }
     close($bundle_handle);
 
