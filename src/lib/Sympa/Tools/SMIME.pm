@@ -206,18 +206,19 @@ sub check_signature {
 	    ($params{capath} ? "-CApath $params{capath}" : '')        ;
     Sympa::Log::do_log('debug', $command);
 
-    unless (open (MSGDUMP, "| $command > /dev/null 2>&1")) {
+    my $command_handle;
+    unless (open ($command_handle, '|-', "$command > /dev/null 2>&1")) {
 
 	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender}");
 	return undef ;
     }
 
     if ($message->{'smime_crypted'}){
-	$message->{'msg'}->head->print(\*MSGDUMP);
-	print MSGDUMP "\n";
+	$message->{'msg'}->head->print($command_handle);
+	print $command_handle "\n";
     }
-    print MSGDUMP $message->{'msg_as_string'};
-    close MSGDUMP;
+    print $command_handle $message->{'msg_as_string'};
+    close $command_handle;
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
@@ -285,7 +286,8 @@ sub check_signature {
 	return undef;
     }
 
-    unless(open(BUNDLE, $certbundle)) {
+    my $bundle_handle;
+    unless(open($bundle_handle, '<', $certbundle)) {
 	Sympa::Log::do_log('err', "Can't open cert bundle $certbundle: $ERRNO");
 	return undef;
     }
@@ -293,7 +295,7 @@ sub check_signature {
     ## read it in, split on "-----END CERTIFICATE-----"
     my $cert = '';
     my(%certs);
-    while(<BUNDLE>) {
+    while(<$bundle_handle>) {
 	$cert .= $_;
 	if(/^-----END CERTIFICATE-----$/) {
 	    my $workcert = $cert;
@@ -333,7 +335,8 @@ sub check_signature {
 	    last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
 	}
     }
-    close(BUNDLE);
+    close($bundle_handle);
+
     if(!($certs{both} || ($certs{sign} || $certs{enc}))) {
 	Sympa::Log::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer->{'email'}}));
 	return undef;
@@ -351,12 +354,13 @@ sub check_signature {
 	    unlink("$fn\@sign");
 	}
 	Sympa::Log::do_log('debug', "Saving $c cert in $fn");
-	unless (open(CERT, ">$fn")) {
+	my $fn_handle;
+	unless (open($fn_handle, '>', $fn)) {
 	    Sympa::Log::do_log('err', "Unable to create certificate file $fn: $ERRNO");
 	    return undef;
 	}
-	print CERT $certs{$c};
-	close(CERT);
+	print $fn_handle $certs{$c};
+	close($fn_handle);
     }
 
     # futur version should check if the subject was part of the SMIME signature.
@@ -738,12 +742,13 @@ sub _parse_cert {
     if($params{'text'}) {
 	@cert = ($params{'text'});
     }elsif ($params{file}) {
-	unless (open(PSC, "$params{file}")) {
+	    my $handle;
+	unless (open($handle, '<', $params{file})) {
 	    Sympa::Log::do_log('err', "_parse_cert: open %s: $ERRNO", $params{file});
 	    return undef;
 	}
-	@cert = <PSC>;
-	close(PSC);
+	@cert = <$handle>;
+	close($handle);
     }else {
 	Sympa::Log::do_log('err', '_parse_cert: neither "text" nor "file" given');
 	return undef;
@@ -751,25 +756,28 @@ sub _parse_cert {
 
     ## Extract information from cert
     my $tmpfile = File::Temp->new(CLEANUP => 1);
-    unless (open(PSC, "| $params{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
+    my $command =
+	    "$params{openssl} x509 -email -subject -purpose -noout > $tmpfile";
+    my $handle;
+    unless (open($handle, '|-', $command)) {
 	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
-    print PSC join('', @cert);
+    print $handle join('', @cert);
 
-    unless (close(PSC)) {
+    unless (close($handle)) {
 	Sympa::Log::do_log('err', "_parse_cert: close openssl: $ERRNO, $EVAL_ERROR");
 	return undef;
     }
 
-    unless (open(PSC, "$tmpfile")) {
+    unless (open($handle, '<', "$tmpfile")) {
 	Sympa::Log::do_log('err', "_parse_cert: open $tmpfile: $ERRNO");
 	return undef;
     }
 
     my (%res, $purpose_section);
 
-    while (<PSC>) {
+    while (<$handle>) {
       ## First lines before subject are the email address(es)
 
       if (/^subject=\s+(\S.+)\s*$/) {
@@ -799,7 +807,7 @@ sub _parse_cert {
     if(!$res{email} && ($res{subject} =~ /\/email(address)?=([^\/]+)/)) {
 	$res{email} = $1;
     }
-    close(PSC);
+    close($handle);
     unlink($tmpfile);
     return \%res;
 }
@@ -820,13 +828,17 @@ sub _extract_certs {
     my $entity = $params{entity};
 
     if ($entity->mime_type =~ /application\/(x-)?pkcs7-/) {
-	unless (open(MSGDUMP, "| $params{openssl} pkcs7 -print_certs ".
-		     "-inform der > $params{file}")) {
+	    my $command =
+		    "$params{openssl} pkcs7 -print_certs -inform der " .
+		    "> $params{file}";
+	    my $handle;
+	unless (open($handle, '|-', $command)) {
 	    Sympa::Log::do_log('err', "unable to run openssl pkcs7: $ERRNO");
 	    return 0;
 	}
-	print MSGDUMP $entity->bodyhandle->as_string;
-	close(MSGDUMP);
+	print $handle $entity->bodyhandle->as_string;
+	close($handle);
+
 	if ($CHILD_ERROR) {
 	    Sympa::Log::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
 	    return 0;
