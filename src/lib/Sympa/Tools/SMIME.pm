@@ -203,11 +203,12 @@ sub check_signature {
     my $command = 
 	    "$params{openssl} smime -verify -signer $temporary_file " .
 	    ($params{cafile} ? "-CAfile $params{cafile}" : '')        .
-	    ($params{capath} ? "-CApath $params{capath}" : '')        ;
+	    ($params{capath} ? "-CApath $params{capath}" : '')        .
+	    ">/dev/null 2>&1";
     Sympa::Log::do_log('debug', $command);
 
     my $command_handle;
-    unless (open ($command_handle, '|-', "$command > /dev/null 2>&1")) {
+    unless (open ($command_handle, '|-', $command)) {
 
 	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender}");
 	return undef ;
