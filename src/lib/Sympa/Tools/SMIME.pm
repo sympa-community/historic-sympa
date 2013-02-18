@@ -239,15 +239,6 @@ sub check_signature {
 
     Sympa::Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer_cert->{'email'}}));
 
-    # create certificate storage directory if needed
-    unless (-d $params{cert_dir}) {
-	if ( mkdir ($params{cert_dir}, 0775)) {
-	    Sympa::Log::do_log('info', "creating spool $params{cert_dir}");
-	}else{
-	    Sympa::Log::do_log('err', "Unable to create user certificat directory $params{cert_dir}");
-	}
-    }
-
     # openssl smime -signer only extract the signer certificate
     # In order to get all included certs, we need to extract and analyse them
     # manually
@@ -331,6 +322,16 @@ sub check_signature {
 	Sympa::Log::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer_cert->{'email'}}));
 	return undef;
     }
+
+    # create certificate storage directory if needed
+    unless (-d $params{cert_dir}) {
+	if ( mkdir ($params{cert_dir}, 0775)) {
+	    Sympa::Log::do_log('info', "creating spool $params{cert_dir}");
+	}else{
+	    Sympa::Log::do_log('err', "Unable to create user certificat directory $params{cert_dir}");
+	}
+    }
+
 
     # store all extracted certs in certificate storage directory,
     # in a single file for dual-purpose certificates,
