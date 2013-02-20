@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-10-06 18:03+0200\n"
-"Last-Translator: rmanola <rmanola@gmail.com>\n"
+"PO-Revision-Date: 2013-02-12 02:12+0200\n"
+"Last-Translator: kareneliot <kareneliot@riseup.net>\n"
 "Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -593,7 +593,7 @@ msgstr "Baixar arquivo Zip"
 # plural needs more brackets than english
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Delete Selected Month(s)"
-msgstr "Excluir Mês(es) Selecionado(s)"
+msgstr "Apagar o(s) mês(es) selecionados"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you really want to delete Selected Archives?"
@@ -1562,7 +1562,7 @@ msgstr "Transferir um arquivo para a pasta %1"
 
 #: ../web_tt2/d_read.tt2:368
 msgid "Upload a file inside folder SHARED"
-msgstr "Transferir um arquivo para a pasta COMPARTILHADA"
+msgstr "Enviar um arquivo para a pasta SHARED"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:385
@@ -1571,7 +1571,7 @@ msgstr "Descompactar um arquivo dentro da pasta %1"
 
 #: ../web_tt2/d_read.tt2:387
 msgid "Unzip a file inside the folder SHARED"
-msgstr "Descompactar um arquivo dentro da pasta COMPARTILHADA"
+msgstr "Descompactar um arquivo dentro da pasta SHARED"
 
 #: ../web_tt2/dump_scenario.tt2:6
 msgid "scenario is created but not loaded in the list config"
@@ -3039,8 +3039,8 @@ msgid ""
 "Please select one or more topic(s) that correspond to the messages you wish "
 "to distribute:"
 msgstr ""
-"Por favor, selecione um ou mais tópicos que correspondam às mensagens que "
-"você deseja distribuir:"
+"Selecione um ou mais tópicos que correspondam às mensagens que você deseja "
+"distribuir:"
 
 #: ../web_tt2/modindex.tt2:155 ../web_tt2/modindex.tt2:71
 msgid "Size"
@@ -3469,9 +3469,7 @@ msgstr ""
 #: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
 msgid ""
 "Please select one or more topic(s) that corresponds to your message below:"
-msgstr ""
-"Por favor selecione abaixo um ou mais tópicos que correspondam a sua "
-"mensagem:"
+msgstr "Selecione abaixo um ou mais tópicos que correspondam a sua mensagem:"
 
 #: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
 msgid "Tag this mail"
@@ -3639,7 +3637,7 @@ msgstr " Outro(s) email(s) de assinante parecidos (%1)"
 #: ../web_tt2/review.tt2:137
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr ""
-"Tem certeza que cancelar a inscrição na lista de TODOS os assinantes "
+"Tem certeza que deseja cancelar a inscrição de TODOS os assinantes "
 "selecionados?"
 
 #: ../web_tt2/review.tt2:145
@@ -4040,8 +4038,8 @@ msgid ""
 "Check our translation FAQ if you wish to translate Sympa GUI in your native "
 "language: "
 msgstr ""
-"Se você quiser traduzir a interface do Sympa para seu idioma nativo, veja as "
-"perguntas frequentes (FAQ) sobre tradução em nosso website :"
+"Consulte noosas instruções e dicas, se você quiser traduzir a interface do "
+"Sympa para seu idioma nativa:"
 
 #: ../web_tt2/serveradmin.tt2:241
 msgid "You can submit a problem or request a new feature: "
@@ -4128,14 +4126,14 @@ msgid ""
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
 "Os usuários listados abaixo estão excluídos-forçados da lista. Atente-se ao "
-"fato de que esta funcionalidade é diferente da \"lista negra\". Exclusão "
-"forçada faz sentido\n"
-"quando uma lista é baseada em fontes de dados externas; graças à exclusão-"
-"forçada, um usuário pode ter sua inscrição cancelada (ou ser removido pelo "
-"proprietário da lista) embora\n"
-"ele devesse ser incluso por meio de uma fonte de dados externa.  Usuários "
-"entram na tabela de exclusão-forçada por meio das funções padrões de remoção/"
-"cancelamento de inscrição.\n"
+"fato de que esta funcionalidade é diferente da lista negra. Exclusão forçada "
+"faz sentido \n"
+"quando uma lista é baseada em fontes de dados externas; graças à "
+"exclusão-forçada, um usuário pode ter sua inscrição cancelada (ou ser "
+"removido pelo proprietário da lista) embora \n"
+"ele devesse ser incluso por meio de uma fonte de dados externa. Usuários "
+"entram na tabela de exclusão-forçada por meio das funções padrões de "
+"remoção/cancelamento de inscrição. \n"
 "Eles saem da tabela de exclusão-forçada por meio das funções padrões de "
 "inscrição/inserção."
 
@@ -4640,7 +4638,7 @@ msgstr "Desativa inscrição de tópicos"
 
 #: ../web_tt2/suboptions.tt2:51
 msgid "Only possible for direct reception modes."
-msgstr "Possível apenas no modo de recepção \"normal\"."
+msgstr "Possível apenas em modos de recepção direta."
 
 #. (list)
 #: ../web_tt2/subrequest.tt2:28 ../web_tt2/subrequest.tt2:7
@@ -5233,7 +5231,7 @@ msgstr "A distribuição de mensagem nesta lista é restrita aos moderadores."
 
 #: ../mail_tt2/authorization_reject.tt2:120
 msgid "Multipart messages are not allowed in this list."
-msgstr "Distribuição de mensagem \"multipart\" não é permitida nesta lista."
+msgstr "Mensagens multipart não são permitidas nesta lista."
 
 #: ../mail_tt2/authorization_reject.tt2:123
 msgid "Message distribution in the list is restricted to list subscribers."

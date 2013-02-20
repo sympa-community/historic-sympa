@@ -7,13 +7,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jens Krehbiel-Graether <jens.krehbiel-graether@okg-"
 "computer.de>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-12-29 00:22+0200\n"
-"Last-Translator: L18N <e.ruedin@freesurf.ch>\n"
+"PO-Revision-Date: 2013-02-16 10:52+0200\n"
+"Last-Translator: Richard <post@richard-heider.de>\n"
 "Language-Team: Deutsch\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -805,9 +805,8 @@ msgstr "Listen automatisch verwalten"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-#, fuzzy
 msgid "The automatic lists are based on the %1 family"
-msgstr "Die automatischen Listen basieren auf der Familie $1"
+msgstr "Die automatischen Listen basieren auf der Familie %1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
@@ -822,9 +821,8 @@ msgid "Go to list"
 msgstr "Zu Liste gehen"
 
 #: ../web_tt2/automatic_lists.tt2:3
-#, fuzzy
 msgid "Automatic lists result"
-msgstr "Automatische Nachrichten"
+msgstr "Ergebnis der automatischen Listen"
 
 #: ../web_tt2/auto_signoff.tt2:1
 msgid "Unsubscription request"
@@ -843,8 +841,8 @@ msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from list %1"
 msgstr ""
-"Eine Bestätigung wurde an die Adresse gesendet. Beim Klick auf den "
-"beinhaltenden Link werden Sie definitiv von der Liste %1 abgemeldet"
+"Eine Bestätigung wurde an diese Adresse gesendet. Beim Klick auf den "
+"enthaltenen Link werden Sie definitiv von der Liste %1 abgemeldet."
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/blacklist.tt2:4
@@ -2067,14 +2065,14 @@ msgid "Syntax errors with the following parameters: %1"
 msgstr "Syntaxfehler in folgenden Parametern: %1"
 
 #: ../web_tt2/error.tt2:47
+#, fuzzy
 msgid "Authorization rejected. Maybe you forgot to log in?"
-msgstr ""
+msgstr "Autorisierung zurückgewiesen. Haben Sie sich bereits angemeldet?"
 
 #. (u_err.list)
 #: ../web_tt2/error.tt2:48
-#, fuzzy
 msgid "List %1 not found"
-msgstr "Datei nicht gefunden."
+msgstr "Liste %1 nicht gefunden."
 
 #. (u_err.new_robot)
 #: ../web_tt2/error.tt2:49
@@ -8613,7 +8611,7 @@ msgstr "Aktualisierung der Listen-Mitglieder gemäß TTL (\"time to live\")"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:1
 msgid "Confidential list setup"
-msgstr ""
+msgstr "vertrauliche Liste"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:3
 msgid "No subscription / unsubscription: only the list owner can add members"
