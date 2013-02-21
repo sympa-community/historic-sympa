@@ -7633,6 +7633,9 @@ sub do_send_me {
 		packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
 		sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 		sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+		tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+		openssl         => $Sympa::Configuration::Conf{'openssl'},
+		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 	);
 
 	unless (defined $result) {
@@ -14840,6 +14843,9 @@ sub do_remind {
 	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	return_message_as_string => undef,
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     
     unless (defined $result) {
@@ -15549,6 +15555,9 @@ sub do_send_mail {
 	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	return_message_as_string => undef,
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     
     unless (defined $result) {
@@ -15705,6 +15714,9 @@ sub do_tag_topic_by_sender {
 	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
 	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 	return_message_as_string => undef,
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     
     unless (defined $result) {

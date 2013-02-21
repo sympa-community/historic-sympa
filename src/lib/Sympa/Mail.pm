@@ -152,6 +152,12 @@ send a tt2 file.
 
 =item * I<sendmail_args>
 
+=item * I<tmpdir>
+
+=item * I<openssl>
+
+=item * I<key_passwd>
+
 =back
 
 =head3 Return value
@@ -362,7 +368,10 @@ sub mail_file {
 	use_bulk        => $data->{'use_bulk'},
 	dkim            => $data->{'dkim'},
 	sendmail        => $params{sendmail},
-	sendmail_args   => $params{sendmail_args}
+	sendmail_args   => $params{sendmail_args},
+	openssl         => $params{openssl},
+	tmpdir          => $params{tmpdir},
+	key_passwd      => $params{key_passwd},
     );
 
     return defined $result ? 1 : undef;
@@ -401,6 +410,14 @@ Distribute a message to a list, crypting if needed.
 =item * I<nrcpt_by_dom>
 
 =item * I<db_type>
+
+=item * I<tmpdir>
+
+=item * I<ssl_cert_dir>
+
+=item * I<openssl>
+
+=item * I<key_passwd>
 
 =back
 
@@ -527,7 +544,11 @@ sub mail_message {
 	merge           => $list->{'admin'}{'merge_feature'},
 	tag_as_last     => $tag_as_last,
 	sendmail        => $params{sendmail},
-	sendmail_args   => $params{sendmail_args}
+	sendmail_args   => $params{sendmail_args},
+	openssl         => $params{openssl},
+	tmpdir          => $params{tmpdir},
+	key_passws      => $params{key_passwd},
+	ssl_cert_dir    => $params{ssl_cert_dir},
     );
 
     if (!defined $result) {
@@ -558,6 +579,12 @@ Forward a message.
 
 =item * I<priority_packet>
 
+=item * I<tmpdir>
+
+=item * I<openssl>
+
+=item * I<key_passwd>
+
 =back
 
 =head3 Return value
@@ -587,7 +614,10 @@ sub mail_forward {
 	priority        => $params{priority},
 	priority_packet => $params{priority_packet},
 	sendmail        => $params{sendmail},
-	sendmail_args   => $params{sendmail_args}
+	sendmail_args   => $params{sendmail_args},
+	openssl         => $params{openssl},
+	tmpdir          => $params{tmpdir},
+	key_passwd      => $params{key_passwd},
     );
 
     if (!defined $result) {
@@ -687,7 +717,7 @@ sub _sendto {
 		    Sympa::Log::do_log('err',"incorrect call for encrypt with incorrect number of recipient");
 		    return undef;
 		}
-		unless ($message->{'msg_as_string'} = Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'})){
+		unless ($message->{'msg_as_string'} = Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $params{tmpdir}, $params{ssl_cert_dir}, $params{openssl})){
     		    Sympa::Log::do_log('err',"Failed to encrypt message");
 		    return undef;
                 }
@@ -704,7 +734,10 @@ sub _sendto {
 			use_bulk        => $use_bulk,
 			tag_as_last     => $tag_as_last,
 			sendmail        => $params{sendmail},
-			sendmail_args   => $params{sendmail_args}
+			sendmail_args   => $params{sendmail_args},
+			openssl         => $params{openssl},
+			tmpdir          => $params{tmpdir},
+			key_passwd      => $params{key_passwd},
 		);
 
 		if (!defined $result) {
@@ -731,7 +764,10 @@ sub _sendto {
 		dkim            => $dkim,
 		tag_as_last     => $tag_as_last,
 		sendmail        => $params{sendmail},
-		sendmail_args   => $params{sendmail_args}
+		sendmail_args   => $params{sendmail_args},
+		openssl         => $params{openssl},
+		tmpdir          => $params{tmpdir},
+		key_passwd      => $params{key_passwd},
 	);
 	return $result;
 
@@ -781,7 +817,7 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	if ($signed_msg = Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'})) {
+	if ($signed_msg = Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $params{tmpdir}, $params{key_passwd}, $params{openssl})) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
 	    Sympa::Log::do_log('notice', 'unable to sign message from %s', $listname);

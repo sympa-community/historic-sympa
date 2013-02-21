@@ -1647,14 +1647,17 @@ sub DoSendMessage {
     my @rcpts = split /,/,$rcpt; #/
 
     my $result = Sympa::Mail::mail_forward(
-	message          => $message,
-	from             => $from,
-	recipient        => \@rcpts,
-	robot            => $robot,
-	priority         => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-	priority_packet  => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	sendmail         => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	sendmail_args    => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	message         => $message,
+	from            => $from,
+	recipient       => \@rcpts,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+	priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
 
     unless (defined $result) {
@@ -1794,14 +1797,17 @@ sub DoForward {
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;
     my $result = Sympa::Mail::mail_forward(
-	    message         => $message,
-	    from            => Sympa::Configuration::get_robot_conf($robot, 'request'),
-	    recipient       => \@rcpt,
-	    robot           => $robot,
-	    priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-	    packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	    sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	    sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args')
+	message         => $message,
+	from            => Sympa::Configuration::get_robot_conf($robot, 'request'),
+	recipient       => \@rcpt,
+	robot           => $robot,
+	priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+	packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     
     unless ($result) {

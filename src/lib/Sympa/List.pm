@@ -3757,6 +3757,9 @@ sub send_global_file {
 	    sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 	    sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	    return_message_as_string => $options->{'parse_and_return'},
+	    tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	    openssl         => $Sympa::Configuration::Conf{'openssl'},
+	    key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     return $result if($options->{'parse_and_return'});
 
@@ -3940,6 +3943,9 @@ sub send_file {
 	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	return_message_as_string => undef,
+	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+	openssl         => $Sympa::Configuration::Conf{'openssl'},
+	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
     );
     
     unless (defined $result) {
@@ -4326,6 +4332,10 @@ sub send_msg {
 		nrcpt           => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
 		nrcpt_by_dom    => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
 		db_type         => $Sympa::Configuration::Conf{'db_type'},
+		tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+		openssl         => $Sympa::Configuration::Conf{'openssl'},
+		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
@@ -4360,6 +4370,10 @@ sub send_msg {
 		dkim_parameters => $dkim_parameters,
 		tag_as_last     => $tags_to_use->{'tag_verp'},
 		priority_packet => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+		tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+		openssl         => $Sympa::Configuration::Conf{'openssl'},
+		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp enabled)");
