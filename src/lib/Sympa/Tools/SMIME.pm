@@ -490,7 +490,7 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
     return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
 }
 
-=head2 smime_decrypt(%parameters)
+=head2 decrypt_message(%parameters)
 
 Decrypt a message.
 
@@ -516,7 +516,7 @@ Decrypt a message.
 
 =cut
 
-sub smime_decrypt {
+sub decrypt_message {
     my (%params) = @_;
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
