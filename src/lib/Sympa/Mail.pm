@@ -738,7 +738,9 @@ sub _sendto {
 		    Sympa::Log::do_log('err',"incorrect call for encrypt with incorrect number of recipient");
 		    return undef;
 		}
-		unless ($message->{'msg_as_string'} = Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $params{tmpdir}, $params{ssl_cert_dir}, $params{openssl})){
+		$message->{'msg_as_string'} =
+		Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $params{tmpdir}, $params{ssl_cert_dir}, $params{openssl});
+		unless ($message->{'msg_as_string'}) {
     		    Sympa::Log::do_log('err',"Failed to encrypt message");
 		    return undef;
                 }
