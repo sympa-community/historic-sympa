@@ -76,10 +76,7 @@ sub parse_rfc1891_notification {
 
 		next unless ($content =~ /message\/delivery-status/i);
 
-		my $body = $part->body();
-		# the body is a list of CRLF-separated lines, with each
-		# paragraph separated by an empty line
-		foreach my $paragraph (split /\r\n\r\n/, (join '', @$body)) {
+		foreach my $paragraph (_get_body_paragraphes($part)) {
 			my ($status, $recipient);
 
 			if ($paragraph =~ /^Status: \s+ ($enhanced_status_pattern)/mx) {
@@ -211,10 +208,7 @@ sub parse_notification {
 		}
 	}
 
-	my $body = $entity->body();
-	# the body is a list of CRLF-separated lines, with each
-	# paragraph separated by an empty line
-	my @paragraphes = split /\r\n\r\n/, (join '', @$body);
+	my @paragraphes = _get_body_paragraphes($entity);
 	while (my $paragraph = shift @paragraphes) {
 
 		if ($paragraph =~ /^\s*-+ The following addresses (?:had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
@@ -625,6 +619,18 @@ sub parse_notification {
 	}
 
 	return $result;
+}
+
+sub _get_body_paragraphes {
+	my ($entity) = @_;
+
+	my $body = $entity->body();
+
+	# the body is a list of lines, with each paragraph separated by an
+	# empty line
+	# all lines should be CRLF-terminated, but MIME::Entity usage seem
+	# to introduce LF-terminated lines also
+	return split /(?:\r\n\r\n|\n\n)/, (join '', @$body);
 }
 
 1;
