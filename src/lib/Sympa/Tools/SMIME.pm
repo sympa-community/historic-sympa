@@ -39,7 +39,6 @@ use File::Temp;
 use MIME::Parser;
 use POSIX qw();
 
-use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
 
