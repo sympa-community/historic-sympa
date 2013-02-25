@@ -739,7 +739,14 @@ sub _sendto {
 		    return undef;
 		}
 		$message->{'msg_as_string'} =
-		Sympa::Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email, undef, $params{tmpdir}, $params{ssl_cert_dir}, $params{openssl});
+		Sympa::Tools::SMIME::smime_encrypt(
+			header       => $msg_header,
+			body         => $msg_body,
+			email        => $email,
+			tmpdir       => $params{tmpdir},
+			ssl_cert_dir => $params{ssl_cert_dir},
+			openssl      => $params{openssl}
+		);
 		unless ($message->{'msg_as_string'}) {
     		    Sympa::Log::do_log('err',"Failed to encrypt message");
 		    return undef;

@@ -4499,7 +4499,14 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = Sympa::Tools::SMIME::smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'ssl_cert_dir'}, $Sympa::Configuration::Conf{'openssl'});
+	   my $cryptedmsg = Sympa::Tools::SMIME::smime_encrypt(
+		   header       => $msg->head,
+		   body         => $msg->body_as_string,
+		   email        => $recipient,
+		   tmpdir       => $Sympa::Configuration::Conf{'tmpdir'},
+		   ssl_cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'},
+		   openssl      => $Sympa::Configuration::Conf{'openssl'}
+	   );
 	   unless ($cryptedmsg) {
 	       Sympa::Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing

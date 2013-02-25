@@ -368,7 +368,7 @@ sub check_signature {
     };
 }
 
-=head2 smime_encrypt($header, $body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
+=head2 smime_encrypt(%parameters)
 
 Encrypt a message.
 
@@ -376,39 +376,39 @@ Encrypt a message.
 
 =over
 
-=item * I<$header>:
+=item * I<header>:
 
-=item * I<$body>:
+=item * I<body>:
 
-=item * I<$email>:
+=item * I<email>:
 
-=item * I<$list>:
+=item * I<list>:
 
-=item * I<$tmpdir>: temporary directory
+=item * I<tmpdir>: temporary directory
 
-=item * I<$ssl_cert_dir>:
+=item * I<ssl_cert_dir>:
 
-=item * I<$openssl>: path to openssl binary
+=item * I<openssl>: path to openssl binary
 
 =back
 
 =cut
 
 sub smime_encrypt {
-    my ($msg_header, $msg_body, $email, $list, $tmpdir, $ssl_cert_dir, $openssl)
-	    = @_;
+    my (%params) = @_;
+
+    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
     my $usercert;
     my $dummy;
     my $cryptedmsg;
     my $encrypted_body;
 
-    Sympa::Log::do_log('debug2', '(%s, %s', $email, $list);
-    if ($list eq 'list') {
-	my $self = Sympa::List->new($email);
+    if ($params{list} eq 'list') {
+	my $self = Sympa::List->new($params{email});
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
-	my $base = "$ssl_cert_dir/".Sympa::Tools::escape_chars($email);
+	my $base = "$params{ssl_cert_dir}/".Sympa::Tools::escape_chars($params{email});
 	if(-f "$base\@enc") {
 	    $usercert = "$base\@enc";
 	} else {
@@ -416,26 +416,26 @@ sub smime_encrypt {
 	}
     }
     if (-r $usercert) {
-	my $temporary_file = $tmpdir."/".$email.".".$PID ;
+	my $temporary_file = $params{tmpdir}."/".$params{email}.".".$PID ;
 
 	## encrypt the incomming message parse it.
-        Sympa::Log::do_log ('debug3', "$openssl smime -encrypt -out $temporary_file -des3 $usercert");
+        Sympa::Log::do_log ('debug3', "$params{openssl} smime -encrypt -out $temporary_file -des3 $usercert");
 
-	if (!open(MSGDUMP, "| $openssl smime -encrypt -out $temporary_file -des3 $usercert")) {
-	    Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $email);
+	if (!open(MSGDUMP, "| $params{openssl} smime -encrypt -out $temporary_file -des3 $usercert")) {
+	    Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
 	}
 ## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
 ## that contains a whole header again... since MIME::Tools has got no function
 ## for this, we need to manually extract only the MIME headers...
 ##	$msg_header->print(\*MSGDUMP);
 ##	printf MSGDUMP "\n%s", $msg_body;
-	my $mime_hdr = $msg_header->dup();
+	my $mime_hdr = $params{header}->dup();
 	foreach my $t ($mime_hdr->tags()) {
 	  $mime_hdr->delete($t) unless ($t =~ /^(mime|content)-/i);
 	}
 	$mime_hdr->print(\*MSGDUMP);
 
-	printf MSGDUMP "\n%s", $msg_body;
+	printf MSGDUMP "\n%s", $params{body};
 	close(MSGDUMP);
 
 	my $status = $CHILD_ERROR/256 ;
@@ -475,7 +475,7 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 	    $predefined_headers->{lc $header} = 1
 	        if ($cryptedmsg->head->get($header)) ;
 	}
-	foreach my $header (split /\n(?![ \t])/, $msg_header->as_string) {
+	foreach my $header (split /\n(?![ \t])/, $params{header}->as_string) {
 	    next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	    my ($tag, $val) = ($1, $2);
 	    $cryptedmsg->head->add($tag, $val)
@@ -483,7 +483,7 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 	}
 
     }else{
-	Sympa::Log::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$email,$usercert);
+	Sympa::Log::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$params{email},$usercert);
 	return undef;
     }
 
