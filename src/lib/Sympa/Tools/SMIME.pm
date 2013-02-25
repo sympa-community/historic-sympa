@@ -490,7 +490,7 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
     return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
 }
 
-=head2 smime_decrypt($message, $list, $tmpdir, $home, $key_passwd, $openssl)
+=head2 smime_decrypt(%parameters)
 
 Decrypt a message.
 
@@ -498,17 +498,17 @@ Decrypt a message.
 
 =over
 
-=item * I<$message>:
+=item * I<message>:
 
-=item * I<$list>: message recipient
+=item * I<list>: message recipient
 
-=item * I<$tmpdir>: temporary directory
+=item * I<tmpdir>: temporary directory
 
-=item * I<$home>:
+=item * I<home>:
 
-=item * I<$key_passwd>:
+=item * I<key_passwd>:
 
-=item * I<$openssl>: path to openssl binary
+=item * I<openssl>: path to openssl binary
 
 =back
 
@@ -517,16 +517,14 @@ Decrypt a message.
 =cut
 
 sub smime_decrypt {
-    my ($msg, $list, $tmpdir, $home, $key_passwd, $openssl) = @_;
+    my (%params) = @_;
 
-    my $from = $msg->head->get('from');
-
-    Sympa::Log::do_log('debug2', 'message msg from %s,%s', $from, $list->{'name'});
+    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
-    my $dir = $list->{'dir'};
+    my $dir = $params{list}->{'dir'};
     unless ($dir) {
-	$dir = $home . '/sympa';
+	$dir = $params{home} . '/sympa';
     }
     my ($certs,$keys) = smime_find_keys($dir, 'decrypt');
     unless (defined $certs && @$certs) {
@@ -534,18 +532,18 @@ sub smime_decrypt {
 	return undef;
     }
 
-    my $temporary_file = $tmpdir."/".$list->get_list_id().".".$PID ;
-    my $temporary_pwd = $tmpdir.'/pass.'.$PID;
+    my $temporary_file = $params{tmpdir}."/".$params{list}->get_list_id().".".$PID ;
+    my $temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
 
     ## dump the incomming message.
     if (!open(MSGDUMP,"> $temporary_file")) {
 	Sympa::Log::do_log('info', 'Can\'t store message in file %s',$temporary_file);
     }
-    $msg->print(\*MSGDUMP);
+    $params{message}->print(\*MSGDUMP);
     close(MSGDUMP);
 
     my ($decryptedmsg, $pass_option, $msg_as_string);
-    if ($key_passwd ne '') {
+    if ($params{key_passwd} ne '') {
 	# if password is define in sympa.conf pass the password to OpenSSL using
 	$pass_option = "-passin file:$temporary_pwd";
     }
@@ -554,22 +552,22 @@ sub smime_decrypt {
     while (my $certfile = shift @$certs) {
 	my $keyfile = shift @$keys;
 	Sympa::Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
-	if ($key_passwd ne '') {
+	if ($params{key_passwd} ne '') {
 	    unless (POSIX::mkfifo($temporary_pwd,0600)) {
 		Sympa::Log::do_log('err', 'Unable to make fifo for %s', $temporary_pwd);
 		return undef;
 	    }
 	}
 
-	Sympa::Log::do_log('debug',"$openssl smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option");
-	open (NEWMSG, "$openssl smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option |");
+	Sympa::Log::do_log('debug',"$params{openssl} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option");
+	open (NEWMSG, "$params{openssl} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option |");
 
-	if ($key_passwd ne '') {
+	if ($params{key_passwd} ne '') {
 	    unless (open (FIFO,"> $temporary_pwd")) {
 		Sympa::Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 		return undef;
 	    }
-	    print FIFO $key_passwd;
+	    print FIFO $params{key_passwd};
 	    close FIFO;
 	    unlink ($temporary_pwd);
 	}
@@ -613,7 +611,7 @@ sub smime_decrypt {
 	$predefined_headers->{lc $header} = 1
 	    if ($decryptedmsg->head->get($header));
     }
-    foreach my $header (split /\n(?![ \t])/, $msg->head->as_string) {
+    foreach my $header (split /\n(?![ \t])/, $params{message}->head->as_string) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
 	$decryptedmsg->head->add($tag, $val)
@@ -621,9 +619,9 @@ sub smime_decrypt {
     }
     ## Some headers from the initial message should not be restored
     ## Content-Disposition and Content-Transfer-Encoding if the result is multipart
-    $decryptedmsg->head->delete('Content-Disposition') if ($msg->head->get('Content-Disposition'));
+    $decryptedmsg->head->delete('Content-Disposition') if ($params{message}->head->get('Content-Disposition'));
     if ($decryptedmsg->head->get('Content-Type') =~ /multipart/) {
-	$decryptedmsg->head->delete('Content-Transfer-Encoding') if ($msg->head->get('Content-Transfer-Encoding'));
+	$decryptedmsg->head->delete('Content-Transfer-Encoding') if ($params{message}->head->get('Content-Transfer-Encoding'));
     }
 
     return ($decryptedmsg, \$msg_as_string);

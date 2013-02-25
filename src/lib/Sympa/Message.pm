@@ -259,7 +259,14 @@ sub new {
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
-	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::smime_decrypt ($message->{'msg'}, $message->{'list'}, $Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'home'}, $Sympa::Configuration::Conf{'key_passwd'}, $Sympa::Configuration::Conf{'openssl'});
+	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::smime_decrypt (
+		    message    => $message->{'msg'},
+		    list       => $message->{'list'},
+		    tmpdir     => $Sympa::Configuration::Conf{'tmpdir'},
+		    home       => $Sympa::Configuration::Conf{'home'},
+		    key_passwd => $Sympa::Configuration::Conf{'key_passwd'},
+		    openssl    => $Sympa::Configuration::Conf{'openssl'}
+	    );
 
 	    unless (defined $dec) {
 		Sympa::Log::do_log('debug', "Message %s could not be decrypted", $file);
