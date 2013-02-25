@@ -51,7 +51,7 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 
 =head1 FUNCTIONS
 
-=head2 smime_sign(%parameters)
+=head2 sign_message(%parameters)
 
 Sign a message.
 
@@ -75,7 +75,7 @@ Sign a message.
 
 =cut
 
-sub smime_sign {
+sub sign_message {
     my (%params) = @_;
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));

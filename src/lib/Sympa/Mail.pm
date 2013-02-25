@@ -844,7 +844,7 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-        $signed_msg = Sympa::Tools::SMIME::smime_sign(
+        $signed_msg = Sympa::Tools::SMIME::sign_message(
 		message    => $message->{'msg'},
 		listname   => $listname,
 		robot      => $robot,
