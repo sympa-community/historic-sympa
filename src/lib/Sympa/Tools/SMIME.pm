@@ -382,8 +382,6 @@ Encrypt a message.
 
 =item * I<email>:
 
-=item * I<list>:
-
 =item * I<tmpdir>: temporary directory
 
 =item * I<ssl_cert_dir>:
@@ -404,17 +402,13 @@ sub encrypt_message {
     my $cryptedmsg;
     my $encrypted_body;
 
-    if ($params{list} eq 'list') {
-	my $self = Sympa::List->new($params{email});
-	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
-    }else{
-	my $base = "$params{ssl_cert_dir}/".Sympa::Tools::escape_chars($params{email});
-	if(-f "$base\@enc") {
-	    $usercert = "$base\@enc";
-	} else {
-	    $usercert = "$base";
-	}
+    my $base = "$params{ssl_cert_dir}/".Sympa::Tools::escape_chars($params{email});
+    if(-f "$base\@enc") {
+	$usercert = "$base\@enc";
+    } else {
+	$usercert = "$base";
     }
+
     if (-r $usercert) {
 	my $temporary_file = $params{tmpdir}."/".$params{email}.".".$PID ;
 
