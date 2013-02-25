@@ -500,11 +500,11 @@ Decrypt a message.
 
 =item * I<message>:
 
-=item * I<list>: message recipient
+=item * I<listid>:
+
+=item * I<certdir>:
 
 =item * I<tmpdir>: temporary directory
-
-=item * I<home>:
 
 =item * I<key_passwd>:
 
@@ -521,18 +521,13 @@ sub decrypt_message {
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
-    ## an empty "list" parameter means mail to sympa@, listmaster@...
-    my $dir = $params{list}->{'dir'};
-    unless ($dir) {
-	$dir = $params{home} . '/sympa';
-    }
-    my ($certs,$keys) = smime_find_keys($dir, 'decrypt');
+    my ($certs,$keys) = smime_find_keys($params{certdir}, 'decrypt');
     unless (defined $certs && @$certs) {
 	Sympa::Log::do_log('err', "Unable to decrypt message : missing certificate file");
 	return undef;
     }
 
-    my $temporary_file = $params{tmpdir}."/".$params{list}->get_list_id().".".$PID ;
+    my $temporary_file = $params{tmpdir}."/".$params{listid}.".".$PID ;
     my $temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
 
     ## dump the incomming message.
