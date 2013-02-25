@@ -51,7 +51,7 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 
 =head1 FUNCTIONS
 
-=head2 smime_sign($message, $list, $robot, $tmpdir, $key_passwd, $openssl)
+=head2 smime_sign(%parameters)
 
 Sign a message.
 
@@ -59,38 +59,38 @@ Sign a message.
 
 =over
 
-=item * I<$message>:
+=item * I<message>:
 
-=item * I<$list>:
+=item * I<listname>:
 
-=item * I<$robot>:
+=item * I<robot>:
 
-=item * I<$tmpdir>: temporary directory
+=item * I<tmpdir>: temporary directory
 
-=item * I<$key_passwd>:
+=item * I<key_passwd>:
 
-=item * I<$openssl>: path to openssl binary
+=item * I<openssl>: path to openssl binary
 
 =back
 
 =cut
 
 sub smime_sign {
-    my ($in_msg, $list, $robot, $tmpdir, $key_passwd, $openssl) = @_;
+    my (%params) = @_;
 
-    Sympa::Log::do_log('debug2', '(%s,%s,%s,%s)', $in_msg,$list,$robot,$tmpdir);
+    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
-    my $self = Sympa::List->new($list, $robot);
+    my $self = Sympa::List->new($params{listname}, $params{robot});
     my($cert, $key) = smime_find_keys($self->{dir}, 'sign');
-    my $temporary_file = $tmpdir."/".$self->get_list_id().".".$PID ;
-    my $temporary_pwd = $tmpdir.'/pass.'.$PID;
+    my $temporary_file = $params{tmpdir}."/".$self->get_list_id().".".$PID ;
+    my $temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
 
     my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if ($key_passwd ne '') ;
+    $pass_option = "-passin file:$temporary_pwd" if ($params{key_passwd} ne '') ;
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
-    my $dup_msg = $in_msg->dup;
+    my $dup_msg = $params{in_msg}->dup;
     foreach my $field ($dup_msg->head->tags) {
          next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
          $dup_msg->head->delete($field);
@@ -105,23 +105,23 @@ sub smime_sign {
     $dup_msg->print(\*MSGDUMP);
     close(MSGDUMP);
 
-    if ($key_passwd ne '') {
+    if ($params{key_passwd} ne '') {
 	unless ( POSIX::mkfifo($temporary_pwd,0600)) {
 	    Sympa::Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    Sympa::Log::do_log('debug', "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file");
-    unless (open (NEWMSG, "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
+    Sympa::Log::do_log('debug', "$params{openssl} smime -sign -rand $params{tmpdir}/rand -signer $cert $pass_option -inkey $key -in $temporary_file");
+    unless (open (NEWMSG, "$params{openssl} smime -sign -rand $params{tmpdir}/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
 
-    if ($key_passwd ne '') {
+    if ($params{key_passwd} ne '') {
 	unless (open (FIFO,"> $temporary_pwd")) {
 	    Sympa::Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 	}
 
-	print FIFO $key_passwd;
+	print FIFO $params{key_passwd};
 	close FIFO;
 	unlink ($temporary_pwd);
     }
@@ -153,7 +153,7 @@ sub smime_sign {
 	$predefined_headers->{lc $header} = 1
 	    if ($signed_msg->head->get($header));
     }
-    foreach my $header (split /\n(?![ \t])/, $in_msg->head->as_string) {
+    foreach my $header (split /\n(?![ \t])/, $params{in_msg}->head->as_string) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
 	$signed_msg->head->add($tag, $val)

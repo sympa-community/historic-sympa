@@ -844,8 +844,14 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-        $signed_msg =
-	Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $params{tmpdir}, $params{key_passwd}, $params{openssl});
+        $signed_msg = Sympa::Tools::SMIME::smime_sign(
+		message    => $message->{'msg'},
+		listname   => $listname,
+		robot      => $robot,
+		tmpdir     => $params{tmpdir},
+		key_passwd => $params{key_passwd},
+		openssl    => $params{openssl}
+	);
 	if ($signed_msg) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
