@@ -7632,6 +7632,7 @@ sub do_send_me {
 		from            => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 		recipient       => \$param->{'user'}{'email'},
 		robot           => $robot,
+		cookie          => $Sympa::Configuration::Conf{'cookie'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 		openssl         => $Sympa::Configuration::Conf{'openssl'},
 		packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
