@@ -368,7 +368,7 @@ sub check_signature {
     };
 }
 
-=head2 smime_encrypt(%parameters)
+=head2 encrypt_message(%parameters)
 
 Encrypt a message.
 
@@ -394,7 +394,7 @@ Encrypt a message.
 
 =cut
 
-sub smime_encrypt {
+sub encrypt_message {
     my (%params) = @_;
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));

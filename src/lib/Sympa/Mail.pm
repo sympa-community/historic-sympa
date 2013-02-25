@@ -739,7 +739,7 @@ sub _sendto {
 		    return undef;
 		}
 		$message->{'msg_as_string'} =
-		Sympa::Tools::SMIME::smime_encrypt(
+		Sympa::Tools::SMIME::encrypt_message(
 			header       => $msg_header,
 			body         => $msg_body,
 			email        => $email,

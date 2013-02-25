@@ -4499,7 +4499,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = Sympa::Tools::SMIME::smime_encrypt(
+	   my $cryptedmsg = Sympa::Tools::SMIME::encrypt_message(
 		   header       => $msg->head,
 		   body         => $msg->body_as_string,
 		   email        => $recipient,
