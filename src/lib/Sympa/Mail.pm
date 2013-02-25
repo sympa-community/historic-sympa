@@ -41,7 +41,6 @@ use POSIX qw();
 use Time::Local;
 
 use Sympa::Bulk;
-use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log;
