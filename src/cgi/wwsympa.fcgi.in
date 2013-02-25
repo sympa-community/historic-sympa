@@ -6827,6 +6827,7 @@ sub do_distribute {
      }
 
      $data->{'not_auto_submitted'} = 1;
+     $data->{return_path} = Sympa::Configuration::get_robot_conf($robot, 'request');
      my $result = Sympa::Mail::mail_file(
 	filename        => '',
 	recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
@@ -14833,7 +14834,8 @@ sub do_remind {
 	},
 	from               => $param->{'user'}{'email'},
 	body               => $mail_command,
-	not_auto_submitted => 1
+	not_auto_submitted => 1,
+	return_path        => Sympa::Configuration::get_robot_conf($robot, 'request'),
      };
 
      my $result = Sympa::Mail::mail_file(
@@ -15542,7 +15544,8 @@ sub do_send_mail {
 		'Message-ID' => $in{'message_id'}
 	},
 	subject            => $in{'subject'},
-	return_path        => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	return_path        => Sympa::Configuration::get_robot_conf($robot, 'sympa') ||
+	                      Sympa::Configuration::get_robot_conf($robot, 'request'),
 	to                 => $to,
 	body               => "From: $from\n" . $in{'body'},
 	sign_mode          => '',
@@ -15717,6 +15720,7 @@ sub do_tag_topic_by_sender {
 	from               => $sender,
 	body               => sprintf("QUIET CONFIRM %s\n",$in{'authkey'}),
 	not_auto_submitted => 1,
+	return_path        => Sympa::Configuration::get_robot_conf($robot, 'request'),
      };
 
      my $result = Sympa::Mail::mail_file(

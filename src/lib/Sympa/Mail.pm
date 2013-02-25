@@ -349,9 +349,6 @@ sub mail_file {
     	Sympa::Log::do_log('err', 'Failed to reformat message');
     }
 
-    ## Set it in case it was not set
-    $data->{'return_path'} ||= Sympa::Configuration::get_robot_conf($params{robot}, 'request');
-
     return $message_as_string if($params{return_message_as_string});
 
     my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
