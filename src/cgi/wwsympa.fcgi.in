@@ -14826,12 +14826,16 @@ sub do_remind {
      }
 
      my $time = time;
-     my $data = {'headers' => {'Message-ID' => '<'.$time.'@wwsympa>',
-			       'X-Sympa-NoWrap' => 'yes'},
-		 'from'=> $param->{'user'}{'email'},
-		 'body' => $mail_command};
+     my $data = {
+	headers => {
+		'Message-ID'     => '<'.$time.'@wwsympa>',
+		'X-Sympa-NoWrap' => 'yes'
+	},
+	from               => $param->{'user'}{'email'},
+	body               => $mail_command,
+	not_auto_submitted => 1
+     };
 
-     $data->{'not_auto_submitted'} = 1;
      my $result = Sympa::Mail::mail_file(
 	filename        => '',
 	recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
@@ -15533,17 +15537,24 @@ sub do_send_mail {
 	$in{'body'} = "\n".$in{'body'};
     }
 
-    my $data = {'headers' => {'Message-ID' => $in{'message_id'}},
-		'subject' => $in{'subject'},
-		'return_path' => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-		'to' => $to,
-		'body' => "From: $from\n" . $in{'body'},
-		'sign_mode' => '',
-		'header_possible' => '1'};
+    my $data = {
+	headers => {
+		'Message-ID' => $in{'message_id'}
+	},
+	subject            => $in{'subject'},
+	return_path        => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+	to                 => $to,
+	body               => "From: $from\n" . $in{'body'},
+	sign_mode          => '',
+	header_possible    => 1,
+	not_auto_submitted => 1
+    };
 
-    $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'} if (($in{'in_reply_to'}) && $in{'in_reply_to'} ne '<>');
-    $data->{'not_auto_submitted'} = 1;
-    $data->{'not_a_list'} = 1 if($in{'sub_action'} eq 'sendmailtome');
+    $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'}
+	if $in{'in_reply_to'} && $in{'in_reply_to'} ne '<>';
+    $data->{'not_a_list'} = 1
+	if $in{'sub_action'} eq 'sendmailtome';
+
     my $result = Sympa::Mail::mail_file(
 	filename        => '',
 	recipient       => $to,
@@ -15698,12 +15709,15 @@ sub do_tag_topic_by_sender {
 
      ## CONFIRM
      my $time = time;
-     my $data = {'headers' => {'Message-ID' => '<'.$time.'@wwsympa>',
-			       'X-Sympa-NoWrap' => 'yes'},
-		 'from'=> $sender};
-     $data->{'body'} = sprintf ("QUIET CONFIRM %s\n",$in{'authkey'});
-     $data->{'not_auto_submitted'} = 1;
-
+     my $data = {
+	headers => {
+		'Message-ID'     => '<'.$time.'@wwsympa>',
+		'X-Sympa-NoWrap' => 'yes'
+	},
+	from               => $sender,
+	body               => sprintf("QUIET CONFIRM %s\n",$in{'authkey'}),
+	not_auto_submitted => 1,
+     };
 
      my $result = Sympa::Mail::mail_file(
 	filename        => '',
