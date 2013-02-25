@@ -152,6 +152,8 @@ send a tt2 file.
 
 =item * I<sendmail_args>
 
+=item * I<maxsmtp>
+
 =item * I<tmpdir>
 
 =item * I<openssl>
@@ -366,6 +368,7 @@ sub mail_file {
 	dkim            => $data->{'dkim'},
 	sendmail        => $params{sendmail},
 	sendmail_args   => $params{sendmail_args},
+	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
@@ -399,6 +402,8 @@ Distribute a message to a list, crypting if needed.
 =item * I<sendmail>
 
 =item * I<sendmail_args>
+
+=item * I<maxsmtp>
 
 =item * I<avg>
 
@@ -542,6 +547,7 @@ sub mail_message {
 	tag_as_last     => $tag_as_last,
 	sendmail        => $params{sendmail},
 	sendmail_args   => $params{sendmail_args},
+	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
 	tmpdir          => $params{tmpdir},
 	key_passws      => $params{key_passwd},
@@ -575,6 +581,12 @@ Forward a message.
 =item * I<priority>
 
 =item * I<priority_packet>
+
+=item * I<sendmail>
+
+=item * I<sendmail_args>
+
+=item * I<maxsmtp>
 
 =item * I<tmpdir>
 
@@ -612,6 +624,7 @@ sub mail_forward {
 	priority_packet => $params{priority_packet},
 	sendmail        => $params{sendmail},
 	sendmail_args   => $params{sendmail_args},
+	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
@@ -732,6 +745,7 @@ sub _sendto {
 			tag_as_last     => $tag_as_last,
 			sendmail        => $params{sendmail},
 			sendmail_args   => $params{sendmail_args},
+			maxsmtp         => $params{maxsmtp},
 			openssl         => $params{openssl},
 			tmpdir          => $params{tmpdir},
 			key_passwd      => $params{key_passwd},
@@ -762,6 +776,7 @@ sub _sendto {
 		tag_as_last     => $tag_as_last,
 		sendmail        => $params{sendmail},
 		sendmail_args   => $params{sendmail_args},
+		maxsmtp         => $params{maxsmtp},
 		openssl         => $params{openssl},
 		tmpdir          => $params{tmpdir},
 		key_passwd      => $params{key_passwd},
@@ -887,7 +902,7 @@ sub _sending {
 	}
     }else{ # send it now
 	Sympa::Log::do_log('debug',"NOT USING BULK");
-	*SMTP = _smtpto($from, $rcpt, $robot, undef, undef, $params{sendmail}, $params{sendmail_args});
+	*SMTP = _smtpto($from, $rcpt, $robot, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
 	print SMTP $message->{'msg'}->as_string ;
 	unless (close SMTP) {
 	    Sympa::Log::do_log('err', 'could not close safefork to sendmail');
@@ -913,7 +928,7 @@ sub _sending {
 # $fh - file handle on opened file for ouput, for SMTP "DATA" field | undef
 
 sub _smtpto {
-   my($from, $rcpt, $robot, $msgkey, $sign_mode, $sendmail, $sendmail_args) = @_;
+   my($from, $rcpt, $robot, $msgkey, $sign_mode, $sendmail, $sendmail_args, $maxsmtp) = @_;
 
    Sympa::Log::do_log('debug2', 'smtpto( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
 
@@ -945,7 +960,7 @@ sub _smtpto {
    ## to terminate and then do our job.
 
    Sympa::Log::do_log('debug3',"Open = $opensmtp");
-   while ($opensmtp > Sympa::Configuration::get_robot_conf($robot, 'maxsmtp')) {
+   while ($opensmtp > $maxsmtp) {
        Sympa::Log::do_log('debug3', "too many open SMTP ($opensmtp), calling reaper");
        last if (reaper(0) == -1); ## Blocking call to the reaper.
        }
@@ -993,7 +1008,7 @@ sub _smtpto {
        return undef;
    }
    $opensmtp++;
-   select(undef, undef,undef, 0.3) if ($opensmtp < Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'));
+   select(undef, undef,undef, 0.3) if ($opensmtp < $maxsmtp);
    return("$fh"); ## Symbol for the write descriptor.
 }
 
