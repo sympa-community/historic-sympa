@@ -61,9 +61,9 @@ Sign a message.
 
 =item * I<message>:
 
-=item * I<listname>:
+=item * I<listid>:
 
-=item * I<robot>:
+=item * I<certdir>:
 
 =item * I<tmpdir>: temporary directory
 
@@ -80,9 +80,8 @@ sub sign_message {
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
-    my $self = Sympa::List->new($params{listname}, $params{robot});
-    my($cert, $key) = smime_find_keys($self->{dir}, 'sign');
-    my $temporary_file = $params{tmpdir}."/".$self->get_list_id().".".$PID ;
+    my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
+    my $temporary_file = $params{tmpdir}."/".$params{listid}.".".$PID ;
     my $temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
 
     my ($signed_msg,$pass_option );

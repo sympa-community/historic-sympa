@@ -844,10 +844,11 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
+	my $list = Sympa::List->new($listname, $robot);
         $signed_msg = Sympa::Tools::SMIME::sign_message(
 		message    => $message->{'msg'},
-		listname   => $listname,
-		robot      => $robot,
+		listid     => $list->get_list_id(),
+		certdir    => $list->{dir},
 		tmpdir     => $params{tmpdir},
 		key_passwd => $params{key_passwd},
 		openssl    => $params{openssl}
