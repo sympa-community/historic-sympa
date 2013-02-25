@@ -844,7 +844,9 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	if ($signed_msg = Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $params{tmpdir}, $params{key_passwd}, $params{openssl})) {
+        $signed_msg =
+	Sympa::Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot, $params{tmpdir}, $params{key_passwd}, $params{openssl});
+	if ($signed_msg) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
 	    Sympa::Log::do_log('notice', 'unable to sign message from %s', $listname);
