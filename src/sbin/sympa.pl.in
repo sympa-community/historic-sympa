@@ -1660,6 +1660,7 @@ sub DoSendMessage {
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 	cookie          => $Sympa::Configuration::Conf{'cookie'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
 
     unless (defined $result) {
@@ -1812,6 +1813,7 @@ sub DoForward {
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 	cookie          => $Sympa::Configuration::Conf{'cookie'},
+	sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
     );
     
     unless ($result) {

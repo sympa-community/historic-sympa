@@ -4342,6 +4342,7 @@ sub send_msg {
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 		cookie          => $Sympa::Configuration::Conf{'cookie'},
+		sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
@@ -4389,6 +4390,7 @@ sub send_msg {
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 		cookie          => $Sympa::Configuration::Conf{'cookie'},
+		sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp enabled)");

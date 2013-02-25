@@ -375,6 +375,7 @@ sub mail_file {
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
 	cookie          => $params{cookie},
+	sympa           => $params{sympa},
     );
 
     return defined $result ? 1 : undef;
@@ -558,6 +559,7 @@ sub mail_message {
 	key_passws      => $params{key_passwd},
 	ssl_cert_dir    => $params{ssl_cert_dir},
 	cookie          => $params{cookie},
+	sympa           => $params{sympa},
     );
 
     if (!defined $result) {
@@ -637,6 +639,7 @@ sub mail_forward {
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
 	cookie          => $params{cookie},
+	sympa           => $params{sympa},
     );
 
     if (!defined $result) {
@@ -759,6 +762,7 @@ sub _sendto {
 			tmpdir          => $params{tmpdir},
 			key_passwd      => $params{key_passwd},
 			cookie          => $params{cookie},
+			sympa           => $params{sympa},
 		);
 
 		if (!defined $result) {
@@ -791,6 +795,7 @@ sub _sendto {
 		tmpdir          => $params{tmpdir},
 		key_passwd      => $params{key_passwd},
 		cookie          => $params{cookie},
+		sympa           => $params{sympa},
 	);
 	return $result;
 
@@ -883,7 +888,7 @@ sub _sending {
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool
 	Sympa::Log::do_log('debug',"NOT USING BULK");
 
-	$sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
+	$sympa_email = $params{sympa};
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
 	unless (open TMP, ">$sympa_file") {
 	    Sympa::Log::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);

@@ -7640,6 +7640,7 @@ sub do_send_me {
 		tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 		openssl         => $Sympa::Configuration::Conf{'openssl'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+		sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 	);
 
 	unless (defined $result) {
