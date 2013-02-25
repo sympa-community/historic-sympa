@@ -22,11 +22,11 @@
 
 =head1 NAME
 
-Sympa::Tools::DKIM - SMIME-related functions
+Sympa::Tools::SMIME - SMIME-related functions
 
 =head1 DESCRIPTION
 
-This module provides various functions for managing SMIME.
+This module provides various functions for managing SMIME messages.
 
 =cut
 
