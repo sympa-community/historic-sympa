@@ -6839,6 +6839,7 @@ sub do_distribute {
 	sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
 	sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
 	maxsmtp         => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
+	cookie          => $Sympa::Configuration::Conf{'cookie'},
 	return_message_as_string => undef,
     );
 
@@ -14855,6 +14856,7 @@ sub do_remind {
 	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+	cookie          => $Sympa::Configuration::Conf{'cookie'},
     );
     
     unless (defined $result) {
@@ -15576,6 +15578,7 @@ sub do_send_mail {
 	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+	cookie          => $Sympa::Configuration::Conf{'cookie'},
     );
     
     unless (defined $result) {
@@ -15740,6 +15743,7 @@ sub do_tag_topic_by_sender {
 	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+	cookie          => $Sympa::Configuration::Conf{'cookie'},
     );
     
     unless (defined $result) {

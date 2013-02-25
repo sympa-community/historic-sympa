@@ -3761,6 +3761,7 @@ sub send_global_file {
 	    tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 	    openssl         => $Sympa::Configuration::Conf{'openssl'},
 	    key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+	    cookie          => $Sympa::Configuration::Conf{'cookie'},
     );
     return $result if($options->{'parse_and_return'});
 
@@ -3948,6 +3949,7 @@ sub send_file {
 	tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
 	openssl         => $Sympa::Configuration::Conf{'openssl'},
 	key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+	cookie          => $Sympa::Configuration::Conf{'cookie'},
     );
     
     unless (defined $result) {
@@ -4339,6 +4341,7 @@ sub send_msg {
 		openssl         => $Sympa::Configuration::Conf{'openssl'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
+		cookie          => $Sympa::Configuration::Conf{'cookie'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp disabled)");
@@ -4385,6 +4388,7 @@ sub send_msg {
 		openssl         => $Sympa::Configuration::Conf{'openssl'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
 		ssl_cert_dir    => $Sympa::Configuration::Conf{'ssl_cert_dir'},
+		cookie          => $Sympa::Configuration::Conf{'cookie'},
 	);
 	unless (defined $result) {
 	    Sympa::Log::do_log('err',"could not send message to distribute from $from (verp enabled)");

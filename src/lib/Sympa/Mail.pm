@@ -160,6 +160,8 @@ send a tt2 file.
 
 =item * I<key_passwd>
 
+=item * I<cookie>
+
 =back
 
 =head3 Return value
@@ -372,6 +374,7 @@ sub mail_file {
 	openssl         => $params{openssl},
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
+	cookie          => $params{cookie},
     );
 
     return defined $result ? 1 : undef;
@@ -420,6 +423,8 @@ Distribute a message to a list, crypting if needed.
 =item * I<openssl>
 
 =item * I<key_passwd>
+
+=item * I<cookie>
 
 =back
 
@@ -552,6 +557,7 @@ sub mail_message {
 	tmpdir          => $params{tmpdir},
 	key_passws      => $params{key_passwd},
 	ssl_cert_dir    => $params{ssl_cert_dir},
+	cookie          => $params{cookie},
     );
 
     if (!defined $result) {
@@ -594,6 +600,8 @@ Forward a message.
 
 =item * I<key_passwd>
 
+=item * I<cookie>
+
 =back
 
 =head3 Return value
@@ -628,6 +636,7 @@ sub mail_forward {
 	openssl         => $params{openssl},
 	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
+	cookie          => $params{cookie},
     );
 
     if (!defined $result) {
@@ -749,6 +758,7 @@ sub _sendto {
 			openssl         => $params{openssl},
 			tmpdir          => $params{tmpdir},
 			key_passwd      => $params{key_passwd},
+			cookie          => $params{cookie},
 		);
 
 		if (!defined $result) {
@@ -780,6 +790,7 @@ sub _sendto {
 		openssl         => $params{openssl},
 		tmpdir          => $params{tmpdir},
 		key_passwd      => $params{key_passwd},
+		cookie          => $params{cookie},
 	);
 	return $result;
 
@@ -889,7 +900,7 @@ sub _sending {
 	}
 	printf TMP "X-Sympa-To: %s\n", $all_rcpt;
 	printf TMP "X-Sympa-From: %s\n", $from;
-	printf TMP "X-Sympa-Checksum: %s\n", Sympa::Tools::sympa_checksum($all_rcpt, $Sympa::Configuration::Conf{'cookie'});
+	printf TMP "X-Sympa-Checksum: %s\n", Sympa::Tools::sympa_checksum($all_rcpt, $params{cookie});
 
 	print TMP $message->{'msg_as_string'} ;
 	close TMP;
