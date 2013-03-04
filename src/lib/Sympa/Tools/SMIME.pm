@@ -153,8 +153,6 @@ sub sign_message {
 	    unless $predefined_headers->{lc $tag};
     }
 
-    my $messageasstring = $signed_msg->as_string();
-
     return $signed_msg;
 }
 
