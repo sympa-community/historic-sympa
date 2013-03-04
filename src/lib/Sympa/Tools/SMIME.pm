@@ -125,12 +125,12 @@ sub sign_message {
 
     my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
-
     my $signed_entity = $parser->read($signed_message_file);
     unless ($signed_entity) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
+    close($signed_message_file);
 
 
     # add additional headers discarded earlier
@@ -384,10 +384,6 @@ sub encrypt_message {
 	return undef;
     }
 
-    my $crypted_message_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
-    );
-
     # clone original message, and discard all headers excepted 
     # mime-type and content ones
     my $entity_clone = $params{entity}->dup();
@@ -396,7 +392,10 @@ sub encrypt_message {
 		 if !$header =~ /^(mime|content)-/i;
     }
 
-    ## encrypt the incomming message parse it.
+    my $crypted_message_file = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
+
     my $command =
 	    "$params{openssl} smime -encrypt -out $crypted_message_file " .
 	    "-des3 $usercert";
@@ -406,7 +405,6 @@ sub encrypt_message {
     unless (open ($command_handle, '|-', $command)) {
 	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
-
     $entity_clone->print($command_handle);
     close($command_handle);
 
@@ -416,16 +414,14 @@ sub encrypt_message {
 	return undef ;
     }
 
-    ## Get as MIME object
-    open (NEWMSG, $crypted_message_file);
-    my $parser = MIME::Parser->new;
+    my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
-    my $crypted_entity = $parser->read(\*NEWMSG);
+    my $crypted_entity = $parser->read($crypted_message_file);
     unless ($crypted_entity) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
-    close NEWMSG ;
+    close($crypted_message_file);
 
     # add additional headers discarded earlier
     foreach my $header ($params{entity}->head()->tags()) {
