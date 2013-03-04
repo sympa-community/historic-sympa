@@ -112,7 +112,7 @@ sub sign_message {
     }
 
     my $command =
-	    "$params{openssl} smime -sign -rand $params{tmpdir}/rand " .
+	    "$params{openssl} smime -sign " .
 	    "-signer $cert $pass_option -inkey $key -in $unsigned_message_file";
     Sympa::Log::do_log('debug', $command);
     unless (open (NEWMSG, "$command |")) {
