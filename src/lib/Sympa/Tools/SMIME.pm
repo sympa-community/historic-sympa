@@ -81,8 +81,8 @@ sub sign_message {
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
-    my $dup_msg = $params{entity}->dup;
-    foreach my $field ($dup_msg->head->tags) {
+    my $dup_msg = $params{entity}->dup();
+    foreach my $field ($dup_msg->head()->tags()) {
          next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
          $dup_msg->head->delete($field);
     }
@@ -120,7 +120,7 @@ sub sign_message {
 	return undef;
     }
 
-    my $parser = MIME::Parser->new;
+    my $parser = MIME::Parser->new();
 
     $parser->output_to_core(1);
     unless ($signed_msg = $parser->read(\*NEWMSG)) {
@@ -141,18 +141,19 @@ sub sign_message {
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
-    foreach my $header ($signed_msg->head->tags) {
+    foreach my $header ($signed_msg->head()->tags()) {
 	$predefined_headers->{lc $header} = 1
-	    if ($signed_msg->head->get($header));
+	    if ($signed_msg->head()->get($header));
     }
-    foreach my $header (split /\n(?![ \t])/, $params{entity}->head->as_string) {
+    foreach my $header (split /\n(?![ \t])/,
+	    $params{entity}->head()->as_string()) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
 	$signed_msg->head->add($tag, $val)
 	    unless $predefined_headers->{lc $tag};
     }
 
-    my $messageasstring = $signed_msg->as_string ;
+    my $messageasstring = $signed_msg->as_string();
 
     return $signed_msg;
 }
