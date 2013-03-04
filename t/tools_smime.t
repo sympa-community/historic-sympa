@@ -14,7 +14,7 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 5;
+plan tests => 7;
 
 chdir "$Bin/..";
 
@@ -39,6 +39,18 @@ my $signed_message = Sympa::Message->new({
 	file       => "t/samples/signed.eml",
 	noxsympato => 1
 });
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+$crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
+ok(
+	!defined Sympa::Tools::SMIME::check_signature(
+		message  => $signed_message,
+		openssl  => '/usr/bin/openssl',
+		cert_dir => $crt_dir
+),
+	"signed message, no CA certificate"
+);
+ok(! -f $crt_file, 'certificate file not created');
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 $crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
