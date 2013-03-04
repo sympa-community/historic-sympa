@@ -376,10 +376,6 @@ sub encrypt_message {
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
     my $usercert;
-    my $dummy;
-    my $cryptedmsg;
-    my $encrypted_body;
-
     my $base = "$params{ssl_cert_dir}/".Sympa::Tools::escape_chars($params{email});
     if(-f "$base\@enc") {
 	$usercert = "$base\@enc";
@@ -426,18 +422,20 @@ sub encrypt_message {
     open (NEWMSG, $crypted_message_file);
     my $parser = MIME::Parser->new;
     $parser->output_to_core(1);
-    unless ($cryptedmsg = $parser->read(\*NEWMSG)) {
+    my $crypted_entity = $parser->read(\*NEWMSG);
+    unless ($crypted_entity) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
     close NEWMSG ;
 
     ## Get body
+    my $crypted_body;
     open (NEWMSG, $crypted_message_file);
     my $in_header = 1 ;
     while (<NEWMSG>) {
        if ( !$in_header)  {
-	 $encrypted_body .= $_;
+	 $crypted_body .= $_;
        }else {
 	 $in_header = 0 if (/^$/);
        }
@@ -447,18 +445,18 @@ sub encrypt_message {
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
-    foreach my $header ($cryptedmsg->head->tags) {
+    foreach my $header ($crypted_entity->head->tags) {
 	$predefined_headers->{lc $header} = 1
-	    if ($cryptedmsg->head->get($header)) ;
+	    if ($crypted_entity->head->get($header)) ;
     }
     foreach my $header (split /\n(?![ \t])/, $params{header}->as_string) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
-	$cryptedmsg->head->add($tag, $val)
+	$crypted_entity->head->add($tag, $val)
 	    unless $predefined_headers->{lc $tag};
     }
 
-    return $cryptedmsg->head->as_string . "\n" . $encrypted_body;
+    return $crypted_entity->head->as_string . "\n" . $crypted_body;
 }
 
 =head2 decrypt_message(%parameters)
