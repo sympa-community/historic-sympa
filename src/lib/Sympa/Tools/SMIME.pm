@@ -111,7 +111,9 @@ sub sign_message {
 	    "-signer $cert -inkey $key -in $unsigned_message_file" .
 	    ($password_file ? " -passin file:$password_file" : "" );
     Sympa::Log::do_log('debug', $command);
-    unless (open (NEWMSG, "$command |")) {
+
+    my $command_handle;
+    unless (open ($command_handle, '-|', $command)) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
@@ -119,15 +121,12 @@ sub sign_message {
     my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
 
-    my $signed_msg = $parser->read(\*NEWMSG);
+    my $signed_msg = $parser->read($command_handle);
     unless ($signed_msg) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
-    unless (close NEWMSG){
-	Sympa::Log::do_log('notice', 'Cannot sign message (close pipe)');
-	return undef;
-    }
+    close($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
@@ -199,7 +198,6 @@ sub check_signature {
 
     my $command_handle;
     unless (open ($command_handle, '|-', $command)) {
-
 	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender}");
 	return undef ;
     }
