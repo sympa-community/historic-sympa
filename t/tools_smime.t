@@ -15,7 +15,7 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 11;
+plan tests => 15;
 
 chdir "$Bin/..";
 
@@ -120,6 +120,16 @@ isa_ok(
 	'MIME::Entity',
 	'signed message'
 );
+like(
+	$new_message->head()->get('Content-Type'),
+	qr{^multipart/signed; protocol="application/x-pkcs7-signature";},
+	'signed message has correct content-type'
+);
+is_deeply(
+	[ sort $new_message->head()->tags() ],
+	[ sort $unsigned_message->{msg}->head()->tags() ],
+	'signed message has the same headers list'
+);
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
@@ -135,4 +145,14 @@ isa_ok(
 	$new_message,
 	'MIME::Entity',
 	'signed message'
+);
+like(
+	$new_message->head()->get('Content-Type'),
+	qr{^multipart/signed; protocol="application/x-pkcs7-signature";},
+	'signed message has correct content-type'
+);
+is_deeply(
+	[ sort $new_message->head()->tags() ],
+	[ sort $unsigned_message->{msg}->head()->tags() ],
+	'signed message has the same headers list'
 );
