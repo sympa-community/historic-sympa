@@ -15,7 +15,7 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 15;
+plan tests => 17;
 
 chdir "$Bin/..";
 
@@ -156,3 +156,28 @@ is_deeply(
 	[ sort $unsigned_message->{msg}->head()->tags() ],
 	'signed message has the same headers list'
 );
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
+my $new_message = Sympa::Tools::SMIME::encrypt_message(
+	header       => $unsigned_message->{msg}->head(),
+	body         => $unsigned_message->{body_as_string},
+	email        => 'guillaume.rousse@sympa.org',
+	openssl      => '/usr/bin/openssl',
+	ssl_cert_dir => $crt_dir,
+	tmpdir       => '/tmp',
+);
+ok(defined $new_message, 'message encryption, passwordless key');
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
+my $new_message = Sympa::Tools::SMIME::encrypt_message(
+	header       => $unsigned_message->{msg}->head(),
+	body         => $unsigned_message->{body_as_string},
+	email        => 'guillaume.rousse@sympa.org',
+	openssl      => '/usr/bin/openssl',
+	ssl_cert_dir => $crt_dir,
+	key_passwd   => 'test',
+	tmpdir       => '/tmp',
+);
+ok(defined $new_message, 'message encryption, password-protected key');
