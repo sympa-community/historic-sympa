@@ -402,7 +402,8 @@ sub encrypt_message {
 	    "-des3 $usercert";
     Sympa::Log::do_log ('debug3', $command);
 
-    if (!open(MSGDUMP, "| $command")) {
+    my $command_handle;
+    unless (open ($command_handle, '|-', $command)) {
 	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
 ## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
@@ -414,10 +415,10 @@ sub encrypt_message {
     foreach my $t ($mime_hdr->tags()) {
       $mime_hdr->delete($t) unless ($t =~ /^(mime|content)-/i);
     }
-    $mime_hdr->print(\*MSGDUMP);
+    $mime_hdr->print($command_handle);
 
-    printf MSGDUMP "\n%s", $params{body};
-    close(MSGDUMP);
+    printf $command_handle "\n%s", $params{body};
+    close($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
