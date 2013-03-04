@@ -1,0 +1,29 @@
+#!/bin/sh
+
+name=$1
+
+if [ -z $name ]; then
+    echo "usage: $0 <name>"
+    exit 1;
+fi
+
+[ -d new ]       || mkdir new
+[ -f serial ]    || echo "01" > serial
+[ -f index.txt ] || touch index.txt
+
+if [ ! -f "cnf/$name.cnf" ]; then
+    echo "usage: no configuration file found"
+    exit 1;
+fi
+
+openssl req -new \
+    -config cnf/$name.cnf \
+    -keyout key/$name.pem \
+    -out csr/$name.pem
+
+openssl ca \
+    -config cnf/ca.cnf \
+    -in csr/$name.pem \
+    -out crt/$name.pem \
+    -batch \
+    -passin pass:test

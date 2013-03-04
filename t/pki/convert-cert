@@ -1,0 +1,14 @@
+#!/bin/sh
+
+name=$1
+
+if [ -z $name ]; then
+    echo "usage: $0 <name>"
+    exit 1;
+fi
+
+openssl pkcs12 -export \
+	-out $name.p12 \
+	-in crt/$name.pem \
+	-inkey key/$name.pem \
+	-passout pass:
