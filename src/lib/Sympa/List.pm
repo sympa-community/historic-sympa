@@ -4503,7 +4503,6 @@ sub send_to_editor {
 		   header       => $msg->head,
 		   body         => $msg->body_as_string,
 		   email        => $recipient,
-		   tmpdir       => $Sympa::Configuration::Conf{'tmpdir'},
 		   ssl_cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 		   openssl      => $Sympa::Configuration::Conf{'openssl'}
 	   );

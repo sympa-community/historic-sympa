@@ -165,7 +165,6 @@ my $new_message = Sympa::Tools::SMIME::encrypt_message(
 	email        => 'guillaume.rousse@sympa.org',
 	openssl      => '/usr/bin/openssl',
 	ssl_cert_dir => $crt_dir,
-	tmpdir       => '/tmp',
 );
 ok(defined $new_message, 'message encryption, passwordless key');
 
@@ -178,6 +177,5 @@ my $new_message = Sympa::Tools::SMIME::encrypt_message(
 	openssl      => '/usr/bin/openssl',
 	ssl_cert_dir => $crt_dir,
 	key_passwd   => 'test',
-	tmpdir       => '/tmp',
 );
 ok(defined $new_message, 'message encryption, password-protected key');

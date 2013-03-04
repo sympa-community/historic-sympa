@@ -743,7 +743,6 @@ sub _sendto {
 			header       => $msg_header,
 			body         => $msg_body,
 			email        => $email,
-			tmpdir       => $params{tmpdir},
 			ssl_cert_dir => $params{ssl_cert_dir},
 			openssl      => $params{openssl}
 		);

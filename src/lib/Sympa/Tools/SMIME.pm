@@ -362,8 +362,6 @@ Encrypt a message.
 
 =item * I<email>:
 
-=item * I<tmpdir>: temporary directory
-
 =item * I<ssl_cert_dir>:
 
 =item * I<openssl>: path to openssl binary
@@ -393,11 +391,14 @@ sub encrypt_message {
 	Sympa::Log::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$params{email},$usercert);
 	return undef;
     }
-    my $temporary_file = $params{tmpdir}."/".$params{email}.".".$PID ;
+
+    my $crypted_message_file = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
 
     ## encrypt the incomming message parse it.
     my $command =
-	    "$params{openssl} smime -encrypt -out $temporary_file " .
+	    "$params{openssl} smime -encrypt -out $crypted_message_file " .
 	    "-des3 $usercert";
     Sympa::Log::do_log ('debug3', $command);
 
@@ -425,7 +426,7 @@ sub encrypt_message {
     }
 
     ## Get as MIME object
-    open (NEWMSG, $temporary_file);
+    open (NEWMSG, $crypted_message_file);
     my $parser = MIME::Parser->new;
     $parser->output_to_core(1);
     unless ($cryptedmsg = $parser->read(\*NEWMSG)) {
@@ -435,7 +436,7 @@ sub encrypt_message {
     close NEWMSG ;
 
     ## Get body
-    open (NEWMSG, $temporary_file);
+    open (NEWMSG, $crypted_message_file);
     my $in_header = 1 ;
     while (<NEWMSG>) {
        if ( !$in_header)  {
@@ -445,8 +446,6 @@ sub encrypt_message {
        }
     }
     close NEWMSG;
-
-unlink ($temporary_file) unless ($main::options{'debug'}) ;
 
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
