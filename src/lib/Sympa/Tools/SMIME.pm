@@ -86,14 +86,6 @@ sub sign_message {
 		 if !$header =~ /^(content-type|content-transfer-encoding)$/i;
     }
 
-
-    # dump the clone of the original message
-    my $unsigned_message_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
-    );
-    $entity_clone->print($unsigned_message_file);
-    close($unsigned_message_file);
-
     my $password_file;
     if ($params{key_passwd}) {
 	my $umask = umask;
@@ -107,33 +99,39 @@ sub sign_message {
 	umask $umask;
     }
 
+    my $signed_message_file = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
+
     my $command =
 	    "$params{openssl} smime -sign " .
-	    "-signer $cert -inkey $key -in $unsigned_message_file" .
+	    "-signer $cert -inkey $key -out $signed_message_file" .
 	    ($password_file ? " -passin file:$password_file" : "" );
     Sympa::Log::do_log('debug', $command);
 
     my $command_handle;
-    unless (open ($command_handle, '-|', $command)) {
+    unless (open ($command_handle, '|-', $command)) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
-
-    my $parser = MIME::Parser->new();
-    $parser->output_to_core(1);
-
-    my $signed_entity = $parser->read($command_handle);
-    unless ($signed_entity) {
-	Sympa::Log::do_log('notice', 'Unable to parse message');
-	return undef;
-    }
-    close($command_handle);
+    $entity_clone->print($command_handle);
+    close ($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
 	Sympa::Log::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
 	return undef;
     }
+
+    my $parser = MIME::Parser->new();
+    $parser->output_to_core(1);
+
+    my $signed_entity = $parser->read($signed_message_file);
+    unless ($signed_entity) {
+	Sympa::Log::do_log('notice', 'Unable to parse message');
+	return undef;
+    }
+
 
     # add additional headers discarded earlier
     foreach my $header ($params{entity}->head()->tags()) {
