@@ -8,13 +8,14 @@ use strict;
 use FindBin qw($Bin);
 use lib "$Bin/../src/lib";
 
+use File::Copy;
 use File::Temp;
 use Test::More;
 
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 7;
+plan tests => 11;
 
 chdir "$Bin/..";
 
@@ -104,3 +105,38 @@ is_deeply(
 	"signed message, CA certificate directory"
 );
 ok(-f $crt_file, 'certificate file created');
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
+copy('t/pki/key/rousse_nopassword.pem', "$crt_dir/private_key");
+my $new_message = Sympa::Tools::SMIME::sign_message(
+	message => $unsigned_message->{msg},
+	openssl => '/usr/bin/openssl',
+	certdir => $crt_dir,
+	tmpdir     => '/tmp',
+	listid     => 'foo'
+);
+ok(defined $new_message, 'message signature, passwordless key');
+isa_ok(
+	$new_message,
+	'MIME::Entity',
+	'signed message'
+);
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
+copy('t/pki/key/rousse_password.pem', "$crt_dir/private_key");
+my $new_message = Sympa::Tools::SMIME::sign_message(
+	message    => $unsigned_message->{msg},
+	openssl    => '/usr/bin/openssl',
+	certdir    => $crt_dir,
+	key_passwd => 'test',
+	tmpdir     => '/tmp',
+	listid     => 'foo'
+);
+ok(defined $new_message, 'message signature, password-protected key');
+isa_ok(
+	$new_message,
+	'MIME::Entity',
+	'signed message'
+);
