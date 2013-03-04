@@ -110,9 +110,9 @@ $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
 copy('t/pki/key/rousse_nopassword.pem', "$crt_dir/private_key");
 my $new_message = Sympa::Tools::SMIME::sign_message(
-	entity  => $unsigned_message->{msg},
-	openssl => '/usr/bin/openssl',
-	certdir => $crt_dir,
+	entity   => $unsigned_message->{msg},
+	openssl  => '/usr/bin/openssl',
+	cert_dir => $crt_dir,
 );
 ok(defined $new_message, 'message signature, passwordless key');
 isa_ok(
@@ -137,7 +137,7 @@ copy('t/pki/key/rousse_password.pem', "$crt_dir/private_key");
 my $new_message = Sympa::Tools::SMIME::sign_message(
 	entity     => $unsigned_message->{msg},
 	openssl    => '/usr/bin/openssl',
-	certdir    => $crt_dir,
+	cert_dir   => $crt_dir,
 	key_passwd => 'test',
 );
 ok(defined $new_message, 'message signature, password-protected key');
@@ -160,10 +160,10 @@ is_deeply(
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
 my $new_message = Sympa::Tools::SMIME::encrypt_message(
-	entity       => $unsigned_message->{msg},
-	email        => 'guillaume.rousse@sympa.org',
-	openssl      => '/usr/bin/openssl',
-	ssl_cert_dir => $crt_dir,
+	entity   => $unsigned_message->{msg},
+	email    => 'guillaume.rousse@sympa.org',
+	openssl  => '/usr/bin/openssl',
+	cert_dir => $crt_dir,
 );
 ok(defined $new_message, 'message encryption');
 isa_ok(

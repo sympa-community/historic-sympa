@@ -731,10 +731,10 @@ sub _sendto {
 		}
 		$message->{'msg_as_string'} =
 		Sympa::Tools::SMIME::encrypt_message(
-			entity       => $message->{'msg'},
-			email        => $email,
-			ssl_cert_dir => $params{ssl_cert_dir},
-			openssl      => $params{openssl}
+			entity   => $message->{'msg'},
+			email    => $email,
+			cert_dir => $params{ssl_cert_dir},
+			openssl  => $params{openssl}
 		)->as_string();
 		unless ($message->{'msg_as_string'}) {
     		    Sympa::Log::do_log('err',"Failed to encrypt message");
@@ -843,7 +843,7 @@ sub _sending {
 	my $list = Sympa::List->new($listname, $robot);
         $signed_msg = Sympa::Tools::SMIME::sign_message(
 		entity     => $message->{'msg'},
-		certdir    => $list->{dir},
+		cert_dir   => $list->{dir},
 		key_passwd => $params{key_passwd},
 		openssl    => $params{openssl}
 	);

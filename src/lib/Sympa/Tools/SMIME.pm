@@ -58,11 +58,11 @@ Sign a message.
 
 =over
 
-=item * I<entity>:
+=item * I<entity>: the message, as a C<MIME::Entity> instance
 
-=item * I<certdir>:
+=item * I<cert_dir>: path to Sympa certificate/keys directory
 
-=item * I<key_passwd>:
+=item * I<key_passwd>: key password
 
 =item * I<openssl>: path to openssl binary
 
@@ -75,7 +75,7 @@ sub sign_message {
 
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
-    my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
+    my($cert, $key) = smime_find_keys($params{cert_dir}, 'sign');
 
     # OpenSSL only needs content type and encoding headers to generate a
     # multipart/signed message, so clone original message, and discard
@@ -151,15 +151,15 @@ Check if a message is signed, and store the sender certificates in certificate s
 
 =over
 
-=item * I<message>:
+=item * I<message>: the message, as a C<Sympa::Message> instance
 
-=item * I<cafile>:
+=item * I<cafile>: path to a CA certificate file
 
-=item * I<capath>:
+=item * I<capath>: : path to a CA certificate directory
 
 =item * I<openssl>: path to openssl binary
 
-=item * I<ssl_cert_dir>:
+=item * I<cert_dir>: path to Sympa certificate/keys directory
 
 =back
 
@@ -354,11 +354,11 @@ Encrypt a message.
 
 =over
 
-=item * I<entity>:
+=item * I<entity>: the message, as a C<MIME::Entity> instance
 
 =item * I<email>:
 
-=item * I<ssl_cert_dir>:
+=item * I<cert_dir>: path to Sympa certificate/keys directory
 
 =item * I<openssl>: path to openssl binary
 
@@ -372,7 +372,7 @@ sub encrypt_message {
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
     my $usercert;
-    my $base = "$params{ssl_cert_dir}/".Sympa::Tools::escape_chars($params{email});
+    my $base = "$params{cert_dir}/".Sympa::Tools::escape_chars($params{email});
     if(-f "$base\@enc") {
 	$usercert = "$base\@enc";
     } else {
