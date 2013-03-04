@@ -442,18 +442,11 @@ sub encrypt_message {
     }
     close NEWMSG;
 
-    ## foreach header defined in  the incomming message but undefined in the
-    ## crypted message, add this header in the crypted form.
-    my $predefined_headers ;
-    foreach my $header ($crypted_entity->head->tags) {
-	$predefined_headers->{lc $header} = 1
-	    if ($crypted_entity->head->get($header)) ;
-    }
-    foreach my $header (split /\n(?![ \t])/, $params{entity}->head()->as_string) {
-	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
-	my ($tag, $val) = ($1, $2);
-	$crypted_entity->head->add($tag, $val)
-	    unless $predefined_headers->{lc $tag};
+    # add additional headers discarded earlier
+    foreach my $header ($params{entity}->head()->tags()) {
+	next if $crypted_entity->head()->get($header);
+	my $value = $params{entity}->head()->get($header);
+	$crypted_entity->head()->add($header, $value);
     }
 
     return $crypted_entity->head->as_string . "\n" . $crypted_body;
