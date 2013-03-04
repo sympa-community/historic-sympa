@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # -*- indent-tabs-mode: t; -*-
 # vim:ft=perl:noet:sw=8:textwidth=78
-# $Id: datasource_mysql.t 8332 2012-12-27 14:02:35Z rousse $
+# $Id$
 
 use strict;
 
