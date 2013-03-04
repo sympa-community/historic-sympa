@@ -80,9 +80,9 @@ sub sign_message {
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
     my $entity_clone = $params{entity}->dup();
-    foreach my $field ($entity_clone->head()->tags()) {
-         next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
-         $entity_clone->head->delete($field);
+    foreach my $header ($entity_clone->head()->tags()) {
+         next if ($header =~ /^(content-type|content-transfer-encoding)$/i);
+         $entity_clone->head()->delete($header);
     }
 
 
