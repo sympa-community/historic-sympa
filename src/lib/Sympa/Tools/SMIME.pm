@@ -356,9 +356,7 @@ Encrypt a message.
 
 =over
 
-=item * I<header>:
-
-=item * I<body>:
+=item * I<entity>:
 
 =item * I<email>:
 
@@ -403,13 +401,13 @@ sub encrypt_message {
 	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
 
-    my $mime_hdr = $params{header}->dup();
+    my $mime_hdr = $params{entity}->head()->dup();
     foreach my $t ($mime_hdr->tags()) {
       $mime_hdr->delete($t) unless ($t =~ /^(mime|content)-/i);
     }
     $mime_hdr->print($command_handle);
 
-    printf $command_handle "\n%s", $params{body};
+    printf $command_handle "\n%s", $params{entity}->body_as_string();
     close($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
@@ -449,7 +447,7 @@ sub encrypt_message {
 	$predefined_headers->{lc $header} = 1
 	    if ($crypted_entity->head->get($header)) ;
     }
-    foreach my $header (split /\n(?![ \t])/, $params{header}->as_string) {
+    foreach my $header (split /\n(?![ \t])/, $params{entity}->head()->as_string) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
 	$crypted_entity->head->add($tag, $val)

@@ -160,8 +160,7 @@ is_deeply(
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
 my $new_message = Sympa::Tools::SMIME::encrypt_message(
-	header       => $unsigned_message->{msg}->head(),
-	body         => $unsigned_message->{body_as_string},
+	entity       => $unsigned_message->{msg},
 	email        => 'guillaume.rousse@sympa.org',
 	openssl      => '/usr/bin/openssl',
 	ssl_cert_dir => $crt_dir,
@@ -171,8 +170,7 @@ ok(defined $new_message, 'message encryption, passwordless key');
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
 my $new_message = Sympa::Tools::SMIME::encrypt_message(
-	header       => $unsigned_message->{msg}->head(),
-	body         => $unsigned_message->{body_as_string},
+	entity       => $unsigned_message->{msg},
 	email        => 'guillaume.rousse@sympa.org',
 	openssl      => '/usr/bin/openssl',
 	ssl_cert_dir => $crt_dir,

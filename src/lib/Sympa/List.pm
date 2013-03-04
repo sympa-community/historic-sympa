@@ -4500,8 +4500,7 @@ sub send_to_editor {
        if ($encrypt eq 'smime_crypted') {
 	   ## is $msg->body_as_string respect base64 number of char per line ??
 	   my $cryptedmsg = Sympa::Tools::SMIME::encrypt_message(
-		   header       => $msg->head,
-		   body         => $msg->body_as_string,
+		   entity       => $msg,
 		   email        => $recipient,
 		   ssl_cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 		   openssl      => $Sympa::Configuration::Conf{'openssl'}

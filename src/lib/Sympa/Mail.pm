@@ -740,8 +740,7 @@ sub _sendto {
 		}
 		$message->{'msg_as_string'} =
 		Sympa::Tools::SMIME::encrypt_message(
-			header       => $msg_header,
-			body         => $msg_body,
+			entity       => $message->{'msg'},
 			email        => $email,
 			ssl_cert_dir => $params{ssl_cert_dir},
 			openssl      => $params{openssl}
