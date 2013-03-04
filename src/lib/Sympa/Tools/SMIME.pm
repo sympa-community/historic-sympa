@@ -108,8 +108,12 @@ sub sign_message {
 	    Sympa::Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    Sympa::Log::do_log('debug', "$params{openssl} smime -sign -rand $params{tmpdir}/rand -signer $cert $pass_option -inkey $key -in $temporary_file");
-    unless (open (NEWMSG, "$params{openssl} smime -sign -rand $params{tmpdir}/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
+
+    my $command =
+	    "$params{openssl} smime -sign -rand $params{tmpdir}/rand " .
+	    "-signer $cert $pass_option -inkey $key -in $temporary_file";
+    Sympa::Log::do_log('debug', $command);
+    unless (open (NEWMSG, "$command |")) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
