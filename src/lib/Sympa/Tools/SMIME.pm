@@ -393,9 +393,12 @@ sub encrypt_message {
 	my $temporary_file = $params{tmpdir}."/".$params{email}.".".$PID ;
 
 	## encrypt the incomming message parse it.
-        Sympa::Log::do_log ('debug3', "$params{openssl} smime -encrypt -out $temporary_file -des3 $usercert");
+	my $command =
+		"$params{openssl} smime -encrypt -out $temporary_file " .
+		"-des3 $usercert";
+        Sympa::Log::do_log ('debug3', $command);
 
-	if (!open(MSGDUMP, "| $params{openssl} smime -encrypt -out $temporary_file -des3 $usercert")) {
+	if (!open(MSGDUMP, "| $command")) {
 	    Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
 	}
 ## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
