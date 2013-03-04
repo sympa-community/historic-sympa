@@ -113,8 +113,6 @@ my $new_message = Sympa::Tools::SMIME::sign_message(
 	entity  => $unsigned_message->{msg},
 	openssl => '/usr/bin/openssl',
 	certdir => $crt_dir,
-	tmpdir  => '/tmp',
-	listid  => 'foo'
 );
 ok(defined $new_message, 'message signature, passwordless key');
 isa_ok(
@@ -131,8 +129,6 @@ my $new_message = Sympa::Tools::SMIME::sign_message(
 	openssl    => '/usr/bin/openssl',
 	certdir    => $crt_dir,
 	key_passwd => 'test',
-	tmpdir     => '/tmp',
-	listid     => 'foo'
 );
 ok(defined $new_message, 'message signature, password-protected key');
 isa_ok(

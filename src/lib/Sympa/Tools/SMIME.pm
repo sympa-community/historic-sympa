@@ -60,11 +60,7 @@ Sign a message.
 
 =item * I<entity>:
 
-=item * I<listid>:
-
 =item * I<certdir>:
-
-=item * I<tmpdir>: temporary directory
 
 =item * I<key_passwd>:
 
@@ -80,7 +76,6 @@ sub sign_message {
     Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
 
     my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
-    my $temporary_file = $params{tmpdir}."/".$params{listid}.".".$PID ;
 
     my $signed_msg;
 
@@ -94,33 +89,31 @@ sub sign_message {
 
 
     ## dump the incomming message.
-    if (!open(MSGDUMP,"> $temporary_file")) {
-	Sympa::Log::do_log('info', 'Can\'t store message in file %s', $temporary_file);
-	return undef;
-    }
-    $dup_msg->print(\*MSGDUMP);
-    close(MSGDUMP);
+    my $unsigned_message_file = File::Temp->new(
+	    CLEANUP => $main::options{'debug'} ? 0 : 1
+    );
+    $dup_msg->print($unsigned_message_file);
+    close($unsigned_message_file);
 
-    my $temporary_pwd;
+    my $password_file;
     my $pass_option = '';
     if ($params{key_passwd}) {
 	my $umask = umask;
 	umask 0077;
-	$temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
-	unless (open (FIFO,"> $temporary_pwd")) {
-	    Sympa::Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
-	}
+	$password_file = File::Temp->new(
+		CLEANUP => $main::options{'debug'} ? 0 : 1
+	);
 
-	print FIFO $params{key_passwd};
-	close FIFO;
+	print $password_file $params{key_passwd};
+	close $password_file;
 	umask $umask;
 
-	$pass_option = "-passin file:$temporary_pwd";
+	$pass_option = "-passin file:$password_file";
     }
 
     my $command =
 	    "$params{openssl} smime -sign -rand $params{tmpdir}/rand " .
-	    "-signer $cert $pass_option -inkey $key -in $temporary_file";
+	    "-signer $cert $pass_option -inkey $key -in $unsigned_message_file";
     Sympa::Log::do_log('debug', $command);
     unless (open (NEWMSG, "$command |")) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
@@ -143,11 +136,6 @@ sub sign_message {
     unless ($status == 0) {
 	Sympa::Log::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
 	return undef;
-    }
-
-    unlink ($temporary_file) unless ($main::options{'debug'}) ;
-    if ($params{key_passwd}) {
-	unlink ($temporary_pwd);
     }
 
     ## foreach header defined in  the incomming message but undefined in the
