@@ -855,7 +855,7 @@ sub _sending {
     if ($sign_mode eq 'smime') {
 	my $list = Sympa::List->new($listname, $robot);
         $signed_msg = Sympa::Tools::SMIME::sign_message(
-		message    => $message->{'msg'},
+		entity     => $message->{'msg'},
 		listid     => $list->get_list_id(),
 		certdir    => $list->{dir},
 		tmpdir     => $params{tmpdir},

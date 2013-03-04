@@ -58,7 +58,7 @@ Sign a message.
 
 =over
 
-=item * I<message>:
+=item * I<entity>:
 
 =item * I<listid>:
 
@@ -88,7 +88,7 @@ sub sign_message {
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
-    my $dup_msg = $params{message}->dup;
+    my $dup_msg = $params{entity}->dup;
     foreach my $field ($dup_msg->head->tags) {
          next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
          $dup_msg->head->delete($field);
@@ -155,7 +155,7 @@ sub sign_message {
 	$predefined_headers->{lc $header} = 1
 	    if ($signed_msg->head->get($header));
     }
-    foreach my $header (split /\n(?![ \t])/, $params{message}->head->as_string) {
+    foreach my $header (split /\n(?![ \t])/, $params{entity}->head->as_string) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
 	$signed_msg->head->add($tag, $val)

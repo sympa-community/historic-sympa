@@ -110,11 +110,11 @@ $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
 copy('t/pki/key/rousse_nopassword.pem', "$crt_dir/private_key");
 my $new_message = Sympa::Tools::SMIME::sign_message(
-	message => $unsigned_message->{msg},
+	entity  => $unsigned_message->{msg},
 	openssl => '/usr/bin/openssl',
 	certdir => $crt_dir,
-	tmpdir     => '/tmp',
-	listid     => 'foo'
+	tmpdir  => '/tmp',
+	listid  => 'foo'
 );
 ok(defined $new_message, 'message signature, passwordless key');
 isa_ok(
@@ -127,7 +127,7 @@ $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
 copy('t/pki/key/rousse_password.pem', "$crt_dir/private_key");
 my $new_message = Sympa::Tools::SMIME::sign_message(
-	message    => $unsigned_message->{msg},
+	entity     => $unsigned_message->{msg},
 	openssl    => '/usr/bin/openssl',
 	certdir    => $crt_dir,
 	key_passwd => 'test',
