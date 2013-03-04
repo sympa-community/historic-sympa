@@ -406,11 +406,7 @@ sub encrypt_message {
     unless (open ($command_handle, '|-', $command)) {
 	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
-## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
-## that contains a whole header again... since MIME::Tools has got no function
-## for this, we need to manually extract only the MIME headers...
-##	$msg_header->print(\*MSGDUMP);
-##	printf MSGDUMP "\n%s", $msg_body;
+
     my $mime_hdr = $params{header}->dup();
     foreach my $t ($mime_hdr->tags()) {
       $mime_hdr->delete($t) unless ($t =~ /^(mime|content)-/i);
