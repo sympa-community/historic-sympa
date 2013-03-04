@@ -79,10 +79,10 @@ sub sign_message {
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
-    my $dup_msg = $params{entity}->dup();
-    foreach my $field ($dup_msg->head()->tags()) {
+    my $entity_clone = $params{entity}->dup();
+    foreach my $field ($entity_clone->head()->tags()) {
          next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
-         $dup_msg->head->delete($field);
+         $entity_clone->head->delete($field);
     }
 
 
@@ -90,7 +90,7 @@ sub sign_message {
     my $unsigned_message_file = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
-    $dup_msg->print($unsigned_message_file);
+    $entity_clone->print($unsigned_message_file);
     close($unsigned_message_file);
 
     my $password_file;
@@ -121,8 +121,8 @@ sub sign_message {
     my $parser = MIME::Parser->new();
     $parser->output_to_core(1);
 
-    my $signed_msg = $parser->read($command_handle);
-    unless ($signed_msg) {
+    my $signed_entity = $parser->read($command_handle);
+    unless ($signed_entity) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
@@ -137,19 +137,19 @@ sub sign_message {
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
-    foreach my $header ($signed_msg->head()->tags()) {
+    foreach my $header ($signed_entity->head()->tags()) {
 	$predefined_headers->{lc $header} = 1
-	    if ($signed_msg->head()->get($header));
+	    if ($signed_entity->head()->get($header));
     }
     foreach my $header (split /\n(?![ \t])/,
 	    $params{entity}->head()->as_string()) {
 	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
 	my ($tag, $val) = ($1, $2);
-	$signed_msg->head->add($tag, $val)
+	$signed_entity->head()->add($tag, $val)
 	    unless $predefined_headers->{lc $tag};
     }
 
-    return $signed_msg;
+    return $signed_entity;
 }
 
 =head2 check_signature(%parameters)
