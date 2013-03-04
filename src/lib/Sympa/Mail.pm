@@ -153,8 +153,6 @@ send a tt2 file.
 
 =item * I<maxsmtp>
 
-=item * I<tmpdir>
-
 =item * I<openssl>
 
 =item * I<key_passwd>
@@ -371,7 +369,6 @@ sub mail_file {
 	sendmail_args   => $params{sendmail_args},
 	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
-	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
 	cookie          => $params{cookie},
 	sympa           => $params{sympa},
@@ -415,8 +412,6 @@ Distribute a message to a list, crypting if needed.
 =item * I<nrcpt_by_dom>
 
 =item * I<db_type>
-
-=item * I<tmpdir>
 
 =item * I<ssl_cert_dir>
 
@@ -554,7 +549,6 @@ sub mail_message {
 	sendmail_args   => $params{sendmail_args},
 	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
-	tmpdir          => $params{tmpdir},
 	key_passws      => $params{key_passwd},
 	ssl_cert_dir    => $params{ssl_cert_dir},
 	cookie          => $params{cookie},
@@ -595,8 +589,6 @@ Forward a message.
 
 =item * I<maxsmtp>
 
-=item * I<tmpdir>
-
 =item * I<openssl>
 
 =item * I<key_passwd>
@@ -635,7 +627,6 @@ sub mail_forward {
 	sendmail_args   => $params{sendmail_args},
 	maxsmtp         => $params{maxsmtp},
 	openssl         => $params{openssl},
-	tmpdir          => $params{tmpdir},
 	key_passwd      => $params{key_passwd},
 	cookie          => $params{cookie},
 	sympa           => $params{sympa},
@@ -765,7 +756,6 @@ sub _sendto {
 			sendmail_args   => $params{sendmail_args},
 			maxsmtp         => $params{maxsmtp},
 			openssl         => $params{openssl},
-			tmpdir          => $params{tmpdir},
 			key_passwd      => $params{key_passwd},
 			cookie          => $params{cookie},
 			sympa           => $params{sympa},
@@ -798,7 +788,6 @@ sub _sendto {
 		sendmail_args   => $params{sendmail_args},
 		maxsmtp         => $params{maxsmtp},
 		openssl         => $params{openssl},
-		tmpdir          => $params{tmpdir},
 		key_passwd      => $params{key_passwd},
 		cookie          => $params{cookie},
 		sympa           => $params{sympa},
