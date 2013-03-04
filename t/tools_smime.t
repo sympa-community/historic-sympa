@@ -15,7 +15,7 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 17;
+plan tests => 23;
 
 chdir "$Bin/..";
 
@@ -166,6 +166,26 @@ my $new_message = Sympa::Tools::SMIME::encrypt_message(
 	ssl_cert_dir => $crt_dir,
 );
 ok(defined $new_message, 'message encryption, passwordless key');
+my $entity = MIME::Parser->new()->parse_data($new_message);
+
+isa_ok(
+	$entity,
+	'MIME::Entity',
+	'parsed crypted message'
+);
+like(
+	$entity->head()->get('Content-Type'),
+	qr{^application/x-pkcs7-mime; smime-type=enveloped-data;},
+	'parsed crypted message has correct content-type'
+);
+is_deeply(
+	[ sort $entity->head()->tags() ],
+	[
+		'Content-Disposition',
+		sort $unsigned_message->{msg}->head()->tags()
+	],
+	'parsed crypted message has the same headers list + Content-Disposition'
+);
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
@@ -177,3 +197,23 @@ my $new_message = Sympa::Tools::SMIME::encrypt_message(
 	key_passwd   => 'test',
 );
 ok(defined $new_message, 'message encryption, password-protected key');
+my $entity = MIME::Parser->new()->parse_data($new_message);
+
+isa_ok(
+	$entity,
+	'MIME::Entity',
+	'parsed crypted message'
+);
+like(
+	$entity->head()->get('Content-Type'),
+	qr{^application/x-pkcs7-mime; smime-type=enveloped-data;},
+	'parsed crypted message has correct content-type'
+);
+is_deeply(
+	[ sort $entity->head()->tags() ],
+	[
+		'Content-Disposition',
+		sort $unsigned_message->{msg}->head()->tags()
+	],
+	'parsed crypted message has the same headers list + Content-Disposition'
+);
