@@ -4504,7 +4504,7 @@ sub send_to_editor {
 		   email        => $recipient,
 		   ssl_cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 		   openssl      => $Sympa::Configuration::Conf{'openssl'}
-	   );
+	   )->as_string();
 	   unless ($cryptedmsg) {
 	       Sympa::Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing

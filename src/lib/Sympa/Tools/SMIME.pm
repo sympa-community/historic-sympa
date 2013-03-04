@@ -429,19 +429,6 @@ sub encrypt_message {
     }
     close NEWMSG ;
 
-    ## Get body
-    my $crypted_body;
-    open (NEWMSG, $crypted_message_file);
-    my $in_header = 1 ;
-    while (<NEWMSG>) {
-       if ( !$in_header)  {
-	 $crypted_body .= $_;
-       }else {
-	 $in_header = 0 if (/^$/);
-       }
-    }
-    close NEWMSG;
-
     # add additional headers discarded earlier
     foreach my $header ($params{entity}->head()->tags()) {
 	next if $crypted_entity->head()->get($header);
@@ -449,7 +436,7 @@ sub encrypt_message {
 	$crypted_entity->head()->add($header, $value);
     }
 
-    return $crypted_entity->head->as_string . "\n" . $crypted_body;
+    return $crypted_entity;
 }
 
 =head2 decrypt_message(%parameters)

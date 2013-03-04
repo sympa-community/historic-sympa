@@ -744,7 +744,7 @@ sub _sendto {
 			email        => $email,
 			ssl_cert_dir => $params{ssl_cert_dir},
 			openssl      => $params{openssl}
-		);
+		)->as_string();
 		unless ($message->{'msg_as_string'}) {
     		    Sympa::Log::do_log('err',"Failed to encrypt message");
 		    return undef;
