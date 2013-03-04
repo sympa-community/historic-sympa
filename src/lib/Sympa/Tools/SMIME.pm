@@ -81,10 +81,8 @@ sub sign_message {
 
     my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
     my $temporary_file = $params{tmpdir}."/".$params{listid}.".".$PID ;
-    my $temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
 
-    my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if ($params{key_passwd} ne '') ;
+    my $signed_msg;
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
@@ -103,10 +101,21 @@ sub sign_message {
     $dup_msg->print(\*MSGDUMP);
     close(MSGDUMP);
 
-    if ($params{key_passwd} ne '') {
-	unless ( POSIX::mkfifo($temporary_pwd,0600)) {
-	    Sympa::Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
+    my $temporary_pwd;
+    my $pass_option = '';
+    if ($params{key_passwd}) {
+	my $umask = umask;
+	umask 0077;
+	$temporary_pwd = $params{tmpdir}.'/pass.'.$PID;
+	unless (open (FIFO,"> $temporary_pwd")) {
+	    Sympa::Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 	}
+
+	print FIFO $params{key_passwd};
+	close FIFO;
+	umask $umask;
+
+	$pass_option = "-passin file:$temporary_pwd";
     }
 
     my $command =
@@ -116,16 +125,6 @@ sub sign_message {
     unless (open (NEWMSG, "$command |")) {
     	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
-    }
-
-    if ($params{key_passwd} ne '') {
-	unless (open (FIFO,"> $temporary_pwd")) {
-	    Sympa::Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
-	}
-
-	print FIFO $params{key_passwd};
-	close FIFO;
-	unlink ($temporary_pwd);
     }
 
     my $parser = MIME::Parser->new;
@@ -147,6 +146,9 @@ sub sign_message {
     }
 
     unlink ($temporary_file) unless ($main::options{'debug'}) ;
+    if ($params{key_passwd}) {
+	unlink ($temporary_pwd);
+    }
 
     ## foreach header defined in  the incomming message but undefined in the
     ## crypted message, add this header in the crypted form.
