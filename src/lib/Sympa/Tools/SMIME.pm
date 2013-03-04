@@ -77,16 +77,17 @@ sub sign_message {
 
     my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
 
-    ## Keep a set of header fields ONLY
-    ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
+    # OpenSSL only needs content type and encoding headers to generate a
+    # multipart/signed message, so clone original message, and discard
+    # all other headers
     my $entity_clone = $params{entity}->dup();
     foreach my $header ($entity_clone->head()->tags()) {
-         next if ($header =~ /^(content-type|content-transfer-encoding)$/i);
-         $entity_clone->head()->delete($header);
+         $entity_clone->head()->delete($header)
+		 if !$header =~ /^(content-type|content-transfer-encoding)$/i;
     }
 
 
-    ## dump the incomming message.
+    # dump the clone of the original message
     my $unsigned_message_file = File::Temp->new(
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
@@ -134,19 +135,11 @@ sub sign_message {
 	return undef;
     }
 
-    ## foreach header defined in  the incomming message but undefined in the
-    ## crypted message, add this header in the crypted form.
-    my $predefined_headers ;
-    foreach my $header ($signed_entity->head()->tags()) {
-	$predefined_headers->{lc $header} = 1
-	    if ($signed_entity->head()->get($header));
-    }
-    foreach my $header (split /\n(?![ \t])/,
-	    $params{entity}->head()->as_string()) {
-	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
-	my ($tag, $val) = ($1, $2);
-	$signed_entity->head()->add($tag, $val)
-	    unless $predefined_headers->{lc $tag};
+    # add additional headers discarded earlier
+    foreach my $header ($params{entity}->head()->tags()) {
+	next if $signed_entity->head()->get($header);
+	my $value = $params{entity}->head()->get($header);
+	$signed_entity->head()->add($header, $value);
     }
 
     return $signed_entity;
