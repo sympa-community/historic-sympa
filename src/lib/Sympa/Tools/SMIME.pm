@@ -77,8 +77,6 @@ sub sign_message {
 
     my($cert, $key) = smime_find_keys($params{certdir}, 'sign');
 
-    my $signed_msg;
-
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
     my $dup_msg = $params{entity}->dup();
@@ -119,9 +117,10 @@ sub sign_message {
     }
 
     my $parser = MIME::Parser->new();
-
     $parser->output_to_core(1);
-    unless ($signed_msg = $parser->read(\*NEWMSG)) {
+
+    my $signed_msg = $parser->read(\*NEWMSG);
+    unless ($signed_msg) {
 	Sympa::Log::do_log('notice', 'Unable to parse message');
 	return undef;
     }
