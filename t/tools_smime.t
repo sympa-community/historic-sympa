@@ -24,9 +24,13 @@ my $unsigned_message = Sympa::Message->new({
 	file       => "t/samples/unsigned.eml",
 	noxsympato => 1
 });
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+$crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
 ok(
 	!defined Sympa::Tools::SMIME::check_signature(
 		message  => $unsigned_message,
+		openssl  => '/usr/bin/openssl',
+		cert_dir => $crt_dir
 	),
 	"unsigned message"
 );
@@ -37,56 +41,54 @@ my $signed_message = Sympa::Message->new({
 });
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
-$crt_file = $crt_dir . '/guillaume.rousse@inria.fr';
+$crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
 		message  => $signed_message,
-		cafile   => 't/pki/ca.pem',
-		capath   => undef,
 		openssl  => '/usr/bin/openssl',
-		cert_dir => $crt_dir
+		cert_dir => $crt_dir,
+		cafile   => 't/pki/crt/ca.pem',
 	),
 	{
 		body => 'smime',
 		subject => {
 			email =>  {
-				'guillaume.rousse@inria.fr' => '1'
+				'guillaume.rousse@sympa.org' => '1'
 			},
-			subject => '/C=FR/O=INRIA/CN=Guillaume ROUSSE/unstructuredName=rousse@inria.fr',
+			subject => '/O=sympa developpers/OU=unit testing/CN=Guillaume Rousse/emailAddress=Guillaume.Rousse@sympa.org',
 			purpose => {
 				'enc'  => 1,
 				'sign' => 1
 			}
 		}
 	},
-	"signed message, CA file"
+	"signed message, CA certificate file"
 );
 
 ok(-f $crt_file, 'certificate file created');
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
-$crt_file = $crt_dir . '/guillaume.rousse@inria.fr';
+$crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
 is_deeply(
 	Sympa::Tools::SMIME::check_signature(
 		message  => $signed_message,
-		cafile   => undef,
-		capath   => 't/pki/ca',
 		openssl  => '/usr/bin/openssl',
-		cert_dir => $crt_dir
+		cert_dir => $crt_dir,
+		capath   => 't/pki/crt',
 	),
 	{
 		body => 'smime',
 		subject => {
 			email =>  {
-				'guillaume.rousse@inria.fr' => '1'
+				'guillaume.rousse@sympa.org' => '1'
 			},
-			subject => '/C=FR/O=INRIA/CN=Guillaume ROUSSE/unstructuredName=rousse@inria.fr',
+			subject => '/O=sympa developpers/OU=unit testing/CN=Guillaume Rousse/emailAddress=Guillaume.Rousse@sympa.org',
 			purpose => {
 				'enc'  => 1,
 				'sign' => 1
 			}
 		}
 	},
-	"signed message, CA directory"
+	"signed message, CA certificate directory"
 );
 ok(-f $crt_file, 'certificate file created');
