@@ -390,6 +390,14 @@ sub encrypt_message {
 	    CLEANUP => $main::options{'debug'} ? 0 : 1
     );
 
+    # clone original message, and discard all headers excepted 
+    # mime-type and content ones
+    my $entity_clone = $params{entity}->dup();
+    foreach my $header ($entity_clone->head()->tags()) {
+         $entity_clone->head()->delete($header)
+		 if !$header =~ /^(mime|content)-/i;
+    }
+
     ## encrypt the incomming message parse it.
     my $command =
 	    "$params{openssl} smime -encrypt -out $crypted_message_file " .
@@ -401,13 +409,7 @@ sub encrypt_message {
 	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
 
-    my $mime_hdr = $params{entity}->head()->dup();
-    foreach my $t ($mime_hdr->tags()) {
-      $mime_hdr->delete($t) unless ($t =~ /^(mime|content)-/i);
-    }
-    $mime_hdr->print($command_handle);
-
-    printf $command_handle "\n%s", $params{entity}->body_as_string();
+    $entity_clone->print($command_handle);
     close($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
