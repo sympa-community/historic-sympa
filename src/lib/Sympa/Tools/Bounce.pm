@@ -212,22 +212,20 @@ sub parse_notification {
 	while (my $paragraph = shift @paragraphes) {
 
 		if ($paragraph =~ /^\s*-+ The following addresses (?:had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
-			my $adr;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			my $address;
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^(\S[^\(]*)/) {
-					$adr = $1;
+					$address = $1;
 					my $error = $2;
-					$adr = _unquote_address($adr);
-					$info{$adr}{error} = $error;
+					$address = _unquote_address($address);
+					$info{$address}{error} = $error;
 				} elsif ($line =~ /^\s+\(expanded from: (.+)\)/) {
-					$info{$adr}{expanded} = _unquote_address($1);
+					$info{$address}{expanded} = _unquote_address($1);
 				}
 			}
 
 		} elsif ($paragraph =~ /^\s+-+\sTranscript of session follows\s-+/m) {
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^($smtp_status_pattern\s)?(\S+|".*")\.{3}\s(.+)$/) {
 					my $addresses = $2;
 					my $cause = $3;
@@ -256,15 +254,13 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^Receiver not found:/m) {
 			# Compuserve
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				$info{$2}{error} = $1 if /^(.*): (\S+)/;
 			}
 
 		} elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
 			my ($cause, $address);
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^Unknown QuickMail recipient\(s\):/) {
 					$cause = 'Unknown QuickMail recipient(s)';
 				} elsif ($line =~ /^\s+(.*)$/ and $cause) {
@@ -275,12 +271,11 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^Your message adressed to .* couldn\'t be delivered/m) {
 			my $address;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
-				if ($paragraph =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
+				if ($line =~ /^Your message adressed to (.*) couldn\'t be delivered, for the following reason :/) {
 					$address = _unquote_address($1);
 				} else {
-					/^(.*)$/;
+					$line =~ /^(.*)$/;
 					$info{$address}{error} = $1;
 				}
 			}
@@ -314,14 +309,13 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^Hi\. This is the qmail-send program/m) {
 			# Qmail
 			while ($paragraph = shift @paragraphes) {
-				if ($paragraph =~ /^<($address_pattern)>:.*\(#($enhanced_status_pattern)\)$/ms) {
-					$info{$1}{error} = $2;
-				}
-				last if $paragraph =~ /^[^<]/;
+				last if $paragraph !~
+					/^<($address_pattern)>:.*\(#($enhanced_status_pattern)\)$/ms;
+				$info{$1}{error} = $2;
 			}
 
 		} elsif ($paragraph =~ /^Your message was not delivered to the following recipients:/m) {
-			## Sendmail
+			# Sendmail
 			$paragraph = shift @paragraphes;
 			if ($paragraph =~ /^\s*(\S+):\s+(.*)$/m) {
 				$info{$1}{error} = $2;
@@ -338,7 +332,7 @@ sub parse_notification {
 			}
 
 		} elsif ($paragraph =~ /^Your mail item could not be delivered to the following users/m) {
-			## IBM VM
+			# IBM VM
 			$paragraph = shift @paragraphes;
 			if ($paragraph =~ /^(.*)\s+\---->\s(\S+)$/m) {
 				$info{$2}{error} = $1;
@@ -361,8 +355,7 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^\s+-+ Transcript of Report follows -+/) {
 			# Smap
 			my $address;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^Rejected-For: (\S+),/) {
 					$address = $1;
 					$info{$address}{error} = "";
@@ -372,16 +365,14 @@ sub parse_notification {
 			}
 		} elsif ($paragraph =~ /^\s*-+Message not delivered to the following:/) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~/^\s*(\S+)\s+(.*)$/) {
 					$info{$1}{error} = $2;
 				}
 			}
 
 		} elsif ($paragraph =~ /unable to deliver following mail to recipient\(s\):/m) {
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^\d+ <($address_pattern)>\.{3} (.+)$/) {
 					$info{$1}{error} = $2;
 				}
@@ -395,8 +386,7 @@ sub parse_notification {
 			}
 		} elsif ($paragraph =~ /^Content-Description: Session Transcript/m) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /<($address_pattern)>\.{3} (.*)$/) {
 					$info{$1}{error} = $2;
 				}
@@ -435,16 +425,15 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^The local mail transport system has reported the following problems/m) {
 			# Mercury 1.43
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /<($address_pattern)>\s+(.*)$/) {
 					$info{$1}{error} = $2;
 				}
 			}
 
 		} elsif ($paragraph =~ /unable to deliver mail to the following recipient\(s\):/m) {
-			$paragraph = shift @paragraphes;
 			# AltaVista Mail
+			$paragraph = shift @paragraphes;
 			if ($paragraph =~ /^(\S+):\n.*\n\s*(.*)$/m) {
 				$info{$1}{error} = $2;
 			}
@@ -462,8 +451,7 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^One or more addresses in your message have failed with the following/m) {
 			# Mercury 1.31
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /<($address_pattern)>\s+(.*)$/) {
 					$info{$1}{error} = $2;
 				}
@@ -471,8 +459,7 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^The following recipients haven\'t received this message:/m) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /(\S+)$/) {
 					$info{$1}{error} = "";
 				}
@@ -480,16 +467,14 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^The following destination addresses were unknown/m) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /<($address_pattern)>/) {
 					$info{$1}{error} = "";
 				}
 			}
 
 		} elsif ($paragraph =~ /^-+Transcript of session follows\s-+$/m) {
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^(\S+)$/) {
 					$info{$1}{error} = "";
 				} elsif ($line =~ /<($address_pattern)>\.{3} (.*)$/) {
@@ -509,8 +494,7 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^The address to which the message has not yet been delivered is:/m) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /(\S+)/) {
 					$info{$1}{error} = "";
 				}
@@ -518,8 +502,7 @@ sub parse_notification {
 
 		} elsif ($paragraph =~ /^This Message was undeliverable due to the following reason:/m) {
 			while ($paragraph = shift @paragraphes) {
-				my @lines = split(/\n/, $paragraph);
-				foreach my $line (@lines) {
+				foreach my $line (split(/\r\n/, $paragraph)) {
 					if ($line =~
 						/\s+Recipient:\s+<($address_pattern)>/) {
 						$info{$1}{error} = "";
@@ -552,8 +535,7 @@ sub parse_notification {
 			# PMDF
 			$paragraph = shift @paragraphes;
 			my $address;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /\s+Recipient address:\s+(\S+)/) {
 					$address = $1;
 					$info{$address}{error} = "";
@@ -572,24 +554,28 @@ sub parse_notification {
 		) {
 			# Postfix
 			while ($paragraph = shift @paragraphes) {
-				if ($paragraph =~ /^<($address_pattern)>(?: \(expanded from <$address_pattern>\))?:\s(.*)/ms) {
-					my ($addr, $error) = ($1, $2);
-					if ($error =~ /^host \s [^:]* said: \s $smtp_status_pattern \s ($enhanced_status_pattern)/x) {
-						$info{$addr}{error} = $1;
-					}
-					elsif ($error =~ /^([^:]+):/) {
-						$info{$addr}{error} = $1;
-					}else {
-						$info{$addr}{error} = $error;
-					}
+				last if $paragraph =~ /The mail system/;
+			}
+
+			while ($paragraph = shift @paragraphes) {
+				last if $paragraph !~ 
+					/^<($address_pattern)>(?: \(expanded from <$address_pattern>\))?:\s(.*)/ms;
+
+				my ($address, $reason) = ($1, $2);
+				$reason =~ s/\s+/ /g;
+
+				my $error;
+				if ($reason =~ /^[^:]+: \s $smtp_status_pattern \s ($enhanced_status_pattern)/x) {
+					$error = $1;
+				} else {
+					$error = $reason;
 				}
-				last if $paragraph =~ /THIS IS A WARNING/;
+				$info{$address}{error} = $error;
 			}
 
 		} elsif ($paragraph =~ /^The message that you sent was undeliverable to the following:/ ) {
 			$paragraph = shift @paragraphes;
-			my @lines = split(/\n/, $paragraph);
-			foreach my $line (@lines) {
+			foreach my $line (split(/\r\n/, $paragraph)) {
 				if ($line =~ /^\s+(\S*) \((.+)\)/ ) {
 					$info{$1}{error} = $2;
 				}

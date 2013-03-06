@@ -76,33 +76,29 @@ my %tests = (
 	'error7.eml' => undef,
 	'error8.eml' => undef,
 	'error9.eml' => {
-		'emmanuel.delaborde@citycampus.com' => 'conversation with
-    citycampus.com[199.59.243.118] timed out while receiving the initial server
-    greeting'
+		'emmanuel.delaborde@citycampus.com' => 'conversation with citycampus.com[199.59.243.118] timed out while receiving the initial server greeting'
 	},
 	'error10.eml' => {
-		'aiolia@maciste.it' => 'connect to mx2.maciste.it[62.149.198.62]'
+		'aiolia@maciste.it' => 'connect to mx2.maciste.it[62.149.198.62]:25: connection timed out'
 	},
 	'error11.eml' => {
-		'kenduest@mdk.linux.org.tw' => 'host mdk.linux.org.tw[210.240.39.201] said',
+		'kenduest@mdk.linux.org.tw' => '4.7.1',
 	},
 	'error12.eml' => {
-		'wojtula95@op.pl' => 'host mx.poczta.onet.pl[213.180.147.146] refused to talk to
-    me'
+		'wojtula95@op.pl' => '4.7.1',
 	},
 	'error13.eml' => {
-		'mlhydeau@austarnet.com.au' => 'connect to austarnet.com.au[203.22.8.238]'
+		'mlhydeau@austarnet.com.au' => 'connect to austarnet.com.au[203.22.8.238]:25: connection timed out'
 	},
 	'error14.eml' => {
-		'ftpmaster@t-online.fr' => 'connect to mailx.tcommerce.de[193.158.123.94]'
+		'ftpmaster@t-online.fr' => 'connect to mailx.tcommerce.de[193.158.123.94]:25: connection timed out'
 	},
 	'error15.eml' => {
-		'fuwafuwa@jessicara.co.uk' => 'host or domain name not found. name service error
-    for name=jessicara.co.uk type=mx'
+		'fuwafuwa@jessicara.co.uk' => 'host or domain name not found. name service error for name=jessicara.co.uk type=mx: host not found, try again'
 	},
 	'error16.eml' => {
-		'nim@zarb.org' => 'unknown user',
-		'fnasser@zarb.org' => 'unknown user'
+		'nim@zarb.org' => 'unknown user: "nim"',
+		'fnasser@zarb.org' => 'unknown user: "fnasser"'
 	},
 );
 
