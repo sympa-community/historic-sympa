@@ -15,6 +15,8 @@ TESTS = compile_modules.t \
 	tools_file.t \
 	tools_password.t  \
 	tools_time.t \
+	tools_bounce.t \
+	tools_smime.t \
 	message.t \
 	upgrade.t \
 	lock.t
