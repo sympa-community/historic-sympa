@@ -263,10 +263,8 @@ sub new {
 		    $message->{'list'}->{dir} ||
 		    $Sympa::Configuration::Conf{'home'} . '/sympa';
 	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::decrypt_message(
-		    message    => $message->{'msg'},
-		    listid     => $message->{'list'}->get_list_id(),
-		    certdir    => $certdir,
-		    tmpdir     => $Sympa::Configuration::Conf{'tmpdir'},
+		    entity     => $message->{'msg'},
+		    cert_dir   => $certdir,
 		    key_passwd => $Sympa::Configuration::Conf{'key_passwd'},
 		    openssl    => $Sympa::Configuration::Conf{'openssl'}
 	    );
