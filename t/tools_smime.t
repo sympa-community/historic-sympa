@@ -15,7 +15,7 @@ use Test::More;
 use Sympa::Message;
 use Sympa::Tools::SMIME;
 
-plan tests => 19;
+plan tests => 23;
 
 chdir "$Bin/..";
 
@@ -159,28 +159,59 @@ is_deeply(
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 copy('t/pki/crt/rousse.pem', "$crt_dir/guillaume.rousse\@sympa.org");
-my $new_message = Sympa::Tools::SMIME::encrypt_message(
+my $crypted_message = Sympa::Tools::SMIME::encrypt_message(
 	entity   => $unsigned_message->{msg},
 	email    => 'guillaume.rousse@sympa.org',
 	openssl  => '/usr/bin/openssl',
 	cert_dir => $crt_dir,
 );
-ok(defined $new_message, 'message encryption');
+ok(defined $crypted_message, 'message encryption');
 isa_ok(
-	$new_message,
+	$crypted_message,
 	'MIME::Entity',
 	'crypted message'
 );
 like(
-	$new_message->head()->get('Content-Type'),
+	$crypted_message->head()->get('Content-Type'),
 	qr{^application/x-pkcs7-mime; smime-type=enveloped-data;},
 	'crypted message has correct content-type'
 );
 is_deeply(
-	[ sort $new_message->head()->tags() ],
+	[ sort $crypted_message->head()->tags() ],
 	[
 		'Content-Disposition',
 		sort $unsigned_message->{msg}->head()->tags()
 	],
 	'crypted message has the same headers list + Content-Disposition'
+);
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
+copy('t/pki/key/rousse_nopassword.pem', "$crt_dir/private_key");
+my ($decrypted_message, $string) = Sympa::Tools::SMIME::decrypt_message(
+	entity   => $crypted_message,
+	openssl  => '/usr/bin/openssl',
+	cert_dir => $crt_dir,
+);
+ok(defined $decrypted_message, 'message decryption, passwordless key');
+isa_ok(
+	$decrypted_message,
+	'MIME::Entity',
+	'decrypted message'
+);
+
+$crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+copy('t/pki/crt/rousse.pem', "$crt_dir/cert.pem");
+copy('t/pki/key/rousse_password.pem', "$crt_dir/private_key");
+my ($decrypted_message, $string) = Sympa::Tools::SMIME::decrypt_message(
+	entity     => $crypted_message,
+	openssl    => '/usr/bin/openssl',
+	cert_dir   => $crt_dir,
+	key_passwd => 'test',
+);
+ok(defined $decrypted_message, 'message decryption, password-protected key');
+isa_ok(
+	$decrypted_message,
+	'MIME::Entity',
+	'decrypted message'
 );
