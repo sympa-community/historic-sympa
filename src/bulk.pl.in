@@ -76,19 +76,14 @@ $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
 # Load sympa.conf
-unless (defined Robot::get_robots()) {
-    Log::fatal_err(
-	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
-	Conf::get_sympa_conf()
-    );
+unless (Robot::get_robots()) {
+    print STDERR
+	"Unable to load sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	Conf::get_sympa_conf();
+    exit 1;
 }
 
 &Log::do_openlog(Site->syslog, Site->log_socket_type, 'bulk');
-
-## Check database connectivity
-unless (&SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Site->db_name);
-}
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
@@ -276,30 +271,33 @@ while (!$end) {
             # so it is needed to fetch the new message from message_table 
 
 	    $messagekey = $bulk->{'messagekey'};
-	    $message_from_spool = $spool->get_message({'messagekey' => $bulk->{'messagekey'}});
+	    $message_from_spool =
+		$spool->get_message({'messagekey' => $messagekey});
 	    &Log::do_log('notice','Start sending message "%s" (key "%s") to list "%s@%s" (priority %s) (starting %s seconds after scheduled expedition date)',
 			$bulk->{'messageid'},
-			$bulk->{'messagekey'},
+			$messagekey,
 			$bulk->{'listname'}, 
 			$bulk->{'robot'}, 
 			$bulk->{'priority_message'}, 
 			time() - $bulk->{'delivery_date'});
-			
-	    $messageasstring_init = $message_from_spool->{'messageasstring'};
-	    
-	    #my $dump = &Dumper($messageasstring_init); open (DUMP,">>/tmp/dumper"); printf DUMP 'messageasstring recup par bulk \n%s',$dump ; close DUMP; 
-	    # &trace_smime($messageasstring_init,'initial');
 
-	    unless ( $messageasstring_init ) {
-		&Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
-		unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-		    &Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+	    unless ($message_from_spool) {
+		Log::do_log('err',
+		    "internal error : current packet (messagekey= %s) contains a ref to a null message",
+		    $messagekey
+		);
+		unless (Bulk::remove($messagekey, $bulk->{'packetid'})) {
+		    Log::do_log('err',
+			"failed to remove processed packet '%s', messagekey '%s'",
+			$messagekey, $bulk->{'packetid'}
+		    );
 		}
+		next; # while (!$end)
 	    }
-	    $messagekey = $bulk->{'messagekey'};
+	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 	}
 	my $data; #HASH which will contain the attributes of the subscriber
-	
+
 	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};

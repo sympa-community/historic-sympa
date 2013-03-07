@@ -69,19 +69,19 @@ sub fatal_err {
 	syslog('err', $m, @_);
 	syslog('err', "Exiting.");
     };
-    if($@ && ($warning_date < time - $warning_timeout)) {
+    if ($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
 	unless(Site->send_notify_to_listmaster('logs_failed', [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
-    };
+    }
     $m =~ s/%m/$errno/g;
 
     my $full_msg = sprintf $m,@_;
 
     ## Notify listmaster
     unless (Site->send_notify_to_listmaster('sympa_died', [$full_msg])) {
-	&do_log('err',"Unable to send notify 'sympa died' to listmaster");
+	do_log('err',"Unable to send notify 'sympa died' to listmaster");
     }
 
     eval { Site->send_notify_to_listmaster(undef, undef, undef, 1); };
@@ -197,9 +197,9 @@ sub do_log {
     };
 
     if ($@ && ($warning_date < time - $warning_timeout)) {
-        $warning_date = time + $warning_timeout;
-        Site->send_notify_to_listmaster('logs_failed', [$@]);
-        }
+	$warning_date = time + $warning_timeout;
+	Site->send_notify_to_listmaster('logs_failed', [$@]);
+    }
 }
 
 
@@ -431,8 +431,11 @@ sub db_log_del {
 sub get_first_db_log {
     my $select = shift;
     my $sortby = shift || 'date';
+    my $way = shift || 'asc';
     $sortby = 'date'
 	unless $sortby =~ /^(list|parameters|msg_id|action|client|user_email|daemon|target_email|status|error_type|robot)$/;
+    $way = 'asc'
+	unless $way =~ /^(asc|desc)$/;
     $select->{'target_type'} = 'none'
 	unless $select->{'target_type'} =~ /^(list|parameters|msg_id|action|client|user_email|daemon|target_email|status|error_type|robot)$/;
 
@@ -474,14 +477,14 @@ sub get_first_db_log {
 
     #if the search is between two date
     if ($select->{'date_from'}) {
-	my @tab_date_from = split(/\//,$select->{'date_from'});
+	my @tab_date_from = split /[-\/.]/, $select->{'date_from'};
 	my $date_from = mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
 	unless($select->{'date_to'}) {
 	    my $date_from2 = mktime(0,0,25,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
 	    $statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_from2;
 	}
 	if($select->{'date_to'}) {
-	    my @tab_date_to = split(/\//,$select->{'date_to'});
+	    my @tab_date_to = split /[-\/.]/, $select->{'date_to'};
 	    my $date_to = mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
 	    
 	    $statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_to;
@@ -527,13 +530,13 @@ sub get_first_db_log {
     }
 
     if ($sortby eq 'date') {
-	$statement .= 'ORDER BY date_logs ';
+	$statement .= sprintf 'ORDER BY date_logs %s ', $way;
     } elsif (Site->db_type =~ /^(mysql|Sybase)$/) {
 	# On MySQL, collation is case-insensitive by default.
 	# On Sybase, collation is defined at the time of database creation.
-	$statement .= sprintf 'ORDER BY %s_logs, date_logs ', $sortby;
+	$statement .= sprintf 'ORDER BY %s_logs %s, date_logs ', $sortby, $way;
     } else {
-	$statement .= sprintf 'ORDER BY lower(%s_logs), date_logs ', $sortby;
+	$statement .= sprintf 'ORDER BY lower(%s_logs) %s, date_logs ', $sortby, $way;
     }
 
     push @sth_stack, $sth;
@@ -600,7 +603,6 @@ sub aggregate_data {
 
     
     my $res = $sth->fetchall_hashref('id_stat');
-
     
     $aggregated_data = &deal_data($res);
     
@@ -893,7 +895,7 @@ sub deal_data {
 	if($result_request->{$id}->{'operation_stat'} eq 'purge list'){
 	    
 	    unless(exists ($data{'purge_list'})){
-		$data{'purge_list'} = 0;
+		$data{'purge_list'} = undef;
 	    }
 	    
 	    my $r_name = $result_request->{$id}->{'robot_stat'}; #get the name of the robot

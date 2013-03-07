@@ -30,11 +30,11 @@ use tt2;
 #use Sympa::Constants; # load in confdef - Conf
 use Robot;
 
-unless (defined Site->load) {
-    Log::fatal_err(
-	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
-	Conf::get_sympa_conf()
-    );
+unless (Site->load('no_db' => 1)) {
+    printf STDERR
+	"Unable to load sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	Conf::get_sympa_conf();
+    exit 1;
 }
 
 Log::set_log_level(Site->log_level);
@@ -71,15 +71,15 @@ my ($operation, $listname, $domain, $file) = @ARGV;
 my $robot;
 
 if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
-    printf "Usage: $0 <add|del> <listname> <domain> [<file>]\n";
-    printf "\n";
-    printf "  Options:\n";
-    printf "    -s\tSimulation mode. Dump the entries but don't add it to the directory.\n";
+    print "Usage: $0 <add|del> <listname> <domain> [<file>]\n";
+    print "\n";
+    print "  Options:\n";
+    print "    -s\tSimulation mode. Dump the entries but don't add it to the directory.\n";
     exit(2);
 }
 
-unless ($robot = Robot->new($domain)) {
-    printf STDERR "Unknown robot $domain";
+unless ($robot = Robot->new($domain, 'no_db' => 1)) {
+    printf STDERR "Unknown robot %s\n", $domain;
     exit(16);
 }
 
@@ -206,7 +206,7 @@ elsif ($operation eq 'del') {
 	$value =~ s/^dn:\s*//;
 
 	if ($simulation_mode) {
-		printf "Would delete dn $value\n";
+		printf "Would delete dn %s\n", $value;
 	} else {
 		$ldap_connection->delete($value);
 	}

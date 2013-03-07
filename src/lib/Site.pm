@@ -18,6 +18,7 @@ use Cwd;
 use Conf;
 use Language qw(gettext gettext_strftime);
 use User;
+use Data::Dumper;
 
 =head1 NAME
 
@@ -860,9 +861,7 @@ sub send_file {
     $data->{'conf'}{'version'} = $main::Version if defined $main::Version;
     $data->{'robot_domain'} = $robot_id;
     if (ref $self eq 'List') {
-	foreach my $p ('lang', 'name', 'domain', 'host', 'subject', 'dir') {
-	    $data->{'list'}{$p} = $self->$p;
-	}
+	$data->{'list'} = $self;
 	$data->{'list'}{'owner'} = $self->get_owners();
 
 	## Sign mode
@@ -1326,8 +1325,7 @@ sub AUTOLOAD {
     $type->{'RobotParameter'} = 1
 	if grep { $_ eq $attr }
 	    qw(blacklist loging_condition loging_for_module) or
-	    grep { $_->{'name'} and $_->{'name'} eq $attr }
-	    @confdef::params;
+	    grep { $_->{'name'} and $_->{'name'} eq $attr } @confdef::params;
     ## getters for attributes specific to global config.
     $type->{'SiteAttribute'} = 1
 	if grep { $_ eq $attr }

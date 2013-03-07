@@ -303,11 +303,11 @@ sub safefork {
    for ($i = 1; $i < 4; $i++) {
       my($pid) = fork;
       return $pid if (defined($pid));
-      &Log::do_log ('warning', "Can't create new process in safefork: %m");
+      &Log::do_log ('warn', 'Cannot create new process in safefork: %s',$@);
       ## should send a mail to the listmaster
       sleep(10 * $i);
    }
-   &Log::fatal_err("Can't create new process in safefork: %m");
+   &Log::fatal_err('Exiting because cannot create new process in safefork: %s',$@);
    ## No return.
 }
 
@@ -462,7 +462,7 @@ sub load_create_list_conf {
 
 ## NOTE: This might be moved to wwslib.
 sub get_list_list_tpl {
-    my $robot = shift;
+    my $robot = Robot::clean_robot(shift);
 
     my $list_conf;
     my $list_templates ;
@@ -470,11 +470,8 @@ sub get_list_list_tpl {
 	return undef;
     }
     
-    ##FIXME: use $robot->get_etc_include_path().
     foreach my $dir (
-        Sympa::Constants::DEFAULTDIR . '/create_list_templates',
-        Site->etc . "/create_list_templates",
-        Site->etc . "/$robot/create_list_templates"
+	reverse @{$robot->get_etc_include_path('create_list_templates')}
     ) {
 	if (opendir(DIR, $dir)) {
 	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
@@ -488,9 +485,11 @@ sub get_list_list_tpl {
 		my $locale = &Language::Lang2Locale( &Language::GetLang());
 		## Look for a comment.tt2 in the appropriate locale first
 		if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
-		    $list_templates->{$template}{'comment'} = $dir.'/'.$template.'/'.$locale.'/comment.tt2';
+		    $list_templates->{$template}{'comment'} =
+			$template.'/'.$locale.'/comment.tt2';
 		}elsif (-r $dir.'/'.$template.'/comment.tt2') {
-		    $list_templates->{$template}{'comment'} = $dir.'/'.$template.'/comment.tt2';
+		    $list_templates->{$template}{'comment'} =
+			$template.'/comment.tt2';
 		}
 	    }
 	    closedir(DIR);
@@ -950,107 +949,8 @@ sub dkim_sign {
     return $message->{'msg'}->head->as_string."\n".&Message::get_body_from_msg_as_string($msg_as_string);
 }
 
-# input object msg and listname, output signed message object
-sub smime_sign {
-    my $in_msg = shift;
-    my $list = shift;
-    my $robot = shift;
-
-    &Log::do_log('debug2', 'tools::smime_sign (%s,%s)',$in_msg,$list);
-
-    my $self = new List($list, $robot);
-    my($cert, $key) = &smime_find_keys($self->dir, 'sign');
-    my $temporary_file = Site->tmpdir .'/'. $self->get_id . "." . $$;
-    my $temporary_pwd = Site->tmpdir . '/pass.' . $$;
-
-    my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if (Site->key_passwd ne '') ;
-
-    ## Keep a set of header fields ONLY
-    ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
-    my $dup_msg = $in_msg->dup;
-    foreach my $field ($dup_msg->head->tags) {
-         next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
-         $dup_msg->head->delete($field);
-    }
-	    
-
-    ## dump the incomming message.
-    if (!open(MSGDUMP,"> $temporary_file")) {
-	&Log::do_log('info', 'Can\'t store message in file %s', $temporary_file);
-	return undef;
-    }
-    $dup_msg->print(\*MSGDUMP);
-    close(MSGDUMP);
-
-    if (Site->key_passwd ne '') {
-	unless ( mkfifo($temporary_pwd,0600)) {
-	    &Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
-	}
-    }
-    my $cmd = sprintf
-	'%s smime -sign -rand %s/rand -signer %s %s -inkey %s -in %s',
-	Site->openssl, Site->tmpdir, $cert, $pass_option, $key,
-	$temporary_file;
-    &Log::do_log('debug3', '%s', $cmd);
-    unless (open NEWMSG, "$cmd |") {
-    	&Log::do_log('notice', 'Cannot sign message (open pipe)');
-	return undef;
-    }
-
-    if (Site->key_passwd ne '') {
-	unless (open (FIFO,"> $temporary_pwd")) {
-	    &Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
-	}
-
-	print FIFO Site->key_passwd;
-	close FIFO;
-	unlink ($temporary_pwd);
-    }
-
-    my $parser = new MIME::Parser;
-
-    $parser->output_to_core(1);
-    unless ($signed_msg = $parser->read(\*NEWMSG)) {
-	&Log::do_log('notice', 'Unable to parse message');
-	return undef;
-    }
-    unless (close NEWMSG){
-	&Log::do_log('notice', 'Cannot sign message (close pipe)');
-	return undef;
-    } 
-
-    my $status = $?/256 ;
-    unless ($status == 0) {
-	&Log::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
-	return undef;	
-    }
-
-    unlink ($temporary_file) unless ($main::options{'debug'}) ;
-    
-    ## foreach header defined in  the incomming message but undefined in the
-    ## crypted message, add this header in the crypted form.
-    my $predefined_headers ;
-    foreach my $header ($signed_msg->head->tags) {
-	$predefined_headers->{lc $header} = 1
-	    if ($signed_msg->head->get($header));
-    }
-    foreach my $header (split /\n(?![ \t])/, $in_msg->head->as_string) {
-	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
-	my ($tag, $val) = ($1, $2);
-	$signed_msg->head->add($tag, $val)
-	    unless $predefined_headers->{lc $tag};
-    }
-    
-    my $messageasstring = $signed_msg->as_string ;
-
-    return $signed_msg;
-}
-
-
 ## Make a multipart/alternative, a singlepart
 sub as_singlepart {
-    &Log::do_log('debug2', 'tools::as_singlepart()');
     my ($msg, $preferred_type, $loops) = @_;
     my $done = 0;
     $loops++;
@@ -1276,7 +1176,8 @@ sub tmp_passwd {
 # Check sum used to authenticate communication from wwsympa to sympa
 sub sympa_checksum {
     my $rcpt = shift;
-    return (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
+    my $checksum = (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
+    return $checksum;
 }
 
 # create a cipher
@@ -1323,7 +1224,7 @@ sub cookie_changed {
 #		&Log::do_log('err', "Unable to create %s/cookies.history", Site->etc);
 #		return undef ; 
 #	    }
-#	    printf COOK "%s",join(" ",@cookies) ;
+#	    print COOK join(" ", @cookies);
 #	    
 #	    close COOK;
 	}
@@ -2468,13 +2369,13 @@ sub dump_var {
 		&dump_var($var->{$key}, $level+1, $fd);
 	    }    
 	}else {
-	    printf $fd "\t"x$level."'%s'"."\n", ref($var);
+	    printf $fd "%s'%s'\n", ("\t" x $level), ref($var);
 	}
     }else {
 	if (defined $var) {
-	    print $fd "\t"x$level."'$var'"."\n";
+	    printf $fd "%s'%s'\n", ("\t" x $level), $var;
 	}else {
-	    print $fd "\t"x$level."UNDEF\n";
+	    printf $fd "%sUNDEF\n", ("\t" x $level);
 	}
     }
 }

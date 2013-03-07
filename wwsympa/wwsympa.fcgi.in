@@ -491,9 +491,9 @@ my %action_args = ('default' => ['list'],
 		'rename_list' => ['list','new_list','new_robot'],
 		'copy_list' => ['list','new_list','new_robot'],
 		'redirect' => [],
-		'viewlogs' => ['list','page','size','sortby'],
-		'viewspools' => ['spoolname','spool_status'],
-		'viewspool_message' => ['spoolname','messagekey','spool_status'],
+		'viewlogs' => ['list','page','size','sortby','way','date_from','date_to'],
+		'viewspools' => ['spoolname','spool_status','spool_page_size','sortby','way'],
+		'viewspool_message' => ['spoolname','messagekey','spool_status','@file'],
 		'viewspool_message_dump' => ['spoolname','messagekey','spool_status'],
 		'viewspool_message_remove' => ['spoolname','messagekey','spool_status'],
 		'viewspool_message_mv' => ['spoolname','messagekey','spool_status','new_spoolname','new_status'],
@@ -958,31 +958,16 @@ my %in_regexp = (
 		 ##Logs
 		 'target_type' => '[\w\-\.\:]*', 
 		 'target' => '.*', ##&tools::get_regexp('email'),
-		 'date_from' => '[\d\/]+',
-		 'date_to' => '[\d\/]+',
+		 'date_from' => '[-\/.\d]+',
+		 'date_to' => '[-\/.\d]+',
 		 'ip' => &tools::get_regexp('host'),
          
 		 ## colors
 		 'subaction_test' => '.*',
 		 'subaction_reset' => '.*',
 		 'subaction_install' => '.*',
-		 'custom_color_value' => '\#.*',
-		 'custom_color_0' => '.*',
-		 'custom_color_1' => '.*',
-		 'custom_color_2' => '.*',
-		 'custom_color_3' => '.*',
-		 'custom_color_4' => '.*',
-		 'custom_color_5' => '.*',
-		 'custom_color_6' => '.*',
-		 'custom_color_7' => '.*',
-		 'custom_color_8' => '.*',
-		 'custom_color_9' => '.*',
-		 'custom_color_10' => '.*',
-		 'custom_color_11' => '.*',
-		 'custom_color_12' => '.*',
-		 'custom_color_13' => '.*',
-		 'custom_color_14' => '.*',
-		 'custom_color_15' => '.*',
+		 'custom_color_value' => '\#[0-9a-fA-F]+',
+		'custom_color_number' => 'color_\w+',
 
                  ## Custom attribute
                  'custom_attribute' => '.*',
@@ -1303,7 +1288,7 @@ my $birthday = time ;
     if (defined $automatic_list_families) {
 	foreach my $key (keys %{$automatic_list_families}){
 	    my $family;
-	    if ($family = new Family($key,$robot_id)) {
+	    if ($family = new Family($key,$robot)) {
 		if ($family->is_allowed_to_create_automatic_lists(('auth_level' => 'md5', 'sender' => $session->{'email'}, 'message' => undef, 'listname' => ''))){
 		    $session->{'is_family_owner'}{$key} = 1;
 		}else{
@@ -1320,11 +1305,13 @@ my $birthday = time ;
      $param->{'dumpvars'} = $session->{'dumpvars'};
      $param->{'unauthenticated_email'} = $session->{'unauthenticated_email'};
 
-     if ($session->{'custom_color'} == 1) {	 
-	 foreach my $i (0 .. 15){
-	     $param->{'color_'.$i} = $session->{'color_'.$i} if ($session->{'color_'.$i});
-	 }
-     }
+    ## testing custom CSS
+    if ($session->{'custom_css'}) {	 
+	foreach my $i (0 .. 15) {
+	    $param->{'color_' . $i} = $session->{'color_' . $i}
+		if $session->{'color_' . $i};
+	}
+    }
 
      ## RSS does not require user authentication
      unless ($rss) {
@@ -1526,6 +1513,7 @@ my $birthday = time ;
 	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || $robot->lang;	     
 
 	     $param->{'locale'} = &Language::SetLang($param->{'lang'});
+	    $param->{'lang_tag'} = &Language::LanguageTag($param->{'lang'});
 
 	    ## list topics	     
 	    export_topics($robot);
@@ -1570,9 +1558,11 @@ my $birthday = time ;
 		      &do_redirect ($param->{'base_url'}.$param->{'path_cgi'}.'/info/'.$action);   
 		      last;
 		 }
-		 &report::reject_report_web('user','unknown_action',{},$action,$list);
-		 &wwslog('info','unknown action %s', $action);
-		 last;
+		&report::reject_report_web('user','unknown_action',{},$action,$list);
+		&wwslog('info','unknown action %s', $action);
+		unless ($action = prevent_visibility_bypass()) {
+		    last;
+		}
 	     }
 	     
 	     $param->{'action'} = $action;
@@ -1591,7 +1581,7 @@ my $birthday = time ;
 	     }elsif ($check_output != 1) {
 	       ## The output of the check may indicate another action to run first
 	       ## Example : running loginrequest if user is not authenticated
-	       $action = $param->{'action'} = $check_output;
+		$action = $param->{'action'} = $check_output;
 	     }
 
 	     ## Execute the action ## 
@@ -1602,8 +1592,12 @@ my $birthday = time ;
 	     }
 	     
 	     unless (defined $action) {
-	       delete($param->{'action'});
-	       last;
+		unless($action = prevent_visibility_bypass()) {
+		    delete($param->{'action'});
+		    last;
+		}else{
+		    &report::reject_report_web('user','authorization_reject',{},$param->{'action'},'');
+		}
 	     }
 	 
 	     last if ($action =~ /redirect/) ; # after redirect do not send anything, it will crash fcgi lib
@@ -1632,6 +1626,7 @@ my $birthday = time ;
      $param->{'action_type'} = 'none' unless (($param->{'is_priv'})||($param->{'action_type'} eq 'serveradmin'));
      $param->{'lang'} ||= $param->{'user'}{'lang'} if (defined $param->{'user'});
      $param->{'lang'} ||= $robot->lang;
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($param->{'list'}) {
 	 $param->{'list_title'} = $list->subject;
@@ -1804,25 +1799,25 @@ my $birthday = time ;
 		 my $auth = &report::get_auth_reject_web();
 		
 		 if (ref($intern) eq 'ARRAY'){
-		     printf "INTERNAL SERVER ERROR\n";
+		     print "INTERNAL SERVER ERROR\n";
 		 };
 		 if (ref($system) eq 'ARRAY'){
-		     printf "SYSTEM ERROR\n";
+		     print "SYSTEM ERROR\n";
 		 };
 		 if (ref($user) eq 'ARRAY'){
 		     foreach my $err (@$user){
-			 printf "ERROR : $err\n";
+			 printf "ERROR : %s\n", $err;
 		     }
 		 };
 		 if (ref($auth) eq 'ARRAY'){
 		     foreach my $err (@$auth){
-			 printf "AUTHORISATION FAILED : $err\n";
+			 printf "AUTHORISATION FAILED : %s\n", $err;
 		     }
 		 };
 
 	     }else{
-		 printf "Internal error content-type nor file defined\n";
-		 &Log::do_log('err', 'Internal error content-type nor file defined');
+		 print "Internal error content-type nor file defined\n";
+		 Log::do_log('err', 'Internal error content-type nor file defined');
 	     }
 	 }
 
@@ -1898,71 +1893,71 @@ my $birthday = time ;
 
  }
 
-Site->send_notify_to_listmaster(undef, undef, undef, 1); # Purge grouped notifications
+# Purge grouped notifications
+Site->send_notify_to_listmaster(undef, undef, undef, 1);
 
 ##############################################################
- #-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/
- ##############################################################
+#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/
+##############################################################
 
-
- ## Write to log
+## Write to log
 sub wwslog {
-     my $facility = shift;
+    my $facility = shift;
 
-     # do not log if log level if too high regarding the log requested by user 
-     return if ($Log::levels{$facility} > $Log::log_level);
+    # do not log if log level if too high regarding the log requested by user 
+    return if ($Log::levels{$facility} > $Log::log_level);
 
-     my $msg = shift;
+    my $msg = shift;
 
-     my $remote = $ENV{'REMOTE_HOST'} || $ENV{'REMOTE_ADDR'};
+    my $remote = $ENV{'REMOTE_HOST'} || $ENV{'REMOTE_ADDR'};
 
-     $msg = "[list $param->{'list'}] " . $msg
-	 if $param->{'list'};
+    $msg = "[list $param->{'list'}] " . $msg
+	if $param->{'list'};
 
-	
-     if ($param->{'alt_emails'}) {
-	 my @alts;
-	 foreach my $alt (keys %{$param->{'alt_emails'}}) {
-	     push @alts, $alt
-		 unless ($alt eq $param->{'user'}{'email'});
-	 }
+    if ($param->{'alt_emails'}) {
+	my @alts;
+	foreach my $alt (keys %{$param->{'alt_emails'}}) {
+	    push @alts, $alt
+		unless ($alt eq $param->{'user'}{'email'});
+	}
 
-	 if ($#alts >= 0) {
-	     my $alt_list = join ',', @alts;
-	     $msg = "[alt $alt_list] " . $msg;
-	 }
-     }
+	if ($#alts >= 0) {
+	    my $alt_list = join ',', @alts;
+	    $msg = "[alt $alt_list] " . $msg;
+	}
+    }
 
-     $msg = "[user $param->{'user'}{'email'}] " . $msg
-	 if $param->{'user'}{'email'};
+    $msg = "[user $param->{'user'}{'email'}] " . $msg
+	if $param->{'user'}{'email'};
 
-     $msg = "[rss] ".$msg
-	 if $rss;
+    $msg = "[rss] ".$msg
+	if $rss;
 
-     $msg = "[client $remote] ".$msg
-	 if $remote;
+    $msg = "[client $remote] ".$msg
+	if $remote;
 
-     $msg = "[session $session->{'id_session'}] ".$msg
-	 if $session;
+    $msg = "[session $session->{'id_session'}] ".$msg
+	if $session;
 
-     $msg = "[robot $robot_id] ".$msg;
+    $msg = "[robot $robot_id] ".$msg;
 
-     return &Log::do_log($facility, $msg, @_);
- }
-
+    return &Log::do_log($facility, $msg, @_);
+}
 
 sub web_db_log {
     my $data = shift;
 
     $data->{'client'} = $param->{'remote_addr'};
     $data->{'daemon'} = 'wwsympa';
-    $data->{'robot'} ||= $robot_id;
-    $data->{'list'} ||= $list->name if (defined $list);
+    $data->{'robot'} ||= $robot;
+    $data->{'list'} ||= $list;
     $data->{'action'} ||= $param->{'action'};
-    $data->{'user_email'} ||= $param->{'user'}{'email'} if (defined $param->{'user'});    
-    $data->{'target_email'} ||= $data->{'user_email'}; ## Default email is the user email
+    $data->{'user_email'} ||= $param->{'user'}{'email'}
+	if defined $param->{'user'};
+    ## Default email is the user email
+    $data->{'target_email'} ||= $data->{'user_email'};
 
-    unless (&Log::db_log($data)) {
+    unless (Log::db_log($data)) {
 	&wwslog('err','web_db_log: failed to log in database');
 	return undef;
     }
@@ -1973,20 +1968,20 @@ sub web_db_log {
 ###################################
 # log in stat_table via web interface
 sub web_db_stat_log {
+    my $data = shift;
+    $data->{'mail'} ||= $param->{'user'}{'email'}
+	if defined $param->{'user'};
+    $data->{'operation'} ||= $param->{'action'};
+    $data->{'list'} ||= $list->name if defined $list;
+    $data->{'daemon'} = 'wwsympa';
+    $data->{'client'} = $param->{'remote_addr'};
+    $data->{'robot'} ||= $robot_id;
 
- 	my $data = shift;
-	$data->{'mail'} ||= $param->{'user'}{'email'} if (defined $param->{'user'});
-	$data->{'operation'} ||= $param->{'action'};
-	$data->{'list'} ||= $list->name if (defined $list);
-	$data->{'daemon'} = 'wwsympa';
-	$data->{'client'} = $param->{'remote_addr'};
-	$data->{'robot'} ||= $robot_id;
-	
-	unless (&Log::db_stat_log($data)) {
-		&wwslog('err', 'web_db_stat_log: failed to log in database');
-		return undef;
-	}
-	return 1;
+    unless (Log::db_stat_log($data)) {
+	&wwslog('err', 'web_db_stat_log: failed to log in database');
+	return undef;
+    }
+    return 1;
 }
 
 ####################################	
@@ -2555,6 +2550,9 @@ sub check_action_parameters {
 	## User is not authenticated
       }elsif ($arg_name eq 'param.user.email') {
 	unless (defined $param->{'user'} && $param->{'user'}{'email'}) {
+	    if(prevent_visibility_bypass()) {
+		&report::reject_report_web('user','authorization_reject',{},$param->{'action'},'');
+	    }
 	  &report::reject_report_web('user','no_user',{},$action);
 	  &wwslog('err','user not logged in');
 	  &web_db_log({'status' => 'error',
@@ -2580,6 +2578,9 @@ sub check_action_parameters {
 	  $in{$arg_name} =~ s/\0/,/g;
 	  $in{$arg_name} =~ s/\|/,/g;
 	  
+	    if(prevent_visibility_bypass()) {
+		&report::reject_report_web('user','authorization_reject',{'list' => $in{'list'}},$param->{'action'},'');
+	    }
 	  &report::reject_report_web('user','missing_arg',{'argument' => $arg_name},$action);
 	  &wwslog('info',"missing parameter '$arg_name'");
 	  &web_db_log({'status' => 'error',
@@ -2616,10 +2617,9 @@ sub check_action_parameters {
 
 ## Send HTML output
 sub send_html {
-
     my $tt2_file = shift;
 
-    ## Send HTML
+    ## Send HTML headers
     if ($param->{'date'}) {
 	Language::PushLang("en");
 	printf "Date: %s\n", &POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
@@ -2633,13 +2633,18 @@ sub send_html {
     }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
     print "Content-Type: text/html\n";
-    ## Workaround for Internet Explorer 8.
-    print "X-UA-Compatible: IE=7\n";
+    ## Workaround for Internet Explorer 8 or later.
+    print "X-UA-Compatible: IE=100\n";
+
+    ## Notify crash to client.
+    if ($param->{'action'} eq 'crash') {
+	print "Status: 503 Service Unavailable\n";
+	print "Retry-After: 300\n";
+    }
 
     ## Icons
     $param->{'icons_url'} = $robot->static_content_url . '/icons';
-    
-    
+
     ## Retro compatibility concerns
     $param->{'active'} = 1;
 
@@ -2661,10 +2666,6 @@ sub send_html {
 	}
     }
 
-    my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path =
-	($list || $robot)->get_etc_include_path('web_tt2', $lang);
-    
     # XSS escaping applied to all outgoing parameters.
     my $param_copy = &tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
     if(defined $param_copy) {
@@ -2679,14 +2680,61 @@ sub send_html {
 	}
     }
 
-    if ($param->{'action'} eq 'crash') {
-	print "Status: 503 Service Unavailable\n";
-	print "Retry-After: 300\n";
+    ## Save special paths.
+    my @added_include_path = tt2::get_include_path();
+
+    ## Custom CSS.  They are stored to $param_copy so that they won't be
+    ## escaped.
+
+    # Do not include language paths.
+    # The css.tt2 by each languages will override styles in main CSS.
+    my $tt2_include_path =
+	($list || $robot)->get_etc_include_path('web_tt2');
+
+    # testing custom CSS.
+    if ($session->{'custom_css'}) {
+	my $custom_css;
+	unless (tt2::parse_tt2($param, 'css.tt2', \$custom_css,
+	    $tt2_include_path
+	)) {
+	    wwslog('info', 'error while parsing custom CSS');
+	    delete $param_copy->{'custom_css'};
+	} else {
+	    $param_copy->{'custom_css'} = $custom_css;
+	}
     }
 
-    unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
-	    $tt2_include_path, { 'has_header' => 1 })) {
-	my $error = &tt2::get_error();
+    # per-locale CSS.
+    my $locale_css;
+    if (($list || $robot)->get_etc_filename(
+	'web_tt2/' . $param->{'locale'} . '/css.tt2'
+    )) {
+	unless (tt2::parse_tt2($param, $param->{'locale'} . '/css.tt2',
+	    \$locale_css, $tt2_include_path
+	)) {
+	    wwslog('info', 'error while parsing locale CSS %s',
+		$param->{'locale'} . '/css.tt2');
+	} else {
+	    $param_copy->{'locale_css'} = $locale_css;
+	}
+    }
+
+    ## Now include language paths.
+    my $locale = &Language::Lang2Locale($param->{'lang'});
+    $tt2_include_path =
+	($list || $robot)->get_etc_include_path('web_tt2', $locale);
+
+    ## Restore special paths.
+    foreach my $dir (@added_include_path) {
+	tt2::add_include_path($dir);
+    }
+
+    ## Output the content.
+    unless (tt2::parse_tt2(
+	$param_copy, $tt2_file, \*STDOUT, $tt2_include_path,
+	{'has_header' => 1}
+    )) {
+	my $error = tt2::get_error();
 	$param->{'tt2_error'} = $error;
 	$param_copy->{'tt2_error'} = $error;
 
@@ -3449,6 +3497,7 @@ sub do_login {
 	 $param->{'lang'} = $user->{'lang'} || ($list || $robot)->lang;
 	 $session->{'lang'} = $param->{'lang'} ;
      }
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($session->{'review_page_size'}) {   #  user did choose a specific page size upgrade prefs
 	 User::update_global_user($param->{'user'}{'email'},{data=>&tools::hash_2_string($param->{'user'}{'prefs'})}) ;
@@ -4830,7 +4879,7 @@ sub do_pref {
 	 my $entry = {'value' => $p};
 
 	 ## Set description from NLS
-	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p}{'gettext_id'});
+	 $entry->{'desc'} = gettext($wwslib::cookie_period{$p}{'gettext_id'});
 
 	 ## Choose nearest delay
 	 if ((! $selected) && $param->{'user'}{'cookie_delay'} >= $p) {
@@ -5099,6 +5148,7 @@ sub do_setpref {
      ## Set session language and user language to new value
      $session->{'lang'} = $in{'lang'} ;
      $param->{'lang'} = $in{'lang'};
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if (User::is_global_user($param->{'user'}{'email'})) {
 
@@ -5174,7 +5224,29 @@ sub do_viewfile {
 ## TOTO: accepter nouveaux users
 sub do_subscribe {
     &wwslog('info', 'do_subscribe(%s)', $in{'email'});
-    
+
+    return undef if ($list->is_scenario_purely_closed('subscribe'));
+    my $result = Scenario::request_action($list,
+	'subscribe', $param->{'auth_method'},
+	{   'sender' => $param->{'user'}{'email'}, 
+	    'remote_host' => $param->{'remote_host'},
+	    'remote_addr' => $param->{'remote_addr'}
+	}
+    );	     
+    my $sub_is;
+    my $reason;
+    if (ref($result) eq 'HASH') {
+	$sub_is = $result->{'action'};
+	$reason = $result->{'reason'};
+    }
+    if ($sub_is =~ /reject/) {
+	&report::reject_report_web('auth',$reason,{},$param->{'action'},$list);
+	&wwslog('info', 'do_subscribe: subscribe closed');
+	&web_db_log({'parameters' => $in{'email'},
+		     'status' => 'error',
+		     'error_type' => 'authorization'});		      
+	return 'home';
+    }
     if (defined $param->{'user'} && $param->{'user'}{'email'}) {
 	my $xml_custom_attribute;
 	
@@ -5201,27 +5273,6 @@ sub do_subscribe {
 	    &web_db_log({'parameters' => $in{'email'},
 			 'status' => 'error',
 			 'error_type' => 'already_subscriber'});		      
-	    return undef;
-	}
-	my $result = Scenario::request_action($list,
-	    'subscribe', $param->{'auth_method'},
-	    {   'sender' => $param->{'user'}{'email'}, 
-		'remote_host' => $param->{'remote_host'},
-		'remote_addr' => $param->{'remote_addr'}
-	    }
-	);	     
-	my $sub_is;
-	my $reason;
-	if (ref($result) eq 'HASH') {
-	    $sub_is = $result->{'action'};
-	    $reason = $result->{'reason'};
-	}
-	if ($sub_is =~ /reject/) {
-	    &report::reject_report_web('auth',$reason,{},$param->{'action'},$list);
-	    &wwslog('info', 'do_subscribe: subscribe closed');
-	    &web_db_log({'parameters' => $in{'email'},
-			 'status' => 'error',
-			 'error_type' => 'authorization'});		      
 	    return undef;
 	}
 	
@@ -5425,6 +5476,7 @@ sub do_suboptions {
 sub do_subrequest {
     &wwslog('info', 'do_subrequest(%s,%s)', $in{'email'},$in{'custom_attribute'});
     
+    return undef if ($list->is_scenario_purely_closed('subscribe'));
     if (defined $in{'custom_attribute'}) {
      	$param->{'custom_attribute'} = $in{'custom_attribute'};
     }
@@ -5602,7 +5654,7 @@ sub do_family_signoff {
 sub do_signoff {
      &wwslog('info', 'do_signoff');
 
-
+    return undef if ($list->is_scenario_purely_closed('unsubscribe'));
      my $authenticated_email_address = $param->{'user'}{'email'};
      unless ($authenticated_email_address) {
 	 unless ($in{'email'}) {
@@ -5736,6 +5788,7 @@ sub unsubscribe {
 sub do_sigrequest {
      &wwslog('info', 'do_sigrequest(%s)', $in{'email'});
 
+    return undef if ($list->is_scenario_purely_closed('unsubscribe'));
      ## If user is authenticated then redirect him to the signoff action but 
      ## get a confirmation (via the sigrequest web page) first
      if ($param->{'user'}{'email'}) {
@@ -6488,16 +6541,12 @@ sub do_skinsedit {
 	}
     }
 
-    if(($in{'editcolors'})&&($in{'subaction'} eq 'test')){
-
-	## Do not include language subdirectories.
-	## The css.tt2 by each languages will override styles in main CSS.
-	my $tt2_include_path = $robot->get_etc_include_path('web_tt2');
-
-	return unless ($in{'custom_color_number'} =~ /color_/);
+    if ($in{'editcolors'} and $in{'subaction'} eq 'test') {
+	return unless $in{'custom_color_number'} =~ /color_/;
 	$param->{'custom_color_number'} = $in{'custom_color_number'};
 	$param->{'custom_color_value'} = $in{'custom_color_value'};
-	$session->{'custom_css'} = $css_url.'/'.$param->{'user'}{'email'}.'.style.css';
+	$param->{'custom_css'} = $css_url.'/'.$param->{'user'}{'email'}.'.style.css';
+	$session->{'custom_css'} = $param->{'custom_css'};
 
 	$session->{$in{'custom_color_number'}} =  $in{'custom_color_value'};
 	
@@ -6508,22 +6557,9 @@ sub do_skinsedit {
 		$param->{'session'}{'color_'.$colornumber} = $session->{'color_'.$colornumber} ;
 	    }
 	}
-
-	$param->{'session'}{'custom_css'} = $session->{'custom_css'};
-	## generate custom CSS
-	my $custom_css;
-	unless (tt2::parse_tt2($param, 'css.tt2', \$custom_css,
-	    $tt2_include_path
-	)) {
-	    my $error = &tt2::get_error();
-	    $param->{'tt2_error'} = $error;
-	    &wwslog('info', "do_skinsedit : error while parsing custom CSS");
-	    undef $custom_css;
-	}
-	$param->{'custom_css'} = $custom_css;
     }
-    if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
+    if ($in{'subaction'} eq 'install' or $in{'installcss'}) {
 	## Do not include language subdirectories.
 	## The css.tt2 by each languages will override styles in main CSS.
 	my $tt2_include_path = $robot->get_etc_include_path('web_tt2');
@@ -8290,14 +8326,23 @@ sub do_send_me {
 
      my $message;
      if ($msgfile) {
-
-	 unless ($message = new Message({'file'=> "$arcpath/arctxt/$msgfile",'noxsympato'=>'noxsympato', 'list' => $list}) ) {
-	     $param->{'status'} = 'message_err';
-	     &wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
-	     return undef;
-	 }
+	unless (open MSG, "$arcpath/arctxt/$msgfile") {
+	    $param->{'status'} = 'message_err';
+	    &wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
+	}
+	my $msg_string;
+	while (<MSG>){
+	    $msg_string .= $_ ;
+	}
+	close MSG;
+	unless ($message = new Message({'messageasstring'=> $msg_string,'noxsympato'=>'noxsympato', 'list' => $list}) ) {
+	$param->{'status'} = 'message_err';
+	&wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
+	return undef;
+    }
+	$message->set_sympa_headers({'from'=>$robot->get_address(),'rcpt'=>$param->{'user'}{'email'}});
 	unless (mail::mail_forward($message, $robot->get_address(),
-	    \$param->{'user'}{'email'}, $robot
+	    $param->{'user'}{'email'}, $robot
 	)) {
 	     $param->{'status'} = 'message_err';
 	     &wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
@@ -9231,7 +9276,11 @@ sub do_create_list_request {
 	 &report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot_id);
      }	
 
-     &tt2::allow_absolute_path();
+    foreach my $dir (
+	@{$robot->get_etc_include_path('create_list_templates')}
+    ) {
+	tt2::add_include_path($dir);
+    }
 
      foreach my $template (keys %{$param->{'list_list_tpl'}}){
 	 $param->{'tpl_count'} ++ ;
@@ -9483,8 +9532,9 @@ sub do_reviewbouncing {
      }
 
      if ($param->{'total_page'} > 0 and ($param->{'page'} > $param->{'total_page'})) {
-	 &report::reject_report_web('user','no_page',{'page' => $param->{'page'}},$param->{'action'});
-	 &wwslog('info','do_reviewbouncing: no page %d', $param->{'page'});
+	&report::reject_report_web('user','no_page',{'page' => $param->{'page'}},$param->{'action'});
+	&web_db_log({'status' => 'error', 'error_type' => 'out of pages'});
+	&wwslog('info','do_reviewbouncing: no page %d', $param->{'page'});
 	 return 'admin';
      }
 
@@ -16154,13 +16204,13 @@ sub do_suspend_request {
     my $data;
 
     ## Sets the date of the field "start date" to "today"
-    my @d_day = localtime(time);
-    $param->{'d_day'} = ($d_day[3])."-".($d_day[4]+1)."-".($d_day[5]+1900);
+    ## FIXME: date format assumed European custom.
+    $param->{'d_day'} = POSIX::strftime('%d-%m-%Y', localtime time);
     my $display_resume = 0;
 
     ## We display in the table the lists of the subscriber and the state in which they are.
     ## reception : - nomail/digest/mail ||
-    ##             - . suspended  From XX/XX/XXXX To XX/XX/XXXX
+    ##             - . suspended  From XX-XX-XXXX To XX-XX-XXXX
     my @lists = &List::get_which($email, $robot, 'member');
 
     foreach my $list (@lists) {
@@ -16251,38 +16301,36 @@ sub do_suspend_request_action {
 	}
 	
 	if ($in{'date_deb'}){
-	    ($day1, $month1, $year1) = split(/\-/, $in{'date_deb'});
-	    $month1 = $month1-1;
+	    # separators may be "-", "/" or ".".
+	    # assume "2013-12-26" order and optionally "26-12-2013".
+	    ($year1, $month1, $day1) = split /[-.\/]/, $in{'date_deb'};
+	    ($year1, $day1) = ($day1, $year1) if 1900 <= $day1;
 
-	    if (($day1 =~ /([0-9]*)/) && ($month1 =~ /([0-9]*)/) && ($year1 =~ /([0-9]*)/)){
-		if (((1<=$day1) && ($day1<=31)) && ((0<=$month1) && ($month1<=11)) && (1900<=$year1)){
-		    ## Return an epoch date
-		    $data->{'startdate'} = timelocal(0, 0, 0, $day1,$month1,$year1);
-		}else{
-		    &report::reject_report_web('user','missing_arg',{'argument' => 'Start Date doesn\'t exist.'}, $param->{'action'});
-		    &wwslog('info','suspend_request: Date doesn\'t exist.');
-		    return 'suspend_request';
-		}
-	    }else{
+	    if ($day1 !~ /\D/ and $month1 !~ /\D/ and $year1 !~ /\D/ and
+		1 <= $day1 and $day1 <= 31 and
+		1 <= $month1 and $month1 <= 12 and 1900 <= $year1) {
+		## Return an epoch date
+		$data->{'startdate'} =
+		    timelocal(0, 0, 0, $day1, $month1 - 1, $year1);
+	    } else {
 		&report::reject_report_web('user','missing_arg',{'argument' => 'Start Date doesn\'t exist.'}, $param->{'action'});
 		&wwslog('info','suspend_request: Date doesn\'t exist.');
 		return 'suspend_request';
 	    }
 	    ## Case 1 : Start date & End date (without indefinite)	    
-	    if (($in{'date_fin'}) && (!$in{'indefinite'})){
-		($day2, $month2, $year2) = split(/\-/, $in{'date_fin'});
-		$month2 = $month2-1;
-		
-		if (($day2 =~ /([0-9]*)/) && ($month2 =~ /([0-9]*)/) && ($year2 =~ /([0-9]*)/)){
-		    if (((1<=$day2) && ($day2<=31)) && ((0<=$month2) && ($month2<=11)) && (1900<=$year2)){
-			## Return an epoch date
-			$data->{'enddate'} = timelocal(0, 0, 0, $day2,$month2,$year2);
-		    }else{
-			&report::reject_report_web('user','missing_arg',{'argument' => 'End Date doesn\'t exist.'}, $param->{'action'});
-			&wwslog('info','suspend_request: Date doesn\'t exist.');
-			return 'suspend_request';
-		    }
-		}else{
+	    if ($in{'date_fin'} and !$in{'indefinite'}) {
+		# separators may be "-", "/" or ".".
+		# assume "2013-12-26" order and optionally "26-12-2013".
+		($year2, $month2, $day2) = split /[-.\/]/, $in{'date_fin'};
+		($year2, $day2) = ($day2, $year2) if 1900 <= $day2;
+
+		if ($day2 !~ /\D/ and $month2 !~ /\D/ and $year2 !~ /\D/ and
+		    1 <= $day2 and $day2 <= 31 and
+		    1 <= $month2 and $month2 <= 12 and 1900 <= $year2) {
+		    ## Return an epoch date
+		    $data->{'enddate'} =
+			timelocal(0, 0, 0, $day2, $month2 - 1, $year2);
+		} else {
 		    &report::reject_report_web('user','missing_arg',{'argument' => 'End Date doesn\'t exist.'}, $param->{'action'});
 		    &wwslog('info','suspend_request: Date doesn\'t exist.');
 		    return 'suspend_request';
@@ -16294,16 +16342,16 @@ sub do_suspend_request_action {
 		    return 'suspend_request';
 		} 
 		## Case 2 : Start date & without indefinite (without end date)	
-	    }elsif((!$in{'date_fin'}) && ($in{'indefinite'})){
+	    } elsif (!$in{'date_fin'} and $in{'indefinite'}) {
 		$data->{'enddate'} = undef;
-	    }else{
-		&report::reject_report_web('user','missing_arg',{'argument' => 'Choose end date (dd/mm/yyyy) or indefinite end date'}, $param->{'action'});
-		&wwslog('info','suspend_request: missing argument for the end date or syntax error : dd/mm/yyyy or must choose a end date or indefinite end date');
+	    } else {
+		&report::reject_report_web('user','missing_arg',{'argument' => 'Choose end date (dd-mm-yyyy) or indefinite end date'}, $param->{'action'});
+		&wwslog('info','suspend_request: missing argument for the end date or syntax error : dd-mm-yyyy or must choose a end date or indefinite end date');
 		return 'suspend_request';
 	    }
-	}else{
-	    &report::reject_report_web('user','missing_arg',{'argument' => 'Miss start date (dd/mm/yyyy)'}, $param->{'action'});
-	    &wwslog('info','suspend_request: missing argument for the start date or syntax error : dd/mm/yyyy');
+	} else {
+	    &report::reject_report_web('user','missing_arg',{'argument' => 'Miss start date (dd-mm-yyyy)'}, $param->{'action'});
+	    &wwslog('info','suspend_request: missing argument for the start date or syntax error : dd-mm-yyyy');
 	    return 'suspend_request';
 	}
 	
@@ -16398,10 +16446,17 @@ sub do_compose_mail {
 	return undef;
     }
 
-    $param->{'use_html_editor'} = $robot->use_html_editor;
-    $param->{'html_editor_file'} = $robot->html_editor_file;
-    $param->{'html_editor_init'} = $robot->html_editor_init;
-    
+    if ($robot->use_html_editor) {
+	$param->{'use_html_editor'} = $robot->use_html_editor;
+	if ($robot->html_editor_url =~ /^([-.\w]+:\/\/|\/)/i) {
+	    $param->{'html_editor_url'} = $robot->html_editor_url;
+	} elsif ($robot->html_editor_url) {
+	    $param->{'html_editor_url'} = $robot->static_content_url . '/' .
+		$robot->html_editor_url;
+	}
+	$param->{'html_editor_init'} = $robot->html_editor_init;
+    }
+
     # Set the subaction to html_news_letter or undef
     $param->{'subaction'} = $in{'subaction'};
     if ($in{'to'}) {
@@ -16587,7 +16642,8 @@ sub do_send_mail {
 		'to' => $to,
 		'body' => "From: $from\n" . $in{'body'},
 		'sign_mode' => '',
-		'header_possible' => '1'};
+		'header_possible' => '1',
+		'list' => $list,};
     
     $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'} if (($in{'in_reply_to'}) && $in{'in_reply_to'} ne '<>');
     $data->{'not_auto_submitted'} = 1;
@@ -16813,6 +16869,7 @@ sub do_set_lang {
 
      $session->{'lang'} = $in{'lang'} ;
      $param->{'lang'} = $in{'lang'};
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($param->{'user'}{'email'}) {
 	 if (User::is_global_user($param->{'user'}{'email'})) {
@@ -17340,79 +17397,107 @@ sub get_protected_email_address {
  ## of there robot or there is real problems with privacy policy and law in such services.
  ## 
 sub do_viewlogs {
-	&wwslog('info', 'do_viewlogs(%s)', $in{'page'});
+    &wwslog('info', 'do_viewlogs(%s)', $in{'page'});
 
-	$param->{'page'} = int($in{'page'}) || 1;
-	$param->{'size'} = int($in{'size'}) || Site->viewlogs_page_size;
+    $param->{'page'} = int($in{'page'}) || 1;
+    $param->{'size'} = int($in{'size'}) || Site->viewlogs_page_size;
 
-	my @date = &Log::get_log_date();
-	$param->{'date_from_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S", localtime($date[0]);
-	$param->{'date_to_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S", localtime($date[1]);
+    my @date = Log::get_log_date();
+    $param->{'date_from_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S",
+	localtime($date[0]);
+    $param->{'date_to_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S",
+	localtime($date[1]);
 
-	#display and search parameters preparation
-	my $select = {};
+    #display and search parameters preparation
+    my $select = {};
 
-	$select->{'robot'} = $robot_id;
-	$select->{'list'} = $param->{'list'};
+    $select->{'robot'} = $robot_id;
+    $select->{'list'}  = $param->{'list'};
 
-	foreach my $p ('target_type','target','date_from','date_to','type','ip') {
-		$param->{$p} = $in{$p};
-		$select->{$p} = $in{$p};
+    foreach my $p ('date_from', 'date_to') {
+	next unless $in{$p};
+	# separators may be "-", "/" or ".".
+	# assume "2013-12-26" order and optionally "26-12-2013".
+	my ($year, $month, $day) = split /[-\/.]/, $in{$p};
+	($year, $day) = ($day, $year) if 1900 <= $day;
+	if ($year !~ /\D/ and $month !~ /\D/ and $day !~ /\D/ and
+	    1900 <= $year and 1 <= $month and $month <= 12 and
+	    1 <= $day and $day <= 31) {
+	    ## FIXME: date format assumed European custom.
+	    $in{$p} = "$day-$month-$year";
+	} else {
+	    delete $in{$p};
+	}
+    }
+
+    foreach
+	my $p ('target_type', 'target', 'date_from', 'date_to', 'type', 'ip')
+    {
+	$param->{$p}  = $in{$p};
+	$select->{$p} = $in{$p};
+    }
+
+    my $sortby = $in{'sortby'} || 'date';
+    $sortby = 'user_email' if $sortby eq 'email';    ## compat.
+    $param->{'sortby'} = $sortby;
+
+    $in{'way'} = 'asc' unless $in{'way'} and $in{'way'} eq 'desc';
+    $param->{'way'} = $in{'way'};
+
+    if ($in{'target_type'} or $in{'page'} or $in{'size'}) {
+
+	#sending of search parameters for the query
+	my $line = Log::get_first_db_log($select, $sortby, $in{'way'});
+
+	#display the number of rows of the query.
+	$param->{'total_results'} = Log::return_rows_nb();
+
+	unless ($line and $param->{'total_results'}) {
+	    ##&report::reject_report_web('user','no_logs',{},$param->{'action'});
+	    &wwslog('info', 'do_viewlogs: no results');
+	    return 1;
 	}
 
-	my $sortby = $in{'sortby'} || 'date';
-	$sortby = 'user_email' if $sortby eq 'email'; ## compat.
-	$param->{'sortby'} = $sortby;
+	$param->{'total_page'} =
+	    int($param->{'total_results'} / $param->{'size'});
+	$param->{'total_page'}++
+	    if ($param->{'total_results'} % $param->{'size'});
 
-	if ($in{'target_type'} or $in{'page'} or $in{'size'}) {
-		#sending of search parameters for the query
-		my $line = Log::get_first_db_log($select, $sortby); 
-		#display the number of rows of the query.
-		##$param->{'total_results'} = $#{$param->{'log_entries'}} + 1;
-		##$param->{'total_results'} = &Log::return_rows_nb() if(&Log::return_rows_nb() != 0);
-		$param->{'total_results'} = Log::return_rows_nb();
-
-		unless($line and $param->{'total_results'}) {
-			##&report::reject_report_web('user','no_logs',{},$param->{'action'});
-			&wwslog('info','do_viewlogs: no results');
-			return 1;
-		}
-
-		$param->{'total_page'} = int($param->{'total_results'} / $param->{'size'});
-		$param->{'total_page'}++ if($param->{'total_results'} % $param->{'size'});
-
-		if($param->{'page'} > $param->{'total_page'}) {
-			&report::reject_report_web('user','no_page',{'page' => $param->{'page'}},$param->{'action'});
-			&wwslog('info','do_viewlogs: no page %d', $param->{'page'});
-			return undef;
-		}
-
-		my $offset = 0;
-		if($param->{'page'} > 1) {
-			$offset = (($param->{'page'} - 1) * $param->{'size'});
-			$param->{'prev_page'} = $param->{'page'} - 1;
-		}
-
-		unless(($offset + $param->{'size'}) >= $param->{'total_results'}) {
-			$param->{'next_page'} = $param->{'page'} + 1;
-		}
-
-		my $last = $offset + $param->{'size'};
-		$last = $param->{'total_results'} - 1
-		    if $last >= $param->{'total_results'};
-
-		my $i;
-		for ($i = 0; $i <= $last; $i++) {
-		    if ($offset <= $i) {
-			$line->{'date'} = gettext_strftime "%d %b %Y %H:%M:%S",
-			    localtime $line->{'date'};
-			push @{$param->{'log_entries'}}, $line;
-		    }
-		    $line = Log::get_next_db_log();
-		}
+	if ($param->{'page'} > $param->{'total_page'}) {
+	    &report::reject_report_web('user', 'no_page',
+		{'page' => $param->{'page'}},
+		$param->{'action'});
+	    &web_db_log({'status' => 'error', 'error_type' => 'out of pages'});
+	    &wwslog('info', 'do_viewlogs: no page %d', $param->{'page'});
+	    return undef;
 	}
 
-	return 1;
+	my $offset = 0;
+	if ($param->{'page'} > 1) {
+	    $offset = (($param->{'page'} - 1) * $param->{'size'});
+	    $param->{'prev_page'} = $param->{'page'} - 1;
+	}
+
+	unless (($offset + $param->{'size'}) >= $param->{'total_results'}) {
+	    $param->{'next_page'} = $param->{'page'} + 1;
+	}
+
+	my $last = $offset + $param->{'size'};
+	$last = $param->{'total_results'} - 1
+	    if $last >= $param->{'total_results'};
+
+	my $i;
+	for ($i = 0; $i <= $last; $i++) {
+	    if ($offset <= $i) {
+		$line->{'date'} = gettext_strftime "%d %b %Y %H:%M:%S",
+		    localtime $line->{'date'};
+		push @{$param->{'log_entries'}}, $line;
+	    }
+	    $line = Log::get_next_db_log();
+	}
+    }
+
+    return 1;
 }
 
  ## view logs stored in RDBMS
@@ -17420,7 +17505,6 @@ sub do_viewlogs {
  ## of there robot or there is real problems with privacy policy and law in such services.
  ## 
 sub do_viewspools {
-
     my $spoolname = 'msg';
     $spoolname = $in{'spoolname'} if ($in{'spoolname'});
     $param->{'spoolname'} = $spoolname;
@@ -17428,6 +17512,16 @@ sub do_viewspools {
     my $spool_status = 'ok';
     $spool_status = $in{'spool_status'} if ($in{'spool_status'});
     $param->{'spool_status'} = $spool_status;
+    $param->{'spool_status_title'} = gettext($spool_status);
+
+    # force sortby to a correct value
+    $in{'sortby'} = 'index'
+	unless $in{'sortby'} and
+	$in{'sortby'} =~ /(index)|(list)|(robot)|(task)|(task_flavour)|(lock)|(date)|(subject)|(sender)|(messageid)|(priority)|(authkey)|(spam)|(size)/;
+    $param->{'sortby'} = $in{'sortby'};
+
+    $in{'way'} = 'asc' unless $in{'way'} and $in{'way'} eq 'desc';
+    $param->{'way'} = $in{'way'};
 
     &wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$spool_status);
 
@@ -17450,7 +17544,6 @@ sub do_viewspools {
 	$spool_page_size = $session->{'review_page_spool_page_size'} || 25 ;
     }
     $param->{'spool_page_size'} = $spool_page_size;
-    
 
     my $spool = new Sympaspool($spoolname,$spool_status);
     unless ($spool) {
@@ -17491,38 +17584,52 @@ sub do_viewspools {
 
     my $offset = ($param->{'current_page'} -  1) * $spool_page_size;
 
-    # force sortby to a correct value
-    $in{'sortby'} = 'index' unless ($in{'sortby'} =~ /(index)|(list)|(robot)|(task)|(task_flavour)|(lock)|(date)|(subject)|(sender)|(messageid)|(priority)|(authkey)|(spam)|(size)/);
-    $param->{'sortby'} = $in{'sortby'};
-
-    $in{'way'} = 'asc' unless ($in{'way'} eq 'desc');
-    $param->{'way'} = $in{'way'};
 
     # 'index' in user interface is mapped to 'messagekey' table field
-    $in{'sortby'} = 'messagekey' if ($in{'sortby'} eq 'index') ;
+    $in{'sortby'} = 'messagekey' if $in{'sortby'} eq 'index';
 
-    # 'index' in user interface is mapped to 'messagekey' table field
-    $in{'sortby'} = 'task_model' if ($in{'sortby'} eq 'task') ;
+    # 'task' in user interface is mapped to 'task_model' table field
+    $in{'sortby'} = 'task_model' if $in{'sortby'} eq 'task';
+
+    # 'lock' in user interface is mapped to 'messagelock' table field
+    $in{'sortby'} = 'messagelock' if $in{'sortby'} eq 'lock';
 
     my %selector = ();
     if ($in{'list'}) {
 	$selector{'list'}=$in{'list'};
     }
     my @messages = $spool->get_content({'selector'=> \%selector ,'selection'=>'*_but_message','offset'=>$offset,'page_size' => $spool_page_size,'sortby' => $in{'sortby'},'way' => $in{'way'}});
+    foreach my $message (@messages) {
+	unless (defined $message) {
+	    &report::reject_report_web('intern', 'db_error');
+	    return undef;
+	}
+
+	$message->{'subject'} = MIME::EncWords::decode_mimewords(
+	    $message->{'subject'}, Charset => 'utf-8'
+	) if defined $message->{'subject'};
+
+	my $flavour;
+	if (defined $message->{'task_flavour'} and
+	    $flavour = $wwslib::task_flavours{$message->{'task_flavour'}}) {
+	    $message->{'task_flavour'} = gettext($flavour->{'gettext_id'});
+	}
+    }
     $param->{'spool_content'} = \@messages;
     return 1;
 }
 
  ## deliver a view of a message identified by the spoolname and the messagekey
 sub do_viewspool_message {
-    
     my $messagekey = $in{'messagekey'};
     my $spoolname = $in{'spoolname'};
+    $param->{'messagekey'} = $messagekey;
     $param->{'spoolname'} = $spoolname;
     my $status = 'ok';
-    $status = $in{'spool_status'} if ($in{'spool_status'});
+    $status = $in{'spool_status'}
+	if $in{'spool_status'} and $in{'spool_status'} =~ /^(ok|bad)$/;;
     $param->{'spool_status'} = $status;
-			       
+
     &wwslog('info', 'do_viewspool_message(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
     my $spool = new Sympaspool($spoolname,$status);
@@ -17555,42 +17662,32 @@ sub do_viewspool_message {
     }
 
     $param->{'spool_message_asstring'} = $messages[0]->{'messageasstring'};
-    return 1;
 
-    # the following code is not executed because of a bug. It should be able to disply message as html....
-
-
-    my $destination_dir = Site->viewmail_dir.'/spool/viewmail/'.$messagekey;
-
+    my $destination_dir = Site->viewmail_dir . '/spool/viewmail/' . $messagekey;
     unless (-d $destination_dir) {
-	&Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
-					      'destination_dir'=>$destination_dir,
-					      'attachement_url'=>"viewspool_message/$messagekey",
-					      'list'=>$list,
-					      'robot'=>$robot_id,
-					      'messagekey'=>$messagekey,} );
-	
-	
+	Archive::convert_single_message(
+	    ($list || $robot), $messages[0],
+	    'destination_dir' => $destination_dir,
+	    'attachement_url' => join('/',
+		'..', 'viewspool_message', $spoolname, $messagekey, '_'
+	    ),
+	);
     }
 
-    unless (open (HTMLMAIL ,$destination_dir.'/msg00000.html')){
-	&report::reject_report_web('intern','could not show message as html');
-	&wwslog('info','do_viewspool_message : could not show message as html');
-	return;
+    if ($in{'file'}) {
+	$in{'file'} =~ /\.(\w+)$/;
+	$param->{'file_extension'} = $1;
+	$param->{'file'} = $destination_dir.'/'.$in{'file'};
+	$param->{'bypass'} = 1;
+    } else {
+	tt2::add_include_path($destination_dir);
     }
-    
-    while (<HTMLMAIL>){
-	$param->{'spool_message_ashtml'} .= $_;
-
-    }
-    close HTMLMAIL;
 
     return 1;
 }
 
  ## deliver a view of an message identified by the spoolname and the messagekey
 sub do_viewspool_message_dump {
-    
     my $messagekey = $in{'messagekey'};
     my $spoolname = $in{'spoolname'};
     $param->{'spoolname'} = $spoolname;
@@ -17599,7 +17696,6 @@ sub do_viewspool_message_dump {
     $param->{'spool_status'} = $status;
 			       
     &wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
-
 
     unless  ( $param->{'is_listmaster'}){
 	&report::reject_report_web('auth','action_listmaster',{},$param->{'action'});
@@ -17612,25 +17708,27 @@ sub do_viewspool_message_dump {
 	&wwslog('info','do_viewspools: unkown spool');
 	return undef;
     }
-    my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
-    
+    my @messages = $spool->get_content(
+	{'selector'=> {'messagekey'=>$messagekey}, 'selection'=>'*'}
+    );
+
     unless ($#messages == 0){
 	&report::reject_report_web('intern','could not find message');
 	&wwslog('info','do_viewspool_message_dump : could not find message %s',$#messages);
-	    return;
-    }
-
-
-    $param->{'msg_file'} = $robot->tmpdir.'/'.$messagekey.'_'.$$;
-    
-
-    unless (open(OUT, ">$param->{'msg_file'}")) {
-	&Log::do_log('notice', 'Could Not open %s', $param->{'msg_file'});
 	return undef;
     }
-    printf OUT  $messages[0]->{'messageasstring'};
+
+    $param->{'msg_file'} = $robot->tmpdir . '/' . $messagekey . '_' . $$;
+
+    unless (open OUT, '>', $param->{'msg_file'}) {
+	Log::do_log('notice', 'Could Not open %s', $param->{'msg_file'});
+	return undef;
+    }
+    print OUT $messages[0]->{'messageasstring'};
     if (close(OUT)) {
-	&Log::do_log('info',"message (messagekey = %s) flushed in file %s",$messagekey,$param->{'msg_file'});
+	Log::do_log('info', 'message (messagekey = %s) flushed in file %s',
+	    $messagekey, $param->{'msg_file'}
+	);
     }
     return 1;
 }
@@ -17638,7 +17736,6 @@ sub do_viewspool_message_dump {
 
  ## remove a message identified by the spoolname and the messagekey
 sub do_viewspool_message_remove {
-    
     my $messagekey = $in{'messagekey'};
     $param->{'messagekey'} = $messagekey;
     my $spoolname = $in{'spoolname'};
@@ -17646,7 +17743,7 @@ sub do_viewspool_message_remove {
     my $status = 'ok';
     $status = $in{'spool_status'} if ($in{'spool_status'});
     $param->{'spool_status'} = $status;
-			       
+
     &wwslog('info', 'do_viewspool_message_remove(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
     unless  ( $param->{'is_listmaster'}){
@@ -17666,7 +17763,12 @@ sub do_viewspool_message_remove {
 	return;	
 	
     }
-    
+
+    # clean html view of the message
+    #FIXME: inconsistent removal.
+    my $dir = Site->viewmail_dir . '/spool/viewmail/' . $messagekey;
+    tools::remove_dir($dir) if -d $dir;
+
     $param->{'removed'} = 1;
     return 1;
 }
@@ -17894,7 +17996,7 @@ sub do_arc_delete {
 sub do_css {
     &wwslog('debug', "do_css ($in{'file'})");		
     $param->{'bypass'} = 'extreme';
-    printf "Content-type: text/css\n\n";
+    print "Content-type: text/css\n\n";
     $param->{'css'} = $in{'file'}; 
 
     ## Do not include language subdirectories.
@@ -17907,12 +18009,30 @@ sub do_css {
 	$robot->send_notify_to_listmaster('web_tt2_error', [$error]);
 	&wwslog('info', "do_css/$in{'file'} : error");
     }
-    
+
     return;
 }
 
 sub do_rss_request {
 	&wwslog('info', "do_rss_request");
+
+	my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
+					     {'sender' => $param->{'user'}{'email'}, 
+					      'remote_host' => $param->{'remote_host'},
+					      'remote_addr' => $param->{'remote_addr'}});	     
+	my $sub_is;
+	my $reason;
+	if (ref($result) eq 'HASH') {
+	    $sub_is = $result->{'action'};
+	    $reason = $result->{'reason'};
+	}
+	if ($sub_is =~ /reject/) {
+	    &wwslog('info', 'RSS not accessible because list %s is not visible to user %s',$list->get_list_id,$param->{'user'}{'email'});
+	    &web_db_log({'parameters' => $param->{'user'}{'email'},
+			 'status' => 'error',
+			 'error_type' => 'authorization'});		      
+	    return undef;
+	}
 
 	my $args ;
 
@@ -17951,7 +18071,7 @@ sub do_wsdl {
     }
 
     $param->{'bypass'} = 'extreme';
-    printf "Content-type: text/xml\n\n";
+    print "Content-type: text/xml\n\n";
     
    $param->{'conf'}{'soap_url'}  = $soap_url;
     
@@ -18497,7 +18617,9 @@ sub check_authz {
     }
     
     unless ($r_action =~ /do_it/i) {
-	&report::reject_report_web('auth',$reason,{'login'=> $param->{'need_login'}},$param->{'action'});
+	unless(prevent_visibility_bypass()) {
+	    &report::reject_report_web('auth',$reason,{'login'=> $param->{'need_login'}},$param->{'action'});
+	}
 	&wwslog('info','check_authz: access denied in %s for %s', $subname, $param->{'user'}{'email'});
 	return undef;
     }
@@ -18609,6 +18731,31 @@ sub do_automatic_lists {
     $in{'list'} = $listname;
     return 'compose_mail';
 }
+
+sub prevent_visibility_bypass {
+    &wwslog('debug2', 'Starting');
+    if (defined $list) {
+	my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
+					     {'sender' => $param->{'user'}{'email'}, 
+					      'remote_host' => $param->{'remote_host'},
+					      'remote_addr' => $param->{'remote_addr'}});
+						       
+	my $sub_is;
+	my $reason;
+	if (ref($result) eq 'HASH') {
+	    $sub_is = $result->{'action'};
+	    $reason = $result->{'reason'};
+	}
+	if ($sub_is =~ /reject/) {
+	    &wwslog('info', 'visibility: List must remain hidden. Returning "home" to prevent visibility bypass');
+	    return "home";
+	}else {
+	    return undef;
+	}
+    }
+    return undef;
+}
+
 =pod 
 
 =head1 AUTHORS 

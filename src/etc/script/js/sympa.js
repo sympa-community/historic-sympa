@@ -156,11 +156,27 @@ function toggle_selection(myfield) {
   }
 }
 
-function chooseColorNumber(cn) {
+function chooseColorNumber(cn, cv) {
     var select = document.getElementById('custom_color_number');
+    var text = document.getElementById('custom_color_value');
 
-    if(select) for(var i=0; i<select.options.length; i++) if(select.options[i].value == cn) select.options.selectedIndex = i;
- }
+    if (select)
+        for (var i=0; i<select.options.length; i++)
+            if (select.options[i].value == cn) {
+                select.options.selectedIndex = i;
+                if (text && cv) {
+                    text.value = cv; 
+                    // FIXME: use jQuery trigger()
+                    if (document.all)
+                        text.fireEvent('onchange');
+                    else {
+                        var evt = document.createEvent('HTMLEvents');
+                        evt.initEvent('change', false, true);
+                        text.dispatchEvent(evt);
+                    }
+                }
+            }
+}
 
 // check if rejecting quietly spams
  function check_reject_spam(form,warningId) {
@@ -1117,4 +1133,14 @@ function spoolPopup(msgkey, url, trigger, remove_if_divclass_present) {
 		var pos = (trigger ? jQuery(trigger) : p.parent()).offset();
 		p.detach().appendTo(jQuery('body')).css({'top': pos.top, 'left': pos.left, 'width': (jQuery('body').innerWidth() - pos.left - 100) + 'px', 'z-index': 10000});
 	}
+}
+
+/* check if the value of element is not empty */
+function isNotEmpty(id) {
+  if (document.getElementById(id)) {
+    var value = document.getElementById(id).value;
+    if (value.replace(/\s+/g, ''))
+      return true;
+  }
+  return false;
 }

@@ -32,6 +32,7 @@ use Net::Netmask;
 #use Conf; # used in List - Site
 #use Language; # used in List
 #use List; # this package is used by List
+use Data::Dumper;
 
 #use Log; # used in Conf
 #use Sympa::Constants; # used in Conf - confdef
@@ -358,6 +359,7 @@ sub request_action {
 	if (defined $context->{'message'});
     $context->{'msg_encrypted'} = 'smime'
 	if (defined $context->{'message'} &&
+	defined $context->{'message'}->{'smime_crypted'} &&
 	$context->{'message'}->{'smime_crypted'} eq 'smime_crypted');
     ## Check that authorization method is one of those known by Sympa
     unless ($auth_method =~ /^(smtp|md5|pgp|smime|dkim)/) {
@@ -379,8 +381,12 @@ sub request_action {
 
 	    #activate log if ip or email match
 	    my $loging_conditions = $robot->loging_condition || {};
-	    if ($loging_conditions->{'ip'} =~ /$context->{'remote_addr'}/ ||
-		$loging_conditions->{'email'} =~ /$context->{'email'}/i) {
+	    if ((   defined $loging_conditions->{'ip'} &&
+		    $loging_conditions->{'ip'} =~ /$context->{'remote_addr'}/
+		) ||
+		(defined $loging_conditions->{'email'} &&
+		    $loging_conditions->{'email'} =~ /$context->{'email'}/i)
+		) {
 		&Log::do_log(
 		    'info',
 		    'Will log scenario process for user with email: "%s", IP: "%s"',
@@ -391,7 +397,6 @@ sub request_action {
 	    }
 	}
     }
-
     if ($log_it) {
 	if (ref $that and ref $that eq 'List') {
 	    $trace_scenario =
@@ -415,6 +420,7 @@ sub request_action {
 
     ## The current action relates to a list
     if ($list) {
+	$context->{'list_object'} = $list;
 	## The $operation refers to a list parameter of the same name
 	## The list parameter might be structured ('.' is a separator)
 	$scenario = $list->get_scenario($operation, $context->{'options'});
@@ -761,8 +767,10 @@ sub verify {
     if ($context->{'listname'} && !defined $context->{'list_object'}) {
 	unless ($context->{'list_object'} =
 	    new List($context->{'listname'}, $robot)) {
-	    &Log::do_log('info',
-		"Unable to create List object for list $context->{'listname'}"
+	    &Log::do_log(
+		'err',
+		'Unable to create List object for list %s',
+		$context->{'listname'}
 	    );
 	    return undef;
 	}
@@ -778,11 +786,16 @@ sub verify {
     if (defined($context->{'msg'})) {
 	my $header = $context->{'msg'}->head;
 	unless (
-	    (   $header->get('to') &&
-		(join(', ', $header->get('to')) =~ /$context->{'listname'}/i)
-	    ) ||
-	    ($header->get('cc') &&
-		(join(', ', $header->get('cc')) =~ /$context->{'listname'}/i))
+	    defined $context->{'listname'} &&
+	    (   (   $header->get('to') &&
+		    (   join(', ', $header->get('to')) =~
+			/$context->{'listname'}/i)
+		) ||
+		(   $header->get('cc') &&
+		    (   join(', ', $header->get('cc')) =~
+			/$context->{'listname'}/i)
+		)
+	    )
 	    ) {
 	    $context->{'is_bcc'} = 1;
 	} else {
@@ -849,11 +862,11 @@ sub verify {
 		$value =~ s/\[conf\-\>([\w\-]+)\]/$conf_value/;
 	    } else {
 		&Log::do_log('debug',
-		    'undefine variable context %s in rule %s',
+		    'undefined variable context %s in rule %s',
 		    $value, $condition);
 		if ($log_it) {
 		    &Log::do_log('info',
-			'undefine variable context %s in rule %s',
+			'undefined variable context %s in rule %s',
 			$value, $condition);
 		}
 
@@ -996,10 +1009,10 @@ sub verify {
 		$value =~ s/\[(\w+)\]/$context->{$1}/i;
 	    } else {
 		&Log::do_log('debug',
-		    "undefine variable context $value in rule $condition");
+		    "undefined variable context $value in rule $condition");
 		if ($log_it) {
 		    &Log::do_log('info',
-			"undefine variable context $value in rule $condition"
+			"undefined variable context $value in rule $condition"
 		    );
 		}
 
@@ -1787,7 +1800,7 @@ sub dump_all_scenarios {
 
 =item get_current_title ()
 
-Get intrnationalized title of the scenario, under current language context.
+Get internationalized title of the scenario, under current language context.
 
 =back
 
@@ -1821,6 +1834,30 @@ Get unique ID of object.
 ## Get unique ID
 sub get_id {
     return shift->{'file_path'} || '';
+}
+
+=over 4
+
+=item is_purely_closed ()
+
+Returns 1 if all conditions in scenario are "true()   [an_auth_method]    ->  reject"
+
+=back
+
+=cut
+
+sub is_purely_closed {
+    my $self = shift;
+    foreach my $rule (@{$self->{'rules'}}) {
+	if ($rule->{'condition'} ne 'true' && $rule->{'action'} !~ /reject/) {
+	    Log::do_log('debug2', 'Scenario %s is not purely closed.',
+		$self->{'title'});
+	    return 0;
+	}
+    }
+    Log::do_log('notice', 'Scenario %s is purely closed.',
+	$self->{'file_path'});
+    return 1;
 }
 
 1;

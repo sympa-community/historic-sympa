@@ -1,6 +1,5 @@
 #!--PERL--
-# sympa.pl - This script is the main one ; it runs as a daemon and does
-# the messages/commands processing
+# spooler.pl - This script fetches messages and push them into spools
 # RCS Identication ; $Revision: 6671 $ ; $Date: 2010-09-07 11:03:18 +0200 (mar 07 sep 2010) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -24,36 +23,32 @@
 use strict;
 
 use lib '--modulesdir--';
-#use Getopt::Std;
+use File::Copy;
 use Getopt::Long;
-
+# tentative
 use Data::Dumper;
-use Mail::Address;
-use File::Path;
 
 use Commands;
-use Conf;
+#use Conf;
 use Auth;
 use SympaSession;
-use Language;
-use Log;
-use Lock;
-use mail;
-use MIME::QuotedPrint;
+#use Language;
+#use Log;
+#use Lock;
+#use mail;
 use List;
-use Message;
-use admin;
-use Config_XML;
-use Family;
-use report;
-use File::Copy;
-use tools;
-use tt2;
-use Sympa::Constants;
-use tracking;
+#use Message;
+#use admin;
+#use Config_XML;
+#use Family;
+#use report;
+#use tools;
+#use tt2;
+#use Sympa::Constants;
+#use tracking;
 use Sympaspool;
-use SDM;
-use SQLSource;
+#use SDM;
+#use SQLSource;
 
 ## Internal tuning
 # delay between each read of the digestqueue
@@ -105,13 +100,16 @@ my %loop_info;
 # this loop is run foreach HUP signal received
 my $signal = 0;
 
-local $main::daemon_usage; 
+local $main::daemon_usage = 'DAEMON_MASTER'; # Start daemon as all by default 
 
 while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
-## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (defined Robot::get_robots('no_db' => 1, 'force_reload' => 1)) {
-    &fatal_err('Configuration file %s has errors.', Conf::get_sympa_conf());  
+## Load configuration file
+unless (Robot::get_robots()) {
+    printf STDERR
+	"Unable to load sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	Conf::get_sympa_conf();
+    exit 1;
 }
 
 ## Open the syslog and say we're read out stuff.
@@ -132,24 +130,6 @@ if ($main::options{'log_level'}) {
     ); 
 }
 
-## Probe Db if defined
-if (Site->db_name and Site->db_type) {
-    unless (SDM::probe_db()) {
-	&Log::fatal_err(
-	    'Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf',
-	    Site->db_name
-	);
-    }
-}
-
-## Now trying to load full config (including database)
-unless (defined Robot::get_robots()) {
-    &Log::fatal_err(
-	'Configuration file %s has errors.',
-	Conf::get_sympa_conf()
-    );
-}
-
 ## Main program
 if (!chdir(Site->home)) {
    &Log::fatal_err("Can't chdir to %s: %m", Site->home);
@@ -162,12 +142,6 @@ unless (&Conf::checkfiles_as_root()) {
    ## No return.
 }
 
-## Check that the data structure is uptodate
-unless ($main::options{'upgrade'} || $main::options{'help'}) {
-    unless (SDM::data_structure_uptodate()) {
-	&Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
-    }
-}
 my $spooldir;
 my %distinct_spools;
 if ($signal ne 'hup') {
@@ -185,6 +159,14 @@ if ($signal ne 'hup') {
 	open(STDERR, ">> /dev/null");
 
 	setpgrp(0, 0);
+	if ($main::daemon_usage eq 'DAEMON_MASTER') {
+	    unless (&Conf::checkfiles()) {
+		&Log::fatal_err("Missing files. Aborting.");
+		## No return.
+	    }
+	}else {
+	    sleep 1; ## wait until main process has created required directories
+	}
 	# start a spooler.pl daemon for the spool location specified by option --queue= or for each distinct spool find in sympa.conf
 	if ($main::options{'queue'}){
 	    &Log::do_log('debug','Using spool %s only',$main::options{'queue'});
@@ -198,21 +180,20 @@ if ($signal ne 'hup') {
 		}
 	    }
 	}
-	my $master = 1;
 	foreach my $distinct_spool (keys %distinct_spools) {
 	    &Log::do_log('debug','Creating a daemon for spool %s',$distinct_spool);
 	    $spooldir = $distinct_spool;
-	    if ($master) { # only master process fork child process
+	    if ($main::daemon_usage eq 'DAEMON_MASTER') { # only master process fork child process
 		if ((my $child_pid = fork) != 0) {
 		    &Log::do_log('debug', "Master daemon fork child %s",$child_pid);		
 		}else{
 		    &Log::do_log('info', "Child process PID %s spooler for spool %s",$$,$spooldir);
-		    $master = 0;
+		    $main::daemon_usage = 'DAEMON_SLAVE';
 		    last;
 		}
 	    }
 	}
-	if ($master) {
+	if ($main::daemon_usage eq 'DAEMON_MASTER') {
 	   &Log::do_log('debug', "Fork, exiting from initial process");
 	    exit (0);
 	}
@@ -258,14 +239,6 @@ if ($signal ne 'hup') {
     &Log::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
     ## Check for several files.
     ## Prevent that 2 processes perform checks at the same time...
-    if ($main::daemon_usage == DAEMON_ALL) {
-	unless (&Conf::checkfiles()) {
-	    &Log::fatal_err("Missing files. Aborting.");
-	    ## No return.
-	}
-    }else {
-	sleep 1; ## wait until main process has created required directories
-    }
     if ($main::options{'help'}) {
 	print $usage_string;
 	exit 0;
@@ -308,7 +281,7 @@ if ($signal ne 'hup') {
 	my $robot;
 
 	my $t_spool = $spooldir; ## in single mode we may have to supervise automatic spool
-	
+
 	## Scans files in queue
 	foreach my $filename (sort @qfile) {
 	    &Log::do_log('info','Processing file %s',$filename);
@@ -355,9 +328,12 @@ if ($signal ne 'hup') {
 		    $meta{'create_list_if_needed'} = 0;		
 		}
 	    }
-	    
+
 	    my $message = new Message({'file'=>$spooldir.'/'.$filename});
-	    
+	    if ($message->get_family){
+		$meta{'create_list_if_needed'} = 1;
+		Log::do_log('notice','Message for list %s, family %s',$message->get_receipient,$message->get_family);
+	    }
 	    $listname = lc($listname);
 	    if ($robot_id) {
 		$robot_id = lc($robot_id);
@@ -412,7 +388,7 @@ if ($signal ne 'hup') {
 		$meta{'priority'} = 1;
 	    }
 	    $meta{'type'} = $type if $type;
-	    
+
 	    my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
 	    unless($messagekey) {
 	       &Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
@@ -424,7 +400,7 @@ if ($signal ne 'hup') {
 		    &Log::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $!);
 		}
 	    }
-	    
+
 	    ## Release the lock
 	    $lock->unlock();
 	    unless (unlink ($spooldir.'/'.$filename)) {

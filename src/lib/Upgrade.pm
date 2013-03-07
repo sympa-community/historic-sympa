@@ -68,7 +68,7 @@ sub update_version {
 	&Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, Site->etc, $!);
 	return undef;
     }
-    printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
+    print VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
     printf VFILE "%s\n", Sympa::Constants::VERSION;
     close VFILE;
     
@@ -78,10 +78,9 @@ sub update_version {
 
 ## Upgrade data structure from one version to another
 sub upgrade {
+    Log::do_log('debug3', '(%s, %s)', @_);
     my ($previous_version, $new_version) = @_;
 
-    &Log::do_log('notice', 'Upgrade::upgrade(%s, %s)', $previous_version, $new_version);
-    
     if (&tools::lower_version($new_version, $previous_version)) {
 	&Log::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 	return 1;
@@ -182,7 +181,9 @@ sub upgrade {
 
 	foreach my $tpl (@templates) {
 	    unless (rename $tpl, "$tpl.oldtemplate") {
-		printf STDERR "Error : failed to rename $tpl to $tpl.oldtemplate : $!\n";
+		printf STDERR
+		    "Error : failed to rename %s to %s.oldtemplate : %s\n",
+		    $tpl, $tpl, $!;
 		next;
 	    }
 
@@ -971,7 +972,7 @@ sub upgrade {
 	    'default_home'               => 'NO',
 	    'export_topics'              => 'yes',
 	    'htmlarea_url'               => 'yes',
-	    'html_editor_file'           => 'NO',
+	    'html_editor_file'           => 'NO', # 6.2a
 	    'html_editor_init'           => 'NO',
 	    'ldap_force_canonical_email' => 'NO',
 	    'log_facility'               => 'yes',
@@ -1067,7 +1068,7 @@ sub upgrade {
 		    $migrated{'unknown'} ||= {};
 		    $migrated{'unknown'}->{$name} =
 			[{'name' => $name,
-			  'gettext_id' => "Unknown parameter"),
+			  'gettext_id' => "Unknown parameter"},
 			 $infile{$name}];
 		}
 	    }
@@ -1092,7 +1093,7 @@ sub upgrade {
 		    Language::gettext("Migrated Parameters\nFollowing parameters were migrated from wwsympa.conf."), '#### ', '#### ') . "\n"
 		    if $type eq 'add';
 		push @newconf, tools::wrap_text(
-		    Language::gettext("Overrididing Parameters\nFollowing parameters existed both in sympa.conf and  wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."), '#### ', '#### ') . "\n"
+		    Language::gettext("Overriding Parameters\nFollowing parameters existed both in sympa.conf and wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."), '#### ', '#### ') . "\n"
 		    if $type eq 'override';
 		push @newconf, tools::wrap_text(
 		    Language::gettext("Duplicate of sympa.conf\nThese parameters were found in both sympa.conf and wwsympa.conf.  Previous release of Sympa used those in sympa.conf.  Uncomment ones you wish to be enabled."), '#### ', '#### ') . "\n"
@@ -1286,7 +1287,7 @@ sub md5_encode_password {
 
     &Log::do_log('notice', 'Upgrade::md5_encode_password() recoding password using md5 fingerprint');
     
-    unless (&List::check_db_connect()) {
+    unless (SDM::check_db_connect('just_try')) {
 	return undef;
     }
 

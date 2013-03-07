@@ -182,6 +182,7 @@ sub new {
     $message->get_subject;
     $message->get_receipient;
     $message->get_robot;
+    $message->get_list;
     $message->get_sympa_local_part;
     $message->check_spam_status;
     $message->check_dkim_signature;
@@ -194,7 +195,6 @@ sub new {
     }
     ## TOPICS
     $message->set_topic;
-    
     return $message;
 }
 
@@ -252,8 +252,6 @@ sub create_message_from_file {
     }else{
 	$self->{'rcpt'} = $1;
 	$self->{'date'} = $2;
-
-	($self->{'listname'}, $self->{'robot_id'}) = split(/\@/, $self->{'rcpt'});
     }
     
     return $self;
@@ -263,9 +261,6 @@ sub create_message_from_string {
     my $messageasstring = shift;
     my $self;
     Log::do_log('debug2','Creating message object from character string');
-    ##foreach my $line (split '\n',$messageasstring) {
-	##Log::do_log('trace','%s',$line);
-    ##}
     
     my $parser = new MIME::Parser;
     $parser->output_to_core(1);
@@ -341,8 +336,12 @@ sub get_sender_email {
 		my @sender_hdr = Mail::Address->parse($hdr->get($field));
 		if (scalar @sender_hdr and $sender_hdr[0]->address) {
 		    $sender = lc($sender_hdr[0]->address);
-		    $gecos = MIME::EncWords::decode_mimewords(
-			$sender_hdr[0]->phrase || '');
+		    my $phrase = $sender_hdr[0]->phrase;
+		    if (defined $phrase and length $phrase) {
+			$gecos = MIME::EncWords::decode_mimewords(
+			    $phrase, Charset => 'UTF-8'
+			);
+		    }
 		    last;
 		}
 	    }
@@ -410,26 +409,92 @@ sub get_subject {
     return $self->{'decoded_subject'};
 }
 
+sub get_family {
+    my $self = shift;
+    unless ($self->{'family'}) {
+	$self->{'family'} = $self->{'msg'}->head->get('X-Sympa-Family');
+	chomp $self->{'family'};
+	$self->{'family'} =~ s/^\s+//;
+	$self->{'family'} =~ s/\s+$//;
+    }
+    return $self->{'family'};
+}
+
 sub get_receipient {
     my $self = shift;
+    my $force = shift;
     my $hdr = $self->{'msg'}->head;
-    unless ($self->{'rcpt'}) {
+    my $rcpt;
+    if (!$self->{'rcpt'} || $self->get_family) {
 	unless (defined $self->{'noxsympato'}) { # message.pm can be used not only for message coming from queue
-	    unless ($hdr->get('X-Sympa-To')) {
-		Log::do_log('debug3', 'no X-Sympa-To found, ignoring message.');
+	    unless ($rcpt = $hdr->get('X-Sympa-To')) {
+		Log::do_log('err', 'no X-Sympa-To found, ignoring message.');
 		return undef;
 	    }
 	}else {
-	    unless ($hdr->get('To')) {
+	    unless ($rcpt = $hdr->get('To')) {
 		Log::do_log('err', 'no To: header found, ignoring message.');
 		return undef;
 	    }
 	}
 	## Extract recepient address (X-Sympa-To)
-	$self->{'rcpt'} = $hdr->get('X-Sympa-To');
+	$self->{'rcpt'} = $rcpt;
 	chomp $self->{'rcpt'};
     }
     return $self->{'rcpt'};
+}
+
+sub set_receipient {
+    my $self = shift;
+    my $new_rcpt = shift;
+
+    $self->{'rcpt'} = $new_rcpt;
+}
+
+sub get_list {
+    my $self = shift;
+    unless ($self->{'list'}) {
+	unless ($self->{'listname'}) {
+	    my ($listname, $robot_id) = split /\@/, $self->{'rcpt'};
+	    $self->{'listname'} = lc($robot_id || '');
+	}
+	unless ($self->{'list'} = List->new($self->{'listname'},$self->get_robot,{'just_try' => 1})) {
+	    return undef;
+	}
+    }
+    return $self->{'list'};    
+}
+
+sub set_sympa_headers {
+    my $self = shift;
+    my $param = shift;
+    my $rcpt = $param->{'rcpt'};
+    my $from = $param->{'from'};
+    $rcpt ||= $self->get_receipient;
+    $from ||= $self->get_sender_email;
+    my $all_rcpt;
+    if (ref($rcpt) eq 'ARRAY') {
+	$all_rcpt = join(',', @{$rcpt});
+    }else {
+	$all_rcpt = $rcpt;
+    }
+    if ($self->get_mime_message->head->get('X-Sympa-To')) {
+	$self->get_mime_message->head->replace('X-Sympa-To', $all_rcpt);
+    }else {
+	$self->get_mime_message->head->add('X-Sympa-To', $all_rcpt);
+    }
+    if ($self->get_mime_message->head->get('X-Sympa-From')) {
+	$self->get_mime_message->head->replace('X-Sympa-From', $from);
+    }else{
+	$self->get_mime_message->head->add('X-Sympa-From', $from);
+    }
+    if ($self->get_mime_message->head->get('X-Sympa-Checksum')) {
+	$self->get_mime_message->head->replace('X-Sympa-Checksum', tools::sympa_checksum($all_rcpt));
+    }else{
+	$self->get_mime_message->head->add('X-Sympa-Checksum', tools::sympa_checksum($all_rcpt));
+    }
+    
+    $self->set_message_as_string($self->get_mime_message->as_string);
 }
 
 sub get_sympa_local_part {
@@ -515,15 +580,17 @@ sub check_dkim_signature {
 sub check_x_sympa_checksum {
     my $self = shift;
     my $hdr = $self->{'msg'}->head;
-    ## valid X-Sympa-Checksum prove the message comes from web interface with authenticated sender
-    if ( $hdr->get('X-Sympa-Checksum')) {
-	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
-	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
+    unless ($self->{'noxsympato'}) {
+	## valid X-Sympa-Checksum prove the message comes from web interface with authenticated sender
+	if ( $hdr->get('X-Sympa-Checksum')) {
+	    my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
+	    my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-	if ($chksum eq &tools::sympa_checksum($rcpt)) {
-	    $self->{'md5_check'} = 1 ;
-	}else{
-	    Log::do_log('err',"incorrect X-Sympa-Checksum header");	
+	    if ($chksum eq &tools::sympa_checksum($rcpt)) {
+		$self->{'md5_check'} = 1 ;
+	    }else{
+		Log::do_log('err',"incorrect X-Sympa-Checksum header");	
+	    }
 	}
     }
 }
@@ -531,7 +598,7 @@ sub check_x_sympa_checksum {
 sub decrypt {
     my $self = shift;
     ## Decrypt messages
-    my $hdr = $self->{'msg'}->head;
+    my $hdr = $self->get_mime_message->head;
     if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	($hdr->get('Content-Type') !~ /signed-data/i)){
 	unless (defined $self->smime_decrypt()) {
@@ -840,7 +907,7 @@ sub smime_decrypt {
 
 	if (defined Site->key_passwd and Site->key_passwd ne '') {
 	    unless (open (FIFO,"> $temporary_pwd")) {
-		Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
+		Log::do_log('err', 'Unable to open fifo for %s', $temporary_pwd);
 		return undef;
 	    }
 	    print FIFO Site->key_passwd;
@@ -855,7 +922,7 @@ sub smime_decrypt {
 	my $status = $?/256;
 	
 	unless ($status == 0) {
-	    Log::do_log('notice', 'Unable to decrypt S/MIME message : %s', $openssl_errors{$status});
+	    Log::do_log('err', 'Unable to decrypt S/MIME message : %s', $openssl_errors{$status});
 	    next;
 	}
 	
@@ -864,7 +931,7 @@ sub smime_decrypt {
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
 	unless ($self->{'decrypted_msg'} = $parser->parse_data($self->{'decrypted_msg_as_string'})) {
-	    Log::do_log('notice', 'Unable to parse message');
+	    Log::do_log('err', 'Unable to parse message');
 	    last;
 	}
     }
@@ -919,7 +986,7 @@ sub smime_encrypt {
     my $usercert;
     my $dummy;
 
-    Log::do_log('debug2', 'tools::smime_encrypt( %s, %s', $email, $list);
+    Log::do_log('debug2', 'tools::smime_encrypt( %s, %s)', $email, $list);
     if ($list eq 'list') {
 	my $self = new List($email);
 	($usercert, $dummy) = tools::smime_find_keys($self->{dir}, 'encrypt');
@@ -953,9 +1020,10 @@ sub smime_encrypt {
 	}
 	$mime_hdr->print(\*MSGDUMP);
 
-	printf MSGDUMP "\n%s", $self->get_mime_message->body;
+	printf MSGDUMP "\n";
+	foreach (@{$self->get_mime_message->body}) { printf MSGDUMP '%s',$_;}
+	##$self->get_mime_message->bodyhandle->print(\*MSGDUMP);
 	close(MSGDUMP);
-
 	my $status = $?/256 ;
 	unless ($status == 0) {
 	    &Log::do_log('err', 'Unable to S/MIME encrypt message (error %s) : %s', $status, $openssl_errors{$status});
@@ -999,12 +1067,106 @@ sub smime_encrypt {
 	    $self->{'crypted_message'}->head->add($tag, $val) 
 	        unless $predefined_headers->{lc $tag};
 	}
-
+	$self->{'msg'} = $self->{'crypted_message'};
+	$self->set_message_as_string($self->{'crypted_message'}->as_string);
+	$self->{'smime_crypted'} = 1;
     }else{
 	&Log::do_log ('err','unable to encrypt message to %s (missing certificate %s)',$email,$usercert);
 	return undef;
     }
         
+    return 1;
+}
+
+# input object msg and listname, output signed message object
+sub smime_sign {
+    my $self = shift;
+    my $list = $self->{'list'};
+
+    Log::do_log('debug2', 'tools::smime_sign (%s,%s)',$self,$list);
+
+    my($cert, $key) = tools::smime_find_keys($list->dir, 'sign');
+    my $temporary_file = Site->tmpdir .'/'. $list->get_id . "." . $$;
+    my $temporary_pwd = Site->tmpdir . '/pass.' . $$;
+
+    my ($signed_msg,$pass_option );
+    $pass_option = "-passin file:$temporary_pwd" if (Site->key_passwd ne '') ;
+
+    ## Keep a set of header fields ONLY
+    ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
+    my $dup_msg = $self->get_mime_message->dup;
+    foreach my $field ($dup_msg->head->tags) {
+         next if ($field =~ /^(content-type|content-transfer-encoding)$/i);
+         $dup_msg->head->delete($field);
+    }
+
+    ## dump the incomming message.
+    if (!open(MSGDUMP,"> $temporary_file")) {
+	Log::do_log('info', 'Can\'t store message in file %s', $temporary_file);
+	return undef;
+    }
+    $dup_msg->print(\*MSGDUMP);
+    close(MSGDUMP);
+
+    if (Site->key_passwd ne '') {
+	unless ( mkfifo($temporary_pwd,0600)) {
+	    Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
+	}
+    }
+    my $cmd = sprintf
+	'%s smime -sign -rand %s/rand -signer %s %s -inkey %s -in %s',
+	Site->openssl, Site->tmpdir, $cert, $pass_option, $key,
+	$temporary_file;
+    Log::do_log('debug2', '%s', $cmd);
+    unless (open NEWMSG, "$cmd |") {
+    	Log::do_log('notice', 'Cannot sign message (open pipe)');
+	return undef;
+    }
+
+    if (Site->key_passwd ne '') {
+	unless (open (FIFO,"> $temporary_pwd")) {
+	    Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
+	}
+
+	print FIFO Site->key_passwd;
+	close FIFO;
+	unlink ($temporary_pwd);
+    }
+
+    my $new_message_as_string = '';
+    while (<NEWMSG>) {
+	$new_message_as_string .= $_;
+    }
+
+    my $parser = new MIME::Parser;
+
+    $parser->output_to_core(1);
+    unless ($signed_msg = $parser->parse_data($new_message_as_string)) {
+	Log::do_log('notice', 'Unable to parse message');
+	return undef;
+    }
+    unlink ($temporary_file) unless ($main::options{'debug'}) ;
+    
+    ## foreach header defined in  the incoming message but undefined in the
+    ## crypted message, add this header in the crypted form.
+    my $predefined_headers ;
+    foreach my $header ($signed_msg->head->tags) {
+	$predefined_headers->{lc $header} = 1
+	    if ($signed_msg->head->get($header));
+    }
+    foreach my $header (split /\n(?![ \t])/, $self->get_mime_message->head->as_string) {
+	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
+	my ($tag, $val) = ($1, $2);
+	$signed_msg->head->add($tag, $val)
+	    unless $predefined_headers->{lc $tag};
+    }
+    ## Keeping original message string in addition to updated headers.
+    my @new_message = split('\n\n',$new_message_as_string,2);
+    $new_message_as_string = $signed_msg->head->as_string.'\n\n'.$new_message[1];
+	
+    $self->{'msg'} = $signed_msg;
+    $self->{'msg_as_string'} = $new_message_as_string;
+    $self->check_smime_signature;
     return 1;
 }
 
@@ -1028,7 +1190,7 @@ sub smime_sign_check {
     $trusted_ca_options .= "-CApath " . Site->capath . " " if Site->capath;
     my $cmd = sprintf '%s smime -verify %s -signer %s',
 	Site->openssl, $trusted_ca_options, $temporary_file;
-    &Log::do_log('debug3', '%s', $cmd);
+    &Log::do_log('debug2', '%s', $cmd);
 
     unless (open MSGDUMP, "| $cmd > /dev/null") {
 	&Log::do_log('err', 'Unable to run command %s to check signature from %s: %s', $cmd, $message->{'sender'},$!);
@@ -1042,7 +1204,7 @@ sub smime_sign_check {
 
     my $status = $?/256 ;
     unless ($status == 0) {
-	&Log::do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
+	&Log::do_log('err', 'Unable to check S/MIME signature: %s', $openssl_errors{$status});
 	return undef ;
     }
     ## second step is the message signer match the sender
@@ -1173,7 +1335,7 @@ sub smime_sign_check {
 
     $is_signed->{'body'} = 'smime';
     
-    # futur version should check if the subject was part of the SMIME signature.
+    # future version should check if the subject was part of the SMIME signature.
     $is_signed->{'subject'} = $signer;
 
     if ($is_signed->{'body'}) {
@@ -1205,6 +1367,36 @@ sub get_message_as_string {
     return $self->{'msg_as_string'};
 }
 
+sub set_message_as_string {
+    my $self = shift;
+    
+    $self->{'msg_as_string'} = shift;
+}
+
+sub set_decrypted_message_as_string {
+    my $self = shift;
+    my $param = shift;
+    
+    $self->{'decrypted_msg_as_string'} = $param->{'new_message_as_string'};
+}
+
+sub reset_message_from_entity {
+    my $self = shift;
+    my $entity = shift;
+    
+    unless (ref ($entity) =~ /^MIME/) {
+	Log::do_log('trace','Can not reset a message by starting from object %s', ref $entity);
+	return undef;
+    }
+    $self->{'msg'} = $entity;
+    $self->{'msg_as_string'} = $entity->as_string;
+    if ($self->is_crypted) {
+	$self->{'decrypted_msg'} = $entity;
+	$self->{'decrypted_msg_as_string'} = $entity->as_string;
+    }
+    return 1;
+}
+
 sub get_encrypted_message_as_string {
     my $self = shift;
     return $self->{'msg_as_string'};
@@ -1217,6 +1409,561 @@ sub get_msg_id {
 	chomp $self->{'id'};
     }
     return $self->{'id'}
+}
+
+sub is_signed {
+    my $self = shift;
+    return $self->{'protected'};
+}
+
+sub is_crypted {
+    my $self = shift;
+    unless(defined $self->{'smime_crypted'}) {
+	$self->decrypt;
+    }
+    return $self->{'smime_crypted'};
+}
+
+sub has_html_part {
+    my $self = shift;
+    $self->check_message_structure unless ($self->{'structure_already_checked'});
+    return $self->{'has_html_part'};
+}
+
+sub has_text_part {
+    my $self = shift;
+    $self->check_message_structure unless ($self->{'structure_already_checked'});
+    return $self->{'has_text_part'};
+}
+
+sub has_attachments {
+    my $self = shift;
+    $self->check_message_structure unless ($self->{'structure_already_checked'});
+    return $self->{'has_attachments'};
+}
+
+## Make a multipart/alternative, a singlepart
+sub check_message_structure {
+    my $self = shift;
+    my $msg = shift;
+    $msg ||= $self->get_mime_message->dup;
+    Log::do_log('debug2', 'Message: %s, part: %s',$self,$msg);
+    $self->{'structure_already_checked'} = 1;
+    if ($msg->effective_type() =~ /^multipart\/alternative/) {
+	foreach my $part ($msg->parts) {
+	    if (($part->effective_type() =~ /^text\/html$/) ||
+	    (
+	    ($part->effective_type() =~ /^multipart\/related$/) &&
+	    $part->parts &&
+	    ($part->parts(0)->effective_type() =~ /^text\/html$/))) {
+		Log::do_log('debug3', 'Found html part');
+		$self->{'has_html_part'} = 1;
+	    }elsif($part->effective_type() =~ /^text\/plain$/) {
+		Log::do_log('debug3', 'Found text part');
+		$self->{'has_text_part'} = 1;
+	    }else{
+		Log::do_log('debug3', 'Found attachment: %s',$part->effective_type());
+		$self->{'has_attachments'} = 1;
+	    }
+	}
+    }elsif ($msg->effective_type() =~ /multipart\/signed/) {
+	my @parts = $msg->parts();
+	## Only keep the first part
+	$msg->parts([$parts[0]]);
+	$msg->make_singlepart();       
+	$self->check_message_structure($msg);
+
+    }elsif ($msg->effective_type() =~ /^multipart/) {
+	Log::do_log('debug3', 'Found multipart: %s',$msg->effective_type());
+	foreach my $part ($msg->parts) {
+            next unless (defined $part); ## Skip empty parts
+	    if ($part->effective_type() =~ /^multipart\/alternative/) {
+		$self->check_message_structure($part);
+	    }else{
+		Log::do_log('debug3', 'Found attachment: %s',$part->effective_type());
+		$self->{'has_attachments'} = 1;
+	    }
+	}
+    }    
+}
+
+## Add footer/header to a message
+sub add_parts {
+    my $self = shift;
+    unless ($self->{'list'}) {
+	Log::do_log('err','The message has no list context; No header/footer to add');
+	return undef;
+    }
+    my $msg = $self->get_mime_message;
+    my ($listname, $type) =
+	($self->{'list'}->name, $self->{'list'}->footer_type);
+    my $listdir = $self->{'list'}->dir;
+    &Log::do_log('debug3', '%s, %s, %s',
+	$msg, $listname, $type);
+    
+    my ($header, $headermime);
+    foreach my $file (
+	"$listdir/message.header",
+	"$listdir/message.header.mime",
+	Site->etc . '/mail_tt2/message.header',
+	Site->etc . '/mail_tt2/message.header.mime'
+	) {
+	if (-f $file) {
+	    unless (-r $file) {
+		&Log::do_log('notice', 'Cannot read %s', $file);
+		next;
+	    }
+	    $header = $file;
+	    last;
+	}
+    }
+
+    my ($footer, $footermime);
+    foreach my $file (
+	"$listdir/message.footer",
+	"$listdir/message.footer.mime",
+	Site->etc . '/mail_tt2/message.footer',
+	Site->etc . '/mail_tt2/message.footer.mime'
+	) {
+	if (-f $file) {
+	    unless (-r $file) {
+		&Log::do_log('notice', 'Cannot read %s', $file);
+		next;
+	    }
+	    $footer = $file;
+	    last;
+	}
+    }
+
+    ## No footer/header
+    unless (($footer and -s $footer) or ($header and -s $header)) {
+ 	return undef;
+    }
+
+    if ($type eq 'append') {
+	## append footer/header
+	my ($footer_msg, $header_msg);
+	if ($header and -s $header) {
+	    open HEADER, $header;
+	    $header_msg = join '', <HEADER>;
+	    close HEADER;
+	    $header_msg = '' unless $header_msg =~ /\S/;
+	}
+	if ($footer and -s $footer) {
+	    open FOOTER, $footer;
+	    $footer_msg = join '', <FOOTER>;
+	    close FOOTER;
+	    $footer_msg = '' unless $footer_msg =~ /\S/;
+	}
+	if (length $header_msg or length $footer_msg) {
+	    if (&_append_parts($msg, $header_msg, $footer_msg)) {
+		$msg->sync_headers(Length => 'COMPUTE')
+		    if $msg->head->get('Content-Length');
+	    }
+	}
+    } else {
+	## MIME footer/header
+	my $parser = new MIME::Parser;
+	$parser->output_to_core(1);
+
+	my $content_type = $msg->effective_type || 'text/plain';
+
+	if ($content_type =~ /^multipart\/alternative/i ||
+	    $content_type =~ /^multipart\/related/i) {
+
+	    &Log::do_log('notice', 'Making message into multipart/mixed');
+	    $msg->make_multipart("mixed", Force => 1);
+	}
+
+	if ($header and -s $header) {
+	    if ($header =~ /\.mime$/) {
+		my $header_part;
+		eval { $header_part = $parser->parse_in($header); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $header, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
+		}
+	    ## text/plain header
+	    } else {
+
+		$msg->make_multipart unless $msg->is_multipart;
+		my $header_part = build MIME::Entity
+		    Path       => $header,
+		Type        => "text/plain",
+		Filename    => undef,
+		'X-Mailer'  => undef,
+		Encoding    => "8bit",
+		Charset     => "UTF-8";
+		$msg->add_part($header_part, 0);
+	    }
+	}
+	if ($footer and -s $footer) {
+	    if ($footer =~ /\.mime$/) {
+		my $footer_part;
+		eval { $footer_part = $parser->parse_in($footer); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $footer, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($footer_part);
+		}
+	    ## text/plain footer
+	    } else {
+
+		$msg->make_multipart unless $msg->is_multipart;
+		$msg->attach(
+		    Path       => $footer,
+			     Type        => "text/plain",
+			     Filename    => undef,
+			     'X-Mailer'  => undef,
+			     Encoding    => "8bit",
+			     Charset     => "UTF-8"
+			     );
+	    }
+	}
+    }
+
+    return $msg;
+}
+
+sub _append_parts {
+    my $part = shift;
+    my $header_msg = shift || '';
+    my $footer_msg = shift || '';
+
+    my $eff_type = $part->effective_type || 'text/plain';
+
+    if ($eff_type eq 'text/plain') {
+	my $cset = MIME::Charset->new('UTF-8');
+	$cset->encoder($part->head->mime_attr('Content-Type.Charset') ||
+		'NONE');
+
+	my $body;
+	if (defined $part->bodyhandle) {
+	    $body = $part->bodyhandle->as_string;
+	} else {
+	    $body = '';
+	}
+
+	## Only encodable footer/header are allowed.
+	if ($cset->encoder) {
+	    eval { $header_msg = $cset->encode($header_msg, 1); };
+	    $header_msg = '' if $@;
+	    eval { $footer_msg = $cset->encode($footer_msg, 1); };
+	    $footer_msg = '' if $@;
+	} else {
+	    $header_msg = '' if $header_msg =~ /[^\x01-\x7F]/;
+	    $footer_msg = '' if $footer_msg =~ /[^\x01-\x7F]/;
+	}
+
+	if (length $header_msg or length $footer_msg) {
+	    $header_msg .= "\n"
+		if length $header_msg and
+		    $header_msg !~ /\n$/;
+	    $body .= "\n"
+		if length $footer_msg and
+		    length $body and
+		    $body !~ /\n$/;
+
+	    my $io = $part->bodyhandle->open('w');
+	    unless (defined $io) {
+		&Log::do_log('err',
+		    "Failed to save message : $!");
+		return undef;
+	    }
+	    $io->print($header_msg);
+	    $io->print($body);
+	    $io->print($footer_msg);
+	    $io->close;
+	    $part->sync_headers(Length => 'COMPUTE')
+		if $part->head->get('Content-Length');
+	}
+	return 1;
+    } elsif ($eff_type eq 'multipart/mixed') {
+	## Append to first part if text/plain
+	if ($part->parts and
+	    &_append_parts($part->parts(0), $header_msg, $footer_msg)) {
+	    return 1;
+	}
+    } elsif ($eff_type eq 'multipart/alternative') {
+	## Append to first text/plain part
+	foreach my $p ($part->parts) {
+	    if (&_append_parts($p, $header_msg, $footer_msg)) {
+		return 1;
+	    }
+	}
+    }
+
+    return undef;
+}
+
+sub prepare_message_according_to_mode {
+    my $self = shift;
+    my $mode = shift;
+    Log::do_log('debug3','msg %s, mode: %s',$self->get_msg_id,$mode);
+    ##Prepare message for normal reception mode
+    if ($mode eq 'mail') {
+	$self->prepare_reception_mail;
+    } elsif (($mode eq 'nomail') ||
+	($mode eq 'summary') ||
+	($mode eq 'digest') ||
+	($mode eq 'digestplain')) {
+    ##Prepare message for notice reception mode
+    }elsif ($mode eq 'notice') {
+	$self->prepare_reception_notice;
+    ##Prepare message for txt reception mode
+    } elsif ($mode eq 'txt') {
+	$self->prepare_reception_txt;
+    ##Prepare message for html reception mode
+    } elsif ($mode eq 'html') {
+	$self->prepare_reception_html;
+    ##Prepare message for urlize reception mode
+    } elsif ($mode eq 'url') {
+	$self->prepare_reception_urlize;
+    } else {
+	&Log::do_log('err',
+	    "Unknown variable/reception mode $mode");
+	return undef;
+    }
+
+    unless (defined $self) {
+	    &Log::do_log('err', "Failed to create Message object");
+	return undef;
+    }
+    return 1;
+
+}
+sub prepare_reception_mail {
+    my $self = shift;
+    Log::do_log('debug3','preparing message for mail reception mode');
+    ## Add footer and header
+    return 0 if ($self->is_signed);
+    my $new_msg = $self->add_parts;
+    if (defined $new_msg) {
+	$self->{'msg'} = $new_msg;
+	$self->{'altered'} = '_ALTERED_';
+    }else{
+	Log::do_log('err','Part addition failed');
+	return undef;
+    }
+    return 1;
+}
+
+sub prepare_reception_notice {
+    my $self = shift;
+    Log::do_log('debug3','preparing message for notice reception mode');
+    my $notice_msg = $self->get_mime_message->dup;
+    $notice_msg->bodyhandle(undef);
+    $notice_msg->parts([]);
+    if(($notice_msg->head->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
+    ($notice_msg->head->get('Content-Type') !~ /signed-data/i)) {
+	$notice_msg->head->delete('Content-Disposition');
+	$notice_msg->head->delete('Content-Description');
+	$notice_msg->head->replace('Content-Type','text/plain; charset="US-ASCII"');
+	$notice_msg->head->replace('Content-Transfer-Encoding','7BIT');
+    }
+    $self->reset_message_from_entity($notice_msg);
+    undef $self->{'smime_crypted'};
+    return 1;
+}
+
+sub prepare_reception_txt {
+    my $self = shift;
+    Log::do_log('debug3','preparing message for txt reception mode');
+    return 0 if ($self->is_signed);
+    if (tools::as_singlepart($self->get_mime_message, 'text/plain')) {
+	Log::do_log('notice',
+	    'Multipart message changed to text singlepart');
+    }
+    ## Add a footer
+    $self->reset_message_from_entity($self->add_parts);
+    return 1;
+}
+
+sub prepare_reception_html {
+    my $self = shift;
+    Log::do_log('debug3','preparing message for html reception mode');
+    return 0 if ($self->is_signed);
+    if (tools::as_singlepart($self->get_mime_message, 'text/html')) {
+	Log::do_log('notice',
+	    'Multipart message changed to html singlepart');
+    }
+    ## Add a footer
+    $self->reset_message_from_entity($self->add_parts);
+    return 1;
+}
+
+sub prepare_reception_urlize {
+    my $self = shift;
+    Log::do_log('debug3','preparing message for urlize reception mode');
+    return 0 if ($self->is_signed);
+    unless ($self->{'list'}) {
+	Log::do_log('err','The message has no list context; Nowhere to place urlized attachments.');
+	return undef;
+    }
+
+    my $expl = $self->{'list'}->dir . '/urlized';
+
+    unless ((-d $expl) || (mkdir $expl, 0775)) {
+	&Log::do_log('err',
+	    "Unable to create urlize directory $expl");
+	return undef;
+    }
+
+    my $dir1 =
+	&tools::clean_msg_id($self->get_mime_message->head->get('Message-ID'));
+
+    ## Clean up Message-ID
+    $dir1 = &tools::escape_chars($dir1);
+    $dir1 = '/' . $dir1;
+
+    unless (mkdir("$expl/$dir1", 0775)) {
+	Log::do_log('err',
+	    'Unable to create urlize directory %s/%s', $expl, $dir1);
+	printf "Unable to create urlized directory %s/%s\n",
+	    $expl, $dir1;
+	return 0;
+    }
+    my $mime_types = &tools::load_mime_types();
+    my @parts = ();
+    my $i = 0;
+    foreach my $part ($self->get_mime_message->parts()) {
+	my $entity =
+	    &_urlize_part($part, $self->{'list'}, $dir1, $i, $mime_types,
+	    $self->{'list'}->robot->wwsympa_url);
+	if (defined $entity) {
+	    push @parts, $entity;
+	} else {
+	    push @parts, $part;
+	}
+	$i++;
+    }
+
+    ## Replace message parts
+    $self->get_mime_message->parts(\@parts);
+
+    ## Add a footer
+    $self->reset_message_from_entity($self->add_parts);
+    return 1;
+}
+
+sub _urlize_part {
+    my $message = shift;
+    my $list = shift;
+    my $expl        = $list->dir . '/urlized';
+    my $robot       = $list->domain;
+    my $dir = shift;
+    my $i = shift;
+    my $mime_types = shift;
+    my $listname    = $list->name;
+    my $wwsympa_url = shift;
+
+    my $head     = $message->head;
+    my $encoding = $head->mime_encoding;
+    my $content_type = $head->get('Content-Type');
+    chomp $content_type;
+    return undef if ($content_type =~ /multipart\/alternative/gi || $content_type =~ /text\//gi);
+    ##  name of the linked file
+    my $fileExt = $mime_types->{$head->mime_type};
+    if ($fileExt) {
+	$fileExt = '.' . $fileExt;
+    }
+    my $filename;
+
+    if ($head->recommended_filename) {
+	$filename = $head->recommended_filename;
+    } else {
+        if ($head->mime_type =~ /multipart\//i) {
+          my $content_type = $head->get('Content-Type');
+          $content_type =~ s/multipart\/[^;]+/multipart\/mixed/g;
+          $message->head->replace('Content-Type', $content_type);
+          my @parts = $message->parts();
+	    foreach my $i (0 .. $#parts) {
+		my $entity =
+		    _urlize_part(
+			$message->parts($i), $list, $dir, $i, $mime_types,
+			$list->robot->wwsympa_url);
+              if (defined $entity) {
+                $parts[$i] = $entity;
+              }
+          }
+          ## Replace message parts
+	    $message->parts(\@parts);
+        }
+	$filename = "msg.$i" . $fileExt;
+    }
+
+    ##create the linked file
+    ## Store body in file
+    if (open OFILE, ">$expl/$dir/$filename") {
+	my $ct = $message->effective_type || 'text/plain';
+	printf OFILE "Content-type: %s", $ct;
+	printf OFILE "; Charset=%s", $head->mime_attr('Content-Type.Charset')
+	    if $head->mime_attr('Content-Type.Charset') =~ /\S/;
+	print OFILE "\n\n";
+    } else {
+	&Log::do_log('notice', "Unable to open $expl/$dir/$filename");
+	return undef;
+    }
+
+    if ($encoding =~
+	/^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/
+	) {
+	open TMP, ">$expl/$dir/$filename.$encoding";
+	$message->print_body(\*TMP);
+	close TMP;
+
+	open BODY, "$expl/$dir/$filename.$encoding";
+	my $decoder = new MIME::Decoder $encoding;
+	$decoder->decode(\*BODY, \*OFILE);
+	unlink "$expl/$dir/$filename.$encoding";
+    } else {
+	$message->print_body(\*OFILE);
+    }
+    close(OFILE);
+    my $file = "$expl/$dir/$filename";
+    my $size = (-s $file);
+
+    ## Only URLize files with a moderate size
+    if ($size < Site->urlize_min_size) {
+	unlink "$expl/$dir/$filename";
+	return undef;
+    }
+
+    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
+    $message->purge;
+
+    (my $file_name = $filename) =~ s/\./\_/g;
+    my $file_url = "$wwsympa_url/attach/$listname" .
+	&tools::escape_chars("$dir/$filename", '/'); # do NOT escape '/' chars
+
+    my $parser = new MIME::Parser;
+    $parser->output_to_core(1);
+    my $new_part;
+
+    my $lang = &Language::GetLang();
+    my $charset = &Language::GetCharset();
+
+    my $tt2_include_path = $list->get_etc_include_path('mail_tt2', $lang);
+
+    &tt2::parse_tt2(
+	{   'file_name' => $file_name,
+		     'file_url'  => $file_url,
+	    'file_size' => $size,
+	    'charset'   => $charset
+	},
+		    'urlized_part.tt2',
+		    \$new_part,
+	$tt2_include_path
+    );
+
+    my $entity = $parser->parse_data(\$new_part);
+
+    return $entity;
 }
 
 ## Packages must return true.

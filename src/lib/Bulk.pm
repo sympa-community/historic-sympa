@@ -336,7 +336,6 @@ sub merge_msg {
 #  users then parse the message. It returns the message    #
 #  personalized to bulk.pl                                 #
 #  It uses the method &tt2::parse_tt2                      #
-#  It uses the method &List::get_list_member_no_object     #
 #  It uses the method &tools::get_fingerprint              #
 #                                                          #
 # IN : - rcpt : the receipient email                       #
@@ -362,14 +361,9 @@ sub merge_data {
     
     my $options;
     $options->{'is_not_template'} = 1;
-    
-    my $user_details;
-    $user_details->{'email'} = $rcpt;
-    $user_details->{'name'} = $listname;
-    $user_details->{'domain'} = $robot_id;
-    
-    # get_list_member_no_object() return the user's details with the custom attributes
-    my $user = &List::get_list_member_no_object($user_details);
+
+    my $list = new List($listname,$robot_id);
+    my $user = $list->user('member',$rcpt);
 
     $user->{'escaped_email'} = &URI::Escape::uri_escape($rcpt);
     $user->{'friendly_date'} = gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
@@ -412,24 +406,24 @@ sub store {
     my $dkim = $data{'dkim'};
     my $tag_as_last = $data{'tag_as_last'};
 
-    &Log::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
+    &Log::do_log('debug2', 'Bulk::store(<msg>,rcpts: %s,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$rcpts,$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
 
     $priority_message = $robot->sympa_priority unless $priority_message;
     $priority_packet = $robot->sympa_packet_priority unless $priority_packet;
     
-    #creation of a MIME entity to extract the real sender of a message
-    my $parser = MIME::Parser->new();
-    $parser->output_to_core(1);
-
-    my $msg = $message->{'msg'}->as_string;
-    if ($message->{'protected'}) {
-	$msg = $message->{'msg_as_string'};
+    my $msg;
+    if ($message->is_crypted) {
+	Log::do_log('trace','smime crypted: %s',length $message->get_encrypted_mime_message->as_string);
+	$msg = $message->get_encrypted_mime_message->as_string;
+    }elsif ($message->is_signed) {
+	Log::do_log('trace','smime signed: %s',length $message->get_message_as_string);
+	$msg = $message->get_message_as_string;
+    }else{
+	Log::do_log('trace','normal message: %s, %s',length $message->get_mime_message->as_string,$message->{'messagekey'});
+	$msg = $message->get_mime_message->as_string;
     }
-
-    my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
-    my $message_sender = $sender_hdr[0]->address;
-
+    my $message_sender = $message->get_sender_email();
 
     # first store the message in spool_table 
     # because as soon as packet are created bulk.pl may distribute the
@@ -444,7 +438,6 @@ sub store {
 	if ($message->{'messagekey'}) {
 	    # move message to spool bulk and keep it locked
 	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
-	   &Log::do_log('debug',"moved message to spool bulk");
 	}else{
 	    $message->{'messagekey'} = $bulkspool->store($msg,
 							 {'dkim_d'=>$dkim->{d},
@@ -454,7 +447,7 @@ sub store {
 							  'dkim_header_list'=>$dkim->{header_list}},
 							 $lock);
 	    unless($message->{'messagekey'}) {
-	&Log::do_log('err',"could not store message in spool distribute, message lost ?");
+		Log::do_log('err',"could not store message in spool distribute, message lost ?");
 		return undef;
 	    }
 	}

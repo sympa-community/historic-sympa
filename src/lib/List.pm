@@ -32,6 +32,7 @@ use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Carp qw(croak);
 
 use IO::Scalar;
+use Scalar::Util qw(refaddr);
 use Storable;
 use Mail::Header;
 
@@ -67,6 +68,7 @@ use Message;
 use Family; #FIXME: dependency loop between List and Family
 use PlainDigest;
 use tracking;
+use Storable qw(dclone);
 
 #use listdef; used in Robot
 
@@ -542,7 +544,7 @@ $DB_BTREE->{compare} = \&_compare_addresses;
 
 ## Creates an object.
 sub new {
-    Log::do_log('debug3', '(%s, %s, %s, %s)', @_);
+    Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
 
     ## NOTICE: Don't use accessors like "$self->dir" but "$self->{'dir'}",
     ## since the object has not been fully initialized yet.
@@ -554,7 +556,7 @@ sub new {
     my $list;
 
     unless ($options->{'skip_name_check'}) {
-	if ($name =~ /\@/) {
+	if ($name && $name =~ /\@/) {
 	    ## Allow robot in the name
 	    my @parts = split /\@/, $name;
 	    $robot ||= $parts[1];
@@ -565,7 +567,7 @@ sub new {
 	    $robot = search_list_among_robots($name);
 	}
 	if ($robot) {
-	    $robot = Robot::clean_robot($robot);
+	    $robot = Robot::clean_robot($robot,1);# May be Site
 	}
 
 	unless ($robot) {
@@ -589,11 +591,12 @@ sub new {
 	## Reject listnames with reserved list suffixes
 	my ($listname, $type) = $robot->split_listname($name);
 	if ($type) {
-	    Log::do_log('err',
+	    unless ($options->{'just_try'}) {
+		Log::do_log('err',
 		'Incorrect name: listname "%s" matches one of service aliases',
-		$name)
-	    unless $options->{'just_try'};
-	    return undef;
+		$name);	    
+		return undef;
+	    }
 	}
     } else {
 	$robot = Robot::clean_robot($robot);
@@ -856,7 +859,7 @@ sub update_stats {
 ##           @rcpt   : a tab of emails
 ## return :  a tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
 ##           input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
-sub extract_verp_rcpt() {
+sub extract_verp_rcpt {
     Log::do_log('debug3', '(%s, %s, %s, %s)', @_);
     my $percent = shift;
     my $xseq = shift;
@@ -1853,7 +1856,7 @@ sub prepare_digest_parameters {
     &Log::do_log('debug2','Preparing digest parameters for list %s',$self->get_list_id);
     $self->{'digest'}{'template_params'} = {'replyto' => $self->get_list_address('owner'),
 		 'to' => $self->get_list_address(),
-		 'table_of_content' => sprintf(gettext("Table of contents:")),
+		 'table_of_content' => gettext("Table of contents:"),
 		 'boundary1' => '----------=_'.&tools::get_message_id($self->domain),
 		 'boundary2' => '----------=_'.&tools::get_message_id($self->domain),
 		 };
@@ -1993,9 +1996,14 @@ sub send_msg {
     my $self = shift;
     my %param = @_;
 
-    my $message = $param{'message'};
     my $apply_dkim_signature = $param{'apply_dkim_signature'};
     my $apply_tracking = $param{'apply_tracking'};
+    my $message = $param{'message'};
+    unless (defined $message && ref($message) eq 'Message') {
+	&Log::do_log('err', 'Invalid message paramater');
+	return undef;
+    }
+    $message->check_message_structure;
 
     &Log::do_log(
 	'debug2',
@@ -2010,21 +2018,15 @@ sub send_msg {
     my $robot               = $self->domain;
 
     my $total       = $self->get_real_total;
-    my $sender_line = $hdr->get('From');
-    my @sender_hdr = Mail::Address->parse($sender_line);
-    my %sender_hash;
-    foreach my $email (@sender_hdr) {
-	$sender_hash{lc($email->address)} = 1;
-    }
-
-    unless (defined $message && ref($message) eq 'Message') {
-	&Log::do_log('err', 'Invalid message paramater');
-	return undef;
-    }
-
     unless ($total > 0) {
 	&Log::do_log('info', 'No subscriber in list %s', $name);
 	return 0;
+    }
+
+    my $sender_line = $hdr->get('From');
+    my @sender_hdr = Mail::Address->parse($sender_line);
+    foreach my $email (@sender_hdr) {
+	$message->{'sender_hash'}{lc($email->address)} = 1;
     }
 
     ## Bounce rate
@@ -2040,136 +2042,214 @@ sub send_msg {
     ## Who is the enveloppe sender?
     my $host = $self->host;
     my $from = $self->get_list_address('return_path');
+    my $nbr_smtp = 0;
+    my $nbr_verp = 0;
 
-# separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
-    my (@tabrcpt,                  @tabrcpt_notice,
-	@tabrcpt_txt,              @tabrcpt_html,
-	@tabrcpt_url,              @tabrcpt_verp,
-	@tabrcpt_notice_verp,      @tabrcpt_txt_verp,
-	@tabrcpt_html_verp,        @tabrcpt_url_verp,
-	@tabrcpt_digestplain,      @tabrcpt_digest,
-	@tabrcpt_summary,          @tabrcpt_nomail,
+    # prepare verp parameter
+    my $verp_rate = $self->verp_rate;
+    $verp_rate = '100%'
+	if (($apply_tracking eq 'dsn') || ($apply_tracking eq 'mdn'))
+	;    # force verp if tracking is requested.
+
+    my $xsequence = $self->stats->[0];
+
+    my $dkim_parameters;
+
+    # prepare dkim parameters
+    if ($apply_dkim_signature eq 'on') {
+	$dkim_parameters = &tools::get_dkim_parameters($self);
+    }
+    # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
+    return 0 unless ($self->get_list_members_per_mode($message));
+    my $topics_updated_total = 0;
+    foreach my $mode (sort keys %{$message->{'rcpts_by_mode'}}) {
+	$topics_updated_total += $self->filter_receipients_by_topics($message,$mode,$verp_rate,$xsequence);
+    }
+    return 0 unless ($topics_updated_total);
+    my ($tag_verp,$tag_mode) = find_packet_to_tag_as_last($message);
+    
+    $message->{'messagekey'} = undef;
+    foreach my $mode (sort keys %{$message->{'rcpts_by_mode'}}) {
+	my $new_message = dclone $message;
+	$new_message->prepare_message_according_to_mode($mode);
+	my $verp = 'off';
+	if ($message->{'rcpts_by_mode'}{$mode}{'noverp'}) {
+	    my $result = mail::mail_message(
+		'message'         => $new_message,
+		'rcpt'            => $message->{'rcpts_by_mode'}{$mode}{'noverp'},
+		'list'            => $self,
+		'verp'            => $verp,
+		'dkim_parameters' => $dkim_parameters,
+		'tag_as_last'     => (($mode eq $tag_mode)&&($tag_verp eq 'noverp'))
+	    );
+	    unless (defined $result) {
+		Log::do_log('err',
+		    "List::send_msg, could not send message to distribute from $from (verp disabled)"
+		);
+		return undef;
+	    }
+	    $nbr_smtp += $result;
+	}
+
+	$verp = 'on';
+
+	if (($apply_tracking eq 'dsn') || ($apply_tracking eq 'mdn')) {
+	    $verp = $apply_tracking;
+	    tracking::db_init_notification_table(
+		$self,
+		'msgid' => $original_message_id,
+		# what ever the message is transformed because of the
+		# reception option, tracking use the original message id
+		'rcpt'             => $message->{'rcpts_by_mode'}{$mode}{'verp'},
+		'reception_option' => $mode
+	    );
+	}
+
+	#  ignore those reception option where mail must not ne sent
+	next if ($mode =~ /nomail|summary|digest|digestplain/);
+
+	if ($message->{'rcpts_by_mode'}{$mode}{'verp'}) {
+	    ## prepare VERP sending.
+	    my $result = mail::mail_message(
+		'message'         => $new_message,
+		'rcpt'            => $message->{'rcpts_by_mode'}{$mode}{'verp'},
+		'list'            => $self,
+		'verp'            => $verp,
+		'dkim_parameters' => $dkim_parameters,
+		'tag_as_last'     => (($mode eq $tag_mode)&&($tag_verp eq 'verp'))
+	    );
+	    unless (defined $result) {
+		Log::do_log('err',
+		    "List::send_msg, could not send message to distribute from $from (verp enabled)"
+		);
+		return undef;
+	    }
+	    $nbr_smtp += $result;
+	    $nbr_verp += $result;
+	}
+    }
+    return $nbr_smtp;
+}
+
+sub get_list_members_per_mode {
+    my $self= shift;
+    my $message = shift;
+    my (@tabrcpt,                  @tabrcpt_verp,
+	@tabrcpt_notice,           @tabrcpt_notice_verp,
+	@tabrcpt_txt,              @tabrcpt_txt_verp,
+	@tabrcpt_html,             @tabrcpt_html_verp,
+	@tabrcpt_url,              @tabrcpt_url_verp,
 	@tabrcpt_digestplain_verp, @tabrcpt_digest_verp,
 	@tabrcpt_summary_verp,     @tabrcpt_nomail_verp
     );
-    my $mixed =
-	($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
-    my $alternative =
-	($message->{'msg'}->head->get('Content-Type') =~
-	    /multipart\/alternative/i);
-    my $recip = $message->{'msg'}->head->get('X-Sympa-Receipient');
 
-    if ($recip) {
-	@tabrcpt = split /,/, $recip;
-	$message->{'msg'}->head->delete('X-Sympa-Receipient');
-
-    } else {
-
-	for (
-	    my $user = $self->get_first_list_member();
-	    $user;
-	    $user = $self->get_next_list_member()
-	    ) {
+    for (my $user = $self->get_first_list_member();
+	$user;
+	$user = $self->get_next_list_member())
+    {
 	unless ($user->{'email'}) {
-		&Log::do_log('err',
-		    'Skipping user with no email address in list %s', $name);
+	    &Log::do_log('err',
+	    'Skipping user with no email address in list %s', $self->get_list_id);
 	    next;
 	}
-	    my $user_data = $self->user('member', $user->{'email'}) || undef;
+	my $user_data = $self->user('member', $user->{'email'}) || undef;
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
-	    if (defined $user_data && $user_data->{'suspend'} eq '1') {
-		if (($user_data->{'startdate'} <= time) &&
-		    ((time <= $user_data->{'enddate'}) ||
-			(!$user_data->{'enddate'}))
-		    ) {
-		    push @tabrcpt_nomail_verp, $user->{'email'};
-		    next;
-		} elsif (($user_data->{'enddate'} < time) &&
-		    ($user_data->{'enddate'})) {
-		## If end date is < time, update the BDD by deleting the suspending's data
-		    $self->restore_suspended_subscription($user->{'email'});
-	    }
-	}
-	    if ($user->{'reception'} eq 'digestplain')
-	    { # digest digestplain, nomail and summary reception option are initialized for tracking feature only
-		push @tabrcpt_digestplain_verp, $user->{'email'};
-		next;
-	    } elsif ($user->{'reception'} eq 'digest') {
-		push @tabrcpt_digest_verp, $user->{'email'};
-		next;
-	    } elsif ($user->{'reception'} eq 'summary') {
-		push @tabrcpt_summary_verp, $user->{'email'};
-		next;
-	    } elsif ($user->{'reception'} eq 'nomail') {
+	if (defined $user_data && $user_data->{'suspend'} eq '1') {
+	    if (($user_data->{'startdate'} <= time) &&
+	    ((time <= $user_data->{'enddate'}) ||
+	    (!$user_data->{'enddate'}))
+	    ) {
 		push @tabrcpt_nomail_verp, $user->{'email'};
 		next;
-	    } elsif ($user->{'reception'} eq 'notice') {
-	    if ($user->{'bounce_address'}) {
-		    push @tabrcpt_notice_verp, $user->{'email'};
-		} else {
-		    push @tabrcpt_notice, $user->{'email'};
+	    } elsif (($user_data->{'enddate'} < time) &&
+		($user_data->{'enddate'})) {
+		## If end date is < time, update the BDD by deleting the suspending's data
+		$self->restore_suspended_subscription($user->{'email'});
 	    }
-	    } elsif ($alternative and ($user->{'reception'} eq 'txt')) {
+	}
+	if ($user->{'reception'} eq 'digestplain')
+	{ # digest digestplain, nomail and summary reception option are initialized for tracking feature only
+	    push @tabrcpt_digestplain_verp, $user->{'email'};
+	} elsif ($user->{'reception'} eq 'digest') {
+	    push @tabrcpt_digest_verp, $user->{'email'};
+	    Log::do_log('debug3','user %s digest',$user->{'email'});
+	} elsif ($user->{'reception'} eq 'summary') {
+	    push @tabrcpt_summary_verp, $user->{'email'};
+	    Log::do_log('debug3','user %s summary',$user->{'email'});
+	} elsif ($user->{'reception'} eq 'nomail') {
+	    push @tabrcpt_nomail_verp, $user->{'email'};
+	    Log::do_log('debug3','user %s nomail',$user->{'email'});
+	} elsif ($user->{'reception'} eq 'notice') {
 	    if ($user->{'bounce_address'}) {
-		push @tabrcpt_txt_verp, $user->{'email'};
-		} else {
-		push @tabrcpt_txt, $user->{'email'};
+		push @tabrcpt_notice_verp, $user->{'email'};
+		Log::do_log('debug3','user %s notice and verp',$user->{'email'});
+	    } else {
+		push @tabrcpt_notice, $user->{'email'};
+		Log::do_log('debug3','user %s notice',$user->{'email'});
 	    }
-	    } elsif ($alternative and ($user->{'reception'} eq 'html')) {
-	    if ($user->{'bounce_address'}) {
-		push @tabrcpt_html_verp, $user->{'email'};
-		} else {
-		if ($user->{'bounce_address'}) {
-		    push @tabrcpt_html_verp, $user->{'email'};
-		    } else {
-		    push @tabrcpt_html, $user->{'email'};
-		}
-	    }
-	} elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
-	    if ($user->{'bounce_address'}) {
-	        push @tabrcpt_url_verp, $user->{'email'};
-		} else {
-	        push @tabrcpt_url, $user->{'email'};
-	    }
-	    } elsif (
-		$message->{'smime_crypted'} &&
-		(!-r Site->ssl_cert_dir . '/' .
-		    &tools::escape_chars($user->{'email'}) &&
-		    !-r Site->ssl_cert_dir . '/' .
-		    &tools::escape_chars($user->{'email'} . '@enc'))
-		) {
-       	    ## Missing User certificate
+	} elsif ($message->{'smime_crypted'} &&
+	    (!-r Site->ssl_cert_dir . '/' .
+	    &tools::escape_chars($user->{'email'}) &&
+	    !-r Site->ssl_cert_dir . '/' .
+	    &tools::escape_chars($user->{'email'} . '@enc'))
+	) {
+	    Log::do_log('debug3','No certificate for user %s',$user->{'email'});
+	    ## Missing User certificate
 	    my $subject = $message->{'msg'}->head->get('Subject');
 	    my $sender = $message->{'msg'}->head->get('From');
-		unless (
-		    $self->send_file(
-			'x509-user-cert-missing',
-			$user->{'email'},
-			{   'mail' =>
-				{'subject' => $subject, 'sender' => $sender},
-			    'auto_submitted' => 'auto-generated'
+	    unless (
+	    $self->send_file(
+		'x509-user-cert-missing',
+		$user->{'email'},
+		{   'mail' =>
+		    {'subject' => $subject, 'sender' => $sender},
+		    'auto_submitted' => 'auto-generated'
+		    }
+		)
+	    ) {
+		&Log::do_log('notice',
+		"Unable to send template 'x509-user-cert-missing' to $user->{'email'}"
+		);
 	    }
-		    )
-		    ) {
-		    &Log::do_log('notice',
-			"Unable to send template 'x509-user-cert-missing' to $user->{'email'}"
-		    );
-		}
+	} elsif (!$message->is_signed && $message->has_text_part && $user->{'reception'} eq 'txt') {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_txt_verp, $user->{'email'};
+		Log::do_log('debug3','user %s txt and verp',$user->{'email'});
 	    } else {
+		push @tabrcpt_txt, $user->{'email'};
+		Log::do_log('debug3','user %s txt',$user->{'email'});
+	    }
+	} elsif (!$message->is_signed && $message->has_html_part && $user->{'reception'} eq 'html') {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_html_verp, $user->{'email'};
+		Log::do_log('debug3','user %s html and verp',$user->{'email'});
+	    } else {
+		push @tabrcpt_html, $user->{'email'};
+		Log::do_log('debug3','user %s html',$user->{'email'});
+	    }
+	} elsif (!$message->is_signed && $message->has_attachments && $user->{'reception'} eq 'urlize') {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_url_verp, $user->{'email'};
+		Log::do_log('debug3','user %s urlize and verp',$user->{'email'});
+	    } else {
+		push @tabrcpt_url, $user->{'email'};
+		Log::do_log('debug3','user %s urlize',$user->{'email'});
+	    }
+	} else {
 	    if ($user->{'bounce_score'}) {
-		    push @tabrcpt_verp, $user->{'email'}
-			unless ($sender_hash{$user->{'email'}}) &&
-			($user->{'reception'} eq 'not_me');
+		push @tabrcpt_verp, $user->{'email'}
+		    unless ($message->{'sender_hash'}{$user->{'email'}}) &&
+		    ($user->{'reception'} eq 'not_me');
+		Log::do_log('debug3','user %s mail and verp',$user->{'email'});
 		} else {
-		    push @tabrcpt, $user->{'email'}
-			unless ($sender_hash{$user->{'email'}}) &&
-			($user->{'reception'} eq 'not_me');
+		push @tabrcpt, $user->{'email'}
+		    unless ($message->{'sender_hash'}{$user->{'email'}}) &&
+		    ($user->{'reception'} eq 'not_me');
+		Log::do_log('debug3','user %s mail',$user->{'email'});
+		}
 	    }
     }
-	}
-    }
-
     unless (@tabrcpt ||
 	@tabrcpt_notice ||
 	@tabrcpt_txt ||
@@ -2181,291 +2261,85 @@ sub send_msg {
 	@tabrcpt_html_verp ||
 	@tabrcpt_url_verp) {
 	&Log::do_log('info', 'No subscriber for sending msg in list %s',
-	    $name);
+	    $self->get_list_id);
 	return 0;
     }
+    $message->{'rcpts_by_mode'}{'mail'}{'noverp'} = \@tabrcpt if ($#tabrcpt > -1);
+    $message->{'rcpts_by_mode'}{'mail'}{'verp'} = \@tabrcpt_verp if ($#tabrcpt_verp > -1);
+    $message->{'rcpts_by_mode'}{'notice'}{'noverp'} = \@tabrcpt_notice if ($#tabrcpt_notice > -1);
+    $message->{'rcpts_by_mode'}{'notice'}{'verp'} = \@tabrcpt_notice_verp if ($#tabrcpt_notice_verp > -1);
+    $message->{'rcpts_by_mode'}{'txt'}{'noverp'} = \@tabrcpt_txt if ($#tabrcpt_txt > -1);
+    $message->{'rcpts_by_mode'}{'txt'}{'verp'} = \@tabrcpt_txt_verp if ($#tabrcpt_txt_verp > -1);
+    $message->{'rcpts_by_mode'}{'html'}{'noverp'} = \@tabrcpt_html if ($#tabrcpt_html > -1);
+    $message->{'rcpts_by_mode'}{'html'}{'verp'} = \@tabrcpt_html_verp if ($#tabrcpt_html_verp > -1);
+    $message->{'rcpts_by_mode'}{'url'}{'noverp'} = \@tabrcpt_url if ($#tabrcpt_url > -1);
+    $message->{'rcpts_by_mode'}{'url'}{'verp'} = \@tabrcpt_url_verp if ($#tabrcpt_url_verp > -1);
+    $message->{'rcpts_by_mode'}{'nomail'}{'verp'} = \@tabrcpt_nomail_verp if ($#tabrcpt_nomail_verp > -1);
+    $message->{'rcpts_by_mode'}{'summary'}{'verp'} = \@tabrcpt_summary_verp if ($#tabrcpt_summary_verp > -1);
+    $message->{'rcpts_by_mode'}{'digest'}{'verp'} = \@tabrcpt_digest_verp if ($#tabrcpt_digest_verp > -1);
+    $message->{'rcpts_by_mode'}{'digestplain'}{'verp'} = \@tabrcpt_digestplain_verp if ($#tabrcpt_digestplain_verp > -1);
+    return 1;
+}
 
-    #save the message before modifying it
-    my $saved_msg = $message->{'msg'}->dup;
-    my $nbr_smtp = 0;
-    my $nbr_verp = 0;
-
-    # prepare verp parameter
-    my $verp_rate = $self->verp_rate;
-    $verp_rate = '100%'
-	if (($apply_tracking eq 'dsn') || ($apply_tracking eq 'mdn'))
-	;    # force verp if tracking is requested.
-
-    my $xsequence = $self->stats->[0];
-    my $tags_to_use;
-
-# Define messages which can be tagged as first or last according to the verp rate.
-# If the VERP is 100%, then all the messages are VERP. Don't try to tag not VERP
-# messages as they won't even exist.
-    if ($verp_rate eq '0%') {
-	$tags_to_use->{'tag_verp'} = 0;
-	$tags_to_use->{'tag_noverp'} = 1;
+sub filter_receipients_by_topics {
+    my $self = shift;
+    my $message = shift;
+    my $mode = shift;
+    my $verp_rate = shift;
+    my $xsequence = shift;
+    ## TOPICS
+    my @selected_tabrcpt;
+    my @possible_verptabrcpt;
+    if ($self->is_there_msg_topic()) {
+	@selected_tabrcpt =
+	    $self->select_list_members_for_topic(
+	    $message->get_topic(),
+	    $message->{'rcpts_by_mode'}{$mode}{'noverp'});
+	@possible_verptabrcpt =
+	    $self->select_list_members_for_topic(
+	    $message->get_topic(),
+	    $message->{'rcpts_by_mode'}{$mode}{'verp'});
     } else {
-	$tags_to_use->{'tag_verp'} = 1;
-	$tags_to_use->{'tag_noverp'} = 0;
+	@selected_tabrcpt = @{$message->{'rcpts_by_mode'}{$mode}{'noverp'}};
+	@possible_verptabrcpt = @{$message->{'rcpts_by_mode'}{$mode}{'verp'}};
     }
 
-    my $dkim_parameters;
+    ## Preparing VERP receipients.
+    my @verp_selected_tabrcpt =
+	extract_verp_rcpt($verp_rate, $xsequence, \@selected_tabrcpt,
+	\@possible_verptabrcpt);
+    
+    if ($#selected_tabrcpt > -1) {
+	$message->{'rcpts_by_mode'}{$mode}{'noverp'} = \@selected_tabrcpt;
+    }else{
+	delete $message->{'rcpts_by_mode'}{$mode}{'noverp'};
+    }
+    if ($#verp_selected_tabrcpt > -1) {
+	$message->{'rcpts_by_mode'}{$mode}{'verp'} = \@verp_selected_tabrcpt;
+    }else{
+	delete $message->{'rcpts_by_mode'}{$mode}{'verp'};
+    }
+    return $#verp_selected_tabrcpt + $#selected_tabrcpt +2;
+}
 
-    # prepare dkim parameters
-    if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = &tools::get_dkim_parameters($self);
-    }
-    ## Storing the not empty subscribers' arrays into a hash.
-    my $available_rcpt;
-    my $available_verp_rcpt;
-
-    if (@tabrcpt) {
-	$available_rcpt->{'tabrcpt'} = \@tabrcpt;
-	$available_verp_rcpt->{'tabrcpt'} = \@tabrcpt_verp;
-    }
-    if (@tabrcpt_notice) {
-	$available_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice;
-	$available_verp_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice_verp;
-    }
-    if (@tabrcpt_txt) {
-	$available_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt;
-	$available_verp_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt_verp;
-    }
-    if (@tabrcpt_html) {
-	$available_rcpt->{'tabrcpt_html'} = \@tabrcpt_html;
-	$available_verp_rcpt->{'tabrcpt_html'} = \@tabrcpt_html_verp;
-    }
-    if (@tabrcpt_url) {
-	$available_rcpt->{'tabrcpt_url'} = \@tabrcpt_url;
-	$available_verp_rcpt->{'tabrcpt_url'} = \@tabrcpt_url_verp;
-    }
-    if (@tabrcpt_digestplain_verp)  {
-	$available_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain;
-	$available_verp_rcpt->{'tabrcpt_digestplain'} =
-	    \@tabrcpt_digestplain_verp;
-    }
-    if (@tabrcpt_digest_verp) {
-	$available_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest;
-	$available_verp_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest_verp;
-    }
-    if (@tabrcpt_summary_verp) {
-	$available_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary;
-	$available_verp_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary_verp;
-    }
-    if (@tabrcpt_nomail_verp) {
-	$available_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail;
-	$available_verp_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail_verp;
-    }
-    foreach my $array_name (keys %$available_rcpt) {
-	my $reception_option;
-	if ($array_name =~
-	    /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/
-	    ) {
-	    $reception_option = $1;
-	    $reception_option = 'mail' unless $reception_option;
+sub find_packet_to_tag_as_last {
+    my $message = shift;
+    my %not_sent_modes = ('nomail',1,'digestplain',1,'digest',1,'summary',1);
+    my $tag_verp = 0;
+    my $tag_noverp = 0;
+    foreach my $mode (sort keys %{$message->{'rcpts_by_mode'}}) {
+	if ($message->{'rcpts_by_mode'}{$mode}{'verp'}) {
+	    $tag_verp = $mode;
 	}
-	my $new_message;
-	##Prepare message for normal reception mode
-	if ($array_name eq 'tabrcpt') {
-	    ## Add a footer
-	    unless ($message->{'protected'}) {
-		my $new_msg = $self->add_parts($message->{'msg'});
-		if (defined $new_msg) {
-		    $message->{'msg'} = $new_msg;
-		    $message->{'altered'} = '_ALTERED_';
-		}
-	    }
-	    $new_message = $message;
-	} elsif (($array_name eq 'tabrcpt_nomail') ||
-	    ($array_name eq 'tabrcpt_summary') ||
-	    ($array_name eq 'tabrcpt_digest') ||
-	    ($array_name eq 'tabrcpt_digestplain')) {
-	    $new_message = $message;
-	}	##Prepare message for notice reception mode
-	elsif ($array_name eq 'tabrcpt_notice') {
-	    my $notice_msg = $saved_msg->dup;
-	    $notice_msg->bodyhandle(undef);
-	    $notice_msg->parts([]);
-	    $new_message = new Message({'mimeentity' => $notice_msg});
-
-	##Prepare message for txt reception mode
-	} elsif ($array_name eq 'tabrcpt_txt') {
-	    my $txt_msg = $saved_msg->dup;
-	    if (&tools::as_singlepart($txt_msg, 'text/plain')) {
-		&Log::do_log('notice',
-		    'Multipart message changed to singlepart');
-	    }
-
-	    ## Add a footer
-	    my $new_msg = $self->add_parts($txt_msg);
-	    if (defined $new_msg) {
-		$txt_msg = $new_msg;
-	    }
-	    $new_message = new Message({'mimeentity' => $txt_msg});
-
-	##Prepare message for html reception mode
-	} elsif ($array_name eq 'tabrcpt_html') {
-	    my $html_msg = $saved_msg->dup;
-	    if (&tools::as_singlepart($html_msg, 'text/html')) {
-		&Log::do_log('notice',
-		    'Multipart message changed to singlepart');
-	    }
-	    ## Add a footer
-	    my $new_msg = $self->add_parts($html_msg);
-	    if (defined $new_msg) {
-		$html_msg = $new_msg;
-	    }
-	    $new_message = new Message({'mimeentity' => $html_msg});
-
-	##Prepare message for urlize reception mode
-	} elsif ($array_name eq 'tabrcpt_url') {
-	    my $url_msg = $saved_msg->dup;
-
-	    my $expl = $self->dir . '/urlized';
-
-	    unless ((-d $expl) || (mkdir $expl, 0775)) {
-		&Log::do_log('err',
-		    "Unable to create urlize directory $expl");
-		return undef;
-	    }
-
-	    my $dir1 =
-		&tools::clean_msg_id($url_msg->head->get('Message-ID'));
-
-	    ## Clean up Message-ID
-	    $dir1 = &tools::escape_chars($dir1);
-	    $dir1 = '/' . $dir1;
-
-	    unless (mkdir("$expl/$dir1", 0775)) {
-		&Log::do_log('err',
-		    "Unable to create urlize directory $expl/$dir1");
-		printf "Unable to create urlized directory $expl/$dir1";
-		return 0;
-	    }
-	    my $mime_types = &tools::load_mime_types();
-	    my @parts = ();
-	    my $i = 0;
-	    foreach my $part ($url_msg->parts()) {
-		my $entity =
-		    &_urlize_part($part, $self, $dir1, $i, $mime_types,
-		    $self->robot->wwsympa_url);
-		if (defined $entity) {
-		    push @parts, $entity;
-		} else {
-		    push @parts, $part;
-		}
-		$i++;
-	    }
-
-	    ## Replace message parts
-	    $url_msg->parts(\@parts);
-
-	    ## Add a footer
-	    my $new_msg = $self->add_parts($url_msg);
-	    if (defined $new_msg) {
-		$url_msg = $new_msg;
-	    }
-	    $new_message = new Message({'mimeentity' => $url_msg});
-	} else {
-	    &Log::do_log('err',
-		"Unknown variable/reception mode $array_name");
-	    return undef;
+	if ($message->{'rcpts_by_mode'}{$mode}{'noverp'}) {
+	    $tag_noverp = $mode;
 	}
-
-	unless (defined $new_message) {
-		&Log::do_log('err', "Failed to create Message object");
-	    return undef;
-	}
-
-	## TOPICS
-	my @selected_tabrcpt;
-	my @possible_verptabrcpt;
-	if ($self->is_there_msg_topic()) {
-	    @selected_tabrcpt =
-		$self->select_list_members_for_topic(
-		$new_message->get_topic(),
-		$available_rcpt->{$array_name});
-	    @possible_verptabrcpt =
-		$self->select_list_members_for_topic(
-		$new_message->get_topic(),
-		$available_verp_rcpt->{$array_name});
-	} else {
-	    @selected_tabrcpt = @{$available_rcpt->{$array_name}};
-	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
-	}
-
-	if ($array_name =~
-	    /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/
-	    ) {
-	    my $reception_option =  $1;
-
-	    $reception_option = 'mail' unless $reception_option;
-	}
-
-	## Preparing VERP receipients.
-	my @verp_selected_tabrcpt =
-	    &extract_verp_rcpt($verp_rate, $xsequence, \@selected_tabrcpt,
-	    \@possible_verptabrcpt);
-	my $verp = 'off';
-
-	my $result = &mail::mail_message(
-	    'message'         => $new_message,
-	    'rcpt'            => \@selected_tabrcpt,
-	    'list'            => $self,
-	    'verp'            => $verp,
-	    'dkim_parameters' => $dkim_parameters,
-	    'tag_as_last'     => $tags_to_use->{'tag_noverp'}
-	);
-	unless (defined $result) {
-	    &Log::do_log('err',
-		"List::send_msg, could not send message to distribute from $from (verp disabled)"
-	    );
-	    return undef;
-	}
-	$tags_to_use->{'tag_noverp'} = 0 if ($result > 0);
-	$nbr_smtp += $result;
-
-	$verp = 'on';
-
-	if (($apply_tracking eq 'dsn') || ($apply_tracking eq 'mdn')) {
-	    $verp = $apply_tracking;
-	    tracking::db_init_notification_table(
-		$self,
-		'msgid' => $original_message_id,
-		# what ever the message is transformed because of the
-		# reception option, tracking use the original message id
-		'rcpt'             => \@verp_selected_tabrcpt,
-		'reception_option' => $reception_option
-	    );
-	}
-
-#  ignore those reception option where mail must not ne sent
-#  next if  (($array_name eq 'tabrcpt_digest') or ($array_name eq 'tabrcpt_digestlplain') or ($array_name eq 'tabrcpt_summary') or ($array_name eq 'tabrcpt_nomail')) ;
-	next
-	    if ($array_name =~
-	    /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
-
-	## prepare VERP sending.
-	$result = &mail::mail_message(
-	    'message'         => $new_message,
-	    'rcpt'            => \@verp_selected_tabrcpt,
-	    'list'            => $self,
-	    'verp'            => $verp,
-	    'dkim_parameters' => $dkim_parameters,
-	    'tag_as_last'     => $tags_to_use->{'tag_verp'}
-	);
-	unless (defined $result) {
-	    &Log::do_log('err',
-		"List::send_msg, could not send message to distribute from $from (verp enabled)"
-	    );
-	    return undef;
-	}
-	$tags_to_use->{'tag_verp'} = 0 if ($result > 0);
-	$nbr_smtp += $result;
-	$nbr_verp += $result;
     }
-    return $nbr_smtp;
+    if ($tag_verp) {
+	return ('verp',$tag_verp);
+    }else{
+	return ('noverp',$tag_noverp);
+    }
 }
 
 ###################   SERVICE MESSAGES   ##################################
@@ -2498,7 +2372,7 @@ sub send_to_editor {
     my ($i, @rcpt);
     my $name  = $self->name;
     my $host  = $self->host;
-    my $robot = $self->domain;
+    my $robot = $self->robot;
 
     return unless $name and $self->config;
 
@@ -2526,15 +2400,11 @@ sub send_to_editor {
 
 	# prepare html view of this message
 	my $destination_dir =
-	    Site->viewmail_dir . '/mod/' . $self->get_list_id() .
-	    '/' . $modkey;
-	&Archive::convert_single_msg_2_html(
-	    {   'msg_as_string'   => $message->get_message_as_string,
-		'destination_dir' => $destination_dir,
-		'attachement_url' => "viewmod/$name/$modkey",
-		'list'            => $self,
-		'robot'	          => $robot,
-	    }
+	    Site->viewmail_dir . '/mod/' . $self->get_id() . '/' . $modkey;
+	Archive::convert_single_message(
+	    $self, $message,
+	    'destination_dir' => $destination_dir,
+	    'attachement_url' => join('/', '..', 'viewmod', $name, $modkey),
 	);
     }
     @rcpt = $self->get_editors_email();
@@ -2583,7 +2453,7 @@ sub send_to_editor {
 	'method'         => $method
     };
 
-   if ($self->is_there_msg_topic()) {
+   if ($self->is_there_msg_topic() && $self->is_msg_topic_tagging_required()) {
        $param->{'request_topic'} = 1;
    }
 
@@ -2643,14 +2513,14 @@ sub send_to_editor {
 ####################################################
 sub send_auth {
     my ($self, $message) = @_;
-    my ($sender, $msg, $file) =
-	($message->{'sender'}, $message->{'msg'}, $message->{'filename'});
+    my ($sender, $file) =
+	($message->{'sender'}, $message->{'filename'});
    &Log::do_log('debug3', 'List::send_auth(%s, %s)', $sender, $file);
 
    ## Ensure 1 second elapsed since last message
+   ## DV: What kind of lame hack is this???
     sleep(1);
 
-    my ($i, @rcpt);
     my $name      = $self->name;
     my $host      = $self->host;
     my $robot     = $self->domain;
@@ -2684,18 +2554,28 @@ sub send_auth {
 	'file'     => $file
     };
 
-   if ($self->is_there_msg_topic()) {
+   if ($self->is_there_msg_topic() && $self->is_msg_topic_tagging_required()) {
        $param->{'request_topic'} = 1;
    }
 
+    if ($message->{'smime_crypted'}) {
+	$message->smime_encrypt($sender);
+	unless($message->{'smime_crypted'} eq 'smime_crypted') {
+	    Log::do_log('err','Could not encrypt message for moderator %s',$sender);
+	}
+	$param->{'msg'} = $message->get_encrypted_mime_message;
+    } else {
+	$param->{'msg'} = $message->get_mime_message;
+    }
+
    &tt2::allow_absolute_path();
-   $param->{'auto_submitted'} = 'auto-replied';
+   $param->{'auto_submitted'} = 'auto-forwarded';
+
     unless ($self->send_file('send_auth', $sender, $param)) {
 	&Log::do_log('notice',
 	    "Unable to send template 'send_auth' to $sender");
        return undef;
    }
-
    return $authkey;
 }
 
@@ -3249,215 +3129,6 @@ See L<Site/get_etc_include_path>.
 =cut
 
 ## Inherited from Site_r
-
-## Add footer/header to a message
-sub add_parts {
-    my ($self, $msg) = @_;
-    my ($listname, $type) =
-	($self->name, $self->footer_type);
-    my $listdir = $self->dir;
-    &Log::do_log('debug2', 'List:add_parts(%s, %s, %s)',
-	$msg, $listname, $type);
-
-    my ($header, $headermime);
-    foreach my $file (
-	"$listdir/message.header",
-	"$listdir/message.header.mime",
-	Site->etc . '/mail_tt2/message.header',
-	Site->etc . '/mail_tt2/message.header.mime'
-	) {
-	if (-f $file) {
-	    unless (-r $file) {
-		&Log::do_log('notice', 'Cannot read %s', $file);
-		next;
-	    }
-	    $header = $file;
-	    last;
-	}
-    }
-
-    my ($footer, $footermime);
-    foreach my $file (
-	"$listdir/message.footer",
-	"$listdir/message.footer.mime",
-	Site->etc . '/mail_tt2/message.footer',
-	Site->etc . '/mail_tt2/message.footer.mime'
-	) {
-	if (-f $file) {
-	    unless (-r $file) {
-		&Log::do_log('notice', 'Cannot read %s', $file);
-		next;
-	    }
-	    $footer = $file;
-	    last;
-	}
-    }
-
-    ## No footer/header
-    unless (($footer and -s $footer) or ($header and -s $header)) {
- 	return undef;
-    }
-
-    if ($type eq 'append') {
-	## append footer/header
-	my ($footer_msg, $header_msg);
-	if ($header and -s $header) {
-	    open HEADER, $header;
-	    $header_msg = join '', <HEADER>;
-	    close HEADER;
-	    $header_msg = '' unless $header_msg =~ /\S/;
-	}
-	if ($footer and -s $footer) {
-	    open FOOTER, $footer;
-	    $footer_msg = join '', <FOOTER>;
-	    close FOOTER;
-	    $footer_msg = '' unless $footer_msg =~ /\S/;
-	}
-	if (length $header_msg or length $footer_msg) {
-	    if (&_append_parts($msg, $header_msg, $footer_msg)) {
-		$msg->sync_headers(Length => 'COMPUTE')
-		    if $msg->head->get('Content-Length');
-	    }
-	}
-    } else {
-	## MIME footer/header
-	my $parser = new MIME::Parser;
-	$parser->output_to_core(1);
-
-	my $content_type = $msg->effective_type || 'text/plain';
-
-	if ($content_type =~ /^multipart\/alternative/i ||
-	    $content_type =~ /^multipart\/related/i) {
-
-	    &Log::do_log('notice', 'Making $1 into multipart/mixed');
-	    $msg->make_multipart("mixed", Force => 1);
-	}
-
-	if ($header and -s $header) {
-	    if ($header =~ /\.mime$/) {
-		my $header_part;
-		eval { $header_part = $parser->parse_in($header); };
-		if ($@) {
-		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
-				 $header, $parser->last_error);
-		} else {
-		    $msg->make_multipart unless $msg->is_multipart;
-		    $msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
-		}
-	    ## text/plain header
-	    } else {
-
-		$msg->make_multipart unless $msg->is_multipart;
-		my $header_part = build MIME::Entity
-		    Path       => $header,
-		Type        => "text/plain",
-		Filename    => undef,
-		'X-Mailer'  => undef,
-		Encoding    => "8bit",
-		Charset     => "UTF-8";
-		$msg->add_part($header_part, 0);
-	    }
-	}
-	if ($footer and -s $footer) {
-	    if ($footer =~ /\.mime$/) {
-		my $footer_part;
-		eval { $footer_part = $parser->parse_in($footer); };
-		if ($@) {
-		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
-				 $footer, $parser->last_error);
-		} else {
-		    $msg->make_multipart unless $msg->is_multipart;
-		    $msg->add_part($footer_part);
-		}
-	    ## text/plain footer
-	    } else {
-
-		$msg->make_multipart unless $msg->is_multipart;
-		$msg->attach(
-		    Path       => $footer,
-			     Type        => "text/plain",
-			     Filename    => undef,
-			     'X-Mailer'  => undef,
-			     Encoding    => "8bit",
-			     Charset     => "UTF-8"
-			     );
-	    }
-	}
-    }
-
-    return $msg;
-}
-
-sub _append_parts {
-    my $part = shift;
-    my $header_msg = shift || '';
-    my $footer_msg = shift || '';
-
-    my $eff_type = $part->effective_type || 'text/plain';
-
-    if ($eff_type eq 'text/plain') {
-	my $cset = MIME::Charset->new('UTF-8');
-	$cset->encoder($part->head->mime_attr('Content-Type.Charset') ||
-		'NONE');
-
-	my $body;
-	if (defined $part->bodyhandle) {
-	    $body = $part->bodyhandle->as_string;
-	} else {
-	    $body = '';
-	}
-
-	## Only encodable footer/header are allowed.
-	if ($cset->encoder) {
-	    eval { $header_msg = $cset->encode($header_msg, 1); };
-	    $header_msg = '' if $@;
-	    eval { $footer_msg = $cset->encode($footer_msg, 1); };
-	    $footer_msg = '' if $@;
-	} else {
-	    $header_msg = '' if $header_msg =~ /[^\x01-\x7F]/;
-	    $footer_msg = '' if $footer_msg =~ /[^\x01-\x7F]/;
-	}
-
-	if (length $header_msg or length $footer_msg) {
-	    $header_msg .= "\n"
-		if length $header_msg and
-		    $header_msg !~ /\n$/;
-	    $body .= "\n"
-		if length $footer_msg and
-		    length $body and
-		    $body !~ /\n$/;
-
-	    my $io = $part->bodyhandle->open('w');
-	    unless (defined $io) {
-		&Log::do_log('err',
-		    "List::add_parts: Failed to save message : $!");
-		return undef;
-	    }
-	    $io->print($header_msg);
-	    $io->print($body);
-	    $io->print($footer_msg);
-	    $io->close;
-	    $part->sync_headers(Length => 'COMPUTE')
-		if $part->head->get('Content-Length');
-	}
-	return 1;
-    } elsif ($eff_type eq 'multipart/mixed') {
-	## Append to first part if text/plain
-	if ($part->parts and
-	    &_append_parts($part->parts(0), $header_msg, $footer_msg)) {
-	    return 1;
-	}
-    } elsif ($eff_type eq 'multipart/alternative') {
-	## Append to first text/plain part
-	foreach my $p ($part->parts) {
-	    if (&_append_parts($p, $header_msg, $footer_msg)) {
-		return 1;
-	    }
-	}
-    }
-
-    return undef;
-}
 
 ## Delete a user in the user_table
 ##sub delete_global_user
@@ -5104,7 +4775,6 @@ sub add_list_member {
 		$self->sync_include();
 	    next if ($self->is_list_member($who));
 	}
-
 	$new_user->{'date'} ||= time;
 	$new_user->{'update_date'} ||= $new_user->{'date'};
 
@@ -5168,31 +4838,35 @@ sub add_list_member {
 
 	## Update Subscriber Table
 	unless (
-	    &SDM::do_prepared_query(
+	    SDM::do_query(
 		q{INSERT INTO subscriber_table
 		  (user_subscriber, comment_subscriber,
 		   list_subscriber, robot_subscriber,
-		   date_subscriber, update_subscriber,
+		   date_subscriber,
+		   update_subscriber,
 		   reception_subscriber,
 		   topics_subscriber,
 		   visibility_subscriber,
 		   subscribed_subscriber,
-		   included_subscriber, include_sources_subscriber,
+		   included_subscriber,
+		   include_sources_subscriber,
 		   custom_attribute_subscriber,
 		   suspend_subscriber,
 		   suspend_start_date_subscriber, suspend_end_date_subscriber)
-		  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
-		$who, $new_user->{'gecos'},
-		$name, $self->domain,
+		  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %d,
+			  %d, %s, %s, %d, %d, %d)},
+		SDM::quote($who), SDM::quote($new_user->{'gecos'}),
+		SDM::quote($name), SDM::quote($self->domain),
 		SDM::get_canonical_write_date($new_user->{'date'}),
 		SDM::get_canonical_write_date($new_user->{'update_date'}),
-		$new_user->{'reception'},
-		$new_user->{'topics'},
-		$new_user->{'visibility'},
-		$new_user->{'subscribed'},
-		$new_user->{'included'}, $new_user->{'id'},
-		$new_user->{'custom_attribute'},
-		$new_user->{'suspend'},
+		SDM::quote($new_user->{'reception'}),
+		SDM::quote($new_user->{'topics'}),
+		SDM::quote($new_user->{'visibility'}),
+		($new_user->{'subscribed'} ? 1 : 0),
+		($new_user->{'included'} ? 1 : 0),
+		SDM::quote($new_user->{'id'}),
+		SDM::quote($new_user->{'custom_attribute'}),
+		($new_user->{'suspend'} ? 1 : 0),
 		$new_user->{'startdate'}, $new_user->{'enddate'}
 	    )
 	    ) {
@@ -5278,24 +4952,28 @@ sub add_list_admin {
 
 	## Update Admin Table
 	unless (
-	    SDM::do_prepared_query(
+	    SDM::do_query(
 		q{INSERT INTO admin_table
 		  (user_admin, comment_admin, list_admin, robot_admin,
 		   date_admin, update_admin,
 		   reception_admin, visibility_admin,
 		   subscribed_admin, included_admin, include_sources_admin,
 		   role_admin, info_admin, profile_admin)
-		  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
-		$who, $new_admin_user->{'gecos'}, $name, $self->domain,
+		  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %d, %d,
+			  %s, %s, %s, %s)},
+		SDM::quote($who), SDM::quote($new_admin_user->{'gecos'}),
+		SDM::quote($name), SDM::quote($self->domain),
 		SDM::get_canonical_write_date($new_admin_user->{'date'}),
 		SDM::get_canonical_write_date(
 		    $new_admin_user->{'update_date'}
 		),
-		$new_admin_user->{'reception'},
-		$new_admin_user->{'visibility'},
-		$new_admin_user->{'subscribed'},
-		$new_admin_user->{'included'}, $new_admin_user->{'id'},
-		$role, $new_admin_user->{'info'}, $new_admin_user->{'profile'}
+		SDM::quote($new_admin_user->{'reception'}),
+		SDM::quote($new_admin_user->{'visibility'}),
+		($new_admin_user->{'subscribed'} ? 1 : 0),
+		($new_admin_user->{'included'} ? 1 : 0),
+		SDM::quote($new_admin_user->{'id'}),
+		SDM::quote($role), SDM::quote($new_admin_user->{'info'}),
+		SDM::quote($new_admin_user->{'profile'})
 	    )
 	) {
 	    &Log::do_log(
@@ -8471,7 +8149,7 @@ sub is_update_param {
 	'profile',   'id',         'included', 'subscribed'
 	) {
 	if (defined $new_param->{$p}) {
-	    if ($new_param->{$p} ne $old_param->{$p}) {
+	    if (defined $old_param->{$p} && $new_param->{$p} ne $old_param->{$p}) {
 		$resul->{$p} = $new_param->{$p};
 		$update = 1;
 	    }
@@ -10482,8 +10160,8 @@ sub tag_topic {
     Log::do_log('debug3', '(%s, %s, %s, %s)', @_);
     my ($self, $msg_id, $topic_list, $method) = @_;
 
-    my $topic_item = sprintf "TOPIC   $topic_list\n";
-    $topic_item .= sprintf "METHOD  $method\n";
+    my $topic_item = sprintf "TOPIC   %s\n", $topic_list;
+    $topic_item .= sprintf "METHOD  %s\n", $method;
     my $topicspool = new Sympaspool('topic');
 
     return (
@@ -10522,7 +10200,7 @@ sub load_msg_topic {
     my $topicspool = new Sympaspool('topic');
 
     my $topics_from_spool = $topicspool->get_message(
-	{   'listname'  => $self->name,
+	{   'list'  => $self->name,
 	    'robot'     => $self->domain,
 	    'messageid' => $msg_id
 	}
@@ -10530,7 +10208,7 @@ sub load_msg_topic {
     unless ($topics_from_spool) {
 	&Log::do_log(
 	    'debug',
-	    'No topic define ; unable to find topic for message %s / list  %s',
+	    'No topic defined ; unable to find topic for message %s / list  %s',
 	    $msg_id,
 	    $self
 	);
@@ -10723,119 +10401,6 @@ sub select_list_members_for_topic {
 #                                                                                         #
 ########## END - functions for message topics #############################################
 
-sub _urlize_part {
-    my $message = shift;
-    my $list = shift;
-    my $expl        = $list->dir . '/urlized';
-    my $robot       = $list->domain;
-    my $dir = shift;
-    my $i = shift;
-    my $mime_types = shift;
-    my $listname    = $list->name;
-    my $wwsympa_url = shift;
-
-    my $head     = $message->head;
-    my $encoding = $head->mime_encoding;
-
-    ##  name of the linked file
-    my $fileExt = $mime_types->{$head->mime_type};
-    if ($fileExt) {
-	$fileExt = '.' . $fileExt;
-    }
-    my $filename;
-
-    if ($head->recommended_filename) {
-	$filename = $head->recommended_filename;
-    } else {
-        if ($head->mime_type =~ /multipart\//i) {
-          my $content_type = $head->get('Content-Type');
-          $content_type =~ s/multipart\/[^;]+/multipart\/mixed/g;
-          $message->head->replace('Content-Type', $content_type);
-          my @parts = $message->parts();
-	    foreach my $i (0 .. $#parts) {
-		my $entity =
-		    _urlize_part(
-			$message->parts($i), $list, $dir, $i, $mime_types,
-			$list->robot->wwsympa_url);
-              if (defined $entity) {
-                $parts[$i] = $entity;
-              }
-          }
-          ## Replace message parts
-	    $message->parts(\@parts);
-        }
-	$filename = "msg.$i" . $fileExt;
-    }
-
-    ##create the linked file
-    ## Store body in file
-    if (open OFILE, ">$expl/$dir/$filename") {
-	my $ct = $message->effective_type || 'text/plain';
-	printf OFILE "Content-type: %s", $ct;
-	printf OFILE "; Charset=%s", $head->mime_attr('Content-Type.Charset')
-	    if $head->mime_attr('Content-Type.Charset') =~ /\S/;
-	print OFILE "\n\n";
-    } else {
-	&Log::do_log('notice', "Unable to open $expl/$dir/$filename");
-	return undef;
-    }
-
-    if ($encoding =~
-	/^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/
-	) {
-	open TMP, ">$expl/$dir/$filename.$encoding";
-	$message->print_body(\*TMP);
-	close TMP;
-
-	open BODY, "$expl/$dir/$filename.$encoding";
-	my $decoder = new MIME::Decoder $encoding;
-	$decoder->decode(\*BODY, \*OFILE);
-	unlink "$expl/$dir/$filename.$encoding";
-    } else {
-	$message->print_body(\*OFILE);
-    }
-    close(OFILE);
-    my $file = "$expl/$dir/$filename";
-    my $size = (-s $file);
-
-    ## Only URLize files with a moderate size
-    if ($size < Site->urlize_min_size) {
-	unlink "$expl/$dir/$filename";
-	return undef;
-    }
-
-    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-    $message->purge;
-
-    (my $file_name = $filename) =~ s/\./\_/g;
-    my $file_url = "$wwsympa_url/attach/$listname" .
-	&tools::escape_chars("$dir/$filename", '/'); # do NOT escape '/' chars
-
-    my $parser = new MIME::Parser;
-    $parser->output_to_core(1);
-    my $new_part;
-
-    my $lang = &Language::GetLang();
-    my $charset = &Language::GetCharset();
-
-    my $tt2_include_path = $list->get_etc_include_path('mail_tt2', $lang);
-
-    &tt2::parse_tt2(
-	{   'file_name' => $file_name,
-		     'file_url'  => $file_url,
-	    'file_size' => $size,
-	    'charset'   => $charset
-	},
-		    'urlized_part.tt2',
-		    \$new_part,
-	$tt2_include_path
-    );
-
-    my $entity = $parser->parse_data(\$new_part);
-
-    return $entity;
-}
-
 sub store_subscription_request {
     &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my ($self, $email, $gecos, $custom_attr) = @_;
@@ -10856,7 +10421,7 @@ sub store_subscription_request {
 	    $email);
 	return undef;
     } else {
-	my $subrequest = sprintf "$gecos||$custom_attr\n";
+	my $subrequest = sprintf "%s||%s\n", $gecos, $custom_attr;
 	$subscription_request_spool->store(
 	    $subrequest,
 	    {   'list'   => $self->name,
@@ -11012,7 +10577,7 @@ sub store_signoff_request {
 	    $email);
 	return undef;
     } else {
-	#my $subrequest = sprintf "$gecos||$custom_attr\n";
+	#my $subrequest = sprintf "%s||%s\n", $gecos, $custom_attr;
 	$signoff_request_spool->store(
 	    '',
 	    {   'list'   => $self->name,
@@ -11187,11 +10752,12 @@ sub search_datasource {
     ## Go through list parameters
     foreach my $p (keys %$pinfo) {
 	next unless ($p =~ /^include/);
-
-	## Go through sources
-	foreach my $s (@{$self->$p}) {
-	    if (&Datasource::_get_datasource_id($s) eq $id) {
-		return {'type' => $p, 'def' => $s};
+	if (defined ($self->$p)) {
+	    ## Go through sources
+	    foreach my $s (@{$self->$p}) {
+		if (&Datasource::_get_datasource_id($s) eq $id) {
+		    return {'type' => $p, 'def' => $s};
+		}
 	    }
 	}
     }
@@ -11357,8 +10923,8 @@ sub purge {
     return undef unless $self->robot->lists($self->name);
 
     ## Remove tasks for this list
-    &Task::list_tasks(Site->queuetask);
-    foreach my $task (&Task::get_tasks_by_list($self->get_list_id())) {
+    &TaskSpool::list_tasks(Site->queuetask);
+    foreach my $task (&TaskSpool::get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
 
@@ -12056,7 +11622,7 @@ sub _set_list_param {
     }
 
     my $def = undef;
-    if (defined $val and exists $p->{'default'}) {
+    if (defined $val and defined $default and exists $p->{'default'}) {
 	if ($p->{'scenario'} and $default and
 	    $val->{'name'} eq $default->{'name'}) {
 	    $def = 1;
@@ -12722,6 +12288,13 @@ sub list_cache_purge {
 	q{DELETE from list_table WHERE name_list = ? AND robot_list = ?},
 	$self->name, $self->domain);
 }
+
+sub is_scenario_purely_closed {
+    my $self = shift;
+    my $action = shift;
+    return $self->$action->is_purely_closed;
+}
+
 
 ###### END of the ListCache package ######
 

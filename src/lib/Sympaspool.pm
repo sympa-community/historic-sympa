@@ -159,7 +159,9 @@ sub get_content {
 	$statement = $statement. ' DESC' if ($way eq 'desc') ;
     }
     if ($page_size) {
-	$statement = $statement . ' LIMIT '.$offset.' , '.$page_size;
+	$statement .= SDM::get_limit_clause(
+	    {'offset' => $offset, 'rows_count' => $page_size}
+	);
     }
 
     push @sth_stack, $sth;
@@ -181,6 +183,8 @@ sub get_content {
 	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 	    $message->{'status'} = $self->{'selection_status'}; 
 	    push @messages, $message;
+
+	    last if $page_size and $page_size <= scalar @messages;
 	}
 	$sth->finish();
 	$sth = pop @sth_stack;
@@ -214,13 +218,14 @@ sub next {
 
     my $messagekey;
     while (1) {
-	unless ($sth = &SDM::do_query(
+	unless ($sth = SDM::do_query(
 	    q{SELECT messagekey_spool FROM spool_table
 	      WHERE messagelock_spool IS NULL AND spoolname_spool = %s AND
 		    (priority_spool <> 'z' OR priority_spool IS NULL) AND %s
 	      ORDER by priority_spool, date_spool
-	      LIMIT 1},
-	    &SDM::quote($self->{'spoolname'}), $sql_where
+	      %s},
+	    SDM::quote($self->{'spoolname'}), $sql_where,
+	    SDM::get_limit_clause({'rows_count' => 1})
 	)) {
 	    &Log::do_log('err', 'Could not search spool %s',
 			 $self->{'spoolname'});
@@ -310,6 +315,7 @@ sub move_to_bad {
 
 #################"
 # return one message from related spool using a specified selector
+# returns undef if message was not found.
 #  
 sub get_message {
     my $self = shift;
@@ -327,9 +333,10 @@ sub get_message {
 	q{SELECT %s
 	  FROM spool_table
 	  WHERE spoolname_spool = %s%s
-	  LIMIT 1},
+	  %s},
 	$all, SDM::quote($self->{'spoolname'}),
-	($sqlselector ? " AND $sqlselector" : '')
+	($sqlselector ? " AND $sqlselector" : ''),
+	SDM::get_limit_clause({'rows_count' => 1})
     )) {
 	Log::do_log('err',
 	    'Could not get message from spool %s', $self);
@@ -338,13 +345,25 @@ sub get_message {
     }
 
     my $message = $sth->fetchrow_hashref('NAME_lc');
-    if ($message) {
-	$message->{'lock'} =  $message->{'messagelock'}; 
-	$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'});
-    }
 
     $sth->finish;
     $sth = pop @sth_stack;
+
+    return undef unless $message and %$message;
+
+    $message->{'lock'} =  $message->{'messagelock'}; 
+    $message->{'messageasstring'} =
+	MIME::Base64::decode($message->{'message'});
+
+    if ($message->{'list'} && $message->{'robot'}) {
+	my $robot = Robot->new($message->{'robot'});
+	if ($robot) {
+	    my $list = List->new($message->{'list'}, $robot);
+	    if ($list) {
+		$message->{'list_object'} = $list;
+	    }
+	}
+    }
     return $message;
 }
 
@@ -441,7 +460,7 @@ sub store {
 
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
-    if ($self->{'spoolname'} ne 'task' && $message_asstring ne 'rebuild' ) {
+    if ($self->{'spoolname'} ne 'task' && $message_asstring ne 'rebuild' && $self->{'spoolname'} ne 'digest') {
 	$message = Message->new({'messageasstring' => $message_asstring});
     }
     

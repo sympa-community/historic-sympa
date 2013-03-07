@@ -594,15 +594,24 @@ sub purge_logs_table {
     my $date_end = timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
 
 	my $sth;
-	unless($sth = &SDM::do_query("SELECT date_stat FROM stat_table WHERE read_stat = 0 ORDER BY date_stat ASC LIMIT 1")) {
+	unless($sth = SDM::do_query(
+	    q{SELECT date_stat
+	      FROM stat_table
+	      WHERE read_stat = 0
+	      ORDER BY date_stat ASC
+	      %s},
+	    SDM::get_limit_clause({'rows_count' => 1})
+	)) {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Unable to retrieve oldest non processed stat'});
 		return undef;
 	}
 	my @res = $sth->fetchrow_array;
-	return 1 unless($#res >= 0);
+	$sth->finish;
+
+	return 1 unless @res;
 	my $date_deb = $res[0] - ($res[0] % 3600);
 
-    #hour to hour
+	#hour to hour
 	for  (my $i=$date_deb; $i <= $date_end; $i=$i+3600){
 		push(@slots, $i);
 	}
@@ -1244,10 +1253,12 @@ sub sync_include {
     &Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
 
     my $list = $task->{'list_object'};
-
+    unless (defined $list and ref $list eq 'List') {
+	return undef;
+    }
     unless ($list->sync_include()) {
-		$self->error({'task' => $task, 'type' => 'execution', 'message' => sprintf('Error while synchronizing list members for list %s', $list->get_id)});
-	}
+	$self->error({'task' => $task, 'type' => 'execution', 'message' => sprintf('Error while synchronizing list members for list %s', $list)});
+    }
     if (scalar @{$list->editor_include} or scalar @{$list->owner_include}) {
 		unless($list->sync_include_admin()) {
 			$self->error({'task' => $task, 'type' => 'execution', 'message' => sprintf('Error while synchronizing list admins for list %s', $list->get_id)});
