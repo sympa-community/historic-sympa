@@ -95,7 +95,7 @@ sub new {
     }
 
     $session->{'is_a_crawler'} = 
-	    $params{crawlers_detection}->{$ENV{'HTTP_USER_AGENT'}};
+	    $crawlers_detection->{$ENV{'HTTP_USER_AGENT'}};
     # passive_session are session not stored in the database, they are used
     # for crawler bots and action such as css, wsdl, ajax and rss
     $session->{'passive_session'} =
