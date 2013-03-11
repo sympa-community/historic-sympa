@@ -9122,7 +9122,8 @@ sub do_voot {
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/voot/'.$in{'voot_path'},
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
 		request_parameters => \%in,
-		robot => $robot
+		robot => $robot,
+		config =>  $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 
 	my $bad = defined($provider) ? $provider->checkRequest() : 400;
