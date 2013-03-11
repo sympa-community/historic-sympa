@@ -16533,7 +16533,7 @@ sub do_viewspool_message {
     my $destination_dir = $Sympa::Configuration::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
 
     unless (-d $destination_dir) {
-	Sympa::Archive::convert_single_msg_2_html({
+	Sympa::Archive::convert_single_msg_2_html(
 		'msg_as_string'   => $param->{'spool_message_asstring'},
 		'destination_dir' => $destination_dir,
 		'attachement_url' => "viewspool_message/$messagekey",
@@ -16543,7 +16543,7 @@ sub do_viewspool_message {
 		'tmpdir'          => Sympa::Configuration::get_robot_conf($robot, 'tmpdir'),
 		'mhonarc'         => Sympa::Configuration::get_robot_conf($robot, 'mhonarc'),
 		'etc'             => $Sympa::Configuration::Conf{'etc'},
-	});
+	);
     }
 
     unless (open (HTMLMAIL ,$destination_dir.'/msg00000.html')){

@@ -260,13 +260,13 @@ Load an archived message, returns the mhonarc metadata
 =cut
 
 sub load_html_message {
-    my %parameters = @_;
+    my (%params) = @_;
 
-    Sympa::Log::do_log ('debug2',$parameters{'file_path'});
+    Sympa::Log::do_log ('debug2',$params{'file_path'});
     my %metadata;
 
-    unless (open ARC, $parameters{'file_path'}) {
-	Sympa::Log::do_log('err', "Failed to load message '%s' : $ERRNO", $parameters{'file_path'});
+    unless (open ARC, $params{'file_path'}) {
+	Sympa::Log::do_log('err', "Failed to load message '%s' : $ERRNO", $params{'file_path'});
 	return undef;
     }
 
@@ -292,12 +292,13 @@ sub load_html_message {
 
 
 sub clean_archive_directory{
-    my ($params) = @_;
-    Sympa::Log::do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
+    my (%params) = @_;
+
+    Sympa::Log::do_log('debug',"Cleaning archives for directory '%s'.",$params{'arc_root'}.'/'.$params{'dir_to_rebuild'});
 
     my $answer;
-    $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
-    $answer->{'cleaned_dir'} = $params->{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
+    $answer->{'dir_to_rebuild'} = $params{'arc_root'}.'/'.$params{'dir_to_rebuild'};
+    $answer->{'cleaned_dir'} = $params{'tmpdir'}.'/'.$params{'dir_to_rebuild'};
     unless(my $number_of_copies = Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	Sympa::Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
@@ -307,7 +308,10 @@ sub clean_archive_directory{
 	foreach my $file (readdir(ARCDIR)){
 	    next if($file =~ /^\./);
 	    $file = $answer->{'cleaned_dir'}.'/'.$file;
-	    $files_left_uncleaned++ unless(clean_archived_message({'input'=>$file ,'output'=>$file}));
+	    $files_left_uncleaned++ unless(clean_archived_message(
+		    'input'  => $file ,
+		    'output' => $file
+	    ));
 	}
 	closedir DIR;
 	if ($files_left_uncleaned) {
@@ -322,12 +326,13 @@ sub clean_archive_directory{
     return $answer;
 }
 
-sub clean_archived_message{
-    my ($params) = @_;
-    Sympa::Log::do_log('debug',"Cleaning HTML parts of a message input %s , output  %s ",$params->{'input'},$params->{'output'});
+sub clean_archived_message {
+    my (%params) = @_;
 
-    my $input = $params->{'input'};
-    my $output = $params->{'output'};
+    Sympa::Log::do_log('debug',"Cleaning HTML parts of a message input %s , output  %s ",$params{'input'},$params{'output'});
+
+    my $input = $params{'input'};
+    my $output = $params{'output'};
 
 
     if (my $msg = Sympa::Message->new({'file'=>$input})){
@@ -358,14 +363,14 @@ Attachement_url is used to link attachement
 =cut
 
 sub convert_single_msg_2_html {
-    my ($data) = @_;
+    my (%params) = @_;
 
-    my $msg_as_string = $data->{'msg_as_string'};
-    my $destination_dir = $data->{'destination_dir'};
-    my $attachement_url = $data->{'attachement_url'};
-    my $list = $data->{'list'};
-    my $robot = $data->{'robot'};
-    my $messagekey = $data->{'messagekey'};
+    my $msg_as_string = $params{'msg_as_string'};
+    my $destination_dir = $params{'destination_dir'};
+    my $attachement_url = $params{'attachement_url'};
+    my $list = $params{'list'};
+    my $robot = $params{'robot'};
+    my $messagekey = $params{'messagekey'};
 
     my $listname =''; my $msg_file;
     my $host = $robot;
@@ -373,9 +378,9 @@ sub convert_single_msg_2_html {
 	$host = $list->{'admin'}{'host'};
 	$robot = $list->{'robot'};
 	$listname = $list->{'name'};
-	$msg_file = $data->{'tmpdir'}.'/'.$list->get_list_id().'_'.$PID;
+	$msg_file = $params{'tmpdir'}.'/'.$list->get_list_id().'_'.$PID;
     }else{
-	$msg_file = $data->{'tmpdir'}.'/'.$messagekey.'_'.$PID;
+	$msg_file = $params{'tmpdir'}.'/'.$messagekey.'_'.$PID;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
@@ -394,7 +399,7 @@ Sympa::Log::do_log('notice', 'Could Not open %s', $msg_file);
     }
     my $mhonarc_ressources =
     Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',
-	    $robot,$list,$data->{'etc'});
+	    $robot,$list,$params{'etc'});
 
     unless ($mhonarc_ressources) {
 Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
@@ -413,7 +418,7 @@ Sympa::Log::do_log('err',"Could not change working directory to %s",$destination
     #print MSG <ARCMOD>;
     #close MSG;
     #close ARCMOD;
-    `$data->{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
+    `$params{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
 
     # restore current wd
     chdir $pwd;
