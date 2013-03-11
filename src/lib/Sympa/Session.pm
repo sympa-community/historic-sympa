@@ -42,7 +42,6 @@ use Sympa::Configuration;
 use Sympa::SDM;
 use Sympa::Language;
 use Sympa::Log;
-use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
@@ -251,21 +250,24 @@ sub renew {
 ## remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
 ##
 sub purge_old_sessions {
-    my ($robot) = @_;
-    Sympa::Log::do_log('info', '(%s)',$robot);
+    my (%params) = @_;
+    Sympa::Log::do_log('info', '(%s)',$params{robot});
 
-    my $delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}) ;
-    my $anonymous_delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}) ;
-
-    unless ($delay) { Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
-    unless ($anonymous_delay) { Sympa::Log::do_log('info', '%s exit with anonymous delay null',$robot); return;}
+    unless ($params{delay}) {
+	    Sympa::Log::do_log('info', '%s exit with delay null',$params{robot});
+	    return;
+    }
+    unless ($params{anonymous_delay}) {
+	    Sympa::Log::do_log('info', '%s exit with anonymous delay null',$params{robot});
+	    return;
+    }
 
     my  $sth;
 
-    my $robot_condition = sprintf "robot_session = %s", Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
+    my $robot_condition = sprintf "robot_session = %s", Sympa::SDM::quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
 
-    my $delay_condition = time-$delay.' > date_session' if ($delay);
-    my $anonymous_delay_condition = time-$anonymous_delay.' > date_session' if ($anonymous_delay);
+    my $delay_condition = time-$params{delay}.' > date_session' if ($params{delay});
+    my $anonymous_delay_condition = time-$params{anonymous_delay}.' > date_session' if ($params{anonymous_delay});
 
     my $and = ' AND ' if (($delay_condition) && ($robot_condition));
     my $anonymous_and = ' AND ' if (($anonymous_delay_condition) && ($robot_condition));
@@ -278,7 +280,7 @@ sub purge_old_sessions {
     my $anonymous_statement = sprintf "DELETE FROM session_table WHERE $robot_condition $anonymous_and $anonymous_delay_condition AND email_session = 'nobody' AND hit_session = '1'";
 
     unless ($sth = Sympa::SDM::do_query($count_statement)) {
-	Sympa::Log::do_log('err','Unable to count old session for robot %s',$robot);
+	Sympa::Log::do_log('err','Unable to count old session for robot %s',$params{robot});
 	return undef;
     }
 
@@ -287,12 +289,12 @@ sub purge_old_sessions {
 	Sympa::Log::do_log('debug','no sessions to expire');
     }else{
 	unless ($sth = Sympa::SDM::do_query($statement)) {
-	    Sympa::Log::do_log('err','Unable to purge old sessions for robot %s', $robot);
+	    Sympa::Log::do_log('err','Unable to purge old sessions for robot %s', $params{robot});
 	    return undef;
 	}
     }
     unless ($sth = Sympa::SDM::do_query($anonymous_count_statement)) {
-	Sympa::Log::do_log('err','Unable to count anonymous sessions for robot %s', $robot);
+	Sympa::Log::do_log('err','Unable to count anonymous sessions for robot %s', $params{robot});
 	return undef;
     }
     my $anonymous_total =  $sth->fetchrow;
@@ -301,7 +303,7 @@ sub purge_old_sessions {
 	return $total ;
     }
     unless ($sth = Sympa::SDM::do_query($anonymous_statement)) {
-	Sympa::Log::do_log('err','Unable to purge anonymous sessions for robot %s',$robot);
+	Sympa::Log::do_log('err','Unable to purge anonymous sessions for robot %s',$params{robot});
 	return undef;
     }
     return $total+$anonymous_total;
@@ -311,23 +313,24 @@ sub purge_old_sessions {
 ## remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
 ##
 sub purge_old_tickets {
-    my ($robot) = @_;
-    Sympa::Log::do_log('info', '(%s)',$robot);
+    my (%params) = @_;
+    Sympa::Log::do_log('info', '(%s)',$params{robot});
 
-    my $delay = Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}) ;
-
-    unless ($delay) { Sympa::Log::do_log('info', '%s exit with delay null',$robot); return;}
+    unless ($params{delay}) {
+	    Sympa::Log::do_log('info', '%s exit with delay null',$params{robot});
+	    return;
+    }
 
     my  $sth;
 
-    my $robot_condition = sprintf "robot_one_time_ticket = %s", Sympa::SDM::quote($robot) unless (($robot eq '*')||($robot));
-    my $delay_condition = time-$delay.' > date_one_time_ticket' if ($delay);
+    my $robot_condition = sprintf "robot_one_time_ticket = %s", Sympa::SDM::quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
+    my $delay_condition = time-$params{delay}.' > date_one_time_ticket' if ($params{delay});
     my $and = ' AND ' if (($delay_condition) && ($robot_condition));
     my $count_statement = sprintf "SELECT count(*) FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
     my $statement = sprintf "DELETE FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
 
     unless ($sth = Sympa::SDM::do_query($count_statement)) {
-	Sympa::Log::do_log('err','Unable to count old one time tickets for robot %s',$robot);
+	Sympa::Log::do_log('err','Unable to count old one time tickets for robot %s',$params{robot});
 	return undef;
     }
 
@@ -336,7 +339,7 @@ sub purge_old_tickets {
 	Sympa::Log::do_log('debug','no tickets to expire');
     }else{
 	unless ($sth = Sympa::SDM::do_query($statement)) {
-	    Sympa::Log::do_log('err','Unable to delete expired one time tickets for robot %s',$robot);
+	    Sympa::Log::do_log('err','Unable to delete expired one time tickets for robot %s',$params{robot});
 	    return undef;
 	}
     }

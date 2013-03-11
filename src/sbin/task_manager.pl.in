@@ -1170,7 +1170,12 @@ sub purge_logs_table {
 sub purge_session_table {
 
     Sympa::Log::do_log('info','()');
-    my $removed = Sympa::Session::purge_old_sessions('*');
+    my $removed = Sympa::Session::purge_old_sessions(
+	    robot => '*',
+	    delay =>
+	    Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}),
+	    anonymous_delay => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'})
+    );
     unless(defined $removed) {
 	Sympa::Log::do_log('err','Failed to remove old sessions');
 	return undef;
@@ -1205,7 +1210,10 @@ sub purge_tables {
 sub purge_one_time_ticket_table {
 
     Sympa::Log::do_log('info','()');
-    my $removed = Sympa::Session::purge_old_tickets('*');
+    my $removed = Sympa::Session::purge_old_tickets(
+	    robot => '*',
+	    delay => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'})
+    );
     unless(defined $removed) {
 	Sympa::Log::do_log('err','Failed to remove old tickets');
 	return undef;
