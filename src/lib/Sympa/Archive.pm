@@ -409,15 +409,7 @@ Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
     unless (chdir $destination_dir) {
 Sympa::Log::do_log('err',"Could not change working directory to %s",$destination_dir);
     }
-    my $tracepwd = getcwd ;
 
-
-    #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
-    #open MSG, ">msg00000.html";
-    #Sympa::Log::do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
-    #print MSG <ARCMOD>;
-    #close MSG;
-    #close ARCMOD;
     `$params{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
 
     # restore current wd
