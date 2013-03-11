@@ -2937,8 +2937,9 @@ sub get_family {
 
     $family_name = $self->{'admin'}{'family_name'};
 
+    my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
     my $family;
-    unless ($family = Sympa::Family->new($family_name,$robot) ) {
+    unless ($family = Sympa::Family->new($family_name,$robot,$family_config,$Sympa::Configuration::Conf{'etc'}) ) {
 	Sympa::Log::do_log('err', '%s: Sympa::Family->new(%s) impossible', $self->{'name'},$family_name);
 	return undef;
     }

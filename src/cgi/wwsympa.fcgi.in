@@ -1302,8 +1302,14 @@ my $birthday = time ;
     my $automatic_list_families = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
     if (defined $automatic_list_families) {
 	foreach my $key (keys %{$automatic_list_families}){
-	    my $family;
-	    if ($family = Sympa::Family->new($key,$robot)) {
+            my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$key};
+	    my $family = Sympa::Family->new(
+		    $key,
+		    $robot,
+		    $family_config,
+		    $Sympa::Configuration::Conf{'etc'}
+	    );
+	    if ($family) {
 		if ($family->is_allowed_to_create_automatic_lists(('auth_level' => 'md5', 'sender' => $session->{'email'}, 'message' => undef, 'listname' => ''))){
 		    $session->{'is_family_owner'}{$key} = 1;
 		}else{
@@ -16966,7 +16972,13 @@ sub do_sync_include {
 sub do_review_family {
     wwslog('info', 'do_review_family');
 
-    my $family = Sympa::Family->new($in{'family_name'}, $robot);
+    my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$in{'family'}};
+    my $family = Sympa::Family->new(
+	    $in{'family_name'},
+	    $robot,
+	    $family_config,
+	    $Sympa::Configuration::Conf{'etc'}
+    );
     unless (defined $family) {
 	Sympa::Report::reject_report_web('user','unknown_family',{'family'=>$in{'family_name'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	wwslog('err', 'do_review_family: incorrect family %s', $in{'family_name'});
@@ -17246,7 +17258,11 @@ sub get_server_details {
      }
 
      ## Families
-     my @families = Sympa::Family::get_available_families($robot);
+     my @families = Sympa::Family::get_available_families(
+	     $robot,
+	     $Sympa::Configuration::Conf{'etc'},
+	     Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')
+     );
 
      if (@families) {
 	 $param->{'families'} = \@families;
@@ -17274,8 +17290,14 @@ sub do_automatic_lists_management {
 sub do_automatic_lists_request {
     wwslog('notice', 'Starting');
     # check authorization
-    my $family;
-    unless ($family = Sympa::Family->new($in{'family'},$robot)) {
+    my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$in{'family'}};
+    my $family = Sympa::Family->new(
+	    $in{'family'},
+	    $robot,
+	    $family_config,
+	    $Sympa::Configuration::Conf{'etc'}
+    );
+    unless ($family) {
 	wwslog('err', "Failed to instantiate family %s. This family does not exist.",$in{'family'});
 	Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to instantiate family $in{'family'}. This family does not exist."]);
 	return undef;
@@ -17294,7 +17316,6 @@ sub do_automatic_lists_request {
 sub do_automatic_lists {
     wwslog('notice', 'Starting');
     my $family_name = $in{'family'};
-    my $family;
 
     my @list_name_parts;
     my $families_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
@@ -17315,13 +17336,26 @@ sub do_automatic_lists {
     $list = Sympa::List->new($listname, $robot);
     unless (defined $list) {
 	## Automatic creation of a mailing list, based on a family
-	unless ($family = Sympa::Family->new($family_name,$robot)) {
+        my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
+	my $family = Sympa::Family->new(
+		$family_name,
+		$robot,
+		$family_config,
+	        $Sympa::Configuration::Conf{'etc'}
+	);
+	unless ($family) {
 	    Sympa::Log::do_log('err', "Failed to create the dynamic list $listname: family $family_name does not exist.");
 	    Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname: family $family_name does not exist."]);
 	    return undef;
 	}
 
-	unless ($list = $family->create_automatic_list(('listname' => $listname,'auth_level' => 'md5','sender'=>$session->{'email'}))) {
+	$list = $family->create_automatic_list(
+		listname   => $listname,
+		auth_level => 'md5',
+		sender     => $session->{'email'},
+		host       => Sympa::Configuration::get_robot_conf($robot, 'host')
+	);
+	unless ($list) {
 	    Sympa::Log::do_log('err', "Failed to create the dynamic list $listname.");
 	    Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname."]);
 	    return undef;

@@ -40,7 +40,6 @@ use Term::ProgressBar;
 use XML::LibXML;
 
 use Sympa::Admin;
-use Sympa::Configuration;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
 use Sympa::Language;
@@ -73,14 +72,14 @@ An array  containing all the robot's families names.
 =cut
 
 sub get_available_families {
-    my ($robot) = @_;
+    my ($robot, $etcdir, $all_families_config) = @_;
 
     my %families;
 
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . "/families",
-        $Sympa::Configuration::Conf{'etc'}           . "/families",
-        $Sympa::Configuration::Conf{'etc'}           . "/$robot/families"
+        $etcdir . "/families",
+        $etcdir . "/$robot/families"
      ) {
 	next unless (-d $dir);
 
@@ -92,7 +91,8 @@ sub get_available_families {
 	## If we can create a Family object with what we find in the family
 	## directory, then it is worth being added to the list.
 	foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
-	    if (my $family = Sympa::Family->new($subdir, $robot)) {
+	    my $family_config = $all_families_config->{$subdir};
+	    if (my $family = Sympa::Family->new($subdir, $robot, $family_config, $etcdir)) {
 		$families{$subdir} = 1;
 	    }
 	}
@@ -103,7 +103,7 @@ sub get_available_families {
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Family->new($name, $robot)
+=head2 Sympa::Family->new($name, $robot, $config)
 
 Creates a new L<Sympa::Family> object of name $name, belonging to the robot
 $robot.
@@ -116,6 +116,8 @@ $robot.
 
 =item * I<$robot>: the robot which the family is/will be installed in
 
+=item * I<$config>: the family configuration
+
 =back
 
 =head3 Return value
@@ -125,7 +127,7 @@ A new L<Sympa::Family> object.
 =cut
 
 sub new {
-    my ($class, $name, $robot) = @_;
+    my ($class, $name, $robot, $config, $etcdir) = @_;
     Sympa::Log::do_log('debug2','(%s,%s)',$name,$robot);
 
     my $self = {};
@@ -161,14 +163,12 @@ sub new {
     $self->{'robot'} = $robot;
 
     ## Adding configuration related to automatic lists.
-    my $all_families_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
-    my $family_config = $all_families_config->{$name};
-    foreach my $key (keys %{$family_config}) {
-	$self->{$key} = $family_config->{$key};
+    foreach my $key (keys %{$config}) {
+	$self->{$key} = $config->{$key};
     }
 
     ## family directory
-    $self->{'dir'} = $self->_get_directory();
+    $self->{'dir'} = $self->_get_directory($etcdir);
     unless (defined $self->{'dir'}) {
 	Sympa::Log::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
 	return undef;
@@ -194,7 +194,7 @@ sub new {
 
 =head1 INSTANCE METHODS
 
-=head2 $family->add_list($data, $abort_on_error)
+=head2 $family->add_list($data, $abort_on_error, $host)
 
 Adds a list to the family. List description can be passed either through a hash of data or through a file handle.
 
@@ -206,6 +206,8 @@ Adds a list to the family. List description can be passed either through a hash 
 
 =item * I<$abort_on_error>: if true, the function won't create lists in status error_config
 
+=item * I<$host>
+
 =back
 
 =head3 Return value
@@ -216,7 +218,7 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub add_list {
-    my ($self, $data, $abort_on_error) = @_;
+    my ($self, $data, $abort_on_error, $host) = @_;
 
     Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
@@ -278,8 +280,6 @@ sub add_list {
     }
     close FILE;
 
-    my $host = Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
-
     # info parameters
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
@@ -324,7 +324,7 @@ sub add_list {
     return $return;
 }
 
-=head2 $family->modify_list($fh)
+=head2 $family->modify_list($fh, $host)
 
 Adds a list to the family.
 
@@ -333,6 +333,8 @@ Adds a list to the family.
 =over
 
 =item * I<$fh>: a file handle on the XML B<list> configuration file
+
+=item * I<$host>:
 
 =back
 
@@ -344,7 +346,7 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub modify_list {
-    my ($self, $fh) = @_;
+    my ($self, $fh, $host) = @_;
     Sympa::Log::do_log('info','(%s)',$self->{'name'});
 
     $self->{'state'} = 'no_check';
@@ -496,8 +498,6 @@ sub modify_list {
     $list->update_config_changes('file',\@kept_files);
 
 
-    my $host = Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
-
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
@@ -596,7 +596,7 @@ sub close_family {
     return $string;
 }
 
-=head2 $family->instantiate($fh, $close_unknown)
+=head2 $family->instantiate($fh, $close_unknown, $tmpdir, $host)
 
 Creates family lists or updates them if they exist already.
 
@@ -608,6 +608,8 @@ Creates family lists or updates them if they exist already.
 
 =item * I<$close_unknown>: if true, the function will close old lists undefined in the new instantiation
 
+=item * I<$tmpdir>
+
 =back
 
 =head3 Return value
@@ -617,7 +619,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub instantiate {
-    my ($self, $xml_file, $close_unknown) = @_;
+    my ($self, $xml_file, $close_unknown, $tmpdir, $host) = @_;
     Sympa::Log::do_log('debug2','(%s)',$self->{'name'});
 
     ## all the description variables are emptied.
@@ -645,8 +647,8 @@ sub instantiate {
 	});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$PID;
-    my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$PID;
+    my $aliasmanager_output_file = $tmpdir.'/aliasmanager.stdout.'.$PID;
+    my $output_file = $tmpdir.'/instantiate_family.stdout.'.$PID;
 	my $output = '';
 
     ## EACH FAMILY LIST
@@ -730,7 +732,7 @@ sub instantiate {
 	}
 
 	## ENDING : existing and new lists
-	unless ($self->_end_update_list($list,1)) {
+	unless ($self->_end_update_list($list,1,$host)) {
 	    Sympa::Log::do_log('err','Instantiation stopped on list %s',$list->{'name'});
 	    return undef;
 	}
@@ -812,7 +814,7 @@ sub instantiate {
 	    }
 	    $list = $result;
 
-	    unless ($self->_end_update_list($list,0)) {
+	    unless ($self->_end_update_list($list,0,$host)) {
 		Sympa::Log::do_log('err','Instantiation stopped on list %s',$list->{'name'});
 		return undef;
 	    }
@@ -1275,7 +1277,7 @@ sub get_uncompellable_param {
     return \%list_of_param;
 }
 
-# $family->_get_directory()
+# $family->_get_directory($etcdir)
 
 # get the family directory, look for it in the robot,
 # then in the site and finally in the distrib
@@ -1284,16 +1286,16 @@ sub get_uncompellable_param {
 # the directory name, or undef if the directory does not exist
 
 sub _get_directory {
-    my ($self) = @_;
+    my ($self, $etcdir) = @_;
 
     my $robot = $self->{'robot'};
     my $name = $self->{'name'};
     Sympa::Log::do_log('debug3','(%s)',$name);
 
     my @try = (
-        $Sympa::Configuration::Conf{'etc'}           . "/$robot/families",
-        $Sympa::Configuration::Conf{'etc'}           . "/families",
-	    Sympa::Constants::DEFAULTDIR . "/families"
+        $etcdir . "/$robot/families",
+        $etcdir . "/families",
+        Sympa::Constants::DEFAULTDIR . "/families"
     );
 
     foreach my $d (@try) {
@@ -1756,7 +1758,7 @@ sub _set_status_changes {
     return $result;
 }
 
-# $family->_end_update_list($list, $xml_file)
+# $family->_end_update_list($list, $xml_file, $host)
 #
 # finish to generate a list in a family context
 # (for a new or an already existing list)
@@ -1770,10 +1772,9 @@ sub _set_status_changes {
 # A true value, or undef if something went wrong
 
 sub _end_update_list {
-    my ($self,$list,$xml_file) = @_;
+    my ($self,$list,$xml_file, $host) = @_;
     Sympa::Log::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
-    my $host = Sympa::Configuration::get_robot_conf($self->{'robot'}, 'host');
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
@@ -1926,7 +1927,7 @@ sub create_automatic_list {
 	Sympa::Log::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation of list %s@%s by user %s.', $listname,$self->{'robot'},$sender);
 	return undef;
     }
-    my $result = $self->add_list({listname=>$listname}, 1);
+    my $result = $self->add_list({listname=>$listname}, 1, $params{host});
 
     unless (defined $result->{'ok'}) {
 	my $details = $result->{'string_error'} || $result->{'string_info'} || [];
