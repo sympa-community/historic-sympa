@@ -1171,6 +1171,7 @@ sub search{
                 if (ref($list) && $list->isa('Sympa::List'));
             return undef;
         }
+        $sql_conf->{domain} = $Sympa::Configuration::Conf{'domain'};
 
         my $statement = $sql_conf->{'sql_named_filter_query'}->{'statement'};
         my $filter = $statement;

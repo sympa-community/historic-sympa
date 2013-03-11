@@ -9284,6 +9284,7 @@ sub _load_list_members_from_include {
 		## Else if we can't syncronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
 			require Sympa::Datasource::SQL;
+			$incl->{domain} = $Sympa::Configuration::Conf{'domain'};
 			my $source = Sympa::Datasource::SQL->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				Sympa::Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
@@ -9455,6 +9456,7 @@ sub _load_list_admin_from_include {
 		## does it need to define a 'default_admin_user_option'?
 		if ($type eq 'include_sql_query') {
 		    require Sympa::Datasource::SQL;
+		    $incl->{domain} = $Sympa::Configuration::Conf{'domain'};
 		    my $source = Sympa::Datasource::SQL->new($incl);
 		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'});
 		}elsif ($type eq 'include_ldap_query') {
@@ -9734,6 +9736,7 @@ sub sync_include_ca {
 			my $srcca = undef;
 			if ($type eq 'include_sql_ca') {
 				require Sympa::Datasource::SQL;
+		                $incl->{domain} = $Sympa::Configuration::Conf{'domain'};
 				$source = Sympa::Datasource::SQL->new($incl);
 			}elsif(($type eq 'include_ldap_ca') or ($type eq 'include_ldap_2level_ca')) {
 				require Sympa::Datasource::LDAP;

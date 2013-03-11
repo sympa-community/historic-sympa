@@ -38,7 +38,6 @@ use base qw(Sympa::Datasource);
 use English qw(-no_match_vars);
 use DBI;
 
-use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Tools;
@@ -135,6 +134,7 @@ sub new {
 	$self->{'db_user'} ||= $self->{'user'};
 	$self->{'db_passwd'} ||= $self->{'passwd'};
 	$self->{'db_options'} ||= $self->{'connect_options'};
+	$self->{'domain'} ||= $self->{'domain'};
 
 	bless $self, $actualclass;
 	return $self;
@@ -204,7 +204,7 @@ sub establish_connection {
 	## Check if DBD is installed
 	unless (eval "require DBD::$self->{'db_type'}") {
 		Sympa::Log::do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
-		Sympa::List::send_notify_to_listmaster('missing_dbd', $Sympa::Configuration::Conf{'domain'},{'db_type' => $self->{'db_type'}});
+		Sympa::List::send_notify_to_listmaster('missing_dbd', $self->{domain}, {'db_type' => $self->{'db_type'}});
 		return undef;
 	}
 
@@ -249,7 +249,8 @@ sub establish_connection {
 				unless (defined $db_connections{$self->{'connect_string'}} &&
 					$db_connections{$self->{'connect_string'}}{'status'} eq 'failed') {
 
-					unless (Sympa::List::send_notify_to_listmaster('no_db', $Sympa::Configuration::Conf{'domain'},{})) {
+					unless
+					(Sympa::List::send_notify_to_listmaster('no_db', $self->{domain},{})) {
 						Sympa::Log::do_log('err',"Unable to send notify 'no_db' to listmaster");
 					}
 				}
@@ -273,7 +274,7 @@ sub establish_connection {
 
 			if ($self->{'reconnect_options'}{'warn'}) {
 				Sympa::Log::do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
-				unless (Sympa::List::send_notify_to_listmaster('db_restored', $Sympa::Configuration::Conf{'domain'},{})) {
+				unless (Sympa::List::send_notify_to_listmaster('db_restored', $self->{domain},{})) {
 					Sympa::Log::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
 				}
 			}
