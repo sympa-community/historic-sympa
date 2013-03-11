@@ -38,10 +38,8 @@ use CGI::Cookie;
 use Digest::MD5;
 use Time::Local;
 
-use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::SDM;
-use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
@@ -82,7 +80,7 @@ sub create {
 }
 
 sub load {
-    my ($id_challenge) = @_;
+    my ($id_challenge, $delay) = @_;
     Sympa::Log::do_log('debug', '(%s)', $id_challenge);
 
     unless ($id_challenge) {
@@ -118,7 +116,7 @@ sub load {
 	return undef;
     }
 
-    return ('expired') if (time - $challenge_datas->{'date'} >= Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'challenge_table_ttl'}));
+    return ('expired') if (time - $challenge_datas->{'date'} >= $delay;
     return ($challenge_datas);
 }
 
