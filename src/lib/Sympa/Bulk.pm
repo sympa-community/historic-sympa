@@ -75,11 +75,12 @@ my $last_stored_message_key;
 
 =head1 FUNCTIONS
 
-=head2 next()
+=head2 next($db_type)
 
 =cut
 
 sub next {
+	my ($db_type) = @_;
     Sympa::Log::do_log('debug', 'Bulk::next');
 
     # lock next packet
@@ -90,11 +91,11 @@ sub next {
     my $limit_sybase='';
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
     $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
-    if (lc($Sympa::Configuration::Conf{'db_type'}) eq 'mysql' || lc($Sympa::Configuration::Conf{'db_type'}) eq 'Pg' || lc($Sympa::Configuration::Conf{'db_type'}) eq 'SQLite'){
+    if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
 	$order.=' LIMIT 1';
-    }elsif (lc($Sympa::Configuration::Conf{'db_type'}) eq 'Oracle'){
+    }elsif ($db_type eq 'Oracle'){
 	$limit_oracle = 'AND rownum<=1';
-    }elsif (lc($Sympa::Configuration::Conf{'db_type'}) eq 'Sybase'){
+    }elsif ($db_type eq 'Sybase'){
 	$limit_sybase = 'TOP 1';
     }
 
@@ -391,7 +392,8 @@ sub store {
 
     Sympa::Log::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
-
+    # todo: use a bulk instance, and pass those default parameters at
+    # instanciation time
     $priority_message = Sympa::Configuration::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
     $priority_packet = Sympa::Configuration::get_robot_conf($robot,'sympa_packet_priority') unless ($priority_packet);
 
@@ -571,10 +573,10 @@ sub get_remaining_packets_count {
     return $result[0];
 }
 
-=head2 there_is_too_much_remaining_packets()
+=head2 there_is_too_much_remaining_packets($max)
 
-Returns 1 if the number of remaining packets in the bulkmailer table exceeds
-the value of the 'bulk_fork_threshold' config parameter.
+Returns a true value if the number of remaining packets in the bulkmailer
+table exceeds given maximum.
 
 =head3 Parameters
 
@@ -583,9 +585,10 @@ None.
 =cut
 
 sub there_is_too_much_remaining_packets {
+	my ($max) = @_;
     Sympa::Log::do_log('debug3', 'there_is_too_much_remaining_packets');
     my $remaining_packets = get_remaining_packets_count();
-    if ($remaining_packets > Sympa::Configuration::get_robot_conf('*','bulk_fork_threshold')) {
+    if ($remaining_packets > $max) {
 	return $remaining_packets;
     }else{
 	return 0;
