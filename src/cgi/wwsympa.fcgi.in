@@ -1274,9 +1274,16 @@ my $birthday = time ;
 
      wwslog('info', "parameter css_url '%s' seems strange, it must be the url of a directory not a css file", $param->{'css_url'}) if ($param->{'css_url'} =~ /\.css$/);
 
-     $session = Sympa::Session->new($robot,{'cookie'=>Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'}),
-					  'action'=>$in{'action'},
-					  'rss'=>$rss, 'ajax' => $ajax});
+     $session = Sympa::Session->new(
+	$robot,
+	{
+		'cookie' => Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'}),
+		'action' => $in{'action'},
+		'rss'    => $rss,
+		'ajax'   => $ajax
+	},
+	$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+     );
 
      undef $ENV{'HTTP_COOKIE'}; # Getting rid of the environment variable to make sure it won't be affected to another anonymous session.
      unless (defined $session) {

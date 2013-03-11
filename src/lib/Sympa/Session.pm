@@ -38,7 +38,6 @@ use CGI::Cookie;
 use Digest::MD5;
 use Time::Local;
 
-use Sympa::Configuration;
 use Sympa::SDM;
 use Sympa::Language;
 use Sympa::Log;
@@ -69,6 +68,8 @@ Creates a new L<Sympa::Session> object.
 
 =item * I<$context>
 
+=item * I<$crawlers_detection>
+
 =back
 
 =head3 Return
@@ -78,7 +79,7 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $robot, $context) = @_;
+    my ($class, $robot, $context, $crawlers_detection) = @_;
 
     my $cookie = $context->{'cookie'};
     my $action = $context->{'action'};
@@ -93,13 +94,15 @@ sub new {
 	return undef;
     }
 
-#   passive_session are session not stored in the database, they are used for crawler bots and action such as css, wsdl, ajax and rss
-
-    if ($session->is_a_crawler($ENV{'HTTP_USER_AGENT'})) {
-	$session->{'is_a_crawler'} = 1;
-	$session->{'passive_session'} = 1;
-    }
-    $session->{'passive_session'} = 1 if ($rss||$action eq 'wsdl'||$action eq 'css');
+    $session->{'is_a_crawler'} = 
+	    $params{crawlers_detection}->{$ENV{'HTTP_USER_AGENT'}};
+    # passive_session are session not stored in the database, they are used
+    # for crawler bots and action such as css, wsdl, ajax and rss
+    $session->{'passive_session'} =
+	    $session->{'is_a_crawler'} ||
+	    $rss                       ||
+	    $action eq 'wsdl'          ||
+	    $action eq 'css';
 
     # if a session cookie exist, try to restore an existing session, don't store sessions from bots
     if (($cookie)&&($session->{'passive_session'} != 1)){
@@ -482,9 +485,9 @@ sub is_anonymous {
 # initial version based on rawlers_dtection.conf file only
 # later : use Session table to identify those who create a lot of sessions
 sub is_a_crawler {
-    my ($self, $user_agent) = @_;
+    my ($self) = @_;
 
-    return $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}{$user_agent};
+    return $self->{'is_a_crawler'};
 }
 
 1;

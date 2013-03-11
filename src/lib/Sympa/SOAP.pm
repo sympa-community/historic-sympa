@@ -225,7 +225,11 @@ sub login {
     }
 
     ## Create Sympa::Session object
-    my $session = Sympa::Session->new($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    my $session = Sympa::Session->new(
+	    $robot,
+	    {'cookie' => $ENV{'SESSION_ID'}},
+	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+    );
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -314,7 +318,11 @@ sub casLogin {
     }
 
     ## Create Sympa::Session object
-    my $session = Sympa::Session->new($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    my $session = Sympa::Session->new(
+	    $robot,
+	    {'cookie' => $ENV{'SESSION_ID'}},
+	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+    );
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -362,7 +370,11 @@ sub authenticateAndRun {
     }
 
     ## Provided email is not trusted, we fetch the user email from the session_table instead
-    my $session = Sympa::Session->new($ENV{'SYMPA_ROBOT'},{'cookie' => $session_id});
+    my $session = Sympa::Session->new(
+	    $ENV{'SYMPA_ROBOT'},
+	    {'cookie' => $session_id},
+	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+    );
     $email = $session->{'email'} if (defined $session);
     unless ($email or ($email eq 'unkown')  ) {
       Sympa::Log::do_log('err', "Failed to authenticate user with session ID $session_id");
@@ -403,7 +415,11 @@ sub getUserEmailByCookie {
 	  ->faultdetail('Use : <cookie>');
     }
 
-    my $session = Sympa::Session->new($ENV{'SYMPA_ROBOT'}, {'cookie' => $cookie});
+    my $session = Sympa::Session->new(
+	    $ENV{'SYMPA_ROBOT'},
+	    {'cookie' => $cookie},
+	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+    );
 
 
     unless (defined $session && ($session->{'email'} ne 'unkown')  ) {
