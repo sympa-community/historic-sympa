@@ -346,7 +346,6 @@ sub clean_archived_message{
 	}
     }else{
 	Sympa::Log::do_log('err','Unable to create a Message object with file %s',$input);
-	exit;
 	return undef;
     }
 }
