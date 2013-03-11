@@ -83,27 +83,28 @@ A new L<Sympa::Task> object, or I<undef>, if something went wrong.
 
 sub new {
     my ($class, $task_in_spool) = @_;
-    my $task;
     Sympa::Log::do_log('debug2', 'messagekey = %s', $task_in_spool->{'messagekey'});
 
-    $task->{'messagekey'} = $task_in_spool->{'messagekey'};
-    $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};
-    $task->{'date'} = $task_in_spool->{'task_date'};
-    $task->{'label'} = $task_in_spool->{'task_label'};
-    $task->{'model'} = $task_in_spool->{'task_model'};
-    $task->{'domain'} = $task_in_spool->{'robot'};
+    my $self = {
+	    messagekey   => $task_in_spool->{'messagekey'},
+	    taskasstring => $task_in_spool->{'messageasstring'},
+	    date         => $task_in_spool->{'task_date'},
+	    label        => $task_in_spool->{'task_label'},
+	    model        => $task_in_spool->{'task_model'},
+	    domain       => $task_in_spool->{'robot'}
+    };
 
     if ($task_in_spool->{'list'}) { # list task
-	$task->{'list_object'} = Sympa::List->new($task_in_spool->{'list'},$task_in_spool->{'robot'});
-	$task->{'domain'} = $task->{'list_object'}{'domain'};
+	$self->{'list_object'} = Sympa::List->new($task_in_spool->{'list'},$task_in_spool->{'robot'});
+	$self->{'domain'} = $self->{'list_object'}{'domain'};
     }
 
-    $task->{'id'} = $task->{'list_object'}{'name'};
-    $task->{'id'} .= '@'.$task->{'domain'} if (defined $task->{'domain'});
+    $self->{'id'} = $self->{'list_object'}{'name'};
+    $self->{'id'} .= '@'.$self->{'domain'} if (defined $self->{'domain'});
 
-    bless $task, $class;
+    bless $self, $class;
 
-    return $task;
+    return $self;
 }
 
 

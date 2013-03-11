@@ -43,7 +43,7 @@ A new L<Sympa::Robot> object, or I<undef>, if something went wrong.
 sub new {
     my ($class, $name) = @_;
 
-    my $robot = {'name' => $name};
+    my $self = {'name' => $name};
     Sympa::Log::do_log('debug2', '');
 
     unless (defined $name && $Sympa::Configuration::Conf{'robots'}{$name}) {
@@ -53,11 +53,11 @@ sub new {
 
     ## The default robot
     if ($name eq $Sympa::Configuration::Conf{'domain'}) {
-	$robot->{'home'} = $Sympa::Configuration::Conf{'home'};
+	$self->{'home'} = $Sympa::Configuration::Conf{'home'};
     }else {
-	$robot->{'home'} = $Sympa::Configuration::Conf{'home'}.'/'.$name;
-	unless (-d $robot->{'home'}) {
-	    Sympa::Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
+	$self->{'home'} = $Sympa::Configuration::Conf{'home'}.'/'.$name;
+	unless (-d $self->{'home'}) {
+	    Sympa::Log::do_log('err', "Missing directory '$self->{'home'}' for robot '$name'");
 	    return undef;
 	}
     }
@@ -65,10 +65,9 @@ sub new {
     ## Initialize internal list cache
     undef %Sympa::List::list_cache;
 
-    # create a new Robot object
-    bless $robot, $class;
+    bless $self, $class;
 
-    return $robot;
+    return $self;
 }
 
 =head1 INSTANCE METHODS

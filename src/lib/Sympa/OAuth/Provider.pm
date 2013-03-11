@@ -75,6 +75,7 @@ A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
 
 sub new {
 	my ($class, %params) = @_;
+	Sympa::Log::do_log('debug2', '(%s)', $params{'consumer_key'});
 
 	my $p = _findParameters(
 		authorization_header => $params{'authorization_header'},
@@ -89,37 +90,36 @@ sub new {
 	return undef unless(defined($c->{'enabled'}));
 	return undef unless($c->{'enabled'} eq '1');
 
-	my $provider = {
-		method => $params{'method'},
-		url => $params{'url'},
-		params => $p,
-		consumer_key => $p->{'oauth_consumer_key'},
-		consumer_secret => $c->{'secret'}
+	my $self = {
+		method          => $params{'method'},
+		url             => $params{'url'},
+		params          => $p,
+		consumer_key    => $p->{'oauth_consumer_key'},
+		consumer_secret => $c->{'secret'},
+		constants       => {
+			old_request_timeout => 600, # Max age for requests timestamps
+			nonce_timeout => 3 * 30 * 24 * 3600, # Time the nonce tags are kept
+			temporary_timeout => 3600, # Time left to use the temporary token
+			verifier_timeout => 300, # Time left to request access once the verifier has been set
+			access_timeout => 3 * 30 * 24 * 3600 # Access timeout
+		},
 	};
 
-	Sympa::Log::do_log('debug2', '(%s)', $params{'consumer_key'});
-
- 	$provider->{'constants'} = {
-		old_request_timeout => 600, # Max age for requests timestamps
-		nonce_timeout => 3 * 30 * 24 * 3600, # Time the nonce tags are kept
-		temporary_timeout => 3600, # Time left to use the temporary token
-		verifier_timeout => 300, # Time left to request access once the verifier has been set
-		access_timeout => 3 * 30 * 24 * 3600 # Access timeout
-	};
-
-	$provider->{'util'} = OAuth::Lite::ServerUtil->new;
-	$provider->{'util'}->support_signature_method('HMAC-SHA1');
-	$provider->{'util'}->allow_extra_params(qw/oauth_callback oauth_verifier/);
+	my $util = OAuth::Lite::ServerUtil->new();
+	$util->support_signature_method('HMAC-SHA1');
+	$util->allow_extra_params(qw/oauth_callback oauth_verifier/);
+	$self->{util} = $util;
 
 	unless(Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND lasttime_oauthprovider<%d',
-		time - $provider->{'constants'}{'temporary_timeout'}
+		time - $self->{'constants'}{'temporary_timeout'}
 	)) {
 		Sympa::Log::do_log('err', 'Unable to delete old temporary tokens in database');
 		return undef;
 	}
 
-	return bless $provider, $class;
+	bless $self, $class;
+	return $self;
 }
 
 =head1 FUNCTIONS

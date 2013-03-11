@@ -74,7 +74,7 @@ sub new {
     Sympa::Log::do_log('debug', '(%s)',$filepath);
 
     my $lock_filename = $filepath.'.lock';
-    my $lock = {
+    my $self = {
         'lock_filename' => $lock_filename,
         'method'        => $method
     };
@@ -89,9 +89,9 @@ sub new {
 	close $fh;
    }
 
-    bless $lock, $class;
+    bless $self, $class;
 
-    return $lock;
+    return $self;
 }
 
 =head1 INSTANCE METHODS

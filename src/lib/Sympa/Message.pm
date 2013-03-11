@@ -83,7 +83,7 @@ sub new {
     my $mimeentity = $datas->{'mimeentity'};
     my $message_in_spool= $datas->{'message_in_spool'};
 
-    my $message;
+    my $self;
     my $input = 'file' if $file;
     $input = 'messageasstring' if $messageasstring;
     $input = 'message_in_spool' if $message_in_spool;
@@ -91,12 +91,12 @@ sub new {
     Sympa::Log::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
 
     if ($mimeentity) {
-	$message->{'msg'} = $mimeentity;
-	$message->{'altered'} = '_ALTERED';
+	$self->{'msg'} = $mimeentity;
+	$self->{'altered'} = '_ALTERED';
 
-	bless $message, $class;
+	bless $self, $class;
 
-	return $message;
+	return $self;
     }
 
     my $parser = MIME::Parser->new();
@@ -106,13 +106,13 @@ sub new {
 
     if ($message_in_spool){
 	$messageasstring = $message_in_spool->{'messageasstring'};
-	$message->{'messagekey'}= $message_in_spool->{'messagekey'};
-	$message->{'spoolname'}= $message_in_spool->{'spoolname'};
-	$message->{'create_list_if_needed'}= $message_in_spool->{'create_list_if_needed'};
+	$self->{'messagekey'}= $message_in_spool->{'messagekey'};
+	$self->{'spoolname'}= $message_in_spool->{'spoolname'};
+	$self->{'create_list_if_needed'}= $message_in_spool->{'create_list_if_needed'};
     }
     if ($file) {
 	## Parse message as a MIME::Entity
-	$message->{'filename'} = $file;
+	$self->{'filename'} = $file;
 	unless (open FILE, "$file") {
 	    Sympa::Log::do_log('err', 'Cannot open message file %s : %s',  $file, $ERRNO);
 	    return undef;
@@ -136,12 +136,12 @@ sub new {
 	Sympa::Log::do_log('err',"could not parse message");
 	return undef;
     }
-    $message->{'msg'} = $msg;
+    $self->{'msg'} = $msg;
 #    $message->{'msg_as_string'} = $msg->as_string;
-    $message->{'msg_as_string'} = $messageasstring;
-    $message->{'size'} = length($msg->as_string);
+    $self->{'msg_as_string'} = $messageasstring;
+    $self->{'size'} = length($msg->as_string);
 
-    my $hdr = $message->{'msg'}->head;
+    my $hdr = $self->{'msg'}->head;
 
     ## Extract sender address
     unless ($hdr->get('From')) {
@@ -153,10 +153,10 @@ sub new {
 	Sympa::Log::do_log('err', 'No valid address in From: field in %s, skipping', $file);
 	return undef;
     }
-    $message->{'sender'} = lc($sender_hdr[0]->address);
+    $self->{'sender'} = lc($sender_hdr[0]->address);
 
-    unless (Sympa::Tools::valid_email($message->{'sender'})) {
-	Sympa::Log::do_log('err', "Invalid From: field '%s'", $message->{'sender'});
+    unless (Sympa::Tools::valid_email($self->{'sender'})) {
+	Sympa::Log::do_log('err', "Invalid From: field '%s'", $self->{'sender'});
 	return undef;
     }
 
@@ -164,12 +164,12 @@ sub new {
     my $subject = $hdr->get('Subject');
     if ($subject =~ /\S/) {
 	my @decoded_subject = MIME::EncWords::decode_mimewords($subject);
-	$message->{'subject_charset'} = 'US-ASCII';
+	$self->{'subject_charset'} = 'US-ASCII';
 	foreach my $token (@decoded_subject) {
 	    unless ($token->[1]) {
 		# don't decode header including raw 8-bit bytes.
 		if ($token->[0] =~ /[^\x00-\x7F]/) {
-		    $message->{'subject_charset'} = undef;
+		    $self->{'subject_charset'} = undef;
 		    last;
 		}
 		next;
@@ -177,46 +177,47 @@ sub new {
 	    my $cset = MIME::Charset->new($token->[1]);
 	    # don't decode header encoded with unknown charset.
 	    unless ($cset->decoder) {
-		$message->{'subject_charset'} = undef;
+		$self->{'subject_charset'} = undef;
 		last;
 	    }
 	    unless ($cset->output_charset eq 'US-ASCII') {
-		$message->{'subject_charset'} = $token->[1];
+		$self->{'subject_charset'} = $token->[1];
 	    }
 	}
     } else {
-	$message->{'subject_charset'} = undef;
+	$self->{'subject_charset'} = undef;
     }
-    if ($message->{'subject_charset'}) {
-	$message->{'decoded_subject'} =
+    if ($self->{'subject_charset'}) {
+	$self->{'decoded_subject'} =
 	    MIME::EncWords::decode_mimewords($subject, Charset => 'utf8');
     } else {
-	$message->{'decoded_subject'} = $subject;
+	$self->{'decoded_subject'} = $subject;
     }
-    chomp $message->{'decoded_subject'};
+    chomp $self->{'decoded_subject'};
 
     ## Extract recepient address (X-Sympa-To)
-    $message->{'rcpt'} = $hdr->get('X-Sympa-To');
-    chomp $message->{'rcpt'};
+    $self->{'rcpt'} = $hdr->get('X-Sympa-To');
+    chomp $self->{'rcpt'};
     unless (defined $noxsympato) { # message.pm can be used not only for message comming from queue
-	unless ($message->{'rcpt'}) {
+	unless ($self->{'rcpt'}) {
 	    Sympa::Log::do_log('err', 'no X-Sympa-To found, ignoring message file %s', $file);
 	    return undef;
 	}
 
 	## get listname & robot
-	my ($listname, $robot) = split(/\@/,$message->{'rcpt'});
+	my ($listname, $robot) = split(/\@/,$self->{'rcpt'});
 
 	$robot = lc($robot);
 	$listname = lc($listname);
 	$robot ||= $Sympa::Configuration::Conf{'domain'};
-	my $spam_status = Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
-	$message->{'spam_status'} = 'unkown';
+	my $spam_status =
+	Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $self});
+	$self->{'spam_status'} = 'unkown';
 	if(defined $spam_status) {
 	    if (ref($spam_status ) eq 'HASH') {
-		$message->{'spam_status'} =  $spam_status ->{'action'};
+		$self->{'spam_status'} =  $spam_status ->{'action'};
 	    }else{
-		$message->{'spam_status'} = $spam_status ;
+		$self->{'spam_status'} = $spam_status ;
 	    }
 	}
 
@@ -230,14 +231,14 @@ sub new {
 
 	    my $list = Sympa::List->new($listname, $robot, {'just_try' => 1});
 	    if ($list) {
-		$message->{'list'} = $list;
+		$self->{'list'} = $list;
 	    }
 	}
 	# verify DKIM signature
 	if (Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
 	    # assume Sympa::Tools::DKIM can be loaded if the setting is still on
 	    require Sympa::Tools::DKIM;
-	    $message->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($message->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
+	    $self->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($self->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
 	}
     }
 
@@ -247,7 +248,7 @@ sub new {
 	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
 	if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
-	    $message->{'md5_check'} = 1 ;
+	    $self->{'md5_check'} = 1 ;
 	}else{
 	    Sympa::Log::do_log('err',"incorrect X-Sympa-Checksum header");
 	}
@@ -260,10 +261,10 @@ sub new {
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
 	    my $certdir =
-		    $message->{'list'}->{dir} ||
+		    $self->{'list'}->{dir} ||
 		    $Sympa::Configuration::Conf{'home'} . '/sympa';
 	    my ($dec, $dec_as_string) = Sympa::Tools::SMIME::decrypt_message(
-		    entity     => $message->{'msg'},
+		    entity     => $self->{'msg'},
 		    cert_dir   => $certdir,
 		    key_passwd => $Sympa::Configuration::Conf{'key_passwd'},
 		    openssl    => $Sympa::Configuration::Conf{'openssl'}
@@ -275,27 +276,27 @@ sub new {
 		## We should the sender and/or the listmaster
 	    }
 
-	    $message->{'smime_crypted'} = 'smime_crypted';
-	    $message->{'orig_msg'} = $message->{'msg'};
-	    $message->{'msg'} = $dec;
-	    $message->{'msg_as_string'} = $dec_as_string;
+	    $self->{'smime_crypted'} = 'smime_crypted';
+	    $self->{'orig_msg'} = $self->{'msg'};
+	    $self->{'msg'} = $dec;
+	    $self->{'msg_as_string'} = $dec_as_string;
 	    $hdr = $dec->head;
 	    Sympa::Log::do_log('debug', "message %s has been decrypted", $file);
 	}
 
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
-	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
+	    $self->{'protected'} = 1; ## Messages that should not be altered (no footer)
 	    my $signed = Sympa::Tools::SMIME::check_signature(
-		    message  => $message,
+		    message  => $self,
 		    cafile   => $Sympa::Configuration::Conf{'cafile'},
 		    capath   => $Sympa::Configuration::Conf{'capath'},
 		    openssl  => $Sympa::Configuration::Conf{'openssl'},
 		    cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'}
 	    );
 	    if ($signed->{'body'}) {
-		$message->{'smime_signed'} = 1;
-		$message->{'smime_subject'} = $signed->{'subject'};
+		$self->{'smime_signed'} = 1;
+		$self->{'smime_subject'} = $signed->{'subject'};
 		Sympa::Log::do_log('debug', "message %s is signed, signature is checked", $file);
 	    }
 	    ## Il faudrait traiter les cas d'erreur (0 différent de undef)
@@ -304,11 +305,12 @@ sub new {
     ## TOPICS
     my $topics;
     if ($topics = $hdr->get('X-Sympa-Topic')){
-	$message->{'topic'} = $topics;
+	$self->{'topic'} = $topics;
     }
 
-    bless $message, $class;
-    return $message;
+    bless $self, $class;
+
+    return $self;
 }
 
 =head2 $message->dump($output)

@@ -106,28 +106,30 @@ A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	my $consumer;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $params{'user'}, $params{'provider'});
 
 	# Get oauth consumer and enpoints from provider_id
-	$consumer->{'conf'} = _get_config_for($params{'provider'}, $params{'config'});
-	return undef unless(defined $consumer->{'conf'});
+	my $config = _get_config_for($params{'provider'}, $params{'config'});
+	return undef unless $config;
 
-	$consumer->{'user'} = $params{'user'};
-	$consumer->{'provider'} = $params{'provider'};
+	my $self = {
+		conf     => $config,
+		user     => $params{'user'},
+		provider => $params{'provider'},
+		oauth_consumer => Sympa::OAuth::Consumer->new(
+			user               => $params{'user'},
+			provider           => 'voot:'.$params{'provider'},
+			consumer_key       => $config->{'oauth.ConsumerKey'},
+			consumer_secret    => $config->{'oauth.ConsumerSecret'},
+			request_token_path => $config->{'oauth.RequestURL'},
+			access_token_path  => $config->{'oauth.AccessURL'},
+			authorize_path     => $config->{'oauth.AuthorizationURL'},
+		)
+	};
 
-	$consumer->{'oauth_consumer'} = Sympa::OAuth::Consumer->new(
-		user => $params{'user'},
-		provider => 'voot:'.$params{'provider'},
-		consumer_key => $consumer->{'conf'}{'oauth.ConsumerKey'},
-		consumer_secret => $consumer->{'conf'}{'oauth.ConsumerSecret'},
-		request_token_path => $consumer->{'conf'}{'oauth.RequestURL'},
-        access_token_path  => $consumer->{'conf'}{'oauth.AccessURL'},
-        authorize_path => $consumer->{'conf'}{'oauth.AuthorizationURL'},
-        here_path => $consumer->{'here_path'}
-	);
+	bless $self, $class;
 
-	return bless $consumer, $class;
+	return $self;
 }
 
 =head1 INSTANCE METHODS

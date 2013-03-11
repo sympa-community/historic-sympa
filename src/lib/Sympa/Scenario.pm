@@ -82,7 +82,7 @@ sub new {
    my ($class, %params) = @_;
     Sympa::Log::do_log('debug2', '');
 
-    my $scenario = {};
+    my $self = {};
 
     ## Check parameters
     ## Need either file_path or function+name
@@ -96,11 +96,11 @@ sub new {
     ## Determine the file path of the scenario
 
     if ($params{'file_path'} eq 'ERROR') {
-	return $all_scenarios{$scenario->{'file_path'}};
+	return $all_scenarios{$self->{'file_path'}};
     }
 
     if (defined $params{'file_path'}) {
-	$scenario->{'file_path'} = $params{'file_path'};
+	$self->{'file_path'} = $params{'file_path'};
 	my @tokens = split /\//, $params{'file_path'};
 	my $filename = $tokens[$#tokens];
 	unless ($filename =~ /^([^\.]+)\.(.+)$/) {
@@ -116,7 +116,7 @@ sub new {
 	foreach my $dir (@dirs) {
 	    my $tmp_path = $dir.'/scenari/'.$params{'function'}.'.'.$params{'name'};
 	    if (-r $tmp_path) {
-		$scenario->{'file_path'} = $tmp_path;
+		$self->{'file_path'} = $tmp_path;
 		last;
 	    }else {
 		Sympa::Log::do_log('debug','Unable to read file %s',$tmp_path);
@@ -125,33 +125,33 @@ sub new {
     }
 
     ## Load the scenario if previously loaded in memory
-    if (defined $all_scenarios{$scenario->{'file_path'}}) {
+    if (defined $all_scenarios{$self->{'file_path'}}) {
 
 	## Option 'dont_reload_scenario' prevents scenario reloading
 	## Usefull for performances reasons
 	if ($params{'options'}{'dont_reload_scenario'}) {
-	    return $all_scenarios{$scenario->{'file_path'}};
+	    return $all_scenarios{$self->{'file_path'}};
 	}
 
 	## Use cache unless file has changed on disk
-	if ($all_scenarios{$scenario->{'file_path'}}{'date'} >= (stat($scenario->{'file_path'}))[9]) {
-	    return $all_scenarios{$scenario->{'file_path'}};
+	if ($all_scenarios{$self->{'file_path'}}{'date'} >= (stat($self->{'file_path'}))[9]) {
+	    return $all_scenarios{$self->{'file_path'}};
 	}
     }
 
     ## Load the scenario
     my $scenario_struct;
-    if (defined $scenario->{'file_path'}) {
+    if (defined $self->{'file_path'}) {
 	## Get the data from file
-	unless (open SCENARIO, $scenario->{'file_path'}) {
-	    Sympa::Log::do_log('err',"Failed to open scenario '$scenario->{'file_path'}'");
+	unless (open SCENARIO, $self->{'file_path'}) {
+	    Sympa::Log::do_log('err',"Failed to open scenario '$self->{'file_path'}'");
 	    return undef;
 	}
 	my $data = join '', <SCENARIO>;
 	close SCENARIO;
 
 	## Keep rough scenario
-	$scenario->{'data'} = $data;
+	$self->{'data'} = $data;
 
 	$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, $data, $params{'directory'});
     }elsif ($params{'function'} eq 'include') {
@@ -162,29 +162,29 @@ sub new {
 	## Default rule is 'true() smtp -> reject'
 	Sympa::Log::do_log('err',"Unable to find scenario file '$params{'function'}.$params{'name'}', please report to listmaster");
 	$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, 'true() smtp -> reject', $params{'directory'});
-	$scenario->{'file_path'} = 'ERROR'; ## special value
-	$scenario->{'data'} = 'true() smtp -> reject';
+	$self->{'file_path'} = 'ERROR'; ## special value
+	$self->{'data'} = 'true() smtp -> reject';
     }
 
     ## Keep track of the current time ; used later to reload scenario files when they changed on disk
-    $scenario->{'date'} = time;
+    $self->{'date'} = time;
 
     unless (ref($scenario_struct) eq 'HASH') {
 	Sympa::Log::do_log('err',"Failed to load scenario '$params{'function'}.$params{'name'}'");
 	return undef;
     }
 
-    $scenario->{'name'} = $scenario_struct->{'name'};
-    $scenario->{'rules'} = $scenario_struct->{'rules'};
-    $scenario->{'title'} = $scenario_struct->{'title'};
-    $scenario->{'struct'} = $scenario_struct;
+    $self->{'name'} = $scenario_struct->{'name'};
+    $self->{'rules'} = $scenario_struct->{'rules'};
+    $self->{'title'} = $scenario_struct->{'title'};
+    $self->{'struct'} = $scenario_struct;
 
-    bless $scenario, $class;
 
     ## Keep the scenario in memory
-    $all_scenarios{$scenario->{'file_path'}} = $scenario;
+    $all_scenarios{$self->{'file_path'}} = $self;
 
-    return $scenario;
+    bless $self, $class;
+    return $self;
 }
 
 ## Parse scenario rules

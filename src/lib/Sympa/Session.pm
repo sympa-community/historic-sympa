@@ -86,28 +86,28 @@ sub new {
     my $rss = $context->{'rss'};
 
     Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
-    my $session={};
-    bless $session, $class;
+    my $self={};
+    bless $self, $class;
 
     unless ($robot) {
 	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
 	return undef;
     }
 
-    $session->{'is_a_crawler'} = 
+    $self->{'is_a_crawler'} = 
 	    $crawlers_detection->{$ENV{'HTTP_USER_AGENT'}};
     # passive_session are session not stored in the database, they are used
     # for crawler bots and action such as css, wsdl, ajax and rss
-    $session->{'passive_session'} =
-	    $session->{'is_a_crawler'} ||
-	    $rss                       ||
-	    $action eq 'wsdl'          ||
+    $self->{'passive_session'} =
+	    $self->{'is_a_crawler'} ||
+	    $rss                    ||
+	    $action eq 'wsdl'       ||
 	    $action eq 'css';
 
     # if a session cookie exist, try to restore an existing session, don't store sessions from bots
-    if (($cookie)&&($session->{'passive_session'} != 1)){
+    if (($cookie)&&($self->{'passive_session'} != 1)){
 	my $status ;
-	$status = $session->load($cookie);
+	$status = $self->load($cookie);
 	unless (defined $status) {
 	    return undef;
 	}
@@ -123,17 +123,18 @@ sub new {
 	#}
     }else{
 	# create a new session context
-	$session->{'new_session'} = 1; ## Tag this session as new, ie no data in the DB exist
-        $session->{'id_session'} = get_random();
-	$session->{'email'} = 'nobody';
-        $session->{'remote_addr'} = $ENV{'REMOTE_ADDR'};
-	$session->{'date'} = time;
-	$session->{'start_date'} = time;
-	$session->{'hit'} = 1;
-	$session->{'robot'} = $robot;
-	$session->{'data'} = '';
+	$self->{'new_session'} = 1; ## Tag this session as new, ie no data in the DB exist
+        $self->{'id_session'} = get_random();
+	$self->{'email'} = 'nobody';
+        $self->{'remote_addr'} = $ENV{'REMOTE_ADDR'};
+	$self->{'date'} = time;
+	$self->{'start_date'} = time;
+	$self->{'hit'} = 1;
+	$self->{'robot'} = $robot;
+	$self->{'data'} = '';
     }
-    return $session;
+
+    return $self;
 }
 
 sub load {

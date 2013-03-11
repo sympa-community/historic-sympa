@@ -75,26 +75,25 @@ A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
 
 sub new {
 	my ($class, %params) = @_;
-
-	my $consumer = {
-		user => $params{'user'},
-		provider => $params{'provider'},
-		consumer_key => $params{'consumer_key'},
-		consumer_secret => $params{'consumer_secret'},
-		request_token_path => $params{'request_token_path'},
-		access_token_path  => $params{'access_token_path'},
-		authorize_path => $params{'authorize_path'},
-		redirect_url => undef
- 	};
 	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
-	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
-		consumer_key => $params{'consumer_key'},
-		consumer_secret => $params{'consumer_secret'},
+	my $self = {
+		user               => $params{'user'},
+		provider           => $params{'provider'},
+		consumer_key       => $params{'consumer_key'},
+		consumer_secret    => $params{'consumer_secret'},
 		request_token_path => $params{'request_token_path'},
-        access_token_path  => $params{'access_token_path'},
-        authorize_path => $params{'authorize_path'}
-	);
+		access_token_path  => $params{'access_token_path'},
+		authorize_path     => $params{'authorize_path'},
+		redirect_url       => undef,
+		handler            => OAuth::Lite::Consumer->new(
+			consumer_key       => $params{'consumer_key'},
+			consumer_secret    => $params{'consumer_secret'},
+			request_token_path => $params{'request_token_path'},
+			access_token_path  => $params{'access_token_path'},
+			authorize_path     => $params{'authorize_path'}
+		)
+	};
 
 	my $sth;
 	unless($sth = Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'})) {
@@ -102,24 +101,27 @@ sub new {
 		return undef;
     }
 
-	$consumer->{'session'} = {
+	$self->{'session'} = {
 		defined => undef,
-		tmp => undef,
-		access => undef
+		tmp     => undef,
+		access  => undef
 	};
+
 	if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
-		$consumer->{'session'}{'tmp'} = OAuth::Lite::Token->new(
+		$self->{'session'}{'tmp'} = OAuth::Lite::Token->new(
 			token => $data->{'tmp_token'},
 			secret => $data->{'tmp_secret'}
 		) if($data->{'tmp_token'});
-		$consumer->{'session'}{'access'} = OAuth::Lite::Token->new(
+		$self->{'session'}{'access'} = OAuth::Lite::Token->new(
 			token => $data->{'access_token'},
 			secret => $data->{'access_secret'}
 		) if($data->{'access_token'});
-		$consumer->{'session'}{'defined'} = 1;
+		$self->{'session'}{'defined'} = 1;
 	}
 
-	return bless $consumer, $class;
+	bless $self, $class;
+
+	return $self;
 }
 
 =head1 INSTANCE METHODS

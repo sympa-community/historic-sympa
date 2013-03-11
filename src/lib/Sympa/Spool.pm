@@ -82,21 +82,21 @@ sub new {
     my ($class, $spoolname, $selection_status) = @_;
    Sympa::Log::do_log('debug2', '(%s)', $spoolname);
 
-    my $spool={};
+    my $self={};
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
-    $spool->{'spoolname'} = $spoolname;
+    $self->{'spoolname'} = $spoolname;
     if (($selection_status eq 'bad')||($selection_status eq 'ok')) {
-	$spool->{'selection_status'} = $selection_status;
+	$self->{'selection_status'} = $selection_status;
     }else{
-	$spool->{'selection_status'} =  'ok';
+	$self->{'selection_status'} =  'ok';
     }
 
-    bless $spool, $class;
+    bless $self, $class;
 
-    return $spool;
+    return $self;
 }
 
 # total spool_table count : not object oriented, just a subroutine

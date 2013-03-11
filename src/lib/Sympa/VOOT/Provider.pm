@@ -77,22 +77,24 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::do_log('debug2', '()');
 
-	my $provider = {
+	my $self = {
 		oauth_provider => Sympa::OAuth::Provider->new(
-			method => $params{'method'},
-			url => $params{'url'},
+			method               => $params{'method'},
+			url                  => $params{'url'},
 			authorization_header => $params{'authorization_header'},
-			request_parameters => $params{'request_parameters'},
-			request_body => $params{'request_body'},
-			config => $params{config}
+			request_parameters   => $params{'request_parameters'},
+			request_body         => $params{'request_body'},
+			config               => $params{config}
 		),
-		robot => $params{'robot'},
+		robot     => $params{'robot'},
 		voot_path => $params{'voot_path'}
 	};
 
- 	return undef unless(defined($provider->{'oauth_provider'}));
+ 	return undef unless(defined($self->{'oauth_provider'}));
 
-	return bless $provider, $class;
+	bless $self, $class;
+
+	return $self;
 }
 
 =head1 INSTANCE METHODS

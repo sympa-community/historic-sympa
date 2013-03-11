@@ -2126,7 +2126,7 @@ sub new {
     my ($class, $name, $robot, $options) = @_;
     Sympa::Log::do_log('debug2', '(%s, %s, %s)', $name, $robot, join('/',keys %$options));
 
-    my $list={};
+    my $self={};
 
     ## Allow robot in the name
     if ($name =~ /\@/) {
@@ -2143,7 +2143,7 @@ sub new {
 	return undef;
     }
 
-    $list->{'robot'} = $robot;
+    $self->{'robot'} = $robot;
 
     $options = {} unless (defined $options);
 
@@ -2170,15 +2170,15 @@ sub new {
     ## If list already in memory and not previously purged by another process
     if ($list_of_lists{$robot}{$name} and -d $list_of_lists{$robot}{$name}{'dir'}){
 	# use the current list in memory and update it
-	$list=$list_of_lists{$robot}{$name};
+	$self=$list_of_lists{$robot}{$name};
 
-	$status = $list->load($name, $robot, $options);
+	$status = $self->load($name, $robot, $options);
     }else{
 	# create a new object list
-	bless $list, $class;
+	bless $self, $class;
 
 	$options->{'first_access'} = 1;
-	$status = $list->load($name, $robot, $options);
+	$status = $self->load($name, $robot, $options);
     }
     unless (defined $status) {
 	return undef;
@@ -2189,17 +2189,17 @@ sub new {
 	$options->{'force_sync_admin'}) {
 
 	## Update admin_table
-	unless (defined $list->sync_include_admin()) {
+	unless (defined $self->sync_include_admin()) {
 	    Sympa::Log::do_log('err','sync_include_admin_failed') unless ($options->{'just_try'});
 	}
-	if ($list->get_nb_owners() < 1 &&
-	    $list->{'admin'}{'status'} ne 'error_config') {
-	    Sympa::Log::do_log('err', 'The list "%s" has got no owner defined',$list->{'name'}) ;
-	    $list->set_status_error_config('no_owner_defined',$list->{'name'});
+	if ($self->get_nb_owners() < 1 &&
+	    $self->{'admin'}{'status'} ne 'error_config') {
+	    Sympa::Log::do_log('err', 'The list "%s" has got no owner defined',$self->{'name'}) ;
+	    $self->set_status_error_config('no_owner_defined',$self->{'name'});
 	}
     }
 
-    return $list;
+    return $self;
 }
 
 =head1 FUNCTIONS
