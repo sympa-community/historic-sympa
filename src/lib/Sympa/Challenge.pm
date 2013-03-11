@@ -116,7 +116,7 @@ sub load {
 	return undef;
     }
 
-    return ('expired') if (time - $challenge_datas->{'date'} >= $delay;
+    return ('expired') if (time - $challenge_datas->{'date'} >= $delay);
     return ($challenge_datas);
 }
 
