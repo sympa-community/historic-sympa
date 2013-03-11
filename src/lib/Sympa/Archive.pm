@@ -366,22 +366,19 @@ Attachement_url is used to link attachement
 sub convert_single_msg_2_html {
     my (%params) = @_;
 
-    my $msg_as_string = $params{'msg_as_string'};
     my $destination_dir = $params{'destination_dir'};
-    my $attachement_url = $params{'attachement_url'};
-    my $list = $params{'list'};
-    my $robot = $params{'robot'};
-    my $messagekey = $params{'messagekey'};
 
-    my $listname =''; my $msg_file;
-    my $host = $robot;
-    if ($list) {
-	$host = $list->{'admin'}{'host'};
-	$robot = $list->{'robot'};
-	$listname = $list->{'name'};
-	$msg_file = $params{'tmpdir'}.'/'.$list->get_list_id().'_'.$PID;
-    }else{
-	$msg_file = $params{'tmpdir'}.'/'.$messagekey.'_'.$PID;
+    my ($host, $robot, $listname, $msg_file);
+    if ($params{'list'}) {
+	$host     = $params{'list'}->{'admin'}->{'host'};
+	$robot    = $params{'list'}->{'robot'};
+	$listname = $params{'list'}->{'name'};
+	$msg_file = $params{'tmpdir'}.'/'.$params{'list'}->get_list_id().'_'.$PID;
+    } else {
+        $host     = $params{'robot'};
+	$robot    = $params{'robot'};
+	$listname = '';
+	$msg_file = $params{'tmpdir'}.'/'.$params{'messagekey'}.'_'.$PID;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
@@ -389,7 +386,7 @@ sub convert_single_msg_2_html {
 Sympa::Log::do_log('notice', 'Could Not open %s', $msg_file);
 	return undef;
     }
-    printf OUT $msg_as_string ;
+    printf OUT $params{msg_as_string};
     close(OUT);
 
     unless (-d $destination_dir) {
@@ -398,9 +395,14 @@ Sympa::Log::do_log('notice', 'Could Not open %s', $msg_file);
 	    return undef;
 	}
     }
-    my $mhonarc_ressources =
-    Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',
-	    $robot,$list,$params{'etc'});
+    my $mhonarc_ressources = Sympa::Tools::get_filename(
+	    'etc',
+	    {},
+	    'mhonarc-ressources.tt2',
+	    $robot,
+	    $params{list},
+	    $params{'etc'}
+    );
 
     unless ($mhonarc_ressources) {
 Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
@@ -411,7 +413,7 @@ Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
 Sympa::Log::do_log('err',"Could not change working directory to %s",$destination_dir);
     }
 
-    `$params{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
+    `$params{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$params{attachement_url} $msg_file > msg00000.html`;
 
     # restore current wd
     chdir $pwd;
