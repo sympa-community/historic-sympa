@@ -23,9 +23,9 @@ foreach my $file (<t/samples/*.eml>) {
 	copy($file, $archive_dir);
 }
 
-my $result = Sympa::Archive::clean_archive_directory({
+my $result = Sympa::Archive::clean_archive_directory(
 	arc_root       => $archive_root,
 	dir_to_rebuild => 'foo',
 	tmpdir         => '/tmp'
-});
+);
 ok($result);
