@@ -91,7 +91,7 @@ sub sign_message {
 	my $umask = umask;
 	umask 0077;
 	$password_file = File::Temp->new(
-		CLEANUP => $main::options{'debug'} ? 0 : 1
+		UNLINK => $main::options{'debug'} ? 0 : 1
 	);
 
 	print $password_file $params{key_passwd};
@@ -100,7 +100,7 @@ sub sign_message {
     }
 
     my $signed_message_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
+	    UNLINK => $main::options{'debug'} ? 0 : 1
     );
 
     my $command =
@@ -178,7 +178,7 @@ sub check_signature {
 
     # extract the signer certificate in a file
     my $signer_cert_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
+	    UNLINK => $main::options{'debug'} ? 0 : 1
     );
     my $command = 
 	    "$params{openssl} smime -verify -signer $signer_cert_file " .
@@ -224,7 +224,7 @@ sub check_signature {
     # In order to also retrieve encryption certificate, if distinct,
     # we need to extract to extract and analyse certificates manually
     my $certs_bundle_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
+	    UNLINK => $main::options{'debug'} ? 0 : 1
     );
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
@@ -393,7 +393,7 @@ sub encrypt_message {
     }
 
     my $crypted_message_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
+	    UNLINK => $main::options{'debug'} ? 0 : 1
     );
 
     my $command =
@@ -471,7 +471,7 @@ sub decrypt_message {
 	my $umask = umask;
 	umask 0077;
 	$password_file = File::Temp->new(
-		CLEANUP => $main::options{'debug'} ? 0 : 1
+		UNLINK => $main::options{'debug'} ? 0 : 1
 	);
 
 	print $password_file $params{key_passwd};
@@ -486,7 +486,7 @@ sub decrypt_message {
 	Sympa::Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
 
 	my $decrypted_message_file = File::Temp->new(
-	    CLEANUP => $main::options{'debug'} ? 0 : 1
+	    UNLINK => $main::options{'debug'} ? 0 : 1
 	);
 
 	my $command =
@@ -662,7 +662,7 @@ sub _parse_cert {
     }
 
     ## Extract information from cert
-    my $file = File::Temp->new(CLEANUP => 1);
+    my $file = File::Temp->new(UNLINK => 1);
     my $command =
 	    "$params{openssl} x509 -email -subject -purpose -noout > $file";
     my $pipe_handle;
