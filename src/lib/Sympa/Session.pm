@@ -95,7 +95,7 @@ sub new {
 
 #   passive_session are session not stored in the database, they are used for crawler bots and action such as css, wsdl, ajax and rss
 
-    if (is_a_crawler($robot, $ENV{'HTTP_USER_AGENT'})) {
+    if ($session->is_a_crawler($ENV{'HTTP_USER_AGENT'})) {
 	$session->{'is_a_crawler'} = 1;
 	$session->{'passive_session'} = 1;
     }
@@ -482,7 +482,7 @@ sub is_anonymous {
 # initial version based on rawlers_dtection.conf file only
 # later : use Session table to identify those who create a lot of sessions
 sub is_a_crawler {
-    my (undef, $user_agent) = @_;
+    my ($self, $user_agent) = @_;
 
     return $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}{$user_agent};
 }
