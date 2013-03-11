@@ -183,7 +183,14 @@ sub load {
     return ($self);
 }
 
-## This method will both store the session information in the database
+=head1 INSTANCE METHODS
+
+=head2 $session->store()
+
+Store the session information in the database
+
+=cut
+
 sub store {
     my ($self) = @_;
     Sympa::Log::do_log('debug', '');
@@ -219,7 +226,12 @@ sub store {
     return 1;
 }
 
-## This method will renew the session ID
+=head2 $session->renew()
+
+Renew the session ID.
+
+=cut
+
 sub renew {
     my ($self) = @_;
     Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
@@ -250,8 +262,14 @@ sub renew {
     return 1;
 }
 
-## remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
-##
+=head1 FUNCTIONS
+
+=head2 purge_old_sessions(%parameters)
+
+Remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
+
+=cut
+
 sub purge_old_sessions {
     my (%params) = @_;
     Sympa::Log::do_log('info', '(%s)',$params{robot});
@@ -312,9 +330,12 @@ sub purge_old_sessions {
     return $total+$anonymous_total;
 }
 
+=head2 purge_old_tickets(%parameters)
 
-## remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
-##
+Remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
+
+=cut
+
 sub purge_old_tickets {
     my (%params) = @_;
     Sympa::Log::do_log('info', '(%s)',$params{robot});
@@ -349,7 +370,12 @@ sub purge_old_tickets {
     return $total;
 }
 
-# list sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
+=head2 list_sessions($delay, $robot, $connected_only)
+
+List sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
+
+=cut
+
 sub list_sessions {
     my ($delay, $robot, $connected_only) = @_;
     Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
@@ -385,11 +411,12 @@ sub list_sessions {
     return \@sessions;
 }
 
-###############################
-# Subroutines to read cookies #
-###############################
+=head2 get_session_cookie($http_cookie)
 
-## Generic subroutine to get a cookie value
+Generic function to get a cookie value.
+
+=cut
+
 sub get_session_cookie {
     my ($http_cookie) = @_;
 
@@ -405,9 +432,14 @@ sub get_session_cookie {
     return (undef);
 }
 
+=head1 INSTANCE METHODS
 
-## Generic subroutine to set a cookie
-## Set user $email cookie, ckecksum use $secret, expire=(now|session|#sec) domain=(localhost|<a domain>)
+=head2 $self->set_cookie($http_domain, $expires,$use_ssl)
+
+Generic method to set a cookie
+
+=cut
+
 sub set_cookie {
     my ($self, $http_domain, $expires,$use_ssl) = @_ ;
     Sympa::Log::do_log('debug','%s,%s,secure= %s',$http_domain, $expires,$use_ssl );
@@ -449,6 +481,11 @@ sub set_cookie {
     return 1;
 }
 
+=head1 FUNCTIONS
+
+=head2 get_random()
+
+=cut
 
 sub get_random {
     Sympa::Log::do_log('debug', '');
@@ -457,7 +494,14 @@ sub get_random {
      return ($random)
 }
 
-## Return the session object content, as a hashref
+=head1 INSTANCE METHODS
+
+=head2 $session->as_hashref()
+
+Return the session object content, as a hashref
+
+=cut
+
 sub as_hashref {
   my ($self) = @_;
 
@@ -470,7 +514,12 @@ sub as_hashref {
   return $data;
 }
 
-## Return 1 if the Session object corresponds to an anonymous session.
+=head2 $session->is_anonymous()
+
+Return a true value if the session object corresponds to an anonymous session.
+
+=cut
+
 sub is_anonymous {
     my ($self) = @_;
 
@@ -481,9 +530,12 @@ sub is_anonymous {
     }
 }
 
-# input user agent string and IP. return 1 if suspected to be a crawler.
-# initial version based on rawlers_dtection.conf file only
-# later : use Session table to identify those who create a lot of sessions
+=head2 $session->is_a_crawler()
+
+Return a true value if the session object corresponds to a crawler, according to the user agent.
+
+=cut
+
 sub is_a_crawler {
     my ($self) = @_;
 
