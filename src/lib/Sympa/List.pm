@@ -4452,10 +4452,15 @@ sub send_to_editor {
 
        # prepare html view of this message
        my $destination_dir  = $Sympa::Configuration::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
-       Sympa::Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
-					     'destination_dir'=>$destination_dir,
-					     'attachement_url' => "viewmod/$name/$modkey",
-					     'list'=>$self} );
+       Sympa::Archive::convert_single_msg_2_html({
+		'msg_as_string'   => $message->{'msg_as_string'},
+		'destination_dir' => $destination_dir,
+		'attachement_url' => "viewmod/$name/$modkey",
+		'list'            => $self,
+		'tmpdir'          => Sympa::Configuration::get_robot_conf($robot, 'tmpdir'),
+		'mhonarc'         => Sympa::Configuration::get_robot_conf($robot, 'mhonarc'),
+		'etc'             => $Sympa::Configuration::Conf{'etc'},
+	});
    }
    @rcpt = $self->get_editors_email();
 

@@ -39,7 +39,6 @@ use Encode qw(decode_utf8 encode_utf8);
 use English qw(-no_match_vars);
 use HTML::Entities qw(decode_entities);
 
-use Sympa::Configuration;
 use Sympa::Log;
 use Sympa::Message;
 use Sympa::Tools::File;
@@ -298,7 +297,7 @@ sub clean_archive_directory{
 
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
-    $answer->{'cleaned_dir'} = $Sympa::Configuration::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
+    $answer->{'cleaned_dir'} = $params->{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
     unless(my $number_of_copies = Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	Sympa::Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
@@ -374,9 +373,9 @@ sub convert_single_msg_2_html {
 	$host = $list->{'admin'}{'host'};
 	$robot = $list->{'robot'};
 	$listname = $list->{'name'};
-	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$PID;
+	$msg_file = $data->{'tmpdir'}.'/'.$list->get_list_id().'_'.$PID;
     }else{
-	$msg_file = Sympa::Configuration::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$PID;
+	$msg_file = $data->{'tmpdir'}.'/'.$messagekey.'_'.$PID;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
@@ -393,7 +392,9 @@ Sympa::Log::do_log('notice', 'Could Not open %s', $msg_file);
 	    return undef;
 	}
     }
-    my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Sympa::Configuration::Conf{'etc'});
+    my $mhonarc_ressources =
+    Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',
+	    $robot,$list,$data->{'etc'});
 
     unless ($mhonarc_ressources) {
 Sympa::Log::do_log('notice',"Cannot find any MhOnArc ressource file");
@@ -406,15 +407,13 @@ Sympa::Log::do_log('err',"Could not change working directory to %s",$destination
     my $tracepwd = getcwd ;
 
 
-    my $mhonarc = Sympa::Configuration::get_robot_conf($robot, 'mhonarc');
-    my $base_url = Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url');
     #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
     #open MSG, ">msg00000.html";
     #Sympa::Log::do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
     #print MSG <ARCMOD>;
     #close MSG;
     #close ARCMOD;
-    `$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
+    `$data->{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
 
     # restore current wd
     chdir $pwd;
