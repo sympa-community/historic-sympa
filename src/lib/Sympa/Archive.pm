@@ -296,18 +296,18 @@ sub clean_archive_directory{
 
     Sympa::Log::do_log('debug',"Cleaning archives for directory '%s'.",$params{'arc_root'}.'/'.$params{'dir_to_rebuild'});
 
-    my $dir_to_rebuild = $params{'arc_root'}.'/'.$params{'dir_to_rebuild'};
-    my $cleaned_dir    = $params{'tmpdir'}.'/'.$params{'dir_to_rebuild'};
-
-    unless(my $number_of_copies = Sympa::Tools::File::copy_dir($dir_to_rebuild,$cleaned_dir)){
+    my $answer;
+    $answer->{'dir_to_rebuild'} = $params{'arc_root'}.'/'.$params{'dir_to_rebuild'};
+    $answer->{'cleaned_dir'} = $params{'tmpdir'}.'/'.$params{'dir_to_rebuild'};
+    unless(my $number_of_copies = Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	Sympa::Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
     }
-    if(opendir ARCDIR,$cleaned_dir){
+    if(opendir ARCDIR,$answer->{'cleaned_dir'}){
 	my $files_left_uncleaned = 0;
 	foreach my $file (readdir(ARCDIR)){
 	    next if($file =~ /^\./);
-	    $file = $cleaned_dir.'/'.$file;
+	    $file = $answer->{'cleaned_dir'}.'/'.$file;
 	    $files_left_uncleaned++ unless(clean_archived_message(
 		    'input'  => $file ,
 		    'output' => $file
@@ -315,16 +315,15 @@ sub clean_archive_directory{
 	}
 	closedir DIR;
 	if ($files_left_uncleaned) {
-	    Sympa::Log::do_log('err',"HTML cleaning failed for %s files in the directory %s.",$files_left_uncleaned,$dir_to_rebuild);
+	    Sympa::Log::do_log('err',"HTML cleaning failed for %s files in the directory %s.",$files_left_uncleaned,$answer->{'dir_to_rebuild'});
 	}
-	$dir_to_rebuild = $cleaned_dir;
+	$answer->{'dir_to_rebuild'} = $answer->{'cleaned_dir'};
     }else{
-	Sympa::Log::do_log('err','Unable to open directory %s: %s',$dir_to_rebuild,$ERRNO);
-	Sympa::Tools::File::del_dir($cleaned_dir);
+	Sympa::Log::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$ERRNO);
+	Sympa::Tools::File::del_dir($answer->{'cleaned_dir'});
 	return undef;
     }
-
-    return $dir_to_rebuild;
+    return $answer;
 }
 
 sub clean_archived_message {
