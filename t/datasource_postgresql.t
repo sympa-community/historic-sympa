@@ -16,7 +16,10 @@ use Sympa::Datasource::SQL;
 
 plan tests => 16;
 
-my $source = Sympa::Datasource::SQL->new({db_type => 'Pg', db_name => 'foo'});
+my $source = Sympa::Datasource::SQL->new(
+	db_type => 'Pg',
+	db_name => 'foo'
+);
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::PostgreSQL');
 
@@ -75,33 +78,33 @@ is(
 );
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Pg',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Pg',
 	db_name => 'foo',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_host');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Pg',
 	db_name => 'foo',
 	db_host => 'localhost',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_user');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Pg',
 	db_name => 'foo',
 	db_host => 'localhost',
 	db_user => 'user',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without DBD::Pg');
 
@@ -122,13 +125,13 @@ SKIP: {
 		skip 'DB_USER environment variable needed', 2;
 	}
 
-	$source = Sympa::Datasource::SQL->new({
+	$source = Sympa::Datasource::SQL->new(
 		db_type   => 'Pg',
 		db_name   => $ENV{DB_NAME},
 		db_host   => $ENV{DB_HOST},
 		db_user   => $ENV{DB_USER},
 		db_passwd => $ENV{DB_PASS},
-	});
+	);
 	$dbh = $source->establish_connection();
 
 	ok(defined $dbh, 'establish connection');

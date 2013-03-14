@@ -15,7 +15,7 @@ use Sympa::Datasource::SQL;
 
 plan tests => 14;
 
-my $source = Sympa::Datasource::SQL->new({db_type => 'Sybase', db_name => 'foo'});
+my $source = Sympa::Datasource::SQL->new(db_type => 'Sybase', db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::Sybase');
 
@@ -70,24 +70,24 @@ $date = $source->get_formatted_date({
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Sybase',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Sybase',
 	db_name => 'foo',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_host');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'Sybase',
 	db_name => 'foo',
 	db_host => 'localhost',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_user');
 
@@ -97,12 +97,12 @@ my $have_dbd = !$EVAL_ERROR;
 SKIP: {
 	skip "DBD::Sybase available", 1 if $have_dbd;
 
-	$source = Sympa::Datasource::SQL->new({
+	$source = Sympa::Datasource::SQL->new(
 		db_type => 'Sybase',
 		db_name => 'foo',
 		db_host => 'localhost',
 		db_host => 'user',
-	});
+	);
 	$dbh = $source->establish_connection();
 	ok(!defined $dbh, 'no connection without DBD::Sybase');
 };

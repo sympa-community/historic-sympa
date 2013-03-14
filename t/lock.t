@@ -28,7 +28,7 @@ throws_ok {
 
 throws_ok {
     $lock = Sympa::Lock->new(
-        $main_file
+        path => $main_file
     );
 } qr/^missing method parameter/,
 'missing method parameter';
@@ -37,8 +37,8 @@ ok(!-f $lock_file, "underlying lock file doesn't exist");
 
 lives_ok {
     $lock = Sympa::Lock->new(
-        $main_file,
-        'anything'
+        path   => $main_file,
+        method => 'anything'
     );
 }
 'all parameters OK';

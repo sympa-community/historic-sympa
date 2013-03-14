@@ -23,71 +23,66 @@ $message = Sympa::Message->new();
 ok(!$message, 'no source');
 
 # MIME::Entity source
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	mimeentity => MIME::Entity->build(
 		From    => 'guillaume.rousse@inria.fr',
 		To      => 'sympa-developpers@listes.renater.fr',
 		Subject => 'Test',
 		Data    => [ 'test' ]
 	)
-});
+);
 ok($message, 'MIME::Entity source');
 isa_ok($message, 'Sympa::Message');
 
 # File source
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	file => 't/samples/unsigned.eml',
-});
+);
 ok(!$message, 'file source, no X-Sympa-To header');
 
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	file       => 't/samples/unsigned.eml',
 	noxsympato => 1
-});
+);
 ok($message, 'file source, no X-Sympa-To header check');
 isa_ok($message, 'Sympa::Message');
-is($message->{sender}, 'guillaume.rousse@inria.fr', 'sender value');
-is($message->{decoded_subject}, 'unsigned test', 'subject value');
+is($message->{sender}, 'guillaume.rousse@sympa.org', 'sender value');
+is($message->{decoded_subject}, 'unsigned test message', 'subject value');
 is($message->{subject_charset}, 'US-ASCII', 'subject charset value');
 
 # String source
 my $string = <<'EOF';
-X-Identity-Key: id5
-X-Account-Key: account5
-Message-ID: <510780E6.8090702@inria.fr>
-Date: Tue, 29 Jan 2013 08:57:26 +0100
-From: Guillaume Rousse <Guillaume.Rousse@inria.fr>
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130114 Thunderbird/17.0.2
+Date: Mon, 25 Feb 2013 17:10:38 +0100
+From: Guillaume Rousse <Guillaume.Rousse@sympa.org>
 MIME-Version: 1.0
 To: sympa-developpers@listes.renater.fr
-Subject: unsigned test
+Subject: unsigned test message
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 
-this is an unsigned test message.
+This is an unsigned test message.
 EOF
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	messageasstring => $string
-});
+);
 ok(!$message, 'string source, no X-Sympa-To header');
 
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	messageasstring => $string,
 	noxsympato      => 1
-});
+);
 ok($message, 'string source, no X-Sympa-To header check');
 isa_ok($message, 'Sympa::Message');
-is($message->{sender}, 'guillaume.rousse@inria.fr', 'sender value');
-is($message->{decoded_subject}, 'unsigned test', 'subject value');
+is($message->{sender}, 'guillaume.rousse@sympa.org', 'sender value');
+is($message->{decoded_subject}, 'unsigned test message', 'subject value');
 is($message->{subject_charset}, 'US-ASCII', 'subject charset value');
 
-$message = Sympa::Message->new({
+$message = Sympa::Message->new(
 	messageasstring => \$string,
 	noxsympato      => 1
-});
+);
 ok($message, 'string reference source, no X-Sympa-To header check');
 isa_ok($message, 'Sympa::Message');
-is($message->{sender}, 'guillaume.rousse@inria.fr', 'sender value');
-is($message->{decoded_subject}, 'unsigned test', 'subject value');
+is($message->{sender}, 'guillaume.rousse@sympa.org', 'sender value');
+is($message->{decoded_subject}, 'unsigned test message', 'subject value');
 is($message->{subject_charset}, 'US-ASCII', 'subject charset value');

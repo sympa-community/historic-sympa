@@ -17,10 +17,7 @@ use Sympa::Datasource::SQL;
 
 plan tests => 31;
 
-my $source = Sympa::Datasource::SQL->new({
-	db_type => 'SQLite',
-	db_name => 'foo'
-});
+my $source = Sympa::Datasource::SQL->new(db_type => 'SQLite', db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::SQLite');
 
@@ -71,16 +68,16 @@ $date = $source->get_formatted_date({
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'SQLite',
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new({
+$source = Sympa::Datasource::SQL->new(
 	db_type => 'SQLite',
 	db_name => File::Temp->new(),
-});
+);
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without DBD::SQLite');
 
@@ -94,10 +91,10 @@ SKIP: {
 	skip 'DBD::SQLite required', 8 if $EVAL_ERROR;
 
 	my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
-	$source = Sympa::Datasource::SQL->new({
+	$source = Sympa::Datasource::SQL->new(
 		db_type => 'SQLite',
 		db_name => $file,
-	});
+	);
 	$dbh = $source->establish_connection();
 
 	ok(defined $dbh, 'establish connection');
