@@ -6829,9 +6829,7 @@ sub do_distribute {
 	 ## TAG
 	 if ($list_topics) {
 
-	     my $message = Sympa::Message->new(
-		     'message_in_spool' => $message_in_spool
-	     );
+	     my $message = Sympa::Message->new(hashref => $message_in_spool);
 	     my $msg = $message->{'msg'};
 	     my $head = $msg->head();
 	     my $filetopic = $list->tag_topic(Sympa::Tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
@@ -7652,8 +7650,8 @@ sub do_send_me {
      if ($msgfile) {
 
 	 my $message = Sympa::Message->new(
-		 'file'       => "$arcpath/arctxt/$msgfile",
-		 'noxsympato' => 'noxsympato'
+		 file       => "$arcpath/arctxt/$msgfile",
+		 noxsympato => 'noxsympato'
 	 );
 	 unless ($message) {
 	     $param->{'status'} = 'message_err';
@@ -15681,7 +15679,7 @@ sub do_request_topic {
 	 wwslog('info','do_request_topic: unknown authentication key');
 	 return undef;
      }
-     my $message = Sympa::Message->new('message_in_spool' => $authmessage);
+     my $message = Sympa::Message->new(hashref => $authmessage);
 
      my $msg = $message->{'msg'};
      my $head = $msg->head();
@@ -15731,8 +15729,8 @@ sub do_tag_topic_by_sender {
 
 
      $mail = Sympa::Message->new(
-	     'message_in_spool' => $messagespool,
-	     'noxsympato'       => 'noxsympato'
+	     hashref    => $messagespool,
+	     noxsympato => 'noxsympato'
      );
      unless($mail) {
 	 Sympa::Report::reject_report_web('intern','cannot_parse_message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot );

@@ -24,7 +24,7 @@ ok(!$message, 'no source');
 
 # MIME::Entity source
 $message = Sympa::Message->new(
-	mimeentity => MIME::Entity->build(
+	entity => MIME::Entity->build(
 		From    => 'guillaume.rousse@inria.fr',
 		To      => 'sympa-developpers@listes.renater.fr',
 		Subject => 'Test',
@@ -63,13 +63,13 @@ Content-Transfer-Encoding: 7bit
 This is an unsigned test message.
 EOF
 $message = Sympa::Message->new(
-	messageasstring => $string
+	string => $string
 );
 ok(!$message, 'string source, no X-Sympa-To header');
 
 $message = Sympa::Message->new(
-	messageasstring => $string,
-	noxsympato      => 1
+	string     => $string,
+	noxsympato => 1
 );
 ok($message, 'string source, no X-Sympa-To header check');
 isa_ok($message, 'Sympa::Message');
@@ -78,8 +78,8 @@ is($message->{decoded_subject}, 'unsigned test message', 'subject value');
 is($message->{subject_charset}, 'US-ASCII', 'subject charset value');
 
 $message = Sympa::Message->new(
-	messageasstring => \$string,
-	noxsympato      => 1
+	string     => \$string,
+	noxsympato => 1
 );
 ok($message, 'string reference source, no X-Sympa-To header check');
 isa_ok($message, 'Sympa::Message');

@@ -56,15 +56,15 @@ Creates a new L<Sympa::Message> object.
 
 =over
 
-=item * I<file>: the message file
+=item * I<file>: message source, as a file
+
+=item * I<string>: message source, as a string
+
+=item * I<entity>: message source, as a C<MIME::Entity> object
+
+=item * I<hashref>: message source, as an hashref
 
 =item * I<noxsympato>: a boolean
-
-=item * I<messageastring>: FIXME
-
-=item * I<mimeentity>: FIXME
-
-=item * I<message_in_spool>: FIXME
 
 =back
 
@@ -77,21 +77,23 @@ A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 sub new {
     my ($class, %params) = @_;
 
-    my $file = $params{'file'};
+    my $file       = $params{'file'};
+    my $string     = $params{'string'};
+    my $entity     = $params{'entity'};
+    my $hashref    = $params{'hashref'};
     my $noxsympato = $params{'noxsympato'};
-    my $messageasstring = $params{'messageasstring'};
-    my $mimeentity = $params{'mimeentity'};
-    my $message_in_spool= $params{'message_in_spool'};
 
     my $self;
-    my $input = 'file' if $file;
-    $input = 'messageasstring' if $messageasstring;
-    $input = 'message_in_spool' if $message_in_spool;
-    $input = 'mimeentity' if $mimeentity;
+    my $input =
+	    $file    ? 'file'   :
+	    $string  ? 'string' :
+	    $entity  ? 'entity' :
+	    $hashref ? 'hashref':
+	               undef    ;
     Sympa::Log::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
 
-    if ($mimeentity) {
-	$self->{'msg'} = $mimeentity;
+    if ($entity) {
+	$self->{'msg'} = $entity;
 	$self->{'altered'} = '_ALTERED';
 
 	bless $self, $class;
@@ -104,11 +106,11 @@ sub new {
 
     my $msg;
 
-    if ($message_in_spool){
-	$messageasstring = $message_in_spool->{'messageasstring'};
-	$self->{'messagekey'}= $message_in_spool->{'messagekey'};
-	$self->{'spoolname'}= $message_in_spool->{'spoolname'};
-	$self->{'create_list_if_needed'}= $message_in_spool->{'create_list_if_needed'};
+    if ($hashref){
+	$string = $hashref->{'messageasstring'};
+	$self->{'messagekey'}= $hashref->{'messagekey'};
+	$self->{'spoolname'}= $hashref->{'spoolname'};
+	$self->{'create_list_if_needed'}= $hashref->{'create_list_if_needed'};
     }
     if ($file) {
 	## Parse message as a MIME::Entity
@@ -118,17 +120,17 @@ sub new {
 	    return undef;
 	}
 	while (<FILE>){
-	    $messageasstring = $messageasstring.$_;
+	    $string = $string.$_;
 	}
 	close(FILE);
         # use Data::Dumper;
 	# my $dump = Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP;
     }
-    if($messageasstring){
-	if (ref ($messageasstring)){
-	    $msg = $parser->parse_data($messageasstring);
+    if($string){
+	if (ref ($string)){
+	    $msg = $parser->parse_data($string);
 	}else{
-	    $msg = $parser->parse_data(\$messageasstring);
+	    $msg = $parser->parse_data(\$string);
 	}
     }
 
@@ -138,7 +140,7 @@ sub new {
     }
     $self->{'msg'} = $msg;
 #    $message->{'msg_as_string'} = $msg->as_string;
-    $self->{'msg_as_string'} = $messageasstring;
+    $self->{'msg_as_string'} = $string;
     $self->{'size'} = length($msg->as_string);
 
     my $hdr = $self->{'msg'}->head;

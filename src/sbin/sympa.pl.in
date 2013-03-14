@@ -1357,7 +1357,7 @@ sub process_message {
 
     my ($listname, $robot);    my $status;
 
-    my $message = Sympa::Message->new(message_in_spool => $message_in_spool);
+    my $message = Sympa::Message->new(hashref => $message_in_spool);
 
     unless (defined $message) {
 	Sympa::Log::do_log('err', 'Unable to create Message object message : %s', $message_in_spool->{'messagekey'});

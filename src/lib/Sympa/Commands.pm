@@ -2029,7 +2029,7 @@ sub distribute {
 	return 'msg_not_found';
 
     }
-    my $message = Sympa::Message->new('message_in_spool'=>$message_in_spool);
+    my $message = Sympa::Message->new(hashref => $message_in_spool);
     unless (defined $message) {
 	Sympa::Log::do_log('err', 'Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
 	Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
@@ -2105,7 +2105,7 @@ sub confirm {
 	Sympa::Report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 	return 'wrong_auth';
     }
-    my $message = Sympa::Message->new('message_in_spool' => $messageinspool);
+    my $message = Sympa::Message->new(hashref => $messageinspool);
 
     unless (defined $message) {
 	Sympa::Log::do_log('err', 'Unable to create message object for key %s', $key);
@@ -2264,7 +2264,7 @@ sub reject {
 	Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }
-    my $message = Sympa::Message->new('message_in_spool' => $message_in_spool);
+    my $message = Sympa::Message->new(hashref => $message_in_spool);
     unless ($message) {
 	Sympa::Log::do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
 	Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);

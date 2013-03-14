@@ -353,8 +353,8 @@ sub mail_file {
     return $message_as_string if($params{return_message_as_string});
 
     my $message = Sympa::Message->new(
-	    'messageasstring'=>$message_as_string,
-	    'noxsympato'=>'noxsympato'
+	    string     => $message_as_string,
+	    noxsympato =>'noxsympato'
     );
 
     my $result = _sending(

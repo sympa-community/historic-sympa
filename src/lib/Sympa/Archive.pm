@@ -131,8 +131,8 @@ sub scan_dir_archive {
 	Sympa::Log::do_log ('debug',"($dir, $month): start parsing message $dir/$month/arctxt/$file");
 
 	my $mail = Sympa::Message->new(
-		'file'       => "$dir/$month/arctxt/$file",
-		'noxsympato' => 'noxsympato'
+		file       => "$dir/$month/arctxt/$file",
+		noxsympato => 'noxsympato'
 	);
 	unless (defined $mail) {
 	    Sympa::Log::do_log('err', 'Unable to create Message object %s', $file);
@@ -338,7 +338,8 @@ sub clean_archived_message {
     my $output = $params{'output'};
 
 
-    if (my $msg = Sympa::Message->new('file' => $input)){
+    my $msg = Sympa::Message->new(file => $input);
+    if ($msg) {
 	if($msg->clean_html()){
 	    if(open TMP, ">$output") {
 		print TMP $msg->{'msg'}->as_string;

@@ -356,7 +356,7 @@ sub store {
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
     if ($self->{'spoolname'} ne 'task') {
-	$message = Sympa::Message->new('messageasstring' => $message_asstring);
+	$message = Sympa::Message->new(string => $message_asstring);
     }
 
     if($message) {

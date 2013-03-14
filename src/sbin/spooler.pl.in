@@ -427,7 +427,7 @@ while (!$signal) {
 	}
 	$meta{'type'} = $type if $type;
 
-	my $message = Sympa::Message->new('file' => $spooldir.'/'.$filename);
+	my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
 
         #use Data::Dumper;
 #	my $dump = Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP;
