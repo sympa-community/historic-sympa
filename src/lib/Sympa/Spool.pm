@@ -82,17 +82,15 @@ sub new {
     my ($class, %params) = @_;
    Sympa::Log::do_log('debug2', '(%s)', $params{name});
 
-    my $self={};
     unless ($params{name} =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 Sympa::Log::do_log('err','internal error unknown spool %s',$params{name});
 	return undef;
     }
-    $self->{'spoolname'} = $params{name};
-    if (($params{status} eq 'bad')||($params{status} eq 'ok')) {
-	$self->{'selection_status'} = $params{status};
-    }else{
-	$self->{'selection_status'} =  'ok';
-    }
+
+    my $self = {
+	spoolname        => $params{name},
+	selection_status => $params{status} eq 'bad' ? 'bad' : 'ok',
+    };
 
     bless $self, $class;
 
