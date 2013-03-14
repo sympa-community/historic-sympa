@@ -579,7 +579,7 @@ if ($options{'dump'}) {
 	    exit;
 	}
 
-	my $list = Sympa::List->new($options{'dump'});
+	my $list = Sympa::List->new(name => $options{'dump'});
 	unless (defined $list) {
 	    Sympa::Log::do_log('err','Unknown list %s', $options{'dump'});
 
@@ -624,7 +624,8 @@ if ($options{'dump'}) {
     }
 
 
-    unless ($list = Sympa::List->new($options{'import'})) {
+    $list = Sympa::List->new(name => $options{'import'});
+    unless ($list) {
 	Sympa::Log::fatal_err('Unknown list name %s', $options{'import'});
     }
 
@@ -691,7 +692,7 @@ if ($options{'dump'}) {
 }elsif ($options{'close_list'}) {
 
     my ($listname, $robotname) = split /\@/, $options{'close_list'};
-    my $list = Sympa::List->new($listname, $robotname);
+    my $list = Sympa::List->new(name => $listname, robot => $robotname);
 
     unless (defined $list) {
 	print STDERR "Incorrect list name $options{'close_list'}\n";
@@ -742,7 +743,7 @@ if ($options{'dump'}) {
 }elsif ($options{'purge_list'}) {
 
     my ($listname, $robotname) = split /\@/, $options{'purge_list'};
-    my $list = Sympa::List->new($listname, $robotname);
+    my $list = Sympa::List->new(name => $listname, robot => $robotname);
 
     unless (defined $list) {
 	print STDERR "Incorrect list name $options{'purge_list'}\n";
@@ -769,7 +770,7 @@ if ($options{'dump'}) {
   ## TODO A completer
 
     my ($listname, $robotname) = split /\@/, $options{'rename_list'};
-    my $list = Sympa::List->new($listname, $robotname);
+    my $list = Sympa::List->new(name => $listname, robot => $robotname);
 
     unless (defined $list) {
 	print STDERR "Incorrect list name $options{'rename_list'}\n";
@@ -838,7 +839,7 @@ if ($options{'dump'}) {
  	exit 1;
     }
 
-    my $config = Sympa::Configuration::XML->new(\*INFILE);
+    my $config = Sympa::Configuration::XML->new(handle => \*INFILE);
     unless (defined $config->createHash()) {
  	print STDERR "Error in representation data with these xml data\n";
  	exit 1;
@@ -872,10 +873,10 @@ if ($options{'dump'}) {
     }
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
     my $family = Sympa::Family->new(
-	    $family_name,
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $family_name,
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless ($family) {
  	print STDERR "The family $family_name does not exist, impossible instantiation\n";
@@ -929,10 +930,10 @@ if ($options{'dump'}) {
 
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
     my $family = Sympa::Family->new(
-	    $family_name,
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $family_name,
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless ($family) {
  	print STDERR "The family $family_name does not exist, impossible to add a list\n";
@@ -970,7 +971,7 @@ if ($options{'dump'}) {
     exit 0;
 }elsif ($options{'sync_include'}) {
 
-    my $list = Sympa::List->new($options{'sync_include'});
+    my $list = Sympa::List->new(name => $options{'sync_include'});
 
     unless (defined $list) {
 	print STDERR "Incorrect list name $options{'sync_include'}\n";
@@ -1026,7 +1027,7 @@ if ($options{'dump'}) {
     Sympa::Log::do_log('notice', "Upgrading share for list=%s robot=%s",$listname,$robot);
 
 
-    my $list = Sympa::List->new($listname,$robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
 
     unless (defined $list) {
 	printf STDERR "Incorrect list or domain name : %s %s\n",$listname,$robot;
@@ -1056,7 +1057,10 @@ if ($options{'dump'}) {
     if ($options{'list'}) {
 
 	Sympa::Log::do_log('notice', "Loading list $options{'list'}...");
-	my $list = Sympa::List->new($options{'list'}, '', {'reload_config' => 1});
+	my $list = Sympa::List->new(
+		name    => $options{'list'},
+		options => {'reload_config' => 1}
+	);
 	unless (defined $list) {
 	    print STDERR "Error : incorrect list name '$options{'list'}'\n";
 	    exit 1;
@@ -1085,10 +1089,10 @@ elsif ($options{'modify_list'}) {
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
 
     my $family = Sympa::Family->new(
-	    $family_name,
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $family_name,
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless ($family) {
  	print STDERR "The family $family_name does not exist, impossible to modify the list.\n";
@@ -1138,10 +1142,10 @@ elsif ($options{'close_family'}) {
     }
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
     my $family = Sympa::Family->new(
-	    $family_name,
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $family_name,
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless ($family) {
  	print STDERR "The family $family_name does not exist, impossible family closure\n";
@@ -1165,7 +1169,7 @@ elsif ($options{'sync_list_db'}) {
     }
     my $listname = $options{'list'} || '';
     if (length($listname) > 1) {
-	my $list = Sympa::List->new($listname);
+	my $list = Sympa::List->new(name => $listname);
 	unless (defined $list) {
 	    print STDOUT "\nList '$listname' does not exist. \n";
 	    exit 1;
@@ -1202,7 +1206,7 @@ my $index_cleanqueue = 0;
 my @qfile;
 
 my $spoolname = 'msg';
-my $spool = Sympa::Spool->new($spoolname);
+my $spool = Sympa::Spool->new(name => $spoolname);
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
@@ -1223,21 +1227,41 @@ while (!$signal) {
     if ($index_cleanqueue++ >= 1000){
 	$index_cleanqueue=0;
 
-	my $msg_bad = Sympa::Spool->new('msg','bad');
+	my $msg_bad = Sympa::Spool->new(
+		name   => 'msg',
+		status => 'bad'
+	);
 	$msg_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queue'}});
-	my $archive_bad = Sympa::Spool->new('archive','bad');
+	my $archive_bad = Sympa::Spool->new(
+		name   => 'archive',
+		status => 'bad'
+	);
 	$archive_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queueoutgoing'}});
-	my $queuebounce_bad = Sympa::Spool->new('bounce','bad');
+	my $queuebounce_bad = Sympa::Spool->new(
+		name   => 'bounce',
+		status => 'bad'
+	);
+	$archive_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queueoutgoing'}});
 	$queuebounce_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queuebounce'}});
-	my $queuemod = Sympa::Spool->new('mod');
+	my $queuemod = Sympa::Spool->new(
+		name => 'mod',
+	);
 	$queuemod->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuemod'}});
-	my $queueauth = Sympa::Spool->new('auth');
+	my $queueauth = Sympa::Spool->new(
+		name => 'auth'
+	);
 	$queueauth->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queueauth'}});
-	my $queuetopic = Sympa::Spool->new('topic');
+	my $queuetopic = Sympa::Spool->new(
+		name => 'topic'
+	);
 	$queuetopic->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuetopic'}});
-	my $queuesubscribe = Sympa::Spool->new('subscribe');
+	my $queuesubscribe = Sympa::Spool->new(
+		name => 'subscribe'
+	);
 	$queuesubscribe->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'}});
-	my $queueautomatic = Sympa::Spool->new('automatic');
+	my $queueautomatic = Sympa::Spool->new(
+		name => 'automatic'
+	);
 	$queueautomatic->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queueautomatic'}});
 	Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
     }
@@ -1333,7 +1357,7 @@ sub process_message {
 
     my ($listname, $robot);    my $status;
 
-    my $message = Sympa::Message->new({'message_in_spool' => $message_in_spool});
+    my $message = Sympa::Message->new(message_in_spool => $message_in_spool);
 
     unless (defined $message) {
 	Sympa::Log::do_log('err', 'Unable to create Message object message : %s', $message_in_spool->{'messagekey'});
@@ -1364,7 +1388,11 @@ sub process_message {
 	# message contain a valid checksum, it comes from wwsympa, so
         #  mail it without other proceding unless it is for a valid list
 	return (DoSendMessage ($message,$robot)) unless(Sympa::Configuration::valid_robot($robot, {'just_try' => 1})) ;
-	return (DoSendMessage ($message,$robot)) unless( Sympa::List->new($listname, $robot, {'just_try' => 1}));
+	return (DoSendMessage ($message,$robot)) unless Sympa::List->new(
+		name    => $listname,
+		robot   => $robot,
+		options => {'just_try' => 1}
+	);
     }
 
     # setting log_level using conf unless it is set by calling option
@@ -1417,7 +1445,7 @@ sub process_message {
 	$name = $listname;
 	$list_address = $name.'@'.$host;
     }else{
-	$list = Sympa::List->new($listname, $robot);
+	$list = Sympa::List->new(name => $listname, robot => $robot);
 	unless (defined $list) {
 	    unless ($dyn_list_family) {
 		Sympa::Log::do_log('err', 'list %s does not exist',$listname);
@@ -1429,10 +1457,10 @@ sub process_message {
 	    ## Automatic creation of a mailing list, based on a family
 	    my $dyn_family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$dyn_list_family};
 	    my $dyn_family = Sympa::Family->new(
-		    $dyn_list_family,
-		    $robot,
-		    $dyn_family_config,
-		    $Sympa::Configuration::Conf{'etc'}
+		    name   => $dyn_list_family,
+		    robot  => $robot,
+		    config => $dyn_family_config,
+		    etcdir => $Sympa::Configuration::Conf{'etc'}
 	    );
             unless ($dyn_family) {
                 Sympa::Log::do_log('err', "Failed to process message: family $dyn_list_family does not exist, impossible to create the dynamic list.");
@@ -1460,7 +1488,7 @@ sub process_message {
 			      'parameters' => $hdr->get('Message-Id').",$robot",'target_email' => '','msg_id' => hdr->get('Message-Id'),'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef ;
             }
-            $list = Sympa::List->new($listname, $robot);
+            $list = Sympa::List->new(name => $listname, robot => $robot);
             unless (defined $list) {
                 Sympa::Log::do_log('err', 'dynamic list %s could not be created',$listname);
                 Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string,'');
@@ -1748,7 +1776,8 @@ sub DoForward {
 	$host = Sympa::Configuration::get_robot_conf($robot, 'host');
 	$priority = 0;
     }else {
-	unless ($list = Sympa::List->new($name, $robot)) {
+	$list = Sympa::List->new(name => $name, robot => $robot);
+	unless ($list) {
 	    Sympa::Log::do_log('notice', "Message for %s-%s ignored, unknown list %s (Message-id: %s)",$name, $function, $name,$messageid);
 	    my $sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
 	    unless (Sympa::List::send_global_file('list_unknown', $sender, $robot,
@@ -1898,7 +1927,7 @@ sub DoMessage{
 
 
 	    ## Search for the list
-	    my $list = Sympa::List->new($listname, $robot);
+	    my $list = Sympa::List->new(name => $listname, robot => $robot);
 
 	    ## List unknown
 	    unless ($list) {
@@ -2305,10 +2334,13 @@ sub DoCommand {
 sub SendDigest{
     Sympa::Log::do_log('debug', '()');
 
-    my $digestspool = Sympa::Spool->new('digest');
+    my $digestspool = Sympa::Spool->new(name => 'digest');
 
     foreach my $digest ($digestspool->get_content({'selection'=>'messagekey,list,robot,date'})){
- 	my $list = Sympa::List->new($digest->{'list'}, $digest->{'robot'});
+ 	my $list = Sympa::List->new(
+		name  => $digest->{'list'},
+		robot => $digest->{'robot'}
+	);
 	unless ($list) {
 	    Sympa::Log::do_log('info', 'Unknown list %s, (robot %s), deleting digest (messagekey %s)',$digest->{'list'}, $digest->{'messagekey'} );
 	    Sympa::Log::db_log({'robot' => $digest->{'robot'},'list' => $digest->{'list'},'action' => 'SendDigest','parameters' => "$digest->{'messagekey'}",'target_email' => '','msg_id' => '','status' => 'error','error_type' => 'unknown_list','user_email' => '','client' => $ip,'daemon' => $daemon_name});

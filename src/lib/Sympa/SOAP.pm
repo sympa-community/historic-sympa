@@ -226,9 +226,9 @@ sub login {
 
     ## Create Sympa::Session object
     my $session = Sympa::Session->new(
-	    $robot,
-	    {'cookie' => $ENV{'SESSION_ID'}},
-	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+	    robot    => $robot,
+	    context  => {cookie => $ENV{SESSION_ID}},
+	    crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
     );
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
@@ -319,9 +319,9 @@ sub casLogin {
 
     ## Create Sympa::Session object
     my $session = Sympa::Session->new(
-	    $robot,
-	    {'cookie' => $ENV{'SESSION_ID'}},
-	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+	    robot    => $robot,
+	    context  => {cookie => $ENV{SESSION_ID}},
+	    crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
     );
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
@@ -371,9 +371,9 @@ sub authenticateAndRun {
 
     ## Provided email is not trusted, we fetch the user email from the session_table instead
     my $session = Sympa::Session->new(
-	    $ENV{'SYMPA_ROBOT'},
-	    {'cookie' => $session_id},
-	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+	    robot    => $ENV{SYMPA_ROBOT},
+	    context  => {cookie => $session_id},
+	    crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
     );
     $email = $session->{'email'} if (defined $session);
     unless ($email or ($email eq 'unkown')  ) {
@@ -416,9 +416,9 @@ sub getUserEmailByCookie {
     }
 
     my $session = Sympa::Session->new(
-	    $ENV{'SYMPA_ROBOT'},
-	    {'cookie' => $cookie},
-	    $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+	    robot    => $ENV{SYMPA_ROBOT},
+	    context  => {cookie => $cookie},
+	    crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
     );
 
 
@@ -531,7 +531,7 @@ sub amI {
   }
 
   $listname = lc($listname);
-  my $list = Sympa::List->new($listname, $robot);
+  my $list = Sympa::List->new(name => $listname, robot => $robot);
 
   Sympa::Log::do_log('debug', '(%s)', $listname);
 
@@ -586,7 +586,7 @@ sub info {
 
     Sympa::Log::do_log('notice', '(%s)', $listname);
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     unless ($list) {
 	Sympa::Log::do_log('info', 'Info %s from %s refused, list unknown', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -693,7 +693,7 @@ sub createList {
 
     Sympa::Log::do_log('debug', '(%s,%s)', $listname,$robot);
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     if ($list) {
 	Sympa::Log::do_log('info', 'create_list %s@%s from %s refused, list already exist', $listname,$robot,$sender);
 	die SOAP::Fault->faultcode('Client')
@@ -821,7 +821,7 @@ sub closeList {
 
     Sympa::Log::do_log('debug', '(%s,%s)', $listname,$robot);
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     unless ($list) {
 	Sympa::Log::do_log('info', 'closeList %s@%s from %s refused, unknown list', $listname,$robot,$sender);
 	die SOAP::Fault->faultcode('Client')
@@ -899,7 +899,7 @@ sub add {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email>');
     }
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     unless ($list) {
 	Sympa::Log::do_log('info', 'add %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -1031,7 +1031,7 @@ sub del {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email>');
     }
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     unless ($list) {
 	Sympa::Log::do_log('info', 'del %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -1147,7 +1147,7 @@ sub review {
 
     Sympa::Log::do_log('debug', '(%s,%s)', $listname,$robot);
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     unless ($list) {
 	Sympa::Log::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
 	die SOAP::Fault->faultcode('Server')
@@ -1244,7 +1244,7 @@ sub fullReview {
 
 	Sympa::Log::do_log('debug', '(%s,%s)', $listname, $robot);
 
-	my $list = Sympa::List->new($listname, $robot);
+	my $list = Sympa::List->new(name => $listname, robot => $robot);
 	unless($list) {
 		Sympa::Log::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname, $sender, $robot);
 		die SOAP::Fault->faultcode('Server')
@@ -1363,7 +1363,7 @@ sub signoff {
     }
 
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
 
     ## Is this list defined
     unless ($list) {
@@ -1383,7 +1383,7 @@ sub signoff {
 	return SOAP::Data->name('result')->value($success);
     }
 
-    $list = Sympa::List->new($listname, $robot);
+    $list = Sympa::List->new(name => $listname, robot => $robot);
 
     # Part of the authorization code
     my $result = $list->check_list_authz('unsubscribe','md5',
@@ -1490,7 +1490,7 @@ sub subscribe {
 
   ## Load the list if not already done, and reject the
   ## subscription if this list is unknown to us.
-  my $list = Sympa::List->new($listname, $robot);
+  my $list = Sympa::List->new(name => $listname, robot => $robot);
   unless ($list) {
       Sympa::Log::do_log('info', 'Subscribe to %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
       die SOAP::Fault->faultcode('Server')

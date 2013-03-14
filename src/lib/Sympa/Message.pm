@@ -48,7 +48,7 @@ use Sympa::Tools::SMIME;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Message->new($parameters)
+=head2 Sympa::Message->new(%parameters)
 
 Creates a new L<Sympa::Message> object.
 
@@ -60,11 +60,11 @@ Creates a new L<Sympa::Message> object.
 
 =item * I<noxsympato>: a boolean
 
-=item * I<messageastring>
+=item * I<messageastring>: FIXME
 
-=item * I<mimeentity>
+=item * I<mimeentity>: FIXME
 
-=item * I<message_in_spool>
+=item * I<message_in_spool>: FIXME
 
 =back
 
@@ -75,13 +75,13 @@ A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $datas) = @_;
+    my ($class, %params) = @_;
 
-    my $file = $datas->{'file'};
-    my $noxsympato = $datas->{'noxsympato'};
-    my $messageasstring = $datas->{'messageasstring'};
-    my $mimeentity = $datas->{'mimeentity'};
-    my $message_in_spool= $datas->{'message_in_spool'};
+    my $file = $params{'file'};
+    my $noxsympato = $params{'noxsympato'};
+    my $messageasstring = $params{'messageasstring'};
+    my $mimeentity = $params{'mimeentity'};
+    my $message_in_spool= $params{'message_in_spool'};
 
     my $self;
     my $input = 'file' if $file;
@@ -229,7 +229,11 @@ sub new {
 		$listname = $1;
 	    }
 
-	    my $list = Sympa::List->new($listname, $robot, {'just_try' => 1});
+	    my $list = Sympa::List->new(
+		    name    => $listname,
+		    robot   => $robot,
+		    options => {'just_try' => 1}
+	    );
 	    if ($list) {
 		$self->{'list'} = $list;
 	    }

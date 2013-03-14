@@ -40,7 +40,7 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Datasource::LDAP->new($params)
+=head2 Sympa::Datasource::LDAP->new(%parameters)
 
 Create a new L<Sympa::Datasource::LDAP> object.
 
@@ -48,9 +48,9 @@ Create a new L<Sympa::Datasource::LDAP> object.
 
 =over
 
-=item * I<user>:
+=item * I<user>: FIXME
 
-=item * I<password>:
+=item * I<password>: FIXME
 
 =back
 
@@ -61,9 +61,9 @@ A new L<Sympa::Datasource::LDAP> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my $class = shift;
-    my $param = shift;
-    my $self = $param;
+    my ($class, %params) = @_;
+
+    my $self = \%params;
     Sympa::Log::do_log('debug','Creating new LDAPSource object');
     ## Map equivalent parameters (depends on the calling context : included members, scenario, authN
     ## Also set defaults

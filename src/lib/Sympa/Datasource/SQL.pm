@@ -51,7 +51,7 @@ my %db_connections;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Datasource::SQL->new($params)
+=head2 Sympa::Datasource::SQL->new(%parameters)
 
 Create a new L<Sympa::Datasource::SQL> object.
 
@@ -59,15 +59,15 @@ Create a new L<Sympa::Datasource::SQL> object.
 
 =over
 
-=item * I<host>
+=item * I<host>: FIXME
 
-=item * I<user>
+=item * I<user>: FIXME
 
-=item * I<passwd>
+=item * I<passwd>: FIXME
 
-=item * I<connect_options>
+=item * I<connect_options>: FIXME
 
-=item * I<db_type>
+=item * I<db_type>: FIXME
 
 =back
 
@@ -78,19 +78,19 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, $params) = @_;
+	my ($class, %params) = @_;
 
-	my $self = $params;
-	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params->{'db_type'});
+	my $self = \%params;
+	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
 	my $actualclass;
-	if ($params->{'db_type'} =~ /^mysql$/i) {
+	if ($params{'db_type'} =~ /^mysql$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::MySQL" ){
 			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $EVAL_ERROR");
 			return undef;
 		}
 		require Sympa::Datasource::SQL::MySQL;
 		$actualclass = "Sympa::Datasource::SQL::MySQL";
-	}elsif ($params->{'db_type'} =~ /^sqlite$/i) {
+	}elsif ($params{'db_type'} =~ /^sqlite$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::SQLite" ){
 			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::SQLite module");
 			return undef;
@@ -98,7 +98,7 @@ sub new {
 		require Sympa::Datasource::SQL::SQLite;
 
 		$actualclass = "Sympa::Datasource::SQL::SQLite";
-	}elsif ($params->{'db_type'} =~ /^pg$/i) {
+	}elsif ($params{'db_type'} =~ /^pg$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::PostgreSQL" ){
 			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::PostgreSQL module");
 			return undef;
@@ -106,7 +106,7 @@ sub new {
 		require Sympa::Datasource::SQL::PostgreSQL;
 
 		$actualclass = "Sympa::Datasource::SQL::PostgreSQL";
-	}elsif ($params->{'db_type'} =~ /^oracle$/i) {
+	}elsif ($params{'db_type'} =~ /^oracle$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::Oracle" ){
 			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Oracle module");
 			return undef;
@@ -114,7 +114,7 @@ sub new {
 		require Sympa::Datasource::SQL::Oracle;
 
 		$actualclass = "Sympa::Datasource::SQL::Oracle";
-	}elsif ($params->{'db_type'} =~ /^sybase$/i) {
+	}elsif ($params{'db_type'} =~ /^sybase$/i) {
 		unless ( eval "require Sympa::Datasource::SQL::Sybase" ){
 			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Sybase module");
 			return undef;
@@ -128,7 +128,7 @@ sub new {
 		## like CSV
 		$actualclass = "Sympa::Datasource::SQL";
 	}
-	$self = $class->SUPER::new($params);
+	$self = $class->SUPER::new(%params);
 
 	$self->{'db_host'} ||= $self->{'host'};
 	$self->{'db_user'} ||= $self->{'user'};

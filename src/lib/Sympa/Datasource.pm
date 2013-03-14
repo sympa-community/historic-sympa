@@ -38,7 +38,7 @@ use Sympa::Log;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Datasource->new($params)
+=head2 Sympa::Datasource->new(%parameters)
 
 Create a new L<Sympa::Datasource> object.
 
@@ -51,9 +51,9 @@ A new L<Sympa::Datasource> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my ($class, $params) = @_;
+    my ($class, %params) = @_;
     Sympa::Log::do_log('debug', '');
-    my $self = $params;
+    my $self = \%params;
     bless $self, $class;
     return $self;
 }

@@ -44,7 +44,7 @@ use Sympa::Tools::Data;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::SharedDocument->new($list, $path, $params)
+=head2 Sympa::SharedDocument->new(%parameters)
 
 Creates a new L<Sympa::SharedDocument> object.
 
@@ -52,11 +52,17 @@ Creates a new L<Sympa::SharedDocument> object.
 
 =over
 
-=item * I<$list>
+=item * I<list>: FIXME
 
-=item * I<$path>
+=item * I<path>: FIXME
 
-=item * I<$params>
+=item * I<user>: FIXME
+
+=item * I<auth_method>: FIXME
+
+=item * I<remote_host>: FIXME
+
+=item * I<remote_addr>: FIXME
 
 =back
 
@@ -67,21 +73,21 @@ A new L<Sympa::SharedDocument> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $list, $path, $params) = @_;
+    my ($class, %params) = @_;
 
-    my $email = $params->{'user'}{'email'};
+    my $email = $params{'user'}{'email'};
     #$email ||= 'nobody';
-    Sympa::Log::do_log('debug2', '(%s, %s)', $list->{'name'}, $path);
+    Sympa::Log::do_log('debug2', '(%s, %s)', $params{list}->{'name'}, $params{path});
 
-    unless (ref($list) && $list->isa('Sympa::List')) {
+    unless (ref($params{list}) && $params{list}->isa('Sympa::List')) {
 	Sympa::Log::do_log('err', 'incorrect list parameter');
 	return undef;
     }
 
-    $path = main::no_slash_end($path);
+    my $path = main::no_slash_end($params{path});
 
     my $self = {
-	    root_path    => $list->{'dir'}.'/shared',
+	    root_path    => $params{list}->{'dir'}.'/shared',
 	    path         => $path,
 	    escaped_path => Sympa::Tools::escape_chars($path, '/')
     };
@@ -100,7 +106,7 @@ sub new {
     }
 
     ## Check access control
-    check_access_control($self, $params);
+    check_access_control($self, \%params);
 
     ###############################
     ## The path has been checked ##
@@ -192,7 +198,7 @@ sub new {
 	# Author
 	if ($desc_hash{'email'}) {
 	    $self->{'author'} = $desc_hash{'email'};
-	    $self->{'author_mailto'} = main::mailto($list,$desc_hash{'email'});
+	    $self->{'author_mailto'} = main::mailto($params{list},$desc_hash{'email'});
 	    $self->{'author_known'} = 1;
 	}
     }
@@ -252,17 +258,19 @@ sub new {
 	# array of entry of the directory DIR
 	my @tmpdir = readdir DIR; closedir DIR;
 
-	my $dir = main::get_directory_content(\@tmpdir, $email, $list, $self->{'absolute_path'});
+	my $dir = main::get_directory_content(\@tmpdir, $email, $params{list}, $self->{'absolute_path'});
 
 	foreach my $d (@{$dir}) {
 
-	    my $sub_document = Sympa::SharedDocument->new($list,
-		    $self->{'path'}.'/'.$d, $params);
+	    my $sub_document = Sympa::SharedDocument->new(
+		    %params,
+		    path => $self->{'path'}.'/'.$d,
+	    );
 	    push @{$self->{'subdir'}}, $sub_document;
 	}
     }
 
-    $self->{'list'} = $list;
+    $self->{'list'} = $params{list};
 
     bless $self, $class;
 

@@ -46,12 +46,12 @@ my %task_by_model;
 my $taskspool ;
 
 sub set_spool {
-    $taskspool = Sympa::Spool->new('task');
+    $taskspool = Sympa::Spool->new(name => 'task');
 }
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Task->new($parameters)
+=head2 Sympa::Task->new(%parameters)
 
 Creates a new L<Sympa::Task> object.
 
@@ -59,19 +59,19 @@ Creates a new L<Sympa::Task> object.
 
 =over
 
-=item * I<messagekey>
+=item * I<messagekey>: FIXME
 
-=item * I<taskasstring>
+=item * I<taskasstring>: FIXME
 
-=item * I<task_date>
+=item * I<task_date>: FIXME
 
-=item * I<task_label>
+=item * I<task_label>: FIXME
 
-=item * I<task_model>
+=item * I<task_model>: FIXME
 
-=item * I<robot>
+=item * I<robot>: FIXME
 
-=item * I<list>
+=item * I<list>: FIXME
 
 =back
 
@@ -82,20 +82,23 @@ A new L<Sympa::Task> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $task_in_spool) = @_;
-    Sympa::Log::do_log('debug2', 'messagekey = %s', $task_in_spool->{'messagekey'});
+    my ($class, %params) = @_;
+    Sympa::Log::do_log('debug2', 'messagekey = %s', $params{'messagekey'});
 
     my $self = {
-	    messagekey   => $task_in_spool->{'messagekey'},
-	    taskasstring => $task_in_spool->{'messageasstring'},
-	    date         => $task_in_spool->{'task_date'},
-	    label        => $task_in_spool->{'task_label'},
-	    model        => $task_in_spool->{'task_model'},
-	    domain       => $task_in_spool->{'robot'}
+	    messagekey   => $params{'messagekey'},
+	    taskasstring => $params{'messageasstring'},
+	    date         => $params{'task_date'},
+	    label        => $params{'task_label'},
+	    model        => $params{'task_model'},
+	    domain       => $params{'robot'}
     };
 
-    if ($task_in_spool->{'list'}) { # list task
-	$self->{'list_object'} = Sympa::List->new($task_in_spool->{'list'},$task_in_spool->{'robot'});
+    if ($params{'list'}) { # list task
+	$self->{'list_object'} = Sympa::List->new(
+		name  => $params{'list'},
+		robot => $params{'robot'}
+	);
 	$self->{'domain'} = $self->{'list_object'}{'domain'};
     }
 
@@ -130,12 +133,12 @@ sub list_tasks {
     undef %task_by_model;
 
     # fetch all task
-    my $taskspool = Sympa::Spool->new('task');
+    my $taskspool = Sympa::Spool->new(name => 'task');
     my @tasks = $taskspool->get_content({'selector'=>{}});
 
     ## Create Task objects
     foreach my $t (@tasks) {
-	my $task = Sympa::Task->new($t);
+	my $task = Sympa::Task->new(%$t);
 	## Maintain list of tasks
 	push @task_list, $task;
 

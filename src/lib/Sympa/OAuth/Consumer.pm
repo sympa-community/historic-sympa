@@ -57,7 +57,9 @@ Creates a new L<Sympa::OAuth::Consumer> object.
 
 =item * I<provider>: the OAuth provider key
 
-=item * I<provider_secret>: the OAuth provider shared secret
+=item * I<consumer_key>: FIXME
+
+=item * I<consumer_secret>: FIXME
 
 =item * I<request_token_path>: the temporary token request URL
 

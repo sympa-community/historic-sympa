@@ -58,17 +58,17 @@ Creates a new L<Sympa::Scenario> object.
 
 =over
 
-=item * I<function>
+=item * I<function>: FIXME
 
-=item * I<robot>
+=item * I<robot>: FIXME
 
-=item * I<name>
+=item * I<name>: FIXME
 
-=item * I<directory>
+=item * I<directory>: FIXME
 
-=item * I<file_path>
+=item * I<file_path>: FIXME
 
-=item * I<options>
+=item * I<options>: FIXME
 
 =back
 
@@ -589,7 +589,11 @@ sub verify {
 
     my $list;
     if ($context->{'listname'} && ! defined $context->{'list_object'}) {
-        unless ( $context->{'list_object'} = Sympa::List->new($context->{'listname'}, $robot) ){
+        $context->{'list_object'} = Sympa::List->new(
+		name  => $context->{'listname'},
+		robot => $robot
+	);
+        unless ($context->{'list_object'}) {
 	    Sympa::Log::do_log('info',"Unable to create List object for list $context->{'listname'}");
 	    return undef ;
 	}
@@ -921,9 +925,9 @@ sub verify {
 
 	## The list is local or in another local robot
 	if ($args[0] =~ /\@/) {
-	    $list2 = Sympa::List->new($args[0]);
+	    $list2 = Sympa::List->new(name => $args[0]);
 	}else {
-	    $list2 = Sympa::List->new($args[0], $robot);
+	    $list2 = Sympa::List->new(name => $args[0], robot => $robot);
 	}
 
 	if (! $list2) {

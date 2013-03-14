@@ -219,7 +219,7 @@ Sympa::Log::do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spoolarchive = Sympa::Spool->new('archive');
+my $spoolarchive = Sympa::Spool->new(name => 'archive');
 
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
@@ -260,8 +260,8 @@ while (!$end) {
 
 Sympa::Log::do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 
-	my $list;
-	unless ($list = Sympa::List->new($listadress)) {
+	my $list = Sympa::List->new(name => $listadress);
+	unless ($list) {
 	   Sympa::Log::do_log('err',"remove : unknown list $listadress");
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
 	    next;
@@ -293,8 +293,11 @@ Sympa::Log::do_log('debug',"remove found : for $arclistdir");
 	    unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||Sympa::List::is_listmaster($sender,$list->{'domain'} )){
 		# if not list owner or list editor or listmaster,n check if sender of remove order is sender of the message to remove
 
-		my $new_message;
-		unless ($new_message = Sympa::Message->new({'file'=>"$arcpath/arctxt/$message",'noxsympato'=>'noxsympato'})) {
+		my $new_message = Sympa::Message->new(
+			'file'       => "$arcpath/arctxt/$message",
+			'noxsympato' => 'noxsympato'
+		);
+		unless ($new_message) {
 		   Sympa::Log::do_log('err',"unable to load new message $arcpath/arctxt/$message");
 		    next;
 		}
@@ -427,7 +430,7 @@ sub rebuild {
 
     my $tag = get_tag($listname);
 
-    my $list = Sympa::List->new($listname, $hostname);
+    my $list = Sympa::List->new(name => $listname, robot => $hostname);
     my $robot = $list->{'domain'};
     my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
     Sympa::Log::do_log('debug',"Rebuilding $adrlist archive ($2)");
@@ -611,7 +614,7 @@ sub mail2arc {
 
     my $newfile;
 
-    my $list = Sympa::List->new($listname, $robot);
+    my $list = Sympa::List->new(name => $listname, robot => $robot);
     my $arcpath = Sympa::Configuration::get_robot_conf($list->{'domain'},'arc_path');
 
     unless (defined $list) {

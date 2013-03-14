@@ -57,13 +57,13 @@ Creates a new L<Sympa::OAuth::Provider> object.
 
 =item * I<url>: request url
 
-=item * I<authorization_header>
+=item * I<authorization_header>: FIXME
 
-=item * I<request_parameters>
+=item * I<request_parameters>: FIXME
 
-=item * I<request_body>
+=item * I<request_body>: FIXME
 
-=item * I<config>
+=item * I<config>: FIXME
 
 =back
 

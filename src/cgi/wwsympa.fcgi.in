@@ -1158,7 +1158,7 @@ my $birthday = time ;
      $robot = $Sympa::Configuration::Conf{'host'} unless $robot;
 
      ## Create Robot object
-     $robot_object = Sympa::Robot->new($robot);
+     $robot_object = Sympa::Robot->new(name => $robot);
 
      ## Default robot
      if ($robot eq $Sympa::Configuration::Conf{'host'}) {
@@ -1304,10 +1304,10 @@ my $birthday = time ;
 	foreach my $key (keys %{$automatic_list_families}){
             my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$key};
 	    my $family = Sympa::Family->new(
-		    $key,
-		    $robot,
-		    $family_config,
-		    $Sympa::Configuration::Conf{'etc'}
+		    name   => $key,
+		    robot  => $robot,
+		    config => $family_config,
+		    etcdir => $Sympa::Configuration::Conf{'etc'}
 	    );
 	    if ($family) {
 		if ($family->is_allowed_to_create_automatic_lists(('auth_level' => 'md5', 'sender' => $session->{'email'}, 'message' => undef, 'listname' => ''))){
@@ -1521,7 +1521,7 @@ my $birthday = time ;
 	     export_topics ($robot);
 
 	     unless ($comm{$action}) {
-		 if (Sympa::List->new($action, $robot)){
+		 if (Sympa::List->new(name => $action, robot => $robot)){
 		      do_redirect ($param->{'base_url'}.$param->{'path_cgi'}.'/info/'.$action);
 		      last;
 		 }
@@ -2392,7 +2392,8 @@ sub check_param_in {
 	 $in{'list'} = $1;
 
 	 ## Create a Sympa::List->newinstance.
-	 unless ($list = Sympa::List->new($in{'list'}, $robot)) {
+	 $list = Sympa::List->new(name => $in{'list'}, robot => $robot);
+	 unless ($list) {
 	     Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
 	     wwslog('info','check_param_in: unknown list %s', $in{'list'});
 	     return undef;
@@ -2409,7 +2410,12 @@ sub check_param_in {
 
      if ($in{'list'}) {
 	## Create a Sympa::List->newinstance.
-	unless ($list = Sympa::List->new($in{'list'}, $robot, {})) {
+	$list = Sympa::List->new(
+		name    => $in{'list'},
+		robot   => $robot,
+		options => {}
+	);
+	unless ($list) {
 	    Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
 	    wwslog('info','check_param_in: unknown list %s', $in{'list'});
 	    return undef;
@@ -3983,7 +3989,7 @@ sub do_active_lists {
 
      ## get msg count for each list
      foreach my $l (keys (%{$param->{'which'}})) {
-	 my $list = Sympa::List->new($l, $robot);
+	 my $list = Sympa::List->new(name => $l, robot => $robot);
 	 my $file = "$list->{'dir'}/msg_count";
 
 	 my %count ;
@@ -4866,7 +4872,10 @@ sub do_multiple_subscribe {
 
 
     foreach my $requested_list (@lists) {
-	my $param->{'list'} = Sympa::List->new($requested_list, $robot);
+	my $param->{'list'} = Sympa::List->new(
+		name  => $requested_list,
+		robot => $robot
+	);
 	$results{'requested_list'} = do_subscribe();
     }
 }
@@ -5631,8 +5640,11 @@ sub do_copy_template {
 # one of theses parameters is commint from the form submission
     if ($in{'scope_out'} eq 'list') {
 	if ($in{'list_out'}) {
-	    my $list_out;
-	    unless ($list_out = Sympa::List->new($in{'list_out'}, $robot)) {
+	    my $list_out = Sympa::List->new(
+		    name => $in{'list_out'},
+		    robot => $robot
+	    );
+	    unless ($list_out) {
 		Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list_out'}},$param->{'action'},'');
 		wwslog('info','do_copy_template: unknown list %s', $in{'list_out'});
 		web_db_log({'parameters' => $in{'list_out'},
@@ -6333,7 +6345,7 @@ sub do_modindex {
      my $doc;
 
      my $list_name = $list->{'name'};
-     my $modspool = Sympa::Spool->new('mod');
+     my $modspool = Sympa::Spool->new(name => 'mod');
      my @messages  = $modspool->get_content({'selector'=>{'list'=>$list_name,'robot'=>$robot}});
      foreach $msg ( @messages ) {
 
@@ -6771,7 +6783,7 @@ sub do_distribute {
 
      wwslog('info', 'do_distribute(%s)', $in{'id'});
 
-     my $modspool = Sympa::Spool->new('mod');
+     my $modspool = Sympa::Spool->new(name => 'mod');
      my ($msg, $file);
 
      my $time = time;
@@ -6817,7 +6829,9 @@ sub do_distribute {
 	 ## TAG
 	 if ($list_topics) {
 
-	     my $message = Sympa::Message->new({'message_in_spool'=> $message_in_spool});
+	     my $message = Sympa::Message->new(
+		     'message_in_spool' => $message_in_spool
+	     );
 	     my $msg = $message->{'msg'};
 	     my $head = $msg->head();
 	     my $filetopic = $list->tag_topic(Sympa::Tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
@@ -7576,7 +7590,7 @@ sub do_remove_arc {
 	# Removing tracking should be done by archived.
 	Sympa::Tracking::remove_message_by_id($msgid, $in{'list'},$robot);
     }
-    my $spoolarchive = Sympa::Spool->new('archive');
+    my $spoolarchive = Sympa::Spool->new(name => 'archive');
     $spoolarchive->store($removeorder,{'list'=>$in{'list'},'robot'=>$robot});
 
     wwslog('info', 'do_remove_arc %d messages marked to be removed by archived', $#msgids+1);
@@ -7635,10 +7649,13 @@ sub do_send_me {
 	 close MAIL ;
      }
 
-     my $message;
      if ($msgfile) {
 
-	 unless ($message = Sympa::Message->new({'file'=> "$arcpath/arctxt/$msgfile",'noxsympato'=>'noxsympato'}) ) {
+	 my $message = Sympa::Message->new(
+		 'file'       => "$arcpath/arctxt/$msgfile",
+		 'noxsympato' => 'noxsympato'
+	 );
+	 unless ($message) {
 	     $param->{'status'} = 'message_err';
 	     wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
 	     return undef;
@@ -8394,7 +8411,11 @@ sub do_create_list {
      $parameters->{'custom_input'} = $in{'custom_input'};
 
      ## create liste
-     if (my $testlist = Sympa::List->new($in{'listname'},$robot)){
+     my $testlist = Sympa::List->new(
+	     name  => $in{'listname'},
+	     robot => $robot
+     );
+     if ($testlist) {
 	  Sympa::Report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	  wwslog('info','do_create_list: requested list %s already exist (from %s)',$in{'listname'},$param->{'user'}{'email'});
 	  web_db_log({'parameters' => $in{'listname'},
@@ -8428,7 +8449,7 @@ sub do_create_list {
      }
 
      ## notify listmaster
-     my $list = Sympa::List->new($in{'listname'});
+     my $list = Sympa::List->new(name => $in{'listname'});
      unless (defined $list) {
        wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
        Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -8865,7 +8886,7 @@ sub do_resetbounce {
 sub do_rebuildarc {
      wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
 
-     my $spoolarchive = Sympa::Spool->new('archive');
+     my $spoolarchive = Sympa::Spool->new(name => 'archive');
 
      unless (     $spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'}} )){
 	 Sympa::Report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
@@ -8888,8 +8909,8 @@ sub do_rebuildallarc {
     wwslog('info', 'do_rebuildallarc');
 
     my $errors = 0;
-    my $spoolarchive;
-    unless ($spoolarchive = Sympa::Spool->new('archive')){
+    my $spoolarchive = Sympa::Spool->new(name => 'archive');
+    unless ($spoolarchive) {
 	Sympa::Report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	wwslog('err','error in  Sympa::Spool->new(archive) ');
     }
@@ -9789,7 +9810,11 @@ sub do_edit_list {
 
 
      ## Reload config to clean some empty entries in $list->{'admin'}
-     $list = Sympa::List->new($list->{'name'}, $robot, {'reload_config' => 1});
+     $list = Sympa::List->new(
+	     name    => $list->{'name'},
+	     robot   => $robot,
+	     options => {'reload_config' => 1}
+     );
 
       unless (defined $list) {
  	  Sympa::Report::reject_report_web('intern','list_reload',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -10530,7 +10555,7 @@ sub do_purge_list {
      my @lists = split /\0/, $in{'selected_lists'};
 
      foreach my $l (@lists) {
-	 my $list = Sympa::List->new($l, $robot);
+	 my $list = Sympa::List->new(name => $l, robot => $robot);
 	 next unless (defined $list);
 	 $list->purge($param->{'user'}{'email'});
      }
@@ -15336,7 +15361,7 @@ sub do_suspend_request_action {
 	my $report = "";
 	foreach my $line (@lists) {
 
-	    my $unsub_list = Sympa::List->new($line, $robot);
+	    my $unsub_list = Sympa::List->new(name => $line, robot => $robot);
 	    unless ($unsub_list) {
 		wwslog('info', 'List %s unknown' , $unsub_list);
 		return undef;
@@ -15648,7 +15673,7 @@ sub do_request_topic {
 
      my $listname = $list->{'name'};
 
-     my $spoolauth = Sympa::Spool->new('auth');
+     my $spoolauth = Sympa::Spool->new(name => 'auth');
 
      my $authmessage = $spoolauth->get_message({'list'=> $list->{'name'},'robot'=>$robot,'authkey'=>$in{'authkey'}});
      unless ($authmessage) {
@@ -15656,7 +15681,7 @@ sub do_request_topic {
 	 wwslog('info','do_request_topic: unknown authentication key');
 	 return undef;
      }
-     my $message = Sympa::Message->new({'message_in_spool'=> $authmessage});
+     my $message = Sympa::Message->new('message_in_spool' => $authmessage);
 
      my $msg = $message->{'msg'};
      my $head = $msg->head();
@@ -15695,7 +15720,7 @@ sub do_tag_topic_by_sender {
 
      my $mail ;
 
-     my $authspool = Sympa::Spool->new('auth');
+     my $authspool = Sympa::Spool->new(name => 'auth');
      my $messagespool = $authspool->get_message({'list'=>$listname, 'robot' => $robot , 'authkey'=> $in{'authkey'}});
 
      unless($messagespool){
@@ -15705,7 +15730,11 @@ sub do_tag_topic_by_sender {
      }
 
 
-     unless($mail  = Sympa::Message->new({'message_in_spool'=>$messagespool,'noxsympato'=>'noxsympato'})) {
+     $mail = Sympa::Message->new(
+	     'message_in_spool' => $messagespool,
+	     'noxsympato'       => 'noxsympato'
+     );
+     unless($mail) {
 	 Sympa::Report::reject_report_web('intern','cannot_parse_message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot );
 	 wwslog('info','do_tag_topic_by_sender: cannot parse message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot );
 	 return undef;
@@ -16438,7 +16467,10 @@ sub do_viewspools {
     $param->{'spool_page_size'} = $spool_page_size;
 
 
-    my $spool = Sympa::Spool->new($spoolname,$spool_status);
+    my $spool = Sympa::Spool->new(
+	    name   => $spoolname,
+	    status => $spool_status
+    );
     unless ($spool) {
 	Sympa::Report::reject_report_web('intern','unkown spool');
 	wwslog('info','do_viewspools: unkown spool');
@@ -16508,7 +16540,10 @@ sub do_viewspool_message {
 
     wwslog('info', 'do_viewspool_message(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
-    my $spool = Sympa::Spool->new($spoolname,$status);
+    my $spool = Sympa::Spool->new(
+	    name   => $spoolname,
+	    status => $status
+    );
     unless ($spool) {
 	Sympa::Report::reject_report_web('intern','unkown spool');
 	wwslog('info','do_viewspools: unkown spool');
@@ -16528,7 +16563,10 @@ sub do_viewspool_message {
     unless  ( $param->{'is_listmaster'}){
 	my $message_listname = $messages[0]->{'list'};
 	if ($message_listname){
-	    $list = Sympa::List->new($message_listname,$robot);
+	    $list = Sympa::List->new(
+		    name  => $message_listname,
+		    robot => $robot
+	    );
 	}
 	unless ($list && ($list->am_i('privileged_owner', $param->{'user'}{'email'})|| $list->am_i('owner', $param->{'user'}{'email'})||$list->am_i('editor', $param->{'user'}{'email'}))) {
 	    Sympa::Report::reject_report_web('auth','action_owner',{},$param->{'action'},$list);
@@ -16592,7 +16630,10 @@ sub do_viewspool_message_dump {
 	wwslog('info','authorization failed, insufficient privileges');
     }
 
-    my $spool = Sympa::Spool->new($spoolname,$status);
+    my $spool = Sympa::Spool->new(
+	    spoolname        => $spoolname,
+	    selection_status => $status
+    );
     unless ($spool) {
 	Sympa::Report::reject_report_web('intern','unkown spool');
 	wwslog('info','do_viewspools: unkown spool');
@@ -16640,7 +16681,10 @@ sub do_viewspool_message_remove {
 	wwslog('info','authorization failed, insufficient privileges');
     }
 
-    my $spool = Sympa::Spool->new($spoolname,$status);
+    my $spool = Sympa::Spool->new(
+	    spoolname        => $spoolname,
+	    selection_status => $status
+    );
     unless ($spool) {
 	Sympa::Report::reject_report_web('intern','unkown spool');
 	wwslog('info','do_viewspools: unkown spool');
@@ -16689,14 +16733,21 @@ sub do_viewspool_message_mv {
 	wwslog('info','authorization failed, insufficient privileges');
     }
 
-    my $spool = Sympa::Spool->new($spoolname,$status);
+    my $spool = Sympa::Spool->new(
+	    spoolname        => $spoolname,
+	    selection_status => $status
+    );
     unless ($spool) {
 	Sympa::Report::reject_report_web('intern','unkown spool');
 	wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
 	return undef;
     }
 
-    unless ( Sympa::Spool->new($newspool,$newstatus)) {
+    my $newspool = Sympa::Spool->new(
+	    spoolname        => $newspool,
+	    selection_status => $newstatus
+    );
+    unless ($newspool) {
 	Sympa::Report::reject_report_web('user','unkopwn spool');
 	wwslog('info','do_viewspool_message_mv : could not move message to unkown spool %s,%s',$newspool,$newstatus);
 	return;
@@ -16974,10 +17025,10 @@ sub do_review_family {
 
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$in{'family'}};
     my $family = Sympa::Family->new(
-	    $in{'family_name'},
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $in{'family_name'},
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless (defined $family) {
 	Sympa::Report::reject_report_web('user','unknown_family',{'family'=>$in{'family_name'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -17292,10 +17343,10 @@ sub do_automatic_lists_request {
     # check authorization
     my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$in{'family'}};
     my $family = Sympa::Family->new(
-	    $in{'family'},
-	    $robot,
-	    $family_config,
-	    $Sympa::Configuration::Conf{'etc'}
+	    name   => $in{'family'},
+	    robot  => $robot,
+	    config => $family_config,
+	    etcdir => $Sympa::Configuration::Conf{'etc'}
     );
     unless ($family) {
 	wwslog('err', "Failed to instantiate family %s. This family does not exist.",$in{'family'});
@@ -17333,15 +17384,15 @@ sub do_automatic_lists {
 	$listname = $1;
     }
 
-    $list = Sympa::List->new($listname, $robot);
+    $list = Sympa::List->new(name => $listname, robot => $robot);
     unless (defined $list) {
 	## Automatic creation of a mailing list, based on a family
         my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
 	my $family = Sympa::Family->new(
-		$family_name,
-		$robot,
-		$family_config,
-	        $Sympa::Configuration::Conf{'etc'}
+		name   => $family_name,
+		robot  => $robot,
+		config => $family_config,
+	        etcdir => $Sympa::Configuration::Conf{'etc'}
 	);
 	unless ($family) {
 	    Sympa::Log::do_log('err', "Failed to create the dynamic list $listname: family $family_name does not exist.");

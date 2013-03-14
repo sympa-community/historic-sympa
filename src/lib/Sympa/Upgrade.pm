@@ -262,7 +262,11 @@ sub upgrade {
 		}
 
 		## Force Sync_admin
-		$list = Sympa::List->new($list->{'name'}, $list->{'domain'}, {'force_sync_admin' => 1});
+		$list = Sympa::List->new(
+			name    => $list->{'name'},
+			robot   => $list->{'domain'},
+			options => {'force_sync_admin' => 1}
+		);
 	    }
 	}
 
@@ -282,7 +286,7 @@ sub upgrade {
 
 	    next unless ($listname & $listdomain);
 
-	    my $list = Sympa::List->new($listname);
+	    my $list = Sympa::List->new(name => $listname);
 	    unless (defined $list) {
 		Sympa::Log::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -401,7 +405,7 @@ sub upgrade {
 	    next if ($dir =~ /\@/); ## Directory already include the list domain
 
 	    my $listname = $dir;
-	    my $list = Sympa::List->new($listname);
+	    my $list = Sympa::List->new(name => $listname);
 	    unless (defined $list) {
 		Sympa::Log::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -436,7 +440,7 @@ sub upgrade {
 
 		foreach my $index (0..$#{$list->{'admin'}{'include_list'}}) {
 		    my $incl = $list->{'admin'}{'include_list'}[$index];
-		    my $incl_list = Sympa::List->new($incl);
+		    my $incl_list = Sympa::List->new(name => $incl);
 
 		    if (defined $incl_list &
 			$incl_list->{'domain'} ne $list->{'domain'}) {
@@ -751,7 +755,11 @@ sub upgrade {
 	    my $valid_robot = '';
 	    my @valid_robot_candidates;
 	    foreach my $robot (@robots) {
-		if (my $list = Sympa::List->new($data->{'list_exclusion'},$robot)) {
+		my $list = Sympa::List->new(
+			name  => $data->{'list_exclusion'},
+			robot => $robot
+		);
+		if ($list) {
 		    if ($list->is_list_member($data->{'user_exclusion'})) {
 			push @valid_robot_candidates,$robot;
 		    }
@@ -787,7 +795,7 @@ sub upgrade {
 	    }
 	    Sympa::Log::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
-	    my $spool = Sympa::Spool->new($spools_def{$spoolparameter});
+	    my $spool = Sympa::Spool->new(name => $spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
 		Sympa::Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
 	    }

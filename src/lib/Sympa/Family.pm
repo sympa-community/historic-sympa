@@ -92,7 +92,13 @@ sub get_available_families {
 	## directory, then it is worth being added to the list.
 	foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
 	    my $family_config = $all_families_config->{$subdir};
-	    if (my $family = Sympa::Family->new($subdir, $robot, $family_config, $etcdir)) {
+	    my $family = Sympa::Family->new(
+		    name   => $subdir,
+		    robot  => $robot,
+		    config => $family_config,
+		    etcdir => $etcdir
+	    );
+	    if ($family) {
 		$families{$subdir} = 1;
 	    }
 	}
@@ -103,33 +109,36 @@ sub get_available_families {
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Family->new($name, $robot, $config)
+=head2 Sympa::Family->new(%parameters)
 
-Creates a new L<Sympa::Family> object of name $name, belonging to the robot
-$robot.
+Creates a new L<Sympa::Family> object.
 
 =head3 Parameters
 
 =over
 
-=item * I<$name>: the family name
+=item * I<name>: family name
 
-=item * I<$robot>: the robot which the family is/will be installed in
+=item * I<robot>: the robot which the family is/will be installed in
 
-=item * I<$config>: the family configuration
+=item * I<config>: family configuration
+
+=item * I<etcdir>: FIXME
 
 =back
 
 =head3 Return value
 
-A new L<Sympa::Family> object.
+A new L<Sympa::Family> object, or I<undef> if something went wrong.
 
 =cut
 
 sub new {
-    my ($class, $name, $robot, $config, $etcdir) = @_;
-    Sympa::Log::do_log('debug2','(%s,%s)',$name,$robot);
+    my ($class, %params) = @_;
+    Sympa::Log::do_log('debug2','(%s,%s)',$params{name},$params{robot});
 
+    my $name = $params{name};
+    my $robot = $params{robot};
     my $self = {};
 
 
@@ -163,12 +172,12 @@ sub new {
     $self->{'robot'} = $robot;
 
     ## Adding configuration related to automatic lists.
-    foreach my $key (keys %{$config}) {
-	$self->{$key} = $config->{$key};
+    foreach my $key (keys %{$params{config}}) {
+	$self->{$key} = $params{config}->{$key};
     }
 
     ## family directory
-    $self->{'dir'} = $self->_get_directory($etcdir);
+    $self->{'dir'} = $self->_get_directory($params{etcdir});
     unless (defined $self->{'dir'}) {
 	Sympa::Log::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
 	return undef;
@@ -244,7 +253,7 @@ sub add_list {
 
 	# get list data
 	open (FIC, '<:raw', "$self->{'dir'}/_new_list.xml");
-	my $config = Sympa::Configuration::XML->new(\*FIC);
+	my $config = Sympa::Configuration::XML->new(handle => \*FIC);
 	close FIC;
 	unless (defined $config->createHash()) {
 	    push @{$return->{'string_error'}}, "Error in representation data with these xml data";
@@ -366,7 +375,7 @@ sub modify_list {
 
     # get list data
     open (FIC, '<:raw', "$self->{'dir'}/_mod_list.xml");
-    my $config = Sympa::Configuration::XML->new(\*FIC);
+    my $config = Sympa::Configuration::XML->new(handle => \*FIC);
     close FIC;
     unless (defined $config->createHash()) {
 	push @{$return->{'string_error'}}, "Error in representation data with these xml data";
@@ -376,8 +385,11 @@ sub modify_list {
     my $hash_list = $config->getHash();
 
     #getting list
-    my $list;
-    unless ($list = Sympa::List->new($hash_list->{'config'}{'listname'}, $self->{'robot'})) {
+    my $list = Sympa::List->new(
+	    name  => $hash_list->{'config'}{'listname'},
+	    robot => $self->{'robot'}
+    );
+    unless ($list) {
 	push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
 	return $return;
     }
@@ -654,12 +666,15 @@ sub instantiate {
     ## EACH FAMILY LIST
     foreach my $listname (@{$self->{'list_to_generate'}}) {
 
-	my $list = Sympa::List->new($listname, $self->{'robot'});
+	my $list = Sympa::List->new(
+		name  => $listname,
+		robot => $self->{'robot'}
+	);
 
         ## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
 	my $xml_fh;
 	open $xml_fh, '<:raw', "$self->{'dir'}"."/".$listname.".xml";
-	my $config = Sympa::Configuration::XML->new($xml_fh);
+	my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
 	close $xml_fh;
 	unless (defined $config->createHash()) {
 	    push (@{$self->{'errors'}{'create_hash'}},"$self->{'dir'}/$listname.xml");
@@ -770,8 +785,8 @@ sub instantiate {
 
     ## PREVIOUS LIST LEFT
     foreach my $l (keys %{$previous_family_lists}) {
-	my $list;
-	unless ($list = Sympa::List->new($l,$self->{'robot'})) {
+	my $list = Sympa::List->new(name => $l, robot => $self->{'robot'});
+	unless ($list) {
 	    push (@{$self->{'errors'}{'previous_list'}},$l);
 	    next;
 	}
@@ -797,7 +812,7 @@ sub instantiate {
 	    ## get data from list xml file
 	    my $xml_fh;
 	    open $xml_fh, '<:raw', "$list->{'dir'}/instance.xml";
-	    my $config = Sympa::Configuration::XML->new($xml_fh);
+	    my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
 	    close $xml_fh;
 	    unless (defined $config->createHash()) {
 		push (@{$self->{'errors'}{'create_hash'}},"$list->{'dir'}/instance.xml");
@@ -1934,7 +1949,7 @@ sub create_automatic_list {
 	Sympa::Log::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
 	return undef;
     }
-    my $list = Sympa::List->new($listname, $self->{'robot'});
+    my $list = Sympa::List->new(name => $listname, robot => $self->{'robot'});
     unless (defined $list) {
 	Sympa::Log::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
 	return undef;

@@ -40,7 +40,7 @@ use Sympa::Log;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Configuration::XML->new($handle)
+=head2 Sympa::Configuration::XML->new(%parameters)
 
 Creates a new L<Sympa::Configuration::XML> object.
 
@@ -48,7 +48,7 @@ Creates a new L<Sympa::Configuration::XML> object.
 
 =over
 
-=item * I<$handle>: file handler on the xml file
+=item * I<handle>: file handler on the xml file
 
 =back
 
@@ -59,13 +59,13 @@ A new L<Sympa::Configuration::XML> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $fh) = @_;
+    my ($class, %params) = @_;
     Sympa::Log::do_log('debug2','()');
 
     my $self = {};
     my $parser = XML::LibXML->new();
     $parser->line_numbers(1);
-    my $doc = $parser->parse_fh($fh);
+    my $doc = $parser->parse_fh($params{handle});
 
     $self->{'root'} = $doc->documentElement();
 

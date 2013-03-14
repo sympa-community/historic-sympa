@@ -221,7 +221,7 @@ Sympa::Log::do_log('notice', "bounced Started");
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spool = Sympa::Spool->new('bounce');
+my $spool = Sympa::Spool->new(name => 'bounce');
 
 
 Sympa::Log::do_log('debug','starting infinite loop');
@@ -246,7 +246,7 @@ while (!$end) {
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 	}
 
-	my $message = Sympa::Message->new({'message_in_spool' => $bounce});
+	my $message = Sympa::Message->new(message_in_spool => $bounce);
 
 	my $entity = $message->{'msg'};
 	my $head = $entity->head;
@@ -286,7 +286,7 @@ while (!$end) {
 
 	    if ($unique =~ /[wr]/) { # in this case the bounce result from a remind or a welcome message ;so try to remove the subscriber
 		Sympa::Log::do_log('debug', "VERP for a service message, try to remove the subscriber");
-		my $list = Sympa::List->new($listname, $robot);
+		my $list = Sympa::List->new(name => $listname, robot => $robot);
 		unless($list) {
 		    Sympa::Log::do_log('notice','Skipping bounce where messagekey = %s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -327,7 +327,7 @@ while (!$end) {
 	    }# close VERP + remind or welcome block
 	}# close VERP in use block
 
-	my $list = Sympa::List->new($listname, $robot);
+	my $list = Sympa::List->new(name => $listname, robot => $robot);
 	unless($list) {
 	    Sympa::Log::do_log('err','Skipping bounce where messagekey= %s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -607,7 +607,10 @@ while (!$end) {
 		    $listname =~ /(.*)\@(.*)/;
 		    $listname = $1;
 		    $robot = $2;
-		    my $list = Sympa::List->new($listname, $robot);
+		    my $list = Sympa::List->new(
+			    name  => $listname,
+			    robot => $robot
+		    );
 		    unless($list) {
 			Sympa::Log::do_log('err','Skipping Feedback Report (spool bounce, messagekey =%s) for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 			$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -657,7 +660,7 @@ while (!$end) {
 
 	# Fin section feedback report
 	# else (not welcome or remind)
-	my $list = Sympa::List->new($listname, $robot);
+	my $list = Sympa::List->new(name => $listname, robot => $robot);
 	if (! $list) {
 	    Sympa::Log::do_log('err','Skipping bounce messagekey=%s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});

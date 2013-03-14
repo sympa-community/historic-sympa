@@ -47,7 +47,7 @@ my $default_timeout = 60 * 20; ## After this period a lock can be stolen
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Lock->new($path)
+=head2 Sympa::Lock->new(%parameters)
 
 Creates a new L<Sympa::Lock> object.
 
@@ -55,7 +55,9 @@ Creates a new L<Sympa::Lock> object.
 
 =over
 
-=item * I<$path>
+=item * I<path>: FIXME
+
+=item * I<method>: FIXME
 
 =back
 
@@ -66,17 +68,17 @@ A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my ($class, $filepath, $method) = @_;
+    my ($class, %params) = @_;
 
-    croak "missing filepath parameter" unless $filepath;
-    croak "missing method parameter" unless $method;
+    croak "missing filepath parameter" unless $params{path};
+    croak "missing method parameter" unless $params{method};
 
-    Sympa::Log::do_log('debug', '(%s)',$filepath);
+    Sympa::Log::do_log('debug', '(%s)', $params{path});
 
-    my $lock_filename = $filepath.'.lock';
+    my $lock_filename = $params{path}.'.lock';
     my $self = {
         'lock_filename' => $lock_filename,
-        'method'        => $method
+        'method'        => $params{method}
     };
 
     ## Create include.lock if needed

@@ -56,7 +56,7 @@ my %session_hard_attributes = ('id_session' => 1,
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Session->new($robot, $context)
+=head2 Sympa::Session->new(%parameters)
 
 Creates a new L<Sympa::Session> object.
 
@@ -64,11 +64,11 @@ Creates a new L<Sympa::Session> object.
 
 =over
 
-=item * I<$robot>
+=item * I<robot>: FIXME
 
-=item * I<$context>
+=item * I<context>: FIXME
 
-=item * I<$crawlers_detection>
+=item * I<crawlers>: FIXME
 
 =back
 
@@ -79,23 +79,23 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $robot, $context, $crawlers_detection) = @_;
+    my ($class, %params) = @_;
 
-    my $cookie = $context->{'cookie'};
-    my $action = $context->{'action'};
-    my $rss = $context->{'rss'};
+    my $cookie = $params{context}->{'cookie'};
+    my $action = $params{context}->{'action'};
+    my $rss = $params{context}->{'rss'};
 
-    Sympa::Log::do_log('debug', '(%s,%s,%s)', $robot,$cookie,$action);
+    Sympa::Log::do_log('debug', '(%s,%s,%s)', $params{robot},$cookie,$action);
     my $self={};
     bless $self, $class;
 
-    unless ($robot) {
+    unless ($params{robot}) {
 	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
 	return undef;
     }
 
     $self->{'is_a_crawler'} = 
-	    $crawlers_detection->{$ENV{'HTTP_USER_AGENT'}};
+	    $params{crawlers}->{$ENV{'HTTP_USER_AGENT'}};
     # passive_session are session not stored in the database, they are used
     # for crawler bots and action such as css, wsdl, ajax and rss
     $self->{'passive_session'} =
@@ -113,7 +113,10 @@ sub new {
 	}
 	if ($status eq 'not_found') {
 	    Sympa::Log::do_log('info',"ignoring unknown session cookie '$cookie'"); # start a new session (may ne a fake cookie)
-	    return (Sympa::Session->new($robot));
+	    return (Sympa::Session->new(
+			    robot    => $params{robot},
+			    crawlers => $params{crawlers},
+		    ));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method
@@ -130,7 +133,7 @@ sub new {
 	$self->{'date'} = time;
 	$self->{'start_date'} = time;
 	$self->{'hit'} = 1;
-	$self->{'robot'} = $robot;
+	$self->{'robot'} = $params{robot};
 	$self->{'data'} = '';
     }
 

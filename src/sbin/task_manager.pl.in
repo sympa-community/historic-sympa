@@ -480,7 +480,7 @@ sub create {
 
     # for a list
     if ($object  eq 'list') {
-	my $list = Sympa::List->new($list_name, $robot);
+	my $list = Sympa::List->new(name => $list_name, robot => $robot);
 
 	$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
@@ -506,7 +506,7 @@ sub create {
 	return undef;
     }
     # task is accetable, store it in spool
-    my $taskspool = Sympa::Spool->new('task');
+    my $taskspool = Sympa::Spool->new(name => 'task');
     my %meta;
     $meta{'task_date'}=$date;
     $meta{'task_label'}=$label;
@@ -1097,7 +1097,7 @@ sub create_cmd {
 		'execution_date' => 'execution_date');
 
     if ($type eq 'list') {
-	my $list = Sympa::List->new($object);
+	my $list = Sympa::List->new(name => $object);
 	$data{'list'}{'name'} = $list->{'name'};
     }
     $type = '_global';

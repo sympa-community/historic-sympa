@@ -72,7 +72,7 @@ sub get_dkim_parameters {
     my $data ; my $keyfile ;
     if ($listname) {
 	# fetch dkim parameter in list context
-	my $list = Sympa::List->new($listname,$robot);
+	my $list = Sympa::List->new(name => $listname, robot => $robot);
 	unless ($list){
 	    Sympa::Log::do_log('err',"Could not load list %s@%s",$listname, $robot);
 	    return undef;
@@ -274,7 +274,10 @@ sub dkim_sign {
 	Sympa::Log::do_log('err', 'Cannot sign (DKIM) message');
 	return ($msg_as_string);
     }
-    my $message = Sympa::Message->new({'file'=>$temporary_file,'noxsympato'=>'noxsympato'});
+    my $message = Sympa::Message->new(
+	    'file'       => $temporary_file,
+	    'noxsympato' => 'noxsympato'
+    );
     unless ($message){
 	Sympa::Log::do_log('err',"unable to load $temporary_file as a message objet");
 	return ($msg_as_string);

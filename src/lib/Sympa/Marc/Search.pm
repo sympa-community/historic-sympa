@@ -50,9 +50,8 @@ my %fields = (
 ## Constructor
 sub new {
   my ($class) = @_;
-  my $self  = Marc->new(\%fields);
-  bless $self, $class;
-  return $self;
+
+  return $class->SUPER::new(\%fields);
 }
 
 ## These accessor methods keep a running count of matches in each area

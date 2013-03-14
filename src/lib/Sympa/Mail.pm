@@ -352,7 +352,10 @@ sub mail_file {
 
     return $message_as_string if($params{return_message_as_string});
 
-    my $message = Sympa::Message->new({'messageasstring'=>$message_as_string,'noxsympato'=>'noxsympato'});
+    my $message = Sympa::Message->new(
+	    'messageasstring'=>$message_as_string,
+	    'noxsympato'=>'noxsympato'
+    );
 
     my $result = _sending(
 	message         => $message,
@@ -840,7 +843,7 @@ sub _sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	my $list = Sympa::List->new($listname, $robot);
+	my $list = Sympa::List->new(name => $listname, robot => $robot);
         $signed_msg = Sympa::Tools::SMIME::sign_message(
 		entity     => $message->{'msg'},
 		cert_dir   => $list->{dir},

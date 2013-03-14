@@ -58,7 +58,7 @@ my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Spool->new($name, $selectionstatus)
+=head2 Sympa::Spool->new(%parameters)
 
 Creates a new L<Sympa::Spool> object.
 
@@ -66,9 +66,9 @@ Creates a new L<Sympa::Spool> object.
 
 =over
 
-=item * I<$name>
+=item * I<name>: FIXME
 
-=item * I<$selection_status>
+=item * I<status>: FIXME
 
 =back
 
@@ -79,17 +79,17 @@ A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, $spoolname, $selection_status) = @_;
-   Sympa::Log::do_log('debug2', '(%s)', $spoolname);
+    my ($class, %params) = @_;
+   Sympa::Log::do_log('debug2', '(%s)', $params{name});
 
     my $self={};
-    unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
-Sympa::Log::do_log('err','internal error unknown spool %s',$spoolname);
+    unless ($params{name} =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
+Sympa::Log::do_log('err','internal error unknown spool %s',$params{name});
 	return undef;
     }
-    $self->{'spoolname'} = $spoolname;
-    if (($selection_status eq 'bad')||($selection_status eq 'ok')) {
-	$self->{'selection_status'} = $selection_status;
+    $self->{'spoolname'} = $params{name};
+    if (($params{status} eq 'bad')||($params{status} eq 'ok')) {
+	$self->{'selection_status'} = $params{status};
     }else{
 	$self->{'selection_status'} =  'ok';
     }
@@ -358,7 +358,7 @@ sub store {
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
     if ($self->{'spoolname'} ne 'task') {
-	$message = Sympa::Message->new({'messageasstring'=>$message_asstring});
+	$message = Sympa::Message->new('messageasstring' => $message_asstring);
     }
 
     if($message) {
@@ -494,7 +494,7 @@ sub store_test {
                                          count => $barmax,
                                          ETA   => 'linear', });
 
-    my $testing = Sympa::Spool->new('bad');
+    my $testing = Sympa::Spool->new(name => 'bad');
 
     my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";
     $progress->max_update_rate(1);

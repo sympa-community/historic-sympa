@@ -315,8 +315,8 @@ $SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
 
 my @qfile;
 
-my $msgspool = Sympa::Spool->new('msg');
-my $bouncespool = Sympa::Spool->new('bounce');
+my $msgspool = Sympa::Spool->new(name => 'msg');
+my $bouncespool = Sympa::Spool->new(name => 'bounce');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
@@ -352,7 +352,8 @@ while (!$signal) {
 
 	## Lock file
 	my $lock = Sympa::Lock->new(
-            $spooldir.'/'.$filename, $Sympa::Configuration::Conf{'lock_method'}
+            path   => $spooldir.'/'.$filename,
+	    method => $Sympa::Configuration::Conf{'lock_method'}
         );
 	unless (defined $lock) {
 	    Sympa::Log::do_log('err','Could not create new lock');
@@ -406,7 +407,11 @@ while (!$signal) {
 	    $priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
-	my $list =  Sympa::List->new($listname, $robot, {'just_try' => 1});
+	my $list =  Sympa::List->new(
+		name    => $listname,
+		robot   => $robot,
+		options => {'just_try' => 1}
+	);
 	if ($list) {
 	    $priority = $list->{'admin'}{'priority'};
 	}else {
@@ -422,7 +427,7 @@ while (!$signal) {
 	}
 	$meta{'type'} = $type if $type;
 
-	my $message = Sympa::Message->new({'file'=>$spooldir.'/'.$filename});
+	my $message = Sympa::Message->new('file' => $spooldir.'/'.$filename);
 
         #use Data::Dumper;
 #	my $dump = Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP;

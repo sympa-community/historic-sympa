@@ -197,7 +197,7 @@ $options->{'multiple_process'} = 1;
 $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmtp'}/$Sympa::Configuration::Conf{'bulk_max_count'});
 
 
-my $spool = Sympa::Spool->new('bulk');
+my $spool = Sympa::Spool->new(name => 'bulk');
 
 while (!$end) {
     Sympa::List::init_list_cache();
@@ -350,7 +350,10 @@ while (!$end) {
 	    my $key ;
 
 	    foreach $rcpt (@rcpts) {
-		my $message = Sympa::Message->new({'messageasstring'=>$messageasstring_init,'noxsympato'=>'noxsympato'});
+		my $message = Sympa::Message->new(
+			messageasstring => $messageasstring_init,
+			noxsympato      => 'noxsympato'
+		);
 		my $entity = $message->{'msg'};
 		my $notification_id;
 		my $return_path;

@@ -22,7 +22,7 @@ use Sympa::Log;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Robot->new($name)
+=head2 Sympa::Robot->new(%parameters)
 
 Creates a new L<Sympa::Robot> object.
 
@@ -30,34 +30,35 @@ Creates a new L<Sympa::Robot> object.
 
 =over
 
-=item * I<$name>
+=item * I<name>: FIXME
 
 =back
 
 =head3 Return
 
-A new L<Sympa::Robot> object, or I<undef>, if something went wrong.
+A new L<Sympa::Robot> object, or I<undef> if something went wrong.
 
 =cut
 
 sub new {
-    my ($class, $name) = @_;
+    my ($class, %params) = @_;
 
-    my $self = {'name' => $name};
+    my $self = {'name' => $params{name}};
     Sympa::Log::do_log('debug2', '');
 
-    unless (defined $name && $Sympa::Configuration::Conf{'robots'}{$name}) {
-	Sympa::Log::do_log('err',"Unknown robot '$name'");
+    unless (defined $params{name} && $Sympa::Configuration::Conf{'robots'}{$params{name}}) {
+	Sympa::Log::do_log('err',"Unknown robot '$params{name}'");
 	return undef;
     }
 
     ## The default robot
-    if ($name eq $Sympa::Configuration::Conf{'domain'}) {
+    if ($params{name} eq $Sympa::Configuration::Conf{'domain'}) {
 	$self->{'home'} = $Sympa::Configuration::Conf{'home'};
     }else {
-	$self->{'home'} = $Sympa::Configuration::Conf{'home'}.'/'.$name;
+	$self->{'home'} =
+		$Sympa::Configuration::Conf{'home'}.'/'.$params{name};
 	unless (-d $self->{'home'}) {
-	    Sympa::Log::do_log('err', "Missing directory '$self->{'home'}' for robot '$name'");
+	    Sympa::Log::do_log('err', "Missing directory '$self->{'home'}' for robot '$params{name}'");
 	    return undef;
 	}
     }
