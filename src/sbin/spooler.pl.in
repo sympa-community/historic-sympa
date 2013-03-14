@@ -429,8 +429,6 @@ while (!$signal) {
 
 	my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
 
-        #use Data::Dumper;
-#	my $dump = Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP;
 	my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
 	unless($messagekey) {
 	   Sympa::Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);

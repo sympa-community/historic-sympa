@@ -308,10 +308,6 @@ while (!$end) {
 
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 
-            #use Data::Dumper;
-	    #my $dump = Dumper($messageasstring_init); open (DUMP,">>/tmp/dumper"); printf DUMP 'messageasstring recup par bulk \n%s',$dump ; close DUMP;
-	    # trace_smime($messageasstring_init,'initial');
-
 	    unless ( $messageasstring_init ) {
 		Sympa::Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
 		unless (Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {

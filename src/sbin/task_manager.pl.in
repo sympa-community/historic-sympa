@@ -519,10 +519,6 @@ sub create {
 	$meta{'object'}= '_global' ;
     }
 
-    #use Data::Dumper;
-    #my $dump = Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP;
-    #my $dump = Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP;
-
     Sympa::Log::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
     $taskspool->store($task_as_string,\%meta);
     return 1;
