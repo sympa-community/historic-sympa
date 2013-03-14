@@ -43,25 +43,26 @@ A new L<Sympa::Robot> object, or I<undef> if something went wrong.
 sub new {
     my ($class, %params) = @_;
 
-    my $self = {'name' => $params{name}};
-    Sympa::Log::do_log('debug2', '');
-
     unless (defined $params{name} && $Sympa::Configuration::Conf{'robots'}{$params{name}}) {
 	Sympa::Log::do_log('err',"Unknown robot '$params{name}'");
 	return undef;
     }
 
-    ## The default robot
-    if ($params{name} eq $Sympa::Configuration::Conf{'domain'}) {
-	$self->{'home'} = $Sympa::Configuration::Conf{'home'};
-    }else {
-	$self->{'home'} =
-		$Sympa::Configuration::Conf{'home'}.'/'.$params{name};
-	unless (-d $self->{'home'}) {
-	    Sympa::Log::do_log('err', "Missing directory '$self->{'home'}' for robot '$params{name}'");
+    my $home = $params{name} eq $Sympa::Configuration::Conf{'domain'} ?
+	$Sympa::Configuration::Conf{'home'} :
+	$Sympa::Configuration::Conf{'home'}.'/'.$params{name};
+
+    unless (-d $home) {
+	    Sympa::Log::do_log('err', "Missing directory $home for robot '$params{name}'");
 	    return undef;
-	}
     }
+
+    Sympa::Log::do_log('debug2', '');
+
+    my $self = {
+	    name => $params{name},
+	    home => $home,
+    };
 
     ## Initialize internal list cache
     undef %Sympa::List::list_cache;
