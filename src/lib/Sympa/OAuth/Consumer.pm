@@ -79,6 +79,12 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
+	my $sth = Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'};
+	unless ($sth) {
+		Sympa::Log::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
+		return undef;
+	}
+
 	my $self = {
 		user               => $params{'user'},
 		provider           => $params{'provider'},
@@ -96,12 +102,6 @@ sub new {
 			authorize_path     => $params{'authorize_path'}
 		)
 	};
-
-	my $sth;
-	unless($sth = Sympa::SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'})) {
-		Sympa::Log::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
-		return undef;
-    }
 
 	$self->{'session'} = {
 		defined => undef,
