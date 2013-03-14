@@ -81,6 +81,11 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 sub new {
     my ($class, %params) = @_;
 
+    unless ($params{robot}) {
+	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
+	return undef;
+    }
+
     my $cookie = $params{context}->{'cookie'};
     my $action = $params{context}->{'action'};
     my $rss = $params{context}->{'rss'};
@@ -88,11 +93,6 @@ sub new {
     Sympa::Log::do_log('debug', '(%s,%s,%s)', $params{robot},$cookie,$action);
     my $self={};
     bless $self, $class;
-
-    unless ($params{robot}) {
-	Sympa::Log::do_log('err', 'Missing robot parameter, cannot create session object') ;
-	return undef;
-    }
 
     $self->{'is_a_crawler'} = 
 	    $params{crawlers}->{$ENV{'HTTP_USER_AGENT'}};
