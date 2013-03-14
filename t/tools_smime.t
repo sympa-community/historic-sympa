@@ -21,10 +21,10 @@ chdir "$Bin/..";
 
 my ($crt_dir, $crt_file);
 
-my $unsigned_message = Sympa::Message->new({
+my $unsigned_message = Sympa::Message->new(
 	file       => "t/samples/unsigned.eml",
 	noxsympato => 1
-});
+);
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 $crt_file = $crt_dir . '/guillaume.rousse@sympa.org';
 ok(
@@ -36,10 +36,10 @@ ok(
 	"unsigned message"
 );
 
-my $signed_message = Sympa::Message->new({
+my $signed_message = Sympa::Message->new(
 	file       => "t/samples/signed.eml",
 	noxsympato => 1
-});
+);
 
 $crt_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 $crt_file = $crt_dir . '/guillaume.rousse@sympa.org';

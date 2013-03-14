@@ -107,10 +107,10 @@ plan tests => (scalar keys %tests_rfc1891) + (scalar keys %tests);
 chdir "$Bin/..";
 
 foreach my $test (sort keys %tests_rfc1891) {
-	my $message = Sympa::Message->new({
+	my $message = Sympa::Message->new(
 		file       => "t/samples/$test",
 		noxsympato => 1
-	});
+	);
 	is_deeply(
 		Sympa::Tools::Bounce::parse_rfc1891_notification($message),
 		$tests_rfc1891{$test},
@@ -119,10 +119,10 @@ foreach my $test (sort keys %tests_rfc1891) {
 }
 
 foreach my $test (sort keys %tests) {
-	my $message = Sympa::Message->new({
+	my $message = Sympa::Message->new(
 		file       => "t/samples/$test",
 		noxsympato => 1
-	});
+	);
 	is_deeply(
 		Sympa::Tools::Bounce::parse_notification($message),
 		$tests{$test},
