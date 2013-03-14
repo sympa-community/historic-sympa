@@ -35,6 +35,18 @@ It handles requests for temporary/access tokens and database storage.
 package Sympa::OAuth::Provider;
 
 use strict;
+use constant {
+	# Max age for requests timestamps
+	OLD_REQUEST_TIMEOUT => 600,
+	# Time the nonce tags are kept
+	NONCE_TIMEOUT       => 3600 * 24 * 30 * 3,
+	# Time left to use the temporary token
+	TEMPORARY_TIMEOUT   => 3600,
+	# Time left to request access once the verifier has been set
+	VERIFIER_TIMEOUT    => 300,
+	# Access timeout
+	ACCESS_TIMEOUT      => 3600 * 24 * 30 * 3,
+};
 
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
@@ -96,13 +108,6 @@ sub new {
 		params          => $p,
 		consumer_key    => $p->{'oauth_consumer_key'},
 		consumer_secret => $c->{'secret'},
-		constants       => {
-			old_request_timeout => 600, # Max age for requests timestamps
-			nonce_timeout => 3 * 30 * 24 * 3600, # Time the nonce tags are kept
-			temporary_timeout => 3600, # Time left to use the temporary token
-			verifier_timeout => 300, # Time left to request access once the verifier has been set
-			access_timeout => 3 * 30 * 24 * 3600 # Access timeout
-		},
 	};
 
 	my $util = OAuth::Lite::ServerUtil->new();
@@ -112,7 +117,7 @@ sub new {
 
 	unless(Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND lasttime_oauthprovider<%d',
-		time - $self->{'constants'}{'temporary_timeout'}
+		time - TEMPORARY_TIMEOUT
 	)) {
 		Sympa::Log::do_log('err', 'Unable to delete old temporary tokens in database');
 		return undef;
@@ -213,9 +218,9 @@ sub checkRequest {
 	my $token = $self->{'params'}{'oauth_token'};
 	my $timestamp = $self->{'params'}{'oauth_timestamp'};
 
-	return 401 unless($timestamp > time - $self->{'constants'}{'old_request_timeout'});
+	return 401 unless($timestamp > time - OLD_REQUEST_TIMEOUT);
 
-	unless(Sympa::SDM::do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - $self->{'constants'}{'nonce_timeout'})) {
+	unless(Sympa::SDM::do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - NONCE_TIMEOUT)) {
 		Sympa::Log::do_log('err', 'Unable to clean nonce store in database');
 		return 401;
 	}
@@ -321,7 +326,7 @@ sub generateTemporary {
 
 	my $r = 'oauth_token='.uri_escape($token);
 	$r .= '&oauth_token_secret='.uri_escape($secret);
-	$r .= '&oauth_expires_in='.$self->{'constants'}{'temporary_timeout'};
+	$r .= '&oauth_expires_in='.TEMPORARY_TIMEOUT;
 	$r .= '&xoauth_request_auth_url='.$params{'authorize'} if(defined($params{'authorize'}));
 	$r .= '&oauth_callback_confirmed=true';
 
@@ -336,9 +341,9 @@ Retreive a temporary token from database.
 
 =over
 
-=item * I<token>: the token key
+=item * I<token>: the toke
 
-=item * I<timeout_type>: the timeout key, temporary or verifier
+=item * I<timeout>: the timeout
 
 =back
 
@@ -362,8 +367,7 @@ sub getTemporary {
 	my $data = $sth->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 
-	my $timeout = $self->{'constants'}{(defined($params{'timeout_type'}) ? $params{'timeout_type'} : 'temporary').'_timeout'};
-	return undef unless($data->{'lasttime'} + $timeout >= time);
+	return undef unless($data->{'lasttime'} + $params{timeout} >= time);
 
 	return $data;
 }
@@ -393,7 +397,7 @@ sub generateVerifier {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s, %s)', $params{'token'}, $params{'user'}, $params{'granted'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}));
+	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout => TEMPORARY_TIMEOUT));
 
 	my $verifier = _generateRandomString(32);
 
@@ -452,7 +456,7 @@ sub generateAccess {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'token'}, $params{'verifier'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout_type => 'verifier'));
+	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout => VERIFIER_TIMEOUT));
 	return undef unless($params{'verifier'} eq $tmp->{'verifier'});
 
 	my $token = _generateRandomString(32);
@@ -472,7 +476,7 @@ sub generateAccess {
 
 	my $r = 'oauth_token='.uri_escape($token);
 	$r .= '&oauth_token_secret='.uri_escape($secret);
-	$r .= '&oauth_expires_in='.$self->{'constants'}{'access_timeout'};
+	$r .= '&oauth_expires_in='.ACCESS_TIMEOUT;
 
 	return $r;
 }
@@ -510,7 +514,7 @@ sub getAccess {
 	my $data = $sth->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 
-	return undef unless($data->{'lasttime'} + $self->{'constants'}{'access_timeout'} >= time);
+	return undef unless($data->{'lasttime'} + ACCESS_TIMEOUT >= time);
 
 	return $data;
 }
