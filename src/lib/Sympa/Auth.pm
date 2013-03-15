@@ -497,7 +497,7 @@ authenticated
 sub create_one_time_ticket {
     my ($email,  $robot, $data_string, $remote_addr) = @_;
 
-    my $ticket = Sympa::Session::get_random();
+    my $ticket = Sympa::Session->get_random();
     Sympa::Log::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
     my $date = time;
