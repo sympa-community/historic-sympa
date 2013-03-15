@@ -1837,7 +1837,7 @@ sub wwslog {
      my $facility = shift;
 
      # do not log if log level if too high regarding the log requested by user
-     return if ($Sympa::Log::levels{$facility} > $Sympa::Log::log_level);
+     return if ($Sympa::Log::levels{$facility} > Sympa::Log::get_log_level());
 
      my $msg = shift;
 
@@ -15532,14 +15532,14 @@ sub do_send_mail {
 	# url and uploaded_file should not be both empty -> missing argument
 	if ($in{'url'} =~ /^\s*$/ && $in{'uploaded_file'} =~ /^\s*$/) {
 	    Sympa::Report::reject_report_web('user','missing_post_source',{},$param->{'action'});
-	    ($Sympa::Log::log_level >= 0) && wwslog('info','Missing url and uploaded file');
+	    wwslog('info','Missing url and uploaded file');
 	    return 'compose_mail';
 	 }
 
 	# url and uploaded_file should not be both filled: we could not chooe which one to use.
 	if ($in{'url'} =~ /\S/ && $in{'uploaded_file'} =~ /\S/) {
 	    Sympa::Report::reject_report_web('user','two_post_sources_defined',{},$param->{'action'});
-	    ($Sympa::Log::log_level >= 0) && wwslog('info','User specified both an URL (%s) and a file to upload (%s). Can\'t choose between them.',$in{'url'},$in{'uploaded_file'});
+	    wwslog('info','User specified both an URL (%s) and a file to upload (%s). Can\'t choose between them.',$in{'url'},$in{'uploaded_file'});
 	    return 'compose_mail';
 	}
 	my $page_source = $in{'url'};
@@ -15570,7 +15570,7 @@ sub do_send_mail {
             $in{'body'} = $html_part_body;
 	}else{
 	    Sympa::Report::reject_report_web('user','unable_to_parse',{},$param->{'action'});
-	    ($Sympa::Log::log_level >= 0) && wwslog('info','A MIME part could not be created with the supplied data, %s, %s',$in{'url'},$in{'uploaded_file'});
+	    wwslog('info','A MIME part could not be created with the supplied data, %s, %s',$in{'url'},$in{'uploaded_file'});
 	    return undef;
 	}
 
@@ -15578,7 +15578,7 @@ sub do_send_mail {
 	## Message body should not be empty
 	if ($in{'body'} =~ /^\s*$/) {
 	    Sympa::Report::reject_report_web('user','missing_arg',{'argument' => 'body'},$param->{'action'});
-	    ($Sympa::Log::log_level >= 0) && wwslog('info','Missing body');
+	    wwslog('info','Missing body');
 	    web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'no_body','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	    return undef;
 	}
