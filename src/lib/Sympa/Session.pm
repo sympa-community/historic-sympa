@@ -127,7 +127,7 @@ sub new {
     }else{
 	# create a new session context
 	$self->{'new_session'} = 1; ## Tag this session as new, ie no data in the DB exist
-        $self->{'id_session'} = get_random();
+        $self->{'id_session'} = Sympa::Session->get_random();
 	$self->{'email'} = 'nobody';
         $self->{'remote_addr'} = $ENV{'REMOTE_ADDR'};
 	$self->{'date'} = time;
@@ -252,7 +252,7 @@ sub renew {
     }
 
     ## Renew the session ID in order to prevent session hijacking
-    my $new_id = get_random();
+    my $new_id = Sympa::Session->get_random();
 
     ## First remove the DB entry for the previous session ID
     unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {
@@ -266,8 +266,6 @@ sub renew {
     return 1;
 }
 
-=head1 FUNCTIONS
-
 =head2 purge_old_sessions(%parameters)
 
 Remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
@@ -275,7 +273,7 @@ Remove old sessions from a particular robot or from all robots. delay is a param
 =cut
 
 sub purge_old_sessions {
-    my (%params) = @_;
+    my ($class, %params) = @_;
     Sympa::Log::do_log('info', '(%s)',$params{robot});
 
     unless ($params{delay}) {
@@ -334,14 +332,14 @@ sub purge_old_sessions {
     return $total+$anonymous_total;
 }
 
-=head2 purge_old_tickets(%parameters)
+=head2 Sympa::Session->purge_old_tickets(%parameters)
 
 Remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
 
 =cut
 
 sub purge_old_tickets {
-    my (%params) = @_;
+    my ($class, %params) = @_;
     Sympa::Log::do_log('info', '(%s)',$params{robot});
 
     unless ($params{delay}) {
@@ -374,14 +372,14 @@ sub purge_old_tickets {
     return $total;
 }
 
-=head2 list_sessions($delay, $robot, $connected_only)
+=head2 Sympa::Session->list_sessions($delay, $robot, $connected_only)
 
 List sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
 
 =cut
 
 sub list_sessions {
-    my ($delay, $robot, $connected_only) = @_;
+    my ($class, $delay, $robot, $connected_only) = @_;
     Sympa::Log::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
 
     my @sessions ;
@@ -415,14 +413,14 @@ sub list_sessions {
     return \@sessions;
 }
 
-=head2 get_session_cookie($http_cookie)
+=head2 Sympa::Session->get_session_cookie($http_cookie)
 
 Generic function to get a cookie value.
 
 =cut
 
 sub get_session_cookie {
-    my ($http_cookie) = @_;
+    my ($class, $http_cookie) = @_;
 
     if ($http_cookie =~/\S+/g) {
 	my %cookies = parse CGI::Cookie($http_cookie);
@@ -485,9 +483,9 @@ sub set_cookie {
     return 1;
 }
 
-=head1 FUNCTIONS
+=head1 CLASS METHODS
 
-=head2 get_random()
+=head2 Sympa::Session->get_random()
 
 =cut
 

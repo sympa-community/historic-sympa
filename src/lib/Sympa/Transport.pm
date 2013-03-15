@@ -47,11 +47,11 @@ sub request {
 
 	my $session;
 	## Existing session or new one
-	if (Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'})) {
+	if (Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})) {
 	  $session = Sympa::Session->new(
 		  robot   => $ENV{SYMPA_ROBOT},
 		  context => {
-			  cookie => Sympa::Session::get_session_cookie($ENV{HTTP_COOKIE})
+			  cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
 		  },
 		  crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
 	  );

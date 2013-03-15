@@ -1166,7 +1166,7 @@ sub purge_logs_table {
 sub purge_session_table {
 
     Sympa::Log::do_log('info','()');
-    my $removed = Sympa::Session::purge_old_sessions(
+    my $removed = Sympa::Session->purge_old_sessions(
 	    robot => '*',
 	    delay =>
 	    Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}),
@@ -1206,7 +1206,7 @@ sub purge_tables {
 sub purge_one_time_ticket_table {
 
     Sympa::Log::do_log('info','()');
-    my $removed = Sympa::Session::purge_old_tickets(
+    my $removed = Sympa::Session->purge_old_tickets(
 	    robot => '*',
 	    delay => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'})
     );
