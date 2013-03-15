@@ -65,9 +65,13 @@ Create a new L<Sympa::Datasource::SQL> object.
 
 =item * I<passwd>: FIXME
 
-=item * I<connect_options>: FIXME
+=item * I<db_name>: FIXME
 
 =item * I<db_type>: FIXME
+
+=item * I<connect_options>: FIXME
+
+=item * I<domain>: FIXME
 
 =back
 
@@ -80,7 +84,6 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	my $self = \%params;
 	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
 	my $actualclass;
 	if ($params{'db_type'} =~ /^mysql$/i) {
@@ -128,13 +131,16 @@ sub new {
 		## like CSV
 		$actualclass = "Sympa::Datasource::SQL";
 	}
-	$self = $class->SUPER::new(%params);
 
-	$self->{'db_host'} ||= $self->{'host'};
-	$self->{'db_user'} ||= $self->{'user'};
-	$self->{'db_passwd'} ||= $self->{'passwd'};
-	$self->{'db_options'} ||= $self->{'connect_options'};
-	$self->{'domain'} ||= $self->{'domain'};
+	my $self = {
+		db_host    => $params{'host'},
+		db_user    => $params{'user'},
+		db_passwd  => $params{'passwd'},
+		db_name    => $params{'db_name'},
+		db_type    => $params{'db_type'},
+		db_options => $params{'connect_options'},
+		domain     => $params{'domain'},
+	};
 
 	bless $self, $actualclass;
 	return $self;

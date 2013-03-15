@@ -36,28 +36,6 @@ use strict;
 
 use Sympa::Log;
 
-=head1 CLASS METHODS
-
-=head2 Sympa::Datasource->new(%parameters)
-
-Create a new L<Sympa::Datasource> object.
-
-=head3 Parameters
-
-=head3 Return value
-
-A new L<Sympa::Datasource> object, or I<undef> if something went wrong.
-
-=cut
-
-sub new {
-    my ($class, %params) = @_;
-    Sympa::Log::do_log('debug', '');
-    my $self = \%params;
-    bless $self, $class;
-    return $self;
-}
-
 # Returns a unique ID for an include datasource
 sub _get_datasource_id {
     my ($source, $other_source) = @_;

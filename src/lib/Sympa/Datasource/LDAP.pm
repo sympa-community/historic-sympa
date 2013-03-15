@@ -79,7 +79,6 @@ sub new {
     $self->{'ldap_bind_dn'} = $self->{'user'};
     $self->{'ldap_bind_password'} = $self->{'passwd'};
 
-    $self = $class->SUPER::new($self);
     bless $self, $class;
 
 
