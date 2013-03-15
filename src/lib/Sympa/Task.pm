@@ -185,15 +185,4 @@ sub get_task_list {
     return @task_list;
 }
 
-## sort task name by their epoch date
-sub epoch_sort {
-
-    $a =~ /(\d+)\..+/;
-    my $date1 = $1;
-    $b =~ /(\d+)\..+/;
-    my $date2 = $1;
-
-    $date1 <=> $date2;
-}
-
 1;
