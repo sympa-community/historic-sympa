@@ -48,7 +48,7 @@ my $warning_timeout = 600;
 # Date of the last time a message was sent to warn the listmaster that the logs are unavailable.
 my $warning_date = 0;
 
-our $log_level = 0;
+my $log_level = 0;
 
 our %levels = (
     err    => 0,
