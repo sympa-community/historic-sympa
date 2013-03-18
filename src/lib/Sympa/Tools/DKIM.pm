@@ -46,7 +46,7 @@ use Sympa::Log;
 
 =head1 FUNCTIONS
 
-=head2 get_dkim_parameters($params)
+=head2 get_dkim_parameters(%parameters)
 
 =head3 Parameters
 
@@ -63,10 +63,10 @@ use Sympa::Log;
 =cut
 
 sub get_dkim_parameters {
-    my ($params) = @_;
+    my (%params) = @_;
 
-    my $robot = $params->{'robot'};
-    my $listname = $params->{'listname'};
+    my $robot = $params{'robot'};
+    my $listname = $params{'listname'};
     Sympa::Log::do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
 
     my $data ; my $keyfile ;
@@ -90,10 +90,10 @@ sub get_dkim_parameters {
 	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
     }else{
 	# in robot context
-	$data->{'d'} = $params->{'signer_domain'};
-	$data->{'i'} = $params->{'signer_identity'};
-	$data->{'selector'} = $params->{'selector'};
-	$keyfile = $params->{'keyfile'};
+	$data->{'d'} = $params{'signer_domain'};
+	$data->{'i'} = $params{'signer_identity'};
+	$data->{'selector'} = $params{'selector'};
+	$keyfile = $params{'keyfile'};
     }
     unless (open (KEY, $keyfile)) {
 	Sympa::Log::do_log('err',"Could not read dkim private key %s",$keyfile);

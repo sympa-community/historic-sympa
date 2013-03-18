@@ -344,7 +344,7 @@ sub remove_dir {
     return 1;
 }
 
-=head2 a_is_older_than_b($parameters)
+=head2 a_is_older_than_b(%parameters)
 
 Compares the last modifications date of two files
 
@@ -367,23 +367,23 @@ could not be carried on.
 =cut
 
 sub a_is_older_than_b {
-    my ($params) = @_;
+    my (%params) = @_;
 
     my ($a_file_readable, $b_file_readable) = (0,0);
     my $answer = undef;
-    if (-r $params->{'a_file'}) {
+    if (-r $params{'a_file'}) {
 	$a_file_readable = 1;
     }else{
-	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params->{'a_file'});
+	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'a_file'});
     }
-    if (-r $params->{'b_file'}) {
+    if (-r $params{'b_file'}) {
 	$b_file_readable = 1;
     }else{
-	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params->{'b_file'});
+	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'b_file'});
     }
     if ($a_file_readable && $b_file_readable) {
-	my @a_stats = stat ($params->{'a_file'});
-	my @b_stats = stat ($params->{'b_file'});
+	my @a_stats = stat ($params{'a_file'});
+	my @b_stats = stat ($params{'b_file'});
 	if($a_stats[9] < $b_stats[9]){
 	    $answer = 1;
 	}else{

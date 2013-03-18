@@ -2867,22 +2867,22 @@ sub get_editors {
     return $editors;
 }
 
-=head2 $list->get_owners_email($param)
+=head2 $list->get_owners_email(%parameters)
 
 Return the list of owners email addresses.
 
 =cut
 
 sub get_owners_email {
-    my ($self, $params) = @_;
-    Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params->{'ignore_nomail'});
+    my ($self, %params) = @_;
+    Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params{'ignore_nomail'});
 
     my @rcpt;
     my $owners = ();
 
     $owners = $self->get_owners();
 
-    if ($params->{'ignore_nomail'}) {
+    if ($params{'ignore_nomail'}) {
 	foreach my $o (@{$owners}) {
 	    push (@rcpt, lc($o->{'email'}));
 	}
@@ -2899,7 +2899,7 @@ sub get_owners_email {
     return @rcpt;
 }
 
-=head2 $list->get_editors_email($param)
+=head2 $list->get_editors_email(%parameters)
 
 Return the list of editors email addresses, or owners if there isn't any
 editors.
@@ -2907,15 +2907,15 @@ editors.
 =cut
 
 sub get_editors_email {
-    my ($self, $params) = @_;
-    Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params->{'ignore_nomail'});
+    my ($self, %params) = @_;
+    Sympa::Log::do_log('debug3', '%s,%s',$self->{'name'}, $params{'ignore_nomail'});
 
     my @rcpt;
     my $editors = ();
 
     $editors = $self->get_editors();
 
-    if ($params->{'ignore_nomail'}) {
+    if ($params{'ignore_nomail'}) {
 	foreach my $e (@{$editors}) {
 	    push (@rcpt, lc($e->{'email'}));
 	}
@@ -2928,7 +2928,7 @@ sub get_editors_email {
     }
     unless (@rcpt) {
 	Sympa::Log::do_log('notice','Warning : no editor found for list %s, getting owners', $self->{'name'} );
-	@rcpt = $self->get_owners_email($params);
+	@rcpt = $self->get_owners_email(%params);
     }
     return @rcpt;
 }
@@ -3761,13 +3761,13 @@ sub send_global_file {
     if ((Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(Sympa::Configuration::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
 	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
 	require Sympa::Tools::DKIM;
-	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({
-            'robot'           => $robot,
-            'signer_domain'   => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
-            'signer_identity' => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
-            'selector'        => Sympa::Configuration::get_robot_conf($robot, 'dkim_selector'),
-            'keyfile'         => Sympa::Configuration::get_robot_conf($robot, 'dkim_private_key_path')
-        });
+	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters(
+            robot           => $robot,
+            signer_domain   => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
+            signer_identity => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
+            selector        => Sympa::Configuration::get_robot_conf($robot, 'dkim_selector'),
+            keyfile         => Sympa::Configuration::get_robot_conf($robot, 'dkim_private_key_path')
+        );
     }
 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -3956,7 +3956,9 @@ sub send_file {
     if ((Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
 	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
 	require Sympa::Tools::DKIM;
-	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
+	$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters(
+		robot => $self->{'domain'}
+	);
     }
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
     my $result = Sympa::Mail::mail_file(
@@ -4172,7 +4174,10 @@ sub send_msg {
     if ($apply_dkim_signature eq 'on') {
 	# assume Sympa::Tools::DKIM can be loaded if the setting is still on
 	require Sympa::Tools::DKIM;
-	$dkim_parameters = Sympa::Tools::DKIM::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
+	$dkim_parameters = Sympa::Tools::DKIM::get_dkim_parameters(
+		robot    => $self->{'domain'},
+		listname => $self->{'name'}
+	);
     }
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
@@ -4497,7 +4502,7 @@ sub send_to_editor {
        Sympa::Log::do_log('notice', "No editor found for list %s. Trying to proceed ignoring nomail option", $self->{'name'});
        my $messageid = $hdr->get('Message-Id');
 
-       @rcpt = $self->get_editors_email({'ignore_nomail',1});
+       @rcpt = $self->get_editors_email(ignore_nomail => 1);
        Sympa::Log::do_log('notice', 'Warning : no owner and editor defined at all in list %s', $name ) unless (@rcpt);
 
        ## Could we find a recipient by ignoring the "nomail" option?
@@ -6137,7 +6142,7 @@ sub get_list_member {
 
 =head1 FUNCTIONS
 
-=head2 get_ressembling_list_members_no_object($parameters)
+=head2 get_ressembling_list_members_no_object(%parameters)
 
 =head3 Parameters
 
@@ -6158,16 +6163,16 @@ An arrayref of ressembling emails, or I<undef> if something went wrong.
 =cut
 
 sub get_ressembling_list_members_no_object {
-    my ($params) = @_;
-    Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params->{'name'},
-	    $params->{'email'}, $params->{'domain'});
+    my (%params) = @_;
+    Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'name'},
+	    $params{'email'}, $params{'domain'});
     my @output;
 
 
 
-    my $email = Sympa::Tools::clean_email($params->{'email'});
-    my $robot = $params->{'domain'};
-    my $listname = $params->{'name'};
+    my $email = Sympa::Tools::clean_email($params{'email'});
+    my $robot = $params{'domain'};
+    my $listname = $params{'name'};
 
 
     $email =~ /^(.*)\@(.*)$/;
@@ -6529,7 +6534,10 @@ sub get_first_list_member {
 	$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, %s AS dom, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s ) ORDER BY dom",
 	Sympa::SDM::get_canonical_read_date('date_subscriber'),
 	Sympa::SDM::get_canonical_read_date('update_subscriber'),
-	Sympa::SDM::get_substring_clause({'source_field'=>'user_subscriber','separator'=>'\@','substring_length'=>'50',}),
+	Sympa::SDM::get_substring_clause(
+		source_field =>'user_subscriber',
+		separator    =>'\@','substring_length'=>'50'
+	),
 	$additional,
 	Sympa::SDM::quote($name),
 	Sympa::SDM::quote($self->{'domain'});
@@ -6551,7 +6559,10 @@ sub get_first_list_member {
 
     ## LIMIT clause
     if (defined($rows) and defined($offset)) {
-	$statement .= Sympa::SDM::get_limit_clause({'rows_count'=>$rows,'offset'=>$offset});
+	$statement .= Sympa::SDM::get_limit_clause(
+		rows_count => $rows,
+		offset     => $offset
+	);
     }
 
     unless ($sth = Sympa::SDM::do_query($statement)) {
@@ -6704,7 +6715,11 @@ sub get_first_list_admin {
 	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, %s AS dom  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s) ORDER BY dom",
 	Sympa::SDM::get_canonical_read_date('date_admin'),
 	Sympa::SDM::get_canonical_read_date('update_admin'),
-	Sympa::SDM::get_substring_clause({'source_field'=>'user_admin','separator'=>'\@','substring_length'=>'50'}),
+	Sympa::SDM::get_substring_clause(
+		source_field     => 'user_admin',
+		separator        => '\@',
+		substring_length => '50'
+	),
 	Sympa::SDM::quote($name),
 	Sympa::SDM::quote($self->{'domain'}),
 	Sympa::SDM::quote($role);
@@ -6723,7 +6738,10 @@ sub get_first_list_admin {
 
     ## LIMIT clause
     if (defined($rows) and defined($offset)) {
-	$statement .= Sympa::SDM::get_substring_clause({'rows_count'=>$rows,'offset'=>$offset});
+	$statement .= Sympa::SDM::get_substring_clause(
+		rows_count => $rows,
+		offset     => $offset
+	);
     }
 
     unless ($sth = Sympa::SDM::do_query($statement)) {

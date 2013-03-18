@@ -191,7 +191,7 @@ sub probe_db {
 	    $found = 1 if ($t1 eq $t2) ;
 	}
 	unless ($found) {
-	    if (my $rep = $db_source->add_table({'table'=>$t1})) {
+	    if (my $rep = $db_source->add_table('table'=>$t1)) {
 		push @report, $rep;
 		Sympa::Log::do_log('notice', 'Table %s created in database %s', $t1, Sympa::Configuration::get_robot_conf('*','db_name'));
 		push @tables, $t1;
@@ -201,7 +201,7 @@ sub probe_db {
     }
     ## Get fields
     foreach my $t (@tables) {
-	$real_struct{$t} = $db_source->get_fields({'table'=>$t});
+	$real_struct{$t} = $db_source->get_fields('table'=>$t);
     }
     ## Check tables structure if we could get it
     ## Only performed with mysql , Pg and SQLite
@@ -212,27 +212,27 @@ sub probe_db {
 		Sympa::Log::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, Sympa::Configuration::get_robot_conf('*','db_name'), Sympa::Configuration::get_robot_conf('*','db_type'));
 		return undef;
 	    }
-	    unless (check_fields({'table' => $t,'report' => \@report,'real_struct' => \%real_struct})) {
+	    unless (check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
 		Sympa::Log::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
 		return undef;
 	    }
 	    ## Remove temporary DB field
 	    if ($real_struct{$t}{'temporary'}) {
-		$db_source->delete_field({
+		$db_source->delete_field(
 		    'table' => $t,
 		    'field' => 'temporary',
-		    });
+		);
 		delete $real_struct{$t}{'temporary'};
 	    }
 
 	    if ((Sympa::Configuration::get_robot_conf('*','db_type') eq 'mysql')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'Pg')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'SQLite')) {
 		## Check that primary key has the right structure.
-		unless (check_primary_key({'table' => $t,'report' => \@report})) {
+		unless (check_primary_key('table' => $t,'report' => \@report)) {
 		    Sympa::Log::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
 		    return undef;
 		}
 
-		unless (check_indexes({'table' => $t,'report' => \@report})) {
+		unless (check_indexes('table' => $t,'report' => \@report)) {
 		    Sympa::Log::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
 		    return undef;
 		}
@@ -242,9 +242,9 @@ sub probe_db {
 	# add autoincrement if needed
 	foreach my $table (keys %autoincrement) {
 	    Sympa::Log::do_log('notice',"Checking autoincrement for table $table, field $autoincrement{$table}");
-	    unless ($db_source->is_autoinc({'table'=>$table,'field'=>$autoincrement{$table}})){
-		if ($db_source->set_autoinc({'table'=>$table,'field'=>$autoincrement{$table},
-		'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'}})){
+	    unless ($db_source->is_autoinc('table'=>$table,'field'=>$autoincrement{$table})){
+		if ($db_source->set_autoinc('table'=>$table,'field'=>$autoincrement{$table},
+		'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'})){
 		    Sympa::Log::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
 		}else{
 		    Sympa::Log::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
@@ -267,11 +267,11 @@ sub probe_db {
 }
 
 sub check_fields {
-    my ($params) = @_;
+    my (%params) = @_;
 
-    my $t = $params->{'table'};
-    my %real_struct = %{$params->{'real_struct'}};
-    my $report_ref = $params->{'report'};
+    my $t = $params{'table'};
+    my %real_struct = %{$params{'real_struct'}};
+    my $report_ref = $params{'report'};
 
     foreach my $f (sort keys %{$db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}}) {
 	unless ($real_struct{$t}{$f}) {
@@ -279,14 +279,14 @@ sub check_fields {
 	    Sympa::Log::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 
 	    my $rep;
-	    if ($rep = $db_source->add_field({
+	    if ($rep = $db_source->add_field(
 		'table' => $t,
 		'field' => $f,
 		'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
 		'notnull' => $not_null{$f},
 		'autoinc' => ( $autoincrement{$t} eq $f),
 		'primary' => ( $autoincrement{$t} eq $f),
-		})){
+		)){
 		push @{$report_ref}, $rep;
 
 	    }else {
@@ -305,12 +305,12 @@ sub check_fields {
 		Sympa::Log::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
 
 		my $rep;
-		if ($rep = $db_source->update_field({
+		if ($rep = $db_source->update_field(
 		    'table' => $t,
 		    'field' => $f,
 		    'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
 		    'notnull' => $not_null{$f},
-		    })){
+		    )){
 			push @{$report_ref}, $rep;
 		}else {
 		    Sympa::Log::do_log('err', 'Fields update in database failed. Aborting.');
@@ -329,17 +329,17 @@ sub check_fields {
 }
 
 sub check_primary_key {
-    my ($params) = @_;
+    my (%params) = @_;
 
-    my $t = $params->{'table'};
-    my $report_ref = $params->{'report'};
+    my $t = $params{'table'};
+    my $report_ref = $params{'report'};
     Sympa::Log::do_log('debug','Checking primary key for table %s',$t);
 
     my $list_of_keys = join ',',@{$primary{$t}};
     my $key_as_string = "$t [$list_of_keys]";
     Sympa::Log::do_log('debug','Checking primary keys for table %s expected_keys %s',$t,$key_as_string );
 
-    my $should_update = $db_source->check_key({'table'=>$t,'key_name'=>'primary','expected_keys'=>$primary{$t}});
+    my $should_update = $db_source->check_key('table'=>$t,'key_name'=>'primary','expected_keys'=>$primary{$t});
     if ($should_update){
 	my $list_of_keys = join ',',@{$primary{$t}};
 	my $key_as_string = "$t [$list_of_keys]";
@@ -347,7 +347,7 @@ sub check_primary_key {
 	    Sympa::Log::do_log('notice',"Primary key %s is missing. Adding it.",$key_as_string);
 	    ## Add primary key
 	    my $rep = undef;
-	    if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
+	    if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
 		push @{$report_ref}, $rep;
 	    }
 	}elsif($should_update->{'existing_key_correct'}) {
@@ -355,12 +355,12 @@ sub check_primary_key {
 	}else{
 	    ## drop previous primary key
 	    my $rep = undef;
-	    if ($rep = $db_source->unset_primary_key({'table'=>$t})) {
+	    if ($rep = $db_source->unset_primary_key('table'=>$t)) {
 		push @{$report_ref}, $rep;
 	    }
 	    ## Add primary key
 	    $rep = undef;
-	    if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
+	    if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
 		push @{$report_ref}, $rep;
 	    }
 	}
@@ -368,12 +368,12 @@ sub check_primary_key {
 	Sympa::Log::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$t);
 	## drop previous primary key
 	my $rep = undef;
-	if ($rep = $db_source->unset_primary_key({'table'=>$t})) {
+	if ($rep = $db_source->unset_primary_key('table'=>$t)) {
 	    push @{$report_ref}, $rep;
 	}
 	## Add primary key
 	$rep = undef;
-	if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
+	if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
 	    push @{$report_ref}, $rep;
 	}
     }
@@ -381,20 +381,20 @@ sub check_primary_key {
 }
 
 sub check_indexes {
-    my ($params) = @_;
+    my (%params) = @_;
 
-    my $t = $params->{'table'};
-    my $report_ref = $params->{'report'};
+    my $t = $params{'table'};
+    my $report_ref = $params{'report'};
     Sympa::Log::do_log('debug','Checking indexes for table %s',$t);
     ## drop previous index if this index is not a primary key and was defined by a previous Sympa version
-    my %index_columns = %{$db_source->get_indexes({'table' => $t})};
+    my %index_columns = %{$db_source->get_indexes('table' => $t)};
     foreach my $idx ( keys %index_columns ) {
 	Sympa::Log::do_log('debug','Found index %s',$idx);
 	## Remove the index if obsolete.
 	foreach my $known_index ( @former_indexes ) {
 	    if ( $idx eq $known_index ) {
 		Sympa::Log::do_log('notice','Removing obsolete index %s',$idx);
-		if (my $rep = $db_source->unset_index({'table'=>$t,'index'=>$idx})) {
+		if (my $rep = $db_source->unset_index('table'=>$t,'index'=>$idx)) {
 		    push @{$report_ref}, $rep;
 		}
 		last;
@@ -407,11 +407,11 @@ sub check_indexes {
 	## Add indexes
 	unless ($index_columns{$idx}) {
 	    Sympa::Log::do_log('notice','Index %s on table %s does not exist. Adding it.',$idx,$t);
-	    if (my $rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
+	    if (my $rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
 		push @{$report_ref}, $rep;
 	    }
 	}
-	my $index_check = $db_source->check_key({'table'=>$t,'key_name'=>$idx,'expected_keys'=>$indexes{$t}{$idx}});
+	my $index_check = $db_source->check_key('table'=>$t,'key_name'=>$idx,'expected_keys'=>$indexes{$t}{$idx});
 	if ($index_check){
 	    my $list_of_fields = join ',',@{$indexes{$t}{$idx}};
 	    my $index_as_string = "$idx: $t [$list_of_fields]";
@@ -419,7 +419,7 @@ sub check_indexes {
 		## Add index
 		my $rep = undef;
 		Sympa::Log::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-		if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
+		if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
 		    push @{$report_ref}, $rep;
 		}
 	    }elsif($index_check->{'existing_key_correct'}) {
@@ -428,12 +428,12 @@ sub check_indexes {
 		## drop previous index
 		Sympa::Log::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
 		my $rep = undef;
-		if ($rep = $db_source->unset_index({'table'=>$t, 'index'=> $idx})) {
+		if ($rep = $db_source->unset_index('table'=>$t, 'index'=> $idx)) {
 		    push @{$report_ref}, $rep;
 		}
 		## Add index
 		$rep = undef;
-		if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
+		if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
 		    push @{$report_ref}, $rep;
 		}
 	    }
@@ -441,12 +441,12 @@ sub check_indexes {
 	    Sympa::Log::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$t,$idx);
 	    ## drop previous index
 	    my $rep = undef;
-	    if ($rep = $db_source->unset_index({'table'=>$t, 'index'=> $idx})) {
+	    if ($rep = $db_source->unset_index('table'=>$t, 'index'=> $idx)) {
 		push @{$report_ref}, $rep;
 	    }
 	    ## Add index
 	    $rep = undef;
-	    if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx,'fields'=>$indexes{$t}{$idx}})) {
+	    if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx,'fields'=>$indexes{$t}{$idx})) {
 		push @{$report_ref}, $rep;
 	    }
 	}
@@ -523,13 +523,13 @@ sub quote {
 }
 
 sub get_substring_clause {
-    my ($param) = @_;;
+    my (%params) = @_;
 
     if (defined $db_source) {
-	return $db_source->get_substring_clause($param);
+	return $db_source->get_substring_clause(%params);
      }else{
 	if(check_db_connect()) {
-	    return $db_source->get_substring_clause($param);
+	    return $db_source->get_substring_clause(%params);
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
 	    return undef;
@@ -538,13 +538,13 @@ sub get_substring_clause {
 }
 
 sub get_limit_clause {
-    my ($param) = @_;
+    my (%params) = @_;
 
     if (defined $db_source) {
-	return ' '.$db_source->get_limit_clause($param).' ';
+	return ' '.$db_source->get_limit_clause(%params).' ';
     }else{
 	if(check_db_connect()) {
-	    return ' '.$db_source->get_limit_clause($param).' ';
+	    return ' '.$db_source->get_limit_clause(%params).' ';
 	}else{
 	    Sympa::Log::do_log('err', 'Unable to get a handle to Sympa database');
 	    return undef;

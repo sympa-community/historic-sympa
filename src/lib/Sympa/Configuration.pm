@@ -1882,7 +1882,10 @@ sub _save_config_hash_to_binary {
 sub _source_has_not_changed {
     my ($params) = @_;
 
-    my $is_older = Sympa::Tools::File::a_is_older_than_b({'a_file' => $params->{'config_file'},'b_file' => $params->{'config_file'}.$binary_file_extension,});
+    my $is_older = Sympa::Tools::File::a_is_older_than_b(
+	    'a_file' => $params->{'config_file'},
+	    'b_file' => $params->{'config_file'}.$binary_file_extension,
+    );
     return 1 if(defined $is_older && $is_older == 1);
     return 0;
 }

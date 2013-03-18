@@ -53,80 +53,80 @@ sub new {
 }
 
 sub build_connect_string{
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
 	$self->{'connect_string'} = "DBI:SQLite:dbname=$self->{'db_name'}";
 }
 
 sub get_substring_clause {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
 	return sprintf
 		"substr(%s,func_index(%s,'%s')+1,%s)",
-		$params->{'source_field'},
-		$params->{'source_field'},
-		$params->{'separator'},
-		$params->{'substring_length'};
+		$params{'source_field'},
+		$params{'source_field'},
+		$params{'separator'},
+		$params{'substring_length'};
 }
 
 
 sub get_limit_clause {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	if ($params->{'offset'}) {
+	if ($params{'offset'}) {
 		return sprintf "LIMIT %s OFFSET %s",
-			$params->{'rows_count'},
-			$params->{'offset'};
+			$params{'rows_count'},
+			$params{'offset'};
 	} else {
 		return sprintf "LIMIT %s",
-			$params->{'rows_count'};
+			$params{'rows_count'};
 	}
 }
 
 sub get_formatted_date {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	my $mode = lc($params->{'mode'});
+	my $mode = lc($params{'mode'});
 	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params->{'target'};
+		return sprintf 'UNIX_TIMESTAMP(%s)',$params{'target'};
 	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params->{'target'};
+		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
 	} else {
-		Sympa::Log::do_log('err',"Unknown date format mode %s", $params->{'mode'});
+		Sympa::Log::do_log('err',"Unknown date format mode %s", $params{'mode'});
 		return undef;
 	}
 }
 
 sub is_autoinc {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Checking whether field %s.%s is autoincremental',$params->{'field'},$params->{'table'});
+	Sympa::Log::do_log('debug','Checking whether field %s.%s is autoincremental',$params{'field'},$params{'table'});
 
-	my $sth = $self->do_query("PRAGMA table_info(%s)",$params->{'table'});
+	my $sth = $self->do_query("PRAGMA table_info(%s)",$params{'table'});
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
 	while (my $row = $sth->fetchrow_arrayref()) {
-		next unless $row->[1] eq $params->{'field'};
+		next unless $row->[1] eq $params{'field'};
 		return $row->[2] =~ /AUTO_INCREMENT/;
 	}
 }
 
 sub set_autoinc {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Setting field %s.%s as autoincremental',$params->{'field'},$params->{'table'});
+	Sympa::Log::do_log('debug','Setting field %s.%s as autoincremental',$params{'field'},$params{'table'});
 
 	my $sth = $self->do_query(
 		"ALTER TABLE `%s` CHANGE `%s` `%s` BIGINT( 20 ) NOT NULL AUTO_INCREMENT",
-		$params->{'table'},
-		$params->{'field'},
-		$params->{'field'}
+		$params{'table'},
+		$params{'field'},
+		$params{'field'}
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err','Unable to set field %s in table %s as autoincrement',$params->{'field'},$params->{'table'});
+		Sympa::Log::do_log('err','Unable to set field %s in table %s as autoincrement',$params{'field'},$params{'table'});
 		return undef;
 	}
 	return 1;
@@ -152,27 +152,27 @@ sub get_tables {
 }
 
 sub add_table {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Adding table %s to database %s',$params->{'table'},$self->{'db_name'});
+	Sympa::Log::do_log('debug','Adding table %s to database %s',$params{'table'},$self->{'db_name'});
 
 	my $sth = $self->do_query(
 		"CREATE TABLE %s (temporary INT)",
-		$params->{'table'}
+		$params{'table'}
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not create table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not create table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	return sprintf "Table %s created in database %s", $params->{'table'}, $self->{'db_name'};
+	return sprintf "Table %s created in database %s", $params{'table'}, $self->{'db_name'};
 }
 
 sub get_fields {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	my $sth = $self->do_query("PRAGMA table_info(%s)", $params->{'table'});
+	my $sth = $self->do_query("PRAGMA table_info(%s)", $params{'table'});
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
@@ -196,39 +196,39 @@ sub get_fields {
 }
 
 sub update_field {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Updating field %s in table %s (%s, %s)',$params->{'field'},$params->{'table'},$params->{'type'},$params->{'notnull'});
+	Sympa::Log::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
 	my $options;
-	if ($params->{'notnull'}) {
+	if ($params{'notnull'}) {
 		$options .= ' NOT NULL ';
 	}
 	my $report = sprintf(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
-		$params->{'table'},
-		$params->{'field'},
-		$params->{'field'},
-		$params->{'type'},
+		$params{'table'},
+		$params{'field'},
+		$params{'field'},
+		$params{'type'},
 		$options
 	);
 	Sympa::Log::do_log('notice', $report);
 
 	my $sth = $self->do_query(
 		"ALTER TABLE %s CHANGE %s %s %s %s",
-		$params->{'table'},
-		$params->{'field'},
-		$params->{'field'},
-		$params->{'type'},
+		$params{'table'},
+		$params{'field'},
+		$params{'field'},
+		$params{'type'},
 		$options
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params->{'field'}, $params->{'table'});
+		Sympa::Log::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
 		return undef;
 	}
 	$report .= sprintf(
 		'\nField %s in table %s, structure updated',
-		$params->{'field'},
-		$params->{'table'}
+		$params{'field'},
+		$params{'table'}
 	);
 	Sympa::Log::do_log('info', $report);
 
@@ -236,36 +236,36 @@ sub update_field {
 }
 
 sub add_field {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params->{'field'},$params->{'table'},$params->{'type'},$params->{'notnull'},$params->{'autoinc'},$params->{'primary'});
+	Sympa::Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
 
 	# specific issues:
 	# - impossible to add a primary key
 	# - impossible to use NOT NULL option with default value NULL
 
 	my $options = join(' ',
-		$params->{notnull} ? 'NOT NULL'       : (),
-		$params->{autoinc} ? 'AUTO_INCREMENT' : (),
-		$params->{primary} ? 'PRIMARY KEY'    : (),
+		$params{notnull} ? 'NOT NULL'       : (),
+		$params{autoinc} ? 'AUTO_INCREMENT' : (),
+		$params{primary} ? 'PRIMARY KEY'    : (),
 	);
 
 	my $sth = $self->do_query(
 		"ALTER TABLE %s ADD %s %s %s",
-		$params->{'table'},
-		$params->{'field'},
-		$params->{'type'},
+		$params{'table'},
+		$params{'field'},
+		$params{'type'},
 		$options
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not add field %s to table %s in database %s', $params->{'field'}, $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s added to table %s (options: %s)',
-		$params->{'field'},
-		$params->{'table'},
+		$params{'field'},
+		$params{'table'},
 		$options
 	);
 	Sympa::Log::do_log('info', $report);
@@ -274,23 +274,23 @@ sub add_field {
 }
 
 sub delete_field {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Deleting field %s from table %s',$params->{'field'},$params->{'table'});
+	Sympa::Log::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
 
 	# unsupported
-	Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $params->{'field'}, $params->{'table'}, $self->{'db_name'});
+	Sympa::Log::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
 	return undef;
 }
 
 sub get_primary_key {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Getting primary key for table %s',$params->{'table'});
+	Sympa::Log::do_log('debug','Getting primary key for table %s',$params{'table'});
 
-	my $sth = $self->do_query("PRAGMA table_info(%s)", $params->{'table'});
+	my $sth = $self->do_query("PRAGMA table_info(%s)", $params{'table'});
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not get field list from table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not get field list from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
@@ -304,55 +304,55 @@ sub get_primary_key {
 }
 
 sub unset_primary_key {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Removing primary key from table %s',$params->{'table'});
+	Sympa::Log::do_log('debug','Removing primary key from table %s',$params{'table'});
 
 	my $sth = $self->do_query(
 		"ALTER TABLE %s DROP PRIMARY KEY",
-		$params->{'table'}
+		$params{'table'}
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not drop primary key from table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not drop primary key from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	my $report = "Table $params->{'table'}, PRIMARY KEY dropped";
+	my $report = "Table $params{'table'}, PRIMARY KEY dropped";
 	Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
 
 sub set_primary_key {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	my $fields = join ',',@{$params->{'fields'}};
-	Sympa::Log::do_log('debug','Setting primary key for table %s (%s)',$params->{'table'},$fields);
+	my $fields = join ',',@{$params{'fields'}};
+	Sympa::Log::do_log('debug','Setting primary key for table %s (%s)',$params{'table'},$fields);
 
 	my $sth = $self->do_query(
 		"ALTER TABLE %s ADD PRIMARY KEY (%s)",
-		$params->{'table'},
+		$params{'table'},
 		$fields
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	my $report = "Table $params->{'table'}, PRIMARY KEY set on $fields";
+	my $report = "Table $params{'table'}, PRIMARY KEY set on $fields";
 	Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
 
 sub get_indexes {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Looking for indexes in %s',$params->{'table'});
+	Sympa::Log::do_log('debug','Looking for indexes in %s',$params{'table'});
 
 	my $sth = $self->do_query(
 		"SELECT name,sql FROM sqlite_master WHERE type='index'"
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 	my %indexes;
@@ -367,42 +367,42 @@ sub get_indexes {
 }
 
 sub unset_index {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Removing index %s from table %s',$params->{'index'},$params->{'table'});
+	Sympa::Log::do_log('debug','Removing index %s from table %s',$params{'index'},$params{'table'});
 
 	my $sth = $self->do_query(
 		"ALTER TABLE %s DROP INDEX %s",
-		$params->{'table'},
-		$params->{'index'}
+		$params{'table'},
+		$params{'index'}
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not drop index %s from table %s in database %s',$params->{'index'}, $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	my $report = "Table $params->{'table'}, index $params->{'index'} dropped";
+	my $report = "Table $params{'table'}, index $params{'index'} dropped";
 	Sympa::Log::do_log('info', $report);
 
 	return $report;
 }
 
 sub set_index {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	my $fields = join ',',@{$params->{'fields'}};
-	Sympa::Log::do_log('debug', 'Setting index %s for table %s using fields %s', $params->{'index_name'},$params->{'table'}, $fields);
+	my $fields = join ',',@{$params{'fields'}};
+	Sympa::Log::do_log('debug', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
 
 	my $sth = $self->do_query(
 		"CREATE INDEX %s ON %s (%s)",
-		$params->{'index_name'},
-		$params->{'table'},
+		$params{'index_name'},
+		$params{'table'},
 		$fields
 	);
 	unless ($sth) {
-		Sympa::Log::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params->{'table'}, $self->{'db_name'});
+		Sympa::Log::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	my $report = "Table $params->{'table'}, index %s set using $fields";
+	my $report = "Table $params{'table'}, index %s set using $fields";
 	Sympa::Log::do_log('info', $report);
 
 	return $report;

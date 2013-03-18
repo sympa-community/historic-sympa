@@ -620,7 +620,7 @@ query (e.g. SELECT) for the field given as argument.
 sub get_canonical_write_date {
 	my ($self, $field) = @_;
 
-	return $self->get_formatted_date({'mode'=>'write','target'=>$field});
+	return $self->get_formatted_date('mode'=>'write','target'=>$field);
 }
 
 =head2 $source->get_canonical_read_date($value)
@@ -641,7 +641,7 @@ a write query (e.g. UPDATE or INSERT) for the value given as argument.
 sub get_canonical_read_date {
 	my $self = shift;
 	my $value = shift;
-	return $self->get_formatted_date({'mode'=>'read','target'=>$value});
+	return $self->get_formatted_date('mode'=>'read','target'=>$value);
 }
 
 =head2 $source->get_all_primary_keys()
@@ -673,7 +673,7 @@ sub get_all_primary_keys {
 	Sympa::Log::do_log('debug','Retrieving all primary keys in database %s',$self->{'db_name'});
 	my %found_keys = undef;
 	foreach my $table (@{$self->get_tables()}) {
-		unless($found_keys{$table} = $self->get_primary_key({'table'=>$table})) {
+		unless($found_keys{$table} = $self->get_primary_key('table'=>$table)) {
 			Sympa::Log::do_log('err','Primary key retrieval for table %s failed. Aborting.',$table);
 			return undef;
 		}
@@ -709,7 +709,7 @@ sub get_all_indexes {
 	Sympa::Log::do_log('debug','Retrieving all indexes in database %s',$self->{'db_name'});
 	my %found_indexes;
 	foreach my $table (@{$self->get_tables()}) {
-		unless($found_indexes{$table} = $self->get_indexes({'table'=>$table})) {
+		unless($found_indexes{$table} = $self->get_indexes('table'=>$table)) {
 			Sympa::Log::do_log('err','Index retrieval for table %s failed. Aborting.',$table);
 			return undef;
 		}
@@ -717,7 +717,7 @@ sub get_all_indexes {
 	return \%found_indexes;
 }
 
-=head2 $source->check_key($parameters)
+=head2 $source->check_key(%parameters)
 
 Checks the compliance of a key of a table compared to what it is supposed to
 reference.
@@ -749,16 +749,16 @@ A ref likely to contain the following values:
 =cut
 
 sub check_key {
-	my ($self, $params) = @_;
+	my ($self, %params) = @_;
 
-	Sympa::Log::do_log('debug','Checking %s key structure for table %s',$params->{'key_name'},$params->{'table'});
+	Sympa::Log::do_log('debug','Checking %s key structure for table %s',$params{'key_name'},$params{'table'});
 	my $keysFound;
 	my $result;
-	if (lc($params->{'key_name'}) eq 'primary') {
-		return undef unless ($keysFound = $self->get_primary_key({'table'=>$params->{'table'}}));
+	if (lc($params{'key_name'}) eq 'primary') {
+		return undef unless ($keysFound = $self->get_primary_key('table'=>$params{'table'}));
 	}else {
-		return undef unless ($keysFound = $self->get_indexes({'table'=>$params->{'table'}}));
-		$keysFound = $keysFound->{$params->{'key_name'}};
+		return undef unless ($keysFound = $self->get_indexes('table'=>$params{'table'}));
+		$keysFound = $keysFound->{$params{'key_name'}};
 	}
 
 	my @keys_list = keys %{$keysFound};
@@ -767,19 +767,19 @@ sub check_key {
 	}else{
 		$result->{'existing_key_correct'} = 1;
 		my %expected_keys;
-		foreach my $expected_field (@{$params->{'expected_keys'}}){
+		foreach my $expected_field (@{$params{'expected_keys'}}){
 			$expected_keys{$expected_field} = 1;
 		}
-		foreach my $field (@{$params->{'expected_keys'}}) {
+		foreach my $field (@{$params{'expected_keys'}}) {
 			unless ($keysFound->{$field}) {
-				Sympa::Log::do_log('info','Table %s: Missing expected key part %s in %s key.',$params->{'table'},$field,$params->{'key_name'});
+				Sympa::Log::do_log('info','Table %s: Missing expected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
 				$result->{'missing_key'}{$field} = 1;
 				$result->{'existing_key_correct'} = 0;
 			}
 		}
 		foreach my $field (keys %{$keysFound}) {
 			unless ($expected_keys{$field}) {
-				Sympa::Log::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params->{'table'},$field,$params->{'key_name'});
+				Sympa::Log::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
 				$result->{'unexpected_key'}{$field} = 1;
 				$result->{'existing_key_correct'} = 0;
 			}
@@ -796,7 +796,7 @@ Builds the string to be used by the DBI to connect to the database.
 
 None
 
-=head2 source->get_substring_clause($parameters)
+=head2 source->get_substring_clause(%parameters)
 
 Returns an SQL clause to be inserted in a query.
 
@@ -816,7 +816,7 @@ I<source_field>.
 
 =back
 
-=head2 $source->get_limit_clause($parameters)
+=head2 $source->get_limit_clause(%parameters)
 
 Returns an SQL clause to be inserted in a query.
 
@@ -854,7 +854,7 @@ UPDATE)
 
 The formatted date or I<undef> if the date format mode is unknonw.
 
-=head2 $source->is_autoinc($parameters)
+=head2 $source->is_autoinc(%parameters)
 
 Checks whether a field is an autoincrement field or not.
 
@@ -872,7 +872,7 @@ Checks whether a field is an autoincrement field or not.
 
 A true value if the field is an autoincrement field, false otherwise.
 
-=head2 $source->set_autoinc($parameters)
+=head2 $source->set_autoinc(%parameters)
 
 Defines the field as an autoincrement field.
 
@@ -902,7 +902,7 @@ None.
 
 A list of table names as an arrayref, or I<undef> if something went wrong.
 
-=head2 $source->add_table($parameters)
+=head2 $source->add_table(%parameters)
 
 Adds a table to the database
 
@@ -918,7 +918,7 @@ Adds a table to the database
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_fields($parameters)
+=head2 $source->get_fields(%parameters)
 
 Get the list of fields in a table from the database.
 
@@ -935,7 +935,7 @@ Get the list of fields in a table from the database.
 A list of name => value pairs as an hashref, or I<undef> if something went
 wrong.
 
-=head2 $source->update_field($parameters)
+=head2 $source->update_field(%parameters)
 
 Changes the type of a field in a table from the database.
 
@@ -957,7 +957,7 @@ Changes the type of a field in a table from the database.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->add_field($parameters)
+=head2 $source->add_field(%parameters)
 
 Adds a field in a table from the database.
 
@@ -983,7 +983,7 @@ Adds a field in a table from the database.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->delete_field($parameters)
+=head2 $source->delete_field(%parameters)
 
 Delete a field in a table from the database.
 
@@ -1001,7 +1001,7 @@ Delete a field in a table from the database.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_primary_key($parameters)
+=head2 $source->get_primary_key(%parameters)
 
 Returns the list of fields being part of a table's primary key.
 
@@ -1018,7 +1018,7 @@ Returns the list of fields being part of a table's primary key.
 An hashref whose keys are the name of the fields of the primary key, or
 I<undef> if something went wrong.
 
-=head2 $source->unset_primary_key($parameters)
+=head2 $source->unset_primary_key(%parameters)
 
 Drops the primary key of a table.
 
@@ -1034,7 +1034,7 @@ Drops the primary key of a table.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->set_primary_key($parameters)
+=head2 $source->set_primary_key(%parameters)
 
 Sets the primary key of a table.
 
@@ -1052,7 +1052,7 @@ Sets the primary key of a table.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_indexes($parameters)
+=head2 $source->get_indexes(%parameters)
 
 Returns the list of indexes of a table.
 
@@ -1069,7 +1069,7 @@ Returns the list of indexes of a table.
 An hashref whose keys are the name of indexes, with hashref whose keys are the
 indexed fields as values, or I<undef> if something went wrong.
 
-=head2 $source->unset_index($parameters)
+=head2 $source->unset_index(%parameters)
 
 Drops an index of a table.
 
@@ -1087,7 +1087,7 @@ Drops an index of a table.
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->set_index($parameters)
+=head2 $source->set_index(%parameters)
 
 Sets an index in a table.
 

@@ -260,17 +260,17 @@ sub get_my_url {
 
 # Uploade source file to the destination on the server
 sub upload_file_to_server {
-    my ($params) = @_;
-    Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$params->{'file_field'},$params->{'destination'});
+    my (%params) = @_;
+    Sympa::Log::do_log('debug',"Uploading file from field %s to destination %s",$params{'file_field'},$params{'destination'});
 
     my $fh;
-    unless ($fh = $params->{'query'}->upload($params->{'file_field'})) {
-	Sympa::Log::do_log('debug',"Cannot upload file from field $params->{'file_field'}");
+    unless ($fh = $params{'query'}->upload($params{'file_field'})) {
+	Sympa::Log::do_log('debug',"Cannot upload file from field $params{'file_field'}");
 	return undef;
     }
 
-    unless (open FILE, ">:bytes", $params->{'destination'}) {
-	Sympa::Log::do_log('debug',"Cannot open file $params->{'destination'} : $ERRNO");
+    unless (open FILE, ">:bytes", $params{'destination'}) {
+	Sympa::Log::do_log('debug',"Cannot open file $params{'destination'} : $ERRNO");
 	return undef;
     }
     while (<$fh>) {

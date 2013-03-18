@@ -1965,34 +1965,47 @@ sub addrencode {
     }
 }
 
-=head2 create_html_part_from_web_page($params)
+=head2 create_html_part_from_web_page(%parameters)
 
 Generate a newsletter from an HTML URL or a file path.
+
+=head3 Parameters
+
+=over
+
+=item * I<from>: FIXME
+
+=item * I<to>: FIXME
+
+=item * I<headers>: FIXME
+
+=item * I<subject>: FIXME
+
+=item * I<source>: FIXME
+
+=back
 
 =cut
 
 sub create_html_part_from_web_page {
-    my ($params) = @_;
-    Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$params->{'source'});
+    my (%params) = @_;
+    Sympa::Log::do_log('debug',"Creating HTML MIME part. Source: %s",$params{source});
 
-    my $mailHTML = MIME::Lite::HTML->new(
-					{
-					    From => $params->{'From'},
-					    To => $params->{'To'},
-					    Headers => $params->{'Headers'},
-					    Subject => $params->{'Subject'},
-					    HTMLCharset => 'utf-8',
-					    TextCharset => 'utf-8',
-					    TextEncoding => '8bit',
-					    HTMLEncoding => '8bit',
-					    remove_jscript => '1', #delete the scripts in the html
-					}
-					);
+    my $mailHTML = MIME::Lite::HTML->new({
+	From           => $params{from},
+	To             => $params{to},
+	Headers        => $params{headers},
+	Subject        => $params{subject},
+	HTMLCharset    => 'utf-8',
+	TextCharset    => 'utf-8',
+	TextEncoding   => '8bit',
+	HTMLEncoding   => '8bit',
+	remove_jscript => '1', #delete the scripts in the html
+    });
     # parse return the MIME::Lite part to send
-    my $part = $mailHTML->parse($params->{'source'});
+    my $part = $mailHTML->parse($params{source});
     unless (defined($part)) {
-	Sympa::Log::do_log('err', 'Unable to convert file %s to a MIME
-		part',$params->{'source'});
+	Sympa::Log::do_log('err', 'Unable to convert file %s to a MIME part',$params{source});
 	return undef;
     }
     return $part->as_string;
