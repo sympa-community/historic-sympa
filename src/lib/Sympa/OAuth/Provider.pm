@@ -127,14 +127,12 @@ sub new {
 	return $self;
 }
 
-=head1 FUNCTIONS
-
-=head2 consumerFromToken($token)
+=head2 Sympa::OAuth::Provider->consumerFromToken($token)
 
 =cut
 
 sub consumerFromToken {
-	my ($token) = @_;
+	my ($class, $token) = @_;
 
 	my $sth;
 	unless($sth = Sympa::SDM::do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {

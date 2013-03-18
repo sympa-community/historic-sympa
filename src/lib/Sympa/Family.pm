@@ -50,9 +50,9 @@ use Sympa::Scenario;
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
 
-=head1 FUNCTIONS
+=head1 CLASS METHODS
 
-=head2 get_available_families($robot)
+=head2 Sympa::Family->get_available_families($robot)
 
 Returns the list of existing families in the Sympa installation.
 
@@ -72,7 +72,7 @@ An array  containing all the robot's families names.
 =cut
 
 sub get_available_families {
-    my ($robot, $etcdir, $all_families_config) = @_;
+    my ($class, $robot, $etcdir, $all_families_config) = @_;
 
     my %families;
 
@@ -106,8 +106,6 @@ sub get_available_families {
 
     return keys %families;
 }
-
-=head1 CLASS METHODS
 
 =head2 Sympa::Family->new(%parameters)
 

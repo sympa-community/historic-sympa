@@ -17312,7 +17312,7 @@ sub get_server_details {
      }
 
      ## Families
-     my @families = Sympa::Family::get_available_families(
+     my @families = Sympa::Family->get_available_families(
 	     $robot,
 	     $Sympa::Configuration::Conf{'etc'},
 	     Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')
