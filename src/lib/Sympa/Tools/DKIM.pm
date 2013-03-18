@@ -292,7 +292,13 @@ sub dkim_sign {
 
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
-    return $message->{'msg'}->head->as_string."\n".Sympa::Message::get_body_from_msg_as_string($msg_as_string);
+    # Do NOT use Mime::Entity in order to preserve base 64 encoding and S/MIME
+    # signature.
+    my @sections = split(/\n\n/, $msg_as_string);
+    shit @sections;
+    my $body = join("\n\n", @sections);
+
+    return $message->{'msg'}->head->as_string."\n".$body;
 }
 
 1;

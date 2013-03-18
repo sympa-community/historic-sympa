@@ -466,22 +466,6 @@ sub fix_html_part {
     return $part;
 }
 
-=head1 FUNCTIONS
-
-=head2 get_body_from_msg_as_string($message)
-
-Extract body as string from I<$message>. Do NOT use Mime::Entity in order to
-preserveB64 encoding form and so preserve S/MIME signature.
-
-=cut
-sub get_body_from_msg_as_string {
-    my ($msg) = @_;
-
-    my @bodysection =split("\n\n",$msg );    # convert it as a tab with headers as first element
-    shift @bodysection;                      # remove headers
-    return (join ("\n\n",@bodysection));  # convert it back as string
-}
-
 =head1 AUTHORS
 
 =over
