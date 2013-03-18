@@ -140,132 +140,6 @@ sub new {
     return $self;
 }
 
-sub load {
-    my ($self, $cookie) = @_;
-    Sympa::Log::do_log('debug', '(%s)', $cookie);
-
-    unless ($cookie) {
-	Sympa::Log::do_log('err', 'internal error, called with undef id_session');
-	return undef;
-    }
-
-    my $sth;
-
-    unless ($sth = Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
-	Sympa::Log::do_log('err','Unable to load session %s', $cookie);
-	return undef;
-    }
-
-    my $session = undef;
-    my $new_session = undef;
-    my $counter = 0;
-    while ($new_session = $sth->fetchrow_hashref('NAME_lc')) {
-	if ( $counter > 0){
-	    Sympa::Log::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql?");
-	    $session->{'email'} = '';
-	    last;
-	}
-	$session = $new_session;
-	$counter ++;
-    }
-
-    unless ($session) {
-	return 'not_found';
-    }
-
-    my %datas= Sympa::Tools::Data::string_2_hash($session->{'data'});
-    foreach my $key (keys %datas) {$self->{$key} = $datas{$key};}
-
-    $self->{'id_session'} = $session->{'id_session'};
-    $self->{'date'} = $session->{'date'};
-    $self->{'start_date'} = $session->{'start_date'};
-    $self->{'hit'} = $session->{'hit'} +1 ;
-    $self->{'remote_addr'} = $session->{'remote_addr'};
-    $self->{'robot'} = $session->{'robot'};
-    $self->{'email'} = $session->{'email'};
-
-    return ($self);
-}
-
-=head1 INSTANCE METHODS
-
-=head2 $session->store()
-
-Store the session information in the database
-
-=cut
-
-sub store {
-    my ($self) = @_;
-    Sympa::Log::do_log('debug', '');
-
-    return undef unless ($self->{'id_session'});
-    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
-    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
-
-    my %hash ;
-    foreach my $var (keys %$self ) {
-	next if ($session_hard_attributes{$var});
-	next unless ($var);
-	$hash{$var} = $self->{$var};
-    }
-    my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
-
-    ## If this is a new session, then perform an INSERT
-    if ($self->{'new_session'}) {
-	## Store the new session ID in the DB
-	unless(Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",Sympa::SDM::quote($self->{'id_session'}),time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string))) {
-	    Sympa::Log::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
-	    return undef;
-	}
-      ## If the session already exists in DB, then perform an UPDATE
-    }else {
-	## Update the new session in the DB
-	unless(Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string), Sympa::SDM::quote($self->{'id_session'}))) {
-	    Sympa::Log::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
-	    return undef;
-	}
-    }
-
-    return 1;
-}
-
-=head2 $session->renew()
-
-Renew the session ID.
-
-=cut
-
-sub renew {
-    my ($self) = @_;
-    Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
-
-    return undef unless ($self->{'id_session'});
-    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
-    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
-
-    my %hash ;
-    foreach my $var (keys %$self ) {
-	next if ($session_hard_attributes{$var});
-	next unless ($var);
-	$hash{$var} = $self->{$var};
-    }
-
-    ## Renew the session ID in order to prevent session hijacking
-    my $new_id = Sympa::Session->get_random();
-
-    ## First remove the DB entry for the previous session ID
-    unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {
-	Sympa::Log::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
-	return undef;
-    }
-
-    ## Renew the session ID in order to prevent session hijacking
-    $self->{'id_session'} = $new_id;
-
-    return 1;
-}
-
 =head2 purge_old_sessions(%parameters)
 
 Remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
@@ -434,7 +308,144 @@ sub get_session_cookie {
     return (undef);
 }
 
+=head2 Sympa::Session->get_random()
+
+=cut
+
+sub get_random {
+    Sympa::Log::do_log('debug', '');
+     my $random = int(rand(10**7)).int(rand(10**7)); ## Concatenates 2 integers for a better entropy
+     $random =~ s/^0(\.|\,)//;
+     return ($random)
+}
+
 =head1 INSTANCE METHODS
+
+=cut
+
+sub load {
+    my ($self, $cookie) = @_;
+    Sympa::Log::do_log('debug', '(%s)', $cookie);
+
+    unless ($cookie) {
+	Sympa::Log::do_log('err', 'internal error, called with undef id_session');
+	return undef;
+    }
+
+    my $sth;
+
+    unless ($sth = Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
+	Sympa::Log::do_log('err','Unable to load session %s', $cookie);
+	return undef;
+    }
+
+    my $session = undef;
+    my $new_session = undef;
+    my $counter = 0;
+    while ($new_session = $sth->fetchrow_hashref('NAME_lc')) {
+	if ( $counter > 0){
+	    Sympa::Log::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql?");
+	    $session->{'email'} = '';
+	    last;
+	}
+	$session = $new_session;
+	$counter ++;
+    }
+
+    unless ($session) {
+	return 'not_found';
+    }
+
+    my %datas= Sympa::Tools::Data::string_2_hash($session->{'data'});
+    foreach my $key (keys %datas) {$self->{$key} = $datas{$key};}
+
+    $self->{'id_session'} = $session->{'id_session'};
+    $self->{'date'} = $session->{'date'};
+    $self->{'start_date'} = $session->{'start_date'};
+    $self->{'hit'} = $session->{'hit'} +1 ;
+    $self->{'remote_addr'} = $session->{'remote_addr'};
+    $self->{'robot'} = $session->{'robot'};
+    $self->{'email'} = $session->{'email'};
+
+    return ($self);
+}
+
+=head2 $session->store()
+
+Store the session information in the database
+
+=cut
+
+sub store {
+    my ($self) = @_;
+    Sympa::Log::do_log('debug', '');
+
+    return undef unless ($self->{'id_session'});
+    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
+    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
+
+    my %hash ;
+    foreach my $var (keys %$self ) {
+	next if ($session_hard_attributes{$var});
+	next unless ($var);
+	$hash{$var} = $self->{$var};
+    }
+    my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
+
+    ## If this is a new session, then perform an INSERT
+    if ($self->{'new_session'}) {
+	## Store the new session ID in the DB
+	unless(Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",Sympa::SDM::quote($self->{'id_session'}),time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string))) {
+	    Sympa::Log::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
+	    return undef;
+	}
+      ## If the session already exists in DB, then perform an UPDATE
+    }else {
+	## Update the new session in the DB
+	unless(Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string), Sympa::SDM::quote($self->{'id_session'}))) {
+	    Sympa::Log::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
+	    return undef;
+	}
+    }
+
+    return 1;
+}
+
+=head2 $session->renew()
+
+Renew the session ID.
+
+=cut
+
+sub renew {
+    my ($self) = @_;
+    Sympa::Log::do_log('debug', 'id_session=(%s)',$self->{'id_session'});
+
+    return undef unless ($self->{'id_session'});
+    return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
+    return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
+
+    my %hash ;
+    foreach my $var (keys %$self ) {
+	next if ($session_hard_attributes{$var});
+	next unless ($var);
+	$hash{$var} = $self->{$var};
+    }
+
+    ## Renew the session ID in order to prevent session hijacking
+    my $new_id = Sympa::Session->get_random();
+
+    ## First remove the DB entry for the previous session ID
+    unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {
+	Sympa::Log::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
+	return undef;
+    }
+
+    ## Renew the session ID in order to prevent session hijacking
+    $self->{'id_session'} = $new_id;
+
+    return 1;
+}
 
 =head2 $self->set_cookie($http_domain, $expires,$use_ssl)
 
@@ -482,21 +493,6 @@ sub set_cookie {
     printf "Set-Cookie: %s\n", $cookie->as_string;
     return 1;
 }
-
-=head1 CLASS METHODS
-
-=head2 Sympa::Session->get_random()
-
-=cut
-
-sub get_random {
-    Sympa::Log::do_log('debug', '');
-     my $random = int(rand(10**7)).int(rand(10**7)); ## Concatenates 2 integers for a better entropy
-     $random =~ s/^0(\.|\,)//;
-     return ($random)
-}
-
-=head1 INSTANCE METHODS
 
 =head2 $session->as_hashref()
 
