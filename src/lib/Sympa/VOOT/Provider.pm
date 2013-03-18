@@ -100,24 +100,24 @@ sub new {
 
 =head1 INSTANCE METHODS
 
-=head2 $provider->getOAuthProvider()
+=head2 $provider->get_oauth_provider()
 
 Get the underlying OAuth provider.
 
 =cut
 
-sub getOAuthProvider {
+sub get_oauth_provider {
 	my ($self) = @_;
 
 	return $self->{'oauth_provider'};
 }
 
-=head2 $provider->checkRequest()
+=head2 $provider->check_request()
 
 Check if a request is valid.
 
-    if(my $http_code = $provider->checkRequest()) {
-            $server->error($http_code, $provider->getOAuthProvider()->{'util'}->errstr);
+    if(my $http_code = $provider->check_request()) {
+            $server->error($http_code, $provider->get_oauth_provider()->{'util'}->errstr);
     }
 
 =head3 Parameters
@@ -130,13 +130,13 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
 =cut
 
-sub checkRequest {
+sub check_request {
 	my ($self, %params) = @_;
 
-	my $r = $self->{'oauth_provider'}->checkRequest(checktoken => 1);
+	my $r = $self->{'oauth_provider'}->check_request(checktoken => 1);
 	return $r if($r);
 
-	my $access = $self->{'oauth_provider'}->getAccess(
+	my $access = $self->{'oauth_provider'}->get_access(
 		token => $self->{'oauth_provider'}{'params'}{'oauth_token'}
 	);
 	return 401 unless($access->{'user'});
@@ -178,14 +178,14 @@ sub response {
 		return undef unless($args[0] eq 'groups' || $args[0] eq 'people');
 		return undef if($args[0] eq 'people' && ($#args < 2 || $args[2] eq ''));
 
-		$r->{'entry'} = ($args[0] eq 'groups') ? $self->getGroups() : $self->getGroupMembers(group => $args[2]);
+		$r->{'entry'} = ($args[0] eq 'groups') ? $self->get_groups() : $self->get_group_members(group => $args[2]);
 		$r->{'totalResults'} = $#{$r->{'entry'}} + 1;
 	}
 
 	return encode_json($r);
 }
 
-=head2 $provider->getGroups()
+=head2 $provider->get_groups()
 
 Get user groups.
 
@@ -199,7 +199,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong
 
 =cut
 
-sub getGroups {
+sub get_groups {
 	my ($self) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
 
@@ -231,7 +231,7 @@ sub _list_to_group {
 	};
 }
 
-=head2 $provider->getGroupMembers(%parameters)
+=head2 $provider->get_group_members(%parameters)
 
 Get members of a group.
 
@@ -249,7 +249,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 
 =cut
 
-sub getGroupMembers {
+sub get_group_members {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
 

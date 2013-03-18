@@ -89,7 +89,7 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $params{'consumer_key'});
 
-	my $p = _findParameters(
+	my $p = _find_parameters(
 		authorization_header => $params{'authorization_header'},
 		request_parameters => $params{'request_parameters'},
 		request_body => $params{'request_body'}
@@ -97,7 +97,7 @@ sub new {
 	return undef unless(defined($p));
 	return undef unless(defined($p->{'oauth_consumer_key'}));
 
-	my $c = _getConsumerConfigFor($p->{'oauth_consumer_key'}, $params{config});
+	my $c = _get_consumer_config_for($p->{'oauth_consumer_key'}, $params{config});
 	return undef unless(defined($c));
 	return undef unless(defined($c->{'enabled'}));
 	return undef unless($c->{'enabled'} eq '1');
@@ -127,11 +127,11 @@ sub new {
 	return $self;
 }
 
-=head2 Sympa::OAuth::Provider->consumerFromToken($token)
+=head2 Sympa::OAuth::Provider->consumer_from_token($token)
 
 =cut
 
-sub consumerFromToken {
+sub consumer_from_token {
 	my ($class, $token) = @_;
 
 	my $sth;
@@ -145,7 +145,7 @@ sub consumerFromToken {
 	return $data->{'consumer'};
 }
 
-# _findParameters(%parameters)
+# _find_parameters(%parameters)
 # Seek various request aspects for parameters
 # Parameters:
 # - authorization_header
@@ -153,7 +153,7 @@ sub consumerFromToken {
 # - request_body
 # Returns an hashref, or undef if something went wrong
 
-sub _findParameters {
+sub _find_parameters {
 	my (%params) = @_;
 
 	my $p = {};
@@ -181,11 +181,11 @@ sub _findParameters {
 
 =head1 INSTANCE METHODS
 
-=head2 $provider->checkRequest(%parameters)
+=head2 $provider->check_request(%parameters)
 
 Check if a request is valid.
 
-    if(my $http_code = $provider->checkRequest()) {
+    if(my $http_code = $provider->check_request()) {
 	$server->error($http_code, $provider->{'util'}->errstr);
     }
 
@@ -203,7 +203,7 @@ The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
 =cut
 
-sub checkRequest {
+sub check_request {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
 
@@ -284,7 +284,7 @@ sub checkRequest {
 	return undef;
 }
 
-=head2 $provider->generateTemporary(%parameters)
+=head2 $provider->generate_temporary(%parameters)
 
 Create a temporary token.
 
@@ -302,7 +302,7 @@ The response body, as a string.
 
 =cut
 
-sub generateTemporary {
+sub generate_temporary {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $self->{'consumer_key'});
 
@@ -331,7 +331,7 @@ sub generateTemporary {
 	return $r;
 }
 
-=head2 $provider->getTemporary(%parameters)
+=head2 $provider->get_temporary(%parameters)
 
 Retreive a temporary token from database.
 
@@ -351,7 +351,7 @@ An hashref, or I<undef> if the token does not exist or is not valid anymore.
 
 =cut
 
-sub getTemporary {
+sub get_temporary {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $params{'token'});
 
@@ -370,7 +370,7 @@ sub getTemporary {
 	return $data;
 }
 
-=head2 $provider->generateVerifier(%parameters)
+=head2 $provider->generate_verifier(%parameters)
 
 Create the verifier for a temporary token.
 
@@ -391,11 +391,11 @@ valid anymore.
 
 =cut
 
-sub generateVerifier {
+sub generate_verifier {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s, %s)', $params{'token'}, $params{'user'}, $params{'granted'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout => TEMPORARY_TIMEOUT));
+	return undef unless(my $tmp = $self->get_temporary(token => $params{'token'}, timeout => TEMPORARY_TIMEOUT));
 
 	my $verifier = _generateRandomString(32);
 
@@ -429,7 +429,7 @@ sub generateVerifier {
 	return $r;
 }
 
-=head2 $provider->generateAccess(%parameters)
+=head2 $provider->generate_access(%parameters)
 
 Create an access token.
 
@@ -450,11 +450,11 @@ exist or is not valid anymore.
 
 =cut
 
-sub generateAccess {
+sub generate_access {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $params{'token'}, $params{'verifier'}, $self->{'consumer_key'});
 
-	return undef unless(my $tmp = $self->getTemporary(token => $params{'token'}, timeout => VERIFIER_TIMEOUT));
+	return undef unless(my $tmp = $self->get_temporary(token => $params{'token'}, timeout => VERIFIER_TIMEOUT));
 	return undef unless($params{'verifier'} eq $tmp->{'verifier'});
 
 	my $token = _generateRandomString(32);
@@ -479,7 +479,7 @@ sub generateAccess {
 	return $r;
 }
 
-=head2 $provider->getAccess(%parameters)
+=head2 $provider->get_access(%parameters)
 
 Retreive an access token from database.
 
@@ -498,7 +498,7 @@ is not valid anymore.
 
 =cut
 
-sub getAccess {
+sub get_access {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $params{'token'});
 
@@ -525,7 +525,7 @@ sub _generateRandomString {
 	return join('', map { (0..9, 'a'..'z', 'A'..'Z')[rand 62] } (1..shift));
 }
 
-# _getConsumerConfigFor($key)
+# _get_consumer_config_for($key)
 #
 # Retreive the configuration for a consumer, as an hashref
 #
@@ -535,7 +535,7 @@ sub _generateRandomString {
 # secret <consumer_secret>
 # enabled 0|1
 
-sub _getConsumerConfigFor {
+sub _get_consumer_config_for {
 	my ($key, $file) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $key);
 

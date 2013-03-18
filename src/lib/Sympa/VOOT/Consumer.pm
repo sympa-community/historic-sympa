@@ -42,7 +42,7 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::VOOT::Consumer->getProviders($config)
+=head2 Sympa::VOOT::Consumer->get_providers($config)
 
 List providers.
 
@@ -60,7 +60,7 @@ An hashref.
 
 =cut
 
-sub getProviders {
+sub get_providers {
 	my ($class, $file) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $file);
 
@@ -134,17 +134,17 @@ sub new {
 
 =head1 INSTANCE METHODS
 
-=head2 $consumer->getOAuthConsumer()
+=head2 $consumer->get_oauth_consumer()
 
 =cut
 
-sub getOAuthConsumer {
+sub get_oauth_consumer {
 	my ($self) = @_;
 
 	return $self->{'oauth_consumer'};
 }
 
-=head2 $consumer->isMemberOf()
+=head2 $consumer->is_member_of()
 
 Get user groups.
 
@@ -158,11 +158,11 @@ An hashref containing groups definitions, or I<undef> if something went wrong.
 
 =cut
 
-sub isMemberOf {
+sub is_member_of {
 	my ($self) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'provider'});
 
-	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
+	my $data = $self->{'oauth_consumer'}->fetch_ressource(url => $self->{'conf'}{'voot.BaseURL'}.'/groups/@me');
 	return undef unless(defined $data);
 
 	return _get_groups(decode_json($data));
@@ -170,17 +170,17 @@ sub isMemberOf {
 
 =head2 $consumer->check()
 
-An alias for $consumer->isMemberOf();
+An alias for $consumer->is_member_of();
 
 =cut
 
 sub check {
 	my ($self) = @_;
 
-	return $self->isMemberOf();
+	return $self->is_member_of();
 }
 
-=head2 $consumer->getGroupMembers(%parameters)
+=head2 $consumer->get_group_members(%parameters)
 
 Get members of a group.
 
@@ -198,11 +198,11 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 
 =cut
 
-sub getGroupMembers {
+sub get_group_members {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s, %s)', $self->{'user'}, $self->{'provider'}, $params{'group'});
 
-	my $data = $self->{'oauth_consumer'}->fetchRessource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$params{'group'});
+	my $data = $self->{'oauth_consumer'}->fetch_ressource(url => $self->{'conf'}{'voot.BaseURL'}.'/people/@me/'.$params{'group'});
 	return undef unless(defined $data);
 
 	return _get_members(decode_json($data));

@@ -8968,7 +8968,7 @@ sub do_oauth_temporary {
 		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 
-	my $bad = defined($provider) ? $provider->checkRequest() : 400;
+	my $bad = defined($provider) ? $provider->check_request() : 400;
 	my $http_code = $bad ? $bad : 200;
 	my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
 
@@ -8976,7 +8976,7 @@ sub do_oauth_temporary {
 	print "Cache-control: no-cache\n";
 	print "Content-type: text/plain\n\n";
 
-	print $provider->generateTemporary() unless($bad);
+	print $provider->generate_temporary() unless($bad);
 
 	return 1;
 }
@@ -8987,7 +8987,7 @@ sub do_oauth_authorize {
 
 	$param->{'oauth_token'} = $in{'oauth_token'};
 
-	my $key = Sympa::OAuth::Provider::consumerFromToken($in{'oauth_token'});
+	my $key = Sympa::OAuth::Provider->consumer_from_token($in{'oauth_token'});
 	return undef unless($key);
 
 	$param->{'consumer_key'} = $key;
@@ -9019,7 +9019,7 @@ sub do_oauth_authorize {
 
 	my $ok = defined($in{'oauth_authorize_ok'}) && !defined($in{'oauth_authorize_no'});
 
-	my $r = $provider->generateVerifier(
+	my $r = $provider->generate_verifier(
 		token => $in{'oauth_token'},
 		user => $param->{'user'}{'email'},
 		granted => $ok
@@ -9044,7 +9044,7 @@ sub do_oauth_access {
 		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 
-	my $bad = defined($provider) ? $provider->checkRequest(checktoken => 1) : 400;
+	my $bad = defined($provider) ? $provider->check_request(checktoken => 1) : 400;
 	my $http_code = $bad ? $bad : 200;
 	my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
 
@@ -9052,7 +9052,7 @@ sub do_oauth_access {
 	print "Cache-control: no-cache\n";
 	print "Content-type: text/plain\n\n";
 
-	print $provider->generateAccess(
+	print $provider->generate_access(
 		token => $provider->{'params'}{'oauth_token'},
 		verifier => $provider->{'params'}{'oauth_verifier'}
 	) unless($bad);
@@ -9089,7 +9089,7 @@ sub do_oauth_check {
 
 	$param->{'oauth_config_ok'} = 1;
 
-	$consumer->getOAuthConsumer()->setWebEnv(
+	$consumer->get_oauth_consumer()->set_web_env(
 		robot => $robot,
 		here_path => 'oauth_check/'.$in{'oauth_provider'},
 		base_path => $param->{'base_url'}.$param->{'path_cgi'}
@@ -9097,7 +9097,7 @@ sub do_oauth_check {
 
 	my $data = $consumer->check();
 	unless(defined $data) {
-		my $url = $consumer->getOAuthConsumer()->mustRedirect();
+		my $url = $consumer->get_oauth_consumer()->must_redirect();
 		return do_redirect($url) if(defined $url);
 	}
 	$param->{'oauth_check_ok'} = 1;
@@ -9131,9 +9131,9 @@ sub do_oauth_ready {
 	#}
 
 	return undef unless(defined $consumer);
-	$consumer = $consumer->getOAuthConsumer();
+	$consumer = $consumer->get_oauth_consumer();
 
-	return undef unless($consumer->getAccessToken(
+	return undef unless($consumer->get_access_token(
 		verifier => $in{'oauth_verifier'},
 		token => $in{'oauth_token'}
 	));
@@ -9163,9 +9163,9 @@ sub do_voot {
 		config =>  $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
 	);
 
-	my $bad = defined($provider) ? $provider->checkRequest() : 400;
+	my $bad = defined($provider) ? $provider->check_request() : 400;
 	my $http_code = $bad ? $bad : 200;
-	my $http_str = $bad ? (defined($provider) ? $provider->getOAuthProvider()->{'util'}->errstr : 'Bad Request') : 'OK';
+	my $http_str = $bad ? (defined($provider) ? $provider->get_oauth_provider()->{'util'}->errstr : 'Bad Request') : 'OK';
 
 	my $r = $provider->response();
 	if(defined $provider->{'error'}) {
@@ -9186,7 +9186,7 @@ sub do_voot {
 sub do_select_voot_provider_request {
 	wwslog('info', 'do_select_voot_provider_request()');
 
-	$param->{'voot_providers'} = Sympa::VOOT::Consumer->getProviders(
+	$param->{'voot_providers'} = Sympa::VOOT::Consumer->get_providers(
 	-	$Sympa::Configuration::Conf{'etc'}.'/voot.conf'
 	);
 
@@ -9205,15 +9205,15 @@ sub do_select_voot_groups_request {
 		config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
 	);
 	return undef unless(defined $consumer);
-	$consumer->getOAuthConsumer()->setWebEnv(
+	$consumer->get_oauth_consumer()->set_web_env(
 		robot => $robot,
 		here_path => 'select_voot_groups_request/'.$param->{'list'}.'/'.$param->{'voot_provider'},
 		base_path => $param->{'base_url'}.$param->{'path_cgi'}
 	) unless(defined $in{'oauth_ready_done'});
 
-	$param->{'voot_groups'} = $consumer->isMemberOf();
+	$param->{'voot_groups'} = $consumer->is_member_of();
 	unless(defined $param->{'voot_groups'}) {
-		my $url = $consumer->getOAuthConsumer()->mustRedirect();
+		my $url = $consumer->get_oauth_consumer()->must_redirect();
 		return do_redirect($url) if(defined $url);
 	}
 

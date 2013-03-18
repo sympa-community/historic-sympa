@@ -128,7 +128,7 @@ sub new {
 
 =head1 INSTANCE METHODS
 
-=head2 $consumer->setWebEnv(%parameters)
+=head2 $consumer->set_web_env(%parameters)
 
 =head3 Parameters
 
@@ -144,7 +144,7 @@ sub new {
 
 =cut
 
-sub setWebEnv {
+sub set_web_env {
 	my ($self, %params) = @_;
 
 	$self->{'robot'} = $params{'robot'};
@@ -152,7 +152,7 @@ sub setWebEnv {
 	$self->{'base_path'} = $params{'base_path'};
 }
 
-=head2 $consumer->mustRedirect()
+=head2 $consumer->must_redirect()
 
 =head3 Parameters
 
@@ -160,13 +160,13 @@ None.
 
 =cut
 
-sub mustRedirect {
+sub must_redirect {
 	my ($self) = @_;
 
 	return $self->{'redirect_url'};
 }
 
-=head2 $consumer->fetchRessource(%parameters)
+=head2 $consumer->fetch_ressource(%parameters)
 
 Check if user has an access token already and fetch resource.
 
@@ -186,12 +186,12 @@ The resource body, as a string, or undef if something went wrong.
 
 =cut
 
-sub fetchRessource {
+sub fetch_ressource {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s)', $params{'url'});
 
 	# Get access token, return 1 if it exists
-	my $token = $self->hasAccess();
+	my $token = $self->has_access();
 	return undef unless(defined $token); # Should never return here unless failed to retreive token
 
 	my $res = $self->{'handler'}->request(
@@ -208,7 +208,7 @@ sub fetchRessource {
 				# access token may be expired,
 				# get request-token and authorize again
 				if($self->{'here_path'}) { # We are running in web env.
-					$self->triggerFlow();
+					$self->trigger_flow();
 				}
 				return undef;
 			}else{
@@ -223,7 +223,7 @@ sub fetchRessource {
 	return $res->decoded_content || $res->content;
 }
 
-=head2 $consumer->hasAccess()
+=head2 $consumer->has_access()
 
 Check if user has an access token already, triggers OAuth workflow otherwise
 
@@ -237,13 +237,13 @@ An hashref, if there is a known access token, undef otherwise.
 
 =cut
 
-sub hasAccess {
+sub has_access {
 	my ($self) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
 	unless(defined $self->{'session'}{'access'}) {
 		if($self->{'here_path'}) { # We are running in web env.
-			$self->triggerFlow();
+			$self->trigger_flow();
 		}
 		return undef;
 	}
@@ -251,7 +251,7 @@ sub hasAccess {
 	return $self->{'session'}{'access'};
 }
 
-=head2 $consumer->triggerFlow()
+=head2 $consumer->trigger_flow()
 
 Triggers OAuth authorization workflow, call only in web env.
 
@@ -265,7 +265,7 @@ A true value, if everything's alright.
 
 =cut
 
-sub triggerFlow {
+sub trigger_flow {
 	my ($self) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 
@@ -310,7 +310,7 @@ sub triggerFlow {
 	return 1;
 }
 
-=head2 head2 $consumer->getAccessToken(%parameters)
+=head2 head2 $consumer->get_access_token(%parameters)
 
 Try to obtain access token from verifier.
 
@@ -330,7 +330,7 @@ A true value if the token was retreived successfully, undef otherwise.
 
 =cut
 
-sub getAccessToken {
+sub get_access_token {
 	my ($self, %params) = @_;
 	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 

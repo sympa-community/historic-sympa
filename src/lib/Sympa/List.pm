@@ -8774,10 +8774,10 @@ sub _include_users_voot_group {
 		return undef;
 	}
 
-	my $members = $consumer->getGroupMembers(group => $param->{'group'});
+	my $members = $consumer->get_group_members(group => $param->{'group'});
 	unless(defined $members) {
 		# Report error with redirect url
-                #my $url = $consumer->getOAuthConsumer()->mustRedirect();
+                #my $url = $consumer->get_oauth_consumer()->must_redirect();
 		#return do_redirect($url) if(defined $url);
 		return undef;
 	}
