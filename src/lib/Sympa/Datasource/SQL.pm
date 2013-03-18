@@ -53,8 +53,8 @@ my %db_connections;
 
 =head2 Sympa::Datasource::SQL->create(%parameters)
 
-Factory method to create a new L<Sympa::Datasource::SQL> object from specific
-class.
+Factory method to create a new L<Sympa::Datasource::SQL> object from a
+specific subclass.
 
 =head3 Parameters
 
@@ -88,17 +88,21 @@ sub create {
 	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
 
 	my $db_type = lc($params{'db_type'});
-	my $subclass = 'Sympa::Datasource::SQL ' .
-		$db_type eq 'mysql'  ? '::MySQL'      :
-		$db_type eq 'sqlite' ? '::SQLite'     :
-		$db_type eq 'pg'     ? '::PostgreSQL' :
-		$db_type eq 'oracle' ? '::Oracle'     :
-		$db_type eq 'sybase' ? '::Sybase'     :
-		                       ''             ;
+	my $subclass =
+		$db_type eq 'mysql'  ? 'Sympa::Datasource::SQL::MySQL'      :
+		$db_type eq 'sqlite' ? 'Sympa::Datasource::SQL::SQLite'     :
+		$db_type eq 'pg'     ? 'Sympa::Datasource::SQL::PostgreSQL' :
+		$db_type eq 'oracle' ? 'Sympa::Datasource::SQL::Oracle'     :
+		$db_type eq 'sybase' ? 'Sympa::Datasource::SQL::Sybase'     :
+		                       'Sympa::Datasource::SQL'             ;
 
-	eval { require $subclass; };
+	# better solution: UNIVERSAL::require 
+	my $module = $subclass . '.pm';
+	$module =~ s{::}{/}g;
+	eval { require $module; };
 	if ($EVAL_ERROR) {
 		Sympa::Log::do_log('err',"Unable to use $subclass: $EVAL_ERROR");
+		return;
 	}
 
 	return $subclass->new(%params);
@@ -202,7 +206,7 @@ sub establish_connection {
 			return undef;
 		}
 		## SQLite just need a db_name
-		unless ($self->{'db_type'} eq 'SQLite') {
+		unless ($self->{'db_type'} eq 'sqlite') {
 			foreach my $db_param ('db_host','db_user') {
 				unless ($self->{$db_param}) {
 					Sympa::Log::do_log('info','Missing parameter %s for DBI connection', $db_param);
@@ -210,13 +214,6 @@ sub establish_connection {
 				}
 			}
 		}
-	}
-
-	## Check if DBD is installed
-	unless (eval "require DBD::$self->{'db_type'}") {
-		Sympa::Log::do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
-		Sympa::List::send_notify_to_listmaster('missing_dbd', $self->{domain}, {'db_type' => $self->{'db_type'}});
-		return undef;
 	}
 
 	## Build connect_string
@@ -291,23 +288,23 @@ sub establish_connection {
 			}
 		}
 
-		if ($self->{'db_type'} eq 'Pg') { # Configure Postgres to use ISO format dates
+		if ($self->{'db_type'} eq 'pg') { # Configure Postgres to use ISO format dates
 			$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
 		}
 
 		## Set client encoding to UTF8
 		if ($self->{'db_type'} eq 'mysql' ||
-			$self->{'db_type'} eq 'Pg') {
+			$self->{'db_type'} eq 'pg') {
 			Sympa::Log::do_log('debug','Setting client encoding to UTF-8');
 			$self->{'dbh'}->do("SET NAMES 'utf8'");
 		}elsif ($self->{'db_type'} eq 'oracle') {
 			$ENV{'NLS_LANG'} = 'UTF8';
-		}elsif ($self->{'db_type'} eq 'Sybase') {
+		}elsif ($self->{'db_type'} eq 'sybase') {
 			$ENV{'SYBASE_CHARSET'} = 'utf8';
 		}
 
 		## added sybase support
-		if ($self->{'db_type'} eq 'Sybase') {
+		if ($self->{'db_type'} eq 'sybase') {
 			my $dbname;
 			$dbname="use $self->{'db_name'}";
 			$self->{'dbh'}->do ($dbname);
@@ -317,7 +314,7 @@ sub establish_connection {
 		## This has has been added after some problems of field names upercased with Oracle
 		$self->{'dbh'}{'FetchHashKeyName'}='NAME_lc';
 
-		if ($self->{'db_type'} eq 'SQLite') { # Configure to use sympa database
+		if ($self->{'db_type'} eq 'sqlite') { # Configure to use sympa database
 			$self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
 			if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
 		}

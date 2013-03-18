@@ -14,9 +14,15 @@ use Test::Without::Module qw(DBD::mysql);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 34;
+plan tests => 36;
 
-my $source = Sympa::Datasource::SQL->new(db_type => 'mysql', db_name => 'foo');
+my $source;
+
+$source = Sympa::Datasource::SQL->create(db_type => 'mysql', db_name => 'foo');
+ok($source, 'source is defined');
+isa_ok($source, 'Sympa::Datasource::SQL::MySQL');
+
+$source = Sympa::Datasource::SQL::MySQL->new(db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::MySQL');
 
@@ -71,29 +77,24 @@ $date = $source->get_formatted_date({
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new({
-	db_type => 'mysql',
-});
+$source = Sympa::Datasource::SQL::MySQL->new();
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'mysql',
+$source = Sympa::Datasource::SQL::MySQL->new(
 	db_name => 'foo',
 );
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_host');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'mysql',
+$source = Sympa::Datasource::SQL::MySQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 );
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_user');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'mysql',
+$source = Sympa::Datasource::SQL::MySQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 	db_user => 'user',
@@ -118,8 +119,7 @@ SKIP: {
 		skip 'DB_USER environment variable needed', 20;
 	}
 
-	$source = Sympa::Datasource::SQL->new(
-		db_type   => 'mysql',
+	$source = Sympa::Datasource::SQL::MySQL->new(
 		db_name   => $ENV{DB_NAME},
 		db_host   => $ENV{DB_HOST},
 		db_user   => $ENV{DB_USER},

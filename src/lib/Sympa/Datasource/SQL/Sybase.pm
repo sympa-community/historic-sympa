@@ -46,6 +46,12 @@ our %date_format = (
 	}
 );
 
+sub new {
+	my ($class, %params) = @_;
+
+	return $class->SUPER::new(%params, db_type => 'sybase');
+}
+
 sub build_connect_string{
 	my ($self) = @_;
 

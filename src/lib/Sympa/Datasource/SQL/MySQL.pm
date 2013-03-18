@@ -37,6 +37,12 @@ use base qw(Sympa::Datasource::SQL);
 
 use Sympa::Log;
 
+sub new {
+	my ($class, %params) = @_;
+
+	return $class->SUPER::new(%params, db_type => 'mysql');
+}
+
 sub build_connect_string {
 	my ($self) = @_;
 

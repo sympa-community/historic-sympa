@@ -13,9 +13,15 @@ use Test::More;
 
 use Sympa::Datasource::SQL;
 
-plan tests => 14;
+plan tests => 16;
 
-my $source = Sympa::Datasource::SQL->new(db_type => 'Sybase', db_name => 'foo');
+my $source;
+
+$source = Sympa::Datasource::SQL->create(db_type => 'Sybase', db_name => 'foo');
+ok($source, 'source is defined');
+isa_ok($source, 'Sympa::Datasource::SQL::Sybase');
+
+$source = Sympa::Datasource::SQL::Sybase->new(db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::Sybase');
 

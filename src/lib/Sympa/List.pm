@@ -9317,7 +9317,7 @@ sub _load_list_members_from_include {
 	    if ($type eq 'include_sql_query') {
 			require Sympa::Datasource::SQL;
 			$incl->{domain} = $Sympa::Configuration::Conf{'domain'};
-			my $source = Sympa::Datasource::SQL->new($incl);
+			my $source = Sympa::Datasource::SQL->create($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				Sympa::Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
 				$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
@@ -9489,7 +9489,7 @@ sub _load_list_admin_from_include {
 		if ($type eq 'include_sql_query') {
 		    require Sympa::Datasource::SQL;
 		    $incl->{domain} = $Sympa::Configuration::Conf{'domain'};
-		    my $source = Sympa::Datasource::SQL->new($incl);
+		    my $source = Sympa::Datasource::SQL->create($incl);
 		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'});
 		}elsif ($type eq 'include_ldap_query') {
 		    require Sympa::Datasource::LDAP;
@@ -9769,7 +9769,7 @@ sub sync_include_ca {
 			if ($type eq 'include_sql_ca') {
 				require Sympa::Datasource::SQL;
 		                $incl->{domain} = $Sympa::Configuration::Conf{'domain'};
-				$source = Sympa::Datasource::SQL->new($incl);
+				$source = Sympa::Datasource::SQL->create($incl);
 			}elsif(($type eq 'include_ldap_ca') or ($type eq 'include_ldap_2level_ca')) {
 				require Sympa::Datasource::LDAP;
 				$source = Sympa::Datasource::LDAP->new($incl);
