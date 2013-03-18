@@ -136,7 +136,7 @@ sub connect_sympa_database {
     $db_conf->{'reconnect_options'} = {'keep_trying'=>($option ne 'just_try' && ( !$db_source->{'connected'} && !$ENV{'HTTP_HOST'})),
 						 'warn'=>1 };
     $db_conf->{domain} = $Sympa::Configuration::Conf{'domain'};
-    my $db_source = Sympa::Datasource::SQL->create($db_conf);
+    my $db_source = Sympa::Datasource::SQL->create(%$db_conf);
     unless ($db_source) {
 	Sympa::Log::do_log('err', 'Unable to create Sympa::Datasource::SQL object');
     	return undef;

@@ -1219,7 +1219,7 @@ sub search{
         }
 
 	require Sympa::Datasource::SQL;
-	my $ds = Sympa::Datasource::SQL->create($sql_conf->{'sql_named_filter_query'});
+	my $ds = Sympa::Datasource::SQL->create(%{$sql_conf->{'sql_named_filter_query'}});
 	unless (defined $ds && $ds->connect() && $ds->ping) {
             Sympa::Log::do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
             return undef;
