@@ -330,7 +330,7 @@ sub create_configuration {
 	*{Sympa::Language::gettext} = sub { shift };
 	*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
     } else {
-	Sympa::Language::SetLang('');
+	Sympa::Language::set_lang('');
     }
 
     my $conf;
@@ -422,9 +422,9 @@ sub edit_configuration {
     if (lc $rep eq 'y') {
         my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
         $lang =~ s/\..*//;
-        Sympa::Language::SetLang($lang);
+        Sympa::Language::set_lang($lang);
     } else {
-	Sympa::Language::SetLang('en_US');
+	Sympa::Language::set_lang('en_US');
     }
 
     ## Load config

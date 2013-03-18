@@ -1039,8 +1039,8 @@ if ($options{'dump'}) {
 
 	## Determine default lang for this list
 	## It should tell us what character encoding was used for filenames
-	Sympa::Language::SetLang($list->{'admin'}{'lang'});
-	my $list_encoding = Sympa::Language::GetCharset();
+	Sympa::Language::set_lang($list->{'admin'}{'lang'});
+	my $list_encoding = Sympa::Language::get_charset();
 
 	my $count = Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 
@@ -1211,7 +1211,7 @@ my $spool = Sympa::Spool->new(name => $spoolname);
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
 
-    Sympa::Language::SetLang($Language::default_lang);
+    Sympa::Language::set_lang($Language::default_lang);
 
     Sympa::List::init_list_cache();
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
@@ -1950,7 +1950,7 @@ sub DoMessage{
 
 	    my $start_time = time;
 
-	    Sympa::Language::SetLang($list->{'admin'}{'lang'});
+	    Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	    ## Now check if the sender is an authorized address.
 
@@ -2348,7 +2348,7 @@ sub SendDigest{
 	    next;
 	}
 
-	Sympa::Language::SetLang($list->{'admin'}{'lang'});
+	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	if ($list->get_nextdigest($digest->{'date'})){
 	    ## Blindly send the message to all users.

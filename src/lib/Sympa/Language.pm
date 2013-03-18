@@ -115,7 +115,7 @@ my %template2textdomain = ('help_admin.tt2' => 'web_help',
 			   'help_user.tt2' => 'web_help',
 			   );
 
-sub GetSupportedLanguages {
+sub get_supported_languages {
     my ($supported_languages) = @_;
 
     my @lang_list;
@@ -127,26 +127,26 @@ sub GetSupportedLanguages {
 }
 
 ## Keep the previous lang ; can be restored with PopLang
-sub PushLang {
+sub push_lang {
     my ($locale) = @_;
     Sympa::Log::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
-    SetLang($locale);
+    set_lang($locale);
 
     return 1;
 }
 
-sub PopLang {
+sub pop_lang {
     Sympa::Log::do_log('debug', '');
 
     my $locale = pop @previous_locale;
-    SetLang($locale);
+    set_lang($locale);
 
     return 1;
 }
 
-sub SetLang {
+sub set_lang {
     my ($locale) = @_;
     Sympa::Log::do_log('debug2', '(%s)', $locale);
 
@@ -166,7 +166,7 @@ sub SetLang {
 	$locale = join '_', @items;
 
 	## Get the NLS equivalent for the lang
-	$lang = Locale2Lang($locale);
+	$lang = locale2lang($locale);
     }
 
     ## Set Locale::Messages context
@@ -210,28 +210,28 @@ sub SetLang {
 
 
 ## Get the name of the language, ie the one defined in the catalog
-sub GetLangName {
+sub get_lang_name {
     my ($lang) = @_;
 
     my $saved_lang = $current_lang;
-    SetLang($lang);
+    set_lang($lang);
     my $name = gettext('_language_');
-    SetLang($saved_lang);
+    set_lang($saved_lang);
 
     return $name;
 }
 
-sub GetLang {
+sub get_lang {
 
     return $current_lang;
 }
 
-sub GetCharset {
+sub get_charset {
 
     return $current_charset;
 }
 
-sub Locale2Lang {
+sub locale2lang {
     my ($locale) = @_;
 
     my $lang;
@@ -247,7 +247,7 @@ sub Locale2Lang {
     return $lang;
 }
 
-sub Lang2Locale {
+sub lang2locale {
     my ($lang) = @_;
 
     return $lang2locale{$lang} || $lang;

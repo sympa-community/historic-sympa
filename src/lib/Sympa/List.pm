@@ -3354,12 +3354,12 @@ sub distribute_msg {
 	if ($message->{'subject_charset'}) {
 	    $subject_field = MIME::EncWords::encode_mimewords([
 							       [Encode::decode('utf8', $before_tag), $message->{'subject_charset'}],
-							       [Encode::decode('utf8', '['.$parsed_tag.'] '), Sympa::Language::GetCharset()],
+							       [Encode::decode('utf8', '['.$parsed_tag.'] '), Sympa::Language::get_charset()],
 							       [Encode::decode('utf8', $after_tag), $message->{'subject_charset'}]
 							       ], Encoding=>'A', Field=>'Subject');
 	}else {
 	    $subject_field = $before_tag . ' ' .  MIME::EncWords::encode_mimewords([
-										    [Encode::decode('utf8', '['.$parsed_tag.']'), Sympa::Language::GetCharset()]
+										    [Encode::decode('utf8', '['.$parsed_tag.']'), Sympa::Language::get_charset()]
 										    ], Encoding=>'A', Field=>'Subject') . ' ' . $after_tag;
 	}
 	$message->{'msg'}->head->add('Subject', $subject_field);
@@ -3732,7 +3732,7 @@ sub send_global_file {
     $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || Sympa::Configuration::get_robot_conf($robot, 'lang');
 
     ## What file
-    my $lang = Sympa::Language::Lang2Locale($data->{'lang'});
+    my $lang = Sympa::Language::lang2locale($data->{'lang'});
     my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     foreach my $d (@{$tt2_include_path}) {
@@ -3901,7 +3901,7 @@ sub send_file {
     }
 
     ## What file
-    my $lang = Sympa::Language::Lang2Locale($data->{'lang'});
+    my $lang = Sympa::Language::lang2locale($data->{'lang'});
     my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
     push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
@@ -8228,8 +8228,8 @@ sub load_scenario_list {
 	    $list_of_scenario{$name} = $scenario;
 
 	    ## Set the title in the current language
-	    if (defined  $scenario->{'title'}{Sympa::Language::GetLang()}) {
-		$list_of_scenario{$name}{'web_title'} = $scenario->{'title'}{Sympa::Language::GetLang()};
+	    if (defined  $scenario->{'title'}{Sympa::Language::get_lang()}) {
+		$list_of_scenario{$name}{'web_title'} = $scenario->{'title'}{Sympa::Language::get_lang()};
 	    }elsif (defined $scenario->{'title'}{'gettext'}) {
 		$list_of_scenario{$name}{'web_title'} = Sympa::Language::gettext($scenario->{'title'}{'gettext'});
 	    }elsif (defined $scenario->{'title'}{'us'}) {
@@ -8272,8 +8272,8 @@ sub load_task_list {
 	    my $titles = _load_task_title ($file);
 
 	    ## Set the title in the current language
-	    if (defined  $titles->{Sympa::Language::GetLang()}) {
-		$list_of_task{$name}{'title'} = $titles->{Sympa::Language::GetLang()};
+	    if (defined  $titles->{Sympa::Language::get_lang()}) {
+		$list_of_task{$name}{'title'} = $titles->{Sympa::Language::get_lang()};
 	    }elsif (defined $titles->{'gettext'}) {
 		$list_of_task{$name}{'title'} = Sympa::Language::gettext( $titles->{'gettext'});
 	    }elsif (defined $titles->{'us'}) {
@@ -11154,7 +11154,7 @@ sub load_topics {
     }
 
     ## Set the title in the current language
-    my $lang = Sympa::Language::GetLang();
+    my $lang = Sympa::Language::get_lang();
     foreach my $top (keys %{$list_of_topics{$robot}}) {
 	my $topic = $list_of_topics{$robot}{$top};
 	$topic->{'current_title'} = $topic->{'title'}{$lang} || $topic->{'title'}{'default'} || $top;
@@ -11207,7 +11207,7 @@ sub _apply_defaults {
     Sympa::Log::do_log('debug3', '()');
 
     ## List of available languages
-    $::pinfo{'lang'}{'format'} = Sympa::Language::GetSupportedLanguages(
+    $::pinfo{'lang'}{'format'} = Sympa::Language::get_supported_languages(
 	    Sympa::Configuration::get_robot_conf('', 'supported_lang')
     );
 
@@ -12405,8 +12405,8 @@ sub _urlize_part {
     $parser->output_to_core(1);
     my $new_part;
 
-    my $lang = Sympa::Language::GetLang();
-    my $charset = Sympa::Language::GetCharset();
+    my $lang = Sympa::Language::get_lang();
+    my $charset = Sympa::Language::get_charset();
 
     my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 

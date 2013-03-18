@@ -51,6 +51,59 @@ my %db_connections;
 
 =head1 CLASS METHODS
 
+=head2 Sympa::Datasource::SQL->create(%parameters)
+
+Factory method to create a new L<Sympa::Datasource::SQL> object from specific
+class.
+
+=head3 Parameters
+
+=over
+
+=item * I<host>: FIXME
+
+=item * I<user>: FIXME
+
+=item * I<passwd>: FIXME
+
+=item * I<db_name>: FIXME
+
+=item * I<db_type>: FIXME
+
+=item * I<connect_options>: FIXME
+
+=item * I<domain>: FIXME
+
+=back
+
+=head3 Return value
+
+A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
+
+=cut
+
+sub create {
+	my ($class, %params) = @_;
+
+	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
+
+	my $db_type = lc($params{'db_type'});
+	my $subclass = 'Sympa::Datasource::SQL ' .
+		$db_type eq 'mysql'  ? '::MySQL'      :
+		$db_type eq 'sqlite' ? '::SQLite'     :
+		$db_type eq 'pg'     ? '::PostgreSQL' :
+		$db_type eq 'oracle' ? '::Oracle'     :
+		$db_type eq 'sybase' ? '::Sybase'     :
+		                       ''             ;
+
+	eval { require $subclass; };
+	if ($EVAL_ERROR) {
+		Sympa::Log::do_log('err',"Unable to use $subclass: $EVAL_ERROR");
+	}
+
+	return $subclass->new(%params);
+}
+
 =head2 Sympa::Datasource::SQL->new(%parameters)
 
 Create a new L<Sympa::Datasource::SQL> object.
@@ -84,54 +137,6 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	Sympa::Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
-	my $actualclass;
-	if ($params{'db_type'} =~ /^mysql$/i) {
-		unless ( eval "require Sympa::Datasource::SQL::MySQL" ){
-			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $EVAL_ERROR");
-			return undef;
-		}
-		require Sympa::Datasource::SQL::MySQL;
-		$actualclass = "Sympa::Datasource::SQL::MySQL";
-	}elsif ($params{'db_type'} =~ /^sqlite$/i) {
-		unless ( eval "require Sympa::Datasource::SQL::SQLite" ){
-			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::SQLite module");
-			return undef;
-		}
-		require Sympa::Datasource::SQL::SQLite;
-
-		$actualclass = "Sympa::Datasource::SQL::SQLite";
-	}elsif ($params{'db_type'} =~ /^pg$/i) {
-		unless ( eval "require Sympa::Datasource::SQL::PostgreSQL" ){
-			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::PostgreSQL module");
-			return undef;
-		}
-		require Sympa::Datasource::SQL::PostgreSQL;
-
-		$actualclass = "Sympa::Datasource::SQL::PostgreSQL";
-	}elsif ($params{'db_type'} =~ /^oracle$/i) {
-		unless ( eval "require Sympa::Datasource::SQL::Oracle" ){
-			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Oracle module");
-			return undef;
-		}
-		require Sympa::Datasource::SQL::Oracle;
-
-		$actualclass = "Sympa::Datasource::SQL::Oracle";
-	}elsif ($params{'db_type'} =~ /^sybase$/i) {
-		unless ( eval "require Sympa::Datasource::SQL::Sybase" ){
-			Sympa::Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Sybase module");
-			return undef;
-		}
-		require Sympa::Datasource::SQL::Sybase;
-
-		$actualclass = "Sympa::Datasource::SQL::Sybase";
-	}else {
-		## We don't have a DB Manipulator for this RDBMS
-		## It might be an SQL source used to include list members/owners
-		## like CSV
-		$actualclass = "Sympa::Datasource::SQL";
-	}
-
 	my $self = {
 		db_host    => $params{'host'},
 		db_user    => $params{'user'},
@@ -142,7 +147,7 @@ sub new {
 		domain     => $params{'domain'},
 	};
 
-	bless $self, $actualclass;
+	bless $self, $class;
 	return $self;
 }
 

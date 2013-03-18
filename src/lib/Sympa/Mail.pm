@@ -192,17 +192,17 @@ sub mail_file {
     }
 
     ## Charset for encoding
-    Sympa::Language::PushLang($data->{'lang'}) if defined $data->{'lang'};
-    $data->{'charset'} ||= Sympa::Language::GetCharset();
-    Sympa::Language::PopLang() if defined $data->{'lang'};
+    Sympa::Language::push_lang($data->{'lang'}) if defined $data->{'lang'};
+    $data->{'charset'} ||= Sympa::Language::get_charset();
+    Sympa::Language::pop_lang() if defined $data->{'lang'};
 
     ## TT2 file parsing
     if ($params{filename} =~ /\.tt2$/) {
 	my $output;
 	my @path = split /\//, $params{filename};
-	Sympa::Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
+	Sympa::Language::push_lang($data->{'lang'}) if (defined $data->{'lang'});
 	Sympa::Template::parse_tt2($data, $path[$#path], \$output);
-	Sympa::Language::PopLang() if (defined $data->{'lang'});
+	Sympa::Language::pop_lang() if (defined $data->{'lang'});
 	$message_as_string .= join('',$output);
 	$header_possible = 1;
 
@@ -245,12 +245,12 @@ sub mail_file {
 	}
 	$tzoff = sprintf '%s%02d%02d',
 			 $sign, int($tzoff / 3600), int($tzoff / 60) % 60;
-	Sympa::Language::PushLang('en');
+	Sympa::Language::push_lang('en');
 	$headers .= 'Date: ' .
 		    POSIX::strftime("%a, %d %b %Y %H:%M:%S $tzoff",
 				    localtime $now) .
 		    "\n";
-	Sympa::Language::PopLang();
+	Sympa::Language::pop_lang();
     }
 
     unless ($header_ok{'to'}) {

@@ -560,7 +560,7 @@ sub get_list_list_tpl {
 
 		$list_templates->{$template}{'path'} = $dir;
 
-		my $locale = Sympa::Language::Lang2Locale( Sympa::Language::GetLang());
+		my $locale = Sympa::Language::lang2locale(Sympa::Language::get_lang());
 		## Look for a comment.tt2 in the appropriate locale first
 		if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
 		    $list_templates->{$template}{'comment'} = $dir.'/'.$template.'/'.$locale.'/comment.tt2';
@@ -1909,7 +1909,7 @@ sub wrap_text {
     return $text unless $cols;
 
     $text = Text::LineFold->new(
-	    Language => Sympa::Language::GetLang(),
+	    Language => Sympa::Language::get_lang(),
 	    OutputCharset => (Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
 	    Prep => 'NONBREAKURI',
 	    ColumnsMax => $cols

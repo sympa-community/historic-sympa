@@ -505,8 +505,8 @@ sub upgrade {
 
 		## Determine default lang for this list
 		## It should tell us what character encoding was used for filenames
-		Sympa::Language::SetLang($list->{'admin'}{'lang'});
-		my $list_encoding = Sympa::Language::GetCharset();
+		Sympa::Language::set_lang($list->{'admin'}{'lang'});
+		my $list_encoding = Sympa::Language::get_charset();
 
 		my $count = Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 
@@ -966,9 +966,9 @@ sub to_utf8 {
 	if ((defined $Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'})&($Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
 	    $charset = $Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'};
 	}else {
-	    Sympa::Language::PushLang($lang);
-	    $charset = Sympa::Language::GetCharset;
-	    Sympa::Language::PopLang;
+	    Sympa::Language::push_lang($lang);
+	    $charset = Sympa::Language::get_charset;
+	    Sympa::Language::pop_lang;
 	}
 
 	# Add X-Sympa-Attach: headers if required.
