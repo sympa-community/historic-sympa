@@ -295,7 +295,7 @@ sub dkim_sign {
     # Do NOT use Mime::Entity in order to preserve base 64 encoding and S/MIME
     # signature.
     my @sections = split(/\n\n/, $msg_as_string);
-    shit @sections;
+    shift @sections;
     my $body = join("\n\n", @sections);
 
     return $message->{'msg'}->head->as_string."\n".$body;
