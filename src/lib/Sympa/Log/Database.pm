@@ -230,8 +230,6 @@ Insert data in stats table.
 
 =item * I<parameter>: FIXME
 
-=item * I<read>: FIXME
-
 =back
 
 =head3 Return
@@ -241,7 +239,6 @@ Insert data in stats table.
 sub do_stat_log {
 	my (%params) = @_;
 
-	my $read   = 0;
 	my $date   = time;
 	my $random = int(rand(1000000));
 	my $id     = $date.$random;
@@ -268,7 +265,7 @@ sub do_stat_log {
 		Sympa::SDM::quote($params{ip}),
 		Sympa::SDM::quote($params{robot}),
 		Sympa::SDM::quote($params{parameter}),
-		Sympa::SDM::quote($params{read})
+		0
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new stat entry in the database');
