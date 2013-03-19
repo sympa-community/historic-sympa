@@ -4343,7 +4343,7 @@ sub do_search {
 
     $param->{'similar_subscribers_occurence'} = 0;
     if($param->{'filter'} !~ /^\@[\w-]+\./) {
-		foreach my $user (@{Sympa::List::get_ressembling_list_members_no_object('name'=>$list->{'name'},'domain'=>$robot,'email'=>$in{'filter'}})) {
+		foreach my $user (@{Sympa::List::get_ressembling_list_members_no_object('name'=>$list->{'name'},'domain'=>$robot,'email'=>$in{'filter'})}) {
 			next if($emails{$user->{'email'}});
 			push @{$param->{'similar_subscribers'}}, $user;
 			last if($#{$param->{'similar_subscribers'}} + 1 > $max_select);
@@ -15556,7 +15556,6 @@ sub do_send_mail {
 		destination => $page_source,
 	    );
 	    unless($result) {
-	    {
 		wwslog('err','Can\'t upload %s', $in{'uploaded_file'});
 		Sympa::Report::reject_report_web('intern','cannot_upload',{'path' => $page_source},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => $in{'uploaded_file'},'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
