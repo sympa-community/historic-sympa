@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: t; -*-
 # vim:ft=perl:noet:sw=8:textwidth=78
-# $Id: Log.pm 8882 2013-03-15 16:55:11Z rousse $
+# $Id$
 
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
