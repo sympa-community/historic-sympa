@@ -5151,7 +5151,7 @@ sub do_signoff {
 	 }
 
 	 ## No passwd
-	 Sympa::WWSympa::init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
+	 init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
 
 	 $param->{'user'}{'email'} = $in{'email'};
      }
@@ -17428,4 +17428,40 @@ sub do_automatic_lists {
 
     $in{'list'} = $listname;
     return 'compose_mail';
+}
+
+sub init_passwd {
+    my ($email, $data) = @_;
+
+    my ($passwd, $user);
+
+    if (Sympa::List::is_global_user($email)) {
+	$user = Sympa::List::get_global_user($email);
+
+	$passwd = $user->{'password'};
+
+	unless ($passwd) {
+	    $passwd = Sympa::Tools::Password::new_passwd();
+
+	    unless ( Sympa::List::update_global_user($email,
+					   {'password' => $passwd,
+					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
+		Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
+		Sympa::Log::Syslog::do_log('info','update failed');
+		return undef;
+	    }
+	}
+    }else {
+	$passwd = Sympa::Tools::Password::new_passwd();
+	unless ( Sympa::List::add_global_user({'email' => $email,
+				     'password' => $passwd,
+				     'lang' => $data->{'lang'},
+				     'gecos' => $data->{'gecos'}})) {
+	    Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
+	    Sympa::Log::Syslog::do_log('info','add failed');
+	    return undef;
+	}
+    }
+
+    return 1;
 }

@@ -34,11 +34,7 @@ package Sympa::WWSympa;
 
 use English qw(-no_match_vars);
 
-use Sympa::Constants;
 use Sympa::Log::Syslog;
-use Sympa::List;
-use Sympa::Report;
-use Sympa::Tools::Password;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
 		   'digest' => {'gettext_id' => 'digest MIME format'},
@@ -201,42 +197,6 @@ sub load_config {
     }
 
     return $conf;
-}
-
-sub init_passwd {
-    my ($email, $data) = @_;
-
-    my ($passwd, $user);
-
-    if (Sympa::List::is_global_user($email)) {
-	$user = Sympa::List::get_global_user($email);
-
-	$passwd = $user->{'password'};
-
-	unless ($passwd) {
-	    $passwd = Sympa::Tools::Password::new_passwd();
-
-	    unless ( Sympa::List::update_global_user($email,
-					   {'password' => $passwd,
-					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
-		Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
-		Sympa::Log::Syslog::do_log('info','update failed');
-		return undef;
-	    }
-	}
-    }else {
-	$passwd = Sympa::Tools::Password::new_passwd();
-	unless ( Sympa::List::add_global_user({'email' => $email,
-				     'password' => $passwd,
-				     'lang' => $data->{'lang'},
-				     'gecos' => $data->{'gecos'}})) {
-	    Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},'','',$email,$robot);
-	    Sympa::Log::Syslog::do_log('info','add failed');
-	    return undef;
-	}
-    }
-
-    return 1;
 }
 
 sub get_my_url {
