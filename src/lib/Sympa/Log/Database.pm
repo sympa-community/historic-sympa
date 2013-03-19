@@ -178,9 +178,6 @@ sub do_log {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new db_log entry in the database');
 		return undef;
 	}
-	#if (($action eq 'send_mail') && $list && $robot){
-	#	_update_subscriber_msg_send($user_email,$list,$robot,1);
-	#}
 
 	return 1;
 }
