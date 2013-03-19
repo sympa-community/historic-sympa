@@ -103,7 +103,7 @@ sub remove_pid {
 }
 
 sub write_pid {
-    my ($pidfile, $pid, $options, $method) = @_;
+    my ($pidfile, $pid, $options, $method, $user, $group) = @_;
 
     my $piddir = $pidfile;
     $piddir =~ s/\/[^\/]+$//;
@@ -112,9 +112,9 @@ sub write_pid {
     mkdir($piddir, 0755) unless(-d $piddir);
 
     unless(Sympa::Tools::File::set_file_rights(
-	file => $piddir,
-	user  => Sympa::Constants::USER,
-	group => Sympa::Constants::GROUP,
+	file  => $piddir,
+	user  => $user,
+	group => $group,
     )) {
 	Sympa::Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
@@ -184,9 +184,9 @@ sub write_pid {
     }
 
     unless(Sympa::Tools::File::set_file_rights(
-	file => $pidfile,
-	user  => Sympa::Constants::USER,
-	group => Sympa::Constants::GROUP,
+	file  => $pidfile,
+	user  => $user,
+	group => $group
     )) {
 	## Unlock pid file
 	$lock->unlock();

@@ -175,7 +175,14 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 
 ## Create and write the pidfile
-Sympa::Tools::Daemon::write_pid($wwsconf->{'bounced_pidfile'}, $PID, $options, $Sympa::Configuration::Conf{'lock_method'});
+Sympa::Tools::Daemon::write_pid(
+	$wwsconf->{'bounced_pidfile'},
+	$PID,
+	$options,
+	$Sympa::Configuration::Conf{'lock_method'},
+	Sympa::Constants::USER,
+	Sympa::Constants::GROUP,
+);
 unless ($options->{'stderr_to_tty'}) {
     Sympa::Tools::Daemon::direct_stderr_to_file((tmpdir => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $PID));
 }

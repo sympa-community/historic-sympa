@@ -147,7 +147,14 @@ $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 $options->{'multiple_process'} = 0;
 
 # Saves the pid number
-Sympa::Tools::Daemon::write_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $PID, $options, $Sympa::Configuration::Conf{'lock_method'});
+Sympa::Tools::Daemon::write_pid(
+	$Sympa::Configuration::Conf{'pidfile_bulk'},
+	$PID,
+	$options,
+	$Sympa::Configuration::Conf{'lock_method'},
+	Sympa::Constants::USER,
+	Sympa::Constants::GROUP,
+);
 unless ($options->{'stderr_to_tty'}) {
     Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $PID));
 }
