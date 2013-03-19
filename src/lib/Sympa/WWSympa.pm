@@ -34,7 +34,6 @@ package Sympa::WWSympa;
 
 use English qw(-no_match_vars);
 
-use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Log::Syslog;
 use Sympa::List;
@@ -144,10 +143,10 @@ my $cipher;
 
 ## Load WWSympa configuration file
 sub load_config {
-    my ($file) = @_;
+    my ($file, $params) = @_;
 
     ## Old params
-    my %old_param = ('alias_manager' => 'No more used, using '.$Sympa::Configuration::Conf{'alias_manager'},
+    my %old_param = ('alias_manager' => 'No more used',
 		     'wws_path' => 'No more used',
 		     'icons_url' => 'No more used. Using static_content/icons instead.',
 		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
@@ -156,9 +155,9 @@ sub load_config {
     my %default_conf = ();
 
     ## Valid params
-    foreach my $key (keys %Sympa::Configuration::params) {
-	if (defined $Sympa::Configuration::params{$key}{'file'} && $Sympa::Configuration::params{$key}{'file'} eq 'wwsympa.conf') {
-	    $default_conf{$key} = $Sympa::Configuration::params{$key}{'default'};
+    foreach my $key (keys %$params) {
+	if (defined $params->{$key}{'file'} && $params->{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $params->{$key}{'default'};
 	}
     }
 
