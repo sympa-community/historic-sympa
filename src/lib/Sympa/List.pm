@@ -6113,7 +6113,7 @@ None.
 =cut
 
 sub get_list_member {
-    my ($self, $email, %options) = @_;
+    my ($self, $email) = @_;
     $email = Sympa::Tools::clean_email($email);
     Sympa::Log::Syslog::do_log('debug2', '(%s)', $email);
 
@@ -12497,7 +12497,7 @@ sub get_subscription_requests {
 	    Sympa::Log::Syslog::do_log('err', "Failed to parse subscription request %s",$subrequest->{'messagekey'});
 	    next;
 	}
-	my $user_entry = $self->get_list_member($email, probe => 1);
+	my $user_entry = $self->get_list_member($email);
 
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    Sympa::Log::Syslog::do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
