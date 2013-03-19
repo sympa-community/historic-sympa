@@ -66,8 +66,6 @@ sub parse_rfc1891_notification {
 	my $entity = $message->{'msg'};
 	return undef unless ($entity) ;
 
-	my @parts = $entity->parts();
-
 	my $result;
 
 	foreach my $part ($entity->parts()) {
