@@ -205,9 +205,9 @@ sub direct_stderr_to_file {
     ## Usefull if process crashes
     open(STDERR, '>>', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
     unless(Tools::Sympa::File::set_file_rights(
-	file => $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr',
-	user  => Sympa::Constants::USER,
-	group => Sympa::Constants::GROUP,
+	file  => $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr',
+	user  => $data{user},
+	group => $data{group}
     )) {
 	Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
 	return undef;

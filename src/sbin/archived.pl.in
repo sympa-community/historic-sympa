@@ -164,7 +164,12 @@ Sympa::Tools::Daemon::write_pid(
 	Sympa::Constants::GROUP,
 );
 unless ($options->{'stderr_to_tty'}) {
-    Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid' => $PID));
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+	tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
+	pid    => $PID,
+	user   => Sympa::Constants::USER,
+	group  => Sympa::Constants::GROUP,
+    );
 }
 
 # setting log_level using conf unless it is set by calling option
