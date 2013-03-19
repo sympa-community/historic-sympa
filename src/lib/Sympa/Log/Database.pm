@@ -37,7 +37,6 @@ use strict;
 use English qw(-no_match_vars);
 use POSIX qw();
 
-#use Sympa::Configuration; # FIXME
 use Sympa::SDM;
 
 my ($sth, @sth_stack, $rows_nb);
@@ -246,7 +245,7 @@ Delete logs in RDBMS.
 =cut
 
 sub db_log_del {
-    my $exp = Sympa::Configuration::get_robot_conf('*','logs_expiration_period');
+	my ($exp) = @_;
     my $date = time - ($exp * 30 * 24 * 60 * 60);
 
     unless(Sympa::SDM::do_query( "DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)", Sympa::SDM::quote($date))) {

@@ -1127,7 +1127,7 @@ sub purge_logs_table {
     my @slots = ();
 
     Sympa::Log::Syslog::do_log('debug2','()');
-    unless(Sympa::Log::Database::do_log_del()) {
+    unless(Sympa::Log::Database::do_log_del(Sympa::Configuration::get_robot_conf('*','logs_expiration_period'))) {
 	Sympa::Log::Syslog::do_log('err','Failed to delete logs');
 	return undef;
     }
