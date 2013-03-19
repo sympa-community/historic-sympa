@@ -57,7 +57,10 @@ sub get_log_date {
 	my $sth;
 	my @dates;
 	foreach my $query('MIN','MAX') {
-		unless ($sth = Sympa::SDM::do_query("SELECT $query(date_logs) FROM logs_table")) {
+		$sth = Sympa::SDM::do_query(
+			"SELECT $query(date_logs) FROM logs_table"
+		);
+		unless ($sth) {
 			do_log('err','Unable to get %s date from logs_table',$query);
 			return undef;
 		}
@@ -119,20 +122,23 @@ sub do_log {
 
 	## Insert in log_table
 
-	unless(Sympa::SDM::do_query( 'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
-			$id,
-			$date,
-			Sympa::SDM::quote($robot),
-			Sympa::SDM::quote($list),
-			Sympa::SDM::quote($action),
-			Sympa::SDM::quote(substr($parameters,0,100)),
-			Sympa::SDM::quote($target_email),
-			Sympa::SDM::quote($msg_id),
-			Sympa::SDM::quote($status),
-			Sympa::SDM::quote($error_type),
-			Sympa::SDM::quote($user_email),
-			Sympa::SDM::quote($client),
-			Sympa::SDM::quote($daemon))) {
+	my $result = Sympa::SDM::do_query(
+		'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+		$id,
+		$date,
+		Sympa::SDM::quote($robot),
+		Sympa::SDM::quote($list),
+		Sympa::SDM::quote($action),
+		Sympa::SDM::quote(substr($parameters,0,100)),
+		Sympa::SDM::quote($target_email),
+		Sympa::SDM::quote($msg_id),
+		Sympa::SDM::quote($status),
+		Sympa::SDM::quote($error_type),
+		Sympa::SDM::quote($user_email),
+		Sympa::SDM::quote($client),
+		Sympa::SDM::quote($daemon)
+	);
+	unless($result) {
 		do_log('err','Unable to insert new db_log entry in the database');
 		return undef;
 	}
@@ -181,17 +187,20 @@ sub do_stat_log{
 	}
 
 	##insert in stat table
-	unless(Sympa::SDM::do_query( 'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat, read_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
-			$id,
-			$date,
-			Sympa::SDM::quote($mail),
-			Sympa::SDM::quote($operation),
-			Sympa::SDM::quote($list),
-			Sympa::SDM::quote($daemon),
-			Sympa::SDM::quote($ip),
-			Sympa::SDM::quote($robot),
-			Sympa::SDM::quote($parameter),
-			Sympa::SDM::quote($read))) {
+	my $result = Sympa::SDM::do_query(
+		'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat, read_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
+		$id,
+		$date,
+		Sympa::SDM::quote($mail),
+		Sympa::SDM::quote($operation),
+		Sympa::SDM::quote($list),
+		Sympa::SDM::quote($daemon),
+		Sympa::SDM::quote($ip),
+		Sympa::SDM::quote($robot),
+		Sympa::SDM::quote($parameter),
+		Sympa::SDM::quote($read)
+	);
+	unless($result) {
 		do_log('err','Unable to insert new stat entry in the database');
 		return undef;
 	}
@@ -218,15 +227,18 @@ sub _db_stat_counter_log {
 		}
 	}
 
-	unless(Sympa::SDM::do_query( 'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, data_counter, robot_counter, list_counter, variation_counter, total_counter) VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
-			$id,
-			$date_deb,
-			$date_fin,
-			Sympa::SDM::quote($data),
-			Sympa::SDM::quote($robot),
-			Sympa::SDM::quote($list),
-			$variation,
-			$total)) {
+	my $result = Sympa::SDM::do_query(
+		'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, data_counter, robot_counter, list_counter, variation_counter, total_counter) VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
+		$id,
+		$date_deb,
+		$date_fin,
+		Sympa::SDM::quote($data),
+		Sympa::SDM::quote($robot),
+		Sympa::SDM::quote($list),
+		$variation,
+		$total
+	);
+	unless($result) {
 		do_log('err','Unable to insert new stat counter entry in the database');
 		return undef;
 	}
@@ -248,7 +260,11 @@ sub delete_messages {
 	my ($exp) = @_;
 	my $date = time - ($exp * 30 * 24 * 60 * 60);
 
-	unless(Sympa::SDM::do_query( "DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)", Sympa::SDM::quote($date))) {
+	my $result = Sympa::SDM::do_query(
+		"DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)",
+		Sympa::SDM::quote($date)
+	);
+	unless ($result) {
 		do_log('err','Unable to delete db_log entry from the database');
 		return undef;
 	}
@@ -361,7 +377,8 @@ sub get_first_db_log {
 	$statement .= sprintf "ORDER BY date_logs ";
 
 	push @sth_stack, $sth;
-	unless($sth = Sympa::SDM::do_query($statement)) {
+	$sth = Sympa::SDM::do_query($statement);
+	unless($sth) {
 		do_log('err','Unable to retrieve logs entry from the database');
 		return undef;
 	}
@@ -438,7 +455,12 @@ sub aggregate_data {
 
 	my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
 
-	unless ($sth = Sympa::SDM::do_query("SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)", $begin_date, $end_date)) {
+	$sth = Sympa::SDM::do_query(
+		"SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)",
+		$begin_date,
+		$end_date
+	);
+	unless ($sth) {
 		do_log('err','Unable to retrieve stat entries between date % and date %s', $begin_date, $end_date);
 		return undef;
 	}
@@ -450,7 +472,12 @@ sub aggregate_data {
 	$aggregated_data = _deal_data($res);
 
 	#the line is read, so update the read_stat from 0 to 1
-	unless ($sth = Sympa::SDM::do_query( "UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')", $begin_date, $end_date)) {
+	$sth = Sympa::SDM::do_query(
+		"UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')",
+		$begin_date,
+		$end_date
+	);
+	unless ($sth) {
 		do_log('err','Unable to set stat entries between date % and date %s as read', $begin_date, $end_date);
 		return undef;
 	}
@@ -863,7 +890,13 @@ sub _update_subscriber_msg_send {
 	my ($mail, $list, $robot, $counter) = @_;
 	do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
 
-	unless ($sth = Sympa::SDM::do_query("SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')", $robot, $list, $mail)){
+	$sth = Sympa::SDM::do_query(
+		"SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
+		$robot,
+		$list,
+		$mail
+	);
+	unless ($sth) {
 		do_log('err','Unable to retrieve message count for user %s, list %s@%s',$mail, $list, $robot);
 		return undef;
 	}
@@ -871,7 +904,14 @@ sub _update_subscriber_msg_send {
 	my $nb_msg = $sth->fetchrow_hashref('number_messages_subscriber') + $counter;
 
 
-	unless (Sympa::SDM::do_query("UPDATE subscriber_table SET number_messages_subscriber = '%d' WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')", $nb_msg, $robot, $list, $mail)){
+	my $result = Sympa::SDM::do_query(
+		"UPDATE subscriber_table SET number_messages_subscriber = '%d' WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
+		$nb_msg,
+		$robot,
+		$list,
+		$mail
+	);
+	unless ($result) {
 		do_log('err','Unable to update message count for user %s, list %s@%s',$mail, $list, $robot);
 		return undef;
 	}
