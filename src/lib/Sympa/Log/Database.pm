@@ -238,7 +238,7 @@ Insert data in stats table.
 
 =cut
 
-sub do_stat_log{
+sub do_stat_log {
 	my (%params) = @_;
 
 	my $read   = 0;
@@ -275,7 +275,7 @@ sub do_stat_log{
 		return undef;
 	}
 	return 1;
-}#end sub
+}
 
 sub _db_stat_counter_log {
 	my (%params) = @_;
@@ -307,7 +307,7 @@ sub _db_stat_counter_log {
 	}
 	return 1;
 
-}#end sub
+}
 
 =head2 delete_messages($parameters)
 
@@ -527,7 +527,7 @@ sub aggregate_data {
 
 		#open TMP2, ">/tmp/digdump"; Sympa::Tools::Data::dump_var($aggregated_data->{$key_op}, 0, \*TMP2); close TMP2;
 
-		#store send mail data-------------------------------
+		#store send mail data
 		if($key_op eq 'send_mail'){
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
@@ -770,20 +770,16 @@ sub aggregate_data {
 	Sympa::Log::Syslog::do_log('debug2', 'data aggregated from %s to %s', $d_deb, $d_fin);
 }
 
-
-#called by subroutine aggregate_data
-#get in parameter the result of db request and put in an hash data we need.
+# get in parameter the result of db request and put in an hash data we need.
 sub _deal_data {
 	my ($result_request) = @_;
 
 	my %data;
 
-
 	#on parcours caque ligne correspondant a un nuplet
 	#each $id correspond to an hash
 	foreach my $id (keys(%$result_request)) {
-
-		#----------------------------test about send_mail----------------------------------
+		# test about send_mail
 		if($result_request->{$id}->{'operation_stat'} eq 'send_mail') {
 
 
@@ -1024,7 +1020,8 @@ sub _deal_data {
 	return \%data;
 }
 
-#subroutine to Update subscriber_table about message send, upgrade field number_messages_subscriber
+# subroutine to Update subscriber_table about message send,
+# upgrade field number_messages_subscriber
 sub _update_subscriber_msg_send {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
