@@ -6,7 +6,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Auth/VOOT/Consumer.pm \
 		      Sympa/Auth/VOOT/Provider.pm \
 		      Sympa/Bulk.pm \
-		      Sympa/Challenge.pm \
 		      Sympa/Commands.pm \
 		      Sympa/Configuration.pm \
 		      Sympa/Configuration/XML.pm \
@@ -41,7 +40,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Scenario.pm \
 		      Sympa/SDM.pm \
 		      Sympa/Session.pm \
-		      Sympa/SharedDocument.pm \
 		      Sympa/SOAP.pm \
 		      Sympa/Spool.pm \
 		      Sympa/Task.pm \
