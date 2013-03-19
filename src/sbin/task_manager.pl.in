@@ -315,14 +315,14 @@ while (!$end) {
     Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
    ## List all tasks
-    unless (Sympa::Task::list_tasks) {
+    unless (Sympa::Task::list_tasks()) {
 	Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool"});
 	Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool");
 	exit -1;
     }
 
     my %used_models; # models for which a task exists
-    foreach my $model (Sympa::Task::get_used_models) {
+    foreach my $model (Sympa::Task::get_used_models()) {
 	$used_models{$model} = 1;
     }
 
