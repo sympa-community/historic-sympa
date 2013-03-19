@@ -122,6 +122,32 @@ Add log in RDBMS.
 
 =head3 Parameters
 
+=over
+
+=item * I<list>: FIXME
+
+=item * I<robot>: FIXEM
+
+=item * I<action>: FIXME
+
+=item * I<parameter>: FIXME
+
+=item * I<target_email>: FIXME
+
+=item * I<user_email>: FIXME
+
+=item * I<msg_id>: FIXME
+
+=item * I<status>: FIXME
+
+=item * I<error_type>: FIXME
+
+=item * I<client>: FIXME
+
+=item * I<daemon>: FIXME
+
+=back
+
 =head3 Return
 
 =cut
@@ -188,7 +214,25 @@ Insert data in stats table.
 
 =head3 Parameters
 
-None.
+=over
+
+=item * I<list>: FIXME
+
+=item * I<robot>: FIXEM
+
+=item * I<mail>: FIXME
+
+=item * I<operation>: FIXME
+
+=item * I<daemon>: FIXME
+
+=item * I<ip>: FIXME
+
+=item * I<parameter>: FIXME
+
+=item * I<read>: FIXME
+
+=back
 
 =head3 Return
 
