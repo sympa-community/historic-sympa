@@ -37,8 +37,6 @@ foreach my $file (@files) {
     vars_ok($file, ignore_vars => {
         '$class'   => 1,
         '$i'       => 1,
-        '$param'   => 1,
-        '%param'   => 1,
-        '%options' => 1
+        '%params'  => 1,
     });
 }
