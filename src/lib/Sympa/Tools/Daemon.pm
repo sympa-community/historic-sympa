@@ -103,9 +103,9 @@ sub remove_pid {
 }
 
 sub write_pid {
-    my ($pidfile, $pid, $options, $method, $user, $group) = @_;
+    my (%params) = @_;
 
-    my $piddir = $pidfile;
+    my $piddir = $params{file};
     $piddir =~ s/\/[^\/]+$//;
 
     ## Create piddir
@@ -113,8 +113,8 @@ sub write_pid {
 
     unless(Sympa::Tools::File::set_file_rights(
 	file  => $piddir,
-	user  => $user,
-	group => $group,
+	user  => $params{user},
+	group => $params{group},
     )) {
 	Sympa::Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
@@ -122,18 +122,21 @@ sub write_pid {
     my @pids;
 
     # Lock pid file
-    my $lock = Sympa::Lock->new(path => $pidfile, method => $method);
+    my $lock = Sympa::Lock->new(
+	    path   => $params{file},
+	    method => $params{method}
+    );
     unless (defined $lock) {
 	Sympa::Log::fatal_err('Lock could not be created. Exiting.');
     }
     $lock->set_timeout(5);
     unless ($lock->lock('write')) {
-	Sympa::Log::fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
+	Sympa::Log::fatal_err('Unable to lock %s file in write mode.  Exiting.',$params{file});
     }
     ## If pidfile exists, read the PIDs
-    if(-f $pidfile) {
+    if(-f $params{file}) {
 	# Read pid file
-	open(PFILE, $pidfile);
+	open(PFILE, $params{file});
 	my $l = <PFILE>;
 	close PFILE;
 	@pids = grep {/[0-9]+/} split(/\s+/, $l);
@@ -141,22 +144,22 @@ sub write_pid {
 
     ## If we can have multiple instances for the process.
     ## Print other pids + this one
-    if($options->{'multiple_process'}) {
-	unless(open(PIDFILE, '> '.$pidfile)) {
+    if($params{options}->{'multiple_process'}) {
+	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$ERRNO);
+	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $params{file},$ERRNO);
 	}
 	## Print other pids + this one
-	push(@pids, $pid);
+	push(@pids, $params{pid});
 	print PIDFILE join(' ', @pids)."\n";
 	close(PIDFILE);
     }else{
 	## Create and write the pidfile
-	unless(open(PIDFILE, '+>> '.$pidfile)) {
+	unless(open(PIDFILE, '+>> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $pidfile);
+	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $params{file});
 	}
 	## The previous process died suddenly, without pidfile cleanup
 	## Send a notice to listmaster with STDERR of the previous process
@@ -168,29 +171,29 @@ sub write_pid {
 	    send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
 	}
 
-	unless(open(PIDFILE, '> '.$pidfile)) {
+	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting', $pidfile);
+	    Sympa::Log::fatal_err('Could not open %s, exiting', $params{file});
 	}
 	unless(truncate(PIDFILE, 0)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not truncate %s, exiting.', $pidfile);
+	    Sympa::Log::fatal_err('Could not truncate %s, exiting.', $params{file});
 	}
 
-	print PIDFILE $pid."\n";
+	print PIDFILE $params{pid}."\n";
 	close(PIDFILE);
     }
 
     unless(Sympa::Tools::File::set_file_rights(
-	file  => $pidfile,
-	user  => $user,
-	group => $group
+	file  => $params{file},
+	user  => $params{user},
+	group => $params{group}
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	Sympa::Log::fatal_err('Unable to set rights on %s', $pidfile);
+	Sympa::Log::fatal_err('Unable to set rights on %s', $params{file});
     }
     ## Unlock pid file
     $lock->unlock();

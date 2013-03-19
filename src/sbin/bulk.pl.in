@@ -148,12 +148,12 @@ $options->{'multiple_process'} = 0;
 
 # Saves the pid number
 Sympa::Tools::Daemon::write_pid(
-	$Sympa::Configuration::Conf{'pidfile_bulk'},
-	$PID,
-	$options,
-	$Sympa::Configuration::Conf{'lock_method'},
-	Sympa::Constants::USER,
-	Sympa::Constants::GROUP,
+	file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
+	pid     => $PID,
+	options => $options,
+	method  => $Sympa::Configuration::Conf{'lock_method'},
+	user    => Sympa::Constants::USER,
+	group   => Sympa::Constants::GROUP,
 );
 unless ($options->{'stderr_to_tty'}) {
     Sympa::Tools::Daemon::direct_stderr_to_file(
@@ -254,12 +254,12 @@ while (!$end) {
 	    my $pids_in_pfile = Sympa::Tools::Daemon::get_pids_in_pid_file($Sympa::Configuration::Conf{'pidfile_bulk'});
 	    unless (defined($pids_in_pfile)){
 		Sympa::Tools::Daemon::write_pid(
-			$Sympa::Configuration::Conf{'pidfile_bulk'},
-			$PID,
-			$options,
-			$Sympa::Configuration::Conf{'lock_method'},
-			Sympa::Constants::USER,
-			Sympa::Constants::GROUP,
+			file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
+			pid     => $PID,
+			options => $options,
+			method  => $Sympa::Configuration::Conf{'lock_method'},
+			user    => Sympa::Constants::USER,
+			group   => Sympa::Constants::GROUP,
 		);
 		close STDERR;
 		Sympa::Tools::Daemon::direct_stderr_to_file(
@@ -287,12 +287,12 @@ while (!$end) {
 			    Sympa::Log::Syslog::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
 			    Sympa::Tools::Daemon::write_pid(
-				$Sympa::Configuration::Conf{'pidfile_bulk'},
-				$child_pid,
-				$options,
-				$Sympa::Configuration::Conf{'lock_method'},
-				Sympa::Constants::USER,
-				Sympa::Constants::GROUP,
+				file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
+				pid     => $child_pid,
+				options => $options,
+				method  => $Sympa::Configuration::Conf{'lock_method'},
+				user    => Sympa::Constants::USER,
+				group   => Sympa::Constants::GROUP,
 			    );
 			    $created_children{$child_pid} = 1;
 			    sleep 1;

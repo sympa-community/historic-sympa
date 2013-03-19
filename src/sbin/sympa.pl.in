@@ -532,12 +532,12 @@ if ($signal ne 'hup') {
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 	Sympa::Tools::Daemon::write_pid(
-		$file,
-		$PID,
-		$options,
-		$Sympa::Configuration::Conf{'lock_method'},
-		Sympa::Constants::USER,
-		Sympa::Constants::GROUP,
+		file    => $file,
+		pid     => $PID,
+		options => $options,
+		method  => $Sympa::Configuration::Conf{'lock_method'},
+		user    => Sympa::Constants::USER,
+		group   => Sympa::Constants::GROUP,
 	);
 	unless ($options->{'stderr_to_tty'}) {
 	    Sympa::Tools::Daemon::direct_stderr_to_file(
