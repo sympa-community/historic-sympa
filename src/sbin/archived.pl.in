@@ -389,7 +389,20 @@ sub remove {
 
     Sympa::Log::Database::do_stat_log({'robot' => $robot, 'list' => $adrlist, 'operation' => 'remove archive', 'parameter' => '', 'mail' => 'test@cru.fr','client' => $ip, 'daemon' => $daemon_name});
 
-    unless(Sympa::Log::Database::do_log({'robot' => $robot,'list' => $adrlist,'action' => 'remove','parameters' => $msgid.','.$adrlist,'target_email' => '','msg_id' => $msgid,'status' => 'succes','error_type' => '','user_email' =>'','client' => $ip,'daemon' => $daemon_name})){
+    my $result = Sympa::Log::Database::do_log(
+	robot        => $robot,
+	list         => $adrlist,
+	action       => 'remove',
+	parameters   => $msgid.','.$adrlist,
+	target_email => '',
+	msg_id       => $msgid,
+	status       => 'succes',
+	error_type   => '',
+	user_email   => '',
+	client       => $ip,
+	daemon       => $daemon_name
+    );
+    unless ($result) {
 	Sympa::Log::Syslog::do_log('error','archived::remove: unable to log event');
     }
     my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');

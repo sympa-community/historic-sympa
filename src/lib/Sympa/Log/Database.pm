@@ -116,7 +116,7 @@ sub get_log_date {
 	return @dates;
 }
 
-=head2 do_log($parameters)
+=head2 do_log(%parameters)
 
 Add log in RDBMS.
 
@@ -127,40 +127,32 @@ Add log in RDBMS.
 =cut
 
 sub do_log {
-	my ($arg) = @_;
+	my (%params) = @_;
 
-	my $list = $arg->{'list'};
-	my $robot = $arg->{'robot'};
-	my $action = $arg->{'action'};
-	my $parameters = Sympa::Tools::clean_msg_id($arg->{'parameters'});
-	my $target_email = $arg->{'target_email'};
-	my $msg_id = Sympa::Tools::clean_msg_id($arg->{'msg_id'});
-	my $status = $arg->{'status'};
-	my $error_type = $arg->{'error_type'};
-	my $user_email = Sympa::Tools::clean_msg_id($arg->{'user_email'});
-	my $client = $arg->{'client'};
-	my $daemon = $arg->{'daemon'};
-	my $date=time;
+	$params{parameters} = Sympa::Tools::clean_msg_id($params{parameters});
+	$params{msg_id}     = Sympa::Tools::clean_msg_id($params{msg_id});
+	$params{user_email} = Sympa::Tools::clean_msg_id($params{user_email});
+
+	my $date   = time;
 	my $random = int(rand(1000000));
-#    my $id = $date*1000000+$random;
-	my $id = $date.$random;
+	my $id     = $date.$random;
 
-	unless($user_email) {
-		$user_email = 'anonymous';
+	unless($params{user_email}) {
+		$params{user_email} = 'anonymous';
 	}
-	unless($list) {
-		$list = '';
+	unless($params{list}) {
+		$params{list} = '';
 	}
 	#remove the robot name of the list name
-	if($list =~ /(.+)\@(.+)/) {
-		$list = $1;
-		unless($robot) {
-			$robot = $2;
+	if($params{list} =~ /(.+)\@(.+)/) {
+		$params{list} = $1;
+		unless($params{robot}) {
+			$params{robot} = $2;
 		}
 	}
 
-	unless ($daemon =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
-		Sympa::Log::Syslog::do_log ('err',"Internal_error : incorrect process value $daemon");
+	unless ($params{daemon} =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
+		Sympa::Log::Syslog::do_log ('err',"Internal_error : incorrect process value $params{daemon}");
 		return undef;
 	}
 
@@ -170,17 +162,17 @@ sub do_log {
 		'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
 		$id,
 		$date,
-		Sympa::SDM::quote($robot),
-		Sympa::SDM::quote($list),
-		Sympa::SDM::quote($action),
-		Sympa::SDM::quote(substr($parameters,0,100)),
-		Sympa::SDM::quote($target_email),
-		Sympa::SDM::quote($msg_id),
-		Sympa::SDM::quote($status),
-		Sympa::SDM::quote($error_type),
-		Sympa::SDM::quote($user_email),
-		Sympa::SDM::quote($client),
-		Sympa::SDM::quote($daemon)
+		Sympa::SDM::quote($params{robot}),
+		Sympa::SDM::quote($params{list}),
+		Sympa::SDM::quote($params{action}),
+		Sympa::SDM::quote(substr($params{parameters},0,100)),
+		Sympa::SDM::quote($params{target_email}),
+		Sympa::SDM::quote($params{msg_id}),
+		Sympa::SDM::quote($params{status}),
+		Sympa::SDM::quote($params{error_type}),
+		Sympa::SDM::quote($params{user_email}),
+		Sympa::SDM::quote($params{client}),
+		Sympa::SDM::quote($params{daemon})
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new db_log entry in the database');

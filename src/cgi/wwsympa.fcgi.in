@@ -1883,15 +1883,17 @@ sub wwslog {
 sub web_db_log {
     my $data = shift;
 
-    $data->{'client'} = $param->{'remote_addr'};
-    $data->{'daemon'} = 'wwsympa';
-    $data->{'robot'} ||= $robot;
-    $data->{'list'} ||= $list->{'name'} if (defined $list);
-    $data->{'action'} ||= $param->{'action'};
-    $data->{'user_email'} ||= $param->{'user'}{'email'} if (defined $param->{'user'});
-    $data->{'target_email'} ||= $data->{'user_email'}; ## Default email is the user email
-
-    unless (Sympa::Log::Database::do_log($data)) {
+    my $result = Sympa::Log::Database::do_log(
+	    robot        => $robot,
+	    action       => $param->{'action'},
+	    user_email   => $param->{'user'}{'email'},
+	    list         => $list->{'name'},
+	    target_email => $data->{'user_email'},
+	    %$data,
+	    client       => $param->{'remote_addr'},
+	    daemon       => 'wwsympa',
+    );
+    unless ($result) {
 	wwslog('err','web_db_log: failed to log in database');
 	return undef;
     }
