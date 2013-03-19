@@ -255,7 +255,7 @@ sub parse_notification {
 		} elsif ($paragraph =~ /^Receiver not found:/m) {
 			# Compuserve
 			foreach my $line (split(/\r\n/, $paragraph)) {
-				$info{$2}{error} = $1 if /^(.*): (\S+)/;
+				$info{$2}{error} = $1 if $line =~ /^(.*): (\S+)/;
 			}
 
 		} elsif ($paragraph =~ /^\s*-+ Special condition follows -+/m) {
