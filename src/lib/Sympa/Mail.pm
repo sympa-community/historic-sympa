@@ -1077,7 +1077,7 @@ sub _smtpto {
 
 sub _reformat_message($;$$) {
     my ($message, $attachments, $defcharset) = @_;
-    my $attachments ||= [];
+    $attachments ||= [];
 
     my $msg;
 
