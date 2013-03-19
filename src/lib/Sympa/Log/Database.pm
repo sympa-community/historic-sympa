@@ -42,6 +42,49 @@ use Sympa::Log::Syslog;
 
 my ($sth, @sth_stack, $rows_nb);
 
+my %action_type = (
+	message => [ qw/
+		arc_delete	arc_download	d_remove_arc	distribute
+		DoCommand	DoFile		DoForward	DoMessage
+		reject		rebuildarc	record_email	remind
+		remove		send_me		send_mail	SendDigest
+		sendMessage
+	/ ],
+	authentication => [ qw/
+		choosepasswd	login			logout
+		loginrequest	remindpasswd		sendpasswd
+		ssologin	ssologin_succeses
+	/ ],
+	subscription => [ qw/
+		add		del	ignoresub	signoff
+		subscribe	subindex
+	/ ],
+	list_management => [ qw/
+		admin		blacklist		close_list
+		copy_template	create_list		edit_list
+		edit_template	install_pending_list	purge_list
+		remove_template	rename_list
+	/ ],
+	bounced => [ qw/
+		get_bounce	resetbounce
+	/ ],
+	preferences => [ qw/
+		change_email	editsubscriber	pref
+		set		setpasswd	setpref
+	/ ],
+	shared => [ qw/
+		change_email	creation_shared_file	d_admin
+		d_change_access	d_control		d_copy_file
+		d_copy_rec_dir	d_create_dir		d_delete
+		d_describe	d_editfile		d_install_shared
+		d_overwrite	d_properties		d_reject_shared
+		d_rename	d_savefile		d_set_owner
+		d_upload	d_unzip			d_unzip_shared_file
+		d_read		install_file_hierarchy	new_d_read
+		set_lang
+	/ ],
+);
+
 =head1 FUNCTIONS
 
 =head2 get_log_date()
@@ -279,30 +322,6 @@ Scan log_table with appropriate select.
 sub get_first_db_log {
 	my ($select) = @_;
 
-	my %action_type = ('message' => ['reject','distribute','arc_delete','arc_download',
-			'sendMessage','remove','record_email','send_me',
-			'd_remove_arc','rebuildarc','remind','send_mail',
-			'DoFile','sendMessage','DoForward','DoMessage',
-			'DoCommand','SendDigest'],
-		'authentication' => ['login','logout','loginrequest','sendpasswd',
-			'ssologin','ssologin_succeses','remindpasswd',
-			'choosepasswd'],
-		'subscription' => ['subscribe','signoff','add','del','ignoresub',
-			'subindex'],
-		'list_management' => ['create_list','rename_list','close_list',
-			'edit_list','admin','blacklist','install_pending_list',
-			'purge_list','edit_template','copy_template',
-			'remove_template'],
-		'bounced' => ['resetbounce','get_bounce'],
-		'preferences' => ['set','setpref','pref','change_email','setpasswd','editsubscriber'],
-		'shared' => ['d_unzip','d_upload','d_read','d_delete','d_savefile',
-			'd_overwrite','d_create_dir','d_set_owner','d_change_access',
-			'd_describe','d_rename','d_editfile','d_admin',
-			'd_install_shared','d_reject_shared','d_properties',
-			'creation_shared_file','d_unzip_shared_file',
-			'install_file_hierarchy','d_copy_rec_dir','d_copy_file',
-			'change_email','set_lang','new_d_read','d_control'],
-	);
 
 	my $statement = sprintf "SELECT date_logs, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", Sympa::SDM::quote($select->{'robot'});
 
