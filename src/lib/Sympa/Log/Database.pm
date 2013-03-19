@@ -209,35 +209,28 @@ sub do_stat_log{
 }#end sub
 
 sub _db_stat_counter_log {
-	my ($arg) = @_;
+	my (%params) = @_;
 
-	my $date_deb = $arg->{'begin_date'};
-	my $date_fin = $arg->{'end_date'};
-	my $data = $arg->{'data'};
-	my $list = $arg->{'list'};
-	my $variation = $arg->{'variation'};
-	my $total = $arg->{'total'};
-	my $robot = $arg->{'robot'};
 	my $random = int(rand(1000000));
-	my $id = $date_deb.$random;
+	my $id = $params{begin_date}.$random;
 
-	if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
-		$list = $1;
-		unless($robot) {
-			$robot = $2;
+	if($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+		$params{list} = $1;
+		unless($params{robot}) {
+			$params{robot} = $2;
 		}
 	}
 
 	my $result = Sympa::SDM::do_query(
 		'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, data_counter, robot_counter, list_counter, variation_counter, total_counter) VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
 		$id,
-		$date_deb,
-		$date_fin,
-		Sympa::SDM::quote($data),
-		Sympa::SDM::quote($robot),
-		Sympa::SDM::quote($list),
-		$variation,
-		$total
+		$params{begin_date},
+		$params{end_date},
+		Sympa::SDM::quote($params{data}),
+		Sympa::SDM::quote($params{robot}),
+		Sympa::SDM::quote($params{list}),
+		$params{variation},
+		$params{total}
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new stat counter entry in the database');
@@ -497,13 +490,26 @@ sub aggregate_data {
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'}, 'total' => '', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'},
+						total => '',
+						robot => $key_robot
+					);
 
 					#updating susbcriber_table
 					foreach my $key_mail (keys (%{$aggregated_data->{$key_op}->{$key_robot}->{$key_list}})){
 
 						if (($key_mail ne 'count') && ($key_mail ne 'size')){
-							_update_subscriber_msg_send($key_mail, $key_list, $key_robot, $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_mail});
+							_update_subscriber_msg_send(
+								mail    => $key_mail,
+								list    => $key_list,
+								robot   => $key_robot,
+								counter => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_mail}
+							);
 						}
 					}
 				}
@@ -517,7 +523,15 @@ sub aggregate_data {
 
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'}, 'total' =>'', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'},
+						total      =>   '',
+						robot      => $key_robot
+					);
 				}
 			}
 		}
@@ -530,7 +544,15 @@ sub aggregate_data {
 
 					foreach my $key_param (keys (%{$aggregated_data->{$key_op}->{$key_robot}->{$key_list}})){
 
-						_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_param, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_param}, 'total'=>'', 'robot' => $key_robot});
+						_db_stat_counter_log(
+							begin_date => $begin_date,
+							end_date   => $end_date,
+							data       => $key_param,
+							list       => $key_list,
+							variation => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_param},
+							total     => '',
+							robot     => $key_robot
+						);
 
 					}
 				}
@@ -541,7 +563,15 @@ sub aggregate_data {
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
 
-				_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => '', 'variation' => $aggregated_data->{$key_op}->{$key_robot}, 'total' => '', 'robot' => $key_robot});
+				_db_stat_counter_log(
+					begin_date => $begin_date,
+					end_date   => $end_date,
+					data       => $key_op,
+					list       => '',
+					variation  => $aggregated_data->{$key_op}->{$key_robot},
+					total      => '',
+					robot      => $key_robot
+				);
 			}
 		}
 		#store lists copy-----------------------------------------------
@@ -549,7 +579,15 @@ sub aggregate_data {
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
 
-				_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => '', 'variation' => $aggregated_data->{$key_op}->{$key_robot}, 'total' => '', 'robot' => $key_robot});
+				_db_stat_counter_log(
+					begin_date => $begin_date,
+					end_date   => $end_date,
+					data       => $key_op,
+					list       => '',
+					variation  => $aggregated_data->{$key_op}->{$key_robot},
+					total      => '',
+					robot      => $key_robot
+				);
 			}
 		}
 		#store lists closed----------------------------------------------
@@ -557,7 +595,15 @@ sub aggregate_data {
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
 
-				_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => '', 'variation' => $aggregated_data->{$key_op}->{$key_robot}, 'total' => '', 'robot' => $key_robot});
+				_db_stat_counter_log(
+					begin_date => $begin_date,
+					end_date   => $end_date,
+					data       => $key_op,
+					list       => '',
+					variation  => $aggregated_data->{$key_op}->{$key_robot},
+					total      => '',
+					robot      => $key_robot
+				);
 			}
 		}
 		#store lists purged-------------------------------------------------
@@ -565,7 +611,15 @@ sub aggregate_data {
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
 
-				_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => '', 'variation' => $aggregated_data->{$key_op}->{$key_robot}, 'total' => '', 'robot' => $key_robot});
+				_db_stat_counter_log(
+					begin_date => $begin_date,
+					end_date   => $end_date,
+					data       => $key_op,
+					list       => '',
+					variation  => $aggregated_data->{$key_op}->{$key_robot},
+					total      => '',
+					robot      => $key_robot
+				);
 			}
 		}
 		#store messages rejected-------------------------------------------
@@ -575,7 +629,15 @@ sub aggregate_data {
 
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}, 'total' => '', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list},
+						total      => '',
+						robot      => $key_robot
+					);
 				}
 			}
 		}
@@ -584,7 +646,15 @@ sub aggregate_data {
 
 			foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
 
-				_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => '', 'variation' => $aggregated_data->{$key_op}->{$key_robot}, 'total' => '', 'robot' => $key_robot});
+				_db_stat_counter_log(
+					begin_date => $begin_date,
+					end_date   => $end_date,
+					data       => $key_op,
+					list       => '',
+					variation  => $aggregated_data->{$key_op}->{$key_robot},
+					total      => '',
+					robot      => $key_robot
+				);
 			}
 		}
 		#store documents uploaded------------------------------------------
@@ -594,7 +664,15 @@ sub aggregate_data {
 
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}, 'total' => '', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list},
+						total      => '',
+						robot      => $key_robot
+					);
 				}
 			}
 
@@ -606,7 +684,15 @@ sub aggregate_data {
 
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}, 'total' => '', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list},
+						total      => '',
+						robot      => $key_robot
+					);
 				}
 			}
 
@@ -618,7 +704,15 @@ sub aggregate_data {
 
 				foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 
-					_db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'data' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}, 'total' => '', 'robot' => $key_robot});
+					_db_stat_counter_log(
+						begin_date => $begin_date,
+						end_date   => $end_date,
+						data       => $key_op,
+						list       => $key_list,
+						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list},
+						total      => '',
+						robot      => $key_robot
+					);
 				}
 			}
 
@@ -887,33 +981,33 @@ sub _deal_data {
 
 #subroutine to Update subscriber_table about message send, upgrade field number_messages_subscriber
 sub _update_subscriber_msg_send {
-
-	my ($mail, $list, $robot, $counter) = @_;
-	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
+	my (%params) = @_;
+	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
 
 	$sth = Sympa::SDM::do_query(
 		"SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
-		$robot,
-		$list,
-		$mail
+		$params{robot},
+		$params{list},
+		$params{mail}
 	);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve message count for user %s, list %s@%s',$mail, $list, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to retrieve message count for user %s, list %s@%s',$params{mail}, $params{list}, $params{robot});
 		return undef;
 	}
 
-	my $nb_msg = $sth->fetchrow_hashref('number_messages_subscriber') + $counter;
-
+	my $nb_msg =
+		$sth->fetchrow_hashref('number_messages_subscriber') +
+		$params{counter};
 
 	my $result = Sympa::SDM::do_query(
 		"UPDATE subscriber_table SET number_messages_subscriber = '%d' WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
 		$nb_msg,
-		$robot,
-		$list,
-		$mail
+		$params{robot},
+		$params{list},
+		$params{mail}
 	);
 	unless ($result) {
-		Sympa::Log::Syslog::do_log('err','Unable to update message count for user %s, list %s@%s',$mail, $list, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to update message count for user %s, list %s@%s',$params{mail}, $params{list}, $params{robot});
 		return undef;
 	}
 	return 1;
