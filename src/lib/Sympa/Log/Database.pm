@@ -38,6 +38,7 @@ use English qw(-no_match_vars);
 use POSIX qw();
 
 use Sympa::SDM;
+use Sympa::Log::Syslog;
 
 my ($sth, @sth_stack, $rows_nb);
 
@@ -61,7 +62,7 @@ sub get_log_date {
 			"SELECT $query(date_logs) FROM logs_table"
 		);
 		unless ($sth) {
-			do_log('err','Unable to get %s date from logs_table',$query);
+			Sympa::Log::Syslog::do_log('err','Unable to get %s date from logs_table',$query);
 			return undef;
 		}
 		while (my $d = ($sth->fetchrow_array) [0]) {
@@ -116,7 +117,7 @@ sub do_log {
 	}
 
 	unless ($daemon =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
-		do_log ('err',"Internal_error : incorrect process value $daemon");
+		Sympa::Log::Syslog::do_log ('err',"Internal_error : incorrect process value $daemon");
 		return undef;
 	}
 
@@ -139,7 +140,7 @@ sub do_log {
 		Sympa::SDM::quote($daemon)
 	);
 	unless($result) {
-		do_log('err','Unable to insert new db_log entry in the database');
+		Sympa::Log::Syslog::do_log('err','Unable to insert new db_log entry in the database');
 		return undef;
 	}
 	#if (($action eq 'send_mail') && $list && $robot){
@@ -201,7 +202,7 @@ sub do_stat_log{
 		Sympa::SDM::quote($read)
 	);
 	unless($result) {
-		do_log('err','Unable to insert new stat entry in the database');
+		Sympa::Log::Syslog::do_log('err','Unable to insert new stat entry in the database');
 		return undef;
 	}
 	return 1;
@@ -239,7 +240,7 @@ sub _db_stat_counter_log {
 		$total
 	);
 	unless($result) {
-		do_log('err','Unable to insert new stat counter entry in the database');
+		Sympa::Log::Syslog::do_log('err','Unable to insert new stat counter entry in the database');
 		return undef;
 	}
 	return 1;
@@ -265,7 +266,7 @@ sub delete_messages {
 		Sympa::SDM::quote($date)
 	);
 	unless ($result) {
-		do_log('err','Unable to delete db_log entry from the database');
+		Sympa::Log::Syslog::do_log('err','Unable to delete db_log entry from the database');
 		return undef;
 	}
 	return 1;
@@ -379,7 +380,7 @@ sub get_first_db_log {
 	push @sth_stack, $sth;
 	$sth = Sympa::SDM::do_query($statement);
 	unless($sth) {
-		do_log('err','Unable to retrieve logs entry from the database');
+		Sympa::Log::Syslog::do_log('err','Unable to retrieve logs entry from the database');
 		return undef;
 	}
 
@@ -461,7 +462,7 @@ sub aggregate_data {
 		$end_date
 	);
 	unless ($sth) {
-		do_log('err','Unable to retrieve stat entries between date % and date %s', $begin_date, $end_date);
+		Sympa::log::Syslog::do_log('err','Unable to retrieve stat entries between date % and date %s', $begin_date, $end_date);
 		return undef;
 	}
 
@@ -478,7 +479,7 @@ sub aggregate_data {
 		$end_date
 	);
 	unless ($sth) {
-		do_log('err','Unable to set stat entries between date % and date %s as read', $begin_date, $end_date);
+		Sympa::Log::Syslog::do_log('err','Unable to set stat entries between date % and date %s as read', $begin_date, $end_date);
 		return undef;
 	}
 
@@ -627,7 +628,7 @@ sub aggregate_data {
 
 	my $d_deb = localtime($begin_date);
 	my $d_fin = localtime($end_date);
-	do_log('debug2', 'data aggregated from %s to %s', $d_deb, $d_fin);
+	Sympa::Log::Syslog::do_log('debug2', 'data aggregated from %s to %s', $d_deb, $d_fin);
 }
 
 
@@ -888,7 +889,7 @@ sub _deal_data {
 sub _update_subscriber_msg_send {
 
 	my ($mail, $list, $robot, $counter) = @_;
-	do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
+	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
 
 	$sth = Sympa::SDM::do_query(
 		"SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
@@ -897,7 +898,7 @@ sub _update_subscriber_msg_send {
 		$mail
 	);
 	unless ($sth) {
-		do_log('err','Unable to retrieve message count for user %s, list %s@%s',$mail, $list, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to retrieve message count for user %s, list %s@%s',$mail, $list, $robot);
 		return undef;
 	}
 
@@ -912,7 +913,7 @@ sub _update_subscriber_msg_send {
 		$mail
 	);
 	unless ($result) {
-		do_log('err','Unable to update message count for user %s, list %s@%s',$mail, $list, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to update message count for user %s, list %s@%s',$mail, $list, $robot);
 		return undef;
 	}
 	return 1;
