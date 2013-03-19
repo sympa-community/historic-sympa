@@ -129,6 +129,11 @@ Add log in RDBMS.
 sub do_log {
 	my (%params) = @_;
 
+	unless ($params{daemon} =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
+		Sympa::Log::Syslog::do_log ('err',"Internal_error : incorrect process value $params{daemon}");
+		return undef;
+	}
+
 	$params{parameters} = Sympa::Tools::clean_msg_id($params{parameters});
 	$params{msg_id}     = Sympa::Tools::clean_msg_id($params{msg_id});
 	$params{user_email} = Sympa::Tools::clean_msg_id($params{user_email});
@@ -149,11 +154,6 @@ sub do_log {
 		unless($params{robot}) {
 			$params{robot} = $2;
 		}
-	}
-
-	unless ($params{daemon} =~ /^(task|archived|sympa|wwsympa|bounced|sympa_soap)$/) {
-		Sympa::Log::Syslog::do_log ('err',"Internal_error : incorrect process value $params{daemon}");
-		return undef;
 	}
 
 	## Insert in log_table
