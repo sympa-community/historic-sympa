@@ -30,50 +30,50 @@ $source->build_connect_string();
 is($source->{connect_string}, 'DBI:mysql:foo:', 'connect string');
 
 my $clause;
-$clause = $source->get_substring_clause({
+$clause = $source->get_substring_clause(
 	source_field     => 'foo',
 	separator        => ',',
 	substring_length => 5
-});
+);
 is(
 	$clause,
 	"REVERSE(SUBSTRING(foo FROM position(',' IN foo) FOR 5))",
 	'substring clause'
 );
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5
-});
+);
 is($clause, "LIMIT 5", 'limit clause');
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5,
 	offset     => 3
-});
+);
 is($clause, "LIMIT 3,5", 'limit clause');
 
 my $date;
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
-});
+);
 ok(!defined $date, 'formatted date (no mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'foo'
-});
+);
 ok(!defined $date, 'formatted date (invalid mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'read'
-});
+);
 is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'write'
-});
+);
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
@@ -147,7 +147,7 @@ SKIP: {
 		'initial tables list'
 	);
 
-	$result = $source->add_table({ table => 'table1' });
+	$result = $source->add_table(table => 'table1');
 	is(
 		$result,
 		"Table table1 created in database $ENV{DB_NAME}",
@@ -161,39 +161,39 @@ SKIP: {
 		'tables list after table creation'
 	);
 
-	$result = $source->get_fields({ table => 'table1' });
+	$result = $source->get_fields(table => 'table1');
 	is_deeply(
 		$result,
 		{ temporary => 'int(11)' },
 		'fields list after table creation'
 	);
 
-	$result = $source->add_field({
+	$result = $source->add_field(
 		table   => 'table1',
 		field   => 'id',
 		type    => 'int',
 		autoinc => 1,
 		primary => 1,
-	});
+	);
 	is(
 		$result,
 		'Field id added to table table1 (options: AUTO_INCREMENT PRIMARY KEY)',
 		'field id creation'
 	);
 
-	$result = $source->add_field({
+	$result = $source->add_field(
 		table   => 'table1',
 		field   => 'data',
 		type    => 'char(30)',
 		notnull => 1
-	});
+	);
 	is(
 		$result,
 		'Field data added to table table1 (options: NOT NULL)',
 		'field data creation'
 	);
 
-	$result = $source->get_fields({ table => 'table1' });
+	$result = $source->get_fields(table => 'table1');
 	is_deeply(
 		$result,
 		{
@@ -204,44 +204,44 @@ SKIP: {
 		'fields list after fields creation'
 	);
 
-	$result = $result = $source->is_autoinc({
+	$result = $result = $source->is_autoinc(
 		table => 'table1',
 		field => 'id',
-	});
+	);
 	ok($result, "id is autoinc");
 
-	$result = $result = $source->is_autoinc({
+	$result = $result = $source->is_autoinc(
 		table => 'table1',
 		field => 'data',
-	});
+	);
 	ok(!$result, "data is not autoinc");
 
-	$result = $source->get_primary_key({ table => 'table1' });
+	$result = $source->get_primary_key(table => 'table1');
 	is_deeply(
 		$result,
 		{ id => 1 },
 		'initial primary key list'
 	);
 
-	$result = $source->get_indexes({ table => 'table1' });
+	$result = $source->get_indexes(table => 'table1');
 	is_deeply(
 		$result,
 		{ },
 		'initial indexes list'
 	);
 
-	$result = $source->set_index({
+	$result = $source->set_index(
 		table      => 'table1',
 		index_name => 'index1',
 		fields     => [ qw/data/ ]
-	});
+	);
 	is(
 		$result,
 		"Table table1, index %s set using data",
 		'index creation'
 	);
 
-	$result = $source->get_indexes({ table => 'table1' });
+	$result = $source->get_indexes(table => 'table1');
 	is_deeply(
 		$result,
 		{ index1 => { data => 1 } },
@@ -254,13 +254,13 @@ SKIP: {
 	});
 	ok($result, "field data deletion");
 
-	$result = $source->delete_field({
+	$result = $source->delete_field(
 		table => 'table1',
 		field => 'id',
-	});
+	);
 	ok($result, "field id deletion");
 
-	$result = $source->get_fields({ table => 'table1' });
+	$result = $source->get_fields(table => 'table1');
 	is_deeply(
 		$result,
 		{
@@ -269,14 +269,14 @@ SKIP: {
 		'fields list after field deletion'
 	);
 
-	$result = $source->get_primary_key({ table => 'table1' });
+	$result = $source->get_primary_key(table => 'table1');
 	is_deeply(
 		$result,
 		{ },
 		'primary key list after field deletion'
 	);
 
-	$result = $source->get_indexes({ table => 'table1' });
+	$result = $source->get_indexes(table => 'table1');
 	is_deeply(
 		$result,
 		{ },

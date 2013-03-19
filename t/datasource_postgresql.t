@@ -30,50 +30,50 @@ $source->build_connect_string();
 is($source->{connect_string}, 'DBI:Pg:dbname=foo;host=', 'connect string');
 
 my $clause;
-$clause = $source->get_substring_clause({
+$clause = $source->get_substring_clause(
 	source_field     => 'foo',
 	separator        => ',',
 	substring_length => 5
-});
+);
 is(
 	$clause,
 	"SUBSTRING(foo FROM position(',' IN foo) FOR 5)",
 	'substring clause'
 );
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5
-});
+);
 is($clause, "LIMIT 5", 'limit clause');
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5,
 	offset     => 3
-});
+);
 is($clause, "LIMIT 5 OFFSET 3", 'limit clause');
 
 my $date;
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
-});
+);
 ok(!defined $date, 'formatted date (no mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'foo'
-});
+);
 ok(!defined $date, 'formatted date (invalid mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'read'
-});
+);
 is($date, "date_part('epoch',666)", 'formatted date (read)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'write'
-});
+);
 is(
 	$date,
 	"'epoch'::timestamp with time zone + '666 sec'",

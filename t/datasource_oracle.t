@@ -29,50 +29,50 @@ $source->build_connect_string();
 is($source->{connect_string}, 'DBI:Oracle:', 'connect string');
 
 my $clause;
-$clause = $source->get_substring_clause({
+$clause = $source->get_substring_clause(
 	source_field     => 'foo',
 	separator        => ',',
 	substring_length => 5
-});
+);
 is(
 	$clause,
 	"substr(foo,instr(foo,',')+1)",
 	'substring clause'
 );
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5
-});
+);
 is($clause, "", 'limit clause');
 
-$clause = $source->get_limit_clause({
+$clause = $source->get_limit_clause(
 	rows_count => 5,
 	offset     => 3
-});
+);
 is($clause, "", 'limit clause');
 
 my $date;
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
-});
+);
 ok(!defined $date, 'formatted date (no mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'foo'
-});
+);
 ok(!defined $date, 'formatted date (invalid mode)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'read'
-});
+);
 is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
 
-$date = $source->get_formatted_date({
+$date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'write'
-});
+);
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
