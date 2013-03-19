@@ -525,8 +525,6 @@ sub aggregate_data {
 	#store reslults in stat_counter_table
 	foreach my $key_op (keys (%$aggregated_data)) {
 
-		#open TMP2, ">/tmp/digdump"; Sympa::Tools::Data::dump_var($aggregated_data->{$key_op}, 0, \*TMP2); close TMP2;
-
 		#store send mail data
 		if($key_op eq 'send_mail'){
 
