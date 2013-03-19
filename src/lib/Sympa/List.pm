@@ -9417,7 +9417,7 @@ sub _load_list_members_from_include {
 		}
 	    }elsif ($type eq 'include_list') {
 		$depend_on->{$name} = 1 ;
-		if (_inclusion_loop ($name,$incl,$depend_on)) {
+		if (_inclusion_loop ($incl,$depend_on)) {
 		    Sympa::Log::Syslog::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		}else{
 		    $depend_on->{$incl} = 1;
@@ -9548,7 +9548,7 @@ sub _load_list_admin_from_include {
 		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$self->{'domain'},\%option);
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
-		    if (_inclusion_loop ($name,$incl,$depend_on)) {
+		    if (_inclusion_loop ($incl,$depend_on)) {
 			Sympa::Log::Syslog::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
 			$depend_on->{$incl} = 1;
@@ -10482,7 +10482,7 @@ sub is_update_param {
 
 
 sub _inclusion_loop {
-	my ($undef, $incl, $depend_on) = @_;
+	my ($incl, $depend_on) = @_;
 
     return 1 if ($depend_on->{$incl}) ;
 
