@@ -70,7 +70,6 @@ use Sympa::Robot;
 use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::SDM;
-use Sympa::SharedDocument;
 use Sympa::Spool;
 use Sympa::Template;
 use Sympa::Tools;
