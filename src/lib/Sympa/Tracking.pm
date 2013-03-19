@@ -38,7 +38,7 @@ use CGI;
 use Email::Simple;
 use MIME::Base64;
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::SDM;
 
 ##############################################
@@ -55,13 +55,13 @@ use Sympa::SDM;
 ##############################################
 sub get_recipients_status {
         my ($msgid, $listname, $robot) = @_;
-        Sympa::Log::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
+        Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
         my $sth;
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
         unless($sth = Sympa::SDM::do_query("SELECT recipient_notification AS recipient,  reception_option_notification AS reception_option, status_notification AS status, arrival_date_notification AS arrival_date, type_notification as type, message_notification as notification_message FROM notification_table WHERE (list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))",Sympa::SDM::quote($listname),Sympa::SDM::quote($robot),Sympa::SDM::quote($msgid),Sympa::SDM::quote($msgid),Sympa::SDM::quote('<'.$msgid.'>'))) {
-	    Sympa::Log::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
+	    Sympa::Log::Syslog::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
             return undef;
         }
         my @pk_notifs;
@@ -98,7 +98,7 @@ sub db_init_notification_table{
     my $reception_option =  $params{'reception_option'};
     my @rcpt =  @{$params{'rcpt'}};
 
-    Sympa::Log::do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
+    Sympa::Log::Syslog::do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
 
     my $time = time ;
 
@@ -106,7 +106,7 @@ sub db_init_notification_table{
 	my $email= lc($email);
 
 	unless(Sympa::SDM::do_query("INSERT INTO notification_table (message_id_notification,recipient_notification,reception_option_notification,list_notification,robot_notification,date_notification) VALUES (%s,%s,%s,%s,%s,%s)",Sympa::SDM::quote($msgid),Sympa::SDM::quote($email),Sympa::SDM::quote($reception_option),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot),$time)) {
-	    Sympa::Log::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot);
+	    Sympa::Log::Syslog::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot);
 	    return undef;
 	}
     }
@@ -138,14 +138,14 @@ sub db_init_notification_table{
 ##############################################
 sub db_insert_notification {
     my ($notification_id, $type, $status, $arrival_date ,$notification_as_string  ) = @_;
-    Sympa::Log::do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status);
+    Sympa::Log::Syslog::do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status);
 
     chomp $arrival_date;
 
     $notification_as_string = MIME::Base64::encode($notification_as_string);
 
     unless(Sympa::SDM::do_query("UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE (pk_notification = %s)",Sympa::SDM::quote($status),Sympa::SDM::quote($arrival_date),Sympa::SDM::quote($notification_as_string),Sympa::SDM::quote($notification_id))) {
-	Sympa::Log::do_log('err','Unable to update notification %s in database', $notification_id);
+	Sympa::Log::Syslog::do_log('err','Unable to update notification %s in database', $notification_id);
 	return undef;
     }
 
@@ -165,19 +165,19 @@ sub db_insert_notification {
 sub find_notification_id_by_message{
     my ($recipient, $msgid, $listname, $robot) = @_;
 	chomp $msgid;
-    Sympa::Log::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
+    Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
     my $sth;
 
     # the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
     unless($sth = Sympa::SDM::do_query("SELECT pk_notification FROM notification_table WHERE ( recipient_notification = %s AND list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))", Sympa::SDM::quote($recipient),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot),Sympa::SDM::quote($msgid),Sympa::SDM::quote($msgid),Sympa::SDM::quote('<'.$msgid.'>'))) {
-	Sympa::Log::do_log('err','Unable to retrieve the tracking informations for user %s, message %s, list %s@%s', $recipient, $msgid, $listname, $robot);
+	Sympa::Log::Syslog::do_log('err','Unable to retrieve the tracking informations for user %s, message %s, list %s@%s', $recipient, $msgid, $listname, $robot);
 	return undef;
     }
 
     my @pk_notifications = $sth->fetchrow_array;
     if ($#pk_notifications > 0){
-	Sympa::Log::do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );
+	Sympa::Log::Syslog::do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );
 	# we should return undef...
     }
     return @pk_notifications[0];
@@ -198,11 +198,11 @@ sub find_notification_id_by_message{
 ##############################################
 sub remove_message_by_id{
     my ($msgid, $listname, $robot) = @_;
-    Sympa::Log::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
+    Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
 
     my $sth;
     unless($sth = Sympa::SDM::do_query("DELETE FROM notification_table WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s", Sympa::SDM::quote($msgid),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot))) {
-	Sympa::Log::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
+	Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
 	return undef;
     }
 
@@ -223,14 +223,14 @@ sub remove_message_by_id{
 ##############################################
 sub remove_message_by_period{
     my ($period, $listname, $robot) = @_;
-    Sympa::Log::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
+    Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
 
     my $sth;
 
     my $limit = time - ($period * 24 * 60 * 60);
 
     unless($sth = Sympa::SDM::do_query("DELETE FROM notification_table WHERE `date_notification` < %s AND list_notification = %s AND robot_notification = %s", $limit,Sympa::SDM::quote($listname),Sympa::SDM::quote($robot))) {
-	Sympa::Log::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot);
+	Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot);
 	return undef;
     }
 

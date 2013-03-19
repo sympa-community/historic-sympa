@@ -37,7 +37,7 @@ use strict;
 use JSON::XS;
 
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::OAuth::Provider;
 use Sympa::Tools;
 
@@ -75,7 +75,7 @@ A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
 
 sub new {
 	my ($class, %params) = @_;
-	Sympa::Log::do_log('debug2', '()');
+	Sympa::Log::Syslog::do_log('debug2', '()');
 
  	my $provider = Sympa::OAuth::Provider->new(
 		method               => $params{'method'},
@@ -201,7 +201,7 @@ An hashref containing groups definitions, or I<undef> if something went wrong
 
 sub get_groups {
 	my ($self) = @_;
-	Sympa::Log::do_log('debug2', '(%s)', $self->{'user'});
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', $self->{'user'});
 
 	my @entries = ();
 
@@ -251,7 +251,7 @@ An hashref containing members definitions, or I<undef> if something went wrong.
 
 sub get_group_members {
 	my ($self, %params) = @_;
-	Sympa::Log::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', $self->{'user'}, $params{'group'});
 
 	my @entries = ();
 

@@ -37,7 +37,7 @@ use strict;
 use Digest::MD5;
 use MIME::Base64;
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 
 ## global var to store a CipherSaber object
 my $cipher;
@@ -97,7 +97,7 @@ Decrypt a password.
 
 sub decrypt_password {
     my ($inpasswd, $cookie) = @_;
-    Sympa::Log::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
+    Sympa::Log::Syslog::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;
@@ -106,7 +106,7 @@ sub decrypt_password {
 	$cipher = ciphersaber_installed($cookie);
     }
     if ($cipher eq 'no_cipher') {
-	Sympa::Log::do_log('info','password seems crypted while CipherSaber is not installed !');
+	Sympa::Log::Syslog::do_log('info','password seems crypted while CipherSaber is not installed !');
 	return $inpasswd ;
     }
     return ($cipher->decrypt(MIME::Base64::decode($inpasswd)));

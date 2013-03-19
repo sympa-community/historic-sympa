@@ -32,7 +32,7 @@ use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::Tools::File;
 use Sympa::Upgrade;
 use Sympa::WWSympa;
@@ -233,7 +233,7 @@ foreach my $tpl (@templates) {
 				mode => 0755,
 			))
 		{
-			Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
+			Sympa::Log::Syslog::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
 			next;
 		}
 	}
@@ -285,7 +285,7 @@ sub convert {
 			group => Sympa::Constants::GROUP
 		))
 	{
-		Sympa::Log::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
+		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s',$Sympa::Configuration::Conf{'db_name'});
 		return undef;
 	}
 }

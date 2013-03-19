@@ -34,12 +34,12 @@ package Sympa::Datasource;
 
 use strict;
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 
 # Returns a unique ID for an include datasource
 sub _get_datasource_id {
     my ($source, $other_source) = @_;
-	Sympa::Log::do_log('debug2',"Getting datasource id for source '%s'",$source);
+	Sympa::Log::Syslog::do_log('debug2',"Getting datasource id for source '%s'",$source);
     if (ref($source) && $source->isa('Sympa::Datasource')) {
     	$source = $other_source;
     }
@@ -69,7 +69,7 @@ sub is_allowed_to_sync {
 	my $rsre = Sympa::Tools::get_regexp('time_ranges');
 	return 1 unless($ranges =~ /^$rsre$/);
 
-	Sympa::Log::do_log('debug', "Checking whether sync is allowed at current time");
+	Sympa::Log::Syslog::do_log('debug', "Checking whether sync is allowed at current time");
 
 	my (undef, $min, $hour) = localtime(time);
 	my $now = 60 * int($hour) + int($min);
@@ -80,19 +80,19 @@ sub is_allowed_to_sync {
 		my $end = 60 * int($3) + int($4);
 		$end += 24 * 60 if($end < $start);
 
-		Sympa::Log::do_log('debug', "Checking for range from ".sprintf('%02d', $start / 60)."h".sprintf('%02d', $start % 60)." to ".sprintf('%02d', ($end / 60) % 24)."h".sprintf('%02d', $end % 60));
+		Sympa::Log::Syslog::do_log('debug', "Checking for range from ".sprintf('%02d', $start / 60)."h".sprintf('%02d', $start % 60)." to ".sprintf('%02d', ($end / 60) % 24)."h".sprintf('%02d', $end % 60));
 
 		next if($start == $end);
 
 		if($now >= $start && $now <= $end) {
-			Sympa::Log::do_log('debug', "Failed, sync not allowed.");
+			Sympa::Log::Syslog::do_log('debug', "Failed, sync not allowed.");
 			return 0;
 		}
 
-		Sympa::Log::do_log('debug', "Pass ...");
+		Sympa::Log::Syslog::do_log('debug', "Pass ...");
 	}
 
-	Sympa::Log::do_log('debug', "Sync allowed");
+	Sympa::Log::Syslog::do_log('debug', "Sync allowed");
 	return 1;
 }
 

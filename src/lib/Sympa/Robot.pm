@@ -18,7 +18,7 @@ use strict;
 
 use Sympa::Configuration;
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Log::Syslog;
 
 =head1 CLASS METHODS
 
@@ -44,7 +44,7 @@ sub new {
     my ($class, %params) = @_;
 
     unless (defined $params{name} && $Sympa::Configuration::Conf{'robots'}{$params{name}}) {
-	Sympa::Log::do_log('err',"Unknown robot '$params{name}'");
+	Sympa::Log::Syslog::do_log('err',"Unknown robot '$params{name}'");
 	return undef;
     }
 
@@ -53,11 +53,11 @@ sub new {
 	$Sympa::Configuration::Conf{'home'}.'/'.$params{name};
 
     unless (-d $home) {
-	    Sympa::Log::do_log('err', "Missing directory $home for robot '$params{name}'");
+	    Sympa::Log::Syslog::do_log('err', "Missing directory $home for robot '$params{name}'");
 	    return undef;
     }
 
-    Sympa::Log::do_log('debug2', '');
+    Sympa::Log::Syslog::do_log('debug2', '');
 
     my $self = {
 	    name => $params{name},

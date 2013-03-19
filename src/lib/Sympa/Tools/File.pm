@@ -40,7 +40,7 @@ use File::Copy::Recursive;
 use File::Find;
 use POSIX qw();
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
@@ -57,7 +57,7 @@ sub set_file_rights {
 
     if ($params{'user'}){
 	unless ($uid = (getpwnam($params{'user'}))[2]) {
-	    Sympa::Log::do_log('err', "User %s can't be found in passwd file",$params{'user'});
+	    Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",$params{'user'});
 	    return undef;
 	}
     }else {
@@ -65,19 +65,19 @@ sub set_file_rights {
     }
     if ($params{'group'}) {
 	unless ($gid = (getgrnam($params{'group'}))[2]) {
-	    Sympa::Log::do_log('err', "Group %s can't be found",$params{'group'});
+	    Sympa::Log::Syslog::do_log('err', "Group %s can't be found",$params{'group'});
 	    return undef;
 	}
     }else {
 	$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
     }
     unless (chown($uid,$gid, $params{'file'})){
-	Sympa::Log::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$params{'file'},$params{'user'},$params{'group'}, $ERRNO);
+	Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$params{'file'},$params{'user'},$params{'group'}, $ERRNO);
 	return undef;
     }
     if ($params{'mode'}){
 	unless (chmod($params{'mode'}, $params{'file'})){
-	    Sympa::Log::do_log('err', "Can't change rights of file %s: %s",$params{'file'}, $ERRNO);
+	    Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s: %s",$params{'file'}, $ERRNO);
 	    return undef;
 	}
     }
@@ -92,10 +92,10 @@ Copy a directory and its content
 
 sub copy_dir {
     my ($dir1, $dir2) = @_;
-    Sympa::Log::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
+    Sympa::Log::Syslog::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
 
     unless (-d $dir1){
-	Sympa::Log::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
+	Sympa::Log::Syslog::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
 	return undef;
     }
     return (File::Copy::Recursive::dircopy($dir1,$dir2)) ;
@@ -109,7 +109,7 @@ Delete a directory and its content.
 
 sub del_dir {
     my ($dir) = @_;
-    Sympa::Log::do_log('debug','%s',$dir);
+    Sympa::Log::Syslog::do_log('debug','%s',$dir);
 
     if(opendir DIR, $dir){
 	for (readdir DIR) {
@@ -119,9 +119,9 @@ sub del_dir {
 	    del_dir($path) if -d $path;
 	}
 	closedir DIR;
-	unless(rmdir $dir) {Sympa::Log::do_log('err','Unable to delete directory %s: $ERRNO',$dir);}
+	unless(rmdir $dir) {Sympa::Log::Syslog::do_log('err','Unable to delete directory %s: $ERRNO',$dir);}
     }else{
-	Sympa::Log::do_log('err','Unable to open directory %s to delete the files it contains: $ERRNO',$dir);
+	Sympa::Log::Syslog::do_log('err','Unable to open directory %s to delete the files it contains: $ERRNO',$dir);
     }
 }
 
@@ -191,10 +191,10 @@ unlink others
 
 sub shift_file {
     my ($file, $count) = @_;
-    Sympa::Log::do_log('debug', "($file,$count)");
+    Sympa::Log::Syslog::do_log('debug', "($file,$count)");
 
     unless (-f $file) {
-	Sympa::Log::do_log('info', "unknown file $file");
+	Sympa::Log::Syslog::do_log('info', "unknown file $file");
 	return undef;
     }
 
@@ -202,7 +202,7 @@ sub shift_file {
     my $file_extention = POSIX::strftime("%Y:%m:%d:%H:%M:%S", @date);
 
     unless (rename ($file,$file.'.'.$file_extention)) {
-	Sympa::Log::do_log('err', "Cannot rename file $file to $file.$file_extention" );
+	Sympa::Log::Syslog::do_log('err', "Cannot rename file $file to $file.$file_extention" );
 	return undef;
     }
     if ($count) {
@@ -210,7 +210,7 @@ sub shift_file {
 	my $dir = $1;
 
 	unless (opendir(DIR, $dir)) {
-	    Sympa::Log::do_log('err', "Cannot read dir $dir" );
+	    Sympa::Log::Syslog::do_log('err', "Cannot read dir $dir" );
 	    return ($file.'.'.$file_extention);
 	}
 	my $i = 0 ;
@@ -218,9 +218,9 @@ sub shift_file {
 	    $i ++;
 	    if ($count lt $i) {
 		if (unlink ($oldfile)) {
-		    Sympa::Log::do_log('info', "unlink $oldfile");
+		    Sympa::Log::Syslog::do_log('info', "unlink $oldfile");
 		}else{
-		    Sympa::Log::do_log('info', "unable to unlink $oldfile");
+		    Sympa::Log::Syslog::do_log('info', "unable to unlink $oldfile");
 		}
 	    }
 	}
@@ -236,7 +236,7 @@ Find a file in an ordered list of directories
 
 sub find_file {
     my ($filename, @directories) = @_;
-    Sympa::Log::do_log('debug3','(%s,%s)', $filename, join(':',@directories));
+    Sympa::Log::Syslog::do_log('debug3','(%s,%s)', $filename, join(':',@directories));
 
     foreach my $d (@directories) {
 	if (-f "$d/$filename") {
@@ -321,18 +321,18 @@ or few direcoty paths
 
 sub remove_dir {
 
-    Sympa::Log::do_log('debug2','()');
+    Sympa::Log::Syslog::do_log('debug2','()');
 
     my $callback = sub  {
 	my $name = $File::Find::name;
 
 	if (!-l && -d _) {
 	    unless (rmdir($name)) {
-		Sympa::Log::do_log('err','Error while removing dir %s',$name);
+		Sympa::Log::Syslog::do_log('err','Error while removing dir %s',$name);
 	    }
 	}else{
 	    unless (unlink($name)) {
-		Sympa::Log::do_log('err','Error while removing file  %s',$name);
+		Sympa::Log::Syslog::do_log('err','Error while removing file  %s',$name);
 	    }
 	}
     };
@@ -374,12 +374,12 @@ sub a_is_older_than_b {
     if (-r $params{'a_file'}) {
 	$a_file_readable = 1;
     }else{
-	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'a_file'});
+	Sympa::Log::Syslog::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'a_file'});
     }
     if (-r $params{'b_file'}) {
 	$b_file_readable = 1;
     }else{
-	Sympa::Log::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'b_file'});
+	Sympa::Log::Syslog::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'b_file'});
     }
     if ($a_file_readable && $b_file_readable) {
 	my @a_stats = stat ($params{'a_file'});

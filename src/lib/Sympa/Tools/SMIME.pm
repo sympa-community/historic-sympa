@@ -39,7 +39,7 @@ use File::Temp;
 use MIME::Parser;
 use POSIX qw();
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::Tools;
 
 my %openssl_errors = (1 => 'an error occurred parsing the command options',
@@ -73,7 +73,7 @@ Sign a message.
 sub sign_message {
     my (%params) = @_;
 
-    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
+    Sympa::Log::Syslog::do_log('debug2', '(%s)', join('/',%params));
 
     my($cert, $key) = smime_find_keys($params{cert_dir}, 'sign');
 
@@ -107,11 +107,11 @@ sub sign_message {
 	    "$params{openssl} smime -sign " .
 	    "-signer $cert -inkey $key -out $signed_message_file" .
 	    ($password_file ? " -passin file:$password_file" : "" );
-    Sympa::Log::do_log('debug', $command);
+    Sympa::Log::Syslog::do_log('debug', $command);
 
     my $command_handle;
     unless (open ($command_handle, '|-', $command)) {
-    	Sympa::Log::do_log('notice', 'Cannot sign message (open pipe)');
+    	Sympa::Log::Syslog::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
     $entity_clone->print($command_handle);
@@ -119,7 +119,7 @@ sub sign_message {
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
-	Sympa::Log::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
+	Sympa::Log::Syslog::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
 	return undef;
     }
 
@@ -127,7 +127,7 @@ sub sign_message {
     $parser->output_to_core(1);
     my $signed_entity = $parser->read($signed_message_file);
     unless ($signed_entity) {
-	Sympa::Log::do_log('notice', 'Unable to parse message');
+	Sympa::Log::Syslog::do_log('notice', 'Unable to parse message');
 	return undef;
     }
     close($signed_message_file);
@@ -174,7 +174,7 @@ sub check_signature {
 
     my $message = $params{message};
 
-    Sympa::Log::do_log('debug', '(message, %s, %s)', $message->{sender}, $message->{'filename'});
+    Sympa::Log::Syslog::do_log('debug', '(message, %s, %s)', $message->{sender}, $message->{'filename'});
 
     # extract the signer certificate in a file
     my $signer_cert_file = File::Temp->new(
@@ -185,11 +185,11 @@ sub check_signature {
 	    ($params{cafile} ? "-CAfile $params{cafile}" : '')          .
 	    ($params{capath} ? "-CApath $params{capath}" : '')          .
 	    ">/dev/null 2>&1";
-    Sympa::Log::do_log('debug', $command);
+    Sympa::Log::Syslog::do_log('debug', $command);
 
     my $command_handle;
     unless (open ($command_handle, '|-', $command)) {
-	Sympa::Log::do_log('err', "unable to verify smime signature from $message->{sender}");
+	Sympa::Log::Syslog::do_log('err', "unable to verify smime signature from $message->{sender}");
 	return undef ;
     }
 
@@ -202,7 +202,7 @@ sub check_signature {
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
-	Sympa::Log::do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
+	Sympa::Log::Syslog::do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
 	return undef ;
     }
 
@@ -214,11 +214,11 @@ sub check_signature {
     );
 
     unless ($signer_cert->{'email'}{lc($message->{sender})}) {
-	Sympa::Log::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$message->{sender}, join(',', keys %{$signer_cert->{'email'}}));
+	Sympa::Log::Syslog::do_log('err', "S/MIME signed message, sender(%s) does NOT match signer(%s)",$message->{sender}, join(',', keys %{$signer_cert->{'email'}}));
 	return undef;
     }
 
-    Sympa::Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer_cert->{'email'}}));
+    Sympa::Log::Syslog::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer_cert->{'email'}}));
 
     # openssl smime -signer only extract the signature certificate
     # In order to also retrieve encryption certificate, if distinct,
@@ -228,7 +228,7 @@ sub check_signature {
     );
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
-    Sympa::Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
+    Sympa::Log::Syslog::do_log('debug2', "smime_sign_check: parsing $nparts parts");
     if($nparts == 0) { # could be opaque signing...
 	$extracted += _extract_certs(
 		entity  => $message->{msg},
@@ -248,13 +248,13 @@ sub check_signature {
     }
 
     unless($extracted) {
-	Sympa::Log::do_log('err', "No application/x-pkcs7-* parts found");
+	Sympa::Log::Syslog::do_log('err', "No application/x-pkcs7-* parts found");
 	return undef;
     }
 
     my $bundle_handle;
     unless(open($bundle_handle, '<', $certs_bundle_file)) {
-	Sympa::Log::do_log('err', "Can't open cert bundle $certs_bundle_file: $ERRNO");
+	Sympa::Log::Syslog::do_log('err', "Can't open cert bundle $certs_bundle_file: $ERRNO");
 	return undef;
     }
 
@@ -271,26 +271,26 @@ sub check_signature {
 		openssl => $params{openssl}
 	);
 	unless($cert) {
-		Sympa::Log::do_log('err', 'No result from _parse_cert');
+		Sympa::Log::Syslog::do_log('err', 'No result from _parse_cert');
 		return undef;
 	}
 	unless($cert->{'email'}) {
-		Sympa::Log::do_log('debug', "No email in cert for $cert->{subject}, skipping");
+		Sympa::Log::Syslog::do_log('debug', "No email in cert for $cert->{subject}, skipping");
 		next;
 	}
 
-	Sympa::Log::do_log('debug2', "Found cert for <%s>", join(',', keys
+	Sympa::Log::Syslog::do_log('debug2', "Found cert for <%s>", join(',', keys
 			%{$cert->{'email'}}));
 	if ($cert->{'email'}{lc($message->{sender})}) {
 		if ($cert->{'purpose'}{'sign'} && $cert->{'purpose'}{'enc'}) {
 		 $certs{'both'} = $cert_string;
-		    Sympa::Log::do_log('debug', 'Found a signing + encryption cert');
+		    Sympa::Log::Syslog::do_log('debug', 'Found a signing + encryption cert');
 		}elsif ($cert->{'purpose'}{'sign'}) {
 		    $certs{'sign'} = $cert_string;
-		    Sympa::Log::do_log('debug', 'Found a signing cert');
+		    Sympa::Log::Syslog::do_log('debug', 'Found a signing cert');
 		} elsif($cert->{'purpose'}{'enc'}) {
 		    $certs{'enc'} = $cert_string;
-		    Sympa::Log::do_log('debug', 'Found an encryption cert');
+		    Sympa::Log::Syslog::do_log('debug', 'Found an encryption cert');
 		}
 	}
 
@@ -300,16 +300,16 @@ sub check_signature {
     close($bundle_handle);
 
     if(!($certs{both} || ($certs{sign} || $certs{enc}))) {
-	Sympa::Log::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer_cert->{'email'}}));
+	Sympa::Log::Syslog::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer_cert->{'email'}}));
 	return undef;
     }
 
     # create certificate storage directory if needed
     unless (-d $params{cert_dir}) {
 	if ( mkdir ($params{cert_dir}, 0775)) {
-	    Sympa::Log::do_log('info', "creating spool $params{cert_dir}");
+	    Sympa::Log::Syslog::do_log('info', "creating spool $params{cert_dir}");
 	}else{
-	    Sympa::Log::do_log('err', "Unable to create user certificat directory $params{cert_dir}");
+	    Sympa::Log::Syslog::do_log('err', "Unable to create user certificat directory $params{cert_dir}");
 	}
     }
 
@@ -328,10 +328,10 @@ sub check_signature {
 	    unlink("$cert_file\@enc");
 	    unlink("$cert_file\@sign");
 	}
-	Sympa::Log::do_log('debug', "Saving $category cert in $cert_file");
+	Sympa::Log::Syslog::do_log('debug', "Saving $category cert in $cert_file");
 	my $cert_handle;
 	unless (open($cert_handle, '>', $cert_file)) {
-	    Sympa::Log::do_log('err', "Unable to create certificate file $cert_file: $ERRNO");
+	    Sympa::Log::Syslog::do_log('err', "Unable to create certificate file $cert_file: $ERRNO");
 	    return undef;
 	}
 	print $cert_handle $certs{$category};
@@ -369,7 +369,7 @@ Encrypt a message.
 sub encrypt_message {
     my (%params) = @_;
 
-    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
+    Sympa::Log::Syslog::do_log('debug2', '(%s)', join('/',%params));
 
     my $usercert;
     my $base = "$params{cert_dir}/".Sympa::Tools::escape_chars($params{email});
@@ -380,7 +380,7 @@ sub encrypt_message {
     }
 
     if (! -r $usercert) {
-	Sympa::Log::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$params{email},$usercert);
+	Sympa::Log::Syslog::do_log ('notice','unable to encrypt message to %s (missing certificat %s)',$params{email},$usercert);
 	return undef;
     }
 
@@ -399,18 +399,18 @@ sub encrypt_message {
     my $command =
 	    "$params{openssl} smime -encrypt -out $crypted_message_file " .
 	    "-des3 $usercert";
-    Sympa::Log::do_log ('debug3', $command);
+    Sympa::Log::Syslog::do_log ('debug3', $command);
 
     my $command_handle;
     unless (open ($command_handle, '|-', $command)) {
-	Sympa::Log::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
+	Sympa::Log::Syslog::do_log('info', 'Can\'t encrypt message for recipient %s', $params{email});
     }
     $entity_clone->print($command_handle);
     close($command_handle);
 
     my $status = $CHILD_ERROR/256 ;
     unless ($status == 0) {
-	Sympa::Log::do_log('err', 'Unable to S/MIME encrypt message : %s', $openssl_errors{$status});
+	Sympa::Log::Syslog::do_log('err', 'Unable to S/MIME encrypt message : %s', $openssl_errors{$status});
 	return undef ;
     }
 
@@ -418,7 +418,7 @@ sub encrypt_message {
     $parser->output_to_core(1);
     my $crypted_entity = $parser->read($crypted_message_file);
     unless ($crypted_entity) {
-	Sympa::Log::do_log('notice', 'Unable to parse message');
+	Sympa::Log::Syslog::do_log('notice', 'Unable to parse message');
 	return undef;
     }
     close($crypted_message_file);
@@ -458,11 +458,11 @@ Decrypt a message.
 sub decrypt_message {
     my (%params) = @_;
 
-    Sympa::Log::do_log('debug2', '(%s)', join('/',%params));
+    Sympa::Log::Syslog::do_log('debug2', '(%s)', join('/',%params));
 
     my ($certs,$keys) = smime_find_keys($params{cert_dir}, 'decrypt');
     unless (defined $certs && @$certs) {
-	Sympa::Log::do_log('err', "Unable to decrypt message : missing certificate file");
+	Sympa::Log::Syslog::do_log('err', "Unable to decrypt message : missing certificate file");
 	return undef;
     }
 
@@ -483,7 +483,7 @@ sub decrypt_message {
     my $decrypted_entity;
     while (my $certfile = shift @$certs) {
 	my $keyfile = shift @$keys;
-	Sympa::Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
+	Sympa::Log::Syslog::do_log('debug', "Trying decrypt with $certfile, $keyfile");
 
 	my $decrypted_message_file = File::Temp->new(
 	    UNLINK => $main::options{'debug'} ? 0 : 1
@@ -493,10 +493,10 @@ sub decrypt_message {
 		"$params{openssl} smime -decrypt -out $decrypted_message_file" .
 		" -recip $certfile -inkey $keyfile" . 
 	        ($password_file ? " -passin file:$password_file" : "" );
-	Sympa::Log::do_log('debug', $command);
+	Sympa::Log::Syslog::do_log('debug', $command);
         my $command_handle;
         unless (open ($command_handle, '|-', $command)) {
-	    Sympa::Log::do_log('info', 'Can\'t decrypt message');
+	    Sympa::Log::Syslog::do_log('info', 'Can\'t decrypt message');
         }
         $params{entity}->print($command_handle);
         close($command_handle);
@@ -504,7 +504,7 @@ sub decrypt_message {
 	my $status = $CHILD_ERROR/256;
 
 	unless ($status == 0) {
-	    Sympa::Log::do_log('notice', 'Unable to decrypt S/MIME message : %s', $openssl_errors{$status});
+	    Sympa::Log::Syslog::do_log('notice', 'Unable to decrypt S/MIME message : %s', $openssl_errors{$status});
 	    next;
 	}
 
@@ -512,14 +512,14 @@ sub decrypt_message {
 	$parser->output_to_core(1);
 	$decrypted_entity = $parser->parse($decrypted_message_file);
 	unless ($decrypted_entity) {
-	    Sympa::Log::do_log('notice', 'Unable to parse message');
+	    Sympa::Log::Syslog::do_log('notice', 'Unable to parse message');
 	    last;
 	}
 	close($decrypted_message_file);
     }
 
     unless (defined $decrypted_entity) {
-      Sympa::Log::do_log('err', 'Message could not be decrypted');
+      Sympa::Log::Syslog::do_log('err', 'Message could not be decrypted');
       return undef;
     }
 
@@ -571,13 +571,13 @@ for 'decrypt', these are arrayrefs containing absolute filenames
 
 sub smime_find_keys {
     my($dir, $oper) = @_;
-    Sympa::Log::do_log('debug', '(%s, %s)', $dir, $oper);
+    Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $dir, $oper);
 
     my(%certs, %keys);
     my $ext = ($oper eq 'sign' ? 'sign' : 'enc');
 
     unless (opendir(D, $dir)) {
-	Sympa::Log::do_log('err', "unable to opendir $dir: $ERRNO");
+	Sympa::Log::Syslog::do_log('err', "unable to opendir $dir: $ERRNO");
 	return undef;
     }
 
@@ -594,7 +594,7 @@ sub smime_find_keys {
 	my $k = $c;
 	$k =~ s/\/cert\.pem/\/private_key/;
 	unless ($keys{$k}) {
-	    Sympa::Log::do_log('notice', "$c exists, but matching $k doesn't");
+	    Sympa::Log::Syslog::do_log('notice', "$c exists, but matching $k doesn't");
 	    delete $certs{$c};
 	}
     }
@@ -603,7 +603,7 @@ sub smime_find_keys {
 	my $c = $k;
 	$c =~ s/\/private_key/\/cert\.pem/;
 	unless ($certs{$c}) {
-	    Sympa::Log::do_log('notice', "$k exists, but matching $c doesn't");
+	    Sympa::Log::Syslog::do_log('notice', "$k exists, but matching $c doesn't");
 	    delete $keys{$k};
 	}
     }
@@ -620,7 +620,7 @@ sub smime_find_keys {
 	    $certs = "$dir/cert.pem";
 	    $keys = "$dir/private_key";
 	} else {
-	    Sympa::Log::do_log('info', "$dir: no certs/keys found for $oper");
+	    Sympa::Log::Syslog::do_log('info', "$dir: no certs/keys found for $oper");
 	    return undef;
 	}
     }
@@ -644,7 +644,7 @@ sub smime_find_keys {
 
 sub _parse_cert {
     my (%params) = @_;
-    Sympa::Log::do_log('debug', '(%s)', join('/',%params));
+    Sympa::Log::Syslog::do_log('debug', '(%s)', join('/',%params));
 
     ## Load certificate
     my $cert_string;
@@ -653,11 +653,11 @@ sub _parse_cert {
     }elsif ($params{file}) {
 	$cert_string = Sympa::Tools::File::slurp_file($params{file});
 	unless ($cert_string) {
-	    Sympa::Log::do_log('err', "unable to read %s: $ERRNO", $params{file});
+	    Sympa::Log::Syslog::do_log('err', "unable to read %s: $ERRNO", $params{file});
 	    return undef;
 	}
     }else {
-	Sympa::Log::do_log('err', '_parse_cert: neither "text" nor "file" given');
+	Sympa::Log::Syslog::do_log('err', '_parse_cert: neither "text" nor "file" given');
 	return undef;
     }
 
@@ -667,7 +667,7 @@ sub _parse_cert {
 	    "$params{openssl} x509 -email -subject -purpose -noout > $file";
     my $pipe_handle;
     unless (open($pipe_handle, '|-', $command)) {
-	Sympa::Log::do_log('err', "_parse_cert: open |openssl: $ERRNO");
+	Sympa::Log::Syslog::do_log('err', "_parse_cert: open |openssl: $ERRNO");
 	return undef;
     }
     print $pipe_handle $cert_string;
@@ -675,7 +675,7 @@ sub _parse_cert {
 
     my $file_handle;
     unless (open($file_handle, '<', $file)) {
-	Sympa::Log::do_log('err', "_parse_cert: open $file: $ERRNO");
+	Sympa::Log::Syslog::do_log('err', "_parse_cert: open $file: $ERRNO");
 	return undef;
     }
 
@@ -726,7 +726,7 @@ sub _parse_cert {
 
 sub _extract_certs {
     my (%params) = @_;
-    Sympa::Log::do_log('debug', '(%s)', join('/',%params));
+    Sympa::Log::Syslog::do_log('debug', '(%s)', join('/',%params));
 
     my $entity = $params{entity};
 
@@ -737,7 +737,7 @@ sub _extract_certs {
 	    "> $params{file}";
     my $handle;
     unless (open($handle, '|-', $command)) {
-	Sympa::Log::do_log('err', "unable to run openssl pkcs7: $ERRNO");
+	Sympa::Log::Syslog::do_log('err', "unable to run openssl pkcs7: $ERRNO");
 	return 0;
     }
 
@@ -745,7 +745,7 @@ sub _extract_certs {
     close($handle);
 
     if ($CHILD_ERROR) {
-	Sympa::Log::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
+	Sympa::Log::Syslog::do_log('err', "openssl pkcs7 returned an error: ", $CHILD_ERROR/256);
 	return 0;
     }
 

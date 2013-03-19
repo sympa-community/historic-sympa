@@ -38,7 +38,7 @@ use Carp;
 use English qw(-no_match_vars);
 use POSIX qw();
 
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::Tools;
 use Sympa::Tools::Data;
 
@@ -77,10 +77,10 @@ sub new {
 
     my $email = $params{'user'}{'email'};
     #$email ||= 'nobody';
-    Sympa::Log::do_log('debug2', '(%s, %s)', $params{list}->{'name'}, $params{path});
+    Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', $params{list}->{'name'}, $params{path});
 
     unless (ref($params{list}) && $params{list}->isa('Sympa::List')) {
-	Sympa::Log::do_log('err', 'incorrect list parameter');
+	Sympa::Log::Syslog::do_log('err', 'incorrect list parameter');
 	return undef;
     }
 
@@ -94,7 +94,7 @@ sub new {
 
     ### Document isn't a description file
     if ($self->{path} =~ /\.desc/) {
-	Sympa::Log::do_log('err',"%s: description file", $self->{path});
+	Sympa::Log::Syslog::do_log('err',"%s: description file", $self->{path});
 	return undef;
     }
 
@@ -114,13 +114,13 @@ sub new {
 
     ### Document exist ?
     unless (-r $self->{'absolute_path'}) {
-	Sympa::Log::do_log('err',"unable to read %s : no such file or directory", $self->{'absolute_path'});
+	Sympa::Log::Syslog::do_log('err',"unable to read %s : no such file or directory", $self->{'absolute_path'});
 	return undef;
     }
 
     ### Document has non-size zero?
     unless (-s $self->{'absolute_path'}) {
-	Sympa::Log::do_log('err',"unable to read %s : empty document", $self->{'absolute_path'});
+	Sympa::Log::Syslog::do_log('err',"unable to read %s : empty document", $self->{'absolute_path'});
 	return undef;
     }
 
@@ -181,7 +181,7 @@ sub new {
 	if ($self->{'absolute_path'} =~ /^(([^\/]*\/)*)([^\/]+)$/) {
 	    $desc_file = $1.'.desc.'.$3;
 	}else {
-	    Sympa::Log::do_log('err',"cannot determine desc file for %s", $self->{'absolute_path'});
+	    Sympa::Log::Syslog::do_log('err',"cannot determine desc file for %s", $self->{'absolute_path'});
 	    return undef;
 	}
     }
@@ -251,7 +251,7 @@ sub new {
 
 	# listing of all the shared documents of the directory
 	unless (opendir DIR, $self->{'absolute_path'}) {
-	    Sympa::Log::do_log('err',"cannot open %s : %s", $self->{'absolute_path'}, $ERRNO);
+	    Sympa::Log::Syslog::do_log('err',"cannot open %s : %s", $self->{'absolute_path'}, $ERRNO);
 	    return undef;
 	}
 
@@ -310,7 +310,7 @@ sub dup {
 
 sub check_access_control {
     my ($self, $params) = @_;
-    Sympa::Log::do_log('debug', "check_access_control(%s)", $self->{'path'});
+    Sympa::Log::Syslog::do_log('debug', "check_access_control(%s)", $self->{'path'});
 
     # Arguments:
     # (\%mode,$path)

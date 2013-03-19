@@ -15,7 +15,7 @@ use SOAP::Transport::HTTP;
 use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::SDM;
 use Sympa::SOAP;
@@ -33,22 +33,22 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 ## Load config 
 unless ($wwsconf = Sympa::WWSympa::load_config($conf_file)) {
-    Sympa::Log::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
+    Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
 ## Load sympa config
 unless (Sympa::Configuration::load($sympa_conf_file)) {
-    Sympa::Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
+    Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
-Sympa::Log::set_log_level($Sympa::Configuration::Conf{'log_level'}) if ($Sympa::Configuration::Conf{'log_level'}); 
+Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'}) if ($Sympa::Configuration::Conf{'log_level'}); 
 
 
 ## Open log
 $wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
 
-Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'soap');
-Sympa::Log::do_log('info', 'SOAP server launched');
+Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'soap');
+Sympa::Log::Syslog::do_log('info', 'SOAP server launched');
 
 ## We set the real UID with the effective UID value
 ## It is usefull to allow execution of scripts like alias_manager
@@ -57,7 +57,7 @@ $UID = $EUID; ## UID
 $GID = $EGID; ## GID
 
 unless (Sympa::SDM::check_db_connect()) {
-    Sympa::Log::do_log('err','SOAP server requires a RDBMS to run');
+    Sympa::Log::Syslog::do_log('err','SOAP server requires a RDBMS to run');
 }
 
 my $pinfo = Sympa::List::_apply_defaults();

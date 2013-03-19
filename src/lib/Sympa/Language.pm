@@ -39,7 +39,7 @@ use POSIX qw();
 
 #use Sympa::Configuration; FIXME
 use Sympa::Constants;
-use Sympa::Log;
+use Sympa::Log::Syslog;
 
 BEGIN {
     ## Using the Pure Perl implementation of gettext
@@ -129,7 +129,7 @@ sub get_supported_languages {
 ## Keep the previous lang ; can be restored with PopLang
 sub push_lang {
     my ($locale) = @_;
-    Sympa::Log::do_log('debug', '(%s)', $locale);
+    Sympa::Log::Syslog::do_log('debug', '(%s)', $locale);
 
     push @previous_locale, $current_locale;
     set_lang($locale);
@@ -138,7 +138,7 @@ sub push_lang {
 }
 
 sub pop_lang {
-    Sympa::Log::do_log('debug', '');
+    Sympa::Log::Syslog::do_log('debug', '');
 
     my $locale = pop @previous_locale;
     set_lang($locale);
@@ -148,12 +148,12 @@ sub pop_lang {
 
 sub set_lang {
     my ($locale) = @_;
-    Sympa::Log::do_log('debug2', '(%s)', $locale);
+    Sympa::Log::Syslog::do_log('debug2', '(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
 
     unless ($lang) {
-	Sympa::Log::do_log('err', 'missing locale parameter');
+	Sympa::Log::Syslog::do_log('err', 'missing locale parameter');
 	return undef;
     }
 
@@ -186,7 +186,7 @@ sub set_lang {
 	    }
 	}
 	unless ($success) {
-	    Sympa::Log::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
+	    Sympa::Log::Syslog::do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
 	    return undef;
 	}
     }
@@ -256,7 +256,7 @@ sub lang2locale {
 sub maketext {
     my ($template_file, $msg) = @_;
 
-#    Sympa::Log::do_log('notice','Maketext: %s', $msg);
+#    Sympa::Log::Syslog::do_log('notice','Maketext: %s', $msg);
 
     my $translation;
     my $textdomain = $template2textdomain{$template_file};
@@ -279,7 +279,7 @@ sub maketext {
 
 sub sympa_dgettext {
     my ($textdomain, @param) = @_;
-    Sympa::Log::do_log('debug3', '(%s)', $param[0]);
+    Sympa::Log::Syslog::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
@@ -315,7 +315,7 @@ sub sympa_dgettext {
 
 sub gettext {
     my (@param) = @_;
-    Sympa::Log::do_log('debug3', '(%s)', $param[0]);
+    Sympa::Log::Syslog::do_log('debug3', '(%s)', $param[0]);
 
     ## This prevents meta information to be returned if the string to translate is empty
     if ($param[0] eq '') {
