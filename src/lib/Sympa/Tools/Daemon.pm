@@ -102,6 +102,28 @@ sub remove_pid {
 	return 1;
 }
 
+=head2 write_pid(%parameters)
+
+=head3 Parameters
+
+=over
+
+=item * I<file>: FIXME
+
+=item * I<method>: FIXME
+
+=item * I<pid>: FIXEM
+
+=item * I<options>: FIXME
+
+=item * I<user>: FIXME
+
+=item * I<group>: FIXME
+
+=back
+
+=cut
+
 sub write_pid {
     my (%params) = @_;
 
@@ -200,6 +222,24 @@ sub write_pid {
 
     return 1;
 }
+
+=head2 direct_stderr_to_file(%parameters)
+
+=head3 Parameters
+
+=over
+
+=item * I<tmpdir>: FIXME
+
+=item * I<pid>: FIXEM
+
+=item * I<user>: FIXME
+
+=item * I<group>: FIXME
+
+=back
+
+=cut
 
 sub direct_stderr_to_file {
     my (%data) = @_;
