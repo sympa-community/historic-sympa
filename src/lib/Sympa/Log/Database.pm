@@ -802,17 +802,4 @@ sub _update_subscriber_msg_send {
 
 }
 
-#get date of the last time we have aggregated data
-sub get_last_date_aggregation {
-
-    unless ($sth = Sympa::SDM::do_query(" SELECT MAX( end_date_counter ) FROM `stat_counter_table` ")){
-	do_log('err','Unable to retrieve last date of aggregation');
-	return undef;
-    }
-
-    my $last_date = $sth->fetchrow_array;
-    return $last_date;
-}
-
-
 1;
