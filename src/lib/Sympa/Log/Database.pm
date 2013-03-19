@@ -195,27 +195,20 @@ None.
 =cut
 
 sub do_stat_log{
-	my ($arg) = @_;
+	my (%params) = @_;
 
-	my $list = $arg->{'list'};
-	my $operation = $arg->{'operation'};
-	my $date = time; #epoch time : time since 1st january 1970
-	my $mail = $arg->{'mail'};
-	my $daemon = $arg->{'daemon'};
-	my $ip = $arg->{'client'};
-	my $robot = $arg->{'robot'};
-	my $parameter = $arg->{'parameter'};
+	my $read   = 0;
+	my $date   = time;
 	my $random = int(rand(1000000));
-	my $id = $date.$random;
-	my $read = 0;
+	my $id     = $date.$random;
 
-	if (ref($list) && $list->isa('Sympa::List')) {
-		$list = $list->{'name'};
+	if (ref($params{list}) && $params{list}->isa('Sympa::List')) {
+		$params{list} = $params{list}->{'name'};
 	}
-	if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
-		$list = $1;
-		unless($robot) {
-			$robot = $2;
+	if($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+		$params{list} = $1;
+		unless($params{robot}) {
+			$params{robot} = $2;
 		}
 	}
 
@@ -224,14 +217,14 @@ sub do_stat_log{
 		'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat, read_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
 		$id,
 		$date,
-		Sympa::SDM::quote($mail),
-		Sympa::SDM::quote($operation),
-		Sympa::SDM::quote($list),
-		Sympa::SDM::quote($daemon),
-		Sympa::SDM::quote($ip),
-		Sympa::SDM::quote($robot),
-		Sympa::SDM::quote($parameter),
-		Sympa::SDM::quote($read)
+		Sympa::SDM::quote($params{mail}),
+		Sympa::SDM::quote($params{operation}),
+		Sympa::SDM::quote($params{list}),
+		Sympa::SDM::quote($params{daemon}),
+		Sympa::SDM::quote($params{ip}),
+		Sympa::SDM::quote($params{robot}),
+		Sympa::SDM::quote($params{parameter}),
+		Sympa::SDM::quote($params{read})
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new stat entry in the database');

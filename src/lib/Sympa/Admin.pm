@@ -281,7 +281,15 @@ sub create_list_old{
     #log in stat_table to make statistics
 
     if($origin eq "web"){
-	Sympa::Log::Database::do_stat_log({'robot' => $robot, 'list' => $params->{'listname'}, 'operation' => 'create list', 'parameter' => '', 'mail' => $user_mail, 'client' => '', 'daemon' => 'wwsympa.fcgi'});
+	Sympa::Log::Database::do_stat_log(
+		robot     => $robot,
+		list      => $params->{'listname'},
+		operation => 'create list',
+		parameter => '',
+		mail      => $user_mail,
+		client    => '',
+		daemon    => 'wwsympa.fcgi'
+	);
     }
 
     my $return = {};

@@ -1903,16 +1903,19 @@ sub web_db_log {
 
 # log in stat_table via web interface
 sub web_db_stat_log {
-
  	my $data = shift;
-	$data->{'mail'} ||= $param->{'user'}{'email'} if (defined $param->{'user'});
-	$data->{'operation'} ||= $param->{'action'};
-	$data->{'list'} ||= $list->{'name'} if (defined $list);
-	$data->{'daemon'} = 'wwsympa';
-	$data->{'client'} = $param->{'remote_addr'};
-	$data->{'robot'} ||= $robot;
 
-	unless (Sympa::Log::Database::do_stat_log($data)) {
+	my $result = Sympa::Log::Database::do_stat_log(
+		mail      => $param->{'user'}{'email'},
+		operation => $param->{'action'},
+		list      => $list->{'name'},
+		robot     => $robot,
+		%$data,
+		daemon    => 'wwsympa',
+		client    => $param->{'remote_addr'}
+	);
+
+	unless ($result) {
 		wwslog('err', 'web_db_stat_log: failed to log in database');
 		return undef;
 	}

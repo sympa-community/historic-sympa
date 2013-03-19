@@ -5625,8 +5625,15 @@ sub delete_list_member {
 	}
 
 	#log in stat_table to make statistics
-	Sympa::Log::Database::do_stat_log({'robot' => $self->{'domain'}, 'list' => $name, 'operation' => 'del subscriber', 'parameter' => $parameter
-			       , 'mail' => $who, 'client' => '', 'daemon' => $daemon_name});
+	Sympa::Log::Database::do_stat_log(
+		robot     => $self->{'domain'},
+		list      => $name,
+		operation => 'del subscriber',
+		parameter => $parameter,
+		mail      => $who,
+		client    => '',
+		daemon    => $daemon_name
+	);
 
 	$total--;
     }
@@ -7556,8 +7563,15 @@ sub add_list_member {
 	$new_user->{'included'} ||= 0;
 
 	#Log in stat_table to make staistics
-	Sympa::Log::Database::do_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' =>'add subscriber', 'parameter' => '', 'mail' => $new_user->{'email'},
-		       'client' => '', 'daemon' => $daemon});
+	Sympa::Log::Database::do_stat_log(
+		robot     => $self->{'domain'},
+		list      => $self->{'name'},
+		operation => 'add subscriber',
+		parameter => '',
+		mail      => $new_user->{'email'},
+		client    => '',
+		daemon    => $daemon
+	);
 
 	## Update Subscriber Table
 	unless(Sympa::SDM::do_query("INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, robot_subscriber, date_subscriber, update_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber,custom_attribute_subscriber,suspend_subscriber,suspend_start_date_subscriber,suspend_end_date_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
@@ -12751,8 +12765,15 @@ sub close_list {
     $self->remove_aliases();
 
     #log in stat_table to make staistics
-    Sympa::Log::Database::do_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'close_list','parameter' => '',
-		       'mail' => $email, 'client' => '', 'daemon' => 'damon_name'});
+    Sympa::Log::Database::do_stat_log(
+	robot     => $self->{'domain'},
+	list      => $self->{'name'},
+	operation => 'close_list',
+	parameter => '',
+	mail      => $email,
+	client    => '',
+	daemon    => 'damon_name'
+    );
 
 
     return 1;
@@ -12798,8 +12819,15 @@ sub purge {
     Sympa::Tools::File::remove_dir($self->{'dir'});
 
     #log ind stat table to make statistics
-    Sympa::Log::Database::do_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'purge list', 'parameter' => '',
-		       'mail' => $email, 'client' => '', 'daemon' => 'daemon_name'});
+    Sympa::Log::Database::do_stat_log(
+	robot     => $self->{'domain'},
+	list      => $self->{'name'},
+	operation => 'purge list',
+	parameter => '',
+	mail      => $email,
+	client    => '',
+	daemon    => 'daemon_name'
+    );
 
     return 1;
 }

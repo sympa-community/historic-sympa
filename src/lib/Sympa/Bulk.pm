@@ -443,8 +443,15 @@ sub store {
 	#log in stat_table to make statistics...
 	unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
 	    unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests
-		Sympa::Log::Database::do_stat_log({'robot' => $robot, 'list' => $listname, 'operation' => 'send_mail', 'parameter' => length($msg),
-				   'mail' => $message_sender, 'client' => '', 'daemon' => 'sympa.pl'});
+		Sympa::Log::Database::do_stat_log(
+			robot     => $robot,
+			list      => $listname,
+			operation => 'send_mail',
+			parameter => length($msg),
+			mail      => $message_sender,
+			client    => '',
+			daemon    => 'sympa.pl'
+		);
 	    }
 	}
     }
