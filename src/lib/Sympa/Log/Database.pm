@@ -234,7 +234,7 @@ sub _db_stat_counter_log {
 
 }#end sub
 
-=head2 db_log_del($parameters)
+=head2 delete_messages($parameters)
 
 Delete logs in RDBMS.
 
@@ -244,7 +244,7 @@ Delete logs in RDBMS.
 
 =cut
 
-sub db_log_del {
+sub delete_messages {
 	my ($exp) = @_;
     my $date = time - ($exp * 30 * 24 * 60 * 60);
 
