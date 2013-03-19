@@ -22,7 +22,7 @@
 
 =head1 NAME
 
-Sympa::OAuth::Provider - OAuth provider object
+Sympa::Auth::OAuth::Provider - OAuth provider object
 
 =head1 DESCRIPTION
 
@@ -32,7 +32,7 @@ It handles requests for temporary/access tokens and database storage.
 
 =cut
 
-package Sympa::OAuth::Provider;
+package Sympa::Auth::OAuth::Provider;
 
 use strict;
 use constant {
@@ -57,9 +57,9 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::OAuth::Provider->new(%parameters)
+=head2 Sympa::Auth::OAuth::Provider->new(%parameters)
 
-Creates a new L<Sympa::OAuth::Provider> object.
+Creates a new L<Sympa::Auth::OAuth::Provider> object.
 
 =head3 Parameters
 
@@ -81,7 +81,7 @@ Creates a new L<Sympa::OAuth::Provider> object.
 
 =head3 Return value
 
-A L<Sympa::OAuth::Provider> object, or I<undef> if something went wrong.
+A L<Sympa::Auth::OAuth::Provider> object, or I<undef> if something went wrong.
 
 =cut
 
@@ -127,7 +127,7 @@ sub new {
 	return $self;
 }
 
-=head2 Sympa::OAuth::Provider->consumer_from_token($token)
+=head2 Sympa::Auth::OAuth::Provider->consumer_from_token($token)
 
 =cut
 

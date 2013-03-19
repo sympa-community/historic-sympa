@@ -22,7 +22,7 @@
 
 =head1 NAME
 
-Sympa::VOOT::Provider - VOOT provider object
+Sympa::Auth::VOOT::Provider - VOOT provider object
 
 =head1 DESCRIPTION
 
@@ -30,22 +30,22 @@ This class implements the server side of VOOT workflow.
 
 =cut
 
-package Sympa::VOOT::Provider;
+package Sympa::Auth::VOOT::Provider;
 
 use strict;
 
 use JSON::XS;
 
+use Sympa::Auth::OAuth::Provider;
 use Sympa::List;
 use Sympa::Log::Syslog;
-use Sympa::OAuth::Provider;
 use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::VOOT::Provider->new(%parameters)
+=head2 Sympa::Auth::VOOT::Provider->new(%parameters)
 
-Creates a new L<Sympa::VOOT::Provider> object.
+Creates a new L<Sympa::Auth::VOOT::Provider> object.
 
 =head3 Parameters
 
@@ -69,7 +69,7 @@ Creates a new L<Sympa::VOOT::Provider> object.
 
 =head3 Return value
 
-A L<Sympa::VOOT::Provider> object, or I<undef> if something went wrong.
+A L<Sympa::Auth::VOOT::Provider> object, or I<undef> if something went wrong.
 
 =cut
 
@@ -77,7 +77,7 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '()');
 
- 	my $provider = Sympa::OAuth::Provider->new(
+ 	my $provider = Sympa::Auth::OAuth::Provider->new(
 		method               => $params{'method'},
 		url                  => $params{'url'},
 		authorization_header => $params{'authorization_header'},

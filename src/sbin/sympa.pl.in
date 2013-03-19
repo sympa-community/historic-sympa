@@ -460,31 +460,31 @@ unless ($options{'upgrade'}) {
 
 if (Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     eval {
-        require Sympa::OAuth::Provider;
+        require Sympa::Auth::OAuth::Provider;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::OAuth::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-        require Sympa::OAuth::Consumer;
+        require Sympa::Auth::OAuth::Consumer;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::OAuth::Consumer module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-        require Sympa::VOOT::Provider;
+        require Sympa::Auth::VOOT::Provider;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Provider module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::VOOT::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-        require Sympa::VOOT::Consumer;
+        require Sympa::Auth::VOOT::Consumer;
     };
     if ($EVAL_ERROR) {
 	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load module: $EVAL_ERROR");

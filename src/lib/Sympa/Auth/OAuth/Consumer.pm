@@ -22,7 +22,7 @@
 
 =head1 NAME
 
-Sympa::OAuth::Consumer - OAuth consumer object
+Sympa::Auth::OAuth::Consumer - OAuth consumer object
 
 =head1 DESCRIPTION
 
@@ -32,7 +32,7 @@ It handles authorization request, token retrieving and database storage.
 
 =cut
 
-package Sympa::OAuth::Consumer;
+package Sympa::Auth::OAuth::Consumer;
 
 use strict;
 
@@ -45,9 +45,9 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::OAuth::Consumer->new(%parameters)
+=head2 Sympa::Auth::OAuth::Consumer->new(%parameters)
 
-Creates a new L<Sympa::OAuth::Consumer> object.
+Creates a new L<Sympa::Auth::OAuth::Consumer> object.
 
 =head3 Parameters
 
@@ -71,7 +71,7 @@ Creates a new L<Sympa::OAuth::Consumer> object.
 
 =head3 Return value
 
-A L<Sympa::OAuth::Consumer> object, or undef if something went wrong.
+A L<Sympa::Auth::OAuth::Consumer> object, or undef if something went wrong.
 
 =cut
 

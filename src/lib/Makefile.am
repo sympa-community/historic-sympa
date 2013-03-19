@@ -1,6 +1,10 @@
 nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Archive.pm \
 		      Sympa/Auth.pm \
+		      Sympa/Auth/OAuth/Consumer.pm \
+		      Sympa/Auth/OAuth/Provider.pm \
+		      Sympa/Auth/VOOT/Consumer.pm \
+		      Sympa/Auth/VOOT/Provider.pm \
 		      Sympa/Bulk.pm \
 		      Sympa/Challenge.pm \
 		      Sympa/Commands.pm \
@@ -31,8 +35,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Marc.pm \
 		      Sympa/Marc/Search.pm \
 		      Sympa/Message.pm \
-		      Sympa/OAuth/Consumer.pm \
-		      Sympa/OAuth/Provider.pm \
 		      Sympa/PlainDigest.pm \
 		      Sympa/Report.pm \
 		      Sympa/Robot.pm \
@@ -57,8 +59,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Tracking.pm \
 		      Sympa/Transport.pm \
 		      Sympa/Upgrade.pm \
-		      Sympa/VOOT/Consumer.pm \
-		      Sympa/VOOT/Provider.pm \
 		      Sympa/WWSympa.pm
 
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)

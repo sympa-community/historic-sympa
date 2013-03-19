@@ -133,34 +133,34 @@ my $mime_types = Sympa::Tools::load_mime_types($Sympa::Configuration::Conf{'etc'
 
 if (Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
     eval {
-	require Sympa::OAuth::Provider;
+	require Sympa::Auth::OAuth::Provider;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::OAuth::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-	require Sympa::OAuth::Consumer;
+	require Sympa::Auth::OAuth::Consumer;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::OAuth::Consumer module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-	require Sympa::VOOT::Provider;
+	require Sympa::Auth::VOOT::Provider;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Provider module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::VOOT::Provider module: $EVAL_ERROR");
 	return undef;
     }
 
     eval {
-	require Sympa::VOOT::Consumer;
+	require Sympa::Auth::VOOT::Consumer;
     };
     if ($EVAL_ERROR) {
-	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::VOOT::Consumer module: $EVAL_ERROR");
+	Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::Auth::VOOT::Consumer module: $EVAL_ERROR");
 	return undef;
     }
 }else {
@@ -8966,7 +8966,7 @@ sub do_oauth_temporary {
 	#   RewriteRule ^ - [e=HTTP_AUTHORIZATION:%1,L]
 	#   SetHandler fcgid-script
 	# </Location>
-	my $provider = Sympa::OAuth::Provider->new(
+	my $provider = Sympa::Auth::OAuth::Provider->new(
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_temporary',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
@@ -8993,7 +8993,7 @@ sub do_oauth_authorize {
 
 	$param->{'oauth_token'} = $in{'oauth_token'};
 
-	my $key = Sympa::OAuth::Provider->consumer_from_token($in{'oauth_token'});
+	my $key = Sympa::Auth::OAuth::Provider->consumer_from_token($in{'oauth_token'});
 	return undef unless($key);
 
 	$param->{'consumer_key'} = $key;
@@ -9005,7 +9005,7 @@ sub do_oauth_authorize {
 		|| $in{'oauth_authorize_verifier'} eq ''
 		|| $session->{'oauth_authorize_verifier'} ne $in{'oauth_authorize_verifier'}
 	) {
-		$session->{'oauth_authorize_verifier'} = Sympa::OAuth::Provider::_generateRandomString(32);
+		$session->{'oauth_authorize_verifier'} = Sympa::Auth::OAuth::Provider::_generateRandomString(32);
 		$param->{'oauth_authorize_verifier'} = $session->{'oauth_authorize_verifier'};
 
 		return 1;
@@ -9013,7 +9013,7 @@ sub do_oauth_authorize {
 
 	delete $session->{'oauth_authorize_verifier'};
 
-	my $provider = Sympa::OAuth::Provider->new(
+	my $provider = Sympa::Auth::OAuth::Provider->new(
 		method => $ENV{'REQUEST_METHOD'},
 		request_parameters => {
 			oauth_token => $in{'oauth_token'},
@@ -9042,7 +9042,7 @@ sub do_oauth_access {
 	wwslog('info', 'do_oauth_access()');
 	$param->{'bypass'} = 'extreme';
 
-	my $provider = Sympa::OAuth::Provider->new(
+	my $provider = Sympa::Auth::OAuth::Provider->new(
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_access',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
@@ -9082,7 +9082,7 @@ sub do_oauth_check {
 	$param->{'oauth_provider_ok'} = 1;
 
 	if($type eq 'voot') {
-		$consumer = Sympa::VOOT::Consumer->new(
+		$consumer = Sympa::Auth::VOOT::Consumer->new(
 			user     => $param->{'user'}{'email'},
 			provider => $provider,
 			config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
@@ -9127,7 +9127,7 @@ sub do_oauth_ready {
 	my $consumer = undef;
 
 	if($type eq 'voot') {
-		$consumer = Sympa::VOOT::Consumer->new(
+		$consumer = Sympa::Auth::VOOT::Consumer->new(
 			user     => $param->{'user'}{'email'},
 			provider => $provider,
 			config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'
@@ -9159,7 +9159,7 @@ sub do_voot {
 	wwslog('info', 'do_voot(%s)', $in{'voot_path'});
 	$param->{'bypass'} = 'extreme';
 
-	my $provider = Sympa::VOOT::Provider->new(
+	my $provider = Sympa::Auth::VOOT::Provider->new(
 		voot_path => $in{'voot_path'},
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/voot/'.$in{'voot_path'},
@@ -9192,7 +9192,7 @@ sub do_voot {
 sub do_select_voot_provider_request {
 	wwslog('info', 'do_select_voot_provider_request()');
 
-	$param->{'voot_providers'} = Sympa::VOOT::Consumer->get_providers(
+	$param->{'voot_providers'} = Sympa::Auth::VOOT::Consumer->get_providers(
 	-	$Sympa::Configuration::Conf{'etc'}.'/voot.conf'
 	);
 
@@ -9205,7 +9205,7 @@ sub do_select_voot_groups_request {
 
 	$param->{'voot_provider'} = $in{'voot_provider'};
 
-	my $consumer = Sympa::VOOT::Consumer->new(
+	my $consumer = Sympa::Auth::VOOT::Consumer->new(
 		user     => $param->{'user'}{'email'},
 		provider => $in{'voot_provider'},
 		config   => $Sympa::Configuration::Conf{'etc'}.'/voot.conf'

@@ -22,7 +22,7 @@
 
 =head1 NAME
 
-Sympa::VOOT::Consumer - VOOT consumer object
+Sympa::Auth::VOOT::Consumer - VOOT consumer object
 
 =head1 DESCRIPTION
 
@@ -30,19 +30,19 @@ This class implements the client side of VOOT workflow.
 
 =cut
 
-package Sympa::VOOT::Consumer;
+package Sympa::Auth::VOOT::Consumer;
 
 use strict;
 
 use JSON::XS;
 
+use Sympa::Auth::OAuth::Consumer;
 use Sympa::Log::Syslog;
-use Sympa::OAuth::Consumer;
 use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::VOOT::Consumer->get_providers($config)
+=head2 Sympa::Auth::VOOT::Consumer->get_providers($config)
 
 List providers.
 
@@ -81,9 +81,9 @@ sub get_providers {
 	return $list;
 }
 
-=head2 Sympa::VOOT::Consumer->new(%parameters)
+=head2 Sympa::Auth::VOOT::Consumer->new(%parameters)
 
-Creates a new L<Sympa::VOOT::Consumer> object.
+Creates a new L<Sympa::Auth::VOOT::Consumer> object.
 
 =head3 Parameters
 
@@ -99,7 +99,7 @@ Creates a new L<Sympa::VOOT::Consumer> object.
 
 =head3 Return value
 
-A L<Sympa::VOOT::Consumer> object, or I<undef> if something went wrong.
+A L<Sympa::Auth::VOOT::Consumer> object, or I<undef> if something went wrong.
 
 =cut
 
@@ -116,7 +116,7 @@ sub new {
 		conf     => $config,
 		user     => $params{'user'},
 		provider => $params{'provider'},
-		oauth_consumer => Sympa::OAuth::Consumer->new(
+		oauth_consumer => Sympa::Auth::OAuth::Consumer->new(
 			user               => $params{'user'},
 			provider           => 'voot:'.$params{'provider'},
 			consumer_key       => $config->{'oauth.ConsumerKey'},
