@@ -42,6 +42,18 @@ use Sympa::SDM;
 
 my ($sth, @sth_stack, $rows_nb);
 
+=head1 FUNCTIONS
+
+=head2 get_log_date()
+
+=head3 Parameters
+
+None.
+
+=head3 Return
+
+=cut
+
 sub get_log_date {
     my $sth;
     my @dates;
@@ -58,8 +70,16 @@ sub get_log_date {
     return @dates;
 }
 
+=head2 do_log($parameters)
 
-# add log in RDBMS
+Add log in RDBMS.
+
+=head3 Parameters
+
+=head3 Return
+
+=cut
+
 sub do_log {
     my ($arg) = @_;
 
@@ -124,7 +144,18 @@ sub do_log {
     return 1;
 }
 
-#insert data in stats table
+=head2 do_stat_log($parameters)
+
+Insert data in stats table.
+
+=head3 Parameters
+
+None.
+
+=head3 Return
+
+=cut
+
 sub do_stat_log{
     my ($arg) = @_;
 
@@ -204,8 +235,16 @@ sub _db_stat_counter_log {
 
 }#end sub
 
+=head2 db_log_del($parameters)
 
-# delete logs in RDBMS
+Delete logs in RDBMS.
+
+=head3 Parameters
+
+=head3 Return
+
+=cut
+
 sub db_log_del {
     my $exp = Sympa::Configuration::get_robot_conf('*','logs_expiration_period');
     my $date = time - ($exp * 30 * 24 * 60 * 60);
@@ -218,7 +257,16 @@ sub db_log_del {
 
 }
 
-# Scan log_table with appropriate select
+=head2 get_first_db_log($parameters)
+
+Scan log_table with appropriate select.
+
+=head3 Parameters
+
+=head3 Return
+
+=cut
+
 sub get_first_db_log {
     my ($select) = @_;
 
@@ -335,9 +383,29 @@ sub get_first_db_log {
 
 }
 
+=head2 return_rows_nb()
+
+=head3 Parameters
+
+None.
+
+=head3 Return
+
+=cut
+
 sub return_rows_nb {
     return $rows_nb;
 }
+
+=head2 get_next_db_log()
+
+=head3 Parameters
+
+None.
+
+=head3 Return
+
+=cut
 
 sub get_next_db_log {
 
@@ -354,8 +422,18 @@ sub get_next_db_log {
     return $log;
 }
 
-#aggregate date from stat_table to stat_counter_table
-#dates must be in epoch format
+=head2 aggregate_data($begin_date, $end_date)
+
+Aggregate date from stat_table to stat_counter_table.
+
+Dates must be in epoch format.
+
+=head3 Parameters
+
+=head3 Return
+
+=cut
+
 sub aggregate_data {
     my ($begin_date, $end_date) = @_;
 
