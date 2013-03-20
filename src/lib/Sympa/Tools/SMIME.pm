@@ -52,21 +52,31 @@ my %openssl_errors = (
 
 =head1 FUNCTIONS
 
-=head2 sign_message(%parameters)
+=over
+
+=item sign_message(%parameters)
 
 Sign a message.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<entity>: the message, as a C<MIME::Entity> instance
+=item entity => L<MIME::Entity>
 
-=item * I<cert_dir>: path to Sympa certificate/keys directory
+The message.
 
-=item * I<key_passwd>: key password
+=item cert_dir => $path
 
-=item * I<openssl>: path to openssl binary
+The path to Sympa certificate/keys directory.
+
+=item key_passwd => $password
+
+The key password.
+
+=item openssl => $path
+
+The path to openssl binary.
 
 =back
 
@@ -145,29 +155,40 @@ sub sign_message {
 	return $signed_entity;
 }
 
-=head2 check_signature(%parameters)
+=item check_signature(%parameters)
 
 Check if a message is signed, and store the sender certificates in certificate storage directory.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<message>: the message, as a C<Sympa::Message> instance
+=item message => L<Sympa::Message>
 
-=item * I<cafile>: path to a CA certificate file
+The message to check.
 
-=item * I<capath>: : path to a CA certificate directory
+=item cafile => $path
 
-=item * I<openssl>: path to openssl binary
+The path to a CA certificate file.
 
-=item * I<cert_dir>: path to Sympa certificate/keys directory
+=item capath => $path
+
+The path to a CA certificate directory.
+
+=item openssl => $path
+
+The path to openssl binary
+
+=item cert_dir => $path
+
+The path to Sympa certificate/keys directory.
 
 =back
 
-=head3 Return value
+Return value:
 
-A data structure corresponding to the signer certificate on success, I<undef> otherwise.
+A data structure corresponding to the signer certificate on
+success, I<undef> otherwise.
 
 =cut
 
@@ -348,21 +369,29 @@ sub check_signature {
 	};
 }
 
-=head2 encrypt_message(%parameters)
+=item encrypt_message(%parameters)
 
 Encrypt a message.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<entity>: the message, as a C<MIME::Entity> instance
+=item entity => L<MIME::Entity>
 
-=item * I<email>:
+The message to encrypt.
 
-=item * I<cert_dir>: path to Sympa certificate/keys directory
+=item email => FIXME
 
-=item * I<openssl>: path to openssl binary
+FIXME
+
+=item cert_dir => $path
+
+The path to Sympa certificate/keys directory.
+
+=item openssl => $path
+
+The path to openssl binary.
 
 =back
 
@@ -435,25 +464,31 @@ sub encrypt_message {
 	return $crypted_entity;
 }
 
-=head2 decrypt_message(%parameters)
+=item decrypt_message(%parameters)
 
 Decrypt a message.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<entity>:
+=item entity => L<MIME::Entity>
 
-=item * I<cert_dir>:
+The message to decrypt.
 
-=item * I<key_passwd>:
+=item cert_dir => $path
 
-=item * I<openssl>: path to openssl binary
+The path to Sympa certificate/keys directory.
+
+=item key_passwd => $password
+
+The key password.
+
+=item openssl => $path
+
+The path to openssl binary.
 
 =back
-
-=head3 Return value
 
 =cut
 
@@ -543,7 +578,7 @@ sub decrypt_message {
 	return ($decrypted_entity, $decrypted_entity->body_as_string());
 }
 
-=head2 smime_find_keys($dir, $oper)
+=item smime_find_keys($dir, $oper)
 
 find the appropriate S/MIME keys/certs for $oper in $dir.
 
@@ -568,6 +603,8 @@ return the preferred encryption key/cert
 returns ($certs, $keys)
 for 'sign' and 'encrypt', these are strings containing the absolute filename
 for 'decrypt', these are arrayrefs containing absolute filenames
+
+=back
 
 =cut
 
@@ -753,4 +790,5 @@ sub _extract_certs {
 
 	return 1;
 }
+
 1;
