@@ -152,7 +152,7 @@ sub write_pid {
 	user  => $params{user},
 	group => $params{group},
     )) {
-	Sympa::Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
+	Sympa::Log::Syslog::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
 
     my @pids;
@@ -163,11 +163,11 @@ sub write_pid {
 	    method => $params{method}
     );
     unless (defined $lock) {
-	Sympa::Log::fatal_err('Lock could not be created. Exiting.');
+	Sympa::Log::Syslog::fatal_err('Lock could not be created. Exiting.');
     }
     $lock->set_timeout(5);
     unless ($lock->lock('write')) {
-	Sympa::Log::fatal_err('Unable to lock %s file in write mode.  Exiting.',$params{file});
+	Sympa::Log::Syslog::fatal_err('Unable to lock %s file in write mode.  Exiting.',$params{file});
     }
     ## If pidfile exists, read the PIDs
     if(-f $params{file}) {
@@ -184,7 +184,7 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $params{file},$ERRNO);
+	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting: %s', $params{file},$ERRNO);
 	}
 	## Print other pids + this one
 	push(@pids, $params{pid});
@@ -195,7 +195,7 @@ sub write_pid {
 	unless(open(PIDFILE, '+>> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting: %s', $params{file});
+	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting: %s', $params{file});
 	}
 	## The previous process died suddenly, without pidfile cleanup
 	## Send a notice to listmaster with STDERR of the previous process
@@ -210,12 +210,12 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not open %s, exiting', $params{file});
+	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting', $params{file});
 	}
 	unless(truncate(PIDFILE, 0)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::fatal_err('Could not truncate %s, exiting.', $params{file});
+	    Sympa::Log::Syslog::fatal_err('Could not truncate %s, exiting.', $params{file});
 	}
 
 	print PIDFILE $params{pid}."\n";
@@ -229,7 +229,7 @@ sub write_pid {
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	Sympa::Log::fatal_err('Unable to set rights on %s', $params{file});
+	Sympa::Log::Syslog::fatal_err('Unable to set rights on %s', $params{file});
     }
     ## Unlock pid file
     $lock->unlock();
