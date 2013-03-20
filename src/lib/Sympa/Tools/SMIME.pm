@@ -54,7 +54,7 @@ my %openssl_errors = (
 
 =over
 
-=item sign_message(%parameters)
+=item I<sign_message(%parameters)>
 
 Sign a message.
 
@@ -155,7 +155,7 @@ sub sign_message {
 	return $signed_entity;
 }
 
-=item check_signature(%parameters)
+=item I<check_signature(%parameters)>
 
 Check if a message is signed, and store the sender certificates in certificate storage directory.
 
@@ -369,7 +369,7 @@ sub check_signature {
 	};
 }
 
-=item encrypt_message(%parameters)
+=item I<encrypt_message(%parameters)>
 
 Encrypt a message.
 
@@ -464,7 +464,7 @@ sub encrypt_message {
 	return $crypted_entity;
 }
 
-=item decrypt_message(%parameters)
+=item I<decrypt_message(%parameters)>
 
 Decrypt a message.
 
@@ -578,7 +578,7 @@ sub decrypt_message {
 	return ($decrypted_entity, $decrypted_entity->body_as_string());
 }
 
-=item smime_find_keys($dir, $oper)
+=item I<smime_find_keys($dir, $oper)>
 
 find the appropriate S/MIME keys/certs for $oper in $dir.
 
