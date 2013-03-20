@@ -62,19 +62,19 @@ Parameters:
 
 =over
 
-=item entity => L<MIME::Entity>
+=item C<entity> => L<MIME::Entity>
 
 The message.
 
-=item cert_dir => $path
+=item C<cert_dir> => $path
 
 The path to Sympa certificate/keys directory.
 
-=item key_passwd => $password
+=item C<key_passwd> => $password
 
 The key password.
 
-=item openssl => $path
+=item C<openssl> => $path
 
 The path to openssl binary.
 
@@ -163,23 +163,23 @@ Parameters:
 
 =over
 
-=item message => L<Sympa::Message>
+=item C<message> => L<Sympa::Message>
 
 The message to check.
 
-=item cafile => $path
+=item C<cafile> => $path
 
 The path to a CA certificate file.
 
-=item capath => $path
+=item C<capath> => $path
 
 The path to a CA certificate directory.
 
-=item openssl => $path
+=item C<openssl> => $path
 
 The path to openssl binary
 
-=item cert_dir => $path
+=item C<cert_dir> => $path
 
 The path to Sympa certificate/keys directory.
 
@@ -188,7 +188,7 @@ The path to Sympa certificate/keys directory.
 Return value:
 
 A data structure corresponding to the signer certificate on
-success, I<undef> otherwise.
+success, C<undef> otherwise.
 
 =cut
 
@@ -377,19 +377,19 @@ Parameters:
 
 =over
 
-=item entity => L<MIME::Entity>
+=item C<entity> => L<MIME::Entity>
 
 The message to encrypt.
 
-=item email => FIXME
+=item C<email> => FIXME
 
 FIXME
 
-=item cert_dir => $path
+=item C<cert_dir> => $path
 
 The path to Sympa certificate/keys directory.
 
-=item openssl => $path
+=item C<openssl> => $path
 
 The path to openssl binary.
 
@@ -472,19 +472,19 @@ Parameters:
 
 =over
 
-=item entity => L<MIME::Entity>
+=item C<entity> => L<MIME::Entity>
 
 The message to decrypt.
 
-=item cert_dir => $path
+=item C<cert_dir> => $path
 
 The path to Sympa certificate/keys directory.
 
-=item key_passwd => $password
+=item C<key_passwd> => $password
 
 The key password.
 
-=item openssl => $path
+=item C<openssl> => $path
 
 The path to openssl binary.
 
@@ -586,15 +586,15 @@ $oper can be:
 
 =over
 
-=item sign
+=item C<sign>
 
 Return the preferred signing key/cert
 
-=item decrypt
+=item C<decrypt>
 
 return a list of possible decryption keys/certs
 
-=item encrypt
+=item C<encrypt>
 
 return the preferred encryption key/cert
 
