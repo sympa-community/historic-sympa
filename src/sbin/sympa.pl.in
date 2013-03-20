@@ -1328,7 +1328,11 @@ Sympa::SDM::db_disconnect;
 
 Sympa::Log::Syslog::do_log('notice', 'Sympa exited normally due to signal');
 my $file = $Sympa::Configuration::Conf{'pidfile'};
-Sympa::Tools::Daemon::remove_pid($file, $PID, undef, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid(
+	file    => $file,
+	pid     => $PID,
+	tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+);
 
 exit(0);
 

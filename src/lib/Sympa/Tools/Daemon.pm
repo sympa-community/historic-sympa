@@ -45,53 +45,53 @@ use Sympa::Tools::File;
 
 =head1 FUNCTIONS
 
-=head2 remove_pid($pidfile, $pid, $options, $tmpdir)
+=head2 remove_pid(%parameters)
 
 Remove PID file and STDERR output.
 
 =cut
 
 sub remove_pid {
-	my ($pidfile, $pid, $options, $tmpdir) = @_;
+	my (%params) = @_;
 
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
-	if($options->{'multiple_process'}) {
-		unless(open(PFILE, $pidfile)) {
+	if($params{options}->{'multiple_process'}) {
+		unless(open(PFILE, $params{file})) {
 			# fatal_err('Could not open %s, exiting', $pidfile);
-			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $pidfile, $pid);
+			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
 			return undef;
 		}
 		my $l = <PFILE>;
 		close PFILE;
 		my @pids = grep {/[0-9]+/} split(/\s+/, $l);
-		@pids = grep {!/^$pid$/} @pids;
+		@pids = grep {!/^$params{pid}$/} @pids;
 
 		## If no PID left, then remove the file
 		if($#pids < 0) {
 			## Release the lock
-			unless(unlink $pidfile) {
-				Sympa::Log::Syslog::do_log('err', "Failed to remove $pidfile: %s", $ERRNO);
+			unless(unlink $params{file}) {
+				Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
 				return undef;
 			}
 		}else{
-			if(-f $pidfile) {
-				unless(open(PFILE, '> '.$pidfile)) {
-					Sympa::Log::Syslog::do_log('err', "Failed to open $pidfile: %s", $ERRNO);
+			if(-f $params{file}) {
+				unless(open(PFILE, '> '.$params{file})) {
+					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
 					return undef;
 				}
 				print PFILE join(' ', @pids)."\n";
 				close(PFILE);
 			}else{
-				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $pidfile);
+				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $params{file});
 			}
 		}
 	}else{
-		unless(unlink $pidfile) {
-			Sympa::Log::Syslog::do_log('err', "Failed to remove $pidfile: %s", $ERRNO);
+		unless(unlink $params{file}) {
+			Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
 			return undef;
 		}
-		my $err_file = $tmpdir.'/'.$pid.'.stderr';
+		my $err_file = $params{tmpdir}.'/'.$params{pid}.'.stderr';
 		if(-f $err_file) {
 			unless(unlink $err_file) {
 				Sympa::Log::Syslog::do_log('err', "Failed to remove $err_file: %s", $ERRNO);

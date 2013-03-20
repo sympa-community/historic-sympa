@@ -245,7 +245,12 @@ while (!$end) {
 			my $pname = $0;
 			$pname =~ s/.*\/(\w+)/$1/;
 			Sympa::Tools::Daemon::send_crash_report(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid'=>$fpid,'pname'=>$pname, domain => $Sympa::Configuration::Conf{'domain'}));
-			Sympa::Tools::Daemon::remove_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $fpid, $options, $Sympa::Configuration::Conf{'tmpdir'});
+			Sympa::Tools::Daemon::remove_pid(
+				pid     => $Sympa::Configuration::Conf{'pidfile_bulk'},
+				pid     => $fpid,
+				options => $options,
+				tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+			);
 			delete $dead_children{$fpid};
 			push @dc, $fpid;
 		    }
@@ -486,7 +491,12 @@ while (!$end) {
 Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 Sympa::Log::Syslog::do_log('notice', 'bulk.pl exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid($Sympa::Configuration::Conf{'pidfile_bulk'}, $PID, $options, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid(
+	file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
+	pid     => $PID,
+	options => $options,
+	tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+);
 
 exit(0);
 

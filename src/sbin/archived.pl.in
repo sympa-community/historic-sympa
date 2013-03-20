@@ -370,7 +370,12 @@ Sympa::Log::Syslog::do_log('notice',"Archiving message %s for list %s@%s",$item-
 Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 Sympa::Log::Syslog::do_log('notice', 'archived exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $PID, undef, $Sympa::Configuration::Conf{'tmpdir'});
+Sympa::Tools::Daemon::remove_pid(
+	file    => $wwsconf->{'archived_pidfile'},
+	file    => $PID,
+	options => undef,
+	tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+);
 
 exit(0);
 
