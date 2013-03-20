@@ -49,6 +49,20 @@ use Sympa::Tools::File;
 
 Remove PID file and STDERR output.
 
+=head3 Parameters
+
+=over
+
+=item * I<file>: FIXME
+
+=item * I<pid>: FIXME
+
+=item * I<options>: FIXME
+
+=item * I<tmpdir>: FIXME
+
+=back
+
 =cut
 
 sub remove_pid {
