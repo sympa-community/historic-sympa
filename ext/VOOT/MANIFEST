@@ -1,0 +1,11 @@
+ChangeLog
+Makefile.PL
+PODTAIL.txt
+lib/Net/VOOT.pm
+lib/Net/VOOT/Renater.pm
+lib/Net/VOOT/SURFnet.pm
+lib/Sympa/ListSource.pm
+lib/Sympa/ListSource/VOOT.pm
+t/10surfnet.t
+t/20renater.t
+xt/99pod.t

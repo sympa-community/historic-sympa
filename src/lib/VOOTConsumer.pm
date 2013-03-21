@@ -1,30 +1,6 @@
-# VOOTConsumer.pm - This module implements VOOT consumer facilities
-#<!-- RCS Identication ; $Revision: 7207 $ ; $Date: 2011-09-05 15:33:26 +0200 (lun 05 sep 2011) $ --> 
-
-#
-# Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-
-=pod 
-
 =head1 NAME 
 
-I<VOOTConsumer.pm> - VOOT consumer facilities for internal use in Sympa
+VOOTConsumer.pm - VOOT consumer facilities for internal use in Sympa
 
 =head1 DESCRIPTION 
 
@@ -42,22 +18,13 @@ use OAuthConsumer;
 use JSON::XS;
 use Data::Dumper;
 
-#use List;
 use tools;
-#use tt2;
 use Conf;
 use Log;
 
 =pod 
 
-=head1 SUBFUNCTIONS 
-
-This is the description of the subfunctions contained by VOOTConsumer.pm
-
-=cut 
-
-
-=pod 
+=head1 METHODS
 
 =head2 sub new
 
@@ -83,49 +50,38 @@ Creates a new VOOTConsumer object.
 
 =back 
 
-=head3 Calls 
-
-=over 
-
-=item * &Log::do_log
-
-=back 
-
 =cut 
 
 ## Creates a new object
 sub new {
-	my $pkg = shift;
+	my $pkg   = shift;
 	my %param = @_;
-	
-	my $consumer;
-	&Log::do_log('debug2', 'VOOTConsumer::new(%s, %s)', $param{'user'}, $param{'provider'});
-	
-	# Get oauth consumer and enpoints from provider_id
-	$consumer->{'conf'} = &_get_config_for($param{'provider'});
-	return undef unless(defined $consumer->{'conf'});
-	
-	$consumer->{'user'} = $param{'user'};
-	$consumer->{'provider'} = $param{'provider'};
-	
-	$consumer->{'oauth_consumer'} = new OAuthConsumer(
-		user => $param{'user'},
-		provider => 'voot:'.$param{'provider'},
-		consumer_key => $consumer->{'conf'}{'oauth.ConsumerKey'},
-		consumer_secret => $consumer->{'conf'}{'oauth.ConsumerSecret'},
-		request_token_path => $consumer->{'conf'}{'oauth.RequestURL'},
-        access_token_path  => $consumer->{'conf'}{'oauth.AccessURL'},
-        authorize_path => $consumer->{'conf'}{'oauth.AuthorizationURL'},
-        here_path => $consumer->{'here_path'}
-	);
-	
-	return bless $consumer, $pkg;
+    (bless {}, $pkg)->init(\%param);
 }
 
-sub getOAuthConsumer {
-	my $self = shift;
-	return $self->{'oauth_consumer'};
+sub init($)
+{   my ($self, $args) = @_;
+	
+	my $user     = $self->{user}     = $args->{user};
+	my $provider = $self->{provider} = $args->{provider};
+	Log::do_log('debug2', 'VOOTConsumer::new(%s, %s)', $user, $provider);
+
+	my $conf     = $self->{conf}     = _get_config_for($provider);
+	$conf or return undef;
+
+	$self->{oauth} = OAuthConsumer->new(
+		user               => $user,
+		provider           => "voot:$provider",
+		consumer_key       => $conf->{ConsumerKey},
+		consumer_secret    => $conf->{ConsumerSecret},
+		request_token_path => $conf->{RequestURL},
+        access_token_path  => $conf->{AccessURL},
+        authorize_path     => $conf->{AuthorizationURL},
+	);
+    $self;
 }
+
+sub getOAuthConsumer { shift->{oauth_consumer} }
 
 =pod 
 
