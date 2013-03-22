@@ -42,7 +42,7 @@ sub init($) {shift}
 The follow code is really tricky: it tries to separate the components
 from the existing interface.
 
-=head3 class method: register HASH
+=head3 class method: register_plugin HASH
 
 This method takes a HASH.  The supported keys are
 
@@ -58,7 +58,7 @@ See the source of L<Sympa::VOOT> for an extended example.
 
 =cut
 
-sub register($)
+sub register_plugin($)
 {   my ($class, $args) = @_;
 
     if(my $url = $args{url_commands})

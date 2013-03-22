@@ -4,7 +4,8 @@ use strict;
 
 #use Log;
 
-my %required_plugins;
+my %required_plugins = qw/
+ /;
 
 my %optional_plugins = qw/
  Sympa::VOOT     0
@@ -102,7 +103,11 @@ sub load_plugin($%)
             {   Log::do_log(notice => "installed optional plugin $pkg too old: $@");
             }
         }
+
         Log::do_log(info => "loaded plugin $pkg");
+
+        $pkg->register_plugin( {} )
+            if $pkg->can('register_plugin');
 
         $plugins{$pkg}++;
         return 1;

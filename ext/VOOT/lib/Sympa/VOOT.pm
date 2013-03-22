@@ -1,6 +1,5 @@
-# load the VOOT plugin
 package Sympa::VOOT;
-use parent 'Sympa::Plugin';
+use base 'Sympa::Plugin';
 
 use warnings;
 use strict;
@@ -40,11 +39,11 @@ my @validate =
   ( voot_path => '[^<>\\\*\$\n]+'
   );  
 
-sub register($)
+sub register_plugin($)
 {   my ($class, $args) = @_;
-    push @{$args{url_commands}}, @url_commands;
-    push @{$args{validate}}, @validate;
-    $class->SUPER::register($args);
+    push @{$args->{url_commands}}, @url_commands;
+    push @{$args->{validate}}, @validate;
+    $class->SUPER::register_plugin($args);
 }
 
 =head1 NAME

@@ -79,8 +79,6 @@ use tracking;
 #use Mail::Header; # no need to import
 #use Mail::Address; # no longer used
 
-use Sympa::Plugin::Manager;
-
 my $crypt_openssl_x509_ok;
 BEGIN {
     if (eval "require Crypt::OpenSSL::X509") {
@@ -106,6 +104,8 @@ my $pinfo;
 my $ip; 
 my $rss;
 my $ajax;
+
+my $has_plugins = eval "require Sympa::Plugin::Manager";
 
 ## Load sympa config
 unless (defined Robot::get_robots()) {
@@ -951,7 +951,8 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 
 # Now, load all components which are implemented as plugins.  Those will
 # add fields to above configuration.
-Sympa::Plugin::Manager->load_plugins;
+Sympa::Plugin::Manager->load_plugins
+    if $has_plugins;
 
 ## Set locale configuration	 
 $Language::default_lang = Site->lang;	 
@@ -976,9 +977,13 @@ my $query;
 
 my $birthday = time ;
 
-# Instantiate voot, if we need it.
+# XXX MO: this will move out!
 our $voot;
 if(Site->voot_feature eq 'on') {
+
+    $has_plugins
+        or Log::fatal_err("voot_feature is on, but no plugin manager");
+
     Sympa::Plugin::Manager->has('Sympa::VOOT')
         or Log::fatal_err("voot_feature is on, but Sympa::VOOT not available");
 

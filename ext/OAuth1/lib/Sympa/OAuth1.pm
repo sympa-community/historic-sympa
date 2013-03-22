@@ -1,15 +1,11 @@
 
 package Sympa::OAuth1;
+use base 'Sympa::Plugin';
 
 use Sympa::OAuth1::Provider;
-use Sympa::VOOT::Renater;
 
-BEGIN {
-  ### try to create a simple plugin-interface until there is a real one
-  # these globals are copied during initiation
-  my %url_commands =
-  (
-    oauth_check      => 
+my @url_commands =
+  ( oauth_check      => 
       { handler   => \&_do_oauth_check
       , path_args => 'oauth_provider'
       , required  => [ qw/param.user.email oauth_provider/ ]
@@ -31,7 +27,7 @@ BEGIN {
       }
   );
 
-  my %validate =
+my @validate =
   ( oauth_provider     => '[^:]+:.+'
   , oauth_authorize_ok => '.+'
   , oauth_authorize_no => '.+'
@@ -39,23 +35,12 @@ BEGIN {
   , oauth_callback     => '[^\\\$\*\"\'\`\^\|\<\>\n]+'
   );
 
-  main::load_plugin
-    ( url_commands => \%url_commands
-    , validate     => \%validate
-    );
+sub register_plugin($)
+{   my ($class, $args) = @_;
+    push @{$args->{url_commands}}, @url_commands;
+    push @{$args->{validate}}, @validate;
+    $self->SUPER::register_plugin($args);
 }
-### END
-
-sub new(@)
-{   my ($class, %args) = @_;
-    (bless {}, $class)->init(\%args);
-}
-
-sub init($)
-{   my ($self, $args) = @_;
-    $self;
-}
-
 
 #### Using HTTP_AUTHORIZATION header requires httpd config customization :
 # <Location /sympa>
