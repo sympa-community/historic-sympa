@@ -41,12 +41,11 @@ This fcgi script completely handles all aspects of the Sympa web interface
 use lib '--modulesdir--';
 
 # XXX MO: during development, where modules are not installed
-use lib qw(
-   /home/sympa/ext/NetVOOT/lib
-   /home/sympa/ext/OAuth1/lib
-   /home/sympa/ext/Plugin/lib
-   /home/sympa/ext/VOOT/lib
-  );
+use lib
+  '/home/sympa/ext/NetVOOT/lib',
+  '/home/sympa/ext/OAuth1/lib',
+  '/home/sympa/ext/Plugin/lib',
+  '/home/sympa/ext/VOOT/lib';
 
 use strict;
 use Getopt::Long;
@@ -1764,7 +1763,7 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
-        unshift @$tt2_include_path, $plugins->web_tt2_paths
+        unshift @$tt2_include_path, $plugins->tt2_paths
             if $plugins;
 
  	unless (&tt2::parse_tt2(
@@ -1796,7 +1795,7 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
-        unshift @$tt2_include_path, $plugins->web_tt2_paths
+        unshift @$tt2_include_path, $plugins->tt2_paths
             if $plugins;
 
  	unless (&tt2::parse_tt2(
@@ -1816,7 +1815,6 @@ Log::do_log(info => "WWSympa started, process $$");
 	 print "Location: $param->{'redirect_to'}\n\n";
      }else {
 	 &prepare_report_user();
-         $param->{plugins} = { map +($_ => 1), $plugins->list };
 	 &send_html('main.tt2');
      }    
 
@@ -2615,6 +2613,10 @@ sub send_html {
 	}
     }
 
+    ## Available plugins, to switch on template fragments
+    $param_copy->{plugins}
+      = $plugins ? sub { $plugins->tt2_fragments(@_) } : sub { () };
+
     ## Save special paths.
     my @added_include_path = tt2::get_include_path();
     tt2::clear_include_path();
@@ -2627,7 +2629,7 @@ sub send_html {
     my $tt2_include_path =
 	($list || $robot)->get_etc_include_path('web_tt2');
 
-    unshift @$tt2_include_path, $plugins->web_tt2_paths
+    unshift @$tt2_include_path, $plugins->tt2_paths
         if $plugins;
 
     # testing custom CSS.
@@ -2669,7 +2671,7 @@ sub send_html {
 	tt2::add_include_path($dir);
     }
 
-    unshift @$tt2_include_path, $plugins->web_tt2_paths
+    unshift @$tt2_include_path, $plugins->tt2_paths
         if $plugins;
 
     ## Output the content.

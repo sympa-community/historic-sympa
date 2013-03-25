@@ -52,13 +52,20 @@ my @validate =
   ( voot_path => '[^<>\\\*\$\n]+'
   );  
 
+my @fragments =
+  ( list_menu => 'list_menu_opensocial.tt2'
+  );
+
 sub register_plugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
     push @{$args->{validate}}, @validate;
 
     (my $templ_dir = __FILE__) =~ s,\.pm$,/web_tt2,;
-    push @{$args->{web_tt2}}, $templ_dir;
+    push @{$args->{templates}},
+     +{ tt2_path      => $templ_dir
+      , tt2_fragments => \@fragments
+      };
 
     $class->SUPER::register_plugin($args);
 }

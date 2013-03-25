@@ -166,19 +166,46 @@ sub has($)
     grep $_->isa($pkg), $self->list;
 }
 
-=head3 method: web_tt2_paths
+=head3 method: add_templates OPTIONS
+
+=over 4
+
+=item C<tt2_path> =E<gt> DIRECTORY|ARRAY
+
+=item C<tt2_fragments> =E<gt> PAIRS
+
+=back
 
 =cut
 
-sub web_tt2_paths() { @{shift->{SPM_web_tt2} || []} }
+sub add_templates(%)
+{   my ($self, %args) = @_;
 
-=head3 method: add_web_tt2_path DIRECTORIES
+    my $path  = $args{tt2_path} || [];
+    push @{$self->{SPM_tt2_paths}}, ref $path ? @$path : $path;
+
+    my $table = $self->{SPM_tt2_frag} ||= {};
+    my @frag  = @{$args{tt2_fragments} || []};
+    while(@frag)
+    {   my $loc = shift @frag;
+        push @{$table->{$loc}}, shift @frag;
+    }
+}
+
+=head3 method: tt2_paths
 
 =cut
 
-sub add_web_tt2_path(@)
-{   my $tt2 = shift->{SPM_web_tt2} ||= [];
-    push @$tt2, @_;
+sub tt2_paths() { @{shift->{SPM_tt2_paths} || []} }
+
+=head3 method: tt2_fragments LOCATION
+
+=cut
+
+sub tt2_fragments($)
+{   my ($self, $location) = @_;
+    Log::do_log(err => "tt2_fragments(@_)");
+    $self->{SPM_tt2_frag}{$location} || [];
 }
 
 1;

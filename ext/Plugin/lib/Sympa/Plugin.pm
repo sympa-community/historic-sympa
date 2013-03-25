@@ -57,7 +57,7 @@ over 4
 
 =item C<validate> =E<gt> PAIRS
 
-=item C<web_tt2> =E<gt> DIRECTORY
+=item C<templates> =E<gt> HASHES
 
 =back
 
@@ -105,8 +105,9 @@ sub register_plugin($)
             $main::in_regexp{$param} = shift @val;
         }
     }
-    if(my $templ = $args->{web_tt2})
-    {   $main::plugins->add_web_tt2_path(ref $templ ? @$templ : $templ);
+    if(my $templ = $args->{templates})
+    {   $main::plugins->add_templates(%$_)
+            for ref $templ ? @$templ : $templ;
     }
 }
 
