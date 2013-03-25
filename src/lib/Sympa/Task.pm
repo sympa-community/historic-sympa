@@ -110,27 +110,6 @@ sub new {
     return $self;
 }
 
-=head1 INSTANCE METHODS
-
-=head2 $task->remove()
-
-remove a task using message key
-
-=cut
-
-sub remove {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
-
-    unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
-	Sympa::Log::Syslog::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
-	return undef;
-    }
-}
-
-
-=head1 CLASS METHODS
-
 =head2 Sympa::Task->list_tasks()
 
 Build all Task objects.
@@ -211,6 +190,24 @@ sub get_task_list {
     my ($class) = @_;
     Sympa::Log::Syslog::do_log('debug',"Getting tasks list");
     return @task_list;
+}
+
+=head1 INSTANCE METHODS
+
+=head2 $task->remove()
+
+remove a task using message key
+
+=cut
+
+sub remove {
+    my ($self) = @_;
+    Sympa::Log::Syslog::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
+
+    unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
+	Sympa::Log::Syslog::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
+	return undef;
+    }
 }
 
 1;
