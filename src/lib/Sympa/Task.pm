@@ -129,15 +129,16 @@ sub remove {
 }
 
 
-=head1 FUNCTIONS
+=head1 CLASS METHODS
 
-=head2 Sympa::Task::list_tasks()
+=head2 Sympa::Task->list_tasks()
 
 Build all Task objects.
 
 =cut
 
 sub list_tasks {
+    my ($class) = @_;
 
     Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
     ## Reset the list of tasks
@@ -164,27 +165,27 @@ sub list_tasks {
     return 1;
 }
 
-=head2 Sympa::Task::get_tasks_by_list($list_id)
+=head2 Sympa::Task->get_tasks_by_list($list_id)
 
 Return a list tasks for the given list.
 
 =cut
 
 sub get_tasks_by_list {
-    my ($list_id) = @_;
+    my ($class, $list_id) = @_;
     Sympa::Log::Syslog::do_log('debug',"Getting tasks for list '%s'",$list_id);
 
     return () unless (defined $task_by_list{$list_id});
     return values %{$task_by_list{$list_id}};
 }
 
-=head2 Sympa::Task::get_used_models($list_id)
+=head2 Sympa::Task->get_used_models($list_id)
 
 =cut
 
 sub get_used_models {
     ## Optional list parameter
-    my ($list_id) = @_;
+    my ($class, $list_id) = @_;
     Sympa::Log::Syslog::do_log('debug',"Getting used models for list '%s'",$list_id);
 
 
@@ -202,11 +203,12 @@ sub get_used_models {
     }
 }
 
-=head2 Sympa::Task::get_task_list()
+=head2 Sympa::Task->get_task_list()
 
 =cut
 
 sub get_task_list {
+    my ($class) = @_;
     Sympa::Log::Syslog::do_log('debug',"Getting tasks list");
     return @task_list;
 }

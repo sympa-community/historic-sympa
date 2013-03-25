@@ -12792,8 +12792,8 @@ sub purge {
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
 
     ## Remove tasks for this list
-    Sympa::Task::list_tasks($Sympa::Configuration::Conf{'queuetask'});
-    foreach my $task (Sympa::Task::get_tasks_by_list($self->get_list_id())) {
+    Sympa::Task->list_tasks($Sympa::Configuration::Conf{'queuetask'});
+    foreach my $task (Sympa::Task->get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
 
