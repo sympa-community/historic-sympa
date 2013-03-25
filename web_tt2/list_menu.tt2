@@ -71,10 +71,8 @@
   [% IF is_owner %]
 	<li class="[% class %]"><a href="[% path_cgi %]/stats/[% list %]">[%|loc%]Statistics[%END%]</a></li>	
   [% END %]
-  [% IF is_owner %]
-    [% FOREACH file IN plugins('list_menu') %]
-      [% INCLUDE $file %]
-    [% END %]
+  [% FOREACH file IN plugins('list_menu') %]
+    [% INCLUDE $file %]
   [% END %]
 
 [% IF is_archived %]
