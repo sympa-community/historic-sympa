@@ -59,6 +59,10 @@ Creates a new L<Sympa::Lock> object.
 
 =item * I<method>: FIXME
 
+=item * I<user>: FIXME
+
+=item * I<group>: FIXME
+
 =back
 
 =head3 Return value
@@ -90,6 +94,14 @@ sub new {
 	}
 	close $fh;
    }
+
+    unless(Sympa::Tools::File::set_file_rights(
+	file  => $lock_filename,
+	user  => $params{user},
+	group => $params{group},
+    )) {
+	Sympa::Log::fatal_err('Unable to set rights on %s', $lock_filename);
+    }
 
     bless $self, $class;
 

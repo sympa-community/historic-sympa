@@ -160,7 +160,9 @@ sub write_pid {
     # Lock pid file
     my $lock = Sympa::Lock->new(
 	    path   => $params{file},
-	    method => $params{method}
+	    method => $params{method},
+	    user   => $params{user},
+	    group  => $params{group},
     );
     unless (defined $lock) {
 	Sympa::Log::Syslog::fatal_err('Lock could not be created. Exiting.');
