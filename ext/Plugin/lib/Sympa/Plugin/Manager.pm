@@ -125,7 +125,7 @@ sub load_plugin($%)
     {   Log::fatal_err("cannot find required plugin $pkg")
            if $required;
 
-        Log::do_log(notice => "optional plugin $pkg is not (completely) installed");
+        Log::do_log(notice => "optional plugin $pkg is not (completely) installed: $@");
     }
     elsif($required)
     {   Log::fatal_error("compilation errors in required plugin $pkg: $@");

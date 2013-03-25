@@ -176,6 +176,9 @@
       [% ELSIF p.key == 'msg_topic_tagging' %]
         [%|helploc%]This parameter indicates if the tagging is optional or required for a list.[%END%]
       [% ELSE %]
+         [% FOREACH file IN plugins('help_editlist') %]
+            [% INCLUDE $file %]
+         [%END%]
         [%|helploc%]No Comment[%END%]
       [% END %]
     </dd>

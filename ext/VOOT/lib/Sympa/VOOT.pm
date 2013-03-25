@@ -53,24 +53,27 @@ my @validate =
   );  
 
 my @fragments =
-  ( list_menu => 'list_menu_opensocial.tt2'
+  ( list_menu     => 'list_menu_opensocial.tt2'
+  , help_editlist => 'help_editlist_voot.tt2'
   );
 
+my @provider_names;
 my %include_voot_form =
   ( group      => 'data_source'
   , gettext_id => 'VOOT group inclusion'
+  , occurrence => '0-n'
   , format     =>
      [ name =>
         { gettext_id => 'short name for this source'
         , format     => '.+'
         , length     => 15
         }
+     , provider => 
+        { gettext_id => 'provider'
+        , format     => \@provider_names
+        }
      , user =>
         { gettext_id => 'user'
-        , format     => '\S+'
-        }
-     , provider =>
-        { gettext_id => 'provider'
         , format     => '\S+'
         }
      , group =>
@@ -78,7 +81,6 @@ my %include_voot_form =
         , format     => '\S+'
         }
      ]
-  , occurrence => '0-n'
   );
 
 sub register_plugin($)
@@ -97,6 +99,10 @@ sub register_plugin($)
 
     $class->SUPER::register_plugin($args);
 }
+
+# FIXME: we load it to get config for the data_sources edit menu, but
+#   that should disappear (somehow)
+__PACKAGE__->new;
 
 =head1 NAME
 
@@ -120,7 +126,7 @@ the various VOOT backends.
 =head3 class method: new OPTIONS
 
 OPTIONS:
-   config FILENAME|HASH            voot configuration file (default voot.conf)
+   config FILENAME|HASH       voot configuration file (default voot.conf)
 
 =cut
 
@@ -142,6 +148,9 @@ sub init($)
     {   $self->{SV_config}    = $self->read_config($config);
         $self->{SV_config_fn} = $config;
     }
+
+    # for config chooser
+    @provider_names = $self->providers;
 
     $self;
 }
@@ -182,7 +191,7 @@ sub read_config($)
     $config;
 }
 
-=head3 provider ID
+=head3 provider ID|NAME
 
 Returns the object which handles the selected provider.
 
@@ -190,7 +199,11 @@ Returns the object which handles the selected provider.
 
 sub provider($)
 {   my ($self, $id) = @_;
-    my $info = first { $_->{'voot.ProviderID'} eq $id } @{$self->config}
+    my $info = first {   $_->{'voot.ProviderID'}   eq $id
+                      || $_->{'voot.ProviderName'} eq $id
+                     } $self->provider_configs;
+
+    $info
         or Log::fatal_err("cannot find VOOT provider $id in "
               . $self->config_filename);
 
@@ -203,11 +216,18 @@ sub provider($)
     
 }
 
-=head3 provider_configs
+=head3 method: provider_configs
+
+=head3 method: providers
 
 =cut
 
 sub provider_configs() { @{shift->config} }
+
+sub providers()
+{   map +($_->{'voot.ProviderName'} || $_->{'voot.ProviderID'})
+      , shift->provider_configs;
+}
 
 =head1 FUNCTIONS
 

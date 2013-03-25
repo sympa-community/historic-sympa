@@ -74,6 +74,29 @@ use Storable qw(dclone);
 
 our @ISA    = qw(Site_r);           # not fully inherit Robot
 
+
+my @sources_providing_listmembers = qw/
+  include_file
+  include_ldap_2level_query
+  include_ldap_query  
+  include_list
+  include_remote_file
+  include_remote_sympa_list  
+  include_sql_query  
+  include_voot_group 
+ /;
+
+#XXX include_admin  
+my @include_data_sources =
+ ( @sources_providing_listmembers, qw/
+  editor_include  
+  owner_include
+/ );
+
+my %config_in_admin_user_file
+  = map +($_ => 1), @sources_providing_listmembers;
+delete $config_in_admin_user_file{include_voot_group};  # in voot.conf file
+
 =encoding utf-8
 
 =head1 CONSTRUCTOR AND INITIALIZER
@@ -6745,13 +6768,8 @@ sub _load_list_members_from_include {
     my $result;
     my @ex_sources;
 
-    foreach my $type (
-	'include_list',              'include_remote_sympa_list',
-	'include_file',              'include_ldap_query',
-	'include_ldap_2level_query', 'include_sql_query',
-	'include_remote_file',       'include_voot_group'
-	) {
-	last unless (defined $total);
+    foreach my $type (@sources_providing_listmembers)
+    {   last unless (defined $total);
 
 	foreach my $tmp_incl (@{$self->$type}) {
 	    my $included;
@@ -6970,13 +6988,9 @@ sub _load_list_admin_from_include {
 	    $include_admin_user =
 		_load_include_admin_user_file($robot, $include_file);
 	}
-	foreach my $type (
-	    'include_list',              'include_remote_sympa_list',
-	    'include_file',              'include_ldap_query',
-	    'include_ldap_2level_query', 'include_sql_query',
-	    'include_remote_file',       'include_voot_group'
-	    ) {
-	    last unless (defined $total);
+
+	foreach my $type (@sources_providing_listmembers)
+	{   defined $total or last;
 
 	    foreach my $tmp_incl (@{$include_admin_user->{$type}}) {
 		my $included;
@@ -7154,15 +7168,8 @@ sub _load_include_admin_user_file {
 
 	$pname = $1;
 
-	unless (($pname eq 'include_list') ||
-	    ($pname eq 'include_remote_sympa_list') ||
-	    ($pname eq 'include_file') ||
-	    ($pname eq 'include_remote_file') ||
-	    ($pname eq 'include_ldap_query') ||
-	    ($pname eq 'include_ldap_2level_query') ||
-	    ($pname eq 'include_sql_query')) {
-	    &Log::do_log('info', 'Unknown parameter "%s" in %s',
-		$pname, $file);
+        unless($config_in_admin_user_file{$pname})
+	{   &Log::do_log('info', 'Unknown parameter "%s" in %s', $pname, $file);
 	    next;
 	}
 
@@ -11072,17 +11079,9 @@ sub create_shared {
 sub has_include_data_sources {
     my $self = shift;
 
-    foreach my $type (
-	'include_file',              'include_list',
-	'include_remote_sympa_list', 'include_sql_query',
-	'include_remote_file',       'include_ldap_query',
-	'include_ldap_2level_query', #XXX'include_admin',
-	'owner_include',             'editor_include',
-	'include_voot_group'
-	) {
-	if (ref($self->$type) eq 'ARRAY' and scalar @{$self->$type}) {
-	    return 1;
-	}
+    foreach my $type (@include_data_sources)
+    {   my $resource = $self->$type;
+        return 1 if ref $resource eq 'ARRAY' && @$resource;
     }
 
     return 0;
