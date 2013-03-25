@@ -110,8 +110,14 @@ sub new {
     return $self;
 }
 
+=head1 INSTANCE METHODS
 
-##remove a task using message key
+=head2 $task->remove()
+
+remove a task using message key
+
+=cut
+
 sub remove {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
@@ -123,7 +129,14 @@ sub remove {
 }
 
 
-## Build all Task objects
+=head1 FUNCTIONS
+
+=head2 Sympa::Task::list_tasks()
+
+Build all Task objects.
+
+=cut
+
 sub list_tasks {
 
     Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
@@ -151,7 +164,12 @@ sub list_tasks {
     return 1;
 }
 
-## Return a list tasks for the given list
+=head2 Sympa::Task::get_tasks_by_list($list_id)
+
+Return a list tasks for the given list.
+
+=cut
+
 sub get_tasks_by_list {
     my ($list_id) = @_;
     Sympa::Log::Syslog::do_log('debug',"Getting tasks for list '%s'",$list_id);
@@ -159,6 +177,10 @@ sub get_tasks_by_list {
     return () unless (defined $task_by_list{$list_id});
     return values %{$task_by_list{$list_id}};
 }
+
+=head2 Sympa::Task::get_used_models($list_id)
+
+=cut
 
 sub get_used_models {
     ## Optional list parameter
@@ -179,6 +201,10 @@ sub get_used_models {
 	return keys %task_by_model;
     }
 }
+
+=head2 Sympa::Task::get_task_list()
+
+=cut
 
 sub get_task_list {
     Sympa::Log::Syslog::do_log('debug',"Getting tasks list");
