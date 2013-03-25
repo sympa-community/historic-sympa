@@ -9,12 +9,13 @@ use warnings;
 use FindBin qw($Bin);
 use lib "$Bin/../src/lib";
 
-use Test::More;
+use English qw(-no_match_vars);
 use File::Temp;
+use Test::More;
 
 use Sympa::Tools::Daemon;
 
-plan tests => 1;
+plan tests => 3;
 
 my $piddir  = File::Temp->newdir();
 my $pidfile = $piddir . '/test.pid';
@@ -24,5 +25,20 @@ ok(
 		file   => $pidfile,
 		pid    => 666,
 		method => 'anything'
-	)
+	),
+	'function success',
 );
+
+ok(-f $pidfile, 'pid file presence');
+cmp_ok(slurp_file($pidfile), '==', 666, 'pid file content');
+
+sub slurp_file {
+	my ($file) = @_;
+
+	open(my $handle, '<', $file) or die "can't open $file: $ERRNO";
+	local $/;
+	my $content = <$handle>;
+	close ($handle);
+
+	return $content;
+}
