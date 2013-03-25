@@ -13,14 +13,14 @@ our %default = (
     'length'     => 25
 );
 
-my @param_order =
+our @param_order =
     qw (subject visibility info subscribe add unsubscribe del owner owner_include
     send editor editor_include delivery_time account topics
     host lang web_archive archive digest digest_max_size available_user_options
     default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to *
     verp_rate tracking welcome_return_path remind_return_path user_data_source include_file include_remote_file
     include_list include_remote_sympa_list include_ldap_query
-    include_ldap_2level_query include_sql_query include_voot_group include_admin ttl distribution_ttl creation update
+    include_ldap_2level_query include_sql_query include_admin ttl distribution_ttl creation update
     status serial custom_attribute include_ldap_ca include_ldap_2level_ca include_sql_ca);
 
 ## List parameters aliases
@@ -1278,38 +1278,6 @@ our %pinfo = (
 		'gettext_id' => "Time ranges when inclusion is not allowed",
 		'format'     => tools::get_regexp('time_ranges'),
 		'occurrence' => '0-1'
-	    }
-	},
-	'occurrence' => '0-n'
-    },
-
-    'include_voot_group' => {
-	'group'      => 'data_source',
-	'gettext_id' => "VOOT group inclusion",
-	'format'     => {
-	    'name' => {
-		'order'      => 1,
-		'gettext_id' => "short name for this source",
-		'format'     => '.+',
-		'length'     => 15
-	    },
-	    'user' => {
-		'order'      => 2,
-		'gettext_id' => "user",
-		'format'     => '\S+',
-		'occurrence' => '1'
-	    },
-	    'provider' => {
-		'order'      => 3,
-		'gettext_id' => "provider",
-		'format'     => '\S+',
-		'occurrence' => '1'
-	    },
-	    'group' => {
-		'order'      => 4,
-		'gettext_id' => "group",
-		'format'     => '\S+',
-		'occurrence' => '1'
 	    }
 	},
 	'occurrence' => '0-n'

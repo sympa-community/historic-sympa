@@ -42,6 +42,7 @@ use lib '--modulesdir--';
 
 # XXX MO: during development, where modules are not installed
 use lib
+  '/home/sympa/lib',
   '/home/sympa/ext/NetVOOT/lib',
   '/home/sympa/ext/OAuth1/lib',
   '/home/sympa/ext/Plugin/lib',

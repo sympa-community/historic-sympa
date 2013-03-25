@@ -56,6 +56,31 @@ my @fragments =
   ( list_menu => 'list_menu_opensocial.tt2'
   );
 
+my %include_voot_form =
+  ( group      => 'data_source'
+  , gettext_id => 'VOOT group inclusion'
+  , format     =>
+     [ name =>
+        { gettext_id => 'short name for this source'
+        , format     => '.+'
+        , length     => 15
+        }
+     , user =>
+        { gettext_id => 'user'
+        , format     => '\S+'
+        }
+     , provider =>
+        { gettext_id => 'provider'
+        , format     => '\S+'
+        }
+     , group =>
+        { gettext_id => 'group'
+        , format     => '\S+'
+        }
+     ]
+  , occurrence => '0-n'
+  );
+
 sub register_plugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
@@ -66,6 +91,9 @@ sub register_plugin($)
      +{ tt2_path      => $templ_dir
       , tt2_fragments => \@fragments
       };
+    push @{$args->{listdef}},
+      ( include_voot_group => \%include_voot_form
+      );
 
     $class->SUPER::register_plugin($args);
 }

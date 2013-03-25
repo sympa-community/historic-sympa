@@ -105,9 +105,39 @@ sub register_plugin($)
             $main::in_regexp{$param} = shift @val;
         }
     }
+
     if(my $templ = $args->{templates})
     {   $main::plugins->add_templates(%$_)
             for ref $templ ? @$templ : $templ;
+    }
+
+    # Add info to listdef.pm table.  This can be made simpler with some
+    # better defaults in listdef.pm itself.
+    if(my $form = $args->{listdef})
+    {   my @form = @$form;
+        while(@form)
+        {   my ($header, $fields) = (shift @form, shift @form);
+            my $format = $fields->{format};
+            if(ref $format eq 'ARRAY')
+            {   # for convenience: automatically add 'order' when the
+                # format is passed as ARRAY
+                my %h;
+                my @format = @$format;
+                while(@format)
+                {   my ($field, $def) = (shift @format, shift @format);
+                    $def->{order} = keys(%h) + 1;
+                    $h{$field}    = $def;
+                }
+                $format = $fields->{format} = \%h;
+            }
+
+            # for convenience, default occurence==1
+            $_->{occurrent} ||= 1 for values %$format;
+
+            $listdef::pinfo{$header} = $fields;
+            $fields->{order} = @listdef::param_order;  # to late for init
+            push @listdef::param_order, $header;
+        }
     }
 }
 
