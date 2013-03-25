@@ -1,29 +1,34 @@
+use warnings;
+use strict;
 
 package Sympa::OAuth1;
 use base 'Sympa::Plugin';
 
+our $VERSION = '0.10';
+
 use Sympa::OAuth1::Provider;
+
 
 my @url_commands =
   ( oauth_check      => 
-      { handler   => \&_do_oauth_check
+      { handler   => \&do_oauth_check
       , path_args => 'oauth_provider'
       , required  => [ qw/param.user.email oauth_provider/ ]
       }
   , oauth_ready      =>
-      { handler   => \&_do_oauth_ready
+      { handler   => \&do_oauth_ready
       , path_args => [ qw/oauth_provider ticket/ ]
       , required  => [ qw/oauth_provider ticket oauth_token oauth_verifier/]
       }
   , oauth_temporary  =>
-      { handler   => \&_do_oauth_temporary
+      { handler   => \&do_oauth_temporary
       }
   , oauth_authorize  =>
-      { handler   => \&_do_oauth_authorize
+      { handler   => \&do_oauth_authorize
       , required  => [ qw/param.user.email oauth_token/ ]
       }
   , oauth_access     =>
-      { handler   => \&_do_oauth_access
+      { handler   => \&do_oauth_access
       }
   );
 
@@ -39,7 +44,7 @@ sub register_plugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
     push @{$args->{validate}}, @validate;
-    $self->SUPER::register_plugin($args);
+    $class->SUPER::register_plugin($args);
 }
 
 #### Using HTTP_AUTHORIZATION header requires httpd config customization :
@@ -52,10 +57,13 @@ sub register_plugin($)
 # </Location>
 
 # Consumer requests a temporary token
-sub _do_oauth_temporary(%)
+sub do_oauth_temporary(%)
 {   my %args = @_;
 
+my $self;
     my $param = $args{param};
+    my $in    = $args{in};
+
     $param->{bypass} = 'extreme';
 
     my $provider = $self->create_provider('oauth_temporary', $param, $in, 0)
@@ -66,7 +74,7 @@ sub _do_oauth_temporary(%)
 }
 
 # User needs to authorize access
-sub _do_oauth_authorize(%)
+sub do_oauth_authorize(%)
 {   my %args    = @_;
     my $in      = $args{in};
     my $param   = $args{param};
@@ -82,7 +90,7 @@ sub _do_oauth_authorize(%)
 
     my $verifier = $session->{oauth_authorize_verifier};
     my $in_verif = $in->{oauth_authorize_verifier} || '';
-    if(!$verifier || $verifier ne $in_verifier)
+    if(!$verifier || $verifier ne $in_verif)
     {   $session->{oauth_authorize_verifier}
           = $param->{oauth_authorize_verifier}
           = $oauth1->generateRandomString(32);
@@ -119,6 +127,7 @@ sub do_oauth_access(%)
     my $param        = $args{param};
     $param->{bypass} = 'extreme';
 
+my $self;
     my $provider = $self->create_provider('oauth_access', $param, $args{in}, 1)
         or return 1;
 
@@ -152,7 +161,7 @@ sub do_oauth_check(%)
     my $consumer = $voot->getOAuthConsumer;
 
     $consumer->setWebEnv
-      ( robot     => $robot_id
+      ( robot     => $args{robot_id}
       , here_path => "oauth_check/$in->{oauth_provider}"
       , base_path => "$param->{base_url}$param->{path_cgi}"
       );
@@ -172,8 +181,9 @@ sub do_oauth_check(%)
 # Got back from OAuth workflow (provider), needs to get authorization
 # token and call the right action
 sub do_oauth_ready(%)
-{   my %params   = @_;
-    my $in       = $params{in};
+{   my %args  = @_;
+    my $in    = $args{in};
+    my $param = $args{param};
 
     my $callback = main::do_ticket();
 

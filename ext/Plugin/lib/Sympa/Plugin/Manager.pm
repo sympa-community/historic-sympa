@@ -12,8 +12,6 @@ my %optional_plugins = qw/
  Sympa::OAuth1   0
  /;
 
-my %plugins;
-
 =head1 NAME
 
 Sympa::Plugin::Manager - module loader
@@ -22,7 +20,8 @@ Sympa::Plugin::Manager - module loader
 
   use Sympa::Plugin::Manager;
 
-  Sympa::Plugin::Manager->load_plugins;
+  my $plugins = Sympa::Plugin::Manager->new;
+  $plugins->load_plugins;
 
 =head1 DESCRIPTION
 
@@ -31,9 +30,18 @@ instantiate plugin objects.
 
 =head1 METHODS
 
+=head2 Constructors
+
+=head2 class method: new OPTIONS
+
+=cut
+
+sub new($%) { my ($class, %args) = @_; (bless {}, $class)->init(\%args) }
+sub init($) {shift}
+
 =head2 Loading
 
-=head3 class method: load_plugins OPTIONS
+=head3 method: load_plugins OPTIONS
 
 Load all known plugins, unless a sub-set is specified.
 
@@ -48,23 +56,23 @@ Options:
 =cut
 
 sub load_plugins(%)
-{   my ($class, %args) = @_;
+{   my ($self, %args) = @_;
 
     my $need = $args{only} || [];
     my %need = map +($_ => 1), ref $need ? @$need : $need;
 
     while(my ($pkg, $version) = each %required_plugins)
     {   next if keys %need && $need{$pkg};
-        $class->load_plugin($pkg, version => $version, required => 1);
+        $self->load_plugin($pkg, version => $version, required => 1);
     }
 
     while(my ($pkg, $version) = each %optional_plugins)
     {   next if keys %need && $need{$pkg};
-        $class->load_plugin($pkg, version => $version, required => 0);
+        $self->load_plugin($pkg, version => $version, required => 0);
     }
 }
 
-=head3 class method: load_plugin PACKAGE, OPTIONS
+=head3 method: load_plugin PACKAGE, OPTIONS
 
 Load a single plugin.  This can be used to load a new package during
 development.  Returned is whether loading was successful.  When the
@@ -87,8 +95,8 @@ Example:
 =cut
 
 sub load_plugin($%)
-{   my ($class, $pkg, %args) = @_;
-    return if $plugins{$pkg};  # already loaded
+{   my ($self, $pkg, %args) = @_;
+    return if $self->{SPM_plugins}{$pkg};  # already loaded
 
     my $required = exists $args{required} ? $args{required} : 1;
     my $version  = $args{version};
@@ -109,7 +117,7 @@ sub load_plugin($%)
         $pkg->register_plugin( {} )
             if $pkg->can('register_plugin');
 
-        $plugins{$pkg}++;
+        $self->{SPM_plugins}{$pkg}++;
         return 1;
     }
 
@@ -131,31 +139,46 @@ sub load_plugin($%)
 
 =head2 Administration
 
-=head3 class method: list
+=head3 method: list
 
 Returns a list class names for all loaded plugins.
 
 =cut
 
 sub list(%)
-{   my ($class, %args) = @_;
-    keys %plugins;
+{   my ($self, %args) = @_;
+    keys %{$self->{SPM_plugins}};
 }
 
-=head3 class method: has PACKAGE
+=head3 method: has PACKAGE
 
 Returns the class names of loaded plug-ins, which extend (or are equal
 to) the requested PACKAGE name.
 
 Example:
 
-  if(Sympa::Plugin::Manager->has('Sympa::VOOT')) ...
+  if($plugins->has('Sympa::VOOT')) ...
 
 =cut
 
 sub has($)
-{   my ($class, $pkg) = @_;
-    grep $_->isa($pkg), keys %plugins;
+{   my ($self, $pkg) = @_;
+    grep $_->isa($pkg), $self->list;
+}
+
+=head3 method: web_tt2_paths
+
+=cut
+
+sub web_tt2_paths() { @{shift->{SPM_web_tt2} || []} }
+
+=head3 method: add_web_tt2_path DIRECTORIES
+
+=cut
+
+sub add_web_tt2_path(@)
+{   my $tt2 = shift->{SPM_web_tt2} ||= [];
+    push @$tt2, @_;
 }
 
 1;

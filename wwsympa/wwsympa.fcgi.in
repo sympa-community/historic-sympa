@@ -25,13 +25,12 @@
 ## Authors :
 ##           Serge Aumont <sa AT cru.fr>
 ##           Olivier Salaün <os AT cru.fr>
-=pod 
 
 =encoding utf-8
 
 =head1 NAME
 
-I<wwsympa.fcgi> - Sympa web interface 
+wwsympa.fcgi - Sympa web interface 
 
 =head1 DESCRIPTION 
 
@@ -40,6 +39,14 @@ This fcgi script completely handles all aspects of the Sympa web interface
 =cut 
 
 use lib '--modulesdir--';
+
+# XXX MO: during development, where modules are not installed
+use lib qw(
+   /home/sympa/ext/NetVOOT/lib
+   /home/sympa/ext/OAuth1/lib
+   /home/sympa/ext/Plugin/lib
+   /home/sympa/ext/VOOT/lib
+  );
 
 use strict;
 use Getopt::Long;
@@ -97,6 +104,7 @@ our $list;
 our $param = {};
 our $robot_id;
 our $session;
+our $plugins;
 
 my $loop = 0;
 my $robot;
@@ -105,7 +113,9 @@ my $ip;
 my $rss;
 my $ajax;
 
-my $has_plugins = eval "require Sympa::Plugin::Manager";
+if(eval "require Sympa::Plugin::Manager")
+{   $plugins = Sympa::Plugin::Manager->new;
+}
 
 ## Load sympa config
 unless (defined Robot::get_robots()) {
@@ -951,8 +961,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 
 # Now, load all components which are implemented as plugins.  Those will
 # add fields to above configuration.
-Sympa::Plugin::Manager->load_plugins
-    if $has_plugins;
+$plugins->load_plugins if $plugins;
 
 ## Set locale configuration	 
 $Language::default_lang = Site->lang;	 
@@ -976,21 +985,6 @@ our %in;
 my $query;
 
 my $birthday = time ;
-
-# XXX MO: this will move out!
-our $voot;
-if(Site->voot_feature eq 'on') {
-
-    $has_plugins
-        or Log::fatal_err("voot_feature is on, but no plugin manager");
-
-    Sympa::Plugin::Manager->has('Sympa::VOOT')
-        or Log::fatal_err("voot_feature is on, but Sympa::VOOT not available");
-
-    my $config_fn = Site->get_etc_filename('voot.conf');
-    $voot = Sympa::VOOT->new(config => $config_fn);
-    Log::do_log(info => "started voot support from $config_fn");
-}
 
 Log::do_log(info => "WWSympa started, process $$");
 
@@ -1770,6 +1764,9 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
+        unshift @$tt2_include_path, $plugins->web_tt2_paths
+            if $plugins;
+
  	unless (&tt2::parse_tt2(
 	    $param, 'rss.tt2', \*STDOUT, $tt2_include_path, {}
 	)) {
@@ -1799,6 +1796,9 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
+        unshift @$tt2_include_path, $plugins->web_tt2_paths
+            if $plugins;
+
  	unless (&tt2::parse_tt2(
 	    $param, 'ajax.tt2', \*STDOUT, $tt2_include_path, {}
 	)) {
@@ -1816,6 +1816,7 @@ Log::do_log(info => "WWSympa started, process $$");
 	 print "Location: $param->{'redirect_to'}\n\n";
      }else {
 	 &prepare_report_user();
+         $param->{plugins} = { map +($_ => 1), $plugins->list };
 	 &send_html('main.tt2');
      }    
 
@@ -2626,6 +2627,9 @@ sub send_html {
     my $tt2_include_path =
 	($list || $robot)->get_etc_include_path('web_tt2');
 
+    unshift @$tt2_include_path, $plugins->web_tt2_paths
+        if $plugins;
+
     # testing custom CSS.
     if ($session->{'custom_css'}) {
 	my $custom_css;
@@ -2664,6 +2668,9 @@ sub send_html {
     foreach my $dir (@added_include_path) {
 	tt2::add_include_path($dir);
     }
+
+    unshift @$tt2_include_path, $plugins->web_tt2_paths
+        if $plugins;
 
     ## Output the content.
     unless (tt2::parse_tt2(

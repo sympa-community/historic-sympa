@@ -59,7 +59,6 @@ sub fromConfig($%)
     my $provider = $args{provider}
         or Log::fatal_err("no VOOT provider name provided to load from config");
 
-    my $config   = ref $c eq 'HASH' ? $c : $class->readConfig($c);
     my $info     = first {$_->{ProviderID} eq $provider} @$config;
     $info or Log::fatal_err("provider $provider not found in configuration ".
             (ref $c eq 'HASH' ? 'HASH' : $c));
@@ -114,22 +113,6 @@ sub getContent($;$)
 
 #---------------------------
 =section Helpers
-
-=ci_method readConfig FILENAME
-=cut
-
-sub readConfig($)
-{   my ($thing, $filename) = @_;
-    local *IN;
-    open IN, '<:encoding(utf8)', $filename
-        or fault __x"cannot read VOOT config from {fn}", fn => $filename;
-
-    local $/;
-    my $config = decode_json <IN>;
-    close IN
-        or fault __x"read errors from {fn}", fn => $filename;
-    $config;
-}
 
 =c_method getProviders CONFIG
 List the names of all provides.

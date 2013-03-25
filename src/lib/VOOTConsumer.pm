@@ -340,63 +340,8 @@ sub _get_config_for {
 	return undef;
 }
 
-
-=pod 
-
-=head2 sub getProviders
-
-List providers.
-
-=head3 Arguments 
-
-=over 
-
-=item * None.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
-=cut 
-
-## List providers
-sub getProviders {
-	&Log::do_log('debug2', 'VOOTConsumer::getProviders()');
-	
-	my $list = {};
-	
-	my $file = Site->etc.'/voot.conf';
-	return $list unless (-f $file);
-	
-	open(my $fh, '<', $file) or return $list;
-	my @ctn = <$fh>;
-	chomp @ctn;
-	close $fh;
-	
-	my $conf = decode_json(join('', @ctn)); # Returns array ref
-	foreach my $item (@$conf) {
-		$list->{$item->{'voot.ProviderID'}} = $item->{'voot.ProviderID'};
-	}
-	
-	return $list;
-}
-
-## Packages must return true.
 1;
+
 =pod 
 
 =head1 AUTHORS 

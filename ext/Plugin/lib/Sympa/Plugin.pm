@@ -2,6 +2,10 @@ package Sympa::Plugin;
 use warnings;
 use strict;
 
+# FIXME: clean interface needed for these:
+use tt2;
+*wwslog = \&main::wwslog;
+
 =head1 NAME
 
 Sympa::Plugin - add plugin system to Sympa
@@ -34,6 +38,7 @@ sub new(@)
 {   my ($class, %args) = @_;
     (bless {}, $class)->init(\%args);
 }
+
 sub init($) {shift}
 
 
@@ -48,9 +53,11 @@ This method takes a HASH.  The supported keys are
 
 over 4
 
-=item C<url_commands>
+=item C<url_commands> =E<gt> PAIRS
 
-=item C<validate>.
+=item C<validate> =E<gt> PAIRS
+
+=item C<web_tt2> =E<gt> DIRECTORY
 
 =back
 
@@ -61,35 +68,45 @@ See the source of L<Sympa::VOOT> for an extended example.
 sub register_plugin($)
 {   my ($class, $args) = @_;
 
-    if(my $url = $args{url_commands})
-    {   while(my ($command, $settings) = each %$url)
-        {   my $handler = $settings->{handler};
+    if(my $url = $args->{url_commands})
+    {   my @url = @$url;
+        while(@url)
+        {   my ($command, $settings) = (shift @url, shift @url);
+            my $handler = $settings->{handler};
 
-            $comm{$command} = sub
-              { main::wwslog(info => "$command(@_)");
+            $main::comm{$command} = sub
+              { wwslog(info => "$command(@_)");
                 $handler->
-                  ( in      => \%main::in
-                  , param   => $main::param
-                  , session => $main::session
-                  , list    => $main::list
+                  ( in       => \%main::in
+                  , param    => $main::param
+                  , session  => $main::session
+                  , list     => $main::list
+                  , robot_id => $main::robot_id
                   , @_
                   );
               };
 
-            if(my $a = $settings{path_args})
+            if(my $a = $settings->{path_args})
             {   $main::action_args{$command} = ref $a ? $a : [ $a ];
             }
-            if(my $r = $settings{required})
+            if(my $r = $settings->{required})
             {   $main::required_args{$command} = ref $r ? $r : [ $r ];
             }
-	    if(my $p = $setting{privilege})
+	    if(my $p = $settings->{privilege})
             {   # default is 'everybody'
                 $main::required_privileges{$command} = ref $p ? $p : [$p];
             }
         }
     }
-    if(my $val = $args{validate})
-    {   @main::in_regexp{keys %$val} = values %$val;
+    if(my $val = $args->{validate})
+    {   my @val = @$val;
+        while(@val)
+        {   my $param = shift @val;
+            $main::in_regexp{$param} = shift @val;
+        }
+    }
+    if(my $templ = $args->{web_tt2})
+    {   $main::plugins->add_web_tt2_path(ref $templ ? @$templ : $templ);
     }
 }
 
