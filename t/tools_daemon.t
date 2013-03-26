@@ -15,7 +15,7 @@ use Test::More;
 
 use Sympa::Tools::Daemon;
 
-plan tests => 9;
+plan tests => 23;
 
 my $piddir  = File::Temp->newdir();
 my $pidfile = $piddir . '/test.pid';
@@ -26,11 +26,16 @@ ok(
 		pid    => 666,
 		method => 'anything'
 	),
-	'function success',
+	'new pid file',
 );
 
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '666', 'pid file content');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	[666],
+	'pids list'
+);
 
 ok(
 	Sympa::Tools::Daemon::write_pid(
@@ -38,11 +43,16 @@ ok(
 		pid    => 667,
 		method => 'anything'
 	),
-	'function success',
+	'pid file overwrite',
 );
 
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667', 'pid file content');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	[667],
+	'pids list'
+);
 
 ok(
 	Sympa::Tools::Daemon::write_pid(
@@ -53,13 +63,71 @@ ok(
 			multiple_process => 1
 		}
 	),
-	'function success',
+	'pid file appending',
 );
-
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667 668', 'pid file content');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	[667, 668],
+	'pids list'
+);
 
-is(get_pids_in_pid_file(), [667, 668], );
+ok(
+	Sympa::Tools::Daemon::remove_pid(
+		file    => $pidfile,
+		pid     => 668,
+		method  => 'anything',
+		options => {
+			multiple_process => 1
+		}
+	),
+	'pid removal, existing pid',
+);
+ok(-f $pidfile, 'pid file presence');
+is(slurp_file($pidfile), '667', 'pid file content');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	[667],
+	'pids list'
+);
+
+ok(
+	Sympa::Tools::Daemon::remove_pid(
+		file    => $pidfile,
+		pid     => 668,
+		method  => 'anything',
+		options => {
+			multiple_process => 1
+		}
+	),
+	'pid removal, unexisting pid',
+);
+ok(-f $pidfile, 'pid file presence');
+is(slurp_file($pidfile), '667', 'pid file content');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	[667],
+	'pids list'
+);
+
+ok(
+	Sympa::Tools::Daemon::remove_pid(
+		file    => $pidfile,
+		pid     => 667,
+		method  => 'anything',
+		options => {
+			multiple_process => 1
+		}
+	),
+	'pid removal, last pid',
+);
+ok(!-f $pidfile, 'pid file presence');
+is_deeply(
+	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	undef,
+	'pids list'
+);
 
 sub slurp_file {
 	my ($file) = @_;
