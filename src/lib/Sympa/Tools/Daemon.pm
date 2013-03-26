@@ -72,7 +72,6 @@ sub remove_pid {
 	## Then the pidfile contains a list of space-separated PIDs on a single line
 	if($params{options}->{'multiple_process'}) {
 		unless(open(PFILE, $params{file})) {
-			# fatal_err('Could not open %s, exiting', $pidfile);
 			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
 			return undef;
 		}
@@ -152,7 +151,8 @@ sub write_pid {
 	user  => $params{user},
 	group => $params{group},
     )) {
-	Sympa::Log::Syslog::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
+	Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', $piddir);
+	return undef;
     }
 
     my @pids;
@@ -165,11 +165,13 @@ sub write_pid {
 	    group  => $params{group},
     );
     unless (defined $lock) {
-	Sympa::Log::Syslog::fatal_err('Lock could not be created. Exiting.');
+	Sympa::Log::Syslog::do_log('err', 'Lock could not be created.');
+	return;
     }
     $lock->set_timeout(5);
     unless ($lock->lock('write')) {
-	Sympa::Log::Syslog::fatal_err('Unable to lock %s file in write mode.  Exiting.',$params{file});
+	Sympa::Log::Syslog::do_log('err', 'Unable to lock %s file in write mode.',$params{file});
+	return;
     }
     ## If pidfile exists, read the PIDs
     if(-f $params{file}) {
@@ -186,7 +188,8 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting: %s', $params{file},$ERRNO);
+	    Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file},$ERRNO);
+	    return;
 	}
 	## Print other pids + this one
 	push(@pids, $params{pid});
@@ -197,7 +200,8 @@ sub write_pid {
 	unless(open(PIDFILE, '+>> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting: %s', $params{file});
+	    Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file});
+	    return;
 	}
 	## The previous process died suddenly, without pidfile cleanup
 	## Send a notice to listmaster with STDERR of the previous process
@@ -212,12 +216,14 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$params{file})) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::Syslog::fatal_err('Could not open %s, exiting', $params{file});
+	    Sympa::Log::Syslog::do_log('err', 'Could not open %s', $params{file});
+	    return;
 	}
 	unless(truncate(PIDFILE, 0)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    Sympa::Log::Syslog::fatal_err('Could not truncate %s, exiting.', $params{file});
+	    Sympa::Log::Syslog::do_log('err', 'Could not truncate %s.', $params{file});
+	    return;
 	}
 
 	print PIDFILE $params{pid}."\n";
@@ -231,7 +237,8 @@ sub write_pid {
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	Sympa::Log::Syslog::fatal_err('Unable to set rights on %s', $params{file});
+	Sympa::Log::Syslog::do_log('err', 'Unable to set rights on %s', $params{file});
+	return;
     }
     ## Unlock pid file
     $lock->unlock();

@@ -100,7 +100,8 @@ sub new {
 	user  => $params{user},
 	group => $params{group},
     )) {
-	Sympa::Log::fatal_err('Unable to set rights on %s', $lock_filename);
+	Sympa::Log::Syslog::do_log('err', 'Unable to set rights on %s', $lock_filename);
+	return;
     }
 
     bless $self, $class;
@@ -189,18 +190,18 @@ sub lock {
 	if ($mode eq 'write' && $list_of_locks{$self->{'lock_filename'}}{'mode'} eq 'read') {
 	    Sympa::Log::Syslog::do_log('debug', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
 	    ## First release previous lock
-	    return undef unless ($self->remove_lock());
+	    return undef unless ($self->_remove_lock());
 	    ## Next, lock in write mode
 	    ## WARNING!!! This exact point of the code is a critical point, as any file lock this process could have
 	    ## is currently released. However, we are supposed to have a 'read' lock! If any OTHER process has a read lock on the file, we won't
 	    ## be able to add the new lock. While waiting, the other process can perfectly switch to 'write' mode and start writing
 	    ## in the file THAT OTHER PARTS OF THIS PROCESS ARE CURRENTLY READING. Consequently, if add_lock can't create a lock at its
 	    ## first attempt, it will first try to put a read lock instead. failing that, it will return undef for lock conflicts reasons.
-	    if ($self->add_lock($mode,-1)) {
+	    if ($self->_add_lock($mode,-1)) {
 		push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
 	    }
 	    else {
-		return undef unless ($self->add_lock('read',-1));
+		return undef unless ($self->_add_lock('read',-1));
 	    }
 	    return 1;
 	}
@@ -213,7 +214,7 @@ sub lock {
 
     ## If file was not locked by this process, just *create* the lock.
     else {
-	    if ($self->add_lock($mode)) {
+	    if ($self->_add_lock($mode)) {
 		push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
 	    }
 	    else {
@@ -256,7 +257,7 @@ sub unlock {
 	    Sympa::Log::Syslog::do_log('debug3', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
 
 	    ## First release previous lock
-	    return undef unless($self->remove_lock());
+	    return undef unless($self->_remove_lock());
 
 	    ## Next, lock in write mode
 	    ## WARNING!!! This exact point of the code is a critical point, as any file lock this process could have
@@ -264,12 +265,12 @@ sub unlock {
 	    ## be able to add the new lock. While waiting, the other process can perfectly switch to 'write' mode and start writing
 	    ## in the file THAT OTHER PARTS OF THIS PROCESS ARE CURRENTLY READING. Consequently, if add_lock can't create a lock at its
 	    ## first attempt, it will first try to put a read lock instead. failing that, it will return undef for lock conflicts reasons.
-	    return undef unless ($self->add_lock($current_mode,-1));
+	    return undef unless ($self->_add_lock($current_mode,-1));
 	}
     }
     ## Otherwise, just delete the last lock.
     else {
-	return undef unless($self->remove_lock());
+	return undef unless($self->_remove_lock());
 	$previous_mode = pop @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}};
 	unlink $self->{'lock_filename'};
     }
@@ -277,7 +278,7 @@ sub unlock {
 }
 
 ## Called by lock() or unlock() when these function need to add a lock (i.e. on the file system or NFS).
-sub add_lock {
+sub _add_lock {
     my ($self, $mode, $timeout) = @_;
 
     ## If the $timeout value is -1, it means that we will try to put a lock only once. This is to be used when we are
@@ -305,7 +306,7 @@ sub add_lock {
 }
 
 ## Called by lock() or unlock() when these function need to remove a lock (i.e. on the file system or NFS).
-sub remove_lock {
+sub _remove_lock {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
 
