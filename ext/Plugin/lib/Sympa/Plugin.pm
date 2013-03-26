@@ -143,7 +143,7 @@ sub register_plugin($)
     }
 }
 
-=head3 upgrade OPTIONS
+=head3 class_method: upgrade OPTIONS
 
 Upgrade the information in the system.  Returned is the next version
 for that information: you can better not make more than one step at
@@ -159,19 +159,22 @@ inbetween these steps.
 =cut
 
 sub upgrade(%)
-{   my ($self, %args) = @_;
+{   my ($class, %args) = @_;
     my $from = $args{from_version};
 
-    my $upgrade_class = ref($self) . "::Upgrade";
+    my $upgrade_class = $class.'::Upgrade';
     eval "require $upgrade_class"
-        or fatal "cannot upgrade via $upgrade_class: $@";
 
-    return $upgrade_class->upgrade(from => $from, to => $self->VERSION)
+# XXX MO: upgrades yet to be implemented in most plugins
+#       or fatal "cannot upgrade via $upgrade_class: $@";
+or return $class->VERSION;
+
+    return $upgrade_class->upgrade(from => $from, to => $class->VERSION)
         if $from;
 
     # First run
     $upgrade_class->setup;
-    $self->VERSION;
+    $class->VERSION;
 }
 
 1;

@@ -12,6 +12,7 @@ use List::Util     qw/first/;
 # Sympa modules
 use report;
 use Site;
+use Sympa::Plugin::Util qw/:functions/;
 
 =head1 NAME
 
@@ -187,14 +188,14 @@ sub read_config($)
     local *IN;
 
     open IN, '<:encoding(utf8)', $filename
-        or Log::fatal_err("cannot read VOOT config from $filename");
+        or fatal "cannot read VOOT config from $filename";
 
     local $/;
     my $config = eval { decode_json <IN> };
-    $@ and Log::fatal_err("parse errors in VOOT config $filename: $@");
+    $@ and fatal "parse errors in VOOT config $filename: $@";
 
     close IN
-        or Log::fatal_err("read errors in VOOT config $filename: $@");
+        or fatal "read errors in VOOT config $filename: $@";
 
     $config;
 }
@@ -222,7 +223,7 @@ sub provider($)
     Sympa::Plugin::Manager->load_plugin($impl)
         or Log::fatal_err("cannot load module $impl for provider $id in $fn");
 
-    my $provider = eval { $impl->new(%$impl, %args) };
+    my $provider = eval { $impl->new(%$impl, %args) }
         or Log::fatal_err("cannot start provider $id from $impl: $@");
 
     $provider;

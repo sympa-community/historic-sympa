@@ -113,24 +113,24 @@ my $ip;
 my $rss;
 my $ajax;
 
-if(eval "require Sympa::Plugin::Manager")
-{   $plugins = Sympa::Plugin::Manager->new;
-}
-
 ## Load sympa config
 unless (defined Robot::get_robots()) {
-    Log::fatal_err(
-	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
-	Conf::get_sympa_conf()
-    );  
+    # we cannot use log without configuration
+    my $conf = Conf::get_sympa_conf();
+    die "Unable to load sympa configuration, file $conf or one of the virtual host robot.conf files contain errors. Exiting.";
 }
 
+## Open log
 Log::set_log_level(Site->log_level);
 
 my $daemon_name = &Log::set_daemon($0);
 
-## Open log
 Log::do_openlog(Site->log_facility, Site->log_socket_type, 'wwsympa');
+
+## Start plugins
+if(eval "require Sympa::Plugin::Manager")
+{   $plugins = Sympa::Plugin::Manager->new;
+}
 
 &mail::set_send_spool(Site->queue);
 

@@ -51,24 +51,29 @@ sub new($%) { my ($class, %args) = @_; (bless {}, $class)->init(\%args) }
 sub init($)
 {   my ($self, $args) = @_;
 
-    my $fn = $self->{SPM_state_fn} = $args->{state_file}
-       || Site->get_etc_filename('plugins.conf');
+    $self->{SPM_loaded} = {};
 
-    $self->{SPM_state} = $args->{state} ||= $self->read_state($fn);
+    my $fn = $self->{SPM_state_fn}
+       = $args->{state_file} || Site->etc.'/plugins.conf';
+
+    $self->{SPM_state}  = $args->{state} ||= $self->read_state($fn);
     $self;
 }
 
 
 =head2 Accessors
 
-=head3 method: plugins
+=head3 method: loaded
 
 =head3 method: state_fn
 
+=head3 method: state
+
 =cut
 
-sub plugins()  { shift->{SPM_plugins} }
+sub loaded()   { shift->{SPM_loaded}   }
 sub state_fn() { shift->{SPM_state_fn} }
+sub state()    { shift->{SPM_state}    }
 
 =head2 Loading
 
@@ -92,7 +97,9 @@ Options:
 sub start(%)
 {   my ($self, %args) = @_;
 
-    $self->load_plugins;
+    #
+    ### Load the plugins
+    #
 
     my $need = $args{only} || [];
     my %need = map +($_ => 1), ref $need ? @$need : $need;
@@ -107,8 +114,10 @@ sub start(%)
         $self->load_plugin($pkg, version => $version, required => 0);
     }
 
-    $self->check_plugins(upgrade => $args{upgrade});
+    # Upgrade when there is new software
+    $self->check_versions(upgrade => $args{upgrade});
 
+    # Start using the plugins
     $_->register_plugin( {} ) for $self->list;
 
     $self;
@@ -139,8 +148,8 @@ Example:
 
 sub load_plugin($%)
 {   my ($self, $pkg, %args) = @_;
-    my $plugins = $self->plugins;
-    return if $self->plugins->{$pkg};  # already loaded
+    my $loaded = $self->loaded;
+    return if $loaded->{$pkg};  # already loaded
 
     my $required = exists $args{required} ? $args{required} : 1;
     my $version  = $args{version};
@@ -158,7 +167,7 @@ sub load_plugin($%)
 
         log(info => "loaded plugin $pkg");
 
-        $self->plugins->{$pkg} = $pkg->VERSION;
+        $loaded->{$pkg} = $pkg->VERSION;
         return 1;
     }
 
@@ -196,15 +205,19 @@ sub check_versions(%)
     my $old     = $self->state->{plugin_versions} ||= {};
     my $too_old = 0;
     my $upgrade = $args{upgrade} || 0;
+$upgrade = 1;
 
+  PLUGIN:
     foreach my $plugin ($self->list)
     {   my $old_version = $old->{$plugin};
         my $new_version = $self->version_of($plugin);
         next if $old_version && $new_version eq $old_version;
 
         unless($upgrade)
-        {   log(err => "new plugin version $new_version requires upgrade from $old_version");
+        {   my $old = $old_version || 'scratch';
+            log(notice => "plugin $plugin new version $new_version requires upgrade from $old");
             $too_old++;
+            next PLUGIN;
         }
 
         # upgrade best in many small steps.
@@ -231,20 +244,20 @@ Returns a list class names for all loaded plugins.
 
 =cut
 
-sub list(%) { keys %{shift->plugins} }
+sub list(%) { keys %{shift->loaded} }
 
-=head3 method: hasPlugin PACKAGE
+=head3 method: has_plugin PACKAGE
 
 Returns the class names of loaded plug-ins, which extend (or are equal
 to) the requested PACKAGE name.
 
 Example:
 
-  if($plugins->hasPlugin('Sympa::VOOT')) ...
+  if($plugins->has_plugin('Sympa::VOOT')) ...
 
 =cut
 
-sub hasPlugin($)
+sub has_plugin($)
 {   my ($self, $pkg) = @_;
     grep $_->isa($pkg), $self->list;
 }
@@ -255,7 +268,7 @@ sub hasPlugin($)
 
 sub version_of($)
 {   my ($self, $package) = @_;
-    $self->plugins->{$package};
+    $self->loaded->{$package};
 }
 
 =head3 method: add_templates OPTIONS
@@ -313,9 +326,10 @@ By default, this is the C<plugin.conf> file in the etc directory.
 
 sub read_state($)
 {   my ($self, $fn) = @_;
+    trace_call("read plugin state from $fn");
     -f $fn or return {};
 
-    open my $fh, "<:encoding(utf8)", $fn
+    open my $fh, "<:raw", $fn
         or fatal "cannot read plugin state from $fn";
 
     my $state = eval { local $/; decode_json <$fh> }
@@ -328,13 +342,14 @@ sub write_state()
 {   my $self = shift;
     my $fn   = $self->state_fn;
 
-    open my $fh, ">:encoding(utf8)", $fn
-        or fatal "cannot write plugin state to $fn";
+    trace_call("write plugin state from $fn");
+    open my $fh, ">:raw", $fn
+        or fatal "cannot write plugin state to $fn: $!";
 
-    $fh->print(encode_json $self->state);
+    $fh->print(JSON->new->pretty->encode($self->state));
 
     close $fh
-        or fatal "failed to write plugin state to $fn";
+        or fatal "failed to write plugin state to $fn: $!";
 }
 
 1;

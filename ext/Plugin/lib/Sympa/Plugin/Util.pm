@@ -100,13 +100,14 @@ sub default_db() { $default_db || (bless {}, 'SPU_db') }
 
 =cut
 
-sub log(@)   { Log::do_log(@_) }
-sub fatal(@) { Log::fatal_err(@_) }
+sub log(@)   { goto &Log::do_log }
+sub fatal(@) { goto &Log::fatal_err }
 
 sub trace_call(@)          # simplification of method logging
 {   my $sub = (caller[1])[3];
     local $" =  ',';
-    Log::do_log(debug2 => "$sub(@_)");
+    @_ = (debug2 => "$sub(@_)");
+    goto &Log::do_log;
 }
 
 1;
