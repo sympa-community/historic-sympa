@@ -1,7 +1,10 @@
+package Sympa::OAuth1::Consumer;
+use strict;
+use warnings;
 
 =head1 NAME 
 
-OAuthConsumer.pm - OAuth consumer facilities for internal use in Sympa
+Sympa::OAuth1::Consumer.pm - OAuth consumer facilities for internal use in Sympa
 
 =head1 DESCRIPTION 
 
@@ -10,10 +13,6 @@ when performing authorization request, handles token retrieving as well
 as database storage.
 
 =cut 
-
-package OAuthConsumer;
-
-use strict;
 
 use OAuth::Lite::Consumer;
 
@@ -30,7 +29,7 @@ use Log;
 
 =head1 SUBFUNCTIONS 
 
-This is the description of the subfunctions contained by OAuthConsumer.pm
+This is the description of the subfunctions contained by Sympa::OAuth1::Consumer.pm
 
 =cut 
 
@@ -39,7 +38,7 @@ This is the description of the subfunctions contained by OAuthConsumer.pm
 
 =head2 sub new
 
-Creates a new OAuthConsumer object.
+Creates a new Sympa::OAuth1::Consumer object.
 
 =head3 Arguments 
 
@@ -63,7 +62,7 @@ Creates a new OAuthConsumer object.
 
 =over 
 
-=item * I<a OAuthConsumer object>, if created
+=item * I<a Sympa::OAuth1::Consumer object>, if created
 
 =item * I<undef>, if something went wrong
 
@@ -94,7 +93,7 @@ sub new {
 		authorize_path => $param{'authorize_path'},
 		redirect_url => undef
  	};
-	&Log::do_log('debug2', 'OAuthConsumer::new(%s, %s, %s)', $param{'user'}, $param{'provider'}, $param{'consumer_key'});
+	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::new(%s, %s, %s)', $param{'user'}, $param{'provider'}, $param{'consumer_key'});
 	
 	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
 		consumer_key => $param{'consumer_key'},
@@ -154,7 +153,7 @@ Check if user has an access token already and fetch ressource
 
 =over 
 
-=item * I<$self>, the OAuthConsumer object to test.
+=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
 
 =item * I<$url>, the ressource url.
 
@@ -187,7 +186,7 @@ sub fetchRessource {
 	my $self = shift;
 	my %param = @_;
 	
-	&Log::do_log('debug2', 'OAuthConsumer::fetchRessource(%s)', $param{'url'});
+	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::fetchRessource(%s)', $param{'url'});
 	
 	# Get access token, return 1 if it exists
 	my $token = $self->hasAccess();
@@ -232,7 +231,7 @@ Check if user has an access token already, triggers OAuth workflow otherwise
 
 =over 
 
-=item * I<$self>, the OAuthConsumer object to test.
+=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
 
 =back 
 
@@ -259,7 +258,7 @@ Check if user has an access token already, triggers OAuth workflow otherwise
 ## Check if user has an access token already, triggers OAuth workflow if none found
 sub hasAccess {
 	my $self = shift;
-	&Log::do_log('debug2', 'OAuthConsumer::hasAccess(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::hasAccess(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	unless(defined $self->{'session'}{'access'}) {
 		if($self->{'here_path'}) { # We are running in web env.
@@ -281,7 +280,7 @@ Triggers OAuth authorization workflow, call only in web env.
 
 =over 
 
-=item * I<$self>, the OAuthConsumer to use.
+=item * I<$self>, the Sympa::OAuth1::Consumer to use.
 
 =back 
 
@@ -306,7 +305,7 @@ Triggers OAuth authorization workflow, call only in web env.
 ## Triggers OAuth workflow, call only in web env.
 sub triggerFlow {
 	my $self = shift;
-	&Log::do_log('debug2', 'OAuthConsumer::triggerFlow(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::triggerFlow(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	my $ticket = &Auth::create_one_time_ticket(
 		$self->{'user'},
@@ -359,7 +358,7 @@ Try to obtain access token from verifier.
 
 =over 
 
-=item * I<$self>, the OAuthConsumer object to test.
+=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
 
 =back 
 
@@ -387,7 +386,7 @@ Try to obtain access token from verifier.
 sub getAccessToken {
 	my $self = shift;
 	my %param = @_;
-	&Log::do_log('debug2', 'OAuthConsumer::getAccessToken(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
+	do_log('debug2', 'Sympa::OAuth1::Consumer::getAccessToken(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
 	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});
 	

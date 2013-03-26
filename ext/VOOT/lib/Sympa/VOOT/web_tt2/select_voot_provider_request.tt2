@@ -5,9 +5,9 @@
 <p>[%|loc%]Hereafter is the list of VOOT providers that share group information with Sympa. Select which provider you want to use your groups from.[%END%]</p>
 
 <ul>
-	[% FOREACH provider IN voot_providers %]
-	<li><a href="[% path_cgi %]/select_voot_groups_request/[% list %]/[% provider.id %]">[% provider.name %]</a>
-	[%END%]
+  [% FOREACH p IN voot_providers %]
+    <li><a href="[% path_cgi %]/[% p.next %]/[% list %]/[% p.id %]">[% p.name %]</a>
+  [%END%]
 </ul>
 
 </div>

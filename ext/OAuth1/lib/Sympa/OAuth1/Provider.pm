@@ -32,35 +32,19 @@ package Sympa::OAuth1::Provider;
 use strict;
 use warnings;
 
+use Sympa::Plugin::Util     qw/:functions :http :time/;
 use OAuth::Lite::ServerUtil ();
 use URI::Escape             qw/uri_escape uri_unescape/;
 
-#use Log           ();
+my @timeouts =
+  ( old_request_timeout => 10*MINUTE # max age for requests timestamps
+  , nonce_timeout       =>  3*MONTH  # time the nonce tags are kept
+  , temporary_timeout   =>  1*HOUR   # time left to use the temp token
+  , access_timeout      =>  3*MONTH  # access timeout
+  , verifier_timeout    =>  5*MINUTE # time left to request access once
+  );                                 #     the verifier has been set
 
-use constant SECOND => 1;
-use constant MINUTE => 60 * SECOND;
-use constant HOUR   => 60 * MINUTE;
-use constant DAY    => 24 * HOUR;
-use constant MONTH  => 30 * DAY;
-
-sub db_prepared($@)
-{   my ($thing, $query, @bind) = @_;
-    SDM::do_prepared_query($query, @bind);
-}
-
-sub db_do($@)      # I want automatic quoting
-{   my $thing = shift;
-    my $sth   = $thing->db_prepared(@_);
-    undef;
-}
-
-sub trace_calls(@)          # simplification of method logging
-{   my $sub = (caller[1])[3];
-    local $" =  ',';
-    Log::do_log(debug2 => "$sub(@_)");
-}
-
-=head1 FUNCTIONS 
+=head1 METHODS
 
 =head2 Constructors
 
@@ -68,27 +52,21 @@ sub trace_calls(@)          # simplification of method logging
 
 Creates a new Sympa::OAuth1::Provider object.
 
-=over 
+Options:
 
-=item * I<$method>, http method
+=over 4
 
-=item * I<$url>, request url
+=item * I<db>, database object, defaults to the default_db
 
-=item * I<$authorization_header>
+=item * I<method>, http method
 
-=item * I<$request_parameters>
+=item * I<url>, request url
 
-=item * I<$request_body>
+=item * I<authorization_header> =E<gt> STRING
 
-=back 
+=item * I<request_parameters> =E<gt> HASH
 
-Returns
-
-=over 
-
-=item * I<an OAuthProvider object>, if created
-
-=item * I<undef>, if something went wrong
+=item * I<request_body> =E<gt> HASH
 
 =back 
 
@@ -97,11 +75,13 @@ Returns
 ## Creates a new object
 sub new($%)
 {   my ($class, %args) = @_;
-    (bless {}, $class)->init(\%args);
+    (bless {@timeouts}, $class)->init(\%args);
 }
 
 sub init($)
 {   my ($self, $args) = @_;
+
+    $self->{SOP_db} = $args->{db} || default_db;
 
     my %p;
     if(my $ah = $args->{authorization_header})
@@ -111,18 +91,13 @@ sub init($)
         }
     }
     elsif(my $rb = $args->{request_body})
-    {   foreach my $k (keys %$rb)
-        {   $k =~ /^x?oauth_/ or next;
-            $p{$k} = uri_unescape($rb->{$k});
-        }
+    {   $p{$_} = uri_unescape($rb->{$_})
+             for grep /^x?oauth_/, keys %$rb;
     }
     elsif(my $rp = $args->{request_parameters})
-    {   foreach my $k (keys %$rp)
-        {   $k =~ /^x?oauth_/ or next;
-            $p{$k} = uri_unescape($rp->{$k});
-        }
+    {   $p{$_} = uri_unescape($rp->{$_})
+             for grep /^x?oauth_/, keys %$rp;
     }
-    keys %p or return;
     $self->{params} = \%p;
 
     my $key = $self->{consumer_key} = $p{oauth_consumer_key}
@@ -131,52 +106,41 @@ sub init($)
     my $c   = $self->consumer_config_for($key)
         or return;
 
+    trace_call($key, $c->{enabled});
+
     $c->{enabled}
         or return;
  
-    $self->{consumer_secret}= $c->{secret};
-
-    $self->{method}         = $args->{method};
-    $self->{url}            = $args->{url};
-
-    trace_calls($key);
+    $self->{consumer_secret} = $c->{secret};
+    $self->{method}          = $args->{method};
+    $self->{url}             = $args->{url};
     
-    my %settings =
-      ( old_request_timeout => 10*MINUTE # Max age for requests timestamps
-      , nonce_timeout       =>  3*MONTH  # Time the nonce tags are kept
-      , temporary_timeout   =>  1*HOUR   # Time left to use the temp token
-      , verifier_timeout    =>  5*MINUTE # Time left to request access once the verifier has been set
-      , access_timeout      =>  3*MONTH  # Access timeout
-      );
-
-    $self->{constants} = \%settings;
-    
-    my $util = $self->{util} = OAuth::Lite::ServerUtil->new;
+    my $util = $self->{SOP_util} = OAuth::Lite::ServerUtil->new;
     $util->support_signature_method('HMAC-SHA1');
     $util->allow_extra_params(qw/oauth_callback oauth_verifier/);
     
-    unless($self->db_do(<<'__CLEANUP', time - $settings{temporary_timeout}))
+    unless($self->db->do(<<'__CLEANUP', time - $self->{temporary_timeout}))
 DELETE FROM oauthprovider_sessions_table
  WHERE isaccess_oauthprovider IS NULL
    AND lasttime_oauthprovider < ?
 __CLEANUP
-    {   Log::do_log(err => 'Unable to delete old temporary tokens in database');
+    {   log(err => 'Unable to delete old temporary tokens in database');
         return undef;
     }
     $self;
 }
 
 sub consumerFromToken($)
-{   my ($class, $token) = @_;
+{   my ($self, $token) = @_;
 
-    my $sth = $class->db_prepared(<<'__GET_TOKEN', $token);
+    my $sth = $self->db->prepared(<<'__GET_TOKEN', $token);
 SELECT consumer_oauthprovider AS consumer
   FROM oauthprovider_sessions_table
  WHERE token_oauthprovider = ?
 __GET_TOKEN
 
     unless($sth)
-    {   Log::do_log(err => 'unable to query token data %s', $token);
+    {   log(err => 'unable to query token data %s', $token);
         return undef;
     }
  
@@ -187,75 +151,72 @@ __GET_TOKEN
 =head2 Accessors
 =cut
 
-sub oauth_util()     {shift->{util}}  # object
+sub db()             {shift->{SOP_db}}
+sub oauth_util()     {shift->{SOP_util}}  # object
 sub oauth_token()    {shift->{params}{oauth_token}}
 sub oauth_verifier() {shift->{params}{oauth_verifier}}
 sub oauth_callback() {shift->{params}{oauth_callback}}
 sub consumer_key()   {shift->{consumer_key}}
 sub consumer_secret(){shift->{consumer_secret}}
-sub constants()      {shift->{constants}}
 sub params()         {shift->{params}}
+
 
 =head2 Actions
 
-=head3 method checkRequest
+=head3 method checkRequest OPTIONS
 
-Check whether a request is valid
+Check whether a request is valid.  Returns an HTTP-code and an error
+string.  An code of HTTP_OK means success.
 
-  if(my $http_code = $provider->checkRequest) {
-      $server->error($http_code, $provider->{util}->errstr);
+  my ($http_code, $http_err) = $provider->checkRequest)
+  if($http_code != HTTP_OK) {
+     $server->error($http_code, $http_err);
   }
 
-=over 
+Options:
 
-=item * I<$self>, the OAuthProvider object to test.
+=over 4
 
-=item * I<$checktoken>, boolean
+=item * I<checktoken>, boolean
 
-=back 
-
-Returns
-
-=over 
-
-=item * I<undef>, if request is valid
-
-=item * I<!= 1>, if request is NOT valid (http error code)
+=item * I<url>
 
 =back 
 
 =cut 
 
-sub checkRequest
+sub checkRequest(%)
 {   my ($self, %args) = @_;
-    trace_calls($args{url});
+    trace_call($args{url});
 
     my $params     = $self->params;
-    my $constants  = $self->constants;
-
+    my $util       = $self->oauth_util;
     my $checktoken = $args{checktoken};
-    $self->oauth_util->validate_params($params, $checktoken)
-        or return 400;
+
+    $util->validate_params($params, $checktoken)
+        or return (HTTP_BAD, $util->errstr);
  
     my $nonce      = $params->{oauth_nonce};
     my $token      = $params->{oauth_token};
     my $timestamp  = $params->{oauth_timestamp};
     
-    $timestamp > time - $constants->{old_request_timeout}
-        or return 401;
+    $timestamp > time - $self->{old_request_timeout}
+        or return (HTTP_UNAUTH, $util->errstr);
     
-    my $expire_nonces = time - $constants->{nonce_timeout};
-    unless($self->db_do(<<__DELETE_NONCE, $expire_nonces))
+    my $db         = $self->db;
+
+    my $expire_nonces = time - $self->{nonce_timeout};
+    unless($db->do(<<__DELETE_NONCE, $expire_nonces))
 DELETE FROM oauthprovider_nonces_table
  WHERE time_oauthprovider < ?
 __DELETE_NONCE
-    {   Log::do_log(err => 'Unable to clean nonce store in database');
-        return 401;
+    {   log(err => 'Unable to clean nonce store in database');
+        return (HTTP_INTERN, 'Unable to clean nonce store');
     }
     
     if($checktoken)
     {   my $key = $self->consumer_key;
-        my $sth = $self->db_prepared(<<'__GET_KEY', $key, $token);
+        my $sth = $db->prepared(<<'__GET_KEY', $key, $token);
 SELECT id_oauthprovider AS id
   FROM oauthprovider_sessions_table
  WHERE consumer_oauthprovider = ?
@@ -263,13 +224,13 @@ SELECT id_oauthprovider AS id
 __GET_KEY
 
         unless($sth)
-        {   Log::do_log(err => 'Unable to get token %s %s', $key, $token);
-            return 401;
+        {   log(err => 'Unable to get token %s %s', $key, $token);
+            return (HTTP_INTERN, 'Unable to get token');
         }
         
         if(my $data = $sth->fetchrow_hashref('NAME_lc'))
         {   my $id  = $data->{id};
-            my $sth = $self->db_prepared(<<'__GET_NONCE', $id, $nonce);
+            my $sth = $db->prepared(<<'__GET_NONCE', $id, $nonce);
 SELECT nonce_oauthprovider AS nonce
   FROM oauthprovider_nonces_table
  WHERE id_oauthprovider    = ?
@@ -277,21 +238,22 @@ SELECT nonce_oauthprovider AS nonce
 __GET_NONCE
 
             unless($sth)
-            {   Log::do_log(err => 'Unable to check nonce %d %s', $id, $nonce);
-                return 401;
+            {   log(err => "Unable to check provider $id nonce $nonce");
+                return (HTTP_INTERN, 'Unable to check nonce');
             }
             
-            # Already used nonce?
-            return 401 if $sth->fetchrow_hashref('NAME_lc');
+            # Nonce must be new
+            not $sth->fetchrow_hashref('NAME_lc')
+                or return (HTTP_INTERN, 'Nonce already in use');
  
-            unless($self->db_do(<<'__INSERT_NONCE', $id, $nonce))
+            unless($db->do(<<'__INSERT_NONCE', $id, $nonce))
 INSERT INTO oauthprovider_nonces_table
    SET id_oauthprovider    = ?
      , nonce_oauthprovider = ?
      , time_oauthprovider  = NOW
 __INSERT_NONCE
-            {   Log::do_log(err => 'Unable to add nonce record %d %s in database', $id, $nonce);
-                return 401;
+            {   log(err => "Unable to add nonce record $id nonce $nonce");
+                return (HTTP_INTERN, 'Unable to add nonce');
             }
         }
     }
@@ -299,24 +261,22 @@ __INSERT_NONCE
     my $secret = '';
     if($checktoken)
     {
-        my $sth = $self->db_prepared(<<__PROVIDER, $token);
+        my $sth = $db->prepared(<<__PROVIDER, $token);
 SELECT secret_oauthprovider AS secret
   FROM oauthprovider_sessions_table
  WHERE token_oauthprovider = ?
 __PROVIDER
 
-        unless($sth)
-        {   Log::do_log(err => 'Unable to load token data %s', $token);
-            return undef;
+        my $data = $sth ? $sth->fetchrow_hashref('NAME_lc') : undef;
+        unless($data)
+        {   log(err => "Unable to load token data $token");
+            return (HTTP_INTERN, 'Unable to load token data');
         }
-        
-        my $data = $sth->fetchrow_hashref('NAME_lc')
-            or return 401;
 
         $secret = $data->{secret};
     }
     
-    my $correct = $self->outh_util->verify_signature
+    my $correct = $util->verify_signature
       ( method          => $self->{method}
       , params          => $self->{params}
       , url             => $self->{url}
@@ -324,32 +284,13 @@ __PROVIDER
       , token_secret    => $secret
       );
 
-    $correct ? undef : 401;
+    $correct ? (HTTP_OK => 'OK') : (HTTP_UNAUTH => $util->errstr);
 }
 
-=pod 
 
 =head2 method generateTemporary
 
-Create a temporary token
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the OAuthProvider object.
-
-=item * I<$authorize>, the authorization url.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string> response body
-
-=back 
+Returns the URI parameters to request the authorization.
 
 =cut 
 
@@ -359,13 +300,12 @@ sub generateTemporary(%)
 
     my $key      = $self->consumer_key;
     my $callback = $self->oauth_callback;
+    my $token    = $self->generateRandomString(32);
+    my $secret   = $self->generateRandomString(32);
 
-    trace_calls($key);
-    
-    my $token  = $self->generateRandomString(32);
-    my $secret = $self->generateRandomString(32);
+    trace_call($key, $callback, $token, $secret);
 
-    unless($self->db_do(<<'__START_SESSION', $token, $secret, $key, $callback))
+    unless($self->db->do(<<'__START_SESSION', $token, $secret, $key, $callback))
 INSERT INTO oauthprovider_sessions_table
    SET token_oauthprovider     = ?
      , secret_oauthprovider    = ?
@@ -378,14 +318,14 @@ INSERT INTO oauthprovider_sessions_table
      , verifier_oauthprovider  = NULL
      , callback_oauthprovider  = ?
 __START_SESSION
-    {   Log::do_log(err => 'Unable to add new token record %s %s in database', $token, $key);
+    {   log(err => 'Unable to add new token record %s %s in database', $token, $key);
         return undef;
     }
     
     my @r =
       ( 'oauth_token='        . uri_escape($token)
       , 'oauth_token_secret=' . uri_escape($secret)
-      , 'oauth_expires_in='   . $self->constants->{temporary_timeout}
+      , 'oauth_expires_in='   . $self->{temporary_timeout}
       , 'oauth_callback_confirmed=true'
       );
 
@@ -395,29 +335,18 @@ __START_SESSION
     join '&', @r;
 }
 
-=head2 sub getTemporary
+=head2 method: getTemporary OPTIONS
 
-Retreive a temporary token from database.
+Retreive a temporary token from database, which is an unblessed HASH.  Returns
+C<undef> on failure.
 
-=head3 Arguments 
+Options:
 
-=over 
+=over 4
 
-=item * I<$self>, the OAuthProvider to use.
+=item * I<token>, the token key.
 
-=item * I<$token>, the token key.
-
-=item * I<$timeout_type>, the timeout key, temporary or verifier.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=item * I<undef>, if token does not exist or is not valid anymore
+=item * I<timeout_type>, the timeout key, temporary or verifier.
 
 =back 
 
@@ -428,9 +357,9 @@ sub getTemporary(%)
     my $token = $args{token};
     my $key   = $self->consumer_key;
 
-    trace_calls($token);
+    trace_call($token);
     
-    my $sth = $self->db_prepared(<<'__GET_TEMP', $key, $token);
+    my $sth = $self->db->prepared(<<'__GET_TEMP', $key, $token);
 SELECT id_oauthprovider        AS id
      , token_oauthprovider     AS token
      , secret_oauthprovider    AS secret
@@ -445,7 +374,7 @@ SELECT id_oauthprovider        AS id
 __GET_TEMP
 
     unless($sth)
-    {   Log::do_log(err => 'Unable to load token data %s %s', $key, $token);
+    {   log(err => 'Unable to load token data %s %s', $key, $token);
         return undef;
     }
     
@@ -453,34 +382,25 @@ __GET_TEMP
         or return undef;
 
     my $timeout_type = ($args{timeout_type} || 'temporary') . '_timeout';
-    my $timeout      = $self->constants->{$timeout_type};
+    my $timeout      = $self->{$timeout_type};
 
     $data->{lasttime} + $timeout >= time ? $data : undef;
 }
 
-=head2 sub generateVerifier
+=head2 method: generateVerifier OPTIONS
 
-Create the verifier for a temporary token
+Create the verifier for a temporary token.  Returns the redirect url, or
+C<undef> when the token does not exist (anymore) or isn't valid.
 
-=head3 Arguments 
+Options:
 
-=over 
+=over 4
 
-=item * I<$self>, the OAuthProvider object.
+=item * I<token>
 
-=item * I<$token>, the token.
+=item * I<user>
 
-=item * I<$user>, the user.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string> redirect url
-
-=item * I<undef>, if token does not exist or is not valid anymore
+=item * I<granted>, boolean
 
 =back 
 
@@ -495,24 +415,26 @@ sub generateVerifier
     my $granted = $args{granted} ? 1 : 0;
     my $key     = $self->consumer_key;
 
-    trace_calls($token, $user, $granted, $key);
+    trace_call($token, $user, $granted, $key);
     
     my $tmp = $self->getTemporary(token => $token)
         or return undef;
-    
+
     my $verifier = $self->generateRandomString(32);
  
-    unless($self->db_do(<<__DELETE_SESSION, $user, $key))
+    my $db       = $self->db;
+
+    unless($db->do(<<__DELETE_SESSION, $user, $key))
 DELETE FROM oauthprovider_sessions_table
  WHERE user_oauthprovider= ?
    AND consumer_oauthprovider= ?
    AND isaccess_oauthprovider=1
 __DELETE_SESSION
-    {   Log::do_log(err => 'Unable to delete other already granted access tokens for this user %s %s in database', $user, $key);
+    {   log(err => 'Unable to delete other already granted access tokens for this user %s %s in database', $user, $key);
         return undef;
     }
     
-    unless($self->db_do(<<'__UPDATE', $verifier, $user, $granted, $key, $token))
+    unless($db->do(<<'__UPDATE', $verifier, $user, $granted, $key, $token))
 UPDATE oauthprovider_sessions_table
    SET verifier_oauthprovider      = ?
      , user_oauthprovider          = ?
@@ -522,7 +444,7 @@ UPDATE oauthprovider_sessions_table
    AND consumer_oauthprovider      = ?
    AND token_oauthprovider         = ?
 __UPDATE
-    {   Log::do_log(err => 'Unable to set token verifier %s %s in database', $token, $key);
+    {   log(err => 'Unable to set token verifier %s %s in database', $token, $key);
         return undef;
     }
     
@@ -534,25 +456,18 @@ __UPDATE
     return $r;
 }
 
-=head3 method generateAccess
+=head3 method: generateAccess OPTIONS
 
-Create an access token.
+Create an access token.  Returned is the response body, but C<undef>
+if the token does not exist anymore or is invalid.
 
-=over 
-
-=item * I<$token>, the temporary token.
-
-=item * I<$verifier>, the verifier.
-
-=back 
-
-Returns
+Options:
 
 =over 
 
-=item * I<string> response body
+=item * I<token>, the temporary token.
 
-=item * I<undef>, if temporary token does not exist or is not valid anymore
+=item * I<verifier>, the verifier.
 
 =back 
 
@@ -566,7 +481,7 @@ sub generateAccess(%)
     my $verifier = $args{verifier} || $self->oauth_verifier;
     my $key      = $self->consumer_key;
 
-    trace_calls($token, $verifier, $key);
+    trace_call($token, $verifier, $key);
     
     my $tmp = $self->getTemporary(token => $token, timeout_type => 'verifier')
         or return;
@@ -576,8 +491,9 @@ sub generateAccess(%)
     
     my $tmp_token = $self->generateRandomString(32);
     my $secret    = $self->generateRandomString(32);
+    my $db        = $self->db;
     
-    unless($self->db_do(<<'__UPDATE', $tmp_token,$secret, $token,$verifier))
+    unless($db->do(<<'__UPDATE', $tmp_token,$secret, $token,$verifier))
 UPDATE oauthprovider_sessions_table
    SET token_oauthprovider    = ?
      , secret_oauthprovider   = ?
@@ -588,33 +504,26 @@ UPDATE oauthprovider_sessions_table
  WHERE token_oauthprovider    = ?
    AND verifier_oauthprovider = ?
 __UPDATE
-    {   Log::do_log(err => 'Unable to transform temporary token into access token record %s %s in database', $tmp_token, $key);
+    {   log(err => 'Unable to transform temporary token into access token record %s %s in database', $tmp_token, $key);
         return undef;
     }
     
     join '&'
      , 'oauth_token='        . uri_escape($tmp_token)
      , 'oauth_token_secret=' . uri_escape($secret)
-     , 'oauth_expires_in='   . $self->constants->{access_timeout};
+     , 'oauth_expires_in='   . $self->{access_timeout};
 }
 
-=head3 method getAccess
+=head3 method: getAccess OPTIONS
 
-Retreive an access token from database.
+Retreive an access token from database.  Returned is the HASH, or C<undef>
+when the token does not exist anymore or is invalid.
 
-=over 
+Options:
 
-=item * I<$token>, the token key.
+=over 4
 
-=back 
-
-Returns
-
-=over 
-
-=item * I<a reference to a hash>, if everything's alright
-
-=item * I<undef>, if token does not exist or is not valid anymore
+=item * I<token>
 
 =back 
 
@@ -625,10 +534,10 @@ sub getAccess(%)
 {   my ($self, %args) = @_;
     my $token = $args{token};
 
-    trace_calls($token);
+    trace_call($token);
 
     my $key   = $self->consumer_key;
-    my $sth   = $self->db_prepared(<<'__GET_ACCESS', $key, $token);
+    my $sth   = $self->db->prepared(<<'__GET_ACCESS', $key, $token);
 SELECT token_oauthprovider         AS token
      , secret_oauthprovider        AS secret
      , lasttime_oauthprovider      AS lasttime
@@ -641,32 +550,24 @@ SELECT token_oauthprovider         AS token
 __GET_ACCESS
 
     unless($sth)
-    {   Log::do_log(err => 'Unable to load token data %s %s', $key, $token);
+    {   log(err => 'Unable to load token data %s %s', $key, $token);
         return undef;
     }
     
     my $data = $sth->fetchrow_hashref('NAME_lc')
         or return undef;
 
-    my $valid_until = $data->{lasttime} + $self->constants->{access_timeout};
+    my $valid_until = $data->{lasttime} + $self->{access_timeout};
     $valid_until >= time ? $data : undef;
 }
 
-=head3 method generateRandomString
+=head3 method: generateRandomString $size
 
-Create a random string.
+Return a random string with a sub-set of base64 characters.
 
-=over 
+=over 4
 
 =item * I<$size>, the string length.
-
-=back 
-
-Returns
-
-=over 
-
-=item * I<string>
 
 =back 
 
@@ -707,8 +608,7 @@ Returns
 
 sub consumer_config_for
 {   my ($thing, $key) = @_;
-
-    trace_calls($key);
+    trace_call($key);
     
     my $file = Site->etc . '/oauth_provider.conf';
     -f $file or return undef;
@@ -734,11 +634,9 @@ sub consumer_config_for
     return \%c;
 }
 
-'Packages must return true';
-
 =head1 AUTHORS 
 
-=over 
+=over 4
 
 =item * Etienne Meleard <etienne.meleard AT renater.fr> 
 
@@ -747,3 +645,5 @@ sub consumer_config_for
 =back 
 
 =cut 
+
+1;

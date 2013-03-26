@@ -13,9 +13,28 @@ use List::Util     qw/first/;
 use report;
 use Site;
 
+=head1 NAME
+
+Sympa::VOOT - manage VOOT use in Sympa
+
+=head1 SYNOPSIS
+
+  my $voot = Sympa::VOOT->new(config => $filename);
+
+=head1 DESCRIPTION
+
+Integrate VOOT with Sympa.  This module handles the web interface, and
+the various VOOT backends.
+
+=cut
+
 # These should (have been) modularized via Log::
 *wwslog     = \&main::wwslog;
 *web_db_log = \&main::web_db_log;
+
+#
+## register plugin
+#
 
 my @url_commands =
   ( opensocial =>
@@ -23,10 +42,6 @@ my @url_commands =
       , path_args => 'list'
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
-      }
-  , voot =>
-      { handler   => \&do_voot
-      , path_args => '@voot_path'
       }
   , select_voot_provider_request =>
       { handler   => \&do_select_voot_provider_request
@@ -45,6 +60,10 @@ my @url_commands =
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
+      }
+  , voot =>
+      { handler   => \&do_voot
+      , path_args => '@voot_path'
       }
   );
 
@@ -100,22 +119,11 @@ sub register_plugin($)
     $class->SUPER::register_plugin($args);
 }
 
-# FIXME: we load it to get config for the data_sources edit menu, but
-#   that should disappear (somehow)
-__PACKAGE__->new;
+# This object is used everywhere.  It shall not contains information
+# about a specific user session.  Instantiation is also needed to make
+# configuration of the data_source work.
+my $voot = __PACKAGE__->new;
 
-=head1 NAME
-
-Sympa::VOOT - manage VOOT use in Sympa
-
-=head1 SYNOPSIS
-
-  my $voot = Sympa::VOOT->new(config => $filename);
-
-=head1 DESCRIPTION
-
-Integrate VOOT with Sympa.  This module handles the web interface, and
-the various VOOT backends.
 
 =head1 METHODS
 
@@ -191,29 +199,33 @@ sub read_config($)
     $config;
 }
 
-=head3 provider ID|NAME
+=head3 provider ID|NAME, OPTIONS
 
-Returns the object which handles the selected provider.
+Returns the object which handles the selected provider, an extension
+of L<Net::VOOT>.  The OPTIONS will be passed to the constructor of the
+module.
 
 =cut
 
 sub provider($)
-{   my ($self, $id) = @_;
+{   my ($self, $id, %args) = @_;
+    my $fn   = $self->config_filename;
+
     my $info = first {   $_->{'voot.ProviderID'}   eq $id
                       || $_->{'voot.ProviderName'} eq $id
                      } $self->provider_configs;
 
     $info
-        or Log::fatal_err("cannot find VOOT provider $id in "
-              . $self->config_filename);
+        or Log::fatal_err("cannot find VOOT provider $id in $fn");
 
     my $impl = $info->{'voot.ServerClass'} || 'Net::VOOT::Renater';
     Sympa::Plugin::Manager->load_plugin($impl)
-        or Log::fatal_err("cannot load module $impl for provider $id in "
-              . $self->config_filename);
+        or Log::fatal_err("cannot load module $impl for provider $id in $fn");
 
-    my $provider = eval { $impl->new(%$impl) };
-    
+    my $provider = eval { $impl->new(%$impl, %args) };
+        or Log::fatal_err("cannot start provider $id from $impl: $@");
+
+    $provider;
 }
 
 =head3 method: provider_configs
@@ -235,63 +247,22 @@ sub providers()
 
 =cut
 
+# Provide nice url
 sub do_opensocial {
     return 'select_voot_provider_request';
 }
 
-# VOOT request
-sub do_voot(%)
-{   my %args  = @_;
-    my $param = $args{param};
-    my $in    = $args{in};
-
-    $param->{bypass} = 'extreme';
-    
-    my $voot_path = $in->{voot_path};
-    my $voot      = __PACKAGE__->new;
-
-my $name;
-    my $provider  = $voot->provider($name)->call
-      ( method    => $ENV{REQUEST_METHOD}
-      , voot_path => $voot_path
-      , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
-      , authorization_header => $ENV{HTTP_AUTHORIZATION}
-      , request_parameters   => $in
-      , robot     => $args{robot_id}
-      );
-    
-    my $bad       = $provider ? $provider->checkRequest : 400;
-    my $http_code = $bad || 200;
-    my $http_str
-      = !$bad     ? 'OK'
-      : $provider ? $provider->getOAuthProvider()->{'util'}->errstr
-      :             'Bad Request';
-    
-    my $r      = $provider->response;
-    my $err    = $provider->{error};
-    my $status = $err || "$http_code $http_str";
-    
-    print <<__HEADER;
-Status: $status
-Cache-control: no-cache
-Content-type: text/plain
-__HEADER
-
-    print $r unless $err;
-    return 1;
-}
-
-# Displays VOOT providers list
+# Displays VOOT providers list in the OpenSocial page
 sub do_select_voot_provider_request(%)
 {   my %args  = @_;
     my $param = $args{param};
-    my $voot  = __PACKAGE__->new;
 
     my @providers;
     foreach my $info ($voot->provider_configs)
     {   my $id   = $info->{'voot.ProviderID'};
         my $name = $info->{'voot.ProviderName'} || $id;
-        push @providers, +{id => $id, name => $name};
+        push @providers,
+          +{id => $id, name => $name, next => 'select_voot_groups_request'};
     }
     $param->{voot_providers} = [ sort {$a->{name} cmp $b->{name}} @providers ];
     return 1;
@@ -300,18 +271,18 @@ sub do_select_voot_provider_request(%)
 # Display groups list for user/VOOT_provider
 sub do_select_voot_groups_request(%)
 {   my %args = @_;
-    my $voot = __PACKAGE__->new;
 
     my $in       = $args{in};
     my $param    = $args{param};
-    
+  
     my $prov_id  = $param->{voot_provider} = $in->{voot_provider};
     my $email    = $param->{user}{email};
-    
-    my $provider = $voot->provider($prov_id)->call
-      ( user      => $email
-      ) or return undef;
 
+    wwslog(info => "get voot groups for provider $prov_id, user $email");
+
+    my $provider = $voot->provider($prov_id, user => $email)
+        or return undef;
+ 
     my $consumer = $voot->getOAuthConsumer;
     $consumer->setWebEnv
       ( robot     => $args{robot_id}
@@ -325,6 +296,43 @@ sub do_select_voot_groups_request(%)
         return do_redirect($url) if defined $url;
     }
     
+    return 1;
+}
+
+# VOOT request
+sub do_voot(%)
+{   my %args  = @_;
+    my $param = $args{param};
+    my $in    = $args{in};
+
+    $param->{bypass} = 'extreme';
+    
+    my $voot_path = $in->{voot_path};
+
+my $name;
+    my $provider  = $voot->provider($name)->call
+      ( method    => $ENV{REQUEST_METHOD}
+      , voot_path => $voot_path
+      , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
+      , authorization_header => $ENV{HTTP_AUTHORIZATION}
+      , request_parameters   => $in
+      , robot     => $args{robot_id}
+      );
+    
+    my ($http_code, $http_str)
+       = $provider ? $provider->checkRequest : (400, 'Bad Request');
+    
+    my $r      = $provider->response;
+    my $err    = $provider->{error};
+    my $status = $err || "$http_code $http_str";
+    
+    print <<__HEADER;
+Status: $status
+Cache-control: no-cache
+Content-type: text/plain
+__HEADER
+
+    print $r unless $err;
     return 1;
 }
 
