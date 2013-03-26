@@ -13,8 +13,6 @@ package VOOTConsumer;
 
 use strict;
 
-use OAuthConsumer;
-
 use JSON::XS;
 use Data::Dumper;
 

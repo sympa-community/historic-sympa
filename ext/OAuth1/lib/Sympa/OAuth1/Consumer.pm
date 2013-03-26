@@ -2,9 +2,15 @@ package Sympa::OAuth1::Consumer;
 use strict;
 use warnings;
 
+use OAuth::Lite::Consumer;
+
+use Sympa::Plugin::Util qw/:functions/;
+
 =head1 NAME 
 
-Sympa::OAuth1::Consumer.pm - OAuth consumer facilities for internal use in Sympa
+Sympa::OAuth1::Consumer - OAuth v1 consumer
+
+=head1 SYNOPSIS
 
 =head1 DESCRIPTION 
 
@@ -12,412 +18,321 @@ This package provides abstraction from the OAuth workflow (client side)
 when performing authorization request, handles token retrieving as well
 as database storage.
 
-=cut 
+=head1 METHODS
 
-use OAuth::Lite::Consumer;
+=head2 Constructors
 
-use Data::Dumper;
+=head3 class method: new OPTIONS
 
-#use List;
-use Auth;
-use tools;
-#use tt2;
-use Conf;
-use Log;
+Create the object, returns C<undef> on failure.
 
-=pod 
+Options:
 
-=head1 SUBFUNCTIONS 
+=over 4
 
-This is the description of the subfunctions contained by Sympa::OAuth1::Consumer.pm
+=item * I<user> =E<gt> EMAIL-ADDRESS
 
-=cut 
+=item * I<provider> =E<gt> STRING, provider key
 
+=item * I<provider_secret> =E<gt> STRING, provider shared secret
 
-=pod 
+=item * I<request_token_path> =E<gt> URL, the temporary token request URL
 
-=head2 sub new
+=item * I<access_token_path> =E<gt> URL, the access token request URL
 
-Creates a new Sympa::OAuth1::Consumer object.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$user>, a user email
-
-=item * I<$provider>, the OAuth provider key
-
-=item * I<$provider_secret>, the OAuth provider shared secret
-
-=item * I<$request_token_path>, the temporary token request URL
-
-=item * I<$access_token_path>, the access token request URL
-
-=item * I<$authorize_path>, the authorization URL
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<a Sympa::OAuth1::Consumer object>, if created
-
-=item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * &Log::do_log
+=item * I<authorize_path> =E<gt> URL, the authorization URL
 
 =back 
 
 =cut 
 
-## Creates a new object
-sub new {
-	my $pkg = shift;
-	my %param = @_;
-	
-	my $consumer = {
-		user => $param{'user'},
-		provider => $param{'provider'},
-		consumer_key => $param{'consumer_key'},
-		consumer_secret => $param{'consumer_secret'},
-		request_token_path => $param{'request_token_path'},
-		access_token_path  => $param{'access_token_path'},
-		authorize_path => $param{'authorize_path'},
-		redirect_url => undef
- 	};
-	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::new(%s, %s, %s)', $param{'user'}, $param{'provider'}, $param{'consumer_key'});
-	
-	$consumer->{'handler'} = OAuth::Lite::Consumer->new(
-		consumer_key => $param{'consumer_key'},
-		consumer_secret => $param{'consumer_secret'},
-		request_token_path => $param{'request_token_path'},
-        access_token_path  => $param{'access_token_path'},
-        authorize_path => $param{'authorize_path'}
-	);
-	
-	my $sth;
-	unless($sth = &SDM::do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $param{'user'}, $param{'provider'})) {
-		&Log::do_log('err','Unable to load token data %s %s', $param{'user'}, $param{'provider'});
-		return undef;
+sub new(@) { my $class = shift; (bless {}, $class)->init({@_}) }
+
+sub init($)
+{   my ($self, $args) = @_:
+    $self->{$_} = $args->{$_}
+        for qw/user provider consumer_key consumer_secret
+               request_token_path access_token_path authorize_path/;
+
+    $self->{redirect_url} = undef;
+    $self->{db}  = $args->{db} || default_db;
+
+    my $user     = $self->{user};
+    my $provider = $self->{provider};
+    my $key      = $self->{consumer_key};
+    trace_call($user, $provider, $key);
+
+    $self->{SOC_handler} = $self->_create_handler($key);
+    $self->{SOC_session} = $self->_create_session($user, $provider);
+    $self;
+}
+
+sub _create_handler($)
+{   my ($self, $key) = @_;
+    OAuth::Lite::Consumer->new
+      ( consumer_key       => $key
+      , consumer_secret    => $self->{consumer_secret}
+      , request_token_path => $self->{request_token_path}
+      , access_token_path  => $self->{access_token_path}
+      , authorize_path     => $self->{authorize_path}
+      );
+}
+
+sub _create_session($$)
+{   my ($self, $user, $provider) = @_;
+
+    my $sth  = $self->db->prepared(<<'__GET_TMP_TOKEN', $user, $provider);
+SELECT tmp_token_oauthconsumer     AS tmp_token
+     , tmp_secret_oauthconsumer    AS tmp_secret
+     , access_token_oauthconsumer  AS access_token
+     , access_secret_oauthconsumer AS access_secret
+  FROM oauthconsumer_sessions_table
+ WHERE user_oauthconsumer     = ?
+   AND provider_oauthconsumer = ?
+__GET_TMP_TOKEN
+
+    unless($sth)
+    {   log(err => "Unable to load token data for $user at $provider");
+        return undef;
     }
     
-	$consumer->{'session'} = {
-		defined => undef,
-		tmp => undef,
-		access => undef
-	};
-	if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
-		$consumer->{'session'}{'tmp'} = new OAuth::Lite::Token(
-			token => $data->{'tmp_token'},
-			secret => $data->{'tmp_secret'}
-		) if($data->{'tmp_token'});
-		$consumer->{'session'}{'access'} = new OAuth::Lite::Token(
-			token => $data->{'access_token'},
-			secret => $data->{'access_secret'}
-		) if($data->{'access_token'});
-		$consumer->{'session'}{'defined'} = 1;
-	}
-	
-	return bless $consumer, $pkg;
+    my %session;
+    if(my $data = $sth->fetchrow_hashref('NAME_lc'))
+    {
+        $session{tmp} = OAuth::Lite::Token->new
+          ( token  => $data->{tmp_token}
+          , secret => $data->{tmp_secret}
+          ) if $data->{tmp_token};
+
+        $session{access} = OAuth::Lite::Token->new
+          ( token  => $data->{access_token},
+          , secret => $data->{access_secret}
+          ) if $data->{access_token};
+
+        $session{defined} = 1;
+    }
+    \%session;
 }
 
-sub setWebEnv {
-	my $self = shift;
-	my %param = @_;
-	
-	$self->{'robot'} = $param{'robot'};
-	$self->{'here_path'} = $param{'here_path'};
-	$self->{'base_path'} = $param{'base_path'};
+
+=head2 Accessors
+
+=head3 method: mustRedirect
+
+Returns the URL to redirect to, if we need to redirect for autorization.
+
+=head3 method: session
+
+=head3 method: handler
+
+=head3 method: webenv
+
+=head3 method: setWebEnv OPTIONS
+
+=cut
+
+sub mustRedirect { shift->{redirect_url} }
+sub session      { shift->{SOC_session}  }
+sub handler      { shift->{SOC_handler}  }
+sub webenv       { shift->{SOC_webenv}   }
+
+sub setWebEnv(%)
+{   my $self = shift;
+    $self->{SOC_webenv} = { @_ };
 }
 
-sub mustRedirect {
-	my $self = shift;
-	return $self->{'redirect_url'};
-}
+=head2 method: fetchResource OPTIONS
 
-=pod 
+Check if user has an access token already and fetch resource.
 
-=head2 sub fetchRessource
-
-Check if user has an access token already and fetch ressource
-
-=head3 Arguments 
+Options:
 
 =over 
 
-=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
+=item * I<url>, the resource url.
 
-=item * I<$url>, the ressource url.
-
-=item * I<$params>, (optionnal) the request parameters.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<string>, ressource body
-
-=item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
+=item * I<params>, (optional) the request parameters.
 
 =back 
 
 =cut 
 
 ## Check if user has an access token already and fetch ressource
-sub fetchRessource {
-	my $self = shift;
-	my %param = @_;
-	
-	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::fetchRessource(%s)', $param{'url'});
-	
-	# Get access token, return 1 if it exists
-	my $token = $self->hasAccess();
-	return undef unless(defined $token); # Should never return here unless failed to retreive token
-	
-	my $res = $self->{'handler'}->request(
-		method => 'GET', 
-		url    => $param{'url'},
-		token  => $token,
-		params => $param{'params'},
-	);
-	
-	unless($res->is_success) {
-		if($res->status == 400 || $res->status == 401) {
-			my $auth_header = $res->header('WWW-Authenticate');
-			if($auth_header && $auth_header =~ /^OAuth/) {
-				# access token may be expired,
-				# get request-token and authorize again
-				if($self->{'here_path'}) { # We are running in web env.
-					$self->triggerFlow();
-				}
-				return undef;
-			}else{
-				# another auth error.
-				return undef;
-			}
-		}
-		# another error.
-		return undef;
-	}
-	
-	return $res->decoded_content || $res->content;
+sub fetchResource(%)
+{   my ($self, %args) = @_;
+    
+    my $url = $args{url};
+    trace_call($url);
+    
+    my $token = $self->hasAccess
+        or return undef;
+
+    my $res = $self->handler->request
+      ( method => 'GET' 
+      , url    => $url
+      , token  => $token
+      , params => $args{params}
+      );
+    
+    return $res->decoded_content || $res->content
+        if $res->is_success;
+
+    if($res->status == HTTP_BAD || $res->status == HTTP_UNAUTH)
+    {   my $auth_header = $res->header('WWW-Authenticate') || '';
+
+        # access token may be expired, retry
+        $self->triggerFlow if $auth_header =~ /^OAuth/;
+    }
+
+    ();
 }
 
-=pod 
+=head3 method: hasAccess
 
-=head2 sub hasAccess
-
-Check if user has an access token already, triggers OAuth workflow otherwise
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<reference to a hash>, if there is a known access token
-
-=item * I<undef>, if no access token found
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
+Returns the access token as HASH when already present.  Triggers the
+authentication flow otherwise.
 
 =cut 
 
-## Check if user has an access token already, triggers OAuth workflow if none found
-sub hasAccess {
-	my $self = shift;
-	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::hasAccess(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
-	
-	unless(defined $self->{'session'}{'access'}) {
-		if($self->{'here_path'}) { # We are running in web env.
-			$self->triggerFlow();
-		}
-		return undef;
-	}
-	
-	return $self->{'session'}{'access'};
+sub hasAccess()
+{   my $self = shift;
+    trace_call($self->{user}, "$self->{consumer_type}:$self->{provider}");
+
+    if(my $access = $self->session->{access})
+    {   return $access;
+    }
+
+    $self->triggerFlow;
+    undef;
 }
 
-=pod 
 
-=head2 sub triggerFlow
+=head2 method: triggerFlow
 
-Triggers OAuth authorization workflow, call only in web env.
-
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Sympa::OAuth1::Consumer to use.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1>, if everything's alright
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
+Triggers OAuth authorization workflow, but only in web env.  Returns
+whether this was successful.
 
 =cut 
 
-## Triggers OAuth workflow, call only in web env.
-sub triggerFlow {
-	my $self = shift;
-	&Log::do_log('debug2', 'Sympa::OAuth1::Consumer::triggerFlow(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
-	
-	my $ticket = &Auth::create_one_time_ticket(
-		$self->{'user'},
-		$self->{'robot'},
-		$self->{'here_path'},
-		'mail'
-	);
-	my $callback = $self->{'base_path'}.'/oauth_ready/'.$self->{'provider'}.'/'.$ticket;
-	
-	my $tmp = $self->{'handler'}->get_request_token(
-		callback_url => $callback
-	);
+sub triggerFlow()
+{   my $self = shift;
 
-	unless(defined $tmp) {
-		&Log::do_log('err', 'Unable to get tmp token for %s %s %s', $self->{'user'}, $self->{'provider'}, $self->{'handler'}->errstr);
-		return undef;
-	}
-	
-	if(defined $self->{'session'}{'defined'}) {
-		unless(&SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=%s, tmp_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', &SDM::quote($tmp->{'token'}), &SDM::quote($tmp->{'secret'}), &SDM::quote($self->{'user'}), &SDM::quote($self->{'provider'}))) {
-			&Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
-			return undef;
-		}
-	}else{
-		unless(&SDM::do_query('INSERT INTO oauthconsumer_sessions_table(user_oauthconsumer, provider_oauthconsumer, tmp_token_oauthconsumer, tmp_secret_oauthconsumer) VALUES (%s, %s, %s, %s)', &SDM::quote($self->{'user'}), &SDM::quote($self->{'provider'}), &SDM::quote($tmp->{'token'}), &SDM::quote($tmp->{'secret'}))) {
-			&Log::do_log('err', 'Unable to add new token record %s %s in database', $self->{'user'}, $self->{'provider'});
-			return undef;
-		}
-	}
-	
-	$self->{'session'}{'tmp'} = $tmp;
-	
-	my $url = $self->{'handler'}->url_to_authorize(
-		token => $tmp
-	);
-	
-	&Log::do_log('info', 'Ask for redirect to %s with callback %s for %s', $url, $callback, $self->{'here_path'});
-	$self->{'redirect_url'} = $url;
-	
-	return 1;
+    my $web       = $self->webenv
+        or return 0;
+
+    my $user      = $self->{user};
+    my $type      = $self->{consumer_type};
+    my $provider  = $self->{provider};
+    trace_call($user, "$type:$provider");
+    
+    my $here_path = $web->{here_path};
+
+    my $ticket    = Auth::create_one_time_ticket($user
+       , $web->{robot}, $here_path, 'mail');
+
+    my $callback  = "$web->{base_path}/oauth_ready/$provider/$ticket";
+    my $hander    = $self->handler;
+ 
+    my $tmp = $handler->get_request_token(callback_url => $callback);
+    unless($tmp)
+    {   log(err => "Unable to get tmp token for $user $provider: ".$handler->errstr);
+        return undef;
+    }
+
+    my $session  = $self->session;
+    if($session->{defined})
+    {    unless($db->do(<<'__UPDATE_SESSION', $tmp->{token}, $tmp->{secret}, $user, $provider))
+UPDATE oauthconsumer_sessions_table
+   SET tmp_token_oauthconsumer  = ? 
+     , tmp_secret_oauthconsumer = ?
+ WHERE user_oauthconsumer       = ?
+   AND provider_oauthconsumer   = ?
+__UPDATE_SESSION
+          {   log(err => "Unable to update token record $user $provider");
+              return undef;
+          }
+    }
+    else
+    {   unless($db->do(<<'__INSERT_SESSION', $user, $provider, $tmp->{token}, $tmp->{secret})
+INSERT INTO oauthconsumer_sessions_table
+   SET user_oauthconsumer       = ?
+     , provider_oauthconsumer   = ?
+     , tmp_token_oauthconsumer  = ?
+     , tmp_secret_oauthconsumer = ?
+__INSERT_SESSION
+         {   log(err => "Unable to add new token record $user $provider");
+             return undef;
+         }
+    }
+    
+    $session->{tmp} = $tmp;
+    
+    my $url = $self->handler->url_to_authorize(token => $tmp);
+    log(info => "redirect to $url with callback $callback for $here_path");
+
+    $self->{redirect_url} = $url;
+    return 1;
 }
 
-=pod 
 
-=head2 sub getAccessToken
+=head2 method: getAccessToken OPTIONS
 
 Try to obtain access token from verifier.
 
-=head3 Arguments 
-
-=over 
-
-=item * I<$self>, the Sympa::OAuth1::Consumer object to test.
-
-=back 
-
-=head3 Return 
-
-=over 
-
-=item * I<1>, if the token was retreived successfully
-
-=item * I<undef>, if something went wrong
-
-=back 
-
-=head3 Calls 
-
-=over 
-
-=item * None
-
-=back 
-
 =cut 
 
-## Try to obtain access token from verifier
-sub getAccessToken {
-	my $self = shift;
-	my %param = @_;
-	do_log('debug2', 'Sympa::OAuth1::Consumer::getAccessToken(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
-	
-	return $self->{'session'}{'access'} if(defined $self->{'session'}{'access'});
-	
-	return undef unless(defined $self->{'session'}{'tmp'} && $self->{'session'}{'tmp'}->token eq $param{'token'} && defined $param{'verifier'} && $param{'verifier'} ne '');
-	
-	my $access = $self->{'handler'}->get_access_token(
-		token => $self->{'session'}{'tmp'},
-		verifier => $param{'verifier'}
-	);
-	
-	$self->{'session'}{'access'} = $access;
-	$self->{'session'}{'tmp'} = undef;
-	
-	unless(&SDM::do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=NULL, tmp_secret_oauthconsumer=NULL, access_token_oauthconsumer=%s, access_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', &SDM::quote($access->{'token'}), &SDM::quote($access->{'secret'}), &SDM::quote($self->{'user'}), &SDM::quote($self->{'provider'}))) {
-		&Log::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
-		return undef;
-	}
-	
-	return $self->{'session'}{'access'};
-}
+sub getAccessToken(%)
+{   my ($self, %args) = @_;
 
-## Packages must return true.
-1;
-=pod 
+    my $verifier = $args{verifier};
+
+    my $user     = $self->{user};
+    my $type     = $self->{consumer_type};
+    my $provider = $self->{provider};
+    my $session  = $self->{session};
+
+    trace_call($user, "$type:$provider");
+    return $session->{access}
+        if $session->{access};
+
+    my $tmp = $session->{tmp};
+    $tmp && $tmp->token eq $param{token} && $verifier
+        or return undef;
+    
+    my $access = $self->handler->get_access_token
+      ( token    => $tmp
+      , verifier => $verifier
+      );
+    
+    $session->{access} = $access;
+    $session->{tmp}    = undef;
+    
+    unless($self->db->do(<<'__UPDATE_SESSION', $access->{token}, $access->{secret}, $user, $provider))
+UPDATE oauthconsumer_SOC_sessions_table
+   SET tmp_token_oauthconsumer     = NULL
+     , tmp_secret_oauthconsumer    = NULL
+     , access_token_oauthconsumer  = ?
+     , access_secret_oauthconsumer = ?
+ WHERE user_oauthconsumer          = ?
+   AND provider_oauthconsumer      = ?
+__UPDATE_SESSION
+    {   log(err => "Unable to update token record $user $provider");
+        return undef;
+    }
+    
+    $access;
+}
 
 =head1 AUTHORS 
 
-=over 
+=over 4
 
 =item * Etienne Meleard <etienne.meleard AT renater.fr> 
+
+=item * Mark Overmeer <mark AT overmeer.net >
 
 =back 
 
 =cut 
+
+1;
