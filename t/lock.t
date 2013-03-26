@@ -14,7 +14,7 @@ use Test::Exception;
 
 use Sympa::Lock;
 
-plan tests => 6;
+plan tests => 9;
 
 my $lock;
 my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
@@ -44,5 +44,8 @@ lives_ok {
 'all parameters OK';
 
 isa_ok($lock, 'Sympa::Lock');
+can_ok($lock, 'set_timeout');
+can_ok($lock, 'lock');
+can_ok($lock, 'unlock');
 
 ok(-f $lock_file, "underlying lock file does exist");
