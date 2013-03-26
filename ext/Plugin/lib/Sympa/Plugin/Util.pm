@@ -6,7 +6,7 @@ use strict;
 
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
-my @func = qw/default_db trace_call log/;
+my @func = qw/default_db trace_call log fatal/;
 
 our @EXPORT      = @func;
 our @EXPORT_OK   = (@http, @time, @func);
@@ -96,16 +96,17 @@ sub default_db() { $default_db || (bless {}, 'SPU_db') }
 
 =head3 log
 
+=head3 fatal
+
 =cut
+
+sub log(@)   { Log::do_log(@_) }
+sub fatal(@) { Log::fatal_err(@_) }
 
 sub trace_call(@)          # simplification of method logging
 {   my $sub = (caller[1])[3];
     local $" =  ',';
     Log::do_log(debug2 => "$sub(@_)");
-}
-
-sub log(@)
-{   Log::do_log(@_);
 }
 
 1;

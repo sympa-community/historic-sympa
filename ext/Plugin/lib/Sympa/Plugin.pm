@@ -2,6 +2,8 @@ package Sympa::Plugin;
 use warnings;
 use strict;
 
+use Sympa::Plugin::Util qw/:functions/;
+
 # FIXME: clean interface needed for these:
 use tt2;
 *wwslog = \&main::wwslog;
@@ -139,6 +141,37 @@ sub register_plugin($)
             push @listdef::param_order, $header;
         }
     }
+}
+
+=head3 upgrade OPTIONS
+
+Upgrade the information in the system.  Returned is the next version
+for that information: you can better not make more than one step at
+the time for the upgrade: we would like to update the plugin status
+inbetween these steps.
+
+=over 4
+
+=item * I<from_version> =E<gt> VERSION
+
+=back
+
+=cut
+
+sub upgrade(%)
+{   my ($self, %args) = @_;
+    my $from = $args{from_version};
+
+    my $upgrade_class = ref($self) . "::Upgrade";
+    eval "require $upgrade_class"
+        or fatal "cannot upgrade via $upgrade_class: $@";
+
+    return $upgrade_class->upgrade(from => $from, to => $self->VERSION)
+        if $from;
+
+    # First run
+    $upgrade_class->setup;
+    $self->VERSION;
 }
 
 1;

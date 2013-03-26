@@ -4,7 +4,7 @@ use warnings;
 
 use OAuth::Lite::Consumer;
 
-use Sympa::Plugin::Util qw/:functions/;
+use Sympa::Plugin::Util qw/:functions :http/;
 
 =head1 NAME 
 
@@ -49,13 +49,13 @@ Options:
 sub new(@) { my $class = shift; (bless {}, $class)->init({@_}) }
 
 sub init($)
-{   my ($self, $args) = @_:
+{   my ($self, $args) = @_;
     $self->{$_} = $args->{$_}
         for qw/user provider consumer_key consumer_secret
                request_token_path access_token_path authorize_path/;
 
     $self->{redirect_url} = undef;
-    $self->{db}  = $args->{db} || default_db;
+    $self->{SOC_db} = $args->{db} || default_db;
 
     my $user     = $self->{user};
     my $provider = $self->{provider};
@@ -117,6 +117,8 @@ __GET_TMP_TOKEN
 
 =head2 Accessors
 
+=head3 method: db
+
 =head3 method: mustRedirect
 
 Returns the URL to redirect to, if we need to redirect for autorization.
@@ -131,6 +133,7 @@ Returns the URL to redirect to, if we need to redirect for autorization.
 
 =cut
 
+sub db           { shift->{SOC_db}       }
 sub mustRedirect { shift->{redirect_url} }
 sub session      { shift->{SOC_session}  }
 sub handler      { shift->{SOC_handler}  }
@@ -231,7 +234,7 @@ sub triggerFlow()
        , $web->{robot}, $here_path, 'mail');
 
     my $callback  = "$web->{base_path}/oauth_ready/$provider/$ticket";
-    my $hander    = $self->handler;
+    my $handler   = $self->handler;
  
     my $tmp = $handler->get_request_token(callback_url => $callback);
     unless($tmp)
@@ -240,6 +243,8 @@ sub triggerFlow()
     }
 
     my $session  = $self->session;
+    my $db       = $self->db;
+
     if($session->{defined})
     {    unless($db->do(<<'__UPDATE_SESSION', $tmp->{token}, $tmp->{secret}, $user, $provider))
 UPDATE oauthconsumer_sessions_table
@@ -253,7 +258,7 @@ __UPDATE_SESSION
           }
     }
     else
-    {   unless($db->do(<<'__INSERT_SESSION', $user, $provider, $tmp->{token}, $tmp->{secret})
+    {   unless($db->do(<<'__INSERT_SESSION', $user, $provider, $tmp->{token}, $tmp->{secret}))
 INSERT INTO oauthconsumer_sessions_table
    SET user_oauthconsumer       = ?
      , provider_oauthconsumer   = ?
@@ -267,7 +272,7 @@ __INSERT_SESSION
     
     $session->{tmp} = $tmp;
     
-    my $url = $self->handler->url_to_authorize(token => $tmp);
+    my $url = $handler->url_to_authorize(token => $tmp);
     log(info => "redirect to $url with callback $callback for $here_path");
 
     $self->{redirect_url} = $url;
@@ -278,6 +283,14 @@ __INSERT_SESSION
 =head2 method: getAccessToken OPTIONS
 
 Try to obtain access token from verifier.
+
+=over 4
+
+=item I<token>
+
+=item I<verifier>
+
+=back
 
 =cut 
 
@@ -296,7 +309,7 @@ sub getAccessToken(%)
         if $session->{access};
 
     my $tmp = $session->{tmp};
-    $tmp && $tmp->token eq $param{token} && $verifier
+    $tmp && $tmp->token eq $args{token} && $verifier
         or return undef;
     
     my $access = $self->handler->get_access_token

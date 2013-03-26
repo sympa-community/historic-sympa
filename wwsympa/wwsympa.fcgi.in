@@ -961,7 +961,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 
 # Now, load all components which are implemented as plugins.  Those will
 # add fields to above configuration.
-$plugins->load_plugins if $plugins;
+$plugins->start if $plugins;
 
 ## Set locale configuration	 
 $Language::default_lang = Site->lang;	 
