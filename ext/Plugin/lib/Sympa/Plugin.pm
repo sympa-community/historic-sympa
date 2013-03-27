@@ -4,21 +4,13 @@ use strict;
 
 use Sympa::Plugin::Util qw/:functions/;
 
-# FIXME: clean interface needed for these:
-use tt2;
-*wwslog = \&main::wwslog;
-
 =head1 NAME
 
 Sympa::Plugin - add plugin system to Sympa
 
 =head1 SYNOPSIS
 
-  # in the main program
-  use Sympa::Plugins;
-  Sympa::Plugins->load;
-
-  # each plugin
+  # in each plugin
   package Sympa::VOOT;  # example
   use parent 'Sympa::Plugin';
 
@@ -49,7 +41,7 @@ sub init($) {shift}
 The follow code is really tricky: it tries to separate the components
 from the existing interface.
 
-=head3 class method: register_plugin HASH
+=head3 class method: registerPlugin HASH
 
 This method takes a HASH.  The supported keys are
 
@@ -67,7 +59,7 @@ See the source of L<Sympa::VOOT> for an extended example.
 
 =cut
 
-sub register_plugin($)
+sub registerPlugin($)
 {   my ($class, $args) = @_;
 
     if(my $url = $args->{url_commands})
@@ -77,7 +69,7 @@ sub register_plugin($)
             my $handler = $settings->{handler};
 
             $main::comm{$command} = sub
-              { wwslog(info => "$command(@_)");
+              { log(debug2 => "$command(@_)");
                 $handler->
                   ( in       => \%main::in
                   , param    => $main::param
@@ -109,7 +101,7 @@ sub register_plugin($)
     }
 
     if(my $templ = $args->{templates})
-    {   $main::plugins->add_templates(%$_)
+    {   $main::plugins->addTemplates(%$_)
             for ref $templ ? @$templ : $templ;
     }
 

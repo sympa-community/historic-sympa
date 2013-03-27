@@ -56,10 +56,12 @@ sub init($)
 
 =method provider
 =method vootBase
+=method authType
 =cut
 
 sub provider() {shift->{NV_provider}}
 sub vootBase() {shift->{NV_voot_base}}
+sub authType() {panic "not implemented"}
 
 #---------------------------
 =section Actions

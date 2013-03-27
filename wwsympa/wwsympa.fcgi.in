@@ -1764,7 +1764,7 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
-        unshift @$tt2_include_path, $plugins->tt2_paths
+        unshift @$tt2_include_path, $plugins->tt2Paths
             if $plugins;
 
  	unless (&tt2::parse_tt2(
@@ -1796,7 +1796,7 @@ Log::do_log(info => "WWSympa started, process $$");
 	my $tt2_include_path =
 	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
 
-        unshift @$tt2_include_path, $plugins->tt2_paths
+        unshift @$tt2_include_path, $plugins->tt2Paths
             if $plugins;
 
  	unless (&tt2::parse_tt2(
@@ -2616,7 +2616,7 @@ sub send_html {
 
     ## Available plugins, to switch on template fragments
     $param_copy->{plugins}
-      = $plugins ? sub { $plugins->tt2_fragments(@_) } : sub { () };
+      = $plugins ? sub { $plugins->tt2Fragments(@_) } : sub { () };
 
     ## Save special paths.
     my @added_include_path = tt2::get_include_path();
@@ -2630,7 +2630,7 @@ sub send_html {
     my $tt2_include_path =
 	($list || $robot)->get_etc_include_path('web_tt2');
 
-    unshift @$tt2_include_path, $plugins->tt2_paths
+    unshift @$tt2_include_path, $plugins->tt2Paths
         if $plugins;
 
     # testing custom CSS.
@@ -2672,7 +2672,7 @@ sub send_html {
 	tt2::add_include_path($dir);
     }
 
-    unshift @$tt2_include_path, $plugins->tt2_paths
+    unshift @$tt2_include_path, $plugins->tt2Paths
         if $plugins;
 
     ## Output the content.

@@ -98,12 +98,12 @@ sub init($)
     {   $p{$_} = uri_unescape($rp->{$_})
              for grep /^x?oauth_/, keys %$rp;
     }
-    $self->{params} = \%p;
+    $self->{SOP_params} = \%p;
 
-    my $key = $self->{consumer_key} = $p{oauth_consumer_key}
+    my $key = $self->{SOP_consumer_key} = $p{oauth_consumer_key}
         or return;
 
-    my $c   = $self->consumer_config_for($key)
+    my $c   = $self->consumerConfigFor($key)
         or return;
 
     trace_call($key, $c->{enabled});
@@ -111,9 +111,9 @@ sub init($)
     $c->{enabled}
         or return;
  
-    $self->{consumer_secret} = $c->{secret};
-    $self->{method}          = $args->{method};
-    $self->{url}             = $args->{url};
+    $self->{SOP_cons_secret} = $c->{secret};
+    $self->{SOP_method}      = $args->{method};
+    $self->{SOP_url}         = $args->{url};
     
     my $util = $self->{SOP_util} = OAuth::Lite::ServerUtil->new;
     $util->support_signature_method('HMAC-SHA1');
@@ -152,13 +152,12 @@ __GET_TOKEN
 =cut
 
 sub db()             {shift->{SOP_db}}
-sub oauth_util()     {shift->{SOP_util}}  # object
-sub oauth_token()    {shift->{params}{oauth_token}}
-sub oauth_verifier() {shift->{params}{oauth_verifier}}
-sub oauth_callback() {shift->{params}{oauth_callback}}
-sub consumer_key()   {shift->{consumer_key}}
-sub consumer_secret(){shift->{consumer_secret}}
-sub params()         {shift->{params}}
+sub oauthUtil()      {shift->{SOP_util}}  # object
+sub consumerKey()    {shift->{SOP_consumer_key}}
+sub consumerSecret() {shift->{SOP_cons_secret}}
+sub params()         {shift->{SOP_params}}
+sub method()         {shift->{SOP_method}}
+sub url()            {shift->{SOP_url}}
 
 
 =head2 Actions
@@ -190,8 +189,8 @@ sub checkRequest(%)
     trace_call($args{url});
 
     my $params     = $self->params;
-    my $util       = $self->oauth_util;
-    my $checktoken = $args{checktoken};
+    my $util       = $self->oauthUtil;
+    my $checktoken = $args{checktoken} || 0;
 
     $util->validate_params($params, $checktoken)
         or return (HTTP_BAD, $util->errstr);
@@ -215,7 +214,7 @@ __DELETE_NONCE
     }
     
     if($checktoken)
-    {   my $key = $self->consumer_key;
+    {   my $key = $self->consumerKey;
         my $sth = $db->prepared(<<'__GET_KEY', $key, $token);
 SELECT id_oauthprovider AS id
   FROM oauthprovider_sessions_table
@@ -277,10 +276,10 @@ __PROVIDER
     }
     
     my $correct = $util->verify_signature
-      ( method          => $self->{method}
-      , params          => $self->{params}
-      , url             => $self->{url}
-      , consumer_secret => $self->consumer_secret
+      ( method          => $self->method
+      , params          => $self->params
+      , url             => $self->url
+      , consumer_secret => $self->consumerSecret
       , token_secret    => $secret
       );
 
@@ -288,7 +287,7 @@ __PROVIDER
 }
 
 
-=head2 method generateTemporary
+=head2 method: generateTemporary
 
 Returns the URI parameters to request the authorization.
 
@@ -298,8 +297,8 @@ Returns the URI parameters to request the authorization.
 sub generateTemporary(%)
 {   my ($self, %args) = @_;
 
-    my $key      = $self->consumer_key;
-    my $callback = $self->oauth_callback;
+    my $key      = $self->consumerKey;
+    my $callback = $self->params->{oauth_callback};
     my $token    = $self->generateRandomString(32);
     my $secret   = $self->generateRandomString(32);
 
@@ -355,7 +354,7 @@ Options:
 sub getTemporary(%)
 {   my ($self, %args) = @_;
     my $token = $args{token};
-    my $key   = $self->consumer_key;
+    my $key   = $self->consumerKey;
 
     trace_call($token);
     
@@ -413,7 +412,7 @@ sub generateVerifier
     my $token   = $args{token};
     my $user    = $args{user};
     my $granted = $args{granted} ? 1 : 0;
-    my $key     = $self->consumer_key;
+    my $key     = $self->consumerKey;
 
     trace_call($token, $user, $granted, $key);
     
@@ -477,9 +476,10 @@ Options:
 sub generateAccess(%)
 {   my ($self, %args) = @_;
 
-    my $token    = $args{token}    || $self->oauth_token;
-    my $verifier = $args{verifier} || $self->oauth_verifier;
-    my $key      = $self->consumer_key;
+    my $params   = $self->params;
+    my $token    = $args{token}    || $params->{oauth_token};
+    my $verifier = $args{verifier} || $params->{oauth_verifier};
+    my $key      = $self->consumerKey;
 
     trace_call($token, $verifier, $key);
     
@@ -536,7 +536,7 @@ sub getAccess(%)
 
     trace_call($token);
 
-    my $key   = $self->consumer_key;
+    my $key   = $self->consumerKey;
     my $sth   = $self->db->prepared(<<'__GET_ACCESS', $key, $token);
 SELECT token_oauthprovider         AS token
      , secret_oauthprovider        AS secret
@@ -579,7 +579,7 @@ sub generateRandomString($)
 }
 
 
-=head3 consumer_config_for
+=head3 consumerConfigFor
 
 Retreive config for a consumer
 
@@ -606,7 +606,7 @@ Returns
 
 =cut
 
-sub consumer_config_for
+sub consumerConfigFor
 {   my ($thing, $key) = @_;
     trace_call($key);
     

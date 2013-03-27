@@ -8,27 +8,28 @@ our $VERSION = '0.10';
 
 use Sympa::OAuth1::Provider;
 
+my $me = __PACKAGE__->new;
 
 my @url_commands =
   ( oauth_check      => 
-      { handler   => \&do_oauth_check
+      { handler   => sub { $me->doAuthCheck(@_) }
       , path_args => 'oauth_provider'
       , required  => [ qw/param.user.email oauth_provider/ ]
       }
   , oauth_ready      =>
-      { handler   => \&do_oauth_ready
+      { handler   => sub { $me->doAuthReady(@_) }
       , path_args => [ qw/oauth_provider ticket/ ]
       , required  => [ qw/oauth_provider ticket oauth_token oauth_verifier/]
       }
   , oauth_temporary  =>
-      { handler   => \&do_oauth_temporary
+      { handler   => sub { $me->doAuthTemporary(@_) }
       }
   , oauth_authorize  =>
-      { handler   => \&do_oauth_authorize
+      { handler   => sub { $me->doAuthAuthorize(@_) }
       , required  => [ qw/param.user.email oauth_token/ ]
       }
   , oauth_access     =>
-      { handler   => \&do_oauth_access
+      { handler   => sub { $me->do_oauth_access(@_) }
       }
   );
 
@@ -40,11 +41,11 @@ my @validate =
   , oauth_callback     => '[^\\\$\*\"\'\`\^\|\<\>\n]+'
   );
 
-sub register_plugin($)
+sub registerPlugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
     push @{$args->{validate}}, @validate;
-    $class->SUPER::register_plugin($args);
+    $class->SUPER::registerPlugin($args);
 }
 
 #### Using HTTP_AUTHORIZATION header requires httpd config customization :
@@ -57,16 +58,15 @@ sub register_plugin($)
 # </Location>
 
 # Consumer requests a temporary token
-sub do_oauth_temporary(%)
-{   my %args = @_;
+sub doAuthTemporary(%)
+{   my ($self, %args) = @_;
 
-my $self;
     my $param = $args{param};
     my $in    = $args{in};
 
     $param->{bypass} = 'extreme';
 
-    my $provider = $self->create_provider('oauth_temporary', $param, $in, 0)
+    my $provider = $self->createProvider('oauth_temporary', $param, $in, 0)
         or return 1;
 
     print $provider->generateTemporary;
@@ -74,8 +74,8 @@ my $self;
 }
 
 # User needs to authorize access
-sub do_oauth_authorize(%)
-{   my %args    = @_;
+sub doAuthAuthorize(%)
+{   my ($self, %args) = @_;
     my $in      = $args{in};
     my $param   = $args{param};
     my $session = $args{session};
@@ -123,12 +123,11 @@ sub do_oauth_authorize(%)
 
 # Consumer requests an access token
 sub do_oauth_access(%)
-{   my %args  = @_;
+{   my ($self, %args) = @_;
     my $param        = $args{param};
     $param->{bypass} = 'extreme';
 
-my $self;
-    my $provider = $self->create_provider('oauth_access', $param, $args{in}, 1)
+    my $provider = $self->createProvider('oauth_access', $param, $args{in}, 1)
         or return 1;
 
     print $provider->generateAccess;
@@ -136,41 +135,38 @@ my $self;
 }
 
 # User asks for access token check
-sub do_oauth_check(%)
-{   my %args = @_;
+sub doAuthCheck(%)
+{   my ($self, %args) = @_;
     my $in    = $args{in};
     my $param = $args{params};
 
-    @{$param}{ qw/oauth_provider_ok oauth_config_ok oauth_check_ok/ } = ();
+    my $user  = $param->{user}{email};
 
-    $in->{oauth_provider} =~ /^([^:]+):(.+)$/
+    @{$param}{ qw/oauth_prov_id_ok oauth_config_ok oauth_check_ok/ } = ();
+
+    $in->{oauth_prov_id} =~ /^([^:]+):(.+)$/
         or return 1;
 
     # $type is always 'voot'
-    my ($type, $provider) = ($1, $2);
+    my ($type, $prov_id) = ($1, $2);
 
-    $param->{oauth_provider_ok} = 1;
+    $param->{oauth_prov_id_ok} = 1;
 
-    my $voot = Sympa::VOOT::Renater->new
-      ( user     => $param->{user}{email}
-      , provider => $provider
-      ) or return 1;
+    my $go = sub {  # produce a callback
+        my $ticket = Auth::create_one_time_ticket($user, $args{robot_id}
+           , "oauth_check/$in->{oauth_prov_id}", 'mail');
+        "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
+    };
+
+    my $consumer = Sympa::VOOT->consumer(user => $user, prov_id => $prov_id
+      , newflow => $go) or return 1;
 
     $param->{oauth_config_ok} = 1;
 
-    my $consumer = $voot->getOAuthConsumer;
-
-    $consumer->setWebEnv
-      ( robot     => $args{robot_id}
-      , here_path => "oauth_check/$in->{oauth_provider}"
-      , base_path => "$param->{base_url}$param->{path_cgi}"
-      );
-
-    my $data = $voot->check;
-
+    my $data = $consumer->check;   # XXX ???
     unless($data)
     {   my $url = $consumer->mustRedirect;
-        return main::do_redirect($url) if $url;
+        return $url ? main::do_redirect($url) : 1;
     }
 
     $param->{oauth_check_ok}       = 1;
@@ -180,8 +176,8 @@ sub do_oauth_check(%)
 
 # Got back from OAuth workflow (provider), needs to get authorization
 # token and call the right action
-sub do_oauth_ready(%)
-{   my %args  = @_;
+sub doAuthReady(%)
+{   my ($self, %args) = @_;
     my $in    = $args{in};
     my $param = $args{param};
 
@@ -194,13 +190,12 @@ sub do_oauth_ready(%)
 
     my ($type, $provider) = ($1, $2);
 
-    my $voot = Sympa::VOOT::Renater->new
+    my $consumer = Sympa::VOOT->consumer
        ( user     => $param->{user}{email}
        , provider => $provider
        ) or return undef;
 
-    my $consumer = $voot->getOAuthConsumer;
-    $consumer->getAccessToken
+    my $voot = $consumer->voot->getAccessToken
       ( verifier => $in->{oauth_verifier}
       , token    => $in->{oauth_token}
       ) or return undef;
@@ -208,7 +203,7 @@ sub do_oauth_ready(%)
     return $callback;
 }
 
-sub create_provider($$$$)
+sub createProvider($$$$)
 {   my ($thing, $for, $param, $in, $check) = @_;
 
     my $provider = Sympa::OAuth1::Provider->new

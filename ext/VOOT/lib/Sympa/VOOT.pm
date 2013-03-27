@@ -12,7 +12,10 @@ use List::Util     qw/first/;
 # Sympa modules
 use report;
 use Site;
-use Sympa::Plugin::Util qw/:functions/;
+use Sympa::Plugin::Util   qw/:functions/;
+use Sympa::VOOT::Consumer ();
+
+my $default_server = 'Net::VOOT::Renater';
 
 =head1 NAME
 
@@ -24,14 +27,15 @@ Sympa::VOOT - manage VOOT use in Sympa
 
 =head1 DESCRIPTION
 
-Integrate VOOT with Sympa.  This module handles the web interface, and
+Intergrate VOOT with Sympa.  This module handles the web interface, and
 the various VOOT backends.
 
 =cut
 
-# These should (have been) modularized via Log::
-*wwslog     = \&main::wwslog;
-*web_db_log = \&main::web_db_log;
+# This object is used everywhere.  It shall not contains information
+# about a specific user session.  Instantiation is also needed to make
+# configuration of the data_source work.
+my $me = __PACKAGE__->new;
 
 #
 ## register plugin
@@ -39,31 +43,31 @@ the various VOOT backends.
 
 my @url_commands =
   ( opensocial =>
-      { handler   => \&do_opensocial
+      { handler   => sub { $me->doOpenSocial(@_) }
       , path_args => 'list'
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
   , select_voot_provider_request =>
-      { handler   => \&do_select_voot_provider_request
+      { handler   => sub { $me->doSelectProvider(@_) }
       , path_args => 'list'
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
   , select_voot_groups_request  =>
-      { handler   => \&do_select_voot_groups_request
+      { handler   => sub { $me->doListVootGroups(@_) }
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
   , select_voot_groups =>
-      { handler   => \&do_select_voot_groups
+      { handler   => sub { $me->doAcceptVootGroup(@_) }
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
   , voot =>
-      { handler   => \&do_voot
+      { handler   => sub { $me->doVoot(@_) }
       , path_args => '@voot_path'
       }
   );
@@ -103,7 +107,7 @@ my %include_voot_form =
      ]
   );
 
-sub register_plugin($)
+sub registerPlugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
     push @{$args->{validate}}, @validate;
@@ -117,14 +121,8 @@ sub register_plugin($)
       ( include_voot_group => \%include_voot_form
       );
 
-    $class->SUPER::register_plugin($args);
+    $class->SUPER::registerPlugin($args);
 }
-
-# This object is used everywhere.  It shall not contains information
-# about a specific user session.  Instantiation is also needed to make
-# configuration of the data_source work.
-my $voot = __PACKAGE__->new;
-
 
 =head1 METHODS
 
@@ -154,7 +152,7 @@ sub init($)
         $self->{SV_config_fn} = 'HASH';
     }
     else
-    {   $self->{SV_config}    = $self->read_config($config);
+    {   $self->{SV_config}    = $self->readConfig($config);
         $self->{SV_config_fn} = $config;
     }
 
@@ -169,21 +167,21 @@ sub init($)
 
 =head3 method: config
 
-=head3 method: config_filename
+=head3 method: configFilename
 
 =cut
 
 sub config() { shift->{SV_config} }
-sub config_filename() { shift->{SV_config_fn} }
+sub configFilename() { shift->{SV_config_fn} }
 
 
 =head2 Configuration handling
 
-=head3 read_config FILENAME
+=head3 readConfig FILENAME
 
 =cut
 
-sub read_config($)
+sub readConfig($)
 {   my ($thing, $filename) = @_;
     local *IN;
 
@@ -200,66 +198,77 @@ sub read_config($)
     $config;
 }
 
-=head3 provider ID|NAME, OPTIONS
+=head3 consumer ID|NAME, OPTIONS
 
 Returns the object which handles the selected provider, an extension
-of L<Net::VOOT>.  The OPTIONS will be passed to the constructor of the
-module.
+of L<Net::VOOT>.
 
+The OPTIONS are passed to the L<Sympa::VOOT::Consumer> constructor.
 =cut
 
-sub provider($)
-{   my ($self, $id, %args) = @_;
-    my $fn   = $self->config_filename;
+sub consumer($@)
+{   my ($self, $ref, @args) = @_;
 
-    my $info = first {   $_->{'voot.ProviderID'}   eq $id
-                      || $_->{'voot.ProviderName'} eq $id
-                     } $self->provider_configs;
+    my $fn   = $self->configFilename;
+    my $info = first {   $_->{'voot.ProviderID'}   eq $ref
+                      || $_->{'voot.ProviderName'} eq $ref
+                     } $self->providerConfigs;
 
     $info
-        or Log::fatal_err("cannot find VOOT provider $id in $fn");
+        or fatal "cannot find VOOT provider $ref in $fn";
 
-    my $impl = $info->{'voot.ServerClass'} || 'Net::VOOT::Renater';
-    Sympa::Plugin::Manager->load_plugin($impl)
-        or Log::fatal_err("cannot load module $impl for provider $id in $fn");
+    my %provider = 
+       ( id     => $info->{'voot.ProviderID'}
+       , name   => $info->{'voot.ProviderName'}
+       , server => ($info->{'voot.ServerClass'} || $default_server)
+       );
 
-    my $provider = eval { $impl->new(%$impl, %args) }
-        or Log::fatal_err("cannot start provider $id from $impl: $@");
+    # old style (6.2-devel): flat list on top-level
+    my $auth1 = $info->{oauth1};
+    /^x?oauth\.(.*)/ && ($auth1->{$1} = $info->{$_})
+         for keys %$info;
 
-    $provider;
+    my $auth = $auth1 && keys %$auth1 ? $auth1 : $info->{oauth2};
+
+    my $consumer = eval {
+        Sympa::VOOT::Consumer->new(provider => \%provider,auth => $auth,@args)};
+
+    $consumer
+        or fatal "cannot start VOOT consumer to $ref: $@";
+
+    $consumer;
 }
 
-=head3 method: provider_configs
+=head3 method: providerConfigs
 
 =head3 method: providers
 
 =cut
 
-sub provider_configs() { @{shift->config} }
+sub providerConfigs() { @{shift->config} }
 
 sub providers()
 {   map +($_->{'voot.ProviderName'} || $_->{'voot.ProviderID'})
-      , shift->provider_configs;
+      , shift->providerConfigs;
 }
 
-=head1 FUNCTIONS
 
 =head2 Web interface actions
 
 =cut
 
 # Provide nice url
-sub do_opensocial {
+sub doOpenSocial {
     return 'select_voot_provider_request';
 }
 
-# Displays VOOT providers list in the OpenSocial page
-sub do_select_voot_provider_request(%)
-{   my %args  = @_;
+# Displays VOOT providers list in the /opensocial page
+sub doSelectProvider(%)
+{   my ($self, %args) = @_;
     my $param = $args{param};
 
     my @providers;
-    foreach my $info ($voot->provider_configs)
+    foreach my $info ($self->providerConfigs)
     {   my $id   = $info->{'voot.ProviderID'};
         my $name = $info->{'voot.ProviderName'} || $id;
         push @providers,
@@ -270,39 +279,42 @@ sub do_select_voot_provider_request(%)
 }
 
 # Display groups list for user/VOOT_provider
-sub do_select_voot_groups_request(%)
-{   my %args = @_;
+sub doListVootGroups(%)
+{   my ($self, %args) = @_;
 
     my $in       = $args{in};
     my $param    = $args{param};
   
     my $prov_id  = $param->{voot_provider} = $in->{voot_provider};
     my $email    = $param->{user}{email};
+    my $list     = $param->{list};
 
-    wwslog(info => "get voot groups for provider $prov_id, user $email");
+    wwslog(info => "get voot groups for provider $prov_id, $email $list");
 
-    my $provider = $voot->provider($prov_id, user => $email)
+    my $go       = sub {
+        my $ticket = Auth::create_one_time_ticket($email, $args{robot_id}
+           , "select_voot_groups_request/$list/$prov_id", 'mail');
+        "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
+    };
+
+    my $consumer = $self->consumer($prov_id, user => $email, newflow => $go)
         or return undef;
  
-    my $consumer = $voot->getOAuthConsumer;
-    $consumer->setWebEnv
-      ( robot     => $args{robot_id}
-      , here_path => "select_voot_groups_request/$param->{list}/$provider"
-      , base_path => "$param->{base_url}.$param->{path_cgi}"
-      ) unless $in->{oauth_ready_done};
-
-    my $groups = $param->{voot_groups} = $voot->isMemberOf;
-    unless(defined $groups) {
-        my $url = $consumer->mustRedirect;
-        return do_redirect($url) if defined $url;
+    my $voot   = $consumer->voot;
+    my @groups = $voot->userGroups;
+    unless(@groups)
+    {   my $url = $consumer->mustRedirect;  # XXX
+        return do_redirect($url) if $url;
     }
-    
+
+    $param->{voot_groups} = \@groups;
     return 1;
 }
 
 # VOOT request
-sub do_voot(%)
-{   my %args  = @_;
+sub doVoot(%)
+{   my ($self, %args) = @_;
+
     my $param = $args{param};
     my $in    = $args{in};
 
@@ -311,7 +323,7 @@ sub do_voot(%)
     my $voot_path = $in->{voot_path};
 
 my $name;
-    my $provider  = $voot->provider($name)->call
+    my $consumer  = $self->consumer($name)->get
       ( method    => $ENV{REQUEST_METHOD}
       , voot_path => $voot_path
       , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
@@ -321,10 +333,10 @@ my $name;
       );
     
     my ($http_code, $http_str)
-       = $provider ? $provider->checkRequest : (400, 'Bad Request');
+       = $consumer ? $consumer->checkRequest : (400, 'Bad Request');
     
-    my $r      = $provider->response;
-    my $err    = $provider->{error};
+    my $r      = $consumer->response;
+    my $err    = $consumer->{error};
     my $status = $err || "$http_code $http_str";
     
     print <<__HEADER;
@@ -338,8 +350,8 @@ __HEADER
 }
 
 # VOOT groups choosen, generate config
-sub do_select_voot_groups(%)
-{   my %args     = @_;
+sub doAcceptVootGroup(%)
+{   my ($self, %args) = @_;
     my $param    = $args{param};
     my $in       = $args{in};
     my $list     = $args{list};
@@ -358,7 +370,7 @@ sub do_select_voot_groups(%)
     my @include_voot_group = @{$list->include_voot_group};    
     foreach my $gid (@groups)
     {   push @include_voot_group,
-         +{ name     => "$provider\::$gid"
+         +{ name     => $provider.'::'.$gid
           , user     => $email
           , provider => $provider
           , group    => $gid
@@ -375,7 +387,7 @@ sub do_select_voot_groups(%)
     {   report::reject_report_web('intern', 'cannot_save_config', {}
           , $action, $list, $email, $robot_id);
 
-        wwslog(info => 'do_select_voot_groups: Cannot save config file');
+        wwslog(info => 'cannot save config file');
         web_db_log({status => 'error', error_type => 'internal'});
         return undef;
     }    
@@ -409,8 +421,10 @@ your VOOT server.
 
 Fields:
 
-   voot.ProviderID            your abbreviation
-   voot.ProviderName          beautified name (defaults to ID)
-   voot.ServerClass           implementation (defaults to Net::VOOT::Renater)
+   voot.ProviderID     your abbreviation
+   voot.ProviderName   beautified name (defaults to ID)
+   voot.ServerClass    implementation (defaults to Net::VOOT::Renater)
+   oauth  => HASH      parameters to Sympa::OAuth1::new()
+   oauth2 => HASH      parameters to Sympa::OAuth2::new()
 
 =cut

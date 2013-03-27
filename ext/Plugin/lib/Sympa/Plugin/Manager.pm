@@ -56,7 +56,7 @@ sub init($)
     my $fn = $self->{SPM_state_fn}
        = $args->{state_file} || Site->etc.'/plugins.conf';
 
-    $self->{SPM_state}  = $args->{state} ||= $self->read_state($fn);
+    $self->{SPM_state}  = $args->{state} ||= $self->readState($fn);
     $self;
 }
 
@@ -65,15 +65,16 @@ sub init($)
 
 =head3 method: loaded
 
-=head3 method: state_fn
+=head3 method: stateFilename
 
 =head3 method: state
 
 =cut
 
-sub loaded()   { shift->{SPM_loaded}   }
-sub state_fn() { shift->{SPM_state_fn} }
-sub state()    { shift->{SPM_state}    }
+sub loaded()        { shift->{SPM_loaded}   }
+sub stateFilename() { shift->{SPM_state_fn} }
+sub state()         { shift->{SPM_state}    }
+
 
 =head2 Loading
 
@@ -106,25 +107,25 @@ sub start(%)
 
     while(my ($pkg, $version) = each %required_plugins)
     {   next if keys %need && $need{$pkg};
-        $self->load_plugin($pkg, version => $version, required => 1);
+        $self->loadPlugin($pkg, version => $version, required => 1);
     }
 
     while(my ($pkg, $version) = each %optional_plugins)
     {   next if keys %need && $need{$pkg};
-        $self->load_plugin($pkg, version => $version, required => 0);
+        $self->loadPlugin($pkg, version => $version, required => 0);
     }
 
     # Upgrade when there is new software
-    $self->check_versions(upgrade => $args{upgrade});
+    $self->checkVersions(upgrade => $args{upgrade});
 
     # Start using the plugins
-    $_->register_plugin( {} ) for $self->list;
+    $_->registerPlugin( {} ) for $self->list;
 
     $self;
 }
 
 
-=head3 method: load_plugin PACKAGE, OPTIONS
+=head3 method: loadPlugin PACKAGE, OPTIONS
 
 Load a single plugin.  This can be used to load a new package during
 development.  Returned is whether loading was successful.  When the
@@ -142,11 +143,11 @@ Options:
 
 Example:
 
-  Sympa::Plugin::Manager->load_plugin('Sympa::VOOT', version => '3.0.0');
+  Sympa::Plugin::Manager->loadPlugin('Sympa::VOOT', version => '3.0.0');
 
 =cut
 
-sub load_plugin($%)
+sub loadPlugin($%)
 {   my ($self, $pkg, %args) = @_;
     my $loaded = $self->loaded;
     return if $loaded->{$pkg};  # already loaded
@@ -187,7 +188,7 @@ sub load_plugin($%)
     return 0;
 }
 
-=head3 method: check_versions OPTIONS
+=head3 method: checkVersions OPTIONS
 
 Check whether the version of a certain plugin is equivalent to the
 version on last run.  If not, we need to call the upgrade on the
@@ -199,7 +200,7 @@ plugin or die.
 
 =cut
 
-sub check_versions(%)
+sub checkVersions(%)
 {   my ($self, %args) = @_;
 
     my $old     = $self->state->{plugin_versions} ||= {};
@@ -210,7 +211,7 @@ $upgrade = 1;
   PLUGIN:
     foreach my $plugin ($self->list)
     {   my $old_version = $old->{$plugin};
-        my $new_version = $self->version_of($plugin);
+        my $new_version = $self->versionOf($plugin);
         next if $old_version && $new_version eq $old_version;
 
         unless($upgrade)
@@ -225,7 +226,7 @@ $upgrade = 1;
         {   $old_version = $old->{$plugin}
               = $plugin->upgrade(from_version => $old_version);
 
-            $self->write_state;
+            $self->writeState;
         }
     }
 
@@ -246,32 +247,32 @@ Returns a list class names for all loaded plugins.
 
 sub list(%) { keys %{shift->loaded} }
 
-=head3 method: has_plugin PACKAGE
+=head3 method: hasPlugin PACKAGE
 
 Returns the class names of loaded plug-ins, which extend (or are equal
 to) the requested PACKAGE name.
 
 Example:
 
-  if($plugins->has_plugin('Sympa::VOOT')) ...
+  if($plugins->hasPlugin('Sympa::VOOT')) ...
 
 =cut
 
-sub has_plugin($)
+sub hasPlugin($)
 {   my ($self, $pkg) = @_;
     grep $_->isa($pkg), $self->list;
 }
 
-=head3 method: version_of PACKAGE
+=head3 method: versionOf PACKAGE
 
 =cut
 
-sub version_of($)
+sub versionOf($)
 {   my ($self, $package) = @_;
     $self->loaded->{$package};
 }
 
-=head3 method: add_templates OPTIONS
+=head3 method: addTemplates OPTIONS
 
 =over 4
 
@@ -283,7 +284,7 @@ sub version_of($)
 
 =cut
 
-sub add_templates(%)
+sub addTemplates(%)
 {   my ($self, %args) = @_;
 
     my $path  = $args{tt2_path} || [];
@@ -297,17 +298,17 @@ sub add_templates(%)
     }
 }
 
-=head3 method: tt2_paths
+=head3 method: tt2Paths
 
 =cut
 
-sub tt2_paths() { @{shift->{SPM_tt2_paths} || []} }
+sub tt2Paths() { @{shift->{SPM_tt2_paths} || []} }
 
-=head3 method: tt2_fragments LOCATION
+=head3 method: tt2Fragments LOCATION
 
 =cut
 
-sub tt2_fragments($)
+sub tt2Fragments($)
 {   my ($self, $location) = @_;
     $self->{SPM_tt2_frag}{$location} || [];
 }
@@ -318,15 +319,16 @@ sub tt2_fragments($)
 The state file is used to track the behavior of the plug-in manager.
 By default, this is the C<plugin.conf> file in the etc directory.
 
-=head3 read_state FILENAME
+=head3 readState FILENAME
 
-=head3 write_state
+=head3 writeState
 
 =cut
 
-sub read_state($)
+sub readState($)
 {   my ($self, $fn) = @_;
-    trace_call("read plugin state from $fn");
+    trace_call($fn);
+
     -f $fn or return {};
 
     open my $fh, "<:raw", $fn
@@ -338,9 +340,9 @@ sub read_state($)
     $state;
 }
 
-sub write_state()
+sub writeState()
 {   my $self = shift;
-    my $fn   = $self->state_fn;
+    my $fn   = $self->stateFilename;
 
     trace_call("write plugin state from $fn");
     open my $fh, ">:raw", $fn

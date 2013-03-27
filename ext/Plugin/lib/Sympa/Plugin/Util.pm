@@ -6,7 +6,7 @@ use strict;
 
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
-my @func = qw/default_db trace_call log fatal/;
+my @func = qw/default_db trace_call log fatal wwslog web_db_log/;
 
 our @EXPORT      = @func;
 our @EXPORT_OK   = (@http, @time, @func);
@@ -75,12 +75,12 @@ The object returned offers the following methods:
 
 {  package SPU_db;
 
-   sub db_prepared($$@)
+   sub prepared($$@)
    {   my $db = shift;
        SDM::do_prepared_query(@_);
    }
 
-   sub db_do($$@)               # I want automatic quoting
+   sub do($$@)               # I want automatic quoting
    {   my $db  = shift;
        my $sth = $db->prepared(@_);
        undef;
@@ -98,16 +98,24 @@ sub default_db() { $default_db || (bless {}, 'SPU_db') }
 
 =head3 fatal
 
+=head3 wsslog
+
+=head3 web_db_log
+
 =cut
 
 sub log(@)   { goto &Log::do_log }
 sub fatal(@) { goto &Log::fatal_err }
 
 sub trace_call(@)          # simplification of method logging
-{   my $sub = (caller[1])[3];
+{   my $sub = (caller 1)[3];
     local $" =  ',';
     @_ = (debug2 => "$sub(@_)");
     goto &Log::do_log;
 }
+
+# These should (have been) modularized via Log::
+*wwslog     = \&main::wwslog;
+*web_db_log = \&main::web_db_log;
 
 1;
