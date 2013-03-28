@@ -41,13 +41,7 @@ This fcgi script completely handles all aspects of the Sympa web interface
 use lib '--modulesdir--';
 
 # XXX MO: during development, where modules are not installed
-do '/home/sympa/ext/PATHS.pm';
-  '/home/sympa/lib',
-  '/home/sympa/ext/NetVOOT/lib',
-  '/home/sympa/ext/OAuth1/lib',
-  '/home/sympa/ext/OAuth1/lib',
-  '/home/sympa/ext/Plugin/lib',
-  '/home/sympa/ext/VOOT/lib';
+do '/home/sympa/ext/DEVEL.pm';
 
 use strict;
 use Getopt::Long;
