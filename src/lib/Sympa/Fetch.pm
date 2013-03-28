@@ -49,52 +49,52 @@ sub get_https{
 	Sympa::Log::Syslog::do_log ('debug','get_https (%s,%s,%s,%s,%s,%s,%s,%s)',$host,$port,$path,$client_cert,$client_key,$key_passwd,$trusted_ca_file,$trusted_ca_path );
 
 	unless ( -r ($trusted_ca_file) ||  (-d $trusted_ca_path )) {
-	    Sympa::Log::Syslog::do_log ('err',"error : incorrect access to cafile $trusted_ca_file bor capath $trusted_ca_path");
-	    return undef;
+		Sympa::Log::Syslog::do_log ('err',"error : incorrect access to cafile $trusted_ca_file bor capath $trusted_ca_path");
+		return undef;
 	}
 
-        eval {
-            require IO::Socket::SSL;
-        };
-        if ($EVAL_ERROR) {
-	    Sympa::Log::Syslog::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
-	    return undef;
+	eval {
+		require IO::Socket::SSL;
+	};
+	if ($EVAL_ERROR) {
+		Sympa::Log::Syslog::do_log('err',"Unable to use SSL library, IO::Socket::SSL required, install IO-Socket-SSL (CPAN) first");
+		return undef;
 	}
 
-        eval {
-            require LWP::UserAgent;
-        };
-        if ($EVAL_ERROR) {
-	    Sympa::Log::Syslog::do_log('err',"Unable to use LWP library, LWP::UserAgent required, install LWP (CPAN) first");
-	    return undef;
+	eval {
+		require LWP::UserAgent;
+	};
+	if ($EVAL_ERROR) {
+		Sympa::Log::Syslog::do_log('err',"Unable to use LWP library, LWP::UserAgent required, install LWP (CPAN) first");
+		return undef;
 	}
 
 	my $ssl_socket;
 
 	$ssl_socket = IO::Socket::SSL->new(SSL_use_cert => 1,
-					  SSL_verify_mode => 0x01,
-					  SSL_cert_file => $client_cert,
-					  SSL_key_file => $client_key,
-					  SSL_passwd_cb => sub { return ($key_passwd)},
-					  SSL_ca_file => $trusted_ca_file,
-					  SSL_ca_path => $trusted_ca_path,
-					  PeerAddr => $host,
-					  PeerPort => $port,
-					  Proto => 'tcp',
-					  Timeout => '5'
-					  );
+		SSL_verify_mode => 0x01,
+		SSL_cert_file => $client_cert,
+		SSL_key_file => $client_key,
+		SSL_passwd_cb => sub { return ($key_passwd)},
+		SSL_ca_file => $trusted_ca_file,
+		SSL_ca_path => $trusted_ca_path,
+		PeerAddr => $host,
+		PeerPort => $port,
+		Proto => 'tcp',
+		Timeout => '5'
+	);
 
 	unless ($ssl_socket) {
-	    Sympa::Log::Syslog::do_log ('err','error %s unable to connect https://%s:%s/',IO::Socket::SSL::errstr(),$host,$port);
-	    return undef;
+		Sympa::Log::Syslog::do_log ('err','error %s unable to connect https://%s:%s/',IO::Socket::SSL::errstr(),$host,$port);
+		return undef;
 	}
 	Sympa::Log::Syslog::do_log ('debug','connected to https://%s:%s/',IO::Socket::SSL::errstr(),$host,$port);
 
 	if( ref($ssl_socket) && $ssl_socket->isa('IO::Socket::SSL')) {
-	   my $subject_name = $ssl_socket->peer_certificate("subject");
-	   my $issuer_name = $ssl_socket->peer_certificate("issuer");
-	   my $cipher = $ssl_socket->get_cipher();
-	   Sympa::Log::Syslog::do_log ('debug','ssl peer certificat %s issued by %s. Cipher used %s',$subject_name,$issuer_name,$cipher);
+		my $subject_name = $ssl_socket->peer_certificate("subject");
+		my $issuer_name = $ssl_socket->peer_certificate("issuer");
+		my $cipher = $ssl_socket->get_cipher();
+		Sympa::Log::Syslog::do_log ('debug','ssl peer certificat %s issued by %s. Cipher used %s',$subject_name,$issuer_name,$cipher);
 	}
 
 	print $ssl_socket "GET $path HTTP/1.0\nHost: $host\n\n";
@@ -108,7 +108,7 @@ sub get_https{
 	Sympa::Log::Syslog::do_log ('debug',"get_https reading answer");
 	my @result;
 	while (my $line = $ssl_socket->getline) {
-	    push  @result, $line;
+		push  @result, $line;
 	}
 
 	$ssl_socket->close(SSL_no_shutdown => 1);

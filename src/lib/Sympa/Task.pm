@@ -46,7 +46,7 @@ my %task_by_model;
 my $taskspool ;
 
 sub set_spool {
-    $taskspool = Sympa::Spool->new(name => 'task');
+	$taskspool = Sympa::Spool->new(name => 'task');
 }
 
 =head1 CLASS METHODS
@@ -82,32 +82,32 @@ A new L<Sympa::Task> object, or I<undef>, if something went wrong.
 =cut
 
 sub new {
-    my ($class, %params) = @_;
-    Sympa::Log::Syslog::do_log('debug2', 'messagekey = %s', $params{'messagekey'});
+	my ($class, %params) = @_;
+	Sympa::Log::Syslog::do_log('debug2', 'messagekey = %s', $params{'messagekey'});
 
-    my $self = {
-	    messagekey   => $params{'messagekey'},
-	    taskasstring => $params{'messageasstring'},
-	    date         => $params{'task_date'},
-	    label        => $params{'task_label'},
-	    model        => $params{'task_model'},
-	    domain       => $params{'robot'}
-    };
+	my $self = {
+		messagekey   => $params{'messagekey'},
+		taskasstring => $params{'messageasstring'},
+		date         => $params{'task_date'},
+		label        => $params{'task_label'},
+		model        => $params{'task_model'},
+		domain       => $params{'robot'}
+	};
 
-    if ($params{'list'}) { # list task
-	$self->{'list_object'} = Sympa::List->new(
-		name  => $params{'list'},
-		robot => $params{'robot'}
-	);
-	$self->{'domain'} = $self->{'list_object'}{'domain'};
-    }
+	if ($params{'list'}) { # list task
+		$self->{'list_object'} = Sympa::List->new(
+			name  => $params{'list'},
+			robot => $params{'robot'}
+		);
+		$self->{'domain'} = $self->{'list_object'}{'domain'};
+	}
 
-    $self->{'id'} = $self->{'list_object'}{'name'};
-    $self->{'id'} .= '@'.$self->{'domain'} if (defined $self->{'domain'});
+	$self->{'id'} = $self->{'list_object'}{'name'};
+	$self->{'id'} .= '@'.$self->{'domain'} if (defined $self->{'domain'});
 
-    bless $self, $class;
+	bless $self, $class;
 
-    return $self;
+	return $self;
 }
 
 =head2 Sympa::Task->list_tasks()
@@ -117,31 +117,31 @@ Build all Task objects.
 =cut
 
 sub list_tasks {
-    my ($class) = @_;
+	my ($class) = @_;
 
-    Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
-    ## Reset the list of tasks
-    undef @task_list;
-    undef %task_by_list;
-    undef %task_by_model;
+	Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
+	## Reset the list of tasks
+	undef @task_list;
+	undef %task_by_list;
+	undef %task_by_model;
 
-    # fetch all task
-    my $taskspool = Sympa::Spool->new(name => 'task');
-    my @tasks = $taskspool->get_content({'selector'=>{}});
+	# fetch all task
+	my $taskspool = Sympa::Spool->new(name => 'task');
+	my @tasks = $taskspool->get_content({'selector'=>{}});
 
-    ## Create Task objects
-    foreach my $t (@tasks) {
-	my $task = Sympa::Task->new(%$t);
-	## Maintain list of tasks
-	push @task_list, $task;
+	## Create Task objects
+	foreach my $t (@tasks) {
+		my $task = Sympa::Task->new(%$t);
+		## Maintain list of tasks
+		push @task_list, $task;
 
-	my $list_id = $task->{'id'};
-	my $model = $task->{'model'};
+		my $list_id = $task->{'id'};
+		my $model = $task->{'model'};
 
-	$task_by_model{$model}{$list_id} = $task;
-	$task_by_list{$list_id}{$model} = $task;
-    }
-    return 1;
+		$task_by_model{$model}{$list_id} = $task;
+		$task_by_list{$list_id}{$model} = $task;
+	}
+	return 1;
 }
 
 =head2 Sympa::Task->get_tasks_by_list($list_id)
@@ -151,11 +151,11 @@ Return a list tasks for the given list.
 =cut
 
 sub get_tasks_by_list {
-    my ($class, $list_id) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Getting tasks for list '%s'",$list_id);
+	my ($class, $list_id) = @_;
+	Sympa::Log::Syslog::do_log('debug',"Getting tasks for list '%s'",$list_id);
 
-    return () unless (defined $task_by_list{$list_id});
-    return values %{$task_by_list{$list_id}};
+	return () unless (defined $task_by_list{$list_id});
+	return values %{$task_by_list{$list_id}};
 }
 
 =head2 Sympa::Task->get_used_models($list_id)
@@ -163,23 +163,23 @@ sub get_tasks_by_list {
 =cut
 
 sub get_used_models {
-    ## Optional list parameter
-    my ($class, $list_id) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Getting used models for list '%s'",$list_id);
+	## Optional list parameter
+	my ($class, $list_id) = @_;
+	Sympa::Log::Syslog::do_log('debug',"Getting used models for list '%s'",$list_id);
 
 
-    if (defined $list_id) {
-	if (defined $task_by_list{$list_id}) {
-	    Sympa::Log::Syslog::do_log('debug2',"Found used models for list '%s'",$list_id);
-	    return keys %{$task_by_list{$list_id}}
+	if (defined $list_id) {
+		if (defined $task_by_list{$list_id}) {
+			Sympa::Log::Syslog::do_log('debug2',"Found used models for list '%s'",$list_id);
+			return keys %{$task_by_list{$list_id}}
+		}else {
+			Sympa::Log::Syslog::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
+			return ();
+		}
+
 	}else {
-	    Sympa::Log::Syslog::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
-	    return ();
+		return keys %task_by_model;
 	}
-
-    }else {
-	return keys %task_by_model;
-    }
 }
 
 =head2 Sympa::Task->get_task_list()
@@ -187,9 +187,9 @@ sub get_used_models {
 =cut
 
 sub get_task_list {
-    my ($class) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Getting tasks list");
-    return @task_list;
+	my ($class) = @_;
+	Sympa::Log::Syslog::do_log('debug',"Getting tasks list");
+	return @task_list;
 }
 
 =head1 INSTANCE METHODS
@@ -201,13 +201,13 @@ remove a task using message key
 =cut
 
 sub remove {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
 
-    unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
-	Sympa::Log::Syslog::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
-	return undef;
-    }
+	unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
+		Sympa::Log::Syslog::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
+		return undef;
+	}
 }
 
 1;

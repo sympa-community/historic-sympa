@@ -78,11 +78,11 @@ pod2usage(-message => 'missing operation', exit => 2) unless $operation;
 pod2usage(-message => 'missing list', exit => 2) unless $operation;
 pod2usage(-message => 'missing domain', exit => 2) unless $domain;
 pod2usage(-message => "invalid operation $operation", exit => 2)
-	unless $operation eq 'add' || $operation eq 'del';
+unless $operation eq 'add' || $operation eq 'del';
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 unless (Sympa::Configuration::load($sympa_conf_file)) {
-   Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
+	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
 }
 my $tmp_alias_file = $Sympa::Configuration::Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
@@ -100,8 +100,8 @@ $alias_file = $Sympa::Configuration::Conf{'sendmail_aliases'} || Sympa::Constant
 $alias_file = $file if ($file);
 
 unless (-w "$alias_file") {
-    print STDERR "Unable to access $alias_file\n";
-    exit(5);
+	print STDERR "Unable to access $alias_file\n";
+	exit(5);
 }
 
 my %data;
@@ -125,148 +125,148 @@ Sympa::Template::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_incl
 @aliases = split /\n/, $aliases_dump;
 
 unless (@aliases) {
-    	print STDERR "No aliases defined\n";
+	print STDERR "No aliases defined\n";
 	exit(15);
 }
 
 if ($operation eq 'add') {
-    ## Create a lock
-    unless (open(LF, ">>$lock_file")) {
-	print STDERR "Can't open lock file $lock_file\n";
-	exit(14);
-    }
-    flock LF, 2;
+	## Create a lock
+	unless (open(LF, ">>$lock_file")) {
+		print STDERR "Can't open lock file $lock_file\n";
+		exit(14);
+	}
+	flock LF, 2;
 
-    ## Check existing aliases
-    if (already_defined(@aliases)) {
-	printf STDERR "some alias already exist\n";
-	exit(13);
-    }
+	## Check existing aliases
+	if (already_defined(@aliases)) {
+		printf STDERR "some alias already exist\n";
+		exit(13);
+	}
 
-    unless (open  ALIAS, ">> $alias_file") {
-	print STDERR "Unable to append to $alias_file\n";
-	exit(5);
-    }
+	unless (open  ALIAS, ">> $alias_file") {
+		print STDERR "Unable to append to $alias_file\n";
+		exit(5);
+	}
 
-    foreach (@aliases) {
-	print ALIAS "$_\n";
-    }
-    close ALIAS;
+	foreach (@aliases) {
+		print ALIAS "$_\n";
+	}
+	close ALIAS;
 
-    ## Newaliases
-    unless ($file) {
-	unless (system($alias_wrapper) == 0) {
-	    print STDERR "Failed to execute newaliases: $ERRNO\n";
-	    exit(6)
-	    }
-    }
+	## Newaliases
+	unless ($file) {
+		unless (system($alias_wrapper) == 0) {
+			print STDERR "Failed to execute newaliases: $ERRNO\n";
+			exit(6)
+		}
+	}
 
-    ## Unlock
-    flock LF, 8;
-    close LF;
+	## Unlock
+	flock LF, 8;
+	close LF;
 
 }elsif ($operation eq 'del') {
 
-    ## Create a lock
-    open(LF, ">>$lock_file") || die "Can't open lock file $lock_file";
-    flock LF, 2;
+	## Create a lock
+	open(LF, ">>$lock_file") || die "Can't open lock file $lock_file";
+	flock LF, 2;
 
-    unless (open  ALIAS, "$alias_file") {
-	print STDERR "Could not read $alias_file\n";
-	exit(7);
-    }
-
-    unless (open NEWALIAS, ">$tmp_alias_file") {
-	printf STDERR "Could not create $tmp_alias_file\n";
-	exit (8);
-    }
-
-    my @deleted_lines;
-    while (my $alias = <ALIAS>) {
-	my $left_side = '';
-	$left_side = $1 if ($alias =~ /^([^:]+):/);
-
-	my $to_be_deleted = 0;
-	foreach my $new_alias (@aliases) {
-	    next unless ($new_alias =~ /^([^:]+):/);
-	    my $new_left_side = $1;
-
-	    if ($left_side eq  $new_left_side) {
-		push @deleted_lines, $alias;
-		$to_be_deleted = 1 ;
-		last;
-	    }
+	unless (open  ALIAS, "$alias_file") {
+		print STDERR "Could not read $alias_file\n";
+		exit(7);
 	}
-	unless ($to_be_deleted)  {
-	    ## append to new aliases file
-	    print NEWALIAS $alias;
+
+	unless (open NEWALIAS, ">$tmp_alias_file") {
+		printf STDERR "Could not create $tmp_alias_file\n";
+		exit (8);
 	}
-    }
-    close ALIAS ;
-    close NEWALIAS;
 
-    if ($#deleted_lines == -1) {
-	print STDERR "No matching line in $alias_file\n" ;
-	exit(9);
-    }
-    ## replace old aliases file
-    unless (open  NEWALIAS, "$tmp_alias_file") {
-	print STDERR "Could not read $tmp_alias_file\n";
-	exit(10);
-    }
+	my @deleted_lines;
+	while (my $alias = <ALIAS>) {
+		my $left_side = '';
+		$left_side = $1 if ($alias =~ /^([^:]+):/);
 
-    unless (open OLDALIAS, ">$alias_file") {
-	print STDERR "Could not overwrite $alias_file\n";
-	exit (11);
-    }
-    print OLDALIAS <NEWALIAS>;
-    close OLDALIAS ;
-    close NEWALIAS;
-    unlink $tmp_alias_file;
+		my $to_be_deleted = 0;
+		foreach my $new_alias (@aliases) {
+			next unless ($new_alias =~ /^([^:]+):/);
+			my $new_left_side = $1;
 
-    ## Newaliases
-    unless ($file) {
-	unless (system($alias_wrapper) == 0) {
-	    print STDERR "Failed to execute newaliases: $ERRNO\n";
-	exit (6);
+			if ($left_side eq  $new_left_side) {
+				push @deleted_lines, $alias;
+				$to_be_deleted = 1 ;
+				last;
+			}
+		}
+		unless ($to_be_deleted)  {
+			## append to new aliases file
+			print NEWALIAS $alias;
+		}
 	}
-    }
-    ## Unlock
-    flock LF, 8;
-    close LF;
+	close ALIAS ;
+	close NEWALIAS;
+
+	if ($#deleted_lines == -1) {
+		print STDERR "No matching line in $alias_file\n" ;
+		exit(9);
+	}
+	## replace old aliases file
+	unless (open  NEWALIAS, "$tmp_alias_file") {
+		print STDERR "Could not read $tmp_alias_file\n";
+		exit(10);
+	}
+
+	unless (open OLDALIAS, ">$alias_file") {
+		print STDERR "Could not overwrite $alias_file\n";
+		exit (11);
+	}
+	print OLDALIAS <NEWALIAS>;
+	close OLDALIAS ;
+	close NEWALIAS;
+	unlink $tmp_alias_file;
+
+	## Newaliases
+	unless ($file) {
+		unless (system($alias_wrapper) == 0) {
+			print STDERR "Failed to execute newaliases: $ERRNO\n";
+			exit (6);
+		}
+	}
+	## Unlock
+	flock LF, 8;
+	close LF;
 
 }else {
-    print STDERR "Action $operation not implemented yet\n";
-    exit(2);
+	print STDERR "Action $operation not implemented yet\n";
+	exit(2);
 }
 
 exit 0;
 
 ## Check if an alias is already defined
 sub already_defined {
-    my @aliases = @_;
+	my @aliases = @_;
 
-    unless (open  ALIAS, "$alias_file") {
-	printf STDERR "Could not read $alias_file\n";
-	exit (7);
-    }
-
-    while (my $alias = <ALIAS>) {
-	# skip comment
-	next if $alias =~ /^#/ ;
-	$alias =~ /^([^:]+):/;
-	my $left_side = $1;
-	next unless ($left_side);
-	foreach (@aliases) {
-	    next unless ($_ =~ /^([^:]+):/);
-	    my $new_left_side = $1;
-	    if ($left_side eq  $new_left_side) {
-		print STDERR "Alias already defined : $left_side\n";
-		return 1;
-	    }
+	unless (open  ALIAS, "$alias_file") {
+		printf STDERR "Could not read $alias_file\n";
+		exit (7);
 	}
-    }
 
-    close ALIAS ;
-    return 0;
+	while (my $alias = <ALIAS>) {
+		# skip comment
+		next if $alias =~ /^#/ ;
+		$alias =~ /^([^:]+):/;
+		my $left_side = $1;
+		next unless ($left_side);
+		foreach (@aliases) {
+			next unless ($_ =~ /^([^:]+):/);
+			my $new_left_side = $1;
+			if ($left_side eq  $new_left_side) {
+				print STDERR "Alias already defined : $left_side\n";
+				return 1;
+			}
+		}
+	}
+
+	close ALIAS ;
+	return 0;
 }

@@ -36,207 +36,209 @@ use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
 
-%reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
-		   'digest' => {'gettext_id' => 'digest MIME format'},
-		   'digestplain' => {'gettext_id' => 'digest plain text format'},
-		   'summary' => {'gettext_id' => 'summary mode'},
-		   'notice' => {'gettext_id' => 'notice mode'},
-		   'txt' => {'gettext_id' => 'text-only mode'},
-		   'html'=> {'gettext_id' => 'html-only mode'},
-		   'urlize' => {'gettext_id' => 'urlize mode'},
-		   'nomail' => {'gettext_id' => 'no mail (useful for vacations)'},
-		   'not_me' => {'gettext_id' => 'you do not receive your own posts'}
-		   );
+%reception_mode = (
+	'mail'        => {'gettext_id' => 'standard (direct reception)'},
+	'digest'      => {'gettext_id' => 'digest MIME format'},
+	'digestplain' => {'gettext_id' => 'digest plain text format'},
+	'summary'     => {'gettext_id' => 'summary mode'},
+	'notice'      => {'gettext_id' => 'notice mode'},
+	'txt'         => {'gettext_id' => 'text-only mode'},
+	'html'        => {'gettext_id' => 'html-only mode'},
+	'urlize'      => {'gettext_id' => 'urlize mode'},
+	'nomail'      => {'gettext_id' => 'no mail (useful for vacations)'},
+	'not_me'      => {'gettext_id' => 'you do not receive your own posts'}
+);
 
 ## Cookie expiration periods with corresponding entry in NLS
-%cookie_period = (0     => {'gettext_id' => "session"},
-		  10    => {'gettext_id' => "10 minutes"},
-		  30    => {'gettext_id' => "30 minutes"},
-		  60    => {'gettext_id' => "1 hour"},
-		  360   => {'gettext_id' => "6 hours"},
-		  1440  => {'gettext_id' => "1 day"},
-		  10800 => {'gettext_id' => "1 week"},
-		  43200 => {'gettext_id' => "30 days"});
+%cookie_period = (
+	0     => {'gettext_id' => "session"},
+	10    => {'gettext_id' => "10 minutes"},
+	30    => {'gettext_id' => "30 minutes"},
+	60    => {'gettext_id' => "1 hour"},
+	360   => {'gettext_id' => "6 hours"},
+	1440  => {'gettext_id' => "1 day"},
+	10800 => {'gettext_id' => "1 week"},
+	43200 => {'gettext_id' => "30 days"});
 
-%visibility_mode = ('noconceal' => {'gettext_id' => "listed in the list review page"},
-		    'conceal' => {'gettext_id' => "concealed"}
-		    );
+%visibility_mode = (
+	'noconceal' => {'gettext_id' => "listed in the list review page"},
+	'conceal'   => {'gettext_id' => "concealed"}
+);
 
 ## Filenames with corresponding entry in NLS set 15
-%filenames = ('welcome.tt2'             => {'gettext_id' => "welcome message"},
-	      'bye.tt2'                 => {'gettext_id' => "unsubscribe message"},
-	      'removed.tt2'             => {'gettext_id' => "deletion message"},
-	      'message.footer'          => {'gettext_id' => "message footer"},
-	      'message.header'          => {'gettext_id' => "message header"},
-	      'remind.tt2'              => {'gettext_id' => "remind message"},
-	      'reject.tt2'              => {'gettext_id' => "editor rejection message"},
-	      'invite.tt2'              => {'gettext_id' => "subscribing invitation message"},
-	      'helpfile.tt2'            => {'gettext_id' => "help file"},
-	      'lists.tt2'               => {'gettext_id' => "directory of lists"},
-	      'global_remind.tt2'       => {'gettext_id' => "global remind message"},
-	      'summary.tt2'             => {'gettext_id' => "summary message"},
-	      'info'                    => {'gettext_id' => "list description"},
-	      'homepage'                => {'gettext_id' => "list homepage"},
-	      'create_list_request.tt2' => {'gettext_id' => "list creation request message"},
-	      'list_created.tt2'        => {'gettext_id' => "list creation notification message"},
-	      'your_infected_msg.tt2'   => {'gettext_id' => "virus infection message"},
-	      'list_aliases.tt2'        => {'gettext_id' => "list aliases template"}
-	      );
+%filenames = (
+	'welcome.tt2'             => {'gettext_id' => "welcome message"},
+	'bye.tt2'                 => {'gettext_id' => "unsubscribe message"},
+	'removed.tt2'             => {'gettext_id' => "deletion message"},
+	'message.footer'          => {'gettext_id' => "message footer"},
+	'message.header'          => {'gettext_id' => "message header"},
+	'remind.tt2'              => {'gettext_id' => "remind message"},
+	'reject.tt2'              => {'gettext_id' => "editor rejection message"},
+	'invite.tt2'              => {'gettext_id' => "subscribing invitation message"},
+	'helpfile.tt2'            => {'gettext_id' => "help file"},
+	'lists.tt2'               => {'gettext_id' => "directory of lists"},
+	'global_remind.tt2'       => {'gettext_id' => "global remind message"},
+	'summary.tt2'             => {'gettext_id' => "summary message"},
+	'info'                    => {'gettext_id' => "list description"},
+	'homepage'                => {'gettext_id' => "list homepage"},
+	'create_list_request.tt2' => {'gettext_id' => "list creation request message"},
+	'list_created.tt2'        => {'gettext_id' => "list creation notification message"},
+	'your_infected_msg.tt2'   => {'gettext_id' => "virus infection message"},
+	'list_aliases.tt2'        => {'gettext_id' => "list aliases template"}
+);
 
 ## Defined in RFC 1893
-%bounce_status = ('1.0' => 'Other address status',
-		  '1.1' => 'Bad destination mailbox address',
-		  '1.2' => 'Bad destination system address',
-		  '1.3' => 'Bad destination mailbox address syntax',
-		  '1.4' => 'Destination mailbox address ambiguous',
-		  '1.5' => 'Destination mailbox address valid',
-		  '1.6' => 'Mailbox has moved',
-		  '1.7' => 'Bad sender\'s mailbox address syntax',
-		  '1.8' => 'Bad sender\'s system address',
-		  '2.0' => 'Other or undefined mailbox status',
-		  '2.1' => 'Mailbox disabled, not accepting messages',
-		  '2.2' => 'Mailbox full',
-		  '2.3' => 'Message length exceeds administrative limit',
-		  '2.4' => 'Mailing list expansion problem',
-		  '3.0' => 'Other or undefined mail system status',
-		  '3.1' => 'Mail system full',
-		  '3.2' => 'System not accepting network messages',
-		  '3.3' => 'System not capable of selected features',
-		  '3.4' => 'Message too big for system',
-		  '4.0' => 'Other or undefined network or routing status',
-		  '4.1' => 'No answer from host',
-		  '4.2' => 'Bad connection',
-		  '4.3' => 'Routing server failure',
-		  '4.4' => 'Unable to route',
-		  '4.5' => 'Network congestion',
-		  '4.6' => 'Routing loop detected',
-		  '4.7' => 'Delivery time expired',
-		  '5.0' => 'Other or undefined protocol status',
-		  '5.1' => 'Invalid command',
-		  '5.2' => 'Syntax error',
-		  '5.3' => 'Too many recipients',
-		  '5.4' => 'Invalid command arguments',
-		  '5.5' => 'Wrong protocol version',
-		  '6.0' => 'Other or undefined media error',
-		  '6.1' => 'Media not supported',
-		  '6.2' => 'Conversion required and prohibited',
-		  '6.3' => 'Conversion required but not supported',
-		  '6.4' => 'Conversion with loss performed',
-		  '6.5' => 'Conversion failed',
-		  '7.0' => 'Other or undefined security status',
-		  '7.1' => 'Delivery not authorized, message refused',
-		  '7.2' => 'Mailing list expansion prohibited',
-		  '7.3' => 'Security conversion required but not possible',
-		  '7.4' => 'Security features not supported',
-		  '7.5' => 'Cryptographic failure',
-		  '7.6' => 'Cryptographic algorithm not supported',
-		  '7.7' => 'Message integrity failure');
-
-
+%bounce_status = (
+	'1.0' => 'Other address status',
+	'1.1' => 'Bad destination mailbox address',
+	'1.2' => 'Bad destination system address',
+	'1.3' => 'Bad destination mailbox address syntax',
+	'1.4' => 'Destination mailbox address ambiguous',
+	'1.5' => 'Destination mailbox address valid',
+	'1.6' => 'Mailbox has moved',
+	'1.7' => 'Bad sender\'s mailbox address syntax',
+	'1.8' => 'Bad sender\'s system address',
+	'2.0' => 'Other or undefined mailbox status',
+	'2.1' => 'Mailbox disabled, not accepting messages',
+	'2.2' => 'Mailbox full',
+	'2.3' => 'Message length exceeds administrative limit',
+	'2.4' => 'Mailing list expansion problem',
+	'3.0' => 'Other or undefined mail system status',
+	'3.1' => 'Mail system full',
+	'3.2' => 'System not accepting network messages',
+	'3.3' => 'System not capable of selected features',
+	'3.4' => 'Message too big for system',
+	'4.0' => 'Other or undefined network or routing status',
+	'4.1' => 'No answer from host',
+	'4.2' => 'Bad connection',
+	'4.3' => 'Routing server failure',
+	'4.4' => 'Unable to route',
+	'4.5' => 'Network congestion',
+	'4.6' => 'Routing loop detected',
+	'4.7' => 'Delivery time expired',
+	'5.0' => 'Other or undefined protocol status',
+	'5.1' => 'Invalid command',
+	'5.2' => 'Syntax error',
+	'5.3' => 'Too many recipients',
+	'5.4' => 'Invalid command arguments',
+	'5.5' => 'Wrong protocol version',
+	'6.0' => 'Other or undefined media error',
+	'6.1' => 'Media not supported',
+	'6.2' => 'Conversion required and prohibited',
+	'6.3' => 'Conversion required but not supported',
+	'6.4' => 'Conversion with loss performed',
+	'6.5' => 'Conversion failed',
+	'7.0' => 'Other or undefined security status',
+	'7.1' => 'Delivery not authorized, message refused',
+	'7.2' => 'Mailing list expansion prohibited',
+	'7.3' => 'Security conversion required but not possible',
+	'7.4' => 'Security features not supported',
+	'7.5' => 'Cryptographic failure',
+	'7.6' => 'Cryptographic algorithm not supported',
+	'7.7' => 'Message integrity failure'
+);
 
 ## if Crypt::CipherSaber installed store the cipher object
 my $cipher;
 
 ## Load WWSympa configuration file
 sub load_config {
-    my ($file, $params) = @_;
+	my ($file, $params) = @_;
 
-    ## Old params
-    my %old_param = ('alias_manager' => 'No more used',
-		     'wws_path' => 'No more used',
-		     'icons_url' => 'No more used. Using static_content/icons instead.',
-		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
-		     );
+	## Old params
+	my %old_param = ('alias_manager' => 'No more used',
+		'wws_path' => 'No more used',
+		'icons_url' => 'No more used. Using static_content/icons instead.',
+		'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+	);
 
-    my %default_conf = ();
+	my %default_conf = ();
 
-    ## Valid params
-    foreach my $key (keys %$params) {
-	if (defined $params->{$key}{'file'} && $params->{$key}{'file'} eq 'wwsympa.conf') {
-	    $default_conf{$key} = $params->{$key}{'default'};
+	## Valid params
+	foreach my $key (keys %$params) {
+		if (defined $params->{$key}{'file'} && $params->{$key}{'file'} eq 'wwsympa.conf') {
+			$default_conf{$key} = $params->{$key}{'default'};
+		}
 	}
-    }
 
-    my $conf = \%default_conf;
+	my $conf = \%default_conf;
 
-    unless (open (FILE, $file)) {
-	Sympa::Log::Syslog::do_log('err',"unable to open $file");
-	return undef;
-    }
-
-    while (<FILE>) {
-	next if /^\s*\#/;
-
-	if (/^\s*(\S+)\s+(.+)$/i) {
-	    my ($k, $v) = ($1, $2);
-	    $v =~ s/\s*$//;
-	    if (defined ($conf->{$k})) {
-		$conf->{$k} = $v;
-	    }elsif (defined $old_param{$k}) {
-		Sympa::Log::Syslog::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
-	    }else {
-		Sympa::Log::Syslog::do_log('err',"Unknown parameter %s in %s", $k, $file);
-	    }
+	unless (open (FILE, $file)) {
+		Sympa::Log::Syslog::do_log('err',"unable to open $file");
+		return undef;
 	}
-	next;
-    }
 
-    close FILE;
+	while (<FILE>) {
+		next if /^\s*\#/;
 
-    ## Check binaries and directories
-    if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
-	Sympa::Log::Syslog::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
-    }
+		if (/^\s*(\S+)\s+(.+)$/i) {
+			my ($k, $v) = ($1, $2);
+			$v =~ s/\s*$//;
+			if (defined ($conf->{$k})) {
+				$conf->{$k} = $v;
+			}elsif (defined $old_param{$k}) {
+				Sympa::Log::Syslog::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
+			}else {
+				Sympa::Log::Syslog::do_log('err',"Unknown parameter %s in %s", $k, $file);
+			}
+		}
+		next;
+	}
 
-    if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
-	Sympa::Log::Syslog::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
-    }
+	close FILE;
 
-    if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
-	Sympa::Log::Syslog::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
-    }
+	## Check binaries and directories
+	if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
+		Sympa::Log::Syslog::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
+	}
 
-    return $conf;
+	if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
+		Sympa::Log::Syslog::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
+	}
+
+	if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
+		Sympa::Log::Syslog::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
+	}
+
+	return $conf;
 }
 
 sub get_my_url {
+	my $return_url;
 
+	## Mod_ssl sets SSL_PROTOCOL ; apache-ssl sets SSL_PROTOCOL_VERSION
+	if ($ENV{'HTTPS'} eq 'on') {
+		$return_url = 'https';
+	}else{
+		$return_url = 'http';
+	}
 
-    my $return_url;
-
-    ## Mod_ssl sets SSL_PROTOCOL ; apache-ssl sets SSL_PROTOCOL_VERSION
-    if ($ENV{'HTTPS'} eq 'on') {
-	$return_url = 'https';
-    }else{
-	$return_url = 'http';
-    }
-
-    $return_url .= '://'.main::get_header_field('HTTP_HOST');
-    $return_url .= ':'.$ENV{'SERVER_PORT'} unless (($ENV{'SERVER_PORT'} eq '80')||($ENV{'SERVER_PORT'} eq '443'));
-    $return_url .= $ENV{'REQUEST_URI'};
-    return ($return_url);
+	$return_url .= '://'.main::get_header_field('HTTP_HOST');
+	$return_url .= ':'.$ENV{'SERVER_PORT'} unless (($ENV{'SERVER_PORT'} eq '80')||($ENV{'SERVER_PORT'} eq '443'));
+	$return_url .= $ENV{'REQUEST_URI'};
+	return ($return_url);
 }
 
 # Uploade source file to the destination on the server
 sub upload_file_to_server {
-    my (%params) = @_;
-    Sympa::Log::Syslog::do_log('debug',"Uploading file from field %s to destination %s",$params{'file_field'},$params{'destination'});
+	my (%params) = @_;
+	Sympa::Log::Syslog::do_log('debug',"Uploading file from field %s to destination %s",$params{'file_field'},$params{'destination'});
 
-    my $fh;
-    unless ($fh = $params{'query'}->upload($params{'file_field'})) {
-	Sympa::Log::Syslog::do_log('debug',"Cannot upload file from field $params{'file_field'}");
-	return undef;
-    }
+	my $fh;
+	unless ($fh = $params{'query'}->upload($params{'file_field'})) {
+		Sympa::Log::Syslog::do_log('debug',"Cannot upload file from field $params{'file_field'}");
+		return undef;
+	}
 
-    unless (open FILE, ">:bytes", $params{'destination'}) {
-	Sympa::Log::Syslog::do_log('debug',"Cannot open file $params{'destination'} : $ERRNO");
-	return undef;
-    }
-    while (<$fh>) {
-	print FILE;
-    }
-    close FILE;
-    return 1;
+	unless (open FILE, ">:bytes", $params{'destination'}) {
+		Sympa::Log::Syslog::do_log('debug',"Cannot open file $params{'destination'} : $ERRNO");
+		return undef;
+	}
+	while (<$fh>) {
+		print FILE;
+	}
+	close FILE;
+	return 1;
 }
 
 1;

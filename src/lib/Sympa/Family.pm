@@ -72,39 +72,39 @@ An array  containing all the robot's families names.
 =cut
 
 sub get_available_families {
-    my ($class, $robot, $etcdir, $all_families_config) = @_;
+	my ($class, $robot, $etcdir, $all_families_config) = @_;
 
-    my %families;
+	my %families;
 
-    foreach my $dir (
-        Sympa::Constants::DEFAULTDIR . "/families",
-        $etcdir . "/families",
-        $etcdir . "/$robot/families"
-     ) {
-	next unless (-d $dir);
+	foreach my $dir (
+		Sympa::Constants::DEFAULTDIR . "/families",
+		$etcdir . "/families",
+		$etcdir . "/$robot/families"
+	) {
+		next unless (-d $dir);
 
-	unless (opendir FAMILIES, $dir) {
-	    Sympa::Log::Syslog::do_log ('err', "error : can't open dir %s: %s", $dir, $ERRNO);
-	    next;
+		unless (opendir FAMILIES, $dir) {
+			Sympa::Log::Syslog::do_log ('err', "error : can't open dir %s: %s", $dir, $ERRNO);
+			next;
+		}
+
+		## If we can create a Family object with what we find in the family
+		## directory, then it is worth being added to the list.
+		foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
+			my $family_config = $all_families_config->{$subdir};
+			my $family = Sympa::Family->new(
+				name   => $subdir,
+				robot  => $robot,
+				config => $family_config,
+				etcdir => $etcdir
+			);
+			if ($family) {
+				$families{$subdir} = 1;
+			}
+		}
 	}
 
-	## If we can create a Family object with what we find in the family
-	## directory, then it is worth being added to the list.
-	foreach my $subdir (grep !/^\.\.?$/, readdir FAMILIES) {
-	    my $family_config = $all_families_config->{$subdir};
-	    my $family = Sympa::Family->new(
-		    name   => $subdir,
-		    robot  => $robot,
-		    config => $family_config,
-		    etcdir => $etcdir
-	    );
-	    if ($family) {
-		$families{$subdir} = 1;
-	    }
-	}
-    }
-
-    return keys %families;
+	return keys %families;
 }
 
 =head2 Sympa::Family->new(%parameters)
@@ -132,71 +132,71 @@ A new L<Sympa::Family> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-    my ($class, %params) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s,%s)',$params{name},$params{robot});
+	my ($class, %params) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s,%s)',$params{name},$params{robot});
 
-    my $name = $params{name};
-    my $robot = $params{robot};
-    my $self = {};
+	my $name = $params{name};
+	my $robot = $params{robot};
+	my $self = {};
 
 
-    if ($list_of_families{$robot}{$name}) {
-        # use the current family in memory and update it
-	$self = $list_of_families{$robot}{$name};
+	if ($list_of_families{$robot}{$name}) {
+		# use the current family in memory and update it
+		$self = $list_of_families{$robot}{$name};
 ###########
-	# the robot can be different from latest new ...
-	if ($robot eq $self->{'robot'}) {
-	    return $self;
-	}else {
-	    $self = {};
+		# the robot can be different from latest new ...
+		if ($robot eq $self->{'robot'}) {
+			return $self;
+		}else {
+			$self = {};
+		}
 	}
-    }
-    # create a new object family
-    bless $self, $class;
-    $list_of_families{$robot}{$name} = $self;
+	# create a new object family
+	bless $self, $class;
+	$list_of_families{$robot}{$name} = $self;
 
-    my $family_name_regexp = Sympa::Tools::get_regexp('family_name');
+	my $family_name_regexp = Sympa::Tools::get_regexp('family_name');
 
-    ## family name
-    unless ($name && ($name =~ /^$family_name_regexp$/io) ) {
-	Sympa::Log::Syslog::do_log('err', 'Incorrect family name "%s"',  $name);
-	return undef;
-    }
+	## family name
+	unless ($name && ($name =~ /^$family_name_regexp$/io) ) {
+		Sympa::Log::Syslog::do_log('err', 'Incorrect family name "%s"',  $name);
+		return undef;
+	}
 
-    ## Lowercase the family name.
-    $name =~ tr/A-Z/a-z/;
-    $self->{'name'} = $name;
+	## Lowercase the family name.
+	$name =~ tr/A-Z/a-z/;
+	$self->{'name'} = $name;
 
-    $self->{'robot'} = $robot;
+	$self->{'robot'} = $robot;
 
-    ## Adding configuration related to automatic lists.
-    foreach my $key (keys %{$params{config}}) {
-	$self->{$key} = $params{config}->{$key};
-    }
+	## Adding configuration related to automatic lists.
+	foreach my $key (keys %{$params{config}}) {
+		$self->{$key} = $params{config}->{$key};
+	}
 
-    ## family directory
-    $self->{'dir'} = $self->_get_directory($params{etcdir});
-    unless (defined $self->{'dir'}) {
-	Sympa::Log::Syslog::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
-	return undef;
-    }
+	## family directory
+	$self->{'dir'} = $self->_get_directory($params{etcdir});
+	unless (defined $self->{'dir'}) {
+		Sympa::Log::Syslog::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
+		return undef;
+	}
 
-    ## family files
-    if (my $file_names = $self->_check_mandatory_files()) {
-	Sympa::Log::Syslog::do_log('err','(%s,%s) : Definition family files are missing : %s',$name,$robot,$file_names);
-	return undef;
-    }
+	## family files
+	if (my $file_names = $self->_check_mandatory_files()) {
+		Sympa::Log::Syslog::do_log('err','(%s,%s) : Definition family files are missing : %s',$name,$robot,$file_names);
+		return undef;
+	}
 
-    ## file mtime
-    $self->{'mtime'}{'param_constraint_conf'} = undef;
+	## file mtime
+	$self->{'mtime'}{'param_constraint_conf'} = undef;
 
-    ## hash of parameters constraint
-    $self->{'param_constraint_conf'} = undef;
+	## hash of parameters constraint
+	$self->{'param_constraint_conf'} = undef;
 
-    ## state of the family for the use of check_param_constraint : 'no_check' or 'normal'
-    ## check_param_constraint  only works in state "normal"
-    $self->{'state'} = 'normal';
-    return $self;
+	## state of the family for the use of check_param_constraint : 'no_check' or 'normal'
+	## check_param_constraint  only works in state "normal"
+	$self->{'state'} = 'normal';
+	return $self;
 }
 
 =head1 INSTANCE METHODS
@@ -225,110 +225,110 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub add_list {
-    my ($self, $data, $abort_on_error, $host) = @_;
+	my ($self, $data, $abort_on_error, $host) = @_;
 
-    Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
+	Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
 
-    $self->{'state'} = 'no_check';
-    my $return;
-    $return->{'ok'} = undef;
-    $return->{'string_info'} = undef; ## info and simple errors
-    $return->{'string_error'} = undef; ## fatal errors
+	$self->{'state'} = 'no_check';
+	my $return;
+	$return->{'ok'} = undef;
+	$return->{'string_info'} = undef; ## info and simple errors
+	$return->{'string_error'} = undef; ## fatal errors
 
-    my $hash_list;
+	my $hash_list;
 
-    if (ref($data) eq "HASH") {
-        $hash_list = {config=>$data};
-    } else {
-	#copy the xml file in another file
-	unless (open (FIC, '>', "$self->{'dir'}/_new_list.xml")) {
-	    Sympa::Log::Syslog::do_log('err','(%s) : impossible to create the temp file %s/_new_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
-	}
-	while (<$data>) {
-	    print FIC ($_);
-	}
-	close FIC;
+	if (ref($data) eq "HASH") {
+		$hash_list = {config=>$data};
+	} else {
+		#copy the xml file in another file
+		unless (open (FIC, '>', "$self->{'dir'}/_new_list.xml")) {
+			Sympa::Log::Syslog::do_log('err','(%s) : impossible to create the temp file %s/_new_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
+		}
+		while (<$data>) {
+			print FIC ($_);
+		}
+		close FIC;
 
-	# get list data
-	open (FIC, '<:raw', "$self->{'dir'}/_new_list.xml");
-	my $config = Sympa::Configuration::XML->new(handle => \*FIC);
+		# get list data
+		open (FIC, '<:raw', "$self->{'dir'}/_new_list.xml");
+		my $config = Sympa::Configuration::XML->new(handle => \*FIC);
 	close FIC;
 	unless (defined $config->createHash()) {
-	    push @{$return->{'string_error'}}, "Error in representation data with these xml data";
-	    return $return;
+		push @{$return->{'string_error'}}, "Error in representation data with these xml data";
+		return $return;
 	}
 
 	$hash_list = $config->getHash();
-    }
+}
 
-    #list creation
-    my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
-    unless (defined $result) {
+#list creation
+my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
+unless (defined $result) {
 	push @{$return->{'string_error'}}, "Error during list creation, see logs for more information";
 	return $return;
-    }
-    unless (defined $result->{'list'}) {
+}
+unless (defined $result->{'list'}) {
 	push @{$return->{'string_error'}}, "Errors : no created list, see logs for more information";
 	return $return;
-    }
-    my $list = $result->{'list'};
+}
+my $list = $result->{'list'};
 
-    ## aliases
-    if ($result->{'aliases'} == 1) {
+## aliases
+if ($result->{'aliases'} == 1) {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family";
-    }else {
+}else {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family, required aliases : $result->{'aliases'} ";
-    }
+}
 
-    # config_changes
-    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+# config_changes
+unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config";
-    }
-    close FILE;
+}
+close FILE;
 
-    # info parameters
-    $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
-    $list->save_config("listmaster\@$host");
-    $list->{'family'} = $self;
+# info parameters
+$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
+$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+$list->save_config("listmaster\@$host");
+$list->{'family'} = $self;
 
-    ## check param_constraint.conf
-    $self->{'state'} = 'normal';
-    my $error = $self->check_param_constraint($list);
-    $self->{'state'} = 'no_check';
+## check param_constraint.conf
+$self->{'state'} = 'normal';
+my $error = $self->check_param_constraint($list);
+$self->{'state'} = 'no_check';
 
-    unless (defined $error) {
+unless (defined $error) {
 	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
 	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 	return $return;
-    }
+}
 
-    if (ref($error) eq 'ARRAY') {
+if (ref($error) eq 'ARRAY') {
 	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
 	push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
-    }
+}
 
-    ## copy files in the list directory : xml file
-    unless ( ref($data) eq "HASH" ) {
-    unless ($self->_copy_files($list->{'dir'},"_new_list.xml")) {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
-    }
-    }
+## copy files in the list directory : xml file
+unless ( ref($data) eq "HASH" ) {
+	unless ($self->_copy_files($list->{'dir'},"_new_list.xml")) {
+		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+	}
+}
 
-    ## Synchronize list members if required
-    if ($list->has_include_data_sources()) {
+## Synchronize list members if required
+if ($list->has_include_data_sources()) {
 	Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
 	$list->sync_include();
-    }
+}
 
-    ## END
-    $self->{'state'} = 'normal';
-    $return->{'ok'} = 1;
+## END
+$self->{'state'} = 'normal';
+$return->{'ok'} = 1;
 
-    return $return;
+return $return;
 }
 
 =head2 $family->modify_list($fh, $host)
@@ -353,157 +353,157 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub modify_list {
-    my ($self, $fh, $host) = @_;
-    Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
+	my ($self, $fh, $host) = @_;
+	Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
 
-    $self->{'state'} = 'no_check';
-    my $return;
-    $return->{'ok'} = undef;
-    $return->{'string_info'} = undef; ## info and simple errors
-    $return->{'string_error'} = undef; ## fatal errors
+	$self->{'state'} = 'no_check';
+	my $return;
+	$return->{'ok'} = undef;
+	$return->{'string_info'} = undef; ## info and simple errors
+	$return->{'string_error'} = undef; ## fatal errors
 
-    #copy the xml file in another file
-    unless (open (FIC, '>', "$self->{'dir'}/_mod_list.xml")) {
-	Sympa::Log::Syslog::do_log('err','(%s) : impossible to create the temp file %s/_mod_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
-    }
-    while (<$fh>) {
-	print FIC ($_);
-    }
-    close FIC;
+	#copy the xml file in another file
+	unless (open (FIC, '>', "$self->{'dir'}/_mod_list.xml")) {
+		Sympa::Log::Syslog::do_log('err','(%s) : impossible to create the temp file %s/_mod_list.xml : %s',$self->{'name'},$self->{'dir'},$ERRNO);
+	}
+	while (<$fh>) {
+		print FIC ($_);
+	}
+	close FIC;
 
-    # get list data
-    open (FIC, '<:raw', "$self->{'dir'}/_mod_list.xml");
-    my $config = Sympa::Configuration::XML->new(handle => \*FIC);
-    close FIC;
-    unless (defined $config->createHash()) {
+	# get list data
+	open (FIC, '<:raw', "$self->{'dir'}/_mod_list.xml");
+	my $config = Sympa::Configuration::XML->new(handle => \*FIC);
+close FIC;
+unless (defined $config->createHash()) {
 	push @{$return->{'string_error'}}, "Error in representation data with these xml data";
 	return $return;
-    }
+}
 
-    my $hash_list = $config->getHash();
+my $hash_list = $config->getHash();
 
-    #getting list
-    my $list = Sympa::List->new(
-	    name  => $hash_list->{'config'}{'listname'},
-	    robot => $self->{'robot'}
-    );
-    unless ($list) {
+#getting list
+my $list = Sympa::List->new(
+	name  => $hash_list->{'config'}{'listname'},
+	robot => $self->{'robot'}
+);
+unless ($list) {
 	push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
 	return $return;
-    }
+}
 
-    ## check family name
-    if (defined $list->{'admin'}{'family_name'}) {
+## check family name
+if (defined $list->{'admin'}{'family_name'}) {
 	unless ($list->{'admin'}{'family_name'} eq $self->{'name'}) {
-	  push @{$return->{'string_error'}}, "The list $list->{'name'} already belongs to family $list->{'admin'}{'family_name'}.";
-	  return $return;
+		push @{$return->{'string_error'}}, "The list $list->{'name'} already belongs to family $list->{'admin'}{'family_name'}.";
+		return $return;
 	}
-    } else {
+} else {
 	push @{$return->{'string_error'}}, "The orphan list $list->{'name'} already exists.";
 	return $return;
-    }
+}
 
-    ## get allowed and forbidden list customizing
-    my $custom = $self->_get_customizing($list);
-    unless (defined $custom) {
+## get allowed and forbidden list customizing
+my $custom = $self->_get_customizing($list);
+unless (defined $custom) {
 	Sympa::Log::Syslog::do_log('err','impossible to get list %s customizing',$list->{'name'});
 	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
 	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
 	return $return;
-    }
-    my $config_changes = $custom->{'config_changes'};
-    my $old_status = $list->{'admin'}{'status'};
+}
+my $config_changes = $custom->{'config_changes'};
+my $old_status = $list->{'admin'}{'status'};
 
-    ## list config family updating
-    my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
-    unless (defined $result) {
+## list config family updating
+my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
+unless (defined $result) {
 	Sympa::Log::Syslog::do_log('err','No object list resulting from updating list %s',$list->{'name'});
 	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
 	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
 	return $return;
-    }
-    $list = $result;
+}
+$list = $result;
 
-    ## set list customizing
-    foreach my $p (keys %{$custom->{'allowed'}}) {
+## set list customizing
+foreach my $p (keys %{$custom->{'allowed'}}) {
 	$list->{'admin'}{$p} = $custom->{'allowed'}{$p};
 	delete $list->{'admin'}{'defaults'}{$p};
 	Sympa::Log::Syslog::do_log('info',"Customizing : keeping values for parameter $p");
-    }
+}
 
-    ## info file
-    unless ($config_changes->{'file'}{'info'}) {
+## info file
+unless ($config_changes->{'file'}{'info'}) {
 	$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
 
 	unless (open INFO, '>', "$list->{'dir'}/info") {
-	    push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $ERRNO";
+		push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $ERRNO";
 	}
 	print INFO $hash_list->{'config'}{'description'};
 	close INFO;
-    }
+}
 
-    foreach my $f (keys %{$config_changes->{'file'}}) {
+foreach my $f (keys %{$config_changes->{'file'}}) {
 	Sympa::Log::Syslog::do_log('info',"Customizing : this file has been changed : $f");
-    }
+}
 
-    ## rename forbidden files
+## rename forbidden files
 #    foreach my $f (@{$custom->{'forbidden'}{'file'}}) {
 #	unless (rename ("$list->{'dir'}"."/"."info","$list->{'dir'}"."/"."info.orig")) {
-	    ################
+################
 #	}
 #	if ($f eq 'info') {
 #	    $hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
 #	    unless (open INFO, '>', "$list_dir/info") {
-		################
+################
 #	    }
 #	    print INFO $hash_list->{'config'}{'description'};
 #	    close INFO;
 #	}
 #    }
 
-    ## notify owner for forbidden customizing
-    if (#(scalar $custom->{'forbidden'}{'file'}) ||
+## notify owner for forbidden customizing
+if (#(scalar $custom->{'forbidden'}{'file'}) ||
 	(scalar @{$custom->{'forbidden'}{'param'}})) {
 #	my $forbidden_files = join(',',@{$custom->{'forbidden'}{'file'}});
 	my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
 	Sympa::Log::Syslog::do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
 
 	unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
-	    Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
+		Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
 	}
-    }
+}
 
-    ## status
-    $result = $self->_set_status_changes($list,$old_status);
+## status
+$result = $self->_set_status_changes($list,$old_status);
 
-    if ($result->{'aliases'} == 1) {
+if ($result->{'aliases'} == 1) {
 	push @{$return->{'string_info'}}, "The $list->{'name'} list has been modified.";
 
-    }elsif ($result->{'install_remove'} eq 'install') {
+}elsif ($result->{'install_remove'} eq 'install') {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, required aliases :\n $result->{'aliases'} ";
 
-    }else {
+}else {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, aliases need to be removed : \n $result->{'aliases'}";
 
-    }
+}
 
-    ## config_changes
-    foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
+## config_changes
+foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
 
 	if (defined $config_changes->{'param'}{$p}  ) {
-	    delete $config_changes->{'param'}{$p};
+		delete $config_changes->{'param'}{$p};
 	}
 
-    }
+}
 
-    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config.";
-    }
-    close FILE;
+}
+close FILE;
 
-    my @kept_param = keys %{$config_changes->{'param'}};
-    $list->update_config_changes('param',\@kept_param);
+my @kept_param = keys %{$config_changes->{'param'}};
+$list->update_config_changes('param',\@kept_param);
     my @kept_files = keys %{$config_changes->{'file'}};
     $list->update_config_changes('file',\@kept_files);
 
@@ -520,27 +520,27 @@ sub modify_list {
     $self->{'state'} = 'no_check';
 
     unless (defined $error) {
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
-	return $return;
+	    $list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+	    push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
+	    return $return;
     }
 
     if (ref($error) eq 'ARRAY') {
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
+	    $list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+	    push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
     }
 
     ## copy files in the list directory : xml file
 
     unless ($self->_copy_files($list->{'dir'},"_mod_list.xml")) {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+	    $list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	    push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
     }
 
     ## Synchronize list members if required
     if ($list->has_include_data_sources()) {
-	Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	$list->sync_include();
+	    Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+	    $list->sync_include();
     }
 
     ## END
@@ -566,44 +566,44 @@ the methods.
 =cut
 
 sub close_family {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
 
-    my $family_lists = $self->get_family_lists();
-    my @impossible_close;
-    my @close_ok;
+	my $family_lists = $self->get_family_lists();
+	my @impossible_close;
+	my @close_ok;
 
-    foreach my $list (@{$family_lists}) {
-	my $listname = $list->{'name'};
+	foreach my $list (@{$family_lists}) {
+		my $listname = $list->{'name'};
 
-	unless (defined $list){
-	    Sympa::Log::Syslog::do_log('err','The %s list belongs to %s family but the list does not exist',$listname,$self->{'name'});
-	    next;
+		unless (defined $list){
+			Sympa::Log::Syslog::do_log('err','The %s list belongs to %s family but the list does not exist',$listname,$self->{'name'});
+			next;
+		}
+
+		unless ($list->set_status_family_closed('close_list',$self->{'name'})) {
+			push (@impossible_close,$list->{'name'});
+			next
+		}
+		push (@close_ok,$list->{'name'});
+	}
+	my $string = "\n\n******************************************************************************\n";
+	$string .= "\n******************** CLOSURE of $self->{'name'} FAMILY ********************\n";
+	$string .= "\n******************************************************************************\n\n";
+
+	unless ($#impossible_close <0) {
+		$string .= "\nImpossible list closure for : \n  ".join(", ",@impossible_close)."\n";
 	}
 
-	unless ($list->set_status_family_closed('close_list',$self->{'name'})) {
-	    push (@impossible_close,$list->{'name'});
-	    next
+	$string .= "\n****************************************\n";
+
+	unless ($#close_ok <0) {
+		$string .= "\nThese lists are closed : \n  ".join(", ",@close_ok)."\n";
 	}
-	push (@close_ok,$list->{'name'});
-    }
-    my $string = "\n\n******************************************************************************\n";
-    $string .= "\n******************** CLOSURE of $self->{'name'} FAMILY ********************\n";
-    $string .= "\n******************************************************************************\n\n";
 
-    unless ($#impossible_close <0) {
-	$string .= "\nImpossible list closure for : \n  ".join(", ",@impossible_close)."\n";
-    }
+	$string .= "\n******************************************************************************\n";
 
-    $string .= "\n****************************************\n";
-
-    unless ($#close_ok <0) {
-	$string .= "\nThese lists are closed : \n  ".join(", ",@close_ok)."\n";
-    }
-
-    $string .= "\n******************************************************************************\n";
-
-    return $string;
+	return $string;
 }
 
 =head2 $family->instantiate($fh, $close_unknown, $tmpdir, $host)
@@ -629,126 +629,126 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub instantiate {
-    my ($self, $xml_file, $close_unknown, $tmpdir, $host) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
+	my ($self, $xml_file, $close_unknown, $tmpdir, $host) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
-    ## all the description variables are emptied.
-    $self->_initialize_instantiation();
+	## all the description variables are emptied.
+	$self->_initialize_instantiation();
 
-    ## set impossible checking (used by list->load)
-    $self->{'state'} = 'no_check';
+	## set impossible checking (used by list->load)
+	$self->{'state'} = 'no_check';
 
-    ## get the currently existing lists in the family
-    my $previous_family_lists = $self->get_hash_family_lists();
+	## get the currently existing lists in the family
+	my $previous_family_lists = $self->get_hash_family_lists();
 
-    ## Splits the family description XML file into a set of list description xml files
-    ## and collects lists to be created in $self->{'list_to_generate'}.
-    unless ($self->_split_xml_file($xml_file)) {
-	Sympa::Log::Syslog::do_log('err','Errors during the parsing of family xml file');
-	return undef;
-    }
+	## Splits the family description XML file into a set of list description xml files
+	## and collects lists to be created in $self->{'list_to_generate'}.
+	unless ($self->_split_xml_file($xml_file)) {
+		Sympa::Log::Syslog::do_log('err','Errors during the parsing of family xml file');
+		return undef;
+	}
 
 	my $created = 0;
 	my $total = $#{@{$self->{'list_to_generate'}}} + 1;
 	my $progress = Term::ProgressBar->new({
-		name  => 'Creating lists',
-		count => $total,
-		ETA   => 'linear'
-	});
+			name  => 'Creating lists',
+			count => $total,
+			ETA   => 'linear'
+		});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $tmpdir.'/aliasmanager.stdout.'.$PID;
-    my $output_file = $tmpdir.'/instantiate_family.stdout.'.$PID;
+	my $aliasmanager_output_file = $tmpdir.'/aliasmanager.stdout.'.$PID;
+	my $output_file = $tmpdir.'/instantiate_family.stdout.'.$PID;
 	my $output = '';
 
-    ## EACH FAMILY LIST
-    foreach my $listname (@{$self->{'list_to_generate'}}) {
+	## EACH FAMILY LIST
+	foreach my $listname (@{$self->{'list_to_generate'}}) {
 
-	my $list = Sympa::List->new(
-		name  => $listname,
-		robot => $self->{'robot'}
-	);
+		my $list = Sympa::List->new(
+			name  => $listname,
+			robot => $self->{'robot'}
+		);
 
-        ## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
-	my $xml_fh;
-	open $xml_fh, '<:raw', "$self->{'dir'}"."/".$listname.".xml";
-	my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
-	close $xml_fh;
-	unless (defined $config->createHash()) {
-	    push (@{$self->{'errors'}{'create_hash'}},"$self->{'dir'}/$listname.xml");
-	    if ($list) {
- 		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
- 	    }
-	    next;
-	}
-
-	## stores the list config into the hash referenced by $hash_list.
-	my $hash_list = $config->getHash();
-
-	## LIST ALREADY EXISTING
-	if ($list) {
-
-	    delete $previous_family_lists->{$list->{'name'}};
-
-	    ## check family name
-	    if (defined $list->{'admin'}{'family_name'}) {
-		unless ($list->{'admin'}{'family_name'} eq $self->{'name'}) {
-		    push (@{$self->{'errors'}{'listname_already_used'}},$list->{'name'});
-		    Sympa::Log::Syslog::do_log('err','The list %s already belongs to family %s',$list->{'name'},$list->{'admin'}{'family_name'});
-		    next;
+		## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
+		my $xml_fh;
+		open $xml_fh, '<:raw', "$self->{'dir'}"."/".$listname.".xml";
+		my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
+		close $xml_fh;
+		unless (defined $config->createHash()) {
+			push (@{$self->{'errors'}{'create_hash'}},"$self->{'dir'}/$listname.xml");
+			if ($list) {
+				$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+			}
+			next;
 		}
-	    } else {
-		push (@{$self->{'errors'}{'listname_already_used'}},$list->{'name'});
-		Sympa::Log::Syslog::do_log('err','The orphan list %s already exists',$list->{'name'});
-		next;
-	    }
 
-	    ## Update list config
-	    my $result = $self->_update_existing_list($list,$hash_list);
-	    unless (defined $result) {
-		push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
-		next;
-	    }
-	    $list = $result;
+		## stores the list config into the hash referenced by $hash_list.
+		my $hash_list = $config->getHash();
 
-	## FIRST LIST CREATION
-	} else{
+		## LIST ALREADY EXISTING
+		if ($list) {
 
-	    ## Create the list
-	    my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'});
-	    unless (defined $result) {
-		push (@{$self->{'errors'}{'create_list'}}, $hash_list->{'config'}{'listname'});
-		next;
-	    }
-	    unless (defined $result->{'list'}) {
-		push (@{$self->{'errors'}{'create_list'}}, $hash_list->{'config'}{'listname'});
-		next;
-	    }
-	    $list = $result->{'list'};
+			delete $previous_family_lists->{$list->{'name'}};
 
-	    ## aliases
-	    if ($result->{'aliases'} == 1) {
-		push (@{$self->{'created_lists'}{'with_aliases'}}, $list->{'name'});
+			## check family name
+			if (defined $list->{'admin'}{'family_name'}) {
+				unless ($list->{'admin'}{'family_name'} eq $self->{'name'}) {
+					push (@{$self->{'errors'}{'listname_already_used'}},$list->{'name'});
+					Sympa::Log::Syslog::do_log('err','The list %s already belongs to family %s',$list->{'name'},$list->{'admin'}{'family_name'});
+					next;
+				}
+			} else {
+				push (@{$self->{'errors'}{'listname_already_used'}},$list->{'name'});
+				Sympa::Log::Syslog::do_log('err','The orphan list %s already exists',$list->{'name'});
+				next;
+			}
 
-	    }else {
-		$self->{'created_lists'}{'without_aliases'}{$list->{'name'}} = $result->{'aliases'};
-	    }
+			## Update list config
+			my $result = $self->_update_existing_list($list,$hash_list);
+			unless (defined $result) {
+				push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
+				$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+				next;
+			}
+			$list = $result;
 
-	    # config_changes
-	    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-		Sympa::Log::Syslog::do_log('err','impossible to create file %s/config_changes : %s',$list->{'dir'},$ERRNO);
-		push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	    }
-	    close FILE;
-	}
+			## FIRST LIST CREATION
+		} else{
 
-	## ENDING : existing and new lists
-	unless ($self->_end_update_list($list,1,$host)) {
-	    Sympa::Log::Syslog::do_log('err','Instantiation stopped on list %s',$list->{'name'});
-	    return undef;
-	}
+			## Create the list
+			my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'});
+			unless (defined $result) {
+				push (@{$self->{'errors'}{'create_list'}}, $hash_list->{'config'}{'listname'});
+				next;
+			}
+			unless (defined $result->{'list'}) {
+				push (@{$self->{'errors'}{'create_list'}}, $hash_list->{'config'}{'listname'});
+				next;
+			}
+			$list = $result->{'list'};
+
+			## aliases
+			if ($result->{'aliases'} == 1) {
+				push (@{$self->{'created_lists'}{'with_aliases'}}, $list->{'name'});
+
+			}else {
+				$self->{'created_lists'}{'without_aliases'}{$list->{'name'}} = $result->{'aliases'};
+			}
+
+			# config_changes
+			unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+				Sympa::Log::Syslog::do_log('err','impossible to create file %s/config_changes : %s',$list->{'dir'},$ERRNO);
+				push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
+				$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+			}
+			close FILE;
+		}
+
+		## ENDING : existing and new lists
+		unless ($self->_end_update_list($list,1,$host)) {
+			Sympa::Log::Syslog::do_log('err','Instantiation stopped on list %s',$list->{'name'});
+			return undef;
+		}
 		$created++;
 		$progress->message(sprintf("List \"%s\" (%i/%i) created/updated", $list->{'name'}, $created, $total));
 		$next_update = $progress->update($created) if($created > $next_update);
@@ -761,16 +761,16 @@ sub instantiate {
 			close OUT;
 			unlink $aliasmanager_output_file; # remove file to catch next call
 		}
-    }
+	}
 
 	$progress->update($total);
 
 	if($output && !$main::options{'quiet'}) {
 		print STDOUT "There is unread output from the instantiation proccess (aliasmanager messages ...), do you want to see it ? (y or n)";
-	    my $answer = <STDIN>;
-	    chomp($answer);
-	    $answer ||= 'n';
-	    print $output if($answer eq 'y');
+		my $answer = <STDIN>;
+		chomp($answer);
+		$answer ||= 'n';
+		print $output if($answer eq 'y');
 
 		if(open OUT, '>'.$output_file) {
 			print OUT $output;
@@ -781,60 +781,60 @@ sub instantiate {
 		}
 	}
 
-    ## PREVIOUS LIST LEFT
-    foreach my $l (keys %{$previous_family_lists}) {
-	my $list = Sympa::List->new(name => $l, robot => $self->{'robot'});
-	unless ($list) {
-	    push (@{$self->{'errors'}{'previous_list'}},$l);
-	    next;
-	}
+	## PREVIOUS LIST LEFT
+	foreach my $l (keys %{$previous_family_lists}) {
+		my $list = Sympa::List->new(name => $l, robot => $self->{'robot'});
+		unless ($list) {
+			push (@{$self->{'errors'}{'previous_list'}},$l);
+			next;
+		}
 
-	my $answer;
-	unless ($close_unknown) {
+		my $answer;
+		unless ($close_unknown) {
 #	while (($answer ne 'y') && ($answer ne 'n')) {
-	    print STDOUT "The list $l isn't defined in the new instantiation family, do you want to close it ? (y or n)";
-	    $answer = <STDIN>;
-	    chomp($answer);
+			print STDOUT "The list $l isn't defined in the new instantiation family, do you want to close it ? (y or n)";
+			$answer = <STDIN>;
+			chomp($answer);
 #######################
-	    $answer ||= 'y';
-	#}
+			$answer ||= 'y';
+			#}
+		}
+		if ($close_unknown || $answer eq 'y'){
+
+			unless ($list->set_status_family_closed('close_list',$self->{'name'})) {
+				push (@{$self->{'family_closed'}{'impossible'}},$list->{'name'});
+			}
+			push (@{$self->{'family_closed'}{'ok'}},$list->{'name'});
+
+		} else {
+			## get data from list xml file
+			my $xml_fh;
+			open $xml_fh, '<:raw', "$list->{'dir'}/instance.xml";
+			my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
+			close $xml_fh;
+			unless (defined $config->createHash()) {
+				push (@{$self->{'errors'}{'create_hash'}},"$list->{'dir'}/instance.xml");
+				$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+				next;
+			}
+			my $hash_list = $config->getHash();
+
+			my $result = $self->_update_existing_list($list,$hash_list);
+			unless (defined $result) {
+				push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
+				$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+				next;
+			}
+			$list = $result;
+
+			unless ($self->_end_update_list($list,0,$host)) {
+				Sympa::Log::Syslog::do_log('err','Instantiation stopped on list %s',$list->{'name'});
+				return undef;
+			}
+		}
 	}
-	if ($close_unknown || $answer eq 'y'){
-
-	    unless ($list->set_status_family_closed('close_list',$self->{'name'})) {
-		push (@{$self->{'family_closed'}{'impossible'}},$list->{'name'});
-	    }
-	    push (@{$self->{'family_closed'}{'ok'}},$list->{'name'});
-
-	} else {
-	    ## get data from list xml file
-	    my $xml_fh;
-	    open $xml_fh, '<:raw', "$list->{'dir'}/instance.xml";
-	    my $config = Sympa::Configuration::XML->new(handle => $xml_fh);
-	    close $xml_fh;
-	    unless (defined $config->createHash()) {
-		push (@{$self->{'errors'}{'create_hash'}},"$list->{'dir'}/instance.xml");
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
-		next;
-	    }
-	    my $hash_list = $config->getHash();
-
-	    my $result = $self->_update_existing_list($list,$hash_list);
-	    unless (defined $result) {
-		push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
-		next;
-	    }
-	    $list = $result;
-
-	    unless ($self->_end_update_list($list,0,$host)) {
-		Sympa::Log::Syslog::do_log('err','Instantiation stopped on list %s',$list->{'name'});
-		return undef;
-	    }
-	}
-    }
-    $self->{'state'} = 'normal';
-    return 1;
+	$self->{'state'} = 'normal';
+	return 1;
 }
 
 =head2 $family->get_instantiation_results()
@@ -852,111 +852,111 @@ A string containing a message to display.
 =cut
 
 sub get_instantiation_results {
-    my ($self, $result) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
+	my ($self, $result) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
 
-    $result->{'errors'} = ();
-    $result->{'warn'} = ();
-    $result->{'info'} = ();
-    my $string;
+	$result->{'errors'} = ();
+	$result->{'warn'} = ();
+	$result->{'info'} = ();
+	my $string;
 
-    unless ($#{$self->{'errors'}{'create_hash'}} <0) {
-        push(@{$result->{'errors'}}, "\nImpossible list generation because errors in xml file for : \n  ".join(", ",@{$self->{'errors'}{'create_hash'}})."\n");    }
+	unless ($#{$self->{'errors'}{'create_hash'}} <0) {
+		push(@{$result->{'errors'}}, "\nImpossible list generation because errors in xml file for : \n  ".join(", ",@{$self->{'errors'}{'create_hash'}})."\n");    }
 
-    unless ($#{$self->{'errors'}{'create_list'}} <0) {
-        push(@{$result->{'errors'}}, "\nImpossible list creation for : \n  ".join(", ",@{$self->{'errors'}{'create_list'}})."\n");
-    }
-
-    unless ($#{$self->{'errors'}{'listname_already_used'}} <0) {
-        push(@{$result->{'errors'}}, "\nImpossible list creation because listname is already used (orphelan list or in another family) for : \n  ".join(", ",@{$self->{'errors'}{'listname_already_used'}})."\n");
-    }
-
-    unless ($#{$self->{'errors'}{'update_list'}} <0) {
-        push(@{$result->{'errors'}}, "\nImpossible list updating for : \n  ".join(", ",@{$self->{'errors'}{'update_list'}})."\n");
-    }
-
-    unless ($#{$self->{'errors'}{'previous_list'}} <0) {
-        push(@{$result->{'errors'}}, "\nExisted lists from the lastest instantiation impossible to get and not anymore defined in the new instantiation : \n  ".join(", ",@{$self->{'errors'}{'previous_list'}})."\n");
-    }
-
-    # $string .= "\n****************************************\n";
-
-    unless ($#{$self->{'created_lists'}{'with_aliases'}} <0) {
-       push(@{$result->{'info'}}, "\nThese lists have been created and aliases are ok :\n  ".join(", ",@{$self->{'created_lists'}{'with_aliases'}})."\n");
-    }
-
-    my $without_aliases =  $self->{'created_lists'}{'without_aliases'};
-    if (ref $without_aliases) {
-	if (scalar %{$without_aliases}) {
-            $string = "\nThese lists have been created but aliases need to be installed : \n";
-	    foreach my $l (keys %{$without_aliases}) {
-		$string .= " $without_aliases->{$l}";
-	    }
-            push(@{$result->{'warn'}}, $string."\n");
+	unless ($#{$self->{'errors'}{'create_list'}} <0) {
+		push(@{$result->{'errors'}}, "\nImpossible list creation for : \n  ".join(", ",@{$self->{'errors'}{'create_list'}})."\n");
 	}
-    }
 
-    unless ($#{$self->{'updated_lists'}{'aliases_ok'}} <0) {
-        push(@{$result->{'info'}}, "\nThese lists have been updated and aliases are ok :\n  ".join(", ",@{$self->{'updated_lists'}{'aliases_ok'}})."\n");
-    }
-
-    my $aliases_to_install =  $self->{'updated_lists'}{'aliases_to_install'};
-    if (ref $aliases_to_install) {
-	if (scalar %{$aliases_to_install}) {
-            $string = "\nThese lists have been updated but aliases need to be installed : \n";
-	    foreach my $l (keys %{$aliases_to_install}) {
-		$string .= " $aliases_to_install->{$l}";
-	    }
-            push(@{$result->{'warn'}}, $string."\n");
+	unless ($#{$self->{'errors'}{'listname_already_used'}} <0) {
+		push(@{$result->{'errors'}}, "\nImpossible list creation because listname is already used (orphelan list or in another family) for : \n  ".join(", ",@{$self->{'errors'}{'listname_already_used'}})."\n");
 	}
-    }
 
-    my $aliases_to_remove =  $self->{'updated_lists'}{'aliases_to_remove'};
-    if (ref $aliases_to_remove) {
-	if (scalar %{$aliases_to_remove}) {
-            $string = "\nThese lists have been updated but aliases need to be removed : \n";
-	    foreach my $l (keys %{$aliases_to_remove}) {
-		$string .= " $aliases_to_remove->{$l}";
-	    }
-            push(@{$result->{'warn'}}, $string."\n");
+	unless ($#{$self->{'errors'}{'update_list'}} <0) {
+		push(@{$result->{'errors'}}, "\nImpossible list updating for : \n  ".join(", ",@{$self->{'errors'}{'update_list'}})."\n");
 	}
-    }
 
-    # $string .= "\n****************************************\n";
-
-    unless ($#{$self->{'generated_lists'}{'file_error'}} <0) {
-        push(@{$result->{'errors'}}, "\nThese lists have been generated but they are in status error_config because of errors while creating list config files :\n  ".join(", ",@{$self->{'generated_lists'}{'file_error'}})."\n");
-    }
-
-    my $constraint_error = $self->{'generated_lists'}{'constraint_error'};
-    if (ref $constraint_error) {
-	if (scalar %{$constraint_error}) {
-            $string ="\nThese lists have been generated but there are in status error_config because of errors on parameter constraint :\n";
-	    foreach my $l (keys %{$constraint_error}) {
-		$string .= " $l : ".$constraint_error->{$l}."\n";
-	    }
-            push(@{$result->{'errors'}}, $string);
+	unless ($#{$self->{'errors'}{'previous_list'}} <0) {
+		push(@{$result->{'errors'}}, "\nExisted lists from the lastest instantiation impossible to get and not anymore defined in the new instantiation : \n  ".join(", ",@{$self->{'errors'}{'previous_list'}})."\n");
 	}
-    }
 
-    # $string .= "\n****************************************\n";
+	# $string .= "\n****************************************\n";
 
-    unless ($#{$self->{'family_closed'}{'ok'}} <0) {
-        push(@{$result->{'info'}}, "\nThese lists don't belong anymore to the family, they are in status family_closed :\n  ".join(", ",@{$self->{'family_closed'}{'ok'}})."\n");
-    }
+	unless ($#{$self->{'created_lists'}{'with_aliases'}} <0) {
+		push(@{$result->{'info'}}, "\nThese lists have been created and aliases are ok :\n  ".join(", ",@{$self->{'created_lists'}{'with_aliases'}})."\n");
+	}
 
-    unless ($#{$self->{'family_closed'}{'impossible'}} <0){
-        push(@{$result->{'warn'}}, "\nThese lists don't belong anymore to the family, but they can't be set in status family_closed :\n  ".join(", ",@{$self->{'family_closed'}{'impossible'}})."\n");
-    }
+	my $without_aliases =  $self->{'created_lists'}{'without_aliases'};
+	if (ref $without_aliases) {
+		if (scalar %{$without_aliases}) {
+			$string = "\nThese lists have been created but aliases need to be installed : \n";
+			foreach my $l (keys %{$without_aliases}) {
+				$string .= " $without_aliases->{$l}";
+			}
+			push(@{$result->{'warn'}}, $string."\n");
+		}
+	}
 
-    unshift @{$result->{'errors'}}, "\n********** ERRORS IN INSTANTIATION of $self->{'name'} FAMILY ********************\n"       if ($#{$result->{'errors'}} > 0);
-    unshift @{$result->{'warn'}}, "\n********** WARNINGS IN INSTANTIATION of $self->{'name'} FAMILY ********************\n"       if ($#{$result->{'warn'}} > 0);
-    unshift @{$result->{'info'}},
-          "\n\n******************************************************************************\n"
-        . "\n******************** INSTANTIATION of $self->{'name'} FAMILY ********************\n"
-        . "\n******************************************************************************\n\n";
+	unless ($#{$self->{'updated_lists'}{'aliases_ok'}} <0) {
+		push(@{$result->{'info'}}, "\nThese lists have been updated and aliases are ok :\n  ".join(", ",@{$self->{'updated_lists'}{'aliases_ok'}})."\n");
+	}
 
-    return $#{$result->{'errors'}};
+	my $aliases_to_install =  $self->{'updated_lists'}{'aliases_to_install'};
+	if (ref $aliases_to_install) {
+		if (scalar %{$aliases_to_install}) {
+			$string = "\nThese lists have been updated but aliases need to be installed : \n";
+			foreach my $l (keys %{$aliases_to_install}) {
+				$string .= " $aliases_to_install->{$l}";
+			}
+			push(@{$result->{'warn'}}, $string."\n");
+		}
+	}
+
+	my $aliases_to_remove =  $self->{'updated_lists'}{'aliases_to_remove'};
+	if (ref $aliases_to_remove) {
+		if (scalar %{$aliases_to_remove}) {
+			$string = "\nThese lists have been updated but aliases need to be removed : \n";
+			foreach my $l (keys %{$aliases_to_remove}) {
+				$string .= " $aliases_to_remove->{$l}";
+			}
+			push(@{$result->{'warn'}}, $string."\n");
+		}
+	}
+
+	# $string .= "\n****************************************\n";
+
+	unless ($#{$self->{'generated_lists'}{'file_error'}} <0) {
+		push(@{$result->{'errors'}}, "\nThese lists have been generated but they are in status error_config because of errors while creating list config files :\n  ".join(", ",@{$self->{'generated_lists'}{'file_error'}})."\n");
+	}
+
+	my $constraint_error = $self->{'generated_lists'}{'constraint_error'};
+	if (ref $constraint_error) {
+		if (scalar %{$constraint_error}) {
+			$string ="\nThese lists have been generated but there are in status error_config because of errors on parameter constraint :\n";
+			foreach my $l (keys %{$constraint_error}) {
+				$string .= " $l : ".$constraint_error->{$l}."\n";
+			}
+			push(@{$result->{'errors'}}, $string);
+		}
+	}
+
+	# $string .= "\n****************************************\n";
+
+	unless ($#{$self->{'family_closed'}{'ok'}} <0) {
+		push(@{$result->{'info'}}, "\nThese lists don't belong anymore to the family, they are in status family_closed :\n  ".join(", ",@{$self->{'family_closed'}{'ok'}})."\n");
+	}
+
+	unless ($#{$self->{'family_closed'}{'impossible'}} <0){
+		push(@{$result->{'warn'}}, "\nThese lists don't belong anymore to the family, but they can't be set in status family_closed :\n  ".join(", ",@{$self->{'family_closed'}{'impossible'}})."\n");
+	}
+
+	unshift @{$result->{'errors'}}, "\n********** ERRORS IN INSTANTIATION of $self->{'name'} FAMILY ********************\n"       if ($#{$result->{'errors'}} > 0);
+	unshift @{$result->{'warn'}}, "\n********** WARNINGS IN INSTANTIATION of $self->{'name'} FAMILY ********************\n"       if ($#{$result->{'warn'}} > 0);
+	unshift @{$result->{'info'}},
+	"\n\n******************************************************************************\n"
+	. "\n******************** INSTANTIATION of $self->{'name'} FAMILY ********************\n"
+	. "\n******************************************************************************\n\n";
+
+	return $#{$result->{'errors'}};
 
 }
 
@@ -987,60 +987,60 @@ Checks the parameter constraints taken from param_constraint.conf file for the L
 =cut
 
 sub check_param_constraint {
-    my ($self, $list) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s,%s)',$self->{'name'},$list->{'name'});
+	my ($self, $list) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s,%s)',$self->{'name'},$list->{'name'});
 
-    if ($self->{'state'} eq 'no_check') {
+	if ($self->{'state'} eq 'no_check') {
+		return 1;
+		# because called by load(called by new that is called by instantiate)
+		# it is not yet the time to check param constraint,
+		# it will be called later by instantiate
+	}
+
+	my @error;
+
+	## checking
+	my $constraint = $self->get_constraints();
+	unless (defined $constraint) {
+		Sympa::Log::Syslog::do_log('err','(%s,%s) : unable to get family constraints',$self->{'name'},$list->{'name'});
+		return undef;
+	}
+	foreach my $param (keys %{$constraint}) {
+		my $constraint_value = $constraint->{$param};
+		my $param_value;
+		my $value_error;
+
+		unless (defined $constraint_value) {
+			Sympa::Log::Syslog::do_log('err','No value constraint on parameter %s in param_constraint.conf',$param);
+			next;
+		}
+
+		$param_value = $list->get_param_value($param);
+
+		# exception for uncompellable parameter
+		foreach my $forbidden (@uncompellable_param) {
+			if ($param eq $forbidden) {
+				next;
+			}
+		}
+
+
+
+		$value_error = $self->check_values($param_value,$constraint_value);
+
+		if (ref($value_error)) {
+			foreach my $v (@{$value_error}) {
+				push (@error,$param);
+				Sympa::Log::Syslog::do_log('err','Error constraint on parameter %s, value : %s',$param,$v);
+			}
+		}
+	}
+
+	if (scalar @error) {
+		return \@error;
+}else {
 	return 1;
-	# because called by load(called by new that is called by instantiate)
-	# it is not yet the time to check param constraint,
-	# it will be called later by instantiate
-    }
-
-    my @error;
-
-    ## checking
-    my $constraint = $self->get_constraints();
-    unless (defined $constraint) {
-	Sympa::Log::Syslog::do_log('err','(%s,%s) : unable to get family constraints',$self->{'name'},$list->{'name'});
-	return undef;
-    }
-    foreach my $param (keys %{$constraint}) {
-	my $constraint_value = $constraint->{$param};
-	my $param_value;
-	my $value_error;
-
-	unless (defined $constraint_value) {
-	    Sympa::Log::Syslog::do_log('err','No value constraint on parameter %s in param_constraint.conf',$param);
-	    next;
-	}
-
-	$param_value = $list->get_param_value($param);
-
-	# exception for uncompellable parameter
-	foreach my $forbidden (@uncompellable_param) {
-	    if ($param eq $forbidden) {
-		next;
-	    }
-	}
-
-
-
-	$value_error = $self->check_values($param_value,$constraint_value);
-
-	if (ref($value_error)) {
-	    foreach my $v (@{$value_error}) {
-		push (@error,$param);
-		Sympa::Log::Syslog::do_log('err','Error constraint on parameter %s, value : %s',$param,$v);
-	    }
-	}
-    }
-
-    if (scalar @error) {
-	return \@error;
-    }else {
-	return 1;
-    }
+}
 }
 
 =head2 $family->get_constraints()
@@ -1058,21 +1058,21 @@ An hash containing the values found in the param_constraint.conf file.
 =cut
 
 sub get_constraints {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
 
-    ## load param_constraint.conf
-    my $time_file = (stat("$self->{'dir'}/param_constraint.conf"))[9];
-    unless ((defined $self->{'param_constraint_conf'}) && ($self->{'mtime'}{'param_constraint_conf'} >= $time_file)) {
-	$self->{'param_constraint_conf'} = $self->_load_param_constraint_conf();
-	unless (defined $self->{'param_constraint_conf'}) {
-	    Sympa::Log::Syslog::do_log('err','Cannot load file param_constraint.conf ');
-	    return undef;
+	## load param_constraint.conf
+	my $time_file = (stat("$self->{'dir'}/param_constraint.conf"))[9];
+	unless ((defined $self->{'param_constraint_conf'}) && ($self->{'mtime'}{'param_constraint_conf'} >= $time_file)) {
+		$self->{'param_constraint_conf'} = $self->_load_param_constraint_conf();
+		unless (defined $self->{'param_constraint_conf'}) {
+			Sympa::Log::Syslog::do_log('err','Cannot load file param_constraint.conf ');
+			return undef;
+		}
+		$self->{'mtime'}{'param_constraint_conf'} = $time_file;
 	}
-	$self->{'mtime'}{'param_constraint_conf'} = $time_file;
-    }
 
-    return $self->{'param_constraint_conf'};
+	return $self->{'param_constraint_conf'};
 }
 
 =head2 $family->check_values($param_value, $constraint_value)
@@ -1100,60 +1100,60 @@ Returns 0 if all the value(s) found in $param_value appear also in $constraint_v
 =cut
 
 sub check_values {
-    my ($self,$param_value,$constraint_value) = @_;
-    Sympa::Log::Syslog::do_log('debug3','()');
+	my ($self,$param_value,$constraint_value) = @_;
+	Sympa::Log::Syslog::do_log('debug3','()');
 
-    my @param_values;
-    my @error;
+	my @param_values;
+	my @error;
 
-    # just in case
-    if ($constraint_value eq '0') {
-	return [];
-    }
-
-    if (ref($param_value) eq 'ARRAY') {
-	@param_values = @{$param_value}; # for multiple parameters
-    }
-    else {
-	push @param_values,$param_value; # for single parameters
-    }
-
-    foreach my $p_val (@param_values) {
-
-	## multiple values
-	if(ref($p_val) eq 'ARRAY') {
-
-	    foreach my $p (@{$p_val}) {
-		## controlled parameter
-		if (ref($constraint_value) eq 'HASH') {
-		    unless ($constraint_value->{$p}) {
-			push (@error,$p);
-		    }
-		## fixed parameter
-		} else {
-		    unless ($constraint_value eq $p) {
-			push (@error,$p);
-		    }
-		}
-	    }
-	## single value
-	} else {
-	    ## controlled parameter
-	    if (ref($constraint_value) eq 'HASH') {
-		unless ($constraint_value->{$p_val}) {
-		    push (@error,$p_val);
-		}
-	    ## fixed parameter
-	    } else {
-		unless ($constraint_value eq $p_val) {
-		    push (@error,$p_val);
-		}
-	    }
+	# just in case
+	if ($constraint_value eq '0') {
+		return [];
 	}
-    }
+
+	if (ref($param_value) eq 'ARRAY') {
+		@param_values = @{$param_value}; # for multiple parameters
+	}
+	else {
+		push @param_values,$param_value; # for single parameters
+	}
+
+	foreach my $p_val (@param_values) {
+
+		## multiple values
+		if(ref($p_val) eq 'ARRAY') {
+
+			foreach my $p (@{$p_val}) {
+				## controlled parameter
+				if (ref($constraint_value) eq 'HASH') {
+					unless ($constraint_value->{$p}) {
+						push (@error,$p);
+					}
+					## fixed parameter
+				} else {
+					unless ($constraint_value eq $p) {
+						push (@error,$p);
+					}
+				}
+			}
+			## single value
+		} else {
+			## controlled parameter
+			if (ref($constraint_value) eq 'HASH') {
+				unless ($constraint_value->{$p_val}) {
+					push (@error,$p_val);
+				}
+				## fixed parameter
+			} else {
+				unless ($constraint_value eq $p_val) {
+					push (@error,$p_val);
+				}
+			}
+		}
+	}
 
 
-    return \@error;
+	return \@error;
 }
 
 
@@ -1186,19 +1186,19 @@ Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 =cut
 
 sub get_param_constraint {
-    my ($self, $param) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$param);
+	my ($self, $param) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$param);
 
-    unless(defined $self->get_constraints()) {
-	return undef;
-    }
+	unless(defined $self->get_constraints()) {
+		return undef;
+	}
 
-    if (defined $self->{'param_constraint_conf'}{$param}) { ## fixed or controlled parameter
-	return $self->{'param_constraint_conf'}{$param};
+	if (defined $self->{'param_constraint_conf'}{$param}) { ## fixed or controlled parameter
+		return $self->{'param_constraint_conf'}{$param};
 
-    } else { ## free parameter
-	return '0';
-    }
+	} else { ## free parameter
+		return '0';
+	}
 }
 
 =head2 $family->get_family_lists()
@@ -1216,18 +1216,18 @@ An arrayref containing the family lists names.
 =cut
 
 sub get_family_lists {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
-    my @list_of_lists;
+	my @list_of_lists;
 
-    my $all_lists = Sympa::List::get_lists($self->{'robot'});
-    foreach my $list ( @$all_lists ) {
-	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
-	    push (@list_of_lists, $list);
+	my $all_lists = Sympa::List::get_lists($self->{'robot'});
+	foreach my $list ( @$all_lists ) {
+		if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
+			push (@list_of_lists, $list);
+		}
 	}
-    }
-    return \@list_of_lists;
+	return \@list_of_lists;
 }
 
 =head2 $family->get_hash_family_lists()
@@ -1246,18 +1246,18 @@ An hashref whose keys are the family's lists' names.
 =cut
 
 sub get_hash_family_lists {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
-    my %list_of_lists;
+	my %list_of_lists;
 
-    my $all_lists = Sympa::List::get_lists($self->{'robot'});
-    foreach my $list ( @$all_lists ) {
-	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
-	    $list_of_lists{$list->{'name'}} = 1;
+	my $all_lists = Sympa::List::get_lists($self->{'robot'});
+	foreach my $list ( @$all_lists ) {
+		if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
+			$list_of_lists{$list->{'name'}} = 1;
+		}
 	}
-    }
-    return \%list_of_lists;
+	return \%list_of_lists;
 }
 
 =head2 $family->get_uncompellable_param()
@@ -1275,19 +1275,19 @@ An hashref whose keys are the uncompellable parameters names.
 =cut
 
 sub get_uncompellable_param {
-    my %list_of_param;
-    Sympa::Log::Syslog::do_log('debug3','()');
+	my %list_of_param;
+	Sympa::Log::Syslog::do_log('debug3','()');
 
-    foreach my $param (@uncompellable_param) {
-	if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
-	    $list_of_param{$1} = $2;
+	foreach my $param (@uncompellable_param) {
+		if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
+			$list_of_param{$1} = $2;
 
-	} else {
-	    $list_of_param{$param} = '';
+		} else {
+			$list_of_param{$param} = '';
+		}
 	}
-    }
 
-    return \%list_of_param;
+	return \%list_of_param;
 }
 
 # $family->_get_directory($etcdir)
@@ -1299,24 +1299,24 @@ sub get_uncompellable_param {
 # the directory name, or undef if the directory does not exist
 
 sub _get_directory {
-    my ($self, $etcdir) = @_;
+	my ($self, $etcdir) = @_;
 
-    my $robot = $self->{'robot'};
-    my $name = $self->{'name'};
-    Sympa::Log::Syslog::do_log('debug3','(%s)',$name);
+	my $robot = $self->{'robot'};
+	my $name = $self->{'name'};
+	Sympa::Log::Syslog::do_log('debug3','(%s)',$name);
 
-    my @try = (
-        $etcdir . "/$robot/families",
-        $etcdir . "/families",
-        Sympa::Constants::DEFAULTDIR . "/families"
-    );
+	my @try = (
+		$etcdir . "/$robot/families",
+		$etcdir . "/families",
+		Sympa::Constants::DEFAULTDIR . "/families"
+	);
 
-    foreach my $d (@try) {
-	if (-d "$d/$name") {
-	    return "$d/$name";
+	foreach my $d (@try) {
+		if (-d "$d/$name") {
+			return "$d/$name";
+		}
 	}
-    }
-    return undef;
+	return undef;
 }
 
 
@@ -1332,23 +1332,23 @@ sub _get_directory {
 # otherwise
 
 sub _check_mandatory_files {
-    my ($self) = @_;
+	my ($self) = @_;
 
-    my $dir = $self->{'dir'};
-    my $string = "";
-    Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
+	my $dir = $self->{'dir'};
+	my $string = "";
+	Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
 
-    foreach my $f ('config.tt2') {
-	unless (-f "$dir/$f") {
-	    $string .= $f." ";
+	foreach my $f ('config.tt2') {
+		unless (-f "$dir/$f") {
+			$string .= $f." ";
+		}
 	}
-    }
 
-    if ($string eq "") {
-	return 0;
-    } else {
-	return $string;
-    }
+	if ($string eq "") {
+		return 0;
+	} else {
+		return $string;
+	}
 }
 
 # $family->_initialize_instantiation()
@@ -1360,53 +1360,53 @@ sub _check_mandatory_files {
 # A true value
 
 sub _initialize_instantiation {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s)',$self->{'name'});
 
-    ### info vars for instantiate  ###
-    ### returned by                ###
-    ### get_instantiation_results  ###
+	### info vars for instantiate  ###
+	### returned by                ###
+	### get_instantiation_results  ###
 
-    ## array of list to generate
-    $self->{'list_to_generate'}=();
+	## array of list to generate
+	$self->{'list_to_generate'}=();
 
-    ## lists in error during creation or updating : LIST FATAL ERROR
-    # array of xml file name  : error during xml data extraction
-    $self->{'errors'}{'create_hash'} = ();
-    ## array of list name : error during list creation
-    $self->{'errors'}{'create_list'} = ();
-    ## array of list name : error during list updating
-    $self->{'errors'}{'update_list'} = ();
-    ## array of list name : listname already used (in another family)
-    $self->{'errors'}{'listname_already_used'} = ();
-    ## array of list name : previous list impossible to get
-    $self->{'errors'}{'previous_list'} = ();
+	## lists in error during creation or updating : LIST FATAL ERROR
+	# array of xml file name  : error during xml data extraction
+	$self->{'errors'}{'create_hash'} = ();
+	## array of list name : error during list creation
+	$self->{'errors'}{'create_list'} = ();
+	## array of list name : error during list updating
+	$self->{'errors'}{'update_list'} = ();
+	## array of list name : listname already used (in another family)
+	$self->{'errors'}{'listname_already_used'} = ();
+	## array of list name : previous list impossible to get
+	$self->{'errors'}{'previous_list'} = ();
 
-    ## created or updated lists
-    ## array of list name : aliases are OK (installed or not, according to status)
-    $self->{'created_lists'}{'with_aliases'} = ();
-    ## hash of (list name -> aliases) : aliases needed to be installed
-    $self->{'created_lists'}{'without_aliases'} = {};
-    ## array of list name : aliases are OK (installed or not, according to status)
-    $self->{'updated_lists'}{'aliases_ok'} = ();
-    ## hash of (list name -> aliases) : aliases needed to be installed
-    $self->{'updated_lists'}{'aliases_to_install'} = {};
-    ## hash of (list name -> aliases) : aliases needed to be removed
-    $self->{'updated_lists'}{'aliases_to_remove'} = {};
+	## created or updated lists
+	## array of list name : aliases are OK (installed or not, according to status)
+	$self->{'created_lists'}{'with_aliases'} = ();
+	## hash of (list name -> aliases) : aliases needed to be installed
+	$self->{'created_lists'}{'without_aliases'} = {};
+	## array of list name : aliases are OK (installed or not, according to status)
+	$self->{'updated_lists'}{'aliases_ok'} = ();
+	## hash of (list name -> aliases) : aliases needed to be installed
+	$self->{'updated_lists'}{'aliases_to_install'} = {};
+	## hash of (list name -> aliases) : aliases needed to be removed
+	$self->{'updated_lists'}{'aliases_to_remove'} = {};
 
-    ## generated (created or updated) lists in error : no fatal error for the list
-    ## array of list name : error during copying files
-    $self->{'generated_lists'}{'file_error'} = ();
-    ## hash of (list name -> array of param) : family constraint error
-    $self->{'generated_lists'}{'constraint_error'} = {};
+	## generated (created or updated) lists in error : no fatal error for the list
+	## array of list name : error during copying files
+	$self->{'generated_lists'}{'file_error'} = ();
+	## hash of (list name -> array of param) : family constraint error
+	$self->{'generated_lists'}{'constraint_error'} = {};
 
-    ## lists isn't anymore in the family
-    ## array of list name : lists in status family_closed
-    $self->{'family_closed'}{'ok'} = ();
-    ## array of list name : lists that must be in status family_closed but they aren't
-    $self->{'family_closed'}{'impossible'} = ();
+	## lists isn't anymore in the family
+	## array of list name : lists in status family_closed
+	$self->{'family_closed'}{'ok'} = ();
+	## array of list name : lists that must be in status family_closed but they aren't
+	$self->{'family_closed'}{'impossible'} = ();
 
-    return 1;
+	return 1;
 }
 
 
@@ -1424,76 +1424,76 @@ sub _initialize_instantiation {
 # A true value, or undef if something went wrong
 
 sub _split_xml_file {
-    my ($self, $xml_file) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
+	my ($self, $xml_file) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
-    my $root;
+	my $root;
 
-    ## parse file
-    my $parser = XML::LibXML->new();
-    $parser->line_numbers(1);
-    my $doc;
+	## parse file
+	my $parser = XML::LibXML->new();
+	$parser->line_numbers(1);
+	my $doc;
 
-    unless ($doc = $parser->parse_file($xml_file)) {
-	Sympa::Log::Syslog::do_log('err',"failed to parse XML file");
-	return undef;
-    }
-
-    ## the family document
-    $root = $doc->documentElement();
-    unless ($root->nodeName eq 'family') {
-	Sympa::Log::Syslog::do_log('err',"the root element must be called \"family\" ");
-	return undef;
-    }
-
-    ## lists : family's elements
-    foreach my $list_elt ($root->childNodes()) {
-
-	if ($list_elt->nodeType == 1) {# ELEMENT_NODE
-	    unless ($list_elt->nodeName eq 'list') {
-		Sympa::Log::Syslog::do_log('err','elements contained in the root element must be called "list", line %s',$list_elt->line_number());
+	unless ($doc = $parser->parse_file($xml_file)) {
+		Sympa::Log::Syslog::do_log('err',"failed to parse XML file");
 		return undef;
-	    }
-	}else {
-	    next;
 	}
 
-	## listname
-	my @children = $list_elt->getChildrenByTagName('listname');
-
-	if ($#children <0) {
-	    Sympa::Log::Syslog::do_log('err','"listname" element is required in "list" element, line : %s',$list_elt->line_number());
-	    return undef;
-	}
-	if ($#children > 0) {
-	    my @error;
-	    foreach my $i (@children) {
-		push (@error,$i->line_number());
-	    }
-	    Sympa::Log::Syslog::do_log('err','Only one "listname" element is allowed for "list" element, lines : %s',join(", ",@error));
-	    return undef;
-	}
-	my $listname_elt = shift @children;
-	my $listname = $listname_elt->textContent();
-	$listname =~ s/^\s*//;
-	$listname =~ s/\s*$//;
-	$listname = lc $listname;
-	my $filename = $listname.".xml";
-
-        ## creating list XML document
-	my $list_doc = XML::LibXML::Document->createDocument($doc->version(),$doc->encoding());
-	$list_doc->setDocumentElement($list_elt);
-
-	## creating the list xml file
-	unless ($list_doc->toFile("$self->{'dir'}/$filename",0)) {
-	    Sympa::Log::Syslog::do_log('err','cannot create list file %s',
-		    $self->{'dir'}.'/'.$filename,$list_elt->line_number());
-	    return undef;
+	## the family document
+	$root = $doc->documentElement();
+	unless ($root->nodeName eq 'family') {
+		Sympa::Log::Syslog::do_log('err',"the root element must be called \"family\" ");
+		return undef;
 	}
 
-	push (@{$self->{'list_to_generate'}},$listname);
-    }
-    return 1;
+	## lists : family's elements
+	foreach my $list_elt ($root->childNodes()) {
+
+		if ($list_elt->nodeType == 1) {# ELEMENT_NODE
+			unless ($list_elt->nodeName eq 'list') {
+				Sympa::Log::Syslog::do_log('err','elements contained in the root element must be called "list", line %s',$list_elt->line_number());
+				return undef;
+			}
+		}else {
+			next;
+		}
+
+		## listname
+		my @children = $list_elt->getChildrenByTagName('listname');
+
+		if ($#children <0) {
+			Sympa::Log::Syslog::do_log('err','"listname" element is required in "list" element, line : %s',$list_elt->line_number());
+			return undef;
+		}
+		if ($#children > 0) {
+			my @error;
+			foreach my $i (@children) {
+				push (@error,$i->line_number());
+			}
+			Sympa::Log::Syslog::do_log('err','Only one "listname" element is allowed for "list" element, lines : %s',join(", ",@error));
+			return undef;
+		}
+		my $listname_elt = shift @children;
+		my $listname = $listname_elt->textContent();
+		$listname =~ s/^\s*//;
+		$listname =~ s/\s*$//;
+		$listname = lc $listname;
+		my $filename = $listname.".xml";
+
+		## creating list XML document
+		my $list_doc = XML::LibXML::Document->createDocument($doc->version(),$doc->encoding());
+		$list_doc->setDocumentElement($list_elt);
+
+		## creating the list xml file
+		unless ($list_doc->toFile("$self->{'dir'}/$filename",0)) {
+			Sympa::Log::Syslog::do_log('err','cannot create list file %s',
+				$self->{'dir'}.'/'.$filename,$list_elt->line_number());
+			return undef;
+		}
+
+		push (@{$self->{'list_to_generate'}},$listname);
+	}
+	return 1;
 }
 
 # $family->_update_existing_list($list, $hash_list)
@@ -1508,60 +1508,60 @@ sub _split_xml_file {
 # The new list (or undef)
 
 sub _update_existing_list {
-    my ($self,$list,$hash_list) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
+	my ($self,$list,$hash_list) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
-    ## get allowed and forbidden list customizing
-    my $custom = $self->_get_customizing($list);
-    unless (defined $custom) {
-	Sympa::Log::Syslog::do_log('err','impossible to get list %s customizing',$list->{'name'});
-	return undef;
-    }
-    my $config_changes = $custom->{'config_changes'};
-    my $old_status = $list->{'admin'}{'status'};
-
-
-
-    ## list config family updating
-    my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
-    unless (defined $result) {
-	Sympa::Log::Syslog::do_log('err','No object list resulting from updating list %s',$list->{'name'});
-	return undef;
-    }
-    $list = $result;
-
-
-    ## set list customizing
-    foreach my $p (keys %{$custom->{'allowed'}}) {
-	$list->{'admin'}{$p} = $custom->{'allowed'}{$p};
-	delete $list->{'admin'}{'defaults'}{$p};
-	Sympa::Log::Syslog::do_log('info','Customizing : keeping values for parameter %s',$p);
-    }
-
-    ## info file
-    unless ($config_changes->{'file'}{'info'}) {
-	$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
-
-	unless (open INFO, '>', "$list->{'dir'}/info") {
-	    Sympa::Log::Syslog::do_log('err','Impossible to open %s/info : %s',$list->{'dir'},$ERRNO);
+	## get allowed and forbidden list customizing
+	my $custom = $self->_get_customizing($list);
+	unless (defined $custom) {
+		Sympa::Log::Syslog::do_log('err','impossible to get list %s customizing',$list->{'name'});
+		return undef;
 	}
-	print INFO $hash_list->{'config'}{'description'};
-	close INFO;
-    }
+	my $config_changes = $custom->{'config_changes'};
+	my $old_status = $list->{'admin'}{'status'};
 
-    foreach my $f (keys %{$config_changes->{'file'}}) {
-	Sympa::Log::Syslog::do_log('info','Customizing : this file has been changed : %s',$f);
-    }
 
-    ## rename forbidden files
+
+	## list config family updating
+	my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
+	unless (defined $result) {
+		Sympa::Log::Syslog::do_log('err','No object list resulting from updating list %s',$list->{'name'});
+		return undef;
+	}
+	$list = $result;
+
+
+	## set list customizing
+	foreach my $p (keys %{$custom->{'allowed'}}) {
+		$list->{'admin'}{$p} = $custom->{'allowed'}{$p};
+		delete $list->{'admin'}{'defaults'}{$p};
+		Sympa::Log::Syslog::do_log('info','Customizing : keeping values for parameter %s',$p);
+	}
+
+	## info file
+	unless ($config_changes->{'file'}{'info'}) {
+		$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
+
+		unless (open INFO, '>', "$list->{'dir'}/info") {
+			Sympa::Log::Syslog::do_log('err','Impossible to open %s/info : %s',$list->{'dir'},$ERRNO);
+		}
+		print INFO $hash_list->{'config'}{'description'};
+		close INFO;
+	}
+
+	foreach my $f (keys %{$config_changes->{'file'}}) {
+		Sympa::Log::Syslog::do_log('info','Customizing : this file has been changed : %s',$f);
+	}
+
+	## rename forbidden files
 #    foreach my $f (@{$custom->{'forbidden'}{'file'}}) {
 #	unless (rename ("$list->{'dir'}"."/"."info","$list->{'dir'}"."/"."info.orig")) {
-	    ################
+	################
 #	}
 #	if ($f eq 'info') {
 #	    $hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
 #	    unless (open INFO, '>', "$list_dir/info") {
-		################
+	################
 #	    }
 #	    print INFO $hash_list->{'config'}{'description'};
 #	    close INFO;
@@ -1569,52 +1569,52 @@ sub _update_existing_list {
 #    }
 
 
-    ## notify owner for forbidden customizing
-    if (#(scalar $custom->{'forbidden'}{'file'}) ||
-	(scalar @{$custom->{'forbidden'}{'param'}})) {
+	## notify owner for forbidden customizing
+	if (#(scalar $custom->{'forbidden'}{'file'}) ||
+		(scalar @{$custom->{'forbidden'}{'param'}})) {
 #	my $forbidden_files = join(',',@{$custom->{'forbidden'}{'file'}});
-	my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
-	Sympa::Log::Syslog::do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
+		my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
+		Sympa::Log::Syslog::do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
 
-	unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
-	    Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
-	}
-    }
-
-    ## status
-    $result = $self->_set_status_changes($list,$old_status);
-
-    if ($result->{'aliases'} == 1) {
-	push (@{$self->{'updated_lists'}{'aliases_ok'}},$list->{'name'});
-
-    }elsif ($result->{'install_remove'} eq 'install') {
-	$self->{'updated_lists'}{'aliases_to_install'}{$list->{'name'}} = $result->{'aliases'};
-
-    }else {
-	$self->{'updated_lists'}{'aliases_to_remove'}{$list->{'name'}} = $result->{'aliases'};
-
-    }
-
-    ## config_changes
-    foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
-
-	if (defined $config_changes->{'param'}{$p}  ) {
-	    delete $config_changes->{'param'}{$p};
+		unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
+			Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
+		}
 	}
 
-    }
+	## status
+	$result = $self->_set_status_changes($list,$old_status);
 
-    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	Sympa::Log::Syslog::do_log('err','impossible to open file %s/config_changes : %s',$list->{'dir'},$ERRNO);
-	push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-    }
-    close FILE;
+	if ($result->{'aliases'} == 1) {
+		push (@{$self->{'updated_lists'}{'aliases_ok'}},$list->{'name'});
 
-    my @kept_param = keys %{$config_changes->{'param'}};
-    $list->update_config_changes('param',\@kept_param);
-    my @kept_files = keys %{$config_changes->{'file'}};
-    $list->update_config_changes('file',\@kept_files);
+	}elsif ($result->{'install_remove'} eq 'install') {
+		$self->{'updated_lists'}{'aliases_to_install'}{$list->{'name'}} = $result->{'aliases'};
+
+	}else {
+		$self->{'updated_lists'}{'aliases_to_remove'}{$list->{'name'}} = $result->{'aliases'};
+
+	}
+
+	## config_changes
+	foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
+
+		if (defined $config_changes->{'param'}{$p}  ) {
+			delete $config_changes->{'param'}{$p};
+		}
+
+	}
+
+	unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+		Sympa::Log::Syslog::do_log('err','impossible to open file %s/config_changes : %s',$list->{'dir'},$ERRNO);
+		push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
+		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	}
+	close FILE;
+
+	my @kept_param = keys %{$config_changes->{'param'}};
+	$list->update_config_changes('param',\@kept_param);
+my @kept_files = keys %{$config_changes->{'file'}};
+$list->update_config_changes('file',\@kept_files);
 
 
     return $list;
@@ -1634,18 +1634,18 @@ sub _update_existing_list {
 # - allowed: hash of allowed param : ($param,$values)
 
 sub _get_customizing {
-    my ($self,$list) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
+	my ($self,$list) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
-    my $result;
-    my $config_changes = $list->get_config_changes;
+	my $result;
+	my $config_changes = $list->get_config_changes;
 
-    unless (defined $config_changes) {
-	Sympa::Log::Syslog::do_log('err','impossible to get config_changes');
-	return undef;
-    }
+	unless (defined $config_changes) {
+		Sympa::Log::Syslog::do_log('err','impossible to get config_changes');
+		return undef;
+	}
 
-    ## FILES
+	## FILES
 #    foreach my $f (keys %{$config_changes->{'file'}}) {
 
 #	my $privilege; # =may_edit($f)
@@ -1655,57 +1655,57 @@ sub _get_customizing {
 #	}
 #    }
 
-    ## PARAMETERS
+	## PARAMETERS
 
-    # get customizing values
-    my $changed_values;
-    foreach my $p (keys %{$config_changes->{'param'}}) {
+	# get customizing values
+	my $changed_values;
+	foreach my $p (keys %{$config_changes->{'param'}}) {
 
-	$changed_values->{$p} = $list->{'admin'}{$p}
-    }
-
-    # check these values
-    my $constraint = $self->get_constraints();
-    unless (defined $constraint) {
-	Sympa::Log::Syslog::do_log('err','unable to get family constraints',$self->{'name'},$list->{'name'});
-	return undef;
-    }
-
-    foreach my $param (keys %{$constraint}) {
-	my $constraint_value = $constraint->{$param};
-	my $param_value;
-	my $value_error;
-
-	unless (defined $constraint_value) {
-	    Sympa::Log::Syslog::do_log('err','No value constraint on parameter %s in param_constraint.conf',$param);
-	    next;
+		$changed_values->{$p} = $list->{'admin'}{$p}
 	}
 
-	$param_value = Sympa::List::_get_param_value_anywhere($changed_values,$param);
-
-	$value_error = $self->check_values($param_value,$constraint_value);
-
-	foreach my $v (@{$value_error}) {
-	    push @{$result->{'forbidden'}{'param'}},$param;
-	    Sympa::Log::Syslog::do_log('err','Error constraint on parameter %s, value : %s',$param,$v);
+	# check these values
+	my $constraint = $self->get_constraints();
+	unless (defined $constraint) {
+		Sympa::Log::Syslog::do_log('err','unable to get family constraints',$self->{'name'},$list->{'name'});
+		return undef;
 	}
 
-    }
+	foreach my $param (keys %{$constraint}) {
+		my $constraint_value = $constraint->{$param};
+		my $param_value;
+		my $value_error;
 
-    # keep allowed values
-    foreach my $param (@{$result->{'forbidden'}{'param'}}) {
-	if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
-	    $param = $1;
+		unless (defined $constraint_value) {
+			Sympa::Log::Syslog::do_log('err','No value constraint on parameter %s in param_constraint.conf',$param);
+			next;
+		}
+
+		$param_value = Sympa::List::_get_param_value_anywhere($changed_values,$param);
+
+		$value_error = $self->check_values($param_value,$constraint_value);
+
+		foreach my $v (@{$value_error}) {
+			push @{$result->{'forbidden'}{'param'}},$param;
+			Sympa::Log::Syslog::do_log('err','Error constraint on parameter %s, value : %s',$param,$v);
+		}
+
 	}
 
-	if (defined $changed_values->{$param}) {
-	    delete $changed_values->{$param};
-	}
-    }
-    $result->{'allowed'} = $changed_values;
+	# keep allowed values
+	foreach my $param (@{$result->{'forbidden'}{'param'}}) {
+		if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
+			$param = $1;
+		}
 
-    $result->{'config_changes'} = $config_changes;
-    return $result;
+		if (defined $changed_values->{$param}) {
+			delete $changed_values->{$param};
+		}
+	}
+	$result->{'allowed'} = $changed_values;
+
+	$result->{'config_changes'} = $config_changes;
+	return $result;
 }
 
 # $family->_set_status_changes($list, $old_status)
@@ -1725,30 +1725,30 @@ sub _get_customizing {
 #        a string of aliases needed to be installed or removed
 
 sub _set_status_changes {
-    my ($self,$list,$old_status) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s,%s)',$self->{'name'},$list);
+	my ($self,$list,$old_status) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s,%s)',$self->{'name'},$list);
 
-    my $result;
+	my $result;
 
-    $result->{'aliases'} = 1;
+	$result->{'aliases'} = 1;
 
-    unless (defined $list->{'admin'}{'status'}) {
-	$list->{'admin'}{'status'} = 'open';
-    }
-
-    ## aliases
-    if ($list->{'admin'}{'status'} eq 'open') {
-	unless ($old_status eq 'open') {
-	    $result->{'install_remove'} = 'install';
-	    $result->{'aliases'} = Sympa::Admin::install_aliases($list,$self->{'robot'});
+	unless (defined $list->{'admin'}{'status'}) {
+		$list->{'admin'}{'status'} = 'open';
 	}
-    }
 
-    if (($list->{'admin'}{'status'} eq 'pending') &&
-	(($old_status eq 'open') || ($old_status eq 'error_config'))) {
-	$result->{'install_remove'} = 'remove';
-	$result->{'aliases'} = Sympa::Admin::remove_aliases($list,$self->{'robot'});
-    }
+	## aliases
+	if ($list->{'admin'}{'status'} eq 'open') {
+		unless ($old_status eq 'open') {
+			$result->{'install_remove'} = 'install';
+			$result->{'aliases'} = Sympa::Admin::install_aliases($list,$self->{'robot'});
+		}
+	}
+
+	if (($list->{'admin'}{'status'} eq 'pending') &&
+		(($old_status eq 'open') || ($old_status eq 'error_config'))) {
+		$result->{'install_remove'} = 'remove';
+		$result->{'aliases'} = Sympa::Admin::remove_aliases($list,$self->{'robot'});
+	}
 
 ##    ## subscribers
 ##    if (($old_status ne 'pending') && ($old_status ne 'open')) {
@@ -1768,7 +1768,7 @@ sub _set_status_changes {
 ##	}
 ##    }
 
-    return $result;
+	return $result;
 }
 
 # $family->_end_update_list($list, $xml_file, $host)
@@ -1785,39 +1785,39 @@ sub _set_status_changes {
 # A true value, or undef if something went wrong
 
 sub _end_update_list {
-    my ($self,$list,$xml_file, $host) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
+	my ($self,$list,$xml_file, $host) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
-    $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
-    $list->save_config("listmaster\@$host");
-    $list->{'family'} = $self;
+	$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
+	$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+	$list->save_config("listmaster\@$host");
+	$list->{'family'} = $self;
 
-    ## check param_constraint.conf
-    $self->{'state'} = 'normal';
-    my $error = $self->check_param_constraint($list);
-    $self->{'state'} = 'no_check';
+	## check param_constraint.conf
+	$self->{'state'} = 'normal';
+	my $error = $self->check_param_constraint($list);
+	$self->{'state'} = 'no_check';
 
-    unless (defined $error) {
-	Sympa::Log::Syslog::do_log('err', 'Impossible to check parameters constraint, it happens on list %s. It is set in status error_config',$list->{'name'});
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	return undef;
-    }
-    if (ref($error) eq 'ARRAY') {
-	$self->{'generated_lists'}{'constraint_error'}{$list->{'name'}} = join(", ",@{$error});
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
-    }
-
-    ## copy files in the list directory
-    if ($xml_file) { # copying the xml file
-	unless ($self->_copy_files($list->{'dir'},"$list->{'name'}.xml")) {
-	    push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-	    $list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	unless (defined $error) {
+		Sympa::Log::Syslog::do_log('err', 'Impossible to check parameters constraint, it happens on list %s. It is set in status error_config',$list->{'name'});
+		$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+		return undef;
 	}
-    }
+	if (ref($error) eq 'ARRAY') {
+		$self->{'generated_lists'}{'constraint_error'}{$list->{'name'}} = join(", ",@{$error});
+		$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+	}
 
-    return 1;
+	## copy files in the list directory
+	if ($xml_file) { # copying the xml file
+		unless ($self->_copy_files($list->{'dir'},"$list->{'name'}.xml")) {
+			push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
+			$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		}
+	}
+
+	return 1;
 }
 
 # $family->_copy_files($list_dir, $file)
@@ -1833,22 +1833,22 @@ sub _end_update_list {
 # A true value, or undef if something went wrong
 
 sub _copy_files {
-    my ($self, $list_dir, $file) = @_;
-    Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list_dir);
+	my ($self, $list_dir, $file) = @_;
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list_dir);
 
-    my $dir = $self->{'dir'};
+	my $dir = $self->{'dir'};
 
-    # instance.xml
-    if (defined $file) {
-	unless (File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
-	    Sympa::Log::Syslog::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$ERRNO);
-	    return undef;
+	# instance.xml
+	if (defined $file) {
+		unless (File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
+			Sympa::Log::Syslog::do_log('err','(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$ERRNO);
+			return undef;
+		}
 	}
-    }
 
 
 
-    return 1;
+	return 1;
 }
 
 # $family->_load_param_constraint_conf()
@@ -1859,100 +1859,100 @@ sub _copy_files {
 # An hashref containing the data found in param_constraint.conf, or undef if something went wrong.
 
 sub _load_param_constraint_conf {
-    my ($self) = @_;
-    Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
-    my $file = "$self->{'dir'}/param_constraint.conf";
+	my $file = "$self->{'dir'}/param_constraint.conf";
 
-    my $constraint = {};
+	my $constraint = {};
 
-    unless (-e $file) {
-	Sympa::Log::Syslog::do_log('err','No file %s. Assuming no constraints to apply.', $file);
-	return $constraint;
-    }
+	unless (-e $file) {
+		Sympa::Log::Syslog::do_log('err','No file %s. Assuming no constraints to apply.', $file);
+		return $constraint;
+	}
 
-    unless (open (FILE, $file)) {
-	Sympa::Log::Syslog::do_log('err','File %s exists, but unable to open it: %s', $file,$_);
-	return undef;
-    }
+	unless (open (FILE, $file)) {
+		Sympa::Log::Syslog::do_log('err','File %s exists, but unable to open it: %s', $file,$_);
+		return undef;
+	}
 
-    my $error = 0;
+	my $error = 0;
 
-    ## Just in case...
-    local $RS = "\n";
+	## Just in case...
+	local $RS = "\n";
 
-    while (<FILE>) {
-	next if /^\s*(\#.*|\s*)$/;
+	while (<FILE>) {
+		next if /^\s*(\#.*|\s*)$/;
 
-	if (/^\s*([\w\-\.]+)\s+(.+)\s*$/) {
-	    my $param = $1;
-	    my $value = $2;
-	    my @values = split /,/, $value;
+		if (/^\s*([\w\-\.]+)\s+(.+)\s*$/) {
+			my $param = $1;
+			my $value = $2;
+			my @values = split /,/, $value;
 
-	    unless(($param =~ /^([\w-]+)\.([\w-]+)$/) || ($param =~ /^([\w-]+)$/)) {
-		Sympa::Log::Syslog::do_log ('err', '(%s) : unknown parameter "%s" in %s',$self->{'name'},$_,$file);
-		$error = 1;
-		next;
-	    }
+			unless(($param =~ /^([\w-]+)\.([\w-]+)$/) || ($param =~ /^([\w-]+)$/)) {
+				Sympa::Log::Syslog::do_log ('err', '(%s) : unknown parameter "%s" in %s',$self->{'name'},$_,$file);
+				$error = 1;
+				next;
+			}
 
-	    if (scalar(@values) == 1) {
-		$constraint->{$param} = shift @values;
-	    } else {
-		foreach my $v (@values) {
-		    $constraint->{$param}{$v} = 1;
+			if (scalar(@values) == 1) {
+				$constraint->{$param} = shift @values;
+			} else {
+				foreach my $v (@values) {
+					$constraint->{$param}{$v} = 1;
+				}
+			}
+		} else {
+			Sympa::Log::Syslog::do_log ('err', '(%s) : bad line : %s in %s',$self->{'name'},$_,$file);
+			$error = 1;
+			next;
 		}
-	    }
-	} else {
-	    Sympa::Log::Syslog::do_log ('err', '(%s) : bad line : %s in %s',$self->{'name'},$_,$file);
-	    $error = 1;
-	    next;
 	}
-    }
-    if ($error) {
-	unless (Sympa::List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
-	    Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
+	if ($error) {
+		unless (Sympa::List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
+			Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
+		}
 	}
-    }
-    close FILE;
+	close FILE;
 
- # Parameters not allowed in param_constraint.conf file :
-    foreach my $forbidden (@uncompellable_param) {
- 	if (defined $constraint->{$forbidden}) {
- 	    delete $constraint->{$forbidden};
- 	}
-     }
+	# Parameters not allowed in param_constraint.conf file :
+	foreach my $forbidden (@uncompellable_param) {
+		if (defined $constraint->{$forbidden}) {
+			delete $constraint->{$forbidden};
+		}
+	}
 
 ###########################"
- #   open TMP, ">/tmp/dump1";
- #   Sympa::Tools::Data::dump_var ($constraint, 0, \*TMP);
- #    close TMP;
+	#   open TMP, ">/tmp/dump1";
+	#   Sympa::Tools::Data::dump_var ($constraint, 0, \*TMP);
+	#    close TMP;
 
-    return $constraint;
+	return $constraint;
 }
 
 sub create_automatic_list {
-    my ($self, %params) = @_;
+	my ($self, %params) = @_;
 
-    my $sender = $params{'sender'};
-    my $listname = $params{'listname'};
+	my $sender = $params{'sender'};
+	my $listname = $params{'listname'};
 
-    unless ($self->is_allowed_to_create_automatic_lists(%params)){
-	Sympa::Log::Syslog::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation of list %s@%s by user %s.', $listname,$self->{'robot'},$sender);
-	return undef;
-    }
-    my $result = $self->add_list({listname=>$listname}, 1, $params{host});
+	unless ($self->is_allowed_to_create_automatic_lists(%params)){
+		Sympa::Log::Syslog::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation of list %s@%s by user %s.', $listname,$self->{'robot'},$sender);
+		return undef;
+	}
+	my $result = $self->add_list({listname=>$listname}, 1, $params{host});
 
-    unless (defined $result->{'ok'}) {
-	my $details = $result->{'string_error'} || $result->{'string_info'} || [];
-	Sympa::Log::Syslog::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
-	return undef;
-    }
-    my $list = Sympa::List->new(name => $listname, robot => $self->{'robot'});
-    unless (defined $list) {
-	Sympa::Log::Syslog::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
-	return undef;
-    }
-    return $list;
+	unless (defined $result->{'ok'}) {
+		my $details = $result->{'string_error'} || $result->{'string_info'} || [];
+		Sympa::Log::Syslog::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
+		return undef;
+	}
+	my $list = Sympa::List->new(name => $listname, robot => $self->{'robot'});
+	unless (defined $list) {
+		Sympa::Log::Syslog::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
+		return undef;
+	}
+	return $list;
 }
 
 =head2 $family->is_allowed_to_create_automatic_lists(%parameters)
@@ -1962,38 +1962,38 @@ Returns 1 if the user is allowed to create lists based on the family.
 =cut
 
 sub is_allowed_to_create_automatic_lists {
-    my ($self, %params) = @_;
+	my ($self, %params) = @_;
 
-    my $auth_level = $params{'auth_level'};
-    my $sender = $params{'sender'};
-    my $message = $params{'message'};
-    my $listname = $params{'listname'};
+	my $auth_level = $params{'auth_level'};
+	my $sender = $params{'sender'};
+	my $message = $params{'message'};
+	my $listname = $params{'listname'};
 
-    # check authorization
-    my $result = Sympa::Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},
-					   {'sender' => $sender,
-					    'message' => $message,
-					    'family'=>$self,
-					    'automatic_listname'=>$listname });
-    my $r_action;
-    unless (defined $result) {
-	Sympa::Log::Syslog::do_log('err', 'Unable to evaluate scenario "automatic_list_creation" for family %s', $self->{'name'});
-	return undef;
-    }
+	# check authorization
+	my $result = Sympa::Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},
+		{'sender' => $sender,
+			'message' => $message,
+			'family'=>$self,
+			'automatic_listname'=>$listname });
+	my $r_action;
+	unless (defined $result) {
+		Sympa::Log::Syslog::do_log('err', 'Unable to evaluate scenario "automatic_list_creation" for family %s', $self->{'name'});
+		return undef;
+	}
 
-    if (ref($result) eq 'HASH') {
-	$r_action = $result->{'action'};
-    }else {
-	Sympa::Log::Syslog::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation in family %s', $self->{'name'});
-	return undef;
-    }
+	if (ref($result) eq 'HASH') {
+		$r_action = $result->{'action'};
+	}else {
+		Sympa::Log::Syslog::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation in family %s', $self->{'name'});
+		return undef;
+	}
 
-    unless ($r_action =~ /do_it/) {
-	Sympa::Log::Syslog::do_log('debug2', 'Automatic list creation refused to user %s for family %s', $sender, $self->{'name'});
-	return undef;
-    }
+	unless ($r_action =~ /do_it/) {
+		Sympa::Log::Syslog::do_log('debug2', 'Automatic list creation refused to user %s for family %s', $sender, $self->{'name'});
+		return undef;
+	}
 
-    return 1;
+	return 1;
 }
 =head1 AUTHORS
 

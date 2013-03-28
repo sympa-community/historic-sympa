@@ -28,90 +28,90 @@ use Sympa::Tools::Cookie;
 our @ISA = qw(SOAP::Transport::HTTP::FCGI);
 
 sub request {
-    my $self = shift;
+	my $self = shift;
 
 
-    if (my $request = $_[0]) {
+	if (my $request = $_[0]) {
 
-	## Select appropriate robot
-	if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
-	  $ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
-	  Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
-	}else {
-	  Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-	  $ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
+		## Select appropriate robot
+		if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
+			$ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
+			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
+		}else {
+			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
+			$ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
+		}
+
+		## Empty cache of the List.pm module
+		Sympa::List::init_list_cache();
+
+		my $session;
+		## Existing session or new one
+		if (Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})) {
+			$session = Sympa::Session->new(
+				robot   => $ENV{SYMPA_ROBOT},
+				context => {
+					cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
+				},
+				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+			);
+		}else {
+			$session = Sympa::Session->new(
+				robot    => $ENV{SYMPA_ROBOT},
+				context  => {},
+				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+			);
+			$session->store() if (defined $session);
+			$session->renew() if (defined $session);## Note that id_session changes each time it is saved in the DB
+		}
+
+		delete $ENV{'USER_EMAIL'};
+		if (defined $session) {
+			$ENV{'SESSION_ID'} = $session->{'id_session'};
+			if ($session->{'email'} ne 'nobody') {
+				$ENV{'USER_EMAIL'} = $session->{'email'};
+			}
+		}
 	}
 
-	## Empty cache of the List.pm module
-	Sympa::List::init_list_cache();
-
-	my $session;
-	## Existing session or new one
-	if (Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})) {
-	  $session = Sympa::Session->new(
-		  robot   => $ENV{SYMPA_ROBOT},
-		  context => {
-			  cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
-		  },
-		  crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
-	  );
-	}else {
-	  $session = Sympa::Session->new(
-		  robot    => $ENV{SYMPA_ROBOT},
-		  context  => {},
-		  crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
-	  );
-	  $session->store() if (defined $session);
-	  $session->renew() if (defined $session);## Note that id_session changes each time it is saved in the DB
-	}
-
-	delete $ENV{'USER_EMAIL'};
-	if (defined $session) {
-	  $ENV{'SESSION_ID'} = $session->{'id_session'};
-	  if ($session->{'email'} ne 'nobody') {
-	    $ENV{'USER_EMAIL'} = $session->{'email'};
-	  }
-	}
-    }
-
-    $self->SUPER::request(@_);
+	$self->SUPER::request(@_);
 }
 
 sub response {
-    my $self = shift;
+	my $self = shift;
 
-    if (my $response = $_[0]) {
-	if (defined $ENV{'SESSION_ID'}) {
-	    my $expire = $main::param->{'user'}{'cookie_delay'} || $main::wwsconf->{'cookie_expire'};
-	    my $cookie = Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
+	if (my $response = $_[0]) {
+		if (defined $ENV{'SESSION_ID'}) {
+			my $expire = $main::param->{'user'}{'cookie_delay'} || $main::wwsconf->{'cookie_expire'};
+			my $cookie = Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
 
-	    $response->headers->push_header('Set-Cookie2' => $cookie);
-	  }
-    }
+			$response->headers->push_header('Set-Cookie2' => $cookie);
+		}
+	}
 
-    $self->SUPER::request(@_);
+	$self->SUPER::request(@_);
 }
 
 ## Redefine FCGI's handle subroutine
 sub handle ($$) {
-    my $self = shift->new;
-    my $birthday = shift;
+	my $self = shift->new;
+	my $birthday = shift;
 
-    my ($r1, $r2);
-    my $fcgirq = $self->{_fcgirq};
+	my ($r1, $r2);
+	my $fcgirq = $self->{_fcgirq};
 
-    ## If fastcgi changed on disk, die
-    ## Apache will restart the process
-    while (($r1 = $fcgirq->Accept()) >= 0) {
+	## If fastcgi changed on disk, die
+	## Apache will restart the process
+	while (($r1 = $fcgirq->Accept()) >= 0) {
 
-	$r2 = $self->SOAP::Transport::HTTP::CGI::handle;
+		$r2 = $self->SOAP::Transport::HTTP::CGI::handle;
 
-	if ((stat($ENV{'SCRIPT_FILENAME'}))[9] > $birthday ) {
-	    exit(0);
+		if ((stat($ENV{'SCRIPT_FILENAME'}))[9] > $birthday ) {
+			exit(0);
+		}
+		#print "Set-Cookie: sympa_altemails=olivier.salaun%40cru.fr; path=/; expires=Tue , 19-Oct-2004 14 :08:19 GMT\n";
 	}
-	#print "Set-Cookie: sympa_altemails=olivier.salaun%40cru.fr; path=/; expires=Tue , 19-Oct-2004 14 :08:19 GMT\n";
-    }
-    return undef;
+	return undef;
 }
 
 1;

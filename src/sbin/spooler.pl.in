@@ -101,7 +101,7 @@ my $digestsleep = 5;
 srand (time());
 
 my $version_string =
-    sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
+sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
 
 my $daemon_name = Sympa::Log::Syslog::set_daemon($0);
 
@@ -121,12 +121,12 @@ GetOptions(
 pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
 
 if ($options{'version'}) {
-    print $version_string;
-    exit 0;
+	print $version_string;
+	exit 0;
 }
 
 if ($options{'debug'}) {
-    $options{'log_level'} = 2 unless ($options{'log_level'});
+	$options{'log_level'} = 2 unless ($options{'log_level'});
 }
 ## Batch mode, ie NOT daemon
 $options{'batch'} = 1 if ($options{'help'}||$options{'version'});
@@ -145,328 +145,328 @@ local $main::daemon_usage;
 
 while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
-my $config_file = $options{'config'} || Sympa::Constants::CONFIG;
+	my $config_file = $options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (Sympa::Configuration::load($config_file,1)) {
-   fatal_err("Configuration file $config_file has errors.");
-}
+	unless (Sympa::Configuration::load($config_file,1)) {
+		fatal_err("Configuration file $config_file has errors.");
+	}
 
 
 ## Open the syslog and say we're read out stuff.
-Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
+	Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
 # setting log_level using conf unless it is set by calling option
-if ($options{'log_level'}) {
-    Sympa::Log::Syslog::set_log_level($options{'log_level'});
-    Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-}else{
-    Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
-    Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
-}
+	if ($options{'log_level'}) {
+		Sympa::Log::Syslog::set_log_level($options{'log_level'});
+		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
+	}else{
+		Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
+		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
+	}
 
 ## Probe Db if defined
-if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-    unless (Sympa::Upgrade::probe_db()) {
-	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
-    }
-}
+	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
+		unless (Sympa::Upgrade::probe_db()) {
+			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
+		}
+	}
 
 ## Now trying to load full config (including database)
-unless (Sympa::Configuration::load($config_file)) {
-   Sympa::Log::Syslog::fatal_err("Configuration file $config_file has errors.");
+	unless (Sympa::Configuration::load($config_file)) {
+		Sympa::Log::Syslog::fatal_err("Configuration file $config_file has errors.");
 
-}
+	}
 
 ## Apply defaults to %Sympa::List::pinfo
-Sympa::List::_apply_defaults();
+	Sympa::List::_apply_defaults();
 
 
 ## Main program
-if (!chdir($Sympa::Configuration::Conf{'home'})) {
-   Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", $Sympa::Configuration::Conf{'home'});
-   ## Function never returns.
-}
+	if (!chdir($Sympa::Configuration::Conf{'home'})) {
+		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", $Sympa::Configuration::Conf{'home'});
+		## Function never returns.
+	}
 
 ## Check for several files.
-unless (Sympa::Configuration::checkfiles_as_root()) {
-   Sympa::Log::Syslog::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
-   ## No return.
-}
+	unless (Sympa::Configuration::checkfiles_as_root()) {
+		Sympa::Log::Syslog::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
+		## No return.
+	}
 
 ## Check that the data structure is uptodate
-unless ($options{'upgrade'} || $options{'help'}) {
-    unless (Sympa::Upgrade::data_structure_uptodate()) {
-	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
-    }
-}
-my $spooldir;
-my %distinct_spools;
-if ($signal ne 'hup') {
-    ## Put ourselves in background if we're not in debug mode. That method
-    ## works on many systems, although, it seems that Unix conceptors have
-    ## decided that there won't be a single and easy way to detach a process
-    ## from its controlling tty.
-    unless ($options{'foreground'}) {
-	if (open(TTY, "/dev/tty")) {
-	    ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
-	    #       ioctl(TTY, &TIOCNOTTY, 0);
-	    close(TTY);
-	}
-	open(STDIN, ">> /dev/null");
-	open(STDOUT, ">> /dev/null");
-	open(STDERR, ">> /dev/null");
-
-	setpgrp(0, 0);
-	# start a spooler.pl daemon for the spool location specified by option --queue= or for each distinct spool find in sympa.conf
-
-	if ($options{'queue'}){
-	    $distinct_spools{$options{'queue'}}= 1;
-	}else{
-	    foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
-		$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
-	    }
-	}
-	my $master = 1;
-	foreach my $distinct_spool (keys %distinct_spools) {
-	    $spooldir = $distinct_spool;
-	    if ($master) { # only master process fork child process
-		if ((my $child_pid = fork) != 0) {
-		   Sympa::Log::Syslog::do_log('debug', "Master daemon fork child %s",$child_pid);
-		}else{
-		   Sympa::Log::Syslog::do_log('info', "Child process PID %s spooler for spool %s",$PID,$spooldir);
-		    $master = 0;
-		    last;
+	unless ($options{'upgrade'} || $options{'help'}) {
+		unless (Sympa::Upgrade::data_structure_uptodate()) {
+			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
 		}
-	    }
 	}
-	if ($master) {
-	   Sympa::Log::Syslog::do_log('debug', "Fork, exiting from initial process");
-	    exit (0);
-	}
+	my $spooldir;
+	my %distinct_spools;
+	if ($signal ne 'hup') {
+		## Put ourselves in background if we're not in debug mode. That method
+		## works on many systems, although, it seems that Unix conceptors have
+		## decided that there won't be a single and easy way to detach a process
+		## from its controlling tty.
+		unless ($options{'foreground'}) {
+			if (open(TTY, "/dev/tty")) {
+				ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
+				#       ioctl(TTY, &TIOCNOTTY, 0);
+				close(TTY);
+			}
+			open(STDIN, ">> /dev/null");
+			open(STDOUT, ">> /dev/null");
+			open(STDERR, ">> /dev/null");
+
+			setpgrp(0, 0);
+			# start a spooler.pl daemon for the spool location specified by option --queue= or for each distinct spool find in sympa.conf
+
+			if ($options{'queue'}){
+				$distinct_spools{$options{'queue'}}= 1;
+			}else{
+				foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
+					$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
+				}
+			}
+			my $master = 1;
+			foreach my $distinct_spool (keys %distinct_spools) {
+				$spooldir = $distinct_spool;
+				if ($master) { # only master process fork child process
+					if ((my $child_pid = fork) != 0) {
+						Sympa::Log::Syslog::do_log('debug', "Master daemon fork child %s",$child_pid);
+					}else{
+						Sympa::Log::Syslog::do_log('info', "Child process PID %s spooler for spool %s",$PID,$spooldir);
+						$master = 0;
+						last;
+					}
+				}
+			}
+			if ($master) {
+				Sympa::Log::Syslog::do_log('debug', "Fork, exiting from initial process");
+				exit (0);
+			}
 
 
-	Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
+			Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
-	Sympa::Log::Syslog::do_log('debug', "Running server $PID for spooler purpose ");
+			Sympa::Log::Syslog::do_log('debug', "Running server $PID for spooler purpose ");
 
-	unless ($options{'batch'} ) {
+			unless ($options{'batch'} ) {
 
-	    ## Create and write the pidfile
-	    my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
+				## Create and write the pidfile
+				my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
 
-	    ## If process is running in foreground, don't write STDERR to a dedicated file
-	    my $options;
-	    $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
-	    $options->{'multiple_process'} = 1 ;
-	    my $result = Sympa::Tools::Daemon::write_pid(
-		file    => $file,
-		pid     => $PID,
-		options => $options,
-		method  => $Sympa::Configuration::Conf{'lock_method'},
-		user    => Sympa::Constants::USER,
-		group   => Sympa::Constants::GROUP,
-	    );
-	    unless ($result) {
-		    Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
-	    }
-	}
+				## If process is running in foreground, don't write STDERR to a dedicated file
+				my $options;
+				$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
+				$options->{'multiple_process'} = 1 ;
+				my $result = Sympa::Tools::Daemon::write_pid(
+					file    => $file,
+					pid     => $PID,
+					options => $options,
+					method  => $Sympa::Configuration::Conf{'lock_method'},
+					user    => Sympa::Constants::USER,
+					group   => Sympa::Constants::GROUP,
+				);
+				unless ($result) {
+					Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
+				}
+			}
 
 
-	# Set the UserID & GroupID for the process
-	$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
-	$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
+			# Set the UserID & GroupID for the process
+			$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
+			$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
-	## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-	POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
-	POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+			## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
+			POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+			POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
-	## Check if the UID has correctly been set (usefull on OS X)
-	unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
-	    fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
-	}
+			## Check if the UID has correctly been set (usefull on OS X)
+			unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
+				fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
+			}
 
-	# Sets the UMASK
-	umask(oct($Sympa::Configuration::Conf{'umask'}));
+			# Sets the UMASK
+			umask(oct($Sympa::Configuration::Conf{'umask'}));
 
-	## Most initializations have now been done.
-	Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
-    }else{
-	Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s reload config", Sympa::Constants::VERSION);
-	$signal = '0';
-    }
+			## Most initializations have now been done.
+			Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
+		}else{
+			Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s reload config", Sympa::Constants::VERSION);
+			$signal = '0';
+		}
 
 ## Check for several files.
 ## Prevent that 2 processes perform checks at the same time...
-if ($main::daemon_usage == Sympa::Configuration::DAEMON_ALL) {
-    unless (Sympa::Configuration::checkfiles()) {
-	Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
-	## No return.
-    }
-}else {
-    sleep 1; ## wait until main process has created required directories
-}
+		if ($main::daemon_usage == Sympa::Configuration::DAEMON_ALL) {
+			unless (Sympa::Configuration::checkfiles()) {
+				Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
+				## No return.
+			}
+		}else {
+			sleep 1; ## wait until main process has created required directories
+		}
 
 ## Do we have right access in the directory
-if ($options{'keepcopy'}) {
-    if (! -d $options{'keepcopy'}) {
-	Sympa::Log::Syslog::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $options{'keepcopy'});
-	delete $options{'keepcopy'};
-    }elsif (! -w $options{'keepcopy'}) {
-	Sympa::Log::Syslog::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $options{'keepcopy'});
-	delete $options{'keepcopy'};
-    }
-}
+		if ($options{'keepcopy'}) {
+			if (! -d $options{'keepcopy'}) {
+				Sympa::Log::Syslog::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $options{'keepcopy'});
+				delete $options{'keepcopy'};
+			}elsif (! -w $options{'keepcopy'}) {
+				Sympa::Log::Syslog::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $options{'keepcopy'});
+				delete $options{'keepcopy'};
+			}
+		}
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
-$SIG{'TERM'} = 'sigterm';
-$SIG{'HUP'} = 'sighup';
-$SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
+		$SIG{'TERM'} = 'sigterm';
+		$SIG{'HUP'} = 'sighup';
+		$SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
 
-my @qfile;
+		my @qfile;
 
-my $msgspool = Sympa::Spool->new(name => 'msg');
-my $bouncespool = Sympa::Spool->new(name => 'bounce');
+		my $msgspool = Sympa::Spool->new(name => 'msg');
+		my $bouncespool = Sympa::Spool->new(name => 'bounce');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
-while (!$signal) {
+		while (!$signal) {
 
-    if (!opendir(DIR, $spooldir)) {
-	Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
-    }
-    @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
-    closedir(DIR);
-    my $filename;
-    my $listname;
-    my $robot;
+			if (!opendir(DIR, $spooldir)) {
+				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
+			}
+			@qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
+			closedir(DIR);
+			my $filename;
+			my $listname;
+			my $robot;
 
-    my $t_spool = $spooldir; ## in single mode we may have to supervise automatic spool
+			my $t_spool = $spooldir; ## in single mode we may have to supervise automatic spool
 
-    ## Scans files in queue
-    foreach my $filename (sort @qfile) {
-	my $type;
-	my $list;
-	my ($listname, $robot);
-	my %meta ;
-	my $spool;
+			## Scans files in queue
+			foreach my $filename (sort @qfile) {
+				my $type;
+				my $list;
+				my ($listname, $robot);
+				my %meta ;
+				my $spool;
 
-	## z and Z are a null priority, so file stay in queue and are processed
-	## only if renamed by administrator
-        next unless ($filename =~ /^(\S+)\.(\d+)\.\w+$/);
-        next if ($filename =~ /\.lock$/);
+				## z and Z are a null priority, so file stay in queue and are processed
+				## only if renamed by administrator
+				next unless ($filename =~ /^(\S+)\.(\d+)\.\w+$/);
+				next if ($filename =~ /\.lock$/);
 
-	## Don't process temporary files created by queue (T.xxx)
-	next if ($filename =~ /^T\./);
+				## Don't process temporary files created by queue (T.xxx)
+				next if ($filename =~ /^T\./);
 
 
-	## Lock file
-	my $lock = Sympa::Lock->new(
-            path   => $spooldir.'/'.$filename,
-	    method => $Sympa::Configuration::Conf{'lock_method'}
-        );
-	unless (defined $lock) {
-	    Sympa::Log::Syslog::do_log('err','Could not create new lock');
-	    next;
+				## Lock file
+				my $lock = Sympa::Lock->new(
+					path   => $spooldir.'/'.$filename,
+					method => $Sympa::Configuration::Conf{'lock_method'}
+				);
+				unless (defined $lock) {
+					Sympa::Log::Syslog::do_log('err','Could not create new lock');
+					next;
+				}
+				$lock->set_timeout(2);
+				unless ($lock->lock('write')) {
+					next;
+				}
+
+				($listname, $robot) = split(/\@/,$1);
+				$meta{'date'} = $2;
+
+				# spooler is able to recognize if message is bounce or automatic family list creation.'
+				if ($listname =~ /Sympa_Bounce\./) {
+					$listname =~ s/Sympa_Bounce\.// ;
+					$spool = $bouncespool;
+				}else{
+					$spool = $msgspool;
+					if ($listname =~ /Sympa_Automatic\./) {
+						$listname =~ s/Sympa_Automatic\.// ;
+						$meta{'create_list_if_needed'} = 1;
+					}else{
+						$meta{'create_list_if_needed'} = 0;
+					}
+				}
+
+				$listname = lc($listname);
+				if ($robot) {
+					$robot=lc($robot);
+				}else{
+					$robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
+				}
+
+				my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+
+				if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
+					($listname, $type) = ($1, $2);
+				}
+				my $email = Sympa::Configuration::get_robot_conf($robot, 'email');
+
+				my $priority;
+
+				if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
+					$priority = 0;
+				}elsif ($type eq 'request') {
+					$priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
+				}elsif ($type eq 'owner') {
+					$priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
+				}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
+					$priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
+					$listname ='';
+				}
+				my $list =  Sympa::List->new(
+					name    => $listname,
+					robot   => $robot,
+					options => {'just_try' => 1}
+				);
+				if ($list) {
+					$priority = $list->{'admin'}{'priority'};
+				}else {
+					$priority = Sympa::Configuration::get_robot_conf($robot, 'default_list_priority');
+				}
+
+				$meta{'robot'} = $robot if $robot;
+				$meta{'list'} = $listname if $listname;
+				if ($priority) {
+					$meta{'priority'} = $priority ;
+				}else{
+					$meta{'priority'} = 1;
+				}
+				$meta{'type'} = $type if $type;
+
+				my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
+
+				my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
+			unless($messagekey) {
+				Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
+				next;
+			}
+
+			if ($options{'keepcopy'}) {
+				unless (File::Copy::copy($t_spool.'/'.$filename, $options{'keepcopy'}.'/'.$filename) ) {
+					Sympa::Log::Syslog::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $options{'keepcopy'}."/$filename", $ERRNO);
+				}
+			}
+
+			## Release the lock
+			$lock->unlock();
+			unless (unlink ($spooldir.'/'.$filename)) {
+				Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+				exit;
+			}
+		}
+
+		unless ($filename) {
+			sleep(Sympa::Configuration::get_robot_conf($robot, 'sleep'));
+			next;
+		}
 	}
-	$lock->set_timeout(2);
-	unless ($lock->lock('write')) {
-	    next;
-	}
-
-	($listname, $robot) = split(/\@/,$1);
-	$meta{'date'} = $2;
-
-	# spooler is able to recognize if message is bounce or automatic family list creation.'
-	if ($listname =~ /Sympa_Bounce\./) {
-	    $listname =~ s/Sympa_Bounce\.// ;
-	    $spool = $bouncespool;
-	}else{
-	    $spool = $msgspool;
-	    if ($listname =~ /Sympa_Automatic\./) {
-		$listname =~ s/Sympa_Automatic\.// ;
-		$meta{'create_list_if_needed'} = 1;
-	    }else{
-		$meta{'create_list_if_needed'} = 0;
-	    }
-	}
-
-	$listname = lc($listname);
-	if ($robot) {
-	    $robot=lc($robot);
-	}else{
-	    $robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
-	}
-
-	my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
-
-	if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
-	    ($listname, $type) = ($1, $2);
-	}
-	my $email = Sympa::Configuration::get_robot_conf($robot, 'email');
-
-	my $priority;
-
-	if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
-	    $priority = 0;
-	}elsif ($type eq 'request') {
-	    $priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
-	}elsif ($type eq 'owner') {
-	    $priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
-	}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
-	    $priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
-	    $listname ='';
-	}
-	my $list =  Sympa::List->new(
-		name    => $listname,
-		robot   => $robot,
-		options => {'just_try' => 1}
-	);
-	if ($list) {
-	    $priority = $list->{'admin'}{'priority'};
-	}else {
-	    $priority = Sympa::Configuration::get_robot_conf($robot, 'default_list_priority');
-	}
-
-	$meta{'robot'} = $robot if $robot;
-	$meta{'list'} = $listname if $listname;
-	if ($priority) {
-	    $meta{'priority'} = $priority ;
-	}else{
-	    $meta{'priority'} = 1;
-	}
-	$meta{'type'} = $type if $type;
-
-	my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
-
-	my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
-	unless($messagekey) {
-	   Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
-	    next;
-	}
-
-	if ($options{'keepcopy'}) {
-	    unless (File::Copy::copy($t_spool.'/'.$filename, $options{'keepcopy'}.'/'.$filename) ) {
- 		Sympa::Log::Syslog::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $options{'keepcopy'}."/$filename", $ERRNO);
-	    }
-	}
-
-	## Release the lock
-	$lock->unlock();
-	unless (unlink ($spooldir.'/'.$filename)) {
-	   Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
-	    exit;
-	}
-    }
-
-    unless ($filename) {
-	sleep(Sympa::Configuration::get_robot_conf($robot, 'sleep'));
-	next;
-    }
-}
 
 ## Disconnect from Database
-Sympa::SDM::db_disconnect;
+	Sympa::SDM::db_disconnect;
 
 }
 Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');
@@ -483,19 +483,19 @@ exit(0);
 # When we catch SIGTERM, just changes the value of the $signal
 # loop variable.
 sub sigterm {
-    Sympa::Log::Syslog::do_log('notice', 'signal TERM received, still processing current task');
-    $signal = 'term';
+	Sympa::Log::Syslog::do_log('notice', 'signal TERM received, still processing current task');
+	$signal = 'term';
 }
 
 # When we catch SIGHUP, changes the value of the $signal
 # loop variable and puts the "-mail" logging option
 sub sighup {
-    if ($options{'mail'}) {
-	Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
-	undef $options{'mail'};
-    }else{
-	Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
-	$options{'mail'} = 1;
-    }
-    $signal = 'hup';
+	if ($options{'mail'}) {
+		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
+		undef $options{'mail'};
+	}else{
+		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
+		$options{'mail'} = 1;
+	}
+	$signal = 'hup';
 }

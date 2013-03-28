@@ -47,14 +47,14 @@ map { $valid_options{$_}++; } @valid_options;
 my %required_options = ();
 map { $required_options{$_}++; } @required_options;
 
-my %Default_Conf =
-    ( 	'host'=> undef,
-    	'suffix' => undef,
-    	'filter' => undef,
-    	'scope' => 'sub',
-	'bind_dn' => undef,
+my %Default_Conf = (
+	'host'          => undef,
+	'suffix'        => undef,
+	'filter'        => undef,
+	'scope'         => 'sub',
+	'bind_dn'       => undef,
 	'bind_password' => undef
-   );
+);
 
 my %Ldap = ();
 
@@ -79,66 +79,66 @@ The configuration, as an hash.
 =cut
 
 sub load {
-    my ($config) = @_;
-   Sympa::Log::Syslog::do_log('debug3', '(%s)', $config);
+	my ($config) = @_;
+	Sympa::Log::Syslog::do_log('debug3', '(%s)', $config);
 
-    my $line_num = 0;
-    my $config_err = 0;
-    my($i, %o);
+	my $line_num = 0;
+	my $config_err = 0;
+	my($i, %o);
 
-    ## Open the configuration file or return and read the lines.
-    unless (open(IN, $config)) {
-	Sympa::Log::Syslog::do_log('err','Unable to open %s: %s', $config, $ERRNO);
-	return undef;
-    }
-
-    my $folded_line;
-    while (my $current_line = <IN>) {
-	$line_num++;
-	next if ($current_line =~ /^\s*$/o || $current_line =~ /^[\#\;]/o);
-
-	## Cope with folded line (ending with '\')
-	if ($current_line =~ /\\\s*$/) {
-	    $current_line =~ s/\\\s*$//; ## remove trailing \
-	    chomp $current_line;
-	    $folded_line .= $current_line;
-	    next;
-	}elsif (defined $folded_line) {
-	    $current_line = $folded_line.$current_line;
-	    $folded_line = undef;
+	## Open the configuration file or return and read the lines.
+	unless (open(IN, $config)) {
+		Sympa::Log::Syslog::do_log('err','Unable to open %s: %s', $config, $ERRNO);
+		return undef;
 	}
 
-	if ($current_line =~ /^(\S+)\s+(.+)$/io) {
-	    my($keyword, $value) = ($1, $2);
-	    $value =~ s/\s*$//;
+	my $folded_line;
+	while (my $current_line = <IN>) {
+		$line_num++;
+		next if ($current_line =~ /^\s*$/o || $current_line =~ /^[\#\;]/o);
 
-	    $o{$keyword} = [ $value, $line_num ];
-	}else {
+		## Cope with folded line (ending with '\')
+		if ($current_line =~ /\\\s*$/) {
+			$current_line =~ s/\\\s*$//; ## remove trailing \
+			chomp $current_line;
+			$folded_line .= $current_line;
+			next;
+		}elsif (defined $folded_line) {
+			$current_line = $folded_line.$current_line;
+			$folded_line = undef;
+		}
+
+		if ($current_line =~ /^(\S+)\s+(.+)$/io) {
+			my($keyword, $value) = ($1, $2);
+			$value =~ s/\s*$//;
+
+			$o{$keyword} = [ $value, $line_num ];
+		}else {
 #	    printf STDERR Msg(1, 3, "Malformed line %d: %s"), $config, $_;
-	    $config_err++;
+			$config_err++;
+		}
 	}
-    }
-    close(IN);
+	close(IN);
 
 
-    ## Check if we have unknown values.
-    foreach $i (sort keys %o) {
-	$Ldap{$i} = $o{$i}[0] || $Default_Conf{$i};
+	## Check if we have unknown values.
+	foreach $i (sort keys %o) {
+		$Ldap{$i} = $o{$i}[0] || $Default_Conf{$i};
 
-	unless ($valid_options{$i}) {
-	    Sympa::Log::Syslog::do_log('err',"Line %d, unknown field: %s \n", $o{$i}[1], $i);
-	    $config_err++;
+		unless ($valid_options{$i}) {
+			Sympa::Log::Syslog::do_log('err',"Line %d, unknown field: %s \n", $o{$i}[1], $i);
+			$config_err++;
+		}
 	}
-    }
-    ## Do we have all required values ?
-    foreach $i (keys %required_options) {
-	unless (defined $o{$i} or defined $Default_Conf{$i}) {
-	    Sympa::Log::Syslog::do_log('err',"Required field not found : %s\n", $i);
-	    $config_err++;
-	    next;
+	## Do we have all required values ?
+	foreach $i (keys %required_options) {
+		unless (defined $o{$i} or defined $Default_Conf{$i}) {
+			Sympa::Log::Syslog::do_log('err',"Required field not found : %s\n", $i);
+			$config_err++;
+			next;
+		}
 	}
-    }
- return %Ldap;
+	return %Ldap;
 }
 
 1;

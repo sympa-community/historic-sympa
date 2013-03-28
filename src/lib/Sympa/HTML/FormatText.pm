@@ -30,9 +30,9 @@ Called foreach img element found.
 =cut
 
 sub img_start   {
-  my($self,$node) = @_;
-  my $alt = $node->attr('alt');
-  $self->out(  defined($alt) ? sprintf(Sympa::Language::gettext("[ Image%s ]"), ": " . $alt) : sprintf(Sympa::Language::gettext("[Image%s]"),""));
+	my($self,$node) = @_;
+	my $alt = $node->attr('alt');
+	$self->out(  defined($alt) ? sprintf(Sympa::Language::gettext("[ Image%s ]"), ": " . $alt) : sprintf(Sympa::Language::gettext("[Image%s]"),""));
 }
 
 1;

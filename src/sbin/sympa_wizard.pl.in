@@ -301,277 +301,277 @@ my %optional_modules = (
 
 my %options;
 GetOptions(
-    \%options,
-    'target=s',
-    'create=s',
-    'check',
-    'help'
+	\%options,
+	'target=s',
+	'create=s',
+	'check',
+	'help'
 ) or pod2usage(-verbose => 0);
 
 if ($options{help}) {
-    pod2usage();
+	pod2usage();
 } elsif ($options{create}) {
-    create_configuration();
+	create_configuration();
 } elsif ($options{check}) {
-    check_cpan();
+	check_cpan();
 } else {
-    edit_configuration();
+	edit_configuration();
 }
 
 exit 0;
 
 sub create_configuration {
 
-    eval {
-	require Sympa::Configuration;
-	require Sympa::Tools;
-    };
-    if ($EVAL_ERROR) {
-	*{Sympa::Language::gettext} = sub { shift };
-	*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
-    } else {
-	Sympa::Language::set_lang('');
-    }
+	eval {
+		require Sympa::Configuration;
+		require Sympa::Tools;
+	};
+	if ($EVAL_ERROR) {
+		*{Sympa::Language::gettext} = sub { shift };
+		*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
+	} else {
+		Sympa::Language::set_lang('');
+	}
 
-    my $conf;
-    if ($options{create} eq 'sympa.conf') {
-        $conf = $options{target} ? $options{target} : $sympa_conf;
-    } elsif ($options{create} eq 'wwsympa.conf') {
-        $conf = $options{target} ? $options{target} : $wwsympa_conf;
-    } else {
-        pod2usage("$options{create} is not a valid argument");
-        exit 1;
-    }
+	my $conf;
+	if ($options{create} eq 'sympa.conf') {
+		$conf = $options{target} ? $options{target} : $sympa_conf;
+	} elsif ($options{create} eq 'wwsympa.conf') {
+		$conf = $options{target} ? $options{target} : $wwsympa_conf;
+	} else {
+		pod2usage("$options{create} is not a valid argument");
+		exit 1;
+	}
 
-    if (-f $conf) {
-        print STDERR "$conf file already exists, exiting\n";
-        exit 1;
-    }
+	if (-f $conf) {
+		print STDERR "$conf file already exists, exiting\n";
+		exit 1;
+	}
 
-    unless (open (NEWF,"> $conf")){
-        die "Unable to open $conf : $ERRNO";
-    };
+	unless (open (NEWF,"> $conf")){
+		die "Unable to open $conf : $ERRNO";
+	};
 
-    if ($options{create} eq 'sympa.conf') {
+	if ($options{create} eq 'sympa.conf') {
 #        print NEWF <<EOF
 ## Configuration file for Sympa
 ## many parameters are optional
 ## refer to the documentation for a detailed list of parameters
 
 #EOF
-    }
+	}
 
-    foreach my $param (@Sympa::Configuration::Definition::params) {
+	foreach my $param (@Sympa::Configuration::Definition::params) {
 
-        if ($param->{'title'}) {
-            printf NEWF "###\\\\\\\\ %s ////###\n\n",
-                        Sympa::Language::gettext($param->{'title'});
-            next;
-        }
+		if ($param->{'title'}) {
+			printf NEWF "###\\\\\\\\ %s ////###\n\n",
+			Sympa::Language::gettext($param->{'title'});
+			next;
+		}
 
-        next unless ($param->{'file'} eq $options{create});
+		next unless ($param->{'file'} eq $options{create});
 
-        next unless (defined $param->{'default'} || defined $param->{'sample'});
+		next unless (defined $param->{'default'} || defined $param->{'sample'});
 
-        print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
-                                    '## ', '## ')
-            if (defined $param->{'query'});
+		print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
+			'## ', '## ')
+		if (defined $param->{'query'});
 
-        print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
-                                    '## ', '## ')
-            if (defined $param->{'advice'});
+		print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
+			'## ', '## ')
+		if (defined $param->{'advice'});
 
-        if (defined $param->{'sample'}) {
-            printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'};
-        } elsif (defined $param->{'default'}) {
-            printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'};
-        }
-    }
+		if (defined $param->{'sample'}) {
+			printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'};
+		} elsif (defined $param->{'default'}) {
+			printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'};
+		}
+	}
 
-    close NEWF;
-    print STDERR "$conf file has been created\n";
+	close NEWF;
+	print STDERR "$conf file has been created\n";
 }
 
 sub edit_configuration {
-    require Sympa::Configuration::Definition;
-    # complement required fields.
-    foreach my $param (@Sympa::Configuration::Definition::params) {
-        if ($param->{'name'} eq 'domain') {
-            $param->{'default'} = hostname();
-        } elsif ($param->{'name'} eq 'wwsympa_url') {
-            $param->{'default'} = sprintf 'http://%s/sympa', hostname();
-        }
-    }
-    eval {
-        require Conf;
-        require tools;
-    };
-    if ($EVAL_ERROR) {
-        die "Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check\n";
-    }
+	require Sympa::Configuration::Definition;
+	# complement required fields.
+	foreach my $param (@Sympa::Configuration::Definition::params) {
+		if ($param->{'name'} eq 'domain') {
+			$param->{'default'} = hostname();
+		} elsif ($param->{'name'} eq 'wwsympa_url') {
+			$param->{'default'} = sprintf 'http://%s/sympa', hostname();
+		}
+	}
+	eval {
+		require Conf;
+		require tools;
+	};
+	if ($EVAL_ERROR) {
+		die "Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check\n";
+	}
 
-    my $new_wwsympa_conf = '/tmp/wwsympa.conf';
-    my $new_sympa_conf = '/tmp/sympa.conf';
-    my $wwsconf = {};
-    my $somechange = 0;
+	my $new_wwsympa_conf = '/tmp/wwsympa.conf';
+	my $new_sympa_conf = '/tmp/sympa.conf';
+	my $wwsconf = {};
+	my $somechange = 0;
 
-    my $rep;
-    print "Does your console support UTF-8 (if you are not sure, hit [Enter])? [y/N] : ";
-    $rep = <STDIN>;
-    chomp $rep;
-    if (lc $rep eq 'y') {
-        my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
-        $lang =~ s/\..*//;
-        Sympa::Language::set_lang($lang);
-    } else {
-	Sympa::Language::set_lang('en_US');
-    }
+	my $rep;
+	print "Does your console support UTF-8 (if you are not sure, hit [Enter])? [y/N] : ";
+	$rep = <STDIN>;
+	chomp $rep;
+	if (lc $rep eq 'y') {
+		my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
+		$lang =~ s/\..*//;
+		Sympa::Language::set_lang($lang);
+	} else {
+		Sympa::Language::set_lang('en_US');
+	}
 
-    ## Load config
-    unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf)) {
-	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
-    }
+	## Load config
+	unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf)) {
+		Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
+	}
 
-    ## Load sympa config (but not using database)
-    unless (Sympa::Configuration::load( $sympa_conf,'nodb')) {
-	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
-    }
+	## Load sympa config (but not using database)
+	unless (Sympa::Configuration::load( $sympa_conf,'nodb')) {
+		Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
+	}
 
-    my (@new_wwsympa_conf, @new_sympa_conf);
+	my (@new_wwsympa_conf, @new_sympa_conf);
 
-    ## Edition mode
-    foreach my $param (@Sympa::Configuration::Definition::params) {
-        my $desc;
+	## Edition mode
+	foreach my $param (@Sympa::Configuration::Definition::params) {
+		my $desc;
 
-        if ($param->{'title'}) {
-            my $title = Sympa::Language::gettext($param->{'title'});
-            print "\n\n** $title **\n";
+		if ($param->{'title'}) {
+			my $title = Sympa::Language::gettext($param->{'title'});
+			print "\n\n** $title **\n";
 
-            ## write to conf file
-            push @new_wwsympa_conf,
-                sprintf "###\\\\\\\\ %s ////###\n\n", $title;
-            push @new_sympa_conf,
-                sprintf "###\\\\\\\\ %s ////###\n\n", $title;
+			## write to conf file
+			push @new_wwsympa_conf,
+			sprintf "###\\\\\\\\ %s ////###\n\n", $title;
+			push @new_sympa_conf,
+			sprintf "###\\\\\\\\ %s ////###\n\n", $title;
 
-            next;
-        }
+			next;
+		}
 
-        my $file = $param->{'file'} ;
-        my $name = $param->{'name'} ;
-        my $query = $param->{'query'} ;
-        $query = Sympa::Language::gettext($query) if $query;
-        my $advice = $param->{'advice'} ;
-        $advice = Sympa::Language::gettext($advice) if $advice;
-        my $sample = $param->{'sample'} ;
-        my $current_value ;
-        if ($file eq 'wwsympa.conf') {
-            $current_value = $wwsconf->{$name} ;
-        } elsif ($file eq 'sympa.conf') {
-            $current_value = $Sympa::Configuration::Conf{$name};
-        } else {
-            next;
-        }
-        my $new_value;
-        if ($param->{'edit'} eq '1') {
-            print "\n";
-            print Sympa::Tools::wrap_text($query, '* ', '  ');
-            print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
-            printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
-            $new_value = <STDIN> ;
-            chomp $new_value;
-        }
-        if ($new_value eq '') {
-            $new_value = $current_value;
-        }
+		my $file = $param->{'file'} ;
+		my $name = $param->{'name'} ;
+		my $query = $param->{'query'} ;
+		$query = Sympa::Language::gettext($query) if $query;
+		my $advice = $param->{'advice'} ;
+		$advice = Sympa::Language::gettext($advice) if $advice;
+		my $sample = $param->{'sample'} ;
+		my $current_value ;
+		if ($file eq 'wwsympa.conf') {
+			$current_value = $wwsconf->{$name} ;
+		} elsif ($file eq 'sympa.conf') {
+			$current_value = $Sympa::Configuration::Conf{$name};
+		} else {
+			next;
+		}
+		my $new_value;
+		if ($param->{'edit'} eq '1') {
+			print "\n";
+			print Sympa::Tools::wrap_text($query, '* ', '  ');
+			print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
+			printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
+			$new_value = <STDIN> ;
+			chomp $new_value;
+		}
+		if ($new_value eq '') {
+			$new_value = $current_value;
+		}
 
-        ## SKip empty parameters
-        next if (($new_value eq '') &&
-            ! $sample);
+		## SKip empty parameters
+		next if (($new_value eq '') &&
+			! $sample);
 
-        ## param is an ARRAY
-        if (ref($new_value) eq 'ARRAY') {
-            $new_value = join ',',@{$new_value};
-        }
+		## param is an ARRAY
+		if (ref($new_value) eq 'ARRAY') {
+			$new_value = join ',',@{$new_value};
+		}
 
-        if ($file eq 'wwsympa.conf') {
-            $desc = \@new_wwsympa_conf;
-        }elsif ($file eq 'sympa.conf') {
-            $desc = \@new_sympa_conf;
-        }else{
-            printf STDERR Sympa::Language::gettext("Incorrect parameter definition: %s\n"),
-                          $file;
-        }
+		if ($file eq 'wwsympa.conf') {
+			$desc = \@new_wwsympa_conf;
+	}elsif ($file eq 'sympa.conf') {
+		$desc = \@new_sympa_conf;
+}else{
+	printf STDERR Sympa::Language::gettext("Incorrect parameter definition: %s\n"),
+	$file;
+}
 
-        if ($new_value eq '') {
-            next unless $sample;
+if ($new_value eq '') {
+	next unless $sample;
 
-            push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
+	push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
 
-            unless ($advice eq '') {
-                push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
-            }
+	unless ($advice eq '') {
+		push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	}
 
-            push @{$desc}, "# $name\t$sample\n\n";
-        }else {
-            push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
-            unless ($advice eq '') {
-                push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
-            }
+	push @{$desc}, "# $name\t$sample\n\n";
+}else {
+	push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
+	unless ($advice eq '') {
+		push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	}
 
-            if ($current_value ne $new_value) {
-                push @{$desc}, "# was $name $current_value\n";
-                $somechange = 1;
-            }
+	if ($current_value ne $new_value) {
+		push @{$desc}, "# was $name $current_value\n";
+		$somechange = 1;
+	}
 
-            push @{$desc}, "$name\t$new_value\n\n";
-        }
+	push @{$desc}, "$name\t$new_value\n\n";
+}
     }
 
     if ($somechange) {
 
-        my $date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
-                                              localtime(time));
+	    my $date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
+		    localtime(time));
 
-        ## Keep old config files
-        unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
-            warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-                         $wwsympa_conf, $ERRNO);
-        }
+	    ## Keep old config files
+	    unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
+		    warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
+			    $wwsympa_conf, $ERRNO);
+	    }
 
-        unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
-            warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-                         $sympa_conf, $ERRNO);
-        }
+	    unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
+		    warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
+			    $sympa_conf, $ERRNO);
+	    }
 
-        ## Write new config files
-        unless (open (WWSYMPA,"> $wwsympa_conf")){
-            die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-                        $wwsympa_conf, $ERRNO);
-        };
+	    ## Write new config files
+	    unless (open (WWSYMPA,"> $wwsympa_conf")){
+		    die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
+			    $wwsympa_conf, $ERRNO);
+	    };
 
-        my $umask = umask 037;
-        unless (open (SYMPA,"> $sympa_conf")){
-            umask $umask;
-            die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-                        $sympa_conf, $ERRNO);
-        };
-        umask $umask;
-        chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
+	    my $umask = umask 037;
+	    unless (open (SYMPA,"> $sympa_conf")){
+		    umask $umask;
+		    die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
+			    $sympa_conf, $ERRNO);
+	    };
+	    umask $umask;
+	    chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
 
-        print SYMPA @new_sympa_conf;
-        print WWSYMPA @new_wwsympa_conf;
+	    print SYMPA @new_sympa_conf;
+	    print WWSYMPA @new_wwsympa_conf;
 
-        close SYMPA;
-        close WWSYMPA;
+	    close SYMPA;
+	    close WWSYMPA;
 
-        printf Sympa::Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
+	    printf Sympa::Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
     }
 }
 
 sub check_cpan {
-    require CPAN;
+	require CPAN;
 
-    print <<EOM;
+	print <<EOM;
 Sympa requires from 50 to 65 additional Perl modules to run properly. This
 process will help you install of them.
 
@@ -585,21 +585,21 @@ You can restart it safely afterward.
 Strike return key to continue...
 EOM
 
-    my $rep = <STDIN>;
+	my $rep = <STDIN>;
 
-    print "******* Check perl for SYMPA ********\n";
-    print "\nChecking for PERL version:\n-----------------------------\n";
-    if ($] >= $perl_version){
-        print "your version of perl is OK ($] >= $perl_version)\n";
-    }else {
-        print "Your version of perl is TOO OLD ($] < $perl_version)\nPlease INSTALL a new one !\n";
-    }
+	print "******* Check perl for SYMPA ********\n";
+	print "\nChecking for PERL version:\n-----------------------------\n";
+	if ($] >= $perl_version){
+		print "your version of perl is OK ($] >= $perl_version)\n";
+	}else {
+		print "Your version of perl is TOO OLD ($] < $perl_version)\nPlease INSTALL a new one !\n";
+	}
 
-    print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
-    check_modules('y', \%mandatory_modules);
+	print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
+	check_modules('y', \%mandatory_modules);
 
-    print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
-    check_modules('n', \%optional_modules);
+print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
+check_modules('n', \%optional_modules);
 
     print <<EOM;
 ******* NOTE *******
@@ -610,122 +610,122 @@ EOM
 }
 
 sub check_modules {
-    my($default, $modules) = @_;
+	my($default, $modules) = @_;
 
-    print <<EOM;
+	print <<EOM;
 perl module                 CPAN distribution          STATUS
 -----------                 -----------------          ------
 EOM
 
-    foreach my $module_name (sort keys %$modules) {
-	my $module = $modules->{$module_name};
-	$module->{name} = $module_name;
+	foreach my $module_name (sort keys %$modules) {
+		my $module = $modules->{$module_name};
+		$module->{name} = $module_name;
 
-        printf ("%-27s %-27s", $module->{name}, $module->{distribution});
+		printf ("%-27s %-27s", $module->{name}, $module->{distribution});
 
-        eval "require $module->{name}";
-        if ($EVAL_ERROR) {
-            ### not installed
-            print "not found\n";
-            install_module($module, {'default' => $default});
-        } else {
+		eval "require $module->{name}";
+		if ($EVAL_ERROR) {
+			### not installed
+			print "not found\n";
+			install_module($module, {'default' => $default});
+		} else {
 
-	  my ($vs, $v);
+			my ($vs, $v);
 
-	  ## MHonArc module does not provide its version the standard way
-	  if ($module->{name} =~ /^MHonArc/i) {
-	    require "mhamain.pl";
-	    $v = $mhonarc::VERSION;
-	  }else {
+			## MHonArc module does not provide its version the standard way
+			if ($module->{name} =~ /^MHonArc/i) {
+				require "mhamain.pl";
+				$v = $mhonarc::VERSION;
+			}else {
 
-	    $vs = $module->{name} . "::VERSION";
-	    {
-	      no strict 'refs';
-	      $v = $$vs;
-	    }
-	  }
+				$vs = $module->{name} . "::VERSION";
+				{
+					no strict 'refs';
+					$v = $$vs;
+				}
+			}
 
-	  my $rv = $module->{version} || "1.0" ;
-	  ### OK: check version
-	  if ($v ge $rv) {
-	    printf ("OK (%-6s >= %s)\n", $v, $rv);
-	    next;
-	  } else {
-	    print "version is too old ($v < $rv).\n";
-	    print ">>>>>>> You must update \"$module->{distribution}\" to version \"$module->{version}}\" <<<<<<.\n";
-	    install_module($module, {'default' => $default});
-	  }
-        }
-    }
+			my $rv = $module->{version} || "1.0" ;
+			### OK: check version
+			if ($v ge $rv) {
+				printf ("OK (%-6s >= %s)\n", $v, $rv);
+				next;
+			} else {
+				print "version is too old ($v < $rv).\n";
+				print ">>>>>>> You must update \"$module->{distribution}\" to version \"$module->{version}}\" <<<<<<.\n";
+				install_module($module, {'default' => $default});
+			}
+		}
+	}
 }
 
 # Install a CPAN module
 sub install_module {
-  my ($module, $options) = @_;
+	my ($module, $options) = @_;
 
-    my $default = $options->{'default'};
+	my $default = $options->{'default'};
 
-    unless ($ENV{'FTP_PASSIVE'} eq 1) {
-        $ENV{'FTP_PASSIVE'} = 1;
-        print "Setting FTP Passive mode\n";
-    }
+	unless ($ENV{'FTP_PASSIVE'} eq 1) {
+		$ENV{'FTP_PASSIVE'} = 1;
+		print "Setting FTP Passive mode\n";
+	}
 
-    ## This is required on RedHat 9 for DBD::mysql installation
-    my $lang = $ENV{'LANG'};
-    $ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
+	## This is required on RedHat 9 for DBD::mysql installation
+	my $lang = $ENV{'LANG'};
+	$ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
 
-    unless ($EUID == 0) {
-        print "\#\# You need root privileges to install $module->{name} module. \#\#\n";
-        print "\#\# Press the Enter key to continue checking modules. \#\#\n";
-        my $t = <STDIN>;
-        return undef;
-    }
+	unless ($EUID == 0) {
+		print "\#\# You need root privileges to install $module->{name} module. \#\#\n";
+		print "\#\# Press the Enter key to continue checking modules. \#\#\n";
+		my $t = <STDIN>;
+		return undef;
+	}
 
-    unless ($options->{'force'}) {
-        printf "-> Usage of this module: %s\n", $module->{usage} if ($module->{usage});
-        printf "-> Prerequisites: %s\n", $module->{prerequisites} if ($module->{prerequisites});
-	print "-> Install module $module->{name} ? [$default]";
-        my $answer = <STDIN>; chomp $answer;
-        $answer ||= $default;
-        return unless ($answer =~ /^y$/i);
-    }
+	unless ($options->{'force'}) {
+		printf "-> Usage of this module: %s\n", $module->{usage} if ($module->{usage});
+		printf "-> Prerequisites: %s\n", $module->{prerequisites} if ($module->{prerequisites});
+		print "-> Install module $module->{name} ? [$default]";
+		my $answer = <STDIN>; chomp $answer;
+		$answer ||= $default;
+		return unless ($answer =~ /^y$/i);
+	}
 
-  $CPAN::Config->{'inactivity_timeout'} = 0; ## disable timeout to prevent timeout during modules installation
-  $CPAN::Config->{'colorize_output'} = 1;
-  $CPAN::Config->{'build_requires_install_policy'} = 'yes';  ## automatically installed prerequisites without asking
-  $CPAN::Config->{'prerequisites_policy'} = 'follow'; ## build prerequisites automatically
-  $CPAN::Config->{'load_module_verbosity'} = 'none';  ## minimum verbosity during module loading
-  $CPAN::Config->{'tar_verbosity'} = 'none';  ## minimum verbosity with tar command
+	$CPAN::Config->{'inactivity_timeout'} = 0; ## disable timeout to prevent timeout during modules installation
+	$CPAN::Config->{'colorize_output'} = 1;
+	$CPAN::Config->{'build_requires_install_policy'} = 'yes';  ## automatically installed prerequisites without asking
+	$CPAN::Config->{'prerequisites_policy'} = 'follow'; ## build prerequisites automatically
+	$CPAN::Config->{'load_module_verbosity'} = 'none';  ## minimum verbosity during module loading
+	$CPAN::Config->{'tar_verbosity'} = 'none';  ## minimum verbosity with tar command
 
-    #CPAN::Shell->clean($module) if ($options->{'force'});
+	#CPAN::Shell->clean($module) if ($options->{'force'});
 
-    CPAN::Shell->make($module->{name});
+	CPAN::Shell->make($module->{name});
 
-    if ($options->{'force'}) {
-        CPAN::Shell->force('test', $module->{name});
-    }else {
-        CPAN::Shell->test($module->{name});
-    }
+	if ($options->{'force'}) {
+		CPAN::Shell->force('test', $module->{name});
+	}else {
+		CPAN::Shell->test($module->{name});
+	}
 
-    CPAN::Shell->install($module->{name}); ## Could use CPAN::Shell->force('install') if make test failed
+	CPAN::Shell->install($module->{name}); ## Could use CPAN::Shell->force('install') if make test failed
 
-    ## Check if module has been successfuly installed
-    eval "require $module->{name}";
-    unless ($EVAL_ERROR) {
-        ## Prevent recusive calls if already in force mode
-        if ($options->{'force'}) {
-            print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
-            my $answer = <STDIN>;
-        }else {
-            print  "Installation of $module->{name} FAILED. Do you want to force the installation of this module? (y/N) ";
-            my $answer = <STDIN>; chomp $answer;
-            if ($answer =~ /^y/i) {
-                install_module($module, {'force' => 1});
-            }
-        }
-    }
+	## Check if module has been successfuly installed
+	eval "require $module->{name}";
+	unless ($EVAL_ERROR) {
+		## Prevent recusive calls if already in force mode
+		if ($options->{'force'}) {
+			print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
+			my $answer = <STDIN>;
+		}else {
+			print  "Installation of $module->{name} FAILED. Do you want to force the installation of this module? (y/N) ";
+			my $answer = <STDIN>; chomp $answer;
+			if ($answer =~ /^y/i) {
+				install_module($module, {'force' => 1});
+			}
+		}
+	}
 
-    ## Restore lang
-    $ENV{'LANG'} = $lang if (defined $lang);
+	## Restore lang
+	$ENV{'LANG'} = $lang if (defined $lang);
 
 }

@@ -38,13 +38,13 @@ use Sympa::Log::Syslog;
 
 # Returns a unique ID for an include datasource
 sub _get_datasource_id {
-    my ($source, $other_source) = @_;
+	my ($source, $other_source) = @_;
 	Sympa::Log::Syslog::do_log('debug2',"Getting datasource id for source '%s'",$source);
-    if (ref($source) && $source->isa('Sympa::Datasource')) {
-    	$source = $other_source;
-    }
+	if (ref($source) && $source->isa('Sympa::Datasource')) {
+		$source = $other_source;
+	}
 
-    if (ref ($source)) {
+	if (ref ($source)) {
 		## Ordering values so that order of keys in a hash don't mess the value comparison
 		## Warning: Only the first level of the hash is ordered. Should a datasource
 		## be described with a hash containing more than one level (a hash of hash) we should transform
@@ -54,9 +54,9 @@ sub _get_datasource_id {
 			@orderedValues = (@orderedValues,$key,$source->{$key});
 		}
 		return substr(Digest::MD5::md5_hex(join('/', @orderedValues)), -8);
-    }else {
+	}else {
 		return substr(Digest::MD5::md5_hex($source), -8);
-    }
+	}
 
 }
 

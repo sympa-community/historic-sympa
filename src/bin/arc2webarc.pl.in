@@ -58,24 +58,26 @@ use Sympa::WWSympa;
 my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 
-my %month_idx = qw(jan 1
-fev 2
-feb 2
-fv  2
-mar 3
-avr 4
-apr 4
-mai 5
-may 5
-jun 6
-jul 7
-aug 8
-aou 8
-sep 9
-oct 10
-nov 11
-dec 12
-dc  12);
+my %month_idx = qw(
+	jan 1
+	fev 2
+	feb 2
+	fv  2
+	mar 3
+	avr 4
+	apr 4
+	mai 5
+	may 5
+	jun 6
+	jul 7
+	aug 8
+	aou 8
+	sep 9
+	oct 10
+	nov 11
+	dec 12
+	dc  12
+);
 
 my $msg_count = 0;
 
@@ -105,8 +107,8 @@ unless $listname;
 ## Check UID
 unless ([getpwuid $UID]->[0] eq Sympa::Constants::USER) {
 	printf
-	"You should run this script as user \"%s\", ignore ? (y/CR)",
-	Sympa::Constants::USER;
+		"You should run this script as user \"%s\", ignore ? (y/CR)",
+		Sympa::Constants::USER;
 	my $s = <STDIN>;
 	die unless ($s =~ /^y$/i);
 }
