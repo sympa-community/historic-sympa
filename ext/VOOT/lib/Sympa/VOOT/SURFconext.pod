@@ -1,0 +1,115 @@
+
+# This module is POD-only, but may be converted to a pm if needed. However,
+# that shouldn't happen, where implementation-differences should be handled
+# in Net::VOOT::* and Sympa::OAuth*
+
+=head1 NAME
+
+Sympa::VOOT::SURFconext - how to use the VOOT plugin with SURFconext
+
+=head1 DESCRIPTION
+
+SURFconext is a service provided by SURFnet Nederland BV (NL)
+B<First read> L<Net::VOOT::SURFconext/DETAILS>.
+
+=head2 Setting-up a test VOOT server
+
+Manual page L<Net::VOOT::SURFconext> explains how to access the test
+server.  You need the following facts:
+
+=over 4
+
+=item I<identifier>
+
+Pick a clear identifier, like C<sympa-uva> for organisation UvA.  This
+is the C<client_id> in your configuration.
+
+=item I<profile> is "Web Application".
+
+=item I<redirect URI>
+
+This will bring people back to your own sympa installation.  The format must
+be something like
+
+  https://[your-sympa-hostname]/oauth2_ready/surfconext-test/[identifier]
+
+=item I<secret>
+
+Be warned: everyone logs-in as the same admin user, so can see your secret.
+Fill this in as C<client_secret> in your configuration.
+
+=item Set I<Allowed Scope> to "read"
+
+=back
+
+B<Be aware> the registrations in the test-environment are regularly and
+unpredictably flushed.  Also, the location of the service may change without
+notice.
+
+Now, put in the C<etc/> directory configured by Sympa, a file named
+C<voot.conf>.  This file is JSON formatted, containing an ARRAY of
+voot providers.  Add this:
+
+  { "voot.ProviderID"   : "surfconext-test",
+    "voot.ProviderName" : "SURFconext (test environment)",
+    "voot.ServerClass"  : "Net::VOOT::SURFconext",
+    "oauth2" :
+      { "client_id"     : "$your_identifier"
+      , "client_secret" : "$your_secret"
+      }
+  }
+
+B<Note:> all records together need to be encapsulated into an ARRAY (so,
+between C<[> and C<]>.
+
+
+=head2 Setting up the "live" server
+
+See L<https://wiki.surfnetlabs.nl/display/surfconextdev/> and contact
+C<help AT surfconext.nl>  They will provide you with the C<client_id> and
+the C<client_secret>
+
+You need the following settings:
+
+=over 4
+
+=item I<identifier>
+
+You will get this information from SURFnet.  This is the C<client_id>
+in your configuration.
+
+=item I<profile> is "Web Application".
+
+=item I<redirect URI>
+
+This will bring people back to your own sympa installation.  The format must
+be something like
+
+  https://[your-sympa-hostname]/oauth2_ready/surfconext/[identifier]
+
+=item I<secret>
+
+You will get this from SURFnet.
+Fill this in as C<client_secret> in your configuration.
+
+=item Set I<Allowed Scope> to "read"
+
+=back
+
+Add this to your F<etc/voot.conf> file (JSON syntax, encapsulated in an ARRAY):
+
+  { "voot.ProviderID"   : "surfconext",
+    "voot.ProviderName" : "SURFconext"
+    "voot.ServerClass"  : "Net::VOOT::SURFconext",
+    "oauth2" :
+      { "client_id"     : "$your_identifier"
+      , "client_secret" : "$your_secret"
+      }
+  }
+
+=head1 AUTHORS
+
+Please contact F<solutions AT overmeer.net> if for remarks on this
+documentation or problems with the implementation.
+
+=cut

@@ -427,4 +427,19 @@ Fields:
    oauth  => HASH      parameters to Sympa::OAuth1::new()
    oauth2 => HASH      parameters to Sympa::OAuth2::new()
 
+=head2 Setting-up VOOT
+
+See the manual pages for specific server implementations:
+
+=over 4
+
+=item L<Sympa::VOOT::SURFconext>, SURFnet NL using OAuth2
+
+=item L<Sympa::VOOT::Renater>, Renater FR using OAuth (v1)
+
+=back
+
+=back
+
+
 =cut

@@ -7,7 +7,7 @@ use strict;
 use Log::Report 'net-voot';
 use Net::OAuth2::Profile::WebServer;
 
-my $site_test = 'https://frko.surfnetlabs.nl/workshop/';
+my $site_test = 'https://frko.surfnetlabs.nl/frkonext/';
 my $site_live = 'unknown';
 
 =chapter NAME
@@ -140,5 +140,59 @@ sub get($)
 {   my ($self, $uri) = @_;
     $self->token->get($uri);
 }
+
+#-------------------
+
+=chapter DETAILS
+
+SURFconext is a service provided by SURFnet Nederland BV (NL)
+
+SURFconext is an authorization provider which encapsulates authorization
+mechanisms of all Dutch universities (and other higher educational
+institutes) and many research organisations.  SURFconext enables the
+students and employees of the participants to use each other's facilities.
+
+B<Be warned:> SURFconext uses OAuth2 which requires that your client
+website uses secure HTTP: https!
+
+=section Setting up the test server
+
+SURFnet's test environment is currently located at
+L<https://frko.surfnetlabs.nl/frkonext/>.
+On that page, you can register applications, which otherwise is a task
+for SURFnet's security manager.
+
+Go to the page which demonstrates the "manage applications" feature.  Login
+using the C<admin> username as listed on the front page.  Register your
+application with
+
+=over 4
+
+=item I<identifier>
+Pick a clear identifier based on the service and your organisation.  For
+instance, C<sympa-uva> for organisation UvA service sympa.  You
+need to pass this to C<new(client_id)>
+
+=item I<profile>
+Only profile "Web Application" is supported by this module, for now.
+
+=item I<redirect URI>
+This will bring people back to your own installation after verfication
+has succeeded.
+
+=item pick any string as I<secret>
+You need to pass that as C<new(client_secret)>.  Be warned: everyone
+logs-in as the same admin user, so can see your secret.
+
+=item Set I<Allowed Scope> to "read" or "write"
+
+=back
+
+B<Be aware> the registrations in the test-environment are regularly and
+unpredictably flushed.  Also, the location of the service may change without
+notice.
+
+=section Setting up the "live" server
+=cut
 
 1;
