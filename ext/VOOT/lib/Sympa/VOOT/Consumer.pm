@@ -13,7 +13,11 @@ Sympa::VOOT::Consumer - represent one VOOT source in Sympa
 
   my $voot = Sympa::VOOT->new;
 
-  my $consumer = $voot->consumer(provider => \%info, oauth => \%config);
+  my $consumer = $voot->consumer
+    ( provider => \%info
+    , user     => \%user
+    , auth     => \%config
+    );
   # $consumer is a Sympa::VOOT::Consumer
 
 =head1 DESCRIPTION
@@ -22,7 +26,7 @@ This object combines three aspects:
 
 =over 4
 
-=item one voot session, implemented by L<Net::VOOT>
+=item one voot session for a user, implemented by L<Net::VOOT>
 
 =item a session store, implemented by L<Sympa::OAuth1::Consumer> and L<Sympa::OAuth2::Consumer>
 
@@ -42,11 +46,9 @@ Options:
 
 =item * I<provider> =E<gt> INFO
 
-=item * I<user> =E<gt> EMAIL
+=item * I<user> =E<gt> HASH
 
 =item * I<auth> =E<gt> HASH, configuration
-
-=item * I<newflow> =E<gt> CODE
 
 =cut
 
@@ -61,9 +63,8 @@ sub init($)
         or fatal "cannot load voot server class $server: $@";
 
     my $voot = $self->{SVP_voot} = $server->new
-      ( provider  => $provider->{id}
-      , auth      => $args->{auth}
-      , voot_base => 'XXX'
+      ( provider     => $provider->{id}
+      , auth         => $args->{auth}
       );
 
     my $auth_type  = $voot->authType;
@@ -72,8 +73,8 @@ sub init($)
         or fatal "cannot load store class $store_type: $@";
 
     $self->{SVP_store} = $store_type->new(db => $args->{db} || default_db) ;
-    $self->{SVP_flow}  = $args->{newflow};
     $self->{SVP_user}  = $args->{user};
+
     $self;
 }
 
@@ -113,18 +114,26 @@ sub get($$)
     $resp->is_success ? $resp : undef;
 }
 
-=head3 start
+
+=head3 startAuth OPTIONS
+
+=over 4
+
+=item * I<callback> =E<gt> URL
+
+=back
 
 =cut
 
-sub start(%)
+sub startAuth(%)
 {   my ($self, %args) = @_;
-    my $newflow = $self->{SVP_flow} or return;
+    trace_call($self->user->{email}, $self->provider->{id}, %args);
 
-    my $session = eval { $self->voot->newSession
-      ( user     => $self->user
+    my $voot    = $self->voot;
+    my $session = eval { $voot->newSession
+      ( user     => $self->user->{email}
       , provider => $self->provider->{id}
-      , callback => $newflow->()
+      , callback => $args{callback}
       ) };
 
     unless($session)
@@ -133,11 +142,16 @@ sub start(%)
     }
 
     $self->store->createSession($session);
-    $session;
+
+    $voot->getAuthorizationStarter;
 }
 
-=head3 trigger_auth OPTIONS
+=method hasAccess
+
+Returns true when the consumer has access to the VOOT resource.
 
 =cut
+
+sub hasAccess() { shift->voot->hasAccess }
 
 1;

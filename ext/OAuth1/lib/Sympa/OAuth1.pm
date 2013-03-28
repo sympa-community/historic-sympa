@@ -12,20 +12,15 @@ my $me = __PACKAGE__->new;
 
 my @url_commands =
   ( oauth_check      => 
-      { handler   => sub { $me->doAuthCheck(@_) }
+      { handler   => sub { $me->doOAuthCheck(@_) }
       , path_args => 'oauth_provider'
       , required  => [ qw/param.user.email oauth_provider/ ]
       }
-  , oauth_ready      =>
-      { handler   => sub { $me->doAuthReady(@_) }
-      , path_args => [ qw/oauth_provider ticket/ ]
-      , required  => [ qw/oauth_provider ticket oauth_token oauth_verifier/]
-      }
   , oauth_temporary  =>
-      { handler   => sub { $me->doAuthTemporary(@_) }
+      { handler   => sub { $me->doOAuthTemporary(@_) }
       }
   , oauth_authorize  =>
-      { handler   => sub { $me->doAuthAuthorize(@_) }
+      { handler   => sub { $me->doOAuthAuthorize(@_) }
       , required  => [ qw/param.user.email oauth_token/ ]
       }
   , oauth_access     =>
@@ -58,7 +53,7 @@ sub registerPlugin($)
 # </Location>
 
 # Consumer requests a temporary token
-sub doAuthTemporary(%)
+sub doOAuthTemporary(%)
 {   my ($self, %args) = @_;
 
     my $param = $args{param};
@@ -74,7 +69,7 @@ sub doAuthTemporary(%)
 }
 
 # User needs to authorize access
-sub doAuthAuthorize(%)
+sub doOAuthAuthorize(%)
 {   my ($self, %args) = @_;
     my $in      = $args{in};
     my $param   = $args{param};
@@ -135,7 +130,7 @@ sub do_oauth_access(%)
 }
 
 # User asks for access token check
-sub doAuthCheck(%)
+sub doOAuthCheck(%)
 {   my ($self, %args) = @_;
     my $in    = $args{in};
     my $param = $args{params};
@@ -152,13 +147,12 @@ sub doAuthCheck(%)
 
     $param->{oauth_prov_id_ok} = 1;
 
-    my $go = sub {  # produce a callback
-        my $ticket = Auth::create_one_time_ticket($user, $args{robot_id}
-           , "oauth_check/$in->{oauth_prov_id}", 'mail');
-        "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
-    };
+    my $here     = "oauth_check/$in->{oauth_prov_id}";
+    my $new_ticket = Sympa::VOOT->ticketFactory($param, $here);
+    my $next     = "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id";
 
-    my $consumer = Sympa::VOOT->consumer(user => $user, prov_id => $prov_id
+    my $go       = sub { $next .'/'. $new_ticket->() };
+    my $consumer = Sympa::VOOT->new->consumer(user => $user, prov_id => $prov_id
       , newflow => $go) or return 1;
 
     $param->{oauth_config_ok} = 1;
@@ -172,35 +166,6 @@ sub doAuthCheck(%)
     $param->{oauth_check_ok}       = 1;
     $param->{oauth_access_renewed} = defined $in->{oauth_ready_done};
     return 1;
-}
-
-# Got back from OAuth workflow (provider), needs to get authorization
-# token and call the right action
-sub doAuthReady(%)
-{   my ($self, %args) = @_;
-    my $in    = $args{in};
-    my $param = $args{param};
-
-    my $callback = main::do_ticket();
-
-    $in->{oauth_ready_done} = 1;
-
-    $in->{oauth_provider}   =~ /^([^:]+):(.+)$/
-        or return undef;
-
-    my ($type, $provider) = ($1, $2);
-
-    my $consumer = Sympa::VOOT->consumer
-       ( user     => $param->{user}{email}
-       , provider => $provider
-       ) or return undef;
-
-    my $voot = $consumer->voot->getAccessToken
-      ( verifier => $in->{oauth_verifier}
-      , token    => $in->{oauth_token}
-      ) or return undef;
-
-    return $callback;
 }
 
 sub createProvider($$$$)

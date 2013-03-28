@@ -5,7 +5,9 @@ use warnings;
 use strict;
 
 use Log::Report 'net-voot';
-use Net::OAuth2::Profile::WebServer;
+
+use Net::OAuth2::Profile::WebServer ();
+use Scalar::Util qw/blessed/;
 
 my $site_test = 'https://frko.surfnetlabs.nl/frkonext/';
 my $site_live = 'unknown';
@@ -25,6 +27,7 @@ by other participants.  For instance, a student on one university can
 use the library and WiFi of an other university when he is on visit there.
 
 SURFconext uses OAuth2 authentication.
+
 =chapter METHODS
 
 =section Constructors
@@ -40,7 +43,7 @@ When 'test' is set, then the name is 'surfnet-test'.
 =default test <false>
 Access the current test environment, provided by SURFnet.
 
-=option  auth M<Net::OAuth2::Profile::WebServer> object
+=option  auth M<Net::OAuth2::Profile::WebServer>|HASH
 =default auth <created for you>
 If you do not provide an object, you need to add some parameters to
 initialize the object.  See M<createAuth()> for the OPTIONS.
@@ -56,14 +59,18 @@ Depends whether you need the test voot server or the production environment.
 sub init($)
 {   my ($self, $args) = @_;
     my $test = delete $args->{test} || 0;
-    my $site = $args->{site} ||= $test ? $site_test : $site_live;
+    my $site = $self->{NVS_site}
+             = $args->{site} ||= $test ? $site_test : $site_live;
+
     $args->{provider}  ||= 'surfnet'.($test ? '-test' : '');
     $args->{voot_base} ||= "$site/php-voot-proxy/voot.php";
 
     $self->SUPER::init($args) or return;
 
     $self->{NVS_token}   = $args->{token};
-    $self->{NVS_auth}    = $args->{auth} || $self->createAuth($args);
+
+    my $auth = $args->{auth};
+    $self->{NVS_auth}    = blessed $auth ? $auth : $self->createAuth(%$auth);
     $self;
 }
 
@@ -73,15 +80,41 @@ sub init($)
 =method auth
 =method authType
 =method token
+=method site
 =cut
 
-sub auth()     {shift->{NVS_auth}}
 sub authType() { 'OAuth2' }
-sub token()    {my $self = shift; $self->{NVS_token} || $self->requestToken}
+sub auth()     {shift->{NVS_auth}}
+sub token()    {shift->{NVS_token}}
+sub site()     {shift->{NVS_site}}
+
+#---------------------------
+=section Session
+=cut
+
+sub newSession(%)
+{   my ($self, %args) = @_;
+    my $user    = $args{user};
+    my $prov_id = $args{provider};
+    +{ user => $user, provider => $prov_id };
+}
+
+sub restoreSession($$$)
+{   my ($self, $user, $provider, $data) = @_;
+    my $session     = $self->newSession($user, $provider);
+
+# XXX
+    $session;
+}
 
 #---------------------------
 =section Actions
-=method 
+=cut
+
+sub get($)
+{   my ($self, $uri) = @_;
+    $self->token->get($uri);
+}
 
 #---------------------------
 =section Helpers
@@ -99,13 +132,7 @@ at the VOOT provider: they relate to the C<site>.
 
 sub createAuth(%)
 {   my ($self, %args) = @_;
-
-    foreach my $param (qw/client_id client_secret site redirect_uri/)
-    {   $args{$param}
-            or error __x"VOOT auth needs value for {param}"
-               , param => $param;
-    }
-    my $site = $args{site};
+    my $site = $self->site;
 
     my $auth = Net::OAuth2::Profile::WebServer->new
       ( client_id         => ($args{client_id}     || panic)
@@ -117,7 +144,7 @@ sub createAuth(%)
       , authorize_method  => 'GET'
       , access_token_path => 'php-oauth/token.php'
 
-      , redirect_uri      => ($args{redirect_uri} || panic)
+      , redirect_uri      => ($args{redirect_uri}  || panic)
       , referer           => $site
       );
 
@@ -125,22 +152,23 @@ sub createAuth(%)
     $auth;
 }
 
-=method requestToken OPTIONS
+=method getRequestToken OPTIONS
 =cut
 
-sub requestToken()
-{   my $self    = shift;
+sub getRequestToken()
+{
+    my $self    = shift;
     my $auth    = $self->auth;
-    my $service = $auth->authorize(scope => 'read') or return;
-    my $token   = $auth->get_access_token($service->{code});
+    my $token; #   = $auth->get_access_token($service->{code});
     trace 'received token from '.$self->provider. ' for '.$auth->client_id;
 
     $token;
 }
 
-sub get($)
-{   my ($self, $uri) = @_;
-    $self->token->get($uri);
+sub hasAccess() { defined shift->token }
+
+sub getAuthorizationStarter()
+{   shift->auth->authorize(scope => 'read');
 }
 
 #-------------------

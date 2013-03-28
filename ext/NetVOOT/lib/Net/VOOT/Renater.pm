@@ -32,8 +32,6 @@ VOOT setup, which may be served via Sympa.
 
 =requires auth M<OAuth::Lite::Consumer>|HASH
 
-=option  access_token M<OAuth::Lite::Token>-object
-=default access_token C<undef>
 =cut
 
 sub init($)
@@ -47,25 +45,20 @@ sub init($)
     $self->{NVR_auth} = $auth
        or error __x"no configuration for authorization provided";
 
-    $self->{NVR_acctoken} = $args->{access_token};
     $self;
 }
 
 #---------------------------
 =section Attributes
 =method auth
-=method authType
-=method accessToken
 =cut
 
 sub auth()        {shift->{NVR_auth}}
+
 sub authType()    { 'OAuth1' }
-sub accessToken() {shift->{NVR_acctoken}}
 
 #---------------------------
 =section Actions
-
-=method get SESSION, URI, PARAMS
 =cut
 
 sub get($$$)
@@ -94,20 +87,18 @@ sub get($$$)
 #---------------------------
 =section Sessions
 
-=method newSession OPTIONS
-
-Create a new session, which will trigger authentication.
 
 =cut
 
 sub newSession(%)
 {   my ($self, %args) = @_;
 
-    my $auth    = $self->auth;
     my $user    = $args{user};
     my $prov_id = $args{provider};
 
-    my $tmp = $auth->get_request_token(callback_url => $args{callback});
+    my $auth    = $self->auth;
+    my $tmp     = $auth->get_request_token(callback_url => $args{callback});
+
     unless($tmp)
     {   error __x"unable to get tmp token for {user} {provider}: {err}"
            , $user, $prov_id, $auth->errstr;
@@ -116,10 +107,6 @@ sub newSession(%)
 
     +{ user => $user, provider => $prov_id, tmp => $tmp };
 }
-
-=method restoreSession HASH
-
-=cut
 
 sub restoreSession($$$)
 {   my ($self, $user, $provider, $data) = @_;

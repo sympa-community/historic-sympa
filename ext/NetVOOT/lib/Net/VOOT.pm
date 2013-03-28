@@ -64,6 +64,19 @@ sub vootBase() {shift->{NV_voot_base}}
 sub authType() {panic "not implemented"}
 
 #---------------------------
+=section Sessions
+
+=method newSession OPTIONS
+Create a new session, which will trigger authentication.
+
+=method restoreSession DATA
+
+=cut
+
+sub newSession(%)     { panic "not implemented" }
+sub restoreSession(%) { panic "not implemented" }
+
+#---------------------------
 =section Actions
 
 =subsection Interpreted return
@@ -190,5 +203,16 @@ sub query($$)
     $uri->query_form($params) if $params;
     $self->get($uri->as_string);
 }
+
+=method hasAccess
+Returns true when there is a token to use with the VOOT provider.
+=cut
+
+sub hasAccess() { panic "not implemented" }
+
+=method getAuthorizationStarter
+=cut
+
+sub getAuthorizationStarter() {panic}
 
 1;

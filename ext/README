@@ -1,5 +1,5 @@
 
-** 2013-03-21 MO:
+** 2013-03-21 Mark Overmeer (MO, solutions@overmeer.net)
 
 The ext/ directory should become the top-level directory, where all
 plugins live, as in the Perl-Core development tree.  It may also be
@@ -8,6 +8,9 @@ very useful to have separate github trees per plugin.
 ** TODO:
 
 in ext/OAuth1
+   add MANIFEST, ChangeLog, Makefile.PL, tests
+
+in ext/OAuth2
    add MANIFEST, ChangeLog, Makefile.PL, tests
 
 in ext/Plugin

@@ -4,6 +4,8 @@ use warnings;
 
 use Sympa::Plugin::Util qw/:functions/;
 
+use Data::Dumper  ();
+
 =head1 NAME 
 
 Sympa::OAuth2::Store - OAuth v2 administration
@@ -57,15 +59,22 @@ sub db    { shift->{SOC_db} }
 sub loadSession($$)
 {   my ($self, $user, $prov_id) = @_;
 
-    my $sth  = $self->db->prepared(<<'__GET_TMP_TOKEN', $user, $prov_id);
-__GET_TMP_TOKEN
+    my $sth  = $self->db->prepared(<<'__LOAD_SESSION', $user, $prov_id);
+SELECT *
+  FROM oauth2_sessions
+ WHERE user     = ?
+   AND provider = ?
+__LOAD_SESSION
 
     unless($sth)
     {   log(err => "Unable to load token data for $user at $prov_id");
         return undef;
     }
     
-    $sth->fetchrow_hashref('NAME_lc');
+    my $record = $sth->fetchrow_hashref('NAME_lc')
+        or return undef;
+
+    eval $record->{session};
 }
 
 =head3 updateSession SESSION
@@ -76,9 +85,13 @@ sub updateSession($)
 {   my ($self, $session) = @_;
     my $user   = $session->{user};
     my $provid = $session->{provider};
-    my @bind;
+    my $dump   = Data::Dumper->new([$session],['Session'])->Indent(0);
 
-    unless($self->db->do(<<'__UPDATE_SESSION', @bind))
+    unless($self->db->do(<<'__UPDATE_SESSION', $dump, $user, $provid))
+UPDATE oauth2_sessions
+   SET session  = ?
+ WHERE user     = ?
+   AND provider = ?
 __UPDATE_SESSION
     {   log(err => "Unable to update token record $user $provid");
         return undef;
@@ -95,9 +108,13 @@ sub createSession($)
 {   my ($self, $session) = @_;
     my $user   = $session->{user};
     my $provid = $session->{provider};
-    my @bind;
+    my $dump   = Data::Dumper->new([$session],['Session'])->Indent(0);
 
-    unless($self->db->do(<<'__INSERT_SESSION', @bind))
+    unless($self->db->do(<<'__INSERT_SESSION', $dump, $user, $provid))
+INSERT oauth2_sessions
+   SET session  = ?
+     , user     = ?
+     , provider = ?
 __INSERT_SESSION
     {   log(err => "Unable to add new token record $user $provid");
         return undef;

@@ -40,37 +40,10 @@ my $session = $voot->restoreSession($user, $provider);
 
 Returns the URL to redirect to, if we need to redirect for authorization.
 
-=head3 method: session
-
-=head3 method: webenv
-
-=head3 method: set_webenv OPTIONS
 
 =cut
 
 sub mustRedirect { shift->{redirect_url} }
-sub session      { shift->{SOC_session}  }
-sub webenv       { shift->{SOC_webenv}   }
-
-=head3 method: hasAccess
-
-Returns the access token as HASH when already present.  Triggers the
-authentication flow otherwise.
-
-=cut 
-
-sub hasAccess()
-{   my $self = shift;
-    trace_call($self->{user}, "$self->{consumer_type}:$self->{provider}");
-
-    if(my $access = $self->session->{access})
-    {   return $access;
-    }
-
-    $self->triggerFlow;
-    undef;
-}
-
 
 =head2 method: triggerFlow
 
@@ -79,24 +52,12 @@ whether this was successful.
 
 =cut 
 
-sub triggerFlow()
-{   my $self = shift;
 
-    my $web       = $self->webenv
-        or return 0;
-
-    my $user      = $self->{user};
-    my $type      = $self->{consumer_type};
-    my $provider  = $self->{provider};
-    trace_call($user, "$type:$provider");
-    
-    my $here_path = $web->{here_path};
-
-    my $ticket    = Auth::create_one_time_ticket($user
-       , $web->{robot_id}, $here_path, 'mail');
-
-    my $callback  = "$web->{base_path}/oauth_ready/$provider/$ticket";
+...
  
+startAuth
+
+
     my $tmp = $handler->get_request_token(callback_url => $callback);
     unless($tmp)
     {   log(err => "Unable to get tmp token for $user $provider: ".$handler->errstr);

@@ -11,6 +11,7 @@ my %required_plugins = qw/
 my %optional_plugins = qw/
  Sympa::VOOT     0
  Sympa::OAuth1   0
+ Sympa::OAuth2   0
  /;
 
 =head1 NAME

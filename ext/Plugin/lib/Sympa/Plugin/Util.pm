@@ -6,7 +6,10 @@ use strict;
 
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
-my @func = qw/default_db trace_call log fatal wwslog web_db_log/;
+my @func = qw/
+  default_db robot
+  trace_call log fatal wwslog web_db_log
+  /;
 
 our @EXPORT      = @func;
 our @EXPORT_OK   = (@http, @time, @func);
@@ -89,6 +92,19 @@ The object returned offers the following methods:
 
 my $default_db;
 sub default_db() { $default_db || (bless {}, 'SPU_db') }
+
+
+=head2 Globals
+
+These globals will probably change name in the near future.  We do not
+want to update the plugins, all the time.
+
+=head3 robot
+
+=cut
+
+sub robot() { $main::robot_object }
+
 
 =head2 Logging
 

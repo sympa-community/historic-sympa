@@ -54,8 +54,8 @@ voot providers.  Add this:
     "voot.ProviderName" : "SURFconext (test environment)",
     "voot.ServerClass"  : "Net::VOOT::SURFconext",
     "oauth2" :
-      { "client_id"     : "$your_identifier"
-      , "client_secret" : "$your_secret"
+      { "client_id"     : "$your_identifier",
+        "client_secret" : "$your_secret"
       }
   }
 
@@ -102,8 +102,8 @@ Add this to your F<etc/voot.conf> file (JSON syntax, encapsulated in an ARRAY):
     "voot.ProviderName" : "SURFconext"
     "voot.ServerClass"  : "Net::VOOT::SURFconext",
     "oauth2" :
-      { "client_id"     : "$your_identifier"
-      , "client_secret" : "$your_secret"
+      { "client_id"     : "$your_identifier",
+        "client_secret" : "$your_secret"
       }
   }
 

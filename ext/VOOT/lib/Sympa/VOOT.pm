@@ -55,7 +55,7 @@ my @url_commands =
       , privilege => 'owner'
       }
   , select_voot_groups_request  =>
-      { handler   => sub { $me->doListVootGroups(@_) }
+      { handler   => sub { $me->doConnectProvider(@_) }
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
@@ -65,6 +65,11 @@ my @url_commands =
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
+      }
+  , oauth_ready      =>
+      { handler   => sub { $me->doOAuthReady(@_) }
+      , path_args => [ qw/oauth_provider ticket/ ]
+      , required  => [ qw/oauth_provider ticket oauth_token oauth_verifier/]
       }
   , voot =>
       { handler   => sub { $me->doVoot(@_) }
@@ -198,7 +203,7 @@ sub readConfig($)
     $config;
 }
 
-=head3 consumer ID|NAME, OPTIONS
+=head3 consumer PARAM, ID|NAME, OPTIONS
 
 Returns the object which handles the selected provider, an extension
 of L<Net::VOOT>.
@@ -206,8 +211,8 @@ of L<Net::VOOT>.
 The OPTIONS are passed to the L<Sympa::VOOT::Consumer> constructor.
 =cut
 
-sub consumer($@)
-{   my ($self, $ref, @args) = @_;
+sub consumer($$@)
+{   my ($self, $param, $ref, @args) = @_;
 
     my $fn   = $self->configFilename;
     my $info = first {   $_->{'voot.ProviderID'}   eq $ref
@@ -217,8 +222,9 @@ sub consumer($@)
     $info
         or fatal "cannot find VOOT provider $ref in $fn";
 
+    my $prov_id  = $info->{'voot.ProviderID'};
     my %provider = 
-       ( id     => $info->{'voot.ProviderID'}
+       ( id     => $prov_id
        , name   => $info->{'voot.ProviderName'}
        , server => ($info->{'voot.ServerClass'} || $default_server)
        );
@@ -229,9 +235,16 @@ sub consumer($@)
          for keys %$info;
 
     my $auth = $auth1 && keys %$auth1 ? $auth1 : $info->{oauth2};
+    $auth->{redirect_uri} ||=
+      "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id";
 
     my $consumer = eval {
-        Sympa::VOOT::Consumer->new(provider => \%provider,auth => $auth,@args)};
+        Sympa::VOOT::Consumer->new
+          ( provider => \%provider
+          , auth     => $auth
+          , user     => $param->{user}
+          , @args
+          )};
 
     $consumer
         or fatal "cannot start VOOT consumer to $ref: $@";
@@ -278,36 +291,37 @@ sub doSelectProvider(%)
     return 1;
 }
 
+sub newTicket($$)
+{   my ($thing, $param, $come_back) = @_;
+    my $session  = $param->{session};
+    my $ip       = $session->{remote_addr} || 'mail';
+    Auth::create_one_time_ticket($param->{user}{email}, $session->{robot}
+      , $come_back, $ip);
+}
+
 # Display groups list for user/VOOT_provider
-sub doListVootGroups(%)
+sub doConnectProvider(%)
 {   my ($self, %args) = @_;
 
     my $in       = $args{in};
     my $param    = $args{param};
+    my $robot_id = $args{robot};
   
     my $prov_id  = $param->{voot_provider} = $in->{voot_provider};
-    my $email    = $param->{user}{email};
     my $list     = $param->{list};
 
-    wwslog(info => "get voot groups for provider $prov_id, $email $list");
+    wwslog(info => "get voot groups of $param->{user}{email} for provider $prov_id");
 
-    my $go       = sub {
-        my $ticket = Auth::create_one_time_ticket($email, $args{robot_id}
-           , "select_voot_groups_request/$list/$prov_id", 'mail');
-        "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
-    };
+    my $consumer = $self->consumer($param, $prov_id);
+    unless($consumer->hasAccess)
+    {   my $ticket  = $self->newTicket($param, "select_voot_groups_request/$list/$prov_id");
+        my $bouncer = "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
 
-    my $consumer = $self->consumer($prov_id, user => $email, newflow => $go)
-        or return undef;
- 
-    my $voot   = $consumer->voot;
-    my @groups = $voot->userGroups;
-    unless(@groups)
-    {   my $url = $consumer->mustRedirect;  # XXX
-        return do_redirect($url) if $url;
+        my $goto = $consumer->startAuth(callback => $bouncer);
+        return $goto ? main::do_redirect($goto) : 1;
     }
 
-    $param->{voot_groups} = \@groups;
+    $param->{voot_groups} = [ $consumer->voot->userGroups ]; 
     return 1;
 }
 
@@ -322,8 +336,10 @@ sub doVoot(%)
     
     my $voot_path = $in->{voot_path};
 
-my $name;
-    my $consumer  = $self->consumer($name)->get
+my $prov_id;
+    my $consumer  = $self->consumer($param, $prov_id);
+
+    $consumer->get
       ( method    => $ENV{REQUEST_METHOD}
       , voot_path => $voot_path
       , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
@@ -401,6 +417,35 @@ sub doAcceptVootGroup(%)
     }
     return 'review';
 }
+
+# token and call the right action
+sub doOAuthReady(%)
+{   my ($self, %args) = @_;
+    my $in    = $args{in};
+    my $param = $args{param};
+
+    my $callback = main::do_ticket();
+
+    $in->{oauth_ready_done} = 1;
+
+    $in->{oauth_provider}   =~ /^([^:]+):(.+)$/
+        or return undef;
+
+    my ($type, $prov_id) = ($1, $2);
+
+    my $consumer = $self->consumer($param, $prov_id)
+        or return undef;
+
+    $consumer->voot->getAccessToken
+      ( verifier => $in->{oauth_verifier}
+      , token    => $in->{oauth_token}
+      );
+
+    return $callback;
+}
+
+
+
 
 1;
 

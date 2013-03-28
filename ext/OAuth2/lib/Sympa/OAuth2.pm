@@ -44,8 +44,6 @@ sub doAuthReady(%)
 
     my ($type, $provider) = ($1, $2);
 
-      ) or return undef;
-
 # XXX
     return $callback;
 }
