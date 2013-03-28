@@ -71,11 +71,13 @@ sub init($)
 =section Attributes
 
 =method auth
+=method authType
 =method token
 =cut
 
-sub auth()  {shift->{NVS_auth}}
-sub token() {my $self = shift; $self->{NVS_token} || $self->requestToken}
+sub auth()     {shift->{NVS_auth}}
+sub authType() { 'OAuth2' }
+sub token()    {my $self = shift; $self->{NVS_token} || $self->requestToken}
 
 #---------------------------
 =section Actions

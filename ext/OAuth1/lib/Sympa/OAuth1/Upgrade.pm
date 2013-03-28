@@ -31,6 +31,8 @@ Sympa::OAuth1::Upgrade - OAuth v1 plugin upgrade
 sub upgrade(%)
 {   my ($self, %args) = @_;
 
+    # no changes needed (yet)
+    $args{to};
 }
 
 
@@ -47,7 +49,7 @@ sub setup(%)
      $create_tables{$db_type}
          or fatal "unsupported database type $db_type for ".__PACKAGE__;
 
-     $db->do($create_tables{$db_type}
+     $db->do($create_tables{$db_type});
 }
 
 my %create_tables =
@@ -64,10 +66,10 @@ CREATE TABLE oauthconsumer_sessions_table (
 ) DEFAULT CHARACTER SET utf8;
 
 CREATE TABLE oauthprovider_nonces_table ( 
-	 id_nonce 		 int(11), 
-	 id_oauthprovider 	 int(11), 
-	 nonce_oauthprovider 	 varchar(100), 
-	 time_oauthprovider 	 int(11), 
+	 id_nonce 		 	int(11), 
+	 id_oauthprovider 	 	int(11), 
+	 nonce_oauthprovider 		 varchar(100), 
+	 time_oauthprovider 		 int(11), 
 	 PRIMARY KEY (id_nonce) 
 ) DEFAULT CHARACTER SET utf8;
 
