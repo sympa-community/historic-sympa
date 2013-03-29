@@ -3637,43 +3637,43 @@ sub send_msg_digest {
 		my @group = splice @all_msg, 0, $self->{'admin'}{'digest_max_size'};
 
 		push @group_of_msg, \@group;
-}
-
-
-$param->{'current_group'} = 0;
-$param->{'total_group'} = $#group_of_msg + 1;
-## Foreach set of digest_max_size messages...
-foreach my $group (@group_of_msg) {
-
-	$param->{'current_group'}++;
-	$param->{'msg_list'} = $group;
-	$param->{'auto_submitted'} = 'auto-forwarded';
-
-	## Prepare Digest
-	if (@tabrcpt) {
-		## Send digest
-		unless ($self->send_file('digest', \@tabrcpt, $robot, $param)) {
-		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'digest' to $self->{'name'} list subscribers");
-	}
-}
-
-## Prepare Plain Text Digest
-if (@tabrcptplain) {
-	## Send digest-plain
-	unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
-	Sympa::Log::Syslog::do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
-}
 	}
 
-	## send summary
-	if (@tabrcptsummary) {
-		unless ($self->send_file('summary', \@tabrcptsummary, $robot, $param)) {
-		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'summary' to $self->{'name'} list subscribers");
+
+	$param->{'current_group'} = 0;
+	$param->{'total_group'} = $#group_of_msg + 1;
+	## Foreach set of digest_max_size messages...
+	foreach my $group (@group_of_msg) {
+
+		$param->{'current_group'}++;
+		$param->{'msg_list'} = $group;
+		$param->{'auto_submitted'} = 'auto-forwarded';
+
+		## Prepare Digest
+		if (@tabrcpt) {
+			## Send digest
+			unless ($self->send_file('digest', \@tabrcpt, $robot, $param)) {
+			Sympa::Log::Syslog::do_log('notice',"Unable to send template 'digest' to $self->{'name'} list subscribers");
+		}
 	}
-}
-    }
-    $digestspool->remove_message({'messagekey'=>$messagekey});
-    return 1;
+
+	## Prepare Plain Text Digest
+	if (@tabrcptplain) {
+		## Send digest-plain
+		unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
+		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
+	}
+		}
+
+		## send summary
+		if (@tabrcptsummary) {
+			unless ($self->send_file('summary', \@tabrcptsummary, $robot, $param)) {
+				Sympa::Log::Syslog::do_log('notice',"Unable to send template 'summary' to $self->{'name'} list subscribers");
+			}
+		}
+	}
+	$digestspool->remove_message({'messagekey'=>$messagekey});
+	return 1;
 }
 
 =head1 FUNCTIONS
@@ -4189,255 +4189,256 @@ sub send_msg {
 			listname => $self->{'name'}
 		);
 	}
+
 	## Storing the not empty subscribers' arrays into a hash.
 	my $available_rcpt;
 	my $available_verp_rcpt;
 
 	if (@tabrcpt) {
 		$available_rcpt->{'tabrcpt'} = \@tabrcpt;
-	$available_verp_rcpt->{'tabrcpt'} = \@tabrcpt_verp;
-    }
-    if (@tabrcpt_notice) {
-	    $available_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice;
-    $available_verp_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice_verp;
-    }
-    if (@tabrcpt_txt) {
-	    $available_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt;
-    $available_verp_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt_verp;
-    }
-    if (@tabrcpt_html) {
-	    $available_rcpt->{'tabrcpt_html'} = \@tabrcpt_html;
-    $available_verp_rcpt->{'tabrcpt_html'} = \@tabrcpt_html_verp;
-    }
-    if (@tabrcpt_url) {
-	    $available_rcpt->{'tabrcpt_url'} = \@tabrcpt_url;
-    $available_verp_rcpt->{'tabrcpt_url'} = \@tabrcpt_url_verp;
-    }
-    if (@tabrcpt_digestplain_verp)  {
-	    $available_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain;
-    $available_verp_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain_verp;
-    }
-    if (@tabrcpt_digest_verp) {
-	    $available_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest;
-    $available_verp_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest_verp;
-    }
-    if (@tabrcpt_summary_verp) {
-	    $available_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary;
-    $available_verp_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary_verp;
-    }
-    if (@tabrcpt_nomail_verp) {
-	    $available_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail;
-    $available_verp_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail_verp;
-    }
-    foreach my $array_name (keys %$available_rcpt) {
-	    my $reception_option ;
-	    if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/) {
-		    $reception_option =  $1;
-		    $reception_option = 'mail' unless $reception_option ;
-	    }
-	    my $new_message;
-	    ##Prepare message for normal reception mode
-	    if ($array_name eq 'tabrcpt'){
-		    ## Add a footer
-		    unless ($message->{'protected'}) {
-			    my $new_msg = $self->add_parts($message->{'msg'});
-			    if (defined $new_msg) {
-				    $message->{'msg'} = $new_msg;
-				    $message->{'altered'} = '_ALTERED_';
-			    }
-		    }
-		    $new_message = $message;
-	    }elsif(($array_name eq 'tabrcpt_nomail')||($array_name eq 'tabrcpt_summary')||($array_name eq 'tabrcpt_digest')||($array_name eq 'tabrcpt_digestplain')){
-		    $new_message = $message;
-	    }	##Prepare message for notice reception mode
-	    elsif($array_name eq 'tabrcpt_notice'){
-		    my $notice_msg = $saved_msg->dup;
-		    $notice_msg->bodyhandle(undef);
-		    $notice_msg->parts([]);
-		    $new_message = Sympa::Message->new(entity => $notice_msg);
-
-		    ##Prepare message for txt reception mode
-	    }elsif($array_name eq 'tabrcpt_txt'){
-		    my $txt_msg = $saved_msg->dup;
-		    if (Sympa::Tools::as_singlepart($txt_msg, 'text/plain')) {
-			    Sympa::Log::Syslog::do_log('notice', 'Multipart message changed to singlepart');
-		    }
-
-		    ## Add a footer
-		    my $new_msg = $self->add_parts($txt_msg);
-		    if (defined $new_msg) {
-			    $txt_msg = $new_msg;
-		    }
-		    $new_message = Sympa::Message->new(entity => $txt_msg);
-
-		    ##Prepare message for html reception mode
-	    }elsif($array_name eq 'tabrcpt_html'){
-		    my $html_msg = $saved_msg->dup;
-		    if (Sympa::Tools::as_singlepart($html_msg, 'text/html')) {
-			    Sympa::Log::Syslog::do_log('notice', 'Multipart message changed to singlepart');
-		    }
-		    ## Add a footer
-		    my $new_msg = $self->add_parts($html_msg);
-		    if (defined $new_msg) {
-			    $html_msg = $new_msg;
-		    }
-		    $new_message = Sympa::Message->new(entity => $html_msg);
-
-		    ##Prepare message for urlize reception mode
-	    }elsif($array_name eq 'tabrcpt_url'){
-		    my $url_msg = $saved_msg->dup;
-
-		    my $expl = $self->{'dir'}.'/urlized';
-
-		    unless ((-d $expl) ||( mkdir $expl, 0775)) {
-			    Sympa::Log::Syslog::do_log('err', "Unable to create urlize directory $expl");
-			    return undef;
-		    }
-
-		    my $dir1 = Sympa::Tools::clean_msg_id($url_msg->head->get('Message-ID'));
-
-		    ## Clean up Message-ID
-		    $dir1 = Sympa::Tools::escape_chars($dir1);
-		    $dir1 = '/'.$dir1;
-
-		    unless ( mkdir ("$expl/$dir1", 0775)) {
-			    Sympa::Log::Syslog::do_log('err', "Unable to create urlize directory $expl/$dir1");
-			    printf "Unable to create urlized directory $expl/$dir1";
-			    return 0;
-		    }
-		    my $mime_types = Sympa::Tools::load_mime_types(
-			    $Sympa::Configuration::Conf{'etc'}
-		    );
-		    my @parts = ();
-		    my $i = 0;
-		    foreach my $part ($url_msg->parts()) {
-			    my $entity = _urlize_part($part, $self, $dir1, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'));
-			    if (defined $entity) {
-				    push @parts, $entity;
-			    } else {
-				    push @parts, $part;
-			    }
-			    $i++;
-		    }
-
-		    ## Replace message parts
-		    $url_msg->parts (\@parts);
-
-	    ## Add a footer
-	    my $new_msg = $self->add_parts($url_msg);
-	    if (defined $new_msg) {
-		    $url_msg = $new_msg;
-	    }
-	    $new_message = Sympa::Message->new(entity => $url_msg);
-    }else {
-	    Sympa::Log::Syslog::do_log('err', "Unknown variable/reception mode $array_name");
-	    return undef;
-    }
-
-    unless (defined $new_message) {
-	    Sympa::Log::Syslog::do_log('err', "Failed to create Message object");
-	    return undef;
-    }
-
-    ## TOPICS
-    my @selected_tabrcpt;
-    my @possible_verptabrcpt;
-    if ($self->is_there_msg_topic()){
-	    @selected_tabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_rcpt->{$array_name});
-	    @possible_verptabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_verp_rcpt->{$array_name});
-    } else {
-	    @selected_tabrcpt = @{$available_rcpt->{$array_name}};
-	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
-    }
-
-    if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/) {
-	    my $reception_option =  $1;
-
-	    $reception_option = 'mail' unless $reception_option ;
-    }
-
-    ## Preparing VERP receipients.
-    my @verp_selected_tabrcpt = extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
-	my $verp= 'off';
-
-	my $result = Sympa::Mail::mail_message(
-		message            => $new_message,
-		rcpt               => \@selected_tabrcpt,
-	list               => $self,
-	verp               => $verp,
-	dkim_parameters    => $dkim_parameters,
-	tag_as_last        => $tags_to_use->{'tag_noverp'},
-	cookie             => $Sympa::Configuration::Conf{'cookie'},
-	db_type            => $Sympa::Configuration::Conf{'db_type'},
-	key_passwd         => $Sympa::Configuration::Conf{'key_passwd'},
-	nrcpt_by_dom       => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
-	openssl            => $Sympa::Configuration::Conf{'openssl'},
-	ssl_cert_dir       => $Sympa::Configuration::Conf{'ssl_cert_dir'},
-	priority_packet    => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	avg                => Sympa::Configuration::get_robot_conf($robot, 'avg'),
-	maxsmtp            => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
-	nrcpt              => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
-	return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
-	sendmail           => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	sendmail_args      => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
-	sympa              => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-);
-unless (defined $result) {
-	Sympa::Log::Syslog::do_log('err',"could not send message to distribute from $from (verp disabled)");
-	return undef;
-}
-$tags_to_use->{'tag_noverp'} = 0 if ($result > 0);
-$nbr_smtp += $result;
-
-$verp= 'on';
-
-if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')){
-	$verp = $apply_tracking ;
-	Sympa::Tracking::db_init_notification_table('listname'=> $self->{'name'},
-		'robot'=> $robot,
-		'msgid' => $original_message_id, # what ever the message is transformed because of the reception option, tracking use the original message id
-		'rcpt'=> \@verp_selected_tabrcpt,
-	'reception_option' => $reception_option,
-);
-
+		$available_verp_rcpt->{'tabrcpt'} = \@tabrcpt_verp;
 	}
+	if (@tabrcpt_notice) {
+		$available_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice;
+		$available_verp_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice_verp;
+	}
+	if (@tabrcpt_txt) {
+		$available_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt;
+		$available_verp_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt_verp;
+	}
+	if (@tabrcpt_html) {
+		$available_rcpt->{'tabrcpt_html'} = \@tabrcpt_html;
+		$available_verp_rcpt->{'tabrcpt_html'} = \@tabrcpt_html_verp;
+	}
+	if (@tabrcpt_url) {
+		$available_rcpt->{'tabrcpt_url'} = \@tabrcpt_url;
+		$available_verp_rcpt->{'tabrcpt_url'} = \@tabrcpt_url_verp;
+	}
+	if (@tabrcpt_digestplain_verp)  {
+		$available_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain;
+		$available_verp_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain_verp;
+	}
+	if (@tabrcpt_digest_verp) {
+		$available_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest;
+		$available_verp_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest_verp;
+	}
+	if (@tabrcpt_summary_verp) {
+		$available_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary;
+		$available_verp_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary_verp;
+	}
+	if (@tabrcpt_nomail_verp) {
+		$available_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail;
+		$available_verp_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail_verp;
+	}
+	foreach my $array_name (keys %$available_rcpt) {
+		my $reception_option ;
+		if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/) {
+			$reception_option =  $1;
+			$reception_option = 'mail' unless $reception_option ;
+		}
+		my $new_message;
+		##Prepare message for normal reception mode
+		if ($array_name eq 'tabrcpt'){
+			## Add a footer
+			unless ($message->{'protected'}) {
+				my $new_msg = $self->add_parts($message->{'msg'});
+				if (defined $new_msg) {
+					$message->{'msg'} = $new_msg;
+					$message->{'altered'} = '_ALTERED_';
+				}
+			}
+			$new_message = $message;
+		}elsif(($array_name eq 'tabrcpt_nomail')||($array_name eq 'tabrcpt_summary')||($array_name eq 'tabrcpt_digest')||($array_name eq 'tabrcpt_digestplain')){
+			$new_message = $message;
+	}	##Prepare message for notice reception mode
+		elsif($array_name eq 'tabrcpt_notice'){
+			my $notice_msg = $saved_msg->dup;
+			$notice_msg->bodyhandle(undef);
+			$notice_msg->parts([]);
+			$new_message = Sympa::Message->new(entity => $notice_msg);
 
-	#  ignore those reception option where mail must not ne sent
-	#  next if  (($array_name eq 'tabrcpt_digest') or ($array_name eq 'tabrcpt_digestlplain') or ($array_name eq 'tabrcpt_summary') or ($array_name eq 'tabrcpt_nomail')) ;
-	next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
+		##Prepare message for txt reception mode
+		}elsif($array_name eq 'tabrcpt_txt'){
+			my $txt_msg = $saved_msg->dup;
+			if (Sympa::Tools::as_singlepart($txt_msg, 'text/plain')) {
+				Sympa::Log::Syslog::do_log('notice', 'Multipart message changed to singlepart');
+			}
 
-	## prepare VERP sending.
-	$result = Sympa::Mail::mail_message(
-		message            => $new_message,
-		rcpt               => \@verp_selected_tabrcpt,
-	list               => $self,
-	verp               => $verp,
-	dkim_parameters    => $dkim_parameters,
-	tag_as_last        => $tags_to_use->{'tag_verp'},
-	cookie             => $Sympa::Configuration::Conf{'cookie'},
-	db_type            => $Sympa::Configuration::Conf{'db_type'},
-	key_passwd         => $Sympa::Configuration::Conf{'key_passwd'},
-	nrcpt_by_dom       => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
-	openssl            => $Sympa::Configuration::Conf{'openssl'},
-	ssl_cert_dir       => $Sympa::Configuration::Conf{'ssl_cert_dir'},
-	priority_packet    => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-	avg                => Sympa::Configuration::get_robot_conf($robot, 'avg'),
-	maxsmtp            => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
-	nrcpt              => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
-	return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
-	sendmail           => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-	sendmail_args      => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
-	sympa              => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-);
-unless (defined $result) {
-	Sympa::Log::Syslog::do_log('err',"could not send message to distribute from $from (verp enabled)");
-	return undef;
-}
-$tags_to_use->{'tag_verp'} = 0 if ($result > 0);
-$nbr_smtp += $result;
-$nbr_verp += $result;
-    }
-    return $nbr_smtp;
+			## Add a footer
+			my $new_msg = $self->add_parts($txt_msg);
+			if (defined $new_msg) {
+				$txt_msg = $new_msg;
+			}
+			$new_message = Sympa::Message->new(entity => $txt_msg);
+
+		##Prepare message for html reception mode
+		}elsif($array_name eq 'tabrcpt_html'){
+			my $html_msg = $saved_msg->dup;
+			if (Sympa::Tools::as_singlepart($html_msg, 'text/html')) {
+				Sympa::Log::Syslog::do_log('notice', 'Multipart message changed to singlepart');
+			}
+			## Add a footer
+			my $new_msg = $self->add_parts($html_msg);
+			if (defined $new_msg) {
+				$html_msg = $new_msg;
+			}
+			$new_message = Sympa::Message->new(entity => $html_msg);
+
+		##Prepare message for urlize reception mode
+		}elsif($array_name eq 'tabrcpt_url'){
+			my $url_msg = $saved_msg->dup;
+
+			my $expl = $self->{'dir'}.'/urlized';
+
+			unless ((-d $expl) ||( mkdir $expl, 0775)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to create urlize directory $expl");
+				return undef;
+			}
+
+			my $dir1 = Sympa::Tools::clean_msg_id($url_msg->head->get('Message-ID'));
+
+			## Clean up Message-ID
+			$dir1 = Sympa::Tools::escape_chars($dir1);
+			$dir1 = '/'.$dir1;
+
+			unless ( mkdir ("$expl/$dir1", 0775)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to create urlize directory $expl/$dir1");
+				printf "Unable to create urlized directory $expl/$dir1";
+				return 0;
+			}
+			my $mime_types = Sympa::Tools::load_mime_types(
+				$Sympa::Configuration::Conf{'etc'}
+			);
+			my @parts = ();
+			my $i = 0;
+			foreach my $part ($url_msg->parts()) {
+				my $entity = _urlize_part($part, $self, $dir1, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'));
+				if (defined $entity) {
+					push @parts, $entity;
+				} else {
+					push @parts, $part;
+				}
+				$i++;
+			}
+
+			## Replace message parts
+			$url_msg->parts (\@parts);
+
+			## Add a footer
+			my $new_msg = $self->add_parts($url_msg);
+			if (defined $new_msg) {
+				$url_msg = $new_msg;
+			}
+			$new_message = Sympa::Message->new(entity => $url_msg);
+		}else {
+			Sympa::Log::Syslog::do_log('err', "Unknown variable/reception mode $array_name");
+			return undef;
+		}
+
+		unless (defined $new_message) {
+			Sympa::Log::Syslog::do_log('err', "Failed to create Message object");
+			return undef;
+		}
+
+		## TOPICS
+		my @selected_tabrcpt;
+		my @possible_verptabrcpt;
+		if ($self->is_there_msg_topic()){
+			@selected_tabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_rcpt->{$array_name});
+			@possible_verptabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_verp_rcpt->{$array_name});
+		} else {
+			@selected_tabrcpt = @{$available_rcpt->{$array_name}};
+			@possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
+		}
+
+		if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(html)|(txt)|(notice))?(_verp)?/) {
+			my $reception_option =  $1;
+
+			$reception_option = 'mail' unless $reception_option ;
+		}
+
+		## Preparing VERP receipients.
+		my @verp_selected_tabrcpt = extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
+		my $verp= 'off';
+
+		my $result = Sympa::Mail::mail_message(
+			message            => $new_message,
+			rcpt               => \@selected_tabrcpt,
+			list               => $self,
+			verp               => $verp,
+			dkim_parameters    => $dkim_parameters,
+			tag_as_last        => $tags_to_use->{'tag_noverp'},
+			cookie             => $Sympa::Configuration::Conf{'cookie'},
+			db_type            => $Sympa::Configuration::Conf{'db_type'},
+			key_passwd         => $Sympa::Configuration::Conf{'key_passwd'},
+			nrcpt_by_dom       => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
+			openssl            => $Sympa::Configuration::Conf{'openssl'},
+			ssl_cert_dir       => $Sympa::Configuration::Conf{'ssl_cert_dir'},
+			priority_packet    => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+			avg                => Sympa::Configuration::get_robot_conf($robot, 'avg'),
+			maxsmtp            => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
+			nrcpt              => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
+			return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
+			sendmail           => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+			sendmail_args      => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+			sympa              => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+		);
+		unless (defined $result) {
+			Sympa::Log::Syslog::do_log('err',"could not send message to distribute from $from (verp disabled)");
+			return undef;
+		}
+		$tags_to_use->{'tag_noverp'} = 0 if ($result > 0);
+		$nbr_smtp += $result;
+
+		$verp= 'on';
+
+		if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')){
+			$verp = $apply_tracking ;
+			Sympa::Tracking::db_init_notification_table('listname'=> $self->{'name'},
+				'robot'=> $robot,
+				'msgid' => $original_message_id, # what ever the message is transformed because of the reception option, tracking use the original message id
+				'rcpt'=> \@verp_selected_tabrcpt,
+				'reception_option' => $reception_option,
+			);
+
+		}
+
+		#  ignore those reception option where mail must not ne sent
+		#  next if  (($array_name eq 'tabrcpt_digest') or ($array_name eq 'tabrcpt_digestlplain') or ($array_name eq 'tabrcpt_summary') or ($array_name eq 'tabrcpt_nomail')) ;
+		next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
+
+		## prepare VERP sending.
+		$result = Sympa::Mail::mail_message(
+			message            => $new_message,
+			rcpt               => \@verp_selected_tabrcpt,
+			list               => $self,
+			verp               => $verp,
+			dkim_parameters    => $dkim_parameters,
+			tag_as_last        => $tags_to_use->{'tag_verp'},
+			cookie             => $Sympa::Configuration::Conf{'cookie'},
+			db_type            => $Sympa::Configuration::Conf{'db_type'},
+			key_passwd         => $Sympa::Configuration::Conf{'key_passwd'},
+			nrcpt_by_dom       => $Sympa::Configuration::Conf{'nrcpt_by_domain'},
+			openssl            => $Sympa::Configuration::Conf{'openssl'},
+			ssl_cert_dir       => $Sympa::Configuration::Conf{'ssl_cert_dir'},
+			priority_packet    => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+			avg                => Sympa::Configuration::get_robot_conf($robot, 'avg'),
+			maxsmtp            => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
+			nrcpt              => Sympa::Configuration::get_robot_conf($robot, 'nrcpt'),
+			return_path_suffix => Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix'),
+			sendmail           => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+			sendmail_args      => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+			sympa              => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+		);
+		unless (defined $result) {
+			Sympa::Log::Syslog::do_log('err',"could not send message to distribute from $from (verp enabled)");
+			return undef;
+		}
+		$tags_to_use->{'tag_verp'} = 0 if ($result > 0);
+		$nbr_smtp += $result;
+		$nbr_verp += $result;
+	}
+	return $nbr_smtp;
 }
 
 =head2 $list->send_to_editor($method, $message)
@@ -5117,30 +5118,31 @@ sub send_notify_to_owner {
 				$param->{'rate'} = int ($param->{'rate'} * 10) / 10;
 			}
 			unless ($self->send_file('listowner_notification',\@to, $robot,$param)) {
+				Sympa::Log::Syslog::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner");
+				return undef;
+			}
+		}
+
+	}elsif(ref($param) eq 'ARRAY') {
+
+		my $data = {'to' => join(',', @to),
+			'type' => $operation};
+
+		for my $i(0..$#{$param}) {
+			$data->{"param$i"} = $param->[$i];
+		}
+		unless ($self->send_file('listowner_notification', \@to, $robot, $data)) {
 			Sympa::Log::Syslog::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner");
 			return undef;
 		}
+
+	}else {
+
+		Sympa::Log::Syslog::do_log('err','%s,%s: error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $self->{'name'},$operation);
+		return undef;
 	}
 
-}elsif(ref($param) eq 'ARRAY') {
-
-	my $data = {'to' => join(',', @to),
-		'type' => $operation};
-
-	for my $i(0..$#{$param}) {
-		$data->{"param$i"} = $param->[$i];
-	}
-	unless ($self->send_file('listowner_notification', \@to, $robot, $data)) {
-	Sympa::Log::Syslog::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner");
-	return undef;
-}
-
-    }else {
-
-	    Sympa::Log::Syslog::do_log('err','%s,%s: error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $self->{'name'},$operation);
-	    return undef;
-    }
-    return 1;
+	return 1;
 }
 
 =head2 $list->delete_list_member_picture($email)
@@ -5234,15 +5236,16 @@ sub send_notify_to_editor {
 		$data->{"param$i"} = $param->[$i];
 	}
 	unless ($self->send_file('listeditor_notification', \@to, $robot, $data)) {
-	Sympa::Log::Syslog::do_log('notice',"Unable to send template 'listeditor_notification' to $self->{'name'} list editor");
-	return undef;
-}
+		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'listeditor_notification' to $self->{'name'} list editor");
+		return undef;
+	}
 
-    }else {
-	    Sympa::Log::Syslog::do_log('err','%s,%s: error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $self->{'name'}, $operation);
-	    return undef;
-    }
-    return 1;
+	}else {
+		Sympa::Log::Syslog::do_log('err','%s,%s: error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $self->{'name'}, $operation);
+	return undef;
+	}
+
+	return 1;
 }
 
 =head2 $list->send_notify_to_user($operation, $user, $data)
@@ -6056,7 +6059,7 @@ Returns a hash with those excluded from the list and the date.
 =head3 Return value
 
  data_exclu : * %data_exclu->{'emails'}->[]
-	      * %data_exclu->{'date'}->[]
+	  * %data_exclu->{'date'}->[]
 
 =cut
 
@@ -6097,17 +6100,17 @@ sub get_exclusion {
 	## in order to use the data, we add the emails and dates in differents array
 	my $data_exclu = {"emails" => \@users,
 	"date"   => \@date
-		      };
+		  };
 
-		      $sth->finish();
-		      $sth = pop @sth_stack;
+		  $sth->finish();
+		  $sth = pop @sth_stack;
 
-		      unless($data_exclu){
-			      Sympa::Log::Syslog::do_log('err','Unable to retrieve information from database for list %s@%s', $name,$robot);
-			      return undef;
-		      }
-		      return $data_exclu;
-	      }
+		  unless($data_exclu){
+			  Sympa::Log::Syslog::do_log('err','Unable to retrieve information from database for list %s@%s', $name,$robot);
+			  return undef;
+		  }
+		  return $data_exclu;
+	  }
 
 =head1 INSTANCE METHODS
 
@@ -7308,8 +7311,8 @@ sub update_list_admin {
 	## additional DB fields
 #    if (defined $Sympa::Configuration::Conf{'db_additional_user_fields'}) {
 #	foreach my $f (split ',', $Sympa::Configuration::Conf{'db_additional_user_fields'}) {
-#	    $map_table{$f} = 'user_table';
-#	    $map_field{$f} = $f;
+#	$map_table{$f} = 'user_table';
+#	$map_field{$f} = $f;
 #	}
 #    }
 
@@ -9150,16 +9153,18 @@ sub _include_users_ldap_2level {
 			$users->{$email} = join("\n", %u);
 		}else {
 			$users->{$email} = \%u;
+		}
 	}
-}
 
-Sympa::Log::Syslog::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'}) ;
-Sympa::Log::Syslog::do_log('info','%d new users included from LDAP query 2level',$total);
+	Sympa::Log::Syslog::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'}) ;
+	Sympa::Log::Syslog::do_log('info','%d new users included from LDAP query 2level',$total);
 
-my $result;
+	my $result;
 $result->{'total'} = $total;
-if ($#sync_errors > -1) {$result->{'errors'} = \@sync_errors;}
-    return $result;
+	if ($#sync_errors > -1) {
+		$result->{'errors'} = \@sync_errors;
+	}
+	return $result;
 }
 
 sub _include_sql_ca {
@@ -9365,106 +9370,113 @@ sub _load_list_members_from_include {
 				if ($source->is_allowed_to_sync() || $source_is_new) {
 					Sympa::Log::Syslog::do_log('debug', 'is_new %d, syncing', $source_is_new);
 					$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
+					unless (defined $included){
+						push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+					}
+				}else{
+					my $exclusion_data = {
+						'id'          => $source_id,
+						'name'        => $incl->{'name'},
+						'starthour'   => $source->{'starthour'},
+						'startminute' => $source->{'startminute'} ,
+						'endhour'     => $source->{'endhour'},
+						'endminute'   => $source->{'endminute'}
+					};
+					push @ex_sources, $exclusion_data;
+					$included = 0;
+				}
+			}elsif ($type eq 'include_ldap_query') {
+				my $source = Sympa::Datasource::LDAP->new(%$incl);
+				if ($source->is_allowed_to_sync() || $source_is_new) {
+					$included = _include_users_ldap(\%users, $source_id, $source, $admin->{'default_user_options'});
+					unless (defined $included){
+						push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+					}
+				}else{
+					my $exclusion_data = {
+						'id'          => $source_id,
+						'name'        => $incl->{'name'},
+						'starthour'   => $source->{'starthour'},
+						'startminute' => $source->{'startminute'} ,
+						'endhour'     => $source->{'endhour'},
+						'endminute'   => $source->{'endminute'}
+					};
+					push @ex_sources, $exclusion_data;
+					$included = 0;
+				}
+			}elsif ($type eq 'include_ldap_2level_query') {
+				my $source = Sympa::Datasource::LDAP->new(%$incl);
+				if ($source->is_allowed_to_sync() || $source_is_new) {
+					my $result = _include_users_ldap_2level(\%users,$source_id, $source, $admin->{'default_user_options'});
+					if (defined $result) {
+						$included = $result->{'total'};
+						if (defined $result->{'errors'}){
+							Sympa::Log::Syslog::do_log('err', 'Errors occurred during the second LDAP passe');
+							push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+						}
+					}else{
+						$included = undef;
+						push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+					}
+				}else{
+					my $exclusion_data = {
+						'id'          => $source_id,
+						'name'        => $incl->{'name'},
+						'starthour'   => $source->{'starthour'},
+						'startminute' => $source->{'startminute'} ,
+						'endhour'     => $source->{'endhour'},
+						'endminute'   => $source->{'endminute'}
+					};
+					push @ex_sources, $exclusion_data;
+					$included = 0;
+				}
+			}elsif ($type eq 'include_remote_sympa_list') {
+				$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$self->{'domain'},$admin->{'default_user_options'});
 				unless (defined $included){
 					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 				}
-			}else{
-				my $exclusion_data = {	'id' => $source_id,
-					'name' => $incl->{'name'},
-					'starthour' => $source->{'starthour'},
-					'startminute' => $source->{'startminute'} ,
-					'endhour' => $source->{'endhour'},
-					'endminute' => $source->{'endminute'}};
-				push @ex_sources, $exclusion_data;
-				$included = 0;
+			}elsif ($type eq 'include_list') {
+				$depend_on->{$name} = 1 ;
+				if (_inclusion_loop ($incl,$depend_on)) {
+					Sympa::Log::Syslog::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
+				}else{
+					$depend_on->{$incl} = 1;
+					$included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'});
+					unless (defined $included){
+						push @errors, {'type' => $type, 'name' => $incl};
+					}
+				}
+			}elsif ($type eq 'include_file') {
+				$included = _include_users_file (\%users, $incl, $admin->{'default_user_options'});
+				unless (defined $included){
+					push @errors, {'type' => $type, 'name' => $incl};
+				}
+			}elsif ($type eq 'include_remote_file') {
+				$included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'});
+				unless (defined $included){
+					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+				}
+			}elsif ($type eq 'include_voot_group') {
+				$included = _include_users_voot_group(\%users, $incl, $admin->{'default_user_options'});
+				unless (defined $included){
+					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+				}
 			}
-		}elsif ($type eq 'include_ldap_query') {
-			my $source = Sympa::Datasource::LDAP->new(%$incl);
-			if ($source->is_allowed_to_sync() || $source_is_new) {
-				$included = _include_users_ldap(\%users, $source_id, $source, $admin->{'default_user_options'});
-			unless (defined $included){
-				push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+
+			unless (defined $included) {
+				Sympa::Log::Syslog::do_log('err', 'Inclusion %s failed in list %s', $type, $name);
+				next;
 			}
-		}else{
-			my $exclusion_data = {	'id' => $source_id,
-				'name' => $incl->{'name'},
-				'starthour' => $source->{'starthour'},
-				'startminute' => $source->{'startminute'} ,
-				'endhour' => $source->{'endhour'},
-				'endminute' => $source->{'endminute'}};
-			push @ex_sources, $exclusion_data;
-			$included = 0;
+			$total += $included;
 		}
-	}elsif ($type eq 'include_ldap_2level_query') {
-		my $source = Sympa::Datasource::LDAP->new(%$incl);
-		if ($source->is_allowed_to_sync() || $source_is_new) {
-			my $result = _include_users_ldap_2level(\%users,$source_id, $source, $admin->{'default_user_options'});
-		if (defined $result) {
-			$included = $result->{'total'};
-			if (defined $result->{'errors'}){
-				Sympa::Log::Syslog::do_log('err', 'Errors occurred during the second LDAP passe');
-				push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-			}
-		}else{
-			$included = undef;
-			push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-		}
-	}else{
-		my $exclusion_data = {	'id' => $source_id,
-			'name' => $incl->{'name'},
-			'starthour' => $source->{'starthour'},
-			'startminute' => $source->{'startminute'} ,
-			'endhour' => $source->{'endhour'},
-			'endminute' => $source->{'endminute'}};
-		push @ex_sources, $exclusion_data;
-		$included = 0;
 	}
-}elsif ($type eq 'include_remote_sympa_list') {
-	$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$self->{'domain'},$admin->{'default_user_options'});
-unless (defined $included){
-	push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-}
-	    }elsif ($type eq 'include_list') {
-		    $depend_on->{$name} = 1 ;
-		    if (_inclusion_loop ($incl,$depend_on)) {
-			    Sympa::Log::Syslog::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
-		    }else{
-			    $depend_on->{$incl} = 1;
-			    $included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'});
-		    unless (defined $included){
-			    push @errors, {'type' => $type, 'name' => $incl};
-		    }
-	    }
-    }elsif ($type eq 'include_file') {
-	    $included = _include_users_file (\%users, $incl, $admin->{'default_user_options'});
-    unless (defined $included){
-	    push @errors, {'type' => $type, 'name' => $incl};
-    }
-	    }elsif ($type eq 'include_remote_file') {
-		    $included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'});
-	    unless (defined $included){
-		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-	    }
-    }elsif ($type eq 'include_voot_group') {
-	    $included = _include_users_voot_group(\%users, $incl, $admin->{'default_user_options'});
-    unless (defined $included){
-	    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-    }
-	    }
 
-	    unless (defined $included) {
-		    Sympa::Log::Syslog::do_log('err', 'Inclusion %s failed in list %s', $type, $name);
-		    next;
-	    }
-	    $total += $included;
-    }
-    }
+	## If an error occured, return an undef value
+	$result->{'users'} = \%users;
+	$result->{'errors'} = \@errors;
+	$result->{'exclusions'} = \@ex_sources;
 
-    ## If an error occured, return an undef value
-    $result->{'users'} = \%users;
-    $result->{'errors'} = \@errors;
-    $result->{'exclusions'} = \@ex_sources;
-    return $result;
+	return $result;
 }
 
 ## Loads the list of admin users from an external include source
@@ -9510,51 +9522,50 @@ sub _load_list_admin_from_include {
 			if ($include_path =~ s/$name$//) {
 				$parsing{'include_path'} = $include_path;
 				$include_admin_user = _load_include_admin_user_file($self->{'domain'},$include_path,\%parsing);
+			} else {
+				Sympa::Log::Syslog::do_log('err', 'errors to get path of the the file %s.incl',$entry->{'source'});
+				return undef;
+			}
+
 		} else {
-			Sympa::Log::Syslog::do_log('err', 'errors to get path of the the file %s.incl',$entry->{'source'});
-			return undef;
+			$include_admin_user = _load_include_admin_user_file($self->{'domain'},$include_file);
 		}
+		foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file', 'include_voot_group') {
+			last unless (defined $total);
 
+			foreach my $tmp_incl (@{$include_admin_user->{$type}}) {
+				my $included;
 
-	} else {
-		$include_admin_user = _load_include_admin_user_file($self->{'domain'},$include_file);
-	}
-	foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file', 'include_voot_group') {
-		last unless (defined $total);
+				## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
+				my $incl = Sympa::Tools::Data::dup_var($tmp_incl);
 
-		foreach my $tmp_incl (@{$include_admin_user->{$type}}) {
-			my $included;
-
-			## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-			my $incl = Sympa::Tools::Data::dup_var($tmp_incl);
-
-			## get the list of admin users
-			## does it need to define a 'default_admin_user_option'?
-			if ($type eq 'include_sql_query') {
-				require Sympa::Datasource::SQL;
-				my $source = Sympa::Datasource::SQL->create(
-					%$incl,
-					domain => $Sympa::Configuration::Conf{'domain'}
-				);
+				## get the list of admin users
+				## does it need to define a 'default_admin_user_option'?
+				if ($type eq 'include_sql_query') {
+					require Sympa::Datasource::SQL;
+					my $source = Sympa::Datasource::SQL->create(
+						%$incl,
+						domain => $Sympa::Configuration::Conf{'domain'}
+					);
 				$included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'});
-	}elsif ($type eq 'include_ldap_query') {
-		require Sympa::Datasource::LDAP;
-		my $source = Sympa::Datasource::LDAP->new(%$incl);
-		$included = _include_users_ldap(\%admin_users, $incl,$source,\%option);
+		}elsif ($type eq 'include_ldap_query') {
+			require Sympa::Datasource::LDAP;
+			my $source = Sympa::Datasource::LDAP->new(%$incl);
+			$included = _include_users_ldap(\%admin_users, $incl,$source,\%option);
 		}elsif ($type eq 'include_ldap_2level_query') {
 			require Sympa::Datasource::LDAP;
 			my $source = Sympa::Datasource::LDAP->new(%$incl);
 			my $result = _include_users_ldap_2level(\%admin_users, $incl,$source,\%option);
-	if (defined $result) {
-		$included = $result->{'total'};
-		if (defined $result->{'errors'}){
-			Sympa::Log::Syslog::do_log('err', 'Errors occurred during the second LDAP passe. Please verify your LDAP query.');
-		}
-	}else{
-		$included = undef;
-	}
-}elsif ($type eq 'include_remote_sympa_list') {
-	$included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$self->{'domain'},\%option);
+			if (defined $result) {
+				$included = $result->{'total'};
+				if (defined $result->{'errors'}){
+					Sympa::Log::Syslog::do_log('err', 'Errors occurred during the second LDAP passe. Please verify your LDAP query.');
+				}
+			}else{
+				$included = undef;
+			}
+		}elsif ($type eq 'include_remote_sympa_list') {
+			$included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$self->{'domain'},\%option);
 		}elsif ($type eq 'include_list') {
 			$depend_on->{$name} = 1 ;
 			if (_inclusion_loop ($incl,$depend_on)) {
@@ -9562,30 +9573,30 @@ sub _load_list_admin_from_include {
 			}else{
 				$depend_on->{$incl} = 1;
 				$included = _include_users_list (\%admin_users, $incl, $self->{'domain'}, \%option);
-	}
-}elsif ($type eq 'include_file') {
-	$included = _include_users_file (\%admin_users, $incl, \%option);
-		}elsif ($type eq 'include_remote_file') {
-			$included = _include_users_remote_file (\%admin_users, $incl, \%option);
-}elsif ($type eq 'include_voot_group') {
-	$included = _include_users_voot_group(\%admin_users, $incl, \%option);
-	    }
+			}
+		}elsif ($type eq 'include_file') {
+			$included = _include_users_file (\%admin_users, $incl, \%option);
+				}elsif ($type eq 'include_remote_file') {
+					$included = _include_users_remote_file (\%admin_users, $incl, \%option);
+				}elsif ($type eq 'include_voot_group') {
+					$included = _include_users_voot_group(\%admin_users, $incl, \%option);
+				}
 
-	    unless (defined $included) {
-		    Sympa::Log::Syslog::do_log('err', 'Inclusion %s %s failed in list %s', $role, $type, $name);
-		    next;
-	    }
-	    $total += $included;
-    }
+			unless (defined $included) {
+				Sympa::Log::Syslog::do_log('err', 'Inclusion %s %s failed in list %s', $role, $type, $name);
+				next;
+			}
+			$total += $included;
+			}
+		}
+
+		## If an error occured, return an undef value
+		unless (defined $total) {
+			return undef;
+		}
 	}
 
-	## If an error occured, return an undef value
-	unless (defined $total) {
-		return undef;
-	}
-}
-
-return \%admin_users;
+	return \%admin_users;
 }
 
 
@@ -9604,176 +9615,176 @@ sub _load_include_admin_user_file {
 	my $output = '';
 
 	unless (Sympa::Template::parse_tt2($vars,$parsing->{'template'},\$output,[$parsing->{'include_path'}])) {
-	Sympa::Log::Syslog::do_log('err', 'Failed to parse %s', $parsing->{'template'});
-	return undef;
-}
-
-my @lines = split('\n',$output);
-
-my $i = 0;
-foreach my $line (@lines) {
-	if ($line =~ /^\s*$/) {
-		$i++ if $paragraphs[$i];
-	}else {
-		push @{$paragraphs[$i]}, $line;
+		Sympa::Log::Syslog::do_log('err', 'Failed to parse %s', $parsing->{'template'});
+		return undef;
 	}
-}
-    } else {
-	    unless (open INCLUDE, $file) {
-		    Sympa::Log::Syslog::do_log('info', 'Cannot open %s', $file);
-	    }
 
-	    ## Just in case...
-	    local $RS = "\n";
+	my @lines = split('\n',$output);
 
-	    ## Split in paragraphs
-	    my $i = 0;
-	    while (<INCLUDE>) {
-		    if (/^\s*$/) {
-			    $i++ if $paragraphs[$i];
-		    }else {
-			    push @{$paragraphs[$i]}, $_;
-		    }
-	    }
-	    close INCLUDE;
-    }
-
-    for my $index (0..$#paragraphs) {
-	    my @paragraph = @{$paragraphs[$index]};
-
-	    my $pname;
-
-	    ## Clean paragraph, keep comments
-	    for my $i (0..$#paragraph) {
-		    my $changed = undef;
-		    for my $j (0..$#paragraph) {
-			    if ($paragraph[$j] =~ /^\s*\#/) {
-				    chomp($paragraph[$j]);
-				    push @{$include{'comment'}}, $paragraph[$j];
-				    splice @paragraph, $j, 1;
-				    $changed = 1;
-			    }elsif ($paragraph[$j] =~ /^\s*$/) {
-				    splice @paragraph, $j, 1;
-				    $changed = 1;
-			    }
-
-			    last if $changed;
-		    }
-
-		    last unless $changed;
-	    }
-
-	    ## Empty paragraph
-	    next unless ($#paragraph > -1);
-
-	    ## Look for first valid line
-	    unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
-		    Sympa::Log::Syslog::do_log('info', 'Bad paragraph "%s" in %s', @paragraph, $file);
-		    next;
-	    }
-
-	    $pname = $1;
-
-	    unless(($pname eq 'include_list')||($pname eq 'include_remote_sympa_list')||($pname eq 'include_file')||($pname eq 'include_remote_file')||
-		    ($pname eq 'include_ldap_query')||($pname eq 'include_ldap_2level_query')||($pname eq 'include_sql_query'))   {
-		    Sympa::Log::Syslog::do_log('info', 'Unknown parameter "%s" in %s', $pname, $file);
-		    next;
-	    }
-
-	    ## Uniqueness
-	    if (defined $include{$pname}) {
-		    unless (($::pinfo{$pname}{'occurrence'} eq '0-n') or
-			    ($::pinfo{$pname}{'occurrence'} eq '1-n')) {
-			    Sympa::Log::Syslog::do_log('info', 'Multiple parameter "%s" in %s', $pname, $file);
-		    }
-	    }
-
-	    ## Line or Paragraph
-	    if (ref $::pinfo{$pname}{'file_format'} eq 'HASH') {
-		    ## This should be a paragraph
-		    unless ($#paragraph > 0) {
-			    Sympa::Log::Syslog::do_log('info', 'Expecting a paragraph for "%s" parameter in %s, ignore it', $pname, $file);
-			    next;
-		    }
-
-		    ## Skipping first line
-		    shift @paragraph;
-
-		    my %hash;
-		    for my $i (0..$#paragraph) {
-			    next if ($paragraph[$i] =~ /^\s*\#/);
-
-			    unless ($paragraph[$i] =~ /^\s*(\w+)\s*/) {
-				    Sympa::Log::Syslog::do_log('info', 'Bad line "%s" in %s',$paragraph[$i], $file);
-			    }
-
-			    my $key = $1;
-
-			    unless (defined $::pinfo{$pname}{'file_format'}{$key}) {
-				    Sympa::Log::Syslog::do_log('info', 'Unknown key "%s" in paragraph "%s" in %s', $key, $pname, $file);
-				    next;
-			    }
-
-			    unless ($paragraph[$i] =~ /^\s*$key\s+($::pinfo{$pname}{'file_format'}{$key}{'file_format'})\s*$/i) {
-				    chomp($paragraph[$i]);
-				    Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" for key "%s", paragraph "%s" in %s', $paragraph[$i], $key, $pname, $file);
-				    next;
-			    }
-
-			    $hash{$key} = _load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key});
-		    }
-
-		    ## Apply defaults & Check required keys
-		    my $missing_required_field;
-		    foreach my $k (keys %{$::pinfo{$pname}{'file_format'}}) {
-
-			    ## Default value
-			    unless (defined $hash{$k}) {
-				    if (defined $::pinfo{$pname}{'file_format'}{$k}{'default'}) {
-					    $hash{$k} = _load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k});
-				    }
-			    }
-			    ## Required fields
-			    if ($::pinfo{$pname}{'file_format'}{$k}{'occurrence'} eq '1') {
-				    unless (defined $hash{$k}) {
-					    Sympa::Log::Syslog::do_log('info', 'Missing key "%s" in param "%s" in %s', $k, $pname, $file);
-					    $missing_required_field++;
-				    }
-			    }
-		    }
-
-		    next if $missing_required_field;
-
-		    ## Should we store it in an array
-		    if (($::pinfo{$pname}{'occurrence'} =~ /n$/)) {
-			    push @{$include{$pname}}, \%hash;
-	    }else {
-		    $include{$pname} = \%hash;
-    }
-	}else {
-		## This should be a single line
-		unless ($#paragraph == 0) {
-			Sympa::Log::Syslog::do_log('info', 'Expecting a single line for "%s" parameter in %s', $pname, $file);
+	my $i = 0;
+	foreach my $line (@lines) {
+		if ($line =~ /^\s*$/) {
+			$i++ if $paragraphs[$i];
+		}else {
+			push @{$paragraphs[$i]}, $line;
+		}
+	}
+	    } else {
+		unless (open INCLUDE, $file) {
+			Sympa::Log::Syslog::do_log('info', 'Cannot open %s', $file);
 		}
 
-		unless ($paragraph[0] =~ /^\s*$pname\s+($::pinfo{$pname}{'file_format'})\s*$/i) {
-			chomp($paragraph[0]);
-			Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" in %s', $paragraph[0], $file);
+		## Just in case...
+		local $RS = "\n";
+
+		## Split in paragraphs
+		my $i = 0;
+		while (<INCLUDE>) {
+			if (/^\s*$/) {
+				$i++ if $paragraphs[$i];
+			}else {
+				push @{$paragraphs[$i]}, $_;
+			}
+		}
+		close INCLUDE;
+	    }
+
+	    for my $index (0..$#paragraphs) {
+		my @paragraph = @{$paragraphs[$index]};
+
+		my $pname;
+
+		## Clean paragraph, keep comments
+		for my $i (0..$#paragraph) {
+			my $changed = undef;
+			for my $j (0..$#paragraph) {
+				if ($paragraph[$j] =~ /^\s*\#/) {
+					chomp($paragraph[$j]);
+					push @{$include{'comment'}}, $paragraph[$j];
+					splice @paragraph, $j, 1;
+					$changed = 1;
+				}elsif ($paragraph[$j] =~ /^\s*$/) {
+					splice @paragraph, $j, 1;
+					$changed = 1;
+				}
+
+				last if $changed;
+			}
+
+			last unless $changed;
+		}
+
+		## Empty paragraph
+		next unless ($#paragraph > -1);
+
+		## Look for first valid line
+		unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
+			Sympa::Log::Syslog::do_log('info', 'Bad paragraph "%s" in %s', @paragraph, $file);
 			next;
 		}
 
-		my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname});
+		$pname = $1;
 
-		if (($::pinfo{$pname}{'occurrence'} =~ /n$/)
-			&& ! (ref ($value) =~ /^ARRAY/)) {
-			push @{$include{$pname}}, $value;
+		unless(($pname eq 'include_list')||($pname eq 'include_remote_sympa_list')||($pname eq 'include_file')||($pname eq 'include_remote_file')||
+			($pname eq 'include_ldap_query')||($pname eq 'include_ldap_2level_query')||($pname eq 'include_sql_query'))   {
+			Sympa::Log::Syslog::do_log('info', 'Unknown parameter "%s" in %s', $pname, $file);
+			next;
+		}
+
+		## Uniqueness
+		if (defined $include{$pname}) {
+			unless (($::pinfo{$pname}{'occurrence'} eq '0-n') or
+				($::pinfo{$pname}{'occurrence'} eq '1-n')) {
+				Sympa::Log::Syslog::do_log('info', 'Multiple parameter "%s" in %s', $pname, $file);
+			}
+		}
+
+		## Line or Paragraph
+		if (ref $::pinfo{$pname}{'file_format'} eq 'HASH') {
+			## This should be a paragraph
+			unless ($#paragraph > 0) {
+				Sympa::Log::Syslog::do_log('info', 'Expecting a paragraph for "%s" parameter in %s, ignore it', $pname, $file);
+				next;
+			}
+
+			## Skipping first line
+			shift @paragraph;
+
+			my %hash;
+			for my $i (0..$#paragraph) {
+				next if ($paragraph[$i] =~ /^\s*\#/);
+
+				unless ($paragraph[$i] =~ /^\s*(\w+)\s*/) {
+					Sympa::Log::Syslog::do_log('info', 'Bad line "%s" in %s',$paragraph[$i], $file);
+				}
+
+				my $key = $1;
+
+				unless (defined $::pinfo{$pname}{'file_format'}{$key}) {
+					Sympa::Log::Syslog::do_log('info', 'Unknown key "%s" in paragraph "%s" in %s', $key, $pname, $file);
+					next;
+				}
+
+				unless ($paragraph[$i] =~ /^\s*$key\s+($::pinfo{$pname}{'file_format'}{$key}{'file_format'})\s*$/i) {
+					chomp($paragraph[$i]);
+					Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" for key "%s", paragraph "%s" in %s', $paragraph[$i], $key, $pname, $file);
+					next;
+				}
+
+				$hash{$key} = _load_list_param($robot,$key, $1, $::pinfo{$pname}{'file_format'}{$key});
+			}
+
+			## Apply defaults & Check required keys
+			my $missing_required_field;
+			foreach my $k (keys %{$::pinfo{$pname}{'file_format'}}) {
+
+				## Default value
+				unless (defined $hash{$k}) {
+					if (defined $::pinfo{$pname}{'file_format'}{$k}{'default'}) {
+						$hash{$k} = _load_list_param($robot,$k, 'default', $::pinfo{$pname}{'file_format'}{$k});
+					}
+				}
+				## Required fields
+				if ($::pinfo{$pname}{'file_format'}{$k}{'occurrence'} eq '1') {
+					unless (defined $hash{$k}) {
+						Sympa::Log::Syslog::do_log('info', 'Missing key "%s" in param "%s" in %s', $k, $pname, $file);
+						$missing_required_field++;
+					}
+				}
+			}
+
+			next if $missing_required_field;
+
+			## Should we store it in an array
+			if (($::pinfo{$pname}{'occurrence'} =~ /n$/)) {
+				push @{$include{$pname}}, \%hash;
 		}else {
-			$include{$pname} = $value;
+			$include{$pname} = \%hash;
+	    }
+		}else {
+			## This should be a single line
+			unless ($#paragraph == 0) {
+				Sympa::Log::Syslog::do_log('info', 'Expecting a single line for "%s" parameter in %s', $pname, $file);
+			}
+
+			unless ($paragraph[0] =~ /^\s*$pname\s+($::pinfo{$pname}{'file_format'})\s*$/i) {
+				chomp($paragraph[0]);
+				Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" in %s', $paragraph[0], $file);
+				next;
+			}
+
+			my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname});
+
+			if (($::pinfo{$pname}{'occurrence'} =~ /n$/)
+				&& ! (ref ($value) =~ /^ARRAY/)) {
+				push @{$include{$pname}}, $value;
+			}else {
+				$include{$pname} = $value;
+			}
 		}
 	}
-}
 
-return \%include;
+	return \%include;
 }
 
 ## Returns a ref to an array containing the ids (as computed by Datasource::_get_datasource_id) of the list of memebers given as argument.
@@ -11703,155 +11714,155 @@ sub _load_list_config_file {
 		}else {
 			$admin{$pname} = \%hash;
 	}
-}else {
-	## This should be a single line
-	unless ($#paragraph == 0) {
-		Sympa::Log::Syslog::do_log('info', 'Expecting a single line for "%s" parameter in %s', $pname, $config_file);
+		}else {
+			## This should be a single line
+			unless ($#paragraph == 0) {
+				Sympa::Log::Syslog::do_log('info', 'Expecting a single line for "%s" parameter in %s', $pname, $config_file);
+			}
+
+			unless ($paragraph[0] =~ /^\s*$pname\s+($::pinfo{$pname}{'file_format'})\s*$/i) {
+				chomp($paragraph[0]);
+				Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" in %s', $paragraph[0], $config_file);
+				next;
+			}
+
+			my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname}, $directory);
+
+			delete $admin{'defaults'}{$pname};
+
+			if (($::pinfo{$pname}{'occurrence'} =~ /n$/)
+				&& ! (ref ($value) =~ /^ARRAY/)) {
+				push @{$admin{$pname}}, $value;
+			}else {
+				$admin{$pname} = $value;
+			}
+		}
 	}
 
-	unless ($paragraph[0] =~ /^\s*$pname\s+($::pinfo{$pname}{'file_format'})\s*$/i) {
-		chomp($paragraph[0]);
-		Sympa::Log::Syslog::do_log('info', 'Bad entry "%s" in %s', $paragraph[0], $config_file);
-		next;
+	close CONFIG;
+
+	## Release the lock
+	unless ($lock->unlock()) {
+		Sympa::Log::Syslog::do_log('err', 'Could not remove the read lock on file %s',$config_file);
+		return undef;
 	}
 
-	my $value = _load_list_param($robot,$pname, $1, $::pinfo{$pname}, $directory);
+	## Apply defaults & check required parameters
+	foreach my $p (keys %::pinfo) {
 
-	delete $admin{'defaults'}{$pname};
+		## Defaults
+		unless (defined $admin{$p}) {
 
-	if (($::pinfo{$pname}{'occurrence'} =~ /n$/)
-		&& ! (ref ($value) =~ /^ARRAY/)) {
-		push @{$admin{$pname}}, $value;
-	}else {
-		$admin{$pname} = $value;
+			## Simple (versus structured) parameter case
+			if (defined $::pinfo{$p}{'default'}) {
+				$admin{$p} = _load_list_param($robot,$p, $::pinfo{$p}{'default'}, $::pinfo{$p}, $directory);
+
+				## Sructured parameters case : the default values are defined at the next level
+			}elsif ((ref $::pinfo{$p}{'format'} eq 'HASH')
+				&& ($::pinfo{$p}{'occurrence'} =~ /1$/)) {
+				## If the paragraph is not defined, try to apply defaults
+				my $hash;
+
+				foreach my $key (keys %{$::pinfo{$p}{'format'}}) {
+
+					## Skip keys without default value.
+					unless (defined $::pinfo{$p}{'format'}{$key}{'default'}) {
+						next;
+					}
+
+					$hash->{$key} = _load_list_param($robot,$key, $::pinfo{$p}{'format'}{$key}{'default'}, $::pinfo{$p}{'format'}{$key}, $directory);
+				}
+
+				$admin{$p} = $hash if (defined $hash);
+
+			}
+
+	#	$admin{'defaults'}{$p} = 1;
+		}
+
+		## Required fields
+		if ($::pinfo{$p}{'occurrence'} =~ /^1(-n)?$/ ) {
+			unless (defined $admin{$p}) {
+				Sympa::Log::Syslog::do_log('info','Missing parameter "%s" in %s', $p, $config_file);
+			}
+		}
 	}
-}
-    }
 
-    close CONFIG;
+	## "Original" parameters
+	if (defined ($admin{'digest'})) {
+		if ($admin{'digest'} =~ /^(.+)\s+(\d+):(\d+)$/) {
+			my $digest = {};
+			$digest->{'hour'} = $2;
+			$digest->{'minute'} = $3;
+			my $days = $1;
+			$days =~ s/\s//g;
+			@{$digest->{'days'}} = split /,/, $days;
 
-    ## Release the lock
-    unless ($lock->unlock()) {
-	    Sympa::Log::Syslog::do_log('err', 'Could not remove the read lock on file %s',$config_file);
-	    return undef;
-    }
+			$admin{'digest'} = $digest;
+		}
+	}
+	# The 'host' parameter is ignored if the list is stored on a
+	#  virtual robot directory
 
-    ## Apply defaults & check required parameters
-    foreach my $p (keys %::pinfo) {
-
-	    ## Defaults
-	    unless (defined $admin{$p}) {
-
-		    ## Simple (versus structured) parameter case
-		    if (defined $::pinfo{$p}{'default'}) {
-			    $admin{$p} = _load_list_param($robot,$p, $::pinfo{$p}{'default'}, $::pinfo{$p}, $directory);
-
-			    ## Sructured parameters case : the default values are defined at the next level
-		    }elsif ((ref $::pinfo{$p}{'format'} eq 'HASH')
-			    && ($::pinfo{$p}{'occurrence'} =~ /1$/)) {
-			    ## If the paragraph is not defined, try to apply defaults
-			    my $hash;
-
-			    foreach my $key (keys %{$::pinfo{$p}{'format'}}) {
-
-				    ## Skip keys without default value.
-				    unless (defined $::pinfo{$p}{'format'}{$key}{'default'}) {
-					    next;
-				    }
-
-				    $hash->{$key} = _load_list_param($robot,$key, $::pinfo{$p}{'format'}{$key}{'default'}, $::pinfo{$p}{'format'}{$key}, $directory);
-			    }
-
-			    $admin{$p} = $hash if (defined $hash);
-
-		    }
-
-#	    $admin{'defaults'}{$p} = 1;
-	    }
-
-	    ## Required fields
-	    if ($::pinfo{$p}{'occurrence'} =~ /^1(-n)?$/ ) {
-		    unless (defined $admin{$p}) {
-			    Sympa::Log::Syslog::do_log('info','Missing parameter "%s" in %s', $p, $config_file);
-		    }
-	    }
-    }
-
-    ## "Original" parameters
-    if (defined ($admin{'digest'})) {
-	    if ($admin{'digest'} =~ /^(.+)\s+(\d+):(\d+)$/) {
-		    my $digest = {};
-		    $digest->{'hour'} = $2;
-		    $digest->{'minute'} = $3;
-		    my $days = $1;
-		    $days =~ s/\s//g;
-		    @{$digest->{'days'}} = split /,/, $days;
-
-		    $admin{'digest'} = $digest;
-	    }
-    }
-    # The 'host' parameter is ignored if the list is stored on a
-    #  virtual robot directory
-
-    # $admin{'host'} = $self{'domain'} if ($self{'dir'} ne '.');
+	# $admin{'host'} = $self{'domain'} if ($self{'dir'} ne '.');
 
 
-    if (defined ($admin{'custom_subject'})) {
-	    if ($admin{'custom_subject'} =~ /^\s*\[\s*(\w+)\s*\]\s*$/) {
-		    $admin{'custom_subject'} = $1;
-	    }
-    }
+	if (defined ($admin{'custom_subject'})) {
+		if ($admin{'custom_subject'} =~ /^\s*\[\s*(\w+)\s*\]\s*$/) {
+			$admin{'custom_subject'} = $1;
+		}
+	}
 
-    ## Format changed for reply_to parameter
-    ## New reply_to_header parameter
-    if (($admin{'forced_reply_to'} && ! $admin{'defaults'}{'forced_reply_to'}) ||
-	    ($admin{'reply_to'} && ! $admin{'defaults'}{'reply_to'})) {
-	    my ($value, $apply, $other_email);
-	    $value = $admin{'forced_reply_to'} || $admin{'reply_to'};
-	    $apply = 'forced' if ($admin{'forced_reply_to'});
-	    if ($value =~ /\@/) {
-		    $other_email = $value;
-		    $value = 'other_email';
-	    }
+	## Format changed for reply_to parameter
+	## New reply_to_header parameter
+	if (($admin{'forced_reply_to'} && ! $admin{'defaults'}{'forced_reply_to'}) ||
+		($admin{'reply_to'} && ! $admin{'defaults'}{'reply_to'})) {
+		my ($value, $apply, $other_email);
+		$value = $admin{'forced_reply_to'} || $admin{'reply_to'};
+		$apply = 'forced' if ($admin{'forced_reply_to'});
+		if ($value =~ /\@/) {
+			$other_email = $value;
+			$value = 'other_email';
+		}
 
-	    $admin{'reply_to_header'} = {'value' => $value,
-		    'other_email' => $other_email,
-		    'apply' => $apply};
+		$admin{'reply_to_header'} = {'value' => $value,
+			'other_email' => $other_email,
+			'apply' => $apply};
 
-	    ## delete old entries
-	    $admin{'reply_to'} = undef;
-	    $admin{'forced_reply_to'} = undef;
-    }
+		## delete old entries
+		$admin{'reply_to'} = undef;
+		$admin{'forced_reply_to'} = undef;
+	}
 
-    ############################################
-    ## Below are constraints between parameters
-    ############################################
+	############################################
+	## Below are constraints between parameters
+	############################################
 
-    ## Do we have a database config/access
-    unless ($Sympa::SDM::use_db) {
-	    Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI or no database access');
-	    ## We should notify the listmaster here...
-	    #return undef;
-    }
+	## Do we have a database config/access
+	unless ($Sympa::SDM::use_db) {
+		Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI or no database access');
+		## We should notify the listmaster here...
+		#return undef;
+	}
 
-    ## This default setting MUST BE THE LAST ONE PERFORMED
-#    if ($admin{'status'} ne 'open') {
+	## This default setting MUST BE THE LAST ONE PERFORMED
+#	if ($admin{'status'} ne 'open') {
 #	## requested and closed list are just list hidden using visibility parameter
 #	## and with send parameter set to closed.
-#	$admin{'send'} = _load_list_param('.','send', 'closed', $::pinfo{'send'}, $directory);
-#	$admin{'visibility'} = _load_list_param('.','visibility', 'conceal', $::pinfo{'visibility'}, $directory);
-#    }
+	#	$admin{'send'} = _load_list_param('.','send', 'closed', $::pinfo{'send'}, $directory);
+	#	$admin{'visibility'} = _load_list_param('.','visibility', 'conceal', $::pinfo{'visibility'}, $directory);
+	#    }
 
-    ## reception of default_user_options must be one of reception of
-    ## available_user_options. If none, warning and put reception of
-    ## default_user_options in reception of available_user_options
-    if (! grep (/^$admin{'default_user_options'}{'reception'}$/,
-		    @{$admin{'available_user_options'}{'reception'}})) {
-	    push @{$admin{'available_user_options'}{'reception'}}, $admin{'default_user_options'}{'reception'};
-	    Sympa::Log::Syslog::do_log('info','reception is not compatible between default_user_options and available_user_options in %s',$directory);
-    }
+	## reception of default_user_options must be one of reception of
+	## available_user_options. If none, warning and put reception of
+	## default_user_options in reception of available_user_options
+	if (! grep (/^$admin{'default_user_options'}{'reception'}$/,
+		@{$admin{'available_user_options'}{'reception'}})) {
+		push @{$admin{'available_user_options'}{'reception'}}, $admin{'default_user_options'}{'reception'};
+		Sympa::Log::Syslog::do_log('info','reception is not compatible between default_user_options and available_user_options in %s',$directory);
+	}
 
-    return \%admin;
+	return \%admin;
 }
 
 ## Save a config file
@@ -12280,32 +12291,32 @@ sub modifying_msg_topic_for_list_members {
 
 	my $msg_topic_changes = Sympa::Tools::Data::diff_on_arrays(\@old_msg_topic_name,\@new_msg_topic_name);
 
-    if ($#{$msg_topic_changes->{'deleted'}} >= 0) {
+	if ($#{$msg_topic_changes->{'deleted'}} >= 0) {
 
-	    for (my $subscriber=$self->get_first_list_member(); $subscriber; $subscriber=$self->get_next_list_member()) {
+		for (my $subscriber=$self->get_first_list_member(); $subscriber; $subscriber=$self->get_next_list_member()) {
 
-		    if ($subscriber->{'reception'} eq 'mail') {
-			    my $topics = Sympa::Tools::Data::diff_on_arrays($msg_topic_changes->{'deleted'},Sympa::Tools::Data::get_array_from_splitted_string($subscriber->{'topics'}));
+			if ($subscriber->{'reception'} eq 'mail') {
+				my $topics = Sympa::Tools::Data::diff_on_arrays($msg_topic_changes->{'deleted'},Sympa::Tools::Data::get_array_from_splitted_string($subscriber->{'topics'}));
 
-			    if ($#{$topics->{'intersection'}} >= 0) {
-				    my $wwsympa_url = Sympa::Configuration::get_robot_conf($self->{'domain'}, 'wwsympa_url');
-				    unless ($self->send_notify_to_user('deleted_msg_topics',$subscriber->{'email'},
-						    {'del_topics' => $topics->{'intersection'},
-							    'url' => $wwsympa_url.'/suboptions/'.$self->{'name'}})) {
-					    Sympa::Log::Syslog::do_log('err',"($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
-				    }
-				    unless ($self->update_list_member(lc($subscriber->{'email'}),
-						    {'update_date' => time,
-							    'topics' => join(',',@{$topics->{'added'}})})) {
-					    Sympa::Log::Syslog::do_log('err',"($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
-				    }
-				    $deleted = 1;
-			    }
-		    }
-	    }
-    }
-    return 1 if ($deleted);
-    return 0;
+				if ($#{$topics->{'intersection'}} >= 0) {
+					my $wwsympa_url = Sympa::Configuration::get_robot_conf($self->{'domain'}, 'wwsympa_url');
+					unless ($self->send_notify_to_user('deleted_msg_topics',$subscriber->{'email'},
+							{'del_topics' => $topics->{'intersection'},
+								'url' => $wwsympa_url.'/suboptions/'.$self->{'name'}})) {
+						Sympa::Log::Syslog::do_log('err',"($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
+					}
+					unless ($self->update_list_member(lc($subscriber->{'email'}),
+							{'update_date' => time,
+								'topics' => join(',',@{$topics->{'added'}})})) {
+						Sympa::Log::Syslog::do_log('err',"($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
+					}
+					$deleted = 1;
+				}
+			}
+		}
+	}
+	return 1 if ($deleted);
+	return 0;
 }
 
 =head2 $listst->select_list_members_for_topic($topics, $subscribers)
@@ -12404,71 +12415,76 @@ sub _urlize_part {
 			}
 			## Replace message parts
 			$message->parts (\@parts);
+		}
+		$filename ="msg.$i".$fileExt;
 	}
-	$filename ="msg.$i".$fileExt;
-}
 
-##create the linked file
-## Store body in file
-if (open OFILE, ">$expl/$dir/$filename") {
-	my $ct = $message->effective_type || 'text/plain';
-	printf OFILE "Content-type: %s", $ct;
-	printf OFILE "; Charset=%s", $head->mime_attr('Content-Type.Charset')
-	if $head->mime_attr('Content-Type.Charset') =~ /\S/;
-	print OFILE "\n\n";
-} else {
-	Sympa::Log::Syslog::do_log('notice', "Unable to open $expl/$dir/$filename") ;
-	return undef ;
-}
+	##create the linked file
+	## Store body in file
+	if (open OFILE, ">$expl/$dir/$filename") {
+		my $ct = $message->effective_type || 'text/plain';
+		printf OFILE "Content-type: %s", $ct;
+		printf OFILE "; Charset=%s", $head->mime_attr('Content-Type.Charset')
+		if $head->mime_attr('Content-Type.Charset') =~ /\S/;
+		print OFILE "\n\n";
+	} else {
+		Sympa::Log::Syslog::do_log('notice', "Unable to open $expl/$dir/$filename") ;
+		return undef ;
+	}
 
-if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
-	open TMP, ">$expl/$dir/$filename.$encoding";
-	$message->print_body (\*TMP);
-close TMP;
+	if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
+		open TMP, ">$expl/$dir/$filename.$encoding";
+		$message->print_body (\*TMP);
+		close TMP;
 
-open BODY, "$expl/$dir/$filename.$encoding";
-my $decoder = MIME::Decoder->new($encoding);
-$decoder->decode(\*BODY, \*OFILE);
-	unlink "$expl/$dir/$filename.$encoding";
-}else {
-	$message->print_body (\*OFILE) ;
-    }
-    close (OFILE);
-    my $file = "$expl/$dir/$filename";
-    my $size = (-s $file);
+		open BODY, "$expl/$dir/$filename.$encoding";
+		my $decoder = MIME::Decoder->new($encoding);
+		$decoder->decode(\*BODY, \*OFILE);
+		unlink "$expl/$dir/$filename.$encoding";
+	}else {
+		$message->print_body (\*OFILE) ;
+	}
 
-    ## Only URLize files with a moderate size
-    if ($size < $Sympa::Configuration::Conf{'urlize_min_size'}) {
-	    unlink "$expl/$dir/$filename";
-	    return undef;
-    }
+	close (OFILE);
+	my $file = "$expl/$dir/$filename";
+	my $size = (-s $file);
 
-    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-    $message->purge ;
+	## Only URLize files with a moderate size
+	if ($size < $Sympa::Configuration::Conf{'urlize_min_size'}) {
+		unlink "$expl/$dir/$filename";
+		return undef;
+	}
 
-    (my $file_name = $filename) =~ s/\./\_/g;
-    my $file_url = "$wwsympa_url/attach/$listname".Sympa::Tools::escape_chars("$dir/$filename",'/'); # do NOT escape '/' chars
+	## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
+	$message->purge ;
 
-    my $parser = MIME::Parser->new();
-    $parser->output_to_core(1);
-    my $new_part;
+	(my $file_name = $filename) =~ s/\./\_/g;
+	my $file_url = "$wwsympa_url/attach/$listname".Sympa::Tools::escape_chars("$dir/$filename",'/'); # do NOT escape '/' chars
 
-    my $lang = Sympa::Language::get_lang();
-    my $charset = Sympa::Language::get_charset();
+	my $parser = MIME::Parser->new();
+	$parser->output_to_core(1);
+	my $new_part;
 
-    my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
+	my $lang = Sympa::Language::get_lang();
+	my $charset = Sympa::Language::get_charset();
 
-    Sympa::Template::parse_tt2({'file_name' => $file_name,
-		    'file_url'  => $file_url,
-		    'file_size' => $size ,
-		    'charset' => $charset},
-	    'urlized_part.tt2',
-	    \$new_part,
-    $tt2_include_path);
+	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
-    my $entity = $parser->parse_data(\$new_part);
+	Sympa::Template::parse_tt2(
+		{
+			'file_name' => $file_name,
+			'file_url'  => $file_url,
+			'file_size' => $size ,
+			'charset' => $charset
+		},
+		'urlized_part.tt2',
+		\$new_part,
+		$tt2_include_path
+	);
 
-    return $entity;
+	my $entity = $parser->parse_data(\$new_part);
+
+	return $entity;
 }
 
 sub store_subscription_request {

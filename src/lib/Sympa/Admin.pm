@@ -428,142 +428,142 @@ sub create_list{
 	$params->{'family_config'} = $family_config->{$family->{'name'}};
 	my $conf;
 	my $tt_result = Sympa::Template::parse_tt2($params, 'config.tt2', \$conf, [$family->{'dir'}]);
-unless (defined $tt_result || !$abort_on_error) {
-	Sympa::Log::Syslog::do_log('err', 'abort on tt2 error. List %s from family %s@%s',
-		$params->{'listname'}, $family->{'name'},$robot);
-	return undef;
-}
+	unless (defined $tt_result || !$abort_on_error) {
+		Sympa::Log::Syslog::do_log('err', 'abort on tt2 error. List %s from family %s@%s',
+			$params->{'listname'}, $family->{'name'},$robot);
+		return undef;
+	}
 
-## Create the list directory
-my $list_dir;
+	## Create the list directory
+	my $list_dir;
 
-if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
-	unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
-		unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-			Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
-			return undef;
+	if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
+		unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
+			unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
+				Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
+				return undef;
+			}
+		}
+		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
+	}else {
+		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
+	}
+
+	unless (-r $list_dir || mkdir ($list_dir,0777)) {
+		Sympa::Log::Syslog::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
+		return undef;
+	}
+
+	## Check topics
+	if (defined $params->{'topics'}){
+		unless (check_topics($params->{'topics'},$robot)){
+			Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',$params->{'topics'});
 		}
 	}
-	$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
-}else {
-	$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
-}
 
-unless (-r $list_dir || mkdir ($list_dir,0777)) {
-	Sympa::Log::Syslog::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
-	return undef;
-}
-
-## Check topics
-if (defined $params->{'topics'}){
-	unless (check_topics($params->{'topics'},$robot)){
-		Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',$params->{'topics'});
+	## Lock config before openning the config file
+	my $lock = Sympa::Lock->new(
+		path   => $list_dir.'/config',
+		method => $Sympa::Configuration::Conf{'lock_method'}
+	);
+	unless (defined $lock) {
+		Sympa::Log::Syslog::do_log('err','Lock could not be created');
+		return undef;
 	}
-}
+	$lock->set_timeout(5);
+	unless ($lock->lock('write')) {
+		return undef;
+	}
 
-## Lock config before openning the config file
-my $lock = Sympa::Lock->new(
-	path   => $list_dir.'/config',
-	method => $Sympa::Configuration::Conf{'lock_method'}
-);
-unless (defined $lock) {
-	Sympa::Log::Syslog::do_log('err','Lock could not be created');
-	return undef;
-}
-$lock->set_timeout(5);
-unless ($lock->lock('write')) {
-	return undef;
-}
+	## Creation of the config file
+	unless (open CONFIG, '>', "$list_dir/config") {
+		Sympa::Log::Syslog::do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+		$lock->unlock();
+		return undef;
+	}
+	#Sympa::Template::parse_tt2($params, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
+	print CONFIG $conf;
+	close CONFIG;
 
-## Creation of the config file
-unless (open CONFIG, '>', "$list_dir/config") {
-	Sympa::Log::Syslog::do_log('err','Impossible to create %s/config : %s', $list_dir, $ERRNO);
+	## Unlock config file
 	$lock->unlock();
-	return undef;
-}
-#Sympa::Template::parse_tt2($params, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
-print CONFIG $conf;
-close CONFIG;
 
-## Unlock config file
-$lock->unlock();
+	## Creation of the info file
+	# remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
+	$params->{'description'} =~ s/\r\n|\r/\n/g;
 
-## Creation of the info file
-# remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
-$params->{'description'} =~ s/\r\n|\r/\n/g;
-
-unless (open INFO, '>', "$list_dir/info") {
-	Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s', $list_dir, $ERRNO);
-}
-if (defined $params->{'description'}) {
-	print INFO $params->{'description'};
-}
-close INFO;
-
-## Create associated files if a template was given.
-for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
-	my $template_file = Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Sympa::Configuration::Conf{'etc'});
-	if (defined $template_file) {
-		my $file_content;
-		my $tt_result = Sympa::Template::parse_tt2($params, $file.".tt2", \$file_content, [$family->{'dir'}]);
-	unless (defined $tt_result) {
-		Sympa::Log::Syslog::do_log('err', 'tt2 error. List %s from family %s@%s, file %s',
-			$params->{'listname'}, $family->{'name'},$robot,$file);
+	unless (open INFO, '>', "$list_dir/info") {
+		Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s', $list_dir, $ERRNO);
 	}
-	unless (open FILE, '>', "$list_dir/$file") {
-		Sympa::Log::Syslog::do_log('err','Impossible to create %s/%s : %s',$list_dir,$file,$ERRNO);
+	if (defined $params->{'description'}) {
+		print INFO $params->{'description'};
 	}
-	print FILE $file_content;
-	close FILE;
-}
-    }
+	close INFO;
 
-    ## Create list object
-    my $list = Sympa::List->new(
-	    name  => $params->{'listname'},
-	    robot => $robot
-    );
-    unless ($list) {
-	    Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
-	    return undef;
-    }
+	## Create associated files if a template was given.
+	for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
+		my $template_file = Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Sympa::Configuration::Conf{'etc'});
+		if (defined $template_file) {
+			my $file_content;
+			my $tt_result = Sympa::Template::parse_tt2($params, $file.".tt2", \$file_content, [$family->{'dir'}]);
+			unless (defined $tt_result) {
+				Sympa::Log::Syslog::do_log('err', 'tt2 error. List %s from family %s@%s, file %s',
+				$params->{'listname'}, $family->{'name'},$robot,$file);
+			}
+			unless (open FILE, '>', "$list_dir/$file") {
+				Sympa::Log::Syslog::do_log('err','Impossible to create %s/%s : %s',$list_dir,$file,$ERRNO);
+			}
+			print FILE $file_content;
+			close FILE;
+		}
+	}
 
-    ## Create shared if required
-    if (defined $list->{'admin'}{'shared_doc'}) {
-	    $list->create_shared();
-    }
+	## Create list object
+	my $list = Sympa::List->new(
+		name  => $params->{'listname'},
+		robot => $robot
+	);
+	unless ($list) {
+		Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
+		return undef;
+	}
 
-    $list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $list->{'admin'}{'creation'}{'date_epoch'} = time;
-    if ($params->{'creation_email'}) {
-	    $list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
-    } else {
-	    my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
-	    $list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
-    }
-    if ($params->{'status'}) {
-	    $list->{'admin'}{'status'} = $params->{'status'};
-    } else {
-	    $list->{'admin'}{'status'} = 'open';
-    }
-    $list->{'admin'}{'family_name'} = $family->{'name'};
+	## Create shared if required
+	if (defined $list->{'admin'}{'shared_doc'}) {
+		$list->create_shared();
+	}
 
-    my $return = {};
-    $return->{'list'} = $list;
+	$list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+	$list->{'admin'}{'creation'}{'date_epoch'} = time;
+	if ($params->{'creation_email'}) {
+		$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
+	} else {
+		my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+		$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
+	}
+	if ($params->{'status'}) {
+		$list->{'admin'}{'status'} = $params->{'status'};
+	} else {
+		$list->{'admin'}{'status'} = 'open';
+	}
+	$list->{'admin'}{'family_name'} = $family->{'name'};
 
-    if ($list->{'admin'}{'status'} eq 'open') {
-	    $return->{'aliases'} = install_aliases($list,$robot);
-    }else{
-	    $return->{'aliases'} = 1;
-    }
+	my $return = {};
+	$return->{'list'} = $list;
 
-    ## Synchronize list members if required
-    if ($list->has_include_data_sources()) {
-	    Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	    $list->sync_include();
-    }
+	if ($list->{'admin'}{'status'} eq 'open') {
+		$return->{'aliases'} = install_aliases($list,$robot);
+	}else{
+		$return->{'aliases'} = 1;
+	}
 
-    return $return;
+	## Synchronize list members if required
+	if ($list->has_include_data_sources()) {
+		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+		$list->sync_include();
+	}
+
+	return $return;
 }
 
 =head2 update_list($list, $params, $family, $robot)
@@ -1358,13 +1358,13 @@ $list->{'name'}-unsubscribe: "|$libexecdir/queue $list->{'name'}-unsubscribe"
 # $list->{'name'}-subscribe: "|$libexecdir/queue $list->{'name'}-subscribe"
 EOF
 
-return $aliases;
-     }
+		return $aliases;
+	}
 
-     Sympa::Log::Syslog::do_log('info','Aliases removed successfully');
+	Sympa::Log::Syslog::do_log('info','Aliases removed successfully');
 
-     return 1;
- }
+	return 1;
+}
 
 =head2 check_topics($topic, $robot)
 

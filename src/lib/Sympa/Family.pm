@@ -374,180 +374,180 @@ sub modify_list {
 	# get list data
 	open (FIC, '<:raw', "$self->{'dir'}/_mod_list.xml");
 	my $config = Sympa::Configuration::XML->new(handle => \*FIC);
-close FIC;
-unless (defined $config->createHash()) {
-	push @{$return->{'string_error'}}, "Error in representation data with these xml data";
-	return $return;
-}
-
-my $hash_list = $config->getHash();
-
-#getting list
-my $list = Sympa::List->new(
-	name  => $hash_list->{'config'}{'listname'},
-	robot => $self->{'robot'}
-);
-unless ($list) {
-	push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
-	return $return;
-}
-
-## check family name
-if (defined $list->{'admin'}{'family_name'}) {
-	unless ($list->{'admin'}{'family_name'} eq $self->{'name'}) {
-		push @{$return->{'string_error'}}, "The list $list->{'name'} already belongs to family $list->{'admin'}{'family_name'}.";
+	close FIC;
+	unless (defined $config->createHash()) {
+		push @{$return->{'string_error'}}, "Error in representation data with these xml data";
 		return $return;
 	}
-} else {
-	push @{$return->{'string_error'}}, "The orphan list $list->{'name'} already exists.";
-	return $return;
-}
 
-## get allowed and forbidden list customizing
-my $custom = $self->_get_customizing($list);
-unless (defined $custom) {
-	Sympa::Log::Syslog::do_log('err','impossible to get list %s customizing',$list->{'name'});
-	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
-	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
-	return $return;
-}
-my $config_changes = $custom->{'config_changes'};
-my $old_status = $list->{'admin'}{'status'};
+	my $hash_list = $config->getHash();
 
-## list config family updating
-my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
-unless (defined $result) {
-	Sympa::Log::Syslog::do_log('err','No object list resulting from updating list %s',$list->{'name'});
-	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
-	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
-	return $return;
-}
-$list = $result;
-
-## set list customizing
-foreach my $p (keys %{$custom->{'allowed'}}) {
-	$list->{'admin'}{$p} = $custom->{'allowed'}{$p};
-	delete $list->{'admin'}{'defaults'}{$p};
-	Sympa::Log::Syslog::do_log('info',"Customizing : keeping values for parameter $p");
-}
-
-## info file
-unless ($config_changes->{'file'}{'info'}) {
-	$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
-
-	unless (open INFO, '>', "$list->{'dir'}/info") {
-		push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $ERRNO";
-	}
-	print INFO $hash_list->{'config'}{'description'};
-	close INFO;
-}
-
-foreach my $f (keys %{$config_changes->{'file'}}) {
-	Sympa::Log::Syslog::do_log('info',"Customizing : this file has been changed : $f");
-}
-
-## rename forbidden files
-#    foreach my $f (@{$custom->{'forbidden'}{'file'}}) {
-#	unless (rename ("$list->{'dir'}"."/"."info","$list->{'dir'}"."/"."info.orig")) {
-################
-#	}
-#	if ($f eq 'info') {
-#	    $hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
-#	    unless (open INFO, '>', "$list_dir/info") {
-################
-#	    }
-#	    print INFO $hash_list->{'config'}{'description'};
-#	    close INFO;
-#	}
-#    }
-
-## notify owner for forbidden customizing
-if (#(scalar $custom->{'forbidden'}{'file'}) ||
-	(scalar @{$custom->{'forbidden'}{'param'}})) {
-#	my $forbidden_files = join(',',@{$custom->{'forbidden'}{'file'}});
-	my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
-	Sympa::Log::Syslog::do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
-
-	unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
-		Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
-	}
-}
-
-## status
-$result = $self->_set_status_changes($list,$old_status);
-
-if ($result->{'aliases'} == 1) {
-	push @{$return->{'string_info'}}, "The $list->{'name'} list has been modified.";
-
-}elsif ($result->{'install_remove'} eq 'install') {
-	push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, required aliases :\n $result->{'aliases'} ";
-
-}else {
-	push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, aliases need to be removed : \n $result->{'aliases'}";
-
-}
-
-## config_changes
-foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
-
-	if (defined $config_changes->{'param'}{$p}  ) {
-		delete $config_changes->{'param'}{$p};
+	#getting list
+	my $list = Sympa::List->new(
+		name  => $hash_list->{'config'}{'listname'},
+		robot => $self->{'robot'}
+	);
+	unless ($list) {
+		push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
+		return $return;
 	}
 
-}
+	## check family name
+	if (defined $list->{'admin'}{'family_name'}) {
+		unless ($list->{'admin'}{'family_name'} eq $self->{'name'}) {
+			push @{$return->{'string_error'}}, "The list $list->{'name'} already belongs to family $list->{'admin'}{'family_name'}.";
+			return $return;
+		}
+	} else {
+		push @{$return->{'string_error'}}, "The orphan list $list->{'name'} already exists.";
+		return $return;
+	}
 
-unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config.";
-}
-close FILE;
+	## get allowed and forbidden list customizing
+	my $custom = $self->_get_customizing($list);
+	unless (defined $custom) {
+		Sympa::Log::Syslog::do_log('err','impossible to get list %s customizing',$list->{'name'});
+		push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
+		$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
+		return $return;
+	}
+	my $config_changes = $custom->{'config_changes'};
+	my $old_status = $list->{'admin'}{'status'};
 
-my @kept_param = keys %{$config_changes->{'param'}};
-$list->update_config_changes('param',\@kept_param);
-    my @kept_files = keys %{$config_changes->{'file'}};
-    $list->update_config_changes('file',\@kept_files);
+	## list config family updating
+	my $result = Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
+	unless (defined $result) {
+		Sympa::Log::Syslog::do_log('err','No object list resulting from updating list %s',$list->{'name'});
+		push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config.";
+		$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
+		return $return;
+	}
+	$list = $result;
+
+	## set list customizing
+	foreach my $p (keys %{$custom->{'allowed'}}) {
+		$list->{'admin'}{$p} = $custom->{'allowed'}{$p};
+		delete $list->{'admin'}{'defaults'}{$p};
+		Sympa::Log::Syslog::do_log('info',"Customizing : keeping values for parameter $p");
+	}
+
+	## info file
+	unless ($config_changes->{'file'}{'info'}) {
+		$hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
+
+		unless (open INFO, '>', "$list->{'dir'}/info") {
+			push @{$return->{'string_info'}}, "Impossible to create new $list->{'dir'}/info file : $ERRNO";
+		}
+		print INFO $hash_list->{'config'}{'description'};
+		close INFO;
+	}
+
+	foreach my $f (keys %{$config_changes->{'file'}}) {
+		Sympa::Log::Syslog::do_log('info',"Customizing : this file has been changed : $f");
+	}
+
+	## rename forbidden files
+	#    foreach my $f (@{$custom->{'forbidden'}{'file'}}) {
+	#	unless (rename ("$list->{'dir'}"."/"."info","$list->{'dir'}"."/"."info.orig")) {
+	################
+	#	}
+	#	if ($f eq 'info') {
+	#	    $hash_list->{'config'}{'description'} =~ s/\r\n|\r/\n/g;
+	#	    unless (open INFO, '>', "$list_dir/info") {
+	################
+	#	    }
+	#	    print INFO $hash_list->{'config'}{'description'};
+	#	    close INFO;
+	#	}
+	#    }
+
+	## notify owner for forbidden customizing
+	if (#(scalar $custom->{'forbidden'}{'file'}) ||
+		(scalar @{$custom->{'forbidden'}{'param'}})) {
+	#	my $forbidden_files = join(',',@{$custom->{'forbidden'}{'file'}});
+		my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
+		Sympa::Log::Syslog::do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
+
+		unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
+			Sympa::Log::Syslog::do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
+		}
+	}
+
+	## status
+	$result = $self->_set_status_changes($list,$old_status);
+
+	if ($result->{'aliases'} == 1) {
+		push @{$return->{'string_info'}}, "The $list->{'name'} list has been modified.";
+
+	}elsif ($result->{'install_remove'} eq 'install') {
+		push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, required aliases :\n $result->{'aliases'} ";
+
+	}else {
+		push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, aliases need to be removed : \n $result->{'aliases'}";
+
+	}
+
+	## config_changes
+	foreach my $p (@{$custom->{'forbidden'}{'param'}}) {
+
+		if (defined $config_changes->{'param'}{$p}  ) {
+			delete $config_changes->{'param'}{$p};
+		}
+
+	}
+
+	unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config.";
+	}
+	close FILE;
+
+	my @kept_param = keys %{$config_changes->{'param'}};
+	$list->update_config_changes('param',\@kept_param);
+	my @kept_files = keys %{$config_changes->{'file'}};
+	$list->update_config_changes('file',\@kept_files);
 
 
-    $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-    $list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-    $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
-    $list->save_config("listmaster\@$host");
-    $list->{'family'} = $self;
+	$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
+	$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+	$list->save_config("listmaster\@$host");
+	$list->{'family'} = $self;
 
-    ## check param_constraint.conf
-    $self->{'state'} = 'normal';
-    my $error = $self->check_param_constraint($list);
-    $self->{'state'} = 'no_check';
+	## check param_constraint.conf
+	$self->{'state'} = 'normal';
+	my $error = $self->check_param_constraint($list);
+	$self->{'state'} = 'no_check';
 
-    unless (defined $error) {
-	    $list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	    push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
-	    return $return;
-    }
+	unless (defined $error) {
+		$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
+		return $return;
+	}
 
-    if (ref($error) eq 'ARRAY') {
-	    $list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
-	    push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
-    }
+	if (ref($error) eq 'ARRAY') {
+		$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
+	}
 
-    ## copy files in the list directory : xml file
+	## copy files in the list directory : xml file
 
-    unless ($self->_copy_files($list->{'dir'},"_mod_list.xml")) {
-	    $list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	    push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
-    }
+	unless ($self->_copy_files($list->{'dir'},"_mod_list.xml")) {
+		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+	}
 
-    ## Synchronize list members if required
-    if ($list->has_include_data_sources()) {
-	    Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	    $list->sync_include();
-    }
+	## Synchronize list members if required
+	if ($list->has_include_data_sources()) {
+		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+		$list->sync_include();
+	}
 
-    ## END
-    $self->{'state'} = 'normal';
-    $return->{'ok'} = 1;
+	## END
+	$self->{'state'} = 'normal';
+	$return->{'ok'} = 1;
 
-    return $return;
+	return $return;
 }
 
 =head2 $family->close_family()
@@ -1613,11 +1613,10 @@ sub _update_existing_list {
 
 	my @kept_param = keys %{$config_changes->{'param'}};
 	$list->update_config_changes('param',\@kept_param);
-my @kept_files = keys %{$config_changes->{'file'}};
-$list->update_config_changes('file',\@kept_files);
+	my @kept_files = keys %{$config_changes->{'file'}};
+	$list->update_config_changes('file',\@kept_files);
 
-
-    return $list;
+	return $list;
 }
 
 # $family->_get_customizing($list)

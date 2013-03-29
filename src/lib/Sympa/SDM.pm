@@ -206,64 +206,64 @@ sub probe_db {
 	## Check tables structure if we could get it
 	## Only performed with mysql , Pg and SQLite
 	if (%real_struct) {
-
 		foreach my $t (keys %{$db_struct{'mysql'}}) {
 			unless ($real_struct{$t}) {
 				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, Sympa::Configuration::get_robot_conf('*','db_name'), Sympa::Configuration::get_robot_conf('*','db_type'));
 				return undef;
 			}
 			unless (check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
-		Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
+				Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
+				return undef;
+			}
+
+			## Remove temporary DB field
+			if ($real_struct{$t}{'temporary'}) {
+				$db_source->delete_field(
+					'table' => $t,
+					'field' => 'temporary',
+				);
+				delete $real_struct{$t}{'temporary'};
+			}
+
+			if ((Sympa::Configuration::get_robot_conf('*','db_type') eq 'mysql')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'Pg')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'SQLite')) {
+				## Check that primary key has the right structure.
+				unless (check_primary_key('table' => $t,'report' => \@report)) {
+					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
+					return undef;
+				}
+
+				unless (check_indexes('table' => $t,'report' => \@report)) {
+					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
+					return undef;
+				}
+
+			}
+		}
+		# add autoincrement if needed
+		foreach my $table (keys %autoincrement) {
+			Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table, field $autoincrement{$table}");
+			unless ($db_source->is_autoinc('table'=>$table,'field'=>$autoincrement{$table})){
+				if ($db_source->set_autoinc('table'=>$table,'field'=>$autoincrement{$table},
+						'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'})){
+					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
+				}else{
+					Sympa::Log::Syslog::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
+					return undef;
+				}
+			}
+		}
+	} else{
+		Sympa::Log::Syslog::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
 		return undef;
 	}
-	## Remove temporary DB field
-	if ($real_struct{$t}{'temporary'}) {
-		$db_source->delete_field(
-			'table' => $t,
-			'field' => 'temporary',
-		);
-		delete $real_struct{$t}{'temporary'};
-	}
 
-	if ((Sympa::Configuration::get_robot_conf('*','db_type') eq 'mysql')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'Pg')||(Sympa::Configuration::get_robot_conf('*','db_type') eq 'SQLite')) {
-		## Check that primary key has the right structure.
-		unless (check_primary_key('table' => $t,'report' => \@report)) {
-		Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
-		return undef;
-	}
+	## Used by List subroutines to check that the DB is available
+	$Sympa::List::use_db = 1;
 
-	unless (check_indexes('table' => $t,'report' => \@report)) {
-	Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
-	return undef;
-}
+	## Notify listmaster
+	Sympa::List::send_notify_to_listmaster('db_struct_updated',  Sympa::Configuration::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
 
-	    }
-    }
-    # add autoincrement if needed
-    foreach my $table (keys %autoincrement) {
-	    Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table, field $autoincrement{$table}");
-	    unless ($db_source->is_autoinc('table'=>$table,'field'=>$autoincrement{$table})){
-		    if ($db_source->set_autoinc('table'=>$table,'field'=>$autoincrement{$table},
-				    'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'})){
-			    Sympa::Log::Syslog::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
-		    }else{
-			    Sympa::Log::Syslog::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
-			    return undef;
-		    }
-	    }
-    }
-    }else{
-	    Sympa::Log::Syslog::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
-	    return undef;
-    }
-
-    ## Used by List subroutines to check that the DB is available
-    $Sympa::List::use_db = 1;
-
-    ## Notify listmaster
-    Sympa::List::send_notify_to_listmaster('db_struct_updated',  Sympa::Configuration::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
-
-    return 1;
+	return 1;
 }
 
 sub check_fields {

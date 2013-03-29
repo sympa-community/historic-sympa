@@ -230,59 +230,58 @@ sub parse_tt2 {
 	## An array can be used as a template (instead of a filename)
 	if (ref($template) eq 'ARRAY') {
 		$template = \join('', @$template);
-}
-
-Sympa::Language::set_lang($data->{lang}) if ($data->{'lang'});
-
-my $config = {
-	# ABSOLUTE => 1,
-	INCLUDE_PATH => $include_path,
-#	PRE_CHOMP  => 1,
-	UNICODE => 0, # Prevent BOM auto-detection
-
-	FILTERS => {
-		unescape => \CGI::Util::unescape,
-	l => [\&maketext, 1],
-loc => [\&maketext, 1],
-	    helploc => [\&maketext, 1],
-    locdt => [\&locdatetime, 1],
-	    wrap => [\&wrap, 1],
-    qencode => [\&qencode, 0],
-	    escape_xml => [\&escape_xml, 0],
-    escape_url => [\&escape_url, 0],
-	    escape_quote => [\&escape_quote, 0],
-    decode_utf8 => [\&decode_utf8, 0],
-	    encode_utf8 => [\&encode_utf8, 0]
-	    }
-    };
-
-    unless($options->{'is_not_template'}){
-	    $config->{'INCLUDE_PATH'} = $include_path;
-    }
-    if ($allow_absolute) {
-	    $config->{'ABSOLUTE'} = 1;
-	    $allow_absolute = 0;
-    }
-    if ($options->{'has_header'}) { # body is separated by an empty line.
-	    if (ref $template) {
-		    $template = \("\n" . $$template);
-    } else {
-	    $template = \"\n[% PROCESS $template %]";
 	}
-}
 
-my $tt2 = Template->new($config) or die "Template error: ".Template->error();
+	Sympa::Language::set_lang($data->{lang}) if ($data->{'lang'});
 
-unless ($tt2->process($template, $data, $output)) {
-	$last_error = $tt2->error();
-	Sympa::Log::Syslog::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
-	Sympa::Log::Syslog::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
+	my $config = {
+	#	ABSOLUTE   => 1,
+		INCLUDE_PATH => $include_path,
+	#	PRE_CHOMP  => 1,
+		UNICODE      => 0, # Prevent BOM auto-detection
+		FILTERS      => {
+			unescape     => \CGI::Util::unescape,
+			l            => [\&maketext, 1],
+			loc          => [\&maketext, 1],
+			helploc      => [\&maketext, 1],
+			locdt        => [\&locdatetime, 1],
+			wrap         => [\&wrap, 1],
+			qencode      => [\&qencode, 0],
+			escape_xml   => [\&escape_xml, 0],
+			escape_url   => [\&escape_url, 0],
+			escape_quote => [\&escape_quote, 0],
+			decode_utf8  => [\&decode_utf8, 0],
+			encode_utf8  => [\&encode_utf8, 0]
+		}
+	};
+
+	unless($options->{'is_not_template'}){
+		$config->{'INCLUDE_PATH'} = $include_path;
+	}
+	if ($allow_absolute) {
+		$config->{'ABSOLUTE'} = 1;
+		$allow_absolute = 0;
+	}
+	if ($options->{'has_header'}) { # body is separated by an empty line.
+		if (ref $template) {
+			$template = \("\n" . $$template);
+		} else {
+			$template = \"\n[% PROCESS $template %]";
+		}
+	}
+
+	my $tt2 = Template->new($config) or die "Template error: ".Template->error();
+
+	unless ($tt2->process($template, $data, $output)) {
+		$last_error = $tt2->error();
+		Sympa::Log::Syslog::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
+		Sympa::Log::Syslog::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
 
 
-	return undef;
-}
+		return undef;
+	}
 
-return 1;
+	return 1;
 }
 
 

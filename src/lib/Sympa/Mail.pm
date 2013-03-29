@@ -116,8 +116,8 @@ send a tt2 file.
 =item * I<lang>: tt2 language if $filename
 
 =item * I<list>:  ref(HASH) if $sign_mode = 'smime', keys are :
-	    -name
-	    -dir
+	-name
+	-dir
 
 =item * I<from>: "From:" field if not a full msg
 
@@ -130,10 +130,10 @@ send a tt2 file.
 =item * I<headers> : ref(HASH) with keys are headers mail
 
 =item * I<dkim>: a set of parameters for appying DKIM signature
-	    -d : d=tag
-	    -i : i=tag (optionnal)
-	    -selector : dkim dns selector
-	    -key : the RSA private key
+	-d : d=tag
+	-i : i=tag (optionnal)
+	-selector : dkim dns selector
+	-key : the RSA private key
 
 =back
 
@@ -206,178 +206,186 @@ sub mail_file {
 	$message_as_string .= join('',$output);
 	$header_possible = 1;
 
-}else { # or not
-	$message_as_string .= $data->{'body'};
-}
+	}else { # or not
+		$message_as_string .= $data->{'body'};
+	}
 
-## ## Does the message include headers ?
-if ($header_possible) {
-	foreach my $line (split(/\n/,$message_as_string)) {
-		last if ($line=~/^\s*$/);
-		if ($line=~/^[\w-]+:\s*/) { ## A header field
-			$existing_headers=1;
-		}elsif ($existing_headers && ($line =~ /^\s/)) { ## Following of a header field
-			next;
-		}else{
-			last;
-		}
-
-		foreach my $header ('date', 'to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
-			if ($line=~/^$header:/i) {
-				$header_ok{$header} = 1;
+	## ## Does the message include headers ?
+	if ($header_possible) {
+		foreach my $line (split(/\n/,$message_as_string)) {
+			last if ($line=~/^\s*$/);
+			if ($line=~/^[\w-]+:\s*/) { ## A header field
+				$existing_headers=1;
+			}elsif ($existing_headers && ($line =~ /^\s/)) { ## Following of a header field
+				next;
+			}else{
 				last;
+			}
+
+			foreach my $header ('date', 'to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
+				if ($line=~/^$header:/i) {
+					$header_ok{$header} = 1;
+					last;
+				}
 			}
 		}
 	}
-}
 
-## ADD MISSING HEADERS
-my $headers="";
+	## ADD MISSING HEADERS
+	my $headers="";
 
-unless ($header_ok{'date'}) {
-	my $now = time;
-	my $tzoff = timegm(localtime $now) - $now;
-	my $sign;
-	if ($tzoff < 0) {
-		($sign, $tzoff) = ('-', -$tzoff);
-	} else {
-		$sign = '+';
-	}
-	$tzoff = sprintf '%s%02d%02d',
-	$sign, int($tzoff / 3600), int($tzoff / 60) % 60;
-	Sympa::Language::push_lang('en');
-	$headers .= 'Date: ' .
-	POSIX::strftime("%a, %d %b %Y %H:%M:%S $tzoff",
-		localtime $now) .
-	"\n";
-	Sympa::Language::pop_lang();
-}
-
-unless ($header_ok{'to'}) {
-	# Currently, bare e-mail address is assumed.  Complex ones such as
-	# "phrase" <email> won't be allowed.
-	if (ref ($params{recipient})) {
-		if ($data->{'to'}) {
-			$to = $data->{'to'};
-		}else {
-			$to = join(",\n   ", @{$params{recipient}});
+	unless ($header_ok{'date'}) {
+		my $now = time;
+		my $tzoff = timegm(localtime $now) - $now;
+		my $sign;
+		if ($tzoff < 0) {
+			($sign, $tzoff) = ('-', -$tzoff);
+		} else {
+			$sign = '+';
 		}
-	}else{
-		$to = $params{recipient};
+		$tzoff = sprintf '%s%02d%02d',
+		$sign, int($tzoff / 3600), int($tzoff / 60) % 60;
+		Sympa::Language::push_lang('en');
+		$headers .= 'Date: ' .
+		POSIX::strftime("%a, %d %b %Y %H:%M:%S $tzoff",
+			localtime $now) .
+		"\n";
+		Sympa::Language::pop_lang();
 	}
-	$headers .= "To: $to\n";
-}
-unless ($header_ok{'from'}) {
-	if ($data->{'from'} eq 'sympa') {
-		$headers .= "From: ".MIME::EncWords::encode_mimewords(
-			sprintf("SYMPA <%s>", $params{sympa}),
-			'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
-		)."\n";
-	} else {
-		$headers .= "From: ".MIME::EncWords::encode_mimewords(
-			Encode::decode('utf8', $data->{'from'}),
-			'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'From'
+
+	unless ($header_ok{'to'}) {
+		# Currently, bare e-mail address is assumed.  Complex ones such as
+		# "phrase" <email> won't be allowed.
+		if (ref ($params{recipient})) {
+			if ($data->{'to'}) {
+				$to = $data->{'to'};
+			}else {
+				$to = join(",\n   ", @{$params{recipient}});
+			}
+		}else{
+			$to = $params{recipient};
+		}
+		$headers .= "To: $to\n";
+	}
+
+	unless ($header_ok{'from'}) {
+		if ($data->{'from'} eq 'sympa') {
+			$headers .= "From: ".MIME::EncWords::encode_mimewords(
+				sprintf("SYMPA <%s>", $params{sympa}),
+				'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
+			)."\n";
+		} else {
+			$headers .= "From: ".MIME::EncWords::encode_mimewords(
+				Encode::decode('utf8', $data->{'from'}),
+				'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'From'
+			)."\n";
+		}
+	}
+
+	unless ($header_ok{'subject'}) {
+		$headers .= "Subject: ".MIME::EncWords::encode_mimewords(
+			Encode::decode('utf8', $data->{'subject'}),
+			'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Subject'
 		)."\n";
 	}
-}
-unless ($header_ok{'subject'}) {
-	$headers .= "Subject: ".MIME::EncWords::encode_mimewords(
-		Encode::decode('utf8', $data->{'subject'}),
-		'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Subject'
-	)."\n";
-}
-unless ($header_ok{'reply-to'}) {
-	$headers .= "Reply-to: ".MIME::EncWords::encode_mimewords(
-		Encode::decode('utf8', $data->{'replyto'}),
-		'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Reply-to'
-	)."\n" if ($data->{'replyto'})
-}
-if ($data->{'headers'}) {
-	foreach my $field (keys %{$data->{'headers'}}) {
-		$headers .= $field.': '.MIME::EncWords::encode_mimewords(
-			Encode::decode('utf8', $data->{'headers'}{$field}),
-			'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => $field
-		)."\n";
+
+	unless ($header_ok{'reply-to'}) {
+		$headers .= "Reply-to: ".MIME::EncWords::encode_mimewords(
+			Encode::decode('utf8', $data->{'replyto'}),
+			'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Reply-to'
+		)."\n" if ($data->{'replyto'})
 	}
-}
-unless ($header_ok{'mime-version'}) {
-	$headers .= "MIME-Version: 1.0\n";
-}
-unless ($header_ok{'content-type'}) {
-	$headers .= "Content-Type: text/plain; charset=".$data->{'charset'}."\n";
-}
-unless ($header_ok{'content-transfer-encoding'}) {
-	$headers .= "Content-Transfer-Encoding: 8bit\n";
-}
-## Determine what value the Auto-Submitted header field should take
-## See http://www.tools.ietf.org/html/draft-palme-autosub-01
-## the header filed can have one of the following values : auto-generated, auto-replied, auto-forwarded
-## The header should not be set when wwsympa sends a command/mail to sympa.pl through its spool
-unless ($data->{'not_auto_submitted'} ||  $header_ok{'auto_submitted'}) {
-	## Default value is 'auto-generated'
-	my $header_value = $data->{'auto_submitted'} || 'auto-generated';
-	$headers .= "Auto-Submitted: $header_value\n";
-}
 
-unless ($existing_headers) {
-	$headers .= "\n";
-}
+	if ($data->{'headers'}) {
+		foreach my $field (keys %{$data->{'headers'}}) {
+			$headers .= $field.': '.MIME::EncWords::encode_mimewords(
+				Encode::decode('utf8', $data->{'headers'}{$field}),
+				'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => $field
+			)."\n";
+		}
+	}
 
-## All these data provide mail attachements in service messages
-my @msgs = ();
-if (ref($data->{'msg_list'}) eq 'ARRAY') {
-	@msgs = map {$_->{'msg'} || $_->{'full_msg'}} @{$data->{'msg_list'}};
-} elsif ($data->{'spool'}) {
-	@msgs = @{$data->{'spool'}};
-} elsif ($data->{'msg'}) {
-	push @msgs, $data->{'msg'};
-} elsif ($data->{'msg_path'} and open IN, '<'.$data->{'msg_path'}) {
-	push @msgs, join('', <IN>);
-	close IN;
-} elsif ($data->{'file'} and open IN, '<'.$data->{'file'}) {
-	push @msgs, join('', <IN>);
-	close IN;
-}
+	unless ($header_ok{'mime-version'}) {
+		$headers .= "MIME-Version: 1.0\n";
+	}
 
-my $listname = '';
-if (ref($data->{'list'}) eq "HASH") {
-	$listname = $data->{'list'}{'name'};
-} elsif ($data->{'list'}) {
-	$listname = $data->{'list'};
-}
+	unless ($header_ok{'content-type'}) {
+		$headers .= "Content-Type: text/plain; charset=".$data->{'charset'}."\n";
+	}
 
-unless ($message_as_string = _reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
-Sympa::Log::Syslog::do_log('err', 'Failed to reformat message');
-    }
+	unless ($header_ok{'content-transfer-encoding'}) {
+		$headers .= "Content-Transfer-Encoding: 8bit\n";
+	}
 
-    return $message_as_string if($params{return_message_as_string});
+	## Determine what value the Auto-Submitted header field should take
+	## See http://www.tools.ietf.org/html/draft-palme-autosub-01
+	## the header filed can have one of the following values : auto-generated, auto-replied, auto-forwarded
+	## The header should not be set when wwsympa sends a command/mail to sympa.pl through its spool
+	unless ($data->{'not_auto_submitted'} ||  $header_ok{'auto_submitted'}) {
+		## Default value is 'auto-generated'
+		my $header_value = $data->{'auto_submitted'} || 'auto-generated';
+		$headers .= "Auto-Submitted: $header_value\n";
+	}
 
-    my $message = Sympa::Message->new(
-	    string     => $message_as_string,
-	    noxsympato =>'noxsympato'
-    );
+	unless ($existing_headers) {
+		$headers .= "\n";
+	}
 
-    my $result = _sending(
-	    message         => $message,
-	    rcpt            => $params{recipient},
-	    from            => $data->{'return_path'},
-	    robot           => $params{robot},
-	    listname        => $listname,
-	    priority        => $params{priority},
-	    priority_packet => $params{priority_packet},
-	    sign_mode       => $params{sign_mode},
-	    use_bulk        => $data->{'use_bulk'},
-	    dkim            => $data->{'dkim'},
-	    sendmail        => $params{sendmail},
-	    sendmail_args   => $params{sendmail_args},
-	    maxsmtp         => $params{maxsmtp},
-	    openssl         => $params{openssl},
-	    key_passwd      => $params{key_passwd},
-	    cookie          => $params{cookie},
-	    sympa           => $params{sympa},
-    );
+	## All these data provide mail attachements in service messages
+	my @msgs = ();
+	if (ref($data->{'msg_list'}) eq 'ARRAY') {
+		@msgs = map {$_->{'msg'} || $_->{'full_msg'}} @{$data->{'msg_list'}};
+	} elsif ($data->{'spool'}) {
+		@msgs = @{$data->{'spool'}};
+	} elsif ($data->{'msg'}) {
+		push @msgs, $data->{'msg'};
+	} elsif ($data->{'msg_path'} and open IN, '<'.$data->{'msg_path'}) {
+		push @msgs, join('', <IN>);
+		close IN;
+	} elsif ($data->{'file'} and open IN, '<'.$data->{'file'}) {
+		push @msgs, join('', <IN>);
+		close IN;
+	}
 
-    return defined $result ? 1 : undef;
+	my $listname = '';
+	if (ref($data->{'list'}) eq "HASH") {
+		$listname = $data->{'list'}{'name'};
+	} elsif ($data->{'list'}) {
+		$listname = $data->{'list'};
+	}
+
+	unless ($message_as_string = _reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
+		Sympa::Log::Syslog::do_log('err', 'Failed to reformat message');
+	}
+
+	return $message_as_string if($params{return_message_as_string});
+
+	my $message = Sympa::Message->new(
+		string     => $message_as_string,
+		noxsympato =>'noxsympato'
+	);
+
+	my $result = _sending(
+		message         => $message,
+		rcpt            => $params{recipient},
+		from            => $data->{'return_path'},
+		robot           => $params{robot},
+		listname        => $listname,
+		priority        => $params{priority},
+		priority_packet => $params{priority_packet},
+		sign_mode       => $params{sign_mode},
+		use_bulk        => $data->{'use_bulk'},
+		dkim            => $data->{'dkim'},
+		sendmail        => $params{sendmail},
+		sendmail_args   => $params{sendmail_args},
+		maxsmtp         => $params{maxsmtp},
+		openssl         => $params{openssl},
+		key_passwd      => $params{key_passwd},
+		cookie          => $params{cookie},
+		sympa           => $params{sympa},
+	);
+
+	return defined $result ? 1 : undef;
 }
 
 =head2 mail_message(%parameters)
@@ -517,53 +525,53 @@ sub mail_message {
 			undef %rcpt_by_dom;
 			# do not replace this line by "push @sendtobypacket, \@sendto" !!!
 			my @tab =  @sendto; push @sendtobypacket, \@tab;
-		$numsmtp++;
-		$nrcpt = $size = 0;
-		@sendto = ();
+			$numsmtp++;
+			$nrcpt = $size = 0;
+			@sendto = ();
+		}
+
+		$nrcpt++; $size += length($i) + 5;
+		push(@sendto, $i);
+		$j = $i;
 	}
 
-	$nrcpt++; $size += length($i) + 5;
-	push(@sendto, $i);
-	$j = $i;
-}
+	if ($#sendto >= 0) {
+		$numsmtp++ ;
+		my @tab =  @sendto;
+		push @sendtobypacket, \@tab ;# do not replace this line by push @sendtobypacket, \@sendto !!!
+	}
 
-if ($#sendto >= 0) {
-	$numsmtp++ ;
-	my @tab =  @sendto ; push @sendtobypacket, \@tab ;# do not replace this line by push @sendtobypacket, \@sendto !!!
-    }
+	my $result = _sendto(
+		message         => $message,
+		from            => $from,
+		rcpt            => \@sendtobypacket,
+		listname        => $list->{'name'},
+		priority        => $list->{'admin'}{'priority'},
+		priority_packet => $priority_packet,
+		delivery_date   => $list->get_next_delivery_date,
+		robot           => $robot,
+		encrypt         => $message->{'smime_crypted'},
+		use_bulk        => 1,
+		verp            => $verp,
+		dkim            => $dkim,
+		merge           => $list->{'admin'}{'merge_feature'},
+		tag_as_last     => $tag_as_last,
+		sendmail        => $params{sendmail},
+		sendmail_args   => $params{sendmail_args},
+		maxsmtp         => $params{maxsmtp},
+		openssl         => $params{openssl},
+		key_passws      => $params{key_passwd},
+		ssl_cert_dir    => $params{ssl_cert_dir},
+		cookie          => $params{cookie},
+		sympa           => $params{sympa},
+	);
 
+	if (!defined $result) {
+		Sympa::Log::Syslog::do_log('err',"Failed to send message to list %s", $list->{'name'});
+	return undef;
+	}
 
-    my $result = _sendto(
-	    message         => $message,
-	    from            => $from,
-	    rcpt            => \@sendtobypacket,
-    listname        => $list->{'name'},
-    priority        => $list->{'admin'}{'priority'},
-    priority_packet => $priority_packet,
-    delivery_date   => $list->get_next_delivery_date,
-    robot           => $robot,
-    encrypt         => $message->{'smime_crypted'},
-    use_bulk        => 1,
-    verp            => $verp,
-    dkim            => $dkim,
-    merge           => $list->{'admin'}{'merge_feature'},
-    tag_as_last     => $tag_as_last,
-    sendmail        => $params{sendmail},
-    sendmail_args   => $params{sendmail_args},
-    maxsmtp         => $params{maxsmtp},
-    openssl         => $params{openssl},
-    key_passws      => $params{key_passwd},
-    ssl_cert_dir    => $params{ssl_cert_dir},
-    cookie          => $params{cookie},
-    sympa           => $params{sympa},
-    );
-
-    if (!defined $result) {
-	    Sympa::Log::Syslog::do_log('err',"Failed to send message to list %s", $list->{'name'});
-	    return undef;
-    }
-
-    return $numsmtp;
+	return $numsmtp;
 }
 
 =head2 mail_forward(%parameters)

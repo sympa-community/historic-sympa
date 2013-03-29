@@ -1078,19 +1078,19 @@ sub split_mail {
 			return undef;
 		}
 		$decoder->decode(\*BODY, \*OFILE);
-close BODY;
-unlink "$dir/$pathname.$fileExt.$encoding";
-	    }else {
-		    $message->print_body (\*OFILE) ;
-    }
-    close (OFILE);
-    printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
+		close BODY;
+		unlink "$dir/$pathname.$fileExt.$encoding";
+	}else {
+		$message->print_body (\*OFILE) ;
+	}
+	close (OFILE);
+	printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
 
-    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-    $message->purge ;
-    }
+	## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
+	$message->purge ;
+	}
 
-    return 1;
+	return 1;
 }
 
 sub virus_infected {

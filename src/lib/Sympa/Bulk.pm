@@ -363,11 +363,11 @@ sub merge_data {
 
 	# Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
 	unless (Sympa::Template::parse_tt2($data,\$body, $message_output, '', $options)) {
-	Sympa::Log::Syslog::do_log('err','Unable to parse body : "%s"', \$body);
-return undef;
-    }
+		Sympa::Log::Syslog::do_log('err','Unable to parse body : "%s"', \$body);
+	return undef;
+	}
 
-    return 1;
+	return 1;
 }
 
 sub store {
@@ -465,53 +465,53 @@ sub store {
 		my @tab = ($rcpts);
 		my @tabtab;
 		push @tabtab, \@tab;
-	$rcpts = \@tabtab;
-    }
+		$rcpts = \@tabtab;
+	}
 
-    my $priority_for_packet;
-    my $already_tagged = 0;
-    my $packet_rank = 0; # Initialize counter used to check wether we are copying the last packet.
-    foreach my $packet (@{$rcpts}) {
-	    $priority_for_packet = $priority_packet;
-	    if($tag_as_last && !$already_tagged){
-		    $priority_for_packet = $priority_packet + 5;
-		    $already_tagged = 1;
-	    }
-	    $type = ref $packet;
-	    my $rcptasstring ;
-	    if  (ref $packet eq 'ARRAY'){
-		    $rcptasstring  = join ',',@{$packet};
-	    }else{
-		    $rcptasstring  = $packet;
-	    }
-	    my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
-	    my $packet_already_exist;
-	    if (ref($listname) && $listname->isa('Sympa::List')) {
-		    $listname = $listname->{'name'};
-	    }
-	    if ($message_already_on_spool) {
-		    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
-		    unless ($sth = Sympa::SDM::do_query( "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", Sympa::SDM::quote($message->{'messagekey'}),Sympa::SDM::quote($packetid))) {
-			    Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
-			    return undef;
-		    }
-		    $packet_already_exist = $sth->fetchrow;
-		    $sth->finish();
-	    }
+	my $priority_for_packet;
+	my $already_tagged = 0;
+	my $packet_rank = 0; # Initialize counter used to check wether we are copying the last packet.
+	foreach my $packet (@{$rcpts}) {
+		$priority_for_packet = $priority_packet;
+		if($tag_as_last && !$already_tagged){
+			$priority_for_packet = $priority_packet + 5;
+			$already_tagged = 1;
+		}
+		$type = ref $packet;
+		my $rcptasstring ;
+		if  (ref $packet eq 'ARRAY'){
+			$rcptasstring  = join ',',@{$packet};
+		}else{
+			$rcptasstring  = $packet;
+		}
+		my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
+		my $packet_already_exist;
+		if (ref($listname) && $listname->isa('Sympa::List')) {
+			$listname = $listname->{'name'};
+		}
+		if ($message_already_on_spool) {
+			## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
+			unless ($sth = Sympa::SDM::do_query( "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", Sympa::SDM::quote($message->{'messagekey'}),Sympa::SDM::quote($packetid))) {
+				Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
+				return undef;
+			}
+			$packet_already_exist = $sth->fetchrow;
+			$sth->finish();
+		}
 
-	    if ($packet_already_exist) {
-		    Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
+		if ($packet_already_exist) {
+			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
-	    }else {
-		    unless (Sympa::SDM::do_query( "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", Sympa::SDM::quote($message->{'messagekey'}),Sympa::SDM::quote($msg_id),Sympa::SDM::quote($packetid),Sympa::SDM::quote($rcptasstring),Sympa::SDM::quote($from),Sympa::SDM::quote($robot),Sympa::SDM::quote($listname),$verp,Sympa::SDM::quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date)) {
-			    Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
-			    return undef;
-		    }
-	    }
-	    $packet_rank++;
-    }
-    $bulkspool->unlock_message($message->{'messagekey'});
-    return 1;
+		}else {
+			unless (Sympa::SDM::do_query( "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", Sympa::SDM::quote($message->{'messagekey'}),Sympa::SDM::quote($msg_id),Sympa::SDM::quote($packetid),Sympa::SDM::quote($rcptasstring),Sympa::SDM::quote($from),Sympa::SDM::quote($robot),Sympa::SDM::quote($listname),$verp,Sympa::SDM::quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date)) {
+				Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
+				return undef;
+			}
+		}
+		$packet_rank++;
+	}
+	$bulkspool->unlock_message($message->{'messagekey'});
+	return 1;
 }
 
 =head2 purge_bulkspool()

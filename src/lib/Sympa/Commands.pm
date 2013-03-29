@@ -1455,43 +1455,43 @@ sub invite {
 				$context{'url'}= "mailto:$sympa?subject=$command";
 				$context{'url'} =~ s/\s/%20/g;
 				unless ($list->send_file('invite', $email, $robot, \%context)) {
-				Sympa::Log::Syslog::do_log('notice',"Unable to send template 'invite' to $email");
-				Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
-				return undef;
-			}
-			Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total());
-			Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
+					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'invite' to $email");
+					Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
+					return undef;
+				}
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total());
+				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
-		}elsif ($action !~ /reject/i) {
-			$context{'subject'} = "sub $which $comment";
-			$context{'url'}= "mailto:$sympa?subject=$context{'subject'}";
-			$context{'url'} =~ s/\s/%20/g;
-			unless ($list->send_file('invite', $email, $robot,\%context)) {
-			Sympa::Log::Syslog::do_log('notice',"Unable to send template 'invite' to $email");
-			Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
-			return undef;
-		}
-		Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
-		Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
+			}elsif ($action !~ /reject/i) {
+				$context{'subject'} = "sub $which $comment";
+				$context{'url'}= "mailto:$sympa?subject=$context{'subject'}";
+				$context{'url'} =~ s/\s/%20/g;
+				unless ($list->send_file('invite', $email, $robot,\%context)) {
+					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'invite' to $email");
+					Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
+					return undef;
+				}
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
-	}elsif ($action =~ /reject/i) {
-		Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
-		if (defined $result->{'tt2'}) {
-			unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
-				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
-				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
+			}elsif ($action =~ /reject/i) {
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+				if (defined $result->{'tt2'}) {
+					unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
+						Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
+						Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
+					}
+				}else {
+					Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'email'=> $email, 'listname' => $which},$cmd_line);
+				}
 			}
-		}else {
-			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'email'=> $email, 'listname' => $which},$cmd_line);
 		}
+		return 1;
 	}
-}
-return 1;
-    }
-    Sympa::Log::Syslog::do_log('info', 'INVITE %s  from %s aborted, unknown requested action in scenario',$which,$sender);
-    my $error = "Unknown requested action in scenario: $action.";
-    Sympa::Report::reject_report_cmd('intern',$error,{'listname' => $which},$cmd_line,$sender,$robot);
-    return undef;
+	Sympa::Log::Syslog::do_log('info', 'INVITE %s  from %s aborted, unknown requested action in scenario',$which,$sender);
+	my $error = "Unknown requested action in scenario: $action.";
+	Sympa::Report::reject_report_cmd('intern',$error,{'listname' => $which},$cmd_line,$sender,$robot);
+	return undef;
 }
 
 ############################################################

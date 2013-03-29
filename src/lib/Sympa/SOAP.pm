@@ -1194,24 +1194,25 @@ sub review {
 			Sympa::Log::Syslog::do_log('err', "no subscribers in list '%s'", $list->{'name'});
 			push @resultSoap, SOAP::Data->name('result')->type('string')->value('no_subscribers');
 			return SOAP::Data->name('return')->value(\@resultSoap);
-	}
-	do {
-		## Owners bypass the visibility option
-		unless ( ($user->{'visibility'} eq 'conceal')
-				and (! $is_owner) ) {
-
-			## Lower case email address
-			$user->{'email'} =~ y/A-Z/a-z/;
-			push @resultSoap, SOAP::Data->name('item')->type('string')->value($user->{'email'});
 		}
-	} while ($user = $list->get_next_list_member());
-	Sympa::Log::Syslog::do_log('info', '%s from %s accepted', $listname, $sender);
-	return SOAP::Data->name('return')->value(\@resultSoap);
-    }
-    Sympa::Log::Syslog::do_log('info', '%s from %s aborted, unknown requested action in scenario',$listname,$sender);
-    die SOAP::Fault->faultcode('Server')
-    ->faultstring('Unknown requested action')
-    ->faultdetail("%s from %s aborted because unknown requested action in scenario",$listname,$sender);
+		do {
+			## Owners bypass the visibility option
+			unless ( ($user->{'visibility'} eq 'conceal')
+					and (! $is_owner) ) {
+
+				## Lower case email address
+				$user->{'email'} =~ y/A-Z/a-z/;
+				push @resultSoap, SOAP::Data->name('item')->type('string')->value($user->{'email'});
+			}
+		} while ($user = $list->get_next_list_member());
+		Sympa::Log::Syslog::do_log('info', '%s from %s accepted', $listname, $sender);
+		return SOAP::Data->name('return')->value(\@resultSoap);
+	}
+
+	Sympa::Log::Syslog::do_log('info', '%s from %s aborted, unknown requested action in scenario',$listname,$sender);
+	die SOAP::Fault->faultcode('Server')
+		->faultstring('Unknown requested action')
+		->faultdetail("%s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
 
 =head2 Sympa::SOAP->fullReview($listname)

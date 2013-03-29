@@ -356,7 +356,6 @@ sub send_report_cmd {
 		return undef;
 	}
 
-
 	# for mail layout
 	my $before_auth = 0;
 	$before_auth = 1 if ($#notice_cmd +1);
@@ -369,30 +368,29 @@ sub send_report_cmd {
 
 	chomp($sender);
 
-	my $data = { 'to' => $sender,
-		'nb_notice' =>$#notice_cmd +1,
-		'nb_auth' => $#auth_reject_cmd +1,
-		'nb_user_err' => $#user_error_cmd +1,
-		'nb_intern_err' => $#intern_error_cmd +1,
-		'nb_global' => $#global_error_cmd +1,
-		'before_auth' => $before_auth,
-		'before_user_err' => $before_user_err,
+	my $data = {
+		'to'                => $sender,
+		'nb_notice'         => $#notice_cmd +1,
+		'nb_auth'           => $#auth_reject_cmd +1,
+		'nb_user_err'       => $#user_error_cmd +1,
+		'nb_intern_err'     => $#intern_error_cmd +1,
+		'nb_global'         => $#global_error_cmd +1,
+		'before_auth'       => $before_auth,
+		'before_user_err'   => $before_user_err,
 		'before_intern_err' => $before_intern_err,
-		'notices' => \@notice_cmd,
-	'auths' => \@auth_reject_cmd,
-'user_errors' => \@user_error_cmd,
-		 'intern_errors' => \@intern_error_cmd,
-	 'globals' => \@global_error_cmd,
-	     };
+		'notices'           => \@notice_cmd,
+		'auths'             => \@auth_reject_cmd,
+		'user_errors'       => \@user_error_cmd,
+		'intern_errors'     => \@intern_error_cmd,
+		'globals'           => \@global_error_cmd,
+	};
 
+	unless (Sympa::List::send_global_file('command_report',$sender,$robot,$data)) {
+		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'command_report' to $sender");
+	}
 
-
-	     unless (Sympa::List::send_global_file('command_report',$sender,$robot,$data)) {
-		     Sympa::Log::Syslog::do_log('notice',"Unable to send template 'command_report' to $sender");
-	     }
-
-	     init_report_cmd();
-     }
+	init_report_cmd();
+}
 
 =head2 global_report_cmd($type, $error,  $data, $sender, $robot, $now)
 
@@ -421,11 +419,9 @@ For I<intern> type, the listmaster is notified immediatly.
 
 =item * I<$data>: variables used in template (hashref)
 
-=item * I<$sender>: the user to notify (required if $type eq 'intern' or if
-      I<$now> is true)
+=item * I<$sender>: the user to notify (required if $type eq 'intern' or if I<$now> is true)
 
-=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or
-      if I<$now> is true)
+=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or if I<$now> is true)
 
 =item * I<$now>: send now if true
 
@@ -855,8 +851,8 @@ For I<intern> or I<system> types, the listmaster is notified immediatly.
 =item * I<$data>: variables used in template (hashref)
 
 =item * I<$action>: the rejected action :
-	    $xx.action in template
-	    $action in listmaster_notification.tt2 if needed
+	$xx.action in template
+	$action in listmaster_notification.tt2 if needed
 
 =item * I<$list>: Sympa::List object
 

@@ -616,321 +616,334 @@ sub upgrade {
 		## Do the encoding modifications
 		## Previous versions of files are backed up with the date extension
 		my $total = to_utf8(\@files);
-	Sympa::Log::Syslog::do_log('notice','%d files have been modified', $total);
-}
+		Sympa::Log::Syslog::do_log('notice','%d files have been modified', $total);
+	}
 
-## giving up subscribers flat files ; moving subscribers to the DB
-## Also giving up old 'database' mode
-if (lower_version($previous_version, '5.4a.1')) {
+	## giving up subscribers flat files ; moving subscribers to the DB
+	## Also giving up old 'database' mode
+	if (lower_version($previous_version, '5.4a.1')) {
 
-	Sympa::Log::Syslog::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
+		Sympa::Log::Syslog::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
 
-	my $all_lists = Sympa::List::get_lists('*');
-	foreach my $list ( @$all_lists ) {
+		my $all_lists = Sympa::List::get_lists('*');
+		foreach my $list ( @$all_lists ) {
 
-		if ($list->{'admin'}{'user_data_source'} eq 'file') {
+			if ($list->{'admin'}{'user_data_source'} eq 'file') {
 
-			Sympa::Log::Syslog::do_log('notice','List %s ; changing user_data_source from file to include2...', $list->{'name'});
+				Sympa::Log::Syslog::do_log('notice','List %s ; changing user_data_source from file to include2...', $list->{'name'});
 
-			my @users = Sympa::List::_load_list_members_file("$list->{'dir'}/subscribers");
+				my @users = Sympa::List::_load_list_members_file("$list->{'dir'}/subscribers");
 
-			$list->{'admin'}{'user_data_source'} = 'include2';
-			$list->{'total'} = 0;
+				$list->{'admin'}{'user_data_source'} = 'include2';
+				$list->{'total'} = 0;
 
-			## Add users to the DB
-			$list->add_list_member(@users);
-			my $total = $list->{'add_outcome'}{'added_members'};
-			if (defined $list->{'add_outcome'}{'errors'}) {
-				Sympa::Log::Syslog::do_log('err', 'Failed to add users: %s',$list->{'add_outcome'}{'errors'}{'error_message'});
-			}
+				## Add users to the DB
+				$list->add_list_member(@users);
+				my $total = $list->{'add_outcome'}{'added_members'};
+				if (defined $list->{'add_outcome'}{'errors'}) {
+					Sympa::Log::Syslog::do_log('err', 'Failed to add users: %s',$list->{'add_outcome'}{'errors'}{'error_message'});
+				}
 
-			Sympa::Log::Syslog::do_log('notice','%d subscribers have been loaded into the database', $total);
+				Sympa::Log::Syslog::do_log('notice','%d subscribers have been loaded into the database', $total);
 
-			unless ($list->save_config('automatic')) {
-				Sympa::Log::Syslog::do_log('err', 'Failed to save config file for list %s', $list->{'name'});
-			}
-		}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
+				unless ($list->save_config('automatic')) {
+					Sympa::Log::Syslog::do_log('err', 'Failed to save config file for list %s', $list->{'name'});
+				}
+			}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
 
-			Sympa::Log::Syslog::do_log('notice','List %s ; changing user_data_source from database to include2...', $list->{'name'});
+				Sympa::Log::Syslog::do_log('notice','List %s ; changing user_data_source from database to include2...', $list->{'name'});
 
-			unless ($list->update_list_member('*', {'subscribed' => 1})) {
-				Sympa::Log::Syslog::do_log('err', 'Failed to update subscribed DB field');
-			}
+				unless ($list->update_list_member('*', {'subscribed' => 1})) {
+					Sympa::Log::Syslog::do_log('err', 'Failed to update subscribed DB field');
+				}
 
-			$list->{'admin'}{'user_data_source'} = 'include2';
+				$list->{'admin'}{'user_data_source'} = 'include2';
 
-			unless ($list->save_config('automatic')) {
-				Sympa::Log::Syslog::do_log('err', 'Failed to save config file for list %s', $list->{'name'});
+				unless ($list->save_config('automatic')) {
+					Sympa::Log::Syslog::do_log('err', 'Failed to save config file for list %s', $list->{'name'});
+				}
 			}
 		}
 	}
-}
 
-if (lower_version($previous_version, '5.5a.1')) {
+	if (lower_version($previous_version, '5.5a.1')) {
 
-	## Remove OTHER/ subdirectories in bounces
-	Sympa::Log::Syslog::do_log('notice', "Removing obsolete OTHER/ bounce directories");
-	if (opendir BOUNCEDIR, Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'}, 'bounce_path')) {
+		## Remove OTHER/ subdirectories in bounces
+		Sympa::Log::Syslog::do_log('notice', "Removing obsolete OTHER/ bounce directories");
+		if (opendir BOUNCEDIR, Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'}, 'bounce_path')) {
 
-		foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
-			my $other_dir = Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
-			if (-d $other_dir) {
-				Sympa::Tools::File::remove_dir($other_dir);
-				Sympa::Log::Syslog::do_log('notice', "Directory $other_dir removed");
+			foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
+				my $other_dir = Sympa::Configuration::get_robot_conf($Sympa::Configuration::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
+				if (-d $other_dir) {
+					Sympa::Tools::File::remove_dir($other_dir);
+					Sympa::Log::Syslog::do_log('notice', "Directory $other_dir removed");
+				}
+			}
+
+			close BOUNCEDIR;
+
+		}else {
+			Sympa::Log::Syslog::do_log('err', "Failed to open directory $Sympa::Configuration::Conf{'queuebounce'} : $ERRNO");
+		}
+	}
+
+	if (lower_version($previous_version, '6.1b.5')) {
+		## Encoding of shared documents was not consistent with recent versions of MIME::Encode
+		## MIME::EncWords::encode_mimewords() used to encode characters -!*+/
+		## Now these characters are preserved, according to RFC 2047 section 5
+		## We change encoding of shared documents according to new algorithm
+		Sympa::Log::Syslog::do_log('notice','Fixing Q-encoding of web document filenames...');
+		my $all_lists = Sympa::List::get_lists('*');
+		foreach my $list ( @$all_lists ) {
+			if (-d $list->{'dir'}.'/shared') {
+				Sympa::Log::Syslog::do_log('notice','  Processing list %s...', $list->get_list_address());
+
+				my @all_files;
+				Sympa::Tools::File::list_dir($list->{'dir'}, \@all_files, 'utf-8');
+
+				my $count;
+				foreach my $f_struct (reverse @all_files) {
+					my $new_filename = $f_struct->{'filename'};
+
+					## Decode and re-encode filename
+					$new_filename = Sympa::Tools::qencode_filename(Sympa::Tools::qdecode_filename($new_filename));
+
+					if ($new_filename ne $f_struct->{'filename'}) {
+						## Rename file
+						my $orig_f = $f_struct->{'directory'}.'/'.$f_struct->{'filename'};
+						my $new_f = $f_struct->{'directory'}.'/'.$new_filename;
+						Sympa::Log::Syslog::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
+						unless (rename $orig_f, $new_f) {
+							Sympa::Log::Syslog::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $ERRNO);
+							next;
+						}
+						$count++;
+					}
+				}
+				if ($count) {
+					Sympa::Log::Syslog::do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
+				}
+			}
+		}
+	}
+
+	if (lower_version($previous_version, '6.3a')) {
+		# move spools from file to database.
+		my %spools_def = ('queue' =>  'msg',
+			'bouncequeue'     => 'bounce',
+			'queuedistribute' => 'msg',
+			'queuedigest'     => 'digest',
+			'queuemod'        => 'mod',
+			'queuesubscribe'  => 'subscribe',
+			'queuetopic'      => 'topic',
+			'queueautomatic'  => 'automatic',
+			'queueauth'       => 'auth',
+			'queueoutgoing'   => 'archive',
+			'queuetask'       => 'task'
+		);
+		if (lower_version($previous_version, '6.1.11')) {
+			## Exclusion table was not robot-enabled.
+			Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
+			my $sth;
+			unless ($sth = Sympa::SDM::do_query("SELECT * FROM exclusion_table")) {
+				Sympa::Log::Syslog::do_log('err','Unable to gather informations from the exclusions table.');
+			}
+			my @robots = Sympa::List::get_robots();
+			while (my $data = $sth->fetchrow_hashref){
+				next if (defined $data->{'robot_exclusion'} && $data->{'robot_exclusion'} ne '');
+				## Guessing right robot for each exclusion.
+				my $valid_robot = '';
+				my @valid_robot_candidates;
+				foreach my $robot (@robots) {
+					my $list = Sympa::List->new(
+						name  => $data->{'list_exclusion'},
+						robot => $robot
+					);
+					if ($list) {
+						if ($list->is_list_member($data->{'user_exclusion'})) {
+							push @valid_robot_candidates,$robot;
+						}
+					}
+				}
+				if ($#valid_robot_candidates == 0) {
+					$valid_robot = $valid_robot_candidates[0];
+					my $sth;
+					unless ($sth = Sympa::SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", Sympa::SDM::quote($valid_robot),Sympa::SDM::quote($data->{'list_exclusion'}),Sympa::SDM::quote($data->{'user_exclusion'}))) {
+						Sympa::Log::Syslog::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
+					}
+				}else {
+					Sympa::Log::Syslog::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
+				}
+			}
+			## Caching all lists config subset to database
+			Sympa::Log::Syslog::do_log('notice','Caching all lists config subset to database');
+			Sympa::List::_flush_list_db();
+			my $all_lists = Sympa::List::get_lists('*', { 'use_files' => 1 });
+			foreach my $list (@$all_lists) {
+				$list->_update_list_db;
 			}
 		}
 
-		close BOUNCEDIR;
+		foreach my $spoolparameter (keys %spools_def ){
+			next if ($spoolparameter eq 'queuetask'); # task is to be done later
 
-	}else {
-		Sympa::Log::Syslog::do_log('err', "Failed to open directory $Sympa::Configuration::Conf{'queuebounce'} : $ERRNO");
-	}
+			my $spooldir = $Sympa::Configuration::Conf{$spoolparameter};
 
-}
+			unless (-d $spooldir){
+				Sympa::Log::Syslog::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
+				next;
+			}
+			Sympa::Log::Syslog::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
-if (lower_version($previous_version, '6.1b.5')) {
-	## Encoding of shared documents was not consistent with recent versions of MIME::Encode
-	## MIME::EncWords::encode_mimewords() used to encode characters -!*+/
-	## Now these characters are preserved, according to RFC 2047 section 5
-	## We change encoding of shared documents according to new algorithm
-	Sympa::Log::Syslog::do_log('notice','Fixing Q-encoding of web document filenames...');
-	my $all_lists = Sympa::List::get_lists('*');
-	foreach my $list ( @$all_lists ) {
-		if (-d $list->{'dir'}.'/shared') {
-			Sympa::Log::Syslog::do_log('notice','  Processing list %s...', $list->get_list_address());
+			my $spool = Sympa::Spool->new(name => $spools_def{$spoolparameter});
+			if (!opendir(DIR, $spooldir)) {
+				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
+			}
+			my @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
+			closedir(DIR);
 
-			my @all_files;
-			Sympa::Tools::File::list_dir($list->{'dir'}, \@all_files, 'utf-8');
+			my $ignored = '';
+			my $performed = '';
 
-		my $count;
-		foreach my $f_struct (reverse @all_files) {
-			my $new_filename = $f_struct->{'filename'};
+			## Scans files in queue
+			foreach my $filename (sort @qfile) {
+				my $type;
+				my ($listname, $robot);
+				my %meta ;
 
-			## Decode and re-encode filename
-			$new_filename = Sympa::Tools::qencode_filename(Sympa::Tools::qdecode_filename($new_filename));
-
-			if ($new_filename ne $f_struct->{'filename'}) {
-				## Rename file
-				my $orig_f = $f_struct->{'directory'}.'/'.$f_struct->{'filename'};
-				my $new_f = $f_struct->{'directory'}.'/'.$new_filename;
-				Sympa::Log::Syslog::do_log('notice', "Renaming %s to %s", $orig_f, $new_f);
-				unless (rename $orig_f, $new_f) {
-					Sympa::Log::Syslog::do_log('err', "Failed to rename %s to %s : %s", $orig_f, $new_f, $ERRNO);
+				Sympa::Log::Syslog::do_log('notice'," spool : $spooldir, fichier $filename");
+				if (-d $spooldir.'/'.$filename){
+					Sympa::Log::Syslog::do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
 					next;
 				}
-				$count++;
+
+				if (($spoolparameter eq 'queuedigest')){
+					unless ($filename =~ /^([^@]*)\@([^@]*)$/){
+						$ignored .= ','.$filename;
+						next;
+					}
+					$listname = $1;
+					$robot = $2;
+					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
+				}elsif (($spoolparameter eq 'queueauth')||($spoolparameter eq 'queuemod')){
+					unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){
+						$ignored .= ','.$filename;
+						next;
+					}
+					$listname = $1;
+					$robot = $2;
+					$meta{'authkey'} = $3;
+					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
+				}elsif ($spoolparameter eq 'queuetopic'){
+					unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){
+						$ignored .= ','.$filename;
+						next;
+					}
+					$listname = $1;
+					$robot = $2;
+					$meta{'authkey'} = $3;
+					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
+				}elsif ($spoolparameter eq 'queuesubscribe'){
+					my $match = 0;
+					foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
+						Sympa::Log::Syslog::do_log('notice',"robot : $robot");
+						if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
+							$listname = $1;
+							$robot = $2;
+							$meta{'authkey'} = $3;
+							$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
+							$match = 1;
+						}
+					}
+					unless ($match){
+						$ignored .= ','.$filename;
+						next;
+					}
+				}elsif (($spoolparameter eq 'queue')||($spoolparameter eq 'bouncequeue')||($spoolparameter eq 'queueoutgoing')){
+
+					## Don't process temporary files created by queue bouncequeue queueautomatic (T.xxx)
+					next if ($filename =~ /^T\./);
+
+					unless ($filename =~ /^(\S+)\.(\d+)\.\w+$/){$ignored .= ','.$filename;next;}
+					($listname, $robot) = split(/\@/,$1);
+					$meta{'date'} = $2;
+
+					if ($spoolparameter eq 'queue') {
+						my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+						if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
+							($listname, $type) = ($1, $2);
+							$meta{'type'} = $type if $type;
+
+							my $email = Sympa::Configuration::get_robot_conf($robot, 'email');
+
+							my $priority;
+
+							if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
+								$priority = 0;
+							}elsif ($type eq 'request') {
+								$priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
+							}elsif ($type eq 'owner') {
+								$priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
+							}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
+								$priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
+								$listname ='';
+							}
+							$meta{'priority'} = $priority;
+
+						}
+					}
+				}
+
+				$listname = lc($listname);
+				if ($robot) {
+					$robot=lc($robot);
+				}else{
+					$robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
+				}
+
+				$meta{'robot'} = $robot if $robot;
+				$meta{'list'} = $listname if $listname;
+				$meta{'priority'} = 1 unless $meta{'priority'};
+
+				unless (open FILE, $spooldir.'/'.$filename) {
+					Sympa::Log::Syslog::do_log('err', 'Cannot open message file %s : %s',  $filename, $ERRNO);
+					return undef;
+				}
+				my $messageasstring;
+				while (<FILE>){
+					$messageasstring = $messageasstring.$_;
+				}
+				close(FILE);
+
+				my $messagekey = $spool->store($messageasstring,\%meta);
+				unless($messagekey) {
+					Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
+					next;
+				}
+
+				mkdir $spooldir.'/copy_by_upgrade_process/'  unless (-d $spooldir.'/copy_by_upgrade_process/');
+
+				my $source = $spooldir.'/'.$filename;
+				my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
+
+				Sympa::Log::Syslog::do_log('notice','source %s, goal %s',$source,$goal);
+				# unless (File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
+				unless (File::Copy::copy($source, $goal)) {
+					Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $ERRNO);
+					exit;
+				}
+
+				unless (unlink ($spooldir.'/'.$filename)) {
+					Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+				}
+				$performed .= ','.$filename;
 			}
-		}
-		if ($count) {
-			Sympa::Log::Syslog::do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
+			Sympa::Log::Syslog::do_log('info',"Upgrade process for spool %s : ignored files %s",$spooldir,$ignored);
+			Sympa::Log::Syslog::do_log('info',"Upgrade process for spool %s : performed files %s",$spooldir,$performed);
 		}
 	}
-}
 
-   }
-   if (lower_version($previous_version, '6.3a')) {
-	   # move spools from file to database.
-	   my %spools_def = ('queue' =>  'msg',
-		   'bouncequeue' => 'bounce',
-		   'queuedistribute' => 'msg',
-		   'queuedigest' => 'digest',
-		   'queuemod' => 'mod',
-		   'queuesubscribe' =>  'subscribe',
-		   'queuetopic' => 'topic',
-		   'queueautomatic' => 'automatic',
-		   'queueauth' => 'auth',
-		   'queueoutgoing' => 'archive',
-		   'queuetask' => 'task');
-	   if (lower_version($previous_version, '6.1.11')) {
-		   ## Exclusion table was not robot-enabled.
-		   Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
-		   my $sth;
-		   unless ($sth = Sympa::SDM::do_query("SELECT * FROM exclusion_table")) {
-			   Sympa::Log::Syslog::do_log('err','Unable to gather informations from the exclusions table.');
-		   }
-		   my @robots = Sympa::List::get_robots();
-		   while (my $data = $sth->fetchrow_hashref){
-			   next if (defined $data->{'robot_exclusion'} && $data->{'robot_exclusion'} ne '');
-			   ## Guessing right robot for each exclusion.
-			   my $valid_robot = '';
-			   my @valid_robot_candidates;
-			   foreach my $robot (@robots) {
-				   my $list = Sympa::List->new(
-					   name  => $data->{'list_exclusion'},
-					   robot => $robot
-				   );
-				   if ($list) {
-					   if ($list->is_list_member($data->{'user_exclusion'})) {
-						   push @valid_robot_candidates,$robot;
-					   }
-				   }
-			   }
-			   if ($#valid_robot_candidates == 0) {
-				   $valid_robot = $valid_robot_candidates[0];
-				   my $sth;
-				   unless ($sth = Sympa::SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", Sympa::SDM::quote($valid_robot),Sympa::SDM::quote($data->{'list_exclusion'}),Sympa::SDM::quote($data->{'user_exclusion'}))) {
-					   Sympa::Log::Syslog::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
-				   }
-			   }else {
-				   Sympa::Log::Syslog::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
-			   }
-		   }
-		   ## Caching all lists config subset to database
-		   Sympa::Log::Syslog::do_log('notice','Caching all lists config subset to database');
-		   Sympa::List::_flush_list_db();
-		   my $all_lists = Sympa::List::get_lists('*', { 'use_files' => 1 });
-		   foreach my $list (@$all_lists) {
-			   $list->_update_list_db;
-		   }
-	   }
-
-	   foreach my $spoolparameter (keys %spools_def ){
-		   next if ($spoolparameter eq 'queuetask'); # task is to be done later
-
-		   my $spooldir = $Sympa::Configuration::Conf{$spoolparameter};
-
-		   unless (-d $spooldir){
-			   Sympa::Log::Syslog::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
-			   next;
-		   }
-		   Sympa::Log::Syslog::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
-
-		   my $spool = Sympa::Spool->new(name => $spools_def{$spoolparameter});
-		   if (!opendir(DIR, $spooldir)) {
-			   Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
-		   }
-		   my @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
-		   closedir(DIR);
-
-		   my $ignored = '';
-		   my $performed = '';
-
-		   ## Scans files in queue
-		   foreach my $filename (sort @qfile) {
-			   my $type;
-			   my ($listname, $robot);
-			   my %meta ;
-
-			   Sympa::Log::Syslog::do_log('notice'," spool : $spooldir, fichier $filename");
-			   if (-d $spooldir.'/'.$filename){
-				   Sympa::Log::Syslog::do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
-				   next;
-			   }
-
-			   if (($spoolparameter eq 'queuedigest')){
-				   unless ($filename =~ /^([^@]*)\@([^@]*)$/){$ignored .= ','.$filename; next;}
-				   $listname = $1;
-				   $robot = $2;
-				   $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-			   }elsif (($spoolparameter eq 'queueauth')||($spoolparameter eq 'queuemod')){
-				   unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){$ignored .= ','.$filename;next;}
-				   $listname = $1;
-				   $robot = $2;
-				   $meta{'authkey'} = $3;
-				   $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-			   }elsif ($spoolparameter eq 'queuetopic'){
-				   unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){$ignored .= ','.$filename;next;}
-				   $listname = $1;
-				   $robot = $2;
-				   $meta{'authkey'} = $3;
-				   $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-			   }elsif ($spoolparameter eq 'queuesubscribe'){
-				   my $match = 0;
-				   foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
-					   Sympa::Log::Syslog::do_log('notice',"robot : $robot");
-					   if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
-						   $listname = $1;
-						   $robot = $2;
-						   $meta{'authkey'} = $3;
-						   $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-						   $match = 1;
-					   }
-				   }
-				   unless ($match){$ignored .= ','.$filename;next;}
-			   }elsif (($spoolparameter eq 'queue')||($spoolparameter eq 'bouncequeue')||($spoolparameter eq 'queueoutgoing')){
-
-				   ## Don't process temporary files created by queue bouncequeue queueautomatic (T.xxx)
-				   next if ($filename =~ /^T\./);
-
-				   unless ($filename =~ /^(\S+)\.(\d+)\.\w+$/){$ignored .= ','.$filename;next;}
-				   ($listname, $robot) = split(/\@/,$1);
-				   $meta{'date'} = $2;
-
-				   if ($spoolparameter eq 'queue') {
-					   my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
-					   if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
-						   ($listname, $type) = ($1, $2);
-						   $meta{'type'} = $type if $type;
-
-						   my $email = Sympa::Configuration::get_robot_conf($robot, 'email');
-
-						   my $priority;
-
-						   if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
-							   $priority = 0;
-						   }elsif ($type eq 'request') {
-							   $priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
-						   }elsif ($type eq 'owner') {
-							   $priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
-						   }elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
-							   $priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
-							   $listname ='';
-						   }
-						   $meta{'priority'} = $priority;
-
-					   }
-				   }
-			   }
-
-			   $listname = lc($listname);
-			   if ($robot) {
-				   $robot=lc($robot);
-			   }else{
-				   $robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
-			   }
-
-			   $meta{'robot'} = $robot if $robot;
-			   $meta{'list'} = $listname if $listname;
-			   $meta{'priority'} = 1 unless $meta{'priority'};
-
-			   unless (open FILE, $spooldir.'/'.$filename) {
-				   Sympa::Log::Syslog::do_log('err', 'Cannot open message file %s : %s',  $filename, $ERRNO);
-				   return undef;
-			   }
-			   my $messageasstring;
-			   while (<FILE>){
-				   $messageasstring = $messageasstring.$_;
-			   }
-			   close(FILE);
-
-			   my $messagekey = $spool->store($messageasstring,\%meta);
-		   unless($messagekey) {
-			   Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
-			   next;
-		   }
-
-		   mkdir $spooldir.'/copy_by_upgrade_process/'  unless (-d $spooldir.'/copy_by_upgrade_process/');
-
-		   my $source = $spooldir.'/'.$filename;
-		   my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
-
-		   Sympa::Log::Syslog::do_log('notice','source %s, goal %s',$source,$goal);
-		   # unless (File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
-		   unless (File::Copy::copy($source, $goal)) {
-			   Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $ERRNO);
-			   exit;
-		   }
-
-		   unless (unlink ($spooldir.'/'.$filename)) {
-			   Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
-		   }
-		   $performed .= ','.$filename;
-	   }
-	   Sympa::Log::Syslog::do_log('info',"Upgrade process for spool %s : ignored files %s",$spooldir,$ignored);
-	   Sympa::Log::Syslog::do_log('info',"Upgrade process for spool %s : performed files %s",$spooldir,$performed);
-   }
-    }
-    return 1;
+	return 1;
 }
 
 sub probe_db {
