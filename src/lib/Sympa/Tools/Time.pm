@@ -50,18 +50,29 @@ my $p_day      = '\d{1,2}';
 my $p_year     = '\d\d\d\d|\d\d';
 
 my %Month2Num = (
-	'jan', 0, 'feb', 1, 'mar', 2, 'apr', 3, 'may', 4, 'jun', 5, 'jul', 6,
-	'aug', 7, 'sep', 8, 'oct', 9, 'nov', 10, 'dec', 11,
-	'january', 0, 'february', 1, 'march', 2, 'april', 3,
-	'may', 4, 'june', 5, 'july', 6, 'august', 7,
-	'september', 8, 'october', 9, 'november', 10, 'december', 11,
-);
-my %WDay2Num = (
-	'sun', 0, 'mon', 1, 'tue', 2, 'wed', 3, 'thu', 4, 'fri', 5, 'sat', 6,
-	'sunday', 0, 'monday', 1, 'tuesday', 2, 'wednesday', 3, 'thursday', 4,
-	'friday', 5, 'saturday', 6,
+	'jan' => 0, 'january'   => 0,
+	'feb' => 1, 'february'  => 1,
+	'mar' => 2, 'march'     => 2,
+	'apr' => 3, 'april'     => 3,
+	'may' => 4, 'may'       => 4,
+	'jun' => 5, 'june'      => 5,
+	'jul' => 6, 'july'      => 6,
+	'aug' => 7, 'august'    => 7,
+	'sep' => 8, 'september' => 8,
+	'oct' => 9, 'october'   => 9,
+	'nov' => 10, 'november' => 10,
+	'dec' => 11, 'december' => 11,
 );
 
+my %WDay2Num = (
+	'sun' => 0, 'sunday'    => 0,
+	'mon' => 1, 'monday'    => 1,
+	'tue' => 2, 'tuesday'   => 2,
+	'wed' => 3, 'wednesday' => 3,
+	'thu' => 4, 'thursday'  => 4,
+	'fri' => 5, 'friday'    => 5,
+	'sat' => 6, 'saturday'  => 6,
+);
 
 =head1 FUNCTIONS
 
