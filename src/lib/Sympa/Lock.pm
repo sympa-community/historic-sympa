@@ -43,7 +43,7 @@ use Sympa::Log::Syslog;
 use Sympa::Tools::File;
 
 my %list_of_locks;
-my $default_timeout = 60 * 20; ## After this period a lock can be stolen
+my $default_timeout = 60 * 20; # After this period a lock can be stolen
 
 =head1 CLASS METHODS
 
@@ -85,7 +85,7 @@ sub new {
 		'method'        => $params{method}
 	};
 
-	## Create include.lock if needed
+	# Create include.lock if needed
 	my $fh;
 	unless (-f $lock_filename) {
 		unless (open $fh, ">>$lock_filename") {
@@ -181,22 +181,29 @@ sub lock {
 	my ($self, $mode) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Trying to put a lock on %s in mode %s',$self->{'lock_filename'}, $mode);
 
-	## If file was already locked by this process, we will add a new lock.
-	## We will need to create a new lock if the state must change.
+	# If file was already locked by this process, we will add a new lock.
+	# We will need to create a new lock if the state must change.
 	if ($list_of_locks{$self->{'lock_filename'}}{'fh'}) {
 
-		## If the mode for the new lock is 'write' and was previously 'read'
-		## then we unlock and redo a lock
+		# If the mode for the new lock is 'write' and was previously
+		# 'read' then we unlock and redo a lock
 		if ($mode eq 'write' && $list_of_locks{$self->{'lock_filename'}}{'mode'} eq 'read') {
 			Sympa::Log::Syslog::do_log('debug', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
-			## First release previous lock
+			# First release previous lock
 			return undef unless ($self->_remove_lock());
-			## Next, lock in write mode
-			## WARNING!!! This exact point of the code is a critical point, as any file lock this process could have
-			## is currently released. However, we are supposed to have a 'read' lock! If any OTHER process has a read lock on the file, we won't
-			## be able to add the new lock. While waiting, the other process can perfectly switch to 'write' mode and start writing
-			## in the file THAT OTHER PARTS OF THIS PROCESS ARE CURRENTLY READING. Consequently, if add_lock can't create a lock at its
-			## first attempt, it will first try to put a read lock instead. failing that, it will return undef for lock conflicts reasons.
+			# Next, lock in write mode
+			# WARNING!!! This exact point of the code is a
+			# critical point, as any file lock this process could
+			# have is currently released. However, we are supposed
+			# to have a 'read' lock! If any OTHER process has a
+			# read lock on the file, we won't be able to add the
+			# new lock. While waiting, the other process can
+			# perfectly switch to 'write' mode and start writing
+			# in the file THAT OTHER PARTS OF THIS PROCESS ARE
+			# CURRENTLY READING. Consequently, if add_lock can't
+			# create a lock at its first attempt, it will first
+			# try to put a read lock instead. failing that, it
+			# will return undef for lock conflicts reasons.
 			if ($self->_add_lock($mode,-1)) {
 				push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
 			}
@@ -205,14 +212,15 @@ sub lock {
 			}
 			return 1;
 		}
-		## Otherwise, the previous lock was probably a 'read' lock, so no worries, just increase the locks count.
+		# Otherwise, the previous lock was probably a 'read' lock, so
+		# no worries, just increase the locks count.
 		Sympa::Log::Syslog::do_log('debug', "No need to change filesystem or NFS lock for %s. Just increasing count.", $self->{'lock_filename'});
 		push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, 'read';
 		Sympa::Log::Syslog::do_log('debug', "Locked %s again; total locks: %d", $self->{'lock_filename'}, $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1);
 		return 1;
 	}
 
-	## If file was not locked by this process, just *create* the lock.
+	# If file was not locked by this process, just *create* the lock.
 	else {
 		if ($self->_add_lock($mode)) {
 			push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
@@ -247,28 +255,37 @@ sub unlock {
 	my $previous_mode;
 	my $current_mode;
 
-	## If it is not the last lock on the file, we revert the lock state to the previous lock.
+	# If it is not the last lock on the file, we revert the lock state to
+	# the previous lock.
 	if ($#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} > 0) {
 		$previous_mode = pop @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}};
 		$current_mode = @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}[$#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}];
 
-		## If the new lock mode is different from the one we just removed, we need to create a new file lock.
+		# If the new lock mode is different from the one we just
+		# removed, we need to create a new file lock.
 		if ($previous_mode eq 'write' && $current_mode eq 'read') {
 			Sympa::Log::Syslog::do_log('debug3', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
 
-			## First release previous lock
+			# First release previous lock
 			return undef unless($self->_remove_lock());
 
-			## Next, lock in write mode
-			## WARNING!!! This exact point of the code is a critical point, as any file lock this process could have
-			## is currently released. However, we are supposed to have a 'read' lock! If any OTHER process has a read lock on the file, we won't
-			## be able to add the new lock. While waiting, the other process can perfectly switch to 'write' mode and start writing
-			## in the file THAT OTHER PARTS OF THIS PROCESS ARE CURRENTLY READING. Consequently, if add_lock can't create a lock at its
-			## first attempt, it will first try to put a read lock instead. failing that, it will return undef for lock conflicts reasons.
+			# Next, lock in write mode
+			# WARNING!!! This exact point of the code is a
+			# critical point, as any file lock this process could
+			# have is currently released. However, we are supposed
+			# to have a 'read' lock! If any OTHER process has a
+			# read lock on the file, we won't be able to add the
+			# new lock. While waiting, the other process can
+			# perfectly switch to 'write' mode and start writing
+			# in the file THAT OTHER PARTS OF THIS PROCESS ARE
+			# CURRENTLY READING. Consequently, if add_lock can't
+			# create a lock at its first attempt, it will first
+			# try to put a read lock instead. failing that, it
+			# will return undef for lock conflicts reasons.
 			return undef unless ($self->_add_lock($current_mode,-1));
 		}
 	}
-	## Otherwise, just delete the last lock.
+	# Otherwise, just delete the last lock.
 	else {
 		return undef unless($self->_remove_lock());
 		$previous_mode = pop @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}};
@@ -277,13 +294,16 @@ sub unlock {
 	return 1;
 }
 
-## Called by lock() or unlock() when these function need to add a lock (i.e. on the file system or NFS).
+# Called by lock() or unlock() when these function need to add a lock (i.e. on
+# the file system or NFS).
 sub _add_lock {
 	my ($self, $mode, $timeout) = @_;
 
-	## If the $timeout value is -1, it means that we will try to put a lock only once. This is to be used when we are
-	## changing the lock mode (from write to read and reverse) and we then  release the file lock to create a new one AND
-	## we have previous locks pending in the same process on the same file.
+	# If the $timeout value is -1, it means that we will try to put a lock
+	# only once. This is to be used when we are changing the lock mode
+	# (from write to read and reverse) and we then  release the file lock
+	# to create a new one AND we have previous locks pending in the same
+	# process on the same file.
 	unless($timeout) {
 		$timeout = $list_of_locks{$self->{'lock_filename'}}{'timeout'} || $default_timeout;
 	}
@@ -305,7 +325,8 @@ sub _add_lock {
 	return 1;
 }
 
-## Called by lock() or unlock() when these function need to remove a lock (i.e. on the file system or NFS).
+# Called by lock() or unlock() when these function need to remove a lock (i.e.
+# on the file system or NFS).
 sub _remove_lock {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
@@ -316,13 +337,15 @@ sub _remove_lock {
 		my $nfs_lock = $list_of_locks{$self->{'lock_filename'}}{'nfs_lock'};
 		unless (defined $fh && defined $nfs_lock && _unlock_nfs($self->{'lock_filename'}, $fh, $nfs_lock)) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
-			$list_of_locks{$self->{'lock_filename'}} = undef; ## Clean the list of locks anyway
+			# Clean the list of locks anyway
+			$list_of_locks{$self->{'lock_filename'}} = undef;
 			return undef;
 		}
 	}else {
 		unless (defined $fh && _unlock_file($self->{'lock_filename'}, $fh)) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
-			$list_of_locks{$self->{'lock_filename'}} = undef; ## Clean the list of locks anyway
+			# Clean the list of locks anyway
+			$list_of_locks{$self->{'lock_filename'}} = undef;
 			return undef;
 		}
 	}
@@ -330,7 +353,7 @@ sub _remove_lock {
 	return 1
 }
 
-## Locks a file - pure interface with the filesystem
+# Locks a file - pure interface with the filesystem
 sub _lock_file {
 	my ($lock_file, $mode, $timeout) = @_;
 	Sympa::Log::Syslog::do_log('debug3', '(%s,%s,%d)',$lock_file, $mode,$timeout);
@@ -345,7 +368,7 @@ sub _lock_file {
 		$open_mode = '>';
 	}
 
-	## Read access to prevent "Bad file number" error on Solaris
+	# Read access to prevent "Bad file number" error on Solaris
 	my $fh;
 	my $untainted_lock_mode = sprintf("%s%s",$open_mode,$lock_file);
 	unless (open $fh, $untainted_lock_mode) {
@@ -361,7 +384,8 @@ sub _lock_file {
 		}
 		Sympa::Log::Syslog::do_log('notice','Waiting for %s lock on %s', $mode, $lock_file);
 
-		## If lock was obtained more than 20 minutes ago, then force the lock
+		# If lock was obtained more than 20 minutes ago, then force
+		# the lock
 		if ( (time - (stat($lock_file))[9] ) >= $timeout) {
 			Sympa::Log::Syslog::do_log('debug3','Removing lock file %s', $lock_file);
 			unless (unlink $lock_file) {
@@ -377,7 +401,7 @@ sub _lock_file {
 
 		$got_lock = undef;
 		my $max = 10;
-		$max = 2 if ($ENV{'HTTP_HOST'}); ## Web context
+		$max = 2 if ($ENV{'HTTP_HOST'}); # Web context
 		for (my $i = 1; $i < $max; $i++) {
 			sleep (10 * $i);
 			if (flock ($fh, $operation | LOCK_NB)) {
@@ -391,7 +415,7 @@ sub _lock_file {
 	if ($got_lock) {
 		Sympa::Log::Syslog::do_log('debug3', 'Got lock for %s on %s', $mode, $lock_file);
 
-		## Keep track of the locking PID
+		# Keep track of the locking PID
 		if ($mode eq 'write') {
 			print $fh "$PID\n";
 		}
@@ -403,7 +427,7 @@ sub _lock_file {
 	return $fh;
 }
 
-## Unlocks a file - pure interface with the filesystem
+# Unlocks a file - pure interface with the filesystem
 sub _unlock_file {
 	my ($lock_file, $fh) = @_;
 	Sympa::Log::Syslog::do_log('debug3', '(%s)',$lock_file);
@@ -423,7 +447,8 @@ sub _lock_nfs {
 	my ($lock_file, $mode, $timeout) = @_;
 	Sympa::Log::Syslog::do_log('debug3', "($lock_file, $mode, $timeout)");
 
-	## TODO should become a configuration parameter, used with or without NFS
+	# TODO should become a configuration parameter, used with or without
+	# NFS
 	my $hold = 30;
 	my ($open_mode, $operation);
 
@@ -443,7 +468,7 @@ sub _lock_nfs {
 				blocking_timeout   => $hold,
 				stale_lock_timeout => $timeout,
 			})) {
-		## Read access to prevent "Bad file number" error on Solaris
+		# Read access to prevent "Bad file number" error on Solaris
 		$FH = FileHandle->new();
 		unless (open $FH, $open_mode.$lock_file) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
