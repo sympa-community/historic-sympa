@@ -45,76 +45,6 @@ use Sympa::Tools::File;
 
 =head1 FUNCTIONS
 
-=head2 remove_pid(%parameters)
-
-Remove PID file and STDERR output.
-
-=head3 Parameters
-
-=over
-
-=item * I<file>: FIXME
-
-=item * I<pid>: FIXME
-
-=item * I<options>: FIXME
-
-=item * I<tmpdir>: FIXME
-
-=back
-
-=cut
-
-sub remove_pid {
-	my (%params) = @_;
-
-	## If in multi_process mode (bulk.pl for instance can have child processes)
-	## Then the pidfile contains a list of space-separated PIDs on a single line
-	if($params{options}->{'multiple_process'}) {
-		unless(open(PFILE, $params{file})) {
-			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
-			return undef;
-		}
-		my $l = <PFILE>;
-		close PFILE;
-		my @pids = grep {/[0-9]+/} split(/\s+/, $l);
-		@pids = grep {!/^$params{pid}$/} @pids;
-
-		## If no PID left, then remove the file
-		if($#pids < 0) {
-			## Release the lock
-			unless(unlink $params{file}) {
-				Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
-				return undef;
-			}
-		}else{
-			if(-f $params{file}) {
-				unless(open(PFILE, '> '.$params{file})) {
-					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
-					return undef;
-				}
-				print PFILE join(' ', @pids)."\n";
-				close(PFILE);
-			}else{
-				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $params{file});
-			}
-		}
-	}else{
-		unless(unlink $params{file}) {
-			Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
-			return undef;
-		}
-		my $err_file = $params{tmpdir}.'/'.$params{pid}.'.stderr';
-		if(-f $err_file) {
-			unless(unlink $err_file) {
-				Sympa::Log::Syslog::do_log('err', "Failed to remove $err_file: %s", $ERRNO);
-				return undef;
-			}
-		}
-	}
-	return 1;
-}
-
 =head2 write_pid(%parameters)
 
 =head3 Parameters
@@ -246,6 +176,95 @@ sub write_pid {
 	return 1;
 }
 
+=head2 remove_pid(%parameters)
+
+Remove PID file and STDERR output.
+
+=head3 Parameters
+
+=over
+
+=item * I<file>: FIXME
+
+=item * I<pid>: FIXME
+
+=item * I<options>: FIXME
+
+=item * I<tmpdir>: FIXME
+
+=back
+
+=cut
+
+sub remove_pid {
+	my (%params) = @_;
+
+	## If in multi_process mode (bulk.pl for instance can have child processes)
+	## Then the pidfile contains a list of space-separated PIDs on a single line
+	if($params{options}->{'multiple_process'}) {
+		unless(open(PFILE, $params{file})) {
+			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
+			return undef;
+		}
+		my $l = <PFILE>;
+		close PFILE;
+		my @pids = grep {/[0-9]+/} split(/\s+/, $l);
+		@pids = grep {!/^$params{pid}$/} @pids;
+
+		## If no PID left, then remove the file
+		if($#pids < 0) {
+			## Release the lock
+			unless(unlink $params{file}) {
+				Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
+				return undef;
+			}
+		}else{
+			if(-f $params{file}) {
+				unless(open(PFILE, '> '.$params{file})) {
+					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
+					return undef;
+				}
+				print PFILE join(' ', @pids)."\n";
+				close(PFILE);
+			}else{
+				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $params{file});
+			}
+		}
+	}else{
+		unless(unlink $params{file}) {
+			Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
+			return undef;
+		}
+		my $err_file = $params{tmpdir}.'/'.$params{pid}.'.stderr';
+		if(-f $err_file) {
+			unless(unlink $err_file) {
+				Sympa::Log::Syslog::do_log('err', "Failed to remove $err_file: %s", $ERRNO);
+				return undef;
+			}
+		}
+	}
+	return 1;
+}
+
+=head2 get_pids_in_pid_file($pidfile)
+
+Returns the list of pid identifiers in the pid file.
+
+=cut
+
+sub get_pids_in_pid_file {
+	my ($pidfile) = @_;
+
+	unless (open(PFILE, $pidfile)) {
+		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$pidfile,$ERRNO);
+		return undef;
+	}
+	my $l = <PFILE>;
+	close PFILE;
+	my @pids = grep {/[0-9]+/} split(/\s+/, $l);
+	return \@pids;
+}
+
 =head2 direct_stderr_to_file(%parameters)
 
 =head3 Parameters
@@ -300,25 +319,6 @@ sub send_crash_report {
 		$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
 	}
 	Sympa::List::send_notify_to_listmaster('crash', $params{'domain'}, {'crashed_process' => $params{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $params{'pid'}});
-}
-
-=head2 get_pids_in_pid_file($pidfile)
-
-Returns the list of pid identifiers in the pid file.
-
-=cut
-
-sub get_pids_in_pid_file {
-	my ($pidfile) = @_;
-
-	unless (open(PFILE, $pidfile)) {
-		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$pidfile,$ERRNO);
-		return undef;
-	}
-	my $l = <PFILE>;
-	close PFILE;
-	my @pids = grep {/[0-9]+/} split(/\s+/, $l);
-	return \@pids;
 }
 
 sub get_children_processes_list {
