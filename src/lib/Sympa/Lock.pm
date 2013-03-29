@@ -137,9 +137,7 @@ sub set_timeout {
 	return 1;
 }
 
-=head1 CLASS METHODS
-
-=head2 Sympa::Lock->get_lock_count()
+=head2 $self->get_lock_count()
 
 =cut
 
@@ -158,8 +156,6 @@ sub get_file_handle {
 
 	return $list_of_locks{$self->{'lock_filename'}}{'fh'};
 }
-
-=head1 INSTANCE METHODS
 
 =head2 $lock->lock($mode)
 
