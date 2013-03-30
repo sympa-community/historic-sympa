@@ -69,7 +69,7 @@ sub registerPlugin($)
             my $handler = $settings->{handler};
 
             $main::comm{$command} = sub
-              { log(debug2 => "$command(@_)");
+              { log(debug2 => "plugin $command");
                 $handler->
                   ( in       => \%main::in
                   , param    => $main::param
@@ -158,8 +158,8 @@ sub upgrade(%)
     eval "require $upgrade_class"
 
 # XXX MO: upgrades yet to be implemented in most plugins
-#       or fatal "cannot upgrade via $upgrade_class: $@";
-or return $class->VERSION;
+        or fatal "cannot upgrade via $upgrade_class: $@";
+#or return $class->VERSION;
 
     return $upgrade_class->upgrade(from => $from, to => $class->VERSION)
         if $from;

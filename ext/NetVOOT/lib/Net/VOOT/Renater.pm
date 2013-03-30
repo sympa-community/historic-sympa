@@ -54,7 +54,6 @@ sub init($)
 =cut
 
 sub auth()        {shift->{NVR_auth}}
-
 sub authType()    { 'OAuth1' }
 
 #---------------------------
@@ -84,50 +83,47 @@ sub get($$$)
     $resp;
 }
 
-#---------------------------
-=section Sessions
-
-
+=method getAuthorizationStarter SESSION
 =cut
 
-sub newSession(%)
-{   my ($self, %args) = @_;
-
-    my $user    = $args{user};
-    my $prov_id = $args{provider};
-
-    my $auth    = $self->auth;
-    my $tmp     = $auth->get_request_token(callback_url => $args{callback});
-
-    unless($tmp)
-    {   error __x"unable to get tmp token for {user} {provider}: {err}"
-           , $user, $prov_id, $auth->errstr;
-        return undef;
-    }
-
-    +{ user => $user, provider => $prov_id, tmp => $tmp };
+sub getAuthorizationStarter($)
+{   my ($self, $session) = @_;
+    $self->auth->url_to_authorize(token => $session->requestToken);
 }
 
-sub restoreSession($$$)
-{   my ($self, $user, $provider, $data) = @_;
-    my $session     = $self->newSession($user, $provider);
+=section Session
 
-    $session->{tmp} = OAuth::Lite::Token->new
-      ( token  => $data->{tmp_token}
-      , secret => $data->{tmp_secret}
-      ) if $data->{tmp_token};
+The session is managed outside the scope of this module.  However, it
+is a HASH which contains a C<request> (request token) and C<access>
+(access token) field.  Both may be either undefined or an
+L<OAuth::Lite::Token>.
 
-    $session->{access} = OAuth::Lite::Token->new
-      ( token  => $data->{access_token},
-      , secret => $data->{access_secret}
-      ) if $data->{access_token};
+=method getRequestToken CALLBACK
+=cut
 
-    $session;
+sub getRequestToken($$)
+{   my ($self, $callback) = @_;
+
+    my $req_token = $self->auth->get_request_token(callback_url => $callback)
+        or error __x"unable to get request token: {err}", $auth->errstr;
+
+    $session->{request} = $req_token;
+}
+
+=method requestToken SESSION
+=cut
+
+sub requestToken($)
+{   my ($self, $session) = @_;
+    $session->{request};
 }
 
 =method accessToken SESSION
 =cut
 
-sub accessToken($) { $_[1]->{access} }
+sub accessToken($)
+{   my ($self, $session) = @_;
+    $session->{access};
+}
 
 1;

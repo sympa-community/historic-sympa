@@ -7,7 +7,7 @@ use strict;
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
 my @func = qw/
-  default_db robot
+  default_db robot this_list
   trace_call log fatal wwslog web_db_log
   /;
 
@@ -86,7 +86,7 @@ The object returned offers the following methods:
    sub do($$@)               # I want automatic quoting
    {   my $db  = shift;
        my $sth = $db->prepared(@_);
-       undef;
+       1;
    }
 }
 
@@ -101,9 +101,13 @@ want to update the plugins, all the time.
 
 =head3 robot
 
+=head3 this_list
+
 =cut
 
 sub robot() { $main::robot_object }
+
+sub this_list() { $main::list }
 
 
 =head2 Logging

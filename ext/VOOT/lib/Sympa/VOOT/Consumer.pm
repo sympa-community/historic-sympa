@@ -57,23 +57,27 @@ sub new(%) { my ($class, %args) = @_; (bless {}, $class)->init(\%args) }
 sub init($)
 {   my ($self, $args) = @_;
     my $provider = $self->{SVP_provider} = $args->{provider};
+    my $user     = $self->{SVP_user} = $args->{user};
 
-    my $server = $provider->{server};
+    my $server   = $provider->{server};
     eval "require $server"
         or fatal "cannot load voot server class $server: $@";
 
+    # the Net::VOOT::* modules are Sympa independent
     my $voot = $self->{SVP_voot} = $server->new
       ( provider     => $provider->{id}
       , auth         => $args->{auth}
       );
 
-    my $auth_type  = $voot->authType;
-    my $store_type = "Sympa::${auth_type}::Store";
-    eval "require $store_type"
-        or fatal "cannot load store class $store_type: $@";
+    # the Sympa::OAuth*::Consumer is 'Sympa'-aware
+    my $auth_class = 'Sympa::'.$voot->authType.'::Consumer';
+    eval "require $auth_class"
+        or fatal "cannot load $auth_class: $@";
+    my $auth     = $self->{SVP_auth} = $auth_class->instance;
 
-    $self->{SVP_store} = $store_type->new(db => $args->{db} || default_db) ;
-    $self->{SVP_user}  = $args->{user};
+    # the session is the activity of the user, it may not yet exist
+    my $session  = $self->{SVP_session} 
+       = $auth->loadSession($voot, $user->{email}, $provider->{id});
 
     $self;
 }
@@ -81,23 +85,23 @@ sub init($)
 
 =head2 Accessors
 
-=head3 method: provider
+=head3 $obj->provider
 
-=head3 method: voot
+=head3 $obj->voot
 
-=head3 method: session
+=head3 $obj->session
 
-=head3 method: store
+=head3 $obj->auth
 
-=head3 method: user
+=head3 $obj->user
 
 =cut
 
-sub provider(){shift->{SVP_provider}}
-sub voot()    {shift->{SVP_voot}}
-sub session() {shift->{SVP_session}}
-sub store()   {shift->{SVP_store}}
-sub user()    {shift->{SVP_user}}
+sub provider() {shift->{SVP_provider}}
+sub voot()     {shift->{SVP_voot}}
+sub session()  {shift->{SVP_session}}
+sub auth()     {shift->{SVP_auth}}
+sub user()     {shift->{SVP_user}}
 
 
 =head2 Action
@@ -119,7 +123,12 @@ sub get($$)
 
 =over 4
 
-=item * I<callback> =E<gt> URL
+=item * param =E<gt> HASH
+
+It is a pity that the global paramers have to entry this module: the
+authorization component needs access to the url.
+
+=item * next_page =E<gt> URL
 
 =back
 
@@ -130,20 +139,17 @@ sub startAuth(%)
     trace_call($self->user->{email}, $self->provider->{id}, %args);
 
     my $voot    = $self->voot;
-    my $session = eval { $voot->newSession
-      ( user     => $self->user->{email}
-      , provider => $self->provider->{id}
-      , callback => $args{callback}
-      ) };
+    my $session = $self->auth->createSession
+      ( user      => $self->user
+      , provider  => $self->provider
+      , voot      => $voot
+      );
 
-    unless($session)
-    {   log(err => $@);
-        return undef;
-    }
+    my $callback = $self->auth
+        ->startAuth($args{param}, $session, $args{next_page});
 
-    $self->store->createSession($session);
-
-    $voot->getAuthorizationStarter;
+    # $callback is the right one for $oauth1 ?
+    $voot->getAuthorizationStarter($session);
 }
 
 =method hasAccess

@@ -12,33 +12,37 @@ Sympa::VOOT::SURFconext - how to use the VOOT plugin with SURFconext
 SURFconext is a service provided by SURFnet Nederland BV (NL)
 B<First read> L<Net::VOOT::SURFconext/DETAILS>.
 
-=head2 Setting-up a test VOOT server
+=head2 Setting-up a connection to the VOOT test-server
 
 Manual page L<Net::VOOT::SURFconext> explains how to access the test
 server.  You need the following facts:
 
 =over 4
 
-=item I<identifier>
+=item * identifier
 
 Pick a clear identifier, like C<sympa-uva> for organisation UvA.  This
 is the C<client_id> in your configuration.
 
-=item I<profile> is "Web Application".
+=item * profile
 
-=item I<redirect URI>
+Always "Web Application".
+
+=item * redirect URI
 
 This will bring people back to your own sympa installation.  The format must
 be something like
 
-  https://[your-sympa-hostname]/oauth2_ready/surfconext-test/[identifier]
+  https://[your-sympa-hostname]/oauth_ready/surfconext-test
 
-=item I<secret>
+=item * secret
 
 Be warned: everyone logs-in as the same admin user, so can see your secret.
 Fill this in as C<client_secret> in your configuration.
 
-=item Set I<Allowed Scope> to "read"
+=item * allowed scope
+
+Set to "read"
 
 =back
 
@@ -63,7 +67,7 @@ B<Note:> all records together need to be encapsulated into an ARRAY (so,
 between C<[> and C<]>.
 
 
-=head2 Setting up the "live" server
+=head2 Setting up the connection to the "live" server
 
 See L<https://wiki.surfnetlabs.nl/display/surfconextdev/> and contact
 C<help AT surfconext.nl>  They will provide you with the C<client_id> and
@@ -73,26 +77,30 @@ You need the following settings:
 
 =over 4
 
-=item I<identifier>
+=item * identifier
 
 You will get this information from SURFnet.  This is the C<client_id>
 in your configuration.
 
-=item I<profile> is "Web Application".
+=item * profile
 
-=item I<redirect URI>
+Always "Web Application".
+
+=item * redirect URI
 
 This will bring people back to your own sympa installation.  The format must
 be something like
 
-  https://[your-sympa-hostname]/oauth2_ready/surfconext/[identifier]
+  https://[your-sympa-hostname]/oauth_ready/surfconext
 
-=item I<secret>
+=item * secret
 
 You will get this from SURFnet.
 Fill this in as C<client_secret> in your configuration.
 
-=item Set I<Allowed Scope> to "read"
+=item * allowed scope
+
+Set to "read"
 
 =back
 

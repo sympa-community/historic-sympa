@@ -9,9 +9,9 @@ my %required_plugins = qw/
  /;
 
 my %optional_plugins = qw/
- Sympa::VOOT     0
- Sympa::OAuth1   0
- Sympa::OAuth2   0
+ Sympa::VOOT              0
+ Sympa::OAuth1::Consumer  0
+ Sympa::OAuth2::Consumer  0
  /;
 
 =head1 NAME
@@ -180,10 +180,10 @@ sub loadPlugin($%)
         log(notice => "optional plugin $pkg is not (completely) installed: $@");
     }
     elsif($required)
-    {   fatalor("compilation errors in required plugin $pkg: $@");
+    {   fatal("compilation errors in required plugin $pkg: $@");
     }
     else
-    {   log(alert => "compilation errors in optional module $pkg: $@");
+    {   log(err => "compilation errors in optional module $pkg: $@");
     }
 
     return 0;

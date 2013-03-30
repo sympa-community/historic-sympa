@@ -4,21 +4,35 @@
 
 <p>[%|loc%]Hereafter is the list of the groups you accepted to share with Sympa. Select which group you want members to be included in your list.[%END%]</p>
 
-<form action="[% path_cgi %]" method="post">
-  <fieldset>
-    <input type="hidden" name="list" value="[% list %]" />
-    <input type="hidden" name="voot_provider" id="voot_provider" value="[% voot_provider %]" />
-    <ul>
-  [% FOREACH group = voot_groups %]
-    <li><input type="checkbox" name="voot_groups[[% group.key %]]" value="1" />
-         [% group.value.name %] ([% group.value.voot_membership_role %])
-  [%IF group.value.description %]<p class="description">[% group.value.description %]</p>[%END%]
-         </li>
-  [%END%]
-    </ul>
+<p>[%|loc%]VOOT groups at privider[%END%] [% voot_provider.name %]:</p>
 
-    <input type="submit" name="action_select_voot_groups" value="[%|loc%]Set as source[%END%]" />
-  </fieldset>
+[% IF voot_groups %]
+
+<form action="[% path_cgi %]" method="post">
+<input type="hidden" name="list" value="[% list %]" />
+<input type="hidden" name="voot_provider" id="voot_provider" value="[% voot_provider.id %]" />
+<table>
+<tr><th>[%|loc%]use?[%END%]</th>
+    <th>[%|loc%]name[%END%]</th>
+    <th>[%|loc%]your role[%END%]</th></tr>
+  [% FOREACH group = voot_groups %]
+<tr><td><input type="checkbox" name="voot_groups[[% group.id %]]"
+           value="[% group.selected %]" /></td>
+    <td>[% group.name %]</td>
+    <td>[% group.role %]</td></tr>
+    [% IF group.description %]
+<tr><td colspan="3"><p class="description">[% group.description %]</p></td></tr>
+    [%END%]
+  [%END%]
+</table><br>
+<input type="submit" name="action_select_voot_groups" value="[%|loc%]Set as source[%END%]" />
 </form>
+
+[% ELSE %]
+<ul>
+<li>[%|loc%]You have no group memberships in VOOT.[%END%]</li>
+</ul>
+[%END%]
+
 
 </div>

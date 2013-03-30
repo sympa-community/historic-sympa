@@ -9,10 +9,11 @@ use Log::Report 'net-voot';
 use Net::OAuth2::Profile::WebServer ();
 use Scalar::Util qw/blessed/;
 
-my $site_test = 'https://frko.surfnetlabs.nl/frkonext/';
+my $site_test = 'https://frko.surfnetlabs.nl/frkonext';
 my $site_live = 'unknown';
 
 =chapter NAME
+
 Net::VOOT::SURFconext - access to a VOOT server of SURFnet
 
 =chapter SYNOPSIS
@@ -34,14 +35,14 @@ SURFconext uses OAuth2 authentication.
 
 =c_method new OPTIONS
 
-=default provider 'surfnet'
-When 'test' is set, then the name is 'surfnet-test'.
-
 =default voot_base <site>/php-voot-proxy/voot.php
 
 =option  test BOOLEAN
 =default test <false>
 Access the current test environment, provided by SURFnet.
+
+=default provider depends on 'test'
+When 'test' is set, then the name is 'surfconext-test', otherwise 'surfconext'
 
 =option  auth M<Net::OAuth2::Profile::WebServer>|HASH
 =default auth <created for you>
@@ -54,15 +55,19 @@ Depends whether you need the test voot server or the production environment.
 
 =option  token M<Net::OAuth2::AccessToken>-object
 =default token <requested when needed>
+
 =cut
 
 sub init($)
 {   my ($self, $args) = @_;
     my $test = delete $args->{test} || 0;
-    my $site = $self->{NVS_site}
-             = $args->{site} ||= $test ? $site_test : $site_live;
 
-    $args->{provider}  ||= 'surfnet'.($test ? '-test' : '');
+    if(my $p = $args->{provider}) { $test = $p =~ m/-test$/ }
+    else { $args->{provider} = 'surfconext'.($test ? '-test' : '') }
+
+    my $site = $self->{NVS_site}
+      = $args->{site}  ||= $test ? $site_test : $site_live;
+
     $args->{voot_base} ||= "$site/php-voot-proxy/voot.php";
 
     $self->SUPER::init($args) or return;
@@ -88,24 +93,11 @@ sub auth()     {shift->{NVS_auth}}
 sub token()    {shift->{NVS_token}}
 sub site()     {shift->{NVS_site}}
 
-#---------------------------
-=section Session
+
+=method setAccessToken TOKEN
 =cut
 
-sub newSession(%)
-{   my ($self, %args) = @_;
-    my $user    = $args{user};
-    my $prov_id = $args{provider};
-    +{ user => $user, provider => $prov_id };
-}
-
-sub restoreSession($$$)
-{   my ($self, $user, $provider, $data) = @_;
-    my $session     = $self->newSession($user, $provider);
-
-# XXX
-    $session;
-}
+sub setAccessToken($) { $_[0]->{NVS_token} = $_[1] }
 
 #---------------------------
 =section Actions
@@ -113,7 +105,11 @@ sub restoreSession($$$)
 
 sub get($)
 {   my ($self, $uri) = @_;
+my $t =
     $self->token->get($uri);
+use Data::Dumper;
+if(open OUT, '>/tmp/get_trace') { print OUT "URI=$uri\n", Dumper $t; close OUT }
+$t;
 }
 
 #---------------------------
@@ -137,7 +133,7 @@ sub createAuth(%)
     my $auth = Net::OAuth2::Profile::WebServer->new
       ( client_id         => ($args{client_id}     || panic)
       , client_secret     => ($args{client_secret} || panic)
-      , token_scheme      => 'auth-http:Bearer'
+      , token_scheme      => 'auth-header:Bearer'
 
       , site              => $site
       , authorize_path    => 'php-oauth/authorize.php'
@@ -152,15 +148,15 @@ sub createAuth(%)
     $auth;
 }
 
-=method getRequestToken OPTIONS
+=method getAccessToken OPTIONS
+=requires code STRING
 =cut
 
-sub getRequestToken()
-{
-    my $self    = shift;
-    my $auth    = $self->auth;
-    my $token; #   = $auth->get_access_token($service->{code});
-    trace 'received token from '.$self->provider. ' for '.$auth->client_id;
+sub getAccessToken(%)
+{   my ($self, %args) = @_;
+    my $auth  = $self->auth;
+    my $token = $auth->get_access_token($args{code});
+    trace 'received token from '.$self->provider. ' for '.$auth->id;
 
     $token;
 }

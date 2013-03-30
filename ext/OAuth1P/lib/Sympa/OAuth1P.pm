@@ -1,7 +1,7 @@
 use warnings;
 use strict;
 
-package Sympa::OAuth1;
+package Sympa::OAuth1P;
 use base 'Sympa::Plugin';
 
 our $VERSION = '0.10';
@@ -11,12 +11,7 @@ use Sympa::OAuth1::Provider;
 my $me = __PACKAGE__->new;
 
 my @url_commands =
-  ( oauth_check      => 
-      { handler   => sub { $me->doOAuthCheck(@_) }
-      , path_args => 'oauth_provider'
-      , required  => [ qw/param.user.email oauth_provider/ ]
-      }
-  , oauth_temporary  =>
+  ( oauth_temporary  =>
       { handler   => sub { $me->doOAuthTemporary(@_) }
       }
   , oauth_authorize  =>
@@ -29,8 +24,7 @@ my @url_commands =
   );
 
 my @validate =
-  ( oauth_provider     => '[^:]+:.+'
-  , oauth_authorize_ok => '.+'
+  ( oauth_authorize_ok => '.+'
   , oauth_authorize_no => '.+'
   , oauth_signature    => '[a-zA-Z0-9\+\/\=\%]+'
   , oauth_callback     => '[^\\\$\*\"\'\`\^\|\<\>\n]+'
@@ -76,7 +70,7 @@ sub doOAuthAuthorize(%)
     my $session = $args{session};
 
     my $token   = $param->{oauth_token} = $in->{oauth_token};
-    my $oauth1  = 'Sympa::OAuth1::Provider';
+    my $oauth1  = 'Sympa::OAuth1P::Provider';
 
     my $key     = $param->{consumer_key} = $oauth1->consumerFromToken($token)
         or return undef;
@@ -129,49 +123,10 @@ sub do_oauth_access(%)
     return 1;
 }
 
-# User asks for access token check
-sub doOAuthCheck(%)
-{   my ($self, %args) = @_;
-    my $in    = $args{in};
-    my $param = $args{params};
-
-    my $user  = $param->{user}{email};
-
-    @{$param}{ qw/oauth_prov_id_ok oauth_config_ok oauth_check_ok/ } = ();
-
-    $in->{oauth_prov_id} =~ /^([^:]+):(.+)$/
-        or return 1;
-
-    # $type is always 'voot'
-    my ($type, $prov_id) = ($1, $2);
-
-    $param->{oauth_prov_id_ok} = 1;
-
-    my $here     = "oauth_check/$in->{oauth_prov_id}";
-    my $new_ticket = Sympa::VOOT->ticketFactory($param, $here);
-    my $next     = "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id";
-
-    my $go       = sub { $next .'/'. $new_ticket->() };
-    my $consumer = Sympa::VOOT->new->consumer(user => $user, prov_id => $prov_id
-      , newflow => $go) or return 1;
-
-    $param->{oauth_config_ok} = 1;
-
-    my $data = $consumer->check;   # XXX ???
-    unless($data)
-    {   my $url = $consumer->mustRedirect;
-        return $url ? main::do_redirect($url) : 1;
-    }
-
-    $param->{oauth_check_ok}       = 1;
-    $param->{oauth_access_renewed} = defined $in->{oauth_ready_done};
-    return 1;
-}
-
 sub createProvider($$$$)
 {   my ($thing, $for, $param, $in, $check) = @_;
 
-    my $provider = Sympa::OAuth1::Provider->new
+    my $provider = Sympa::OAuth1P::Provider->new
       ( method               => $ENV{REQUEST_METHOD}
       , url                  => "$param->{base_url}$param->{path_cgi}/$for"
       , authorization_header => $ENV{HTTP_AUTHORIZATION}

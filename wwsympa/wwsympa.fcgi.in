@@ -954,15 +954,15 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 		 'change_email' => {'*email' => 'normalize'}, ## Remove leading/trailing white spaces and lowercase
 		 );
 
-# Now, load all components which are implemented as plugins.  Those will
-# add fields to above configuration.
-$plugins->start if $plugins;
-
 ## Set locale configuration	 
 $Language::default_lang = Site->lang;	 
 
 ## Important to leave this there because it defined defaults for user_data_source
 &SDM::check_db_connect();
+
+# Now, load all components which are implemented as plugins.  Those will
+# add fields to above configuration and may do database upgrades.
+$plugins->start if $plugins;
 
 ## Check that the data structure is uptodate
 ## If not, set the web interface to maintenance mode

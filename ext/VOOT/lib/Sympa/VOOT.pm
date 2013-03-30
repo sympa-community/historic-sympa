@@ -55,7 +55,7 @@ my @url_commands =
       , privilege => 'owner'
       }
   , select_voot_groups_request  =>
-      { handler   => sub { $me->doConnectProvider(@_) }
+      { handler   => sub { $me->doListVootGroups(@_) }
       , path_args => [ qw/list voot_provider/ ]
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
@@ -66,11 +66,6 @@ my @url_commands =
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
-  , oauth_ready      =>
-      { handler   => sub { $me->doOAuthReady(@_) }
-      , path_args => [ qw/oauth_provider ticket/ ]
-      , required  => [ qw/oauth_provider ticket oauth_token oauth_verifier/]
-      }
   , voot =>
       { handler   => sub { $me->doVoot(@_) }
       , path_args => '@voot_path'
@@ -78,7 +73,8 @@ my @url_commands =
   );
 
 my @validate =
-  ( voot_path => '[^<>\\\*\$\n]+'
+  ( voot_path     => '[^<>\\\*\$\n]+'
+  , voot_provider => '[\w-]+'
   );  
 
 my @fragments =
@@ -133,12 +129,10 @@ sub registerPlugin($)
 
 =head2 Constructors
 
-=over 4
-
-=head3 class method: new OPTIONS
+=head3 $class->new(OPTIONS)
 
 OPTIONS:
-   config FILENAME|HASH       voot configuration file (default voot.conf)
+ config FILENAME|HASH   voot configuration file (default voot.conf)
 
 =cut
 
@@ -168,11 +162,17 @@ sub init($)
 }
 
 
+=head3 my $obj = $class->instance
+
+=cut
+
+sub instance() { $me }
+
 =head2 Accessors
 
-=head3 method: config
+=head3 $obj->config
 
-=head3 method: configFilename
+=head3 $obj->configFilename
 
 =cut
 
@@ -182,7 +182,7 @@ sub configFilename() { shift->{SV_config_fn} }
 
 =head2 Configuration handling
 
-=head3 readConfig FILENAME
+=head3 $thing->readConfig(FILENAME)
 
 =cut
 
@@ -203,7 +203,7 @@ sub readConfig($)
     $config;
 }
 
-=head3 consumer PARAM, ID|NAME, OPTIONS
+=head3 $obj->consumer(PARAM, ID|NAME, OPTIONS)
 
 Returns the object which handles the selected provider, an extension
 of L<Net::VOOT>.
@@ -235,8 +235,10 @@ sub consumer($$@)
          for keys %$info;
 
     my $auth = $auth1 && keys %$auth1 ? $auth1 : $info->{oauth2};
+
+    # MO: ugly, only used for oauth2 right now.
     $auth->{redirect_uri} ||=
-      "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id";
+     "$param->{base_url}$param->{path_cgi}/oauth2_ready/$prov_id";
 
     my $consumer = eval {
         Sympa::VOOT::Consumer->new
@@ -252,9 +254,9 @@ sub consumer($$@)
     $consumer;
 }
 
-=head3 method: providerConfigs
+=head3 $obj->providerConfigs
 
-=head3 method: providers
+=head3 $obj->providers
 
 =cut
 
@@ -268,14 +270,19 @@ sub providers()
 
 =head2 Web interface actions
 
+=head3 $obj->doOpenSocial
+
 =cut
 
-# Provide nice url
 sub doOpenSocial {
+    # Currently nice interface to select groups
     return 'select_voot_provider_request';
 }
 
-# Displays VOOT providers list in the /opensocial page
+=head3 $obj->doSelectProvider
+
+=cut
+
 sub doSelectProvider(%)
 {   my ($self, %args) = @_;
     my $param = $args{param};
@@ -291,38 +298,59 @@ sub doSelectProvider(%)
     return 1;
 }
 
-sub newTicket($$)
-{   my ($thing, $param, $come_back) = @_;
-    my $session  = $param->{session};
-    my $ip       = $session->{remote_addr} || 'mail';
-    Auth::create_one_time_ticket($param->{user}{email}, $session->{robot}
-      , $come_back, $ip);
-}
+=head3 $obj->doListVootGroups
 
-# Display groups list for user/VOOT_provider
-sub doConnectProvider(%)
+=cut
+
+sub doListVootGroups(%)
 {   my ($self, %args) = @_;
 
     my $in       = $args{in};
     my $param    = $args{param};
     my $robot_id = $args{robot};
   
-    my $prov_id  = $param->{voot_provider} = $in->{voot_provider};
-    my $list     = $param->{list};
+    my $prov_id  = $in->{voot_provider};
 
     wwslog(info => "get voot groups of $param->{user}{email} for provider $prov_id");
 
     my $consumer = $self->consumer($param, $prov_id);
     unless($consumer->hasAccess)
-    {   my $ticket  = $self->newTicket($param, "select_voot_groups_request/$list/$prov_id");
-        my $bouncer = "$param->{base_url}$param->{path_cgi}/oauth_ready/$prov_id/$ticket";
-
-        my $goto = $consumer->startAuth(callback => $bouncer);
-        return $goto ? main::do_redirect($goto) : 1;
+    {   my $here = "select_voot_groups_request/$param->{list}/$prov_id";
+        return $self->getAccessFor($consumer, $param, $here);
     }
 
-    $param->{voot_groups} = [ $consumer->voot->userGroups ]; 
-    return 1;
+    $param->{voot_provider} = $consumer->provider;
+
+    # Request groups
+    my $groups   = eval { $consumer->voot->userGroups };
+    if($@)
+    {   $param->{error} = 'failed to get user groups';
+        return 1;
+    }
+
+    # Keep all previously selected groups selected
+    $_->{selected} = 0 for values %$groups;
+    if(my $list  = this_list)
+    {   foreach my $gid ($list->include('voot_groups'))
+        {   my $group = $groups->{$gid} or next;
+            $group->{selected} = 1;
+        }
+    }
+
+    # XXX: needs to become language specific sort
+    $param->{voot_groups} = [sort {$a->{name} cmp $b->{name}} values %$groups]
+        if $groups && keys %$groups;
+
+use Data::Dumper;
+log(info => "VOOT got ".Dumper $param->{voot_groups});
+    1;
+}
+
+sub getAccessFor($$$)
+{   my ($self, $consumer, $param, $here) = @_;
+    my $goto  = $consumer->startAuth(param => $param, next_page => $here);
+    log(info => "going for access at $goto");
+    $goto ? main::do_redirect($goto) : 1;
 }
 
 # VOOT request
@@ -365,6 +393,9 @@ __HEADER
     return 1;
 }
 
+=head3 $obj->doAcceptVootGroup
+=cut
+
 # VOOT groups choosen, generate config
 sub doAcceptVootGroup(%)
 {   my ($self, %args) = @_;
@@ -376,6 +407,7 @@ sub doAcceptVootGroup(%)
     my $provider = $param->{voot_provider} = $in->{voot_provider};
     my $email    = $param->{user}{email};
 
+    # Get all the voot_groups fields from the form
     my @groups;
     foreach my $k (keys %$in)
     {   $k =~ /^voot_groups\[([^\]]+)\]$/ or next;
@@ -383,6 +415,7 @@ sub doAcceptVootGroup(%)
     }
     $param->{voot_groups}  = \@groups;
 
+    my $list     = $main::list;
     my @include_voot_group = @{$list->include_voot_group};    
     foreach my $gid (@groups)
     {   push @include_voot_group,
@@ -415,43 +448,59 @@ sub doAcceptVootGroup(%)
     {   report::reject_report_web('intern', 'sync_include_failed'
            , {}, $action, $list, $email, $robot_id);
     }
-    return 'review';
+
+    'review';
 }
-
-# token and call the right action
-sub doOAuthReady(%)
-{   my ($self, %args) = @_;
-    my $in    = $args{in};
-    my $param = $args{param};
-
-    my $callback = main::do_ticket();
-
-    $in->{oauth_ready_done} = 1;
-
-    $in->{oauth_provider}   =~ /^([^:]+):(.+)$/
-        or return undef;
-
-    my ($type, $prov_id) = ($1, $2);
-
-    my $consumer = $self->consumer($param, $prov_id)
-        or return undef;
-
-    $consumer->voot->getAccessToken
-      ( verifier => $in->{oauth_verifier}
-      , token    => $in->{oauth_token}
-      );
-
-    return $callback;
-}
-
-
-
 
 1;
 
 __END__
 
 =head1 DETAILS
+
+The VOOT protocol is a subset of OpenSocial, used to share information
+about users and groups of users between organisations.  You may find
+more information at L<http://www.openvoot.org>.
+
+=head2 Using VOOT
+
+To be able to use VOOT with Sympa, you need to
+
+=over 4
+
+=item * install the plugins,
+
+=item * create a configuration file F<voot.conf>, and
+
+=item * configure to use some VOOT group for a mailinglist.
+
+=back
+
+=head2 Using a VOOT group
+
+Go, as administrator of a mailinglist first to the OpenSocial menu-entry at
+the left.  If you do not see that "OpenSocial" entry, the software is not
+installed (correctly).  Search the logs for errors while loading the
+plugins.
+
+Then pick a provider.  Authenticate yourself for that provider.  Then select
+a group you are member of.
+
+Per list you need the group for, go to tab 'admin/Edit List Config/Data
+sources setup' block VOOT.
+
+=head2 Setting-up VOOT
+
+There are few VOOT server implementations.  Read more about how
+to use them with Sympa in their specific man-pages:
+
+=over 4
+
+=item L<Sympa::VOOT::SURFconext>, SURFnet NL using OAuth2
+
+=item L<Sympa::VOOT::Renater>, Renater FR using OAuth (v1)
+
+=back
 
 =head2 Description of the VOOT file
 
@@ -471,20 +520,5 @@ Fields:
    voot.ServerClass    implementation (defaults to Net::VOOT::Renater)
    oauth  => HASH      parameters to Sympa::OAuth1::new()
    oauth2 => HASH      parameters to Sympa::OAuth2::new()
-
-=head2 Setting-up VOOT
-
-See the manual pages for specific server implementations:
-
-=over 4
-
-=item L<Sympa::VOOT::SURFconext>, SURFnet NL using OAuth2
-
-=item L<Sympa::VOOT::Renater>, Renater FR using OAuth (v1)
-
-=back
-
-=back
-
 
 =cut
