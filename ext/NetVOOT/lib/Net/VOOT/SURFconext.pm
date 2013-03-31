@@ -9,7 +9,7 @@ use Log::Report 'net-voot';
 use Net::OAuth2::Profile::WebServer ();
 use Scalar::Util qw/blessed/;
 
-my $site_test = 'https://frko.surfnetlabs.nl/frkonext';
+my $site_test = 'https://frko.surfnetlabs.nl/frkonext/';
 my $site_live = 'unknown';
 
 =chapter NAME
@@ -105,11 +105,7 @@ sub setAccessToken($) { $_[0]->{NVS_token} = $_[1] }
 
 sub get($)
 {   my ($self, $uri) = @_;
-my $t =
     $self->token->get($uri);
-use Data::Dumper;
-if(open OUT, '>/tmp/get_trace') { print OUT "URI=$uri\n", Dumper $t; close OUT }
-$t;
 }
 
 #---------------------------
@@ -161,7 +157,10 @@ sub getAccessToken(%)
     $token;
 }
 
-sub hasAccess() { defined shift->token }
+sub hasAccess()
+{   my $token = shift->token;
+    $token && !$token->expired;
+}
 
 sub getAuthorizationStarter()
 {   shift->auth->authorize(scope => 'read');

@@ -98,11 +98,11 @@ is a HASH which contains a C<request> (request token) and C<access>
 (access token) field.  Both may be either undefined or an
 L<OAuth::Lite::Token>.
 
-=method getRequestToken CALLBACK
+=method getRequestToken SESSION, CALLBACK
 =cut
 
 sub getRequestToken($$)
-{   my ($self, $callback) = @_;
+{   my ($self, $session, $callback) = @_;
 
     my $req_token = $self->auth->get_request_token(callback_url => $callback)
         or error __x"unable to get request token: {err}", $auth->errstr;

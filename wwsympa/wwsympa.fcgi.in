@@ -18309,7 +18309,7 @@ sub get_safe_robot_conf {
 	   color_4 color_5 color_6 color_7 color_8 color_9 color_10 color_11
 	   color_12 color_13 color_14 color_15
 	   reporting_spam_script_path automatic_list_families
-	   voot_feature your_lists_size
+	   your_lists_size
     )) {
 	 $param->{'conf'}{$p} = $robot->$p;
 	 $param->{$p} = $robot->$p if $p =~ /_color$/ or $p =~ /color_/;

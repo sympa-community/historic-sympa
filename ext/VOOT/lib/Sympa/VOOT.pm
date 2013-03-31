@@ -1,5 +1,5 @@
 package Sympa::VOOT;
-use base 'Sympa::Plugin';
+use base 'Sympa::Plugin', 'Sympa::Plugin::ListSource';
 
 use warnings;
 use strict;
@@ -22,6 +22,9 @@ my $default_server = 'Net::VOOT::Renater';
 Sympa::VOOT - manage VOOT use in Sympa
 
 =head1 SYNOPSIS
+
+  # extends Sympa::Plugin
+  # extends Sympa::Plugin::ListSource
 
   my $voot = Sympa::VOOT->new(config => $filename);
 
@@ -66,10 +69,6 @@ my @url_commands =
       , required  => [ qw/param.user.email param.list/ ]
       , privilege => 'owner'
       }
-  , voot =>
-      { handler   => sub { $me->doVoot(@_) }
-      , path_args => '@voot_path'
-      }
   );
 
 my @validate =
@@ -82,8 +81,7 @@ my @fragments =
   , help_editlist => 'help_editlist_voot.tt2'
   );
 
-my @provider_names;
-my %include_voot_form =
+my %include_voot_group =
   ( group      => 'data_source'
   , gettext_id => 'VOOT group inclusion'
   , occurrence => '0-n'
@@ -95,7 +93,7 @@ my %include_voot_form =
         }
      , provider => 
         { gettext_id => 'provider'
-        , format     => \@provider_names
+        , format     => '\S+'
         }
      , user =>
         { gettext_id => 'user'
@@ -119,7 +117,7 @@ sub registerPlugin($)
       , tt2_fragments => \@fragments
       };
     push @{$args->{listdef}},
-      ( include_voot_group => \%include_voot_form
+      ( include_voot_group => \%include_voot_group
       );
 
     $class->SUPER::registerPlugin($args);
@@ -155,8 +153,7 @@ sub init($)
         $self->{SV_config_fn} = $config;
     }
 
-    # for config chooser
-    @provider_names = $self->providers;
+    $self->Sympa::Plugin::ListSource::init( { name => 'voot_group' });
 
     $self;
 }
@@ -240,11 +237,15 @@ sub consumer($$@)
     $auth->{redirect_uri} ||=
      "$param->{base_url}$param->{path_cgi}/oauth2_ready/$prov_id";
 
+    # Sometimes, we only have an email address of the user
+    my $user     = $param->{user};
+    ref $user eq 'HASH' or $user = { email => $user };
+
     my $consumer = eval {
         Sympa::VOOT::Consumer->new
           ( provider => \%provider
           , auth     => $auth
-          , user     => $param->{user}
+          , user     => $user
           , @args
           )};
 
@@ -325,15 +326,16 @@ sub doListVootGroups(%)
     my $groups   = eval { $consumer->voot->userGroups };
     if($@)
     {   $param->{error} = 'failed to get user groups';
+        log(err => "failed to get user groups: $@");
         return 1;
     }
 
     # Keep all previously selected groups selected
-    $_->{selected} = 0 for values %$groups;
+    $_->{selected} = '' for values %$groups;
     if(my $list  = this_list)
-    {   foreach my $gid ($list->include('voot_groups'))
-        {   my $group = $groups->{$gid} or next;
-            $group->{selected} = 1;
+    {   foreach my $included ($list->includes('voot_group'))
+        {   my $group = $groups->{$included->{group}} or next;
+            $group->{selected} = 'CHECKED';
         }
     }
 
@@ -341,56 +343,17 @@ sub doListVootGroups(%)
     $param->{voot_groups} = [sort {$a->{name} cmp $b->{name}} values %$groups]
         if $groups && keys %$groups;
 
-use Data::Dumper;
-log(info => "VOOT got ".Dumper $param->{voot_groups});
     1;
 }
 
 sub getAccessFor($$$)
 {   my ($self, $consumer, $param, $here) = @_;
-    my $goto  = $consumer->startAuth(param => $param, next_page => $here);
+    my $goto  = $consumer->startAuth(param => $param
+      , next_page => "$param->{base_url}$param->{path_cgi}/$here"
+      );
     log(info => "going for access at $goto");
     $goto ? main::do_redirect($goto) : 1;
-}
 
-# VOOT request
-sub doVoot(%)
-{   my ($self, %args) = @_;
-
-    my $param = $args{param};
-    my $in    = $args{in};
-
-    $param->{bypass} = 'extreme';
-    
-    my $voot_path = $in->{voot_path};
-
-my $prov_id;
-    my $consumer  = $self->consumer($param, $prov_id);
-
-    $consumer->get
-      ( method    => $ENV{REQUEST_METHOD}
-      , voot_path => $voot_path
-      , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
-      , authorization_header => $ENV{HTTP_AUTHORIZATION}
-      , request_parameters   => $in
-      , robot     => $args{robot_id}
-      );
-    
-    my ($http_code, $http_str)
-       = $consumer ? $consumer->checkRequest : (400, 'Bad Request');
-    
-    my $r      = $consumer->response;
-    my $err    = $consumer->{error};
-    my $status = $err || "$http_code $http_str";
-    
-    print <<__HEADER;
-Status: $status
-Cache-control: no-cache
-Content-type: text/plain
-__HEADER
-
-    print $r unless $err;
-    return 1;
 }
 
 =head3 $obj->doAcceptVootGroup
@@ -401,35 +364,39 @@ sub doAcceptVootGroup(%)
 {   my ($self, %args) = @_;
     my $param    = $args{param};
     my $in       = $args{in};
-    my $list     = $args{list};
     my $robot_id = $args{robot_id};
 
-    my $provider = $param->{voot_provider} = $in->{voot_provider};
+    my $provid   = $param->{voot_provider} = $in->{voot_provider};
     my $email    = $param->{user}{email};
 
     # Get all the voot_groups fields from the form
-    my @groups;
+    my @groupids;
     foreach my $k (keys %$in)
     {   $k =~ /^voot_groups\[([^\]]+)\]$/ or next;
-        push @groups, $1 if $in->{$k}==1;
+        push @groupids, $1 if $in->{$k}==1;
     }
-    $param->{voot_groups}  = \@groups;
+    $param->{voot_groups} = \@groupids;
 
-    my $list     = $main::list;
-    my @include_voot_group = @{$list->include_voot_group};    
-    foreach my $gid (@groups)
-    {   push @include_voot_group,
-         +{ name     => $provider.'::'.$gid
+    my $list     = this_list;
+
+    # Keep all groups from other providers
+    my %groups   = map +($_->{name} => $_)
+       , grep $_->{provider} ne $provid
+          , $list->includes('voot_group');
+
+    # Add the groups from this provider
+    foreach my $gid (@groupids)
+    {   my $name = $provid.'::'.$gid;
+        $groups{$name} =
+         +{ name     => $name
           , user     => $email
-          , provider => $provider
+          , provider => $provid
           , group    => $gid
           };
-
-        # XXX MO: ???
-        # No save otherwise ...
-        $list->defaults(include_voot_group => undef);
     }
-    $list->include_voot_group(\@include_voot_group);
+
+    $list->defaults(include_voot_group => undef); # No save otherwise ...
+    $list->includes(voot_group => [values %groups]);
 
     my $action = $param->{action};
     unless($list->save_config($email))
@@ -449,7 +416,112 @@ sub doAcceptVootGroup(%)
            , {}, $action, $list, $email, $robot_id);
     }
 
-    'review';
+    'review';   # show current members
+}
+
+
+=head2 The Sympa::Plugin::ListSource interface
+
+See L<Sympa::Plugin::ListSource> for more details about the provided methods.
+
+=head3 listSource
+
+=head3 listSourceName
+
+=cut
+
+sub listSource() { $me }   # I'll do it myself
+
+sub listSourceName() { 'voot_group' }
+
+=head3 getUsers OPTIONS
+
+=cut
+
+sub getUsers(%)
+{   my ($self, %args) = @_;
+
+    my $admin_only = $args{admin_only} || 0;
+    my $settings   = $args{settings};
+    my $defaults   = $args{user_defaults};
+    my $tied       = $args{keep_tied};
+    my $users      = $args{users};
+
+    my $email      = $settings->{user};
+    my $provid     = $settings->{provider};
+    my $groupid    = $settings->{group};
+    my $sourceid   = $self->getSourceId($settings);
+    trace_call($email, $provid, $groupid);
+
+    my $consumer   = $self->consumer($settings, $provid);
+
+    my @members    = eval { $consumer->voot->groupMembership($groupid) };
+    if($@)
+    {   log(err => "Unable to get group members for $email in $groupid at $provid: $@");
+        return undef;
+    }
+    
+    my $new_members = 0;
+  MEMBER:
+    foreach my $member (@members)
+    {   # A VOOT user may define more than one email address, but we take
+        # only the first, hopely the preferred.
+        my $mem_email = $member->{emails}[0]
+            or next MEMBER;
+
+	unless (tools::valid_email($mem_email))
+        {   log(err => "skip malformed address '$mem_email' in $groupid");
+            next MEMBER;
+        }
+
+        next MEMBER
+            if $admin_only && $member->{role} !~ /admin/;
+
+        # Check if user has already been included
+	my %info;
+        if(my $old = $users->{$mem_email})
+        {   %info = ref $old eq 'HASH' ? %$old : split("\n", $old);
+            defined $defaults->{$_} && ($info{$_} = $defaults->{$_})
+                for qw/visibility reception profile info/;
+	}
+        else
+        {   %info = %$defaults;
+            $new_members++;
+	}
+
+        $info{email} = $mem_email;
+        $info{gecos} = $member->{name};
+        $info{id}   .= ($info{id} ? ',' : '') . $sourceid;
+
+	$users->{$mem_email} = $tied ? join("\n", %info) : \%info;
+    }
+
+    log(info => "included $new_members new users from VOOT group"
+      . "$groupid at provider $provid");
+
+    $new_members;
+}
+
+sub reportListError($$)
+{   my ($self, $list, $provid) = @_;
+
+    my $conf = first {$_->{name} eq $provid} $list->includes('voot_group');
+    $conf or return;
+
+    my $repr = 'voot:' . $conf->{provider};
+
+    report::reject_report_web
+      ( 'user', 'sync_include_voot_failed', {oauth_provider => $repr}
+      , 'sync_include', $list->domain, $conf->{user}, $list->name
+      );
+
+    report::reject_report_msg
+      ( 'oauth', 'sync_include_voot_failed', $conf->{user}
+      , { consumer_name => 'VOOT', oauth_provider => $repr }
+      , $self->robot, '', $self->name
+      );
+
+    1;
 }
 
 1;

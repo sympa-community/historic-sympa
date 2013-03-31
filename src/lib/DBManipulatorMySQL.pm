@@ -49,7 +49,7 @@ sub build_connect_string {
 sub get_substring_clause {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug3','Building substring caluse');
+    &Log::do_log('debug3','Building substring clause');
     return "REVERSE(SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}."))";
 }
 

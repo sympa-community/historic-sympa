@@ -10,3 +10,5 @@ use lib
   '/home/sympa/ext/Plugin/lib',
   '/home/sympa/ext/VOOT/lib'
   ;
+
+1;

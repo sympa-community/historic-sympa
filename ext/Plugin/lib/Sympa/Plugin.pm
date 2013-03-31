@@ -4,6 +4,10 @@ use strict;
 
 use Sympa::Plugin::Util qw/:functions/;
 
+# From Sympa-core.  Be sure they are loaded before me!
+use List     ();
+
+
 =head1 NAME
 
 Sympa::Plugin - add plugin system to Sympa
@@ -126,13 +130,17 @@ sub registerPlugin($)
             }
 
             # for convenience, default occurence==1
-            $_->{occurrent} ||= 1 for values %$format;
+            $_->{occurrence} ||= 1 for values %$format;
 
+            listdef::cleanup($header, $fields);
             $listdef::pinfo{$header} = $fields;
             $fields->{order} = @listdef::param_order;  # to late for init
             push @listdef::param_order, $header;
         }
     }
+
+    List->registerPlugin($class)
+        if $class->isa('Sympa::Plugin::ListSource');
 }
 
 =head3 class_method: upgrade OPTIONS

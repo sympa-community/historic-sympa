@@ -56,7 +56,6 @@ use Fetch;
 use WebAgent;
 #use Sympaspool; # used in Task
 use Archive;
-use VOOTConsumer;
 use tt2;
 #use Sympa::Constants; # used in Conf - confdef
 use Language qw(gettext gettext_strftime);
@@ -83,19 +82,16 @@ my @sources_providing_listmembers = qw/
   include_remote_file
   include_remote_sympa_list  
   include_sql_query  
-  include_voot_group 
  /;
 
 #XXX include_admin  
-my @include_data_sources =
- ( @sources_providing_listmembers, qw/
+my @more_data_sources = qw/
   editor_include  
   owner_include
-/ );
+  /;
 
-my %config_in_admin_user_file
-  = map +($_ => 1), @sources_providing_listmembers;
-delete $config_in_admin_user_file{include_voot_group};  # in voot.conf file
+# All non-pluggable sources are in the admin user file
+my %config_in_admin_user_file = map +($_ => 1), @sources_providing_listmembers;
 
 =encoding utf-8
 
@@ -6085,89 +6081,6 @@ sub _include_users_remote_file {
     return $total;
 }
 
-## Includes users from voot group
-sub _include_users_voot_group {
-    my ($users, $param, $default_user_options, $tied) = @_;
-
-    &Log::do_log('debug2', "List::_include_users_voot_group(%s, %s, %s)",
-	$param->{'user'}, $param->{'provider'}, $param->{'group'});
-
-	my $id = Datasource::_get_datasource_id($param);
-
-	my $consumer = new VOOTConsumer(
-		user => $param->{'user'},
-		provider => $param->{'provider'}
-	);
-
-# Here we need to check if we are in a web environment and set consumer's webEnv accordingly
-
-    unless ($consumer) {
-		&Log::do_log('err', 'Cannot create VOOT consumer. Cancelling.');
-		return undef;
-	}
-
-	my $members = $consumer->getGroupMembers(group => $param->{'group'});
-    unless (defined $members) {
-		my $url = $consumer->getOAuthConsumer()->mustRedirect();
-
-		# Report error with redirect url
-		#return &do_redirect($url) if(defined $url);
-		return undef;
-	}
-
-	my $email_regexp = &tools::get_regexp('email');
-	my $total = 0;
-
-	foreach my $member (@$members) {
-
-		#foreach my $email (@{$member->{'emails'}}) {
-	if (my $email = shift(@{$member->{'emails'}})) {
-	    unless (&tools::valid_email($email)) {
-		&Log::do_log('err', "Skip badly formed email address: '%s'",
-		    $email);
-				next;
-			}
-	    next unless ($email);
-
-			## Check if user has already been included
-			my %u;
-	    if ($users->{$email}) {
-		%u =
-		    $tied ? split("\n", $users->{$email}) :
-		            %{$users->{$email}};
-	    } else {
-				%u = %{$default_user_options};
-				$total++;
-			}
-
-			$u{'email'} = $email;
-			$u{'gecos'} = $member->{'displayName'};
-	    $u{'id'}    = join(',', split(',', $u{'id'}), $id);
-
-	    $u{'visibility'} = $default_user_options->{'visibility'}
-		if (defined $default_user_options->{'visibility'});
-	    $u{'reception'} = $default_user_options->{'reception'}
-		if (defined $default_user_options->{'reception'});
-	    $u{'profile'} = $default_user_options->{'profile'}
-		if (defined $default_user_options->{'profile'});
-	    $u{'info'} = $default_user_options->{'info'}
-		if (defined $default_user_options->{'info'});
-
-	    if ($tied) {
-				$users->{$email} = join("\n", %u);
-	    } else {
-				$users->{$email} = \%u;
-			}
-		}
-	}
-
-    &Log::do_log('info',
-	"included %d users from VOOT group %s at provider %s",
-	$total, $param->{'group'}, $param->{'provider'});
-
-	return $total;
-}
-
 ## Returns a list of subscribers extracted from a remote LDAP Directory
 sub _include_users_ldap {
     my ($users, $id, $source, $default_user_options, $tied) = @_;
@@ -6768,22 +6681,36 @@ sub _load_list_members_from_include {
     my $result;
     my @ex_sources;
 
-    foreach my $type (@sources_providing_listmembers)
-    {   last unless (defined $total);
+    foreach my $type (@sources_providing_listmembers) { 
 
 	foreach my $tmp_incl (@{$self->$type}) {
+
+            # Work with a copy of admin hash branch to avoid including
+            # temporary variables into the actual admin hash.[bug #3182]
+	    my $incl          = tools::dup_var($tmp_incl);
+	    my $source_id     = Datasource::_get_datasource_id($tmp_incl);
+	    my $source_is_new = defined $old_subs->{$source_id};
+
+	    # Get the list of users.
+	    # Verify if we can synchronize sources. If it's allowed OR there
+	    # are new sources, we update the list, and can add subscribers.
+	    # If we can't synchronize, we make an array with excluded sources.
+
 	    my $included;
-	    my $source_is_new = 1;
-        ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-	    my $incl = &tools::dup_var($tmp_incl);
-		my $source_id = Datasource::_get_datasource_id($tmp_incl);
-		if (defined $old_subs->{$source_id}) {
-			$source_is_new = 0;
+	    if(my $plugin = $self->isPlugin($type))
+            {   my $source = $plugin->listSource;
+		if($source->isAllowedToSync || $source_is_new)
+		{   Log::do_log(debug => "syncing members from $type");
+		    $included = $source->getUsers
+		      ( users         => \%users
+		      , settings      => $incl
+		      , user_defaults => $self->default_user_options
+		      );
+		    defined $included
+			or push @errors, {type => $type, name => $incl->{name}};
 		}
-	    ## Get the list of users.
-	    ## Verify if we can syncronize sources. If it's allowed OR there are new sources, we update the list, and can add subscribers.
-		## Else if we can't syncronize sources. We make an array with excluded sources.
-	    if ($type eq 'include_sql_query') {
+	    }
+	    elsif ($type eq 'include_sql_query') {
 			my $source = new SQLSource($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 		    &Log::do_log('debug', 'is_new %d, syncing',
@@ -6901,13 +6828,6 @@ sub _load_list_members_from_include {
 		    push @errors,
 			{'type' => $type, 'name' => $incl->{'name'}};
 		}
-	    } elsif ($type eq 'include_voot_group') {
-		$included = _include_users_voot_group(\%users, $incl,
-		    $self->default_user_options);
-		unless (defined $included) {
-		    push @errors,
-			{'type' => $type, 'name' => $incl->{'name'}};
-		}
 	    }
 
 	    unless (defined $included) {
@@ -6923,9 +6843,10 @@ sub _load_list_members_from_include {
     $result->{'users'} = \%users;
     $result->{'errors'} = \@errors;
     $result->{'exclusions'} = \@ex_sources;
+use Data::Dumper;
+if(open OUT, '>/tmp/result') { print OUT Dumper $result; close OUT }
     return $result;
 }
-
 ## Loads the list of admin users from an external include source
 sub _load_list_admin_from_include {
     &Log::do_log('debug3', '(%s, %s)', @_);
@@ -6993,14 +6914,24 @@ sub _load_list_admin_from_include {
 	{   defined $total or last;
 
 	    foreach my $tmp_incl (@{$include_admin_user->{$type}}) {
-		my $included;
 
-		## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
+		# Work with a copy of admin hash branch to avoid including
+		# temporary variables into the actual admin hash. [bug #3182]
 		my $incl = &tools::dup_var($tmp_incl);
 
-		## get the list of admin users
-		## does it need to define a 'default_admin_user_option'?
-		if ($type eq 'include_sql_query') {
+		# get the list of admin users
+		# does it need to define a 'default_admin_user_option'?
+		my $included;
+		if(my $plugin = $self->isPlugin($type))
+		{   my $source = $plugin->listSource;
+                    Log::do_log(debug => "syncing admins from $type");
+		    $included = $source->getUsers
+		      ( users         => \%admin_users
+		      , settings      => $incl
+		      , user_defaults => \%option
+		      , admin_only    => 1
+		      );
+		} elsif ($type eq 'include_sql_query') {
 		    my $source = new SQLSource($incl);
 		    $included =
 			_include_users_sql(\%admin_users, $incl, $source,
@@ -7050,11 +6981,7 @@ sub _load_list_admin_from_include {
 		    $included =
 			_include_users_remote_file(\%admin_users, $incl,
 			\%option);
-		} elsif ($type eq 'include_voot_group') {
-		    $included =
-			_include_users_voot_group(\%admin_users, $incl,
-			\%option);
-	    }
+		};
 
 		unless (defined $included) {
 		    &Log::do_log('err', 'Inclusion %s %s failed in list %s',
@@ -7472,7 +7399,7 @@ sub sync_include {
 
 	## If include sources were not available, do not update subscribers
 	## Use DB cache instead and warn the listmaster.
-	if ($#errors > -1) {
+	if (@errors) {
 	    Log::do_log(
 		'err',
 		'Errors occurred while synchronizing datasources for list %s',
@@ -7490,32 +7417,9 @@ sub sync_include {
 		);
 	    }
 	    foreach my $e (@errors) {
-		next unless ($e->{'type'} eq 'include_voot_group');
-		my $cfg = undef;
-		foreach my $p (@{$self->include_voot_group}) {
-		    $cfg = $p if ($p->{'name'} eq $e->{'name'});
-		}
-		next unless (defined $cfg);
-		&report::reject_report_web(
-		    'user',
-		    'sync_include_voot_failed',
-		    {'oauth_provider' => 'voot:' . $cfg->{'provider'}},
-		    'sync_include',
-		    $self->domain,
-		    $cfg->{'user'},
-		    $self->name
-		);
-		&report::reject_report_msg(
-		    'oauth',
-		    'sync_include_voot_failed',
-		    $cfg->{'user'},
-		    {   'consumer_name'  => 'VOOT',
-			'oauth_provider' => 'voot:' . $cfg->{'provider'}
-		    },
-		    $self->robot,
-		    '',
-		    $self->name
-		);
+		my $plugin = $self->isPlugin($e->{type}) or next;
+ 		my $source = $plugin->listSource;
+		$source->reportListError($self, $e->{name});
 	    }
 	    return undef;
 	}
@@ -7524,7 +7428,7 @@ sub sync_include {
 	# with data sources not used because we were not in the period of
 	# time during which synchronization is allowed. This will prevent
 	# these users from being unsubscribed.
-	if ($#exclusions > -1) {
+	if (@exclusions) {
 	    foreach my $ex_sources (@exclusions) {
 		my $id = $ex_sources->{'id'};
 		foreach my $email (keys %old_subscribers) {
@@ -9338,7 +9242,6 @@ sub _save_list_param {
     return 1 unless defined $p;
 
     my $pinfo = $robot->list_params;
-
     if (defined $pinfo->{$key}{'scenario'} or
 	defined $pinfo->{$key}{'task'}) {
 	return 1 if $p->{'name'} eq 'default';
@@ -9856,6 +9759,9 @@ sub _save_list_config_file {
     });
     ## Get updated config
     my $config = $self->config;
+use Data::Dumper;
+open OUT, '>/tmp/list-config';
+print OUT Dumper $config, $pinfo;
 
     ## Now build textized configuration
     my $config_text = '';
@@ -9870,16 +9776,19 @@ sub _save_list_config_file {
 	next if $key eq 'comment';
 	next unless exists $config->{$key};
 
+print OUT "KEY=$key#",$config->{$key},"#", $pinfo->{$key}{split_char}, "#\n";
 	if (ref($config->{$key}) eq 'ARRAY' and
 	    !$pinfo->{$key}{'split_char'}) {
 	    ## Multiple parameter (owner, custom_header,...)
 	    foreach my $elt (@{$config->{$key}}) {
+print OUT "    save $key, $elt\n";
 		_save_list_param($robot, $key, $elt, $fd);
 	    }
 	} else {
 	    _save_list_param($robot, $key, $config->{$key}, $fd);
 	}
     }
+close OUT;
 
     ## Write to file at last.
     unless (rename $config_file, $old_config_file) {
@@ -11079,8 +10988,8 @@ sub create_shared {
 sub has_include_data_sources {
     my $self = shift;
 
-    foreach my $type (@include_data_sources)
-    {   my $resource = $self->$type;
+    foreach my $type (@sources_providing_listmembers, @more_data_sources)
+    {   my $resource = $self->$type || [];
         return 1 if ref $resource eq 'ARRAY' && @$resource;
     }
 
@@ -12013,6 +11922,44 @@ sub get_option_title {
     return $option;
 }
 
+=head2 Pluggin data-sources
+
+=head3 $obj->includes(DATASOURCE, [NEW])
+
+More abstract accessor for $list->include_DATASOURCE.  It will return
+a LIST of the data.  You may pass a NEW single or ARRAY of values.
+
+=cut
+
+sub includes($;$)
+{   my $self   = shift;
+    my $source = 'include_'.shift;
+    if(@_)
+    {   my $data = ref $_[0] ? shift : [ shift ];
+        return $self->$source($data);
+    }
+    @{$self->$source || []};
+}
+
+=head3 $class->registerPlugin(CLASS)
+
+CLASS must extend L<Sympa::Plugin::ListSource>
+
+=cut
+
+my %plugins;
+sub registerPlugin($$)
+{   my ($class, $impl) = @_;
+    my $source = 'include_'.$impl->listSourceName;
+    push @sources_providing_listmembers, $source;
+    $plugins{$source} = $impl;
+}
+
+=head3 $obj->isPlugin(DATASOURCE)
+
+=cut
+
+sub isPlugin($) { $plugins{$_[1]} }
 
 ###### END of the List package ######
 
@@ -12297,5 +12244,4 @@ sub is_scenario_purely_closed {
 
 ###### END of the ListCache package ######
 
-## Packages must return true.
 1;

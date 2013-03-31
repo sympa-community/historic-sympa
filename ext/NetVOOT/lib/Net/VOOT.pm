@@ -5,7 +5,8 @@ use strict;
 
 use Log::Report 'net-voot';
 
-use URI ();
+use URI  ();
+use JSON ();
 
 =chapter NAME
 Net::VOOT - access to a VOOT Server
@@ -91,18 +92,21 @@ sub userGroups(;$)
 {   my $self = shift;
     my $user = shift || '@me';
     my $r    = $self->userGroupInfo($user) or return {};
+use Data::Dumper;
+if(open OUT, '>/tmp/user-groups') {print OUT Dumper $r; close OUT }
     my $got  = $r->{entry} or return {};
 
     my %groups;
     foreach my $g (@$got)
     {   my $id = $g->{id};
         $groups{$id} =
-          { name        => $g->{name} || $id
+          { name        => $g->{title}
           , id          => $id
           , description => $g->{description}
           , role        => $g->{voot_membership_role}
           };
     }
+if(open OUT, '>/tmp/user-groups2') {print OUT Dumper \%groups; close OUT }
     \%groups;
 }
 
@@ -201,7 +205,14 @@ sub query($$)
 {   my ($self, $action, $params) = @_;
     my $uri = URI->new($self->vootBase.$action);
     $uri->query_form($params) if $params;
-    $self->get($uri->as_string);
+
+    my $resp = $self->get($uri->as_string)
+        or return;
+
+    my $data = JSON->new->decode($resp->decoded_content || $resp->content);
+use Data::Dumper;
+if(open OUT, '>/tmp/query') {print OUT Dumper $data; close OUT}
+   $data;
 }
 
 =method hasAccess

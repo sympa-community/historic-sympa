@@ -1,6 +1,8 @@
 use warnings;
 use strict;
 
+###### This code is not ready!
+
 package Sympa::OAuth1P;
 use base 'Sympa::Plugin';
 
@@ -19,8 +21,13 @@ my @url_commands =
       , required  => [ qw/param.user.email oauth_token/ ]
       }
   , oauth_access     =>
-      { handler   => sub { $me->do_oauth_access(@_) }
+      { handler   => sub { $me->doOauthAccess(@_) }
       }
+  , voot =>
+      { handler   => sub { $me->doVoot(@_) }
+      , path_args => '@voot_path'
+      }
+
   );
 
 my @validate =
@@ -111,7 +118,7 @@ sub doOAuthAuthorize(%)
 }
 
 # Consumer requests an access token
-sub do_oauth_access(%)
+sub doOauthAccess(%)
 {   my ($self, %args) = @_;
     my $param        = $args{param};
     $param->{bypass} = 'extreme';
@@ -120,6 +127,46 @@ sub do_oauth_access(%)
         or return 1;
 
     print $provider->generateAccess;
+    return 1;
+}
+
+# VOOT request
+sub doVoot(%)
+{   my ($self, %args) = @_;
+
+    my $param = $args{param};
+    my $in    = $args{in};
+
+    $param->{bypass} = 'extreme';
+    
+    my $voot_path = $in->{voot_path};
+
+my $prov_id;
+    my $consumer  = $self->consumer($param, $prov_id);
+
+    $consumer->get
+      ( method    => $ENV{REQUEST_METHOD}
+      , voot_path => $voot_path
+      , url       => "$param->{base_url}$param->{path_cgi}/voot/$voot_path"
+      , authorization_header => $ENV{HTTP_AUTHORIZATION}
+      , request_parameters   => $in
+      , robot     => $args{robot_id}
+      );
+    
+    my ($http_code, $http_str)
+       = $consumer ? $consumer->checkRequest : (400, 'Bad Request');
+    
+    my $r      = $consumer->response;
+    my $err    = $consumer->{error};
+    my $status = $err || "$http_code $http_str";
+    
+    print <<__HEADER;
+Status: $status
+Cache-control: no-cache
+Content-type: text/plain
+__HEADER
+
+    print $r unless $err;
     return 1;
 }
 
