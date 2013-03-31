@@ -20,16 +20,17 @@ Sympa::Plugin - add plugin system to Sympa
 
 =head1 DESCRIPTION
 
-In the Sympa system (version 6.2), each component has facts listed
-all over the code.  This hinders a pluggable interface.  This module
-implements a few tricky hacks to move towards accepting optional modules
-which can get upgraded between major Sympa releases.
+In the Sympa system (version 6.2), each logic component has code fragments
+and configuration scattered all over the code.  This hinders maintenance.
+This module implements a few tricky hacks to move towards accepting
+optional modules which can get upgraded between major Sympa releases.
 
 =head1 METHODS
 
 =head2 Constructors
 
-=head3 new OPTIONS
+=head3 $class->new(OPTIONS)
+
 =cut
 
 sub new(@)
@@ -42,20 +43,22 @@ sub init($) {shift}
 
 =head2 Plugin loader
 
-The follow code is really tricky: it tries to separate the components
+The following code is really tricky: it tries to separate the components
 from the existing interface.
 
-=head3 class method: registerPlugin HASH
+=head3 $class->registerPlugin(HASH)
 
 This method takes a HASH.  The supported keys are
 
-over 4
+=over 4
 
-=item C<url_commands> =E<gt> PAIRS
+=item * url_commands =E<gt> PAIRS
 
-=item C<validate> =E<gt> PAIRS
+=item * validate =E<gt> PAIRS
 
-=item C<templates> =E<gt> HASHES
+=item * templates =E<gt> HASHES
+
+=item * listdef =E<gt> HASHES
 
 =back
 
@@ -143,7 +146,7 @@ sub registerPlugin($)
         if $class->isa('Sympa::Plugin::ListSource');
 }
 
-=head3 class_method: upgrade OPTIONS
+=head3 $class->upgrade(OPTIONS)
 
 Upgrade the information in the system.  Returned is the next version
 for that information: you can better not make more than one step at
@@ -152,7 +155,7 @@ inbetween these steps.
 
 =over 4
 
-=item * I<from_version> =E<gt> VERSION
+=item * from_version =E<gt> VERSION
 
 =back
 

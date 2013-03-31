@@ -22,15 +22,16 @@ Sympa::VOOT::Consumer - represent one VOOT source in Sympa
 
 =head1 DESCRIPTION
 
-This object combines three aspects:
+This object combines three aspects, to organize a voor session for a single
+user:
 
 =over 4
 
-=item one voot session for a user, implemented by L<Net::VOOT>
+=item * a session set-up and administration, implemented by L<Sympa::OAuth1::Consumer> and L<Sympa::OAuth2::Consumer>
 
-=item a session store, implemented by L<Sympa::OAuth1::Consumer> and L<Sympa::OAuth2::Consumer>
+=item * the VOOT interrogation protocol, implemented by various L<Net::VOOT> extensions.
 
-=item the sympa specific logic, in here
+=item * some Sympa specific flow logic, in here
 
 =back
 
@@ -38,17 +39,19 @@ This object combines three aspects:
 
 =head2 Constructors
 
-=head3 class method: new OPTIONS
+=head3 $class->new(OPTIONS)
 
 Options:
 
 =over 4
 
-=item * I<provider> =E<gt> INFO
+=item * provider =E<gt> INFO
 
-=item * I<user> =E<gt> HASH
+=item * user =E<gt> HASH
 
-=item * I<auth> =E<gt> HASH, configuration
+=item * auth =E<gt> HASH, configuration
+
+=back
 
 =cut
 
@@ -106,7 +109,7 @@ sub user()     {shift->{SVP_user}}
 
 =head2 Action
 
-=head3 get URL, PARAMS
+=head3 $self->get(URL, PARAMS)
 
 Returns the L<HTTP::Response> on success.
 
@@ -119,7 +122,7 @@ sub get($$)
 }
 
 
-=head3 startAuth OPTIONS
+=head3 $self->startAuth(OPTIONS)
 
 =over 4
 
@@ -152,7 +155,7 @@ sub startAuth(%)
     $voot->getAuthorizationStarter($session);
 }
 
-=method hasAccess
+=head3 $self->hasAccess
 
 Returns true when the consumer has access to the VOOT resource.
 

@@ -36,13 +36,13 @@ instantiate plugin objects.
 
 =head2 Constructors
 
-=head2 class method: new OPTIONS
+=head3 $class->new(OPTIONS)
 
 =over 4
 
-=item * I<state_file> =E<gt> FILENAME
+=item * state_file =E<gt> FILENAME
 
-=item * I<state> =E<gt> HASH, by default read from C<state_file>
+=item * state =E<gt> HASH, by default read from C<state_file>
 
 =back
 
@@ -64,11 +64,11 @@ sub init($)
 
 =head2 Accessors
 
-=head3 method: loaded
+=head3 $obj->loaded
 
-=head3 method: stateFilename
+=head3 $obj->stateFilename
 
-=head3 method: state
+=head3 $obj->state
 
 =cut
 
@@ -79,7 +79,7 @@ sub state()         { shift->{SPM_state}    }
 
 =head2 Loading
 
-=head3 method: start OPTIONS
+=head3 $obj->start(OPTIONS)
 
 Start an application with plugins.  Die() when some plug-in is new, so
 the tables need to be upgraded.
@@ -88,9 +88,9 @@ Options:
 
 =over 4
 
-=item * I<upgrade> =E<gt> BOOLEAN
+=item * upgrade =E<gt> BOOLEAN
 
-=item * I<only> =E<gt> PACKAGE|ARRAY-of-PACKAGE, empty means 'all'
+=item * only =E<gt> PACKAGE|ARRAY-of-PACKAGE, empty means 'all'
 
 =back
 
@@ -126,7 +126,7 @@ sub start(%)
 }
 
 
-=head3 method: loadPlugin PACKAGE, OPTIONS
+=head3 $obj->loadPlugin(PACKAGE, OPTIONS)
 
 Load a single plugin.  This can be used to load a new package during
 development.  Returned is whether loading was successful.  When the
@@ -189,7 +189,7 @@ sub loadPlugin($%)
     return 0;
 }
 
-=head3 method: checkVersions OPTIONS
+=head3 $obj->checkVersions(OPTIONS)
 
 Check whether the version of a certain plugin is equivalent to the
 version on last run.  If not, we need to call the upgrade on the
@@ -197,7 +197,9 @@ plugin or die.
 
 =over 4
 
-=item * I<upgrade> =E<gt> BOOLEAN   (default false)
+=item * upgrade =E<gt> BOOLEAN   (default false)
+
+=back
 
 =cut
 
@@ -240,7 +242,7 @@ $upgrade = 1;
 
 =head2 Administration
 
-=head3 method: list
+=head3 $obj->list
 
 Returns a list class names for all loaded plugins.
 
@@ -248,7 +250,7 @@ Returns a list class names for all loaded plugins.
 
 sub list(%) { keys %{shift->loaded} }
 
-=head3 method: hasPlugin PACKAGE
+=head3 $obj->hasPlugin(PACKAGE)
 
 Returns the class names of loaded plug-ins, which extend (or are equal
 to) the requested PACKAGE name.
@@ -264,7 +266,7 @@ sub hasPlugin($)
     grep $_->isa($pkg), $self->list;
 }
 
-=head3 method: versionOf PACKAGE
+=head3 $obj->versionOf(PACKAGE)
 
 =cut
 
@@ -273,13 +275,13 @@ sub versionOf($)
     $self->loaded->{$package};
 }
 
-=head3 method: addTemplates OPTIONS
+=head3 $obj->addTemplates(OPTIONS)
 
 =over 4
 
-=item * I<tt2_path> =E<gt> DIRECTORY|ARRAY
+=item * tt2_path =E<gt> DIRECTORY|ARRAY
 
-=item * I<tt2_fragments> =E<gt> PAIRS
+=item * tt2_fragments =E<gt> PAIRS
 
 =back
 
@@ -299,13 +301,13 @@ sub addTemplates(%)
     }
 }
 
-=head3 method: tt2Paths
+=head3 $obj->tt2Paths
 
 =cut
 
 sub tt2Paths() { @{shift->{SPM_tt2_paths} || []} }
 
-=head3 method: tt2Fragments LOCATION
+=head3 $obj->tt2Fragments(LOCATION)
 
 =cut
 
@@ -320,9 +322,9 @@ sub tt2Fragments($)
 The state file is used to track the behavior of the plug-in manager.
 By default, this is the C<plugin.conf> file in the etc directory.
 
-=head3 readState FILENAME
+=head3 $obj->readState(FILENAME)
 
-=head3 writeState
+=head3 $obj->writeState
 
 =cut
 

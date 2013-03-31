@@ -21,8 +21,9 @@ Net::VOOT::SURFconext - access to a VOOT server of SURFnet
   my $voot = Net::VOOT::SURFconext->new(test => 1);
 
 =chapter DESCRIPTION
-"SURFconext" is an Dutch (i.e. Netherlands) national infrastructure
-(organized by SURFnet) which arranges access-rights to people on
+
+"SURFconext" is a Dutch (i.e. The Netherlands) national infrastructure
+(organized by SURFnet) which arranges access rights to people on
 universities and research institutes (participants) to facilities offered
 by other participants.  For instance, a student on one university can
 use the library and WiFi of an other university when he is on visit there.

@@ -26,16 +26,23 @@ Sympa::Plugin::Util - simplify connections to Sympa
 
 =head1 SYNOPSIS
 
+  use Sympa::Plugin::Util qw/default_db :http/;
+
 =head1 DESCRIPTION
 
 The Sympa core is under heavy development.  To be able to let plugins
-work with different releases of Sympa, we add some abstractions.
+work with different releases of Sympa, we add some abstractions.  More
+will follow.
 
 =head1 CONSTANTS
 
-=head2 :http
+=head2 export tag C<:http>
 
-=head2 :time
+A few used HTTP codes.
+
+=head2 export tag C<:time>
+
+Some constants to express time periods more clearly.
 
 =cut
 
@@ -44,6 +51,9 @@ use constant MINUTE => 60 * SECOND;
 use constant HOUR   => 60 * MINUTE;
 use constant DAY    => 24 * HOUR;
 use constant MONTH  => 30 * DAY;
+
+# HTTP::Status is nowhere loaded in "core", so let's  keep it that
+# way; just define the values we use.
 
 use constant
   { HTTP_OK     => 200
@@ -57,22 +67,25 @@ use constant
 
 All functions are exported by default, or with tag C<:function>.
 
-=head2 Database
+=head2 Database pseudo-object
 
-=head3 default_db
+Sympa "code" let all other modules call directly into the SDM package.
+That is not clean and overly complicated.  It is much easier to have
+a C<db> object.
+
+=head3 $db = default_db()
 
 Returns an object which handles database queries.  This can be removed
-when Sympa-core accesses databases via clean objects.
+when Sympa-core profives access to the databases via clean objects.
 
 The object returned offers the following methods:
 
-=over 4
+=head3 $db->prepared(DBH, QUERY, BINDS)
 
-=item method: prepared DBH, QUERY, BINDS
+=head3 $db->do(DBH, QUERY, BINDS)
 
-=item method: do DBH, QUERY, BINDS
-
-=back
+In "core" named SDM::do_query(), but here with bindings, to remove the need
+for SDM::quote().
 
 =cut
 
@@ -99,9 +112,9 @@ sub default_db() { $default_db || (bless {}, 'SPU_db') }
 These globals will probably change name in the near future.  We do not
 want to update the plugins, all the time.
 
-=head3 robot
+=head3 robot()
 
-=head3 this_list
+=head3 this_list()
 
 =cut
 
@@ -112,15 +125,15 @@ sub this_list() { $main::list }
 
 =head2 Logging
 
-=head3 trace_call PARAMETERS
+=head3 trace_call(PARAMETERS)
 
-=head3 log
+=head3 log()
 
-=head3 fatal
+=head3 fatal()
 
-=head3 wsslog
+=head3 wsslog()
 
-=head3 web_db_log
+=head3 web_db_log()
 
 =cut
 

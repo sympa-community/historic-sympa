@@ -30,8 +30,8 @@ Sympa::VOOT - manage VOOT use in Sympa
 
 =head1 DESCRIPTION
 
-Intergrate VOOT with Sympa.  This module handles the web interface, and
-the various VOOT backends.
+Intergrate VOOT with Sympa.  This module handles the web interface
+administers consumer objects (L<Sympa::VOOT::Consumer>) per user session.
 
 =cut
 
@@ -127,10 +127,15 @@ sub registerPlugin($)
 
 =head2 Constructors
 
-=head3 $class->new(OPTIONS)
+=head3 $obj = $class->new(OPTIONS)
 
-OPTIONS:
- config FILENAME|HASH   voot configuration file (default voot.conf)
+Options:
+
+=over 4
+
+=item * config =E<gt> FILENAME|HASH, voot configuration file (default voot.conf)
+
+=back
 
 =cut
 
@@ -159,7 +164,7 @@ sub init($)
 }
 
 
-=head3 my $obj = $class->instance
+=head3 $obj = $class->instance
 
 =cut
 
@@ -357,6 +362,7 @@ sub getAccessFor($$$)
 }
 
 =head3 $obj->doAcceptVootGroup
+
 =cut
 
 # VOOT groups choosen, generate config
@@ -424,9 +430,9 @@ sub doAcceptVootGroup(%)
 
 See L<Sympa::Plugin::ListSource> for more details about the provided methods.
 
-=head3 listSource
+=head3 $obj->listSource
 
-=head3 listSourceName
+=head3 $obj->listSourceName
 
 =cut
 
@@ -434,7 +440,7 @@ sub listSource() { $me }   # I'll do it myself
 
 sub listSourceName() { 'voot_group' }
 
-=head3 getUsers OPTIONS
+=head3 $obj->getUsers(OPTIONS)
 
 =cut
 
@@ -502,6 +508,10 @@ sub getUsers(%)
     $new_members;
 }
 
+=head3 $obj->reportListError(LIST, PROVID)
+
+=cut
+
 sub reportListError($$)
 {   my ($self, $list, $provid) = @_;
 
@@ -555,11 +565,8 @@ the left.  If you do not see that "OpenSocial" entry, the software is not
 installed (correctly).  Search the logs for errors while loading the
 plugins.
 
-Then pick a provider.  Authenticate yourself for that provider.  Then select
-a group you are member of.
-
-Per list you need the group for, go to tab 'admin/Edit List Config/Data
-sources setup' block VOOT.
+Then pick a provider provider in the OpenSocial interface, and then the
+groups to associate the specific list with.
 
 =head2 Setting-up VOOT
 
@@ -568,9 +575,9 @@ to use them with Sympa in their specific man-pages:
 
 =over 4
 
-=item L<Sympa::VOOT::SURFconext>, SURFnet NL using OAuth2
+=item * L<Sympa::VOOT::SURFconext>, SURFnet NL using OAuth2
 
-=item L<Sympa::VOOT::Renater>, Renater FR using OAuth (v1)
+=item * L<Sympa::VOOT::Renater>, Renater FR using OAuth (v1)
 
 =back
 

@@ -1,3 +1,10 @@
+package Sympa::OAuth1::Provider;
+use strict;
+use warnings;
+
+use Sympa::Plugin::Util     qw/:functions :http :time/;
+use OAuth::Lite::ServerUtil ();
+use URI::Escape             qw/uri_escape uri_unescape/;
 
 =head1 NAME 
 
@@ -11,14 +18,6 @@ storage and provides helpers.
 
 =cut 
 
-package Sympa::OAuth1::Provider;
-use strict;
-use warnings;
-
-use Sympa::Plugin::Util     qw/:functions :http :time/;
-use OAuth::Lite::ServerUtil ();
-use URI::Escape             qw/uri_escape uri_unescape/;
-
 my @timeouts =
   ( old_request_timeout => 10*MINUTE # max age for requests timestamps
   , nonce_timeout       =>  3*MONTH  # time the nonce tags are kept
@@ -31,23 +30,23 @@ my @timeouts =
 
 =head2 Constructors
 
-=head3 new OPTIONS
+=head3 $obj = $class->new(OPTIONS)
 
 Options:
 
 =over 4
 
-=item * I<db>, database object, defaults to the default_db
+=item * db, database object, defaults to the C<default_db>
 
-=item * I<method>, http method
+=item * method, http method
 
-=item * I<url>, request url
+=item * url, request url
 
-=item * I<authorization_header> =E<gt> STRING
+=item * authorization_header =E<gt> STRING
 
-=item * I<request_parameters> =E<gt> HASH
+=item * request_parameters =E<gt> HASH
 
-=item * I<request_body> =E<gt> HASH
+=item * request_body =E<gt> HASH
 
 =back 
 
@@ -130,20 +129,34 @@ __GET_TOKEN
 }
 
 =head2 Accessors
+
+Provided are C<db()>, C<consumerKey>, C<consumerSecret>, C<method>, and C<url>.
+
 =cut
 
 sub db()             {shift->{SOP_db}}
-sub oauthUtil()      {shift->{SOP_util}}  # object
 sub consumerKey()    {shift->{SOP_consumer_key}}
 sub consumerSecret() {shift->{SOP_cons_secret}}
-sub params()         {shift->{SOP_params}}
 sub method()         {shift->{SOP_method}}
 sub url()            {shift->{SOP_url}}
 
+=head3 $obj->params
+
+Authorization parameters.
+
+=head3 $obj->oauthUtil
+
+Returns an L<OAuth::Lite::Util> object, which can be used for various
+OAuth tasks.
+
+=cut
+
+sub params()         {shift->{SOP_params}}
+sub oauthUtil()      {shift->{SOP_util}}  # object
 
 =head2 Actions
 
-=head3 method checkRequest OPTIONS
+=head3 $obj->checkRequest(OPTIONS)
 
 Check whether a request is valid.  Returns an HTTP-code and an error
 string.  An code of HTTP_OK means success.
@@ -157,9 +170,9 @@ Options:
 
 =over 4
 
-=item * I<checktoken>, boolean
+=item * checktoken =E<gt> BOOLEAN
 
-=item * I<url>
+=item * url =E<gt> URI
 
 =back 
 
@@ -268,7 +281,7 @@ __PROVIDER
 }
 
 
-=head2 method: generateTemporary
+=head3 $obj->generateTemporary
 
 Returns the URI parameters to request the authorization.
 
@@ -315,7 +328,7 @@ __START_SESSION
     join '&', @r;
 }
 
-=head2 method: getTemporary OPTIONS
+=head3 $obj->getTemporary(OPTIONS)
 
 Retreive a temporary token from database, which is an unblessed HASH.  Returns
 C<undef> on failure.
@@ -324,9 +337,9 @@ Options:
 
 =over 4
 
-=item * I<token>, the token key.
+=item * token =E<gt> STRING
 
-=item * I<timeout_type>, the timeout key, temporary or verifier.
+=item * timeout_type =E<gt> C<temporary>|C<verifier>
 
 =back 
 
@@ -367,7 +380,7 @@ __GET_TEMP
     $data->{lasttime} + $timeout >= time ? $data : undef;
 }
 
-=head2 method: generateVerifier OPTIONS
+=head3 $obj->generateVerifier(OPTIONS)
 
 Create the verifier for a temporary token.  Returns the redirect url, or
 C<undef> when the token does not exist (anymore) or isn't valid.
@@ -376,18 +389,18 @@ Options:
 
 =over 4
 
-=item * I<token>
+=item * token =E<gt> STRING
 
-=item * I<user>
+=item * user =E<gt> EMAIL
 
-=item * I<granted>, boolean
+=item * granted =E<gt> BOOLEAN
 
 =back 
 
 =cut 
 
 ## Create the verifier for a temporary token
-sub generateVerifier
+sub generateVerifier(%)
 {   my ($self, %args) = @_;
 
     my $token   = $args{token};
@@ -406,9 +419,9 @@ sub generateVerifier
 
     unless($db->do(<<__DELETE_SESSION, $user, $key))
 DELETE FROM oauthprovider_sessions_table
- WHERE user_oauthprovider= ?
-   AND consumer_oauthprovider= ?
-   AND isaccess_oauthprovider=1
+ WHERE user_oauthprovider     = ?
+   AND consumer_oauthprovider = ?
+   AND isaccess_oauthprovider = 1
 __DELETE_SESSION
     {   log(err => 'Unable to delete other already granted access tokens for this user %s %s in database', $user, $key);
         return undef;
@@ -436,7 +449,7 @@ __UPDATE
     return $r;
 }
 
-=head3 method: generateAccess OPTIONS
+=head3 $obj->generateAccess(OPTIONS)
 
 Create an access token.  Returned is the response body, but C<undef>
 if the token does not exist anymore or is invalid.
@@ -445,9 +458,9 @@ Options:
 
 =over 
 
-=item * I<token>, the temporary token.
+=item * token =E<gt> STRING
 
-=item * I<verifier>, the verifier.
+=item * verifier =E<gt> STRING
 
 =back 
 
@@ -495,7 +508,7 @@ __UPDATE
      , 'oauth_expires_in='   . $self->{access_timeout};
 }
 
-=head3 method: getAccess OPTIONS
+=head3 $obj->getAccess(OPTIONS)
 
 Retreive an access token from database.  Returned is the HASH, or C<undef>
 when the token does not exist anymore or is invalid.
@@ -504,7 +517,7 @@ Options:
 
 =over 4
 
-=item * I<token>
+=item * token =E<gt> STRING
 
 =back 
 
@@ -542,7 +555,7 @@ __GET_ACCESS
     $valid_until >= time ? $data : undef;
 }
 
-=head3 method: generateRandomString $size
+=head3 $obj->generateRandomString($size)
 
 Return a random string with a sub-set of base64 characters.
 
@@ -560,30 +573,16 @@ sub generateRandomString($)
 }
 
 
-=head3 consumerConfigFor
+=head3 $obj->consumerConfigFor(KEY)
 
 Retreive config for a consumer
 
 Config file is like :
-# comment
 
-<consumer_key>
-secret <consumer_secret>
-enabled 0|1
-
-=over 
-
-=item * I<string>, the consumer key.
-
-=back 
-
-Returns
-
-=over 
-
-=item * I<string>
-
-=back 
+  # comment
+  <consumer_key>
+  secret <consumer_secret>
+  enabled 0|1
 
 =cut
 

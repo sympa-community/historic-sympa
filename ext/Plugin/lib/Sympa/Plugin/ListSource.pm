@@ -15,13 +15,17 @@ Sympa::Plugin::ListSource - list source interface for Sympa::List plugins
 
 =head1 SYNOPSIS
 
+  package Sympa::VOOT;
+  use base 'Sympa::Plugin', 'Sympa::Plugin::ListSource';
+
   my $source = Sympa::VOOT->listSource;
   my $count  = $source->getUsers(...);
 
 =head1 DESCRIPTION
 
-When a plugin implements this module, it will be called by Sympa's List
-managers.
+When a plugin implements this module, it can be called by Sympa's the List
+object to perform some tasks: it is the interface description of pluggable
+data-sources.
 
 =head1 METHODS
 
