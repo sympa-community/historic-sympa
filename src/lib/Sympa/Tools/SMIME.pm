@@ -116,9 +116,9 @@ sub sign_message {
 	);
 
 	my $command =
-	"$params{openssl} smime -sign " .
-	"-signer $cert -inkey $key -out $signed_message_file" .
-	($password_file ? " -passin file:$password_file" : "" );
+		"$params{openssl} smime -sign " .
+		"-signer $cert -inkey $key -out $signed_message_file" .
+		($password_file ? " -passin file:$password_file" : "" );
 	Sympa::Log::Syslog::do_log('debug', $command);
 
 	my $command_handle;
@@ -203,11 +203,11 @@ sub check_signature {
 	my $signer_cert_file = File::Temp->new(
 		UNLINK => $main::options{'debug'} ? 0 : 1
 	);
-	my $command = 
-	"$params{openssl} smime -verify -signer $signer_cert_file " .
-	($params{cafile} ? "-CAfile $params{cafile}" : '')          .
-	($params{capath} ? "-CApath $params{capath}" : '')          .
-	">/dev/null 2>&1";
+	my $command =
+		"$params{openssl} smime -verify -signer $signer_cert_file " .
+		($params{cafile} ? "-CAfile $params{cafile}" : '')          .
+		($params{capath} ? "-CApath $params{capath}" : '')          .
+		">/dev/null 2>&1";
 	Sympa::Log::Syslog::do_log('debug', $command);
 
 	my $command_handle;
@@ -428,8 +428,8 @@ sub encrypt_message {
 	);
 
 	my $command =
-	"$params{openssl} smime -encrypt -out $crypted_message_file " .
-	"-des3 $usercert";
+		"$params{openssl} smime -encrypt -out $crypted_message_file " .
+		"-des3 $usercert";
 	Sympa::Log::Syslog::do_log ('debug3', $command);
 
 	my $command_handle;
@@ -527,9 +527,9 @@ sub decrypt_message {
 		);
 
 		my $command =
-		"$params{openssl} smime -decrypt -out $decrypted_message_file" .
-		" -recip $certfile -inkey $keyfile" . 
-		($password_file ? " -passin file:$password_file" : "" );
+			"$params{openssl} smime -decrypt -out $decrypted_message_file" .
+			" -recip $certfile -inkey $keyfile" . 
+			($password_file ? " -passin file:$password_file" : "" );
 		Sympa::Log::Syslog::do_log('debug', $command);
 		my $command_handle;
 		unless (open ($command_handle, '|-', $command)) {
@@ -703,7 +703,7 @@ sub _parse_cert {
 	## Extract information from cert
 	my $file = File::Temp->new(UNLINK => 1);
 	my $command =
-	"$params{openssl} x509 -email -subject -purpose -noout > $file";
+		"$params{openssl} x509 -email -subject -purpose -noout > $file";
 	my $pipe_handle;
 	unless (open($pipe_handle, '|-', $command)) {
 		Sympa::Log::Syslog::do_log('err', "_parse_cert: open |openssl: $ERRNO");
@@ -772,8 +772,8 @@ sub _extract_certs {
 	return unless $entity->mime_type() =~ /application\/(x-)?pkcs7-/;
 
 	my $command =
-	"$params{openssl} pkcs7 -print_certs -inform der " .
-	"> $params{file}";
+		"$params{openssl} pkcs7 -print_certs -inform der " .
+		"> $params{file}";
 	my $handle;
 	unless (open($handle, '|-', $command)) {
 		Sympa::Log::Syslog::do_log('err', "unable to run openssl pkcs7: $ERRNO");
