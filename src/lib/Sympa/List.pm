@@ -4601,7 +4601,7 @@ sub send_to_editor {
 	return $modkey;
 }
 
-$list->send_auth(message)):
+=item $list->send_auth(message)):
 
 Sends an authentication request for a sent message to distribute. The message
 for distribution is copied in the authqueue spool in order to wait for
