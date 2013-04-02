@@ -341,9 +341,9 @@ sub check_signature {
 	# in a single file for dual-purpose certificates,
 	# or as distinct files for single-purpose certificates
 	foreach my $category (keys %certs) {
-		my $cert_file = 
-		"$params{cert_dir}/" .
-		Sympa::Tools::escape_chars(lc($message->{sender}));
+		my $cert_file =
+			"$params{cert_dir}/" .
+			Sympa::Tools::escape_chars(lc($message->{sender}));
 		if ($category ne 'both') {
 			unlink($cert_file); # just in case there's an old cert left...
 			$cert_file .= "\@$category";
@@ -415,7 +415,7 @@ sub encrypt_message {
 		return undef;
 	}
 
-	# clone original message, and discard all headers excepted 
+	# clone original message, and discard all headers excepted
 	# mime-type and content ones
 	my $entity_clone = $params{entity}->dup();
 	foreach my $header ($entity_clone->head()->tags()) {
@@ -528,7 +528,7 @@ sub decrypt_message {
 
 		my $command =
 			"$params{openssl} smime -decrypt -out $decrypted_message_file" .
-			" -recip $certfile -inkey $keyfile" . 
+			" -recip $certfile -inkey $keyfile" .
 			($password_file ? " -passin file:$password_file" : "" );
 		Sympa::Log::Syslog::do_log('debug', $command);
 		my $command_handle;

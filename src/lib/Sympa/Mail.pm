@@ -1073,7 +1073,7 @@ sub _smtpto {
 # * $msg: ref(MIME::Entity) | string - message to reformat
 # * $attachments: ref(ARRAY) - messages to be attached as subparts.
 # * $defcharset
-# 
+#
 # Return value:
 # a string
 

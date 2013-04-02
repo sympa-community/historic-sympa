@@ -98,7 +98,7 @@ sub create {
 		$db_type eq 'sybase' ? 'Sympa::Datasource::SQL::Sybase'     :
 		                       'Sympa::Datasource::SQL'             ;
 
-	# better solution: UNIVERSAL::require 
+	# better solution: UNIVERSAL::require
 	my $module = $subclass . '.pm';
 	$module =~ s{::}{/}g;
 	eval { require $module; };

@@ -97,8 +97,7 @@ sub new {
 	my $self={};
 	bless $self, $class;
 
-	$self->{'is_a_crawler'} = 
-	$params{crawlers}->{$ENV{'HTTP_USER_AGENT'}};
+	$self->{'is_a_crawler'} = $params{crawlers}->{$ENV{'HTTP_USER_AGENT'}};
 	# passive_session are session not stored in the database, they are used
 	# for crawler bots and action such as css, wsdl, ajax and rss
 	$self->{'passive_session'} =

@@ -52,7 +52,7 @@ Parameters:
 
 =over
 
-=item L<Sympa::Message> 
+=item L<Sympa::Message>
 
 The message to parse.
 
@@ -167,7 +167,7 @@ Parameters:
 
 =over
 
-=item L<Sympa::Message> 
+=item L<Sympa::Message>
 
 The message to parse.
 
@@ -562,7 +562,7 @@ sub parse_notification {
 			}
 
 			while ($paragraph = shift @paragraphes) {
-				last if $paragraph !~ 
+				last if $paragraph !~
 					/^<($address_pattern)>(?: \(expanded from <$address_pattern>\))?:\s(.*)/ms;
 
 				my ($address, $reason) = ($1, $2);
