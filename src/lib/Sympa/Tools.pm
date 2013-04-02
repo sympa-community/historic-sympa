@@ -91,19 +91,21 @@ sub _create_xss_parser {
 
 =head1 FUNCTIONS
 
-=head2 pictures_filename(%parameters)
+=over
+
+=item pictures_filename(%parameters)
 
 Return the type of a pictures according to the user.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<email>
+=item C<email> => FIXME
 
-=item * I<list>
+=item C<list> => FIXME
 
-=item * I<path>
+=item C<path> => FIXME
 
 =back
 
@@ -126,21 +128,21 @@ sub pictures_filename {
 	return $filename;
 }
 
-=head2 make_pictures_url(%parameters)
+=item make_pictures_url(%parameters)
 
 Creation of pictures url.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<url>
+=item C<url> => FIXME
 
-=item * I<email>
+=item C<email> => FIXME
 
-=item * I<list>
+=item C<list> => FIXME
 
-=item * I<path>
+=item C<path> => FIXME
 
 =back
 
@@ -156,20 +158,20 @@ sub make_pictures_url {
 	$parameters{'url'}.$listname.'@'.$robot.'/'.$filename : undef;
 }
 
-=head2 sanitize_html(%parameters)
+=item sanitize_html(%parameters)
 
 Returns sanitized version (using StripScripts) of the string provided as
 argument.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<string>
+=item C<string> => FIXME
 
-=item * I<robot>
+=item C<robot> => FIXME
 
-=item * I<host>
+=item C<host> => FIXME
 
 =back
 
@@ -193,20 +195,20 @@ sub sanitize_html {
 	return $string;
 }
 
-=head2 sanitize_html_file(%parameters)
+=item sanitize_html_file(%parameters)
 
 Returns sanitized version (using StripScripts) of the content of the file whose
 path is provided as argument.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<file>
+=item C<file> => FIXME
 
-=item * I<robot>
+=item C<robot> => FIXME
 
-=item * I<host>
+=item C<host> => FIXME
 
 =back
 
@@ -230,23 +232,23 @@ sub sanitize_html_file {
 	return $hss -> filtered_document;
 }
 
-=head2 sanitize_var(%parameters)
+=item sanitize_var(%parameters)
 
 Sanitize all values in the hash $var, starting from $level
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<var>
+=item C<var> => FIXME
 
-=item * I<level>
+=item C<level> => FIXME
 
-=item * I<robot>
+=item C<robot> => FIXME
 
-=item * I<htmlAllowedParam>
+=item C<htmlAllowedParam> => FIXME
 
-=item * I<htmlToFilter>
+=item C<htmlToFilter> => FIXME
 
 =back
 
@@ -316,7 +318,7 @@ sub sanitize_var {
 	return 1;
 }
 
-=head2 by_date()
+=item by_date()
 
 Sort subroutine to order files in sympa spool by date
 
@@ -334,7 +336,7 @@ sub by_date {
 
 }
 
-=head2 safefork()
+=item safefork()
 
 Safefork does several tries before it gives up. Do 3 trials and wait 10 seconds
 * $i between each. Exit with a fatal error is fork failed after all tests have
@@ -354,24 +356,34 @@ sub safefork {
 	## No return.
 }
 
-=head2 checkcommand($msg, $sender, $robot, $regexp)
+=item checkcommand($msg, $sender, $robot, $regexp)
 
 Checks for no command in the body of the message. If there are some command in
 it, it return true and send a message to $sender.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$msg>: message to check (MIME::Entity object)
+=item L<MIME::Entity>
 
-=item * I<$sender>: the sender
+The message to check.
 
-=item * I<$robot>: the robot
+=item string
+
+The sender
+
+=item string
+
+The robot
+
+=item string
+
+The regexp
 
 =back
 
-=head3 Return value
+Return value:
 
 true if there are some command in $msg, false otherwise.
 
@@ -406,19 +418,19 @@ sub checkcommand {
 	return 0;
 }
 
-=head2 load_edit_list_conf($robot, $list, $basedir)
+=item load_edit_list_conf($robot, $list, $basedir)
 
 Return a hash from the edit_list_conf file
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>
+=item FIXME
 
-=item * I<$list>
+=item FIXME
 
-=item * I<$basedir>
+=item FIXME
 
 =back
 
@@ -476,17 +488,17 @@ sub load_edit_list_conf {
 	return $conf;
 }
 
-=head2 load_create_list_conf($robot, $basedir)
+=item load_create_list_conf($robot, $basedir)
 
 Return a hash from the create_list_conf file
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>
+=item FIXME
 
-=item * I<$basedir>
+=item FIXME
 
 =back
 
@@ -636,27 +648,27 @@ sub get_templates_list {
 
 }
 
-=head2 get_template_path($type, $robot, $scope, $tpl, $lang, $list, $basedir)
+=item get_template_path($type, $robot, $scope, $tpl, $lang, $list, $basedir)
 
 Return the path for a specific template
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>
+=item FIXME
 
-=item * I<$robot>
+=item FIXME
 
-=item * I<$scope>
+=item FIXME
 
-=item * I<$tpl>
+=item FIXME
 
-=item * I<$lang>
+=item FIXME
 
-=item * I<$list>
+=item FIXME
 
-=item * I<$basedir>
+=item FIXME
 
 =back
 
@@ -702,19 +714,19 @@ sub get_template_path {
 	return undef;
 }
 
-=head2 as_singlepart($msg, $preferred_type, $loops)
+=item as_singlepart($msg, $preferred_type, $loops)
 
 Make a multipart/alternative, a singlepart
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$msg>
+=item FIXME
 
-=item * I<$preferred_type>
+=item FIXME
 
-=item * I<$loops>
+=item FIXME
 
 =back
 
@@ -778,7 +790,7 @@ sub as_singlepart {
 	return $done;
 }
 
-=head2 escape_chars()
+=item escape_chars()
 
 Escape weird characters.
 
@@ -802,7 +814,7 @@ sub escape_chars {
 	return $s;
 }
 
-=head2 escape_docname($filename, $except)
+=item escape_docname($filename, $except)
 
 Escape shared document file name
 Q-decode it first
@@ -822,7 +834,7 @@ sub escape_docname {
 	return escape_chars($filename, $except);
 }
 
-=head2 unicode_to_utf8($string)
+=item unicode_to_utf8($string)
 
 Convert from Perl unicode encoding to UTF8
 
@@ -838,7 +850,7 @@ sub unicode_to_utf8 {
 	return $s;
 }
 
-=head2 qencode_filename($filename)
+=item qencode_filename($filename)
 
 Q-Encode web file name
 
@@ -868,7 +880,7 @@ sub qencode_filename {
 	return $filename;
 }
 
-=head2 qdecode_filename($filename)
+=item qdecode_filename($filename)
 
 Q-Decode web file name
 
@@ -886,7 +898,7 @@ sub qdecode_filename {
 	return $filename;
 }
 
-=head2 unescape_chars($string, $except)
+=item unescape_chars($string, $except)
 
 Unescape weird characters
 
@@ -925,7 +937,7 @@ sub unescape_html {
 	return $s;
 }
 
-=head2 sympa_checksum($rcpt, $cookie)
+=item sympa_checksum($rcpt, $cookie)
 
 Check sum used to authenticate communication from wwsympa to sympa
 
@@ -937,7 +949,7 @@ sub sympa_checksum {
 	return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
 }
 
-=head2 cookie_changed($current, $basedir)
+=item cookie_changed($current, $basedir)
 
 Create a cipher.
 
@@ -1339,26 +1351,26 @@ sub virus_infected {
 
 }
 
-=head2 get_filename($type, $options, $name, $robot, $object, $basedir)
+=item get_filename($type, $options, $name, $robot, $object, $basedir)
 
 Look for a file in the list > robot > server > default locations
 Possible values for $options : order=all
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>
+=item FIXME
 
-=item * I<$options>
+=item FIXME
 
-=item * I<$name>
+=item FIXME
 
-=item * I<$robot>
+=item FIXME
 
-=item * I<$object>
+=item FIXME
 
-=item * I<$basedir>
+=item FIXME
 
 =back
 
@@ -1444,31 +1456,39 @@ sub get_filename {
 	return undef;
 }
 
-=head2 make_tt2_include_path($robot, $dir, $lang, $list, $basedir, $viewmaildir, $domain)
+=item make_tt2_include_path($robot, $dir, $lang, $list, $basedir, $viewmaildir, $domain)
 
 Make an array of include path for tt2 parsing.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>: robot
+=item FIXME
 
-=item * I<$dir>: directory ending each path
+The robot.
 
-=item * I<$lang>: lang
+=item FIXME
 
-=item * I<$list>: list
+The directory ending each path.
 
-=item * I<$basedir>
+=item FIXME
 
-=item * I<$viewmaildir>
+The lang
 
-=item * I<$domain>
+=item FIXME
+
+The list
+
+=item FIXME
+
+=item FIXME
+
+=item FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 An arrayref of tt2 include path
 
@@ -1556,17 +1576,21 @@ sub make_tt2_include_path {
 
 }
 
-=head2 qencode_hierarchy($dir)
+=item qencode_hierarchy($dir, $original_encoding)
 
 Q-encode a complete file hierarchy. Useful to Q-encode subshared documents
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$dir>: root directory
+=item FIXME
 
-=item * I<$original_encoding>: suspected original encoding of filenames
+The root directory
+
+=item FIXME
+
+The suspected original encoding of filenames.
 
 =back
 
@@ -1613,7 +1637,7 @@ sub get_message_id {
 	return $id;
 }
 
-=head2 valid_email($email)
+=item valid_email($email)
 
 Basic check of an email address
 
@@ -1636,7 +1660,7 @@ sub valid_email {
 	return 1;
 }
 
-=head2 clean_email($email)
+=item clean_email($email)
 
 Clean email address
 
@@ -1655,7 +1679,7 @@ sub clean_email {
 	return $email;
 }
 
-=head2 get_canonical_email($email)
+=item get_canonical_email($email)
 
 Return canonical email address (lower-cased + space cleanup)
 It could also support alternate email
@@ -1674,19 +1698,21 @@ sub get_canonical_email {
 	return $email;
 }
 
-=head2 clean_msg_id($msg_id)
+=item clean_msg_id($msg_id)
 
 clean msg_id to use it without  \n, \s or <,>
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$msg_id>: the message id.
+=item FIXME
+
+The message id.
 
 =back
 
-=head3 Return value
+Return value:
 
 The clean message id.
 
@@ -1704,7 +1730,7 @@ sub clean_msg_id {
 	return $msg_id;
 }
 
-=head2 change_x_sympa_to($file, $value)
+=item change_x_sympa_to($file, $value)
 
 Change X-Sympa-To: header field in the message
 
@@ -1786,7 +1812,7 @@ sub add_in_blacklist {
 
 }
 
-=head2 md5_fingerprint($string)
+=item md5_fingerprint($string)
 
 The algorithm MD5 (Message Digest 5) is a cryptographic hash function which
 permit to obtain the fingerprint of a file/data.
@@ -1811,7 +1837,7 @@ sub get_separator {
 	return $separator;
 }
 
-=head2 get_regexp($type)
+=item get_regexp($type)
 
 Return the Sympa regexp corresponding to the given type.
 
@@ -1828,29 +1854,27 @@ sub get_regexp {
 
 }
 
-=head2 CleanSpool($spool_dir, $clean_delay)
+=item CleanDir($dir, $clean_delay)
 
 Clean all messages in spool $spool_dir older than $clean_delay.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$spool_dir>: a string corresponding to the path to the spool to clean;
+=item string
 
-=item * I<$clean_delay>: the delay between the moment we try to clean spool and the last modification date of a file.
+The path to the spool to clean.
+
+=item FIXME
+
+The delay between the moment we try to clean spool and the last modification date of a file.
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the spool was cleaned, a false value otherwise.
-
-=head2 CleanDir($dir, $clean_delay)
-
-Cleans files older than $clean_delay from spool $spool_dir
-
-Returns a true value.
 
 =cut
 
@@ -1884,7 +1908,7 @@ sub CleanDir {
 	return 1;
 }
 
-=head2 get_lockname()
+=item get_lockname()
 
 Return a lockname that is a uniq id of a processus (hostname + pid) ; hostname
 (20) and pid(10) are truncated in order to store lockname in database
@@ -1896,7 +1920,7 @@ sub get_lockname {
 	return substr(substr(hostname(), 0, 20).$PID,0,30);
 }
 
-=head2 wrap_text($text, $init, $subs, $cols)
+=item wrap_text($text, $init, $subs, $cols)
 
 Return line-wrapped text.
 
@@ -1918,19 +1942,21 @@ sub wrap_text {
 	return $text;
 }
 
-=head2 addrencode($addr, $phrase, $charset)
+=item addrencode($addr, $phrase, $charset)
 
 Return formatted (and encoded) name-addr as RFC5322 3.4.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$addr>
+=item FIXME
 
-=item * I<$phrase>
+=item FIXME
 
-=item * I<$charset> (default: utf8)
+=item FIXME
+
+(default: utf8)
 
 =back
 
@@ -1965,23 +1991,23 @@ sub addrencode {
 	}
 }
 
-=head2 create_html_part_from_web_page(%parameters)
+=item create_html_part_from_web_page(%parameters)
 
 Generate a newsletter from an HTML URL or a file path.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<from>: FIXME
+=item C<from> => FIXME
 
-=item * I<to>: FIXME
+=item C<to> => FIXME
 
-=item * I<headers>: FIXME
+=item C<headers> => FIXME
 
-=item * I<subject>: FIXME
+=item C<subject> => FIXME
 
-=item * I<source>: FIXME
+=item C<source> => FIXME
 
 =back
 
@@ -2011,7 +2037,7 @@ sub create_html_part_from_web_page {
 	return $part->as_string;
 }
 
-=head2 decode_header($msg, $tag, $sep)
+=item decode_header($msg, $tag, $sep)
 
 Return header value decoded to UTF-8 or undef.
 trailing newline will be removed.
@@ -2046,5 +2072,9 @@ sub decode_header {
 		return $val;
 	}
 }
+
+=back
+
+=cut
 
 1;

@@ -60,19 +60,23 @@ my %Ldap = ();
 
 =head1 FUNCTIONS
 
-=head2 load($config)
+=over
+
+=item load($config)
 
 Loads and parses the configuration file. Reports errors if any.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$config>: the configuration file
+=item string
+
+The configuration file.
 
 =back
 
-=head3 Return value
+Return value:
 
 The configuration, as an hash.
 
@@ -140,5 +144,9 @@ sub load {
 	}
 	return %Ldap;
 }
+
+=back
+
+=cut
 
 1;

@@ -40,19 +40,23 @@ use Sympa::Log::Syslog;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Configuration::XML->new(%parameters)
+=over
+
+=item Sympa::Configuration::XML->new(%parameters)
 
 Creates a new L<Sympa::Configuration::XML> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<handle>: file handler on the xml file
+=item C<handle> => filehandle
+
+The XML file handle.
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Configuration::XML> object, or I<undef>, if something went wrong.
 
@@ -452,6 +456,9 @@ sub _find_lines {
     return $hash;
 }
 
+=back
+
+=cut
 
 ######################################################
 1;

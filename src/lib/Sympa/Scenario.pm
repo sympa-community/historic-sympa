@@ -50,29 +50,31 @@ my %persistent_cache;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Scenario->new(%parameters)
+=over
+
+=item Sympa::Scenario->new(%parameters)
 
 Creates a new L<Sympa::Scenario> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<function>: FIXME
+=item C<function> => FIXME
 
-=item * I<robot>: FIXME
+=item C<robot> => FIXME
 
-=item * I<name>: FIXME
+=item C<name> => FIXME
 
-=item * I<directory>: FIXME
+=item C<directory> => FIXME
 
-=item * I<file_path>: FIXME
+=item C<file_path> => FIXME
 
-=item * I<options>: FIXME
+=item C<options> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Scenario> object, or I<undef>, if something went wrong.
 
@@ -1422,5 +1424,9 @@ sub dump_all_scenarios {
 	Sympa::Tools::Data::dump_var(\%all_scenarios, 0, \*TMP);
 	close TMP;
 }
+
+=back
+
+=cut
 
 1;

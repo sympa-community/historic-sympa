@@ -41,7 +41,9 @@ use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
-=head2 set_cookie_soap($session_id, $http_domain, $expire)
+=over
+
+=item set_cookie_soap($session_id, $http_domain, $expire)
 
 Sets an HTTP cookie to be sent to a SOAP client
 
@@ -71,7 +73,7 @@ sub set_cookie_soap {
 	return $cookie;
 }
 
-=head2 get_mac($email, $secret)
+=item get_mac($email, $secret)
 
 Returns Message Authentication Check code
 
@@ -132,7 +134,7 @@ sub set_cookie_extern {
 	return 1;
 }
 
-=head2 generic_get_cookie($http_cookie, $cookie_name)
+=item generic_get_cookie($http_cookie, $cookie_name)
 
 Generic subroutine to get a cookie value
 
@@ -152,7 +154,7 @@ sub generic_get_cookie {
 	return (undef);
 }
 
-=head2 check_cookie($http_cookie, $secret)
+=item check_cookie($http_cookie, $secret)
 
 Returns user information extracted from the cookie
 
@@ -199,5 +201,9 @@ sub check_cookie_extern {
 }
 return undef
 }
+
+=back
+
+=cut
 
 1;

@@ -50,15 +50,17 @@ use Sympa::Tools::File;
 
 =head1 FUNCTIONS
 
-=head2 get_previous_version()
+=over
+
+=item get_previous_version()
 
 Return the previous Sympa version, ie the one listed in data_structure.version
 
-=head3 Parameters
+Parameters:
 
 None
 
-=head3 Return value
+Return value:
 
 A version number.
 
@@ -1126,7 +1128,7 @@ sub md5_encode_password {
 	return $total;
 }
 
-=head2 lower_version($v1, $v2)
+=item lower_version($v1, $v2)
 
 Compare 2 versions of Sympa
 
@@ -1167,5 +1169,9 @@ sub lower_version {
 
 	return 0;
 }
+
+=back
+
+=cut
 
 1;

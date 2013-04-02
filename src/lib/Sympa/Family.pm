@@ -52,20 +52,23 @@ my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Family->get_available_families($robot)
+=over
+
+=item Sympa::Family->get_available_families($robot)
 
 Returns the list of existing families in the Sympa installation.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>: the name of the robot the family list of which we want to
-get
+=item string
+
+the name of the robot the family list of which we want to get.
 
 =back
 
-=head3 Return
+Return:
 
 An array  containing all the robot's families names.
 
@@ -107,25 +110,25 @@ sub get_available_families {
 	return keys %families;
 }
 
-=head2 Sympa::Family->new(%parameters)
+=item Sympa::Family->new(%parameters)
 
 Creates a new L<Sympa::Family> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<name>: family name
+=item C<name> => family name
 
-=item * I<robot>: the robot which the family is/will be installed in
+=item C<robot> => the robot which the family is/will be installed in
 
-=item * I<config>: family configuration
+=item C<config> => family configuration
 
-=item * I<etcdir>: FIXME
+=item C<etcdir> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A new L<Sympa::Family> object, or I<undef> if something went wrong.
 
@@ -199,25 +202,29 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
-
-=head2 $family->add_list($data, $abort_on_error, $host)
-
-Adds a list to the family. List description can be passed either through a hash of data or through a file handle.
-
-=head3 Parameters
 
 =over
 
-=item * I<$data>: a file handle on an XML B<list> description file or a hash of data
+=item $family->add_list($data, $abort_on_error, $host)
 
-=item * I<$abort_on_error>: if true, the function won't create lists in status error_config
+Adds a list to the family. List description can be passed either through a hash of data or through a file handle.
 
-=item * I<$host>
+Parameters:
+
+=over
+
+=item C<$data> => a file handle on an XML B<list> description file or a hash of data
+
+=item C<$abort_on_error> => if true, the function won't create lists in status error_config
+
+=item C<$host> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 An hash containing the execution state of the method. If everything went well,
 the "ok" key must be associated to the value "1".
@@ -331,21 +338,21 @@ $return->{'ok'} = 1;
 return $return;
 }
 
-=head2 $family->modify_list($fh, $host)
+=item $family->modify_list($fh, $host)
 
 Adds a list to the family.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$fh>: a file handle on the XML B<list> configuration file
+=item C<$fh> => a file handle on the XML B<list> configuration file
 
-=item * I<$host>:
+=item C<$host> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 An hash containing the execution state of the method. If everything went well,
 the "ok" key must be associated to the value "1".
@@ -550,15 +557,15 @@ sub modify_list {
 	return $return;
 }
 
-=head2 $family->close_family()
+=item $family->close_family()
 
 Closes every list family.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A character string containing a message to display describing the results of
 the methods.
@@ -606,23 +613,23 @@ sub close_family {
 	return $string;
 }
 
-=head2 $family->instantiate($fh, $close_unknown, $tmpdir, $host)
+=item $family->instantiate($fh, $close_unknown, $tmpdir, $host)
 
 Creates family lists or updates them if they exist already.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$fh>: a file handle on the XML B<list> configuration file
+=item C<$fh> => a file handle on the XML B<list> configuration file
 
-=item * I<$close_unknown>: if true, the function will close old lists undefined in the new instantiation
+=item C<$close_unknown> => if true, the function will close old lists undefined in the new instantiation
 
-=item * I<$tmpdir>
+=item C<$tmpdir> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -837,15 +844,15 @@ sub instantiate {
 	return 1;
 }
 
-=head2 $family->get_instantiation_results()
+=item $family->get_instantiation_results()
 
 Returns a string with information summarizing the instantiation results.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A string containing a message to display.
 
@@ -960,27 +967,27 @@ sub get_instantiation_results {
 
 }
 
-=head2 $family->check_param_constraint($list)
+=item $family->check_param_constraint($list)
 
 Checks the parameter constraints taken from param_constraint.conf file for the List object $list.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: the list to check (L<Sympa::List> object)
+=item C<$list> => the list to check (L<Sympa::List> object)
 
 =back
 
-=head3 Return value
+Return value:
 
 =over
 
-=item * I<1> if everything goes well,
+=item C<1> => if everything goes well,
 
-=item * I<undef> if something goes wrong,
+=item C<undef> => if something goes wrong,
 
-=item * I<\@error>, a ref on an array containing parameters conflicting with constraints.
+=item C<\@error> =>, a ref on an array containing parameters conflicting with constraints.
 
 =back
 
@@ -1043,15 +1050,15 @@ sub check_param_constraint {
 }
 }
 
-=head2 $family->get_constraints()
+=item $family->get_constraints()
 
 Returns a hash containing the values found in the param_constraint.conf file.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hash containing the values found in the param_constraint.conf file.
 
@@ -1075,25 +1082,25 @@ sub get_constraints {
 	return $self->{'param_constraint_conf'};
 }
 
-=head2 $family->check_values($param_value, $constraint_value)
+=item $family->check_values($param_value, $constraint_value)
 
 Returns 0 if all the value(s) found in $param_value appear also in $constraint_value. Otherwise the function returns an array containing the unmatching values.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$param_value>: a scalar or a ref to a list (which is also a scalar after all)
+=item C<$param_value> => a scalar or a ref to a list (which is also a scalar after all)
 
-=item * I<$constraint_value>: a scalar or a ref to a list
+=item C<$constraint_value> => a scalar or a ref to a list
 
 =back
 
-=head3 Return
+Return:
 
 =over
 
-=item * I<\@error>, a ref to an array containing the values in $param_value which don't match those in $constraint_value.
+=item C<\@error> =>, a ref to an array containing the values in $param_value which don't match those in $constraint_value.
 
 =back
 
@@ -1157,29 +1164,29 @@ sub check_values {
 }
 
 
-=head2 $family->get_param_constraint($param)
+=item $family->get_param_constraint($param)
 
 Gets the constraints on parameter $param from the 'param_constraint.conf' file.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$param>: the name of the parameter for which we want to gather constraints.
+=item C<$param> => the name of the parameter for which we want to gather constraints.
 
 =back
 
-=head3 Return value
+Return value:
 
 =over
 
-=item * I<0> if there are no constraints on the parameter,
+=item C<0> => if there are no constraints on the parameter,
 
-=item * I<a scalar> containing the allowed value if the parameter has a fixed value,
+=item C<a scalar> => containing the allowed value if the parameter has a fixed value,
 
-=item * I<a ref to a hash> containing the allowed values if the parameter is controlled,
+=item C<a ref to a hash> => containing the allowed values if the parameter is controlled,
 
-=item * I<undef> if something went wrong.
+=item C<undef> => if something went wrong.
 
 =back
 
@@ -1201,15 +1208,15 @@ sub get_param_constraint {
 	}
 }
 
-=head2 $family->get_family_lists()
+=item $family->get_family_lists()
 
 Returns a ref to an array whose values are the family lists' names.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An arrayref containing the family lists names.
 
@@ -1230,16 +1237,16 @@ sub get_family_lists {
 	return \@list_of_lists;
 }
 
-=head2 $family->get_hash_family_lists()
+=item $family->get_hash_family_lists()
 
 Returns a ref to a hash whose keys are this family's lists' names. They are
 associated to the value "1".
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref whose keys are the family's lists' names.
 
@@ -1260,15 +1267,15 @@ sub get_hash_family_lists {
 	return \%list_of_lists;
 }
 
-=head2 $family->get_uncompellable_param()
+=item $family->get_uncompellable_param()
 
 Returns a reference to hash whose keys are the uncompellable parameters.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref whose keys are the uncompellable parameters names.
 
@@ -1954,7 +1961,7 @@ sub create_automatic_list {
 	return $list;
 }
 
-=head2 $family->is_allowed_to_create_automatic_lists(%parameters)
+=item $family->is_allowed_to_create_automatic_lists(%parameters)
 
 Returns 1 if the user is allowed to create lists based on the family.
 
@@ -1994,6 +2001,9 @@ sub is_allowed_to_create_automatic_lists {
 
 	return 1;
 }
+
+=back
+
 =head1 AUTHORS
 
 =over

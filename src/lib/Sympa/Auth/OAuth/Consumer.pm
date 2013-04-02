@@ -45,31 +45,33 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Auth::OAuth::Consumer->new(%parameters)
+=over
+
+=item Sympa::Auth::OAuth::Consumer->new(%parameters)
 
 Creates a new L<Sympa::Auth::OAuth::Consumer> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<user>: a user email
+=item C<user> => a user email
 
-=item * I<provider>: the OAuth provider key
+=item C<provider> => the OAuth provider key
 
-=item * I<consumer_key>: FIXME
+=item C<consumer_key> => FIXME
 
-=item * I<consumer_secret>: FIXME
+=item C<consumer_secret> => FIXME
 
-=item * I<request_token_path>: the temporary token request URL
+=item C<request_token_path> => the temporary token request URL
 
-=item * I<access_token_path>: the access token request URL
+=item C<access_token_path> => the access token request URL
 
-=item * I<authorize_path>: the authorization URL
+=item C<authorize_path> => the authorization URL
 
 =back
 
-=head3 Return value
+Return value:
 
 A L<Sympa::Auth::OAuth::Consumer> object, or undef if something went wrong.
 
@@ -126,19 +128,23 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
-
-=head2 $consumer->set_web_env(%parameters)
-
-=head3 Parameters
 
 =over
 
-=item * I<robot>
+=item $consumer->set_web_env(%parameters)
 
-=item * I<here_path>
+Parameters:
 
-=item * I<base_path>
+=over
+
+=item C<robot> =>
+
+=item C<here_path> =>
+
+=item C<base_path> =>
 
 =back
 
@@ -152,9 +158,9 @@ sub set_web_env {
 	$self->{'base_path'} = $params{'base_path'};
 }
 
-=head2 $consumer->must_redirect()
+=item $consumer->must_redirect()
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -166,21 +172,21 @@ sub must_redirect {
 	return $self->{'redirect_url'};
 }
 
-=head2 $consumer->fetch_ressource(%parameters)
+=item $consumer->fetch_ressource(%parameters)
 
 Check if user has an access token already and fetch resource.
 
-=head3 parameters
+parameters:
 
 =over
 
-=item * I<url>: the resource url
+=item C<url> => the resource url
 
-=item * I<params>: the request parameters (optional)
+=item C<params> => the request parameters (optional)
 
 =back
 
-=head3 Return value
+Return value:
 
 The resource body, as a string, or undef if something went wrong.
 
@@ -223,15 +229,15 @@ sub fetch_ressource {
 	return $res->decoded_content || $res->content;
 }
 
-=head2 $consumer->has_access()
+=item $consumer->has_access()
 
 Check if user has an access token already, triggers OAuth workflow otherwise
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref, if there is a known access token, undef otherwise.
 
@@ -251,15 +257,15 @@ sub has_access {
 	return $self->{'session'}{'access'};
 }
 
-=head2 $consumer->trigger_flow()
+=item $consumer->trigger_flow()
 
 Triggers OAuth authorization workflow, call only in web env.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value, if everything's alright.
 
@@ -310,21 +316,21 @@ sub trigger_flow {
 	return 1;
 }
 
-=head2 head2 $consumer->get_access_token(%parameters)
+=item $consumer->get_access_token(%parameters)
 
 Try to obtain access token from verifier.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<verifier>
+=item C<verifier> =>
 
-=item * I<token>
+=item C<token> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the token was retreived successfully, undef otherwise.
 
@@ -353,6 +359,8 @@ sub get_access_token {
 
 	return $self->{'session'}{'access'};
 }
+
+=back
 
 =head1 AUTHORS
 

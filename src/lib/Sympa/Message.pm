@@ -48,27 +48,37 @@ use Sympa::Tools::SMIME;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Message->new(%parameters)
+=over
+
+=item Sympa::Message->new(%parameters)
 
 Creates a new L<Sympa::Message> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<file>: message source, as a file
+=item C<file> => string
 
-=item * I<string>: message source, as a string
+The message source.
 
-=item * I<entity>: message source, as a C<MIME::Entity> object
+=item C<string> => string
 
-=item * I<hashref>: message source, as an hashref
+The message source.
 
-=item * I<noxsympato>: a boolean
+=item C<entity> => L<MIME::Entity>
+
+The message source.
+
+=item C<hashref> => hashref
+
+The message source.
+
+=item C<noxsympato> => boolean
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Message> object, or I<undef>, if something went wrong.
 
@@ -317,19 +327,21 @@ sub new {
 	return $self;
 }
 
-=head2 $message->dump($output)
+=item $message->dump($output)
 
 Dump this object to a stream.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$output>: the stream to which dump the object
+=item filehandle
+
+the stream to which dump the object
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value.
 
@@ -356,19 +368,21 @@ sub dump {
 	return 1;
 }
 
-=head2 $message->add_topic($topic)
+=item $message->add_topic($topic)
 
 Add topic and put header X-Sympa-Topic.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$topic>: the topic to add
+=item FIXME
+
+The topic to add
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value.
 
@@ -385,7 +399,7 @@ sub add_topic {
 }
 
 
-=head2 sub $message->get_topic()
+=item sub $message->get_topic()
 
 Get topic.
 
@@ -465,6 +479,8 @@ sub fix_html_part {
 	}
 	return $part;
 }
+
+=back
 
 =head1 AUTHORS
 

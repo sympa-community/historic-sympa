@@ -61,9 +61,11 @@ my %types = (
 
 =head1 CLASS METHODS
 
-=head2 Sympa::SOAP->checkCookie()
+=over
 
-=head3 Parameters
+=item Sympa::SOAP->checkCookie()
+
+Parameters:
 
 None
 
@@ -85,17 +87,17 @@ sub checkCookie {
 	return SOAP::Data->name('result')->type('string')->value($sender);
 }
 
-=head2 Sympa::SOAP->lists($topic, $subtopic, $mode)
+=item Sympa::SOAP->lists($topic, $subtopic, $mode)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$topic>
+=item C<$topic> =>
 
-=item * I<$subtopic>
+=item C<$subtopic> =>
 
-=item * I<$mode>
+=item C<$mode> =>
 
 =back
 
@@ -170,15 +172,15 @@ sub lists {
 	return SOAP::Data->name('listInfo')->value(\@result);
 }
 
-=head2 Sympa::SOAP->login($email, $password)
+=item Sympa::SOAP->login($email, $password)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$email>
+=item C<$email> =>
 
-=item * I<$password>
+=item C<$password> =>
 
 =back
 
@@ -244,13 +246,13 @@ sub login {
 	return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
 }
 
-=head2 Sympa::SOAP->casLogin($proxyTicket)
+=item Sympa::SOAP->casLogin($proxyTicket)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$proxyTicket>
+=item C<$proxyTicket> =>
 
 =back
 
@@ -337,23 +339,29 @@ sub casLogin {
 	return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
 }
 
+=back
+
 =head1 INSTANCE METHODS
-
-=head2 $soap->authenticateAndRun($email, $cookie, $service, $parameters)
-
-Used to call a service as an authenticated user without using HTTP cookies.
-
-=head3 Parameters
 
 =over
 
-=item * I<$email>
+=item $soap->authenticateAndRun($email, $cookie, $service, $parameters)
 
-=item * I<$cookie>: secret contained in the cookie
+Used to call a service as an authenticated user without using HTTP cookies.
 
-=item * I<$service>
+Parameters:
 
-=item * I<$parameters>
+=over
+
+=item FIXME
+
+=item FIXME
+
+The secret contained in the cookie
+
+=item FIXME
+
+=item FIXME
 
 =back
 
@@ -392,15 +400,15 @@ sub authenticateAndRun {
 	&{$service}($self,@$parameters);
 }
 
-=head2 $soap->getUserEmailByCookie($cookie)
+=item $soap->getUserEmailByCookie($cookie)
 
 Request user email from http cookie.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$cookie>
+=item FIXME
 
 =back
 
@@ -436,24 +444,33 @@ sub getUserEmailByCookie {
 
 }
 
-=head2 $soap->authenticateRemoteAppAndRun($appname, $apppassword, $vars, $service, $parameters)
+=item $soap->authenticateRemoteAppAndRun($appname, $apppassword, $vars, $service, $parameters)
 
 Call a service from a remote proxy application.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$appname>: remot application name
+=item FIXME
 
-=item * I<$apppassword>: remote application password
+The remote application name
 
-=item * I<$vars>: comma separated list of variable definitions
-(var=value,var=value,...)
+=item FIXME
 
-=item * I<$service>: service name requested
+The remote application password
 
-=item * I<$parameters>: service parameters
+=item string
+
+A comma separated list of variable definitions (var=value,var=value,...)
+
+=item FIXME
+
+The service name requested
+
+=item FIXME
+
+service parameters
 
 =back
 
@@ -502,19 +519,23 @@ sub authenticateRemoteAppAndRun {
 	&{$service}($self,@$parameters);
 }
 
+=back
+
 =head1 CLASS METHODS
-
-=head2 Sympa::SOAP->amI($listname, $function, $user)
-
-=head3 Parameters
 
 =over
 
-=item * I<$listname>
+=item Sympa::SOAP->amI($listname, $function, $user)
 
-=item * I<$function>
+Parameters:
 
-=item * I<$user>
+=over
+
+=item FIXME
+
+=item FIXME
+
+=item FIXME
 
 =back
 
@@ -556,13 +577,13 @@ sub amI {
 
 }
 
-=head2 Sympa::SOAP->info($listname)
+=item Sympa::SOAP->info($listname)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item FIXME
 
 =back
 
@@ -647,22 +668,22 @@ sub info {
 	->faultdetail("%s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
 
-=head2 Sympa::SOAP->createList($listname, $subject, $template, $description,
+=item Sympa::SOAP->createList($listname, $subject, $template, $description,
 $topics)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
-=item * I<$subject>
+=item C<$subject> =>
 
-=item * I<$template>
+=item C<$template> =>
 
-=item * I<$description>
+=item C<$description> =>
 
-=item * I<$topics>
+=item C<$topics> =>
 
 =back
 
@@ -788,13 +809,13 @@ return SOAP::Data->name('result')->type('boolean')->value(1);
 
 }
 
-=head2 Sympa::SOAP->closeList($listname)
+=item Sympa::SOAP->closeList($listname)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
 =back
 
@@ -855,19 +876,19 @@ sub closeList {
 	return 1;
 }
 
-=head2 Sympa::SOAP->add($listname, $email, $gecos, $quiet)
+=item Sympa::SOAP->add($listname, $email, $gecos, $quiet)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
-=item * I<$email>
+=item C<$email> =>
 
-=item * I<$gecos>
+=item C<$gecos> =>
 
-=item * I<$quiet>
+=item C<$quiet> =>
 
 =back
 
@@ -990,17 +1011,17 @@ sub add {
 	}
 }
 
-=head2 Sympa::SOAP->del($listname, $email, $quiet)
+=item Sympa::SOAP->del($listname, $email, $quiet)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
-=item * I<$email>
+=item C<$email> =>
 
-=item * I<$quiet>
+=item C<$quiet> =>
 
 =back
 
@@ -1114,13 +1135,13 @@ sub del {
 	return 1;
 }
 
-=head2 Sympa::SOAP->review($listname)
+=item Sympa::SOAP->review($listname)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
 =back
 
@@ -1215,13 +1236,13 @@ sub review {
 		->faultdetail("%s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
 
-=head2 Sympa::SOAP->fullReview($listname)
+=item Sympa::SOAP->fullReview($listname)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
 =back
 
@@ -1334,13 +1355,13 @@ sub fullReview {
 	return SOAP::Data->name('return')->value(\@result);
 }
 
-=head2 Sympa::SOAP->signoff($listname)
+=item Sympa::SOAP->signoff($listname)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
 =back
 
@@ -1456,15 +1477,15 @@ sub signoff {
 	->faultdetail("Sign off %s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
 
-=head2 Sympa::SOAP->subscribe($listname, $gecos)
+=item Sympa::SOAP->subscribe($listname, $gecos)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$listname>
+=item C<$listname> =>
 
-=item * I<$gecos>
+=item C<$gecos> =>
 
 =back
 
@@ -1624,15 +1645,19 @@ sub subscribe {
 	->faultdetail("%s from %s aborted because unknown requested action in scenario",$listname,$sender);
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $soap->complexWhich()
+=over
+
+=item $soap->complexWhich()
 
 Which list the user is subscribed to.
 
 TODO: all the lists, for listmaster.
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -1646,15 +1671,15 @@ sub complexWhich {
 	$self->which('complex');
 }
 
-=head2 $soap->complexLists($topic, $subtopic)
+=item $soap->complexLists($topic, $subtopic)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$topic>
+=item FIXME
 
-=item * I<$subtopic>
+=item FIXME
 
 =back
 
@@ -1670,17 +1695,17 @@ sub complexLists {
 	$self->lists($topic, $subtopic, 'complex');
 }
 
-=head2 $soap->which($mode)
+=item $soap->which($mode)
 
 Which list the user is subscribed to, with a simplified return structure.
 
 TODO: all the lists, for listmaster.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$mode>
+=item FIXME
 
 =back
 
@@ -1773,20 +1798,24 @@ sub which {
 	return SOAP::Data->name('return')->value(\@result);
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 struct_to_soap($data, $format)
+=over
+
+=item struct_to_soap($data, $format)
 
 Return a structure in SOAP data format
 either flat (string) or structured (complexType)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$data>
+=item FIXME
 
-=item * I<$format>
+=item FIXME
 
 =back
 
@@ -1827,15 +1856,15 @@ sub struct_to_soap {
 	return $soap_data;
 }
 
-=head2 get_reason_string($data, $format)
+=item get_reason_string($data, $format)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$reason>
+=item FIXME
 
-=item * I<$robot>
+=item FIXME
 
 =back
 
@@ -1857,5 +1886,9 @@ sub get_reason_string {
 
 return $string
 }
+
+=back
+
+=cut
 
 1;

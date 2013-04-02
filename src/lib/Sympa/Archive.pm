@@ -47,7 +47,9 @@ my $serial_number = 0; # incremented on each archived mail
 
 =head1 FUNCTIONS
 
-=head2 store_last($list, $msg)
+=over
+
+=item store_last($list, $msg)
 
 Does the real job : stores the message given as an argument into
 the indicated directory.
@@ -78,7 +80,7 @@ close(OUT);
 
 }
 
-=head2 lists($name)
+=item lists($name)
 
 Lists the files included in the archive, preformatted for printing.
 
@@ -160,21 +162,21 @@ sub scan_dir_archive {
 	return $all_msg;
 }
 
-=head2 search_msgid($dir, $msgid)
+=item search_msgid($dir, $msgid)
 
 Find a message in archive specified by I<$dir> and I<$msgid>.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$dir>
+=item C<$dir> =>
 
-=item * I<$msgid>
+=item C<$msgid> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 undef | #message in arctxt
 
@@ -228,7 +230,7 @@ sub exist {
 }
 
 
-=head2 last_path($list)
+=item last_path($list)
 
 Return path for latest message distributed in the list.
 
@@ -246,19 +248,19 @@ sub last_path {
 
 }
 
-=head2 load_html_message(%parameters)
+=item load_html_message(%parameters)
 
 Load an archived message, returns the mhonarc metadata
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<file_path>
+=item C<file_path> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -358,7 +360,7 @@ sub clean_archived_message {
 	}
 }
 
-=head2 convert_single_msg_2_html($data)
+=item convert_single_msg_2_html($data)
 
 Convert a message to html.
 Result is stored in $destination_dir
@@ -423,5 +425,9 @@ sub convert_single_msg_2_html {
 
 	return 1;
 }
+
+=back
+
+=cut
 
 1;

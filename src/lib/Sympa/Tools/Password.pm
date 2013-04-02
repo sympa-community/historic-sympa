@@ -42,13 +42,19 @@ use Sympa::Log::Syslog;
 ## global var to store a CipherSaber object
 my $cipher;
 
+=head1 FUNCTIONS
+
+=over
+
+=cut
+
 sub tmp_passwd {
     my ($email, $cookie) = @_;
 
     return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
 }
 
-=head2 ciphersaber_installed($cookie)
+=item ciphersaber_installed($cookie)
 
 Create a cipher.
 
@@ -73,7 +79,7 @@ sub ciphersaber_installed {
     }
 }
 
-=head2 crypt_password($inpasswd, $cookie)
+=item crypt_password($inpasswd, $cookie)
 
 Encrypt a password.
 
@@ -89,7 +95,7 @@ sub crypt_password {
     return ("crypt.".MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
 }
 
-=head2 decrypt_password($inpasswd, $cookie)
+=item decrypt_password($inpasswd, $cookie)
 
 Decrypt a password.
 
@@ -122,5 +128,9 @@ sub new_passwd {
 
     return 'init'.$passwd;
 }
+
+=back
+
+=cut
 
 1;

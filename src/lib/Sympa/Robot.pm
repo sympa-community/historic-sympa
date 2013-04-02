@@ -22,19 +22,21 @@ use Sympa::Log::Syslog;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Robot->new(%parameters)
+=over
+
+=item Sympa::Robot->new(%parameters)
 
 Creates a new L<Sympa::Robot> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<name>: FIXME
+=item C<name> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Robot> object, or I<undef> if something went wrong.
 
@@ -72,13 +74,17 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $robot->get_lists()
+=over
+
+=item $robot->get_lists()
 
 Load all lists belonging to this robot
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -89,5 +95,9 @@ sub get_lists {
 
 	return Sympa::List::get_lists($self->{'name'});
 }
+
+=back
+
+=cut
 
 1;

@@ -46,19 +46,21 @@ use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
-=head2 get_dkim_parameters(%parameters)
+=over
 
-=head3 Parameters
+=item get_dkim_parameters(%parameters)
+
+Parameters:
 
 =over
 
-=item * I<robot>
+=item C<robot> =>
 
-=item * I<listname>
+=item C<listname> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -107,7 +109,7 @@ sub get_dkim_parameters {
 	return $data;
 }
 
-=head2 dkim_verifier($msg, $tmpdir)
+=item dkim_verifier($msg, $tmpdir)
 
 Input a msg as string, output the dkim status
 
@@ -158,7 +160,7 @@ sub dkim_verifier {
 	return undef;
 }
 
-=head2 remove_invalid_dkim_signature($tmpdir, $msg)
+=item remove_invalid_dkim_signature($tmpdir, $msg)
 
 Input a msg as string, output idem without signature if invalid
 
@@ -186,7 +188,7 @@ sub remove_invalid_dkim_signature {
 	}
 }
 
-=head2 dkim_sign($msg, $data, $tmpdir)
+=item dkim_sign($msg, $data, $tmpdir)
 
 Input object msg and listname, output signed message object
 
@@ -300,5 +302,9 @@ sub dkim_sign {
 
 	return $message->{'msg'}->head->as_string."\n".$body;
 }
+
+=back
+
+=cut
 
 1;

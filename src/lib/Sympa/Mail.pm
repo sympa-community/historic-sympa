@@ -67,20 +67,24 @@ my $send_spool; ## for calling context
 
 =head1 FUNCTIONS
 
-=head2 set_send_spool($spool)
+=over
+
+=item set_send_spool($spool)
 
 Set in global $send_spool, the concerned spool for sending message when it is
 not done by smtpto
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$spool>: spool to use
+=item FIXME
+
+The spool to use
 
 =back
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -92,44 +96,50 @@ sub set_send_spool {
 	$send_spool = $spool;
 }
 
-=head2 mail_file(%parameters)
+=item mail_file(%parameters)
 
 send a tt2 file.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<filename>: tt2 filename (with .tt2) | ''
+=item C<filename> => string
 
-=item * I<recipient>: SCALAR |ref(ARRAY) : SMTP "RCPT To:" field
+The template filename (with .tt2).
 
-=item * I<data>: used to parse tt2 file, ref(HASH) with keys :
+=item C<recipient> => string|arrayref
+
+SMTP "RCPT To:" field
+
+=item C<data> => hashref
+
+Data passed to the template:
 
 =over
 
-=item * I<return_path>: SMTP "MAIL From:" field if send by smtp,
+=item C<return_path> => SMTP "MAIL From:" field if send by smtp,
 			   "X-Sympa-From:" field if send by spool
 
-=item * I<to>: "To:" header field
+=item C<to> => "To:" header field
 
-=item * I<lang>: tt2 language if $filename
+=item C<lang> => tt2 language if $filename
 
-=item * I<list>:  ref(HASH) if $sign_mode = 'smime', keys are :
+=item C<list> =>  ref(HASH) if $sign_mode = 'smime', keys are :
 	-name
 	-dir
 
-=item * I<from>: "From:" field if not a full msg
+=item C<from> => "From:" field if not a full msg
 
-=item * I<subject>: "Subject:" field if not a full msg
+=item C<subject> => "Subject:" field if not a full msg
 
-=item * I<replyto>: "Reply-to:" field if not a full msg
+=item C<replyto> => "Reply-to:" field if not a full msg
 
-=item * I<body>: body message if not $filename
+=item C<body> => body message if not $filename
 
-=item * I<headers> : ref(HASH) with keys are headers mail
+=item C<headers> => : ref(HASH) with keys are headers mail
 
-=item * I<dkim>: a set of parameters for appying DKIM signature
+=item C<dkim> => a set of parameters for appying DKIM signature
 	-d : d=tag
 	-i : i=tag (optionnal)
 	-selector : dkim dns selector
@@ -137,31 +147,31 @@ send a tt2 file.
 
 =back
 
-=item * I<robot>
+=item C<robot> => FIXME
 
-=item * I<return_message_as_string>
+=item C<return_message_as_string> => FIXME
 
-=item * I<priority>
+=item C<priority> => FIXME
 
-=item * I<priority_packet>
+=item C<priority_packet> => FIXME
 
-=item * I<sympa>
+=item C<sympa> => FIXME
 
-=item * I<sendmail>
+=item C<sendmail> => FIXME
 
-=item * I<sendmail_args>
+=item C<sendmail_args> => FIXME
 
-=item * I<maxsmtp>
+=item C<maxsmtp> => FIXME
 
-=item * I<openssl>
+=item C<openssl> => FIXME
 
-=item * I<key_passwd>
+=item C<key_passwd> => FIXME
 
-=item * I<cookie>
+=item C<cookie> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value on sucess, I<undef> otherwise.
 
@@ -388,53 +398,63 @@ sub mail_file {
 	return defined $result ? 1 : undef;
 }
 
-=head2 mail_message(%parameters)
+=item mail_message(%parameters)
 
 Distribute a message to a list, crypting if needed.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<message>: the message
+=item C<message> => FIXME
 
-=item * I<from>: message sendef
+The message
 
-=item * I<rcpt>: message recipients, as a listref
+=item C<from> => FIXME
 
-=item * I<robot>: the robot
+The message sender.
 
-=item * I<verp>: verp parameters, as an hashref
+=item C<rcpt> => arrayref
 
-=item * I<priority_packet>
+The message recipients.
 
-=item * I<return_path_suffix>
+=item C<robot> => FIXME
 
-=item * I<sendmail>
+The robot.
 
-=item * I<sendmail_args>
+=item C<verp> => hashref
 
-=item * I<maxsmtp>
+The verp parameters.
 
-=item * I<avg>
+=item C<priority_packet> =>
 
-=item * I<nrcpt>
+=item C<return_path_suffix> =>
 
-=item * I<nrcpt_by_dom>
+=item C<sendmail> =>
 
-=item * I<db_type>
+=item C<sendmail_args> =>
 
-=item * I<ssl_cert_dir>
+=item C<maxsmtp> =>
 
-=item * I<openssl>
+=item C<avg> =>
 
-=item * I<key_passwd>
+=item C<nrcpt> =>
 
-=item * I<cookie>
+=item C<nrcpt_by_dom> =>
+
+=item C<db_type> =>
+
+=item C<ssl_cert_dir> =>
+
+=item C<openssl> =>
+
+=item C<key_passwd> =>
+
+=item C<cookie> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A number of sendmail process on success, I<undef> otherwise.
 
@@ -574,41 +594,41 @@ sub mail_message {
 	return $numsmtp;
 }
 
-=head2 mail_forward(%parameters)
+=item mail_forward(%parameters)
 
 Forward a message.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<message>: the message
+=item C<message> => the message
 
-=item * I<from>: message sender
+=item C<from> => message sender
 
-=item * I<recipient>: message recipients, as a listref
+=item C<recipient> => message recipients, as a listref
 
-=item * I<robot>: the robot
+=item C<robot> => the robot
 
-=item * I<priority>
+=item C<priority> =>
 
-=item * I<priority_packet>
+=item C<priority_packet> =>
 
-=item * I<sendmail>
+=item C<sendmail> =>
 
-=item * I<sendmail_args>
+=item C<sendmail_args> =>
 
-=item * I<maxsmtp>
+=item C<maxsmtp> =>
 
-=item * I<openssl>
+=item C<openssl> =>
 
-=item * I<key_passwd>
+=item C<key_passwd> =>
 
-=item * I<cookie>
+=item C<cookie> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value on success, I<undef> otherwise.
 
@@ -651,20 +671,20 @@ sub mail_forward {
 	return 1;
 }
 
-=head2 reaper($block)
+=item reaper($block)
 
 Non blocking function called to clean the defuncts list by waiting to any
 processes and decrementing the counter.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$block>
+=item FiXME
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -1204,5 +1224,9 @@ sub _fix_part($$$$) {
 }
 return $part;
 }
+
+=back
+
+=cut
 
 1;

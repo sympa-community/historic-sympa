@@ -88,26 +88,28 @@ my $quiet;
 
 =head1 FUNCTIONS
 
-=head2 parse($sender, $robot, $i, $sign_mod, $message)
+=over
+
+=item parse($sender, $robot, $i, $sign_mod, $message)
 
 Parses the command and calls the adequate subroutine with the arguments to the
 command.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$sender> (+): the command sender
+=item C<$sender> => (+): the command sender
 
-=item * I<$robot> (+): robot
+=item C<$robot> => (+): robot
 
-=item * I<$i> (+): command line
+=item C<$i> => (+): command line
 
-=item * I<$sign_mod> : 'smime'| 'dkim' -
+=item C<$sign_mod> => : 'smime'| 'dkim' -
 
 =back
 
-=head3 Return value
+Return value:
 
 $status |'unknown_cmd'
 
@@ -163,15 +165,15 @@ sub parse {
 	return 'unknown_cmd';
 }
 
-=head2 finished()
+=item finished()
 
 Do not process what is after this line
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value.
 
@@ -185,21 +187,21 @@ sub finished {
 }
 
 
-=head2 help(undef, $robot)
+=item help(undef, $robot)
 
 Sends the help file for the software
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<undef>
+=item C<undef> =>
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -263,25 +265,25 @@ sub help {
 }
 
 
-=head2 lists(undef, $robot, $sign_mod, $message)
+=item lists(undef, $robot, $sign_mod, $message)
 
 Sends back the list of public lists on this node.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<undef>
+=item C<undef> =>
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$sign_mod>
+=item C<$sign_mod> =>
 
-=item * I<$message>
+=item C<$message> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -335,25 +337,25 @@ sub lists {
 	return 1;
 }
 
-=head2 stats($listname, $robot, $sign_mod, $message)
+=item stats($listname, $robot, $sign_mod, $message)
 
 Sends the statistics about a list using template 'stats_report'.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<listname>: list name
+=item C<listname> => list name
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$sign_mod>: 'smime' | 'dkim'
+=item C<$sign_mod> => 'smime' | 'dkim'
 
-=item * I<$message>
+=item C<$message> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 OUT : 'unknown_list'|'not_allowed'|1  | undef
 
@@ -421,16 +423,16 @@ return 1;
 }
 
 
-=head2 getfile($command, $robot)
+=item getfile($command, $robot)
 
 Sends back the requested archive file
 
-=head3 Parameters
+Parameters:
 
 # IN : -$which (+): command parameters : listname filename
 #      -$robot (+): robot
 
-=head3 Return value
+Return value:
 
 OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
 
@@ -483,21 +485,21 @@ sub getfile {
 	return 1;
 }
 
-=head2 last($which, $robot)
+=item last($which, $robot)
 
 Sends back the last archive file.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$which>: listname
+=item C<$which> => listname
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
 =back
 
-=head3 Return value
+Return value:
 
 'unknownlist'|'no_archive'|'not_allowed'|1
 
@@ -2555,5 +2557,9 @@ sub get_auth_method {
 
 	return $auth_method;
 }
+
+=back
+
+=cut
 
 1;

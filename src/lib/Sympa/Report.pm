@@ -49,20 +49,22 @@ use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
-=head2 reject_report_msg($type, $error, $user, $params, $robot, $msg_string, $list)
+=over
+
+=item reject_report_msg($type, $error, $user, $params, $robot, $msg_string, $list)
 
 Send a notification of message rejection to an user, using
 I<message_report.tt2> mail template.
 
 For I<intern> type, the listmaster is also notified.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>: 'intern' || 'intern_quiet' || 'user' || 'auth'
+=item C<$type> => 'intern' || 'intern_quiet' || 'user' || 'auth'
 
-=item * I<$error>:
+=item C<$error> =>
 
 =over
 
@@ -74,19 +76,19 @@ For I<intern> type, the listmaster is also notified.
 
 =back
 
-=item * I<$user>: the user to notify
+=item C<$user> => the user to notify
 
-=item * I<$param>: variables used in template (hashref)
+=item C<$param> => variables used in template (hashref)
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$msg_string>: rejected msg
+=item C<$msg_string> => rejected msg
 
-=item * I<$list>: list (Sympa::List object)
+=item C<$list> => list (Sympa::List object)
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -202,28 +204,28 @@ sub _get_msg_as_hash {
 	return $msg_hash;
 }
 
-=head2 notice_report_msg($entry, $user, $params, $robot, $list)
+=item notice_report_msg($entry, $user, $params, $robot, $list)
 
 Send a notification of message diffusion to an user, using
 I<message_report.tt2> mail template.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$entry>: the entry in template
+=item C<$entry> => the entry in template
 
-=item * I<$user>: the user to notify
+=item C<$user> => the user to notify
 
-=item * I<$param>: variables used in template (hashref)
+=item C<$param> => variables used in template (hashref)
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$list>: list (Sympa::List object)
+=item C<$list> => list (Sympa::List object)
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -276,15 +278,15 @@ my @auth_reject_cmd;
 # for command notice
 my @notice_cmd;
 
-=head2 init_report_cmd()
+=item init_report_cmd()
 
 Flush the events queue for category I<cmd>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -299,15 +301,15 @@ sub init_report_cmd {
 	undef @notice_cmd;
 }
 
-=head2 is_there_any_report_cmd()
+=item is_there_any_report_cmd()
 
 Look for error events of category I<cmd> in the events queue.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value if there is any such event in the queue.
 
@@ -322,22 +324,22 @@ sub is_there_any_report_cmd {
 		@notice_cmd );
 }
 
-=head2 send_report_cmd($sender, $robot)
+=item send_report_cmd($sender, $robot)
 
 Send a mail report of all events of category I<cmd> in the queue, using
 I<command_report.tt2> mail template, and flushes the queue of such events.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$sender>
+=item C<$sender> =>
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -392,7 +394,7 @@ sub send_report_cmd {
 	init_report_cmd();
 }
 
-=head2 global_report_cmd($type, $error,  $data, $sender, $robot, $now)
+=item global_report_cmd($type, $error,  $data, $sender, $robot, $now)
 
 Push an event of type I<intern> or I<user> in the command execution events
 queue.
@@ -401,13 +403,13 @@ If I<$now> is true, send_report_cmd() is called immediatly.
 
 For I<intern> type, the listmaster is notified immediatly.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>: 'intern' || 'intern_quiet' || 'user'
+=item C<$type> => 'intern' || 'intern_quiet' || 'user'
 
-=item * I<$error>:
+=item C<$error> =>
 
 =over
 
@@ -417,17 +419,17 @@ For I<intern> type, the listmaster is notified immediatly.
 
 =back
 
-=item * I<$data>: variables used in template (hashref)
+=item C<$data> => variables used in template (hashref)
 
-=item * I<$sender>: the user to notify (required if $type eq 'intern' or if I<$now> is true)
+=item C<$sender> => the user to notify (required if $type eq 'intern' or if I<$now> is true)
 
-=item * I<$robot>: to notify listmaster (required if $type eq 'intern' or if I<$now> is true)
+=item C<$robot> => to notify listmaster (required if $type eq 'intern' or if I<$now> is true)
 
-=item * I<$now>: send now if true
+=item C<$now> => send now if true
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -481,20 +483,20 @@ sub global_report_cmd {
 	}
 }
 
-=head2 reject_report_cmd($type, $error, $data, $cmd, $sender, $robot)
+=item reject_report_cmd($type, $error, $data, $cmd, $sender, $robot)
 
 Push an event of category I<cmd>, type I<auth>, I<user> or I<intern> in the
 events queue.
 
 For I<intern> type, the listmaster is notified immediatly.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>: 'intern' || 'intern_quiet' || 'user' || 'auth'
+=item C<$type> => 'intern' || 'intern_quiet' || 'user' || 'auth'
 
-=item * I<$error>:
+=item C<$error> =>
 
 =over
 
@@ -506,17 +508,17 @@ For I<intern> type, the listmaster is notified immediatly.
 
 =back
 
-=item * I<$data>: variables used in template (hashref)
+=item C<$data> => variables used in template (hashref)
 
-=item * I<$cmd>: the rejected cmd ($xx.cmd in template)
+=item C<$cmd> => the rejected cmd ($xx.cmd in template)
 
-=item * I<$sender>: the user to notify (required if $type eq 'intern')
+=item C<$sender> => the user to notify (required if $type eq 'intern')
 
-=item * I<$robot>: to notify listmaster (required if $type eq 'intern')
+=item C<$robot> => to notify listmaster (required if $type eq 'intern')
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -573,23 +575,23 @@ sub reject_report_cmd {
 
 }
 
-=head2 notice_report_cmd($entry, $data, $cmd)
+=item notice_report_cmd($entry, $data, $cmd)
 
 Push an event of category I<cmd>, type I<notice> in the events queue.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$entry>: $notice.entry to select string in template
+=item C<$entry> => $notice.entry to select string in template
 
-=item * I<$data>: variables used in template (hashref)
+=item C<$data> => variables used in template (hashref)
 
-=item * I<$cmd>: the noticed cmd
+=item C<$cmd> => the noticed cmd
 
 =back
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -615,15 +617,15 @@ my @auth_reject_web;
 # for web command notice
 my @notice_web;
 
-=head2 init_report_web()
+=item init_report_web()
 
 Flush the events queue for category I<web>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -638,15 +640,15 @@ sub init_report_web {
 	undef @notice_web;
 }
 
-=head2 is_there_any_reject_report_web()
+=item is_there_any_reject_report_web()
 
 Look for error events of category I<web> in the events queue.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value if there is any such event in the queue.
 
@@ -661,15 +663,15 @@ sub is_there_any_reject_report_web {
 }
 
 
-=head2 get_intern_error_web()
+=item get_intern_error_web()
 
 Get the list of reports for category I<web>, type I<intern>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of error reports, as an arrayref.
 
@@ -684,15 +686,15 @@ sub get_intern_error_web {
 	return \@intern_err;
 }
 
-=head2 get_system_error_web()
+=item get_system_error_web()
 
 Get the list of reports for category I<web>, type I<system>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of reports, as an arrayref.
 
@@ -708,15 +710,15 @@ sub get_system_error_web {
 }
 
 
-=head2 get_user_error_web()
+=item get_user_error_web()
 
 Get the list of reports for category I<web>, type I<user>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of reports, as an arrayref.
 
@@ -732,15 +734,15 @@ sub get_user_error_web {
 }
 
 
-=head2 get_auth_reject_web()
+=item get_auth_reject_web()
 
 Get the list of reports for category I<web>, type I<auth>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of reports, as an arrayref.
 
@@ -756,15 +758,15 @@ sub get_auth_reject_web {
 }
 
 
-=head2 get_notice_web()
+=item get_notice_web()
 
 Get the list of reports for category I<web>, type I<notice>.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of reports, as an arrayref.
 
@@ -786,23 +788,23 @@ sub get_notice_web {
 
 }
 
-=head2 notice_report_web($msg, $data, $action)
+=item notice_report_web($msg, $data, $action)
 
 Push an event of category I<web>, type <notice>, in the events queue.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$msg>: $notice.msg to select string in template
+=item C<$msg> => $notice.msg to select string in template
 
-=item * I<$data>: variables used in template (hashref)
+=item C<$data> => variables used in template (hashref)
 
-=item * I<$action>: the noticed action $notice.action in template
+=item C<$action> => the noticed action $notice.action in template
 
 =back
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -818,21 +820,21 @@ sub notice_report_web {
 
 }
 
-=head2 reject_report_web($type, $error, $data, $action, $list, $user, $robot)
+=item reject_report_web($type, $error, $data, $action, $list, $user, $robot)
 
 Push an event of category I<web>, type I<intern>, I<system>, I<user> or
 I<auth> in the events queue.
 
 For I<intern> or I<system> types, the listmaster is notified immediatly.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$type>: 'intern' || 'intern_quiet' || 'system' || 'system_quiet' ||
+=item C<$type> => 'intern' || 'intern_quiet' || 'system' || 'system_quiet' ||
 'user' || 'auth'
 
-=item * I<$error>:
+=item C<$error> =>
 
 =over
 
@@ -848,23 +850,23 @@ For I<intern> or I<system> types, the listmaster is notified immediatly.
 
 =back
 
-=item * I<$data>: variables used in template (hashref)
+=item C<$data> => variables used in template (hashref)
 
-=item * I<$action>: the rejected action :
+=item C<$action> => the rejected action :
 	$xx.action in template
 	$action in listmaster_notification.tt2 if needed
 
-=item * I<$list>: Sympa::List object
+=item C<$list> => Sympa::List object
 
-=item * I<$user>: the user to notify listmaster (required if $type eq 'intern'
+=item C<$user> => the user to notify listmaster (required if $type eq 'intern'
 or 'system')
 
-=item * I<$robot>: the robot to notify listmaster (required if $type eq
+=item C<$robot> => the robot to notify listmaster (required if $type eq
 'intern' or 'system')
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -922,5 +924,9 @@ sub reject_report_web {
 
 	}
 }
+
+=back
+
+=cut
 
 1;

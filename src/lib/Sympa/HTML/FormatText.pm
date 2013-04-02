@@ -23,7 +23,9 @@ use Sympa::Language;
 
 =head1 INSTANCE METHODS
 
-=head2 $formatter->img_start($node)
+=over
+
+=item $formatter->img_start($node)
 
 Called foreach img element found.
 
@@ -34,5 +36,9 @@ sub img_start   {
 	my $alt = $node->attr('alt');
 	$self->out(  defined($alt) ? sprintf(Sympa::Language::gettext("[ Image%s ]"), ": " . $alt) : sprintf(Sympa::Language::gettext("[Image%s]"),""));
 }
+
+=back
+
+=cut
 
 1;

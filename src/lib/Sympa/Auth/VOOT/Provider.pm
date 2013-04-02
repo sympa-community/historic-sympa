@@ -43,31 +43,33 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Auth::VOOT::Provider->new(%parameters)
+=over
+
+=item Sympa::Auth::VOOT::Provider->new(%parameters)
 
 Creates a new L<Sympa::Auth::VOOT::Provider> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<voot_path>: VOOT path, as array
+=item C<voot_path> => VOOT path, as array
 
-=item * I<method>: http method
+=item C<method> => http method
 
-=item * I<url>: request url
+=item C<url> => request url
 
-=item * I<authorization_header>
+=item C<authorization_header> =>
 
-=item * I<request_parameters>
+=item C<request_parameters> =>
 
-=item * I<request_body>
+=item C<request_body> =>
 
-=item * I<robot>
+=item C<robot> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A L<Sympa::Auth::VOOT::Provider> object, or I<undef> if something went wrong.
 
@@ -98,9 +100,13 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $provider->get_oauth_provider()
+=over
+
+=item $provider->get_oauth_provider()
 
 Get the underlying OAuth provider.
 
@@ -112,7 +118,7 @@ sub get_oauth_provider {
 	return $self->{'oauth_provider'};
 }
 
-=head2 $provider->check_request()
+=item $provider->check_request()
 
 Check if a request is valid.
 
@@ -120,11 +126,11 @@ Check if a request is valid.
             $server->error($http_code, $provider->get_oauth_provider()->{'util'}->errstr);
     }
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
@@ -147,15 +153,15 @@ sub check_request {
 	return undef;
 }
 
-=head2 $provider->response()
+=item $provider->response()
 
 Respond to a request (parse url, build json), assumes that request is valid
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A string, or I<undef> if something went wrong.
 
@@ -185,15 +191,15 @@ sub response {
 	return encode_json($r);
 }
 
-=head2 $provider->get_groups()
+=item $provider->get_groups()
 
 Get user groups.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref containing groups definitions, or I<undef> if something went wrong
 
@@ -231,19 +237,19 @@ sub _list_to_group {
 	};
 }
 
-=head2 $provider->get_group_members(%parameters)
+=item $provider->get_group_members(%parameters)
 
 Get members of a group.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<group>: the group ID.
+=item C<group> => the group ID.
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref containing members definitions, or I<undef> if something went wrong.
 
@@ -283,6 +289,8 @@ sub _subscriber_to_member {
 		voot_membership_role => $role
 	};
 }
+
+=back
 
 =head1 AUTHORS
 

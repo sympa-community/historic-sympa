@@ -53,15 +53,17 @@ use Sympa::Tools::File;
 
 =head1 FUNCTIONS
 
-=head2 create_list_old($params, $template, $robot, $origin, $user_mail)
+=over
+
+=item create_list_old($params, $template, $robot, $origin, $user_mail)
 
 Creates a list, without family concept.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$params>: an hashref containing configuration parameters, as the
+=item C<$params> => an hashref containing configuration parameters, as the
 following keys:
 
 =over 4
@@ -76,24 +78,24 @@ following keys:
 
 =back
 
-=item * I<$template>: the list creation template
+=item C<$template> => the list creation template
 
-=item * I<$robot>: the list robot
+=item C<$robot> => the list robot
 
-=item * I<$origin>: the source of the command : web, soap or command_line (no
+=item C<$origin> => the source of the command : web, soap or command_line (no
 longer used)
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
 =over
 
-=item * I<list>: the just created L<Sympa::List> object
+=item C<list> => the just created L<Sympa::List> object
 
-=item * I<aliases>: I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
+=item C<aliases> => I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
 
 =back
 
@@ -311,15 +313,15 @@ $list->save_config;
 return $return;
 }
 
-=head2 create_list($params, $family, $robot, $abort_on_error)
+=item create_list($params, $family, $robot, $abort_on_error)
 
 Create a list, with family concept.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$param>: an hashref containing configuration parameters, as the
+=item C<$param> => an hashref containing configuration parameters, as the
 following keys:
 
 =over 4
@@ -334,24 +336,24 @@ following keys:
 
 =back
 
-=item * I<$family>: the list family (L<Sympa::Family> object)
+=item C<$family> => the list family (L<Sympa::Family> object)
 
-=item * I<$robot>: the list robot
+=item C<$robot> => the list robot
 
-=item * I<$abort_on_error>:  won't create the list directory on tt2 process
+=item C<$abort_on_error> =>  won't create the list directory on tt2 process
 error (usefull for dynamic lists that throw exceptions)
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
 =over
 
-=item * I<list>: the just created L<Sympa::List> object
+=item C<list> => the just created L<Sympa::List> object
 
-=item * I<aliases>: I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
+=item C<aliases> => I<undef> if not applicable; 1 (if ok) or $aliases : concatenated string of aliases if they are not installed or 1 (in status open)
 
 =back
 
@@ -566,17 +568,17 @@ sub create_list{
 	return $return;
 }
 
-=head2 update_list($list, $params, $family, $robot)
+=item update_list($list, $params, $family, $robot)
 
 Update a list with family concept when the list already exists.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: the list to update
+=item C<$list> => the list to update
 
-=item * I<$param>: an hashref containing the new config parameters, as the following keys:
+=item C<$param> => an hashref containing the new config parameters, as the following keys:
 
 =over 4
 
@@ -590,13 +592,13 @@ Update a list with family concept when the list already exists.
 
 =back
 
-=item * I<$family>: the list family (L<Sympa::Family> object)
+=item C<$family> => the list family (L<Sympa::Family> object)
 
-=item * I<$robot>: the list robot
+=item C<$robot> => the list robot
 
 =back
 
-=head3 Return value
+Return value:
 
 The updated L<Sympa::List> object.
 
@@ -686,35 +688,35 @@ if ($list->has_include_data_sources()) {
 return $list;
 }
 
-=head2 rename_list(%parameters)
+=item rename_list(%parameters)
 
 Rename a list or move a list to another virtual host.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<list>
+=item C<list> =>
 
-=item * I<new_listname>
+=item C<new_listname> =>
 
-=item * I<new_robot>
+=item C<new_robot> =>
 
-=item * I<mode>: 'copy'
+=item C<mode> => 'copy'
 
-=item * I<auth_method>
+=item C<auth_method> =>
 
-=item * I<user_email>
+=item C<user_email> =>
 
-=item * I<remote_host>
+=item C<remote_host> =>
 
-=item * I<remote_addr>
+=item C<remote_addr> =>
 
-=item * I<options>: 'skip_authz' to skip authorization scenarios eval
+=item C<options> => 'skip_authz' to skip authorization scenarios eval
 
 =back
 
-=head3 Return value
+Return value:
 
 I<1> in case of success, an error string otherwise.
 
@@ -966,30 +968,30 @@ sub rename_list{
 	return 1;
 }
 
-=head2 clone_list_as_empty($source_list_name, $source_robot, $new_listname,
+=item clone_list_as_empty($source_list_name, $source_robot, $new_listname,
 $new_robot, $email)
 
 Clone a list config including customization, templates, scenario config
 but without archives, subscribers and shared
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$source_list_name>: the list to clone
+=item C<$source_list_name> => the list to clone
 
-=item * I<$source_robot>: robot of the list to clone
+=item C<$source_robot> => robot of the list to clone
 
-=item * I<$new_listname>: the target list name
+=item C<$new_listname> => the target list name
 
-=item * I<$new_robot>: the target list robot
+=item C<$new_robot> => the target list robot
 
-=item * I<$email>: the email of the requestor : used in config as
+=item C<$email> => the email of the requestor : used in config as
 admin->last_update->email
 
 =back
 
-=head3 Return value
+Return value:
 
 The updated L<Sympa::List> object.
 
@@ -1069,14 +1071,14 @@ sub clone_list_as_empty {
 }
 
 
-=head2 check_owner_defined($owner,$owner_include)
+=item check_owner_defined($owner,$owner_include)
 
 Verify if they are any owner defined : it must exist at least one param
 owner(in I<$owner>) or one param owner_include (in I<$owner_include>) the owner
 param must have sub param email the owner_include param must have sub param
 source
 
-=head3 Parameters
+Parameters:
 
 =over
 
@@ -1086,7 +1088,7 @@ source
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the owner exists, I<undef> otherwise.
 
@@ -1167,21 +1169,21 @@ sub check_owner_defined {
 }
 
 
-=head2 list_check_smtp($list, $robot)
+=item list_check_smtp($list, $robot)
 
 Check if the requested list exists already using smtp 'rcpt to'
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: list name
+=item C<$list> => list name
 
-=item * I<$robot>: list robot
+=item C<$robot> => list robot
 
 =back
 
-=head3 Return value
+Return value:
 
 Net::SMTP object or 0
 
@@ -1231,21 +1233,21 @@ sub list_check_smtp {
 	return undef;
 }
 
-=head2 install_aliases($list, $robot)
+=item install_aliases($list, $robot)
 
 Install sendmail aliases for I<$list>.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: list
+=item C<$list> => list
 
-=item * I<$robot>: list robot
+=item C<$robot> => list robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the alias have been installed, I<undef> otherwise.
 
@@ -1313,21 +1315,21 @@ sub install_aliases {
 }
 
 
-=head2 remove_aliases($list, $robot)
+=item remove_aliases($list, $robot)
 
 Remove sendmail aliases for I<$list>.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: list
+=item C<$list> => list
 
-=item * I<$robot>: list robot
+=item C<$robot> => list robot
 
 =back
 
-=head3 Return value
+Return value:
 
 I<1> in case of success, the aliases definition as a string otherwise.
 
@@ -1366,21 +1368,21 @@ EOF
 	return 1;
 }
 
-=head2 check_topics($topic, $robot)
+=item check_topics($topic, $robot)
 
 Check $topic in the $robot conf
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$topic>: topic id
+=item C<$topic> => topic id
 
-=item * I<$robot>: the list robot
+=item C<$robot> => the list robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the topic is in the robot conf, I<undef> otherwise.
 
@@ -1406,23 +1408,29 @@ sub check_topics {
 	return undef;
 }
 
-=head2 change_user_email(%parameters)
+=item change_user_email(%parameters)
 
 Change a user email address for both his memberships and ownerships.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<current_email>: current user email address
+=item C<current_email> => string
 
-=item * I<new_email>: new user email address
+The current user email address.
 
-=item * I<$robot>: virtual robot
+=item C<new_email> => string
+
+The new user email address.
+
+=item C<$robot> => string
+
+The virtual robot
 
 =back
 
-=head3 Return value
+Return value:
 
 I<1>, and the list of lists for which the changes could not be achieved.
 
@@ -1546,6 +1554,8 @@ sub change_user_email {
 
 	return (1,\@failed_for);
 }
+
+=back
 
 =head1 AUTHORS
 

@@ -45,23 +45,25 @@ use Sympa::Tools::File;
 
 =head1 FUNCTIONS
 
-=head2 write_pid(%parameters)
+=over
 
-=head3 Parameters
+=item write_pid(%parameters)
+
+Parameters:
 
 =over
 
-=item * I<file>: FIXME
+=item C<file> => FIXME
 
-=item * I<method>: FIXME
+=item C<method> => FIXME
 
-=item * I<pid>: FIXEM
+=item C<pid> => FIXEM
 
-=item * I<options>: FIXME
+=item C<options> => FIXME
 
-=item * I<user>: FIXME
+=item C<user> => FIXME
 
-=item * I<group>: FIXME
+=item C<group> => FIXME
 
 =back
 
@@ -176,21 +178,21 @@ sub write_pid {
 	return 1;
 }
 
-=head2 remove_pid(%parameters)
+=item remove_pid(%parameters)
 
 Remove PID file and STDERR output.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<file>: FIXME
+=item C<file> => FIXME
 
-=item * I<pid>: FIXME
+=item C<pid> => FIXME
 
-=item * I<options>: FIXME
+=item C<options> => FIXME
 
-=item * I<tmpdir>: FIXME
+=item C<tmpdir> => FIXME
 
 =back
 
@@ -246,7 +248,7 @@ sub remove_pid {
 	return 1;
 }
 
-=head2 get_pids_in_pid_file($pidfile)
+=item get_pids_in_pid_file($pidfile)
 
 Returns the list of pid identifiers in the pid file.
 
@@ -265,19 +267,19 @@ sub get_pids_in_pid_file {
 	return \@pids;
 }
 
-=head2 direct_stderr_to_file(%parameters)
+=item direct_stderr_to_file(%parameters)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<tmpdir>: FIXME
+=item C<tmpdir> => FIXME
 
-=item * I<pid>: FIXEM
+=item C<pid> => FIXME
 
-=item * I<user>: FIXME
+=item C<user> => FIXME
 
-=item * I<group>: FIXME
+=item C<group> => FIXME
 
 =back
 
@@ -300,7 +302,7 @@ sub direct_stderr_to_file {
 	return 1;
 }
 
-=head2 send_crash_report(%parameters)
+=item send_crash_report(%parameters)
 
 Send content of $pid.stderr to listmaster for process whose pid is $pid.
 

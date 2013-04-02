@@ -44,7 +44,9 @@ use Sympa::Session;
 
 =head1 FUNCTIONS
 
-=head2 password_fingerprint($pwd)
+=over
+
+=item password_fingerprint($pwd)
 
 Return the password finger print (this proc allow futur replacement of md5 by
 sha1 or ....)
@@ -62,19 +64,23 @@ sub password_fingerprint{
 	}
 }
 
-=head2 check_auth($robot, $auth, $pwd)
+=item check_auth($robot, $auth, $pwd)
 
 Authentication via email or uid.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>
+=item string
 
-=item * I<$auth>: user email or UID
+=item string
 
-=item * I<$pwd>: password
+user email or UID
+
+=item string
+
+password
 
 =back
 
@@ -115,23 +121,23 @@ sub check_auth{
 	}
 }
 
-=head2 may_use_sympa_native_auth($robot, $user_email)
+=item may_use_sympa_native_auth($robot, $user_email)
 
 This subroutine if Sympa may use its native authentication for a given user
 It might not if no user_table paragraph is found in auth.conf or if the regexp
 or negative_regexp exclude this user
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>
+=item string
 
-=item * I<$user_email>
+=item string
 
 =back
 
-=head3 Return value
+Return value:
 
 boolean
 
@@ -341,23 +347,23 @@ sub ldap_authentication {
 	}
 }
 
-=head2 get_email_by_net_id($robot, $auth_id, $attributes)
+=item get_email_by_net_id($robot, $auth_id, $attributes)
 
 Fetch user email using his cas net_id and the paragrapah number in auth.conf.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$robot>
+=item string
 
-=item * I<$auth_id>
+=item string
 
-=item * I<$attributes>
+=item string
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -416,23 +422,23 @@ sub get_email_by_net_id {
 
 }
 
-=head2 remote_app_check_password($trusted_application_name,$password,$robot)
+=item remote_app_check_password($trusted_application_name,$password,$robot)
 
 Check trusted_application_name et trusted_application_password
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$trusted_application_name>
+=item string
 
-=item * I<$password>
+=item string
 
-=item * I<$robot>
+=item string
 
 =back
 
-=head3 Return value
+Return value:
 
 return 1 or I<undef>.
 
@@ -471,26 +477,28 @@ Sympa::Log::Syslog::do_log('info', 'unknown application name %s', $trusted_appli
 return undef;
 }
 
-=head2 create_one_time_ticket($email, $robot, $data_string, $remote_addr)
+=item create_one_time_ticket($email, $robot, $data_string, $remote_addr)
 
 Create new entry in one_time_ticket table using a rand as id so later access is
 authenticated
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$email>
+=item string
 
-=item * I<$robot>
+=item string
 
-=item * I<$data_string>
+=item string
 
-=item * I<$remote_addr> Value may be 'mail' if the IP address is not known
+=item string
+
+Value may be 'mail' if the IP address is not known
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -510,21 +518,21 @@ sub create_one_time_ticket {
 	return $ticket;
 }
 
-=head2 get_one_time_ticket($ticket_number, $addr)
+=item get_one_time_ticket($ticket_number, $addr)
 
 Read one_time_ticket from table and remove it
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$ticket_number>
+=item string
 
-=item * I<$addr>
+=item string
 
 =back
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -573,5 +581,9 @@ sub get_one_time_ticket {
 		'status'=>$ticket->{'status'}
 	};
 }
+
+=back
+
+=cut
 
 1;

@@ -51,31 +51,33 @@ sub set_spool {
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Task->new(%parameters)
+=over
+
+=item Sympa::Task->new(%parameters)
 
 Creates a new L<Sympa::Task> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<messagekey>: FIXME
+=item C<messagekey> => FIXME
 
-=item * I<taskasstring>: FIXME
+=item C<taskasstring> => FIXME
 
-=item * I<task_date>: FIXME
+=item C<task_date> => FIXME
 
-=item * I<task_label>: FIXME
+=item C<task_label> => FIXME
 
-=item * I<task_model>: FIXME
+=item C<task_model> => FIXME
 
-=item * I<robot>: FIXME
+=item C<robot> => FIXME
 
-=item * I<list>: FIXME
+=item C<list> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Task> object, or I<undef>, if something went wrong.
 
@@ -110,7 +112,7 @@ sub new {
 	return $self;
 }
 
-=head2 Sympa::Task->list_tasks()
+=item Sympa::Task->list_tasks()
 
 Build all Task objects.
 
@@ -144,7 +146,7 @@ sub list_tasks {
 	return 1;
 }
 
-=head2 Sympa::Task->get_tasks_by_list($list_id)
+=item Sympa::Task->get_tasks_by_list($list_id)
 
 Return a list tasks for the given list.
 
@@ -158,7 +160,7 @@ sub get_tasks_by_list {
 	return values %{$task_by_list{$list_id}};
 }
 
-=head2 Sympa::Task->get_used_models($list_id)
+=item Sympa::Task->get_used_models($list_id)
 
 =cut
 
@@ -182,7 +184,7 @@ sub get_used_models {
 	}
 }
 
-=head2 Sympa::Task->get_task_list()
+=item Sympa::Task->get_task_list()
 
 =cut
 
@@ -192,9 +194,13 @@ sub get_task_list {
 	return @task_list;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $task->remove()
+=over
+
+=item $task->remove()
 
 remove a task using message key
 
@@ -209,5 +215,9 @@ sub remove {
 		return undef;
 	}
 }
+
+=back
+
+=cut
 
 1;

@@ -58,21 +58,23 @@ my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Spool->new(%parameters)
+=over
+
+=item Sympa::Spool->new(%parameters)
 
 Creates a new L<Sympa::Spool> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<name>: FIXME
+=item C<name> => FIXME
 
-=item * I<status>: FIXME
+=item C<status> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
 
@@ -116,6 +118,14 @@ sub count {
 
 	return ($self->get_content({'selection'=>'count'}));
 }
+
+=back
+
+=head1 INSTANCE METHODS
+
+=over
+
+=cut
 
 #######################
 #
@@ -586,5 +596,9 @@ sub _sqlselector {
 	}
 	return $sqlselector;
 }
+
+=back
+
+=cut
 
 1;

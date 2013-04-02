@@ -42,19 +42,21 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Auth::VOOT::Consumer->get_providers($config)
+=over
+
+=item Sympa::Auth::VOOT::Consumer->get_providers($config)
 
 List providers.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$config>: the VOOT configuration file
+=item C<$config> => the VOOT configuration file
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref.
 
@@ -81,23 +83,23 @@ sub get_providers {
 	return $list;
 }
 
-=head2 Sympa::Auth::VOOT::Consumer->new(%parameters)
+=item Sympa::Auth::VOOT::Consumer->new(%parameters)
 
 Creates a new L<Sympa::Auth::VOOT::Consumer> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<user>: a user email
+=item C<user> => a user email
 
-=item * I<provider>: the VOOT provider key
+=item C<provider> => the VOOT provider key
 
-=item * I<config>: the VOOT configuration file
+=item C<config> => the VOOT configuration file
 
 =back
 
-=head3 Return value
+Return value:
 
 A L<Sympa::Auth::VOOT::Consumer> object, or I<undef> if something went wrong.
 
@@ -132,9 +134,13 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $consumer->get_oauth_consumer()
+=over
+
+=item $consumer->get_oauth_consumer()
 
 =cut
 
@@ -144,15 +150,15 @@ sub get_oauth_consumer {
 	return $self->{'oauth_consumer'};
 }
 
-=head2 $consumer->is_member_of()
+=item $consumer->is_member_of()
 
 Get user groups.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref containing groups definitions, or I<undef> if something went wrong.
 
@@ -168,7 +174,7 @@ sub is_member_of {
 	return _get_groups(decode_json($data));
 }
 
-=head2 $consumer->check()
+=item $consumer->check()
 
 An alias for $consumer->is_member_of();
 
@@ -180,19 +186,19 @@ sub check {
 	return $self->is_member_of();
 }
 
-=head2 $consumer->get_group_members(%parameters)
+=item $consumer->get_group_members(%parameters)
 
 Get members of a group.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<group>: the group ID
+=item C<group> => the group ID
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref containing members definitions, or I<undef> if something went wrong.
 
@@ -281,6 +287,8 @@ sub _get_config_for {
 
 	return undef;
 }
+
+=back
 
 =head1 AUTHORS
 

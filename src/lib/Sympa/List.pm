@@ -2125,24 +2125,26 @@ our %listmaster_messages_stack;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::List->new(%parameters)
+=over
+
+=item Sympa::List->new(%parameters)
 
 Creates a new L<Sympa::List> object, and
 eventually loads the list if a name is given.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<name>: FIXME
+=item C<name> => FIXME
 
-=item * I<robot>: FIXME
+=item C<robot> => FIXME
 
-=item * I<options>: FIXME
+=item C<options> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::List> object, or I<undef>, if something went wrong.
 
@@ -2232,9 +2234,13 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 search_list_among_robots($listname)
+=over
+
+=item search_list_among_robots($listname)
 
 When no robot is specified, look for a list among robots
 
@@ -2262,9 +2268,13 @@ sub search_list_among_robots {
 	return 0;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->status_error_config($message, @param)
+=over
+
+=item $list->status_error_config($message, @param)
 
 set the list in status error_config and send a notify to listmaster.
 
@@ -2288,7 +2298,7 @@ sub set_status_error_config {
 }
 }
 
-=head2 $list->set_status_family_closed($message, @param)
+=item $list->set_status_family_closed($message, @param)
 
 Set the list in status family_closed and send a notify to owners.
 
@@ -2315,7 +2325,7 @@ sub set_status_family_closed {
 return 1;
 }
 
-=head2 $list->savestats()
+=item $list->savestats()
 
 Saves updates the statistics file on disk.
 
@@ -2357,7 +2367,7 @@ sub savestats {
 	return 1;
 }
 
-=head2 $list->increment_msg_count()
+=item $list->increment_msg_count()
 
 Msg count.
 
@@ -2402,7 +2412,7 @@ sub increment_msg_count {
 	return 1;
 }
 
-=head2 $list->get_msg_count()
+=item $list->get_msg_count()
 
 Return the number of messages sent to the list.
 
@@ -2429,7 +2439,7 @@ sub get_msg_count {
 
 }
 
-=head2 $list->get_latest_distribution_date()
+=item $list->get_latest_distribution_date()
 
 Rerturn the last date of distribution message.
 
@@ -2459,7 +2469,7 @@ sub get_latest_distribution_date {
 	return $latest_date ;
 }
 
-=head2 $list->update_stats($bytes)
+=item $list->update_stats($bytes)
 
 Updates the stats, argument is number of bytes, returns the next
 sequence number. Does nothing if no stats.
@@ -2482,27 +2492,31 @@ sub update_stats {
 	return $stats->[0];
 }
 
+=back
+
 =head1 FUNCTIONS
-
-=head2 extract_verp_rcpt($percent, $xseq, $refrcpt, $refrcptverp)
-
-Extract a set of rcpt for which verp must be use from a rcpt_tab.
-
-=head3 Parameters
 
 =over
 
-=item * I<$percent>: the rate of subscribers that must be threaded using verp
+=item extract_verp_rcpt($percent, $xseq, $refrcpt, $refrcptverp)
 
-=item * I<$xseq>: the message sequence number
+Extract a set of rcpt for which verp must be use from a rcpt_tab.
 
-=item * I<$refrcpt>
+Parameters:
 
-=item * I<$refrcptverp>
+=over
+
+=item C<$percent> => the rate of subscribers that must be threaded using verp
+
+=item C<$xseq> => the message sequence number
+
+=item C<$refrcpt> =>
+
+=item C<$refrcptverp> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
 input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
@@ -2536,9 +2550,13 @@ sub extract_verp_rcpt {
 	return ( @result ) ;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->dump()
+=over
+
+=item $list->dump()
 
 Dump a copy of lists to disk, in text format
 
@@ -2565,7 +2583,7 @@ sub dump {
 	return 1;
 }
 
-=head2 $list->save_config($email)
+=item $list->save_config($email)
 
 Saves the configuration file to disk.
 
@@ -2634,7 +2652,7 @@ sub save_config {
 	return 1;
 }
 
-=head2 $list->load($name, $robot, $options)
+=item $list->load($name, $robot, $options)
 
 Loads the administrative data for a list
 
@@ -2820,7 +2838,7 @@ sub load {
 	return $config_reloaded;
 }
 
-=head2 $list->get_owners()
+=item $list->get_owners()
 
 Return a list of hash's owners and their param.
 
@@ -2840,7 +2858,7 @@ sub get_owners {
 	return $owners;
 }
 
-=head2 $list->get_nb_owners()
+=item $list->get_nb_owners()
 
 =cut
 
@@ -2857,7 +2875,7 @@ sub get_nb_owners {
 	return $resul;
 }
 
-=head2 $list->get_editors()
+=item $list->get_editors()
 
 Return the list of editors, as an arrayref.
 
@@ -2877,7 +2895,7 @@ sub get_editors {
 	return $editors;
 }
 
-=head2 $list->get_owners_email(%parameters)
+=item $list->get_owners_email(%parameters)
 
 Return the list of owners email addresses.
 
@@ -2909,7 +2927,7 @@ sub get_owners_email {
 	return @rcpt;
 }
 
-=head2 $list->get_editors_email(%parameters)
+=item $list->get_editors_email(%parameters)
 
 Return the list of editors email addresses, or owners if there isn't any
 editors.
@@ -2943,7 +2961,7 @@ sub get_editors_email {
 	return @rcpt;
 }
 
-=head2 $list->get_family()
+=item $list->get_family()
 
 Return the family this list belongs to.
 
@@ -2983,7 +3001,7 @@ sub get_family {
 	return $family;
 }
 
-=head2 $list->get_config_changes()
+=item $list->get_config_changes()
 
 return the config_changes hash
 Used ONLY with lists belonging to a family.
@@ -3010,7 +3028,7 @@ sub get_config_changes {
 	return $self->{'config_changes'};
 }
 
-=head2 $list->update_config_changes($what)
+=item $list->update_config_changes($what)
 
 Update file config_changes if the list belongs to a family by writing the
 $what(file or param) name.
@@ -3155,7 +3173,7 @@ sub _get_param_value_anywhere {
 }
 
 
-=head2 $list->get_param_value($param)
+=item $list->get_param_value($param)
 
 Returns the list parameter value from $list->{'admin'}
 the parameter is simple ($param) or composed ($param & $minor_param)
@@ -3225,7 +3243,7 @@ sub _get_single_param_value {
 	}
 }
 
-=head2 $list->distribute_msg($message, $apply_dkim_signature)
+=item $list->distribute_msg($message, $apply_dkim_signature)
 
 Prepares and distributes a message to a list, do some of these :
 
@@ -3249,17 +3267,17 @@ Prepares and distributes a message to a list, do some of these :
 
 =back
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$message>: message (L<Sympa::Message> object)
+=item C<$message> => message (L<Sympa::Message> object)
 
-=item * I<$apply_dkim_signature>: I<on> | I<off>
+=item C<$apply_dkim_signature> => I<on> | I<off>
 
 =back
 
-=head3 Return value
+Return value:
 
 The number of sendmail processes.
 
@@ -3492,21 +3510,21 @@ $self->savestats() if (defined ($numsmtp));
 return $numsmtp;
 }
 
-=head2 $list->send_msg_digest($messagekey)
+=item $list->send_msg_digest($messagekey)
 
 Send a digest message to the subscribers with reception digest, digestplain or
 summary.
 
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$messagekey>: a digest spool entry in database
+=item C<$messagekey> => a digest spool entry in database
 
 =back
 
-=head3 Return value
+Return value:
 
 Return <1> if everything is OK, I<0> if there is no subscriber for sending digest,
 I<undef> if something went wrong.
@@ -3676,25 +3694,29 @@ sub send_msg_digest {
 	return 1;
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 send_global_file($tpl, $who, $robot, $context, $options)
+=over
+
+=item send_global_file($tpl, $who, $robot, $context, $options)
 
 Send a global (not relative to a list) message to a user. Find the tt2 file
 according to $tpl, set up $data for the next parsing (with $context and
 configuration).
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$tpl>: template file name, without extension
+=item C<$tpl> => template file name, without extension
 
-=item * I<$who>: recipient(s)
+=item C<$who> => recipient(s)
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$context>: context (hashref), with the following keys:
+=item C<$context> => context (hashref), with the following keys:
 
 =over
 
@@ -3704,7 +3726,7 @@ configuration).
 
 =back
 
-=item * I<$options>: options (hashref), with the following keys:
+=item C<$options> => options (hashref), with the following keys:
 
 =over
 
@@ -3714,7 +3736,7 @@ configuration).
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -3808,25 +3830,29 @@ sub send_global_file {
 	return 1;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->send_file($tpl, $who, $robot, $context)
+=over
+
+=item $list->send_file($tpl, $who, $robot, $context)
 
 Send a message to a user, relative to a list. Find the tt2 file according to
 $tpl, set up $data for the next parsing (with $context and configuration).
 Message is signed if the list has a key and a certificate.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$tpl>: template file name, without extension
+=item C<$tpl> => template file name, without extension
 
-=item * I<$who>: recipient(s)
+=item C<$who> => recipient(s)
 
-=item * I<$robot>: robot
+=item C<$robot> => robot
 
-=item * I<$context>: context (hashref), with the following keys:
+=item C<$context> => context (hashref), with the following keys:
 
 =over
 
@@ -3838,7 +3864,7 @@ Message is signed if the list has a key and a certificate.
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -3996,26 +4022,26 @@ sub send_file {
 	return 1;
 }
 
-=head2 $list->send_msg(%parameters)
+=item $list->send_msg(%parameters)
 
 Selects subscribers according to their reception mode in order to distribute a
 message to a list and sends the message to them. For subscribers in reception
 mode 'mail', and in a msg topic context, selects only one who are subscribed to
 the topic of the message.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<message>: the message to send (L<Sympa::Message> object)
+=item C<message> => the message to send (L<Sympa::Message> object)
 
-=item * I<apply_dkim_signature>
+=item C<apply_dkim_signature> =>
 
-=item * I<apply_tracking>
+=item C<apply_tracking> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 The number of sendmail processes, or I<0> if they are no subscriber for sending
 message in list.
@@ -4441,7 +4467,7 @@ sub send_msg {
 	return $nbr_smtp;
 }
 
-=head2 $list->send_to_editor($method, $message)
+=item $list->send_to_editor($method, $message)
 
 Sends a message to the list editor to ask him for moderation (in moderation
 context : editor or editorkey). The message to moderate is set in spool
@@ -4449,17 +4475,17 @@ queuemod with name containing a key (reference send to editor for moderation)
 In context of msg_topic defined the editor must tag it for the moderation (on
 Web interface).
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$method>: I<'md5'> for "editorkey" | I<'smtp'> for "editor"
+=item C<$method> => I<'md5'> for "editorkey" | I<'smtp'> for "editor"
 
-=item * I<$message>: the message to moderate (L<Sympa::Message> object)
+=item C<$message> => the message to moderate (L<Sympa::Message> object)
 
 =back
 
-=head3 Return value
+Return value:
 
 The key for the message waiting for moderation in moderation spool, or I<undef>
 if something went wrong.
@@ -4575,22 +4601,22 @@ sub send_to_editor {
 	return $modkey;
 }
 
-=head3 $list->send_auth(message))
+$list->send_auth(message)):
 
 Sends an authentication request for a sent message to distribute. The message
 for distribution is copied in the authqueue spool in order to wait for
 confirmation by its sender. This message is named with a key. In context of
 msg_topic defined, the sender must tag it for the confirmation.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$message>: the message to authenticate (L<Sympa::Message> object)
+=item C<$message> => the message to authenticate (L<Sympa::Message> object)
 
 =back
 
-=head3 Return value
+Return value:
 
 The key for the message waiting for confirmation (or tagging) in authentication
 spool, or I<undef> if something went wrong.
@@ -4742,21 +4768,21 @@ sub request_auth {
 	return 1;
 }
 
-=head2 $list->archive_send($who, $file)
+=item $list->archive_send($who, $file)
 
 Send the indicated archive file to the user, if it exists.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$who>: recipient
+=item C<$who> => recipient
 
-=item * I<$file>: archive file to send
+=item C<$file> => archive file to send
 
 =back
 
-=head3 Return value
+Return value:
 
 I<undef> if something went wrong.
 
@@ -4789,17 +4815,17 @@ sub archive_send {
 
 }
 
-=head2 $list->archive_send_last($who)
+=item $list->archive_send_last($who)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$who>: recipient
+=item C<$who> => recipient
 
 =back
 
-=head3 Return value
+Return value:
 
 I<undef> if something went wrong.
 
@@ -4851,30 +4877,33 @@ unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 }
 
 }
+=back
 
 =head1 FUNCTIONS
 
-=head2 send_notify_to_listmaster($operation, $robot, $data, $checkstack, $purge)
+=over
+
+=item send_notify_to_listmaster($operation, $robot, $data, $checkstack, $purge)
 
 Sends a notice to listmaster by parsing listmaster_notification.tt2 template.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$operation>: notification type
+=item C<$operation> => notification type
 
-=item * I<$robot>: the roboto
+=item C<$robot> => the roboto
 
-=item * I<$data>: values for template parsing
+=item C<$data> => values for template parsing
 
-=item * I<$checkstack>
+=item C<$checkstack> =>
 
-=item * I<$purge>
+=item C<$purge> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5041,23 +5070,27 @@ sub send_notify_to_listmaster {
 	return 1;
 }
 
+=back
+
 =head1 INSTANCE METHODS
-
-=head2 $list->send_notify_to_owner($operation, $data)
-
-Sends a notice to list owner(s) by parsing listowner_notification.tt2 template.
-
-=head3 Parameters
 
 =over
 
-=item * I<$operation>: notification type
+=item $list->send_notify_to_owner($operation, $data)
 
-=item * I<$data>: values for template parsing
+Sends a notice to list owner(s) by parsing listowner_notification.tt2 template.
+
+Parameters:
+
+=over
+
+=item C<$operation> => notification type
+
+=item C<$data> => values for template parsing
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5145,7 +5178,7 @@ sub send_notify_to_owner {
 	return 1;
 }
 
-=head2 $list->delete_list_member_picture($email)
+=item $list->delete_list_member_picture($email)
 
 Delete a member's picture file.
 
@@ -5180,22 +5213,22 @@ sub delete_list_member_picture {
 	return 1;
 }
 
-=head2 $list->send_notify_to_editor($operation, $data)
+=item $list->send_notify_to_editor($operation, $data)
 
 Sends a notice to list editor(s) or owner (if no editor) by parsing
 listeditor_notification.tt2 template.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$operation>: notification type
+=item C<$operation> => notification type
 
-=item * I<$data>: values for template parsing
+=item C<$data> => values for template parsing
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5248,24 +5281,24 @@ sub send_notify_to_editor {
 	return 1;
 }
 
-=head2 $list->send_notify_to_user($operation, $user, $data)
+=item $list->send_notify_to_user($operation, $user, $data)
 
 Send a notice to a user (sender, subscriber ...) by parsing
 user_notification.tt2 template.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$operation>: notification type
+=item C<$operation> => notification type
 
-=item * I<$user>: email of notified user
+=item C<$user> => email of notified user
 
-=item * I<$data>: values for template parsing
+=item C<$data> => values for template parsing
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5354,7 +5387,7 @@ sub compute_auth {
 	return $key;
 }
 
-=head2 $list->add_parts($message)
+=item $list->add_parts($message)
 
 Add footer/header to a message
 
@@ -5559,9 +5592,13 @@ sub _append_parts {
 	return undef;
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 delete_global_user(@users)
+=over
+
+=item delete_global_user(@users)
 
 Delete a user in the user_table.
 
@@ -5586,13 +5623,17 @@ sub delete_global_user {
 	return $#users + 1;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->delete_list_member(%parameters)
+=over
+
+=item $list->delete_list_member(%parameters)
 
 Delete the indicated users from the list.
 
-=head3 Parameters
+Parameters:
 
 ## IN : - ref to array
 ##      - option exclude
@@ -5657,7 +5698,7 @@ sub delete_list_member {
 
 }
 
-=head2 $list->delete_list_admin($role, @u)
+=item $list->delete_list_admin($role, @u)
 
 Delete the indicated admin user with the predefined role from the list.
 
@@ -5691,9 +5732,13 @@ sub delete_list_admin {
 	return (-1 * $total);
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 delete_all_list_admin()
+=over
+
+=item delete_all_list_admin()
 
 Delete all admin_table entries.
 
@@ -5711,9 +5756,13 @@ sub delete_all_list_admin {
 	return 1;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->get_cookie()
+=over
+
+=item $list->get_cookie()
 
 Returns the cookie for a list, if available.
 
@@ -5725,7 +5774,7 @@ sub get_cookie {
 	return $self->{'admin'}{'cookie'};
 }
 
-=head2 $list->get_max_size()
+=item $list->get_max_size()
 
 Returns the maximum allowed size for a message.
 
@@ -5737,7 +5786,7 @@ sub get_max_size {
 	return $self->{'admin'}{'max_size'};
 }
 
-=head2 $list->get_reply_to()
+=item $list->get_reply_to()
 
 Returns an array with the Reply-To values.
 
@@ -5753,7 +5802,7 @@ sub get_reply_to {
 	return $value
 }
 
-=head2 $list->get_default_user_options()
+=item $list->get_default_user_options()
 
 Returns a default option of the list for subscription.
 
@@ -5769,7 +5818,7 @@ sub get_default_user_options {
 	return undef;
 }
 
-=head2 $list->get_total()
+=item $list->get_total()
 
 Returns the number of subscribers to the list.
 
@@ -5788,9 +5837,13 @@ sub get_total {
 	return $self->{'total'};
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 get_global_user($user)
+=over
+
+=item get_global_user($user)
 
 Returns a hash with the information regarding the indicated
 user.
@@ -5847,7 +5900,7 @@ sub get_global_user {
 return $user;
 }
 
-=head2 get_all_global_user
+=item get_all_global_user
 
 Returns a list of all users in User table hash for a given user
 
@@ -5876,28 +5929,31 @@ sub get_all_global_user {
 	return @users;
 }
 
+=back
 
 =head1 FUNCTIONS
 
-=head2 suspend_subscription($email, $list, $data, $robot)
+=over
+
+=item suspend_subscription($email, $list, $data, $robot)
 
 Suspend an user from list(s).
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$email>: the subscriber email
+=item C<$email> => the subscriber email
 
-=item * I<$list>: the list name
+=item C<$list> => the list name
 
-=item * I<$data>: start_date and end_date
+=item C<$data> => start_date and end_date
 
-=item * I<$robot>: the robot
+=item C<$robot> => the robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5920,23 +5976,23 @@ sub suspend_subscription {
 	return 1;
 }
 
-=head2 restore_suspended_subscription($email, $list, $robot)
+=item restore_suspended_subscription($email, $list, $robot)
 
 Restore the subscription of an user from list(s).
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$email>: the subscriber email
+=item C<$email> => the subscriber email
 
-=item * I<$list>: the list name
+=item C<$list> => the list name
 
-=item * I<$robot>: the robot
+=item C<$robot> => the robot
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -5957,25 +6013,25 @@ sub restore_suspended_subscription {
 	return 1;
 }
 
-=head2 insert_delete_exclusion($email, $list, $robot, $action, $family)
+=item insert_delete_exclusion($email, $list, $robot, $action, $family)
 
 Update the exclusion_table
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$email>: the subscriber email
+=item C<$email> => the subscriber email
 
-=item * I<$list>: the list name
+=item C<$list> => the list name
 
-=item * I<$robot>: the robot
+=item C<$robot> => the robot
 
-=item * I<$action>: I<'insert'> | I<'delete'>
+=item C<$action> => I<'insert'> | I<'delete'>
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -6042,21 +6098,21 @@ sub insert_delete_exclusion {
 	return $r;
 }
 
-=head2 get_exclusion($list, $robot)
+=item get_exclusion($list, $robot)
 
 Returns a hash with those excluded from the list and the date.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$list>: the list name
+=item C<$list> => the list name
 
-=item * I<$robot>: the robot
+=item C<$robot> => the robot
 
 =back
 
-=head3 Return value
+Return value:
 
  data_exclu : * %data_exclu->{'emails'}->[]
 	  * %data_exclu->{'date'}->[]
@@ -6112,13 +6168,17 @@ sub get_exclusion {
 		  return $data_exclu;
 	  }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->get_list_member()
+=over
+
+=item $list->get_list_member()
 
 Returns a subscriber of the list.
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -6160,23 +6220,27 @@ sub get_list_member {
 	return $user;
 }
 
+=back
+
 =head1 FUNCTIONS
-
-=head2 get_ressembling_list_members_no_object(%parameters)
-
-=head3 Parameters
 
 =over
 
-=item * I<email>: the subscriber email
+=item get_ressembling_list_members_no_object(%parameters)
 
-=item * I<name>: the list name
+Parameters:
 
-=item * I<domain>: the virtual host under which the list is installed
+=over
+
+=item C<email> => the subscriber email
+
+=item C<name> => the list name
+
+=item C<domain> => the virtual host under which the list is installed
 
 =back
 
-=head3 Return value
+Return value:
 
 An arrayref of ressembling emails, or I<undef> if something went wrong.
 
@@ -6288,23 +6352,23 @@ sub get_ressembling_list_members_no_object {
 
 }
 
-=head2 find_list_member_by_pattern_no_object($parameters)
+=item find_list_member_by_pattern_no_object($parameters)
 
 Get details regarding a subscriber.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<email_pattern>: the subscriber email pattern
+=item C<email_pattern> => the subscriber email pattern
 
-=item * I<name>: the list name
+=item C<name> => the list name
 
-=item * I<domain>: the virtual host under which the list is installed
+=item C<domain> => the virtual host under which the list is installed
 
 =back
 
-=head3 Return value
+Return value:
 
 A list of ressembling emails, or I<undef> if something went wrong.
 
@@ -6357,23 +6421,23 @@ sub find_list_member_by_pattern_no_object {
 	return @ressembling_users;
 }
 
-=head2 get_list_member_no_object($parameters)
+=item get_list_member_no_object($parameters)
 
 Get details regarding a subscriber.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<email>: the subscriber email
+=item C<email> => the subscriber email
 
-=item * I<name>: the list name
+=item C<name> => the list name
 
-=item * I<domain>: the virtual host under which the list is installed
+=item C<domain> => the virtual host under which the list is installed
 
 =back
 
-=head3 Return value
+Return value:
 
 An hash containing the user details, or I<undef> if something went wrong.
 
@@ -6436,9 +6500,13 @@ sub get_list_member_no_object {
 	return $user;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->get_list_admin($role, $user)
+=over
+
+=item $list->get_list_admin($role, $user)
 
 Return an admin user of the list with predefined role
 
@@ -6487,7 +6555,7 @@ sub get_list_admin {
 
 }
 
-=head2 $list->get_first_list_member($data)
+=item $list->get_first_list_member($data)
 
 Returns a hash to the first user on the list.
 
@@ -6674,7 +6742,7 @@ sub createXMLCustomAttribute {
 	return $XMLstr ;
 }
 
-=head2 $list->get_first_list_admin($role, $data)
+=item $list->get_first_list_admin($role, $data)
 
 Returns a hash to the first admin user with predefined role on the list.
 
@@ -6797,7 +6865,7 @@ sub get_first_list_admin {
 	return $admin_user;
 }
 
-=head2 $list->get_next_list_member()
+=item $list->get_next_list_member()
 
 Returns a hash to the next users, until we reach the end of
 the list.
@@ -6852,7 +6920,7 @@ sub get_next_list_member {
 	return $user;
 }
 
-=head2 $list->get_next_list_admin()
+=item $list->get_next_list_admin()
 
 Returns a hash to the next admin users, until we reach the end of the list.
 
@@ -7059,7 +7127,7 @@ sub is_global_user {
 	return $is_user;
 }
 
-=head2 $list->is_list_member($user)
+=item $list->is_list_member($user)
 
 Returns true if the indicated user is member of the list.
 
@@ -7099,7 +7167,7 @@ sub is_list_member {
 	return $is_user;
 }
 
-=head2 $list->update_list_member($who, $values)
+=item $list->update_list_member($who, $values)
 
 Sets the new values given in the hash for the user (except gecos)
 
@@ -7261,7 +7329,7 @@ sub update_list_member {
 	return 1;
 }
 
-=head2 $list->update_list_admin($who,$role, $values)
+=item $list->update_list_admin($who,$role, $values)
 
 Sets the new values given in the hash for the admin user (except gecos).
 
@@ -7504,7 +7572,7 @@ sub add_global_user {
 	return 1;
 }
 
-=head2 $list->add_list_member(@new_users, $daemon)
+=item $list->add_list_member(@new_users, $daemon)
 
 Adds a new user to the list. May overwrite existing
 entries.
@@ -7738,9 +7806,13 @@ sub rename_list_db {
 	return 1;
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 is_listmaster($who, $robot)
+=over
+
+=item is_listmaster($who, $robot)
 
 Is the user listmaster ?
 
@@ -7764,9 +7836,13 @@ sub is_listmaster {
 	return 0;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->am_i($function, $who, $options)
+=over
+
+=item $list->am_i($function, $who, $options)
 
 Returns true is USER has FUNCTION (owner, editor) on the
 list.
@@ -7866,7 +7942,7 @@ sub am_i {
 	}
 }
 
-=head2 $list->check_list_authz($operation, $auth_method, $context, $debug)
+=item $list->check_list_authz($operation, $auth_method, $context, $debug)
 
 Check list authorizations
 Higher level sub for request_action
@@ -7882,9 +7958,13 @@ sub check_list_authz {
 	return Sympa::Scenario::request_action($operation, $auth_method, $self->{'domain'}, $context, $debug);
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 init_list_cache()
+=over
+
+=item init_list_cache()
 
 Initialize internal list cache
 
@@ -7896,9 +7976,13 @@ sub init_list_cache {
 	undef %list_cache;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $list->may_edit($parameter, $who)
+=over
+
+=item $list->may_edit($parameter, $who)
 
 May the indicated user edit the indicated list parameter or not?
 
@@ -7968,7 +8052,7 @@ sub may_edit {
 	return ('user','hidden');
 }
 
-=head2 $list->may_create_parameter($parameter, $who,$robot)
+=item $list->may_create_parameter($parameter, $who,$robot)
 
 May the indicated user edit a parameter while creating a new list.
 Dev note: This sub is never called. Shall we remove it?
@@ -7996,7 +8080,7 @@ sub may_create_parameter {
 
 }
 
-=head2 $list->may_do($action, $user)
+=item $list->may_do($action, $user)
 
 Chcks is USER may do the ACTION for the list. ACTION can be
 one of following : send, review, index, getm add, del,
@@ -8079,7 +8163,7 @@ sub may_do {
 	return undef;
 }
 
-=head2 $list->is_digest()
+=item $list->is_digest()
 
 Returns true if the list support digest mode.
 
@@ -8091,7 +8175,7 @@ sub is_digest {
 	return ($self->{'admin'}{'digest'});
 }
 
-=head2 $list->archive_exist($file)
+=item $list->archive_exist($file)
 
 Returns true if the indicated file exists.
 
@@ -8107,7 +8191,7 @@ sub archive_exist {
 
 }
 
-=head2 $list->archive_ls()
+=item $list->archive_ls()
 
 Returns the list of available files, if any.
 
@@ -8122,7 +8206,7 @@ sub archive_ls {
 	Sympa::Archive::list($dir) if ($self->is_archived());
 }
 
-=head2 $list->archive_msg($message)
+=item $list->archive_msg($message)
 
 Archives the Mail::Internet message given as argument.
 
@@ -8157,7 +8241,7 @@ sub archive_msg {
 	}
 }
 
-=head2 $list->is_moderated()
+=item $list->is_moderated()
 
 Returns true if the list is moderated.
 
@@ -8170,7 +8254,7 @@ sub is_moderated {
 	return 0;
 }
 
-=head2 $list->is_archived()
+=item $list->is_archived()
 
 Returns true is the list is configured to keep archives of
 its messages.
@@ -12255,20 +12339,20 @@ sub load_msg_topic {
 return undef;
 }
 
-=head2 $list->modifying_msg_topic_for_list_members($new_msg_topic)
+=item $list->modifying_msg_topic_for_list_members($new_msg_topic)
 
 Deletes topics subscriber that does not exist anymore and send a notify to
 concerned subscribers.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$new_msg_topic>: new state of msg_topic parameters (arrayref)
+=item C<$new_msg_topic> => new state of msg_topic parameters (arrayref)
 
 =back
 
-=head3 Return value
+Return value:
 
 I<1> if some subscribers topics have been deleted, I<0> otherwise.
 
@@ -12319,24 +12403,24 @@ sub modifying_msg_topic_for_list_members {
 	return 0;
 }
 
-=head2 $listst->select_list_members_for_topic($topics, $subscribers)
+=item $listst->select_list_members_for_topic($topics, $subscribers)
 
 Select users subscribed to a topic that is in the topic list incoming when
 reception mode is 'mail', 'notice', 'not_me', 'txt', 'html' or 'urlize', and
 the other subscribers (recpetion mode different from 'mail'), 'mail' and no
 topic subscription.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$topics>: comma-separated list of topics
+=item C<$topics> => comma-separated list of topics
 
-=item * I<$subscribers>: list of subscribers
+=item C<$subscribers> => list of subscribers
 
 =back
 
-=head3 Return value
+Return value:
 
 The list of selected users.
 
@@ -12588,7 +12672,7 @@ sub get_arc_size {
 	return Sympa::Tools::File::get_dir_size($dir.'/'.$self->get_list_id());
 }
 
-=head2 $list->get_next_delivery_date()
+=item $list->get_next_delivery_date()
 
 Return the date epoch for next delivery planified for a list.
 
@@ -12625,7 +12709,7 @@ sub  get_next_delivery_date {
 	}
 }
 
-=head2 $list->search_datasource($id)
+=item $list->search_datasource($id)
 
 Searches the include datasource corresponding to the provided ID.
 
@@ -12650,19 +12734,19 @@ sub search_datasource {
 	return undef;
 }
 
-=head2 $list->get_datasource_name($ids)
+=item $list->get_datasource_name($ids)
 
 Return the names of datasources, given a coma-separated list of source ids.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$ids>: comma-separated list of datasource id
+=item C<$ids> => comma-separated list of datasource id
 
 =back
 
-=head3 Return value
+Return value:
 
 The names of datasources.
 
@@ -12691,7 +12775,7 @@ sub get_datasource_name {
 	return join(', ', values %sources);
 }
 
-=head2 $list->remove_task($task)
+=item $list->remove_task($task)
 
 Remove a task in the tasks spool.
 
@@ -12720,7 +12804,7 @@ sub remove_task {
 	return 1;
 }
 
-=head2 $list->close_list($email, $status)
+=item $list->close_list($email, $status)
 
 Close the list (remove from DB, remove aliases, change status to 'closed' or 'family_closed').
 
@@ -12804,7 +12888,7 @@ Sympa::Log::Database::do_stat_log(
 return 1;
 }
 
-=head2 $list->purge($email)
+=item $list->purge($email)
 
 Remove the list.
 
@@ -12857,7 +12941,7 @@ sub purge {
 	return 1;
 }
 
-=head2 $list->remove_aliases()
+=item $list->remove_aliases()
 
 Remove list aliases
 
@@ -12890,7 +12974,7 @@ sub remove_aliases {
 }
 
 
-=head2 $list->remove_bouncers($users)
+=item $list->remove_bouncers($users)
 
 Remove users
 
@@ -12913,7 +12997,7 @@ sub remove_bouncers {
 }
 
 #
-=head2 $list->notify_bouncers($users)
+=item $list->notify_bouncers($users)
 
 Notify users : "Be carefull,You're bouncing"
 
@@ -12932,7 +13016,7 @@ sub notify_bouncers{
 	return 1;
 }
 
-=head2 $list->create_shared()
+=item $list->create_shared()
 
 Create the document repository
 
@@ -12956,7 +13040,7 @@ sub create_shared {
 	return 1;
 }
 
-=head2 $list->has_include_data_sources()
+=item $list->has_include_data_sources()
 
 Check if a list  has include-type data sources.
 
@@ -12975,7 +13059,7 @@ sub has_include_data_sources {
 	return 0
 }
 
-=head2 $list->move_message($file, $queue)
+=item $list->move_message($file, $queue)
 
 Move a message to a queue or distribute spool.
 
@@ -13006,7 +13090,7 @@ sub move_message {
 	return 1;
 }
 
-=head2 $list->get_bounce_dir()
+=item $list->get_bounce_dir()
 
 Return the path to the list bounce directory, where bounces are stored
 
@@ -13020,7 +13104,7 @@ sub get_bounce_dir {
 	return $root_dir.'/'.$self->get_list_id();
 }
 
-=head2 $list->get_list_address()
+=item $list->get_list_address()
 
 Return the list email address.
 
@@ -13031,7 +13115,7 @@ sub get_list_address {
 	return $self->{'name'}.'@'.$self->{'admin'}{'host'};
 }
 
-=head2 $list->get_list_id()
+=item $list->get_list_id()
 
 Return the list ID, different from the list address (uses the robot name).
 
@@ -13043,9 +13127,13 @@ sub get_list_id {
 	return $self->{'name'}.'@'.$self->{'domain'};
 }
 
+=back
+
 =head1 FUNCTIONS
 
-=head2 get_data($data, $robotname, $listname)
+=over
+
+=item get_data($data, $robotname, $listname)
 
 Connect to stat_counter_table and extract data.
 
@@ -13062,7 +13150,7 @@ sub get_data {
 	return $res;
 }
 
-=head2 get_lists_db($where)
+=item get_lists_db($where)
 
 support for list config caching in database
 
@@ -13181,5 +13269,9 @@ sub _flush_list_db {
 		return undef;
 	}
 }
+
+=back
+
+=cut
 
 1;

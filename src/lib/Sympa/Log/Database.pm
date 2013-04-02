@@ -87,13 +87,15 @@ my %action_type = (
 
 =head1 FUNCTIONS
 
-=head2 get_log_date()
+=over
 
-=head3 Parameters
+=item get_log_date()
+
+Parameters:
 
 None.
 
-=head3 Return
+Return:
 
 =cut
 
@@ -116,39 +118,39 @@ sub get_log_date {
 	return @dates;
 }
 
-=head2 do_log(%parameters)
+=item do_log(%parameters)
 
 Add log in RDBMS.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<list>: FIXME
+=item C<list> => FIXME
 
-=item * I<robot>: FIXEM
+=item C<robot> => FIXEM
 
-=item * I<action>: FIXME
+=item C<action> => FIXME
 
-=item * I<parameter>: FIXME
+=item C<parameter> => FIXME
 
-=item * I<target_email>: FIXME
+=item C<target_email> => FIXME
 
-=item * I<user_email>: FIXME
+=item C<user_email> => FIXME
 
-=item * I<msg_id>: FIXME
+=item C<msg_id> => FIXME
 
-=item * I<status>: FIXME
+=item C<status> => FIXME
 
-=item * I<error_type>: FIXME
+=item C<error_type> => FIXME
 
-=item * I<client>: FIXME
+=item C<client> => FIXME
 
-=item * I<daemon>: FIXME
+=item C<daemon> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 =cut
 
@@ -208,31 +210,31 @@ sub do_log {
 	return 1;
 }
 
-=head2 do_stat_log($parameters)
+=item do_stat_log($parameters)
 
 Insert data in stats table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<list>: FIXME
+=item C<list> => FIXME
 
-=item * I<robot>: FIXEM
+=item C<robot> => FIXEM
 
-=item * I<mail>: FIXME
+=item C<mail> => FIXME
 
-=item * I<operation>: FIXME
+=item C<operation> => FIXME
 
-=item * I<daemon>: FIXME
+=item C<daemon> => FIXME
 
-=item * I<ip>: FIXME
+=item C<ip> => FIXME
 
-=item * I<parameter>: FIXME
+=item C<parameter> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 =cut
 
@@ -306,13 +308,13 @@ sub _db_stat_counter_log {
 
 }
 
-=head2 delete_messages($parameters)
+=item delete_messages($parameters)
 
 Delete logs in RDBMS.
 
-=head3 Parameters
+Parameters:
 
-=head3 Return
+Return:
 
 =cut
 
@@ -332,13 +334,13 @@ sub delete_messages {
 
 }
 
-=head2 get_first_db_log($parameters)
+=item get_first_db_log($parameters)
 
 Scan log_table with appropriate select.
 
-=head3 Parameters
+Parameters:
 
-=head3 Return
+Return:
 
 =cut
 
@@ -435,13 +437,13 @@ sub get_first_db_log {
 
 }
 
-=head2 return_rows_nb()
+=item return_rows_nb()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return
+Return:
 
 =cut
 
@@ -449,13 +451,13 @@ sub return_rows_nb {
 	return $rows_nb;
 }
 
-=head2 get_next_db_log()
+=item get_next_db_log()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return
+Return:
 
 =cut
 
@@ -474,15 +476,15 @@ sub get_next_db_log {
 	return $log;
 }
 
-=head2 aggregate_data($begin_date, $end_date)
+=item aggregate_data($begin_date, $end_date)
 
 Aggregate date from stat_table to stat_counter_table.
 
 Dates must be in epoch format.
 
-=head3 Parameters
+Parameters:
 
-=head3 Return
+Return:
 
 =cut
 
@@ -1050,5 +1052,9 @@ sub _update_subscriber_msg_send {
 	return 1;
 
 }
+
+=back
+
+=cut
 
 1;

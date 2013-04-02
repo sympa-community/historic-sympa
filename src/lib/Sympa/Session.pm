@@ -57,23 +57,25 @@ my %session_hard_attributes = (
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Session->new(%parameters)
+=over
+
+=item Sympa::Session->new(%parameters)
 
 Creates a new L<Sympa::Session> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<robot>: FIXME
+=item C<robot> => FIXME
 
-=item * I<context>: FIXME
+=item C<context> => FIXME
 
-=item * I<crawlers>: FIXME
+=item C<crawlers> => FIXME
 
 =back
 
-=head3 Return
+Return:
 
 A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 
@@ -141,7 +143,7 @@ sub new {
 	return $self;
 }
 
-=head2 purge_old_sessions(%parameters)
+=item purge_old_sessions(%parameters)
 
 Remove old sessions from a particular robot or from all robots. delay is a parameter in seconds
 
@@ -207,7 +209,7 @@ sub purge_old_sessions {
 	return $total+$anonymous_total;
 }
 
-=head2 Sympa::Session->purge_old_tickets(%parameters)
+=item Sympa::Session->purge_old_tickets(%parameters)
 
 Remove old one_time_ticket from a particular robot or from all robots. delay is a parameter in seconds
 
@@ -247,7 +249,7 @@ sub purge_old_tickets {
 	return $total;
 }
 
-=head2 Sympa::Session->list_sessions($delay, $robot, $connected_only)
+=item Sympa::Session->list_sessions($delay, $robot, $connected_only)
 
 List sessions for $robot where last access is newer then $delay. List is limited to connected users if $connected_only
 
@@ -288,7 +290,7 @@ sub list_sessions {
 	return \@sessions;
 }
 
-=head2 Sympa::Session->get_session_cookie($http_cookie)
+=item Sympa::Session->get_session_cookie($http_cookie)
 
 Generic function to get a cookie value.
 
@@ -309,7 +311,7 @@ sub get_session_cookie {
 	return (undef);
 }
 
-=head2 Sympa::Session->get_random()
+=item Sympa::Session->get_random()
 
 =cut
 
@@ -320,7 +322,11 @@ sub get_random {
 	return ($random)
 }
 
+=back
+
 =head1 INSTANCE METHODS
+
+=over
 
 =cut
 
@@ -371,7 +377,7 @@ sub load {
 	return ($self);
 }
 
-=head2 $session->store()
+=item $session->store()
 
 Store the session information in the database
 
@@ -412,7 +418,7 @@ if ($self->{'new_session'}) {
 return 1;
 }
 
-=head2 $session->renew()
+=item $session->renew()
 
 Renew the session ID.
 
@@ -448,7 +454,7 @@ sub renew {
 	return 1;
 }
 
-=head2 $self->set_cookie($http_domain, $expires,$use_ssl)
+=item $self->set_cookie($http_domain, $expires,$use_ssl)
 
 Generic method to set a cookie
 
@@ -495,7 +501,7 @@ sub set_cookie {
 	return 1;
 }
 
-=head2 $session->as_hashref()
+=item $session->as_hashref()
 
 Return the session object content, as a hashref
 
@@ -513,7 +519,7 @@ sub as_hashref {
 	return $data;
 }
 
-=head2 $session->is_anonymous()
+=item $session->is_anonymous()
 
 Return a true value if the session object corresponds to an anonymous session.
 
@@ -529,7 +535,7 @@ sub is_anonymous {
 	}
 }
 
-=head2 $session->is_a_crawler()
+=item $session->is_a_crawler()
 
 Return a true value if the session object corresponds to a crawler, according to the user agent.
 
@@ -540,5 +546,9 @@ sub is_a_crawler {
 
 	return $self->{'is_a_crawler'};
 }
+
+=back
+
+=cut
 
 1;

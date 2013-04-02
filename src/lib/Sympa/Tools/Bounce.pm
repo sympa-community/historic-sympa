@@ -42,19 +42,23 @@ my $address_pattern         = qr/[\w._-]+@[\w._-]+/;
 
 =head1 FUNCTIONS
 
-=head2 parse_compliant_notification($message)
+=over
+
+=item parse_compliant_notification($message)
 
 Parse a RFC1891-compliant non-delivery notification.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$message>: message object
+=item L<Sympa::Message> 
+
+The message to parse.
 
 =back
 
-=head3 Return value
+Return value:
 
 A list of recipients/status pairs, as an hasref.
 
@@ -155,19 +159,21 @@ sub _unquote_address {
 							$address;
 }
 
-=head2 parse_notification($message)
+=item parse_notification($message)
 
 Parse a non-delivery notification.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$message>: message object
+=item L<Sympa::Message> 
+
+The message to parse.
 
 =back
 
-=head3 Return value
+Return value:
 
 A list of recipients/status pairs, as an hasref.
 
@@ -616,5 +622,9 @@ sub _get_body_paragraphes {
 	# to introduce LF-terminated lines also
 	return split /(?:\r\n\r\n|\n\n)/, (join '', @$body);
 }
+
+=back
+
+=cut
 
 1;

@@ -39,7 +39,9 @@ use POSIX qw();
 
 =head1 FUNCTIONS
 
-=head2 recursive_transformation($var, $subref)
+=over
+
+=item recursive_transformation($var, $subref)
 
 This applies recursively to a data structure. The transformation subroutine is
 passed as a ref.
@@ -72,7 +74,7 @@ sub recursive_transformation {
 	return;
 }
 
-=head2 dump_var($var, $level, $fd)
+=item dump_var($var, $level, $fd)
 
 Dump a variable's content
 
@@ -106,7 +108,7 @@ sub dump_var {
 	}
 }
 
-=head2 dump_html_var($var)
+=item dump_html_var($var)
 
 Dump a variable's content
 
@@ -149,7 +151,7 @@ sub dump_html_var {
 	return $html;
 }
 
-=head2 dup_var($var)
+=item dup_var($var)
 
 Duplicate a complex variable
 
@@ -177,7 +179,7 @@ sub dup_var {
 	return $var;
 }
 
-=head2 get_array_from_splitted_string($string)
+=item get_array_from_splitted_string($string)
 
 return an array made on a string splited by ','.
 It removes spaces.
@@ -198,21 +200,25 @@ sub get_array_from_splitted_string {
 	return \@array;
 }
 
-=head2 diff_on_arrays($a, $b)
+=item diff_on_arrays($a, $b)
 
 Makes set operation on arrays (seen as set, with no double).
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$a>: first set (arrayref)
+=item arrayref
 
-=item * I<$b>: second set (arrayref)
+The first set.
+
+=item arrayref
+
+The second set.
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref with following keys:
 
@@ -290,7 +296,7 @@ sub diff_on_arrays {
 
 }
 
-=head2 is_in_array($set, $value)
+=item is_in_array($set, $value)
 
 Returns a true value if value I<$value> if part of set I<$set>
 
@@ -305,7 +311,7 @@ sub is_in_array {
 	return undef;
 }
 
-=head2 string_2_hash($string)
+=item string_2_hash($string)
 
 convert a string formated as var1="value1";var2="value2"; into a hash.
 Used when extracting from session table some session properties or when
@@ -330,7 +336,7 @@ sub string_2_hash {
 
 }
 
-=head2 hash_2_string($hash)
+=item hash_2_string($hash)
 
 Convert a hash into a string formated as var1="value1";var2="value2"; into a
 hash
@@ -352,7 +358,7 @@ sub hash_2_string {
 	return ($data_string);
 }
 
-=head2 smart_lessthan($a, $b)
+=item smart_lessthan($a, $b)
 
 compare 2 scalars, string/numeric independent
 
@@ -374,5 +380,9 @@ sub smart_lessthan {
 		return $stra < $strb;
 	}
 }
+
+=back
+
+=cut
 
 1;

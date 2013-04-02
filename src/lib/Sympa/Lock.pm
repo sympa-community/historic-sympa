@@ -47,11 +47,13 @@ my $default_timeout = 60 * 20; # After this period a lock can be stolen
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Lock->new(%parameters)
+=over
+
+=item Sympa::Lock->new(%parameters)
 
 Creates a new L<Sympa::Lock> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
@@ -65,7 +67,7 @@ Creates a new L<Sympa::Lock> object.
 
 =back
 
-=head3 Return value
+Return value:
 
 A new L<Sympa::Lock> object, or I<undef> if something went wrong.
 
@@ -109,11 +111,15 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $lock->set_timeout($timeout)
+=over
 
-=head3 Parameters
+=item $lock->set_timeout($timeout)
+
+Parameters:
 
 =over
 
@@ -121,7 +127,7 @@ sub new {
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value on sucess, I<undef> otherwise.
 
@@ -137,7 +143,7 @@ sub set_timeout {
 	return 1;
 }
 
-=head2 $self->get_lock_count()
+=item $self->get_lock_count()
 
 =cut
 
@@ -147,7 +153,7 @@ sub get_lock_count {
 	return $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1;
 }
 
-=head2 Sympa::Lock->get_file_handle()
+=item Sympa::Lock->get_file_handle()
 
 =cut
 
@@ -157,9 +163,9 @@ sub get_file_handle {
 	return $list_of_locks{$self->{'lock_filename'}}{'fh'};
 }
 
-=head2 $lock->lock($mode)
+=item $lock->lock($mode)
 
-=head3 Parameters
+Parameters:
 
 =over
 
@@ -167,7 +173,7 @@ sub get_file_handle {
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value on sucess, I<undef> otherwise.
 
@@ -228,13 +234,13 @@ sub lock {
 	return 1;
 }
 
-=head2 $lock->unlock()
+=item $lock->unlock()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value on sucess, I<undef> otherwise.
 
@@ -496,5 +502,9 @@ sub _unlock_nfs {
 
 	return 1;
 }
+
+=back
+
+=cut
 
 1;

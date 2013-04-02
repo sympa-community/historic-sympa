@@ -44,7 +44,9 @@ use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
-=head2 set_file_rights(%param)
+=over
+
+=item set_file_rights(%parameters)
 
 Sets owner and/or access rights on a file.
 
@@ -84,7 +86,7 @@ sub set_file_rights {
 	return 1;
 }
 
-=head2 copy_dir($dir1, $dir2)
+=item copy_dir($dir1, $dir2)
 
 Copy a directory and its content
 
@@ -101,7 +103,7 @@ sub copy_dir {
 	return (File::Copy::Recursive::dircopy($dir1,$dir2)) ;
 }
 
-=head2 del_dir($dir)
+=item del_dir($dir)
 
 Delete a directory and its content.
 
@@ -125,7 +127,7 @@ sub del_dir {
 	}
 }
 
-=head2 mk_parent_dir($file)
+=item mk_parent_dir($file)
 
 To be used before creating a file in a directory that may not exist already.
 
@@ -141,7 +143,7 @@ sub mk_parent_dir {
 	mkdir_all($dir, 0755);
 }
 
-=head2 mkdir_all($path, $mode)
+=item mkdir_all($path, $mode)
 
 Recursively create directory and all parent directories
 
@@ -182,7 +184,7 @@ sub mkdir_all {
 	return $status;
 }
 
-=head2 shift_file($file, $count)
+=item shift_file($file, $count)
 
 Shift file renaming it with date. If count is defined, keep $count file and
 unlink others
@@ -228,7 +230,7 @@ sub shift_file {
 	return ($file.'.'.$file_extention);
 }
 
-=head2 find_file($filename, @directories)
+=item find_file($filename, @directories)
 
 Find a file in an ordered list of directories
 
@@ -247,7 +249,7 @@ sub find_file {
 	return undef;
 }
 
-=head2 list_dir($dir, $all)
+=item list_dir($dir, $all)
 
 Recursively list the content of a directory
 Return an array of hash, each entry with directory + filename + encoding
@@ -283,7 +285,7 @@ sub list_dir {
 	return 1;
 }
 
-=head2 get_dir_size($dir)
+=item get_dir_size($dir)
 
 Get the total size for the given directory.
 
@@ -310,7 +312,7 @@ sub get_dir_size {
 	return $size;
 }
 
-=head2 remove_dir(@directories)
+=item remove_dir(@directories)
 
 Function for Removing a non-empty directory.
 It takes a variale number of arguments :
@@ -344,21 +346,21 @@ sub remove_dir {
 	return 1;
 }
 
-=head2 a_is_older_than_b(%parameters)
+=item a_is_older_than_b(%parameters)
 
 Compares the last modifications date of two files
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<a_file>: full path to a file
+=item C<a_file> => full path to a file
 
-=item * I<b_file>: full path to a file
+=item C<b_file> => full path to a file
 
 =back
 
-=head3 Return value
+Return value:
 
 The string 'true' if the last modification date of first file is older
 than second file, the 'false' string otherwise, and undef if the comparison
@@ -393,19 +395,21 @@ sub a_is_older_than_b {
 	return $answer;
 }
 
-=head2 slurp_file($file)
+=item slurp_file($file)
 
 Read the whole content of a file.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$file>: file to read
+=item path
+
+The file to read.
 
 =back
 
-=head3 Return value
+Return value:
 
 The file content as a string on success, I<undef> otherwise.
 
@@ -422,5 +426,9 @@ sub slurp_file {
 
 	return $content;
 }
+
+=back
+
+=cut
 
 1;

@@ -76,7 +76,9 @@ my $last_stored_message_key;
 
 =head1 FUNCTIONS
 
-=head2 next($db_type)
+=over
+
+=item next($db_type)
 
 =cut
 
@@ -139,7 +141,7 @@ sub next {
 
 }
 
-=head2 remove($messagekey, $packetid)
+=item remove($messagekey, $packetid)
 
 Remove a packet from database by packet id. return undef if packet does not
 exist
@@ -180,7 +182,7 @@ sub messageasstring {
 	return $msg;
 }
 
-=head2 message_from_spool($messagekey)
+=item message_from_spool($messagekey)
 
 Fetch message from bulkspool_table by key.
 
@@ -207,17 +209,17 @@ sub message_from_spool {
 
 }
 
-=head2 merge_msg($entity, $rcpt, $bulk, $data)
+=item merge_msg($entity, $rcpt, $bulk, $data)
 
 Merge a message with custom attributes of a user.
 
-=head3 Parameters
+Parameters:
 MIME:Entity                                      #
 $rcpt : a receipient                             #
 $bulk : HASH                                     #
 $data : HASH with user's data                    #
 
-=head3 Return value
+Return value:
 
 1 | undef
 
@@ -308,12 +310,12 @@ return 1;
 
 }
 
-=head2 merge_data(%parameterss)
+=item merge_data(%parameterss)
 
 This function retrieves the customized data of the users then parse the
 message. It returns the message personalized to bulk.pl
 
-=head3 Parameters
+Parameters:
 
 rcpt : the receipient email
 listname : the name of the list
@@ -322,7 +324,7 @@ data : HASH with many data
 body : message with the TT2
 message_output : object, IO::Scalar
 
-=head3 Return value
+Return value:
 - message_output : customized message              #
     | undef                                              #
 
@@ -514,11 +516,11 @@ sub store {
 	return 1;
 }
 
-=head2 purge_bulkspool()
+=item purge_bulkspool()
 
 Remove file that are not referenced by any packet.
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -558,11 +560,11 @@ sub remove_bulkspool_message {
 	return 1;
 }
 
-=head2 get_remaining_packets_count()
+=item get_remaining_packets_count()
 
 Return the number of remaining packets in the bulkmailer table.
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -581,12 +583,12 @@ sub get_remaining_packets_count {
 	return $result[0];
 }
 
-=head2 there_is_too_much_remaining_packets($max)
+=item there_is_too_much_remaining_packets($max)
 
 Returns a true value if the number of remaining packets in the bulkmailer
 table exceeds given maximum.
 
-=head3 Parameters
+Parameters:
 
 None.
 
@@ -603,15 +605,15 @@ sub there_is_too_much_remaining_packets {
 	}
 }
 
-=head2 get_db_random()
+=item get_db_random()
 
 This function returns $random which is stored in the database.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 The random stored in the database, or I<undef> if something went wrong.
 
@@ -630,16 +632,16 @@ sub get_db_random {
 
 }
 
-=head2 init_db_random()
+=item init_db_random()
 
 This function initializes $random used in get_fingerprint if there is no value
 in the database.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 The random initialized in the database, or I<undef> if something went wrong.
 
@@ -658,5 +660,9 @@ sub init_db_random {
 	}
 	return $random;
 }
+
+=back
+
+=cut
 
 1;

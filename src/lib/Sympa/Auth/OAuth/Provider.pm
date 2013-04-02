@@ -57,29 +57,31 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Auth::OAuth::Provider->new(%parameters)
+=over
+
+=item Sympa::Auth::OAuth::Provider->new(%parameters)
 
 Creates a new L<Sympa::Auth::OAuth::Provider> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<method>: http method
+=item C<method> => http method
 
-=item * I<url>: request url
+=item C<url> => request url
 
-=item * I<authorization_header>: FIXME
+=item C<authorization_header> => FIXME
 
-=item * I<request_parameters>: FIXME
+=item C<request_parameters> => FIXME
 
-=item * I<request_body>: FIXME
+=item C<request_body> => FIXME
 
-=item * I<config>: FIXME
+=item C<config> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A L<Sympa::Auth::OAuth::Provider> object, or I<undef> if something went wrong.
 
@@ -127,7 +129,7 @@ sub new {
 	return $self;
 }
 
-=head2 Sympa::Auth::OAuth::Provider->consumer_from_token($token)
+=item Sympa::Auth::OAuth::Provider->consumer_from_token($token)
 
 =cut
 
@@ -179,9 +181,13 @@ sub _find_parameters {
 	return $p;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $provider->check_request(%parameters)
+=over
+
+=item $provider->check_request(%parameters)
 
 Check if a request is valid.
 
@@ -189,15 +195,15 @@ Check if a request is valid.
 	$server->error($http_code, $provider->{'util'}->errstr);
     }
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<checktoken>: boolean
+=item C<checktoken> => boolean
 
 =back
 
-=head3 Return value
+Return value:
 
 The HTTP error code if the request is NOT valid, I<undef> otherwise.
 
@@ -284,19 +290,19 @@ sub check_request {
 	return undef;
 }
 
-=head2 $provider->generate_temporary(%parameters)
+=item $provider->generate_temporary(%parameters)
 
 Create a temporary token.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<authorize>: the authorization url
+=item C<authorize> => the authorization url
 
 =back
 
-=head3 Return value
+Return value:
 
 The response body, as a string.
 
@@ -331,21 +337,21 @@ sub generate_temporary {
 	return $r;
 }
 
-=head2 $provider->get_temporary(%parameters)
+=item $provider->get_temporary(%parameters)
 
 Retreive a temporary token from database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<token>: the toke
+=item C<token> => the toke
 
-=item * I<timeout>: the timeout
+=item C<timeout> => the timeout
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref, or I<undef> if the token does not exist or is not valid anymore.
 
@@ -370,21 +376,21 @@ sub get_temporary {
 	return $data;
 }
 
-=head2 $provider->generate_verifier(%parameters)
+=item $provider->generate_verifier(%parameters)
 
 Create the verifier for a temporary token.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<token>: the token
+=item C<token> => the token
 
-=item * I<user>: the user
+=item C<user> => the user
 
 =back
 
-=head3 Return value
+Return value:
 
 A redirect URL, as a string, or I<undef> if the token does not exist or is not
 valid anymore.
@@ -429,21 +435,21 @@ sub generate_verifier {
 	return $r;
 }
 
-=head2 $provider->generate_access(%parameters)
+=item $provider->generate_access(%parameters)
 
 Create an access token.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<token>: the temporary token
+=item C<token> => the temporary token
 
-=item * I<verifier>: the verifier
+=item C<verifier> => the verifier
 
 =back
 
-=head3 Return value
+Return value:
 
 The response body as a string, or I<undef> if the temporary token does not
 exist or is not valid anymore.
@@ -479,19 +485,19 @@ sub generate_access {
 	return $r;
 }
 
-=head2 $provider->get_access(%parameters)
+=item $provider->get_access(%parameters)
 
 Retreive an access token from database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<token>: the token
+=item C<token> => the token
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref if everything's alright, or I<undef> if the token does not exist or
 is not valid anymore.
@@ -558,6 +564,8 @@ sub _get_consumer_config_for {
 
 	return $c;
 }
+
+=back
 
 =head1 AUTHORS
 

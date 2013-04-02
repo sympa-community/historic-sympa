@@ -51,32 +51,34 @@ my %db_connections;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Datasource::SQL->create(%parameters)
+=over
+
+=item Sympa::Datasource::SQL->create(%parameters)
 
 Factory method to create a new L<Sympa::Datasource::SQL> object from a
 specific subclass.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<host>: FIXME
+=item C<host> => FIXME
 
-=item * I<user>: FIXME
+=item C<user> => FIXME
 
-=item * I<passwd>: FIXME
+=item C<passwd> => FIXME
 
-=item * I<db_name>: FIXME
+=item C<db_name> => FIXME
 
-=item * I<db_type>: FIXME
+=item C<db_type> => FIXME
 
-=item * I<connect_options>: FIXME
+=item C<connect_options> => FIXME
 
-=item * I<domain>: FIXME
+=item C<domain> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 
@@ -108,31 +110,31 @@ sub create {
 	return $subclass->new(%params);
 }
 
-=head2 Sympa::Datasource::SQL->new(%parameters)
+=item Sympa::Datasource::SQL->new(%parameters)
 
 Create a new L<Sympa::Datasource::SQL> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<host>: FIXME
+=item C<host> => FIXME
 
-=item * I<user>: FIXME
+=item C<user> => FIXME
 
-=item * I<passwd>: FIXME
+=item C<passwd> => FIXME
 
-=item * I<db_name>: FIXME
+=item C<db_name> => FIXME
 
-=item * I<db_type>: FIXME
+=item C<db_type> => FIXME
 
-=item * I<connect_options>: FIXME
+=item C<connect_options> => FIXME
 
-=item * I<domain>: FIXME
+=item C<domain> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 
@@ -155,13 +157,17 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $source->connect()
+=over
+
+=item $source->connect()
 
 Connect to a SQL database.
 
-=head3 Return value
+Return value:
 
 A true value, or I<undef> if something went wrong.
 
@@ -181,15 +187,15 @@ sub connect {
 	}
 }
 
-=head2 $source->establish_connection()
+=item $source->establish_connection()
 
 Connect to a SQL database.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A DBI database handle object, or I<undef> if something went wrong.
 
@@ -326,17 +332,17 @@ sub establish_connection {
 	}
 }
 
-=head2 $source->do_query($query, @params)
+=item $source->do_query($query, @params)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$query>
+=item C<$query> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A DBI statement handle object, or I<undef> if something went wrong.
 
@@ -391,17 +397,17 @@ sub do_query {
 	return $self->{'sth'};
 }
 
-=head2 $source->do_prepared_query($query, @params)
+=item $source->do_prepared_query($query, @params)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$query>
+=item C<$query> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 A DBI statement handle object, or I<undef> if something went wrong.
 
@@ -457,17 +463,17 @@ sub do_prepared_query {
 	return $self->{'cached_prepared_statements'}{$query};
 }
 
-=head2 $source->prepare_query_log_values(@values)
+=item $source->prepare_query_log_values(@values)
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<@values>
+=item C<@values> =>
 
 =back
 
-=head3 Return value
+Return value:
 
 The list of cropped values, as an arrayref.
 
@@ -487,13 +493,13 @@ sub prepare_query_log_values {
 	return \@result;
 }
 
-=head2 $source->fetch()
+=item $source->fetch()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 =cut
 
@@ -525,13 +531,13 @@ sub fetch {
 	return $array_of_users;
 }
 
-=head2 $source->disconnect()
+=item $source->disconnect()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 None.
 
@@ -545,13 +551,13 @@ sub disconnect {
 	delete $db_connections{$self->{'connect_string'}};
 }
 
-=head2 $source->create_db()
+=item $source->create_db()
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 A true value.
 
@@ -562,7 +568,7 @@ sub create_db {
 	return 1;
 }
 
-=head2 $source->ping()
+=item $source->ping()
 
 Ping underlying data source.
 
@@ -576,7 +582,7 @@ sub ping {
 	return $self->{'dbh'}->ping;
 }
 
-=head2 $source->quote($string, $datatype)
+=item $source->quote($string, $datatype)
 
 Quote a string literal for use in an SQL statement.
 
@@ -590,7 +596,7 @@ sub quote {
 	return $self->{'dbh'}->quote($string, $datatype);
 }
 
-=head2 $source->set_fetch_timeout($timeout)
+=item $source->set_fetch_timeout($timeout)
 
 Set a timeout for fetch operations.
 
@@ -602,16 +608,16 @@ sub set_fetch_timeout {
 	return $self->{'fetch_timeout'} = $timeout;
 }
 
-=head2 $source->get_canonical_write_date($field)
+=item $source->get_canonical_write_date($field)
 
 Returns a character string corresponding to the expression to use in a read
 query (e.g. SELECT) for the field given as argument.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$field>: field to be used in the query
+=item C<$field> => field to be used in the query
 
 =back
 
@@ -623,16 +629,16 @@ sub get_canonical_write_date {
 	return $self->get_formatted_date('mode'=>'write','target'=>$field);
 }
 
-=head2 $source->get_canonical_read_date($value)
+=item $source->get_canonical_read_date($value)
 
 Returns a character string corresponding to the expression to use in
 a write query (e.g. UPDATE or INSERT) for the value given as argument.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$value>: value to be used in the query
+=item C<$value> => value to be used in the query
 
 =back
 
@@ -644,15 +650,15 @@ sub get_canonical_read_date {
 	return $self->get_formatted_date('mode'=>'read','target'=>$value);
 }
 
-=head2 $source->get_all_primary_keys()
+=item $source->get_all_primary_keys()
 
 Returns the primary keys for all the tables in the database.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
@@ -681,15 +687,15 @@ sub get_all_primary_keys {
 	return \%found_keys;
 }
 
-=head2 $source->get_all_indexes()
+=item $source->get_all_indexes()
 
 Returns the indexes for all the tables in the database.
 
-=head3 Parameters
+Parameters:
 
 None.
 
-=head3 Return value
+Return value:
 
 An hashref with the following keys, or I<undef> if something went wrong:
 
@@ -717,12 +723,12 @@ sub get_all_indexes {
 	return \%found_indexes;
 }
 
-=head2 $source->check_key(%parameters)
+=item $source->check_key(%parameters)
 
 Checks the compliance of a key of a table compared to what it is supposed to
 reference.
 
-=head3 Parameters
+Parameters:
 
 * 'table' : the name of the table for which we want to check the primary key
 * 'key_name' : the kind of key tested:
@@ -731,7 +737,7 @@ reference.
 	* 'expected_keys' : A ref to an array containing the list of fields that we
 	   expect to be part of the key.
 
-=head3 Return value
+Return value:
 
 A ref likely to contain the following values:
 #	* 'empty': if this key is defined, then no key was found for the table
@@ -788,15 +794,15 @@ sub check_key {
 	return $result;
 }
 
-=head2 source->build_connect_string()
+=item source->build_connect_string()
 
 Builds the string to be used by the DBI to connect to the database.
 
-=head3 Parameters
+Parameters:
 
 None
 
-=head2 source->get_substring_clause(%parameters)
+=item source->get_substring_clause(%parameters)
 
 Returns an SQL clause to be inserted in a query.
 
@@ -804,19 +810,19 @@ This clause will compute a substring of max length I<substring_length> starting
 from the first character equal to I<separator> found in the value of field
 I<source_field>.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<substring_length>: maximum substring length
+=item C<substring_length> => maximum substring length
 
-=item * I<separator>: substring first character
+=item C<separator> => substring first character
 
-=item * I<source_field>: field to search
+=item C<source_field> => field to search
 
 =back
 
-=head2 $source->get_limit_clause(%parameters)
+=item $source->get_limit_clause(%parameters)
 
 Returns an SQL clause to be inserted in a query.
 
@@ -824,288 +830,290 @@ This clause will limit the number of records returned by the query to
 I<rows_count>. If I<offset> is provided, an offset of I<offset> rows is done
 from the first record before selecting the rows to return.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<rows_count>: maximum number of records
+=item C<rows_count> => maximum number of records
 
-=item * I<offset>: rows offset (optional)
+=item C<offset> => rows offset (optional)
 
 =back
 
-=head2 $source->get_formatted_date()
+=item $source->get_formatted_date()
 
 Returns a character string corresponding to the expression to use in a query
 involving a date.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<mode>: the query type (I<read> for SELECT, I<write> for INSERT or
+=item C<mode> => the query type (I<read> for SELECT, I<write> for INSERT or
 UPDATE)
 
-=item * I<target>: field name or value
+=item C<target> => field name or value
 
 =back
 
-=head3 Return value
+Return value:
 
 The formatted date or I<undef> if the date format mode is unknonw.
 
-=head2 $source->is_autoinc(%parameters)
+=item $source->is_autoinc(%parameters)
 
 Checks whether a field is an autoincrement field or not.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<field>: field name
+=item C<field> => field name
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the field is an autoincrement field, false otherwise.
 
-=head2 $source->set_autoinc(%parameters)
+=item $source->set_autoinc(%parameters)
 
 Defines the field as an autoincrement field.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<field>: field name
+=item C<field> => field name
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 A true value if the autoincrement could be set, I<undef> otherwise.
 
-=head2 $source->get_tables()
+=item $source->get_tables()
 
 Get the list of the tables in the database.
 
-=head3 Parametersr
+Parametersr:
 
 None.
 
-=head3 Return value
+Return value:
 
 A list of table names as an arrayref, or I<undef> if something went wrong.
 
-=head2 $source->add_table(%parameters)
+=item $source->add_table(%parameters)
 
 Adds a table to the database
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_fields(%parameters)
+=item $source->get_fields(%parameters)
 
 Get the list of fields in a table from the database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 A list of name => value pairs as an hashref, or I<undef> if something went
 wrong.
 
-=head2 $source->update_field(%parameters)
+=item $source->update_field(%parameters)
 
 Changes the type of a field in a table from the database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<field>: field name
+=item C<field> => field name
 
-=item * I<type>: field type
+=item C<type> => field type
 
-=item * I<notnull>: specifies that the field must not be null
+=item C<notnull> => specifies that the field must not be null
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->add_field(%parameters)
+=item $source->add_field(%parameters)
 
 Adds a field in a table from the database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<field>: field name
+=item C<field> => field name
 
-=item * I<type>: field type
+=item C<type> => field type
 
-=item * I<notnull>: specifies that the field must not be null
+=item C<notnull> => specifies that the field must not be null
 
-=item * I<autoinc>: specifies that the field must be autoincremental
+=item C<autoinc> => specifies that the field must be autoincremental
 
-=item * I<primary>: specifies that the field is a key
+=item C<primary> => specifies that the field is a key
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->delete_field(%parameters)
+=item $source->delete_field(%parameters)
 
 Delete a field in a table from the database.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<field>: field name
+=item C<field> => field name
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_primary_key(%parameters)
+=item $source->get_primary_key(%parameters)
 
 Returns the list of fields being part of a table's primary key.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref whose keys are the name of the fields of the primary key, or
 I<undef> if something went wrong.
 
-=head2 $source->unset_primary_key(%parameters)
+=item $source->unset_primary_key(%parameters)
 
 Drops the primary key of a table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->set_primary_key(%parameters)
+=item $source->set_primary_key(%parameters)
 
 Sets the primary key of a table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<fields>: field names, as an arrayref
+=item C<fields> => field names, as an arrayref
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->get_indexes(%parameters)
+=item $source->get_indexes(%parameters)
 
 Returns the list of indexes of a table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
 =back
 
-=head3 Return value
+Return value:
 
 An hashref whose keys are the name of indexes, with hashref whose keys are the
 indexed fields as values, or I<undef> if something went wrong.
 
-=head2 $source->unset_index(%parameters)
+=item $source->unset_index(%parameters)
 
 Drops an index of a table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<index>: index name
+=item C<index> => index name
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
-=head2 $source->set_index(%parameters)
+=item $source->set_index(%parameters)
 
 Sets an index in a table.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<table>: table name
+=item C<table> => table name
 
-=item * I<fields>: field names, as an arrayref
+=item C<fields> => field names, as an arrayref
 
-=item * I<index_name>: index name
+=item C<index_name> => index name
 
 =back
 
-=head3 Return value
+Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=back
 
 =cut
 

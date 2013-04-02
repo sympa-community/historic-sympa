@@ -40,21 +40,23 @@ use Sympa::Tools;
 
 =head1 CLASS METHODS
 
-=head2 Sympa::Datasource::LDAP->new(%parameters)
+=over
+
+=item Sympa::Datasource::LDAP->new(%parameters)
 
 Create a new L<Sympa::Datasource::LDAP> object.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<user>: FIXME
+=item C<user> => FIXME
 
-=item * I<password>: FIXME
+=item C<password> => FIXME
 
 =back
 
-=head3 Return value
+Return value:
 
 A new L<Sympa::Datasource::LDAP> object, or I<undef> if something went wrong.
 
@@ -91,20 +93,24 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
-=head2 $source->connect($options)
+=over
+
+=item $source->connect($options)
 
 Connect to an LDAP directory.
 
-=head3 Parameters
+Parameters:
 
 # IN : -$options : ref to a hash. Options for the connection process.
 #         currently accepts 'keep_trying' : wait and retry until
 #         db connection is ok (boolean) ; 'warn' : warn
 #         listmaster if connection fails (boolean)
 
-=head3 Return value
+Return value:
 
 An L<Net::LDAP> object.
 
@@ -195,7 +201,7 @@ sub connect {
 
 }
 
-=head2 $source->query($query)
+=item $source->query($query)
 
 =cut
 
@@ -212,7 +218,7 @@ sub query {
 
 }
 
-=head2 $source->ping()
+=item $source->ping()
 
 Does not make sense in LDAP context
 
@@ -221,7 +227,7 @@ Does not make sense in LDAP context
 sub ping {
 }
 
-=head2 $source->quote()
+=item $source->quote()
 
 Does not make sense in LDAP context
 
@@ -230,7 +236,7 @@ Does not make sense in LDAP context
 sub quote {
 }
 
-=head2 $source->fetcj()
+=item $source->fetcj()
 
 =cut
 
@@ -239,7 +245,7 @@ sub fetch {
 	return $self->{'sth'}->fetchrow_arrayref;
 }
 
-=head2 $source->create_db()
+=item $source->create_db()
 
 Does not make sense in LDAP context
 
@@ -253,7 +259,7 @@ sub disconnect {
 	$self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
 }
 
-=head2 $source->set_fetch_timeout()
+=item $source->set_fetch_timeout()
 
 Does not make sense in LDAP context
 
@@ -261,5 +267,9 @@ Does not make sense in LDAP context
 
 sub set_fetch_timeout {
 }
+
+=back
+
+=cut
 
 1;

@@ -76,7 +76,9 @@ my %WDay2Num = (
 
 =head1 FUNCTIONS
 
-=head2 epoch2yyyymmjj_hhmmss($epoch)
+=over
+
+=item epoch2yyyymmjj_hhmmss($epoch)
 
 Convert an epoch date into a readable date scalar.
 
@@ -91,7 +93,7 @@ sub epoch2yyyymmjj_hhmmss {
 	return $date;
 }
 
-=head2 adate($epoch)
+=item adate($epoch)
 
 Convert an epoch date into a readable date scalar.
 
@@ -106,7 +108,7 @@ sub adate {
 	return $date;
 }
 
-=head2 get_midnight_time($epoch)
+=item get_midnight_time($epoch)
 
 Return the epoch date corresponding to the last midnight before date given as
 argument.
@@ -121,17 +123,21 @@ sub get_midnight_time {
 	return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
 }
 
-=head2 epoch_conv($arg, $time)
+=item epoch_conv($arg, $time)
 
 Convert a human format date into an epoch date.
 
-=head3 Parameters
+Parameters:
 
 =over
 
-=item * I<$arg>: argument date to convert
+=item date
 
-=item * I<$time>: the epoch current date
+The date to convert.
+
+=item time
+
+The epoch current date
 
 =back
 
@@ -169,7 +175,7 @@ sub epoch_conv {
 	return $result;
 }
 
-=head2 date_conv($arg)
+=item date_conv($arg)
 
 Convert a formated date string into a unix timestamp.
 
@@ -204,7 +210,7 @@ sub date_conv {
 	return time;
 }
 
-=head2 duration_conv($arg, $start_date)
+=item duration_conv($arg, $start_date)
 
 Convert a formated duration string into a second number.
 
@@ -234,7 +240,7 @@ sub duration_conv {
 	return $duration;
 }
 
-=head2 parse_date($date)
+=item parse_date($date)
 
 Takes a string date specified like the output of date(1) into its components.
 Parsing a string for a date is ugly since we have to watch out for differing
@@ -341,5 +347,9 @@ sub parse_date {
 
 	($wday, $mday, $mon, $yr, $hr, $min, $sec, $zone);
 }
+
+=back
+
+=cut
 
 1;
