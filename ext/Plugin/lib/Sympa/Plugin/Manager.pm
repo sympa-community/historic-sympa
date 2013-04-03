@@ -2,17 +2,19 @@ package Sympa::Plugin::Manager;
 use warnings;
 use strict;
 
-use Sympa::Plugin::Util qw/:functions/;
+use Sympa::Plugin::Util qw/:log plugin/;
 use JSON  qw/encode_json decode_json/;
 
-my %required_plugins = qw/
- /;
+# The list ordered: there may be a dependendy
+# Defaults:
+#     version (=required minimal version) is 0
+#     required (=must be loaded for application) is 'false'
 
-my %optional_plugins = qw/
- Sympa::VOOT              0
- Sympa::OAuth1::Consumer  0
- Sympa::OAuth2::Consumer  0
- /;
+my @plugins =
+ ( 'Sympa::VOOT'             => { version => '0', required => 0 }
+ , 'Sympa::OAuth1::Consumer' => {}
+ , 'Sympa::OAuth2::Consumer' => {}
+ );
 
 =head1 NAME
 
@@ -22,7 +24,7 @@ Sympa::Plugin::Manager - module loader
 
   use Sympa::Plugin::Manager;
 
-  my $plugins = Sympa::Plugin::Manager->new;
+  my $plugins = Sympa::Plugin::Manager->new(application => 'website');
   $plugins->start;
 
   $plugins->start(upgrade => 1);
@@ -44,11 +46,13 @@ instantiate plugin objects.
 
 =item * state =E<gt> HASH, by default read from C<state_file>
 
+=item * application =E<gt> 'website'|'bulk'|...
 =back
 
 =cut
 
 sub new($%) { my ($class, %args) = @_; (bless {}, $class)->init(\%args) }
+
 sub init($)
 {   my ($self, $args) = @_;
 
@@ -57,7 +61,9 @@ sub init($)
     my $fn = $self->{SPM_state_fn}
        = $args->{state_file} || Site->etc.'/plugins.conf';
 
-    $self->{SPM_state}  = $args->{state} ||= $self->readState($fn);
+    $self->{SPM_state} = $args->{state} ||= $self->readState($fn);
+    $self->{SPM_appl}  = $args->{application} || 'website';
+
     $self;
 }
 
@@ -70,11 +76,14 @@ sub init($)
 
 =head3 $obj->state
 
+=head3 $obj->application
+
 =cut
 
-sub loaded()        { shift->{SPM_loaded}   }
+sub loaded()        { shift->{SPM_loaded} }
 sub stateFilename() { shift->{SPM_state_fn} }
-sub state()         { shift->{SPM_state}    }
+sub state()         { shift->{SPM_state} }
+sub application()   { shift->{SPM_appl} }
 
 
 =head2 Loading
@@ -106,21 +115,27 @@ sub start(%)
     my $need = $args{only} || [];
     my %need = map +($_ => 1), ref $need ? @$need : $need;
 
-    while(my ($pkg, $version) = each %required_plugins)
-    {   next if keys %need && $need{$pkg};
-        $self->loadPlugin($pkg, version => $version, required => 1);
-    }
-
-    while(my ($pkg, $version) = each %optional_plugins)
-    {   next if keys %need && $need{$pkg};
-        $self->loadPlugin($pkg, version => $version, required => 0);
+    my @load = @plugins;
+    while(@load)
+    {   my ($pkg, $info) = (shift @load, shift @load);
+        next if keys %need && $need{$pkg};
+        $self->loadPlugin($pkg, %$info);
     }
 
     # Upgrade when there is new software
     $self->checkVersions(upgrade => $args{upgrade});
 
-    # Start using the plugins
-    $_->registerPlugin( {} ) for $self->list;
+    #
+    ### instantiate the plugins
+    #
+
+    my $appl = $self->application;
+    foreach my $pkg ($self->list)
+    {   next if plugin($pkg);    # singleton already exists?
+        my $instance = $pkg->new(application => $appl);  # extends $pkg
+        plugin($pkg => $instance);
+        log(info => "instantiated plugin ".ref $instance);
+    }
 
     $self;
 }
@@ -324,8 +339,6 @@ By default, this is the C<plugin.conf> file in the etc directory.
 
 =head3 $obj->readState(FILENAME)
 
-=head3 $obj->writeState
-
 =cut
 
 sub readState($)
@@ -342,6 +355,10 @@ sub readState($)
 
     $state;
 }
+
+=head3 $obj->writeState
+
+=cut
 
 sub writeState()
 {   my $self = shift;

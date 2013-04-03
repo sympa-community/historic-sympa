@@ -3,7 +3,7 @@ package Sympa::VOOT::Consumer;
 use warnings;
 use strict;
 
-use Sympa::Plugin::Util qw/:functions/;
+use Sympa::Plugin::Util qw/:log plugin/;
 
 =head1 NAME
 
@@ -61,10 +61,11 @@ sub init($)
 {   my ($self, $args) = @_;
     my $provider = $self->{SVP_provider} = $args->{provider};
     my $user     = $self->{SVP_user} = $args->{user};
+    my $provid   = $provider->{id};
 
     my $server   = $provider->{server};
     eval "require $server"
-        or fatal "cannot load voot server class $server: $@";
+        or fatal "cannot load voot server class $server for $provid: $@";
 
     # the Net::VOOT::* modules are Sympa independent
     my $voot = $self->{SVP_voot} = $server->new
@@ -74,13 +75,12 @@ sub init($)
 
     # the Sympa::OAuth*::Consumer is 'Sympa'-aware
     my $auth_class = 'Sympa::'.$voot->authType.'::Consumer';
-    eval "require $auth_class"
-        or fatal "cannot load $auth_class: $@";
-    my $auth     = $self->{SVP_auth} = $auth_class->instance;
+    my $auth       = $self->{SVP_auth} = plugin($auth_class)
+        or fatal "plugin $auth_class is not loaded, required for $provid";
 
     # the session is the activity of the user, it may not yet exist
-    my $session  = $self->{SVP_session} 
-       = $auth->loadSession($voot, $user->{email}, $provider->{id});
+    my $session    = $self->{SVP_session} 
+       = $auth->loadSession($voot, $user->{email}, $provid);
 
     $self;
 }

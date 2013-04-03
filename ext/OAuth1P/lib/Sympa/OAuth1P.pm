@@ -10,21 +10,19 @@ our $VERSION = '0.10';
 
 use Sympa::OAuth1::Provider;
 
-my $me = __PACKAGE__->new;
-
 my @url_commands =
   ( oauth_temporary  =>
-      { handler   => sub { $me->doOAuthTemporary(@_) }
+      { handler   => 'doOAuthTemporary'
       }
   , oauth_authorize  =>
-      { handler   => sub { $me->doOAuthAuthorize(@_) }
+      { handler   => 'doOAuthAuthorize'
       , required  => [ qw/param.user.email oauth_token/ ]
       }
   , oauth_access     =>
-      { handler   => sub { $me->doOauthAccess(@_) }
+      { handler   => 'doOauthAccess'
       }
   , voot =>
-      { handler   => sub { $me->doVoot(@_) }
+      { handler   => 'doVoot'
       , path_args => '@voot_path'
       }
 

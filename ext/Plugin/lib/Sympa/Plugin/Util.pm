@@ -6,17 +6,16 @@ use strict;
 
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
-my @func = qw/
-  default_db robot this_list
-  trace_call log fatal wwslog web_db_log
-  /;
+my @obj  = qw/default_db robot this_list plugin/;
+my @log  = qw/trace_call log fatal wwslog web_db_log/;
 
-our @EXPORT      = @func;
-our @EXPORT_OK   = (@http, @time, @func);
+our @EXPORT      = ();
+our @EXPORT_OK   = (@http, @time, @obj, @log);
 
 our %EXPORT_TAGS =
   ( http      => \@http
   , time      => \@time
+  , log       => \@log
   , functions => \@EXPORT
   );
 
@@ -121,6 +120,16 @@ want to update the plugins, all the time.
 sub robot() { $main::robot_object }
 
 sub this_list() { $main::list }
+
+=head3 plugin NAME, [INSTANCE]
+
+Each plugin has an instance, which is started by the L<Sympa::Plugin::Manager>.
+You can ask for them by NAME (of the base class).
+
+=cut
+
+my %plugins;
+sub plugin($;$) { @_==2 ? ($plugins{$_[0]} = $_[1]) :  $plugins{$_[0]} }
 
 
 =head2 Logging

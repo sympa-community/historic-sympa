@@ -19,19 +19,24 @@ Sympa::Plugin::ListSource - list source interface for Sympa::List plugins
   use base 'Sympa::Plugin', 'Sympa::Plugin::ListSource';
 
   my $source = Sympa::VOOT->listSource;
-  my $count  = $source->getUsers(...);
+  my $count  = $source->getListMembers(...);
 
 =head1 DESCRIPTION
 
-When a plugin implements this module, it can be called by Sympa's the List
-object to perform some tasks: it is the interface description of pluggable
-data-sources.
+Extensions of this module can be called by Sympa's "List" object
+to perform some tasks: it is the interface description of pluggable
+"data-sources".
+
+A plugin can either decide to implement this interface itself (like
+L<Sympa::VOOT> does) or start a separate object to implement this
+interface.  The Plugin's C<listSource()> method will need to return
+that object.
 
 =head1 METHODS
 
 =head2 Constructors
 
-=head3 $class->new(OPTIONS)
+=head3 my $obj = $class->new(OPTIONS)
 
 Options:
 
@@ -70,7 +75,7 @@ sub isAllowedToSync() { shift->{SPL_sync} }
 
 sub getSourceId($)    { Datasource::_get_datasource_id($_[1]) }
 
-=head3 $obj->getUsers(OPTIONS)
+=head3 $obj->getListMembers(OPTIONS)
 
 Options:
 
@@ -94,7 +99,7 @@ Options:
 
 =cut
 
-sub getUsers(%) { die }
+sub getListMembers(%) { die }
 
 =head3 $obj->reportListError(LIST, NAME)
 

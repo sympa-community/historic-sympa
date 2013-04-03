@@ -12,7 +12,7 @@ use List::Util     qw/first/;
 # Sympa modules
 use report;
 use Site;
-use Sympa::Plugin::Util   qw/:functions/;
+use Sympa::Plugin::Util   qw/:log/;
 use Sympa::VOOT::Consumer ();
 
 my $default_server = 'Net::VOOT::Renater';
@@ -30,57 +30,18 @@ Sympa::VOOT - manage VOOT use in Sympa
 
 =head1 DESCRIPTION
 
-Intergrate VOOT with Sympa.  This module handles the web interface
-administers consumer objects (L<Sympa::VOOT::Consumer>) per user session.
+Intergrate VOOT with Sympa.  This module administers consumer objects
+(L<Sympa::VOOT::Consumer>) per user session.  When in the website
+environment, it will get extended by L<Sympa::VOOT::Website>.
 
 =cut
-
-# This object is used everywhere.  It shall not contains information
-# about a specific user session.  Instantiation is also needed to make
-# configuration of the data_source work.
-my $me = __PACKAGE__->new;
 
 #
 ## register plugin
 #
 
-my @url_commands =
-  ( opensocial =>
-      { handler   => sub { $me->doOpenSocial(@_) }
-      , path_args => 'list'
-      , required  => [ qw/param.user.email param.list/ ]
-      , privilege => 'owner'
-      }
-  , select_voot_provider_request =>
-      { handler   => sub { $me->doSelectProvider(@_) }
-      , path_args => 'list'
-      , required  => [ qw/param.user.email param.list/ ]
-      , privilege => 'owner'
-      }
-  , select_voot_groups_request  =>
-      { handler   => sub { $me->doListVootGroups(@_) }
-      , path_args => [ qw/list voot_provider/ ]
-      , required  => [ qw/param.user.email param.list/ ]
-      , privilege => 'owner'
-      }
-  , select_voot_groups =>
-      { handler   => sub { $me->doAcceptVootGroup(@_) }
-      , path_args => [ qw/list voot_provider/ ]
-      , required  => [ qw/param.user.email param.list/ ]
-      , privilege => 'owner'
-      }
-  );
-
-my @validate =
-  ( voot_path     => '[^<>\\\*\$\n]+'
-  , voot_provider => '[\w-]+'
-  );  
-
-my @fragments =
-  ( list_menu     => 'list_menu_opensocial.tt2'
-  , help_editlist => 'help_editlist_voot.tt2'
-  );
-
+# This ugly info is needed to be able to save the defined listsource
+# to a file.  We need to get around it.
 my %include_voot_group =
   ( group      => 'data_source'
   , gettext_id => 'VOOT group inclusion'
@@ -106,23 +67,6 @@ my %include_voot_group =
      ]
   );
 
-sub registerPlugin($)
-{   my ($class, $args) = @_;
-    push @{$args->{url_commands}}, @url_commands;
-    push @{$args->{validate}}, @validate;
-
-    (my $templ_dir = __FILE__) =~ s,\.pm$,/web_tt2,;
-    push @{$args->{templates}},
-     +{ tt2_path      => $templ_dir
-      , tt2_fragments => \@fragments
-      };
-    push @{$args->{listdef}},
-      ( include_voot_group => \%include_voot_group
-      );
-
-    $class->SUPER::registerPlugin($args);
-}
-
 =head1 METHODS
 
 =head2 Constructors
@@ -139,13 +83,10 @@ Options:
 
 =cut
 
-sub new(@)
-{   my ($class, %args) = @_;
-    (bless {}, $class)->init(\%args);
-}
-
 sub init($)
 {   my ($self, $args) = @_;
+    $args->{website}     ||= 'Sympa::VOOT::Website';
+    $self->SUPER::init($args);
 
     my $config = $args->{config} || Site->get_etc_filename('voot.conf');
 
@@ -159,16 +100,14 @@ sub init($)
     }
 
     $self->Sympa::Plugin::ListSource::init( { name => 'voot_group' });
-
     $self;
 }
 
-
-=head3 $obj = $class->instance
-
-=cut
-
-sub instance() { $me }
+sub registerPlugin($)
+{   my ($class, $args) = @_;
+    push @{$args->{listdef}}, include_voot_group => \%include_voot_group;
+    $class->SUPER::registerPlugin($args);
+}
 
 =head2 Accessors
 
@@ -181,6 +120,7 @@ sub instance() { $me }
 sub config() { shift->{SV_config} }
 sub configFilename() { shift->{SV_config_fn} }
 
+sub listSource() {shift}     # I do it myself
 
 =head2 Configuration handling
 
@@ -240,7 +180,7 @@ sub consumer($$@)
 
     # MO: ugly, only used for oauth2 right now.
     $auth->{redirect_uri} ||=
-     "$param->{base_url}$param->{path_cgi}/oauth2_ready/$prov_id";
+       "$param->{base_url}$param->{path_cgi}/oauth2_ready/$prov_id";
 
     # Sometimes, we only have an email address of the user
     my $user     = $param->{user};
@@ -274,177 +214,22 @@ sub providers()
 }
 
 
-=head2 Web interface actions
-
-=head3 $obj->doOpenSocial
-
-=cut
-
-sub doOpenSocial {
-    # Currently nice interface to select groups
-    return 'select_voot_provider_request';
-}
-
-=head3 $obj->doSelectProvider
-
-=cut
-
-sub doSelectProvider(%)
-{   my ($self, %args) = @_;
-    my $param = $args{param};
-
-    my @providers;
-    foreach my $info ($self->providerConfigs)
-    {   my $id   = $info->{'voot.ProviderID'};
-        my $name = $info->{'voot.ProviderName'} || $id;
-        push @providers,
-          +{id => $id, name => $name, next => 'select_voot_groups_request'};
-    }
-    $param->{voot_providers} = [ sort {$a->{name} cmp $b->{name}} @providers ];
-    return 1;
-}
-
-=head3 $obj->doListVootGroups
-
-=cut
-
-sub doListVootGroups(%)
-{   my ($self, %args) = @_;
-
-    my $in       = $args{in};
-    my $param    = $args{param};
-    my $robot_id = $args{robot};
-  
-    my $prov_id  = $in->{voot_provider};
-
-    wwslog(info => "get voot groups of $param->{user}{email} for provider $prov_id");
-
-    my $consumer = $self->consumer($param, $prov_id);
-    unless($consumer->hasAccess)
-    {   my $here = "select_voot_groups_request/$param->{list}/$prov_id";
-        return $self->getAccessFor($consumer, $param, $here);
-    }
-
-    $param->{voot_provider} = $consumer->provider;
-
-    # Request groups
-    my $groups   = eval { $consumer->voot->userGroups };
-    if($@)
-    {   $param->{error} = 'failed to get user groups';
-        log(err => "failed to get user groups: $@");
-        return 1;
-    }
-
-    # Keep all previously selected groups selected
-    $_->{selected} = '' for values %$groups;
-    if(my $list  = this_list)
-    {   foreach my $included ($list->includes('voot_group'))
-        {   my $group = $groups->{$included->{group}} or next;
-            $group->{selected} = 'CHECKED';
-        }
-    }
-
-    # XXX: needs to become language specific sort
-    $param->{voot_groups} = [sort {$a->{name} cmp $b->{name}} values %$groups]
-        if $groups && keys %$groups;
-
-    1;
-}
-
-sub getAccessFor($$$)
-{   my ($self, $consumer, $param, $here) = @_;
-    my $goto  = $consumer->startAuth(param => $param
-      , next_page => "$param->{base_url}$param->{path_cgi}/$here"
-      );
-    log(info => "going for access at $goto");
-    $goto ? main::do_redirect($goto) : 1;
-
-}
-
-=head3 $obj->doAcceptVootGroup
-
-=cut
-
-# VOOT groups choosen, generate config
-sub doAcceptVootGroup(%)
-{   my ($self, %args) = @_;
-    my $param    = $args{param};
-    my $in       = $args{in};
-    my $robot_id = $args{robot_id};
-
-    my $provid   = $param->{voot_provider} = $in->{voot_provider};
-    my $email    = $param->{user}{email};
-
-    # Get all the voot_groups fields from the form
-    my @groupids;
-    foreach my $k (keys %$in)
-    {   $k =~ /^voot_groups\[([^\]]+)\]$/ or next;
-        push @groupids, $1 if $in->{$k}==1;
-    }
-    $param->{voot_groups} = \@groupids;
-
-    my $list     = this_list;
-
-    # Keep all groups from other providers
-    my %groups   = map +($_->{name} => $_)
-       , grep $_->{provider} ne $provid
-          , $list->includes('voot_group');
-
-    # Add the groups from this provider
-    foreach my $gid (@groupids)
-    {   my $name = $provid.'::'.$gid;
-        $groups{$name} =
-         +{ name     => $name
-          , user     => $email
-          , provider => $provid
-          , group    => $gid
-          };
-    }
-
-    $list->defaults(include_voot_group => undef); # No save otherwise ...
-    $list->includes(voot_group => [values %groups]);
-
-    my $action = $param->{action};
-    unless($list->save_config($email))
-    {   report::reject_report_web('intern', 'cannot_save_config', {}
-          , $action, $list, $email, $robot_id);
-
-        wwslog(info => 'cannot save config file');
-        web_db_log({status => 'error', error_type => 'internal'});
-        return undef;
-    }    
-
-    if($list->on_the_fly_sync_include(use_ttl => 0))
-    {   report::notice_report_web('subscribers_updated', {}, $action);
-    }
-    else
-    {   report::reject_report_web('intern', 'sync_include_failed'
-           , {}, $action, $list, $email, $robot_id);
-    }
-
-    'review';   # show current members
-}
-
-
 =head2 The Sympa::Plugin::ListSource interface
 
 See L<Sympa::Plugin::ListSource> for more details about the provided methods.
-
-=head3 $obj->listSource
 
 =head3 $obj->listSourceName
 
 =cut
 
-sub listSource() { $me }   # I'll do it myself
 
 sub listSourceName() { 'voot_group' }
 
-=head3 $obj->getUsers(OPTIONS)
+=head3 $obj->getListMembers(OPTIONS)
 
 =cut
 
-sub getUsers(%)
+sub getListMembers(%)
 {   my ($self, %args) = @_;
 
     my $admin_only = $args{admin_only} || 0;
@@ -518,17 +303,15 @@ sub reportListError($$)
     my $conf = first {$_->{name} eq $provid} $list->includes('voot_group');
     $conf or return;
 
-    my $repr = 'voot:' . $conf->{provider};
-
     report::reject_report_web
-      ( 'user', 'sync_include_voot_failed', {oauth_provider => $repr}
+      ( 'user', 'sync_include_voot_failed', {provider => $provid}
       , 'sync_include', $list->domain, $conf->{user}, $list->name
       );
 
     report::reject_report_msg
       ( 'oauth', 'sync_include_voot_failed', $conf->{user}
-      , { consumer_name => 'VOOT', oauth_provider => $repr }
-      , $self->robot, '', $self->name
+      , { consumer_name => 'VOOT', provider => $provid }
+      , $list->robot, '', $list->name
       );
 
     1;
