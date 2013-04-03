@@ -18,7 +18,7 @@ archived.pod bounced.pod alias_manager.pod sympa.pod: Makefile
 		-e 's|--defaultdir--|$(defaultdir)|' \
 		-e 's|--spooldir--|$(spooldir)|' \
 		-e 's|--docdir--|$(docdir)|' \
-		-e 's|--docdir--|$(localedir)|' \
+		-e 's|--localedir--|$(localedir)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
