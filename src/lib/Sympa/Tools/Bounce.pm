@@ -592,20 +592,20 @@ sub parse_notification {
 	}
 
 	my $result;
-	foreach my $a1 (keys %info) {
-		next unless ($a1 and ref ($info{$a1}));
-		my ($a2, $a3);
-		$a2 = $a1;
-		unless (! $info{$a1}{expanded} || ($a1 =~ /\@/ and $info{$a1}{expanded} !~ /\@/) ) {
-			$a2 = $info{$a1}{expanded};
+	foreach my $user (keys %info) {
+		my $info = $info{$user};
+		next unless ref $info;
 
-		}
+		# use "expanded from" information preferentially, if available
+		my $address = $info->{expanded} && $info->{expanded} =~ /@/ ?
+			      $info->{expanded} : $user;
 
-		$a3 = _fix_address($a2, $from);
-		$a3 = _unquote_address($a3);
-		$a3 = lc($a3);
+		$address = _fix_address($address, $from);
+		$address = _unquote_address($address);
+		$address = lc($address);
 
-		$result->{$a3} = lc ($info{$a1}{error});
+		$result->{$address} = lc($info->{error}) 
+			if !$result->{$address};
 	}
 
 	return $result;
