@@ -1,0 +1,112 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id DAE261CAA4A
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Cv4VrPaXPEEv for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:29:19 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 85EE21CAA47
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:19 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id B78F11CAA31
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:29:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 1YrcWsma1d12 for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:29:16 +0200 (CEST)
+Received: from vsmtp101.tin.it (vsmtp100.tin.it [212.216.176.131])
+	by ryu.zarb.org (Postfix) with ESMTP id 5D7991CAA47
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:29:16 +0200 (CEST)
+Received: from vsmtp13.tin.it (212.216.176.207) by vsmtp101.tin.it (8.5.132)
+	id 4E90D2B000FFB64F for mailman-bounces@zarb.org;
+	Mon, 1 Apr 2013 05:29:16 +0200
+Received: by vsmtp13.tin.it (8.6.023.02) id 4F653C6C53363058 for
+	mailman-bounces@zarb.org; Mon, 1 Apr 2013 05:29:16 +0200
+From: Mail Delivery Service <postmaster@virgilio.it>
+Subject: Delivery Status Notification
+To: mailman-bounces@zarb.org
+Date: Mon, 1 Apr 2013 05:29:16 +0200
+Message-ID: <4S653P6P53363057@vsmtp13.tin.it>
+X-CP-Transaction-ID: 4F653C6C53362FAA
+X-CP-For: dhnarg@tin.it
+MIME-Version: 1.0
+Content-Type: Multipart/Report; report-type=delivery-status;
+	boundary="========/4F653C6C53362FAA/vsmtp13.tin.it"
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This multi-part MIME message contains a Delivery Status Notification.
+If you can see this text, your mail client may not be able to understand MIME
+formatted messages or DSNs (see RFC 2045 through 2049 for general MIME
+information and RFC 1891 through 1894 for DSN specific information).
+
+--========/4F653C6C53362FAA/vsmtp13.tin.it
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+
+ - These recipients of your message have been processed by the mail server:
+dhnarg@tin.it; Failed; 5.1.1 (bad destination mailbox address)
+
+    Remote MTA ims15f.cp.tin.it: SMTP diagnostic: 550 RCPT TO:<dhnarg@tin.it> Mailbox disabled 
+
+
+
+--========/4F653C6C53362FAA/vsmtp13.tin.it
+Content-Type: Message/Delivery-Status
+
+Reporting-MTA: dns; vsmtp13.tin.it
+Received-from-MTA: dns; ryu.zarb.org (212.85.158.22)
+Arrival-Date: Mon, 1 Apr 2013 05:29:11 +0200
+
+Original-Recipient: rfc822;dhnarg@tin.it
+Final-Recipient: rfc822; dhnarg@tin.it
+Action: Failed
+Status: 5.1.1 (bad destination mailbox address)
+Remote-MTA: dns; ims15f.cp.tin.it
+Diagnostic-Code: smtp; 550 RCPT TO:<dhnarg@tin.it> Mailbox disabled 
+
+--========/4F653C6C53362FAA/vsmtp13.tin.it
+Content-Type: Text/RFC822-headers
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from ryu.zarb.org (212.85.158.22) by vsmtp13.tin.it (8.6.023.02)
+        id 4F653C6C53362FAA for dhnarg@tin.it; Mon, 1 Apr 2013 05:29:11 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5BB721CAA6B
+	for <dhnarg@tin.it>; Mon,  1 Apr 2013 05:16:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Wqh6l8h7yh6g for <dhnarg@tin.it>;
+	Mon,  1 Apr 2013 05:16:17 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 27A411CAF85
+	for <dhnarg@tin.it>; Mon,  1 Apr 2013 05:02:13 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: dhnarg@tin.it
+X-No-Archive: yes
+Message-ID: <mailman.1400.1364785239.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:39 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+
+--========/4F653C6C53362FAA/vsmtp13.tin.it--
+

@@ -1,0 +1,129 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5D1A41CAA58
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:22:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id F8abCnIdsXBq for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:22:32 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 1BABA1CAA5B
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:06:43 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 36D411CAA61; Mon,  1 Apr 2013 05:06:41 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:06:41 +0200 (CEST)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="43E4B1CAA60.1364785601/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401030641.36Q411PNN61@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--43E4B1CAA60.1364785601/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<fvambqn1@otenet.gr>: host mx.otenet.gr[62.103.147.198] said: 550 5.1.1
+    <fvambqn1@otenet.gr>: Recipient address rejected: User unknown in local
+    recipient table (in reply to RCPT TO command)
+
+--43E4B1CAA60.1364785601/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: 43E4B1CAA60
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:06:39 +0200 (CEST)
+
+Final-Recipient: rfc822; fvambqn1@otenet.gr
+Original-Recipient: rfc822;fvambqn1@otenet.gr
+Action: failed
+Status: 5.1.1
+Remote-MTA: dns; mx.otenet.gr
+Diagnostic-Code: smtp; 550 5.1.1 <fvambqn1@otenet.gr>: Recipient address
+	rejected: User unknown in local recipient table
+
+--43E4B1CAA60.1364785601/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 43E4B1CAA60
+	for <fvambqn1@otenet.gr>; Mon,  1 Apr 2013 05:06:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id eWjfMrY3Ldn9 for <fvambqn1@otenet.gr>;
+	Mon,  1 Apr 2013 05:06:38 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 407FF1CAC13
+	for <fvambqn1@otenet.gr>; Mon,  1 Apr 2013 05:00:55 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: mailman-owner@mageia.org
+To: fvambqn1@otenet.gr
+X-No-Archive: yes
+Message-ID: <mailman.471.1364785217.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:17 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for fvambqn1@otenet.gr:
+
+List                                     Password // URL
+----                                     --------  
+zntrvn-naabhapr@mageia.org               sinzoda   
+https://www.mageia.org/mailman/options/mageia-announce/sinzoda1%40otenet.gr
+
+--43E4B1CAA60.1364785601/ryu.zarb.org--

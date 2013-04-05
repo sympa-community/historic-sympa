@@ -1,0 +1,127 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8A5241CAA65
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:01 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id P2F6Z5fxgAts for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:23:00 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id DAC3D1CAA5A
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:12:38 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 409141CAA5A; Mon,  1 Apr 2013 05:12:37 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:12:37 +0200 (CEST)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="5ED4E1CAA55.1364785957/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401031237.409141PNN5N@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--5ED4E1CAA55.1364785957/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<zbba@lunarhub.com>: host smtp.secureserver.net[72.167.238.201] said: 550
+    #5.1.0 Address rejected. (in reply to RCPT TO command)
+
+--5ED4E1CAA55.1364785957/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: 5ED4E1CAA55
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:06:22 +0200 (CEST)
+
+Final-Recipient: rfc822; zbba@lunarhub.com
+Original-Recipient: rfc822;zbba@lunarhub.com
+Action: failed
+Status: 5.0.0
+Remote-MTA: dns; smtp.secureserver.net
+Diagnostic-Code: smtp; 550 #5.1.0 Address rejected.
+
+--5ED4E1CAA55.1364785957/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5ED4E1CAA55
+	for <zbba@lunarhub.com>; Mon,  1 Apr 2013 05:06:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id X1TFJ6uDsC3r for <zbba@lunarhub.com>;
+	Mon,  1 Apr 2013 05:06:21 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id C52F11CABF0
+	for <zbba@lunarhub.com>; Mon,  1 Apr 2013 05:00:52 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: mailman-owner@mageia.org
+To: zbba@lunarhub.com
+X-No-Archive: yes
+Message-ID: <mailman.444.1364785216.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:16 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for zbba@lunarhub.com:
+
+List                                     Password // URL
+----                                     --------  
+zntrvn-naabhapr@mageia.org               1qaz2wsx  
+https://www.mageia.org/mailman/options/mageia-announce/moon%40lunarhub.com
+
+--5ED4E1CAA55.1364785957/ryu.zarb.org--

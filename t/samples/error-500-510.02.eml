@@ -1,0 +1,125 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id B68CA1CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:24:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id b0Ibitn-VTCj for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:24:07 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 7D40F1CAA62
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:22:58 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 3AC641CAA62
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:22:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id NfxaEOdXHpGJ for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:22:55 +0200 (CEST)
+X-Greylist: delayed 573 seconds by postgrey-1.32 at ryu.zarb.org;
+	Mon, 01 Apr 2013 05:11:39 CEST
+Received: from ironport-2.opentransfer.com (ironport-2.opentransfer.com
+	[76.162.254.110]) by ryu.zarb.org (Postfix) with ESMTP id E0A5E1CAA7A
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:11:39 +0200 (CEST)
+Message-Id: <038199$h6nd1e@ironport-2.opentransfer.com>
+Received: from localhost by ironport-2.opentransfer.com;
+	31 Mar 2013 23:02:05 -0400
+Date: 31 Mar 2013 23:02:05 -0400
+To: mailman-bounces@zarb.org
+From: "Mail Delivery System" <MAILER-DAEMON@ironport.opentransfer.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="yPMWr.4sKFOWwRl.lR1q.7lqtMmT"
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+--yPMWr.4sKFOWwRl.lR1q.7lqtMmT
+content-type: text/plain;
+    charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The following message to <yhvfirtn@zonainter.org> was undeliverable.
+The reason for the problem:
+5.1.0 - Unknown address error 550-'sorry, no mailbox here by that name (#5.=
+1.1)'
+
+--yPMWr.4sKFOWwRl.lR1q.7lqtMmT
+content-type: message/delivery-status
+
+Reporting-MTA: dns; ironport-2.opentransfer.com
+
+Final-Recipient: rfc822;yhvfirtn@zonainter.org
+Action: failed
+Status: 5.0.0 (permanent failure)
+Remote-MTA: dns; [98.130.1.130]
+Diagnostic-Code: smtp;
+	5.1.0 - Unknown address error 550-'sorry, no mailbox here by
+	that name (#5.1.1)' (delivery attempts: 0)
+
+--yPMWr.4sKFOWwRl.lR1q.7lqtMmT
+content-type: message/rfc822
+
+Received: from ryu.zarb.org ([212.85.158.22])
+	by ironport-2.opentransfer.com with ESMTP; 31 Mar 2013 23:02:04 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 467281CAEDE
+	for <yhvfirtn@zonainter.org>; Mon,  1 Apr 2013 05:02:04 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id W5i9ed-FgBDv for <yhvfirtn@zonainter.org>;
+	Mon,  1 Apr 2013 05:02:02 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 479131CAA8D
+	for <yhvfirtn@zonainter.org>; Mon,  1 Apr 2013 05:00:15 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: mailman-owner@mageia.org
+To: yhvfirtn@zonainter.org
+X-No-Archive: yes
+Message-ID: <mailman.67.1364785209.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:09 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for yhvfirtn@zonainter.org:
+
+List                                     Password // URL
+----                                     --------  
+zntrvn-naabhapr@mageia.org               daoave93  
+https://www.mageia.org/mailman/options/mageia-announce/luisvega%40zonainter.org
+
+--yPMWr.4sKFOWwRl.lR1q.7lqtMmT--
+
+

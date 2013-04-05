@@ -1,0 +1,127 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id BEED71CAA6F
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id bGLyxiwsoIiD for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:23:14 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id D9BC91CAAD7
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:14:54 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id BC4D71CAAD7; Mon,  1 Apr 2013 05:14:52 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:14:52 +0200 (CEST)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="D6E311CAA83.1364786092/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401031452.OP4Q71PNNQ7@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--D6E311CAA83.1364786092/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<yrvssba_m@126.com>: host 126mx02.mxmail.netease.com[220.181.14.133] said: 550
+    User not found: yrvssba_m@126.com (in reply to RCPT TO command)
+
+--D6E311CAA83.1364786092/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: D6E311CAA83
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:14:34 +0200 (CEST)
+
+Final-Recipient: rfc822; yrvssba_m@126.com
+Original-Recipient: rfc822;yrvssba_m@126.com
+Action: failed
+Status: 5.0.0
+Remote-MTA: dns; 126mx02.mxmail.netease.com
+Diagnostic-Code: smtp; 550 User not found: yrvssba_m@126.com
+
+--D6E311CAA83.1364786092/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id D6E311CAA83
+	for <yrvssba_m@126.com>; Mon,  1 Apr 2013 05:14:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id taZ3OvSIzVyd for <yrvssba_m@126.com>;
+	Mon,  1 Apr 2013 05:14:34 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id B78B91CAEF8
+	for <yrvssba_m@126.com>; Mon,  1 Apr 2013 05:02:05 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: mailman-owner@mageia.org
+To: yrvssba_m@126.com
+X-No-Archive: yes
+Message-ID: <mailman.1255.1364785234.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:34 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for yrvssba_m@126.com:
+
+List                                     Password // URL
+----                                     --------  
+zntrvn-naabhapr@mageia.org               mageia    
+https://www.mageia.org/mailman/options/mageia-announce/leiffon_z%40126.com
+
+--D6E311CAA83.1364786092/ryu.zarb.org--

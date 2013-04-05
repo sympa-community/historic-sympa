@@ -1,0 +1,148 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5FD111CAA47
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:28:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 3J78CQ4QmP68 for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:28:06 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 7EAC91CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:28:06 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 9028B1CAA47
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:28:04 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 5U+10ZIdAoe3 for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:28:02 +0200 (CEST)
+X-Greylist: delayed 442 seconds by postgrey-1.32 at ryu.zarb.org;
+	Mon, 01 Apr 2013 05:28:02 CEST
+Received: from gmmr2.centrum.cz (gmmr2.centrum.cz [IPv6:2a00:da80:1:502::2])
+	by ryu.zarb.org (Postfix) with ESMTPS id 838FA1CAA31
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:28:02 +0200 (CEST)
+Received: from bouncer (localhost.localdomain [127.0.0.1])
+	by gmmr2.centrum.cz (Postfix) with ESMTP id 1B1806000262
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:20:40 +0200 (CEST)
+To: mailman-bounces@zarb.org
+Subject: Undelivered Mail Returned to Sender
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="5E5F521185D1.1207995974/gmmr"
+From: MAILER-DAEMON (Mail Delivery System) <postmaster@centrumholdings.com>
+Message-Id: <20130401032040.1O1806000262@gmmr2.centrum.cz>
+Date: Mon,  1 Apr 2013 05:20:40 +0200 (CEST)
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--5E5F521185D1.1207995974/gmmr
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at Centrum Holdings
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please contact your system administrator.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+--5E5F521185D1.1207995974/gmmr
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; gmmr2.centrum.cz
+X-Postfix-Queue-ID: F348C6000262
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:20:39 +0200 (CEST)
+
+Final-Recipient: rfc822; nyrfk1@centrum.cz
+Original-Recipient: rfc822;nyrfk1@centrum.cz
+Action: failed
+Status: 5.2.2
+Diagnostic-Code: X-Postfix; Mailbox is full
+
+--5E5F521185D1.1207995974/gmmr
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 8bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from ironport7.centrum.cz (unknown [10.32.3.102])
+	by gmmr2.centrum.cz (Postfix) with ESMTP id F348C6000262
+	for <nyrfk1@centrum.cz>; Mon,  1 Apr 2013 05:20:39 +0200 (CEST)
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: AjcBAH78WFHUVZ4WnGdsb2JhbABDgzvAeRYOAQEBAQEICwkJFCiCIQYBATcUIA4DCQIvCwYICAMuFSoFGASHYQMTCLZlCIlgjW+BXwKDKAOWa4Efknk6gTc
+Received: from ryu.zarb.org ([212.85.158.22])
+	by mx.centrum.cz with ESMTP/TLS/ADH-CAMELLIA256-SHA;
+	01 Apr 2013 05:20:39 +0200
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 93F9F1CAAAA
+	for <nyrfk1@centrum.cz>; Mon,  1 Apr 2013 05:20:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id ybTB7t5Lmma7 for <nyrfk1@centrum.cz>;
+	Mon,  1 Apr 2013 05:20:37 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 08A451CB0F1
+	for <nyrfk1@centrum.cz>; Mon,  1 Apr 2013 05:02:34 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: nyrfk1@centrum.cz
+X-No-Archive: yes
+Message-ID: <mailman.1789.1364785248.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:48 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for nyrfk1@centrum.cz:
+
+List                                     Password // URL
+----                                     --------  
+plf-discuss@zarb.org                     prengab1  
+https://www.zarb.org/mailman/options/plf-discuss/alesx1%40centrum.cz
+
+cys-naabhapr@zarb.org                    prengab1  
+https://www.zarb.org/mailman/options/plf-announce/alesx1%40centrum.cz
+
+
+--5E5F521185D1.1207995974/gmmr--

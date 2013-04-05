@@ -1,0 +1,127 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id A919D1CAA47
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id l5Oked4DgJt2 for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:29:21 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 9A4A71CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:21 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 17B8F1CAA47; Mon,  1 Apr 2013 05:29:20 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:29:20 +0200 (CEST)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="64C071CAAA6.1364786960/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401032920.17O8S1PNN47@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--64C071CAAA6.1364786960/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<ensghyvx@o2.pl>: host mx11.go2.pl[193.17.41.141] said: 500 No such user (in
+    reply to RCPT TO command)
+
+--64C071CAAA6.1364786960/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: 64C071CAAA6
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:20:00 +0200 (CEST)
+
+Final-Recipient: rfc822; ensghyvx@o2.pl
+Original-Recipient: rfc822;ensghyvx@o2.pl
+Action: failed
+Status: 5.0.0
+Remote-MTA: dns; mx11.go2.pl
+Diagnostic-Code: smtp; 500 No such user
+
+--64C071CAAA6.1364786960/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 64C071CAAA6
+	for <ensghyvx@o2.pl>; Mon,  1 Apr 2013 05:20:00 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id YH3nyhoLq7nG for <ensghyvx@o2.pl>;
+	Mon,  1 Apr 2013 05:19:59 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8679D1CB0B7
+	for <ensghyvx@o2.pl>; Mon,  1 Apr 2013 05:02:30 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: ensghyvx@o2.pl
+X-No-Archive: yes
+Message-ID: <mailman.1726.1364785247.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:47 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for ensghyvx@o2.pl:
+
+List                                     Password // URL
+----                                     --------  
+rnflheczv-qriry@zarb.org                 kultura72 
+https://www.zarb.org/mailman/options/easyurpmi-devel/raftulik%40o2.pl
+
+--64C071CAAA6.1364786960/ryu.zarb.org--

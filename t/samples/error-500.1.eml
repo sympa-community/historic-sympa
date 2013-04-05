@@ -1,0 +1,145 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 3DABF1CAA47
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:31:32 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id PrbOB-JK7Zvg for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:31:32 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 081481CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:31:32 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5B9BC1CAA47
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:31:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id IwBouSNiIJ7Q for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:31:28 +0200 (CEST)
+X-Greylist: delayed 1285 seconds by postgrey-1.32 at ryu.zarb.org;
+	Mon, 01 Apr 2013 05:31:28 CEST
+Received: from mail1.childrenshospital.org (mail1.childrenshospital.org
+	[134.174.20.63]) by ryu.zarb.org (Postfix) with ESMTP id 2D0601CAA31
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:31:28 +0200 (CEST)
+Received: from gate.ajalat.org (localhost [127.0.0.1])
+	by mail1.childrenshospital.org (Postfix) with ESMTP id C95286C43B
+	for <mailman-bounces@zarb.org>; Sun, 31 Mar 2013 23:10:01 -0400 (EDT)
+Received: by gate.ajalat.org (Postfix)
+	id AB2654B30; Sun, 31 Mar 2013 22:10:01 -0500 (EST)
+Date: Sun, 31 Mar 2013 22:10:01 -0500 (EST)
+From: MAILER-DAEMON@ajalat.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="02BA9423B.1364785801/gate.ajalat.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401031001.NO2654O30@gate.ajalat.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--02BA9423B.1364785801/gate.ajalat.org
+Content-Description: Notification
+Content-Type: text/plain
+
+This is the Postfix program at host gate.ajalat.org.
+
+I'm sorry to have to inform you that the message returned
+below could not be delivered to one or more destinations.
+
+For further assistance, please send mail to <postmaster>
+
+If you do so, please include this problem report. You can
+delete your own text from the message returned below.
+
+			The Postfix program
+
+<pnfrl@gate.ajalat.org>: can't create user output file
+
+--02BA9423B.1364785801/gate.ajalat.org
+Content-Description: Delivery error report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; gate.ajalat.org
+Arrival-Date: Sun, 31 Mar 2013 22:09:27 -0500 (EST)
+
+Final-Recipient: rfc822; pnfrl@gate.ajalat.org
+Action: failed
+Status: 5.0.0
+Diagnostic-Code: X-Postfix; can't create user output file
+
+--02BA9423B.1364785801/gate.ajalat.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Received: from ryu.zarb.org (ryu.zarb.org [212.85.158.22])
+	by gate.ajalat.org (Postfix) with ESMTP id 02BA9423B
+	for <zntrvn@ajalat.org>; Sun, 31 Mar 2013 23:09:26 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 6EC4B1CAA72
+	for <zntrvn@ajalat.org>; Mon,  1 Apr 2013 05:09:25 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id U0MLm5lmSCTY for <zntrvn@ajalat.org>;
+	Mon,  1 Apr 2013 05:09:24 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id ADE1C1CAD1B
+	for <zntrvn@ajalat.org>; Mon,  1 Apr 2013 05:01:23 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: mageia.org mailing list memberships reminder
+From: mailman-owner@mageia.org
+To: zntrvn@ajalat.org
+X-No-Archive: yes
+Message-ID: <mailman.750.1364785223.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:23 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your mageia.org
+mailing list memberships.  It includes your subscription info and how
+to use it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@mageia.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@mageia.org.  Thanks!
+
+Passwords for zntrvn@ajalat.org:
+
+List                                     Password // URL
+----                                     --------  
+mageia-discuss@mageia.org                M4u&me!   
+https://www.mageia.org/mailman/options/mageia-discuss/mageia%40ajalat.org
+
+zntrvn-qri@mageia.org                    M4u&me!   
+https://www.mageia.org/mailman/options/mageia-dev/mageia%40ajalat.org
+
+zntrvn-naabhapr@mageia.org               M4u&me!   
+https://www.mageia.org/mailman/options/mageia-announce/mageia%40ajalat.org
+
+--02BA9423B.1364785801/gate.ajalat.org--

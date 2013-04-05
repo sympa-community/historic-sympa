@@ -1,0 +1,82 @@
+Received: from zfront2.inria.fr (LHLO zfront2.inria.fr) (193.51.193.148) by
+ zmbs4.inria.fr with LMTP; Wed, 6 Mar 2013 11:01:23 +0100 (CET)
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+	by zfront2.inria.fr (Postfix) with ESMTPS id 43BA12480E3
+	for <ebhffr@zimbra.inria.fr>; Wed,  6 Mar 2013 11:01:23 +0100 (CET)
+Received-SPF: None (mail3-smtp-sop.national.inria.fr: no sender
+  authenticity information available from domain of
+  MAILER-DAEMON@ironport.thda.org) identity=pra;
+  client-ip=207.10.77.5;
+  receiver=mail3-smtp-sop.national.inria.fr; envelope-from="";
+  x-sender="MAILER-DAEMON@ironport.thda.org";
+  x-conformance=sidf_compatible
+Received-SPF: None (mail3-smtp-sop.national.inria.fr: no sender
+  authenticity information available from domain of
+  postmaster@ironport.thda.org) identity=mailfrom;
+  client-ip=207.10.77.5;
+  receiver=mail3-smtp-sop.national.inria.fr; envelope-from="";
+  x-sender="postmaster@ironport.thda.org";
+  x-conformance=sidf_compatible
+Received-SPF: None (mail3-smtp-sop.national.inria.fr: no sender
+  authenticity information available from domain of
+  postmaster@ironport.thda.org) identity=helo;
+  client-ip=207.10.77.5;
+  receiver=mail3-smtp-sop.national.inria.fr; envelope-from="";
+  x-sender="postmaster@ironport.thda.org";
+  x-conformance=sidf_compatible
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: AqkbAJUTN1HPCk0F/2dsb2JhbACDLAYBAYRwqz4Bkzpzgyg+LwYPUYgTmk+YRoh1gkqLAoFegy2IbIRrhS4FlC6DJ4FT
+X-IPAS-Result: AqkbAJUTN1HPCk0F/2dsb2JhbACDLAYBAYRwqz4Bkzpzgyg+LwYPUYgTmk+YRoh1gkqLAoFegy2IbIRrhS4FlC6DJ4FT
+X-IronPort-AV: E=Sophos;i="4.84,793,1355094000"; 
+   d="scan'208";a="4376163"
+Received: from mail.thda.org (HELO ironport.thda.org) ([207.10.77.5])
+  by mail3-smtp-sop.national.inria.fr with ESMTP/TLS/RC4-SHA; 06 Mar 2013 11:01:05 +0100
+Received: from localhost by ironport.thda.org;
+  06 Mar 2013 04:01:02 -0600
+Message-Id: <6256c0$1peu2@ironport.thda.org>
+Date: 06 Mar 2013 04:01:02 -0600
+To: thvyynhzr.ebhffr@inria.fr
+From: "Mail Delivery System" <MAILER-DAEMON@ironport.thda.org>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status; boundary="5cuX.4rpwgyab1.1MJN+B.CIj7EQd"
+
+--5cuX.4rpwgyab1.1MJN+B.CIj7EQd
+content-type: text/plain;
+    charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The following message to <3nuhqcvp@thda.org> was undeliverable.
+The reason for the problem:
+5.1.1 - Bad destination email address 'reject'
+
+--5cuX.4rpwgyab1.1MJN+B.CIj7EQd
+content-type: message/delivery-status
+
+Reporting-MTA: dns; ironport.thda.org
+
+Final-Recipient: rfc822;3nuhqcvp@thda.org
+Action: failed
+Status: 5.0.0 (permanent failure)
+Diagnostic-Code: smtp; 5.1.1 - Bad destination email address 'reject' (delivery attempts: 0)
+
+--5cuX.4rpwgyab1.1MJN+B.CIj7EQd
+content-type: message/rfc822
+
+Received: from localhost (HELO inria.fr) ([113.169.162.51])
+  by ironport.thda.org with ESMTP; 06 Mar 2013 04:01:00 -0600
+From: thvyynhzr.ebhffr@inria.fr
+To: 3nuhqcvp@thda.org
+Subject: Returned mail: see transcript for details
+Date: Wed, 6 Mar 2013 17:00:04 +0700
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0012_AF869D5D.5FDEA396"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+
+--5cuX.4rpwgyab1.1MJN+B.CIj7EQd--
+
+

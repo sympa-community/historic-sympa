@@ -1,0 +1,173 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 982581CAA4A
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id KrC8aVTjVDBL for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:29:19 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 756EE1CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:29:19 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 5DAF91CAA4A
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:29:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id W7kL4LwZPO7d for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:29:16 +0200 (CEST)
+Received: from smtp4-out.nordnet.fr (smtp4-out.nordnet.fr [194.206.126.150])
+	by ryu.zarb.org (Postfix) with ESMTP id 22F701CAA31
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:29:16 +0200 (CEST)
+Received: from maildrop2.maildrop.msg.nordnet.fr
+	(maildrop2.maildrop.msg.nordnet.fr [10.102.2.12])
+	by smtp4-out.smtp-out.msg.nordnet.fr (Postfix) with ESMTP id
+	CAA166C07BF
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:29:14 +0200 (CEST)
+Received: by maildrop2.maildrop.msg.nordnet.fr (Postfix)
+	id 3D39D34002; Mon,  1 Apr 2013 05:29:15 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:29:15 +0200 (CEST)
+From: MAILER-DAEMON@nordnet.fr (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="2D0DB34003.1364786955/maildrop2.maildrop.msg.nordnet.fr"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401032915.3Q39Q34002@maildrop2.maildrop.msg.nordnet.fr>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--2D0DB34003.1364786955/maildrop2.maildrop.msg.nordnet.fr
+Content-Description: Notification
+Content-Type: text/plain
+
+This is the Postfix program at host maildrop2.maildrop.msg.nordnet.fr.
+
+I'm sorry to have to inform you that your message could not be
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to <postmaster>
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+			The Postfix program
+
+<svyyvqr@nordnet.fr>: host 10.102.3.5[10.102.3.5] said: 552 5.2.2
+    <svyyvqr@nordnet.fr> Quota exceeded (mailbox is full, la boite aux lettres
+    du destinataire est pleine) (in reply to end of DATA command)
+
+--2D0DB34003.1364786955/maildrop2.maildrop.msg.nordnet.fr
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; maildrop2.maildrop.msg.nordnet.fr
+X-Postfix-Queue-ID: 2D0DB34003
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:29:15 +0200 (CEST)
+
+Final-Recipient: rfc822; svyyvqr@nordnet.fr
+Action: failed
+Status: 5.0.0
+Diagnostic-Code: X-Postfix; host 10.102.3.5[10.102.3.5] said: 552 5.2.2
+	<svyyvqr@nordnet.fr> Quota exceeded (mailbox is full,
+	la boite aux lettres
+	du destinataire est pleine) (in reply to end of DATA command)
+
+--2D0DB34003.1364786955/maildrop2.maildrop.msg.nordnet.fr
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Received: from localhost
+	by maildrop2.maildrop.msg.nordnet.fr (Postfix) with ESMTP id 2D0DB34003
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:29:15 +0200 (CEST)
+Received: from avas10.avas.msg.nordnet.fr
+	by maildrop2.maildrop.msg.nordnet.fr (Postfix) with ESMTP id 1801B34002
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:29:15 +0200 (CEST)
+Received: from localhost
+	by avas10.avas.msg.nordnet.fr (Postfix) with ESMTP id D2FE734002
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:29:14 +0200 (CEST)
+X-Relay-Countries: FR ** ** **
+X-Nnbl-Tag: 81ce1ddcd5cfe30a76ea0ce4ea893a4de5ef9af7
+X-Virus-Scanned: amavisd-new at nordnet.fr
+X-Spam-Flag: NO
+X-Spam-Score: 1.8
+X-Spam-Level: *
+X-Spam-Status: No, score=1.8 tagged_above=4 required=6.31 tests=[BAYES_50=0.8, 
+	SA2DNSBLC=1] autolearn=disabled
+Received: from avas10.avas.msg.nordnet.fr ([127.0.0.1])
+	by localhost (avas10.avas.msg.nordnet.fr [127.0.0.1]) (amavisd-new,
+	port 10024) with ESMTP id 10ANzpvqDdhd for <svyyvqr@nordnet.fr>;
+	Mon,  1 Apr 2013 05:29:10 +0200 (CEST)
+Received: from smtp5-in.smtp-in.msg.nordnet.fr
+	by avas10.avas.msg.nordnet.fr (Postfix) with ESMTP id 8E85334003
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:29:10 +0200 (CEST)
+Received: from ryu.zarb.org (ryu.zarb.org [212.85.158.22])
+	by smtp5-in.smtp-in.msg.nordnet.fr (Postfix) with ESMTP id 2F04E8003
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:29:10 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 6CCFE1CAA93
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:20:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id 9nvjyOssXH0v for <svyyvqr@nordnet.fr>;
+	Mon,  1 Apr 2013 05:20:34 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id CB6AF1CB0EC
+	for <svyyvqr@nordnet.fr>; Mon,  1 Apr 2013 05:02:33 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: svyyvqr@nordnet.fr
+X-No-Archive: yes
+Message-ID: <mailman.1784.1364785248.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:48 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for svyyvqr@nordnet.fr:
+
+List                                     Password // URL
+----                                     --------  
+plf-discuss@zarb.org                     atorwo    
+https://www.zarb.org/mailman/options/plf-discuss/fillide%40nordnet.fr
+
+cys-naabhapr@zarb.org                    woager    
+https://www.zarb.org/mailman/options/plf-announce/fillide%40nordnet.fr
+
+--2D0DB34003.1364786955/maildrop2.maildrop.msg.nordnet.fr--

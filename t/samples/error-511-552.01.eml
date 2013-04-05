@@ -1,0 +1,123 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 122BD1CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:24:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id loSMh5orWQR5 for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:24:15 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 8BE7A1CAA7A
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:48 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 52BD71CAA7A
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:23:46 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id SyEnEck2EuPe for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:23:44 +0200 (CEST)
+Received: from imp02.mtu.ru (imp02.mtu.ru [62.5.255.19])
+	by ryu.zarb.org (Postfix) with ESMTP id E1EA71CAAF0
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:19:37 +0200 (CEST)
+Date: Mon, 01 Apr 2013 07:19:37 +0400
+From: MAILER DAEMON <znvyre-qnrzba@mtu.ru>
+To: mailman-bounces@zarb.org
+Subject: Delivery status notification
+MIME-Version: 1.0
+Content-Type: multipart/report;
+	boundary="------------I305M09060309060P_211413647863770"
+Message-Id: <20130401032346.52OQ71PNN7N@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a multi-part message in MIME format.
+
+--------------I305M09060309060P_211413647863770
+Content-Type: text/plain; charset=UTF-8;
+Content-Transfer-Encoding: 8bit
+
+      This is an automatically generated Delivery Status Notification.      
+
+Delivery to the following recipients was aborted after 0 second(s):
+
+  * byryhxbvr@mtu-net.ru
+
+
+
+--------------I305M09060309060P_211413647863770
+Content-Type: message/delivery-status; charset=UTF-8;
+Content-Transfer-Encoding: 8bit
+
+Reporting-MTA: dns; imp02.mtu.ru [62.5.255.19]
+Received-From-MTA: dns; ss27-so02.mtu.ru [212.85.158.22]
+Arrival-Date: Mon, 01 Apr 2013 07:19:37 +0400
+
+
+Final-recipient: rfc822; byryhxbvr@mtu-net.ru
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: smtp;
+	552 byryhxbvr@mtu-net.ru account is full (quota exceeded),
+	rejecting
+Last-attempt-Date: Mon, 01 Apr 2013 07:19:37 +0400
+
+
+
+--------------I305M09060309060P_211413647863770
+Content-Type: text/rfc822-headers; Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment
+
+Received: by ss27-so02.mtu.ru (Postfix, from userid 58)
+	id 22B45228037; Mon,  1 Apr 2013 07:19:37 +0400 (MSK)
+X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on ss27-so02.mtu.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=-101.5 required=5.0 tests=BAYES_00,SHORTCIRCUIT
+	shortcircuit=ham autolearn=disabled version=3.3.2
+X-Spam-Flag: NO
+Received: from imp02.mtu.ru (alt-proxy-1.mtu.ru [62.5.255.74])
+	by ss27-so02.mtu.ru (Postfix) with ESMTP id 9137A228028
+	for <byryhxbvr@mtu-net.ru>; Mon,  1 Apr 2013 07:19:36 +0400 (MSK)
+Received: from ryu.zarb.org ([212.85.158.22])
+	by imp02.mtu.ru with bizsmtp
+	id JTKb1l01Y0VGpqC01TKcfQ; Mon, 01 Apr 2013 07:19:36 +0400
+X-BIZ-SOURCE-IP: 212.85.158.22
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 192501CAAF7
+	for <byryhxbvr@mtu-net.ru>; Mon,  1 Apr 2013 05:19:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id Am+jA2CmjnoF for <byryhxbvr@mtu-net.ru>;
+	Mon,  1 Apr 2013 05:19:34 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 9A9611CB08C
+	for <byryhxbvr@mtu-net.ru>; Mon,  1 Apr 2013 05:02:27 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: byryhxbvr@mtu-net.ru
+X-No-Archive: yes
+Message-ID: <mailman.1681.1364785246.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:46 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+X-DCC-STREAM-Metrics: ss27-so02.mtu.ru 10003; Body=1 Fuz1=1 Fuz2=1
+
+
+
+--------------I305M09060309060P_211413647863770--
+
+

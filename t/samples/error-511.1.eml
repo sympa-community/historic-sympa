@@ -1,0 +1,157 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 4CB1D1CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:24:14 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id FQ0BKaR0gAgx for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:24:13 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id EBCFB1CAA72
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:29 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 764771CAA4B
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:23:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id RHOAT1HK3YoO for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:23:26 +0200 (CEST)
+Received: from disforce.be (unknown [195.13.7.168])
+	by ryu.zarb.org (Postfix) with ESMTP id 133FE1CAAE3
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:17:02 +0200 (CEST)
+Received: by disforce.be (Postfix)
+	id A9F6A11A; Mon,  1 Apr 2013 03:17:02 +0000 (UTC)
+Date: Mon,  1 Apr 2013 03:17:02 +0000 (UTC)
+From: MAILER-DAEMON@disforce.be (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="953E9139D.1364786222/disforce.be"
+Message-Id: <20130401031702.N9S6N11N@disforce.be>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--953E9139D.1364786222/disforce.be
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host disforce.be.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<ehhq@disforce.be>: unknown user: "ruud"
+
+<ehhqzbovyr@disforce.be> (expanded from <ehhq@disforce.be>): unknown user:
+    "ruudmobile"
+
+--953E9139D.1364786222/disforce.be
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; disforce.be
+X-Postfix-Queue-ID: 953E9139D
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 03:17:02 +0000 (UTC)
+
+Final-Recipient: rfc822; ehhq@disforce.be
+Original-Recipient: rfc822;ehhq@disforce.be
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: X-Postfix; unknown user: "ruud"
+
+Final-Recipient: rfc822; ehhqzbovyr@disforce.be
+Original-Recipient: rfc822;ehhq@disforce.be
+Action: failed
+Status: 5.1.1
+Diagnostic-Code: X-Postfix; unknown user: "ruudmobile"
+
+--953E9139D.1364786222/disforce.be
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (unknown [127.0.0.1])
+	by disforce.be (Postfix) with ESMTP id 953E9139D
+	for <ehhq@disforce.be>; Mon,  1 Apr 2013 03:17:02 +0000 (UTC)
+Received: from disforce.be ([127.0.0.1])
+	by localhost (mail.disforce.be [127.0.0.1]) (amavisd-maia, port 10024)
+	with LMTP id 05096-01 for <ehhq@disforce.be>;
+	Mon,  1 Apr 2013 05:17:01 +0200 (CEST)
+Received: from ryu.zarb.org (ryu.zarb.org [212.85.158.22])
+	by disforce.be (Postfix) with ESMTP id 7693811A
+	for <ehhq@disforce.be>; Mon,  1 Apr 2013 05:17:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 0E0911CAA99
+	for <ehhq@disforce.be>; Mon,  1 Apr 2013 05:17:01 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id WJCapgQQySz1 for <ehhq@disforce.be>;
+	Mon,  1 Apr 2013 05:16:59 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id EBC521CAFA4
+	for <ehhq@disforce.be>; Mon,  1 Apr 2013 05:02:14 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: ehhq@disforce.be
+X-No-Archive: yes
+Message-ID: <mailman.1432.1364785240.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:40 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+X-Virus-Scanned: Maia Mailguard 1.0.2c
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for ehhq@disforce.be:
+
+List                                     Password // URL
+----                                     --------  
+plf-discuss@zarb.org                     MineOnly  
+https://www.zarb.org/mailman/options/plf-discuss/ruud%40disforce.be
+
+cys-naabhapr@zarb.org                    MineOnly  
+https://www.zarb.org/mailman/options/plf-announce/ruud%40disforce.be
+
+--953E9139D.1364786222/disforce.be--

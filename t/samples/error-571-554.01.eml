@@ -1,0 +1,129 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id E90F81CAA7B
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:46 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id w2sXSakECf8T for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:23:45 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 700171CAAA7
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:19:59 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: by ryu.zarb.org (Postfix)
+	id 451D71CAAA9; Mon,  1 Apr 2013 05:19:58 +0200 (CEST)
+Date: Mon,  1 Apr 2013 05:19:58 +0200 (CEST)
+From: MAILER-DAEMON@zarb.org (Mail Delivery System)
+Subject: Undelivered Mail Returned to Sender
+To: mailman-bounces@zarb.org
+Auto-Submitted: auto-replied
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="C09E81CAAF1.1364786398/ryu.zarb.org"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20130401031958.451Q71PNNN9@ryu.zarb.org>
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+This is a MIME-encapsulated message.
+
+--C09E81CAAF1.1364786398/ryu.zarb.org
+Content-Description: Notification
+Content-Type: text/plain; charset=us-ascii
+
+This is the mail system at host ryu.zarb.org.
+
+I'm sorry to have to inform you that your message could not
+be delivered to one or more recipients. It's attached below.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                   The mail system
+
+<bjra.flatr@desy.de>: host smtp-intra-3.desy.de[131.169.56.69] said: 554 5.7.1
+    <bjra.flatr@desy.de>: Recipient address rejected: No such mailbox (in reply
+    to RCPT TO command)
+
+--C09E81CAAF1.1364786398/ryu.zarb.org
+Content-Description: Delivery report
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns; ryu.zarb.org
+X-Postfix-Queue-ID: C09E81CAAF1
+X-Postfix-Sender: rfc822; mailman-bounces@zarb.org
+Arrival-Date: Mon,  1 Apr 2013 05:19:26 +0200 (CEST)
+
+Final-Recipient: rfc822; bjra.flatr@desy.de
+Original-Recipient: rfc822;bjra.flatr@desy.de
+Action: failed
+Status: 5.7.1
+Remote-MTA: dns; smtp-intra-3.desy.de
+Diagnostic-Code: smtp; 554 5.7.1 <bjra.flatr@desy.de>: Recipient address
+	rejected: No such mailbox
+
+--C09E81CAAF1.1364786398/ryu.zarb.org
+Content-Description: Undelivered Message
+Content-Type: message/rfc822
+Content-Transfer-Encoding: 7bit
+
+Return-Path: <mailman-bounces@zarb.org>
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id C09E81CAAF1
+	for <bjra.flatr@desy.de>; Mon,  1 Apr 2013 05:19:26 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id nKrvLZOowa+Z for <bjra.flatr@desy.de>;
+	Mon,  1 Apr 2013 05:19:25 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 0A5141CB07D
+	for <bjra.flatr@desy.de>; Mon,  1 Apr 2013 05:02:27 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: bjra.flatr@desy.de
+X-No-Archive: yes
+Message-ID: <mailman.1664.1364785245.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:45 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for bjra.flatr@desy.de:
+
+List                                     Password // URL
+----                                     --------  
+jpackage-discuss@zarb.org                insecure  
+https://www.zarb.org/mailman/options/jpackage-discuss/owen.synge%40desy.de
+
+--C09E81CAAF1.1364786398/ryu.zarb.org--

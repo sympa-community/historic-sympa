@@ -1,0 +1,136 @@
+Return-Path: <mailman-loop@zarb.org>
+X-Original-To: root@zarb.org
+Delivered-To: root@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 021951CAA31
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:24:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id kSnYnX5n2Gxc for <root@zarb.org>;
+	Mon,  1 Apr 2013 05:24:14 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 37B7F1CAA76
+	for <root@zarb.org>; Mon,  1 Apr 2013 05:23:38 +0200 (CEST)
+X-Original-To: mailman-bounces@zarb.org
+Delivered-To: mailman-bounces@zarb.org
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 279601CAA76
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:23:37 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id KumEuk-EIC+3 for <mailman-bounces@zarb.org>;
+	Mon,  1 Apr 2013 05:23:35 +0200 (CEST)
+Received: from iron4.vtr.com (iron4.vtr.com [190.160.0.174])
+	by ryu.zarb.org (Postfix) with ESMTP id 734D71CAAEF
+	for <mailman-bounces@zarb.org>; Mon,  1 Apr 2013 05:18:47 +0200 (CEST)
+Received: from localhost by iron4.vtr.com;
+  01 Apr 2013 00:17:39 -0300
+Message-Id: <70a2e3$74dhp3@iron4s.vtr.com>
+Date: 01 Apr 2013 00:17:39 -0300
+To: mailman-bounces@zarb.org
+From: "Mail Delivery System" <MAILER-DAEMON@iron4.vtr.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="EJNby.4sKGGDfBM.1CUqTD.6qzW2/O"
+Sender: mailman-loop@zarb.org
+Errors-To: mailman-loop@zarb.org
+
+--EJNby.4sKGGDfBM.1CUqTD.6qzW2/O
+content-type: text/plain;
+    charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+The following message to <whyvna.pbephren@vtr.net> was undeliverable.
+The reason for the problem:
+5.1.0 - Unknown address error 550-'whyvna.pbephren@vtr.net unknown user acc=
+ount'
+
+--EJNby.4sKGGDfBM.1CUqTD.6qzW2/O
+content-type: message/delivery-status
+
+Reporting-MTA: dns; iron4.vtr.com
+
+Final-Recipient: rfc822;whyvna.pbephren@vtr.net
+Action: failed
+Status: 5.0.0 (permanent failure)
+Remote-MTA: dns; [190.160.0.137]
+Diagnostic-Code: smtp;
+	5.1.0 - Unknown address error 550-'whyvna.pbephren@vtr.net
+	unknown user account' (delivery attempts: 0)
+
+--EJNby.4sKGGDfBM.1CUqTD.6qzW2/O
+content-type: message/rfc822
+
+Received-SPF: None (iron4.vtr.com: no sender authenticity
+	information available from domain of
+	mailman-bounces@zarb.org) identity=mailfrom;
+	client-ip=212.85.158.22; receiver=iron4.vtr.com;
+	envelope-from="mailman-bounces@zarb.org";
+	x-sender="mailman-bounces@zarb.org"; x-conformance=spf_only
+Received-SPF: None (iron4.vtr.com: no sender authenticity
+	information available from domain of postmaster@ryu.zarb.org)
+	identity=helo; client-ip=212.85.158.22; receiver=iron4.vtr.com;
+	envelope-from="mailman-bounces@zarb.org";
+	x-sender="postmaster@ryu.zarb.org"; x-conformance=spf_only
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: Aj0BALz7WFHUVZ4WnGdsb2JhbABDgzuCWb4gFg4BAQEBAQgLCQkUKIIhBgEBNxQgDgMJAi8LBggIAy4VKgUYBId3CMBMjW+BXwKDKAOWa4Efknk6gTc
+Received: from ryu.zarb.org ([212.85.158.22])
+	by iron4.vtr.com with ESMTP; 01 Apr 2013 00:17:37 -0300
+Received: from localhost (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id DEDE31CAA9A
+	for <whyvna.pbephren@vtr.net>; Mon,  1 Apr 2013 05:17:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zarb.org
+Received: from ryu.zarb.org ([127.0.0.1])
+	by localhost (ryu.zarb.org [127.0.0.1]) (amavisd-new, port 10025)
+	with ESMTP id YFXcKgwHru2k for <whyvna.pbephren@vtr.net>;
+	Mon,  1 Apr 2013 05:17:33 +0200 (CEST)
+Received: from ryu.zarb.org (localhost [127.0.0.1])
+	by ryu.zarb.org (Postfix) with ESMTP id 61FEF1CAFD0
+	for <whyvna.pbephren@vtr.net>; Mon,  1 Apr 2013 05:02:17 +0200 (CEST)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Subject: zarb.org mailing list memberships reminder
+From: mailman-owner@zarb.org
+To: whyvna.pbephren@vtr.net
+X-No-Archive: yes
+Message-ID: <mailman.1480.1364785241.20118.mailman@zarb.org>
+Date: Mon, 01 Apr 2013 05:00:41 +0200
+Precedence: bulk
+X-BeenThere: mailman@zarb.org
+X-Mailman-Version: 2.1.12
+List-Id: <mailman.zarb.org>
+X-List-Administrivia: yes
+Sender: mailman-bounces@zarb.org
+Errors-To: mailman-bounces@zarb.org
+
+This is a reminder, sent out once a month, about your zarb.org mailing
+list memberships.  It includes your subscription info and how to use
+it to change it or unsubscribe from a list.
+
+You can visit the URLs to change your membership status or
+configuration, including unsubscribing, setting digest-style delivery
+or disabling delivery altogether (e.g., for a vacation), and so on.
+
+In addition to the URL interfaces, you can also use email to make such
+changes.  For more info, send a message to the '-request' address of
+the list (for example, mailman-request@zarb.org) containing just the
+word 'help' in the message body, and an email message will be sent to
+you with instructions.
+
+If you have questions, problems, comments, etc, send them to
+mailman-owner@zarb.org.  Thanks!
+
+Passwords for whyvna.pbephren@vtr.net:
+
+List                                     Password // URL
+----                                     --------  
+cys-naabhapr@zarb.org                    aribtu    
+https://www.zarb.org/mailman/options/plf-announce/julian.corcuera%40vtr.net
+
+--EJNby.4sKGGDfBM.1CUqTD.6qzW2/O--
+
+
