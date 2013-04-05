@@ -77,17 +77,27 @@ sub new {
     return $self;
 }
 
+=back
 
-################################################
-# createHash
-################################################
-# Create a hash used to create a list. Check
-#  elements unicity when their are not
-#  declared multiple
-#
-# IN : -$self
-# OUT : -1 or undef
-################################################
+=head1 INSTANCE METHODS
+
+=over
+
+=item $xml->createHash()
+
+Create a hash used to create a list. Check elements unicity when their are not
+declared multiple
+
+Parameters:
+
+None.
+
+Return value:
+
+A positive value of success, I<undef>otherwise.
+
+=cut
+
 sub createHash {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug2','()');
@@ -124,16 +134,20 @@ sub createHash {
     return 1;
 }
 
+=item $xml->getHash()
 
-#########################################
-# getHash
-#########################################
-# return the hash structure containing :
-#   type, config
-#
-# IN  : -$self
-# OUT : -$hash
-#########################################
+Return the hash structure containing type, config
+
+Parameters:
+
+None.
+
+Return value:
+
+An hashref.
+
+=cut
+
 sub getHash {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug2','()');
@@ -146,20 +160,12 @@ sub getHash {
     return $hash;
 }
 
-
-############################# PRIVATE METHODS ##############################
-
-
-#################################################################
-# _getRequiredElements
-#################################################################
+# $xml->_getRequiredElements()
 # get all obligatory elements and store them :
 #  single : listname
 # remove it in order to the later recursive call
 #
-# IN : -$self
-# OUT : -1 or undef
-#################################################################
+# Return value: a positive value on success, I<undef> otherwise
 sub _getRequiredElements {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug3','()');
@@ -171,18 +177,11 @@ sub _getRequiredElements {
     return 1;
 }
 
-
-####################################################
-# _getMultipleAndRequiredChild  : no used anymore
-####################################################
-# get all nodes with name $nodeName and check if
-#  they contain the child $childName and store them
+# $xml->_getMultipleAndRequiredChild($nodeName, $childName)
+# get all nodes with name $nodeName and check if they contain the child
+# $childName and store them
 #
-# IN : -$self
-#      -$nodeName
-#      -$childName
-# OUT : - the number of node with the name $nodeName
-####################################################
+# Return value: the number of node with the name $nodeName
 sub _getMultipleAndRequiredChild {
     my ($self, $nodeName, $childName) = @_;
     Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$nodeName,$childName);
@@ -212,17 +211,10 @@ sub _getMultipleAndRequiredChild {
     return ($#nodes + 1);
 }
 
-
-############################################
-# _getRequiredSingle
-############################################
-# get the node with name $nodeName and check
-#  its unicity and store it
+# $xml->_getRequiredSingle($nodeName)
+# get the node with name $nodeName and check its unicity and store it
 #
-# IN : -$self
-#      -$nodeName
-# OUT : -1 or undef
-############################################
+# Return value: a positive value on success, I<undef> otherwise
 sub _getRequiredSingle {
     my ($self, $nodeName) = @_;
     Sympa::Log::Syslog::do_log('debug3','(%s)',$nodeName);
@@ -282,20 +274,12 @@ sub _getRequiredSingle {
 }
 
 
-##############################################
-# _getChildren
-##############################################
-# get $node's children (elements, text,
-# cdata section) and their values
-#  it is a recursive call
+# $xml->_getChildren()
+# get $node's children (elements, text, cdata section) and their values. It is
+# a recursive call.
 #
-# IN :  -$node
-# OUT : -$hash : hash of children and
-#         their contents if elements
-#        or
-#        $string : value of cdata section
-#         or of text content
-##############################################
+# Return value: an hashref of children and their contents if elements, or a
+# string containing the value of a cdata or text section
 sub _getChildren {
     my ($node) = @_;
     Sympa::Log::Syslog::do_log('debug3','(%s)',$node->nodeName);
@@ -391,17 +375,15 @@ sub _getChildren {
     }
 }
 
-
-##################################################
-# _verify_single_nodes
-##################################################
+# Sympa::Configuration::XML->_verify_single_nodes($nodeList)
 # check the uniqueness(in a node list) for a node not
 #  declared  multiple.
 # (no attribute multiple = "1")
 #
-# IN :  -$nodeList : ref on the array of nodes
-# OUT : -1 or undef
-##################################################
+# Parameters:
+# - an arrayref of nodes
+#
+# Return value: a positive value of success, I<undef> otherwise.
 sub _verify_single_nodes {
     my ($nodeList) = @_;
     Sympa::Log::Syslog::do_log('debug3','()');
@@ -432,16 +414,14 @@ sub _verify_single_nodes {
     return 1;
 }
 
-
-###############################################
-# _find_lines
-###############################################
+# Sympa::Configuration::XML::->_find_lines($nodeList)
 # make a hash : keys are node names, values
 #  are arrays of their line occurrences
 #
-# IN  : - $nodeList : ref on a array of nodes
-# OUT : - $hash : ref on the hash defined
-###############################################
+# Parameters:
+# - an arrayref of nodes
+#
+# Return value: an hashref
 sub _find_lines {
     my ($nodeList) = @_;
     Sympa::Log::Syslog::do_log('debug3','()');
@@ -460,5 +440,4 @@ sub _find_lines {
 
 =cut
 
-######################################################
 1;
