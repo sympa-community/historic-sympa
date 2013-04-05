@@ -50,7 +50,6 @@ my %include_voot_group =
      [ name =>
         { gettext_id => 'short name for this source'
         , format     => '.+'
-        , length     => 15
         }
      , provider => 
         { gettext_id => 'provider'

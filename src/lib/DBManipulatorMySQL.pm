@@ -61,7 +61,7 @@ sub get_substring_clause {
 sub get_limit_clause {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug3','Building limit 1 caluse');
+    &Log::do_log('debug3','Building limit 1 clause');
     if ($param->{'offset'}) {
 	return "LIMIT ".$param->{'offset'}.",".$param->{'rows_count'};
     }else{

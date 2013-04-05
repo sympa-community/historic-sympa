@@ -123,8 +123,8 @@ my $daemon_name = &Log::set_daemon($0);
 Log::do_openlog(Site->log_facility, Site->log_socket_type, 'wwsympa');
 
 ## Start plugins
-if(eval "require Sympa::Plugin::Manager")
-{   $plugins = Sympa::Plugin::Manager->new;
+if(eval "require Sympa::Plugin::Manager") {
+    $plugins = Sympa::Plugin::Manager->new;
 }
 
 &mail::set_send_spool(Site->queue);
@@ -10759,6 +10759,7 @@ sub _prepare_data {
 			 $empty_entry->{$sub_parameter} = $struct->{'format'}{$sub_parameter}{'default'};
 		       }
 		     }
+                     $empty_entry->{is_empty} = 1;
 
 		     ## Simpe parameter
 		   }else {
@@ -10839,6 +10840,7 @@ sub _prepare_data {
 		 $d = {};
 	     }
 
+             $p->{is_empty} = delete $d->{is_empty};
 	     foreach my $k (sort {$struct->{'format'}{$a}{'order'} <=> $struct->{'format'}{$b}{'order'}} 
 			    keys %{$struct->{'format'}}) {
 		 ## Prepare data recursively

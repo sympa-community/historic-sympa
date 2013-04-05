@@ -6701,7 +6701,7 @@ sub _load_list_members_from_include {
             {   my $source = $plugin->listSource;
 		if($source->isAllowedToSync || $source_is_new)
 		{   Log::do_log(debug => "syncing members from $type");
-		    $included = $source->getUsers
+		    $included = $source->getListMembers
 		      ( users         => \%users
 		      , settings      => $incl
 		      , user_defaults => $self->default_user_options
@@ -6925,7 +6925,7 @@ sub _load_list_admin_from_include {
 		if(my $plugin = $self->isPlugin($type))
 		{   my $source = $plugin->listSource;
                     Log::do_log(debug => "syncing admins from $type");
-		    $included = $source->getUsers
+		    $included = $source->getListMembers
 		      ( users         => \%admin_users
 		      , settings      => $incl
 		      , user_defaults => \%option
@@ -11947,6 +11947,8 @@ CLASS must extend L<Sympa::Plugin::ListSource>
 
 =cut
 
+# We have own plugin administration, not using the ::Plugin::Manager
+# until all 'include_' labels are abstracted out into objects.
 my %plugins;
 sub registerPlugin($$)
 {   my ($class, $impl) = @_;
