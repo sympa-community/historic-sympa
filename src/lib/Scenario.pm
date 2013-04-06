@@ -1033,9 +1033,10 @@ sub search{
  
         my $res = $ds->fetch;
         $ds->disconnect();
-        do_log('debug2','Result of SQL query : %d = %s', $res->[0], $statement);
+        my $first_row = ref($res->[0]) ? $res->[0]->[0] : $res->[0];
+        do_log('debug2','Result of SQL query : %d = %s', $first_row, $statement);
  
-        if ($res->[0] == 0){
+        if ($first_row == 0){
             $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 0;
         }else {
             $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
