@@ -59,6 +59,20 @@ our %levels = (
 	debug3 => 3,
 );
 
+=head1 FUNCTIONS
+
+=over
+
+=item fatal_err(@parameters)
+
+FIXME
+
+Parameters:
+
+FIXME
+
+=cut
+
 sub fatal_err {
 	my ($m) = @_;
 
@@ -89,6 +103,30 @@ sub fatal_err {
 	printf STDERR "$m\n", @_;
 	exit(1);
 }
+
+=item do_log($level, $message, @parameters)
+
+FIXME
+
+Parameters:
+
+=over
+
+=item string
+
+FIXME
+
+=item string
+
+FIXME
+
+=item ...
+
+FIXME
+
+=back
+
+=cut
 
 sub do_log {
 	my ($level, $message, @param) = @_;
@@ -170,6 +208,33 @@ sub do_log {
 	}
 }
 
+=item do_openlog($fac, $socket_type, $service)
+
+FIXME
+
+Parameters:
+
+=over
+
+=item string
+
+FIXME
+
+=item string
+
+FIXME
+
+=item string
+
+FIXME
+
+=back
+
+Return value:
+
+FIXME
+
+=cut
 
 sub do_openlog {
 	my ($fac, $socket_type, $service) = @_;
@@ -183,6 +248,20 @@ sub do_openlog {
 
 	do_connect();
 }
+
+=item do_connect()
+
+FIXME
+
+Parameters:
+
+None.
+
+Return value:
+
+FIXME
+
+=cut
 
 sub do_connect {
 	if ($log_socket_type =~ /^(unix|inet)$/i) {
@@ -200,7 +279,24 @@ sub do_connect {
 	};
 }
 
-# return the name of the used daemon
+=item set_daemon($daemon_tmp)
+
+Return the name of the used daemon.
+
+Parameters:
+
+=over
+
+=item string
+
+=back
+
+Return value:
+
+FIXME
+
+=cut
+
 sub set_daemon {
 	my ($daemon_tmp) = @_;
 
@@ -209,6 +305,34 @@ sub set_daemon {
 	$daemon =~ s/(\.[^\.]+)$//;
 	return $daemon;
 }
+
+=item agregate_daily_data($parameters)
+
+FIXME.
+
+Parameters:
+
+=over
+
+=item C<first_date> => 
+
+FIXME
+
+=item C<last_date> => 
+
+FIXME
+
+=item C<hourly_data> => 
+
+FIXME
+
+=back
+
+Return value:
+
+FIXME
+
+=cut
 
 sub agregate_daily_data {
 	my ($params) = @_;
@@ -235,14 +359,54 @@ sub agregate_daily_data {
 	return $result;
 }
 
+=item set_log_level($level)
+
+Set the global log level.
+
+FIXME.
+
+Parameters:
+
+=over
+
+=item string
+
+The log level.
+
+=back
+
+Return value:
+
+None.
+
+=cut
+
 sub set_log_level {
 	my ($level) = @_;
 
 	$log_level = $level;
 }
 
+=item get_log_level()
+
+Get the global log level.
+
+Parameters:
+
+None.
+
+Return value:
+
+The log level.
+
+=cut
+
 sub get_log_level {
 	return $log_level;
 }
+
+=back
+
+=cut
 
 1;
