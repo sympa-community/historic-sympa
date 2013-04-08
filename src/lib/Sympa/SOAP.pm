@@ -789,8 +789,8 @@ sub createList {
 	}
 
 	## create liste
-	my $resul = Sympa::Admin::create_list_old($parameters,$template,$robot,"soap");
-	unless(defined $resul) {
+	my $result = Sympa::Admin::create_list_old($parameters,$template,$robot,"soap");
+	unless(defined $result) {
 		Sympa::Log::Syslog::do_log('info', 'unable to create list %s@%s from %s ', $listname,$robot,$sender);
 		die SOAP::Fault->faultcode('Server')
 		->faultstring('unable to create list')
