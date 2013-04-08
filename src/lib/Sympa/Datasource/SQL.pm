@@ -493,16 +493,6 @@ sub prepare_query_log_values {
 	return \@result;
 }
 
-=item $source->fetch()
-
-Parameters:
-
-None.
-
-Return value:
-
-=cut
-
 sub fetch {
 	my ($self) = @_;
 
@@ -531,18 +521,6 @@ sub fetch {
 	return $array_of_users;
 }
 
-=item $source->disconnect()
-
-Parameters:
-
-None.
-
-Return value:
-
-None.
-
-=cut
-
 sub disconnect {
 	my ($self) = @_;
 
@@ -551,30 +529,10 @@ sub disconnect {
 	delete $db_connections{$self->{'connect_string'}};
 }
 
-=item $source->create_db()
-
-Parameters:
-
-None.
-
-Return value:
-
-A true value.
-
-=cut
-
 sub create_db {
 	Sympa::Log::Syslog::do_log('debug3', '()');
 	return 1;
 }
-
-=item $source->ping()
-
-Ping underlying data source.
-
-See L<DBI> for details.
-
-=cut
 
 sub ping {
 	my ($self) = @_;
@@ -582,25 +540,11 @@ sub ping {
 	return $self->{'dbh'}->ping;
 }
 
-=item $source->quote($string, $datatype)
-
-Quote a string literal for use in an SQL statement.
-
-See L<DBI> for details.
-
-=cut
-
 sub quote {
 	my ($self, $string, $datatype) = @_;
 
 	return $self->{'dbh'}->quote($string, $datatype);
 }
-
-=item $source->set_fetch_timeout($timeout)
-
-Set a timeout for fetch operations.
-
-=cut
 
 sub set_fetch_timeout {
 	my ($self, $timeout) = @_;

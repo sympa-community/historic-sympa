@@ -218,38 +218,16 @@ sub query {
 
 }
 
-=item $source->ping()
-
-Does not make sense in LDAP context
-
-=cut
-
 sub ping {
 }
 
-=item $source->quote()
-
-Does not make sense in LDAP context
-
-=cut
-
 sub quote {
 }
-
-=item $source->fetcj()
-
-=cut
 
 sub fetch {
 	my $self = shift;
 	return $self->{'sth'}->fetchrow_arrayref;
 }
-
-=item $source->create_db()
-
-Does not make sense in LDAP context
-
-=cut
 
 sub create_db {
 }
@@ -258,12 +236,6 @@ sub disconnect {
 	my $self = shift;
 	$self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
 }
-
-=item $source->set_fetch_timeout()
-
-Does not make sense in LDAP context
-
-=cut
 
 sub set_fetch_timeout {
 }

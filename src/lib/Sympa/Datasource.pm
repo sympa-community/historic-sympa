@@ -60,6 +60,20 @@ sub _get_datasource_id {
 
 }
 
+=head1 INSTANCE METHODS
+
+=over
+
+=item $source->is_allowed_to_sync()
+
+FIXME.
+
+Parameters:
+
+None.
+
+=cut
+
 sub is_allowed_to_sync {
 	my ($self) = @_;
 
@@ -95,5 +109,79 @@ sub is_allowed_to_sync {
 	Sympa::Log::Syslog::do_log('debug', "Sync allowed");
 	return 1;
 }
+
+=item $source->create_db()
+
+FIXME.
+
+Parameters:
+
+None.
+
+Return value:
+
+A true value.
+
+=item $source->ping()
+
+Ping underlying data source.
+
+Parameters:
+
+None.
+
+Return value:
+
+FIXME
+
+=item $source->quote($string, $datatype)
+
+Quote a string literal for use in query statement.
+
+Return value:
+
+FIXME
+
+=item $source->fetch()
+
+Parameters:
+
+None.
+
+Return value:
+
+FIXME
+
+=item $source->set_fetch_timeout($timeout)
+
+Set a timeout for fetch operations.
+
+Parameters:
+
+=over
+
+=item number
+
+The timeout duration.
+
+=back
+
+Return value:
+
+FIXME
+
+=item $source->disconnect()
+
+Parameters:
+
+None.
+
+Return value:
+
+None.
+
+=back
+
+=cut
 
 1;
