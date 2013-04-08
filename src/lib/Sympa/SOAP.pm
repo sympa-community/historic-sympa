@@ -777,36 +777,35 @@ sub createList {
 	$owner{'gecos'} = $params->{'user'}{'gecos'};
 	push @{$parameters->{'owner'}},\%owner;
 
-$parameters->{'listname'} = $listname;
-$parameters->{'subject'} = $subject;
-$parameters->{'description'} = $description;
-$parameters->{'topics'} = $topics;
+	$parameters->{'listname'} = $listname;
+	$parameters->{'subject'} = $subject;
+	$parameters->{'description'} = $description;
+	$parameters->{'topics'} = $topics;
 
-if ($r_action =~ /listmaster/i) {
-	$params->{'status'} = 'pending' ;
-}elsif  ($r_action =~ /do_it/i) {
-	$params->{'status'} = 'open' ;
-}
-
-## create liste
-my $resul = Sympa::Admin::create_list_old($parameters,$template,$robot,"soap");
-unless(defined $resul) {
-	Sympa::Log::Syslog::do_log('info', 'unable to create list %s@%s from %s ', $listname,$robot,$sender);
-	die SOAP::Fault->faultcode('Server')
-	->faultstring('unable to create list')
-	->faultdetail('unable to create list');
-}
-
-## notify listmaster
-if ($params->{'create_action'} =~ /notify/) {
-	if(Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
-		Sympa::Log::Syslog::do_log('info','notify listmaster for list creation');
-	}else{
-		Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'request_list_creation' to listmaster");
+	if ($r_action =~ /listmaster/i) {
+		$params->{'status'} = 'pending' ;
+	}elsif  ($r_action =~ /do_it/i) {
+		$params->{'status'} = 'open' ;
 	}
-}
-return SOAP::Data->name('result')->type('boolean')->value(1);
 
+	## create liste
+	my $resul = Sympa::Admin::create_list_old($parameters,$template,$robot,"soap");
+	unless(defined $resul) {
+		Sympa::Log::Syslog::do_log('info', 'unable to create list %s@%s from %s ', $listname,$robot,$sender);
+		die SOAP::Fault->faultcode('Server')
+		->faultstring('unable to create list')
+		->faultdetail('unable to create list');
+	}
+
+	## notify listmaster
+	if ($params->{'create_action'} =~ /notify/) {
+		if(Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
+			Sympa::Log::Syslog::do_log('info','notify listmaster for list creation');
+		}else{
+			Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'request_list_creation' to listmaster");
+		}
+	}
+	return SOAP::Data->name('result')->type('boolean')->value(1);
 }
 
 =item Sympa::SOAP->closeList($listname)
