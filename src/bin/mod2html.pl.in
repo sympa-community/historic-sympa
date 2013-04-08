@@ -15,8 +15,8 @@ use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Log::Syslog;
+use Sympa::SDM;
 use Sympa::Tools;
-use Sympa::Upgrade;
 
 unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
 	die "Can't load Sympa configuration file";
@@ -24,7 +24,7 @@ unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'sympa');
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-	unless (Sympa::Upgrade::probe_db()) {
+	unless (Sympa::SDM::probe_db()) {
 		die "Sympa can't connect to database";
 	}
 } #  to check availabity of Sympa database

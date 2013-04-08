@@ -83,7 +83,6 @@ use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
 use Sympa::Task;
-use Sympa::Upgrade;
 use Sympa::WWSympa;
 
 my $opt_d;
@@ -133,7 +132,7 @@ unless (Sympa::SDM::check_db_connect()) {
 }
 
 ## Check that the data structure is uptodate
-unless (Sympa::Upgrade::data_structure_uptodate()) {
+unless (Sympa::SDM::data_structure_uptodate()) {
 	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 

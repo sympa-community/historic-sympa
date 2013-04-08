@@ -958,26 +958,6 @@ sub upgrade {
 	return 1;
 }
 
-=item probe_db()
-
-FIXME.
-
-=cut
-
-sub probe_db {
-	Sympa::SDM::probe_db();
-}
-
-=item data_structure_uptodate()
-
-FIXME.
-
-=cut
-
-sub data_structure_uptodate {
-	Sympa::SDM::data_structure_uptodate();
-}
-
 =item to_utf8($files)
 
 Used to encode files to UTF-8. also add X-Attach header field if template

@@ -167,7 +167,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 ## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		unless (Sympa::Upgrade::probe_db()) {
+		unless (Sympa::SDM::probe_db()) {
 			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
 		}
 	}
@@ -196,7 +196,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 ## Check that the data structure is uptodate
 	unless ($options{'upgrade'} || $options{'help'}) {
-		unless (Sympa::Upgrade::data_structure_uptodate()) {
+		unless (Sympa::SDM::data_structure_uptodate()) {
 			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
 		}
 	}

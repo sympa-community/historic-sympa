@@ -34,7 +34,7 @@ use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Tools::File;
-use Sympa::Upgrade;
+use Sympa::SDM;
 use Sympa::WWSympa;
 
 my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
@@ -65,7 +65,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-	unless ($Sympa::List::use_db = Sympa::Upgrade::probe_db()) {
+	unless ($Sympa::List::use_db = Sympa::SDM::probe_db()) {
 		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
 	}
 }
