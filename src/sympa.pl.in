@@ -2073,8 +2073,10 @@ sub DoCommand {
     
     my $sender = $message->{'sender'};
 
-    if ($msg->{'spam_status'} eq 'spam'){
-	&do_log('notice', "Message for robot %s@%s ignored, because tagged as spam (Message-id: %s)",$rcpt,$robot,$messageid);
+    if ($message->{'spam_status'} eq 'spam') {
+	do_log('notice',
+	    'Message for list %s@%s ignored, because tagged as spam (Message-id: %s)',
+	    $rcpt, $robot, $messageid);
 	return undef;
     }
 
