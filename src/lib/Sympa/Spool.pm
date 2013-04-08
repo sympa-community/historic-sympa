@@ -99,13 +99,7 @@ sub new {
 	return $self;
 }
 
-=back
-
-=head1 FUNCTIONS
-
-=over
-
-=item global_count($message_status)
+=item Sympa::Spool->global_count($message_status)
 
 FIXME
 
