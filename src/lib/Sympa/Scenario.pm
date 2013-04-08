@@ -242,13 +242,17 @@ sub _parse_scenario {
 	return $structure;
 }
 
+=back
 
-####################################################
-# request_action
-####################################################
-# Return the action to perform for 1 sender
-# using 1 auth method to perform 1 operation
-#
+=head1 FUNCTIONS
+
+=over
+
+=item request_action($operation, $auth_method, $robot, $context, $debug)
+
+return the action to perform for 1 sender using 1 auth method to perform 1
+operation
+
 # IN : -$operation (+) : scalar
 #      -$auth_method (+) : 'smtp'|'md5'|'pgp'|'smime'|'dkim'
 #      -$robot (+) : scalar
@@ -269,7 +273,9 @@ sub _parse_scenario {
 #           (defined if $debug)
 #        -auth_method : the checked auth_method
 #           (defined if $debug)
-######################################################
+
+=cut
+
 sub request_action {
 	my ($operation, $auth_method, $robot, $context, $debug) = @_;
 	Sympa::Log::Syslog::do_log('debug', '%s,%s,%s',$operation,$auth_method,$robot);
@@ -572,7 +578,13 @@ sub request_action {
 	return $return;
 }
 
-## check if email respect some condition
+
+=item verify($context, $condition, $log_it)
+
+Check if email respect some condition
+
+=cut
+
 sub verify {
 	my ($context, $condition, $log_it) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'condition %s, log %s', $condition, $log_it);
@@ -1162,8 +1174,13 @@ sub verify {
 	return undef;
 }
 
-## Verify if a given user is part of an LDAP, SQL or TXT search filter
-sub search{
+=item search($filter_file, $context, $robot, $list)
+
+Verify if a given user is part of an LDAP, SQL or TXT search filter.
+
+=cut
+
+sub search {
 	my ($filter_file, $context, $robot, $list) = @_;
 
 	my $sender = $context->{'sender'};
@@ -1379,7 +1396,12 @@ sub search{
 }
 }
 
-# eval a custom perl module to verify a scenario condition
+=item verify_custom($condition, $args_ref, $robot, $list)
+
+Eval a custom perl module to verify a scenario condition.
+
+=cut
+
 sub verify_custom {
 	my ($condition, $args_ref, $robot, $list) = @_;
 	my $timeout = 3600;
@@ -1418,6 +1440,12 @@ sub verify_custom {
 	$persistent_cache{'named_filter'}{$condition}{$filter}{'update'} = time;
 	return $persistent_cache{'named_filter'}{$condition}{$filter}{'value'};
 }
+
+=item dump_all_scenarios()
+
+FIXME
+
+=cut
 
 sub dump_all_scenarios {
 	open TMP, ">/tmp/all_scenarios";

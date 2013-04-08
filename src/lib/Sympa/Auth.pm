@@ -160,6 +160,12 @@ sub may_use_sympa_native_auth {
 	return $ok;
 }
 
+=item authentication($robot, $email, $pwd)
+
+FIXME.
+
+=cut
+
 sub authentication {
 	my ($robot, $email, $pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $email);
@@ -220,6 +226,11 @@ sub authentication {
 	return undef;
 }
 
+=item ldap_authentication($robot, $ldap, $auth, $pwd, $whichfilter)
+
+FIXME.
+
+=cut
 
 sub ldap_authentication {
 	my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;

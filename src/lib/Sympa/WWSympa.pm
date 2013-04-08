@@ -141,7 +141,16 @@ use Sympa::Log::Syslog;
 ## if Crypt::CipherSaber installed store the cipher object
 my $cipher;
 
-## Load WWSympa configuration file
+=head1 FUNCTIONS
+
+=over
+
+=item load_config($file, $params)
+
+Load WWSympa configuration file
+
+=cut
+
 sub load_config {
 	my ($file, $params) = @_;
 
@@ -203,6 +212,12 @@ sub load_config {
 	return $conf;
 }
 
+=item get_my_url()
+
+FIXME
+
+=cut
+
 sub get_my_url {
 	my $return_url;
 
@@ -219,7 +234,12 @@ sub get_my_url {
 	return ($return_url);
 }
 
-# Uploade source file to the destination on the server
+=item upload_file_to_server(%parameters)
+
+Upload source file to the destination on the server
+
+=cut
+
 sub upload_file_to_server {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug',"Uploading file from field %s to destination %s",$params{'file_field'},$params{'destination'});
@@ -240,5 +260,9 @@ sub upload_file_to_server {
 	close FILE;
 	return 1;
 }
+
+=back
+
+=cut
 
 1;

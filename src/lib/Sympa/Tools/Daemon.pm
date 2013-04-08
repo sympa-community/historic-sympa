@@ -250,7 +250,7 @@ sub remove_pid {
 
 =item get_pids_in_pid_file($pidfile)
 
-Returns the list of pid identifiers in the pid file.
+Returns the list of pid in the pid file.
 
 =cut
 
@@ -322,6 +322,12 @@ sub send_crash_report {
 	}
 	Sympa::List::send_notify_to_listmaster('crash', $params{'domain'}, {'crashed_process' => $params{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $params{'pid'}});
 }
+
+=item get_children_processes_list()
+
+Returns the list of pid of current process children.
+
+=cut
 
 sub get_children_processes_list {
 	Sympa::Log::Syslog::do_log('debug3','');

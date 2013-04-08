@@ -314,15 +314,15 @@ Parameters:
 
 =over
 
-=item C<first_date> => 
+=item C<first_date> => number
 
 FIXME
 
-=item C<last_date> => 
+=item C<last_date> => number
 
 FIXME
 
-=item C<hourly_data> => 
+=item C<hourly_data> => hashref
 
 FIXME
 

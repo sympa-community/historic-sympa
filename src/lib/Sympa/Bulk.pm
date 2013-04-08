@@ -159,6 +159,12 @@ sub remove {
 	return $sth;
 }
 
+=item messageasstring($messagekey)
+
+FIXME.
+
+=cut
+
 sub messageasstring {
 	my ($messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
@@ -214,10 +220,22 @@ sub message_from_spool {
 Merge a message with custom attributes of a user.
 
 Parameters:
-MIME:Entity                                      #
-$rcpt : a receipient                             #
-$bulk : HASH                                     #
-$data : HASH with user's data                    #
+
+=over
+
+=item L<MIME:Entity>
+
+=item string
+
+The recipient
+
+=item hashref
+
+=item hashref
+
+User data
+
+=back
 
 Return value:
 
@@ -371,6 +389,12 @@ sub merge_data {
 
 	return 1;
 }
+
+=item store(%parameterss)
+
+FIXME.
+
+=cut
 
 sub store {
 	my %data = @_;
@@ -545,6 +569,12 @@ sub purge_bulkspool {
 	$sth->finish;
 	return $count;
 }
+
+=item remove_bulkspool_message($spool, $messagekey)
+
+FIXME.
+
+=cut
 
 sub remove_bulkspool_message {
 	my ($spool, $messagekey) = @_;

@@ -1936,6 +1936,12 @@ sub _load_param_constraint_conf {
 	return $constraint;
 }
 
+=item $family->create_automatic_list(%parameters)
+
+FIXME.
+
+=cut
+
 sub create_automatic_list {
 	my ($self, %params) = @_;
 

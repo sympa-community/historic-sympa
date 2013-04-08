@@ -45,9 +45,6 @@ my %task_by_model;
 
 my $taskspool ;
 
-sub set_spool {
-	$taskspool = Sympa::Spool->new(name => 'task');
-}
 
 =head1 CLASS METHODS
 
@@ -110,6 +107,16 @@ sub new {
 	bless $self, $class;
 
 	return $self;
+}
+
+=item Sympa::Task->set_spool()
+
+FIXME
+
+=cut
+
+sub set_spool {
+	$taskspool = Sympa::Spool->new(name => 'task');
 }
 
 =item Sympa::Task->list_tasks()

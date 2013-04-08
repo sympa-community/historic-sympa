@@ -399,7 +399,7 @@ sub add_topic {
 }
 
 
-=item sub $message->get_topic()
+=item $message->get_topic()
 
 Get topic.
 
@@ -416,6 +416,12 @@ sub get_topic {
 	}
 }
 
+=item $message->clean_html()
+
+FIXME.
+
+=cut
+
 sub clean_html {
 	my ($self) = @_;
 
@@ -430,6 +436,12 @@ sub clean_html {
 	}
 	return 0;
 }
+
+=item $message->fix_html_part($part, $robot)
+
+FIXME.
+
+=cut
 
 sub fix_html_part {
 	my ($part, $robot) = @_;

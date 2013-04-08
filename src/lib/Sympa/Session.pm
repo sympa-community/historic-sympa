@@ -327,6 +327,10 @@ sub get_random {
 
 =over
 
+=item $session->load($cookie)
+
+FIXME.
+
 =cut
 
 sub load {

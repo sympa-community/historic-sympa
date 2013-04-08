@@ -90,6 +90,12 @@ sub get_previous_version {
 	return undef;
 }
 
+=item update_version()
+
+FIXME.
+
+=cut
+
 sub update_version {
 	my $version_file = "$Sympa::Configuration::Conf{'etc'}/data_structure.version";
 
@@ -105,8 +111,12 @@ sub update_version {
 	return 1;
 }
 
+=item upgrade($previous_version, $new_version)
 
-## Upgrade data structure from one version to another
+Upgrade data structure from one version to another.
+
+=cut
+
 sub upgrade {
 	my ($previous_version, $new_version) = @_;
 	Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
@@ -948,17 +958,43 @@ sub upgrade {
 	return 1;
 }
 
+=item probe_db()
+
+FIXME.
+
+=cut
+
 sub probe_db {
 	Sympa::SDM::probe_db();
 }
+
+=item data_structure_uptodate()
+
+FIXME.
+
+=cut
 
 sub data_structure_uptodate {
 	Sympa::SDM::data_structure_uptodate();
 }
 
-## used to encode files to UTF-8
-## also add X-Attach header field if template requires it
-## IN : - arrayref with list of filepath/lang pairs
+=item to_utf8($files)
+
+Used to encode files to UTF-8. also add X-Attach header field if template
+requires it
+
+Parameters:
+
+=over
+
+=item arrayref
+
+A list of filepath/lang pairs
+
+=back
+
+=cut
+
 sub to_utf8 {
 	my ($files) = @_;
 
@@ -1061,9 +1097,14 @@ sub to_utf8 {
 	return $total;
 }
 
+=item md5_encode_password()
 
-# md5_encode_password : Version later than 5.4 uses md5 fingerprint instead of symetric crypto to store password.
-#  This require to rewrite paassword in database. This upgrade IS NOT REVERSIBLE
+Version later than 5.4 uses md5 fingerprint instead of symetric crypto to store password.
+
+This require to rewrite passwords in database. This upgrade IS NOT REVERSIBLE
+
+=cut
+
 sub md5_encode_password {
 	Sympa::Log::Syslog::do_log('notice', '() recoding password using md5 fingerprint');
 

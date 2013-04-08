@@ -66,6 +66,16 @@ my @former_indexes =  @Sympa::DatabaseDescription::former_indexes ;
 our $db_source;
 our $use_db;
 
+=head1 FUNCTIONS
+
+=over
+
+=item do_query($query, @params)
+
+FIXME.
+
+=cut
+
 sub do_query {
 	my ($query, @params) = @_;
 
@@ -78,6 +88,12 @@ sub do_query {
 
 	return $sth;
 }
+
+=item do_prepared_query($query, @params)
+
+FIXME.
+
+=cut
 
 sub do_prepared_query {
 	my ($query, @params) = @_;
@@ -92,7 +108,12 @@ sub do_prepared_query {
 	return $sth;
 }
 
-## Get database handler
+=item db_get_handler()
+
+Get database handler
+
+=cut
+
 sub db_get_handler {
 	Sympa::Log::Syslog::do_log('debug3', 'Returning handle to sympa database');
 
@@ -104,7 +125,12 @@ sub db_get_handler {
 	}
 }
 
-## Just check if DB connection is ok
+=item check_db_connect()
+
+Just check if DB connection is ok
+
+=cut
+
 sub check_db_connect {
 
 	#Sympa::Log::Syslog::do_log('debug2', 'Checking connection to the Sympa database');
@@ -124,7 +150,12 @@ sub check_db_connect {
 	return 1;
 }
 
-## Connect to Database
+=item connect_sympa_database()
+
+Connect to database.
+
+=cut
+
 sub connect_sympa_database {
 	my ($option) = @_;
 
@@ -155,7 +186,12 @@ sub connect_sympa_database {
 	return 1;
 }
 
-## Disconnect from Database
+=item db_disconnect()
+
+Disconnect from database.
+
+=cut
+
 sub db_disconnect {
 	Sympa::Log::Syslog::do_log('debug', 'Disconnecting from Sympa database');
 
@@ -166,6 +202,12 @@ sub db_disconnect {
 
 	return 1;
 }
+
+=item probe_db()
+
+FIXME.
+
+=cut
 
 sub probe_db {
 	Sympa::Log::Syslog::do_log('debug3', 'Checking database structure');
@@ -266,6 +308,12 @@ sub probe_db {
 	return 1;
 }
 
+=item check_fields(%parameters)
+
+FIXME.
+
+=cut
+
 sub check_fields {
 	my (%params) = @_;
 
@@ -328,6 +376,12 @@ sub check_fields {
 	return 1;
 }
 
+=item check_primary_key(%parameters)
+
+FIXME.
+
+=cut
+
 sub check_primary_key {
 	my (%params) = @_;
 
@@ -379,6 +433,12 @@ sub check_primary_key {
 	}
 	return 1;
 }
+
+=item check_indexes(%parameters)
+
+FIXME.
+
+=cut
 
 sub check_indexes {
 	my (%params) = @_;
@@ -454,8 +514,14 @@ sub check_indexes {
 	return 1;
 }
 
-## Check if data structures are uptodate
-## If not, no operation should be performed before the upgrade process is run
+=item data_structure_uptodate()
+
+Check if data structures are uptodate.
+
+If not, no operation should be performed before the upgrade process is run
+
+=cut
+
 sub data_structure_uptodate {
 	my $version_file = "Sympa::Configuration::get_robot_conf('*','etc')/data_structure.version";
 	my $data_structure_version;
@@ -484,9 +550,26 @@ sub data_structure_uptodate {
 	return 1;
 }
 
-## Compare required DB field type
-## Input : required_format, effective_format
-## Output : return 1 if field type is appropriate AND size >= required size
+=item check_db_field_type(%parameters)
+
+Compare required DB field type
+
+Parameters:
+
+=over
+
+item C<required_format> => string
+
+item C<effective_format> => string
+
+=back
+
+Return value:
+
+1 if field type is appropriate AND size >= required size
+
+=cut
+
 sub check_db_field_type {
 	my (%params) = @_;
 
@@ -507,6 +590,12 @@ sub check_db_field_type {
 	return 0;
 }
 
+=item quote($param)
+
+FIXME.
+
+=cut
+
 sub quote {
 	my ($param) = @_;
 
@@ -521,6 +610,12 @@ sub quote {
 		}
 	}
 }
+
+=item get_substring_clause(%parameters)
+
+FIXME.
+
+=cut
 
 sub get_substring_clause {
 	my (%params) = @_;
@@ -537,6 +632,12 @@ sub get_substring_clause {
 	}
 }
 
+=item get_limit_clause(%parameters)
+
+FIXME.
+
+=cut
+
 sub get_limit_clause {
 	my (%params) = @_;
 
@@ -552,11 +653,23 @@ sub get_limit_clause {
 	}
 }
 
-## Returns a character string corresponding to the expression to use in
-## a read query (e.g. SELECT) for the field given as argument.
-## This sub takes a single argument: the name of the field to be used in
-## the query.
-##
+=item get_canonical_write_date($field)
+
+Returns a character string corresponding to the expression to use in
+a read query (e.g. SELECT) for the field given as argument.
+
+Parameters:
+
+=over
+
+=item string
+
+The field to be used in the query.
+
+=back
+
+=cut
+
 sub get_canonical_write_date {
 	my ($param) = @_;
 
@@ -572,11 +685,23 @@ sub get_canonical_write_date {
 	}
 }
 
-## Returns a character string corresponding to the expression to use in
-## a write query (e.g. UPDATE or INSERT) for the value given as argument.
-## This sub takes a single argument: the value of the date to be used in
-## the query.
-##
+=item get_canonical_read_date($value)
+
+Returns a character string corresponding to the expression to use in a write
+query (e.g. UPDATE or INSERT) for the value given as argument.
+
+Parameters:
+
+=over
+
+=item string
+
+The date to be used in the query.
+
+=back
+
+=cut
+
 sub get_canonical_read_date {
 	my ($param) = @_;
 
@@ -591,5 +716,9 @@ sub get_canonical_read_date {
 		}
 	}
 }
+
+=back
+
+=cut
 
 1;

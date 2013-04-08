@@ -52,6 +52,15 @@ my $last_error;
 my @other_include_path;
 my $allow_absolute;
 
+=head1 FUNCTIONS
+
+=over
+
+=item qencode($string)
+
+FIXME.
+
+=cut
 
 sub qencode {
 	my ($string) = @_;
@@ -63,6 +72,12 @@ sub qencode {
 		Charset=>Sympa::Language::get_charset(),
 		Field=>"message-id");
 }
+
+=item escape_url($string)
+
+FIXME.
+
+=cut
 
 sub escape_url {
 	my ($string) = @_;
@@ -80,6 +95,12 @@ sub escape_url {
 	return $string;
 }
 
+=item escape_xml($string)
+
+FIXME.
+
+=cut
+
 sub escape_xml {
 	my ($string) = @_;
 
@@ -92,6 +113,12 @@ sub escape_xml {
 	return $string;
 }
 
+=item escape_quote($string)
+
+FIXME.
+
+=cut
+
 sub escape_quote {
 	my ($string) = @_;
 
@@ -100,6 +127,12 @@ sub escape_quote {
 
 	return $string;
 }
+
+=item encode_utf8($string)
+
+FIXME.
+
+=cut
 
 sub encode_utf8 {
 	my ($string) = @_;
@@ -112,6 +145,12 @@ sub encode_utf8 {
 	return $string;
 
 }
+
+=item decode_utf8($string)
+
+FIXME.
+
+=cut
 
 sub decode_utf8 {
 	my ($string) = @_;
@@ -129,6 +168,12 @@ sub decode_utf8 {
 	return $string;
 
 }
+
+=item maketext($context, @arg)
+
+FIXME.
+
+=cut
 
 sub maketext {
 	my ($context, @arg) = @_;
@@ -149,12 +194,26 @@ sub maketext {
 	}
 }
 
-# IN:
-#    $fmt: strftime() style format string.
-#    $arg: a string representing date/time:
-#          "YYYY/MM", "YYYY/MM/DD", "YYYY/MM/DD/HH/MM", "YYYY/MM/DD/HH/MM/SS"
-# OUT:
-#    Subref to generate formatted (i18n'ized) date/time.
+=item locdatetime(undef, $arg)
+
+FIXME.
+
+Parameters:
+
+=over
+
+=item string
+
+A date/time mask: "YYYY/MM", "YYYY/MM/DD", "YYYY/MM/DD/HH/MM", "YYYY/MM/DD/HH/MM/SS"
+
+=back
+
+Return value:
+
+A date formating callback.
+
+=cut
+
 sub locdatetime {
 	my (undef, $arg) = @_;
 
@@ -166,13 +225,34 @@ sub locdatetime {
 	}
 }
 
-# IN:
-#    $context: Context.
-#    $init: Indentation (or its length) of each paragraphm if any.
-#    $subs: Indentation (or its length) of other lines if any.
-#    $cols: Line width, defaults to 78.
-# OUT:
-#    Subref to generate folded text.
+=item wrap(undef, $init, $subs, $cols)
+
+FIXME.
+
+Parameters:
+
+=over
+
+=item number
+
+The indentation depth of each paragraph.
+
+=item number
+
+The indentation of other lines
+
+=item number
+
+The line width (default: 78)
+
+=back
+
+Return value:
+
+A text formating callback.
+
+=cut
+
 sub wrap {
 	my (undef, $init, $subs, $cols) = @_;
 
@@ -190,33 +270,67 @@ sub wrap {
 	};
 }
 
-## To add a directory to the TT2 include_path
+=item add_include_path($path)
+
+Add a directory to TT2 template search path.
+
+=cut
+
 sub add_include_path {
 	my ($path) = @_;
 
 	push @other_include_path, $path;
 }
 
-## Get current INCLUDE_PATH
+=item get_include_path()
+
+Get current TT2 template search path.
+
+=cut
+
 sub get_include_path {
 	return @other_include_path;
 }
 
-## Allow inclusion/insertion of file with absolute path
+=item allow_absolute_path()
+
+Allow inclusion/insertion of file with absolute path.
+
+=cut
+
 sub allow_absolute_path {
 	$allow_absolute = 1;
 }
 
-## Return the last error message
+=item get_error()
+
+Return the last error message
+
+=cut
+
 sub get_error {
 	return $last_error;
 }
 
-## The main parsing sub
-## Parameters are
-## data: a HASH ref containing the data
-## template : a filename or a ARRAY ref that contains the template
-## output : a Filedescriptor or a SCALAR ref for the output
+=item parse_tt2($data, $template, $output, $include_path, $options)
+
+The main parsing function
+
+Parameters:
+
+=over
+
+=item data: a HASH ref containing the data
+
+=item template : a filename or a ARRAY ref that contains the template
+
+=item output : a Filedescriptor or a SCALAR ref for the output
+
+Return value:
+
+The last error message
+
+=cut
 
 sub parse_tt2 {
 	my ($data, $template, $output, $include_path, $options) = @_;
@@ -284,5 +398,8 @@ sub parse_tt2 {
 	return 1;
 }
 
+=back
+
+=cut
 
 1;

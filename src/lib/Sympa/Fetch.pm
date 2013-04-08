@@ -38,7 +38,16 @@ use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
 
-# request a document using https, return status and content
+=head1 FUNCTIONS
+
+=over
+
+=item get_https($host, $port, $path, $client_cert, $client_key, $ssl_data)
+
+request a document using https, return status and content
+
+=cut
+
 sub get_https{
 	my ($host, $port, $path, $client_cert, $client_key, $ssl_data) = @_;
 
@@ -116,5 +125,9 @@ sub get_https{
 
 	return (@result);
 }
+
+=back
+
+=cut
 
 1;

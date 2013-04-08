@@ -99,7 +99,18 @@ sub new {
 	return $self;
 }
 
-# total spool_table count : not object oriented, just a subroutine
+=back
+
+=head1 FUNCTIONS
+
+=over
+
+=item global_count($message_status)
+
+FIXME
+
+=cut
+
 sub global_count {
 	my ($message_status) = @_;
 
@@ -113,24 +124,30 @@ sub global_count {
 	return $result[0];
 }
 
-sub count {
-	my ($self) = @_;
-
-	return ($self->get_content({'selection'=>'count'}));
-}
-
 =back
 
 =head1 INSTANCE METHODS
 
 =over
 
+=item $spool->count()
+
+FIXME
+
 =cut
 
-#######################
-#
-#  get_content return the content an array of hash describing the spool content
-#
+sub count {
+	my ($self) = @_;
+
+	return ($self->get_content({'selection'=>'count'}));
+}
+
+=item $spool->get_content($data)
+
+Return the content an array of hash describing the spool content.
+
+=cut
+
 sub get_content {
 	my ($self, $data) = @_;
 
@@ -194,10 +211,12 @@ sub get_content {
 	}
 }
 
-#######################
-#
-#  next : return next spool entry ordered by priority next lock the message_in_spool that is returned
-#
+=item $spool->next($selector)
+
+Return next spool entry ordered by priority next lock the message_in_spool that is returned
+
+=cut
+
 sub next {
 	my ($self, $selector) = @_;
 
@@ -241,9 +260,11 @@ sub next {
 	return $message  ;
 }
 
-#################"
-# return one message from related spool using a specified selector
-#
+=item $spool->get_message($selector)
+
+Return one message using a specified selector
+
+=cut
 sub get_message {
 	my ($self, $selector) = @_;
 	Sympa::Log::Syslog::do_log('debug', "($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
@@ -281,9 +302,12 @@ sub get_message {
 	return $message;
 }
 
-#################"
-# lock one message from related spool using a specified selector
-#
+=item $spool->unlock_message($messagekey)
+
+FIXME.
+
+=cut
+
 sub unlock_message {
 	my ($self, $messagekey) = @_;
 
@@ -292,9 +316,12 @@ sub unlock_message {
 			{'messagelock' => 'NULL'}));
 }
 
-#################"
-#
-#  update spool entries that match selector with values
+=item $spool->update($selector, $values)
+
+Update spool entries that match selector with values.
+
+=cut
+
 sub update {
 	my ($self, $selector, $values) = @_;
 	Sympa::Log::Syslog::do_log('debug', "($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
@@ -350,11 +377,15 @@ sub update {
 	return 1;
 }
 
-################"
-# store a message in database spool
-#
-#    I<$metadata>: a set of attributes related to the spool
-#   I<$locked>: if define message must stay locked after store
+=item $spool->store($message_asstring, $metadata, $locked)
+
+Store a message in database spool.
+
+I<$metadata>: a set of attributes related to the spool
+I<$locked>: if define message must stay locked after store
+
+=cut
+
 sub store {
 	my ($self, $message_asstring, $metadata, $locked) = @_;
 
@@ -419,9 +450,12 @@ sub store {
 	return $messagekey;
 }
 
-################"
-# remove a message in database spool using (messagekey,list,robot) which are a unique id in the spool
-#
+=item $spool->remove_message($selector)
+
+Remove a message in database spool using (messagekey,list,robot) which are a unique id in the spool
+
+=cut
+
 sub remove_message {
 	my ($self, $selector) = @_;
 
@@ -448,10 +482,11 @@ sub remove_message {
 	return 1;
 }
 
+=item $spool->clean($filter)
 
-################"
-# Clean a spool by removing old messages
-#
+Remove old messages.
+
+=cut
 
 sub clean {
 	my ($self, $filter) = @_;
@@ -483,7 +518,18 @@ sub clean {
 }
 
 
-# test the maximal message size the database will accept
+=back
+
+=head1 FUNCTIONS
+
+=over
+
+=item store_test($value)
+
+Test the maximal message size the database will accept
+
+=cut
+
 sub store_test {
 	my ($value_test) = @_;
 
@@ -536,10 +582,6 @@ sub store_test {
 	return $result;
 }
 
-
-
-
-#######################
 # Internal to ease SQL
 # return a SQL SELECT substring in ordder to select choosen fields from spool table
 # selction is comma separated list of field, '*' or '*_but_message'. in this case skip message_spool field
@@ -570,8 +612,6 @@ sub _selectfields{
 	return $select;
 }
 
-#######################
-# Internal to ease SQL
 # return a SQL WHERE substring in order to select chosen fields from the spool table
 # selector is a hash where key is a column name and value is column value expected.****
 #   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(

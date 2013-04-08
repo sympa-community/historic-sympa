@@ -46,6 +46,10 @@ my $cipher;
 
 =over
 
+=item tmp_passwd($email, $cookie)
+
+Return a temporary password.
+
 =cut
 
 sub tmp_passwd {
@@ -117,6 +121,12 @@ sub decrypt_password {
     }
     return ($cipher->decrypt(MIME::Base64::decode($inpasswd)));
 }
+
+=item new_passwd()
+
+Return a new random password.
+
+=cut
 
 sub new_passwd {
 

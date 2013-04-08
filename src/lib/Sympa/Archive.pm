@@ -80,7 +80,7 @@ close(OUT);
 
 }
 
-=item lists($name)
+=item list($name)
 
 Lists the files included in the archive, preformatted for printing.
 
@@ -114,6 +114,12 @@ sub list {
 	}
 	return @l;
 }
+
+=item scan_dir_archive($dir, $month)
+
+FIXME.
+
+=cut
 
 sub scan_dir_archive {
 
@@ -220,6 +226,11 @@ sub search_msgid {
 	return undef;
 }
 
+=item exist($name, $file)
+
+FIXME.
+
+=cut
 
 sub exist {
 	my($name, $file) = @_;
@@ -295,6 +306,11 @@ sub load_html_message {
 	return \%metadata;
 }
 
+=item clean_archive_directory(%parameters)
+
+FIXME
+
+=cut
 
 sub clean_archive_directory{
 	my (%params) = @_;
@@ -330,6 +346,12 @@ sub clean_archive_directory{
 	}
 	return $answer;
 }
+
+=item clean_archived_message(%parameters)
+
+FIXME
+
+=cut
 
 sub clean_archived_message {
 	my (%params) = @_;

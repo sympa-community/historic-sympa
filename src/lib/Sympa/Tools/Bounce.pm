@@ -44,7 +44,7 @@ my $address_pattern         = qr/[\w._-]+@[\w._-]+/;
 
 =over
 
-=item parse_compliant_notification($message)
+=item parse_rfc1891_notification($message)
 
 Parse a RFC1891-compliant non-delivery notification.
 
@@ -604,7 +604,7 @@ sub parse_notification {
 		$address = _unquote_address($address);
 		$address = lc($address);
 
-		$result->{$address} = lc($info->{error}) 
+		$result->{$address} = lc($info->{error})
 			if !$result->{$address};
 	}
 

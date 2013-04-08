@@ -11,7 +11,24 @@ use Carp;
 our $AUTOLOAD;
 our $VERSION = "4.3";
 
-## Constructor
+=head1 CLASS METHODS
+
+=over
+
+=item Sympa::Marc->new($parameters)
+
+Creates a new L<Sympa::Marc> object.
+
+Parameters:
+
+FIXME
+
+Return:
+
+A new L<Sympa::Marc> object
+
+=cut
+
 sub new {
 	my ($class, $fields_ref) = @_;
 

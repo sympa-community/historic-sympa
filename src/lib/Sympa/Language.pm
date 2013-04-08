@@ -119,6 +119,16 @@ my %template2textdomain = (
 	'help_user.tt2'          => 'web_help',
 );
 
+=head1 FUNCTIONS
+
+=over
+
+=item get_supported_languages($supported_languages)
+
+FIXME.
+
+=cut
+
 sub get_supported_languages {
 	my ($supported_languages) = @_;
 
@@ -130,7 +140,12 @@ sub get_supported_languages {
 	return \@lang_list;
 }
 
-## Keep the previous lang ; can be restored with PopLang
+=item push_lang($locale)
+
+Keep the previous lang ; can be restored with PopLang.
+
+=cut
+
 sub push_lang {
 	my ($locale) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $locale);
@@ -141,6 +156,12 @@ sub push_lang {
 	return 1;
 }
 
+=item pop_lang()
+
+FIXME.
+
+=cut
+
 sub pop_lang {
 	Sympa::Log::Syslog::do_log('debug', '');
 
@@ -149,6 +170,12 @@ sub pop_lang {
 
 	return 1;
 }
+
+=item set_lang($locale)
+
+FIXME.
+
+=cut
 
 sub set_lang {
 	my ($locale) = @_;
@@ -210,10 +237,14 @@ sub set_lang {
 	$current_charset = $locale2charset->{$locale} || 'utf-8';
 
 	return $locale;
-}#SetLang
+}
 
+=item get_lang_name($lang)
 
-## Get the name of the language, ie the one defined in the catalog
+Get the name of the language, ie the one defined in the catalog
+
+=cut
+
 sub get_lang_name {
 	my ($lang) = @_;
 
@@ -225,15 +256,33 @@ sub get_lang_name {
 	return $name;
 }
 
+=item get_lang()
+
+FIXME.
+
+=cut
+
 sub get_lang {
 
 	return $current_lang;
 }
 
+=item get_charset()
+
+FIXME.
+
+=cut
+
 sub get_charset {
 
 	return $current_charset;
 }
+
+=item locale2lang($locale)
+
+FIXME.
+
+=cut
 
 sub locale2lang {
 	my ($locale) = @_;
@@ -251,11 +300,23 @@ sub locale2lang {
 	return $lang;
 }
 
+=item lang2locale($lang)
+
+FIXME.
+
+=cut
+
 sub lang2locale {
 	my ($lang) = @_;
 
 	return $lang2locale{$lang} || $lang;
 }
+
+=item maketext($template_file, $msg)
+
+FIXME.
+
+=cut
 
 sub maketext {
 	my ($template_file, $msg) = @_;
@@ -280,6 +341,11 @@ sub maketext {
 	return $translation;
 }
 
+=item sympa_dgettext($textdomain, @param)
+
+FIXME.
+
+=cut
 
 sub sympa_dgettext {
 	my ($textdomain, @param) = @_;
@@ -317,6 +383,12 @@ sub sympa_dgettext {
 
 }
 
+=item gettext(@param)
+
+FIXME.
+
+=cut
+
 sub gettext {
 	my (@param) = @_;
 	Sympa::Log::Syslog::do_log('debug3', '(%s)', $param[0]);
@@ -353,6 +425,12 @@ sub gettext {
 
 }
 
+=item gettext_strftime($format)
+
+FIXME.
+
+=cut
+
 sub gettext_strftime {
 	my ($format) = @_;
 
@@ -362,5 +440,9 @@ sub gettext_strftime {
 	my $datestr = POSIX::strftime($format, @_);
 	return $datestr;
 }
+
+=back
+
+=cut
 
 1;

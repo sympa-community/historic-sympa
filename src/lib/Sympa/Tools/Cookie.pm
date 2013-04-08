@@ -103,6 +103,12 @@ sub get_mac {
 
 }
 
+=item set_cookie_extern($secret, $http_domain, %alt_emails)
+
+FIXME.
+
+=cut
+
 sub set_cookie_extern {
 	my ($secret, $http_domain, %alt_emails) = @_ ;
 
@@ -179,6 +185,12 @@ sub check_cookie {
 	return undef;
 }
 
+=item check_cookie_extern($http_cookie, $secret, $user_email)
+
+FIXME.
+
+=cut
+
 sub check_cookie_extern {
 	my ($http_cookie, $secret, $user_email) = @_;
 
@@ -198,8 +210,8 @@ sub check_cookie_extern {
 			return undef;
 		}
 		return (\%alt_emails);
-}
-return undef
+	}
+	return undef
 }
 
 =back

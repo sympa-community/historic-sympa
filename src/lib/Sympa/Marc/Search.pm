@@ -47,20 +47,54 @@ my %fields = (
 	words            => undef,
 );
 
-## Constructor
+=head1 CLASS METHODS
+
+=over
+
+=item Sympa::Marc::Search->new()
+
+Creates a new L<Sympa::Marc::Search> object.
+
+Parameters:
+
+FIXME
+
+Return:
+
+A new L<Sympa::Marc::Search> object
+
+=cut
+
 sub new {
 	my ($class) = @_;
 
 	return $class->SUPER::new(\%fields);
 }
 
-## These accessor methods keep a running count of matches in each area
+=back
+
+=head1 INSTANCE METHODS
+
+=over
+
+=item $search->body_count($count)
+
+These accessor methods keep a running count of matches in each area
+
+=cut
+
 sub body_count {
 	my ($self, $count) = @_;
 	$count ||= 0;
 
 	return $self->{body_count} += $count;
 }
+
+=item $search->id_count($count)
+
+These accessor methods keep a running count of matches in each area
+
+=cut
 
 sub id_count {
 	my ($self, $count) = @_;
@@ -69,12 +103,24 @@ sub id_count {
 	return $self->{id_count} += $count;
 }
 
+=item $search->date_count($count)
+
+These accessor methods keep a running count of matches in each area
+
+=cut
+
 sub date_count {
 	my ($self, $count) = @_;
 	$count ||= 0;
 
 	return $self->{date_count} += $count;
 }
+
+=item $search->from_count($count)
+
+These accessor methods keep a running count of matches in each area
+
+=cut
 
 sub from_count {
 	my ($self, $count) = @_;
@@ -83,12 +129,24 @@ sub from_count {
 	return $self->{from_count} += $count;
 }
 
+=item $search->subj_count($count)
+
+These accessor methods keep a running count of matches in each area
+
+=cut
+
 sub subj_count {
 	my ($self, $count) = @_;
 	$count ||= 0;
 
 	return $self->{subj_count} += $count;
 }
+
+=item $search->key_word(@keywords)
+
+FIXME.
+
+=cut
 
 sub key_word {
 	my ($self, @keywords) = @_;
@@ -219,9 +277,14 @@ sub _find_match {
 return $match;		# 1 if match suceeds; 0 otherwise
 }
 
-## Build up a list of files to search; read in the relevant portions;
-## pass those parts off for checking (and printing if there's a match)
-## by the _find_match method
+=item $search->search()
+
+Build up a list of files to search; read in the relevant portions;
+pass those parts off for checking (and printing if there's a match)
+by the _find_match method
+
+=cut
+
 sub search {
 	my ($self) = @_;
 
@@ -363,7 +426,12 @@ sub _get_file_list {
 	/^msg/ && push @MSGFILES,$File::Find::name;
 }
 
-## Eval anonymous pattern match functions based on user search terms
+=item $search->match_any(@patterns)
+
+eval anonymous pattern match functions based on user search terms.
+
+=cut
+
 sub match_any {
 	my ($self, @patterns) = @_;
 
@@ -386,6 +454,12 @@ EOCODE
 	die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
 	return $function;
 }
+
+=item $search->body_match_all(@patterns)
+
+FIXME.
+
+=cut
 
 sub body_match_all {
 	my ($self, @ret) = @_;
@@ -418,6 +492,12 @@ EOCODE
 	return $function;
 }
 
+=item $search->match_all(@patterns)
+
+FIXME.
+
+=cut
+
 sub match_all {
 	my ($self, @patterns) = @_;
 
@@ -434,6 +514,12 @@ sub match_all {
 	die "bad pattern: $EVAL_ERROR" if $EVAL_ERROR;
 	return $function;
 }
+
+=item $search->match_this(@patterns)
+
+FIXME.
+
+=cut
 
 sub match_this {
 	my ($self, @patterns) = @_;

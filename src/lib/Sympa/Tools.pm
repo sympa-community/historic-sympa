@@ -549,6 +549,12 @@ sub _add_topic {
 	}
 }
 
+=item get_list_list_tpl($robot, $directory)
+
+FIXME.
+
+=cut
+
 sub get_list_list_tpl {
 	my ($robot, $directory) = @_;
 
@@ -586,6 +592,12 @@ sub get_list_list_tpl {
 
 	return ($list_templates);
 }
+
+=item get_templates_list($type, $robot, $list, $options, $basedir)
+
+FIXME.
+
+=cut
 
 sub get_templates_list {
 	my ($type, $robot, $list, $options, $basedir) = @_;
@@ -917,6 +929,12 @@ sub unescape_chars {
 	return $s;
 }
 
+=item escape_html($string)
+
+FIXME.
+
+=cut
+
 sub escape_html {
 	my ($s) = @_;
 
@@ -926,6 +944,12 @@ sub escape_html {
 
 	return $s;
 }
+
+=item unescape_html($string)
+
+FIXME.
+
+=cut
 
 sub unescape_html {
 	my ($s) = @_;
@@ -999,6 +1023,12 @@ sub cookie_changed {
 	}
 }
 
+=item load_mime_types($confdir)
+
+FIXME.
+
+=cut
+
 sub load_mime_types {
 	my ($confdir) = @_;
 
@@ -1041,6 +1071,12 @@ sub load_mime_types {
 	return $types;
 }
 
+=item split_mail($message, $pathname, $dir, $confdir)
+
+FIXME.
+
+=cut
+
 sub split_mail {
 	my ($message, $pathname, $dir, $confdir) = @_;
 
@@ -1080,30 +1116,36 @@ sub split_mail {
 		if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
 			open TMP, ">$dir/$pathname.$fileExt.$encoding";
 			$message->print_body (\*TMP);
-		close TMP;
+			close TMP;
 
-		open BODY, "$dir/$pathname.$fileExt.$encoding";
+			open BODY, "$dir/$pathname.$fileExt.$encoding";
 
-		my $decoder = MIME::Decoder->new($encoding);
-		unless (defined $decoder) {
-			Sympa::Log::Syslog::do_log('err', 'Cannot create decoder for %s', $encoding);
-			return undef;
+			my $decoder = MIME::Decoder->new($encoding);
+			unless (defined $decoder) {
+				Sympa::Log::Syslog::do_log('err', 'Cannot create decoder for %s', $encoding);
+				return undef;
+			}
+			$decoder->decode(\*BODY, \*OFILE);
+			close BODY;
+			unlink "$dir/$pathname.$fileExt.$encoding";
+		}else {
+			$message->print_body (\*OFILE) ;
 		}
-		$decoder->decode(\*BODY, \*OFILE);
-		close BODY;
-		unlink "$dir/$pathname.$fileExt.$encoding";
-	}else {
-		$message->print_body (\*OFILE) ;
-	}
-	close (OFILE);
-	printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
+		close (OFILE);
+		printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
 
-	## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-	$message->purge ;
+		## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
+		$message->purge ;
 	}
 
 	return 1;
 }
+
+=item virus_infected($mail, $path, $args, $tmpdir, $domain, $confdir)
+
+FIXME.
+
+=cut
 
 sub virus_infected {
 	my ($mail, $path, $args, $tmpdir, $domain, $confdir) = @_;
@@ -1629,6 +1671,12 @@ foreach my $f_struct (reverse @all_files) {
 return $count;
 }
 
+=item get_message_id($robot)
+
+FIXME.
+
+=cut
+
 sub get_message_id {
 	my ($robot) = @_;
 
@@ -1762,6 +1810,12 @@ sub change_x_sympa_to {
 	return 1;
 }
 
+=item add_in_blacklist($entry, $robot, $list)
+
+FIXME.
+
+=cut
+
 sub add_in_blacklist {
 	my ($entry, $robot, $list) = @_;
 
@@ -1832,6 +1886,12 @@ sub md5_fingerprint {
 	$digestmd5->add($input_string);
 	return (unpack("H*", $digestmd5->digest));
 }
+
+=item get_separator()
+
+FIXME.
+
+=cut
 
 sub get_separator {
 	return $separator;

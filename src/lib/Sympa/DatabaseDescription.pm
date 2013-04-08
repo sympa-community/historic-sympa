@@ -36,6 +36,16 @@ our %not_null = not_null();
 our %primary = primary();
 our %autoincrement = autoincrement();
 
+=head1 FUNCTIONS
+
+=over
+
+=item full_db_struct()
+
+FIXME.
+
+=cut
+
 sub full_db_struct {
 
 	my %full_db_struct = (
@@ -1167,6 +1177,11 @@ sub full_db_struct {
 	return %full_db_struct;
 }
 
+=item db_struct()
+
+FIXME.
+
+=cut
 
 sub db_struct {
 
@@ -1227,6 +1242,12 @@ sub db_struct {
 	return %db_struct;
 }
 
+=item not_null()
+
+FIXME.
+
+=cut
+
 sub not_null {
 	my %not_null;
 	my %full_db_struct = full_db_struct() ;
@@ -1238,6 +1259,12 @@ sub not_null {
 	return %not_null;
 }
 
+=item autoincrement()
+
+FIXME.
+
+=cut
+
 sub autoincrement {
 	my %autoincrement;
 	my %full_db_struct = full_db_struct() ;
@@ -1248,6 +1275,12 @@ sub autoincrement {
 	}
 	return %autoincrement;
 }
+
+=item primary()
+
+FIXME.
+
+=cut
 
 sub primary {
 	my %primary;
