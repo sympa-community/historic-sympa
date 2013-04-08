@@ -42,7 +42,7 @@ use FileHandle;
 use Sympa::Log::Syslog;
 use Sympa::Tools::File;
 
-my %list_of_locks;
+my %locks;
 my $default_timeout = 60 * 20; # After this period a lock can be stolen
 
 =head1 CLASS METHODS
@@ -138,7 +138,9 @@ sub set_timeout {
 
 	return undef unless (defined $delay);
 
-	$list_of_locks{$self->{'lock_filename'}}{'timeout'} = $delay;
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+	$lock->{'timeout'} = $delay;
 
 	return 1;
 }
@@ -150,7 +152,9 @@ sub set_timeout {
 sub get_lock_count {
 	my ($self) = @_;
 
-	return $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1;
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+	return $#{$lock->{'states_list'}} +1;
 }
 
 =item Sympa::Lock->get_file_handle()
@@ -160,7 +164,9 @@ sub get_lock_count {
 sub get_file_handle {
 	my ($self) = @_;
 
-	return $list_of_locks{$self->{'lock_filename'}}{'fh'};
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+	return $lock->{'fh'};
 }
 
 =item $lock->lock($mode)
@@ -183,13 +189,16 @@ sub lock {
 	my ($self, $mode) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Trying to put a lock on %s in mode %s',$self->{'lock_filename'}, $mode);
 
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+
 	# If file was already locked by this process, we will add a new lock.
 	# We will need to create a new lock if the state must change.
-	if ($list_of_locks{$self->{'lock_filename'}}{'fh'}) {
+	if ($lock->{'fh'}) {
 
 		# If the mode for the new lock is 'write' and was previously
 		# 'read' then we unlock and redo a lock
-		if ($mode eq 'write' && $list_of_locks{$self->{'lock_filename'}}{'mode'} eq 'read') {
+		if ($mode eq 'write' && $lock->{'mode'} eq 'read') {
 			Sympa::Log::Syslog::do_log('debug', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
 			# First release previous lock
 			return undef unless ($self->_remove_lock());
@@ -207,7 +216,7 @@ sub lock {
 			# try to put a read lock instead. failing that, it
 			# will return undef for lock conflicts reasons.
 			if ($self->_add_lock($mode,-1)) {
-				push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
+				push @{$lock->{'states_list'}}, $mode;
 			}
 			else {
 				return undef unless ($self->_add_lock('read',-1));
@@ -217,15 +226,15 @@ sub lock {
 		# Otherwise, the previous lock was probably a 'read' lock, so
 		# no worries, just increase the locks count.
 		Sympa::Log::Syslog::do_log('debug', "No need to change filesystem or NFS lock for %s. Just increasing count.", $self->{'lock_filename'});
-		push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, 'read';
-		Sympa::Log::Syslog::do_log('debug', "Locked %s again; total locks: %d", $self->{'lock_filename'}, $#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} +1);
+		push @{$lock->{'states_list'}}, 'read';
+		Sympa::Log::Syslog::do_log('debug', "Locked %s again; total locks: %d", $self->{'lock_filename'}, $#{$lock->{'states_list'}} +1);
 		return 1;
 	}
 
 	# If file was not locked by this process, just *create* the lock.
 	else {
 		if ($self->_add_lock($mode)) {
-			push @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}, $mode;
+			push @{$lock->{'states_list'}}, $mode;
 		}
 		else {
 			return undef;
@@ -250,7 +259,10 @@ sub unlock {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Removing lock on %s',$self->{'lock_filename'});
 
-	unless (defined $list_of_locks{$self->{'lock_filename'}}) {
+	# get existing lock
+	my $lock = $locks{$self->{'lock_filename'}};
+
+	unless ($lock) {
 		Sympa::Log::Syslog::do_log('err', "Failed to unlock file %s ; file is not locked", $self->{'lock_filename'});
 		return undef;
 	}
@@ -259,9 +271,9 @@ sub unlock {
 
 	# If it is not the last lock on the file, we revert the lock state to
 	# the previous lock.
-	if ($#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}} > 0) {
-		$previous_mode = pop @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}};
-		$current_mode = @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}[$#{$list_of_locks{$self->{'lock_filename'}}{'states_list'}}];
+	if ($#{$lock->{'states_list'}} > 0) {
+		$previous_mode = pop @{$lock->{'states_list'}};
+		$current_mode = @{$lock->{'states_list'}}[$#{$lock->{'states_list'}}];
 
 		# If the new lock mode is different from the one we just
 		# removed, we need to create a new file lock.
@@ -290,7 +302,7 @@ sub unlock {
 	# Otherwise, just delete the last lock.
 	else {
 		return undef unless($self->_remove_lock());
-		$previous_mode = pop @{$list_of_locks{$self->{'lock_filename'}}{'states_list'}};
+		$previous_mode = pop @{$lock->{'states_list'}};
 		unlink $self->{'lock_filename'};
 	}
 	return 1;
@@ -301,28 +313,31 @@ sub unlock {
 sub _add_lock {
 	my ($self, $mode, $timeout) = @_;
 
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+
 	# If the $timeout value is -1, it means that we will try to put a lock
 	# only once. This is to be used when we are changing the lock mode
 	# (from write to read and reverse) and we then  release the file lock
 	# to create a new one AND we have previous locks pending in the same
 	# process on the same file.
 	unless($timeout) {
-		$timeout = $list_of_locks{$self->{'lock_filename'}}{'timeout'} || $default_timeout;
+		$timeout = $lock->{'timeout'} || $default_timeout;
 	}
 	Sympa::Log::Syslog::do_log('debug3', 'Adding lock to file %s in mode %s with a timeout of: %s',$self->{'lock_filename'}, $mode, $timeout);
 	my ($fh, $nfs_lock);
 	if ($self->{'method'} eq 'nfs') {
 		($fh, $nfs_lock) = _lock_nfs($self->{'lock_filename'}, $mode, $timeout);
 		return undef unless (defined $fh && defined $nfs_lock);
-		$list_of_locks{$self->{'lock_filename'}}{'fh'} = $fh;
-		$list_of_locks{$self->{'lock_filename'}}{'mode'} = $mode;
-		$list_of_locks{$self->{'lock_filename'}}{'nfs_lock'} = $nfs_lock;
+		$lock->{'fh'}       = $fh;
+		$lock->{'mode'}     = $mode;
+		$lock->{'nfs_lock'} = $nfs_lock;
 	}else {
 		$fh = _lock_file($self->{'lock_filename'}, $mode, $timeout);
 		return undef unless (defined $fh);
-		$list_of_locks{$self->{'lock_filename'}}{'fh'} = $fh;
-		$list_of_locks{$self->{'lock_filename'}}{'mode'} = $mode;
-		$list_of_locks{$self->{'lock_filename'}}{'nfs_lock'} = $nfs_lock;
+		$lock->{'fh'}       = $fh;
+		$lock->{'mode'}     = $mode;
+		$lock->{'nfs_lock'} = $nfs_lock;
 	}
 	return 1;
 }
@@ -333,25 +348,27 @@ sub _remove_lock {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
 
-	my $fh = $list_of_locks{$self->{'lock_filename'}}{'fh'};
+	# get existing lock, or create a new one
+	my $lock = $locks{$self->{'lock_filename'}} ||= {};
+	my $fh   = $lock->{'fh'};
 
 	if ($self->{'method'} eq 'nfs') {
-		my $nfs_lock = $list_of_locks{$self->{'lock_filename'}}{'nfs_lock'};
+		my $nfs_lock = $lock->{'nfs_lock'};
 		unless (defined $fh && defined $nfs_lock && _unlock_nfs($self->{'lock_filename'}, $fh, $nfs_lock)) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
 			# Clean the list of locks anyway
-			$list_of_locks{$self->{'lock_filename'}} = undef;
+			$locks{$self->{'lock_filename'}} = undef;
 			return undef;
 		}
 	}else {
 		unless (defined $fh && _unlock_file($self->{'lock_filename'}, $fh)) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
 			# Clean the list of locks anyway
-			$list_of_locks{$self->{'lock_filename'}} = undef;
+			$locks{$self->{'lock_filename'}} = undef;
 			return undef;
 		}
 	}
-	$list_of_locks{$self->{'lock_filename'}}{'fh'} = undef;
+	$locks{$self->{'lock_filename'}}{'fh'} = undef;
 	return 1
 }
 
