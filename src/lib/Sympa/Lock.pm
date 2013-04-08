@@ -51,19 +51,28 @@ my $default_timeout = 60 * 20; # After this period a lock can be stolen
 
 =item Sympa::Lock->new(%parameters)
 
-Creates a new L<Sympa::Lock> object.
+Creates a new L<Sympa::Lock> object, emulating a lock on a target file using
+an auxiliary file handle.
 
 Parameters:
 
 =over
 
-=item * I<path>: FIXME
+=item C<path> => string
 
-=item * I<method>: FIXME
+The path to the file to lock.
 
-=item * I<user>: FIXME
+=item C<method> => [nfs|other]
 
-=item * I<group>: FIXME
+The locking method.
+
+=item C<user> => string
+
+Auxiliary file handle user.
+
+=item C<group> => string
+
+Auxiliary file handle group.
 
 =back
 
@@ -119,11 +128,15 @@ sub new {
 
 =item $lock->set_timeout($timeout)
 
+Set lock timeout.
+
 Parameters:
 
 =over
 
-=item * I<$timeout>
+=item number
+
+The timeout, in seconds.
 
 =back
 
@@ -145,7 +158,9 @@ sub set_timeout {
 	return 1;
 }
 
-=item $self->get_lock_count()
+=item $lock->get_lock_count()
+
+Get the count of active locks on target file.
 
 =cut
 
@@ -157,7 +172,9 @@ sub get_lock_count {
 	return $#{$lock->{'states_list'}} +1;
 }
 
-=item Sympa::Lock->get_file_handle()
+=item $lock->get_file_handle()
+
+Get the auxiliary file handle.
 
 =cut
 
@@ -171,11 +188,13 @@ sub get_file_handle {
 
 =item $lock->lock($mode)
 
+Add one active lock on target file.
+
 Parameters:
 
 =over
 
-=item * I<$mode>: read | write
+=item [read|write]
 
 =back
 
@@ -244,6 +263,8 @@ sub lock {
 }
 
 =item $lock->unlock()
+
+Remove one active lock on target file.
 
 Parameters:
 
