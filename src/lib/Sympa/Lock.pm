@@ -97,9 +97,9 @@ sub new {
 	};
 
 	# Create include.lock if needed
-	my $fh;
 	unless (-f $lock_filename) {
-		unless (open $fh, ">>$lock_filename") {
+		my $fh;
+		unless (open $fh, '>', $lock_filename) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot open %s: %s', $lock_filename, $ERRNO);
 			return undef;
 		}
@@ -403,15 +403,14 @@ sub _lock_file {
 
 	if ($mode eq 'read') {
 		$operation = LOCK_SH;
+		$open_mode = '<';
 	}else {
 		$operation = LOCK_EX;
 		$open_mode = '>';
 	}
 
-	# Read access to prevent "Bad file number" error on Solaris
 	my $fh;
-	my $untainted_lock_mode = sprintf("%s%s",$open_mode,$lock_file);
-	unless (open $fh, $untainted_lock_mode) {
+	unless (open $fh, $open_mode, $lock_file) {
 		Sympa::Log::Syslog::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 		return undef;
 	}
@@ -433,7 +432,7 @@ sub _lock_file {
 				return undef;
 			}
 
-			unless (open $fh, ">$lock_file") {
+			unless (open $fh, '>', $lock_file) {
 				Sympa::Log::Syslog::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 				return undef;
 			}
@@ -494,13 +493,13 @@ sub _lock_nfs {
 
 	if ($mode eq 'read') {
 		$operation = LOCK_SH;
+		$open_mode = '<';
 	}else {
 		$operation = LOCK_EX;
 		$open_mode = '>>';
 	}
 
 	my $nfs_lock = undef;
-	my $FH = undef;
 
 	if ($nfs_lock = File::NFSLock->new( {
 				file      => $lock_file,
@@ -509,14 +508,14 @@ sub _lock_nfs {
 				stale_lock_timeout => $timeout,
 			})) {
 		# Read access to prevent "Bad file number" error on Solaris
-		$FH = FileHandle->new();
-		unless (open $FH, $open_mode.$lock_file) {
+		my $fh;
+		unless (open $fh, $open_mode, $lock_file) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot open %s: %s', $lock_file, $ERRNO);
 			return undef;
 		}
 
 		Sympa::Log::Syslog::do_log('debug3', 'Got lock for %s on %s', $mode, $lock_file);
-		return ($FH, $nfs_lock);
+		return ($fh, $nfs_lock);
 	} else {
 		Sympa::Log::Syslog::do_log('err', 'Failed locking %s: %s', $lock_file, $ERRNO);
 		return undef;
