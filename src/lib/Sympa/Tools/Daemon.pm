@@ -248,17 +248,25 @@ sub remove_pid {
 	return 1;
 }
 
-=item get_pids_in_pid_file($pidfile)
+=item read_pids(%parameters)
 
 Returns the list of pid in the pid file.
 
+Parameters:
+
+=over
+
+=item C<file> => FIXME
+
+=back
+
 =cut
 
-sub get_pids_in_pid_file {
-	my ($pidfile) = @_;
+sub read_pids {
+	my (%params) = @_;
 
-	unless (open(PFILE, $pidfile)) {
-		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$pidfile,$ERRNO);
+	unless (open(PFILE, $params{file})) {
+		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$params{file},$ERRNO);
 		return undef;
 	}
 	my $l = <PFILE>;

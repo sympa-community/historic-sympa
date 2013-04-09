@@ -32,7 +32,7 @@ ok(
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '666', 'pid file content');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	[666],
 	'pids list'
 );
@@ -49,7 +49,7 @@ ok(
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667', 'pid file content');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	[667],
 	'pids list'
 );
@@ -68,7 +68,7 @@ ok(
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667 668', 'pid file content');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	[667, 668],
 	'pids list'
 );
@@ -87,7 +87,7 @@ ok(
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667', 'pid file content');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	[667],
 	'pids list'
 );
@@ -106,7 +106,7 @@ ok(
 ok(-f $pidfile, 'pid file presence');
 is(slurp_file($pidfile), '667', 'pid file content');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	[667],
 	'pids list'
 );
@@ -124,7 +124,7 @@ ok(
 );
 ok(!-f $pidfile, 'pid file presence');
 is_deeply(
-	Sympa::Tools::Daemon::get_pids_in_pid_file($pidfile),
+	Sympa::Tools::Daemon::read_pids(file => $pidfile),
 	undef,
 	'pids list'
 );

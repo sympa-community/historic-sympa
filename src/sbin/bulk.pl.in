@@ -241,7 +241,7 @@ while (!$end) {
 	    if ($#pids_leftover > -1) {
 		my @dc;
 		Sympa::Log::Syslog::do_log('debug2','Some childs of current process disappeared. Checking whether they shut down cleanly or not.');
-		my $pids_in_pfile = Sympa::Tools::Daemon::get_pids_in_pid_file($Sympa::Configuration::Conf{'pidfile_bulk'});
+		my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(file => $Sympa::Configuration::Conf{'pidfile_bulk'});
 		foreach my $fpid (@{$pids_in_pfile}) {
 		    if (defined $dead_children{$fpid}) {
 			Sympa::Log::Syslog::do_log('err','The %s child exists in the pid file but is no longer running. Removing it and notyfying listmaster.',$fpid);
@@ -259,7 +259,7 @@ while (!$end) {
 		    }
 		}
 	    }
-	    my $pids_in_pfile = Sympa::Tools::Daemon::get_pids_in_pid_file($Sympa::Configuration::Conf{'pidfile_bulk'});
+	    my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(file => $Sympa::Configuration::Conf{'pidfile_bulk'});
 	    unless (defined($pids_in_pfile)){
 		my $result = Sympa::Tools::Daemon::write_pid(
 			file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
