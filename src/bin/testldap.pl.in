@@ -96,7 +96,7 @@ if ($options{'ssl'} eq 'on') {
 	$arg{'sslciphers'} = 'ALL';
 
 	$ldap=Net::LDAPS->new($options{'host'},%arg) or print "connect impossible\n";
-}else {
+} else {
 	$ldap=Net::LDAP->new($options{'host'},%arg) or print "connect impossible\n";
 }
 
@@ -131,7 +131,7 @@ foreach $dn (keys %$res) {
 		my $array = $hash->{$k};
 		if ((ref($array) eq 'ARRAY') and ($k ne 'jpegphoto')) {
 			printf "\t%s => %s\n", $k, join(',', @$array);
-		}else {
+		} else {
 			printf "\t%s => %s\n", $k, $array;
 		}
 	}

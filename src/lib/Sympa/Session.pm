@@ -126,7 +126,7 @@ sub new {
 		#    Sympa::Log::Syslog::do_log('info','SympaSession::new ignoring session cookie because remote host %s is not the original host %s', $ENV{'REMOTE_ADDR'},$session->{'remote_addr'}); # start a new session
 		#    return (SympaSession->new($robot));
 		#}
-	}else{
+	} else {
 		# create a new session context
 		$self->{'new_session'} = 1; ## Tag this session as new, ie no data in the DB exist
 		$self->{'id_session'} = Sympa::Session->get_random();
@@ -186,7 +186,7 @@ sub purge_old_sessions {
 	my $total =  $sth->fetchrow;
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no sessions to expire');
-	}else{
+	} else {
 		unless ($sth = Sympa::SDM::do_query($statement)) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge old sessions for robot %s', $params{robot});
 			return undef;
@@ -239,7 +239,7 @@ sub purge_old_tickets {
 	my $total =  $sth->fetchrow;
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no tickets to expire');
-	}else{
+	} else {
 		unless ($sth = Sympa::SDM::do_query($statement)) {
 			Sympa::Log::Syslog::do_log('err','Unable to delete expired one time tickets for robot %s',$params{robot});
 			return undef;
@@ -410,7 +410,7 @@ if ($self->{'new_session'}) {
 		return undef;
 	}
 	## If the session already exists in DB, then perform an UPDATE
-}else {
+} else {
 	## Update the new session in the DB
 	unless(Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string), Sympa::SDM::quote($self->{'id_session'}))) {
 		Sympa::Log::Syslog::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
@@ -471,7 +471,7 @@ sub set_cookie {
 	if ($expires =~ /now/i) {
 		## 10 years ago
 		$expiration = '-10y';
-	}else{
+	} else {
 		$expiration = '+'.$expires.'m';
 	}
 
@@ -488,7 +488,7 @@ sub set_cookie {
 			-secure => $use_ssl,
 			-httponly => 1
 		);
-	}else {
+	} else {
 		$cookie = CGI::Cookie->new(-name    => 'sympa_session',
 			-value   => $self->{'id_session'},
 			-expires => $expiration,
@@ -533,7 +533,7 @@ sub is_anonymous {
 
 	if($self->{'email'} eq 'nobody' || $self->{'email'} eq '') {
 		return 1;
-	}else{
+	} else {
 		return 0;
 	}
 }

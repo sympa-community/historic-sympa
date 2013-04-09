@@ -57,15 +57,15 @@ sub recursive_transformation {
 		foreach my $index (0..$#{$var}) {
 			if (ref($var->[$index])) {
 				recursive_transformation($var->[$index], $subref);
-			}else {
+			} else {
 				$var->[$index] = &{$subref}($var->[$index]);
 			}
 		}
-	}elsif (ref($var) eq 'HASH') {
+	} elsif (ref($var) eq 'HASH') {
 		foreach my $key (sort keys %{$var}) {
 			if (ref($var->{$key})) {
 				recursive_transformation($var->{$key}, $subref);
-			}else {
+			} else {
 				$var->{$key} = &{$subref}($var->{$key});
 			}
 		}
@@ -91,18 +91,18 @@ sub dump_var {
 				print $fd "\t"x$level.$index."\n";
 				dump_var($var->[$index], $level+1, $fd);
 			}
-		}elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List') || $var->isa('CGI::Fast')) {
+		} elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List') || $var->isa('CGI::Fast')) {
 			foreach my $key (sort keys %{$var}) {
 				print $fd "\t"x$level.'_'.$key.'_'."\n";
 				dump_var($var->{$key}, $level+1, $fd);
 			}
-		}else {
+		} else {
 			printf $fd "\t"x$level."'%s'"."\n", ref($var);
 		}
-	}else {
+	} else {
 		if (defined $var) {
 			print $fd "\t"x$level."'$var'"."\n";
-		}else {
+		} else {
 			print $fd "\t"x$level."UNDEF\n";
 		}
 	}
@@ -130,7 +130,7 @@ sub dump_html_var {
 				$html .= '</li>';
 			}
 			$html .= '</ul>';
-		}elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List')) {
+		} elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List')) {
 			$html .= '<ul>';
 			foreach my $key (sort keys %{$var}) {
 				$html .= '<li>'.$key.'=' ;
@@ -138,13 +138,13 @@ sub dump_html_var {
 				$html .= '</li>';
 			}
 			$html .= '</ul>';
-		}else {
+		} else {
 			$html .= 'EEEEEEEEEEEEEEEEEEEEE'.ref($var);
 		}
-	}else{
+	} else {
 		if (defined $var) {
 			$html .= escape_html($var);
-		}else {
+		} else {
 			$html .= 'UNDEF';
 		}
 	}
@@ -167,7 +167,7 @@ sub dup_var {
 				$new_var->[$index] = dup_var($var->[$index]);
 			}
 			return $new_var;
-		}elsif (ref($var) eq 'HASH') {
+		} elsif (ref($var) eq 'HASH') {
 			my $new_var = {};
 			foreach my $key (sort keys %{$var}) {
 				$new_var->{$key} = dup_var($var->{$key});
@@ -264,7 +264,7 @@ sub diff_on_arrays {
 		if ($hashA{$eltB}) {
 			$intersection{$eltB} = 1;
 			$deleted{$eltB} = 0;
-		}else {
+		} else {
 			$union{$eltB} = 1;
 		}
 	}

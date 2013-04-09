@@ -190,7 +190,7 @@ sub set_lang {
 
 	if (length($lang) == 2) {
 		$locale = $lang2locale{$lang};
-	}else {
+	} else {
 		## uppercase the country part if needed
 		my @items = split /_/, $locale;
 		$items[1] = uc($items[1]);
@@ -291,7 +291,7 @@ sub locale2lang {
 
 	if (defined $language_equiv{$locale}) {
 		$lang = $language_equiv{$locale};
-	}else {
+	} else {
 		## remove the country part
 		$lang = $locale;
 		$lang =~ s/_\w{2}$//;
@@ -328,7 +328,7 @@ sub maketext {
 
 	if ($textdomain) {
 		$translation = sympa_dgettext ($textdomain, $msg);
-	}else {
+	} else {
 		$translation = gettext ($msg);
 	}
 #    $translation = gettext ($msg);
@@ -356,7 +356,7 @@ sub sympa_dgettext {
 		return '';
 
 		## return meta information on the catalogue (language, charset, encoding,...)
-	}elsif ($param[0] =~ '^_(\w+)_$') {
+	} elsif ($param[0] =~ '^_(\w+)_$') {
 		my $var = $1;
 		foreach (split /\n/,Locale::Messages::gettext('')) {
 			if ($var eq 'language') {
@@ -366,11 +366,11 @@ sub sympa_dgettext {
 
 					return $language;
 				}
-			}elsif ($var eq 'charset') {
+			} elsif ($var eq 'charset') {
 				if (/^Content-Type:\s*.*charset=(\S+)$/i) {
 					return $1;
 				}
-			}elsif ($var eq 'encoding') {
+			} elsif ($var eq 'encoding') {
 				if (/^Content-Transfer-Encoding:\s*(.+)$/i) {
 					return $1;
 				}
@@ -398,7 +398,7 @@ sub gettext {
 		return '';
 
 		## return meta information on the catalogue (language, charset, encoding,...)
-	}elsif ($param[0] =~ '^_(\w+)_$') {
+	} elsif ($param[0] =~ '^_(\w+)_$') {
 		my $var = $1;
 		foreach (split /\n/,Locale::Messages::gettext('')) {
 			if ($var eq 'language') {
@@ -408,11 +408,11 @@ sub gettext {
 
 					return $language;
 				}
-			}elsif ($var eq 'charset') {
+			} elsif ($var eq 'charset') {
 				if (/^Content-Type:\s*.*charset=(\S+)$/i) {
 					return $1;
 				}
-			}elsif ($var eq 'encoding') {
+			} elsif ($var eq 'encoding') {
 				if (/^Content-Transfer-Encoding:\s*(.+)$/i) {
 					return $1;
 				}

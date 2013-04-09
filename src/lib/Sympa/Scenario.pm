@@ -111,7 +111,7 @@ sub new {
 		}
 		($params{'function'}, $params{'name'}) = ($1, $2);
 
-	}else {
+	} else {
 		## We can't use Sympa::Tools::get_filename() because we don't have a List object yet ; it's being constructed
 		my @dirs = ($Sympa::Configuration::Conf{'etc'}.'/'.$params{'robot'}, $Sympa::Configuration::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
 		unshift @dirs, $params{'directory'} if (defined $params{'directory'});
@@ -120,7 +120,7 @@ sub new {
 			if (-r $tmp_path) {
 				$self->{'file_path'} = $tmp_path;
 				last;
-			}else {
+			} else {
 				Sympa::Log::Syslog::do_log('debug','Unable to read file %s',$tmp_path);
 			}
 		}
@@ -156,11 +156,11 @@ sub new {
 		$self->{'data'} = $data;
 
 		$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, $data, $params{'directory'});
-	}elsif ($params{'function'} eq 'include') {
+	} elsif ($params{'function'} eq 'include') {
 		## include.xx not found will not raise an error message
 		return undef;
 
-	}else {
+	} else {
 		## Default rule is 'true() smtp -> reject'
 		Sympa::Log::Syslog::do_log('err',"Unable to find scenario file '$params{'function'}.$params{'name'}', please report to listmaster");
 		$scenario_struct = _parse_scenario($params{'function'}, $params{'robot'}, $params{'name'}, 'true() smtp -> reject', $params{'directory'});
@@ -208,7 +208,7 @@ sub _parse_scenario {
 		if ($current_rule =~ /^\s*title\.gettext\s+(.*)\s*$/i) {
 			$structure->{'title'}{'gettext'} = $1;
 			next;
-		}elsif ($current_rule =~ /^\s*title\.(\w+)\s+(.*)\s*$/i) {
+		} elsif ($current_rule =~ /^\s*title\.(\w+)\s+(.*)\s*$/i) {
 			$structure->{'title'}{$1} = $2;
 			next;
 		}
@@ -216,13 +216,13 @@ sub _parse_scenario {
 		if ($current_rule =~ /\s*(include\s*\(?\'?(.*)\'?\)?)\s*$/i) {
 			$rule->{'condition'} = $1;
 			push(@scenario, $rule);
-		}elsif ($current_rule =~ /^\s*(.*?)\s+((\s*(md5|pgp|smtp|smime|dkim)\s*,?)*)\s*->\s*(.*)\s*$/gi) {
+		} elsif ($current_rule =~ /^\s*(.*?)\s+((\s*(md5|pgp|smtp|smime|dkim)\s*,?)*)\s*->\s*(.*)\s*$/gi) {
 			$rule->{'condition'} = $1;
 			$rule->{'action'} = $5;
 			my $auth_methods = $2 || 'smtp';
 			$auth_methods=~ s/\s//g;
 			@auth_methods_list = split ',', $auth_methods;
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('err', "error rule syntaxe in scenario
 				$function rule line $NR expected : <condition> <auth_mod> -> <action>");
 			Sympa::Log::Syslog::do_log('err',"error parsing $current_rule");
@@ -303,7 +303,7 @@ sub request_action {
 		#activate log if no condition is defined
 		unless (Sympa::Configuration::get_robot_conf($robot,'loging_condition')) {
 			$log_it = 1;
-		}else {
+		} else {
 			#activate log if ip or email match
 			my $loging_conditions = Sympa::Configuration::get_robot_conf($robot,'loging_condition');
 			if ($loging_conditions->{'ip'} =~ /$context->{'remote_addr'}/ || $loging_conditions->{'email'} =~ /$context->{'email'}/i) {
@@ -317,7 +317,7 @@ sub request_action {
 		if ($context->{'list_object'}) {
 			$trace_scenario = 'scenario request '.$operation.' for list '.$context->{'list_object'}{'name'}.'@'.$robot.' :';
 			Sympa::Log::Syslog::do_log('info','Will evaluate scenario %s for list %s@%s',$operation,$context->{'list_object'}{'name'},$robot);
-		}else{
+		} else {
 			$trace_scenario = 'scenario request '.$operation.' for robot '.$robot.' :';
 			Sympa::Log::Syslog::do_log('info','Will evaluate scenario %s for robot %s',$operation,$robot);
 		}
@@ -335,7 +335,7 @@ sub request_action {
 		if ($#operations == 0) {
 			## Simple parameter
 			$scenario_path = $list->{'admin'}{$operation}{'file_path'};
-		}else{
+		} else {
 			## Structured parameter
 			$scenario_path = $list->{'admin'}{$operations[0]}{$operations[1]}{'file_path'} if (defined $list->{'admin'}{$operations[0]});
 		}
@@ -392,7 +392,7 @@ sub request_action {
 				'options' => $context->{'options'});
 		}
 
-	}elsif ($context->{'topicname'}) {
+	} elsif ($context->{'topicname'}) {
 		## Topics
 
 		$scenario = Sympa::Scenario->new('robot' => $robot,
@@ -400,7 +400,7 @@ sub request_action {
 			'name' => $Sympa::List::list_of_topics{$robot}{$context->{'topicname'}}{'visibility'},
 			'options' => $context->{'options'});
 
-	}else{
+	} else {
 		## Global scenario (ie not related to a list) ; example : create_list
 
 		my $p = Sympa::Configuration::get_robot_conf($robot, $operation);
@@ -511,7 +511,7 @@ sub request_action {
 
 				if ($4 eq 'quiet') {
 					$action = 'reject,quiet';
-				} else{
+				} else {
 					$action = 'reject';
 				}
 				my @param = split /,/,$2;
@@ -521,7 +521,7 @@ sub request_action {
 						$return->{'reason'} = $1;
 						next;
 
-					}elsif ($p =~ /^tt2=\'?(\w+)\'?/){
+					} elsif ($p =~ /^tt2=\'?(\w+)\'?/){
 						$return->{'tt2'} = $1;
 						next;
 
@@ -557,7 +557,7 @@ sub request_action {
 				}
 				return $return;
 			}
-		}else {
+		} else {
 			if ($log_it){
 				Sympa::Log::Syslog::do_log('info', 'Context does not use auth method %s',$rule->{'auth_method'});
 			}
@@ -626,7 +626,7 @@ sub verify {
 		unless (($header->get('to') && (join(', ', $header->get('to')) =~ /$context->{'listname'}/i)) ||
 			($header->get('cc') && (join(', ', $header->get('cc')) =~ /$context->{'listname'}/i))) {
 			$context->{'is_bcc'} = 1;
-		}else{
+		} else {
 			$context->{'is_bcc'} = 0;
 		}
 
@@ -676,7 +676,7 @@ sub verify {
 			if (my $conf_value = Sympa::Configuration::get_robot_conf($robot, $1)) {
 
 				$value =~ s/\[conf\-\>([\w\-]+)\]/$conf_value/;
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('debug',"undefine variable context $value in rule $condition");
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"undefine variable context $value in rule $condition");
@@ -686,18 +686,18 @@ sub verify {
 			}
 
 			## List param
-		}elsif ($value =~ /\[list\-\>([\w\-]+)\]/i) {
+		} elsif ($value =~ /\[list\-\>([\w\-]+)\]/i) {
 			my $param = $1;
 
 			if ($param =~ /^(name|total)$/) {
 				$value =~ s/\[list\-\>([\w\-]+)\]/$list->{$param}/;
-			}elsif ($param eq 'address') {
+			} elsif ($param eq 'address') {
 				my $list_address = $list->get_list_address();
 				$value =~ s/\[list\-\>([\w\-]+)\]/$list_address/;
 
-			}elsif ($list->{'admin'}{$param} and (!ref($list->{'admin'}{$param})) ) {
+			} elsif ($list->{'admin'}{$param} and (!ref($list->{'admin'}{$param})) ) {
 				$value =~ s/\[list\-\>([\w\-]+)\]/$list->{'admin'}{$param}/;
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('err','Unknown list parameter %s in rule %s', $value, $condition);
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','Unknown list parameter %s in rule %s', $value, $condition);
@@ -705,28 +705,28 @@ sub verify {
 				return undef;
 			}
 
-		}elsif ($value =~ /\[env\-\>([\w\-]+)\]/i) {
+		} elsif ($value =~ /\[env\-\>([\w\-]+)\]/i) {
 
 			$value =~ s/\[env\-\>([\w\-]+)\]/$ENV{$1}/;
 
 			## Sender's user/subscriber attributes (if subscriber)
-		}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
+		} elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
 
 			$context->{'user'} ||= Sympa::List::get_global_user($context->{'sender'});
 			$value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
 
-		}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
+		} elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 
 			$context->{'user'} ||= Sympa::List::get_global_user($context->{'sender'});
 			$value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
 
-		}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
+		} elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
 
 			$context->{'subscriber'} ||= $list->get_list_member($context->{'sender'});
 			$value =~ s/\[subscriber\-\>([\w\-]+)\]/$context->{'subscriber'}{$1}/;
 
 			## SMTP Header field
-		}elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
+		} elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
 			my $field_name = $2;
 			if (defined ($context->{'msg'})) {
 				my $header = $context->{'msg'}->head;
@@ -740,14 +740,14 @@ sub verify {
 				}
 
 				$value = \@fields;
-			}else {
+			} else {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','no message object found to evaluate rule %s', $condition);
 				}
 				return -1 * $negation;
 			}
 
-		}elsif ($value =~ /\[msg_body\]/i) {
+		} elsif ($value =~ /\[msg_body\]/i) {
 			unless (defined ($context->{'msg'}) && defined ($context->{'msg'}->effective_type() =~ /^text/) && defined ($context->{'msg'}->bodyhandle)) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','no proper textual message body to evaluate rule %s', $condition);
@@ -757,7 +757,7 @@ sub verify {
 
 			$value = $context->{'msg'}->bodyhandle->as_string();
 
-		}elsif ($value =~ /\[msg_part\-\>body\]/i) {
+		} elsif ($value =~ /\[msg_part\-\>body\]/i) {
 			unless (defined ($context->{'msg'})) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','no message to evaluate rule %s', $condition);
@@ -775,7 +775,7 @@ sub verify {
 			}
 			$value = \@bodies;
 
-		}elsif ($value =~ /\[msg_part\-\>type\]/i) {
+		} elsif ($value =~ /\[msg_part\-\>type\]/i) {
 			unless (defined ($context->{'msg'})) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','no message to evaluate rule %s', $condition);
@@ -789,16 +789,16 @@ sub verify {
 			}
 			$value = \@types;
 
-		}elsif ($value =~ /\[current_date\]/i) {
+		} elsif ($value =~ /\[current_date\]/i) {
 			my $time = time;
 			$value =~ s/\[current_date\]/$time/;
 
 			## Quoted string
-		}elsif ($value =~ /\[(\w+)\]/i) {
+		} elsif ($value =~ /\[(\w+)\]/i) {
 
 			if (defined ($context->{$1})) {
 				$value =~ s/\[(\w+)\]/$context->{$1}/i;
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('debug',"undefine variable context $value in rule $condition");
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"undefine variable context $value in rule $condition");
@@ -807,7 +807,7 @@ sub verify {
 				return -1 * $negation;
 			}
 
-		}elsif ($value =~ /^'(.*)'$/ || $value =~ /^"(.*)"$/) {
+		} elsif ($value =~ /^'(.*)'$/ || $value =~ /^"(.*)"$/) {
 			$value = $1;
 		}
 		push (@args,$value);
@@ -824,24 +824,24 @@ sub verify {
 			return undef ;
 		}
 		# condition that require 1 argument
-	}elsif ($condition_key =~ /^(is_listmaster|verify_netmask)$/) {
+	} elsif ($condition_key =~ /^(is_listmaster|verify_netmask)$/) {
 		unless ($#args == 0) {
 			Sympa::Log::Syslog::do_log('err',"error rule syntaxe : incorrect argument number for condition $condition_key") ;
 			return undef ;
 		}
 		# condition that require 1 or 2 args (search : historical reasons)
-	}elsif ($condition_key =~ /^search$/o) {
+	} elsif ($condition_key =~ /^search$/o) {
 		unless ($#args == 1 || $#args == 0) {
 			Sympa::Log::Syslog::do_log('err',"error rule syntaxe : Incorrect argument number for condition $condition_key") ;
 			return undef ;
 		}
 		# condition that require 2 args
-	}elsif ($condition_key =~ /^(is_owner|is_editor|is_subscriber|less_than|match|equal|message|newer|older)$/o) {
+	} elsif ($condition_key =~ /^(is_owner|is_editor|is_subscriber|less_than|match|equal|message|newer|older)$/o) {
 		unless ($#args == 1) {
 			Sympa::Log::Syslog::do_log('err',"error rule syntaxe : incorrect argument number (%d instead of %d) for condition $condition_key", $#args+1, 2) ;
 			return undef ;
 		}
-	}elsif ($condition_key !~ /^customcondition::/o) {
+	} elsif ($condition_key !~ /^customcondition::/o) {
 		Sympa::Log::Syslog::do_log('err', "error rule syntaxe : unknown condition $condition_key");
 		return undef;
 	}
@@ -869,7 +869,7 @@ sub verify {
 				Sympa::Log::Syslog::do_log('info','%s is listmaster of robot %s (rule %s)',$args[0],$robot,$condition);
 			}
 			return $negation;
-		}else{
+		} else {
 			if ($log_it == 1) {
 				Sympa::Log::Syslog::do_log('info','%s is not listmaster of robot %s (rule %s)',$args[0],$robot,$condition);
 			}
@@ -898,7 +898,7 @@ sub verify {
 				Sympa::Log::Syslog::do_log('info','REMOTE_ADDR %s matches %s (rule %s)',$ENV{'REMOTE_ADDR'},$args[0],$condition);
 			}
 			return $negation;
-		}else{
+		} else {
 			if ($log_it == 1) {
 				Sympa::Log::Syslog::do_log('info','REMOTE_ADDR %s does not match %s (rule %s)',$ENV{'REMOTE_ADDR'},$args[0],$condition);
 			}
@@ -919,7 +919,7 @@ sub verify {
 				Sympa::Log::Syslog::do_log('info','%s is smaller than %s (rule %s)',$arg0, $arg1,$condition);
 			}
 			return $negation;
-		}else{
+		} else {
 			if ($log_it == 1) {
 				Sympa::Log::Syslog::do_log('info','%s is NOT smaller than %s (rule %s)',$arg0, $arg1,$condition);
 			}
@@ -942,7 +942,7 @@ sub verify {
 		## The list is local or in another local robot
 		if ($args[0] =~ /\@/) {
 			$list2 = Sympa::List->new(name => $args[0]);
-		}else {
+		} else {
 			$list2 = Sympa::List->new(name => $args[0], robot => $robot);
 		}
 
@@ -958,33 +958,33 @@ sub verify {
 					Sympa::Log::Syslog::do_log('info',"%s is member of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
 				return $negation ;
-			}else{
+			} else {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"%s is NOT member of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
 				return -1 * $negation ;
 			}
 
-		}elsif ($condition_key eq 'is_owner') {
+		} elsif ($condition_key eq 'is_owner') {
 			if ($list2->am_i('owner',$args[1])) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"%s is owner of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
 				return $negation ;
-			}else{
+			} else {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"%s is NOT owner of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
 				return -1 * $negation ;
 			}
 
-		}elsif ($condition_key eq 'is_editor') {
+		} elsif ($condition_key eq 'is_editor') {
 			if ($list2->am_i('editor',$args[1])) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"%s is editor of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
 				return $negation ;
-			}else{
+			} else {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"%s is NOT editor of list %s (rule %s)",$args[1],$args[0],$condition);
 				}
@@ -1044,20 +1044,20 @@ sub verify {
 					foreach my $arg (@{$args[0]}) {
 						$args_as_string .= "$arg, ";
 					}
-				}else{
+				} else {
 					$args_as_string = $args[0];
 				}
 				Sympa::Log::Syslog::do_log('info',"'%s' matches regexp '%s' (rule %s)",$args_as_string,$regexp,$condition);
 			}
 			return $negation;
-		}else{
+		} else {
 			if ($log_it == 1) {
 				my $args_as_string = '';
 				if (ref($args[0])) {
 					foreach my $arg (@{$args[0]}) {
 						$args_as_string .= "$arg, ";
 					}
-				}else{
+				} else {
 					$args_as_string = $args[0];
 				}
 				Sympa::Log::Syslog::do_log('info',"'%s' does not match regexp '%s' (rule %s)",$args_as_string,$regexp,$condition);
@@ -1072,7 +1072,7 @@ sub verify {
 		# we could search in the family if we got ref on Family object
 		if (defined $list){
 			$val_search = search($args[0],$context,$robot,$list);
-		}else {
+		} else {
 			$val_search = search($args[0],$context,$robot);
 		}
 		return undef unless defined $val_search;
@@ -1081,7 +1081,7 @@ sub verify {
 				Sympa::Log::Syslog::do_log('info',"'%s' found in '%s', robot %s (rule %s)",$context->{'sender'},$args[0],$robot,$condition);
 			}
 			return $negation;
-		}else {
+		} else {
 			if ($log_it == 1) {
 				Sympa::Log::Syslog::do_log('info',"'%s' NOT found in '%s', robot %s (rule %s)",$context->{'sender'},$args[0],$robot,$condition);
 			}
@@ -1137,7 +1137,7 @@ sub verify {
 			}
 			if ($res == 1) {
 				Sympa::Log::Syslog::do_log('info',"'%s' verifies custom condition '%s' (rule %s)",$args_as_string,$condition,$condition);
-			}else {
+			} else {
 				Sympa::Log::Syslog::do_log('info',"'%s' does not verify custom condition '%s' (rule %s)",$args_as_string,$condition,$condition);
 			}
 		}
@@ -1156,7 +1156,7 @@ sub verify {
 					return $negation;
 				}
 			}
-		}else {
+		} else {
 			if (Sympa::Tools::Data::smart_lessthan($args[0], $args[1])) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info',"'%s' is less than '%s' (rule %s)",$args[0], $args[1],$condition);
@@ -1224,7 +1224,7 @@ sub search {
 				$filter =~ s/\[$full_var\]/$context->{$var}{$key}/;
 				$statement =~ s/\[$full_var\]/\%s/;
 				push @statement_args, $context->{$var}{$key};
-			}else { ## Scalar
+			} else { ## Scalar
 				$filter =~ s/\[$full_var\]/$context->{$var}/;
 				$statement =~ s/\[$full_var\]/\%s/;
 				push @statement_args, $context->{$var};
@@ -1265,13 +1265,13 @@ sub search {
 
 		if ($res->[0] == 0){
 			$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 0;
-		}else {
+		} else {
 			$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 		}
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
 		return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
-	}elsif ($filter_file =~ /\.ldap$/) {
+	} elsif ($filter_file =~ /\.ldap$/) {
 		## Determine full path of the filter file
 		my $file = Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 
@@ -1305,7 +1305,7 @@ sub search {
 				}
 
 				$filter =~ s/\[$full_var\]/$context->{$var}{$key}/;
-			}else { ## Scalar
+			} else { ## Scalar
 				$filter =~ s/\[$full_var\]/$context->{$var}/;
 
 			}
@@ -1348,7 +1348,7 @@ sub search {
 	if ($mesg->count() == 0){
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 0;
 
-	}else {
+	} else {
 		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 	}
 
@@ -1357,7 +1357,7 @@ sub search {
 
 	return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
-}elsif($filter_file =~ /\.txt$/){
+} elsif($filter_file =~ /\.txt$/){
 	# Sympa::Log::Syslog::do_log('info', 'Sympa::List::search: eval %s', $filter_file);
 	my @files = Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Sympa::Configuration::Conf{'etc'});
 
@@ -1365,7 +1365,7 @@ sub search {
 	unless (@files) {
 		if ($filter_file eq 'blacklist.txt') {
 			return -1;
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Could not find search filter %s', $filter_file);
 			return undef;
 		}

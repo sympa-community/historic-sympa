@@ -191,7 +191,7 @@ Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration
 if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-}else{
+} else {
 	Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 }
@@ -427,7 +427,7 @@ foreach my $task ( Sympa::Task->get_task_list() ) {
 				$task->remove;
 				next;
 			}
-		}else {
+		} else {
 			unless (defined $list->{'admin'}{$task->{'model'}} &&
 				defined $list->{'admin'}{$task->{'model'}}{'name'}) {
 				Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
@@ -533,7 +533,7 @@ $meta{'robot'}= $robot if $robot;
 if ($list_name) {
 	$meta{'list'}=$list_name ;
 	$meta{'object'}=$list_name.'@'.$robot ;
-}else{
+} else {
 	$meta{'object'}= '_global' ;
 }
 
@@ -786,7 +786,7 @@ sub execute {
 			chk_line ($line, \%result);
 		if ($result{'label'} eq $label) {
 			$labelfound = 1;
-		}else{
+		} else {
 			next;
 		}
 	}
@@ -964,7 +964,7 @@ sub next_cmd {
 				last;
 			}
 		}
-	}else {
+	} else {
 		$type = 'list';
 		my $list = $task->{'list_object'};
 		$data{'list'}{'name'} = $list->{'name'};
@@ -978,7 +978,7 @@ sub next_cmd {
 
 			$data{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 			$model_choice = 'ttl';
-		}else {
+		} else {
 			unless (defined $list->{'admin'}{"$model\_task"}) {
 				error ($task->{'messagekey'}, "List $list->{'name'} no more require $model task");
 				return undef;
@@ -1541,7 +1541,7 @@ return 1;
 	 unless (-d $Sympa::Configuration::Conf{'crl_dir'}) {
 		 if ( mkdir ($Sympa::Configuration::Conf{'crl_dir'}, 0775)) {
 			 Sympa::Log::Syslog::do_log('notice', "creating spool $Sympa::Configuration::Conf{'crl_dir'}");
-		 }else{
+		 } else {
 			 Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory $Sympa::Configuration::Conf{'crl_dir'}");
 			 return undef;
 		 }

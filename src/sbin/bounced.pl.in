@@ -200,7 +200,7 @@ unless ($options->{'stderr_to_tty'}) {
 if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-}else{
+} else {
 	Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 }
@@ -290,7 +290,7 @@ while (!$end) {
 				$distribution_id = $4;
 				$local_part =~ /^(.*)\=\=(.*)$/ ;
 				$local_part = $1;
-			}else{
+			} else {
 				undef $distribution_id ;
 				Sympa::Log::Syslog::do_log('err', 'NOT ID PART in the bounce for :%s', $to);
 			}
@@ -342,7 +342,7 @@ while (!$end) {
 							}
 						}
 					}
-				}else{
+				} else {
 					Sympa::Log::Syslog::do_log ('notice',"Unable to remove $who from $listname (welcome message bounced but del is closed)");
 					$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 				}
@@ -403,7 +403,7 @@ while (!$end) {
 									}
 								}
 							}
-							else{
+							else {
 								($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
 							}
 						}
@@ -457,7 +457,7 @@ while (!$end) {
 
 			if (Sympa::Tracking::db_insert_notification($distribution_id, 'DSN', $dsn_status, $arrival_date,$notification_as_string )) {
 				Sympa::Log::Syslog::do_log('notice', "DSN Correctly treated...");
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('err','Not able to fill database with notification data');
 			}
 			unless($dsn_status =~ /failed/) {
@@ -512,7 +512,7 @@ while (!$end) {
 									}
 								}
 							}
-							else{
+							else {
 								($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
 							}
 						}
@@ -643,7 +643,7 @@ while (!$end) {
 						push @lists, $list;
 					}elsif( $feedback_type =~ /opt-out/ && (defined $original_rcpt)){
 						@lists = Sympa::List::get_which($original_rcpt,$robot,'member');
-					}else {
+					} else {
 						Sympa::Log::Syslog::do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $original_rcpt, $listname );
 						$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 					}
@@ -659,22 +659,22 @@ while (!$end) {
 								unless ($list->send_notify_to_owner('automatic_del',{'who' => $original_rcpt, 'by' => 'listmaster'})) {
 									Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'automatic_del' to $list->{'name'} list owner");
 								}
-							}else{
+							} else {
 								Sympa::Log::Syslog::do_log('err','Ignore Feedback Report (bounce where messagekey =%s) for list %s@%s : user %s not subscribed',$bounce->{'messagekey'},$list->name,$robot,$original_rcpt);
 								unless ($list->send_notify_to_owner('warn-signoff',{'who' => $original_rcpt})) {
 									Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'warn-signoff' to $list->{'name'} list owner");
 								}
 							}
-						}else{
+						} else {
 							$forward = 'request';
 							Sympa::Log::Syslog::do_log('err','Ignore Feedback Report (bounce where messagekey=%s) for list %s@%s : user %s is not allowed to unsubscribe',$bounce->{'messagekey'},$list->name,$robot,$original_rcpt);
 						}
 					}
-				}else{
+				} else {
 					Sympa::Log::Syslog::do_log ('err','Ignoring Feedback Report (bounce where messagekey=%s) : Unknown Original-Rcpt-To field. Can\'t do anything. (feedback_type:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $listname );
 					$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 				}
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log ('err','Ignoring Feedback Report %s : Unknown format (bounce where messagekey=%s), original_rcpt:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $original_rcpt, $listname );
 				$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 			}
@@ -689,7 +689,7 @@ while (!$end) {
 			Sympa::Log::Syslog::do_log('err','Skipping bounce messagekey=%s for unknown list %s@%s',$bounce->{'messagekey'},$listname,$robot);
 			$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 			next;
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('debug',"Processing bounce messagekey=%s for list $listname",$bounce->{'messagekey'});
 
 			my $bounce_dir = $list->get_bounce_dir();
@@ -734,7 +734,7 @@ while (!$end) {
 				if ( $who ) {	# rcpt not recognized in the bounce but VERP was used
 					store_bounce ($bounce_dir,$bounce->{'messageasstring'},$who);
 					update_subscriber_bounce_history($list, 'unknown', $who); # status is undefined
-				}else{          # no VERP and no rcpt recognized
+				} else {          # no VERP and no rcpt recognized
 					my $escaped_from = Sympa::Tools::escape_chars($from);
 					Sympa::Log::Syslog::do_log('info', 'error: no address found in message from %s for list %s',$from, $list->{'name'});
 					$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
@@ -806,7 +806,7 @@ sub canonicalize_status {
 	if ($status !~ /^\d+\.\d+\.\d+$/) {
 		if ($equiv{$status}) {
 			$status = $equiv{$status};
-		}else {
+		} else {
 			return undef;
 		}
 	}
@@ -857,7 +857,7 @@ sub update_subscriber_bounce_history {
 			error_type   => $status,
 			daemon       => 'bounced'
 		);
-	}else{
+	} else {
 		$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status"});
 		Sympa::Log::Syslog::do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list->{'name'});
 		Sympa::Log::Database::do_log(

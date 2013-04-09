@@ -161,7 +161,7 @@ sub get_content {
 	my $sql_where = _sqlselector($selector);
 	if ($self->{'selection_status'} eq 'bad') {
 		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
-	}else{
+	} else {
 		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
 	}
 	$sql_where =~s/^AND//;
@@ -170,7 +170,7 @@ sub get_content {
 	if ($selection eq 'count'){
 		# just return the selected count, not all the values
 		$statement = 'SELECT COUNT(*) ';
-	}else{
+	} else {
 		$statement = 'SELECT '._selectfields($selection);
 	}
 
@@ -189,7 +189,7 @@ sub get_content {
 	if($selection eq 'count') {
 		my @result = $sth->fetchrow_array();
 		return $result[0];
-	}else{
+	} else {
 		my @messages;
 		while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
 			$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
@@ -220,7 +220,7 @@ sub next {
 
 	if ($self->{'selection_status'} eq 'bad') {
 		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
-	}else{
+	} else {
 		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
 	}
 	$sql_where =~ s/^\s*AND//;
@@ -340,14 +340,14 @@ sub update {
 		if (($meta eq 'messagelock')&&($values->{$meta} eq 'NULL')){
 			# SQL set  xx = NULL and set xx = 'NULL' is not the same !
 			$set = $set .$meta.'_spool = NULL';
-		}else{
+		} else {
 			$set = $set .$meta.'_spool = '.Sympa::SDM::quote($values->{$meta});
 		}
 		if ($meta eq 'messagelock') {
 			if ($values->{'messagelock'} eq 'NULL'){
 				# when unlock always reset the lockdate
 				$set =  $set .', lockdate_spool = NULL ';
-			}else{
+			} else {
 				# when setting a lock always set the lockdate
 				$set =  $set .', lockdate_spool = '.Sympa::SDM::quote(time);
 			}
@@ -407,7 +407,7 @@ sub store {
 			$metadata->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
 			$metadata->{'sender'} = substr $metadata->{'sender'}, 0, 109;
 		}
-	}else{
+	} else {
 		$metadata->{'subject'} = '';
 		$metadata->{'messageid'} = '';
 		$metadata->{'sender'} = $sender;
@@ -499,7 +499,7 @@ sub clean {
 	my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($spoolname),Sympa::SDM::quote($freshness_date);
 	if ($bad) {
 		$sqlquery  = 	$sqlquery . " AND bad_spool IS NOTNULL ";
-	}else{
+	} else {
 		$sqlquery  = 	$sqlquery . " AND bad_spool IS NULL ";
 	}
 
@@ -530,7 +530,7 @@ sub _selectfields{
 			$var =~ s/\_spool//;
 			$select = $select . $field .' AS '.$var.',';
 		}
-	}else{
+	} else {
 		my @fields = split (/,/,$selection);
 		foreach my $field (@fields){
 			$select = $select . $field .'_spool AS '.$field.',';
@@ -559,7 +559,7 @@ sub _sqlselector {
 
 		if ($sqlselector) {
 			$sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
-		}else{
+		} else {
 			$sqlselector = ' '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
 		}
 	}

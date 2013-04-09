@@ -353,7 +353,7 @@ sub _add_lock {
 		$lock->{'fh'}       = $fh;
 		$lock->{'mode'}     = $mode;
 		$lock->{'nfs_lock'} = $nfs_lock;
-	}else {
+	} else {
 		$fh = _lock_file($self->{'lock_filename'}, $mode, $timeout);
 		return undef unless (defined $fh);
 		$lock->{'fh'}       = $fh;
@@ -381,7 +381,7 @@ sub _remove_lock {
 			$locks{$self->{'lock_filename'}} = undef;
 			return undef;
 		}
-	}else {
+	} else {
 		unless (defined $fh && _unlock_file($self->{'lock_filename'}, $fh)) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to unlock %s', $self->{'lock_filename'});
 			# Clean the list of locks anyway
@@ -404,7 +404,7 @@ sub _lock_file {
 	if ($mode eq 'read') {
 		$operation = LOCK_SH;
 		$open_mode = '<';
-	}else {
+	} else {
 		$operation = LOCK_EX;
 		$open_mode = '>';
 	}
@@ -458,7 +458,7 @@ sub _lock_file {
 		if ($mode eq 'write') {
 			print $fh "$PID\n";
 		}
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err', 'Failed locking %s: %s', $lock_file, $ERRNO);
 		return undef;
 	}
@@ -494,7 +494,7 @@ sub _lock_nfs {
 	if ($mode eq 'read') {
 		$operation = LOCK_SH;
 		$open_mode = '<';
-	}else {
+	} else {
 		$operation = LOCK_EX;
 		$open_mode = '>>';
 	}

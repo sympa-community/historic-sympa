@@ -122,11 +122,11 @@ sub createHash {
 			foreach my $k (keys %$hash) {
 				if ($k eq "type") { ## the list template creation without family context
 					$self->{'type'} = $hash->{'type'};
-				}else {
+				} else {
 					$self->{'config'}{$k} = $hash->{$k};
 				}
 			}
-		}elsif ($hash ne "") { # a string
+		} elsif ($hash ne "") { # a string
 			Sympa::Log::Syslog::do_log('err','the list\'s children are not homogeneous');
 			return undef;
 		}
@@ -253,7 +253,7 @@ if ($nodeName eq "type") {## the list template creation without family context
 	$value =~ s/\s*$//;
 	$self->{$nodeName} = $value;
 
-}else {
+} else {
 	my $values = _getChildren($node);
 	unless (defined $values) {
 		Sympa::Log::Syslog::do_log('err','error on _getChildren(%s) ',$node->nodeName);
@@ -264,7 +264,7 @@ if ($nodeName eq "type") {## the list template creation without family context
 		foreach my $k (keys %$values) {
 			$self->{'config'}{$nodeName}{$k} = $values->{$k};
 		}
-	}else {
+	} else {
 		$self->{'config'}{$nodeName} = $values;
 	}
 }
@@ -315,12 +315,12 @@ foreach my $child (@nodeList) {
 			push @{$multiple_nodes->{$childName}},$values;
 
 			## single
-		}else {
+		} else {
 			if (ref($values) eq "HASH") {
 				foreach my $k (keys %$values) {
 					$hash->{$childName}{$k} = $values->{$k};
 				}
-			}else {
+			} else {
 				$hash->{$childName} = $values;
 			}
 		}
@@ -331,7 +331,7 @@ foreach my $child (@nodeList) {
 		$return = "hash";
 
 		# TEXT_NODE
-	}elsif ($type == 3) {
+	} elsif ($type == 3) {
 		my $value = Encode::encode_utf8($child->nodeValue);
 		$value =~ s/^\s+//;
 		unless ($value eq "") {
@@ -344,7 +344,7 @@ foreach my $child (@nodeList) {
 
 
 		# CDATA_SECTION_NODE
-	}elsif ($type == 4) {
+	} elsif ($type == 4) {
 		$string = $string . Encode::encode_utf8($child->nodeValue);
 		if ($return eq "hash") {
 			$error = 1;

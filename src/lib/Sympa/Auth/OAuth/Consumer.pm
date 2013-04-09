@@ -217,7 +217,7 @@ sub fetch_ressource {
 					$self->trigger_flow();
 				}
 				return undef;
-			}else{
+			} else {
 				# another auth error.
 				return undef;
 			}
@@ -297,7 +297,7 @@ sub trigger_flow {
 			Sympa::Log::Syslog::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;
 		}
-	}else{
+	} else {
 		unless(Sympa::SDM::do_query('INSERT INTO oauthconsumer_sessions_table(user_oauthconsumer, provider_oauthconsumer, tmp_token_oauthconsumer, tmp_secret_oauthconsumer) VALUES (%s, %s, %s, %s)', Sympa::SDM::quote($self->{'user'}), Sympa::SDM::quote($self->{'provider'}), Sympa::SDM::quote($tmp->{'token'}), Sympa::SDM::quote($tmp->{'secret'}))) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to add new token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;

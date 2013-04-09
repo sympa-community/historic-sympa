@@ -147,7 +147,7 @@ sub lists {
 		my $listInfo;
 		if ($mode eq 'complex') {
 			$listInfo = struct_to_soap($result_item);
-		}else {
+		} else {
 			$listInfo = struct_to_soap($result_item, 'as_string');
 		}
 
@@ -155,7 +155,7 @@ sub lists {
 		if (!$topic) {
 			push @result, $listInfo;
 
-		}elsif ($list->{'admin'}{'topics'}) {
+		} elsif ($list->{'admin'}{'topics'}) {
 			foreach my $list_topic (@{$list->{'admin'}{'topics'}}) {
 				my @tree = split '/', $list_topic;
 
@@ -164,7 +164,7 @@ sub lists {
 
 				push @result, $listInfo;
 			}
-		}elsif ($topic  eq 'topicsless') {
+		} elsif ($topic  eq 'topicsless') {
 			push @result, $listInfo;
 		}
 	}
@@ -562,14 +562,14 @@ sub amI {
 	if ($list) {
 		if ($function eq 'subscriber') {
 			return SOAP::Data->name('result')->type('boolean')->value($list->is_list_member($user));
-		}elsif ($function =~ /^owner|editor$/) {
+		} elsif ($function =~ /^owner|editor$/) {
 			return SOAP::Data->name('result')->type('boolean')->value($list->am_i($function, $user));
-		}else {
+		} else {
 			die SOAP::Fault->faultcode('Server')
 			->faultstring('Unknown function.')
 			->faultdetail("Function $function unknown");
 		}
-	}else {
+	} else {
 		die SOAP::Fault->faultcode('Server')
 		->faultstring('Unknown list.')
 		->faultdetail("List $listname unknown");
@@ -784,7 +784,7 @@ sub createList {
 
 	if ($r_action =~ /listmaster/i) {
 		$params->{'status'} = 'pending' ;
-	}elsif  ($r_action =~ /do_it/i) {
+	} elsif  ($r_action =~ /do_it/i) {
 		$params->{'status'} = 'open' ;
 	}
 
@@ -801,7 +801,7 @@ sub createList {
 	if ($params->{'create_action'} =~ /notify/) {
 		if(Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
 			Sympa::Log::Syslog::do_log('info','notify listmaster for list creation');
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'request_list_creation' to listmaster");
 		}
 	}
@@ -865,10 +865,10 @@ sub closeList {
 		die SOAP::Fault->faultcode('Client')
 		->faultstring('list allready closed')
 		->faultdetail("list $listname all ready closed");
-	}elsif($list->{'admin'}{'status'} eq 'pending') {
+	} elsif($list->{'admin'}{'status'} eq 'pending') {
 		Sympa::Log::Syslog::do_log('info','do_close_list: closing a pending list makes it purged');
 		$list->purge($sender);
-	}else{
+	} else {
 		$list->close_list($sender);
 		Sympa::Log::Syslog::do_log('info','do_close_list: list %s closed',$listname);
 	}
@@ -970,7 +970,7 @@ sub add {
 		->faultstring('Unable to add user')
 		->faultdetail($error);
 
-	}else {
+	} else {
 		my $u;
 		my $defaults = $list->get_default_user_options();
 		my $u2 = Sympa::List::get_user_db($email);
@@ -1315,7 +1315,7 @@ sub fullReview {
 			$user->{'email'} =~ y/A-Z/a-z/;
 			if(defined $members->{$user->{'email'}}) {
 				$members->{$user->{'email'}}{'isEditor'} = 1;
-			}else{
+			} else {
 				my $res;
 				$res->{'email'} = $user->{'email'};
 				$res->{'gecos'} = $user->{'gecos'};
@@ -1333,7 +1333,7 @@ sub fullReview {
 			$user->{'email'} =~ y/A-Z/a-z/;
 			if(defined $members->{$user->{'email'}}) {
 				$members->{$user->{'email'}}{'isOwner'} = 1;
-			}else{
+			} else {
 				my $res;
 				$res->{'email'} = $user->{'email'};
 				$res->{'gecos'} = $user->{'gecos'};
@@ -1594,7 +1594,7 @@ sub subscribe {
 			->faultstring('Undef.')
 			->faultdetail("update user failed" )
 			unless $list->update_list_member($sender, $user);
-		}else {
+		} else {
 
 			my $u;
 			my $defaults = $list->get_default_user_options();
@@ -1787,7 +1787,7 @@ sub which {
 		my $listInfo;
 		if ($mode eq 'complex') {
 			$listInfo = struct_to_soap($result_item);
-		}else {
+		} else {
 			$listInfo = struct_to_soap($result_item, 'as_string');
 		}
 		push @result, $listInfo;
@@ -1843,7 +1843,7 @@ sub struct_to_soap {
 
 		$formated_data = join ';', @all;
 		$soap_data = SOAP::Data->type('string')->value($formated_data);
-	}else {
+	} else {
 		my $formated_data;
 		foreach my $k (keys %$data) {
 			$formated_data->{$k} = SOAP::Data->name($k)->type($types{'listType'}{$k})->value($data->{$k});

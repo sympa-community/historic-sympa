@@ -270,7 +270,7 @@ sub get_group_members {
 
 		if(ref($r) ne 'HASH' || $r->{'action'} !~ /do_it/i) {
 			$self->{'error'} = '403 Forbiden';
-		}else{
+		} else {
 			for(my $user = $list->get_first_list_member(); $user; $user = $list->get_next_list_member()) {
 				push(@entries, $self->_subscriber_to_member($user, 'member'));
 			}

@@ -119,7 +119,7 @@ sub db_get_handler {
 
 	if(check_db_connect()) {
 		return $db_source->{'dbh'};
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 		return undef;
 	}
@@ -221,7 +221,7 @@ sub probe_db {
 	my $list_of_tables;
 	if ($list_of_tables = $db_source->get_tables()) {
 		@tables = @{$list_of_tables};
-	}else{
+	} else {
 		@tables = ();
 	}
 
@@ -288,13 +288,13 @@ sub probe_db {
 				if ($db_source->set_autoinc('table'=>$table,'field'=>$autoincrement{$table},
 						'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'})){
 					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
-				}else{
+				} else {
 					Sympa::Log::Syslog::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
 					return undef;
 				}
 			}
 		}
-	} else{
+	} else {
 		Sympa::Log::Syslog::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
 		return undef;
 	}
@@ -337,7 +337,7 @@ sub check_fields {
 				)){
 				push @{$report_ref}, $rep;
 
-			}else {
+			} else {
 				Sympa::Log::Syslog::do_log('err', 'Addition of fields in database failed. Aborting.');
 				return undef;
 			}
@@ -360,12 +360,12 @@ sub check_fields {
 						'notnull' => $not_null{$f},
 					)){
 					push @{$report_ref}, $rep;
-				}else {
+				} else {
 					Sympa::Log::Syslog::do_log('err', 'Fields update in database failed. Aborting.');
 					return undef;
 				}
 			}
-		}else {
+		} else {
 			unless ($real_struct{$t}{$f} eq $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f}) {
 				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
@@ -404,9 +404,9 @@ sub check_primary_key {
 			if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
 				push @{$report_ref}, $rep;
 			}
-		}elsif($should_update->{'existing_key_correct'}) {
+		} elsif($should_update->{'existing_key_correct'}) {
 			Sympa::Log::Syslog::do_log('debug',"Existing key correct (%s) nothing to change",$key_as_string);
-		}else{
+		} else {
 			## drop previous primary key
 			my $rep = undef;
 			if ($rep = $db_source->unset_primary_key('table'=>$t)) {
@@ -418,7 +418,7 @@ sub check_primary_key {
 				push @{$report_ref}, $rep;
 			}
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$t);
 		## drop previous primary key
 		my $rep = undef;
@@ -482,9 +482,9 @@ sub check_indexes {
 				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
 					push @{$report_ref}, $rep;
 				}
-			}elsif($index_check->{'existing_key_correct'}) {
+			} elsif($index_check->{'existing_key_correct'}) {
 				Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
-			}else{
+			} else {
 				## drop previous index
 				Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
 				my $rep = undef;
@@ -497,7 +497,7 @@ sub check_indexes {
 					push @{$report_ref}, $rep;
 				}
 			}
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$t,$idx);
 			## drop previous index
 			my $rep = undef;
@@ -601,10 +601,10 @@ sub quote {
 
 	if (defined $db_source) {
 		return $db_source->quote($param);
-	}else{
+	} else {
 		if(check_db_connect()) {
 			return $db_source->quote($param);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 			return undef;
 		}
@@ -622,10 +622,10 @@ sub get_substring_clause {
 
 	if (defined $db_source) {
 		return $db_source->get_substring_clause(%params);
-	}else{
+	} else {
 		if(check_db_connect()) {
 			return $db_source->get_substring_clause(%params);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 			return undef;
 		}
@@ -643,10 +643,10 @@ sub get_limit_clause {
 
 	if (defined $db_source) {
 		return ' '.$db_source->get_limit_clause(%params).' ';
-	}else{
+	} else {
 		if(check_db_connect()) {
 			return ' '.$db_source->get_limit_clause(%params).' ';
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 			return undef;
 		}
@@ -675,10 +675,10 @@ sub get_canonical_write_date {
 
 	if (defined $db_source) {
 		return $db_source->get_canonical_write_date($param);
-	}else{
+	} else {
 		if(check_db_connect()) {
 			return $db_source->get_canonical_write_date($param);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 			return undef;
 		}
@@ -707,10 +707,10 @@ sub get_canonical_read_date {
 
 	if (defined $db_source) {
 		return $db_source->get_canonical_read_date($param);
-	}else{
+	} else {
 		if(check_db_connect()) {
 			return $db_source->get_canonical_read_date($param);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
 			return undef;
 		}

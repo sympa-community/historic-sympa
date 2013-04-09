@@ -185,9 +185,9 @@ sub load_config {
 			$v =~ s/\s*$//;
 			if (defined ($conf->{$k})) {
 				$conf->{$k} = $v;
-			}elsif (defined $old_param{$k}) {
+			} elsif (defined $old_param{$k}) {
 				Sympa::Log::Syslog::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
-			}else {
+			} else {
 				Sympa::Log::Syslog::do_log('err',"Unknown parameter %s in %s", $k, $file);
 			}
 		}
@@ -224,7 +224,7 @@ sub get_my_url {
 	## Mod_ssl sets SSL_PROTOCOL ; apache-ssl sets SSL_PROTOCOL_VERSION
 	if ($ENV{'HTTPS'} eq 'on') {
 		$return_url = 'https';
-	}else{
+	} else {
 		$return_url = 'http';
 	}
 

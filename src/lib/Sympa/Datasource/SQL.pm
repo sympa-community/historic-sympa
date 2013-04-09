@@ -225,7 +225,7 @@ sub establish_connection {
 	## Build connect_string
 	if ($self->{'f_dir'}) {
 		$self->{'connect_string'} = "DBI:CSV:f_dir=$self->{'f_dir'}";
-	}else {
+	} else {
 		$self->build_connect_string();
 	}
 	if ($self->{'db_options'}) {
@@ -244,7 +244,7 @@ sub establish_connection {
 		$self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'};
 		return $db_connections{$self->{'connect_string'}}{'dbh'};
 
-	}else {
+	} else {
 
 		## Set environment variables
 		## Used by Oracle (ORACLE_HOME)
@@ -271,7 +271,7 @@ sub establish_connection {
 			}
 			if ($self->{'reconnect_options'}{'keep_trying'}) {
 				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $self->{'connect_string'}, $self->{'db_user'});
-			} else{
+			} else {
 				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $self->{'connect_string'}, $self->{'db_user'});
 				$db_connections{$self->{'connect_string'}}{'status'} = 'failed';
 				$db_connections{$self->{'connect_string'}}{'first_try'} ||= time;
@@ -303,9 +303,9 @@ sub establish_connection {
 			$self->{'db_type'} eq 'pg') {
 			Sympa::Log::Syslog::do_log('debug','Setting client encoding to UTF-8');
 			$self->{'dbh'}->do("SET NAMES 'utf8'");
-		}elsif ($self->{'db_type'} eq 'oracle') {
+		} elsif ($self->{'db_type'} eq 'oracle') {
 			$ENV{'NLS_LANG'} = 'UTF8';
-		}elsif ($self->{'db_type'} eq 'sybase') {
+		} elsif ($self->{'db_type'} eq 'sybase') {
 			$ENV{'SYBASE_CHARSET'} = 'utf8';
 		}
 
@@ -359,7 +359,7 @@ sub do_query {
 		unless($self->connect()) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 			return undef;
-		}else {
+		} else {
 			unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
 				my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
 				Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
@@ -372,13 +372,13 @@ sub do_query {
 		unless($self->connect()) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 			return undef;
-		}else {
+		} else {
 			unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
 				# Check connection to database in case it would be the cause of the problem.
 				unless($self->connect()) {
 					Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 					return undef;
-				}else {
+				} else {
 					unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
 						my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
 						Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
@@ -424,7 +424,7 @@ sub do_prepared_query {
 			unless($self->connect()) {
 				Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 				return undef;
-			}else {
+			} else {
 				unless ($sth = $self->{'dbh'}->prepare($query)) {
 					Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
 					return undef;
@@ -432,7 +432,7 @@ sub do_prepared_query {
 			}
 		}
 		$self->{'cached_prepared_statements'}{$query} = $sth;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('debug3','Reusing prepared statement for %s',$query);
 	}
 	unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
@@ -440,12 +440,12 @@ sub do_prepared_query {
 		unless($self->connect()) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 			return undef;
-		}else {
+		} else {
 			unless ($sth = $self->{'dbh'}->prepare($query)) {
 				unless($self->connect()) {
 					Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 					return undef;
-				}else {
+				} else {
 					unless ($sth = $self->{'dbh'}->prepare($query)) {
 						Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
 						return undef;
@@ -513,7 +513,7 @@ sub fetch {
 	if ( $EVAL_ERROR eq "TIMEOUT\n" ) {
 		Sympa::Log::Syslog::do_log('err','Fetch timeout on remote SQL database');
 		return undef;
-	}elsif ($EVAL_ERROR) {
+	} elsif ($EVAL_ERROR) {
 		Sympa::Log::Syslog::do_log('err','Fetch failed on remote SQL database');
 		return undef;
 	}
@@ -706,7 +706,7 @@ sub check_key {
 	my $result;
 	if (lc($params{'key_name'}) eq 'primary') {
 		return undef unless ($keysFound = $self->get_primary_key('table'=>$params{'table'}));
-	}else {
+	} else {
 		return undef unless ($keysFound = $self->get_indexes('table'=>$params{'table'}));
 		$keysFound = $keysFound->{$params{'key_name'}};
 	}
@@ -714,7 +714,7 @@ sub check_key {
 	my @keys_list = keys %{$keysFound};
 	if ($#keys_list < 0) {
 		$result->{'empty'}=1;
-	}else{
+	} else {
 		$result->{'existing_key_correct'} = 1;
 		my %expected_keys;
 		foreach my $expected_field (@{$params{'expected_keys'}}){

@@ -308,7 +308,7 @@ sub check_signature {
 			if ($cert->{'purpose'}{'sign'} && $cert->{'purpose'}{'enc'}) {
 				$certs{'both'} = $cert_string;
 				Sympa::Log::Syslog::do_log('debug', 'Found a signing + encryption cert');
-			}elsif ($cert->{'purpose'}{'sign'}) {
+			} elsif ($cert->{'purpose'}{'sign'}) {
 				$certs{'sign'} = $cert_string;
 				Sympa::Log::Syslog::do_log('debug', 'Found a signing cert');
 			} elsif($cert->{'purpose'}{'enc'}) {
@@ -331,7 +331,7 @@ sub check_signature {
 	unless (-d $params{cert_dir}) {
 		if ( mkdir ($params{cert_dir}, 0775)) {
 			Sympa::Log::Syslog::do_log('info', "creating spool $params{cert_dir}");
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err', "Unable to create user certificat directory $params{cert_dir}");
 		}
 	}
@@ -347,7 +347,7 @@ sub check_signature {
 		if ($category ne 'both') {
 			unlink($cert_file); # just in case there's an old cert left...
 			$cert_file .= "\@$category";
-		}else {
+		} else {
 			unlink("$cert_file\@enc");
 			unlink("$cert_file\@sign");
 		}
@@ -623,7 +623,7 @@ sub smime_find_keys {
 	while (my $fn = readdir(D)) {
 		if ($fn =~ /^cert\.pem/) {
 			$certs{"$dir/$fn"} = 1;
-		}elsif ($fn =~ /^private_key/) {
+		} elsif ($fn =~ /^private_key/) {
 			$keys{"$dir/$fn"} = 1;
 		}
 	}
@@ -651,7 +651,7 @@ sub smime_find_keys {
 	if ($oper eq 'decrypt') {
 		$certs = [ sort keys %certs ];
 		$keys = [ sort keys %keys ];
-	}else {
+	} else {
 		if($certs{"$dir/cert.pem.$ext"}) {
 			$certs = "$dir/cert.pem.$ext";
 			$keys = "$dir/private_key.$ext";
@@ -689,13 +689,13 @@ sub _parse_cert {
 	my $cert_string;
 	if($params{'text'}) {
 		$cert_string = $params{'text'};
-	}elsif ($params{file}) {
+	} elsif ($params{file}) {
 		$cert_string = Sympa::Tools::File::slurp_file($params{file});
 		unless ($cert_string) {
 			Sympa::Log::Syslog::do_log('err', "unable to read %s: $ERRNO", $params{file});
 			return undef;
 		}
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err', '_parse_cert: neither "text" nor "file" given');
 		return undef;
 	}
@@ -726,20 +726,20 @@ sub _parse_cert {
 		if ($line =~ /^subject=\s+(\S.+)\s*$/) {
 			$res{'subject'} = $1;
 
-		}elsif (! $res{'subject'} && $line =~ /\@/) {
+		} elsif (! $res{'subject'} && $line =~ /\@/) {
 			my $email_address = lc($line);
 			chomp $email_address;
 			$res{'email'}{$email_address} = 1;
 
 			## Purpose section appears at the end of the output
 			## because options order matters for openssl
-		}elsif ($line =~ /^Certificate purposes:/) {
+		} elsif ($line =~ /^Certificate purposes:/) {
 			$purpose_section = 1;
-		}elsif ($purpose_section) {
+		} elsif ($purpose_section) {
 			if ($line =~ /^S\/MIME signing : (\S+)/) {
 				$res{purpose}->{sign} = ($1 eq 'Yes');
 
-			}elsif ($line =~ /^S\/MIME encryption : (\S+)/) {
+			} elsif ($line =~ /^S\/MIME encryption : (\S+)/) {
 				$res{purpose}->{enc} = ($1 eq 'Yes');
 			}
 		}

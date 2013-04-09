@@ -195,7 +195,7 @@ sub create_list_old{
 			}
 		}
 		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
-	}else {
+	} else {
 		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
 	}
 
@@ -299,7 +299,7 @@ $return->{'list'} = $list;
 
 if ($list->{'admin'}{'status'} eq 'open') {
 	$return->{'aliases'} = install_aliases($list,$robot);
-}else{
+} else {
 	$return->{'aliases'} = 1;
 }
 
@@ -447,7 +447,7 @@ sub create_list{
 			}
 		}
 		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
-	}else {
+	} else {
 		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
 	}
 
@@ -555,7 +555,7 @@ sub create_list{
 
 	if ($list->{'admin'}{'status'} eq 'open') {
 		$return->{'aliases'} = install_aliases($list,$robot);
-	}else{
+	} else {
 		$return->{'aliases'} = 1;
 	}
 
@@ -800,9 +800,9 @@ sub rename_list{
 	## Default robot
 	if (-d "$Sympa::Configuration::Conf{'home'}/$params{'new_robot'}") {
 		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params{'new_robot'}.'/'.$params{'new_listname'};
-	}elsif ($params{'new_robot'} eq $Sympa::Configuration::Conf{'domain'}) {
+	} elsif ($params{'new_robot'} eq $Sympa::Configuration::Conf{'domain'}) {
 		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params{'new_listname'};
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err',"Unknown robot $params{'new_robot'}");
 		return 'unknown_robot';
 	}
@@ -927,15 +927,15 @@ sub rename_list{
 				my $newfile = $file;
 				if ($file =~ /^$old_listname\_/) {
 					$newfile =~ s/^$old_listname\_/$params{'new_listname'}\_/;
-				}elsif ($file =~ /^$old_listname\./) {
+				} elsif ($file =~ /^$old_listname\./) {
 					$newfile =~ s/^$old_listname\./$params{'new_listname'}\./;
-				}elsif ($file =~ /^$old_listname\@$robot\./) {
+				} elsif ($file =~ /^$old_listname\@$robot\./) {
 					$newfile =~ s/^$old_listname\@$robot\./$params{'new_listname'}\@$params{'new_robot'}\./;
-				}elsif ($file =~ /^$old_listname\@$robot\_/) {
+				} elsif ($file =~ /^$old_listname\@$robot\_/) {
 					$newfile =~ s/^$old_listname\@$robot\_/$params{'new_listname'}\@$params{'new_robot'}\_/;
-				}elsif ($file =~ /^\.$old_listname\@$robot\_/) {
+				} elsif ($file =~ /^\.$old_listname\@$robot\_/) {
 					$newfile =~ s/^\.$old_listname\@$robot\_/\.$params{'new_listname'}\@$params{'new_robot'}\_/;
-				}elsif ($file =~ /\.$old_listname$/) {
+				} elsif ($file =~ /\.$old_listname$/) {
 					$newfile =~ s/\.$old_listname$/\.$params{'new_listname'}/;
 				}
 
@@ -957,7 +957,7 @@ sub rename_list{
 				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}", $ERRNO);
 				next;
 			}
-		}elsif (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot") {
+		} elsif (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot") {
 			unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}\@$params{'new_robot'}") {
 				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}\@$params{'new_robot'}", $ERRNO);
 				next;
@@ -1015,9 +1015,9 @@ sub clone_list_as_empty {
 	my $new_dir;
 	if (-d $Sympa::Configuration::Conf{'home'}.'/'.$new_robot) {
 		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$new_robot.'/'.$new_listname;
-	}elsif ($new_robot eq $Sympa::Configuration::Conf{'domain'}) {
+	} elsif ($new_robot eq $Sympa::Configuration::Conf{'domain'}) {
 		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$new_listname;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
 		return undef;
 	}
@@ -1116,7 +1116,7 @@ sub check_owner_defined {
 				Sympa::Log::Syslog::do_log('err','missing list param owner or owner_include');
 				return undef;
 			}
-		}else {
+		} else {
 			if (!($owner) && !($owner_include)) {
 				Sympa::Log::Syslog::do_log('err','missing list param owner or owner_include');
 				return undef;
@@ -1156,7 +1156,7 @@ sub check_owner_defined {
 				return undef;
 			}
 		}
-	}elsif (ref($owner_include) eq "HASH"){
+	} elsif (ref($owner_include) eq "HASH"){
 		unless ($owner_include->{'source'}) {
 			Sympa::Log::Syslog::do_log('err','missing sub param "source" for param "owner_include"');
 			return undef;
@@ -1287,27 +1287,27 @@ sub install_aliases {
 
 	if ($status == 1) {
 		Sympa::Log::Syslog::do_log('err','Configuration file %s has errors : %s', Sympa::Constants::CONFIG, $error_output);
-	}elsif ($status == 2)  {
+	} elsif ($status == 2)  {
 		Sympa::Log::Syslog::do_log('err','Internal error : Incorrect call to alias_manager : %s', $error_output);
-	}elsif ($status == 3)  {
+	} elsif ($status == 3)  {
 		Sympa::Log::Syslog::do_log('err','Could not read sympa config file, report to httpd error_log: %s', $error_output) ;
-	}elsif ($status == 4)  {
+	} elsif ($status == 4)  {
 		Sympa::Log::Syslog::do_log('err','Could not get default domain, report to httpd error_log: %s', $error_output) ;
-	}elsif ($status == 5)  {
+	} elsif ($status == 5)  {
 		Sympa::Log::Syslog::do_log('err','Unable to append to alias file: %s', $error_output) ;
-	}elsif ($status == 6)  {
+	} elsif ($status == 6)  {
 		Sympa::Log::Syslog::do_log('err','Unable to run newaliases: %s', $error_output) ;
-	}elsif ($status == 7)  {
+	} elsif ($status == 7)  {
 		Sympa::Log::Syslog::do_log('err','Unable to read alias file, report to httpd error_log: %s', $error_output) ;
-	}elsif ($status == 8)  {
+	} elsif ($status == 8)  {
 		Sympa::Log::Syslog::do_log('err','Could not create temporay file, report to httpd error_log: %s', $error_output) ;
-	}elsif ($status == 13) {
+	} elsif ($status == 13) {
 		Sympa::Log::Syslog::do_log('info','Some of list aliases already exist: %s', $error_output) ;
-	}elsif ($status == 14) {
+	} elsif ($status == 14) {
 		Sympa::Log::Syslog::do_log('err','Can not open lock file, report to httpd error_log: %s', $error_output) ;
-	}elsif ($status == 15) {
+	} elsif ($status == 15) {
 		Sympa::Log::Syslog::do_log('err','The parser returned empty aliases: %s', $error_output) ;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err',"Unknown error $status while running alias manager $alias_manager : %s", $error_output);
 	}
 
@@ -1401,7 +1401,7 @@ sub check_topics {
 
 	if ($subtop) {
 		return 1 if (defined $topics{$top} && defined $topics{$top}{'sub'}{$subtop});
-	}else {
+	} else {
 		return 1 if (defined $topics{$top});
 	}
 
@@ -1486,7 +1486,7 @@ sub change_user_email {
 				Sympa::Log::Syslog::do_log('info', 'could not remove email from list %s', $l);
 			}
 
-		}else {
+		} else {
 
 			unless ($list->update_list_member($in{'current_email'}, {'email' => $in{'new_email'}, 'update_date' => time}) ) {
 				push @failed_for, $list;

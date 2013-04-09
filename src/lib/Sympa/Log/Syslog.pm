@@ -158,7 +158,7 @@ sub do_log {
 		}
 
 		$caller_string = join(' > ',@calls);
-	}else {
+	} else {
 		my @call = caller(1);
 
 		## If called via wwslog, go one step ahead
@@ -349,7 +349,7 @@ sub agregate_daily_data {
 		next if ($begin_date < $first_date || $params->{'hourly_data'}{$begin_date}{'end_date_counter'} > $last_date);
 		if(defined $result->{$reftime}) {
 			$result->{$reftime} += $params->{'hourly_data'}{$begin_date}{'variation_counter'};
-		}else{
+		} else {
 			$result->{$reftime} = $params->{'hourly_data'}{$begin_date}{'variation_counter'};
 		}
 	}

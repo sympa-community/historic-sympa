@@ -137,7 +137,7 @@ sub new {
 	if($string){
 		if (ref ($string)){
 			$msg = $parser->parse_data($string);
-		}else{
+		} else {
 			$msg = $parser->parse_data(\$string);
 		}
 	}
@@ -226,7 +226,7 @@ sub new {
 		if(defined $spam_status) {
 			if (ref($spam_status ) eq 'HASH') {
 				$self->{'spam_status'} =  $spam_status ->{'action'};
-			}else{
+			} else {
 				$self->{'spam_status'} = $spam_status ;
 			}
 		}
@@ -263,7 +263,7 @@ sub new {
 
 		if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
 			$self->{'md5_check'} = 1 ;
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err',"incorrect X-Sympa-Checksum header");
 		}
 	}
@@ -358,7 +358,7 @@ sub dump {
 		if (ref($self->{$key}) && $self->{$key}->isa('MIME::Entity')) {
 			printf "%s =>\n", $key;
 			$self->{$key}->print;
-		}else {
+		} else {
 			printf "%s => %s\n", $key, $self->{$key};
 		}
 	}

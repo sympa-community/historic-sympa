@@ -150,7 +150,7 @@ sub connect {
 			require Net::LDAPS;
 
 			$self->{'ldap_handler'} = Net::LDAPS->new($host, port => $port, %{$self});
-		}else {
+		} else {
 			$self->{'ldap_handler'} = Net::LDAP->new($host, %{$self});
 		}
 
@@ -185,7 +185,7 @@ sub connect {
 	## Not always anonymous...
 	if (defined ($self->{'ldap_bind_dn'}) && defined ($self->{'ldap_bind_password'})) {
 		$cnx = $self->{'ldap_handler'}->bind($self->{'ldap_bind_dn'}, password =>$self->{'ldap_bind_password'});
-	}else {
+	} else {
 		$cnx = $self->{'ldap_handler'}->bind;
 	}
 

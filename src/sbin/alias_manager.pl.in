@@ -235,7 +235,7 @@ if ($operation eq 'add') {
 	flock LF, 8;
 	close LF;
 
-}else {
+} else {
 	print STDERR "Action $operation not implemented yet\n";
 	exit(2);
 }

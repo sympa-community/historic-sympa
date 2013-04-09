@@ -54,7 +54,7 @@ sub _get_datasource_id {
 			@orderedValues = (@orderedValues,$key,$source->{$key});
 		}
 		return substr(Digest::MD5::md5_hex(join('/', @orderedValues)), -8);
-	}else {
+	} else {
 		return substr(Digest::MD5::md5_hex($source), -8);
 	}
 

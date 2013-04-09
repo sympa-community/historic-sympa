@@ -127,7 +127,7 @@ sub write_pid {
 		push(@pids, $params{pid});
 		print PIDFILE join(' ', @pids)."\n";
 		close(PIDFILE);
-	}else{
+	} else {
 		## Create and write the pidfile
 		unless(open(PIDFILE, '+>> '.$params{file})) {
 			## Unlock pid file
@@ -220,7 +220,7 @@ sub remove_pid {
 				Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
 				return undef;
 			}
-		}else{
+		} else {
 			if(-f $params{file}) {
 				unless(open(PFILE, '> '.$params{file})) {
 					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
@@ -228,11 +228,11 @@ sub remove_pid {
 				}
 				print PFILE join(' ', @pids)."\n";
 				close(PFILE);
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $params{file});
 			}
 		}
-	}else{
+	} else {
 		unless(unlink $params{file}) {
 			Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
 			return undef;

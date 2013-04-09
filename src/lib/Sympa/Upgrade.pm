@@ -311,7 +311,7 @@ sub upgrade {
 				if (-d $new_path) {
 					Sympa::Log::Syslog::do_log('err',"Could not rename %s to %s ; directory already exists", $old_path, $new_path);
 					next;
-				}else {
+				} else {
 					unless (rename $old_path, $new_path) {
 						Sympa::Log::Syslog::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $ERRNO);
 						next;
@@ -429,7 +429,7 @@ sub upgrade {
 			if (-d $new_path) {
 				Sympa::Log::Syslog::do_log('err',"Could not rename %s to %s ; directory already exists", $old_path, $new_path);
 				next;
-			}else {
+			} else {
 				unless (rename $old_path, $new_path) {
 					Sympa::Log::Syslog::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $ERRNO);
 					next;
@@ -602,7 +602,7 @@ sub upgrade {
 				}
 				closedir DIR;
 
-			}elsif ($d =~ /(create_list_templates|families)$/) {
+			} elsif ($d =~ /(create_list_templates|families)$/) {
 				foreach my $subdir (grep(/^\w+$/, readdir DIR)) {
 					if (-d "$d/$subdir") {
 						push @directories, ["$d/$subdir", $Sympa::Configuration::Conf{'lang'}];
@@ -661,7 +661,7 @@ sub upgrade {
 				unless ($list->save_config('automatic')) {
 					Sympa::Log::Syslog::do_log('err', 'Failed to save config file for list %s', $list->{'name'});
 				}
-			}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
+			} elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
 
 				Sympa::Log::Syslog::do_log('notice','List %s ; changing user_data_source from database to include2...', $list->{'name'});
 
@@ -694,7 +694,7 @@ sub upgrade {
 
 			close BOUNCEDIR;
 
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('err', "Failed to open directory $Sympa::Configuration::Conf{'queuebounce'} : $ERRNO");
 		}
 	}
@@ -783,7 +783,7 @@ sub upgrade {
 					unless ($sth = Sympa::SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", Sympa::SDM::quote($valid_robot),Sympa::SDM::quote($data->{'list_exclusion'}),Sympa::SDM::quote($data->{'user_exclusion'}))) {
 						Sympa::Log::Syslog::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
 					}
-				}else {
+				} else {
 					Sympa::Log::Syslog::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
 				}
 			}
@@ -837,7 +837,7 @@ sub upgrade {
 					$listname = $1;
 					$robot = $2;
 					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-				}elsif (($spoolparameter eq 'queueauth')||($spoolparameter eq 'queuemod')){
+				} elsif (($spoolparameter eq 'queueauth')||($spoolparameter eq 'queuemod')){
 					unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){
 						$ignored .= ','.$filename;
 						next;
@@ -846,7 +846,7 @@ sub upgrade {
 					$robot = $2;
 					$meta{'authkey'} = $3;
 					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-				}elsif ($spoolparameter eq 'queuetopic'){
+				} elsif ($spoolparameter eq 'queuetopic'){
 					unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){
 						$ignored .= ','.$filename;
 						next;
@@ -855,7 +855,7 @@ sub upgrade {
 					$robot = $2;
 					$meta{'authkey'} = $3;
 					$meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-				}elsif ($spoolparameter eq 'queuesubscribe'){
+				} elsif ($spoolparameter eq 'queuesubscribe'){
 					my $match = 0;
 					foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 						Sympa::Log::Syslog::do_log('notice',"robot : $robot");
@@ -871,7 +871,7 @@ sub upgrade {
 						$ignored .= ','.$filename;
 						next;
 					}
-				}elsif (($spoolparameter eq 'queue')||($spoolparameter eq 'bouncequeue')||($spoolparameter eq 'queueoutgoing')){
+				} elsif (($spoolparameter eq 'queue')||($spoolparameter eq 'bouncequeue')||($spoolparameter eq 'queueoutgoing')){
 
 					## Don't process temporary files created by queue bouncequeue queueautomatic (T.xxx)
 					next if ($filename =~ /^T\./);
@@ -892,11 +892,11 @@ sub upgrade {
 
 							if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
 								$priority = 0;
-							}elsif ($type eq 'request') {
+							} elsif ($type eq 'request') {
 								$priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
-							}elsif ($type eq 'owner') {
+							} elsif ($type eq 'owner') {
 								$priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
-							}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
+							} elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
 								$priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
 								$listname ='';
 							}
@@ -909,7 +909,7 @@ sub upgrade {
 				$listname = lc($listname);
 				if ($robot) {
 					$robot=lc($robot);
-				}else{
+				} else {
 					$robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
 				}
 
@@ -996,7 +996,7 @@ sub to_utf8 {
 		my $charset;
 		if ((defined $Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'})&($Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
 			$charset = $Sympa::Configuration::Conf::Ignored_Conf{'filesystem_encoding'};
-		}else {
+		} else {
 			Sympa::Language::push_lang($lang);
 			$charset = Sympa::Language::get_charset;
 			Sympa::Language::pop_lang;
@@ -1124,7 +1124,7 @@ sub md5_encode_password {
 
 		if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
 			$clear_password = Sympa::Tools::Password::decrypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
-		}else{ ## Old style cleartext passwords
+		} else { ## Old style cleartext passwords
 			$clear_password = $user->{'password_user'};
 		}
 
@@ -1169,13 +1169,13 @@ sub lower_version {
 
 		if ($tab1[0] =~ /^(\d*)a$/) {
 			$tab1[0] = $1 - 0.5;
-		}elsif ($tab1[0] =~ /^(\d*)b$/) {
+		} elsif ($tab1[0] =~ /^(\d*)b$/) {
 			$tab1[0] = $1 - 0.25;
 		}
 
 		if ($tab2[0] =~ /^(\d*)a$/) {
 			$tab2[0] = $1 - 0.5;
-		}elsif ($tab2[0] =~ /^(\d*)b$/) {
+		} elsif ($tab2[0] =~ /^(\d*)b$/) {
 			$tab2[0] = $1 - 0.25;
 		}
 

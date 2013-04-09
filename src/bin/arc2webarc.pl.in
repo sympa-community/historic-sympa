@@ -135,7 +135,7 @@ my $list = new Sympa::List($listname, $robot)
 my $home_sympa;
 if ($robot) {
 	$home_sympa = $Sympa::Configuration::Conf{'home'}.'/'.$robot;
-}else {
+} else {
 	$home_sympa = $Sympa::Configuration::Conf{'home'};
 }
 my $dest_dir = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
@@ -152,7 +152,7 @@ if (-d $dest_dir) {
 	print "Web archives already exist for list $listname\nGo on (<CR>|n) ?";
 	my $s = <STDIN>;
 	die if ($s eq 'n');
-}else {
+} else {
 	mkdir $dest_dir, 0755 or die;
 }
 
@@ -170,7 +170,7 @@ if ($options{'input-directory'}) {
 	}
 	closedir DIR;
 
-}else {
+} else {
 
 	print STDERR "Bursting archives\n";
 	foreach my $arc_file (<$home_sympa/$listname/archives/log*>) {
@@ -195,7 +195,7 @@ if ($options{'input-directory'}) {
 				$msg_count++;
 				$msg = [];
 				$new = 1;
-			}else {
+			} else {
 				push @{$msg}, $_;
 				undef $new;
 			}
@@ -267,7 +267,7 @@ sub store_messages {
 					$year =$3;
 
 					# unknown date format
-				}else {
+				} else {
 					$incorrect = 1;
 					last;
 				}
@@ -277,7 +277,7 @@ sub store_messages {
 					$month =~ y/éûA-Z/eua-z/;
 					if (!$month_idx{$month}) {
 						$incorrect = 1;
-					}else {
+					} else {
 						$month = $month_idx{$month};
 					}
 				}elsif (($month < 1) or ($month > 12)) {

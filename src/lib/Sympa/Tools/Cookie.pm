@@ -65,7 +65,7 @@ sub set_cookie_soap {
 
 	if ($http_domain eq 'localhost') {
 		$cookie = sprintf "%s=%s; Path=/; Max-Age=%s", 'sympa_session', $value, $expire;
-	}else {
+	} else {
 		$cookie = sprintf "%s=%s; Domain=%s; Path=/; Max-Age=%s", 'sympa_session', $value, $http_domain, $expire;;
 	}
 

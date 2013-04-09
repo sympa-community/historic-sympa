@@ -125,7 +125,7 @@ if ($operation eq 'add') {
 
 		if ($command_value =~ m/bouncequeue/) {
 			$command_value = $bouncequeue_transport;
-		} else{
+		} else {
 			$command_value = $queue_transport;
 		}
 

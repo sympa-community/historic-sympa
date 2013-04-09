@@ -164,17 +164,17 @@ sub _find_parameters {
 			next unless($b =~ /^(OAuth\s)?\s*(x?oauth_[^=]+)="([^"]*)"\s*$/);
 			$p->{$2} = uri_unescape($3);
 		}
-	}elsif(defined($params{'request_body'})) {
+	} elsif(defined($params{'request_body'})) {
 		foreach my $k (keys(%{$params{'request_body'}})) {
 			next unless($k =~ /^x?oauth_/);
 			$p->{$k} = uri_unescape($params{'request_body'}{$k});
 		}
-	}elsif(defined($params{'request_parameters'})) {
+	} elsif(defined($params{'request_parameters'})) {
 		foreach my $k (keys(%{$params{'request_parameters'}})) {
 			next unless($k =~ /^x?oauth_/);
 			$p->{$k} = uri_unescape($params{'request_parameters'}{$k});
 		}
-	}else{
+	} else {
 		return undef;
 	}
 

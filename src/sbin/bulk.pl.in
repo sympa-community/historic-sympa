@@ -118,7 +118,7 @@ Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Co
 if ($options{'log_level'}) {
     Sympa::Log::Syslog::set_log_level($options{'log_level'});
     Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-}else{
+} else {
     Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
     Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 }
@@ -310,7 +310,7 @@ while (!$end) {
 			    }
 			    $created_children{$child_pid} = 1;
 			    sleep 1;
-			}else{
+			} else {
 			    ## We're in a child bulk process
 			    close STDERR;
 			    Sympa::Tools::Daemon::direct_stderr_to_file(
@@ -414,11 +414,11 @@ while (!$end) {
 		    if (($message->{'protected'})||($message->{'smime_crypted'})){
 			my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
 			$messageasstring_init = $entity->head->as_string. "\n" . $msg_body; # concat headers from entity with original body
-		    }else{
+		    } else {
 			$messageasstring_init = $entity->as_string;
 		    }
 		    # trace_smime($messageasstring,'tracking');
-		}else{  # VERP
+		} else {  # VERP
 		    $return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
 		}
 		if (($bulk->{'merge'}) && !($message->{'protected'})) {
@@ -426,7 +426,7 @@ while (!$end) {
 			Sympa::Log::Syslog::do_log('err', 'Erreur d appel Sympa::Bulk::merge_msg');
 		    }
 		    $messageasstring = $entity->as_string;
-		}else{
+		} else {
 		    $messageasstring = $messageasstring_init;
 		}
 
@@ -450,7 +450,7 @@ while (!$end) {
 		print SMTP $messageasstring;
 		close SMTP;
 	    }
-	}else{ # message dont needs personalization, they can be sent by packet
+	} else { # message dont needs personalization, they can be sent by packet
             if (Sympa::Configuration::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
 		$messageasstring_init = remove_invalid_dkim_signature($messageasstring_init, $Sympa::Configuration::Conf{'tmpdir'});
 	    }
@@ -488,7 +488,7 @@ while (!$end) {
 		    time() - $bulk->{'delivery_date'});
 	}
 	$date_of_last_activity = time();
-    }else{
+    } else {
 	## Sleep for a while if bulk_mailer DB table is empty
 	sleep $Sympa::Configuration::Conf{'bulk_sleep'};
     }
@@ -538,7 +538,7 @@ sub trace_smime {
     my $status = $?/256 ;
     unless ($status == 0) {
 	Sympa::Log::Syslog::do_log('debug', "signature SMIME NOT OK   (%s)",$where);
-    }else{
+    } else {
 	Sympa::Log::Syslog::do_log('debug', "signature SMIME OK    (%s)",$where);
     }
 }

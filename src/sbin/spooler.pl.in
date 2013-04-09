@@ -160,7 +160,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 	if ($options{'log_level'}) {
 		Sympa::Log::Syslog::set_log_level($options{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-	}else{
+	} else {
 		Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 	}
@@ -222,7 +222,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 			if ($options{'queue'}){
 				$distinct_spools{$options{'queue'}}= 1;
-			}else{
+			} else {
 				foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
 					$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
 				}
@@ -233,7 +233,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				if ($master) { # only master process fork child process
 					if ((my $child_pid = fork) != 0) {
 						Sympa::Log::Syslog::do_log('debug', "Master daemon fork child %s",$child_pid);
-					}else{
+					} else {
 						Sympa::Log::Syslog::do_log('info', "Child process PID %s spooler for spool %s",$PID,$spooldir);
 						$master = 0;
 						last;
@@ -291,7 +291,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 			## Most initializations have now been done.
 			Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s reload config", Sympa::Constants::VERSION);
 			$signal = '0';
 		}
@@ -303,7 +303,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
 				## No return.
 			}
-		}else {
+		} else {
 			sleep 1; ## wait until main process has created required directories
 		}
 
@@ -381,12 +381,12 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				if ($listname =~ /Sympa_Bounce\./) {
 					$listname =~ s/Sympa_Bounce\.// ;
 					$spool = $bouncespool;
-				}else{
+				} else {
 					$spool = $msgspool;
 					if ($listname =~ /Sympa_Automatic\./) {
 						$listname =~ s/Sympa_Automatic\.// ;
 						$meta{'create_list_if_needed'} = 1;
-					}else{
+					} else {
 						$meta{'create_list_if_needed'} = 0;
 					}
 				}
@@ -394,7 +394,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				$listname = lc($listname);
 				if ($robot) {
 					$robot=lc($robot);
-				}else{
+				} else {
 					$robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
 				}
 
@@ -424,7 +424,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				);
 				if ($list) {
 					$priority = $list->{'admin'}{'priority'};
-				}else {
+				} else {
 					$priority = Sympa::Configuration::get_robot_conf($robot, 'default_list_priority');
 				}
 
@@ -432,7 +432,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				$meta{'list'} = $listname if $listname;
 				if ($priority) {
 					$meta{'priority'} = $priority ;
-				}else{
+				} else {
 					$meta{'priority'} = 1;
 				}
 				$meta{'type'} = $type if $type;
@@ -493,7 +493,7 @@ sub sighup {
 	if ($options{'mail'}) {
 		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
 		undef $options{'mail'};
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
 		$options{'mail'} = 1;
 	}

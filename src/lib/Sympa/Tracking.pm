@@ -72,7 +72,7 @@ sub get_recipients_status {
 	while (my $pk_notif = $sth->fetchrow_hashref){
 		if ($pk_notif->{'notification_message'}) {
 			$pk_notif->{'notification_message'} = MIME::Base64::decode($pk_notif->{'notification_message'});
-		}else{
+		} else {
 			$pk_notif->{'notification_message'} = '';
 		}
 		push @pk_notifs, $pk_notif;

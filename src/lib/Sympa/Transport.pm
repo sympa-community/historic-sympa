@@ -37,7 +37,7 @@ sub request {
 		if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
 			$ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
 			$ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
 		}
@@ -55,7 +55,7 @@ sub request {
 				},
 				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
 			);
-		}else {
+		} else {
 			$session = Sympa::Session->new(
 				robot    => $ENV{SYMPA_ROBOT},
 				context  => {},

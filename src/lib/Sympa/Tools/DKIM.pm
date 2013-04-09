@@ -83,14 +83,14 @@ sub get_dkim_parameters {
 		$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
 		if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
 			$data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
-		}else{
+		} else {
 			# RFC 4871 (page 21)
 			$data->{'i'} = $list->{'name'}.'-request@'.$robot;
 		}
 
 		$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
 		$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
-	}else{
+	} else {
 		# in robot context
 		$data->{'d'} = $params{'signer_domain'};
 		$data->{'i'} = $params{'signer_identity'};
@@ -183,7 +183,7 @@ sub remove_invalid_dkim_signature {
 		$entity->head->delete('DKIM-Signature');
 		Sympa::Log::Syslog::do_log('debug',"removing invalide dkim signature header");
 		return $entity->head->as_string."\n".$body_as_string;
-	}else{
+	} else {
 		return ($msg_as_string); # sgnature is valid.
 	}
 }
@@ -237,7 +237,7 @@ sub dkim_sign {
 			Selector  => $dkim_selector,
 			KeyFile   => $temporary_keyfile,
 		);
-	}else{
+	} else {
 		$dkim = Mail::DKIM::Signer->new(
 			Algorithm => "rsa-sha1",
 			Method    => "relaxed",
@@ -287,7 +287,7 @@ sub dkim_sign {
 
 	if ($main::options{'debug'}) {
 		Sympa::Log::Syslog::do_log('debug',"temporary file is $temporary_file");
-	}else{
+	} else {
 		unlink ($temporary_file);
 	}
 	unlink ($temporary_keyfile);

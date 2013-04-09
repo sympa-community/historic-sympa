@@ -59,7 +59,7 @@ sub password_fingerprint{
 
 	if(Sympa::Configuration::get_robot_conf('*','password_case') eq 'insensitive') {
 		return Sympa::Tools::md5_fingerprint(lc($pwd));
-	}else{
+	} else {
 		return Sympa::Tools::md5_fingerprint($pwd);
 	}
 }
@@ -94,7 +94,7 @@ sub check_auth{
 
 	if( Sympa::Tools::valid_email($auth)) {
 		return authentication($robot, $auth,$pwd);
-	}else{
+	} else {
 		## This is an UID
 		foreach my $ldap (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
 			# only ldap service are to be applied here
@@ -113,7 +113,7 @@ sub check_auth{
 				'alt_emails' => {$canonic => 'ldap'}
 			};
 
-		}else{
+		} else {
 			Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
 			Sympa::Log::Syslog::do_log('err', "Incorrect Ldap password");
 			return undef;
@@ -203,7 +203,7 @@ sub authentication {
 					'alt_emails' => {$email => 'classic'}
 				};
 			}
-		}elsif($auth_service->{'auth_type'} eq 'ldap') {
+		} elsif($auth_service->{'auth_type'} eq 'ldap') {
 			if ($canonic = ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
 				unless($user = Sympa::List::get_global_user($canonic)){
 					$user = {'email' => $canonic};
@@ -353,7 +353,7 @@ sub ldap_authentication {
 	## Otherwise, return the canonical email guessed after the login.
 	if( Sympa::Tools::valid_email($auth) && !Sympa::Configuration::get_robot_conf($robot,'ldap_force_canonical_email')) {
 		return ($auth);
-	}else{
+	} else {
 		return lc($canonic_email[0]);
 	}
 }
@@ -477,7 +477,7 @@ sub remote_app_check_password {
 					$proxy_for_vars{$varname}=1;
 				}
 				return (\%proxy_for_vars);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('info', 'bad password from %s', $trusted_application_name);
 			return undef;
 		}
@@ -575,7 +575,7 @@ sub get_one_time_ticket {
 	elsif (time - $ticket->{'date'} > 48 * 60 * 60) {
 		Sympa::Log::Syslog::do_log('info','ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
 		$result = 'expired';
-	}else{
+	} else {
 		$result = 'success';
 	}
 	unless (Sympa::SDM::do_query("UPDATE one_time_ticket_table SET status_one_time_ticket = %s WHERE (ticket_one_time_ticket=%s)", Sympa::SDM::quote($addr), Sympa::SDM::quote($ticket_number))) {

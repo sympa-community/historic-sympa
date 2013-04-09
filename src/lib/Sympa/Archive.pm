@@ -73,7 +73,7 @@ sub store_last {
 	open(OUT, "> $dir/last_message");
 	if (ref ($msg)) {
 		$msg->print(\*OUT);
-}else {
+} else {
 	print OUT $msg;
 }
 close(OUT);
@@ -339,7 +339,7 @@ sub clean_archive_directory{
 			Sympa::Log::Syslog::do_log('err',"HTML cleaning failed for %s files in the directory %s.",$files_left_uncleaned,$answer->{'dir_to_rebuild'});
 		}
 		$answer->{'dir_to_rebuild'} = $answer->{'cleaned_dir'};
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$ERRNO);
 		Sympa::Tools::File::del_dir($answer->{'cleaned_dir'});
 		return undef;
@@ -368,15 +368,15 @@ sub clean_archived_message {
 			if(open TMP, ">$output") {
 				print TMP $msg->{'msg'}->as_string;
 				close TMP;
-			}else{
+			} else {
 				Sympa::Log::Syslog::do_log('err','Unable to create a tmp file to write clean HTML to file %s',$output);
 				return undef;
 			}
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err','HTML cleaning in file %s failed.',$output);
 			return undef;
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err','Unable to create a Message object with file %s',$input);
 		return undef;
 	}

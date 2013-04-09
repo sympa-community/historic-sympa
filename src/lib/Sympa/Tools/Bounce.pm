@@ -140,7 +140,7 @@ sub _fix_address {
 		my ($dom, $loc) = split /\!/, $address;
 		return "$loc\@$dom";
 
-	}else {
+	} else {
 
 		my (undef, $d) =  split /\@/, $from;
 		my $newadr = "$address\@$d";

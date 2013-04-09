@@ -497,7 +497,7 @@ sub edit_configuration {
 			$desc = \@new_wwsympa_conf;
 	}elsif ($file eq 'sympa.conf') {
 		$desc = \@new_sympa_conf;
-}else{
+} else {
 	printf STDERR Sympa::Language::gettext("Incorrect parameter definition: %s\n"),
 	$file;
 }
@@ -512,7 +512,7 @@ if ($new_value eq '') {
 	}
 
 	push @{$desc}, "# $name\t$sample\n\n";
-}else {
+} else {
 	push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
 	unless ($advice eq '') {
 		push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
@@ -591,7 +591,7 @@ EOM
 	print "\nChecking for PERL version:\n-----------------------------\n";
 	if ($] >= $perl_version){
 		print "your version of perl is OK ($] >= $perl_version)\n";
-	}else {
+	} else {
 		print "Your version of perl is TOO OLD ($] < $perl_version)\nPlease INSTALL a new one !\n";
 	}
 
@@ -636,7 +636,7 @@ EOM
 			if ($module->{name} =~ /^MHonArc/i) {
 				require "mhamain.pl";
 				$v = $mhonarc::VERSION;
-			}else {
+			} else {
 
 				$vs = $module->{name} . "::VERSION";
 				{
@@ -703,7 +703,7 @@ sub install_module {
 
 	if ($options->{'force'}) {
 		CPAN::Shell->force('test', $module->{name});
-	}else {
+	} else {
 		CPAN::Shell->test($module->{name});
 	}
 
@@ -716,7 +716,7 @@ sub install_module {
 		if ($options->{'force'}) {
 			print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
 			my $answer = <STDIN>;
-		}else {
+		} else {
 			print  "Installation of $module->{name} FAILED. Do you want to force the installation of this module? (y/N) ";
 			my $answer = <STDIN>; chomp $answer;
 			if ($answer =~ /^y/i) {

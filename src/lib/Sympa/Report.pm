@@ -175,9 +175,9 @@ sub _get_msg_as_hash {
 
 	if ($msg_object->isa('MIME::Entity')) { ## MIME-ttols object
 		$msg_entity = $msg_object;
-	}elsif ($msg_object->isa('Sympa::Message')) { ## Sympa's own Message object
+	} elsif ($msg_object->isa('Sympa::Message')) { ## Sympa's own Message object
 		$msg_entity = $msg_object->{'msg'};
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err', "reject_report_msg: wrong type for msg parameter");
 	}
 
@@ -782,7 +782,7 @@ sub get_notice_web {
 		}
 		return \@notice;
 
-}else {
+} else {
 	return 0;
 }
 
@@ -899,7 +899,7 @@ sub reject_report_web {
 			unless (Sympa::List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $params)) {
 				Sympa::Log::Syslog::do_log('notice',"Unable to notify listmaster concerning '$user'");
 			}
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('notice',"unable to notify listmaster for error: '$error' : (no robot) ");
 		}
 	}
@@ -913,13 +913,13 @@ sub reject_report_web {
 	if ($type eq 'auth') {
 		push @auth_reject_web,$data;
 
-	}elsif ($type eq 'user') {
+	} elsif ($type eq 'user') {
 		push @user_error_web,$data;
 
-	}elsif ($type eq 'system' || $type eq 'system_quiet') {
+	} elsif ($type eq 'system' || $type eq 'system_quiet') {
 		push @system_error_web,$data;
 
-	}elsif ($type eq 'intern' || $type eq 'intern_quiet') {
+	} elsif ($type eq 'intern' || $type eq 'intern_quiet') {
 		push @intern_error_web,$data;
 
 	}

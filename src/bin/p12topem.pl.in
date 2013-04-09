@@ -111,7 +111,7 @@ if ($listname) {
 	if (-d $Sympa::Configuration::Conf{'etc'}.'/'.$robot) {
 		$cert = $Sympa::Configuration::Conf{'etc'}.'/'.$robot.'/cert.pem';
 		$privatekey = $Sympa::Configuration::Conf{'etc'}.'/'.$robot.'/private_key';
-	}else{
+	} else {
 		$cert = $Sympa::Configuration::Conf{'etc'}.'/cert.pem';
 		$privatekey = $Sympa::Configuration::Conf{'etc'}.'/private_key';
 	}

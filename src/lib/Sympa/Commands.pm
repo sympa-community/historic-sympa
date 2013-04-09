@@ -140,7 +140,7 @@ sub parse {
 	if ($i =~ /^quiet\s+(.+)$/i) {
 		$i = $1;
 		$quiet = 1;
-	}else {
+	} else {
 		$quiet = 0;
 	}
 
@@ -213,7 +213,7 @@ sub _help {
 			Sympa::Report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 		}
 
-	}elsif (-r Sympa::Constants::DEFAULTDIR . '/mail_tt2/helpfile.tt2') {
+	} elsif (-r Sympa::Constants::DEFAULTDIR . '/mail_tt2/helpfile.tt2') {
 
 		my $data = {};
 
@@ -229,7 +229,7 @@ sub _help {
 			Sympa::Report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 		}
 
-	}else{
+	} else {
 		my $error = sprintf('Unable to read "help file" : %s',$ERRNO);
 		Sympa::Report::reject_report_cmd('intern',$error,{},$cmd_line,$sender,$robot);
 		Sympa::Log::Syslog::do_log('info', 'HELP from %s refused, file not found', $sender,);
@@ -343,12 +343,12 @@ sub _stats {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'stats %s from %s refused (not allowed)', $listname,$sender);
 		return 'not_allowed';
-	}else {
+	} else {
 		my %stats = ('msg_rcv' => $list->{'stats'}[0],
 			'msg_sent' => $list->{'stats'}[1],
 			'byte_rcv' => sprintf ('%9.2f', ($list->{'stats'}[2] / 1024 / 1024)),
@@ -575,7 +575,7 @@ sub _review {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'review %s from %s refused (not allowed)', $listname,$sender);
@@ -637,10 +637,10 @@ sub _verify {
 		Sympa::Log::Syslog::do_log('info', 'VERIFY successfull from %s', $sender,time-$time_command);
 		if ($sign_mod eq 'smime') {
 			Sympa::Report::notice_report_cmd('smime',{},$cmd_line);
-		}elsif($sign_mod eq 'dkim') {
+		} elsif($sign_mod eq 'dkim') {
 			Sympa::Report::notice_report_cmd('dkim',{},$cmd_line);
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('info', 'VERIFY from %s : could not find correct s/mime signature', $sender,time-$time_command);
 		Sympa::Report::reject_report_cmd('user','no_verify_sign',{},$cmd_line);
 	}
@@ -709,7 +709,7 @@ sub _subscribe {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'SUB %s from %s refused (not allowed)', $which, $sender);
@@ -769,7 +769,7 @@ sub _subscribe {
 				Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 				return undef;
 			}
-		}else {
+		} else {
 
 			my $u;
 			my $defaults = $list->get_default_user_options();
@@ -872,7 +872,7 @@ sub _info {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'review %s from %s refused (not allowed)', $listname,$sender);
@@ -1022,7 +1022,7 @@ sub _signoff {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'SIG %s %s from %s refused (not allowed)', $which, $email, $sender);
@@ -1158,7 +1158,7 @@ sub _add {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'ADD %s %s from %s refused (not allowed)', $which, $email, $sender);
@@ -1182,7 +1182,7 @@ sub _add {
 			Sympa::Log::Syslog::do_log('err',"ADD command rejected ; user '%s' already member of list '%s'", $email, $which);
 			return undef;
 
-		}else {
+		} else {
 			my $u;
 			my $defaults = $list->get_default_user_options();
 			%{$u} = %{$defaults};
@@ -1291,7 +1291,7 @@ sub _invite {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused (not allowed)', $which, $email, $sender);
@@ -1313,7 +1313,7 @@ sub _invite {
 			Sympa::Report::reject_report_cmd('user','already_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);
 			Sympa::Log::Syslog::do_log('err',"INVITE command rejected ; user '%s' already member of list '%s'", $email, $which);
 			return undef;
-		}else{
+		} else {
 			## Is the guest user allowed to subscribe in this list ?
 
 			my %context;
@@ -1347,7 +1347,7 @@ sub _invite {
 				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total());
 				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
-			}elsif ($action !~ /reject/i) {
+			} elsif ($action !~ /reject/i) {
 				$context{'subject'} = "sub $which $comment";
 				$context{'url'}= "mailto:$sympa?subject=$context{'subject'}";
 				$context{'url'} =~ s/\s/%20/g;
@@ -1359,14 +1359,14 @@ sub _invite {
 				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
 				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
-			}elsif ($action =~ /reject/i) {
+			} elsif ($action =~ /reject/i) {
 				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
 				if (defined $result->{'tt2'}) {
 					unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 						Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 						Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 					}
-				}else {
+				} else {
 					Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'email'=> $email, 'listname' => $which},$cmd_line);
 				}
 			}
@@ -1421,7 +1421,7 @@ sub _remind {
 		$auth_method = _get_auth_method('remind','',{'type'=>'auth_failed',
 				'data'=>{},
 				'msg'=> "REMIND $listname from $sender"},$sign_mod);
-	}else {
+	} else {
 		$auth_method = _get_auth_method('remind','',{'type'=>'auth_failed',
 				'data'=>{},
 				'msg'=> "REMIND $listname from $sender"},$sign_mod,$list);
@@ -1439,7 +1439,7 @@ sub _remind {
 			{'sender' => $sender });
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 
-	}else{
+	} else {
 
 		Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
@@ -1468,11 +1468,11 @@ sub _remind {
 
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $listname},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{},$cmd_line);
 		}
 		return 'not_allowed';
-	}elsif ($action =~ /request_auth/i) {
+	} elsif ($action =~ /request_auth/i) {
 		Sympa::Log::Syslog::do_log ('debug2',"auth requested from $sender");
 		if ($listname eq '*') {
 			unless (Sympa::List::request_auth ($sender,'remind', $robot)){
@@ -1480,7 +1480,7 @@ sub _remind {
 				Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$listname},$cmd_line,$sender,$robot);
 				return undef;
 			}
-		}else {
+		} else {
 			unless ($list->request_auth ($sender,'remind', $robot)){
 				my $error = "Unable to request authentification for command 'remind'";
 				Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$listname},$cmd_line,$sender,$robot);
@@ -1489,7 +1489,7 @@ sub _remind {
 		}
 		Sympa::Log::Syslog::do_log('info', 'REMIND %s from %s, auth requested (%d seconds)', $listname, $sender,time-$time_command);
 		return 1;
-	}elsif ($action =~ /do_it/i) {
+	} elsif ($action =~ /do_it/i) {
 
 		if ($listname ne '*') {
 
@@ -1521,7 +1521,7 @@ sub _remind {
 			Sympa::Log::Syslog::do_log('info', 'REMIND %s  from %s accepted, sent to %d subscribers (%d seconds)',$listname,$sender,$total,time-$time_command);
 
 			return 1;
-		}else{
+		} else {
 			## Global REMIND
 			my %global_subscription;
 			my %global_info;
@@ -1593,7 +1593,7 @@ sub _remind {
 			}
 			Sympa::Report::notice_report_cmd('glob_remind',{'count'=> $count},$cmd_line);
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('info', 'REMIND %s  from %s aborted, unknown requested action in scenario',$listname,$sender);
 		my $error = "Unknown requested action in scenario: $action.";
 		Sympa::Report::reject_report_cmd('intern',$error,{'listname' => $listname},$cmd_line,$sender,$robot);
@@ -1659,7 +1659,7 @@ sub _del {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{tt2}' to $sender");
 				Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 			}
-		}else {
+		} else {
 			Sympa::Report::reject_report_cmd('auth',$result->{'reason'},{'listname' => $which},$cmd_line);
 		}
 		Sympa::Log::Syslog::do_log('info', 'DEL %s %s from %s refused (not allowed)', $which, $who, $sender);
@@ -2010,7 +2010,7 @@ sub _confirm {
 		}
 		return 1;
 
-	}elsif($action =~ /editor(\s?,\s?(quiet))?/){
+	} elsif($action =~ /editor(\s?,\s?(quiet))?/){
 		my $key = $list->send_to_editor('smtp', $message);
 
 		unless (defined $key) {
@@ -2028,7 +2028,7 @@ sub _confirm {
 		}
 		return 1;
 
-	}elsif($action =~ /^reject(,(quiet))?/) {
+	} elsif($action =~ /^reject(,(quiet))?/) {
 		Sympa::Log::Syslog::do_log('notice', 'Message for %s from %s rejected, sender not allowed', $name, $sender);
 		unless ($2 eq 'quiet') {
 			if (defined $result->{'tt2'}) {
@@ -2036,7 +2036,7 @@ sub _confirm {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{'tt2'}' to $sender");
 					Sympa::Report::reject_report_msg('auth',$result->{'reason'},$sender,{'message' => $message},$robot,$msg_string,$list);
 				}
-			}else {
+			} else {
 				unless (Sympa::Report::reject_report_msg('auth',$result->{'reason'},$sender,{'message' => $message},$robot,$msg_string,$list)) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'message_report', type 'auth' to $sender");
 				}
@@ -2044,7 +2044,7 @@ sub _confirm {
 		}
 		return undef;
 
-	}elsif($action =~ /^do_it/) {
+	} elsif($action =~ /^do_it/) {
 
 		$hdr->add('X-Validation-by', $sender);
 
@@ -2204,7 +2204,7 @@ sub _modindex {
 			# list loaded
 			if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){
 				$moddelay = $curlist->{'admin'}{'clean_delay_queuemod'}
-			}else{
+			} else {
 				$moddelay = Sympa::Configuration::get_robot_conf($robot,'clean_delay_queuemod');
 			}
 
@@ -2355,29 +2355,28 @@ sub _get_auth_method {
 	if ($sign_mod eq 'smime') {
 		$auth_method ='smime';
 
-	}elsif ($auth ne '') {
+	} elsif ($auth ne '') {
 		Sympa::Log::Syslog::do_log('debug',"auth received from $sender : $auth");
 
 		my $compute;
 		if (ref($list) && $list->isa('Sympa::List')){
 			$compute= $list->compute_auth($email,$cmd);
-
-		}else {
+		} else {
 			$compute= Sympa::List::compute_auth($email,$cmd);
 		}
 		if ($auth eq $compute) {
 			$auth_method = 'md5' ;
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'auth should be %s',$compute);
 			if ($error->{'type'} eq 'auth_failed'){
 				Sympa::Report::reject_report_cmd('intern',"The authentication process failed",$error->{'data'},$cmd_line,$sender);
-			}else {
+			} else {
 				Sympa::Report::reject_report_cmd('user',$error->{'type'},$error->{'data'},$cmd_line);
 			}
 			Sympa::Log::Syslog::do_log('info', '%s refused, auth failed',$error->{'msg'});
 			return undef;
 		}
-	}else {
+	} else {
 		$auth_method = 'smtp';
 		$auth_method = 'dkim' if ($sign_mod eq 'dkim');
 	}

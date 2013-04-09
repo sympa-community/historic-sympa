@@ -408,7 +408,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 	if ($options{'log_level'}) {
 		Sympa::Log::Syslog::set_log_level($options{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-	}else{
+	} else {
 		Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 	}
@@ -491,7 +491,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			Sympa::Log::Syslog::fatal_err("VOOT feature is on, but Sympa was Unable to load module: $EVAL_ERROR");
 			return undef;
 		}
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err','Sympa is configured to use VOOT but the required modules are not accessible.');
 	}
 
@@ -573,7 +573,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		## Most initializations have now been done.
 		Sympa::Log::Syslog::do_log('notice', "Sympa %s started", Sympa::Constants::VERSION);
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('notice', "Sympa %s reload config", Sympa::Constants::VERSION);
 		$signal = '0';
 	}
@@ -588,7 +588,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		my ($all_lists, $list);
 		if ($options{'dump'} eq 'ALL') {
 			$all_lists = Sympa::List::get_lists('*');
-		}else {
+		} else {
 
 			## The parameter can be a list address
 			unless ($options{'dump'} =~ /\@/) {
@@ -829,7 +829,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		$size = test_storage(21000); ## will test message until a 21 Mo message.
 		if ($size == 21000) {
 			printf "The maximum message size ($size Ko) testing was successful \n";
-		}else{
+		} else {
 			printf "maximun message size that can be stored in database : $size Ko\n";
 		}
 		exit 1;
@@ -839,7 +839,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		printf "Sympa is going to store $config_file in database conf_table. This operation do NOT remove original files\n";
 		if ( Sympa::Configuration::conf_2_db($config_file) ) {
 			printf "Done";
-		}else{
+		} else {
 			printf "an error occur";
 		}
 		exit 1;
@@ -876,7 +876,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 	if (! defined($resul->{'aliases'}) || $resul->{'aliases'} == 1) {
 		printf STDOUT "List has been created \n";
 		exit 0;
-	}else {
+	} else {
 		printf STDOUT "List has been created, required aliases :\n $resul->{'aliases'} \n";
 		exit 0;
 	}
@@ -1014,7 +1014,7 @@ exit 0;
 	if ($options{'from'} eq $options{'to'}) {
 		Sympa::Log::Syslog::do_log('err', "Current version : %s ; no upgrade is required.", $options{'to'});
 		exit 0;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('notice', "Upgrading from %s to %s...", $options{'from'}, $options{'to'});
 	}
 
@@ -1083,7 +1083,7 @@ exit 0;
 			print STDERR "Error : incorrect list name '$options{'list'}'\n";
 			exit 1;
 		}
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('notice', "Loading ALL lists...");
 		my $all_lists = Sympa::List::get_lists('*',{'reload_config' => 1});
 	}
@@ -1314,7 +1314,7 @@ while (!$signal) {
 		Sympa::Log::Syslog::do_log('debug', "Message key %s  processed for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
 		# Do not remove message task_manager will purge database removing messages in spool distribute that have no links with bulkspool_stable
 		# $spool->remove_message({'messagekey' => $message_in_spool->{'messagekey'}});
-	}else{
+	} else {
 		# move message to bad.
 		$spool->update({'messagekey' => $message_in_spool->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		Sympa::Log::Syslog::do_log('debug', "Message # %s  moved to spool bad (message for list = %s robot = %s reception_date = %s)", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
@@ -1355,7 +1355,7 @@ sub sighup {
 	if ($options{'mail'}) {
 		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch of the "-mail" logging option and continue current task');
 		undef $options{'mail'};
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('notice', 'signal HUP received, switch on the "-mail" logging option and continue current task');
 		$options{'mail'} = 1;
 	}
@@ -1499,7 +1499,7 @@ sub process_message {
 		$host = $conf_host;
 		$name = $listname;
 		$list_address = $name.'@'.$host;
-	}else{
+	} else {
 		$list = Sympa::List->new(name => $listname, robot => $robot);
 		unless (defined $list) {
 			unless ($dyn_list_family) {
@@ -1618,7 +1618,7 @@ sub process_message {
 	if ($message->{'smime_signed'}) {
 		$is_signed = {'subject' => $message->{'smime_subject'},# subject semantic is relater to X509 (subject is the private key owner, not the message Subject header !)
 			'body' => 'smime'};
-	}else{
+	} else {
 		undef $is_signed;
 	}
 
@@ -1737,10 +1737,10 @@ sub process_message {
 			my $command = $1;
 
 			$status = DoCommand("$listname-$command", $robot, $message);
-		}else {
+		} else {
 			$status = DoForward($listname, $type, $robot, $message);
 		}
-	}else {
+	} else {
 		$status =  DoMessage($rcpt, $message, $robot);
 	}
 
@@ -1770,7 +1770,7 @@ sub process_message {
 
 				return undef;
 			}
-		}else {
+		} else {
 			## Sampling delay is over, reinit
 			$loop_info{$sender}{'date_init'} = time;
 
@@ -1921,7 +1921,7 @@ sub DoForward {
 		$recepient=$Sympa::Configuration::Conf{'listmaster_email'};
 		$host = Sympa::Configuration::get_robot_conf($robot, 'host');
 		$priority = 0;
-	}else {
+	} else {
 		$list = Sympa::List->new(name => $name, robot => $robot);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('notice', "Message for %s-%s ignored, unknown list %s (Message-id: %s)",$name, $function, $name,$messageid);
@@ -2441,7 +2441,7 @@ sub DoMessage{
 				unless ($list->send_file($result->{'tt2'}, $sender, $robot, {'auto_submitted' => 'auto-replied'})) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template '$result->{'tt2'}' to $sender");
 				}
-			}else {
+			} else {
 				unless (Sympa::Report::reject_report_msg('auth',$result->{'reason'},$sender,{'message' => $message},$robot,$msg_string,$list)) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'message_report', type 'auth' to $sender");
 				}
@@ -2461,7 +2461,7 @@ sub DoMessage{
 			daemon       => $daemon_name
 		);
 		return undef;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err','unknown action %s returned by the scenario "send"', $action);
 		Sympa::Report::reject_report_msg('intern','Unknown action returned by the scenario "send"',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
 		Sympa::Log::Database::do_log(

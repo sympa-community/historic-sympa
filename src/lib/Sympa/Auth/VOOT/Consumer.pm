@@ -254,7 +254,7 @@ sub _get_members {
 		foreach my $email (@{$mmb->{'emails'}}) {
 			if(ref($email) eq 'HASH') {
 				push(@{$member->{'emails'}}, $email->{'value'});
-			}else{
+			} else {
 				push(@{$member->{'emails'}}, $email);
 			}
 		}

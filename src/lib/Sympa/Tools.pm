@@ -471,7 +471,7 @@ sub load_edit_list_conf {
 				}
 				$conf->{$param}{$r} = $priv;
 			}
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$basedir/edit_list.conf",$_ );
 			next;
 		}
@@ -526,7 +526,7 @@ sub load_create_list_conf {
 
 		if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
 			$conf->{$1} = lc($2);
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s', $file,$_ );
 			next;
 		}
@@ -543,7 +543,7 @@ sub _add_topic {
 	my @tree = split '/', $name;
 	if ($#tree == 0) {
 		return {'title' => $title};
-	}else {
+	} else {
 		$topic->{'sub'}{$name} = _add_topic(join ('/', @tree[1..$#tree]), $title);
 		return $topic;
 	}
@@ -582,7 +582,7 @@ sub get_list_list_tpl {
 				## Look for a comment.tt2 in the appropriate locale first
 				if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
 					$list_templates->{$template}{'comment'} = $dir.'/'.$template.'/'.$locale.'/comment.tt2';
-				}elsif (-r $dir.'/'.$template.'/comment.tt2') {
+				} elsif (-r $dir.'/'.$template.'/comment.tt2') {
 					$list_templates->{$template}{'comment'} = $dir.'/'.$template.'/comment.tt2';
 				}
 			}
@@ -646,7 +646,7 @@ sub get_templates_list {
 				}
 				closedir LANGDIR;
 
-			}else {
+			} else {
 				next unless ($file =~ /\.tt2$/);
 				if ($dir eq $distrib_dir){$tpl->{$file}{'distrib'}{'default'} = $dir.'/'.$file;}
 				if ($dir eq $site_dir)   {$tpl->{$file}{'site'}{'default'} =  $dir.'/'.$file;}
@@ -712,13 +712,13 @@ sub get_template_path {
 		$dir .= '/'.$lang unless ($lang eq 'default');
 		return $dir.'/'.$tpl ;
 
-	}elsif ($scope eq 'robot')  {
+	} elsif ($scope eq 'robot')  {
 		return $robot_dir.'/'.$tpl;
 
-	}elsif ($scope eq 'site') {
+	} elsif ($scope eq 'site') {
 		return $site_dir.'/'.$tpl;
 
-	}elsif ($scope eq 'distrib') {
+	} elsif ($scope eq 'distrib') {
 		return $distrib_dir.'/'.$tpl;
 
 	}
@@ -762,7 +762,7 @@ sub as_singlepart {
 
 	if ($msg->effective_type() =~ /^$preferred_type$/) {
 		$done = 1;
-	}elsif ($msg->effective_type() =~ /^multipart\/alternative/) {
+	} elsif ($msg->effective_type() =~ /^multipart\/alternative/) {
 		foreach my $part ($msg->parts) {
 			if (($part->effective_type() =~ /^$preferred_type$/) ||
 				(
@@ -776,7 +776,7 @@ sub as_singlepart {
 				last;
 			}
 		}
-	}elsif ($msg->effective_type() =~ /multipart\/signed/) {
+	} elsif ($msg->effective_type() =~ /multipart\/signed/) {
 		my @parts = $msg->parts();
 		## Only keep the first part
 		$msg->parts([$parts[0]]);
@@ -784,7 +784,7 @@ sub as_singlepart {
 
 		$done ||= as_singlepart($msg, $preferred_type, $loops);
 
-	}elsif ($msg->effective_type() =~ /^multipart/) {
+	} elsif ($msg->effective_type() =~ /^multipart/) {
 		foreach my $part ($msg->parts) {
 
 			next unless (defined $part); ## Skip empty parts
@@ -997,7 +997,7 @@ sub cookie_changed {
 		if ($cookies[$#cookies] eq $current) {
 			Sympa::Log::Syslog::do_log('debug2', "cookie is stable") ;
 			$changed = 0;
-#	}else{
+#	} else {
 #	    push @cookies, $current ;
 #	    unless (open COOK, ">$basedir/cookies.history") {
 #		Sympa::Log::Syslog::do_log('err', "Unable to create $basedir/cookies.history") ;
@@ -1008,7 +1008,7 @@ sub cookie_changed {
 #	    close COOK;
 		}
 		return $changed ;
-	}else{
+	} else {
 		my $umask = umask 037;
 		unless (open COOK, ">$basedir/cookies.history") {
 			umask $umask;
@@ -1128,7 +1128,7 @@ sub split_mail {
 			$decoder->decode(\*BODY, \*OFILE);
 			close BODY;
 			unlink "$dir/$pathname.$fileExt.$encoding";
-		}else {
+		} else {
 			$message->print_body (\*OFILE) ;
 		}
 		close (OFILE);
@@ -1221,7 +1221,7 @@ sub virus_infected {
 		if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
 
 		## Trend Micro
-	}elsif ($path =~  /\/vscan$/) {
+	} elsif ($path =~  /\/vscan$/) {
 
 		open (ANTIVIR,"$path $args $work_dir |") ;
 
@@ -1266,7 +1266,7 @@ sub virus_infected {
 		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
-	}elsif($path =~ /f-prot\.sh$/) {
+	} elsif($path =~ /f-prot\.sh$/) {
 
 		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
 
@@ -1289,7 +1289,7 @@ sub virus_infected {
 		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
-	}elsif ($path =~ /kavscanner/) {
+	} elsif ($path =~ /kavscanner/) {
 
 		# impossible to look for viruses with no option set
 		unless ($args) {
@@ -1317,7 +1317,7 @@ sub virus_infected {
 		}
 
 		## Sophos Antivirus... by liuk@publinet.it
-	}elsif ($path =~ /\/sweep$/) {
+	} elsif ($path =~ /\/sweep$/) {
 
 		# impossible to look for viruses with no option set
 		unless ($args) {
@@ -1342,7 +1342,7 @@ sub virus_infected {
 		}
 
 		## Clam antivirus
-	}elsif ($path =~ /\/clamd?scan$/) {
+	} elsif ($path =~ /\/clamd?scan$/) {
 
 		open (ANTIVIR,"$path $args $work_dir |") ;
 
@@ -1434,7 +1434,7 @@ sub get_filename {
 				return undef;
 			}
 		}
-	}elsif ($object->isa('Sympa::Family')) {
+	} elsif ($object->isa('Sympa::Family')) {
 		$family = $object;
 	}
 
@@ -1453,7 +1453,7 @@ sub get_filename {
 				$basedir . "/$default_name",
 				Sympa::Constants::DEFAULTDIR . "/$name",
 				Sympa::Constants::DEFAULTDIR . "/$default_name");
-		}else {
+		} else {
 			@try = (
 				$basedir . "/$robot/$name",
 				$basedir . "/$name",
@@ -1484,7 +1484,7 @@ sub get_filename {
 			if (-r $f) {
 				if ($options->{'order'} eq 'all') {
 					push @result, $f;
-				}else {
+				} else {
 					return $f;
 				}
 			}
@@ -1566,7 +1566,7 @@ sub make_tt2_include_path {
 				$path_family = $family->{'dir'}.'/'.$dir;
 			}
 		}
-	}else {
+	} else {
 		$path_etcbindir = Sympa::Constants::DEFAULTDIR;
 		$path_etcdir = $basedir;
 		$path_robot = "$basedir/".$robot if (lc($robot) ne lc($domain));
@@ -1597,7 +1597,7 @@ sub make_tt2_include_path {
 			}
 
 		}
-	}else {
+	} else {
 		@include_path = ($path_etcdir,
 			$path_etcbindir);
 
@@ -1908,7 +1908,7 @@ sub get_regexp {
 
 	if (defined $regexp{$type}) {
 		return $regexp{$type};
-	}else {
+	} else {
 		return '\w+'; ## default is a very strict regexp
 	}
 
@@ -1956,7 +1956,7 @@ sub CleanDir {
 			if (-f "$dir/$f") {
 				unlink ("$dir/$f") ;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$dir/$f");
-			}elsif (-d "$dir/$f") {
+			} elsif (-d "$dir/$f") {
 				unless (Sympa::Tools::File::remove_dir("$dir/$f")) {
 					Sympa::Log::Syslog::do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $ERRNO);
 					next;

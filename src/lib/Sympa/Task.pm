@@ -181,12 +181,12 @@ sub get_used_models {
 		if (defined $task_by_list{$list_id}) {
 			Sympa::Log::Syslog::do_log('debug2',"Found used models for list '%s'",$list_id);
 			return keys %{$task_by_list{$list_id}}
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('debug2',"Did not find any used models for list '%s'",$list_id);
 			return ();
 		}
 
-	}else {
+	} else {
 		return keys %task_by_model;
 	}
 }

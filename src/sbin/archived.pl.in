@@ -179,7 +179,7 @@ unless ($options->{'stderr_to_tty'}) {
 if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
-}else{
+} else {
 	Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 }
@@ -212,7 +212,7 @@ foreach my $robot (@{Sympa::Configuration::get_robots_list()}) {
 			Sympa::Log::Syslog::do_log('err','No vailable directory to store archives. Exiting.');
 			exit -1;
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err','Robot %s has no archives directory. Check arc_path parameter in this robot.conf and in wwsympa.conf.');
 		exit -1;
 	}
@@ -255,7 +255,7 @@ while (!$end) {
 		if ($item->{'list'} && $item->{'robot'}) {
 			rebuild($item->{'list'}.'@'.$item->{'robot'});
 			$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err',"unable to rebuild archive for unkown list/robot.Move to bad");
 			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lock'=>'NULL'});
 			next;
@@ -354,7 +354,7 @@ while (!$end) {
 			}
 		}
 		$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('notice',"Archiving message %s for list %s@%s",$item->{'messagekey'},$item->{'list'},$item->{'robot'});
 		unless (mail2arc ($item)) {
 			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
@@ -457,7 +457,7 @@ sub rebuild {
 	if ($adrlist =~ /^(.*)\@(.*)$/) {
 		$listname = $1;
 		$hostname = $2;
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err',"Match of list address '$adrlist' failed");
 		return undef;
 	}
@@ -473,7 +473,7 @@ sub rebuild {
 
 	if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 		set_hidden_mode($tag);
-	}else {
+	} else {
 		unset_hidden_mode();
 	}
 
@@ -549,7 +549,7 @@ sub rebuild {
 		if ($exitcode) {
 			Sympa::Log::Syslog::do_log('err',"Command $cmd failed with exit code $exitcode");
 		}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('notice',"Rebuilding $adrlist archive completely");
 
 		if (!opendir(DIR, "$arcpath/$adrlist" )) {
@@ -641,7 +641,7 @@ sub mail2arc {
 	my $txtdate = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
 	if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
 		$yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err',"could not scan date");
 		return undef;
 	}
@@ -660,7 +660,7 @@ sub mail2arc {
 
 	if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 		set_hidden_mode($tag);
-	}else {
+	} else {
 		unset_hidden_mode();
 	}
 
@@ -674,7 +674,7 @@ sub mail2arc {
 		printf DUMP $message_in_spool->{'messageasstring'};
 		`$wwsconf->{'custom_archiver'} --list=$listname\@$robot --file=$file`;
 		return 1;
-	}else{
+	} else {
 		my $basedir = $arcpath.'/'.$list->get_list_id();
 
 		if (! -d $basedir) {
@@ -749,7 +749,7 @@ sub mail2arc {
 			chomp($newfile);
 			$newfile++;
 			close IDX;
-		}else{
+		} else {
 			## recreate index file if needed and update it
 			$newfile = create_idx($monthdir) + 1;
 		}

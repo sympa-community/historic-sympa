@@ -96,9 +96,9 @@ sub next {
 	$order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
 	if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
 		$order.=' LIMIT 1';
-	}elsif ($db_type eq 'Oracle'){
+	} elsif ($db_type eq 'Oracle'){
 		$limit_oracle = 'AND rownum<=1';
-	}elsif ($db_type eq 'Sybase'){
+	} elsif ($db_type eq 'Sybase'){
 		$limit_sybase = 'TOP 1';
 	}
 
@@ -273,7 +273,7 @@ sub merge_msg {
 					# Put the charset to UTF-8
 					Encode::from_to($body, $charset, 'UTF-8');
 				}
-			}else {
+			} else {
 				Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
 			}
 
@@ -295,7 +295,7 @@ sub merge_msg {
 				# Put the charset to UTF-8
 				Encode::from_to($body, 'UTF-8',$charset);
 			}
-		}else {
+		} else {
 			Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
 		}
 
@@ -445,13 +445,13 @@ sub store {
 
 	if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {
 		$message_already_on_spool = 1;
-	}else{
+	} else {
 		my $lock = $PID.'@'.hostname() ;
 		if ($message->{'messagekey'}) {
 			# move message to spool bulk and keep it locked
 			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
 			Sympa::Log::Syslog::do_log('debug',"moved message to spool bulk");
-		}else{
+		} else {
 			$message->{'messagekey'} = $bulkspool->store($msg,
 				{'dkim_d'=>$dkim->{d},
 					'dkim_i'=>$dkim->{i},
@@ -507,7 +507,7 @@ sub store {
 		my $rcptasstring ;
 		if  (ref $packet eq 'ARRAY'){
 			$rcptasstring  = join ',',@{$packet};
-		}else{
+		} else {
 			$rcptasstring  = $packet;
 		}
 		my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
@@ -528,7 +528,7 @@ sub store {
 		if ($packet_already_exist) {
 			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
-		}else {
+		} else {
 			unless (Sympa::SDM::do_query( "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", Sympa::SDM::quote($message->{'messagekey'}),Sympa::SDM::quote($msg_id),Sympa::SDM::quote($packetid),Sympa::SDM::quote($rcptasstring),Sympa::SDM::quote($from),Sympa::SDM::quote($robot),Sympa::SDM::quote($listname),$verp,Sympa::SDM::quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date)) {
 				Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
 				return undef;
@@ -562,7 +562,7 @@ sub purge_bulkspool {
 	while (my $key = $sth->fetchrow_hashref('NAME_lc')) {
 		if ( remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
 			$count++;
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});
 		}
 	}
@@ -630,7 +630,7 @@ sub there_is_too_much_remaining_packets {
 	my $remaining_packets = get_remaining_packets_count();
 	if ($remaining_packets > $max) {
 		return $remaining_packets;
-	}else{
+	} else {
 		return 0;
 	}
 }

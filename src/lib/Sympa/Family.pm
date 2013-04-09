@@ -150,7 +150,7 @@ sub new {
 		# the robot can be different from latest new ...
 		if ($robot eq $self->{'robot'}) {
 			return $self;
-		}else {
+		} else {
 			$self = {};
 		}
 	}
@@ -283,7 +283,7 @@ my $list = $result->{'list'};
 ## aliases
 if ($result->{'aliases'} == 1) {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family";
-}else {
+} else {
 	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family, required aliases : $result->{'aliases'} ";
 }
 
@@ -486,10 +486,10 @@ sub modify_list {
 	if ($result->{'aliases'} == 1) {
 		push @{$return->{'string_info'}}, "The $list->{'name'} list has been modified.";
 
-	}elsif ($result->{'install_remove'} eq 'install') {
+	} elsif ($result->{'install_remove'} eq 'install') {
 		push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, required aliases :\n $result->{'aliases'} ";
 
-	}else {
+	} else {
 		push @{$return->{'string_info'}}, "List $list->{'name'} has been modified, aliases need to be removed : \n $result->{'aliases'}";
 
 	}
@@ -720,7 +720,7 @@ sub instantiate {
 			$list = $result;
 
 			## FIRST LIST CREATION
-		} else{
+		} else {
 
 			## Create the list
 			my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'});
@@ -738,7 +738,7 @@ sub instantiate {
 			if ($result->{'aliases'} == 1) {
 				push (@{$self->{'created_lists'}{'with_aliases'}}, $list->{'name'});
 
-			}else {
+			} else {
 				$self->{'created_lists'}{'without_aliases'}{$list->{'name'}} = $result->{'aliases'};
 			}
 
@@ -783,7 +783,7 @@ sub instantiate {
 			print OUT $output;
 			close OUT;
 			print STDOUT "\nOutput saved in $output_file\n";
-		}else{
+		} else {
 			print STDERR "\nUnable to save output in $output_file\n";
 		}
 	}
@@ -1045,7 +1045,7 @@ sub check_param_constraint {
 
 	if (scalar @error) {
 		return \@error;
-}else {
+} else {
 	return 1;
 }
 }
@@ -1461,7 +1461,7 @@ sub _split_xml_file {
 				Sympa::Log::Syslog::do_log('err','elements contained in the root element must be called "list", line %s',$list_elt->line_number());
 				return undef;
 			}
-		}else {
+		} else {
 			next;
 		}
 
@@ -1594,10 +1594,10 @@ sub _update_existing_list {
 	if ($result->{'aliases'} == 1) {
 		push (@{$self->{'updated_lists'}{'aliases_ok'}},$list->{'name'});
 
-	}elsif ($result->{'install_remove'} eq 'install') {
+	} elsif ($result->{'install_remove'} eq 'install') {
 		$self->{'updated_lists'}{'aliases_to_install'}{$list->{'name'}} = $result->{'aliases'};
 
-	}else {
+	} else {
 		$self->{'updated_lists'}{'aliases_to_remove'}{$list->{'name'}} = $result->{'aliases'};
 
 	}
@@ -1761,7 +1761,7 @@ sub _set_status_changes {
 ##
 ##	if ($list->{'admin'}{'user_data_source'} eq 'file') {
 ##	    $list->{'users'} = Sympa::List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
-##	}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
+##	} elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
 ##	    unless (-f "$list->{'dir'}/subscribers.closed.dump") {
 ##		Sympa::Log::Syslog::do_log('notice', 'No subscribers to restore');
 ##	    }
@@ -1995,7 +1995,7 @@ sub is_allowed_to_create_automatic_lists {
 
 	if (ref($result) eq 'HASH') {
 		$r_action = $result->{'action'};
-	}else {
+	} else {
 		Sympa::Log::Syslog::do_log('err', 'Unconsistent scenario evaluation result for automatic list creation in family %s', $self->{'name'});
 		return undef;
 	}

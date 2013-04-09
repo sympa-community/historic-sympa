@@ -107,7 +107,7 @@ sub load {
 			chomp $current_line;
 			$folded_line .= $current_line;
 			next;
-		}elsif (defined $folded_line) {
+		} elsif (defined $folded_line) {
 			$current_line = $folded_line.$current_line;
 			$folded_line = undef;
 		}
@@ -117,7 +117,7 @@ sub load {
 			$value =~ s/\s*$//;
 
 			$o{$keyword} = [ $value, $line_num ];
-		}else {
+		} else {
 #	    printf STDERR Msg(1, 3, "Malformed line %d: %s"), $config, $_;
 			$config_err++;
 		}

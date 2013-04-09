@@ -216,7 +216,7 @@ sub mail_file {
 	$message_as_string .= join('',$output);
 	$header_possible = 1;
 
-	}else { # or not
+	} else { # or not
 		$message_as_string .= $data->{'body'};
 	}
 
@@ -226,9 +226,9 @@ sub mail_file {
 			last if ($line=~/^\s*$/);
 			if ($line=~/^[\w-]+:\s*/) { ## A header field
 				$existing_headers=1;
-			}elsif ($existing_headers && ($line =~ /^\s/)) { ## Following of a header field
+			} elsif ($existing_headers && ($line =~ /^\s/)) { ## Following of a header field
 				next;
-			}else{
+			} else {
 				last;
 			}
 
@@ -269,10 +269,10 @@ sub mail_file {
 		if (ref ($params{recipient})) {
 			if ($data->{'to'}) {
 				$to = $data->{'to'};
-			}else {
+			} else {
 				$to = join(",\n   ", @{$params{recipient}});
 			}
-		}else{
+		} else {
 			$to = $params{recipient};
 		}
 		$headers .= "To: $to\n";
@@ -494,9 +494,9 @@ sub mail_message {
 	$msg_header = $message->{'msg'}->head;
 	if (!($message->{'protected'})) {
 		$msg_body = $message->{'msg'}->body_as_string;
-	}elsif ($message->{'smime_crypted'}) {
+	} elsif ($message->{'smime_crypted'}) {
 		$msg_body = ${$message->{'msg_as_string'}}; # why is object message msg_as_string contain a body _as_string ? wrong name for this mesage property
-	}else{
+	} else {
 		## Get body from original message body
 		my @bodysection =split("\n\n",$message->{'msg_as_string'});  # convert it as a tab with headers as first element
 		shift @bodysection;                                          # remove headers
@@ -799,7 +799,7 @@ sub _sendto {
 				$tag_as_last = 0;
 			}
 		}
-	}else{
+	} else {
 		$message->{'msg_as_string'} = $msg_header->as_string . "\n" . $msg_body;
 		my $result = _sending(
 			message         => $message,
@@ -880,7 +880,7 @@ sub _sending {
 		);
 		if ($signed_msg) {
 			$message->{'msg'} = $signed_msg->dup;
-		}else{
+		} else {
 			Sympa::Log::Syslog::do_log('notice', 'unable to sign message from %s', $listname);
 			return undef;
 		}
@@ -891,7 +891,7 @@ sub _sending {
 	my $trackingfeature ;
 	if (($verp eq 'mdn')||($verp eq 'dsn')) {
 		$trackingfeature = $verp;
-	}else{
+	} else {
 		$trackingfeature ='';
 	}
 	my $mergefeature = ($merge eq 'on');
@@ -918,7 +918,7 @@ sub _sending {
 			Sympa::List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
 			return undef;
 		}
-	}elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool
+	} elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
 
 		$sympa_email = $params{sympa};
@@ -931,9 +931,9 @@ sub _sending {
 		my $all_rcpt;
 		if (ref($rcpt) eq 'SCALAR') {
 			$all_rcpt = $$rcpt;
-		}elsif (ref($rcpt) eq 'ARRAY') {
+		} elsif (ref($rcpt) eq 'ARRAY') {
 			$all_rcpt = join(',', @{$rcpt});
-		}else {
+		} else {
 			$all_rcpt = $rcpt;
 		}
 		printf TMP "X-Sympa-To: %s\n", $all_rcpt;
@@ -949,7 +949,7 @@ sub _sending {
 			Sympa::Log::Syslog::do_log('notice', 'Cannot rename %s to %s : %s', $sympa_file, $new_file, $ERRNO);
 			return undef;
 		}
-	}else{ # send it now
+	} else { # send it now
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
 		*SMTP = _smtpto($from, $rcpt, $robot, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
 		print SMTP $message->{'msg'}->as_string ;
@@ -987,7 +987,7 @@ sub _smtpto {
 
 	if (ref($rcpt) eq 'SCALAR') {
 		Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s )', $from, $$rcpt,$sign_mode);
-	}elsif (ref($rcpt) eq 'ARRAY')  {
+	} elsif (ref($rcpt) eq 'ARRAY')  {
 		Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $from, join(',', @{$rcpt}), $sign_mode);
 	}
 
@@ -998,7 +998,7 @@ sub _smtpto {
 
 	if (ref($rcpt) eq 'SCALAR') {
 		$$rcpt =~ s/^-/\\-/;
-	}elsif (ref($rcpt) eq 'ARRAY') {
+	} elsif (ref($rcpt) eq 'ARRAY') {
 		my @emails = @$rcpt;
 		foreach my $i (0..$#emails) {
 			$rcpt->[$i] =~ s/^-/\\-/;
@@ -1033,9 +1033,9 @@ sub _smtpto {
 
 		if (! ref($rcpt)) {
 			exec $sendmail, split(/\s+/,$sendmail_args),'-f', $from, $rcpt;
-		}elsif (ref($rcpt) eq 'SCALAR') {
+		} elsif (ref($rcpt) eq 'SCALAR') {
 			exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, $$rcpt;
-		}elsif (ref($rcpt) eq 'ARRAY'){
+		} elsif (ref($rcpt) eq 'ARRAY'){
 			exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, @$rcpt;
 		}
 
@@ -1045,9 +1045,9 @@ sub _smtpto {
 		$str = "safefork: $sendmail $sendmail_args -f $from ";
 		if (! ref($rcpt)) {
 			$str .= $rcpt;
-		}elsif (ref($rcpt) eq 'SCALAR') {
+		} elsif (ref($rcpt) eq 'SCALAR') {
 			$str .= $$rcpt;
-		}else {
+		} else {
 			$str .= join(' ', @$rcpt);
 		}
 		Sympa::Log::Syslog::do_log('notice', $str);

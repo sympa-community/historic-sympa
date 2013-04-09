@@ -62,7 +62,7 @@ sub set_file_rights {
 			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",$params{'user'});
 			return undef;
 		}
-	}else {
+	} else {
 		$uid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
 	}
 	if ($params{'group'}) {
@@ -70,7 +70,7 @@ sub set_file_rights {
 			Sympa::Log::Syslog::do_log('err', "Group %s can't be found",$params{'group'});
 			return undef;
 		}
-	}else {
+	} else {
 		$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
 	}
 	unless (chown($uid,$gid, $params{'file'})){
@@ -122,7 +122,7 @@ sub del_dir {
 		}
 		closedir DIR;
 		unless(rmdir $dir) {Sympa::Log::Syslog::do_log('err','Unable to delete directory %s: $ERRNO',$dir);}
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err','Unable to open directory %s to delete the files it contains: $ERRNO',$dir);
 	}
 }
@@ -221,7 +221,7 @@ sub shift_file {
 			if ($count lt $i) {
 				if (unlink ($oldfile)) {
 					Sympa::Log::Syslog::do_log('info', "unlink $oldfile");
-				}else{
+				} else {
 					Sympa::Log::Syslog::do_log('info', "unable to unlink $oldfile");
 				}
 			}
@@ -267,7 +267,7 @@ sub list_dir {
 			my $decoder = Encode::Guess::guess_encoding($file, $original_encoding, 'utf-8');
 			if (ref $decoder) {
 				$encoding = $decoder->name;
-			}else {
+			} else {
 				$guess = $decoder;
 			}
 
@@ -301,7 +301,7 @@ sub get_dir_size {
 			if (-d "$dir/$file") {
 				$size += get_dir_size("$dir/$file");
 			}
-			else{
+			else {
 				my @info = stat "$dir/$file" ;
 				$size += $info[7];
 			}
@@ -332,7 +332,7 @@ sub remove_dir {
 			unless (rmdir($name)) {
 				Sympa::Log::Syslog::do_log('err','Error while removing dir %s',$name);
 			}
-		}else{
+		} else {
 			unless (unlink($name)) {
 				Sympa::Log::Syslog::do_log('err','Error while removing file  %s',$name);
 			}
@@ -375,12 +375,12 @@ sub a_is_older_than_b {
 	my $answer = undef;
 	if (-r $params{'a_file'}) {
 		$a_file_readable = 1;
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'a_file'});
 	}
 	if (-r $params{'b_file'}) {
 		$b_file_readable = 1;
-	}else{
+	} else {
 		Sympa::Log::Syslog::do_log('err', 'Could not read file "%s". Comparison impossible', $params{'b_file'});
 	}
 	if ($a_file_readable && $b_file_readable) {
@@ -388,7 +388,7 @@ sub a_is_older_than_b {
 		my @b_stats = stat ($params{'b_file'});
 		if($a_stats[9] < $b_stats[9]){
 			$answer = 1;
-		}else{
+		} else {
 			$answer = 0;
 		}
 	}

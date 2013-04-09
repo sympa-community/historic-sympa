@@ -172,7 +172,7 @@ sub get_fields {
 		my $length = $ref->{'length'} - 4; # What a dirty method ! We give a Sympa tee shirt to anyone that suggest a clean solution ;-)
 		if ( $ref->{'type'} eq 'varchar') {
 			$result{$ref->{'field'}} = $ref->{'type'}.'('.$length.')';
-		}else{
+		} else {
 			$result{$ref->{'field'}} = $ref->{'type'};
 		}
 	}

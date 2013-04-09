@@ -200,7 +200,7 @@ foreach my $tpl (@templates) {
 		$dest_path =~ s/templates/mail_tt2/;
 	}elsif ($path =~ /\/expl\//) {
 		$dest_path .= '/mail_tt2';
-	}else {
+	} else {
 		$dest_path = $path;
 	}
 
@@ -271,7 +271,7 @@ sub convert {
 	while (<TPL>) {
 		if ($out_file) {
 			print TT2 Sympa::Template::Compat::_translate($_);
-		}else {
+		} else {
 			print STDOUT Sympa::Template::Compat::_translate($_);
 		}
 	}
@@ -313,7 +313,7 @@ sub my_mkdir {
 			printf STDERR "Error : Cannot create $path directory : $ERRNO\n";
 			return undef;
 		}
-	}else {
+	} else {
 		return undef;
 	}
 

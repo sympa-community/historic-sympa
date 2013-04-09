@@ -78,7 +78,7 @@ sub ciphersaber_installed {
     if ($is_installed) {
 	require Crypt::CipherSaber;
 	$cipher = Crypt::CipherSaber->new($cookie);
-    }else{
+    } else {
 	$cipher = 'no_cipher';
     }
 }
