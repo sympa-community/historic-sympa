@@ -51,28 +51,28 @@ use Sympa::Tools::File;
 use Sympa::Tools::Password;
 
 my %comms =  (
-	'add'                               => 'add',
-	'con|confirm'                       => 'confirm',
-	'del|delete'                        => 'del',
-	'dis|distribute'                    => 'distribute',
-	'get'                               => 'getfile',
-	'hel|help|sos'                      => 'help',
-	'inf|info'                          => 'info',
-	'inv|invite'                        => 'invite',
-	'ind|index'                         => 'index',
-	'las|last'                          => 'last',
-	'lis|lists?'                        => 'lists',
-	'mod|modindex|modind'               => 'modindex',
-	'qui|quit|end|stop|-'               => 'finished',
-	'rej|reject'                        => 'reject',
-	'rem|remind'                        => 'remind',
-	'rev|review|who'                    => 'review',
-	'set'                               => 'set',
-	'sub|subscribe'                     => 'subscribe',
-	'sig|signoff|uns|unsub|unsubscribe' => 'signoff',
-	'sta|stats'                         => 'stats',
-	'ver|verify'                        => 'verify',
-	'whi|which|status'                  => 'which'
+	'add'                               => '_add',
+	'con|confirm'                       => '_confirm',
+	'del|delete'                        => '_del',
+	'dis|distribute'                    => '_distribute',
+	'get'                               => '_getfile',
+	'hel|help|sos'                      => '_help',
+	'inf|info'                          => '_info',
+	'inv|invite'                        => '_invite',
+	'ind|index'                         => '_index',
+	'las|last'                          => '_last',
+	'lis|lists?'                        => '_lists',
+	'mod|modindex|modind'               => '_modindex',
+	'qui|quit|end|stop|-'               => '_finished',
+	'rej|reject'                        => '_reject',
+	'rem|remind'                        => '_remind',
+	'rev|review|who'                    => '_review',
+	'set'                               => '_set',
+	'sub|subscribe'                     => '_subscribe',
+	'sig|signoff|uns|unsub|unsubscribe' => '_signoff',
+	'sta|stats'                         => '_stats',
+	'ver|verify'                        => '_verify',
+	'whi|which|status'                  => '_which'
 );
 # command sender
 my $sender = '';
@@ -165,21 +165,12 @@ sub parse {
 	return 'unknown_cmd';
 }
 
-=item finished()
+# _finished()
+# Do not process what is after this line
+# Parameters: None.
+# Return value: a true value.
 
-Do not process what is after this line
-
-Parameters:
-
-None.
-
-Return value:
-
-A true value.
-
-=cut
-
-sub finished {
+sub _finished {
 	Sympa::Log::Syslog::do_log('debug2', '()');
 
 	Sympa::Report::notice_report_cmd('finished',{},$cmd_line);
@@ -187,27 +178,13 @@ sub finished {
 }
 
 
-=item help(undef, $robot)
+# _help(undef, $robot)
+# Sends the help file for the software
+# Parameters:
+# - $robot => robot
+# Return value: A true value, or undef if something went wrong.
 
-Sends the help file for the software
-
-Parameters:
-
-=over
-
-=item C<undef> =>
-
-=item C<$robot> => robot
-
-=back
-
-Return value:
-
-A true value, or I<undef> if something went wrong.
-
-=cut
-
-sub help {
+sub _help {
 	my (undef, $robot) = @_;
 
 	my $etc =  Sympa::Configuration::get_robot_conf($robot, 'etc');
@@ -264,30 +241,15 @@ sub help {
 	return 1;
 }
 
+#_lists(undef, $robot, $sign_mod, $message)
+# Sends back the list of public lists on this node.
+# Parameters:
+# - $robot: robot
+# - $sign_mod:
+# - $message:
+# Return value:
 
-=item lists(undef, $robot, $sign_mod, $message)
-
-Sends back the list of public lists on this node.
-
-Parameters:
-
-=over
-
-=item C<undef> =>
-
-=item C<$robot> => robot
-
-=item C<$sign_mod> =>
-
-=item C<$message> =>
-
-=back
-
-Return value:
-
-=cut
-
-sub lists {
+sub _lists {
 	my (undef, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'for robot %s, sign_mod %, message %s', $robot,$sign_mod , $message);
 
@@ -337,31 +299,16 @@ sub lists {
 	return 1;
 }
 
-=item stats($listname, $robot, $sign_mod, $message)
+# _stats($listname, $robot, $sign_mod, $message)
+# Sends the statistics about a list using template 'stats_report'.
+# Parameters:
+# - $listname: list name
+# - $robot: robot
+# - $sign_mod: 'smime' | 'dkim'
+# - $message:
+# Return value: 'unknown_list'|'not_allowed'|1| undef
 
-Sends the statistics about a list using template 'stats_report'.
-
-Parameters:
-
-=over
-
-=item C<listname> => list name
-
-=item C<$robot> => robot
-
-=item C<$sign_mod> => 'smime' | 'dkim'
-
-=item C<$message> =>
-
-=back
-
-Return value:
-
-OUT : 'unknown_list'|'not_allowed'|1  | undef
-
-=cut
-
-sub stats {
+sub _stats {
 	my ($listname, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
 
@@ -372,7 +319,7 @@ sub stats {
 		return 'unknown_list';
 	}
 
-	my $auth_method = get_auth_method('stats',$sender,{'type'=>'auth_failed',
+	my $auth_method = _get_auth_method('stats',$sender,{'type'=>'auth_failed',
 			'data'=>{},
 			'msg'=> "STATS $listname from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -422,23 +369,14 @@ sub stats {
 return 1;
 }
 
+# _getfile($command, $robot)
+# Sends back the requested archive file
+# Parameters:
+# - $which: command parameters : listname filename
+# - $robot: robot
+# Return value: 'unknownlist'|'no_archive'|'not_allowed'|1
 
-=item getfile($command, $robot)
-
-Sends back the requested archive file
-
-Parameters:
-
-# IN : -$which (+): command parameters : listname filename
-#      -$robot (+): robot
-
-Return value:
-
-OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
-
-=cut
-
-sub getfile {
+sub _getfile {
 	my ($arg, $robot) = @_;
 
 	my ($which, $file) = split(/\s+/, $arg);
@@ -485,27 +423,14 @@ sub getfile {
 	return 1;
 }
 
-=item last($which, $robot)
+# _last($which, $robot)
+# Sends back the last archive file.
+# Parameters:
+# - $which: listname
+# - $robot: robot
+# Return value: 'unknownlist'|'no_archive'|'not_allowed'|1
 
-Sends back the last archive file.
-
-Parameters:
-
-=over
-
-=item C<$which> => listname
-
-=item C<$robot> => robot
-
-=back
-
-Return value:
-
-'unknownlist'|'no_archive'|'not_allowed'|1
-
-=cut
-
-sub last {
+sub _last {
 	my ($which, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $which, $robot);
 
@@ -545,18 +470,14 @@ sub last {
 	return 1;
 }
 
-############################################################
-#  index
-############################################################
-#  Sends the list of archived files of a list
-#
-# IN : -$which (+): list name
-#      -$robot (+): robot
-#
-# OUT : 'unknown_list'|'not_allowed'|'no_archive'|1
-#
-#############################################################
-sub index {
+# _index($which, $robot)
+# Sends the list of archived files of a list
+# Parameters:
+# - $which: list name
+# - $robot: robot
+# Return value: 'unknown_list'|'not_allowed'|'no_archive'|1
+
+sub _index {
 	my ($which, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s) robot (%s)',$which,$robot);
 
@@ -594,20 +515,16 @@ Sympa::Log::Syslog::do_log('info', 'INDEX %s from %s accepted (%d seconds)', $wh
 return 1;
 }
 
-############################################################
-#  review
-############################################################
-#  Sends the list of subscribers to the requester.
-#
-# IN : -$listname (+): list name
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'| -
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       |'no_subscribers'|1 | undef
-#
-################################################################
-sub review {
+# _review($listname, $robot, $sign_mod, $message)
+# Sends the list of subscribers to the requester.
+# Parameters:
+# - $listname: list name
+# - $robot: robot
+# - $sign_mod : 'smime'| -
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'|'no_subscribers'|1|
+# undef
+
+sub _review {
 	my ($listname, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s)', $listname,$robot,$sign_mod );
 
@@ -624,7 +541,7 @@ sub review {
 
 	$list->on_the_fly_sync_include('use_ttl' => 1);
 
-	my $auth_method = get_auth_method('review','',{'type'=>'auth_failed',
+	my $auth_method = _get_auth_method('review','',{'type'=>'auth_failed',
 			'data'=>{},
 			'msg'=> "REVIEW $listname from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -701,19 +618,15 @@ Sympa::Report::reject_report_cmd('intern',$error,{'listname' => $listname},$cmd_
 return undef;
 }
 
-############################################################
-#  verify
-############################################################
-#  Verify an S/MIME signature
-#
-# IN : -$listname (+): list name
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'| 'dkim' | -
-#
-# OUT : 1
-#
-#############################################################
-sub verify {
+# _verify($listname, $robot, $sign_mod)
+# Verify an S/MIME signature
+# Parameters:
+# - $listname: list name
+# - $robot: robot
+# - $sign_mod: 'smime'| 'dkim'
+# Return value: 1
+
+sub _verify {
 	my ($listname, $robot, $sign_mod) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $sign_mod, $robot);
 
@@ -734,21 +647,16 @@ sub verify {
 	return 1;
 }
 
-##############################################################
-#  subscribe
-##############################################################
-#  Subscribes a user to a list. The user sent a subscribe
-#  command. Format was : sub list optionnal comment. User can
-#  be informed by template 'welcome'
-#
-# IN : -$what (+): command parameters : listname(+), comment
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'| -
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'| 1 | undef
-#
-################################################################
-sub subscribe {
+# _subscribe
+# Subscribes a user to a list. The user sent a subscribe
+# command. Format was : sub list optionnal comment. User can
+# be informed by template 'welcome'
+# Parameters:
+# - $what (+): command parameters : listname(+), comment
+# - $robot (+): robot
+# - $sign_mod : 'smime'| -
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'| 1 | undef
+sub _subscribe {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s, %s, %s)', $what,$robot,$sign_mod,$message);
 
@@ -773,7 +681,7 @@ sub subscribe {
 
 	## Now check if the user may subscribe to the list
 
-	my $auth_method = get_auth_method('subscribe',$sender,{'type'=>'wrong_email_confirm',
+	my $auth_method = _get_auth_method('subscribe',$sender,{'type'=>'wrong_email_confirm',
 			'data'=>{'command'=>'subscription'},
 			'msg'=> "SUB $which from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -916,21 +824,15 @@ sub subscribe {
 	return undef;
 }
 
-############################################################
-#  info
-############################################################
-#  Sends the information file to the requester
-#
-# IN : -$listname (+): concerned list
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'|undef
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       | 1 | undef
-#
-#
-##############################################################
-sub info {
+#  _info
+# Sends the information file to the requester
+# Parameters:
+# - $listname (+): concerned list
+# - $robot (+): robot
+# - $sign_mod : 'smime'|undef
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'|1| undef
+
+sub _info {
 	my ($listname, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
 
@@ -943,7 +845,7 @@ sub info {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	my $auth_method = get_auth_method('info','',{'type'=>'auth_failed',
+	my $auth_method = _get_auth_method('info','',{'type'=>'auth_failed',
 			'data'=>{},
 			'msg'=> "INFO $listname from $sender"},$sign_mod,$list);
 
@@ -1023,22 +925,17 @@ sub info {
 
 }
 
-##############################################################
-#  signoff
-##############################################################
-#  Unsubscribes a user from a list. The user sent a signoff
+# _signoff
+# Unsubscribes a user from a list. The user sent a signoff
 # command. Format was : sig list. He can be informed by template 'bye'
-#
-# IN : -$which (+): command parameters : listname(+), email(+)
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'| -
-#
-# OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
-#       |'not_allowed'| 1 | undef
-#
-#
-##############################################################
-sub signoff {
+# Parametets:
+# - $which (+): command parameters : listname(+), email(+)
+# - $robot (+): robot
+# - $sign_mod : 'smime'| -
+# Return value : 'syntax_error'|'unknown_list'|'wrong_auth'|'not_allowed'|
+# 1 | undef
+
+sub _signoff {
 	my ($which, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s, %s, %s)', $which,$robot, $sign_mod, $message);
 
@@ -1099,7 +996,7 @@ sub signoff {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	$auth_method = get_auth_method('signoff',$email,{'type'=>'wrong_email_confirm',
+	$auth_method = _get_auth_method('signoff',$email,{'type'=>'wrong_email_confirm',
 			'data'=>{'command'=>'unsubscription'},
 			'msg'=> "SIG $which from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -1206,24 +1103,17 @@ sub signoff {
 	return undef;
 }
 
-############################################################
-#  add
-############################################################
-#  Adds a user to a list (requested by another user). Verifies
-#  the proper authorization and sends acknowledgements unless
-#  quiet add.
-#
-# IN : -$what (+): command parameters : listname(+),
-#                                    email(+), comments
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'|undef
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       | 1 | undef
-#
-#
-############################################################
-sub add {
+# _add
+# Adds a user to a list (requested by another user). Verifies
+# the proper authorization and sends acknowledgements unless
+# quiet add.
+# Parameters:
+# - $what (+): command parameters : listname(+), email(+), comments
+# - $robot (+): robot
+# - $sign_mod : 'smime'|undef
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'|1|undef
+
+sub _add {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $what,$robot, $sign_mod, $message);
 
@@ -1243,7 +1133,7 @@ sub add {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	my $auth_method = get_auth_method('add',$email,{'type'=>'wrong_email_confirm',
+	my $auth_method = _get_auth_method('add',$email,{'type'=>'wrong_email_confirm',
 			'data'=>{'command'=>'addition'},
 			'msg'=> "ADD $which $email from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -1347,23 +1237,16 @@ sub add {
 
 }
 
+# _invite
+# Invite someone to subscribe a list by sending him
+# template 'invite'
+# Parameters:
+# - $what (+): listname(+), email(+) and comments
+# - $robot (+): robot
+# - $sign_mod : 'smime'|undef
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'|1|undef
 
-############################################################
-#  invite
-############################################################
-#  Invite someone to subscribe a list by sending him
-#  template 'invite'
-#
-# IN : -$what (+): listname(+), email(+) and comments
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'|undef
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       | 1 | undef
-#
-#
-##############################################################
-sub invite {
+sub _invite {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
@@ -1383,7 +1266,7 @@ sub invite {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	my $auth_method = get_auth_method('invite',$email,{'type'=>'wrong_email_confirm',
+	my $auth_method = _get_auth_method('invite',$email,{'type'=>'wrong_email_confirm',
 			'data'=>{'command'=>'invitation'},
 			'msg'=> "INVITE $which $email from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -1496,24 +1379,17 @@ sub invite {
 	return undef;
 }
 
-############################################################
-#  remind
-############################################################
-#  Sends a personal reminder to each subscriber of one list or
-#  of every list ($which = *) using template 'remind' or
-#  'global_remind'
-#
-#
-# IN : -$which (+): * | listname
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'| -
-#
-# OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
-#       |'not_allowed' |  1 | undef
-#
-#
-##############################################################
-sub remind {
+# _remind
+# Sends a personal reminder to each subscriber of one list or
+# of every list ($which = *) using template 'remind' or
+# 'global_remind'
+# Parameters:
+# - $which (+): * | listname
+# - $robot (+): robot
+# - $sign_mod : 'smime'| -
+# Return value: 'syntax_error'|'unknown_list'|'wrong_auth'|'not_allowed'|1|undef
+
+sub _remind {
 	my ($which, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $which,$robot,$sign_mod,$message);
 
@@ -1542,11 +1418,11 @@ sub remind {
 	my $auth_method;
 
 	if ($listname eq '*') {
-		$auth_method = get_auth_method('remind','',{'type'=>'auth_failed',
+		$auth_method = _get_auth_method('remind','',{'type'=>'auth_failed',
 				'data'=>{},
 				'msg'=> "REMIND $listname from $sender"},$sign_mod);
 	}else {
-		$auth_method = get_auth_method('remind','',{'type'=>'auth_failed',
+		$auth_method = _get_auth_method('remind','',{'type'=>'auth_failed',
 				'data'=>{},
 				'msg'=> "REMIND $listname from $sender"},$sign_mod,$list);
 	}
@@ -1725,25 +1601,17 @@ sub remind {
 }
 }
 
-
-
-############################################################
-#  del
-############################################################
+# _del
 # Removes a user from a list (requested by another user).
 # Verifies the authorization and sends acknowledgements
 # unless quiet is specified.
-#
-# IN : -$what (+): command parameters : listname(+), email(+)
-#      -$robot (+): robot
-#      -$sign_mod : 'smime'|undef
-#
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       | 1 | undef
-#
-#
-##############################################################
-sub del {
+# Parameters:
+# - $what (+): command parameters : listname(+), email(+)
+# - $robot (+): robot
+# - $sign_mod : 'smime'|undef
+# Return value: 'unknown_list'|'wrong_auth'|'not_allowed'|1|undef
+
+sub _del {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $what,$robot,$sign_mod,$message);
 
@@ -1763,7 +1631,7 @@ sub del {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	my $auth_method = get_auth_method('del',$who,{'type'=>'wrong_email_confirm',
+	my $auth_method = _get_auth_method('del',$who,{'type'=>'wrong_email_confirm',
 			'data'=>{'command'=>'delete'},
 			'msg'=> "DEL $which $who from $sender"},$sign_mod,$list);
 	return 'wrong_auth'
@@ -1853,22 +1721,16 @@ sub del {
 	return undef;
 }
 
-
-############################################################
-#  set
-############################################################
-#  Change subscription options (reception or visibility)
-#
-# IN : -$what (+): command parameters : listname,
+# _set
+# Change subscription options (reception or visibility)
+# Parameters:
+# - $what (+): command parameters : listname,
 #        reception mode (digest|digestplain|nomail|normal...)
 #        or visibility mode(conceal|noconceal)
-#      -$robot (+): robot
-#
-# OUT : 'syntax_error'|'unknown_list'|'not_allowed'|'failed'|1
-#
-#
-#############################################################
-sub set {
+# - $robot (+): robot
+# Return value:'syntax_error'|'unknown_list'|'not_allowed'|'failed'|1
+
+sub _set {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
@@ -1983,18 +1845,15 @@ sub set {
 	return 1;
 }
 
-############################################################
-#  distribute
-############################################################
-#  distributes the broadcast of a validated moderated message
+# _distribute
+# Distributes the broadcast of a validated moderated message
+# Parameters:
+# - $what (+): command parameters : listname(+), authentification key(+)
+# - $robot (+): robot
 #
-# IN : -$what (+): command parameters : listname(+), authentification key(+)
-#      -$robot (+): robot
-#
-# OUT : 'unknown_list'|'msg_noty_found'| 1 | undef
-#
-##############################################################
-sub distribute {
+# Return value: 'unknown_list'|'msg_noty_found'| 1 | undef
+
+sub _distribute {
 	my ($what, $robot) = @_;
 
 	$what =~ /^\s*(\S+)\s+(.+)\s*$/;
@@ -2077,22 +1936,14 @@ sub distribute {
 	return 1;
 }
 
+# _confirm
+# Confirms the authentification of a message for its distribution on a list
+# Parameters:
+# - $what (+): command parameter : authentification key
+# - $robot (+): robot
+# Return value: 'wrong_auth'|'msg_not_found'| 1  | undef
 
-############################################################
-#  confirm
-############################################################
-#  confirms the authentification of a message for its
-#  distribution on a list
-#
-# IN : -$what (+): command parameter : authentification key
-#      -$robot (+): robot
-#
-# OUT : 'wrong_auth'|'msg_not_found'
-#       | 1  | undef
-#
-#
-############################################################
-sub confirm {
+sub _confirm {
 	my ($what, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s)', $what, $robot);
 
@@ -2225,20 +2076,15 @@ sub confirm {
 	}
 }
 
-############################################################
-#  reject
-############################################################
-#  Refuse and delete  a moderated message and notify sender
-#  by sending template 'reject'
-#
-# IN : -$what (+): command parameter : listname and authentification key
-#      -$robot (+): robot
-#
-# OUT : 'unknown_list'|'wrong_auth'| 1 | undef
-#
-#
-##############################################################
-sub reject {
+# _reject
+# Refuse and delete  a moderated message and notify sender
+# by sending template 'reject'
+# Parameters:
+# - $what (+): command parameter : listname and authentification key
+# - $robot (+): robot
+# Return value: 'unknown_list'|'wrong_auth'| 1 | undef
+
+sub _reject {
 	my ($what, $robot, undef, $editor_msg) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s)', $what, $robot);
 
@@ -2308,21 +2154,15 @@ $modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 return 1;
 }
 
+#  _modindex
+# Sends a list of current messages to moderate of a list
+# (look into spool queuemod)
+# Parameters:
+# - $name (+): listname
+# - $robot (+): robot
+# Return value: 'unknown_list'|'not_allowed'|'no_file'|1
 
-#########################################################
-#  modindex
-#########################################################
-#  Sends a list of current messages to moderate of a list
-#  (look into spool queuemod)
-#  usage :    modindex <liste>
-#
-# IN : -$name (+): listname
-#      -$robot (+): robot
-#
-# OUT : 'unknown_list'|'not_allowed'|'no_file'|1
-#
-#########################################################
-sub modindex {
+sub _modindex {
 	my ($name, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s)',$name,$robot);
 
@@ -2422,20 +2262,15 @@ Sympa::Log::Syslog::do_log('info', 'MODINDEX %s from %s accepted (%d seconds)', 
 return 1;
 }
 
+# _which
+# Return list of lists that sender is subscribed. If he is
+# owner and/or editor, managed lists are also noticed.
+# Parameters:
+# - : ?
+# - $robot (+): robot
+# Return value : 1
 
-#########################################################
-#  which
-#########################################################
-#  Return list of lists that sender is subscribed. If he is
-#  owner and/or editor, managed lists are also noticed.
-#
-# IN : - : ?
-#      -$robot (+): robot
-#
-# OUT : 1
-#
-#########################################################
-sub which {
+sub _which {
 	my (undef, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', '', $robot, $sign_mod, $message);
 
@@ -2498,28 +2333,20 @@ sub which {
 	return 1;
 }
 
-
-################ Function for authentification #######################
-
-##########################################################
-#  get_auth_method
-##########################################################
+# _get_auth_method($cmd,$email,$error,$sign_mod,$list)
 # Checks the authentification and return method
 # used if authentification not failed
-#
-# IN :-$cmd (+): current command
-#     -$email (+): used to compute auth
-#     -$error (+):ref(HASH) with keys :
-#        -type : for message_report.tt2 parsing
-#        -data : ref(HASH) for message_report.tt2 parsing
-#        -msg : for Sympa::Log::Syslog::do_log
-#     -$sign_mod (+): 'smime'| 'dkim' | -
-#     -$list : ref(List) | -
-#
-# OUT : 'smime'|'md5'|'dkim'|'smtp' if authentification OK, undef else
-#       | undef
-##########################################################
-sub get_auth_method {
+# Parameters:
+# - $cmd (+): current command
+# - $email (+): used to compute auth
+# - $error (+):ref(HASH) with keys :
+#   -type : for message_report.tt2 parsing
+#   -data : ref(HASH) for message_report.tt2 parsing
+#   -msg : for Sympa::Log::Syslog::do_log
+# - $sign_mod (+): 'smime'| 'dkim' | -
+# - $list : ref(List) | -
+# Return value: 'smime'|'md5'|'dkim'|'smtp' if authentification OK, undef else
+sub _get_auth_method {
 	my ($cmd,$email,$error,$sign_mod,$list) = @_;
 	Sympa::Log::Syslog::do_log('debug3',"()");
 
