@@ -463,6 +463,34 @@ sub do_prepared_query {
 	return $self->{'cached_prepared_statements'}{$query};
 }
 
+=item $source->get_query_handle($query)
+
+Returns a query handle for the given query, caching it automagically.
+
+Parameters:
+
+=over
+
+=item string
+
+The SQL query.
+
+=back
+
+Return value:
+
+A DBI statement handle object, or I<undef> if something went wrong.
+
+=cut
+
+sub get_query_handle {
+	my ($self, $query) = @_;
+
+	return 
+		$self->{cache}->{$query} ||= 
+		$self->{dbh}->prepare($query);
+}
+
 =item $source->prepare_query_log_values(@values)
 
 Parameters:
