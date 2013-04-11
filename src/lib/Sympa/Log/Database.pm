@@ -85,6 +85,63 @@ my %action_type = (
 	/ ],
 );
 
+my %queries = (
+	get_min_date => "SELECT min(date_logs) FROM logs_table",
+	get_max_date => "SELECT max(date_logs) FROM logs_table",
+
+	get_subscriber    =>
+		"SELECT number_messages_subscriber "   .
+		"FROM subscriber_table "               .
+		"WHERE ("                              .
+			"robot_subscriber = '%s' AND " .
+			"list_subscriber  = '%s' AND " .
+			"user_subscriber  = '%s'"      .
+		")",
+	update_subscriber =>
+		"UPDATE subscriber_table "               .
+		"SET number_messages_subscriber = '%d' " .
+		"WHERE ("                                .
+			"robot_subscriber = '%s' AND "   .
+			"list_subscriber  = '%s' AND "   .
+			"user_subscriber  = '%s'"        .
+		")",
+
+	get_data =>
+		"SELECT * "                                      .
+		"FROM stat_table "                               .
+		"WHERE "                                         .
+			"(date_stat BETWEEN '%s' AND '%s') AND " .
+			"(read_stat = 0)",
+	update_data =>
+		"UPDATE stat_table "                     .
+		"SET read_stat = 1 "                     .
+		"WHERE (date_stat BETWEEN '%s' AND '%s')",
+
+	add_log_message =>
+		'INSERT INTO logs_table ('                                  .
+			'id_logs, date_logs, robot_logs, list_logs, '       .
+			'action_logs, parameters_logs, target_email_logs, ' .
+			'msg_id_logs, status_logs, error_type_logs, '       .
+			'user_email_logs, client_logs, daemon_logs'         .
+		') VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+	delete_log_message =>
+		'DELETE FROM logs_table '           .
+		'WHERE (logs_table.date_logs <= %s)',
+
+	add_stat_message =>
+		'INSERT INTO stat_table ('                                   .
+			'id_stat, date_stat, email_stat, operation_stat, '   .
+			'list_stat, daemon_stat, user_ip_stat, robot_stat, ' .
+			'parameter_stat, read_stat'                          .
+		') VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
+	add_counter_message =>
+		'INSERT INTO stat_counter_table ('                        .
+			'id_counter, beginning_date_counter, '            .
+			'end_date_counter, data_counter, robot_counter, ' .
+			'list_counter, variation_counter, total_counter'  .
+		') VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
+);
+
 =head1 FUNCTIONS
 
 =over
@@ -100,20 +157,21 @@ Return:
 =cut
 
 sub get_log_date {
-	my $sth;
 	my @dates;
-	foreach my $query('MIN','MAX') {
-		$sth = Sympa::SDM::do_query(
-			"SELECT $query(date_logs) FROM logs_table"
-		);
-		unless ($sth) {
-			Sympa::Log::Syslog::do_log('err','Unable to get %s date from logs_table',$query);
-			return undef;
-		}
-		while (my $d = ($sth->fetchrow_array) [0]) {
-			push @dates, $d;
-		}
+
+	my $min_sth = Sympa::SDM::do_query($queries{get_min_date});
+	unless ($min_sth) {
+		Sympa::Log::Syslog::do_log('err','Unable to get minimal date from logs_table');
+		return undef;
 	}
+	push @dates, ($min_sth->fetchrow_array)[0];
+
+	my $max_sth = Sympa::SDM::do_query($queries{get_max_date});
+	unless ($max_sth) {
+		Sympa::Log::Syslog::do_log('err','Unable to get maximal date from logs_table');
+		return undef;
+	}
+	push @dates, ($max_sth->fetchrow_array)[0];
 
 	return @dates;
 }
@@ -187,7 +245,7 @@ sub do_log {
 	## Insert in log_table
 
 	my $result = Sympa::SDM::do_query(
-		'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+		$queries{add_log_message},
 		$id,
 		$date,
 		Sympa::SDM::quote($params{robot}),
@@ -257,7 +315,7 @@ sub do_stat_log {
 
 	##insert in stat table
 	my $result = Sympa::SDM::do_query(
-		'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat, read_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
+		$queries{add_stat_message},
 		$id,
 		$date,
 		Sympa::SDM::quote($params{mail}),
@@ -290,7 +348,7 @@ sub _db_stat_counter_log {
 	}
 
 	my $result = Sympa::SDM::do_query(
-		'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, data_counter, robot_counter, list_counter, variation_counter, total_counter) VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
+		$queries{add_counter_message},
 		$id,
 		$params{begin_date},
 		$params{end_date},
@@ -323,7 +381,7 @@ sub delete_messages {
 	my $date = time - ($exp * 30 * 24 * 60 * 60);
 
 	my $result = Sympa::SDM::do_query(
-		"DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)",
+		$queries{delete_log_message},
 		Sympa::SDM::quote($date)
 	);
 	unless ($result) {
@@ -494,7 +552,7 @@ sub aggregate_data {
 	my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
 
 	$sth = Sympa::SDM::do_query(
-		"SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)",
+		$queries{get_data},
 		$begin_date,
 		$end_date
 	);
@@ -511,7 +569,7 @@ sub aggregate_data {
 
 	#the line is read, so update the read_stat from 0 to 1
 	$sth = Sympa::SDM::do_query(
-		"UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')",
+		$queries{update_data},
 		$begin_date,
 		$end_date
 	);
@@ -1024,7 +1082,7 @@ sub _update_subscriber_msg_send {
 	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
 
 	$sth = Sympa::SDM::do_query(
-		"SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
+		$queries{get_subscribers},
 		$params{robot},
 		$params{list},
 		$params{mail}
@@ -1039,7 +1097,7 @@ sub _update_subscriber_msg_send {
 		$params{counter};
 
 	my $result = Sympa::SDM::do_query(
-		"UPDATE subscriber_table SET number_messages_subscriber = '%d' WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')",
+		$queries{update_subscribers},
 		$nb_msg,
 		$params{robot},
 		$params{list},
