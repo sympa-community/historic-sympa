@@ -37,7 +37,6 @@ use strict;
 use English qw(-no_match_vars);
 
 use Sympa::Configuration;
-use Sympa::Constants;
 use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
 use Sympa::List;
@@ -514,7 +513,7 @@ sub check_indexes {
 	return 1;
 }
 
-=item data_structure_uptodate()
+=item data_structure_uptodate($version)
 
 Check if data structures are uptodate.
 
@@ -523,6 +522,8 @@ If not, no operation should be performed before the upgrade process is run
 =cut
 
 sub data_structure_uptodate {
+	my ($version) = @_;
+
 	my $version_file = "Sympa::Configuration::get_robot_conf('*','etc')/data_structure.version";
 	my $data_structure_version;
 
@@ -542,8 +543,8 @@ sub data_structure_uptodate {
 	}
 
 	if (defined $data_structure_version &&
-		$data_structure_version ne Sympa::Constants::VERSION) {
-		Sympa::Log::Syslog::do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, Sympa::Constants::VERSION);
+		$data_structure_version ne $version) {
+		Sympa::Log::Syslog::do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, $version);
 		return 0;
 	}
 

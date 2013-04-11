@@ -196,7 +196,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 ## Check that the data structure is uptodate
 	unless ($options{'upgrade'} || $options{'help'}) {
-		unless (Sympa::SDM::data_structure_uptodate()) {
+		unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
 			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
 		}
 	}
