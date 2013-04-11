@@ -108,7 +108,7 @@ sub write_pid {
 	## If pidfile exists, read the PIDs
 	if(-f $params{file}) {
 		# Read pid file
-		open(PFILE, $params{file});
+		open(PFILE, '<', $params{file});
 		my $l = <PFILE>;
 		close PFILE;
 		@pids = grep {/[0-9]+/} split(/\s+/, $l);
@@ -117,7 +117,7 @@ sub write_pid {
 	## If we can have multiple instances for the process.
 	## Print other pids + this one
 	if($params{options}->{'multiple_process'}) {
-		unless(open(PIDFILE, '> '.$params{file})) {
+		unless(open(PIDFILE, '>', $params{file})) {
 			## Unlock pid file
 			$lock->unlock();
 			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file},$ERRNO);
@@ -129,7 +129,7 @@ sub write_pid {
 		close(PIDFILE);
 	} else {
 		## Create and write the pidfile
-		unless(open(PIDFILE, '+>> '.$params{file})) {
+		unless(open(PIDFILE, '+>>', $params{file})) {
 			## Unlock pid file
 			$lock->unlock();
 			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file});
@@ -145,7 +145,7 @@ sub write_pid {
 			send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
 		}
 
-		unless(open(PIDFILE, '> '.$params{file})) {
+		unless(open(PIDFILE, '>', $params{file})) {
 			## Unlock pid file
 			$lock->unlock();
 			Sympa::Log::Syslog::do_log('err', 'Could not open %s', $params{file});
@@ -204,7 +204,7 @@ sub remove_pid {
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
 	if($params{options}->{'multiple_process'}) {
-		unless(open(PFILE, $params{file})) {
+		unless(open(PFILE, '<', $params{file})) {
 			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
 			return undef;
 		}
@@ -222,7 +222,7 @@ sub remove_pid {
 			}
 		} else {
 			if(-f $params{file}) {
-				unless(open(PFILE, '> '.$params{file})) {
+				unless(open(PFILE, '>', $params{file})) {
 					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
 					return undef;
 				}
@@ -265,7 +265,7 @@ Parameters:
 sub read_pids {
 	my (%params) = @_;
 
-	unless (open(PFILE, $params{file})) {
+	unless (open(PFILE, '<', $params{file})) {
 		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$params{file},$ERRNO);
 		return undef;
 	}
@@ -323,7 +323,7 @@ sub send_crash_report {
 	my $err_file = $params{'tmpdir'}.'/'.$params{'pid'}.'.stderr';
 	my (@err_output, $err_date);
 	if(-f $err_file) {
-		open(ERR, $err_file);
+		open(ERR, '<', $err_file);
 		@err_output = <ERR>;
 		close ERR;
 		$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
