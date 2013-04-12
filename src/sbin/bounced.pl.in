@@ -330,8 +330,15 @@ while (!$end) {
 							daemon       => 'bounced'
 						);
 
-						Sympa::Log::Database::do_stat_log({'robot' => $list->{'domain'}, 'list' => $list->{'name'}, 'operation' => 'auto_del', 'parameter' => "",
-								'mail' => $who, 'client' => "", 'daemon' => 'bounced.pl'});
+						Sympa::Log::Database::do_stat_log(
+							robot     => $list->{'domain'},
+							list      => $list->{'name'},
+							operation => 'auto_del',
+							parameter => "",
+							mail      => $who,
+							client    => "",
+							daemon    => 'bounced.pl'
+						);
 
 						if ($action =~ /notify/) {
 							unless ($list->send_notify_to_owner('automatic_del',
