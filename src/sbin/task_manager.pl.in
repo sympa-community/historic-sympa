@@ -136,6 +136,9 @@ unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
 	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 
+# init database logger
+Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+
 ## Check for several files.
 unless (Sympa::Configuration::checkfiles()) {
 	Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");

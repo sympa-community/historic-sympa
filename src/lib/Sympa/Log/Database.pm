@@ -37,7 +37,7 @@ use strict;
 use English qw(-no_match_vars);
 use POSIX qw();
 
-use Sympa::SDM;
+use Sympa::Datasource::SQL;
 use Sympa::Log::Syslog;
 
 my ($sth, @sth_stack, $rows_nb);
@@ -142,9 +142,19 @@ my %queries = (
 		') VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
 );
 
+my $source;
+
 =head1 FUNCTIONS
 
 =over
+
+=cut
+
+sub init {
+	my (%params) = @_;
+
+	$source = $params{source};
+}
 
 =item get_log_date()
 
@@ -159,14 +169,14 @@ Return:
 sub get_log_date {
 	my @dates;
 
-	my $min_sth = Sympa::SDM::do_query($queries{get_min_date});
+	my $min_sth = $source->do_query($queries{get_min_date});
 	unless ($min_sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get minimal date from logs_table');
 		return undef;
 	}
 	push @dates, ($min_sth->fetchrow_array)[0];
 
-	my $max_sth = Sympa::SDM::do_query($queries{get_max_date});
+	my $max_sth = $source->do_query($queries{get_max_date});
 	unless ($max_sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get maximal date from logs_table');
 		return undef;
@@ -244,21 +254,21 @@ sub do_log {
 
 	## Insert in log_table
 
-	my $result = Sympa::SDM::do_query(
+	my $result = $source->do_query(
 		$queries{add_log_message},
 		$id,
 		$date,
-		Sympa::SDM::quote($params{robot}),
-		Sympa::SDM::quote($params{list}),
-		Sympa::SDM::quote($params{action}),
-		Sympa::SDM::quote(substr($params{parameters},0,100)),
-		Sympa::SDM::quote($params{target_email}),
-		Sympa::SDM::quote($params{msg_id}),
-		Sympa::SDM::quote($params{status}),
-		Sympa::SDM::quote($params{error_type}),
-		Sympa::SDM::quote($params{user_email}),
-		Sympa::SDM::quote($params{client}),
-		Sympa::SDM::quote($params{daemon})
+		$source->quote($params{robot}),
+		$source->quote($params{list}),
+		$source->quote($params{action}),
+		$source->quote(substr($params{parameters},0,100)),
+		$source->quote($params{target_email}),
+		$source->quote($params{msg_id}),
+		$source->quote($params{status}),
+		$source->quote($params{error_type}),
+		$source->quote($params{user_email}),
+		$source->quote($params{client}),
+		$source->quote($params{daemon})
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new db_log entry in the database');
@@ -314,17 +324,17 @@ sub do_stat_log {
 	}
 
 	##insert in stat table
-	my $result = Sympa::SDM::do_query(
+	my $result = $source->do_query(
 		$queries{add_stat_message},
 		$id,
 		$date,
-		Sympa::SDM::quote($params{mail}),
-		Sympa::SDM::quote($params{operation}),
-		Sympa::SDM::quote($params{list}),
-		Sympa::SDM::quote($params{daemon}),
-		Sympa::SDM::quote($params{ip}),
-		Sympa::SDM::quote($params{robot}),
-		Sympa::SDM::quote($params{parameter}),
+		$source->quote($params{mail}),
+		$source->quote($params{operation}),
+		$source->quote($params{list}),
+		$source->quote($params{daemon}),
+		$source->quote($params{ip}),
+		$source->quote($params{robot}),
+		$source->quote($params{parameter}),
 		0
 	);
 	unless($result) {
@@ -347,14 +357,14 @@ sub _db_stat_counter_log {
 		}
 	}
 
-	my $result = Sympa::SDM::do_query(
+	my $result = $source->do_query(
 		$queries{add_counter_message},
 		$id,
 		$params{begin_date},
 		$params{end_date},
-		Sympa::SDM::quote($params{data}),
-		Sympa::SDM::quote($params{robot}),
-		Sympa::SDM::quote($params{list}),
+		$source->quote($params{data}),
+		$source->quote($params{robot}),
+		$source->quote($params{list}),
 		$params{variation},
 		$params{total}
 	);
@@ -380,9 +390,9 @@ sub delete_messages {
 	my ($exp) = @_;
 	my $date = time - ($exp * 30 * 24 * 60 * 60);
 
-	my $result = Sympa::SDM::do_query(
+	my $result = $source->do_query(
 		$queries{delete_log_message},
-		Sympa::SDM::quote($date)
+		$source->quote($date)
 	);
 	unless ($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to delete db_log entry from the database');
@@ -406,14 +416,14 @@ sub get_first_db_log {
 	my ($select) = @_;
 
 
-	my $statement = sprintf "SELECT date_logs, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", Sympa::SDM::quote($select->{'robot'});
+	my $statement = sprintf "SELECT date_logs, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", $source->quote($select->{'robot'});
 
 	#if a type of target and a target are specified
 	if (($select->{'target_type'}) && ($select->{'target_type'} ne 'none')) {
 		if($select->{'target'}) {
 			$select->{'target_type'} = lc ($select->{'target_type'});
 			$select->{'target'} = lc ($select->{'target'});
-			$statement .= 'AND ' . $select->{'target_type'} . '_logs = ' . Sympa::SDM::quote($select->{'target'}).' ';
+			$statement .= 'AND ' . $select->{'target_type'} . '_logs = ' . $source->quote($select->{'target'}).' ';
 		}
 	}
 
@@ -473,7 +483,7 @@ sub get_first_db_log {
 	$statement .= sprintf "ORDER BY date_logs ";
 
 	push @sth_stack, $sth;
-	$sth = Sympa::SDM::do_query($statement);
+	$sth = $source->do_query($statement);
 	unless($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve logs entry from the database');
 		return undef;
@@ -551,7 +561,7 @@ sub aggregate_data {
 
 	my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
 
-	$sth = Sympa::SDM::do_query(
+	$sth = $source->do_query(
 		$queries{get_data},
 		$begin_date,
 		$end_date
@@ -568,7 +578,7 @@ sub aggregate_data {
 	$aggregated_data = _deal_data($res);
 
 	#the line is read, so update the read_stat from 0 to 1
-	$sth = Sympa::SDM::do_query(
+	$sth = $source->do_query(
 		$queries{update_data},
 		$begin_date,
 		$end_date
@@ -1081,7 +1091,7 @@ sub _update_subscriber_msg_send {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
 
-	$sth = Sympa::SDM::do_query(
+	$sth = $source->do_query(
 		$queries{get_subscribers},
 		$params{robot},
 		$params{list},
@@ -1096,7 +1106,7 @@ sub _update_subscriber_msg_send {
 		$sth->fetchrow_hashref('number_messages_subscriber') +
 		$params{counter};
 
-	my $result = Sympa::SDM::do_query(
+	my $result = $source->do_query(
 		$queries{update_subscribers},
 		$nb_msg,
 		$params{robot},

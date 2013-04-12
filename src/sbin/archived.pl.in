@@ -134,6 +134,9 @@ unless (Sympa::SDM::check_db_connect()) {
 	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
+# init database logger
+Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
 	open(STDERR, ">> /dev/null");

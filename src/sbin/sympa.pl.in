@@ -426,6 +426,9 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	}
 
+	# init database logger
+	Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+
 ## Apply defaults to %Sympa::List::pinfo
 	Sympa::List::_apply_defaults();
 
