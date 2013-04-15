@@ -8,9 +8,7 @@ use JSON           qw/decode_json/;
 use List::Util     qw/first/;
 
 # Sympa modules
-use report;
-use Sympa::Plugin::Util   qw/:log/;
-
+use Sympa::Plugin::Util   qw/:log reporter/;
 
 =head1 NAME
 
@@ -73,13 +71,7 @@ sub registerPlugin($)
 {   my ($class, $args) = @_;
     push @{$args->{url_commands}}, @url_commands;
     push @{$args->{validate}}, @validate;
-
-    (my $templ_dir = __FILE__) =~ s,Website\.pm$,web_tt2,;
-    push @{$args->{templates}},
-     +{ tt2_path      => $templ_dir
-      , tt2_fragments => \@fragments
-      };
-
+    push @{$args->{templates}}, {tt2_fragments => \@fragments};
     $class->SUPER::registerPlugin($args);
 }
 
@@ -234,7 +226,7 @@ sub doAcceptVootGroup(%)
 
     my $action = $param->{action};
     unless($list->save_config($email))
-    {   report::reject_report_web('intern', 'cannot_save_config', {}
+    {   reporter->rejectToWeb('intern', 'cannot_save_config', {}
           , $action, $list, $email, $robot_id);
 
         wwslog(info => 'cannot save config file');
@@ -243,10 +235,10 @@ sub doAcceptVootGroup(%)
     }    
 
     if($list->on_the_fly_sync_include(use_ttl => 0))
-    {   report::notice_report_web('subscribers_updated', {}, $action);
+    {   reporter->noticeToWeb('subscribers_updated', {}, $action);
     }
     else
-    {   report::reject_report_web('intern', 'sync_include_failed'
+    {   reporter->rejectToWeb('intern', 'sync_include_failed'
            , {}, $action, $list, $email, $robot_id);
     }
 

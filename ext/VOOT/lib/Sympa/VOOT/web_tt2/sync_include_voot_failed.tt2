@@ -1,3 +1,0 @@
-[% IF u_err.msg == 'sync_include_voot_failed' %]
-   [%|loc(u_err.provider)%]Failed to include members from VOOT group %1.  Please login to restore your authorization.[%END%]
-[%END%]

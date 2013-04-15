@@ -9,8 +9,27 @@ use Log::Report 'net-voot';
 use Net::OAuth2::Profile::WebServer ();
 use Scalar::Util qw/blessed/;
 
-my $site_test = 'https://frko.surfnetlabs.nl/frkonext/';
-my $site_live = 'unknown';
+my $test_site = 'https://frko.surfnetlabs.nl/frkonext/';
+my $live_site = 'https://api.surfconext.nl/v1';
+
+my %providers =
+ ( 'surfconext-test' =>
+     { voot_base => "$test_site/php-voot-proxy/voot.php"
+     , oauth2    =>
+        { site              => $test_site
+        , authorize_path    => 'php-oauth/authorize.php'
+        , access_token_path => 'php-oauth/token.php'
+        }
+     }
+ , surfconext        =>
+     { voot_base => "$live_site/social/rest"
+     , oauth2    =>
+        { site              => "$live_site/oauth2/"
+        , authorize_path    => 'authorize'
+        , access_token_path => 'token'
+        }
+     }
+ );
 
 =chapter NAME
 
@@ -36,23 +55,14 @@ SURFconext uses OAuth2 authentication.
 
 =c_method new OPTIONS
 
-=default voot_base <site>/php-voot-proxy/voot.php
+=requires provider 'surfconext'|'surfconext-test'
 
-=option  test BOOLEAN
-=default test <false>
-Access the current test environment, provided by SURFnet.
-
-=default provider depends on 'test'
-When 'test' is set, then the name is 'surfconext-test', otherwise 'surfconext'
+=default voot_base <depends on provider>
 
 =option  auth M<Net::OAuth2::Profile::WebServer>|HASH
 =default auth <created for you>
 If you do not provide an object, you need to add some parameters to
 initialize the object.  See M<createAuth()> for the OPTIONS.
-
-=option  site URI
-=default site <hard-coded>
-Depends whether you need the test voot server or the production environment.
 
 =option  token M<Net::OAuth2::AccessToken>-object
 =default token <requested when needed>
@@ -61,15 +71,13 @@ Depends whether you need the test voot server or the production environment.
 
 sub init($)
 {   my ($self, $args) = @_;
-    my $test = delete $args->{test} || 0;
 
-    if(my $p = $args->{provider}) { $test = $p =~ m/-test$/ }
-    else { $args->{provider} = 'surfconext'.($test ? '-test' : '') }
+    my $provid = $args->{provider} || 'surfconext';
 
-    my $site = $self->{NVS_site}
-      = $args->{site}  ||= $test ? $site_test : $site_live;
+    my $config = $providers{$provid}
+        or error __x"unknown provider `{name}' for SURFconext", name => $provid;
 
-    $args->{voot_base} ||= "$site/php-voot-proxy/voot.php";
+    $args->{voot_base} ||= $config->{voot_base};
 
     $self->SUPER::init($args) or return;
 
@@ -86,7 +94,6 @@ sub init($)
 =method auth
 =method authType
 =method token
-=method site
 =cut
 
 sub authType() { 'OAuth2' }
@@ -106,7 +113,8 @@ sub setAccessToken($) { $_[0]->{NVS_token} = $_[1] }
 
 sub get($)
 {   my ($self, $uri) = @_;
-    $self->token->get($uri);
+    my $token = $self->token or return;
+    $token->get($uri);
 }
 
 #---------------------------
@@ -125,20 +133,18 @@ at the VOOT provider: they relate to the C<site>.
 
 sub createAuth(%)
 {   my ($self, %args) = @_;
-    my $site = $self->site;
+    my $provname = $self->provider;
+    my $settings = $providers{$provname}{oauth2}
+        or error __x"unknown oauth2 provider `{name}' for SURFconext"
+           , name => $provname;
 
     my $auth = Net::OAuth2::Profile::WebServer->new
       ( client_id         => ($args{client_id}     || panic)
       , client_secret     => ($args{client_secret} || panic)
       , token_scheme      => 'auth-header:Bearer'
-
-      , site              => $site
-      , authorize_path    => 'php-oauth/authorize.php'
       , authorize_method  => 'GET'
-      , access_token_path => 'php-oauth/token.php'
-
       , redirect_uri      => ($args{redirect_uri}  || panic)
-      , referer           => $site
+      , %$settings
       );
 
     trace "initialized oauth2 for voot to ".$self->provider if $auth;
@@ -219,6 +225,9 @@ unpredictably flushed.  Also, the location of the service may change without
 notice.
 
 =section Setting up the "live" server
+
+See F<https://wiki.surfnetlabs.nl/display/surfconextdev/>
+
 =cut
 
 1;

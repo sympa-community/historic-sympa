@@ -10,9 +10,8 @@ use JSON           qw/decode_json/;
 use List::Util     qw/first/;
 
 # Sympa modules
-use report;
 use Site;
-use Sympa::Plugin::Util   qw/:log/;
+use Sympa::Plugin::Util   qw/:log reporter/;
 use Sympa::VOOT::Consumer ();
 
 my $default_server = 'Net::VOOT::Renater';
@@ -105,6 +104,10 @@ sub init($)
 sub registerPlugin($)
 {   my ($class, $args) = @_;
     push @{$args->{listdef}}, include_voot_group => \%include_voot_group;
+
+    (my $templ_dir = __FILE__) =~ s,\.pm$,/tt2,;
+    push @{$args->{templates}}, {tt2_path => $templ_dir };
+
     $class->SUPER::registerPlugin($args);
 }
 
@@ -177,7 +180,9 @@ sub consumer($$@)
 
     my $auth = $auth1 && keys %$auth1 ? $auth1 : $info->{oauth2};
 
-    # MO: ugly, only used for oauth2 right now.
+    # 20130409 MO: ugly, only used for oauth2 right now.
+    # Needed because of a bug in current SURFconext implementation.  See
+    # remark in https://wiki.surfnetlabs.nl/display/surfconextdev/API
     $auth->{redirect_uri} ||=
        "$param->{base_url}$param->{path_cgi}/oauth2_ready/$prov_id";
 
@@ -302,15 +307,14 @@ sub reportListError($$)
     my $conf = first {$_->{name} eq $provid} $list->includes('voot_group');
     $conf or return;
 
-    report::reject_report_web
-      ( 'user', 'sync_include_voot_failed', {provider => $provid}
+    reporter->rejectToWeb
+      ( user => 'sync_include_voot_failed.tt2', $conf
       , 'sync_include', $list->domain, $conf->{user}, $list->name
       );
 
-    report::reject_report_msg
-      ( 'oauth', 'sync_include_voot_failed', $conf->{user}
-      , { consumer_name => 'VOOT', provider => $provid }
-      , $list->robot, '', $list->name
+    reporter->rejectPerEmail
+      ( plugin => 'message_report_voot_failed.tt2', $conf->{user}
+      , $conf, $list->robot, '', $list->name
       );
 
     1;

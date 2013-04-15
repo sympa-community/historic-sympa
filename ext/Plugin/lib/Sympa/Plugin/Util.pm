@@ -6,7 +6,7 @@ use strict;
 
 my @http = qw/HTTP_OK HTTP_BAD HTTP_UNAUTH HTTP_INTERN/;
 my @time = qw/SECOND MINUTE HOUR DAY MONTH/;
-my @obj  = qw/default_db robot this_list plugin/;
+my @obj  = qw/default_db robot plugin reporter/;
 my @log  = qw/trace_call log fatal wwslog web_db_log/;
 
 our @EXPORT      = ();
@@ -16,8 +16,10 @@ our %EXPORT_TAGS =
   ( http      => \@http
   , time      => \@time
   , log       => \@log
-  , functions => \@EXPORT
+  , functions => [@obj, @log]
   );
+
+use report;
 
 =head1 NAME
 
@@ -105,6 +107,32 @@ for SDM::quote().
 my $default_db;
 sub default_db() { $default_db || (bless {}, 'SPU_db') }
 
+=head2 Report pseudo-object
+
+=head3 my $reporter = reporter();
+
+=head3 $reporter->rejectToWeb(@options);
+
+OO wrapper around C<eport::reject_report_web()>
+
+=head3 $reporter->noticeToWeb(@options);
+
+OO wrapper around C<eport::notice_report_web()>
+
+=head3 $reporter->rejectPerlEmail(@options);
+
+OO wrapper around C<eport::reject_report_msg()>
+
+=cut
+
+{  package SPU_report;
+   sub rejectToWeb(@)    { my $self = shift; report::reject_report_web(@_) }
+   sub noticeToWeb(@)    { my $self = shift; report::notice_report_web(@_) }
+   sub rejectPerEmail(@) { my $self = shift; report::reject_report_msg(@_) }
+}
+
+my $report;
+sub reporter() { $report ||= bless {}, 'SPU_report' }
 
 =head2 Globals
 
@@ -113,13 +141,9 @@ want to update the plugins, all the time.
 
 =head3 robot()
 
-=head3 this_list()
-
 =cut
 
 sub robot() { $main::robot_object }
-
-sub this_list() { $main::list }
 
 =head3 plugin NAME, [INSTANCE]
 

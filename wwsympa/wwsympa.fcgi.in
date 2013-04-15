@@ -124,7 +124,7 @@ Log::do_openlog(Site->log_facility, Site->log_socket_type, 'wwsympa');
 
 ## Start plugins
 if(eval "require Sympa::Plugin::Manager") {
-    $plugins = Sympa::Plugin::Manager->new;
+    $plugins = Sympa::Plugin::Manager->new(application => 'website');
 }
 
 &mail::set_send_spool(Site->queue);

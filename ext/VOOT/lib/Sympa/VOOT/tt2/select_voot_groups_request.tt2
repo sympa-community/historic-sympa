@@ -17,7 +17,7 @@
 <table cellspacing=4>
 <tr><th>[%|loc%]use?[%END%]</th>
     <th>[%|loc%]title[%END%]</th>
-    <th>[%|loc%]your role[%END%]</th>
+    <th>[%|loc%]your&nbsp;role[%END%]</th>
     <th>[%|loc%]description[%END%]</th></tr>
   [% FOREACH group = voot_groups %]
 <tr><td><input type="checkbox" name="voot_groups[[% group.id %]]"

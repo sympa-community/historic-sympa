@@ -136,6 +136,7 @@
     [% TRY %][% INCLUDE $u_err.msg %]
     [% CATCH %][% u_err.msg %]
     [%END%]
+  [%END%]
   <br />
 [% END %]
 
