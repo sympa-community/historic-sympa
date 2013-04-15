@@ -90,32 +90,32 @@ my %queries = (
 	get_max_date => "SELECT max(date_logs) FROM logs_table",
 
 	get_subscriber    =>
-		"SELECT number_messages_subscriber "   .
-		"FROM subscriber_table "               .
-		"WHERE ("                              .
-			"robot_subscriber = '%s' AND " .
-			"list_subscriber  = '%s' AND " .
-			"user_subscriber  = '%s'"      .
-		")",
+		'SELECT number_messages_subscriber ' .
+		'FROM subscriber_table '             .
+		'WHERE ('                            .
+			'robot_subscriber = ? AND '  .
+			'list_subscriber  = ? AND '  .
+			'user_subscriber  = ?'       .
+		')',
 	update_subscriber =>
-		"UPDATE subscriber_table "               .
-		"SET number_messages_subscriber = '%d' " .
-		"WHERE ("                                .
-			"robot_subscriber = '%s' AND "   .
-			"list_subscriber  = '%s' AND "   .
-			"user_subscriber  = '%s'"        .
-		")",
+		'UPDATE subscriber_table '            .
+		'SET number_messages_subscriber = ? ' .
+		'WHERE ('                             .
+			'robot_subscriber = ? AND '   .
+			'list_subscriber  = ? AND '   .
+			'user_subscriber  = ?'        .
+		')',
 
 	get_data =>
-		"SELECT * "                                      .
-		"FROM stat_table "                               .
-		"WHERE "                                         .
-			"(date_stat BETWEEN '%s' AND '%s') AND " .
-			"(read_stat = 0)",
+		'SELECT * '                                .
+		'FROM stat_table '                         .
+		'WHERE '                                   .
+			'(date_stat BETWEEN ? AND ?) AND ' .
+			'(read_stat = 0)',
 	update_data =>
-		"UPDATE stat_table "                     .
-		"SET read_stat = 1 "                     .
-		"WHERE (date_stat BETWEEN '%s' AND '%s')",
+		'UPDATE stat_table '                     .
+		'SET read_stat = 1 '                     .
+		'WHERE (date_stat BETWEEN ? AND ?)',
 
 	add_log_message =>
 		'INSERT INTO logs_table ('                                  .
@@ -123,23 +123,23 @@ my %queries = (
 			'action_logs, parameters_logs, target_email_logs, ' .
 			'msg_id_logs, status_logs, error_type_logs, '       .
 			'user_email_logs, client_logs, daemon_logs'         .
-		') VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+		') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 	delete_log_message =>
 		'DELETE FROM logs_table '           .
-		'WHERE (logs_table.date_logs <= %s)',
+		'WHERE (logs_table.date_logs <= ?)',
 
 	add_stat_message =>
 		'INSERT INTO stat_table ('                                   .
 			'id_stat, date_stat, email_stat, operation_stat, '   .
 			'list_stat, daemon_stat, user_ip_stat, robot_stat, ' .
 			'parameter_stat, read_stat'                          .
-		') VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)',
+		') VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 	add_counter_message =>
 		'INSERT INTO stat_counter_table ('                        .
 			'id_counter, beginning_date_counter, '            .
 			'end_date_counter, data_counter, robot_counter, ' .
 			'list_counter, variation_counter, total_counter'  .
-		') VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
+		') VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
 );
 
 my $source;
@@ -169,19 +169,21 @@ Return:
 sub get_log_date {
 	my @dates;
 
-	my $min_sth = $source->do_query($queries{get_min_date});
-	unless ($min_sth) {
+	my $min_handle = $source->get_query_handle($queries{get_min_date});
+	my $min_result = $min_handle->execute();
+	unless ($min_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to get minimal date from logs_table');
 		return undef;
 	}
-	push @dates, ($min_sth->fetchrow_array)[0];
+	push @dates, ($min_handle->fetchrow_array)[0];
 
-	my $max_sth = $source->do_query($queries{get_max_date});
-	unless ($max_sth) {
+	my $max_handle = $source->get_query_handle($queries{get_max_date});
+	my $max_result = $max_handle->execute();
+	unless ($max_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to get maximal date from logs_table');
 		return undef;
 	}
-	push @dates, ($max_sth->fetchrow_array)[0];
+	push @dates, ($max_handle->fetchrow_array)[0];
 
 	return @dates;
 }
@@ -254,21 +256,23 @@ sub do_log {
 
 	## Insert in log_table
 
-	my $result = $source->do_query(
+	my $handle = $source->get_query_handle(
 		$queries{add_log_message},
+	);
+	my $result = $handle->execute(
 		$id,
 		$date,
-		$source->quote($params{robot}),
-		$source->quote($params{list}),
-		$source->quote($params{action}),
-		$source->quote(substr($params{parameters},0,100)),
-		$source->quote($params{target_email}),
-		$source->quote($params{msg_id}),
-		$source->quote($params{status}),
-		$source->quote($params{error_type}),
-		$source->quote($params{user_email}),
-		$source->quote($params{client}),
-		$source->quote($params{daemon})
+		$params{robot},
+		$params{list},
+		$params{action},
+		substr($params{parameters},0,100),
+		$params{target_email},
+		$params{msg_id},
+		$params{status},
+		$params{error_type},
+		$params{user_email},
+		$params{client},
+		$params{daemon}
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new db_log entry in the database');
@@ -323,18 +327,19 @@ sub do_stat_log {
 		}
 	}
 
-	##insert in stat table
-	my $result = $source->do_query(
+	my $handle = $source->get_query_handle(
 		$queries{add_stat_message},
+	);
+	my $result = $handle->execute(
 		$id,
 		$date,
-		$source->quote($params{mail}),
-		$source->quote($params{operation}),
-		$source->quote($params{list}),
-		$source->quote($params{daemon}),
-		$source->quote($params{ip}),
-		$source->quote($params{robot}),
-		$source->quote($params{parameter}),
+		$params{mail},
+		$params{operation},
+		$params{list},
+		$params{daemon},
+		$params{ip},
+		$params{robot},
+		$params{parameter},
 		0
 	);
 	unless($result) {
@@ -357,14 +362,16 @@ sub _db_stat_counter_log {
 		}
 	}
 
-	my $result = $source->do_query(
+	my $handle = $source->get_query_handle(
 		$queries{add_counter_message},
+	);
+	my $result = $handle->execute(
 		$id,
 		$params{begin_date},
 		$params{end_date},
-		$source->quote($params{data}),
-		$source->quote($params{robot}),
-		$source->quote($params{list}),
+		$params{data},
+		$params{robot},
+		$params{list},
 		$params{variation},
 		$params{total}
 	);
@@ -390,9 +397,11 @@ sub delete_messages {
 	my ($exp) = @_;
 	my $date = time - ($exp * 30 * 24 * 60 * 60);
 
-	my $result = $source->do_query(
+	my $handle = $source->get_query_handle(
 		$queries{delete_log_message},
-		$source->quote($date)
+	);
+	my $result = $handle->execute(
+		$date
 	);
 	unless ($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to delete db_log entry from the database');
@@ -561,33 +570,35 @@ sub aggregate_data {
 
 	my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
 
-	$sth = $source->do_query(
+	my $get_handle = $source->get_query_handle(
 		$queries{get_data},
+	);
+	my $get_result = $get_handle->execute(
 		$begin_date,
 		$end_date
 	);
-	unless ($sth) {
+	unless ($get_result) {
 		Sympa::log::Syslog::do_log('err','Unable to retrieve stat entries between date % and date %s', $begin_date, $end_date);
 		return undef;
 	}
 
 
-	my $res = $sth->fetchall_hashref('id_stat');
-
+	my $res = $get_handle->fetchall_hashref('id_stat');
 
 	$aggregated_data = _deal_data($res);
 
 	#the line is read, so update the read_stat from 0 to 1
-	$sth = $source->do_query(
+	my $update_handle = $source->get_query_handle(
 		$queries{update_data},
+	);
+	my $update_result = $update_handle->execute(
 		$begin_date,
 		$end_date
 	);
-	unless ($sth) {
+	unless ($update_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to set stat entries between date % and date %s as read', $begin_date, $end_date);
 		return undef;
 	}
-
 
 	#store reslults in stat_counter_table
 	foreach my $key_op (keys (%$aggregated_data)) {
@@ -606,8 +617,8 @@ sub aggregate_data {
 						data       => $key_op,
 						list       => $key_list,
 						variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'},
-						total => '',
-						robot => $key_robot
+						total      => '',
+						robot      => $key_robot
 					);
 
 					#updating susbcriber_table
@@ -659,9 +670,9 @@ sub aggregate_data {
 							end_date   => $end_date,
 							data       => $key_param,
 							list       => $key_list,
-							variation => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_param},
-							total     => '',
-							robot     => $key_robot
+							variation  => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{$key_param},
+							total      => '',
+							robot      => $key_robot
 						);
 
 					}
@@ -1091,29 +1102,33 @@ sub _update_subscriber_msg_send {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
 
-	$sth = $source->do_query(
+	my $get_handle = $source->get_query_handle(
 		$queries{get_subscribers},
+	);
+	my $get_result = $get_handle->execute(
 		$params{robot},
 		$params{list},
 		$params{mail}
 	);
-	unless ($sth) {
+	unless ($get_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve message count for user %s, list %s@%s',$params{mail}, $params{list}, $params{robot});
 		return undef;
 	}
 
 	my $nb_msg =
-		$sth->fetchrow_hashref('number_messages_subscriber') +
+		$get_handle->fetchrow_hashref('number_messages_subscriber') +
 		$params{counter};
 
-	my $result = $source->do_query(
+	my $update_handle = $source->get_query_handle(
 		$queries{update_subscribers},
+	);
+	my $update_result = $update_handle->execute(
 		$nb_msg,
 		$params{robot},
 		$params{list},
 		$params{mail}
 	);
-	unless ($result) {
+	unless ($update_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to update message count for user %s, list %s@%s',$params{mail}, $params{list}, $params{robot});
 		return undef;
 	}
