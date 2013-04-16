@@ -13,6 +13,7 @@ use File::Temp;
 use Test::More;
 
 use Sympa::Log::Database;
+use Sympa::Log::Database::Iterator;
 use Sympa::Datasource::SQL;
 
 # init sqlite database
@@ -27,7 +28,7 @@ my $source = Sympa::Datasource::SQL->create(
 plan(skip_all => 'unable to create database') unless $source;
 my $dbh = $source->establish_connection();
 
-plan tests => 25;
+plan tests => 28;
 
 Sympa::Log::Database::init(source => $source);
 
@@ -78,29 +79,34 @@ cmp_ok(get_row_count("logs_table"), '==', 2, 'two log records in database');
 my ($min, $max) = Sympa::Log::Database::get_log_date();
 ok($min == $max, "identical minimum and maximum log dates");
 
-is_deeply(
-	Sympa::Log::Database::get_first_db_log(),
-	{},
-	'log message retrieval, no criteria'
-);
+my $iterator;
 
-is_deeply(
-	Sympa::Log::Database::get_first_db_log({ ip => '127.0.0.1' }),
-	{},
-	'log message retrieval, adress criteria'
-);
+$iterator = Sympa::Log::Database::Iterator->new(source => $source);
+ok($iterator, 'event iterator creation, no criteria');
+ok(!defined $iterator->get_next(),'no matching event');
 
-is_deeply(
-	Sympa::Log::Database::get_first_db_log({ robot => 'robot' }),
-	{},
-	'log message retrieval, robot criteria'
+$iterator = Sympa::Log::Database::Iterator->new(
+	source => $source,
+	ip     => '127.0.0.1'
 );
+ok($iterator, 'event iterator creation, adress criteria');
+ok(!defined $iterator->get_next(),'no matching event');
 
+$iterator = Sympa::Log::Database::Iterator->new(
+	source => $source,
+	robot => 'robot',
+);
+ok($iterator, 'event iterator creation, robot criteria');
+ok(!defined $iterator->get_next(),'no matching event');
+
+$iterator = Sympa::Log::Database::Iterator->new(
+	source => $source,
+	ip    => '127.0.0.1',
+	robot => 'robot'
+);
+ok($iterator, 'event iterator creation, address and robot criteria');
 is_deeply(
-	Sympa::Log::Database::get_first_db_log({
-		robot => 'robot',
-		ip    => '127.0.0.1'
-	}),
+	$iterator->get_next(),
 	{
 		'date'         => $second_message_time,
 		'status'       => 'error',
@@ -116,21 +122,9 @@ is_deeply(
 		'robot'        => 'robot',
 		'list'         => 'list'
 	},
-	'first log message retrieval, address and robot criteria'
+	'first matching eventl'
 );
-
-cmp_ok(
-	Sympa::Log::Database::return_rows_nb(),
-	'==',
-	1,
-	'one single message'
-);
-
-is_deeply(
-	Sympa::Log::Database::get_next_db_log(),
-	{},
-	'no more log matching log message'
-);
+ok(!defined $iterator->get_next(),'no more matching event');
 
 ok(
 	Sympa::Log::Database::delete_events(1),

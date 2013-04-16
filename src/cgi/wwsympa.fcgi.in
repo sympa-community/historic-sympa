@@ -61,6 +61,7 @@ use Sympa::Family;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Database;
+use Sympa::Log::Database::Iterator;
 use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::Marc::Search;
@@ -16394,28 +16395,27 @@ sub do_viewlogs {
 	$param->{'date_to_formated'} = Sympa::Language::gettext_strftime "%Y-%m-%d-%H-%M-%S", localtime($date[1]);
 
 	#display and search parameters preparation
-	my $select = {};
+	my %select = (
+		robot => $robot,
+		list  => $param->{'list'}
+	);
 
-	$select->{'robot'} = $robot;
-	$select->{'list'} = $param->{'list'};
 
 	foreach my $p ('target_type','target','date_from','date_to','type','ip') {
 		$param->{$p} = $in{$p};
-		$select->{$p} = $in{$p};
+		$select{$p} = $in{$p};
 	}
 
 	if($in{'target_type'} or $in{'page'} or $in{'size'}) {
 		#sending of search parameters for the query
-		my $line = Sympa::Log::Database::get_first_db_log($select);
-		while(defined $line->{'date'}) {
+		my $iterator = Sympa::Log::Database::Iterator->new(%select);
+		while(my $line = $iterator->get_next();
 			$line->{'date'} = Sympa::Language::gettext_strftime "%d %b %Y %H:%M:%S", localtime($line->{'date'});
 			push @{$param->{'log_entries'}}, $line;
-			$line = Sympa::Log::Database::get_next_db_log();
 		}
 
 		#display the number of rows of the query.
-		$param->{'total_results'} = $#{$param->{'log_entries'}} + 1;
-		$param->{'total_results'} = Sympa::Log::Database::return_rows_nb() if(Sympa::Log::Database::return_rows_nb() != 0);
+		$param->{'total_results'} = @{$param->{'log_entries'}};
 
 		unless($param->{'total_results'}) {
 			Sympa::Report::reject_report_web('user','no_logs',{},$param->{'action'});
