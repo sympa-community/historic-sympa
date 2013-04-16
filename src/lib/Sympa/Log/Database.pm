@@ -138,8 +138,8 @@ my %queries = (
 		'INSERT INTO stat_counter_table ('                        .
 			'id_counter, beginning_date_counter, '            .
 			'end_date_counter, data_counter, robot_counter, ' .
-			'list_counter, variation_counter, total_counter'  .
-		') VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+			'list_counter, variation_counter'                 .
+		') VALUES (?, ?, ?, ?, ?, ?, ?)',
 );
 
 my $source;
@@ -373,7 +373,6 @@ sub _db_stat_counter_log {
 		$params{robot},
 		$params{list},
 		$params{variation},
-		$params{total}
 	);
 	unless($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new stat counter entry in the database');
@@ -621,7 +620,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list}->{'count'},
-						total      => '',
 						robot      => $robot
 					);
 
@@ -649,7 +647,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list}->{count},
-						total      =>   '',
 						robot      => $robot
 					);
 				}
@@ -666,7 +663,6 @@ sub _store_aggregated_stats {
 							data       => $param,
 							list       => $list,
 							variation  => $stat->{$robot}->{$list}->{$param},
-							total      => '',
 							robot      => $robot
 						);
 					}
@@ -680,9 +676,7 @@ sub _store_aggregated_stats {
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
-					list       => '',
 					variation  => $stat->{$robot},
-					total      => '',
 					robot      => $robot
 				);
 			}
@@ -694,9 +688,7 @@ sub _store_aggregated_stats {
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
-					list       => '',
 					variation  => $stat->{$robot},
-					total      => '',
 					robot      => $robot
 				);
 			}
@@ -708,9 +700,7 @@ sub _store_aggregated_stats {
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
-					list       => '',
 					variation  => $stat->{$robot},
-					total      => '',
 					robot      => $robot
 				);
 			}
@@ -722,9 +712,7 @@ sub _store_aggregated_stats {
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
-					list       => '',
 					variation  => $stat->{$robot},
-					total      => '',
 					robot      => $robot
 				);
 			}
@@ -739,7 +727,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list},
-						total      => '',
 						robot      => $robot
 					);
 				}
@@ -752,9 +739,7 @@ sub _store_aggregated_stats {
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
-					list       => '',
 					variation  => $stat->{$robot},
-					total      => '',
 					robot      => $robot
 				);
 			}
@@ -769,7 +754,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list},
-						total      => '',
 						robot      => $robot
 					);
 				}
@@ -785,7 +769,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list},
-						total      => '',
 						robot      => $robot
 					);
 				}
@@ -801,7 +784,6 @@ sub _store_aggregated_stats {
 						data       => $operation,
 						list       => $list,
 						variation  => $stat->{$robot}->{$list},
-						total      => '',
 						robot      => $robot
 					);
 				}
