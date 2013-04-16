@@ -27,7 +27,7 @@ my $source = Sympa::Datasource::SQL->create(
 plan(skip_all => 'unable to create database') unless $source;
 my $dbh = $source->establish_connection();
 
-plan tests => 25;
+plan tests => 27;
 
 Sympa::Log::Database::init(source => $source);
 
@@ -205,7 +205,7 @@ ok(
 	'data aggregation, dates provided'
 );
 
-cmp_ok(get_row_count("stat_counter_table"), '==', 1, "one stat counter records in database");
+cmp_ok(get_row_count("stat_counter_table"), '==', 2, "two stat counter records in database");
 
 sub get_row_count {
 	my ($table) = @_;
