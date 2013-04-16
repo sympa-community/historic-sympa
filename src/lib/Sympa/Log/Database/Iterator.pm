@@ -190,8 +190,10 @@ sub new {
 		push @parameters, @actions;
 	}
 
-	$statement .= ' AND client_logs = ?';
-	push @parameters, $params{ip};
+	if ($params{ip}) {
+		$statement .= ' AND client_logs = ?';
+		push @parameters, $params{ip};
+	}
 
 	if ($params{user_email}) {
 		$statement .= ' AND user_email_logs = ?';
