@@ -39,6 +39,7 @@ use Encode::Guess; ## Useful when encoding should be guessed
 use English;
 use File::Copy::Recursive;
 use File::Find;
+use File::Temp;
 use HTML::StripScripts::Parser;
 use MIME::EncWords;
 use MIME::Lite::HTML;
@@ -1141,14 +1142,14 @@ sub split_mail {
 	return 1;
 }
 
-=item virus_infected($mail, $path, $args, $tmpdir, $domain, $confdir)
+=item virus_infected($mail, $path, $args, $domain, $confdir)
 
 FIXME.
 
 =cut
 
 sub virus_infected {
-	my ($mail, $path, $args, $tmpdir, $domain, $confdir) = @_;
+	my ($mail, $path, $args, $domain, $confdir) = @_;
 
 	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
 	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
@@ -1157,20 +1158,9 @@ sub virus_infected {
 		Sympa::Log::Syslog::do_log('debug', 'Sympa not configured to scan virus in message');
 		return 0;
 	}
-	my @name = split(/\//,$file);
-	my $work_dir = $tmpdir.'/antivirus';
-
-	unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
-		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
-		return undef;
-	}
-
-	$work_dir = $tmpdir.'/antivirus/'.$name[$#name];
-
-	unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
-		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
-		return undef;
-	}
+	my $work_dir = File::Temp->newdir(
+		CLEANUP => $main::options{'debug'} ? 0 : 1
+	);
 
 	#$mail->dump_skeleton;
 
@@ -1378,19 +1368,7 @@ sub virus_infected {
 
 	}
 
-	## if debug mode is active, the working directory is kept
-	unless ($main::options{'debug'}) {
-		opendir (DIR, ${work_dir});
-		my @list = readdir(DIR);
-		closedir (DIR);
-		foreach (@list) {
-			unlink ("$work_dir/$_")  ;
-		}
-		rmdir ($work_dir) ;
-	}
-
 	return $virusfound;
-
 }
 
 =item get_filename($type, $options, $name, $robot, $object, $basedir)

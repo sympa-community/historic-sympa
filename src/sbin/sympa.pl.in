@@ -1621,7 +1621,6 @@ sub process_message {
 		$message->{'msg'},
 		$Sympa::Configuration::Conf{'antivirus_path'},
 		$Sympa::Configuration::Conf{'antivirus_args'},
-		$Sympa::Configuration::Conf{'tmpdir'},
 		$Sympa::Configuration::Conf{'domain'},
 		$Sympa::Configuration::Conf{'etc'}
 	);
