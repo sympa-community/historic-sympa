@@ -16409,7 +16409,7 @@ sub do_viewlogs {
 	if($in{'target_type'} or $in{'page'} or $in{'size'}) {
 		#sending of search parameters for the query
 		my $iterator = Sympa::Log::Database::Iterator->new(%select);
-		while(my $line = $iterator->get_next();
+		while(my $line = $iterator->get_next()) {
 			$line->{'date'} = Sympa::Language::gettext_strftime "%d %b %Y %H:%M:%S", localtime($line->{'date'});
 			push @{$param->{'log_entries'}}, $line;
 		}
