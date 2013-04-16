@@ -1230,7 +1230,7 @@ sub probe_db {
     
     my $found_tables = 0;
     foreach $table('user_table', 'subscriber_table', 'admin_table') {
-	if ($checked{$table} || $checked{'public.' . $table}) {
+	if ($checked{$table} || $checked{'public.' . $table} || $checked{$Conf::Conf{'db_user'} . '.' . $table}) {
 	    $found_tables++;
 	}else {
 	    &do_log('err', 'Table %s not found in database %s', $table, $Conf::Conf{'db_name'});
