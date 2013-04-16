@@ -27,7 +27,7 @@ my $source = Sympa::Datasource::SQL->create(
 plan(skip_all => 'unable to create database') unless $source;
 my $dbh = $source->establish_connection();
 
-plan tests => 27;
+plan tests => 25;
 
 Sympa::Log::Database::init(source => $source);
 
@@ -38,23 +38,6 @@ is_deeply(
 	[ undef, undef ],
 	"neither minimal nor maximal log date"
 );
-
-ok(!
-	Sympa::Log::Database::do_log(
-		daemon       => 'daemon',
-		list         => 'list',
-		action       => 'process_message',
-		target_email => '',
-		msg_id       => '',
-		status       => 'error',
-		error_type   => 'unable_create_message',
-		user_email   => '',
-		client       => '127.0.0.1'
-	),
-	'incorrect parameter'
-);
-
-cmp_ok(get_row_count("logs_table"), '==', 0, "no log record in database");
 
 ok(
 	Sympa::Log::Database::do_log(
