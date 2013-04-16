@@ -54,7 +54,7 @@ use Sympa::SDM;
 use Sympa::Tools::Time;
 
 ## Database and SQL statement handlers
-my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
+my ($sth, @sth_stack);
 
 =head1 CLASS METHODS
 
@@ -365,7 +365,7 @@ sub update {
 	my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
 	unless (Sympa::SDM::do_query($statement)) {
-		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, undef);
 		return undef;
 	}
 	return 1;
