@@ -8274,10 +8274,6 @@ sub do_install_pending_list {
 
 	$list->{'admin'}{'status'} = $in{'status'};
 
-	#    open TMP, ">/tmp/dump1";
-	#    Sympa::Tools::Data::dump_var ($list->{'admin'}, 0, \*TMP);
-	#    close TMP;
-
 	unless ($list->save_config($param->{'user'}{'email'})) {
 		 Sympa::Report::reject_report_web('intern','cannot_save_config',{'listname'=> $list->{'name'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 wwslog('info','_create_list: Cannot save config file');
@@ -8286,10 +8282,6 @@ sub do_install_pending_list {
 				 'error_type' => 'internal'});
 		 return undef;
 	}
-
-	#    open TMP, ">/tmp/dump2";
-	#    Sympa::Tools::Data::dump_var ($list->{'admin'}, 0, \*TMP);
-	#    close TMP;
 
 	## create the aliases
 	if ($in{'status'} eq 'open') {
@@ -11653,10 +11645,6 @@ if (scalar keys %subdirs) {
 		     $param->{'expert_page'} = 0;
 	    }
     }
-
-    #open TMP, ">/tmp/dump1";
-    #Sympa::Tools::Data::dump_var($param, 0,\*TMP);
-    #close TMP;
 
     web_db_log({'parameters' => $in{'path'},
 		     'status' => 'success'});

@@ -3602,7 +3602,6 @@ sub send_msg_digest {
 		$parser->output_to_core(1);
 		$parser->extract_uuencode(1);
 		$parser->extract_nested_messages(1);
-		#   $parser->output_dir($Sympa::Configuration::Conf{'spool'} ."/tmp");
 		my $mail = $parser->parse_data($message_as_string);
 		next unless (defined $mail);
 		push @list_of_mail, $mail;
@@ -4806,7 +4805,6 @@ sub archive_send {
 	$param->{'boundary2'} = Sympa::Tools::get_message_id($self->{'domain'});
 	$param->{'from'} = Sympa::Configuration::get_robot_conf($self->{'domain'},'sympa');
 
-#    open TMP2, ">/tmp/digdump"; Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 	$param->{'auto_submitted'} = 'auto-replied';
 	unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 		Sympa::Log::Syslog::do_log('notice',"Unable to send template 'archive_send' to $who");
@@ -4869,7 +4867,6 @@ $param->{'boundary1'} = Sympa::Tools::get_message_id($self->{'domain'});
 $param->{'boundary2'} = Sympa::Tools::get_message_id($self->{'domain'});
 $param->{'from'} = Sympa::Configuration::get_robot_conf($self->{'domain'},'sympa');
 $param->{'auto_submitted'} = 'auto-replied';
-#    open TMP2, ">/tmp/digdump"; Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 
 unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 	Sympa::Log::Syslog::do_log('notice',"Unable to send template 'archive_send' to $who");

@@ -1441,18 +1441,6 @@ sub verify_custom {
 	return $persistent_cache{'named_filter'}{$condition}{$filter}{'value'};
 }
 
-=item dump_all_scenarios()
-
-FIXME
-
-=cut
-
-sub dump_all_scenarios {
-	open TMP, ">/tmp/all_scenarios";
-	Sympa::Tools::Data::dump_var(\%all_scenarios, 0, \*TMP);
-	close TMP;
-}
-
 =back
 
 =cut
