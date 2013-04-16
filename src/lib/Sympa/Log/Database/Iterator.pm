@@ -113,84 +113,105 @@ Parameters:
 
 Return:
 
-A new L<Sympa::Log::Database::Iterator> object, or I<undef> if something went wrong.
+A new L<Sympa::Log::Database::Iterator> object, or I<undef> if something went
+wrong.
 
 =cut
 
 sub new {
 	my ($class, %params) = @_;
 
-	my $statement = sprintf "SELECT date_logs, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", $params{source}->quote($params{robot});
+	my $statement =
+		'SELECT '                                                     .
+			'date_logs, robot_logs AS robot, list_logs AS list, ' .
+			'action_logs AS action, '                             .
+			'parameters_logs AS parameters, '                     .
+			'target_email_logs AS target_email, '                 .
+			'msg_id_logs AS msg_id, status_logs AS status, '      .
+			'error_type_logs AS error_type, '                     .
+			'user_email_logs AS user_email, '                     .
+			'client_logs AS client, daemon_logs AS daemon '       .
+	'FROM logs_table '                                                    .
+	'WHERE robot_logs=?';
+	my @parameters = ($params{robot});
 
-	#if a type of target and a target are specified
-	if ($params{target_type} && $params{target_type} ne 'none') {
-		if($params{target}) {
-			$params{target_type} = lc ($params{target_type});
-			$params{target} = lc ($params{target});
-			$statement .= 'AND ' . $params{target_type} . '_logs = ' . $params{source}->quote($params{target}).' ';
-		}
+	if (
+		$params{target_type} &&
+		$params{target_type} ne 'none' &&
+		$params{target}
+	) {
+		$statement .= ' AND ' . lc($params{target_type}) . '_logs = ?';
+		push @parameters, lc($params{target});
 	}
 
-	#if the search is between two date
 	if ($params{date_from}) {
 		my @tab_date_from = split(/\//,$params{date_from});
-		my $date_from = POSIX::mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
-		unless($params{date_to}) {
-			my $date_from2 = POSIX::mktime(0,0,25,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
-			$statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_from2;
-		}
-		if($params{date_to}) {
+		my $date_from = POSIX::mktime(
+			0, 0, -1,
+			$tab_date_from[0],
+			$tab_date_from[1] - 1,
+			$tab_date_from[2] - 1900
+		);
+		my $date_to;
+
+		if ($params{date_to}) {
 			my @tab_date_to = split(/\//,$params{date_to});
-			my $date_to = POSIX::mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
+			$date_to = POSIX::mktime(
+				0, 0, 25,
+				$tab_date_to[0],
+				$tab_date_to[1] - 1,
+				$tab_date_to[2] - 1900
+			);
 
-			$statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_to;
+		} else {
+			$date_to = POSIX::mktime(
+				0, 0, 25,
+				$tab_date_from[0],
+				$tab_date_from[1] - 1,
+				$tab_date_from[2] - 1900
+			);
 		}
-	}
 
-	#if the search is on a precise type
-	if ($params{type}) {
-		if($params{type} ne 'none' && $params{type} ne 'all_actions') {
-			my $first = 'false';
-			foreach my $type(@{$action_type{$params{type}}}) {
-				if($first eq 'false') {
-					#if it is the first action, put AND on the statement
-					$statement .= sprintf "AND (logs_table.action_logs = '%s' ",$type;
-					$first = 'true';
-				} else {
-					#else, put OR
-					$statement .= sprintf "OR logs_table.action_logs = '%s' ",$type;
-				}
-			}
-			$statement .= ')';
-		}
+		$statement .= ' AND date_logs BETWEEN ? AND ?';
+		push @parameters, $date_from, $date_to;
 
 	}
 
-	#if the listmaster want to make a search by an IP adress.
-	$statement .= sprintf "AND client_logs = '%s'",$params{ip};
+	if (
+		$params{type} &&
+		$params{type} ne 'none' &&
+		$params{type} ne 'all_actions'
+	) {
+		my @actions =  @{$action_type{$params{type}}};
+		$statement .= 
+			' AND ('                                         .
+			join(' OR ', map { 'action_logs = ?' } @actions) .
+			')';
+		push @parameters, @actions;
+	}
 
+	$statement .= ' AND client_logs = ?';
+	push @parameters, $params{ip};
 
-	## Currently not used
-	#if the search is on the actor of the action
 	if ($params{user_email}) {
-		$params{user_email} = lc ($params{user_email});
-		$statement .= sprintf "AND user_email_logs = '%s' ",$params{user_email};
+		$statement .= ' AND user_email_logs = ?';
+		push @parameters, lc($params{user_email});
 	}
 
-	#if a list is specified -just for owner or above-
-	if($params{list}) {
+	if ($params{list}) {
 		$params{list} = lc ($params{list});
-		$statement .= sprintf "AND list_logs = '%s' ",$params{list};
+		$statement .= ' AND list_logs = ?';
+		push @parameters, lc($params{list});
 	}
 
-	$statement .= sprintf "ORDER BY date_logs ";
+	$statement .= ' ORDER BY date_logs';
 
 	my $sth = $params{source}->get_query_handle($statement);
 	unless($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve logs entry from the database');
 		return undef;
 	}
-	$sth->execute();
+	$sth->execute(@parameters);
 
 	my $self = {
 		sth => $sth,
