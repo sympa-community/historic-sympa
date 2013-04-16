@@ -104,8 +104,6 @@ my %equiv = (
 	"User's Disk Quota Exceeded:"                              => '4.2.2'
 );
 
-
-## Check options
 my %options;
 GetOptions(
 	\%options,
@@ -116,8 +114,6 @@ GetOptions(
 ) or pod2usage(-verbose => 0);
 
 pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
-
-# $options{'debug2'} = 1 if ($options{'debug'});
 
 if ($options{'debug'}) {
 	$options{'log_level'} = 2 unless ($options{'log_level'});

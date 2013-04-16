@@ -93,9 +93,6 @@ use Sympa::WWSympa;
 my $daemon_name = Sympa::Tools::Daemon::get_daemon_name();
 my $ip = $ENV{'REMOTE_HOST'};
 
-#getopts('dF');
-
-## Check options
 my %options;
 GetOptions(
 	\%options,

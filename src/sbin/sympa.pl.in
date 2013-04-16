@@ -287,12 +287,10 @@ my $digestsleep = 5;
 srand (time());
 
 my $version_string =
-sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
+	sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
 
 my $daemon_name = Sympa::Tools::Daemon::get_daemon_name();
-my $ip;
-$ip = $ENV{'REMOTE_HOST'};
-$ip = $ENV{'REMOTE_ADDR'} unless ($ip);
+my $ip = $ENV{'REMOTE_HOST'} || $ENV{'REMOTE_ADDR'};
 
 my %options;
 GetOptions(
