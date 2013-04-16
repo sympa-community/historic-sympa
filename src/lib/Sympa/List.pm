@@ -5684,7 +5684,6 @@ sub delete_list_member {
 			operation => 'del subscriber',
 			parameter => $parameter,
 			mail      => $who,
-			client    => '',
 			daemon    => $daemon_name
 		);
 
@@ -7647,9 +7646,7 @@ sub add_list_member {
 		robot     => $self->{'domain'},
 		list      => $self->{'name'},
 		operation => 'add subscriber',
-		parameter => '',
 		mail      => $new_user->{'email'},
-		client    => '',
 		daemon    => $daemon
 	);
 
@@ -12878,9 +12875,7 @@ Sympa::Log::Database::add_stat(
 	robot     => $self->{'domain'},
 	list      => $self->{'name'},
 	operation => 'close_list',
-	parameter => '',
 	mail      => $email,
-	client    => '',
 	daemon    => 'damon_name'
 );
 
@@ -12932,9 +12927,7 @@ sub purge {
 		robot     => $self->{'domain'},
 		list      => $self->{'name'},
 		operation => 'purge list',
-		parameter => '',
 		mail      => $email,
-		client    => '',
 		daemon    => 'daemon_name'
 	);
 

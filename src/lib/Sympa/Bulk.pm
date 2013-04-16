@@ -475,7 +475,6 @@ sub store {
 					operation => 'send_mail',
 					parameter => length($msg),
 					mail      => $message_sender,
-					client    => '',
 					daemon    => 'sympa.pl'
 				);
 			}

@@ -287,9 +287,7 @@ if($origin eq "web"){
 		robot     => $robot,
 		list      => $params->{'listname'},
 		operation => 'create list',
-		parameter => '',
 		mail      => $user_mail,
-		client    => '',
 		daemon    => 'wwsympa.fcgi'
 	);
 }

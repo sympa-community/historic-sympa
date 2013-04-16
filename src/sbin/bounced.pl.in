@@ -337,9 +337,7 @@ while (!$end) {
 							robot     => $list->{'domain'},
 							list      => $list->{'name'},
 							operation => 'auto_del',
-							parameter => "",
 							mail      => $who,
-							client    => "",
 							daemon    => 'bounced.pl'
 						);
 
@@ -862,7 +860,6 @@ sub update_subscriber_bounce_history {
 			action       => 'get_bounce',
 			parameters   => "address=$rcpt",
 			target_email => $bouncefor,
-			msg_id       => '',
 			status       => 'error',
 			error_type   => $status,
 			daemon       => 'bounced'
@@ -875,7 +872,6 @@ sub update_subscriber_bounce_history {
 			list         => $list->{'name'},
 			action       => 'get_bounce',
 			target_email => $bouncefor,
-			msg_id       => '',
 			status       => 'error',
 			error_type   => $status,
 			daemon       => 'bounced'
