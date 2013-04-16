@@ -680,7 +680,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		exit 0;
 	}elsif ($options{'md5_encode_password'}) {
 
-		unless ($Sympa::List::use_db) {
+		unless ($Sympa::SDM::use_db) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 
@@ -691,7 +691,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	}elsif ($options{'lowercase'}) {
 
-		unless ($Sympa::List::use_db) {
+		unless ($Sympa::SDM::use_db) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 

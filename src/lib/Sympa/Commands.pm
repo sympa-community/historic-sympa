@@ -910,7 +910,7 @@ sub _subscribe {
 			}
 		}
 
-		if ($Sympa::List::use_db) {
+		if ($Sympa::SDM::use_db) {
 			my $u = Sympa::List::get_global_user($sender);
 
 			Sympa::List::update_global_user(
@@ -1418,7 +1418,7 @@ sub _add {
 			Sympa::Report::notice_report_cmd('now_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);
 		}
 
-		if ($Sympa::List::use_db) {
+		if ($Sympa::SDM::use_db) {
 			my $u = Sympa::List::get_global_user($email);
 
 			Sympa::List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},

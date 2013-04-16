@@ -1609,7 +1609,7 @@ sub subscribe {
 			unless $list->add_list_member($u);
 		}
 
-		if ($Sympa::List::use_db) {
+		if ($Sympa::SDM::use_db) {
 			my $u = Sympa::List::get_global_user($sender);
 
 			Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}

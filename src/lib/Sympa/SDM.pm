@@ -299,7 +299,7 @@ sub probe_db {
 	}
 
 	## Used by List subroutines to check that the DB is available
-	$Sympa::List::use_db = 1;
+	$use_db = 1;
 
 	## Notify listmaster
 	Sympa::List::send_notify_to_listmaster('db_struct_updated',  Sympa::Configuration::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
