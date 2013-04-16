@@ -5678,7 +5678,7 @@ sub delete_list_member {
 		}
 
 		#log in stat_table to make statistics
-		Sympa::Log::Database::do_stat_log(
+		Sympa::Log::Database::add_stat(
 			robot     => $self->{'domain'},
 			list      => $name,
 			operation => 'del subscriber',
@@ -7643,7 +7643,7 @@ sub add_list_member {
 	$new_user->{'included'} ||= 0;
 
 	#Log in stat_table to make staistics
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		robot     => $self->{'domain'},
 		list      => $self->{'name'},
 		operation => 'add subscriber',
@@ -12874,7 +12874,7 @@ $self->savestats();
 $self->remove_aliases();
 
 #log in stat_table to make staistics
-Sympa::Log::Database::do_stat_log(
+Sympa::Log::Database::add_stat(
 	robot     => $self->{'domain'},
 	list      => $self->{'name'},
 	operation => 'close_list',
@@ -12928,7 +12928,7 @@ sub purge {
 	Sympa::Tools::File::remove_dir($self->{'dir'});
 
 	#log ind stat table to make statistics
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		robot     => $self->{'domain'},
 		list      => $self->{'name'},
 		operation => 'purge list',

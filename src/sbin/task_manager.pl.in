@@ -1147,7 +1147,7 @@ sub purge_logs_table {
 	my @slots = ();
 
 	Sympa::Log::Syslog::do_log('debug2','()');
-	unless(Sympa::Log::Database::delete_messages(Sympa::Configuration::get_robot_conf('*','logs_expiration_period'))) {
+	unless(Sympa::Log::Database::delete_events(Sympa::Configuration::get_robot_conf('*','logs_expiration_period'))) {
 		Sympa::Log::Syslog::do_log('err','Failed to delete logs');
 		return undef;
 	}
@@ -1175,7 +1175,7 @@ sub purge_logs_table {
 
 	for (my $j=1; $j <= scalar(@slots); $j++){
 
-		Sympa::Log::Database::aggregate_data($slots[$j-1], $slots[$j]);
+		Sympa::Log::Database::aggregate_stats($slots[$j-1], $slots[$j]);
 	}
 	#-------------------------------------------------------------------
 

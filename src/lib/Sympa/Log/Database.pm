@@ -26,7 +26,7 @@ Sympa::Log::Database - Database-oriented log functions
 
 =head1 DESCRIPTION
 
-This module provides database-oriented logging functions
+This module provides database-oriented logging functions.
 
 =cut
 
@@ -188,9 +188,9 @@ sub get_log_date {
 	return @dates;
 }
 
-=item do_log(%parameters)
+=item add_event(%parameters)
 
-Add log in RDBMS.
+Add event entry in database.
 
 Parameters:
 
@@ -224,7 +224,7 @@ Return:
 
 =cut
 
-sub do_log {
+sub add_event {
 	my (%params) = @_;
 
 	$params{parameters} = Sympa::Tools::clean_msg_id($params{parameters});
@@ -277,9 +277,9 @@ sub do_log {
 	return 1;
 }
 
-=item do_stat_log($parameters)
+=item add_stat($parameters)
 
-Insert data in stats table.
+Add stat entry in database.
 
 Parameters:
 
@@ -305,7 +305,7 @@ Return:
 
 =cut
 
-sub do_stat_log {
+sub add_stat {
 	my (%params) = @_;
 
 	my $date   = time;
@@ -344,7 +344,7 @@ sub do_stat_log {
 	return 1;
 }
 
-sub _db_stat_counter_log {
+sub _add_stat_counter {
 	my (%params) = @_;
 
 	my $random = int(rand(1000000));
@@ -377,19 +377,29 @@ sub _db_stat_counter_log {
 
 }
 
-=item delete_messages($parameters)
+=item delete_events($age)
 
-Delete logs in RDBMS.
+Delete event entry from database.
 
 Parameters:
 
+=over
+
+=item number
+
+The minimum age of events to delete (in months)
+
+=back
+
 Return:
+
+A true value on success.
 
 =cut
 
-sub delete_messages {
-	my ($exp) = @_;
-	my $date = time - ($exp * 30 * 24 * 60 * 60);
+sub delete_events {
+	my ($age) = @_;
+	my $date = time - ($age * 30 * 24 * 60 * 60);
 
 	my $handle = $source->get_query_handle(
 		$queries{delete_log_message},
@@ -547,19 +557,27 @@ sub get_next_db_log {
 	return $log;
 }
 
-=item aggregate_data($begin_date, $end_date)
+=item aggregate_stats($begin_date, $end_date)
 
-Aggregate date from stat_table to stat_counter_table.
-
-Dates must be in epoch format.
+Aggregate stats entries in database.
 
 Parameters:
 
+=over
+
+=item timestamp
+
+=item timestamp
+
+=back
+
 Return:
+
+A true value on success
 
 =cut
 
-sub aggregate_data {
+sub aggregate_stats {
 	my ($begin_date, $end_date) = @_;
 
 	# retrieve new stats (read_stat value is 0)
@@ -609,7 +627,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'send_mail') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,
@@ -636,7 +654,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'add_subscriber') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,
@@ -652,7 +670,7 @@ sub _store_aggregated_stats {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
 					foreach my $param (keys %{$stat->{$robot}->{$list}}) {
-						_db_stat_counter_log(
+						_add_stat_counter(
 							begin_date => $begin_date,
 							end_date   => $end_date,
 							data       => $param,
@@ -667,7 +685,7 @@ sub _store_aggregated_stats {
 
 		if ($operation eq 'create_list') {
 			foreach my $robot (keys %{$stat}) {
-				_db_stat_counter_log(
+				_add_stat_counter(
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
@@ -679,7 +697,7 @@ sub _store_aggregated_stats {
 
 		if ($operation eq 'copy_list') {
 			foreach my $robot (keys %{$stat}) {
-				_db_stat_counter_log(
+				_add_stat_counter(
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
@@ -691,7 +709,7 @@ sub _store_aggregated_stats {
 
 		if ($operation eq 'close_list') {
 			foreach my $robot (keys %{$stat}) {
-				_db_stat_counter_log(
+				_add_stat_counter(
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
@@ -703,7 +721,7 @@ sub _store_aggregated_stats {
 
 		if ($operation eq 'purge_list') {
 			foreach my $robot (keys %{$stat}) {
-				_db_stat_counter_log(
+				_add_stat_counter(
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
@@ -716,7 +734,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'reject') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,
@@ -730,7 +748,7 @@ sub _store_aggregated_stats {
 
 		if ($operation eq 'list_rejected') {
 			foreach my $robot (keys %$stat) {
-				_db_stat_counter_log(
+				_add_stat_counter(
 					begin_date => $begin_date,
 					end_date   => $end_date,
 					data       => $operation,
@@ -743,7 +761,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'd_upload') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,
@@ -758,7 +776,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'd_create_directory') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,
@@ -773,7 +791,7 @@ sub _store_aggregated_stats {
 		if ($operation eq 'd_create_file') {
 			foreach my $robot (keys %{$stat}) {
 				foreach my $list (keys %{$stat->{$robot}}) {
-					_db_stat_counter_log(
+					_add_stat_counter(
 						begin_date => $begin_date,
 						end_date   => $end_date,
 						data       => $operation,

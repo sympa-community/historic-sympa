@@ -283,7 +283,7 @@ if (defined $list->{'admin'}{'shared_doc'}) {
 #log in stat_table to make statistics
 
 if($origin eq "web"){
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		robot     => $robot,
 		list      => $params->{'listname'},
 		operation => 'create list',

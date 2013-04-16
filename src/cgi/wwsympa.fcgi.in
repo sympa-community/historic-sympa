@@ -1894,7 +1894,7 @@ sub wwslog {
 sub web_db_log {
 	my $data = shift;
 
-	my $result = Sympa::Log::Database::do_log(
+	my $result = Sympa::Log::Database::add_event(
 		 robot        => $robot,
 		 action       => $param->{'action'},
 		 user_email   => $param->{'user'}{'email'},
@@ -1916,7 +1916,7 @@ sub web_db_log {
 sub web_db_stat_log {
 	my $data = shift;
 
-	my $result = Sympa::Log::Database::do_stat_log(
+	my $result = Sympa::Log::Database::add_stat(
 		 mail      => $param->{'user'}{'email'},
 		 operation => $param->{'action'},
 		 list      => $list->{'name'},

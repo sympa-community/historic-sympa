@@ -323,7 +323,7 @@ while (!$end) {
 					if ($list->is_list_member($who)) {
 						my $u = $list->delete_list_member('users' => [$who], 'exclude' =>' 1');
 						Sympa::Log::Syslog::do_log ('notice',"$who has been removed from $listname because welcome message bounced");
-						Sympa::Log::Database::do_log(
+						Sympa::Log::Database::add_event(
 							robot        => $list->{'domain'},
 							list         => $list->{'name'},
 							action       => 'del',
@@ -333,7 +333,7 @@ while (!$end) {
 							daemon       => 'bounced'
 						);
 
-						Sympa::Log::Database::do_stat_log(
+						Sympa::Log::Database::add_stat(
 							robot     => $list->{'domain'},
 							list      => $list->{'name'},
 							operation => 'auto_del',
@@ -856,7 +856,7 @@ sub update_subscriber_bounce_history {
 		Sympa::Log::Syslog::do_log ('debug','update_subscribe (%s, bounce-> %s %s %s %s,bounce_address->%s)',$bouncefor,$first,$last,$count,$status,$rcpt);
 		$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status",
 				'bounce_address' => $rcpt});
-		Sympa::Log::Database::do_log(
+		Sympa::Log::Database::add_event(
 			robot        => $list->{'domain'},
 			list         => $list->{'name'},
 			action       => 'get_bounce',
@@ -870,7 +870,7 @@ sub update_subscriber_bounce_history {
 	} else {
 		$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status"});
 		Sympa::Log::Syslog::do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list->{'name'});
-		Sympa::Log::Database::do_log(
+		Sympa::Log::Database::add_event(
 			robot        => $list->{'domain'},
 			list         => $list->{'name'},
 			action       => 'get_bounce',

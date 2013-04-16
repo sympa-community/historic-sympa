@@ -410,7 +410,7 @@ sub remove {
 
 	Sympa::Log::Syslog::do_log('notice',"Removing $msgid in list $adrlist section $2");
 
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		robot     => $robot,
 		list      => $adrlist,
 		operation => 'remove archive',
@@ -420,7 +420,7 @@ sub remove {
 		daemon    => $daemon_name
 	);
 
-	my $result = Sympa::Log::Database::do_log(
+	my $result = Sympa::Log::Database::add_event(
 		robot        => $robot,
 		list         => $adrlist,
 		action       => 'remove',

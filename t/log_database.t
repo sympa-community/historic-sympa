@@ -40,7 +40,7 @@ is_deeply(
 );
 
 ok(
-	Sympa::Log::Database::do_log(
+	Sympa::Log::Database::add_event(
 		daemon       => 'sympa',
 		list         => 'list',
 		action       => 'process_message',
@@ -58,7 +58,7 @@ cmp_ok(get_row_count("logs_table"), '==', 1, 'one log record in database');
 
 my $second_message_time = time();
 ok(
-	Sympa::Log::Database::do_log(
+	Sympa::Log::Database::add_event(
 		daemon       => 'sympa',
 		list         => 'list',
 		action       => 'process_message',
@@ -133,13 +133,13 @@ is_deeply(
 );
 
 ok(
-	Sympa::Log::Database::delete_messages(1),
+	Sympa::Log::Database::delete_events(1),
 	'delete log messages older than one month'
 );
 cmp_ok(get_row_count("logs_table"), '==', 2, 'two log records in database');
 
 ok(
-	Sympa::Log::Database::delete_messages(0),
+	Sympa::Log::Database::delete_events(0),
 	"delete all log messages"
 );
 cmp_ok(get_row_count("logs_table"), '==', 0, "no more log records in database");
@@ -147,7 +147,7 @@ cmp_ok(get_row_count("logs_table"), '==', 0, "no more log records in database");
 my $stat_start_time = time();
 
 ok(
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		daemon     => 'daemon',
 		list       => 'list',
 		operation  => 'send_mail',
@@ -161,7 +161,7 @@ ok(
 cmp_ok(get_row_count("stat_table"), '==', 1, "one stat record in database");
 
 ok(
-	Sympa::Log::Database::do_stat_log(
+	Sympa::Log::Database::add_stat(
 		daemon     => 'daemon',
 		list       => 'list',
 		operation  => 'add_subscriber',
@@ -179,12 +179,12 @@ cmp_ok(get_row_count("stat_counter_table"), '==', 0, "no stat counter record in 
 my $stat_stop_time = time();
 
 ok(
-	Sympa::Log::Database::aggregate_data(),
+	Sympa::Log::Database::aggregate_stats(),
 	'data aggregation, no date provided'
 );
 
 ok(
-	Sympa::Log::Database::aggregate_data($stat_start_time, $stat_stop_time),
+	Sympa::Log::Database::aggregate_stats($stat_start_time, $stat_stop_time),
 	'data aggregation, dates provided'
 );
 

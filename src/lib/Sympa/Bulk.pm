@@ -469,7 +469,7 @@ sub store {
 		#log in stat_table to make statistics...
 		unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
 			unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests
-				Sympa::Log::Database::do_stat_log(
+				Sympa::Log::Database::add_stat(
 					robot     => $robot,
 					list      => $listname,
 					operation => 'send_mail',
