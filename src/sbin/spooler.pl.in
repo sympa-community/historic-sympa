@@ -91,7 +91,6 @@ use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use Sympa::Upgrade;
 
 ## Internal tuning
 # delay between each read of the digestqueue
