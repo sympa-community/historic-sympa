@@ -56,8 +56,6 @@ Parameters:
 
 None.
 
-=back
-
 Return value:
 
 A sane daemon name.

@@ -82,6 +82,10 @@ my %action_type = (
 	/ ],
 );
 
+=head1 CLASS METHODS
+
+=over
+
 =item Sympa::Log::Database::Iterator->new(%parameters)
 
 Create a new L<Sympa::Log::Database::Iterator> object.
@@ -182,7 +186,7 @@ sub new {
 		$params{type} ne 'all_actions'
 	) {
 		my @actions =  @{$action_type{$params{type}}};
-		$statement .= 
+		$statement .=
 			' AND ('                                         .
 			join(' OR ', map { 'action_logs = ?' } @actions) .
 			')';
@@ -221,6 +225,12 @@ sub new {
 	bless $self, $class;
 	return $self;
 }
+
+=back
+
+=head1 INSTANCE METHODS
+
+=over
 
 =item $iterator->get_next()
 

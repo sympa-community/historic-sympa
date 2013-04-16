@@ -486,8 +486,8 @@ A DBI statement handle object, or I<undef> if something went wrong.
 sub get_query_handle {
 	my ($self, $query) = @_;
 
-	return 
-		$self->{cache}->{$query} ||= 
+	return
+		$self->{cache}->{$query} ||=
 		$self->{dbh}->prepare($query);
 }
 
