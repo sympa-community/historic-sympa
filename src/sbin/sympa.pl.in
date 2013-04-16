@@ -2769,9 +2769,12 @@ sub test_storage {
 
 	print "maxtest: $maxtest\n";
 	print "barmax: $barmax\n";
-	my $progress = Term::ProgressBar->new({name  => 'Total size transfered',
-			count => $barmax,
-			ETA   => 'linear', });
+	require Term::ProgressBar;
+	my $progress = Term::ProgressBar->new({
+		name  => 'Total size transfered',
+		count => $barmax,
+		ETA   => 'linear'
+	});
 
 	my $testing = Sympa::Spool->new(name => 'bad');
 
