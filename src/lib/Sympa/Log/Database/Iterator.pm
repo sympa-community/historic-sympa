@@ -37,7 +37,6 @@ use strict;
 use English qw(-no_match_vars);
 use POSIX qw();
 
-use Sympa::Datasource::SQL;
 use Sympa::Log::Syslog;
 
 my %action_type = (
