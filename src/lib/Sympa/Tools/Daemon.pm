@@ -35,6 +35,7 @@ package Sympa::Tools::Daemon;
 use strict;
 
 use English qw(-no_match_vars);
+use File::Spec;
 use Proc::ProcessTable;
 use Sys::Hostname;
 
@@ -46,6 +47,26 @@ use Sympa::Tools::File;
 =head1 FUNCTIONS
 
 =over
+
+=item get_daemon_name()
+
+Get the current program name.
+
+Parameters:
+
+None.
+
+=back
+
+Return value:
+
+A sane daemon name.
+
+=cut
+
+sub get_daemon_name {
+	return (File::Spec->splitpath($0))[2];
+}
 
 =item write_pid(%parameters)
 

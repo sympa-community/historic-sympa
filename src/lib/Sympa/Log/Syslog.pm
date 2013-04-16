@@ -279,33 +279,6 @@ sub do_connect {
 	};
 }
 
-=item set_daemon($daemon_tmp)
-
-Return the name of the used daemon.
-
-Parameters:
-
-=over
-
-=item string
-
-=back
-
-Return value:
-
-FIXME
-
-=cut
-
-sub set_daemon {
-	my ($daemon_tmp) = @_;
-
-	my @path = split(/\//, $daemon_tmp);
-	my $daemon = $path[$#path];
-	$daemon =~ s/(\.[^\.]+)$//;
-	return $daemon;
-}
-
 =item agregate_daily_data($parameters)
 
 FIXME.
