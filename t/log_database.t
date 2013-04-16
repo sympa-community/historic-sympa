@@ -43,35 +43,29 @@ is_deeply(
 ok(
 	Sympa::Log::Database::add_event(
 		daemon       => 'sympa',
+		robot        => 'robot',
 		list         => 'list',
 		action       => 'process_message',
-		target_email => "",
-		msg_id       => '',
 		status       => 'error',
 		error_type   => 'unable_create_message',
-		user_email   => '',
 		client       => '127.0.0.1'
 	),
-	'add a log message, no robot'
+	'add a first log message'
 );
 
 cmp_ok(get_row_count("logs_table"), '==', 1, 'one log record in database');
 
-my $second_message_time = time();
 ok(
 	Sympa::Log::Database::add_event(
 		daemon       => 'sympa',
+		robot        => 'robot',
 		list         => 'list',
 		action       => 'process_message',
-		target_email => '',
-		msg_id       => '',
 		status       => 'error',
 		error_type   => 'unable_create_message',
-		user_email   => '',
-		client       => '127.0.0.1',
-		robot        => 'robot'
+		client       => '192.168.0.1',
 	),
-	'add another log message, explicit robot'
+	'add a second log message, with another address'
 );
 
 cmp_ok(get_row_count("logs_table"), '==', 2, 'two log records in database');
@@ -87,44 +81,21 @@ ok(!defined $iterator->get_next(),'no matching event');
 
 $iterator = Sympa::Log::Database::Iterator->new(
 	source => $source,
-	ip     => '127.0.0.1'
+	robot => 'robot',
 );
-ok($iterator, 'event iterator creation, adress criteria');
-ok(!defined $iterator->get_next(),'no matching event');
+ok($iterator, 'event iterator creation, robot criteria');
+ok(defined $iterator->get_next(),'first matching event');
+ok(defined $iterator->get_next(),'second matching event');
+ok(!defined $iterator->get_next(),'no third matching event');
 
 $iterator = Sympa::Log::Database::Iterator->new(
 	source => $source,
 	robot => 'robot',
-);
-ok($iterator, 'event iterator creation, robot criteria');
-ok(!defined $iterator->get_next(),'no matching event');
-
-$iterator = Sympa::Log::Database::Iterator->new(
-	source => $source,
-	ip    => '127.0.0.1',
-	robot => 'robot'
+	ip    => '127.0.0.1'
 );
 ok($iterator, 'event iterator creation, address and robot criteria');
-is_deeply(
-	$iterator->get_next(),
-	{
-		'date'         => $second_message_time,
-		'status'       => 'error',
-		'target_email' => '',
-		'client'       => '127.0.0.1',
-		'parameters'   => '',
-		'user_email'   => 'anonymous',
-		'action'       => 'process_message',
-		'msg_id'       => '',
-		'daemon'       => 'sympa',
-		'error_type'   => 'unable_create_message',
-		'date_logs'    => $second_message_time,
-		'robot'        => 'robot',
-		'list'         => 'list'
-	},
-	'first matching eventl'
-);
-ok(!defined $iterator->get_next(),'no more matching event');
+ok(defined $iterator->get_next(),'first matching event');
+ok(!defined $iterator->get_next(),'no second matching event');
 
 ok(
 	Sympa::Log::Database::delete_events(1),
