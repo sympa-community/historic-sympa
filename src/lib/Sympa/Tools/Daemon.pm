@@ -72,17 +72,33 @@ Parameters:
 
 =over
 
-=item C<file> => FIXME
+=item C<directory> => path
 
-=item C<method> => FIXME
+The PID file directory.
 
-=item C<pid> => FIXEM
+=item C<daemon> => string
 
-=item C<options> => FIXME
+The daemon name.
 
-=item C<user> => FIXME
+=item C<pid> => string
 
-=item C<group> => FIXME
+The daemon PID.
+
+=item C<options> => hashref
+
+FIXME
+
+=item C<method> => string
+
+The PID file locking method.
+
+=item C<user> => string
+
+The PID file user.
+
+=item C<group> => string
+
+The PID file group.
 
 =back
 
@@ -91,26 +107,25 @@ Parameters:
 sub write_pid {
 	my (%params) = @_;
 
-	my $piddir = $params{file};
-	$piddir =~ s/\/[^\/]+$//;
-
 	## Create piddir
-	mkdir($piddir, 0755) unless(-d $piddir);
+	mkdir($params{directory}, 0755) unless(-d $params{directory});
 
 	unless(Sympa::Tools::File::set_file_rights(
-			file  => $piddir,
+			file  => $params{directory},
 			user  => $params{user},
 			group => $params{group},
 		)) {
-		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', $piddir);
+		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', $params{directory});
 		return undef;
 	}
+
+	my $pid_file = _get_pid_file(%params);
 
 	my @pids;
 
 	# Lock pid file
 	my $lock = Sympa::Lock->new(
-		path   => $params{file},
+		path   => $pid_file,
 		method => $params{method},
 		user   => $params{user},
 		group  => $params{group},
@@ -121,13 +136,13 @@ sub write_pid {
 	}
 	$lock->set_timeout(5);
 	unless ($lock->lock('write')) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to lock %s file in write mode.',$params{file});
+		Sympa::Log::Syslog::do_log('err', 'Unable to lock %s file in write mode.',$pid_file);
 		return;
 	}
 	## If pidfile exists, read the PIDs
-	if(-f $params{file}) {
+	if(-f $pid_file) {
 		# Read pid file
-		open(PFILE, '<', $params{file});
+		open(PFILE, '<', $pid_file);
 		my $l = <PFILE>;
 		close PFILE;
 		@pids = grep {/[0-9]+/} split(/\s+/, $l);
@@ -136,10 +151,10 @@ sub write_pid {
 	## If we can have multiple instances for the process.
 	## Print other pids + this one
 	if($params{options}->{'multiple_process'}) {
-		unless(open(PIDFILE, '>', $params{file})) {
+		unless(open(PIDFILE, '>', $pid_file)) {
 			## Unlock pid file
 			$lock->unlock();
-			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file},$ERRNO);
+			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $pid_file,$ERRNO);
 			return;
 		}
 		## Print other pids + this one
@@ -148,10 +163,10 @@ sub write_pid {
 		close(PIDFILE);
 	} else {
 		## Create and write the pidfile
-		unless(open(PIDFILE, '+>>', $params{file})) {
+		unless(open(PIDFILE, '+>>', $pid_file)) {
 			## Unlock pid file
 			$lock->unlock();
-			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $params{file});
+			Sympa::Log::Syslog::do_log('err', 'Could not open %s: %s', $pid_file);
 			return;
 		}
 		## The previous process died suddenly, without pidfile cleanup
@@ -159,21 +174,23 @@ sub write_pid {
 		if($#pids >= 0) {
 			my $other_pid = $pids[0];
 			Sympa::Log::Syslog::do_log('notice', "Previous process %s died suddenly ; notifying listmaster", $other_pid);
-			my $pname = $0;
-			$pname =~ s/.*\/(\w+)/$1/;
-			send_crash_report(('pid'=>$other_pid,'pname'=>$pname));
+			send_crash_report(
+				directory => $params{directory},
+				daemon    => $params{daemon},
+				pid       => $other_pid,
+			);
 		}
 
-		unless(open(PIDFILE, '>', $params{file})) {
+		unless(open(PIDFILE, '>', $pid_file)) {
 			## Unlock pid file
 			$lock->unlock();
-			Sympa::Log::Syslog::do_log('err', 'Could not open %s', $params{file});
+			Sympa::Log::Syslog::do_log('err', 'Could not open %s', $pid_file);
 			return;
 		}
 		unless(truncate(PIDFILE, 0)) {
 			## Unlock pid file
 			$lock->unlock();
-			Sympa::Log::Syslog::do_log('err', 'Could not truncate %s.', $params{file});
+			Sympa::Log::Syslog::do_log('err', 'Could not truncate %s.', $pid_file);
 			return;
 		}
 
@@ -182,13 +199,13 @@ sub write_pid {
 	}
 
 	unless(Sympa::Tools::File::set_file_rights(
-			file  => $params{file},
+			file  => $pid_file,
 			user  => $params{user},
 			group => $params{group}
 		)) {
 		## Unlock pid file
 		$lock->unlock();
-		Sympa::Log::Syslog::do_log('err', 'Unable to set rights on %s', $params{file});
+		Sympa::Log::Syslog::do_log('err', 'Unable to set rights on %s', $pid_file);
 		return;
 	}
 	## Unlock pid file
@@ -205,13 +222,21 @@ Parameters:
 
 =over
 
-=item C<file> => FIXME
+=item C<directory> => path
 
-=item C<pid> => FIXME
+The PID file directory.
 
-=item C<options> => FIXME
+=item C<daemon> => string
 
-=item C<tmpdir> => FIXME
+The daemon name.
+
+=item C<pid> => number
+
+The daemon PID.
+
+=item C<options> => hashref
+
+FIXME
 
 =back
 
@@ -220,11 +245,13 @@ Parameters:
 sub remove_pid {
 	my (%params) = @_;
 
+	my $pid_file = _get_pid_file(%params);
+
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
 	if($params{options}->{'multiple_process'}) {
-		unless(open(PFILE, '<', $params{file})) {
-			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $params{file}, $params{pid});
+		unless(open(PFILE, '<', $pid_file)) {
+			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $pid_file, $params{pid});
 			return undef;
 		}
 		my $l = <PFILE>;
@@ -235,29 +262,29 @@ sub remove_pid {
 		## If no PID left, then remove the file
 		if($#pids < 0) {
 			## Release the lock
-			unless(unlink $params{file}) {
-				Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
+			unless(unlink $pid_file) {
+				Sympa::Log::Syslog::do_log('err', "Failed to remove $pid_file: %s", $ERRNO);
 				return undef;
 			}
 		} else {
-			if(-f $params{file}) {
-				unless(open(PFILE, '>', $params{file})) {
-					Sympa::Log::Syslog::do_log('err', "Failed to open $params{file}: %s", $ERRNO);
+			if(-f $pid_file) {
+				unless(open(PFILE, '>', $pid_file)) {
+					Sympa::Log::Syslog::do_log('err', "Failed to open $pid_file: %s", $ERRNO);
 					return undef;
 				}
 				print PFILE join(' ', @pids)."\n";
 				close(PFILE);
 			} else {
-				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $params{file});
+				Sympa::Log::Syslog::do_log('notice', 'pidfile %s does not exist. Nothing to do.', $pid_file);
 			}
 		}
 	} else {
-		unless(unlink $params{file}) {
-			Sympa::Log::Syslog::do_log('err', "Failed to remove $params{file}: %s", $ERRNO);
+		unless(unlink $pid_file) {
+			Sympa::Log::Syslog::do_log('err', "Failed to remove $pid_file: %s", $ERRNO);
 			return undef;
 		}
-		my $err_file = $params{tmpdir}.'/'.$params{pid}.'.stderr';
-		if(-f $err_file) {
+		my $err_file = _get_error_file(%params);
+		if (-f $err_file) {
 			unless(unlink $err_file) {
 				Sympa::Log::Syslog::do_log('err', "Failed to remove $err_file: %s", $ERRNO);
 				return undef;
@@ -275,7 +302,13 @@ Parameters:
 
 =over
 
-=item C<file> => FIXME
+=item C<directory> => path
+
+The PID file directory.
+
+=item C<daemon> => string
+
+The daemon name.
 
 =back
 
@@ -284,8 +317,10 @@ Parameters:
 sub read_pids {
 	my (%params) = @_;
 
-	unless (open(PFILE, '<', $params{file})) {
-		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$params{file},$ERRNO);
+	my $pid_file = _get_pid_file(%params);
+
+	unless (open(PFILE, '<', $pid_file)) {
+		Sympa::Log::Syslog::do_log('err', "unable to open pidfile %s:%s",$pid_file,$ERRNO);
 		return undef;
 	}
 	my $l = <PFILE>;
@@ -300,13 +335,21 @@ Parameters:
 
 =over
 
-=item C<tmpdir> => FIXME
+=item C<directory> => path
 
-=item C<pid> => FIXME
+The error file directory.
 
-=item C<user> => FIXME
+=item C<pid> => number
 
-=item C<group> => FIXME
+The daemon PID.
+
+=item C<user> => string
+
+The error file user.
+
+=item C<group> => string
+
+The error file group.
 
 =back
 
@@ -317,13 +360,16 @@ sub direct_stderr_to_file {
 
 	## Error output is stored in a file with PID-based name
 	## Usefull if process crashes
-	open(STDERR, '>>', $params{tmpdir}.'/'.$params{pid}.'.stderr');
+	my $err_file = _get_error_file(%params);
+	open(STDERR, '>>', $err_file);
 	unless(Tools::Sympa::File::set_file_rights(
-			file  => $params{tmpdir}.'/'.$params{pid}.'.stderr',
+			file  => $err_file,
 			user  => $params{user},
 			group => $params{group}
 		)) {
-		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', $params{tmpdir}.'/'.$params{pid}.'.stderr');
+		Sympa::Log::Syslog::do_log(
+			'err','Unable to set rights on %s', $err_file
+		);
 		return undef;
 	}
 	return 1;
@@ -331,7 +377,27 @@ sub direct_stderr_to_file {
 
 =item send_crash_report(%parameters)
 
-Send content of $pid.stderr to listmaster for process whose pid is $pid.
+Send error file content to listmaster.
+
+Parameters:
+
+=over
+
+=item C<directory> => path
+
+The error file directory.
+
+=item C<pid> => number
+
+The crashed daemon PID.
+
+=item C<daemon> => string
+
+The crashed daemon name.
+
+=item C<domain> => string
+
+=back
 
 =cut
 
@@ -339,7 +405,7 @@ sub send_crash_report {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug','Sending crash report for process %s',$params{'pid'}),
 
-	my $err_file = $params{'tmpdir'}.'/'.$params{'pid'}.'.stderr';
+	my $err_file = _get_error_file(%params);
 	my (@err_output, $err_date);
 	if(-f $err_file) {
 		open(ERR, '<', $err_file);
@@ -347,7 +413,16 @@ sub send_crash_report {
 		close ERR;
 		$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
 	}
-	Sympa::List::send_notify_to_listmaster('crash', $params{'domain'}, {'crashed_process' => $params{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $params{'pid'}});
+	Sympa::List::send_notify_to_listmaster(
+		'crash',
+		$params{domain},
+		{
+			crashed_process => $params{daemon},
+			crash_err       => \@err_output,
+			crash_date      => $err_date,
+			pid             => $params{pid}
+		}
+	);
 }
 
 =item get_children_processes_list()
@@ -366,6 +441,18 @@ sub get_children_processes_list {
 		}
 	}
 	return @children;
+}
+
+sub _get_error_file {
+	my (%params) = @_;
+
+	return $params{directory} . '/' . $params{pid} . '.stderr';
+}
+
+sub _get_pid_file {
+	my (%params) = @_;
+
+	return $params{directory} . '/' . $params{daemon} . '.pid';
 }
 
 1;

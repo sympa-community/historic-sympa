@@ -85,6 +85,8 @@ use Sympa::Tracking;
 use Sympa::Task;
 use Sympa::WWSympa;
 
+my $daemon_name = Sympa::Tools::Daemon::get_daemon_name();
+
 my $opt_d;
 my $opt_F;
 my %options;
@@ -167,25 +169,25 @@ unless ($options{'debug'} || $options{'foreground'}) {
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 my $result = Sympa::Tools::Daemon::write_pid(
-	file    => $wwsconf->{'task_manager_pidfile'},
-	pid     => $PID,
-	options => $options,
-	method  => $Sympa::Configuration::Conf{'lock_method'},
-	user    => Sympa::Constants::USER,
-	group   => Sympa::Constants::GROUP,
+	directory => Sympa::Constants::PIDDIR,
+	daemon    => $daemon_name,
+	pid       => $PID,
+	options   => $options,
+	method    => $Sympa::Configuration::Conf{'lock_method'},
+	user      => Sympa::Constants::USER,
+	group     => Sympa::Constants::GROUP,
 );
 unless ($result) {
 	Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
 }
 unless ($options->{'stderr_to_tty'}) {
 	Sympa::Tools::Daemon::direct_stderr_to_file(
-		tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
-		pid    => $PID,
-		user   => Sympa::Constants::USER,
-		user   => Sympa::Constants::GROUP,
+		directory => Sympa::Constants::PIDDIR,
+		pid       => $PID,
+		user      => Sympa::Constants::USER,
+		user      => Sympa::Constants::GROUP,
 	);
 }
-
 
 $wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
 Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'task_manager');
@@ -453,9 +455,9 @@ Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge g
 
 Sympa::Log::Syslog::do_log ('notice', 'task_manager exited normally due to signal');
 Sympa::Tools::Daemon::remove_pid(
-	file   => $wwsconf->{'task_manager_pidfile'},
-	pid    => $PID,
-	tmpdir => $Sympa::Configuration::Conf{'tmpdir'}
+	directory => Sympa::Constants::PIDDIR,
+	daemon    => $daemon_name,
+	pid       => $PID,
 );
 
 exit(0);

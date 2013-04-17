@@ -529,17 +529,17 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		unless ($options{'batch'} ) {
 
 			## Create and write the pidfile
-			my $file = $Sympa::Configuration::Conf{'pidfile'};
 			## If process is running in foreground, don't write STDERR to a dedicated file
 			my $options;
 			$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 			my $result = Sympa::Tools::Daemon::write_pid(
-				file    => $file,
-				pid     => $PID,
-				options => $options,
-				method  => $Sympa::Configuration::Conf{'lock_method'},
-				user    => Sympa::Constants::USER,
-				group   => Sympa::Constants::GROUP,
+				directory  => Sympa::Constants::PIDDIR,
+				daemon     => $daemon_name,
+				pid        => $PID,
+				options    => $options,
+				method     => $Sympa::Configuration::Conf{'lock_method'},
+				user       => Sympa::Constants::USER,
+				group      => Sympa::Constants::GROUP,
 			);
 			unless ($result) {
 				Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -547,10 +547,10 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 			unless ($options->{'stderr_to_tty'}) {
 				Sympa::Tools::Daemon::direct_stderr_to_file(
-					tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
-					pid    => $PID,
-					user   => Sympa::Constants::USER,
-					group  => Sympa::Constants::GROUP,
+					directory => Sympa::Constants::PIDDIR,
+					pid       => $PID,
+					user      => Sympa::Constants::USER,
+					group     => Sympa::Constants::GROUP,
 				);
 			}
 		}
@@ -1333,11 +1333,10 @@ Sympa::SDM::db_disconnect;
 } #end of block while ($signal ne 'term'){
 
 Sympa::Log::Syslog::do_log('notice', 'Sympa exited normally due to signal');
-my $file = $Sympa::Configuration::Conf{'pidfile'};
 Sympa::Tools::Daemon::remove_pid(
-	file    => $file,
-	pid     => $PID,
-	tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+	directory => Sympa::Constants::PIDDIR,
+	daemon    => $daemon_name,
+	pid       => $PID,
 );
 
 exit(0);
@@ -1563,7 +1562,8 @@ sub process_message {
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('err', 'dynamic list %s could not be created',$listname);
 				Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string,'');
-				Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $file."]);
+				# FIXME
+				Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $message_in_spool."]);
 				return undef;
 			}
 			$dyn_just_created = 1;
@@ -1749,7 +1749,8 @@ sub process_message {
 			if ($loop_info{$sender}{'count'} ==  Sympa::Configuration::get_robot_conf($robot, 'loop_command_max')) {
 				## Notify listmaster
 				unless (Sympa::List::send_notify_to_listmaster('loop_command',  Sympa::Configuration::get_robot_conf($robot, 'domain'),
-						{'msg' => $file})) {
+						# FIXME
+						{'msg' => $message_in_spool})) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'loop_command' to listmaster");
 				}
 			}
@@ -1774,7 +1775,7 @@ sub process_message {
 			robot        => $robot,
 			list         => $listname,
 			action       => 'Process_message',
-			parameters   => $file,
+			parameters   => $message_in_spool, # FIXME
 			msg_id       => $hdr->get('Message-ID'),
 			status       => 'success',
 			user_email   => $sender,

@@ -148,12 +148,12 @@ $options->{'multiple_process'} = 0;
 
 # Saves the pid number
 my $result = Sympa::Tools::Daemon::write_pid(
-	file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
-	pid     => $PID,
-	options => $options,
-	method  => $Sympa::Configuration::Conf{'lock_method'},
-	user    => Sympa::Constants::USER,
-	group   => Sympa::Constants::GROUP,
+	directory => Sympa::Constants::PIDDIR,
+	pid       => $PID,
+	options   => $options,
+	method    => $Sympa::Configuration::Conf{'lock_method'},
+	user      => Sympa::Constants::USER,
+	group     => Sympa::Constants::GROUP,
 );
 unless ($result) {
 	Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -241,33 +241,43 @@ while (!$end) {
 	    if ($#pids_leftover > -1) {
 		my @dc;
 		Sympa::Log::Syslog::do_log('debug2','Some childs of current process disappeared. Checking whether they shut down cleanly or not.');
-		my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(file => $Sympa::Configuration::Conf{'pidfile_bulk'});
+		my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(
+			directory => Sympa::Constants::PIDDIR,
+			daemon    => $daemon_name
+		);
 		foreach my $fpid (@{$pids_in_pfile}) {
 		    if (defined $dead_children{$fpid}) {
 			Sympa::Log::Syslog::do_log('err','The %s child exists in the pid file but is no longer running. Removing it and notyfying listmaster.',$fpid);
-			my $pname = $0;
-			$pname =~ s/.*\/(\w+)/$1/;
-			Sympa::Tools::Daemon::send_crash_report(('tmpdir' => $Sympa::Configuration::Conf{'tmpdir'}, 'pid'=>$fpid,'pname'=>$pname, domain => $Sympa::Configuration::Conf{'domain'}));
+			Sympa::Tools::Daemon::send_crash_report(
+				directory => Sympa::Constants::PIDDIR,
+				daemon    => $daemon_name,
+				pid       => $fpid,
+				domain    => $Sympa::Configuration::Conf{'domain'}
+			);
 			Sympa::Tools::Daemon::remove_pid(
-				pid     => $Sympa::Configuration::Conf{'pidfile_bulk'},
-				pid     => $fpid,
-				options => $options,
-				tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+				directory => Sympa::Constants::PIDDIR,
+				daemon    => $daemon_name,
+				pid       => $fpid,
+				options   => $options,
 			);
 			delete $dead_children{$fpid};
 			push @dc, $fpid;
 		    }
 		}
 	    }
-	    my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(file => $Sympa::Configuration::Conf{'pidfile_bulk'});
+	    my $pids_in_pfile = Sympa::Tools::Daemon::read_pids(
+		directory => Sympa::Constants::PIDDIR,
+		daemon    => $daemon_name
+	    );
 	    unless (defined($pids_in_pfile)){
 		my $result = Sympa::Tools::Daemon::write_pid(
-			file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
-			pid     => $PID,
-			options => $options,
-			method  => $Sympa::Configuration::Conf{'lock_method'},
-			user    => Sympa::Constants::USER,
-			group   => Sympa::Constants::GROUP,
+			directory => Sympa::Constants::PIDDIR,
+			daemon    => $daemon_name,
+			pid       => $PID,
+			options   => $options,
+			method    => $Sympa::Configuration::Conf{'lock_method'},
+			user      => Sympa::Constants::USER,
+			group     => Sympa::Constants::GROUP,
 		);
 		unless ($result) {
 			Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -298,12 +308,13 @@ while (!$end) {
 			    Sympa::Log::Syslog::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
 			    my $result = Sympa::Tools::Daemon::write_pid(
-				file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
-				pid     => $child_pid,
-				options => $options,
-				method  => $Sympa::Configuration::Conf{'lock_method'},
-				user    => Sympa::Constants::USER,
-				group   => Sympa::Constants::GROUP,
+				directory => Sympa::Constants::PIDDIR,
+				daemon    => $daemon_name,
+				pid       => $child_pid,
+				options   => $options,
+				method    => $Sympa::Configuration::Conf{'lock_method'},
+				user      => Sympa::Constants::USER,
+				group     => Sympa::Constants::GROUP,
 			    );
 			    unless ($result) {
 				Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -501,10 +512,10 @@ Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge g
 
 Sympa::Log::Syslog::do_log('notice', 'bulk.pl exited normally due to signal');
 Sympa::Tools::Daemon::remove_pid(
-	file    => $Sympa::Configuration::Conf{'pidfile_bulk'},
-	pid     => $PID,
-	options => $options,
-	tmpdir  => $Sympa::Configuration::Conf{'tmpdir'}
+	directory => Sympa::Constants::PIDDIR,
+	daemon    => $daemon_name,
+	pid       => $PID,
+	options   => $options,
 );
 
 exit(0);

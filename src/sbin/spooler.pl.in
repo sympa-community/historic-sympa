@@ -250,20 +250,18 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 			unless ($options{'batch'} ) {
 
-				## Create and write the pidfile
-				my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
-
 				## If process is running in foreground, don't write STDERR to a dedicated file
 				my $options;
 				$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 				$options->{'multiple_process'} = 1 ;
 				my $result = Sympa::Tools::Daemon::write_pid(
-					file    => $file,
-					pid     => $PID,
-					options => $options,
-					method  => $Sympa::Configuration::Conf{'lock_method'},
-					user    => Sympa::Constants::USER,
-					group   => Sympa::Constants::GROUP,
+					directory => Sympa::Constants::PIDDIR,
+					daemon    => $daemon_name,
+					pid       => $PID,
+					options   => $options,
+					method    => $Sympa::Configuration::Conf{'lock_method'},
+					user      => Sympa::Constants::USER,
+					group     => Sympa::Constants::GROUP,
 				);
 				unless ($result) {
 					Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -468,11 +466,10 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 }
 Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');
-my $file = $Sympa::Configuration::Conf{'pidfile_spooler'};
 Sympa::Tools::Daemon::remove_pid(
-	file   => $file,
-	pid    => $PID,
-	tmpdir => $Sympa::Configuration::Conf{'tmpdir'}
+	directory => Sympa::Constants::PIDDIR,
+	daemon    => $daemon_name,
+	pid       => $PID,
 );
 
 exit(0);
