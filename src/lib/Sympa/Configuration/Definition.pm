@@ -105,11 +105,6 @@ our @params = (
 		'edit'     => '1',
 	},
 	{
-		name    => 'pidfile_spooler',
-		default => Sympa::Constants::PIDDIR . '/spooler.pid',
-		file    => 'sympa.conf',
-	},
-	{
 		'name'     => 'soap_url',
 		'optional' => '1',
 		'vhost'    => '1',
@@ -440,13 +435,6 @@ our @params = (
 		'file'     => 'sympa.conf',
 	},
 	{
-		'name'     => 'pidfile',
-		'default'  => Sympa::Constants::PIDDIR . '/sympa.pid',
-		'query'    => _gettext('File containing Sympa PID while running'),
-		'file'     => 'sympa.conf',
-		'advice'   => _gettext('Sympa also locks this file to ensure that it is not running more than once. Caution: user sympa need to write access without special privilege.'),
-	},
-	{
 		'name'     => 'umask',
 		'default'  => '027',
 		'query'    => _gettext('Umask used for file creation by Sympa'),
@@ -646,11 +634,6 @@ our @params = (
 
 	{ 'title' => _gettext('Bulk mailer') },
 
-	{
-		'name'     => 'pidfile_bulk',
-		'default'  => Sympa::Constants::PIDDIR . '/bulk.pid',
-		'file'     => 'sympa.conf',
-	},
 	{
 		'name'     => 'sympa_packet_priority',
 		'query'    => _gettext('Default priority for a packet to be sent by bulk.'),
@@ -1351,23 +1334,11 @@ our @params = (
 		'edit'     => '1',
 	},
 	{
-		'name'     => 'archived_pidfile',
-		'default'  => Sympa::Constants::PIDDIR . '/archived.pid',
-		'query'    => _gettext('File containing archived PID while running'),
-		'file'     => 'wwsympa.conf',
-	},
-	{
 		'name'     => 'bounce_path',
 		'default'  => Sympa::Constants::BOUNCEDIR ,
 		'query'    => _gettext('Directory for storing bounces'),
 		'file'     => 'wwsympa.conf',
 		'advice'   => _gettext('Better if not in a critical partition'),
-	},
-	{
-		'name'     => 'bounced_pidfile',
-		'default'  => Sympa::Constants::PIDDIR . '/bounced.pid',
-		'query'    => _gettext('File containing bounced PID while running'),
-		'file'     => 'wwsympa.conf',
 	},
 	{
 		'name'     => 'cookie_expire',
@@ -1602,12 +1573,6 @@ our @params = (
 		'default'  => Sympa::Constants::EXPLDIR . '/X509-user-certs',
 		'query'    => _gettext('Directory containing user certificates'),
 		'file'     => 'sympa.conf',
-	},
-	{
-		'name'     => 'task_manager_pidfile',
-		'default'  => Sympa::Constants::PIDDIR . '/task_manager.pid',
-		'query'    => _gettext('File containing task_manager PID while running'),
-		'file'     => 'wwsympa.conf',
 	},
 	{
 		'name'     => 'viewlogs_page_size',
