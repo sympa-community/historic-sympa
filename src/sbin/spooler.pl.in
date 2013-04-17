@@ -126,13 +126,10 @@ if ($options{'version'}) {
 if ($options{'debug'}) {
 	$options{'log_level'} = 2 unless ($options{'log_level'});
 }
-## Batch mode, ie NOT daemon
-$options{'batch'} = 1 if ($options{'help'}||$options{'version'});
-
 # Some option force foreground mode
-$options{'foreground'} = 1 if ($options{'debug'} || $options{'batch'});
+$options{'foreground'} = 1 if $options{'debug'};
 
-$options{'log_to_stderr'} = 1 unless ($options{'batch'});
+$options{'log_to_stderr'} = 1;
 
 my %loop_info;
 
@@ -248,26 +245,23 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 			Sympa::Log::Syslog::do_log('debug', "Running server $PID for spooler purpose ");
 
-			unless ($options{'batch'} ) {
 
-				## If process is running in foreground, don't write STDERR to a dedicated file
-				my $options;
-				$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
-				$options->{'multiple_process'} = 1 ;
-				my $result = Sympa::Tools::Daemon::write_pid(
-					directory => Sympa::Constants::PIDDIR,
-					daemon    => $daemon_name,
-					pid       => $PID,
-					options   => $options,
-					method    => $Sympa::Configuration::Conf{'lock_method'},
-					user      => Sympa::Constants::USER,
-					group     => Sympa::Constants::GROUP,
-				);
-				unless ($result) {
-					Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
-				}
+			## If process is running in foreground, don't write STDERR to a dedicated file
+			my $options;
+			$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
+			$options->{'multiple_process'} = 1 ;
+			my $result = Sympa::Tools::Daemon::write_pid(
+				directory => Sympa::Constants::PIDDIR,
+				daemon    => $daemon_name,
+				pid       => $PID,
+				options   => $options,
+				method    => $Sympa::Configuration::Conf{'lock_method'},
+				user      => Sympa::Constants::USER,
+				group     => Sympa::Constants::GROUP,
+			);
+			unless ($result) {
+				Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
 			}
-
 
 			# Set the UserID & GroupID for the process
 			$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
