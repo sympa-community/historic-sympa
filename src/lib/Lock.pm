@@ -227,7 +227,7 @@ sub remove_lock {
 	    return undef;
 	}
     }
-    $list_of_locks{$self->{'lock_filename'}}{'fh'} = undef;
+    $list_of_locks{$self->{'lock_filename'}} = undef;
     return 1
 }
 
