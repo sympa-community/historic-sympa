@@ -62,7 +62,7 @@ Parameters:
 
 The path to the file to lock.
 
-=item C<method> => [nfs|other]
+=item C<method> => C<nfs> | C<flock>
 
 The locking method.
 
@@ -86,7 +86,10 @@ sub new {
 	my ($class, %params) = @_;
 
 	croak "missing filepath parameter" unless $params{path};
-	croak "missing method parameter" unless $params{method};
+	croak "invalid method parameter" if 
+		$params{method} &&
+		$params{method} ne 'flock' &&
+		$params{method} ne 'nfs';
 
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $params{path});
 

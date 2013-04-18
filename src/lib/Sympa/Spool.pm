@@ -68,9 +68,9 @@ Parameters:
 
 =over
 
-=item C<name> => FIXME
+=item C<name> => string
 
-=item C<status> => FIXME
+=item C<status> => C<bad> | C<ok>
 
 =back
 
@@ -84,6 +84,11 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{name});
 
+	croak "invalid status parameter" if 
+		$params{status} &&
+		$params{status} ne 'bad' &&
+		$params{status} ne 'ok';
+
 	unless ($params{name} =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 		Sympa::Log::Syslog::do_log('err','internal error unknown spool %s',$params{name});
 		return undef;
@@ -91,7 +96,7 @@ sub new {
 
 	my $self = {
 		spoolname        => $params{name},
-		selection_status => $params{status} eq 'bad' ? 'bad' : 'ok',
+		selection_status => $params{status}
 	};
 
 	bless $self, $class;

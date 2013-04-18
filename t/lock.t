@@ -29,17 +29,17 @@ throws_ok {
 
 throws_ok {
     $lock = Sympa::Lock->new(
-        path => $main_file
+        path   => $main_file,
+	method => 'something'
     );
-} qr/^missing method parameter/,
-'missing method parameter';
+} qr/^invalid method parameter/,
+'invalid method parameter';
 
 ok(!-f $lock_file, "underlying lock file doesn't exist");
 
 lives_ok {
     $lock = Sympa::Lock->new(
-        path   => $main_file,
-        method => 'anything'
+        path => $main_file,
     );
 }
 'all parameters OK';
@@ -65,8 +65,7 @@ ok(!attempt_parallel_lock($main_file, 'read'), 'read lock on same file');
 ok(!attempt_parallel_lock($main_file, 'write'), 'write lock on same file');
 
 my $another_lock = Sympa::Lock->new(
-	path   => $main_file,
-	method => 'anything'
+	path => $main_file,
 );
 cmp_ok($another_lock->get_lock_count(), '==', 4, 'lock count, new lock');
 ok($another_lock->unlock(), 'unlocking, new lock');
@@ -77,7 +76,7 @@ sub attempt_parallel_lock {
 	my ($file, $mode) = @_;
 
 	my $code = <<EOF;
-my \$lock = Sympa::Lock->new(path => "$file", method => "foo");
+my \$lock = Sympa::Lock->new(path => "$file");
 \$lock->set_timeout(-1);
 exit \$lock->lock("$mode");
 EOF
