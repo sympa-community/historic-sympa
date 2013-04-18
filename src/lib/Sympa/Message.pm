@@ -70,11 +70,13 @@ The message source.
 
 The message source.
 
-=item C<hashref> => hashref
-
-The message source.
-
 =item C<noxsympato> => boolean
+
+=item C<messagekey> => FIXME
+
+=item C<spoolname> => FIXME
+
+=item C<create_list_if_needed> => FIXME
 
 =back
 
@@ -90,21 +92,20 @@ sub new {
 	my $file       = $params{'file'};
 	my $string     = $params{'string'};
 	my $entity     = $params{'entity'};
-	my $hashref    = $params{'hashref'};
 	my $noxsympato = $params{'noxsympato'};
 
-	my $self;
 	my $input =
 		$file    ? 'file'   :
 		$string  ? 'string' :
 		$entity  ? 'entity' :
-		$hashref ? 'hashref':
 		undef    ;
 	Sympa::Log::Syslog::do_log('debug2', '(input= %s, noxsympato= %s)',$input,$noxsympato);
 
 	if ($entity) {
-		$self->{'msg'} = $entity;
-		$self->{'altered'} = '_ALTERED';
+		my $self = {
+			msg     => $entity,
+			altered => '_ALTERED'
+		};
 
 		bless $self, $class;
 
@@ -115,13 +116,12 @@ sub new {
 	$parser->output_to_core(1);
 
 	my $msg;
+	my $self = {
+		messagekey            => $params{messagekey},
+		spoolname             => $params{spoolname},
+		create_list_if_needed => $params{create_list_if_needed}
+	};
 
-	if ($hashref){
-		$string = $hashref->{'messageasstring'};
-		$self->{'messagekey'}= $hashref->{'messagekey'};
-		$self->{'spoolname'}= $hashref->{'spoolname'};
-		$self->{'create_list_if_needed'}= $hashref->{'create_list_if_needed'};
-	}
 	if ($file) {
 		## Parse message as a MIME::Entity
 		$self->{'filename'} = $file;

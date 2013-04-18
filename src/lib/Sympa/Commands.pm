@@ -2228,7 +2228,12 @@ sub _distribute {
 		return 'msg_not_found';
 
 	}
-	my $message = Sympa::Message->new(hashref => $message_in_spool);
+	my $message = Sympa::Message->new(
+		string                => $message_in_spool->{messageasstring},
+		messagekey            => $message_in_spool->{messagekey},
+		spoolname             => $message_in_spool->{spoolname},
+		create_list_if_needed => $message_in_spool->{create_list_if_needed}
+	);
 	unless (defined $message) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
 		Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
@@ -2296,7 +2301,12 @@ sub _confirm {
 		Sympa::Report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 		return 'wrong_auth';
 	}
-	my $message = Sympa::Message->new(hashref => $messageinspool);
+	my $message = Sympa::Message->new(
+		string                => $messageinspool->{messageasstring},
+		messagekey            => $messageinspool->{messagekey},
+		spoolname             => $messageinspool->{spoolname},
+		create_list_if_needed => $messageinspool->{create_list_if_needed}
+	);
 
 	unless (defined $message) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to create message object for key %s', $key);
@@ -2456,7 +2466,12 @@ sub _reject {
 		Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 		return 'wrong_auth';
 	}
-	my $message = Sympa::Message->new(hashref => $message_in_spool);
+	my $message = Sympa::Message->new(
+		string                => $message_in_spool->{messageasstring},
+		messagekey            => $message_in_spool->{messagekey},
+		spoolname             => $message_in_spool->{spoolname},
+		create_list_if_needed => $message_in_spool->{create_list_if_needed}
+	);
 	unless ($message) {
 		Sympa::Log::Syslog::do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
 		Sympa::Report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);

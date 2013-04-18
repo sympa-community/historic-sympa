@@ -265,7 +265,12 @@ while (!$end) {
 			$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		}
 
-		my $message = Sympa::Message->new(hashref => $bounce);
+		my $message = Sympa::Message->new(
+			string                => $bounce->{messageasstring},
+			messagekey            => $bounce->{messagekey},
+			spoolname             => $bounce->{spoolname},
+			create_list_if_needed => $bounce->{create_list_if_needed}
+		);
 
 		my $entity = $message->{'msg'};
 		my $head = $entity->head;
