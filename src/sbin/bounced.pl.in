@@ -838,7 +838,7 @@ sub update_subscriber_bounce_history {
 
 	Sympa::Log::Syslog::do_log ('debug','update_subscriber_bounce_history (%s,%s,%s,%s)',$list->{'name'},$rcpt,$bouncefor,$status);
 
-	my $first = my $last = time;
+	my $first = my $last = time();
 	my $count = 0;
 
 	my $user = $list->get_list_member($bouncefor);

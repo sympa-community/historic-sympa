@@ -1151,7 +1151,7 @@ FIXME.
 sub virus_infected {
 	my ($mail, $path, $args, $domain, $confdir) = @_;
 
-	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
+	my $file = int(rand(time())) ; # in, version previous from db spools, $file was the filename of the message
 	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
 
 	unless ($path) {
@@ -1658,7 +1658,7 @@ FIXME.
 sub get_message_id {
 	my ($robot) = @_;
 
-	my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $PID, int(rand(999)), $robot;
+	my $id = sprintf '<sympa.%d.%d.%d@%s>', time(), $PID, int(rand(999)), $robot;
 
 	return $id;
 }
@@ -1930,7 +1930,7 @@ sub CleanDir {
 
 	foreach my $f (sort @qfile) {
 
-		if ((stat "$dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {
+		if ((stat "$dir/$f")[9] < (time() - $clean_delay * 60 * 60 * 24)) {
 			if (-f "$dir/$f") {
 				unlink ("$dir/$f") ;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$dir/$f");

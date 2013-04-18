@@ -4912,8 +4912,8 @@ sub send_notify_to_listmaster {
 	if($checkstack or $purge) {
 		foreach my $robot (keys %listmaster_messages_stack) {
 			foreach my $operation (keys %{$listmaster_messages_stack{$robot}}) {
-				my $first_age = time - $listmaster_messages_stack{$robot}{$operation}{'first'};
-				my $last_age = time - $listmaster_messages_stack{$robot}{$operation}{'last'};
+				my $first_age = time() - $listmaster_messages_stack{$robot}{$operation}{'first'};
+				my $last_age = time() - $listmaster_messages_stack{$robot}{$operation}{'last'};
 				next unless($purge or ($last_age > 30) or ($first_age > 60)); # not old enough to send and first not too old
 				next unless($listmaster_messages_stack{$robot}{$operation}{'messages'});
 
@@ -4949,9 +4949,9 @@ sub send_notify_to_listmaster {
 	}
 
 	my $stack = 0;
-	$listmaster_messages_stack{$robot}{$operation}{'first'} = time unless($List::listmaster_messages_stack{$robot}{$operation}{'first'});
+	$listmaster_messages_stack{$robot}{$operation}{'first'} = time() unless($List::listmaster_messages_stack{$robot}{$operation}{'first'});
 	$listmaster_messages_stack{$robot}{$operation}{'counter'}++;
-	$listmaster_messages_stack{$robot}{$operation}{'last'} = time;
+	$listmaster_messages_stack{$robot}{$operation}{'last'} = time();
 	if($listmaster_messages_stack{$robot}{$operation}{'counter'} > 3) { # stack if too much messages w/ same code
 		$stack = 1;
 	}
@@ -6046,7 +6046,7 @@ sub insert_delete_exclusion {
 		$options->{'name'} = $list;
 		$options->{'domain'} = $robot;
 		my $user = get_list_member_no_object($options);
-		my $date = time;
+		my $date = time();
 
 		if ($user->{'included'} eq '1' or defined $family) {
 			## Insert : list, user and date
@@ -7603,7 +7603,7 @@ sub add_list_member {
 			next if($self->is_list_member($who));
 		}
 
-		$new_user->{'date'} ||= time;
+		$new_user->{'date'} ||= time();
 		$new_user->{'update_date'} ||= $new_user->{'date'};
 
 		my %custom_attr = %{ $subscriptions->{$who}{'custom_attribute'} } if (defined $subscriptions->{$who}{'custom_attribute'} );
@@ -7705,7 +7705,7 @@ sub add_list_admin {
 
 		next unless $who;
 
-		$new_admin_user->{'date'} ||= time;
+		$new_admin_user->{'date'} ||= time();
 		$new_admin_user->{'update_date'} ||= $new_admin_user->{'date'};
 
 		$list_cache{'is_admin_user'}{$self->{'domain'}}{$name}{$who} = undef;
@@ -7997,7 +7997,7 @@ sub may_edit {
 	if (! $edit_list_conf{$edit_conf_file} || ((stat($edit_conf_file))[9] > $mtime{'edit_list_conf'}{$edit_conf_file})) {
 
 		$edit_conf = $edit_list_conf{$edit_conf_file} = Sympa::Tools::load_edit_list_conf($self->{'domain'}, $self, $Sympa::Configuration::Conf{'etc'});
-		$mtime{'edit_list_conf'}{$edit_conf_file} = time;
+		$mtime{'edit_list_conf'}{$edit_conf_file} = time();
 	} else {
 		$edit_conf = $edit_list_conf{$edit_conf_file};
 	}
@@ -8286,7 +8286,7 @@ sub get_nextdigest {
 	my @days = @{$digest->{'days'}};
 	my ($hh, $mm) = ($digest->{'hour'}, $digest->{'minute'});
 
-	my @now  = localtime(time);
+	my @now  = localtime(time());
 	my $today = $now[6]; # current day
 	my @timedigest = localtime($date);
 
@@ -9047,8 +9047,8 @@ sub _include_users_ldap {
 
 		$u{'email'} = $email;
 		$u{'gecos'} = $gecos if($gecos);
-		$u{'date'} = time;
-		$u{'update_date'} = time;
+		$u{'date'} = time();
+		$u{'update_date'} = time();
 		$u{'id'} = join (',', split(',', $u{'id'}), $id);
 
 		$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
@@ -9218,8 +9218,8 @@ sub _include_users_ldap_2level {
 
 		$u{'email'} = $email;
 		$u{'gecos'} = $gecos if($gecos);
-		$u{'date'} = time;
-		$u{'update_date'} = time;
+		$u{'date'} = time();
+		$u{'update_date'} = time();
 		$u{'id'} = join (',', split(',', $u{'id'}), $id);
 
 		$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
@@ -9389,8 +9389,8 @@ sub _include_users_sql {
 
 		$u{'email'} = $email;
 		$u{'gecos'} = $gecos if($gecos);
-		$u{'date'} = time;
-		$u{'update_date'} = time;
+		$u{'date'} = time();
+		$u{'update_date'} = time();
 		$u{'id'} = join (',', split(',', $u{'id'}), $id);
 
 		$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
@@ -9997,7 +9997,7 @@ sub sync_include {
 		## User neither included nor subscribed = > set subscribed to 1
 		unless ($old_subscribers{lc($user->{'email'})}{'included'} || $old_subscribers{lc($user->{'email'})}{'subscribed'}) {
 			Sympa::Log::Syslog::do_log('notice','Update user %s neither included nor subscribed', $user->{'email'});
-			unless( $self->update_list_member(lc($user->{'email'}),  {'update_date' => time,
+			unless( $self->update_list_member(lc($user->{'email'}),  {'update_date' => time(),
 						'subscribed' => 1 }) ) {
 				Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
 				next;
@@ -10122,7 +10122,7 @@ if($#exclusions > -1) {
 			## User is also subscribed, update DB entry
 			if ($old_subscribers{$email}{'subscribed'}) {
 				Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-				unless( $self->update_list_member($email,  {'update_date' => time,
+				unless( $self->update_list_member($email,  {'update_date' => time(),
 							'included' => 0,
 							'id' => ''}) ) {
 					Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s',  $name, $email);
@@ -10177,7 +10177,7 @@ foreach my $email (keys %{$new_subscribers}) {
 			foreach my $attribute ('id','gecos') {
 				if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
 					Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-					my $update_time = $new_subscribers->{$email}{'update_date'} || time;
+					my $update_time = $new_subscribers->{$email}{'update_date'} || time();
 					unless( $self->update_list_member(
 							$email,
 							{'update_date' => $update_time,
@@ -10195,7 +10195,7 @@ foreach my $email (keys %{$new_subscribers}) {
 			## User was already subscribed, update include_sources_subscriber in DB
 		} else {
 			Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-			unless( $self->update_list_member($email,  {'update_date' => time,
+			unless( $self->update_list_member($email,  {'update_date' => time(),
 						'included' => 1,
 						'id' => $new_subscribers->{$email}{'id'} }) ) {
 				Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s',
@@ -10223,7 +10223,7 @@ foreach my $email (keys %{$new_subscribers}) {
 		Sympa::Log::Syslog::do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
 		my $u = $new_subscribers->{$email};
 		$u->{'included'} = 1;
-		$u->{'date'} = time;
+		$u->{'date'} = time();
 		@add_tab = ($u);
 		my $user_added = 0;
 		unless( $user_added = $self->add_list_member( @add_tab ) ) {
@@ -10255,7 +10255,7 @@ unless ($lock->unlock()) {
 
 ## Get and save total of subscribers
 $self->{'total'} = $self->_load_total_db('nocache');
-$self->{'last_sync'} = time;
+$self->{'last_sync'} = time();
 $self->savestats();
 $self->sync_include_ca($option eq 'purge');
 
@@ -10274,7 +10274,7 @@ sub on_the_fly_sync_include {
 
 	my $pertinent_ttl = $self->{'admin'}{'distribution_ttl'}||$self->{'admin'}{'ttl'};
 	Sympa::Log::Syslog::do_log('debug2','(%s)',$pertinent_ttl);
-	if ( $options{'use_ttl'} != 1 || $self->{'last_sync'} < time - $pertinent_ttl) {
+	if ( $options{'use_ttl'} != 1 || $self->{'last_sync'} < time() - $pertinent_ttl) {
 		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
 		my $return_value = $self->sync_include();
 		if ($return_value == 1) {
@@ -10371,7 +10371,7 @@ sub sync_include_admin {
 					if (defined $param_update) {
 						if (%{$param_update}) {
 							Sympa::Log::Syslog::do_log('debug', 'List:sync_include_admin : updating %s %s to list %s',$role, $email, $name);
-							$param_update->{'update_date'} = time;
+							$param_update->{'update_date'} = time();
 
 							unless ($self->update_list_admin($email, $role,$param_update)) {
 								Sympa::Log::Syslog::do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name,$role,$email);
@@ -10415,7 +10415,7 @@ sub sync_include_admin {
 					if (defined $param_update) {
 						if (%{$param_update}) {
 							Sympa::Log::Syslog::do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
-							$param_update->{'update_date'} = time;
+							$param_update->{'update_date'} = time();
 
 							unless ($self->update_list_admin($email, $role,$param_update)) {
 								Sympa::Log::Syslog::do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role,$email);
@@ -10454,7 +10454,7 @@ sub sync_include_admin {
 				if (defined $param_update) {
 					if (%{$param_update}) {
 						Sympa::Log::Syslog::do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
-						$param_update->{'update_date'} = time;
+						$param_update->{'update_date'} = time();
 
 						unless ($self->update_list_admin($email, $role,$param_update)) {
 							Sympa::Log::Syslog::do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role, $email);
@@ -10516,7 +10516,7 @@ sub sync_include_admin {
 		}
 	}
 
-	$self->{'last_sync_admin_user'} = time;
+	$self->{'last_sync_admin_user'} = time();
 	$self->savestats();
 
 	return $self->get_nb_owners;
@@ -10675,7 +10675,7 @@ sub store_digest {
 	my ($self,$message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(list= %s)',$self->{'name'});
 
-	my @now  = localtime(time);
+	my @now  = localtime(time());
 
 	my $digestspool = Sympa::Spool->new(name => 'digest');
 	my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
@@ -12384,7 +12384,7 @@ sub modifying_msg_topic_for_list_members {
 						Sympa::Log::Syslog::do_log('err',"($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
 					}
 					unless ($self->update_list_member(lc($subscriber->{'email'}),
-							{'update_date' => time,
+							{'update_date' => time(),
 								'topics' => join(',',@{$topics->{'added'}})})) {
 						Sympa::Log::Syslog::do_log('err',"($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
 					}
@@ -13060,7 +13060,7 @@ sub move_message {
 	Sympa::Log::Syslog::do_log('debug2', "($file, $self->{'name'}, $queue)");
 
 	my $dir = $queue || $Sympa::Configuration::Conf{'queuedistribute'};
-	my $filename = $self->get_list_id().'.'.time.'.'.int(rand(999));
+	my $filename = $self->get_list_id().'.'.time().'.'.int(rand(999));
 
 	unless (open OUT, ">$dir/T.$filename") {
 		Sympa::Log::Syslog::do_log('err', 'Cannot create file %s', "$dir/T.$filename");

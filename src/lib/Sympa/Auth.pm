@@ -519,10 +519,10 @@ sub create_one_time_ticket {
 	my $ticket = Sympa::Session->get_random();
 	Sympa::Log::Syslog::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
-	my $date = time;
+	my $date = time();
 	my $sth;
 
-	unless (Sympa::SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",Sympa::SDM::quote($ticket),Sympa::SDM::quote($robot),Sympa::SDM::quote($email),time,Sympa::SDM::quote($data_string),Sympa::SDM::quote($remote_addr),Sympa::SDM::quote('open'))) {
+	unless (Sympa::SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",Sympa::SDM::quote($ticket),Sympa::SDM::quote($robot),Sympa::SDM::quote($email),time(),Sympa::SDM::quote($data_string),Sympa::SDM::quote($remote_addr),Sympa::SDM::quote('open'))) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
 		return undef;
 	}
@@ -572,7 +572,7 @@ sub get_one_time_ticket {
 		$result = 'closed';
 		Sympa::Log::Syslog::do_log('info','ticket %s from %s has been used before (%s)',$ticket_number,$ticket->{'email'},$printable_date);
 	}
-	elsif (time - $ticket->{'date'} > 48 * 60 * 60) {
+	elsif (time() - $ticket->{'date'} > 48 * 60 * 60) {
 		Sympa::Log::Syslog::do_log('info','ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
 		$result = 'expired';
 	} else {

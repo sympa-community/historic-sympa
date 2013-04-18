@@ -1080,7 +1080,7 @@ our %changed_params;
 
 my (%in, $query, $action);
 
-my $birthday = time ;
+my $birthday = time();
 
 # Now internal encoding is same as input/output.
 #XXX## Set output encoding
@@ -1092,7 +1092,7 @@ my $birthday = time ;
 
 ## Main loop
 my $loop_count;
-my $start_time = time;
+my $start_time = time();
 while ($query = new_loop()) {
 
 	undef %::changed_params;
@@ -1228,8 +1228,8 @@ while ($query = new_loop()) {
 	$param->{'path_cgi'} = $ENV{'SCRIPT_NAME'};
 	$param->{'path_cgi'} =~ s/\/\//\//g; ## Replace '//' with '/' because it would break navigation
 	$param->{'version'} = Sympa::Constants::VERSION;
-	$param->{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-	$param->{'time'} = Sympa::Language::gettext_strftime "%H:%M:%S", localtime(time);
+	$param->{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time());
+	$param->{'time'} = Sympa::Language::gettext_strftime "%H:%M:%S", localtime(time());
 
 	## Hash defining the parameters where no control is performed (because they are supposed to contain html and/or javascript).
 	$param->{'htmlAllowedParam'} = {
@@ -2157,7 +2157,7 @@ sub get_parameters {
 				 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
 				 ## Dump parameters in a tmp file for later analysis
 				 my $dump_file =  Sympa::Configuration::get_robot_conf($robot,
-					 'tmpdir').'/sympa_dump.'.time.'.'.$PID;
+					 'tmpdir').'/sympa_dump.'.time().'.'.$PID;
 				 unless (open DUMP, ">$dump_file") {
 					 wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $ERRNO);
 				 }
@@ -2312,7 +2312,7 @@ sub send_html {
 	## Send HTML
 	if ($param->{'date'}) {
 		 Sympa::Language::push_lang("en");
-		 printf "Date: %s\n", POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
+		 printf "Date: %s\n", POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time()));
 		 Sympa::Language::pop_lang();
 	}
 	## If we set the header indicating the last time the file to send was modified, add an HTTP header (limitate web harvesting).
@@ -3998,7 +3998,7 @@ sub do_active_lists {
 	my $oldest_day = 0;
 
 	if (defined $in{'for'}) {
-		$oldest_day = int(time/86400) - $in{'for'};
+		$oldest_day = int(time()/86400) - $in{'for'};
 		unless ($oldest_day >= 0){
 			Sympa::Report::reject_report_web('user','nb_days_to_much',{'nb_days' => $in{'for'} },$param->{'action'});
 			wwslog('err','do_latest_lists: parameter "for" is too big"');
@@ -4501,7 +4501,7 @@ sub do_set {
 
 	my $update = {'reception' => $reception,
 		'visibility' => $visibility,
-		'update_date' => time};
+		'update_date' => time()};
 
 	## Lower-case new email address
 	$in{'new_email'} = lc( $in{'new_email'});
@@ -4793,7 +4793,7 @@ sub do_subscribe {
 			if ($param->{'is_subscriber'}) {
 				unless ($list->update_list_member($param->{'user'}{'email'},
 						{'subscribed' => 1,
-							'update_date' => time})) {
+							'update_date' => time()})) {
 					Sympa::Report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=>$param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 					wwslog('info', 'do_subscribe: update failed');
 					web_db_log({'parameters' => $in{'email'},
@@ -4807,7 +4807,7 @@ sub do_subscribe {
 				%{$u} = %{$defaults};
 				$u->{'email'} = $param->{'user'}{'email'};
 				$u->{'gecos'} = $param->{'user'}{'gecos'} || $in{'gecos'};
-				$u->{'date'} = $u->{'update_date'} = time;
+				$u->{'date'} = $u->{'update_date'} = time();
 				$u->{'password'} = $param->{'user'}{'password'};
 				$u->{'custom_attribute'} = $xml_custom_attribute if (defined $xml_custom_attribute);
 				$u->{'lang'} = $param->{'user'}{'lang'} || $param->{'lang'};
@@ -6006,7 +6006,7 @@ sub do_skinsedit {
 		my $lang = Sympa::Language::lang2locale($param->{'lang'});
 		my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
-		my $date= time;
+		my $date= time();
 		my $style_file;
 
 		# update config
@@ -6197,7 +6197,7 @@ sub do_add {
 		%{$u} = %{$defaults};
 		$u->{'email'} = $email;
 		$u->{'gecos'} = $user{$email} || $u2->{'gecos'};
-		$u->{'date'} = $u->{'update_date'} = time;
+		$u->{'date'} = $u->{'update_date'} = time();
 		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email) ;
 		$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 		if ($comma_emails) {
@@ -6809,7 +6809,7 @@ sub do_distribute {
 	my $modspool = Sympa::Spool->new(name => 'mod');
 	my ($msg, $file);
 
-	my $time = time;
+	my $time = time();
 	my $data = {'headers' => {'Message-ID' => Sympa::Tools::get_message_id($robot),
 			 'X-Sympa-NoWrap' => 'yes'},
 		 'from'=> $param->{'user'}{'email'}};
@@ -7400,7 +7400,7 @@ sub do_latest_arc {
 	return undef unless (defined check_authz('do_latest_arc', 'web_archive.access'));
 
 	## parameters of the query
-	my $today  = time;
+	my $today  = time();
 
 	my $oldest_day;
 	if (defined $in{'for'}) {
@@ -7568,7 +7568,7 @@ sub get_timelocal_from_date {
 	$yr += 100   if $yr <= 37;    # in case of 2 digit years
 	if (($yr < 70) || ($yr > 137)) {
 		 warn "Warning: Bad year (", $yr+1900, ") using current\n";
-		 $yr = (localtime(time))[5];
+		 $yr = (localtime(time()))[5];
 	}
 
 	$time = timelocal($sec,$min,$hr,$mday,$mon,$yr);
@@ -7608,7 +7608,7 @@ sub do_remove_arc {
 		 return undef;
 	}
 
-	my $removeorder = sprintf "remove.%s-%s.%s\n",$in{'yyyy'},$in{'month'},time;
+	my $removeorder = sprintf "remove.%s-%s.%s\n",$in{'yyyy'},$in{'month'},time();
 
 	foreach my $msgid (@msgids) {
 		 chomp $msgid ;
@@ -7894,8 +7894,8 @@ sub do_arcsearch {
 	unless (defined($in{'directories'})) {
 		 # by default search in current month and in the previous non-empty one
 		 my $archive_name = $in{'archive_name'} || '';
-		 $archive_name = POSIX::strftime '%Y-%m', localtime(time)
-		 unless $archive_name =~ /^\d{4}-\d{2}$/;
+		 $archive_name = POSIX::strftime '%Y-%m', localtime(time())
+			 unless $archive_name =~ /^\d{4}-\d{2}$/;
 		 my @directories = ();
 		 my $search_base = Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
 		 opendir ARC, "$search_base";
@@ -8876,7 +8876,7 @@ sub do_resetbounce {
 			 return undef;
 		 }
 
-		 unless( $list->update_list_member($email, {'bounce' => 'NULL', 'update_date' => time, 'score' => 0})) {
+		 unless( $list->update_list_member($email, {'bounce' => 'NULL', 'update_date' => time(), 'score' => 0})) {
 			 Sympa::Report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=> $email},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 			 wwslog('info','do_resetbounce: failed update database for %s', $email);
 			 web_db_log({'status' => 'error',
@@ -11779,7 +11779,7 @@ unless ($access{'may'}{'read'}) {
 }
 
 ## parameters of the query
-my $today  = time;
+my $today  = time();
 
 my $oldest_day;
 if (defined $in{'for'}) {
@@ -12944,7 +12944,7 @@ unless ($access_file{'may'}{'edit'} > 0) {
 if (-e "$longtmpname"){
 	# if exists a temp file younger than 5 minutes that belongs to another user : upload refused
 	my @info = stat $longtmpname;
-	my $timeold = time - $info[10];
+	my $timeold = time() - $info[10];
 
 	if ($timeold<=300){
 		 my %desc_hash = get_desc_file($longtmpdesc);
@@ -13375,7 +13375,7 @@ sub creation_desc_file {
 	}
 
 	print DESC "title\n \n\n";
-	print DESC "creation\n  date_epoch ".time."\n  email $param->{'user'}{'email'}\n\n";
+	print DESC "creation\n  date_epoch ".time()."\n  email $param->{'user'}{'email'}\n\n";
 
 	print DESC "access\n";
 	print DESC "  read $access{'scenario'}{'read'}\n";
@@ -13479,7 +13479,7 @@ if ($access_dir{'may'}{'edit'} == 0.5) {
 ## End of control
 
 # directory for the uploaded file
-my $date = time;
+my $date = time();
 my $zip_dir_name = $listname.$date.$PID;
 my $zip_abs_dir = $Sympa::Configuration::Conf{'tmpdir'}.'/'.$zip_dir_name;
 
@@ -13714,7 +13714,7 @@ unless ($may->{'exists'}) {
 	}
 
 	print DESC "title\n \n\n";
-	print DESC "creation\n  date_epoch ".time."\n  email $param->{'user'}{'email'}\n\n";
+	print DESC "creation\n  date_epoch ".time()."\n  email $param->{'user'}{'email'}\n\n";
 
 	print DESC "access\n";
 	print DESC "  read $access_dir{'scenario'}{'read'}\n";
@@ -13857,7 +13857,7 @@ sub d_copy_file {
 		##  # if exists a temp file younger than 5 minutes that belongs to another user : file copy refused
 		if (-e "$dest_dir/.$fname.duplicate") {
 			my @info = stat "$dest_dir/.$fname.duplicate";
-			my $timeold = time - $info[10];
+			my $timeold = time() - $info[10];
 			if ($timeold <= 300){
 				my %desc_hash = get_desc_file("$dest_dir/.desc..$fname.duplicate");
 				unless($desc_hash{'email'} eq $param->{'user'}{'email'}){
@@ -13939,7 +13939,7 @@ sub d_copy_file {
 		}
 
 		print DESC "title\n \n\n";
-		print DESC "creation\n  date_epoch ".time."\n  email $param->{'user'}{'email'}\n\n";
+		print DESC "creation\n  date_epoch ".time()."\n  email $param->{'user'}{'email'}\n\n";
 
 		print DESC "access\n";
 		print DESC "  read $access_dir->{'scenario'}{'read'}\n";
@@ -14380,7 +14380,7 @@ unless (open (DESC,">$desc_file")) {
 }
 
 print DESC "title\n \n\n";
-print DESC "creation\n  date_epoch ".time."\n  email $param->{'user'}{'email'}\n\n";
+print DESC "creation\n  date_epoch ".time()."\n  email $param->{'user'}{'email'}\n\n";
 
 print DESC "access\n";
 print DESC "  read $access{'scenario'}{'read'}\n";
@@ -14862,7 +14862,7 @@ sub do_remind {
 	## Access control
 	return undef unless (defined check_authz('do_remind', 'remind'));
 
-	my $extention = time.".".int(rand 9999) ;
+	my $extention = time().".".int(rand 9999) ;
 	my $mail_command;
 
 	## Sympa will require a confirmation
@@ -14887,7 +14887,7 @@ sub do_remind {
 		 $mail_command = sprintf "REMIND %s", $param->{'list'};
 	}
 
-	my $time = time;
+	my $time = time();
 	my $data = {
 		 headers => {
 			 'Message-ID'     => '<'.$time.'@wwsympa>',
@@ -15191,7 +15191,7 @@ sub do_suspend_request {
 	my $data;
 
 	## Sets the date of the field "start date" to "today"
-	my @d_day = localtime(time);
+	my @d_day = localtime(time());
 	$param->{'d_day'} = ($d_day[3])."-".($d_day[4]+1)."-".($d_day[5]+1900);
 	my $display_resume = 0;
 
@@ -15202,7 +15202,7 @@ sub do_suspend_request {
 
 	foreach my $list (@lists) {
 		 my $member_info = $list->get_list_member($param->{'user'}{'email'});
-		 if(($member_info->{'enddate'} < time) && ($member_info->{'enddate'})){
+		 if(($member_info->{'enddate'} < time()) && ($member_info->{'enddate'})){
 			 ## If end date is < time, update the BDD by deleting the suspending's data
 			 Sympa::List::restore_suspended_subscription($param->{'user'}{'email'},$list->{'name'},$list->{'domain'});
 		 }
@@ -15792,7 +15792,7 @@ sub do_tag_topic_by_sender {
 	my $filetopic = $list->tag_topic($in{'message_id'},$list_topics,'sender');
 
 	## CONFIRM
-	my $time = time;
+	my $time = time();
 	my $data = {
 		 headers => {
 			 'Message-ID'     => '<'.$time.'@wwsympa>',

@@ -223,7 +223,7 @@ sub next {
 	$sql_where =~ s/^\s*AND//;
 
 	my $lock = $PID.'@'.hostname();
-	my $epoch=time; # should we use milli or nano seconds ?
+	my $epoch = time(); # should we use milli or nano seconds ?
 
 	my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch),Sympa::SDM::quote($self->{'spoolname'}),$sql_where;
 	push @sth_stack, $sth;
@@ -346,7 +346,7 @@ sub update {
 				$set =  $set .', lockdate_spool = NULL ';
 			} else {
 				# when setting a lock always set the lockdate
-				$set =  $set .', lockdate_spool = '.Sympa::SDM::quote(time);
+				$set =  $set .', lockdate_spool = '.Sympa::SDM::quote(time());
 			}
 		}
 	}
@@ -409,7 +409,7 @@ sub store {
 		$metadata->{'messageid'} = '';
 		$metadata->{'sender'} = $sender;
 	}
-	$metadata->{'date'}= int(time) unless ($metadata->{'date'}) ;
+	$metadata->{'date'}= int(time()) unless ($metadata->{'date'}) ;
 	$metadata->{'size'}= length($message_asstring) unless ($metadata->{'size'}) ;
 	$metadata->{'message_status'} = 'ok';
 
@@ -491,7 +491,7 @@ sub clean {
 	return undef unless $spoolname;
 	return undef unless $delay;
 
-	my $freshness_date = time - ($delay * 60 * 60 * 24);
+	my $freshness_date = time() - ($delay * 60 * 60 * 24);
 
 	my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($spoolname),Sympa::SDM::quote($freshness_date);
 	if ($bad) {

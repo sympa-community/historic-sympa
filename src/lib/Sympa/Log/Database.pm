@@ -184,7 +184,7 @@ sub add_event {
 	$params{msg_id}     = Sympa::Tools::clean_msg_id($params{msg_id});
 	$params{user_email} = Sympa::Tools::clean_msg_id($params{user_email});
 
-	my $date   = time;
+	my $date   = time();
 	my $random = int(rand(1000000));
 	my $id     = $date.$random;
 
@@ -261,7 +261,7 @@ Return:
 sub add_stat {
 	my (%params) = @_;
 
-	my $date   = time;
+	my $date   = time();
 	my $random = int(rand(1000000));
 	my $id     = $date.$random;
 
@@ -352,7 +352,7 @@ A true value on success.
 
 sub delete_events {
 	my ($age) = @_;
-	my $date = time - ($age * 30 * 24 * 60 * 60);
+	my $date = time() - ($age * 30 * 24 * 60 * 60);
 
 	my $handle = $source->get_query_handle(
 		$queries{delete_log_message},

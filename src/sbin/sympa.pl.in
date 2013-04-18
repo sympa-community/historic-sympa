@@ -383,7 +383,7 @@ $options{'log_to_stderr'} = 1 if ($options{'upgrade'} || $options{'reload_list_c
 
 my %loop_info;
 my %msgid_table;
-my $latest_msgid_table_cleanup = time;
+my $latest_msgid_table_cleanup = time();
 
 # this loop is run foreach HUP signal received
 my $signal = 0;
@@ -1281,9 +1281,9 @@ while (!$signal) {
 		Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
 	}
 	## Cleanup in-memory msgid table, only in a while
-	if (time > $latest_msgid_table_cleanup + $Sympa::Configuration::Conf{'msgid_table_cleanup_frequency'}) {
+	if (time() > $latest_msgid_table_cleanup + $Sympa::Configuration::Conf{'msgid_table_cleanup_frequency'}) {
 		clean_msgid_table();
-		$latest_msgid_table_cleanup = time;
+		$latest_msgid_table_cleanup = time();
 	}
 
 	Sympa::Mail::reaper; # finish terminated process
@@ -1744,7 +1744,7 @@ sub process_message {
 		$loop_info{$sender}{'count'}++;
 
 		## Sampling delay
-		if ((time - $loop_info{$sender}{'date_init'}) < Sympa::Configuration::get_robot_conf($robot, 'loop_command_sampling_delay')) {
+		if ((time() - $loop_info{$sender}{'date_init'}) < Sympa::Configuration::get_robot_conf($robot, 'loop_command_sampling_delay')) {
 
 			## Notify listmaster of first rejection
 			if ($loop_info{$sender}{'count'} ==  Sympa::Configuration::get_robot_conf($robot, 'loop_command_max')) {
@@ -1764,7 +1764,7 @@ sub process_message {
 			}
 		} else {
 			## Sampling delay is over, reinit
-			$loop_info{$sender}{'date_init'} = time;
+			$loop_info{$sender}{'date_init'} = time();
 
 			## We apply Decrease factor if a loop occured
 			$loop_info{$sender}{'count'} *=  Sympa::Configuration::get_robot_conf($robot,'loop_command_decrease_factor');
@@ -1915,8 +1915,8 @@ sub DoForward {
 			my $sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
 			unless (Sympa::List::send_global_file('list_unknown', $sender, $robot,
 					{'list' => $name,
-						'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
-						'boundary' => $sympa_email.time,
+						'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time())),
+						'boundary' => $sympa_email.time(),
 						'header' => $hdr->as_string(),
 						'auto_submitted' => 'auto-replied'
 					})) {
@@ -2101,8 +2101,8 @@ sub DoMessage{
 
 		unless (Sympa::List::send_global_file('list_unknown', $sender, $robot,
 				{'list' => $which,
-					'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
-					'boundary' => $sympa_email.time,
+					'date' => POSIX::strftime("%d %b %Y  %H:%M", localtime(time())),
+					'boundary' => $sympa_email.time(),
 					'header' => $hdr->as_string(),
 					'auto_submitted' => 'auto-replied'
 				})) {
@@ -2113,7 +2113,7 @@ sub DoMessage{
 
 	($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
 
-	my $start_time = time;
+	my $start_time = time();
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
@@ -2286,7 +2286,7 @@ sub DoMessage{
 		eval { $numsmtp =$list->distribute_msg('message'=> $message,
 				'apply_dkim_signature'=>$apply_dkim_signature)};
 		## Keep track of known message IDs...if any
-		$msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
+		$msgid_table{$list->get_list_id()}{$messageid} = time() if ($messageid);
 
 		unless (defined($numsmtp)) {
 			Sympa::Log::Syslog::do_log('err','Unable to send message to list %s', $listname);
@@ -2305,7 +2305,7 @@ sub DoMessage{
 			);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
+		Sympa::Log::Syslog::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time() - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
 
 		return 1;
 
@@ -2509,8 +2509,8 @@ sub DoCommand {
 	}## Clean old files from spool
 
 	## Keep track of known message IDs...if any
-	$msgid_table{'sympa@'.$robot}{$messageid} = time
-	if ($messageid);
+	$msgid_table{'sympa@'.$robot}{$messageid} = time()
+		if ($messageid);
 
 	## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
 	if ($rcpt =~ /^(\S+)-(subscribe|unsubscribe)(\@(\S+))?$/o) {
@@ -2724,10 +2724,10 @@ sub SendDigest{
 		if ($list->get_nextdigest($digest->{'date'})){
 			## Blindly send the message to all users.
 			Sympa::Log::Syslog::do_log('info', "Sending digest to list %s@%s", $list->{'name'},$list->{'robot'});
-			my $start_time = time;
+			my $start_time = time();
 			$list->send_msg_digest($digest->{'messagekey'});
 
-			Sympa::Log::Syslog::do_log('info', 'Digest of the list %s sent (%d seconds)', $list->{'name'},time - $start_time);
+			Sympa::Log::Syslog::do_log('info', 'Digest of the list %s sent (%d seconds)', $list->{'name'},time() - $start_time);
 			Sympa::Log::Database::add_event(
 				robot        => $list->{'robot'},
 				list         => $list->{'name'},
@@ -2746,7 +2746,7 @@ sub clean_msgid_table {
 
 	foreach my $rcpt (keys %msgid_table) {
 		foreach my $msgid (keys %{$msgid_table{$rcpt}}) {
-			if (time > $msgid_table{$rcpt}{$msgid} + $Sympa::Configuration::Conf{'msgid_table_cleanup_ttl'}) {
+			if (time() > $msgid_table{$rcpt}{$msgid} + $Sympa::Configuration::Conf{'msgid_table_cleanup_ttl'}) {
 				delete $msgid_table{$rcpt}{$msgid};
 			}
 		}
