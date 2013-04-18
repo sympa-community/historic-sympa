@@ -430,7 +430,6 @@ while (!$end) {
 					} else {
 					$messageasstring_init = $entity->as_string;
 					}
-					# trace_smime($messageasstring,'tracking');
 				} else {  # VERP
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
 				}
@@ -465,8 +464,6 @@ while (!$end) {
 					);
 				}
 
-				# trace_smime($messageasstring,'dkim');
-
 				*SMTP = Sympa::Mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
 				# Message with customized data
 				print SMTP $messageasstring;
@@ -493,8 +490,6 @@ while (!$end) {
 					$Sympa::Configuration::Conf{'tmpdir'}
 				);
 			}
-
-			# trace_smime($messageasstring_init,'dkim 2');
 
 			*SMTP = Sympa::Mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
 			print SMTP $messageasstring_init;
@@ -541,29 +536,4 @@ exit(0);
 sub sigterm {
 	Sympa::Log::Syslog::do_log('notice', 'signal TERM received, still processing current task');
 	$end = 1;
-}
-
-sub trace_smime {
-	my $messageasstring_init = shift;
-	my $where = shift;
-
-	my $trusted_ca_options = '';
-	$trusted_ca_options = "-CAfile $Sympa::Configuration::Conf{'cafile'} " if ($Sympa::Configuration::Conf{'cafile'});
-	$trusted_ca_options .= "-CApath $Sympa::Configuration::Conf{'capath'} " if ($Sympa::Configuration::Conf{'capath'});
-
-	unless (open (MSGDUMP, "| $Sympa::Configuration::Conf{'openssl'} smime -verify  $trusted_ca_options > /dev/null")) {
-		Sympa::Log::Syslog::do_log('err', "unable to verify smime signature");
-		return undef ;
-	}
-
-	print MSGDUMP $messageasstring_init;
-
-	close MSGDUMP;
-
-	my $status = $?/256 ;
-	unless ($status == 0) {
-		Sympa::Log::Syslog::do_log('debug', "signature SMIME NOT OK   (%s)",$where);
-	} else {
-		Sympa::Log::Syslog::do_log('debug', "signature SMIME OK    (%s)",$where);
-	}
 }
