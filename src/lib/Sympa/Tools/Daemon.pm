@@ -84,7 +84,7 @@ The daemon name.
 
 The daemon PID.
 
-=item C<options> => hashref
+=item C<multiple_process> => boolean
 
 FIXME
 
@@ -150,7 +150,7 @@ sub write_pid {
 
 	## If we can have multiple instances for the process.
 	## Print other pids + this one
-	if($params{options}->{'multiple_process'}) {
+	if($params{multiple_process}) {
 		unless(open(PIDFILE, '>', $pid_file)) {
 			## Unlock pid file
 			$lock->unlock();
@@ -234,7 +234,7 @@ The daemon name.
 
 The daemon PID.
 
-=item C<options> => hashref
+=item C<multiple_process> => boolean
 
 FIXME
 
@@ -249,7 +249,7 @@ sub remove_pid {
 
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
-	if($params{options}->{'multiple_process'}) {
+	if($params{multiple_process}) {
 		unless(open(PFILE, '<', $pid_file)) {
 			Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $pid_file, $params{pid});
 			return undef;

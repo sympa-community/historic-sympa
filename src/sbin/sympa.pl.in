@@ -527,16 +527,10 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		Sympa::Log::Syslog::do_log('debug', "Running server $PID");
 		unless ($options{'batch'} ) {
-
-			## Create and write the pidfile
-			## If process is running in foreground, don't write STDERR to a dedicated file
-			my $options;
-			$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 			my $result = Sympa::Tools::Daemon::write_pid(
 				directory  => Sympa::Constants::PIDDIR,
 				daemon     => $daemon_name,
 				pid        => $PID,
-				options    => $options,
 				method     => $Sympa::Configuration::Conf{'lock_method'},
 				user       => Sympa::Constants::USER,
 				group      => Sympa::Constants::GROUP,
@@ -545,7 +539,9 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
 			}
 
-			unless ($options->{'stderr_to_tty'}) {
+			# If process is running in foreground, don't write
+			# STDERR to a dedicated file
+			unless ($options{foreground}) {
 				Sympa::Tools::Daemon::direct_stderr_to_file(
 					directory => Sympa::Constants::PIDDIR,
 					pid       => $PID,

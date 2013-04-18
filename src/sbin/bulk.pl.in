@@ -140,16 +140,11 @@ unless ($options{'debug'} || $options{'foreground'}) {
 	}
 }
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'bulk');
-## If process is running in foreground, don't write STDERR to a dedicated file
-my $options;
-$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
-$options->{'multiple_process'} = 0;
 
 # Saves the pid number
 my $result = Sympa::Tools::Daemon::write_pid(
 	directory => Sympa::Constants::PIDDIR,
 	pid       => $PID,
-	options   => $options,
 	method    => $Sympa::Configuration::Conf{'lock_method'},
 	user      => Sympa::Constants::USER,
 	group     => Sympa::Constants::GROUP,
@@ -157,7 +152,8 @@ my $result = Sympa::Tools::Daemon::write_pid(
 unless ($result) {
 	Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
 }
-unless ($options->{'stderr_to_tty'}) {
+# If process is running in foreground, don't write STDERR to a dedicated file
+unless ($options{foreground}) {
 	Sympa::Tools::Daemon::direct_stderr_to_file(
 		tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
 		pid    => $PID,
@@ -207,7 +203,6 @@ my $timeout = $Sympa::Configuration::Conf{'bulk_wait_to_fork'};
 my $last_check_date = 0;
 my %created_children;
 
-$options->{'multiple_process'} = 1;
 $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmtp'}/$Sympa::Configuration::Conf{'bulk_max_count'});
 
 
@@ -256,10 +251,10 @@ while (!$end) {
 							domain    => $Sympa::Configuration::Conf{'domain'}
 						);
 						Sympa::Tools::Daemon::remove_pid(
-							directory => Sympa::Constants::PIDDIR,
-							daemon    => $daemon_name,
-							pid       => $fpid,
-							options   => $options,
+							directory        => Sympa::Constants::PIDDIR,
+							daemon           => $daemon_name,
+							pid              => $fpid,
+							multiple_process => 1
 						);
 						delete $dead_children{$fpid};
 						push @dc, $fpid;
@@ -272,13 +267,13 @@ while (!$end) {
 			);
 			unless (defined($pids_in_pfile)){
 				my $result = Sympa::Tools::Daemon::write_pid(
-					directory => Sympa::Constants::PIDDIR,
-					daemon    => $daemon_name,
-					pid       => $PID,
-					options   => $options,
-					method    => $Sympa::Configuration::Conf{'lock_method'},
-					user      => Sympa::Constants::USER,
-					group     => Sympa::Constants::GROUP,
+					directory        => Sympa::Constants::PIDDIR,
+					daemon           => $daemon_name,
+					pid              => $PID,
+					multiple_process => 1,
+					method           => $Sympa::Configuration::Conf{'lock_method'},
+					user             => Sympa::Constants::USER,
+					group            => Sympa::Constants::GROUP,
 				);
 				unless ($result) {
 					Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -311,13 +306,13 @@ while (!$end) {
 							Sympa::Log::Syslog::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 							# Saves the pid number
 							my $result = Sympa::Tools::Daemon::write_pid(
-								directory => Sympa::Constants::PIDDIR,
-								daemon    => $daemon_name,
-								pid       => $child_pid,
-								options   => $options,
-								method    => $Sympa::Configuration::Conf{'lock_method'},
-								user      => Sympa::Constants::USER,
-								group     => Sympa::Constants::GROUP,
+								directory        => Sympa::Constants::PIDDIR,
+								daemon           => $daemon_name,
+								pid              => $child_pid,
+								multiple_process => 1,
+								method           => $Sympa::Configuration::Conf{'lock_method'},
+								user             => Sympa::Constants::USER,
+								group            => Sympa::Constants::GROUP,
 							);
 							unless ($result) {
 								Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
@@ -533,10 +528,10 @@ Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge g
 
 Sympa::Log::Syslog::do_log('notice', 'bulk.pl exited normally due to signal');
 Sympa::Tools::Daemon::remove_pid(
-	directory => Sympa::Constants::PIDDIR,
-	daemon    => $daemon_name,
-	pid       => $PID,
-	options   => $options,
+	directory        => Sympa::Constants::PIDDIR,
+	daemon           => $daemon_name,
+	pid              => $PID,
+	multiple_process => 1
 );
 
 exit(0);

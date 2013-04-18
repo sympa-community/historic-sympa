@@ -247,17 +247,14 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 
 			## If process is running in foreground, don't write STDERR to a dedicated file
-			my $options;
-			$options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
-			$options->{'multiple_process'} = 1 ;
 			my $result = Sympa::Tools::Daemon::write_pid(
-				directory => Sympa::Constants::PIDDIR,
-				daemon    => $daemon_name,
-				pid       => $PID,
-				options   => $options,
-				method    => $Sympa::Configuration::Conf{'lock_method'},
-				user      => Sympa::Constants::USER,
-				group     => Sympa::Constants::GROUP,
+				directory        => Sympa::Constants::PIDDIR,
+				daemon           => $daemon_name,
+				pid              => $PID,
+				multiple_process => 1,
+				method           => $Sympa::Configuration::Conf{'lock_method'},
+				user             => Sympa::Constants::USER,
+				group            => Sympa::Constants::GROUP,
 			);
 			unless ($result) {
 				Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
