@@ -34,19 +34,11 @@ package Sympa::Spool;
 
 use strict;
 
-require Encode;
+use Carp;
 use English qw(-no_match_vars);
-use IO::Scalar;
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
-use Mail::Header;
-use MIME::Entity;
-use MIME::EncWords;
-use MIME::Parser;
-use Storable;
+use MIME::Base64;
 use Sys::Hostname;
-use Time::Local;
 
-use Sympa::Constants;
 use Sympa::DatabaseDescription;
 use Sympa::Log::Syslog;
 use Sympa::Message;
