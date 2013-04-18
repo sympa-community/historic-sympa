@@ -280,10 +280,10 @@ while (!$end) {
 				}
 				close STDERR;
 				Sympa::Tools::Daemon::direct_stderr_to_file(
-					tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
-					pid    => $PID,
-					user   => Sympa::Constants::USER,
-					group  => Sympa::Constants::GROUP,
+					directory => Sympa::Constants::PIDDIR,
+					pid       => $PID,
+					user      => Sympa::Constants::USER,
+					group     => Sympa::Constants::GROUP,
 				);
 				$pids_in_pfile = [$PID];
 			}
@@ -323,10 +323,10 @@ while (!$end) {
 							## We're in a child bulk process
 							close STDERR;
 							Sympa::Tools::Daemon::direct_stderr_to_file(
-								tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
-								pid    => $PID,
-								user   => Sympa::Constants::USER,
-								group  => Sympa::Constants::GROUP,
+								directory => Sympa::Constants::PIDDIR,
+								pid       => $PID,
+								user      => Sympa::Constants::USER,
+								group     => Sympa::Constants::GROUP,
 							);
 							$date_of_last_activity = time();
 							$main::daemon_usage = 'DAEMON_SLAVE'; # automatic lists creation
