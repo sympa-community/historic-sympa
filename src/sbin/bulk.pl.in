@@ -155,10 +155,10 @@ unless ($result) {
 # If process is running in foreground, don't write STDERR to a dedicated file
 unless ($options{foreground}) {
 	Sympa::Tools::Daemon::direct_stderr_to_file(
-		tmpdir => $Sympa::Configuration::Conf{'tmpdir'},
-		pid    => $PID,
-		user   => Sympa::Constants::USER,
-		group  => Sympa::Constants::GROUP,
+		directory => Sympa::Constants::PIDDIR,
+		pid       => $PID,
+		user      => Sympa::Constants::USER,
+		group     => Sympa::Constants::GROUP,
 	);
 }
 ## Set the UserID & GroupID for the process
