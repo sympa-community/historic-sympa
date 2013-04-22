@@ -1171,58 +1171,58 @@ sub _fix_part($$$$) {
 			push @newparts, _fix_part($_, $parser, $attachments, $defcharset);
 		}
 		$part->parts(\@newparts);
-} elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {
-	# multipart or message types without subparts.
+	} elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {
+		# multipart or message types without subparts.
 
-	return $part;
-} elsif (MIME::Tools::textual_type($eff_type)) {
-	my $bodyh = $part->bodyhandle();
-	# Encoded body or null body won't be modified.
-	return $part if !$bodyh or $bodyh->is_encoded;
-
-	my $head = $part->head();
-	my $body = $bodyh->as_string();
-	my $wrap = $body;
-	if ($head->get('X-Sympa-NoWrap')) { # Need not wrapping
-		$head->delete('X-Sympa-NoWrap');
-	} elsif ($eff_type eq 'text/plain' and
-		lc($head->mime_attr('Content-type.Format')||'') ne 'flowed') {
-		$wrap = Sympa::Tools::wrap_text($body);
-	}
-	my $charset = $head->mime_attr("Content-Type.Charset") || $defcharset;
-
-	my ($newbody, $newcharset, $newenc) =
-	MIME::Charset::body_encode(Encode::decode('utf8', $wrap), $charset,
-		Replacement => 'FALLBACK');
-	if ($newenc eq $enc and $newcharset eq $charset and
-		$newbody eq $body) {
-		$head->add("MIME-Version", "1.0") unless $head->get("MIME-Version");
 		return $part;
+	} elsif (MIME::Tools::textual_type($eff_type)) {
+		my $bodyh = $part->bodyhandle();
+		# Encoded body or null body won't be modified.
+		return $part if !$bodyh or $bodyh->is_encoded;
+
+		my $head = $part->head();
+		my $body = $bodyh->as_string();
+		my $wrap = $body;
+		if ($head->get('X-Sympa-NoWrap')) { # Need not wrapping
+			$head->delete('X-Sympa-NoWrap');
+		} elsif ($eff_type eq 'text/plain' and
+			lc($head->mime_attr('Content-type.Format')||'') ne 'flowed') {
+			$wrap = Sympa::Tools::wrap_text($body);
+		}
+		my $charset = $head->mime_attr("Content-Type.Charset") || $defcharset;
+
+		my ($newbody, $newcharset, $newenc) =
+		MIME::Charset::body_encode(Encode::decode('utf8', $wrap), $charset,
+			Replacement => 'FALLBACK');
+		if ($newenc eq $enc and $newcharset eq $charset and
+			$newbody eq $body) {
+			$head->add("MIME-Version", "1.0") unless $head->get("MIME-Version");
+			return $part;
+		}
+
+		# Fix headers and body.
+		$head->mime_attr("Content-Type", "TEXT/PLAIN")
+		unless $head->mime_attr("Content-Type");
+		$head->mime_attr("Content-Type.Charset", $newcharset);
+		$head->mime_attr("Content-Transfer-Encoding", $newenc);
+		$head->add("MIME-Version", "1.0") unless $head->get("MIME-Version");
+		my $io = $bodyh->open("w");
+
+		unless (defined $io) {
+			Sympa::Log::Syslog::do_log('err', "Failed to save message : $ERRNO");
+			return undef;
+		}
+
+		$io->print($newbody);
+		$io->close;
+		$part->sync_headers(Length => 'COMPUTE');
+	} else {
+		# Binary or text with long lines will be suggested to be BASE64.
+		$part->head()->mime_attr("Content-Transfer-Encoding",
+			$part->suggest_encoding);
+		$part->sync_headers(Length => 'COMPUTE');
 	}
-
-	# Fix headers and body.
-	$head->mime_attr("Content-Type", "TEXT/PLAIN")
-	unless $head->mime_attr("Content-Type");
-	$head->mime_attr("Content-Type.Charset", $newcharset);
-	$head->mime_attr("Content-Transfer-Encoding", $newenc);
-	$head->add("MIME-Version", "1.0") unless $head->get("MIME-Version");
-	my $io = $bodyh->open("w");
-
-	unless (defined $io) {
-		Sympa::Log::Syslog::do_log('err', "Failed to save message : $ERRNO");
-		return undef;
-	}
-
-	$io->print($newbody);
-	$io->close;
-	$part->sync_headers(Length => 'COMPUTE');
-} else {
-	# Binary or text with long lines will be suggested to be BASE64.
-	$part->head()->mime_attr("Content-Transfer-Encoding",
-		$part->suggest_encoding);
-	$part->sync_headers(Length => 'COMPUTE');
-}
-return $part;
+	return $part;
 }
 
 =back
