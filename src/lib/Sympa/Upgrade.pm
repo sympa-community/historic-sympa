@@ -917,18 +917,10 @@ sub upgrade {
 				$meta{'list'} = $listname if $listname;
 				$meta{'priority'} = 1 unless $meta{'priority'};
 
-				unless (open FILE, $spooldir.'/'.$filename) {
-					Sympa::Log::Syslog::do_log('err', 'Cannot open message file %s : %s',  $filename, $ERRNO);
-					return undef;
-				}
-				my $string;
-				while (<FILE>){
-					$string = $string.$_;
-				}
-				close(FILE);
+				my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
 
 				my $messagekey = $spool->store(
-					string   => $string,
+					message  => $message,
 					metadata => \%meta
 				);
 				unless($messagekey) {
