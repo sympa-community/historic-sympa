@@ -474,28 +474,36 @@ sub remove_message {
 	return 1;
 }
 
-=item $spool->clean($filter)
+=item $spool->clean(%parameters)
 
 Remove old messages.
+
+Parameters:
+
+=over
+
+=item C<delay> => number
+
+FIXME.
+
+=item C<bad> => FIXME
+
+FIXME.
+
+=back
 
 =cut
 
 sub clean {
-	my ($self, $filter) = @_;
+	my ($self, %params) = @_;
 
-	my $delay = $filter->{'delay'};
-	my $bad =  $filter->{'bad'};
+	return undef unless $params{delay};
+	Sympa::Log::Syslog::do_log('debug', '(%s,$delay)',$self->{name},$params{delay});
 
+	my $freshness_date = time() - ($params{delay} * 60 * 60 * 24);
 
-	Sympa::Log::Syslog::do_log('debug', '(%s,$delay)',$self->{name},$delay);
-	my $spoolname = $self->{name};
-	return undef unless $spoolname;
-	return undef unless $delay;
-
-	my $freshness_date = time() - ($delay * 60 * 60 * 24);
-
-	my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($spoolname),Sympa::SDM::quote($freshness_date);
-	if ($bad) {
+	my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($freshness_date);
+	if ($params{bad}) {
 		$sqlquery  = 	$sqlquery . " AND bad_spool IS NOTNULL ";
 	} else {
 		$sqlquery  = 	$sqlquery . " AND bad_spool IS NULL ";
@@ -503,7 +511,7 @@ sub clean {
 
 	my $sth = Sympa::SDM::do_query($sqlquery);
 	$sth->finish();
-	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{name});
+	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$params{delay},$self->{name});
 	return 1;
 }
 

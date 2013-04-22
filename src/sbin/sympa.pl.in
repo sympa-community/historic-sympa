@@ -1237,38 +1237,38 @@ while ($signal ne 'term') {
 				name   => 'msg',
 				status => 'bad'
 			);
-			$msg_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queue'}});
+			$msg_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queue'});
 			my $archive_bad = Sympa::Spool->new(
 				name   => 'archive',
 				status => 'bad'
 			);
-			$archive_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queueoutgoing'}});
+			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			my $queuebounce_bad = Sympa::Spool->new(
 				name   => 'bounce',
 				status => 'bad'
 			);
-			$archive_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queueoutgoing'}});
-			$queuebounce_bad->clean({'delay'=>$Sympa::Configuration::Conf{'clean_delay_queuebounce'}});
+			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
+			$queuebounce_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queuebounce'});
 			my $queuemod = Sympa::Spool->new(
 				name => 'mod',
 			);
-			$queuemod->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuemod'}});
+			$queuemod->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuemod'});
 			my $queueauth = Sympa::Spool->new(
 				name => 'auth'
 			);
-			$queueauth->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queueauth'}});
+			$queueauth->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueauth'});
 			my $queuetopic = Sympa::Spool->new(
 				name => 'topic'
 			);
-			$queuetopic->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuetopic'}});
+			$queuetopic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuetopic'});
 			my $queuesubscribe = Sympa::Spool->new(
 				name => 'subscribe'
 			);
-			$queuesubscribe->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'}});
+			$queuesubscribe->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'});
 			my $queueautomatic = Sympa::Spool->new(
 				name => 'automatic'
 			);
-			$queueautomatic->clean({'delay'=> $Sympa::Configuration::Conf{'clean_delay_queueautomatic'}});
+			$queueautomatic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueautomatic'});
 			Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
 		}
 		## Cleanup in-memory msgid table, only in a while
