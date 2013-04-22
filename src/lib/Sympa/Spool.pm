@@ -95,19 +95,34 @@ sub new {
 	return $self;
 }
 
-=item Sympa::Spool->global_count($message_status)
+=item Sympa::Spool->global_count(%parameters)
 
 FIXME
+
+Parameters:
+
+=over
+
+=item C<source> => L<Sympa::Datasource::SQL>
+
+=item C<status> => C<bad> | C<ok>
+
+=back
 
 =cut
 
 sub global_count {
-	my ($message_status) = @_;
+	my ($class, %params) = @_;
 
-	my $sth = Sympa::SDM::do_query ("SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'");
+	my $query =
+		'SELECT COUNT(*) ' .
+		'FROM spool_table '.
+		'WHERE message_status_spool = ?';
+	my $handle = $params{source}->get_query_handle($query);
+	$handle->execute($params{status});
 
-	my @result = $sth->fetchrow_array();
-	$sth->finish();
+	my @result = $handle->fetchrow_array();
+	$handle->finish();
 
 	return $result[0];
 }
@@ -463,34 +478,43 @@ sub store {
 	$params{metadata}->{'size'}= length($params{message}) unless ($params{metadata}->{'size'}) ;
 	$params{metadata}->{'message_status'} = 'ok';
 
-	my $insertpart1; my $insertpart2;
+	my ($insertpart1, my $insertpart2);
 	foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
-		$insertpart1 = $insertpart1. ', '.$meta.'_spool';
-		$insertpart2 = $insertpart2. ', '.Sympa::SDM::quote($params{metadata}->{$meta});
+		$insertpart1 .= ', '.$meta.'_spool';
+		$insertpart2 .= ', '.Sympa::SDM::quote($params{metadata}->{$meta});
 	}
 	my $lock = $PID.'@'.hostname() ;
 
-	my $statement = sprintf
-		"INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",
-		$insertpart1,
-		Sympa::SDM::quote($self->{name}),
-		Sympa::SDM::quote($lock),
-		Sympa::SDM::quote($string),
-		$insertpart2;
+	my $insert_query =
+		"INSERT INTO spool_table ("                    .
+			"spoolname_spool, messagelock_spool, " .
+			"message_spool $insertpart1"           .
+		") "                                           .
+		"VALUES (?, ?, ? $insertpart2)";
 
-	my $sth = Sympa::SDM::do_query ($statement);
+	my $insert_handle = $self->{source}->get_query_handle($insert_query);
+	$insert_handle->execute(
+		$self->{name},
+		$lock,
+		$string
+	);
 
-	$statement = sprintf
-		"SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",
-		Sympa::SDM::quote($lock),
-		Sympa::SDM::quote($params{metadata}->{'date'});
-	$sth = Sympa::SDM::do_query ($statement);
+	my $select_query =
+		'SELECT messagekey_spool as messagekey '        .
+		'FROM spool_table '                             .
+		'WHERE messagelock_spool = ? AND date_spool = ?';
+	my $select_handle = $self->{source}->get_query_handle($select_query);
+	$select_handle->execute(
+		$lock,
+		$params{metadata}->{'date'}
+	);
 	# this query returns the autoinc primary key as result of this insert
 
-	my $inserted_message = $sth->fetchrow_hashref('NAME_lc');
+	my $inserted_message = $select_handle->fetchrow_hashref('NAME_lc');
 	my $messagekey = $inserted_message->{'messagekey'};
 
-	$sth->finish();
+	$insert_handle->finish();
+	$select_handle->finish();
 
 	unless ($params{locked}) {
 		$self->unlock_message($messagekey);
@@ -558,16 +582,19 @@ sub clean {
 
 	my $freshness_date = time() - ($params{delay} * 60 * 60 * 24);
 
-	my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($freshness_date);
+	my $query = 'DELETE FROM spool_table WHERE spoolname_spool = ? AND date_spool < ?';
+
 	if ($params{bad}) {
-		$sqlquery  = 	$sqlquery . " AND bad_spool IS NOTNULL ";
+		$query .= ' AND bad_spool IS NOTNULL';
 	} else {
-		$sqlquery  = 	$sqlquery . " AND bad_spool IS NULL ";
+		$query .= ' AND bad_spool IS NULL';
 	}
 
-	my $sth = Sympa::SDM::do_query($sqlquery);
-	$sth->finish();
-	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$params{delay},$self->{name});
+	my $handle = $self->{source}->get_query_handle($query);
+	$handle->execute($self->{name}, $freshness_date);
+	$handle->finish();
+
+	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$handle->rows(),$params{delay},$self->{name});
 	return 1;
 }
 
