@@ -373,55 +373,73 @@ sub update {
 	return 1;
 }
 
-=item $spool->store($message_asstring, $metadata, $locked)
+=item $spool->store(%parameters)
 
 Store a message in database spool.
 
-I<$metadata>: a set of attributes related to the spool
-I<$locked>: if define message must stay locked after store
+Parameters:
+
+=over
+
+=item C<message> => string
+
+FIXME.
+
+=item C<metadata> => hashref
+
+A set of attributes related to the spool
+
+=item C<locked> => boolean
+
+If define message must stay locked after store
+
+=back
+
 
 =cut
 
 sub store {
-	my ($self, $message_asstring, $metadata, $locked) = @_;
+	my ($self, %params) = @_;
 
-	my $sender = $metadata->{'sender'};
+	my $sender = $params{metadata}->{'sender'};
 	$sender |= '';
 
-	Sympa::Log::Syslog::do_log('debug',"($self->{name},$self->{status}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
+	Sympa::Log::Syslog::do_log('debug',"($self->{name},$self->{status}, <message_asstring> ,list : $params{metadata}->{'list'},robot : $params{metadata}->{'robot'} , date: $params{metadata}->{'date'}), lock : $params{locked}");
 
-	my $b64msg = MIME::Base64::encode($message_asstring);
+	my $b64msg = MIME::Base64::encode($params{message});
 	my $message;
 	if ($self->{name} ne 'task') {
-		$message = Sympa::Message->new(string => $message_asstring);
+		$message = Sympa::Message->new(string => $params{message});
 	}
 
 	if($message) {
-		$metadata->{'spam_status'} = $message->{'spam_status'};
-		$metadata->{'subject'} = $message->{'msg'}->head->get('Subject'); chomp $metadata->{'subject'} ;
-		$metadata->{'subject'} = substr $metadata->{'subject'}, 0, 109;
-		$metadata->{'messageid'} = $message->{'msg'}->head->get('Message-Id'); chomp $metadata->{'messageid'} ;
-		$metadata->{'messageid'} = substr $metadata->{'messageid'}, 0, 295;
-		$metadata->{'headerdate'} = substr $message->{'msg'}->head->get('Date'), 0, 78;
+		$params{metadata}->{'spam_status'} = $message->{'spam_status'};
+		$params{metadata}->{'subject'} = $message->{'msg'}->head->get('Subject');
+		chomp $params{metadata}->{'subject'} ;
+		$params{metadata}->{'subject'} = substr $params{metadata}->{'subject'}, 0, 109;
+		$params{metadata}->{'messageid'} = $message->{'msg'}->head->get('Message-Id');
+		chomp $params{metadata}->{'messageid'} ;
+		$params{metadata}->{'messageid'} = substr $params{metadata}->{'messageid'}, 0, 295;
+		$params{metadata}->{'headerdate'} = substr $message->{'msg'}->head->get('Date'), 0, 78;
 
 		my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
 		if ($#sender_hdr >= 0){
-			$metadata->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
-			$metadata->{'sender'} = substr $metadata->{'sender'}, 0, 109;
+			$params{metadata}->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
+			$params{metadata}->{'sender'} = substr $params{metadata}->{'sender'}, 0, 109;
 		}
 	} else {
-		$metadata->{'subject'} = '';
-		$metadata->{'messageid'} = '';
-		$metadata->{'sender'} = $sender;
+		$params{metadata}->{'subject'} = '';
+		$params{metadata}->{'messageid'} = '';
+		$params{metadata}->{'sender'} = $sender;
 	}
-	$metadata->{'date'}= int(time()) unless ($metadata->{'date'}) ;
-	$metadata->{'size'}= length($message_asstring) unless ($metadata->{'size'}) ;
-	$metadata->{'message_status'} = 'ok';
+	$params{metadata}->{'date'}= int(time()) unless ($params{metadata}->{'date'}) ;
+	$params{metadata}->{'size'}= length($params{message}) unless ($params{metadata}->{'size'}) ;
+	$params{metadata}->{'message_status'} = 'ok';
 
 	my $insertpart1; my $insertpart2;
 	foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
 		$insertpart1 = $insertpart1. ', '.$meta.'_spool';
-		$insertpart2 = $insertpart2. ', '.Sympa::SDM::quote($metadata->{$meta});
+		$insertpart2 = $insertpart2. ', '.Sympa::SDM::quote($params{metadata}->{$meta});
 	}
 	my $lock = $PID.'@'.hostname() ;
 
@@ -429,7 +447,7 @@ sub store {
 
 	my $sth = Sympa::SDM::do_query ($statement);
 
-	$statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",Sympa::SDM::quote($lock),Sympa::SDM::quote($metadata->{'date'});
+	$statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",Sympa::SDM::quote($lock),Sympa::SDM::quote($params{metadata}->{'date'});
 	$sth = Sympa::SDM::do_query ($statement);
 	# this query returns the autoinc primary key as result of this insert
 
@@ -438,7 +456,7 @@ sub store {
 
 	$sth->finish();
 
-	unless ($locked) {
+	unless ($params{locked}) {
 		$self->unlock_message($messagekey);
 	}
 	return $messagekey;

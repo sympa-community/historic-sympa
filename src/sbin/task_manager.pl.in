@@ -543,7 +543,10 @@ if ($list_name) {
 }
 
 Sympa::Log::Syslog::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
-$taskspool->store($task_as_string,\%meta);
+$taskspool->store(
+	message  => $task_as_string,
+	metadata => \%meta
+);
     return 1;
 }
 

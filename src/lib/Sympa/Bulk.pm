@@ -452,13 +452,17 @@ sub store {
 			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
 			Sympa::Log::Syslog::do_log('debug',"moved message to spool bulk");
 		} else {
-			$message->{'messagekey'} = $bulkspool->store($msg,
-				{'dkim_d'=>$dkim->{d},
-					'dkim_i'=>$dkim->{i},
-					'dkim_selector'=>$dkim->{selector},
-					'dkim_privatekey'=>$dkim->{private_key},
-					'dkim_header_list'=>$dkim->{header_list}},
-				$lock);
+			$message->{'messagekey'} = $bulkspool->store(
+				message  => $msg,
+				metadata => {
+					dkim_d           => $dkim->{d},
+					dkim_i           => $dkim->{i},
+					dkim_selector    => $dkim->{selector},
+					dkim_privatekey  => $dkim->{private_key},
+					dkim_header_list => $dkim->{header_list}
+				},
+				locked => $lock
+			);
 			unless($message->{'messagekey'}) {
 				Sympa::Log::Syslog::do_log('err',"could not store message in spool distribute, message lost ?");
 				return undef;

@@ -7637,7 +7637,13 @@ sub do_remove_arc {
 		 Sympa::Tracking::remove_message_by_id($msgid, $in{'list'},$robot);
 	}
 	my $spoolarchive = Sympa::Spool->new(name => 'archive');
-	$spoolarchive->store($removeorder,{'list'=>$in{'list'},'robot'=>$robot});
+	$spoolarchive->store(
+		message  => $removeorder,
+		metadata => {
+			list  => $in{list},
+			robot => $robot
+		}
+	);
 
 	wwslog('info', 'do_remove_arc %d messages marked to be removed by archived', $#msgids+1);
 	web_db_log({'parameters' => $in{'msgid'},
@@ -8926,7 +8932,15 @@ sub do_rebuildarc {
 
 	my $spoolarchive = Sympa::Spool->new(name => 'archive');
 
-	unless (     $spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'}} )){
+	my $result = $spoolarchive->store(
+		message => 'rebuild',
+		metadata => {
+			list  => $list->{name},
+			robot => $list->{robot}
+		} 
+	);
+
+	unless ($result) {
 		 Sympa::Report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
 		 web_db_log({'parameters' => $in{'month'},

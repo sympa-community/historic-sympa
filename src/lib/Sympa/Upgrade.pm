@@ -927,7 +927,10 @@ sub upgrade {
 				}
 				close(FILE);
 
-				my $messagekey = $spool->store($messageasstring,\%meta);
+				my $messagekey = $spool->store(
+					message  => $messageasstring,
+					metadata => \%meta
+				);
 				unless($messagekey) {
 					Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
 					next;

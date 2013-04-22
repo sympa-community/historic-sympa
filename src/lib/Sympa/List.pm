@@ -8227,7 +8227,14 @@ sub archive_msg {
 				Sympa::Log::Syslog::do_log('err', "could not store message in archive spool, messagekey missing");
 				return undef;
 			}
-			unless ($spoolarchive->store($msgtostore,{'robot'=>$self->{'robot'},'list'=>$self->{'name'}})){
+			my $result = $spoolarchive->store(
+				message  => $msgtostore,
+				metadata => {
+					robot => $self->{robot},
+					list  => $self->{name}
+				}
+			);
+			unless ($result) {
 				Sympa::Log::Syslog::do_log('err', "could not store message in archive spool, unkown reason");
 				return undef;
 			}
@@ -10699,7 +10706,14 @@ sub store_digest {
 			return undef;
 		}
 	} else {
-		unless ($digestspool->store($message_as_string,{'list'=>$self->{'name'},'robot'=>$self->{'robot'}})){
+		my $result = $digestspool->store(
+			message  => $message_as_string,
+			metadata => {
+				list  => $self->{name},
+				robot => $self->{robot}
+			}
+		);
+		unless ($result) {
 			Sympa::Log::Syslog::do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
 			return undef;
 		}
@@ -12271,7 +12285,14 @@ sub tag_topic {
 	$topic_item .= sprintf  "METHOD  $method\n";
 	my $topicspool = Sympa::Spool->new(name => 'topic');
 
-	return ($topicspool->store($topic_item,{'list'=>$self->{'name'},'robot'=> $self->{'domain'},'messageid'=>$msg_id}));
+	return $topicspool->store(
+		message  => $topic_item,
+		metadata => {
+			list      => $self->{'name'},
+			robot     => $self->{'domain'},
+			messageid => $msg_id
+		}
+	);
 }
 
 
@@ -12589,7 +12610,14 @@ sub store_subscription_request {
 		return undef;
 	} else {
 		my $subrequest = sprintf "$gecos||$custom_attr\n";
-		$subscription_request_spool->store($subrequest,{'list'=>$self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email });
+		$subscription_request_spool->store(
+			message  => $subrequest,
+			metadata => {
+				list   => $self->{name},
+				robot  => $self->{robot},
+				sender => $email
+			}
+		);
 	}
 	return 1;
 }

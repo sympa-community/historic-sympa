@@ -2783,7 +2783,14 @@ sub test_storage {
 		my $time = time();
 		$progress->message(sprintf "Test storing and removing of a %5d kB message (step %s out of %s)", $z*$size_increment, $z, $steps);
 		#
-		unless ($testing->store($msg,{list=>'notalist',robot=>'notaboot'})) {
+		my $result = $testing->store(
+			message  => $msg,
+			metadata => {
+				list  => 'notalist',
+				robot => 'notaboot'
+			}
+		);
+		unless ($result) {
 			return (($z-1)*$size_increment);
 		}
 		my $messagekey = get_messagekey($msg);

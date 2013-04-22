@@ -426,7 +426,10 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 				my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
 
-				my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
+				my $messagekey = $spool->store(
+					message  => $message->{'msg_as_string'},
+					metadata => \%meta
+				);
 			unless($messagekey) {
 				Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
 				next;
