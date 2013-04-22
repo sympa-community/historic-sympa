@@ -285,11 +285,6 @@ sub get_message {
 	my $sqlselector = '';
 
 	foreach my $field (keys %$selector){
-#	unless (defined %{$db_struct{'mysql'}{'spool_table'}{$field.'_spool'}}) {
-#	   Sympa::Log::Syslog::do_log ('err',"internal error : invalid selector field $field locking for message in spool_table");
-#	    return undef;
-#	}
-
 		$sqlselector = $sqlselector.' AND ' unless ($sqlselector eq '');
 
 		if ($field eq 'messageid') {
@@ -512,7 +507,6 @@ sub remove_message {
 	}
 
 	my $sqlselector = _sqlselector($selector);
-	#my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($messagekey),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot);
 	my $statement  = sprintf 
 		"DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",
 		Sympa::SDM::quote($self->{name}),
