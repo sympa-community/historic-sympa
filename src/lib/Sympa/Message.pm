@@ -44,6 +44,7 @@ use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Scenario;
 use Sympa::Tools;
+use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
 
 =head1 CLASS METHODS
@@ -125,14 +126,7 @@ sub new {
 	if ($file) {
 		## Parse message as a MIME::Entity
 		$self->{'filename'} = $file;
-		unless (open FILE, "$file") {
-			Sympa::Log::Syslog::do_log('err', 'Cannot open message file %s : %s',  $file, $ERRNO);
-			return undef;
-		}
-		while (<FILE>){
-			$string = $string.$_;
-		}
-		close(FILE);
+		$string = Sympa::Tools::File::slurp_file($file);
 	}
 	if($string){
 		if (ref ($string)){
