@@ -136,7 +136,7 @@ sub list_tasks {
 
 	# fetch all task
 	my $taskspool = Sympa::Spool->new(name => 'task');
-	my @tasks = $taskspool->get_content({'selector'=>{}});
+	my @tasks = $taskspool->get_content(selector => {});
 
 	## Create Task objects
 	foreach my $t (@tasks) {

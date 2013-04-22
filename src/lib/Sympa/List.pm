@@ -11066,8 +11066,13 @@ sub get_mod_spool_size {
 	Sympa::Log::Syslog::do_log('debug3', '()');
 
 	my $spool = Sympa::Spool->new(name => 'mod');
-	my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'} },
-			'selection'=>'count'});
+	my $count =  $spool->get_content(
+		selector  => {
+			list  => $self->{name},
+			robot => $self->{robot}
+		},
+		selection => 'count'
+	);
 
 	if ($count) {
 		return $count;
@@ -12571,7 +12576,15 @@ sub store_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(name => 'subscribe');
 
-	if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
+	my $content = $subscription_request_spool->get_content(
+		selector  => {
+			list   => $self->{name},
+			robot  => $self->{robot},
+			sender => $email
+		},
+		selection => 'count'
+	);
+	if ($content != 0) {
 		Sympa::Log::Syslog::do_log('notice', 'Subscription already requested by %s', $email);
 		return undef;
 	} else {
@@ -12588,7 +12601,13 @@ sub get_subscription_requests {
 	my %subscriptions;
 
 	my $subscription_request_spool = Sympa::Spool->new(name => 'subscribe');
-	my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
+	my @subrequests = $subscription_request_spool->get_content(
+		selector  => {
+			list  => $self->{name},
+			robot => $self->{robot}
+		},
+		selection => '*'
+	);
 
 	foreach my $subrequest (@subrequests) {
 
@@ -12631,7 +12650,13 @@ sub get_subscription_request_count {
 	my ($self) = @_;
 
 	my $subscription_request_spool = Sympa::Spool->new(name => 'subscribe');
-	return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
+	return $subscription_request_spool->get_content(
+		selector  => {
+			list  => $self->{name},
+			robot => $self->{robot}
+		},
+		selection => 'count'
+	);
 }
 
 

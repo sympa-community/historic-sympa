@@ -120,32 +120,53 @@ FIXME
 sub count {
 	my ($self) = @_;
 
-	return ($self->get_content({'selection'=>'count'}));
+	return $self->get_content(selection => 'count');
 }
 
-=item $spool->get_content($data)
+=item $spool->get_content(%parameters)
 
 Return the content an array of hash describing the spool content.
 
-=cut
+Parameters:
+=over
 
-sub get_content {
-	my ($self, $data) = @_;
+=item C<selector> => hashref
 
-	my $selector=$data->{'selector'};     # hash field->value used as filter  WHERE sql query
-	my $selection=$data->{'selection'};   # the list of field to select. possible values are :
+Hash field->value used as filter WHERE sql query.
+
+=item C<selection> => string
+
+The list of field to select. possible values are :
 	#    -  a comma separated list of field to select.
 	#    -  '*'  is the default .
 	#    -  '*_but_message' mean any field except message which may be hugue and unusefull while listing spools
 	#    - 'count' mean the selection is just a count.
 	# should be used mainly to select all but 'message' that may be huge and may be unusefull
-	my $ofset = $data->{'ofset'};         # for pagination, start fetch at element number = $ofset;
-	my $page_size = $data->{'page_size'}; # for pagination, limit answers to $page_size
-	my $orderby = $data->{'sortby'};      # sort
-	my $way = $data->{'way'};             # asc or desc
 
+=item C<ofset> => number
 
-	my $sql_where = _sqlselector($selector);
+For pagination, start fetch at given number.
+
+=item C<page_size> => number
+
+For pagination, limit answers to given size.
+
+=item C<sortby> =>
+
+sort
+
+=item C<way> =>
+
+asc or desc 
+
+=back
+
+=cut
+
+sub get_content {
+	my ($self, %params) = @_;
+
+	my $sql_where = _sqlselector($params{selector});
 	if ($self->{status} eq 'bad') {
 		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
 	} else {
@@ -154,25 +175,25 @@ sub get_content {
 	$sql_where =~s/^AND//;
 
 	my $statement ;
-	if ($selection eq 'count'){
+	if ($params{selection} eq 'count'){
 		# just return the selected count, not all the values
 		$statement = 'SELECT COUNT(*) ';
 	} else {
-		$statement = 'SELECT '._selectfields($selection);
+		$statement = 'SELECT '._selectfields($params{selection});
 	}
 
 	$statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,Sympa::SDM::quote($self->{name});
 
-	if ($orderby) {
-		$statement = $statement. ' ORDER BY '.$orderby.'_spool ';
-		$statement = $statement. ' DESC' if ($way eq 'desc') ;
+	if ($params{orderby}) {
+		$statement = $statement. ' ORDER BY '.$params{orderby}.'_spool ';
+		$statement = $statement. ' DESC' if ($params{way} eq 'desc') ;
 	}
-	if ($page_size) {
-		$statement = $statement . ' LIMIT '.$ofset.' , '.$page_size;
+	if ($params{page_size}) {
+		$statement = $statement . ' LIMIT '.$params{ofset}.' , '.$params{page_size};
 	}
 
 	my $sth = Sympa::SDM::do_query($statement);
-	if($selection eq 'count') {
+	if($params{selection} eq 'count') {
 		my @result = $sth->fetchrow_array();
 		return $result[0];
 	} else {

@@ -6384,7 +6384,12 @@ sub do_modindex {
 
 	my $list_name = $list->{'name'};
 	my $modspool = Sympa::Spool->new(name => 'mod');
-	my @messages  = $modspool->get_content({'selector'=>{'list'=>$list_name,'robot'=>$robot}});
+	my @messages  = $modspool->get_content(
+		selector => {
+			list  => $list_name,
+			robot => $robot
+		}
+	);
 	foreach $msg ( @messages ) {
 
 		 $param->{'spool'}{$msg->{'authkey'}}{'size'} = int( $msg->{'size'} / 1024 + 0.5);
@@ -16559,7 +16564,14 @@ sub do_viewspools {
 	if ($in{'list'}) {
 		$selector{'list'}=$in{'list'};
 	}
-	my @messages = $spool->get_content({'selector'=> \%selector ,'selection'=>'*_but_message','ofset'=>$ofset,'page_size' => $spool_page_size,'sortby' => $in{'sortby'},'way' => $in{'way'}});
+	my @messages = $spool->get_content(
+		selector  => \%selector,
+		selection => '*_but_message',
+		ofset     => $ofset,
+		page_size => $spool_page_size,
+		sortby    => $in{'sortby'},
+		way       => $in{'way'}
+	);
 $param->{'spool_content'} = \@messages;
 	return 1;
 }
@@ -16587,7 +16599,10 @@ sub do_viewspool_message {
 		name   => $spoolname,
 		status => $status
 	);
-	my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
+	my @messages = $spool->get_content(
+		selector  => {'messagekey'=>$messagekey},
+		selection => '*'
+	);
 
 	unless ($#messages == 0){
 		Sympa::Report::reject_report_web('intern','could not find message');
@@ -16679,7 +16694,10 @@ sub do_viewspool_message_dump {
 		spoolname        => $spoolname,
 		selection_status => $status
 	);
-	my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
+	my @messages = $spool->get_content(
+		selector  => { messagekey => $messagekey},
+		selection => '*'
+	);
 
 	unless ($#messages == 0){
 		Sympa::Report::reject_report_web('intern','could not find message');
