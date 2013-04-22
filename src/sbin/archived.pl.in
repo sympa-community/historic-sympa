@@ -236,7 +236,7 @@ Sympa::Log::Syslog::do_log('notice', "archived %s Started", Sympa::Constants::VE
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spoolarchive = Sympa::Spool->new(
+my $spool = Sympa::Spool->new(
 	name   => 'archive',
 	source => $Sympa::SDM::db_source
 );
@@ -246,7 +246,7 @@ while (!$end) {
 
 	Sympa::List::init_list_cache();
 	sleep 1;
-	my $item = $spoolarchive->next;
+	my $item = $spool->next;
 
 	next unless $item;
 
@@ -258,10 +258,10 @@ while (!$end) {
 		Sympa::Log::Syslog::do_log('debug',"rebuild found ");
 		if ($item->{'list'} && $item->{'robot'}) {
 			rebuild($item->{'list'}.'@'.$item->{'robot'});
-			$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
+			$spool->remove_message({'messagekey'=>$item->{'messagekey'}});
 		} else {
 			Sympa::Log::Syslog::do_log('err',"unable to rebuild archive for unkown list/robot.Move to bad");
-			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lock'=>'NULL'});
+			$spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lock'=>'NULL'});
 			next;
 		}
 	}elsif($orders[0]  =~ /^remove\.(\d\d\d\d\-\d\d)\.\d+$/ ) {
@@ -270,7 +270,7 @@ while (!$end) {
 		Sympa::Log::Syslog::do_log('debug',"removed found ");
 		unless($item->{'list'} && $item->{'robot'}){
 			Sympa::Log::Syslog::do_log('err',"unable to remove messages from archive for unkown list/robot.Move to bad");
-			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive, list name missing','lock'=>'NULL'});
+			$spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive, list name missing','lock'=>'NULL'});
 			next;
 		}
 		my $listadress = $item->{'list'}.'@'.$item->{'robot'}	;
@@ -283,7 +283,7 @@ while (!$end) {
 		my $list = Sympa::List->new(name => $listadress);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err',"remove : unknown list $listadress");
-			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
+			$spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
 			next;
 		}
 		Sympa::Log::Syslog::do_log('debug',"remove found : for $arclistdir");
@@ -357,17 +357,17 @@ while (!$end) {
 				Sympa::Tools::File::remove_dir ($arcpath);
 			}
 		}
-		$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
+		$spool->remove_message({'messagekey'=>$item->{'messagekey'}});
 	} else {
 		Sympa::Log::Syslog::do_log('notice',"Archiving message %s for list %s@%s",$item->{'messagekey'},$item->{'list'},$item->{'robot'});
 		unless (mail2arc ($item)) {
-			$spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
+			$spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
 			Sympa::Log::Syslog::do_log('err',"archiving_failed for message %s",$item->{'messagekey'});
 			unless (Sympa::List::send_notify_to_listmaster('archiving_failed',$item->{'robot'})) {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
 			}
 		}
-		unless ($spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}})){
+		unless ($spool->remove_message({'messagekey'=>$item->{'messagekey'}})){
 			Sympa::Log::Syslog::do_log ('err',"Couldn't remove message in archive spool %s . exiting to prevent infinite loop",$item->{'messagekey'});
 			last;
 		}
