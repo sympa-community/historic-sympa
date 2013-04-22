@@ -520,34 +520,34 @@ sub create {
 	my $tt2 = Template->new({'START_TAG' => quotemeta('['),'END_TAG' => quotemeta(']'), 'ABSOLUTE' => 1});
 
 	unless (defined $tt2 && $tt2->process($model_file, $Rdata, \$task_as_string)) {
-	Sympa::Log::Syslog::do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
-}
+		Sympa::Log::Syslog::do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
+	}
 
-if  (!check ($task_as_string)) {
-	Sympa::Log::Syslog::do_log ('err', "error : syntax error in $task_as_string, you should check $model_file");
-	Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request") ;
-	return undef;
-}
-# task is accetable, store it in spool
-my $taskspool = Sympa::Spool->new(name => 'task');
-my %meta;
-$meta{'task_date'}=$date;
-$meta{'task_label'}=$label;
-$meta{'task_model'}=$model;
-$meta{'robot'}= $robot if $robot;
-if ($list_name) {
-	$meta{'list'}=$list_name ;
-	$meta{'object'}=$list_name.'@'.$robot ;
-} else {
-	$meta{'object'}= '_global' ;
-}
+	if  (!check ($task_as_string)) {
+		Sympa::Log::Syslog::do_log ('err', "error : syntax error in $task_as_string, you should check $model_file");
+		Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request") ;
+		return undef;
+	}
+	# task is accetable, store it in spool
+	my $taskspool = Sympa::Spool->new(name => 'task');
+	my %meta;
+	$meta{'task_date'}=$date;
+	$meta{'task_label'}=$label;
+	$meta{'task_model'}=$model;
+	$meta{'robot'}= $robot if $robot;
+	if ($list_name) {
+		$meta{'list'}=$list_name ;
+		$meta{'object'}=$list_name.'@'.$robot ;
+	} else {
+		$meta{'object'}= '_global' ;
+	}
 
-Sympa::Log::Syslog::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
-$taskspool->store(
-	message  => $task_as_string,
-	metadata => \%meta
-);
-    return 1;
+	Sympa::Log::Syslog::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
+	$taskspool->store(
+		message  => $task_as_string,
+		metadata => \%meta
+	);
+	return 1;
 }
 
 ### SYNTAX CHECKING SUBROUTINES ###
@@ -817,13 +817,13 @@ last unless defined($status);
     }
 
     unless (defined $status) {
-	    Sympa::Log::Syslog::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-	    $task->remove;
-	    return undef;
+	Sympa::Log::Syslog::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+	$task->remove;
+	return undef;
     }
     unless ($status >= 0) {
-	    Sympa::Log::Syslog::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-	    $task->remove;
+	Sympa::Log::Syslog::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+	$task->remove;
     }
 
     return 1;
@@ -1361,7 +1361,6 @@ sub purge_orphan_bounces {
 	return 1;
 }
 
-
 sub expire_bounce {
 	# If a bounce is older then $list->get_latest_distribution_date()-$delai expire the bounce
 	# Is this variable my be set in to task modele ?
@@ -1513,149 +1512,148 @@ sub chk_cert_expiration {
 
 			if (!$log) {
 				unless (Sympa::List::send_global_file ($template, $_,'', \%tpl_context)) {
-				Sympa::Log::Syslog::do_log ('notice', "Unable to send template $template to $_");
+					Sympa::Log::Syslog::do_log ('notice', "Unable to send template $template to $_");
+				}
 			}
+			Sympa::Log::Syslog::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
 		}
-		Sympa::Log::Syslog::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
 	}
+	return 1;
 }
-return 1;
- }
 
 # attention, j'ai n'ai pas pu comprendre les retours d'erreurs des commandes wget donc pas de verif sur le bon fonctionnement de cette commande
- sub update_crl {
+sub update_crl {
 
-	 my ($task, $Rarguments, $context) = @_;
+	my ($task, $Rarguments, $context) = @_;
 
-	 my @tab = @{$Rarguments};
-	 my $limit = Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
-	 my $CA_file = "$Sympa::Configuration::Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
-	 Sympa::Log::Syslog::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
+	my @tab = @{$Rarguments};
+	my $limit = Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
+	my $CA_file = "$Sympa::Configuration::Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
+	Sympa::Log::Syslog::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
-	 # building of CA list
-	 my @CA;
-	 unless (open (FILE, $CA_file)) {
-		 error ($task->{'filepath'}, "can't open $CA_file file");
-		 return undef;
-	 }
-	 while (<FILE>) {
-		 chomp;
-		 push (@CA, $_);
-	 }
-	 close (FILE);
+	# building of CA list
+	my @CA;
+	unless (open (FILE, $CA_file)) {
+		error ($task->{'filepath'}, "can't open $CA_file file");
+		return undef;
+	}
+	while (<FILE>) {
+		chomp;
+		push (@CA, $_);
+	}
+	close (FILE);
 
-	 # updating of crl files
-	 my $crl_dir = "$Sympa::Configuration::Conf{'crl_dir'}";
-	 unless (-d $Sympa::Configuration::Conf{'crl_dir'}) {
-		 if ( mkdir ($Sympa::Configuration::Conf{'crl_dir'}, 0775)) {
-			 Sympa::Log::Syslog::do_log('notice', "creating spool $Sympa::Configuration::Conf{'crl_dir'}");
-		 } else {
-			 Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory $Sympa::Configuration::Conf{'crl_dir'}");
-			 return undef;
-		 }
-	 }
+	# updating of crl files
+	my $crl_dir = "$Sympa::Configuration::Conf{'crl_dir'}";
+	unless (-d $Sympa::Configuration::Conf{'crl_dir'}) {
+		if ( mkdir ($Sympa::Configuration::Conf{'crl_dir'}, 0775)) {
+			Sympa::Log::Syslog::do_log('notice', "creating spool $Sympa::Configuration::Conf{'crl_dir'}");
+		} else {
+			Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory $Sympa::Configuration::Conf{'crl_dir'}");
+			return undef;
+		}
+	}
 
-	 foreach my $url (@CA) {
+	foreach my $url (@CA) {
 
-		 my $crl_file = Sympa::Tools::escape_chars ($url); # convert an URL into a file name
-		 my $file = "$crl_dir/$crl_file";
+		my $crl_file = Sympa::Tools::escape_chars ($url); # convert an URL into a file name
+		my $file = "$crl_dir/$crl_file";
 
-		 ## create $file if it doesn't exist
-		 unless (-e $file) {
-			 my $cmd = "wget -O \'$file\' \'$url\'";
-			 open CMD, "| $cmd";
-			 close CMD;
-		 }
+		## create $file if it doesn't exist
+		unless (-e $file) {
+			my $cmd = "wget -O \'$file\' \'$url\'";
+			open CMD, "| $cmd";
+			close CMD;
+		}
 
-		 # recovery of the crl expiration date
-		 open (ID, "openssl crl -nextupdate -in \'$file\' -noout -inform der|");
-		 my $date = <ID>; # expiration date
-		 close (ID);
-		 chomp ($date);
+		# recovery of the crl expiration date
+		open (ID, "openssl crl -nextupdate -in \'$file\' -noout -inform der|");
+		my $date = <ID>; # expiration date
+		close (ID);
+		chomp ($date);
 
-		 unless ($date) {
-			 Sympa::Log::Syslog::do_log ('err', "can't get expiration date for $file crl file by using the crl openssl command");
-			 next;
-		 }
+		unless ($date) {
+			Sympa::Log::Syslog::do_log ('err', "can't get expiration date for $file crl file by using the crl openssl command");
+			next;
+		}
 
-		 $date =~ /nextUpdate=(\w+)\s*(\d+)\s(\d\d)\:(\d\d)\:\d\d\s(\d+).+/;
-		 my @date = (0, $4, $3 - 1, $2, $months{$1}, $5 - 1900);
-		 my $expiration_date = timegm (@date); # epoch expiration date
-		 my $rep = Sympa::Tools::Time::adate ($expiration_date);
+		$date =~ /nextUpdate=(\w+)\s*(\d+)\s(\d\d)\:(\d\d)\:\d\d\s(\d+).+/;
+		my @date = (0, $4, $3 - 1, $2, $months{$1}, $5 - 1900);
+		my $expiration_date = timegm (@date); # epoch expiration date
+		my $rep = Sympa::Tools::Time::adate ($expiration_date);
 
-		 ## check if the crl is soon expired or expired
-		 #my $file_date = $task->{'date'} - (-M $file) * 24 * 60 * 60; # last modification date
-		 my $condition = "newer($limit, $expiration_date)";
-		 my $verify_context;
-		 $verify_context->{'sender'} = 'nobody';
+		## check if the crl is soon expired or expired
+		#my $file_date = $task->{'date'} - (-M $file) * 24 * 60 * 60; # last modification date
+		my $condition = "newer($limit, $expiration_date)";
+		my $verify_context;
+		$verify_context->{'sender'} = 'nobody';
 
-		 if (Sympa::Scenario::verify ($verify_context, $condition) == 1) {
-			 unlink ($file);
-			 Sympa::Log::Syslog::do_log ('notice', "--> updating of the $file crl file");
-			 my $cmd = "wget -O \'$file\' \'$url\'";
-			 open CMD, "| $cmd";
-			 close CMD;
-			 next;
-		 }
-	 }
-	 return 1;
- }
+		if (Sympa::Scenario::verify ($verify_context, $condition) == 1) {
+			unlink ($file);
+			Sympa::Log::Syslog::do_log ('notice', "--> updating of the $file crl file");
+			my $cmd = "wget -O \'$file\' \'$url\'";
+			open CMD, "| $cmd";
+			close CMD;
+			next;
+		}
+	}
+	return 1;
+}
 
 # Subroutine for bouncers evaluation:
 # give a score for each bouncing user
- sub eval_bouncers {
-	 #################
-	 my ($task, $context) = @_;
+sub eval_bouncers {
+	#################
+	my ($task, $context) = @_;
 
-	 my $all_lists = Sympa::List::get_lists('*');
-	 foreach my $list (@$all_lists) {
+	my $all_lists = Sympa::List::get_lists('*');
+	foreach my $list (@$all_lists) {
 
-		 my $listname = $list->{'name'};
-		 my $list_traffic = {};
+		my $listname = $list->{'name'};
+		my $list_traffic = {};
 
-		 Sympa::Log::Syslog::do_log('info','(%s)',$listname);
+		Sympa::Log::Syslog::do_log('info','(%s)',$listname);
 
-		 ## Analizing file Msg-count and fill %$list_traffic
-		 unless (open(COUNT,$list->{'dir'}.'/msg_count')){
-			 Sympa::Log::Syslog::do_log('debug','** Could not open msg_count FILE for list %s',$listname);
-			 next;
-		 }
-		 while (<COUNT>) {
-			 if ( /^(\w+)\s+(\d+)/) {
-				 my ($a, $b) = ($1, $2);
-				 $list_traffic->{$a} = $b;
-			 }
-		 }
-		 close(COUNT);
+		## Analizing file Msg-count and fill %$list_traffic
+		unless (open(COUNT,$list->{'dir'}.'/msg_count')){
+			Sympa::Log::Syslog::do_log('debug','** Could not open msg_count FILE for list %s',$listname);
+			next;
+		}
+		while (<COUNT>) {
+			if ( /^(\w+)\s+(\d+)/) {
+				my ($a, $b) = ($1, $2);
+				$list_traffic->{$a} = $b;
+			}
+		}
+		close(COUNT);
 
-		 #for each bouncing user
-		 for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()){
-			 my $score = get_score($user_ref,$list_traffic) || 0;
+		#for each bouncing user
+		for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()){
+			my $score = get_score($user_ref,$list_traffic) || 0;
 
-			 ## copying score into DataBase
-			 unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {
-				 Sympa::Log::Syslog::do_log('err','Error while updating DB for user %s',$user_ref->{'email'});
-				 next;
-			 }
-		 }
-	 }
-	 return 1;
- }
+			## copying score into DataBase
+			unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {
+				Sympa::Log::Syslog::do_log('err','Error while updating DB for user %s',$user_ref->{'email'});
+				next;
+			}
+		}
+	}
+	return 1;
+}
 
- sub none {
-
-	 1;
- }
+sub none {
+	1;
+}
 
 # Routine for automatic bouncing users management
  sub process_bouncers {
 ###################
-	 my ($task,$context) = @_;
-	 Sympa::Log::Syslog::do_log('info','Processing automatic actions on bouncing users');
+	my ($task,$context) = @_;
+	Sympa::Log::Syslog::do_log('info','Processing automatic actions on bouncing users');
 
 ###########################################################################
 # This sub apply a treatment foreach category of bouncing-users
-	 #
+	#
 # The relation between possible actions and correponding subroutines
 # is indicated by the following hash (%actions).
 # It's possible to add actions by completing this hash and the one in list
@@ -1667,184 +1665,184 @@ return 1;
 # Look at the "remove_bouncers" sub in List.pm for an example
 ###########################################################################
 
-	 ## possible actions
-	 my %actions = ('remove_bouncers' => \Sympa::List::remove_bouncers,
-	 'notify_bouncers' => \Sympa::List::notify_bouncers,
+	## possible actions
+	my %actions = ('remove_bouncers' => \Sympa::List::remove_bouncers,
+	'notify_bouncers' => \Sympa::List::notify_bouncers,
  'none'            => \&none
-		   );
+		);
 
-		   my $all_lists = Sympa::List::get_lists();
-		   foreach my $list (@$all_lists) {
-			   my $listname = $list->{'name'};
+		my $all_lists = Sympa::List::get_lists();
+		foreach my $list (@$all_lists) {
+			my $listname = $list->{'name'};
 
-			   my @bouncers;
-			   # @bouncers = ( ['email1', 'email2', 'email3',....,],    There is one line
-			   #               ['email1', 'email2', 'email3',....,],    foreach bounce
-			   #               ['email1', 'email2', 'email3',....,],)   level.
+			my @bouncers;
+			# @bouncers = ( ['email1', 'email2', 'email3',....,],    There is one line
+			#               ['email1', 'email2', 'email3',....,],    foreach bounce
+			#               ['email1', 'email2', 'email3',....,],)   level.
 
-			   next unless ($list);
+			next unless ($list);
 
-			   my $max_level;
-			   for (my $level = 1;defined ($list->{'admin'}{'bouncers_level'.$level});$level++) {
-				   $max_level = $level;
-			   }
+			my $max_level;
+			for (my $level = 1;defined ($list->{'admin'}{'bouncers_level'.$level});$level++) {
+				$max_level = $level;
+			}
 
-			   ##  first, bouncing email are sorted in @bouncer
-			   for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
+			##  first, bouncing email are sorted in @bouncer
+			for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
 
-				   ## Skip included users (cannot be removed)
-				   next if ($user_ref->{'is_included'});
+				## Skip included users (cannot be removed)
+				next if ($user_ref->{'is_included'});
 
-				   for ( my $level = $max_level;($level >= 1) ;$level--) {
+				for ( my $level = $max_level;($level >= 1) ;$level--) {
 
-					   if ($user_ref->{'bounce_score'} >= $list->{'admin'}{'bouncers_level'.$level}{'rate'}){
-						   push(@{$bouncers[$level]}, $user_ref->{'email'});
-						   $level = ($level-$max_level);
-					   }
-				   }
-			   }
+					if ($user_ref->{'bounce_score'} >= $list->{'admin'}{'bouncers_level'.$level}{'rate'}){
+						push(@{$bouncers[$level]}, $user_ref->{'email'});
+						$level = ($level-$max_level);
+					}
+				}
+			}
 
-			   ## then, calling action foreach level
-			   for ( my $level = $max_level;($level >= 1) ;$level--) {
+			## then, calling action foreach level
+			for ( my $level = $max_level;($level >= 1) ;$level--) {
 
-				   my $action = $list->{'admin'}{'bouncers_level'.$level}{'action'};
-				   my $notification = $list->{'admin'}{'bouncers_level'.$level}{'notification'};
+				my $action = $list->{'admin'}{'bouncers_level'.$level}{'action'};
+				my $notification = $list->{'admin'}{'bouncers_level'.$level}{'notification'};
 
-				   if (@{$bouncers[$level]}){
-					   ## calling action subroutine with (list,email list) in parameter
-					   unless ($actions{$action}->($list,$bouncers[$level])){
-						   Sympa::Log::Syslog::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
-						   return undef;
-					   }
+				if (@{$bouncers[$level]}){
+					## calling action subroutine with (list,email list) in parameter
+					unless ($actions{$action}->($list,$bouncers[$level])){
+						Sympa::Log::Syslog::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
+						return undef;
+					}
 
-					   ## calling notification subroutine with (list,action, email list) in parameter
+					## calling notification subroutine with (list,action, email list) in parameter
 
-					   my $param = {'listname' => $listname,
-						   'action' => $action,
-						   'user_list' => \@{$bouncers[$level]},
-					   'total' => $#{$bouncers[$level]} + 1};
+					my $param = {'listname' => $listname,
+						'action' => $action,
+						'user_list' => \@{$bouncers[$level]},
+					'total' => $#{$bouncers[$level]} + 1};
 
-				   if ($notification eq 'listmaster'){
+				if ($notification eq 'listmaster'){
 
-					   unless(Sympa::List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
-						   Sympa::Log::Syslog::do_log('err','error while notifying listmaster');
-					   }
-				   }elsif ($notification eq 'owner'){
-					   unless ($list->send_notify_to_owner('automatic_bounce_management',$param)){
-						   Sympa::Log::Syslog::do_log('err','error while notifying owner');
-					   }
-				   }
-			   }
-		   }
-	   }
-	   return 1;
-   }
+					unless(Sympa::List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
+						Sympa::Log::Syslog::do_log('err','error while notifying listmaster');
+					}
+				}elsif ($notification eq 'owner'){
+					unless ($list->send_notify_to_owner('automatic_bounce_management',$param)){
+						Sympa::Log::Syslog::do_log('err','error while notifying owner');
+					}
+				}
+			}
+		}
+	}
+	return 1;
+}
 
 
-   sub get_score {
+sub get_score {
 
-	   my $user_ref = shift;
-	   my $list_traffic = shift;
+	my $user_ref = shift;
+	my $list_traffic = shift;
 
-	   Sympa::Log::Syslog::do_log('debug','(%s) ',$user_ref->{'email'});
+	Sympa::Log::Syslog::do_log('debug','(%s) ',$user_ref->{'email'});
 
-	   my $min_period = $Sympa::Configuration::Conf{'minimum_bouncing_period'};
-	   my $min_msg_count = $Sympa::Configuration::Conf{'minimum_bouncing_count'};
+	my $min_period = $Sympa::Configuration::Conf{'minimum_bouncing_period'};
+	my $min_msg_count = $Sympa::Configuration::Conf{'minimum_bouncing_count'};
 
-	   # Analizing bounce_subscriber_field and keep usefull infos for notation
-	   $user_ref->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
+	# Analizing bounce_subscriber_field and keep usefull infos for notation
+	$user_ref->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
 
-	   my $BO_period = int($1 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
-	   my $EO_period = int($2 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
-	   my $bounce_count = $3;
-	   my $bounce_type = $4;
+	my $BO_period = int($1 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
+	my $EO_period = int($2 / 86400) - $Sympa::Configuration::Conf{'bounce_delay'};
+	my $bounce_count = $3;
+	my $bounce_type = $4;
 
-	   my $msg_count = 0;
-	   my $min_day = $EO_period;
+	my $msg_count = 0;
+	my $min_day = $EO_period;
 
-	   unless ($bounce_count >= $min_msg_count){
-		   #not enough messages distributed to keep score
-		   Sympa::Log::Syslog::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
-		   return undef ;
-	   }
+	unless ($bounce_count >= $min_msg_count){
+		#not enough messages distributed to keep score
+		Sympa::Log::Syslog::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
+		return undef ;
+	}
 
-	   unless (($EO_period - $BO_period) >= $min_period){
-		   #too short bounce period to keep score
-		   Sympa::Log::Syslog::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
-		   return undef;
-	   }
+	unless (($EO_period - $BO_period) >= $min_period){
+		#too short bounce period to keep score
+		Sympa::Log::Syslog::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
+		return undef;
+	}
 
-	   # calculate number of messages distributed in list while user was bouncing
-	   foreach my $date (sort {$b <=> $a} keys (%$list_traffic)) {
-		   if (($date >= $BO_period) && ($date <= $EO_period)) {
-			   $min_day = $date;
-			   $msg_count += $list_traffic->{$date};
-		   }
-	   }
+	# calculate number of messages distributed in list while user was bouncing
+	foreach my $date (sort {$b <=> $a} keys (%$list_traffic)) {
+		if (($date >= $BO_period) && ($date <= $EO_period)) {
+			$min_day = $date;
+			$msg_count += $list_traffic->{$date};
+		}
+	}
 
-	   #Adjust bounce_count when msg_count file is too recent, compared to the bouncing period
-	   my $tmp_bounce_count = $bounce_count;
-	   unless ($EO_period == $BO_period) {
-		   my $ratio  = (($EO_period - $min_day) / ($EO_period - $BO_period));
-		   $tmp_bounce_count *= $ratio;
-	   }
+	#Adjust bounce_count when msg_count file is too recent, compared to the bouncing period
+	my $tmp_bounce_count = $bounce_count;
+	unless ($EO_period == $BO_period) {
+		my $ratio  = (($EO_period - $min_day) / ($EO_period - $BO_period));
+		$tmp_bounce_count *= $ratio;
+	}
 
-	   ## Regularity rate tells how much user has bounced compared to list traffic
-	   $msg_count ||= 1; ## Prevents "Illegal division by zero" error
-	   my $regularity_rate = $tmp_bounce_count / $msg_count;
+	## Regularity rate tells how much user has bounced compared to list traffic
+	$msg_count ||= 1; ## Prevents "Illegal division by zero" error
+	my $regularity_rate = $tmp_bounce_count / $msg_count;
 
-	   ## type rate depends on bounce type (5 = permanent ; 4 =tewmporary)
-	   my $type_rate = 1;
-	   $bounce_type =~ /(\d)\.(\d)\.(\d)/;
-	   if ($1 == 4) { # if its a temporary Error: score = score/2
-		   $type_rate = .5;
-	   }
+	## type rate depends on bounce type (5 = permanent ; 4 =tewmporary)
+	my $type_rate = 1;
+	$bounce_type =~ /(\d)\.(\d)\.(\d)/;
+	if ($1 == 4) { # if its a temporary Error: score = score/2
+		$type_rate = .5;
+	}
 
-	   my $note = $bounce_count * $regularity_rate * $type_rate;
+	my $note = $bounce_count * $regularity_rate * $type_rate;
 
-	   ## Note should be an integer
-	   $note = int($note + 0.5);
+	## Note should be an integer
+	$note = int($note + 0.5);
 
 #    $note = 100 if ($note > 100); # shift between message ditrib & bounces => note > 100
 
-	   return  $note;
-   }
+	return  $note;
+}
 
 ### MISCELLANEOUS SUBROUTINES ###
 
 # when we catch SIGTERM, just change the value of the loop variable.
-   sub sigterm {
-	   $end = 1;
-   }
+sub sigterm {
+	$end = 1;
+}
 
 # change the label of a task file
-   sub change_label {
-	   my $task_file = $_[0];
-	   my $new_label = $_[1];
+sub change_label {
+	my $task_file = $_[0];
+	my $new_label = $_[1];
 
-	   my $new_task_file = $task_file;
-	   $new_task_file =~ s/(.+\.)(\w*)(\.\w+\.\w+$)/$1$new_label$3/;
+	my $new_task_file = $task_file;
+	$new_task_file =~ s/(.+\.)(\w*)(\.\w+\.\w+$)/$1$new_label$3/;
 
-	   if (rename ($task_file, $new_task_file)) {
-		   Sympa::Log::Syslog::do_log ('notice', "$task_file renamed in $new_task_file");
-	   } else {
-		   Sympa::Log::Syslog::do_log ('err', "error ; can't rename $task_file in $new_task_file");
-	   }
-   }
+	if (rename ($task_file, $new_task_file)) {
+		Sympa::Log::Syslog::do_log ('notice', "$task_file renamed in $new_task_file");
+	} else {
+		Sympa::Log::Syslog::do_log ('err', "error ; can't rename $task_file in $new_task_file");
+	}
+}
 
 # send a error message to list-master, log it, and change the label task into 'ERROR'
-   sub error {
-	   my $task_id = $_[0];
-	   my $message = $_[1];
+sub error {
+	my $task_id = $_[0];
+	my $message = $_[1];
 
-	   my @param;
-	   $param[0] = "An error has occured during the execution of the task $task_id :
-	   $message";
-	   Sympa::Log::Syslog::do_log ('err', "$message");
-	   change_label ($task_id, 'ERROR') unless ($task_id eq '');
-	   unless (Sympa::List::send_notify_to_listmaster ('error in task', $Sympa::Configuration::Conf{'domain'}, \@param)) {
-	   Sympa::Log::Syslog::do_log('notice','error while notifying listmaster about "error_in_task"');
-   }
+	my @param;
+	$param[0] = "An error has occured during the execution of the task $task_id :
+	$message";
+	Sympa::Log::Syslog::do_log ('err', "$message");
+	change_label ($task_id, 'ERROR') unless ($task_id eq '');
+	unless (Sympa::List::send_notify_to_listmaster ('error in task', $Sympa::Configuration::Conf{'domain'}, \@param)) {
+		Sympa::Log::Syslog::do_log('notice','error while notifying listmaster about "error_in_task"');
+	}
 }
 
 sub sync_include {
