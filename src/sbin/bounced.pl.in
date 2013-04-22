@@ -273,9 +273,9 @@ while (!$end) {
 		);
 
 		my $entity = $message->{'msg'};
-		my $head = $entity->head;
+		my $head = $entity->head();
 		my $to = $head->get('to', 0);
-		my $notification_as_string = $entity->as_string;
+		my $notification_as_string = $entity->as_string();
 
 		my $who;
 		my $distribution_id;
@@ -392,7 +392,7 @@ while (!$end) {
 				my $content = $h->get('Content-type');
 
 				if ($content =~ /message\/delivery-status/) {
-					my @report = split(/\n/, $p->bodyhandle->as_string());
+					my @report = split(/\n/, $p->bodyhandle()->as_string());
 					foreach my $line (@report) {
 						$line = lc($line);
 						# Action Field MUST be present in a DSN report, possible values : failed, delayed, delivered, relayed, expanded(rfc3464)
@@ -498,7 +498,7 @@ while (!$end) {
 				my $content = $h->get('Content-type');
 
 				if ($content =~ /message\/disposition-notification/) {
-					my @report = split(/\n/, $p->bodyhandle->as_string());
+					my @report = split(/\n/, $p->bodyhandle()->as_string());
 					foreach my $line (@report) {
 						$line = lc($line);
 # Disposition Field MUST be present in a MDN report, possible values : displayed, deleted(rfc3798)
@@ -595,7 +595,7 @@ while (!$end) {
 				my $content = $h->get('Content-type');
 				next if ($content =~ /text\/plain/i);
 				if ($content =~ /message\/feedback-report/) {
-					my @report = split(/\n/, $p->bodyhandle->as_string());
+					my @report = split(/\n/, $p->bodyhandle()->as_string());
 					foreach my $line (@report) {
 						$feedback_type = 'abuse' if ($line =~ /Feedback\-Type\:\s*abuse/i);
 						if ($line =~ /Feedback\-Type\:\s*(.*)/i) {
@@ -619,7 +619,7 @@ while (!$end) {
 					my @subparts = $p->parts();
 					foreach my $subp (@subparts) {
 						# Sympa::Log::Syslog::do_log ('notice',"xxx subparts : subps");
-						my $subph =  $subp->head;
+						my $subph =  $subp->head();
 						$listname = $subph->get('X-Loop');
 					}
 					# Sympa::Log::Syslog::do_log ('notice',"xxx processing  Email Feedback Report : extract listname $listname");
@@ -803,7 +803,7 @@ sub store_bounce {
 		$spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		return undef;
 	}
-	print ARC $bounce->{'msg'}->as_string;
+	print ARC $bounce->{'msg'}->as_string();
 	close ARC;
 	close BOUNCE;
 }

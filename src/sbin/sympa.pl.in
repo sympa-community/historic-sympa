@@ -1315,7 +1315,7 @@ while ($signal ne 'term') {
 	#Sympa::List::dump();
 
 	## Disconnect from Database
-	Sympa::SDM::db_disconnect;
+	Sympa::SDM::db_disconnect();
 }
 
 Sympa::Log::Syslog::do_log('notice', 'Sympa exited normally due to signal');
@@ -1387,7 +1387,7 @@ sub process_message {
 	}
 
 	my $msg = $message->{'msg'};
-	my $hdr = $msg->head;
+	my $hdr = $msg->head();
 	my $rcpt = $message->{'rcpt'};
 
 	Sympa::Log::Syslog::do_log('notice', 'Processing: sender: %s ; message-id: %s', $hdr->get('From'), $hdr->get('Message-ID'));
@@ -1552,7 +1552,7 @@ sub process_message {
 			$list = Sympa::List->new(name => $listname, robot => $robot);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('err', 'dynamic list %s could not be created',$listname);
-				Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string,'');
+				Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string(),'');
 				# FIXME
 				Sympa::List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $message_in_spool."]);
 				return undef;
@@ -1792,7 +1792,7 @@ sub DoSendMessage {
 	my $robot = shift;
 	Sympa::Log::Syslog::do_log('debug', '()');
 
-	my $hdr = $message->{'msg'}->head;
+	my $hdr = $message->{'msg'}->head();
 
 	my $chksum = $hdr->get('X-Sympa-Checksum');
 	my $rcpt = $hdr->get('X-Sympa-To');
@@ -1801,7 +1801,7 @@ sub DoSendMessage {
 
 	Sympa::Log::Syslog::do_log('info', "Processing web message for %s", $rcpt);
 
-	my $string = $message->{'msg'}->as_string;
+	my $string = $message->{'msg'}->as_string();
 	my $msg_id = $hdr->get('Message-ID');
 	my $sender = $hdr->get('From');
 
@@ -1880,9 +1880,9 @@ sub DoForward {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $name, $function);
 
 	my $msg = $message->{'msg'};
-	my $hdr = $msg->head;
+	my $hdr = $msg->head();
 	my $messageid = $hdr->get('Message-Id');
-	my $msg_string = $msg->as_string;
+	my $msg_string = $msg->as_string();
 	my $sender = $hdr->get('From');
 	chomp $sender;
 
@@ -2070,12 +2070,12 @@ sub DoMessage{
 	## List and host.
 	my($listname, $host) = split(/[@\s]+/, $which);
 
-	my $hdr = $message->{'msg'}->head;
+	my $hdr = $message->{'msg'}->head();
 
 
 	my $messageid = $hdr->get('Message-Id');
 	my $msg = $message->{'msg'};
-	my $msg_string = $msg->as_string;
+	my $msg_string = $msg->as_string();
 
 	my $sender = $message->{'sender'};
 
@@ -2463,7 +2463,7 @@ sub DoCommand {
 	my $cmd_found = 0;
 
 	## Now check if the sender is an authorized address.
-	my $hdr = $msg->head;
+	my $hdr = $msg->head();
 
 	## Decode headers
 	#$hdr->decode();
@@ -2570,7 +2570,7 @@ sub DoCommand {
 
 	## Process the body of the message
 	## unless subject contained commands or message has no body
-	if ( (!$cmd_found) && (defined $msg->bodyhandle)) {
+	if ( (!$cmd_found) && (defined $msg->bodyhandle())) {
 
 		## check Content-type
 		my $mime = $hdr->get('Mime-Version') ;
@@ -2581,7 +2581,7 @@ sub DoCommand {
 		unless ($cset->decoder) {
 			# Charset is unknown.  Detect 7-bit charset.
 			my ($dummy, $charset) =
-			MIME::Charset::body_encode($msg->bodyhandle->as_string,
+			MIME::Charset::body_encode($msg->bodyhandle()->as_string(),
 				'', Detect7Bit => 'YES');
 			$cset = MIME::Charset->new($charset);
 		}
@@ -2611,7 +2611,7 @@ sub DoCommand {
 			return $success;
 		}
 
-		my @body = $msg->bodyhandle->as_lines();
+		my @body = $msg->bodyhandle()->as_lines();
 		foreach $i (@body) {
 			$i = $cset->encode($i);
 

@@ -6743,7 +6743,7 @@ sub do_reject {
 			 next;
 		 }
 
-		 my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
+		 my @sender_hdr = Mail::Address->parse($msg->head()->get('From'));
 		 unless  ($#sender_hdr == -1) {
 			 my $rejected_sender = $sender_hdr[0]->address;
 			 unless ($in{'quiet'}) {
@@ -7505,7 +7505,7 @@ sub do_latest_arc {
 				 next;
 			 }
 
-			 my $hdr = $message->head;
+			 my $hdr = $message->head();
 
 			 unless (defined $hdr) {
 				 wwslog('err', 'Unable to parse header of message %s', $arc_file);

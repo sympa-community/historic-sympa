@@ -420,15 +420,15 @@ while (!$end) {
 				$escaped_rcpt  =~ s/\@/\=\=a\=\=/;
 
 				if(($bulk->{'tracking'} eq 'dsn')||($bulk->{'tracking'} eq 'mdn')){ # tracking by MDN required tracking by DSN to
-					my $msgid = $entity->head->get('Message-Id'); chomp $msgid;
+					my $msgid = $entity->head()->get('Message-Id'); chomp $msgid;
 					$notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
-					$entity->head->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
+					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
 					if (($message->{'protected'})||($message->{'smime_crypted'})){
 					my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
-					$messageasstring_init = $entity->head->as_string. "\n" . $msg_body; # concat headers from entity with original body
+					$messageasstring_init = $entity->head()->as_string(). "\n" . $msg_body; # concat headers from entity with original body
 					} else {
-					$messageasstring_init = $entity->as_string;
+					$messageasstring_init = $entity->as_string();
 					}
 				} else {  # VERP
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
@@ -438,7 +438,7 @@ while (!$end) {
 					unless(Sympa::Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
 						Sympa::Log::Syslog::do_log('err', 'Erreur d appel Sympa::Bulk::merge_msg');
 					}
-					$messageasstring = $entity->as_string;
+					$messageasstring = $entity->as_string();
 				} else {
 					$messageasstring = $messageasstring_init;
 				}

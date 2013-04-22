@@ -183,7 +183,7 @@ sub purge_old_sessions {
 		return undef;
 	}
 
-	my $total =  $sth->fetchrow;
+	my $total =  $sth->fetchrow();
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no sessions to expire');
 	} else {
@@ -196,7 +196,7 @@ sub purge_old_sessions {
 		Sympa::Log::Syslog::do_log('err','Unable to count anonymous sessions for robot %s', $params{robot});
 		return undef;
 	}
-	my $anonymous_total =  $sth->fetchrow;
+	my $anonymous_total =  $sth->fetchrow();
 	if ($anonymous_total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no anonymous sessions to expire');
 		return $total ;
@@ -236,7 +236,7 @@ sub purge_old_tickets {
 		return undef;
 	}
 
-	my $total =  $sth->fetchrow;
+	my $total =  $sth->fetchrow();
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no tickets to expire');
 	} else {
@@ -500,7 +500,7 @@ sub set_cookie {
 	}
 
 	## Send cookie to the client
-	printf "Set-Cookie: %s\n", $cookie->as_string;
+	printf "Set-Cookie: %s\n", $cookie->as_string();
 	return 1;
 }
 

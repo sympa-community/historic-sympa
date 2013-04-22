@@ -315,7 +315,7 @@ sub get_db_conf  {
 		return undef;
 	}
 
-	my $value = $sth->fetchrow;
+	my $value = $sth->fetchrow();
 
 	$sth->finish();
 	return $value
@@ -341,7 +341,7 @@ sub set_robot_conf  {
 		return undef;
 	}
 
-	my $count = $sth->fetchrow;
+	my $count = $sth->fetchrow();
 	$sth->finish();
 
 	if ($count == 0) {

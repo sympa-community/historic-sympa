@@ -77,6 +77,6 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 $sth->finish();
 
 ## Disconnect from Database
-Sympa::SDM::db_disconnect if ($Sympa::SDM::dbh);
+Sympa::SDM::db_disconnect() if ($Sympa::SDM::dbh);
 
 printf "Crypted %d passwords\n", $count;

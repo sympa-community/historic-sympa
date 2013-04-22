@@ -181,8 +181,8 @@ sub _get_msg_as_hash {
 		Sympa::Log::Syslog::do_log('err', "reject_report_msg: wrong type for msg parameter");
 	}
 
-	my $head = $msg_entity->head;
-	my $body_handle = $msg_entity->bodyhandle;
+	my $head = $msg_entity->head();
+	my $body_handle = $msg_entity->bodyhandle();
 	my $body_as_string;
 
 	if (defined $body_handle) {

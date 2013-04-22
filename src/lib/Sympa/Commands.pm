@@ -122,7 +122,7 @@ sub parse {
 	my $sign_mod = shift;
 	my $message = shift;
 
-	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message->{'msg'}->as_string );
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message->{'msg'}->as_string() );
 
 	my $j;
 	$cmd_line = '';
@@ -2242,10 +2242,10 @@ sub _distribute {
 
 	my $msg = $message->{'msg'};
 	my $bytes = $message->{'size'};
-	my $hdr= $msg->head;
+	my $hdr= $msg->head();
 
 	my $msg_id = $hdr->get('Message-Id');
-	my $msg_string = $msg->as_string;
+	my $msg_string = $msg->as_string();
 
 	$hdr->add('X-Validation-by', $sender);
 
@@ -2319,10 +2319,10 @@ sub _confirm {
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	my $name = $list->{'name'};
-	my $hdr= $msg->head;
+	my $hdr= $msg->head();
 
 	my $msgid = $hdr->get('Message-Id');
-	my $msg_string = $message->{'msg'}->as_string;
+	my $msg_string = $message->{'msg'}->as_string();
 
 	my $result = $list->check_list_authz('send','md5',
 		{'sender' => $sender,
@@ -2479,13 +2479,13 @@ sub _reject {
 	}
 	my $msg = $message->{'msg'};
 
-	my @sender_hdr = Mail::Address->parse($message->head->get('From'));
+	my @sender_hdr = Mail::Address->parse($message->head()->get('From'));
 	unless  ($#sender_hdr == -1) {
 		my $rejected_sender = $sender_hdr[0]->address;
 		my %context;
 		$context{'subject'} = Sympa::Tools::decode_header($message, 'Subject');
 		$context{'rejected_by'} = $sender;
-		$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string if ($editor_msg) ;
+		$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string() if ($editor_msg) ;
 
 		Sympa::Log::Syslog::do_log('debug', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
 

@@ -396,9 +396,9 @@ sub checkcommand {
 	my $i;
 
 	## Check for commands in the subject.
-	my $subject = $msg->head->get('Subject');
+	my $subject = $msg->head()->get('Subject');
 
-	Sympa::Log::Syslog::do_log('debug3', '(msg->head->get(subject): %s,%s)', $subject, $sender);
+	Sympa::Log::Syslog::do_log('debug3', '(msg->head()->get(subject): %s,%s)', $subject, $sender);
 
 	if ($subject) {
 		if ($regexp && ($subject =~ /^$regexp\b/im)) {
@@ -1081,8 +1081,8 @@ FIXME.
 sub split_mail {
 	my ($message, $pathname, $dir, $confdir) = @_;
 
-	my $head = $message->head ;
-	my $encoding = $head->mime_encoding ;
+	my $head = $message->head();
+	my $encoding = $head->mime_encoding();
 
 	if ($message->is_multipart
 		|| ($message->mime_type eq 'message/rfc822')) {
@@ -2072,7 +2072,7 @@ sub create_html_part_from_web_page {
 		Sympa::Log::Syslog::do_log('err', 'Unable to convert file %s to a MIME part',$params{source});
 		return undef;
 	}
-	return $part->as_string;
+	return $part->as_string();
 }
 
 =item decode_header($msg, $tag, $sep)
@@ -2088,9 +2088,9 @@ sub decode_header {
 
 	my $head;
 	if ($msg->isa('Sympa::Message')) {
-		$head = $msg->{'msg'}->head;
+		$head = $msg->{'msg'}->head();
 	} elsif ($msg->('MIME::Entity')) {
-		$head = $msg->head;
+		$head = $msg->head();
 	} elsif ($msg->isa('MIME::Head') or $msg->isa('Mail::Header')) {
 		$head = $msg;
 	}

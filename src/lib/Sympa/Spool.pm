@@ -434,13 +434,13 @@ sub store {
 
 	if($message) {
 		$params{metadata}->{'spam_status'} = $message->{'spam_status'};
-		$params{metadata}->{'subject'} = $message->{'msg'}->head->get('Subject');
+		$params{metadata}->{'subject'} = $message->{'msg'}->head()->get('Subject');
 		chomp $params{metadata}->{'subject'} ;
 		$params{metadata}->{'subject'} = substr $params{metadata}->{'subject'}, 0, 109;
-		$params{metadata}->{'messageid'} = $message->{'msg'}->head->get('Message-Id');
+		$params{metadata}->{'messageid'} = $message->{'msg'}->head()->get('Message-Id');
 		chomp $params{metadata}->{'messageid'} ;
 		$params{metadata}->{'messageid'} = substr $params{metadata}->{'messageid'}, 0, 295;
-		$params{metadata}->{'headerdate'} = substr $message->{'msg'}->head->get('Date'), 0, 78;
+		$params{metadata}->{'headerdate'} = substr $message->{'msg'}->head()->get('Date'), 0, 78;
 
 		my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
 		if ($#sender_hdr >= 0){

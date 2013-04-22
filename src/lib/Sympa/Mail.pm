@@ -491,9 +491,9 @@ sub mail_message {
 	## If message contain a footer or header added by Sympa  use the object message else
 	## Extract body from original file to preserve signature
 	my $msg_body; my $msg_header;
-	$msg_header = $message->{'msg'}->head;
+	$msg_header = $message->{'msg'}->head();
 	if (!($message->{'protected'})) {
-		$msg_body = $message->{'msg'}->body_as_string;
+		$msg_body = $message->{'msg'}->body_as_string();
 	} elsif ($message->{'smime_crypted'}) {
 		$msg_body = ${$message->{'msg_as_string'}}; # why is object message msg_as_string contain a body _as_string ? wrong name for this mesage property
 	} else {
@@ -645,7 +645,7 @@ sub mail_forward {
 		return undef;
 	}
 	## Add an Auto-Submitted header field according to  http://www.tools.ietf.org/html/draft-palme-autosub-01
-	$message->{'msg'}->head->add('Auto-Submitted', 'auto-forwarded');
+	$message->{'msg'}->head()->add('Auto-Submitted', 'auto-forwarded');
 
 	my $result = _sending(
 		message         => $message,
@@ -730,7 +730,7 @@ sub _sendto {
 	my (%params) = @_;
 
 	my $message = $params{'message'};
-	my $msg_header = $message->{'msg'}->head;
+	my $msg_header = $message->{'msg'}->head();
 	my $msg_body = $message->{'body_as_string'};
 	my $from = $params{'from'};
 	my $rcpt = $params{'rcpt'};
@@ -885,7 +885,7 @@ sub _sending {
 			return undef;
 		}
 	}
-	# my $msg_id = $message->{'msg'}->head->get('Message-ID'); chomp $msg_id;
+	# my $msg_id = $message->{'msg'}->head()->get('Message-ID'); chomp $msg_id;
 
 	my $verpfeature = (($verp eq 'on')||($verp eq 'mdn')||($verp eq 'dsn'));
 	my $trackingfeature ;
@@ -1127,10 +1127,10 @@ sub _reformat_message($;$$) {
 			return undef;
 		}
 	}
-	$msg->head->delete("X-Mailer");
+	$msg->head()->delete("X-Mailer");
 	$msg = _fix_part($msg, $parser, $attachments, $defcharset);
-	$msg->head->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
-	return $msg->as_string;
+	$msg->head()->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
+	return $msg->as_string();
 }
 
 sub _fix_part($$$$) {
@@ -1139,7 +1139,7 @@ sub _fix_part($$$$) {
 
 	return $part unless $part;
 
-	my $enc = $part->head->mime_attr("Content-Transfer-Encoding");
+	my $enc = $part->head()->mime_attr("Content-Transfer-Encoding");
 	# Parts with nonstandard encodings aren't modified.
 
 	if ($enc and $enc !~ /^(?:base64|quoted-printable|[78]bit|binary)$/i) {
@@ -1151,7 +1151,7 @@ sub _fix_part($$$$) {
 		return $part;
 	}
 
-	if ($part->head->get('X-Sympa-Attach')) { # Need re-attaching data.
+	if ($part->head()->get('X-Sympa-Attach')) { # Need re-attaching data.
 
 		my $data = shift @{$attachments};
 		if (ref($data) ne 'MIME::Entity') {
@@ -1163,7 +1163,7 @@ sub _fix_part($$$$) {
 				$data = $parser->parse_data('');
 			}
 		}
-		$part->head->delete('X-Sympa-Attach');
+		$part->head()->delete('X-Sympa-Attach');
 		$part->parts([$data]);
 	} elsif ($part->parts) {
 		my @newparts = ();
@@ -1176,12 +1176,12 @@ sub _fix_part($$$$) {
 
 	return $part;
 } elsif (MIME::Tools::textual_type($eff_type)) {
-	my $bodyh = $part->bodyhandle;
+	my $bodyh = $part->bodyhandle();
 	# Encoded body or null body won't be modified.
 	return $part if !$bodyh or $bodyh->is_encoded;
 
-	my $head = $part->head;
-	my $body = $bodyh->as_string;
+	my $head = $part->head();
+	my $body = $bodyh->as_string();
 	my $wrap = $body;
 	if ($head->get('X-Sympa-NoWrap')) { # Need not wrapping
 		$head->delete('X-Sympa-NoWrap');
@@ -1218,7 +1218,7 @@ sub _fix_part($$$$) {
 	$part->sync_headers(Length => 'COMPUTE');
 } else {
 	# Binary or text with long lines will be suggested to be BASE64.
-	$part->head->mime_attr("Content-Transfer-Encoding",
+	$part->head()->mime_attr("Content-Transfer-Encoding",
 		$part->suggest_encoding);
 	$part->sync_headers(Length => 'COMPUTE');
 }

@@ -54,7 +54,7 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
 		$sth2->execute || die "Unable to execute SQL statement";
 
-		my $gecos = $sth2->fetchrow;
+		my $gecos = $sth2->fetchrow();
 		$sth2->finish();
 
 		if ($gecos) {
@@ -71,4 +71,4 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 $sth->finish();
 
 ## Disconnect from Database
-Sympa::SDM::db_disconnect if ($Sympa::SDM::dbh);
+Sympa::SDM::db_disconnect() if ($Sympa::SDM::dbh);

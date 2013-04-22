@@ -253,11 +253,11 @@ sub merge_msg {
 	}
 
 	my $body;
-	if(defined $entity->bodyhandle){
-		$body      = $entity->bodyhandle->as_string;
+	if(defined $entity->bodyhandle()){
+		$body      = $entity->bodyhandle()->as_string();
 	}
 	## Get the Content-Type / Charset / Content-Transfer-encoding of a message
-	my $charset   = MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
+	my $charset   = MIME::WordDecoder::unmime($entity->head()->mime_attr('content-type.charset'));
 
 	my $message_output;
 	my $IO;
@@ -300,7 +300,7 @@ sub merge_msg {
 		}
 
 		# Write the new body in the entity
-		unless($IO = $entity->bodyhandle->open("w") || die "open body: $ERRNO"){
+		unless($IO = $entity->bodyhandle()->open("w") || die "open body: $ERRNO"){
 			Sympa::Log::Syslog::do_log('err', "Can't open Entity");
 			return undef;
 		}
@@ -400,7 +400,7 @@ sub store {
 	my %data = @_;
 
 	my $message = $data{'message'};
-	my $msg_id = $message->{'msg'}->head->get('Message-ID'); chomp $msg_id;
+	my $msg_id = $message->{'msg'}->head()->get('Message-ID'); chomp $msg_id;
 	my $rcpts = $data{'rcpts'};
 	my $from = $data{'from'};
 	my $robot = $data{'robot'};
@@ -429,9 +429,9 @@ sub store {
 	$parser->output_to_core(1);
 
 	my $string = $message->{'protected'} ?
-		$message->{'msg_as_string'} : $message->{'msg'}->as_string;
+		$message->{'msg_as_string'} : $message->{'msg'}->as_string();
 
-	my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
+	my @sender_hdr = Mail::Address->parse($message->{'msg'}->head()->get('From'));
 	my $message_sender = $sender_hdr[0]->address;
 
 
@@ -522,7 +522,7 @@ sub store {
 				Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
 				return undef;
 			}
-			$packet_already_exist = $sth->fetchrow;
+			$packet_already_exist = $sth->fetchrow();
 			$sth->finish();
 		}
 

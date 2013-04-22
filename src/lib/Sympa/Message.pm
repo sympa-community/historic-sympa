@@ -147,11 +147,11 @@ sub new {
 		return undef;
 	}
 	$self->{'msg'} = $msg;
-	#    $message->{'msg_as_string'} = $msg->as_string;
+	#    $message->{'msg_as_string'} = $msg->as_string();
 	$self->{'msg_as_string'} = $string;
-	$self->{'size'} = length($msg->as_string);
+	$self->{'size'} = length($msg->as_string());
 
-	my $hdr = $self->{'msg'}->head;
+	my $hdr = $self->{'msg'}->head();
 
 	## Extract sender address
 	unless ($hdr->get('From')) {
@@ -294,7 +294,7 @@ sub new {
 			$self->{'orig_msg'} = $self->{'msg'};
 			$self->{'msg'} = $dec;
 			$self->{'msg_as_string'} = $dec_as_string;
-			$hdr = $dec->head;
+			$hdr = $dec->head();
 			Sympa::Log::Syslog::do_log('debug', "message %s has been decrypted", $file);
 		}
 
@@ -392,7 +392,7 @@ sub add_topic {
 	my ($self, $topic) = @_;
 
 	$self->{'topic'} = $topic;
-	my $hdr = $self->{'msg'}->head;
+	my $hdr = $self->{'msg'}->head();
 	$hdr->add('X-Sympa-Topic', $topic);
 
 	return 1;
@@ -447,7 +447,7 @@ sub fix_html_part {
 	my ($part, $robot) = @_;
 
 	return $part unless $part;
-	my $eff_type = $part->head->mime_attr("Content-Type");
+	my $eff_type = $part->head()->mime_attr("Content-Type");
 	if ($part->parts) {
 		my @newparts = ();
 		foreach ($part->parts) {
@@ -455,22 +455,22 @@ sub fix_html_part {
 		}
 		$part->parts(\@newparts);
 	} elsif ($eff_type =~ /^text\/html/i) {
-		my $bodyh = $part->bodyhandle;
+		my $bodyh = $part->bodyhandle();
 		# Encoded body or null body won't be modified.
-		return $part if !$bodyh or $bodyh->is_encoded;
+		return $part if !$bodyh or $bodyh->is_encoded();
 
-		my $body = $bodyh->as_string;
+		my $body = $bodyh->as_string();
 		# Re-encode parts with 7-bit charset (ISO-2022-*), since
 		# StripScripts cannot handle them correctly.
-		my $cset = MIME::Charset->new($part->head->mime_attr('Content-Type.Charset') || '');
+		my $cset = MIME::Charset->new($part->head()->mime_attr('Content-Type.Charset') || '');
 		unless ($cset->decoder) {
 			# Charset is unknown.  Detect 7-bit charset.
 			my (undef, $charset) =
 			MIME::Charset::body_encode($body, '', Detect7Bit => 'YES');
 			$cset = MIME::Charset->new($charset);
 		}
-		if ($cset->decoder and $cset->as_string =~ /^ISO-2022-/i) {
-			$part->head->mime_attr('Content-Type.Charset', 'UTF-8');
+		if ($cset->decoder and $cset->as_string() =~ /^ISO-2022-/i) {
+			$part->head()->mime_attr('Content-Type.Charset', 'UTF-8');
 			$cset->encoder('UTF-8');
 			$body = $cset->encode($body);
 		}

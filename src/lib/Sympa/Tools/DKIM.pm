@@ -180,9 +180,9 @@ sub remove_invalid_dkim_signature {
 			Sympa::Log::Syslog::do_log('err','could not parse message');
 			return $msg_as_string ;
 		}
-		$entity->head->delete('DKIM-Signature');
+		$entity->head()->delete('DKIM-Signature');
 		Sympa::Log::Syslog::do_log('debug',"removing invalide dkim signature header");
-		return $entity->head->as_string."\n".$body_as_string;
+		return $entity->head()->as_string()."\n".$body_as_string;
 	} else {
 		return ($msg_as_string); # sgnature is valid.
 	}
@@ -292,7 +292,7 @@ sub dkim_sign {
 	}
 	unlink ($temporary_keyfile);
 
-	$message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
+	$message->{'msg'}->head()->add('DKIM-signature',$dkim->signature()->as_string());
 
 	# Do NOT use Mime::Entity in order to preserve base 64 encoding and S/MIME
 	# signature.
@@ -300,7 +300,7 @@ sub dkim_sign {
 	shift @sections;
 	my $body = join("\n\n", @sections);
 
-	return $message->{'msg'}->head->as_string."\n".$body;
+	return $message->{'msg'}->head()->as_string()."\n".$body;
 }
 
 =back

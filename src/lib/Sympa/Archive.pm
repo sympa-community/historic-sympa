@@ -157,7 +157,7 @@ sub scan_dir_archive {
 		$msg->{'from'} = Sympa::Tools::decode_header($mail, 'From');
 		$msg->{'date'} = Sympa::Tools::decode_header($mail, 'Date');
 
-		$msg->{'full_msg'} = $mail->{'msg'}->as_string;
+		$msg->{'full_msg'} = $mail->{'msg'}->as_string();
 
 		Sympa::Log::Syslog::do_log('debug','adding message %s in archive to send', $msg->{'subject'});
 
@@ -366,7 +366,7 @@ sub clean_archived_message {
 	if ($msg) {
 		if($msg->clean_html()){
 			if(open TMP, ">$output") {
-				print TMP $msg->{'msg'}->as_string;
+				print TMP $msg->{'msg'}->as_string();
 				close TMP;
 			} else {
 				Sympa::Log::Syslog::do_log('err','Unable to create a tmp file to write clean HTML to file %s',$output);

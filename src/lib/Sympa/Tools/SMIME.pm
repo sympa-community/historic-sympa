@@ -217,7 +217,7 @@ sub check_signature {
 	}
 
 	if ($message->{'smime_crypted'}){
-		$message->{'msg'}->head->print($command_handle);
+		$message->{'msg'}->head()->print($command_handle);
 		print $command_handle "\n";
 	}
 	print $command_handle $message->{'msg_as_string'};
@@ -569,11 +569,11 @@ sub decrypt_message {
 
 	## Some headers from the initial message should not be restored
 	## Content-Disposition and Content-Transfer-Encoding if the result is multipart
-	$decrypted_entity->head->delete('Content-Disposition') if
-	($params{entity}->head->get('Content-Disposition'));
-	$decrypted_entity->head->delete('Content-Transfer-Encoding') if
-	($params{entity}->head->get('Content-Transfer-Encoding')) &&
-	($decrypted_entity->head->get('Content-Type') =~ /multipart/);
+	$decrypted_entity->head()->delete('Content-Disposition') if
+		($params{entity}->head()->get('Content-Disposition'));
+	$decrypted_entity->head()->delete('Content-Transfer-Encoding') if
+		($params{entity}->head()->get('Content-Transfer-Encoding')) &&
+		($decrypted_entity->head()->get('Content-Type') =~ /multipart/);
 
 	return ($decrypted_entity, $decrypted_entity->body_as_string());
 }

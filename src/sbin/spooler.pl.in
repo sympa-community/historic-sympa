@@ -456,7 +456,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		}
 
 	## Disconnect from Database
-		Sympa::SDM::db_disconnect;
+		Sympa::SDM::db_disconnect();
 
 	}
 	Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');

@@ -622,7 +622,7 @@ sub verify {
 	}
 
 	if (defined ($context->{'msg'})) {
-		my $header = $context->{'msg'}->head;
+		my $header = $context->{'msg'}->head();
 		unless (($header->get('to') && (join(', ', $header->get('to')) =~ /$context->{'listname'}/i)) ||
 			($header->get('cc') && (join(', ', $header->get('cc')) =~ /$context->{'listname'}/i))) {
 			$context->{'is_bcc'} = 1;
@@ -729,7 +729,7 @@ sub verify {
 		} elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
 			my $field_name = $2;
 			if (defined ($context->{'msg'})) {
-				my $header = $context->{'msg'}->head;
+				my $header = $context->{'msg'}->head();
 				my @fields = $header->get($field_name);
 				## Defaulting empty or missing fields to '', so that we can test
 				## their value in Scenario, considering that, for an incoming message,
@@ -748,14 +748,14 @@ sub verify {
 			}
 
 		} elsif ($value =~ /\[msg_body\]/i) {
-			unless (defined ($context->{'msg'}) && defined ($context->{'msg'}->effective_type() =~ /^text/) && defined ($context->{'msg'}->bodyhandle)) {
+			unless (defined ($context->{'msg'}) && defined ($context->{'msg'}->effective_type() =~ /^text/) && defined ($context->{'msg'}->bodyhandle())) {
 				if ($log_it == 1) {
 					Sympa::Log::Syslog::do_log('info','no proper textual message body to evaluate rule %s', $condition);
 				}
 				return -1 * $negation;
 			}
 
-			$value = $context->{'msg'}->bodyhandle->as_string();
+			$value = $context->{'msg'}->bodyhandle()->as_string();
 
 		} elsif ($value =~ /\[msg_part\-\>body\]/i) {
 			unless (defined ($context->{'msg'})) {
@@ -769,9 +769,9 @@ sub verify {
 			## FIXME:Should be recurcive...
 			foreach my $part ($context->{'msg'}->parts) {
 				next unless ($part->effective_type() =~ /^text/);
-				next unless (defined $part->bodyhandle);
+				next unless (defined $part->bodyhandle());
 
-				push @bodies, $part->bodyhandle->as_string();
+				push @bodies, $part->bodyhandle()->as_string();
 			}
 			$value = \@bodies;
 

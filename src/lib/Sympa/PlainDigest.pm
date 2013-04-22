@@ -198,11 +198,11 @@ sub _do_message {
 		return undef;
 	}
 
-	my $from = $msgent->head->get('From') ? Sympa::Tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
-	my $subject = $msgent->head->get('Subject') ? Sympa::Tools::decode_header($msgent, 'Subject') : '';
-	my $date = $msgent->head->get('Date') ? Sympa::Tools::decode_header($msgent, 'Date') : '';
-	my $to = $msgent->head->get('To') ? Sympa::Tools::decode_header($msgent, 'To', ', ') : '';
-	my $cc = $msgent->head->get('Cc') ? Sympa::Tools::decode_header($msgent, 'Cc', ', ') : '';
+	my $from = $msgent->head()->get('From') ? Sympa::Tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
+	my $subject = $msgent->head()->get('Subject') ? Sympa::Tools::decode_header($msgent, 'Subject') : '';
+	my $date = $msgent->head()->get('Date') ? Sympa::Tools::decode_header($msgent, 'Date') : '';
+	my $to = $msgent->head()->get('To') ? Sympa::Tools::decode_header($msgent, 'To', ', ') : '';
+	my $cc = $msgent->head()->get('Cc') ? Sympa::Tools::decode_header($msgent, 'Cc', ', ') : '';
 
 	chomp $from;
 	chomp $to;
@@ -210,7 +210,7 @@ sub _do_message {
 	chomp $subject;
 	chomp $date;
 
-	my @fromline = Mail::Address->parse($msgent->head->get('From'));
+	my @fromline = Mail::Address->parse($msgent->head()->get('From'));
 	my $name;
 	if ($fromline[0]) {
 		$name = MIME::EncWords::decode_mimewords($fromline[0]->name(),
@@ -239,7 +239,7 @@ sub _do_message {
 sub _do_text_plain {
 	my ($entity) = @_;
 
-	my $thispart = $entity->bodyhandle->as_string;
+	my $thispart = $entity->bodyhandle()->as_string();
 
 	# deal with CR/LF left over - a problem from Outlook which
 	# qp encodes them
@@ -254,7 +254,7 @@ sub _do_text_plain {
 	};
 	if ($EVAL_ERROR) {
 		# mmm, what to do if it fails?
-		$outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
+		$outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string());
 		$thispart =~ s/[^\x00-\x7F]/?/g;
 	}
 
@@ -290,12 +290,12 @@ sub _do_text_html {
 
 	my $text;
 
-	unless (defined $entity->bodyhandle) {
+	unless (defined $entity->bodyhandle()) {
 		$outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
 		return undef;
 	}
 
-	my $body = $entity->bodyhandle->as_string;
+	my $body = $entity->bodyhandle()->as_string();
 
 	# deal with CR/LF left over - a problem from Outlook which
 	# qp encodes them
@@ -353,7 +353,7 @@ sub _hasTextPlain {
 sub _getCharset {
 	my ($entity) = @_;
 
-	my $charset = $entity->head->mime_attr('content-type.charset')?$entity->head->mime_attr('content-type.charset'):'us-ascii';
+	my $charset = $entity->head()->mime_attr('content-type.charset')?$entity->head()->mime_attr('content-type.charset'):'us-ascii';
 	# malformed mail with single quotes around charset?
 	if ($charset =~ /'([^']*)'/i) { $charset = $1; };
 

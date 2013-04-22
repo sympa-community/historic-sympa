@@ -135,8 +135,8 @@ sub set_cookie_extern {
 		-path    => '/'
 	);
 	## Send cookie to the client
-	printf "Set-Cookie: %s\n", $cookie->as_string;
-	#Sympa::Log::Syslog::do_log('notice',"set_cookie_extern : %s",$cookie->as_string);
+	printf "Set-Cookie: %s\n", $cookie->as_string();
+	#Sympa::Log::Syslog::do_log('notice',"set_cookie_extern : ##%s",$cookie->as_string());
 	return 1;
 }
 

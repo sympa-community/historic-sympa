@@ -3291,7 +3291,7 @@ sub distribute_msg {
 
 	Sympa::Log::Syslog::do_log('debug2', '%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
 
-	my $hdr = $message->{'msg'}->head;
+	my $hdr = $message->{'msg'}->head();
 	my ($name, $host) = ($self->{'name'}, $self->{'admin'}{'host'});
 	my $robot = $self->{'domain'};
 
@@ -3349,7 +3349,7 @@ sub distribute_msg {
 		$tag_regexp =~ s/\s+/\\s+/g; ## Takes spaces into account
 
 		## Add subject tag
-		$message->{'msg'}->head->delete('Subject');
+		$message->{'msg'}->head()->delete('Subject');
 		my $parsed_tag;
 		Sympa::Template::parse_tt2({'list' => {'name' => $self->{'name'},
 					'sequence' => $self->{'stats'}->[0]
@@ -3390,7 +3390,7 @@ sub distribute_msg {
 				[Encode::decode('utf8', '['.$parsed_tag.']'), Sympa::Language::get_charset()]
 			], Encoding=>'A', Field=>'Subject') . ' ' . $after_tag;
 	}
-	$message->{'msg'}->head->add('Subject', $subject_field);
+	$message->{'msg'}->head()->add('Subject', $subject_field);
 }
 
 ## Prepare tracking if list config allow it
@@ -3439,7 +3439,7 @@ if ($self->{'admin'}{'reply_to_header'}) {
 
 ## Add useful headers
 $hdr->add('X-Loop', "$name\@$host");
-$message->{'msg'}->head->add('X-Loop', "$name\@$host");
+$message->{'msg'}->head()->add('X-Loop', "$name\@$host");
 $hdr->add('X-Sequence', $sequence);
 $hdr->add('Errors-to', $name.Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
 $hdr->add('Precedence', 'list');
@@ -3629,13 +3629,13 @@ sub send_msg_digest {
 		## Commented because one Spam made Sympa die (MIME::tools 5.413)
 		#$mail->remove_sig;
 
-		$msg->{'full_msg'} = $mail->as_string;
-		$msg->{'body'} = $mail->body_as_string;
+		$msg->{'full_msg'} = $mail->as_string();
+		$msg->{'body'} = $mail->body_as_string();
 		$msg->{'plain_body'} = $mail->Sympa::PlainDigest::plain_body_as_string();
-		#$msg->{'body'} = $mail->bodyhandle->as_string();
+		#$msg->{'body'} = $mail->bodyhandle()->as_string();
 		chomp $msg->{'from'};
 		$msg->{'month'} = POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
-		$msg->{'message_id'} = Sympa::Tools::clean_msg_id($mail->head->get('Message-Id'));
+		$msg->{'message_id'} = Sympa::Tools::clean_msg_id($mail->head()->get('Message-Id'));
 
 		## Clean up Message-ID
 		$msg->{'message_id'} = Sympa::Tools::escape_chars($msg->{'message_id'});
@@ -4055,7 +4055,7 @@ sub send_msg {
 	my $apply_tracking = $params{'apply_tracking'};
 
 	Sympa::Log::Syslog::do_log('debug2', 'filname = %s, smime_crypted = %s,apply_dkim_signature = %s', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
-	my $hdr = $message->{'msg'}->head;
+	my $hdr = $message->{'msg'}->head();
 	my $original_message_id = $hdr->get('Message-Id');
 	my $name = $self->{'name'};
 	my $robot = $self->{'domain'};
@@ -4091,14 +4091,14 @@ sub send_msg {
 
 	# separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
 	my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp, @tabrcpt_digestplain, @tabrcpt_digest, @tabrcpt_summary, @tabrcpt_nomail, @tabrcpt_digestplain_verp, @tabrcpt_digest_verp, @tabrcpt_summary_verp, @tabrcpt_nomail_verp );
-	my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
-	my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
-	my $recip = $message->{'msg'}->head->get('X-Sympa-Receipient');
+	my $mixed = ($message->{'msg'}->head()->get('Content-Type') =~ /multipart\/mixed/i);
+	my $alternative = ($message->{'msg'}->head()->get('Content-Type') =~ /multipart\/alternative/i);
+	my $recip = $message->{'msg'}->head()->get('X-Sympa-Receipient');
 
 
 	if ($recip) {
 		@tabrcpt = split /,/, $recip;
-		$message->{'msg'}->head->delete('X-Sympa-Receipient');
+		$message->{'msg'}->head()->delete('X-Sympa-Receipient');
 
 	} else {
 
@@ -4162,8 +4162,8 @@ sub send_msg {
 				(! -r $Sympa::Configuration::Conf{'ssl_cert_dir'}.'/'.Sympa::Tools::escape_chars($user->{'email'}) &&
 					! -r $Sympa::Configuration::Conf{'ssl_cert_dir'}.'/'.Sympa::Tools::escape_chars($user->{'email'}.'@enc' ))) {
 				## Missing User certificate
-				my $subject = $message->{'msg'}->head->get('Subject');
-				my $sender = $message->{'msg'}->head->get('From');
+				my $subject = $message->{'msg'}->head()->get('Subject');
+				my $sender = $message->{'msg'}->head()->get('From');
 				unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $subject, 'sender' => $sender}, 'auto_submitted' => 'auto-generated'})) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 				}
@@ -4320,7 +4320,7 @@ sub send_msg {
 				return undef;
 			}
 
-			my $dir1 = Sympa::Tools::clean_msg_id($url_msg->head->get('Message-ID'));
+			my $dir1 = Sympa::Tools::clean_msg_id($url_msg->head()->get('Message-ID'));
 
 			## Clean up Message-ID
 			$dir1 = Sympa::Tools::escape_chars($dir1);
@@ -4531,7 +4531,7 @@ sub send_to_editor {
 	}
 	@rcpt = $self->get_editors_email();
 
-	my $hdr = $message->{'msg'}->head;
+	my $hdr = $message->{'msg'}->head();
 
 	## Did we find a recipient?
 	if ($#rcpt < 0) {
@@ -4853,7 +4853,7 @@ sub archive_send_last {
 	$msg->{'from'} = Sympa::Tools::decode_header($mail, 'From');
 	$msg->{'date'} = Sympa::Tools::decode_header($mail, 'Date');
 
-	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
+	$msg->{'full_msg'} = $mail->{'msg'}->as_string();
 
 	push @msglist,$msg;
 
@@ -5450,7 +5450,7 @@ sub add_parts {
 		if (length $header_msg or length $footer_msg) {
 			if (_append_parts($msg, $header_msg, $footer_msg)) {
 				$msg->sync_headers(Length => 'COMPUTE')
-				if $msg->head->get('Content-Length');
+				if $msg->head()->get('Content-Length');
 			}
 		}
 	} else {
@@ -5528,11 +5528,11 @@ sub _append_parts {
 
 	if ($eff_type eq 'text/plain') {
 		my $cset = MIME::Charset->new('UTF-8');
-		$cset->encoder($part->head->mime_attr('Content-Type.Charset')||'NONE');
+		$cset->encoder($part->head()->mime_attr('Content-Type.Charset')||'NONE');
 
 		my $body;
-		if (defined $part->bodyhandle) {
-			$body = $part->bodyhandle->as_string;
+		if (defined $part->bodyhandle()) {
+			$body = $part->bodyhandle()->as_string();
 		} else {
 			$body = '';
 		}
@@ -5558,7 +5558,7 @@ sub _append_parts {
 			$body .= "\n"
 			if length $footer_msg and length $body and $body !~ /\n$/;
 
-			my $io = $part->bodyhandle->open('w');
+			my $io = $part->bodyhandle()->open('w');
 			unless (defined $io) {
 				Sympa::Log::Syslog::do_log('err', "Failed to save message : $ERRNO");
 				return undef;
@@ -5568,7 +5568,7 @@ sub _append_parts {
 			$io->print($footer_msg);
 			$io->close;
 			$part->sync_headers(Length => 'COMPUTE')
-			if $part->head->get('Content-Length');
+			if $part->head()->get('Content-Length');
 		}
 		return 1;
 	} elsif ($eff_type eq 'multipart/mixed') {
@@ -7090,7 +7090,7 @@ sub get_total_bouncing {
 		return undef;
 	}
 
-	my $total =  $sth->fetchrow;
+	my $total =  $sth->fetchrow();
 
 	$sth->finish();
 
@@ -7151,7 +7151,7 @@ sub is_list_member {
 		return undef;
 	}
 
-	my $is_user = $sth->fetchrow;
+	my $is_user = $sth->fetchrow();
 
 	$sth->finish();
 
@@ -8215,9 +8215,12 @@ sub archive_msg {
 		my $string =
 			$message->{'smime_crypted'} eq 'smime_crypted' &&
 			$self->{admin}{archive_crypted_msg} eq 'original' ?
-				$message->{'orig_msg'}->as_string : $message->{'msg_as_string'};
+				$message->{'orig_msg'}->as_string() : $message->{'msg_as_string'};
 
-		if (($Sympa::Configuration::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
+		if
+		(($Sympa::Configuration::Conf{'ignore_x_no_archive_header_feature'}
+				ne 'on') &&
+			(($message->{'msg'}->head()->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head()->get('Restrict') =~ /no\-external\-archive/i))) {
 			## ignoring message with a no-archive flag
 			Sympa::Log::Syslog::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 		} else {
@@ -10610,7 +10613,7 @@ sub _load_total_db {
 		return undef;
 	}
 
-	my $total = $sth->fetchrow;
+	my $total = $sth->fetchrow();
 
 	$sth->finish();
 
@@ -10959,7 +10962,7 @@ sub get_netidtoemail_db {
 		return undef;
 	}
 
-	$email = $sth->fetchrow;
+	$email = $sth->fetchrow();
 
 	$sth->finish();
 
@@ -12140,7 +12143,7 @@ sub is_msg_topic_tagging_required {
 ####################################################
 sub automatic_tag {
 	my ($self,$msg,$robot) = @_;
-	my $msg_id = $msg->head->get('Message-ID');
+	my $msg_id = $msg->head()->get('Message-ID');
 	chomp($msg_id);
 	Sympa::Log::Syslog::do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg_id);
 
@@ -12176,7 +12179,7 @@ sub automatic_tag {
 ####################################################
 sub compute_topic {
 	my ($self,$msg,$robot) = @_;
-	my $msg_id = $msg->head->get('Message-ID');
+	my $msg_id = $msg->head()->get('Message-ID');
 	chomp($msg_id);
 	Sympa::Log::Syslog::do_log('debug3','compute_topic(%s,%s)',$self->{'name'},$msg_id);
 	my @topic_array;
@@ -12186,7 +12189,7 @@ sub compute_topic {
 
 	## TAGGING INHERITED BY THREAD
 	# getting reply-to
-	my $reply_to = $msg->head->get('In-Reply-To');
+	my $reply_to = $msg->head()->get('In-Reply-To');
 	my $info_msg_reply_to = $self->load_msg_topic($reply_to,$robot);
 
 	# is msg reply to already tagged?
@@ -12221,10 +12224,10 @@ sub compute_topic {
 		}
 		foreach my $part (@parts) {
 			next unless $part->effective_type =~ /^text\//i;
-			my $charset = $part->head->mime_attr("Content-Type.Charset");
+			my $charset = $part->head()->mime_attr("Content-Type.Charset");
 			$charset = MIME::Charset->new($charset);
-			if (defined $part->bodyhandle) {
-				my $body = $part->bodyhandle->as_string();
+			if (defined $part->bodyhandle()) {
+				my $body = $part->bodyhandle()->as_string();
 				my $converted;
 				eval {
 					$converted = $charset->decode($body);
@@ -12492,8 +12495,8 @@ sub _urlize_part {
 	my $expl = $list->{'dir'}.'/urlized';
 	my $robot = $list->{'domain'};
 	my $listname = $list->{'name'};
-	my $head = $message->head ;
-	my $encoding = $head->mime_encoding ;
+	my $head = $message->head();
+	my $encoding = $head->mime_encoding();
 
 	##  name of the linked file
 	my $fileExt = $mime_types->{$head->mime_type};
@@ -12508,7 +12511,7 @@ sub _urlize_part {
 		if ($head->mime_type =~ /multipart\//i) {
 			my $content_type = $head->get('Content-Type');
 			$content_type =~ s/multipart\/[^;]+/multipart\/mixed/g;
-			$message->head->replace('Content-Type', $content_type);
+			$message->head()->replace('Content-Type', $content_type);
 			my @parts = $message->parts();
 			foreach my $i (0..$#parts) {
 				my $entity = _urlize_part ($message->parts ($i), $list, $dir, $i, $mime_types,  Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url')) ;
