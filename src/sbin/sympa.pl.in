@@ -1220,8 +1220,7 @@ my $index_queuedigest = 0; # verify the digest queue
 my $index_cleanqueue = 0;
 my @qfile;
 
-my $spoolname = 'msg';
-my $spool = Sympa::Spool->new(name => $spoolname);
+my $spool = Sympa::Spool->new(name => 'msg');
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
