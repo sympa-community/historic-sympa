@@ -91,7 +91,22 @@ my $wwsconf = {};
 my $conf_file = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 
-
+my @spools = qw(
+	auth
+	bounce
+	digest
+	bulk
+	expire
+	mod
+	msg
+	archive
+	automatic
+	subscribe
+	topic
+	validated
+	task
+);
+my %spools = map { $_ => 1 } @spools;
 
 
 my $loop = 0;
@@ -16465,6 +16480,12 @@ sub do_viewspools {
 	my $spool_status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $spool_status;
 
+	unless ($spools{spoolname}) {
+		Sympa::Report::reject_report_web('intern','unkown spool');
+		wwslog('info','do_viewspools: unkown spool');
+		return undef;
+	}
+
 	wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$spool_status);
 
 	unless (Sympa::List::is_listmaster($param->{'user'}{'email'},$robot)) {
@@ -16487,16 +16508,10 @@ sub do_viewspools {
 	}
 	$param->{'spool_page_size'} = $spool_page_size;
 
-
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
 		status => $spool_status
 	);
-	unless ($spool) {
-		Sympa::Report::reject_report_web('intern','unkown spool');
-		wwslog('info','do_viewspools: unkown spool');
-		return undef;
-	}
 
 	$param->{'total'} = $spool->count;
 
@@ -16557,6 +16572,12 @@ sub do_viewspool_message {
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
 
+	unless ($spools{$spoolname}) {
+		Sympa::Report::reject_report_web('intern','unkown spool');
+		wwslog('info','do_viewspools: unkown spool');
+		return undef;
+	}
+
 	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
@@ -16566,11 +16587,6 @@ sub do_viewspool_message {
 		name   => $spoolname,
 		status => $status
 	);
-	unless ($spool) {
-		Sympa::Report::reject_report_web('intern','unkown spool');
-		wwslog('info','do_viewspools: unkown spool');
-		return undef;
-	}
 	my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
 
 	unless ($#messages == 0){
@@ -16642,6 +16658,12 @@ sub do_viewspool_message_dump {
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
 
+	unless ($spools{spoolname}) {
+		Sympa::Report::reject_report_web('intern','unkown spool');
+		wwslog('info','do_viewspools: unkown spool');
+		return undef;
+	}
+
 	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
@@ -16657,11 +16679,6 @@ sub do_viewspool_message_dump {
 		spoolname        => $spoolname,
 		selection_status => $status
 	);
-	unless ($spool) {
-		Sympa::Report::reject_report_web('intern','unkown spool');
-		wwslog('info','do_viewspools: unkown spool');
-		return undef;
-	}
 	my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
 
 	unless ($#messages == 0){
@@ -16695,6 +16712,12 @@ sub do_viewspool_message_remove {
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
 
+	unless ($spools{spoolname}) {
+		Sympa::Report::reject_report_web('intern','unkown spool');
+		wwslog('info','do_viewspools: unkown spool');
+		return undef;
+	}
+
 	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
@@ -16709,11 +16732,6 @@ sub do_viewspool_message_remove {
 		spoolname        => $spoolname,
 		selection_status => $status
 	);
-	unless ($spool) {
-		Sympa::Report::reject_report_web('intern','unkown spool');
-		wwslog('info','do_viewspools: unkown spool');
-		return undef;
-	}
 	unless ($spool->remove_message({'messagekey'=>$messagekey})){
 		Sympa::Report::reject_report_web('intern','could not remove message');
 		wwslog('info','do_viewspool_message_remove : could not remove message');
@@ -16735,10 +16753,22 @@ sub do_viewspool_message_mv {
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
 
+	unless ($spools{$spoolname}) {
+		Sympa::Report::reject_report_web('intern','unknown spool');
+		wwslog('info','do_viewspool_message_mv: unknown spool %s', $spoolname);
+		return undef;
+	}
+
 	my $status = $in{'status'} || 'ok';
 
 	my $newspool = $in{'new_spoolname'};
 	$newspool = $spoolname unless ($spoolname);
+
+	unless ($spools{$newspool}) {
+		Sympa::Report::reject_report_web('user','unknown spool');
+		wwslog('info','do_viewspool_message_mv : unknown spool %s', $newspool);
+		return;
+	}
 
 	my $newstatus = $in{'new_status'} || 'ok';
 
@@ -16760,22 +16790,11 @@ sub do_viewspool_message_mv {
 		spoolname        => $spoolname,
 		selection_status => $status
 	);
-	unless ($spool) {
-		Sympa::Report::reject_report_web('intern','unkown spool');
-		wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
-		return undef;
-	}
 
 	my $newspool = Sympa::Spool->new(
 		spoolname        => $newspool,
 		selection_status => $newstatus
 	);
-	unless ($newspool) {
-		Sympa::Report::reject_report_web('user','unkopwn spool');
-		wwslog('info','do_viewspool_message_mv : could not move message to unkown spool %s,%s',$newspool,$newstatus);
-		return;
-	}
-
 
 	unless ($spool->update({'messagekey'=>$messagekey},{'message_status'=>$newstatus,'spoolname'=>$newspool})){
 		Sympa::Report::reject_report_web('intern','could not move message to spool');

@@ -78,11 +78,6 @@ sub new {
 		$params{status} ne 'bad' &&
 		$params{status} ne 'ok';
 
-	unless ($params{name} =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
-		Sympa::Log::Syslog::do_log('err','internal error unknown spool %s',$params{name});
-		return undef;
-	}
-
 	my $self = {
 		spoolname        => $params{name},
 		selection_status => $params{status}
