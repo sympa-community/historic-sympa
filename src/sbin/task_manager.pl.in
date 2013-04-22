@@ -583,46 +583,46 @@ sub check {
 
 	if ( $result{'nature'} eq 'assignment' ) {
 		if (chk_cmd ($result{'command'}, $lnb, $result{'Rarguments'}, \%used_labels, \%used_vars)) {
-	$vars{$result{'var'}} = 1;
-} else {
-	return undef;}
+			$vars{$result{'var'}} = 1;
+		} else {
+			return undef;}
+		}
+
+		if ( $result{'nature'} eq 'command' ) {
+			return undef unless (chk_cmd ($result{'command'}, $lnb, $result{'Rarguments'}, \%used_labels, \%used_vars));
+		}
+
+		$labels{$result{'label'}} = 1 if ( $result{'nature'} eq 'label' );
+
 	}
 
-	if ( $result{'nature'} eq 'command' ) {
-		return undef unless (chk_cmd ($result{'command'}, $lnb, $result{'Rarguments'}, \%used_labels, \%used_vars));
+	# are all labels used ?
+	foreach my $label (keys %labels) {
+		Sympa::Log::Syslog::do_log ('debug3', "warning : label $label exists but is not used") unless ($used_labels{$label});
 	}
 
-	$labels{$result{'label'}} = 1 if ( $result{'nature'} eq 'label' );
-
-}
-
-# are all labels used ?
-foreach my $label (keys %labels) {
-	Sympa::Log::Syslog::do_log ('debug3', "warning : label $label exists but is not used") unless ($used_labels{$label});
-}
-
-# do all used labels exist ?
-foreach my $label (keys %used_labels) {
-	unless ($labels{$label}) {
-		Sympa::Log::Syslog::do_log ('err', "error : label $label is used but does not exist");
-		return undef;
+	# do all used labels exist ?
+	foreach my $label (keys %used_labels) {
+		unless ($labels{$label}) {
+			Sympa::Log::Syslog::do_log ('err', "error : label $label is used but does not exist");
+			return undef;
+		}
 	}
-}
 
-# are all variables used ?
-foreach my $var (keys %vars) {
-	Sympa::Log::Syslog::do_log ('notice', "warning : var $var exists but is not used") unless ($used_vars{$var});
-}
-
-# do all used variables exist ?
-foreach my $var (keys %used_vars) {
-	unless ($vars{$var}) {
-		Sympa::Log::Syslog::do_log ('err', "error : var $var is used but does not exist");
-		return undef;
+	# are all variables used ?
+	foreach my $var (keys %vars) {
+		Sympa::Log::Syslog::do_log ('notice', "warning : var $var exists but is not used") unless ($used_vars{$var});
 	}
-}
 
-return 1;
+	# do all used variables exist ?
+	foreach my $var (keys %used_vars) {
+		unless ($vars{$var}) {
+			Sympa::Log::Syslog::do_log ('err', "error : var $var is used but does not exist");
+			return undef;
+		}
+	}
+
+	return 1;
 }
 
 # check a task line
@@ -682,29 +682,29 @@ sub chk_line {
 
 		# arguments recovery. no checking of their syntax !!!
 		$Rhash->{'Rarguments'} = \@args;
-	return 1;
-}
+		return 1;
+	}
 
-# assignment
-if ($line =~ /^\s*(@\w+)\s*=\s*(.+)/) {
+	# assignment
+	if ($line =~ /^\s*(@\w+)\s*=\s*(.+)/) {
 
-	my %hash2;
-	chk_line ($2, \%hash2);
-unless ( $asgn_commands{$hash2{'command'}} ) {
+		my %hash2;
+		chk_line ($2, \%hash2);
+		unless ( $asgn_commands{$hash2{'command'}} ) {
+			$Rhash->{'nature'} = 'error';
+			$Rhash->{'error'} = "non valid assignment $2";
+			return 0;
+		}
+		$Rhash->{'nature'} = 'assignment';
+		$Rhash->{'var'} = $1;
+		$Rhash->{'command'} = $hash2{'command'};
+		$Rhash->{'Rarguments'} = $hash2{'Rarguments'};
+		return 1;
+	}
+
 	$Rhash->{'nature'} = 'error';
-	$Rhash->{'error'} = "non valid assignment $2";
+	$Rhash->{'error'} = 'syntax error';
 	return 0;
-}
-$Rhash->{'nature'} = 'assignment';
-$Rhash->{'var'} = $1;
-$Rhash->{'command'} = $hash2{'command'};
-$Rhash->{'Rarguments'} = $hash2{'Rarguments'};
-return 1;
-    }
-
-    $Rhash->{'nature'} = 'error';
-    $Rhash->{'error'} = 'syntax error';
-    return 0;
 }
 
 # check the arguments of a command
@@ -792,41 +792,42 @@ sub execute {
 		$lnb++;
 		unless ($labelfound ) {
 			chk_line ($line, \%result);
-		if ($result{'label'} eq $label) {
-			$labelfound = 1;
-		} else {
-			next;
+			if ($result{'label'} eq $label) {
+				$labelfound = 1;
+			} else {
+				next;
+			}
+		}
+		unless ( chk_line ($line, \%result) ) {
+			Sympa::Log::Syslog::do_log ('err', "error : $result{'error'}");
+			return undef;
+		}
+
+		# processing of the assignments
+		if ($result{'nature'} eq 'assignment') {
+			$status = $vars{$result{'var'}} = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
+		last unless defined($status);
+			}
+
+			# processing of the commands
+			if ($result{'nature'} eq 'command') {
+				$status = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
+			last unless (defined($status) && $status >= 0);
 		}
 	}
-	unless ( chk_line ($line, \%result) ) {
-	Sympa::Log::Syslog::do_log ('err', "error : $result{'error'}");
-	return undef;
-}
 
-# processing of the assignments
-if ($result{'nature'} eq 'assignment') {
-	$status = $vars{$result{'var'}} = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
-last unless defined($status);
+	unless (defined $status) {
+		Sympa::Log::Syslog::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+		$task->remove;
+		return undef;
 	}
 
-	# processing of the commands
-	if ($result{'nature'} eq 'command') {
-		$status = cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
-	last unless (defined($status) && $status >= 0);
-}
-    }
+	unless ($status >= 0) {
+		Sympa::Log::Syslog::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
+		$task->remove;
+	}
 
-    unless (defined $status) {
-	Sympa::Log::Syslog::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-	$task->remove;
-	return undef;
-    }
-    unless ($status >= 0) {
-	Sympa::Log::Syslog::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-	$task->remove;
-    }
-
-    return 1;
+	return 1;
 }
 
 
@@ -849,31 +850,31 @@ sub cmd_process {
 
 	# regular commands
 	return stop ($task, \%context) if ($command eq 'stop');
-return next_cmd ($task, $Rarguments, \%context) if ($command eq 'next');
-    return create_cmd ($task, $Rarguments, \%context) if ($command eq 'create');
-    return exec_cmd ($task, $Rarguments) if ($command eq 'exec');
-    return update_crl ($task, $Rarguments, \%context) if ($command eq 'update_crl');
-    return expire_bounce ($task, $Rarguments, \%context) if ($command eq 'expire_bounce');
-    return purge_user_table ($task, \%context) if ($command eq 'purge_user_table');
-    return purge_logs_table ($task, \%context) if ($command eq 'purge_logs_table');
-    return purge_session_table ($task, \%context) if ($command eq 'purge_session_table');
-    return purge_tables ($task, \%context) if ($command eq 'purge_tables');
-    return purge_one_time_ticket_table ($task, \%context) if ($command eq 'purge_one_time_ticket_table');
-    return sync_include($task, \%context) if ($command eq 'sync_include');
-    return purge_orphan_bounces ($task, \%context) if ($command eq 'purge_orphan_bounces');
-    return eval_bouncers ($task, \%context) if ($command eq 'eval_bouncers');
-    return process_bouncers ($task, \%context) if ($command eq 'process_bouncers');
+	return next_cmd ($task, $Rarguments, \%context) if ($command eq 'next');
+	return create_cmd ($task, $Rarguments, \%context) if ($command eq 'create');
+	return exec_cmd ($task, $Rarguments) if ($command eq 'exec');
+	return update_crl ($task, $Rarguments, \%context) if ($command eq 'update_crl');
+	return expire_bounce ($task, $Rarguments, \%context) if ($command eq 'expire_bounce');
+	return purge_user_table ($task, \%context) if ($command eq 'purge_user_table');
+	return purge_logs_table ($task, \%context) if ($command eq 'purge_logs_table');
+	return purge_session_table ($task, \%context) if ($command eq 'purge_session_table');
+	return purge_tables ($task, \%context) if ($command eq 'purge_tables');
+	return purge_one_time_ticket_table ($task, \%context) if ($command eq 'purge_one_time_ticket_table');
+	return sync_include($task, \%context) if ($command eq 'sync_include');
+	return purge_orphan_bounces ($task, \%context) if ($command eq 'purge_orphan_bounces');
+	return eval_bouncers ($task, \%context) if ($command eq 'eval_bouncers');
+	return process_bouncers ($task, \%context) if ($command eq 'process_bouncers');
 
-     # commands which use a variable
-     return send_msg ($task, $Rarguments, $Rvars, \%context) if ($command eq 'send_msg');
-    return rm_file ($task, $Rarguments, $Rvars, \%context) if ($command eq 'rm_file');
+	# commands which use a variable
+	return send_msg ($task, $Rarguments, $Rvars, \%context) if ($command eq 'send_msg');
+	return rm_file ($task, $Rarguments, $Rvars, \%context) if ($command eq 'rm_file');
 
-     # commands which return a variable
-     return select_subs ($task, $Rarguments, \%context) if ($command eq 'select_subs');
-    return chk_cert_expiration ($task, $Rarguments, \%context) if ($command eq 'chk_cert_expiration');
+	# commands which return a variable
+	return select_subs ($task, $Rarguments, \%context) if ($command eq 'select_subs');
+	return chk_cert_expiration ($task, $Rarguments, \%context) if ($command eq 'chk_cert_expiration');
 
-     # commands which return and use a variable
-     return delete_subs_cmd ($task, $Rarguments, $Rvars, \%context) if ($command eq 'delete_subs');
+	# commands which return and use a variable
+	return delete_subs_cmd ($task, $Rarguments, $Rvars, \%context) if ($command eq 'delete_subs');
 }
 
 
@@ -997,20 +998,20 @@ sub next_cmd {
 	}
 
 	unless (create ($date, $tab[1], $model, $model_choice, \%data)) {
-	error ($task->{'messagekey'}, "error in create command : creation subroutine failure");
-	return undef;
-}
+		error ($task->{'messagekey'}, "error in create command : creation subroutine failure");
+		return undef;
+	}
 
-my $human_date = Sympa::Tools::Time::adate ($date);
+	my $human_date = Sympa::Tools::Time::adate ($date);
 
-unless ($task->remove) {
-	error ($task->{'messagekey'}, "error in next command : unable to remove task");
-	return undef;
-}
+	unless ($task->remove) {
+		error ($task->{'messagekey'}, "error in next command : unable to remove task");
+		return undef;
+	}
 
-Sympa::Log::Syslog::do_log ('notice', "--> new task $model ($human_date)");
+	Sympa::Log::Syslog::do_log ('notice', "--> new task $model ($human_date)");
 
-return 0;
+	return 0;
 }
 
 sub select_subs {
@@ -1124,11 +1125,11 @@ sub create_cmd {
 	}
 	$type = '_global';
 	unless (create ($task->{'date'}, '', $model, $model_choice, \%data)) {
-	error ($task->{'messagekey'}, "error in create command : creation subroutine failure");
-	return undef;
-}
+		error ($task->{'messagekey'}, "error in create command : creation subroutine failure");
+		return undef;
+	}
 
-return 1;
+	return 1;
 }
 
 sub exec_cmd {
