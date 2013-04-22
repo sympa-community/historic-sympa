@@ -219,7 +219,7 @@ sub next {
 	return undef unless ($sth->rows); # spool is empty
 
 	my $star_select = _selectfields();
-	my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,Sympa::SDM::quote($self->name}),Sympa::SDM::quote($self->{status}),Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch);
+	my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($self->{status}),Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch);
 
 	$sth = Sympa::SDM::do_query($statement);
 	my $message = $sth->fetchrow_hashref('NAME_lc');
