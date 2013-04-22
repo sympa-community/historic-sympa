@@ -428,10 +428,8 @@ sub store {
 	my $parser = MIME::Parser->new();
 	$parser->output_to_core(1);
 
-	my $msg = $message->{'msg'}->as_string;
-	if ($message->{'protected'}) {
-		$msg = $message->{'msg_as_string'};
-	}
+	my $string = $message->{'protected'} ?
+		$message->{'msg_as_string'} : $message->{'msg'}->as_string;
 
 	my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
 	my $message_sender = $sender_hdr[0]->address;
@@ -449,11 +447,11 @@ sub store {
 		my $lock = $PID.'@'.hostname() ;
 		if ($message->{'messagekey'}) {
 			# move message to spool bulk and keep it locked
-			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
+			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $string});
 			Sympa::Log::Syslog::do_log('debug',"moved message to spool bulk");
 		} else {
 			$message->{'messagekey'} = $bulkspool->store(
-				message  => $msg,
+				string   => $string,
 				metadata => {
 					dkim_d           => $dkim->{d},
 					dkim_i           => $dkim->{i},
@@ -477,7 +475,7 @@ sub store {
 					robot     => $robot,
 					list      => $listname,
 					operation => 'send_mail',
-					parameter => length($msg),
+					parameter => length($string),
 					mail      => $message_sender,
 					daemon    => 'sympa.pl'
 				);

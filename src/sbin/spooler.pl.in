@@ -427,7 +427,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				my $message = Sympa::Message->new(file => $spooldir.'/'.$filename);
 
 				my $messagekey = $spool->store(
-					message  => $message->{'msg_as_string'},
+					message  => $message,
 					metadata => \%meta
 				);
 			unless($messagekey) {

@@ -8212,11 +8212,10 @@ sub archive_msg {
 
 	if ($self->is_archived()){
 
-		my $msgtostore = $message->{'msg_as_string'};
-		if (($message->{'smime_crypted'} eq 'smime_crypted') && ($self->{admin}{archive_crypted_msg} eq 'original')) {
-			$msgtostore = $message->{'orig_msg'}->as_string;
-		}
-#	Sympa::Archive::store_last($self, $msgtostore) ;
+		my $string =
+			$message->{'smime_crypted'} eq 'smime_crypted' &&
+			$self->{admin}{archive_crypted_msg} eq 'original' ?
+				$message->{'orig_msg'}->as_string : $message->{'msg_as_string'};
 
 		if (($Sympa::Configuration::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
 			## ignoring message with a no-archive flag
@@ -8228,7 +8227,7 @@ sub archive_msg {
 				return undef;
 			}
 			my $result = $spoolarchive->store(
-				message  => $msgtostore,
+				string   => $string,
 				metadata => {
 					robot => $self->{robot},
 					list  => $self->{name}
@@ -10686,28 +10685,28 @@ sub store_digest {
 
 	my $digestspool = Sympa::Spool->new(name => 'digest');
 	my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
-	my $message_as_string;
+	my $string;
 
 	if($current_digest) {
-		$message_as_string = $current_digest->{'messageasstring'};
+		$string = $current_digest->{'messageasstring'};
 	} else {
-		$message_as_string =  sprintf "\nThis digest for list has been created on %s\n\n", POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
-		$message_as_string .= sprintf "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
-		$message_as_string .= sprintf "\n%s\n\n", Sympa::Tools::get_separator();
+		$string =  sprintf "\nThis digest for list has been created on %s\n\n", POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
+		$string .= sprintf "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
+		$string .= sprintf "\n%s\n\n", Sympa::Tools::get_separator();
 	}
-	$message_as_string .= $message->{'msg_as_string'} ;
-	$message_as_string .= sprintf "\n%s\n\n", Sympa::Tools::get_separator();
+	$string .= $message->{'msg_as_string'} ;
+	$string .= sprintf "\n%s\n\n", Sympa::Tools::get_separator();
 
 	# update and unlock current digest message or create it
 	if ($current_digest) {
 		# update does not modify the date field, this is needed in order to send digest when needed.
-		unless ($digestspool->update({'messagekey'=>$current_digest->{'messagekey'}},{'message'=>$message_as_string,'messagelock'=>'NULL'})){
+		unless ($digestspool->update({'messagekey'=>$current_digest->{'messagekey'}},{'message'=>$string,'messagelock'=>'NULL'})){
 			Sympa::Log::Syslog::do_log('err',"could not update digest adding this message (digest spool entry key %s)",$current_digest->{'messagekey'});
 			return undef;
 		}
 	} else {
 		my $result = $digestspool->store(
-			message  => $message_as_string,
+			string   => $string,
 			metadata => {
 				list  => $self->{name},
 				robot => $self->{robot}
@@ -12286,7 +12285,7 @@ sub tag_topic {
 	my $topicspool = Sympa::Spool->new(name => 'topic');
 
 	return $topicspool->store(
-		message  => $topic_item,
+		string   => $topic_item,
 		metadata => {
 			list      => $self->{'name'},
 			robot     => $self->{'domain'},
@@ -12611,7 +12610,7 @@ sub store_subscription_request {
 	} else {
 		my $subrequest = sprintf "$gecos||$custom_attr\n";
 		$subscription_request_spool->store(
-			message  => $subrequest,
+			string   => $subrequest,
 			metadata => {
 				list   => $self->{name},
 				robot  => $self->{robot},

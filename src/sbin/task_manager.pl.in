@@ -516,15 +516,15 @@ sub create {
 	Sympa::Log::Syslog::do_log ('notice', "create task with with tt2 template $model_file");
 
 	## creation
-	my $task_as_string = '';
+	my $string = '';
 	my $tt2 = Template->new({'START_TAG' => quotemeta('['),'END_TAG' => quotemeta(']'), 'ABSOLUTE' => 1});
 
-	unless (defined $tt2 && $tt2->process($model_file, $Rdata, \$task_as_string)) {
+	unless (defined $tt2 && $tt2->process($model_file, $Rdata, \$string)) {
 		Sympa::Log::Syslog::do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
 	}
 
-	if  (!check ($task_as_string)) {
-		Sympa::Log::Syslog::do_log ('err', "error : syntax error in $task_as_string, you should check $model_file");
+	if  (!check ($string)) {
+		Sympa::Log::Syslog::do_log ('err', "error : syntax error in $string, you should check $model_file");
 		Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request") ;
 		return undef;
 	}
@@ -545,7 +545,7 @@ sub create {
 
 	Sympa::Log::Syslog::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
 	$spool->store(
-		message  => $task_as_string,
+		string   => $string,
 		metadata => \%meta
 	);
 	return 1;

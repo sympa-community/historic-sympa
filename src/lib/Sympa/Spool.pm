@@ -396,7 +396,11 @@ Parameters:
 
 =over
 
-=item C<message> => string
+=item C<string> => string
+
+FIXME.
+
+=item C<message> => L<Sympa::Message>
 
 FIXME.
 
@@ -421,11 +425,12 @@ sub store {
 
 	Sympa::Log::Syslog::do_log('debug',"($self->{name},$self->{status}, <message_asstring> ,list : $params{metadata}->{'list'},robot : $params{metadata}->{'robot'} , date: $params{metadata}->{'date'}), lock : $params{locked}");
 
-	my $b64msg = MIME::Base64::encode($params{message});
-	my $message;
-	if ($self->{name} ne 'task') {
-		$message = Sympa::Message->new(string => $params{message});
-	}
+	my $message = $params{message} ?
+		$params{message} :
+		Sympa::Message->new(string => $params{string});
+	my $string  = $params{message} ?
+		$params{message}->{'msg_as_string'} :
+		MIME::Base64::encode($params{string});
 
 	if($message) {
 		$params{metadata}->{'spam_status'} = $message->{'spam_status'};
@@ -463,7 +468,7 @@ sub store {
 		$insertpart1,
 		Sympa::SDM::quote($self->{name}),
 		Sympa::SDM::quote($lock),
-		Sympa::SDM::quote($b64msg),
+		Sympa::SDM::quote($string),
 		$insertpart2;
 
 	my $sth = Sympa::SDM::do_query ($statement);

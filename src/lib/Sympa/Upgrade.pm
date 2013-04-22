@@ -921,14 +921,14 @@ sub upgrade {
 					Sympa::Log::Syslog::do_log('err', 'Cannot open message file %s : %s',  $filename, $ERRNO);
 					return undef;
 				}
-				my $messageasstring;
+				my $string;
 				while (<FILE>){
-					$messageasstring = $messageasstring.$_;
+					$string = $string.$_;
 				}
 				close(FILE);
 
 				my $messagekey = $spool->store(
-					message  => $messageasstring,
+					string   => $string,
 					metadata => \%meta
 				);
 				unless($messagekey) {
