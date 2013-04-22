@@ -142,16 +142,16 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	my $config_file = $options{'config'} || Sympa::Constants::CONFIG;
 
-## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
+	## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
 	unless (Sympa::Configuration::load($config_file,1)) {
 		fatal_err("Configuration file $config_file has errors.");
 	}
 
 
-## Open the syslog and say we're read out stuff.
+	## Open the syslog and say we're read out stuff.
 	Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
 
-# setting log_level using conf unless it is set by calling option
+	# setting log_level using conf unless it is set by calling option
 	if ($options{'log_level'}) {
 		Sympa::Log::Syslog::set_log_level($options{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
@@ -160,36 +160,36 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
 	}
 
-## Probe Db if defined
+	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
 		unless (Sympa::SDM::probe_db()) {
 			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
 		}
 	}
 
-## Now trying to load full config (including database)
+	## Now trying to load full config (including database)
 	unless (Sympa::Configuration::load($config_file)) {
 		Sympa::Log::Syslog::fatal_err("Configuration file $config_file has errors.");
 
 	}
 
-## Apply defaults to %Sympa::List::pinfo
+	## Apply defaults to %Sympa::List::pinfo
 	Sympa::List::_apply_defaults();
 
 
-## Main program
+	## Main program
 	if (!chdir($Sympa::Configuration::Conf{'home'})) {
 		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", $Sympa::Configuration::Conf{'home'});
 		## Function never returns.
 	}
 
-## Check for several files.
+	## Check for several files.
 	unless (Sympa::Configuration::checkfiles_as_root()) {
 		Sympa::Log::Syslog::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
 		## No return.
 	}
 
-## Check that the data structure is uptodate
+	## Check that the data structure is uptodate
 	unless ($options{'upgrade'} || $options{'help'}) {
 		unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
 			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
@@ -283,8 +283,8 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			$signal = '0';
 		}
 
-## Check for several files.
-## Prevent that 2 processes perform checks at the same time...
+		## Check for several files.
+		## Prevent that 2 processes perform checks at the same time...
 		if ($main::daemon_usage == Sympa::Configuration::DAEMON_ALL) {
 			unless (Sympa::Configuration::checkfiles()) {
 				Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
@@ -294,7 +294,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			sleep 1; ## wait until main process has created required directories
 		}
 
-## Do we have right access in the directory
+		## Do we have right access in the directory
 		if ($options{'keepcopy'}) {
 			if (! -d $options{'keepcopy'}) {
 				Sympa::Log::Syslog::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $options{'keepcopy'});
@@ -305,7 +305,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			}
 		}
 
-## Catch SIGTERM, in order to exit cleanly, whenever possible.
+		## Catch SIGTERM, in order to exit cleanly, whenever possible.
 		$SIG{'TERM'} = 'sigterm';
 		$SIG{'HUP'} = 'sighup';
 		$SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
@@ -315,8 +315,8 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		my $msgspool = Sympa::Spool->new(name => 'msg');
 		my $bouncespool = Sympa::Spool->new(name => 'bounce');
 
-## This is the main loop : look for files in the directory, handles
-## them, sleeps a while and continues the good job.
+		## This is the main loop : look for files in the directory, handles
+		## them, sleeps a while and continues the good job.
 		while (!$signal) {
 
 			if (!opendir(DIR, $spooldir)) {
@@ -430,43 +430,43 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 					message  => $message,
 					metadata => \%meta
 				);
-			unless($messagekey) {
-				Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
-				next;
-			}
+				unless($messagekey) {
+					Sympa::Log::Syslog::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
+					next;
+				}
 
-			if ($options{'keepcopy'}) {
-				unless (File::Copy::copy($t_spool.'/'.$filename, $options{'keepcopy'}.'/'.$filename) ) {
-					Sympa::Log::Syslog::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $options{'keepcopy'}."/$filename", $ERRNO);
+				if ($options{'keepcopy'}) {
+					unless (File::Copy::copy($t_spool.'/'.$filename, $options{'keepcopy'}.'/'.$filename) ) {
+						Sympa::Log::Syslog::do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $options{'keepcopy'}."/$filename", $ERRNO);
+					}
+				}
+
+				## Release the lock
+				$lock->unlock();
+				unless (unlink ($spooldir.'/'.$filename)) {
+					Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+					exit;
 				}
 			}
 
-			## Release the lock
-			$lock->unlock();
-			unless (unlink ($spooldir.'/'.$filename)) {
-				Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
-				exit;
+			unless ($filename) {
+				sleep(Sympa::Configuration::get_robot_conf($robot, 'sleep'));
+				next;
 			}
 		}
 
-		unless ($filename) {
-			sleep(Sympa::Configuration::get_robot_conf($robot, 'sleep'));
-			next;
-		}
+	## Disconnect from Database
+		Sympa::SDM::db_disconnect;
+
 	}
+	Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');
+	Sympa::Tools::Daemon::remove_pid(
+		directory => Sympa::Constants::PIDDIR,
+		daemon    => $daemon_name,
+		pid       => $PID,
+	);
 
-## Disconnect from Database
-	Sympa::SDM::db_disconnect;
-
-}
-Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid(
-	directory => Sympa::Constants::PIDDIR,
-	daemon    => $daemon_name,
-	pid       => $PID,
-);
-
-exit(0);
+	exit(0);
 }
 
 # When we catch SIGTERM, just changes the value of the $signal
