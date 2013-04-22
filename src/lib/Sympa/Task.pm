@@ -116,7 +116,10 @@ FIXME
 =cut
 
 sub set_spool {
-	$taskspool = Sympa::Spool->new(name => 'task');
+	$taskspool = Sympa::Spool->new(
+		name   => 'task',
+		source => $Sympa::SDM::db_source
+	);
 }
 
 =item Sympa::Task->list_tasks()
@@ -135,7 +138,10 @@ sub list_tasks {
 	undef %task_by_model;
 
 	# fetch all task
-	my $taskspool = Sympa::Spool->new(name => 'task');
+	my $taskspool = Sympa::Spool->new(
+		name   => 'task',
+		source => $Sympa::SDM::db_source
+	);
 	my @tasks = $taskspool->get_content(selector => {});
 
 	## Create Task objects

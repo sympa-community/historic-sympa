@@ -61,6 +61,8 @@ Parameters:
 
 =item C<status> => C<bad> | C<ok>
 
+=item C<source> => L<Sympa::Datasource::SQL>
+
 =back
 
 Return:
@@ -78,9 +80,14 @@ sub new {
 		$params{status} ne 'bad' &&
 		$params{status} ne 'ok';
 
+	croak "missing source parameter" unless $params{source};
+	croak "invalid source parameter" unless
+		$params{source}->isa('Sympa::Datasource::SQL');
+
 	my $self = {
 		name   => $params{name},
-		status => $params{status}
+		status => $params{status},
+		params => $params{source}
 	};
 
 	bless $self, $class;

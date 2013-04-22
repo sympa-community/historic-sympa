@@ -45,6 +45,7 @@ use Sympa::Log::Syslog;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
+use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
@@ -2213,13 +2214,19 @@ sub _distribute {
 
 	#read the moderation queue and purge it
 
-	my $modspool = Sympa::Spool->new(name => 'mod');
+	my $modspool = Sympa::Spool->new(
+		name   => 'mod',
+		source => $Sympa::SDM::db_source
+	);
 	my $name = $list->{'name'};
 
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	unless ($message_in_spool) {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
-		my $validatedspool = Sympa::Spool->new(name => 'validated');
+		my $validatedspool = Sympa::Spool->new(
+			name   => 'validated',
+			source => $Sympa::SDM::db_source
+		);
 		$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	}
 	unless ($message_in_spool) {
@@ -2292,7 +2299,10 @@ sub _confirm {
 	$what =~ /^\s*(\S+)\s*$/;
 	my $key = $1; chomp $key;
 
-	my $spool = Sympa::Spool->new(name => 'auth');
+	my $spool = Sympa::Spool->new(
+		name   => 'auth',
+		source => $Sympa::SDM::db_source
+	);
 
 	my $messageinspool = $spool->get_message({'authkey'=>$key});
 
@@ -2458,7 +2468,10 @@ sub _reject {
 
 	my $name = "$list->{'name'}";
 
-	my $modspool = Sympa::Spool->new(name => 'mod');
+	my $modspool = Sympa::Spool->new(
+		name   => 'mod',
+		source => $Sympa::SDM::db_source
+	);
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
 	unless ($message_in_spool) {

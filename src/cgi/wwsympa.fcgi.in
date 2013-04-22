@@ -6383,7 +6383,10 @@ sub do_modindex {
 	my $doc;
 
 	my $list_name = $list->{'name'};
-	my $modspool = Sympa::Spool->new(name => 'mod');
+	my $modspool = Sympa::Spool->new(
+		name   => 'mod',
+		source => $Sympa::SDM::db_source
+	);
 	my @messages  = $modspool->get_content(
 		selector => {
 			list  => $list_name,
@@ -6826,7 +6829,10 @@ sub do_distribute {
 
 	wwslog('info', 'do_distribute(%s)', $in{'id'});
 
-	my $modspool = Sympa::Spool->new(name => 'mod');
+	my $modspool = Sympa::Spool->new(
+		name   => 'mod',
+		source => $Sympa::SDM::db_source
+	);
 	my ($msg, $file);
 
 	my $time = time();
@@ -7636,7 +7642,10 @@ sub do_remove_arc {
 		 # Removing tracking should be done by archived.
 		 Sympa::Tracking::remove_message_by_id($msgid, $in{'list'},$robot);
 	}
-	my $spoolarchive = Sympa::Spool->new(name => 'archive');
+	my $spoolarchive = Sympa::Spool->new(
+		name   => 'archive',
+		source => $Sympa::SDM::db_source
+	);
 	$spoolarchive->store(
 		message  => $removeorder,
 		metadata => {
@@ -8930,7 +8939,10 @@ sub do_resetbounce {
 sub do_rebuildarc {
 	wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
 
-	my $spoolarchive = Sympa::Spool->new(name => 'archive');
+	my $spoolarchive = Sympa::Spool->new(
+		name   => 'archive',
+		source => $Sympa::SDM::db_source
+	);
 
 	my $result = $spoolarchive->store(
 		message => 'rebuild',
@@ -8961,7 +8973,10 @@ sub do_rebuildallarc {
 	wwslog('info', 'do_rebuildallarc');
 
 	my $errors = 0;
-	my $spoolarchive = Sympa::Spool->new(name => 'archive');
+	my $spoolarchive = Sympa::Spool->new(
+		name   => 'archive',
+		source => $Sympa::SDM::db_source
+	);
 	unless ($spoolarchive) {
 		 Sympa::Report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 wwslog('err','error in  Sympa::Spool->new(archive) ');
@@ -15725,7 +15740,10 @@ sub do_request_topic {
 
 	my $listname = $list->{'name'};
 
-	my $spoolauth = Sympa::Spool->new(name => 'auth');
+	my $spoolauth = Sympa::Spool->new(
+		name   => 'auth',
+		source => $Sympa::SDM::db_source
+	);
 
 	my $authmessage = $spoolauth->get_message({'list'=> $list->{'name'},'robot'=>$robot,'authkey'=>$in{'authkey'}});
 	unless ($authmessage) {
@@ -15777,7 +15795,10 @@ sub do_tag_topic_by_sender {
 
 	my $mail ;
 
-	my $authspool = Sympa::Spool->new(name => 'auth');
+	my $authspool = Sympa::Spool->new(
+		name   => 'auth',
+		source => $Sympa::SDM::db_source
+	);
 	my $messagespool = $authspool->get_message({'list'=>$listname, 'robot' => $robot , 'authkey'=> $in{'authkey'}});
 
 	unless($messagespool){
@@ -16529,7 +16550,8 @@ sub do_viewspools {
 
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
-		status => $spool_status
+		status => $spool_status,
+		source => $Sympa::SDM::db_source
 	);
 
 	$param->{'total'} = $spool->count;
@@ -16611,7 +16633,8 @@ sub do_viewspool_message {
 
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
-		status => $status
+		status => $status,
+		source => $Sympa::SDM::db_source
 	);
 	my @messages = $spool->get_content(
 		selector  => {'messagekey'=>$messagekey},
@@ -16706,7 +16729,8 @@ sub do_viewspool_message_dump {
 
 	my $spool = Sympa::Spool->new(
 		spoolname        => $spoolname,
-		selection_status => $status
+		selection_status => $status,
+		source           => $Sympa::SDM::db_source
 	);
 	my @messages = $spool->get_content(
 		selector  => { messagekey => $messagekey},
@@ -16762,7 +16786,8 @@ sub do_viewspool_message_remove {
 
 	my $spool = Sympa::Spool->new(
 		spoolname        => $spoolname,
-		selection_status => $status
+		selection_status => $status,
+		source           => $Sympa::SDM::db_source
 	);
 	unless ($spool->remove_message({'messagekey'=>$messagekey})){
 		Sympa::Report::reject_report_web('intern','could not remove message');
@@ -16820,12 +16845,14 @@ sub do_viewspool_message_mv {
 
 	my $spool = Sympa::Spool->new(
 		spoolname        => $spoolname,
-		selection_status => $status
+		selection_status => $status,
+		source           => $Sympa::SDM::db_source
 	);
 
 	my $newspool = Sympa::Spool->new(
 		spoolname        => $newspool,
-		selection_status => $newstatus
+		selection_status => $newstatus,
+		source           => $Sympa::SDM::db_source
 	);
 
 	unless ($spool->update({'messagekey'=>$messagekey},{'message_status'=>$newstatus,'spoolname'=>$newspool})){

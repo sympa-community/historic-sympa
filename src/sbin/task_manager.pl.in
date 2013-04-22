@@ -529,7 +529,10 @@ sub create {
 		return undef;
 	}
 	# task is accetable, store it in spool
-	my $spool = Sympa::Spool->new(name => 'task');
+	my $spool = Sympa::Spool->new(
+		name   => 'task',
+		source => $Sympa::SDM::db_source
+	);
 	my %meta = (
 		task_date  => $date,
 		task_label => $label,

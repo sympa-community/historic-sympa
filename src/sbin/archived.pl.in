@@ -236,7 +236,10 @@ Sympa::Log::Syslog::do_log('notice', "archived %s Started", Sympa::Constants::VE
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spoolarchive = Sympa::Spool->new(name => 'archive');
+my $spoolarchive = Sympa::Spool->new(
+	name   => 'archive',
+	source => $Sympa::SDM::db_source
+);
 
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {

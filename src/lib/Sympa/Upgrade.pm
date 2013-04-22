@@ -807,7 +807,10 @@ sub upgrade {
 			}
 			Sympa::Log::Syslog::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
-			my $spool = Sympa::Spool->new(name => $spools_def{$spoolparameter});
+			my $spool = Sympa::Spool->new(
+				name   => $spools_def{$spoolparameter},
+				source => $Sympa::SDM::db_source
+			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
 			}

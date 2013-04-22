@@ -1212,7 +1212,10 @@ while ($signal ne 'term') {
 	my $index_cleanqueue = 0;
 	my @qfile;
 
-	my $spool = Sympa::Spool->new(name => 'msg');
+	my $spool = Sympa::Spool->new(
+		name   => 'msg',
+		source => $Sympa::SDM::db_source
+	);
 	## This is the main loop : look for files in the directory, handles
 	## them, sleeps a while and continues the good job.
 	while (!$signal) {
@@ -1235,38 +1238,46 @@ while ($signal ne 'term') {
 
 			my $msg_bad = Sympa::Spool->new(
 				name   => 'msg',
-				status => 'bad'
+				status => 'bad',
+				source => $Sympa::SDM::db_source
 			);
 			$msg_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queue'});
 			my $archive_bad = Sympa::Spool->new(
 				name   => 'archive',
-				status => 'bad'
+				status => 'bad',
+				source => $Sympa::SDM::db_source
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			my $queuebounce_bad = Sympa::Spool->new(
 				name   => 'bounce',
-				status => 'bad'
+				status => 'bad',
+				source => $Sympa::SDM::db_source
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			$queuebounce_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queuebounce'});
 			my $queuemod = Sympa::Spool->new(
-				name => 'mod',
+				name   => 'mod',
+				source => $Sympa::SDM::db_source
 			);
 			$queuemod->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuemod'});
 			my $queueauth = Sympa::Spool->new(
-				name => 'auth'
+				name   => 'auth',
+				source => $Sympa::SDM::db_source
 			);
 			$queueauth->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueauth'});
 			my $queuetopic = Sympa::Spool->new(
-				name => 'topic'
+				name   => 'topic',
+				source => $Sympa::SDM::db_source
 			);
 			$queuetopic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuetopic'});
 			my $queuesubscribe = Sympa::Spool->new(
-				name => 'subscribe'
+				name   => 'subscribe',
+				source => $Sympa::SDM::db_source
 			);
 			$queuesubscribe->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'});
 			my $queueautomatic = Sympa::Spool->new(
-				name => 'automatic'
+				name   => 'automatic',
+				source => $Sympa::SDM::db_source
 			);
 			$queueautomatic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueautomatic'});
 			Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
@@ -2686,7 +2697,10 @@ sub DoCommand {
 sub SendDigest{
 	Sympa::Log::Syslog::do_log('debug', '()');
 
-	my $digestspool = Sympa::Spool->new(name => 'digest');
+	my $digestspool = Sympa::Spool->new(
+		name   => 'digest',
+		source => $Sympa::SDM::db_source
+	);
 
 	foreach my $digest ($digestspool->get_content(selection => 'messagekey,list,robot,date')){
 		my $list = Sympa::List->new(
@@ -2767,7 +2781,10 @@ sub test_storage {
 		ETA   => 'linear'
 	});
 
-	my $testing = Sympa::Spool->new(name => 'bad');
+	my $testing = Sympa::Spool->new(
+		name   => 'bad',
+		source => $Sympa::SDM::db_source
+	);
 
 	my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";
 	$progress->max_update_rate(1);

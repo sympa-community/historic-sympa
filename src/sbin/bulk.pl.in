@@ -206,7 +206,10 @@ my %created_children;
 $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmtp'}/$Sympa::Configuration::Conf{'bulk_max_count'});
 
 
-my $spool = Sympa::Spool->new(name => 'bulk');
+my $spool = Sympa::Spool->new(
+	name   => 'bulk',
+	source => $Sympa::SDM::db_source
+);
 
 while (!$end) {
 	Sympa::List::init_list_cache();

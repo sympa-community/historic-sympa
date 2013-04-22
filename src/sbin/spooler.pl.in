@@ -312,8 +312,14 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		my @qfile;
 
-		my $msgspool = Sympa::Spool->new(name => 'msg');
-		my $bouncespool = Sympa::Spool->new(name => 'bounce');
+		my $msgspool = Sympa::Spool->new(
+			name   => 'msg',
+			source => $Sympa::SDM::db_source
+		);
+		my $bouncespool = Sympa::Spool->new(
+			name   => 'bounce',
+			source => $Sympa::SDM::db_source
+		);
 
 		## This is the main loop : look for files in the directory, handles
 		## them, sleeps a while and continues the good job.
