@@ -1666,61 +1666,61 @@ sub none {
 ###########################################################################
 
 	## possible actions
-	my %actions = ('remove_bouncers' => \Sympa::List::remove_bouncers,
-	'notify_bouncers' => \Sympa::List::notify_bouncers,
- 'none'            => \&none
-		);
+	my %actions = (
+		'remove_bouncers' => \Sympa::List::remove_bouncers,
+		'notify_bouncers' => \Sympa::List::notify_bouncers,
+		'none'            => \&none
+	);
 
-		my $all_lists = Sympa::List::get_lists();
-		foreach my $list (@$all_lists) {
-			my $listname = $list->{'name'};
+	my $all_lists = Sympa::List::get_lists();
+	foreach my $list (@$all_lists) {
+		my $listname = $list->{'name'};
 
-			my @bouncers;
-			# @bouncers = ( ['email1', 'email2', 'email3',....,],    There is one line
-			#               ['email1', 'email2', 'email3',....,],    foreach bounce
-			#               ['email1', 'email2', 'email3',....,],)   level.
+		my @bouncers;
 
-			next unless ($list);
+		next unless ($list);
 
-			my $max_level;
-			for (my $level = 1;defined ($list->{'admin'}{'bouncers_level'.$level});$level++) {
-				$max_level = $level;
-			}
+		my $max_level;
+		for (my $level = 1;defined ($list->{'admin'}{'bouncers_level'.$level});$level++) {
+			$max_level = $level;
+		}
 
-			##  first, bouncing email are sorted in @bouncer
-			for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
+		##  first, bouncing email are sorted in @bouncer
+		for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
 
-				## Skip included users (cannot be removed)
-				next if ($user_ref->{'is_included'});
+			## Skip included users (cannot be removed)
+			next if ($user_ref->{'is_included'});
 
-				for ( my $level = $max_level;($level >= 1) ;$level--) {
-
-					if ($user_ref->{'bounce_score'} >= $list->{'admin'}{'bouncers_level'.$level}{'rate'}){
-						push(@{$bouncers[$level]}, $user_ref->{'email'});
-						$level = ($level-$max_level);
-					}
-				}
-			}
-
-			## then, calling action foreach level
 			for ( my $level = $max_level;($level >= 1) ;$level--) {
 
-				my $action = $list->{'admin'}{'bouncers_level'.$level}{'action'};
-				my $notification = $list->{'admin'}{'bouncers_level'.$level}{'notification'};
+				if ($user_ref->{'bounce_score'} >= $list->{'admin'}{'bouncers_level'.$level}{'rate'}){
+					push(@{$bouncers[$level]}, $user_ref->{'email'});
+					$level = ($level-$max_level);
+				}
+			}
+		}
 
-				if (@{$bouncers[$level]}){
-					## calling action subroutine with (list,email list) in parameter
-					unless ($actions{$action}->($list,$bouncers[$level])){
-						Sympa::Log::Syslog::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
-						return undef;
-					}
+		## then, calling action foreach level
+		for ( my $level = $max_level;($level >= 1) ;$level--) {
 
-					## calling notification subroutine with (list,action, email list) in parameter
+			my $action = $list->{'admin'}{'bouncers_level'.$level}{'action'};
+			my $notification = $list->{'admin'}{'bouncers_level'.$level}{'notification'};
 
-					my $param = {'listname' => $listname,
-						'action' => $action,
-						'user_list' => \@{$bouncers[$level]},
-					'total' => $#{$bouncers[$level]} + 1};
+			if (@{$bouncers[$level]}){
+				## calling action subroutine with (list,email list) in parameter
+				unless ($actions{$action}->($list,$bouncers[$level])){
+					Sympa::Log::Syslog::do_log('err','error while calling action sub for bouncing users in list %s',$listname);
+					return undef;
+				}
+
+				## calling notification subroutine with (list,action, email list) in parameter
+
+				my $param = {
+					'listname' => $listname,
+					'action' => $action,
+					'user_list' => \@{$bouncers[$level]},
+					'total' => $#{$bouncers[$level]} + 1
+				};
 
 				if ($notification eq 'listmaster'){
 
