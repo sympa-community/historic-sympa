@@ -529,21 +529,22 @@ sub create {
 		return undef;
 	}
 	# task is accetable, store it in spool
-	my $taskspool = Sympa::Spool->new(name => 'task');
-	my %meta;
-	$meta{'task_date'}=$date;
-	$meta{'task_label'}=$label;
-	$meta{'task_model'}=$model;
-	$meta{'robot'}= $robot if $robot;
+	my $spool = Sympa::Spool->new(name => 'task');
+	my %meta = (
+		task_date  => $date,
+		task_label => $label,
+		task_model => $model,
+		robot      => $robot
+	);
 	if ($list_name) {
-		$meta{'list'}=$list_name ;
-		$meta{'object'}=$list_name.'@'.$robot ;
+		$meta{list}   = $list_name;
+		$meta{object} = $list_name.'@'.$robot;
 	} else {
-		$meta{'object'}= '_global' ;
+		$meta{object} = '_global';
 	}
 
 	Sympa::Log::Syslog::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
-	$taskspool->store(
+	$spool->store(
 		message  => $task_as_string,
 		metadata => \%meta
 	);
