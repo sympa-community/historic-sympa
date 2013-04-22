@@ -16459,12 +16459,10 @@ sub do_viewlogs {
 # of there robot or there is real problems with privacy policy and law in such services.
 sub do_viewspools {
 
-	my $spoolname = 'msg';
-	$spoolname = $in{'spoolname'} if ($in{'spoolname'});
+	my $spoolname = $in{'spoolname'} || 'msg';
 	$param->{'spoolname'} = $spoolname;
 
-	my $spool_status = 'ok';
-	$spool_status = $in{'spool_status'} if ($in{'spool_status'});
+	my $spool_status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $spool_status;
 
 	wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$spool_status);
@@ -16555,10 +16553,11 @@ $param->{'spool_content'} = \@messages;
 sub do_viewspool_message {
 
 	my $messagekey = $in{'messagekey'};
+
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
-	my $status = 'ok';
-	$status = $in{'spool_status'} if ($in{'spool_status'});
+
+	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
 	wwslog('info', 'do_viewspool_message(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
@@ -16639,10 +16638,11 @@ sub do_viewspool_message {
 sub do_viewspool_message_dump {
 
 	my $messagekey = $in{'messagekey'};
+
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
-	my $status = 'ok';
-	$status = $in{'spool_status'} if ($in{'spool_status'});
+
+	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
 	wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
@@ -16691,10 +16691,11 @@ sub do_viewspool_message_remove {
 
 	my $messagekey = $in{'messagekey'};
 	$param->{'messagekey'} = $messagekey;
+
 	my $spoolname = $in{'spoolname'};
 	$param->{'spoolname'} = $spoolname;
-	my $status = 'ok';
-	$status = $in{'spool_status'} if ($in{'spool_status'});
+
+	my $status = $in{'spool_status'} || 'ok';
 	$param->{'spool_status'} = $status;
 
 	wwslog('info', 'do_viewspool_message_remove(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
@@ -16729,21 +16730,20 @@ sub do_viewspool_message_remove {
 sub do_viewspool_message_mv {
 
 	my $messagekey = $in{'messagekey'};
-	my $spoolname = $in{'spoolname'};
-	my $status = $in{'status'};
-	my $newspool = $in{'new_spoolname'};
-	my $newstatus = $in{'new_status'};
+	$param->{'messagekey'} = $messagekey;
 
+	my $spoolname = $in{'spoolname'};
+	$param->{'spoolname'} = $spoolname;
+
+	my $status = $in{'status'} || 'ok';
+
+	my $newspool = $in{'new_spoolname'};
+	$newspool = $spoolname unless ($spoolname);
+
+	my $newstatus = $in{'new_status'} || 'ok';
 
 	Sympa::Log::Syslog::do_log('info',"move message %s from spool %s status %s to spool %s with status %s",$messagekey,$spoolname,$status,$newspool,$newstatus);
 
-
-	$param->{'messagekey'} = $messagekey;
-	$param->{'spoolname'} = $spoolname;
-
-	$status = 'ok' unless ($status);
-	$newspool = $spoolname unless ($spoolname);
-	$newstatus = 'ok' unless ($newstatus);
 
 	unless (($newspool) && ($newstatus)){
 		Sympa::Report::reject_report_web('intern','unkown spool %s or status %s',$newspool,$newstatus);
