@@ -421,7 +421,7 @@ foreach my $task ( Sympa::Task->get_task_list() ) {
 		## Skip closed lists
 		unless (defined $list && ($list->{'admin'}{'status'} eq 'open')) {
 			Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-			$task->remove;
+			$task->remove();
 			next;
 		}
 
@@ -429,14 +429,14 @@ foreach my $task ( Sympa::Task->get_task_list() ) {
 		if ( $task->{'model'} eq 'sync_include') {
 			unless ($list->{'admin'}{'status'} eq 'open') {
 				Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-				$task->remove;
+				$task->remove();
 				next;
 			}
 		} else {
 			unless (defined $list->{'admin'}{$task->{'model'}} &&
 				defined $list->{'admin'}{$task->{'model'}}{'name'}) {
 				Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-				$task->remove;
+				$task->remove();
 				next;
 			}
 		}
@@ -822,13 +822,13 @@ sub execute {
 
 	unless (defined $status) {
 		Sympa::Log::Syslog::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-		$task->remove;
+		$task->remove();
 		return undef;
 	}
 
 	unless ($status >= 0) {
 		Sympa::Log::Syslog::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
-		$task->remove;
+		$task->remove();
 	}
 
 	return 1;
@@ -910,7 +910,7 @@ sub stop {
 
 	Sympa::Log::Syslog::do_log ('notice', "$context->{'line_number'} : stop $task->{'mesageid'}");
 
-	unless ($task->remove) {
+	unless ($task->remove()) {
 		error ($task->{'mesagekey'}, "error in stop command : unable to delete task $task->{'messagekey'}");
 		return 0;
 	}
@@ -1008,7 +1008,7 @@ sub next_cmd {
 
 	my $human_date = Sympa::Tools::Time::adate ($date);
 
-	unless ($task->remove) {
+	unless ($task->remove()) {
 		error ($task->{'messagekey'}, "error in next command : unable to remove task");
 		return undef;
 	}
