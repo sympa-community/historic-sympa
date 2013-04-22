@@ -182,7 +182,10 @@ sub get_content {
 		$statement = 'SELECT '._selectfields($params{selection});
 	}
 
-	$statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,Sympa::SDM::quote($self->{name});
+	$statement = $statement . sprintf
+		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
+		$sql_where,
+		Sympa::SDM::quote($self->{name});
 
 	if ($params{orderby}) {
 		$statement = $statement. ' ORDER BY '.$params{orderby}.'_spool ';
@@ -234,13 +237,24 @@ sub next {
 	my $lock = $PID.'@'.hostname();
 	my $epoch = time(); # should we use milli or nano seconds ?
 
-	my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch),Sympa::SDM::quote($self->{name}),$sql_where;
+	my $statement = sprintf 
+		"UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1",
+		Sympa::SDM::quote($lock),
+		Sympa::SDM::quote($epoch),
+		Sympa::SDM::quote($self->{name}),
+		$sql_where;
 
 	my $sth = Sympa::SDM::do_query($statement);
 	return undef unless ($sth->rows); # spool is empty
 
 	my $star_select = _selectfields();
-	my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($self->{status}),Sympa::SDM::quote($lock),Sympa::SDM::quote($epoch);
+	my $statement = sprintf
+		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1",
+		$star_select,
+		Sympa::SDM::quote($self->{name}),
+		Sympa::SDM::quote($self->{status}),
+		Sympa::SDM::quote($lock),
+		Sympa::SDM::quote($epoch);
 
 	$sth = Sympa::SDM::do_query($statement);
 	my $message = $sth->fetchrow_hashref('NAME_lc');
@@ -284,7 +298,10 @@ sub get_message {
 		$sqlselector = $sqlselector.' '.$field.'_spool = '.Sympa::SDM::quote($selector->{$field});
 	}
 	my $all = _selectfields();
-	my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,Sympa::SDM::quote($self->{name});
+	my $statement = sprintf
+		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ". $sqlselector. ' LIMIT 1',
+		$all,
+		Sympa::SDM::quote($self->{name});
 
 	my $sth = Sympa::SDM::do_query($statement);
 
@@ -364,7 +381,10 @@ sub update {
 	}
 
 	## Updating Db
-	my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
+	my $statement = sprintf
+		"UPDATE spool_table SET %s WHERE (%s)",
+		$set,
+		$where;
 
 	unless (Sympa::SDM::do_query($statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, undef);
@@ -443,11 +463,20 @@ sub store {
 	}
 	my $lock = $PID.'@'.hostname() ;
 
-	my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($lock),Sympa::SDM::quote($b64msg), $insertpart2;
+	my $statement = sprintf
+		"INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",
+		$insertpart1,
+		Sympa::SDM::quote($self->{name}),
+		Sympa::SDM::quote($lock),
+		Sympa::SDM::quote($b64msg),
+		$insertpart2;
 
 	my $sth = Sympa::SDM::do_query ($statement);
 
-	$statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",Sympa::SDM::quote($lock),Sympa::SDM::quote($params{metadata}->{'date'});
+	$statement = sprintf
+		"SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",
+		Sympa::SDM::quote($lock),
+		Sympa::SDM::quote($params{metadata}->{'date'});
 	$sth = Sympa::SDM::do_query ($statement);
 	# this query returns the autoinc primary key as result of this insert
 
@@ -484,9 +513,12 @@ sub remove_message {
 
 	my $sqlselector = _sqlselector($selector);
 	#my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",Sympa::SDM::quote($self->{name}),Sympa::SDM::quote($messagekey),Sympa::SDM::quote($listname),Sympa::SDM::quote($robot);
-	my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",Sympa::SDM::quote($self->{name}),$sqlselector;
+	my $statement  = sprintf 
+		"DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",
+		Sympa::SDM::quote($self->{name}),
+		$sqlselector;
 
-	my $sth = Sympa::SDM::do_query ($statement);
+	my $sth = Sympa::SDM::do_query($statement);
 
 	$sth->finish();
 	return 1;
