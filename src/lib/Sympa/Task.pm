@@ -122,13 +122,13 @@ sub set_spool {
 	);
 }
 
-=item Sympa::Task->list_tasks()
+=item Sympa::Task->load_tasks()
 
-Build all Task objects.
+Build all Task objects from task spool.
 
 =cut
 
-sub list_tasks {
+sub load_tasks {
 	my ($class) = @_;
 
 	Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
