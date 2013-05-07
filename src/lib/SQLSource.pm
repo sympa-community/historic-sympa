@@ -149,7 +149,10 @@ sub connect {
     }
  
     ## First check if we have an active connection with this server
+    ## We require that user also matches (except SQLite).
     if (defined $db_connections{$connect_string} && 
+	($param->{'db_type'} eq 'SQLite' or
+	 $db_connections{$connect_string}{'db_user'} eq $param->{'db_user'}) &&
 	defined $db_connections{$connect_string}{'dbh'} && 
 	$db_connections{$connect_string}{'dbh'}->ping()) {
       
@@ -161,6 +164,21 @@ sub connect {
       
       ## Set environment variables
       ## Used by Oracle (ORACLE_HOME)
+
+      ## Client encoding derived from the environment variable.
+      ## Set this before parsing db_env to allow override if one knows what
+      ## she is doing.
+      ## Note: on mysql and Pg, "SET NAMES" will be executed below; on SQLite,
+      ## no need to set encoding.
+      if ($param->{'db_type'} eq 'Oracle') {
+	## NLS_LANG.  This needs to be set before connecting, otherwise it's
+	## useless.  Underscore (_) and dot (.) are a vital part as NLS_LANG
+	## has the syntax "language_territory.charset".
+	$ENV{'NLS_LANG'} = '_.UTF8';
+      } elsif ($param->{'db_type'} eq 'Sybase') {
+	$ENV{'SYBASE_CHARSET'} = 'utf8';
+      }
+
       if ($param->{'db_env'}) {
 	foreach my $env (split /;/,$param->{'db_env'}) {
 	  my ($key, $value) = split /=/, $env;
@@ -211,18 +229,15 @@ sub connect {
 	
       }
       
-      if ($param->{'db_type'} eq 'Pg') { # Configure Postgres to use ISO format dates
+      # Configure Postgres to use ISO format dates
+      if ($param->{'db_type'} eq 'Pg') {
 	$dbh->do ("SET DATESTYLE TO 'ISO';");
       }
       
-      ## Set client encoding to UTF8
+      ## mysql or Pg: Set client encoding to UTF8
       if ($param->{'db_type'} eq 'mysql' ||
 	  $param->{'db_type'} eq 'Pg') {
 	$dbh->do("SET NAMES 'utf8'");
-      }elsif ($param->{'db_type'} eq 'oracle') { 
-	$ENV{'NLS_LANG'} = 'UTF8';
-      }elsif ($param->{'db_type'} eq 'Sybase') { 
-	$ENV{'SYBASE_CHARSET'} = 'utf8';
       }
       
       ## added sybase support
@@ -244,6 +259,7 @@ sub connect {
       $self->{'dbh'} = $dbh if $self;
       $self->{'connect_string'} = $connect_string if $self;     
       $db_connections{$connect_string}{'dbh'} = $dbh;
+      $db_connections{$connect_string}{'db_user'} = $param->{'db_user'};
       
       do_log('debug2','Connected to Database %s',$param->{'db_name'});
       return $dbh;
