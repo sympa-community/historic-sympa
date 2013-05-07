@@ -109,19 +109,6 @@ sub new {
 	return $self;
 }
 
-=item Sympa::Task->set_spool()
-
-FIXME
-
-=cut
-
-sub set_spool {
-	$taskspool = Sympa::Spool->new(
-		name   => 'task',
-		source => $Sympa::SDM::db_source
-	);
-}
-
 =item Sympa::Task->load_tasks()
 
 Build all Task objects from task spool.
@@ -138,7 +125,7 @@ sub load_tasks {
 	undef %task_by_model;
 
 	# fetch all task
-	my $taskspool = Sympa::Spool->new(
+	$taskspool = Sympa::Spool->new(
 		name   => 'task',
 		source => $Sympa::SDM::db_source
 	);

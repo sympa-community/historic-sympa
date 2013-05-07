@@ -223,8 +223,6 @@ unless (chdir($Sympa::Configuration::Conf{'home'})) {
 	exit (-1);
 }
 
-Sympa::Task->set_spool(); # force initialisation of $taskspool in module Task
-
 my $pinfo = Sympa::List::_apply_defaults();
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
