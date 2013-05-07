@@ -404,7 +404,8 @@ foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 }
 ## Execute existing tasks
 ## List all tasks
-unless (Sympa::Task->list_tasks($spool_task)) {
+my $result = Sympa::Task->load_tasks();
+unless ($result) {
 	Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
 	Sympa::Log::Syslog::do_log ('err', "Failed to list task files in %s", $spool_task);
 	exit -1;
