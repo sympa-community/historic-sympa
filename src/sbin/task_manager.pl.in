@@ -231,9 +231,13 @@ my $end = 0;
 
 ###### VARIABLES DECLARATION ######
 
-my $spool_task = $Sympa::Configuration::Conf{'queuetask'};
 my $cert_dir = $Sympa::Configuration::Conf{'ssl_cert_dir'};
 my @tasks; # list of tasks in the spool
+
+my $spool = Sympa::Spool->new(
+	name   => 'task',
+	source => $Sympa::SDM::db_source
+);
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log
 #$log = 1;
@@ -331,7 +335,7 @@ while (!$end) {
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
 	## List all tasks
-	my $result = Sympa::Task->load_tasks();
+	my $result = Sympa::Task->load_tasks($spool);
 	unless ($result) {
 		Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool"});
 		Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool");
@@ -402,10 +406,10 @@ foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 }
 ## Execute existing tasks
 ## List all tasks
-my $result = Sympa::Task->load_tasks();
+my $result = Sympa::Task->load_tasks($spool);
 unless ($result) {
-	Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in $spool_task"});
-	Sympa::Log::Syslog::do_log ('err', "Failed to list task files in %s", $spool_task);
+	Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool task"});
+	Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool task");
 	exit -1;
 }
 
@@ -528,11 +532,6 @@ sub create {
 		Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request") ;
 		return undef;
 	}
-	# task is accetable, store it in spool
-	my $spool = Sympa::Spool->new(
-		name   => 'task',
-		source => $Sympa::SDM::db_source
-	);
 	my %meta = (
 		task_date  => $date,
 		task_label => $label,

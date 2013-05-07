@@ -12987,7 +12987,12 @@ sub purge {
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
 
 	## Remove tasks for this list
-	Sympa::Task->load_tasks();
+	Sympa::Task->load_tasks(
+		Sympa::Spool->new(
+			name   => 'task',
+			source => $Sympa::SDM::db_source
+		)
+	);
 	foreach my $task (Sympa::Task->get_tasks_by_list($self->get_list_id())) {
 		unlink $task->{'filepath'};
 	}

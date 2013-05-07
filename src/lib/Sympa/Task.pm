@@ -36,7 +36,6 @@ use strict;
 
 use Sympa::List;
 use Sympa::Log::Syslog;
-use Sympa::Spool;
 use Sympa::Tools;
 
 my @task_list;
@@ -44,7 +43,6 @@ my %task_by_list;
 my %task_by_model;
 
 my $taskspool ;
-
 
 =head1 CLASS METHODS
 
@@ -116,7 +114,7 @@ Build all Task objects from task spool.
 =cut
 
 sub load_tasks {
-	my ($class) = @_;
+	my ($class, $spool) = @_;
 
 	Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
 	## Reset the list of tasks
@@ -125,11 +123,7 @@ sub load_tasks {
 	undef %task_by_model;
 
 	# fetch all task
-	$taskspool = Sympa::Spool->new(
-		name   => 'task',
-		source => $Sympa::SDM::db_source
-	);
-	my @tasks = $taskspool->get_content(selector => {});
+	my @tasks = $spool->get_content(selector => {});
 
 	## Create Task objects
 	foreach my $t (@tasks) {
@@ -143,6 +137,10 @@ sub load_tasks {
 		$task_by_model{$model}{$list_id} = $task;
 		$task_by_list{$list_id}{$model} = $task;
 	}
+
+	# keep a reference to the spool for task removal
+	$taskspool = $spool;
+
 	return 1;
 }
 
