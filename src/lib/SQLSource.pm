@@ -47,7 +47,7 @@ our %date_format = (
 		   'write' => {
 		       'Pg' => '\'epoch\'::timestamp with time zone + \'%d sec\'',
 		       'mysql' => 'FROM_UNIXTIME(%d)',
-		       'Oracle' => 'to_date(to_char(round(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
+		       'Oracle' => 'to_date(to_char(floor(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
 		       'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
 		       'SQLite' => 'datetime(%d,\'unixepoch\',\'localtime\')'
 		       }
