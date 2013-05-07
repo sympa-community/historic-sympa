@@ -389,17 +389,17 @@ foreach my $robot (keys %{$Sympa::Configuration::Conf{'robots'}}) {
 						($list->{'admin'}{'status'} eq 'open'));
 
 					create ($current_date, 'INIT', $model, 'ttl', \%data);
-				Sympa::Log::Syslog::do_log('debug3',"sync_include task ceration done");$tt++;
+					Sympa::Log::Syslog::do_log('debug3',"sync_include task ceration done");$tt++;
 
-			}elsif (defined $list->{'admin'}{$model_task_parameter} &&
-				defined $list->{'admin'}{$model_task_parameter}{'name'} &&
-				($list->{'admin'}{'status'} eq 'open')) {
+				}elsif (defined $list->{'admin'}{$model_task_parameter} &&
+					defined $list->{'admin'}{$model_task_parameter}{'name'} &&
+					($list->{'admin'}{'status'} eq 'open')) {
 
-				create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, \%data);
-			$tt++;
+					create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, \%data);
+					$tt++;
+				}
+			}
 		}
-	}
-}
 	}
 }
 ## Execute existing tasks
