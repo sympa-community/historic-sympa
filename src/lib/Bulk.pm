@@ -472,15 +472,34 @@ sub store {
 	
 	# if message is not found in bulkspool_table store it
 	if ($message_already_on_spool == 0) {
-	    my $statement      = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool,dkim_i_bulkspool,dkim_selector_bulkspool, dkim_privatekey_bulkspool) VALUES (%s, %s, %s, 1, %s, %s, %s ,%s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote($msg),$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote($dkim->{private_key}); 
+	    my $statement =
+		q{INSERT INTO bulkspool_table
+		  (messagekey_bulkspool, messageid_bulkspool,
+		   message_bulkspool, lock_bulkspool,
+		   dkim_d_bulkspool, dkim_i_bulkspool,
+		   dkim_selector_bulkspool, dkim_privatekey_bulkspool)
+		  VALUES (?, ?, ?, 1, ?, ?, ?, ?)};
+	    my $statementtrace = $statement;
+	    $statementtrace =~ s/\n\s*/ /g;
+	    $statementtrace =~ s/\?/\%s/g;
 
-	    my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool, dkim_i_bulkspool, dkim_selector_bulkspool, dkim_privatekey_bulkspool) VALUES (%s, %s, %s, 1, %s ,%s ,%s, %s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote(substr($msg, 0, 100)), $dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote(substr($dkim->{private_key},0,30));  
-	    # do_log('debug',"insert : $statement_trace");
-
-		unless ($dbh->do($statement)) {
-		    do_log('err','Unable to add message in bulkspool_table "%s"; error : %s', $statementtrace, $dbh->errstr);
-		    return undef;
-		}
+	    my $sth = $dbh->prepare($statement);
+	    unless ($sth and $sth->execute(
+		$messagekey, $msg_id, $msg, $dkim->{d}, $dkim->{i},
+		$dkim->{selector}, $dkim->{private_key}
+	    )) {
+		do_log('err',
+		    'Unable to add message in bulkspool_table "%s"; error : %s',
+		    sprintf($statementtrace,
+			$dbh->quote($messagekey), $dbh->quote($msg_id),
+			$dbh->quote(substr($msg, 0, 100)),
+			$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),
+			$dbh->quote($dkim->{selector}),
+			$dbh->quote(substr($dkim->{private_key}, 0, 30))
+		    ), $dbh->errstr
+		);
+		return undef;
+	    }
 
 	    $message_fingerprint = $messagekey;
 	}

@@ -1493,6 +1493,26 @@ sub db_connect {
     	return undef;
     }
     do_log('debug3','Connected to Database %s',$Conf::Conf{'db_name'});
+
+    ## We set Long preload length to two times global max message size
+    ## (because of base64 encoding) instead of defaulting to 80 on Oracle
+    ## and 32768 on Sybase.
+    ## This is to avoid error in Bulk::messageasstring when using Oracle
+    ## or Sybase database:
+    ##   bulk[pid]: internal error : current packet 'messagekey= 0c40f56e07d3c8ce34683b98d54b6575 contain a ref to a null message
+    ## FIXME: would be better to use lists' setting, but
+    ##  * list config is not load()-ed at this point, and
+    ##  * when invoked from Bulk::messageasstring, list settings is not even
+    ##    load()-ed later.
+    if ($Conf::Conf{'db_type'} eq 'Oracle' or
+	$Conf::Conf{'db_type'} eq 'Sybase') {
+	$dbh->{LongReadLen} = $Conf::Conf{'max_size'} * 2;
+	$dbh->{LongTruncOk} = 0;
+    }
+    do_log('debug3',
+	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
+	$dbh->{LongReadLen}, $dbh->{LongTruncOk}, $dbh->{RaiseError});
+
     $db_connected = 1;
 
     return 1;
