@@ -1071,6 +1071,32 @@ my %full_db_struct = (
 	},
 );
 
+## List the required INDEXES
+##   1st key is the concerned table
+##   2nd key is the index name
+##   the table lists the field on which the index applies
+our %indexes = (
+	'admin_table'      => {'admin_user_index'      => ['user_admin']},
+	'subscriber_table' => {'subscriber_user_index' => ['user_subscriber']},
+	'stat_table'       => {'stats_user_index'      => ['email_stat']}
+);
+
+# table indexes that can be removed during upgrade process
+our @former_indexes = (
+	'user_subscriber',
+	'list_subscriber',
+	'subscriber_idx',
+	'admin_idx',
+	'netidmap_idx',
+	'user_admin',
+	'list_admin',
+	'role_admin',
+	'admin_table_index',
+	'logs_table_index',
+	'netidmap_table_index',
+	'subscriber_table_index',
+	'user_index'
+);
 
 =head1 FUNCTIONS
 
@@ -1175,32 +1201,5 @@ sub primary {
 	}
 	return %primary;
 }
-
-## List the required INDEXES
-##   1st key is the concerned table
-##   2nd key is the index name
-##   the table lists the field on which the index applies
-our %indexes = (
-	'admin_table'      => {'admin_user_index'      => ['user_admin']},
-	'subscriber_table' => {'subscriber_user_index' => ['user_subscriber']},
-	'stat_table'       => {'stats_user_index'      => ['email_stat']}
-);
-
-# table indexes that can be removed during upgrade process
-our @former_indexes = (
-	'user_subscriber',
-	'list_subscriber',
-	'subscriber_idx',
-	'admin_idx',
-	'netidmap_idx',
-	'user_admin',
-	'list_admin',
-	'role_admin',
-	'admin_table_index',
-	'logs_table_index',
-	'netidmap_table_index',
-	'subscriber_table_index',
-	'user_index'
-);
 
 1;
