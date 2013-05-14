@@ -32,10 +32,6 @@ package Sympa::DatabaseDescription;
 
 use strict;
 
-our %not_null = not_null();
-our %primary = primary();
-our %autoincrement = autoincrement();
-
 my %full_db_struct = (
 	'subscriber_table' => {
 		'fields' => {
