@@ -55,9 +55,6 @@ my %autoincrement = Sympa::DatabaseDescription::autoincrement() ;
 ##   the table lists the field on which the index applies
 my %indexes = %Sympa::DatabaseDescription::indexes ;
 
-# table indexes that can be removed during upgrade process
-my @former_indexes =  @Sympa::DatabaseDescription::former_indexes ;
-
 our $db_source;
 our $use_db;
 
@@ -448,7 +445,8 @@ sub check_indexes {
 	foreach my $idx ( keys %index_columns ) {
 		Sympa::Log::Syslog::do_log('debug','Found index %s',$idx);
 		## Remove the index if obsolete.
-		foreach my $known_index ( @former_indexes ) {
+
+		foreach my $known_index (@Sympa::DatabaseDescription::former_indexes) {
 			if ( $idx eq $known_index ) {
 				Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$idx);
 				if (my $rep = $db_source->unset_index('table'=>$t,'index'=>$idx)) {
