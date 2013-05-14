@@ -45,8 +45,6 @@ use Sympa::Log::Syslog;
 # db structure description has moved in Sympa/Constant.pm
 my %db_struct = Sympa::DatabaseDescription::db_struct();
 
-my %not_null = Sympa::DatabaseDescription::not_null();
-
 my %primary =  Sympa::DatabaseDescription::primary() ;
 
 my %autoincrement = Sympa::DatabaseDescription::autoincrement() ;
@@ -328,7 +326,7 @@ sub check_fields {
 					'table' => $t,
 					'field' => $f,
 					'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
-					'notnull' => $not_null{$f},
+					'notnull' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{fields}{$f}{'not_null'},
 					'autoinc' => ( $autoincrement{$t} eq $f),
 					'primary' => ( $autoincrement{$t} eq $f),
 				)){
@@ -354,7 +352,7 @@ sub check_fields {
 						'table' => $t,
 						'field' => $f,
 						'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
-						'notnull' => $not_null{$f},
+						'notnull' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{fields}{$f}{'not_null'},
 					)){
 					push @{$report_ref}, $rep;
 				} else {

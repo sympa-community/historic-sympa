@@ -1144,22 +1144,6 @@ sub db_struct {
 	return %db_struct;
 }
 
-=item not_null()
-
-FIXME.
-
-=cut
-
-sub not_null {
-	my %not_null;
-	foreach my $table ( keys %full_db_struct  ) {
-		foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-			$not_null{'$field'} = $full_db_struct{$table}{'fields'}{$field}{'not_null'};
-		}
-	}
-	return %not_null;
-}
-
 =item autoincrement()
 
 FIXME.
