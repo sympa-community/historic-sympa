@@ -321,12 +321,13 @@ sub check_fields {
 			push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 
+			my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
 			my $rep;
 			if ($rep = $db_source->add_field(
 					'table' => $t,
 					'field' => $f,
-					'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
-					'notnull' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{fields}{$f}{'not_null'},
+					'type' => $db_struct{$db_type}{$t}{$f},
+					'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
 					'autoinc' => ( $autoincrement{$t} eq $f),
 					'primary' => ( $autoincrement{$t} eq $f),
 				)){
@@ -347,12 +348,13 @@ sub check_fields {
 
 				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
 
+				my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
 				my $rep;
 				if ($rep = $db_source->update_field(
 						'table' => $t,
 						'field' => $f,
-						'type' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},
-						'notnull' => $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{fields}{$f}{'not_null'},
+						'type' => $db_struct{$db_type}{$t}{$f},
+						'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
 					)){
 					push @{$report_ref}, $rep;
 				} else {
