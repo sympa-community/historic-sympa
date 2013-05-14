@@ -42,8 +42,6 @@ use Sympa::DatabaseDescription;
 use Sympa::List;
 use Sympa::Log::Syslog;
 
-our $AUTOLOAD;
-
 # db structure description has moved in Sympa/Constant.pm
 my %db_struct = Sympa::DatabaseDescription::db_struct();
 
