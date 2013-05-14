@@ -319,15 +319,15 @@ sub check_fields {
 			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 
 			my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
-			my $rep;
-			if ($rep = $db_source->add_field(
-					'table' => $t,
-					'field' => $f,
-					'type' => $db_struct{$db_type}{$t}{$f},
-					'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
-					'autoinc' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement},
-					'primary' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement}
-				)){
+			my $rep = $db_source->add_field(
+				'table'   => $t,
+				'field'   => $f,
+				'type'    => $db_struct{$db_type}{$t}{$f},
+				'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
+				'autoinc' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement},
+				'primary' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement}
+			);
+			if ($rep) {
 				push @{$report_ref}, $rep;
 
 			} else {
@@ -346,13 +346,13 @@ sub check_fields {
 				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{Sympa::Configuration::get_robot_conf('*','db_type')}{$t}{$f},$real_struct{$t}{$f});
 
 				my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
-				my $rep;
-				if ($rep = $db_source->update_field(
-						'table' => $t,
-						'field' => $f,
-						'type' => $db_struct{$db_type}{$t}{$f},
-						'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
-					)){
+				my $rep = $db_source->update_field(
+					'table'   => $t,
+					'field'   => $f,
+					'type'    => $db_struct{$db_type}{$t}{$f},
+					'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
+				);
+				if ($rep) {
 					push @{$report_ref}, $rep;
 				} else {
 					Sympa::Log::Syslog::do_log('err', 'Fields update in database failed. Aborting.');
