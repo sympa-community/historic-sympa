@@ -325,8 +325,8 @@ sub check_fields {
 					'field' => $f,
 					'type' => $db_struct{$db_type}{$t}{$f},
 					'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
-					'autoinc' => ( $autoincrement{$t} eq $f),
-					'primary' => ( $autoincrement{$t} eq $f),
+					'autoinc' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement},
+					'primary' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement}
 				)){
 				push @{$report_ref}, $rep;
 
