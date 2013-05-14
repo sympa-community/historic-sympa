@@ -94,17 +94,14 @@ sub full_db_struct {
 				},
 				'bounce_subscriber' => {
 					'struct' => 'varchar(35)',
-					'doc'    => 'FIXME',
 					'order'  => 8,
 				},
 				'bounce_score_subscriber' => {
 					'struct' => 'smallint(6)',
-					'doc'    => 'FIXME',
 					'order'  => 9,
 				},
 				'bounce_address_subscriber' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 10,
 				},
 				'date_subscriber' => {
@@ -132,7 +129,6 @@ sub full_db_struct {
 				},
 				'visibility_subscriber' => {
 					'struct' => 'varchar(20)',
-					'doc'    => 'FIXME',
 					'order'  => 15,
 				},
 				'topics_subscriber' => {
@@ -157,7 +153,6 @@ sub full_db_struct {
 				},
 				'custom_attribute_subscriber' => {
 					'struct' => 'text',
-					'doc'    => 'FIXME',
 					'order'  => 10,
 				},
 
@@ -199,7 +194,6 @@ sub full_db_struct {
 				},
 				'cookie_delay_user' => {
 					'struct' => 'int(11)',
-					'doc'    => 'FIXME',
 				},
 				'lang_user' => {
 					'struct' => 'varchar(10)',
@@ -207,11 +201,9 @@ sub full_db_struct {
 				},
 				'attributes_user' => {
 					'struct' => 'text',
-					'doc'    => 'FIXME',
 				},
 				'data_user' => {
 					'struct' => 'text',
-					'doc'    => 'FIXME',
 				},
 			},
 			'doc'   => 'The user_table is mainly used to manage login from web interface. A subscriber may not appear in the user_table if he never log through the web interface.',
@@ -235,12 +227,10 @@ sub full_db_struct {
 				},
 				'list_spool'=> {
 					'struct' => 'varchar(50)',
-					'doc'    => '',
 					'order'  => 3,
 				},
 				'robot_spool' =>{
 					'struct' => 'varchar(80)',
-					'doc'    => '',
 					'order'  => 4,
 				},
 				'priority_spool'=> {
@@ -400,12 +390,10 @@ sub full_db_struct {
 				},
 				'robot_bulkmailer' => {
 					'struct' => 'varchar(80)',
-					'doc'    => '',
 					'order'  => 6,
 				},
 				'listname_bulkmailer' => {
 					'struct' => 'varchar(50)',
-					'doc'    => '',
 					'order'  => 7,
 				},
 				'verp_bulkmailer' => {
@@ -425,12 +413,10 @@ sub full_db_struct {
 				},
 				'priority_message_bulkmailer' => {
 					'struct' => 'smallint(10)',
-					'doc'    => 'FIXME',
 					'order'  => 11,
 				},
 				'priority_packet_bulkmailer' => {
 					'struct' => 'smallint(10)',
-					'doc'    => 'FIXME',
 					'order'  => 12,
 				},
 				'reception_date_bulkmailer' => {
@@ -456,33 +442,28 @@ sub full_db_struct {
 			'fields' => {
 				'list_exclusion' => {
 					'struct'   => 'varchar(50)',
-					'doc'      => '',
 					'order'    => 1,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'robot_exclusion' => {
 					'struct'   => 'varchar(50)',
-					'doc'      => '',
 					'order'    => 2,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'user_exclusion' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => '',
 					'order'    => 3,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'family_exclusion' => {
 					'struct' => 'varchar(50)',
-					'doc'    => '',
 					'order'  => 4,
 				},
 				'date_exclusion' => {
 					'struct' => 'int(11)',
-					'doc'    => '',
 					'order'  => 5,
 				},
 			},
@@ -543,32 +524,25 @@ sub full_db_struct {
 			'fields' => {
 				'ticket_one_time_ticket' => {
 					'struct'  => 'varchar(30)',
-					'doc'     => '',
 					'primary' => 1,
 				},
 				'email_one_time_ticket' => {
 					'struct' => 'varchar(100)',
-					'doc'    => '',
 				},
 				'robot_one_time_ticket' => {
 					'struct' => 'varchar(80)',
-					'doc'    => '',
 				},
 				'date_one_time_ticket' => {
 					'struct' => 'int(11)',
-					'doc'    => '',
 				},
 				'data_one_time_ticket' => {
 					'struct' => 'varchar(200)',
-					'doc'    => '',
 				},
 				'remote_addr_one_time_ticket' => {
 					'struct' => 'varchar(60)',
-					'doc'    => '',
 				},
 				'status_one_time_ticket' => {
 					'struct' => 'varchar(60)',
-					'doc'    => '',
 				},
 			},
 			'doc'   => 'One time ticket are random value use for authentication chalenge. A ticket is associated with a context which look like a session',
@@ -631,7 +605,6 @@ sub full_db_struct {
 				},
 				'date_notification' => {
 					'struct'   => 'int(11)',
-					'doc'      => 'FIXME',
 					'not_null' => 1
 				},
 			},
@@ -719,57 +692,47 @@ sub full_db_struct {
 			'fields' => {
 				'id_stat' => {
 					'struct'   => 'bigint(20)',
-					'doc'      => '',
 					'order'    => 1,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'date_stat' => {
 					'struct'   => 'int(11)',
-					'doc'      => '',
 					'order'    => 2,
 					'not_null' => 1,
 				},
 				'email_stat' => {
 					'struct' => 'varchar(100)',
-					'doc'    => '',
 					'order'  => 3,
 				},
 				'operation_stat' => {
 					'struct'   => 'varchar(50)',
-					'doc'      => '',
 					'order'    => 4,
 					'not_null' => 1,
 				},
 				'list_stat' => {
 					'struct' => 'varchar(150)',
-					'doc'    => '',
 					'order'  => 5,
 				},
 				'daemon_stat' => {
 					'struct' => 'varchar(10)',
-					'doc'    => '',
 					'order'  => 6,
 				},
 				'user_ip_stat' => {
 					'struct' => 'varchar(100)',
-					'doc'    => '',
 					'order'  => 7,
 				},
 				'robot_stat' => {
 					'struct'   => 'varchar(80)',
-					'doc'      => '',
 					'order'    => 8,
 					'not_null' => 1,
 				},
 				'parameter_stat' => {
 					'struct' => 'varchar(50)',
-					'doc'    => '',
 					'order'  => 9,
 				},
 				'read_stat' => {
 					'struct'   => 'tinyint(1)',
-					'doc'      => '',
 					'order'    => 10,
 					'not_null' => 1,
 				},
@@ -781,47 +744,39 @@ sub full_db_struct {
 			'fields' => {
 				'id_counter' => {
 					'struct'   => 'bigint(20)',
-					'doc'      => '',
 					'order'    => 1,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'beginning_date_counter' => {
 					'struct'   => 'int(11)',
-					'doc'      => '',
 					'order'    => 2,
 					'not_null' => 1,
 				},
 				'end_date_counter' => {
 					'struct' => 'int(11)',
-					'doc'    => '',
 					'order'  => 1,
 				},
 				'data_counter' => {
 					'struct'   => 'varchar(50)',
-					'doc'      => '',
 					'not_null' => 1,
 					'order'    => 3,
 				},
 				'robot_counter' => {
 					'struct'   => 'varchar(80)',
-					'doc'      => '',
 					'not_null' => 1,
 					'order'    => 4,
 				},
 				'list_counter' => {
 					'struct' => 'varchar(150)',
-					'doc'    => '',
 					'order'  => 5,
 				},
 				'variation_counter' => {
 					'struct' => 'int',
-					'doc'    => '',
 					'order'  => 6,
 				},
 				'total_counter' => {
 					'struct' => 'int',
-					'doc'    => '',
 					'order'  => 7,
 				},
 			},
@@ -854,7 +809,6 @@ sub full_db_struct {
 				},
 				'role_admin' => {
 					'struct'  => "enum('listmaster','owner','editor')",
-					'doc'     => '',
 					'primary' => 1,
 					'doc'     => 'A role of this user for this list (editor, owner or listmaster which a kind of list owner too)',
 					'order'   => 4,
@@ -887,7 +841,6 @@ sub full_db_struct {
 				},
 				'comment_admin' => {
 					'struct' => 'varchar(150)',
-					'doc'    => '',
 					'order'  => 10,
 				},
 				'subscribed_admin' => {
@@ -919,45 +872,38 @@ sub full_db_struct {
 			'fields' => {
 				'netid_netidmap' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => '',
 					'primary'  => 1,
 					'not_null' => 1,
 					'order'    => 1,
 				},
 				'serviceid_netidmap' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => '',
 					'primary'  => 1,
 					'not_null' => 1,
 					'order'    => 2,
 				},
 				'email_netidmap' => {
 					'struct' => 'varchar(100)',
-					'doc'    => '',
 					'order'  => 4,
 				},
 				'robot_netidmap' => {
 					'struct'   => 'varchar(80)',
-					'doc'      => '',
 					'primary'  => 1,
 					'not_null' => 1,
 					'order'    => 3,
 				},
 			},
 			'order' => 13,
-			'doc'   => 'FIXME',
 		},
 		'conf_table' => {
 			'fields' => {
 				'robot_conf' => {
 					'struct'  => 'varchar(80)',
-					'doc'     => '',
 					'primary' => 1,
 					'order'   => 1,
 				},
 				'label_conf' => {
 					'struct'  => 'varchar(80)',
-					'doc'     => '',
 					'primary' => 1,
 					'order'   => 2,
 				},
@@ -967,47 +913,39 @@ sub full_db_struct {
 					'order'  => 3,
 				},
 			},
-			'doc'   => 'FIXME',
 			'order' => 14,
 		},
 		'oauthconsumer_sessions_table' => {
 			'fields' => {
 				'user_oauthconsumer' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 1,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'provider_oauthconsumer' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 2,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'tmp_token_oauthconsumer' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 3,
 				},
 				'tmp_secret_oauthconsumer' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 4,
 				},
 				'access_token_oauthconsumer' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 5,
 				},
 				'access_secret_oauthconsumer' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 6,
 				},
 			},
-			'doc'   => 'FIXME',
 			'order' => 15,
 		},
 		'oauthprovider_sessions_table' => {
@@ -1022,61 +960,50 @@ sub full_db_struct {
 				},
 				'token_oauthprovider' => {
 					'struct'   => 'varchar(32)',
-					'doc'      => 'FIXME',
 					'order'    => 2,
 					'not_null' => 1,
 				},
 				'secret_oauthprovider' => {
 					'struct'   => 'varchar(32)',
-					'doc'      => 'FIXME',
 					'order'    => 3,
 					'not_null' => 1,
 				},
 				'isaccess_oauthprovider' => {
 					'struct' => 'tinyint(1)',
-					'doc'    => 'FIXME',
 					'order'  => 4,
 				},
 				'accessgranted_oauthprovider' => {
 					'struct' => 'tinyint(1)',
-					'doc'    => 'FIXME',
 					'order'  => 5,
 				},
 				'consumer_oauthprovider' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 6,
 					'not_null' => 1,
 				},
 				'user_oauthprovider' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 7,
 				},
 				'firsttime_oauthprovider' => {
 					'struct'   => 'int(11)',
-					'doc'      => 'FIXME',
 					'order'    => 8,
 					'not_null' => 1,
 				},
 				'lasttime_oauthprovider' => {
 					'struct'   => 'int(11)',
-					'doc'      => 'FIXME',
 					'order'    => 9,
 					'not_null' => 1,
 				},
 				'verifier_oauthprovider' => {
 					'struct' => 'varchar(32)',
-					'doc'    => 'FIXME',
 					'order'  => 10,
 				},
 				'callback_oauthprovider' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 11,
 				},
 			},
-			'doc'   => 'FIXME',
 			'order' => 16,
 		},
 		'oauthprovider_nonces_table' => {
@@ -1091,87 +1018,71 @@ sub full_db_struct {
 				},
 				'id_oauthprovider' => {
 					'struct' => 'int(11)',
-					'doc'    => 'FIXME',
 					'order'  => 2,
 				},
 				'nonce_oauthprovider' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 3,
 					'not_null' => 1,
 				},
 				'time_oauthprovider' => {
 					'struct' => 'int(11)',
-					'doc'    => 'FIXME',
 					'order'  => 4,
 				},
 			},
-			'doc'   => 'FIXME',
 			'order' => 17,
 		},
 		'list_table' => {
 			'fields' => {
 				'name_list'=> => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 1,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'robot_list' => {
 					'struct'   => 'varchar(100)',
-					'doc'      => 'FIXME',
 					'order'    => 2,
 					'primary'  => 1,
 					'not_null' => 1,
 				},
 				'path_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 3,
 				},
 				'status_list' => {
 					'struct' => "enum('open','closed','pending','error_config','family_closed')",
-					'doc'    => 'FIXME',
 					'order'  => 4,
 				},
 				'creation_email_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 5,
 				},
 				'creation_epoch_list' => {
 					'struct' => 'datetime',
-					'doc'    => 'FIXME',
 					'order'  => 6,
 				},
 				'subject_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 7,
 				},
 				'web_archive_list' => {
 					'struct' => 'tinyint(1)',
-					'doc'    => 'FIXME',
 					'order'  => 8,
 				},
 				'topics_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 9,
 				},
 				'editors_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 10,
 				},
 				'owners_list' => {
 					'struct' => 'varchar(100)',
-					'doc'    => 'FIXME',
 					'order'  => 11,
 				},
 			},
-			'doc'   => 'FIXME',
 			'order' => 18,
 		},
 	);
