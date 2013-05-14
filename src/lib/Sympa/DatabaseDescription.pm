@@ -1166,13 +1166,13 @@ sub db_struct {
 	return %db_struct;
 }
 
-=item autoincrement()
+=item get_autoincrement_fields()
 
-FIXME.
+Return an hash of autoincremented field for each table.
 
 =cut
 
-sub autoincrement {
+sub get_autoincrement_fields {
 	my %autoincrement;
 	foreach my $table ( keys %full_db_struct  ) {
 		foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
@@ -1182,13 +1182,13 @@ sub autoincrement {
 	return %autoincrement;
 }
 
-=item primary()
+=item get_primary_key_fields()
 
-FIXME.
+Return an hash of primary key fields for each table.
 
 =cut
 
-sub primary {
+sub get_primary_key_fields {
 	my %primary;
 
 	foreach my $table ( keys %full_db_struct ) {

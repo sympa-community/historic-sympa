@@ -45,9 +45,9 @@ use Sympa::Log::Syslog;
 # db structure description has moved in Sympa/Constant.pm
 my %db_struct = Sympa::DatabaseDescription::db_struct();
 
-my %primary =  Sympa::DatabaseDescription::primary() ;
+my %primary =  Sympa::DatabaseDescription::get_primary_key_fields();
 
-my %autoincrement = Sympa::DatabaseDescription::autoincrement() ;
+my %autoincrement = Sympa::DatabaseDescription::get_autoincrement_fields();
 
 ## List the required INDEXES
 ##   1st key is the concerned table
