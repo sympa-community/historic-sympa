@@ -1166,22 +1166,6 @@ sub db_struct {
 	return %db_struct;
 }
 
-=item get_autoincrement_fields()
-
-Return an hash of autoincremented field for each table.
-
-=cut
-
-sub get_autoincrement_fields {
-	my %autoincrement;
-	foreach my $table ( keys %full_db_struct  ) {
-		foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-			$autoincrement{$table} = $field if ($full_db_struct{$table}{'fields'}{$field}{'autoincrement'});
-		}
-	}
-	return %autoincrement;
-}
-
 =item get_primary_key_fields()
 
 Return an hash of primary key fields for each table.

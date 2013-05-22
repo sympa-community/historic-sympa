@@ -47,8 +47,6 @@ my %db_struct = Sympa::DatabaseDescription::db_struct();
 
 my %primary =  Sympa::DatabaseDescription::get_primary_key_fields();
 
-my %autoincrement = Sympa::DatabaseDescription::get_autoincrement_fields();
-
 ## List the required INDEXES
 ##   1st key is the concerned table
 ##   2nd key is the index name
@@ -274,15 +272,23 @@ sub probe_db {
 
 			}
 		}
-		# add autoincrement if needed
-		foreach my $table (keys %autoincrement) {
-			Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table, field $autoincrement{$table}");
-			unless ($db_source->is_autoinc('table'=>$table,'field'=>$autoincrement{$table})){
-				if ($db_source->set_autoinc('table'=>$table,'field'=>$autoincrement{$table},
-						'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'})){
-					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
+		# add autoincrement option if needed
+		foreach my $table (keys %{$db_struct{'mysql'}}) {
+			Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
+			foreach my $field (keys %{$db_struct{'mysql'}{$table}{'fields'}}) {
+				next unless $db_struct{'mysql'}{$table}{'fields'}{$field}{'autoincrement'};
+				next if $db_source->is_autoinc(
+					'table' => $table,
+					'field' => $field
+				);
+				my $result = $db_source->set_autoinc(
+					'table'      => $table,
+					'field'      => $field,
+					'field_type' => $db_struct{'mysql'}{$table}{'fields'}{$field});
+				if ($result) {
+					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
 				} else {
-					Sympa::Log::Syslog::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
+					Sympa::Log::Syslog::do_log('err',"Could not set table $table field $field as autoincrement");
 					return undef;
 				}
 			}
