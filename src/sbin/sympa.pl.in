@@ -414,7 +414,14 @@ while ($signal ne 'term') {
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		unless (Sympa::SDM::probe_db()) {
+		my $report = Sympa::SDM::probe_db();
+		if (defined $report) {
+			Sympa::List::send_notify_to_listmaster(
+				'db_struct_updated',
+				Sympa::Configuration::get_robot_conf('*','domain'),
+				{ 'report' => $report }
+			) if @$report;
+		} else {
 			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
 		}
 	}

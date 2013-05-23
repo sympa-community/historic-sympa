@@ -125,7 +125,14 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	die 'config_error';
 }
 
-Sympa::SDM::probe_db();
+my $report = Sympa::SDM::probe_db();
+if (defined $report) {
+	Sympa::List::send_notify_to_listmaster(
+		'db_struct_updated',
+		Sympa::Configuration::get_robot_conf('*','domain'),
+		{ 'report' => $report }
+	) if @$report;
+}
 
 chdir $Sympa::Configuration::Conf{'home'};
 

@@ -24,7 +24,14 @@ unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'sympa');
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-	unless (Sympa::SDM::probe_db()) {
+	my $report = Sympa::SDM::probe_db();
+	if (defined $report) {
+		Sympa::List::send_notify_to_listmaster(
+			'db_struct_updated',
+			Sympa::Configuration::get_robot_conf('*','domain'),
+			{ 'report' => $report }
+		) if @$report;
+	} else {
 		die "Sympa can't connect to database";
 	}
 } #  to check availabity of Sympa database

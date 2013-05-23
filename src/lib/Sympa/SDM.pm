@@ -39,7 +39,6 @@ use English qw(-no_match_vars);
 use Sympa::Configuration;
 use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
-use Sympa::List;
 use Sympa::Log::Syslog;
 
 # db structure description has moved in Sympa/Constant.pm
@@ -204,7 +203,6 @@ sub probe_db {
 
 	my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
 	## Database structure
-	## Report changes to listmaster
 	my @report;
 
 	## Get tables
@@ -300,11 +298,8 @@ sub probe_db {
 
 	## Used by List subroutines to check that the DB is available
 	$use_db = 1;
-
-	## Notify listmaster
-	Sympa::List::send_notify_to_listmaster('db_struct_updated',  Sympa::Configuration::get_robot_conf('*','domain'), {'report' => \@report}) if ($#report >= 0);
-
-	return 1;
+	
+	return \@report;
 }
 
 =item check_fields(%parameters)
