@@ -620,29 +620,29 @@ sub checkfiles {
 				}
 
 				unless (Sympa::Template::parse_tt2($params,'css.tt2' ,\*CSS, $tt2_include_path)) {
-				my $error = Sympa::Template::get_error();
-				$params->{'tt2_error'} = $error;
-				Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
-				Sympa::Log::Syslog::do_log('err', "Error while installing $dir/$css");
+					my $error = Sympa::Template::get_error();
+					$params->{'tt2_error'} = $error;
+					Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+					Sympa::Log::Syslog::do_log('err', "Error while installing $dir/$css");
+				}
+
+				$css_updated ++;
+
+				close (CSS) ;
+
+				## Make the CSS world-readable
+				chmod 0644, $dir.'/'.$css;
 			}
-
-			$css_updated ++;
-
-			close (CSS) ;
-
-			## Make the CSS world-readable
-			chmod 0644, $dir.'/'.$css;
 		}
 	}
-}
-if ($css_updated) {
-	## Notify main listmaster
-	Sympa::List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
-}
+	if ($css_updated) {
+		## Notify main listmaster
+		Sympa::List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
+	}
 
 
-return undef if ($config_err);
-return 1;
+	return undef if ($config_err);
+	return 1;
 }
 
 ## return 1 if the parameter is a known robot
@@ -1092,17 +1092,17 @@ sub load_crawlers_detection {
 	my $config_file = _get_config_file_name({'robot' => $robot, 'file' => "crawlers_detection.conf"});
 	return undef unless  (-r $config_file);
 	my $hashtab = load_generic_conf_file($config_file,\%crawlers_detection_conf);
-my $hashhash ;
+	my $hashhash ;
 
 
-foreach my $kword (keys %{$hashtab}) {
-	next unless ($crawlers_detection_conf{$kword});  # ignore comments and default
-	foreach my $value (@{$hashtab->{$kword}}) {
-		$hashhash->{$kword}{$value} = 'true';
+	foreach my $kword (keys %{$hashtab}) {
+		next unless ($crawlers_detection_conf{$kword});  # ignore comments and default
+		foreach my $value (@{$hashtab->{$kword}}) {
+			$hashhash->{$kword}{$value} = 'true';
+		}
 	}
-}
 
-return $hashhash;
+	return $hashhash;
 }
 
 ############################################################
