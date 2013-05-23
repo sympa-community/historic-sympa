@@ -242,7 +242,7 @@ sub probe_db {
 				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_type);
 				return undef;
 			}
-			unless (check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
+			unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
 				return undef;
 			}
@@ -258,12 +258,12 @@ sub probe_db {
 
 			if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
 				## Check that primary key has the right structure.
-				unless (check_primary_key('table' => $t,'report' => \@report)) {
+				unless (_check_primary_key('table' => $t,'report' => \@report)) {
 					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
 					return undef;
 				}
 
-				unless (check_indexes('table' => $t,'report' => \@report)) {
+				unless (_check_indexes('table' => $t,'report' => \@report)) {
 					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
 					return undef;
 				}
@@ -302,13 +302,7 @@ sub probe_db {
 	return \@report;
 }
 
-=item check_fields(%parameters)
-
-FIXME.
-
-=cut
-
-sub check_fields {
+sub _check_fields {
 	my (%params) = @_;
 
 	my $t = $params{'table'};
@@ -341,7 +335,7 @@ sub check_fields {
 
 		## Change DB types if different and if update_db_types enabled
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
-			unless (check_db_field_type(effective_format => $real_struct{$t}{$f},
+			unless (_check_db_field_type(effective_format => $real_struct{$t}{$f},
 					required_format => $db_struct{$db_type}{$t}{$f})) {
 				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{$db_type}{$t}{$f});
 
@@ -371,13 +365,7 @@ sub check_fields {
 	return 1;
 }
 
-=item check_primary_key(%parameters)
-
-FIXME.
-
-=cut
-
-sub check_primary_key {
+sub _check_primary_key {
 	my (%params) = @_;
 
 	my $t = $params{'table'};
@@ -429,13 +417,7 @@ sub check_primary_key {
 	return 1;
 }
 
-=item check_indexes(%parameters)
-
-FIXME.
-
-=cut
-
-sub check_indexes {
+sub _check_indexes {
 	my (%params) = @_;
 
 	my $t = $params{'table'};
@@ -548,27 +530,14 @@ sub data_structure_uptodate {
 	return 1;
 }
 
-=item check_db_field_type(%parameters)
-
-Compare required DB field type
-
-Parameters:
-
-=over
-
-item C<required_format> => string
-
-item C<effective_format> => string
-
-=back
-
-Return value:
-
-1 if field type is appropriate AND size >= required size
-
-=cut
-
-sub check_db_field_type {
+# _check_db_field_type(%parameters)
+# Compare required DB field type
+# Parameters:
+# required_format> => string
+# effective_format> => string
+# Return value:
+# 1 if field type is appropriate AND size >= required size
+sub _check_db_field_type {
 	my (%params) = @_;
 
 	my ($required_type, $required_size, $effective_type, $effective_size);
