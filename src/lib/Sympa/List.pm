@@ -11103,12 +11103,11 @@ sub get_mod_spool_size {
 		name   => 'mod',
 		source => $Sympa::SDM::db_source
 	);
-	my $count =  $spool->get_content(
+	my $count =  $spool->get_count(
 		selector  => {
 			list  => $self->{name},
 			robot => $self->{robot}
 		},
-		selection => 'count'
 	);
 
 	if ($count) {
@@ -12629,13 +12628,12 @@ sub store_subscription_request {
 		source => $Sympa::SDM::db_source
 	);
 
-	my $content = $subscription_request_spool->get_content(
+	my $content = $subscription_request_spool->get_count(
 		selector  => {
 			list   => $self->{name},
 			robot  => $self->{robot},
 			sender => $email
 		},
-		selection => 'count'
 	);
 	if ($content != 0) {
 		Sympa::Log::Syslog::do_log('notice', 'Subscription already requested by %s', $email);
@@ -12716,12 +12714,11 @@ sub get_subscription_request_count {
 		name   => 'subscribe',
 		source => $Sympa::SDM::db_source
 	);
-	return $subscription_request_spool->get_content(
+	return $subscription_request_spool->get_count(
 		selector  => {
 			list  => $self->{name},
 			robot => $self->{robot}
 		},
-		selection => 'count'
 	);
 }
 

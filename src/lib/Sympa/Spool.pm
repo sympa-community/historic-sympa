@@ -133,23 +133,51 @@ sub global_count {
 
 =over
 
-=item $spool->count()
+=item $spool->get_count()
 
-FIXME
+Return the spool content count.
+
+Parameters:
+
+=over
+
+=item C<selector> => hashref
+
+Hash field->value used as filter WHERE sql query.
+
+=back
 
 =cut
 
-sub count {
-	my ($self) = @_;
+sub get_count {
+	my ($self, %params) = @_;
 
-	return $self->get_content(selection => 'count');
+	my $sql_where = _sqlselector($params{selector});
+	if ($self->{status} eq 'bad') {
+		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
+	} else {
+		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
+	}
+	$sql_where =~s/^AND//;
+
+	my $statement = 'SELECT COUNT(*) ';
+
+	$statement = $statement . sprintf
+		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
+		$sql_where,
+		Sympa::SDM::quote($self->{name});
+
+	my $sth = Sympa::SDM::do_query($statement);
+	my @result = $sth->fetchrow_array();
+	return $result[0];
 }
 
 =item $spool->get_content(%parameters)
 
-Return the content an array of hash describing the spool content.
+Return the spool content, as a list of hashref.
 
 Parameters:
+
 =over
 
 =item C<selector> => hashref
@@ -162,7 +190,6 @@ The list of field to select. possible values are :
 	#    -  a comma separated list of field to select.
 	#    -  '*'  is the default .
 	#    -  '*_but_message' mean any field except message which may be hugue and unusefull while listing spools
-	#    - 'count' mean the selection is just a count.
 	# should be used mainly to select all but 'message' that may be huge and may be unusefull
 
 =item C<ofset> => number
@@ -196,13 +223,7 @@ sub get_content {
 	}
 	$sql_where =~s/^AND//;
 
-	my $statement ;
-	if ($params{selection} eq 'count'){
-		# just return the selected count, not all the values
-		$statement = 'SELECT COUNT(*) ';
-	} else {
-		$statement = 'SELECT '._selectfields($params{selection});
-	}
+	my $statement = 'SELECT '._selectfields($params{selection});
 
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
@@ -218,22 +239,17 @@ sub get_content {
 	}
 
 	my $sth = Sympa::SDM::do_query($statement);
-	if($params{selection} eq 'count') {
-		my @result = $sth->fetchrow_array();
-		return $result[0];
-	} else {
-		my @messages;
-		while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
-			$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
-			$message->{'lockdate_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
-			$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
-			$message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
-			$message->{'status'} = $self->{status};
-			push @messages, $message;
-		}
-		$sth->finish();
-		return @messages;
+	my @messages;
+	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
+		$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
+		$message->{'lockdate_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
+		$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
+		$message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
+		$message->{'status'} = $self->{status};
+		push @messages, $message;
 	}
+	$sth->finish();
+	return @messages;
 }
 
 =item $spool->next($selector)
