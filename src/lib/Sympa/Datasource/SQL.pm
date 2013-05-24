@@ -332,6 +332,26 @@ sub establish_connection {
 	}
 }
 
+=item $source->get_handle()
+
+Return underlying database handle.
+
+Parameters:
+
+None
+
+Return value:
+
+A DBI database handle object.
+
+=cut
+
+sub get_handle {
+	my ($self) = @_;
+
+	return $self->{dbh};
+}
+
 =item $source->do_query($query, @params)
 
 Parameters:
