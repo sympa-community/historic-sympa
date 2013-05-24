@@ -154,6 +154,7 @@ FIXME.
 =cut
 
 sub probe_db {
+	my ($db_source) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'Checking database structure');
 
 	my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');

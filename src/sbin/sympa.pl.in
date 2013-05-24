@@ -414,7 +414,7 @@ while ($signal ne 'term') {
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		my $report = Sympa::SDM::probe_db();
+		my $report = Sympa::SDM::probe_db(Sympa::SDM::get_source());
 		if (defined $report) {
 			Sympa::List::send_notify_to_listmaster(
 				'db_struct_updated',
