@@ -52,7 +52,7 @@ my %primary =  Sympa::DatabaseDescription::get_primary_key_fields();
 ##   the table lists the field on which the index applies
 my %indexes = %Sympa::DatabaseDescription::indexes ;
 
-our $db_source;
+my $db_source;
 our $use_db;
 
 =head1 FUNCTIONS
@@ -95,6 +95,16 @@ sub do_prepared_query {
 	}
 
 	return $sth;
+}
+
+=item get_source()
+
+Return data source.
+
+=cut
+
+sub get_source {
+	return $db_source;
 }
 
 =item db_get_handler()

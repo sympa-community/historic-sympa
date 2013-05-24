@@ -151,7 +151,7 @@ unless (Sympa::SDM::check_db_connect()) {
 }
 
 # init database logger
-Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+Sympa::Log::Database::init(source => Sympa::SDM::get_source());
 
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
@@ -242,7 +242,7 @@ my $end = 0;
 
 my $spool = Sympa::Spool->new(
 	name   => 'bounce',
-	source => $Sympa::SDM::db_source
+	source => Sympa::SDM::get_source()
 );
 
 Sympa::Log::Syslog::do_log('debug','starting infinite loop');

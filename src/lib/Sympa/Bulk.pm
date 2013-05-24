@@ -441,7 +441,7 @@ sub store {
 	my $message_already_on_spool ;
 	my $bulkspool = Sympa::Spool->new(
 		name   => 'bulk',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {

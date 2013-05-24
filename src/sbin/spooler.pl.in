@@ -321,11 +321,11 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		my $msgspool = Sympa::Spool->new(
 			name   => 'msg',
-			source => $Sympa::SDM::db_source
+			source => Sympa::SDM::get_source()
 		);
 		my $bouncespool = Sympa::Spool->new(
 			name   => 'bounce',
-			source => $Sympa::SDM::db_source
+			source => Sympa::SDM::get_source()
 		);
 
 		## This is the main loop : look for files in the directory, handles

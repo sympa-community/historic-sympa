@@ -139,7 +139,7 @@ unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
 }
 
 # init database logger
-Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+Sympa::Log::Database::init(source => Sympa::SDM::get_source());
 
 ## Check for several files.
 unless (Sympa::Configuration::checkfiles()) {
@@ -236,7 +236,7 @@ my @tasks; # list of tasks in the spool
 
 my $spool = Sympa::Spool->new(
 	name   => 'task',
-	source => $Sympa::SDM::db_source
+	source => Sympa::SDM::get_source()
 );
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log

@@ -268,7 +268,7 @@ sub upgrade {
 							$table,
 							Sympa::SDM::quote($list->{'name'}))) {
 						Sympa::Log::Syslog::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => $Sympa::SDM::db_source->{'db_handler'}->errstr});
+						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::SDM::get_source()->{'db_handler'}->errstr});
 						return undef;
 					}
 				}
@@ -809,7 +809,7 @@ sub upgrade {
 
 			my $spool = Sympa::Spool->new(
 				name   => $spools_def{$spoolparameter},
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.

@@ -208,7 +208,7 @@ $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmt
 
 my $spool = Sympa::Spool->new(
 	name   => 'bulk',
-	source => $Sympa::SDM::db_source
+	source => Sympa::SDM::get_source()
 );
 
 while (!$end) {

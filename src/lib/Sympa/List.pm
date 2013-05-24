@@ -3324,7 +3324,7 @@ sub distribute_msg {
 		if ($info_msg_topic) {
 			my $topicspool = Sympa::Spool->new(
 				name   => 'topic',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});
 		}
@@ -3541,7 +3541,7 @@ sub send_msg_digest {
 	# fetch and lock message.
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
@@ -4522,7 +4522,7 @@ sub send_to_editor {
 		# move message to spool  mod
 		my $spoolmod = Sympa::Spool->new(
 			name   => 'mod',
-			source => $Sympa::SDM::db_source
+			source => Sympa::SDM::get_source()
 		);
 		$spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
@@ -4656,7 +4656,7 @@ sub send_auth {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'auth',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	$spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
 	my $param = {'authkey' => $authkey,
@@ -8238,7 +8238,7 @@ sub archive_msg {
 		} else {
 			my $spoolarchive = Sympa::Spool->new(
 				name   => 'archive',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			unless ($message->{'messagekey'}) {
 				Sympa::Log::Syslog::do_log('err', "could not store message in archive spool, messagekey missing");
@@ -10703,7 +10703,7 @@ sub store_digest {
 
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
 	my $string;
@@ -11101,7 +11101,7 @@ sub get_mod_spool_size {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'mod',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	my $count =  $spool->get_count(
 		selector  => {
@@ -12307,7 +12307,7 @@ sub tag_topic {
 	$topic_item .= sprintf  "METHOD  $method\n";
 	my $topicspool = Sympa::Spool->new(
 		name   => 'topic',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	return $topicspool->store(
@@ -12346,7 +12346,7 @@ sub load_msg_topic {
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$self->{'name'},$msg_id);
 	my $topicspool = Sympa::Spool->new(
 		name   => 'topic',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
@@ -12625,7 +12625,7 @@ sub store_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $content = $subscription_request_spool->get_count(
@@ -12660,7 +12660,7 @@ sub get_subscription_requests {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	my @subrequests = $subscription_request_spool->get_content(
 		selector  => {
@@ -12712,7 +12712,7 @@ sub get_subscription_request_count {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	return $subscription_request_spool->get_count(
 		selector  => {
@@ -12729,7 +12729,7 @@ sub delete_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $removed = 0;
@@ -12987,7 +12987,7 @@ sub purge {
 	Sympa::Task->load_tasks(
 		Sympa::Spool->new(
 			name   => 'task',
-			source => $Sympa::SDM::db_source
+			source => Sympa::SDM::get_source()
 		)
 	);
 	foreach my $task (Sympa::Task->get_tasks_by_list($self->get_list_id())) {

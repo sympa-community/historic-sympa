@@ -2216,7 +2216,7 @@ sub _distribute {
 
 	my $modspool = Sympa::Spool->new(
 		name   => 'mod',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	my $name = $list->{'name'};
 
@@ -2225,7 +2225,7 @@ sub _distribute {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
 		my $validatedspool = Sympa::Spool->new(
 			name   => 'validated',
-			source => $Sympa::SDM::db_source
+			source => Sympa::SDM::get_source()
 		);
 		$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	}
@@ -2301,7 +2301,7 @@ sub _confirm {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'auth',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $messageinspool = $spool->get_message({'authkey'=>$key});
@@ -2470,7 +2470,7 @@ sub _reject {
 
 	my $modspool = Sympa::Spool->new(
 		name   => 'mod',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 

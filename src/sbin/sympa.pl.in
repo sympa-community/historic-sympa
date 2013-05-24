@@ -433,7 +433,7 @@ while ($signal ne 'term') {
 	}
 
 	# init database logger
-	Sympa::Log::Database::init(source => $Sympa::SDM::db_source);
+	Sympa::Log::Database::init(source => Sympa::SDM::get_source());
 
 ## Apply defaults to %Sympa::List::pinfo
 	Sympa::List::_apply_defaults();
@@ -1221,7 +1221,7 @@ while ($signal ne 'term') {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'msg',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 	## This is the main loop : look for files in the directory, handles
 	## them, sleeps a while and continues the good job.
@@ -1246,45 +1246,45 @@ while ($signal ne 'term') {
 			my $msg_bad = Sympa::Spool->new(
 				name   => 'msg',
 				status => 'bad',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$msg_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queue'});
 			my $archive_bad = Sympa::Spool->new(
 				name   => 'archive',
 				status => 'bad',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			my $queuebounce_bad = Sympa::Spool->new(
 				name   => 'bounce',
 				status => 'bad',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			$queuebounce_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queuebounce'});
 			my $queuemod = Sympa::Spool->new(
 				name   => 'mod',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$queuemod->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuemod'});
 			my $queueauth = Sympa::Spool->new(
 				name   => 'auth',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$queueauth->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueauth'});
 			my $queuetopic = Sympa::Spool->new(
 				name   => 'topic',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$queuetopic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuetopic'});
 			my $queuesubscribe = Sympa::Spool->new(
 				name   => 'subscribe',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$queuesubscribe->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'});
 			my $queueautomatic = Sympa::Spool->new(
 				name   => 'automatic',
-				source => $Sympa::SDM::db_source
+				source => Sympa::SDM::get_source()
 			);
 			$queueautomatic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueautomatic'});
 			Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
@@ -2706,7 +2706,7 @@ sub SendDigest{
 
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	foreach my $digest ($digestspool->get_content(selection => 'messagekey,list,robot,date')){
@@ -2790,7 +2790,7 @@ sub test_storage {
 
 	my $testing = Sympa::Spool->new(
 		name   => 'bad',
-		source => $Sympa::SDM::db_source
+		source => Sympa::SDM::get_source()
 	);
 
 	my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";
