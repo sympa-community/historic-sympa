@@ -45,7 +45,7 @@ chdir $Sympa::Configuration::Conf{'home'};
 
 Sympa::SDM::db_connect() || die "Can't connect to database";
 
-my $dbh = Sympa::SDM::db_get_handler();
+my $dbh = Sympa::SDM::get_source()->get_handle();
 
 print "Searching uncrypted passwords\n";
 

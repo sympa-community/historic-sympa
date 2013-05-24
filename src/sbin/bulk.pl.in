@@ -298,8 +298,10 @@ while (!$end) {
 
 				## disconnect from database before fork
 				## to prevent DB handlers to be shared by different processes
-				my $dbh = Sympa::SDM::db_get_handler();
-				$dbh->disconnect; # when loading conf in database disconnect because of sharing dbh may crash bulk.pl
+				# when loading conf in database disconnect
+				# because of sharing dbh may crash bulk.pl
+				my $source = Sympa::SDM::get_source();
+				$source->disconnect();
 
 				if($Sympa::Configuration::Conf{'bulk_max_count'} > 1) {
 					Sympa::Log::Syslog::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, $Sympa::Configuration::Conf{'bulk_max_count'}-($#remaining_children+1));

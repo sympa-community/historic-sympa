@@ -107,23 +107,6 @@ sub get_source {
 	return $db_source;
 }
 
-=item db_get_handler()
-
-Get database handler
-
-=cut
-
-sub db_get_handler {
-	Sympa::Log::Syslog::do_log('debug3', 'Returning handle to sympa database');
-
-	if(check_db_connect()) {
-		return $db_source->{'dbh'};
-	} else {
-		Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to Sympa database');
-		return undef;
-	}
-}
-
 =item check_db_connect()
 
 Just check if DB connection is ok

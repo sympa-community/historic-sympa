@@ -333,7 +333,7 @@ sub upgrade {
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $dbh = Sympa::SDM::db_get_handler();
+			my $dbh = Sympa::SDM::get_source()->get_handle();
 
 			foreach my $field (keys %check) {
 
@@ -1092,7 +1092,7 @@ sub md5_encode_password {
 		return undef;
 	}
 
-	my $dbh = Sympa::SDM::db_get_handler();
+	my $dbh = Sympa::SDM::get_source()->get_handle();
 
 	my $sth;
 	unless ($sth = $dbh->prepare("SELECT email_user,password_user from user_table")) {

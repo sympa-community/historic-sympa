@@ -37,7 +37,7 @@ chdir $Sympa::Configuration::Conf{'home'};
 
 Sympa::SDM::db_connect() || die "Can't connect to database";
 
-my $dbh = Sympa::SDM::db_get_handler();
+my $dbh = Sympa::SDM::get_source()->get_handle();
 
 my $sth =  $dbh->prepare("SELECT user_subscriber, comment_subscriber FROM subscriber_table") || die "Can't prepare SQL statement";
 
