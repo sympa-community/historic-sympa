@@ -144,9 +144,9 @@ sub new {
 	my ($class, %params) = @_;
 
 	my $self = {
-		db_host    => $params{'host'},
-		db_user    => $params{'user'},
-		db_passwd  => $params{'passwd'},
+		db_host    => $params{'db_host'},
+		db_user    => $params{'db_user'},
+		db_passwd  => $params{'db_passwd'},
 		db_name    => $params{'db_name'},
 		db_type    => $params{'db_type'},
 		db_options => $params{'connect_options'},
