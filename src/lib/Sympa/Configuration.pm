@@ -127,10 +127,20 @@ my $wwsconf = Sympa::WWSympa::load_config(
 );
 our %Conf = ();
 
-## Loads and parses the configuration file. Reports errors if any.
-# do not try to load database values if $no_db is set ;
-# do not change gloval hash %Conf if $return_result  is set ;
-# we known that's dirty, this proc should be rewritten without this global var %Conf
+=head1 FUNCTIONS
+
+=over
+
+=item load($config_file, $no_db, $return_result)
+
+Loads and parses the configuration file. Reports errors if any.
+do not try to load database values if $no_db is set ;
+do not change gloval hash %Conf if $return_result  is set ;
+we known that's dirty, this proc should be rewritten without this global var
+%Conf
+
+=cut
+
 sub load {
 	my ($config_file, $no_db, $return_result) = @_;
 
@@ -200,7 +210,7 @@ sub load {
 	_load_robot_secondary_config_files({'config_hash' => \%Conf});
 
 	## Load robot.conf files
-	unless (load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload})){
+	unless (_load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload})){
 		printf STDERR "Unable to load robots\n";
 		return undef;
 	}
@@ -210,7 +220,7 @@ sub load {
 }
 
 ## load each virtual robots configuration files
-sub load_robots {
+sub _load_robots {
 	my ($params) = @_;
 	my @robots;
 
@@ -239,7 +249,12 @@ sub load_robots {
 	return 1;
 }
 
-## returns a robot conf parameter
+=item get_robot_conf($robot, $param)
+
+Returns a robot conf parameter
+
+=cut
+
 sub get_robot_conf {
 	my ($robot, $param) = @_;
 
@@ -252,7 +267,12 @@ sub get_robot_conf {
 	return $Conf{$param} || $wwsconf->{$param};
 }
 
-# deletes all the *.conf.bin files.
+=item delete_binaries()
+
+Deletes all the *.conf.bin files.
+
+=cut
+
 sub delete_binaries {
 	Sympa::Log::Syslog::do_log('notice',"Removing binary cache for sympa.conf, wwsympa.conf and all the robot.conf files");
 	my @files = (Sympa::Constants::CONFIG,Sympa::Constants::WWSCONFIG);
@@ -271,7 +291,12 @@ sub delete_binaries {
 	}
 }
 
-# Return a reference to an array containing the names of the robots on the server.
+=item get_robots_list()
+
+Return a list of the robots on the server, as an arrayref.
+
+=cut
+
 sub get_robots_list {
 	Sympa::Log::Syslog::do_log('debug2',"Retrieving the list of robots on the server");
 	my @robots_list;
@@ -289,9 +314,13 @@ sub get_robots_list {
 	return \@robots_list;
 }
 
-## Returns a hash containing the values of all the parameters of the group
-## (as defined in Sympa::Configuration::Definition.pm) whose name is given as argument, in the context
-## of the robot given as argument.
+=item get_parameters_group($robot, $group)
+
+Returns a hash containing the values of all the parameters of the group whose
+name is given as argument, in the context of the robot given as argument.
+
+=cut
+
 sub get_parameters_group {
 	my ($robot, $group) = @_;
 	Sympa::Log::Syslog::do_log('debug3','Getting parameters for group "%s"',$group);
@@ -303,7 +332,7 @@ sub get_parameters_group {
 }
 
 ## fetch the value from parameter $label of robot $robot from conf_table
-sub get_db_conf  {
+sub _get_db_conf  {
 	my ($robot, $label) = @_;
 
 	# if the value is related to a robot that is not explicitly defined, apply it to the default robot.
@@ -322,7 +351,12 @@ sub get_db_conf  {
 }
 
 
-## store the value from parameter $label of robot $robot from conf_table
+=item set_robot_conf($robot, $label, $value)
+
+Store the value from parameter $label of robot $robot from conf_table.
+
+=cut
+
 sub set_robot_conf  {
 	my ($robot, $label, $value) = @_;
 	Sympa::Log::Syslog::do_log('info','Set config for robot %s , %s="%s"',$robot,$label, $value);
@@ -358,7 +392,12 @@ sub set_robot_conf  {
 }
 
 
-# Store configs to database
+=item conf_2_db($config_file)
+
+Store configs to database.
+
+=cut
+
 sub conf_2_db {
 	my ($config_file) = @_;
 	Sympa::Log::Syslog::do_log('info',"conf_2_db");
@@ -366,7 +405,7 @@ sub conf_2_db {
 	my @conf_parameters = @Sympa::Configuration::Definition::params ;
 
 	# store in database robots parameters.
-	load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults).
+	_load_robots(); #load only parameters that are in a robot.conf file (do not apply defaults).
 
 	unless (opendir DIR,$Conf{'etc'} ) {
 		printf STDERR "%s::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n", __PACKAGE__;
@@ -409,7 +448,12 @@ sub conf_2_db {
 	}
 }
 
-## Check required files and create them if required
+=item checkfiles_as_root()
+
+Check required files and create them if required
+
+=cut
+
 sub checkfiles_as_root {
 
 	my $config_err = 0;
@@ -462,7 +506,12 @@ sub checkfiles_as_root {
 	return 1 ;
 }
 
-## Check a few files
+=item checkfiles()
+
+Check a few files.
+
+=cut
+
 sub checkfiles {
 	my $config_err = 0;
 
@@ -645,9 +694,14 @@ sub checkfiles {
 	return 1;
 }
 
-## return 1 if the parameter is a known robot
-## Valid options :
-##    'just_try' : prevent error logs if robot is not valid
+=item valid_robot($robot, $options)
+
+Return 1 if the parameter is a known robot
+Valid options :
+'just_try' : prevent error logs if robot is not valid
+
+=cut
+
 sub valid_robot {
 	my ($robot, $options) = @_;
 
@@ -675,8 +729,13 @@ sub valid_robot {
 	return 1;
 }
 
-## Returns the SSO record correponding to the provided sso_id
-## return undef if none was found
+=item get_sso_by_id(%params)
+
+Returns the SSO record correponding to the provided sso_id
+return undef if none was found
+
+=cut
+
 sub get_sso_by_id {
 	my (%params) = @_;
 
@@ -693,10 +752,6 @@ sub get_sso_by_id {
 
 	return undef;
 }
-
-##########################################
-## Low level subs. Not supposed to be called from other modules.
-##########################################
 
 sub _load_auth {
 	my ($robot) = @_;
@@ -902,7 +957,7 @@ sub _load_auth {
 }
 
 ## load charset.conf file (charset mapping for service messages)
-sub load_charset {
+sub _load_charset {
 	my $charset = {};
 
 	my $config_file = _get_config_file_name({'robot' => '', 'file' => "charset.conf"});
@@ -936,7 +991,7 @@ sub load_charset {
 
 
 ## load nrcpt file (limite receipient par domain
-sub load_nrcpt_by_domain {
+sub _load_nrcpt_by_domain {
 	my $config_file = _get_config_file_name({'robot' => '', 'file' => "nrcpt_by_domain.conf"});
 	return undef unless  (-r $config_file);
 	my $line_num = 0;
@@ -967,7 +1022,12 @@ sub load_nrcpt_by_domain {
 	return ($nrcpt_by_domain);
 }
 
-## load .sql named filter conf file
+=item load_sql_filter($file)
+
+Load .sql named filter conf file.
+
+=cut
+
 sub load_sql_filter {
 	my ($file) = @_;
 
@@ -989,10 +1049,15 @@ sub load_sql_filter {
 
 	return undef unless  (-r $file);
 
-	return (load_generic_conf_file($file,\%sql_named_filter_params, 'abort'));
+	return (_load_generic_conf_file($file,\%sql_named_filter_params, 'abort'));
 }
 
-## load automatic_list_description.conf configuration file
+=item load_automatic_lists_description($robot, $family)
+
+Load automatic_list_description.conf configuration file.
+
+=cut
+
 sub load_automatic_lists_description {
 	my ($robot, $family) = @_;
 	Sympa::Log::Syslog::do_log('debug2','Starting: robot %s family %s',$robot,$family);
@@ -1027,7 +1092,7 @@ sub load_automatic_lists_description {
 		$config = $Conf{'etc'}.'/families/'.$family.'/automatic_lists_description.conf';
 	}
 	return undef unless  (-r $config);
-	my $description = load_generic_conf_file($config,\%automatic_lists_params);
+	my $description = _load_generic_conf_file($config,\%automatic_lists_params);
 
 	## Now doing some structuration work because load_automatic_lists_description() can't handle
 	## data structured beyond one level of hash. This needs to be changed.
@@ -1066,7 +1131,7 @@ sub load_automatic_lists_description {
 
 
 ## load trusted_application.conf configuration file
-sub load_trusted_application {
+sub _load_trusted_application {
 	my ($robot) = @_;
 
 	# find appropriate trusted-application.conf file
@@ -1076,13 +1141,13 @@ sub load_trusted_application {
 
 	return undef unless  (-r $config_file);
 	# open TMP, ">/tmp/dump1";Sympa::Tools::Data::dump_var(load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
-	return (load_generic_conf_file($config_file,\%trusted_applications));
+	return (_load_generic_conf_file($config_file,\%trusted_applications));
 
 }
 
 
 ## load trusted_application.conf configuration file
-sub load_crawlers_detection {
+sub _load_crawlers_detection {
 	my ($robot) = @_;
 
 	my %crawlers_detection_conf = ('user_agent_string' => {'occurrence' => '0-n',
@@ -1091,7 +1156,7 @@ sub load_crawlers_detection {
 
 	my $config_file = _get_config_file_name({'robot' => $robot, 'file' => "crawlers_detection.conf"});
 	return undef unless  (-r $config_file);
-	my $hashtab = load_generic_conf_file($config_file,\%crawlers_detection_conf);
+	my $hashtab = _load_generic_conf_file($config_file,\%crawlers_detection_conf);
 	my $hashhash ;
 
 
@@ -1105,20 +1170,16 @@ sub load_crawlers_detection {
 	return $hashhash;
 }
 
-############################################################
-#  load_generic_conf_file
-############################################################
-#  load a generic config organized by paragraph syntax
-#
+# _load_generic_conf_file($config_file, $structure_ref, $on_error)
+# Load a generic config organized by paragraph syntax.
+# Parameters:
 # IN : -$config_file (+): full path of config file
 #      -$structure_ref (+): ref(HASH) describing expected syntax
 #      -$on_error: optional. sub returns undef if set to 'abort'
 #          and an error is found in conf file
-# OUT : ref(HASH) of parsed parameters
-#     | undef
-#
-##############################################################
-sub load_generic_conf_file {
+# Return value:
+# hashref of parsed parameters | undef
+sub _load_generic_conf_file {
 	my ($config_file, $structure_ref, $on_error) = @_;
 
 	my %structure = %$structure_ref;
@@ -1294,9 +1355,6 @@ sub load_generic_conf_file {
 	return \%admin;
 }
 
-
-### load_a_param
-#
 sub _load_a_param {
 	my (undef, $value, $p) = @_;
 
@@ -1327,12 +1385,12 @@ sub _load_a_param {
 }
 }
 
-## Simply load a config file and returns a hash.
-## the returned hash contains two keys:
-## 1- the key 'config' points to a hash containing the data found in the config file.
-## 2- the key 'numbered_config' points to a hash containing the data found in the config file. Each entry contains both the value of a parameter and the line where it was found in the config file.
-## 3- the key 'errors' contains the number of config entries that could not be loaded, due to an error.
-## Returns undef if something went wrong while attempting to read the file.
+# Simply load a config file and returns a hash.
+# the returned hash contains two keys:
+# 1- the key 'config' points to a hash containing the data found in the config file.
+# 2- the key 'numbered_config' points to a hash containing the data found in the config file. Each entry contains both the value of a parameter and the line where it was found in the config file.
+# 3- the key 'errors' contains the number of config entries that could not be loaded, due to an error.
+# Returns undef if something went wrong while attempting to read the file.
 sub _load_config_file_to_hash {
 	my ($params) = @_;
 
@@ -1500,14 +1558,14 @@ sub _load_server_specific_secondary_config_files {
 
 	## Load charset.conf file if necessary.
 	if($params->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
-		$params->{'config_hash'}{'locale2charset'} = load_charset ();
+		$params->{'config_hash'}{'locale2charset'} = _load_charset ();
 	} else {
 		$params->{'config_hash'}{'locale2charset'} = {};
 	}
 
 	## Load nrcpt_by_domain.conf
-	$params->{'config_hash'}{'nrcpt_by_domain'} = load_nrcpt_by_domain () ;
-	$params->{'config_hash'}{'crawlers_detection'} = load_crawlers_detection($params->{'config_hash'}{'robot_name'});
+	$params->{'config_hash'}{'nrcpt_by_domain'} = _load_nrcpt_by_domain () ;
+	$params->{'config_hash'}{'crawlers_detection'} = _load_crawlers_detection($params->{'config_hash'}{'robot_name'});
 
 }
 
@@ -1572,7 +1630,7 @@ sub _infer_robot_parameter_values {
 sub _load_robot_secondary_config_files {
 	my ($params) = @_;
 
-	my $trusted_applications = load_trusted_application($params->{'config_hash'}{'robot_name'});
+	my $trusted_applications = _load_trusted_application($params->{'config_hash'}{'robot_name'});
 	$params->{'config_hash'}{'trusted_applications'} = undef;
 	if (defined $trusted_applications) {
 		$params->{'config_hash'}{'trusted_applications'} = $trusted_applications->{'trusted_application'};
@@ -1795,7 +1853,7 @@ sub _replace_file_value_by_db_value {
 	$robot = '*' if ($params->{'config_hash'}{'robot_name'} eq '');
 	foreach my $label (keys %db_storable_parameters) {
 		next unless ($robot ne '*' && $valid_robot_key_words{$label} == 1);
-		my $value = get_db_conf($robot, $label);
+		my $value = _get_db_conf($robot, $label);
 		if (defined $value) {
 			$params->{'config_hash'}{$label} = $value ;
 		}
