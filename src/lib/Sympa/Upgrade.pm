@@ -343,9 +343,9 @@ sub upgrade {
 				## Query the Database
 				$statement = sprintf "SELECT max(%s) FROM %s", $field, $check{$field};
 
-				my $sth;
+				my $sth = $dbh->prepare($statement);
 
-				unless ($sth = $dbh->prepare($statement)) {
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 					return undef;
 				}
@@ -757,8 +757,8 @@ sub upgrade {
 		if (lower_version($previous_version, '6.1.11')) {
 			## Exclusion table was not robot-enabled.
 			Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
-			my $sth;
-			unless ($sth = $source->do_query("SELECT * FROM exclusion_table")) {
+			my $sth = $source->do_query("SELECT * FROM exclusion_table");
+			unless ($sth) {
 				Sympa::Log::Syslog::do_log('err','Unable to gather informations from the exclusions table.');
 			}
 			my @robots = Sympa::List::get_robots();
@@ -780,8 +780,13 @@ sub upgrade {
 				}
 				if ($#valid_robot_candidates == 0) {
 					$valid_robot = $valid_robot_candidates[0];
-					my $sth;
-					unless ($sth = $source->do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", $source->quote($valid_robot),$source->quote($data->{'list_exclusion'}),$source->quote($data->{'user_exclusion'}))) {
+					my $sth = $source->do_query(
+						"UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s",
+						$source->quote($valid_robot),
+						$source->quote($data->{'list_exclusion'}),
+						$source->quote($data->{'user_exclusion'})
+					);
+					unless ($sth) {
 						Sympa::Log::Syslog::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
 					}
 				} else {
@@ -1095,8 +1100,8 @@ sub md5_encode_password {
 
 	my $dbh = Sympa::SDM::get_source()->get_handle();
 
-	my $sth;
-	unless ($sth = $dbh->prepare("SELECT email_user,password_user from user_table")) {
+	my $sth = $dbh->prepare("SELECT email_user,password_user from user_table");
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 		return undef;
 	}

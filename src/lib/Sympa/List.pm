@@ -5760,7 +5760,8 @@ sub delete_all_list_admin {
 
 	## Delete record in ADMIN
 	my $source = Sympa::SDM::get_source();
-	unless($sth = $source->do_query("DELETE FROM admin_table")) {
+	my $sth = $source->do_query("DELETE FROM admin_table");
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to remove all admin from database');
 		return undef;
 	}
@@ -5874,12 +5875,13 @@ sub get_global_user {
 	}
 
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
-
-	$sth = $source->do_query("SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ", $additional, $source->quote($who));
-
-	unless (defined $sth) {
+	my $sth = $source->do_query(
+		"SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ",
+		$additional,
+		$source->quote($who)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Failed to prepare SQL query');
 		return undef;
 	}
@@ -5887,8 +5889,6 @@ sub get_global_user {
 	my $user = $sth->fetchrow_hashref('NAME_lc');
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	if (defined $user) {
 		## decrypt password
@@ -5923,11 +5923,10 @@ sub get_all_global_user {
 	Sympa::Log::Syslog::do_log('debug2', '');
 
 	my @users;
-	my $sth;
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
+	my $sth = $source->do_query("SELECT email_user FROM user_table");
 
-	unless ($sth = $source->do_query("SELECT email_user FROM user_table")) {
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to gather all users in DB');
 		return undef;
 	}
@@ -5937,8 +5936,6 @@ sub get_all_global_user {
 	}
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return @users;
 }
@@ -6089,17 +6086,19 @@ sub insert_delete_exclusion {
 		}
 
 		$r = 0;
-		my $sth;
 		foreach my $users (@users_excluded) {
 			if($email eq $users){
+				my $sth;
 				## Delete : list, user and date
 				if (defined $family) {
 
-					unless ($sth = $source->do_query("DELETE FROM exclusion_table WHERE (family_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$source->quote($family), $source->quote($robot), $source->quote($email))) {
+					$sth = $source->do_query("DELETE FROM exclusion_table WHERE (family_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$source->quote($family), $source->quote($robot), $source->quote($email));
+					unless ($sth) {
 						Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for family %s (robot %s) from table exclusion_table', $email, $family, $robot);
 					}
 				} else {
-					unless ($sth = $source->do_query("DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$source->quote($list), $source->quote($robot), $source->quote($email))) {
+					$sth = $source->do_query("DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$source->quote($list), $source->quote($robot), $source->quote($email));
+					unless ($sth) {
 						Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for list %s@%s from table exclusion_table', $email, $family, $robot);
 					}
 				}
@@ -6147,22 +6146,30 @@ sub get_exclusion {
 	}
 
 	my $source = Sympa::SDM::get_source();
+	my $sth;
 	if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
-		unless ($sth = $source->do_query("SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE (list_exclusion = %s OR family_exclusion = %s) AND robot_exclusion=%s",
-				$source->quote($name),$source->quote($list->{'admin'}{'family_name'}), $source->quote($robot))) {
+
+		$sth = $source->do_query(
+			"SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE (list_exclusion = %s OR family_exclusion = %s) AND robot_exclusion=%s",
+			$source->quote($name),
+			$source->quote($list->{'admin'}{'family_name'}),
+			$source->quote($robot)
+		);
+		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable to retrieve excluded users for list %s@%s',$name, $robot);
 			return undef;
 		}
 	} else {
-		unless ($sth = $source->do_query("SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s",
-				$source->quote($name), $source->quote($robot))) {
+		$sth = $source->do_query(
+			"SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s",
+			$source->quote($name),
+			$source->quote($robot)
+		);
+		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable to retrieve excluded users for list %s@%s',$name, $robot);
 			return undef;
 		}
 	}
-
-	push @sth_stack, $sth;
-
 
 	my @users;
 	my @date;
@@ -6177,7 +6184,6 @@ sub get_exclusion {
 		  };
 
 		  $sth->finish();
-		  $sth = pop @sth_stack;
 
 		  unless($data_exclu){
 			  Sympa::Log::Syslog::do_log('err','Unable to retrieve information from database for list %s@%s', $name,$robot);
@@ -6401,7 +6407,6 @@ sub find_list_member_by_pattern_no_object {
 
 	my @ressembling_users;
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
 
 	## Additional subscriber fields
@@ -6409,13 +6414,16 @@ sub find_list_member_by_pattern_no_object {
 	if ($Sympa::Configuration::Conf{'db_additional_subscriber_fields'}) {
 		$additional = ',' . $Sympa::Configuration::Conf{'db_additional_subscriber_fields'};
 	}
-	unless ($sth = $source->do_query("SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (user_subscriber LIKE %s AND list_subscriber = %s AND robot_subscriber = %s)",
-			$source->get_canonical_read_date('date_subscriber'),
-			$source->get_canonical_read_date('update_subscriber'),
-			$additional,
-			$source->quote($email_pattern),
-			$source->quote($name),
-			$source->quote($options->{'domain'}))) {
+	my $sth = $source->do_query(
+		"SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (user_subscriber LIKE %s AND list_subscriber = %s AND robot_subscriber = %s)",
+		$source->get_canonical_read_date('date_subscriber'),
+		$source->get_canonical_read_date('update_subscriber'),
+		$additional,
+		$source->quote($email_pattern),
+		$source->quote($name),
+		$source->quote($options->{'domain'})
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to gather informations corresponding to pattern %s for list %s@%s',$email_pattern,$name,$options->{'domain'});
 		return undef;
 	}
@@ -6433,9 +6441,6 @@ sub find_list_member_by_pattern_no_object {
 		}
 	}
 	$sth->finish();
-
-	$sth = pop @sth_stack;
-	## Set session cache
 
 	return @ressembling_users;
 }
@@ -6475,7 +6480,6 @@ sub get_list_member_no_object {
 		return $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email};
 	}
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
 
 	## Additional subscriber fields
@@ -6483,13 +6487,16 @@ sub get_list_member_no_object {
 	if ($Sympa::Configuration::Conf{'db_additional_subscriber_fields'}) {
 		$additional = ',' . $Sympa::Configuration::Conf{'db_additional_subscriber_fields'};
 	}
-	unless ($sth = $source->do_query( "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate, number_messages_subscriber AS number_messages %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)",
-			$source->get_canonical_read_date('date_subscriber'),
-			$source->get_canonical_read_date('update_subscriber'),
-			$additional,
-			$source->quote($email),
-			$source->quote($name),
-			$source->quote($options->{'domain'}))) {
+	$sth = $source->do_query(
+		"SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate, number_messages_subscriber AS number_messages %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)",
+		$source->get_canonical_read_date('date_subscriber'),
+		$source->get_canonical_read_date('update_subscriber'),
+		$additional,
+		$source->quote($email),
+		$source->quote($name),
+		$source->quote($options->{'domain'})
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to gather informations for user: %s', $email,$name,$options->{'domain'});
 		return undef;
 	}
@@ -6514,7 +6521,6 @@ sub get_list_member_no_object {
 		}
 	}
 
-	$sth = pop @sth_stack;
 	## Set session cache
 	$list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email} = $user;
 	return $user;
@@ -6539,7 +6545,6 @@ sub get_list_admin {
 
 	my $name = $self->{'name'};
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
 
 	## Use session cache
@@ -6547,13 +6552,16 @@ sub get_list_admin {
 		return $list_cache{'get_list_admin'}{$self->{'domain'}}{$name}{$role}{$email};
 	}
 
-	unless ($sth = $source->do_query("SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)",
-			$source->get_canonical_read_date('date_admin'),
-			$source->get_canonical_read_date('update_admin'),
-			$source->quote($email),
-			$source->quote($name),
-			$source->quote($self->{'domain'}),
-			$source->quote($role))) {
+	my $sth = $source->do_query(
+		"SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)",
+		$source->get_canonical_read_date('date_admin'),
+		$source->get_canonical_read_date('update_admin'),
+		$source->quote($email),
+		$source->quote($name),
+		$source->quote($self->{'domain'}),
+		$source->quote($role)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get admin %s for list %s@%s',$email,$name,$self->{'domain'});
 		return undef;
 	}
@@ -6566,8 +6574,6 @@ sub get_list_admin {
 	}
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	## Set session cache
 	$list_cache{'get_list_admin'}{$self->{'domain'}}{$name}{$role}{$email} = $admin_user;
@@ -6629,28 +6635,30 @@ sub get_first_list_member {
 		$additional = ',' . $Sympa::Configuration::Conf{'db_additional_subscriber_fields'};
 	}
 
-	$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)",
-	$source->get_canonical_read_date('date_subscriber'),
-	$source->get_canonical_read_date('update_subscriber'),
-	$additional,
-	$source->quote($name),
-	$source->quote($self->{'domain'}),
-	$selection;
+	$statement = sprintf
+		"SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)",
+		$source->get_canonical_read_date('date_subscriber'),
+		$source->get_canonical_read_date('update_subscriber'),
+		$additional,
+		$source->quote($name),
+		$source->quote($self->{'domain'}),
+		$selection;
 
 	## SORT BY
 	if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, %s AS dom, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s ) ORDER BY dom",
-		$source->get_canonical_read_date('date_subscriber'),
-		$source->get_canonical_read_date('update_subscriber'),
-		$source->get_substring_clause(
-			source_field =>'user_subscriber',
-			separator    =>'\@','substring_length'=>'50'
-		),
-		$additional,
-		$source->quote($name),
-		$source->quote($self->{'domain'});
+		$statement = sprintf
+			"SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, %s AS dom, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s ) ORDER BY dom",
+			$source->get_canonical_read_date('date_subscriber'),
+			$source->get_canonical_read_date('update_subscriber'),
+			$source->get_substring_clause(
+				source_field =>'user_subscriber',
+				separator    =>'\@','substring_length'=>'50'
+			),
+			$additional,
+			$source->quote($name),
+			$source->quote($self->{'domain'});
 
 	} elsif ($sortby eq 'email') {
 		## Default SORT
@@ -6678,7 +6686,8 @@ sub get_first_list_member {
 			' ';
 	}
 
-	unless ($sth = $source->do_query($statement)) {
+	$sth = $source->do_query($statement);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get members of list %s@%s', $name, $self->{'domain'});
 		return undef;
 	}
@@ -6814,29 +6823,31 @@ sub get_first_list_admin {
 	}
 	push @sth_stack, $sth;
 
-	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)",
-	$source->get_canonical_read_date('date_admin'),
-	$source->get_canonical_read_date('update_admin'),
-	$source->quote($name),
-	$source->quote($self->{'domain'}),
-	$selection,
-	$source->quote($role);
+	$statement = sprintf
+		"SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)",
+		$source->get_canonical_read_date('date_admin'),
+		$source->get_canonical_read_date('update_admin'),
+		$source->quote($name),
+		$source->quote($self->{'domain'}),
+		$selection,
+		$source->quote($role);
 
 	## SORT BY
 	if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, %s AS dom  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s) ORDER BY dom",
-		$source->get_canonical_read_date('date_admin'),
-		$source->get_canonical_read_date('update_admin'),
-		$source->get_substring_clause(
-			source_field     => 'user_admin',
-			separator        => '\@',
-			substring_length => '50'
-		),
-		$source->quote($name),
-		$source->quote($self->{'domain'}),
-		$source->quote($role);
+		$statement = sprintf
+			"SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, %s AS dom  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s) ORDER BY dom",
+			$source->get_canonical_read_date('date_admin'),
+			$source->get_canonical_read_date('update_admin'),
+			$source->get_substring_clause(
+				source_field     => 'user_admin',
+				separator        => '\@',
+				substring_length => '50'
+			),
+			$source->quote($name),
+			$source->quote($self->{'domain'}),
+			$source->quote($role);
 	} elsif ($sortby eq 'email') {
 		$statement .= ' ORDER BY email';
 
@@ -6858,7 +6869,8 @@ sub get_first_list_admin {
 		);
 	}
 
-	unless ($sth = $source->do_query($statement)) {
+	$sth = $source->do_query($statement);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get admins having role %s for list %s@%s', $role,$name,$self->{'domain'});
 		return undef;
 	}
@@ -7022,12 +7034,15 @@ sub get_first_bouncing_list_member {
 	push @sth_stack, $sth;
 
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query("SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date,suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)",
-			$source->get_canonical_read_date('date_subscriber'),
-			$source->get_canonical_read_date('update_subscriber'),
-			$additional,
-			$source->quote($name),
-			$source->quote($self->{'domain'}))) {
+	$sth = $source->do_query(
+		"SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date,suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)",
+		$source->get_canonical_read_date('date_subscriber'),
+		$source->get_canonical_read_date('update_subscriber'),
+		$additional,
+		$source->quote($name),
+		$source->quote($self->{'domain'})
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get bouncing users %s@%s',$name,$self->{'domain'});
 		return undef;
 	}
@@ -7113,20 +7128,20 @@ sub get_total_bouncing {
 
 	my $name = $self->{'name'};
 
-	push @sth_stack, $sth;
-
-	## Query the Database
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query( "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND robot_subscriber = %s AND bounce_subscriber is not NULL)", $source->quote($name), $source->quote($self->{'domain'}))) {
+	my $sth = $source->do_query(
+		"SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND robot_subscriber = %s AND bounce_subscriber is not NULL)",
+		$source->quote($name),
+		$source->quote($self->{'domain'})
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to gather bouncing subscribers count for list %s@%s',$name,$self->{'domain'});
 		return undef;
 	}
 
-	my $total =  $sth->fetchrow();
+	my $total = $sth->fetchrow();
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return $total;
 }
@@ -7139,19 +7154,18 @@ sub is_global_user {
 
 	return undef unless ($who);
 
-	push @sth_stack, $sth;
-
-	## Query the Database
 	my $source = Sympa::SDM::get_source();
-	unless($sth = $source->do_query("SELECT count(*) FROM user_table WHERE email_user = %s", $source->quote($who))) {
+	my $sth = $source->do_query(
+		"SELECT count(*) FROM user_table WHERE email_user = %s",
+		$source->quote($who)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to check whether user %s is in the user table.');
 		return undef;
 	}
 
 	my $is_user = $sth->fetchrow();
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return $is_user;
 }
@@ -7311,27 +7325,39 @@ sub update_list_member {
 
 		## Update field
 		if ($table eq 'user_table') {
-			unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (email_user=%s)", $table, join(',', @set_list), $source->quote($who))) {
+			my $sth = $source->do_query(
+				"UPDATE %s SET %s WHERE (email_user=%s)",
+				$table,
+				join(',', @set_list),
+				$source->quote($who)
+			);
+			unless ($sth) {
 				Sympa::Log::Syslog::do_log('err','Could not update informations for user %s in table %s',$who,$table);
 				return undef;
 			}
 		} elsif ($table eq 'subscriber_table') {
 			if ($who eq '*') {
-				unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (list_subscriber=%s AND robot_subscriber = %s)",
-						$table,
-						join(',', @set_list),
-						$source->quote($name),
-						$source->quote($self->{'domain'}))) {
+				my $sth = $source->do_query(
+					"UPDATE %s SET %s WHERE (list_subscriber=%s AND robot_subscriber = %s)",
+					$table,
+					join(',', @set_list),
+					$source->quote($name),
+					$source->quote($self->{'domain'})
+				);
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Could not update informations for user %s in table %s for list %s@%s',$who,$table,$name,$self->{'domain'});
 					return undef;
 				}
 			} else {
-				unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s)",
-						$table,
-						join(',', @set_list),
-						$source->quote($who),
-						$source->quote($name),
-						$source->quote($self->{'domain'}))) {
+				my $sth = $source->do_query(
+					"UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s)",
+					$table,
+					join(',', @set_list),
+					$source->quote($who),
+					$source->quote($name),
+					$source->quote($self->{'domain'})
+				);
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Could not update informations for user %s in table %s for list %s@%s',$who,$table,$name,$self->{'domain'});
 					return undef;
 				}
@@ -7450,30 +7476,42 @@ sub update_list_admin {
 
 		## Update field
 		if ($table eq 'user_table') {
-			unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (email_user=%s)", $table, join(',', @set_list), $source->quote($who))) {
+			my $sth = $source->do_query(
+				"UPDATE %s SET %s WHERE (email_user=%s)",
+				$table,
+				join(',', @set_list),
+				$source->quote($who)
+			);
+			unless ($sth) {
 				Sympa::Log::Syslog::do_log('err','Could not update informations for admin %s in table %s',$who,$table);
 				return undef;
 			}
 
 		} elsif ($table eq 'admin_table') {
 			if ($who eq '*') {
-				unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (list_admin=%s AND robot_admin=%s AND role_admin=%s)",
-						$table,
-						join(',', @set_list),
-						$source->quote($name),
-						$source->quote($self->{'domain'}),
-						$source->quote($role))) {
+				my $sth = $source->do_query(
+					"UPDATE %s SET %s WHERE (list_admin=%s AND robot_admin=%s AND role_admin=%s)",
+					$table,
+					join(',', @set_list),
+					$source->quote($name),
+					$source->quote($self->{'domain'}),
+					$source->quote($role)
+				);
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Could not update informations for admin %s in table %s for list %s@%s',$who,$table,$name,$self->{'domain'});
 					return undef;
 				}
 			} else {
-				unless ($sth = $source->do_query("UPDATE %s SET %s WHERE (user_admin=%s AND list_admin=%s AND robot_admin=%s AND role_admin=%s )",
-						$table,
-						join(',', @set_list),
-						$source->quote($who),
-						$source->quote($name),
-						$source->quote($self->{'domain'}),
-						$source->quote($role))) {
+				my $sth = $source->do_query(
+					"UPDATE %s SET %s WHERE (user_admin=%s AND list_admin=%s AND robot_admin=%s AND role_admin=%s )",
+					$table,
+					join(',', @set_list),
+					$source->quote($who),
+					$source->quote($name),
+					$source->quote($self->{'domain'}),
+					$source->quote($role)
+				);
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Could not update informations for admin %s in table %s for list %s@%s',$who,$table,$name,$self->{'domain'});
 					return undef;
 				}
@@ -7539,8 +7577,11 @@ sub update_global_user {
 
 	## Update field
 
-	unless ($sth = $source->do_query("UPDATE user_table SET %s WHERE (email_user=%s)"
-			, join(',', @set_list), $source->quote($who))) {
+	my $sth = $source->do_query(
+		"UPDATE user_table SET %s WHERE (email_user=%s)",
+		join(',', @set_list), $source->quote($who)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Could not update informations for user %s in user_table',$who);
 		return undef;
 	}
@@ -7597,8 +7638,12 @@ sub add_global_user {
 	}
 
 	## Update field
-	unless($sth = $source->do_query("INSERT INTO user_table (%s) VALUES (%s)"
-			, join(',', @insert_field), join(',', @insert_value))) {
+	my $sth = $source->do_query(
+		"INSERT INTO user_table (%s) VALUES (%s)",
+		join(',', @insert_field),
+		join(',', @insert_value)
+	);
+	unless($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to add user %s to the DB table user_table', $values->{'email'});
 		return undef;
 	}
@@ -10649,11 +10694,13 @@ sub _load_total_db {
 		return $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}};
 	}
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
-
-	## Query the Database
-	unless ($sth = $source->do_query( "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s)", $source->quote($self->{'name'}), $source->quote($self->{'domain'}))) {
+	my $sth = $source->do_query(
+		"SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s)",
+		$source->quote($self->{'name'}),
+		$source->quote($self->{'domain'})
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('debug','Unable to get subscriber count for list %s@%s',$self->{'name'},$self->{'domain'});
 		return undef;
 	}
@@ -10661,8 +10708,6 @@ sub _load_total_db {
 	my $total = $sth->fetchrow();
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	## Set session cache
 	$list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}} = $total;
@@ -10956,9 +11001,12 @@ sub get_which_db {
 	my $source = Sympa::SDM::get_source();
 	if ($function eq 'member') {
 		## Get subscribers
-		push @sth_stack, $sth;
 
-		unless ($sth = $source->do_query( "SELECT list_subscriber, robot_subscriber, bounce_subscriber, reception_subscriber, topics_subscriber, include_sources_subscriber, subscribed_subscriber, included_subscriber  FROM subscriber_table WHERE user_subscriber = %s",$source->quote($email))) {
+		my $sth = $source->do_query(
+			"SELECT list_subscriber, robot_subscriber, bounce_subscriber, reception_subscriber, topics_subscriber, include_sources_subscriber, subscribed_subscriber, included_subscriber  FROM subscriber_table WHERE user_subscriber = %s",
+			$source->quote($email)
+		);
+		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable to get the list of lists the user %s is subscribed to', $email);
 			return undef;
 		}
@@ -10975,13 +11023,14 @@ sub get_which_db {
 			$which{$robot}{$name}{'include_sources'} = $l->{'include_sources_subscriber'};
 		}
 		$sth->finish();
-		$sth = pop @sth_stack;
 
 	} else {
 		## Get admin
-		push @sth_stack, $sth;
-
-		unless ($sth = $source->do_query( "SELECT list_admin, robot_admin, role_admin FROM admin_table WHERE user_admin = %s",$source->quote($email))) {
+		my $sth = $source->do_query(
+			"SELECT list_admin, robot_admin, role_admin FROM admin_table WHERE user_admin = %s",
+			$source->quote($email)
+		);
+		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable to get the list of lists the user %s is subscribed to', $email);
 			return undef;
 		}
@@ -10991,8 +11040,6 @@ sub get_which_db {
 		}
 
 		$sth->finish();
-
-		$sth = pop @sth_stack;
 	}
 
 	return \%which;
@@ -11005,10 +11052,15 @@ sub get_netidtoemail_db {
 
 	my $email;
 
-	push @sth_stack, $sth;
 	my $source = Sympa::SDM::get_source();
 
-	unless ($sth = $source->do_query( "SELECT email_netidmap FROM netidmap_table WHERE netid_netidmap = %s and serviceid_netidmap = %s and robot_netidmap = %s", $source->quote($netid), $source->quote($idpname), $source->quote($robot))) {
+	$sth = $source->do_query(
+		"SELECT email_netidmap FROM netidmap_table WHERE netid_netidmap = %s and serviceid_netidmap = %s and robot_netidmap = %s",
+		$source->quote($netid),
+		$source->quote($idpname),
+		$source->quote($robot)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get email address from netidmap_table for id %s, service %s, robot %s', $netid, $idpname, $robot);
 		return undef;
 	}
@@ -11016,8 +11068,6 @@ sub get_netidtoemail_db {
 	$email = $sth->fetchrow();
 
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return $email;
 }
@@ -11230,7 +11280,9 @@ sub get_db_field_type {
 	my ($table, $field) = @_;
 
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query("SHOW FIELDS FROM $table")) {
+	my $sth = $source->do_query("SHOW FIELDS FROM $table");
+
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','get the list of fields for table %s', $table);
 		return undef;
 	}
@@ -11251,7 +11303,8 @@ sub lowercase_field {
 	my $total = 0;
 
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query( "SELECT $field from $table")) {
+	my $sth = $source->do_query( "SELECT $field from $table");
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get values of field %s for table %s',$field,$table);
 		return undef;
 	}
@@ -11262,8 +11315,12 @@ sub lowercase_field {
 
 		$total++;
 
-		## Updating Db
-		unless ($sth = $source->do_query( "UPDATE $table SET $field=%s WHERE ($field=%s)", $source->quote($lower_cased), $source->quote($user->{$field}))) {
+		my $sth = $source->do_query(
+			"UPDATE $table SET $field=%s WHERE ($field=%s)",
+			$source->quote($lower_cased),
+			$source->quote($user->{$field})
+		);
+		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable to set field % from table %s to value %s',$field,$lower_cased,$table);
 			next;
 		}
@@ -13267,7 +13324,13 @@ sub get_data {
 	my ($data, $robotname, $listname) = @_;
 
 	my $source = Sympa::SDM::get_source();
-	unless ( $sth = $source->do_query( "SELECT * FROM stat_counter_table WHERE data_counter = '%s' AND robot_counter = '%s' AND list_counter = '%s'", $data,$robotname, $listname)) {
+	my $sth = $source->do_query(
+		"SELECT * FROM stat_counter_table WHERE data_counter = '%s' AND robot_counter = '%s' AND list_counter = '%s'",
+		$data,
+		$robotname,
+		$listname
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get stat data %s for liste %s@%s',$data,$listname,$robotname);
 		return undef;
 	}
@@ -13297,16 +13360,15 @@ sub get_lists_db {
 	my ($l, @lists);
 
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query($statement)) {
+	my $sth = $source->do_query($statement);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err',"Unable to gather the list of lists from lists table");
 		return undef;
 	}
-	push @sth_stack, $sth;
 	while ($l = $sth->fetchrow_hashref) {
 		my $name = $l->{'name_list'};
 		push @lists, $name;
 	}
-	$sth = pop @sth_stack;
 
 	return \@lists;
 }
@@ -13349,7 +13411,10 @@ sub _update_list_db {
 	$ed_txt = join(',',@admins) || '';
 
 	my $source = Sympa::SDM::get_source();
-	my $sth = $source->do_query('SELECT name_list FROM list_table WHERE name_list = %s', $source->quote($name));
+	my $sth = $source->do_query(
+		'SELECT name_list FROM list_table WHERE name_list = %s',
+		$source->quote($name)
+	);
 	if($sth->fetch) {
 		unless($source->do_query('UPDATE list_table SET status_list = %s, name_list = %s, robot_list = %s, subject_list = %s, web_archive_list = %d, topics_list = %s, owners_list = %s, editors_list = %s WHERE robot_list = %s AND name_list = %s',
 				$source->quote($status), $source->quote($name),
@@ -13392,7 +13457,11 @@ sub _flush_list_db {
 	}
 
 	my $source = Sympa::SDM::get_source();
-	unless ($sth = $source->do_query($statement, $source->quote($listname))) {
+	my $sth = $source->do_query(
+		$statement,
+		$source->quote($listname)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to flush lists table');
 		return undef;
 	}

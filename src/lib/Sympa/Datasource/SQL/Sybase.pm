@@ -94,8 +94,12 @@ sub is_autoinc {
 	my ($self, %params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Checking whether field %s.%s is autoincremental',$params{'field'},$params{'table'});
-	my $sth;
-	unless ($sth = $self->do_query("SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",$params{'table'},$params{'field'})) {
+	my $sth = $self->do_query(
+		"SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",
+		$params{'table'},
+		$params{'field'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to gather autoincrement field named %s for table %s',$params{'field'},$params{'table'});
 		return undef;
 	}
@@ -118,8 +122,11 @@ sub get_tables {
 	my ($self) = @_;
 
 	my @raw_tables;
-	my $sth;
-	unless ($sth = $self->do_query("SELECT name FROM %s..sysobjects WHERE type='U'",$self->{'db_name'})) {
+	my $sth = $self->do_query(
+		"SELECT name FROM %s..sysobjects WHERE type='U'",
+		$self->{'db_name'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 		return undef;
 	}
@@ -144,12 +151,15 @@ sub get_fields {
 	my ($self, %params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Getting fields list from table %s in database %s',$params{'table'},$self->{'db_name'});
-	my $sth;
-	my %result;
-	unless ($sth = $self->do_query("SHOW FIELDS FROM %s",$params{'table'})) {
+	my $sth = $self->do_query(
+		"SHOW FIELDS FROM %s",
+		$params{'table'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
+	my %result;
 	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 		$result{$ref->{'field'}} = $ref->{'type'};
 	}
@@ -223,8 +233,11 @@ sub get_primary_key {
 	Sympa::Log::Syslog::do_log('debug','Getting primary key for table %s',$params{'table'});
 
 	my %found_keys;
-	my $sth;
-	unless ($sth = $self->do_query("SHOW COLUMNS FROM %s",$params{'table'})) {
+	my $sth = $self->do_query(
+		"SHOW COLUMNS FROM %s",
+		$params{'table'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get field list from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -243,8 +256,11 @@ sub unset_primary_key {
 
 	Sympa::Log::Syslog::do_log('debug','Removing primary key from table %s',$params{'table'});
 
-	my $sth;
-	unless ($sth = $self->do_query("ALTER TABLE %s DROP PRIMARY KEY",$params{'table'})) {
+	my $sth = $self->do_query(
+		"ALTER TABLE %s DROP PRIMARY KEY",
+		$params{'table'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not drop primary key from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -257,10 +273,15 @@ sub unset_primary_key {
 sub set_primary_key {
 	my ($self, %params) = @_;
 
-	my $sth;
 	my $fields = join ',',@{$params{'fields'}};
 	Sympa::Log::Syslog::do_log('debug','Setting primary key for table %s (%s)',$params{'table'},$fields);
-	unless ($sth = $self->do_query("ALTER TABLE %s ADD PRIMARY KEY (%s)",$params{'table'}, $fields)) {
+
+	my $sth = $self->do_query(
+		"ALTER TABLE %s ADD PRIMARY KEY (%s)",
+		$params{'table'},
+		$fields
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -275,8 +296,11 @@ sub get_indexes {
 	Sympa::Log::Syslog::do_log('debug','Looking for indexes in %s',$params{'table'});
 
 	my %found_indexes;
-	my $sth;
-	unless ($sth = $self->do_query("SHOW INDEX FROM %s",$params{'table'})) {
+	my $sth = $self->do_query(
+		"SHOW INDEX FROM %s",
+		$params{'table'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -296,8 +320,12 @@ sub unset_index {
 
 	Sympa::Log::Syslog::do_log('debug','Removing index %s from table %s',$params{'index'},$params{'table'});
 
-	my $sth;
-	unless ($sth = $self->do_query("ALTER TABLE %s DROP INDEX %s",$params{'table'},$params{'index'})) {
+	my $sth = $self->do_query(
+		"ALTER TABLE %s DROP INDEX %s",
+		$params{'table'},
+		$params{'index'}
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
@@ -310,10 +338,16 @@ sub unset_index {
 sub set_index {
 	my ($self, %params) = @_;
 
-	my $sth;
 	my $fields = join ',',@{$params{'fields'}};
 	Sympa::Log::Syslog::do_log('debug', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
-	unless ($sth = $self->do_query("ALTER TABLE %s ADD INDEX %s (%s)",$params{'table'}, $params{'index_name'}, $fields)) {
+
+	my $sth = $self->do_query(
+		"ALTER TABLE %s ADD INDEX %s (%s)",
+		$params{'table'},
+		$params{'index_name'},
+		$fields
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
 		return undef;
 	}

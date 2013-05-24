@@ -440,12 +440,14 @@ sub do_prepared_query {
 
 	unless ($self->{'cached_prepared_statements'}{$query}) {
 		Sympa::Log::Syslog::do_log('debug3','Did not find prepared statement for %s. Doing it.',$query);
-		unless ($sth = $self->{'dbh'}->prepare($query)) {
+		$sth = $self->{'dbh'}->prepare($query);
+		unless ($sth) {
 			unless($self->connect()) {
 				Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 				return undef;
 			} else {
-				unless ($sth = $self->{'dbh'}->prepare($query)) {
+				$sth = $self->{'dbh'}->prepare($query);
+				unless ($sth) {
 					Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
 					return undef;
 				}
@@ -455,18 +457,21 @@ sub do_prepared_query {
 	} else {
 		Sympa::Log::Syslog::do_log('debug3','Reusing prepared statement for %s',$query);
 	}
+
 	unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
 		# Check database connection in case it would be the cause of the problem.
 		unless($self->connect()) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 			return undef;
 		} else {
-			unless ($sth = $self->{'dbh'}->prepare($query)) {
+			$sth = $self->{'dbh'}->prepare($query);
+			unless ($sth) {
 				unless($self->connect()) {
 					Sympa::Log::Syslog::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
 					return undef;
 				} else {
-					unless ($sth = $self->{'dbh'}->prepare($query)) {
+					$sth = $self->{'dbh'}->prepare($query);
+					unless ($sth) {
 						Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
 						return undef;
 					}

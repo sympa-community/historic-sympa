@@ -552,10 +552,12 @@ sub get_one_time_ticket {
 	my ($ticket_number, $addr) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)',$ticket_number);
 
-	my $sth;
 	my $source = Sympa::SDM::get_source();
-
-	unless ($sth = $source->do_query("SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ", $source->quote($ticket_number))) {
+	my $sth = $source->do_query(
+		"SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ",
+		$source->quote($ticket_number)
+	);
+	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
 		return {'result'=>'error'};
 	}
