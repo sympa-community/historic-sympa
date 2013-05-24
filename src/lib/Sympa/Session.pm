@@ -161,9 +161,10 @@ sub purge_old_sessions {
 		return;
 	}
 
+	my $source = Sympa::SDM::get_source();
 	my  $sth;
 
-	my $robot_condition = sprintf "robot_session = %s", Sympa::SDM::quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
+	my $robot_condition = sprintf "robot_session = %s", $source->quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
 
 	my $delay_condition = time-$params{delay}.' > date_session' if ($params{delay});
 	my $anonymous_delay_condition = time-$params{anonymous_delay}.' > date_session' if ($params{anonymous_delay});
@@ -178,7 +179,7 @@ sub purge_old_sessions {
 	my $statement = sprintf "DELETE FROM session_table WHERE $robot_condition $and $delay_condition";
 	my $anonymous_statement = sprintf "DELETE FROM session_table WHERE $robot_condition $anonymous_and $anonymous_delay_condition AND email_session = 'nobody' AND hit_session = '1'";
 
-	unless ($sth = Sympa::SDM::do_query($count_statement)) {
+	unless ($sth = $source->do_query($count_statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to count old session for robot %s',$params{robot});
 		return undef;
 	}
@@ -187,12 +188,12 @@ sub purge_old_sessions {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no sessions to expire');
 	} else {
-		unless ($sth = Sympa::SDM::do_query($statement)) {
+		unless ($sth = $source->do_query($statement)) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge old sessions for robot %s', $params{robot});
 			return undef;
 		}
 	}
-	unless ($sth = Sympa::SDM::do_query($anonymous_count_statement)) {
+	unless ($sth = $source->do_query($anonymous_count_statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to count anonymous sessions for robot %s', $params{robot});
 		return undef;
 	}
@@ -201,7 +202,7 @@ sub purge_old_sessions {
 		Sympa::Log::Syslog::do_log('debug','no anonymous sessions to expire');
 		return $total ;
 	}
-	unless ($sth = Sympa::SDM::do_query($anonymous_statement)) {
+	unless ($sth = $source->do_query($anonymous_statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to purge anonymous sessions for robot %s',$params{robot});
 		return undef;
 	}
@@ -223,15 +224,16 @@ sub purge_old_tickets {
 		return;
 	}
 
+	my $source = Sympa::SDM::get_source();
 	my  $sth;
 
-	my $robot_condition = sprintf "robot_one_time_ticket = %s", Sympa::SDM::quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
+	my $robot_condition = sprintf "robot_one_time_ticket = %s", $source->quote($params{robot}) unless (($params{robot} eq '*')||($params{robot}));
 	my $delay_condition = time-$params{delay}.' > date_one_time_ticket' if ($params{delay});
 	my $and = ' AND ' if (($delay_condition) && ($robot_condition));
 	my $count_statement = sprintf "SELECT count(*) FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
 	my $statement = sprintf "DELETE FROM one_time_ticket_table WHERE $robot_condition $and $delay_condition";
 
-	unless ($sth = Sympa::SDM::do_query($count_statement)) {
+	unless ($sth = $source->do_query($count_statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to count old one time tickets for robot %s',$params{robot});
 		return undef;
 	}
@@ -240,7 +242,7 @@ sub purge_old_tickets {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no tickets to expire');
 	} else {
-		unless ($sth = Sympa::SDM::do_query($statement)) {
+		unless ($sth = $source->do_query($statement)) {
 			Sympa::Log::Syslog::do_log('err','Unable to delete expired one time tickets for robot %s',$params{robot});
 			return undef;
 		}
@@ -260,8 +262,9 @@ sub list_sessions {
 
 	my @sessions ;
 	my $sth;
+	my $source = Sympa::SDM::get_source();
 
-	my $condition = sprintf "robot_session = %s", Sympa::SDM::quote($robot) unless ($robot eq '*');
+	my $condition = sprintf "robot_session = %s", $source->quote($robot) unless ($robot eq '*');
 	my $condition2 = time-$delay.' < date_session ' if ($delay);
 	my $and = ' AND ' if (($condition) && ($condition2));
 	$condition = $condition.$and.$condition2 ;
@@ -273,7 +276,7 @@ sub list_sessions {
 	my $statement = sprintf "SELECT remote_addr_session, email_session, robot_session, date_session, start_date_session, hit_session FROM session_table WHERE $condition";
 	Sympa::Log::Syslog::do_log('debug', 'statement = %s',$statement);
 
-	unless ($sth = Sympa::SDM::do_query($statement)) {
+	unless ($sth = $source->do_query($statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to get the list of sessions for robot %s',$robot);
 		return undef;
 	}
@@ -344,7 +347,8 @@ sub load {
 
 	my $sth;
 
-	unless ($sth = Sympa::SDM::do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
+	my $source = Sympa::SDM::get_source();
+	unless ($sth = $source->do_prepared_query("SELECT id_session AS id_session, date_session AS \"date\", remote_addr_session AS remote_addr, robot_session AS robot, email_session AS email, data_session AS data, hit_session AS hit, start_date_session AS start_date FROM session_table WHERE id_session = ?",$cookie)) {
 		Sympa::Log::Syslog::do_log('err','Unable to load session %s', $cookie);
 		return undef;
 	}
@@ -402,17 +406,18 @@ sub store {
 	}
 	my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
 
+	my $source = Sympa::SDM::get_source();
 ## If this is a new session, then perform an INSERT
 if ($self->{'new_session'}) {
 	## Store the new session ID in the DB
-	unless(Sympa::SDM::do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",Sympa::SDM::quote($self->{'id_session'}),time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string))) {
+	unless($source->do_query( "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES (%s,%d,%s,%s,%s,%d,%d,%s)",$source->quote($self->{'id_session'}),time,$source->quote($ENV{'REMOTE_ADDR'}),$source->quote($self->{'robot'}),$source->quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, $source->quote($data_string))) {
 		Sympa::Log::Syslog::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
 		return undef;
 	}
 	## If the session already exists in DB, then perform an UPDATE
 } else {
 	## Update the new session in the DB
-	unless(Sympa::SDM::do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,Sympa::SDM::quote($ENV{'REMOTE_ADDR'}),Sympa::SDM::quote($self->{'robot'}),Sympa::SDM::quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, Sympa::SDM::quote($data_string), Sympa::SDM::quote($self->{'id_session'}))) {
+	unless($source->do_query("UPDATE session_table SET date_session=%d, remote_addr_session=%s, robot_session=%s, email_session=%s, start_date_session=%d, hit_session=%d, data_session=%s WHERE (id_session=%s)",time,$source->quote($ENV{'REMOTE_ADDR'}),$source->quote($self->{'robot'}),$source->quote($self->{'email'}),$self->{'start_date'},$self->{'hit'}, $source->quote($data_string), $source->quote($self->{'id_session'}))) {
 		Sympa::Log::Syslog::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
 		return undef;
 	}
@@ -446,7 +451,8 @@ sub renew {
 	my $new_id = Sympa::Session->get_random();
 
 	## First remove the DB entry for the previous session ID
-	unless(Sympa::SDM::do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",Sympa::SDM::quote($new_id), Sympa::SDM::quote($self->{'id_session'}))) {
+	my $source = Sympa::SDM::get_source();
+	unless($source->do_query("UPDATE session_table SET id_session=%s WHERE (id_session=%s)",$source->quote($new_id), $source->quote($self->{'id_session'}))) {
 		Sympa::Log::Syslog::do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
 		return undef;
 	}

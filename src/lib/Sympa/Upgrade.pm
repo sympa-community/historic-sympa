@@ -121,6 +121,7 @@ sub upgrade {
 	my ($previous_version, $new_version) = @_;
 	Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
+	my $source = Sympa::SDM::get_source();
 	if (lower_version($new_version, $previous_version)) {
 		Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 		return 1;
@@ -261,12 +262,12 @@ sub upgrade {
 			foreach my $list ( @$all_lists ) {
 
 				foreach my $table ('subscriber','admin') {
-					unless (Sympa::SDM::do_query("UPDATE %s_table SET robot_%s=%s WHERE (list_%s=%s)",
+					unless ($source->do_query("UPDATE %s_table SET robot_%s=%s WHERE (list_%s=%s)",
 							$table,
 							$table,
-							Sympa::SDM::quote($r),
+							$source->quote($r),
 							$table,
-							Sympa::SDM::quote($list->{'name'}))) {
+							$source->quote($list->{'name'}))) {
 						Sympa::Log::Syslog::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
 						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::SDM::get_source()->{'db_handler'}->errstr});
 						return undef;
@@ -757,7 +758,7 @@ sub upgrade {
 			## Exclusion table was not robot-enabled.
 			Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
 			my $sth;
-			unless ($sth = Sympa::SDM::do_query("SELECT * FROM exclusion_table")) {
+			unless ($sth = $source->do_query("SELECT * FROM exclusion_table")) {
 				Sympa::Log::Syslog::do_log('err','Unable to gather informations from the exclusions table.');
 			}
 			my @robots = Sympa::List::get_robots();
@@ -780,7 +781,7 @@ sub upgrade {
 				if ($#valid_robot_candidates == 0) {
 					$valid_robot = $valid_robot_candidates[0];
 					my $sth;
-					unless ($sth = Sympa::SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", Sympa::SDM::quote($valid_robot),Sympa::SDM::quote($data->{'list_exclusion'}),Sympa::SDM::quote($data->{'user_exclusion'}))) {
+					unless ($sth = $source->do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", $source->quote($valid_robot),$source->quote($data->{'list_exclusion'}),$source->quote($data->{'user_exclusion'}))) {
 						Sympa::Log::Syslog::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
 					}
 				} else {

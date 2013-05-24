@@ -152,7 +152,7 @@ Hash field->value used as filter WHERE sql query.
 sub get_count {
 	my ($self, %params) = @_;
 
-	my $sql_where = _sqlselector($params{selector});
+	my $sql_where = $self->_sqlselector($params{selector});
 	if ($self->{status} eq 'bad') {
 		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
 	} else {
@@ -165,9 +165,9 @@ sub get_count {
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
 		$sql_where,
-		Sympa::SDM::quote($self->{name});
+		$self->{source}->quote($self->{name});
 
-	my $sth = Sympa::SDM::do_query($statement);
+	my $sth = $self->{source}->do_query($statement);
 	my @result = $sth->fetchrow_array();
 	return $result[0];
 }
@@ -228,7 +228,7 @@ sub get_content {
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
 		$sql_where,
-		Sympa::SDM::quote($self->{name});
+		$self->{source}->quote($self->{name});
 
 	if ($params{orderby}) {
 		$statement = $statement. ' ORDER BY '.$params{orderby}.'_spool ';
@@ -238,7 +238,7 @@ sub get_content {
 		$statement = $statement . ' LIMIT '.$params{ofset}.' , '.$params{page_size};
 	}
 
-	my $sth = Sympa::SDM::do_query($statement);
+	my $sth = $self->{source}->do_query($statement);
 	my @messages;
 	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
 		$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
@@ -277,24 +277,24 @@ sub next {
 
 	my $statement = sprintf 
 		"UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1",
-		Sympa::SDM::quote($lock),
-		Sympa::SDM::quote($epoch),
-		Sympa::SDM::quote($self->{name}),
+		$self->{source}->quote($lock),
+		$self->{source}->quote($epoch),
+		$self->{source}->quote($self->{name}),
 		$sql_where;
 
-	my $sth = Sympa::SDM::do_query($statement);
+	my $sth = $self->{source}->do_query($statement);
 	return undef unless ($sth->rows); # spool is empty
 
 	my $star_select = _selectfields();
 	my $statement = sprintf
 		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1",
 		$star_select,
-		Sympa::SDM::quote($self->{name}),
-		Sympa::SDM::quote($self->{status}),
-		Sympa::SDM::quote($lock),
-		Sympa::SDM::quote($epoch);
+		$self->{source}->quote($self->{name}),
+		$self->{source}->quote($self->{status}),
+		$self->{source}->quote($lock),
+		$self->{source}->quote($epoch);
 
-	$sth = Sympa::SDM::do_query($statement);
+	$sth = $self->{source}->do_query($statement);
 	my $message = $sth->fetchrow_hashref('NAME_lc');
 	$sth->finish();
 
@@ -328,15 +328,15 @@ sub get_message {
 		if ($field eq 'messageid') {
 			$selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 		}
-		$sqlselector = $sqlselector.' '.$field.'_spool = '.Sympa::SDM::quote($selector->{$field});
+		$sqlselector = $sqlselector.' '.$field.'_spool = '.$self->{source}->quote($selector->{$field});
 	}
 	my $all = _selectfields();
 	my $statement = sprintf
 		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ". $sqlselector. ' LIMIT 1',
 		$all,
-		Sympa::SDM::quote($self->{name});
+		$self->{source}->quote($self->{name});
 
-	my $sth = Sympa::SDM::do_query($statement);
+	my $sth = $self->{source}->do_query($statement);
 
 	my $message = $sth->fetchrow_hashref('NAME_lc');
 	if ($message) {
@@ -393,7 +393,7 @@ sub update {
 			# SQL set  xx = NULL and set xx = 'NULL' is not the same !
 			$set = $set .$meta.'_spool = NULL';
 		} else {
-			$set = $set .$meta.'_spool = '.Sympa::SDM::quote($values->{$meta});
+			$set = $set .$meta.'_spool = '.$self->{source}->quote($values->{$meta});
 		}
 		if ($meta eq 'messagelock') {
 			if ($values->{'messagelock'} eq 'NULL'){
@@ -401,7 +401,7 @@ sub update {
 				$set =  $set .', lockdate_spool = NULL ';
 			} else {
 				# when setting a lock always set the lockdate
-				$set =  $set .', lockdate_spool = '.Sympa::SDM::quote(time());
+				$set =  $set .', lockdate_spool = '.$self->{source}->quote(time());
 			}
 		}
 	}
@@ -419,7 +419,7 @@ sub update {
 		$set,
 		$where;
 
-	unless (Sympa::SDM::do_query($statement)) {
+	unless ($self->{source}->do_query($statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, undef);
 		return undef;
 	}
@@ -497,7 +497,7 @@ sub store {
 	my ($insertpart1, my $insertpart2);
 	foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
 		$insertpart1 .= ', '.$meta.'_spool';
-		$insertpart2 .= ', '.Sympa::SDM::quote($params{metadata}->{$meta});
+		$insertpart2 .= ', '.$self->{source}->quote($params{metadata}->{$meta});
 	}
 	my $lock = $PID.'@'.hostname() ;
 
@@ -561,10 +561,10 @@ sub remove_message {
 	my $sqlselector = _sqlselector($selector);
 	my $statement  = sprintf 
 		"DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",
-		Sympa::SDM::quote($self->{name}),
+		$self->{source}->quote($self->{name}),
 		$sqlselector;
 
-	my $sth = Sympa::SDM::do_query($statement);
+	my $sth = $self->{source}->do_query($statement);
 
 	$sth->finish();
 	return 1;
@@ -648,7 +648,7 @@ sub _selectfields{
 # selector is a hash where key is a column name and value is column value expected.****
 #   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(
 sub _sqlselector {
-	my ($selector) = @_;
+	my ($self, $selector) = @_;
 
 	my $sqlselector = '';
 
@@ -661,9 +661,9 @@ sub _sqlselector {
 		}
 
 		if ($sqlselector) {
-			$sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
+			$sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.$self->{source}->quote($selector->{$field});
 		} else {
-			$sqlselector = ' '.$field.'_spool '.$compare_operator.' '.Sympa::SDM::quote($selector->{$field});
+			$sqlselector = ' '.$field.'_spool '.$compare_operator.' '.$self->{source}->quote($selector->{$field});
 		}
 	}
 	return $sqlselector;
