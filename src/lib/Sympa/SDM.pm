@@ -160,13 +160,7 @@ sub probe_db {
 	my @report;
 
 	## Get tables
-	my @tables;
-	my $list_of_tables;
-	if ($list_of_tables = $db_source->get_tables()) {
-		@tables = @{$list_of_tables};
-	} else {
-		@tables = ();
-	}
+	my @tables = $db_source->get_tables();
 
 	my %real_struct;
 	## Check required tables

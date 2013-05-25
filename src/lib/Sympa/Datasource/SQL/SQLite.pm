@@ -148,7 +148,7 @@ sub get_tables {
 	    push @tables, $row->[0];
     }
 
-    return \@tables;
+    return @tables;
 }
 
 sub add_table {

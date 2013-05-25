@@ -136,7 +136,7 @@ sub get_tables {
 		$table =~ s/^\`[^\`]+\`\.//; # drop db name prefix
 		$table =~ s/^\`(.+)\`$/$1/;  # drop quotes
 	}
-	return \@tables;
+	return @tables;
 }
 
 sub add_table {

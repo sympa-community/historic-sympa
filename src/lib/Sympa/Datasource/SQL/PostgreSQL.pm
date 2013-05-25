@@ -170,7 +170,7 @@ sub get_tables {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 		return undef;
 	}
-	return \@raw_tables;
+	return @raw_tables;
 }
 
 sub add_table {

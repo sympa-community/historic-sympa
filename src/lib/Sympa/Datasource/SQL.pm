@@ -675,7 +675,7 @@ sub get_all_primary_keys {
 
 	Sympa::Log::Syslog::do_log('debug','Retrieving all primary keys in database %s',$self->{'db_name'});
 	my %found_keys = undef;
-	foreach my $table (@{$self->get_tables()}) {
+	foreach my $table ($self->get_tables()) {
 		unless($found_keys{$table} = $self->get_primary_key('table'=>$table)) {
 			Sympa::Log::Syslog::do_log('err','Primary key retrieval for table %s failed. Aborting.',$table);
 			return undef;
@@ -711,7 +711,7 @@ sub get_all_indexes {
 
 	Sympa::Log::Syslog::do_log('debug','Retrieving all indexes in database %s',$self->{'db_name'});
 	my %found_indexes;
-	foreach my $table (@{$self->get_tables()}) {
+	foreach my $table ($self->get_tables()) {
 		unless($found_indexes{$table} = $self->get_indexes('table'=>$table)) {
 			Sympa::Log::Syslog::do_log('err','Index retrieval for table %s failed. Aborting.',$table);
 			return undef;
@@ -903,7 +903,7 @@ None.
 
 Return value:
 
-A list of table names as an arrayref, or I<undef> if something went wrong.
+A list of table names, or I<undef> if something went wrong.
 
 =item $source->add_table(%parameters)
 

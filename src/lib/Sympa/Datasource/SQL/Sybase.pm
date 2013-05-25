@@ -133,7 +133,7 @@ sub get_tables {
 	while (my $table= $sth->fetchrow()) {
 		push @raw_tables, lc ($table);
 	}
-	return \@raw_tables;
+	return @raw_tables;
 }
 
 sub add_table {
