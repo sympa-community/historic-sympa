@@ -81,29 +81,24 @@ is(
 );
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Pg',
-);
+$source = Sympa::Datasource::SQL::PostgreSQL->new();
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Pg',
+$source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 );
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_host');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Pg',
+$source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 );
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_user');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Pg',
+$source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 	db_user => 'user',
@@ -128,8 +123,7 @@ SKIP: {
 		skip 'DB_USER environment variable needed', 2;
 	}
 
-	$source = Sympa::Datasource::SQL->new(
-		db_type   => 'Pg',
+	$source = Sympa::Datasource::SQL::PostgreSQL->new(
 		db_name   => $ENV{DB_NAME},
 		db_host   => $ENV{DB_HOST},
 		db_user   => $ENV{DB_USER},

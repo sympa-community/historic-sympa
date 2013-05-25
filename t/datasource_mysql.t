@@ -134,19 +134,15 @@ SKIP: {
 		unless $dbh;
 
 	# start from empty database
-	my $tables = $source->get_tables();
-	foreach my $table (@$tables) {
+	my @tables = $source->get_tables();
+	foreach my $table (@tables) {
 		$dbh->do("DROP TABLE $table");
 	}
 
-	my $result;
-	$result = $source->get_tables();
-	is_deeply(
-		$result,
-		[ ],
-		'initial tables list'
-	);
+	@tables = $source->get_tables();
+	cmp_ok(@tables, '==', 0, 'initial tables list');
 
+	my $result;
 	$result = $source->add_table(table => 'table1');
 	is(
 		$result,

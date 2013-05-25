@@ -76,21 +76,17 @@ $date = $source->get_formatted_date(
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Sybase',
-);
+$source = Sympa::Datasource::SQL::Sybase->new();
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_name');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Sybase',
+$source = Sympa::Datasource::SQL::Sybase->new(
 	db_name => 'foo',
 );
 $dbh = $source->establish_connection();
 ok(!defined $dbh, 'no connection without db_host');
 
-$source = Sympa::Datasource::SQL->new(
-	db_type => 'Sybase',
+$source = Sympa::Datasource::SQL::Sybase->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 );
@@ -103,8 +99,7 @@ my $have_dbd = !$EVAL_ERROR;
 SKIP: {
 	skip "DBD::Sybase available", 1 if $have_dbd;
 
-	$source = Sympa::Datasource::SQL->new(
-		db_type => 'Sybase',
+	$source = Sympa::Datasource::SQL::Sybase->new(
 		db_name => 'foo',
 		db_host => 'localhost',
 		db_host => 'user',
