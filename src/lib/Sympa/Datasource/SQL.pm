@@ -352,6 +352,26 @@ sub get_handle {
 	return $self->{dbh};
 }
 
+=item $source->get_type()
+
+Return underlying database type.
+
+Parameters:
+
+None
+
+Return value:
+
+A string.
+
+=cut
+
+sub get_type {
+	my ($self) = @_;
+
+	return $self->{db_type};
+}
+
 =item $source->do_query($query, @params)
 
 Parameters:
