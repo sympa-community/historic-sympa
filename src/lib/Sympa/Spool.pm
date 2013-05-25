@@ -152,19 +152,19 @@ Hash field->value used as filter WHERE sql query.
 sub get_count {
 	my ($self, %params) = @_;
 
-	my $sql_where = $self->_sqlselector($params{selector});
+	my $filter_clause = $self->_get_filter_clause($params{selector});
 	if ($self->{status} eq 'bad') {
-		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
+		$filter_clause .= " AND message_status_spool = 'bad'" ;
 	} else {
-		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
+		$filter_clause .= " AND message_status_spool != 'bad'" ;
 	}
-	$sql_where =~s/^AND//;
+	$filter_clause =~ s/^AND//;
 
 	my $statement = 'SELECT COUNT(*) ';
 
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
-		$sql_where,
+		$filter_clause,
 		$self->{source}->quote($self->{name});
 
 	my $sth = $self->{source}->do_query($statement);
@@ -215,19 +215,19 @@ asc or desc
 sub get_content {
 	my ($self, %params) = @_;
 
-	my $sql_where = _sqlselector($params{selector});
+	my $filter_clause = $self->_get_filter_clause($params{selector});
 	if ($self->{status} eq 'bad') {
-		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
+		$filter_clause .= " AND message_status_spool = 'bad'" ;
 	} else {
-		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
+		$filter_clause .= " AND message_status_spool != 'bad'" ;
 	}
-	$sql_where =~s/^AND//;
+	$filter_clause =~s/^AND//;
 
 	my $statement = 'SELECT '._selectfields($params{selection});
 
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
-		$sql_where,
+		$filter_clause,
 		$self->{source}->quote($self->{name});
 
 	if ($params{orderby}) {
@@ -263,14 +263,14 @@ sub next {
 
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s)',$self->{name},$self->{status});
 
-	my $sql_where = _sqlselector($selector);
+	my $filter_clause = $self->_get_filter_clause($selector);
 
 	if ($self->{status} eq 'bad') {
-		$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
+		$filter_clause .= " AND message_status_spool = 'bad'" ;
 	} else {
-		$sql_where = $sql_where."AND message_status_spool != 'bad' " ;
+		$filter_clause .= " AND message_status_spool != 'bad'" ;
 	}
-	$sql_where =~ s/^\s*AND//;
+	$filter_clause =~ s/^\s*AND//;
 
 	my $lock = $PID.'@'.hostname();
 	my $epoch = time(); # should we use milli or nano seconds ?
@@ -280,7 +280,7 @@ sub next {
 		$self->{source}->quote($lock),
 		$self->{source}->quote($epoch),
 		$self->{source}->quote($self->{name}),
-		$sql_where;
+		$filter_clause;
 
 	my $sth = $self->{source}->do_query($statement);
 	return undef unless ($sth->rows); # spool is empty
@@ -319,22 +319,22 @@ sub get_message {
 	my ($self, $selector) = @_;
 	Sympa::Log::Syslog::do_log('debug', "($self->{name},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
 
-
-	my $sqlselector = '';
+	my $filter_clause;
 
 	foreach my $field (keys %$selector){
-		$sqlselector = $sqlselector.' AND ' unless ($sqlselector eq '');
+		$filter_clause .= ' AND ' unless ($filter_clause eq '');
 
 		if ($field eq 'messageid') {
 			$selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 		}
-		$sqlselector = $sqlselector.' '.$field.'_spool = '.$self->{source}->quote($selector->{$field});
+		$filter_clause .= ' ' . $field . '_spool = '.$self->{source}->quote($selector->{$field});
 	}
 	my $all = _selectfields();
 	my $statement = sprintf
-		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ". $sqlselector. ' LIMIT 1',
+		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND %s LIMIT 1",
 		$all,
-		$self->{source}->quote($self->{name});
+		$self->{source}->quote($self->{name}),
+		$filter_clause;
 
 	my $sth = $self->{source}->do_query($statement);
 
@@ -372,7 +372,7 @@ sub update {
 	my ($self, $selector, $values) = @_;
 	Sympa::Log::Syslog::do_log('debug', "($self->{name}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
 
-	my $where = _sqlselector($selector);
+	my $filter_clause = $self->_get_filter_clause($selector);
 
 	my $set = '';
 
@@ -409,7 +409,7 @@ sub update {
 	unless ($set) {
 		Sympa::Log::Syslog::do_log('err',"No value to update"); return undef;
 	}
-	unless ($where) {
+	unless ($filter_clause) {
 		Sympa::Log::Syslog::do_log('err',"No selector for an update"); return undef;
 	}
 
@@ -417,7 +417,7 @@ sub update {
 	my $statement = sprintf
 		"UPDATE spool_table SET %s WHERE (%s)",
 		$set,
-		$where;
+		$filter_clause;
 
 	unless ($self->{source}->do_query($statement)) {
 		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, undef);
@@ -558,11 +558,11 @@ sub remove_message {
 		return undef;
 	}
 
-	my $sqlselector = _sqlselector($selector);
+	my $filter_clause = $self->_get_filter_clause($selector);
 	my $statement  = sprintf 
 		"DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",
 		$self->{source}->quote($self->{name}),
-		$sqlselector;
+		$filter_clause;
 
 	my $sth = $self->{source}->do_query($statement);
 
@@ -647,7 +647,7 @@ sub _selectfields{
 # return a SQL WHERE substring in order to select chosen fields from the spool table
 # selector is a hash where key is a column name and value is column value expected.****
 #   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(
-sub _sqlselector {
+sub _get_filter_clause {
 	my ($self, $selector) = @_;
 
 	my $sqlselector = '';
