@@ -1166,24 +1166,4 @@ sub db_struct {
 	return %db_struct;
 }
 
-=item get_primary_key_fields()
-
-Return an hash of primary key fields for each table.
-
-=cut
-
-sub get_primary_key_fields {
-	my %primary;
-
-	foreach my $table ( keys %full_db_struct ) {
-		my @primarykey;
-		foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-			push (@primarykey,$field) if ($full_db_struct{$table}{'fields'}{$field}{'primary'});
-		}
-
-		$primary{$table} = \@primarykey;
-	}
-	return %primary;
-}
-
 1;
