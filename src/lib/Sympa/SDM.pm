@@ -44,8 +44,6 @@ use Sympa::Log::Syslog;
 # db structure description has moved in Sympa/Constant.pm
 my %db_struct = Sympa::DatabaseDescription::db_struct();
 
-my %primary =  Sympa::DatabaseDescription::get_primary_key_fields();
-
 ## List the required INDEXES
 ##   1st key is the concerned table
 ##   2nd key is the index name
@@ -324,51 +322,64 @@ sub _check_fields {
 sub _check_primary_key {
 	my (%params) = @_;
 
-	my $t = $params{'table'};
-	my $report_ref = $params{'report'};
-	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$t);
+	my $table  = $params{'table'};
+	my $report = $params{'report'};
+	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
 
-	my $list_of_keys = join ',',@{$primary{$t}};
-	my $key_as_string = "$t [$list_of_keys]";
-	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$t,$key_as_string );
+	my @key_fields;
+	foreach my $field (keys %{$db_struct{mysql}{$table}{fields}}) {
+		next unless $db_struct{mysql}{$table}{fields}{$field}{primary};
+		push @key_fields, $field;
+	}
 
-	my $should_update = $db_source->check_key('table'=>$t,'key_name'=>'primary','expected_keys'=>$primary{$t});
+	my $key_as_string = "$table [" . join(',', @key_fields) . "]";
+	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$table,$key_as_string );
+
+	my $should_update = $db_source->check_key(
+		table         => $table,
+		key_name      => 'primary',
+		expected_keys => \@key_fields
+	);
+
 	if ($should_update){
-		my $list_of_keys = join ',',@{$primary{$t}};
-		my $key_as_string = "$t [$list_of_keys]";
 		if ($should_update->{'empty'}) {
 			Sympa::Log::Syslog::do_log('notice',"Primary key %s is missing. Adding it.",$key_as_string);
-			## Add primary key
-			my $rep = undef;
-			if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
-				push @{$report_ref}, $rep;
-			}
+			# Add primary key
+			my $result = $db_source->set_primary_key(
+				table  => $table,
+				fields =>\@key_fields
+			);
+			push @{$report}, $result if $result;
 		} elsif($should_update->{'existing_key_correct'}) {
 			Sympa::Log::Syslog::do_log('debug',"Existing key correct (%s) nothing to change",$key_as_string);
 		} else {
-			## drop previous primary key
-			my $rep = undef;
-			if ($rep = $db_source->unset_primary_key('table'=>$t)) {
-				push @{$report_ref}, $rep;
-			}
-			## Add primary key
-			$rep = undef;
-			if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
-				push @{$report_ref}, $rep;
-			}
+			my $result;
+
+			# drop previous primary key
+			$result = $db_source->unset_primary_key(table => $table);
+			push @{$report}, $result if $result;
+
+			# Add primary key
+			$result = $db_source->set_primary_key(
+				table  => $table,
+				fields => \@key_fields
+			);
+			push @{$report}, $result if $result;
 		}
 	} else {
-		Sympa::Log::Syslog::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$t);
-		## drop previous primary key
-		my $rep = undef;
-		if ($rep = $db_source->unset_primary_key('table'=>$t)) {
-			push @{$report_ref}, $rep;
-		}
-		## Add primary key
-		$rep = undef;
-		if ($rep = $db_source->set_primary_key('table'=>$t,'fields'=>$primary{$t})) {
-			push @{$report_ref}, $rep;
-		}
+		Sympa::Log::Syslog::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$table);
+		my $result;
+
+		# drop previous primary key
+		$result = $db_source->unset_primary_key(table => $table);
+		push @{$report}, $result if $result;
+
+		# Add primary key
+		$result = $db_source->set_primary_key(
+			table  => $table,
+			fields => \@key_fields
+		);
+		push @{$report}, $result if $result;
 	}
 	return 1;
 }
