@@ -252,12 +252,14 @@ sub _check_fields {
 	my $current_structure = $params{'current_structure'};
 	my $target_structure = $params{'target_structure'};
 	my $report_ref = $params{'report'};
+
 	my $db_type = $db_source->get_type();
+	my $db_name = $db_source->get_name();
 
 	foreach my $f (sort keys %{$target_structure->{$t}}) {
 		unless ($current_structure->{$t}{$f}) {
-			push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
-			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
+			push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, $db_name);
+			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, $db_name);
 
 			my $rep = $db_source->add_field(
 				'table'   => $t,
@@ -281,9 +283,9 @@ sub _check_fields {
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
 			unless (_check_db_field_type(effective_format => $current_structure->{$t}{$f},
 					required_format => $target_structure->{$t}{$f})) {
-				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f});
+				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, $db_name, $target_structure->{$t}{$f});
 
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f},$current_structure->{$t}{$f});
+				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, $db_name, $target_structure->{$t}{$f},$current_structure->{$t}{$f});
 
 				my $rep = $db_source->update_field(
 					'table'   => $t,
@@ -300,7 +302,7 @@ sub _check_fields {
 			}
 		} else {
 			unless ($current_structure->{$t}{$f} eq $target_structure->{$t}{$f}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f});
+				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, $db_name, $target_structure->{$t}{$f});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 				return undef;
 			}
