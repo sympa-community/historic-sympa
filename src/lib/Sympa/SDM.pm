@@ -133,7 +133,7 @@ sub probe_db {
 	Sympa::Log::Syslog::do_log('debug3', 'Checking database structure');
 
 	my $db_type = $db_source->get_type();
-	## Database structure
+	my $db_name = $db_source->get_name();
 	my @report;
 
 	## Get tables
@@ -149,7 +149,7 @@ sub probe_db {
 		unless ($found) {
 			if (my $rep = $db_source->add_table('table'=>$t1)) {
 				push @report, $rep;
-				Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, Sympa::Configuration::get_robot_conf('*','db_name'));
+				Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, $db_name);
 				push @tables, $t1;
 				$real_struct{$t1} = {};
 			}
@@ -164,7 +164,7 @@ sub probe_db {
 	if (%real_struct) {
 		foreach my $t (keys %{$db_struct{'mysql'}}) {
 			unless ($real_struct{$t}) {
-				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_type);
+				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, $db_name, $db_type);
 				return undef;
 			}
 			unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
