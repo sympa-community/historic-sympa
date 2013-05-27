@@ -41,9 +41,6 @@ use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
 use Sympa::Log::Syslog;
 
-# db structure description has moved in Sympa/Constant.pm
-my %db_struct = Sympa::DatabaseDescription::db_struct();
-
 my $db_source;
 our $use_db;
 
@@ -134,12 +131,12 @@ sub probe_db {
 
 	my @report;
 
-	my @current_tables = $db_source->get_tables();
-	my %current_structure;
-	my $target_structure = $db_struct{'mysql'};
-
 	my $db_type = $db_source->get_type();
 	my $db_name = $db_source->get_name();
+
+	my @current_tables = $db_source->get_tables();
+	my %current_structure;
+	my $target_structure = Sympa::DatabaseDescription::db_struct()->{$db_type};
 
 	## Check required tables
 	foreach my $table (keys %{$target_structure}) {
@@ -174,10 +171,11 @@ sub probe_db {
 		}
 
 		my $fields_result = _check_fields(
-			source      => $db_source,
-			table       => $table,
-			report      => \@report,
-			real_struct => \%current_structure
+			source            => $db_source,
+			table             => $table,
+			report            => \@report,
+			current_structure => \%current_structure,
+			target_structure  => $target_structure
 		);
 		unless ($fields_result) {
 			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
@@ -196,9 +194,10 @@ sub probe_db {
 		if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
 			## Check that primary key has the right structure.
 			my $primary_key_result = _check_primary_key(
-				source => $db_source,
-				table  => $table,
-				report => \@report
+				source           => $db_source,
+				table            => $table,
+				report           => \@report,
+				target_structure => $target_structure
 			);
 			unless ($primary_key_result) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $table);
@@ -250,22 +249,23 @@ sub _check_fields {
 
 	my $db_source = $params{'source'};
 	my $t = $params{'table'};
-	my %real_struct = %{$params{'real_struct'}};
+	my $current_structure = $params{'current_structure'};
+	my $target_structure = $params{'target_structure'};
 	my $report_ref = $params{'report'};
 	my $db_type = $db_source->get_type();
 
-	foreach my $f (sort keys %{$db_struct{$db_type}{$t}}) {
-		unless ($real_struct{$t}{$f}) {
+	foreach my $f (sort keys %{$target_structure->{$t}}) {
+		unless ($current_structure->{$t}{$f}) {
 			push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'));
 
 			my $rep = $db_source->add_field(
 				'table'   => $t,
 				'field'   => $f,
-				'type'    => $db_struct{$db_type}{$t}{$f},
-				'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
-				'autoinc' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement},
-				'primary' => $db_struct{$db_type}{$t}{fields}{$f}{autoincrement}
+				'type'    => $target_structure->{$t}{$f},
+				'notnull' => $target_structure->{$t}{fields}{$f}{'not_null'},
+				'autoinc' => $target_structure->{$t}{fields}{$f}{autoincrement},
+				'primary' => $target_structure->{$t}{fields}{$f}{autoincrement}
 			);
 			if ($rep) {
 				push @{$report_ref}, $rep;
@@ -279,17 +279,17 @@ sub _check_fields {
 
 		## Change DB types if different and if update_db_types enabled
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
-			unless (_check_db_field_type(effective_format => $real_struct{$t}{$f},
-					required_format => $db_struct{$db_type}{$t}{$f})) {
-				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{$db_type}{$t}{$f});
+			unless (_check_db_field_type(effective_format => $current_structure->{$t}{$f},
+					required_format => $target_structure->{$t}{$f})) {
+				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f});
 
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{$db_type}{$t}{$f},$real_struct{$t}{$f});
+				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f},$current_structure->{$t}{$f});
 
 				my $rep = $db_source->update_field(
 					'table'   => $t,
 					'field'   => $f,
-					'type'    => $db_struct{$db_type}{$t}{$f},
-					'notnull' => $db_struct{$db_type}{$t}{fields}{$f}{'not_null'},
+					'type'    => $target_structure->{$t}{$f},
+					'notnull' => $target_structure->{$t}{fields}{$f}{'not_null'},
 				);
 				if ($rep) {
 					push @{$report_ref}, $rep;
@@ -299,8 +299,8 @@ sub _check_fields {
 				}
 			}
 		} else {
-			unless ($real_struct{$t}{$f} eq $db_struct{$db_type}{$t}{$f}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $db_struct{$db_type}{$t}{$f});
+			unless ($current_structure->{$t}{$f} eq $target_structure->{$t}{$f}) {
+				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, Sympa::Configuration::get_robot_conf('*','db_name'), $target_structure->{$t}{$f});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 				return undef;
 			}
@@ -315,11 +315,12 @@ sub _check_primary_key {
 	my $db_source = $params{'source'};
 	my $table  = $params{'table'};
 	my $report = $params{'report'};
+	my $target_structure = $params{'target_structure'};
 	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
 
 	my @key_fields;
-	foreach my $field (keys %{$db_struct{mysql}{$table}{fields}}) {
-		next unless $db_struct{mysql}{$table}{fields}{$field}{primary};
+	foreach my $field (keys %{$target_structure->{$table}{fields}}) {
+		next unless $target_structure->{$table}{fields}{$field}{primary};
 		push @key_fields, $field;
 	}
 
