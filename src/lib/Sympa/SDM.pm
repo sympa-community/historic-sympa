@@ -143,19 +143,16 @@ sub probe_db {
 
 	## Check required tables
 	foreach my $t1 (keys %{$target_structure}) {
-		my $found;
-		foreach my $t2 (@current_tables) {
-			$found = 1 if ($t1 eq $t2) ;
-		}
-		unless ($found) {
-			if (my $rep = $db_source->add_table('table'=>$t1)) {
-				push @report, $rep;
-				Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, $db_name);
-				push @current_tables, $t1;
-				$current_structure{$t1} = {};
-			}
+		next if Sympa::Tools::Data::any { $t1 eq $_ } @current_tables;
+
+		if (my $rep = $db_source->add_table('table'=>$t1)) {
+			push @report, $rep;
+			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, $db_name);
+			push @current_tables, $t1;
+			$current_structure{$t1} = {};
 		}
 	}
+
 	## Get fields
 	foreach my $t (@current_tables) {
 		$current_structure{$t} = $db_source->get_fields('table'=>$t);
