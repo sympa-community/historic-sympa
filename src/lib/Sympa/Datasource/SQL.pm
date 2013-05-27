@@ -372,6 +372,26 @@ sub get_type {
 	return $self->{db_type};
 }
 
+=item $source->get_name()
+
+Return underlying database name.
+
+Parameters:
+
+None
+
+Return value:
+
+A string.
+
+=cut
+
+sub get_name {
+	my ($self) = @_;
+
+	return $self->{db_name};
+}
+
 =item $source->do_query($query, @params)
 
 Parameters:
