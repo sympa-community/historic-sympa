@@ -146,8 +146,9 @@ sub probe_db {
 		next if Sympa::Tools::Data::any { $table eq $_ }
 			@current_tables;
 
-		if (my $rep = $db_source->add_table(table => $table)) {
-			push @report, $rep;
+		my $result = $db_source->add_table(table => $table);
+		if ($result) {
+			push @report, $result;
 			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $table, $db_name);
 			push @current_tables, $table;
 			$current_structure{$table} = {};
@@ -171,7 +172,13 @@ sub probe_db {
 			Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $table, $db_name, $db_type);
 			return undef;
 		}
-		unless (_check_fields(table => $table, report => \@report, real_struct => \%current_structure)) {
+
+		my $fields_result = _check_fields(
+			table       => $table,
+			report      => \@report,
+			real_struct => \%current_structure
+		);
+		unless ($fields_result) {
 			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
 			return undef;
 		}
@@ -187,12 +194,20 @@ sub probe_db {
 
 		if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
 			## Check that primary key has the right structure.
-			unless (_check_primary_key(table => $table, report => \@report)) {
+			my $primary_key_result = _check_primary_key(
+				table  => $table,
+				report => \@report
+			);
+			unless ($primary_key_result) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $table);
 				return undef;
 			}
 
-			unless (_check_indexes('table' => $table, report => \@report)) {
+			my $indexes_result = _check_indexes(
+				table  => $table,
+				report => \@report
+			);
+			unless ($indexes_result) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $table);
 				return undef;
 			}
