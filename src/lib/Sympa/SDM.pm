@@ -248,29 +248,29 @@ sub _check_fields {
 	my (%params) = @_;
 
 	my $db_source = $params{'source'};
-	my $t = $params{'table'};
+	my $table     = $params{'table'};
+	my $report    = $params{'report'};
 	my $current_structure = $params{'current_structure'};
 	my $target_structure = $params{'target_structure'};
-	my $report_ref = $params{'report'};
 
 	my $db_type = $db_source->get_type();
 	my $db_name = $db_source->get_name();
 
-	foreach my $f (sort keys %{$target_structure->{$t}}) {
-		unless ($current_structure->{$t}{$f}) {
-			push @{$report_ref}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, $db_name);
-			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $f, $t, $db_name);
+	foreach my $field (sort keys %{$target_structure->{$table}}) {
+		unless ($current_structure->{$table}{$field}) {
+			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
+			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
 
 			my $rep = $db_source->add_field(
-				'table'   => $t,
-				'field'   => $f,
-				'type'    => $target_structure->{$t}{$f},
-				'notnull' => $target_structure->{$t}{fields}{$f}{'not_null'},
-				'autoinc' => $target_structure->{$t}{fields}{$f}{autoincrement},
-				'primary' => $target_structure->{$t}{fields}{$f}{autoincrement}
+				'table'   => $table,
+				'field'   => $field,
+				'type'    => $target_structure->{$table}{$field},
+				'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
+				'autoinc' => $target_structure->{$table}{fields}{$field}{autoincrement},
+				'primary' => $target_structure->{$table}{fields}{$field}{autoincrement}
 			);
 			if ($rep) {
-				push @{$report_ref}, $rep;
+				push @{$report}, $rep;
 
 			} else {
 				Sympa::Log::Syslog::do_log('err', 'Addition of fields in database failed. Aborting.');
@@ -281,28 +281,28 @@ sub _check_fields {
 
 		## Change DB types if different and if update_db_types enabled
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
-			unless (_check_db_field_type(effective_format => $current_structure->{$t}{$f},
-					required_format => $target_structure->{$t}{$f})) {
-				push @{$report_ref}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$f, $t, $db_name, $target_structure->{$t}{$f});
+			unless (_check_db_field_type(effective_format => $current_structure->{$table}{$field},
+					required_format => $target_structure->{$table}{$field})) {
+				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field});
 
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$f, $t, $db_name, $target_structure->{$t}{$f},$current_structure->{$t}{$f});
+				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field},$current_structure->{$table}{$field});
 
 				my $rep = $db_source->update_field(
-					'table'   => $t,
-					'field'   => $f,
-					'type'    => $target_structure->{$t}{$f},
-					'notnull' => $target_structure->{$t}{fields}{$f}{'not_null'},
+					'table'   => $table,
+					'field'   => $field,
+					'type'    => $target_structure->{$table}{$field},
+					'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
 				);
 				if ($rep) {
-					push @{$report_ref}, $rep;
+					push @{$report}, $rep;
 				} else {
 					Sympa::Log::Syslog::do_log('err', 'Fields update in database failed. Aborting.');
 					return undef;
 				}
 			}
 		} else {
-			unless ($current_structure->{$t}{$f} eq $target_structure->{$t}{$f}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, $db_name, $target_structure->{$t}{$f});
+			unless ($current_structure->{$table}{$field} eq $target_structure->{$table}{$field}) {
+				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $field, $table, $db_name, $target_structure->{$table}{$field});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 				return undef;
 			}
@@ -315,8 +315,8 @@ sub _check_primary_key {
 	my (%params) = @_;
 
 	my $db_source = $params{'source'};
-	my $table  = $params{'table'};
-	my $report = $params{'report'};
+	my $table     = $params{'table'};
+	my $report    = $params{'report'};
 	my $target_structure = $params{'target_structure'};
 	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
 
@@ -382,20 +382,20 @@ sub _check_indexes {
 	my (%params) = @_;
 
 	my $db_source = $params{'source'};
-	my $t = $params{'table'};
-	my $report_ref = $params{'report'};
-	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$t);
+	my $table     = $params{'table'};
+	my $report    = $params{'report'};
+	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$table);
 	## drop previous index if this index is not a primary key and was defined by a previous Sympa version
-	my %index_columns = %{$db_source->get_indexes('table' => $t)};
-	foreach my $idx ( keys %index_columns ) {
-		Sympa::Log::Syslog::do_log('debug','Found index %s',$idx);
+	my %index_columns = %{$db_source->get_indexes('table' => $table)};
+	foreach my $index ( keys %index_columns ) {
+		Sympa::Log::Syslog::do_log('debug','Found index %s',$index);
 		## Remove the index if obsolete.
 
 		foreach my $known_index (@Sympa::DatabaseDescription::former_indexes) {
-			if ( $idx eq $known_index ) {
-				Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$idx);
-				if (my $rep = $db_source->unset_index('table'=>$t,'index'=>$idx)) {
-					push @{$report_ref}, $rep;
+			if ( $index eq $known_index ) {
+				Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$index);
+				if (my $rep = $db_source->unset_index('table'=>$table,'index'=>$index)) {
+					push @{$report}, $rep;
 				}
 				last;
 			}
@@ -403,24 +403,24 @@ sub _check_indexes {
 	}
 
 	## Create required indexes
-	foreach my $idx (keys %{$Sympa::DatabaseDescription::indexes{$t}}){
+	foreach my $index (keys %{$Sympa::DatabaseDescription::indexes{$table}}){
 		## Add indexes
-		unless ($index_columns{$idx}) {
-			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$idx,$t);
-			if (my $rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
-				push @{$report_ref}, $rep;
+		unless ($index_columns{$index}) {
+			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
+			if (my $rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
+				push @{$report}, $rep;
 			}
 		}
-		my $index_check = $db_source->check_key('table'=>$t,'key_name'=>$idx,'expected_keys'=>$Sympa::DatabaseDescription::indexes{$t}{$idx});
+		my $index_check = $db_source->check_key('table'=>$table,'key_name'=>$index,'expected_keys'=>$Sympa::DatabaseDescription::indexes{$table}{$index});
 		if ($index_check){
-			my $list_of_fields = join ',',@{$Sympa::DatabaseDescription::indexes{$t}{$idx}};
-			my $index_as_string = "$idx: $t [$list_of_fields]";
+			my $list_of_fields = join ',',@{$Sympa::DatabaseDescription::indexes{$table}{$index}};
+			my $index_as_string = "$index: $table [$list_of_fields]";
 			if ($index_check->{'empty'}) {
 				## Add index
 				my $rep = undef;
 				Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
-					push @{$report_ref}, $rep;
+				if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
+					push @{$report}, $rep;
 				}
 			} elsif($index_check->{'existing_key_correct'}) {
 				Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
@@ -428,26 +428,26 @@ sub _check_indexes {
 				## drop previous index
 				Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
 				my $rep = undef;
-				if ($rep = $db_source->unset_index('table'=>$t, 'index'=> $idx)) {
-					push @{$report_ref}, $rep;
+				if ($rep = $db_source->unset_index('table'=>$table, 'index'=> $index)) {
+					push @{$report}, $rep;
 				}
 				## Add index
 				$rep = undef;
-				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
-					push @{$report_ref}, $rep;
+				if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
+					push @{$report}, $rep;
 				}
 			}
 		} else {
-			Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$t,$idx);
+			Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$table,$index);
 			## drop previous index
 			my $rep = undef;
-			if ($rep = $db_source->unset_index('table'=>$t, 'index'=> $idx)) {
-				push @{$report_ref}, $rep;
+			if ($rep = $db_source->unset_index('table'=>$table, 'index'=> $index)) {
+				push @{$report}, $rep;
 			}
 			## Add index
 			$rep = undef;
-			if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx,'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
-				push @{$report_ref}, $rep;
+			if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index,'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
+				push @{$report}, $rep;
 			}
 		}
 	}
