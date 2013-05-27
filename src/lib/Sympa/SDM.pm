@@ -174,6 +174,7 @@ sub probe_db {
 		}
 
 		my $fields_result = _check_fields(
+			source      => $db_source,
 			table       => $table,
 			report      => \@report,
 			real_struct => \%current_structure
@@ -195,6 +196,7 @@ sub probe_db {
 		if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
 			## Check that primary key has the right structure.
 			my $primary_key_result = _check_primary_key(
+				source => $db_source,
 				table  => $table,
 				report => \@report
 			);
@@ -204,6 +206,7 @@ sub probe_db {
 			}
 
 			my $indexes_result = _check_indexes(
+				source => $db_source,
 				table  => $table,
 				report => \@report
 			);
@@ -245,10 +248,11 @@ sub probe_db {
 sub _check_fields {
 	my (%params) = @_;
 
+	my $db_source = $params{'source'};
 	my $t = $params{'table'};
 	my %real_struct = %{$params{'real_struct'}};
 	my $report_ref = $params{'report'};
-	my $db_type = Sympa::Configuration::get_robot_conf('*','db_type');
+	my $db_type = $db_source->get_type();
 
 	foreach my $f (sort keys %{$db_struct{$db_type}{$t}}) {
 		unless ($real_struct{$t}{$f}) {
@@ -308,6 +312,7 @@ sub _check_fields {
 sub _check_primary_key {
 	my (%params) = @_;
 
+	my $db_source = $params{'source'};
 	my $table  = $params{'table'};
 	my $report = $params{'report'};
 	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
@@ -373,6 +378,7 @@ sub _check_primary_key {
 sub _check_indexes {
 	my (%params) = @_;
 
+	my $db_source = $params{'source'};
 	my $t = $params{'table'};
 	my $report_ref = $params{'report'};
 	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$t);
