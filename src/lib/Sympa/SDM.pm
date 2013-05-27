@@ -281,20 +281,23 @@ sub _check_fields {
 
 		## Change DB types if different and if update_db_types enabled
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
-			unless (_check_db_field_type(effective_format => $current_structure->{$table}{$field},
-					required_format => $target_structure->{$table}{$field})) {
+			my $type_check = _check_db_field_type(
+				effective_format => $current_structure->{$table}{$field},
+				required_format => $target_structure->{$table}{$field}
+			);
+			unless ($type_check) {
 				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field});
 
 				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field},$current_structure->{$table}{$field});
 
-				my $rep = $db_source->update_field(
+				my $type_change = $db_source->update_field(
 					'table'   => $table,
 					'field'   => $field,
 					'type'    => $target_structure->{$table}{$field},
 					'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
 				);
-				if ($rep) {
-					push @{$report}, $rep;
+				if ($type_change) {
+					push @{$report}, $type_change;
 				} else {
 					Sympa::Log::Syslog::do_log('err', 'Fields update in database failed. Aborting.');
 					return undef;
@@ -329,51 +332,52 @@ sub _check_primary_key {
 	my $key_as_string = "$table [" . join(',', @key_fields) . "]";
 	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$table,$key_as_string );
 
-	my $should_update = $db_source->check_key(
+	my $key_check = $db_source->check_key(
 		table         => $table,
 		key_name      => 'primary',
 		expected_keys => \@key_fields
 	);
 
-	if ($should_update){
-		if ($should_update->{'empty'}) {
+	if ($key_check) {
+		if ($key_check->{'empty'}) {
 			Sympa::Log::Syslog::do_log('notice',"Primary key %s is missing. Adding it.",$key_as_string);
 			# Add primary key
-			my $result = $db_source->set_primary_key(
-				table  => $table,
-				fields =>\@key_fields
-			);
-			push @{$report}, $result if $result;
-		} elsif($should_update->{'existing_key_correct'}) {
-			Sympa::Log::Syslog::do_log('debug',"Existing key correct (%s) nothing to change",$key_as_string);
-		} else {
-			my $result;
-
-			# drop previous primary key
-			$result = $db_source->unset_primary_key(table => $table);
-			push @{$report}, $result if $result;
-
-			# Add primary key
-			$result = $db_source->set_primary_key(
+			my $key_addition = $db_source->set_primary_key(
 				table  => $table,
 				fields => \@key_fields
 			);
-			push @{$report}, $result if $result;
+			push @{$report}, $key_addition if $key_addition;
+		} elsif ($key_check->{'existing_key_correct'}) {
+			Sympa::Log::Syslog::do_log('debug',"Existing key correct (%s) nothing to change",$key_as_string);
+		} else {
+			# drop previous primary key
+			my $key_deletion = $db_source->unset_primary_key(
+				table => $table
+			);
+			push @{$report}, $key_deletion if $key_deletion;
+
+			# Add primary key
+			my $key_addition = $db_source->set_primary_key(
+				table  => $table,
+				fields => \@key_fields
+			);
+			push @{$report}, $key_addition if $key_addition;
 		}
 	} else {
 		Sympa::Log::Syslog::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$table);
-		my $result;
 
 		# drop previous primary key
-		$result = $db_source->unset_primary_key(table => $table);
-		push @{$report}, $result if $result;
+		my $key_deletion = $db_source->unset_primary_key(
+			table => $table
+		);
+		push @{$report}, $key_deletion if $key_deletion;
 
 		# Add primary key
-		$result = $db_source->set_primary_key(
+		my $key_addition = $db_source->set_primary_key(
 			table  => $table,
 			fields => \@key_fields
 		);
-		push @{$report}, $result if $result;
+		push @{$report}, $key_addition if $key_addition;
 	}
 	return 1;
 }
@@ -394,9 +398,12 @@ sub _check_indexes {
 		foreach my $known_index (@Sympa::DatabaseDescription::former_indexes) {
 			if ( $index eq $known_index ) {
 				Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$index);
-				if (my $rep = $db_source->unset_index('table'=>$table,'index'=>$index)) {
-					push @{$report}, $rep;
-				}
+				my $index_deletion = $db_source->unset_index(
+					table => $table,
+					index => $index
+				);
+				push @{$report}, $index_deletion
+					if $index_deletion;
 				last;
 			}
 		}
@@ -407,48 +414,70 @@ sub _check_indexes {
 		## Add indexes
 		unless ($index_columns{$index}) {
 			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
-			if (my $rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
-				push @{$report}, $rep;
-			}
+			my $index_addition = $db_source->set_index(
+				table      => $table,
+				index_name => $index,
+				fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+			);
+			push @{$report}, $index_addition if $index_addition;
 		}
-		my $index_check = $db_source->check_key('table'=>$table,'key_name'=>$index,'expected_keys'=>$Sympa::DatabaseDescription::indexes{$table}{$index});
-		if ($index_check){
+		my $index_check = $db_source->check_key(
+			table         => $table,
+			key_name      => $index,
+			expected_keys => $Sympa::DatabaseDescription::indexes{$table}{$index}
+		);
+		if ($index_check) {
 			my $list_of_fields = join ',',@{$Sympa::DatabaseDescription::indexes{$table}{$index}};
 			my $index_as_string = "$index: $table [$list_of_fields]";
 			if ($index_check->{'empty'}) {
 				## Add index
-				my $rep = undef;
 				Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-				if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
-					push @{$report}, $rep;
-				}
-			} elsif($index_check->{'existing_key_correct'}) {
+				my $index_addition = $db_source->set_index(
+					table      => $table,
+					index_name => $index,
+					fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+				);
+				push @{$report}, $index_addition
+					if $index_addition;
+			} elsif ($index_check->{'existing_key_correct'}) {
 				Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
 			} else {
 				## drop previous index
 				Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
-				my $rep = undef;
-				if ($rep = $db_source->unset_index('table'=>$table, 'index'=> $index)) {
-					push @{$report}, $rep;
-				}
+				my $index_deletion = $db_source->unset_index(
+					table => $table,
+					index => $index
+				);
+				push @{$report}, $index_deletion
+					if $index_deletion;
+
 				## Add index
-				$rep = undef;
-				if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index, 'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
-					push @{$report}, $rep;
-				}
+				my $index_addition = $db_source->set_index(
+					table      => $table,
+					index_name => $index,
+					fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+				);
+				push @{$report}, $index_addition
+					if $index_addition;
 			}
 		} else {
 			Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$table,$index);
 			## drop previous index
-			my $rep = undef;
-			if ($rep = $db_source->unset_index('table'=>$table, 'index'=> $index)) {
-				push @{$report}, $rep;
-			}
+			my $index_deletion = $db_source->unset_index(
+				table => $table,
+				index => $index
+			);
+			push @{$report}, $index_deletion
+				if $index_deletion;
+
 			## Add index
-			$rep = undef;
-			if ($rep = $db_source->set_index('table'=>$table, 'index_name'=> $index,'fields'=>$Sympa::DatabaseDescription::indexes{$table}{$index})) {
-				push @{$report}, $rep;
-			}
+			my $index_addition = $db_source->set_index(
+				table      => $table,
+				index_name => $index,
+				fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+			);
+			push @{$report}, $index_addition
+				if $index_addition;
 		}
 	}
 	return 1;
