@@ -381,6 +381,23 @@ sub smart_lessthan {
 	}
 }
 
+=item any {} @list
+
+Returns a true value if any item in @list meets the criterion given through
+code block.
+
+Shamelessly imported from List::MoreUtils to avoid a dependency.
+
+=cut
+
+sub any (&@) { ## no critic (SubroutinePrototypes)
+    my $f = shift;
+    foreach ( @_ ) {
+        return 1 if $f->();
+    }
+    return 0;
+}
+
 =back
 
 =cut
