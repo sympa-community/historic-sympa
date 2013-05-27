@@ -44,12 +44,6 @@ use Sympa::Log::Syslog;
 # db structure description has moved in Sympa/Constant.pm
 my %db_struct = Sympa::DatabaseDescription::db_struct();
 
-## List the required INDEXES
-##   1st key is the concerned table
-##   2nd key is the index name
-##   the table lists the field on which the index applies
-my %indexes = %Sympa::DatabaseDescription::indexes ;
-
 my $db_source;
 our $use_db;
 
@@ -385,23 +379,23 @@ sub _check_indexes {
 	}
 
 	## Create required indexes
-	foreach my $idx (keys %{$indexes{$t}}){
+	foreach my $idx (keys %{$Sympa::DatabaseDescription::indexes{$t}}){
 		## Add indexes
 		unless ($index_columns{$idx}) {
 			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$idx,$t);
-			if (my $rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
+			if (my $rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
 				push @{$report_ref}, $rep;
 			}
 		}
-		my $index_check = $db_source->check_key('table'=>$t,'key_name'=>$idx,'expected_keys'=>$indexes{$t}{$idx});
+		my $index_check = $db_source->check_key('table'=>$t,'key_name'=>$idx,'expected_keys'=>$Sympa::DatabaseDescription::indexes{$t}{$idx});
 		if ($index_check){
-			my $list_of_fields = join ',',@{$indexes{$t}{$idx}};
+			my $list_of_fields = join ',',@{$Sympa::DatabaseDescription::indexes{$t}{$idx}};
 			my $index_as_string = "$idx: $t [$list_of_fields]";
 			if ($index_check->{'empty'}) {
 				## Add index
 				my $rep = undef;
 				Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
+				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
 					push @{$report_ref}, $rep;
 				}
 			} elsif($index_check->{'existing_key_correct'}) {
@@ -415,7 +409,7 @@ sub _check_indexes {
 				}
 				## Add index
 				$rep = undef;
-				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx})) {
+				if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx, 'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
 					push @{$report_ref}, $rep;
 				}
 			}
@@ -428,7 +422,7 @@ sub _check_indexes {
 			}
 			## Add index
 			$rep = undef;
-			if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx,'fields'=>$indexes{$t}{$idx})) {
+			if ($rep = $db_source->set_index('table'=>$t, 'index_name'=> $idx,'fields'=>$Sympa::DatabaseDescription::indexes{$t}{$idx})) {
 				push @{$report_ref}, $rep;
 			}
 		}
