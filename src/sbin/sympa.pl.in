@@ -1333,7 +1333,7 @@ while ($signal ne 'term') {
 	#Sympa::List::dump();
 
 	## Disconnect from Database
-	Sympa::SDM::db_disconnect();
+	Sympa::SDM::get_source()->disconnect();
 }
 
 Sympa::Log::Syslog::do_log('notice', 'Sympa exited normally due to signal');

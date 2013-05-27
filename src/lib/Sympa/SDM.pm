@@ -128,23 +128,6 @@ sub connect_sympa_database {
 	return 1;
 }
 
-=item db_disconnect()
-
-Disconnect from database.
-
-=cut
-
-sub db_disconnect {
-	Sympa::Log::Syslog::do_log('debug', 'Disconnecting from Sympa database');
-
-	unless ($db_source->{'dbh'}->disconnect()) {
-		Sympa::Log::Syslog::do_log('err','Can\'t disconnect from Database %s : %s',Sympa::Configuration::get_robot_conf('*','db_name'), $db_source->{'dbh'}->errstr);
-		return undef;
-	}
-
-	return 1;
-}
-
 =item probe_db()
 
 FIXME.
