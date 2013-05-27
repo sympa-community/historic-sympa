@@ -160,66 +160,67 @@ sub probe_db {
 	foreach my $t (@current_tables) {
 		$current_structure{$t} = $db_source->get_fields('table'=>$t);
 	}
-	## Check tables structure if we could get it
-	## Only performed with mysql , Pg and SQLite
-	if (%current_structure) {
-		foreach my $t (keys %{$target_structure}) {
-			unless ($current_structure{$t}) {
-				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, $db_name, $db_type);
-				return undef;
-			}
-			unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%current_structure)) {
-				Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
-				return undef;
-			}
 
-			## Remove temporary DB field
-			if ($current_structure{$t}{'temporary'}) {
-				$db_source->delete_field(
-					'table' => $t,
-					'field' => 'temporary',
-				);
-				delete $current_structure{$t}{'temporary'};
-			}
-
-			if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
-				## Check that primary key has the right structure.
-				unless (_check_primary_key('table' => $t,'report' => \@report)) {
-					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
-					return undef;
-				}
-
-				unless (_check_indexes('table' => $t,'report' => \@report)) {
-					Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
-					return undef;
-				}
-
-			}
-		}
-		# add autoincrement option if needed
-		foreach my $table (keys %{$target_structure}) {
-			Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
-			foreach my $field (keys %{$target_structure->{$table}{'fields'}}) {
-				next unless $target_structure->{$table}{'fields'}{$field}{'autoincrement'};
-				next if $db_source->is_autoinc(
-					'table' => $table,
-					'field' => $field
-				);
-				my $result = $db_source->set_autoinc(
-					'table'      => $table,
-					'field'      => $field,
-					'field_type' => $target_structure->{$table}{'fields'}{$field});
-				if ($result) {
-					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
-				} else {
-					Sympa::Log::Syslog::do_log('err',"Could not set table $table field $field as autoincrement");
-					return undef;
-				}
-			}
-		}
-	} else {
+	if (!%current_structure) {
 		Sympa::Log::Syslog::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
 		return undef;
+	}
+
+	## Check tables structure if we could get it
+	## Only performed with mysql , Pg and SQLite
+	foreach my $t (keys %{$target_structure}) {
+		unless ($current_structure{$t}) {
+			Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, $db_name, $db_type);
+			return undef;
+		}
+		unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%current_structure)) {
+			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
+			return undef;
+		}
+
+		## Remove temporary DB field
+		if ($current_structure{$t}{'temporary'}) {
+			$db_source->delete_field(
+				'table' => $t,
+				'field' => 'temporary',
+			);
+			delete $current_structure{$t}{'temporary'};
+		}
+
+		if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
+			## Check that primary key has the right structure.
+			unless (_check_primary_key('table' => $t,'report' => \@report)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
+				return undef;
+			}
+
+			unless (_check_indexes('table' => $t,'report' => \@report)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
+				return undef;
+			}
+
+		}
+	}
+	# add autoincrement option if needed
+	foreach my $table (keys %{$target_structure}) {
+		Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
+		foreach my $field (keys %{$target_structure->{$table}{'fields'}}) {
+			next unless $target_structure->{$table}{'fields'}{$field}{'autoincrement'};
+			next if $db_source->is_autoinc(
+				'table' => $table,
+				'field' => $field
+			);
+			my $result = $db_source->set_autoinc(
+				'table'      => $table,
+				'field'      => $field,
+				'field_type' => $target_structure->{$table}{'fields'}{$field});
+			if ($result) {
+				Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
+			} else {
+				Sympa::Log::Syslog::do_log('err',"Could not set table $table field $field as autoincrement");
+				return undef;
+			}
+		}
 	}
 
 	## Used by List subroutines to check that the DB is available
