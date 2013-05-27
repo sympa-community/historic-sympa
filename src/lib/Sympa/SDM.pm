@@ -132,53 +132,54 @@ sub probe_db {
 	my ($db_source) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'Checking database structure');
 
-	my $db_type = $db_source->get_type();
-	my $db_name = $db_source->get_name();
 	my @report;
 
-	## Get tables
-	my @tables = $db_source->get_tables();
+	my @current_tables = $db_source->get_tables();
+	my %current_structure;
+	my $target_structure = $db_struct{'mysql'};
 
-	my %real_struct;
+	my $db_type = $db_source->get_type();
+	my $db_name = $db_source->get_name();
+
 	## Check required tables
-	foreach my $t1 (keys %{$db_struct{'mysql'}}) {
+	foreach my $t1 (keys %{$target_structure}) {
 		my $found;
-		foreach my $t2 (@tables) {
+		foreach my $t2 (@current_tables) {
 			$found = 1 if ($t1 eq $t2) ;
 		}
 		unless ($found) {
 			if (my $rep = $db_source->add_table('table'=>$t1)) {
 				push @report, $rep;
 				Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, $db_name);
-				push @tables, $t1;
-				$real_struct{$t1} = {};
+				push @current_tables, $t1;
+				$current_structure{$t1} = {};
 			}
 		}
 	}
 	## Get fields
-	foreach my $t (@tables) {
-		$real_struct{$t} = $db_source->get_fields('table'=>$t);
+	foreach my $t (@current_tables) {
+		$current_structure{$t} = $db_source->get_fields('table'=>$t);
 	}
 	## Check tables structure if we could get it
 	## Only performed with mysql , Pg and SQLite
-	if (%real_struct) {
-		foreach my $t (keys %{$db_struct{'mysql'}}) {
-			unless ($real_struct{$t}) {
+	if (%current_structure) {
+		foreach my $t (keys %{$target_structure}) {
+			unless ($current_structure{$t}) {
 				Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, $db_name, $db_type);
 				return undef;
 			}
-			unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%real_struct)) {
+			unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%current_structure)) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
 				return undef;
 			}
 
 			## Remove temporary DB field
-			if ($real_struct{$t}{'temporary'}) {
+			if ($current_structure{$t}{'temporary'}) {
 				$db_source->delete_field(
 					'table' => $t,
 					'field' => 'temporary',
 				);
-				delete $real_struct{$t}{'temporary'};
+				delete $current_structure{$t}{'temporary'};
 			}
 
 			if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
@@ -196,10 +197,10 @@ sub probe_db {
 			}
 		}
 		# add autoincrement option if needed
-		foreach my $table (keys %{$db_struct{'mysql'}}) {
+		foreach my $table (keys %{$target_structure}) {
 			Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
-			foreach my $field (keys %{$db_struct{'mysql'}{$table}{'fields'}}) {
-				next unless $db_struct{'mysql'}{$table}{'fields'}{$field}{'autoincrement'};
+			foreach my $field (keys %{$target_structure->{$table}{'fields'}}) {
+				next unless $target_structure->{$table}{'fields'}{$field}{'autoincrement'};
 				next if $db_source->is_autoinc(
 					'table' => $table,
 					'field' => $field
@@ -207,7 +208,7 @@ sub probe_db {
 				my $result = $db_source->set_autoinc(
 					'table'      => $table,
 					'field'      => $field,
-					'field_type' => $db_struct{'mysql'}{$table}{'fields'}{$field});
+					'field_type' => $target_structure->{$table}{'fields'}{$field});
 				if ($result) {
 					Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
 				} else {
