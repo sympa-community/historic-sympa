@@ -142,20 +142,21 @@ sub probe_db {
 	my $db_name = $db_source->get_name();
 
 	## Check required tables
-	foreach my $t1 (keys %{$target_structure}) {
-		next if Sympa::Tools::Data::any { $t1 eq $_ } @current_tables;
+	foreach my $table (keys %{$target_structure}) {
+		next if Sympa::Tools::Data::any { $table eq $_ }
+			@current_tables;
 
-		if (my $rep = $db_source->add_table('table'=>$t1)) {
+		if (my $rep = $db_source->add_table(table => $table)) {
 			push @report, $rep;
-			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $t1, $db_name);
-			push @current_tables, $t1;
-			$current_structure{$t1} = {};
+			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $table, $db_name);
+			push @current_tables, $table;
+			$current_structure{$table} = {};
 		}
 	}
 
 	## Get fields
-	foreach my $t (@current_tables) {
-		$current_structure{$t} = $db_source->get_fields('table'=>$t);
+	foreach my $table (@current_tables) {
+		$current_structure{$table} = $db_source->get_fields(table => $table);
 	}
 
 	if (!%current_structure) {
@@ -165,34 +166,34 @@ sub probe_db {
 
 	## Check tables structure if we could get it
 	## Only performed with mysql , Pg and SQLite
-	foreach my $t (keys %{$target_structure}) {
-		unless ($current_structure{$t}) {
-			Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $t, $db_name, $db_type);
+	foreach my $table (keys %{$target_structure}) {
+		unless ($current_structure{$table}) {
+			Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $table, $db_name, $db_type);
 			return undef;
 		}
-		unless (_check_fields('table' => $t,'report' => \@report,'real_struct' => \%current_structure)) {
-			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
+		unless (_check_fields(table => $table, report => \@report, real_struct => \%current_structure)) {
+			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
 			return undef;
 		}
 
 		## Remove temporary DB field
-		if ($current_structure{$t}{'temporary'}) {
+		if ($current_structure{$table}{'temporary'}) {
 			$db_source->delete_field(
-				'table' => $t,
-				'field' => 'temporary',
+				table => $table,
+				field => 'temporary',
 			);
-			delete $current_structure{$t}{'temporary'};
+			delete $current_structure{$table}{'temporary'};
 		}
 
 		if ($db_type eq 'mysql'||$db_type eq 'Pg'||$db_type eq 'SQLite') {
 			## Check that primary key has the right structure.
-			unless (_check_primary_key('table' => $t,'report' => \@report)) {
-				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
+			unless (_check_primary_key(table => $table, report => \@report)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $table);
 				return undef;
 			}
 
-			unless (_check_indexes('table' => $t,'report' => \@report)) {
-				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
+			unless (_check_indexes('table' => $table, report => \@report)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $table);
 				return undef;
 			}
 
@@ -204,13 +205,13 @@ sub probe_db {
 		foreach my $field (keys %{$target_structure->{$table}{'fields'}}) {
 			next unless $target_structure->{$table}{'fields'}{$field}{'autoincrement'};
 			next if $db_source->is_autoinc(
-				'table' => $table,
-				'field' => $field
+				table => $table,
+				field => $field
 			);
 			my $result = $db_source->set_autoinc(
-				'table'      => $table,
-				'field'      => $field,
-				'field_type' => $target_structure->{$table}{'fields'}{$field});
+				table      => $table,
+				field      => $field,
+				field_type => $target_structure->{$table}{'fields'}{$field});
 			if ($result) {
 				Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
 			} else {
