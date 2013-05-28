@@ -40,6 +40,7 @@ use Sympa::Configuration;
 use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
 use Sympa::Log::Syslog;
+use Sympa::Tools::Data
 
 my $db_source;
 our $use_db;
