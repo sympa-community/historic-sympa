@@ -103,14 +103,10 @@ SKIP: {
 	ok(defined $dbh, 'establish connection');
 	isa_ok($dbh, 'DBI::db');
 
-	my $result;
-	$result = $source->get_tables();
-	is_deeply(
-		$result,
-		[ ],
-		'initial tables list'
-	);
+	my @tables = $source->get_tables();
+	cmp_ok(@tables, '==', 0, 'initial tables list');
 
+	my $result;
 	$result = $source->add_table(table => 'table1');
 	is(
 		$result,
@@ -118,9 +114,9 @@ SKIP: {
 		'table creation'
 	);
 
-	$result = $source->get_tables();
+	@tables = $source->get_tables();
 	is_deeply(
-		$result,
+		\@tables,
 		[ qw/table1/ ],
 		'tables list after table creation'
 	);

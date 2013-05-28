@@ -150,9 +150,9 @@ SKIP: {
 		'table creation'
 	);
 
-	$result = $source->get_tables();
+	@tables = $source->get_tables();
 	is_deeply(
-		$result,
+		\@tables,
 		[ qw/table1/ ],
 		'tables list after table creation'
 	);
@@ -244,10 +244,10 @@ SKIP: {
 		'indexes list after index creation'
 	);
 
-	$result = $source->delete_field({
+	$result = $source->delete_field(
 		table => 'table1',
 		field => 'data',
-	});
+	);
 	ok($result, "field data deletion");
 
 	$result = $source->delete_field(
@@ -280,8 +280,7 @@ SKIP: {
 	);
 
 	if (!$ENV{TEST_DEBUG}) {
-		my $tables = $source->get_tables();
-		foreach my $table (@$tables) {
+		foreach my $table ($source->get_tables()) {
 			$dbh->do("DROP TABLE $table");
 		}
 	}
