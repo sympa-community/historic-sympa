@@ -40,7 +40,7 @@ use Sympa::Configuration;
 use Sympa::Datasource::SQL;
 use Sympa::DatabaseDescription;
 use Sympa::Log::Syslog;
-use Sympa::Tools::Data
+use Sympa::Tools::Data;
 
 my $db_source;
 our $use_db;
@@ -137,7 +137,7 @@ sub probe_db {
 
 	my @current_tables = $db_source->get_tables();
 	my %current_structure;
-	my $target_structure = Sympa::DatabaseDescription::db_struct()->{$db_type};
+	my $target_structure = Sympa::DatabaseDescription::get_structure($db_type);
 
 	## Check required tables
 	foreach my $table (keys %{$target_structure}) {
@@ -252,12 +252,12 @@ sub _check_fields {
 	my $table     = $params{'table'};
 	my $report    = $params{'report'};
 	my $current_structure = $params{'current_structure'};
-	my $target_structure = $params{'target_structure'};
+	my $target_structure  = $params{'target_structure'};
 
 	my $db_type = $db_source->get_type();
 	my $db_name = $db_source->get_name();
 
-	foreach my $field (sort keys %{$target_structure->{$table}}) {
+	foreach my $field (keys %{$target_structure->{$table}{fields}}) {
 		unless ($current_structure->{$table}{$field}) {
 			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
 			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
@@ -265,7 +265,7 @@ sub _check_fields {
 			my $rep = $db_source->add_field(
 				'table'   => $table,
 				'field'   => $field,
-				'type'    => $target_structure->{$table}{$field},
+				'type'    => $target_structure->{$table}{fields}{$field}{type},
 				'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
 				'autoinc' => $target_structure->{$table}{fields}{$field}{autoincrement},
 				'primary' => $target_structure->{$table}{fields}{$field}{autoincrement}
