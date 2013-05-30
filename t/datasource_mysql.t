@@ -13,8 +13,9 @@ use Test::More;
 use Test::Without::Module qw(DBD::mysql);
 
 use Sympa::Datasource::SQL;
+use Sympa::SDM;
 
-plan tests => 36;
+plan tests => 37;
 
 my $source;
 
@@ -110,13 +111,13 @@ eval { require DBD::mysql; };
 
 SKIP: {
 	if      ($EVAL_ERROR) {
-		skip 'DBD::mysql required',                 20;
+		skip 'DBD::mysql required',                 21;
 	} elsif (!$ENV{DB_NAME}) {
-		skip 'DB_NAME environment variable needed', 20;
+		skip 'DB_NAME environment variable needed', 21;
 	} elsif (!$ENV{DB_HOST}) {
-		skip 'DB_HOST environment variable needed', 20;
+		skip 'DB_HOST environment variable needed', 21;
 	} elsif (!$ENV{DB_USER}) {
-		skip 'DB_USER environment variable needed', 20;
+		skip 'DB_USER environment variable needed', 21;
 	}
 
 	$source = Sympa::Datasource::SQL::MySQL->new(
@@ -146,7 +147,7 @@ SKIP: {
 	$result = $source->add_table(table => 'table1');
 	is(
 		$result,
-		"Table table1 created in database $ENV{DB_NAME}",
+		"Table table1 created",
 		'table creation'
 	);
 
@@ -173,7 +174,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		'Field id added to table table1 (options: AUTO_INCREMENT PRIMARY KEY)',
+		'Field id added to table table1',
 		'field id creation'
 	);
 
@@ -185,7 +186,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		'Field data added to table table1 (options: NOT NULL)',
+		'Field data added to table table1',
 		'field data creation'
 	);
 
@@ -233,7 +234,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		"Table table1, index %s set using data",
+		"Index set as data on table table1",
 		'index creation'
 	);
 
@@ -278,6 +279,9 @@ SKIP: {
 		{ },
 		'indexes list after field deletion'
 	);
+
+	my $report = Sympa::SDM::probe_db($source);
+	ok(defined $report, 'database structure initialisation');
 
 	if (!$ENV{TEST_DEBUG}) {
 		foreach my $table ($source->get_tables()) {
