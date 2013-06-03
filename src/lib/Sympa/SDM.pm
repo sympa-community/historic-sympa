@@ -175,8 +175,8 @@ sub probe_db {
 			source            => $db_source,
 			table             => $table,
 			report            => \@report,
-			current_structure => \%current_structure,
-			target_structure  => $target_structure
+			current_structure => $current_structure{$table},
+			target_structure  => $target_structure->{$table}
 		);
 		unless ($fields_result) {
 			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
@@ -198,7 +198,7 @@ sub probe_db {
 				source           => $db_source,
 				table            => $table,
 				report           => \@report,
-				target_structure => $target_structure
+				target_structure  => $target_structure->{$table}
 			);
 			unless ($primary_key_result) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $table);
@@ -257,18 +257,18 @@ sub _check_fields {
 	my $db_type = $db_source->get_type();
 	my $db_name = $db_source->get_name();
 
-	foreach my $field (keys %{$target_structure->{$table}{fields}}) {
-		unless ($current_structure->{$table}{$field}) {
+	foreach my $field (keys %{$target_structure->{fields}}) {
+		unless ($current_structure->{$field}) {
 			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
 			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $db_name);
 
 			my $rep = $db_source->add_field(
 				'table'   => $table,
 				'field'   => $field,
-				'type'    => $target_structure->{$table}{fields}{$field}{type},
-				'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
-				'autoinc' => $target_structure->{$table}{fields}{$field}{autoincrement},
-				'primary' => $target_structure->{$table}{fields}{$field}{autoincrement}
+				'type'    => $target_structure->{fields}{$field}{type},
+				'notnull' => $target_structure->{fields}{$field}{'not_null'},
+				'autoinc' => $target_structure->{fields}{$field}{autoincrement},
+				'primary' => $target_structure->{fields}{$field}{autoincrement}
 			);
 			if ($rep) {
 				push @{$report}, $rep;
@@ -283,19 +283,19 @@ sub _check_fields {
 		## Change DB types if different and if update_db_types enabled
 		if (Sympa::Configuration::get_robot_conf('*','update_db_field_types') eq 'auto' && $db_type ne 'SQLite') {
 			my $type_check = _check_db_field_type(
-				effective_format => $current_structure->{$table}{$field},
-				required_format => $target_structure->{$table}{$field}
+				effective_format => $current_structure->{$field},
+				required_format => $target_structure->{$field}
 			);
 			unless ($type_check) {
 				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field});
 
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{$table}{$field},$current_structure->{$table}{$field});
+				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field, $table, $db_name, $target_structure->{fields}{$field}{type},$current_structure->{$field});
 
 				my $type_change = $db_source->update_field(
 					'table'   => $table,
 					'field'   => $field,
-					'type'    => $target_structure->{$table}{$field},
-					'notnull' => $target_structure->{$table}{fields}{$field}{'not_null'},
+					'type'    => $target_structure->{fields}{$field}{type},
+					'notnull' => $target_structure->{fields}{$field}{not_null},
 				);
 				if ($type_change) {
 					push @{$report}, $type_change;
@@ -305,8 +305,8 @@ sub _check_fields {
 				}
 			}
 		} else {
-			unless ($current_structure->{$table}{$field} eq $target_structure->{$table}{$field}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $field, $table, $db_name, $target_structure->{$table}{$field});
+			unless ($current_structure->{$field} eq $target_structure->{fields}{$field}{type}) {
+				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $field, $table, $db_name, $target_structure->{fields}{$field}{type});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 				return undef;
 			}
@@ -325,8 +325,8 @@ sub _check_primary_key {
 	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
 
 	my @key_fields;
-	foreach my $field (keys %{$target_structure->{$table}{fields}}) {
-		next unless $target_structure->{$table}{fields}{$field}{primary};
+	foreach my $field (keys %{$target_structure->{fields}}) {
+		next unless $target_structure->{fields}{$field}{primary};
 		push @key_fields, $field;
 	}
 
