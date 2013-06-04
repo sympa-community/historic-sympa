@@ -162,7 +162,9 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		my $report = Sympa::SDM::probe_db(Sympa::SDM::get_source());
+		my $report = Sympa::SDM::get_source()->probe(
+			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
+		);
 		if (defined $report) {
 			Sympa::List::send_notify_to_listmaster(
 				'db_struct_updated',

@@ -125,7 +125,9 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	die 'config_error';
 }
 
-my $report = Sympa::SDM::probe_db(Sympa::SDM::get_source());
+my $report = Sympa::SDM::get_source()->probe(
+	update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
+);
 if (defined $report) {
 	Sympa::List::send_notify_to_listmaster(
 		'db_struct_updated',
