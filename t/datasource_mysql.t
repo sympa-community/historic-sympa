@@ -13,7 +13,6 @@ use Test::More;
 use Test::Without::Module qw(DBD::mysql);
 
 use Sympa::Datasource::SQL;
-use Sympa::SDM;
 
 plan tests => 37;
 
@@ -280,7 +279,7 @@ SKIP: {
 		'indexes list after field deletion'
 	);
 
-	my $report = Sympa::SDM::probe_db($source);
+	my $report = $source->probe();
 	ok(defined $report, 'database structure initialisation');
 
 	if (!$ENV{TEST_DEBUG}) {

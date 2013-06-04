@@ -14,8 +14,9 @@ use Test::More;
 use Test::Without::Module qw(DBD::SQLite);
 
 use Sympa::Datasource::SQL;
+use Sympa::SDM;
 
-plan tests => 33;
+plan tests => 34;
 
 my $source;
 
@@ -110,7 +111,7 @@ SKIP: {
 	$result = $source->add_table(table => 'table1');
 	is(
 		$result,
-		"Table table1 created in database $file",
+		"Table table1 created",
 		'table creation'
 	);
 
@@ -148,7 +149,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		'Field id added to table table1 (options: AUTO_INCREMENT)',
+		'Field id added to table table1',
 		'field id creation'
 	);
 
@@ -170,7 +171,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		'Field data added to table table1 (options: )',
+		'Field data added to table table1',
 		'field data creation'
 	);
 
@@ -218,7 +219,7 @@ SKIP: {
 	);
 	is(
 		$result,
-		"Table table1, index %s set using data",
+		"Index set as data on table table1",
 		'index creation'
 	);
 
@@ -241,4 +242,6 @@ SKIP: {
 	);
 	ok(!defined $result, "field id deletion failure");
 
-};
+	my $report = $source->probe();
+	ok(!defined $report, "database structure initialisation failure");
+}
