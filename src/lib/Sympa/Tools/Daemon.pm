@@ -455,4 +455,6 @@ sub _get_pid_file {
 	return $params{directory} . '/' . $params{daemon} . '.pid';
 }
 
+=back
+
 1;

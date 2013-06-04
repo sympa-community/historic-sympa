@@ -65,4 +65,9 @@ sub AUTOLOAD {
 		return $self->{$name};
 	}
 }
+
+=back
+
+=cut
+
 1;

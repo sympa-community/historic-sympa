@@ -60,6 +60,8 @@ check CPAN modules needed for running sympa
 
 =head1 AUTHORS
 
+=encoding utf8
+
 =over
 
 =item Serge Aumont <sa@cru.fr>

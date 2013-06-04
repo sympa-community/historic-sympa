@@ -488,6 +488,8 @@ sub fix_html_part {
 
 =back
 
+=encoding utf8
+
 =head1 AUTHORS
 
 =over

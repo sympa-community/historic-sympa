@@ -1197,4 +1197,8 @@ sub _get_sybase_structure {
 	return \%base_structure;
 }
 
+=back
+
+=cut
+
 1;

@@ -2019,4 +2019,8 @@ sub _get_parameters_names_by_category {
 	return $param_by_categories;
 }
 
+=back
+
+=cut
+
 1;

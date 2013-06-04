@@ -240,6 +240,8 @@ Automatically close undefined lists when instantiating a family.
 
 Do not print report when instanciating a family.
 
+=back
+
 =cut
 
 use strict;

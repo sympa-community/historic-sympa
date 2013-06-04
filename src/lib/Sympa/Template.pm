@@ -326,6 +326,8 @@ Parameters:
 
 =item output : a Filedescriptor or a SCALAR ref for the output
 
+=back
+
 Return value:
 
 The last error message

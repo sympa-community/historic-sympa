@@ -532,4 +532,6 @@ sub match_this {
 	return $function;
 }
 
+=back
+
 1;
