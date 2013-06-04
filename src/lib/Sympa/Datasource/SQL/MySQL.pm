@@ -43,6 +43,13 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'mysql');
 }
 
+sub get_structure {
+	my ($self) = @_;
+
+	my $base = $self->SUPER::get_structure();
+	return $base;
+}
+
 sub build_connect_string {
 	my ($self) = @_;
 

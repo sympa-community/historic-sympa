@@ -39,7 +39,6 @@ use English qw(-no_match_vars);
 use MIME::Base64;
 use Sys::Hostname;
 
-use Sympa::DatabaseDescription;
 use Sympa::Log::Syslog;
 use Sympa::Message;
 use Sympa::SDM;
@@ -223,7 +222,7 @@ sub get_content {
 	}
 	$filter_clause =~s/^AND//;
 
-	my $statement = 'SELECT '._selectfields($params{selection});
+	my $statement = 'SELECT '. $self->_selectfields($params{selection});
 
 	$statement = $statement . sprintf
 		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
@@ -285,7 +284,7 @@ sub next {
 	my $sth = $self->{source}->do_query($statement);
 	return undef unless ($sth->rows); # spool is empty
 
-	my $star_select = _selectfields();
+	my $star_select = $self->_selectfields();
 	my $statement = sprintf
 		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1",
 		$star_select,
@@ -329,7 +328,7 @@ sub get_message {
 		}
 		$filter_clause .= ' ' . $field . '_spool = '.$self->{source}->quote($selector->{$field});
 	}
-	my $all = _selectfields();
+	my $all = $self->_selectfields();
 	my $statement = sprintf
 		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND %s LIMIT 1",
 		$all,
@@ -618,16 +617,16 @@ sub clean {
 # return a SQL SELECT substring in ordder to select choosen fields from spool table
 # selction is comma separated list of field, '*' or '*_but_message'. in this case skip message_spool field
 sub _selectfields{
-	my ($selection) = @_;
+	my ($self, $selection) = @_;
 
 	$selection = '*' unless $selection;
 	my $select ='';
 
 	if (($selection eq '*_but_message')||($selection eq '*')) {
 
-		my %db_struct = Sympa::DatabaseDescription::db_struct();
+		my $structure = $self->{source}->get_structure();
 
-		foreach my $field ( keys %{ $db_struct{'mysql'}{'spool_table'}} ) {
+		foreach my $field (keys %{$structure->{spool_table}{fields}}) {
 			next if (($selection eq '*_but_message') && ($field eq 'message_spool')) ;
 			my $var = $field;
 			$var =~ s/\_spool//;

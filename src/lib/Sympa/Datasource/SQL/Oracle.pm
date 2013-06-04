@@ -52,6 +52,27 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
+sub get_structure {
+	my ($self) = @_;
+
+	my $base = $self->SUPER::get_structure();
+
+	foreach my $table (values %{$base}) {
+		foreach my $field (values %{$table->{fields}}) {
+			$field->{type} =~ s/^varchar/varchar2/;
+			$field->{type} =~ s/^int.*/number/;
+			$field->{type} =~ s/^bigint.*/number/;
+			$field->{type} =~ s/^smallint.*/number/;
+			$field->{type} =~ s/^enum.*/varchar2(20)/;
+			$field->{type} =~ s/^text.*/varchar2(500)/;
+			$field->{type} =~ s/^longtext.*/long/;
+			$field->{type} =~ s/^datetime.*/date/;
+		}
+	}
+
+	return $base_structure;
+}
+
 sub build_connect_string{
 	my ($self) = @_;
 

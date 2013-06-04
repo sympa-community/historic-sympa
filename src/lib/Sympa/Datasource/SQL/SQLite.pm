@@ -52,6 +52,27 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sqlite');
 }
 
+sub get_structure {
+	my ($self) = @_;
+
+	my $base = $self->SUPER::get_structure();
+
+	foreach my $table (values %{$base}) {
+		foreach my $field (values %{$table->{fields}}) {
+			$field->{type} =~ s/^varchar.*/text/;
+			$field->{type} =~ s/^int\(1\).*/numeric/;
+			$field->{type} =~ s/^int.*/integer/;
+			$field->{type} =~ s/^tinyint.*/integer/;
+			$field->{type} =~ s/^bigint.*/integer/;
+			$field->{type} =~ s/^smallint.*/integer/;
+			$field->{type} =~ s/^datetime.*/numeric/;
+			$field->{type} =~ s/^enum.*/text/;
+		}
+	}
+
+	return $base;
+}
+
 sub build_connect_string{
 	my ($self, %params) = @_;
 

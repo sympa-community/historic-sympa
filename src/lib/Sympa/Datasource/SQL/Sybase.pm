@@ -52,6 +52,25 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sybase');
 }
 
+sub get_structure {
+	my ($self) = @_;
+
+	my $base = $self->SUPER::get_structure();
+
+	foreach my $table (values %{$base}) {
+		foreach my $field (values %{$table->{fields}}) {
+			$field->{type} =~ s/^int.*/numeric/;
+			$field->{type} =~ s/^text.*/varchar(500)/;
+			$field->{type} =~ s/^smallint.*/numeric/;
+			$field->{type} =~ s/^bigint.*/numeric/;
+			$field->{type} =~ s/^longtext.*/text/;
+			$field->{type} =~ s/^enum.*/varchar(15)/;
+		}
+	}
+
+	return $base_structure;
+}
+
 sub build_connect_string{
 	my ($self) = @_;
 

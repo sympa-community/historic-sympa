@@ -52,6 +52,28 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'pg');
 }
 
+sub get_structure {
+	my ($self) = @_;
+
+	my $base = $self->SUPER::get_structure();
+
+	foreach my $table (values %{$base}) {
+		foreach my $field (values %{$table->{fields}}) {
+			$field->{type} =~ s/^int(1)/smallint/;
+			$field->{type} =~ s/^int\(?.*\)?/int4/;
+			$field->{type} =~ s/^smallint.*/int4/;
+			$field->{type} =~ s/^tinyint\(.*\)/int2/;
+			$field->{type} =~ s/^bigint.*/int8/;
+			$field->{type} =~ s/^text.*/varchar(500)/;
+			$field->{type} =~ s/^longtext.*/text/;
+			$field->{type} =~ s/^datetime.*/timestamptz/;
+			$field->{type} =~ s/^enum.*/varchar(15)/;
+		}
+	}
+
+	return $base;
+}
+
 sub build_connect_string{
 	my ($self) = @_;
 
