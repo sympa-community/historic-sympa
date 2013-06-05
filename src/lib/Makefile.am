@@ -11,7 +11,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Configuration/XML.pm \
 		      Sympa/Configuration/Definition.pm \
 		      Sympa/Constants.pm \
-		      Sympa/DatabaseDescription.pm \
 		      Sympa/Datasource.pm \
 		      Sympa/Datasource/LDAP.pm \
 		      Sympa/Datasource/SQL.pm \

@@ -38,7 +38,6 @@ use base qw(Sympa::Datasource);
 use English qw(-no_match_vars);
 use DBI;
 
-use Sympa::DatabaseDescription;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Tools;
@@ -163,6 +162,7 @@ my $structure = {
 				order  => 10,
 			},
 		},
+		subscriber_user_index => ['user_subscriber'],
 		order => 1,
 	},
 	# The user_table is mainly used to manage login from web interface. A
@@ -782,7 +782,8 @@ my $structure = {
 				not_null => 1,
 			},
 		},
-		order => 10,
+		stats_user_index => ['email_stat'],
+		order            => 10,
 	},
 	# Use in conjunction with stat_table for users statistics
 	stat_counter_table => {
@@ -916,7 +917,8 @@ my $structure = {
 			},
 
 		},
-		order => 12,
+		admin_user_index => ['user_admin'],
+		order            => 12,
 	},
 	netidmap_table => {
 		fields => {
@@ -1134,6 +1136,23 @@ my $structure = {
 		order => 18,
 	},
 };
+
+my @former_indexes = qw(
+	user_subscriber
+	list_subscriber
+	subscriber_idx
+	admin_idx
+	netidmap_idx
+	user_admin
+	list_admin
+	role_admin
+	admin_table_index
+	logs_table_index
+	netidmap_table_index
+	subscriber_table_index
+	user_index
+);
+
 
 =head1 CLASS METHODS
 
@@ -1516,8 +1535,9 @@ sub probe {
 			}
 
 			my $indexes_result = $self->_check_indexes(
-				table  => $table,
-				report => \@report
+				table            => $table,
+				report           => \@report,
+				target_structure => $target_structure->{$table}
 			);
 			unless ($indexes_result) {
 				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $table);
@@ -1689,31 +1709,28 @@ sub _check_indexes {
 
 	my $table     = $params{'table'};
 	my $report    = $params{'report'};
+	my $target_structure = $params{'target_structure'};
 	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$table);
-	## drop previous index if this index is not a primary key and was defined by a previous Sympa version
-	my %index_columns = %{$self->get_indexes(table => $table)};
-	foreach my $index ( keys %index_columns ) {
-		Sympa::Log::Syslog::do_log('debug','Found index %s',$index);
-		## Remove the index if obsolete.
+	my %indexes = %{$self->get_indexes(table => $table)};
 
-		foreach my $known_index (@Sympa::DatabaseDescription::former_indexes) {
-			if ( $index eq $known_index ) {
-				Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$index);
-				my $index_deletion = $self->unset_index(
-					table => $table,
-					index => $index
-				);
-				push @{$report}, $index_deletion
-					if $index_deletion;
-				last;
-			}
-		}
+	# drop all former indexes
+	foreach my $index (keys %indexes) {
+		Sympa::Log::Syslog::do_log('debug','Found index %s',$index);
+		next unless Sympa::Tools::Data::any { $index eq $_ }
+			@former_indexes;
+
+		Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$index);
+		my $index_deletion = $self->unset_index(
+			table => $table,
+			index => $index
+		);
+		push @{$report}, $index_deletion if $index_deletion;
 	}
 
-	## Create required indexes
-	foreach my $index (keys %{$Sympa::DatabaseDescription::indexes{$table}}){
+	# create required indexes
+	foreach my $index (keys %{$target_structure->{indexes}}) {
 		## Add indexes
-		unless ($index_columns{$index}) {
+		unless ($indexes{$index}) {
 			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
 			my $index_addition = $self->set_index(
 				table      => $table,
@@ -1722,6 +1739,7 @@ sub _check_indexes {
 			);
 			push @{$report}, $index_addition if $index_addition;
 		}
+
 		my $index_check = $self->check_key(
 			table         => $table,
 			key_name      => $index,
