@@ -1735,7 +1735,7 @@ sub _check_indexes {
 			my $index_addition = $self->set_index(
 				table      => $table,
 				index_name => $index,
-				fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+				fields     => $target_structure->{indexes}{$index}
 			);
 			push @{$report}, $index_addition if $index_addition;
 		}
@@ -1743,10 +1743,10 @@ sub _check_indexes {
 		my $index_check = $self->check_key(
 			table         => $table,
 			key_name      => $index,
-			expected_keys => $Sympa::DatabaseDescription::indexes{$table}{$index}
+			expected_keys => $target_structure->{indexes}{$index}
 		);
 		if ($index_check) {
-			my $list_of_fields = join ',',@{$Sympa::DatabaseDescription::indexes{$table}{$index}};
+			my $list_of_fields = join ',',@{$target_structure->{indexes}{$index}};
 			my $index_as_string = "$index: $table [$list_of_fields]";
 			if ($index_check->{'empty'}) {
 				## Add index
@@ -1754,7 +1754,7 @@ sub _check_indexes {
 				my $index_addition = $self->set_index(
 					table      => $table,
 					index_name => $index,
-					fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+					fields     => $target_structure->{indexes}{$index}
 				);
 				push @{$report}, $index_addition
 					if $index_addition;
@@ -1774,7 +1774,7 @@ sub _check_indexes {
 				my $index_addition = $self->set_index(
 					table      => $table,
 					index_name => $index,
-					fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+					fields     => $target_structure->{indexes}{$index}
 				);
 				push @{$report}, $index_addition
 					if $index_addition;
@@ -1793,7 +1793,7 @@ sub _check_indexes {
 			my $index_addition = $self->set_index(
 				table      => $table,
 				index_name => $index,
-				fields     => $Sympa::DatabaseDescription::indexes{$table}{$index}
+				fields     => $target_structure->{indexes}{$index}
 			);
 			push @{$report}, $index_addition
 				if $index_addition;
