@@ -1660,47 +1660,47 @@ sub _check_primary_key {
 		expected_keys => \@key_fields
 	);
 
-	if ($key_check) {
-		if ($key_check->{'empty'}) {
-			Sympa::Log::Syslog::do_log('notice',"Primary key %s is missing. Adding it.",$key_as_string);
-			# Add primary key
-			my $key_addition = $self->set_primary_key(
-				table  => $table,
-				fields => \@key_fields
+	if (defined $key_check) {
+		if ($key_check) {
+			Sympa::Log::Syslog::do_log(
+				'debug',
+				"Existing key correct, nothing to change",
 			);
-			push @{$report}, $key_addition if $key_addition;
-		} elsif ($key_check->{'existing_key_correct'}) {
-			Sympa::Log::Syslog::do_log('debug',"Existing key correct (%s) nothing to change",$key_as_string);
 		} else {
-			# drop previous primary key
-			my $key_deletion = $self->unset_primary_key(
+			Sympa::Log::Syslog::do_log(
+				'debug',
+				"Existing key incorrect, re-creating it",
+			);
+
+			my $deletion = $self->unset_primary_key(
 				table => $table
 			);
-			push @{$report}, $key_deletion if $key_deletion;
+			push @{$report}, $deletion if $deletion;
 
-			# Add primary key
-			my $key_addition = $self->set_primary_key(
+			my $addition = $self->set_primary_key(
 				table  => $table,
 				fields => \@key_fields
 			);
-			push @{$report}, $key_addition if $key_addition;
+			push @{$report}, $addition if $addition;
 		}
 	} else {
-		Sympa::Log::Syslog::do_log('err','Unable to evaluate table %s primary key. Trying to reset primary key anyway.',$table);
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to check key, re-creating it'
+		);
 
-		# drop previous primary key
-		my $key_deletion = $self->unset_primary_key(
+		my $deletion = $self->unset_primary_key(
 			table => $table
 		);
-		push @{$report}, $key_deletion if $key_deletion;
+		push @{$report}, $deletion if $deletion;
 
-		# Add primary key
-		my $key_addition = $self->set_primary_key(
+		my $addition = $self->set_primary_key(
 			table  => $table,
 			fields => \@key_fields
 		);
-		push @{$report}, $key_addition if $key_addition;
+		push @{$report}, $addition if $addition;
 	}
+
 	return 1;
 }
 
@@ -1745,24 +1745,19 @@ sub _check_indexes {
 				key_name      => $index,
 				expected_keys => $target_structure->{indexes}{$index}
 			);
-			if ($index_check) {
-				my $list_of_fields = join ',',@{$target_structure->{indexes}{$index}};
-				my $index_as_string = "$index: $table [$list_of_fields]";
-				if ($index_check->{'empty'}) {
-					# empty index (??), create it
-					Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-					my $addition = $self->set_index(
-						table      => $table,
-						index_name => $index,
-						fields     => $target_structure->{indexes}{$index}
+			if (defined $index_check) {
+				if ($index_check) {
+					Sympa::Log::Syslog::do_log(
+						'debug',
+						"Existing index %s correct, nothing to change",
+						$index
 					);
-					push @{$report}, $addition if $addition;
-				} elsif ($index_check->{'existing_key_correct'}) {
-					# nothing to do
-					Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
 				} else {
-					# incorrect index, recreate it
-					Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
+					Sympa::Log::Syslog::do_log(
+						'debug',
+						"Existing index %s incorrect, re-creating it",
+						$index
+					);
 					my $deletion = $self->unset_index(
 						table => $table,
 						index => $index
@@ -1776,13 +1771,17 @@ sub _check_indexes {
 					push @{$report}, $addition if $addition;
 				}
 			} else {
-				# impossible to check, recreate index
-				Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$table,$index);
+				Sympa::Log::Syslog::do_log(
+					'err',
+					"Untable to check index %s, re-creating it",
+					$index
+				);
 				my $deletion = $self->unset_index(
 					table => $table,
 					index => $index
 				);
 				push @{$report}, $deletion if $deletion;
+
 				my $addition = $self->set_index(
 					table      => $table,
 					index_name => $index,
@@ -2237,25 +2236,15 @@ sub get_all_indexes {
 #   expect to be part of the key.
 #
 # Return value:
-# An hashref with the following keys:
-# * empty: if this key is defined, then no key was found for the table
-# * existing_key_correct: if this key's value is 1, then a key exists and is
-# fair to the structure defined in the 'expected_keys' parameter hash.
-# Otherwise, the key is not correct.
-# * missing_key: if this key is defined, then a part of the key was missing.
-# The value associated to this key is a hash whose keys are the names of the
-# fields   missing in the key.
-# * unexpected_key: if this key is defined, then we found fields in the actual
-# key that don't belong to the list provided in the 'expected_keys' parameter
-# hash. The value associated to this key is a hash whose keys are the names of
-# the fields unexpectedely found.
+# * true if the actual fields list matched expected one
+# * false if the actual fields list didn't matched it
+# * undef if an error occured
 
 sub _check_key {
 	my ($self, %params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Checking %s key structure for table %s',$params{'key_name'},$params{'table'});
 	my $keysFound;
-	my $result;
 	if (lc($params{'key_name'}) eq 'primary') {
 		return undef unless ($keysFound = $self->get_primary_key('table'=>$params{'table'}));
 	} else {
@@ -2264,30 +2253,28 @@ sub _check_key {
 	}
 
 	my @keys_list = keys %{$keysFound};
-	if ($#keys_list < 0) {
-		$result->{'empty'}=1;
-	} else {
-		$result->{'existing_key_correct'} = 1;
-		my %expected_keys;
-		foreach my $expected_field (@{$params{'expected_keys'}}){
-			$expected_keys{$expected_field} = 1;
-		}
-		foreach my $field (@{$params{'expected_keys'}}) {
-			unless ($keysFound->{$field}) {
-				Sympa::Log::Syslog::do_log('info','Table %s: Missing expected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
-				$result->{'missing_key'}{$field} = 1;
-				$result->{'existing_key_correct'} = 0;
-			}
-		}
-		foreach my $field (keys %{$keysFound}) {
-			unless ($expected_keys{$field}) {
-				Sympa::Log::Syslog::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
-				$result->{'unexpected_key'}{$field} = 1;
-				$result->{'existing_key_correct'} = 0;
-			}
+	return 0 if $#keys_list < 0;
+
+	my %expected_keys;
+	foreach my $expected_field (@{$params{'expected_keys'}}){
+		$expected_keys{$expected_field} = 1;
+	}
+
+	foreach my $field (@{$params{'expected_keys'}}) {
+		unless ($keysFound->{$field}) {
+			Sympa::Log::Syslog::do_log('info','Table %s: Missing expected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
+			return 0;
 		}
 	}
-	return $result;
+
+	foreach my $field (keys %{$keysFound}) {
+		unless ($expected_keys{$field}) {
+			Sympa::Log::Syslog::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
+			return 0;
+		}
+	}
+
+	return 1;
 }
 
 =item source->build_connect_string()
