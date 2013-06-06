@@ -1654,7 +1654,7 @@ sub _check_primary_key {
 	my $key_as_string = "$table [" . join(',', @key_fields) . "]";
 	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$table,$key_as_string );
 
-	my $key_check = $self->check_key(
+	my $key_check = $self->_check_key(
 		table         => $table,
 		key_name      => 'primary',
 		expected_keys => \@key_fields
@@ -1740,7 +1740,7 @@ sub _check_indexes {
 			push @{$report}, $index_addition if $index_addition;
 		} else {
 			# index exist, check it
-			my $index_check = $self->check_key(
+			my $index_check = $self->_check_key(
 				table         => $table,
 				key_name      => $index,
 				expected_keys => $target_structure->{indexes}{$index}
@@ -2223,38 +2223,34 @@ sub get_all_indexes {
 	return \%found_indexes;
 }
 
-=item $source->check_key(%parameters)
+# $source->_check_key(%parameters)
+#
+# Checks the compliance of a key of a table compared to what it is supposed to
+# reference.
+#
+# Parameters:
+# * table: the name of the table for which we want to check the primary key
+# * key_name: the kind of key tested:
+#   - if the value is 'primary', the key tested will be the table primary key
+#   - for any other value, the index whose name is this value will be tested.
+# * expected_keys: A ref to an array containing the list of fields that we #
+#   expect to be part of the key.
+#
+# Return value:
+# An hashref with the following keys:
+# * empty: if this key is defined, then no key was found for the table
+# * existing_key_correct: if this key's value is 1, then a key exists and is
+# fair to the structure defined in the 'expected_keys' parameter hash.
+# Otherwise, the key is not correct.
+# * missing_key: if this key is defined, then a part of the key was missing.
+# The value associated to this key is a hash whose keys are the names of the
+# fields   missing in the key.
+# * unexpected_key: if this key is defined, then we found fields in the actual
+# key that don't belong to the list provided in the 'expected_keys' parameter
+# hash. The value associated to this key is a hash whose keys are the names of
+# the fields unexpectedely found.
 
-Checks the compliance of a key of a table compared to what it is supposed to
-reference.
-
-Parameters:
-
-* 'table' : the name of the table for which we want to check the primary key
-* 'key_name' : the kind of key tested:
-	- if the value is 'primary', the key tested will be the table primary key
-		- for any other value, the index whose name is this value will be tested.
-	* 'expected_keys' : A ref to an array containing the list of fields that we
-	   expect to be part of the key.
-
-Return value:
-
-A ref likely to contain the following values:
-#	* 'empty': if this key is defined, then no key was found for the table
-#	* 'existing_key_correct': if this key's value is 1, then a key
-#	   exists and is fair to the structure defined in the 'expected_keys' parameter hash.
-#	   Otherwise, the key is not correct.
-#	* 'missing_key': if this key is defined, then a part of the key was missing.
-#	   The value associated to this key is a hash whose keys are the names of the fields
-#	   missing in the key.
-#	* 'unexpected_key': if this key is defined, then we found fields in the actual
-#	   key that don't belong to the list provided in the 'expected_keys' parameter hash.
-#	   The value associated to this key is a hash whose keys are the names of the fields
-#	   unexpectedely found.
-
-=cut
-
-sub check_key {
+sub _check_key {
 	my ($self, %params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Checking %s key structure for table %s',$params{'key_name'},$params{'table'});
