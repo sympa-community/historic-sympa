@@ -1711,10 +1711,10 @@ sub _check_indexes {
 	my $report    = $params{'report'};
 	my $target_structure = $params{'target_structure'};
 	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$table);
-	my %indexes = %{$self->get_indexes(table => $table)};
+	my $current_indexes = $self->get_indexes(table => $table);
 
 	# drop all former indexes
-	foreach my $index (keys %indexes) {
+	foreach my $index (keys %{$current_indexes}) {
 		Sympa::Log::Syslog::do_log('debug','Found index %s',$index);
 		next unless Sympa::Tools::Data::any { $index eq $_ }
 			@former_indexes;
@@ -1730,7 +1730,7 @@ sub _check_indexes {
 	# create required indexes
 	foreach my $index (keys %{$target_structure->{indexes}}) {
 		## Add indexes
-		unless ($indexes{$index}) {
+		unless ($current_indexes->{$index}) {
 			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
 			my $index_addition = $self->set_index(
 				table      => $table,
