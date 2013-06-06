@@ -1729,8 +1729,8 @@ sub _check_indexes {
 
 	# create required indexes
 	foreach my $index (keys %{$target_structure->{indexes}}) {
-		## Add indexes
-		unless ($current_indexes->{$index}) {
+		if (!$current_indexes->{$index}) {
+			# index doesn't exist yet, create it
 			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
 			my $index_addition = $self->set_index(
 				table      => $table,
@@ -1738,65 +1738,58 @@ sub _check_indexes {
 				fields     => $target_structure->{indexes}{$index}
 			);
 			push @{$report}, $index_addition if $index_addition;
-		}
-
-		my $index_check = $self->check_key(
-			table         => $table,
-			key_name      => $index,
-			expected_keys => $target_structure->{indexes}{$index}
-		);
-		if ($index_check) {
-			my $list_of_fields = join ',',@{$target_structure->{indexes}{$index}};
-			my $index_as_string = "$index: $table [$list_of_fields]";
-			if ($index_check->{'empty'}) {
-				## Add index
-				Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
-				my $index_addition = $self->set_index(
-					table      => $table,
-					index_name => $index,
-					fields     => $target_structure->{indexes}{$index}
-				);
-				push @{$report}, $index_addition
-					if $index_addition;
-			} elsif ($index_check->{'existing_key_correct'}) {
-				Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
+		} else {
+			# index exist, check it
+			my $index_check = $self->check_key(
+				table         => $table,
+				key_name      => $index,
+				expected_keys => $target_structure->{indexes}{$index}
+			);
+			if ($index_check) {
+				my $list_of_fields = join ',',@{$target_structure->{indexes}{$index}};
+				my $index_as_string = "$index: $table [$list_of_fields]";
+				if ($index_check->{'empty'}) {
+					# empty index (??), create it
+					Sympa::Log::Syslog::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
+					my $addition = $self->set_index(
+						table      => $table,
+						index_name => $index,
+						fields     => $target_structure->{indexes}{$index}
+					);
+					push @{$report}, $addition if $addition;
+				} elsif ($index_check->{'existing_key_correct'}) {
+					# nothing to do
+					Sympa::Log::Syslog::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
+				} else {
+					# incorrect index, recreate it
+					Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
+					my $deletion = $self->unset_index(
+						table => $table,
+						index => $index
+					);
+					push @{$report}, $deletion if $deletion;
+					my $addition = $self->set_index(
+						table      => $table,
+						index_name => $index,
+						fields     => $target_structure->{indexes}{$index}
+					);
+					push @{$report}, $addition if $addition;
+				}
 			} else {
-				## drop previous index
-				Sympa::Log::Syslog::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
-				my $index_deletion = $self->unset_index(
+				# impossible to check, recreate index
+				Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$table,$index);
+				my $deletion = $self->unset_index(
 					table => $table,
 					index => $index
 				);
-				push @{$report}, $index_deletion
-					if $index_deletion;
-
-				## Add index
-				my $index_addition = $self->set_index(
+				push @{$report}, $deletion if $deletion;
+				my $addition = $self->set_index(
 					table      => $table,
 					index_name => $index,
 					fields     => $target_structure->{indexes}{$index}
 				);
-				push @{$report}, $index_addition
-					if $index_addition;
+				push @{$report}, $addition if $addition;
 			}
-		} else {
-			Sympa::Log::Syslog::do_log('err','Unable to evaluate index %s in table %s. Trying to reset index anyway.',$table,$index);
-			## drop previous index
-			my $index_deletion = $self->unset_index(
-				table => $table,
-				index => $index
-			);
-			push @{$report}, $index_deletion
-				if $index_deletion;
-
-			## Add index
-			my $index_addition = $self->set_index(
-				table      => $table,
-				index_name => $index,
-				fields     => $target_structure->{indexes}{$index}
-			);
-			push @{$report}, $index_addition
-				if $index_addition;
 		}
 	}
 	return 1;
