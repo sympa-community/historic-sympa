@@ -457,4 +457,6 @@ sub _get_pid_file {
 
 =back
 
+=cut
+
 1;

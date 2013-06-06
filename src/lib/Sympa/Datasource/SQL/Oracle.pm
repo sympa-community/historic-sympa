@@ -70,7 +70,7 @@ sub get_structure {
 		}
 	}
 
-	return $base_structure;
+	return $base;
 }
 
 sub build_connect_string{
