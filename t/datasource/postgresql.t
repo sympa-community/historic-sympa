@@ -285,7 +285,7 @@ SKIP: {
 	my $report = $source->probe();
 	ok(defined $report, 'database structure initialisation');
 
-	cmp_ok(scalar @$report, '==', 394, 'event count in report');
+	cmp_ok(scalar @$report, '==', 408, 'event count in report');
 
 	@tables = sort $source->get_tables();
 	is_deeply(
