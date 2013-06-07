@@ -1640,26 +1640,26 @@ sub _check_fields {
 sub _check_primary_key {
 	my ($self, %params) = @_;
 
-	my $table     = $params{'table'};
-	my $report    = $params{'report'};
-	my $target_structure = $params{'target_structure'};
-	Sympa::Log::Syslog::do_log('debug','Checking primary key for table %s',$table);
+	my $table            = $params{table};
+	my $report           = $params{report};
+	my $target_structure = $params{target_structure};
 
-	my @key_fields;
-	foreach my $field (keys %{$target_structure->{fields}}) {
-		next unless $target_structure->{fields}{$field}{primary};
-		push @key_fields, $field;
-	}
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Checking primary key for table %s',
+		$table
+	);
 
-	my $key_as_string = "$table [" . join(',', @key_fields) . "]";
-	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$table,$key_as_string );
+	my $current_fields = $self->get_primary_key(table => $params{table});
+	my $target_fields = [
+		grep { $target_structure->{fields}{$_}{primary} }
+		keys %{$target_structure->{fields}}
+	];
 
-	my $fields = $self->get_primary_key(table => $params{table});
-
-	if (!$fields) {
+	if (!$current_fields) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Unable to check key, re-creating it'
+			'Unable to check primary key, re-creating it'
 		);
 
 		my $deletion = $self->unset_primary_key(
@@ -1669,37 +1669,41 @@ sub _check_primary_key {
 
 		my $addition = $self->set_primary_key(
 			table  => $table,
-			fields => \@key_fields
+			fields => $target_fields
 		);
 		push @{$report}, $addition if $addition;
-	} else {
-		my $check = $self->_check_fields_list(
-			current => $fields,
-			target  => \@key_fields
-		);
-		if ($check) {
-			Sympa::Log::Syslog::do_log(
-				'debug',
-				"Existing key correct, nothing to change",
-			);
-		} else {
-			Sympa::Log::Syslog::do_log(
-				'debug',
-				"Existing key incorrect, re-creating it",
-			);
 
-			my $deletion = $self->unset_primary_key(
-				table => $table
-			);
-			push @{$report}, $deletion if $deletion;
-
-			my $addition = $self->set_primary_key(
-				table  => $table,
-				fields => \@key_fields
-			);
-			push @{$report}, $addition if $addition;
-		}
+		return 1;
 	}
+
+	my $check = $self->_check_fields_list(
+		current => $current_fields,
+		target  => $target_fields
+	);
+
+	if ($check) {
+		Sympa::Log::Syslog::do_log(
+			'debug',
+			'Existing primary key correct, nothing to change',
+		);
+		return 1;
+	}
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Existing primary key incorrect, re-creating it',
+	);
+
+	my $deletion = $self->unset_primary_key(
+		table => $table
+	);
+	push @{$report}, $deletion if $deletion;
+
+	my $addition = $self->set_primary_key(
+		table  => $table,
+		fields => $target_fields
+	);
+	push @{$report}, $addition if $addition;
 
 	return 1;
 }
@@ -1707,10 +1711,16 @@ sub _check_primary_key {
 sub _check_indexes {
 	my ($self, %params) = @_;
 
-	my $table     = $params{'table'};
-	my $report    = $params{'report'};
-	my $target_structure = $params{'target_structure'};
-	Sympa::Log::Syslog::do_log('debug','Checking indexes for table %s',$table);
+	my $table            = $params{table};
+	my $report           = $params{report};
+	my $target_structure = $params{target_structure};
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Checking indexes for table %s',
+		$table
+	);
+
 	my $current_indexes = $self->get_indexes(table => $table);
 
 	# drop all former indexes
@@ -1729,70 +1739,81 @@ sub _check_indexes {
 
 	# create required indexes
 	foreach my $index (keys %{$target_structure->{indexes}}) {
+
+		# check index existence
 		if (!$current_indexes->{$index}) {
-			# index doesn't exist yet, create it
-			Sympa::Log::Syslog::do_log('notice','Index %s on table %s does not exist. Adding it.',$index,$table);
-			my $index_addition = $self->set_index(
+			Sympa::Log::Syslog::do_log(
+				'notice',
+				'Index %s does not exist, creating it',
+				$index
+			);
+			my $addition = $self->set_index(
 				table      => $table,
 				index_name => $index,
 				fields     => $target_structure->{indexes}{$index}
 			);
-			push @{$report}, $index_addition if $index_addition;
-		} else {
-			# index exist, check it
-			my $fields = $self->get_indexes(
-				table => $params{table}
-			)->{$index};
-			if (!$fields) {
-				Sympa::Log::Syslog::do_log(
-					'err',
-					"Unable to check index %s, re-creating it",
-					$index
-				);
-				my $deletion = $self->unset_index(
-					table => $table,
-					index => $index
-				);
-				push @{$report}, $deletion if $deletion;
-
-				my $addition = $self->set_index(
-					table      => $table,
-					index_name => $index,
-					fields     => $target_structure->{indexes}{$index}
-				);
-				push @{$report}, $addition if $addition;
-			} else {
-				my $check = $self->_check_fields_list(
-					current => $fields,
-					target  => $target_structure->{indexes}{$index}
-				);
-				if ($check) {
-					Sympa::Log::Syslog::do_log(
-						'debug',
-						"Existing index %s correct, nothing to change",
-						$index
-					);
-				} else {
-					Sympa::Log::Syslog::do_log(
-						'debug',
-						"Existing index %s incorrect, re-creating it",
-						$index
-					);
-					my $deletion = $self->unset_index(
-						table => $table,
-						index => $index
-					);
-					push @{$report}, $deletion if $deletion;
-					my $addition = $self->set_index(
-						table      => $table,
-						index_name => $index,
-						fields     => $target_structure->{indexes}{$index}
-					);
-					push @{$report}, $addition if $addition;
-				}
-			}
+			push @{$report}, $addition if $addition;
+			next;
 		}
+
+		# index exist, check it
+		my $fields =
+			$self->get_indexes(table => $params{table})->{$index};
+
+		if (!$fields) {
+			Sympa::Log::Syslog::do_log(
+				'err',
+				'Unable to check index %s, re-creating it',
+				$index
+			);
+			my $deletion = $self->unset_index(
+				table => $table,
+				index => $index
+			);
+			push @{$report}, $deletion if $deletion;
+
+			my $addition = $self->set_index(
+				table      => $table,
+				index_name => $index,
+				fields     => $target_structure->{indexes}{$index}
+			);
+			push @{$report}, $addition if $addition;
+			next;
+		}
+
+		my $check = $self->_check_fields_list(
+			current => $fields,
+			target  => $target_structure->{indexes}{$index}
+		);
+
+		if ($check) {
+			Sympa::Log::Syslog::do_log(
+				'debug',
+				'Existing index %s correct, nothing to change',
+				$index
+			);
+			next;
+		}
+
+		Sympa::Log::Syslog::do_log(
+			'debug',
+			'Existing index %s incorrect, re-creating it',
+			$index
+		);
+		my $deletion = $self->unset_index(
+			table => $table,
+			index => $index
+		);
+		push @{$report}, $deletion if $deletion;
+
+		my $addition = $self->set_index(
+			table      => $table,
+			index_name => $index,
+			fields     => $target_structure->{indexes}{$index}
+		);
+		push @{$report}, $addition if $addition;
 	}
+
 	return 1;
 }
 
