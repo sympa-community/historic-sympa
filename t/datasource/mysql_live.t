@@ -19,7 +19,7 @@ plan(skip_all => 'DBD::mysql required') if $EVAL_ERROR;
 plan(skip_all => 'DB_NAME environment variable needed') if !$ENV{DB_NAME};
 plan(skip_all => 'DB_HOST environment variable needed') if !$ENV{DB_HOST};
 plan(skip_all => 'DB_USER environment variable needed') if !$ENV{DB_USER};
-plan tests => 23;
+plan tests => 24;
 
 my $source = Sympa::Datasource::SQL::MySQL->new(
 	db_name   => $ENV{DB_NAME},
@@ -209,6 +209,33 @@ is_deeply(
 		user_table
 	/ ],
 	'tables list after table creation'
+);
+
+is_deeply(
+	$source->get_fields(table => 'subscriber_table'),
+	{
+		user_subscriber               => 'varchar(100)',
+		list_subscriber               => 'varchar(50)',
+		robot_subscriber              => 'varchar(80)',
+		reception_subscriber          => 'varchar(20)',
+		suspend_subscriber            => 'int(1)',
+		suspend_start_date_subscriber => 'int(11)',
+		suspend_end_date_subscriber   => 'int(11)',
+		bounce_subscriber             => 'varchar(35)',
+		bounce_score_subscriber       => 'smallint(6)',
+		bounce_address_subscriber     => 'varchar(100)',
+		date_subscriber               => 'datetime',
+		update_subscriber             => 'datetime',
+		comment_subscriber            => 'varchar(150)',
+		number_messages_subscriber    => 'int(5)',
+		visibility_subscriber         => 'varchar(20)',
+		topics_subscriber             => 'varchar(200)',
+		subscribed_subscriber         => 'int(1)',
+		included_subscriber           => 'int(1)',
+		include_sources_subscriber    => 'varchar(50)',
+		custom_attribute_subscriber   => 'text',
+	},
+	'admin_table table structure'
 );
 
 cleanup($dbh) if !$ENV{TEST_DEBUG};
