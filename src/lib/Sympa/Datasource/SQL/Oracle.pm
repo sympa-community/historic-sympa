@@ -317,45 +317,20 @@ sub get_indexes {
 return \%found_indexes;
 }
 
-sub unset_index {
+sub _unset_index {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Removing index %s from table %s',$params{'index'},$params{'table'});
-
-	my $sth = $self->do_query(
-		"ALTER TABLE %s DROP INDEX %s",
-		$params{'table'},
-		$params{'index'}
-	);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-	my $report = "Table $params{'table'}, index $params{'index'} dropped";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, index %s dropped', $params{'table'},$params{'index'});
-
-	return $report;
+	my $query = "ALTER TABLE $params{table} DROP INDEX $params{index}";
+	return $self->{dbh}->do($query);
 }
 
-sub set_index {
+sub _set_index {
 	my ($self, %params) = @_;
 
-	my $fields = join ',',@{$params{'fields'}};
-	Sympa::Log::Syslog::do_log('debug', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
-
-	my $sth = $self->do_query(
-		"ALTER TABLE %s ADD INDEX %s (%s)",
-		$params{'table'},
-		$params{'index_name'}, 
-		$fields
-	);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-	my $report = "Table $params{'table'}, index %s set using $fields";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, index %s set using fields %s',$params{'table'}, $params{'index_name'}, $fields);
-	return $report;
+	my $query = 
+		"ALTER TABLE $params{table} " .
+		"ADD INDEX $params{index_name} ($params{fields})";
+	return $self->{dbh}->do($query);
 }
 
 1;

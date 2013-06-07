@@ -2642,6 +2642,29 @@ Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
+=cut
+
+sub unset_index {
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug','Removing index %s from table %s',$params{'index'},$params{'table'});
+
+	my $rows = $self->_unset_index(%params);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
+		return undef;
+	}
+
+	my $report = sprintf(
+		"Index %s dropped from table %s",
+		$params{'index'},
+		$params{'table'}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
+
 =item $source->set_index(%parameters)
 
 Sets an index in a table.
@@ -2661,6 +2684,30 @@ Parameters:
 Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=cut
+
+sub set_index {
+	my ($self, %params) = @_;
+
+	my $fields = join ',',@{$params{'fields'}};
+	Sympa::Log::Syslog::do_log('debug', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
+
+	my $rows = $self->_set_index(%params, fields => $fields);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
+		return undef;
+	}
+
+	my $report = sprintf(
+		"Index set as %s on table %s",
+		$fields,
+		$params{table}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
 
 =back
 
