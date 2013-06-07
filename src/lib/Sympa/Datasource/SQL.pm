@@ -2521,6 +2521,37 @@ Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
+=cut
+
+sub unset_primary_key {
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Removing primary key from table %s',
+		$params{table}
+	);
+
+	my $rows = $self->_unset_primary_key(table => $params{table});
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not drop primary key from table %s in database %s',
+			$params{table},
+			$self->{db_name}
+		);
+		return undef;
+	}
+
+	my $report = sprintf(
+		"Primary key dropped from table %s",
+		$params{table}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
+
 =item $source->set_primary_key(%parameters)
 
 Sets the primary key of a table.
@@ -2538,6 +2569,43 @@ Parameters:
 Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=cut
+
+sub set_primary_key {
+	my ($self, %params) = @_;
+
+	my $fields = join(',', @{$params{fields}});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting primary key for table %s (%s)',
+		$params{'table'}
+	);
+
+	my $rows = $self->_set_primary_key(
+		table  => $params{table},
+		fields => $fields
+	);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not set fields %s as primary key for table %s in database %s',
+			$fields,
+			$params{'table'},
+			$self->{'db_name'}
+		);
+		return undef;
+	}
+
+	my $report = sprintf(
+		"Primary key set as %s on table %s",
+		$fields,
+		$params{table}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
 
 =item $source->get_indexes(%parameters)
 

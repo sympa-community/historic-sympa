@@ -311,48 +311,19 @@ sub get_primary_key {
 	return \%keys;
 }
 
-sub unset_primary_key {
+sub _unset_primary_key {
 	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Removing primary key from table %s',$params{'table'});
 
 	my $query = "ALTER TABLE $params{table} DROP PRIMARY KEY";
-	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not drop primary key from table %s in database %s', $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf(
-		"Primary key dropped on table %s",
-		$params{'table'}
-	);
-	Sympa::Log::Syslog::do_log('info', $report);
-
-	return $report;
+	return $self->{dbh}->do($query);
 }
 
-sub set_primary_key {
+sub _set_primary_key {
 	my ($self, %params) = @_;
 
-	my $fields = join ',',@{$params{'fields'}};
-	Sympa::Log::Syslog::do_log('debug','Setting primary key for table %s (%s)',$params{'table'},$fields);
-
-	my $query = "ALTER TABLE $params{table} ADD PRIMARY KEY ($fields)";
-	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf(
-		"Primary key set as %s on table %s",
-		$fields,
-		$params{table}
-	);
-	Sympa::Log::Syslog::do_log('info', $report);
-
-	return $report;
+	my $query =
+		"ALTER TABLE $params{table} ADD PRIMARY KEY ($params{fields})";
+	return $self->{dbh}->do($query);
 }
 
 sub get_indexes {
