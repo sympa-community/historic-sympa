@@ -138,12 +138,9 @@ SKIP: {
 		unless $dbh;
 
 	# start from empty database
-	my @tables = $source->get_tables();
-	foreach my $table (@tables) {
-		$dbh->do("DROP TABLE $table");
-	}
+	cleanup($dbh);
 
-	@tables = $source->get_tables();
+	my @tables = $source->get_tables();
 	cmp_ok(@tables, '==', 0, 'initial tables list');
 
 	my $result;
@@ -286,9 +283,13 @@ SKIP: {
 	my $report = $source->probe();
 	ok(defined $report, 'database structure initialisation');
 
-	if (!$ENV{TEST_DEBUG}) {
-		foreach my $table ($source->get_tables()) {
-			$dbh->do("DROP TABLE $table");
-		}
-	}
+	cleanup($dbh) if !$ENV{TEST_DEBUG};
 };
+
+sub cleanup {
+	my ($dbh) = @_;
+
+	foreach my $table ($source->get_tables()) {
+		$dbh->do("DROP TABLE $table");
+	}
+}
