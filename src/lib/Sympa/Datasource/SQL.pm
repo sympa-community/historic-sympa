@@ -1654,14 +1654,30 @@ sub _check_primary_key {
 	my $key_as_string = "$table [" . join(',', @key_fields) . "]";
 	Sympa::Log::Syslog::do_log('debug','Checking primary keys for table %s expected_keys %s',$table,$key_as_string );
 
-	my $key_check = $self->_check_key(
-		table         => $table,
-		key_name      => 'primary',
-		expected_keys => \@key_fields
-	);
+	my $fields = $self->get_primary_key(table => $params{table});
 
-	if (defined $key_check) {
-		if ($key_check) {
+	if (!$fields) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to check key, re-creating it'
+		);
+
+		my $deletion = $self->unset_primary_key(
+			table => $table
+		);
+		push @{$report}, $deletion if $deletion;
+
+		my $addition = $self->set_primary_key(
+			table  => $table,
+			fields => \@key_fields
+		);
+		push @{$report}, $addition if $addition;
+	} else {
+		my $check = $self->_check_fields_list(
+			current => $fields,
+			target  => \@key_fields
+		);
+		if ($check) {
 			Sympa::Log::Syslog::do_log(
 				'debug',
 				"Existing key correct, nothing to change",
@@ -1683,22 +1699,6 @@ sub _check_primary_key {
 			);
 			push @{$report}, $addition if $addition;
 		}
-	} else {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to check key, re-creating it'
-		);
-
-		my $deletion = $self->unset_primary_key(
-			table => $table
-		);
-		push @{$report}, $deletion if $deletion;
-
-		my $addition = $self->set_primary_key(
-			table  => $table,
-			fields => \@key_fields
-		);
-		push @{$report}, $addition if $addition;
 	}
 
 	return 1;
@@ -1740,13 +1740,33 @@ sub _check_indexes {
 			push @{$report}, $index_addition if $index_addition;
 		} else {
 			# index exist, check it
-			my $index_check = $self->_check_key(
-				table         => $table,
-				key_name      => $index,
-				expected_keys => $target_structure->{indexes}{$index}
-			);
-			if (defined $index_check) {
-				if ($index_check) {
+			my $fields = $self->get_indexes(
+				table => $params{table}
+			)->{$index};
+			if (!$fields) {
+				Sympa::Log::Syslog::do_log(
+					'err',
+					"Unable to check index %s, re-creating it",
+					$index
+				);
+				my $deletion = $self->unset_index(
+					table => $table,
+					index => $index
+				);
+				push @{$report}, $deletion if $deletion;
+
+				my $addition = $self->set_index(
+					table      => $table,
+					index_name => $index,
+					fields     => $target_structure->{indexes}{$index}
+				);
+				push @{$report}, $addition if $addition;
+			} else {
+				my $check = $self->_check_fields_list(
+					current => $fields,
+					target  => $target_structure->{indexes}{$index}
+				);
+				if ($check) {
 					Sympa::Log::Syslog::do_log(
 						'debug',
 						"Existing index %s correct, nothing to change",
@@ -1770,24 +1790,6 @@ sub _check_indexes {
 					);
 					push @{$report}, $addition if $addition;
 				}
-			} else {
-				Sympa::Log::Syslog::do_log(
-					'err',
-					"Untable to check index %s, re-creating it",
-					$index
-				);
-				my $deletion = $self->unset_index(
-					table => $table,
-					index => $index
-				);
-				push @{$report}, $deletion if $deletion;
-
-				my $addition = $self->set_index(
-					table      => $table,
-					index_name => $index,
-					fields     => $target_structure->{indexes}{$index}
-				);
-				push @{$report}, $addition if $addition;
 			}
 		}
 	}
@@ -2222,39 +2224,24 @@ sub get_all_indexes {
 	return \%found_indexes;
 }
 
-# $source->_check_key(%parameters)
+# $source->_check_fields_list(%parameters)
 #
-# Checks the compliance of a key of a table compared to what it is supposed to
+# Checks the compliance of an actual fields list with an expected one
 # reference.
 #
 # Parameters:
-# * table: the name of the table for which we want to check the primary key
-# * key_name: the kind of key tested:
-#   - if the value is 'primary', the key tested will be the table primary key
-#   - for any other value, the index whose name is this value will be tested.
-# * expected_keys: A ref to an array containing the list of fields that we #
-#   expect to be part of the key.
+# * current: the actual fields list
+# * target: the expected one
 #
 # Return value:
-# * true if the actual fields list matched expected one
-# * false if the actual fields list didn't matched it
-# * undef if an error occured
+# true if the actual fields list matched expected one,  false otherwise
 
-sub _check_key {
+sub _check_fields_list {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Checking %s key structure for table %s',$params{'key_name'},$params{'table'});
-	my $keysFound;
-	if (lc($params{'key_name'}) eq 'primary') {
-		return undef unless ($keysFound = $self->get_primary_key('table'=>$params{'table'}));
-	} else {
-		return undef unless ($keysFound = $self->get_indexes('table'=>$params{'table'}));
-		$keysFound = $keysFound->{$params{'key_name'}};
-	}
-
 	return
-		join(',', sort keys %{$keysFound}) eq 
-		join(',', sort @{$params{expected_keys}});
+		join(',', sort @{$params{current}}) eq 
+		join(',', sort @{$params{target}});
 }
 
 =item source->build_connect_string()
