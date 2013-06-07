@@ -2252,29 +2252,9 @@ sub _check_key {
 		$keysFound = $keysFound->{$params{'key_name'}};
 	}
 
-	my @keys_list = keys %{$keysFound};
-	return 0 if $#keys_list < 0;
-
-	my %expected_keys;
-	foreach my $expected_field (@{$params{'expected_keys'}}){
-		$expected_keys{$expected_field} = 1;
-	}
-
-	foreach my $field (@{$params{'expected_keys'}}) {
-		unless ($keysFound->{$field}) {
-			Sympa::Log::Syslog::do_log('info','Table %s: Missing expected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
-			return 0;
-		}
-	}
-
-	foreach my $field (keys %{$keysFound}) {
-		unless ($expected_keys{$field}) {
-			Sympa::Log::Syslog::do_log('info','Table %s: Found unexpected key part %s in %s key.',$params{'table'},$field,$params{'key_name'});
-			return 0;
-		}
-	}
-
-	return 1;
+	return
+		join(',', sort keys %{$keysFound}) eq 
+		join(',', sort @{$params{expected_keys}});
 }
 
 =item source->build_connect_string()
