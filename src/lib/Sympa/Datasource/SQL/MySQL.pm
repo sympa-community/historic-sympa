@@ -54,7 +54,7 @@ sub build_connect_string {
 	my ($self) = @_;
 
 	$self->{'connect_string'} =
-		"DBI:$self->{'db_type'}:$self->{'db_name'}:$self->{'db_host'}";
+		"DBI:mysql:$self->{'db_name'}:$self->{'db_host'}";
 }
 
 sub get_substring_clause {
