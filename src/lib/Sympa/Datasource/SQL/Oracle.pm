@@ -329,7 +329,7 @@ sub _set_index {
 
 	my $query = 
 		"ALTER TABLE $params{table} " .
-		"ADD INDEX $params{index_name} ($params{fields})";
+		"ADD INDEX $params{index} ($params{fields})";
 	return $self->{dbh}->do($query);
 }
 

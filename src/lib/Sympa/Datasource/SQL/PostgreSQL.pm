@@ -456,7 +456,7 @@ sub _set_index {
 	my ($self, %params) = @_;
 
 	my $query = 
-		"CREATE INDEX $params{index_name} " .
+		"CREATE INDEX $params{index} " .
 		"ON $params{table} ($params{fields})";
 	return $self->{dbh}->do($query);
 }

@@ -1758,9 +1758,9 @@ sub _check_indexes {
 				$index
 			);
 			my $addition = $self->set_index(
-				table      => $table,
-				index_name => $index,
-				fields     => $target_structure->{indexes}{$index}
+				table  => $table,
+				index  => $index,
+				fields => $target_structure->{indexes}{$index}
 			);
 			push @{$report}, $addition if $addition;
 			next;
@@ -1783,9 +1783,9 @@ sub _check_indexes {
 			push @{$report}, $deletion if $deletion;
 
 			my $addition = $self->set_index(
-				table      => $table,
-				index_name => $index,
-				fields     => $target_structure->{indexes}{$index}
+				table  => $table,
+				index  => $index,
+				fields => $target_structure->{indexes}{$index}
 			);
 			push @{$report}, $addition if $addition;
 			next;
@@ -1817,9 +1817,9 @@ sub _check_indexes {
 		push @{$report}, $deletion if $deletion;
 
 		my $addition = $self->set_index(
-			table      => $table,
-			index_name => $index,
-			fields     => $target_structure->{indexes}{$index}
+			table  => $table,
+			index  => $index,
+			fields => $target_structure->{indexes}{$index}
 		);
 		push @{$report}, $addition if $addition;
 	}
@@ -2686,9 +2686,9 @@ Parameters:
 
 =item C<table> => table name
 
-=item C<fields> => field names, as an arrayref
+=item C<index> => index name
 
-=item C<index_name> => index name
+=item C<fields> => field names, as an arrayref
 
 =back
 
@@ -2705,8 +2705,8 @@ sub set_index {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Setting index %s for table %s using fields %s',
-		$params{'index_name'},
-		$params{'table'},
+		$params{index},
+		$params{table},
 		$fields
 	);
 
@@ -2715,16 +2715,17 @@ sub set_index {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not add index %s using field %s for table %s in database %s',
-			$params{'index_name'},
+			$params{index},
 			$fields,
-			$params{'table'},
-			$self->{'db_name'}
+			$params{table},
+			$self->{db_name}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		"Index set as %s on table %s",
+		"Index %s set as %s on table %s",
+		$params{index},
 		$fields,
 		$params{table}
 	);

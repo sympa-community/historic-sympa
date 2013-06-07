@@ -138,13 +138,13 @@ is_deeply(
 );
 
 $result = $source->set_index(
-	table      => 'table1',
-	index_name => 'index1',
-	fields     => [ qw/data/ ]
+	table  => 'table1',
+	index  => 'index1',
+	fields => [ qw/data/ ]
 );
 is(
 	$result,
-	"Index set as data on table table1",
+	"Index index1 set as data on table table1",
 	'index creation'
 );
 
