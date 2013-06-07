@@ -1524,24 +1524,31 @@ sub probe {
 			$type eq 'pg'   ||
 			$type eq 'sqlite'
 		) {
-			## Check that primary key has the right structure.
-			my $primary_key_result = $self->_check_primary_key(
+			my $primary_key_check = $self->_check_primary_key(
 				table            => $table,
 				report           => \@report,
 				target_structure => $target_structure->{$table}
 			);
-			unless ($primary_key_result) {
-				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $table);
+			unless ($primary_key_check) {
+				Sympa::Log::Syslog::do_log(
+					'err',
+					"Unable to check the primary key validity for table %s, aborting",
+					$table
+				);
 				return undef;
 			}
 
-			my $indexes_result = $self->_check_indexes(
+			my $indexes_check = $self->_check_indexes(
 				table            => $table,
 				report           => \@report,
 				target_structure => $target_structure->{$table}
 			);
-			unless ($indexes_result) {
-				Sympa::Log::Syslog::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $table);
+			unless ($indexes_check) {
+				Sympa::Log::Syslog::do_log(
+					'err',
+					"Unable to check the indexes validity for table %s, aborting",
+					$table
+				);
 				return undef;
 			}
 
@@ -1651,7 +1658,9 @@ sub _check_primary_key {
 		$table
 	);
 
-	my $current_fields = $self->get_primary_key(table => $params{table});
+	my $current_fields = [
+		keys %{$self->get_primary_key(table => $params{table})}
+	];
 	my $target_fields = [
 		grep { $target_structure->{fields}{$_}{primary} }
 		keys %{$target_structure->{fields}}
