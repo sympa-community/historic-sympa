@@ -14,7 +14,7 @@ use Test::Without::Module qw(DBD::mysql);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 37;
+plan tests => 39;
 
 my $source;
 
@@ -276,8 +276,39 @@ SKIP: {
 		'indexes list after field deletion'
 	);
 
+	cleanup($dbh);
+
 	my $report = $source->probe();
 	ok(defined $report, 'database structure initialisation');
+
+	cmp_ok(scalar @$report, '==', 394, 'event count in report');
+
+	@tables = sort $source->get_tables();
+	is_deeply(
+		\@tables,
+		[ qw/
+			admin_table
+			bulkmailer_table
+			conf_table
+			exclusion_table
+			list_table
+			logs_table
+			netidmap_table
+			notification_table
+			oauthconsumer_sessions_table
+			oauthprovider_nonces_table
+			oauthprovider_sessions_table
+			one_time_ticket_table
+			session_table
+			spool_table
+			stat_counter_table
+			stat_table
+			subscriber_table
+			user_table
+		/ ],
+		'tables list after table creation'
+	);
+
 
 	cleanup($dbh) if !$ENV{TEST_DEBUG};
 };
