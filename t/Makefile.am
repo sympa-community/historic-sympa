@@ -6,11 +6,11 @@ TESTS = compile_modules.t \
 	pod-coverage.t \
 	pod-spelling.t \
 	space.t \
-	datasource_mysql.t \
-	datasource_oracle.t \
-	datasource_postgresql.t \
-	datasource_sqlite.t \
-	datasource_sybase.t \
+	datasource/mysql.t \
+	datasource/oracle.t \
+	datasource/postgresql.t \
+	datasource/sqlite.t \
+	datasource/sybase.t \
 	tools_data.t \
 	tools_file.t \
 	tools_password.t  \
