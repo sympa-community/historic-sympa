@@ -1518,10 +1518,11 @@ sub probe {
 			delete $current_structure{$table}{'temporary'};
 		}
 
+		my $type = lc($self->{db_type});
 		if (
-			$self->{db_type} eq 'mysql'||
-			$self->{db_type} eq 'Pg'   ||
-			$self->{db_type} eq 'SQLite'
+			$type eq 'mysql'||
+			$type eq 'pg'   ||
+			$type eq 'sqlite'
 		) {
 			## Check that primary key has the right structure.
 			my $primary_key_result = $self->_check_primary_key(
