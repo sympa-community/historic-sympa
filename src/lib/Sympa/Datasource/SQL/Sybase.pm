@@ -58,7 +58,7 @@ sub get_structure {
 	my $base = $self->SUPER::get_structure();
 
 	foreach my $table (values %{$base}) {
-		foreach my $field (values %{$table->{fields}}) {
+		foreach my $field (@{$table->{fields}}) {
 			$field->{type} =~ s/^int.*/numeric/;
 			$field->{type} =~ s/^text.*/varchar(500)/;
 			$field->{type} =~ s/^smallint.*/numeric/;

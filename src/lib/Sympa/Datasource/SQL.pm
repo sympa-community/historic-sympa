@@ -53,115 +53,114 @@ my %db_connections;
 my $structure = {
 	# subscription, subscription option, etc...
 	'subscriber_table' => {
-		fields => {
-			# email of subscriber
-			'user_subscriber' => {
+		fields => [
+			{
+				# email of subscriber
+				name     => 'user_subscriber',
 				type     => 'varchar(100)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1
 			},
-			# list name of a subscription
-			'list_subscriber' => {
+			{
+				# list name of a subscription
+				name     => 'list_subscriber',
 				type     => 'varchar(50)',
 				primary  => 1,
 				not_null => 1,
-				order    => 2
 			},
-			# robot (domain) of the list
-			'robot_subscriber' => {
+			{
+				# robot (domain) of the list
+				name     => 'robot_subscriber',
 				type     => 'varchar(80)',
 				primary  => 1,
 				not_null => 1,
-				order    => 3
 			},
-			# reception format option (digest, summary, etc.)
-			'reception_subscriber' => {
-				type   => 'varchar(20)',
-				order  => 4,
+			{
+				# reception format option (digest, summary, etc.)
+				name => 'reception_subscriber',
+				type => 'varchar(20)',
 			},
-			# boolean set to 1 if subscription is suspended
-			'suspend_subscriber' => {
-				type   => 'int(1)',
-				order  => 5,
+			{
+				# boolean set to 1 if subscription is suspended
+				name => 'suspend_subscriber',
+				type => 'int(1)',
 			},
-			# The date (epoch) when message reception is suspended
-			'suspend_start_date_subscriber' => {
-				type   => 'int(11)',
-				order  => 6,
+			{
+				# The date (epoch) when message reception is suspended
+				name => 'suspend_start_date_subscriber',
+				type => 'int(11)',
 			},
-			# The date (epoch) when message reception should be restored
-			'suspend_end_date_subscriber' => {
-				type   => 'int(11)',
-				order  => 7,
+			{
+				# The date (epoch) when message reception should be restored
+				name => 'suspend_end_date_subscriber',
+				type => 'int(11)',
 			},
-			'bounce_subscriber' => {
-				type   => 'varchar(35)',
-				order  => 8,
+			{
+				name => 'bounce_subscriber',
+				type => 'varchar(35)',
 			},
-			'bounce_score_subscriber' => {
-				type   => 'smallint(6)',
-				order  => 9,
+			{
+				name => 'bounce_score_subscriber',
+				type => 'smallint(6)',
 			},
-			'bounce_address_subscriber' => {
-				type   => 'varchar(100)',
-				order  => 10,
+			{
+				name => 'bounce_address_subscriber',
+				type => 'varchar(100)',
 			},
-			# date of subscription
-			'date_subscriber' => {
+			{
+				# date of subscription
+				name     => 'date_subscriber',
 				type     => 'datetime',
 				not_null => 1,
-				order    => 11,
 			},
-			# the latest date where subscription is confirmed by subscriber
-			'update_subscriber' => {
-				type   => 'datetime',
-				order  => 12,
+			{
+				# the latest date where subscription is confirmed by subscriber
+				name => 'update_subscriber',
+				type => 'datetime',
 			},
-			# free form name
-			'comment_subscriber' => {
-				type   => 'varchar(150)',
-				order  => 13,
+			{
+				# free form name
+				name => 'comment_subscriber',
+				type => 'varchar(150)',
 			},
-			# the number of message the subscriber sent
-			'number_messages_subscriber' => {
+			{
+				# the number of message the subscriber sent
+				name     => 'number_messages_subscriber',
 				type     => 'int(5)',
 				not_null => 1,
-				order    => 5,
-				order    => 14,
 			},
-			'visibility_subscriber' => {
-				type   => 'varchar(20)',
-				order  => 15,
+			{
+				name => 'visibility_subscriber',
+				type => 'varchar(20)',
 			},
-			# topic subscription specification
-			'topics_subscriber' => {
-				type   => 'varchar(200)',
-				order  => 16,
+			{
+				# topic subscription specification
+				name => 'topics_subscriber',
+				type => 'varchar(200)',
 			},
-			# boolean set to 1 if subscriber comes from ADD or SUB
-			'subscribed_subscriber' => {
-				type   => 'int(1)',
-				order  => 17,
+			{
+				# boolean set to 1 if subscriber comes from ADD or SUB
+				name => 'subscribed_subscriber',
+				type => 'int(1)',
 			},
-			# boolean, set to 1 is subscriber comes from an
-			# external datasource. Note that included_subscriber
-			# and subscribed_subscriber can both value 1
-			'included_subscriber' => {
-				type   => 'int(1)',
-				order  => 18,
+			{
+				# boolean, set to 1 is subscriber comes from an
+				# external datasource. Note that included_subscriber
+				# and subscribed_subscriber can both value 1
+				name => 'included_subscriber',
+				type => 'int(1)',
 			},
-			# comma-separated list of datasource that contain this
-			# subscriber
-			'include_sources_subscriber' => {
-				type   => 'varchar(50)',
-				order  => 19,
+			{
+				# comma-separated list of datasource that contain this
+				# subscriber
+				name => 'include_sources_subscriber',
+				type => 'varchar(50)',
 			},
-			'custom_attribute_subscriber' => {
-				type   => 'text',
-				order  => 10,
+			{
+				name => 'custom_attribute_subscriber',
+				type => 'text',
 			},
-		},
+		],
 		subscriber_user_index => ['user_subscriber'],
 		order => 1,
 	},
@@ -169,408 +168,420 @@ my $structure = {
 	# subscriber may not appear in the user_table if he never log through
 	# the web interface.',
 	user_table => {
-		fields => {
-			# email user is the key
-			email_user => {
+		fields => [
+			{
+				# email user is the key
+				name     => 'email_user',
 				type     => 'varchar(100)' ,
 				primary  => 1,
 				not_null => 1,
 			},
-			gecos_user => {
-				type  => 'varchar(150)',
-				order => 3,
+			{
+				name => 'gecos_user',
+				type => 'varchar(150)',
 			},
-			# password are stored as fingerprint
-			password_user => {
-				type  => 'varchar(40)',
-				order => 2,
+			{
+				# password are stored as fingerprint
+				name => 'password_user',
+				type => 'varchar(40)',
 			},
-			# date epoch from last login, printed in login result
-			# for security purpose
-			last_login_date_user => {
-				type  => 'int(11)',
-				order => 4,
-			},
-			# host of last login, printed in login result for
-			# security purpose
-			last_login_host_user => {
-				type  => 'varchar(60)',
-				order => 5,
-			},
-			# login attempt count, used to prevent brut force
-			# attack
-			wrong_login_count_user =>{
-				type  => 'int(11)',
-				order => 6,
-			},
-			cookie_delay_user => {
+			{
+				# date epoch from last login, printed in login result
+				# for security purpose
+				name => 'last_login_date_user',
 				type => 'int(11)',
 			},
-			# user langage preference
-			lang_user => {
+			{
+				# host of last login, printed in login result for
+				# security purpose
+				name => 'last_login_host_user',
+				type => 'varchar(60)',
+			},
+			{
+				# login attempt count, used to prevent brut force
+				# attack
+				name => 'wrong_login_count_user',
+				type => 'int(11)',
+			},
+			{
+				name => 'cookie_delay_user',
+				type => 'int(11)',
+			},
+			{
+				# user langage preference
+				name => 'lang_user',
 				type => 'varchar(10)',
 			},
-			attributes_user => {
+			{
+				name => 'attributes_user',
 				type => 'text',
 			},
-			data_user => {
+			{
+				name => 'data_user',
 				type => 'text',
 			},
-		},
+		],
 		order => 2,
 	},
 	# message and task spools management
 	spool_table => {
-		fields => {
-			messagekey_spool => {
+		fields => [
+			{
+				name          => 'messagekey_spool',
 				type          => 'bigint(20)',
 				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
-				order         => 1,
 			},
-			# the spool name
-			spoolname_spool => {
+			{
+				# the spool name
+				name     => 'spoolname_spool',
 				type     => "enum('msg','auth','mod','digest','archive','bounce','subscribe','topic','bulk','validated','task')",
 				not_null => 1,
-				order    => 2,
 			},
-			list_spool=> {
-				type  => 'varchar(50)',
-				order => 3,
+			{
+				name => 'list_spool',
+				type => 'varchar(50)',
 			},
-			robot_spool => {
-				type  => 'varchar(80)',
-				order => 4,
+			{
+				name => 'robot_spool',
+				type => 'varchar(80)',
 			},
-			# priority (list priority, owner pririty etc)',
-			priority_spool => {
-				type  => 'varchar(2)',
-				order => 5,
+			{
+				# priority (list priority, owner pririty etc)',
+				name => 'priority_spool',
+				type => 'varchar(2)',
 			},
-			# the date a message is copied in spool table
-			date_spool => {
-				type  => 'int(11)',
-				order => 6,
+			{
+				# the date a message is copied in spool table
+				name => 'date_spool',
+				type => 'int(11)',
 			},
-			# message as base64-encoded string
-			message_spool => {
-				type  => 'longtext',
-				order => 7,
+			{
+				# message as base64-encoded string
+				name => 'message_spool',
+				type => 'longtext',
 			},
-			# a unique string for each process
-			messagelock_spool => {
-				type  => 'varchar(90)',
-				order => 8,
+			{
+				# a unique string for each process
+				name => 'messagelock_spool',
+				type => 'varchar(90)',
 			},
-			# the date a lock is set. Used in order detect old
-			# locks
-			lockdate_spool => {
-				type  => 'int(11)',
-				order => 9,
+			{
+				# the date a lock is set. Used in order detect old
+				# locks
+				name => 'lockdate_spool',
+				type => 'int(11)',
 			},
-			# if problem when processed entries have bad status
-			message_status_spool => {
-				type  => "enum('ok','bad')",
-				order => 10,
+			{
+				# if problem when processed entries have bad status
+				name => 'message_status_spool',
+				type => "enum('ok','bad')",
 			},
-			# the reason why a message is moved to bad
-			message_diag_spool => {
-				type  => 'text',
-				order => 11,
+			{
+				# the reason why a message is moved to bad
+				name => 'message_diag_spool',
+				type => 'text',
 			},
-			# list, list-request, sympa robot or other recipient
-			type_spool => {
-				type  => 'varchar(15)',
-				order => 12,
+			{
+				# list, list-request, sympa robot or other recipient
+				name => 'type_spool',
+				type => 'varchar(15)',
 			},
-			# authentication key for email challenge
-			authkey_spool => {
-				type  => 'varchar(33)',
-				order => 13,
+			{
+				# authentication key for email challenge
+				name => 'authkey_spool',
+				type => 'varchar(33)',
 			},
-			# the message header date
-			headerdate_spool => {
-				type  => 'varchar(80)',
-				order => 14,
+			{
+				# the message header date
+				name => 'headerdate_spool',
+				type => 'varchar(80)',
 			},
-			# true if message is related to a dynamic list, false
-			# if list as been created or if list is static',
-			create_list_if_needed_spool=> {
-				type  => 'int(1)',
-				order => 15,
+			{
+				# true if message is related to a dynamic list, false
+				# if list as been created or if list is static',
+				name => 'create_list_if_needed_spool',
+				type => 'int(1)',
 			},
-			# subject of the message stored to list spool content
-			# faster
-			subject_spool => {
-				type  => 'varchar(110)',
-				order => 16,
+			{
+				# subject of the message stored to list spool content
+				# faster
+				name => 'subject_spool',
+				type => 'varchar(110)',
 			},
-			# this info is stored to browse spool content faster
-			sender_spool => {
-				type  => 'varchar(110)',
-				order => 17,
+			{
+				# this info is stored to browse spool content faster
+				name => 'sender_spool',
+				type => 'varchar(110)',
 			},
-			# stored to list spool content faster
-			messageid_spool => {
-				type  => 'varchar(300)',
-				order => 18,
+			{
+				# stored to list spool content faster
+				name => 'messageid_spool',
+				type => 'varchar(300)',
 			},
-			# spamstatus scenario result
-			spam_status_spool => {
-				type  => 'varchar(12)',
-				order => 19,
+			{
+				# spamstatus scenario result
+				name => 'spam_status_spool',
+				type => 'varchar(12)',
 			},
-			# info stored in order to browse spool content faster
-			size_spool => {
-				type  => 'int(11)',
-				order => 20,
+			{
+				# info stored in order to browse spool content faster
+				name => 'size_spool',
+				type => 'int(11)',
 			},
-			# date for a task
-			task_date_spool => {
-				type  => 'int(11)',
-				order => 21,
+			{
+				# date for a task
+				name => 'task_date_spool',
+				type => 'int(11)',
 			},
-			# label for a task
-			task_label_spool => {
-				type  => 'varchar(20)',
-				order => 22,
+			{
+				# label for a task
+				name => 'task_label_spool',
+				type => 'varchar(20)',
 			},
-			# model of related task
-			task_model_spool => {
-				type  => 'varchar(40)',
-				order => 23,
+			{
+				# model of related task
+				name => 'task_model_spool',
+				type => 'varchar(40)',
 			},
-			# object of related task
-			task_object_spool => {
-				type  => 'varchar(50)',
-				order => 24,
+			{
+				# object of related task
+				name => 'task_object_spool',
+				type => 'varchar(50)',
 			},
-			# private key to sign message
-			dkim_privatekey_spool => {
-				type  => 'varchar(1000)',
-				order => 35,
+			{
+				# private key to sign message
+				name => 'dkim_privatekey_spool',
+				type => 'varchar(1000)',
 			},
-			# DKIM selector to sign message
-			dkim_selector_spool => {
-				type  => 'varchar(50)',
-				order => 36,
+			{
+				# DKIM selector to sign message
+				name => 'dkim_selector_spool',
+				type => 'varchar(50)',
 			},
-			# DKIM d parameter
-			dkim_d_spool => {
-				type  => 'varchar(50)',
-				order => 37,
+			{
+				# DKIM d parameter
+				name => 'dkim_d_spool',
+				type => 'varchar(50)',
 			},
-			# DKIM i signature parameter
-			dkim_i_spool => {
-				type  => 'varchar(100)',
-				order => 38,
+			{
+				# DKIM i signature parameter
+				name => 'dkim_i_spool',
+				type => 'varchar(100)',
 			},
-		},
+		],
 		order => 3,
 	},
 	# storage of recipients with a ref to a message in spool_table. So a
 	# very simple process can distribute them
 	bulkmailer_table => {
-		fields => {
-			# a pointer to a message in spool_table.It must be a
-			# value of a line in table spool_table with same value
-			# as messagekey_spool
-			messagekey_bulkmailer => {
+		fields => [
+			{
+				# a pointer to a message in spool_table.It must be a
+				# value of a line in table spool_table with same value
+				# as messagekey_spool
+				name     => 'messagekey_bulkmailer',
 				type     => 'varchar(80)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1,
 			},
-			# an id for the packet
-			packetid_bulkmailer => {
+			{
+				# an id for the packet
+				name     => 'packetid_bulkmailer',
 				type     => 'varchar(33)',
 				primary  => 1,
 				not_null => 1,
-				order    => 2,
 			},
-			# the message Id
-			messageid_bulkmailer => {
-				type  => 'varchar(200)',
-				order => 3,
+			{
+				# the message Id
+				name => 'messageid_bulkmailer',
+				type => 'varchar(200)',
 			},
-			# comma-separated list of recipient email for this
-			# message
-			receipients_bulkmailer => {
-				type  => 'text',
-				order => 4,
+			{
+				# comma-separated list of recipient email for this
+				# message
+				name => 'receipients_bulkmailer',
+				type => 'text',
 			},
-			# the return path value that must be set when sending
-			# the message
-			returnpath_bulkmailer => {
-				type  => 'varchar(100)',
-				order => 5,
+			{
+				# the return path value that must be set when sending
+				# the message
+				name => 'returnpath_bulkmailer',
+				type => 'varchar(100)',
 			},
-			robot_bulkmailer => {
-				type  => 'varchar(80)',
-				order => 6,
+			{
+				name => 'robot_bulkmailer',
+				type => 'varchar(80)',
 			},
-			listname_bulkmailer => {
-				type  => 'varchar(50)',
-				order => 7,
+			{
+				name => 'listname_bulkmailer',
+				type => 'varchar(50)',
 			},
-			# true if VERP is required, in this cas return_path
-			# will be formated using verp form
-			verp_bulkmailer => {
-				type  => 'int(1)',
-				order => 8,
+			{
+				# true if VERP is required, in this cas return_path
+				# will be formated using verp form
+				name => 'verp_bulkmailer',
+				type => 'int(1)',
 			},
-			# Is DSN or MDM required when sending this message?',
-			tracking_bulkmailer => {
-				type  => "enum('mdn','dsn')",
-				order => 9,
+			{
+				# Is DSN or MDM required when sending this message?',
+				name => 'tracking_bulkmailer',
+				type => "enum('mdn','dsn')",
 			},
-			# true if the message is to be parsed as a TT2
-			# template foreach recipient
-			merge_bulkmailer => {
-				type  => 'int(1)',
-				order => 10,
+			{
+				# true if the message is to be parsed as a TT2
+				# template foreach recipient
+				name => 'merge_bulkmailer',
+				type => 'int(1)',
 			},
-			priority_message_bulkmailer => {
-				type  => 'smallint(10)',
-				order => 11,
+			{
+				name => 'priority_message_bulkmailer',
+				type => 'smallint(10)',
 			},
-			priority_packet_bulkmailer => {
-				type  => 'smallint(10)',
-				order => 12,
+			{
+				name => 'priority_packet_bulkmailer',
+				type => 'smallint(10)',
 			},
-			# the date where the message was received
-			'reception_date_bulkmailer' => {
-				type  => 'int(11)',
-				order => 13,
+			{
+				# the date where the message was received
+				name => 'reception_date_bulkmailer',
+				type => 'int(11)',
 			},
-			# the date the message was sent
-			delivery_date_bulkmailer => {
-				type  => 'int(11)',
-				order => 14,
+			{
+				# the date the message was sent
+				name => 'delivery_date_bulkmailer',
+				type => 'int(11)',
 			},
-			# a lock. It is set as process-number @ hostname so
-			# multiple bulkmailer can handle this spool
-			lock_bulkmailer => {
-				type  => 'varchar(30)',
-				order => 15,
+			{
+				# a lock. It is set as process-number @ hostname so
+				# multiple bulkmailer can handle this spool
+				name => 'lock_bulkmailer',
+				type => 'varchar(30)',
 			},
-		},
+		],
 		order => 4,
 	},
 	# exclusion table is used in order to manage unsubscription for
 	# subsceriber inclued from an external data source
 	exclusion_table => {
-		fields => {
-			list_exclusion => {
+		fields => [
+			{
+				name     => 'list_exclusion',
 				type     => 'varchar(50)',
-				order    => 1,
 				primary  => 1,
 				not_null => 1,
 			},
-			robot_exclusion => {
+			{
+				name     => 'robot_exclusion',
 				type     => 'varchar(50)',
-				order    => 2,
 				primary  => 1,
 				not_null => 1,
 			},
-			user_exclusion => {
+			{
+				name     => 'user_exclusion',
 				type     => 'varchar(100)',
-				order    => 3,
 				primary  => 1,
 				not_null => 1,
 			},
-			family_exclusion => {
-				type  => 'varchar(50)',
-				order => 4,
+			{
+				name => 'family_exclusion',
+				type => 'varchar(50)',
 			},
-			date_exclusion => {
-				type  => 'int(11)',
-				order => 5,
+			{
+				name => 'date_exclusion',
+				type => 'int(11)',
 			},
-		},
+		],
 		order => 5,
 	},
 	# HTTP session management
 	session_table => {
-		fields => {
-			# database record identifier
-			id_session => {
+		fields => [
+			{
+				# database record identifier
+				name     => 'id_session',
 				type     => 'varchar(30)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1,
 			},
-			# the date when the session was created
-			start_date_session => {
+			{
+				# the date when the session was created
+				name     => 'start_date_session',
 				type     => 'int(11)',
 				not_null => 1,
-				order    => 2,
 			},
-			# date epoch of the last use of this session. It is
-			# used in order to expire old sessions
-			date_session => {
+			{
+				# date epoch of the last use of this session. It is
+				# used in order to expire old sessions
+				name     => 'date_session',
 				type     => 'int(11)',
 				not_null => 1,
-				order    => 3,
 			},
-			# IP address of the computer from which the
-			# session was created
-			remote_addr_session => {
-				type  => 'varchar(60)',
-				order => 4,
+			{
+				# IP address of the computer from which the
+				# session was created
+				name => 'remote_addr_session',
+				type => 'varchar(60)',
 			},
-			# virtual host in which the session was created
-			robot_session  => {
-				type  => 'varchar(80)',
-				order => 5,
+			{
+				# virtual host in which the session was created
+				name => 'robot_session',
+				type => 'varchar(80)',
 			},
-			# email associated to this session
-			email_session  => {
-				type  => 'varchar(100)',
-				order => 6,
+			{
+				# email associated to this session
+				name => 'email_session ',
+				type => 'varchar(100)',
 			},
-			# the number of hit performed during this session.
-			# Used to detect crawlers
-			hit_session => {
-				type  => 'int(11)',
-				order => 7,
+			{
+				# the number of hit performed during this session.
+				# Used to detect crawlers
+				name => 'hit_session',
+				type => 'int(11)',
 			},
-			# additional session parameters
-			data_session  => {
-				type  => 'text',
-				order => 8,
+			{
+				# additional session parameters
+				name => 'data_session ',
+				type => 'text',
 			},
-		},
+		],
 		order => 6,
 	},
 	# one time ticket are random value use for authentication chalenge. A
 	# ticket is associated with a context which look like a session',
 	one_time_ticket_table => {
-		fields => {
-			ticket_one_time_ticket => {
+		fields => [
+			{
+				name    => 'ticket_one_time_ticket',
 				type    => 'varchar(30)',
 				primary => 1,
 			},
-			email_one_time_ticket => {
+			{
+				name => 'email_one_time_ticket',
 				type => 'varchar(100)',
 			},
-			robot_one_time_ticket => {
+			{
+				name => 'robot_one_time_ticket',
 				type => 'varchar(80)',
 			},
-			date_one_time_ticket => {
+			{
+				name => 'date_one_time_ticket',
 				type => 'int(11)',
 			},
-			data_one_time_ticket => {
+			{
+				name => 'data_one_time_ticket',
 				type => 'varchar(200)',
 			},
-			remote_addr_one_time_ticket => {
+			{
+				name => 'remote_addr_one_time_ticket',
 				type => 'varchar(60)',
 			},
-			status_one_time_ticket => {
+			{
+				name => 'status_one_time_ticket',
 				type => 'varchar(60)',
 			},
-		},
+		],
 		order => 7,
 	},
 	# used for message tracking feature. If the list is configured for
@@ -579,560 +590,561 @@ my $structure = {
 	# received by Sympa, they are store in this table in relation with the
 	# related list and message_id.
 	notification_table => {
-		fields => {
-			pk_notification => {
+		fields => [
+			{
+				name          => 'pk_notification',
 				type          => 'bigint(20)',
 				autoincrement => 1,
 				primary       => 1,
 				not_null      => 1,
-				order         => 1,
 			},
-			# initial message-id. This feild is used to search DSN
-			# and MDN related to a particular message
-			message_id_notification => {
-				type  => 'varchar(100)',
-				order => 2,
+			{
+				# initial message-id. This feild is used to search DSN
+				# and MDN related to a particular message
+				name => 'message_id_notification',
+				type => 'varchar(100)',
 			},
-			# email adresse of recipient for which a DSN or MDM
-			# was received
-			recipient_notification => {
-				type  => 'varchar(100)',
-				order => 3,
+			{
+				# email adresse of recipient for which a DSN or MDM
+				# was received
+				name => 'recipient_notification',
+				type => 'varchar(100)',
 			},
-			# the subscription option of the subscriber when the
-			# related message was sent to the list. Ussefull
-			# because some receipient may have option such as
-			# //digest// or //nomail//
-			reception_option_notification => {
-				type  => 'varchar(20)',
-				order => 4,
+			{
+				# the subscription option of the subscriber when the
+				# related message was sent to the list. Ussefull
+				# because some receipient may have option such as
+				# //digest// or //nomail//
+				name => 'reception_option_notification',
+				type => 'varchar(20)',
 			},
-			# Value of notification
-			status_notification => {
-				type  => 'varchar(100)',
-				order => 5,
+			{
+				# Value of notification
+				name => 'status_notification',
+				type => 'varchar(100)',
 			},
-			# reception date of latest DSN or MDM
-			arrival_date_notification => {
-				type  => 'varchar(80)',
-				order => 6,
+			{
+				# reception date of latest DSN or MDM
+				name => 'arrival_date_notification',
+				type => 'varchar(80)',
 			},
-			# type of the notification (DSN or MDM)
-			type_notification => {
-				type  => "enum('DSN', 'MDN')",
-				order => 7,
+			{
+				# type of the notification (DSN or MDM)
+				name => 'type_notification',
+				type => "enum('DSN', 'MDN')",
 			},
-			# the DSN or the MDN itself
-			'message_notification' => {
-				type  => 'longtext',
-				order => 8,
+			{
+				# the DSN or the MDN itself
+				name => 'message_notification',
+				type => 'longtext',
 			},
-			# the listname the message was issued for
-			list_notification => {
-				type  => 'varchar(50)',
-				order => 9,
+			{
+				# the listname the message was issued for
+				name => 'list_notification',
+				type => 'varchar(50)',
 			},
-			# the robot the message is related to
-			robot_notification => {
-				type  => 'varchar(80)',
-				order => 10,
+			{
+				# the robot the message is related to
+				name => 'robot_notification',
+				type => 'varchar(80)',
 			},
-			date_notification => {
+			{
+				name     => 'date_notification',
 				type     => 'int(11)',
 				not_null => 1
 			},
-		},
+		],
 		order => 8,
 	},
 	# each important event is stored in this table. List owners and
 	# listmaster can search entries in this table using web interface.',
 	logs_table => {
-		fields => {
-			# event key
-			id_logs => {
+		fields => [
+			{
+				# event key
+				name     => 'id_logs',
 				type     => 'bigint(20)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1,
 			},
-			# e-mail address of the message sender or email of
-			# identified web interface user (or soap user)',
-			user_email_logs => {
-				type  => 'varchar(100)',
-				order => 2,
+			{
+				# e-mail address of the message sender or email of
+				# identified web interface user (or soap user)',
+				name => 'user_email_logs',
+				type => 'varchar(100)',
 			},
-			# date when the action was executed',
-			date_logs => {
+			{
+				# date when the action was executed',
+				name     => 'date_logs',
 				type     => 'int(11)',
 				not_null => 1,
-				order    => 3,
 			},
-			# name of the robot in which context the action was
-			# executed
-			robot_logs => {
-				type  => 'varchar(80)',
-				order => 4,
+			{
+				# name of the robot in which context the action was
+				# executed
+				name => 'robot_logs',
+				type => 'varchar(80)',
 			},
-			# name of the mailing-list in which context the action
-			# was executed
-			list_logs => {
-				type  => 'varchar(50)',
-				order => 5,
+			{
+				# name of the mailing-list in which context the action
+				# was executed
+				name => 'list_logs',
+				type => 'varchar(50)',
 			},
-			# name of the Sympa subroutine which initiated the log
-			action_logs => {
+			{
+				# name of the Sympa subroutine which initiated the log
+				name     => 'action_logs',
 				type     => 'varchar(50)',
 				not_null => 1,
-				order    => 6,
 			},
-			# List of commas-separated parameters. The amount and
-			# type of parameters can differ from an action to
-			# another
-			parameters_logs => {
-				type  => 'varchar(100)',
-				order => 7,
+			{
+				# List of commas-separated parameters. The amount and
+				# type of parameters can differ from an action to
+				# another
+				name => 'parameters_logs',
+				type => 'varchar(100)',
 			},
-			# e-mail address (if any) targeted by the message
-			target_email_logs => {
-				type  => 'varchar(100)',
-				order => 8,
+			{
+				# e-mail address (if any) targeted by the message
+				name => 'target_email_logs',
+				type => 'varchar(100)',
 			},
-			# identifier of the message which triggered the action
-			msg_id_logs => {
-				type  => 'varchar(255)',
-				order => 9,
+			{
+				# identifier of the message which triggered the action
+				name => 'msg_id_logs',
+				type => 'varchar(255)',
 			},
-			# exit status of the action. If it was an error, it is
-			# likely that the error_type_logs field will contain a
-			# description of this error
-			status_logs => {
+			{
+				# exit status of the action. If it was an error, it is
+				# likely that the error_type_logs field will contain a
+				# description of this error
+				name     => 'status_logs',
 				type     => 'varchar(10)',
 				not_null => 1,
-				order    => 10,
 			},
-			# name of the error string – if any – issued by the
-			# subroutine
-			error_type_logs => {
-				type  => 'varchar(150)',
-				order => 11,
+			{
+				# name of the error string – if any – issued by the
+				# subroutine
+				name => 'error_type_logs',
+				type => 'varchar(150)',
 			},
-			# IP address of the client machine from which the
-			# message was sent
-			client_logs => {
-				type  => 'varchar(100)',
-				order => 12,
+			{
+				# IP address of the client machine from which the
+				# message was sent
+				name => 'client_logs',
+				type => 'varchar(100)',
 			},
-			# name of the Sympa daemon which ran the action
-			daemon_logs => {
+			{
+				# name of the Sympa daemon which ran the action
+				name     => 'daemon_logs',
 				type     => 'varchar(10)',
 				not_null => 1,
-				order    => 13,
 			},
-		},
+		],
 		order => 9,
 	},
 	# Statistic item are store in this table, Sum average etc are stored
 	# in Stat_counter_table
 	stat_table => {
-		fields => {
-			id_stat => {
+		fields => [
+			{
+				name     => 'id_stat',
 				type     => 'bigint(20)',
-				order    => 1,
 				primary  => 1,
 				not_null => 1,
 			},
-			date_stat => {
+			{
+				name     => 'date_stat',
 				type     => 'int(11)',
-				order    => 2,
 				not_null => 1,
 			},
-			email_stat => {
-				type  => 'varchar(100)',
-				order => 3,
+			{
+				name => 'email_stat',
+				type => 'varchar(100)',
 			},
-			operation_stat => {
+			{
+				name     => 'operation_stat',
 				type     => 'varchar(50)',
-				order    => 4,
 				not_null => 1,
 			},
-			list_stat => {
-				type  => 'varchar(150)',
-				order => 5,
+			{
+				name => 'list_stat',
+				type => 'varchar(150)',
 			},
-			daemon_stat => {
-				type  => 'varchar(10)',
-				order => 6,
+			{
+				name => 'daemon_stat',
+				type => 'varchar(10)',
 			},
-			user_ip_stat => {
-				type  => 'varchar(100)',
-				order => 7,
+			{
+				name => 'user_ip_stat',
+				type => 'varchar(100)',
 			},
-			robot_stat => {
+			{
+				name     => 'robot_stat',
 				type     => 'varchar(80)',
-				order    => 8,
 				not_null => 1,
 			},
-			parameter_stat => {
+			{
+				name => 'parameter_stat',
 				type  => 'varchar(50)',
-				order => 9,
 			},
-			read_stat => {
+			{
+				name     => 'read_stat',
 				type     => 'tinyint(1)',
-				order    => 10,
 				not_null => 1,
 			},
-		},
+		],
 		stats_user_index => ['email_stat'],
 		order            => 10,
 	},
 	# Use in conjunction with stat_table for users statistics
 	stat_counter_table => {
-		fields => {
-			id_counter => {
+		fields => [
+			{
+				name     => 'id_counter',
 				type     => 'bigint(20)',
-				order    => 1,
 				primary  => 1,
 				not_null => 1,
 			},
-			beginning_date_counter => {
+			{
+				name => 'beginning_date_counter',
 				type     => 'int(11)',
-				order    => 2,
 				not_null => 1,
 			},
-			end_date_counter => {
-				type  => 'int(11)',
-				order => 1,
+			{
+				name => 'end_date_counter',
+				type => 'int(11)',
 			},
-			data_counter => {
+			{
+				name     => 'data_counter',
 				type     => 'varchar(50)',
 				not_null => 1,
-				order    => 3,
 			},
-			robot_counter => {
+			{
+				name     => 'robot_counter',
 				type     => 'varchar(80)',
 				not_null => 1,
-				order    => 4,
 			},
-			list_counter => {
-				type  => 'varchar(150)',
-				order => 5,
+			{
+				name => 'list_counter',
+				type => 'varchar(150)',
 			},
-			variation_counter => {
-				type  => 'int',
-				order => 6,
+			{
+				name => 'variation_counter',
+				type => 'int',
 			},
-			total_counter => {
-				type  => 'int',
-				order => 7,
+			{
+				name => 'total_counter',
+				type => 'int',
 			},
-		},
+		],
 		order => 11,
 	},
 	# internal cache where list admin roles are stored
 	admin_table => {
-		fields => {
-			# list admin email
-			user_admin => {
+		fields => [
+			{
+				# list admin email
+				name     => 'user_admin',
 				type     => 'varchar(100)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1,
 			},
-			# listname
-			list_admin => {
+			{
+				# listname
+				name     => 'list_admin',
 				type     => 'varchar(50)',
 				primary  => 1,
 				not_null => 1,
-				order    => 2,
 			},
-			# list domain
-			robot_admin => {
+			{
+				# list domain
+				name     => 'robot_admin',
 				type     => 'varchar(80)',
 				primary  => 1,
 				not_null => 1,
-				order    => 3,
 			},
-			# a role of this user for this list (editor, owner or
-			# listmaster which a kind of list owner too
-			role_admin => {
+			{
+				# a role of this user for this list (editor, owner or
+				# listmaster which a kind of list owner too
+				name    => 'role_admin',
 				type    => "enum('listmaster','owner','editor')",
 				primary => 1,
-				order   => 4,
 			},
-			# privilege level for this owner, value //normal// or
-			# //privileged//. The related privilege are listed in
-			# editlist.conf.
-			profile_admin => {
-				type  => "enum('privileged','normal')",
-				order => 5,
+			{
+				# privilege level for this owner, value //normal// or
+				# //privileged//. The related privilege are listed in
+				# editlist.conf.
+				name => 'profile_admin',
+				type => "enum('privileged','normal')",
 			},
-			# date this user become a list admin
-			date_admin => {
+			{
+				# date this user become a list admin
+				name     => 'date_admin',
 				type     => 'datetime',
 				not_null => 1,
-				order    => 6,
 			},
-			# last update timestamp
-			update_admin => {
-				type  => 'datetime',
-				order => 7,
+			{
+				# last update timestamp
+				name => 'update_admin',
+				type => 'datetime',
 			},
-			# email reception option for list management messages
-			reception_admin => {
-				type  => 'varchar(20)',
-				order => 8,
+			{
+				# email reception option for list management messages
+				name => 'reception_admin',
+				type => 'varchar(20)',
 			},
-			# admin user email can be hidden in the list web page
-			# description',
-			visibility_admin => {
-				type  => 'varchar(20)',
-				order => 9,
+			{
+				# admin user email can be hidden in the list web page
+				# description',
+				name => 'visibility_admin',
+				type => 'varchar(20)',
 			},
-			comment_admin => {
-				type  => 'varchar(150)',
-				order => 10,
+			{
+				name => 'comment_admin',
+				type => 'varchar(150)',
 			},
-			# true if user is list admin by definition in list
-			# config file
-			subscribed_admin => {
-				type  => 'int(1)',
-				order => 11,
+			{
+				# true if user is list admin by definition in list
+				# config file
+				name => 'subscribed_admin',
+				type => 'int(1)',
 			},
-			# true if user is admin by an external data source
-			included_admin => {
-				type  => 'int(1)',
-				order => 12,
+			{
+				# true if user is admin by an external data source
+				name => 'included_admin',
+				type => 'int(1)',
 			},
-			# external datasource name
-			include_sources_admin => {
-				type  => 'varchar(50)',
-				order => 13,
+			{
+				# external datasource name
+				name => 'include_sources_admin',
+				type => 'varchar(50)',
 			},
-			# private information usually dedicated to listmasters
-			# who needs some additional information about list
-			# owners
-			info_admin => {
-				type  => 'varchar(150)',
-				order => 14,
+			{
+				# private information usually dedicated to listmasters
+				# who needs some additional information about list
+				# owners
+				name => 'info_admin',
+				type => 'varchar(150)',
 			},
 
-		},
+		],
 		admin_user_index => ['user_admin'],
 		order            => 12,
 	},
 	netidmap_table => {
-		fields => {
-			netid_netidmap => {
+		fields => [
+			{
+				name     => 'netid_netidmap',
 				type     => 'varchar(100)',
 				primary  => 1,
 				not_null => 1,
-				order    => 1,
 			},
-			serviceid_netidmap => {
+			{
+				name     => 'serviceid_netidmap',
 				type     => 'varchar(100)',
 				primary  => 1,
 				not_null => 1,
-				order    => 2,
 			},
-			email_netidmap => {
-				type  => 'varchar(100)',
-				order => 4,
+			{
+				name => 'email_netidmap',
+				type => 'varchar(100)',
 			},
-			robot_netidmap => {
+			{
+				name     => 'robot_netidmap',
 				type     => 'varchar(80)',
 				primary  => 1,
 				not_null => 1,
-				order    => 3,
-			},
-		},
+			}
+		],
 		order => 13,
 	},
 	conf_table => {
-		fields => {
-			robot_conf => {
+		fields => [
+			{
+				name    => 'robot_conf',
 				type    => 'varchar(80)',
 				primary => 1,
-				order   => 1,
 			},
-			label_conf => {
+			{
+				name    => 'label_conf',
 				type    => 'varchar(80)',
 				primary => 1,
-				order   => 2,
 			},
-			# the parameter value
-			value_conf => {
+			{
+				# the parameter value
+				name  => 'value_conf',
 				type  => 'varchar(300)',
-				order => 3,
 			},
-		},
+		],
 		order => 14,
 	},
 	'oauthconsumer_sessions_table' => {
-		fields => {
-			user_oauthconsumer => {
+		fields => [
+			{
+				name     => 'user_oauthconsumer',
 				type     => 'varchar(100)',
-				order    => 1,
 				primary  => 1,
 				not_null => 1,
 			},
-			provider_oauthconsumer => {
+			{
+				name     => 'provider_oauthconsumer',
 				type     => 'varchar(100)',
-				order    => 2,
 				primary  => 1,
 				not_null => 1,
 			},
-			tmp_token_oauthconsumer => {
-				type  => 'varchar(100)',
-				order => 3,
+			{
+				name => 'tmp_token_oauthconsumer',
+				type => 'varchar(100)',
 			},
-			tmp_secret_oauthconsumer => {
-				type  => 'varchar(100)',
-				order => 4,
+			{
+				name => 'tmp_secret_oauthconsumer',
+				type => 'varchar(100)',
 			},
-			access_token_oauthconsumer => {
-				type  => 'varchar(100)',
-				order => 5,
+			{
+				name => 'access_token_oauthconsumer',
+				type => 'varchar(100)',
 			},
-			access_secret_oauthconsumer => {
-				type  => 'varchar(100)',
-				order => 6,
+			{
+				name => 'access_secret_oauthconsumer',
+				type => 'varchar(100)',
 			},
-		},
+		],
 		order => 15,
 	},
 	oauthprovider_sessions_table => {
-		fields => {
-			id_oauthprovider => {
+		fields => [
+			{
+				name          => 'id_oauthprovider',
 				type          => 'bigint(20)',
-				order         => 1,
 				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
 			},
-			token_oauthprovider => {
+			{
+				name     => 'token_oauthprovider',
 				type     => 'varchar(32)',
-				order    => 2,
 				not_null => 1,
 			},
-			secret_oauthprovider => {
+			{
+				name     => 'secret_oauthprovider',
 				type     => 'varchar(32)',
-				order    => 3,
 				not_null => 1,
 			},
-			isaccess_oauthprovider => {
-				type  => 'tinyint(1)',
-				order => 4,
+			{
+				name => 'isaccess_oauthprovider',
+				type => 'tinyint(1)',
 			},
-			accessgranted_oauthprovider => {
-				type  => 'tinyint(1)',
-				order => 5,
+			{
+				name => 'accessgranted_oauthprovider',
+				type => 'tinyint(1)',
 			},
-			consumer_oauthprovider => {
+			{
+				name     => 'consumer_oauthprovider',
 				type     => 'varchar(100)',
-				order    => 6,
 				not_null => 1,
 			},
-			user_oauthprovider => {
-				type  => 'varchar(100)',
-				order => 7,
+			{
+				name => 'user_oauthprovider',
+				type => 'varchar(100)',
 			},
-			firsttime_oauthprovider => {
+			{
+				name     => 'firsttime_oauthprovider',
 				type     => 'int(11)',
-				order    => 8,
 				not_null => 1,
 			},
-			lasttime_oauthprovider => {
+			{
+				name     => 'lasttime_oauthprovider',
 				type     => 'int(11)',
-				order    => 9,
 				not_null => 1,
 			},
-			verifier_oauthprovider => {
-				type  => 'varchar(32)',
-				order => 10,
+			{
+				name => 'verifier_oauthprovider',
+				type => 'varchar(32)',
 			},
-			callback_oauthprovider => {
-				type  => 'varchar(100)',
-				order => 11,
+			{
+				name => 'callback_oauthprovider',
+				type => 'varchar(100)',
 			},
-		},
+		],
 		order => 16,
 	},
 	'oauthprovider_nonces_table' => {
-		fields => {
-			id_nonce => {
+		fields => [
+			{
+				name          => 'id_nonce',
 				type          => 'bigint(20)',
-				order         => 1,
 				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
 			},
-			id_oauthprovider => {
-				type  => 'int(11)',
-				order => 2,
+			{
+				name => 'id_oauthprovider',
+				type => 'int(11)',
 			},
-			nonce_oauthprovider => {
+			{
+				name     => 'nonce_oauthprovider',
 				type     => 'varchar(100)',
-				order    => 3,
 				not_null => 1,
 			},
-			time_oauthprovider => {
-				type  => 'int(11)',
-				order => 4,
+			{
+				name => 'time_oauthprovider',
+				type => 'int(11)',
 			},
-		},
+		],
 		order => 17,
 	},
 	list_table => {
-		fields => {
-			name_list => {
+		fields => [
+			{
+				name     => 'name_list',
 				type     => 'varchar(100)',
-				order    => 1,
 				primary  => 1,
 				not_null => 1,
 			},
-			robot_list => {
+			{
+				name     => 'robot_list',
 				type     => 'varchar(100)',
-				order    => 2,
 				primary  => 1,
 				not_null => 1,
 			},
-			path_list => {
-				type  => 'varchar(100)',
-				order => 3,
+			{
+				name => 'path_list',
+				type => 'varchar(100)',
 			},
-			status_list => {
-				type  => "enum('open','closed','pending','error_config','family_closed')",
-				order => 4,
+			{
+				name => 'status_list',
+				type => "enum('open','closed','pending','error_config','family_closed')",
 			},
-			creation_email_list => {
-				type  => 'varchar(100)',
-				order => 5,
+			{
+				name => 'creation_email_list',
+				type => 'varchar(100)',
 			},
-			creation_epoch_list => {
-				type  => 'datetime',
-				order => 6,
+			{
+				name => 'creation_epoch_list',
+				type => 'datetime',
 			},
-			subject_list => {
-				type  => 'varchar(100)',
-				order => 7,
+			{
+				name => 'subject_list',
+				type => 'varchar(100)',
 			},
-			web_archive_list => {
-				type  => 'tinyint(1)',
-				order => 8,
+			{
+				name => 'web_archive_list',
+				type => 'tinyint(1)',
 			},
-			topics_list => {
-				type  => 'varchar(100)',
-				order => 9,
+			{
+				name => 'topics_list',
+				type => 'varchar(100)',
 			},
-			editors_list => {
-				type  => 'varchar(100)',
-				order => 10,
+			{
+				name => 'editors_list',
+				type => 'varchar(100)',
 			},
-			owners_list => {
-				type  => 'varchar(100)',
-				order => 11,
+			{
+				name => 'owners_list',
+				type => 'varchar(100)',
 			},
-		},
+		],
 		order => 18,
 	},
 };
@@ -1557,16 +1569,17 @@ sub probe {
 	# add autoincrement option if needed
 	foreach my $table (keys %{$target_structure}) {
 		Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
-		foreach my $field (keys %{$target_structure->{$table}{'fields'}}) {
-			next unless $target_structure->{$table}{'fields'}{$field}{'autoincrement'};
+		foreach my $field (@{$target_structure->{$table}{fields}}) {
+			next unless $field->{autoincrement};
 			next if $self->is_autoinc(
 				table => $table,
-				field => $field
+				field => $field->{name}
 			);
 			my $result = $self->set_autoinc(
 				table      => $table,
-				field      => $field,
-				field_type => $target_structure->{$table}{'fields'}{$field});
+				field      => $field->{name},
+				field_type => $field->{type}
+			);
 			if ($result) {
 				Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
 			} else {
@@ -1587,18 +1600,18 @@ sub _check_fields {
 	my $current_structure = $params{'current_structure'};
 	my $target_structure  = $params{'target_structure'};
 
-	foreach my $field (keys %{$target_structure->{fields}}) {
-		unless ($current_structure->{$field}) {
-			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $self->{db_name});
-			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field, $table, $self->{db_name});
+	foreach my $field (@{$target_structure->{fields}}) {
+		unless ($current_structure->{$field->{name}}) {
+			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field->{name}, $table, $self->{db_name});
+			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field->{name}, $table, $self->{db_name});
 
 			my $rep = $self->add_field(
 				table   => $table,
-				field   => $field,
-				type    => $target_structure->{fields}{$field}{type},
-				notnull => $target_structure->{fields}{$field}{'not_null'},
-				autoinc => $target_structure->{fields}{$field}{autoincrement},
-				primary => $target_structure->{fields}{$field}{autoincrement}
+				field   => $field->{name},
+				type    => $field->{type},
+				notnull => $field->{'not_null'},
+				autoinc => $field->{autoincrement},
+				primary => $field->{autoincrement}
 			);
 			if ($rep) {
 				push @{$report}, $rep;
@@ -1614,7 +1627,7 @@ sub _check_fields {
 		if ($params{update} eq 'auto' && $self->{db_type} ne 'SQLite') {
 			my $type_check = $self->_check_db_field_type(
 				effective_format => $current_structure->{$field},
-				required_format => $target_structure->{$field}
+				required_format => $field->{type}
 			);
 			unless ($type_check) {
 				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field, $table, $self->{db_name}, $target_structure->{$table}{$field});
@@ -1623,9 +1636,9 @@ sub _check_fields {
 
 				my $type_change = $self->update_field(
 					table   => $table,
-					field   => $field,
-					type    => $target_structure->{fields}{$field}{type},
-					notnull => $target_structure->{fields}{$field}{not_null},
+					field   => $field->{name},
+					type    => $field->{type},
+					notnull => $field->{not_null},
 				);
 				if ($type_change) {
 					push @{$report}, $type_change;
@@ -1662,8 +1675,9 @@ sub _check_primary_key {
 		keys %{$self->get_primary_key(table => $params{table})}
 	];
 	my $target_fields = [
-		grep { $target_structure->{fields}{$_}{primary} }
-		keys %{$target_structure->{fields}}
+		map { $_->{name} }
+		grep { $_->{primary} }
+		@{$target_structure->{fields}}
 	];
 
 	if (!$current_fields) {
