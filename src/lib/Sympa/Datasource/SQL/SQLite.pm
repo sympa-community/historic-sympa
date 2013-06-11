@@ -173,39 +173,11 @@ sub get_tables {
 	return @tables;
 }
 
-sub add_table {
+sub _add_table {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Adding table %s to database %s',$params{'table'},$self->{'db_name'});
-
 	my $query = "CREATE TABLE $params{table} (temporary INT)";
-	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not create table %s in database %s', $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	foreach my $field (@{$params{fields}}) {
-		$self->add_field(
-			table   => $params{table},
-			field   => $field->{name},
-			type    => $field->{type},
-			notnull => $field->{not_null},
-			autoinc => $field->{autoincrement},
-			primary => $field->{autoincrement}
-		);
-	}
-
-	$self->delete_field(
-		table => $params{table},
-		field => 'temporary',
-	);
-
-	my $report = sprintf(
-		"Table %s created",
-		$params{'table'}
-	);
-	return $report;
+	return $self->{dbh}->do($query);
 }
 
 sub get_fields {

@@ -18,7 +18,7 @@ use Sympa::Datasource::SQL::SQLite;
 eval { require DBD::SQLite; };
 
 plan(skip_all => 'DBD::SQLite required') if $EVAL_ERROR;
-plan tests => 20;
+plan tests => 18;
 
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
 my $source = Sympa::Datasource::SQL::SQLite->new(
@@ -33,7 +33,15 @@ my @tables = $source->get_tables();
 cmp_ok(@tables, '==', 0, 'initial tables list');
 
 my $result;
-$result = $source->add_table(table => 'table1');
+$result = $source->add_table(
+	table => 'table1',
+	fields => [
+		{
+			name => 'id',
+			type => 'int(11)',
+		},
+	]
+);
 is(
 	$result,
 	"Table table1 created",
@@ -50,32 +58,11 @@ is_deeply(
 $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
-	{ temporary => 'numeric' },
-	'fields list after table creation'
-);
-
-$result = $source->add_field(
-	table   => 'table1',
-	field   => 'id',
-	type    => 'int',
-	autoinc => 1,
-	primary => 1,
-);
-ok(
-	!defined $result,
-	'field id creation failure (primary key issue)'
-);
-
-$result = $source->add_field(
-	table   => 'table1',
-	field   => 'id',
-	type    => 'int',
-	autoinc => 1,
-);
-is(
-	$result,
-	'Field id added to table table1',
-	'field id creation'
+	{
+		id        => 'integer',
+		temporary => 'numeric'
+	},
+	'initial fields list'
 );
 
 $result = $source->add_field(
@@ -115,7 +102,7 @@ $result = $result = $source->is_autoinc(
 	table => 'table1',
 	field => 'id',
 );
-ok(defined $result && $result, "id is autoinc");
+ok(defined $result && !$result, "id is autoinc");
 
 $result = $result = $source->is_autoinc(
 	table => 'table1',

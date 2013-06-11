@@ -35,6 +35,7 @@ package Sympa::Datasource::SQL;
 use strict;
 use base qw(Sympa::Datasource);
 
+use Carp;
 use English qw(-no_match_vars);
 use DBI;
 
@@ -2412,6 +2413,48 @@ Parameters:
 Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=cut
+
+sub add_table {
+	my ($self, %params) = @_;
+
+	croak 'unable to create empty table'
+		unless $params{fields} && @{$params{fields}};
+
+	Sympa::Log::Syslog::do_log('debug','Adding table %s',$params{table});
+
+	my $rows = $self->_add_table(%params);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not create table %s in database %s',
+			$params{table},
+			$self->{db_name}
+		);
+		return undef;
+	}
+
+	foreach my $field (@{$params{fields}}) {
+		$self->add_field(
+			table   => $params{table},
+			field   => $field->{name},
+			type    => $field->{type},
+			notnull => $field->{not_null},
+			autoinc => $field->{autoincrement},
+			primary => $field->{autoincrement}
+		);
+	}
+
+	$self->delete_field(
+		table => $params{table},
+		field => 'temporary',
+	);
+
+	my $report = sprintf("Table %s created", $params{table});
+
+	return $report;
+}
 
 =item $source->get_fields(%parameters)
 
