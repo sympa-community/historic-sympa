@@ -163,6 +163,23 @@ sub add_table {
 		Sympa::Log::Syslog::do_log('err', 'Could not create table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
+
+	foreach my $field (@{$params{fields}}) {
+		$self->add_field(
+			table   => $params{table},
+			field   => $field->{name},
+			type    => $field->{type},
+			notnull => $field->{not_null},
+			autoinc => $field->{autoincrement},
+			primary => $field->{autoincrement}
+		);
+	}
+
+	$self->delete_field(
+		table => $params{table},
+		field => 'temporary',
+	);
+
 	return sprintf "Table %s created in database %s", $params{'table'}, $self->{'db_name'};
 }
 

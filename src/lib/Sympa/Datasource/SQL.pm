@@ -531,7 +531,7 @@ my $structure = {
 			},
 			{
 				# email associated to this session
-				name => 'email_session ',
+				name => 'email_session',
 				type => 'varchar(100)',
 			},
 			{
@@ -542,7 +542,7 @@ my $structure = {
 			},
 			{
 				# additional session parameters
-				name => 'data_session ',
+				name => 'data_session',
 				type => 'text',
 			},
 		],
@@ -631,7 +631,7 @@ my $structure = {
 			{
 				# type of the notification (DSN or MDM)
 				name => 'type_notification',
-				type => "enum('DSN', 'MDN')",
+				type => "enum('DSN','MDN')",
 			},
 			{
 				# the DSN or the MDN itself
@@ -831,11 +831,11 @@ my $structure = {
 			},
 			{
 				name => 'variation_counter',
-				type => 'int',
+				type => 'int(11)',
 			},
 			{
 				name => 'total_counter',
-				type => 'int',
+				type => 'int(11)',
 			},
 		],
 		order => 11,
@@ -1482,7 +1482,10 @@ sub probe {
 		next if Sympa::Tools::Data::any { $table eq $_ }
 			@current_tables;
 
-		my $result = $self->add_table(table => $table);
+		my $result = $self->add_table(
+			table  => $table,
+			fields => $target_structure->{$table}{fields}
+		);
 		if ($result) {
 			push @report, $result;
 			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $table, $self->{db_name});
@@ -1519,15 +1522,6 @@ sub probe {
 		unless ($fields_result) {
 			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
 			return undef;
-		}
-
-		## Remove temporary DB field
-		if ($current_structure{$table}{'temporary'}) {
-			$self->delete_field(
-				table => $table,
-				field => 'temporary',
-			);
-			delete $current_structure{$table}{'temporary'};
 		}
 
 		my $type = lc($self->{db_type});
@@ -1626,13 +1620,13 @@ sub _check_fields {
 		## Change DB types if different and if update_db_types enabled
 		if ($params{update} eq 'auto' && $self->{db_type} ne 'SQLite') {
 			my $type_check = $self->_check_db_field_type(
-				effective_format => $current_structure->{$field},
+				effective_format => $current_structure->{$field->{name}},
 				required_format => $field->{type}
 			);
 			unless ($type_check) {
-				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field, $table, $self->{db_name}, $target_structure->{$table}{$field});
+				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field->{name}, $table, $self->{db_name}, $field->{type});
 
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field, $table, $self->{db_name}, $target_structure->{fields}{$field}{type},$current_structure->{$field});
+				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field->{name}, $table, $self->{db_name}, $field->{type},$current_structure->{$field->{name}});
 
 				my $type_change = $self->update_field(
 					table   => $table,
@@ -1648,8 +1642,8 @@ sub _check_fields {
 				}
 			}
 		} else {
-			unless ($current_structure->{$field} eq $target_structure->{fields}{$field}{type}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $field, $table, $self->{db_name}, $target_structure->{fields}{$field}{type});
+			unless ($current_structure->{$field->{name}} eq $field->{type}) {
+				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s vs %s).', $field->{name}, $table, $self->{db_name}, $field->{type}, $current_structure->{$field->{name}});
 				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 				return undef;
 			}

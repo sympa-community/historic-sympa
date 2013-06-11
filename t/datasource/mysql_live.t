@@ -19,7 +19,7 @@ plan(skip_all => 'DBD::mysql required') if $EVAL_ERROR;
 plan(skip_all => 'DB_NAME environment variable needed') if !$ENV{DB_NAME};
 plan(skip_all => 'DB_HOST environment variable needed') if !$ENV{DB_HOST};
 plan(skip_all => 'DB_USER environment variable needed') if !$ENV{DB_USER};
-plan tests => 24;
+plan tests => 23;
 
 my $source = Sympa::Datasource::SQL::MySQL->new(
 	db_name   => $ENV{DB_NAME},
@@ -42,7 +42,16 @@ my @tables = $source->get_tables();
 cmp_ok(@tables, '==', 0, 'initial tables list');
 
 my $result;
-$result = $source->add_table(table => 'table1');
+$result = $source->add_table(
+	table  => 'table1',
+	fields => [
+		{
+			name          => 'id',
+			type          => 'int(11)',
+			autoincrement => 1,
+		},
+	]
+);
 is(
 	$result,
 	"Table table1 created",
@@ -59,28 +68,14 @@ is_deeply(
 $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
-	{ temporary => 'int(11)' },
-	'fields list after table creation'
-);
-
-$result = $source->add_field(
-	table   => 'table1',
-	field   => 'id',
-	type    => 'int',
-	autoinc => 1,
-	primary => 1,
-);
-is(
-	$result,
-	'Field id added to table table1',
-	'field id creation'
+	{ id => 'int(11)' },
+	'initial fields list'
 );
 
 $result = $source->add_field(
 	table   => 'table1',
 	field   => 'data',
 	type    => 'char(30)',
-	notnull => 1
 );
 is(
 	$result,
@@ -92,9 +87,8 @@ $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
-		temporary => 'int(11)',
-		id        => 'int(11)',
-		data      => 'char(30)',
+		id   => 'int(11)',
+		data => 'char(30)',
 	},
 	'fields list after fields creation'
 );
@@ -153,13 +147,13 @@ $result = $source->delete_field(
 	table => 'table1',
 	field => 'id',
 );
-ok($result, "field id deletion");
+ok(!$result, 'impossible to delete last field');
 
 $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
-		temporary => 'int(11)',
+		id => 'int(11)',
 	},
 	'fields list after field deletion'
 );
@@ -167,7 +161,7 @@ is_deeply(
 $result = $source->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
-	{ },
+	{ id => 1 },
 	'primary key list after field deletion'
 );
 
@@ -183,7 +177,7 @@ cleanup($dbh);
 my $report = $source->probe();
 ok(defined $report, 'database structure initialisation');
 
-cmp_ok(scalar @$report, '==', 408, 'event count in report');
+cmp_ok(scalar @$report, '==', 32, 'event count in report');
 
 @tables = sort $source->get_tables();
 is_deeply(

@@ -35,6 +35,8 @@ package Sympa::Datasource::SQL::MySQL;
 use strict;
 use base qw(Sympa::Datasource::SQL);
 
+use Carp;
+
 use Sympa::Log::Syslog;
 
 sub new {
@@ -151,9 +153,12 @@ sub get_tables {
 sub add_table {
 	my ($self, %params) = @_;
 
+	croak 'unable to create empty table'
+		unless $params{fields} && @{$params{fields}};
+
 	Sympa::Log::Syslog::do_log('debug','Adding table %s to database %s',$params{'table'},$self->{'db_name'});
 
-	my $query = 
+	my $query =
 		"CREATE TABLE $params{table} (temporary INT) " .
 		"DEFAULT CHARACTER SET utf8";
 	my $rows = $self->{dbh}->do($query);
@@ -161,6 +166,22 @@ sub add_table {
 		Sympa::Log::Syslog::do_log('err', 'Could not create table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
+
+	foreach my $field (@{$params{fields}}) {
+		$self->add_field(
+			table   => $params{table},
+			field   => $field->{name},
+			type    => $field->{type},
+			notnull => $field->{not_null},
+			autoinc => $field->{autoincrement},
+			primary => $field->{autoincrement}
+		);
+	}
+
+	$self->delete_field(
+		table => $params{table},
+		field => 'temporary',
+	);
 
 	my $report = sprintf(
 		"Table %s created",
