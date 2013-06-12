@@ -37,8 +37,10 @@ $result = $source->add_table(
 	table => 'table1',
 	fields => [
 		{
-			name => 'id',
-			type => 'int(11)',
+			name          => 'id',
+			type          => 'int(11)',
+			autoincrement => 1,
+			primary       => 1,
 		},
 	]
 );
@@ -60,7 +62,6 @@ is_deeply(
 	$result,
 	{
 		id        => 'integer',
-		temporary => 'numeric'
 	},
 	'initial fields list'
 );
@@ -91,9 +92,8 @@ $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
-		temporary => 'numeric',
-		id        => 'integer',
-		data      => 'text',
+		id   => 'integer',
+		data => 'text',
 	},
 	'fields list after fields creation'
 );

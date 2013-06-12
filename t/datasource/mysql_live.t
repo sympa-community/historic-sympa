@@ -19,7 +19,7 @@ plan(skip_all => 'DBD::mysql required') if $EVAL_ERROR;
 plan(skip_all => 'DB_NAME environment variable needed') if !$ENV{DB_NAME};
 plan(skip_all => 'DB_HOST environment variable needed') if !$ENV{DB_HOST};
 plan(skip_all => 'DB_USER environment variable needed') if !$ENV{DB_USER};
-plan tests => 23;
+plan tests => 25;
 
 my $source = Sympa::Datasource::SQL::MySQL->new(
 	db_name   => $ENV{DB_NAME},
@@ -49,6 +49,7 @@ $result = $source->add_table(
 			name          => 'id',
 			type          => 'int(11)',
 			autoincrement => 1,
+			primary       => 1,
 		},
 	]
 );
@@ -177,7 +178,7 @@ cleanup($dbh);
 my $report = $source->probe();
 ok(defined $report, 'database structure initialisation');
 
-cmp_ok(scalar @$report, '==', 32, 'event count in report');
+cmp_ok(scalar @$report, '==', 18, 'event count in report');
 
 @tables = sort $source->get_tables();
 is_deeply(
@@ -231,6 +232,30 @@ is_deeply(
 	},
 	'admin_table table structure'
 );
+
+is_deeply(
+	$source->get_fields(table => 'notification_table'),
+	{
+		pk_notification               => 'bigint(20)',
+		message_id_notification       => 'varchar(100)',
+		recipient_notification        => 'varchar(100)',
+		reception_option_notification => 'varchar(20)',
+		status_notification           => 'varchar(100)',
+		arrival_date_notification     => 'varchar(80)',
+		type_notification             => "enum('DSN','MDN')",
+		message_notification          => 'longtext',
+		list_notification             => 'varchar(50)',
+		robot_notification            => 'varchar(80)',
+		date_notification             => 'int(11)',
+	},
+	'notification_table table structure'
+);
+
+$result = $source->is_autoinc(
+	table => 'notification_table',
+	field => 'pk_notification',
+);
+ok($result, "pk_notification is autoincremented");
 
 cleanup($dbh) if !$ENV{TEST_DEBUG};
 
