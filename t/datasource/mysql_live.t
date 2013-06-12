@@ -178,7 +178,7 @@ cleanup($dbh);
 my $report = $source->probe();
 ok(defined $report, 'database structure initialisation');
 
-cmp_ok(scalar @$report, '==', 18, 'event count in report');
+cmp_ok(scalar @$report, '==', 21, 'event count in report');
 
 @tables = sort $source->get_tables();
 is_deeply(

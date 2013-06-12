@@ -162,7 +162,9 @@ my $structure = {
 				type => 'text',
 			},
 		],
-		subscriber_user_index => ['user_subscriber'],
+		indexes => {
+			subscriber_user_index => ['user_subscriber'],
+		},
 		order => 1,
 	},
 	# The user_table is mainly used to manage login from web interface. A
@@ -795,7 +797,9 @@ my $structure = {
 				not_null => 1,
 			},
 		],
-		stats_user_index => ['email_stat'],
+		indexes => {
+			stats_user_index => ['email_stat'],
+		},
 		order            => 10,
 	},
 	# Use in conjunction with stat_table for users statistics
@@ -930,7 +934,9 @@ my $structure = {
 			},
 
 		],
-		admin_user_index => ['user_admin'],
+		indexes => {
+			admin_user_index => ['user_admin'],
+		},
 		order            => 12,
 	},
 	netidmap_table => {
