@@ -215,9 +215,41 @@ sub get_tables {
 sub _add_table {
 	my ($self, %params) = @_;
 
-	my $query = 
-		"CREATE TABLE $params{table} (temporary INT)";
+	my @field_clauses =
+		map { $self->_get_field_clause(%$_, table => $params{table}) }
+		@{$params{fields}};
+	my $primary_key_clause =
+		$self->_get_primary_key_clause(@{$params{fields}});
+
+	my $query =
+		"CREATE TABLE $params{table} ("                .
+		join(',', @field_clauses, $primary_key_clause) .
+		")";
+
+	if ($query =~ /NEXTVAL\('(\w+)'\)/) {
+		$self->_create_sequence($1);
+	}
+
 	return $self->{dbh}->do($query);
+
+
+}
+
+sub _get_field_clause {
+	my ($self, %params) = @_;
+
+	my $clause = "$params{name} $params{type}";
+	$clause .= ' NOT NULL' if $params{notnull};
+
+	if ($params{autoincrement}) {
+		my $sequence = _get_sequence_name(
+			table => $params{table},
+			field => $params{name}
+		);
+		$clause .= " DEFAULT NEXTVAL('$sequence')";
+	}
+
+	return $clause;
 }
 
 sub get_fields {
@@ -455,6 +487,17 @@ sub _set_index {
 sub _get_sequence_name {
 	my (%params) = @_;
 	return $params{table} . '_' . $params{field} . '_seq';
+}
+
+sub _create_sequence {
+	my ($self, $sequence) = @_;
+
+	my $query = "CREATE SEQUENCE $sequence";
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err','Unable to create sequence %s',$sequence);
+		return undef;
+	}
 }
 
 1;

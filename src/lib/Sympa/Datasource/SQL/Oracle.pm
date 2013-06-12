@@ -161,7 +161,18 @@ sub get_tables {
 sub _add_table {
 	my ($self, %params) = @_;
 
-	my $query = "CREATE TABLE $params{table} (temporary INT)";
+	
+	my @field_clauses =
+		map { $self->_get_field_clause(%$_) }
+		@{$params{fields}};
+	my $primary_key_clause =
+		$self->_get_primary_key_clause(@{$params{fields}});
+
+	my $query =
+		"CREATE TABLE $params{table} ("                .
+		join(',', @field_clauses, $primary_key_clause) .
+		")";
+
 	return $self->{dbh}->do($query);
 }
 

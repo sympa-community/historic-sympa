@@ -2435,25 +2435,25 @@ sub add_table {
 		return undef;
 	}
 
-	foreach my $field (@{$params{fields}}) {
-		$self->add_field(
-			table   => $params{table},
-			field   => $field->{name},
-			type    => $field->{type},
-			notnull => $field->{not_null},
-			autoinc => $field->{autoincrement},
-			primary => $field->{autoincrement}
-		);
-	}
-
-	$self->delete_field(
-		table => $params{table},
-		field => 'temporary',
-	);
-
 	my $report = sprintf("Table %s created", $params{table});
 
 	return $report;
+}
+
+sub _get_primary_key_clause {
+	my ($self, @fields) = @_;
+
+	my $clause =
+		"PRIMARY KEY (" .
+		join(
+			',',
+			map { $_->{name} }
+			grep { $_->{primary} }
+			@fields
+		) .
+		")";
+
+	return $clause;
 }
 
 =item $source->get_fields(%parameters)
