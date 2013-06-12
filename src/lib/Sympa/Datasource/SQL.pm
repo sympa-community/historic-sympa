@@ -59,21 +59,18 @@ my $structure = {
 				# email of subscriber
 				name     => 'user_subscriber',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# list name of a subscription
 				name     => 'list_subscriber',
 				type     => 'varchar(50)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# robot (domain) of the list
 				name     => 'robot_subscriber',
 				type     => 'varchar(80)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -162,6 +159,11 @@ my $structure = {
 				type => 'text',
 			},
 		],
+		key => [
+			'user_subscriber',
+			'list_subscriber',
+			'robot_subscriber'
+		],
 		indexes => {
 			subscriber_user_index => ['user_subscriber'],
 		},
@@ -176,7 +178,6 @@ my $structure = {
 				# email user is the key
 				name     => 'email_user',
 				type     => 'varchar(100)' ,
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -224,6 +225,7 @@ my $structure = {
 				type => 'text',
 			},
 		],
+		key   => [ 'email_user' ],
 		order => 2,
 	},
 	# message and task spools management
@@ -232,7 +234,6 @@ my $structure = {
 			{
 				name          => 'messagekey_spool',
 				type          => 'bigint(20)',
-				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
 			},
@@ -374,6 +375,7 @@ my $structure = {
 				type => 'varchar(100)',
 			},
 		],
+		key   => [ 'messagekey_spool' ],
 		order => 3,
 	},
 	# storage of recipients with a ref to a message in spool_table. So a
@@ -386,14 +388,12 @@ my $structure = {
 				# as messagekey_spool
 				name     => 'messagekey_bulkmailer',
 				type     => 'varchar(80)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# an id for the packet
 				name     => 'packetid_bulkmailer',
 				type     => 'varchar(33)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -463,6 +463,10 @@ my $structure = {
 				type => 'varchar(30)',
 			},
 		],
+		key   => [
+			'messagekey_bulkmailer',
+			'packetid_bulkmailer',
+		],
 		order => 4,
 	},
 	# exclusion table is used in order to manage unsubscription for
@@ -472,19 +476,16 @@ my $structure = {
 			{
 				name     => 'list_exclusion',
 				type     => 'varchar(50)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				name     => 'robot_exclusion',
 				type     => 'varchar(50)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				name     => 'user_exclusion',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -496,6 +497,11 @@ my $structure = {
 				type => 'int(11)',
 			},
 		],
+		key => [
+			'list_exclusion',
+			'robot_exclusion',
+			'user_exclusion',
+		],
 		order => 5,
 	},
 	# HTTP session management
@@ -505,7 +511,6 @@ my $structure = {
 				# database record identifier
 				name     => 'id_session',
 				type     => 'varchar(30)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -549,6 +554,7 @@ my $structure = {
 				type => 'text',
 			},
 		],
+		key => [ 'id_session' ],
 		order => 6,
 	},
 	# one time ticket are random value use for authentication chalenge. A
@@ -558,7 +564,6 @@ my $structure = {
 			{
 				name    => 'ticket_one_time_ticket',
 				type    => 'varchar(30)',
-				primary => 1,
 			},
 			{
 				name => 'email_one_time_ticket',
@@ -585,6 +590,7 @@ my $structure = {
 				type => 'varchar(60)',
 			},
 		],
+		key   => [ 'ticket_one_time_ticket' ],
 		order => 7,
 	},
 	# used for message tracking feature. If the list is configured for
@@ -598,7 +604,6 @@ my $structure = {
 				name          => 'pk_notification',
 				type          => 'bigint(20)',
 				autoincrement => 1,
-				primary       => 1,
 				not_null      => 1,
 			},
 			{
@@ -657,6 +662,7 @@ my $structure = {
 				not_null => 1
 			},
 		],
+		key   => [ 'pk_notification' ],
 		order => 8,
 	},
 	# each important event is stored in this table. List owners and
@@ -667,7 +673,6 @@ my $structure = {
 				# event key
 				name     => 'id_logs',
 				type     => 'bigint(20)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -744,6 +749,7 @@ my $structure = {
 				not_null => 1,
 			},
 		],
+		key   => [ 'id_logs' ],
 		order => 9,
 	},
 	# Statistic item are store in this table, Sum average etc are stored
@@ -753,7 +759,6 @@ my $structure = {
 			{
 				name     => 'id_stat',
 				type     => 'bigint(20)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -797,10 +802,11 @@ my $structure = {
 				not_null => 1,
 			},
 		],
+		key     => [ 'id_stat' ],
 		indexes => {
 			stats_user_index => ['email_stat'],
 		},
-		order            => 10,
+		order   => 10,
 	},
 	# Use in conjunction with stat_table for users statistics
 	stat_counter_table => {
@@ -808,7 +814,6 @@ my $structure = {
 			{
 				name     => 'id_counter',
 				type     => 'bigint(20)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -843,6 +848,7 @@ my $structure = {
 				type => 'int(11)',
 			},
 		],
+		key   => [ 'id_counter' ],
 		order => 11,
 	},
 	# internal cache where list admin roles are stored
@@ -852,29 +858,25 @@ my $structure = {
 				# list admin email
 				name     => 'user_admin',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# listname
 				name     => 'list_admin',
 				type     => 'varchar(50)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# list domain
 				name     => 'robot_admin',
 				type     => 'varchar(80)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				# a role of this user for this list (editor, owner or
 				# listmaster which a kind of list owner too
-				name    => 'role_admin',
-				type    => "enum('listmaster','owner','editor')",
-				primary => 1,
+				name => 'role_admin',
+				type => "enum('listmaster','owner','editor')",
 			},
 			{
 				# privilege level for this owner, value //normal// or
@@ -934,23 +936,27 @@ my $structure = {
 			},
 
 		],
+		key => [
+			'user_admin',
+			'list_admin',
+			'robot_admin',
+			'role_admin',
+		],
 		indexes => {
 			admin_user_index => ['user_admin'],
 		},
-		order            => 12,
+		order => 12,
 	},
 	netidmap_table => {
 		fields => [
 			{
 				name     => 'netid_netidmap',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				name     => 'serviceid_netidmap',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -960,9 +966,13 @@ my $structure = {
 			{
 				name     => 'robot_netidmap',
 				type     => 'varchar(80)',
-				primary  => 1,
 				not_null => 1,
 			}
+		],
+		key => [
+			'netid_netidmap',
+			'serviceid_netidmap',
+			'robot_netidmap',
 		],
 		order => 13,
 	},
@@ -971,18 +981,20 @@ my $structure = {
 			{
 				name    => 'robot_conf',
 				type    => 'varchar(80)',
-				primary => 1,
 			},
 			{
 				name    => 'label_conf',
 				type    => 'varchar(80)',
-				primary => 1,
 			},
 			{
 				# the parameter value
 				name  => 'value_conf',
 				type  => 'varchar(300)',
 			},
+		],
+		key => [
+			'robot_conf',
+			'label_conf',
 		],
 		order => 14,
 	},
@@ -991,13 +1003,11 @@ my $structure = {
 			{
 				name     => 'user_oauthconsumer',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				name     => 'provider_oauthconsumer',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -1017,6 +1027,10 @@ my $structure = {
 				type => 'varchar(100)',
 			},
 		],
+		key => [
+			'user_oauthconsumer',
+			'provider_oauthconsumer',
+		],
 		order => 15,
 	},
 	oauthprovider_sessions_table => {
@@ -1024,7 +1038,6 @@ my $structure = {
 			{
 				name          => 'id_oauthprovider',
 				type          => 'bigint(20)',
-				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
 			},
@@ -1074,6 +1087,9 @@ my $structure = {
 				type => 'varchar(100)',
 			},
 		],
+		key => [
+			'id_oauthprovider',
+		],
 		order => 16,
 	},
 	'oauthprovider_nonces_table' => {
@@ -1081,7 +1097,6 @@ my $structure = {
 			{
 				name          => 'id_nonce',
 				type          => 'bigint(20)',
-				primary       => 1,
 				not_null      => 1,
 				autoincrement => 1,
 			},
@@ -1099,6 +1114,7 @@ my $structure = {
 				type => 'int(11)',
 			},
 		],
+		key   => [ 'id_nonce' ],
 		order => 17,
 	},
 	list_table => {
@@ -1106,13 +1122,11 @@ my $structure = {
 			{
 				name     => 'name_list',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
 				name     => 'robot_list',
 				type     => 'varchar(100)',
-				primary  => 1,
 				not_null => 1,
 			},
 			{
@@ -1151,6 +1165,10 @@ my $structure = {
 				name => 'owners_list',
 				type => 'varchar(100)',
 			},
+		],
+		key => [
+			'name_list',
+			'robot_list',
 		],
 		order => 18,
 	},
@@ -1491,7 +1509,8 @@ sub probe {
 
 		my $result = $self->add_table(
 			table  => $table,
-			fields => $target_structure->{$table}{fields}
+			fields => $target_structure->{$table}{fields},
+			key    => $target_structure->{$table}{key}
 		);
 		if ($result) {
 			push @report, $result;
@@ -1675,11 +1694,7 @@ sub _check_primary_key {
 	my $current_fields = [
 		keys %{$self->get_primary_key(table => $params{table})}
 	];
-	my $target_fields = [
-		map { $_->{name} }
-		grep { $_->{primary} }
-		@{$target_structure->{fields}}
-	];
+	my $target_fields = $target_structure->{key};
 
 	if (!$current_fields) {
 		Sympa::Log::Syslog::do_log(
@@ -2450,14 +2465,7 @@ sub _get_primary_key_clause {
 	my ($self, @fields) = @_;
 
 	my $clause =
-		"PRIMARY KEY (" .
-		join(
-			',',
-			map { $_->{name} }
-			grep { $_->{primary} }
-			@fields
-		) .
-		")";
+		"PRIMARY KEY (" . join(',', @fields) . ")";
 
 	return $clause;
 }

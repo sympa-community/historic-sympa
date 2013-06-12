@@ -49,9 +49,9 @@ $result = $source->add_table(
 			name          => 'id',
 			type          => 'int4',
 			autoincrement => 1,
-			primary       => 1,
 		},
-	]
+	],
+	key => [ 'id' ]
 );
 is(
 	$result,

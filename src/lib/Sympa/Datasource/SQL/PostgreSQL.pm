@@ -215,16 +215,14 @@ sub get_tables {
 sub _add_table {
 	my ($self, %params) = @_;
 
-	my @field_clauses =
+	my @clauses =
 		map { $self->_get_field_clause(%$_, table => $params{table}) }
 		@{$params{fields}};
-	my $primary_key_clause =
-		$self->_get_primary_key_clause(@{$params{fields}});
+	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
+		if $params{key};
 
 	my $query =
-		"CREATE TABLE $params{table} ("                .
-		join(',', @field_clauses, $primary_key_clause) .
-		")";
+		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
 
 	if ($query =~ /NEXTVAL\('(\w+)'\)/) {
 		$self->_create_sequence($1);
