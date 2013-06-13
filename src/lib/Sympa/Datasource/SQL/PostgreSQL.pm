@@ -194,11 +194,13 @@ sub get_tables {
 sub add_table {
 	my ($self, %params) = @_;
 
-	foreach my $field (@{$params{field}}) {
+	foreach my $field (@{$params{fields}}) {
 		next unless $field->{autoincrement};
 		$self->_create_sequence(
-			table => $params{table},
-			field => $field
+			_get_sequence_name(
+				table => $params{table},
+				field => $field->{name}
+			)
 		);
 	}
 
