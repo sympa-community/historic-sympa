@@ -299,13 +299,13 @@ sub get_primary_key {
 		return undef;
 	}
 
-	my %keys;
+	my @fields;
 	while (my $row = $sth->fetchrow_arrayref()) {
 		next unless $row->[5];
-		$keys{$row->[0]} = 1;
+		push @fields, $row->[0];
 	}
 
-	return \%keys;
+	return \@fields;
 }
 
 sub _unset_primary_key {

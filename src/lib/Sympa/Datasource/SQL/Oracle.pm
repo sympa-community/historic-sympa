@@ -251,23 +251,19 @@ sub get_primary_key {
 
 	Sympa::Log::Syslog::do_log('debug','Getting primary key for table %s',$params{'table'});
 
-	my %found_keys;
-	my $sth = $self->do_query(
-		"SHOW COLUMNS FROM %s",
-		$params{'table'}
-	);
+	my $query = "SHOW COLUMNS FROM $params{table}";
+	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get field list from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
 
-	my $test_request_result = $sth->fetchall_hashref('field');
-	foreach my $scannedResult ( keys %$test_request_result ) {
-		if ( $test_request_result->{$scannedResult}{'key'} eq "PRI" ) {
-			$found_keys{$scannedResult} = 1;
-		}
+	my @fields;
+	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+		push @fields, $row->{field} if $row->{key} eq 'PRI';
 	}
-	return \%found_keys;
+
+	return \@fields;
 }
 
 sub _unset_primary_key {

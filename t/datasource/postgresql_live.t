@@ -110,7 +110,7 @@ ok(!$result, "data is not autoinc");
 $result = $source->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
-	{ id => 1 },
+	[ 'id' ],
 	'initial primary key list'
 );
 
@@ -162,7 +162,7 @@ is_deeply(
 $result = $source->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
-	{ },
+	[ ],
 	'primary key list after field deletion'
 );
 

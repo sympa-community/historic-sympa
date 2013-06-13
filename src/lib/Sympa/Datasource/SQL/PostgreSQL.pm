@@ -383,11 +383,11 @@ sub get_primary_key {
 	}
 	$sth->execute();
 
-	my %keys;
+	my @keys;
 	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
-		$keys{$row->{'field'}} = 1;
+		push @keys, $row->{field};
 	}
-	return \%keys;
+	return \@keys;
 }
 
 sub _unset_primary_key {

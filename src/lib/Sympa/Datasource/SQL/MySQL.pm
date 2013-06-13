@@ -285,15 +285,12 @@ sub get_primary_key {
 	}
 	$sth->execute();
 
-	my %keys;
-	my $test_request_result = $sth->fetchall_hashref('field');
-	foreach my $scannedResult ( keys %$test_request_result ) {
-		if ( $test_request_result->{$scannedResult}{'key'} eq "PRI" ) {
-			$keys{$scannedResult} = 1;
-		}
+	my @fields;
+	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+		push @fields, $row->{field} if $row->{key} eq 'PRI';
 	}
 
-	return \%keys;
+	return \@fields;
 }
 
 sub _unset_primary_key {

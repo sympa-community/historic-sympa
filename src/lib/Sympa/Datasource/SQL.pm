@@ -1698,10 +1698,8 @@ sub _check_primary_key {
 		$table
 	);
 
-	my $current_fields = [
-		keys %{$self->get_primary_key(table => $params{table})}
-	];
-	my $target_fields = $target_structure->{key};
+	my $current_fields = $self->get_primary_key(table => $params{table});
+	my $target_fields  = $target_structure->{key};
 
 	if (!$current_fields) {
 		Sympa::Log::Syslog::do_log(
@@ -2574,8 +2572,8 @@ Parameters:
 
 Return value:
 
-An hashref whose keys are the name of the fields of the primary key, or
-I<undef> if something went wrong.
+The list of primary key fields, as an arrayref, or I<undef> if something went
+wrong.
 
 =item $source->unset_primary_key(%parameters)
 
