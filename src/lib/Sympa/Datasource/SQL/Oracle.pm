@@ -137,21 +137,6 @@ sub get_tables {
 	return @raw_tables;
 }
 
-sub _add_table {
-	my ($self, %params) = @_;
-
-	my @clauses =
-		map { $self->_get_field_clause(%$_) }
-		@{$params{fields}};
-	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
-		if $params{key};
-
-	my $query =
-		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
-
-	return $self->{dbh}->do($query);
-}
-
 sub _get_native_type {
 	my ($self, $type) = @_;
 

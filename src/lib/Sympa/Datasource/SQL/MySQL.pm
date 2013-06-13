@@ -141,7 +141,7 @@ sub get_tables {
 	return @tables;
 }
 
-sub _add_table {
+sub _get_table_query {
 	my ($self, %params) = @_;
 
 	my @clauses =
@@ -153,7 +153,8 @@ sub _add_table {
 	my $query =
 		"CREATE TABLE $params{table} (" . join(',', @clauses) . ") " .
 		"DEFAULT CHARACTER SET utf8";
-	return $self->{dbh}->do($query);
+
+	return $query;
 }
 
 sub _get_field_clause {

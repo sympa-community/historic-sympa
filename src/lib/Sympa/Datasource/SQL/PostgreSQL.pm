@@ -191,25 +191,18 @@ sub get_tables {
 	return @tables;
 }
 
-sub _add_table {
+sub add_table {
 	my ($self, %params) = @_;
 
-	my @clauses =
-		map { $self->_get_field_clause(%$_, table => $params{table}) }
-		@{$params{fields}};
-	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
-		if $params{key};
-
-	my $query =
-		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
-
-	if ($query =~ /NEXTVAL\('(\w+)'\)/) {
-		$self->_create_sequence($1);
+	foreach my $field (@{$params{field}}) {
+		next unless $field->{autoincrement};
+		$self->_create_sequence(
+			table => $params{table},
+			field => $field
+		);
 	}
 
-	return $self->{dbh}->do($query);
-
-
+	return $self->SUPER::add_table(%params);
 }
 
 sub _get_field_clause {

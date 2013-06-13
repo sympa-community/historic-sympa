@@ -2450,7 +2450,8 @@ sub add_table {
 
 	Sympa::Log::Syslog::do_log('debug','Adding table %s',$params{table});
 
-	my $rows = $self->_add_table(%params);
+	my $query = $self->_get_table_query(%params);
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
@@ -2464,6 +2465,20 @@ sub add_table {
 	my $report = sprintf("Table %s created", $params{table});
 
 	return $report;
+}
+
+sub _get_table_query {
+	my ($self, %params) = @_;
+
+	my @clauses =
+		map { $self->_get_field_clause(%$_, table => $params{table}) }
+		@{$params{fields}};
+	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
+		if $params{key};
+
+	my $query =
+		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
+	return $query;
 }
 
 sub _get_primary_key_clause {
