@@ -52,27 +52,6 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
-sub get_structure {
-	my ($self) = @_;
-
-	my $base = $self->SUPER::get_structure();
-
-	foreach my $table (values %{$base}) {
-		foreach my $field (@{$table->{fields}}) {
-			$field->{type} =~ s/^varchar/varchar2/;
-			$field->{type} =~ s/^int.*/number/;
-			$field->{type} =~ s/^bigint.*/number/;
-			$field->{type} =~ s/^smallint.*/number/;
-			$field->{type} =~ s/^enum.*/varchar2(20)/;
-			$field->{type} =~ s/^text.*/varchar2(500)/;
-			$field->{type} =~ s/^longtext.*/long/;
-			$field->{type} =~ s/^datetime.*/date/;
-		}
-	}
-
-	return $base;
-}
-
 sub build_connect_string{
 	my ($self) = @_;
 
@@ -171,6 +150,20 @@ sub _add_table {
 		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
 
 	return $self->{dbh}->do($query);
+}
+
+sub _get_native_type {
+	my ($self, $type) = @_;
+
+	return 'number'        if $type =~ /^int/;
+	return 'number'        if $type =~ /^bigint/;
+	return 'number'        if $type =~ /^smallint/;
+	return "varchar2($1)"  if $type =~ /^varchar\((\d+)\)/;
+	return "varchar2(20)"  if $type =~ /^enum/;
+	return "varchar2(500)" if $type =~ /^text/;
+	return 'long'          if $type =~ /^longtext/;
+	return 'date'          if $type =~ /^datetime/;
+	return $type;
 }
 
 sub get_fields {

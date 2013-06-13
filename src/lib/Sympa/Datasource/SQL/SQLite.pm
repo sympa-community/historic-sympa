@@ -52,27 +52,6 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sqlite');
 }
 
-sub get_structure {
-	my ($self) = @_;
-
-	my $base = $self->SUPER::get_structure();
-
-	foreach my $table (values %{$base}) {
-		foreach my $field (@{$table->{fields}}) {
-			$field->{type} =~ s/^varchar.*/text/;
-			$field->{type} =~ s/^int\(1\).*/numeric/;
-			$field->{type} =~ s/^int.*/integer/;
-			$field->{type} =~ s/^tinyint.*/integer/;
-			$field->{type} =~ s/^bigint.*/integer/;
-			$field->{type} =~ s/^smallint.*/integer/;
-			$field->{type} =~ s/^datetime.*/numeric/;
-			$field->{type} =~ s/^enum.*/text/;
-		}
-	}
-
-	return $base;
-}
-
 sub build_connect_string{
 	my ($self, %params) = @_;
 
@@ -194,6 +173,20 @@ sub _get_field_clause {
 	$clause .= ' NOT NULL' if $params{notnull};
 
 	return $clause;
+}
+
+sub _get_native_type {
+	my ($self, $type) = @_;
+
+	return 'text'    if $type =~ /^varchar/;
+	return 'numeric' if $type =~ /^int\(1\)/;
+	return 'integer' if $type =~ /^int/;
+	return 'integer' if $type =~ /^tinyint/;
+	return 'integer' if $type =~ /^bigint/;
+	return 'integer' if $type =~ /^smallint/;
+	return 'numeric' if $type =~ /^datetime/;
+	return 'text'    if $type =~ /^enum/;
+	return $type;
 }
 
 sub get_fields {

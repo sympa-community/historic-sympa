@@ -43,13 +43,6 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'mysql');
 }
 
-sub get_structure {
-	my ($self) = @_;
-
-	my $base = $self->SUPER::get_structure();
-	return $base;
-}
-
 sub build_connect_string {
 	my ($self) = @_;
 
@@ -171,6 +164,12 @@ sub _get_field_clause {
 	$clause .= ' AUTO_INCREMENT' if $params{autoincrement};
 
 	return $clause;
+}
+
+sub _get_native_type {
+	my ($self, $type) = @_;
+
+	return $type;
 }
 
 sub get_fields {

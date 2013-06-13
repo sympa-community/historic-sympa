@@ -817,7 +817,7 @@ my $structure = {
 				not_null => 1,
 			},
 			{
-				name => 'beginning_date_counter',
+				name     => 'beginning_date_counter',
 				type     => 'int(11)',
 				not_null => 1,
 			},
@@ -1482,6 +1482,13 @@ FIXME.
 
 sub get_structure {
 	my ($self) = @_;
+
+	foreach my $table (values %{$structure}) {
+		foreach my $field (@{$table->{fields}}) {
+			$field->{type} =
+				$self->_get_native_type($field->{type});
+		}
+	}
 
 	return $structure;
 }
