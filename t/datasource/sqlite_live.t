@@ -61,7 +61,7 @@ $result = $source->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
-		id        => 'integer',
+		id => 'integer',
 	},
 	'initial fields list'
 );
@@ -113,7 +113,7 @@ ok(defined $result && !$result, "data is not autoinc");
 $result = $source->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
-	{ },
+	[ ],
 	'initial primary key list'
 );
 
