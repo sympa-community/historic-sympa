@@ -7,9 +7,12 @@ TESTS = compile_modules.t \
 	pod-spelling.t \
 	space.t \
 	datasource/mysql.t \
+	datasource/mysql_live.t \
 	datasource/oracle.t \
 	datasource/postgresql.t \
+	datasource/postgresql_live.t \
 	datasource/sqlite.t \
+	datasource/sqlite_live.t \
 	datasource/sybase.t \
 	tools_data.t \
 	tools_file.t \
