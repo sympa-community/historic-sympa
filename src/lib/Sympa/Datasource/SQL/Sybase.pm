@@ -35,6 +35,8 @@ package Sympa::Datasource::SQL::Sybase;
 use strict;
 use base qw(Sympa::Datasource::SQL);
 
+use Carp;
+
 use Sympa::Log::Syslog;
 
 our %date_format = (
@@ -93,30 +95,12 @@ sub get_formatted_date {
 
 sub is_autoinc {
 	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Checking whether field %s.%s is autoincremental',$params{'field'},$params{'table'});
-	my $sth = $self->do_query(
-		"SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",
-		$params{'table'},
-		$params{'field'}
-	);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to gather autoincrement field named %s for table %s',$params{'field'},$params{'table'});
-		return undef;
-	}
-	my $ref = $sth->fetchrow_hashref('NAME_lc') ;
-	return ($ref->{'field'} eq $params{'field'});
+	croak "not implemented";
 }
 
 sub set_autoinc {
 	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Setting field %s.%s as autoincremental',$params{'field'},$params{'table'});
-	unless ($self->do_query("ALTER TABLE `%s` CHANGE `%s` `%s` BIGINT( 20 ) NOT NULL AUTO_INCREMENT",$params{'table'},$params{'field'},$params{'field'})) {
-		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincrement',$params{'field'},$params{'table'});
-		return undef;
-	}
-	return 1;
+	croak "not implemented";
 }
 
 sub get_tables {
