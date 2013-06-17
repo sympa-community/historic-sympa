@@ -51,7 +51,7 @@ use Sympa::Tools::Data;
 ## 'first_try' contains an epoch date
 my %db_connections;
 
-my $structure = {
+my $abstract_structure = {
 	# subscription, subscription option, etc...
 	'subscriber_table' => {
 		fields => [
@@ -1483,14 +1483,20 @@ FIXME.
 sub get_structure {
 	my ($self) = @_;
 
-	foreach my $table (values %{$structure}) {
+	# return native structure if already computed
+	return $self->{structure} if $self->{structure};
+
+	# otherwise compute and cache it
+	my $native_structure = Sympa::Tools::Data::dup_var($abstract_structure);
+	foreach my $table (values %{$native_structure}) {
 		foreach my $field (@{$table->{fields}}) {
 			$field->{type} =
 				$self->_get_native_type($field->{type});
 		}
 	}
+	$self->{structure} = $native_structure;
 
-	return $structure;
+	return $self->{structure};
 }
 
 =item $self->probe()
@@ -1503,227 +1509,174 @@ sub probe {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'Checking database structure');
 
-	my @report;
-
 	my @current_tables = $self->get_tables();
-	my %current_structure;
+	my %current_tables = map { $_ => 1 } @current_tables;
+
 	my $target_structure = $self->get_structure();
+	my $report = [];
 
-	## Check required tables
 	foreach my $table (keys %{$target_structure}) {
-		next if Sympa::Tools::Data::any { $table eq $_ }
-			@current_tables;
+		if ($current_tables{$table}) {
+			$self->_check_table(
+				table     => $table,
+				structure => $target_structure->{$table},
+				report    => $report,
+				update    => $params{update}
+			);
+		} else {
+			$self->_create_table(
+				table     => $table,
+				structure => $target_structure->{$table},
+				report    => $report
+			);
+		}
+	}
 
-		my $result = $self->add_table(
-			table  => $table,
-			fields => $target_structure->{$table}{fields},
-			key    => $target_structure->{$table}{key}
+	return $report;
+}
+
+sub _create_table {
+	my ($self, %params) = @_;
+
+	my $table_creation = $self->add_table(
+		table  => $params{table},
+		fields => $params{structure}->{fields},
+		key    => $params{structure}->{key}
+	);
+	push @{$params{report}}, $table_creation if $table_creation;
+
+	foreach my $index (keys %{$params{structure}->{indexes}}) {
+		my $index_creation = $self->set_index(
+			table  => $params{table},
+			index  => $index,
+			fields => $params{structure}->{indexes}{$index}
 		);
-		if ($result) {
-			push @report, $result;
-			Sympa::Log::Syslog::do_log('notice', 'Table %s created in database %s', $table, $self->{db_name});
-			push @current_tables, $table;
-			$current_structure{$table} = {};
-		}
+		push @{$params{report}}, $index_creation if $index_creation;
 	}
+}
 
-	## Get fields
-	foreach my $table (@current_tables) {
-		$current_structure{$table} = $self->get_fields(table => $table);
-	}
-
-	if (!%current_structure) {
-		Sympa::Log::Syslog::do_log('err',"Could not check the database structure. consider verify it manually before launching Sympa.");
-		return undef;
-	}
-
-	## Check tables structure if we could get it
-	## Only performed with mysql , Pg and SQLite
-	foreach my $table (keys %{$target_structure}) {
-		unless ($current_structure{$table}) {
-			Sympa::Log::Syslog::do_log('err', "Table '%s' not found in database '%s' ; you should create it with create_db.%s script", $table, $self->{db_name}, $self->{db_type});
-			return undef;
-		}
-
-		my $fields_result = $self->_check_fields(
-			table             => $table,
-			report            => \@report,
-			current_structure => $current_structure{$table},
-			target_structure  => $target_structure->{$table},
-			update            => $params{update}
-		);
-		unless ($fields_result) {
-			Sympa::Log::Syslog::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $table);
-			return undef;
-		}
-
-		my $type = lc($self->{db_type});
-		if (
-			$type eq 'mysql'||
-			$type eq 'pg'   ||
-			$type eq 'sqlite'
-		) {
-			my $primary_key_check = $self->_check_primary_key(
-				table            => $table,
-				report           => \@report,
-				target_structure => $target_structure->{$table}
-			);
-			unless ($primary_key_check) {
-				Sympa::Log::Syslog::do_log(
-					'err',
-					"Unable to check the primary key validity for table %s, aborting",
-					$table
-				);
-				return undef;
-			}
-
-			my $indexes_check = $self->_check_indexes(
-				table            => $table,
-				report           => \@report,
-				target_structure => $target_structure->{$table}
-			);
-			unless ($indexes_check) {
-				Sympa::Log::Syslog::do_log(
-					'err',
-					"Unable to check the indexes validity for table %s, aborting",
-					$table
-				);
-				return undef;
-			}
-
-		}
-	}
-	# add autoincrement option if needed
-	foreach my $table (keys %{$target_structure}) {
-		Sympa::Log::Syslog::do_log('notice',"Checking autoincrement for table $table");
-		foreach my $field (@{$target_structure->{$table}{fields}}) {
-			next unless $field->{autoincrement};
-			next if $self->is_autoinc(
-				table => $table,
-				field => $field->{name}
-			);
-			my $result = $self->set_autoinc(
-				table      => $table,
-				field      => $field->{name},
-				field_type => $field->{type}
-			);
-			if ($result) {
-				Sympa::Log::Syslog::do_log('notice',"Setting table $table field $field as autoincrement");
-			} else {
-				Sympa::Log::Syslog::do_log('err',"Could not set table $table field $field as autoincrement");
-				return undef;
-			}
-		}
-	}
-
-	return \@report;
+sub _check_table {
+	my ($self, %params) = @_;
+	$self->_check_fields(%params);
+	$self->_check_primary_key(%params);
+	$self->_check_indexes(%params);
 }
 
 sub _check_fields {
 	my ($self, %params) = @_;
 
-	my $table     = $params{'table'};
-	my $report    = $params{'report'};
-	my $current_structure = $params{'current_structure'};
-	my $target_structure  = $params{'target_structure'};
+	my $current_fields = $self->get_fields(table => $params{table});
 
-	foreach my $field (@{$target_structure->{fields}}) {
-		unless ($current_structure->{$field->{name}}) {
-			push @{$report}, sprintf("Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field->{name}, $table, $self->{db_name});
-			Sympa::Log::Syslog::do_log('info', "Field '%s' (table '%s' ; database '%s') was NOT found. Attempting to add it...", $field->{name}, $table, $self->{db_name});
+	croak "Unable to check fields for $params{table}, aborting"
+		unless $current_fields;
 
-			my $rep = $self->add_field(
-				table   => $table,
-				field   => $field->{name},
-				type    => $field->{type},
-				notnull => $field->{'not_null'},
-				autoinc => $field->{autoincrement},
-				primary => $field->{autoincrement}
+	foreach my $field (@{$params{structure}->{fields}}) {
+		my $current_type = $current_fields->{$field->{name}};
+		if ($current_type) {
+			$self->_check_field(
+				table        => $params{table},
+				report       => $params{report},
+				structure    => $field,
+			       	current_type => $current_type,
+				update       => $params{update},
 			);
-			if ($rep) {
-				push @{$report}, $rep;
-
-			} else {
-				Sympa::Log::Syslog::do_log('err', 'Addition of fields in database failed. Aborting.');
-				return undef;
-			}
-			next;
-		}
-
-		## Change DB types if different and if update_db_types enabled
-		if ($params{update} eq 'auto' && $self->{db_type} ne 'SQLite') {
-			my $type_check = $self->_check_db_field_type(
-				effective_format => $current_structure->{$field->{name}},
-				required_format => $field->{type}
-			);
-			unless ($type_check) {
-				push @{$report}, sprintf("Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s). Attempting to change it...",$field->{name}, $table, $self->{db_name}, $field->{type});
-
-				Sympa::Log::Syslog::do_log('notice', "Field '%s'  (table '%s' ; database '%s') does NOT have awaited type (%s) where type in database seems to be (%s). Attempting to change it...",$field->{name}, $table, $self->{db_name}, $field->{type},$current_structure->{$field->{name}});
-
-				my $type_change = $self->update_field(
-					table   => $table,
-					field   => $field->{name},
-					type    => $field->{type},
-					notnull => $field->{not_null},
-				);
-				if ($type_change) {
-					push @{$report}, $type_change;
-				} else {
-					Sympa::Log::Syslog::do_log('err', 'Fields update in database failed. Aborting.');
-					return undef;
-				}
-			}
 		} else {
-			unless ($current_structure->{$field->{name}} eq $field->{type}) {
-				Sympa::Log::Syslog::do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s vs %s).', $field->{name}, $table, $self->{db_name}, $field->{type}, $current_structure->{$field->{name}});
-				Sympa::Log::Syslog::do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
-				return undef;
-			}
+			$self->_create_field(
+				table     => $params{table},
+				report    => $params{report},
+				structure => $field,
+			);
 		}
 	}
-	return 1;
+}
+
+sub _create_field {
+	my ($self, %params) = @_;
+
+	my $field_creation = $self->add_field(
+		table   => $params{table},
+		field   => $params{structure}->{name},
+		type    => $params{structure}->{type},
+		notnull => $params{structure}->{not_null},
+		autoinc => $params{structure}->{autoincrement},
+	);
+	push @{$params{report}}, $field_creation if $field_creation;
+}
+
+sub _check_field {
+	my ($self, %params) = @_;
+
+	$self->_check_field_type(
+		table => $params{table},
+		field => $params{structure}->{name},
+		type  => $params{structure}->{type},
+		not_null => $params{structure}->{not_null},
+		current_type => $params{current_type},
+		update   => $params{update},
+	);
+
+	$self->_check_field_autoincrement(
+		table         => $params{table},
+		field         => $params{structure}->{name},
+		type  => $params{structure}->{type},
+		autoincrement => $params{structure}->{autoincrement},
+		update   => $params{update}
+	);
+}
+
+sub _check_field_type {
+	my ($self, %params) = @_;
+
+	return if $params{type} eq $params{current_type};
+
+	croak
+		"Field $params{field} in table $params{table} has type " .
+		"$params{current_type} instead of expected type " .
+		"$params{type}, and automatic update not allowed, aborting"
+		if $params{update} ne 'auto';
+
+	my $update = $self->update_field(
+		table   => $params{table},
+		field   => $params{field},
+		type    => $params{type},
+		notnull => $params{not_null},
+	);
+	push @{$params{report}}, $update if $update;
+}
+
+sub _check_field_autoincrement {
+	my ($self, %params) = @_;
+
+	return if !$params{autoincrement};
+	return if $self->is_autoinc(
+		table => $params{table},
+		field => $params{field}
+	);
+
+	croak
+		"Field $params{field} in table $params{table} not " .
+		"autoincremented, and automatic update not allowed, aborting"
+		if $params{update} ne 'auto';
+
+	my $update = $self->set_autoinc(
+		table => $params{table},
+		field => $params{field},
+		type  => $params{type}
+	);
+	push @{$params{report}}, $update if $update;
 }
 
 sub _check_primary_key {
 	my ($self, %params) = @_;
 
-	my $table            = $params{table};
-	my $report           = $params{report};
-	my $target_structure = $params{target_structure};
-
-	Sympa::Log::Syslog::do_log(
-		'debug',
-		'Checking primary key for table %s',
-		$table
-	);
-
 	my $current_fields = $self->get_primary_key(table => $params{table});
-	my $target_fields  = $target_structure->{key};
 
-	if (!$current_fields) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to check primary key, re-creating it'
-		);
-
-		my $deletion = $self->unset_primary_key(
-			table => $table
-		);
-		push @{$report}, $deletion if $deletion;
-
-		my $addition = $self->set_primary_key(
-			table  => $table,
-			fields => $target_fields
-		);
-		push @{$report}, $addition if $addition;
-
-		return 1;
-	}
+	croak "Unable to check primary key for $params{table}, aborting"
+		unless $current_fields;
 
 	my $check = $self->_check_fields_list(
 		current => $current_fields,
-		target  => $target_fields
+		target  => $params{structure}->{key}
 	);
 
 	if ($check) {
@@ -1740,15 +1693,15 @@ sub _check_primary_key {
 	);
 
 	my $deletion = $self->unset_primary_key(
-		table => $table
+		table => $params{table}
 	);
-	push @{$report}, $deletion if $deletion;
+	push @{$params{report}}, $deletion if $deletion;
 
 	my $addition = $self->set_primary_key(
-		table  => $table,
-		fields => $target_fields
+		table  => $params{table},
+		fields => $current_fields
 	);
-	push @{$report}, $addition if $addition;
+	push @{$params{report}}, $addition if $addition;
 
 	return 1;
 }
@@ -1756,108 +1709,91 @@ sub _check_primary_key {
 sub _check_indexes {
 	my ($self, %params) = @_;
 
-	my $table            = $params{table};
-	my $report           = $params{report};
-	my $target_structure = $params{target_structure};
+	my $current_indexes = $self->get_indexes(table => $params{table});
 
-	Sympa::Log::Syslog::do_log(
-		'debug',
-		'Checking indexes for table %s',
-		$table
-	);
+	croak "Unable to check indexes for $params{table}, aborting"
+		unless $current_indexes;
 
-	my $current_indexes = $self->get_indexes(table => $table);
+	foreach my $index (keys %{$params{structure}->{indexes}}) {
+		my $current_fields = $current_indexes->{$index};
+		if ($current_fields) {
+			$self->_check_index(
+				table  => $params{table},
+				index  => $params{index},
+				fields => $params{structure}->{indexes}{$index},
+				current_fields => $current_fields,
+			);
+		} else {
+			$self->_create_index(
+				table  => $params{table},
+				index  => $params{index},
+				fields => $params{structure}->{indexes}{$index}
+			);
+		}
+	}
 
-	# drop all former indexes
+	# drop former indexes
 	foreach my $index (keys %{$current_indexes}) {
 		Sympa::Log::Syslog::do_log('debug','Found index %s',$index);
 		next unless Sympa::Tools::Data::any { $index eq $_ }
 			@former_indexes;
 
 		Sympa::Log::Syslog::do_log('notice','Removing obsolete index %s',$index);
-		my $index_deletion = $self->unset_index(
-			table => $table,
+		my $deletion = $self->unset_index(
+			table => $params{table},
 			index => $index
 		);
-		push @{$report}, $index_deletion if $index_deletion;
+		push @{$params{report}}, $deletion if $deletion;
 	}
+}
 
-	# create required indexes
-	foreach my $index (keys %{$target_structure->{indexes}}) {
 
-		# check index existence
-		if (!$current_indexes->{$index}) {
-			Sympa::Log::Syslog::do_log(
-				'notice',
-				'Index %s does not exist, creating it',
-				$index
-			);
-			my $addition = $self->set_index(
-				table  => $table,
-				index  => $index,
-				fields => $target_structure->{indexes}{$index}
-			);
-			push @{$report}, $addition if $addition;
-			next;
-		}
+sub _create_index {
+	my ($self, %params) = @_;
 
-		# index exist, check it
-		my $fields =
-			$self->get_indexes(table => $params{table})->{$index};
+	my $addition = $self->set_index(
+		table  => $params{table},
+		index  => $params{index},
+		fields => $params{fields}
+	);
+	push @{$params{report}}, $addition if $addition;
+}
 
-		if (!$fields) {
-			Sympa::Log::Syslog::do_log(
-				'err',
-				'Unable to check index %s, re-creating it',
-				$index
-			);
-			my $deletion = $self->unset_index(
-				table => $table,
-				index => $index
-			);
-			push @{$report}, $deletion if $deletion;
+sub _check_index {
+	my ($self, %params) = @_;
 
-			my $addition = $self->set_index(
-				table  => $table,
-				index  => $index,
-				fields => $target_structure->{indexes}{$index}
-			);
-			push @{$report}, $addition if $addition;
-			next;
-		}
+	my $check = $self->_check_fields_list(
+		current => $params{current_fields},
+		target  => $params{fields}
+	);
 
-		my $check = $self->_check_fields_list(
-			current => $fields,
-			target  => $target_structure->{indexes}{$index}
-		);
-
-		if ($check) {
-			Sympa::Log::Syslog::do_log(
-				'debug',
-				'Existing index %s correct, nothing to change',
-				$index
-			);
-			next;
-		}
-
+	if ($check) {
 		Sympa::Log::Syslog::do_log(
 			'debug',
-			'Existing index %s incorrect, re-creating it',
-			$index
+			'Existing index %s correct, nothing to change',
+			$params{index}
 		);
-		my $deletion = $self->unset_index(
-			table => $table,
-			index => $index
-		);
-		push @{$report}, $deletion if $deletion;
-
-		my $addition = $self->set_index(
-			table  => $table,
-			index  => $index,
-			fields => $target_structure->{indexes}{$index}
-		);
-		push @{$report}, $addition if $addition;
+		return 1;
 	}
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Existing index %s incorrect, re-creating it',
+		$params{index}
+	);
+
+	my $deletion = $self->unset_index(
+		table => $params{table},
+		index => $params{index}
+	);
+	push @{$params{report}}, $deletion if $deletion;
+
+	my $addition = $self->set_index(
+		table  => $params{table},
+		index  => $params{index},
+		fields => $params{fields}
+	);
+	push @{$params{report}}, $addition if $addition;
 
 	return 1;
 }
