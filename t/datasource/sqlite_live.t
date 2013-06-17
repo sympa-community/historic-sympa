@@ -18,7 +18,7 @@ use Sympa::Datasource::SQL::SQLite;
 eval { require DBD::SQLite; };
 
 plan(skip_all => 'DBD::SQLite required') if $EVAL_ERROR;
-plan tests => 18;
+plan tests => 23;
 
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
 my $source = Sympa::Datasource::SQL::SQLite->new(
@@ -38,7 +38,7 @@ $result = $source->add_table(
 	fields => [
 		{
 			name          => 'id',
-			type          => 'int(11)',
+			type          => 'integer',
 			autoincrement => 1,
 		},
 	],
@@ -102,7 +102,7 @@ $result = $result = $source->is_autoinc(
 	table => 'table1',
 	field => 'id',
 );
-ok(defined $result && !$result, "id is autoinc");
+ok($result, "id is autoinc");
 
 $result = $result = $source->is_autoinc(
 	table => 'table1',
@@ -153,6 +153,94 @@ $result = $source->delete_field(
 	field => 'id',
 );
 ok(!defined $result, "field id deletion failure");
+cleanup($dbh);
 
 my $report = $source->probe();
-ok(!defined $report, "database structure initialisation failure");
+ok(defined $report, "database structure initialisation failure");
+
+cmp_ok(scalar @$report, '==', 21, 'event count in report');
+
+@tables = sort $source->get_tables();
+is_deeply(
+	\@tables,
+	[ qw/
+		admin_table
+		bulkmailer_table
+		conf_table
+		exclusion_table
+		list_table
+		logs_table
+		netidmap_table
+		notification_table
+		oauthconsumer_sessions_table
+		oauthprovider_nonces_table
+		oauthprovider_sessions_table
+		one_time_ticket_table
+		session_table
+		spool_table
+		stat_counter_table
+		stat_table
+		subscriber_table
+		user_table
+	/ ],
+	'tables list after table creation'
+);
+
+is_deeply(
+	$source->get_fields(table => 'subscriber_table'),
+	{
+		user_subscriber               => 'text',
+		list_subscriber               => 'text',
+		robot_subscriber              => 'text',
+		reception_subscriber          => 'text',
+		suspend_subscriber            => 'numeric',
+		suspend_start_date_subscriber => 'integer',
+		suspend_end_date_subscriber   => 'integer',
+		bounce_subscriber             => 'text',
+		bounce_score_subscriber       => 'integer',
+		bounce_address_subscriber     => 'text',
+		date_subscriber               => 'numeric',
+		update_subscriber             => 'numeric',
+		comment_subscriber            => 'text',
+		number_messages_subscriber    => 'integer',
+		visibility_subscriber         => 'text',
+		topics_subscriber             => 'text',
+		subscribed_subscriber         => 'numeric',
+		included_subscriber           => 'numeric',
+		include_sources_subscriber    => 'text',
+		custom_attribute_subscriber   => 'text',
+	},
+	'admin_table table structure'
+);
+
+is_deeply(
+	$source->get_fields(table => 'notification_table'),
+	{
+		pk_notification               => 'integer',
+		message_id_notification       => 'text',
+		recipient_notification        => 'text',
+		reception_option_notification => 'text',
+		status_notification           => 'text',
+		arrival_date_notification     => 'text',
+		type_notification             => 'text',
+		message_notification          => 'text',
+		list_notification             => 'text',
+		robot_notification            => 'text',
+		date_notification             => 'integer',
+	},
+	'notification_table table structure'
+);
+
+$result = $source->is_autoinc(
+	table => 'notification_table',
+	field => 'pk_notification',
+);
+ok($result, "pk_notification is autoincremented");
+
+sub cleanup {
+	my ($dbh) = @_;
+
+	foreach my $table ($source->get_tables()) {
+		$dbh->do("DROP TABLE $table");
+	}
+}
