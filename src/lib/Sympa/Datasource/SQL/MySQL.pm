@@ -203,7 +203,7 @@ sub update_field {
 		"CHANGE $params{field} $params{field} $params{type}";
 	$query .= ' NOT NULL' if $params{notnull};
 
-	my $rows = $self->{do}->($query);
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
 		return undef;

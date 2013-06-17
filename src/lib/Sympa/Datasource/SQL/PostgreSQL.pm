@@ -283,9 +283,9 @@ sub update_field {
 	my $query =
 		"ALTER TABLE $params{table} " .
 		"ALTER COLUMN $params{field} TYPE $params{type}";
-	$query .= ' NOT NULL' if $params{notnull};
+	# not null constraint requires a separate query
 
-	my $rows = $self->{do}->($query);
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
 		return undef;
