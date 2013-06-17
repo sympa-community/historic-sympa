@@ -107,18 +107,21 @@ sub get_tables {
 	my ($self) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Retrieving all tables in database %s',$self->{'db_name'});
-	my @raw_tables;
-	my $sth = $self->do_query(
-		"SELECT table_name FROM user_tables"
-	);
+
+	my $query = "SELECT table_name FROM user_tables";
+	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 		return undef;
 	}
-	while (my $table= $sth->fetchrow()) {
-		push @raw_tables, lc ($table);
+	$sth->execute();
+
+	my @tables;
+	while (my $row = $sth->fetchrow_arrayref()) {
+		push @tables, lc($row->[0]);
 	}
-	return @raw_tables;
+
+	return @tables;
 }
 
 sub _get_native_type {

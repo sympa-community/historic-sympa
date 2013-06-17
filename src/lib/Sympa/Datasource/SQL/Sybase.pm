@@ -106,19 +106,21 @@ sub set_autoinc {
 sub get_tables {
 	my ($self) = @_;
 
-	my @raw_tables;
-	my $sth = $self->do_query(
-		"SELECT name FROM %s..sysobjects WHERE type='U'",
-		$self->{'db_name'}
-	);
+	my $query = 
+		"SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
+	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 		return undef;
 	}
-	while (my $table= $sth->fetchrow()) {
-		push @raw_tables, lc ($table);
+	$sth->execute();
+
+	my @tables;
+	while (my $row = $sth->fetchrow_arrayref()) {
+		push @tables, lc($row->[0]);
 	}
-	return @raw_tables;
+
+	return @tables;
 }
 
 sub _get_table_query {
