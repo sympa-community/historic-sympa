@@ -36,6 +36,7 @@ use strict;
 use base qw(Sympa::Datasource::SQL);
 
 use Sympa::Log::Syslog;
+use Sympa::Tools::Data;
 
 our %date_format = (
 	'read' => {
@@ -112,7 +113,7 @@ sub is_autoinc {
 
 	while (my $row = $sth->fetchrow_arrayref()) {
 		next unless $row->[1] eq $params{'field'};
-		return $row->[2] =~ /AUTO_INCREMENT/;
+		return $row->[2] eq 'integer' and $row->[5];
 	}
 }
 
@@ -152,11 +153,27 @@ sub get_tables {
 	return @tables;
 }
 
+sub _get_table_query {
+	my ($self, %params) = @_;
+
+	my @clauses =
+		map { $self->_get_field_clause(%$_, table => $params{table}) }
+		@{$params{fields}};
+	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
+		if $params{key} and
+		! Sympa::Tools::Data::any { $_->{autoincrement} } @{$params{fields}};
+
+	my $query =
+		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
+	return $query;
+}
+
 sub _get_field_clause {
 	my ($self, %params) = @_;
 
 	my $clause = "$params{name} $params{type}";
 	$clause .= ' NOT NULL' if $params{notnull};
+	$clause .= ' PRIMARY KEY' if $params{autoincrement};
 
 	return $clause;
 }
