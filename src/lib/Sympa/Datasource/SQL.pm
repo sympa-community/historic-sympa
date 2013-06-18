@@ -2455,6 +2455,12 @@ Return value:
 A list of name => value pairs as an hashref, or I<undef> if something went
 wrong.
 
+=cut
+
+sub get_fields {
+	croak "not implemented";
+}
+
 =item $source->update_field(%parameters)
 
 Changes the type of a field in a table from the database.
@@ -2624,6 +2630,12 @@ Return value:
 The list of primary key fields, as an arrayref, or I<undef> if something went
 wrong.
 
+=cut
+
+sub get_primary_key {
+	croak "not implemented";
+}
+
 =item $source->unset_primary_key(%parameters)
 
 Drops the primary key of a table.
@@ -2742,6 +2754,12 @@ Return value:
 
 An hashref whose keys are the name of indexes, with hashref whose keys are the
 indexed fields as values, or I<undef> if something went wrong.
+
+=cut
+
+sub get_indexes {
+	croak "not implemented";
+}
 
 =item $source->unset_index(%parameters)
 
