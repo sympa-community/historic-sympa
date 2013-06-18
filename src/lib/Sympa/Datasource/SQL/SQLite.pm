@@ -280,14 +280,9 @@ sub add_field {
 	return $report;
 }
 
+# override needed as unsupported
 sub delete_field {
-	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
-
-	# unsupported
-	Sympa::Log::Syslog::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
-	return undef;
+	croak "unsupported operation";
 }
 
 sub get_primary_key {

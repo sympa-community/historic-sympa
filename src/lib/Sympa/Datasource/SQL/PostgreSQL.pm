@@ -275,6 +275,7 @@ sub get_fields {
 	return \%result;
 }
 
+# override needed for specific null constraint handling
 sub update_field {
 	my ($self, %params) = @_;
 
@@ -283,7 +284,6 @@ sub update_field {
 	my $query =
 		"ALTER TABLE $params{table} " .
 		"ALTER COLUMN $params{field} TYPE $params{type}";
-	# not null constraint requires a separate query
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
@@ -301,6 +301,7 @@ sub update_field {
 	return $report;
 }
 
+# override needed for specific autoincrement support
 sub add_field {
 	my ($self, %params) = @_;
 
@@ -329,28 +330,6 @@ sub add_field {
 		'Field %s added to table %s',
 		$params{'field'},
 		$params{'table'},
-	);
-	Sympa::Log::Syslog::do_log('info', $report);
-
-	return $report;
-}
-
-sub delete_field {
-	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
-
-	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
-	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf(
-		'Field %s removed from table %s',
-		$params{'field'},
-		$params{'table'}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 

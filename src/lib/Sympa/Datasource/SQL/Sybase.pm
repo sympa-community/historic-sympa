@@ -168,67 +168,6 @@ sub get_fields {
 	return \%result;
 }
 
-sub update_field {
-	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
-	my $options;
-	if ($params{'notnull'}) {
-		$options .= ' NOT NULL ';
-	}
-	my $report = sprintf("ALTER TABLE %s CHANGE %s %s %s %s",$params{'table'},$params{'field'},$params{'field'},$params{'type'},$options);
-	Sympa::Log::Syslog::do_log('notice', "ALTER TABLE %s CHANGE %s %s %s %s",$params{'table'},$params{'field'},$params{'field'},$params{'type'},$options);
-	unless ($self->do_query("ALTER TABLE %s CHANGE %s %s %s %s",$params{'table'},$params{'field'},$params{'field'},$params{'type'},$options)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
-		return undef;
-	}
-	$report .= sprintf('\nField %s in table %s, structure updated', $params{'field'}, $params{'table'});
-	Sympa::Log::Syslog::do_log('info', 'Field %s in table %s, structure updated', $params{'field'}, $params{'table'});
-	return $report;
-}
-
-sub add_field {
-	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
-	my $options;
-	# To prevent "Cannot add a NOT NULL column with default value NULL" errors
-	if ($params{'notnull'}) {
-		$options .= 'NOT NULL ';
-	}
-	if ( $params{'autoinc'}) {
-		$options .= ' AUTO_INCREMENT ';
-	}
-	if ( $params{'primary'}) {
-		$options .= ' PRIMARY KEY ';
-	}
-	unless ($self->do_query("ALTER TABLE %s ADD %s %s %s",$params{'table'},$params{'field'},$params{'type'},$options)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf('Field %s added to table %s (options : %s)', $params{'field'}, $params{'table'}, $options);
-	Sympa::Log::Syslog::do_log('info', 'Field %s added to table %s  (options : %s)', $params{'field'}, $params{'table'}, $options);
-
-	return $report;
-}
-
-sub delete_field {
-	my ($self, %params) = @_;
-
-	Sympa::Log::Syslog::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
-
-	unless ($self->do_query("ALTER TABLE %s DROP COLUMN `%s`",$params{'table'},$params{'field'})) {
-		Sympa::Log::Syslog::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-
-	my $report = sprintf('Field %s removed from table %s', $params{'field'}, $params{'table'});
-	Sympa::Log::Syslog::do_log('info', 'Field %s removed from table %s', $params{'field'}, $params{'table'});
-
-	return $report;
-}
-
 sub get_primary_key {
 	my ($self, %params) = @_;
 
