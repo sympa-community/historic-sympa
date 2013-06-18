@@ -2465,6 +2465,34 @@ Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
+=cut
+
+sub update_field {
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
+
+	my $query =
+		"ALTER TABLE $params{table} " .
+		"CHANGE $params{field} $params{field} $params{type}";
+	$query .= ' NOT NULL' if $params{notnull};
+
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
+		return undef;
+	}
+
+	my $report = sprintf(
+		'Field %s updated in table %s',
+		$params{'field'},
+		$params{'table'}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
+
 =item $source->add_field(%parameters)
 
 Adds a field in a table from the database.
@@ -2491,6 +2519,40 @@ Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
 
+=cut
+
+sub add_field {
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
+
+	# specific issues:
+	# - an auto column must be defined as primary key
+	# - impossible to add more than one auto column
+	my $query =
+		"ALTER TABLE $params{table} "     .
+		"ADD $params{field} $params{type}";
+
+	$query .= ' NOT NULL'       if $params{notnull};
+	$query .= ' AUTO_INCREMENT' if $params{autoinc};
+	$query .= ' PRIMARY KEY'    if $params{primary};
+
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		return undef;
+	}
+
+	my $report = sprintf(
+		'Field %s added to table %s',
+		$params{'field'},
+		$params{'table'},
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
+}
+
 =item $source->delete_field(%parameters)
 
 Delete a field in a table from the database.
@@ -2508,6 +2570,30 @@ Parameters:
 Return value:
 
 A report of the operation done as a string, or I<undef> if something went wrong.
+
+=cut
+
+sub delete_field {
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
+
+	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		return undef;
+	}
+
+	my $report = sprintf(
+		'Field %s removed from table %s',
+		$params{'field'},
+		$params{'table'}
+	);
+	Sympa::Log::Syslog::do_log('info', 'Field %s removed from table %s', $params{'field'}, $params{'table'});
+
+	return $report;
+}
 
 =item $source->get_primary_key(%parameters)
 
