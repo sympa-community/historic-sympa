@@ -385,21 +385,6 @@ sub get_primary_key {
 	return \@keys;
 }
 
-sub _unset_primary_key {
-	my ($self, %params) = @_;
-
-	my $query = "ALTER TABLE $params{table} DROP PRIMARY KEY";
-	return $self->{dbh}->do($query);
-}
-
-sub _set_primary_key {
-	my ($self, %params) = @_;
-
-	my $query =
-		"ALTER TABLE $params{table} ADD PRIMARY KEY ($params{fields})";
-	return $self->{dbh}->do($query);
-}
-
 sub get_indexes {
 	my ($self, %params) = @_;
 

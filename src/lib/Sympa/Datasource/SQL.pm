@@ -2553,7 +2553,8 @@ sub unset_primary_key {
 		$params{table}
 	);
 
-	my $rows = $self->_unset_primary_key(table => $params{table});
+	my $query = "ALTER TABLE $params{table} DROP PRIMARY KEY";
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
@@ -2603,10 +2604,9 @@ sub set_primary_key {
 		$params{'table'}
 	);
 
-	my $rows = $self->_set_primary_key(
-		table  => $params{table},
-		fields => $fields
-	);
+	my $query =
+		"ALTER TABLE $params{table} ADD PRIMARY KEY ($params{fields})";
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
