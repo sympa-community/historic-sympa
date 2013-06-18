@@ -2330,6 +2330,12 @@ Return value:
 
 A true value if the field is an autoincrement field, false otherwise.
 
+=cut
+
+sub is_autoinc {
+	croak "not implemented";
+}
+
 =item $source->set_autoinc(%parameters)
 
 Defines the field as an autoincrement field.
@@ -2347,6 +2353,12 @@ Parameters:
 Return value:
 
 A true value if the autoincrement could be set, I<undef> otherwise.
+
+=cut
+
+sub set_autoinc {
+	croak "not implemented";
+}
 
 =item $source->get_tables()
 

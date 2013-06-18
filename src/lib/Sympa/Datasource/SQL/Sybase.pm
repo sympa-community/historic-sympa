@@ -93,16 +93,6 @@ sub get_formatted_date {
 	}
 }
 
-sub is_autoinc {
-	my ($self, %params) = @_;
-	croak "not implemented";
-}
-
-sub set_autoinc {
-	my ($self, %params) = @_;
-	croak "not implemented";
-}
-
 sub get_tables {
 	my ($self) = @_;
 
