@@ -2791,7 +2791,8 @@ sub unset_index {
 		$params{table}
 	);
 
-	my $rows = $self->_unset_index(%params);
+	my $query = $self->_get_unset_index_query(%params);
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
@@ -2812,6 +2813,13 @@ sub unset_index {
 
 	return $report;
 }
+
+sub _get_unset_index_query {
+	my ($self, %params) = @_;
+
+	return "ALTER TABLE $params{table} DROP INDEX $params{index}";
+}
+
 
 =item $source->set_index(%parameters)
 
@@ -2847,7 +2855,8 @@ sub set_index {
 		$fields
 	);
 
-	my $rows = $self->_set_index(%params, fields => $fields);
+	my $query = $self->_get_set_index_query(%params, fields => $fields);
+	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
@@ -2870,6 +2879,15 @@ sub set_index {
 
 	return $report;
 }
+
+sub _get_set_index_query {
+	my ($self, %params) = @_;
+
+	return
+		"CREATE INDEX $params{index} " .
+		"ON $params{table} ($params{fields})";
+}
+
 
 =back
 

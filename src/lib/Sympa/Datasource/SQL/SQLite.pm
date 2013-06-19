@@ -35,6 +35,8 @@ package Sympa::Datasource::SQL::SQLite;
 use strict;
 use base qw(Sympa::Datasource::SQL);
 
+use Carp;
+
 use Sympa::Log::Syslog;
 use Sympa::Tools::Data;
 
@@ -328,22 +330,6 @@ sub get_indexes {
 	}
 
 	return \%indexes;
-}
-
-sub _unset_index {
-	my ($self, %params) = @_;
-
-	my $query = "ALTER TABLE $params{table} DROP INDEX $params{index}";
-	return $self->{dbh}->do($query);
-}
-
-sub _set_index {
-	my ($self, %params) = @_;
-
-	my $query = 
-		"CREATE INDEX $params{index} " .
-		"ON $params{table} ($params{fields})";
-	return $self->{dbh}->do($query);
 }
 
 1;

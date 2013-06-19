@@ -236,20 +236,4 @@ sub get_indexes {
 	return \%indexes;
 }
 
-sub _unset_index {
-	my ($self, %params) = @_;
-
-	my $query = "ALTER TABLE $params{table} DROP INDEX $params{index}";
-	return $self->{dbh}->do($query);
-}
-
-sub _set_index {
-	my ($self, %params) = @_;
-
-	my $query =
-		"ALTER TABLE $params{table} " .
-		"ADD INDEX $params{index} ($params{fields})";
-	return $self->{dbh}->do($query);
-}
-
 1;

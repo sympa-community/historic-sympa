@@ -419,20 +419,18 @@ sub get_indexes {
 	return \%indexes;
 }
 
-sub _unset_index {
+sub _get_unset_index_query {
 	my ($self, %params) = @_;
 
-	my $query = "DROP INDEX $params{index}";
-	return $self->{dbh}->do($query);
+	return "DROP INDEX $params{index}";
 }
 
-sub _set_index {
+sub _get_set_index_query {
 	my ($self, %params) = @_;
 
-	my $query = 
+	return 
 		"CREATE INDEX $params{index} " .
 		"ON $params{table} ($params{fields})";
-	return $self->{dbh}->do($query);
 }
 
 sub _get_sequence_name {
