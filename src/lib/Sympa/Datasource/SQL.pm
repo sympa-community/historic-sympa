@@ -2640,12 +2640,7 @@ sub delete_field {
 		$params{'field'},
 		$params{'table'}
 	);
-	Sympa::Log::Syslog::do_log(
-		'info',
-		'Field %s removed from table %s',
-		$params{'field'},
-		$params{'table'}
-	);
+	Sympa::Log::Syslog::do_log('info', $report);
 
 	return $report;
 }
