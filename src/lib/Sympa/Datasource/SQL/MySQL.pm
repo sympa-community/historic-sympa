@@ -214,7 +214,12 @@ sub get_fields {
 	my $query = "SHOW FIELDS FROM $params{table}";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of fields from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -238,7 +243,12 @@ sub get_primary_key {
 	my $query = "SHOW COLUMNS FROM $params{table}";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get field list from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get field list from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
