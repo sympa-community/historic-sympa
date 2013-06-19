@@ -160,16 +160,7 @@ sub set_autoinc {
 		field => $params{field}
 	);
 
-	$query = "CREATE SEQUENCE $sequence";
-	$rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to create sequence %s',
-			$sequence
-		);
-		return undef;
-	}
+	$self->_create_sequence($sequence);
 
 	$query =
 		"ALTER TABLE $params{table} " .
