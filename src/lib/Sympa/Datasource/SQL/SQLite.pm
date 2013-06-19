@@ -163,6 +163,11 @@ sub set_autoinc {
 sub get_tables {
 	my ($self) = @_;
 
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting tables list',
+	);
+
 	my $query = "SELECT name FROM sqlite_master WHERE type='table'";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
@@ -224,6 +229,12 @@ sub _get_native_type {
 
 sub get_fields {
 	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting fields from table %s',
+		$params{'table'},
+	);
 
 	my $query = "PRAGMA table_info($params{table})";
 	my $sth = $self->{dbh}->prepare($query);
@@ -352,7 +363,7 @@ sub get_primary_key {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting primary key for table %s',
+		'Getting primary key from table %s',
 		$params{'table'}
 	);
 
@@ -382,7 +393,7 @@ sub get_indexes {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Looking for indexes in %s',
+		'Getting indexes from table %s',
 		$params{'table'}
 	);
 

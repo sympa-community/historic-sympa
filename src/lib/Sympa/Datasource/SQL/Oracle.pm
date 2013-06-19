@@ -102,8 +102,7 @@ sub get_tables {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Retrieving all tables in database %s',
-		$self->{'db_name'}
+		'Getting tables list',
 	);
 
 	my $query = "SELECT table_name FROM user_tables";

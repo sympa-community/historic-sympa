@@ -100,6 +100,11 @@ sub get_formatted_date {
 sub get_tables {
 	my ($self) = @_;
 
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting tables list',
+	);
+
 	my $query = 
 		"SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
 	my $sth = $self->{dbh}->prepare($query);

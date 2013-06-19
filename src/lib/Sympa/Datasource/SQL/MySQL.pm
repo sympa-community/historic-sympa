@@ -157,11 +157,10 @@ sub get_tables {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Retrieving all tables in database %s',
-		$self->{'db_name'}
+		'Getting tables list',
 	);
-	my @tables = $self->{'dbh'}->tables();
 
+	my @tables = $self->{'dbh'}->tables();
 	foreach my $table (@tables) {
 		$table =~ s/^\`[^\`]+\`\.//; # drop db name prefix
 		$table =~ s/^\`(.+)\`$/$1/;  # drop quotes
@@ -206,9 +205,8 @@ sub get_fields {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting fields list from table %s in database %s',
+		'Getting fields from table %s',
 		$params{'table'},
-		$self->{'db_name'}
 	);
 
 	my $query = "SHOW FIELDS FROM $params{table}";
@@ -236,7 +234,7 @@ sub get_primary_key {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting primary key for table %s',
+		'Getting primary key from table %s',
 		$params{'table'}
 	);
 
@@ -266,7 +264,7 @@ sub get_indexes {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Looking for indexes in %s',
+		'Getting indexes from table %s',
 		$params{'table'}
 	);
 

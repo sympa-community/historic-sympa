@@ -215,8 +215,7 @@ sub get_tables {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting the list of tables in database %s',
-		$self->{'db_name'}
+		'Getting tables list',
 	);
 
 	my @tables = $self->{dbh}->tables(
@@ -279,9 +278,8 @@ sub get_fields {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting the list of fields in table %s, database %s',
+		'Getting fields from table %s',
 		$params{'table'},
-		$self->{'db_name'}
 	);
 
 	my $query = 
@@ -413,7 +411,7 @@ sub get_primary_key {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting primary key for table %s',
+		'Getting primary key from table %s',
 		$params{'table'}
 	);
 
@@ -450,7 +448,7 @@ sub get_indexes {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting the indexes defined on table %s',
+		'Getting indexes from table %s',
 		$params{'table'}
 	);
 
