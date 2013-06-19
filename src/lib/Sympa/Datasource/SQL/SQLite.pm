@@ -95,7 +95,11 @@ sub get_formatted_date {
 	} elsif ($mode eq 'write') {
 		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
 	} else {
-		Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $params{'mode'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			"Unknown date format mode %s",
+			$params{'mode'}
+		);
 		return undef;
 	}
 }
@@ -103,12 +107,22 @@ sub get_formatted_date {
 sub is_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Checking whether field %s.%s is autoincremental',$params{'field'},$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Checking whether field %s.%s is autoincremental',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	my $query = "PRAGMA table_info($params{table})";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of fields from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -122,14 +136,24 @@ sub is_autoinc {
 sub set_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Setting field %s.%s as autoincremental',$params{'field'},$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting field %s.%s as autoincremental',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	my $query = 
 		"ALTER TABLE $params{table} CHANGE $params{field} " .
 		"$params{field} BIGINT(20) NOT NULL AUTO_INCREMENT";
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincrement',$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set field %s in table %s as autoincrement',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -142,7 +166,11 @@ sub get_tables {
 	my $query = "SELECT name FROM sqlite_master WHERE type='table'";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to retrieve the list of tables from database %s',
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -200,7 +228,12 @@ sub get_fields {
 	my $query = "PRAGMA table_info($params{table})";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of fields from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -227,7 +260,14 @@ sub get_fields {
 sub update_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Updating field %s in table %s (%s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'}
+	);
 
 	my $query =
 		"ALTER TABLE $params{table} " .
@@ -236,7 +276,12 @@ sub update_field {
 
 	my $rows = $self->{do}->($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not change field \'%s\' in table\'%s\'.',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -253,7 +298,16 @@ sub update_field {
 sub add_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Adding field %s in table %s (%s, %s, %s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'},
+		$params{'autoinc'},
+		$params{'primary'}
+	);
 
 	# specific issues:
 	# - impossible to add a primary key
@@ -268,7 +322,13 @@ sub add_field {
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not add field %s to table %s in database %s',
+			$params{'field'},
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 
@@ -290,12 +350,21 @@ sub delete_field {
 sub get_primary_key {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting primary key for table %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting primary key for table %s',
+		$params{'table'}
+	);
 
 	my $query = "PRAGMA table_info($params{table})";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get field list from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get field list from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 
@@ -311,12 +380,21 @@ sub get_primary_key {
 sub get_indexes {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Looking for indexes in %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Looking for indexes in %s',
+		$params{'table'}
+	);
 
 	my $query = "SELECT name,sql FROM sqlite_master WHERE type='index'";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of indexes from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();

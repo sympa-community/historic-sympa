@@ -83,7 +83,11 @@ sub get_formatted_date {
 	} elsif ($mode eq 'write') {
 		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
 	} else {
-		Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $params{'mode'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			"Unknown date format mode %s",
+			$params{'mode'}
+		);
 		return undef;
 	}
 }
@@ -91,7 +95,12 @@ sub get_formatted_date {
 sub is_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Checking whether field %s.%s is autoincremental',$params{'field'},$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Checking whether field %s.%s is autoincremental',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	my $query = 
 		"SHOW FIELDS "                 .
@@ -104,7 +113,12 @@ sub is_autoinc {
 		$params{'field'}
 	);
 	unless ($row) {
-		Sympa::Log::Syslog::do_log('err','Unable to gather autoincrement field named %s for table %s',$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to gather autoincrement field named %s for table %s',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 	return $row->{'field'} eq $params{'field'};
@@ -113,7 +127,12 @@ sub is_autoinc {
 sub set_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Setting field %s.%s as autoincremental',$params{'field'},$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting field %s.%s as autoincremental',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	my $field_type = defined ($params{'field_type'}) ? $params{'field_type'} : 'BIGINT( 20 )';
 	my $query = 
@@ -121,7 +140,12 @@ sub set_autoinc {
 		"$params{field} $field_type NOT NULL AUTO_INCREMENT";
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincrement',$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set field %s in table %s as autoincrement',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -131,7 +155,11 @@ sub set_autoinc {
 sub get_tables {
 	my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Retrieving all tables in database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Retrieving all tables in database %s',
+		$self->{'db_name'}
+	);
 	my @tables = $self->{'dbh'}->tables();
 
 	foreach my $table (@tables) {
@@ -176,7 +204,12 @@ sub _get_native_type {
 sub get_fields {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting fields list from table %s in database %s',$params{'table'},$self->{'db_name'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting fields list from table %s in database %s',
+		$params{'table'},
+		$self->{'db_name'}
+	);
 
 	my $query = "SHOW FIELDS FROM $params{table}";
 	my $sth = $self->{dbh}->prepare($query);
@@ -196,7 +229,11 @@ sub get_fields {
 sub get_primary_key {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting primary key for table %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting primary key for table %s',
+		$params{'table'}
+	);
 
 	my $query = "SHOW COLUMNS FROM $params{table}";
 	my $sth = $self->{dbh}->prepare($query);
@@ -217,12 +254,21 @@ sub get_primary_key {
 sub get_indexes {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Looking for indexes in %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Looking for indexes in %s',
+		$params{'table'}
+	);
 
 	my $query = "SHOW INDEX FROM $params{table}";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of indexes from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();

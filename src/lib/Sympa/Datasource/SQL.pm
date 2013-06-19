@@ -2488,7 +2488,14 @@ A report of the operation done as a string, or I<undef> if something went wrong.
 sub update_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Updating field %s in table %s (%s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'}
+	);
 
 	my $query =
 		"ALTER TABLE $params{table} " .
@@ -2497,7 +2504,12 @@ sub update_field {
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not change field \'%s\' in table\'%s\'.',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -2542,7 +2554,16 @@ A report of the operation done as a string, or I<undef> if something went wrong.
 sub add_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Adding field %s in table %s (%s, %s, %s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'},
+		$params{'autoinc'},
+		$params{'primary'}
+	);
 
 	# specific issues:
 	# - an auto column must be defined as primary key
@@ -2557,7 +2578,13 @@ sub add_field {
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not add field %s to table %s in database %s',
+			$params{'field'},
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 
@@ -2594,7 +2621,12 @@ A report of the operation done as a string, or I<undef> if something went wrong.
 sub delete_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Deleting field %s from table %s',$params{'field'},$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Deleting field %s from table %s',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
 	my $rows = $self->{dbh}->do($query);
@@ -2608,7 +2640,12 @@ sub delete_field {
 		$params{'field'},
 		$params{'table'}
 	);
-	Sympa::Log::Syslog::do_log('info', 'Field %s removed from table %s', $params{'field'}, $params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'info',
+		'Field %s removed from table %s',
+		$params{'field'},
+		$params{'table'}
+	);
 
 	return $report;
 }

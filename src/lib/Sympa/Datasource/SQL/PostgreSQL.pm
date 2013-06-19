@@ -93,7 +93,11 @@ sub get_formatted_date {
 	} elsif ($mode eq 'write') {
 		return sprintf '\'epoch\'::timestamp with time zone + \'%d sec\'',$params{'target'};
 	} else {
-		Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $params{'mode'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			"Unknown date format mode %s",
+			$params{'mode'}
+		);
 		return undef;
 	}
 }
@@ -101,7 +105,12 @@ sub get_formatted_date {
 sub is_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Checking whether field %s.%s is an autoincrement',$params{'table'},$params{'field'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Checking whether field %s.%s is an autoincrement',
+		$params{'table'},
+		$params{'field'}
+	);
 
 	my $sequence = _get_sequence_name(
 		table => $params{table},
@@ -123,7 +132,12 @@ sub is_autoinc {
 			")";
 	my $row = $self->{dbh}->selectrow_hashref($query);
 	unless ($row) {
-		Sympa::Log::Syslog::do_log('err','Unable to gather autoincrement field named %s for table %s',$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to gather autoincrement field named %s for table %s',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -133,7 +147,12 @@ sub is_autoinc {
 sub set_autoinc {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Setting field %s.%s as an auto increment',$params{'table'},$params{'field'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting field %s.%s as an auto increment',
+		$params{'table'},
+		$params{'field'}
+	);
 
 	my ($query, $rows);
 	my $sequence = _get_sequence_name(
@@ -144,7 +163,11 @@ sub set_autoinc {
 	$query = "CREATE SEQUENCE $sequence";
 	$rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to create sequence %s',$sequence);
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to create sequence %s',
+			$sequence
+		);
 		return undef;
 	}
 
@@ -154,7 +177,12 @@ sub set_autoinc {
 		"TYPE BIGINT";
 	$rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set type of field %s in table %s as bigint',$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set type of field %s in table %s as bigint',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -164,7 +192,13 @@ sub set_autoinc {
 		"SET DEFAULT NEXTVAL($sequence)";
 	$rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set default value of field %s in table %s as next value of sequence table %',$params{'field'},$params{'table'},$sequence);
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set default value of field %s in table %s as next value of sequence table %',
+			$params{'field'},
+			$params{'table'},
+			$sequence
+		);
 		return undef;
 	}
 
@@ -173,7 +207,13 @@ sub set_autoinc {
 		"SET $params{field} = NEXTVAL($sequence)";
 	$rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set sequence %s as value for field %s, table %s',$sequence,$params{'field'},$params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set sequence %s as value for field %s, table %s',
+			$sequence,
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 	return 1;
@@ -182,7 +222,11 @@ sub set_autoinc {
 sub get_tables {
 	my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting the list of tables in database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting the list of tables in database %s',
+		$self->{'db_name'}
+	);
 
 	my @tables = $self->{dbh}->tables(
 		undef,'public',undef,'TABLE',{pg_noprefix => 1}
@@ -242,7 +286,12 @@ sub _get_native_type {
 sub get_fields {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting the list of fields in table %s, database %s',$params{'table'}, $self->{'db_name'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting the list of fields in table %s, database %s',
+		$params{'table'},
+		$self->{'db_name'}
+	);
 
 	my $query = 
 		"SELECT " .
@@ -258,7 +307,12 @@ sub get_fields {
 		"ORDER BY a.attnum";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of fields from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute($params{table});
@@ -279,7 +333,14 @@ sub get_fields {
 sub update_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Updating field %s in table %s (%s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Updating field %s in table %s (%s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'}
+	);
 
 	my $query =
 		"ALTER TABLE $params{table} " .
@@ -287,7 +348,12 @@ sub update_field {
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not change field \'%s\' in table\'%s\'.',$params{'field'}, $params{'table'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not change field \'%s\' in table\'%s\'.',
+			$params{'field'},
+			$params{'table'}
+		);
 		return undef;
 	}
 
@@ -305,7 +371,16 @@ sub update_field {
 sub add_field {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',$params{'field'},$params{'table'},$params{'type'},$params{'notnull'},$params{'autoinc'},$params{'primary'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Adding field %s in table %s (%s, %s, %s, %s)',
+		$params{'field'},
+		$params{'table'},
+		$params{'type'},
+		$params{'notnull'},
+		$params{'autoinc'},
+		$params{'primary'}
+	);
 
 	my $query =
 		"ALTER TABLE $params{table} "     .
@@ -315,7 +390,13 @@ sub add_field {
 
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not add field %s to table %s in database %s',
+			$params{'field'},
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 
@@ -339,7 +420,11 @@ sub add_field {
 sub get_primary_key {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting primary key for table %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting primary key for table %s',
+		$params{'table'}
+	);
 
 	my $query = 
 		"SELECT pg_attribute.attname AS field "                   .
@@ -352,7 +437,12 @@ sub get_primary_key {
 			"indisprimary";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the primary key from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the primary key from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -367,7 +457,11 @@ sub get_primary_key {
 sub get_indexes {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Getting the indexes defined on table %s',$params{'table'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting the indexes defined on table %s',
+		$params{'table'}
+	);
 
 	my $oid_query = 
 		"SELECT c.oid "                                 .
@@ -379,7 +473,12 @@ sub get_indexes {
 			"pg_catalog.pg_table_is_visible(c.oid)" ;
 	my $row = $self->{dbh}->selectrow_hashref($oid_query);
 	unless ($row) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the oid for table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the oid for table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 
@@ -401,7 +500,12 @@ sub get_indexes {
 
 	my $sth = $self->{dbh}->prepare($index_query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get the list of indexes from table %s in database %s',
+			$params{'table'},
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
@@ -444,7 +548,11 @@ sub _create_sequence {
 	my $query = "CREATE SEQUENCE $sequence";
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to create sequence %s',$sequence);
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to create sequence %s',
+			$sequence
+		);
 		return undef;
 	}
 }

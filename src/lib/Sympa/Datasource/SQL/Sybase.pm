@@ -88,7 +88,11 @@ sub get_formatted_date {
 	} elsif ($mode eq 'write') {
 		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
 	} else {
-		Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $params{'mode'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			"Unknown date format mode %s",
+			$params{'mode'}
+		);
 		return undef;
 	}
 }
@@ -100,7 +104,11 @@ sub get_tables {
 		"SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to retrieve the list of tables from database %s',
+			$self->{'db_name'}
+		);
 		return undef;
 	}
 	$sth->execute();
