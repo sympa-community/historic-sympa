@@ -46,19 +46,24 @@ chdir $Sympa::Configuration::Conf{'home'};
 Sympa::SDM::db_connect() || die "Can't connect to database";
 
 my $source = Sympa::SDM::get_source();
-my $dbh = $source->get_handle();
 
 print "Searching uncrypted passwords\n";
 
-my $sth =  $dbh->prepare("SELECT email_user, password_user FROM user_table WHERE (password_user not like 'crypt.%')") || die "Can't prepare SQL statement";
+my $select_handle = $source->get_query_handle(
+	"SELECT email_user, password_user FROM user_table WHERE (password_user not like 'crypt.%')"
+) || die "Can't prepare SQL statement";
 
-$sth->execute || die "Unable to execute SQL statement";
+$select_handle->execute() || die "Unable to execute SQL statement";
+
+my $update_handle = $source->get_query_handle(
+	"UPDATE user_table SET password_user=? WHERE (email_user=?)"
+) || die "Can't prepare SQL statement";
 
 my $user;
 
 my $count = 0;
 
-while ($user = $sth->fetchrow_hashref('NAME_lc')) {
+while ($user = $select_handle->fetchrow_hashref('NAME_lc')) {
 	next unless $user->{'password_user'};
 
 	printf "\n%s", $user->{'email_user'};
@@ -67,15 +72,14 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
 	printf " => %s", $crypted_password;
 
-	my $statement = sprintf "UPDATE user_table SET password_user=%s WHERE (email_user=%s)", $dbh->quote($crypted_password), $dbh->quote($user->{'email_user'});
-	my $sth2 =  $dbh->prepare($statement) || die "Can't prepare SQL statement";
-	$sth2->execute || die "Unable to execute SQL statement";
-	$sth2->finish();
+	$update_handle->execute($crypted_password, $user->{'email_user'})
+		|| die "Unable to execute SQL statement";
 
 	$count++;
 }
 
-$sth->finish();
+$select_handle->finish();
+$update_handle->finish();
 
 ## Disconnect from Database
 $source->disconnect();

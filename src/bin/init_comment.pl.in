@@ -38,38 +38,45 @@ chdir $Sympa::Configuration::Conf{'home'};
 Sympa::SDM::db_connect() || die "Can't connect to database";
 
 my $source = Sympa::SDM::get_source();
-my $dbh = $source->get_handle();
 
-my $sth =  $dbh->prepare("SELECT user_subscriber, comment_subscriber FROM subscriber_table") || die "Can't prepare SQL statement";
+my $select_subscriber_handle = $source->get_query_handle(
+	"SELECT user_subscriber, comment_subscriber FROM subscriber_table"
+);
 
-$sth->execute || die "Unable to execute SQL statement";
+my $select_user_handle = $source->get_query_handle(
+	"SELECT gecos_user FROM user_table WHERE email_user=?"
+);
+
+my $update_subscriber_handle = $source->get_query_handle(
+	"UPDATE subscriber_table SET comment_subscriber=? WHERE user_subscriber=?"
+);
+
+$select_subscriber_handle->execute() || die "Unable to execute SQL statement";
 
 my $user;
-
-while ($user = $sth->fetchrow_hashref('NAME_lc')) {
+while ($user = $select_subscriber_handle->fetchrow_hashref('NAME_lc')) {
 	printf "\nUser: %s", $user->{'user_subscriber'};
 
 	unless ($user->{'comment_subscriber'}) {
-		my $statement = sprintf "SELECT gecos_user FROM user_table WHERE email_user=%s", $dbh->quote($user->{'user_subscriber'});
-		my $sth2 =  $dbh->prepare($statement) || die "Can't prepare SQL statement";
+		$select_user_handle->execute(
+			$user->{'user_subscriber'}
+		) || die "Unable to execute SQL statement";
 
-		$sth2->execute || die "Unable to execute SQL statement";
-
-		my $gecos = $sth2->fetchrow();
-		$sth2->finish();
+		my $gecos = $select_user_handle->fetchrow();
 
 		if ($gecos) {
 			printf " =>%s", $gecos;
-			my $statement = sprintf "UPDATE subscriber_table SET comment_subscriber=%s WHERE (user_subscriber=%s)", $dbh->quote($gecos), $dbh->quote($user->{'user_subscriber'});
-			my $sth2 =  $dbh->prepare($statement) || die "Can't prepare SQL statement";
-			$sth2->execute || die "Unable to execute SQL statement";
-			$sth2->finish();
+			$update_subscriber_handle->execute(
+				$gecos, $user->{'user_subscriber'}
+			) || die "Unable to execute SQL statement";
 		}
 
 	}
 }
 
-$sth->finish();
+$select_user_handle->finish();
+$select_subscriber_handle->finish();
+$update_subscriber_handle->finish();
 
 ## Disconnect from Database
 $source->disconnect();
