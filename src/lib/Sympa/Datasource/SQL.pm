@@ -2022,6 +2022,32 @@ sub get_query_handle {
 		$self->{dbh}->prepare($query);
 }
 
+=item $source->do($query)
+
+Execute a single non-select query.
+
+Parameters:
+
+=over
+
+=item string
+
+The SQL query.
+
+=back
+
+Return value:
+
+The number of rows affected, or I<undef> if something went wrong.
+
+=cut
+
+sub do {
+	my ($self, $query) = @_;
+
+	return $self->{dbh}->do($query);
+}
+
 =item $source->prepare_query_log_values(@values)
 
 Parameters:
