@@ -82,7 +82,7 @@ $result = $source->add_field(
 );
 is(
 	$result,
-	'Field data added to table table1',
+	'Field data added in table table1',
 	'field data creation'
 );
 
@@ -129,7 +129,7 @@ $result = $source->set_index(
 );
 is(
 	$result,
-	"Index index1 set as data on table table1",
+	"Index index1 set on table table1 using fields data",
 	'index creation'
 );
 

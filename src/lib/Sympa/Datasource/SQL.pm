@@ -2403,9 +2403,8 @@ sub add_table {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not create table %s in database %s',
+			'Unable to create table %s',
 			$params{table},
-			$self->{db_name}
 		);
 		return undef;
 	}
@@ -2506,7 +2505,7 @@ sub update_field {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not change field \'%s\' in table\'%s\'.',
+			'Unable to update field %s in table %s',
 			$params{'field'},
 			$params{'table'}
 		);
@@ -2580,16 +2579,15 @@ sub add_field {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not add field %s to table %s in database %s',
+			'Unable to add field %s in table %s',
 			$params{'field'},
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		'Field %s added to table %s',
+		'Field %s added in table %s',
 		$params{'field'},
 		$params{'table'},
 	);
@@ -2623,7 +2621,7 @@ sub delete_field {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Deleting field %s from table %s',
+		'Removing field %s from table %s',
 		$params{'field'},
 		$params{'table'}
 	);
@@ -2631,7 +2629,12 @@ sub delete_field {
 	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
 	my $rows = $self->{dbh}->do($query);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err', 'Could not delete field %s from table %s in database %s', $params{'field'}, $params{'table'}, $self->{'db_name'});
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to remove field %s from table %s',
+			$params{'field'},
+			$params{'table'},
+		);
 		return undef;
 	}
 
@@ -2700,15 +2703,14 @@ sub unset_primary_key {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not drop primary key from table %s in database %s',
+			'Unable to remove primary key from table %s',
 			$params{table},
-			$self->{db_name}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		"Primary key dropped from table %s",
+		"Primary key removed from table %s",
 		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
@@ -2742,8 +2744,9 @@ sub set_primary_key {
 	my $fields = join(',', @{$params{fields}});
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Setting primary key for table %s (%s)',
-		$params{'table'}
+		'Setting primary key on table %s using fields %s',
+		$params{'table'},
+		$fields
 	);
 
 	my $query =
@@ -2752,18 +2755,17 @@ sub set_primary_key {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not set fields %s as primary key for table %s in database %s',
-			$fields,
+			'Unable to set primary key on table %s using fields %s',
 			$params{'table'},
-			$self->{'db_name'}
+			$fields
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		"Primary key set as %s on table %s",
-		$fields,
-		$params{table}
+		"Primary key set on table %s using fields %s",
+		$params{table},
+		$fields
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -2828,16 +2830,15 @@ sub unset_index {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not drop index %s from table %s in database %s',
+			'Unable to remove index %s from table %s',
 			$params{'index'},
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		"Index %s dropped from table %s",
+		"Index %s removed from table %s",
 		$params{'index'},
 		$params{'table'}
 	);
@@ -2881,7 +2882,7 @@ sub set_index {
 	my $fields = join(',', @{$params{fields}});
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Setting index %s for table %s using fields %s',
+		'Setting index %s on table %s using fields %s',
 		$params{index},
 		$params{table},
 		$fields
@@ -2892,20 +2893,19 @@ sub set_index {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not add index %s using field %s for table %s in database %s',
+			'Unable to set index %s on table %s using fields %s',
 			$params{index},
-			$fields,
 			$params{table},
-			$self->{db_name}
+			$fields,
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
-		"Index %s set as %s on table %s",
+		"Index %s set on table %s using fields %s",
 		$params{index},
-		$fields,
-		$params{table}
+		$params{table},
+		$fields
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 

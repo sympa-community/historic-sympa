@@ -110,8 +110,7 @@ sub get_tables {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Unable to retrieve the list of tables from database %s',
-			$self->{'db_name'}
+			'Unable to get tables list',
 		);
 		return undef;
 	}

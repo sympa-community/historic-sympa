@@ -173,8 +173,7 @@ sub get_tables {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Unable to retrieve the list of tables from database %s',
-			$self->{'db_name'}
+			'Unable to get tables list',
 		);
 		return undef;
 	}
@@ -232,7 +231,7 @@ sub get_fields {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting fields from table %s',
+		'Getting fields list from table %s',
 		$params{'table'},
 	);
 
@@ -241,9 +240,8 @@ sub get_fields {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not get the list of fields from table %s in database %s',
+			'Unable to get fields list from table %s',
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
@@ -335,10 +333,9 @@ sub add_field {
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not add field %s to table %s in database %s',
+			'Unable to add field %s to table %s',
 			$params{'field'},
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
@@ -393,7 +390,7 @@ sub get_indexes {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting indexes from table %s',
+		'Getting indexes list from table %s',
 		$params{'table'}
 	);
 

@@ -205,7 +205,7 @@ sub get_fields {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting fields from table %s',
+		'Getting fields list from table %s',
 		$params{'table'},
 	);
 
@@ -214,9 +214,8 @@ sub get_fields {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not get the list of fields from table %s in database %s',
+			'Could not get fields list from table %s',
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
@@ -243,9 +242,8 @@ sub get_primary_key {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not get field list from table %s in database %s',
+			'Could not get fields list from table %s',
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}
@@ -264,7 +262,7 @@ sub get_indexes {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting indexes from table %s',
+		'Getting indexes list from table %s',
 		$params{'table'}
 	);
 
@@ -273,9 +271,8 @@ sub get_indexes {
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log(
 			'err',
-			'Could not get the list of indexes from table %s in database %s',
+			'Could not get indexes list from table %s',
 			$params{'table'},
-			$self->{'db_name'}
 		);
 		return undef;
 	}

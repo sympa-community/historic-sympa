@@ -129,7 +129,7 @@ $result = $source->set_index(
 );
 is(
 	$result,
-	"Index index1 set as data on table table1",
+	"Index index1 set on table table1 using fields data",
 	'index creation'
 );
 
