@@ -1167,13 +1167,17 @@ sub purge_logs_table {
 	$sec = 0;
 	my $date_end = timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
 
-	my $sth;
 	my $source = Sympa::SDM::get_source();
-	unless($sth = $source->do_query("SELECT date_stat FROM stat_table WHERE read_stat = 0 ORDER BY date_stat ASC LIMIT 1")) {
+	my $handle = $source->get_query_handle(
+		"SELECT date_stat FROM stat_table WHERE read_stat = 0 " .
+		"ORDER BY date_stat ASC LIMIT 1"
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to retrieve oldest non processed stat');
 		return undef;
 	}
-	my @res = $sth->fetchrow_array;
+	$handle->execute();
+	my @res = $handle->fetchrow_array();
 	return unless($#res >= 0);
 	my $date_deb = $res[0] - ($res[0] % 3600);
 
