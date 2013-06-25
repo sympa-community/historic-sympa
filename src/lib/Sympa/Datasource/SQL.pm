@@ -2094,11 +2094,6 @@ sub disconnect {
 	delete $db_connections{$self->{'connect_string'}};
 }
 
-sub create_db {
-	Sympa::Log::Syslog::do_log('debug3', '()');
-	return 1;
-}
-
 sub ping {
 	my ($self) = @_;
 
