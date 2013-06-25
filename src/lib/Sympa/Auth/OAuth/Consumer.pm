@@ -39,8 +39,8 @@ use strict;
 use OAuth::Lite::Consumer;
 
 use Sympa::Auth;
+use Sympa::Database;
 use Sympa::Log::Syslog;
-use Sympa::SDM;
 use Sympa::Tools;
 
 =head1 CLASS METHODS
@@ -81,7 +81,7 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'});
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
@@ -293,7 +293,7 @@ sub trigger_flow {
 		return undef;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	if(defined $self->{'session'}{'defined'}) {
 		unless($source->do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=%s, tmp_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', $source->quote($tmp->{'token'}), $source->quote($tmp->{'secret'}), $source->quote($self->{'user'}), $source->quote($self->{'provider'}))) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
@@ -354,7 +354,7 @@ sub get_access_token {
 	$self->{'session'}{'access'} = $access;
 	$self->{'session'}{'tmp'} = undef;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=NULL, tmp_secret_oauthconsumer=NULL, access_token_oauthconsumer=%s, access_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', $source->quote($access->{'token'}), $source->quote($access->{'secret'}), $source->quote($self->{'user'}), $source->quote($self->{'provider'}))) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 		return undef;

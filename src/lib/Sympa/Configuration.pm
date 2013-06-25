@@ -45,12 +45,12 @@ use English;
 use Storable;
 
 use Sympa::Configuration::Definition;
+use Sympa::Database;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::List;
 use Sympa::Lock;
-use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::Template;
@@ -339,7 +339,7 @@ sub _get_db_conf  {
 	$robot = '*' unless (-f $Conf{'etc'}.'/'.$robot.'/robot.conf') ;
 	unless ($robot) {$robot = '*'};
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT value_conf AS value FROM conf_table WHERE (robot_conf =%s AND label_conf =%s)",
 		$source->quote($robot),
@@ -376,7 +376,7 @@ sub set_robot_conf  {
 		$robot = '*' ;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT count(*) FROM conf_table WHERE (robot_conf=%s AND label_conf =%s)",
 		$source->quote($robot),

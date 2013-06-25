@@ -39,13 +39,13 @@ use English;
 use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
@@ -911,7 +911,7 @@ sub _subscribe {
 			}
 		}
 
-		if ($Sympa::SDM::use_db) {
+		if ($Sympa::Database::use_db) {
 			my $u = Sympa::List::get_global_user($sender);
 
 			Sympa::List::update_global_user(
@@ -1419,7 +1419,7 @@ sub _add {
 			Sympa::Report::notice_report_cmd('now_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);
 		}
 
-		if ($Sympa::SDM::use_db) {
+		if ($Sympa::Database::use_db) {
 			my $u = Sympa::List::get_global_user($email);
 
 			Sympa::List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
@@ -2216,7 +2216,7 @@ sub _distribute {
 
 	my $modspool = Sympa::Spool->new(
 		name   => 'mod',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	my $name = $list->{'name'};
 
@@ -2225,7 +2225,7 @@ sub _distribute {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
 		my $validatedspool = Sympa::Spool->new(
 			name   => 'validated',
-			source => Sympa::SDM::get_source()
+			source => Sympa::Database::get_source()
 		);
 		$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	}
@@ -2301,7 +2301,7 @@ sub _confirm {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'auth',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $messageinspool = $spool->get_message({'authkey'=>$key});
@@ -2470,7 +2470,7 @@ sub _reject {
 
 	my $modspool = Sympa::Spool->new(
 		name   => 'mod',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 

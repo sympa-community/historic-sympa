@@ -40,13 +40,13 @@ use IO::Scalar;
 
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Lock;
 use Sympa::Log::Syslog;
 use Sympa::Log::Database;
 use Sympa::Scenario;
-use Sympa::SDM;
 use Sympa::Template;
 use Sympa::Tools;
 use Sympa::Tools::File;
@@ -861,7 +861,7 @@ sub rename_list{
 	}
 
 	## Move stats
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ($source->do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )",
 			$source->quote($params{'new_listname'}),
 			$source->quote($params{'new_robot'}),

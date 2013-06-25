@@ -38,7 +38,7 @@ use CGI::Cookie;
 use Digest::MD5;
 use Time::Local;
 
-use Sympa::SDM;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::Tools::Data;
@@ -161,7 +161,7 @@ sub purge_old_sessions {
 		return;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	my @clauses = (
 		time - $params{delay} . ' > date_session'
@@ -249,7 +249,7 @@ sub purge_old_tickets {
 		return;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	my @clauses = (
 		time - $params{delay} . ' < date_one_time_ticket'
@@ -299,7 +299,7 @@ sub list_sessions {
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
 
 	my @sessions ;
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	my @clauses;
 	my @params;
@@ -400,7 +400,7 @@ sub load {
 		return undef;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->get_query_handle(
 		"SELECT "                                      .
 			"id_session AS id_session, "           .
@@ -472,7 +472,7 @@ sub store {
 	}
 	my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 ## If this is a new session, then perform an INSERT
 if ($self->{'new_session'}) {
 	## Store the new session ID in the DB
@@ -558,7 +558,7 @@ sub renew {
 	my $new_id = Sympa::Session->get_random();
 
 	## First remove the DB entry for the previous session ID
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $rows = $source->do(
 		"UPDATE session_table SET id_session=? WHERE (id_session=?)",
 		undef,

@@ -77,12 +77,12 @@ use Pod::Usage;
 use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Database;
 use Sympa::Log::Syslog;
 use Sympa::Message;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
@@ -127,12 +127,12 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 ## Check databse connectivity
-unless (Sympa::SDM::check_db_connect()) {
+unless (Sympa::Database::check_db_connect()) {
 	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
 # init database logger
-Sympa::Log::Database::init(source => Sympa::SDM::get_source());
+Sympa::Log::Database::init(source => Sympa::Database::get_source());
 
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
@@ -238,7 +238,7 @@ my $end = 0;
 
 my $spool = Sympa::Spool->new(
 	name   => 'archive',
-	source => Sympa::SDM::get_source()
+	source => Sympa::Database::get_source()
 );
 
 ## infinite loop scanning the queue (unless a sig TERM is received

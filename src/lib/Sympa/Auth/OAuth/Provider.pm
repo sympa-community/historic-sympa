@@ -51,8 +51,8 @@ use constant {
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
+use Sympa::Database;
 use Sympa::Log::Syslog;
-use Sympa::SDM;
 use Sympa::Tools;
 
 =head1 CLASS METHODS
@@ -117,7 +117,7 @@ sub new {
 	$util->allow_extra_params(qw/oauth_callback oauth_verifier/);
 	$self->{util} = $util;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND lasttime_oauthprovider<%d',
 		time - TEMPORARY_TIMEOUT
@@ -137,7 +137,7 @@ sub new {
 sub consumer_from_token {
 	my ($class, $token) = @_;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 	unless($sth = $source->do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s', $token);
@@ -226,7 +226,7 @@ sub check_request {
 
 	return 401 unless($timestamp > time - OLD_REQUEST_TIMEOUT);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - NONCE_TIMEOUT)) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to clean nonce store in database');
 		return 401;
@@ -318,7 +318,7 @@ sub generate_temporary {
 	my $token = _generateRandomString(32); # 9x10^62 entropy ...
 	my $secret = _generateRandomString(32); # may be sha1-ed or such ...
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query(
 		'INSERT INTO oauthprovider_sessions_table(token_oauthprovider, secret_oauthprovider, isaccess_oauthprovider, accessgranted_oauthprovider, consumer_oauthprovider, user_oauthprovider, firsttime_oauthprovider, lasttime_oauthprovider, verifier_oauthprovider, callback_oauthprovider) VALUES (%s, %s, NULL, NULL, %s, NULL, %d, %d, NULL, %s)',
 		$source->quote($token),
@@ -365,7 +365,7 @@ sub get_temporary {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 	unless($sth = $source->do_prepared_query(
 		'SELECT id_oauthprovider AS id, token_oauthprovider AS token, secret_oauthprovider AS secret, firsttime_oauthprovider AS firsttime, lasttime_oauthprovider AS lasttime, callback_oauthprovider AS callback, verifier_oauthprovider AS verifier FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {
@@ -410,7 +410,7 @@ sub generate_verifier {
 
 	my $verifier = _generateRandomString(32);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE user_oauthprovider=%s AND consumer_oauthprovider=%s AND isaccess_oauthprovider=1',
 		$source->quote($params{'user'}),
@@ -472,7 +472,7 @@ sub generate_access {
 	my $token = _generateRandomString(32);
 	my $secret = _generateRandomString(32);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query(
 		'UPDATE oauthprovider_sessions_table SET token_oauthprovider=%s, secret_oauthprovider=%s, isaccess_oauthprovider=1, lasttime_oauthprovider=%d, verifier_oauthprovider=NULL, callback_oauthprovider=NULL WHERE token_oauthprovider=%s AND verifier_oauthprovider=%s',
 		$source->quote($token),
@@ -515,7 +515,7 @@ sub get_access {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 	unless($sth = $source->do_prepared_query(
 		'SELECT token_oauthprovider AS token, secret_oauthprovider AS secret, lasttime_oauthprovider AS lasttime, user_oauthprovider AS user, accessgranted_oauthprovider AS accessgranted FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider=1 AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {

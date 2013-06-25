@@ -83,11 +83,11 @@ use Pod::Usage;
 
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::List;
 use Sympa::Lock;
 use Sympa::Log::Syslog;
 use Sympa::Message;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -162,7 +162,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		my $report = Sympa::SDM::get_source()->probe(
+		my $report = Sympa::Database::get_source()->probe(
 			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 		);
 		if (defined $report) {
@@ -200,7 +200,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	## Check that the data structure is uptodate
 	unless ($options{'upgrade'} || $options{'help'}) {
-		unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
+		unless (Sympa::Database::data_structure_uptodate(Sympa::Constants::VERSION)) {
 			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
 		}
 	}
@@ -323,11 +323,11 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		my $msgspool = Sympa::Spool->new(
 			name   => 'msg',
-			source => Sympa::SDM::get_source()
+			source => Sympa::Database::get_source()
 		);
 		my $bouncespool = Sympa::Spool->new(
 			name   => 'bounce',
-			source => Sympa::SDM::get_source()
+			source => Sympa::Database::get_source()
 		);
 
 		## This is the main loop : look for files in the directory, handles
@@ -471,7 +471,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		}
 
 	## Disconnect from Database
-		Sympa::SDM::get_source()->disconnect();
+		Sympa::Database::get_source()->disconnect();
 
 	}
 	Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');

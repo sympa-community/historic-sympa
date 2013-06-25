@@ -11,6 +11,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Configuration/XML.pm \
 		      Sympa/Configuration/Definition.pm \
 		      Sympa/Constants.pm \
+		      Sympa/Database.pm \
 		      Sympa/Datasource.pm \
 		      Sympa/Datasource/LDAP.pm \
 		      Sympa/Datasource/SQL.pm \
@@ -38,7 +39,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Report.pm \
 		      Sympa/Robot.pm \
 		      Sympa/Scenario.pm \
-		      Sympa/SDM.pm \
 		      Sympa/Session.pm \
 		      Sympa/SOAP.pm \
 		      Sympa/Spool.pm \

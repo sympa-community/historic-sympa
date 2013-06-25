@@ -46,11 +46,11 @@ use Time::HiRes qw(time);
 use URI::Escape;
 
 use Sympa::Configuration;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Log::Database;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Template;
 use Sympa::Tools;
@@ -103,7 +103,7 @@ sub next {
 	}
 
 	# Select the most prioritary packet to lock.
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_prepared_query(
 		sprintf(
 			"SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= ? %s %s",
@@ -172,7 +172,7 @@ sub remove {
 	my ($messagekey, $packetid) = @_;
 	Sympa::Log::Syslog::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",
 		$source->quote($packetid),
@@ -195,7 +195,7 @@ sub messageasstring {
 	my ($messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT message_bulkspool AS message FROM bulkspool_table WHERE messagekey_bulkspool = %s",
 		$source->quote($messagekey)
@@ -229,7 +229,7 @@ sub message_from_spool {
 	my ($messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(messagekey : %s)',$messagekey);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",
 		$source->quote($messagekey)
@@ -471,7 +471,7 @@ sub store {
 	my $message_sender = $sender_hdr[0]->address;
 
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	# first store the message in spool_table
 	# because as soon as packet are created bulk.pl may distribute the
 	# $last_stored_message_key is a global var used in order to detcect if a message as been allready stored
@@ -616,7 +616,7 @@ None.
 sub purge_bulkspool {
 	Sympa::Log::Syslog::do_log('debug', 'purge_bulkspool');
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT messagekey_bulkspool AS messagekey FROM bulkspool_table LEFT JOIN bulkmailer_table ON messagekey_bulkspool = messagekey_bulkmailer WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0"
 	);
@@ -649,7 +649,7 @@ sub remove_bulkspool_message {
 	my $table = $spool.'_table';
 	my $key = 'messagekey_'.$spool ;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"DELETE FROM %s WHERE %s = %s",
 		$table,
@@ -677,7 +677,7 @@ None.
 sub get_remaining_packets_count {
 	Sympa::Log::Syslog::do_log('debug3', 'get_remaining_packets_count');
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_prepared_query(
 		"SELECT COUNT(*) FROM bulkmailer_table WHERE lock_bulkmailer IS NULL"
 	);
@@ -729,7 +729,7 @@ The random stored in the database, or I<undef> if something went wrong.
 
 sub get_db_random {
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query("SELECT random FROM fingerprint_table");
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve random value from fingerprint_table');
@@ -763,7 +763,7 @@ sub init_db_random {
 
 	my $random = int(rand($range)) + $minimum;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		'INSERT INTO fingerprint_table VALUES (%d)',
 		$random

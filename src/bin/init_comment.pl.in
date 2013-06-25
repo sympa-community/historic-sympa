@@ -28,16 +28,16 @@ use lib '--modulesdir--';
 
 use Sympa::Configuration;
 use Sympa::Constants;
-use Sympa::SDM;
+use Sympa::Database;
 
 ## Load sympa config
 Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
 chdir $Sympa::Configuration::Conf{'home'};
 
-Sympa::SDM::db_connect() || die "Can't connect to database";
+Sympa::Database::db_connect() || die "Can't connect to database";
 
-my $source = Sympa::SDM::get_source();
+my $source = Sympa::Database::get_source();
 
 my $select_subscriber_handle = $source->get_query_handle(
 	"SELECT user_subscriber, comment_subscriber FROM subscriber_table"

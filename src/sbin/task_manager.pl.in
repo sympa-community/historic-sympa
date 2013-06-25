@@ -70,13 +70,13 @@ use Time::Local;
 use Sympa::Bulk;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::List;
 use Sympa::Log::Database;
 use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Scenario;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
@@ -129,17 +129,17 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 ## Check databse connectivity
-unless (Sympa::SDM::check_db_connect()) {
+unless (Sympa::Database::check_db_connect()) {
 	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
 ## Check that the data structure is uptodate
-unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
+unless (Sympa::Database::data_structure_uptodate(Sympa::Constants::VERSION)) {
 	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 
 # init database logger
-Sympa::Log::Database::init(source => Sympa::SDM::get_source());
+Sympa::Log::Database::init(source => Sympa::Database::get_source());
 
 ## Check for several files.
 unless (Sympa::Configuration::checkfiles()) {
@@ -236,7 +236,7 @@ my @tasks; # list of tasks in the spool
 
 my $spool = Sympa::Spool->new(
 	name   => 'task',
-	source => Sympa::SDM::get_source()
+	source => Sympa::Database::get_source()
 );
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log
@@ -1167,7 +1167,7 @@ sub purge_logs_table {
 	$sec = 0;
 	my $date_end = timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $handle = $source->get_query_handle(
 		"SELECT date_stat FROM stat_table WHERE read_stat = 0 " .
 		"ORDER BY date_stat ASC LIMIT 1"

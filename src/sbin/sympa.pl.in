@@ -261,6 +261,7 @@ use Sympa::Commands;
 use Sympa::Configuration;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Family;
 use Sympa::Language;
 use Sympa::List;
@@ -270,7 +271,6 @@ use Sympa::Mail;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -416,7 +416,7 @@ while ($signal ne 'term') {
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		my $report = Sympa::SDM::get_source()->probe(
+		my $report = Sympa::Database::get_source()->probe(
 			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 		);
 		if (defined $report) {
@@ -437,7 +437,7 @@ while ($signal ne 'term') {
 	}
 
 	# init database logger
-	Sympa::Log::Database::init(source => Sympa::SDM::get_source());
+	Sympa::Log::Database::init(source => Sympa::Database::get_source());
 
 ## Apply defaults to %Sympa::List::pinfo
 	Sympa::List::_apply_defaults();
@@ -466,7 +466,7 @@ while ($signal ne 'term') {
 
 ## Check that the data structure is uptodate
 	unless ($options{'upgrade'}) {
-		unless (Sympa::SDM::data_structure_uptodate(Sympa::Constants::VERSION)) {
+		unless (Sympa::Database::data_structure_uptodate(Sympa::Constants::VERSION)) {
 			Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
 		}
 	}
@@ -688,7 +688,7 @@ while ($signal ne 'term') {
 		exit 0;
 	}elsif ($options{'md5_encode_password'}) {
 
-		unless ($Sympa::SDM::use_db) {
+		unless ($Sympa::Database::use_db) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 
@@ -699,7 +699,7 @@ while ($signal ne 'term') {
 
 	}elsif ($options{'lowercase'}) {
 
-		unless ($Sympa::SDM::use_db) {
+		unless ($Sympa::Database::use_db) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 
@@ -1225,7 +1225,7 @@ while ($signal ne 'term') {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'msg',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	## This is the main loop : look for files in the directory, handles
 	## them, sleeps a while and continues the good job.
@@ -1250,45 +1250,45 @@ while ($signal ne 'term') {
 			my $msg_bad = Sympa::Spool->new(
 				name   => 'msg',
 				status => 'bad',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$msg_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queue'});
 			my $archive_bad = Sympa::Spool->new(
 				name   => 'archive',
 				status => 'bad',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			my $queuebounce_bad = Sympa::Spool->new(
 				name   => 'bounce',
 				status => 'bad',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$archive_bad->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueoutgoing'});
 			$queuebounce_bad->clean(delay =>$Sympa::Configuration::Conf{'clean_delay_queuebounce'});
 			my $queuemod = Sympa::Spool->new(
 				name   => 'mod',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$queuemod->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuemod'});
 			my $queueauth = Sympa::Spool->new(
 				name   => 'auth',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$queueauth->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueauth'});
 			my $queuetopic = Sympa::Spool->new(
 				name   => 'topic',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$queuetopic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuetopic'});
 			my $queuesubscribe = Sympa::Spool->new(
 				name   => 'subscribe',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$queuesubscribe->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queuesubscribe'});
 			my $queueautomatic = Sympa::Spool->new(
 				name   => 'automatic',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$queueautomatic->clean(delay => $Sympa::Configuration::Conf{'clean_delay_queueautomatic'});
 			Sympa::Tools::CleanDir($Sympa::Configuration::Conf{'tmpdir'}, $Sympa::Configuration::Conf{'clean_delay_tmpdir'}); # this is not a message spool
@@ -1337,7 +1337,7 @@ while ($signal ne 'term') {
 	#Sympa::List::dump();
 
 	## Disconnect from Database
-	Sympa::SDM::get_source()->disconnect();
+	Sympa::Database::get_source()->disconnect();
 }
 
 Sympa::Log::Syslog::do_log('notice', 'Sympa exited normally due to signal');
@@ -2710,7 +2710,7 @@ sub SendDigest{
 
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	foreach my $digest ($digestspool->get_content(selection => 'messagekey,list,robot,date')){
@@ -2794,7 +2794,7 @@ sub test_storage {
 
 	my $testing = Sympa::Spool->new(
 		name   => 'bad',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $msg = sprintf "From: justeatester\@notadomain\nMessage-Id:yep\@notadomain\nSubject: this a test\n\n";

@@ -39,10 +39,10 @@ use POSIX qw();
 
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Password;
@@ -121,7 +121,7 @@ sub upgrade {
 	my ($previous_version, $new_version) = @_;
 	Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	if (lower_version($new_version, $previous_version)) {
 		Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 		return 1;
@@ -269,7 +269,7 @@ sub upgrade {
 							$table,
 							$source->quote($list->{'name'}))) {
 						Sympa::Log::Syslog::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::SDM::get_source()->{'db_handler'}->errstr});
+						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::Database::get_source()->{'db_handler'}->errstr});
 						return undef;
 					}
 				}
@@ -328,13 +328,13 @@ sub upgrade {
 	## DB fields of enum type have been changed to int
 	if (lower_version($previous_version, '5.2a.1')) {
 
-		if ($Sympa::SDM::use_db & $Sympa::Configuration::Conf{'db_type'} eq 'mysql') {
+		if ($Sympa::Database::use_db & $Sympa::Configuration::Conf{'db_type'} eq 'mysql') {
 			my %check = ('subscribed_subscriber' => 'subscriber_table',
 				'included_subscriber' => 'subscriber_table',
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $dbh = Sympa::SDM::get_source()->get_handle();
+			my $dbh = Sympa::Database::get_source()->get_handle();
 
 			foreach my $field (keys %check) {
 
@@ -815,7 +815,7 @@ sub upgrade {
 
 			my $spool = Sympa::Spool->new(
 				name   => $spools_def{$spoolparameter},
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
@@ -1098,7 +1098,7 @@ sub md5_encode_password {
 		return undef;
 	}
 
-	my $dbh = Sympa::SDM::get_source()->get_handle();
+	my $dbh = Sympa::Database::get_source()->get_handle();
 
 	my $sth = $dbh->prepare("SELECT email_user,password_user from user_table");
 	unless ($sth) {

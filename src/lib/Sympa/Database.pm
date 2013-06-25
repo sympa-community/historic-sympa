@@ -21,7 +21,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 =head1 NAME
 
-Sympa::SDM - Database functions
+Sympa::Database - Database functions
 
 =head1 DESCRIPTION
 
@@ -30,7 +30,7 @@ Sympa database.
 
 =cut
 
-package Sympa::SDM;
+package Sympa::Database;
 
 use strict;
 

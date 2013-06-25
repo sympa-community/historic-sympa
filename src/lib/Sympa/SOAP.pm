@@ -37,6 +37,7 @@ use HTTP::Cookies;
 use Sympa::Admin;
 use Sympa::Auth;
 use Sympa::Configuration;
+use Sympa::Database;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Scenario;
@@ -1609,7 +1610,7 @@ sub subscribe {
 			unless $list->add_list_member($u);
 		}
 
-		if ($Sympa::SDM::use_db) {
+		if ($Sympa::Database::use_db) {
 			my $u = Sympa::List::get_global_user($sender);
 
 			Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}

@@ -68,12 +68,12 @@ use Pod::Usage;
 use Sympa::Bulk;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::Message;
 use Sympa::Spool;
-use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
@@ -108,7 +108,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 ## Check database connectivity
-unless (Sympa::SDM::check_db_connect()) {
+unless (Sympa::Database::check_db_connect()) {
 	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
 }
 
@@ -208,7 +208,7 @@ $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmt
 
 my $spool = Sympa::Spool->new(
 	name   => 'bulk',
-	source => Sympa::SDM::get_source()
+	source => Sympa::Database::get_source()
 );
 
 while (!$end) {
@@ -300,7 +300,7 @@ while (!$end) {
 				## to prevent DB handlers to be shared by different processes
 				# when loading conf in database disconnect
 				# because of sharing dbh may crash bulk.pl
-				my $source = Sympa::SDM::get_source();
+				my $source = Sympa::Database::get_source();
 				$source->disconnect();
 
 				if($Sympa::Configuration::Conf{'bulk_max_count'} > 1) {

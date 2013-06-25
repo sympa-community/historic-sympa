@@ -38,8 +38,8 @@ use CGI;
 use Email::Simple;
 use MIME::Base64;
 
+use Sympa::Database;
 use Sympa::Log::Syslog;
-use Sympa::SDM;
 
 =head1 FUNCTIONS
 
@@ -61,7 +61,7 @@ sub get_recipients_status {
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
@@ -111,7 +111,7 @@ sub db_init_notification_table {
 
 	my $time = time ;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	foreach my $email (@rcpt){
 		my $email= lc($email);
 
@@ -153,7 +153,7 @@ sub db_insert_notification {
 
 	$notification_as_string = MIME::Base64::encode($notification_as_string);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless($source->do_query("UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE (pk_notification = %s)",$source->quote($status),$source->quote($arrival_date),$source->quote($notification_as_string),$source->quote($notification_id))) {
 		Sympa::Log::Syslog::do_log('err','Unable to update notification %s in database', $notification_id);
 		return undef;
@@ -173,7 +173,7 @@ sub find_notification_id_by_message{
 	chomp $msgid;
 	Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
@@ -208,7 +208,7 @@ sub remove_message_by_id{
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 	unless($sth = $source->do_query("DELETE FROM notification_table WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s", $source->quote($msgid),$source->quote($listname),$source->quote($robot))) {
 		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
@@ -235,7 +235,7 @@ sub remove_message_by_period{
 	my ($period, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 
 	my $limit = time - ($period * 24 * 60 * 60);

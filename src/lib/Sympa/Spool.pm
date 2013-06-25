@@ -41,7 +41,6 @@ use Sys::Hostname;
 
 use Sympa::Log::Syslog;
 use Sympa::Message;
-use Sympa::SDM;
 use Sympa::Tools::Time;
 
 =head1 CLASS METHODS

@@ -48,6 +48,7 @@ use Time::Local;
 use Sympa::Archive;
 use Sympa::Configuration;
 use Sympa::Constants;
+use Sympa::Database;
 use Sympa::Datasource;
 use Sympa::Family;
 use Sympa::Fetch;
@@ -60,7 +61,6 @@ use Sympa::Message;
 use Sympa::PlainDigest;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Task;
 use Sympa::Template;
@@ -2643,7 +2643,7 @@ sub save_config {
 		return undef;
 	}
 
-	if ($Sympa::SDM::use_db) {
+	if ($Sympa::Database::use_db) {
 		unless (_update_list_db()) {
 			Sympa::Log::Syslog::do_log('err', "Unable to update list_table");
 		}
@@ -3324,7 +3324,7 @@ sub distribute_msg {
 		if ($info_msg_topic) {
 			my $topicspool = Sympa::Spool->new(
 				name   => 'topic',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			$topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});
 		}
@@ -3541,7 +3541,7 @@ sub send_msg_digest {
 	# fetch and lock message.
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
@@ -4522,7 +4522,7 @@ sub send_to_editor {
 		# move message to spool  mod
 		my $spoolmod = Sympa::Spool->new(
 			name   => 'mod',
-			source => Sympa::SDM::get_source()
+			source => Sympa::Database::get_source()
 		);
 		$spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
@@ -4656,7 +4656,7 @@ sub send_auth {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'auth',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	$spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
 	my $param = {'authkey' => $authkey,
@@ -5619,7 +5619,7 @@ sub delete_global_user {
 
 	return undef unless ($#users >= 0);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	foreach my $who (@users) {
 		$who = Sympa::Tools::clean_email($who);
 		## Update field
@@ -5665,7 +5665,7 @@ sub delete_list_member {
 	my $name = $self->{'name'};
 	my $total = 0;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	foreach my $who (@u) {
 		$who = Sympa::Tools::clean_email($who);
 
@@ -5721,7 +5721,7 @@ sub delete_list_admin {
 	my $name = $self->{'name'};
 	my $total = 0;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	foreach my $who (@u) {
 		$who = Sympa::Tools::clean_email($who);
 
@@ -5759,7 +5759,7 @@ sub delete_all_list_admin {
 	Sympa::Log::Syslog::do_log('debug2', '');
 
 	## Delete record in ADMIN
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query("DELETE FROM admin_table");
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to remove all admin from database');
@@ -5875,7 +5875,7 @@ sub get_global_user {
 	}
 
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ",
 		$additional,
@@ -5923,7 +5923,7 @@ sub get_all_global_user {
 	Sympa::Log::Syslog::do_log('debug2', '');
 
 	my @users;
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query("SELECT email_user FROM user_table");
 
 	unless ($sth) {
@@ -5974,7 +5974,7 @@ sub suspend_subscription {
 	my ($email, $list, $data, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '"%s", "%s", "%s"', $email, $list, $data);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ($source->do_query("UPDATE subscriber_table SET suspend_subscriber='1', suspend_start_date_subscriber=%s, suspend_end_date_subscriber=%s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",
 			$source->quote($data->{'startdate'}),
 			$source->quote($data->{'enddate'}),
@@ -6014,7 +6014,7 @@ sub restore_suspended_subscription {
 	my ($email, $list, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '("%s", "%s", "%s")', $email, $list, $robot);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ($source->do_query("UPDATE subscriber_table SET suspend_subscriber='0', suspend_start_date_subscriber=NULL, suspend_end_date_subscriber=NULL WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",
 			$source->quote($email),
 			$source->quote($list),
@@ -6054,7 +6054,7 @@ sub insert_delete_exclusion {
 	Sympa::Log::Syslog::do_log('info', '("%s", "%s", "%s", "%s", "%s")', $email, $list, $robot, $action, $family);
 
 	my $r = 1;
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	if($action eq 'insert'){
 		## INSERT only if $user->{'included'} eq '1'
@@ -6145,7 +6145,7 @@ sub get_exclusion {
 		return undef;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth;
 	if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
 
@@ -6407,7 +6407,7 @@ sub find_list_member_by_pattern_no_object {
 
 	my @ressembling_users;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	## Additional subscriber fields
 	my $additional;
@@ -6480,7 +6480,7 @@ sub get_list_member_no_object {
 		return $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email};
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	## Additional subscriber fields
 	my $additional;
@@ -6545,7 +6545,7 @@ sub get_list_admin {
 
 	my $name = $self->{'name'};
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	## Use session cache
 	if (defined $list_cache{'get_list_admin'}{$self->{'domain'}}{$name}{$role}{$email}) {
@@ -6620,7 +6620,7 @@ sub get_first_list_member {
 	my $statement;
 
 	push @sth_stack, $sth;
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	## SQL regexp
 	my $selection;
@@ -6815,7 +6815,7 @@ sub get_first_list_admin {
 	my $statement;
 
 	## SQL regexp
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $selection;
 	if ($sql_regexp) {
 		$selection = sprintf " AND (user_admin LIKE %s OR comment_admin LIKE %s)"
@@ -7033,7 +7033,7 @@ sub get_first_bouncing_list_member {
 
 	push @sth_stack, $sth;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	$sth = $source->do_query(
 		"SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date,suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)",
 		$source->get_canonical_read_date('date_subscriber'),
@@ -7128,7 +7128,7 @@ sub get_total_bouncing {
 
 	my $name = $self->{'name'};
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND robot_subscriber = %s AND bounce_subscriber is not NULL)",
 		$source->quote($name),
@@ -7154,7 +7154,7 @@ sub is_global_user {
 
 	return undef unless ($who);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT count(*) FROM user_table WHERE email_user = %s",
 		$source->quote($who)
@@ -7193,7 +7193,7 @@ sub is_list_member {
 	}
 
 	## Query the Database
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ( $sth = $source->do_query("SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND user_subscriber = %s)",$source->quote($name), $source->quote($self->{'domain'}), $source->quote($who))) {
 		Sympa::Log::Syslog::do_log('err','Unable to check chether user %s is subscribed to list %s@%s : %s', $who, $name, $self->{'domain'});
 		return undef;
@@ -7292,7 +7292,7 @@ sub update_list_member {
 	}
 
 	## Update each table
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	foreach $table ('user_table','subscriber_table') {
 
 		my @set_list;
@@ -7397,7 +7397,7 @@ sub update_list_admin {
 	$who = Sympa::Tools::clean_email($who);
 	Sympa::Log::Syslog::do_log('debug2', '(%s,%s)', $role, $who);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my ($table, $field, $value);
 
 	my $name = $self->{'name'};
@@ -7554,7 +7554,7 @@ sub update_global_user {
 	);
 
 	## Update each table
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my @set_list;
 
 	while (($field, $value) = each %{$values}) {
@@ -7594,7 +7594,7 @@ sub add_global_user {
 	my ($values) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my ($field, $value);
 	my ($user, $statement, $table);
 
@@ -7662,7 +7662,7 @@ sub add_list_member {
 	my ($self, @new_users, $daemon) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '%s', $self->{'name'});
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $name = $self->{'name'};
 	$self->{'add_outcome'} = undef;
 	$self->{'add_outcome'}{'added_members'} = 0;
@@ -7781,7 +7781,7 @@ sub add_list_admin {
 	my ($self, $role, @new_admin_users) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $name = $self->{'name'};
 	my $total = 0;
 
@@ -7848,7 +7848,7 @@ sub rename_list_db {
 	my $statement_subscriber;
 	my $statement_admin;
 	my $statement_list_cache;
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	unless($source->do_query("UPDATE subscriber_table SET list_subscriber=%s, robot_subscriber=%s WHERE (list_subscriber=%s AND robot_subscriber=%s)",
 			$source->quote($new_listname),
@@ -7872,7 +7872,7 @@ sub rename_list_db {
 	}
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_admin );
 
-	if ($Sympa::SDM::use_db) {
+	if ($Sympa::Database::use_db) {
 		unless ($source->do_query("UPDATE list_table SET name_list=%s, robot_list=%s WHERE (name_list=%s AND robot_list=%s)",
 				$source->quote($new_listname),
 				$source->quote($new_robot),
@@ -8312,7 +8312,7 @@ sub archive_msg {
 		} else {
 			my $spoolarchive = Sympa::Spool->new(
 				name   => 'archive',
-				source => Sympa::SDM::get_source()
+				source => Sympa::Database::get_source()
 			);
 			unless ($message->{'messagekey'}) {
 				Sympa::Log::Syslog::do_log('err', "could not store message in archive spool, messagekey missing");
@@ -10694,7 +10694,7 @@ sub _load_total_db {
 		return $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}};
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s)",
 		$source->quote($self->{'name'}),
@@ -10778,7 +10778,7 @@ sub store_digest {
 
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
 	my $string;
@@ -10838,7 +10838,7 @@ sub get_lists {
 	}
 
 	# Build query: Perl expression for files and SQL expression for list_table.
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my @query = (@{$options->{'filter_query'} || []});
 	my @clause_perl = ();
 	my @clause_sql = ();
@@ -10998,7 +10998,7 @@ sub get_which_db {
 
 	my ($l, %which);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	if ($function eq 'member') {
 		## Get subscribers
 
@@ -11052,7 +11052,7 @@ sub get_netidtoemail_db {
 
 	my $email;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 
 	$sth = $source->do_query(
 		"SELECT email_netidmap FROM netidmap_table WHERE netid_netidmap = %s and serviceid_netidmap = %s and robot_netidmap = %s",
@@ -11077,7 +11077,7 @@ sub set_netidtoemail_db {
 	my ($robot, $netid, $idpname, $email) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s)', $netid, $idpname, $email);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ($source->do_query( "INSERT INTO netidmap_table (netid_netidmap,serviceid_netidmap,email_netidmap,robot_netidmap) VALUES (%s, %s, %s, %s)", $source->quote($netid), $source->quote($idpname), $source->quote($email), $source->quote($robot))) {
 		Sympa::Log::Syslog::do_log('err','Unable to set email address %s in netidmap_table for id %s, service %s, robot %s', $email, $netid, $idpname, $robot);
 		return undef;
@@ -11097,7 +11097,7 @@ sub update_email_netidmap_db{
 		return undef;
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	unless ($source->do_query( "UPDATE netidmap_table SET email_netidmap = %s WHERE (email_netidmap = %s AND robot_netidmap = %s)",$source->quote($new_email), $source->quote($old_email), $source->quote($robot))) {
 		Sympa::Log::Syslog::do_log('err','Unable to set new email address %s in netidmap_table to replace old address %s for robot %s', $new_email, $old_email, $robot);
 		return undef;
@@ -11186,7 +11186,7 @@ sub get_mod_spool_size {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'mod',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	my $count =  $spool->get_count(
 		selector  => {
@@ -11279,7 +11279,7 @@ sub sort_dir_to_get_mod {
 sub get_db_field_type {
 	my ($table, $field) = @_;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query("SHOW FIELDS FROM $table");
 
 	unless ($sth) {
@@ -11302,7 +11302,7 @@ sub lowercase_field {
 
 	my $total = 0;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query( "SELECT $field from $table");
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get values of field %s for table %s',$field,$table);
@@ -12052,7 +12052,7 @@ sub _load_list_config_file {
 	############################################
 
 	## Do we have a database config/access
-	unless ($Sympa::SDM::use_db) {
+	unless ($Sympa::Database::use_db) {
 		Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI or no database access');
 		## We should notify the listmaster here...
 		#return undef;
@@ -12401,7 +12401,7 @@ sub tag_topic {
 	$topic_item .= sprintf  "METHOD  $method\n";
 	my $topicspool = Sympa::Spool->new(
 		name   => 'topic',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	return $topicspool->store(
@@ -12440,7 +12440,7 @@ sub load_msg_topic {
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$self->{'name'},$msg_id);
 	my $topicspool = Sympa::Spool->new(
 		name   => 'topic',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
@@ -12719,7 +12719,7 @@ sub store_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $content = $subscription_request_spool->get_count(
@@ -12754,7 +12754,7 @@ sub get_subscription_requests {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	my @subrequests = $subscription_request_spool->get_content(
 		selector  => {
@@ -12806,7 +12806,7 @@ sub get_subscription_request_count {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 	return $subscription_request_spool->get_count(
 		selector  => {
@@ -12823,7 +12823,7 @@ sub delete_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name   => 'subscribe',
-		source => Sympa::SDM::get_source()
+		source => Sympa::Database::get_source()
 	);
 
 	my $removed = 0;
@@ -13081,7 +13081,7 @@ sub purge {
 	Sympa::Task->load_tasks(
 		Sympa::Spool->new(
 			name   => 'task',
-			source => Sympa::SDM::get_source()
+			source => Sympa::Database::get_source()
 		)
 	);
 	foreach my $task (Sympa::Task->get_tasks_by_list($self->get_list_id())) {
@@ -13098,7 +13098,7 @@ sub purge {
 	}
 
 	## Clean list table if needed
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	if ($Sympa::Configuration::Conf{'db_list_cache'} eq 'on') {
 		unless ($source->do_query('DELETE FROM list_table WHERE name_list = %s AND robot_list = %s', $source->quote($self->{'name'}), $source->quote($self->{'domain'}))) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
@@ -13323,7 +13323,7 @@ Connect to stat_counter_table and extract data.
 sub get_data {
 	my ($data, $robotname, $listname) = @_;
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		"SELECT * FROM stat_counter_table WHERE data_counter = '%s' AND robot_counter = '%s' AND list_counter = '%s'",
 		$data,
@@ -13349,7 +13349,7 @@ sub get_lists_db {
 	$where ||= '';
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $where);
 
-	unless ($Sympa::SDM::use_db) {
+	unless ($Sympa::Database::use_db) {
 		Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI');
 		return undef;
 	}
@@ -13359,7 +13359,7 @@ sub get_lists_db {
 
 	my ($l, @lists);
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query($statement);
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err',"Unable to gather the list of lists from lists table");
@@ -13410,7 +13410,7 @@ sub _update_list_db {
 	}
 	$ed_txt = join(',',@admins) || '';
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		'SELECT name_list FROM list_table WHERE name_list = %s',
 		$source->quote($name)
@@ -13456,7 +13456,7 @@ sub _flush_list_db {
 		$statement = "DELETE FROM list_table WHERE name_list = %s";
 	}
 
-	my $source = Sympa::SDM::get_source();
+	my $source = Sympa::Database::get_source();
 	my $sth = $source->do_query(
 		$statement,
 		$source->quote($listname)
