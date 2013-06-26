@@ -85,7 +85,7 @@ sub new {
 	my $self = {
 		name   => $params{name},
 		status => $params{status},
-		params => $params{source}
+		source => $params{source}
 	};
 
 	bless $self, $class;
