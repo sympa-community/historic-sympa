@@ -5509,10 +5509,10 @@ sub do_show_sessions {
 	$in{'session_delay'} = 10 unless ($in{'session_delay'});
 	my $delay = 60 * $in{'session_delay'};
 	$param->{'sessions'} = Sympa::Session->list_sessions(
-		$delay,
-		$robot,
-		$in{'connected_only'},
-		Sympa::Database::get_source()
+		delay          => $delay,
+		robot          => $robot,
+		connected_only => $in{'connected_only'},
+		source         => Sympa::Database::get_source()
 	);
 	return '1';
 }

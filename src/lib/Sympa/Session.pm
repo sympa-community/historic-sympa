@@ -307,23 +307,24 @@ limited to connected users if $connected_only
 =cut
 
 sub list_sessions {
-	my ($class, $delay, $robot, $connected_only, $source) = @_;
-	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s)',$delay,$robot,$connected_only);
+	my ($class, %params) = @_;
+	Sympa::Log::Syslog::do_log('debug',
+		'(%s,%s,%s)',$params{delay},$params{robot},$params{connected_only});
 
 	my @sessions ;
 	my @clauses;
 	my @params;
 
-	if (!$robot eq '*') {
+	if (!$params{robot} eq '*') {
 		push @clauses, 'robot_session = ?';
-		push @params, $robot;
+		push @params, $params{robot};
 	}
 
-	if ($delay) {
-		push @clauses, time - $delay . ' < date_session';
+	if ($params{delay}) {
+		push @clauses, time - $params{delay} . ' < date_session';
 	}
 
-	if ($connected_only eq 'on') {
+	if ($params{connected_only}) {
 		push @clauses,  "email_session != 'nobody'";
 	}
 
@@ -339,9 +340,9 @@ sub list_sessions {
 		"WHERE " . join(" AND ", @clauses);
 	Sympa::Log::Syslog::do_log('debug', 'statement = %s',$query);
 
-	my $sth = $source->get_query_handle($query);
+	my $sth = $params{source}->get_query_handle($query);
 	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to get the list of sessions for robot %s',$robot);
+		Sympa::Log::Syslog::do_log('err','Unable to get the list of sessions for robot %s',$params{robot});
 		return undef;
 	}
 	$sth->execute(@params);
