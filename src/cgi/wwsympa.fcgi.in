@@ -1310,7 +1310,8 @@ while ($query = new_loop()) {
 			'rss'    => $rss,
 			'ajax'   => $ajax
 		},
-		$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+		$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		Sympa::Database::get_source()
 	);
 
 	undef $ENV{'HTTP_COOKIE'}; # Getting rid of the environment variable to make sure it won't be affected to another anonymous session.
@@ -5510,7 +5511,8 @@ sub do_show_sessions {
 	$param->{'sessions'} = Sympa::Session->list_sessions(
 		$delay,
 		$robot,
-		$in{'connected_only'}
+		$in{'connected_only'},
+		Sympa::Database::get_source()
 	);
 	return '1';
 }

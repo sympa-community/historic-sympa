@@ -234,7 +234,8 @@ sub login {
 	my $session = Sympa::Session->new(
 		robot    => $robot,
 		context  => {cookie => $ENV{SESSION_ID}},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		source   => Sympa::Database::get_source()
 	);
 	$ENV{'USER_EMAIL'} = $email;
 	$session->{'email'} = $email;
@@ -327,7 +328,9 @@ sub casLogin {
 	my $session = Sympa::Session->new(
 		robot    => $robot,
 		context  => {cookie => $ENV{SESSION_ID}},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+		crawlers =>
+		$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		source   => Sympa::Database::get_source()
 	);
 	$ENV{'USER_EMAIL'} = $email;
 	$session->{'email'} = $email;
@@ -385,7 +388,8 @@ sub authenticateAndRun {
 	my $session = Sympa::Session->new(
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $session_id},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		source   => Sympa::Database::get_source()
 	);
 	$email = $session->{'email'} if (defined $session);
 	unless ($email or ($email eq 'unkown')  ) {
@@ -430,7 +434,8 @@ sub getUserEmailByCookie {
 	my $session = Sympa::Session->new(
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $cookie},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'}
+		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		source   => Sympa::Database::get_source()
 	);
 
 
