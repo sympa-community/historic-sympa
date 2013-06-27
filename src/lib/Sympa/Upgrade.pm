@@ -334,29 +334,22 @@ sub upgrade {
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $dbh = Sympa::Database::get_source()->get_handle();
+			my $source = Sympa::Database::get_source();
 
 			foreach my $field (keys %check) {
-
-				my $statement;
-
-				## Query the Database
-				$statement = sprintf "SELECT max(%s) FROM %s", $field, $check{$field};
-
-				my $sth = $dbh->prepare($statement);
-
-				unless ($sth) {
-					Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+				my $select_query =
+					"SELECT max($field) " .
+					"FROM $check{$field}";
+				my $select_handle = $source->get_query_handle(
+					$select_query
+				);
+				unless ($select_handle) {
+					Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement');
 					return undef;
 				}
 
-				unless ($sth->execute) {
-					Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-					return undef;
-				}
-
-				my $max = $sth->fetchrow();
-				$sth->finish();
+				$select_handle->execute();
+				my $max = $select_handle->fetchrow();
 
 				## '0' has been mapped to 1 and '1' to 2
 				## Restore correct field value
@@ -364,10 +357,19 @@ sub upgrade {
 					## 1 to 0
 					Sympa::Log::Syslog::do_log('notice', 'Fixing DB field %s ; turning 1 to 0...', $field);
 
-					my $statement = sprintf "UPDATE %s SET %s=%d WHERE (%s=%d)", $check{$field}, $field, 0, $field, 1;
+					my $update_query =
+						"UPDATE $check{$field} " .
+						"SET $field = ? "        .
+						"WHERE $field = ?";
 					my $rows;
-					unless ($rows = $dbh->do($statement)) {
-						Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+					$rows = $source->do(
+						$update_query,
+						undef,
+						0,
+						1
+					);
+					unless ($rows) {
+						Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement');
 						return undef;
 					}
 
@@ -376,10 +378,14 @@ sub upgrade {
 					## 2 to 1
 					Sympa::Log::Syslog::do_log('notice', 'Fixing DB field %s ; turning 2 to 1...', $field);
 
-					$statement = sprintf "UPDATE %s SET %s=%d WHERE (%s=%d)", $check{$field}, $field, 1, $field, 2;
-
-					unless ($rows = $dbh->do($statement)) {
-						Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+					$rows = $source->do(
+						$update_query,
+						undef,
+						1,
+						2
+					);
+					unless ($rows) {
+						Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement');
 						return undef;
 					}
 
@@ -387,17 +393,24 @@ sub upgrade {
 
 				}
 
-				## Set 'subscribed' data field to '1' is none of 'subscribed' and 'included' is set
-				$statement = "UPDATE subscriber_table SET subscribed_subscriber=1 WHERE ((included_subscriber IS NULL OR included_subscriber!=1) AND (subscribed_subscriber IS NULL OR subscribed_subscriber!=1))";
-
-				Sympa::Log::Syslog::do_log('notice','Updating subscribed field of the subscriber table...');
-				my $rows = $dbh->do($statement);
-				unless (defined $rows) {
-					Sympa::Log::Syslog::fatal_err("Unable to execute SQL statement %s : %s", $statement, $dbh->errstr);
-				}
-				Sympa::Log::Syslog::do_log('notice','%d rows have been updated', $rows);
 
 			}
+
+			## Set 'subscribed' data field to '1' is none of 'subscribed' and 'included' is set
+			my $update_query =
+				"UPDATE subscriber_table " .
+				"SET subscribed_subscriber = 1 " .
+				"WHERE (" .
+					"(included_subscriber IS NULL OR included_subscriber!=1) AND " .
+					"(subscribed_subscriber IS NULL OR subscribed_subscriber!=1)" .
+				")";
+
+			Sympa::Log::Syslog::do_log('notice','Updating subscribed field of the subscriber table...');
+			my $rows = $source->do($update_query);
+			unless (defined $rows) {
+				Sympa::Log::Syslog::fatal_err("Unable to execute SQL statement");
+			}
+			Sympa::Log::Syslog::do_log('notice','%d rows have been updated', $rows);
 		}
 	}
 
