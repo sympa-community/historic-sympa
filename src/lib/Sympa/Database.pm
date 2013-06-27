@@ -43,6 +43,54 @@ use Sympa::Log::Syslog;
 my $db_source;
 our $use_db;
 
+=head1 CLASS METHODS
+
+=over
+
+=item Sympa::Database->new(%parameters)
+
+Create a new L<Sympa::Database> object.
+
+Parameters:
+
+=over
+
+=item C<db_host> => FIXME
+
+=item C<db_user> => FIXME
+
+=item C<db_passwd> => FIXME
+
+=item C<db_name> => FIXME
+
+=item C<db_type> => FIXME
+
+=item C<db_options> => FIXME
+
+=item C<domain> => FIXME
+
+=back
+
+Return value:
+
+A new L<Sympa::Database> object, or I<undef> if something went wrong.
+
+=cut
+
+sub new {
+	my ($class, %params) = @_;
+
+	my $source = Sympa::Datasource::SQL->create(%params);
+
+	my $self = {
+		source => $source,
+		domain => $params{'domain'},
+	};
+
+	bless $self, $class;
+	return $self;
+}
+
 =head1 FUNCTIONS
 
 =over
