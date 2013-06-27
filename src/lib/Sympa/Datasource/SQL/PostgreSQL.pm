@@ -53,11 +53,10 @@ sub new {
 }
 
 
-sub build_connect_string{
+sub get_connect_string{
 	my ($self) = @_;
 
-	$self->{'connect_string'} =
-		"DBI:Pg:dbname=$self->{'db_name'};host=$self->{'db_host'}";
+	return "DBI:Pg:dbname=$self->{'db_name'};host=$self->{'db_host'}";
 }
 
 sub get_substring_clause {

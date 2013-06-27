@@ -26,8 +26,7 @@ $source = Sympa::Datasource::SQL::PostgreSQL->new(db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::PostgreSQL');
 
-$source->build_connect_string();
-is($source->{connect_string}, 'DBI:Pg:dbname=foo;host=', 'connect string');
+is($source->get_connect_string(), 'DBI:Pg:dbname=foo;host=', 'connect string');
 
 my $clause;
 $clause = $source->get_substring_clause(

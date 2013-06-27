@@ -54,13 +54,15 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
-sub build_connect_string{
+sub get_connect_string{
 	my ($self) = @_;
 
-	$self->{'connect_string'} = "DBI:Oracle:";
+	my $string = "DBI:Oracle:";
 	if ($self->{'db_host'} && $self->{'db_name'}) {
-		$self->{'connect_string'} .= "host=$self->{'db_host'};sid=$self->{'db_name'}";
+		$string .= "host=$self->{'db_host'};sid=$self->{'db_name'}";
 	}
+
+	return $string;
 }
 
 sub get_substring_clause {

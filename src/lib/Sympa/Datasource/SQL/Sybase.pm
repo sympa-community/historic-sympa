@@ -55,10 +55,10 @@ sub new {
 }
 
 
-sub build_connect_string{
+sub get_connect_string{
 	my ($self) = @_;
 
-	$self->{'connect_string'} =
+	return
 		"DBI:Sybase:database=$self->{'db_name'};server=$self->{'db_host'}";
 }
 

@@ -1367,26 +1367,19 @@ sub establish_connection {
 	}
 
 	## Build connect_string
-	if ($self->{'f_dir'}) {
-		$self->{'connect_string'} = "DBI:CSV:f_dir=$self->{'f_dir'}";
-	} else {
-		$self->build_connect_string();
-	}
-	if ($self->{'db_options'}) {
-		$self->{'connect_string'} .= ';' . $self->{'db_options'};
-	}
-	if (defined $self->{'db_port'}) {
-		$self->{'connect_string'} .= ';port=' . $self->{'db_port'};
-	}
+	my $connect_string = $self->get_connect_string();
+	$connect_string .= ';'   . $self->{db_options} if $self->{db_options};
+	$connect_string .= ';port=' . $self->{db_port} if $self->{db_port};
+	$self->{connect_string} = $connect_string;
 
 	## First check if we have an active connection with this server
-	if (defined $db_connections{$self->{'connect_string'}} &&
-		defined $db_connections{$self->{'connect_string'}}{'dbh'} &&
-		$db_connections{$self->{'connect_string'}}{'dbh'}->ping()) {
+	if (defined $db_connections{$connect_string} &&
+		defined $db_connections{$connect_string}{'dbh'} &&
+		$db_connections{$connect_string}{'dbh'}->ping()) {
 
 		Sympa::Log::Syslog::do_log('debug', "Use previous connection");
-		$self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'};
-		return $db_connections{$self->{'connect_string'}}{'dbh'};
+		$self->{'dbh'} = $db_connections{$connect_string}{'dbh'};
+		return $db_connections{$connect_string}{'dbh'};
 
 	} else {
 
@@ -1399,13 +1392,13 @@ sub establish_connection {
 			}
 		}
 
-		$self->{'dbh'} = eval {DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })} ;
+		$self->{'dbh'} = eval {DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })} ;
 		unless (defined $self->{'dbh'}) {
 			## Notify listmaster if warn option was set
 			## Unless the 'failed' status was set earlier
 			if ($self->{'reconnect_options'}{'warn'}) {
-				unless (defined $db_connections{$self->{'connect_string'}} &&
-					$db_connections{$self->{'connect_string'}}{'status'} eq 'failed') {
+				unless (defined $db_connections{$connect_string} &&
+					$db_connections{$connect_string}{'status'} eq 'failed') {
 
 					unless
 					(Sympa::List::send_notify_to_listmaster('no_db', $self->{domain},{})) {
@@ -1414,24 +1407,24 @@ sub establish_connection {
 				}
 			}
 			if ($self->{'reconnect_options'}{'keep_trying'}) {
-				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $self->{'connect_string'}, $self->{'db_user'});
+				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
 			} else {
-				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $self->{'connect_string'}, $self->{'db_user'});
-				$db_connections{$self->{'connect_string'}}{'status'} = 'failed';
-				$db_connections{$self->{'connect_string'}}{'first_try'} ||= time;
+				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{'db_user'});
+				$db_connections{$connect_string}{'status'} = 'failed';
+				$db_connections{$connect_string}{'first_try'} ||= time;
 				return undef;
 			}
 			## Loop until connect works
 			my $sleep_delay = 60;
 			while (1) {
 				sleep $sleep_delay;
-				eval {$self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })};
+				eval {$self->{'dbh'} = DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })};
 				last if ($self->{'dbh'} && $self->{'dbh'}->ping());
 				$sleep_delay += 10;
 			}
 
 			if ($self->{'reconnect_options'}{'warn'}) {
-				Sympa::Log::Syslog::do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
+				Sympa::Log::Syslog::do_log('notice','Connection to Database %s restored.', $connect_string);
 				unless (Sympa::List::send_notify_to_listmaster('db_restored', $self->{domain},{})) {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
 				}
@@ -1469,8 +1462,7 @@ sub establish_connection {
 			if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
 		}
 
-		$self->{'connect_string'} = $self->{'connect_string'} if $self;
-		$db_connections{$self->{'connect_string'}}{'dbh'} = $self->{'dbh'};
+		$db_connections{$connect_string}{'dbh'} = $self->{'dbh'};
 		Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
 		return $self->{'dbh'};
 	}
@@ -2249,7 +2241,7 @@ sub _check_fields_list {
 		join(',', sort @{$params{target}});
 }
 
-=item source->build_connect_string()
+=item source->get_connect_string()
 
 Builds the string to be used by the DBI to connect to the database.
 

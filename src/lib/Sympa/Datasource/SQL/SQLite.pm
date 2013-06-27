@@ -55,10 +55,10 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sqlite');
 }
 
-sub build_connect_string{
+sub get_connect_string{
 	my ($self, %params) = @_;
 
-	$self->{'connect_string'} = "DBI:SQLite:dbname=$self->{'db_name'}";
+	return "DBI:SQLite:dbname=$self->{'db_name'}";
 }
 
 sub get_substring_clause {

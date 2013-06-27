@@ -27,8 +27,11 @@ $source = Sympa::Datasource::SQL::SQLite->new(db_name => 'foo');
 ok($source, 'direct create OK');
 isa_ok($source, 'Sympa::Datasource::SQL::SQLite');
 
-$source->build_connect_string();
-is($source->{connect_string}, 'DBI:SQLite:dbname=foo', 'connect string');
+is(
+	$source->get_connect_string(),
+	'DBI:SQLite:dbname=foo',
+	'connect string'
+);
 
 my $clause;
 $clause = $source->get_substring_clause(

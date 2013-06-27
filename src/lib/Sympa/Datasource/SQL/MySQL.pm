@@ -43,10 +43,10 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'mysql');
 }
 
-sub build_connect_string {
+sub get_connect_string {
 	my ($self) = @_;
 
-	$self->{'connect_string'} =
+	return 
 		"DBI:mysql:$self->{'db_name'}:$self->{'db_host'}";
 }
 

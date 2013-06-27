@@ -25,8 +25,11 @@ $source = Sympa::Datasource::SQL::Oracle->new(db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::Oracle');
 
-$source->build_connect_string();
-is($source->{connect_string}, 'DBI:Oracle:', 'connect string');
+is(
+	$source->get_connect_string(),
+	'DBI:Oracle:',
+	'connect string'
+);
 
 my $clause;
 $clause = $source->get_substring_clause(

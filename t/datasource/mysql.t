@@ -26,8 +26,11 @@ $source = Sympa::Datasource::SQL::MySQL->new(db_name => 'foo');
 ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::MySQL');
 
-$source->build_connect_string();
-is($source->{connect_string}, 'DBI:mysql:foo:', 'connect string');
+is(
+	$source->get_connect_string(),
+	'DBI:mysql:foo:',
+	'connect string'
+);
 
 my $clause;
 $clause = $source->get_substring_clause(
