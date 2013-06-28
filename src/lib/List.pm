@@ -4580,8 +4580,6 @@ sub _append_parts {
 	if (length $header_msg or length $footer_msg) {
 	    $header_msg .= "\n"
 		if length $header_msg and $header_msg !~ /\n$/;
-	    $header_msg .= "\n"
-		if length $header_msg and $header_msg !~ /\n$/;
 	    $body .= "\n"
 		if length $footer_msg and length $body and $body !~ /\n$/;
 	    $io = $part->bodyhandle->open('w');
