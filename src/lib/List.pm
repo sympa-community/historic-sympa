@@ -22,9 +22,10 @@ package List;
 
 use strict;
 
-use POSIX qw(strftime);
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Encode;
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
+use HTML::Entities qw(encode_entities);
+use POSIX qw(strftime);
 
 use Datasource;
 use SQLSource qw(create_db %date_format);
@@ -4539,125 +4540,193 @@ sub add_parts {
     return $msg;
 }
 
+## Append header/footer to text/plain body.
+## Note: As some charsets (e.g. UTF-16) are not compatible to US-ASCII,
+##   we must concatenate decoded header/body/footer and at last encode it.
+## Note: With BASE64 transfer-encoding, newline must be normalized to CRLF,
+##   however, original body would be intact.
 sub _append_parts {
     my $part = shift;
     my $header_msg = shift || '';
     my $footer_msg = shift || '';
 
+    my $enc = $part->head->mime_encoding;
+    # Parts with nonstandard encodings aren't modified.
+    if ($enc and $enc !~ /^(?:base64|quoted-printable|[78]bit|binary)$/i) {
+       return undef;
+    }
     my $eff_type = $part->effective_type || 'text/plain';
-    my $cset;
     my $body;
     my $io;
-    &do_log('notice', $eff_type);
+
+    ## Signed or encrypted parts aren't modified.
+    if ($eff_type =~ m{^multipart/(signed|encrypted)$}i) {
+	return undef;
+    }
+
+    ## Skip attached parts.
+    my $disposition = $part->head->mime_attr('Content-Disposition');
+    return undef
+	if $disposition and uc $disposition ne 'INLINE';
 
     ## Preparing header and footer for inclusion.
-    if ($eff_type eq 'text/plain' || $eff_type eq 'text/html') {
-	$cset = MIME::Charset->new('UTF-8');
-	$cset->encoder($part->head->mime_attr(
-	    'Content-Type.Charset') || 'NONE'
-	);
-
-	if (defined $part->bodyhandle) {
-	    $body = $part->bodyhandle->as_string;
-	} else {
-	    $body = '';
-	}
-
-	## Only encodable footer/header are allowed.
-	if ($cset->encoder) {
-	    eval {
-		$header_msg = $cset->encode($header_msg, 1);
-	    };
-	    $header_msg = '' if $@;
-	    eval {
-		$footer_msg = $cset->encode($footer_msg, 1);
-	    };
-	    $footer_msg = '' if $@;
-	} else {
-	    $header_msg = '' if $header_msg =~ /[^\x01-\x7F]/;
-	    $footer_msg = '' if $footer_msg =~ /[^\x01-\x7F]/;
-	}
+    if ($eff_type eq 'text/plain' or $eff_type eq 'text/html') {
 	if (length $header_msg or length $footer_msg) {
-	    $header_msg .= "\n"
-		if length $header_msg and $header_msg !~ /\n$/;
-	    $body .= "\n"
-		if length $footer_msg and length $body and $body !~ /\n$/;
-	    $io = $part->bodyhandle->open('w');
+
+	    ## Only decodable bodies are allowed.
+	    my $bodyh = $part->bodyhandle;
+	    if ($bodyh) {
+		return undef if $bodyh->is_encoded;
+		$body = $bodyh->as_string;
+	    } else {
+		$body = '';
+	    }
+
+	    $body = _append_footer_header_to_part(
+		{   'part'     => $part,
+		    'header'   => $header_msg,
+		    'footer'   => $footer_msg,
+		    'eff_type' => $eff_type,
+		    'body'     => $body
+		}
+	    );
+	    return undef unless defined $body;
+
+	    $io = $bodyh->open('w');
 	    unless (defined $io) {
-		&do_log('err',
-		    "List::add_parts: Failed to save message : $!");
+		Log::do_log('err', 'Failed to save message: %s', "$!");
 		return undef;
 	    }
-	    return undef
-		unless &_append_footer_header_to_part(
-			{   'io'       => $io,
-			    'part'     => $part,
-			    'header'   => $header_msg,
-			    'footer'   => $footer_msg,
-			    'eff_type' => $eff_type,
-			    'body'     => $body
-			}
-		);
+	    $io->print($body);
 	    $io->close;
 	    $part->sync_headers(Length => 'COMPUTE')
 		if $part->head->get('Content-Length');
+
+	    return 1;
 	}
-	return 1;
     } elsif ($eff_type eq 'multipart/mixed') {
-	## We treat all the parts
-	foreach my $p ($part->parts) {
-	    &_append_parts($p, $header_msg, $footer_msg);
+	## Append to the first part, since other parts will be "attachments".
+	if ($part->parts and
+	    _append_parts($part->parts(0), $header_msg, $footer_msg)) {
+	    return 1;
 	}
-	return 1;
     } elsif ($eff_type eq 'multipart/alternative') {
-	## We treat all the parts
+	## We try all the alternatives
+	my $r = undef;
 	foreach my $p ($part->parts) {
-	    &_append_parts($p, $header_msg, $footer_msg);
+	    $r = 1
+		if _append_parts($p, $header_msg, $footer_msg);
 	}
-	return 1;
+	return $r if $r;
     } elsif ($eff_type eq 'multipart/related') {
-	## We treat all the parts
-	foreach my $p ($part->parts) {
-	    &_append_parts($p, $header_msg, $footer_msg);
+	## Append to the first part, since other parts will be "attachments".
+	if ($part->parts and
+	    _append_parts($part->parts(0), $header_msg, $footer_msg)) {
+	    return 1;
 	}
-	return 1;
     }
+
+    ## We couldn't find any parts to modify.
     return undef;
 }
 
+# Styles to cancel local CSS.
+my $div_style = 'background: transparent; border: none; clear: both; display: block; float: none; position: static';
+
 sub _append_footer_header_to_part {
     my $data       = shift;
-    my $io         = $data->{'io'};
+
     my $part       = $data->{'part'};
     my $header_msg = $data->{'header'};
     my $footer_msg = $data->{'footer'};
     my $eff_type   = $data->{'eff_type'};
     my $body       = $data->{'body'};
 
+    my $cset;
+
+    ## Detect charset.  If charset is unknown, detect 7-bit charset.
+    my $charset = $part->head->mime_attr('Content-Type.Charset');
+    $cset = MIME::Charset->new($charset || 'NONE');
+    unless ($cset->decoder) {
+	# n.b. detect_7bit_charset() in MIME::Charset prior to 1.009.2 doesn't
+	# work correctly.
+	my ($dummy, $charset) =
+	    MIME::Charset::body_encode($body, '', Detect7Bit => 'YES');
+	$cset = MIME::Charset->new($charset)
+	    if $charset;
+    }
+    unless ($cset->decoder) {
+	#Log::do_log('err', 'Unknown charset "%s"', $charset);
+	return undef;
+    }
+
+    ## Decode body to Unicode, since encode_entities() and newline
+    ## normalization will break texts with several character sets (UTF-16/32,
+    ## ISO-2022-JP, ...).
+    eval {
+	$body = $cset->decode($body, 1);
+	$header_msg = Encode::decode_utf8($header_msg, 1);
+	$footer_msg = Encode::decode_utf8($footer_msg, 1);
+    };
+    return undef if $@;
+
+    my $new_body;
     if ($eff_type eq 'text/plain') {
-	&do_log('notice', "Treating text/plain part");
-	$io->print($header_msg);
-	$io->print($body);
-	$io->print($footer_msg);
-	return 1;
+	Log::do_log('debug3', "Treating text/plain part");
+
+	## Add newlines. For BASE64 encoding they also must be normalized.
+	if (length $header_msg) {
+	    $header_msg .= "\n" unless $header_msg =~ /\n\z/;
+	}
+	if (length $footer_msg and length $body) {
+	    $body .= "\n" unless $body =~ /\n\z/;
+	}
+	if (uc($part->head->mime_attr(
+	    'Content-Transfer-Encoding') || '') eq 'BASE64') {
+	    $header_msg =~ s/\r\n|\r|\n/\r\n/g;
+	    $body =~ s/(\r\n|\r|\n)\z/\r\n/;       # only at end
+	    $footer_msg =~ s/\r\n|\r|\n/\r\n/g;
+	}
+
+	$new_body = $header_msg . $body . $footer_msg;
     } elsif ($eff_type eq 'text/html') {
-	&do_log('notice', "Treating text/html part");
-	my @bodydata = split('</body>', $body);
-	$io->print($header_msg);
+	Log::do_log('debug3', "Treating text/html part");
+
+	# Escape special characters.
+	$header_msg = encode_entities($header_msg, '<>&"');
+	$header_msg =~ s/(\r\n|\r|\n)$//; # strip the last newline.
+	$header_msg =~ s,(\r\n|\r|\n),<br/>,g;
+	$footer_msg = encode_entities($footer_msg, '<>&"');
+	$footer_msg =~ s/(\r\n|\r|\n)$//; # strip the last newline.
+	$footer_msg =~ s,(\r\n|\r|\n),<br/>,g;
+
+	my @bodydata = split '</body>', $body;
+	if (length $header_msg) {
+	    $new_body = sprintf '<div style="%s">%s</div>',
+		$div_style, $header_msg;
+	} else {
+	    $new_body = '';
+	}
 	my $i = -1;
 	foreach my $html_body_bit (@bodydata) {
-	    $io->print($html_body_bit);
+	    $new_body .= $html_body_bit;
 	    $i++;
-	    if ($i == $#bodydata) {
-		$io->print('<div>');
-		$io->print($footer_msg);
-		$io->print('</div></body>');
+	    if ($i == $#bodydata and length $footer_msg) {
+		$new_body .= sprintf '<div style="%s">%s</div></body>',
+		    $div_style, $footer_msg;
 	    } else {
-		$io->print('</body>');
+		$new_body .= '</body>';
 	    }
 	}
-	return 1;
     }
+
+    ## Only encodable footer/header are allowed.
+    eval {
+	$new_body = $cset->encode($new_body, 1);
+    };
+    return undef if $@;
+
+    return $new_body;
 }
 
 ## Delete a new user to Database (in User table)
