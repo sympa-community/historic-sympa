@@ -1219,7 +1219,11 @@ sub purge_session_table {
 sub purge_tables {
 
 	Sympa::Log::Syslog::do_log('info','');
-	my $removed = Sympa::Bulk::purge_bulkspool();
+
+	my $bulk = Sympa::Bulk->new(
+		source => Sympa::Database::get_source()
+	);
+	my $removed = $bulk->purge_bulkspool();
 	unless(defined $removed) {
 		Sympa::Log::Syslog::do_log('err','Failed to purge bulkspool');
 	}
