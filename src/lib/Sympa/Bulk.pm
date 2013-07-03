@@ -55,13 +55,6 @@ use Sympa::Spool;
 use Sympa::Template;
 use Sympa::Tools;
 
-## Database and SQL statement handlers
-my $sth;
-
-
-# last message stored in spool, this global var is used to prevent multiple stored of the same message in spool table
-my $last_stored_message_key;
-
 =head1 CLASS METHODS
 
 =over
@@ -501,15 +494,20 @@ sub store {
 
 
 	# first store the message in spool_table
-	# because as soon as packet are created bulk.pl may distribute the
-	# $last_stored_message_key is a global var used in order to detcect if a message as been allready stored
+	# because as soon as packet are created bulk.pl may distribute them
+
 	my $message_already_on_spool ;
 	my $bulkspool = Sympa::Spool->new(
 		name   => 'bulk',
 		source => $self->{source}
 	);
 
-	if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {
+	# last_stored_message_key is used to prevent multiple copies of the
+	# same message in spool table
+	if (
+		$self->{last_stored_message_key} &&
+		$self->{last_stored_message_key} eq $message->{'messagekey'}
+	) {
 		$message_already_on_spool = 1;
 	} else {
 		my $lock = $PID.'@'.hostname() ;
@@ -534,7 +532,7 @@ sub store {
 				return undef;
 			}
 		}
-		$last_stored_message_key = $message->{'messagekey'};
+		$self->{last_stored_message_key} = $message->{'messagekey'};
 
 		#log in stat_table to make statistics...
 		unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
