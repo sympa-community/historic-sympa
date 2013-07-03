@@ -46,13 +46,6 @@ use Sympa::Log::Syslog;
 use Sympa::Tools;
 use Sympa::Tools::Data;
 
-## Structure to keep track of active connections/connection status
-## Key : connect_string (includes server+port+dbname+DB type)
-## Values : dbh,status,first_try
-## "status" can have value 'failed'
-## 'first_try' contains an epoch date
-my %db_connections;
-
 my $abstract_structure = {
 	# subscription, subscription option, etc...
 	'subscriber_table' => {
@@ -1372,100 +1365,81 @@ sub establish_connection {
 	$connect_string .= ';port=' . $self->{db_port} if $self->{db_port};
 	$self->{connect_string} = $connect_string;
 
-	## First check if we have an active connection with this server
-	if (defined $db_connections{$connect_string} &&
-		defined $db_connections{$connect_string}{'dbh'} &&
-		$db_connections{$connect_string}{'dbh'}->ping()) {
-
-		Sympa::Log::Syslog::do_log('debug', "Use previous connection");
-		$self->{'dbh'} = $db_connections{$connect_string}{'dbh'};
-		return $db_connections{$connect_string}{'dbh'};
-
-	} else {
-
-		## Set environment variables
-		## Used by Oracle (ORACLE_HOME)
-		if ($self->{'db_env'}) {
-			foreach my $env (split /;/,$self->{'db_env'}) {
-				my ($key, $value) = split /=/, $env;
-				$ENV{$key} = $value if ($key);
-			}
+	## Set environment variables
+	## Used by Oracle (ORACLE_HOME)
+	if ($self->{'db_env'}) {
+		foreach my $env (split /;/,$self->{'db_env'}) {
+			my ($key, $value) = split /=/, $env;
+			$ENV{$key} = $value if ($key);
 		}
-
-		$self->{'dbh'} = eval {DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })} ;
-		unless (defined $self->{'dbh'}) {
-			## Notify listmaster if warn option was set
-			## Unless the 'failed' status was set earlier
-			if ($self->{'reconnect_options'}{'warn'}) {
-				unless (defined $db_connections{$connect_string} &&
-					$db_connections{$connect_string}{'status'} eq 'failed') {
-
-					unless
-					(Sympa::List::send_notify_to_listmaster('no_db', $self->{domain},{})) {
-						Sympa::Log::Syslog::do_log('err',"Unable to send notify 'no_db' to listmaster");
-					}
-				}
-			}
-			if ($self->{'reconnect_options'}{'keep_trying'}) {
-				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
-			} else {
-				Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{'db_user'});
-				$db_connections{$connect_string}{'status'} = 'failed';
-				$db_connections{$connect_string}{'first_try'} ||= time;
-				return undef;
-			}
-			## Loop until connect works
-			my $sleep_delay = 60;
-			while (1) {
-				sleep $sleep_delay;
-				eval {$self->{'dbh'} = DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })};
-				last if ($self->{'dbh'} && $self->{'dbh'}->ping());
-				$sleep_delay += 10;
-			}
-
-			if ($self->{'reconnect_options'}{'warn'}) {
-				Sympa::Log::Syslog::do_log('notice','Connection to Database %s restored.', $connect_string);
-				unless (Sympa::List::send_notify_to_listmaster('db_restored', $self->{domain},{})) {
-					Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
-				}
-			}
-		}
-
-		if ($self->{'db_type'} eq 'pg') { # Configure Postgres to use ISO format dates
-			$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
-		}
-
-		## Set client encoding to UTF8
-		if ($self->{'db_type'} eq 'mysql' ||
-			$self->{'db_type'} eq 'pg') {
-			Sympa::Log::Syslog::do_log('debug','Setting client encoding to UTF-8');
-			$self->{'dbh'}->do("SET NAMES 'utf8'");
-		} elsif ($self->{'db_type'} eq 'oracle') {
-			$ENV{'NLS_LANG'} = 'UTF8';
-		} elsif ($self->{'db_type'} eq 'sybase') {
-			$ENV{'SYBASE_CHARSET'} = 'utf8';
-		}
-
-		## added sybase support
-		if ($self->{'db_type'} eq 'sybase') {
-			my $dbname;
-			$dbname="use $self->{'db_name'}";
-			$self->{'dbh'}->do ($dbname);
-		}
-
-		## Force field names to be lowercased
-		## This has has been added after some problems of field names upercased with Oracle
-		$self->{'dbh'}{'FetchHashKeyName'}='NAME_lc';
-
-		if ($self->{'db_type'} eq 'sqlite') { # Configure to use sympa database
-			$self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
-			if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
-		}
-
-		$db_connections{$connect_string}{'dbh'} = $self->{'dbh'};
-		Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
-		return $self->{'dbh'};
 	}
+
+	$self->{'dbh'} = eval {DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })} ;
+	unless (defined $self->{'dbh'}) {
+		## Notify listmaster if warn option was set
+		## Unless the 'failed' status was set earlier
+		if ($self->{'reconnect_options'}{'warn'}) {
+			unless
+			(Sympa::List::send_notify_to_listmaster('no_db', $self->{domain},{})) {
+				Sympa::Log::Syslog::do_log('err',"Unable to send notify 'no_db' to listmaster");
+			}
+		}
+		if ($self->{'reconnect_options'}{'keep_trying'}) {
+			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
+		} else {
+			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{'db_user'});
+			return undef;
+		}
+		## Loop until connect works
+		my $sleep_delay = 60;
+		while (1) {
+			sleep $sleep_delay;
+			eval {$self->{'dbh'} = DBI->connect($connect_string, $self->{'db_user'}, $self->{'db_passwd'}, { PrintError => 0 })};
+			last if ($self->{'dbh'} && $self->{'dbh'}->ping());
+			$sleep_delay += 10;
+		}
+
+		if ($self->{'reconnect_options'}{'warn'}) {
+			Sympa::Log::Syslog::do_log('notice','Connection to Database %s restored.', $connect_string);
+			unless (Sympa::List::send_notify_to_listmaster('db_restored', $self->{domain},{})) {
+				Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
+			}
+		}
+	}
+
+	if ($self->{'db_type'} eq 'pg') { # Configure Postgres to use ISO format dates
+		$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
+	}
+
+	## Set client encoding to UTF8
+	if ($self->{'db_type'} eq 'mysql' ||
+		$self->{'db_type'} eq 'pg') {
+		Sympa::Log::Syslog::do_log('debug','Setting client encoding to UTF-8');
+		$self->{'dbh'}->do("SET NAMES 'utf8'");
+	} elsif ($self->{'db_type'} eq 'oracle') {
+		$ENV{'NLS_LANG'} = 'UTF8';
+	} elsif ($self->{'db_type'} eq 'sybase') {
+		$ENV{'SYBASE_CHARSET'} = 'utf8';
+	}
+
+	## added sybase support
+	if ($self->{'db_type'} eq 'sybase') {
+		my $dbname;
+		$dbname="use $self->{'db_name'}";
+		$self->{'dbh'}->do ($dbname);
+	}
+
+	## Force field names to be lowercased
+	## This has has been added after some problems of field names upercased with Oracle
+	$self->{'dbh'}{'FetchHashKeyName'}='NAME_lc';
+
+	if ($self->{'db_type'} eq 'sqlite') { # Configure to use sympa database
+		$self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
+		if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
+	}
+
+	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
+	return $self->{'dbh'};
 }
 
 =item $self->get_structure()
@@ -2085,7 +2059,6 @@ sub disconnect {
 
 	$self->{'sth'}->finish if $self->{'sth'};
 	if ($self->{'dbh'}) {$self->{'dbh'}->disconnect;}
-	delete $db_connections{$self->{'connect_string'}};
 }
 
 sub ping {
