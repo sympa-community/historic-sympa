@@ -3807,12 +3807,18 @@ sub send_global_file {
 		);
 	}
 
-	$data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
+	# use verp excepted for alarms. We should make this configurable in
+	# order to support Sympa server on a machine without any MTA service
+	my $bulk;
+	$bulk = Sympa::Bulk->new(
+		source => Sympa::Database::get_source()
+	)  unless $data->{'alarm'};
 
 	my $result = Sympa::Mail::mail_file(
 		filename        => $filename,
 		recipient       => $who,
 		data            => $data,
+		bulk            => $bulk,
 		robot           => $robot,
 		cookie          => $Sympa::Configuration::Conf{'cookie'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
@@ -4001,11 +4007,19 @@ sub send_file {
 			robot => $self->{'domain'}
 		);
 	}
-	$data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
+
+	# use verp excepted for alarms. We should make this configurable in
+	# order to support Sympa server on a machine without any MTA service
+	my $bulk;
+	$bulk = Sympa::Bulk->new(
+		source => Sympa::Database::get_source()
+	)  unless $data->{'alarm'};
+
 	my $result = Sympa::Mail::mail_file(
 		filename        => $filename,
 		recipient       => $who,
 		data            => $data,
+		bulk            => $bulk,
 		robot           => $self->{'domain'},
 		cookie          => $Sympa::Configuration::Conf{'cookie'},
 		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
@@ -4392,8 +4406,13 @@ sub send_msg {
 		my @verp_selected_tabrcpt = extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
 		my $verp= 'off';
 
+		my $bulk = Sympa::Bulk->new(
+			source => Sympa::Database::get_source()
+		);
+
 		my $result = Sympa::Mail::mail_message(
 			message            => $new_message,
+			bulk               => $bulk,
 			rcpt               => \@selected_tabrcpt,
 			list               => $self,
 			verp               => $verp,
@@ -4439,8 +4458,12 @@ sub send_msg {
 		next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
 
 		## prepare VERP sending.
+		my $bulk = Sympa::Bulk->new(
+			source => Sympa::Database::get_source()
+		);
 		$result = Sympa::Mail::mail_message(
 			message            => $new_message,
+			bulk               => $bulk,
 			rcpt               => \@verp_selected_tabrcpt,
 			list               => $self,
 			verp               => $verp,

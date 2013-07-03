@@ -40,7 +40,6 @@ use MIME::Tools;
 use POSIX qw();
 use Time::Local;
 
-use Sympa::Bulk;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log::Syslog;
@@ -384,7 +383,7 @@ sub mail_file {
 		priority        => $params{priority},
 		priority_packet => $params{priority_packet},
 		sign_mode       => $params{sign_mode},
-		use_bulk        => $data->{'use_bulk'},
+		bulk            => $params{bulk},
 		dkim            => $data->{'dkim'},
 		sendmail        => $params{sendmail},
 		sendmail_args   => $params{sendmail_args},
@@ -571,7 +570,7 @@ sub mail_message {
 		delivery_date   => $list->get_next_delivery_date,
 		robot           => $robot,
 		encrypt         => $message->{'smime_crypted'},
-		use_bulk        => 1,
+		bulk            => $params{bulk},
 		verp            => $verp,
 		dkim            => $dkim,
 		merge           => $list->{'admin'}{'merge_feature'},
@@ -721,7 +720,7 @@ sub reaper {
 # * robot(+) : robot
 # * encrypt : 'smime_crypted' | undef
 # * verp : 1| undef
-# * use_bulk : if defined,  send message using bulk
+# * bulk : if defined,  send message using bulk
 #
 # Return value:
 # 1 - call to sending
@@ -742,10 +741,10 @@ sub _sendto {
 	my $verp = $params{'verp'};
 	my $merge = $params{'merge'};
 	my $dkim = $params{'dkim'};
-	my $use_bulk = $params{'use_bulk'};
+	my $bulk = $params{'bulk'};
 	my $tag_as_last = $params{'tag_as_last'};
 
-	Sympa::Log::Syslog::do_log('debug', '(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, use_bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $use_bulk);
+	Sympa::Log::Syslog::do_log('debug', '(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $params{bulk});
 
 	my $delivery_date =  $params{'delivery_date'};
 	$delivery_date = time() unless $delivery_date; # if not specified, delivery tile is right now (used for sympa messages etc)
@@ -781,7 +780,7 @@ sub _sendto {
 					priority        => $priority,
 					priority_packet => $priority_packet,
 					delivery_date   => $delivery_date,
-					use_bulk        => $use_bulk,
+					bulk            => $bulk,
 					tag_as_last     => $tag_as_last,
 					sendmail        => $params{sendmail},
 					sendmail_args   => $params{sendmail_args},
@@ -812,7 +811,7 @@ sub _sendto {
 			delivery_date   => $delivery_date,
 			verp            => $verp,
 			merge           => $merge,
-			use_bulk        => $use_bulk,
+			bulk            => $bulk,
 			dkim            => $dkim,
 			tag_as_last     => $tag_as_last,
 			sendmail        => $params{sendmail},
@@ -864,7 +863,7 @@ sub _sending {
 	$delivery_date = time() unless ($delivery_date);
 	my $verp  =  $params{'verp'};
 	my $merge  =  $params{'merge'};
-	my $use_bulk = $params{'use_bulk'};
+	my $bulk = $params{'bulk'};
 	my $dkim = $params{'dkim'};
 	my $tag_as_last = $params{'tag_as_last'};
 	my $sympa_file;
@@ -896,21 +895,21 @@ sub _sending {
 	}
 	my $mergefeature = ($merge eq 'on');
 
-	if ($use_bulk){ # in that case use bulk tables to prepare message distribution
-
-		my $bulk_code = Sympa::Bulk::store('message' => $message,
-			'rcpts' => $rcpt,
-			'from' => $from,
-			'robot' => $robot,
-			'listname' => $listname,
+	if ($bulk){ # in that case use bulk tables to prepare message distribution
+		my $bulk_code = $bulk->store(
+			'message'          => $message,
+			'rcpts'            => $rcpt,
+			'from'             => $from,
+			'robot'            => $robot,
+			'listname'         => $listname,
 			'priority_message' => $priority_message,
-			'priority_packet' => $priority_packet,
-			'delivery_date' => $delivery_date,
-			'verp' => $verpfeature,
-			'tracking' => $trackingfeature,
-			'merge' => $mergefeature,
-			'dkim' => $dkim,
-			'tag_as_last' => $tag_as_last,
+			'priority_packet'  => $priority_packet,
+			'delivery_date'    => $delivery_date,
+			'verp'             => $verpfeature,
+			'tracking'         => $trackingfeature,
+			'merge'            => $mergefeature,
+			'dkim'             => $dkim,
+			'tag_as_last'      => $tag_as_last,
 		);
 
 		unless (defined $bulk_code) {
