@@ -97,7 +97,7 @@ sub new {
 
 =over
 
-=item $bulk->next($db_type)
+=item $bulk->next()
 
 Get next packet to process, order is controled by priority_message, then by
 priority_packet, then by creation date.
@@ -108,7 +108,7 @@ Next lock the packetb to prevent multiple proccessing of a single packet
 =cut
 
 sub next {
-	my ($self, $db_type) = @_;
+	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::next');
 
 	# lock next packet
@@ -123,6 +123,7 @@ sub next {
 			"verp_bulkmailer ASC";
 	my $limit_oracle='';
 	my $limit_sybase='';
+	my $db_type = $self->{source}->get_type();
 	if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
 		$order_clause .= ' LIMIT 1';
 	} elsif ($db_type eq 'Oracle'){
