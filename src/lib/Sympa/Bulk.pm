@@ -302,12 +302,14 @@ sub message_from_spool {
 
 	my $message_from_spool = $handle->fetchrow_hashref('NAME_lc') ;
 
-	return({'messageasstring'=> MIME::Base64::decode($message_from_spool->{'message'}),
-			'messageid' => $message_from_spool->{'messageid'},
-			'dkim_d' => $message_from_spool->{'dkim_d'},
-			'dkim_i' => $message_from_spool->{'dkim_i'},
-			'dkim_selector' => $message_from_spool->{'dkim_selector'},
-			'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},});
+	return {
+		'messageasstring' => MIME::Base64::decode($message_from_spool->{'message'}),
+		'messageid'       => $message_from_spool->{'messageid'},
+		'dkim_d'          => $message_from_spool->{'dkim_d'},
+		'dkim_i'          => $message_from_spool->{'dkim_i'},
+		'dkim_selector'   => $message_from_spool->{'dkim_selector'},
+		'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}
+	};
 
 }
 
