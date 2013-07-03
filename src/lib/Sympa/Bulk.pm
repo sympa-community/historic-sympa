@@ -445,28 +445,20 @@ Return value:
 =cut
 
 sub merge_data {
-	my ($self) = @_;
-
-	my %params = @_;
-	my $rcpt = $params{'rcpt'},
-	my $listname = $params{'listname'},
-	my $robot = $params{'robot'},
-	my $data = $params{'data'},
-	my $body = $params{'body'},
-	my $message_output = $params{'message_output'},
+	my ($self, %params) = @_;
 
 	my $options;
 	$options->{'is_not_template'} = 1;
 
 	my $user_details;
-	$user_details->{'email'} = $rcpt;
-	$user_details->{'name'} = $listname;
-	$user_details->{'domain'} = $robot;
+	$user_details->{'email'} = $params{rcpt};
+	$user_details->{'name'} = $params{listname};
+	$user_details->{'domain'} = $params{robot};
 
 	# get_list_member_no_object() return the user's details with the custom attributes
 	my $user = Sympa::List::get_list_member_no_object($user_details);
 
-	$user->{'escaped_email'} = URI::Escape::uri_escape($rcpt);
+	$user->{'escaped_email'} = URI::Escape::uri_escape($params{rcpt});
 	$user->{'friendly_date'} = Sympa::Language::gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
 
 	# this method as been removed because some users may forward authentication link
@@ -474,13 +466,13 @@ sub merge_data {
 	# $random = init_db_random() unless $random;
 	# $user->{'fingerprint'} = get_fingerprint($rcpt);
 
-	$data->{'user'} = $user;
-	$data->{'robot'} = $robot;
-	$data->{'listname'} = $listname;
+	$params{data}->{'user'} = $user;
+	$params{data}->{'robot'} = $params{robot};
+	$params{data}->{'listname'} = $params{listname};
 
 	# Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
-	unless (Sympa::Template::parse_tt2($data,\$body, $message_output, '', $options)) {
-		Sympa::Log::Syslog::do_log('err','Unable to parse body : "%s"', \$body);
+	unless (Sympa::Template::parse_tt2($params{data},\$params{body}, $params{message_output}, '', $options)) {
+		Sympa::Log::Syslog::do_log('err','Unable to parse body : "%s"', \$params{body});
 	return undef;
 	}
 
@@ -494,32 +486,33 @@ FIXME.
 =cut
 
 sub store {
-	my ($self, %data) = @_;
+	my ($self, %params) = @_;
 
-	my $message = $data{'message'};
-	my $msg_id = $message->{'msg'}->head()->get('Message-ID'); chomp $msg_id;
-	my $rcpts = $data{'rcpts'};
-	my $from = $data{'from'};
-	my $robot = $data{'robot'};
-	my $listname = $data{'listname'};
-	my $priority_message = $data{'priority_message'};
-	my $priority_packet = $data{'priority_packet'};
-	my $delivery_date = $data{'delivery_date'};
-	my $verp  = $data{'verp'};
-	my $tracking  = $data{'tracking'};
-	$tracking  = '' unless (($tracking  eq 'dsn')||($tracking  eq 'mdn'));
-	$verp=0 unless($verp);
-	my $merge  = $data{'merge'};
-	$merge=0 unless($merge);
-	my $dkim = $data{'dkim'};
-	my $tag_as_last = $data{'tag_as_last'};
+	my $message = $params{'message'};
+	my $msg_id = $message->{'msg'}->head()->get('Message-ID');
+	chomp $msg_id;
+	my $dkim = $params{dkim};
 
-	Sympa::Log::Syslog::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
-
+	$params{tracking}  = '' unless
+		$params{tracking} eq 'dsn' ||
+		$params{tracking} eq 'mdn';
+	$params{verp}  = 0 unless $params{verp};
+	$params{merge} = 0 unless $params{merge};
 	# todo: use a bulk instance, and pass those default parameters at
 	# instanciation time
-	$priority_message = Sympa::Configuration::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
-	$priority_packet = Sympa::Configuration::get_robot_conf($robot,'sympa_packet_priority') unless ($priority_packet);
+	$params{priority_message} = Sympa::Configuration::get_robot_conf(
+		$params{robot}, 'sympa_priority'
+	) unless $params{priority_message};
+	$params{priority_packet} = Sympa::Configuration::get_robot_conf(
+		$params{robot}, 'sympa_packet_priority'
+	) unless $params{priority_packet};
+
+	Sympa::Log::Syslog::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from =
+		%s,robot = %s,listname= %s,priority_message = %s,
+		delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim:
+		d= %s i=%s, last:
+		%s)',$params{from},$params{robot},$params{listname},$params{priority_message},$params{delivery_date},$params{verp},$params{tracking},
+		$params{merge},$dkim->{'d'},$dkim->{'i'},$params{tag_as_last});
 
 	#creation of a MIME entity to extract the real sender of a message
 	my $parser = MIME::Parser->new();
@@ -574,11 +567,11 @@ sub store {
 		$self->{last_stored_message_key} = $message->{'messagekey'};
 
 		#log in stat_table to make statistics...
-		unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
-			unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests
+		unless($message_sender =~ /($params{robot})\@/) { #ignore messages sent by robot
+			unless ($message_sender =~ /($params{listname})-request/) { #ignore messages of requests
 				Sympa::Log::Database::add_stat(
-					robot     => $robot,
-					list      => $listname,
+					robot     => $params{robot},
+					list      => $params{listname},
 					operation => 'send_mail',
 					parameter => length($string),
 					mail      => $message_sender,
@@ -591,22 +584,22 @@ sub store {
 	my $current_date = int(time);
 
 	# second : create each receipient packet in bulkmailer_table
-	my $type = ref $rcpts;
+	my $type = ref $params{rcpts};
 
-	unless (ref $rcpts) {
-		my @tab = ($rcpts);
+	unless (ref $params{rcpts}) {
+		my @tab = ($params{rcpts});
 		my @tabtab;
 		push @tabtab, \@tab;
-		$rcpts = \@tabtab;
+		$params{rcpts} = \@tabtab;
 	}
 
 	my $priority_for_packet;
 	my $already_tagged = 0;
 	my $packet_rank = 0; # Initialize counter used to check wether we are copying the last packet.
-	foreach my $packet (@{$rcpts}) {
-		$priority_for_packet = $priority_packet;
-		if($tag_as_last && !$already_tagged){
-			$priority_for_packet = $priority_packet + 5;
+	foreach my $packet (@{$params{rcpts}}) {
+		$priority_for_packet = $params{priority_packet};
+		if($params{tag_as_last} && !$already_tagged){
+			$priority_for_packet = $params{priority_packet} + 5;
 			$already_tagged = 1;
 		}
 		$type = ref $packet;
@@ -618,8 +611,8 @@ sub store {
 		}
 		my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
 		my $packet_already_exist;
-		if (ref($listname) && $listname->isa('Sympa::List')) {
-			$listname = $listname->{'name'};
+		if (ref($params{listname}) && $params{listname}->isa('Sympa::List')) {
+			$params{listname} = $params{listname}->{'name'};
 		}
 		if ($message_already_on_spool) {
 			## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
@@ -668,16 +661,16 @@ sub store {
 				$msg_id,
 				$packetid,
 				$rcptasstring,
-				$from,
-				$robot,
-				$listname,
-				$verp,
-				$tracking,
-				$merge,
-				$priority_message,
+				$params{from},
+				$params{robot},
+				$params{listname},
+				$params{verp},
+				$params{tracking},
+				$params{merge},
+				$params{priority_message},
 				$priority_for_packet,
 				$current_date,
-				$delivery_date
+				$params{delivery_date}
 			);
 			unless ($rows) {
 				Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
