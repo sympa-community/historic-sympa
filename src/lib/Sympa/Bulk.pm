@@ -375,53 +375,53 @@ sub merge_msg {
 
 			## PARSAGE ##
 
-			$self->merge_data('rcpt' => $rcpt,
-				'messageid' => $bulk->{'messageid'},
-				'listname' => $bulk->{'listname'},
-				'robot' => $bulk->{'robot'},
-				'data' => $data,
-				'body' => $body,
+			$self->merge_data(
+				'rcpt'           => $rcpt,
+				'messageid'      => $bulk->{'messageid'},
+				'listname'       => $bulk->{'listname'},
+				'robot'          => $bulk->{'robot'},
+				'data'           => $data,
+				'body'           => $body,
 				'message_output' => \$message_output,
-		);
-		$body = $message_output;
+			);
+			$body = $message_output;
 
-		## We use find_encoding() to ensure that's a valid charset
-		if ($charset && ref Encode::find_encoding($charset)) {
-			unless($charset =~ /UTF-8/){
-				# Put the charset to UTF-8
-				Encode::from_to($body, 'UTF-8',$charset);
+			## We use find_encoding() to ensure that's a valid charset
+			if ($charset && ref Encode::find_encoding($charset)) {
+				unless($charset =~ /UTF-8/){
+					# Put the charset to UTF-8
+					Encode::from_to($body, 'UTF-8',$charset);
+				}
+			} else {
+				Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
 			}
-		} else {
-			Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
-		}
 
-		# Write the new body in the entity
-		unless($IO = $entity->bodyhandle()->open("w") || die "open body: $ERRNO"){
-			Sympa::Log::Syslog::do_log('err', "Can't open Entity");
-			return undef;
+			# Write the new body in the entity
+			unless($IO = $entity->bodyhandle()->open("w") || die "open body: $ERRNO"){
+				Sympa::Log::Syslog::do_log('err', "Can't open Entity");
+				return undef;
+			}
+			unless($IO->print($body)){
+				Sympa::Log::Syslog::do_log('err', "Can't write in Entity");
+				return undef;
+			}
+			unless($IO->close || die "close I/O handle: $ERRNO"){
+				Sympa::Log::Syslog::do_log('err', "Can't close Entity");
+				return undef;
+			}
 		}
-		unless($IO->print($body)){
-			Sympa::Log::Syslog::do_log('err', "Can't write in Entity");
-			return undef;
-		}
-		unless($IO->close || die "close I/O handle: $ERRNO"){
-			Sympa::Log::Syslog::do_log('err', "Can't close Entity");
+	}
+
+	##--- Recursive call of the method. ---##
+	## Course on the different parts of the message at all levels.
+	foreach my $part ($entity->parts) {
+		unless($self->merge_msg($part, $rcpt, $bulk, $data)){
+			Sympa::Log::Syslog::do_log('err', "Failed to merge message part.");
 			return undef;
 		}
 	}
-}
 
-##--- Recursive call of the method. ---##
-## Course on the different parts of the message at all levels.
-foreach my $part ($entity->parts) {
-	unless($self->merge_msg($part, $rcpt, $bulk, $data)){
-		Sympa::Log::Syslog::do_log('err', "Failed to merge message part.");
-		return undef;
-	}
-}
-
-return 1;
-
+	return 1;
 }
 
 =item $bulk->merge_data(%parameterss)
