@@ -91,6 +91,30 @@ sub new {
 	return $self;
 }
 
+=head1 INSTANCE METHODS
+
+=over
+
+=item $database->connect()
+
+=cut
+
+sub connect {
+	my ($self) = @_;
+	return $self->{source}->connect();
+}
+
+=over
+
+=item $database->disconnect()
+
+=cut
+
+sub disconnect {
+	my ($self) = @_;
+	return $self->{source}->disconnect();
+}
+
 =head1 FUNCTIONS
 
 =over
