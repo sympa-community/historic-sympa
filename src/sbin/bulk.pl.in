@@ -215,7 +215,6 @@ while (!$end) {
 	Sympa::List::init_list_cache();
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
-	my $bulk;
 	my $message_from_spool ;
 
 	unless ($options{'foreground'}) {
@@ -357,43 +356,45 @@ while (!$end) {
 
 	## Go through the bulk_mailer table and process messages
 
-	if ($bulk = Sympa::Bulk::next($Sympa::Configuration::Conf{'db_type'})) {
-		if ($bulk->{'messagekey'} ne $messagekey) {
+	if (my $next = Sympa::Bulk::next($Sympa::Configuration::Conf{'db_type'})) {
+		if ($next->{'messagekey'} ne $messagekey) {
 			# current packet is not related to the same message as
 			# the previous packet
 			# so it is needed to fetch the new message from message_table
-			$messagekey = $bulk->{'messagekey'};
-			$message_from_spool = $spool->get_message({'messagekey' => $bulk->{'messagekey'}});
+			$messagekey = $next->{'messagekey'};
+			$message_from_spool =
+				$spool->get_message({'messagekey' => $next->{'messagekey'}});
 			Sympa::Log::Syslog::do_log('notice','Start sending message "%s" (key "%s") to list "%s@%s" (priority %s) (starting %s seconds after scheduled expedition date)',
-				$bulk->{'messageid'},
-				$bulk->{'messagekey'},
-				$bulk->{'listname'},
-				$bulk->{'robot'},
-				$bulk->{'priority_message'},
-				time() - $bulk->{'delivery_date'}
+				$next->{'messageid'},
+				$next->{'messagekey'},
+				$next->{'listname'},
+				$next->{'robot'},
+				$next->{'priority_message'},
+				time() - $next->{'delivery_date'}
 			);
 
 			$messageasstring_init = $message_from_spool->{'messageasstring'};
 
 			unless ( $messageasstring_init ) {
-				Sympa::Log::Syslog::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
-				unless (Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-					Sympa::Log::Syslog::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+				Sympa::Log::Syslog::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$next->{'messagekey'});
+				unless
+				(Sympa::Bulk::remove($next->{'messagekey'},$next->{'packetid'})) {
+					Sympa::Log::Syslog::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $next->{'messagekey'},$next->{'packetid'});
 				}
 			}
-			$messagekey = $bulk->{'messagekey'};
+			$messagekey = $next->{'messagekey'};
 		}
 		my $data; #HASH which will contain the attributes of the subscriber
 
 		# Initialization of the HASH : $data.
 		# It will be used by parse_tt2 to personalized messages.
-		$data->{'listname'} = $bulk->{'listname'};
-		$data->{'robot'} = $bulk->{'robot'};
-		$data->{'to'} = $bulk->{'receipients'};
-		$data->{'wwsympa_url'} = Sympa::Configuration::get_robot_conf($bulk->{'robot'},'wwsympa_url');
+		$data->{'listname'} = $next->{'listname'};
+		$data->{'robot'} = $next->{'robot'};
+		$data->{'to'} = $next->{'receipients'};
+		$data->{'wwsympa_url'} = Sympa::Configuration::get_robot_conf($next->{'robot'},'wwsympa_url');
 
 		my $rcpt; # It is the email of a subscriber, use it in the foreach
-		my @rcpts = split /,/,$bulk->{'receipients'}; # / Contain all the subscribers
+		my @rcpts = split /,/,$next->{'receipients'}; # / Contain all the subscribers
 		## Use an intermediate handler to encode to filesystem_encoding
 		my $user;
 
@@ -406,10 +407,16 @@ while (!$end) {
 		#  -6 dkim sign
 
 
-		#my $list = Sympa::List->new($bulk->{'listname'}, $bulk->{'robot'});
-		my $listname= $bulk->{'listname'}; my $robot =  $bulk->{'robot'};
+		#my $list = Sympa::List->new($next->{'listname'}, $next->{'robot'});
+		my $listname= $next->{'listname'};
+		my $robot =  $next->{'robot'};
 
-		if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'}eq 'dsn')||($bulk->{'tracking'}eq 'mdn')){
+		if (
+			$next->{'verp'}  ||
+			$next->{'merge'} || 
+			$next->{'tracking'} eq 'dsn' || 
+			$next->{'tracking'}eq 'mdn'
+		){
 			# message needs personalization
 			my $key ;
 
@@ -424,11 +431,15 @@ while (!$end) {
 				my $escaped_rcpt = $rcpt;
 				$escaped_rcpt  =~ s/\@/\=\=a\=\=/;
 
-				if(($bulk->{'tracking'} eq 'dsn')||($bulk->{'tracking'} eq 'mdn')){ # tracking by MDN required tracking by DSN to
+				if (
+					$next->{'tracking'} eq 'dsn' ||
+					$next->{'tracking'} eq 'mdn'
+				) {
+					# tracking by MDN required tracking by DSN to
 					my $msgid = $entity->head()->get('Message-Id'); chomp $msgid;
 					$notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
-					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
+					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn') ;
 					if (($message->{'protected'})||($message->{'smime_crypted'})){
 					my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
 					$messageasstring_init = $entity->head()->as_string(). "\n" . $msg_body; # concat headers from entity with original body
@@ -439,8 +450,8 @@ while (!$end) {
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
 				}
 
-				if (($bulk->{'merge'}) && !($message->{'protected'})) {
-					unless(Sympa::Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
+				if (($next->{'merge'}) && !($message->{'protected'})) {
+					unless(Sympa::Bulk::merge_msg ($entity, $rcpt, $next, $data)){
 						Sympa::Log::Syslog::do_log('err', 'Erreur d appel Sympa::Bulk::merge_msg');
 					}
 					$messageasstring = $entity->as_string();
@@ -448,7 +459,7 @@ while (!$end) {
 					$messageasstring = $messageasstring_init;
 				}
 
-				if (Sympa::Configuration::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
+				if (Sympa::Configuration::get_robot_conf($next->{'robot'}, 'dkim_feature') eq 'on'){
 					# assume Sympa::Tools::DKIM can be loaded if the setting is
 					# still on
 					require Sympa::Tools::DKIM;
@@ -469,14 +480,14 @@ while (!$end) {
 					);
 				}
 
-				*SMTP = Sympa::Mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
+				*SMTP = Sympa::Mail::smtpto($return_path, \$rcpt, $next->{'robot'},$notification_id);
 				# Message with customized data
 				print SMTP $messageasstring;
 				close SMTP;
 			}
 		} else {
 			# message dont needs personalization, they can be sent by packet
-			if (Sympa::Configuration::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
+			if (Sympa::Configuration::get_robot_conf($next->{'robot'}, 'dkim_feature') eq 'on'){
 				$messageasstring_init = remove_invalid_dkim_signature($messageasstring_init, $Sympa::Configuration::Conf{'tmpdir'});
 			}
 			# Initial message
@@ -496,24 +507,24 @@ while (!$end) {
 				);
 			}
 
-			*SMTP = Sympa::Mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
+			*SMTP = Sympa::Mail::smtpto($next->{'returnpath'}, \@rcpts, $next->{'robot'});
 			print SMTP $messageasstring_init;
 			close SMTP;
 		}
 
 		## Remove packet once it has been processed
-		unless (Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-			Sympa::Log::Syslog::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+		unless (Sympa::Bulk::remove($next->{'messagekey'},$next->{'packetid'})) {
+			Sympa::Log::Syslog::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $next->{'messagekey'},$next->{'packetid'});
 		}
 
-		if($bulk->{'priority_packet'} == $Sympa::Configuration::Conf{'sympa_packet_priority'} + 5){
+		if($next->{'priority_packet'} == $Sympa::Configuration::Conf{'sympa_packet_priority'} + 5){
 			Sympa::Log::Syslog::do_log('notice','Done sending message "%s" (key "%s") to list "%s@%s" (priority %s) in %s seconds since scheduled expedition date.',
-				$bulk->{'messageid'},
-				$bulk->{'messagekey'},
-				$bulk->{'listname'},
-				$bulk->{'robot'},
-				$bulk->{'priority_message'},
-				time() - $bulk->{'delivery_date'}
+				$next->{'messageid'},
+				$next->{'messagekey'},
+				$next->{'listname'},
+				$next->{'robot'},
+				$next->{'priority_message'},
+				time() - $next->{'delivery_date'}
 			);
 		}
 		$date_of_last_activity = time();
