@@ -114,13 +114,17 @@ sub next {
 	# lock next packet
 	my $lock = Sympa::Tools::get_lockname();
 
-	my $order;
+	## Only the first record found is locked, thanks to the "LIMIT 1" clause
+	my $order_clause =
+		"ORDER BY "                                 .
+			"priority_message_bulkmailer ASC, " .
+			"priority_packet_bulkmailer ASC, "  .
+			"reception_date_bulkmailer ASC, "   .
+			"verp_bulkmailer ASC";
 	my $limit_oracle='';
 	my $limit_sybase='';
-	## Only the first record found is locked, thanks to the "LIMIT 1" clause
-	$order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
 	if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
-		$order.=' LIMIT 1';
+		$order_clause .= ' LIMIT 1';
 	} elsif ($db_type eq 'Oracle'){
 		$limit_oracle = 'AND rownum<=1';
 	} elsif ($db_type eq 'Sybase'){
@@ -128,61 +132,84 @@ sub next {
 	}
 
 	# Select the most prioritary packet to lock.
-	my $sth = $self->{source}->do_prepared_query(
-		sprintf(
-			"SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= ? %s %s",
-			$limit_sybase,
-			$limit_oracle,
-			$order
-		),
-		int(time())
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT $limit_sybase "                         .
+			"messagekey_bulkmailer AS messagekey, " . 
+			"packetid_bulkmailer AS packetid "      .
+		"FROM bulkmailer_table "                        .
+		"WHERE "                                        .
+			"lock_bulkmailer IS NULL AND "          .
+			"delivery_date_bulkmailer <= ? "        .
+			$limit_oracle .
+		$order_clause
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to get the most prioritary packet from database');
 		return undef;
 	}
+	$handle->execute(int(time()));
 
 	my $packet;
-	unless($packet = $sth->fetchrow_hashref('NAME_lc')){
+	unless($packet = $handle->fetchrow_hashref('NAME_lc')){
 		return undef;
 	}
 
 	# Lock the packet previously selected.
-	my $rv = $self->{source}->do_query(
-		"UPDATE bulkmailer_table SET lock_bulkmailer=%s WHERE messagekey_bulkmailer='%s' AND packetid_bulkmailer='%s' AND lock_bulkmailer IS NULL",
-		$self->{source}->quote($lock),
+	my $rows = $self->{source}->do(
+		"UPDATE bulkmailer_table "             .
+		"SET lock_bulkmailer=? "               .
+		"WHERE "                               .
+			"messagekey_bulkmailer=? AND " .
+			"packetid_bulkmailer=? AND "   .
+			"lock_bulkmailer IS NULL",
+		undef,
+		$lock,
 		$packet->{'messagekey'},
 		$packet->{'packetid'}
 	);
-	unless ($rv) {
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to lock packet %s for message %s',$packet->{'packetid'}, $packet->{'messagekey'});
 		return undef;
 	}
 
-	if ($rv < 0) {
+	if ($rows < 0) {
 		Sympa::Log::Syslog::do_log('err','Unable to lock packet %s for message %s, though the query succeeded',$packet->{'packetid'}, $packet->{'messagekey'});
 		return undef;
 	}
-	unless ($rv) {
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('info','Bulk packet is already locked');
 		return undef;
 	}
 
 	# select the packet that has been locked previously
-	my $sth = $self->{source}->do_query(
-		"SELECT messagekey_bulkmailer AS messagekey, messageid_bulkmailer AS messageid, packetid_bulkmailer AS packetid, receipients_bulkmailer AS receipients, returnpath_bulkmailer AS returnpath, listname_bulkmailer AS listname, robot_bulkmailer AS robot, priority_message_bulkmailer AS priority_message, priority_packet_bulkmailer AS priority_packet, verp_bulkmailer AS verp, tracking_bulkmailer AS tracking, merge_bulkmailer as merge, reception_date_bulkmailer AS reception_date, delivery_date_bulkmailer AS delivery_date FROM bulkmailer_table WHERE lock_bulkmailer=%s %s",
-		$self->{source}->quote($lock),
-		$order
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT " .
+			"messagekey_bulkmailer AS messagekey, "   .
+			"messageid_bulkmailer AS messageid, "     .
+			"packetid_bulkmailer AS packetid, "       .
+			"receipients_bulkmailer AS receipients, " .
+			"returnpath_bulkmailer AS returnpath, "   .
+			"listname_bulkmailer AS listname, "       .
+			"robot_bulkmailer AS robot, " .
+			"priority_message_bulkmailer AS priority_message, " .
+			"priority_packet_bulkmailer AS priority_packet, " .
+			"verp_bulkmailer AS verp, " .
+			"tracking_bulkmailer AS tracking, " .
+			"merge_bulkmailer as merge, " .
+			"reception_date_bulkmailer AS reception_date, " .
+			"delivery_date_bulkmailer AS delivery_date " .
+		"FROM bulkmailer_table WHERE lock_bulkmailer=? " .
+		$order_clause
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve informations for packet %s of message %s',$packet->{'packetid'}, $packet->{'messagekey'});
 		return undef;
 	}
+	$handle->execute($lock);
 
-	my $result = $sth->fetchrow_hashref('NAME_lc');
+	my $result = $handle->fetchrow_hashref('NAME_lc');
 
 	return $result;
-
 }
 
 =item $bulk->remove($messagekey, $packetid)
@@ -196,16 +223,18 @@ sub remove {
 	my ($self, $messagekey, $packetid) = @_;
 	Sympa::Log::Syslog::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
-	my $sth = $self->{source}->do_query(
-		"DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",
-		$self->{source}->quote($packetid),
-		$self->{source}->quote($messagekey)
+	my $rows = $self->{source}->do(
+		"DELETE FROM bulkmailer_table " .
+		"WHERE packetid_bulkmailer = ? AND messagekey_bulkmailer = ?",
+		undef,
+		$packetid,
+		$messagekey
 	);
-	unless ($sth) {
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to delete packet %s of message %s', $packetid,$messagekey);
 		return undef;
 	}
-	return $sth;
+	return $rows;
 }
 
 =item $bulk->messageasstring($messagekey)
@@ -218,16 +247,18 @@ sub messageasstring {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
 
-	my $sth = $self->{source}->do_query(
-		"SELECT message_bulkspool AS message FROM bulkspool_table WHERE messagekey_bulkspool = %s",
-		$self->{source}->quote($messagekey)
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT message_bulkspool AS message " .
+		"FROM bulkspool_table " .
+		"WHERE messagekey_bulkspool = ?",
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve message %s text representation from database', $messagekey);
 		return undef;
 	}
+	$handle->execute($messagekey);
 
-	my $messageasstring = $sth->fetchrow_hashref('NAME_lc') ;
+	my $messageasstring = $handle->fetchrow_hashref('NAME_lc') ;
 
 	unless ($messageasstring ){
 		Sympa::Log::Syslog::do_log('err',"could not fetch message $messagekey from spool");
@@ -251,17 +282,24 @@ sub message_from_spool {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(messagekey : %s)',$messagekey);
 
-	my $sth = $self->{source}->do_query(
-		"SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",
-		$self->{source}->quote($messagekey)
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT "                                                .
+			"message_bulkspool AS message, "                 .
+			"messageid_bulkspool AS messageid, "             .
+			"dkim_d_bulkspool AS dkim_d,  "                  .
+			"dkim_i_bulkspool AS dkim_i, "                   .
+			"dkim_privatekey_bulkspool AS dkim_privatekey, " .
+			"dkim_selector_bulkspool AS dkim_selector "      .
+		"FROM bulkspool_table "                                  .
+		"WHERE messagekey_bulkspool = ?",
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve message %s full data from database', $messagekey);
 		return undef;
 	}
+	$handle->execute($messagekey);
 
-	my $message_from_spool = $sth->fetchrow_hashref('NAME_lc') ;
-	$sth->finish;
+	my $message_from_spool = $handle->fetchrow_hashref('NAME_lc') ;
 
 	return({'messageasstring'=> MIME::Base64::decode($message_from_spool->{'message'}),
 			'messageid' => $message_from_spool->{'messageid'},
@@ -584,41 +622,63 @@ sub store {
 		}
 		if ($message_already_on_spool) {
 			## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
-			my $sth = $self->{source}->do_query(
-				"SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)",
-				$self->{source}->quote($message->{'messagekey'}),
-				$self->{source}->quote($packetid)
+			my $handle = $self->{source}->get_query_handle(
+				"SELECT count(*) " .
+				"FROM bulkmailer_table " .
+				"WHERE " .
+					"messagekey_bulkmailer = ? AND ".
+					"packetid_bulkmailer = ?",
 			);
-			unless ($sth) {
+			unless ($handle) {
 				Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
 				return undef;
 			}
-			$packet_already_exist = $sth->fetchrow();
-			$sth->finish();
+			$handle->execute(
+				$message->{'messagekey'},
+				$packetid
+			);
+			$packet_already_exist = $handle->fetchrow();
 		}
 
 		if ($packet_already_exist) {
 			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
 		} else {
-			my $sth = $self->{source}->do_query(
-				"INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-				$self->{source}->quote($message->{'messagekey'}),
-				$self->{source}->quote($msg_id),
-				$self->{source}->quote($packetid),
-				$self->{source}->quote($rcptasstring),
-				$self->{source}->quote($from),
-				$self->{source}->quote($robot),
-				$self->{source}->quote($listname),
+			my $rows = $self->{source}->do(
+				"INSERT INTO bulkmailer_table ("        .
+					"messagekey_bulkmailer, "       .
+					"messageid_bulkmailer, "        .
+					"packetid_bulkmailer, "         .
+					"receipients_bulkmailer, "      . 
+					"returnpath_bulkmailer, "       .
+					"robot_bulkmailer, "            .
+					"listname_bulkmailer, "         .
+					"verp_bulkmailer, "             .
+					"tracking_bulkmailer, "         .
+					"merge_bulkmailer, "            .
+					"priority_message_bulkmailer, " .
+					"priority_packet_bulkmailer, "  .
+					"reception_date_bulkmailer, "   .
+					"delivery_date_bulkmailer"      .
+				") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+				?, ?)",
+				undef,
+				$message->{'messagekey'},
+				$msg_id,
+				$packetid,
+				$rcptasstring,
+				$from,
+				$robot,
+				$listname,
 				$verp,
-				$self->{source}->quote($tracking),
+				$tracking,
 				$merge,
 				$priority_message,
 				$priority_for_packet,
 				$current_date,
 				$delivery_date
 			);
-			unless ($sth) {
+			unless ($rows) {
 				Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
 				return undef;
 			}
@@ -643,23 +703,27 @@ sub purge_bulkspool {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'purge_bulkspool');
 
-	my $sth = $self->{source}->do_query(
-		"SELECT messagekey_bulkspool AS messagekey FROM bulkspool_table LEFT JOIN bulkmailer_table ON messagekey_bulkspool = messagekey_bulkmailer WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0"
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT messagekey_bulkspool AS messagekey "               .
+		"FROM bulkspool_table LEFT JOIN bulkmailer_table "         .
+			"ON messagekey_bulkspool = messagekey_bulkmailer " .
+		"WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0"
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to check messages unreferenced by packets in database');
 		return undef;
 	}
+	$handle->execute();
 
 	my $count = 0;
-	while (my $key = $sth->fetchrow_hashref('NAME_lc')) {
-		if ( remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
+	while (my $key = $handle->fetchrow_hashref('NAME_lc')) {
+		if ($self->remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
 			$count++;
 		} else {
 			Sympa::Log::Syslog::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});
 		}
 	}
-	$sth->finish;
+
 	return $count;
 }
 
@@ -675,13 +739,12 @@ sub remove_bulkspool_message {
 	my $table = $spool.'_table';
 	my $key = 'messagekey_'.$spool ;
 
-	my $sth = $self->{source}->do_query(
-		"DELETE FROM %s WHERE %s = %s",
-		$table,
-		$key,
-		$self->{source}->quote($messagekey)
+	my $rows = $self->{source}->do(
+		"DELETE FROM $table WHERE $key = ?",
+		undef,
+		$$messagekey
 	);
-	unless ($sth) {
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to delete %s %s from %s',$table,$key,$messagekey);
 		return undef;
 	}
@@ -703,15 +766,18 @@ sub get_remaining_packets_count {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'get_remaining_packets_count');
 
-	my $sth = $self->{source}->do_prepared_query(
-		"SELECT COUNT(*) FROM bulkmailer_table WHERE lock_bulkmailer IS NULL"
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT COUNT(*) " .
+		"FROM bulkmailer_table " .
+		"WHERE lock_bulkmailer IS NULL"
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to count remaining packets in bulkmailer_table');
 		return undef;
 	}
+	$handle->execute();
 
-	my @result = $sth->fetchrow_array();
+	my @result = $handle->fetchrow_array();
 
 	return $result[0];
 }
@@ -755,12 +821,15 @@ The random stored in the database, or I<undef> if something went wrong.
 sub get_db_random {
 	my ($self) = @_;
 
-	my $sth = $self->{source}->do_query("SELECT random FROM fingerprint_table");
-	unless ($sth) {
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT random FROM fingerprint_table"
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve random value from fingerprint_table');
 		return undef;
 	}
-	my $random = $sth->fetchrow_hashref('NAME_lc');
+	$handle->execute();
+	my $random = $handle->fetchrow_hashref('NAME_lc');
 
 	return $random;
 
@@ -789,11 +858,10 @@ sub init_db_random {
 
 	my $random = int(rand($range)) + $minimum;
 
-	my $sth = $self->{source}->do_query(
-		'INSERT INTO fingerprint_table VALUES (%d)',
-		$random
+	my $rows = $self->{source}->do(
+		"INSERT INTO fingerprint_table VALUES ($random)",
 	);
-	unless ($sth) {
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to set random value in fingerprint_table');
 		return undef;
 	}
