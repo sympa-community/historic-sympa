@@ -849,29 +849,17 @@ sub _sendto {
 # 1 - call to smtpto (sendmail) | 0 - push in spool | undef
 
 sub _sending {
-	my %params = @_;
-	my $message = $params{'message'};
-	my $rcpt = $params{'rcpt'};
-	my $from = $params{'from'};
-	my $robot = $params{'robot'};
-	my $listname = $params{'listname'};
-	my $sign_mode = $params{'sign_mode'};
-	my $sympa_email =  $params{'sympa_email'};
-	my $priority_message = $params{'priority'};
-	my $priority_packet = $params{'priority_packet'};
-	my $delivery_date = $params{'delivery_date'};
-	$delivery_date = time() unless ($delivery_date);
-	my $verp  =  $params{'verp'};
-	my $merge  =  $params{'merge'};
-	my $bulk = $params{'bulk'};
-	my $dkim = $params{'dkim'};
-	my $tag_as_last = $params{'tag_as_last'};
-	my $sympa_file;
-	my $signed_msg; # if signing
+	my (%params) = @_;
 
-	if ($sign_mode eq 'smime') {
-		my $list = Sympa::List->new(name => $listname, robot => $robot);
-		$signed_msg = Sympa::Tools::SMIME::sign_message(
+	my $message = $params{'message'};
+	$params{delivery_date} = time() unless $params{delivery_date};
+
+	if ($params{sign_mode} eq 'smime') {
+		my $list = Sympa::List->new(
+			name  => $params{listname},
+			robot => $params{robot}
+		);
+		my $signed_msg = Sympa::Tools::SMIME::sign_message(
 			entity     => $message->{'msg'},
 			cert_dir   => $list->{dir},
 			key_passwd => $params{key_passwd},
@@ -880,63 +868,69 @@ sub _sending {
 		if ($signed_msg) {
 			$message->{'msg'} = $signed_msg->dup;
 		} else {
-			Sympa::Log::Syslog::do_log('notice', 'unable to sign message from %s', $listname);
+			Sympa::Log::Syslog::do_log('notice', 'unable to sign message from %s', $params{listname});
 			return undef;
 		}
 	}
 	# my $msg_id = $message->{'msg'}->head()->get('Message-ID'); chomp $msg_id;
 
-	my $verpfeature = (($verp eq 'on')||($verp eq 'mdn')||($verp eq 'dsn'));
-	my $trackingfeature ;
-	if (($verp eq 'mdn')||($verp eq 'dsn')) {
-		$trackingfeature = $verp;
-	} else {
-		$trackingfeature ='';
-	}
-	my $mergefeature = ($merge eq 'on');
-
-	if ($bulk){ # in that case use bulk tables to prepare message distribution
-		my $bulk_code = $bulk->store(
+	if ($params{bulk}) {
+		# in that case use bulk tables to prepare message distribution
+		my $mergefeature = $params{merge} eq 'on';
+		my $verpfeature =
+			$params{verp} eq 'on'  ||
+			$params{verp} eq 'mdn' ||
+			$params{verp} eq 'dsn';
+		my $trackingfeature =
+			$params{verp} eq 'mdn' || $params{verp} eq 'dsn' ?
+			$params{verp} : '';
+		my $bulk_code = $params{bulk}->store(
 			'message'          => $message,
-			'rcpts'            => $rcpt,
-			'from'             => $from,
-			'robot'            => $robot,
-			'listname'         => $listname,
-			'priority_message' => $priority_message,
-			'priority_packet'  => $priority_packet,
-			'delivery_date'    => $delivery_date,
+			'rcpts'            => $params{rcpt},
+			'from'             => $params{from},
+			'robot'            => $params{robot},
+			'listname'         => $params{listname},
+			'priority_message' => $params{priority_message},
+			'priority_packet'  => $params{priority_packet},
+			'delivery_date'    => $params{delivery_date},
 			'verp'             => $verpfeature,
 			'tracking'         => $trackingfeature,
 			'merge'            => $mergefeature,
-			'dkim'             => $dkim,
-			'tag_as_last'      => $tag_as_last,
+			'dkim'             => $params{dkim},
+			'tag_as_last'      => $params{tag_as_last},
 		);
 
 		unless (defined $bulk_code) {
-			Sympa::Log::Syslog::do_log('err', 'Failed to store message for list %s', $listname);
-			Sympa::List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
+			Sympa::Log::Syslog::do_log('err', 'Failed to store message for list %s', $params{listname});
+			Sympa::List::send_notify_to_listmaster(
+				'bulk_error',
+				$params{robot},
+				{'listname' => $params{listname}}
+			);
 			return undef;
 		}
-	} elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool
+	} elsif ($params{send_spool}) {
+		# in context wwsympa.fcgi do not send message to reciepients
+		# but copy it to standard spool
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
 
-		$sympa_email = $params{sympa};
-		$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
+		my $sympa_email = $params{sympa};
+		my $sympa_file = "$params{send_spool}/T.$sympa_email.".time.'.'.int(rand(10000));
 		unless (open TMP, ">$sympa_file") {
 			Sympa::Log::Syslog::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);
 			return undef;
 		}
 
 		my $all_rcpt;
-		if (ref($rcpt) eq 'SCALAR') {
-			$all_rcpt = $$rcpt;
-		} elsif (ref($rcpt) eq 'ARRAY') {
-			$all_rcpt = join(',', @{$rcpt});
+		if (ref($params{rcpt}) eq 'SCALAR') {
+			$all_rcpt = ${$params{rcpt}};
+		} elsif (ref($params{rcpt}) eq 'ARRAY') {
+			$all_rcpt = join(',', @{$params{rcpt}});
 		} else {
-			$all_rcpt = $rcpt;
+			$all_rcpt = $params{rcpt};
 		}
 		printf TMP "X-Sympa-To: %s\n", $all_rcpt;
-		printf TMP "X-Sympa-From: %s\n", $from;
+		printf TMP "X-Sympa-From: %s\n", $params{from};
 		printf TMP "X-Sympa-Checksum: %s\n", Sympa::Tools::sympa_checksum($all_rcpt, $params{cookie});
 
 		print TMP $message->{'msg_as_string'} ;
@@ -948,9 +942,10 @@ sub _sending {
 			Sympa::Log::Syslog::do_log('notice', 'Cannot rename %s to %s : %s', $sympa_file, $new_file, $ERRNO);
 			return undef;
 		}
-	} else { # send it now
+	} else {
+		# send it now
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
-		*SMTP = _smtpto($from, $rcpt, $robot, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
+		*SMTP = _smtpto($params{from}, $params{rcpt}, $params{robot}, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
 		print SMTP $message->{'msg'}->as_string ;
 		unless (close SMTP) {
 			Sympa::Log::Syslog::do_log('err', 'could not close safefork to sendmail');
