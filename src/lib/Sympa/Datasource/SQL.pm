@@ -1897,11 +1897,35 @@ sub disconnect {
 	if ($self->{'dbh'}) {$self->{'dbh'}->disconnect;}
 }
 
+=item $source->ping()
+
+Ping underlying data source.
+
+Parameters:
+
+None.
+
+Return value:
+
+A true value if the underlying data source is connected.
+
+=cut
+
 sub ping {
 	my ($self) = @_;
 
 	return $self->{'dbh'}->ping;
 }
+
+=item $source->quote($string, $datatype)
+
+Quote a string literal for use in query statement.
+
+Return value:
+
+The quoted string.
+
+=cut
 
 sub quote {
 	my ($self, $string, $datatype) = @_;

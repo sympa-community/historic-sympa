@@ -110,38 +110,6 @@ sub is_allowed_to_sync {
 	return 1;
 }
 
-=item $source->create_db()
-
-FIXME.
-
-Parameters:
-
-None.
-
-Return value:
-
-A true value.
-
-=item $source->ping()
-
-Ping underlying data source.
-
-Parameters:
-
-None.
-
-Return value:
-
-FIXME
-
-=item $source->quote($string, $datatype)
-
-Quote a string literal for use in query statement.
-
-Return value:
-
-FIXME
-
 =item $source->disconnect()
 
 Parameters:
