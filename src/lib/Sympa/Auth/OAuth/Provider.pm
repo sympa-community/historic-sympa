@@ -118,10 +118,15 @@ sub new {
 	$self->{util} = $util;
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query(
-		'DELETE FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND lasttime_oauthprovider<%d',
+	my $rows = $source->do(
+		'DELETE FROM oauthprovider_sessions_table '   .
+		'WHERE '                                      .
+			'isaccess_oauthprovider IS NULL AND ' .
+			'lasttime_oauthprovider<?',
+		undef,
 		time - TEMPORARY_TIMEOUT
-	)) {
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to delete old temporary tokens in database');
 		return undef;
 	}
@@ -138,13 +143,18 @@ sub consumer_from_token {
 	my ($class, $token) = @_;
 
 	my $source = Sympa::Database::get_source();
-	my $sth;
-	unless($sth = $source->do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
+	my $handle = $source->get_query_handle(
+		"SELECT consumer_oauthprovider AS consumer " .
+		"FROM oauthprovider_sessions_table "         .
+		"WHERE token_oauthprovider=?"
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s', $token);
 		return undef;
 	}
+	$handle->execute($token);
 
-	my $data = $sth->fetchrow_hashref('NAME_lc');
+	my $data = $handle->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 	return $data->{'consumer'};
 }
@@ -227,42 +237,63 @@ sub check_request {
 	return 401 unless($timestamp > time - OLD_REQUEST_TIMEOUT);
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - NONCE_TIMEOUT)) {
+	my $rows = $source->do(
+		'DELETE FROM oauthprovider_nonces_table ' .
+		'WHERE time_oauthprovider<?',
+		undef,
+		time - NONCE_TIMEOUT
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to clean nonce store in database');
 		return 401;
 	}
 
 	if($checktoken) {
-		my $sth;
-		unless($sth = $source->do_prepared_query(
-			'SELECT id_oauthprovider AS id FROM oauthprovider_sessions_table WHERE consumer_oauthprovider=? AND token_oauthprovider=?',
-			$self->{'consumer_key'},
-			$token
-		)) {
+		my $id_handle = $source->get_query_handle(
+			"SELECT id_oauthprovider AS id "        .
+			"FROM oauthprovider_sessions_table "    .
+			"WHERE "                                .
+				"consumer_oauthprovider=? AND " .
+				"token_oauthprovider=?",
+		);
+		unless ($id_handle) {
 			Sympa::Log::Syslog::do_log('err','Unable to get token %s %s', $self->{'consumer_key'}, $token);
 			return 401;
 		}
+		$id_handle->execute($self->{'consumer_key'}, $token);
 
-		if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
+		if (my $data = $id_handle->fetchrow_hashref('NAME_lc')) {
 			my $id = $data->{'id'};
 
-			unless($sth = $source->do_prepared_query(
-				'SELECT nonce_oauthprovider AS nonce FROM oauthprovider_nonces_table WHERE id_oauthprovider=? AND nonce_oauthprovider=?',
-				$id,
-				$nonce
-			)) {
+			my $nonce_handle = $source->get_query_handle(
+				"SELECT nonce_oauthprovider AS nonce " .
+				"FROM oauthprovider_nonces_table "     .
+				"WHERE "                               .
+					"id_oauthprovider=? AND "      .
+					"nonce_oauthprovider=?",
+			);
+			unless ($nonce_handle) {
 				Sympa::Log::Syslog::do_log('err','Unable to check nonce %d %s', $id, $nonce);
 				return 401;
 			}
+			$nonce_handle->execute($id, $nonce);
 
-			return 401 if($sth->fetchrow_hashref('NAME_lc')); # Already used nonce
+			# Already used nonce
+			return 401
+				if $nonce_handle->fetchrow_hashref('NAME_lc');
 
-			unless($source->do_query(
-				'INSERT INTO oauthprovider_nonces_table(id_oauthprovider, nonce_oauthprovider, time_oauthprovider) VALUES (%d, %s, %d)',
+			my $rows = $source->do(
+				"INSERT INTO oauthprovider_nonces_table(" .
+					"id_oauthprovider, " .
+					"nonce_oauthprovider, " .
+					"time_oauthprovider" .
+				") VALUES (?, ?, ?)",
+				undef,
 				$id,
-				$source->quote($nonce),
+				$nonce,
 				time
-			)) {
+			);
+			unless ($rows) {
 				Sympa::Log::Syslog::do_log('err', 'Unable to add nonce record %d %s in database', $id, $nonce);
 				return 401;
 			}
@@ -270,14 +301,19 @@ sub check_request {
 	}
 
 	my $secret = '';
-	if($checktoken) {
-		my $sth;
-		unless($sth = $source->do_prepared_query('SELECT secret_oauthprovider AS secret FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
+	if ($checktoken) {
+		my $token_handle = $source->get_query_handle(
+			"SELECT secret_oauthprovider AS secret " .
+			"FROM oauthprovider_sessions_table "     .
+			"WHERE token_oauthprovider=?"
+		);
+		unless ($token_handle) {
 			Sympa::Log::Syslog::do_log('err','Unable to load token data %s', $token);
 			return undef;
 		}
+		$token_handle->execute($token);
 
-		my $data = $sth->fetchrow_hashref('NAME_lc');
+		my $data = $token_handle->fetchrow_hashref('NAME_lc');
 		return 401 unless($data);
 		$secret = $data->{'secret'};
 	}
@@ -319,15 +355,27 @@ sub generate_temporary {
 	my $secret = _generateRandomString(32); # may be sha1-ed or such ...
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query(
-		'INSERT INTO oauthprovider_sessions_table(token_oauthprovider, secret_oauthprovider, isaccess_oauthprovider, accessgranted_oauthprovider, consumer_oauthprovider, user_oauthprovider, firsttime_oauthprovider, lasttime_oauthprovider, verifier_oauthprovider, callback_oauthprovider) VALUES (%s, %s, NULL, NULL, %s, NULL, %d, %d, NULL, %s)',
-		$source->quote($token),
-		$source->quote($secret),
-		$source->quote($self->{'consumer_key'}),
+	my $rows = $source->do(
+		"INSERT INTO oauthprovider_sessions_table(" .
+			"token_oauthprovider, "             .
+			"secret_oauthprovider, "            .
+			"isaccess_oauthprovider, "          .
+			"accessgranted_oauthprovider, "     .
+			"consumer_oauthprovider, "          .
+			"user_oauthprovider, "              .
+			"firsttime_oauthprovider, "         .
+			"lasttime_oauthprovider, "          .
+			"verifier_oauthprovider, "          .
+			"callback_oauthprovider"            .
+		") VALUES (?, ?, NULL, NULL, ?, NULL, ?, ?, NULL, ?)",
+		$token,
+		$secret,
+		$self->{'consumer_key'},
 		time,
 		time,
-		$source->quote($self->{'params'}{'oauth_callback'})
-	)) {
+		$self->{'params'}{'oauth_callback'}
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to add new token record %s %s in database', $token, $self->{'consumer_key'});
 		return undef;
 	}
@@ -366,14 +414,28 @@ sub get_temporary {
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
 	my $source = Sympa::Database::get_source();
-	my $sth;
-	unless($sth = $source->do_prepared_query(
-		'SELECT id_oauthprovider AS id, token_oauthprovider AS token, secret_oauthprovider AS secret, firsttime_oauthprovider AS firsttime, lasttime_oauthprovider AS lasttime, callback_oauthprovider AS callback, verifier_oauthprovider AS verifier FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {
+	my $handle = $source->get_query_handle(
+		"SELECT "                                        .
+			"id_oauthprovider AS id, "               .
+			"token_oauthprovider AS token, "         .
+			"secret_oauthprovider AS secret, "       .
+			"firsttime_oauthprovider AS firsttime, " .
+			"lasttime_oauthprovider AS lasttime, "   .
+			"callback_oauthprovider AS callback, "   .
+			"verifier_oauthprovider AS verifier "    .
+		"FROM oauthprovider_sessions_table "             .
+		"WHERE "                                         .
+			"isaccess_oauthprovider IS NULL AND "    .
+			"consumer_oauthprovider=? AND "          .
+			"token_oauthprovider=?"
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $params{'token'});
 		return undef;
 	}
+	$handle->execute($self->{'consumer_key'}, $params{'token'});
 
-	my $data = $sth->fetchrow_hashref('NAME_lc');
+	my $data = $handle->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 
 	return undef unless($data->{'lasttime'} + $params{timeout} >= time);
@@ -411,24 +473,41 @@ sub generate_verifier {
 	my $verifier = _generateRandomString(32);
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query(
-		'DELETE FROM oauthprovider_sessions_table WHERE user_oauthprovider=%s AND consumer_oauthprovider=%s AND isaccess_oauthprovider=1',
-		$source->quote($params{'user'}),
-		$source->quote($self->{'consumer_key'})
-	)) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', $source->quote($params{'user'}), $self->{'consumer_key'});
+	my $delete_rows = $source->do(
+		'DELETE FROM oauthprovider_sessions_table ' .
+		'WHERE '                                    .
+			'user_oauthprovider=? AND '         .
+			'consumer_oauthprovider=? AND '     .
+			'isaccess_oauthprovider=1',
+		undef,
+		$params{'user'},
+		$self->{'consumer_key'}
+	);
+	unless ($delete_rows) {
+		Sympa::Log::Syslog::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', $params{'user'}, $self->{'consumer_key'});
 		return undef;
 	}
 
-	unless($source->do_query(
-		'UPDATE oauthprovider_sessions_table SET verifier_oauthprovider=%s, user_oauthprovider=%s, accessgranted_oauthprovider=%d, lasttime_oauthprovider=%d WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=%s AND token_oauthprovider=%s',
-		$source->quote($verifier),
-		$source->quote($params{'user'}),
+	my $update_rows = $source->do(
+		"UPDATE oauthprovider_sessions_table "        .
+		"SET "                                        .
+			"verifier_oauthprovider=?, "          .
+			"user_oauthprovider=?, "              .
+			"accessgranted_oauthprovider=?, "     .
+			"lasttime_oauthprovider=? "           .
+		"WHERE "                                      .
+			"isaccess_oauthprovider IS NULL AND " .
+			"consumer_oauthprovider=? AND "       .
+			"token_oauthprovider=?",
+		undef,
+		$verifier,
+		$params{'user'},
 		$params{'granted'} ? 1 : 0,
 		time,
-		$source->quote($self->{'consumer_key'}),
-		$source->quote($params{'token'})
-	)) {
+		$self->{'consumer_key'},
+		$params{'token'}
+	);
+	unless ($update_rows) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to set token verifier %s %s in database', $tmp->{'token'}, $self->{'consumer_key'});
 		return undef;
 	}
@@ -473,15 +552,27 @@ sub generate_access {
 	my $secret = _generateRandomString(32);
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query(
-		'UPDATE oauthprovider_sessions_table SET token_oauthprovider=%s, secret_oauthprovider=%s, isaccess_oauthprovider=1, lasttime_oauthprovider=%d, verifier_oauthprovider=NULL, callback_oauthprovider=NULL WHERE token_oauthprovider=%s AND verifier_oauthprovider=%s',
-		$source->quote($token),
-		$source->quote($secret),
+	my $rows = $source->do(
+		"UPDATE oauthprovider_sessions_table "       .
+		"SET "                                       .
+			"token_oauthprovider=?, "            .
+			"secret_oauthprovider=?, "           .
+			"isaccess_oauthprovider=1, "         .
+			"lasttime_oauthprovider=?, "         .
+			"verifier_oauthprovider=NULL, "      .
+			"callback_oauthprovider=NULL "       .
+			"WHERE "                             .
+				"token_oauthprovider=? AND " .
+				"verifier_oauthprovider=?",
+		undef,
+		$token,
+		$secret,
 		time,
-		$source->quote($params{'token'}),
-		$source->quote($params{'verifier'})
-	)) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to transform temporary token into access token record %s %s in database', $source->quote($tmp->{'token'}), $self->{'consumer_key'});
+		$params{'token'},
+		$params{'verifier'}
+	);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err', 'Unable to transform temporary token into access token record %s %s in database', $tmp->{'token'}, $self->{'consumer_key'});
 		return undef;
 	}
 
@@ -516,14 +607,26 @@ sub get_access {
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
 	my $source = Sympa::Database::get_source();
-	my $sth;
-	unless($sth = $source->do_prepared_query(
-		'SELECT token_oauthprovider AS token, secret_oauthprovider AS secret, lasttime_oauthprovider AS lasttime, user_oauthprovider AS user, accessgranted_oauthprovider AS accessgranted FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider=1 AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $params{'token'})) {
+	my $handle = $source->get_query_handle(
+		"SELECT "                                               .
+			"token_oauthprovider AS token, "                .
+			"secret_oauthprovider AS secret, "              .
+			"lasttime_oauthprovider AS lasttime, "          .
+			"user_oauthprovider AS user, "                  .
+			"accessgranted_oauthprovider AS accessgranted " .
+		"FROM oauthprovider_sessions_table "                    .
+		"WHERE "                                                .
+			"isaccess_oauthprovider=1 AND "                 .
+			"consumer_oauthprovider=? AND "                 .
+			"token_oauthprovider=?"
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $params{'token'});
 		return undef;
-    }
+	}
+	$handle->execute($self->{'consumer_key'}, $params{'token'});
 
-	my $data = $sth->fetchrow_hashref('NAME_lc');
+	my $data = $handle->fetchrow_hashref('NAME_lc');
 	return undef unless($data);
 
 	return undef unless($data->{'lasttime'} + ACCESS_TIMEOUT >= time);

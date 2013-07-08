@@ -82,11 +82,20 @@ sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
 	my $source = Sympa::Database::get_source();
-	my $sth = $source->do_prepared_query('SELECT tmp_token_oauthconsumer AS tmp_token, tmp_secret_oauthconsumer AS tmp_secret, access_token_oauthconsumer AS access_token, access_secret_oauthconsumer AS access_secret FROM oauthconsumer_sessions_table WHERE user_oauthconsumer=? AND provider_oauthconsumer=?', $params{'user'}, $params{'provider'});
-	unless ($sth) {
+	my $handle = $source->get_query_handle(
+		"SELECT "                                               .
+			"tmp_token_oauthconsumer AS tmp_token, "        .
+			"tmp_secret_oauthconsumer AS tmp_secret, "      .
+			"access_token_oauthconsumer AS access_token, "  .
+			"access_secret_oauthconsumer AS access_secret " .
+		"FROM oauthconsumer_sessions_table "                    .
+		"WHERE user_oauthconsumer=? AND provider_oauthconsumer=?",
+	);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to load token data %s %s', $params{'user'}, $params{'provider'});
 		return undef;
 	}
+	$handle->execute($params{'user'}, $params{'provider'});
 
 	my $self = {
 		user               => $params{'user'},
@@ -112,7 +121,7 @@ sub new {
 		access  => undef
 	};
 
-	if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
+	if(my $data = $handle->fetchrow_hashref('NAME_lc')) {
 		$self->{'session'}{'tmp'} = OAuth::Lite::Token->new(
 			token => $data->{'tmp_token'},
 			secret => $data->{'tmp_secret'}
@@ -295,12 +304,39 @@ sub trigger_flow {
 
 	my $source = Sympa::Database::get_source();
 	if(defined $self->{'session'}{'defined'}) {
-		unless($source->do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=%s, tmp_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', $source->quote($tmp->{'token'}), $source->quote($tmp->{'secret'}), $source->quote($self->{'user'}), $source->quote($self->{'provider'}))) {
+		my $rows = $source->do(
+			'UPDATE oauthconsumer_sessions_table " .
+			"SET "                                 .
+				"tmp_token_oauthconsumer=?, "  .
+				"tmp_secret_oauthconsumer=? "  .
+			"WHERE "                               .
+				"user_oauthconsumer=? AND "    .
+				"provider_oauthconsumer=?',
+			undef,
+			$tmp->{'token'},
+			$tmp->{'secret'},
+			$self->{'user'},
+			$self->{'provider'}
+		);
+		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;
 		}
 	} else {
-		unless($source->do_query('INSERT INTO oauthconsumer_sessions_table(user_oauthconsumer, provider_oauthconsumer, tmp_token_oauthconsumer, tmp_secret_oauthconsumer) VALUES (%s, %s, %s, %s)', $source->quote($self->{'user'}), $source->quote($self->{'provider'}), $source->quote($tmp->{'token'}), $source->quote($tmp->{'secret'}))) {
+		my $rows = $source->do(
+			"INSERT INTO oauthconsumer_sessions_table(" .
+				"user_oauthconsumer, "              .
+				"provider_oauthconsumer, "          .
+				"tmp_token_oauthconsumer, "         .
+				"tmp_secret_oauthconsumer "         .
+			") VALUES (?, ?, ?, ?)",
+			undef,
+			$self->{'user'},
+			$self->{'provider'},
+			$tmp->{'token'},
+			$tmp->{'secret'}
+		);
+		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err', 'Unable to add new token record %s %s in database', $self->{'user'}, $self->{'provider'});
 			return undef;
 		}
@@ -355,7 +391,21 @@ sub get_access_token {
 	$self->{'session'}{'tmp'} = undef;
 
 	my $source = Sympa::Database::get_source();
-	unless($source->do_query('UPDATE oauthconsumer_sessions_table SET tmp_token_oauthconsumer=NULL, tmp_secret_oauthconsumer=NULL, access_token_oauthconsumer=%s, access_secret_oauthconsumer=%s WHERE user_oauthconsumer=%s AND provider_oauthconsumer=%s', $source->quote($access->{'token'}), $source->quote($access->{'secret'}), $source->quote($self->{'user'}), $source->quote($self->{'provider'}))) {
+	my $rows = $source->do(
+		"UPDATE oauthconsumer_sessions_table "    .
+		"SET "                                    .
+			"tmp_token_oauthconsumer=NULL, "  .
+			"tmp_secret_oauthconsumer=NULL, " .
+			"access_token_oauthconsumer=?, "  .
+			"access_secret_oauthconsumer=? "  .
+		"WHERE user_oauthconsumer=? AND provider_oauthconsumer=?",
+		undef,
+		$access->{'token'},
+		$access->{'secret'},
+		$self->{'user'},
+		$self->{'provider'}
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to update token record %s %s in database', $self->{'user'}, $self->{'provider'});
 		return undef;
 	}
