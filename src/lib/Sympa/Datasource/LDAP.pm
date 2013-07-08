@@ -201,32 +201,6 @@ sub connect {
 
 }
 
-=item $source->query($query)
-
-=cut
-
-sub query {
-	my ($self, $sql_query) = @_;
-	unless ($self->{'sth'} = $self->{'dbh'}->prepare($sql_query)) {
-		Sympa::Log::Syslog::do_log('err','Unable to prepare SQL query : %s', $self->{'dbh'}->errstr);
-		return undef;
-	}
-	unless ($self->{'sth'}->execute) {
-		Sympa::Log::Syslog::do_log('err','Unable to perform SQL query %s : %s ',$sql_query, $self->{'dbh'}->errstr);
-		return undef;
-	}
-
-}
-
-sub ping {
-}
-
-sub quote {
-}
-
-sub create_db {
-}
-
 sub disconnect {
 	my $self = shift;
 	$self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
