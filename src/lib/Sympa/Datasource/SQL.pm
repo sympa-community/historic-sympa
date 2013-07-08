@@ -1893,7 +1893,9 @@ sub prepare_query_log_values {
 sub disconnect {
 	my ($self) = @_;
 
-	$self->{'sth'}->finish if $self->{'sth'};
+	foreach my $handle (values %{$self->{cache}}) {
+		$handle->finish();
+	}
 	if ($self->{'dbh'}) {$self->{'dbh'}->disconnect;}
 }
 
