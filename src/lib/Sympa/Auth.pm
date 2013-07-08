@@ -520,10 +520,27 @@ sub create_one_time_ticket {
 	Sympa::Log::Syslog::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
 	my $date = time();
-	my $sth;
 	my $source = Sympa::Database::get_source();
-
-	unless ($source->do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",$source->quote($ticket),$source->quote($robot),$source->quote($email),time(),$source->quote($data_string),$source->quote($remote_addr),$source->quote('open'))) {
+	my $rows = $source->do(
+		"INSERT INTO one_time_ticket_table ("   .
+			"ticket_one_time_ticket, "      .
+			"robot_one_time_ticket, "       .
+			"email_one_time_ticket, "       .
+			"date_one_time_ticket, "        .
+			"data_one_time_ticket, "        .
+			"remote_addr_one_time_ticket, " .
+			"status_one_time_ticket"        .
+		") VALUES (?, ?, ?, ?, ?, ?, ?)",
+		undef,
+		$ticket,
+		$robot,
+		$email,
+		time(),
+		$data_string,
+		$remote_addr,
+		'open'
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
 		return undef;
 	}
@@ -553,16 +570,25 @@ sub get_one_time_ticket {
 	Sympa::Log::Syslog::do_log('debug2', '(%s)',$ticket_number);
 
 	my $source = Sympa::Database::get_source();
-	my $sth = $source->do_query(
-		"SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ",
-		$source->quote($ticket_number)
+	my $handle = $source->get_query_handle(
+		"SELECT "                                              .
+			"ticket_one_time_ticket AS ticket, "           .
+			"robot_one_time_ticket AS robot, "             .
+			"email_one_time_ticket AS email, "             .
+			"date_one_time_ticket AS \"date\", "           .
+			"data_one_time_ticket AS data, "               .
+			"remote_addr_one_time_ticket AS remote_addr, " .
+			"status_one_time_ticket as status "            .
+		"FROM one_time_ticket_table "                          .
+		"WHERE ticket_one_time_ticket=?",
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
 		return {'result'=>'error'};
 	}
+	$handle->execute($ticket_number);
 
-	my $ticket = $sth->fetchrow_hashref('NAME_lc');
+	my $ticket = $handle->fetchrow_hashref('NAME_lc');
 
 	unless ($ticket) {
 		Sympa::Log::Syslog::do_log('info','Unable to find one time ticket %s', $ticket);
@@ -582,7 +608,15 @@ sub get_one_time_ticket {
 	} else {
 		$result = 'success';
 	}
-	unless ($source->do_query("UPDATE one_time_ticket_table SET status_one_time_ticket = %s WHERE (ticket_one_time_ticket=%s)", $source->quote($addr), $source->quote($ticket_number))) {
+	my $rows = $source->do(
+		"UPDATE one_time_ticket_table " .
+		"SET status_one_time_ticket=? " .
+		"WHERE ticket_one_time_ticket=?",
+		undef,
+		$addr,
+		$ticket_number
+	);
+	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
 	}
 
