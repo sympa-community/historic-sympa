@@ -9803,69 +9803,78 @@ sub _include_users_sql {
 		return undef;
 	}
 
-	unless ($source->connect() && ($source->do_query($source->{'sql_query'}))) {
+	unless ($source->connect()) {
 		Sympa::Log::Syslog::do_log('err','Unable to connect to SQL datasource with parameters host: %s, database: %s',$source->{'host'},$source->{'db_name'});
 		return undef;
 	}
-	## Counters.
+
 	my $total = 0;
 
-	## Process the SQL results
-	$source->set_fetch_timeout($fetch_timeout);
-	my $array_of_users = $source->fetch;
+	eval {
+		local $SIG{ALRM} = sub { die "TIMEOUT\n" };
+		# set timeout
+		alarm $fetch_timeout;
+		my $handle = $source->get_query_handle($source->{'sql_query'});
+		$handle->execute();
 
-	unless (defined $array_of_users && ref($array_of_users) eq 'ARRAY') {
-		Sympa::Log::Syslog::do_log('err', 'Failed to include users from %s',$source->{'name'});
-		return undef;
-	}
+		## Process the SQL results
+		while (my $row = $handle->fetchall_arrayref()) {
 
-	foreach my $row (@{$array_of_users}) {
-		my $email = $row->[0]; ## only get first field
-		my $gecos = $row->[1]; ## second field (if it exists) is gecos
-		## Empty value
-		next if ($email =~ /^\s*$/);
+			my $email = $row->[0];
+			my $gecos = $row->[1];
+			## Empty value
+			next if ($email =~ /^\s*$/);
 
-		$email = Sympa::Tools::clean_email($email);
+			$email = Sympa::Tools::clean_email($email);
 
-		## Skip badly formed emails
-		unless (Sympa::Tools::valid_email($email)) {
-			Sympa::Log::Syslog::do_log('err', "Skip badly formed email address: '%s'", $email);
-			next;
-		}
-
-		my %u;
-		## Check if user has already been included
-		if ($users->{$email}) {
-			if ($tied eq 'tied') {
-				%u = split "\n",$users->{$email};
-			} else {
-				%u = %{$users->{$email}};
+			## Skip badly formed emails
+			unless (Sympa::Tools::valid_email($email)) {
+				Sympa::Log::Syslog::do_log('err', "Skip badly formed email address: '%s'", $email);
+				next;
 			}
-		} else {
-			%u = %{$default_user_options};
-			$total++;
+
+			my %u;
+			## Check if user has already been included
+			if ($users->{$email}) {
+				if ($tied eq 'tied') {
+					%u = split "\n",$users->{$email};
+				} else {
+					%u = %{$users->{$email}};
+				}
+			} else {
+				%u = %{$default_user_options};
+				$total++;
+			}
+
+			$u{'email'} = $email;
+			$u{'gecos'} = $gecos if($gecos);
+			$u{'date'} = time();
+			$u{'update_date'} = time();
+			$u{'id'} = join (',', split(',', $u{'id'}), $id);
+
+			$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
+			$u{'reception'} = $default_user_options->{'reception'} if (defined $default_user_options->{'reception'});
+			$u{'profile'} = $default_user_options->{'profile'} if (defined $default_user_options->{'profile'});
+			$u{'info'} = $default_user_options->{'info'} if (defined $default_user_options->{'info'});
+
+			if ($tied eq 'tied') {
+				$users->{$email} = join("\n", %u);
+			} else {
+				$users->{$email} = \%u;
+			}
 		}
-
-		$u{'email'} = $email;
-		$u{'gecos'} = $gecos if($gecos);
-		$u{'date'} = time();
-		$u{'update_date'} = time();
-		$u{'id'} = join (',', split(',', $u{'id'}), $id);
-
-		$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
-		$u{'reception'} = $default_user_options->{'reception'} if (defined $default_user_options->{'reception'});
-		$u{'profile'} = $default_user_options->{'profile'} if (defined $default_user_options->{'profile'});
-		$u{'info'} = $default_user_options->{'info'} if (defined $default_user_options->{'info'});
-
-		if ($tied eq 'tied') {
-			$users->{$email} = join("\n", %u);
-		} else {
-			$users->{$email} = \%u;
+		# unset timeout
+		alarm 0;
+	};
+	if ($EVAL_ERROR eq "TIMEOUT\n") {
+		Sympa::Log::Syslog::do_log('err', 'Failed to include users from %s: timeout',$source->{'name'});
+	} elsif ($EVAL_ERROR) {
+		Sympa::Log::Syslog::do_log('err', 'Failed to include users from %s',$source->{'name'});
 	}
-}
-$source->disconnect();
-Sympa::Log::Syslog::do_log('info','%d included users from SQL query', $total);
-return $total;
+
+	$source->disconnect();
+	Sympa::Log::Syslog::do_log('info','%d included users from SQL query', $total);
+	return $total;
 }
 
 ## Loads the list of subscribers from an external include source
