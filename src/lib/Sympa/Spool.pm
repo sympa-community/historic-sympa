@@ -158,15 +158,14 @@ sub get_count {
 	}
 	$filter_clause =~ s/^AND//;
 
-	my $statement = 'SELECT COUNT(*) ';
+	my $query =
+		"SELECT COUNT(*) " .
+		"FROM spool_table " .
+		"WHERE $filter_clause AND spoolname_spool=?";
 
-	$statement = $statement . sprintf
-		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
-		$filter_clause,
-		$self->{source}->quote($self->{name});
-
-	my $sth = $self->{source}->do_query($statement);
-	my @result = $sth->fetchrow_array();
+	my $handle = $self->{source}->get_query_handle($query);
+	$handle->execute($self->{name});
+	my @result = $handle->fetchrow_array();
 	return $result[0];
 }
 
@@ -221,24 +220,24 @@ sub get_content {
 	}
 	$filter_clause =~s/^AND//;
 
-	my $statement = 'SELECT '. $self->_selectfields($params{selection});
+	my $select_clause = $self->_selectfields($params{selection});
 
-	$statement = $statement . sprintf
-		" FROM spool_table WHERE %s AND spoolname_spool = %s ",
-		$filter_clause,
-		$self->{source}->quote($self->{name});
+	my $query =
+		"SELECT $select_clause " .
+		"FROM spool_table WHERE $filter_clause AND spoolname_spool=?";
 
 	if ($params{orderby}) {
-		$statement = $statement. ' ORDER BY '.$params{orderby}.'_spool ';
-		$statement = $statement. ' DESC' if ($params{way} eq 'desc') ;
+		$query .= " ORDER BY $params{orderby}_spool";
+		$query .= " DESC" if $params{way} eq 'desc';
 	}
 	if ($params{page_size}) {
-		$statement = $statement . ' LIMIT '.$params{ofset}.' , '.$params{page_size};
+		$query .= " LIMIT $params{ofset}, $params{page_size}";
 	}
 
-	my $sth = $self->{source}->do_query($statement);
+	my $handle = $self->{source}->get_query_handle($query);
+	$handle->execute($self->{name});
 	my @messages;
-	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $message = $handle->fetchrow_hashref('NAME_lc')) {
 		$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
 		$message->{'lockdate_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
 		$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
@@ -246,7 +245,6 @@ sub get_content {
 		$message->{'status'} = $self->{status};
 		push @messages, $message;
 	}
-	$sth->finish();
 	return @messages;
 }
 
@@ -273,28 +271,44 @@ sub next {
 	my $lock = $PID.'@'.hostname();
 	my $epoch = time(); # should we use milli or nano seconds ?
 
-	my $statement = sprintf 
-		"UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1",
-		$self->{source}->quote($lock),
-		$self->{source}->quote($epoch),
-		$self->{source}->quote($self->{name}),
-		$filter_clause;
+	my $update_query = 
+		"UPDATE spool_table "                        .
+		"SET messagelock_spool=?, lockdate_spool=? " .
+		"WHERE "                                     .
+			"messagelock_spool IS NULL AND "     .
+			"spoolname_spool=? AND "             .
+			$filter_clause                       .
+		"ORDER BY priority_spool, date_spool LIMIT 1";
 
-	my $sth = $self->{source}->do_query($statement);
-	return undef unless ($sth->rows); # spool is empty
+	my $rows = $self->{source}->do(
+		$update_query,
+		undef,
+		$lock,
+		$epoch,
+		$self->{name},
+	);
+	return undef unless $rows; # spool is empty
 
-	my $star_select = $self->_selectfields();
-	my $statement = sprintf
-		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1",
-		$star_select,
-		$self->{source}->quote($self->{name}),
-		$self->{source}->quote($self->{status}),
-		$self->{source}->quote($lock),
-		$self->{source}->quote($epoch);
+	my $select_clause = $self->_selectfields();
+	my $select_query =
+		"SELECT $select_clause "                                     .
+		"FROM spool_table "                                          .
+		"WHERE "                                                     .
+			"spoolname_spool=? AND "                             .
+			"message_status_spool=? AND "                        .
+			"messagelock_spool=? AND "                           .
+			"lockdate_spool=? AND "                              .
+			"(priority_spool != 'z' OR priority_spool IS NULL) " .
+		"ORDER by priority_spool LIMIT 1";
 
-	$sth = $self->{source}->do_query($statement);
-	my $message = $sth->fetchrow_hashref('NAME_lc');
-	$sth->finish();
+	my $handle = $self->{source}->get_query_handle($select_query);
+	$handle->execute(
+		$self->{name},
+		$self->{status},
+		$lock,
+		$epoch
+	);
+	my $message = $handle->fetchrow_hashref('NAME_lc');
 
 	unless ($message->{'message'}){
 		Sympa::Log::Syslog::do_log('err',"INTERNAL Could not find message previouly locked");
@@ -317,32 +331,32 @@ sub get_message {
 	my ($self, $selector) = @_;
 	Sympa::Log::Syslog::do_log('debug', "($self->{name},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
 
-	my $filter_clause;
-
+	my (@filter_clauses, @values);
 	foreach my $field (keys %$selector){
-		$filter_clause .= ' AND ' unless ($filter_clause eq '');
-
 		if ($field eq 'messageid') {
 			$selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 		}
-		$filter_clause .= ' ' . $field . '_spool = '.$self->{source}->quote($selector->{$field});
+		push @filter_clauses,  $field . '_spool = ?';
+		push @values, $selector->{$field};
 	}
-	my $all = $self->_selectfields();
-	my $statement = sprintf
-		"SELECT %s FROM spool_table WHERE spoolname_spool = %s AND %s LIMIT 1",
-		$all,
-		$self->{source}->quote($self->{name}),
-		$filter_clause;
 
-	my $sth = $self->{source}->do_query($statement);
+	my $filter_clause = join(' AND ', @filter_clauses);
 
-	my $message = $sth->fetchrow_hashref('NAME_lc');
+	my $select_clause = $self->_selectfields();
+	my $query = 
+		"SELECT $select_clause " .
+		"FROM spool_table " .
+		"WHERE spoolname_spool=? AND $filter_clause LIMIT 1";
+
+	my $handle = $self->{source}->get_query_handle($query);
+	$handle->execute($self->{name}, @values);
+
+	my $message = $handle->fetchrow_hashref('NAME_lc');
 	if ($message) {
 		$message->{'lock'} =  $message->{'messagelock'};
 		$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'});
 	}
 
-	$sth->finish();
 	return $message;
 }
 
@@ -372,8 +386,6 @@ sub update {
 
 	my $filter_clause = $self->_get_filter_clause($selector);
 
-	my $set = '';
-
 	# hidde B64 encoding inside spool database.
 	if ($values->{'message'}) {
 		$values->{'size'} =  length($values->{'message'});
@@ -382,29 +394,31 @@ sub update {
 	# update can used in order to move a message from a spool to another one
 	$values->{name} = $self->{name} unless($values->{'spoolname'});
 
+	my (@set_clauses, @values);
 	foreach my $meta (keys %$values) {
 		next if ($meta =~ /^(messagekey)$/);
-		if ($set) {
-			$set = $set.',';
-		}
 		if (($meta eq 'messagelock')&&($values->{$meta} eq 'NULL')){
 			# SQL set  xx = NULL and set xx = 'NULL' is not the same !
-			$set = $set .$meta.'_spool = NULL';
+			push @set_clauses, $meta .'_spool = NULL';
 		} else {
-			$set = $set .$meta.'_spool = '.$self->{source}->quote($values->{$meta});
+			push @set_clauses, $meta . '_spool = ?';
+			push @values, $values->{$meta};
 		}
 		if ($meta eq 'messagelock') {
 			if ($values->{'messagelock'} eq 'NULL'){
 				# when unlock always reset the lockdate
-				$set =  $set .', lockdate_spool = NULL ';
+				push @set_clauses, 'lockdate_spool = NULL';
 			} else {
 				# when setting a lock always set the lockdate
-				$set =  $set .', lockdate_spool = '.$self->{source}->quote(time());
+				push @set_clauses, 'lockdate_spool = ?';
+				push @values, time();
 			}
 		}
 	}
 
-	unless ($set) {
+	my $set_clause = join(', ', @set_clauses);
+
+	unless ($set_clause) {
 		Sympa::Log::Syslog::do_log('err',"No value to update"); return undef;
 	}
 	unless ($filter_clause) {
@@ -412,13 +426,12 @@ sub update {
 	}
 
 	## Updating Db
-	my $statement = sprintf
-		"UPDATE spool_table SET %s WHERE (%s)",
-		$set,
-		$filter_clause;
+	my $query =
+		"UPDATE spool_table SET $set_clause WHERE $filter_clause";
 
-	unless ($self->{source}->do_query($statement)) {
-		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, undef);
+	my $rows = $self->{source}->do($query, undef, @values);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement');
 		return undef;
 	}
 	return 1;
@@ -492,31 +505,39 @@ sub store {
 	$params{metadata}->{'size'}= length($params{message}) unless ($params{metadata}->{'size'}) ;
 	$params{metadata}->{'message_status'} = 'ok';
 
-	my ($insertpart1, my $insertpart2);
-	foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
-		$insertpart1 .= ', '.$meta.'_spool';
-		$insertpart2 .= ', '.$self->{source}->quote($params{metadata}->{$meta});
-	}
+	my @meta = qw/
+		list robot message_status priority date type subject sender
+		messageid size headerdate spam_status dkim_privatekey dkim_d
+		dkim_i dkim_selector create_list_if_needed task_label task_date
+		task_model task_object
+	/;
+	my $field_clause = join(', ', map { $_ . '_spool' } @meta);
+	my $value_clause = join(', ', map { '?' } @meta);
+	my @values = map { $params{metadata}->{$_} } @meta;
+
 	my $lock = $PID.'@'.hostname() ;
 
 	my $insert_query =
 		"INSERT INTO spool_table ("                    .
-			"spoolname_spool, messagelock_spool, " .
-			"message_spool $insertpart1"           .
+			"spoolname_spool, "   .
+			"messagelock_spool, " .
+			"message_spool, "     .
+			$field_clause         .
 		") "                                           .
-		"VALUES (?, ?, ? $insertpart2)";
+		"VALUES (?, ?, ?, $value_clause)";
 
 	my $insert_handle = $self->{source}->get_query_handle($insert_query);
 	$insert_handle->execute(
 		$self->{name},
 		$lock,
-		$string
+		$string,
+		@values,
 	);
 
 	my $select_query =
-		'SELECT messagekey_spool as messagekey '        .
-		'FROM spool_table '                             .
-		'WHERE messagelock_spool = ? AND date_spool = ?';
+		'SELECT messagekey_spool as messagekey '    .
+		'FROM spool_table '                         .
+		'WHERE messagelock_spool=? AND date_spool=?';
 	my $select_handle = $self->{source}->get_query_handle($select_query);
 	$select_handle->execute(
 		$lock,
@@ -557,14 +578,11 @@ sub remove_message {
 	}
 
 	my $filter_clause = $self->_get_filter_clause($selector);
-	my $statement  = sprintf 
-		"DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",
-		$self->{source}->quote($self->{name}),
-		$filter_clause;
+	my $query = 
+		"DELETE FROM spool_table " .
+		"WHERE spoolname_spool=? AND $filter_clause";
 
-	my $sth = $self->{source}->do_query($statement);
-
-	$sth->finish();
+	$self->{source}->do($query, undef, $self->{name});
 	return 1;
 }
 
