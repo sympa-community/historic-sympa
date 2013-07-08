@@ -11667,20 +11667,7 @@ sub get_db_field_type {
 	my ($table, $field) = @_;
 
 	my $source = Sympa::Database::get_source();
-	my $sth = $source->do_query("SHOW FIELDS FROM $table");
-
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','get the list of fields for table %s', $table);
-		return undef;
-	}
-
-	while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
-		next unless ($ref->{'Field'} eq $field);
-
-		return $ref->{'Type'};
-	}
-
-	return undef;
+	return $source->get_fields()->{$field};
 }
 
 ## Lowercase field from database
