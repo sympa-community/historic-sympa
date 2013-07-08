@@ -2026,34 +2026,6 @@ sub prepare_query_log_values {
 	return \@result;
 }
 
-sub fetch {
-	my ($self) = @_;
-
-	## call to fetchrow_arrayref() uses eval to set a timeout
-	## this prevents one data source to make the process wait forever if SELECT does not respond
-	my $array_of_users;
-	$array_of_users = eval {
-		local $SIG{ALRM} = sub { die "TIMEOUT\n" }; # NB: \n required
-		alarm $self->{'fetch_timeout'};
-
-		## Inner eval just in case the fetchall_arrayref call would die, thus leaving the alarm trigered
-		my $status = eval {
-			return $self->{'sth'}->fetchall_arrayref;
-		};
-		alarm 0;
-		return $status;
-	};
-	if ( $EVAL_ERROR eq "TIMEOUT\n" ) {
-		Sympa::Log::Syslog::do_log('err','Fetch timeout on remote SQL database');
-		return undef;
-	} elsif ($EVAL_ERROR) {
-		Sympa::Log::Syslog::do_log('err','Fetch failed on remote SQL database');
-		return undef;
-	}
-
-	return $array_of_users;
-}
-
 sub disconnect {
 	my ($self) = @_;
 
@@ -2071,12 +2043,6 @@ sub quote {
 	my ($self, $string, $datatype) = @_;
 
 	return $self->{'dbh'}->quote($string, $datatype);
-}
-
-sub set_fetch_timeout {
-	my ($self, $timeout) = @_;
-
-	return $self->{'fetch_timeout'} = $timeout;
 }
 
 =item $source->get_canonical_write_date($field)

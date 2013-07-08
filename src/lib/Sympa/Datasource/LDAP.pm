@@ -224,20 +224,12 @@ sub ping {
 sub quote {
 }
 
-sub fetch {
-	my $self = shift;
-	return $self->{'sth'}->fetchrow_arrayref;
-}
-
 sub create_db {
 }
 
 sub disconnect {
 	my $self = shift;
 	$self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
-}
-
-sub set_fetch_timeout {
 }
 
 =back

@@ -142,34 +142,6 @@ Return value:
 
 FIXME
 
-=item $source->fetch()
-
-Parameters:
-
-None.
-
-Return value:
-
-FIXME
-
-=item $source->set_fetch_timeout($timeout)
-
-Set a timeout for fetch operations.
-
-Parameters:
-
-=over
-
-=item number
-
-The timeout duration.
-
-=back
-
-Return value:
-
-FIXME
-
 =item $source->disconnect()
 
 Parameters:
