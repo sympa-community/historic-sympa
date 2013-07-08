@@ -860,24 +860,35 @@ sub rename_list{
 			$params{'new_robot'});
 	}
 
-	## Move stats
 	my $source = Sympa::Database::get_source();
-	unless ($source->do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )",
-			$source->quote($params{'new_listname'}),
-			$source->quote($params{'new_robot'}),
-			$source->quote($list->{'name'}),
-			$source->quote($robot)
-		)) {
+
+	## Move stats
+	my $stat_rows = $source->do(
+		"UPDATE stat_table "                .
+		"SET list_stat=?, robot_stat=? "    .
+		"WHERE list_stat=? AND robot_stat=?",
+		undef,
+		$params{'new_listname'},
+		$params{'new_robot'},
+		$list->{'name'},
+		$robot
+	);
+	unless ($stat_rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to transfer stats from list %s@%s to list %s@%s',$params{'new_listname'}, $params{'new_robot'}, $list->{'name'}, $robot);
 	}
 
 	## Move stat counters
-	unless ($source->do_query("UPDATE stat_counter_table SET list_counter=%s, robot_counter=%s WHERE (list_counter = %s AND robot_counter = %s )",
-			$source->quote($params{'new_listname'}),
-			$source->quote($params{'new_robot'}),
-			$source->quote($list->{'name'}),
-			$source->quote($robot)
-		)) {
+	my $stat_counters_rows = $source->do(
+		"UPDATE stat_counter_table "              .
+		"SET list_counter=?, robot_counter=? "    .
+		"WHERE list_counter=? AND robot_counter=?",
+		undef,
+		$params{'new_listname'},
+		$params{'new_robot'},
+		$list->{'name'},
+		$robot
+	);
+	unless ($stat_counters_rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to transfer stat counter from list %s@%s to list %s@%s',$params{'new_listname'}, $params{'new_robot'}, $list->{'name'}, $robot);
 	}
 
