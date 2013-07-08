@@ -137,7 +137,6 @@ unless ($wwsconf = Sympa::WWSympa::load_config($conf_file)) {
 	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");
 }
 
-Sympa::Mail::set_send_spool($Sympa::Configuration::Conf{'queue'});
 
 if ($wwsconf->{'use_fast_cgi'}) {
 	require CGI::Fast;
@@ -6909,8 +6908,16 @@ sub do_distribute {
 
 	$data->{'not_auto_submitted'} = 1;
 	$data->{return_path} = Sympa::Configuration::get_robot_conf($robot, 'request');
+
+	# spool messages instead of sending them
+	my $spool = Sympa::Spool->new(
+		name   => $Sympa::Configuration::Conf{'queue'},
+		source => Sympa::Database::get_source()
+	);
+
 	my $result = Sympa::Mail::mail_file(
 		filename        => '',
+		spool           => $spool,
 		recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 		data            => $data,
 		robot           => $robot,
@@ -14949,8 +14956,15 @@ sub do_remind {
 		return_path        => Sympa::Configuration::get_robot_conf($robot, 'request'),
 	};
 
+	# spool messages instead of sending them
+	my $spool = Sympa::Spool->new(
+		name   => $Sympa::Configuration::Conf{'queue'},
+		source => Sympa::Database::get_source()
+	);
+
 	my $result = Sympa::Mail::mail_file(
 		filename        => '',
+		spool           => $spool,
 		recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 		data            => $data,
 		robot           => $robot,
@@ -15675,8 +15689,15 @@ sub do_send_mail {
 	$data->{'not_a_list'} = 1
 	if $in{'sub_action'} eq 'sendmailtome';
 
+	# spool messages instead of sending them
+	my $spool = Sympa::Spool->new(
+		name   => $Sympa::Configuration::Conf{'queue'},
+		source => Sympa::Database::get_source()
+	);
+
 	my $result = Sympa::Mail::mail_file(
 		filename        => '',
+		spool           => $spool,
 		recipient       => $to,
 		data            => $data,
 		robot           => $robot,
@@ -15860,8 +15881,15 @@ sub do_tag_topic_by_sender {
 		return_path        => Sympa::Configuration::get_robot_conf($robot, 'request'),
 	};
 
+	# spool messages instead of sending them
+	my $spool = Sympa::Spool->new(
+		name   => $Sympa::Configuration::Conf{'queue'},
+		source => Sympa::Database::get_source()
+	);
+
 	my $result = Sympa::Mail::mail_file(
 		filename        => '',
+		spool           => $spool,
 		recipient       => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 		data            => $data,
 		robot           => $robot,

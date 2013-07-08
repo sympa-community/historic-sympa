@@ -62,38 +62,9 @@ if ($EVAL_ERROR) {
 
 my %pid = ();
 
-my $send_spool; ## for calling context
-
 =head1 FUNCTIONS
 
 =over
-
-=item set_send_spool($spool)
-
-Set in global $send_spool, the concerned spool for sending message when it is
-not done by smtpto
-
-Parameters:
-
-=over
-
-=item FIXME
-
-The spool to use
-
-=back
-
-Return value:
-
-None.
-
-=cut
-
-sub set_send_spool {
-	my $spool = pop;
-
-	$send_spool = $spool;
-}
 
 =item mail_file(%parameters)
 
@@ -384,6 +355,7 @@ sub mail_file {
 		priority_packet => $params{priority_packet},
 		sign_mode       => $params{sign_mode},
 		bulk            => $params{bulk},
+		spool           => $params{spool},
 		dkim            => $data->{'dkim'},
 		sendmail        => $params{sendmail},
 		sendmail_args   => $params{sendmail_args},
@@ -909,39 +881,9 @@ sub _sending {
 			);
 			return undef;
 		}
-	} elsif ($params{send_spool}) {
-		# in context wwsympa.fcgi do not send message to reciepients
-		# but copy it to standard spool
+	} elsif ($params{spool}) {
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
-
-		my $sympa_email = $params{sympa};
-		my $sympa_file = "$params{send_spool}/T.$sympa_email.".time.'.'.int(rand(10000));
-		unless (open TMP, ">$sympa_file") {
-			Sympa::Log::Syslog::do_log('notice', 'Cannot create %s : %s', $sympa_file, $ERRNO);
-			return undef;
-		}
-
-		my $all_rcpt;
-		if (ref($params{rcpt}) eq 'SCALAR') {
-			$all_rcpt = ${$params{rcpt}};
-		} elsif (ref($params{rcpt}) eq 'ARRAY') {
-			$all_rcpt = join(',', @{$params{rcpt}});
-		} else {
-			$all_rcpt = $params{rcpt};
-		}
-		printf TMP "X-Sympa-To: %s\n", $all_rcpt;
-		printf TMP "X-Sympa-From: %s\n", $params{from};
-		printf TMP "X-Sympa-Checksum: %s\n", Sympa::Tools::sympa_checksum($all_rcpt, $params{cookie});
-
-		print TMP $message->{'msg_as_string'} ;
-		close TMP;
-		my $new_file = $sympa_file;
-		$new_file =~ s/T\.//g;
-
-		unless (rename $sympa_file, $new_file) {
-			Sympa::Log::Syslog::do_log('notice', 'Cannot rename %s to %s : %s', $sympa_file, $new_file, $ERRNO);
-			return undef;
-		}
+		$params{spool}->store(message => $message);
 	} else {
 		# send it now
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");

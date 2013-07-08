@@ -62,9 +62,11 @@ unless (Sympa::Database::check_db_connect()) {
 
 my $pinfo = Sympa::List::_apply_defaults();
 
-## The process should not fork for sending mail
-## Messages will be spooled instead
-Sympa::Mail::set_send_spool($Sympa::Configuration::Conf{'queue'});
+# spool messages instead of sending them
+my $spool = Sympa::Spool->new(
+	name   => $Sympa::Configuration::Conf{'queue'},
+	source => Sympa::Database::get_source()
+);
 
 ## Loading all Lists at startup, in order to increase execution speed
 
