@@ -340,20 +340,18 @@ sub _get_db_conf  {
 	unless ($robot) {$robot = '*'};
 
 	my $source = Sympa::Database::get_source();
-	my $sth = $source->do_query(
-		"SELECT value_conf AS value FROM conf_table WHERE (robot_conf =%s AND label_conf =%s)",
-		$source->quote($robot),
-		$source->quote($label)
+	my $handle = $source->get_query_handle(
+		"SELECT value_conf AS value " .
+		"FROM conf_table " .
+		"WHERE robot_conf=? AND label_conf=?)",
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable retrieve value of parameter %s for robot %s from the database', $label, $robot);
 		return undef;
 	}
+	$handle->execute($robot, $label);
 
-	my $value = $sth->fetchrow();
-
-	$sth->finish();
-	return $value
+	return $handle->fetchrow();
 }
 
 
@@ -377,38 +375,44 @@ sub set_robot_conf  {
 	}
 
 	my $source = Sympa::Database::get_source();
-	my $sth = $source->do_query(
-		"SELECT count(*) FROM conf_table WHERE (robot_conf=%s AND label_conf =%s)",
-		$source->quote($robot),
-		$source->quote($label)
+	my $handle = $source->get_query_handle(
+		"SELECT count(*) " .
+		"FROM conf_table " .
+		"WHERE robot_conf=? AND label_conf=?",
 	);
-	unless ($sth) {
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to check presence of parameter %s for robot %s in database', $label, $robot);
 		return undef;
 	}
+	$handle->execute($robot, $label);
 
-	my $count = $sth->fetchrow();
-	$sth->finish();
+	my $count = $handle->fetchrow();
 
 	if ($count == 0) {
-		my $sth = $source->do_query(
-			"INSERT INTO conf_table (robot_conf, label_conf, value_conf) VALUES (%s,%s,%s)",
-			$source->quote($robot),
-			$source->quote($label),
-			$source->quote($value)
+		my $rows = $source->do(
+			"INSERT INTO conf_table ("                   .
+				"robot_conf, label_conf, value_conf" .
+			") VALUES (?, ?, ?)",
+			undef,
+			$robot,
+			$label,
+			$value
 		);
-		unless ($sth) {
+		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err','Unable add value %s for parameter %s in the robot %s DB conf', $value, $label, $robot);
 			return undef;
 		}
 	} else {
-		my $sth = $source->do_query(
-			"UPDATE conf_table SET robot_conf=%s, label_conf=%s, value_conf=%s WHERE ( robot_conf  =%s AND label_conf =%s)",
-			$source->quote($robot),
-			$source->quote($label),
-			$source->quote($value),
-			$source->quote($robot),
-			$source->quote($label)
+		my $rows = $source->do(
+			"UPDATE conf_table "                            .
+			"SET robot_conf=?, label_conf=?, value_conf=? " .
+			"WHERE robot_conf=? AND label_conf=?",
+			undef,
+			$robot,
+			$label,
+			$value,
+			$robot,
+			$label
 		);
 		unless ($sth) {
 			Sympa::Log::Syslog::do_log('err','Unable set parameter %s value to %s in the robot %s DB conf', $label, $value, $robot);
