@@ -47,7 +47,6 @@ use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Scenario;
 
-my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
 
 =head1 CLASS METHODS
@@ -141,25 +140,9 @@ sub new {
 	my $name = $params{name};
 	my $robot = $params{robot};
 	my $self = {};
-
-
-	if ($list_of_families{$robot}{$name}) {
-		# use the current family in memory and update it
-		$self = $list_of_families{$robot}{$name};
-###########
-		# the robot can be different from latest new ...
-		if ($robot eq $self->{'robot'}) {
-			return $self;
-		} else {
-			$self = {};
-		}
-	}
-	# create a new object family
 	bless $self, $class;
-	$list_of_families{$robot}{$name} = $self;
 
 	my $family_name_regexp = Sympa::Tools::get_regexp('family_name');
-
 	## family name
 	unless ($name && ($name =~ /^$family_name_regexp$/io) ) {
 		Sympa::Log::Syslog::do_log('err', 'Incorrect family name "%s"',  $name);
