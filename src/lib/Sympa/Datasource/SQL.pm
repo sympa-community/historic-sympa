@@ -1834,9 +1834,9 @@ sub get_query_handle {
 		$self->{dbh}->prepare($query);
 }
 
-=item $source->do($query)
+=item $source->execute_query($query)
 
-Execute a single non-select query.
+Execute a single SQL query.
 
 Parameters:
 
@@ -1854,10 +1854,10 @@ The number of rows affected, or I<undef> if something went wrong.
 
 =cut
 
-sub do {
-	my ($self, $query) = @_;
+sub execute_query {
+	my ($self, $query, @values) = @_;
 
-	return $self->{dbh}->do($query);
+	return $self->{dbh}->do($query, undef, @values);
 }
 
 =item $source->prepare_query_log_values(@values)

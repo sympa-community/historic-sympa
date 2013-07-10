@@ -521,7 +521,7 @@ sub create_one_time_ticket {
 
 	my $date = time();
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"INSERT INTO one_time_ticket_table ("   .
 			"ticket_one_time_ticket, "      .
 			"robot_one_time_ticket, "       .
@@ -531,7 +531,6 @@ sub create_one_time_ticket {
 			"remote_addr_one_time_ticket, " .
 			"status_one_time_ticket"        .
 		") VALUES (?, ?, ?, ?, ?, ?, ?)",
-		undef,
 		$ticket,
 		$robot,
 		$email,
@@ -608,11 +607,10 @@ sub get_one_time_ticket {
 	} else {
 		$result = 'success';
 	}
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"UPDATE one_time_ticket_table " .
 		"SET status_one_time_ticket=? " .
 		"WHERE ticket_one_time_ticket=?",
-		undef,
 		$addr,
 		$ticket_number
 	);

@@ -156,14 +156,13 @@ sub next {
 	}
 
 	# Lock the packet previously selected.
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"UPDATE bulkmailer_table "             .
 		"SET lock_bulkmailer=? "               .
 		"WHERE "                               .
 			"messagekey_bulkmailer=? AND " .
 			"packetid_bulkmailer=? AND "   .
 			"lock_bulkmailer IS NULL",
-		undef,
 		$lock,
 		$packet->{'messagekey'},
 		$packet->{'packetid'}
@@ -224,10 +223,9 @@ sub remove {
 	my ($self, $messagekey, $packetid) = @_;
 	Sympa::Log::Syslog::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"DELETE FROM bulkmailer_table " .
-		"WHERE packetid_bulkmailer = ? AND messagekey_bulkmailer = ?",
-		undef,
+		"WHERE packetid_bulkmailer=? AND messagekey_bulkmailer=?",
 		$packetid,
 		$messagekey
 	);
@@ -637,7 +635,7 @@ sub store {
 			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
 		} else {
-			my $rows = $self->{source}->do(
+			my $rows = $self->{source}->execute_query(
 				"INSERT INTO bulkmailer_table ("        .
 					"messagekey_bulkmailer, "       .
 					"messageid_bulkmailer, "        .
@@ -655,7 +653,6 @@ sub store {
 					"delivery_date_bulkmailer"      .
 				") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
 				?, ?)",
-				undef,
 				$message->{'messagekey'},
 				$msg_id,
 				$packetid,
@@ -732,9 +729,8 @@ sub remove_bulkspool_message {
 	my $table = $spool.'_table';
 	my $key = 'messagekey_'.$spool ;
 
-	my $rows = $self->{source}->do(
-		"DELETE FROM $table WHERE $key = ?",
-		undef,
+	my $rows = $self->{source}->execute_query(
+		"DELETE FROM $table WHERE $key=?",
 		$$messagekey
 	);
 	unless ($rows) {
@@ -851,7 +847,7 @@ sub init_db_random {
 
 	my $random = int(rand($range)) + $minimum;
 
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"INSERT INTO fingerprint_table VALUES ($random)",
 	);
 	unless ($rows) {

@@ -201,14 +201,13 @@ sub db_insert_notification {
 	$notification_as_string = MIME::Base64::encode($notification_as_string);
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"UPDATE notification_table "            .
 		"SET "                                  .
 			"status_notification=?, "       .
 			"arrival_date_notification=?, " .
 			"message_notification=?"        .
 		"WHERE pk_notification=?",
-		undef,
 		$status,
 		$arrival_date,
 		$notification_as_string,
@@ -289,13 +288,12 @@ sub remove_message_by_id{
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"DELETE FROM notification_table "        .
 		"WHERE "                                 .
 			"message_id_notification=? AND " .
 			"list_notification=? AND "       .
 			"robot_notification=?",
-		undef,
 		$msgid,
 		$listname,
 		$robot
@@ -328,13 +326,12 @@ sub remove_message_by_period{
 	my $source = Sympa::Database::get_source();
 
 	my $limit = time - ($period * 24 * 60 * 60);
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"DELETE FROM notification_table "  .
 		"WHERE "                           .
 			"date_notification<? AND " .
 			"list_notification=? AND " .
 			"robot_notification=?",
-		undef,
 		$limit,
 		$listname,
 		$robot

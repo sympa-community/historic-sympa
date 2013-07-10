@@ -262,11 +262,10 @@ sub upgrade {
 			foreach my $list ( @$all_lists ) {
 
 				foreach my $table ('subscriber','admin') {
-					my $rows = $source->do(
+					my $rows = $source->execute_query(
 						"UPDATE ${table}_table " .
 						"SET robot_$table=? "    .
 						"WHERE list_$table=?",
-						undef,
 						$r,
 						$list->{'name'}
 					);
@@ -370,9 +369,8 @@ sub upgrade {
 						"SET $field = ? "        .
 						"WHERE $field = ?";
 					my $rows;
-					$rows = $source->do(
+					$rows = $source->execute_query(
 						$update_query,
-						undef,
 						0,
 						1
 					);
@@ -386,9 +384,8 @@ sub upgrade {
 					## 2 to 1
 					Sympa::Log::Syslog::do_log('notice', 'Fixing DB field %s ; turning 2 to 1...', $field);
 
-					$rows = $source->do(
+					$rows = $source->execute_query(
 						$update_query,
-						undef,
 						1,
 						2
 					);
@@ -414,7 +411,7 @@ sub upgrade {
 				")";
 
 			Sympa::Log::Syslog::do_log('notice','Updating subscribed field of the subscriber table...');
-			my $rows = $source->do($update_query);
+			my $rows = $source->execute_query($update_query);
 			unless (defined $rows) {
 				Sympa::Log::Syslog::fatal_err("Unable to execute SQL statement");
 			}

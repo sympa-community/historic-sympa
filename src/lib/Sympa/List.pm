@@ -5713,13 +5713,12 @@ sub delete_list_member {
 		$list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
 
 		## Delete record in SUBSCRIBER
-		my $rows = $self->{source}->do(
+		my $rows = $self->{source}->execute_query(
 			"DELETE FROM subscriber_table "  .
 			"WHERE "                         .
 				"user_subscriber=? AND " .
 				"list_subscriber=? AND " .
 				"robot_subscriber=?",
-			undef,
 			$who,
 			$name,
 			$self->{'domain'}
@@ -5768,14 +5767,13 @@ sub delete_list_admin {
 		$list_cache{'is_admin_user'}{$self->{'domain'}}{$name}{$who} = undef;
 
 		## Delete record in ADMIN
-		my $rows = $self->{source}->do(
+		my $rows = $self->{source}->execute_query(
 			"DELETE FROM admin_table "   .
 			"WHERE "                     .
 				"user_admin=? AND "  .
 				"list_admin=? AND "  .
 				"robot_admin=? AND " .
 				"role_admin=?",
-			undef,
 			$who,
 			$name,
 			$self->{'domain'},
@@ -5809,7 +5807,7 @@ sub delete_all_list_admin {
 
 	## Delete record in ADMIN
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do("DELETE FROM admin_table");
+	my $rows = $source->execute_query("DELETE FROM admin_table");
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to remove all admin from database');
 		return undef;
@@ -6034,7 +6032,7 @@ sub suspend_subscription {
 	Sympa::Log::Syslog::do_log('debug2', '"%s", "%s", "%s"', $email, $list, $data);
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"UPDATE subscriber_table "                  .
 		"SET "                                      .
 			"suspend_subscriber='1', "          .
@@ -6044,7 +6042,6 @@ sub suspend_subscription {
 			"user_subscriber=? AND "            .
 			"list_subscriber=? AND "            .
 			"robot_subscriber=?",
-		undef,
 		$data->{'startdate'},
 		$data->{'enddate'},
 		$email,
@@ -6086,7 +6083,7 @@ sub restore_suspended_subscription {
 	Sympa::Log::Syslog::do_log('debug2', '("%s", "%s", "%s")', $email, $list, $robot);
 
 	my $source = Sympa::Database::get_source();
-	my $rows =$source->do(
+	my $rows = $source->execute_query(
 		"UPDATE subscriber_table "                     .
 		"SET "                                         .
 			"suspend_subscriber='0', "             .
@@ -6096,7 +6093,6 @@ sub restore_suspended_subscription {
 			"user_subscriber=? AND "               .
 			"list_subscriber=? AND "               .
 			"robot_subscriber=?",
-		undef,
 		$email,
 		$list,
 		$robot
@@ -6151,7 +6147,7 @@ sub insert_delete_exclusion {
 
 		if ($user->{'included'} eq '1' or defined $family) {
 			## Insert : list, user and date
-			my $rows = $source->do(
+			my $rows = $source->execute_query(
 				"INSERT INTO exclusion_table (" .
 					"list_exclusion, "      .
 					"family_exclusion, "    .
@@ -6159,7 +6155,6 @@ sub insert_delete_exclusion {
 					"user_exclusion, "      .
 					"date_exclusion"        .
 				") VALUES (?, ?, ?, ?, ?)",
-				undef,
 				$list,
 				$family,
 				$robot,
@@ -6188,13 +6183,12 @@ sub insert_delete_exclusion {
 			if($email eq $users){
 				## Delete : list, user and date
 				if (defined $family) {
-					my $rows = $source->do(
+					my $rows = $source->execute_query(
 						"DELETE FROM exclusion_table ".
 						"WHERE " .
 							"family_exclusion=? AND ".
 							"robot_exclusion=? AND ".
 							"user_exclusion=?",
-						undef,
 						$family,
 						$robot,
 						$email
@@ -6204,13 +6198,12 @@ sub insert_delete_exclusion {
 					}
 					$r = $rows;
 				} else {
-					my $rows = $source->do(
+					my $rows = $source->execute_query(
 						"DELETE FROM exclusion_table " .
 						"WHERE " .
 							"list_exclusion=? AND " .
 							"robot_exclusion=? AND " .
 							"user_exclusion=?",
-						undef,
 						$list,
 						$robot,
 						$email
@@ -7578,11 +7571,10 @@ sub update_list_member {
 
 		## Update field
 		if ($table eq 'user_table') {
-			my $rows = $self->{source}->do(
+			my $rows = $self->{source}->execute_query(
 				"UPDATE $table "              .
 				"SET " . join(',', @set_list) .
 				"WHERE email_user=?",
-				undef,
 				$who
 			);
 			unless ($rows) {
@@ -7591,13 +7583,12 @@ sub update_list_member {
 			}
 		} elsif ($table eq 'subscriber_table') {
 			if ($who eq '*') {
-				my $rows = $self->{source}->do(
+				my $rows = $self->{source}->execute_query(
 					"UPDATE $table " .
 					"SET " . join(',', @set_list) .
 					"WHERE " .
 						"list_subscriber=? AND " .
 						"robot_subscriber=?",
-					undef,
 					$name,
 					$self->{'domain'}
 				);
@@ -7606,14 +7597,13 @@ sub update_list_member {
 					return undef;
 				}
 			} else {
-				my $rows = $self->{source}->do(
+				my $rows = $self->{source}->execute_query(
 					"UPDATE $table "                 .
 					"SET " . join(',', @set_list)    .
 					"WHERE "                         .
 						"user_subscriber=? AND " .
 						"list_subscriber=? AND " .
 						"robot_subscriber=?",
-					undef,
 					$who,
 					$name,
 					$self->{'domain'}
@@ -7736,11 +7726,10 @@ sub update_list_admin {
 
 		## Update field
 		if ($table eq 'user_table') {
-			my $rows = $self->{source}->do(
-				"UPDATE $table " .
+			my $rows = $self->{source}->execute_query(
+				"UPDATE $table "              .
 				"SET " . join(',', @set_list) .
 				"WHERE email_user=?",
-				undef,
 				$who
 			);
 			unless ($rows) {
@@ -7750,14 +7739,13 @@ sub update_list_admin {
 
 		} elsif ($table eq 'admin_table') {
 			if ($who eq '*') {
-				my $rows = $self->{source}->do(
-					"UPDATE $table " .
+				my $rows = $self->{source}->execute_query(
+					"UPDATE $table "              .
 					"SET " . join(',', @set_list) .
 					"WHERE " .
 						"list_admin=? AND " .
 						"robot_admin=? AND " .
 						"role_admin=?)",
-					undef,
 					$name,
 					$self->{'domain'},
 					$role
@@ -7767,7 +7755,7 @@ sub update_list_admin {
 					return undef;
 				}
 			} else {
-				my $rows = $self->{source}->do(
+				my $rows = $self->{source}->execute_query(
 					"UPDATE $table "              .
 					"SET " . join(',', @set_list) .
 					"WHERE "                      .
@@ -7775,7 +7763,6 @@ sub update_list_admin {
 						"list_admin=? AND "   .
 						"robot_admin=? AND "  .
 						"role_admin=?",
-					undef,
 					$who,
 					$name,
 					$self->{'domain'},
@@ -7841,11 +7828,10 @@ sub update_global_user {
 
 	return undef unless @fields;
 
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"UPDATE user_table "         .
 		"SET " . join(', ', @fields) .
 		"WHERE email_user=?",
-		undef,
 		@values,
 		$who
 	);
@@ -7901,10 +7887,9 @@ sub add_global_user {
 	}
 
 	## Update field
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"INSERT INTO user_table (" . join(', ', @fields) . ") " .
 		"VALUES (" . join(', ', map { "?" } @fields) . ")",
-		undef,
 		@values
 	);
 	unless($rows) {
@@ -8179,11 +8164,10 @@ sub rename_list_db {
 	my $statement_admin;
 	my $statement_list_cache;
 
-	my $subscriber_rows = $self->{source}->do(
+	my $subscriber_rows = $self->{source}->execute_query(
 		"UPDATE subscriber_table "                      .
 		"SET list_subscriber=?, robot_subscriber=? "    .
 		"WHERE list_subscriber=? AND robot_subscriber=?",
-		undef,
 		$new_listname,
 		$new_robot,
 		$self->{'name'},
@@ -8197,11 +8181,10 @@ sub rename_list_db {
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_subscriber );
 
 	# admin_table is "alive" only in case include2
-	my $admin_rows = $self->{source}->do(
+	my $admin_rows = $self->{source}->execute_query(
 		"UPDATE admin_table "                  .
 		"SET list_admin=?, robot_admin=? "     .
 		"WHERE list_admin=? AND robot_admin=?)",
-		undef,
 		$new_listname,
 		$new_robot,
 		$self->{'name'},
@@ -8214,11 +8197,10 @@ sub rename_list_db {
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_admin );
 
 	if ($Sympa::Database::use_db) {
-		my $list_rows =  $self->{source}->do(
+		my $list_rows =  $self->{source}->execute_query(
 			"UPDATE list_table "                .
 			"SET name_list=?, robot_list=? "    .
 			"WHERE name_list=? AND robot_list=?",
-			undef,
 			$new_listname,
 			$new_robot,
 			$self->{'name'},
@@ -11438,14 +11420,13 @@ sub set_netidtoemail_db {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s)', $netid, $idpname, $email);
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		"INSERT INTO netidmap_table (" .
 			"netid_netidmap, " .
 			"serviceid_netidmap, " .
 			"email_netidmap, " .
 			"robot_netidmap" .
 		") VALUES (?, ?, ?, ?)",
-		undef,
 		$netid,
 		$idpname,
 		$email,
@@ -11471,11 +11452,10 @@ sub update_email_netidmap_db{
 	}
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
-		"UPDATE netidmap_table " .
-		"SET email_netidmap=? "  .
+	my $rows = $source->execute_query(
+		"UPDATE netidmap_table "                     .
+		"SET email_netidmap=? "                      .
 		"WHERE email_netidmap=? AND robot_netidmap=?",
-		undef,
 		$new_email,
 		$old_email,
 		$robot
@@ -11685,9 +11665,8 @@ sub lowercase_field {
 
 		$total++;
 
-		my $rows = $source->do(
+		my $rows = $source->execute_query(
 			"UPDATE $table SET $field=? WHERE $field=?",
-			undef,
 			$lower_cased,
 			$user->{$field}
 		);
@@ -13468,10 +13447,9 @@ sub purge {
 	}
 	## Clean list table if needed
 	if ($Sympa::Configuration::Conf{'db_list_cache'} eq 'on') {
-		my $rows = $self->{source}->do(
+		my $rows = $self->{source}->execute_query(
 			"DELETE FROM list_table "           .
 			"WHERE name_list=? AND robot_list=?",
-			undef,
 			$self->{'name'},
 			$self->{'domain'}
 		);
@@ -13790,19 +13768,18 @@ sub _update_list_db {
 	);
 	$handle->execute($name);
 	if ($handle->fetch()) {
-		my $rows = $self->{source}->do(
-			"UPDATE list_table " .
-			"SET " .
-				"status_list=?, " .
-				"name_list=?, " .
-				"robot_list=?, " .
-				"subject_list=?, " .
-				"web_archive_list=?, " .
-				"topics_list=?, " .
-				"owners_list=?, " .
-				"editors_list=? " .
+		my $rows = $self->{source}->execute_query(
+			"UPDATE list_table "                .
+			"SET "                              .
+				"status_list=?, "           .
+				"name_list=?, "             .
+				"robot_list=?, "            .
+				"subject_list=?, "          .
+				"web_archive_list=?, "      .
+				"topics_list=?, "           .
+				"owners_list=?, "           .
+				"editors_list=? "           .
 			"WHERE robot_list=? AND name_list=?",
-			undef,
 			$status,
 			$name,
 			$robot,
@@ -13819,7 +13796,7 @@ sub _update_list_db {
 			return undef;
 		}
 	} else {
-		my $rows = $self->{source}->do(
+		my $rows = $self->{source}->execute_query(
 			"INSERT INTO list_table ("         .
 				"status_list, "            .
 				"name_list, "              .
@@ -13828,9 +13805,8 @@ sub _update_list_db {
 				"web_archive_list, "       .
 				"topics_list, "            .
 				"owners_list, "            .
-				"editors_list"             . 
+				"editors_list"             .
 			") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-			undef,
 			$status,
 			$name,
 			$robot,
@@ -13865,9 +13841,8 @@ sub _flush_list_db {
 	}
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
+	my $rows = $source->execute_query(
 		$query,
-		undef,
 		$listname
 	);
 	unless ($rows) {

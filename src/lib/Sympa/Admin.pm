@@ -871,11 +871,10 @@ sub rename_list{
 	my $source = Sympa::Database::get_source();
 
 	## Move stats
-	my $stat_rows = $source->do(
+	my $stat_rows = $source->execute_query(
 		"UPDATE stat_table "                .
 		"SET list_stat=?, robot_stat=? "    .
 		"WHERE list_stat=? AND robot_stat=?",
-		undef,
 		$params{'new_listname'},
 		$params{'new_robot'},
 		$list->{'name'},
@@ -886,11 +885,10 @@ sub rename_list{
 	}
 
 	## Move stat counters
-	my $stat_counters_rows = $source->do(
+	my $stat_counters_rows = $source->execute_query(
 		"UPDATE stat_counter_table "              .
 		"SET list_counter=?, robot_counter=? "    .
 		"WHERE list_counter=? AND robot_counter=?",
-		undef,
 		$params{'new_listname'},
 		$params{'new_robot'},
 		$list->{'name'},

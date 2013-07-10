@@ -304,7 +304,7 @@ sub trigger_flow {
 
 	my $source = Sympa::Database::get_source();
 	if(defined $self->{'session'}{'defined'}) {
-		my $rows = $source->do(
+		my $rows = $source->execute_query(
 			'UPDATE oauthconsumer_sessions_table " .
 			"SET "                                 .
 				"tmp_token_oauthconsumer=?, "  .
@@ -312,7 +312,6 @@ sub trigger_flow {
 			"WHERE "                               .
 				"user_oauthconsumer=? AND "    .
 				"provider_oauthconsumer=?',
-			undef,
 			$tmp->{'token'},
 			$tmp->{'secret'},
 			$self->{'user'},
@@ -323,14 +322,13 @@ sub trigger_flow {
 			return undef;
 		}
 	} else {
-		my $rows = $source->do(
+		my $rows = $source->execute_query(
 			"INSERT INTO oauthconsumer_sessions_table(" .
 				"user_oauthconsumer, "              .
 				"provider_oauthconsumer, "          .
 				"tmp_token_oauthconsumer, "         .
 				"tmp_secret_oauthconsumer "         .
 			") VALUES (?, ?, ?, ?)",
-			undef,
 			$self->{'user'},
 			$self->{'provider'},
 			$tmp->{'token'},
@@ -391,15 +389,14 @@ sub get_access_token {
 	$self->{'session'}{'tmp'} = undef;
 
 	my $source = Sympa::Database::get_source();
-	my $rows = $source->do(
-		"UPDATE oauthconsumer_sessions_table "    .
-		"SET "                                    .
-			"tmp_token_oauthconsumer=NULL, "  .
-			"tmp_secret_oauthconsumer=NULL, " .
-			"access_token_oauthconsumer=?, "  .
-			"access_secret_oauthconsumer=? "  .
+	my $rows = $source->execute_query(
+		"UPDATE oauthconsumer_sessions_table "                   .
+		"SET "                                                   .
+			"tmp_token_oauthconsumer=NULL, "                 .
+			"tmp_secret_oauthconsumer=NULL, "                .
+			"access_token_oauthconsumer=?, "                 .
+			"access_secret_oauthconsumer=? "                 .
 		"WHERE user_oauthconsumer=? AND provider_oauthconsumer=?",
-		undef,
 		$access->{'token'},
 		$access->{'secret'},
 		$self->{'user'},

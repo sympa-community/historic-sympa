@@ -389,11 +389,10 @@ sub set_robot_conf  {
 	my $count = $handle->fetchrow();
 
 	if ($count == 0) {
-		my $rows = $source->do(
+		my $rows = $source->execute_query(
 			"INSERT INTO conf_table ("                   .
 				"robot_conf, label_conf, value_conf" .
 			") VALUES (?, ?, ?)",
-			undef,
 			$robot,
 			$label,
 			$value
@@ -403,11 +402,10 @@ sub set_robot_conf  {
 			return undef;
 		}
 	} else {
-		my $rows = $source->do(
+		my $rows = $source->execute_query(
 			"UPDATE conf_table "                            .
 			"SET robot_conf=?, label_conf=?, value_conf=? " .
 			"WHERE robot_conf=? AND label_conf=?",
-			undef,
 			$robot,
 			$label,
 			$value,

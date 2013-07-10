@@ -215,7 +215,7 @@ sub purge_old_sessions {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no sessions to expire');
 	} else {
-		my $rows = $params{source}->do($delete_query);
+		my $rows = $params{source}->execute_query($delete_query);
 		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge old sessions for robot %s', $params{robot});
 			return undef;
@@ -235,7 +235,7 @@ sub purge_old_sessions {
 		Sympa::Log::Syslog::do_log('debug','no anonymous sessions to expire');
 	} else {
 		my $anonymous_rows =
-			$params{source}->do($anonymous_delete_query);
+			$params{source}->execute_query($anonymous_delete_query);
 		unless ($anonymous_rows) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge anonymous sessions for robot %s',$params{robot});
 			return undef;
@@ -290,7 +290,9 @@ sub purge_old_tickets {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no tickets to expire');
 	} else {
-		my $rows = $params{source}->do($delete_query, undef, @params);
+		my $rows = $params{source}->execute_query(
+			$delete_query, @params
+		);
 		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err','Unable to delete expired one time tickets for robot %s',$params{robot});
 			return undef;
@@ -485,7 +487,7 @@ sub store {
 ## If this is a new session, then perform an INSERT
 if ($self->{'new_session'}) {
 	## Store the new session ID in the DB
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"INSERT INTO session_table ("   .
 			"id_session, "          .
 			"date_session, "        .
@@ -496,7 +498,6 @@ if ($self->{'new_session'}) {
 			"hit_session, "         .
 			"data_session"          .
 		") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		undef,
 		$self->{'id_session'},
 		time,
 		$ENV{'REMOTE_ADDR'},
@@ -513,7 +514,7 @@ if ($self->{'new_session'}) {
 	## If the session already exists in DB, then perform an UPDATE
 } else {
 	## Update the new session in the DB
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"UPDATE session_table SET "       .
 			"date_session=?, "        .
 			"remote_addr_session=?, " .
@@ -523,7 +524,6 @@ if ($self->{'new_session'}) {
 			"hit_session=?, "         .
 			"data_session=? "         .
 			"WHERE (id_session=?)",
-		undef,
 		time,
 		$ENV{'REMOTE_ADDR'},
 		$self->{'robot'},
@@ -567,9 +567,8 @@ sub renew {
 	my $new_id = Sympa::Session->get_random();
 
 	## First remove the DB entry for the previous session ID
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		"UPDATE session_table SET id_session=? WHERE (id_session=?)",
-		undef,
 		$new_id,
 		$self->{'id_session'}
 	);

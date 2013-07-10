@@ -280,9 +280,8 @@ sub next {
 			$filter_clause                       .
 		"ORDER BY priority_spool, date_spool LIMIT 1";
 
-	my $rows = $self->{source}->do(
+	my $rows = $self->{source}->execute_query(
 		$update_query,
-		undef,
 		$lock,
 		$epoch,
 		$self->{name},
@@ -429,7 +428,7 @@ sub update {
 	my $query =
 		"UPDATE spool_table SET $set_clause WHERE $filter_clause";
 
-	my $rows = $self->{source}->do($query, undef, @values);
+	my $rows = $self->{source}->execute_query($query, @values);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement');
 		return undef;
@@ -582,7 +581,7 @@ sub remove_message {
 		"DELETE FROM spool_table " .
 		"WHERE spoolname_spool=? AND $filter_clause";
 
-	$self->{source}->do($query, undef, $self->{name});
+	$self->{source}->execute_query($query, $self->{name});
 	return 1;
 }
 
