@@ -40,7 +40,6 @@ use MIME::EncWords;
 use MIME::Parser;
 
 use Sympa::Configuration;
-use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Scenario;
 use Sympa::Tools;
@@ -233,14 +232,7 @@ sub new {
 				$listname = $1;
 			}
 
-			my $list = Sympa::List->new(
-				name    => $listname,
-				robot   => $robot,
-				options => {'just_try' => 1}
-			);
-			if ($list) {
-				$self->{'list'} = $list;
-			}
+			$self->{'listname'} = $listname;
 		}
 		# verify DKIM signature
 		if (Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){

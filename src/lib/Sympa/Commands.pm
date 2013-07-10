@@ -2328,7 +2328,11 @@ sub _confirm {
 	my $msg_id     = $msg->head()->get('Message-Id');
 	my $msg_string = $msg->as_string();
 
-	my $list = $message->{'list'};
+	my $list = Sympa::List->new(
+		name    => $message->{'listname'},
+		robot   => $robot,
+		options => {'just_try' => 1}
+	);
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	my $name = $list->{'name'};
