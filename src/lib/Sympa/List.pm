@@ -3796,15 +3796,12 @@ sub send_global_file {
 	$data->{'boundary'} = '----------=_'.Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
 
 	if ((Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(Sympa::Configuration::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
-		# assume Sympa::Tools::DKIM can be loaded if the setting is still on
-		require Sympa::Tools::DKIM;
-		$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters(
-			robot           => $robot,
-			signer_domain   => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
-			signer_identity => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
-			selector        => Sympa::Configuration::get_robot_conf($robot, 'dkim_selector'),
-			keyfile         => Sympa::Configuration::get_robot_conf($robot, 'dkim_private_key_path')
-		);
+		$data->{'dkim'} = {
+			d           => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
+			i           => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
+			selector    => Sympa::Configuration::get_robot_conf($robot, 'dkim_selector'),
+			private_key => Sympa::Tools::File::slurp_file(Sympa::Configuration::get_robot_conf($robot, 'dkim_private_key_path'))
+		};
 	}
 
 	# use verp excepted for alarms. We should make this configurable in
@@ -4001,11 +3998,12 @@ sub send_file {
 	$data->{'sign_mode'} = $sign_mode;
 
 	if ((Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(Sympa::Configuration::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
-		# assume Sympa::Tools::DKIM can be loaded if the setting is still on
-		require Sympa::Tools::DKIM;
-		$data->{'dkim'} = Sympa::Tools::DKIM::get_dkim_parameters(
-			robot => $self->{'domain'}
-		);
+		$data->{'dkim'} = {
+			d           => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_domain'),
+			i           => Sympa::Configuration::get_robot_conf($robot, 'dkim_signer_identity'),
+			selector    => Sympa::Configuration::get_robot_conf($robot, 'dkim_selector'),
+			private_key => Sympa::Tools::File::slurp_file(Sympa::Configuration::get_robot_conf($robot, 'dkim_private_key_path'))
+		};
 	}
 
 	# use verp excepted for alarms. We should make this configurable in
@@ -4227,12 +4225,13 @@ sub send_msg {
 	my $dkim_parameters ;
 	# prepare dkim parameters
 	if ($apply_dkim_signature eq 'on') {
-		# assume Sympa::Tools::DKIM can be loaded if the setting is still on
-		require Sympa::Tools::DKIM;
-		$dkim_parameters = Sympa::Tools::DKIM::get_dkim_parameters(
-			robot    => $self->{'domain'},
-			listname => $self->{'name'}
-		);
+		my $dkim = $self->{'admin'}{'dkim_parameters'};
+		$dkim_parameters = {
+			d           => $dkim->{signer_domain},
+			i           => $dkim->{signer_identity} || $self->{'name'}.'-request@'.$robot,
+			selector    => $dkim->{selector},
+			private_key => Sympa::Tools::File::slurp_file($dkim->{private_key_path})
+			};
 	}
 
 	## Storing the not empty subscribers' arrays into a hash.
