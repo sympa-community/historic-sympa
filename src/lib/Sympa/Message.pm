@@ -268,12 +268,9 @@ sub new {
 		## Decrypt messages
 		if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 			($hdr->get('Content-Type') !~ /signed-data/)){
-			my $certdir =
-			$self->{'list'}->{dir} ||
-			$Sympa::Configuration::Conf{'home'} . '/sympa';
 			my ($dec, $dec_as_string) = Sympa::Tools::SMIME::decrypt_message(
 				entity     => $self->{'msg'},
-				cert_dir   => $certdir,
+				cert_dir   => $Sympa::Configuration::Conf{'ssl_cert_dir'},
 				key_passwd => $Sympa::Configuration::Conf{'key_passwd'},
 				openssl    => $Sympa::Configuration::Conf{'openssl'}
 			);
