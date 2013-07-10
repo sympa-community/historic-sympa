@@ -34,6 +34,7 @@ package Sympa::Family;
 
 use strict;
 
+use Carp;
 use English qw(-no_match_vars);
 use File::Copy;
 use Term::ProgressBar;
@@ -137,23 +138,16 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2','(%s,%s)',$params{name},$params{robot});
 
-	my $name = $params{name};
-	my $robot = $params{robot};
-	my $self = {};
-	bless $self, $class;
-
 	my $family_name_regexp = Sympa::Tools::get_regexp('family_name');
-	## family name
-	unless ($name && ($name =~ /^$family_name_regexp$/io) ) {
-		Sympa::Log::Syslog::do_log('err', 'Incorrect family name "%s"',  $name);
-		return undef;
-	}
+	croak "missing name parameter" unless $params{name};
+	croak "invalid name parameter" unless
+		$params{name} =~ /^$family_name_regexp$/io;
 
-	## Lowercase the family name.
-	$name =~ tr/A-Z/a-z/;
-	$self->{'name'} = $name;
-
-	$self->{'robot'} = $robot;
+	my $self = {
+		name  => lc($params{name}),
+		robot => $params{robot}
+	};
+	bless $self, $class;
 
 	## Adding configuration related to automatic lists.
 	foreach my $key (keys %{$params{config}}) {
@@ -163,13 +157,13 @@ sub new {
 	## family directory
 	$self->{'dir'} = $self->_get_directory($params{etcdir});
 	unless (defined $self->{'dir'}) {
-		Sympa::Log::Syslog::do_log('err','(%s,%s) : the family directory does not exist',$name,$robot);
+		Sympa::Log::Syslog::do_log('err','(%s,%s) : the family directory does not exist',$self->{name},$self->{robot});
 		return undef;
 	}
 
 	## family files
 	if (my $file_names = $self->_check_mandatory_files()) {
-		Sympa::Log::Syslog::do_log('err','(%s,%s) : Definition family files are missing : %s',$name,$robot,$file_names);
+		Sympa::Log::Syslog::do_log('err','(%s,%s) : Definition family files are missing : %s',$self->{name},$self->{robot},$file_names);
 		return undef;
 	}
 
