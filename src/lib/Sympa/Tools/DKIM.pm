@@ -41,73 +41,11 @@ use Mail::DKIM::TextWrap;
 use MIME::Parser;
 
 use Sympa::Message;
-use Sympa::List;
 use Sympa::Log::Syslog;
 
 =head1 FUNCTIONS
 
 =over
-
-=item get_dkim_parameters(%parameters)
-
-Parameters:
-
-=over
-
-=item C<robot> =>
-
-=item C<listname> =>
-
-=back
-
-Return value:
-
-=cut
-
-sub get_dkim_parameters {
-	my (%params) = @_;
-
-	my $robot = $params{'robot'};
-	my $listname = $params{'listname'};
-	Sympa::Log::Syslog::do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
-
-	my $data ; my $keyfile ;
-	if ($listname) {
-		# fetch dkim parameter in list context
-		my $list = Sympa::List->new(name => $listname, robot => $robot);
-		unless ($list){
-			Sympa::Log::Syslog::do_log('err',"Could not load list %s@%s",$listname, $robot);
-			return undef;
-		}
-
-		$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
-		if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
-			$data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
-		} else {
-			# RFC 4871 (page 21)
-			$data->{'i'} = $list->{'name'}.'-request@'.$robot;
-		}
-
-		$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
-		$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
-	} else {
-		# in robot context
-		$data->{'d'} = $params{'signer_domain'};
-		$data->{'i'} = $params{'signer_identity'};
-		$data->{'selector'} = $params{'selector'};
-		$keyfile = $params{'keyfile'};
-	}
-	unless (open (KEY, $keyfile)) {
-		Sympa::Log::Syslog::do_log('err',"Could not read dkim private key %s",$keyfile);
-		return undef;
-	}
-	while (<KEY>){
-		$data->{'private_key'} .= $_;
-	}
-	close (KEY);
-
-	return $data;
-}
 
 =item dkim_verifier($msg, $tmpdir)
 
