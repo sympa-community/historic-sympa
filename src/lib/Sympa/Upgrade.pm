@@ -813,13 +813,12 @@ sub upgrade {
 				}
 				if ($#valid_robot_candidates == 0) {
 					$valid_robot = $valid_robot_candidates[0];
-					my $rows = $source->do(
+					my $rows = $source->execute_query(
 						"UPDATE exclusion_table "      .
 						"SET robot_exclusion=? "       .
 						"WHERE "                       .
 							"list_exclusion=? AND ".
 							"user_exclusion=?",
-						undef,
 						$valid_robot,
 						$data->{'list_exclusion'},
 						$data->{'user_exclusion'}
@@ -1136,23 +1135,21 @@ sub md5_encode_password {
 		return undef;
 	}
 
-	my $dbh = Sympa::Database::get_source()->get_handle();
+	my $source = Sympa::Database::get_source();
 
-	my $sth = $dbh->prepare("SELECT email_user,password_user from user_table");
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	my $handle = $source->get_query_handle(
+		"SELECT email_user,password_user from user_table"
+	);
+	unless ($handle) {
+		Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement');
 		return undef;
 	}
-
-	unless ($sth->execute) {
-		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement : %s', $dbh->errstr);
-		return undef;
-	}
+	$handle->execute();
 
 	$total = 0;
 	my $total_md5 = 0 ;
 
-	while (my $user = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $user = $handle->fetchrow_hashref('NAME_lc')) {
 
 		my $clear_password ;
 		if ($user->{'password_user'} =~ /^[0-9a-f]{32}/){
@@ -1175,14 +1172,23 @@ sub md5_encode_password {
 		## Updating Db
 		my $escaped_email =  $user->{'email_user'};
 		$escaped_email =~ s/\'/''/g;
-		my $statement = sprintf "UPDATE user_table SET password_user='%s' WHERE (email_user='%s')", Sympa::Auth::password_fingerprint($clear_password), $escaped_email ;
 
-		unless ($dbh->do($statement)) {
-			Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+		my $query = 
+			"UPDATE user_table "   .
+			"SET password_user=? " .
+			"WHERE email_user=?";
+
+		my $rows = $source->execute_query(
+			$query, 
+			Sympa::Auth::password_fingerprint($clear_password),
+			$escaped_email
+		);
+
+		unless ($rows) {
+			Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement "%s"', $query);
 			return undef;
 		}
 	}
-	$sth->finish();
 
 	Sympa::Log::Syslog::do_log('info',"Updating password storage in table user_table using md5 for %d users",$total) ;
 	if ($total_md5) {
