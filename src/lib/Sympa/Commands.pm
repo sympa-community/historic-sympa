@@ -2324,27 +2324,31 @@ sub _confirm {
 		return 'msg_not_found';
 	}
 
-	my $msg = $message->{'msg'};
+	my $msg        = $message->{'msg'};
+	my $msg_id     = $msg->head()->get('Message-Id');
+	my $msg_string = $msg->as_string();
+
 	my $list = $message->{'list'};
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	my $name = $list->{'name'};
-	my $hdr= $msg->head();
 
-	my $msgid = $hdr->get('Message-Id');
-	my $msg_string = $message->{'msg'}->as_string();
-
-	my $result = $list->check_list_authz('send','md5',
-		{'sender' => $sender,
-			'message' => $message, });
+	my $result = $list->check_list_authz(
+		'send',
+		'md5',
+		{
+			'sender'  => $sender,
+			'message' => $message,
+		}
+	);
 
 	my $action;
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 
 	unless (defined $action) {
-		Sympa::Log::Syslog::do_log('err', 'message (%s) ignored because unable to evaluate scenario for list %s',$msgid,$name);
-		Sympa::Report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msgid,'message' => $message},
+		Sympa::Log::Syslog::do_log('err', 'message (%s) ignored because unable to evaluate scenario for list %s',$msg_id,$name);
+		Sympa::Report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msg_id,'message' => $message},
 			$robot,$msg_string,$list);
 		return undef ;
 	}
@@ -2354,7 +2358,7 @@ sub _confirm {
 
 		unless (defined $key) {
 			Sympa::Log::Syslog::do_log('err','Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
-			Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
+			Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msg_id,'message' => $message},$robot,$msg_string,$list);
 			return undef
 		}
 
@@ -2372,7 +2376,7 @@ sub _confirm {
 
 		unless (defined $key) {
 			Sympa::Log::Syslog::do_log('err','Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
-			Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
+			Sympa::Report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msg_id,'message' => $message},$robot,$msg_string,$list);
 			return undef
 		}
 
@@ -2409,20 +2413,21 @@ sub _confirm {
 
 	} elsif($action =~ /^do_it/) {
 
-		$hdr->add('X-Validation-by', $sender);
+		$msg->head()->add('X-Validation-by', $sender);
 
 		## Distribute the message
-		my $numsmtp;
 		my $apply_dkim_signature = 'off';
 		$apply_dkim_signature = 'on' if Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
 		$apply_dkim_signature = 'on' if Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
 
-		$numsmtp =$list->distribute_msg('message'=> $message,
-			'apply_dkim_signature'=>$apply_dkim_signature);
+		my $numsmtp = $list->distribute_msg(
+			'message'              => $message,
+			'apply_dkim_signature' => $apply_dkim_signature
+		);
 
 		unless (defined $numsmtp) {
 			Sympa::Log::Syslog::do_log('err','Unable to send message to list %s', $list->{'name'});
-			Sympa::Report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
+			Sympa::Report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id,'message' => $message},$robot,$msg_string,$list);
 			return undef;
 		}
 
