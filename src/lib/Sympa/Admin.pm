@@ -243,74 +243,74 @@ sub create_list_old{
 	## Use an intermediate handler to encode to filesystem_encoding
 	my $config = '';
 	my $fd = IO::Scalar->new(\$config);
-Sympa::Template::parse_tt2($params, 'config.tt2', $fd, $tt2_include_path);
-#    Encode::from_to($config, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
-print CONFIG $config;
+	Sympa::Template::parse_tt2($params, 'config.tt2', $fd, $tt2_include_path);
+	#    Encode::from_to($config, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
+	print CONFIG $config;
 
-close CONFIG;
+	close CONFIG;
 
-## Unlock config file
-$lock->unlock();
+	## Unlock config file
+	$lock->unlock();
 
-## Creation of the info file
-# remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
-$params->{'description'} =~ s/\r\n|\r/\n/g;
+	## Creation of the info file
+	# remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
+	$params->{'description'} =~ s/\r\n|\r/\n/g;
 
-## info file creation.
-unless (open INFO, '>', "$list_dir/info") {
-	Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s',$list_dir,$ERRNO);
-}
-if (defined $params->{'description'}) {
-	Encode::from_to($params->{'description'}, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
-	print INFO $params->{'description'};
-}
-close INFO;
+	## info file creation.
+	unless (open INFO, '>', "$list_dir/info") {
+		Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s',$list_dir,$ERRNO);
+	}
+	if (defined $params->{'description'}) {
+		Encode::from_to($params->{'description'}, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
+		print INFO $params->{'description'};
+	}
+	close INFO;
 
-## Create list object
-my $list = Sympa::List->new(
-	name   => $params->{'listname'},
-	robot  => $robot,
-	source => Sympa::Database::get_source(),
-);
-unless ($list) {
-	Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
-	return undef;
-}
-
-## Create shared if required
-if (defined $list->{'admin'}{'shared_doc'}) {
-	$list->create_shared();
-}
-
-#log in stat_table to make statistics
-
-if($origin eq "web"){
-	Sympa::Log::Database::add_stat(
-		robot     => $robot,
-		list      => $params->{'listname'},
-		operation => 'create list',
-		mail      => $user_mail,
-		daemon    => 'wwsympa.fcgi'
+	## Create list object
+	my $list = Sympa::List->new(
+		name   => $params->{'listname'},
+		robot  => $robot,
+		source => Sympa::Database::get_source(),
 	);
-}
+	unless ($list) {
+		Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
+		return undef;
+	}
 
-my $return = {};
-$return->{'list'} = $list;
+	## Create shared if required
+	if (defined $list->{'admin'}{'shared_doc'}) {
+		$list->create_shared();
+	}
 
-if ($list->{'admin'}{'status'} eq 'open') {
-	$return->{'aliases'} = install_aliases($list,$robot);
-} else {
-	$return->{'aliases'} = 1;
-}
+	#log in stat_table to make statistics
 
-## Synchronize list members if required
-if ($list->has_include_data_sources()) {
-	Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	$list->sync_include();
-}
+	if($origin eq "web"){
+		Sympa::Log::Database::add_stat(
+			robot     => $robot,
+			list      => $params->{'listname'},
+			operation => 'create list',
+			mail      => $user_mail,
+			daemon    => 'wwsympa.fcgi'
+		);
+	}
 
-$list->save_config;
-return $return;
+	my $return = {};
+	$return->{'list'} = $list;
+
+	if ($list->{'admin'}{'status'} eq 'open') {
+		$return->{'aliases'} = install_aliases($list,$robot);
+	} else {
+		$return->{'aliases'} = 1;
+	}
+
+	## Synchronize list members if required
+	if ($list->has_include_data_sources()) {
+		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+		$list->sync_include();
+	}
+
+	$list->save_config;
+	return $return;
 }
 
 =item create_list($params, $family, $robot, $abort_on_error)
