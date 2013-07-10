@@ -280,7 +280,10 @@ while (!$end) {
 
 		Sympa::Log::Syslog::do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 
-		my $list = Sympa::List->new(name => $listadress);
+		my $list = Sympa::List->new(
+			name   => $listadress,
+			source => Sympa::Database::get_source(),
+		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err',"remove : unknown list $listadress");
 			$spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
@@ -471,7 +474,11 @@ sub rebuild {
 
 	my $tag = get_tag($listname);
 
-	my $list = Sympa::List->new(name => $listname, robot => $hostname);
+	my $list = Sympa::List->new(
+		name   => $listname,
+		robot  => $hostname,
+		source => Sympa::Database::get_source(),
+	);
 	my $robot = $list->{'domain'};
 	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
 	Sympa::Log::Syslog::do_log('debug',"Rebuilding $adrlist archive ($2)");
@@ -655,7 +662,11 @@ sub mail2arc {
 
 	my $newfile;
 
-	my $list = Sympa::List->new(name => $listname, robot => $robot);
+	my $list = Sympa::List->new(
+		name   => $listname,
+		robot  => $robot,
+		source => Sympa::Database::get_source(),
+	);
 	my $arcpath = Sympa::Configuration::get_robot_conf($list->{'domain'},'arc_path');
 
 	unless (defined $list) {

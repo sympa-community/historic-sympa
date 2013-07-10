@@ -335,7 +335,9 @@ while (!$end) {
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
 	## List all tasks
-	my $result = Sympa::Task->load_tasks($spool);
+	my $result = Sympa::Task->load_tasks(
+		$spool, Sympa::Database::get_source()
+	);
 	unless ($result) {
 		Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool"});
 		Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool");
@@ -507,7 +509,11 @@ sub create {
 
 	# for a list
 	if ($object  eq 'list') {
-		my $list = Sympa::List->new(name => $list_name, robot => $robot);
+		my $list = Sympa::List->new(
+			name   => $list_name,
+			robot  => $robot,
+			source => Sympa::Database::get_source(),
+		);
 
 		$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
@@ -1123,7 +1129,10 @@ sub create_cmd {
 		'execution_date' => 'execution_date');
 
 	if ($type eq 'list') {
-		my $list = Sympa::List->new(name => $object);
+		my $list = Sympa::List->new(
+			name   => $object,
+			source => Sympa::Database::get_source(),
+		);
 		$data{'list'}{'name'} = $list->{'name'};
 	}
 	$type = '_global';

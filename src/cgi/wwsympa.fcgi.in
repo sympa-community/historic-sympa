@@ -1550,7 +1550,11 @@ while ($query = new_loop()) {
 			export_topics ($robot);
 
 			unless ($comm{$action}) {
-				if (Sympa::List->new(name => $action, robot => $robot)){
+				if (Sympa::List->new(
+						name   => $action,
+						robot  => $robot,
+						source => Sympa::Database::get_source()
+					)){
 					do_redirect ($param->{'base_url'}.$param->{'path_cgi'}.'/info/'.$action);
 					last;
 				}
@@ -2426,7 +2430,11 @@ sub check_param_in {
 		$in{'list'} = $1;
 
 		## Create a Sympa::List->newinstance.
-		$list = Sympa::List->new(name => $in{'list'}, robot => $robot);
+		$list = Sympa::List->new(
+			name   => $in{'list'},
+			robot  => $robot,
+			source => Sympa::Database::get_source()
+		);
 		unless ($list) {
 			Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
 			wwslog('info','check_param_in: unknown list %s', $in{'list'});
@@ -2447,6 +2455,7 @@ sub check_param_in {
 		$list = Sympa::List->new(
 			name    => $in{'list'},
 			robot   => $robot,
+			source  => Sympa::Database::get_source(),
 			options => {}
 		);
 		unless ($list) {
@@ -4023,7 +4032,11 @@ sub do_active_lists {
 
 	## get msg count for each list
 	foreach my $l (keys (%{$param->{'which'}})) {
-		my $list = Sympa::List->new(name => $l, robot => $robot);
+		my $list = Sympa::List->new(
+			name   => $l,
+			robot  => $robot,
+			source => Sympa::Database::get_source()
+		);
 		my $file = "$list->{'dir'}/msg_count";
 
 		my %count ;
@@ -4907,8 +4920,9 @@ sub do_multiple_subscribe {
 
 	foreach my $requested_list (@lists) {
 		my $param->{'list'} = Sympa::List->new(
-			name  => $requested_list,
-			robot => $robot
+			name   => $requested_list,
+			robot  => $robot,
+			source => Sympa::Database::get_source()
 		);
 		$results{'requested_list'} = do_subscribe();
 	}
@@ -5680,8 +5694,9 @@ sub do_copy_template {
 	if ($in{'scope_out'} eq 'list') {
 		if ($in{'list_out'}) {
 			my $list_out = Sympa::List->new(
-				name => $in{'list_out'},
-				robot => $robot
+				name   => $in{'list_out'},
+				robot  => $robot,
+				source => Sympa::Database::get_source()
 			);
 			unless ($list_out) {
 				Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list_out'}},$param->{'action'},'');
@@ -8474,8 +8489,9 @@ $parameters->{'custom_input'} = $in{'custom_input'};
 
 ## create liste
 my $testlist = Sympa::List->new(
-	name  => $in{'listname'},
-	robot => $robot
+	name   => $in{'listname'},
+	robot  => $robot,
+	source => Sympa::Database::get_source()
 );
 if ($testlist) {
 	Sympa::Report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -8511,7 +8527,10 @@ if  ($param->{'create_action'} =~ /do_it/i) {
 }
 
 ## notify listmaster
-my $list = Sympa::List->new(name => $in{'listname'});
+my $list = Sympa::List->new(
+	name   => $in{'listname'},
+	source => Sympa::Database::get_source()
+);
 unless (defined $list) {
 	wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
 	Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -9896,6 +9915,7 @@ unless ($list->save_config($param->{'user'}{'email'})) {
 $list = Sympa::List->new(
 	name    => $list->{'name'},
 	robot   => $robot,
+	source  => Sympa::Database::get_source(),
 	options => {'reload_config' => 1}
 );
 
@@ -10638,7 +10658,11 @@ sub do_purge_list {
 	my @lists = split /\0/, $in{'selected_lists'};
 
 	foreach my $l (@lists) {
-		my $list = Sympa::List->new(name => $l, robot => $robot);
+		my $list = Sympa::List->new(
+			name   => $l,
+			robot  => $robot,
+			source => Sympa::Database::get_source(),
+		);
 		next unless (defined $list);
 		$list->purge($param->{'user'}{'email'});
 	}
@@ -15439,7 +15463,11 @@ sub do_suspend_request_action {
 		my $report = "";
 		foreach my $line (@lists) {
 
-			my $unsub_list = Sympa::List->new(name => $line, robot => $robot);
+			my $unsub_list = Sympa::List->new(
+				name   => $line,
+				robot  => $robot,
+				source => Sympa::Database::get_source(),
+			);
 			unless ($unsub_list) {
 				wwslog('info', 'List %s unknown' , $unsub_list);
 				return undef;
@@ -16689,8 +16717,9 @@ sub do_viewspool_message {
 		my $message_listname = $messages[0]->{'list'};
 		if ($message_listname){
 			$list = Sympa::List->new(
-				name  => $message_listname,
-				robot => $robot
+				name   => $message_listname,
+				robot  => $robot,
+				source => Sympa::Database::get_source(),
 			);
 		}
 		unless ($list && ($list->am_i('privileged_owner', $param->{'user'}{'email'})|| $list->am_i('owner', $param->{'user'}{'email'})||$list->am_i('editor', $param->{'user'}{'email'}))) {
@@ -17520,7 +17549,11 @@ sub do_automatic_lists {
 		$listname = $1;
 	}
 
-	$list = Sympa::List->new(name => $listname, robot => $robot);
+	$list = Sympa::List->new(
+		name   => $listname,
+		robot  => $robot,
+		source => Sympa::Database::get_source(),
+	);
 	unless (defined $list) {
 		## Automatic creation of a mailing list, based on a family
 		my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families')->{$family_name};
@@ -17540,7 +17573,9 @@ sub do_automatic_lists {
 			listname   => $listname,
 			auth_level => 'md5',
 			sender     => $session->{'email'},
-			host       => Sympa::Configuration::get_robot_conf($robot, 'host')
+			host       =>
+				Sympa::Configuration::get_robot_conf($robot, 'host'),
+			source => Sympa::Database::get_source()
 		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err', "Failed to create the dynamic list $listname.");

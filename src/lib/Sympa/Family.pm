@@ -338,7 +338,7 @@ $return->{'ok'} = 1;
 return $return;
 }
 
-=item $family->modify_list($fh, $host)
+=item $family->modify_list($fh, $host, $source)
 
 Adds a list to the family.
 
@@ -350,6 +350,8 @@ Parameters:
 
 =item C<$host> =>
 
+=item C<$source> =>
+
 =back
 
 Return value:
@@ -360,7 +362,7 @@ the "ok" key must be associated to the value "1".
 =cut
 
 sub modify_list {
-	my ($self, $fh, $host) = @_;
+	my ($self, $fh, $host, $source) = @_;
 	Sympa::Log::Syslog::do_log('info','(%s)',$self->{'name'});
 
 	$self->{'state'} = 'no_check';
@@ -391,8 +393,9 @@ sub modify_list {
 
 	#getting list
 	my $list = Sympa::List->new(
-		name  => $hash_list->{'config'}{'listname'},
-		robot => $self->{'robot'}
+		name   => $hash_list->{'config'}{'listname'},
+		robot  => $self->{'robot'},
+		source => $source
 	);
 	unless ($list) {
 		push @{$return->{'string_error'}}, "The list $hash_list->{'config'}{'listname'} does not exist.";
@@ -613,7 +616,7 @@ sub close_family {
 	return $string;
 }
 
-=item $family->instantiate($fh, $close_unknown, $tmpdir, $host)
+=item $family->instantiate($fh, $close_unknown, $tmpdir, $host, $source)
 
 Creates family lists or updates them if they exist already.
 
@@ -627,6 +630,10 @@ Parameters:
 
 =item C<$tmpdir> =>
 
+=item C<$host> =>
+
+=item C<$source> => data source
+
 =back
 
 Return value:
@@ -636,7 +643,7 @@ A true value, or I<undef> if something went wrong.
 =cut
 
 sub instantiate {
-	my ($self, $xml_file, $close_unknown, $tmpdir, $host) = @_;
+	my ($self, $xml_file, $close_unknown, $tmpdir, $host, $source) = @_;
 	Sympa::Log::Syslog::do_log('debug2','(%s)',$self->{'name'});
 
 	## all the description variables are emptied.
@@ -672,8 +679,9 @@ sub instantiate {
 	foreach my $listname (@{$self->{'list_to_generate'}}) {
 
 		my $list = Sympa::List->new(
-			name  => $listname,
-			robot => $self->{'robot'}
+			name   => $listname,
+			robot  => $self->{'robot'},
+			source => $source,
 		);
 
 		## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
@@ -790,7 +798,11 @@ sub instantiate {
 
 	## PREVIOUS LIST LEFT
 	foreach my $l (keys %{$previous_family_lists}) {
-		my $list = Sympa::List->new(name => $l, robot => $self->{'robot'});
+		my $list = Sympa::List->new(
+			name   => $l,
+			robot  => $self->{'robot'},
+			source => $source
+		);
 		unless ($list) {
 			push (@{$self->{'errors'}{'previous_list'}},$l);
 			next;
@@ -1954,7 +1966,11 @@ sub create_automatic_list {
 		Sympa::Log::Syslog::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
 		return undef;
 	}
-	my $list = Sympa::List->new(name => $listname, robot => $self->{'robot'});
+	my $list = Sympa::List->new(
+		name   => $listname,
+		robot  => $self->{'robot'},
+		source => $params{source}
+	);
 	unless (defined $list) {
 		Sympa::Log::Syslog::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
 		return undef;

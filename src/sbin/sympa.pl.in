@@ -606,7 +606,10 @@ while ($signal ne 'term') {
 				exit;
 			}
 
-			my $list = Sympa::List->new(name => $options{'dump'});
+			my $list = Sympa::List->new(
+				name   => $options{'dump'},
+				source => Sympa::Database::get_source(),
+			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('err','Unknown list %s', $options{'dump'});
 
@@ -651,7 +654,10 @@ while ($signal ne 'term') {
 		}
 
 
-		$list = Sympa::List->new(name => $options{'import'});
+		$list = Sympa::List->new(
+			name   => $options{'import'},
+			source => Sympa::Database::get_source(),
+		);
 		unless ($list) {
 			Sympa::Log::Syslog::fatal_err('Unknown list name %s', $options{'import'});
 		}
@@ -719,7 +725,11 @@ while ($signal ne 'term') {
 	}elsif ($options{'close_list'}) {
 
 		my ($listname, $robotname) = split /\@/, $options{'close_list'};
-		my $list = Sympa::List->new(name => $listname, robot => $robotname);
+		my $list = Sympa::List->new(
+			name   => $listname,
+			robot  => $robotname,
+			source => Sympa::Database::get_source(),
+		);
 
 		unless (defined $list) {
 			print STDERR "Incorrect list name $options{'close_list'}\n";
@@ -770,7 +780,11 @@ while ($signal ne 'term') {
 	}elsif ($options{'purge_list'}) {
 
 		my ($listname, $robotname) = split /\@/, $options{'purge_list'};
-		my $list = Sympa::List->new(name => $listname, robot => $robotname);
+		my $list = Sympa::List->new(
+			name  => $listname,
+			robot => $robotname,
+			source => Sympa::Database::get_source(),
+		);
 
 		unless (defined $list) {
 			print STDERR "Incorrect list name $options{'purge_list'}\n";
@@ -797,7 +811,11 @@ while ($signal ne 'term') {
 		## TODO A completer
 
 		my ($listname, $robotname) = split /\@/, $options{'rename_list'};
-		my $list = Sympa::List->new(name => $listname, robot => $robotname);
+		my $list = Sympa::List->new(
+			name   => $listname,
+			robot  => $robotname,
+			source => Sympa::Database::get_source(),
+		);
 
 		unless (defined $list) {
 			print STDERR "Incorrect list name $options{'rename_list'}\n";
@@ -920,12 +938,14 @@ while ($signal ne 'term') {
 			exit 1;
 		}
 
-		unless ($family->instantiate(
-				$options{'input_file'},
-				$options{'close_unknown'},
-				$Sympa::Configuration::Conf{'tmpdir'},
-				Sympa::Configuration::get_robot_conf($robot, 'host')
-			)) {
+		my $result = $family->instantiate(
+			$options{'input_file'},
+			$options{'close_unknown'},
+			$Sympa::Configuration::Conf{'tmpdir'},
+			Sympa::Configuration::get_robot_conf($robot, 'host'),
+			Sympa::Database::get_source(),
+		);
+		unless ($result) {
 			print STDERR "\nImpossible family instantiation : action stopped \n";
 			exit 1;
 		}
@@ -998,7 +1018,10 @@ while ($signal ne 'term') {
 		exit 0;
 	}elsif ($options{'sync_include'}) {
 
-		my $list = Sympa::List->new(name => $options{'sync_include'});
+		my $list = Sympa::List->new(
+			name   => $options{'sync_include'},
+			source => Sympa::Database::get_source(),
+		);
 
 		unless (defined $list) {
 			print STDERR "Incorrect list name $options{'sync_include'}\n";
@@ -1054,7 +1077,11 @@ while ($signal ne 'term') {
 		Sympa::Log::Syslog::do_log('notice', "Upgrading share for list=%s robot=%s",$listname,$robot);
 
 
-		my $list = Sympa::List->new(name => $listname, robot => $robot);
+		my $list = Sympa::List->new(
+			name   => $listname,
+			robot  => $robot,
+			source => Sympa::Database::get_source(),
+		);
 
 		unless (defined $list) {
 			printf STDERR "Incorrect list or domain name : %s %s\n",$listname,$robot;
@@ -1086,6 +1113,7 @@ while ($signal ne 'term') {
 			Sympa::Log::Syslog::do_log('notice', "Loading list $options{'list'}...");
 			my $list = Sympa::List->new(
 				name    => $options{'list'},
+				source  => Sympa::Database::get_source(),
 				options => {'reload_config' => 1}
 			);
 			unless (defined $list) {
@@ -1133,8 +1161,12 @@ while ($signal ne 'term') {
 			exit 1;
 		}
 
-		my $result;
-		unless ($result = $family->modify_list(\*INFILE, Sympa::Configuration::get_robot_conf($robot, 'host'))) {
+		my $result = $family->modify_list(
+			\*INFILE,
+			Sympa::Configuration::get_robot_conf($robot, 'host'),
+			Sympa::Database::get_source(),
+		);
+		unless ($result) {
 			print STDERR "\nImpossible to modify the family list : action stopped. \n";
 			exit 1;
 		}
@@ -1188,7 +1220,10 @@ while ($signal ne 'term') {
 		}
 		my $listname = $options{'list'} || '';
 		if (length($listname) > 1) {
-			my $list = Sympa::List->new(name => $listname);
+			my $list = Sympa::List->new(
+				name   => $listname,
+				source => Sympa::Database::get_source(),
+			);
 			unless (defined $list) {
 				print STDOUT "\nList '$listname' does not exist. \n";
 				exit 1;
@@ -1434,6 +1469,7 @@ sub process_message {
 		return (DoSendMessage ($message,$robot)) unless Sympa::List->new(
 			name    => $listname,
 			robot   => $robot,
+			source  => Sympa::Database::get_source(),
 			options => {'just_try' => 1}
 		);
 	}
@@ -1508,7 +1544,11 @@ sub process_message {
 		$name = $listname;
 		$list_address = $name.'@'.$host;
 	} else {
-		$list = Sympa::List->new(name => $listname, robot => $robot);
+		$list = Sympa::List->new(
+			name   => $listname,
+			robot  => $robot,
+			source => Sympa::Database::get_source(),
+		);
 		unless (defined $list) {
 			unless ($dyn_list_family) {
 				Sympa::Log::Syslog::do_log('err', 'list %s does not exist',$listname);
@@ -1571,7 +1611,11 @@ sub process_message {
 				);
 				return undef ;
 			}
-			$list = Sympa::List->new(name => $listname, robot => $robot);
+			$list = Sympa::List->new(
+				name   => $listname,
+				robot  => $robot,
+				source => Sympa::Database::get_source(),
+			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('err', 'dynamic list %s could not be created',$listname);
 				Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string(),'');
@@ -1921,7 +1965,11 @@ sub DoForward {
 		$host = Sympa::Configuration::get_robot_conf($robot, 'host');
 		$priority = 0;
 	} else {
-		$list = Sympa::List->new(name => $name, robot => $robot);
+		$list = Sympa::List->new(
+			name   => $name,
+			robot  => $robot,
+			source => Sympa::Database::get_source(),
+		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('notice', "Message for %s-%s ignored, unknown list %s (Message-id: %s)",$name, $function, $name,$messageid);
 			my $sympa_email = Sympa::Configuration::get_robot_conf($robot, 'sympa');
@@ -2104,7 +2152,11 @@ sub DoMessage{
 
 
 	## Search for the list
-	my $list = Sympa::List->new(name => $listname, robot => $robot);
+	my $list = Sympa::List->new(
+		name   => $listname,
+		robot  => $robot,
+		source => Sympa::Database::get_source(),
+	);
 
 	## List unknown
 	unless ($list) {
@@ -2715,8 +2767,9 @@ sub SendDigest{
 
 	foreach my $digest ($digestspool->get_content(selection => 'messagekey,list,robot,date')){
 		my $list = Sympa::List->new(
-			name  => $digest->{'list'},
-			robot => $digest->{'robot'}
+			name   => $digest->{'list'},
+			robot  => $digest->{'robot'},
+			source => Sympa::Database::get_source(),
 		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('info', 'Unknown list %s, (robot %s), deleting digest (messagekey %s)',$digest->{'list'}, $digest->{'messagekey'} );

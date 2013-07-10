@@ -422,6 +422,8 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				my $list =  Sympa::List->new(
 					name    => $listname,
 					robot   => $robot,
+					source  =>
+						Sympa::Database::get_source(),
 					options => {'just_try' => 1}
 				);
 				if ($list) {

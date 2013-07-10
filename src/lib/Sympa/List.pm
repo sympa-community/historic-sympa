@@ -33,6 +33,7 @@ package Sympa::List;
 
 use strict;
 
+use Carp;
 use DB_File;
 use Encode;
 use English;
@@ -2142,6 +2143,8 @@ Parameters:
 
 =item C<options> => FIXME
 
+=item C<source> => L<Sympa::Datasource::SQL>
+
 =back
 
 Return:
@@ -2155,7 +2158,14 @@ sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $params{name},
 		$params{robot}, join('/',keys %{$params{options}}));
 
-	my $self={};
+	
+	croak "missing source parameter" unless $params{source};
+	croak "invalid source parameter" unless
+		$params{source}->isa('Sympa::Datasource::SQL');
+
+	my $self = {
+		source => $params{source}
+	};
 
 	## Allow robot in the name
 	my ($name, $robot);
@@ -3324,7 +3334,7 @@ sub distribute_msg {
 		if ($info_msg_topic) {
 			my $topicspool = Sympa::Spool->new(
 				name   => 'topic',
-				source => Sympa::Database::get_source()
+				source => $self->{source}
 			);
 			$topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});
 		}
@@ -3541,7 +3551,7 @@ sub send_msg_digest {
 	# fetch and lock message.
 	my $digestspool = Sympa::Spool->new(
 		name   => 'digest',
-		source => Sympa::Database::get_source()
+		source => $self->{source}
 	);
 
 	my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
@@ -4544,7 +4554,7 @@ sub send_to_editor {
 		# move message to spool  mod
 		my $spoolmod = Sympa::Spool->new(
 			name   => 'mod',
-			source => Sympa::Database::get_source()
+			source => $self->{source}
 		);
 		$spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
@@ -4678,7 +4688,7 @@ sub send_auth {
 
 	my $spool = Sympa::Spool->new(
 		name   => 'auth',
-		source => Sympa::Database::get_source()
+		source => $self->{source}
 	);
 	$spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
 	my $param = {'authkey' => $authkey,
@@ -5689,7 +5699,6 @@ sub delete_list_member {
 	my $name = $self->{'name'};
 	my $total = 0;
 
-	my $source = Sympa::Database::get_source();
 	foreach my $who (@u) {
 		$who = Sympa::Tools::clean_email($who);
 
@@ -5704,7 +5713,7 @@ sub delete_list_member {
 		$list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
 
 		## Delete record in SUBSCRIBER
-		my $rows = $source->do(
+		my $rows = $self->{source}->do(
 			"DELETE FROM subscriber_table "  .
 			"WHERE "                         .
 				"user_subscriber=? AND " .
@@ -5753,14 +5762,13 @@ sub delete_list_admin {
 	my $name = $self->{'name'};
 	my $total = 0;
 
-	my $source = Sympa::Database::get_source();
 	foreach my $who (@u) {
 		$who = Sympa::Tools::clean_email($who);
 
 		$list_cache{'is_admin_user'}{$self->{'domain'}}{$name}{$who} = undef;
 
 		## Delete record in ADMIN
-		my $rows = $source->do(
+		my $rows = $self->{source}->do(
 			"DELETE FROM admin_table "   .
 			"WHERE "                     .
 				"user_admin=? AND "  .
@@ -6706,22 +6714,20 @@ sub get_list_admin {
 
 	my $name = $self->{'name'};
 
-	my $source = Sympa::Database::get_source();
-
 	## Use session cache
 	if (defined $list_cache{'get_list_admin'}{$self->{'domain'}}{$name}{$role}{$email}) {
 		return $list_cache{'get_list_admin'}{$self->{'domain'}}{$name}{$role}{$email};
 	}
 
-	my $handle = $source->get_query_handle(
+	my $handle = $self->{source}->get_query_handle(
 		"SELECT "                                                .
 			"user_admin AS email, "                          .
 			"comment_admin AS gecos, "                       .
 			"reception_admin AS reception, "                 .
 			"visibility_admin AS visibility, "               .
-			$source->get_canonical_read_date('date_admin')   .
+			$self->{source}->get_canonical_read_date('date_admin')   .
 				" AS date, "                             .
-			$source->get_canonical_read_date('update_admin') .
+			$self->{source}->get_canonical_read_date('update_admin') .
 				" AS update_date, "                      .
 			"info_admin AS info, "                           .
 			"profile_admin AS profile, "                     .
@@ -6793,15 +6799,14 @@ sub get_first_list_member {
 	my $name = $self->{'name'};
 
 	push @sth_stack, $sth;
-	my $source = Sympa::Database::get_source();
 
 	## SQL regexp
 	my $selection;
 	if ($data->{'sql_regexp'}) {
 		$selection =
 			sprintf " AND (user_subscriber LIKE %s OR comment_subscriber LIKE %s)",
-			$source->quote($data->{'sql_regexp'}),
-			$source->quote($data->{'sql_regexp'});
+			$self->{source}->quote($data->{'sql_regexp'}),
+			$self->{source}->quote($data->{'sql_regexp'});
 	}
 
 	## Additional subscriber fields
@@ -6820,9 +6825,9 @@ sub get_first_list_member {
 			"bounce_subscriber AS bounce, "                       .
 			"bounce_score_subscriber AS bounce_score, "           .
 			"bounce_address_subscriber AS bounce_address, "       .
-			$source->get_canonical_read_date('date_subscriber')   .
+			$self->{source}->get_canonical_read_date('date_subscriber')   .
 				" AS date, "                                  .
-			$source->get_canonical_read_date('update_subscriber') .
+			$self->{source}->get_canonical_read_date('update_subscriber') .
 				" AS update_date, "                           .
 			"subscribed_subscriber AS subscribed, "               .
 			"included_subscriber AS included, "                   .
@@ -6841,7 +6846,7 @@ sub get_first_list_member {
 	## SORT BY
 	if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
-		my $dom_clause = $source->get_substring_clause(
+		my $dom_clause = $self->{source}->get_substring_clause(
 			source_field =>'user_subscriber',
 			separator    =>'\@','substring_length'=>'50'
 		);
@@ -6856,9 +6861,9 @@ sub get_first_list_member {
 				"bounce_subscriber AS bounce, "               .
 				"bounce_score_subscriber AS bounce_score, "   .
 				"bounce_address_subscriber AS bounce_address, ". 
-				$source->get_canonical_read_date('date_subscriber') .
+				$self->{source}->get_canonical_read_date('date_subscriber') .
 					" AS date, " .
-				$source->get_canonical_read_date('update_subscriber') .
+				$self->{source}->get_canonical_read_date('update_subscriber') .
 					" AS update_date, "                   .
 				"subscribed_subscriber AS subscribed, "       .
 				"included_subscriber AS included, "           .
@@ -6893,14 +6898,14 @@ sub get_first_list_member {
 	if (defined($rows) and defined($offset)) {
 		$query .= 
 			' ' .
-			$source->get_limit_clause(
+			$self->{source}->get_limit_clause(
 				rows_count => $rows,
 				offset     => $offset
 			) .
 			' ';
 	}
 
-	my $handle = $source->get_query_handle($query);
+	my $handle = $self->{source}->get_query_handle($query);
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to get members of list %s@%s', $name, $self->{'domain'});
 		return undef;
@@ -7028,14 +7033,12 @@ sub get_first_list_admin {
 	my $name = $self->{'name'};
 
 	## SQL regexp
-	my $source = Sympa::Database::get_source();
-
 	my $selection;
 	if ($data->{sql_regexp}) {
 		$selection =
 			sprintf " AND (user_admin LIKE %s OR comment_admin LIKE %s)" ,
-			$source->quote($data->{sql_regexp}),
-			$source->quote($data->{sql_regexp})
+			$self->{source}->quote($data->{sql_regexp}),
+			$self->{source}->quote($data->{sql_regexp})
 	}
 
 	my $query =
@@ -7044,9 +7047,9 @@ sub get_first_list_admin {
 			"comment_admin AS gecos, "                       .
 			"reception_admin AS reception, "                 .
 			"visibility_admin AS visibility, "               .
-			$source->get_canonical_read_date('date_admin')   .
+			$self->{source}->get_canonical_read_date('date_admin')   .
 				" AS date, "                             .
-			$source->get_canonical_read_date('update_admin') .
+			$self->{source}->get_canonical_read_date('update_admin') .
 				" AS update_date, "                      .
 			"info_admin AS info, "                           .
 			"profile_admin AS profile, "                     .
@@ -7064,7 +7067,7 @@ sub get_first_list_admin {
 	## SORT BY
 	if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
-		my $dom_clause = $source->get_substring_clause(
+		my $dom_clause = $self->{source}->get_substring_clause(
 			source_field     => 'user_admin',
 			separator        => '\@',
 		);
@@ -7075,9 +7078,9 @@ sub get_first_list_admin {
 				"comment_admin AS gecos, "                    .
 				"reception_admin AS reception, "              .
 				"visibility_admin AS visibility, "            .
-				$source->get_canonical_read_date('date_admin').
+				$self->{source}->get_canonical_read_date('date_admin').
 					" AS date, "                          .
-				$source->get_canonical_read_date('update_admin').
+				$self->{source}->get_canonical_read_date('update_admin').
 					" AS update_date, "                   .
 				"info_admin AS info, "                        .
 				"profile_admin AS profile, "                  .
@@ -7106,13 +7109,13 @@ sub get_first_list_admin {
 
 	## LIMIT clause
 	if (defined($rows) and defined($offset)) {
-		$query .= $source->get_substring_clause(
+		$query .= $self->{source}->get_substring_clause(
 			rows_count => $rows,
 			offset     => $offset
 		);
 	}
 
-	my $handle = $source->get_query_handle($query);
+	my $handle = $self->{source}->get_query_handle($query);
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to get admins having role %s for list %s@%s', $role,$name,$self->{'domain'});
 		return undef;
@@ -7275,8 +7278,7 @@ sub get_first_bouncing_list_member {
 		$additional = ',' . $Sympa::Configuration::Conf{'db_additional_subscriber_fields'};
 	}
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $handle = $self->{source}->get_query_handle(
 		"SELECT "                                                     .
 			"user_subscriber AS email, "                          .
 			"reception_subscriber AS reception, "                 .
@@ -7284,9 +7286,9 @@ sub get_first_bouncing_list_member {
 			"visibility_subscriber AS visibility, "               .
 			"bounce_subscriber AS bounce, "                       .
 			"bounce_score_subscriber AS bounce_score, "           .
-			$source->get_canonical_read_date('date_subscriber')   .
+			$self->{source}->get_canonical_read_date('date_subscriber')   .
 				" AS date, "                                  .
-			$source->get_canonical_read_date('update_subscriber') .
+			$self->{source}->get_canonical_read_date('update_subscriber') .
 				" AS update_date, "                           .
 			"suspend_subscriber AS suspend, "                     .
 			"suspend_start_date_subscriber AS startdate, "        .
@@ -7380,10 +7382,7 @@ sub get_total_bouncing {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $name = $self->{'name'};
-
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $handle = $self->{source}->get_query_handle(
 		"SELECT count(*) "                     .
 		"FROM subscriber_table "               .
 		"WHERE "                               .
@@ -7392,16 +7391,11 @@ sub get_total_bouncing {
 			"bounce_subscriber is not NULL",
 	);
 	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to gather bouncing subscribers count for list %s@%s',$name,$self->{'domain'});
+		Sympa::Log::Syslog::do_log('err','Unable to gather bouncing subscribers count for list %s@%s',$self->{'name'},$self->{'domain'});
 		return undef;
 	}
-	$handle->execute($name, $self->{'domain'});
-
-	my $total = $sth->fetchrow();
-
-	$sth->finish();
-
-	return $total;
+	$handle->execute($self->{'name'}, $self->{'domain'});
+	return $handle->fetchrow();
 }
 
 ## Is the person in user table (db only)
@@ -7448,8 +7442,7 @@ sub is_list_member {
 	}
 
 	## Query the Database
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $handle = $self->{source}->get_query_handle(
 		"SELECT count(*) FROM subscriber_table " .
 		"WHERE " .
 		"	list_subscriber=? AND " .
@@ -7553,7 +7546,6 @@ sub update_list_member {
 	}
 
 	## Update each table
-	my $source = Sympa::Database::get_source();
 	foreach $table ('user_table','subscriber_table') {
 
 		my @set_list;
@@ -7566,7 +7558,7 @@ sub update_list_member {
 
 			if ($map_table{$field} eq $table) {
 				if ($field eq 'date' || $field eq 'update_date') {
-					$value = $source->get_canonical_write_date($value);
+					$value = $self->{source}->get_canonical_write_date($value);
 				} elsif ($value eq 'NULL'){ ## get_null_value?
 					if ($Sympa::Configuration::Conf{'db_type'} eq 'mysql') {
 						$value = '\N';
@@ -7575,7 +7567,7 @@ sub update_list_member {
 					if ($numeric_field{$map_field{$field}}) {
 						$value ||= 0; ## Can't have a null value
 					} else {
-						$value = $source->quote($value);
+						$value = $self->{source}->quote($value);
 					}
 				}
 				my $set = sprintf "%s=%s", $map_field{$field}, $value;
@@ -7586,7 +7578,7 @@ sub update_list_member {
 
 		## Update field
 		if ($table eq 'user_table') {
-			my $rows = $source->do(
+			my $rows = $self->{source}->do(
 				"UPDATE $table "              .
 				"SET " . join(',', @set_list) .
 				"WHERE email_user=?",
@@ -7599,7 +7591,7 @@ sub update_list_member {
 			}
 		} elsif ($table eq 'subscriber_table') {
 			if ($who eq '*') {
-				my $rows = $source->do(
+				my $rows = $self->{source}->do(
 					"UPDATE $table " .
 					"SET " . join(',', @set_list) .
 					"WHERE " .
@@ -7614,7 +7606,7 @@ sub update_list_member {
 					return undef;
 				}
 			} else {
-				my $rows = $source->do(
+				my $rows = $self->{source}->do(
 					"UPDATE $table "                 .
 					"SET " . join(',', @set_list)    .
 					"WHERE "                         .
@@ -7666,7 +7658,6 @@ sub update_list_admin {
 	$who = Sympa::Tools::clean_email($who);
 	Sympa::Log::Syslog::do_log('debug2', '(%s,%s)', $role, $who);
 
-	my $source = Sympa::Database::get_source();
 	my ($table, $field, $value);
 
 	my $name = $self->{'name'};
@@ -7724,7 +7715,7 @@ sub update_list_admin {
 
 			if ($map_table{$field} eq $table) {
 				if ($field eq 'date' || $field eq 'update_date') {
-					$value = $source->get_canonical_write_date($value);
+					$value = $self->{source}->get_canonical_write_date($value);
 				} elsif ($value eq 'NULL'){ #get_null_value?
 					if ($Sympa::Configuration::Conf{'db_type'} eq 'mysql') {
 						$value = '\N';
@@ -7733,7 +7724,7 @@ sub update_list_admin {
 					if ($numeric_field{$map_field{$field}}) {
 						$value ||= 0; ## Can't have a null value
 					} else {
-						$value = $source->quote($value);
+						$value = $self->{source}->quote($value);
 					}
 				}
 				my $set = sprintf "%s=%s", $map_field{$field}, $value;
@@ -7745,7 +7736,7 @@ sub update_list_admin {
 
 		## Update field
 		if ($table eq 'user_table') {
-			my $rows = $source->do(
+			my $rows = $self->{source}->do(
 				"UPDATE $table " .
 				"SET " . join(',', @set_list) .
 				"WHERE email_user=?",
@@ -7759,7 +7750,7 @@ sub update_list_admin {
 
 		} elsif ($table eq 'admin_table') {
 			if ($who eq '*') {
-				my $rows = $source->do(
+				my $rows = $self->{source}->do(
 					"UPDATE $table " .
 					"SET " . join(',', @set_list) .
 					"WHERE " .
@@ -7776,7 +7767,7 @@ sub update_list_admin {
 					return undef;
 				}
 			} else {
-				my $rows = $source->do(
+				my $rows = $self->{source}->do(
 					"UPDATE $table "              .
 					"SET " . join(',', @set_list) .
 					"WHERE "                      .
@@ -7935,7 +7926,6 @@ sub add_list_member {
 	my ($self, @new_users, $daemon) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '%s', $self->{'name'});
 
-	my $source = Sympa::Database::get_source();
 	my $name = $self->{'name'};
 	$self->{'add_outcome'} = undef;
 	$self->{'add_outcome'}{'added_members'} = 0;
@@ -7945,13 +7935,13 @@ sub add_list_member {
 	my $subscriptions = $self->get_subscription_requests();
 	my $current_list_members_count = $self->get_total();
 
-	my $user_handle = $source->get_query_handle(
+	my $user_handle = $self->{source}->get_query_handle(
 		"INSERT INTO user_table ("                                 .
 			"email_user, gecos_user, lang_user, password_user" .
 		") VALUES (?, ?, ?, ?)"
 	);
 
-	my $subscriber_handle = $self->get_query_handle(
+	my $subscriber_handle = $self->{source}->get_query_handle(
 		"INSERT INTO subscriber_table (" .
 			"user_subscriber, " .
 			"comment_subscriber, " .
@@ -8043,8 +8033,8 @@ sub add_list_member {
 		$new_user->{'gecos'},
 		$name,
 		$self->{'domain'},
-		$source->get_canonical_write_date($new_user->{'date'}),
-		$source->get_canonical_write_date($new_user->{'update_date'}),
+		$self->{source}->get_canonical_write_date($new_user->{'date'}),
+		$self->{source}->get_canonical_write_date($new_user->{'update_date'}),
 		$new_user->{'reception'},
 		$new_user->{'topics'},
 		$new_user->{'visibility'},
@@ -8089,17 +8079,16 @@ sub add_list_admin {
 	my ($self, $role, @new_admin_users) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $source = Sympa::Database::get_source();
 	my $name = $self->{'name'};
 	my $total = 0;
 
-	my $user_handle = $source->get_query_handle(
+	my $user_handle = $self->{source}->get_query_handle(
 		"INSERT INTO user_table (" .
 			"email_user, gecos_user, lang_user, password_user" .
 		") VALUES (?, ?, ?, ?)"
 	);
 
-	my $admin_handle = $source->get_query_handle(
+	my $admin_handle = $self->{source}->get_query_handle(
 		"INSERT INTO admin_table ("       .
 			"user_admin, "            .
 			"comment_admin, "         .
@@ -8160,8 +8149,8 @@ sub add_list_admin {
 				$new_admin_user->{'gecos'},
 				$name,
 				$self->{'domain'},
-				$source->get_canonical_write_date($new_admin_user->{'date'}),
-				$source->get_canonical_write_date($new_admin_user->{'update_date'}),
+				$self->{source}->get_canonical_write_date($new_admin_user->{'date'}),
+				$self->{source}->get_canonical_write_date($new_admin_user->{'update_date'}),
 				$new_admin_user->{'reception'},
 				$new_admin_user->{'visibility'},
 				$new_admin_user->{'subscribed'},
@@ -8189,11 +8178,10 @@ sub rename_list_db {
 	my $statement_subscriber;
 	my $statement_admin;
 	my $statement_list_cache;
-	my $source = Sympa::Database::get_source();
 
-	my $subscriber_rows = $source->do(
-		"UPDATE subscriber_table " .
-		"SET list_subscriber=?, robot_subscriber=? " .
+	my $subscriber_rows = $self->{source}->do(
+		"UPDATE subscriber_table "                      .
+		"SET list_subscriber=?, robot_subscriber=? "    .
 		"WHERE list_subscriber=? AND robot_subscriber=?",
 		undef,
 		$new_listname,
@@ -8209,9 +8197,9 @@ sub rename_list_db {
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_subscriber );
 
 	# admin_table is "alive" only in case include2
-	my $admin_rows = $source->do(
-		"UPDATE admin_table " .
-		"SET list_admin=?, robot_admin=? " .
+	my $admin_rows = $self->{source}->do(
+		"UPDATE admin_table "                  .
+		"SET list_admin=?, robot_admin=? "     .
 		"WHERE list_admin=? AND robot_admin=?)",
 		undef,
 		$new_listname,
@@ -8226,9 +8214,9 @@ sub rename_list_db {
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_admin );
 
 	if ($Sympa::Database::use_db) {
-		my $list_rows =  $source->do(
-			"UPDATE list_table " .
-			"SET name_list=?, robot_list=? " .
+		my $list_rows =  $self->{source}->do(
+			"UPDATE list_table "                .
+			"SET name_list=?, robot_list=? "    .
 			"WHERE name_list=? AND robot_list=?",
 			undef,
 			$new_listname,
@@ -8671,7 +8659,7 @@ sub archive_msg {
 		} else {
 			my $spoolarchive = Sympa::Spool->new(
 				name   => 'archive',
-				source => Sympa::Database::get_source()
+				source => $self->{source}
 			);
 			unless ($message->{'messagekey'}) {
 				Sympa::Log::Syslog::do_log('err', "could not store message in archive spool, messagekey missing");
@@ -11063,10 +11051,9 @@ sub _load_total_db {
 		return $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}};
 	}
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
-		"SELECT count(*) " .
-		"FROM subscriber_table " .
+	my $handle = $self->{source}->get_query_handle(
+		"SELECT count(*) "                              .
+		"FROM subscriber_table "                        .
 		"WHERE list_subscriber=? AND robot_subscriber=?",
 	);
 	unless ($handle) {
@@ -13479,11 +13466,9 @@ sub purge {
 		Sympa::Tools::File::remove_dir($arc_dir.'/'.$self->get_list_id());
 		Sympa::Tools::File::remove_dir($self->get_bounce_dir());
 	}
-
 	## Clean list table if needed
-	my $source = Sympa::Database::get_source();
 	if ($Sympa::Configuration::Conf{'db_list_cache'} eq 'on') {
-		my $rows = $source->do(
+		my $rows = $self->{source}->do(
 			"DELETE FROM list_table "           .
 			"WHERE name_list=? AND robot_list=?",
 			undef,
@@ -13800,13 +13785,12 @@ sub _update_list_db {
 	}
 	$ed_txt = join(',',@admins) || '';
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $handle = $self->{source}->get_query_handle(
 		"SELECT name_list FROM list_table WHERE name_list=?",
 	);
 	$handle->execute($name);
 	if ($handle->fetch()) {
-		my $rows = $source->do(
+		my $rows = $self->{source}->do(
 			"UPDATE list_table " .
 			"SET " .
 				"status_list=?, " .
@@ -13835,7 +13819,7 @@ sub _update_list_db {
 			return undef;
 		}
 	} else {
-		my $rows = $source->do(
+		my $rows = $self->{source}->do(
 			"INSERT INTO list_table ("         .
 				"status_list, "            .
 				"name_list, "              .
