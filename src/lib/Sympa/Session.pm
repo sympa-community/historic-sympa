@@ -86,10 +86,7 @@ A new L<Sympa::Session> object, or I<undef>, if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	unless ($params{robot}) {
-		Sympa::Log::Syslog::do_log('err', 'Missing robot parameter, cannot create session object') ;
-		return undef;
-	}
+	croak "missing robot parameter" unless $params{robot};
 
 	croak "missing source parameter" unless $params{source};
 	croak "invalid source parameter" unless
