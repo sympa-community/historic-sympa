@@ -147,7 +147,7 @@ sub parse {
 
 	foreach $j (keys %comms) {
 		if ($i =~ /^($j)(\s+(.+))?\s*$/i) {
-			$time_command = time;
+			$time_command = time();
 			my $args = $3;
 			$args =~ s/^\s*//;
 			$args =~ s/\s*$//;
@@ -250,7 +250,7 @@ sub _help {
 		return undef;
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'HELP from %s accepted (%d seconds)',$sender,time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'HELP from %s accepted (%d seconds)',$sender, time() - $time_command);
 
 	return 1;
 }
@@ -324,7 +324,7 @@ sub _lists {
 		Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> undef},$cmd_line,$sender,$robot);
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'LISTS from %s accepted (%d seconds)', $sender, time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'LISTS from %s accepted (%d seconds)', $sender, time() - $time_command);
 
 	return 1;
 }
@@ -431,7 +431,7 @@ sub _stats {
 		}
 
 
-		Sympa::Log::Syslog::do_log('info', 'STATS %s from %s accepted (%d seconds)', $listname, $sender, time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'STATS %s from %s accepted (%d seconds)', $listname, $sender, time() - $time_command);
 	}
 
 	return 1;
@@ -490,7 +490,7 @@ sub _getfile {
 		return 'no_archive';
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'GET %s %s from %s accepted (%d seconds)', $which, $file, $sender,time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'GET %s %s from %s accepted (%d seconds)', $which, $file, $sender, time() - $time_command);
 
 	return 1;
 }
@@ -541,7 +541,7 @@ sub _last {
 		return 'no_archive';
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'LAST %s from %s accepted (%d seconds)', $which,  $sender,time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'LAST %s from %s accepted (%d seconds)', $which,  $sender, time() - $time_command);
 
 	return 1;
 }
@@ -599,7 +599,7 @@ sub _index {
 		Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $list->{'name'}},$cmd_line,$sender,$robot);
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'INDEX %s from %s accepted (%d seconds)', $which, $sender,time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'INDEX %s from %s accepted (%d seconds)', $which, $sender, time() - $time_command);
 
 	return 1;
 }
@@ -671,7 +671,7 @@ sub _review {
 			Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$listname},$cmd_line,$sender,$robot);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'REVIEW %s from %s, auth requested (%d seconds)', $listname, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'REVIEW %s from %s, auth requested (%d seconds)', $listname, $sender, time() - $time_command);
 		return 1;
 	}
 	if ($action =~ /reject/i) {
@@ -728,7 +728,7 @@ sub _review {
 			Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=>$listname},$cmd_line,$sender,$robot);
 		}
 
-		Sympa::Log::Syslog::do_log('info', 'REVIEW %s from %s accepted (%d seconds)', $listname, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'REVIEW %s from %s accepted (%d seconds)', $listname, $sender, time() - $time_command);
 		return 1;
 	}
 	Sympa::Log::Syslog::do_log('info', 'REVIEW %s from %s aborted, unknown requested action in scenario',$listname,$sender);
@@ -757,14 +757,14 @@ sub _verify {
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
 	if  ($sign_mod) {
-		Sympa::Log::Syslog::do_log('info', 'VERIFY successfull from %s', $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'VERIFY successfull from %s', $sender, time() - $time_command);
 		if ($sign_mod eq 'smime') {
 			Sympa::Report::notice_report_cmd('smime',{},$cmd_line);
 		} elsif($sign_mod eq 'dkim') {
 			Sympa::Report::notice_report_cmd('dkim',{},$cmd_line);
 		}
 	} else {
-		Sympa::Log::Syslog::do_log('info', 'VERIFY from %s : could not find correct s/mime signature', $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'VERIFY from %s : could not find correct s/mime signature', $sender, time() - $time_command);
 		Sympa::Report::reject_report_cmd('user','no_verify_sign',{},$cmd_line);
 	}
 	return 1;
@@ -887,7 +887,8 @@ sub _subscribe {
 			Sympa::Report::reject_report_cmd('intern',"Unable to send subrequest to $list->{'name'} list owner",{'listname'=> $list->{'name'}},$cmd_line,$sender,$robot);
 		}
 		if ($list->store_subscription_request($sender, $comment)) {
-			Sympa::Log::Syslog::do_log('info', 'SUB %s from %s forwarded to the owners of the list (%d seconds)', $which, $sender,time-$time_command);
+			Sympa::Log::Syslog::do_log('info', 'SUB %s from %s
+				forwarded to the owners of the list (%d seconds)', $which, $sender, time() - $time_command);
 		}
 		return 1;
 	}
@@ -899,7 +900,7 @@ sub _subscribe {
 			Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'SUB %s from %s, auth requested (%d seconds)', $which, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'SUB %s from %s, auth requested (%d seconds)', $which, $sender, time() - $time_command);
 		return 1;
 	}
 	if ($action =~ /do_it/i) {
@@ -911,7 +912,7 @@ sub _subscribe {
 			## Only updates the date
 			## Options remain the same
 			my $user = {};
-			$user->{'update_date'} = time;
+			$user->{'update_date'} = time();
 			$user->{'gecos'} = $comment if $comment;
 			$user->{'subscribed'} = 1;
 
@@ -927,7 +928,7 @@ sub _subscribe {
 			%{$u} = %{$defaults};
 			$u->{'email'} = $sender;
 			$u->{'gecos'} = $comment;
-			$u->{'date'} = $u->{'update_date'} = time;
+			$u->{'date'} = $u->{'update_date'} = time();
 
 			$list->add_list_member($u);
 			if (defined $list->{'add_outcome'}{'errors'}) {
@@ -980,7 +981,7 @@ sub _subscribe {
 				Sympa::Log::Syslog::do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
 			}
 		}
-		Sympa::Log::Syslog::do_log('info', 'SUB %s from %s accepted (%d seconds, %d subscribers)', $which, $sender, time-$time_command, $list->get_total());
+		Sympa::Log::Syslog::do_log('info', 'SUB %s from %s accepted (%d seconds, %d subscribers)', $which, $sender, time() - $time_command, $list->get_total());
 
 		return 1;
 	}
@@ -1082,7 +1083,10 @@ sub _info {
 		if (defined $list->{'admin'}{'digest'}) {
 
 			foreach my $d (@{$list->{'admin'}{'digest'}{'days'}}) {
-				push @days, (Sympa::Language::gettext_strftime "%A", localtime(0 + ($d +3) * (3600 * 24)));
+				push @days, Sympa::Language::gettext_strftime(
+					"%A",
+					localtime(0 + ($d +3) * (3600 * 24))
+				);
 			}
 			$data->{'digest'} = join (',', @days).' '.$list->{'admin'}{'digest'}{'hour'}.':'.$list->{'admin'}{'digest'}{'minute'};
 		}
@@ -1103,7 +1107,7 @@ sub _info {
 			Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $list->{'name'}},$cmd_line,$sender,$robot);
 		}
 
-		Sympa::Log::Syslog::do_log('info', 'INFO %s from %s accepted (%d seconds)', $listname, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'INFO %s from %s accepted (%d seconds)', $listname, $sender, time() - $time_command);
 		return 1;
 	}
 
@@ -1253,7 +1257,7 @@ sub _signoff {
 			Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s auth requested (%d seconds)', $which, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s auth requested (%d seconds)', $which, $sender, time() - $time_command);
 		return 1;
 	}
 
@@ -1272,7 +1276,7 @@ sub _signoff {
 			Sympa::Log::Syslog::do_log('info',"Unable to send notify 'sigrequest' to $list->{'name'} list owner");
 			Sympa::Report::reject_report_cmd('intern_quiet',"Unable to send sigrequest to $list->{'name'} list owner",{'listname'=> $list->{'name'}},$cmd_line,$sender,$robot);
 		}
-		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s forwarded to the owners of the list (%d seconds)', $which, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s forwarded to the owners of the list (%d seconds)', $which, $sender, time() - $time_command);
 		return 1;
 	}
 	if ($action =~ /do_it/i) {
@@ -1333,7 +1337,7 @@ sub _signoff {
 			}
 		}
 
-		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s accepted (%d seconds, %d subscribers)', $which, $email, time-$time_command, $list->get_total() );
+		Sympa::Log::Syslog::do_log('info', 'SIG %s from %s accepted (%d seconds, %d subscribers)', $which, $email, time() - $time_command, $list->get_total() );
 
 		return 1;
 	}
@@ -1429,7 +1433,7 @@ sub _add {
 			Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'ADD %s from %s, auth requested(%d seconds)', $which, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'ADD %s from %s, auth requested(%d seconds)', $which, $sender, time() - $time_command);
 		return 1;
 	}
 	if ($action =~ /do_it/i) {
@@ -1444,7 +1448,7 @@ sub _add {
 			%{$u} = %{$defaults};
 			$u->{'email'} = $email;
 			$u->{'gecos'} = $comment;
-			$u->{'date'} = $u->{'update_date'} = time;
+			$u->{'date'} = $u->{'update_date'} = time();
 
 			$list->add_list_member($u);
 			if (defined $list->{'add_outcome'}{'errors'}) {
@@ -1481,7 +1485,8 @@ sub _add {
 			}
 		}
 
-		Sympa::Log::Syslog::do_log('info', 'ADD %s %s from %s accepted (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+		Sympa::Log::Syslog::do_log('info', 'ADD %s %s from %s accepted
+			(%d seconds, %d subscribers)', $which, $email, $sender,  time() - $time_command, $list->get_total() );
 		if ($action =~ /notify/i) {
 			my $expedition_result = $list->send_notify_to_owner(
 				'notice',
@@ -1590,7 +1595,7 @@ sub _invite {
 			return undef;
 		}
 
-		Sympa::Log::Syslog::do_log('info', 'INVITE %s from %s, auth requested (%d seconds)', $which, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'INVITE %s from %s, auth requested (%d seconds)', $which, $sender, time() - $time_command);
 		return 1;
 	}
 	if ($action =~ /do_it/i) {
@@ -1636,7 +1641,7 @@ sub _invite {
 					Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
 					return undef;
 				}
-				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total());
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time() - $time_command, $list->get_total());
 				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
 			} elsif ($action !~ /reject/i) {
@@ -1654,11 +1659,11 @@ sub _invite {
 					Sympa::Report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
 					return undef;
 				}
-				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time() - $time_command, $list->get_total() );
 				Sympa::Report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line);
 
 			} elsif ($action =~ /reject/i) {
-				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+				Sympa::Log::Syslog::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time() - $time_command, $list->get_total() );
 				if (defined $result->{'tt2'}) {
 				my $expedition_result = $list->send_file(
 					$result->{'tt2'},
@@ -1824,7 +1829,7 @@ sub _remind {
 				return undef;
 			}
 		}
-		Sympa::Log::Syslog::do_log('info', 'REMIND %s from %s, auth requested (%d seconds)', $listname, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'REMIND %s from %s, auth requested (%d seconds)', $listname, $sender, time() - $time_command);
 		return 1;
 	} elsif ($action =~ /do_it/i) {
 
@@ -1861,7 +1866,7 @@ sub _remind {
 			} while ($user = $list->get_next_list_member());
 
 			Sympa::Report::notice_report_cmd('remind',{'total'=> $total,'listname' => $listname},$cmd_line);
-			Sympa::Log::Syslog::do_log('info', 'REMIND %s  from %s accepted, sent to %d subscribers (%d seconds)',$listname,$sender,$total,time-$time_command);
+			Sympa::Log::Syslog::do_log('info', 'REMIND %s  from %s accepted, sent to %d subscribers (%d seconds)',$listname,$sender,$total, time() - $time_command);
 
 			return 1;
 		} else {
@@ -2045,7 +2050,7 @@ sub _del {
 			Sympa::Report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 			return undef;
 		}
-		Sympa::Log::Syslog::do_log('info', 'DEL %s %s from %s, auth requested (%d seconds)', $which, $who, $sender,time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'DEL %s %s from %s, auth requested (%d seconds)', $which, $who, $sender, time() - $time_command);
 		return 1;
 	}
 
@@ -2082,7 +2087,7 @@ sub _del {
 			}
 		}
 		Sympa::Report::notice_report_cmd('removed',{'email'=> $who, 'listname' => $which},$cmd_line);
-		Sympa::Log::Syslog::do_log('info', 'DEL %s %s from %s accepted (%d seconds, %d subscribers)', $which, $who, $sender, time-$time_command, $list->get_total() );
+		Sympa::Log::Syslog::do_log('info', 'DEL %s %s from %s accepted (%d seconds, %d subscribers)', $which, $who, $sender, time() - $time_command, $list->get_total() );
 		if ($action =~ /notify/i) {
 			my $expedition_result = $list->send_notify_to_owner(
 				'notice',
@@ -2222,7 +2227,7 @@ sub _set {
 
 		Sympa::Report::notice_report_cmd('config_updated',{'listname' => $which},$cmd_line);
 
-		Sympa::Log::Syslog::do_log('info', 'SET %s %s from %s accepted (%d seconds)', $which, $mode, $sender, time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'SET %s %s from %s accepted (%d seconds)', $which, $mode, $sender, time() - $time_command);
 	}
 
 	if ($mode =~ /^(conceal|noconceal)/){
@@ -2234,7 +2239,7 @@ sub _set {
 		}
 
 		Sympa::Report::notice_report_cmd('config_updated',{'listname' => $which},$cmd_line);
-		Sympa::Log::Syslog::do_log('info', 'SET %s %s from %s accepted (%d seconds)', $which, $mode, $sender, time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'SET %s %s from %s accepted (%d seconds)', $which, $mode, $sender, time() - $time_command);
 	}
 	return 1;
 }
@@ -2256,7 +2261,7 @@ sub _distribute {
 
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $which,$robot,$key,$what);
 
-	my $start_time=time; # get the time at the beginning
+	my $start_time = time(); # get the time at the beginning
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
@@ -2340,7 +2345,7 @@ sub _distribute {
 		}
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time() - $time_command);
 
 	return 1;
 }
@@ -2501,7 +2506,7 @@ sub _confirm {
 				Sympa::Log::Syslog::do_log('notice',"Unable to send template 'message_report', entry 'message_distributed' to $sender");
 			}
 		}
-		Sympa::Log::Syslog::do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
+		Sympa::Log::Syslog::do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time() - $time_command);
 
 		$spool->remove({'authkey'=>$key});
 
@@ -2597,7 +2602,7 @@ sub _reject {
 
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time() - $time_command);
 	Sympa::Tools::File::remove_dir ( $Sympa::Configuration::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
 
 	$modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
@@ -2667,7 +2672,7 @@ sub _modindex {
 				$moddelay = Sympa::Configuration::get_robot_conf($robot,'clean_delay_queuemod');
 			}
 
-			if ((stat "$modqueue/$i")[9] < (time -  $moddelay*86400) ){
+			if ((stat "$modqueue/$i")[9] < (time() -  $moddelay*86400) ){
 				unlink ("$modqueue/$i") ;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting unmoderated message %s, too old', $i);
 			};
@@ -2680,7 +2685,7 @@ sub _modindex {
 	my @files = ( sort grep (/^($name|$list_id)\_/,readdir(DIR)));
 	closedir(DIR);
 	my $n;
-	my @now = localtime(time);
+	my @now = localtime(time());
 
 	## List of messages
 	my @spool;
@@ -2724,7 +2729,7 @@ sub _modindex {
 	}
 
 	Sympa::Log::Syslog::do_log('info', 'MODINDEX %s from %s accepted (%d seconds)', $name,
-		$sender,time-$time_command);
+		$sender, time() - $time_command);
 
 	return 1;
 }
@@ -2807,7 +2812,8 @@ sub _which {
 		Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $listname},$cmd_line,$sender,$robot);
 	}
 
-	Sympa::Log::Syslog::do_log('info', 'WHICH from %s accepted (%d seconds)', $sender,time-$time_command);
+	Sympa::Log::Syslog::do_log('info', 'WHICH from %s accepted (%d
+		seconds)', $sender, time() - $time_command);
 
 	return 1;
 }

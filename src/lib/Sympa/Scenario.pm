@@ -170,7 +170,7 @@ sub new {
 	}
 
 	## Keep track of the current time ; used later to reload scenario files when they changed on disk
-	$self->{'date'} = time;
+	$self->{'date'} = time();
 
 	unless (ref($scenario_struct) eq 'HASH') {
 		Sympa::Log::Syslog::do_log('err',"Failed to load scenario '$params{'function'}.$params{'name'}'");
@@ -792,7 +792,7 @@ sub verify {
 			$value = \@types;
 
 		} elsif ($value =~ /\[current_date\]/i) {
-			my $time = time;
+			my $time = time();
 			$value =~ s/\[current_date\]/$time/;
 
 			## Quoted string
@@ -1277,7 +1277,7 @@ sub search {
 		} else {
 			$persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'} = 1;
 		}
-		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
+		$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time();
 		return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
 	} elsif ($filter_file =~ /\.ldap$/) {
@@ -1362,7 +1362,7 @@ sub search {
 	}
 
 	$ds->disconnect() or Sympa::Log::Syslog::do_log('notice','Unbind impossible');
-	$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time;
+	$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} = time();
 
 	return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
 
@@ -1446,7 +1446,7 @@ sub verify_custom {
 	return undef unless defined $res;
 
 	$persistent_cache{'named_filter'}{$condition}{$filter}{'value'} = ($res == 1 ? 1 : 0);
-	$persistent_cache{'named_filter'}{$condition}{$filter}{'update'} = time;
+	$persistent_cache{'named_filter'}{$condition}{$filter}{'update'} = time();
 	return $persistent_cache{'named_filter'}{$condition}{$filter}{'value'};
 }
 

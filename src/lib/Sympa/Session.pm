@@ -137,8 +137,8 @@ sub new {
 		$self->{'id_session'} = Sympa::Session->get_random();
 		$self->{'email'} = 'nobody';
 		$self->{'remote_addr'} = $ENV{'REMOTE_ADDR'};
-		$self->{'date'} = time;
-		$self->{'start_date'} = time;
+		$self->{'date'} = time();
+		$self->{'start_date'} = time();
 		$self->{'hit'} = 1;
 		$self->{'robot'} = $params{robot};
 		$self->{'data'} = '';
@@ -170,11 +170,11 @@ sub purge_old_sessions {
 	}
 
 	my @clauses = (
-		time - $params{delay} . ' > date_session'
+		time() - $params{delay} . ' > date_session'
 	);
 
 	my @anonymous_clauses = (
-		time - $params{anonymous_delay} . ' > date_session',
+		time() - $params{anonymous_delay} . ' > date_session',
 		"email_session = 'nobody'",
 		"hit_session = 1"
 	);
@@ -260,7 +260,7 @@ sub purge_old_tickets {
 	}
 
 	my @clauses = (
-		time - $params{delay} . ' < date_one_time_ticket'
+		time() - $params{delay} . ' < date_one_time_ticket'
 	);
 	my @params;
 
@@ -320,7 +320,7 @@ sub list_sessions {
 	}
 
 	if ($params{delay}) {
-		push @clauses, time - $params{delay} . ' < date_session';
+		push @clauses, time() - $params{delay} . ' < date_session';
 	}
 
 	if ($params{connected_only}) {
@@ -348,8 +348,8 @@ sub list_sessions {
 
 	while (my $session = ($sth->fetchrow_hashref('NAME_lc'))) {
 
-		$session->{'formated_date'} = Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
-		$session->{'formated_start_date'} = Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
+		$session->{'formated_date'} = Sympa::Language::gettext_strftime("%d %b %y  %H:%M", localtime($session->{'date_session'}));
+		$session->{'formated_start_date'} = Sympa::Language::gettext_strftime("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
 
 		push @sessions, $session;
 	}
@@ -496,7 +496,7 @@ if ($self->{'new_session'}) {
 			"data_session"          .
 		") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		$self->{'id_session'},
-		time,
+		time(),
 		$ENV{'REMOTE_ADDR'},
 		$self->{'robot'},
 		$self->{'email'},
@@ -521,7 +521,7 @@ if ($self->{'new_session'}) {
 			"hit_session=?, "         .
 			"data_session=? "         .
 			"WHERE (id_session=?)",
-		time,
+		time(),
 		$ENV{'REMOTE_ADDR'},
 		$self->{'robot'},
 		$self->{'email'},

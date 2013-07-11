@@ -595,7 +595,9 @@ sub get_one_time_ticket {
 	}
 
 	my $result;
-	my $printable_date = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime($ticket->{'date'});
+	my $printable_date = Sympa::Language::gettext_strftime(
+		"%d %b %Y at %H:%M:%S", localtime($ticket->{'date'})
+	);
 
 	if ($ticket->{'status'} ne 'open') {
 		$result = 'closed';

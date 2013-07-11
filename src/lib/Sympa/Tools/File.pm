@@ -200,7 +200,7 @@ sub shift_file {
 		return undef;
 	}
 
-	my @date = localtime (time);
+	my @date = localtime(time());
 	my $file_extention = POSIX::strftime("%Y:%m:%d:%H:%M:%S", @date);
 
 	unless (rename ($file,$file.'.'.$file_extention)) {

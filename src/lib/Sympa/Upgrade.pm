@@ -505,7 +505,8 @@ sub upgrade {
 			}
 
 			if (-f $etc_dir.'/mhonarc-ressources.tt2') {
-				my $new_filename = $etc_dir.'/mhonarc-ressources.tt2'.'.'.time;
+				my $new_filename =
+					$etc_dir.'/mhonarc-ressources.tt2'.'.'.time();
 				rename $etc_dir.'/mhonarc-ressources.tt2', $new_filename;
 				Sympa::Log::Syslog::do_log('notice', "Custom %s file has been backed up as %s", $etc_dir.'/mhonarc-ressources.tt2', $new_filename);
 				Sympa::List::send_notify_to_listmaster('file_removed',$Sympa::Configuration::Conf{'domain'},
@@ -1087,7 +1088,7 @@ sub to_utf8 {
 
 		next unless $modified;
 
-		my $date = POSIX::strftime("%Y.%m.%d-%H.%M.%S", localtime(time));
+		my $date = POSIX::strftime("%Y.%m.%d-%H.%M.%S", localtime(time()));
 		unless (rename $file, $file.'@'.$date) {
 			Sympa::Log::Syslog::do_log('err', "Cannot rename old template %s", $file);
 			next;

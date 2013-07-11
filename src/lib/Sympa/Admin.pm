@@ -215,8 +215,12 @@ sub create_list_old{
 
 	## Creation of the config file
 	my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
-	$params->{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-	$params->{'creation'}{'date_epoch'} = time;
+	$params->{'creation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S",
+			localtime(time())
+	);
+	$params->{'creation'}{'date_epoch'} = time();
 	$params->{'creation_email'} = "listmaster\@$host" unless ($params->{'creation_email'});
 	$params->{'status'} = 'open'  unless ($params->{'status'});
 
@@ -536,8 +540,11 @@ sub create_list{
 		$list->create_shared();
 	}
 
-	$list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-	$list->{'admin'}{'creation'}{'date_epoch'} = time;
+	$list->{'admin'}{'creation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S", localtime(time())
+		);
+	$list->{'admin'}{'creation'}{'date_epoch'} = time();
 	if ($params->{'creation_email'}) {
 		$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
 	} else {
@@ -668,8 +675,12 @@ unless ($list) {
 	return undef;
 }
 ############## ? update
-$list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-$list->{'admin'}{'creation'}{'date_epoch'} = time;
+$list->{'admin'}{'creation'}{'date'} =
+	Sympa::Language::gettext_strftime(
+		"%d %b %Y at %H:%M:%S",
+		localtime(time())
+);
+$list->{'admin'}{'creation'}{'date_epoch'} = time();
 if ($params->{'creation_email'}) {
 	$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
 } else {
@@ -1084,8 +1095,12 @@ sub clone_list_as_empty {
 	}
 	$new_list->{'admin'}{'serial'} = 0 ;
 	$new_list->{'admin'}{'creation'}{'email'} = $email if ($email);
-	$new_list->{'admin'}{'creation'}{'date_epoch'} = time;
-	$new_list->{'admin'}{'creation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %y at %H:%M:%S", localtime(time);
+	$new_list->{'admin'}{'creation'}{'date_epoch'} = time();
+	$new_list->{'admin'}{'creation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %y at %H:%M:%S",
+			localtime(time())
+		);
 	$new_list->save_config($email);
 	return $new_list;
 }

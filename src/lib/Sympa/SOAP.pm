@@ -1003,7 +1003,7 @@ sub add {
 		%{$u} = %{$defaults};
 		$u->{'email'} = $email;
 		$u->{'gecos'} = $gecos || $u2->{'gecos'};
-		$u->{'date'} = $u->{'update_date'} = time;
+		$u->{'date'} = $u->{'update_date'} = time();
 		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'}) ;
 		$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
@@ -1635,7 +1635,7 @@ sub subscribe {
 			## Only updates the date
 			## Options remain the same
 			my $user = {};
-			$user->{'update_date'} = time;
+			$user->{'update_date'} = time();
 			$user->{'gecos'} = $gecos if $gecos;
 
 			Sympa::Log::Syslog::do_log('err','Subscribe : user already subscribed');
@@ -1651,7 +1651,7 @@ sub subscribe {
 			%{$u} = %{$defaults};
 			$u->{'email'} = $sender;
 			$u->{'gecos'} = $gecos;
-			$u->{'date'} = $u->{'update_date'} = time;
+			$u->{'date'} = $u->{'update_date'} = time();
 
 			die SOAP::Fault->faultcode('Server')
 			->faultstring('Undef')

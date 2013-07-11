@@ -368,8 +368,8 @@ sub generate_temporary {
 		$token,
 		$secret,
 		$self->{'consumer_key'},
-		time,
-		time,
+		time(),
+		time(),
 		$self->{'params'}{'oauth_callback'}
 	);
 	unless ($rows) {
@@ -498,7 +498,7 @@ sub generate_verifier {
 		$verifier,
 		$params{'user'},
 		$params{'granted'} ? 1 : 0,
-		time,
+		time(),
 		$self->{'consumer_key'},
 		$params{'token'}
 	);
@@ -562,7 +562,7 @@ sub generate_access {
 		undef,
 		$token,
 		$secret,
-		time,
+		time(),
 		$params{'token'},
 		$params{'verifier'}
 	);

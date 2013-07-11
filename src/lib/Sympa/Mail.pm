@@ -215,8 +215,8 @@ sub mail_file {
 	my $headers="";
 
 	unless ($header_ok{'date'}) {
-		my $now = time;
-		my $tzoff = timegm(localtime $now) - $now;
+		my $now = time();
+		my $tzoff = timegm(localtime($now)) - $now;
 		my $sign;
 		if ($tzoff < 0) {
 			($sign, $tzoff) = ('-', -$tzoff);

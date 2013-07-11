@@ -273,8 +273,12 @@ close FILE;
 
 # info parameters
 $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+$list->{'admin'}{'latest_instantiation'}{'date'} =
+	Sympa::Language::gettext_strftime(
+		"%d %b %Y at %H:%M:%S",
+		localtime(time())
+	);
+$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time();
 $list->save_config("listmaster\@$host");
 $list->{'family'} = $self;
 
@@ -496,8 +500,12 @@ sub modify_list {
 
 
 	$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-	$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+	$list->{'admin'}{'latest_instantiation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S",
+			localtime(time())
+		);
+	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time();
 	$list->save_config("listmaster\@$host");
 	$list->{'family'} = $self;
 
@@ -1784,8 +1792,12 @@ sub _end_update_list {
 	Sympa::Log::Syslog::do_log('debug3','(%s,%s)',$self->{'name'},$list->{'name'});
 
 	$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-	$list->{'admin'}{'latest_instantiation'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
-	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;
+	$list->{'admin'}{'latest_instantiation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S",
+			localtime(time())
+		);
+	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time();
 	$list->save_config("listmaster\@$host");
 	$list->{'family'} = $self;
 

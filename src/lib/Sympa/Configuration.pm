@@ -688,7 +688,7 @@ sub checkfiles {
 				Sympa::Log::Syslog::do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
 
 				## Keep copy of previous file
-				rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
+				rename $dir.'/'.$css, $dir.'/'.$css.'.'.time();
 
 				unless (open (CSS,">$dir/$css")) {
 					Sympa::List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $ERRNO"]);

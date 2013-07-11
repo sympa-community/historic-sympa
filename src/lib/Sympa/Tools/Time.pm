@@ -87,8 +87,8 @@ Convert an epoch date into a readable date scalar.
 sub epoch2yyyymmjj_hhmmss {
 	my ($epoch) = @_;
 
-	my @date = localtime ($epoch);
-	my $date = POSIX::strftime ("%Y-%m-%d  %H:%M:%S", @date);
+	my @date = localtime($epoch);
+	my $date = POSIX::strftime("%Y-%m-%d  %H:%M:%S", @date);
 
 	return $date;
 }
@@ -102,7 +102,7 @@ Convert an epoch date into a readable date scalar.
 sub adate {
 	my ($epoch) = @_;
 
-	my @date = localtime ($epoch);
+	my @date = localtime($epoch);
 	my $date = POSIX::strftime ("%e %a %b %Y  %H h %M min %S s", @date);
 
 	return $date;
@@ -119,7 +119,7 @@ sub get_midnight_time {
 	my ($epoch) = @_;
 	Sympa::Log::Syslog::do_log('debug3','Getting midnight time for: %s',$epoch);
 
-	my @date = localtime ($epoch);
+	my @date = localtime($epoch);
 	return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
 }
 
@@ -185,7 +185,7 @@ sub date_conv {
 	my ($arg) = @_;
 
 	if ( ($arg eq 'execution_date') ){ # execution date
-		return time;
+		return time();
 	}
 
 	if ($arg =~ /^\d+$/) { # already an epoch date
@@ -207,7 +207,7 @@ sub date_conv {
 		return timelocal (@date);
 	}
 
-	return time;
+	return time();
 }
 
 =item duration_conv($arg, $start_date)
@@ -232,7 +232,7 @@ sub duration_conv {
 	# specific processing for the months because their duration varies
 	my @months = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
 		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-	my $start  = (localtime ($start_date))[4];
+	my $start  = (localtime($start_date))[4];
 	for (my $i = 0; $i < $date[1]; $i++) {
 		$duration += $months[$start + $i] * 60 * 60 * 24;
 	}
@@ -328,7 +328,7 @@ sub parse_date {
 			($yr) = ($1);
 		} else {				# zilch, use current year
 			warn "Warning: No year in date ($date), using current\n";
-			$yr = (localtime(time))[5];
+			$yr = (localtime(time()))[5];
 		}
 
 		# Weekday Month DD YYYY HH:MM Zone

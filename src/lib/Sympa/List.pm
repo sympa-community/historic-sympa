@@ -2372,7 +2372,7 @@ sub savestats {
 	}
 
 	## Changed on disk
-	$self->{'mtime'}[2] = time;
+	$self->{'mtime'}[2] = time();
 
 	return 1;
 }
@@ -2628,8 +2628,10 @@ sub save_config {
 	## Update management info
 	$self->{'admin'}{'serial'}++;
 	$self->{'admin'}{'update'} = {'email' => $email,
-		'date_epoch' => time,
-		'date' => (Sympa::Language::gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
+		'date_epoch' => time(),
+		'date' => Sympa::Language::gettext_strftime(
+				"%d %b %Y at %H:%M:%S", localtime(time())
+			),
 	};
 
 	unless (_save_list_config_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
@@ -3491,7 +3493,7 @@ foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
 
 ## Add RFC5064 Archived-At SMTP header field
 if (Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-	my @now = localtime(time);
+	my @now = localtime(time());
 	my $yyyy = sprintf '%04d', 1900+$now[5];
 	my $mm = sprintf '%02d', $now[4]+1;
 	my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, Sympa::Tools::clean_msg_id($hdr->get('Message-Id'));
@@ -3587,9 +3589,9 @@ sub send_msg_digest {
 		## test to know if the rcpt suspended her subscription for this list
 		## if yes, don't send the message
 		if ($user_data->{'suspend'} eq '1'){
-			if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
+			if(($user_data->{'startdate'} <= time()) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
 				next;
-			} elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
+			} elsif(($user_data->{'enddate'} < time()) && ($user_data->{'enddate'})){
 				## If end date is < time, update the BDD by deleting the suspending's data
 				restore_suspended_subscription($user->{'email'},$self->{'name'},$self->{'domain'});
 			}
@@ -3650,7 +3652,7 @@ sub send_msg_digest {
 		$msg->{'plain_body'} = $mail->Sympa::PlainDigest::plain_body_as_string();
 		#$msg->{'body'} = $mail->bodyhandle()->as_string();
 		chomp $msg->{'from'};
-		$msg->{'month'} = POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
+		$msg->{'month'} = POSIX::strftime("%Y-%m", localtime(time())); ## Should be extracted from Date:
 		$msg->{'message_id'} = Sympa::Tools::clean_msg_id($mail->head()->get('Message-Id'));
 
 		## Clean up Message-ID
@@ -3660,9 +3662,9 @@ sub send_msg_digest {
 		push @all_msg, $msg ;
 	}
 
-	my @now  = localtime(time);
-	$param->{'datetime'} = Sympa::Language::gettext_strftime "%a, %d %b %Y %H:%M:%S", @now;
-	$param->{'date'} = Sympa::Language::gettext_strftime "%a, %d %b %Y", @now;
+	my @now  = localtime(time());
+	$param->{'datetime'} = Sympa::Language::gettext_strftime("%a, %d %b %Y %H:%M:%S", @now);
+	$param->{'date'} = Sympa::Language::gettext_strftime("%a, %d %b %Y", @now);
 
 	## Split messages into groups of digest_max_size size
 	my @group_of_msg;
@@ -3916,12 +3918,22 @@ sub send_file {
 		$data->{'subscriber'} = $self->get_list_member($who);
 
 		if ($data->{'subscriber'}) {
-			$data->{'subscriber'}{'date'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'date'});
-			$data->{'subscriber'}{'update_date'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'update_date'});
+			$data->{'subscriber'}{'date'} =
+				Sympa::Language::gettext_strftime(
+					"%d %b %Y",
+					localtime($data->{'subscriber'}{'date'})
+				);
+			$data->{'subscriber'}{'update_date'} = 
+				Sympa::Language::gettext_strftime(
+					"%d %b %Y",
+					localtime($data->{'subscriber'}{'update_date'})
+				);
 			if ($data->{'subscriber'}{'bounce'}) {
 				$data->{'subscriber'}{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
-
-				$data->{'subscriber'}{'first_bounce'} = Sympa::Language::gettext_strftime "%d %b %Y", localtime($1);
+				$data->{'subscriber'}{'first_bounce'} =
+					Sympa::Language::gettext_strftime(
+						"%d %b %Y", localtime($1)
+					);
 			}
 		}
 
@@ -4143,9 +4155,9 @@ sub send_msg {
 			## test to know if the rcpt suspended her subscription for this list
 			## if yes, don't send the message
 			if (defined $user_data && $user_data->{'suspend'} eq '1'){
-				if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
+				if(($user_data->{'startdate'} <= time()) && ((time() <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
 					push @tabrcpt_nomail_verp, $user->{'email'}; next;
-				} elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
+				} elsif(($user_data->{'enddate'} < time()) && ($user_data->{'enddate'})){
 					## If end date is < time, update the BDD by deleting the suspending's data
 					restore_suspended_subscription($user->{'email'}, $name, $robot);
 				}
@@ -4544,7 +4556,7 @@ sub send_to_editor {
 
 	return unless ($name && $admin);
 
-	my @now = localtime(time);
+	my @now = localtime(time());
 	my $messageid=$now[6].$now[5].$now[4].$now[3].$now[2].$now[1]."."
 	.int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6))."\@".$host;
 	my $modkey=Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
@@ -4679,7 +4691,7 @@ sub send_auth {
 	return undef unless ($name && $admin);
 
 
-	my @now = localtime(time);
+	my @now = localtime(time());
 	my $messageid = $now[6].$now[5].$now[4].$now[3].$now[2].$now[1]."."
 	.int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6))
 	.int(rand(6)).int(rand(6))."\@".$host;
@@ -6294,7 +6306,7 @@ sub get_exclusion {
 	my @users;
 	my @date;
 	my $data;
-	while ($data = $handle->fetchrow_hashref){
+	while ($data = $handle->fetchrow_hashref()) {
 		push @users, $data->{'email'};
 		push @date, $data->{'date'};
 	}
@@ -9415,7 +9427,7 @@ sub _include_users_ldap {
 	my @emails;
 	my %emailsViewed;
 
-	while (my $e = $fetch->shift_entry) {
+	while (my $e = $fetch->shift_entry()) {
 		my $emailentry = $e->get_value($email_attr, asref => 1);
 		my $gecosentry = $e->get_value($gecos_attr, asref => 1);
 		$gecosentry = $gecosentry->[0] if(ref($gecosentry) eq 'ARRAY');
@@ -9547,7 +9559,7 @@ sub _include_users_ldap_2level {
 
 	my (@attrs, @emails);
 
-	while (my $e = $fetch->shift_entry) {
+	while (my $e = $fetch->shift_entry()) {
 		my $entry = $e->get_value($ldap_attrs1, asref => 1);
 		## Multiple values
 		if (ref($entry) eq 'ARRAY') {
@@ -9583,7 +9595,7 @@ sub _include_users_ldap_2level {
 		## returns a reference to a HASH where the keys are the DNs
 		##  the second level hash's hold the attributes
 
-		while (my $e = $fetch->shift_entry) {
+		while (my $e = $fetch->shift_entry()) {
 			my $emailentry = $e->get_value($email_attr, asref => 1);
 			my $gecosentry = $e->get_value($gecos_attr, asref => 1);
 			$gecosentry = $gecosentry->[0] if(ref($gecosentry) eq 'ARRAY');
@@ -9713,7 +9725,7 @@ sub _include_ldap_ca {
 	}
 
 	my $attributes;
-	while(my $entry = $results->shift_entry) {
+	while(my $entry = $results->shift_entry()) {
 		my $email = $entry->get_value($source->{'email_entry'});
 		next unless($email);
 		foreach my $attr (@attrs) {
@@ -9748,7 +9760,7 @@ sub _include_ldap_level2_ca {
 	}
 
 	my $attributes;
-	while(my $entry = $results->shift_entry) {
+	while(my $entry = $results->shift_entry()) {
 		my $email = $entry->get_value($source->{'email_entry'});
 		next unless($email);
 		foreach my $attr (@attrs) {

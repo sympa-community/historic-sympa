@@ -312,8 +312,8 @@ sub agregate_daily_data {
 	do_log('debug2','Agregating data');
 
 	my $result;
-	my $first_date = $params->{'first_date'} || time;
-	my $last_date = $params->{'last_date'} || time;
+	my $first_date = $params->{'first_date'} || time();
+	my $last_date = $params->{'last_date'} || time();
 	foreach my $begin_date (sort keys %{$params->{'hourly_data'}}) {
 		my $reftime = Sympa::Tools::Time::get_midnight_time($begin_date);
 		unless (defined $params->{'first_date'}) {
