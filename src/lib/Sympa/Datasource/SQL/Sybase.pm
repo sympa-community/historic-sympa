@@ -105,7 +105,7 @@ sub get_tables {
 		'Getting tables list',
 	);
 
-	my $query = 
+	my $query =
 		"SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {

@@ -458,16 +458,16 @@ sub edit_configuration {
 			next;
 		}
 
-		my $file = $param->{'file'} ;
-		my $name = $param->{'name'} ;
-		my $query = $param->{'query'} ;
+		my $file = $param->{'file'};
+		my $name = $param->{'name'};
+		my $query = $param->{'query'};
 		$query = Sympa::Language::gettext($query) if $query;
-		my $advice = $param->{'advice'} ;
+		my $advice = $param->{'advice'};
 		$advice = Sympa::Language::gettext($advice) if $advice;
-		my $sample = $param->{'sample'} ;
-		my $current_value ;
+		my $sample = $param->{'sample'};
+		my $current_value;
 		if ($file eq 'wwsympa.conf') {
-			$current_value = $wwsconf->{$name} ;
+			$current_value = $wwsconf->{$name};
 		} elsif ($file eq 'sympa.conf') {
 			$current_value = $Sympa::Configuration::Conf{$name};
 		} else {
@@ -479,7 +479,7 @@ sub edit_configuration {
 			print Sympa::Tools::wrap_text($query, '* ', '  ');
 			print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
 			printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
-			$new_value = <STDIN> ;
+			$new_value = <STDIN>;
 			chomp $new_value;
 		}
 		if ($new_value eq '') {
@@ -647,7 +647,7 @@ EOM
 				}
 			}
 
-			my $rv = $module->{version} || "1.0" ;
+			my $rv = $module->{version} || "1.0";
 			### OK: check version
 			if ($v ge $rv) {
 				printf ("OK (%-6s >= %s)\n", $v, $rv);

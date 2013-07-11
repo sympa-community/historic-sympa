@@ -268,7 +268,7 @@ sub do_connect {
 		Sys::Syslog::setlogsock(lc($log_socket_type));
 	}
 	# close log may be usefull : if parent processus did open log child process inherit the openlog with parameters from parent process
-	closelog ;
+	closelog;
 	eval {openlog("$log_service\[$PID\]", 'ndelay,nofatal', $log_facility)};
 	if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
 		$warning_date = time + $warning_timeout;

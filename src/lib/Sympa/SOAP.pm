@@ -280,7 +280,7 @@ sub casLogin {
 	};
 	if ($EVAL_ERROR) {
 		Sympa::Log::Syslog::do_log('err',"Unable to use AuthCAS library, install AuthCAS (CPAN) first");
-		return undef ;
+		return undef;
 	}
 	require AuthCAS;
 
@@ -520,7 +520,7 @@ sub authenticateRemoteAppAndRun {
 			->faultstring('Incorrect syntaxe value')
 			->faultdetail("Unrecognized syntaxe  $var");
 		}
-		$ENV{$id}=$value	if ($proxy_vars->{$id}) ;
+		$ENV{$id}=$value	if ($proxy_vars->{$id});
 	}
 	&{$service}($self,@$parameters);
 }
@@ -801,9 +801,9 @@ sub createList {
 	$parameters->{'topics'} = $topics;
 
 	if ($r_action =~ /listmaster/i) {
-		$params->{'status'} = 'pending' ;
+		$params->{'status'} = 'pending';
 	} elsif  ($r_action =~ /do_it/i) {
-		$params->{'status'} = 'open' ;
+		$params->{'status'} = 'open';
 	}
 
 	## create liste
@@ -1004,7 +1004,7 @@ sub add {
 		$u->{'email'} = $email;
 		$u->{'gecos'} = $gecos || $u2->{'gecos'};
 		$u->{'date'} = $u->{'update_date'} = time();
-		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'}) ;
+		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'});
 		$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 		$list->add_list_member($u);
@@ -1819,7 +1819,7 @@ sub which {
 		}
 		## determine bounce informations of this user for this list
 		if ($result_item->{'isSubscriber'}) {
-			my $subscriber ;
+			my $subscriber;
 			if($subscriber = $list->get_list_member($sender)) {
 				$result_item->{'bounceCount'} = 0;
 				if ($subscriber->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/) {

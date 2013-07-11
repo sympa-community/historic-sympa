@@ -42,7 +42,7 @@ my @task_list;
 my %task_by_list;
 my %task_by_model;
 
-my $taskspool ;
+my $taskspool;
 
 =head1 CLASS METHODS
 

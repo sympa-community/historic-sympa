@@ -55,7 +55,7 @@ Return a temporary password.
 sub tmp_passwd {
     my ($email, $cookie) = @_;
 
-    return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
+    return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8));
 }
 
 =item ciphersaber_installed($cookie)
@@ -95,8 +95,8 @@ sub crypt_password {
     unless (defined($cipher)){
 	$cipher = ciphersaber_installed($cookie);
     }
-    return $inpasswd if ($cipher eq 'no_cipher') ;
-    return ("crypt.".MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
+    return $inpasswd if ($cipher eq 'no_cipher');
+    return ("crypt.".MIME::Base64::encode($cipher->encrypt ($inpasswd)));
 }
 
 =item decrypt_password($inpasswd, $cookie)
@@ -109,7 +109,7 @@ sub decrypt_password {
     my ($inpasswd, $cookie) = @_;
     Sympa::Log::Syslog::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
 
-    return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
+    return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/);
     $inpasswd = $1;
 
     unless (defined($cipher)){
@@ -117,7 +117,7 @@ sub decrypt_password {
     }
     if ($cipher eq 'no_cipher') {
 	Sympa::Log::Syslog::do_log('info','password seems crypted while CipherSaber is not installed !');
-	return $inpasswd ;
+	return $inpasswd;
     }
     return ($cipher->decrypt(MIME::Base64::decode($inpasswd)));
 }

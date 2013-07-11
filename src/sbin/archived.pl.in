@@ -301,13 +301,13 @@ while (!$end) {
 			my $msgid = $1;
 			my $sender = $2;
 
-			chomp 	$msgid ;
+			chomp $msgid;
 			if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
 				Sympa::Log::Syslog::do_log('err','remove_arc: no message id found');
 				next;
 			}
 
-			my $message ;
+			my $message;
 			unless ($message = Sympa::Archive::search_msgid("$arcpath/arctxt",$msgid)){
 				Sympa::Log::Syslog::do_log('err','No message with message-id %s found in %s/arctxt',$msgid,$arcpath);
 				next;
@@ -404,7 +404,7 @@ sub remove {
 	my $robot = shift;
 
 	Sympa::Log::Syslog::do_log ('debug',"remove ($adrlist, $msgid)");
-	my $arc ;
+	my $arc;
 
 	if ($adrlist =~ /^(.*)\.(\d{4}-\d{2})$/) {
 		$adrlist = $1;
@@ -436,9 +436,9 @@ sub remove {
 		Sympa::Log::Syslog::do_log('error','archived::remove: unable to log event');
 	}
 	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
-	$arc =~ /^(\d{4})-(\d{2})$/ ;
-	my $yyyy = $1 ;
-	my $mm = $2 ;
+	$arc =~ /^(\d{4})-(\d{2})$/;
+	my $yyyy = $1;
+	my $mm = $2;
 
 	$msgid =~ s/\$/\\\$/g;
 	system "$wwsconf->{'mhonarc'}  -outdir $arcpath/$adrlist/$yyyy-$mm -rmm $msgid";
@@ -454,7 +454,7 @@ sub remove {
 sub rebuild {
 
 	my $adrlist = shift;
-	my $arc ;
+	my $arc;
 
 	Sympa::Log::Syslog::do_log ('debug2',"rebuild ($adrlist)");
 
@@ -495,20 +495,20 @@ sub rebuild {
 
 	if ($arc) {
 		Sympa::Log::Syslog::do_log('notice',"Rebuilding  $arc of $adrlist archive");
-		$arc =~ /^(\d{4})-(\d{2})$/ ;
-		my $yyyy = $1 ;
-		my $mm = $2 ;
+		$arc =~ /^(\d{4})-(\d{2})$/;
+		my $yyyy = $1;
+		my $mm = $2;
 
 		# remove empty directory
-		my $arcdir = $arcpath.'/'.$adrlist.'/'.$yyyy.'-'.$mm ;
-		my $arctxt = $arcdir.'/arctxt' ;
+		my $arcdir = $arcpath.'/'.$adrlist.'/'.$yyyy.'-'.$mm;
+		my $arctxt = $arcdir.'/arctxt';
 		if (opendir (DIR,$arctxt)) {
 			my @files = (grep(/^\d+$/,(readdir DIR )));
 			close (DIR);
 			if ($#files == -1) {
 				Sympa::Log::Syslog::do_log('notice', "Removing empty directory $arcdir");
 				Sympa::Tools::File::remove_dir ($arcdir);
-				next ;
+				next;
 			}
 
 			## index file was removed ; recreate it
@@ -568,15 +568,15 @@ sub rebuild {
 
 		if (!opendir(DIR, "$arcpath/$adrlist" )) {
 			Sympa::Log::Syslog::do_log('err',"unable to open $arcpath/$adrlist to rebuild archive");
-			return ;
+			return;
 		}
 		my @archives = (grep (/^\d{4}-\d{2}/, readdir(DIR)));
-		close DIR ;
+		close DIR;
 
 		foreach my $arc (@archives) {
-			$arc =~ /^(\d{4})-(\d{2})$/ ;
-			my $yyyy = $1 ;
-			my $mm = $2 ;
+			$arc =~ /^(\d{4})-(\d{2})$/;
+			my $yyyy = $1;
+			my $mm = $2;
 
 			my $arcdir = $arcpath.'/'.$adrlist.'/'.$yyyy.'-'.$mm;
 
@@ -687,7 +687,7 @@ sub mail2arc {
 
 
 	if ($wwsconf->{'custom_archiver'}) {
-		my $file = $Sympa::Configuration::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'} ;
+		my $file = $Sympa::Configuration::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'};
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
 		`$wwsconf->{'custom_archiver'} --list=$listname\@$robot --file=$file`;
@@ -707,7 +707,7 @@ sub mail2arc {
 
 		## Check quota
 		if ($list->{'admin'}{'web_archive'}{'quota'}) {
-			my $used = $list->get_arc_size("$arcpath") ;
+			my $used = $list->get_arc_size("$arcpath");
 
 			if ($used >= $list->{'admin'}{'web_archive'}{'quota'} * 1024){
 				Sympa::Log::Syslog::do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
@@ -739,8 +739,8 @@ sub mail2arc {
 				if (opendir DIR,$arcpath.'/'.$list->get_list_id()) {
 					my @archives = (sort {$a cmp $b} grep (/^\d{4}-\d{2}/, readdir(DIR)));
 					closedir DIR;
-					my $nb_month = $#archives + 1 ;
-					my $i = 0 ;
+					my $nb_month = $#archives + 1;
+					my $i = 0;
 					while ( $nb_month >  $list->{'admin'}{'web_archive'}{'max_month'}) {
 						Sympa::Log::Syslog::do_log('info',"removing  $arcpath/%s/$archives[$i]", $list->get_list_id());
 						Sympa::Tools::File::remove_dir ($arcpath.'/'.$list->get_list_id().'/'.$archives[$i]);
@@ -773,7 +773,7 @@ sub mail2arc {
 		}
 
 		# savee arctxt dump of original message.
-		my $file = $monthdir.'/arctxt/'.$newfile ;
+		my $file = $monthdir.'/arctxt/'.$newfile;
 		my $output = $Sympa::Configuration::Conf{'tmpdir'}.'/arc'.$newfile;
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
@@ -792,7 +792,7 @@ sub mail2arc {
 
 		my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
 
-		Sympa::Log::Syslog::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
+		Sympa::Log::Syslog::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() );
 
 		# call mhonarc on cleaned message source to make clean htlm view of message
 		my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=$Sympa::Configuration::Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Sympa::Configuration::Conf{'umask'} < $output";
@@ -864,7 +864,7 @@ sub create_idx {
 		return undef;
 	}
 
-	my @files = (sort { $a <=> $b;}  grep(/^\d+$/,(readdir DIR ))) ;
+	my @files = (sort { $a <=> $b;}  grep(/^\d+$/,(readdir DIR )));
 	my $index = $files[$#files];
 	save_idx($arc_dir.'/index', $index);
 
@@ -886,7 +886,7 @@ sub create_idx {
 sub get_tag {
 	my $listname = shift;
 
-	return (substr(Digest::MD5::md5_hex(join('/', $Sympa::Configuration::Conf{'cookie'}, $listname)), -10)) ;
+	return (substr(Digest::MD5::md5_hex(join('/', $Sympa::Configuration::Conf{'cookie'}, $listname)), -10));
 }
 
 # Checks if directory exists and we have write and read accec to it.

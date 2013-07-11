@@ -192,7 +192,7 @@ sub set_autoinc {
 		return undef;
 	}
 
-	$query = 
+	$query =
 		"UPDATE $params{table} " .
 		"SET $params{field} = NEXTVAL($sequence)";
 	$rows = $self->{dbh}->do($query);
@@ -281,7 +281,7 @@ sub get_fields {
 		$params{'table'},
 	);
 
-	my $query = 
+	my $query =
 		"SELECT " .
 			"a.attname AS field, " .
 			"t.typname AS type, " .
@@ -291,7 +291,7 @@ sub get_fields {
 			"a.attnum > 0 AND ".
 			"a.attrelid = c.oid AND ".
 			"c.relname = ? AND " .
-			"a.atttypid = t.oid ". 
+			"a.atttypid = t.oid ".
 		"ORDER BY a.attnum";
 	my $sth = $self->{dbh}->prepare($query);
 	unless ($sth) {
@@ -412,7 +412,7 @@ sub get_primary_key {
 		$params{'table'}
 	);
 
-	my $query = 
+	my $query =
 		"SELECT pg_attribute.attname AS field "                   .
 		"FROM pg_index, pg_class, pg_attribute "                  .
 		"WHERE "                                                  .
@@ -448,14 +448,14 @@ sub get_indexes {
 		$params{'table'}
 	);
 
-	my $oid_query = 
+	my $oid_query =
 		"SELECT c.oid "                                 .
 		"FROM pg_catalog.pg_class c "                   .
 		"LEFT JOIN pg_catalog.pg_namespace n "          .
 			"ON n.oid = c.relnamespace "            .
 		"WHERE "                                        .
 			"c.relname ~ \'^$params{table}$\' AND " .
-			"pg_catalog.pg_table_is_visible(c.oid)" ;
+			"pg_catalog.pg_table_is_visible(c.oid)";
 	my $row = $self->{dbh}->selectrow_hashref($oid_query);
 	unless ($row) {
 		Sympa::Log::Syslog::do_log(
@@ -466,7 +466,7 @@ sub get_indexes {
 		return undef;
 	}
 
-	my $index_query = 
+	my $index_query =
 		"SELECT "                                                     .
 			"c2.relname, "                                        .
 			"pg_catalog.pg_get_indexdef(i.indexrelid, 0, true) "  .
@@ -515,7 +515,7 @@ sub _get_unset_index_query {
 sub _get_set_index_query {
 	my ($self, %params) = @_;
 
-	return 
+	return
 		"CREATE INDEX $params{index} " .
 		"ON $params{table} ($params{fields})";
 }

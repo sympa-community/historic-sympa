@@ -147,7 +147,7 @@ print "\n";
 system 'stty', 'echo';
 open  PASS, "| $openssl pkcs12 -in $p12input -out $cert -nokeys -clcerts -passin stdin";
 print PASS "$inpass\n";
-close PASS ;
+close PASS;
 
 unless ($outpass) {
 	system 'stty', '-echo';
@@ -159,7 +159,7 @@ unless ($outpass) {
 
 open  PASS, "| $openssl pkcs12 -in $p12input -out $privatekey -nocerts -passin stdin -des3 -passout stdin";
 print PASS "$inpass\n$outpass\n";
-close PASS ;
+close PASS;
 
 printf "$privatekey and  $cert created.\n";
 exit;

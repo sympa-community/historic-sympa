@@ -50,7 +50,7 @@ Sets an HTTP cookie to be sent to a SOAP client
 =cut
 
 sub set_cookie_soap {
-	my ($session_id, $http_domain, $expire) = @_ ;
+	my ($session_id, $http_domain, $expire) = @_;
 
 	my $cookie;
 	my $value;
@@ -110,12 +110,12 @@ FIXME.
 =cut
 
 sub set_cookie_extern {
-	my ($secret, $http_domain, %alt_emails) = @_ ;
+	my ($secret, $http_domain, %alt_emails) = @_;
 
 	my $cookie;
 	my $value;
 
-	my @mails ;
+	my @mails;
 	foreach my $mail (keys %alt_emails) {
 		my $string = $mail.':'.$alt_emails{$mail};
 		push(@mails,$string);
@@ -197,9 +197,9 @@ sub check_cookie_extern {
 	my $extern_value = generic_get_cookie($http_cookie, 'sympa_altemails');
 
 	if ($extern_value =~ /^(\S+)&(\w+)$/) {
-		return undef unless (get_mac($1,$secret) eq $2) ;
+		return undef unless (get_mac($1,$secret) eq $2);
 
-		my %alt_emails ;
+		my %alt_emails;
 		foreach my $element (split(/,/,$1)){
 			my @array = split(/:/,$element);
 			$alt_emails{$array[0]} = $array[1];

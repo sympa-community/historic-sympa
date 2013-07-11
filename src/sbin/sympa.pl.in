@@ -1071,8 +1071,8 @@ while ($signal ne 'term') {
 			Sympa::Log::Syslog::do_log('err', "listname and domain are required, use --list= --robot= options");
 			exit 0;
 		}
-		$listname = $options{'list'} ;
-		$robot = $options{'robot'} ;
+		$listname = $options{'list'};
+		$robot = $options{'robot'};
 
 		Sympa::Log::Syslog::do_log('notice', "Upgrading share for list=%s robot=%s",$listname,$robot);
 
@@ -1344,7 +1344,7 @@ while ($signal ne 'term') {
 		}
 		my $listname = $message_in_spool->{'list'};
 		my $robot = $message_in_spool->{'robot'};
-		Sympa::Log::Syslog::do_log('debug', "Processing message # %s for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
+		Sympa::Log::Syslog::do_log('debug', "Processing message # %s for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'});
 
 		if ($options{'mail'} != 1) {
 			$options{'mail'} = $robot if (Sympa::Configuration::get_robot_conf($robot, 'log_smtp'));
@@ -1356,13 +1356,13 @@ while ($signal ne 'term') {
 		my $status = process_message($message_in_spool);
 
 		if (defined($status)) {
-			Sympa::Log::Syslog::do_log('debug', "Message key %s  processed for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
+			Sympa::Log::Syslog::do_log('debug', "Message key %s  processed for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'});
 			# Do not remove message task_manager will purge database removing messages in spool distribute that have no links with bulkspool_stable
 			# $spool->remove_message({'messagekey' => $message_in_spool->{'messagekey'}});
 		} else {
 			# move message to bad.
 			$spool->update({'messagekey' => $message_in_spool->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
-			Sympa::Log::Syslog::do_log('debug', "Message # %s  moved to spool bad (message for list = %s robot = %s reception_date = %s)", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
+			Sympa::Log::Syslog::do_log('debug', "Message # %s  moved to spool bad (message for list = %s robot = %s reception_date = %s)", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'});
 		}
 	}
 
@@ -1465,7 +1465,7 @@ sub process_message {
 	if ( $message->{'md5_check'} ) {
 		# message contain a valid checksum, it comes from wwsympa, so
 		#  mail it without other proceding unless it is for a valid list
-		return (DoSendMessage ($message,$robot)) unless(Sympa::Configuration::valid_robot($robot, {'just_try' => 1})) ;
+		return (DoSendMessage ($message,$robot)) unless(Sympa::Configuration::valid_robot($robot, {'just_try' => 1}));
 		return (DoSendMessage ($message,$robot)) unless Sympa::List->new(
 			name    => $listname,
 			robot   => $robot,
@@ -1609,7 +1609,7 @@ sub process_message {
 					client       => $ip,
 					daemon       => $daemon_name
 				);
-				return undef ;
+				return undef;
 			}
 			$list = Sympa::List->new(
 				name   => $listname,
@@ -2308,7 +2308,7 @@ sub DoMessage{
 	my $auth_method = 'smtp';
 	$auth_method = 'dkim' if ($message->{'dkim_pass'});
 	$auth_method = 'md5' if ($message->{'md5_check'});
-	$auth_method = 'smime' if ($is_signed->{'body'}) ;
+	$auth_method = 'smime' if ($is_signed->{'body'});
 
 	$result = $list->check_list_authz('send',$auth_method,$context);
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -2330,7 +2330,7 @@ sub DoMessage{
 			client       => $ip,
 			daemon       => $daemon_name
 		);
-		return undef ;
+		return undef;
 	}
 
 	## message topic context
@@ -2579,7 +2579,7 @@ sub DoCommand {
 	## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
 	if ($rcpt =~ /^(\S+)-(subscribe|unsubscribe)(\@(\S+))?$/o) {
 		Sympa::Log::Syslog::do_log('debug',"processing message for $1-$2");
-		my $auth_level ;
+		my $auth_level;
 		$auth_level = 'dkim' if $message->{'dkim_pass'}; # at this point $message->{'dkim_pass'} does not verify that Subject: is part of the signature. It SHOULD !
 		Sympa::Commands::parse($sender,$robot,"$2 $1",$auth_level ,$message);
 		Sympa::Log::Database::add_event(
@@ -2604,9 +2604,9 @@ sub DoCommand {
 	$subject_field =~ s/^\s*(?:$re_regexp)?\s*(.*)\s*$/$1/i;
 
 	my $auth_level = 'dkim' if ($message->{'dkim_pass'});
-	$auth_level = $is_signed->{'subject'} if ($is_signed->{'subject'}) ;
+	$auth_level = $is_signed->{'subject'} if ($is_signed->{'subject'});
 
-	$success ||= Sympa::Commands::parse($sender, $robot, $subject_field, $auth_level, $message) ;
+	$success ||= Sympa::Commands::parse($sender, $robot, $subject_field, $auth_level, $message);
 
 	unless ($success eq 'unknown_cmd') {
 		$cmd_found = 1;
@@ -2647,7 +2647,7 @@ sub DoCommand {
 	if ( (!$cmd_found) && (defined $msg->bodyhandle())) {
 
 		## check Content-type
-		my $mime = $hdr->get('Mime-Version') ;
+		my $mime = $hdr->get('Mime-Version');
 		my $content_type = $msg->effective_type;
 		## Get charset
 		my $cset =
@@ -2693,12 +2693,12 @@ sub DoCommand {
 			last if ($i =~ /^-- $/); ## ignore signature
 			$i =~ s/^\s*>?\s*(.*)\s*$/$1/g;
 			next if ($i =~ /^$/); ## skip empty lines
-			next if ($i =~ /^\s*\#/) ;
+			next if ($i =~ /^\s*\#/);
 
 			Sympa::Log::Syslog::do_log('debug2',"is_signed->body $is_signed->{'body'}");
 
 			$auth_level = 'dkim' if ($message->{'dkim_pass'});
-			$auth_level = $is_signed->{'body'} if ($is_signed->{'body'}) ;
+			$auth_level = $is_signed->{'body'} if ($is_signed->{'body'});
 			$status = Sympa::Commands::parse($sender, $robot, $i, $auth_level, $message);
 
 			$cmd_found = 1; # if problem no_cmd_understood is sent here

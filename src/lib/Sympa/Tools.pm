@@ -443,7 +443,7 @@ sub load_edit_list_conf {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $robot, $list, $basedir);
 
 	my $file;
-	my $conf ;
+	my $conf;
 
 	return undef
 	unless ($file = get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
@@ -510,7 +510,7 @@ sub load_create_list_conf {
 	my ($robot, $basedir) = @_;
 
 	my $file;
-	my $conf ;
+	my $conf;
 
 	$file = get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
 	unless ($file) {
@@ -561,7 +561,7 @@ sub get_list_list_tpl {
 	my ($robot, $directory) = @_;
 
 	my $list_conf;
-	my $list_templates ;
+	my $list_templates;
 	unless ($list_conf = load_create_list_conf($robot)) {
 		return undef;
 	}
@@ -576,7 +576,7 @@ sub get_list_list_tpl {
 
 				my $status = $list_conf->{$template} || $list_conf->{'default'};
 
-				next if ($status eq 'hidden') ;
+				next if ($status eq 'hidden');
 
 				$list_templates->{$template}{'path'} = $dir;
 
@@ -619,17 +619,17 @@ sub get_templates_list {
 
 	## The 'ignore_global' option allows to look for files at list level only
 	unless ($options->{'ignore_global'}) {
-		push @try, $distrib_dir ;
-		push @try, $site_dir ;
+		push @try, $distrib_dir;
+		push @try, $site_dir;
 		push @try, $robot_dir;
 	}
 
 	if (defined $list) {
 		$listdir = $list->{'dir'}.'/'.$type.'_tt2';
-		push @try, $listdir ;
+		push @try, $listdir;
 	}
 
-	my $i = 0 ;
+	my $i = 0;
 	my $tpl;
 
 	foreach my $dir (@try) {
@@ -712,7 +712,7 @@ sub get_template_path {
 	if ($scope eq 'list')  {
 		my $dir = $listdir.'/'.$type.'_tt2';
 		$dir .= '/'.$lang unless ($lang eq 'default');
-		return $dir.'/'.$tpl ;
+		return $dir.'/'.$tpl;
 
 	} elsif ($scope eq 'robot')  {
 		return $robot_dir.'/'.$tpl;
@@ -972,7 +972,7 @@ Check sum used to authenticate communication from wwsympa to sympa
 sub sympa_checksum {
 	my ($rcpt, $cookie) = @_;
 
-	return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
+	return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10));
 }
 
 =item cookie_changed($current, $basedir)
@@ -984,11 +984,11 @@ Create a cipher.
 sub cookie_changed {
 	my ($current, $basedir) = @_;
 
-	my $changed = 1 ;
+	my $changed = 1;
 	if (-f "$basedir/cookies.history") {
 		unless (open COOK, "$basedir/cookies.history") {
-			Sympa::Log::Syslog::do_log('err', "Unable to read $basedir/cookies.history") ;
-			return undef ;
+			Sympa::Log::Syslog::do_log('err', "Unable to read $basedir/cookies.history");
+			return undef;
 		}
 		my $oldcook = <COOK>;
 		close COOK;
@@ -997,25 +997,25 @@ sub cookie_changed {
 
 
 		if ($cookies[$#cookies] eq $current) {
-			Sympa::Log::Syslog::do_log('debug2', "cookie is stable") ;
+			Sympa::Log::Syslog::do_log('debug2', "cookie is stable");
 			$changed = 0;
 #	} else {
-#	    push @cookies, $current ;
+#	    push @cookies, $current;
 #	    unless (open COOK, ">$basedir/cookies.history") {
-#		Sympa::Log::Syslog::do_log('err', "Unable to create $basedir/cookies.history") ;
-#		return undef ;
+#		Sympa::Log::Syslog::do_log('err', "Unable to create $basedir/cookies.history");
+#		return undef;
 #	    }
-#	    printf COOK "%s",join(" ",@cookies) ;
+#	    printf COOK "%s",join(" ",@cookies);
 			#
 #	    close COOK;
 		}
-		return $changed ;
+		return $changed;
 	} else {
 		my $umask = umask 037;
 		unless (open COOK, ">$basedir/cookies.history") {
 			umask $umask;
-			Sympa::Log::Syslog::do_log('err', "Unable to create $basedir/cookies.history") ;
-			return undef ;
+			Sympa::Log::Syslog::do_log('err', "Unable to create $basedir/cookies.history");
+			return undef;
 		}
 		umask $umask;
 		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$basedir/cookies.history";
@@ -1089,17 +1089,17 @@ sub split_mail {
 		|| ($message->mime_type eq 'message/rfc822')) {
 
 		for (my $i=0 ; $i < $message->parts ; $i++) {
-			split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir) ;
+			split_mail ($message->parts ($i), $pathname.'.'.$i, $dir, $confdir);
 		}
 	}
 	else {
-		my $fileExt ;
+		my $fileExt;
 
 		if ($head->mime_attr("content_type.name") =~ /\.(\w+)\s*\"*$/) {
-			$fileExt = $1 ;
+			$fileExt = $1;
 		}
 		elsif ($head->recommended_filename =~ /\.(\w+)\s*\"*$/) {
-			$fileExt = $1 ;
+			$fileExt = $1;
 		}
 		else {
 			my $mime_types = load_mime_types($confdir);
@@ -1111,8 +1111,8 @@ sub split_mail {
 
 		## Store body in file
 		unless (open OFILE, ">$dir/$pathname.$fileExt") {
-			Sympa::Log::Syslog::do_log('err', "Unable to create $dir/$pathname.$fileExt : $ERRNO") ;
-			return undef ;
+			Sympa::Log::Syslog::do_log('err', "Unable to create $dir/$pathname.$fileExt : $ERRNO");
+			return undef;
 		}
 
 		if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
@@ -1131,13 +1131,13 @@ sub split_mail {
 			close BODY;
 			unlink "$dir/$pathname.$fileExt.$encoding";
 		} else {
-			$message->print_body (\*OFILE) ;
+			$message->print_body (\*OFILE);
 		}
 		close (OFILE);
-		printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
+		printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt;
 
 		## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-		$message->purge ;
+		$message->purge;
 	}
 
 	return 1;
@@ -1184,7 +1184,7 @@ sub virus_infected {
 			return undef;
 		}
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		while (<ANTIVIR>) {
 			$result .= $_; chomp $result;
@@ -1214,7 +1214,7 @@ sub virus_infected {
 		## Trend Micro
 	} elsif ($path =~  /\/vscan$/) {
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		while (<ANTIVIR>) {
 			if (/Found virus (\S+) /i){
@@ -1223,7 +1223,7 @@ sub virus_infected {
 		}
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		## uvscan status = 1 | 2 (*256) => virus
 		if ((( $status == 1) or ( $status == 2)) and not($virusfound)) {
@@ -1240,7 +1240,7 @@ sub virus_infected {
 			return undef;
 		}
 
-		open (ANTIVIR,"$path --databasedirectory $dbdir $args $work_dir |") ;
+		open (ANTIVIR,"$path --databasedirectory $dbdir $args $work_dir |");
 
 		while (<ANTIVIR>) {
 
@@ -1251,7 +1251,7 @@ sub virus_infected {
 
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		## fsecure status =3 (*256) => virus
 		if (( $status == 3) and not($virusfound)) {
@@ -1261,7 +1261,7 @@ sub virus_infected {
 
 		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		while (<ANTIVIR>) {
 
@@ -1272,7 +1272,7 @@ sub virus_infected {
 
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		Sympa::Log::Syslog::do_log('debug2', 'Status: '.$status);
 
@@ -1288,7 +1288,7 @@ sub virus_infected {
 			return undef;
 		}
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		while (<ANTIVIR>) {
 			if (/infected:\s+(.*)/){
@@ -1300,7 +1300,7 @@ sub virus_infected {
 		}
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		## uvscan status =3 (*256) => virus
 		if (( $status >= 3) and not($virusfound)) {
@@ -1316,7 +1316,7 @@ sub virus_infected {
 			return undef;
 		}
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		while (<ANTIVIR>) {
 			if (/Virus\s+(.*)/) {
@@ -1325,7 +1325,7 @@ sub virus_infected {
 		}
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		## sweep status =3 (*256) => virus
 		if (( $status == 3) and not($virusfound)) {
@@ -1335,7 +1335,7 @@ sub virus_infected {
 		## Clam antivirus
 	} elsif ($path =~ /\/clamd?scan$/) {
 
-		open (ANTIVIR,"$path $args $work_dir |") ;
+		open (ANTIVIR,"$path $args $work_dir |");
 
 		my $result;
 		while (<ANTIVIR>) {
@@ -1346,7 +1346,7 @@ sub virus_infected {
 		}
 		close ANTIVIR;
 
-		my $status = $CHILD_ERROR/256 ;
+		my $status = $CHILD_ERROR/256;
 
 		## Clamscan status =1 (*256) => virus
 		if (( $status == 1) and not($virusfound)) {
@@ -1469,7 +1469,7 @@ sub get_filename {
 			}
 		}
 		if ($options->{'order'} eq 'all') {
-			return @result ;
+			return @result;
 		}
 	}
 
@@ -1550,7 +1550,7 @@ sub make_tt2_include_path {
 		$path_etcdir = $basedir;
 		$path_robot = "$basedir/".$robot if (lc($robot) ne lc($domain));
 		if (ref($list) && $list->isa('Sympa::List')) {
-			$path_list = $list->{'dir'} ;
+			$path_list = $list->{'dir'};
 			if (defined $list->{'admin'}{'family_name'}) {
 				my $family = $list->get_family();
 				$path_family = $family->{'dir'};
@@ -1825,9 +1825,9 @@ sub add_in_blacklist {
 	if (open BLACKLIST, "$file"){
 		while(<BLACKLIST>) {
 			next if (/^\s*$/o || /^[\#\;]/o);
-			my $regexp= $_ ;
+			my $regexp= $_;
 			chomp $regexp;
-			$regexp =~ s/\*/.*/ ;
+			$regexp =~ s/\*/.*/;
 			$regexp = '^'.$regexp.'$';
 			if ($entry =~ /$regexp/i) {
 				Sympa::Log::Syslog::do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
@@ -1933,7 +1933,7 @@ sub CleanDir {
 
 		if ((stat "$dir/$f")[9] < (time() - $clean_delay * 60 * 60 * 24)) {
 			if (-f "$dir/$f") {
-				unlink ("$dir/$f") ;
+				unlink ("$dir/$f");
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$dir/$f");
 			} elsif (-d "$dir/$f") {
 				unless (Sympa::Tools::File::remove_dir("$dir/$f")) {

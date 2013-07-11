@@ -158,7 +158,7 @@ sub parse {
 			no strict 'refs';
 			$status = & {$comms{$j}}($args, $robot, $sign_mod, $message);
 
-			return $status ;
+			return $status;
 		}
 	}
 
@@ -1146,7 +1146,7 @@ sub _signoff {
 	($which,$email) = ($1,$4||$sender);
 
 	if ($which eq '*') {
-		my $success ;
+		my $success;
 		foreach $list ( Sympa::List::get_which ($email,$robot,'member') ){
 			$l = $list->{'name'};
 
@@ -1862,7 +1862,7 @@ sub _remind {
 					Sympa::Log::Syslog::do_log('notice',"Unable to send template 'remind' to $user->{'email'}");
 					Sympa::Report::reject_report_cmd('intern_quiet','',{'listname'=> $listname},$cmd_line,$sender,$robot);
 				}
-				$total += 1 ;
+				$total += 1;
 			} while ($user = $list->get_next_list_member());
 
 			Sympa::Report::notice_report_cmd('remind',{'total'=> $total,'listname' => $listname},$cmd_line);
@@ -1873,7 +1873,7 @@ sub _remind {
 			## Global REMIND
 			my %global_subscription;
 			my %global_info;
-			my $count = 0 ;
+			my $count = 0;
 
 			$context{'subject'} =Sympa::Language::gettext("Subscription summary");
 			# this remind is a global remind.
@@ -1883,7 +1883,7 @@ sub _remind {
 
 				my $listname = $list->{'name'};
 
-				next unless (my $user = $list->get_first_list_member()) ;
+				next unless (my $user = $list->get_first_list_member());
 
 				do {
 					my $email = lc ($user->{'email'});
@@ -1919,7 +1919,7 @@ sub _remind {
 						$global_info{$email} = $user;
 
 						Sympa::Log::Syslog::do_log('debug2','remind * : %s subscriber of %s', $email,$listname);
-						$count++ ;
+						$count++;
 					}
 				} while ($user = $list->get_next_list_member());
 			}
@@ -2420,7 +2420,7 @@ sub _confirm {
 		Sympa::Log::Syslog::do_log('err', 'message (%s) ignored because unable to evaluate scenario for list %s',$msg_id,$name);
 		Sympa::Report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msg_id,'message' => $message},
 			$robot,$msg_string,$list);
-		return undef ;
+		return undef;
 	}
 
 	if ($action =~ /^editorkey(\s?,\s?(quiet))?/) {
@@ -2577,7 +2577,7 @@ sub _reject {
 		my %context;
 		$context{'subject'} = Sympa::Tools::decode_header($message, 'Subject');
 		$context{'rejected_by'} = $sender;
-		$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string() if ($editor_msg) ;
+		$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string() if ($editor_msg);
 
 		Sympa::Log::Syslog::do_log('debug', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
 
@@ -2673,7 +2673,7 @@ sub _modindex {
 			}
 
 			if ((stat "$modqueue/$i")[9] < (time() -  $moddelay*86400) ){
-				unlink ("$modqueue/$i") ;
+				unlink ("$modqueue/$i");
 				Sympa::Log::Syslog::do_log('notice', 'Deleting unmoderated message %s, too old', $i);
 			};
 		}
@@ -2692,7 +2692,7 @@ sub _modindex {
 
 	foreach $i (@files) {
 		## skip message already marked to be distributed using WWS
-		next if ($i =~ /.distribute$/) ;
+		next if ($i =~ /.distribute$/);
 
 		## Push message for building MODINDEX
 		my $raw_msg;
@@ -2850,7 +2850,7 @@ sub _get_auth_method {
 			$compute= Sympa::List::compute_auth($email,$cmd);
 		}
 		if ($auth eq $compute) {
-			$auth_method = 'md5' ;
+			$auth_method = 'md5';
 		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'auth should be %s',$compute);
 			if ($error->{'type'} eq 'auth_failed'){

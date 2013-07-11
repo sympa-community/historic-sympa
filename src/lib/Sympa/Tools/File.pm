@@ -100,7 +100,7 @@ sub copy_dir {
 		Sympa::Log::Syslog::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
 		return undef;
 	}
-	return (File::Copy::Recursive::dircopy($dir1,$dir2)) ;
+	return (File::Copy::Recursive::dircopy($dir1,$dir2));
 }
 
 =item del_dir($dir)
@@ -136,7 +136,7 @@ To be used before creating a file in a directory that may not exist already.
 sub mk_parent_dir {
 	my ($file) = @_;
 
-	$file =~ /^(.*)\/([^\/])*$/ ;
+	$file =~ /^(.*)\/([^\/])*$/;
 	my $dir = $1;
 
 	return 1 if (-d $dir);
@@ -208,14 +208,14 @@ sub shift_file {
 		return undef;
 	}
 	if ($count) {
-		$file =~ /^(.*)\/([^\/])*$/ ;
+		$file =~ /^(.*)\/([^\/])*$/;
 		my $dir = $1;
 
 		unless (opendir(DIR, $dir)) {
 			Sympa::Log::Syslog::do_log('err', "Cannot read dir $dir" );
 			return ($file.'.'.$file_extention);
 		}
-		my $i = 0 ;
+		my $i = 0;
 		foreach my $oldfile (reverse (sort (grep (/^$file\./,readdir(DIR))))) {
 			$i ++;
 			if ($count lt $i) {
@@ -302,7 +302,7 @@ sub get_dir_size {
 				$size += get_dir_size("$dir/$file");
 			}
 			else {
-				my @info = stat "$dir/$file" ;
+				my @info = stat "$dir/$file";
 				$size += $info[7];
 			}
 		}

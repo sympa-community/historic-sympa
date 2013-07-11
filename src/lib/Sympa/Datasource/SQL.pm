@@ -2066,7 +2066,7 @@ sub _check_fields_list {
 	my ($self, %params) = @_;
 
 	return
-		join(',', sort @{$params{current}}) eq 
+		join(',', sort @{$params{current}}) eq
 		join(',', sort @{$params{target}});
 }
 

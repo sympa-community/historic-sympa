@@ -129,7 +129,7 @@ sub sign_message {
 	$entity_clone->print($command_handle);
 	close ($command_handle);
 
-	my $status = $CHILD_ERROR/256 ;
+	my $status = $CHILD_ERROR/256;
 	unless ($status == 0) {
 		Sympa::Log::Syslog::do_log('notice', 'Unable to S/MIME sign message : status = %d', $status);
 		return undef;
@@ -213,7 +213,7 @@ sub check_signature {
 	my $command_handle;
 	unless (open ($command_handle, '|-', $command)) {
 		Sympa::Log::Syslog::do_log('err', "unable to verify smime signature from $message->{sender}");
-		return undef ;
+		return undef;
 	}
 
 	if ($message->{'smime_crypted'}){
@@ -223,10 +223,10 @@ sub check_signature {
 	print $command_handle $message->{'msg_as_string'};
 	close $command_handle;
 
-	my $status = $CHILD_ERROR/256 ;
+	my $status = $CHILD_ERROR/256;
 	unless ($status == 0) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
-		return undef ;
+		return undef;
 	}
 
 	# check if the certificate matches the sender
@@ -439,10 +439,10 @@ sub encrypt_message {
 	$entity_clone->print($command_handle);
 	close($command_handle);
 
-	my $status = $CHILD_ERROR/256 ;
+	my $status = $CHILD_ERROR/256;
 	unless ($status == 0) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to S/MIME encrypt message : %s', $openssl_errors{$status});
-		return undef ;
+		return undef;
 	}
 
 	my $parser = MIME::Parser->new();

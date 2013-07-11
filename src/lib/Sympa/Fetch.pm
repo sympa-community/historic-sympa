@@ -112,7 +112,7 @@ sub get_https{
 	#my ($buffer) = $ssl_socket->getlines;
 	# print STDERR $buffer;
 	#Sympa::Log::Syslog::do_log ('debug',"return");
-	#return ;
+	#return;
 
 	Sympa::Log::Syslog::do_log ('debug',"get_https reading answer");
 	my @result;

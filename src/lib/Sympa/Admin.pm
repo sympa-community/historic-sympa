@@ -834,7 +834,7 @@ sub rename_list{
 
 	# set list status to pending if creation list is moderated
 	if ($r_action =~ /listmaster/) {
-		$list->{'admin'}{'status'} = 'pending' ;
+		$list->{'admin'}{'status'} = 'pending';
 		Sympa::List::send_notify_to_listmaster('request_list_renaming',$list->{'domain'},
 			{'list' => $list,
 				'new_listname' => $params{'new_listname'},
@@ -1093,7 +1093,7 @@ sub clone_list_as_empty {
 		Sympa::Log::Syslog::do_log('info',"Admin::clone_list_as_empty : unable to load $new_listname while renamming");
 		return undef;
 	}
-	$new_list->{'admin'}{'serial'} = 0 ;
+	$new_list->{'admin'}{'serial'} = 0;
 	$new_list->{'admin'}{'creation'}{'email'} = $email if ($email);
 	$new_list->{'admin'}{'creation'}{'date_epoch'} = time();
 	$new_list->{'admin'}{'creation'}{'date'} =
@@ -1304,10 +1304,10 @@ sub install_aliases {
 		Sympa::Log::Syslog::do_log('err','Failed to install aliases: %s', $ERRNO);
 		return undef;
 	}
-	system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'} >$output_file 2>  $error_output_file") ;
+	system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'} >$output_file 2>  $error_output_file");
 	my $status = $CHILD_ERROR / 256;
 	if ($status == 0) {
-		Sympa::Log::Syslog::do_log('info','Aliases installed successfully') ;
+		Sympa::Log::Syslog::do_log('info','Aliases installed successfully');
 		return 1;
 	}
 
@@ -1325,23 +1325,23 @@ sub install_aliases {
 	} elsif ($status == 2)  {
 		Sympa::Log::Syslog::do_log('err','Internal error : Incorrect call to alias_manager : %s', $error_output);
 	} elsif ($status == 3)  {
-		Sympa::Log::Syslog::do_log('err','Could not read sympa config file, report to httpd error_log: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Could not read sympa config file, report to httpd error_log: %s', $error_output);
 	} elsif ($status == 4)  {
-		Sympa::Log::Syslog::do_log('err','Could not get default domain, report to httpd error_log: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Could not get default domain, report to httpd error_log: %s', $error_output);
 	} elsif ($status == 5)  {
-		Sympa::Log::Syslog::do_log('err','Unable to append to alias file: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Unable to append to alias file: %s', $error_output);
 	} elsif ($status == 6)  {
-		Sympa::Log::Syslog::do_log('err','Unable to run newaliases: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Unable to run newaliases: %s', $error_output);
 	} elsif ($status == 7)  {
-		Sympa::Log::Syslog::do_log('err','Unable to read alias file, report to httpd error_log: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Unable to read alias file, report to httpd error_log: %s', $error_output);
 	} elsif ($status == 8)  {
-		Sympa::Log::Syslog::do_log('err','Could not create temporay file, report to httpd error_log: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Could not create temporay file, report to httpd error_log: %s', $error_output);
 	} elsif ($status == 13) {
-		Sympa::Log::Syslog::do_log('info','Some of list aliases already exist: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('info','Some of list aliases already exist: %s', $error_output);
 	} elsif ($status == 14) {
-		Sympa::Log::Syslog::do_log('err','Can not open lock file, report to httpd error_log: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','Can not open lock file, report to httpd error_log: %s', $error_output);
 	} elsif ($status == 15) {
-		Sympa::Log::Syslog::do_log('err','The parser returned empty aliases: %s', $error_output) ;
+		Sympa::Log::Syslog::do_log('err','The parser returned empty aliases: %s', $error_output);
 	} else {
 		Sympa::Log::Syslog::do_log('err',"Unknown error $status while running alias manager $alias_manager : %s", $error_output);
 	}

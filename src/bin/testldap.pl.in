@@ -116,7 +116,7 @@ $mesg = $ldap->search ( base => $options{'suffix'},
 #    printf "-- %s \n", $entry->get('mail');
 #}
 
-$res = $mesg->as_struct ;
+$res = $mesg->as_struct;
 
 #foreach my $k (keys %$res) {
 #   printf "\t%s => %s\n", $k, $res->{$k};

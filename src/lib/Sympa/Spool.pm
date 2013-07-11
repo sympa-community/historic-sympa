@@ -73,7 +73,7 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{name});
 
-	croak "invalid status parameter" if 
+	croak "invalid status parameter" if
 		$params{status} &&
 		$params{status} ne 'bad' &&
 		$params{status} ne 'ok';
@@ -152,9 +152,9 @@ sub get_count {
 
 	my $filter_clause = $self->_get_filter_clause($params{selector});
 	if ($self->{status} eq 'bad') {
-		$filter_clause .= " AND message_status_spool = 'bad'" ;
+		$filter_clause .= " AND message_status_spool = 'bad'";
 	} else {
-		$filter_clause .= " AND message_status_spool != 'bad'" ;
+		$filter_clause .= " AND message_status_spool != 'bad'";
 	}
 	$filter_clause =~ s/^AND//;
 
@@ -203,7 +203,7 @@ sort
 
 =item C<way> =>
 
-asc or desc 
+asc or desc
 
 =back
 
@@ -214,9 +214,9 @@ sub get_content {
 
 	my $filter_clause = $self->_get_filter_clause($params{selector});
 	if ($self->{status} eq 'bad') {
-		$filter_clause .= " AND message_status_spool = 'bad'" ;
+		$filter_clause .= " AND message_status_spool = 'bad'";
 	} else {
-		$filter_clause .= " AND message_status_spool != 'bad'" ;
+		$filter_clause .= " AND message_status_spool != 'bad'";
 	}
 	$filter_clause =~s/^AND//;
 
@@ -240,7 +240,7 @@ sub get_content {
 	while (my $message = $handle->fetchrow_hashref('NAME_lc')) {
 		$message->{'date_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
 		$message->{'lockdate_asstring'} = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
-		$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
+		$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'});
 		$message->{'listname'} = $message->{'listname'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 		$message->{'status'} = $self->{status};
 		push @messages, $message;
@@ -262,16 +262,16 @@ sub next {
 	my $filter_clause = $self->_get_filter_clause($selector);
 
 	if ($self->{status} eq 'bad') {
-		$filter_clause .= " AND message_status_spool = 'bad'" ;
+		$filter_clause .= " AND message_status_spool = 'bad'";
 	} else {
-		$filter_clause .= " AND message_status_spool != 'bad'" ;
+		$filter_clause .= " AND message_status_spool != 'bad'";
 	}
 	$filter_clause =~ s/^\s*AND//;
 
 	my $lock = $PID.'@'.hostname();
 	my $epoch = time(); # should we use milli or nano seconds ?
 
-	my $update_query = 
+	my $update_query =
 		"UPDATE spool_table "                        .
 		"SET messagelock_spool=?, lockdate_spool=? " .
 		"WHERE "                                     .
@@ -318,7 +318,7 @@ sub next {
 		Sympa::Log::Syslog::do_log('err',"Could not decode %s",$message->{'message'});
 		return undef;
 	}
-	return $message  ;
+	return $message;
 }
 
 =item $spool->get_message($selector)
@@ -342,7 +342,7 @@ sub get_message {
 	my $filter_clause = join(' AND ', @filter_clauses);
 
 	my $select_clause = $self->_selectfields();
-	my $query = 
+	my $query =
 		"SELECT $select_clause " .
 		"FROM spool_table " .
 		"WHERE spoolname_spool=? AND $filter_clause LIMIT 1";
@@ -388,7 +388,7 @@ sub update {
 	# hidde B64 encoding inside spool database.
 	if ($values->{'message'}) {
 		$values->{'size'} =  length($values->{'message'});
-		$values->{'message'} =  MIME::Base64::encode($values->{'message'})  ;
+		$values->{'message'} =  MIME::Base64::encode($values->{'message'});
 	}
 	# update can used in order to move a message from a spool to another one
 	$values->{name} = $self->{name} unless($values->{'spoolname'});
@@ -483,10 +483,10 @@ sub store {
 	if($message) {
 		$params{metadata}->{'spam_status'} = $message->{'spam_status'};
 		$params{metadata}->{'subject'} = $message->{'msg'}->head()->get('Subject');
-		chomp $params{metadata}->{'subject'} ;
+		chomp $params{metadata}->{'subject'};
 		$params{metadata}->{'subject'} = substr $params{metadata}->{'subject'}, 0, 109;
 		$params{metadata}->{'messageid'} = $message->{'msg'}->head()->get('Message-Id');
-		chomp $params{metadata}->{'messageid'} ;
+		chomp $params{metadata}->{'messageid'};
 		$params{metadata}->{'messageid'} = substr $params{metadata}->{'messageid'}, 0, 295;
 		$params{metadata}->{'headerdate'} = substr $message->{'msg'}->head()->get('Date'), 0, 78;
 
@@ -500,8 +500,8 @@ sub store {
 		$params{metadata}->{'messageid'} = '';
 		$params{metadata}->{'sender'} = $sender;
 	}
-	$params{metadata}->{'date'}= int(time()) unless ($params{metadata}->{'date'}) ;
-	$params{metadata}->{'size'}= length($params{message}) unless ($params{metadata}->{'size'}) ;
+	$params{metadata}->{'date'}= int(time()) unless ($params{metadata}->{'date'});
+	$params{metadata}->{'size'}= length($params{message}) unless ($params{metadata}->{'size'});
 	$params{metadata}->{'message_status'} = 'ok';
 
 	my @meta = qw/
@@ -514,7 +514,7 @@ sub store {
 	my $value_clause = join(', ', map { '?' } @meta);
 	my @values = map { $params{metadata}->{$_} } @meta;
 
-	my $lock = $PID.'@'.hostname() ;
+	my $lock = $PID.'@'.hostname();
 
 	my $insert_query =
 		"INSERT INTO spool_table ("                    .
@@ -577,7 +577,7 @@ sub remove_message {
 	}
 
 	my $filter_clause = $self->_get_filter_clause($selector);
-	my $query = 
+	my $query =
 		"DELETE FROM spool_table " .
 		"WHERE spoolname_spool=? AND $filter_clause";
 
@@ -643,7 +643,7 @@ sub _selectfields{
 		my $structure = $self->{source}->get_structure();
 
 		foreach my $field (keys %{$structure->{spool_table}{fields}}) {
-			next if (($selection eq '*_but_message') && ($field eq 'message_spool')) ;
+			next if (($selection eq '*_but_message') && ($field eq 'message_spool'));
 			my $var = $field;
 			$var =~ s/\_spool//;
 			$select = $select . $field .' AS '.$var.',';

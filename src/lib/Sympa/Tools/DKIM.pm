@@ -63,12 +63,12 @@ sub dkim_verifier {
 		return undef;
 	}
 
-	my $temporary_file = $tmpdir."/dkim.".$PID ;
+	my $temporary_file = $tmpdir."/dkim.".$PID;
 	if (!open(MSGDUMP,"> $temporary_file")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 		return undef;
 	}
-	print MSGDUMP $msg_as_string ;
+	print MSGDUMP $msg_as_string;
 
 	unless (close(MSGDUMP)){
 		Sympa::Log::Syslog::do_log('err',"unable to dump message in temporary file $temporary_file");
@@ -116,7 +116,7 @@ sub remove_invalid_dkim_signature {
 		my $entity = $parser->parse_data($msg_as_string);
 		unless($entity) {
 			Sympa::Log::Syslog::do_log('err','could not parse message');
-			return $msg_as_string ;
+			return $msg_as_string;
 		}
 		$entity->head()->delete('DKIM-Signature');
 		Sympa::Log::Syslog::do_log('debug',"removing invalide dkim signature header");
@@ -156,15 +156,15 @@ sub dkim_sign {
 		return $msg_as_string;
 	}
 
-	my $temporary_keyfile = $tmpdir."/dkimkey.".$PID ;
+	my $temporary_keyfile = $tmpdir."/dkimkey.".$PID;
 	if (!open(MSGDUMP,"> $temporary_keyfile")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 		return $msg_as_string;
 	}
-	print MSGDUMP $dkim_privatekey ;
+	print MSGDUMP $dkim_privatekey;
 	close(MSGDUMP);
 
-	my $dkim ;
+	my $dkim;
 	if ($dkim_i) {
 		# create a signer object
 		$dkim = Mail::DKIM::Signer->new(
@@ -188,12 +188,12 @@ sub dkim_sign {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t create Mail::DKIM::Signer');
 		return ($msg_as_string);
 	}
-	my $temporary_file = $tmpdir."/dkim.".$PID ;
+	my $temporary_file = $tmpdir."/dkim.".$PID;
 	if (!open(MSGDUMP,"> $temporary_file")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 		return ($msg_as_string);
 	}
-	print MSGDUMP $msg_as_string ;
+	print MSGDUMP $msg_as_string;
 	close(MSGDUMP);
 
 	unless (open (MSGDUMP , $temporary_file)){

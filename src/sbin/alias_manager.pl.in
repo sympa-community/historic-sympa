@@ -116,7 +116,7 @@ $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
 $data{'return_path_suffix'} = Sympa::Configuration::get_robot_conf($domain, 'return_path_suffix');
 
 
-my @aliases ;
+my @aliases;
 
 my $tt2_include_path = Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 
@@ -194,7 +194,7 @@ if ($operation eq 'add') {
 
 			if ($left_side eq  $new_left_side) {
 				push @deleted_lines, $alias;
-				$to_be_deleted = 1 ;
+				$to_be_deleted = 1;
 				last;
 			}
 		}
@@ -203,11 +203,11 @@ if ($operation eq 'add') {
 			print NEWALIAS $alias;
 		}
 	}
-	close ALIAS ;
+	close ALIAS;
 	close NEWALIAS;
 
 	if ($#deleted_lines == -1) {
-		print STDERR "No matching line in $alias_file\n" ;
+		print STDERR "No matching line in $alias_file\n";
 		exit(9);
 	}
 	## replace old aliases file
@@ -221,7 +221,7 @@ if ($operation eq 'add') {
 		exit (11);
 	}
 	print OLDALIAS <NEWALIAS>;
-	close OLDALIAS ;
+	close OLDALIAS;
 	close NEWALIAS;
 	unlink $tmp_alias_file;
 
@@ -254,7 +254,7 @@ sub already_defined {
 
 	while (my $alias = <ALIAS>) {
 		# skip comment
-		next if $alias =~ /^#/ ;
+		next if $alias =~ /^#/;
 		$alias =~ /^([^:]+):/;
 		my $left_side = $1;
 		next unless ($left_side);
@@ -268,6 +268,6 @@ sub already_defined {
 		}
 	}
 
-	close ALIAS ;
+	close ALIAS;
 	return 0;
 }

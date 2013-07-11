@@ -86,7 +86,7 @@ sub new {
 	my ($class, %params) = @_;
 
 	croak "missing filepath parameter" unless $params{path};
-	croak "invalid method parameter" if 
+	croak "invalid method parameter" if
 		$params{method} &&
 		$params{method} ne 'flock' &&
 		$params{method} ne 'nfs';

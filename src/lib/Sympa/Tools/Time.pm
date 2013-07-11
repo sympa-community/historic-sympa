@@ -221,7 +221,7 @@ sub duration_conv {
 
 	return 0 unless $arg;
 
-	$arg =~ /(\d+y)?(\d+m)?(\d+w)?(\d+d)?(\d+h)?(\d+min)?(\d+sec)?$/i ;
+	$arg =~ /(\d+y)?(\d+m)?(\d+w)?(\d+d)?(\d+h)?(\d+min)?(\d+sec)?$/i;
 	my @date = ("$1", "$2", "$3", "$4", "$5", "$6", "$7");
 	for (my $i = 0; $i < 7; $i++) {
 		$date[$i] =~ s/[a-z]+$//; ## Remove trailing units

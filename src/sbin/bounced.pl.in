@@ -296,15 +296,15 @@ while (!$end) {
 			}elsif ($local_part =~  /^(.*)\=\=a\=\=(.*)\=\=(.*)\=\=(.*)$/ ) {# tracking in use
 
 				$distribution_id = $4;
-				$local_part =~ /^(.*)\=\=(.*)$/ ;
+				$local_part =~ /^(.*)\=\=(.*)$/;
 				$local_part = $1;
 			} else {
-				undef $distribution_id ;
+				undef $distribution_id;
 				Sympa::Log::Syslog::do_log('err', 'NOT ID PART in the bounce for :%s', $to);
 			}
 
-			$local_part =~ s/\=\=a\=\=/\@/ ;
-			$local_part =~ /^(.*)\=\=(.*)$/ ;
+			$local_part =~ s/\=\=a\=\=/\@/;
+			$local_part =~ /^(.*)\=\=(.*)$/;
 			$who = $1;
 			$listname = $2;
 
@@ -627,7 +627,7 @@ while (!$end) {
 					# Sympa::Log::Syslog::do_log ('notice',"xxx processing  Email Feedback Report : extract listname $listname");
 				}
 			}
-			my $forward ;
+			my $forward;
 			## RFC compliance remark: We do something if there is an abuse or an unsubscribe request.
 			## We don't throw an error if we find another kind of feedback (fraud, miscategorized, not-spam, virus or other)
 			## but we don't take action if we meet them yet. This is to be done, if relevant.
@@ -640,7 +640,7 @@ while (!$end) {
 
 					if (( $feedback_type =~ /(opt-out-list|abuse)/i ) && (defined $listname)) {
 						$listname = lc($listname);
-						chomp $listname ;
+						chomp $listname;
 						$listname =~ /(.*)\@(.*)/;
 						$listname = $1;
 						$robot = $2;

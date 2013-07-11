@@ -220,7 +220,7 @@ sub new {
 			if (ref($spam_status ) eq 'HASH') {
 				$self->{'spam_status'} =  $spam_status ->{'action'};
 			} else {
-				$self->{'spam_status'} = $spam_status ;
+				$self->{'spam_status'} = $spam_status;
 			}
 		}
 
@@ -248,7 +248,7 @@ sub new {
 		my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
 		if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
-			$self->{'md5_check'} = 1 ;
+			$self->{'md5_check'} = 1;
 		} else {
 			Sympa::Log::Syslog::do_log('err',"incorrect X-Sympa-Checksum header");
 		}

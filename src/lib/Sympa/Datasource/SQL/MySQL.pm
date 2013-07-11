@@ -46,7 +46,7 @@ sub new {
 sub get_connect_string {
 	my ($self) = @_;
 
-	return 
+	return
 		"DBI:mysql:$self->{'db_name'}:$self->{'db_host'}";
 }
 
@@ -102,7 +102,7 @@ sub is_autoinc {
 		$params{'table'}
 	);
 
-	my $query = 
+	my $query =
 		"SHOW FIELDS "                 .
 		"FROM $params{table} "         .
 		"WHERE Extra = ? AND Field = ?";
@@ -135,7 +135,7 @@ sub set_autoinc {
 	);
 
 	my $field_type = defined ($params{'field_type'}) ? $params{'field_type'} : 'BIGINT( 20 )';
-	my $query = 
+	my $query =
 		"ALTER TABLE $params{table} CHANGE $params{field} " .
 		"$params{field} $field_type NOT NULL AUTO_INCREMENT";
 	my $rows = $self->{dbh}->do($query);

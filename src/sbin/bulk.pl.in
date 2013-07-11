@@ -192,7 +192,7 @@ Sympa::Log::Syslog::do_log('notice', "bulk.pl %s Started", Sympa::Constants::VER
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $opensmtp = 0 ;
+my $opensmtp = 0;
 my $fh = 'fh0000000000';	## File handle for the stream.
 
 my $messagekey;       # the key of the current message in the message_table
@@ -219,7 +219,7 @@ while (!$end) {
 	Sympa::List::init_list_cache();
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 
-	my $message_from_spool ;
+	my $message_from_spool;
 
 	unless ($options{'foreground'}) {
 		# Create child bulks if too much packets are waiting to be
@@ -417,12 +417,12 @@ while (!$end) {
 
 		if (
 			$next->{'verp'}  ||
-			$next->{'merge'} || 
-			$next->{'tracking'} eq 'dsn' || 
+			$next->{'merge'} ||
+			$next->{'tracking'} eq 'dsn' ||
 			$next->{'tracking'}eq 'mdn'
 		){
 			# message needs personalization
-			my $key ;
+			my $key;
 
 			foreach $rcpt (@rcpts) {
 				my $message = Sympa::Message->new(
@@ -443,7 +443,7 @@ while (!$end) {
 					my $msgid = $entity->head()->get('Message-Id'); chomp $msgid;
 					$notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
 					$return_path = $Sympa::Configuration::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
-					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn') ;
+					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn');
 					if (($message->{'protected'})||($message->{'smime_crypted'})){
 					my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
 					$messageasstring_init = $entity->head()->as_string(). "\n" . $msg_body; # concat headers from entity with original body

@@ -535,7 +535,7 @@ sub create {
 
 	if  (!check ($string)) {
 		Sympa::Log::Syslog::do_log ('err', "error : syntax error in $string, you should check $model_file");
-		Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request") ;
+		Sympa::Log::Syslog::do_log ('notice', "Ignoring creation task request");
 		return undef;
 	}
 	my %meta = (
@@ -794,7 +794,7 @@ sub execute {
 	my @tasklines = split('\n',$taskasstring);
 
 	my $labelfound = 0;my $status;
-	$labelfound = 1 if ($label eq '') ;
+	$labelfound = 1 if ($label eq '');
 
 	foreach my $line (@tasklines){
 		chomp $line;
@@ -1551,7 +1551,7 @@ sub update_crl {
 
 	my @tab = @{$Rarguments};
 	my $limit = Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
-	my $CA_file = "$Sympa::Configuration::Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
+	my $CA_file = "$Sympa::Configuration::Conf{'home'}/$tab[0]"; # file where CA urls are stored;
 	Sympa::Log::Syslog::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
 	# building of CA list
@@ -1786,7 +1786,7 @@ sub get_score {
 	unless ($bounce_count >= $min_msg_count){
 		#not enough messages distributed to keep score
 		Sympa::Log::Syslog::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
-		return undef ;
+		return undef;
 	}
 
 	unless (($EO_period - $BO_period) >= $min_period){

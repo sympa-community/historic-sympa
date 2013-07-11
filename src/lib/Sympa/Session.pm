@@ -32,7 +32,7 @@ This class implements an HTTP session.
 
 package Sympa::Session;
 
-use strict ;
+use strict;
 
 use Carp;
 use CGI::Cookie;
@@ -113,7 +113,7 @@ sub new {
 
 	# if a session cookie exist, try to restore an existing session, don't store sessions from bots
 	if (($cookie)&&($self->{'passive_session'} != 1)){
-		my $status ;
+		my $status;
 		$status = $self->load($cookie);
 		unless (defined $status) {
 			return undef;
@@ -190,7 +190,7 @@ sub purge_old_sessions {
 	my $count_query =
 		"SELECT count(*) FROM session_table " .
 		"WHERE " . join(' AND ', @clauses);
-	my $anonymous_count_query = 
+	my $anonymous_count_query =
 		"SELECT count(*) FROM session_table "   .
 		"WHERE " . join(' AND ', @anonymous_clauses);
 
@@ -272,7 +272,7 @@ sub purge_old_tickets {
 	my $count_query =
 		"SELECT count(*) FROM one_time_ticket_table " .
 		"WHERE " . join(" AND ", @clauses);
-	my $delete_query = 
+	my $delete_query =
 		"DELETE FROM one_time_ticket_table " .
 		"WHERE " . join(" AND ", @clauses);
 
@@ -310,7 +310,7 @@ sub list_sessions {
 	Sympa::Log::Syslog::do_log('debug',
 		'(%s,%s,%s)',$params{delay},$params{robot},$params{connected_only});
 
-	my @sessions ;
+	my @sessions;
 	my @clauses;
 	my @params;
 
@@ -451,7 +451,7 @@ sub load {
 	$self->{'id_session'} = $session->{'id_session'};
 	$self->{'date'} = $session->{'date'};
 	$self->{'start_date'} = $session->{'start_date'};
-	$self->{'hit'} = $session->{'hit'} +1 ;
+	$self->{'hit'} = $session->{'hit'} +1;
 	$self->{'remote_addr'} = $session->{'remote_addr'};
 	$self->{'robot'} = $session->{'robot'};
 	$self->{'email'} = $session->{'email'};
@@ -473,7 +473,7 @@ sub store {
 	return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
 	return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
 
-	my %hash ;
+	my %hash;
 	foreach my $var (keys %$self ) {
 		next if ($session_hard_attributes{$var});
 		next unless ($var);
@@ -553,7 +553,7 @@ sub renew {
 	return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers;
 	return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication;
 
-	my %hash ;
+	my %hash;
 	foreach my $var (keys %$self ) {
 		next if ($session_hard_attributes{$var});
 		next unless ($var);
@@ -587,7 +587,7 @@ Generic method to set a cookie
 =cut
 
 sub set_cookie {
-	my ($self, $http_domain, $expires,$use_ssl) = @_ ;
+	my ($self, $http_domain, $expires,$use_ssl) = @_;
 	Sympa::Log::Syslog::do_log('debug','%s,%s,secure= %s',$http_domain, $expires,$use_ssl );
 
 	my $expiration;

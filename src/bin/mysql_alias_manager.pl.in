@@ -55,7 +55,7 @@ $data{'default_domain'} = $default_domain;
 #$data{'is_default_domain'} = 1 if ($domain eq $default_domain);
 $data{'is_default_domain'} = 1;
 $data{'return_path_suffix'} = $return_path_suffix;
-my @aliases ;
+my @aliases;
 
 my $tt2_include_path = Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
 

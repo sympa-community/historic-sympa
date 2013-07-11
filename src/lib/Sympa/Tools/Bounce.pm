@@ -68,7 +68,7 @@ sub parse_rfc1891_notification {
 	my ($message) = @_;
 
 	my $entity = $message->{'msg'};
-	return undef unless ($entity) ;
+	return undef unless ($entity);
 
 	my $result;
 
@@ -183,7 +183,7 @@ sub parse_notification {
 	my ($message) = @_;
 
 	my $entity = $message->{'msg'};
-	return undef unless ($entity) ;
+	return undef unless ($entity);
 
 	my %info;
 

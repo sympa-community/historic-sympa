@@ -73,7 +73,7 @@ sub get_recipients_status {
 			"type_notification as type, "                         .
 			"message_notification as notification_message "       .
 		"FROM notification_table "                                    .
-		"WHERE "                                                      . 
+		"WHERE "                                                      .
 			"list_notification=? AND "                            .
 			"robot_notification=? AND "                           .
 			"(" .
@@ -134,7 +134,7 @@ sub db_init_notification_table {
 
 	Sympa::Log::Syslog::do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
 
-	my $time = time ;
+	my $time = time;
 
 	my $source = Sympa::Database::get_source();
 	my $handle = $source->get_query_handle(

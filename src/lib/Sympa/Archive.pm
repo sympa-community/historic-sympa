@@ -133,7 +133,7 @@ sub scan_dir_archive {
 	}
 
 	my $all_msg = [];
-	my $i = 0 ;
+	my $i = 0;
 	foreach my $file (sort readdir(DIR)) {
 		next unless ($file =~ /^\d+$/);
 		Sympa::Log::Syslog::do_log ('debug',"($dir, $month): start parsing message $dir/$month/arctxt/$file");
@@ -161,9 +161,9 @@ sub scan_dir_archive {
 
 		Sympa::Log::Syslog::do_log('debug','adding message %s in archive to send', $msg->{'subject'});
 
-		push @{$all_msg}, $msg ;
+		push @{$all_msg}, $msg;
 	}
-	closedir DIR ;
+	closedir DIR;
 
 	return $all_msg;
 }
@@ -206,10 +206,10 @@ sub search_msgid {
 		Sympa::Log::Syslog::do_log ('err',"($dir, $msgid): unable to open dir $dir");
 		return undef;
 	}
-	chomp $msgid ;
+	chomp $msgid;
 
 	foreach my $file (grep (!/\./,readdir ARC)) {
-		next unless (open MAIL,"$dir/$file") ;
+		next unless (open MAIL,"$dir/$file");
 		while (<MAIL>) {
 			last if /^$/ ; #stop parse after end of headers
 			if (/^Message-id:\s?<?([^>\s]+)>?\s?/i ) {

@@ -865,7 +865,7 @@ sub upgrade {
 			foreach my $filename (sort @qfile) {
 				my $type;
 				my ($listname, $robot);
-				my %meta ;
+				my %meta;
 
 				Sympa::Log::Syslog::do_log('notice'," spool : $spooldir, fichier $filename");
 				if (-d $spooldir.'/'.$filename){
@@ -1145,14 +1145,14 @@ sub md5_encode_password {
 	$handle->execute();
 
 	$total = 0;
-	my $total_md5 = 0 ;
+	my $total_md5 = 0;
 
 	while (my $user = $handle->fetchrow_hashref('NAME_lc')) {
 
-		my $clear_password ;
+		my $clear_password;
 		if ($user->{'password_user'} =~ /^[0-9a-f]{32}/){
 			Sympa::Log::Syslog::do_log('info','password from %s already encoded as md5 fingerprint',$user->{'email_user'});
-			$total_md5++ ;
+			$total_md5++;
 			next;
 		}
 
@@ -1171,13 +1171,13 @@ sub md5_encode_password {
 		my $escaped_email =  $user->{'email_user'};
 		$escaped_email =~ s/\'/''/g;
 
-		my $query = 
+		my $query =
 			"UPDATE user_table "   .
 			"SET password_user=? " .
 			"WHERE email_user=?";
 
 		my $rows = $source->execute_query(
-			$query, 
+			$query,
 			Sympa::Auth::password_fingerprint($clear_password),
 			$escaped_email
 		);
@@ -1188,7 +1188,7 @@ sub md5_encode_password {
 		}
 	}
 
-	Sympa::Log::Syslog::do_log('info',"Updating password storage in table user_table using md5 for %d users",$total) ;
+	Sympa::Log::Syslog::do_log('info',"Updating password storage in table user_table using md5 for %d users",$total);
 	if ($total_md5) {
 		Sympa::Log::Syslog::do_log('info',"Found in table user %d password stored using md5, did you run Sympa before upgrading ?", $total_md5 );
 	}

@@ -473,9 +473,9 @@ sub mail_message {
 		shift @bodysection;                                          # remove headers
 		$msg_body = join ("\n\n",@bodysection);                      # convert it back as string
 	}
-	$message->{'body_as_string'} = $msg_body ;
+	$message->{'body_as_string'} = $msg_body;
 
-	my %rcpt_by_dom ;
+	my %rcpt_by_dom;
 
 	my @sendto;
 	my @sendtobypacket;
@@ -494,7 +494,7 @@ sub mail_message {
 			$dom = $1;
 			chomp $dom;
 		}
-		$rcpt_by_dom{$dom} += 1 ;
+		$rcpt_by_dom{$dom} += 1;
 		Sympa::Log::Syslog::do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $params{nrcpt_by_domain}{$dom}");
 
 		if (
@@ -527,7 +527,7 @@ sub mail_message {
 	}
 
 	if ($#sendto >= 0) {
-		$numsmtp++ ;
+		$numsmtp++;
 		my @tab =  @sendto;
 		push @sendtobypacket, \@tab ;# do not replace this line by push @sendtobypacket, \@sendto !!!
 	}
@@ -888,7 +888,7 @@ sub _sending {
 		# send it now
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
 		*SMTP = _smtpto($params{from}, $params{rcpt}, $params{robot}, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
-		print SMTP $message->{'msg'}->as_string ;
+		print SMTP $message->{'msg'}->as_string;
 		unless (close SMTP) {
 			Sympa::Log::Syslog::do_log('err', 'could not close safefork to sendmail');
 			return undef;

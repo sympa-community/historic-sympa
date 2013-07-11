@@ -133,7 +133,7 @@ sub dump_html_var {
 		} elsif (ref($var) eq 'HASH' || $var->isa('Sympa::Scenario') || $var->isa('Sympa::List')) {
 			$html .= '<ul>';
 			foreach my $key (sort keys %{$var}) {
-				$html .= '<li>'.$key.'=' ;
+				$html .= '<li>'.$key.'=';
 				$html .=  dump_html_var($var->{$key});
 				$html .= '</li>';
 			}
@@ -323,7 +323,7 @@ Current encoding is NOT compatible with encoding of values with '"'
 sub string_2_hash {
 	my ($data) = @_;
 
-	my %hash ;
+	my %hash;
 
 	pos($data) = 0;
 	while ($data =~ /\G;?(\w+)\=\"((\\[\"\\]|[^\"])*)\"(?=(;|\z))/g) {
@@ -346,9 +346,9 @@ hash
 sub hash_2_string {
 	my ($refhash) = @_;
 
-	return undef unless ((ref($refhash))&& (ref($refhash) eq 'HASH')) ;
+	return undef unless ((ref($refhash))&& (ref($refhash) eq 'HASH'));
 
-	my $data_string ;
+	my $data_string;
 	foreach my $var (keys %$refhash ) {
 		next unless ($var);
 		my $val = $refhash->{$var};

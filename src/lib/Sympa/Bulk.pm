@@ -135,7 +135,7 @@ sub next {
 	# Select the most prioritary packet to lock.
 	my $handle = $self->{source}->get_query_handle(
 		"SELECT $limit_sybase "                         .
-			"messagekey_bulkmailer AS messagekey, " . 
+			"messagekey_bulkmailer AS messagekey, " .
 			"packetid_bulkmailer AS packetid "      .
 		"FROM bulkmailer_table "                        .
 		"WHERE "                                        .
@@ -257,7 +257,7 @@ sub messageasstring {
 	}
 	$handle->execute($messagekey);
 
-	my $messageasstring = $handle->fetchrow_hashref('NAME_lc') ;
+	my $messageasstring = $handle->fetchrow_hashref('NAME_lc');
 
 	unless ($messageasstring ){
 		Sympa::Log::Syslog::do_log('err',"could not fetch message $messagekey from spool");
@@ -298,7 +298,7 @@ sub message_from_spool {
 	}
 	$handle->execute($messagekey);
 
-	my $message_from_spool = $handle->fetchrow_hashref('NAME_lc') ;
+	my $message_from_spool = $handle->fetchrow_hashref('NAME_lc');
 
 	return {
 		'messageasstring' => MIME::Base64::decode($message_from_spool->{'message'}),
@@ -528,7 +528,7 @@ sub store {
 	# first store the message in spool_table
 	# because as soon as packet are created bulk.pl may distribute them
 
-	my $message_already_on_spool ;
+	my $message_already_on_spool;
 	my $bulkspool = Sympa::Spool->new(
 		name   => 'bulk',
 		source => $self->{source}
@@ -542,7 +542,7 @@ sub store {
 	) {
 		$message_already_on_spool = 1;
 	} else {
-		my $lock = $PID.'@'.hostname() ;
+		my $lock = $PID.'@'.hostname();
 		if ($message->{'messagekey'}) {
 			# move message to spool bulk and keep it locked
 			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $string});
@@ -603,7 +603,7 @@ sub store {
 			$already_tagged = 1;
 		}
 		$type = ref $packet;
-		my $rcptasstring ;
+		my $rcptasstring;
 		if  (ref $packet eq 'ARRAY'){
 			$rcptasstring  = join ',',@{$packet};
 		} else {
@@ -640,7 +640,7 @@ sub store {
 					"messagekey_bulkmailer, "       .
 					"messageid_bulkmailer, "        .
 					"packetid_bulkmailer, "         .
-					"receipients_bulkmailer, "      . 
+					"receipients_bulkmailer, "      .
 					"returnpath_bulkmailer, "       .
 					"robot_bulkmailer, "            .
 					"listname_bulkmailer, "         .
@@ -727,7 +727,7 @@ sub remove_bulkspool_message {
 	my ($self, $spool, $messagekey) = @_;
 
 	my $table = $spool.'_table';
-	my $key = 'messagekey_'.$spool ;
+	my $key = 'messagekey_'.$spool;
 
 	my $rows = $self->{source}->execute_query(
 		"DELETE FROM $table WHERE $key=?",

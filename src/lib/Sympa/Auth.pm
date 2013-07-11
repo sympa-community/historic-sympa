@@ -181,7 +181,7 @@ sub authentication {
 
 	if ($user->{'wrong_login_count'} > Sympa::Configuration::get_robot_conf($robot, 'max_wrong_password')){
 		# too many wrong login attemp
-		Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
+		Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1});
 		Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
 		Sympa::Log::Syslog::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 		return undef;
@@ -197,7 +197,7 @@ sub authentication {
 			my $fingerprint = password_fingerprint ($pwd);
 
 			if ($fingerprint eq $user->{'password'}) {
-				Sympa::List::update_global_user($email,{wrong_login_count => 0}) ;
+				Sympa::List::update_global_user($email,{wrong_login_count => 0});
 				return {'user' => $user,
 					'auth' => 'classic',
 					'alt_emails' => {$email => 'classic'}
@@ -208,7 +208,7 @@ sub authentication {
 				unless($user = Sympa::List::get_global_user($canonic)){
 					$user = {'email' => $canonic};
 				}
-				Sympa::List::update_global_user($canonic,{wrong_login_count => 0}) ;
+				Sympa::List::update_global_user($canonic,{wrong_login_count => 0});
 				return {'user' => $user,
 					'auth' => 'ldap',
 					'alt_emails' => {$email => 'ldap'}
@@ -218,7 +218,7 @@ sub authentication {
 	}
 
 	# increment wrong login count.
-	Sympa::List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
+	Sympa::List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1});
 
 	Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
 	Sympa::Log::Syslog::do_log('err','authentication: incorrect password for user %s', $email);
@@ -338,7 +338,7 @@ sub ldap_authentication {
 		@alternative = $entry->get_value($attribute_value, 'alloptions' => 1);
 		foreach my $alter (@alternative){
 			my $a = lc($alter);
-			$params->{'alt_emails'}{$a} = 'ldap' if($a) ;
+			$params->{'alt_emails'}{$a} = 'ldap' if($a);
 		}
 	}
 
@@ -385,7 +385,7 @@ sub get_email_by_net_id {
 
 	if (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'internal_email_by_netid'}) {
 		my $sso_config = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
-		my $netid_cookie = $sso_config->{'netid_http_header'} ;
+		my $netid_cookie = $sso_config->{'netid_http_header'};
 
 		$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 
@@ -406,7 +406,7 @@ sub get_email_by_net_id {
 		return undef;
 	}
 
-	my $filter = $ldap->{'ldap_get_email_by_uid_filter'} ;
+	my $filter = $ldap->{'ldap_get_email_by_uid_filter'};
 	$filter =~ s/\[([\w-]+)\]/$attributes->{$1}/ig;
 
 #	my @alternative_conf = split(/,/,$ldap->{'alternative_email_attribute'});
@@ -462,7 +462,7 @@ sub remote_app_check_password {
 	my $md5 = Sympa::Tools::md5_fingerprint($password);
 
 	# seach entry for trusted_application in Conf
-	my @trusted_apps ;
+	my @trusted_apps;
 
 	# select trusted_apps from robot context or sympa context
 	@trusted_apps = @{Sympa::Configuration::get_robot_conf($robot,'trusted_applications')};
@@ -472,7 +472,7 @@ sub remote_app_check_password {
 		if (lc($application->{'name'}) eq lc($trusted_application_name)) {
 			if ($md5 eq $application->{'md5password'}) {
 				# Sympa::Log::Syslog::do_log('debug', 'authentication succeed for %s',$application->{'name'});
-				my %proxy_for_vars ;
+				my %proxy_for_vars;
 				foreach my $varname (@{$application->{'proxy_for_variables'}}) {
 					$proxy_for_vars{$varname}=1;
 				}

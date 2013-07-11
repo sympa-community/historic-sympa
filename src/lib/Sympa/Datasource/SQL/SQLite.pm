@@ -143,7 +143,7 @@ sub set_autoinc {
 		$params{'table'}
 	);
 
-	my $query = 
+	my $query =
 		"ALTER TABLE $params{table} CHANGE $params{field} " .
 		"$params{field} BIGINT(20) NOT NULL AUTO_INCREMENT";
 	my $rows = $self->{dbh}->do($query);

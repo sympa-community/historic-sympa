@@ -39,7 +39,7 @@ sub request {
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-			$ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'} ;
+			$ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'};
 		}
 
 		## Empty cache of the List.pm module

@@ -350,7 +350,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				my $type;
 				my $list;
 				my ($listname, $robot);
-				my %meta ;
+				my %meta;
 				my $spool;
 
 				## z and Z are a null priority, so file stay in queue and are processed
@@ -381,12 +381,12 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 				# spooler is able to recognize if message is bounce or automatic family list creation.'
 				if ($listname =~ /Sympa_Bounce\./) {
-					$listname =~ s/Sympa_Bounce\.// ;
+					$listname =~ s/Sympa_Bounce\.//;
 					$spool = $bouncespool;
 				} else {
 					$spool = $msgspool;
 					if ($listname =~ /Sympa_Automatic\./) {
-						$listname =~ s/Sympa_Automatic\.// ;
+						$listname =~ s/Sympa_Automatic\.//;
 						$meta{'create_list_if_needed'} = 1;
 					} else {
 						$meta{'create_list_if_needed'} = 0;
@@ -435,7 +435,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				$meta{'robot'} = $robot if $robot;
 				$meta{'list'} = $listname if $listname;
 				if ($priority) {
-					$meta{'priority'} = $priority ;
+					$meta{'priority'} = $priority;
 				} else {
 					$meta{'priority'} = 1;
 				}

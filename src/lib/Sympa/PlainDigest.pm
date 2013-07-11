@@ -318,7 +318,7 @@ sub _do_text_html {
 		$text = $formatter->format($tree);
 		$tree->delete();
 		$text = Encode::encode_utf8($text);
-	} ;
+	};
 	if ($EVAL_ERROR) {
 		$outstring .= Sympa::Language::gettext("\n[** Unable to process HTML message part **]\n");
 		return 1;
