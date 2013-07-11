@@ -2574,33 +2574,33 @@ sub check_param_in {
 		my %mode;
 		$mode{'read'} = 1;
 		my %access = d_access_control(\%mode,"");
-	$param->{'may_d_read'} = $access{'may'}{'read'};
+		$param->{'may_d_read'} = $access{'may'}{'read'};
 
-	## Check the status (exists, deleted, doesn't exist) of the shared directory
-	$param->{'shared'} = $list->get_shared_status();
-}
+		## Check the status (exists, deleted, doesn't exist) of the shared directory
+		$param->{'shared'} = $list->get_shared_status();
+	}
 
-## Check if the current user can create a list.
-my $result = Sympa::Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
-	{'sender' => $param->{'user'}{'email'},
-		'remote_host' => $param->{'remote_host'},
-		'remote_addr' => $param->{'remote_addr'}});
-my $r_action;
-my $reason;
-if (ref($result) eq 'HASH') {
-	$r_action = $result->{'action'};
-	$reason = $result->{'reason'};
-}
-$param->{'create_list_reason'} = $reason;
+	## Check if the current user can create a list.
+	my $result = Sympa::Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
+		{'sender' => $param->{'user'}{'email'},
+			'remote_host' => $param->{'remote_host'},
+			'remote_addr' => $param->{'remote_addr'}});
+	my $r_action;
+	my $reason;
+	if (ref($result) eq 'HASH') {
+		$r_action = $result->{'action'};
+		$reason = $result->{'reason'};
+	}
+	$param->{'create_list_reason'} = $reason;
 
-if ($param->{'user'}{'email'} &&
-	(($param->{'create_list'} = $r_action ) =~ /do_it|listmaster/)) {
-	$param->{'may_create_list'} = 1;
-} else {
-	undef ($param->{'may_create_list'});
-}
+	if ($param->{'user'}{'email'} &&
+		(($param->{'create_list'} = $r_action ) =~ /do_it|listmaster/)) {
+		$param->{'may_create_list'} = 1;
+	} else {
+		undef ($param->{'may_create_list'});
+	}
 
-return 1;
+	return 1;
 
 }
 
@@ -3318,117 +3318,117 @@ sub do_sso_login {
 			}
 		}
 
-	} else {
-		##
-		if (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}) {
-			my @email_list = split($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'},
-				lc($ENV{$Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
-			$email = $email_list[0]; ## Only get the first occurence if multi-valued
-
 		} else {
-			unless (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'ldap_host'} &&
-				defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'ldap_get_email_by_uid_filter'}) {
-				Sympa::Report::reject_report_web('intern','auth_conf_no_identified_user',{},$param->{'action'},'','',$robot);
-				wwslog('err','do_sso_login: auth.conf error : either email_http_header or ldap_host/ldap_get_email_by_uid_filter entries should be defined');
-				web_db_log({'parameters' => $in{'auth_service_name'},
+			if (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}) {
+				my @email_list = split($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'},
+					lc($ENV{$Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
+				$email = $email_list[0]; ## Only get the first occurence if multi-valued
+
+			} else {
+				unless (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'ldap_host'} &&
+					defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'ldap_get_email_by_uid_filter'}) {
+					Sympa::Report::reject_report_web('intern','auth_conf_no_identified_user',{},$param->{'action'},'','',$robot);
+					wwslog('err','do_sso_login: auth.conf error : either email_http_header or ldap_host/ldap_get_email_by_uid_filter entries should be defined');
+					web_db_log({'parameters' => $in{'auth_service_name'},
 						'target_email' => $in{'email'},
 						'status' => 'error',
 						'error_type' => 'internal'});
-				return 'home';
+					return 'home';
+				}
+
+				$email = Sympa::Auth::get_email_by_net_id($robot, $sso_id, \%ENV);
+			}
+		}
+
+		unless ($email) {
+			Sympa::Report::reject_report_web('intern','no_identified_user',{},$param->{'action'},'','',$robot);
+			wwslog('err','do_sso_login: user could not be identified, no %s HTTP header set', $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'});
+			web_db_log({'parameters' => $in{'auth_service_name'},
+
+				'status' => 'error',
+				'error_type' => 'no_email'});
+			return 'home';
+		}
+
+		$param->{'user'}{'email'} = $email;
+		$session->{'email'} = $email;
+		$session->{'auth'} = 'generic_sso' ;
+
+		wwslog('notice', 'User identified as %s', $email);
+
+		## There are two ways to list the attributes that Sympa will cache for the user
+		## Either with a defined header prefix (http_header_prefix)
+		## Or with an explicit list of header fields (http_header_list)
+		my @sso_attr;
+		if ($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
+			my $list_of_headers = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'};
+
+			foreach my $field (split(/,/, $list_of_headers)) {
+				if (defined $ENV{$field}) {
+					push @sso_attr, "$field=$ENV{$field}";
+				}
 			}
 
-			$email = Sympa::Auth::get_email_by_net_id($robot, $sso_id, \%ENV);
-	}
-}
+		} elsif ($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
 
-unless ($email) {
-	Sympa::Report::reject_report_web('intern','no_identified_user',{},$param->{'action'},'','',$robot);
-	wwslog('err','do_sso_login: user could not be identified, no %s HTTP header set', $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'});
-	web_db_log({'parameters' => $in{'auth_service_name'},
+			my $prefix = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
 
-			'status' => 'error',
-			'error_type' => 'no_email'});
-	return 'home';
-}
-
-$param->{'user'}{'email'} = $email;
-$session->{'email'} = $email;
-$session->{'auth'} = 'generic_sso' ;
-
-wwslog('notice', 'User identified as %s', $email);
-
-## There are two ways to list the attributes that Sympa will cache for the user
-## Either with a defined header prefix (http_header_prefix)
-## Or with an explicit list of header fields (http_header_list)
-my @sso_attr;
-if ($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
-	my $list_of_headers = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'};
-
-	foreach my $field (split(/,/, $list_of_headers)) {
-		if (defined $ENV{$field}) {
-			push @sso_attr, "$field=$ENV{$field}";
+			foreach my $k (keys %ENV) {
+				if ($k =~ /^$prefix/) {
+					push @sso_attr, "$k=$ENV{$k}";
+				}
+			}
 		}
-	}
 
-} elsif ($Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
+		my $all_sso_attr = join ';', @sso_attr;
 
-	my $prefix = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
-
-	foreach my $k (keys %ENV) {
-		if ($k =~ /^$prefix/) {
-			push @sso_attr, "$k=$ENV{$k}";
+		## Create user entry if required
+		unless (Sympa::List::is_global_user($email)) {
+			unless (Sympa::List::add_global_user({'email' => $email})) {
+				Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},$param->{'action'},'',$email,$robot);
+				wwslog('info','do_sso_login: add failed');
+				web_db_log({'parameters' => $in{'auth_service_name'},
+					'target_email' => $in{'email'},
+					'status' => 'error',
+					'error_type' => 'internal'});
+				return undef;
+			}
 		}
-	}
-}
 
-my $all_sso_attr = join ';', @sso_attr;
+		unless (Sympa::List::update_global_user($email,
+			{'attributes' => $all_sso_attr })) {
+			Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},$param->{'action'},'',$email,$robot);
+			wwslog('info','do_sso_login: update failed');
+			web_db_log({'parameters' => $in{'auth_service_name'},
+				'target_email' => $in{'email'},
+				'status' => 'error',
+				'error_type' => 'internal'});
+			return undef;
+		}
 
-## Create user entry if required
-unless (Sympa::List::is_global_user($email)) {
-	unless (Sympa::List::add_global_user({'email' => $email})) {
-		Sympa::Report::reject_report_web('intern','add_user_db_failed',{'user'=>$email},$param->{'action'},'',$email,$robot);
-		wwslog('info','do_sso_login: add failed');
+		Sympa::Report::notice_report_web('you_have_been_authenticated',{},$param->{'action'});
+
+		## Keep track of the SSO used to login
+		## Required to provide logout feature if available
+		$session->{'sso_id'} = $in{'auth_service_name'};
+
+		do_redirect ($session->{'redirect_url'});
+		return ;
+	} else {
+		## Unknown SSO service
+		Sympa::Report::reject_report_web('intern','unknown_authentication_service',{'name'=> $in{'auth_service_name'}},$param->{'action'},'','',$robot);
+		wwslog('err','do_sso_login: unknown authentication service %s', $in{'auth_service_name'});
 		web_db_log({'parameters' => $in{'auth_service_name'},
 				'target_email' => $in{'email'},
 				'status' => 'error',
 				'error_type' => 'internal'});
-		return undef;
+		return 'home';
 	}
-}
 
-unless (Sympa::List::update_global_user($email,
-		{'attributes' => $all_sso_attr })) {
-	Sympa::Report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},$param->{'action'},'',$email,$robot);
-	wwslog('info','do_sso_login: update failed');
 	web_db_log({'parameters' => $in{'auth_service_name'},
-			'target_email' => $in{'email'},
-			'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
-
-Sympa::Report::notice_report_web('you_have_been_authenticated',{},$param->{'action'});
-
-## Keep track of the SSO used to login
-## Required to provide logout feature if available
-$session->{'sso_id'} = $in{'auth_service_name'};
-
-do_redirect ($session->{'redirect_url'});
-return ;
-   } else {
-	## Unknown SSO service
-	Sympa::Report::reject_report_web('intern','unknown_authentication_service',{'name'=> $in{'auth_service_name'}},$param->{'action'},'','',$robot);
-	wwslog('err','do_sso_login: unknown authentication service %s', $in{'auth_service_name'});
-	web_db_log({'parameters' => $in{'auth_service_name'},
-			'target_email' => $in{'email'},
-			'status' => 'error',
-			'error_type' => 'internal'});
-	return 'home';
-   }
-   web_db_log({'parameters' => $in{'auth_service_name'},
 		'target_email' => $in{'email'},
 		'status' => 'success'});
-   return 1;
+	return 1;
 }
 
 sub do_sso_login_succeeded {
@@ -4062,45 +4062,44 @@ sub do_active_lists {
 			}
 			close MSG_COUNT ;
 
-			$param->{'which'}{$l}{'msg_count'}	= count_total_msg_since($oldest_day,\%count);
+			$param->{'which'}{$l}{'msg_count'} = count_total_msg_since($oldest_day,\%count);
 
-		if ($in{'for'}) {
-			my $average = $param->{'which'}{$l}{'msg_count'} / $in{'for'}; ## nb msg by day
-			$average = int($average * 10);
-			$param->{'which'}{$l}{'average'} = $average /10; ## one digit
+			if ($in{'for'}) {
+				my $average = $param->{'which'}{$l}{'msg_count'} / $in{'for'}; ## nb msg by day
+				$average = int($average * 10);
+				$param->{'which'}{$l}{'average'} = $average /10; ## one digit
+			}
+		} else {
+			$param->{'which'}{$l}{'msg_count'}	= 0;
 		}
-	} else {
-		$param->{'which'}{$l}{'msg_count'}	= 0;
 	}
-}
 
-my $nb_lists = 0;
+	my $nb_lists = 0;
 
-## get "count" lists
-foreach my $l ( sort {$param->{'which'}{$b}{'msg_count'} <=> $param->{'which'}{$a}{'msg_count'}} (keys (%{$param->{'which'}}))) {
+	## get "count" lists
+	foreach my $l ( sort {$param->{'which'}{$b}{'msg_count'} <=> $param->{'which'}{$a}{'msg_count'}} (keys (%{$param->{'which'}}))) {
+		if (defined $in{'count'}) {
+			$nb_lists++;
+			if ($nb_lists > $in{'count'}) {
+				last;
+			}
+		}
+
+		$param->{'which'}{$l}{'name'} = $l;
+		push @{$param->{'active_lists'}} , $param->{'which'}{$l};
+
+	}
+
 	if (defined $in{'count'}) {
-		$nb_lists++;
-		if ($nb_lists > $in{'count'}) {
-			last;
-		}
+		$param->{'count'} = $in{'count'};
+	}
+	if (defined $in{'for'}) {
+		$param->{'for'} = $in{'for'};
 	}
 
-	$param->{'which'}{$l}{'name'} = $l;
-	push @{$param->{'active_lists'}} , $param->{'which'}{$l};
+	$param->{'which'} = undef;
 
-}
-
-if (defined $in{'count'}) {
-	$param->{'count'} = $in{'count'};
-}
-if (defined $in{'for'}) {
-	$param->{'for'} = $in{'for'};
-}
-
-$param->{'which'} = undef;
-
-
-return 1;
+	return 1;
 }
 
 sub count_total_msg_since {
@@ -5506,8 +5505,7 @@ sub do_edit_config {
 	}
 
 	$param->{'editable_params'} = \@editable_params ;
-return 1;
-
+	return 1;
 }
 
 # Change log_level for the current session
@@ -6107,22 +6105,21 @@ sub do_skinsedit {
 				return undef;
 			}
 			unless (Sympa::Template::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
-			my $error = Sympa::Template::get_error();
-			$param->{'tt2_error'} = $error;
-			Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot,[$error]);
-			wwslog('info', "do_skinsedit : error while installing $css_file");
+				my $error = Sympa::Template::get_error();
+				$param->{'tt2_error'} = $error;
+				Sympa::List::send_notify_to_listmaster('web_tt2_error', $robot,[$error]);
+				wwslog('info', "do_skinsedit : error while installing $css_file");
+			}
+			close (CSS) ;
+
+			## Make the CSS readable to anyone
+			chmod 0775, "$css_file";
+
 		}
-		close (CSS) ;
 
-		## Make the CSS readable to anyone
-		chmod 0775, "$css_file";
-
-
+		$param->{'css_result'} = 1 ;
 	}
-
-	$param->{'css_result'} = 1 ;
-}
-return 1;
+	return 1;
 }
 
 # Multiple add
@@ -6382,28 +6379,26 @@ sub do_del {
 
 	$total = $list->delete_list_member('users' => \@removed_users, 'exclude' =>'1', 'parameter' => 'deleted by admin', 'daemon' => 'wwsympa.fcgi');
 
-unless( defined $total) {
-	Sympa::Report::reject_report_web('intern','delete_subscriber_db_failed',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	wwslog('info','do_del: failed');
-	web_db_log({'target_email' => $in{'email'},
-			'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
+	unless( defined $total) {
+		Sympa::Report::reject_report_web('intern','delete_subscriber_db_failed',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+		wwslog('info','do_del: failed');
+		web_db_log({'target_email' => $in{'email'},
+				'status' => 'error',
+				'error_type' => 'internal'});
+		return undef;
+	}
 
-Sympa::Report::notice_report_web('del_performed',{'total' => $total},$param->{'action'});
-web_db_log({'target_email' => $in{'email'},
+	Sympa::Report::notice_report_web('del_performed',{'total' => $total},$param->{'action'});
+	web_db_log({'target_email' => $in{'email'},
 		'status' => 'success'});
 
+	$param->{'is_subscriber'} = 1;
+	$param->{'may_signoff'} = 1;
 
+	## Skip search because we don't have the expression anymore
+	delete $in{'previous_action'} if ($in{'previous_action'} eq 'search');
 
-$param->{'is_subscriber'} = 1;
-$param->{'may_signoff'} = 1;
-
-## Skip search because we don't have the expression anymore
-delete $in{'previous_action'} if ($in{'previous_action'} eq 'search');
-
-return $in{'previous_action'} || 'review';
+	return $in{'previous_action'} || 'review';
 }
 
 # Web page for an editor to moderate documents and
@@ -7774,36 +7769,36 @@ sub do_send_me {
 			message         => $message,
 			from            => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 			recipient       => \$param->{'user'}{'email'},
-		robot           => $robot,
-		cookie          => $Sympa::Configuration::Conf{'cookie'},
-		key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
-		openssl         => $Sympa::Configuration::Conf{'openssl'},
-		packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
-		tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
-		maxsmtp         => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
-		priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
-		sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
-		sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
-		sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
-	);
+			robot           => $robot,
+			cookie          => $Sympa::Configuration::Conf{'cookie'},
+			key_passwd      => $Sympa::Configuration::Conf{'key_passwd'},
+			openssl         => $Sympa::Configuration::Conf{'openssl'},
+			packet_priority => $Sympa::Configuration::Conf{'sympa_packet_priority'},
+			tmpdir          => $Sympa::Configuration::Conf{'tmpdir'},
+			maxsmtp         => Sympa::Configuration::get_robot_conf($robot, 'maxsmtp'),
+			priority        => Sympa::Configuration::get_robot_conf($robot, 'request_priority'),
+			sendmail        => Sympa::Configuration::get_robot_conf($robot, 'sendmail'),
+			sendmail_args   => Sympa::Configuration::get_robot_conf($robot, 'sendmail_args'),
+			sympa           => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+		);
 
-	unless (defined $result) {
-		$param->{'status'} = 'message_err';
-		wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
+		unless (defined $result) {
+			$param->{'status'} = 'message_err';
+			wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
+			return undef;
+		}
+		wwslog('info', 'do_send_me message %s spooled for %s', "$arcpath/arctxt/$msgfile", $param->{'user'}{'email'} );
+		Sympa::Report::notice_report_web('performed',{},$param->{'action'});
+		$in{'month'} = $in{'yyyy'}."-".$in{'month'};
+		return 'arc';
+
+	} else {
+		wwslog('info', 'do_send_me : no file match msgid');
+		$param->{'status'} = 'not_found';
 		return undef;
 	}
-	wwslog('info', 'do_send_me message %s spooled for %s', "$arcpath/arctxt/$msgfile", $param->{'user'}{'email'} );
-	Sympa::Report::notice_report_web('performed',{},$param->{'action'});
-	$in{'month'} = $in{'yyyy'}."-".$in{'month'};
-	return 'arc';
 
-} else {
-	wwslog('info', 'do_send_me : no file match msgid');
-	$param->{'status'} = 'not_found';
-	return undef;
-}
-
-return 1;
+	return 1;
 }
 
 # Display message as text/plain in archives
@@ -8039,63 +8034,61 @@ sub do_arcsearch {
 	}
 	$search->words(\@words);
 
-$search->key_word (join('|',@words));
+	$search->key_word (join('|',@words));
 
-if ($in{'case'} eq 'off') {
-	$search->case(1);
-	$search->key_word ('(?i)' . $search->key_word);
-}
-if ($in{'how'} eq 'any') {
-	$search->function2 ($search->match_any(@words));
-	$search->how ('any');
-} elsif ($in{'how'} eq 'all') {
-	$search->function1 ($search->body_match_all(@clean_words,@words));
-	$search->function2 ($search->match_all(@words));
-	$search->how       ('all');
-} else {
-	$search->function2 ($search->match_this(@words));
-	$search->how       ('phrase');
-}
+	if ($in{'case'} eq 'off') {
+		$search->case(1);
+		$search->key_word ('(?i)' . $search->key_word);
+	}
+	if ($in{'how'} eq 'any') {
+		$search->function2 ($search->match_any(@words));
+		$search->how ('any');
+	} elsif ($in{'how'} eq 'all') {
+		$search->function1 ($search->body_match_all(@clean_words,@words));
+		$search->function2 ($search->match_all(@words));
+		$search->how       ('all');
+	} else {
+		$search->function2 ($search->match_this(@words));
+		$search->how       ('phrase');
+	}
 
-$search->subj (defined($in{'subj'}));
-$search->from (defined($in{'from'}));
-$search->date (defined($in{'date'}));
-$search->body (defined($in{'body'}));
+	$search->subj (defined($in{'subj'}));
+	$search->from (defined($in{'from'}));
+	$search->date (defined($in{'date'}));
+	$search->body (defined($in{'body'}));
 
-$search->body (1)
-if ( not ($search->subj)
+	$search->body (1)
+	if ( not ($search->subj)
 		and not ($search->from)
 		and not ($search->body)
 		and not ($search->date));
 
-my $searched = $search->search;
+	my $searched = $search->search;
 
-if (defined($search->error)) {
-	wwslog('info','do_arcsearch_search_error : %s', $search->error);
-}
+	if (defined($search->error)) {
+		wwslog('info','do_arcsearch_search_error : %s', $search->error);
+	}
 
 $search->searched($searched);
 
-if ($searched < $search->file_count) {
-	$param->{'continue'} = 1;
-}
+	if ($searched < $search->file_count) {
+		$param->{'continue'} = 1;
+	}
 
-foreach my $field ('list','archive_name','age','body','case','date','from','how','limit','match','subj') {
-	$param->{$field} = $in{$field};
-}
+	foreach my $field ('list','archive_name','age','body','case','date','from','how','limit','match','subj') {
+		$param->{$field} = $in{$field};
+	}
 
-$param->{'body_count'} = $search->body_count;
-$param->{'clean_words'} = $search->clean_words;
-$param->{'date_count'} = $search->date_count;
-$param->{'from_count'} = $search->from_count;
-$param->{'subj_count'} = $search->subj_count;
+	$param->{'body_count'} = $search->body_count;
+	$param->{'clean_words'} = $search->clean_words;
+	$param->{'date_count'} = $search->date_count;
+	$param->{'from_count'} = $search->from_count;
+	$param->{'subj_count'} = $search->subj_count;
+	$param->{'num'} = $search->file_count + 1;
+	$param->{'searched'} = $search->searched;
+	$param->{'res'} = $search->res;
 
-$param->{'num'} = $search->file_count + 1;
-$param->{'searched'} = $search->searched;
-
-$param->{'res'} = $search->res;
-
-return 1;
+	return 1;
 }
 
 # Search message-id in web archives
@@ -8148,31 +8141,31 @@ sub do_arcsearch_id {
 	}
 	$search->words (\@words);
 
-$search->key_word (join('|',@words));
+	$search->key_word (join('|',@words));
 
-$search->function2 ($search->match_this(@words));
+	$search->function2 ($search->match_this(@words));
 
-$search->id (1);
+	$search->id (1);
 
-my $searched = $search->search;
+	my $searched = $search->search;
 
-if (defined($search->error)) {
-	wwslog('info','do_arcsearch_id_search_error : %s', $search->error);
-}
+	if (defined($search->error)) {
+		wwslog('info','do_arcsearch_id_search_error : %s', $search->error);
+	}
 
-$search->searched($searched);
+	$search->searched($searched);
 
-$param->{'res'} = $search->res;
+	$param->{'res'} = $search->res;
 
-unless ($#{$param->{'res'}} >= 0) {
-	Sympa::Report::reject_report_web('intern_quiet','archive_not_found',{'msgid'=> $in{'msgid'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	wwslog('err','No message found in archives matching Message-ID %s', $in{'msgid'});
-	return 'arc';
-}
+	unless ($#{$param->{'res'}} >= 0) {
+		Sympa::Report::reject_report_web('intern_quiet','archive_not_found',{'msgid'=> $in{'msgid'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+		wwslog('err','No message found in archives matching Message-ID %s', $in{'msgid'});
+		return 'arc';
+	}
 
-$param->{'redirect_to'} = $param->{'res'}[0]{'file'};
+	$param->{'redirect_to'} = $param->{'res'}[0]{'file'};
 
-return 1;
+	return 1;
 }
 
 # get pendings lists
@@ -8514,85 +8507,85 @@ sub do_create_list {
 
 	my $parameters;
 	push @{$parameters->{'owner'}},\%owner;
-$parameters->{'listname'} = $in{'listname'};
-$parameters->{'subject'} = $in{'subject'};
-$parameters->{'creation_email'} = $param->{'user'}{'email'};
-$parameters->{'lang'} = $param->{'lang'};
-$parameters->{'status'} = $param->{'status'};
-$parameters->{'topics'} = $in{'topics'};
-$parameters->{'description'} = $in{'info'};
-$parameters->{'custom_input'} = $in{'custom_input'};
+	$parameters->{'listname'} = $in{'listname'};
+	$parameters->{'subject'} = $in{'subject'};
+	$parameters->{'creation_email'} = $param->{'user'}{'email'};
+	$parameters->{'lang'} = $param->{'lang'};
+	$parameters->{'status'} = $param->{'status'};
+	$parameters->{'topics'} = $in{'topics'};
+	$parameters->{'description'} = $in{'info'};
+	$parameters->{'custom_input'} = $in{'custom_input'};
 
-## create liste
-my $testlist = Sympa::List->new(
-	name   => $in{'listname'},
-	robot  => $robot,
-	source => Sympa::Database::get_source()
-);
-if ($testlist) {
-	Sympa::Report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	wwslog('info','do_create_list: requested list %s already exist (from %s)',$in{'listname'},$param->{'user'}{'email'});
+	## create liste
+	my $testlist = Sympa::List->new(
+		name   => $in{'listname'},
+		robot  => $robot,
+		source => Sympa::Database::get_source()
+	);
+	if ($testlist) {
+		Sympa::Report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+		wwslog('info','do_create_list: requested list %s already exist (from %s)',$in{'listname'},$param->{'user'}{'email'});
+		web_db_log({'parameters' => $in{'listname'},
+				'list' => $in{'listname'},
+				'status' => 'error',
+				'error_type' => 'user'});
+		return 'create_list_request';
+	}
+	my $resul = Sympa::Admin::create_list_old($parameters,$in{'template'},$robot,"web", $param->{'user'}{'email'});
+	unless(defined $resul) {
+		Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+		wwslog('info','do_create_list: unable to create list %s for %s',$in{'listname'},$param->{'user'}{'email'});
+		web_db_log({'parameters' => $in{'listname'},
+				'list' => $in{'listname'},
+				'status' => 'error',
+				'error_type' => 'internal'});
+		return 'create_list_request';
+	}
+
+	## Create list object
+	$in{'list'} = $in{'listname'};
+	check_param_in();
+
+	if  ($param->{'create_action'} =~ /do_it/i) {
+		if ($resul->{'aliases'} == 1) {
+			$param->{'auto_aliases'}  = 1;
+		} else {
+			Sympa::Report::reject_report_web('intern','failed_to_install_aliases',{'listname'=> $in{'listname'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+			wwslog('err','Failed to install list aliases');
+		}
+	}
+
+	## notify listmaster
+	my $list = Sympa::List->new(
+		name   => $in{'listname'},
+		source => Sympa::Database::get_source()
+	);
+	unless (defined $list) {
+		wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
+		Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+		return 'create_list_request';
+	}
+
+	if ($param->{'create_action'} =~ /notify/) {
+		wwslog('info','notify listmaster');
+
+		unless (Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,
+				{'list' => $list,
+					'email' => $param->{'user'}{'email'}})) {
+			wwslog('notice',"Unable to send notify 'request_list_creation' to listmaster");
+		}
+	}
+
 	web_db_log({'parameters' => $in{'listname'},
 			'list' => $in{'listname'},
-			'status' => 'error',
-			'error_type' => 'user'});
-	return 'create_list_request';
-}
-my $resul = Sympa::Admin::create_list_old($parameters,$in{'template'},$robot,"web", $param->{'user'}{'email'});
-unless(defined $resul) {
-	Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	wwslog('info','do_create_list: unable to create list %s for %s',$in{'listname'},$param->{'user'}{'email'});
-	web_db_log({'parameters' => $in{'listname'},
-			'list' => $in{'listname'},
-			'status' => 'error',
-			'error_type' => 'internal'});
-	return 'create_list_request';
-}
-
-## Create list object
-$in{'list'} = $in{'listname'};
-check_param_in();
-
-if  ($param->{'create_action'} =~ /do_it/i) {
-	if ($resul->{'aliases'} == 1) {
-		$param->{'auto_aliases'}  = 1;
-	} else {
-		Sympa::Report::reject_report_web('intern','failed_to_install_aliases',{'listname'=> $in{'listname'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		wwslog('err','Failed to install list aliases');
-	}
-}
-
-## notify listmaster
-my $list = Sympa::List->new(
-	name   => $in{'listname'},
-	source => Sympa::Database::get_source()
-);
-unless (defined $list) {
-	wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
-	Sympa::Report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	return 'create_list_request';
-}
-
-if ($param->{'create_action'} =~ /notify/) {
-	wwslog('info','notify listmaster');
-
-	unless (Sympa::List::send_notify_to_listmaster('request_list_creation',$robot,
-			{'list' => $list,
-				'email' => $param->{'user'}{'email'}})) {
-		wwslog('notice',"Unable to send notify 'request_list_creation' to listmaster");
-	}
-}
-
-web_db_log({'parameters' => $in{'listname'},
-		'list' => $in{'listname'},
-		'status' => 'success'});
+			'status' => 'success'});
 
 
-$in{'list'} = $resul->{'list'}{'name'};
-check_param_in();
+	$in{'list'} = $resul->{'list'}{'name'};
+	check_param_in();
 
-$param->{'listname'} = $resul->{'list'}{'name'};
-return 1;
+	$param->{'listname'} = $resul->{'list'}{'name'};
+	return 1;
 }
 
 # Sends back the list creation edition form.
@@ -8639,31 +8632,29 @@ sub do_create_list_request {
 	}
 	$param->{'list_of_topics'} = \%topics;
 
-if ($in{'topics'}) {
-	my ($topic, $subtopic) = split('/', $in{'topics'});
-	if($subtopic) {
-		$param->{'list_of_topics'}{$topic}{'sub'}{$subtopic}{'selected'} = 1;
-	} else {
-		$param->{'list_of_topics'}{$topic}{'selected'} = 1;
+	if ($in{'topics'}) {
+		my ($topic, $subtopic) = split('/', $in{'topics'});
+		if($subtopic) {
+			$param->{'list_of_topics'}{$topic}{'sub'}{$subtopic}{'selected'} = 1;
+		} else {
+			$param->{'list_of_topics'}{$topic}{'selected'} = 1;
+		}
 	}
-}
 
-unless ($param->{'list_list_tpl'} = Sympa::Tools::get_list_list_tpl($robot, $Sympa::Configuration::Conf{'etc'})) {
-	Sympa::Report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-}
+	unless ($param->{'list_list_tpl'} = Sympa::Tools::get_list_list_tpl($robot, $Sympa::Configuration::Conf{'etc'})) {
+		Sympa::Report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	}
 
-Sympa::Template::allow_absolute_path();
+	Sympa::Template::allow_absolute_path();
 
-foreach my $template (keys %{$param->{'list_list_tpl'}}){
-	$param->{'tpl_count'} ++ ;
-}
+	foreach my $template (keys %{$param->{'list_list_tpl'}}){
+		$param->{'tpl_count'} ++ ;
+	}
 
-$param->{'list_list_tpl'}{$in{'template'}}{'selected'} = 1
-if ($in{'template'});
+	$param->{'list_list_tpl'}{$in{'template'}}{'selected'} = 1
+	if ($in{'template'});
 
-
-return 1 ;
-
+	return 1 ;
 }
 
 # WWSympa Home-Page
@@ -8809,11 +8800,11 @@ sub do_editsubscriber {
 			}
 		}
 		$param->{'additional_fields'} = \%data;
-}
+	}
 
-$param->{'previous_action'} = $in{'previous_action'};
+	$param->{'previous_action'} = $in{'previous_action'};
 
-return 1;
+	return 1;
 }
 
 sub do_viewbounce {
@@ -9111,20 +9102,20 @@ sub do_oauth_temporary {
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_temporary',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
 		request_parameters => \%in,
-	config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
-);
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
+	);
 
-my $bad = defined($provider) ? $provider->check_request() : 400;
-my $http_code = $bad ? $bad : 200;
-my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
+	my $bad = defined($provider) ? $provider->check_request() : 400;
+	my $http_code = $bad ? $bad : 200;
+	my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
 
-print 'Status: '.$http_code.' '.$http_str."\n";
-print "Cache-control: no-cache\n";
-print "Content-type: text/plain\n\n";
+	print 'Status: '.$http_code.' '.$http_str."\n";
+	print "Cache-control: no-cache\n";
+	print "Content-type: text/plain\n\n";
 
-print $provider->generate_temporary() unless($bad);
+	print $provider->generate_temporary() unless($bad);
 
-return 1;
+	return 1;
 }
 
 # User needs to authorize access
@@ -9187,23 +9178,23 @@ sub do_oauth_access {
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_access',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
 		request_parameters => \%in,
-	config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
-);
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
+	);
 
-my $bad = defined($provider) ? $provider->check_request(checktoken => 1) : 400;
-my $http_code = $bad ? $bad : 200;
-my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
+	my $bad = defined($provider) ? $provider->check_request(checktoken => 1) : 400;
+	my $http_code = $bad ? $bad : 200;
+	my $http_str = $bad ? (defined($provider) ? $provider->{'util'}->errstr : 'Bad Request') : 'OK';
 
-print 'Status: '.$http_code.' '.$http_str."\n";
-print "Cache-control: no-cache\n";
-print "Content-type: text/plain\n\n";
+	print 'Status: '.$http_code.' '.$http_str."\n";
+	print "Cache-control: no-cache\n";
+	print "Content-type: text/plain\n\n";
 
-print $provider->generate_access(
-	token => $provider->{'params'}{'oauth_token'},
-	verifier => $provider->{'params'}{'oauth_verifier'}
-) unless($bad);
+	print $provider->generate_access(
+		token => $provider->{'params'}{'oauth_token'},
+		verifier => $provider->{'params'}{'oauth_verifier'}
+	) unless($bad);
 
-return 1;
+	return 1;
 }
 
 # User ask for access token check
@@ -9305,27 +9296,27 @@ sub do_voot {
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/voot/'.$in{'voot_path'},
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
 		request_parameters => \%in,
-	robot => $robot,
-	config =>  $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
-);
+		robot => $robot,
+		config => $Sympa::Configuration::Conf{'etc'}.'/oauth_provider.conf'
+	);
 
-my $bad = defined($provider) ? $provider->check_request() : 400;
-my $http_code = $bad ? $bad : 200;
-my $http_str = $bad ? (defined($provider) ? $provider->get_oauth_provider()->{'util'}->errstr : 'Bad Request') : 'OK';
+	my $bad = defined($provider) ? $provider->check_request() : 400;
+	my $http_code = $bad ? $bad : 200;
+	my $http_str = $bad ? (defined($provider) ? $provider->get_oauth_provider()->{'util'}->errstr : 'Bad Request') : 'OK';
 
-my $r = $provider->response();
-if(defined $provider->{'error'}) {
-	my @error = split(' ', $provider->{'error'});
-	$http_code = shift @error;
-	$http_str = join(' ', @error);
-}
+	my $r = $provider->response();
+	if(defined $provider->{'error'}) {
+		my @error = split(' ', $provider->{'error'});
+		$http_code = shift @error;
+		$http_str = join(' ', @error);
+	}
 
-print 'Status: '.$http_code.' '.$http_str."\n";
-print "Cache-control: no-cache\n";
-print "Content-type: text/plain\n\n";
-print $r unless(defined $provider->{'error'});
+	print 'Status: '.$http_code.' '.$http_str."\n";
+	print "Cache-control: no-cache\n";
+	print "Content-type: text/plain\n\n";
+	print $r unless(defined $provider->{'error'});
 
-return 1;
+	return 1;
 }
 
 # Displays VOOT providers list
@@ -9523,493 +9514,493 @@ sub do_edit_list {
 		if ($type eq 'multiple_param') {
 			my @values = split /\0/, $value;
 			$value = \@values;
-	}
-
-	my @token = split (/\./, $name);
-
-	## make it an entry in $new_admin
-	my $var = _shift_var(0, $new_admin, @token);
-	$$var = $value;
-}
-
-## Check that the serial number sent by the form is the same as the one we expect.
-## Avoid modifying a list previously modified by another way.
-unless ($list->{'admin'}{'serial'} == $in{'serial'}) {
-	Sympa::Report::reject_report_web('user','config_changed',{'email' => $list->{'admin'}{'update'}{'email'}},$param->{'action'},$list);
-	wwslog('info','do_edit_list: Config file has been modified(%d => %d) by %s. Cannot apply changes', $in{'single_param.serial'}, $list->{'admin'}{'serial'}, $list->{'admin'}{'update'}{'email'});
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
-
-## Check changes & check syntax
-## %changed stores the names of the parameters whose values differs from the value in the config file.
-## %stores the name of parameter for which values have been deleted. The keys are the parameter name, the values are the index of the deleted value.
-## @syntax_error stores the list of parameters for which syntax errors wre founs while evaluating the data sent by the form.
-my (%changed, %delete);
-my @syntax_error;
-
-## Check family constraints.
-## %check_family is a hash whose keys are a parameter name and whose values are the constraints
-## defined for this parameter.
-my %check_family;
-
-
-## Getting changes about owners or editors
-## If changes occured in the owner or editor definition, these scalars are set to 1.
-my $owner_update = 0;
-my $editor_update = 0;
-
-######################################################################
-## Start of the loop parsing the data sent by the edition form. ##
-######################################################################
-
-foreach my $pname (sort Sympa::List::by_order keys %{$edited_param}) {
-
-	## $p will contain the values of the current parameter in the previous list config
-	## $new_p  will contain the values sent by the form for the current parameter.
-	my ($p, $new_p);
-
-	## Check privileges first
-	next unless ($list->may_edit($pname,$param->{'user'}{'email'}) eq 'write');
-
-	## If the list belongs to a family, gather all the constraints for each edited parameter.
-	if (ref($family) && $family->isa('Sympa::Family')) {
-
-		if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
-			my $constraint = $family->get_param_constraint($pname);
-
-			if (ref($constraint) eq 'HASH') { # controlled parameter
-				$check_family{$pname} = $constraint;
-
-			} elsif ($constraint ne '0') {    # fixed parameter (free : no control)
-				next;
-			}
 		}
+
+		my @token = split (/\./, $name);
+
+		## make it an entry in $new_admin
+		my $var = _shift_var(0, $new_admin, @token);
+		$$var = $value;
 	}
 
-	## Skip the obsolete parameters.
-	next if $pinfo->{$pname}{'obsolete'};
+	## Check that the serial number sent by the form is the same as the one we expect.
+	## Avoid modifying a list previously modified by another way.
+	unless ($list->{'admin'}{'serial'} == $in{'serial'}) {
+		Sympa::Report::reject_report_web('user','config_changed',{'email' => $list->{'admin'}{'update'}{'email'}},$param->{'action'},$list);
+		wwslog('info','do_edit_list: Config file has been modified(%d => %d) by %s. Cannot apply changes', $in{'single_param.serial'}, $list->{'admin'}{'serial'}, $list->{'admin'}{'update'}{'email'});
+		web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+		return undef;
+	}
 
-	## $to_index value will correspond to the number of not empty parameters sent by the form.
-	my $to_index;
+	## Check changes & check syntax
+	## %changed stores the names of the parameters whose values differs from the value in the config file.
+	## %stores the name of parameter for which values have been deleted. The keys are the parameter name, the values are the index of the deleted value.
+	## @syntax_error stores the list of parameters for which syntax errors wre founs while evaluating the data sent by the form.
+	my (%changed, %delete);
+	my @syntax_error;
 
-	####### Validation, step 1: remove empty entries ###########
+	## Check family constraints.
+	## %check_family is a hash whose keys are a parameter name and whose values are the constraints
+	## defined for this parameter.
+	my %check_family;
 
-	## If the parameter can have multiple values...
-	if ($pinfo->{$pname}{'occurrence'} =~ /n$/) {
 
-		## They were either entries removed by the user or empty entries added by wwsympa
-		## The loop is going backward so we can remove empty entries
-		my @all = 0..$#{$new_admin->{$pname}};
-		foreach my $i (reverse @all ) {
-			## If the parameter has a complex structure
-			if (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
-				## Check each component of the complex parameter.
-				foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
-					## As soon as a required component is found missing, the whole parameter instance is removed.
-					if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/ &&
-						$new_admin->{$pname}[$i]{$key} =~ /^\s*$/ ) {
-						splice(@{$new_admin->{$pname}}, $i, 1);
-						last;
-					}
-				}
-				## Else if the parameter has only a scalar value
-			} else {
-				## Remove if empty
-				if ($new_admin->{$pname}[$i] =~ /^\s*$/) {
-					splice(@{$new_admin->{$pname}}, $i, 1);
+	## Getting changes about owners or editors
+	## If changes occured in the owner or editor definition, these scalars are set to 1.
+	my $owner_update = 0;
+	my $editor_update = 0;
+
+	######################################################################
+	## Start of the loop parsing the data sent by the edition form. ##
+	######################################################################
+
+	foreach my $pname (sort Sympa::List::by_order keys %{$edited_param}) {
+
+		## $p will contain the values of the current parameter in the previous list config
+		## $new_p  will contain the values sent by the form for the current parameter.
+		my ($p, $new_p);
+
+		## Check privileges first
+		next unless ($list->may_edit($pname,$param->{'user'}{'email'}) eq 'write');
+
+		## If the list belongs to a family, gather all the constraints for each edited parameter.
+		if (ref($family) && $family->isa('Sympa::Family')) {
+
+			if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
+				my $constraint = $family->get_param_constraint($pname);
+
+				if (ref($constraint) eq 'HASH') { # controlled parameter
+					$check_family{$pname} = $constraint;
+
+				} elsif ($constraint ne '0') {    # fixed parameter (free : no control)
 					next;
 				}
 			}
 		}
 
-		## Now, %new_admin contains only entries for which all the mandatory values are accounted for.
+		## Skip the obsolete parameters.
+		next if $pinfo->{$pname}{'obsolete'};
 
-		## $last_index corresponds to the number of remaining instances of this param sent by the form.
-		my $last_index = $#{$new_admin->{$pname}};
+		## $to_index value will correspond to the number of not empty parameters sent by the form.
+		my $to_index;
 
+		####### Validation, step 1: remove empty entries ###########
 
-		## If a mandatory parameter is missing, issue an error and stop here.
-		if ($pinfo->{$pname}{'occurrence'} =~ /^1/ && !($last_index >= 0)){
-			delete $new_admin->{$pname};
-			wwslog('err','Error: Parameter %s is mandatory.', $pname);
-			Sympa::Report::reject_report_web('user','mandatory_parameter',{'p_name' => $pname},$param->{'action'},$list);
-			web_db_log({'status' => 'error',
-					'error_type' => 'syntax_errors'});
-			next;
-		}
+		## If the parameter can have multiple values...
+		if ($pinfo->{$pname}{'occurrence'} =~ /n$/) {
 
-		## If there are less entries in the config file than were sent by the form,
-		## $to_index must correspond to the number of entries sent.
-		if ($#{$list->{'admin'}{$pname}} < $last_index) {
-			$to_index = $last_index;
-			## Otherwise, $to_index must correspond to the number of entries in the config file.
-		} else {
-			$to_index = $#{$list->{'admin'}{$pname}};
-		}
-
-		$p = $list->{'admin'}{$pname};
-		$new_p = $new_admin->{$pname};
-
-		## If the parameter can't have multiple values...
-	} else {
-
-		## If the parameter has a complex structure
-		if (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
-
-			## Check each component of the complex parameter.
-			foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
-
-				## Remove the full record if a component is emtpy and required
-				if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/ &&
-					$new_admin->{$pname}{$key} =~ /^\s*$/ ) {
-					delete $new_admin->{$pname};
-					last;
+			## They were either entries removed by the user or empty entries added by wwsympa
+			## The loop is going backward so we can remove empty entries
+			my @all = 0..$#{$new_admin->{$pname}};
+			foreach my $i (reverse @all ) {
+				## If the parameter has a complex structure
+				if (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
+					## Check each component of the complex parameter.
+					foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
+						## As soon as a required component is found missing, the whole parameter instance is removed.
+						if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/ &&
+							$new_admin->{$pname}[$i]{$key} =~ /^\s*$/ ) {
+							splice(@{$new_admin->{$pname}}, $i, 1);
+							last;
+						}
+					}
+					## Else if the parameter has only a scalar value
+				} else {
+					## Remove if empty
+					if ($new_admin->{$pname}[$i] =~ /^\s*$/) {
+						splice(@{$new_admin->{$pname}}, $i, 1);
+						next;
+					}
 				}
 			}
-			## If the parameter contains a simple scalar value.
+
+			## Now, %new_admin contains only entries for which all the mandatory values are accounted for.
+
+			## $last_index corresponds to the number of remaining instances of this param sent by the form.
+			my $last_index = $#{$new_admin->{$pname}};
+
+
+			## If a mandatory parameter is missing, issue an error and stop here.
+			if ($pinfo->{$pname}{'occurrence'} =~ /^1/ && !($last_index >= 0)){
+				delete $new_admin->{$pname};
+				wwslog('err','Error: Parameter %s is mandatory.', $pname);
+				Sympa::Report::reject_report_web('user','mandatory_parameter',{'p_name' => $pname},$param->{'action'},$list);
+				web_db_log({'status' => 'error',
+						'error_type' => 'syntax_errors'});
+				next;
+			}
+
+			## If there are less entries in the config file than were sent by the form,
+			## $to_index must correspond to the number of entries sent.
+			if ($#{$list->{'admin'}{$pname}} < $last_index) {
+				$to_index = $last_index;
+				## Otherwise, $to_index must correspond to the number of entries in the config file.
+			} else {
+				$to_index = $#{$list->{'admin'}{$pname}};
+			}
+
+			$p = $list->{'admin'}{$pname};
+			$new_p = $new_admin->{$pname};
+
+			## If the parameter can't have multiple values...
 		} else {
 
-			## Remove if empty
-			if ($new_admin->{$pname} =~ /^\s*$/) {
-				delete $new_admin->{$pname};
-				next; # Go directly to the next parameter.
+			## If the parameter has a complex structure
+			if (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
+
+				## Check each component of the complex parameter.
+				foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
+
+					## Remove the full record if a component is emtpy and required
+					if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/ &&
+						$new_admin->{$pname}{$key} =~ /^\s*$/ ) {
+						delete $new_admin->{$pname};
+						last;
+					}
+				}
+				## If the parameter contains a simple scalar value.
+			} else {
+
+				## Remove if empty
+				if ($new_admin->{$pname} =~ /^\s*$/) {
+					delete $new_admin->{$pname};
+					next; # Go directly to the next parameter.
+				}
 			}
+
+			$p = [$list->{'admin'}{$pname}];
+			$new_p = [$new_admin->{$pname}];
 		}
 
-		$p = [$list->{'admin'}{$pname}];
-		$new_p = [$new_admin->{$pname}];
-	}
+		####### Validation, step 2: - check if the parameter was modified.             ###########
+		#######                     - check that the new values have the right syntax. ###########
+		####### Note: this step is performed for each occurrence of the parameter.     ###########
 
-	####### Validation, step 2: - check if the parameter was modified.             ###########
-	#######                     - check that the new values have the right syntax. ###########
-	####### Note: this step is performed for each occurrence of the parameter.     ###########
-
-	foreach my $i (0..$to_index) {
-		unless (defined $new_p->[$i]) {
-			push @{$delete{$pname}}, $i;
-			$changed{$pname} = 1; next;
-		}
-		## If the parameter corresponds to a scenario or a task, mark it as changed if its name was changed.
-		## Example: 'subscribe'
-		if ($pinfo->{$pname}{'scenario'} ||
-			$pinfo->{$pname}{'task'} ) {
-			if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
+		foreach my $i (0..$to_index) {
+			unless (defined $new_p->[$i]) {
+				push @{$delete{$pname}}, $i;
 				$changed{$pname} = 1; next;
 			}
-			## If the parameter has a complex structure, we need to check all its components.
-			## Example: 'owner'
-		} elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
-			## Check each parameter component.
-			## Example: 'owner->email'
-			foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
-
-				## Check that the user is allowed to edit this parameter component.
-				next unless ($list->may_edit("$pname.$key",$param->{'user'}{'email'}) eq 'write');
-
-				## If the list belongs to a family, check the possible constraints on this parameter component.
-				if (ref($family) && $family->isa('Sympa::Family')) {
-					## Test constraints only if the parameter component is not a complex structure.
-					if (!ref($key)) {
-						my $constraint = $family->get_param_constraint("$pname.$key");
-						if (ref($constraint) eq 'HASH') { # controlled parameter
-							$check_family{$pname}{$key} = $constraint;
-						} elsif ($constraint ne '0') {    # fixed parameter
-							next; # Go to the next parameter component.
-						}
-					}
+			## If the parameter corresponds to a scenario or a task, mark it as changed if its name was changed.
+			## Example: 'subscribe'
+			if ($pinfo->{$pname}{'scenario'} ||
+				$pinfo->{$pname}{'task'} ) {
+				if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
+					$changed{$pname} = 1; next;
 				}
+				## If the parameter has a complex structure, we need to check all its components.
+				## Example: 'owner'
+			} elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
+				## Check each parameter component.
+				## Example: 'owner->email'
+				foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
 
-				## If the parameter component corresponds to a task or a scenario, mark it as changed if its name was changed.
-				if ($pinfo->{$pname}{'format'}{$key}{'scenario'} ||
-					$pinfo->{$pname}{'format'}{$key}{'task'} ) {
-					if ($p->[$i]{$key}{'name'} ne $new_p->[$i]{$key}{'name'}) {
-						$changed{$pname} = 1; next; # Mark as changed and go to the next parameter component.
-					}
-					## If the parameter component doesn't correspond to a task or a scenario, we must check its content.
-				} else {
-					## Parameter component check, case 1: this parameter component can have multiple occurence.
-					## Example: 'digest->days'
-					if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
-						## If the new value differs from the previous value, mark as changed and go to the next parameter component.
-						if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
-							$changed{$pname} = 1; next;
-						}
+					## Check that the user is allowed to edit this parameter component.
+					next unless ($list->may_edit("$pname.$key",$param->{'user'}{'email'}) eq 'write');
 
-						## For each occurrence of this parameter component, check value
-						foreach my $index (0..$#{$p->[$i]{$key}}) {
-							my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
-
-							## If the format has a complex structure, it is the description of a file format.
-							if (ref ($format)) {
-								$format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
+					## If the list belongs to a family, check the possible constraints on this parameter component.
+					if (ref($family) && $family->isa('Sympa::Family')) {
+						## Test constraints only if the parameter component is not a complex structure.
+						if (!ref($key)) {
+							my $constraint = $family->get_param_constraint("$pname.$key");
+							if (ref($constraint) eq 'HASH') { # controlled parameter
+								$check_family{$pname}{$key} = $constraint;
+							} elsif ($constraint ne '0') {    # fixed parameter
+								next; # Go to the next parameter component.
 							}
-							## If this occurrence of the parameter component differs from the corresponding one in the config
-							## check the syntax and mark as changed.
-							if ($p->[$i]{$key}[$index] ne $new_p->[$i]{$key}[$index]) {
+						}
+					}
 
-								if (defined($new_p->[$i]{$key}[$index]) && $new_p->[$i]{$key}[$index] !~ /^$format$/i) {
-									wwslog('err', "Syntax error : $pname/$i/$key/$index = $new_p->[$i]{$key}[$index]");
+					## If the parameter component corresponds to a task or a scenario, mark it as changed if its name was changed.
+					if ($pinfo->{$pname}{'format'}{$key}{'scenario'} ||
+						$pinfo->{$pname}{'format'}{$key}{'task'} ) {
+						if ($p->[$i]{$key}{'name'} ne $new_p->[$i]{$key}{'name'}) {
+							$changed{$pname} = 1; next; # Mark as changed and go to the next parameter component.
+						}
+						## If the parameter component doesn't correspond to a task or a scenario, we must check its content.
+					} else {
+						## Parameter component check, case 1: this parameter component can have multiple occurence.
+						## Example: 'digest->days'
+						if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
+							## If the new value differs from the previous value, mark as changed and go to the next parameter component.
+							if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
+								$changed{$pname} = 1; next;
+							}
+
+							## For each occurrence of this parameter component, check value
+							foreach my $index (0..$#{$p->[$i]{$key}}) {
+								my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
+
+								## If the format has a complex structure, it is the description of a file format.
+								if (ref ($format)) {
+									$format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
+								}
+								## If this occurrence of the parameter component differs from the corresponding one in the config
+								## check the syntax and mark as changed.
+								if ($p->[$i]{$key}[$index] ne $new_p->[$i]{$key}[$index]) {
+
+									if (defined($new_p->[$i]{$key}[$index]) && $new_p->[$i]{$key}[$index] !~ /^$format$/i) {
+										wwslog('err', "Syntax error : $pname/$i/$key/$index = $new_p->[$i]{$key}[$index]");
+										push @syntax_error, $pname;
+									}
+									$changed{$pname} = 1; next; # Mark as changed and go to the next parameter component.
+								}
+							}
+
+							## Parameter component check, case 2: this component is limited to one occurence.
+							## Example: 'owner->email'
+						} else {
+							## If the parameter component value differs from the corresponding one in the config, go on.
+							if ($p->[$i]{$key} ne $new_p->[$i]{$key}) {
+								my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
+
+								## If the format has a complex structure, it is the description of a file format.
+								if (ref ($format)) {
+									$format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
+								}
+
+								## Check the syntax and mark as changed if the syntax is correct.
+								if (defined($new_p->[$i]{$key}) && $new_p->[$i]{$key} !~ /^$format$/i) {
+									wwslog('err', "Syntax error : $pname/$i/$key = $new_p->[$i]{$key}");
 									push @syntax_error, $pname;
 								}
+
 								$changed{$pname} = 1; next; # Mark as changed and go to the next parameter component.
 							}
 						}
-
-						## Parameter component check, case 2: this component is limited to one occurence.
-						## Example: 'owner->email'
-					} else {
-						## If the parameter component value differs from the corresponding one in the config, go on.
-						if ($p->[$i]{$key} ne $new_p->[$i]{$key}) {
-							my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
-
-							## If the format has a complex structure, it is the description of a file format.
-							if (ref ($format)) {
-								$format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
-							}
-
-							## Check the syntax and mark as changed if the syntax is correct.
-							if (defined($new_p->[$i]{$key}) && $new_p->[$i]{$key} !~ /^$format$/i) {
-								wwslog('err', "Syntax error : $pname/$i/$key = $new_p->[$i]{$key}");
-								push @syntax_error, $pname;
-							}
-
-							$changed{$pname} = 1; next; # Mark as changed and go to the next parameter component.
-						}
 					}
 				}
-			}
-			## If the parameter has just a scalar value, just check its value.
-			## Example: 'max_size'
-		} else {
-			## If the value differs from the one in the config file, mark parameter as changed if the syntax is correct.
-			if ($p->[$i] ne $new_p->[$i]) {
-				unless ($new_p->[$i] =~ /^$pinfo->{$pname}{'file_format'}$/) {
-					wwslog('err', "Syntax error : $pname/$i = $new_p->[$i]");
-					push @syntax_error, $pname;
+				## If the parameter has just a scalar value, just check its value.
+				## Example: 'max_size'
+			} else {
+				## If the value differs from the one in the config file, mark parameter as changed if the syntax is correct.
+				if ($p->[$i] ne $new_p->[$i]) {
+					unless ($new_p->[$i] =~ /^$pinfo->{$pname}{'file_format'}$/) {
+						wwslog('err', "Syntax error : $pname/$i = $new_p->[$i]");
+						push @syntax_error, $pname;
+					}
+					$changed{$pname} = 1;
 				}
-				$changed{$pname} = 1;
 			}
 		}
 	}
-}
 
-######################################################################
-## Validation of the form finished. Start of valid data treatments  ##
-######################################################################
+	######################################################################
+	## Validation of the form finished. Start of valid data treatments  ##
+	######################################################################
 
-## Error if no parameter was edited
-unless (keys %changed) {
-	Sympa::Report::reject_report_web('user','no_parameter_edited',{},$param->{'action'},$list);
-	wwslog('info','No parameter was edited by user');
-	return 'edit_list_request';
-}
+	## Error if no parameter was edited
+	unless (keys %changed) {
+		Sympa::Report::reject_report_web('user','no_parameter_edited',{},$param->{'action'},$list);
+		wwslog('info','No parameter was edited by user');
+		return 'edit_list_request';
+	}
 
-## Syntax errors
-if ($#syntax_error > -1) {
-	Sympa::Report::reject_report_web('user','syntax_errors',{'params' => join(',', @syntax_error)},$param->{'action'},$list);
-	wwslog('info','do_edit_list: Syntax errors for parameters %s', join(',', @syntax_error));
-	web_db_log({'status' => 'error',
-			'error_type' => 'syntax_errors'});
-	return undef;
-}
-
-## Checking no topic named "other"
-foreach my $msg_topic (@{$new_admin->{'msg_topic'}}) {
-	if ($msg_topic->{'name'} =~  /^other$/i) {
-		$msg_topic->{'name'} = undef;
-		$msg_topic->{'title'} = undef;
-		Sympa::Report::reject_report_web('user','topic_other',{},$param->{'action'},$list);
-		wwslog('notice',"do_edit_list: topic other is a reserved word");
+	## Syntax errors
+	if ($#syntax_error > -1) {
+		Sympa::Report::reject_report_web('user','syntax_errors',{'params' => join(',', @syntax_error)},$param->{'action'},$list);
+		wwslog('info','do_edit_list: Syntax errors for parameters %s', join(',', @syntax_error));
 		web_db_log({'status' => 'error',
 				'error_type' => 'syntax_errors'});
 		return undef;
 	}
-}
 
-## For changed msg_topic.name
-if (defined $new_admin->{'msg_topic'} && $list->modifying_msg_topic_for_list_members($new_admin->{'msg_topic'})) {
-	Sympa::Report::notice_report_web('subscribers_noticed_deleted_topics',{},$param->{'action'});
-}
-
-## Delete selected params
-foreach my $p (keys %delete) {
-
-	if (($p eq 'owner') || ($p eq 'owner_include')) {
-		$owner_update = 1;
-	}
-
-	if (($p eq 'editor') || ($p eq 'editor_include')) {
-		$editor_update = 1;
-	}
-
-	## Delete ALL entries
-	unless (ref ($delete{$p})) {
-		undef $new_admin->{$p};
-		next;
-	}
-
-	## Delete selected entries
-	foreach my $k (reverse @{$delete{$p}}) {
-		splice @{$new_admin->{$p}}, $k, 1;
-	}
-
-	if (defined $check_family{$p}) { # $p is family controlled
-		if ($#{$new_admin->{$p}} < 0) {
-			Sympa::Report::reject_report_web('user','p_family_controlled',{'param' => $p},$param->{'action'},$list);
-			wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
+	## Checking no topic named "other"
+	foreach my $msg_topic (@{$new_admin->{'msg_topic'}}) {
+		if ($msg_topic->{'name'} =~  /^other$/i) {
+			$msg_topic->{'name'} = undef;
+			$msg_topic->{'title'} = undef;
+			Sympa::Report::reject_report_web('user','topic_other',{},$param->{'action'},$list);
+			wwslog('notice',"do_edit_list: topic other is a reserved word");
 			web_db_log({'status' => 'error',
-					'error_type' => 'missing_parameter'});
+					'error_type' => 'syntax_errors'});
 			return undef;
 		}
 	}
-}
 
-# updating config_changes for deleted parameters
-if (ref($family)) {
-	my @array_delete = keys %delete;
-	unless ($list->update_config_changes('param',\@array_delete)) {
-	Sympa::Report::reject_report_web('intern','update_config_changes',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	wwslog('info','do_edit_list: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
-   }
-
-   ## Update config in memory
-   my $data_source_updated;
-   foreach my $parameter (keys %changed) {
-
-	my $pname;
-	if ($parameter =~ /^([\w-]+)\.([\w-]+)$/) {
-		$pname = $1;
-	} else {
-		$pname = $parameter;
+	## For changed msg_topic.name
+	if (defined $new_admin->{'msg_topic'} && $list->modifying_msg_topic_for_list_members($new_admin->{'msg_topic'})) {
+		Sympa::Report::notice_report_web('subscribers_noticed_deleted_topics',{},$param->{'action'});
 	}
 
-	## If new owners/editors have been added, then notify them
-	foreach my $admin_type ('owner','editor') {
-		my (%previous_emails, %new_emails);
+	## Delete selected params
+	foreach my $p (keys %delete) {
 
-		## Check previous entries
-		foreach my $entry (@{$list->{'admin'}{$admin_type}}) {
-			$previous_emails{$entry->{'email'}} = 1;
+		if (($p eq 'owner') || ($p eq 'owner_include')) {
+			$owner_update = 1;
 		}
 
-		## Compare with new entries
-		foreach my $entry (@{$new_admin->{$admin_type}}) {
+		if (($p eq 'editor') || ($p eq 'editor_include')) {
+			$editor_update = 1;
+		}
 
-			unless ($previous_emails{$entry->{'email'}}) {
+		## Delete ALL entries
+		unless (ref ($delete{$p})) {
+			undef $new_admin->{$p};
+			next;
+		}
 
-				## Notify the new list owner/editor
-				$list->send_notify_to_user('added_as_listadmin', $entry->{'email'},{'admin_type' => $admin_type, 'delegator' => $param->{'user'}{'email'}});
-				Sympa::Report::notice_report_web('user_notified',{'notified_user' => $entry->{'email'}},$param->{'action'});
+		## Delete selected entries
+		foreach my $k (reverse @{$delete{$p}}) {
+			splice @{$new_admin->{$p}}, $k, 1;
+		}
+
+		if (defined $check_family{$p}) { # $p is family controlled
+			if ($#{$new_admin->{$p}} < 0) {
+				Sympa::Report::reject_report_web('user','p_family_controlled',{'param' => $p},$param->{'action'},$list);
+				wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
+				web_db_log({'status' => 'error',
+						'error_type' => 'missing_parameter'});
+				return undef;
 			}
 		}
 	}
 
-	if (defined $check_family{$pname}) { # $pname is CONTROLLED
-		_check_new_values(\%check_family,$pname,$new_admin);
-   }
-
-   ## If datasource config changed
-   if ($pname =~ /^(include_.*|ttl)$/) {
-	$data_source_updated = 1;
-   }
-
-   $list->{'admin'}{$pname} = $new_admin->{$pname};
-   if (defined $new_admin->{$pname} || $pinfo->{$pname}{'internal'}) {
-	delete $list->{'admin'}{'defaults'}{$pname};
-   } else {
-	$list->{'admin'}{'defaults'}{$pname} = 1;
-   }
-
-   if (($pname eq 'owner') || ($pname eq 'owner_include')){
-	$owner_update = 1;
-   }
-
-   if (($pname eq 'editor') || ($pname eq 'editor_include')){
-	$editor_update = 1;
-   }
-
-   # updating config_changes for changed parameters
-
-   if (ref($family)) {
-	my @array_changed = keys %changed;
-	unless ($list->update_config_changes('param',\@array_changed)) {
-	Sympa::Report::reject_report_web('intern','update_config_changes',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	wwslog('info','do_edit_file: cannot write in config_changes for changed parameters from list %s', $list->{'name'});
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-   }
+	# updating config_changes for deleted parameters
+	if (ref($family)) {
+		my @array_delete = keys %delete;
+		unless ($list->update_config_changes('param',\@array_delete)) {
+			Sympa::Report::reject_report_web('intern','update_config_changes',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+			wwslog('info','do_edit_list: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
+			web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+			return undef;
+		}
 	}
-}
 
-## Save config file
-unless ($list->save_config($param->{'user'}{'email'})) {
-	Sympa::Report::reject_report_web('intern','cannot_save_config',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	wwslog('info','do_edit_list: Cannot save config file');
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
+	## Update config in memory
+	my $data_source_updated;
+	foreach my $parameter (keys %changed) {
 
+		my $pname;
+		if ($parameter =~ /^([\w-]+)\.([\w-]+)$/) {
+			$pname = $1;
+		} else {
+			$pname = $parameter;
+		}
 
-## Reload config to clean some empty entries in $list->{'admin'}
-$list = Sympa::List->new(
-	name    => $list->{'name'},
-	robot   => $robot,
-	source  => Sympa::Database::get_source(),
-	options => {'reload_config' => 1}
-);
+		## If new owners/editors have been added, then notify them
+		foreach my $admin_type ('owner','editor') {
+			my (%previous_emails, %new_emails);
 
-unless (defined $list) {
-	Sympa::Report::reject_report_web('intern','list_reload',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	wwslog('info','do_edit_list: error in list reloading');
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
+			## Check previous entries
+			foreach my $entry (@{$list->{'admin'}{$admin_type}}) {
+				$previous_emails{$entry->{'email'}} = 1;
+			}
 
-## If list has included data sources, update them and delete sync_include task.
-if ($data_source_updated) {
-	if ($list->on_the_fly_sync_include('use_ttl'=>0)) {
-		Sympa::Report::notice_report_web('subscribers_updated',{},$param->{'action'});
-	} else {
-		Sympa::Report::reject_report_web('intern','sync_include_failed',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+			## Compare with new entries
+			foreach my $entry (@{$new_admin->{$admin_type}}) {
+
+				unless ($previous_emails{$entry->{'email'}}) {
+
+					## Notify the new list owner/editor
+					$list->send_notify_to_user('added_as_listadmin', $entry->{'email'},{'admin_type' => $admin_type, 'delegator' => $param->{'user'}{'email'}});
+					Sympa::Report::notice_report_web('user_notified',{'notified_user' => $entry->{'email'}},$param->{'action'});
+				}
+			}
+		}
+
+		if (defined $check_family{$pname}) { # $pname is CONTROLLED
+			_check_new_values(\%check_family,$pname,$new_admin);
+		}
+
+		## If datasource config changed
+		if ($pname =~ /^(include_.*|ttl)$/) {
+			$data_source_updated = 1;
+		}
+
+		$list->{'admin'}{$pname} = $new_admin->{$pname};
+		if (defined $new_admin->{$pname} || $pinfo->{$pname}{'internal'}) {
+			delete $list->{'admin'}{'defaults'}{$pname};
+		} else {
+			$list->{'admin'}{'defaults'}{$pname} = 1;
+		}
+
+		if (($pname eq 'owner') || ($pname eq 'owner_include')){
+			$owner_update = 1;
+		}
+
+		if (($pname eq 'editor') || ($pname eq 'editor_include')){
+			$editor_update = 1;
+		}
+
+		# updating config_changes for changed parameters
+
+		if (ref($family)) {
+			my @array_changed = keys %changed;
+			unless ($list->update_config_changes('param',\@array_changed)) {
+				Sympa::Report::reject_report_web('intern','update_config_changes',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+				wwslog('info','do_edit_file: cannot write in config_changes for changed parameters from list %s', $list->{'name'});
+				web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+				return undef;
+			}
+		}
 	}
-}
 
-## call sync_include_admin if there are changes about owners or editors and we're in mode include2
-unless ($list->sync_include_admin()) {
-	Sympa::Report::reject_report_web('intern', 'sync_include_admin_failed',
-		{}, $param->{'action'}, $list,
-		$param->{'user'}{'email'}, $robot);
-	wwslog('info','do_edit_list: sync_include_admin() failed');
-	web_db_log({'status' => 'error',
-			'error_type' => 'internal'});
-	return undef;
-}
+	## Save config file
+	unless ($list->save_config($param->{'user'}{'email'})) {
+		Sympa::Report::reject_report_web('intern','cannot_save_config',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+		wwslog('info','do_edit_list: Cannot save config file');
+		web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+		return undef;
+	}
 
-## Tag changed parameters
-foreach my $pname (keys %changed) {
-	$::changed_params{$pname} = 1;
-}
 
-## Save stats
-$list->savestats();
+	## Reload config to clean some empty entries in $list->{'admin'}
+	$list = Sympa::List->new(
+		name    => $list->{'name'},
+		robot   => $robot,
+		source  => Sympa::Database::get_source(),
+		options => {'reload_config' => 1}
+	);
+
+	unless (defined $list) {
+		Sympa::Report::reject_report_web('intern','list_reload',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+		wwslog('info','do_edit_list: error in list reloading');
+		web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+		return undef;
+	}
+
+	## If list has included data sources, update them and delete sync_include task.
+	if ($data_source_updated) {
+		if ($list->on_the_fly_sync_include('use_ttl'=>0)) {
+			Sympa::Report::notice_report_web('subscribers_updated',{},$param->{'action'});
+		} else {
+			Sympa::Report::reject_report_web('intern','sync_include_failed',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+		}
+	}
+
+	## call sync_include_admin if there are changes about owners or editors and we're in mode include2
+	unless ($list->sync_include_admin()) {
+		Sympa::Report::reject_report_web('intern', 'sync_include_admin_failed',
+			{}, $param->{'action'}, $list,
+			$param->{'user'}{'email'}, $robot);
+		wwslog('info','do_edit_list: sync_include_admin() failed');
+		web_db_log({'status' => 'error',
+				'error_type' => 'internal'});
+		return undef;
+	}
+
+	## Tag changed parameters
+	foreach my $pname (keys %changed) {
+		$::changed_params{$pname} = 1;
+	}
+
+	## Save stats
+	$list->savestats();
 
 #      print "Content-type: text/plain\n\n";
 #    Sympa::Tools::Data::dump_var($list->{'admin'}{'msg_topic'},0);
 #    Sympa::Tools::Data::dump_var($param->{'param'},0);
 
 
-Sympa::Report::notice_report_web('list_config_updated',{},$param->{'action'});
-web_db_log({'status' => 'success'});
-return 'edit_list_request';
+	Sympa::Report::notice_report_web('list_config_updated',{},$param->{'action'});
+	web_db_log({'status' => 'success'});
+	return 'edit_list_request';
 }
 
 # Shift tokens to get a reference to the desired entry in $var (recursive)
@@ -10232,58 +10223,58 @@ sub _prepare_edit_form {
 
 			if (defined $p->{'constraint'}) {
 				_restrict_values(\%list_of_topics,$p->{'constraint'});
-		}
+			}
 
-		foreach my $topic (keys %list_of_topics) {
-			$p->{'value'}{$topic}{'selected'} = 0;
-			$p->{'value'}{$topic}{'title'} = $list_of_topics{$topic}{'current_title'};
+			foreach my $topic (keys %list_of_topics) {
+				$p->{'value'}{$topic}{'selected'} = 0;
+				$p->{'value'}{$topic}{'title'} = $list_of_topics{$topic}{'current_title'};
 
-			if ($list_of_topics{$topic}{'sub'}) {
-				foreach my $subtopic (keys %{$list_of_topics{$topic}{'sub'}}) {
-					$p->{'value'}{"$topic/$subtopic"}{'selected'} = 0;
-					$p->{'value'}{"$topic/$subtopic"}{'title'} = "$list_of_topics{$topic}{'current_title'}/$list_of_topics{$topic}{'sub'}{$subtopic}{'current_title'}";
+				if ($list_of_topics{$topic}{'sub'}) {
+					foreach my $subtopic (keys %{$list_of_topics{$topic}{'sub'}}) {
+						$p->{'value'}{"$topic/$subtopic"}{'selected'} = 0;
+						$p->{'value'}{"$topic/$subtopic"}{'title'} = "$list_of_topics{$topic}{'current_title'}/$list_of_topics{$topic}{'sub'}{$subtopic}{'current_title'}";
+					}
 				}
 			}
-		}
-		foreach my $selected_topic (@topics) {
-			next unless (defined $selected_topic);
-			$p->{'value'}{$selected_topic}{'selected'} = 1;
-			$p->{'value'}{$selected_topic}{'title'} = "Unknown ($selected_topic)"
-			unless (defined $p->{'value'}{$selected_topic}{'title'});
-		}
-	} elsif ($pname eq 'digest') {
-		foreach my $v (@{$p->{'value'}}) {
-			next unless ($v->{'name'} eq 'days');
-			if (ref($v->{'value'}) eq 'ARRAY'){
-				Sympa::Log::Syslog::do_log('debug2','Empty digest parameter. Putting a dummy value.');
-				$v->{'value'} = undef;
-				$v->{'type'} = 'enum';
-			} else {
-				foreach my $day (keys %{$v->{'value'}}) {
-					$v->{'value'}{$day}{'title'} =
-						Sympa::Language::gettext_strftime(
-							"%A", gmtime(0 + ($day +3) * (3600 * 24))
-						);
+			foreach my $selected_topic (@topics) {
+				next unless (defined $selected_topic);
+				$p->{'value'}{$selected_topic}{'selected'} = 1;
+				$p->{'value'}{$selected_topic}{'title'} = "Unknown ($selected_topic)"
+				unless (defined $p->{'value'}{$selected_topic}{'title'});
+			}
+		} elsif ($pname eq 'digest') {
+			foreach my $v (@{$p->{'value'}}) {
+				next unless ($v->{'name'} eq 'days');
+				if (ref($v->{'value'}) eq 'ARRAY'){
+					Sympa::Log::Syslog::do_log('debug2','Empty digest parameter. Putting a dummy value.');
+					$v->{'value'} = undef;
+					$v->{'type'} = 'enum';
+				} else {
+					foreach my $day (keys %{$v->{'value'}}) {
+						$v->{'value'}{$day}{'title'} =
+							Sympa::Language::gettext_strftime(
+								"%A", gmtime(0 + ($day +3) * (3600 * 24))
+							);
+					}
 				}
 			}
-		}
-	} elsif ($pname eq 'lang') {
-		my $saved_lang = Sympa::Language::get_lang();
+		} elsif ($pname eq 'lang') {
+			my $saved_lang = Sympa::Language::get_lang();
 
-		foreach my $lang (keys %{$p->{'value'}}) {
-			#wwslog('notice','LANG: %s', $lang);
-			Sympa::Language::set_lang($lang);
-			$p->{'value'}{$lang}{'title'} = Sympa::Language::gettext('_language_');
+			foreach my $lang (keys %{$p->{'value'}}) {
+				#wwslog('notice','LANG: %s', $lang);
+				Sympa::Language::set_lang($lang);
+				$p->{'value'}{$lang}{'title'} = Sympa::Language::gettext('_language_');
+			}
+			Sympa::Language::set_lang($saved_lang);
 		}
-		Sympa::Language::set_lang($saved_lang);
+
+		push @{$param->{'param'}}, $p;
 	}
 
-	push @{$param->{'param'}}, $p;
-}
-
-## If at least one param was editable, make the update button appear in the form.
-$param->{'is_form_editable'} = $is_form_editable;
-return 1;
+	## If at least one param was editable, make the update button appear in the form.
+	$param->{'is_form_editable'} = $is_form_editable;
+	return 1;
 }
 
 # Returns a reference to a hash containing the data used to edit the parameter
@@ -10520,14 +10511,14 @@ sub _prepare_data {
 
 	if (($p_glob->{'occurrence'} eq 'multiple')
 		&& ($p_glob->{'type'} ne 'enum')) {
-		$p_glob->{'value'} = \@all_p;
-} else {
-	foreach my $k (keys %{$all_p[0]}) {
-		$p_glob->{$k} = $all_p[0]->{$k};
+			$p_glob->{'value'} = \@all_p;
+	} else {
+		foreach my $k (keys %{$all_p[0]}) {
+			$p_glob->{$k} = $all_p[0]->{$k};
+		}
 	}
-}
 
-return $p_glob;
+	return $p_glob;
 }
 
 # Restrict allowed values in the hash
