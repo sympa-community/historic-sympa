@@ -59,17 +59,17 @@ my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -----
 my $time_regexp = '[012]?[0-9](?:\:[0-5][0-9])?';
 my $time_range_regexp = $time_regexp.'-'.$time_regexp;
 my %regexp = (
-	'email'                   => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
-	'family_name'             => '[a-z0-9][a-z0-9\-\.\+_]*',
-	'template_name'           => '[a-zA-Z0-9][a-zA-Z0-9\-\.\+_\s]*', ## Allow \s
-	'host'                    => '[\w\.\-]+',
-	'multiple_host_with_port' => '[\w\.\-]+(:\d+)?(,[\w\.\-]+(:\d+)?)*',
-	'listname'                => '[a-z0-9][a-z0-9\-\.\+_]{0,49}',
+	'email'                   => '([\w\-_./+=\'&]+|".*")@[\w\-]+(\.[\w\-]+)+',
+	'family_name'             => '[a-z0-9][a-z0-9\-.+_]*',
+	'template_name'           => '[a-zA-Z0-9][a-zA-Z0-9\-.+_\s]*', ## Allow \s
+	'host'                    => '[\w.\-]+',
+	'multiple_host_with_port' => '[\w.\-]+(:\d+)?(,[\w.\-]+(:\d+)?)*',
+	'listname'                => '[a-z0-9][a-z0-9\-.+_]{0,49}',
 	'sql_query'               => '(SELECT|select).*',
-	'scenario'                => '[\w,\.\-]+',
+	'scenario'                => '[\w,.\-]+',
 	'task'                    => '\w+',
 	'datasource'              => '[\w-]+',
-	'uid'                     => '[\w\-\.\+]+',
+	'uid'                     => '[\w\-.+]+',
 	'time'                    => $time_regexp,
 	'time_range'              => $time_range_regexp,
 	'time_ranges'             => $time_range_regexp.'(?:\s+'.$time_range_regexp.')*',
