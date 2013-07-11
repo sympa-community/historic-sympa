@@ -58,21 +58,22 @@ my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -----
 ## also be changed
 my $time_regexp = '[012]?[0-9](?:\:[0-5][0-9])?';
 my $time_range_regexp = $time_regexp.'-'.$time_regexp;
-my %regexp = ('email' => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
-	'family_name' => '[a-z0-9][a-z0-9\-\.\+_]*',
-	'template_name' => '[a-zA-Z0-9][a-zA-Z0-9\-\.\+_\s]*', ## Allow \s
-	'host' => '[\w\.\-]+',
+my %regexp = (
+	'email'                   => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
+	'family_name'             => '[a-z0-9][a-z0-9\-\.\+_]*',
+	'template_name'           => '[a-zA-Z0-9][a-zA-Z0-9\-\.\+_\s]*', ## Allow \s
+	'host'                    => '[\w\.\-]+',
 	'multiple_host_with_port' => '[\w\.\-]+(:\d+)?(,[\w\.\-]+(:\d+)?)*',
-	'listname' => '[a-z0-9][a-z0-9\-\.\+_]{0,49}',
-	'sql_query' => '(SELECT|select).*',
-	'scenario' => '[\w,\.\-]+',
-	'task' => '\w+',
-	'datasource' => '[\w-]+',
-	'uid' => '[\w\-\.\+]+',
-	'time' => $time_regexp,
-	'time_range' => $time_range_regexp,
-	'time_ranges' => $time_range_regexp.'(?:\s+'.$time_range_regexp.')*',
-	're' => '(?i)(?:AW|(?:\xD0\x9D|\xD0\xBD)(?:\xD0\x90|\xD0\xB0)|Re(?:\^\d+|\*\d+|\*\*\d+|\[\d+\])?|Rif|SV|VS)\s*:',
+	'listname'                => '[a-z0-9][a-z0-9\-\.\+_]{0,49}',
+	'sql_query'               => '(SELECT|select).*',
+	'scenario'                => '[\w,\.\-]+',
+	'task'                    => '\w+',
+	'datasource'              => '[\w-]+',
+	'uid'                     => '[\w\-\.\+]+',
+	'time'                    => $time_regexp,
+	'time_range'              => $time_range_regexp,
+	'time_ranges'             => $time_range_regexp.'(?:\s+'.$time_range_regexp.')*',
+	're'                      => '(?i)(?:AW|(?:\xD0\x9D|\xD0\xBD)(?:\xD0\x90|\xD0\xB0)|Re(?:\^\d+|\*\d+|\*\*\d+|\[\d+\])?|Rif|SV|VS)\s*:',
 );
 
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
