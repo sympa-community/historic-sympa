@@ -1675,10 +1675,15 @@ while ($query = new_loop()) {
 			## Add lists information to 'which_info'
 			foreach my $list (@{$param->{'get_which'}}) {
 				## Evaluate AuthZ scenario first
-				my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
-					{'sender' =>$param->{'user'}{'email'} ,
+				my $result = $list->check_list_authz(
+					'visibility',
+					$param->{'auth_method'},
+					{
+						'sender'      => $param->{'user'}{'email'} ,
 						'remote_host' => $param->{'remote_host'},
-						'remote_addr' => $param->{'remote_addr'}});
+						'remote_addr' => $param->{'remote_addr'}
+					}
+				);
 				next unless (ref($result) eq 'HASH' && $result->{'action'} eq 'do_it');
 
 				my $l = $list->{'name'};
@@ -2507,10 +2512,15 @@ sub check_param_in {
 			$param->{'pictures_url'} = Sympa::Tools::make_pictures_url('url' => Sympa::Configuration::get_robot_conf($robot, 'pictures_url'), 'email' => $param->{'user'}{'email'}, 'list' => $list, 'path' => Sympa::Configuration::get_robot_conf($robot,'pictures_path'));
 
 			## Checks if the user can post in this list.
-			my $result = $list->check_list_authz('send',$param->{'auth_method'},
-				{'sender' => $param->{'user'}{'email'},
+			my $result = $list->check_list_authz(
+				'send',
+				$param->{'auth_method'},
+				{
+					'sender'      => $param->{'user'}{'email'},
 					'remote_host' => $param->{'remote_host'},
-					'remote_addr' => $param->{'remote_addr'}});
+					'remote_addr' => $param->{'remote_addr'}
+				}
+			);
 			my $r_action;
 			$r_action = $result->{'action'} if (ref($result) eq 'HASH');
 			$param->{'may_post'} = 1 if ($r_action !~ /reject/);
@@ -2546,10 +2556,15 @@ sub check_param_in {
 
 
 		## Check unsubscription authorization for the current user and list.
-		my $result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-			{'sender' =>$param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'unsubscribe',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		if (! $param->{'user'}{'email'}) {
@@ -2561,10 +2576,15 @@ sub check_param_in {
 		}
 
 		## Check subscription authorization for the current user and list.
-		$result = $list->check_list_authz('subscribe',$param->{'auth_method'},
-			{'sender' =>$param->{'user'}{'email'},
+		$result = $list->check_list_authz(
+			'subscribe',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		$param->{'may_subscribe'} = 1 if ($action =~ /do_it|owner|request_auth/);
@@ -2748,10 +2768,15 @@ sub check_param_out {
 			$param->{'is_priv'} = $param->{'is_owner'} || $param->{'is_editor'};
 
 			#May post:
-			my $result = $list->check_list_authz('send',$param->{'auth_method'},
-				{'sender' => $param->{'user'}{'email'},
+			my $result = $list->check_list_authz(
+				'send',
+				$param->{'auth_method'},
+				{
+					'sender'      => $param->{'user'}{'email'},
 					'remote_host' => $param->{'remote_host'},
-					'remote_addr' => $param->{'remote_addr'}});
+					'remote_addr' => $param->{'remote_addr'}
+				}
+			);
 
 			my $r_action;
 			my $reason;
@@ -2788,10 +2813,15 @@ sub check_param_out {
 		if ($param->{'may_signoff'} || $param->{'may_subscribe'});
 
 		## May review
-		my $result = $list->check_list_authz('review',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'review',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $r_action;
 		$r_action = $result->{'action'} if (ref($result) eq 'HASH');
 
@@ -2801,10 +2831,15 @@ sub check_param_out {
 		$param->{'list_status'} = $list->{'admin'}{'status'};
 
 		## May signoff
-		$result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-			{'sender' =>$param->{'user'}{'email'},
+		$result = $list->check_list_authz(
+			'unsubscribe',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		if (! $param->{'user'}{'email'}) {
@@ -2817,10 +2852,15 @@ sub check_param_out {
 		}
 
 		## May Subscribe
-		$result = $list->check_list_authz('subscribe',$param->{'auth_method'},
-			{'sender' =>$param->{'user'}{'email'},
+		$result = $list->check_list_authz(
+			'subscribe',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		$param->{'may_subscribe'} = 1 if ($action =~ /do_it|owner|request_auth/);
@@ -2832,10 +2872,15 @@ sub check_param_out {
 			$param->{'is_archived'} = 1;
 
 			## Check if the current user may access web archives
-			my $result = $list->check_list_authz('web_archive.access',$param->{'auth_method'},
-				{'sender' => $param->{'user'}{'email'},
+			my $result = $list->check_list_authz(
+				'web_archive.access',
+				$param->{'auth_method'},
+				{
+					'sender'      => $param->{'user'}{'email'},
 					'remote_host' => $param->{'remote_host'},
-					'remote_addr' => $param->{'remote_addr'}});
+					'remote_addr' => $param->{'remote_addr'}
+				}
+			);
 			my $r_action;
 			$r_action = $result->{'action'} if (ref($result) eq 'HASH');
 
@@ -2846,8 +2891,11 @@ sub check_param_out {
 			}
 
 			## Check if web archive is publically accessible (useful information for RSS)
-			$result = $list->check_list_authz('web_archive.access',$param->{'auth_method'},
-				{'sender' => 'nobody'});
+			$result = $list->check_list_authz(
+				'web_archive.access',
+				$param->{'auth_method'},
+				{ 'sender' => 'nobody' }
+			);
 			$r_action = $result->{'action'} if (ref($result) eq 'HASH');
 
 			if ($r_action =~ /do_it/i) {
@@ -2858,8 +2906,11 @@ sub check_param_out {
 		## Shared documents access control
 		if ($list->get_shared_status() eq 'exist') {
 			## Check if shared is publically accessible (useful information for RSS)
-			my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-				{'sender' => 'nobody'});
+			my $result = $list->check_list_authz(
+				'shared_doc.d_read',
+				$param->{'auth_method'},
+				{ 'sender' => 'nobody' }
+			);
 			my $r_action;
 			if (ref($result) eq 'HASH') {
 				$r_action = $result->{'action'};
@@ -3843,10 +3894,15 @@ sub do_which {
 		foreach my $list ( Sympa::List::get_which($param->{'user'}{'email'}, $robot, $role) ){
 			my $l = $list->{'name'};
 
-			my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
-				{'sender' =>$param->{'user'}{'email'} ,
+			my $result = $list->check_list_authz(
+				'visibility',
+				$param->{'auth_method'},
+				{
+					'sender'      => $param->{'user'}{'email'} ,
 					'remote_host' => $param->{'remote_host'},
-					'remote_addr' => $param->{'remote_addr'}});
+					'remote_addr' => $param->{'remote_addr'}
+				}
+			);
 
 			my $r_action;
 			$r_action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -3898,11 +3954,16 @@ sub do_lists {
 
 		my $sender = $param->{'user'}{'email'} || 'nobody';
 
-		my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
-			{'sender' => $sender,
+		my $result = $list->check_list_authz(
+			'visibility',
+			$param->{'auth_method'},
+			{
+				'sender'      => $sender,
 				'remote_host' => $param->{'remote_host'},
 				'remote_addr' => $param->{'remote_addr'},
-				'options' => {'dont_reload_scenario' => 1}});
+				'options'     => { 'dont_reload_scenario' => 1 }
+			}
+		);
 
 		my $r_action;
 		$r_action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -4796,10 +4857,15 @@ sub do_subscribe {
 					'error_type' => 'already_subscriber'});
 			return undef;
 		}
-		my $result = $list->check_list_authz('subscribe',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'subscribe',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $sub_is;
 		my $reason;
 		if (ref($result) eq 'HASH') {
@@ -5088,10 +5154,15 @@ sub do_auto_signoff {
 
 	## If unsubscribe is forbidden, reject the request. Other
 
-	my $result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-		{'sender' => $in{'email'},
+	my $result = $list->check_list_authz(
+		'unsubscribe',
+		$param->{'auth_method'},
+		{
+			'sender'      => $in{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $sig_is;
 	my $reason;
 	if (ref($result) eq 'HASH') {
@@ -5245,10 +5316,15 @@ sub unsubscribe {
 		return %report;
 	}
 
-	my $result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-		{'sender' => $param->{'user'}{'email'},
+	my $result = $list->check_list_authz(
+		'unsubscribe',
+		$param->{'auth_method'},
+		{
+			'sender'      => $param->{'user'}{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $sig_is;
 	my $reason;
 	if (ref($result) eq 'HASH') {
@@ -6199,11 +6275,16 @@ sub do_add {
 			wwslog('debug', "do_add subscription XML \$subscriptions->{$email}{custom_attribute} = $xml;");
 		}
 
-		my $result = $list->check_list_authz('add',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
-				'email' => $in{'email'},
+		my $result = $list->check_list_authz(
+			'add',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
+				'email'       => $in{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $add_is;
 		my $reason;
 		if (ref($result) eq 'HASH') {
@@ -6310,11 +6391,16 @@ sub do_del {
 
 	$in{'email'} = Sympa::Tools::unescape_chars($in{'email'});
 
-	my $result = $list->check_list_authz('del',$param->{'auth_method'},
-		{'sender' => $param->{'user'}{'email'},
-			'email' => $in{'email'},
+	my $result = $list->check_list_authz(
+		'del',
+		$param->{'auth_method'},
+		{
+			'sender'      => $param->{'user'}{'email'},
+			'email'       => $in{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $del_is;
 	my $reason;
 	if (ref($result) eq 'HASH') {
@@ -7322,10 +7408,15 @@ sub do_arc {
 	}
 
 	## check autorization for tracking
-	my $result = $list->check_list_authz('tracking.tracking',$param->{'auth_method'},
-		{'sender' => $param->{'user'}{'email'},
+	my $result = $list->check_list_authz(
+		'tracking.tracking',
+		$param->{'auth_method'},
+		{
+			'sender'      => $param->{'user'}{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $r_action;
 	if (ref($result) eq 'HASH') {
 		$r_action = $result->{'action'};
@@ -7885,10 +7976,15 @@ sub do_tracking   {
 	wwslog('info', 'do_tracking(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
 	## Access control
-	my $result = $list->check_list_authz('tracking.tracking',$param->{'auth_method'},
-		{'sender' => $param->{'user'}{'email'},
+	my $result = $list->check_list_authz(
+		'tracking.tracking',
+		$param->{'auth_method'},
+		{
+			'sender'      => $param->{'user'}{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $r_action;
 	my $reason;
 	if (ref($result) eq 'HASH') {
@@ -9434,10 +9530,15 @@ sub do_search_list {
 		}
 		next if $regtest;
 
-		my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'visibility',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $r_action;
 		$r_action = $result->{'action'} if (ref($result) eq 'HASH');
 		next unless ($r_action eq 'do_it');
@@ -10955,10 +11056,15 @@ sub d_access_control {
 
 	# if not privileged owner
 	if ($mode_read) {
-		my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'shared_doc.d_read',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $action;
 		if (ref($result) eq 'HASH') {
 			$action = $result->{'action'};
@@ -10969,10 +11075,15 @@ sub d_access_control {
 	}
 
 	if ($mode_edit) {
-		my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-			{'sender' => $param->{'user'}{'email'},
+		my $result = $list->check_list_authz(
+			'shared_doc.d_edit',
+			$param->{'auth_method'},
+			{
+				'sender'      => $param->{'user'}{'email'},
 				'remote_host' => $param->{'remote_host'},
-				'remote_addr' => $param->{'remote_addr'}});
+				'remote_addr' => $param->{'remote_addr'}
+			}
+		);
 		my $action;
 		if (ref($result) eq 'HASH') {
 			$action = $result->{'action'};
@@ -11037,11 +11148,16 @@ sub d_access_control {
 
 			if ($mode_read) {
 
-				my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-					{'sender' => $param->{'user'}{'email'},
+				my $result = $list->check_list_authz(
+					'shared_doc.d_read',
+					$param->{'auth_method'},
+					{
+						'sender'      => $param->{'user'}{'email'},
 						'remote_host' => $param->{'remote_host'},
 						'remote_addr' => $param->{'remote_addr'},
-						'scenario'=> $desc_hash{'read'}});
+						'scenario'    => $desc_hash{'read'}
+					}
+				);
 				my $action;
 				if (ref($result) eq 'HASH') {
 					$action = $result->{'action'};
@@ -11053,11 +11169,16 @@ sub d_access_control {
 			}
 
 			if ($mode_edit) {
-				my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-					{'sender' => $param->{'user'}{'email'},
+				my $result = $list->check_list_authz(
+					'shared_doc.d_edit',
+					$param->{'auth_method'},
+					{
+						'sender'      => $param->{'user'}{'email'},
 						'remote_host' => $param->{'remote_host'},
 						'remote_addr' => $param->{'remote_addr'},
-						'scenario'=> $desc_hash{'edit'}});
+						'scenario'    => $desc_hash{'edit'}
+					}
+				);
 				my $action_edit;
 				if (ref($result) eq 'HASH') {
 					$action_edit = $result->{'action'};
@@ -11458,11 +11579,16 @@ sub do_d_read {
 					# check access permission for reading
 					%desc_hash = get_desc_file("$path_doc/.desc");
 
-					my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-						{'sender' => $param->{'user'}{'email'},
+					my $result = $list->check_list_authz(
+						'shared_doc.d_read',
+						$param->{'auth_method'},
+						{
+							'sender'      => $param->{'user'}{'email'},
 							'remote_host' => $param->{'remote_host'},
 							'remote_addr' => $param->{'remote_addr'},
-							'scenario' => $desc_hash{'read'}});
+							'scenario'    => $desc_hash{'read'}
+						}
+					);
 					my $action;
 					$action = $result->{'action'} if (ref($result) eq 'HASH');
 
@@ -11499,11 +11625,16 @@ sub do_d_read {
 						## only authenticated users can edit a file
 
 						if ($param->{'user'}{'email'}) {
-							my $result = $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-								{'sender' => $param->{'user'}{'email'},
+							my $result = $list->check_list_authz(
+								'shared_doc.d_edit',
+								$param->{'auth_method'},
+								{
+									'sender'      => $param->{'user'}{'email'},
 									'remote_host' => $param->{'remote_host'},
 									'remote_addr' => $param->{'remote_addr'},
-									'scenario' => $desc_hash{'edit'}});
+									'scenario'    => $desc_hash{'edit'}
+								}
+							);
 							my $action_edit;
 							$action_edit = $result->{'action'} if (ref($result) eq 'HASH');
 							#may_action_edit = 0, 0.5 or 1
@@ -11557,11 +11688,16 @@ sub do_d_read {
 					%desc_hash = get_desc_file("$doc/.desc.$d");
 
 
-					my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-						{'sender' => $param->{'user'}{'email'},
+					my $result = $list->check_list_authz(
+						'shared_doc.d_read',
+						$param->{'auth_method'},
+						{
+							'sender'      => $param->{'user'}{'email'},
 							'remote_host' => $param->{'remote_host'},
 							'remote_addr' => $param->{'remote_addr'},
-							'scenario' => $desc_hash{'read'}});
+							'scenario'    => $desc_hash{'read'}
+						}
+					);
 					my $action;
 					$action = $result->{'action'} if (ref($result) eq 'HASH');
 					unless (($user eq $desc_hash{'email'}) || ($may_control) ||
@@ -11620,11 +11756,16 @@ sub do_d_read {
 						## Only authenticated users can edit files
 
 						if ($param->{'user'}{'email'}) {
-							my $result= $list->check_list_authz('shared_doc.d_edit',$param->{'auth_method'},
-								{'sender' => $param->{'user'}{'email'},
+							my $result= $list->check_list_authz(
+								'shared_doc.d_edit',
+								$param->{'auth_method'},
+								{
+									'sender'      => $param->{'user'}{'email'},
 									'remote_host' => $param->{'remote_host'},
 									'remote_addr' => $param->{'remote_addr'},
-									'scenario' => $desc_hash{'edit'}});
+									'scenario'    => $desc_hash{'edit'}
+								}
+							);
 							my $action_edit;
 							$action_edit = $result->{'action'} if (ref($result) eq 'HASH');
 							#may_action_edit = 0, 0.5 or 1
@@ -11987,11 +12128,16 @@ sub directory_browsing {
 				# check access permission for reading
 				my %desc_hash = get_desc_file("$path_d/.desc");
 
-				my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-					{'sender' => $param->{'user'}{'email'},
+				my $result = $list->check_list_authz(
+					'shared_doc.d_read',
+					$param->{'auth_method'},
+					{
+						'sender'      => $param->{'user'}{'email'},
 						'remote_host' => $param->{'remote_host'},
 						'remote_addr' => $param->{'remote_addr'},
-						'scenario' => $desc_hash{'read'}});
+						'scenario'    => $desc_hash{'read'}
+					}
+				);
 				my $action;
 				$action = $result->{'action'} if (ref($result) eq 'HASH');
 				if  (($user eq $desc_hash{'email'}) || ($may_control) ||
@@ -12041,11 +12187,16 @@ sub directory_browsing {
 				# check access permission
 				%desc_hash = get_desc_file("$path_dir/.desc.$d");
 
-				my $result = $list->check_list_authz('shared_doc.d_read',$param->{'auth_method'},
-					{'sender' => $param->{'user'}{'email'},
+				my $result = $list->check_list_authz(
+					'shared_doc.d_read',
+					$param->{'auth_method'},
+					{
+						'sender'      => $param->{'user'}{'email'},
 						'remote_host' => $param->{'remote_host'},
 						'remote_addr' => $param->{'remote_addr'},
-						'scenario' => $desc_hash{'read'}});
+						'scenario'    => $desc_hash{'read'}
+					}
+				);
 				my $action;
 				$action = $result->{'action'} if (ref($result) eq 'HASH');
 				unless (($user eq $desc_hash{'email'}) || ($may_control) ||
@@ -15004,10 +15155,15 @@ sub do_remind {
 	my $mail_command;
 
 	## Sympa will require a confirmation
-	my $result = $list->check_list_authz('remind','smtp',
-		{'sender' => $param->{'user'}{'email'},
+	my $result = $list->check_list_authz(
+		'remind',
+		'smtp',
+		{
+			'sender'      => $param->{'user'}{'email'},
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $r_action;
 	my $reason;
 	if (ref($result) eq 'HASH') {
@@ -17525,10 +17681,15 @@ sub _prepare_subscriber {
 sub check_authz {
 	my ($subname, $action) = @_;
 
-	my $result = $list->check_list_authz($action,$param->{'auth_method'},
-		{'sender' => $param->{'user'}{'email'} || 'nobody',
+	my $result = $list->check_list_authz(
+		$action,
+		$param->{'auth_method'},
+		{
+			'sender'      => $param->{'user'}{'email'} || 'nobody',
 			'remote_host' => $param->{'remote_host'},
-			'remote_addr' => $param->{'remote_addr'}});
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	);
 	my $r_action;
 	my $reason;
 	if (ref($result) eq 'HASH') {
