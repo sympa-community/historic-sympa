@@ -659,49 +659,49 @@ sub update_list{
 		return undef;
 	}
 	Sympa::Template::parse_tt2($params, 'config.tt2', \*CONFIG, [$family->{'dir'}]);
-close CONFIG;
+	close CONFIG;
 
-## Unlock config file
-$lock->unlock();
+	## Unlock config file
+	$lock->unlock();
 
-## Create list object
-$list = Sympa::List->new(
-	name   => $params->{'listname'},
-	robot  => $robot,
-	source => Sympa::Database::get_source(),
-);
-unless ($list) {
-	Sympa::Log::Syslog::do_log('err','unable to create list %s',  $params->{'listname'});
-	return undef;
-}
-############## ? update
-$list->{'admin'}{'creation'}{'date'} =
-	Sympa::Language::gettext_strftime(
-		"%d %b %Y at %H:%M:%S",
-		localtime(time())
-);
-$list->{'admin'}{'creation'}{'date_epoch'} = time();
-if ($params->{'creation_email'}) {
-	$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
-} else {
-	my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
-	$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
-}
+	## Create list object
+	$list = Sympa::List->new(
+		name   => $params->{'listname'},
+		robot  => $robot,
+		source => Sympa::Database::get_source(),
+	);
+	unless ($list) {
+		Sympa::Log::Syslog::do_log('err','unable to create list %s',  $params->{'listname'});
+		return undef;
+	}
+	############## ? update
+	$list->{'admin'}{'creation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S",
+			localtime(time())
+	);
+	$list->{'admin'}{'creation'}{'date_epoch'} = time();
+	if ($params->{'creation_email'}) {
+		$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
+	} else {
+		my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+		$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
+	}
 
-if ($params->{'status'}) {
-	$list->{'admin'}{'status'} = $params->{'status'};
-} else {
-	$list->{'admin'}{'status'} = 'open';
-}
-$list->{'admin'}{'family_name'} = $family->{'name'};
+	if ($params->{'status'}) {
+		$list->{'admin'}{'status'} = $params->{'status'};
+	} else {
+		$list->{'admin'}{'status'} = 'open';
+	}
+	$list->{'admin'}{'family_name'} = $family->{'name'};
 
-## Synchronize list members if required
-if ($list->has_include_data_sources()) {
-	Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	$list->sync_include();
-}
+	## Synchronize list members if required
+	if ($list->has_include_data_sources()) {
+		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+		$list->sync_include();
+	}
 
-return $list;
+	return $list;
 }
 
 =item rename_list(%parameters)

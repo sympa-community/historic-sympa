@@ -265,16 +265,16 @@ sub _find_match {
 				}
 			}
 			$res->{'rich'}->{$k} = \@rich;
-		$res->{$k} = encode_entities($res->{$k}, '<>&"');
-		$res->{$k} =~ s,\001,<B>,g;
-		$res->{$k} =~ s,\002,</B>,g;
-		$res->{$k} =~ s,\n,<BR/>,g;
-		$res->{$k} = encode_utf8($res->{$k});
+			$res->{$k} = encode_entities($res->{$k}, '<>&"');
+			$res->{$k} =~ s,\001,<B>,g;
+			$res->{$k} =~ s,\002,</B>,g;
+			$res->{$k} =~ s,\n,<BR/>,g;
+			$res->{$k} = encode_utf8($res->{$k});
+		}
+		push @{$self->{'res'}}, $res;
 	}
-	push @{$self->{'res'}}, $res;
-}
 
-return $match;		# 1 if match suceeds; 0 otherwise
+	return $match;		# 1 if match suceeds; 0 otherwise
 }
 
 =item $search->search()
@@ -299,126 +299,126 @@ sub search {
 	foreach my $dir (@directories) {
 		my $directory = ($self->search_base . '/' . $dir . '/');
 		find({ wanted => \&_get_file_list, untaint => 1, untaint_pattern => qr|^([-@\w./]+)$| },$directory);
-}
-# File::Find returns these in somewhat haphazard order.
-@MSGFILES = sort @MSGFILES;
-
-# Newest files first!
-@MSGFILES = reverse(@MSGFILES) if $self->age;
-
-# The *real* number of files
-$self->file_count($#MSGFILES);
-
-@MSGFILES = splice(@MSGFILES,$previous) if $previous;
-my $file;
-my $i = 1;			# Arrays are numbered from 0
-# Avoid doing a lot of extra math inside the loop
-$limit += $previous;
-foreach $file (@MSGFILES) {
-	my ($subj,$from,$date,$id,$body_ref);
-	unless (open FH, '<:utf8', $file) {
-#			$self->error("Couldn't open file $file, $ERRNO");
 	}
+	# File::Find returns these in somewhat haphazard order.
+	@MSGFILES = sort @MSGFILES;
 
-	# Need this loop because newer versions of MHonArc put a version
-	# number on the first line of the message.  Just in case Earl
-	# decides to change this again, we will loop until the subject
-	# comment tag is found.  Thanks to Douglas Gray Stephens for
-	# pointing this out, and more importantly, for suggesting a good
-	# solution (though ultimately not the one in place here).  That
-	# DGS was able to contribute to this modest little program is, I
-	# think, a good argument in favor of open source code!
-	while (<FH>) {
-		## Next line is appended to the subject
-		if (defined $subj) {
-			$subj .= $1 if (/\s(.*)( -->|$)/);
-			if (/-->$/) {
-				$subj =~ s/ -->$//;
+	# Newest files first!
+	@MSGFILES = reverse(@MSGFILES) if $self->age;
+
+	# The *real* number of files
+	$self->file_count($#MSGFILES);
+
+	@MSGFILES = splice(@MSGFILES,$previous) if $previous;
+	my $file;
+	my $i = 1;			# Arrays are numbered from 0
+	# Avoid doing a lot of extra math inside the loop
+	$limit += $previous;
+	foreach $file (@MSGFILES) {
+		my ($subj,$from,$date,$id,$body_ref);
+		unless (open FH, '<:utf8', $file) {
+#			$self->error("Couldn't open file $file, $ERRNO");
+		}
+
+		# Need this loop because newer versions of MHonArc put a version
+		# number on the first line of the message.  Just in case Earl
+		# decides to change this again, we will loop until the subject
+		# comment tag is found.  Thanks to Douglas Gray Stephens for
+		# pointing this out, and more importantly, for suggesting a good
+		# solution (though ultimately not the one in place here).  That
+		# DGS was able to contribute to this modest little program is, I
+		# think, a good argument in favor of open source code!
+		while (<FH>) {
+			## Next line is appended to the subject
+			if (defined $subj) {
+				$subj .= $1 if (/\s(.*)( -->|$)/);
+				if (/-->$/) {
+					$subj =~ s/ -->$//;
+					last;
+				}
+			} elsif (/^<!--X-Subject: (.*)( -->|$)/) {
+				## No more need to decode header fields
+				# $subj = MIME::Words::decode_mimewords($1);
+				$subj = $1;
+				last if (/-->/);
+			}
+		}
+		$subj =~ s/ *-->$//;
+
+		($from = <FH>) =~ s/^<!--X-From-R13: (.*) -->/$1/;
+
+		## No more need to decode header fields
+		#$from = MIME::Words::decode_mimewords($from);
+
+		$from =~ tr/N-Z[@A-Mn-za-m/@A-Z[a-z/;
+
+		($date = <FH>) =~ s/^<!--X-Date: (.*) -->/$1/;
+
+		($id = <FH>) =~ s/^<!--X-Message-Id: (.*) -->/$1/;
+
+		if ($body) {
+			my $lines = '';
+			while (<FH>) {
+				# Messages are contained between Body-of-Message tags
+				next unless (/^<!--X-Body-of-Message-->/);
+				$_ = <FH>;
+				while (! eof && ($_ !~ /^<!--X-MsgBody-End-->/)) {
+					$lines .= $_;
+					$_ = <FH>;
+				}
 				last;
 			}
-		} elsif (/^<!--X-Subject: (.*)( -->|$)/) {
-			## No more need to decode header fields
-			# $subj = MIME::Words::decode_mimewords($1);
-			$subj = $1;
-			last if (/-->/);
+			# Remove HTML comments
+			$lines =~ s/<!--[^<>]*?-->//g;
+			# Translate newlines
+			$lines =~ s{<PRE\b[^>]*>(.*?)</PRE\b[^>]*>}
+			{ my $s = $1; $s =~ s,\r\n|\r|\n,<BR/>,g; $s; }egis;
+			$lines =~ s/[\r\n]/ /g;
+			$lines =~ s/<(BR|DIV|P)\b[^>]*>[ \t]*/\n/gi;
+			# Remove other HTML tags
+			$lines =~ s,[ \t]*</[^>]*>,,g;
+			$lines =~ s/<[^>]*>[ \t]*//g;
+			$lines =~ s/[<>]/ /g;
+			# Decode entities
+			$lines = decode_entities($lines);
+			$lines =~ s/[\001\002]/ /g;
+			# Split lines
+			$body_ref = [split /(?<=\n)/, $lines];
 		}
-	}
-	$subj =~ s/ *-->$//;
-
-	($from = <FH>) =~ s/^<!--X-From-R13: (.*) -->/$1/;
-
-	## No more need to decode header fields
-	#$from = MIME::Words::decode_mimewords($from);
-
-	$from =~ tr/N-Z[@A-Mn-za-m/@A-Z[a-z/;
-
-	($date = <FH>) =~ s/^<!--X-Date: (.*) -->/$1/;
-
-	($id = <FH>) =~ s/^<!--X-Message-Id: (.*) -->/$1/;
-
-	if ($body) {
-		my $lines = '';
-		while (<FH>) {
-			# Messages are contained between Body-of-Message tags
-			next unless (/^<!--X-Body-of-Message-->/);
-			$_ = <FH>;
-			while (! eof && ($_ !~ /^<!--X-MsgBody-End-->/)) {
-				$lines .= $_;
-				$_ = <FH>;
-			}
-			last;
+		unless (close FH) {
+	#            $self->error("Couldn't close file $file, $ERRNO");
 		}
-		# Remove HTML comments
-		$lines =~ s/<!--[^<>]*?-->//g;
-		# Translate newlines
-		$lines =~ s{<PRE\b[^>]*>(.*?)</PRE\b[^>]*>}
-		{ my $s = $1; $s =~ s,\r\n|\r|\n,<BR/>,g; $s; }egis;
-		$lines =~ s/[\r\n]/ /g;
-		$lines =~ s/<(BR|DIV|P)\b[^>]*>[ \t]*/\n/gi;
-		# Remove other HTML tags
-		$lines =~ s,[ \t]*</[^>]*>,,g;
-		$lines =~ s/<[^>]*>[ \t]*//g;
-		$lines =~ s/[<>]/ /g;
+
 		# Decode entities
-		$lines = decode_entities($lines);
-		$lines =~ s/[\001\002]/ /g;
-		# Split lines
-		$body_ref = [split /(?<=\n)/, $lines];
-	}
-	unless (close FH) {
-#            $self->error("Couldn't close file $file, $ERRNO");
+		if ($subj) {
+			$subj = decode_entities($subj);
+			$subj =~ s/[\001\002\r\n]/ /g;
+		}
+		if ($from) {
+			$from = decode_entities($from);
+			$from =~ s/[\001\002\r\n]/ /g;
+		}
+		if ($date) {
+			$date = decode_entities($date);
+			$date =~ s/[\001\002\r\n]/ /g;
+		}
+		if ($id) {
+			$id = decode_entities($id);
+			$id =~ s/[\001\002\r\n]/ /g;
+		}
+
+		if ($self->_find_match($file,$subj,$from,$date,$id,$body_ref)) {
+			return ($i + $previous)
+				if (   $self->body_count == $limit
+					or $self->subj_count == $limit
+					or $self->from_count == $limit
+					or $self->date_count == $limit
+					or $self->id_count == $limit);
+		}
+		$i++;
 	}
 
-	# Decode entities
-	if ($subj) {
-		$subj = decode_entities($subj);
-		$subj =~ s/[\001\002\r\n]/ /g;
-	}
-	if ($from) {
-		$from = decode_entities($from);
-		$from =~ s/[\001\002\r\n]/ /g;
-	}
-	if ($date) {
-		$date = decode_entities($date);
-		$date =~ s/[\001\002\r\n]/ /g;
-	}
-	if ($id) {
-		$id = decode_entities($id);
-		$id =~ s/[\001\002\r\n]/ /g;
-	}
-
-	if ($self->_find_match($file,$subj,$from,$date,$id,$body_ref)) {
-		return ($i + $previous)
-		if (   $self->body_count == $limit
-				or $self->subj_count == $limit
-				or $self->from_count == $limit
-				or $self->date_count == $limit
-				or $self->id_count == $limit);
-	}
-	$i++;
-}
-
-return $self->file_count + 1;
+	return $self->file_count + 1;
 }
 
 ## Function for use with File::Find -- recursive

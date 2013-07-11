@@ -236,87 +236,87 @@ sub add_list {
 		# get list data
 		open (FIC, '<:raw', "$self->{'dir'}/_new_list.xml");
 		my $config = Sympa::Configuration::XML->new(handle => \*FIC);
-	close FIC;
-	unless (defined $config->createHash()) {
-		push @{$return->{'string_error'}}, "Error in representation data with these xml data";
+		close FIC;
+		unless (defined $config->createHash()) {
+			push @{$return->{'string_error'}}, "Error in representation data with these xml data";
+			return $return;
+		}
+
+		$hash_list = $config->getHash();
+	}
+
+	#list creation
+	my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
+	unless (defined $result) {
+		push @{$return->{'string_error'}}, "Error during list creation, see logs for more information";
+		return $return;
+	}
+	unless (defined $result->{'list'}) {
+		push @{$return->{'string_error'}}, "Errors : no created list, see logs for more information";
+		return $return;
+	}
+	my $list = $result->{'list'};
+
+	## aliases
+	if ($result->{'aliases'} == 1) {
+		push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family";
+	} else {
+		push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family, required aliases : $result->{'aliases'} ";
+	}
+
+	# config_changes
+	unless (open FILE, '>', "$list->{'dir'}/config_changes") {
+		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config";
+	}
+	close FILE;
+
+	# info parameters
+	$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
+	$list->{'admin'}{'latest_instantiation'}{'date'} =
+		Sympa::Language::gettext_strftime(
+			"%d %b %Y at %H:%M:%S",
+			localtime(time())
+		);
+	$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time();
+	$list->save_config("listmaster\@$host");
+	$list->{'family'} = $self;
+
+	## check param_constraint.conf
+	$self->{'state'} = 'normal';
+	my $error = $self->check_param_constraint($list);
+	$self->{'state'} = 'no_check';
+
+	unless (defined $error) {
+		$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 		return $return;
 	}
 
-	$hash_list = $config->getHash();
-}
-
-#list creation
-my $result = Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
-unless (defined $result) {
-	push @{$return->{'string_error'}}, "Error during list creation, see logs for more information";
-	return $return;
-}
-unless (defined $result->{'list'}) {
-	push @{$return->{'string_error'}}, "Errors : no created list, see logs for more information";
-	return $return;
-}
-my $list = $result->{'list'};
-
-## aliases
-if ($result->{'aliases'} == 1) {
-	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family";
-} else {
-	push @{$return->{'string_info'}}, "List $list->{'name'} has been created in $self->{'name'} family, required aliases : $result->{'aliases'} ";
-}
-
-# config_changes
-unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $ERRNO, the list is set in status error_config";
-}
-close FILE;
-
-# info parameters
-$list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
-$list->{'admin'}{'latest_instantiation'}{'date'} =
-	Sympa::Language::gettext_strftime(
-		"%d %b %Y at %H:%M:%S",
-		localtime(time())
-	);
-$list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time();
-$list->save_config("listmaster\@$host");
-$list->{'family'} = $self;
-
-## check param_constraint.conf
-$self->{'state'} = 'normal';
-my $error = $self->check_param_constraint($list);
-$self->{'state'} = 'no_check';
-
-unless (defined $error) {
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
-	return $return;
-}
-
-if (ref($error) eq 'ARRAY') {
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
-	push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
-}
-
-## copy files in the list directory : xml file
-unless ( ref($data) eq "HASH" ) {
-	unless ($self->_copy_files($list->{'dir'},"_new_list.xml")) {
-		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
-		push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+	if (ref($error) eq 'ARRAY') {
+		$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+		push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
 	}
-}
 
-## Synchronize list members if required
-if ($list->has_include_data_sources()) {
-	Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
-	$list->sync_include();
-}
+	## copy files in the list directory : xml file
+	unless ( ref($data) eq "HASH" ) {
+		unless ($self->_copy_files($list->{'dir'},"_new_list.xml")) {
+			$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+			push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+		}
+	}
 
-## END
-$self->{'state'} = 'normal';
-$return->{'ok'} = 1;
+	## Synchronize list members if required
+	if ($list->has_include_data_sources()) {
+		Sympa::Log::Syslog::do_log('notice', "Synchronizing list members...");
+		$list->sync_include();
+	}
 
-return $return;
+	## END
+	$self->{'state'} = 'normal';
+	$return->{'ok'} = 1;
+
+	return $return;
 }
 
 =item $family->modify_list($fh, $host, $source)

@@ -481,62 +481,62 @@ sub store {
 	}
 	my $data_string = Sympa::Tools::Data::hash_2_string (\%hash);
 
-## If this is a new session, then perform an INSERT
-if ($self->{'new_session'}) {
-	## Store the new session ID in the DB
-	my $rows = $self->{source}->execute_query(
-		"INSERT INTO session_table ("   .
-			"id_session, "          .
-			"date_session, "        .
-			"remote_addr_session, " .
-			"robot_session, "       .
-			"email_session, "       .
-			"start_date_session, "  .
-			"hit_session, "         .
-			"data_session"          .
-		") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-		$self->{'id_session'},
-		time(),
-		$ENV{'REMOTE_ADDR'},
-		$self->{'robot'},
-		$self->{'email'},
-		$self->{'start_date'},
-		$self->{'hit'},
-		$data_string
-	);
-	unless($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
-		return undef;
+	## If this is a new session, then perform an INSERT
+	if ($self->{'new_session'}) {
+		## Store the new session ID in the DB
+		my $rows = $self->{source}->execute_query(
+			"INSERT INTO session_table ("   .
+				"id_session, "          .
+				"date_session, "        .
+				"remote_addr_session, " .
+				"robot_session, "       .
+				"email_session, "       .
+				"start_date_session, "  .
+				"hit_session, "         .
+				"data_session"          .
+			") VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+			$self->{'id_session'},
+			time(),
+			$ENV{'REMOTE_ADDR'},
+			$self->{'robot'},
+			$self->{'email'},
+			$self->{'start_date'},
+			$self->{'hit'},
+			$data_string
+		);
+		unless($rows) {
+			Sympa::Log::Syslog::do_log('err','Unable to add new session %s informations in database', $self->{'id_session'});
+			return undef;
+		}
+		## If the session already exists in DB, then perform an UPDATE
+	} else {
+		## Update the new session in the DB
+		my $rows = $self->{source}->execute_query(
+			"UPDATE session_table SET "       .
+				"date_session=?, "        .
+				"remote_addr_session=?, " .
+				"robot_session=?, "       .
+				"email_session=?,"        .
+				"start_date_session=?, "  .
+				"hit_session=?, "         .
+				"data_session=? "         .
+				"WHERE (id_session=?)",
+			time(),
+			$ENV{'REMOTE_ADDR'},
+			$self->{'robot'},
+			$self->{'email'},
+			$self->{'start_date'},
+			$self->{'hit'},
+			$data_string,
+			$self->{'id_session'}
+		);
+		unless ($rows) {
+			Sympa::Log::Syslog::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
+			return undef;
+		}
 	}
-	## If the session already exists in DB, then perform an UPDATE
-} else {
-	## Update the new session in the DB
-	my $rows = $self->{source}->execute_query(
-		"UPDATE session_table SET "       .
-			"date_session=?, "        .
-			"remote_addr_session=?, " .
-			"robot_session=?, "       .
-			"email_session=?,"        .
-			"start_date_session=?, "  .
-			"hit_session=?, "         .
-			"data_session=? "         .
-			"WHERE (id_session=?)",
-		time(),
-		$ENV{'REMOTE_ADDR'},
-		$self->{'robot'},
-		$self->{'email'},
-		$self->{'start_date'},
-		$self->{'hit'},
-		$data_string,
-		$self->{'id_session'}
-	);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to update session %s information in database', $self->{'id_session'});
-		return undef;
-	}
-}
 
-return 1;
+	return 1;
 }
 
 =item $session->renew()

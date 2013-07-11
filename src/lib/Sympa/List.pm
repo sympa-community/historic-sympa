@@ -3214,10 +3214,10 @@ sub get_param_value {
 			push @values,_get_single_param_value($elt,$param,$minor_param)
 		}
 		$value = \@values;
-} else {
-	$value = _get_single_param_value($self->{'admin'}{$param},$param,$minor_param);
-}
-return $value;
+	} else {
+		$value = _get_single_param_value($self->{'admin'}{$param},$param,$minor_param);
+	}
+	return $value;
 }
 
 ## Returns the single list parameter value from struct $p, with $key entrie,
@@ -3369,160 +3369,161 @@ sub distribute_msg {
 		Sympa::Template::parse_tt2({'list' => {'name' => $self->{'name'},
 					'sequence' => $self->{'stats'}->[0]
 				}},
-			[$custom_subject], \$parsed_tag);
+			[$custom_subject], \$parsed_tag
+		);
 
-	## If subject is tagged, replace it with new tag
-	## Splitting the subject in two parts :
-	##   - what will be before the custom subject (probably some "Re:")
-	##   - what will be after it : the orginal subject sent to the list.
-	## The custom subject is not kept.
-	my $before_tag;
-	my $after_tag;
-	if ($custom_subject =~ /\S/) {
-		$subject_field =~ s/\s*\[$tag_regexp\]\s*/ /;
-	}
-	$subject_field =~ s/\s+$//;
+		## If subject is tagged, replace it with new tag
+		## Splitting the subject in two parts :
+		##   - what will be before the custom subject (probably some "Re:")
+		##   - what will be after it : the orginal subject sent to the list.
+		## The custom subject is not kept.
+		my $before_tag;
+		my $after_tag;
+		if ($custom_subject =~ /\S/) {
+			$subject_field =~ s/\s*\[$tag_regexp\]\s*/ /;
+		}
+		$subject_field =~ s/\s+$//;
 
-	# truncate multiple "Re:" and equivalents.
-	my $re_regexp = Sympa::Tools::get_regexp('re');
-	if ($subject_field =~ /^\s*($re_regexp\s*)($re_regexp\s*)*/) {
-		($before_tag, $after_tag) = ($1, $POSTMATCH); #'
-	} else {
-		($before_tag, $after_tag) = ('', $subject_field);
-	}
+		# truncate multiple "Re:" and equivalents.
+		my $re_regexp = Sympa::Tools::get_regexp('re');
+		if ($subject_field =~ /^\s*($re_regexp\s*)($re_regexp\s*)*/) {
+			($before_tag, $after_tag) = ($1, $POSTMATCH); #'
+		} else {
+			($before_tag, $after_tag) = ('', $subject_field);
+		}
 
-	## Encode subject using initial charset
+		## Encode subject using initial charset
 
-	## Don't try to encode the subject if it was not originaly encoded.
-	if ($message->{'subject_charset'}) {
-		$subject_field = MIME::EncWords::encode_mimewords([
+		## Don't try to encode the subject if it was not originaly encoded.
+		if ($message->{'subject_charset'}) {
+			$subject_field = MIME::EncWords::encode_mimewords([
 				[Encode::decode('utf8', $before_tag), $message->{'subject_charset'}],
 				[Encode::decode('utf8', '['.$parsed_tag.'] '), Sympa::Language::get_charset()],
 				[Encode::decode('utf8', $after_tag), $message->{'subject_charset'}]
 			], Encoding=>'A', Field=>'Subject');
-	} else {
-		$subject_field = $before_tag . ' ' .  MIME::EncWords::encode_mimewords([
+		} else {
+			$subject_field = $before_tag . ' ' .  MIME::EncWords::encode_mimewords([
 				[Encode::decode('utf8', '['.$parsed_tag.']'), Sympa::Language::get_charset()]
 			], Encoding=>'A', Field=>'Subject') . ' ' . $after_tag;
-	}
-	$message->{'msg'}->head()->add('Subject', $subject_field);
-}
-
-## Prepare tracking if list config allow it
-my $apply_tracking = 'off';
-
-$apply_tracking = 'dsn' if ($self->{'admin'}{'tracking'}{'delivery_status_notification'} eq 'on');
-$apply_tracking = 'mdn' if ($self->{'admin'}{'tracking'}{'message_delivery_notification'} eq 'on');
-$apply_tracking = 'mdn' if (($self->{'admin'}{'tracking'}{'message_delivery_notification'}  eq 'on_demand') && ($hdr->get('Disposition-Notification-To')));
-
-if ($apply_tracking ne 'off'){
-	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted if needed
-}
-
-## Remove unwanted headers if present.
-if ($self->{'admin'}{'remove_headers'}) {
-	foreach my $field (@{$self->{'admin'}{'remove_headers'}}) {
-		$hdr->delete($field);
-	}
-}
-
-## Archives
-
-$self->archive_msg($message);
-
-
-## Change the reply-to header if necessary.
-if ($self->{'admin'}{'reply_to_header'}) {
-	unless ($hdr->get('Reply-To') && ($self->{'admin'}{'reply_to_header'}{'apply'} ne 'forced')) {
-		my $reply;
-
-		$hdr->delete('Reply-To');
-
-		if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
-			$reply = "$name\@$host";
-		} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
-			$reply = $hdr->get('From');
-		} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'all') {
-			$reply = "$name\@$host,".$hdr->get('From');
-		} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'other_email') {
-			$reply = $self->{'admin'}{'reply_to_header'}{'other_email'};
 		}
-
-		$hdr->add('Reply-To',$reply) if $reply;
+		$message->{'msg'}->head()->add('Subject', $subject_field);
 	}
-}
 
-## Add useful headers
-$hdr->add('X-Loop', "$name\@$host");
-$message->{'msg'}->head()->add('X-Loop', "$name\@$host");
-$hdr->add('X-Sequence', $sequence);
-$hdr->add('Errors-to', $name.Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
-$hdr->add('Precedence', 'list');
-$hdr->add('Precedence', 'bulk');
-$hdr->add('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}"); # The Sender: header should be add at least for DKIM compatibility
-$hdr->add('X-no-archive', 'yes');
-foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
-	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
-}
+	## Prepare tracking if list config allow it
+	my $apply_tracking = 'off';
 
-## Add RFC 2919 header field
-if ($hdr->get('List-Id')) {
-	Sympa::Log::Syslog::do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
-	$hdr->delete('List-ID');
-}
-$hdr->add('List-Id', sprintf ('<%s.%s>', $self->{'name'}, $self->{'admin'}{'host'}));
+	$apply_tracking = 'dsn' if ($self->{'admin'}{'tracking'}{'delivery_status_notification'} eq 'on');
+	$apply_tracking = 'mdn' if ($self->{'admin'}{'tracking'}{'message_delivery_notification'} eq 'on');
+	$apply_tracking = 'mdn' if (($self->{'admin'}{'tracking'}{'message_delivery_notification'}  eq 'on_demand') && ($hdr->get('Disposition-Notification-To')));
 
-## Add RFC 2369 header fields
-foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
-	if ($field eq 'help') {
-		$hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host')));
-	} elsif ($field eq 'unsubscribe') {
-		$hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host'), $self->{'name'}));
-	} elsif ($field eq 'subscribe') {
-		$hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host'), $self->{'name'}));
-	} elsif ($field eq 'post') {
-		$hdr->add('List-Post', sprintf ('<mailto:%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-	} elsif ($field eq 'owner') {
-		$hdr->add('List-Owner', sprintf ('<mailto:%s-request@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-	} elsif ($field eq 'archive') {
-		if (Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-			$hdr->add('List-Archive', sprintf ('<%s/arc/%s>', Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}));
+	if ($apply_tracking ne 'off'){
+		$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted if needed
+	}
+
+	## Remove unwanted headers if present.
+	if ($self->{'admin'}{'remove_headers'}) {
+		foreach my $field (@{$self->{'admin'}{'remove_headers'}}) {
+			$hdr->delete($field);
 		}
 	}
-}
 
-## Add RFC5064 Archived-At SMTP header field
-if (Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-	my @now = localtime(time());
-	my $yyyy = sprintf '%04d', 1900+$now[5];
-	my $mm = sprintf '%02d', $now[4]+1;
-	my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, Sympa::Tools::clean_msg_id($hdr->get('Message-Id'));
-	$hdr->add('Archived-At', '<'.$archived_msg_url.'>');
-}
+	## Archives
 
-## Remove outgoing header fileds
-## Useful to remove some header fields that Sympa has set
-if ($self->{'admin'}{'remove_outgoing_headers'}) {
-	foreach my $field (@{$self->{'admin'}{'remove_outgoing_headers'}}) {
-		$hdr->delete($field);
+	$self->archive_msg($message);
+
+
+	## Change the reply-to header if necessary.
+	if ($self->{'admin'}{'reply_to_header'}) {
+		unless ($hdr->get('Reply-To') && ($self->{'admin'}{'reply_to_header'}{'apply'} ne 'forced')) {
+			my $reply;
+
+			$hdr->delete('Reply-To');
+
+			if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
+				$reply = "$name\@$host";
+			} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
+				$reply = $hdr->get('From');
+			} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'all') {
+				$reply = "$name\@$host,".$hdr->get('From');
+			} elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'other_email') {
+				$reply = $self->{'admin'}{'reply_to_header'}{'other_email'};
+			}
+
+			$hdr->add('Reply-To',$reply) if $reply;
+		}
 	}
-}
 
-## store msg in digest if list accept digest mode (encrypted message can't be included in digest)
-if (($self->is_digest()) and ($message->{'smime_crypted'} ne 'smime_crypted')) {
-	$self->store_digest($message);
-}
+	## Add useful headers
+	$hdr->add('X-Loop', "$name\@$host");
+	$message->{'msg'}->head()->add('X-Loop', "$name\@$host");
+	$hdr->add('X-Sequence', $sequence);
+	$hdr->add('Errors-to', $name.Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
+	$hdr->add('Precedence', 'list');
+	$hdr->add('Precedence', 'bulk');
+	$hdr->add('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}"); # The Sender: header should be add at least for DKIM compatibility
+	$hdr->add('X-no-archive', 'yes');
+	foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
+		$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
+	}
 
-## Synchronize list members, required if list uses include sources
-## unless sync_include has been performed recently.
-if ($self->has_include_data_sources()) {
-	$self->on_the_fly_sync_include('use_ttl' => 1);
-}
+	## Add RFC 2919 header field
+	if ($hdr->get('List-Id')) {
+		Sympa::Log::Syslog::do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
+		$hdr->delete('List-ID');
+	}
+	$hdr->add('List-Id', sprintf ('<%s.%s>', $self->{'name'}, $self->{'admin'}{'host'}));
 
-## Blindly send the message to all users.
-my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature, 'apply_tracking'=>$apply_tracking);
-$self->savestats() if (defined ($numsmtp));
-return $numsmtp;
+	## Add RFC 2369 header fields
+	foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
+		if ($field eq 'help') {
+			$hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host')));
+		} elsif ($field eq 'unsubscribe') {
+			$hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host'), $self->{'name'}));
+		} elsif ($field eq 'subscribe') {
+			$hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', Sympa::Configuration::get_robot_conf($robot, 'email'), Sympa::Configuration::get_robot_conf($robot, 'host'), $self->{'name'}));
+		} elsif ($field eq 'post') {
+			$hdr->add('List-Post', sprintf ('<mailto:%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
+		} elsif ($field eq 'owner') {
+			$hdr->add('List-Owner', sprintf ('<mailto:%s-request@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
+		} elsif ($field eq 'archive') {
+			if (Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
+				$hdr->add('List-Archive', sprintf ('<%s/arc/%s>', Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}));
+			}
+		}
+	}
+
+	## Add RFC5064 Archived-At SMTP header field
+	if (Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
+		my @now = localtime(time());
+		my $yyyy = sprintf '%04d', 1900+$now[5];
+		my $mm = sprintf '%02d', $now[4]+1;
+		my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, Sympa::Tools::clean_msg_id($hdr->get('Message-Id'));
+		$hdr->add('Archived-At', '<'.$archived_msg_url.'>');
+	}
+
+	## Remove outgoing header fileds
+	## Useful to remove some header fields that Sympa has set
+	if ($self->{'admin'}{'remove_outgoing_headers'}) {
+		foreach my $field (@{$self->{'admin'}{'remove_outgoing_headers'}}) {
+			$hdr->delete($field);
+		}
+	}
+
+	## store msg in digest if list accept digest mode (encrypted message can't be included in digest)
+	if (($self->is_digest()) and ($message->{'smime_crypted'} ne 'smime_crypted')) {
+		$self->store_digest($message);
+	}
+
+	## Synchronize list members, required if list uses include sources
+	## unless sync_include has been performed recently.
+	if ($self->has_include_data_sources()) {
+		$self->on_the_fly_sync_include('use_ttl' => 1);
+	}
+
+	## Blindly send the message to all users.
+	my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature, 'apply_tracking'=>$apply_tracking);
+	$self->savestats() if (defined ($numsmtp));
+	return $numsmtp;
 }
 
 =item $list->send_msg_digest($messagekey)
@@ -5975,10 +5976,10 @@ sub get_global_user {
 		if ($user->{'data'}) {
 			my %prefs = Sympa::Tools::Data::string_2_hash($user->{'data'});
 			$user->{'prefs'} = \%prefs;
+		}
 	}
-}
 
-return $user;
+	return $user;
 }
 
 =item get_all_global_user
@@ -7979,83 +7980,83 @@ sub add_list_member {
 
 		my %custom_attr = %{ $subscriptions->{$who}{'custom_attribute'} } if (defined $subscriptions->{$who}{'custom_attribute'} );
 		$new_user->{'custom_attribute'} ||= createXMLCustomAttribute(\%custom_attr);
-	Sympa::Log::Syslog::do_log('debug2', 'custom_attribute = %s', $new_user->{'custom_attribute'});
+		Sympa::Log::Syslog::do_log('debug2', 'custom_attribute = %s', $new_user->{'custom_attribute'});
 
-	## Crypt password if it was not crypted
-	unless ($new_user->{'password'} =~ /^crypt/) {
-		$new_user->{'password'} = Sympa::Tools::Password::crypt_password($new_user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
-	}
+		## Crypt password if it was not crypted
+		unless ($new_user->{'password'} =~ /^crypt/) {
+			$new_user->{'password'} = Sympa::Tools::Password::crypt_password($new_user->{'password'}, $Sympa::Configuration::Conf{'cookie'});
+		}
 
-	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
+		$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
 
-	## Either is_included or is_subscribed must be set
-	## default is is_subscriber for backward compatibility reason
-	unless ($new_user->{'included'}) {
-		$new_user->{'subscribed'} = 1;
-	}
+		## Either is_included or is_subscribed must be set
+		## default is is_subscriber for backward compatibility reason
+		unless ($new_user->{'included'}) {
+			$new_user->{'subscribed'} = 1;
+		}
 
-	unless ($new_user->{'included'}) {
-		## Is the email in user table?
-		if (! is_global_user($who)) {
-			## Insert in User Table
-			my $user_rows = $user_handle->execute(
-				$who,
-				$new_user->{'gecos'},
-				$new_user->{'lang'},
-				$new_user->{'password'}
-			);
-			unless ($user_rows) {
-				Sympa::Log::Syslog::do_log('err','Unable to add user %s to user_table.', $who);
-				$self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'} = 1;
-				next;
+		unless ($new_user->{'included'}) {
+			## Is the email in user table?
+			if (! is_global_user($who)) {
+				## Insert in User Table
+				my $user_rows = $user_handle->execute(
+					$who,
+					$new_user->{'gecos'},
+					$new_user->{'lang'},
+					$new_user->{'password'}
+				);
+				unless ($user_rows) {
+					Sympa::Log::Syslog::do_log('err','Unable to add user %s to user_table.', $who);
+					$self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'} = 1;
+					next;
+				}
 			}
 		}
+
+		$new_user->{'subscribed'} ||= 0;
+		$new_user->{'included'} ||= 0;
+
+		#Log in stat_table to make staistics
+		Sympa::Log::Database::add_stat(
+			robot     => $self->{'domain'},
+			list      => $self->{'name'},
+			operation => 'add subscriber',
+			mail      => $new_user->{'email'},
+			daemon    => $daemon
+		);
+
+		## Update Subscriber Table
+		my $subscriber_rows = $subscriber_handle->execute(
+			$who,
+			$new_user->{'gecos'},
+			$name,
+			$self->{'domain'},
+			$self->{source}->get_canonical_write_date($new_user->{'date'}),
+			$self->{source}->get_canonical_write_date($new_user->{'update_date'}),
+			$new_user->{'reception'},
+			$new_user->{'topics'},
+			$new_user->{'visibility'},
+			$new_user->{'subscribed'},
+			$new_user->{'included'},
+			$new_user->{'id'},
+			$new_user->{'custom_attribute'},
+			$new_user->{'suspend'},
+			$new_user->{'startdate'},
+			$new_user->{'enddate'}
+		);
+		unless ($subscriber_rows) {
+			Sympa::Log::Syslog::do_log('err','Unable to add subscriber %s to table subscriber_table for list %s@%s %s', $who,$name,$self->{'domain'});
+			next;
+		}
+		$self->{'add_outcome'}{'added_members'}++;
+		$self->{'add_outcome'}{'remaining_member_to_add'}--;
+		$current_list_members_count++;
 	}
 
-	$new_user->{'subscribed'} ||= 0;
-	$new_user->{'included'} ||= 0;
-
-	#Log in stat_table to make staistics
-	Sympa::Log::Database::add_stat(
-		robot     => $self->{'domain'},
-		list      => $self->{'name'},
-		operation => 'add subscriber',
-		mail      => $new_user->{'email'},
-		daemon    => $daemon
-	);
-
-	## Update Subscriber Table
-	my $subscriber_rows = $subscriber_handle->execute(
-		$who,
-		$new_user->{'gecos'},
-		$name,
-		$self->{'domain'},
-		$self->{source}->get_canonical_write_date($new_user->{'date'}),
-		$self->{source}->get_canonical_write_date($new_user->{'update_date'}),
-		$new_user->{'reception'},
-		$new_user->{'topics'},
-		$new_user->{'visibility'},
-		$new_user->{'subscribed'},
-		$new_user->{'included'},
-		$new_user->{'id'},
-		$new_user->{'custom_attribute'},
-		$new_user->{'suspend'},
-		$new_user->{'startdate'},
-		$new_user->{'enddate'}
-	);
-	unless ($subscriber_rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to add subscriber %s to table subscriber_table for list %s@%s %s', $who,$name,$self->{'domain'});
-		next;
-	}
-	$self->{'add_outcome'}{'added_members'}++;
-	$self->{'add_outcome'}{'remaining_member_to_add'}--;
-	$current_list_members_count++;
-}
-
-$self->{'total'} += $self->{'add_outcome'}{'added_members'};
-$self->savestats();
-$self->_create_add_error_string() if ($self->{'add_outcome'}{'errors'});
-return 1;
+	$self->{'total'} += $self->{'add_outcome'}{'added_members'};
+	$self->savestats();
+	$self->_create_add_error_string() if ($self->{'add_outcome'}{'errors'});
+	return 1;
 }
 
 sub _create_add_error_string {
@@ -8963,10 +8964,10 @@ sub _load_list_members_file {
 		$user{'visibility'} = $1 if (/^\s*visibility\s+(conceal|noconceal)\s*$/om);
 
 		push @users, \%user;
-}
-close(L);
+	}
+	close(L);
 
-return @users;
+	return @users;
 }
 
 ## include a remote sympa list as subscribers.
@@ -9058,15 +9059,12 @@ sub _include_users_remote_sympa_list {
 			$users->{$email} = join("\n", %u);
 		} else {
 			$users->{$email} = \%u;
+		}
+		delete $user{$email};undef $email;
 	}
-	delete $user{$email};undef $email;
-
+	Sympa::Log::Syslog::do_log('info','Include %d users from list (%d subscribers) https://%s:%s%s',$total,$get_total,$host,$port,$path);
+	return $total;
 }
-Sympa::Log::Syslog::do_log('info','Include %d users from list (%d subscribers) https://%s:%s%s',$total,$get_total,$host,$port,$path);
-return $total;
-}
-
-
 
 ## include a list as subscribers.
 sub _include_users_list {
@@ -9119,10 +9117,10 @@ sub _include_users_list {
 			$users->{$email} = join("\n", %u);
 		} else {
 			$users->{$email} = \%u;
+		}
 	}
-}
-Sympa::Log::Syslog::do_log('info',"Include %d users from list %s",$total,$includelistname);
-return $total;
+	Sympa::Log::Syslog::do_log('info',"Include %d users from list %s",$total,$includelistname);
+	return $total;
 }
 
 ## include a lists owners lists privileged_owners or lists_editors.
@@ -9216,13 +9214,12 @@ sub _include_users_file {
 			$users->{$email} = join("\n", %u);
 		} else {
 			$users->{$email} = \%u;
+		}
 	}
-}
-close INCLUDE;
+	close INCLUDE;
 
-
-Sympa::Log::Syslog::do_log('info',"include %d new users from file %s",$total,$filename);
-return $total;
+	Sympa::Log::Syslog::do_log('info',"include %d new users from file %s",$total,$filename);
+	return $total;
 }
 
 sub _include_users_remote_file {
@@ -9301,19 +9298,18 @@ sub _include_users_remote_file {
 				$users->{$email} = join("\n", %u);
 			} else {
 				$users->{$email} = \%u;
+			}
 		}
+	} else {
+		# TODO: handle authentication required result, to retrieve the realm
+		# and set proper credentials
+
+		Sympa::Log::Syslog::do_log ('err',"Unable to fetch remote file $url : %s", $res->message());
+		return undef;
 	}
-}
-else {
-	# TODO: handle authentication required result, to retrieve the realm
-	# and set proper credentials
 
-	Sympa::Log::Syslog::do_log ('err',"Unable to fetch remote file $url : %s", $res->message());
-	return undef;
-}
-
-Sympa::Log::Syslog::do_log('info',"include %d users from remote file %s",$total,$url);
-return $total;
+	Sympa::Log::Syslog::do_log('info',"include %d users from remote file %s",$total,$url);
+	return $total;
 }
 
 ## Includes users from voot group
@@ -9377,13 +9373,13 @@ sub _include_users_voot_group {
 				$users->{$email} = join("\n", %u);
 			} else {
 				$users->{$email} = \%u;
+			}
 		}
 	}
-}
 
-Sympa::Log::Syslog::do_log('info',"included %d users from VOOT group %s at provider %s", $total, $param->{'group'}, $param->{'provider'});
+	Sympa::Log::Syslog::do_log('info',"included %d users from VOOT group %s at provider %s", $total, $param->{'group'}, $param->{'provider'});
 
-return $total;
+	return $total;
 }
 
 
@@ -9499,13 +9495,13 @@ sub _include_users_ldap {
 			$users->{$email} = join("\n", %u);
 		} else {
 			$users->{$email} = \%u;
+		}
 	}
-}
 
-Sympa::Log::Syslog::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'});
-Sympa::Log::Syslog::do_log('info','%d new users included from LDAP query',$total);
+	Sympa::Log::Syslog::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'});
+	Sympa::Log::Syslog::do_log('info','%d new users included from LDAP query',$total);
 
-return $total;
+	return $total;
 }
 
 ## Returns a list of subscribers extracted indirectly from a remote LDAP
@@ -10461,76 +10457,76 @@ sub sync_include {
 	my $new_subscribers;
 	unless ($option eq 'purge') {
 		my $result = $self->_load_list_members_from_include($self->get_list_of_sources_id(\%old_subscribers));
-	$new_subscribers = $result->{'users'};
-	my @errors = @{$result->{'errors'}};
-	my @exclusions = @{$result->{'exclusions'}};
+		$new_subscribers = $result->{'users'};
+		my @errors = @{$result->{'errors'}};
+		my @exclusions = @{$result->{'exclusions'}};
 
-	## If include sources were not available, do not update subscribers
-	## Use DB cache instead and warn the listmaster.
-	if($#errors > -1) {
-		Sympa::Log::Syslog::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
-		$errors_occurred = 1;
-		unless (send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
-		Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
-	}
-	foreach my $e (@errors) {
-		next unless($e->{'type'} eq 'include_voot_group');
-		my $cfg = undef;
-		foreach my $p (@{$self->{'admin'}{'include_voot_group'}}) {
-			$cfg = $p if($p->{'name'} eq $e->{'name'});
+		## If include sources were not available, do not update subscribers
+		## Use DB cache instead and warn the listmaster.
+		if($#errors > -1) {
+			Sympa::Log::Syslog::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
+			$errors_occurred = 1;
+			unless (send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
+				Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
+			}
+			foreach my $e (@errors) {
+				next unless($e->{'type'} eq 'include_voot_group');
+				my $cfg = undef;
+				foreach my $p (@{$self->{'admin'}{'include_voot_group'}}) {
+					$cfg = $p if($p->{'name'} eq $e->{'name'});
+				}
+				next unless(defined $cfg);
+				Sympa::Report::reject_report_web(
+					'user',
+					'sync_include_voot_failed',
+					{
+						'oauth_provider' => 'voot:'.$cfg->{'provider'}
+					},
+					'sync_include',
+					$self->{'domain'},
+					$cfg->{'user'},
+					$self->{'name'}
+				);
+				Sympa::Report::reject_report_msg(
+					'oauth',
+					'sync_include_voot_failed',
+					$cfg->{'user'},
+					{
+						'consumer_name' => 'VOOT',
+						'oauth_provider' => 'voot:'.$cfg->{'provider'}
+					},
+					$self->{'domain'},
+					'',
+					$self->{'name'}
+				);
+			}
+			return undef;
 		}
-		next unless(defined $cfg);
-		Sympa::Report::reject_report_web(
-			'user',
-			'sync_include_voot_failed',
-			{
-				'oauth_provider' => 'voot:'.$cfg->{'provider'}
-			},
-			'sync_include',
-			$self->{'domain'},
-			$cfg->{'user'},
-			$self->{'name'}
-		);
-		Sympa::Report::reject_report_msg(
-			'oauth',
-			'sync_include_voot_failed',
-			$cfg->{'user'},
-			{
-				'consumer_name' => 'VOOT',
-				'oauth_provider' => 'voot:'.$cfg->{'provider'}
-			},
-			$self->{'domain'},
-			'',
-			$self->{'name'}
-		);
-	}
-	return undef;
-}
 
-# Feed the new_subscribers hash with users previously subscribed
-# with data sources not used because we were not in the period of
-# time during which synchronization is allowed. This will prevent
-# these users from being unsubscribed.
-if($#exclusions > -1) {
-	foreach my $ex_sources (@exclusions) {
-		my $id = $ex_sources->{'id'};
-		foreach my $email (keys %old_subscribers) {
-			if($old_subscribers{$email}{'id'} =~ /$id/g) {
-				$new_subscribers->{$email}{'date'} = $old_subscribers{$email}{'date'};
-				$new_subscribers->{$email}{'update_date'} = $old_subscribers{$email}{'update_date'};
-				$new_subscribers->{$email}{'visibility'} = $self->{'default_user_options'}{'visibility'} if (defined $self->{'default_user_options'}{'visibility'});
-				$new_subscribers->{$email}{'reception'} = $self->{'default_user_options'}{'reception'} if (defined $self->{'default_user_options'}{'reception'});
-				$new_subscribers->{$email}{'profile'} = $self->{'default_user_options'}{'profile'} if (defined $self->{'default_user_options'}{'profile'});
-				$new_subscribers->{$email}{'info'} = $self->{'default_user_options'}{'info'} if (defined $self->{'default_user_options'}{'info'});
-				if(defined $new_subscribers->{$email}{'id'} && $new_subscribers->{$email}{'id'} ne '') {
-					$new_subscribers->{$email}{'id'} = join (',', split(',', $new_subscribers->{$email}{'id'}), $id);
-				} else {
-					$new_subscribers->{$email}{'id'} = $old_subscribers{$email}{'id'};
+		# Feed the new_subscribers hash with users previously subscribed
+		# with data sources not used because we were not in the period of
+		# time during which synchronization is allowed. This will prevent
+		# these users from being unsubscribed.
+		if($#exclusions > -1) {
+			foreach my $ex_sources (@exclusions) {
+				my $id = $ex_sources->{'id'};
+				foreach my $email (keys %old_subscribers) {
+					if($old_subscribers{$email}{'id'} =~ /$id/g) {
+						$new_subscribers->{$email}{'date'} = $old_subscribers{$email}{'date'};
+						$new_subscribers->{$email}{'update_date'} = $old_subscribers{$email}{'update_date'};
+						$new_subscribers->{$email}{'visibility'} = $self->{'default_user_options'}{'visibility'} if (defined $self->{'default_user_options'}{'visibility'});
+						$new_subscribers->{$email}{'reception'} = $self->{'default_user_options'}{'reception'} if (defined $self->{'default_user_options'}{'reception'});
+						$new_subscribers->{$email}{'profile'} = $self->{'default_user_options'}{'profile'} if (defined $self->{'default_user_options'}{'profile'});
+						$new_subscribers->{$email}{'info'} = $self->{'default_user_options'}{'info'} if (defined $self->{'default_user_options'}{'info'});
+						if(defined $new_subscribers->{$email}{'id'} && $new_subscribers->{$email}{'id'} ne '') {
+							$new_subscribers->{$email}{'id'} = join (',', split(',', $new_subscribers->{$email}{'id'}), $id);
+						} else {
+							$new_subscribers->{$email}{'id'} = $old_subscribers{$email}{'id'};
+						}
+					}
 				}
 			}
 		}
-	}
-}
 	}
 
 	my $data_exclu;
@@ -10600,116 +10596,116 @@ if($#exclusions > -1) {
 		}
 	}
 }
-if ($users_removed > 0) {
-	Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users removed', $name, $users_removed);
-}
+	if ($users_removed > 0) {
+		Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users removed', $name, $users_removed);
+	}
 
-## Go through new users
-my @add_tab;
-$users_added = 0;
-foreach my $email (keys %{$new_subscribers}) {
-	my $compare = 0;
-	foreach my $sub_exclu (@subscriber_exclusion){
-		if ($email eq $sub_exclu){
-			$compare = 1;
-			last;
+	## Go through new users
+	my @add_tab;
+	$users_added = 0;
+	foreach my $email (keys %{$new_subscribers}) {
+		my $compare = 0;
+		foreach my $sub_exclu (@subscriber_exclusion){
+			if ($email eq $sub_exclu){
+				$compare = 1;
+				last;
+			}
 		}
-	}
-	if($compare == 1){
-		delete $new_subscribers->{$email};
-		next;
-	}
-	if (defined($old_subscribers{$email}) ) {
-		if ($old_subscribers{$email}{'included'}) {
-			## If one user attribute has changed, then we should update the user entry
-			my $succesful_update = 0;
-			foreach my $attribute ('id','gecos') {
-				if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
-					Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-					my $update_time = $new_subscribers->{$email}{'update_date'} || time();
-					unless( $self->update_list_member(
-							$email,
-							{'update_date' => $update_time,
-								$attribute => $new_subscribers->{$email}{$attribute}}
-						)){
+		if($compare == 1){
+			delete $new_subscribers->{$email};
+			next;
+		}
+		if (defined($old_subscribers{$email}) ) {
+			if ($old_subscribers{$email}{'included'}) {
+				## If one user attribute has changed, then we should update the user entry
+				my $succesful_update = 0;
+				foreach my $attribute ('id','gecos') {
+					if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
+						Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
+						my $update_time = $new_subscribers->{$email}{'update_date'} || time();
+						unless( $self->update_list_member(
+								$email,
+								{'update_date' => $update_time,
+									$attribute => $new_subscribers->{$email}{$attribute}}
+							)){
 
-						Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, $email);
-						next;
+							Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, $email);
+							next;
+						} else {
+							$succesful_update = 1;
+						}
+					}
+				}
+				$users_updated++ if($succesful_update);
+				## User was already subscribed, update include_sources_subscriber in DB
+			} else {
+				Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
+				unless( $self->update_list_member($email,  {'update_date' => time(),
+							'included' => 1,
+							'id' => $new_subscribers->{$email}{'id'} }) ) {
+					Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s',
+						$name, $email);
+					next;
+				}
+				$users_updated++;
+			}
+
+			## Add new included user
+		} else {
+			my $compare = 0;
+			foreach my $sub_exclu (@subscriber_exclusion){
+				unless ($compare eq '1'){
+					if ($email eq $sub_exclu){
+						$compare = 1;
 					} else {
-						$succesful_update = 1;
+						next;
 					}
 				}
 			}
-			$users_updated++ if($succesful_update);
-			## User was already subscribed, update include_sources_subscriber in DB
-		} else {
-			Sympa::Log::Syslog::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-			unless( $self->update_list_member($email,  {'update_date' => time(),
-						'included' => 1,
-						'id' => $new_subscribers->{$email}{'id'} }) ) {
-				Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to update %s',
-					$name, $email);
+			if($compare eq '1'){
 				next;
 			}
-			$users_updated++;
-		}
-
-		## Add new included user
-	} else {
-		my $compare = 0;
-		foreach my $sub_exclu (@subscriber_exclusion){
-			unless ($compare eq '1'){
-				if ($email eq $sub_exclu){
-					$compare = 1;
-				} else {
-					next;
-				}
+			Sympa::Log::Syslog::do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
+			my $u = $new_subscribers->{$email};
+			$u->{'included'} = 1;
+			$u->{'date'} = time();
+			@add_tab = ($u);
+			my $user_added = 0;
+			unless( $user_added = $self->add_list_member( @add_tab ) ) {
+				Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
+				return undef;
 			}
-		}
-		if($compare eq '1'){
-			next;
-		}
-		Sympa::Log::Syslog::do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
-		my $u = $new_subscribers->{$email};
-		$u->{'included'} = 1;
-		$u->{'date'} = time();
-		@add_tab = ($u);
-		my $user_added = 0;
-		unless( $user_added = $self->add_list_member( @add_tab ) ) {
-			Sympa::Log::Syslog::do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
-			return undef;
-		}
-		if ($user_added) {
-			$users_added++;
-			## Send notification if the list config authorizes it only.
-			if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
-				unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
-					Sympa::Log::Syslog::do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
+			if ($user_added) {
+				$users_added++;
+				## Send notification if the list config authorizes it only.
+				if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
+					unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
+						Sympa::Log::Syslog::do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
+					}
 				}
 			}
 		}
 	}
-}
 
-if ($users_added) {
-	Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users added', $name, $users_added);
-}
+	if ($users_added) {
+		Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users added', $name, $users_added);
+	}
 
-Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users updated', $name, $users_updated);
+	Sympa::Log::Syslog::do_log('notice', 'List:sync_include(%s): %d users updated', $name, $users_updated);
 
-## Release lock
-unless ($lock->unlock()) {
-	return undef;
-}
+	## Release lock
+	unless ($lock->unlock()) {
+		return undef;
+	}
 
-## Get and save total of subscribers
-$self->{'total'} = $self->_load_total_db('nocache');
-$self->{'last_sync'} = time();
-$self->savestats();
-$self->sync_include_ca($option eq 'purge');
+	## Get and save total of subscribers
+	$self->{'total'} = $self->_load_total_db('nocache');
+	$self->{'last_sync'} = time();
+	$self->savestats();
+	$self->sync_include_ca($option eq 'purge');
 
 
-return 1;
+	return 1;
 }
 
 ## The previous function (sync_include) is to be called by the task_manager.
@@ -10992,8 +10988,8 @@ sub _load_list_admin_from_config {
 		$u{'profile'} = $entry->{'profile'} if ($role eq 'owner');
 
 		$admin_users{$email} = \%u;
-}
-return \%admin_users;
+	}
+	return \%admin_users;
 }
 
 ## return true if new_param has changed from old_param
@@ -12456,31 +12452,31 @@ sub _save_list_config_file {
 	my $config = '';
 	my $fd = IO::Scalar->new(\$config);
 
-foreach my $c (@{$admin->{'comment'}}) {
-	$fd->print(sprintf "%s\n", $c);
-}
-$fd->print("\n");
-
-foreach my $key (sort by_order keys %{$admin}) {
-
-	next if ($key =~ /^(comment|defaults)$/);
-	next unless (defined $admin->{$key});
-
-	## Multiple parameter (owner, custom_header,...)
-	if ((ref ($admin->{$key}) eq 'ARRAY') &&
-		! $::pinfo{$key}{'split_char'}) {
-		foreach my $elt (@{$admin->{$key}}) {
-			_save_list_param($key, $elt, $admin->{'defaults'}{$key}, $fd);
-		}
-	} else {
-		_save_list_param($key, $admin->{$key}, $admin->{'defaults'}{$key}, $fd);
+	foreach my $c (@{$admin->{'comment'}}) {
+		$fd->print(sprintf "%s\n", $c);
 	}
+	$fd->print("\n");
 
-}
-print CONFIG $config;
-close CONFIG;
+	foreach my $key (sort by_order keys %{$admin}) {
 
-return 1;
+		next if ($key =~ /^(comment|defaults)$/);
+		next unless (defined $admin->{$key});
+
+		## Multiple parameter (owner, custom_header,...)
+		if ((ref ($admin->{$key}) eq 'ARRAY') &&
+			! $::pinfo{$key}{'split_char'}) {
+			foreach my $elt (@{$admin->{$key}}) {
+				_save_list_param($key, $elt, $admin->{'defaults'}{$key}, $fd);
+			}
+		} else {
+			_save_list_param($key, $admin->{$key}, $admin->{'defaults'}{$key}, $fd);
+		}
+
+	}
+	print CONFIG $config;
+	close CONFIG;
+
+	return 1;
 }
 
 # Is a reception mode in the parameter reception of the available_user_options
@@ -12838,8 +12834,8 @@ sub load_msg_topic {
 		$info{'msg_id'} = $msg_id;
 		$info{'messagekey'} = $topics_from_spool->{'messagekey'};
 		return \%info;
-}
-return undef;
+	}
+	return undef;
 }
 
 =item $list->modifying_msg_topic_for_list_members($new_msg_topic)
@@ -13385,45 +13381,44 @@ sub close_list {
 	}
 	$self->delete_list_member('users' => \@users);
 
-## Remove entries from admin_table
-foreach my $role ('owner','editor') {
-	my @admin_users;
-	for ( my $user = $self->get_first_list_admin($role); $user; $user = $self->get_next_list_admin() ){
-		push @admin_users, $user->{'email'};
+	## Remove entries from admin_table
+	foreach my $role ('owner','editor') {
+		my @admin_users;
+		for ( my $user = $self->get_first_list_admin($role); $user; $user = $self->get_next_list_admin() ){
+			push @admin_users, $user->{'email'};
+		}
+		$self->delete_list_admin($role, @admin_users);
 	}
-	$self->delete_list_admin($role, @admin_users);
-}
 
-## Change status & save config
-$self->{'admin'}{'status'} = 'closed';
+	## Change status & save config
+	$self->{'admin'}{'status'} = 'closed';
 
-if (defined $status) {
-	foreach my $s ('family_closed','closed') {
-		if ($status eq $s) {
-			$self->{'admin'}{'status'} = $status;
-			last;
+	if (defined $status) {
+		foreach my $s ('family_closed','closed') {
+			if ($status eq $s) {
+				$self->{'admin'}{'status'} = $status;
+				last;
+			}
 		}
 	}
-}
 
-$self->{'admin'}{'defaults'}{'status'} = 0;
+	$self->{'admin'}{'defaults'}{'status'} = 0;
 
-$self->save_config($email);
-$self->savestats();
+	$self->save_config($email);
+	$self->savestats();
 
-$self->remove_aliases();
+	$self->remove_aliases();
 
-#log in stat_table to make staistics
-Sympa::Log::Database::add_stat(
-	robot     => $self->{'domain'},
-	list      => $self->{'name'},
-	operation => 'close_list',
-	mail      => $email,
-	daemon    => 'damon_name'
-);
+	#log in stat_table to make staistics
+	Sympa::Log::Database::add_stat(
+		robot     => $self->{'domain'},
+		list      => $self->{'name'},
+		operation => 'close_list',
+		mail      => $email,
+		daemon    => 'damon_name'
+	);
 
-
-return 1;
+	return 1;
 }
 
 =item $list->purge($email)
