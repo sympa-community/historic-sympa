@@ -2318,21 +2318,21 @@ sub set_status_family_closed {
 	my ($self, $message, @param) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	unless ($self->{'admin'}{'status'} eq 'family_closed'){
+	return 1 if $self->{'admin'}{'status'} ne 'family_closed';
 
-		my $host = Sympa::Configuration::get_robot_conf($self->{'domain'}, 'host');
+	my $host = Sympa::Configuration::get_robot_conf($self->{'domain'}, 'host');
 
-		unless ($self->close_list("listmaster\@$host",'family_closed')) {
-			Sympa::Log::Syslog::do_log('err','Impossible to set the list %s in status family_closed');
-			return undef;
-		}
-		Sympa::Log::Syslog::do_log('info', 'The list "%s" is set in status family_closed',$self->{'name'});
-		unless ($self->send_notify_to_owner($message,\@param)){
+	unless ($self->close_list("listmaster\@$host",'family_closed')) {
+		Sympa::Log::Syslog::do_log('err','Impossible to set the list %s in status family_closed');
+		return undef;
+	}
+
+	Sympa::Log::Syslog::do_log('info', 'The list "%s" is set in status family_closed',$self->{'name'});
+	unless ($self->send_notify_to_owner($message,\@param)){
 		Sympa::Log::Syslog::do_log('err','Impossible to send notify to owner informing status family_closed for the list %s',$self->{'name'});
 	}
-# messages : close_list
-}
-return 1;
+
+	return 1;
 }
 
 =item $list->savestats()
