@@ -771,7 +771,7 @@ sub _sendto {
 			}
 		}
 	} else {
-		$message->{'msg_as_string'} = $msg_header->as_string . "\n" . $msg_body;
+		$message->{'msg_as_string'} = $msg_header->as_string() . "\n" . $msg_body;
 		my $result = _sending(
 			message         => $message,
 			rcpt            => $rcpt,
@@ -888,7 +888,7 @@ sub _sending {
 		# send it now
 		Sympa::Log::Syslog::do_log('debug',"NOT USING BULK");
 		*SMTP = _smtpto($params{from}, $params{rcpt}, $params{robot}, undef, undef, $params{sendmail}, $params{sendmail_args}, $params{maxsmtp});
-		print SMTP $message->{'msg'}->as_string;
+		print SMTP $message->{'msg'}->as_string();
 		unless (close SMTP) {
 			Sympa::Log::Syslog::do_log('err', 'could not close safefork to sendmail');
 			return undef;

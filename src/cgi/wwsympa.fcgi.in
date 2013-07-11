@@ -3971,7 +3971,7 @@ sub do_latest_lists {
 		return undef;
 	}
 
-	my $today  = time;
+	my $today = time();
 
 	my $oldest_day;
 	if (defined $in{'for'}) {

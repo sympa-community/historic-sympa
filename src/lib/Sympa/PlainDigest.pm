@@ -309,7 +309,7 @@ sub _do_text_html {
 			$body =  $charset->decode($body);
 		} else {
 			# mmm, what to do if it fails?
-			$outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string);
+			$outstring .= sprintf (Sympa::Language::gettext("** Warning: Message part using unrecognised character set %s\n    Some characters may be lost or incorrect **\n\n"), $charset->as_string());
 			$body =~ s/[^\x00-\x7F]/?/g;
 		}
 		my $tree = HTML::TreeBuilder->new->parse($body);

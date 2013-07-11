@@ -22,7 +22,7 @@ use Sympa::SOAP;
 use Sympa::Transport;
 use Sympa::WWSympa;
 
-my $birthday = time;
+my $birthday = time();
 
 ## Configuration
 my $wwsconf = {};

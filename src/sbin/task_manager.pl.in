@@ -326,7 +326,7 @@ foreach (keys %asgn_commands) {
 ###### INFINITE LOOP SCANING THE SPOOL (unless a sig TERM is received) ######
 while (!$end) {
 
-	my $current_date = time; # current epoch date
+	my $current_date = time(); # current epoch date
 	my $rep = Sympa::Tools::Time::adate ($current_date);
 
 

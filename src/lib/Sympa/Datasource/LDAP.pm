@@ -186,12 +186,12 @@ sub connect {
 	if (defined ($self->{'ldap_bind_dn'}) && defined ($self->{'ldap_bind_password'})) {
 		$cnx = $self->{'ldap_handler'}->bind($self->{'ldap_bind_dn'}, password =>$self->{'ldap_bind_password'});
 	} else {
-		$cnx = $self->{'ldap_handler'}->bind;
+		$cnx = $self->{'ldap_handler'}->bind();
 	}
 
 	unless (defined($cnx) && ($cnx->code() == 0)){
 		Sympa::Log::Syslog::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
-		$self->{'ldap_handler'}->unbind;
+		$self->{'ldap_handler'}->unbind();
 		return undef;
 	}
 	Sympa::Log::Syslog::do_log ('debug',"Bound to LDAP host '$host_entry'");
@@ -203,7 +203,7 @@ sub connect {
 
 sub disconnect {
 	my $self = shift;
-	$self->{'ldap_handler'}->unbind if $self->{'ldap_handler'};
+	$self->{'ldap_handler'}->unbind() if $self->{'ldap_handler'};
 }
 
 =back

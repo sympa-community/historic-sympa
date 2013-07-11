@@ -319,7 +319,7 @@ sub initialize_ldap {
 ## Close the LDAP connection
 sub finalize_ldap {
 	if (defined $ldap_connection) {
-		$ldap_connection->unbind;
+		$ldap_connection->unbind();
 		$ldap_connection = undef;
 	}
 }
