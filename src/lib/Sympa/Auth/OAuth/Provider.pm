@@ -117,8 +117,8 @@ sub new {
 	$util->allow_extra_params(qw/oauth_callback oauth_verifier/);
 	$self->{util} = $util;
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		'DELETE FROM oauthprovider_sessions_table '   .
 		'WHERE '                                      .
 			'isaccess_oauthprovider IS NULL AND ' .
@@ -141,8 +141,8 @@ sub new {
 sub consumer_from_token {
 	my ($class, $token) = @_;
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT consumer_oauthprovider AS consumer " .
 		"FROM oauthprovider_sessions_table "         .
 		"WHERE token_oauthprovider=?"
@@ -235,8 +235,8 @@ sub check_request {
 
 	return 401 unless($timestamp > time - OLD_REQUEST_TIMEOUT);
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		'DELETE FROM oauthprovider_nonces_table ' .
 		'WHERE time_oauthprovider<?',
 		time - NONCE_TIMEOUT
@@ -247,7 +247,7 @@ sub check_request {
 	}
 
 	if($checktoken) {
-		my $id_handle = $source->get_query_handle(
+		my $id_handle = $base->get_query_handle(
 			"SELECT id_oauthprovider AS id "        .
 			"FROM oauthprovider_sessions_table "    .
 			"WHERE "                                .
@@ -263,7 +263,7 @@ sub check_request {
 		if (my $data = $id_handle->fetchrow_hashref('NAME_lc')) {
 			my $id = $data->{'id'};
 
-			my $nonce_handle = $source->get_query_handle(
+			my $nonce_handle = $base->get_query_handle(
 				"SELECT nonce_oauthprovider AS nonce " .
 				"FROM oauthprovider_nonces_table "     .
 				"WHERE "                               .
@@ -280,7 +280,7 @@ sub check_request {
 			return 401
 				if $nonce_handle->fetchrow_hashref('NAME_lc');
 
-			my $rows = $source->execute_query(
+			my $rows = $base->execute_query(
 				"INSERT INTO oauthprovider_nonces_table(" .
 					"id_oauthprovider, " .
 					"nonce_oauthprovider, " .
@@ -299,7 +299,7 @@ sub check_request {
 
 	my $secret = '';
 	if ($checktoken) {
-		my $token_handle = $source->get_query_handle(
+		my $token_handle = $base->get_query_handle(
 			"SELECT secret_oauthprovider AS secret " .
 			"FROM oauthprovider_sessions_table "     .
 			"WHERE token_oauthprovider=?"
@@ -351,8 +351,8 @@ sub generate_temporary {
 	my $token = _generateRandomString(32); # 9x10^62 entropy ...
 	my $secret = _generateRandomString(32); # may be sha1-ed or such ...
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		"INSERT INTO oauthprovider_sessions_table(" .
 			"token_oauthprovider, "             .
 			"secret_oauthprovider, "            .
@@ -410,8 +410,8 @@ sub get_temporary {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT "                                        .
 			"id_oauthprovider AS id, "               .
 			"token_oauthprovider AS token, "         .
@@ -469,8 +469,8 @@ sub generate_verifier {
 
 	my $verifier = _generateRandomString(32);
 
-	my $source = Sympa::Database::get_source();
-	my $delete_rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $delete_rows = $base->execute_query(
 		'DELETE FROM oauthprovider_sessions_table ' .
 		'WHERE '                                    .
 			'user_oauthprovider=? AND '         .
@@ -484,7 +484,7 @@ sub generate_verifier {
 		return undef;
 	}
 
-	my $update_rows = $source->execute_query(
+	my $update_rows = $base->execute_query(
 		"UPDATE oauthprovider_sessions_table "        .
 		"SET "                                        .
 			"verifier_oauthprovider=?, "          .
@@ -546,8 +546,8 @@ sub generate_access {
 	my $token = _generateRandomString(32);
 	my $secret = _generateRandomString(32);
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		"UPDATE oauthprovider_sessions_table "       .
 		"SET "                                       .
 			"token_oauthprovider=?, "            .
@@ -601,8 +601,8 @@ sub get_access {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT "                                               .
 			"token_oauthprovider AS token, "                .
 			"secret_oauthprovider AS secret, "              .

@@ -121,7 +121,7 @@ sub upgrade {
 	my ($previous_version, $new_version) = @_;
 	Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
-	my $source = Sympa::Database::get_source();
+	my $base = Sympa::Database::get_source();
 	if (lower_version($new_version, $previous_version)) {
 		Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 		return 1;
@@ -262,7 +262,7 @@ sub upgrade {
 			foreach my $list ( @$all_lists ) {
 
 				foreach my $table ('subscriber','admin') {
-					my $rows = $source->execute_query(
+					my $rows = $base->execute_query(
 						"UPDATE ${table}_table " .
 						"SET robot_$table=? "    .
 						"WHERE list_$table=?",
@@ -280,7 +280,7 @@ sub upgrade {
 				$list = Sympa::List->new(
 					name    => $list->{'name'},
 					robot   => $list->{'domain'},
-					source  =>
+					base    =>
 						Sympa::Database::get_source(),
 					options => {'force_sync_admin' => 1}
 				);
@@ -304,8 +304,8 @@ sub upgrade {
 			next unless ($listname & $listdomain);
 
 			my $list = Sympa::List->new(
-				name   => $listname,
-				source => Sympa::Database::get_source()
+				name => $listname,
+				base => Sympa::Database::get_source()
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -341,13 +341,13 @@ sub upgrade {
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $source = Sympa::Database::get_source();
+			my $base = Sympa::Database::get_source();
 
 			foreach my $field (keys %check) {
 				my $select_query =
 					"SELECT max($field) " .
 					"FROM $check{$field}";
-				my $select_handle = $source->get_query_handle(
+				my $select_handle = $base->get_query_handle(
 					$select_query
 				);
 				unless ($select_handle) {
@@ -369,7 +369,7 @@ sub upgrade {
 						"SET $field = ? "        .
 						"WHERE $field = ?";
 					my $rows;
-					$rows = $source->execute_query(
+					$rows = $base->execute_query(
 						$update_query,
 						0,
 						1
@@ -384,7 +384,7 @@ sub upgrade {
 					## 2 to 1
 					Sympa::Log::Syslog::do_log('notice', 'Fixing DB field %s ; turning 2 to 1...', $field);
 
-					$rows = $source->execute_query(
+					$rows = $base->execute_query(
 						$update_query,
 						1,
 						2
@@ -411,7 +411,7 @@ sub upgrade {
 				")";
 
 			Sympa::Log::Syslog::do_log('notice','Updating subscribed field of the subscriber table...');
-			my $rows = $source->execute_query($update_query);
+			my $rows = $base->execute_query($update_query);
 			unless (defined $rows) {
 				Sympa::Log::Syslog::fatal_err("Unable to execute SQL statement");
 			}
@@ -437,8 +437,8 @@ sub upgrade {
 
 			my $listname = $dir;
 			my $list = Sympa::List->new(
-				name   => $listname,
-				source => Sympa::Database::get_source()
+				name => $listname,
+				base => Sympa::Database::get_source()
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -475,8 +475,8 @@ sub upgrade {
 				foreach my $index (0..$#{$list->{'admin'}{'include_list'}}) {
 					my $incl = $list->{'admin'}{'include_list'}[$index];
 					my $incl_list = Sympa::List->new(
-						name   => $incl,
-						source =>
+						name => $incl,
+						base =>
 							Sympa::Database::get_source()
 					);
 
@@ -783,7 +783,7 @@ sub upgrade {
 		if (lower_version($previous_version, '6.1.11')) {
 			## Exclusion table was not robot-enabled.
 			Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
-			my $handle = $source->get_query_handle(
+			my $handle = $base->get_query_handle(
 				"SELECT * FROM exclusion_table"
 			);
 			unless ($handle) {
@@ -800,7 +800,7 @@ sub upgrade {
 					my $list = Sympa::List->new(
 						name  => $data->{'list_exclusion'},
 						robot => $robot,
-						source =>
+						base  =>
 							Sympa::Database::get_source()
 					);
 					if ($list) {
@@ -811,7 +811,7 @@ sub upgrade {
 				}
 				if ($#valid_robot_candidates == 0) {
 					$valid_robot = $valid_robot_candidates[0];
-					my $rows = $source->execute_query(
+					my $rows = $base->execute_query(
 						"UPDATE exclusion_table "      .
 						"SET robot_exclusion=? "       .
 						"WHERE "                       .
@@ -849,8 +849,8 @@ sub upgrade {
 			Sympa::Log::Syslog::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
 			my $spool = Sympa::Spool->new(
-				name   => $spools_def{$spoolparameter},
-				source => Sympa::Database::get_source()
+				name => $spools_def{$spoolparameter},
+				base => Sympa::Database::get_source()
 			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
@@ -974,13 +974,13 @@ sub upgrade {
 
 				mkdir $spooldir.'/copy_by_upgrade_process/'  unless (-d $spooldir.'/copy_by_upgrade_process/');
 
-				my $source = $spooldir.'/'.$filename;
+				my $base = $spooldir.'/'.$filename;
 				my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
 
-				Sympa::Log::Syslog::do_log('notice','source %s, goal %s',$source,$goal);
+				Sympa::Log::Syslog::do_log('notice','source %s, goal %s',$base,$goal);
 				# unless (File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
-				unless (File::Copy::copy($source, $goal)) {
-					Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $ERRNO);
+				unless (File::Copy::copy($base, $goal)) {
+					Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $base,$goal, $ERRNO);
 					exit;
 				}
 
@@ -1133,9 +1133,9 @@ sub md5_encode_password {
 		return undef;
 	}
 
-	my $source = Sympa::Database::get_source();
+	my $base = Sympa::Database::get_source();
 
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		"SELECT email_user,password_user from user_table"
 	);
 	unless ($handle) {
@@ -1176,7 +1176,7 @@ sub md5_encode_password {
 			"SET password_user=? " .
 			"WHERE email_user=?";
 
-		my $rows = $source->execute_query(
+		my $rows = $base->execute_query(
 			$query,
 			Sympa::Auth::password_fingerprint($clear_password),
 			$escaped_email

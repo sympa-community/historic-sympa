@@ -520,8 +520,8 @@ sub create_one_time_ticket {
 	Sympa::Log::Syslog::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
 	my $date = time();
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		"INSERT INTO one_time_ticket_table ("   .
 			"ticket_one_time_ticket, "      .
 			"robot_one_time_ticket, "       .
@@ -568,8 +568,8 @@ sub get_one_time_ticket {
 	my ($ticket_number, $addr) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)',$ticket_number);
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT "                                              .
 			"ticket_one_time_ticket AS ticket, "           .
 			"robot_one_time_ticket AS robot, "             .
@@ -609,7 +609,7 @@ sub get_one_time_ticket {
 	} else {
 		$result = 'success';
 	}
-	my $rows = $source->execute_query(
+	my $rows = $base->execute_query(
 		"UPDATE one_time_ticket_table " .
 		"SET status_one_time_ticket=? " .
 		"WHERE ticket_one_time_ticket=?",

@@ -73,7 +73,7 @@ Parameters:
 
 =item C<crawlers> => FIXME
 
-=item C<source> => L<Sympa::Datasource::SQL>
+=item C<base> => L<Sympa::Database>
 
 =back
 
@@ -88,9 +88,9 @@ sub new {
 
 	croak "missing robot parameter" unless $params{robot};
 
-	croak "missing source parameter" unless $params{source};
-	croak "invalid source parameter" unless
-		$params{source}->isa('Sympa::Datasource::SQL');
+	croak "missing base parameter" unless $params{base};
+	croak "invalid base parameter" unless
+		$params{base}->isa('Sympa::Database');
 
 	my $cookie = $params{context}->{'cookie'};
 	my $action = $params{context}->{'action'};
@@ -98,7 +98,7 @@ sub new {
 
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s)', $params{robot},$cookie,$action);
 	my $self = {
-		source => $params{source}
+		base => $params{base}
 	};
 	bless $self, $class;
 
@@ -158,7 +158,7 @@ sub purge_old_sessions {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('info', '(%s)',$params{robot});
 
-	croak "missing source parameter" unless $params{source};
+	croak "missing base parameter" unless $params{base};
 
 	unless ($params{delay}) {
 		Sympa::Log::Syslog::do_log('info', '%s exit with delay null',$params{robot});
@@ -201,7 +201,7 @@ sub purge_old_sessions {
 		"DELETE FROM session_table " .
 		"WHERE " . join(' AND ', @anonymous_clauses);
 
-	my $count_handle = $params{source}->get_query_handle($count_query);
+	my $count_handle = $params{base}->get_query_handle($count_query);
 	unless ($count_handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to count old session for robot %s',$params{robot});
 		return undef;
@@ -212,7 +212,7 @@ sub purge_old_sessions {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no sessions to expire');
 	} else {
-		my $rows = $params{source}->execute_query($delete_query);
+		my $rows = $params{base}->execute_query($delete_query);
 		unless ($rows) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge old sessions for robot %s', $params{robot});
 			return undef;
@@ -220,7 +220,7 @@ sub purge_old_sessions {
 	}
 
 	my $anonymous_count_handle =
-		$params{source}->get_query_handle($anonymous_count_query);
+		$params{base}->get_query_handle($anonymous_count_query);
 	unless ($anonymous_count_handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to count anonymous sessions for robot %s', $params{robot});
 		return undef;
@@ -232,7 +232,7 @@ sub purge_old_sessions {
 		Sympa::Log::Syslog::do_log('debug','no anonymous sessions to expire');
 	} else {
 		my $anonymous_rows =
-			$params{source}->execute_query($anonymous_delete_query);
+			$params{base}->execute_query($anonymous_delete_query);
 		unless ($anonymous_rows) {
 			Sympa::Log::Syslog::do_log('err','Unable to purge anonymous sessions for robot %s',$params{robot});
 			return undef;
@@ -252,7 +252,7 @@ sub purge_old_tickets {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('info', '(%s)',$params{robot});
 
-	croak "missing source parameter" unless $params{source};
+	croak "missing base parameter" unless $params{base};
 
 	unless ($params{delay}) {
 		Sympa::Log::Syslog::do_log('info', '%s exit with delay null',$params{robot});
@@ -276,7 +276,7 @@ sub purge_old_tickets {
 		"DELETE FROM one_time_ticket_table " .
 		"WHERE " . join(" AND ", @clauses);
 
-	my $count_handle = $params{source}->get_query_handle($count_query);
+	my $count_handle = $params{base}->get_query_handle($count_query);
 	unless ($count_handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to count old one time tickets for robot %s',$params{robot});
 		return undef;
@@ -287,7 +287,7 @@ sub purge_old_tickets {
 	if ($total == 0) {
 		Sympa::Log::Syslog::do_log('debug','no tickets to expire');
 	} else {
-		my $rows = $params{source}->execute_query(
+		my $rows = $params{base}->execute_query(
 			$delete_query, @params
 		);
 		unless ($rows) {
@@ -339,7 +339,7 @@ sub list_sessions {
 		"WHERE " . join(" AND ", @clauses);
 	Sympa::Log::Syslog::do_log('debug', 'statement = %s',$query);
 
-	my $sth = $params{source}->get_query_handle($query);
+	my $sth = $params{base}->get_query_handle($query);
 	unless ($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to get the list of sessions for robot %s',$params{robot});
 		return undef;
@@ -410,7 +410,7 @@ sub load {
 		return undef;
 	}
 
-	my $sth = $self->{source}->get_query_handle(
+	my $sth = $self->{base}->get_query_handle(
 		"SELECT "                                      .
 			"id_session AS id_session, "           .
 			"date_session AS \"date\", "           .
@@ -484,7 +484,7 @@ sub store {
 	## If this is a new session, then perform an INSERT
 	if ($self->{'new_session'}) {
 		## Store the new session ID in the DB
-		my $rows = $self->{source}->execute_query(
+		my $rows = $self->{base}->execute_query(
 			"INSERT INTO session_table ("   .
 				"id_session, "          .
 				"date_session, "        .
@@ -511,7 +511,7 @@ sub store {
 		## If the session already exists in DB, then perform an UPDATE
 	} else {
 		## Update the new session in the DB
-		my $rows = $self->{source}->execute_query(
+		my $rows = $self->{base}->execute_query(
 			"UPDATE session_table SET "       .
 				"date_session=?, "        .
 				"remote_addr_session=?, " .
@@ -564,7 +564,7 @@ sub renew {
 	my $new_id = Sympa::Session->get_random();
 
 	## First remove the DB entry for the previous session ID
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		"UPDATE session_table SET id_session=? WHERE (id_session=?)",
 		$new_id,
 		$self->{'id_session'}

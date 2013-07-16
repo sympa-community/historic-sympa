@@ -207,12 +207,12 @@ $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmt
 
 
 my $spool = Sympa::Spool->new(
-	name   => 'bulk',
-	source => Sympa::Database::get_source()
+	name => 'bulk',
+	base => Sympa::Database::get_source()
 );
 
 my $bulk = Sympa::Bulk->new(
-	source => Sympa::Database::get_source()
+	base => Sympa::Database::get_source()
 );
 
 while (!$end) {
@@ -303,8 +303,8 @@ while (!$end) {
 				## to prevent DB handlers to be shared by different processes
 				# when loading conf in database disconnect
 				# because of sharing dbh may crash bulk.pl
-				my $source = Sympa::Database::get_source();
-				$source->disconnect();
+				my $base = Sympa::Database::get_source();
+				$base->disconnect();
 
 				if($Sympa::Configuration::Conf{'bulk_max_count'} > 1) {
 					Sympa::Log::Syslog::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, $Sympa::Configuration::Conf{'bulk_max_count'}-($#remaining_children+1));

@@ -94,7 +94,7 @@ Parameters:
 
 =over
 
-=item C<source> => L<Sympa::Datasource::SQL>
+=item C<base> => L<Sympa::Database>
 
 =item C<robot> => FIXME
 
@@ -211,7 +211,7 @@ sub new {
 
 	$statement .= ' ORDER BY date_logs';
 
-	my $sth = $params{source}->get_query_handle($statement);
+	my $sth = $params{base}->get_query_handle($statement);
 	unless($sth) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve logs entry from the database');
 		return undef;

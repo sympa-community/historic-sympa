@@ -95,7 +95,7 @@ my %queries = (
 		') VALUES (?, ?, ?, ?, ?, ?, ?)',
 );
 
-my $source;
+my $base;
 
 =head1 FUNCTIONS
 
@@ -106,7 +106,7 @@ my $source;
 sub init {
 	my (%params) = @_;
 
-	$source = $params{source};
+	$base = $params{base};
 }
 
 =item get_log_date()
@@ -122,7 +122,7 @@ Return:
 sub get_log_date {
 	my @dates;
 
-	my $min_handle = $source->get_query_handle($queries{get_min_date});
+	my $min_handle = $base->get_query_handle($queries{get_min_date});
 	my $min_result = $min_handle->execute();
 	unless ($min_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to get minimal date from logs_table');
@@ -130,7 +130,7 @@ sub get_log_date {
 	}
 	push @dates, ($min_handle->fetchrow_array)[0];
 
-	my $max_handle = $source->get_query_handle($queries{get_max_date});
+	my $max_handle = $base->get_query_handle($queries{get_max_date});
 	my $max_result = $max_handle->execute();
 	unless ($max_result) {
 		Sympa::Log::Syslog::do_log('err','Unable to get maximal date from logs_table');
@@ -204,7 +204,7 @@ sub add_event {
 
 	## Insert in log_table
 
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		$queries{add_log_message},
 	);
 	my $result = $handle->execute(
@@ -275,7 +275,7 @@ sub add_stat {
 		}
 	}
 
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		$queries{add_stat_message},
 	);
 	my $result = $handle->execute(
@@ -310,7 +310,7 @@ sub _add_stat_counter {
 		}
 	}
 
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		$queries{add_counter_message},
 	);
 	my $result = $handle->execute(
@@ -354,7 +354,7 @@ sub delete_events {
 	my ($age) = @_;
 	my $date = time() - ($age * 30 * 24 * 60 * 60);
 
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		$queries{delete_log_message},
 	);
 	my $result = $handle->execute(
@@ -392,7 +392,7 @@ sub aggregate_stats {
 	my ($begin_date, $end_date) = @_;
 
 	# retrieve new stats (read_stat value is 0)
-	my $get_handle = $source->get_query_handle(
+	my $get_handle = $base->get_query_handle(
 		$queries{get_data},
 	);
 	my $get_result = $get_handle->execute(
@@ -407,7 +407,7 @@ sub aggregate_stats {
 	my $raw_stats = $get_handle->fetchall_hashref('id_stat');
 
 	# mark stats as read (flip read_stat value to 1)
-	my $update_handle = $source->get_query_handle(
+	my $update_handle = $base->get_query_handle(
 		$queries{update_data},
 	);
 	my $update_result = $update_handle->execute(
@@ -753,7 +753,7 @@ sub _update_subscriber_msg_send {
 	my (%params) = @_;
 	Sympa::Log::Syslog::do_log('debug2','%s,%s,%s,%s',$params{mail}, $params{list}, $params{robot}, $params{counter});
 
-	my $get_handle = $source->get_query_handle(
+	my $get_handle = $base->get_query_handle(
 		$queries{get_subscribers},
 	);
 	my $get_result = $get_handle->execute(
@@ -770,7 +770,7 @@ sub _update_subscriber_msg_send {
 		$get_handle->fetchrow_hashref('number_messages_subscriber') +
 		$params{counter};
 
-	my $update_handle = $source->get_query_handle(
+	my $update_handle = $base->get_query_handle(
 		$queries{update_subscribers},
 	);
 	my $update_result = $update_handle->execute(

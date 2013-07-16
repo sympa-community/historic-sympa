@@ -37,17 +37,17 @@ chdir $Sympa::Configuration::Conf{'home'};
 
 Sympa::Database::db_connect() || die "Can't connect to database";
 
-my $source = Sympa::Database::get_source();
+my $base = Sympa::Database::get_source();
 
-my $select_subscriber_handle = $source->get_query_handle(
+my $select_subscriber_handle = $base->get_query_handle(
 	"SELECT user_subscriber, comment_subscriber FROM subscriber_table"
 );
 
-my $select_user_handle = $source->get_query_handle(
+my $select_user_handle = $base->get_query_handle(
 	"SELECT gecos_user FROM user_table WHERE email_user=?"
 );
 
-my $update_subscriber_handle = $source->get_query_handle(
+my $update_subscriber_handle = $base->get_query_handle(
 	"UPDATE subscriber_table SET comment_subscriber=? WHERE user_subscriber=?"
 );
 
@@ -79,4 +79,4 @@ $select_subscriber_handle->finish();
 $update_subscriber_handle->finish();
 
 ## Disconnect from Database
-$source->disconnect();
+$base->disconnect();

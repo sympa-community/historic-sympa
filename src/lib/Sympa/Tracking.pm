@@ -61,10 +61,10 @@ sub get_recipients_status {
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
-	my $source = Sympa::Database::get_source();
+	my $base = Sympa::Database::get_source();
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		"SELECT "                                                     .
 			"recipient_notification AS recipient, "               .
 			"reception_option_notification AS reception_option, " .
@@ -136,8 +136,8 @@ sub db_init_notification_table {
 
 	my $time = time();
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"INSERT INTO notification_table ("        .
 			"message_id_notification, "       .
 			"recipient_notification, "        .
@@ -200,8 +200,8 @@ sub db_insert_notification {
 
 	$notification_as_string = MIME::Base64::encode($notification_as_string);
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		"UPDATE notification_table "            .
 		"SET "                                  .
 			"status_notification=?, "       .
@@ -232,10 +232,10 @@ sub find_notification_id_by_message{
 	chomp $msgid;
 	Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
-	my $source = Sympa::Database::get_source();
+	my $base = Sympa::Database::get_source();
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
-	my $handle = $source->get_query_handle(
+	my $handle = $base->get_query_handle(
 		"SELECT pk_notification "                                      .
 		"FROM notification_table "                                     .
 		"WHERE "                                                       .
@@ -287,8 +287,8 @@ sub remove_message_by_id{
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
 
-	my $source = Sympa::Database::get_source();
-	my $rows = $source->execute_query(
+	my $base = Sympa::Database::get_source();
+	my $rows = $base->execute_query(
 		"DELETE FROM notification_table "        .
 		"WHERE "                                 .
 			"message_id_notification=? AND " .
@@ -323,10 +323,10 @@ sub remove_message_by_period{
 	my ($period, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
 
-	my $source = Sympa::Database::get_source();
+	my $base = Sympa::Database::get_source();
 
 	my $limit = time - ($period * 24 * 60 * 60);
-	my $rows = $source->execute_query(
+	my $rows = $base->execute_query(
 		"DELETE FROM notification_table "  .
 		"WHERE "                           .
 			"date_notification<? AND " .

@@ -93,9 +93,9 @@ sub new {
 
 	if ($params{'list'}) { # list task
 		$self->{'list_object'} = Sympa::List->new(
-			name   => $params{'list'},
-			robot  => $params{'robot'},
-			source => $params{'source'},
+			name  => $params{'list'},
+			robot => $params{'robot'},
+			base  => $params{'base'},
 		);
 		$self->{'domain'} = $self->{'list_object'}{'domain'};
 	}
@@ -115,7 +115,7 @@ Build all Task objects from task spool.
 =cut
 
 sub load_tasks {
-	my ($class, $spool, $source) = @_;
+	my ($class, $spool, $base) = @_;
 
 	Sympa::Log::Syslog::do_log('debug',"Listing all tasks");
 	## Reset the list of tasks
@@ -128,7 +128,7 @@ sub load_tasks {
 
 	## Create Task objects
 	foreach my $t (@tasks) {
-		my $task = Sympa::Task->new(%$t, source => $source);
+		my $task = Sympa::Task->new(%$t, base => $base);
 		## Maintain list of tasks
 		push @task_list, $task;
 

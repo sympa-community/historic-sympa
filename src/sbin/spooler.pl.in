@@ -322,12 +322,12 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		my @qfile;
 
 		my $msgspool = Sympa::Spool->new(
-			name   => 'msg',
-			source => Sympa::Database::get_source()
+			name => 'msg',
+			base => Sympa::Database::get_source()
 		);
 		my $bouncespool = Sympa::Spool->new(
-			name   => 'bounce',
-			source => Sympa::Database::get_source()
+			name => 'bounce',
+			base => Sympa::Database::get_source()
 		);
 
 		## This is the main loop : look for files in the directory, handles
@@ -422,7 +422,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				my $list =  Sympa::List->new(
 					name    => $listname,
 					robot   => $robot,
-					source  =>
+					base    =>
 						Sympa::Database::get_source(),
 					options => {'just_try' => 1}
 				);

@@ -343,9 +343,9 @@ sub _stats {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s, %s)', $listname, $robot, $sign_mod, $message);
 
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -451,9 +451,9 @@ sub _getfile {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s)', $which, $file, $robot);
 
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -507,9 +507,9 @@ sub _last {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $which, $robot);
 
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list)  {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -558,9 +558,9 @@ sub _index {
 	Sympa::Log::Syslog::do_log('debug', '(%s) robot (%s)',$which,$robot);
 
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -619,9 +619,9 @@ sub _review {
 
 	my $user;
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 
 	unless ($list) {
@@ -750,9 +750,9 @@ sub _verify {
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $sign_mod, $robot);
 
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
@@ -789,9 +789,9 @@ sub _subscribe {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1005,9 +1005,9 @@ sub _info {
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
 
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -1185,9 +1185,9 @@ sub _signoff {
 	}
 
 	$list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 
 	## Is this list defined
@@ -1368,9 +1368,9 @@ sub _add {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1531,9 +1531,9 @@ sub _invite {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1717,9 +1717,9 @@ sub _remind {
 
 	unless ($listname eq '*') {
 		$list = Sympa::List->new(
-			name   => $listname,
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $listname,
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		unless ($list) {
 			Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1983,9 +1983,9 @@ sub _del {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -2180,9 +2180,9 @@ sub _set {
 	## Load the list if not already done, and reject
 	## if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 
 	unless ($list) {
@@ -2265,9 +2265,9 @@ sub _distribute {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'DISTRIBUTE %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
@@ -2280,8 +2280,8 @@ sub _distribute {
 	#read the moderation queue and purge it
 
 	my $modspool = Sympa::Spool->new(
-		name   => 'mod',
-		source => Sympa::Database::get_source()
+		name => 'mod',
+		base => Sympa::Database::get_source()
 	);
 	my $name = $list->{'name'};
 
@@ -2289,8 +2289,8 @@ sub _distribute {
 	unless ($message_in_spool) {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
 		my $validatedspool = Sympa::Spool->new(
-			name   => 'validated',
-			source => Sympa::Database::get_source()
+			name => 'validated',
+			base => Sympa::Database::get_source()
 		);
 		$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	}
@@ -2365,8 +2365,8 @@ sub _confirm {
 	my $key = $1; chomp $key;
 
 	my $spool = Sympa::Spool->new(
-		name   => 'auth',
-		source => Sympa::Database::get_source()
+		name => 'auth',
+		base => Sympa::Database::get_source()
 	);
 
 	my $messageinspool = $spool->get_message({'authkey'=>$key});
@@ -2396,7 +2396,7 @@ sub _confirm {
 	my $list = Sympa::List->new(
 		name    => $message->{'listname'},
 		robot   => $robot,
-		source  => Sympa::Database::get_source(),
+		base    => Sympa::Database::get_source(),
 		options => {'just_try' => 1}
 	);
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
@@ -2532,9 +2532,9 @@ sub _reject {
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
-		name   => $which,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $which,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 
 	unless ($list) {
@@ -2548,8 +2548,8 @@ sub _reject {
 	my $name = "$list->{'name'}";
 
 	my $modspool = Sympa::Spool->new(
-		name   => 'mod',
-		source => Sympa::Database::get_source()
+		name => 'mod',
+		base => Sympa::Database::get_source()
 	);
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
@@ -2625,9 +2625,9 @@ sub _modindex {
 	$name =~ y/A-Z/a-z/;
 
 	my $list = Sympa::List->new(
-		name   => $name,
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $name,
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $name},$cmd_line);
@@ -2660,9 +2660,9 @@ sub _modindex {
 
 		$i=~/\_(.+)$/;
 		$curlist = Sympa::List->new(
-			name   => $PREMATCH,
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $PREMATCH,
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		if ($curlist) {
 			# list loaded

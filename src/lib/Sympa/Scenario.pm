@@ -606,9 +606,9 @@ sub verify {
 	my $list;
 	if ($context->{'listname'} && ! defined $context->{'list_object'}) {
 		$context->{'list_object'} = Sympa::List->new(
-			name   => $context->{'listname'},
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $context->{'listname'},
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		unless ($context->{'list_object'}) {
 			Sympa::Log::Syslog::do_log('info',"Unable to create List object for list $context->{'listname'}");
@@ -944,14 +944,14 @@ sub verify {
 		## The list is local or in another local robot
 		if ($args[0] =~ /\@/) {
 			$list2 = Sympa::List->new(
-				name   => $args[0],
-				source => Sympa::Database::get_source()
+				name => $args[0],
+				base => Sympa::Database::get_source()
 			);
 		} else {
 			$list2 = Sympa::List->new(
-				name   => $args[0],
-				robot  => $robot,
-				source => Sympa::Database::get_source()
+				name  => $args[0],
+				robot => $robot,
+				base  => Sympa::Database::get_source()
 			);
 		}
 

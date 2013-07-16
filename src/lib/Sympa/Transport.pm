@@ -54,14 +54,14 @@ sub request {
 					cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
 				},
 				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-				source   => Sympa::Database::get_source()
+				base     => Sympa::Database::get_source()
 			);
 		} else {
 			$session = Sympa::Session->new(
 				robot    => $ENV{SYMPA_ROBOT},
 				context  => {},
 				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-				source   => Sympa::Database::get_source()
+				base     => Sympa::Database::get_source()
 			);
 			$session->store() if (defined $session);
 			$session->renew() if (defined $session);## Note that id_session changes each time it is saved in the DB

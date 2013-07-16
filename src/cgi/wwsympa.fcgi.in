@@ -1076,7 +1076,7 @@ $Sympa::Language::default_lang = $Sympa::Configuration::Conf{'lang'};
 Sympa::Database::check_db_connect();
 
 # init database logger
-Sympa::Log::Database::init(source => Sympa::Database::get_source());
+Sympa::Log::Database::init(base => Sympa::Database::get_source());
 
 my $pinfo = Sympa::List::_apply_defaults();
 
@@ -1314,7 +1314,7 @@ while ($query = new_loop()) {
 			'ajax'   => $ajax
 		},
 		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-		source => Sympa::Database::get_source()
+		base     => Sympa::Database::get_source()
 	);
 
 	undef $ENV{'HTTP_COOKIE'}; # Getting rid of the environment variable to make sure it won't be affected to another anonymous session.
@@ -1555,9 +1555,9 @@ while ($query = new_loop()) {
 
 			unless ($comm{$action}) {
 				if (Sympa::List->new(
-						name   => $action,
-						robot  => $robot,
-						source => Sympa::Database::get_source()
+						name  => $action,
+						robot => $robot,
+						base  => Sympa::Database::get_source()
 					)){
 					do_redirect ($param->{'base_url'}.$param->{'path_cgi'}.'/info/'.$action);
 					last;
@@ -2440,9 +2440,9 @@ sub check_param_in {
 
 		## Create a Sympa::List->newinstance.
 		$list = Sympa::List->new(
-			name   => $in{'list'},
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $in{'list'},
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		unless ($list) {
 			Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
@@ -2464,7 +2464,7 @@ sub check_param_in {
 		$list = Sympa::List->new(
 			name    => $in{'list'},
 			robot   => $robot,
-			source  => Sympa::Database::get_source(),
+			base    => Sympa::Database::get_source(),
 			options => {}
 		);
 		unless ($list) {
@@ -4107,9 +4107,9 @@ sub do_active_lists {
 	## get msg count for each list
 	foreach my $l (keys (%{$param->{'which'}})) {
 		my $list = Sympa::List->new(
-			name   => $l,
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $l,
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		my $file = "$list->{'dir'}/msg_count";
 
@@ -5002,9 +5002,9 @@ sub do_multiple_subscribe {
 
 	foreach my $requested_list (@lists) {
 		my $param->{'list'} = Sympa::List->new(
-			name   => $requested_list,
-			robot  => $robot,
-			source => Sympa::Database::get_source()
+			name  => $requested_list,
+			robot => $robot,
+			base  => Sympa::Database::get_source()
 		);
 		$results{'requested_list'} = do_subscribe();
 	}
@@ -5620,7 +5620,7 @@ sub do_show_sessions {
 		delay          => $delay,
 		robot          => $robot,
 		connected_only => $in{'connected_only'},
-		source         => Sympa::Database::get_source()
+		base           => Sympa::Database::get_source()
 	);
 	return '1';
 }
@@ -5789,9 +5789,9 @@ sub do_copy_template {
 	if ($in{'scope_out'} eq 'list') {
 		if ($in{'list_out'}) {
 			my $list_out = Sympa::List->new(
-				name   => $in{'list_out'},
-				robot  => $robot,
-				source => Sympa::Database::get_source()
+				name  => $in{'list_out'},
+				robot => $robot,
+				base  => Sympa::Database::get_source()
 			);
 			unless ($list_out) {
 				Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list_out'}},$param->{'action'},'');
@@ -6502,8 +6502,8 @@ sub do_modindex {
 
 	my $list_name = $list->{'name'};
 	my $modspool = Sympa::Spool->new(
-		name   => 'mod',
-		source => Sympa::Database::get_source()
+		name => 'mod',
+		base => Sympa::Database::get_source()
 	);
 	my @messages  = $modspool->get_content(
 		selector => {
@@ -6950,8 +6950,8 @@ sub do_distribute {
 	wwslog('info', 'do_distribute(%s)', $in{'id'});
 
 	my $modspool = Sympa::Spool->new(
-		name   => 'mod',
-		source => Sympa::Database::get_source()
+		name => 'mod',
+		base => Sympa::Database::get_source()
 	);
 	my ($msg, $file);
 
@@ -7030,8 +7030,8 @@ sub do_distribute {
 
 	# spool messages instead of sending them
 	my $spool = Sympa::Spool->new(
-		name   => $Sympa::Configuration::Conf{'queue'},
-		source => Sympa::Database::get_source()
+		name => $Sympa::Configuration::Conf{'queue'},
+		base => Sympa::Database::get_source()
 	);
 
 	my $result = Sympa::Mail::mail_file(
@@ -7778,8 +7778,8 @@ sub do_remove_arc {
 		Sympa::Tracking::remove_message_by_id($msgid, $in{'list'},$robot);
 	}
 	my $spoolarchive = Sympa::Spool->new(
-		name   => 'archive',
-		source => Sympa::Database::get_source()
+		name => 'archive',
+		base => Sympa::Database::get_source()
 	);
 	$spoolarchive->store(
 		string   => $removeorder,
@@ -8614,9 +8614,9 @@ sub do_create_list {
 
 	## create liste
 	my $testlist = Sympa::List->new(
-		name   => $in{'listname'},
-		robot  => $robot,
-		source => Sympa::Database::get_source()
+		name  => $in{'listname'},
+		robot => $robot,
+		base  => Sympa::Database::get_source()
 	);
 	if ($testlist) {
 		Sympa::Report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -8653,8 +8653,8 @@ sub do_create_list {
 
 	## notify listmaster
 	my $list = Sympa::List->new(
-		name   => $in{'listname'},
-		source => Sympa::Database::get_source()
+		name => $in{'listname'},
+		base => Sympa::Database::get_source()
 	);
 	unless (defined $list) {
 		wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
@@ -9102,8 +9102,8 @@ sub do_rebuildarc {
 	wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
 
 	my $spoolarchive = Sympa::Spool->new(
-		name   => 'archive',
-		source => Sympa::Database::get_source()
+		name => 'archive',
+		base => Sympa::Database::get_source()
 	);
 
 	my $result = $spoolarchive->store(
@@ -9136,8 +9136,8 @@ sub do_rebuildallarc {
 
 	my $errors = 0;
 	my $spoolarchive = Sympa::Spool->new(
-		name   => 'archive',
-		source => Sympa::Database::get_source()
+		name => 'archive',
+		base => Sympa::Database::get_source()
 	);
 	unless ($spoolarchive) {
 		Sympa::Report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
@@ -10054,7 +10054,7 @@ sub do_edit_list {
 	$list = Sympa::List->new(
 		name    => $list->{'name'},
 		robot   => $robot,
-		source  => Sympa::Database::get_source(),
+		base    => Sympa::Database::get_source(),
 		options => {'reload_config' => 1}
 	);
 
@@ -10801,9 +10801,9 @@ sub do_purge_list {
 
 	foreach my $l (@lists) {
 		my $list = Sympa::List->new(
-			name   => $l,
-			robot  => $robot,
-			source => Sympa::Database::get_source(),
+			name  => $l,
+			robot => $robot,
+			base  => Sympa::Database::get_source(),
 		);
 		next unless (defined $list);
 		$list->purge($param->{'user'}{'email'});
@@ -15195,8 +15195,8 @@ sub do_remind {
 
 	# spool messages instead of sending them
 	my $spool = Sympa::Spool->new(
-		name   => $Sympa::Configuration::Conf{'queue'},
-		source => Sympa::Database::get_source()
+		name => $Sympa::Configuration::Conf{'queue'},
+		base => Sympa::Database::get_source()
 	);
 
 	my $result = Sympa::Mail::mail_file(
@@ -15681,9 +15681,9 @@ sub do_suspend_request_action {
 		foreach my $line (@lists) {
 
 			my $unsub_list = Sympa::List->new(
-				name   => $line,
-				robot  => $robot,
-				source => Sympa::Database::get_source(),
+				name  => $line,
+				robot => $robot,
+				base  => Sympa::Database::get_source(),
 			);
 			unless ($unsub_list) {
 				wwslog('info', 'List %s unknown' , $unsub_list);
@@ -15893,7 +15893,7 @@ sub do_send_mail {
 			},
 			return_path => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
 			subject     => $in{'subject'},
-			source      => $page_source,
+			base        => $page_source,
 		);
 		if (defined $html_part_body) {
 			$in{'body'} = $html_part_body;
@@ -15936,8 +15936,8 @@ sub do_send_mail {
 
 	# spool messages instead of sending them
 	my $spool = Sympa::Spool->new(
-		name   => $Sympa::Configuration::Conf{'queue'},
-		source => Sympa::Database::get_source()
+		name => $Sympa::Configuration::Conf{'queue'},
+		base => Sympa::Database::get_source()
 	);
 
 	my $result = Sympa::Mail::mail_file(
@@ -16008,8 +16008,8 @@ sub do_request_topic {
 	my $listname = $list->{'name'};
 
 	my $spoolauth = Sympa::Spool->new(
-		name   => 'auth',
-		source => Sympa::Database::get_source()
+		name => 'auth',
+		base => Sympa::Database::get_source()
 	);
 
 	my $authmessage = $spoolauth->get_message({'list'=> $list->{'name'},'robot'=>$robot,'authkey'=>$in{'authkey'}});
@@ -16063,8 +16063,8 @@ sub do_tag_topic_by_sender {
 	my $mail;
 
 	my $authspool = Sympa::Spool->new(
-		name   => 'auth',
-		source => Sympa::Database::get_source()
+		name => 'auth',
+		base => Sympa::Database::get_source()
 	);
 	my $messagespool = $authspool->get_message({'list'=>$listname, 'robot' => $robot , 'authkey'=> $in{'authkey'}});
 
@@ -16128,8 +16128,8 @@ sub do_tag_topic_by_sender {
 
 	# spool messages instead of sending them
 	my $spool = Sympa::Spool->new(
-		name   => $Sympa::Configuration::Conf{'queue'},
-		source => Sympa::Database::get_source()
+		name => $Sympa::Configuration::Conf{'queue'},
+		base => Sympa::Database::get_source()
 	);
 
 	my $result = Sympa::Mail::mail_file(
@@ -16825,11 +16825,11 @@ sub do_viewspools {
 	}
 
 	$param->{'global_count_ok'} = Sympa::Spool->global_count(
-		source => Sympa::Database::get_source(),
+		base   => Sympa::Database::get_source(),
 		status => 'ok'
 	);
 	$param->{'global_count_bad'} = Sympa::Spool->global_count(
-		source => Sympa::Database::get_source(),
+		base   => Sympa::Database::get_source(),
 		status => 'bad'
 	);
 
@@ -16845,7 +16845,7 @@ sub do_viewspools {
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
 		status => $spool_status,
-		source => Sympa::Database::get_source()
+		base   => Sympa::Database::get_source()
 	);
 
 	$param->{'total'} = $spool->count;
@@ -16928,7 +16928,7 @@ sub do_viewspool_message {
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
 		status => $status,
-		source => Sympa::Database::get_source()
+		base   => Sympa::Database::get_source()
 	);
 	my @messages = $spool->get_content(
 		selector  => {'messagekey'=>$messagekey},
@@ -16948,9 +16948,9 @@ sub do_viewspool_message {
 		my $message_listname = $messages[0]->{'list'};
 		if ($message_listname){
 			$list = Sympa::List->new(
-				name   => $message_listname,
-				robot  => $robot,
-				source => Sympa::Database::get_source(),
+				name  => $message_listname,
+				robot => $robot,
+				base  => Sympa::Database::get_source(),
 			);
 		}
 		unless ($list && ($list->am_i('privileged_owner', $param->{'user'}{'email'})|| $list->am_i('owner', $param->{'user'}{'email'})||$list->am_i('editor', $param->{'user'}{'email'}))) {
@@ -17025,7 +17025,7 @@ sub do_viewspool_message_dump {
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
 		status => $status,
-		source => Sympa::Database::get_source()
+		base   => Sympa::Database::get_source()
 	);
 	my @messages = $spool->get_content(
 		selector  => { messagekey => $messagekey},
@@ -17082,7 +17082,7 @@ sub do_viewspool_message_remove {
 	my $spool = Sympa::Spool->new(
 		name   => $spoolname,
 		status => $status,
-		source => Sympa::Database::get_source()
+		base   => Sympa::Database::get_source()
 	);
 	unless ($spool->remove_message({'messagekey'=>$messagekey})){
 		Sympa::Report::reject_report_web('intern','could not remove message');
@@ -17141,13 +17141,13 @@ sub do_viewspool_message_mv {
 	my $spool = Sympa::Spool->new(
 		spoolname        => $spoolname,
 		selection_status => $status,
-		source           => Sympa::Database::get_source()
+		base             => Sympa::Database::get_source()
 	);
 
 	my $newspool = Sympa::Spool->new(
 		spoolname        => $newspool,
 		selection_status => $newstatus,
-		source           => Sympa::Database::get_source()
+		base            => Sympa::Database::get_source()
 	);
 
 	unless ($spool->update({'messagekey'=>$messagekey},{'message_status'=>$newstatus,'spoolname'=>$newspool})){
@@ -17790,9 +17790,9 @@ sub do_automatic_lists {
 	}
 
 	$list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source(),
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source(),
 	);
 	unless (defined $list) {
 		## Automatic creation of a mailing list, based on a family
@@ -17815,7 +17815,7 @@ sub do_automatic_lists {
 			sender     => $session->{'email'},
 			host       =>
 				Sympa::Configuration::get_robot_conf($robot, 'host'),
-			source => Sympa::Database::get_source()
+			base       => Sympa::Database::get_source()
 		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err', "Failed to create the dynamic list $listname.");

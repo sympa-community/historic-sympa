@@ -132,7 +132,7 @@ unless (Sympa::Database::check_db_connect()) {
 }
 
 # init database logger
-Sympa::Log::Database::init(source => Sympa::Database::get_source());
+Sympa::Log::Database::init(base => Sympa::Database::get_source());
 
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
@@ -237,8 +237,8 @@ $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
 my $spool = Sympa::Spool->new(
-	name   => 'archive',
-	source => Sympa::Database::get_source()
+	name => 'archive',
+	base => Sympa::Database::get_source()
 );
 
 ## infinite loop scanning the queue (unless a sig TERM is received
@@ -281,8 +281,8 @@ while (!$end) {
 		Sympa::Log::Syslog::do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 
 		my $list = Sympa::List->new(
-			name   => $listadress,
-			source => Sympa::Database::get_source(),
+			name => $listadress,
+			base => Sympa::Database::get_source(),
 		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err',"remove : unknown list $listadress");
@@ -475,9 +475,9 @@ sub rebuild {
 	my $tag = get_tag($listname);
 
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $hostname,
-		source => Sympa::Database::get_source(),
+		name  => $listname,
+		robot => $hostname,
+		base  => Sympa::Database::get_source(),
 	);
 	my $robot = $list->{'domain'};
 	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
@@ -663,9 +663,9 @@ sub mail2arc {
 	my $newfile;
 
 	my $list = Sympa::List->new(
-		name   => $listname,
-		robot  => $robot,
-		source => Sympa::Database::get_source(),
+		name  => $listname,
+		robot => $robot,
+		base  => Sympa::Database::get_source(),
 	);
 	my $arcpath = Sympa::Configuration::get_robot_conf($list->{'domain'},'arc_path');
 

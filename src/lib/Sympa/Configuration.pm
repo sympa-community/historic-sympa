@@ -339,8 +339,8 @@ sub _get_db_conf  {
 	$robot = '*' unless (-f $Conf{'etc'}.'/'.$robot.'/robot.conf');
 	unless ($robot) {$robot = '*'};
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT value_conf AS value " .
 		"FROM conf_table " .
 		"WHERE robot_conf=? AND label_conf=?)",
@@ -374,8 +374,8 @@ sub set_robot_conf  {
 		$robot = '*';
 	}
 
-	my $source = Sympa::Database::get_source();
-	my $handle = $source->get_query_handle(
+	my $base = Sympa::Database::get_source();
+	my $handle = $base->get_query_handle(
 		"SELECT count(*) " .
 		"FROM conf_table " .
 		"WHERE robot_conf=? AND label_conf=?",
@@ -389,7 +389,7 @@ sub set_robot_conf  {
 	my $count = $handle->fetchrow();
 
 	if ($count == 0) {
-		my $rows = $source->execute_query(
+		my $rows = $base->execute_query(
 			"INSERT INTO conf_table ("                   .
 				"robot_conf, label_conf, value_conf" .
 			") VALUES (?, ?, ?)",
@@ -402,7 +402,7 @@ sub set_robot_conf  {
 			return undef;
 		}
 	} else {
-		my $rows = $source->execute_query(
+		my $rows = $base->execute_query(
 			"UPDATE conf_table "                            .
 			"SET robot_conf=?, label_conf=?, value_conf=? " .
 			"WHERE robot_conf=? AND label_conf=?",

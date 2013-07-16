@@ -67,7 +67,7 @@ Parameters:
 
 =over
 
-=item C<source> => L<Sympa::Datasource::SQL>
+=item C<base> => L<Sympa::Database>
 
 =back
 
@@ -80,12 +80,12 @@ A new L<Sympa::Bulk> object, or I<undef>, if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	croak "missing source parameter" unless $params{source};
-	croak "invalid source parameter" unless
-		$params{source}->isa('Sympa::Datasource::SQL');
+	croak "missing base parameter" unless $params{base};
+	croak "invalid base parameter" unless
+		$params{base}->isa('Sympa::Database');
 
 	my $self = {
-		source => $params{source}
+		base => $params{base}
 	};
 
 	bless $self, $class;
@@ -123,7 +123,7 @@ sub next {
 			"verp_bulkmailer ASC";
 	my $limit_oracle='';
 	my $limit_sybase='';
-	my $db_type = $self->{source}->get_type();
+	my $db_type = $self->{base}->get_type();
 	if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
 		$order_clause .= ' LIMIT 1';
 	} elsif ($db_type eq 'Oracle'){
@@ -133,7 +133,7 @@ sub next {
 	}
 
 	# Select the most prioritary packet to lock.
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT $limit_sybase "                         .
 			"messagekey_bulkmailer AS messagekey, " .
 			"packetid_bulkmailer AS packetid "      .
@@ -156,7 +156,7 @@ sub next {
 	}
 
 	# Lock the packet previously selected.
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		"UPDATE bulkmailer_table "             .
 		"SET lock_bulkmailer=? "               .
 		"WHERE "                               .
@@ -182,7 +182,7 @@ sub next {
 	}
 
 	# select the packet that has been locked previously
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT " .
 			"messagekey_bulkmailer AS messagekey, "   .
 			"messageid_bulkmailer AS messageid, "     .
@@ -223,7 +223,7 @@ sub remove {
 	my ($self, $messagekey, $packetid) = @_;
 	Sympa::Log::Syslog::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		"DELETE FROM bulkmailer_table " .
 		"WHERE packetid_bulkmailer=? AND messagekey_bulkmailer=?",
 		$packetid,
@@ -246,7 +246,7 @@ sub messageasstring {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
 
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT message_bulkspool AS message " .
 		"FROM bulkspool_table " .
 		"WHERE messagekey_bulkspool = ?",
@@ -281,7 +281,7 @@ sub message_from_spool {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(messagekey : %s)',$messagekey);
 
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT "                                                .
 			"message_bulkspool AS message, "                 .
 			"messageid_bulkspool AS messageid, "             .
@@ -530,8 +530,8 @@ sub store {
 
 	my $message_already_on_spool;
 	my $bulkspool = Sympa::Spool->new(
-		name   => 'bulk',
-		source => $self->{source}
+		name => 'bulk',
+		base => $self->{base}
 	);
 
 	# last_stored_message_key is used to prevent multiple copies of the
@@ -613,7 +613,7 @@ sub store {
 		my $packet_already_exist;
 		if ($message_already_on_spool) {
 			## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
-			my $handle = $self->{source}->get_query_handle(
+			my $handle = $self->{base}->get_query_handle(
 				"SELECT count(*) " .
 				"FROM bulkmailer_table " .
 				"WHERE " .
@@ -635,7 +635,7 @@ sub store {
 			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
 		} else {
-			my $rows = $self->{source}->execute_query(
+			my $rows = $self->{base}->execute_query(
 				"INSERT INTO bulkmailer_table ("        .
 					"messagekey_bulkmailer, "       .
 					"messageid_bulkmailer, "        .
@@ -693,7 +693,7 @@ sub purge_bulkspool {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'purge_bulkspool');
 
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT messagekey_bulkspool AS messagekey "               .
 		"FROM bulkspool_table LEFT JOIN bulkmailer_table "         .
 			"ON messagekey_bulkspool = messagekey_bulkmailer " .
@@ -729,7 +729,7 @@ sub remove_bulkspool_message {
 	my $table = $spool.'_table';
 	my $key = 'messagekey_'.$spool;
 
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		"DELETE FROM $table WHERE $key=?",
 		$$messagekey
 	);
@@ -755,7 +755,7 @@ sub get_remaining_packets_count {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug3', 'get_remaining_packets_count');
 
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT COUNT(*) " .
 		"FROM bulkmailer_table " .
 		"WHERE lock_bulkmailer IS NULL"
@@ -810,7 +810,7 @@ The random stored in the database, or I<undef> if something went wrong.
 sub get_db_random {
 	my ($self) = @_;
 
-	my $handle = $self->{source}->get_query_handle(
+	my $handle = $self->{base}->get_query_handle(
 		"SELECT random FROM fingerprint_table"
 	);
 	unless ($handle) {
@@ -847,7 +847,7 @@ sub init_db_random {
 
 	my $random = int(rand($range)) + $minimum;
 
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		"INSERT INTO fingerprint_table VALUES ($random)",
 	);
 	unless ($rows) {

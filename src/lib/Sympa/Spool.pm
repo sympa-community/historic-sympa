@@ -59,7 +59,7 @@ Parameters:
 
 =item C<status> => C<bad> | C<ok>
 
-=item C<source> => L<Sympa::Datasource::SQL>
+=item C<base> => L<Sympa::Database>
 
 =back
 
@@ -78,14 +78,14 @@ sub new {
 		$params{status} ne 'bad' &&
 		$params{status} ne 'ok';
 
-	croak "missing source parameter" unless $params{source};
-	croak "invalid source parameter" unless
-		$params{source}->isa('Sympa::Datasource::SQL');
+	croak "missing base parameter" unless $params{base};
+	croak "invalid base parameter" unless
+		$params{base}->isa('Sympa::Database');
 
 	my $self = {
 		name   => $params{name},
 		status => $params{status},
-		source => $params{source}
+		base   => $params{base}
 	};
 
 	bless $self, $class;
@@ -101,7 +101,7 @@ Parameters:
 
 =over
 
-=item C<source> => L<Sympa::Datasource::SQL>
+=item C<base> => L<Sympa::Database>
 
 =item C<status> => C<bad> | C<ok>
 
@@ -116,7 +116,7 @@ sub global_count {
 		'SELECT COUNT(*) ' .
 		'FROM spool_table '.
 		'WHERE message_status_spool = ?';
-	my $handle = $params{source}->get_query_handle($query);
+	my $handle = $params{base}->get_query_handle($query);
 	$handle->execute($params{status});
 
 	my @result = $handle->fetchrow_array();
@@ -163,7 +163,7 @@ sub get_count {
 		"FROM spool_table " .
 		"WHERE $filter_clause AND spoolname_spool=?";
 
-	my $handle = $self->{source}->get_query_handle($query);
+	my $handle = $self->{base}->get_query_handle($query);
 	$handle->execute($self->{name});
 	my @result = $handle->fetchrow_array();
 	return $result[0];
@@ -234,7 +234,7 @@ sub get_content {
 		$query .= " LIMIT $params{ofset}, $params{page_size}";
 	}
 
-	my $handle = $self->{source}->get_query_handle($query);
+	my $handle = $self->{base}->get_query_handle($query);
 	$handle->execute($self->{name});
 	my @messages;
 	while (my $message = $handle->fetchrow_hashref('NAME_lc')) {
@@ -280,7 +280,7 @@ sub next {
 			$filter_clause                       .
 		"ORDER BY priority_spool, date_spool LIMIT 1";
 
-	my $rows = $self->{source}->execute_query(
+	my $rows = $self->{base}->execute_query(
 		$update_query,
 		$lock,
 		$epoch,
@@ -300,7 +300,7 @@ sub next {
 			"(priority_spool != 'z' OR priority_spool IS NULL) " .
 		"ORDER by priority_spool LIMIT 1";
 
-	my $handle = $self->{source}->get_query_handle($select_query);
+	my $handle = $self->{base}->get_query_handle($select_query);
 	$handle->execute(
 		$self->{name},
 		$self->{status},
@@ -347,7 +347,7 @@ sub get_message {
 		"FROM spool_table " .
 		"WHERE spoolname_spool=? AND $filter_clause LIMIT 1";
 
-	my $handle = $self->{source}->get_query_handle($query);
+	my $handle = $self->{base}->get_query_handle($query);
 	$handle->execute($self->{name}, @values);
 
 	my $message = $handle->fetchrow_hashref('NAME_lc');
@@ -428,7 +428,7 @@ sub update {
 	my $query =
 		"UPDATE spool_table SET $set_clause WHERE $filter_clause";
 
-	my $rows = $self->{source}->execute_query($query, @values);
+	my $rows = $self->{base}->execute_query($query, @values);
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to execute SQL statement');
 		return undef;
@@ -525,7 +525,7 @@ sub store {
 		") "                                           .
 		"VALUES (?, ?, ?, $value_clause)";
 
-	my $insert_handle = $self->{source}->get_query_handle($insert_query);
+	my $insert_handle = $self->{base}->get_query_handle($insert_query);
 	$insert_handle->execute(
 		$self->{name},
 		$lock,
@@ -537,7 +537,7 @@ sub store {
 		'SELECT messagekey_spool as messagekey '    .
 		'FROM spool_table '                         .
 		'WHERE messagelock_spool=? AND date_spool=?';
-	my $select_handle = $self->{source}->get_query_handle($select_query);
+	my $select_handle = $self->{base}->get_query_handle($select_query);
 	$select_handle->execute(
 		$lock,
 		$params{metadata}->{'date'}
@@ -581,7 +581,7 @@ sub remove_message {
 		"DELETE FROM spool_table " .
 		"WHERE spoolname_spool=? AND $filter_clause";
 
-	$self->{source}->execute_query($query, $self->{name});
+	$self->{base}->execute_query($query, $self->{name});
 	return 1;
 }
 
@@ -621,7 +621,7 @@ sub clean {
 		$query .= ' AND bad_spool IS NULL';
 	}
 
-	my $handle = $self->{source}->get_query_handle($query);
+	my $handle = $self->{base}->get_query_handle($query);
 	$handle->execute($self->{name}, $freshness_date);
 	$handle->finish();
 
@@ -640,7 +640,7 @@ sub _selectfields{
 
 	if (($selection eq '*_but_message')||($selection eq '*')) {
 
-		my $structure = $self->{source}->get_structure();
+		my $structure = $self->{base}->get_structure();
 
 		foreach my $field (keys %{$structure->{spool_table}{fields}}) {
 			next if (($selection eq '*_but_message') && ($field eq 'message_spool'));
@@ -676,9 +676,9 @@ sub _get_filter_clause {
 		}
 
 		if ($sqlselector) {
-			$sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.$self->{source}->quote($selector->{$field});
+			$sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.$self->{base}->quote($selector->{$field});
 		} else {
-			$sqlselector = ' '.$field.'_spool '.$compare_operator.' '.$self->{source}->quote($selector->{$field});
+			$sqlselector = ' '.$field.'_spool '.$compare_operator.' '.$self->{base}->quote($selector->{$field});
 		}
 	}
 	return $sqlselector;
