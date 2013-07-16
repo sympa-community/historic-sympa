@@ -1386,7 +1386,11 @@ sub connect {
 
 sub disconnect {
 	my ($self) = @_;
-	return $self->{source}->disconnect();
+
+	foreach my $handle (values %{$self->{cache}}) {
+		$handle->finish();
+	}
+	$self->{dbh}->disconnect() if $self->{dbh};
 }
 
 =item $self->get_structure()
