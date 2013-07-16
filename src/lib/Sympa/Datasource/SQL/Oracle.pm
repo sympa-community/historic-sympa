@@ -57,6 +57,17 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
+sub connect {
+	my ($self, %params) = @_;
+
+	my $result = $self->SUPER::connect(%params);
+	return unless $result;
+	
+	$ENV{'NLS_LANG'} = 'UTF8';
+
+	return 1;
+}
+
 sub get_connect_string{
 	my ($self) = @_;
 

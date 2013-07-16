@@ -48,6 +48,17 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'mysql');
 }
 
+sub connect {
+	my ($self, %params) = @_;
+
+	my $result = $self->SUPER::connect(%params);
+	return unless $result;
+	
+	$self->{'dbh'}->do("SET NAMES 'utf8'");
+
+	return 1;
+}
+
 sub get_connect_string {
 	my ($self) = @_;
 

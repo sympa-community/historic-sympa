@@ -55,6 +55,28 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sqlite');
 }
 
+sub connect {
+	my ($self, %params) = @_;
+
+	my $result = $self->SUPER::connect(%params);
+	return unless $result;
+
+	$self->{'dbh'}->func(
+		'func_index',
+		-1,
+		sub { return index($_[0], $_[1]) },
+		'create_function'
+	);
+
+	if (defined $self->{'db_timeout'}) {
+		$self->{'dbh'}->func($self->{'db_timeout'}, 'busy_timeout' );
+	} else {
+		$self->{'dbh'}->func(5000, 'busy_timeout');
+	}
+
+	return 1;
+}
+
 sub get_connect_string{
 	my ($self, %params) = @_;
 

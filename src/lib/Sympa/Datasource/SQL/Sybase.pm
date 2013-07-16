@@ -57,6 +57,18 @@ sub new {
 	return $class->SUPER::new(%params, db_type => 'sybase');
 }
 
+sub connect {
+	my ($self, %params) = @_;
+
+	my $result = $self->SUPER::connect(%params);
+	return unless $result;
+
+	$ENV{'SYBASE_CHARSET'} = 'utf8';
+	$self->{'dbh'}->do("use $self->{'db_name'}");
+
+	return 1;
+}
+
 
 sub get_connect_string{
 	my ($self) = @_;

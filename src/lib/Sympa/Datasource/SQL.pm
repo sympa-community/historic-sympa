@@ -1385,36 +1385,8 @@ sub connect {
 		}
 	}
 
-	if ($self->{'db_type'} eq 'pg') { # Configure Postgres to use ISO format dates
-		$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
-	}
-
-	## Set client encoding to UTF8
-	if ($self->{'db_type'} eq 'mysql' ||
-		$self->{'db_type'} eq 'pg') {
-		Sympa::Log::Syslog::do_log('debug','Setting client encoding to UTF-8');
-		$self->{'dbh'}->do("SET NAMES 'utf8'");
-	} elsif ($self->{'db_type'} eq 'oracle') {
-		$ENV{'NLS_LANG'} = 'UTF8';
-	} elsif ($self->{'db_type'} eq 'sybase') {
-		$ENV{'SYBASE_CHARSET'} = 'utf8';
-	}
-
-	## added sybase support
-	if ($self->{'db_type'} eq 'sybase') {
-		my $dbname;
-		$dbname="use $self->{'db_name'}";
-		$self->{'dbh'}->do ($dbname);
-	}
-
-	## Force field names to be lowercased
-	## This has has been added after some problems of field names upercased with Oracle
-	$self->{'dbh'}{'FetchHashKeyName'}='NAME_lc';
-
-	if ($self->{'db_type'} eq 'sqlite') { # Configure to use sympa database
-		$self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
-		if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
-	}
+	# Force field names to be lowercased
+	$self->{'dbh'}{'FetchHashKeyName'} = 'NAME_lc';
 
 	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
 	return 1;
