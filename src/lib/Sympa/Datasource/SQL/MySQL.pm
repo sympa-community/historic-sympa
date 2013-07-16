@@ -54,7 +54,7 @@ sub connect {
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 	
-	$self->{'dbh'}->do("SET NAMES 'utf8'");
+	$self->{dbh}->do("SET NAMES 'utf8'");
 
 	return 1;
 }
@@ -63,7 +63,7 @@ sub get_connect_string {
 	my ($self) = @_;
 
 	return
-		"DBI:mysql:$self->{'db_name'}:$self->{'db_host'}";
+		"DBI:mysql:$self->{db_name}:$self->{db_host}";
 }
 
 sub get_substring_clause {
@@ -71,38 +71,38 @@ sub get_substring_clause {
 
 	return sprintf
 		"REVERSE(SUBSTRING(%s FROM position('%s' IN %s) FOR %s))",
-		$params{'source_field'},
-		$params{'separator'},
-		$params{'source_field'},
-		$params{'substring_length'};
+		$params{source_field},
+		$params{separator},
+		$params{source_field},
+		$params{substring_length};
 }
 
 sub get_limit_clause {
 	my ($self, %params) = @_;
 
-	if ($params{'offset'}) {
+	if ($params{offset}) {
 		return sprintf "LIMIT %s,%s",
-			$params{'offset'},
-			$params{'rows_count'};
+			$params{offset},
+			$params{rows_count};
 	} else {
 		return sprintf "LIMIT %s",
-			$params{'rows_count'};
+			$params{rows_count};
 	}
 }
 
 sub get_formatted_date {
 	my ($self, %params) = @_;
 
-	my $mode = lc($params{'mode'});
+	my $mode = lc($params{mode});
 	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{'target'};
+		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
 	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
+		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
 	} else {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			"Unknown date format mode %s",
-			$params{'mode'}
+			$params{mode}
 		);
 		return undef;
 	}
@@ -114,8 +114,8 @@ sub is_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Checking whether field %s.%s is autoincremental',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 
 	my $query =
@@ -126,18 +126,18 @@ sub is_autoinc {
 		$query,
 		undef,
 		'auto_increment',
-		$params{'field'}
+		$params{field}
 	);
 	unless ($row) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to gather autoincrement field named %s for table %s',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
-	return $row->{'field'} eq $params{'field'};
+	return $row->{'field'} eq $params{field};
 }
 
 sub set_autoinc {
@@ -146,11 +146,11 @@ sub set_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Setting field %s.%s as autoincremental',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 
-	my $field_type = defined ($params{'field_type'}) ? $params{'field_type'} : 'BIGINT( 20 )';
+	my $field_type = defined ($params{field_type}) ? $params{field_type} : 'BIGINT( 20 )';
 	my $query =
 		"ALTER TABLE $params{table} CHANGE $params{field} " .
 		"$params{field} $field_type NOT NULL AUTO_INCREMENT";
@@ -159,8 +159,8 @@ sub set_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to set field %s in table %s as autoincrement',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
@@ -176,7 +176,7 @@ sub get_tables {
 		'Getting tables list',
 	);
 
-	my @tables = $self->{'dbh'}->tables();
+	my @tables = $self->{dbh}->tables();
 	foreach my $table (@tables) {
 		$table =~ s/^\`[^\`]+\`\.//; # drop db name prefix
 		$table =~ s/^\`(.+)\`$/$1/;  # drop quotes
@@ -222,7 +222,7 @@ sub get_fields {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting fields list from table %s',
-		$params{'table'},
+		$params{table},
 	);
 
 	my $query = "SHOW FIELDS FROM $params{table}";
@@ -231,7 +231,7 @@ sub get_fields {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -250,7 +250,7 @@ sub get_primary_key {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting primary key from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $query = "SHOW COLUMNS FROM $params{table}";
@@ -259,7 +259,7 @@ sub get_primary_key {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -279,7 +279,7 @@ sub get_indexes {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting indexes list from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $query = "SHOW INDEX FROM $params{table}";
@@ -288,7 +288,7 @@ sub get_indexes {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get indexes list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}

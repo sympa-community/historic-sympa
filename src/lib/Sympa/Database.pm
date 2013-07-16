@@ -85,7 +85,7 @@ sub new {
 
 	my $self = {
 		source => $source,
-		domain => $params{'domain'},
+		domain => $params{domain},
 	};
 
 	bless $self, $class;
@@ -246,11 +246,11 @@ sub _check_db_field_type {
 
 	my ($required_type, $required_size, $effective_type, $effective_size);
 
-	if ($params{'required_format'} =~ /^(\w+)(\((\d+)\))?$/) {
+	if ($params{required_format} =~ /^(\w+)(\((\d+)\))?$/) {
 		($required_type, $required_size) = ($1, $3);
 	}
 
-	if ($params{'effective_format'} =~ /^(\w+)(\((\d+)\))?$/) {
+	if ($params{effective_format} =~ /^(\w+)(\((\d+)\))?$/) {
 		($effective_type, $effective_size) = ($1, $3);
 	}
 

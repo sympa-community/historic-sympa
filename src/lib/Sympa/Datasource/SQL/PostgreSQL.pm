@@ -63,8 +63,8 @@ sub connect {
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 	
-	$self->{'dbh'}->do("SET DATESTYLE TO 'ISO'");
-	$self->{'dbh'}->do("SET NAMES 'utf8'");
+	$self->{dbh}->do("SET DATESTYLE TO 'ISO'");
+	$self->{dbh}->do("SET NAMES 'utf8'");
 
 	return 1;
 }
@@ -73,7 +73,7 @@ sub connect {
 sub get_connect_string{
 	my ($self) = @_;
 
-	return "DBI:Pg:dbname=$self->{'db_name'};host=$self->{'db_host'}";
+	return "DBI:Pg:dbname=$self->{db_name};host=$self->{db_host}";
 }
 
 sub get_substring_clause {
@@ -81,38 +81,38 @@ sub get_substring_clause {
 
 	return sprintf
 		"SUBSTRING(%s FROM position('%s' IN %s) FOR %s)",
-		$params{'source_field'},
-		$params{'separator'},
-		$params{'source_field'},
-		$params{'substring_length'};
+		$params{source_field},
+		$params{separator},
+		$params{source_field},
+		$params{substring_length};
 }
 
 sub get_limit_clause {
 	my ($self, %params) = @_;
 
-	if ($params{'offset'}) {
+	if ($params{offset}) {
 		return sprintf "LIMIT %s OFFSET %s",
-			$params{'rows_count'},
-			$params{'offset'};
+			$params{rows_count},
+			$params{offset};
 	} else {
 		return sprintf "LIMIT %s",
-			$params{'rows_count'};
+			$params{rows_count};
 	}
 }
 
 sub get_formatted_date {
 	my ($self, %params) = @_;
 
-	my $mode = lc($params{'mode'});
+	my $mode = lc($params{mode});
 	if ($mode eq 'read') {
-		return sprintf 'date_part(\'epoch\',%s)',$params{'target'};
+		return sprintf 'date_part(\'epoch\',%s)',$params{target};
 	} elsif ($mode eq 'write') {
-		return sprintf '\'epoch\'::timestamp with time zone + \'%d sec\'',$params{'target'};
+		return sprintf '\'epoch\'::timestamp with time zone + \'%d sec\'',$params{target};
 	} else {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			"Unknown date format mode %s",
-			$params{'mode'}
+			$params{mode}
 		);
 		return undef;
 	}
@@ -124,8 +124,8 @@ sub is_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Checking whether field %s.%s is an autoincrement',
-		$params{'table'},
-		$params{'field'}
+		$params{table},
+		$params{field}
 	);
 
 	my $sequence = _get_sequence_name(
@@ -151,8 +151,8 @@ sub is_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to gather autoincrement field named %s for table %s',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
@@ -166,8 +166,8 @@ sub set_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Setting field %s.%s as an auto increment',
-		$params{'table'},
-		$params{'field'}
+		$params{table},
+		$params{field}
 	);
 
 	my ($query, $rows);
@@ -187,8 +187,8 @@ sub set_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to set type of field %s in table %s as bigint',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
@@ -202,8 +202,8 @@ sub set_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to set default value of field %s in table %s as next value of sequence table %',
-			$params{'field'},
-			$params{'table'},
+			$params{field},
+			$params{table},
 			$sequence
 		);
 		return undef;
@@ -218,8 +218,8 @@ sub set_autoinc {
 			'err',
 			'Unable to set sequence %s as value for field %s, table %s',
 			$sequence,
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
@@ -295,7 +295,7 @@ sub get_fields {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting fields list from table %s',
-		$params{'table'},
+		$params{table},
 	);
 
 	my $query =
@@ -315,7 +315,7 @@ sub get_fields {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -340,10 +340,10 @@ sub update_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Updating field %s in table %s (%s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull}
 	);
 
 	my $query =
@@ -355,16 +355,16 @@ sub update_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not change field %s in table %s',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s updated in table %s',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -378,12 +378,12 @@ sub add_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Adding field %s in table %s (%s, %s, %s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'},
-		$params{'autoinc'},
-		$params{'primary'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull},
+		$params{autoinc},
+		$params{primary}
 	);
 
 	my $query =
@@ -397,8 +397,8 @@ sub add_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not add field %s in table %s',
-			$params{'field'},
-			$params{'table'},
+			$params{field},
+			$params{table},
 		);
 		return undef;
 	}
@@ -412,8 +412,8 @@ sub add_field {
 
 	my $report = sprintf(
 		'Field %s added to table %s',
-		$params{'field'},
-		$params{'table'},
+		$params{field},
+		$params{table},
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -426,7 +426,7 @@ sub get_primary_key {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting primary key from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $query =
@@ -443,7 +443,7 @@ sub get_primary_key {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get primary key from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -462,7 +462,7 @@ sub get_indexes {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting indexes list from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $oid_query =
@@ -478,7 +478,7 @@ sub get_indexes {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get oid from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -504,7 +504,7 @@ sub get_indexes {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get indexes list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}

@@ -72,8 +72,8 @@ sub get_connect_string{
 	my ($self) = @_;
 
 	my $string = "DBI:Oracle:";
-	if ($self->{'db_host'} && $self->{'db_name'}) {
-		$string .= "host=$self->{'db_host'};sid=$self->{'db_name'}";
+	if ($self->{db_host} && $self->{db_name}) {
+		$string .= "host=$self->{db_host};sid=$self->{db_name}";
 	}
 
 	return $string;
@@ -84,9 +84,9 @@ sub get_substring_clause {
 
 	return sprintf
 		"substr(%s,instr(%s,'%s')+1)",
-		$params{'source_field'},
-		$params{'source_field'},
-		$params{'separator'};
+		$params{source_field},
+		$params{source_field},
+		$params{separator};
 }
 
 sub get_limit_clause {
@@ -98,16 +98,16 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, %params) = @_;
 
-	my $mode = lc($params{'mode'});
+	my $mode = lc($params{mode});
 	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{'target'};
+		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
 	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
+		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
 	} else {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			"Unknown date format mode %s",
-			$params{'mode'}
+			$params{mode}
 		);
 		return undef;
 	}

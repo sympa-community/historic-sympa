@@ -1224,9 +1224,9 @@ sub create {
 	croak "missing db_type parameter" unless $params{db_type};
 	croak "missing db_name parameter" unless $params{db_name};
 
-	Sympa::Log::Syslog::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
+	Sympa::Log::Syslog::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{db_type});
 
-	my $db_type = lc($params{'db_type'});
+	my $db_type = lc($params{db_type});
 	my $subclass =
 		$db_type eq 'mysql'  ? 'Sympa::Datasource::SQL::MySQL'      :
 		$db_type eq 'sqlite' ? 'Sympa::Datasource::SQL::SQLite'     :
@@ -1282,12 +1282,12 @@ sub new {
 	croak "missing db_name parameter" unless $params{db_name};
 
 	my $self = {
-		db_host     => $params{'db_host'},
-		db_user     => $params{'db_user'},
-		db_passwd   => $params{'db_passwd'},
-		db_name     => $params{'db_name'},
-		db_type     => $params{'db_type'},
-		db_options  => $params{'db_options'},
+		db_host     => $params{db_host},
+		db_user     => $params{db_user},
+		db_passwd   => $params{db_passwd},
+		db_name     => $params{db_name},
+		db_type     => $params{db_type},
+		db_options  => $params{db_options},
 	};
 
 	bless $self, $class;
@@ -1321,7 +1321,7 @@ A true value on success, I<undef> otherwise.
 sub connect {
 	my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{db_name});
 
 	## Build connect_string
 	my $connect_string = $self->get_connect_string();
@@ -1331,50 +1331,50 @@ sub connect {
 
 	## Set environment variables
 	## Used by Oracle (ORACLE_HOME)
-	if ($self->{'db_env'}) {
-		foreach my $env (split /;/,$self->{'db_env'}) {
+	if ($self->{db_env}) {
+		foreach my $env (split /;/,$self->{db_env}) {
 			my ($key, $value) = split /=/, $env;
 			$ENV{$key} = $value if ($key);
 		}
 	}
 
-	$self->{'dbh'} = eval {
+	$self->{dbh} = eval {
 		DBI->connect(
 			$connect_string,
-			$self->{'db_user'},
-			$self->{'db_passwd'},
+			$self->{db_user},
+			$self->{db_passwd},
 			{ PrintError => 0 }
 		)
 	} ;
-	unless ($self->{'dbh'}) {
-		if (!$params{'keep_trying'}) {
-			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{'db_user'});
+	unless ($self->{dbh}) {
+		if (!$params{keep_trying}) {
+			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
 			return undef;
 		}
 
-		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
+		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{db_user});
 
 		# Loop until connect works
 		my $sleep_delay = 60;
 		while (1) {
 			sleep $sleep_delay;
 			eval {
-				$self->{'dbh'} = DBI->connect(
+				$self->{dbh} = DBI->connect(
 					$connect_string,
-					$self->{'db_user'},
-					$self->{'db_passwd'},
+					$self->{db_user},
+					$self->{db_passwd},
 					{ PrintError => 0 }
 				)
 			};
-			last if $self->{'dbh'};
+			last if $self->{dbh};
 			$sleep_delay += 10;
 		}
 	}
 
 	# Force field names to be lowercased
-	$self->{'dbh'}{'FetchHashKeyName'} = 'NAME_lc';
+	$self->{dbh}{FetchHashKeyName} = 'NAME_lc';
 
-	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{db_name});
 	return 1;
 }
 
@@ -1511,20 +1511,20 @@ sub _check_field {
 	my ($self, %params) = @_;
 
 	$self->_check_field_type(
-		table => $params{table},
-		field => $params{structure}->{name},
-		type  => $params{structure}->{type},
-		not_null => $params{structure}->{not_null},
+		table        => $params{table},
+		field        => $params{structure}->{name},
+		type         => $params{structure}->{type},
+		not_null     => $params{structure}->{not_null},
 		current_type => $params{current_type},
-		update   => $params{update},
+		update       => $params{update},
 	);
 
 	$self->_check_field_autoincrement(
 		table         => $params{table},
 		field         => $params{structure}->{name},
-		type  => $params{structure}->{type},
+		type          => $params{structure}->{type},
 		autoincrement => $params{structure}->{autoincrement},
-		update   => $params{update}
+		update        => $params{update}
 	);
 }
 
@@ -1622,9 +1622,9 @@ sub _check_indexes {
 		my $current_fields = $current_indexes->{$index};
 		if ($current_fields) {
 			$self->_check_index(
-				table  => $params{table},
-				index  => $params{index},
-				fields => $params{structure}->{indexes}{$index},
+				table          => $params{table},
+				index          => $params{index},
+				fields         => $params{structure}->{indexes}{$index},
 				current_fields => $current_fields,
 			);
 		} else {
@@ -1832,7 +1832,7 @@ sub disconnect {
 	foreach my $handle (values %{$self->{cache}}) {
 		$handle->finish();
 	}
-	if ($self->{'dbh'}) {$self->{'dbh'}->disconnect;}
+	if ($self->{dbh}) {$self->{dbh}->disconnect;}
 }
 
 =item $source->ping()
@@ -1852,7 +1852,7 @@ A true value if the underlying data source is connected.
 sub ping {
 	my ($self) = @_;
 
-	return $self->{'dbh'}->ping;
+	return $self->{dbh}->ping;
 }
 
 =item $source->quote($string, $datatype)
@@ -1868,7 +1868,7 @@ The quoted string.
 sub quote {
 	my ($self, $string, $datatype) = @_;
 
-	return $self->{'dbh'}->quote($string, $datatype);
+	return $self->{dbh}->quote($string, $datatype);
 }
 
 =item $source->get_canonical_write_date($field)
@@ -1939,7 +1939,7 @@ table whose name is  given by the first level key.
 sub get_all_primary_keys {
 	my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Retrieving all primary keys in database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log('debug','Retrieving all primary keys in database %s',$self->{db_name});
 	my %found_keys = undef;
 	foreach my $table ($self->get_tables()) {
 		unless($found_keys{$table} = $self->get_primary_key('table'=>$table)) {
@@ -1975,10 +1975,10 @@ An hashref with the following keys, or I<undef> if something went wrong:
 sub get_all_indexes {
 	my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Retrieving all indexes in database %s',$self->{'db_name'});
+	Sympa::Log::Syslog::do_log('debug','Retrieving all indexes in database %s',$self->{db_name});
 	my %found_indexes;
 	foreach my $table ($self->get_tables()) {
-		unless($found_indexes{$table} = $self->get_indexes('table'=>$table)) {
+		unless($found_indexes{$table} = $self->get_indexes(table=>$table)) {
 			Sympa::Log::Syslog::do_log('err','Index retrieval for table %s failed. Aborting.',$table);
 			return undef;
 		}
@@ -2250,10 +2250,10 @@ sub update_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Updating field %s in table %s (%s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull}
 	);
 
 	my $query =
@@ -2266,16 +2266,16 @@ sub update_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to update field %s in table %s',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s updated in table %s',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -2316,12 +2316,12 @@ sub add_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Adding field %s in table %s (%s, %s, %s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'},
-		$params{'autoinc'},
-		$params{'primary'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull},
+		$params{autoinc},
+		$params{primary}
 	);
 
 	# specific issues:
@@ -2340,16 +2340,16 @@ sub add_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to add field %s in table %s',
-			$params{'field'},
-			$params{'table'},
+			$params{field},
+			$params{table},
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s added in table %s',
-		$params{'field'},
-		$params{'table'},
+		$params{field},
+		$params{table},
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -2382,8 +2382,8 @@ sub delete_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Removing field %s from table %s',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 
 	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
@@ -2392,16 +2392,16 @@ sub delete_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to remove field %s from table %s',
-			$params{'field'},
-			$params{'table'},
+			$params{field},
+			$params{table},
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s removed from table %s',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -2505,7 +2505,7 @@ sub set_primary_key {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Setting primary key on table %s using fields %s',
-		$params{'table'},
+		$params{table},
 		$fields
 	);
 
@@ -2516,7 +2516,7 @@ sub set_primary_key {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to set primary key on table %s using fields %s',
-			$params{'table'},
+			$params{table},
 			$fields
 		);
 		return undef;
@@ -2591,16 +2591,16 @@ sub unset_index {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to remove index %s from table %s',
-			$params{'index'},
-			$params{'table'},
+			$params{index},
+			$params{table},
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		"Index %s removed from table %s",
-		$params{'index'},
-		$params{'table'}
+		$params{index},
+		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 

@@ -61,17 +61,17 @@ sub connect {
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 
-	$self->{'dbh'}->func(
+	$self->{dbh}->func(
 		'func_index',
 		-1,
 		sub { return index($_[0], $_[1]) },
 		'create_function'
 	);
 
-	if (defined $self->{'db_timeout'}) {
-		$self->{'dbh'}->func($self->{'db_timeout'}, 'busy_timeout' );
+	if (defined $self->{db_timeout}) {
+		$self->{dbh}->func($self->{db_timeout}, 'busy_timeout' );
 	} else {
-		$self->{'dbh'}->func(5000, 'busy_timeout');
+		$self->{dbh}->func(5000, 'busy_timeout');
 	}
 
 	return 1;
@@ -80,7 +80,7 @@ sub connect {
 sub get_connect_string{
 	my ($self, %params) = @_;
 
-	return "DBI:SQLite:dbname=$self->{'db_name'}";
+	return "DBI:SQLite:dbname=$self->{db_name}";
 }
 
 sub get_substring_clause {
@@ -88,39 +88,39 @@ sub get_substring_clause {
 
 	return sprintf
 		"substr(%s,func_index(%s,'%s')+1,%s)",
-		$params{'source_field'},
-		$params{'source_field'},
-		$params{'separator'},
-		$params{'substring_length'};
+		$params{source_field},
+		$params{source_field},
+		$params{separator},
+		$params{substring_length};
 }
 
 
 sub get_limit_clause {
 	my ($self, %params) = @_;
 
-	if ($params{'offset'}) {
+	if ($params{offset}) {
 		return sprintf "LIMIT %s OFFSET %s",
-			$params{'rows_count'},
-			$params{'offset'};
+			$params{rows_count},
+			$params{offset};
 	} else {
 		return sprintf "LIMIT %s",
-			$params{'rows_count'};
+			$params{rows_count};
 	}
 }
 
 sub get_formatted_date {
 	my ($self, %params) = @_;
 
-	my $mode = lc($params{'mode'});
+	my $mode = lc($params{mode});
 	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{'target'};
+		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
 	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
+		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
 	} else {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			"Unknown date format mode %s",
-			$params{'mode'}
+			$params{mode}
 		);
 		return undef;
 	}
@@ -132,8 +132,8 @@ sub is_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Checking whether field %s.%s is autoincremental',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 
 	my $query = "PRAGMA table_info($params{table})";
@@ -142,15 +142,15 @@ sub is_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get the list of fields from table %s in database %s',
-			$params{'table'},
-			$self->{'db_name'}
+			$params{table},
+			$self->{db_name}
 		);
 		return undef;
 	}
 	$sth->execute();
 
 	while (my $row = $sth->fetchrow_arrayref()) {
-		next unless $row->[1] eq $params{'field'};
+		next unless $row->[1] eq $params{field};
 		return $row->[2] eq 'integer' and $row->[5];
 	}
 }
@@ -161,8 +161,8 @@ sub set_autoinc {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Setting field %s.%s as autoincremental',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 
 	my $query =
@@ -173,8 +173,8 @@ sub set_autoinc {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to set field %s in table %s as autoincrement',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
@@ -254,7 +254,7 @@ sub get_fields {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting fields list from table %s',
-		$params{'table'},
+		$params{table},
 	);
 
 	my $query = "PRAGMA table_info($params{table})";
@@ -263,7 +263,7 @@ sub get_fields {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to get fields list from table %s',
-			$params{'table'},
+			$params{table},
 		);
 		return undef;
 	}
@@ -294,10 +294,10 @@ sub update_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Updating field %s in table %s (%s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull}
 	);
 
 	my $query =
@@ -310,16 +310,16 @@ sub update_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not change field \'%s\' in table\'%s\'.',
-			$params{'field'},
-			$params{'table'}
+			$params{field},
+			$params{table}
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s updated in table %s',
-		$params{'field'},
-		$params{'table'}
+		$params{field},
+		$params{table}
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -332,12 +332,12 @@ sub add_field {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Adding field %s in table %s (%s, %s, %s, %s)',
-		$params{'field'},
-		$params{'table'},
-		$params{'type'},
-		$params{'notnull'},
-		$params{'autoinc'},
-		$params{'primary'}
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull},
+		$params{autoinc},
+		$params{primary}
 	);
 
 	# specific issues:
@@ -356,16 +356,16 @@ sub add_field {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to add field %s to table %s',
-			$params{'field'},
-			$params{'table'},
+			$params{field},
+			$params{table},
 		);
 		return undef;
 	}
 
 	my $report = sprintf(
 		'Field %s added to table %s',
-		$params{'field'},
-		$params{'table'},
+		$params{field},
+		$params{table},
 	);
 	Sympa::Log::Syslog::do_log('info', $report);
 
@@ -383,7 +383,7 @@ sub get_primary_key {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting primary key from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $query = "PRAGMA table_info($params{table})";
@@ -392,8 +392,8 @@ sub get_primary_key {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get field list from table %s in database %s',
-			$params{'table'},
-			$self->{'db_name'}
+			$params{table},
+			$self->{db_name}
 		);
 		return undef;
 	}
@@ -413,7 +413,7 @@ sub get_indexes {
 	Sympa::Log::Syslog::do_log(
 		'debug',
 		'Getting indexes list from table %s',
-		$params{'table'}
+		$params{table}
 	);
 
 	my $query = "SELECT name,sql FROM sqlite_master WHERE type='index'";
@@ -422,8 +422,8 @@ sub get_indexes {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get the list of indexes from table %s in database %s',
-			$params{'table'},
-			$self->{'db_name'}
+			$params{table},
+			$self->{db_name}
 		);
 		return undef;
 	}

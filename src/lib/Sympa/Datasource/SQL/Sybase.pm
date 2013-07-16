@@ -64,7 +64,7 @@ sub connect {
 	return unless $result;
 
 	$ENV{'SYBASE_CHARSET'} = 'utf8';
-	$self->{'dbh'}->do("use $self->{'db_name'}");
+	$self->{dbh}->do("use $self->{db_name}");
 
 	return 1;
 }
@@ -74,7 +74,7 @@ sub get_connect_string{
 	my ($self) = @_;
 
 	return
-		"DBI:Sybase:database=$self->{'db_name'};server=$self->{'db_host'}";
+		"DBI:Sybase:database=$self->{db_name};server=$self->{db_host}";
 }
 
 sub get_substring_clause {
@@ -82,10 +82,10 @@ sub get_substring_clause {
 
 	return sprintf
 		"substring(%s,charindex('%s',%s)+1,%s)",
-		$params{'source_field'},
-		$params{'separator'},
-		$params{'source_field'},
-		$params{'substring_length'};
+		$params{source_field},
+		$params{separator},
+		$params{source_field},
+		$params{substring_length};
 }
 
 sub get_limit_clause {
@@ -97,16 +97,16 @@ sub get_limit_clause {
 sub get_formatted_date {
 	my ($self, %params) = @_;
 
-	my $mode = lc($params{'mode'});
+	my $mode = lc($params{mode});
 	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{'target'};
+		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
 	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{'target'};
+		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
 	} else {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			"Unknown date format mode %s",
-			$params{'mode'}
+			$params{mode}
 		);
 		return undef;
 	}
