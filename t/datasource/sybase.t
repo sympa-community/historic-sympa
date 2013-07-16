@@ -15,9 +15,7 @@ use Test::Without::Module qw(DBD::Sybase);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 22;
-
-my $source;
+plan tests => 15;
 
 my $source;
 
@@ -98,53 +96,6 @@ is(
 	'DBI:Sybase:database=foo;server=localhost',
 	'connect string'
 );
-
-my $clause;
-$clause = $source->get_substring_clause(
-	source_field     => 'foo',
-	separator        => ',',
-	substring_length => 5
-);
-is(
-	$clause,
-	"substring(foo,charindex(',',foo)+1,5)",
-	'substring clause'
-);
-
-$clause = $source->get_limit_clause(
-	rows_count => 5
-);
-is($clause, "", 'limit clause');
-
-$clause = $source->get_limit_clause(
-	rows_count => 5,
-	offset     => 3
-);
-is($clause, "", 'limit clause');
-
-my $date;
-$date = $source->get_formatted_date(
-	target => 666,
-);
-ok(!defined $date, 'formatted date (no mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'foo'
-);
-ok(!defined $date, 'formatted date (invalid mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'read'
-);
-is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'write'
-);
-is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 $source = Sympa::Datasource::SQL::Sybase->new(
 	db_name => 'foo',

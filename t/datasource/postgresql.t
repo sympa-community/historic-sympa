@@ -15,7 +15,7 @@ use Test::Without::Module qw(DBD::Pg);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 22;
+plan tests => 15;
 
 my $source;
 
@@ -92,57 +92,6 @@ ok($source, 'source is defined');
 isa_ok($source, 'Sympa::Datasource::SQL::PostgreSQL');
 
 is($source->get_connect_string(), 'DBI:Pg:dbname=foo;host=localhost', 'connect string');
-
-my $clause;
-$clause = $source->get_substring_clause(
-	source_field     => 'foo',
-	separator        => ',',
-	substring_length => 5
-);
-is(
-	$clause,
-	"SUBSTRING(foo FROM position(',' IN foo) FOR 5)",
-	'substring clause'
-);
-
-$clause = $source->get_limit_clause(
-	rows_count => 5
-);
-is($clause, "LIMIT 5", 'limit clause');
-
-$clause = $source->get_limit_clause(
-	rows_count => 5,
-	offset     => 3
-);
-is($clause, "LIMIT 5 OFFSET 3", 'limit clause');
-
-my $date;
-$date = $source->get_formatted_date(
-	target => 666,
-);
-ok(!defined $date, 'formatted date (no mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'foo'
-);
-ok(!defined $date, 'formatted date (invalid mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'read'
-);
-is($date, "date_part('epoch',666)", 'formatted date (read)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'write'
-);
-is(
-	$date,
-	"'epoch'::timestamp with time zone + '666 sec'",
-	'formatted date (write)'
-);
 
 $source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',

@@ -15,7 +15,7 @@ use Test::Without::Module qw(DBD::mysql);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 22;
+plan tests => 15;
 
 my $source;
 
@@ -96,53 +96,6 @@ is(
 	'DBI:mysql:foo:localhost',
 	'connect string'
 );
-
-my $clause;
-$clause = $source->get_substring_clause(
-	source_field     => 'foo',
-	separator        => ',',
-	substring_length => 5
-);
-is(
-	$clause,
-	"REVERSE(SUBSTRING(foo FROM position(',' IN foo) FOR 5))",
-	'substring clause'
-);
-
-$clause = $source->get_limit_clause(
-	rows_count => 5
-);
-is($clause, "LIMIT 5", 'limit clause');
-
-$clause = $source->get_limit_clause(
-	rows_count => 5,
-	offset     => 3
-);
-is($clause, "LIMIT 3,5", 'limit clause');
-
-my $date;
-$date = $source->get_formatted_date(
-	target => 666,
-);
-ok(!defined $date, 'formatted date (no mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'foo'
-);
-ok(!defined $date, 'formatted date (invalid mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'read'
-);
-is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'write'
-);
-is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 $source = Sympa::Datasource::SQL::MySQL->new(
 	db_name => 'foo',

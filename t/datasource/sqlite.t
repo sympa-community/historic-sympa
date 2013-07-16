@@ -16,9 +16,7 @@ use Test::Without::Module qw(DBD::SQLite);
 
 use Sympa::Datasource::SQL;
 
-plan tests => 18;
-
-my $source;
+plan tests => 11;
 
 my $source;
 
@@ -70,49 +68,6 @@ is(
 	'DBI:SQLite:dbname=foo',
 	'connect string'
 );
-
-my $clause;
-$clause = $source->get_substring_clause(
-	source_field     => 'foo',
-	separator        => ',',
-	substring_length => 5
-);
-is($clause, "substr(foo,func_index(foo,',')+1,5)", 'substring clause');
-
-$clause = $source->get_limit_clause(
-	rows_count => 5
-);
-is($clause, "LIMIT 5", 'limit clause');
-
-$clause = $source->get_limit_clause(
-	rows_count => 5,
-	offset     => 3
-);
-is($clause, "LIMIT 5 OFFSET 3", 'limit clause');
-
-my $date;
-$date = $source->get_formatted_date(
-        target => 666,
-);
-ok(!defined $date, 'formatted date (no mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'foo'
-);
-ok(!defined $date, 'formatted date (invalid mode)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'read'
-);
-is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
-
-$date = $source->get_formatted_date(
-	target => 666,
-	mode   => 'write'
-);
-is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 $source = Sympa::Datasource::SQL::SQLite->new(
 	db_name => File::Temp->new(),
