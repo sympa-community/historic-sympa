@@ -24,7 +24,7 @@ my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
 my $source = Sympa::Datasource::SQL::SQLite->new(
 	db_name => $file,
 );
-my $dbh = $source->establish_connection();
+my $dbh = $source->connect();
 
 ok(defined $dbh, 'establish connection');
 isa_ok($dbh, 'DBI::db');

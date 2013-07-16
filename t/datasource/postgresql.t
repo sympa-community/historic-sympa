@@ -81,20 +81,20 @@ is(
 
 my $dbh;
 $source = Sympa::Datasource::SQL::PostgreSQL->new();
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_name');
 
 $source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_host');
 
 $source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_user');
 
 $source = Sympa::Datasource::SQL::PostgreSQL->new(
@@ -102,7 +102,7 @@ $source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_host => 'localhost',
 	db_user => 'user',
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without DBD::Pg');
 
 sub cleanup {

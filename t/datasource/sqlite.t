@@ -79,11 +79,11 @@ is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 my $dbh;
 $source = Sympa::Datasource::SQL::SQLite->new(
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_name');
 
 $source = Sympa::Datasource::SQL::SQLite->new(
 	db_name => File::Temp->new(),
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without DBD::SQLite');

@@ -28,7 +28,7 @@ my $source = Sympa::Datasource::SQL::MySQL->new(
 	db_user   => $ENV{DB_USER},
 	db_passwd => $ENV{DB_PASS},
 );
-my $dbh = $source->establish_connection();
+my $dbh = $source->connect();
 
 ok(defined $dbh, 'establish connection');
 isa_ok($dbh, 'DBI::db');

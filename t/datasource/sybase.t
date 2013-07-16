@@ -80,20 +80,20 @@ is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
 my $dbh;
 $source = Sympa::Datasource::SQL::Sybase->new();
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_name');
 
 $source = Sympa::Datasource::SQL::Sybase->new(
 	db_name => 'foo',
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_host');
 
 $source = Sympa::Datasource::SQL::Sybase->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 );
-$dbh = $source->establish_connection();
+$dbh = $source->connect();
 ok(!defined $dbh, 'no connection without db_user');
 
 eval { require DBD::Sybase; };
@@ -107,6 +107,6 @@ SKIP: {
 		db_host => 'localhost',
 		db_host => 'user',
 	);
-	$dbh = $source->establish_connection();
+	$dbh = $source->connect();
 	ok(!defined $dbh, 'no connection without DBD::Sybase');
 };
