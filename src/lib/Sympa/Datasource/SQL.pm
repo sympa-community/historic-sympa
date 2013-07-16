@@ -1306,39 +1306,13 @@ Connect to a SQL database.
 
 Return value:
 
-A true value, or I<undef> if something went wrong.
-
-=cut
-
-sub connect {
-	my ($self) = @_;
-
-	Sympa::Log::Syslog::do_log('debug3',"Checking connection to database %s",$self->{'db_name'});
-	if ($self->{'dbh'} && $self->{'dbh'}->ping) {
-		Sympa::Log::Syslog::do_log('debug3','Connection to database %s already available',$self->{'db_name'});
-		return 1;
-	}
-	unless($self->establish_connection()) {
-		Sympa::Log::Syslog::do_log('err','Unable to establish new connection to database %s on host %s',$self->{'db_name'},$self->{'db_host'});
-		return undef;
-	}
-}
-
-=item $source->establish_connection()
-
-Connect to a SQL database.
-
-Parameters:
-
-None.
-
 Return value:
 
 A DBI database handle object, or I<undef> if something went wrong.
 
 =cut
 
-sub establish_connection {
+sub connect {
 	my ($self) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{'db_name'});
