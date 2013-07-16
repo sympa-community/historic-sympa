@@ -26,7 +26,8 @@ Sympa::Datasource - Abstract data source object
 
 =head1 DESCRIPTION
 
-This class implements an abstract data source.
+This class implements a generic mechanism to populate a mailing list
+subscribers from an external data source.
 
 =cut
 

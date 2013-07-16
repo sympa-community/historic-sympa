@@ -25,7 +25,10 @@ Sympa::Database - Sympa database object
 
 =head1 DESCRIPTION
 
-This class implements the Sympa database.
+This class implements the Sympa database. This is a wrapper over a
+DBI database handler object, providing caching and database-specific schema
+manipulation methods.
+
 
 =cut
 

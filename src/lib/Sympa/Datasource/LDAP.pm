@@ -26,7 +26,8 @@ Sympa::Datasource::LDAP - LDAP data source object
 
 =head1 DESCRIPTION
 
-This class implements an LDAP data source.
+This class implements a mechanism to populate a mailing list subscribers from
+an external LDAP directory.
 
 =cut
 

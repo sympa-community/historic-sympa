@@ -26,9 +26,8 @@ Sympa::Datasource::SQL - SQL data source object
 
 =head1 DESCRIPTION
 
-This class implements an SQL data source. This is merely a wrapper over a
-DBI database handler object, providing caching and database-specific schema
-manipulation methods.
+This class implements a mechanism to populate a mailing list subscribers from
+an external SQL database.
 
 =cut
 
