@@ -11,6 +11,7 @@ use lib "$Bin/../../src/lib";
 use English qw(-no_match_vars);
 use Test::Exception;
 use Test::More;
+use Test::Without::Module qw(DBD::Sybase);
 
 use Sympa::Datasource::SQL;
 
@@ -145,19 +146,10 @@ $date = $source->get_formatted_date(
 );
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
-my $dbh;
-
-eval { require DBD::Sybase; };
-my $have_dbd = !$EVAL_ERROR;
-
-SKIP: {
-	skip "DBD::Sybase available", 1 if $have_dbd;
-
-	$source = Sympa::Datasource::SQL::Sybase->new(
-		db_name => 'foo',
-		db_host => 'localhost',
-		db_user => 'user',
-	);
-	$dbh = $source->connect();
-	ok(!defined $dbh, 'no connection without DBD::Sybase');
-};
+$source = Sympa::Datasource::SQL::Sybase->new(
+	db_name => 'foo',
+	db_host => 'localhost',
+	db_user => 'user',
+);
+my $dbh = $source->connect();
+ok(!defined $dbh, 'no connection without DBD::Sybase');
