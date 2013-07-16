@@ -41,7 +41,6 @@ use Carp;
 use English qw(-no_match_vars);
 use DBI;
 
-use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Tools;
 use Sympa::Tools::Data;
@@ -1211,8 +1210,6 @@ Parameters:
 
 =item C<connect_options> => FIXME
 
-=item C<domain> => FIXME
-
 =back
 
 Return value:
@@ -1270,8 +1267,6 @@ Parameters:
 
 =item C<connect_options> => FIXME
 
-=item C<domain> => FIXME
-
 =back
 
 Return value:
@@ -1293,7 +1288,6 @@ sub new {
 		db_name    => $params{'db_name'},
 		db_type    => $params{'db_type'},
 		db_options => $params{'connect_options'},
-		domain     => $params{'domain'},
 	};
 
 	bless $self, $class;
@@ -1347,14 +1341,6 @@ sub connect {
 		)
 	} ;
 	unless (defined $self->{'dbh'}) {
-		## Notify listmaster if warn option was set
-		## Unless the 'failed' status was set earlier
-		if ($self->{'reconnect_options'}{'warn'}) {
-			unless
-			(Sympa::List::send_notify_to_listmaster('no_db', $self->{domain},{})) {
-				Sympa::Log::Syslog::do_log('err',"Unable to send notify 'no_db' to listmaster");
-			}
-		}
 		if ($self->{'reconnect_options'}{'keep_trying'}) {
 			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
 		} else {
@@ -1375,13 +1361,6 @@ sub connect {
 			};
 			last if ($self->{'dbh'} && $self->{'dbh'}->ping());
 			$sleep_delay += 10;
-		}
-
-		if ($self->{'reconnect_options'}{'warn'}) {
-			Sympa::Log::Syslog::do_log('notice','Connection to Database %s restored.', $connect_string);
-			unless (Sympa::List::send_notify_to_listmaster('db_restored', $self->{domain},{})) {
-				Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
-			}
 		}
 	}
 

@@ -38,6 +38,7 @@ use English qw(-no_match_vars);
 
 use Sympa::Configuration;
 use Sympa::Datasource::SQL;
+use Sympa::List;
 use Sympa::Log::Syslog;
 
 my $db_source;
@@ -168,12 +169,19 @@ sub connect_sympa_database {
 	## We keep trying to connect if this is the first attempt
 	## Unless in a web context, because we can't afford long response time on the web interface
 	my $db_conf = Sympa::Configuration::get_parameters_group('*','Database related');
-	$db_conf->{'reconnect_options'} = {'keep_trying'=>($option ne 'just_try' && ( !$db_source->{'connected'} && !$ENV{'HTTP_HOST'})),
-		'warn'=>1 };
-	$db_conf->{domain} = $Sympa::Configuration::Conf{'domain'};
+	$db_conf->{'reconnect_options'} = {
+		'keep_trying' => ($option ne 'just_try' && ( !$db_source->{'connected'} && !$ENV{'HTTP_HOST'})),
+		'warn'        => 1
+	};
 	my $db_source = Sympa::Datasource::SQL->create(%$db_conf);
 	unless ($db_source) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Datasource::SQL object');
+		my $result = Sympa::List::send_notify_to_listmaster(
+			'no_db', $Sympa::Configuration::Conf{'domain'}, {}
+		);
+		unless ($result) {
+			Sympa::Log::Syslog::do_log('err',"Unable to send notify 'no_db' to listmaster");
+		}
 		return undef;
 	}
 	## Used to check that connecting to the Sympa database works and the
