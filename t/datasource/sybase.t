@@ -151,5 +151,4 @@ $source = Sympa::Datasource::SQL::Sybase->new(
 	db_host => 'localhost',
 	db_user => 'user',
 );
-my $dbh = $source->connect();
-ok(!defined $dbh, 'no connection without DBD::Sybase');
+ok(!defined $source->connect(), 'no connection without DBD::Sybase');

@@ -1314,7 +1314,7 @@ Return value:
 
 Return value:
 
-A DBI database handle object, or I<undef> if something went wrong.
+A true value on success, I<undef> otherwise.
 
 =cut
 
@@ -1417,7 +1417,7 @@ sub connect {
 	}
 
 	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{'db_name'});
-	return $self->{'dbh'};
+	return 1;
 }
 
 =item $self->get_structure()

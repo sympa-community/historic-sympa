@@ -114,10 +114,7 @@ $date = $source->get_formatted_date(
 );
 is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
 
-my $dbh;
-
 $source = Sympa::Datasource::SQL::SQLite->new(
 	db_name => File::Temp->new(),
 );
-$dbh = $source->connect();
-ok(!defined $dbh, 'no connection without DBD::SQLite');
+ok(!defined $source->connect(), 'no connection without DBD::SQLite');

@@ -144,12 +144,9 @@ is(
 	'formatted date (write)'
 );
 
-my $dbh;
-
 $source = Sympa::Datasource::SQL::PostgreSQL->new(
 	db_name => 'foo',
 	db_host => 'localhost',
 	db_user => 'user',
 );
-$dbh = $source->connect();
-ok(!defined $dbh, 'no connection without DBD::Pg');
+ok(!defined $source->connect(), 'no connection without DBD::Pg');
