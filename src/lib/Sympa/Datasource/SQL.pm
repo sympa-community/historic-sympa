@@ -163,12 +163,6 @@ sub new {
 
 Connect to a SQL database.
 
-Parameters:
-
-=over
-
-=item C<keep_trying> => retry indefinitly in case of failure
-
 =back
 
 Return value:
@@ -206,28 +200,8 @@ sub connect {
 		)
 	} ;
 	unless ($self->{dbh}) {
-		if (!$params{keep_trying}) {
-			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
-			return undef;
-		}
-
-		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{db_user});
-
-		# Loop until connect works
-		my $sleep_delay = 60;
-		while (1) {
-			sleep $sleep_delay;
-			eval {
-				$self->{dbh} = DBI->connect(
-					$connect_string,
-					$self->{db_user},
-					$self->{db_passwd},
-					{ PrintError => 0 }
-				)
-			};
-			last if $self->{dbh};
-			$sleep_delay += 10;
-		}
+		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
+		return undef;
 	}
 
 	# Force field names to be lowercased
