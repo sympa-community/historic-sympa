@@ -169,31 +169,29 @@ sub connect_sympa_database {
 	## We keep trying to connect if this is the first attempt
 	## Unless in a web context, because we can't afford long response time on the web interface
 	my $db_conf = Sympa::Configuration::get_parameters_group('*','Database related');
-	$db_conf->{'reconnect_options'} = {
-		'keep_trying' => ($option ne 'just_try' && ( !$db_source->{'connected'} && !$ENV{'HTTP_HOST'})),
-		'warn'        => 1
-	};
 	my $db_source = Sympa::Datasource::SQL->create(%$db_conf);
 	unless ($db_source) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Datasource::SQL object');
-		my $result = Sympa::List::send_notify_to_listmaster(
-			'no_db', $Sympa::Configuration::Conf{'domain'}, {}
-		);
-		unless ($result) {
-			Sympa::Log::Syslog::do_log('err',"Unable to send notify 'no_db' to listmaster");
-		}
 		return undef;
 	}
-	## Used to check that connecting to the Sympa database works and the
-	## Sympa::Datasource::SQL object is created.
-	$use_db = 1;
 
 	# Just in case, we connect to the database here. Probably not necessary.
-	unless ( $db_source->{'dbh'} = $db_source->connect()) {
+	my $result = $db_source->connect(
+		'keep_trying' =>
+			($option ne 'just_try' && !$ENV{'HTTP_HOST'} ? 1 : 0)
+	);
+	unless ($result) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to connect to the Sympa database');
+		Sympa::List::send_notify_to_listmaster(
+			'no_db', $Sympa::Configuration::Conf{'domain'}, {}
+		);
 		return undef;
 	}
 	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Sympa::Configuration::get_robot_conf('*','db_name'));
+
+	## Used to check that connecting to the Sympa database works and the
+	## Sympa::Datasource::SQL object is created.
+	$use_db = 1;
 
 	return 1;
 }

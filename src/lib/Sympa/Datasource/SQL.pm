@@ -1208,7 +1208,7 @@ Parameters:
 
 =item C<db_type> => FIXME
 
-=item C<connect_options> => FIXME
+=item C<db_options> => FIXME
 
 =back
 
@@ -1265,7 +1265,7 @@ Parameters:
 
 =item C<db_type> => FIXME
 
-=item C<connect_options> => FIXME
+=item C<db_options> => FIXME
 
 =back
 
@@ -1282,12 +1282,12 @@ sub new {
 	croak "missing db_name parameter" unless $params{db_name};
 
 	my $self = {
-		db_host    => $params{'db_host'},
-		db_user    => $params{'db_user'},
-		db_passwd  => $params{'db_passwd'},
-		db_name    => $params{'db_name'},
-		db_type    => $params{'db_type'},
-		db_options => $params{'connect_options'},
+		db_host     => $params{'db_host'},
+		db_user     => $params{'db_user'},
+		db_passwd   => $params{'db_passwd'},
+		db_name     => $params{'db_name'},
+		db_type     => $params{'db_type'},
+		db_options  => $params{'db_options'},
 	};
 
 	bless $self, $class;
@@ -1304,7 +1304,13 @@ sub new {
 
 Connect to a SQL database.
 
-Return value:
+Parameters:
+
+=over
+
+=item C<keep_trying> => retry indefinitly in case of failure
+
+=back
 
 Return value:
 
@@ -1313,7 +1319,7 @@ A true value on success, I<undef> otherwise.
 =cut
 
 sub connect {
-	my ($self) = @_;
+	my ($self, %params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{'db_name'});
 
@@ -1340,14 +1346,15 @@ sub connect {
 			{ PrintError => 0 }
 		)
 	} ;
-	unless (defined $self->{'dbh'}) {
-		if ($self->{'reconnect_options'}{'keep_trying'}) {
-			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
-		} else {
+	unless ($self->{'dbh'}) {
+		if (!$params{'keep_trying'}) {
 			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{'db_user'});
 			return undef;
 		}
-		## Loop until connect works
+
+		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{'db_user'});
+
+		# Loop until connect works
 		my $sleep_delay = 60;
 		while (1) {
 			sleep $sleep_delay;
@@ -1359,7 +1366,7 @@ sub connect {
 					{ PrintError => 0 }
 				)
 			};
-			last if ($self->{'dbh'} && $self->{'dbh'}->ping());
+			last if $self->{'dbh'};
 			$sleep_delay += 10;
 		}
 	}
