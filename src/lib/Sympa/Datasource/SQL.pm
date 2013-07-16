@@ -240,15 +240,12 @@ sub connect {
 sub disconnect {
 	my ($self) = @_;
 
-	foreach my $handle (values %{$self->{cache}}) {
-		$handle->finish();
-	}
-	if ($self->{dbh}) {$self->{dbh}->disconnect;}
+	$self->{dbh}->disconnect() if $self->{dbh};
 }
 
 =item $source->get_query_handle($query)
 
-Returns a query handle for the given query, caching it automagically.
+Returns a query handle for the given query.
 
 Parameters:
 
@@ -269,9 +266,7 @@ A DBI statement handle object, or I<undef> if something went wrong.
 sub get_query_handle {
 	my ($self, $query) = @_;
 
-	return
-		$self->{cache}->{$query} ||=
-		$self->{dbh}->prepare($query);
+	return $self->{dbh}->prepare($query);
 }
 
 =back
