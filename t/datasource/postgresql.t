@@ -153,11 +153,3 @@ $source = Sympa::Datasource::SQL::PostgreSQL->new(
 );
 $dbh = $source->connect();
 ok(!defined $dbh, 'no connection without DBD::Pg');
-
-sub cleanup {
-	my ($dbh) = @_;
-
-	foreach my $table ($source->get_tables()) {
-		$dbh->do("DROP TABLE $table");
-	}
-}
