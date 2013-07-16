@@ -1224,6 +1224,9 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 sub create {
 	my ($class, %params) = @_;
 
+	croak "missing db_type parameter" unless $params{db_type};
+	croak "missing db_name parameter" unless $params{db_name};
+
 	Sympa::Log::Syslog::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{'db_type'});
 
 	my $db_type = lc($params{'db_type'});
@@ -1280,6 +1283,9 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
+	croak "missing db_type parameter" unless $params{db_type};
+	croak "missing db_name parameter" unless $params{db_name};
+
 	my $self = {
 		db_host    => $params{'db_host'},
 		db_user    => $params{'db_user'},
@@ -1316,22 +1322,6 @@ sub connect {
 	my ($self) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{'db_name'});
-	## Do we have db_xxx required parameters
-	foreach my $db_param ('db_type','db_name') {
-		unless ($self->{$db_param}) {
-			Sympa::Log::Syslog::do_log('info','Missing parameter %s for DBI connection', $db_param);
-			return undef;
-		}
-		## SQLite just need a db_name
-		unless ($self->{'db_type'} eq 'sqlite') {
-			foreach my $db_param ('db_host','db_user') {
-				unless ($self->{$db_param}) {
-					Sympa::Log::Syslog::do_log('info','Missing parameter %s for DBI connection', $db_param);
-					return undef;
-				}
-			}
-		}
-	}
 
 	## Build connect_string
 	my $connect_string = $self->get_connect_string();

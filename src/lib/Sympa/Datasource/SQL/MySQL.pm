@@ -35,10 +35,15 @@ package Sympa::Datasource::SQL::MySQL;
 use strict;
 use base qw(Sympa::Datasource::SQL);
 
+use Carp;
+
 use Sympa::Log::Syslog;
 
 sub new {
 	my ($class, %params) = @_;
+
+	croak "missing db_host parameter" unless $params{db_host};
+	croak "missing db_user parameter" unless $params{db_user};
 
 	return $class->SUPER::new(%params, db_type => 'mysql');
 }
