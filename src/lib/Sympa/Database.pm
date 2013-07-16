@@ -21,12 +21,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 =head1 NAME
 
-Sympa::Database - Database functions
+Sympa::Database - Sympa database object
 
 =head1 DESCRIPTION
 
-This module provides functions relative to the access and maintenance of the
-Sympa database.
+This class implements the Sympa database.
 
 =cut
 
@@ -34,10 +33,10 @@ package Sympa::Database;
 
 use strict;
 
+use Carp;
 use English qw(-no_match_vars);
 
 use Sympa::Configuration;
-use Sympa::Datasource::SQL;
 use Sympa::List;
 use Sympa::Log::Syslog;
 
@@ -48,6 +47,66 @@ our $use_db;
 
 =over
 
+=over
+
+=item Sympa::Database->create(%parameters)
+
+Factory method to create a new L<Sympa::Database> object from a
+specific subclass.
+
+Parameters:
+
+=over
+
+=item C<host> => FIXME
+
+=item C<user> => FIXME
+
+=item C<passwd> => FIXME
+
+=item C<db_name> => FIXME
+
+=item C<db_type> => FIXME
+
+=item C<db_options> => FIXME
+
+=back
+
+Return value:
+
+A new L<Sympa::Database> object, or I<undef> if something went wrong.
+
+=cut
+
+sub create {
+	my ($class, %params) = @_;
+
+	croak "missing db_type parameter" unless $params{db_type};
+	croak "missing db_name parameter" unless $params{db_name};
+
+	Sympa::Log::Syslog::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{db_type});
+
+	my $db_type = lc($params{db_type});
+	my $subclass =
+		$db_type eq 'mysql'  ? 'Sympa::Database::MySQL'      :
+		$db_type eq 'sqlite' ? 'Sympa::Database::SQLite'     :
+		$db_type eq 'pg'     ? 'Sympa::Database::PostgreSQL' :
+		$db_type eq 'oracle' ? 'Sympa::Database::Oracle'     :
+		$db_type eq 'sybase' ? 'Sympa::Database::Sybase'     :
+		                       'Sympa::Database'             ;
+
+	# better solution: UNIVERSAL::require
+	my $module = $subclass . '.pm';
+	$module =~ s{::}{/}g;
+	eval { require $module; };
+	if ($EVAL_ERROR) {
+		Sympa::Log::Syslog::do_log('err',"Unable to use $subclass: $EVAL_ERROR");
+		return;
+	}
+
+	return $subclass->new(%params);
+}
+
 =item Sympa::Database->new(%parameters)
 
 Create a new L<Sympa::Database> object.
@@ -56,19 +115,17 @@ Parameters:
 
 =over
 
-=item C<db_host> => FIXME
+=item C<host> => FIXME
 
-=item C<db_user> => FIXME
+=item C<user> => FIXME
 
-=item C<db_passwd> => FIXME
+=item C<passwd> => FIXME
 
 =item C<db_name> => FIXME
 
 =item C<db_type> => FIXME
 
 =item C<db_options> => FIXME
-
-=item C<domain> => FIXME
 
 =back
 
@@ -81,11 +138,16 @@ A new L<Sympa::Database> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	my $source = Sympa::Datasource::SQL->create(%params);
+	croak "missing db_type parameter" unless $params{db_type};
+	croak "missing db_name parameter" unless $params{db_name};
 
 	my $self = {
-		source => $source,
-		domain => $params{domain},
+		db_host     => $params{db_host},
+		db_user     => $params{db_user},
+		db_passwd   => $params{db_passwd},
+		db_name     => $params{db_name},
+		db_type     => $params{db_type},
+		db_options  => $params{db_options},
 	};
 
 	bless $self, $class;
@@ -98,11 +160,80 @@ sub new {
 
 =item $database->connect()
 
+Connect to a SQL database.
+
+Parameters:
+
+=over
+
+=item C<keep_trying> => retry indefinitly in case of failure
+
+=back
+
+Return value:
+
+A true value on success, I<undef> otherwise.
+
 =cut
 
 sub connect {
-	my ($self) = @_;
-	return $self->{source}->connect();
+	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{db_name});
+
+	## Build connect_string
+	my $connect_string = $self->get_connect_string();
+	$connect_string .= ';'   . $self->{db_options} if $self->{db_options};
+	$connect_string .= ';port=' . $self->{db_port} if $self->{db_port};
+	$self->{connect_string} = $connect_string;
+
+	## Set environment variables
+	## Used by Oracle (ORACLE_HOME)
+	if ($self->{db_env}) {
+		foreach my $env (split /;/,$self->{db_env}) {
+			my ($key, $value) = split /=/, $env;
+			$ENV{$key} = $value if ($key);
+		}
+	}
+
+	$self->{dbh} = eval {
+		DBI->connect(
+			$connect_string,
+			$self->{db_user},
+			$self->{db_passwd},
+			{ PrintError => 0 }
+		)
+	} ;
+	unless ($self->{dbh}) {
+		if (!$params{keep_trying}) {
+			Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
+			return undef;
+		}
+
+		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $self->{db_user});
+
+		# Loop until connect works
+		my $sleep_delay = 60;
+		while (1) {
+			sleep $sleep_delay;
+			eval {
+				$self->{dbh} = DBI->connect(
+					$connect_string,
+					$self->{db_user},
+					$self->{db_passwd},
+					{ PrintError => 0 }
+				)
+			};
+			last if $self->{dbh};
+			$sleep_delay += 10;
+		}
+	}
+
+	# Force field names to be lowercased
+	$self->{dbh}{FetchHashKeyName} = 'NAME_lc';
+
+	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{db_name});
+	return 1;
 }
 
 =over
@@ -169,9 +300,9 @@ sub connect_sympa_database {
 	## We keep trying to connect if this is the first attempt
 	## Unless in a web context, because we can't afford long response time on the web interface
 	my $db_conf = Sympa::Configuration::get_parameters_group('*','Database related');
-	my $db_source = Sympa::Datasource::SQL->create(%$db_conf);
+	my $db_source = Sympa::Database->create(%$db_conf);
 	unless ($db_source) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Datasource::SQL object');
+		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Database object');
 		return undef;
 	}
 
@@ -190,7 +321,7 @@ sub connect_sympa_database {
 	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Sympa::Configuration::get_robot_conf('*','db_name'));
 
 	## Used to check that connecting to the Sympa database works and the
-	## Sympa::Datasource::SQL object is created.
+	## Sympa::Database object is created.
 	$use_db = 1;
 
 	return 1;
