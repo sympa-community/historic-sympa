@@ -162,7 +162,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 	## Probe Db if defined
 	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-		my $report = Sympa::Database::get_source()->probe(
+		my $report = Sympa::Database->get_singleton()->probe(
 			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 		);
 		if (defined $report) {
@@ -323,11 +323,11 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		my $msgspool = Sympa::Spool->new(
 			name => 'msg',
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		);
 		my $bouncespool = Sympa::Spool->new(
 			name => 'bounce',
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		);
 
 		## This is the main loop : look for files in the directory, handles
@@ -423,7 +423,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 					name    => $listname,
 					robot   => $robot,
 					base    =>
-						Sympa::Database::get_source(),
+						Sympa::Database->get_singleton(),
 					options => {'just_try' => 1}
 				);
 				if ($list) {
@@ -473,7 +473,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 		}
 
 	## Disconnect from Database
-		Sympa::Database::get_source()->disconnect();
+		Sympa::Database->get_singleton()->disconnect();
 
 	}
 	Sympa::Log::Syslog::do_log('notice', 'spooler exited normally due to signal');

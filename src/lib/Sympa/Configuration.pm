@@ -339,7 +339,7 @@ sub _get_db_conf  {
 	$robot = '*' unless (-f $Conf{'etc'}.'/'.$robot.'/robot.conf');
 	unless ($robot) {$robot = '*'};
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT value_conf AS value " .
 		"FROM conf_table " .
@@ -374,7 +374,7 @@ sub set_robot_conf  {
 		$robot = '*';
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT count(*) " .
 		"FROM conf_table " .

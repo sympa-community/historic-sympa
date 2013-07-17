@@ -164,7 +164,7 @@ sub create_list_old{
 	my $new_list = Sympa::List->new(
 		name    => $params->{'listname'},
 		robot   => $robot,
-		base    => Sympa::Database::get_source(),
+		base    => Sympa::Database->get_singleton(),
 		options => {'just_try' => 1}
 	);
 	if( $res || $new_list) {
@@ -274,7 +274,7 @@ sub create_list_old{
 	my $list = Sympa::List->new(
 		name  => $params->{'listname'},
 		robot => $robot,
-		base  => Sympa::Database::get_source(),
+		base  => Sympa::Database->get_singleton(),
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
@@ -528,7 +528,7 @@ sub create_list{
 	my $list = Sympa::List->new(
 		name  => $params->{'listname'},
 		robot => $robot,
-		base  => Sympa::Database::get_source(),
+		base  => Sympa::Database->get_singleton(),
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('err','unable to create list %s', $params->{'listname'});
@@ -668,7 +668,7 @@ sub update_list{
 	$list = Sympa::List->new(
 		name  => $params->{'listname'},
 		robot => $robot,
-		base  => Sympa::Database::get_source(),
+		base  => Sympa::Database->get_singleton(),
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('err','unable to create list %s',  $params->{'listname'});
@@ -787,7 +787,7 @@ sub rename_list{
 		(Sympa::List->new(
 				name    => $params{'new_listname'},
 				robot   => $params{'new_robot'},
-				base    => Sympa::Database::get_source(),
+				base    => Sympa::Database->get_singleton(),
 				options => {'just_try' => 1}
 			)
 		)) {
@@ -879,7 +879,7 @@ sub rename_list{
 			$params{'new_robot'});
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	## Move stats
 	my $stat_rows = $base->execute_query(
@@ -915,7 +915,7 @@ sub rename_list{
 	$list = Sympa::List->new(
 		name    => $params{'new_listname'},
 		robot   => $params{'new_robot'},
-		base    => Sympa::Database::get_source(),
+		base    => Sympa::Database->get_singleton(),
 		options => {'reload_config' => 1}
 	);
 	unless ($list) {
@@ -1033,7 +1033,7 @@ sub clone_list_as_empty {
 	my $list = Sympa::List->new(
 		name  => $source_list_name,
 		robot => $source_robot,
-		base  => Sympa::Database::get_source(),
+		base  => Sympa::Database->get_singleton(),
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('err','Admin::clone_list_as_empty : new list failed %s %s',$source_list_name, $source_robot);
@@ -1085,7 +1085,7 @@ sub clone_list_as_empty {
 	my $new_list = Sympa::List->new(
 		name    => $new_listname,
 		robot   => $new_robot,
-		base    => Sympa::Database::get_source(),
+		base    => Sympa::Database->get_singleton(),
 		options => {'reload_config' => 1}
 	);
 	# now switch List object to new list, update some values

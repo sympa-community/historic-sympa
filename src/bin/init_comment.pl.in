@@ -37,7 +37,7 @@ chdir $Sympa::Configuration::Conf{'home'};
 
 Sympa::Database::db_connect() || die "Can't connect to database";
 
-my $base = Sympa::Database::get_source();
+my $base = Sympa::Database->get_singleton();
 
 my $select_subscriber_handle = $base->get_query_handle(
 	"SELECT user_subscriber, comment_subscriber FROM subscriber_table"

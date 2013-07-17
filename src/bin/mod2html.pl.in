@@ -24,7 +24,7 @@ unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'sympa');
 
 if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
-	my $report = Sympa::Database::get_source()->probe(
+	my $report = Sympa::Database->get_singleton()->probe(
 		update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 	);
 	if (defined $report) {

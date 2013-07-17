@@ -117,7 +117,7 @@ sub new {
 	$util->allow_extra_params(qw/oauth_callback oauth_verifier/);
 	$self->{util} = $util;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		'DELETE FROM oauthprovider_sessions_table '   .
 		'WHERE '                                      .
@@ -141,7 +141,7 @@ sub new {
 sub consumer_from_token {
 	my ($class, $token) = @_;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT consumer_oauthprovider AS consumer " .
 		"FROM oauthprovider_sessions_table "         .
@@ -235,7 +235,7 @@ sub check_request {
 
 	return 401 unless($timestamp > time - OLD_REQUEST_TIMEOUT);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		'DELETE FROM oauthprovider_nonces_table ' .
 		'WHERE time_oauthprovider<?',
@@ -351,7 +351,7 @@ sub generate_temporary {
 	my $token = _generateRandomString(32); # 9x10^62 entropy ...
 	my $secret = _generateRandomString(32); # may be sha1-ed or such ...
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"INSERT INTO oauthprovider_sessions_table(" .
 			"token_oauthprovider, "             .
@@ -410,7 +410,7 @@ sub get_temporary {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT "                                        .
 			"id_oauthprovider AS id, "               .
@@ -469,7 +469,7 @@ sub generate_verifier {
 
 	my $verifier = _generateRandomString(32);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $delete_rows = $base->execute_query(
 		'DELETE FROM oauthprovider_sessions_table ' .
 		'WHERE '                                    .
@@ -546,7 +546,7 @@ sub generate_access {
 	my $token = _generateRandomString(32);
 	my $secret = _generateRandomString(32);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE oauthprovider_sessions_table "       .
 		"SET "                                       .
@@ -601,7 +601,7 @@ sub get_access {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{'token'});
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT "                                               .
 			"token_oauthprovider AS token, "                .

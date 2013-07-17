@@ -121,7 +121,7 @@ sub upgrade {
 	my ($previous_version, $new_version) = @_;
 	Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	if (lower_version($new_version, $previous_version)) {
 		Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 		return 1;
@@ -271,7 +271,7 @@ sub upgrade {
 					);
 					unless ($rows) {
 						Sympa::Log::Syslog::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::Database::get_source()->{'db_handler'}->errstr});
+						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::Database->get_singleton()->{'db_handler'}->errstr});
 						return undef;
 					}
 				}
@@ -281,7 +281,7 @@ sub upgrade {
 					name    => $list->{'name'},
 					robot   => $list->{'domain'},
 					base    =>
-						Sympa::Database::get_source(),
+						Sympa::Database->get_singleton(),
 					options => {'force_sync_admin' => 1}
 				);
 			}
@@ -305,7 +305,7 @@ sub upgrade {
 
 			my $list = Sympa::List->new(
 				name => $listname,
-				base => Sympa::Database::get_source()
+				base => Sympa::Database->get_singleton()
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -341,7 +341,7 @@ sub upgrade {
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $base = Sympa::Database::get_source();
+			my $base = Sympa::Database->get_singleton();
 
 			foreach my $field (keys %check) {
 				my $select_query =
@@ -438,7 +438,7 @@ sub upgrade {
 			my $listname = $dir;
 			my $list = Sympa::List->new(
 				name => $listname,
-				base => Sympa::Database::get_source()
+				base => Sympa::Database->get_singleton()
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -477,7 +477,7 @@ sub upgrade {
 					my $incl_list = Sympa::List->new(
 						name => $incl,
 						base =>
-							Sympa::Database::get_source()
+							Sympa::Database->get_singleton()
 					);
 
 					if (defined $incl_list &
@@ -801,7 +801,7 @@ sub upgrade {
 						name  => $data->{'list_exclusion'},
 						robot => $robot,
 						base  =>
-							Sympa::Database::get_source()
+							Sympa::Database->get_singleton()
 					);
 					if ($list) {
 						if ($list->is_list_member($data->{'user_exclusion'})) {
@@ -850,7 +850,7 @@ sub upgrade {
 
 			my $spool = Sympa::Spool->new(
 				name => $spools_def{$spoolparameter},
-				base => Sympa::Database::get_source()
+				base => Sympa::Database->get_singleton()
 			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
@@ -1133,7 +1133,7 @@ sub md5_encode_password {
 		return undef;
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	my $handle = $base->get_query_handle(
 		"SELECT email_user,password_user from user_table"

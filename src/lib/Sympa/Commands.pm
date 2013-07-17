@@ -345,7 +345,7 @@ sub _stats {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -453,7 +453,7 @@ sub _getfile {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -509,7 +509,7 @@ sub _last {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list)  {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -560,7 +560,7 @@ sub _index {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -621,7 +621,7 @@ sub _review {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	unless ($list) {
@@ -752,7 +752,7 @@ sub _verify {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
@@ -791,7 +791,7 @@ sub _subscribe {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1007,7 +1007,7 @@ sub _info {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $listname},$cmd_line);
@@ -1187,7 +1187,7 @@ sub _signoff {
 	$list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	## Is this list defined
@@ -1370,7 +1370,7 @@ sub _add {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1533,7 +1533,7 @@ sub _invite {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1719,7 +1719,7 @@ sub _remind {
 		$list = Sympa::List->new(
 			name  => $listname,
 			robot => $robot,
-			base  => Sympa::Database::get_source()
+			base  => Sympa::Database->get_singleton()
 		);
 		unless ($list) {
 			Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1985,7 +1985,7 @@ sub _del {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -2182,7 +2182,7 @@ sub _set {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	unless ($list) {
@@ -2267,7 +2267,7 @@ sub _distribute {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'DISTRIBUTE %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
@@ -2281,7 +2281,7 @@ sub _distribute {
 
 	my $modspool = Sympa::Spool->new(
 		name => 'mod',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my $name = $list->{'name'};
 
@@ -2290,7 +2290,7 @@ sub _distribute {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
 		my $validatedspool = Sympa::Spool->new(
 			name => 'validated',
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		);
 		$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	}
@@ -2366,7 +2366,7 @@ sub _confirm {
 
 	my $spool = Sympa::Spool->new(
 		name => 'auth',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 
 	my $messageinspool = $spool->get_message({'authkey'=>$key});
@@ -2396,7 +2396,7 @@ sub _confirm {
 	my $list = Sympa::List->new(
 		name    => $message->{'listname'},
 		robot   => $robot,
-		base    => Sympa::Database::get_source(),
+		base    => Sympa::Database->get_singleton(),
 		options => {'just_try' => 1}
 	);
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
@@ -2534,7 +2534,7 @@ sub _reject {
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	unless ($list) {
@@ -2549,7 +2549,7 @@ sub _reject {
 
 	my $modspool = Sympa::Spool->new(
 		name => 'mod',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
@@ -2627,7 +2627,7 @@ sub _modindex {
 	my $list = Sympa::List->new(
 		name  => $name,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $name},$cmd_line);
@@ -2662,7 +2662,7 @@ sub _modindex {
 		$curlist = Sympa::List->new(
 			name  => $PREMATCH,
 			robot => $robot,
-			base  => Sympa::Database::get_source()
+			base  => Sympa::Database->get_singleton()
 		);
 		if ($curlist) {
 			# list loaded

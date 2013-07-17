@@ -61,7 +61,7 @@ sub get_recipients_status {
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
 	my $handle = $base->get_query_handle(
@@ -136,7 +136,7 @@ sub db_init_notification_table {
 
 	my $time = time();
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"INSERT INTO notification_table ("        .
 			"message_id_notification, "       .
@@ -200,7 +200,7 @@ sub db_insert_notification {
 
 	$notification_as_string = MIME::Base64::encode($notification_as_string);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE notification_table "            .
 		"SET "                                  .
@@ -232,7 +232,7 @@ sub find_notification_id_by_message{
 	chomp $msgid;
 	Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
 	my $handle = $base->get_query_handle(
@@ -287,7 +287,7 @@ sub remove_message_by_id{
 	my ($msgid, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"DELETE FROM notification_table "        .
 		"WHERE "                                 .
@@ -323,7 +323,7 @@ sub remove_message_by_period{
 	my ($period, $listname, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	my $limit = time - ($period * 24 * 60 * 60);
 	my $rows = $base->execute_query(

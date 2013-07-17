@@ -65,7 +65,7 @@ my $pinfo = Sympa::List::_apply_defaults();
 # spool messages instead of sending them
 my $spool = Sympa::Spool->new(
 	name => $Sympa::Configuration::Conf{'queue'},
-	base => Sympa::Database::get_source()
+	base => Sympa::Database->get_singleton()
 );
 
 ## Loading all Lists at startup, in order to increase execution speed

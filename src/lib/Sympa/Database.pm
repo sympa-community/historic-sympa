@@ -43,7 +43,7 @@ use Sympa::Configuration;
 use Sympa::List;
 use Sympa::Log::Syslog;
 
-my $db_source;
+my $singleton;
 our $use_db;
 
 my $abstract_structure = {
@@ -1294,6 +1294,22 @@ sub new {
 
 	bless $self, $class;
 	return $self;
+}
+
+=item Sympa::Database->get_singleton()
+
+Return the shared database instance.
+
+Return value:
+
+A L<Sympa::Database> object.
+
+=cut
+
+sub get_singleton {
+	my ($class);
+
+	return $singleton;
 }
 
 =head1 INSTANCE METHODS
@@ -2670,15 +2686,6 @@ sub _get_set_index_query {
 
 =over
 
-=item get_source()
-
-Return data source.
-
-=cut
-
-sub get_source {
-	return $db_source;
-}
 
 =item check_db_connect()
 
@@ -2695,7 +2702,7 @@ sub check_db_connect {
 		return undef;
 	}
 
-	unless ($db_source->{'dbh'} && $db_source->{'dbh'}->ping()) {
+	unless ($singleton->{'dbh'} && $singleton->{'dbh'}->ping()) {
 		unless (connect_sympa_database('just_try')) {
 			Sympa::Log::Syslog::do_log('err', 'Failed to connect to database');
 			return undef;
@@ -2719,14 +2726,14 @@ sub connect_sympa_database {
 	## We keep trying to connect if this is the first attempt
 	## Unless in a web context, because we can't afford long response time on the web interface
 	my $db_conf = Sympa::Configuration::get_parameters_group('*','Database related');
-	my $db_source = Sympa::Database->create(%$db_conf);
-	unless ($db_source) {
+	$singleton = Sympa::Database->create(%$db_conf);
+	unless ($singleton) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Database object');
 		return undef;
 	}
 
 	# Just in case, we connect to the database here. Probably not necessary.
-	my $result = $db_source->connect(
+	my $result = $singleton->connect(
 		'keep_trying' =>
 			($option ne 'just_try' && !$ENV{'HTTP_HOST'} ? 1 : 0)
 	);

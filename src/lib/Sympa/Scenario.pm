@@ -608,7 +608,7 @@ sub verify {
 		$context->{'list_object'} = Sympa::List->new(
 			name  => $context->{'listname'},
 			robot => $robot,
-			base  => Sympa::Database::get_source()
+			base  => Sympa::Database->get_singleton()
 		);
 		unless ($context->{'list_object'}) {
 			Sympa::Log::Syslog::do_log('info',"Unable to create List object for list $context->{'listname'}");
@@ -945,13 +945,13 @@ sub verify {
 		if ($args[0] =~ /\@/) {
 			$list2 = Sympa::List->new(
 				name => $args[0],
-				base => Sympa::Database::get_source()
+				base => Sympa::Database->get_singleton()
 			);
 		} else {
 			$list2 = Sympa::List->new(
 				name  => $args[0],
 				robot => $robot,
-				base  => Sympa::Database::get_source()
+				base  => Sympa::Database->get_singleton()
 			);
 		}
 

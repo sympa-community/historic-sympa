@@ -235,7 +235,7 @@ sub login {
 		robot    => $robot,
 		context  => {cookie => $ENV{SESSION_ID}},
 		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-		base     => Sympa::Database::get_source()
+		base     => Sympa::Database->get_singleton()
 	);
 	$ENV{'USER_EMAIL'} = $email;
 	$session->{'email'} = $email;
@@ -330,7 +330,7 @@ sub casLogin {
 		context  => {cookie => $ENV{SESSION_ID}},
 		crawlers =>
 		$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-		base     => Sympa::Database::get_source()
+		base     => Sympa::Database->get_singleton()
 	);
 	$ENV{'USER_EMAIL'} = $email;
 	$session->{'email'} = $email;
@@ -389,7 +389,7 @@ sub authenticateAndRun {
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $session_id},
 		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-		base     => Sympa::Database::get_source()
+		base     => Sympa::Database->get_singleton()
 	);
 	$email = $session->{'email'} if (defined $session);
 	unless ($email or ($email eq 'unkown')  ) {
@@ -435,7 +435,7 @@ sub getUserEmailByCookie {
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $cookie},
 		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
-		base     => Sympa::Database::get_source()
+		base     => Sympa::Database->get_singleton()
 	);
 
 
@@ -564,7 +564,7 @@ sub amI {
 	my $list = Sympa::List->new(
 		name   => $listname,
 		robot  => $robot,
-		base   => Sympa::Database::get_source()
+		base   => Sympa::Database->get_singleton()
 	);
 
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $listname);
@@ -623,7 +623,7 @@ sub info {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'Info %s from %s refused, list unknown', $listname,$sender);
@@ -734,7 +734,7 @@ sub createList {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	if ($list) {
 		Sympa::Log::Syslog::do_log('info', 'create_list %s@%s from %s refused, list already exist', $listname,$robot,$sender);
@@ -865,7 +865,7 @@ sub closeList {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'closeList %s@%s from %s refused, unknown list', $listname,$robot,$sender);
@@ -947,7 +947,7 @@ sub add {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'add %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
@@ -1083,7 +1083,7 @@ sub del {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'del %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
@@ -1203,7 +1203,7 @@ sub review {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
@@ -1305,7 +1305,7 @@ sub fullReview {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless($list) {
 		Sympa::Log::Syslog::do_log('info', 'Review %s from %s refused, list unknown to robot %s', $listname, $sender, $robot);
@@ -1428,7 +1428,7 @@ sub signoff {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	## Is this list defined
@@ -1452,7 +1452,7 @@ sub signoff {
 	$list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 
 	# Part of the authorization code
@@ -1563,7 +1563,7 @@ sub subscribe {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'Subscribe to %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);

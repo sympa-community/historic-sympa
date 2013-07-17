@@ -81,7 +81,7 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $params{'user'}, $params{'provider'}, $params{'consumer_key'});
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT "                                               .
 			"tmp_token_oauthconsumer AS tmp_token, "        .
@@ -302,7 +302,7 @@ sub trigger_flow {
 		return undef;
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	if(defined $self->{'session'}{'defined'}) {
 		my $rows = $base->execute_query(
 			'UPDATE oauthconsumer_sessions_table " .
@@ -388,7 +388,7 @@ sub get_access_token {
 	$self->{'session'}{'access'} = $access;
 	$self->{'session'}{'tmp'} = undef;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE oauthconsumer_sessions_table "                   .
 		"SET "                                                   .

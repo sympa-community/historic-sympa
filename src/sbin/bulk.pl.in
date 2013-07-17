@@ -208,11 +208,11 @@ $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmt
 
 my $spool = Sympa::Spool->new(
 	name => 'bulk',
-	base => Sympa::Database::get_source()
+	base => Sympa::Database->get_singleton()
 );
 
 my $bulk = Sympa::Bulk->new(
-	base => Sympa::Database::get_source()
+	base => Sympa::Database->get_singleton()
 );
 
 while (!$end) {
@@ -303,7 +303,7 @@ while (!$end) {
 				## to prevent DB handlers to be shared by different processes
 				# when loading conf in database disconnect
 				# because of sharing dbh may crash bulk.pl
-				my $base = Sympa::Database::get_source();
+				my $base = Sympa::Database->get_singleton();
 				$base->disconnect();
 
 				if($Sympa::Configuration::Conf{'bulk_max_count'} > 1) {

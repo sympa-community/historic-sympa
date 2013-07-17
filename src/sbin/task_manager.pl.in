@@ -139,7 +139,7 @@ unless (Sympa::Database::data_structure_uptodate(Sympa::Constants::VERSION)) {
 }
 
 # init database logger
-Sympa::Log::Database::init(base => Sympa::Database::get_source());
+Sympa::Log::Database::init(base => Sympa::Database->get_singleton());
 
 ## Check for several files.
 unless (Sympa::Configuration::checkfiles()) {
@@ -236,7 +236,7 @@ my @tasks; # list of tasks in the spool
 
 my $spool = Sympa::Spool->new(
 	name => 'task',
-	base => Sympa::Database::get_source()
+	base => Sympa::Database->get_singleton()
 );
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log
@@ -336,7 +336,7 @@ while (!$end) {
 
 	## List all tasks
 	my $result = Sympa::Task->load_tasks(
-		$spool, Sympa::Database::get_source()
+		$spool, Sympa::Database->get_singleton()
 	);
 	unless ($result) {
 		Sympa::List::send_notify_to_listmaster('intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list task files in spool"});
@@ -512,7 +512,7 @@ sub create {
 		my $list = Sympa::List->new(
 			name  => $list_name,
 			robot => $robot,
-			base  => Sympa::Database::get_source(),
+			base  => Sympa::Database->get_singleton(),
 		);
 
 		$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
@@ -1131,7 +1131,7 @@ sub create_cmd {
 	if ($type eq 'list') {
 		my $list = Sympa::List->new(
 			name => $object,
-			base => Sympa::Database::get_source(),
+			base => Sympa::Database->get_singleton(),
 		);
 		$data{'list'}{'name'} = $list->{'name'};
 	}
@@ -1176,7 +1176,7 @@ sub purge_logs_table {
 	$sec = 0;
 	my $date_end = timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT date_stat FROM stat_table WHERE read_stat = 0 " .
 		"ORDER BY date_stat ASC LIMIT 1"
@@ -1214,7 +1214,7 @@ sub purge_session_table {
 		robot           => '*',
 		delay           => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'session_table_ttl'}),
 		anonymous_delay => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'anonymous_session_table_ttl'}),
-		base            => Sympa::Database::get_source()
+		base            => Sympa::Database->get_singleton()
 	);
 	unless(defined $removed) {
 		Sympa::Log::Syslog::do_log('err','Failed to remove old sessions');
@@ -1230,7 +1230,7 @@ sub purge_tables {
 	Sympa::Log::Syslog::do_log('info','');
 
 	my $bulk = Sympa::Bulk->new(
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my $removed = $bulk->purge_bulkspool();
 	unless(defined $removed) {
@@ -1257,7 +1257,7 @@ sub purge_one_time_ticket_table {
 	my $removed = Sympa::Session->purge_old_tickets(
 		robot => '*',
 		delay => Sympa::Tools::Time::duration_conv($Sympa::Configuration::Conf{'one_time_ticket_table_ttl'}),
-		base  => Sympa::Database::get_source()
+		base  => Sympa::Database->get_singleton()
 	);
 	unless(defined $removed) {
 		Sympa::Log::Syslog::do_log('err','Failed to remove old tickets');

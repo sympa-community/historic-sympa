@@ -3821,7 +3821,7 @@ sub send_global_file {
 	# order to support Sympa server on a machine without any MTA service
 	my $bulk;
 	$bulk = Sympa::Bulk->new(
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	)  unless $data->{'alarm'};
 
 	my $result = Sympa::Mail::mail_file(
@@ -4033,7 +4033,7 @@ sub send_file {
 	# order to support Sympa server on a machine without any MTA service
 	my $bulk;
 	$bulk = Sympa::Bulk->new(
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	)  unless $data->{'alarm'};
 
 	my $result = Sympa::Mail::mail_file(
@@ -4429,7 +4429,7 @@ sub send_msg {
 		my $verp= 'off';
 
 		my $bulk = Sympa::Bulk->new(
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		);
 
 		my $result = Sympa::Mail::mail_message(
@@ -4481,7 +4481,7 @@ sub send_msg {
 
 		## prepare VERP sending.
 		my $bulk = Sympa::Bulk->new(
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		);
 		$result = Sympa::Mail::mail_message(
 			message            => $new_message,
@@ -5664,7 +5664,7 @@ sub delete_global_user {
 
 	return undef unless ($#users >= 0);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"DELETE FROM user_table WHERE email_user=?"
 	);
@@ -5819,7 +5819,7 @@ sub delete_all_list_admin {
 	Sympa::Log::Syslog::do_log('debug2', '');
 
 	## Delete record in ADMIN
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query("DELETE FROM admin_table");
 	unless ($rows) {
 		Sympa::Log::Syslog::do_log('err','Unable to remove all admin from database');
@@ -5935,7 +5935,7 @@ sub get_global_user {
 	}
 
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT "                                               .
 			"email_user AS email, "                         .
@@ -5991,7 +5991,7 @@ Returns a list of all users in User table hash for a given user
 sub get_all_global_user {
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT email_user FROM user_table"
 	);
@@ -6044,7 +6044,7 @@ sub suspend_subscription {
 	my ($email, $list, $data, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '"%s", "%s", "%s"', $email, $list, $data);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE subscriber_table "                  .
 		"SET "                                      .
@@ -6095,7 +6095,7 @@ sub restore_suspended_subscription {
 	my ($email, $list, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '("%s", "%s", "%s")', $email, $list, $robot);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE subscriber_table "                     .
 		"SET "                                         .
@@ -6146,7 +6146,7 @@ sub insert_delete_exclusion {
 	Sympa::Log::Syslog::do_log('info', '("%s", "%s", "%s", "%s", "%s")', $email, $list, $robot, $action, $family);
 
 	my $r = 1;
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	if($action eq 'insert'){
 		## INSERT only if $user->{'included'} eq '1'
@@ -6268,7 +6268,7 @@ sub get_exclusion {
 		return undef;
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle;
 	if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
 
@@ -6540,7 +6540,7 @@ sub find_list_member_by_pattern_no_object {
 
 	my @ressembling_users;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	## Additional subscriber fields
 	my $additional;
@@ -6633,7 +6633,7 @@ sub get_list_member_no_object {
 		return $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email};
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	## Additional subscriber fields
 	my $additional;
@@ -7412,7 +7412,7 @@ sub is_global_user {
 
 	return undef unless ($who);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT count(*) FROM user_table WHERE email_user=?",
 	);
@@ -7822,7 +7822,7 @@ sub update_global_user {
 	);
 
 	## Update each table
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	my @fields;
 	my @values;
@@ -7861,7 +7861,7 @@ sub add_global_user {
 	my ($values) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '');
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my ($user, $statement, $table);
 
 	## encrypt password
@@ -11123,7 +11123,7 @@ sub store_digest {
 
 	my $digestspool = Sympa::Spool->new(
 		name => 'digest',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
 	my $string;
@@ -11183,7 +11183,7 @@ sub get_lists {
 	}
 
 	# Build query: Perl expression for files and SQL expression for list_table.
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my @query = (@{$options->{'filter_query'} || []});
 	my @clause_perl = ();
 	my @clause_sql = ();
@@ -11343,7 +11343,7 @@ sub get_which_db {
 
 	my ($l, %which);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	if ($function eq 'member') {
 		## Get subscribers
 		my $handle = $base->get_query_handle(
@@ -11403,7 +11403,7 @@ sub get_netidtoemail_db {
 	my ($robot, $netid, $idpname) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s)', $netid, $idpname);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 
 	my $handle = $base->get_query_handle(
 		"SELECT email_netidmap "            .
@@ -11427,7 +11427,7 @@ sub set_netidtoemail_db {
 	my ($robot, $netid, $idpname, $email) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s, %s, %s)', $netid, $idpname, $email);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"INSERT INTO netidmap_table (" .
 			"netid_netidmap, " .
@@ -11459,7 +11459,7 @@ sub update_email_netidmap_db{
 		return undef;
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		"UPDATE netidmap_table "                     .
 		"SET email_netidmap=? "                      .
@@ -11556,7 +11556,7 @@ sub get_mod_spool_size {
 
 	my $spool = Sympa::Spool->new(
 		name => 'mod',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my $count =  $spool->get_count(
 		selector  => {
@@ -11649,7 +11649,7 @@ sub sort_dir_to_get_mod {
 sub get_db_field_type {
 	my ($table, $field) = @_;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	return $base->get_fields()->{$field};
 }
 
@@ -11659,7 +11659,7 @@ sub lowercase_field {
 
 	my $total = 0;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle("SELECT $field from $table");
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to get values of field %s for table %s',$field,$table);
@@ -12758,7 +12758,7 @@ sub tag_topic {
 	$topic_item .= sprintf  "METHOD  $method\n";
 	my $topicspool = Sympa::Spool->new(
 		name => 'topic',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 
 	return $topicspool->store(
@@ -12797,7 +12797,7 @@ sub load_msg_topic {
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$self->{'name'},$msg_id);
 	my $topicspool = Sympa::Spool->new(
 		name => 'topic',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 
 	my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
@@ -13076,7 +13076,7 @@ sub store_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name => 'subscribe',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 
 	my $content = $subscription_request_spool->get_count(
@@ -13111,7 +13111,7 @@ sub get_subscription_requests {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name => 'subscribe',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	my @subrequests = $subscription_request_spool->get_content(
 		selector  => {
@@ -13163,7 +13163,7 @@ sub get_subscription_request_count {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name => 'subscribe',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 	return $subscription_request_spool->get_count(
 		selector  => {
@@ -13180,7 +13180,7 @@ sub delete_subscription_request {
 
 	my $subscription_request_spool = Sympa::Spool->new(
 		name => 'subscribe',
-		base => Sympa::Database::get_source()
+		base => Sympa::Database->get_singleton()
 	);
 
 	my $removed = 0;
@@ -13437,7 +13437,7 @@ sub purge {
 	Sympa::Task->load_tasks(
 		Sympa::Spool->new(
 			name => 'task',
-			base => Sympa::Database::get_source()
+			base => Sympa::Database->get_singleton()
 		)
 	);
 	foreach my $task (Sympa::Task->get_tasks_by_list($self->get_list_id())) {
@@ -13683,7 +13683,7 @@ Connect to stat_counter_table and extract data.
 sub get_data {
 	my ($data, $robotname, $listname) = @_;
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
 		"SELECT * FROM stat_counter_table " .
 		"WHERE data_counter=? AND robot_counter=? AND list_counter=?",
@@ -13718,7 +13718,7 @@ sub get_lists_db {
 
 	my ($l, @lists);
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle($query);
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err',"Unable to gather the list of lists from lists table");
@@ -13847,7 +13847,7 @@ sub _flush_list_db {
 		$query = "DELETE FROM list_table WHERE name_list=?";
 	}
 
-	my $base = Sympa::Database::get_source();
+	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
 		$query,
 		$listname

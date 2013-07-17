@@ -125,7 +125,7 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	die 'config_error';
 }
 
-my $report = Sympa::Database::get_source()->probe(
+my $report = Sympa::Database->get_singleton()->probe(
 	update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 );
 if (defined $report) {
