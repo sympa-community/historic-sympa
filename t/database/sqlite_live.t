@@ -18,22 +18,20 @@ use Sympa::Database::SQLite;
 eval { require DBD::SQLite; };
 
 plan(skip_all => 'DBD::SQLite required') if $EVAL_ERROR;
-plan tests => 23;
+plan tests => 22;
 
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
-my $source = Sympa::Database::SQLite->new(
+my $base = Sympa::Database::SQLite->new(
 	db_name => $file,
 );
-my $dbh = $source->connect();
+my $result = $base->connect();
+ok($result, 'establish connection');
 
-ok(defined $dbh, 'establish connection');
-isa_ok($dbh, 'DBI::db');
-
-my @tables = $source->get_tables();
+my @tables = $base->get_tables();
 cmp_ok(@tables, '==', 0, 'initial tables list');
 
 my $result;
-$result = $source->add_table(
+$result = $base->add_table(
 	table => 'table1',
 	fields => [
 		{
@@ -50,14 +48,14 @@ is(
 	'table creation'
 );
 
-@tables = $source->get_tables();
+@tables = $base->get_tables();
 is_deeply(
 	\@tables,
 	[ qw/table1/ ],
 	'tables list after table creation'
 );
 
-$result = $source->get_fields(table => 'table1');
+$result = $base->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
@@ -66,7 +64,7 @@ is_deeply(
 	'initial fields list'
 );
 
-$result = $source->add_field(
+$result = $base->add_field(
 	table   => 'table1',
 	field   => 'data',
 	type    => 'char(30)',
@@ -77,7 +75,7 @@ ok(
 	'field data creation failure (not null issue)'
 );
 
-	$result = $source->add_field(
+	$result = $base->add_field(
 	table   => 'table1',
 	field   => 'data',
 	type    => 'char(30)',
@@ -88,7 +86,7 @@ is(
 	'field data creation'
 );
 
-$result = $source->get_fields(table => 'table1');
+$result = $base->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
@@ -98,33 +96,33 @@ is_deeply(
 	'fields list after fields creation'
 );
 
-$result = $result = $source->is_autoinc(
+$result = $result = $base->is_autoinc(
 	table => 'table1',
 	field => 'id',
 );
 ok($result, "id is autoinc");
 
-$result = $result = $source->is_autoinc(
+$result = $result = $base->is_autoinc(
 	table => 'table1',
 	field => 'data',
 );
 ok(defined $result && !$result, "data is not autoinc");
 
-$result = $source->get_primary_key(table => 'table1');
+$result = $base->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
 	[ ],
 	'initial primary key list'
 );
 
-$result = $source->get_indexes(table => 'table1');
+$result = $base->get_indexes(table => 'table1');
 is_deeply(
 	$result,
 	{ },
 	'initial indexes list'
 );
 
-$result = $source->set_index(
+$result = $base->set_index(
 	table  => 'table1',
 	index  => 'index1',
 	fields => [ qw/data/ ]
@@ -135,32 +133,32 @@ is(
 	'index creation'
 );
 
-$result = $source->get_indexes(table => 'table1');
+$result = $base->get_indexes(table => 'table1');
 is_deeply(
 	$result,
 	{ index1 => { data => 1 } },
 	'indexes list after index creation'
 );
 
-$result = $source->delete_field(
+$result = $base->delete_field(
 	table => 'table1',
 	field => 'data',
 );
 ok(!defined $result, "field data deletion failure");
 
-$result = $source->delete_field(
+$result = $base->delete_field(
 	table => 'table1',
 	field => 'id',
 );
 ok(!defined $result, "field id deletion failure");
-cleanup($dbh);
+cleanup($base);
 
-my $report = $source->probe();
+my $report = $base->probe();
 ok(defined $report, "database structure initialisation failure");
 
 cmp_ok(scalar @$report, '==', 21, 'event count in report');
 
-@tables = sort $source->get_tables();
+@tables = sort $base->get_tables();
 is_deeply(
 	\@tables,
 	[ qw/
@@ -187,7 +185,7 @@ is_deeply(
 );
 
 is_deeply(
-	$source->get_fields(table => 'subscriber_table'),
+	$base->get_fields(table => 'subscriber_table'),
 	{
 		user_subscriber               => 'text',
 		list_subscriber               => 'text',
@@ -214,7 +212,7 @@ is_deeply(
 );
 
 is_deeply(
-	$source->get_fields(table => 'notification_table'),
+	$base->get_fields(table => 'notification_table'),
 	{
 		pk_notification               => 'integer',
 		message_id_notification       => 'text',
@@ -231,16 +229,16 @@ is_deeply(
 	'notification_table table structure'
 );
 
-$result = $source->is_autoinc(
+$result = $base->is_autoinc(
 	table => 'notification_table',
 	field => 'pk_notification',
 );
 ok($result, "pk_notification is autoincremented");
 
 sub cleanup {
-	my ($dbh) = @_;
+	my ($base) = @_;
 
-	foreach my $table ($source->get_tables()) {
-		$dbh->do("DROP TABLE $table");
+	foreach my $table ($base->get_tables()) {
+		$base->execute_query("DROP TABLE $table");
 	}
 }

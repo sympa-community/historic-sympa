@@ -20,31 +20,30 @@ plan(skip_all => 'DBD::mysql required') if $EVAL_ERROR;
 plan(skip_all => 'DB_NAME environment variable needed') if !$ENV{DB_NAME};
 plan(skip_all => 'DB_HOST environment variable needed') if !$ENV{DB_HOST};
 plan(skip_all => 'DB_USER environment variable needed') if !$ENV{DB_USER};
-plan tests => 38;
+plan tests => 37;
 
-my $source = Sympa::Database::MySQL->new(
+my $base = Sympa::Database::MySQL->new(
 	db_name   => $ENV{DB_NAME},
 	db_host   => $ENV{DB_HOST},
 	db_user   => $ENV{DB_USER},
 	db_passwd => $ENV{DB_PASS},
 );
-my $dbh = $source->connect();
+my $result = $base->connect();
 
-ok(defined $dbh, 'establish connection');
-isa_ok($dbh, 'DBI::db');
+ok($result, 'establish connection');
 
 BAIL_OUT("unable to connect to database $ENV{DB_NAME} on $ENV{DB_HOST}")
-	unless $dbh;
+	unless $result;
 
 
 # individual functions tests
-cleanup($dbh);
+cleanup($base);
 
-my @tables = $source->get_tables();
+my @tables = $base->get_tables();
 cmp_ok(@tables, '==', 0, 'initial tables list');
 
 my $result;
-$result = $source->add_table(
+$result = $base->add_table(
 	table  => 'table1',
 	fields => [
 		{
@@ -61,21 +60,21 @@ is(
 	'table creation'
 );
 
-@tables = $source->get_tables();
+@tables = $base->get_tables();
 is_deeply(
 	\@tables,
 	[ qw/table1/ ],
 	'tables list after table creation'
 );
 
-$result = $source->get_fields(table => 'table1');
+$result = $base->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{ id => 'int(11)' },
 	'initial fields list'
 );
 
-$result = $source->add_field(
+$result = $base->add_field(
 	table   => 'table1',
 	field   => 'data',
 	type    => 'char(30)',
@@ -86,7 +85,7 @@ is(
 	'field data creation'
 );
 
-$result = $source->get_fields(table => 'table1');
+$result = $base->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
@@ -96,33 +95,33 @@ is_deeply(
 	'fields list after fields creation'
 );
 
-$result = $result = $source->is_autoinc(
+$result = $result = $base->is_autoinc(
 	table => 'table1',
 	field => 'id',
 );
 ok($result, "id is autoinc");
 
-$result = $result = $source->is_autoinc(
+$result = $result = $base->is_autoinc(
 	table => 'table1',
 	field => 'data',
 );
 ok(!$result, "data is not autoincremented");
 
-$result = $source->get_primary_key(table => 'table1');
+$result = $base->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
 	[ 'id' ],
 	'initial primary key list'
 );
 
-$result = $source->get_indexes(table => 'table1');
+$result = $base->get_indexes(table => 'table1');
 is_deeply(
 	$result,
 	{ },
 	'initial indexes list'
 );
 
-$result = $source->set_index(
+$result = $base->set_index(
 	table  => 'table1',
 	index  => 'index1',
 	fields => [ qw/data/ ]
@@ -133,26 +132,26 @@ is(
 	'index creation'
 );
 
-$result = $source->get_indexes(table => 'table1');
+$result = $base->get_indexes(table => 'table1');
 is_deeply(
 	$result,
 	{ index1 => { data => 1 } },
 	'indexes list after index creation'
 );
 
-$result = $source->delete_field(
+$result = $base->delete_field(
 	table => 'table1',
 	field => 'data',
 );
 ok($result, "field data deletion");
 
-$result = $source->delete_field(
+$result = $base->delete_field(
 	table => 'table1',
 	field => 'id',
 );
 ok(!$result, 'impossible to delete last field');
 
-$result = $source->get_fields(table => 'table1');
+$result = $base->get_fields(table => 'table1');
 is_deeply(
 	$result,
 	{
@@ -161,14 +160,14 @@ is_deeply(
 	'fields list after field deletion'
 );
 
-$result = $source->get_primary_key(table => 'table1');
+$result = $base->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
 	[ 'id' ],
 	'primary key list after field deletion'
 );
 
-$result = $source->get_indexes(table => 'table1');
+$result = $base->get_indexes(table => 'table1');
 is_deeply(
 	$result,
 	{ },
@@ -176,9 +175,9 @@ is_deeply(
 );
 
 # database creation, from empty schema
-cleanup($dbh);
+cleanup($base);
 
-my $report = $source->probe();
+my $report = $base->probe();
 ok(defined $report, 'database creation, from empty schema');
 
 cmp_ok(scalar @$report, '==', 21, 'event count in report');
@@ -186,9 +185,9 @@ cmp_ok(scalar @$report, '==', 21, 'event count in report');
 check_database();
 
 # database creation, from partial schema
-cleanup($dbh);
+cleanup($base);
 
-$source->add_table(
+$base->add_table(
 	table  => 'subscriber_table',
 	fields => [
 		{
@@ -199,7 +198,7 @@ $source->add_table(
 	]
 );
 
-$source->add_table(
+$base->add_table(
 	table  => 'notification_table',
 	fields => [
 		{
@@ -212,7 +211,7 @@ $source->add_table(
 	key => [ 'pk_notification' ],
 );
 
-my $report = $source->probe();
+my $report = $base->probe();
 ok(defined $report, 'database creation, from partial schema');
 
 cmp_ok(scalar @$report, '==', 47, 'event count in report');
@@ -220,9 +219,9 @@ cmp_ok(scalar @$report, '==', 47, 'event count in report');
 check_database();
 
 # database creation from wrong schema, no automatic correction
-cleanup($dbh);
+cleanup($base);
 
-$source->add_table(
+$base->add_table(
 	table  => 'subscriber_table',
 	fields => [
 		{
@@ -233,7 +232,7 @@ $source->add_table(
 	]
 );
 
-$source->add_table(
+$base->add_table(
 	table  => 'notification_table',
 	fields => [
 		{
@@ -246,13 +245,13 @@ $source->add_table(
 );
 
 dies_ok {
-	$source->probe()
+	$base->probe()
 } 'database creation from wrong schema, no automatic correction';
 
 # database creation from wrong schema, with automatic correction
-cleanup($dbh);
+cleanup($base);
 
-$source->add_table(
+$base->add_table(
 	table  => 'subscriber_table',
 	fields => [
 		{
@@ -263,7 +262,7 @@ $source->add_table(
 	]
 );
 
-$source->add_table(
+$base->add_table(
 	table  => 'notification_table',
 	fields => [
 		{
@@ -275,7 +274,7 @@ $source->add_table(
 	key => [ 'pk_notification' ],
 );
 
-my $report = $source->probe(update => 'auto');
+my $report = $base->probe(update => 'auto');
 ok(
 	defined $report,
        	'database creation from wrong schema, with automatic correction');
@@ -285,19 +284,19 @@ cmp_ok(scalar @$report, '==', 47, 'event count in report');
 check_database();
 
 # final cleanup
-cleanup($dbh) if !$ENV{TEST_DEBUG};
+cleanup($base) if !$ENV{TEST_DEBUG};
 
 sub cleanup {
-	my ($dbh) = @_;
+	my ($base) = @_;
 
-	foreach my $table ($source->get_tables()) {
-		$dbh->do("DROP TABLE $table");
+	foreach my $table ($base->get_tables()) {
+		$base->execute_query("DROP TABLE $table");
 	}
 }
 
 sub check_database {
 
-	my @tables = sort $source->get_tables();
+	my @tables = sort $base->get_tables();
 	is_deeply(
 		\@tables,
 		[ qw/
@@ -324,7 +323,7 @@ sub check_database {
 	);
 
 	is_deeply(
-		$source->get_fields(table => 'subscriber_table'),
+		$base->get_fields(table => 'subscriber_table'),
 		{
 			user_subscriber               => 'varchar(100)',
 			list_subscriber               => 'varchar(50)',
@@ -351,7 +350,7 @@ sub check_database {
 	);
 
 	is_deeply(
-		$source->get_fields(table => 'notification_table'),
+		$base->get_fields(table => 'notification_table'),
 		{
 			pk_notification               => 'bigint(20)',
 			message_id_notification       => 'varchar(100)',
@@ -368,7 +367,7 @@ sub check_database {
 		'notification_table table structure'
 	);
 
-	$result = $source->is_autoinc(
+	$result = $base->is_autoinc(
 		table => 'notification_table',
 		field => 'pk_notification',
 	);
