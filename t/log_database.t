@@ -12,25 +12,25 @@ use English qw(-no_match_vars);
 use File::Temp;
 use Test::More;
 
+use Sympa::Database;
 use Sympa::Log::Database;
 use Sympa::Log::Database::Iterator;
-use Sympa::Datasource::SQL;
 
 # init sqlite database
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
 system("sqlite3 $file < src/bin/create_db.SQLite");
 
 # init datasource
-my $source = Sympa::Datasource::SQL->create(
+my $base = Sympa::Database->create(
 	db_type => 'SQLite',
 	db_name => $file,
 );
-plan(skip_all => 'unable to create database') unless $source;
-my $dbh = $source->establish_connection();
+plan(skip_all => 'unable to create database') unless $base;
+$base->connect();
 
 plan tests => 28;
 
-Sympa::Log::Database::init(source => $source);
+Sympa::Log::Database::init(base => $base);
 
 cmp_ok(get_row_count("logs_table"), '==', 0, "no message in database");
 
@@ -75,12 +75,12 @@ ok($min == $max, "identical minimum and maximum log dates");
 
 my $iterator;
 
-$iterator = Sympa::Log::Database::Iterator->new(source => $source);
+$iterator = Sympa::Log::Database::Iterator->new(base => $base);
 ok($iterator, 'event iterator creation, no criteria');
 ok(!defined $iterator->get_next(),'no matching event');
 
 $iterator = Sympa::Log::Database::Iterator->new(
-	source => $source,
+	base  => $base,
 	robot => 'robot',
 );
 ok($iterator, 'event iterator creation, robot criteria');
@@ -89,7 +89,7 @@ ok(defined $iterator->get_next(),'second matching event');
 ok(!defined $iterator->get_next(),'no third matching event');
 
 $iterator = Sympa::Log::Database::Iterator->new(
-	source => $source,
+	base  => $base,
 	robot => 'robot',
 	ip    => '127.0.0.1'
 );
@@ -158,6 +158,6 @@ cmp_ok(get_row_count("stat_counter_table"), '==', 2, "two stat counter records i
 sub get_row_count {
 	my ($table) = @_;
 
-	my @row = $dbh->selectrow_array("SELECT COUNT(*) from $table");
+	my @row = $base->{dbh}->selectrow_array("SELECT COUNT(*) from $table");
 	return $row[0];
 }
