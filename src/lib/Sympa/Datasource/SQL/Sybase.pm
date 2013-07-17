@@ -52,7 +52,6 @@ sub connect {
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 
-	$ENV{'SYBASE_CHARSET'} = 'utf8';
 	$self->{dbh}->do("use $self->{db_name}");
 
 	return 1;
