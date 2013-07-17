@@ -694,26 +694,28 @@ while ($signal ne 'term') {
 		exit 0;
 	}elsif ($options{'md5_encode_password'}) {
 
-		unless ($Sympa::Database::use_db) {
+		my $base = Sympa::Database->get_singleton();
+		unless ($base) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 
-		my $total=Sympa::Upgrade::md5_encode_password();
+		my $total = Sympa::Upgrade::md5_encode_password();
 		printf STDERR "Total password re-encoded using md5: %d\n", $total;
 
 		exit 0;
 
 	}elsif ($options{'lowercase'}) {
 
-		unless ($Sympa::Database::use_db) {
+		my $base = Sympa::Database->get_singleton();
+		unless ($base) {
 			Sympa::Log::Syslog::fatal_err("You don't have a database setup, can't lowercase email addresses");
 		}
 
 		print STDERR "Working on user_table...\n";
-		my $total = Sympa::List::lowercase_field('user_table', 'email_user');
+		my $total = Sympa::List::lowercase_field($base, 'user_table', 'email_user');
 
 		print STDERR "Working on subscriber_table...\n";
-		$total += Sympa::List::lowercase_field('subscriber_table', 'user_subscriber');
+		$total += Sympa::List::lowercase_field($base, 'subscriber_table', 'user_subscriber');
 
 		unless (defined $total) {
 			Sympa::Log::Syslog::fatal_err("Could not work on dabatase");

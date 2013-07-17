@@ -786,12 +786,14 @@ sub _subscribe {
 	$what =~ /^(\S+)(\s+(.+))?\s*$/;
 	my($which, $comment) = ($1, $3);
 
+	my $base = Sympa::Database->get_singleton();
+
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database->get_singleton()
+		base  => $base
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -940,19 +942,17 @@ sub _subscribe {
 			}
 		}
 
-		if ($Sympa::Database::use_db) {
-			my $u = Sympa::List::get_global_user($sender);
+		my $u = Sympa::List::get_global_user($sender);
 
-			Sympa::List::update_global_user(
-				$sender,
-				{
-					'lang' => $u->{'lang'} ||
-					          $list->{'admin'}{'lang'},
-					'password' => $u->{'password'} ||
-						      Sympa::Tools::Password::tmp_passwd($sender, $Sympa::Configuration::Conf{'cookie'})
-				}
-			);
-		}
+		Sympa::List::update_global_user(
+			$sender,
+			{
+				'lang'     => $u->{'lang'} ||
+					      $list->{'admin'}{'lang'},
+				'password' => $u->{'password'} ||
+					      Sympa::Tools::Password::tmp_passwd($sender, $Sympa::Configuration::Conf{'cookie'})
+			}
+		);
 
 		## Now send the welcome file to the user
 		unless ($quiet || ($action =~ /quiet/i )) {
@@ -1365,12 +1365,14 @@ sub _add {
 	$what =~ /^(\S+)\s+($email_regexp)(\s+(.+))?\s*$/;
 	my($which, $email, $comment) = ($1, $2, $6);
 
+	my $base = Sympa::Database->get_singleton();
+
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
 		name  => $which,
 		robot => $robot,
-		base  => Sympa::Database->get_singleton()
+		base  => $base
 	);
 	unless ($list) {
 		Sympa::Report::reject_report_cmd('user','no_existing_list',{'listname' => $which},$cmd_line);
@@ -1463,14 +1465,17 @@ sub _add {
 			Sympa::Report::notice_report_cmd('now_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);
 		}
 
-		if ($Sympa::Database::use_db) {
-			my $u = Sympa::List::get_global_user($email);
+		my $u = Sympa::List::get_global_user($email);
 
-			Sympa::List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					'password' => $u->{'password'} ||
-					Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'})
-				});
-		}
+		Sympa::List::update_global_user(
+			$email,
+			{
+				'lang'     => $u->{'lang'} ||
+				              $list->{'admin'}{'lang'},
+				'password' => $u->{'password'} ||
+				              Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'})
+			}
+		);
 
 		## Now send the welcome file to the user if it exists and notification is supposed to be sent.
 		unless ($quiet || $action =~ /quiet/i) {

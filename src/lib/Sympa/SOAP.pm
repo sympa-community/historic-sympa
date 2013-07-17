@@ -1558,12 +1558,14 @@ sub subscribe {
 
 	Sympa::Log::Syslog::do_log('notice', '(%s,%s)', $listname, $sender);
 
+	my $base  = Sympa::Database->get_singleton();
+
 	## Load the list if not already done, and reject the
 	## subscription if this list is unknown to us.
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database->get_singleton()
+		base  => $base
 	);
 	unless ($list) {
 		Sympa::Log::Syslog::do_log('info', 'Subscribe to %s from %s refused, list unknown to robot %s', $listname,$sender,$robot);
@@ -1659,12 +1661,10 @@ sub subscribe {
 			unless $list->add_list_member($u);
 		}
 
-		if ($Sympa::Database::use_db) {
-			my $u = Sympa::List::get_global_user($sender);
+		my $u = Sympa::List::get_global_user($sender);
 
-			Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
-				});
-		}
+		Sympa::List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}
+		});
 
 		## Now send the welcome file to the user
 		unless ($action =~ /quiet/i ) {

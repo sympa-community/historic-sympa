@@ -2655,10 +2655,8 @@ sub save_config {
 		return undef;
 	}
 
-	if ($Sympa::Database::use_db) {
-		unless (_update_list_db()) {
-			Sympa::Log::Syslog::do_log('err', "Unable to update list_table");
-		}
+	unless (_update_list_db()) {
+		Sympa::Log::Syslog::do_log('err', "Unable to update list_table");
 	}
 
 	return 1;
@@ -8209,20 +8207,18 @@ sub rename_list_db {
 	}
 	Sympa::Log::Syslog::do_log('debug', '%s', $statement_admin );
 
-	if ($Sympa::Database::use_db) {
-		my $list_rows =  $self->{base}->execute_query(
-			"UPDATE list_table "                .
-			"SET name_list=?, robot_list=? "    .
-			"WHERE name_list=? AND robot_list=?",
-			$new_listname,
-			$new_robot,
-			$self->{'name'},
-			$self->{'domain'}
-		);
-		unless ($list_rows) {
-			Sympa::Log::Syslog::do_log('err',"Unable to rename list in database");
-			return undef;
-		}
+	my $list_rows =  $self->{base}->execute_query(
+		"UPDATE list_table "                .
+		"SET name_list=?, robot_list=? "    .
+		"WHERE name_list=? AND robot_list=?",
+		$new_listname,
+		$new_robot,
+		$self->{'name'},
+		$self->{'domain'}
+	);
+	unless ($list_rows) {
+		Sympa::Log::Syslog::do_log('err',"Unable to rename list in database");
+		return undef;
 	}
 
 	return 1;
@@ -11655,11 +11651,10 @@ sub get_db_field_type {
 
 ## Lowercase field from database
 sub lowercase_field {
-	my ($table, $field) = @_;
+	my ($base, $table, $field) = @_;
 
 	my $total = 0;
 
-	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle("SELECT $field from $table");
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to get values of field %s for table %s',$field,$table);
@@ -12407,13 +12402,6 @@ sub _load_list_config_file {
 	############################################
 	## Below are constraints between parameters
 	############################################
-
-	## Do we have a database config/access
-	unless ($Sympa::Database::use_db) {
-		Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI or no database access');
-		## We should notify the listmaster here...
-		#return undef;
-	}
 
 	## This default setting MUST BE THE LAST ONE PERFORMED
 #	if ($admin{'status'} ne 'open') {
@@ -13707,11 +13695,6 @@ sub get_lists_db {
 	my ($where) = @_;
 	$where ||= '';
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $where);
-
-	unless ($Sympa::Database::use_db) {
-		Sympa::Log::Syslog::do_log('info', 'Sympa not setup to use DBI');
-		return undef;
-	}
 
 	my $query = 'SELECT name_list FROM list_table';
 	$query .= " WHERE $where" if $where;

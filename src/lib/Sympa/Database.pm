@@ -44,7 +44,6 @@ use Sympa::List;
 use Sympa::Log::Syslog;
 
 my $singleton;
-our $use_db;
 
 my $abstract_structure = {
 	# subscription, subscription option, etc...
@@ -2745,10 +2744,6 @@ sub connect_sympa_database {
 		return undef;
 	}
 	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Sympa::Configuration::get_robot_conf('*','db_name'));
-
-	## Used to check that connecting to the Sympa database works and the
-	## Sympa::Database object is created.
-	$use_db = 1;
 
 	return 1;
 }

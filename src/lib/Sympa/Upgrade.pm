@@ -1121,15 +1121,10 @@ This require to rewrite passwords in database. This upgrade IS NOT REVERSIBLE
 =cut
 
 sub md5_encode_password {
+	my ($base) = @_;
 	Sympa::Log::Syslog::do_log('notice', '() recoding password using md5 fingerprint');
 
 	my $total = 0;
-
-	unless (Sympa::List::check_db_connect()) {
-		return undef;
-	}
-
-	my $base = Sympa::Database->get_singleton();
 
 	my $handle = $base->get_query_handle(
 		"SELECT email_user,password_user from user_table"
