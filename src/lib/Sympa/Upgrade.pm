@@ -271,7 +271,7 @@ sub upgrade {
 					);
 					unless ($rows) {
 						Sympa::Log::Syslog::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => Sympa::Database->get_singleton()->{'db_handler'}->errstr});
+						Sympa::List::send_notify_to_listmaster('upgrade_failed', $Sympa::Configuration::Conf{'domain'},{'error' => $base->{'db_handler'}->errstr});
 						return undef;
 					}
 				}
@@ -280,8 +280,7 @@ sub upgrade {
 				$list = Sympa::List->new(
 					name    => $list->{'name'},
 					robot   => $list->{'domain'},
-					base    =>
-						Sympa::Database->get_singleton(),
+					base    => $base,
 					options => {'force_sync_admin' => 1}
 				);
 			}
@@ -305,7 +304,7 @@ sub upgrade {
 
 			my $list = Sympa::List->new(
 				name => $listname,
-				base => Sympa::Database->get_singleton()
+				base => $base
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -335,13 +334,12 @@ sub upgrade {
 	## DB fields of enum type have been changed to int
 	if (lower_version($previous_version, '5.2a.1')) {
 
-		if ($Sympa::Database::use_db & $Sympa::Configuration::Conf{'db_type'} eq 'mysql') {
+		if ($base->get_type() eq 'mysql') {
 			my %check = ('subscribed_subscriber' => 'subscriber_table',
 				'included_subscriber' => 'subscriber_table',
 				'subscribed_admin' => 'admin_table',
 				'included_admin' => 'admin_table');
 
-			my $base = Sympa::Database->get_singleton();
 
 			foreach my $field (keys %check) {
 				my $select_query =
@@ -438,7 +436,7 @@ sub upgrade {
 			my $listname = $dir;
 			my $list = Sympa::List->new(
 				name => $listname,
-				base => Sympa::Database->get_singleton()
+				base => $base
 			);
 			unless (defined $list) {
 				Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
@@ -476,8 +474,7 @@ sub upgrade {
 					my $incl = $list->{'admin'}{'include_list'}[$index];
 					my $incl_list = Sympa::List->new(
 						name => $incl,
-						base =>
-							Sympa::Database->get_singleton()
+						base => $base,
 					);
 
 					if (defined $incl_list &
@@ -800,8 +797,7 @@ sub upgrade {
 					my $list = Sympa::List->new(
 						name  => $data->{'list_exclusion'},
 						robot => $robot,
-						base  =>
-							Sympa::Database->get_singleton()
+						base  => $base
 					);
 					if ($list) {
 						if ($list->is_list_member($data->{'user_exclusion'})) {
@@ -850,7 +846,7 @@ sub upgrade {
 
 			my $spool = Sympa::Spool->new(
 				name => $spools_def{$spoolparameter},
-				base => Sympa::Database->get_singleton()
+				base => $base
 			);
 			if (!opendir(DIR, $spooldir)) {
 				Sympa::Log::Syslog::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
@@ -974,13 +970,13 @@ sub upgrade {
 
 				mkdir $spooldir.'/copy_by_upgrade_process/'  unless (-d $spooldir.'/copy_by_upgrade_process/');
 
-				my $base = $spooldir.'/'.$filename;
+				my $source = $spooldir.'/'.$filename;
 				my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
 
-				Sympa::Log::Syslog::do_log('notice','source %s, goal %s',$base,$goal);
+				Sympa::Log::Syslog::do_log('notice','source %s, goal %s', $source, $goal);
 				# unless (File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
-				unless (File::Copy::copy($base, $goal)) {
-					Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $base,$goal, $ERRNO);
+				unless (File::Copy::copy($source, $goal)) {
+					Sympa::Log::Syslog::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $ERRNO);
 					exit;
 				}
 
