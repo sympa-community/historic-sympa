@@ -1393,8 +1393,6 @@ sub connect {
 	return 1;
 }
 
-=over
-
 =item $database->disconnect()
 
 =cut
@@ -1406,6 +1404,22 @@ sub disconnect {
 		$handle->finish();
 	}
 	$self->{dbh}->disconnect() if $self->{dbh};
+}
+
+=item $database->ping()
+
+Check if the database is still connected.
+
+Return value:
+
+A true value on success, false otherwise.
+
+=cut
+
+sub ping {
+	my ($self) = @_;
+
+	return $self->{dbh}->ping();
 }
 
 =item $self->get_structure()
