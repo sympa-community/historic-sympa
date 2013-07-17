@@ -2760,33 +2760,6 @@ sub data_structure_uptodate {
 	return 1;
 }
 
-# _check_db_field_type(%parameters)
-# Compare required DB field type
-# Parameters:
-# required_format> => string
-# effective_format> => string
-# Return value:
-# 1 if field type is appropriate AND size >= required size
-sub _check_db_field_type {
-	my (%params) = @_;
-
-	my ($required_type, $required_size, $effective_type, $effective_size);
-
-	if ($params{required_format} =~ /^(\w+)(\((\d+)\))?$/) {
-		($required_type, $required_size) = ($1, $3);
-	}
-
-	if ($params{effective_format} =~ /^(\w+)(\((\d+)\))?$/) {
-		($effective_type, $effective_size) = ($1, $3);
-	}
-
-	if (($effective_type eq $required_type) && ($effective_size >= $required_size)) {
-		return 1;
-	}
-
-	return 0;
-}
-
 =back
 
 =cut
