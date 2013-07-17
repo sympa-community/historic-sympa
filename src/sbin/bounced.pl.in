@@ -145,13 +145,27 @@ unless (Sympa::Conf::load($sympa_conf_file)) {
 
 unshift @INC, $wwsconf->{'wws_path'};
 
-## Check databse connectivity
-unless (Sympa::Database::check_db_connect()) {
-	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
+# connect to database
+my $db_conf = Sympa::Configuration::get_parameters_group(
+	'*','Database related'
+);
+
+my $base = Sympa::Database->create(%$db_conf);
+unless ($base) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to create database defined in configuration. Exiting.'
+	);
+}
+
+my $result = $base->connect();
+unless ($result) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to connect to database defined in configuration. Exiting.'
+	);
 }
 
 # init database logger
-Sympa::Log::Database::init(base => Sympa::Database->get_singleton());
+Sympa::Log::Database::init(base => $base);
 
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
@@ -242,7 +256,7 @@ my $end = 0;
 
 my $spool = Sympa::Spool->new(
 	name => 'bounce',
-	base => Sympa::Database->get_singleton()
+	base => $base
 );
 
 Sympa::Log::Syslog::do_log('debug','starting infinite loop');

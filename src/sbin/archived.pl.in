@@ -126,13 +126,27 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file has errors.");
 }
 
-## Check databse connectivity
-unless (Sympa::Database::check_db_connect()) {
-	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
+# connect to database
+my $db_conf = Sympa::Configuration::get_parameters_group(
+	'*','Database related'
+);
+
+my $base = Sympa::Database->create(%$db_conf);
+unless ($base) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to create database defined in configuration. Exiting.'
+	);
+}
+
+my $result = $base->connect(keep_trying => 1);
+unless ($result) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to connect to database defined in configuration. Exiting.'
+	);
 }
 
 # init database logger
-Sympa::Log::Database::init(base => Sympa::Database->get_singleton());
+Sympa::Log::Database::init(base => $base);
 
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
@@ -238,7 +252,7 @@ my $end = 0;
 
 my $spool = Sympa::Spool->new(
 	name => 'archive',
-	base => Sympa::Database->get_singleton()
+	base => $base
 );
 
 ## infinite loop scanning the queue (unless a sig TERM is received
@@ -282,7 +296,7 @@ while (!$end) {
 
 		my $list = Sympa::List->new(
 			name => $listadress,
-			base => Sympa::Database->get_singleton(),
+			base => $base
 		);
 		unless ($list) {
 			Sympa::Log::Syslog::do_log('err',"remove : unknown list $listadress");
@@ -477,7 +491,7 @@ sub rebuild {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $hostname,
-		base  => Sympa::Database->get_singleton(),
+		base  => $base
 	);
 	my $robot = $list->{'domain'};
 	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
@@ -665,7 +679,7 @@ sub mail2arc {
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $robot,
-		base  => Sympa::Database->get_singleton(),
+		base  => $base
 	);
 	my $arcpath = Sympa::Configuration::get_robot_conf($list->{'domain'},'arc_path');
 

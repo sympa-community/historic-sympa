@@ -107,9 +107,23 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
 }
 
-## Check database connectivity
-unless (Sympa::Database::check_db_connect()) {
-	Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Configuration::Conf{'db_name'});
+# connect to database
+my $db_conf = Sympa::Configuration::get_parameters_group(
+	'*','Database related'
+);
+
+my $base = Sympa::Database->create(%$db_conf);
+unless ($base) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to create database defined in configuration. Exiting.'
+	);
+}
+
+my $result = $base->connect();
+unless ($result) {
+	Sympa::Log::Syslog::fatal_err(
+		'Unable to connect to database defined in configuration. Exiting.'
+	);
 }
 
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'bulk');
@@ -208,11 +222,11 @@ $Sympa::Configuration::Conf{'maxsmtp'} = int($Sympa::Configuration::Conf{'maxsmt
 
 my $spool = Sympa::Spool->new(
 	name => 'bulk',
-	base => Sympa::Database->get_singleton()
+	base => $base
 );
 
 my $bulk = Sympa::Bulk->new(
-	base => Sympa::Database->get_singleton()
+	base => $base
 );
 
 while (!$end) {
@@ -303,7 +317,6 @@ while (!$end) {
 				## to prevent DB handlers to be shared by different processes
 				# when loading conf in database disconnect
 				# because of sharing dbh may crash bulk.pl
-				my $base = Sympa::Database->get_singleton();
 				$base->disconnect();
 
 				if($Sympa::Configuration::Conf{'bulk_max_count'} > 1) {

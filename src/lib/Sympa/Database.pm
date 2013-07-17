@@ -2685,32 +2685,6 @@ sub _get_set_index_query {
 
 =over
 
-
-=item check_db_connect()
-
-Just check if DB connection is ok
-
-=cut
-
-sub check_db_connect {
-
-	#Sympa::Log::Syslog::do_log('debug2', 'Checking connection to the Sympa database');
-	## Is the Database defined
-	unless (Sympa::Configuration::get_robot_conf('*','db_name')) {
-		Sympa::Log::Syslog::do_log('err', 'No db_name defined in configuration file');
-		return undef;
-	}
-
-	unless ($singleton->{'dbh'} && $singleton->{'dbh'}->ping()) {
-		unless (connect_sympa_database('just_try')) {
-			Sympa::Log::Syslog::do_log('err', 'Failed to connect to database');
-			return undef;
-		}
-	}
-
-	return 1;
-}
-
 =item connect_sympa_database()
 
 Connect to database.
