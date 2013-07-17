@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Task;
 
@@ -37,7 +36,6 @@ use Bulk;
 #use Log; # used by Conf
 #use mail; # used by List
 #use Scenario; # not used
-use Sympaspool;
 use TaskSpool;
 use TaskInstruction;
 #use tools; # used by Conf
@@ -51,11 +49,10 @@ use TaskInstruction;
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
-    &Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
-
+    Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
     if ($task_in_spool) {
-	$task->{'messagekey'} = $task_in_spool->{'messagekey'};    
-	$task->{'taskasstring'} = $task_in_spool->{'messageasstring'};    
+	$task = $task_in_spool;
+	$task->{'messageasstring'} = $task_in_spool->{'messageasstring'};    
 	$task->{'date'} = $task_in_spool->{'task_date'};    
 	$task->{'label'} = $task_in_spool->{'task_label'};    
 	$task->{'model'} = $task_in_spool->{'task_model'};    
@@ -182,22 +179,22 @@ sub generate_from_template {
     }
     ## creation
     my $tt2 = Template->new({'START_TAG' => quotemeta('['),'END_TAG' => quotemeta(']'), 'ABSOLUTE' => 1});
-    my $taskasstring = '';
+    my $messageasstring = '';
     if ($self->{'model'} eq 'sync_include') {
 	$self->{'Rdata'}{'list'}{'ttl'} = $self->{'list_object'}->ttl;
     }
-    unless (defined $tt2 && $tt2->process($self->{'template'}, $self->{'Rdata'}, \$taskasstring)) {
+    unless (defined $tt2 && $tt2->process($self->{'template'}, $self->{'Rdata'}, \$messageasstring)) {
 	&Log::do_log('err', "Failed to parse task template '%s' : %s", $self->{'template'}, $tt2->error());
 	return undef;
     }
-    $self->{'taskasstring'} = $taskasstring;
+    $self->{'messageasstring'} = $messageasstring;
     
     if  (!$self->check) {
 	&Log::do_log ('err', 'error : syntax error in task %s, you should check %s',$self->get_description,$self->{'template'});
 	&Log::do_log ('notice', "Ignoring creation task request") ;
 	return undef;
     }
-    &Log::do_log('debug2', 'Resulting task_as_string: %s', $self->as_string);
+    Log::do_log('debug2', 'Resulting task_as_string: %s', $self->as_string());
     return 1;
 }
 
@@ -236,9 +233,10 @@ sub store {
     my $self = shift;
 
     &Log::do_log('debug','Spooling task %s',$self->get_description);
-    my $taskspool = new Sympaspool('task');
+    my $taskspool = new TaskSpool;
     my %meta;
     $meta{'task_date'}=$self->{'date'};
+    $meta{'date'}=$self->{'date'};
     $meta{'task_label'}=$self->{'label'};
     $meta{'task_model'}=$self->{'model'};
     $meta{'task_flavour'}=$self->{'flavour'};
@@ -251,23 +249,26 @@ sub store {
     }
 
     &Log::do_log ('debug3', 'Task creation done. date: %s, label: %s, model: %s, flavour: %s',$self->{'date'},$self->{'label'},$self->{'model'},$self->{'flavour'});
-    unless($taskspool->store($self->{'taskasstring'},\%meta)) {
-	&Log::do_log('err','Unable to store task %s in database.',$self->get_description);
+    unless($taskspool->store($self->{'messageasstring'},\%meta)) {
+	&Log::do_log('err','Unable to store task %s.',$self->get_description);
 	return undef;
     }
-    &Log::do_log ('debug3', 'task %s successfully stored.',$self->get_description);
+    Log::do_log ('debug3', 'task %s successfully stored.',$self->get_description);
     return 1;
 }
 
 ## Removes a task using message key
 sub remove {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
-    &Log::do_log('debug',"Removing task '%s'",$self->{'messagekey'});
-    my $taskspool = new Sympaspool('task');
-    unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
-	&Log::do_log('err', 'Unable to remove task (messagekey = %s)', $self->{'messagekey'});
+
+    my $taskspool = new TaskSpool;
+    unless ($taskspool->remove_message($self->{'messagekey'})) {
+	Log::do_log('err', 'Unable to remove task (messagekey = %s)',
+	    $self->{'messagekey'});
 	return undef;
     }
+    return 1;
 }
 
 ## Builds a string giving the name of the model of the task, along with its flavour and, if the task is in list context, the name of the list.
@@ -286,17 +287,17 @@ sub get_description {
 ## Uses the parsed instructions to build a new task as string. If no parsed instructions are found, returns the original task as string.
 sub stringify_parsed_instructions {
     my $self = shift;
-    &Log::do_log('debug2','Resetting taskasstring key of task object from the parsed content of %s',$self->get_description);
+    &Log::do_log('debug2','Resetting messageasstring key of task object from the parsed content of %s',$self->get_description);
 
-    my $new_string = $self->as_string;
+    my $new_string = $self->as_string();
     unless (defined $new_string) {
-	&Log::do_log('err','task %s has no parsed content. Leaving taskasstring key unchanged',$self->get_description);
+	&Log::do_log('err','task %s has no parsed content. Leaving messageasstring key unchanged',$self->get_description);
 	return undef;
     }else {
-	$self->{'taskasstring'} = $new_string;
+	$self->{'messageasstring'} = $new_string;
 	if ($Log::get_log_level > 1) {
 	    &Log::do_log('debug2','task %s content recreated. Content:',$self->get_description);
-	    foreach (split "\n",$self->{'taskasstring'}) {
+	    foreach (split "\n",$self->{'messageasstring'}) {
 		&Log::do_log('debug2','%s',$_);
 	    }
 	}
@@ -406,13 +407,13 @@ sub parse {
     my $self = shift;
     &Log::do_log ('debug2', "Parsing task id = %s : %s", $self->{'messagekey'},$self->get_description);
     
-    my $taskasstring = $self->{'taskasstring'}; # task to execute
-    unless ($taskasstring) {
+    my $messageasstring = $self->{'messageasstring'}; # task to execute
+    unless ($messageasstring) {
 	&Log::do_log('err','No string describing the task available in %s',$self->get_description);
 	return undef;
     }
     my $lnb = 0; # line number
-    foreach my $line (split('\n',$taskasstring)){
+    foreach my $line (split('\n',$messageasstring)){
 	$lnb++;
 	my $result = new TaskInstruction ({'line_as_string' =>$line, 'line_number' => $lnb},$self);
 	if ( defined $self->{'errors'}) {
@@ -540,10 +541,10 @@ sub error_report {
     if (defined $self->{'list_object'}) {$data->{'list'} = $self->{'list_object'};}
     $self->{'human_date'} = &tools::adate($self->{'date'});
     $data->{'task'} = $self;
-    &Log::do_log('err','Execution of task %s failed. sending detailed report to listmaster',$self->get_description);
-    unless (Site->send_notify_to_listmaster('task_error', $data)) {
-	&Log::do_log('notice','Error while notifying listmaster about errors in task %s',$self->get_description);
-    }
+    Log::do_log('err',
+	'Execution of task %s failed. sending detailed report to listmaster',
+	$self->get_description);
+    Site->send_notify_to_listmaster('task_error', $data);
 }
 
 #### Task line level subs ####

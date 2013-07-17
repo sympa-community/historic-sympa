@@ -17,14 +17,14 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Upgrade;
 
 use strict;
 
-#use Carp; # currently not used
+use Carp qw(croak);
+use File::Copy::Recursive;
 use POSIX qw(strftime);
 # tentative
 use Data::Dumper;
@@ -364,7 +364,8 @@ sub upgrade {
 			    (subscribed_subscriber IS NULL OR
 			     subscribed_subscriber <> 1)});
 		unless ($sth) {
-		    Log::fatal_err("Unable to execute SQL statement");
+		    Log::do_log('err', 'Unable to execute SQL statement');
+		    return undef;
 		}
 		$rows = $sth->rows;
 		Log::do_log('notice','%d rows have been updated', $rows);
@@ -507,7 +508,7 @@ sub upgrade {
     }
 
     ## We now support UTF-8 only for custom templates, config files, headers and footers, info files
-    ## + web_tt2, scenari, create_list_templatee, families
+    ## + web_tt2, scenari, create_list_templates, families
     if (&tools::lower_version($previous_version, '5.3b.3')) {
 	&Log::do_log('notice','Encoding all custom files to UTF-8...');
 
@@ -735,58 +736,65 @@ sub upgrade {
 			  'queueauth' => 'auth',
 			  'queueoutgoing' => 'archive',
 			  'queuetask' => 'task');
-   if (&tools::lower_version($previous_version, '6.1.11')) {
-	## Exclusion table was not robot-enabled.
-	Log::do_log('notice','fixing robot column of exclusion table.');
-	my $sth = SDM::do_query(q{SELECT * FROM exclusion_table});
-	unless ($sth) {
-	    Log::do_log('err',
-		'Unable to gather informations from the exclusions table.');
-	}
-	my @robots = @{Robot::get_robots() || []};
-	while (my $data = $sth->fetchrow_hashref){
-	    next
-		if defined $data->{'robot_exclusion'} and
-		$data->{'robot_exclusion'} ne '';
-	    ## Guessing right robot for each exclusion.
-	    my $valid_robot = '';
-	    my @valid_robot_candidates;
-	    foreach my $robot (@robots) {
-		if (my $list = new List($data->{'list_exclusion'},$robot)) {
-		    if ($list->is_list_member($data->{'user_exclusion'})) {
-			push @valid_robot_candidates,$robot;
+	if (&tools::lower_version($previous_version, '6.1.11')) {
+	    ## Exclusion table was not robot-enabled.
+	    Log::do_log('notice','fixing robot column of exclusion table.');
+	    my $sth = SDM::do_query(q{SELECT * FROM exclusion_table});
+	    unless ($sth) {
+		Log::do_log('err',
+		    'Unable to gather informations from the exclusions table.'
+		);
+	    }
+	    my @robots = @{Robot::get_robots() || []};
+	    while (my $data = $sth->fetchrow_hashref){
+		next
+		    if defined $data->{'robot_exclusion'} and
+		    $data->{'robot_exclusion'} ne '';
+		## Guessing right robot for each exclusion.
+		my $valid_robot = '';
+		my @valid_robot_candidates;
+		foreach my $robot (@robots) {
+		    if (my $list =
+			new List($data->{'list_exclusion'},$robot)) {
+			if ($list->is_list_member($data->{'user_exclusion'})) {
+			    push @valid_robot_candidates,$robot;
+			}
 		    }
 		}
-	    }
-	    if ($#valid_robot_candidates == 0) {
-		$valid_robot = $valid_robot_candidates[0];
-		my $sth = SDM::do_query(
-		    q{UPDATE exclusion_table
-		      SET robot_exclusion = %s
-		      WHERE list_exclusion = %s AND user_exclusion = %s},
-		    SDM::quote($valid_robot->domain),
-		    SDM::quote($data->{'list_exclusion'}),
-		    SDM::quote($data->{'user_exclusion'})
-		);
-		unless ($sth) {
-		    &Log::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
+		if ($#valid_robot_candidates == 0) {
+		    $valid_robot = $valid_robot_candidates[0];
+		    my $sth = SDM::do_query(
+			q{UPDATE exclusion_table
+			  SET robot_exclusion = %s
+			  WHERE list_exclusion = %s AND user_exclusion = %s},
+			SDM::quote($valid_robot->domain),
+			SDM::quote($data->{'list_exclusion'}),
+			SDM::quote($data->{'user_exclusion'})
+		    );
+		    unless ($sth) {
+			Log::do_log('err',
+			    'Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',
+			    $data->{'list_exclusion'},
+			    $data->{'user_exclusion'},
+			    $valid_robot
+			);
+		    }
+		} else {
+		    Log::do_log('err',
+			"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",
+			$data->{'user_exclusion'},
+			$data->{'list_exclusion'},
+			join(', ', map { $_->domain } @valid_robot_candidates)
+		    );
 		}
-	    }else {
-		Log::do_log('err',
-		    "Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",
-		    $data->{'user_exclusion'},
-		    $data->{'list_exclusion'},
-		    join(', ', map { $_->domain } @valid_robot_candidates)
-		);
 	    }
-	}
-	## Caching all list config
-	&Log::do_log('notice', 'Caching all list config to database...');
-	List::get_lists('Site', { 'reload_config' => 1 });
-	&Log::do_log('notice', '...done');
+	    ## Caching all list config
+	    Log::do_log('notice', 'Caching all list config to database...');
+	    List::get_lists('Site', { 'reload_config' => 1 });
+	    Log::do_log('notice', '...done');
 	}
 
-	foreach my $spoolparameter (keys %spools_def ){
+	foreach my $spoolparameter (keys %spools_def) {
 	    # task is to be done later
 	    next if ($spoolparameter eq 'queuetask');
 
@@ -795,12 +803,14 @@ sub upgrade {
 	    unless (-d $spooldir){
 		&Log::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
 		next;
-   }
-	    &Log::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
+	    }
+	    Log::do_log('notice',
+		'Performing upgrade for spool %s', $spooldir);
 
 	    my $spool = new Sympaspool($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
-		&Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
+		croak sprintf("Can't open dir %s: %s", $spooldir, "$!");
+		## No return.
 	    }
 	    my @qfile = sort tools::by_date grep (!/^\./,readdir(DIR));
 	    closedir(DIR);
@@ -818,25 +828,35 @@ sub upgrade {
 		my ($listname, $robot_id, $robot);	
 		my %meta ;
 
-		&Log::do_log('notice'," spool : $spooldir, fichier $filename");
+		&Log::do_log('notice'," spool : $spooldir, file $filename");
 		if (-d $spooldir.'/'.$filename){
 		    &Log::do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
 		    next;
 		}				
 
 		if (($spoolparameter eq 'queuedigest')){
-		    unless ($filename =~ /^([^@]*)\@([^@]*)$/){$ignored .= ','.$filename; next;}
+		    unless ($filename =~ /^([^@]*)\@([^@]*)$/) {
+			$ignored .= ','.$filename;
+			next;
+		    }
 		    $listname = $1;
 		    $robot_id = $2;
 		    $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-		}elsif (($spoolparameter eq 'queueauth')||($spoolparameter eq 'queuemod')){
-		    unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){$ignored .= ','.$filename;next;}
+		} elsif ($spoolparameter eq 'queueauth' or
+		    $spoolparameter eq 'queuemod') {
+		    unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/) {
+			$ignored .= ','.$filename;
+			next;
+		    }
 		    $listname = $1;
 		    $robot_id = $2;
 		    $meta{'authkey'} = $3;
 		    $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
 		}elsif ($spoolparameter eq 'queuetopic'){
-		    unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/){$ignored .= ','.$filename;next;}
+		    unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/) {
+			$ignored .= ','.$filename;
+			next;
+		    }
 		    $listname = $1;
 		    $robot_id = $2;
 		    $meta{'authkey'} = $3;
@@ -854,7 +874,8 @@ sub upgrade {
 			}
 		    }
 		    unless ($match){$ignored .= ','.$filename;next;}
-		}elsif (($spoolparameter eq 'queue')||($spoolparameter eq 'bouncequeue')||($spoolparameter eq 'queueoutgoing')){
+		} elsif ($spoolparameter eq 'queue' or
+		    $spoolparameter eq 'queuebounce') {
 		    ## Don't process temporary files created by queue bouncequeue queueautomatic (T.xxx)
 		    next if ($filename =~ /^T\./);
 
@@ -920,29 +941,65 @@ sub upgrade {
 		    $messageasstring = $messageasstring.$_;
 		}
 		close(FILE);
-		
-		my $messagekey = $spool->store($messageasstring,\%meta);
-		unless($messagekey) {
-		    &Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
-		    next;
+
+		## Store into DB spool
+		unless ($spoolparameter eq 'queue' or
+		    $spoolparameter eq 'queueautomatic' or
+		    $spoolparameter eq 'queuebounce' or
+		    $spoolparameter eq 'queuemod' or
+		    $spoolparameter eq 'queueoutgoing') {
+		    my $messagekey = $spool->store($messageasstring,\%meta);
+		    unless($messagekey) {
+			Log::do_log('err',
+			    'Could not load message %s/%s in db spool',
+			    $spooldir, $filename);
+			next;
+		    }
 		}
 
-		mkdir $spooldir.'/copy_by_upgrade_process/'  unless (-d $spooldir.'/copy_by_upgrade_process/');		
-		
-		my $source = $spooldir.'/'.$filename;
-		my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
+		## Move HTML view of pending messages
+		if ($spoolparameter eq 'queuemod') {
+		    my $html_view_dir = $spooldir.'/.'.$filename;
+		    my $list_html_view_dir = Site->viewmail_dir.'/mod/'.$listname.'@'.$robot_id;
+		    my $new_html_view_dir = $list_html_view_dir.'/'.$meta{'authkey'};
+		    unless (tools::mkdir_all($list_html_view_dir, 0755)) {
+			&Log::do_log('err', 'Could not create list html view directory %s: %s', $list_html_view_dir, $!);
+			exit 1;
+		    }
+		    unless (File::Copy::Recursive::dircopy($html_view_dir, $new_html_view_dir)) {
+			&Log::do_log('err', 'Could not rename %s to %s: %s', $html_view_dir,$new_html_view_dir, $!);
+			exit 1;
+		    }
+		}
 
-		&Log::do_log('notice','source %s, goal %s',$source,$goal);
-		# unless (&File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
-		unless (&File::Copy::copy($source, $goal)) {
-		    &Log::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $!);
-		    exit;
-		}
+		## Clear filesystem spool
+		unless ($spoolparameter eq 'queue' or
+		    $spoolparameter eq 'queueautomatic' or
+		    $spoolparameter eq 'queuebounce' or
+		    $spoolparameter eq 'queuemod' or
+		    $spoolparameter eq 'queueoutgoing') {
+		    mkdir $spooldir.'/copy_by_upgrade_process/'
+			unless -d $spooldir.'/copy_by_upgrade_process/';
+
+		    my $source = $spooldir.'/'.$filename;
+		    my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
+
+		    Log::do_log('notice','source %s, goal %s',$source,$goal);
+		    # unless (&File::Copy::copy($spooldir.'/'.$filename,
+		    #     $spooldir.'/copy_by_upgrade_process/'.$filename)) {
+		    unless (&File::Copy::copy($source, $goal)) {
+			Log::do_log('err', 'Could not rename %s to %s: %s',
+			    $source,$goal, $!);
+			exit 1;
+		    }
 		
-		unless (unlink ($spooldir.'/'.$filename)) {
-		    &Log::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+		    unless (unlink ($spooldir.'/'.$filename)) {
+			Log::do_log('err',
+			    'Could not unlink message %s/%s. Exiting',
+			    $spooldir, $filename);
+		    }
+		    $performed .= ','.$filename;
 		}
-		$performed .= ','.$filename;
 	    } 	    
 	    &Log::do_log('info',"Upgrade process for spool %s : ignored files %s",$spooldir,$ignored);
 	    &Log::do_log('info',"Upgrade process for spool %s : performed files %s",$spooldir,$performed);
@@ -963,15 +1020,13 @@ sub upgrade {
 	my %wwsconf_override = (
 	    'arc_path'                   => 'yes',
 	    'archive_default_index'      => 'yes',
-	    'archived_pidfile'           => 'yes',
 	    'bounce_path'                => 'yes',
-	    'bounced_pidfile'            => 'yes',
 	    'cookie_domain'              => 'NO',
 	    'cookie_expire'              => 'yes',
+	    'cookie_refresh'		 => 'yes', # 6.1.17+
 	    'custom_archiver'            => 'yes',
 	    'default_home'               => 'NO',
 	    'export_topics'              => 'yes',
-	    'htmlarea_url'               => 'yes',
 	    'html_editor_file'           => 'NO', # 6.2a
 	    'html_editor_init'           => 'NO',
 	    'ldap_force_canonical_email' => 'NO',
@@ -979,7 +1034,6 @@ sub upgrade {
 	    'mhonarc'                    => 'yes',
 	    'password_case'              => 'NO',
 	    'review_page_size'           => 'yes',
-	    'task_manager_pidfile'       => 'yes',
 	    'title'                      => 'NO',
 	    'use_fast_cgi'               => 'yes',
 	    'use_html_editor'            => 'NO',
@@ -994,6 +1048,10 @@ sub upgrade {
 		'No more used. Using static_content/icons instead.',
 	    'robots' =>
 		'Not used anymore. Robots are fully described in their respective robot.conf file.',
+	    'htmlarea_url'  => 'No longer supported',
+	    'archived_pidfile'           => 'No more used',
+	    'bounced_pidfile'            => 'No more used',
+	    'task_manager_pidfile'       => 'No more used',
 	);
 
 	## Set language of new file content
@@ -1267,7 +1325,7 @@ sub to_utf8 {
 					mode =>  0644,
 					))
 	{
-	    &Log::do_log('err','Unable to set rights on %s',Site->db_name);
+	    Log::do_log('err', 'Unable to set rights on %s', $file);
 	    next;
 	}
 	&Log::do_log('notice','Modified file %s ; original file kept as %s', $file, $file.'@'.$date);
@@ -1279,13 +1337,13 @@ sub to_utf8 {
 }
 
 
-# md5_encode_password : Version later than 5.4 uses md5 fingerprint instead of symetric crypto to store password.
+# md5_encode_password : Version later than 5.4 uses MD5 fingerprint instead of symetric crypto to store password.
 #  This require to rewrite paassword in database. This upgrade IS NOT REVERSIBLE
 sub md5_encode_password {
 
     my $total = 0;
 
-    &Log::do_log('notice', 'Upgrade::md5_encode_password() recoding password using md5 fingerprint');
+    &Log::do_log('notice', 'Upgrade::md5_encode_password() recoding password using MD5 fingerprint');
     
     unless (SDM::check_db_connect('just_try')) {
 	return undef;
@@ -1306,7 +1364,7 @@ sub md5_encode_password {
 	my $clear_password ;
 	if ($user->{'password_user'} =~ /^[0-9a-f]{32}/){
 	    Log::do_log('info',
-		'password from %s already encoded as md5 fingerprint',
+		'password from %s already encoded as MD5 fingerprint',
 		$user->{'email_user'});
 	    $total_md5++ ;
 	    next;
@@ -1337,9 +1395,9 @@ sub md5_encode_password {
     }
     $sth->finish();
 
-    &Log::do_log('info',"Updating password storage in table user_table using md5 for %d users",$total) ;
+    &Log::do_log('info',"Updating password storage in table user_table using MD5 for %d users",$total) ;
     if ($total_md5) {
-	&Log::do_log('info',"Found in table user %d password stored using md5, did you run Sympa before upgrading ?", $total_md5 );
+	&Log::do_log('info',"Found in table user %d password stored using MD5, did you run Sympa before upgrading ?", $total_md5 );
     }    
     return $total;
 }

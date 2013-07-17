@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package report;
 
@@ -99,7 +98,7 @@ sub reject_report_msg {
        or Log::do_log('notice',"report::reject_report_msg(): Unable to send template 'message_report' to '$user'");
 
     if ($type eq 'intern') {
-	chomp($param->{'msg_id'});
+	chomp $param->{'msg_id'} if $param->{'msg_id'};
 
 	$param ||= {}; 
 	$param->{'error'} =  &gettext($error);
@@ -107,9 +106,8 @@ sub reject_report_msg {
 	$param->{'action'} = 'message diffusion';
 	$param->{'msg_id'} = $param->{'msg_id'};
 	$param->{'list'} = $list if (defined $list);
-	unless ($robot->send_notify_to_listmaster('mail_intern_error', $param)) {
-	    &Log::do_log('notice',"report::reject_report_msg(): Unable to notify_listmaster concerning '$user'");
-	}
+
+	$robot->send_notify_to_listmaster('mail_intern_error', $param);
     }
     return 1;
 }
@@ -136,7 +134,7 @@ sub _get_msg_as_hash {
     if (ref($msg_object) =~ /^MIME::Entity/) { ## MIME-ttols object
 	$msg_entity = $msg_object;
     }elsif (ref($msg_object) =~ /^Message/) { ## Sympa's own Message object
-	$msg_entity = $msg_object->{'msg'};
+	$msg_entity = $msg_object->as_entity();
     }else {
 	&Log::do_log('err', "reject_report_msg: wrong type for msg parameter");
     }
@@ -152,9 +150,12 @@ sub _get_msg_as_hash {
     ## TODO : we should also decode headers + remove trailing \n + use these variables in default mail templates
 
     my $from = $head->get('From');
+    chomp $from if $from;
     my $subject = $head->get('Subject');
+    chomp $subject if $subject;
     my $msg_id = $head->get('Message-Id');
-    $msg_hash = {'full' => $msg_entity->as_string, 
+    chomp $msg_id if $msg_id;
+    $msg_hash = {'full' => $msg_entity->as_string(), 
 		 'body' => $body_as_string,
 		 'from' => $from,
 		 'subject' => $subject,
@@ -399,17 +400,10 @@ sub global_report_cmd {
 	    $param->{'error'} = &gettext($error);
 	    $param->{'who'} = $sender;
 	    $param->{'action'} = 'Command process';
-	    
-	    unless ($robot->send_notify_to_listmaster(
-		'mail_intern_error', $param
-	    )) {
-		&Log::do_log('notice',
-		    'Unable to notify listmaster concerning "%s"',
-		    $sender
-		);
-	    }
+
+	    $robot->send_notify_to_listmaster('mail_intern_error', $param);
 	} else {
-	    &Log::do_log(
+	    Log::do_log(
 		'notice', 'unable to send notify to listmaster : no robot'
 	    );
 	}	
@@ -490,16 +484,9 @@ sub reject_report_cmd {
 	    $param->{'who'} = $sender;
 	    $param->{'action'} = 'Command process';
 
-	    unless ($robot->send_notify_to_listmaster(
-		'mail_intern_error', $param
-	    )) {
-		&Log::do_log(
-		    'notice', 'Unable to notify listmaster concerning "%s"',
-		    $sender
-		);
-	    }
+	    $robot->send_notify_to_listmaster('mail_intern_error', $param);
 	} else {
-	    &Log::do_log(
+	    Log::do_log(
 		'notice',
 		'unable to notify listmaster for error: "%s" : (no robot)',
 		$error
@@ -799,13 +786,10 @@ sub reject_report_web {
 	    $param->{'who'} = $user;
 	    $param->{'action'} ||= 'Command process';
 
-	    unless ($robot->send_notify_to_listmaster(
-		'web_'.$type.'_error', $param
-	    )) {
-		&Log::do_log('notice', 'Unable to notify listmaster concerning "%s"', $user);
-	    } 
-	}else {
-	    &Log::do_log('notice', 'unable to notify listmaster for error: "%s" : (no robot)',
+	    $robot->send_notify_to_listmaster('web_'.$type.'_error', $param);
+	} else {
+	    Log::do_log('notice',
+		'unable to notify listmaster for error: "%s" : (no robot)',
 		$error);
 	} 
     }

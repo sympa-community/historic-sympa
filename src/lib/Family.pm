@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =pod 
 
@@ -386,7 +385,7 @@ sub add_list {
 	close FIC;
 	unless (defined $config->createHash()) {
 	    push @{$return->{'string_error'}},
-		"Error in representation data with these xml data";
+		"Error in representation data with these XML data";
 	    return $return;
 	}
 
@@ -398,12 +397,12 @@ sub add_list {
 	$self, $self->{'robot'}, $abort_on_error);
     unless (defined $result) {
 	push @{$return->{'string_error'}},
-	    "Error during list creation, see logs for more informations";
+	    "Error during list creation, see logs for more information";
 	return $return;
     }
     unless (defined $result->{'list'}) {
 	push @{$return->{'string_error'}},
-	    "Errors : no created list, see logs for more informations";
+	    "Errors : no created list, see logs for more information";
 	return $return;
     }
     my $list = $result->{'list'};
@@ -451,7 +450,7 @@ sub add_list {
     unless (defined $error) {
 	$list->set_status_error_config('no_check_rules_family', $self->name);
 	push @{$return->{'string_error'}},
-	    "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
+	    "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 	return $return;
     }
 
@@ -468,7 +467,7 @@ sub add_list {
 	unless ($self->_copy_files($list->dir, "_new_list.xml")) {
 	    $list->set_status_error_config('error_copy_file', $self->name);
 	    push @{$return->{'string_info'}},
-		"Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+		"Impossible to copy the XML file in the list directory, the list is set in status error_config.";
 	}
     }
 
@@ -589,7 +588,7 @@ sub modify_list {
     close FIC;
     unless (defined $config->createHash()) {
 	push @{$return->{'string_error'}},
-	    "Error in representation data with these xml data";
+	    "Error in representation data with these XML data";
 	return $return;
     }
 
@@ -772,7 +771,7 @@ sub modify_list {
     unless (defined $error) {
 	$list->set_status_error_config('no_check_rules_family', $self->name);
 	push @{$return->{'string_error'}},
-	    "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
+	    "Impossible to check parameters constraint, see logs for more information. The list is set in status error_config";
 	return $return;
     }
 
@@ -789,7 +788,7 @@ sub modify_list {
     unless ($self->_copy_files($list->dir, "_mod_list.xml")) {
 	$list->set_status_error_config('error_copy_file', $self->name);
 	push @{$return->{'string_info'}},
-	    "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
+	    "Impossible to copy the XML file in the list directory, the list is set in status error_config.";
     }
 
     ## Synchronize list members if required
@@ -1151,7 +1150,7 @@ sub instantiate {
 
     if ($output && !$main::options{'quiet'}) {
 	print STDOUT
-	    "There is unread output from the instantiation proccess (aliasmanager messages ...), do you want to see it ? (y or n)";
+	    "There is unread output from the instantiation process (aliasmanager messages ...), do you want to see it ? (y or n)";
 	my $answer = <STDIN>;
 	chomp($answer);
 	$answer ||= 'n';
@@ -1285,7 +1284,7 @@ sub get_instantiation_results {
     unless ($#{$self->{'errors'}{'create_hash'}} < 0) {
 	push(
 	    @{$result->{'errors'}},
-	    "\nImpossible list generation because errors in xml file for : \n  "
+	    "\nImpossible list generation because errors in XML file for : \n  "
 		. join(", ", @{$self->{'errors'}{'create_hash'}}) . "\n"
 	);
     }
@@ -1301,7 +1300,7 @@ sub get_instantiation_results {
     unless ($#{$self->{'errors'}{'listname_already_used'}} < 0) {
 	push(
 	    @{$result->{'errors'}},
-	    "\nImpossible list creation because listname is already used (orphelan list or in another family) for : \n  "
+	    "\nImpossible list creation because list name is already used (orphan list or in another family) for : \n  "
 		. join(", ", @{$self->{'errors'}{'listname_already_used'}})
 		. "\n"
 	);
@@ -1318,7 +1317,7 @@ sub get_instantiation_results {
     unless ($#{$self->{'errors'}{'previous_list'}} < 0) {
 	push(
 	    @{$result->{'errors'}},
-	    "\nExisted lists from the lastest instantiation impossible to get and not anymore defined in the new instantiation : \n  "
+	    "\nExisted lists from the latest instantiation impossible to get and not anymore defined in the new instantiation : \n  "
 		. join(", ", @{$self->{'errors'}{'previous_list'}}) . "\n"
 	);
     }
@@ -3034,17 +3033,8 @@ sub _load_param_constraint_conf {
 	}
     }
     if ($error) {
-	unless (
-	    $self->robot->send_notify_to_listmaster(
-		'param_constraint_conf_error', [$file]
-	    )
-	    ) {
-	    &Log::do_log(
-		'notice',
-		'the owner isn\'t informed from param constraint config errors on the %s family',
-		$self->name
-	    );
-	}
+	$self->robot->send_notify_to_listmaster('param_constraint_conf_error',
+	    [$file]);
     }
     close FILE;
 
@@ -3137,7 +3127,7 @@ sub is_allowed_to_create_automatic_lists {
     } else {
 	&Log::do_log(
 	    'err',
-	    'Unconsistent scenario evaluation result for automatic list creation in family %s',
+	    'Inconsistent scenario evaluation result for automatic list creation in family %s',
 	    $self
 	);
 	return undef;
@@ -3276,7 +3266,7 @@ sub state {
     $self->{'state'};
 }
 
-=head1 Miscelaneous Methods
+=head1 Miscellaneous Methods
 
 =head2 get_id
 

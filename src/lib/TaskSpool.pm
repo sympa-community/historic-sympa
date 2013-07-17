@@ -17,14 +17,14 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package TaskSpool;
 
 use strict;
 
 use Exporter;
+use SympaspoolClassic;
 #use Time::Local; # no longer used
 # tentative
 use Data::Dumper;
@@ -32,17 +32,16 @@ use Data::Dumper;
 #use Task; # this module is used by Task
 #use List; # used by Task
 
-our @ISA = qw(Exporter);
+our @ISA = qw(SympaspoolClassic Exporter);
 our @EXPORT = qw(%global_models %months);
 
 my @task_list;
 my %task_by_list;
 my %task_by_model;
 
-my $taskspool ;
-
 my @tasks; # list of tasks in the spool
 
+our $filename_regexp = '^(\d+)\.([^\.]+)?\.([^\.]+)\.(\S+)$';
 ## list of list task models
 #my @list_models = ('expire', 'remind', 'sync_include');
 our @list_models = ('sync_include','remind');
@@ -69,24 +68,81 @@ our %months = ('Jan', 0, 'Feb', 1, 'Mar', 2, 'Apr', 3, 'May', 4,  'Jun', 5,
 #### Spool level subs ####
 ##########################
 
-# Initialize Sympaspool global object.
-sub set_spool {
-    $taskspool = new Sympaspool('task');
+sub new {
+    Log::do_log('debug2', '(%s, %s)', @_);
+    return shift->SUPER::new('task', shift);
 }
 
-## Build all Task objects
-sub list_tasks {
+sub get_storage_name {
+    my $self = shift;
+    my $filename;
+    my $param = shift;
+    my $object = "_global";
+    my $date = $param->{'task_date'};
+    $date ||= time;
+    $filename = $date.'.'.$param->{'task_label'}.'.'.$param->{'task_model'}.'.'.$param->{'task_object'};
+    return $filename;
+}
 
-    &Log::do_log('debug',"Listing all tasks");
-    my $spool_task = Site->queuetask;
+sub analyze_file_name {
+    Log::do_log('debug3', '(%s, %s, %s)', @_);
+    my $self = shift;
+    my $key  = shift;
+    my $data = shift;
+
+    unless($key =~ /$filename_regexp/){
+	Log::do_log('err',
+	'File %s name does not have the proper format', $key);
+	return undef;
+    }
+    $data->{'task_date'} = $1;
+    $data->{'task_label'} = $2;
+    $data->{'task_model'} = $3;
+    $data->{'task_object'} = $4;
+    Log::do_log('debug3', 'date %s, label %s, model %s, object %s',
+	$data->{'task_date'}, $data->{'task_label'}, $data->{'task_model'},
+	$data->{'task_object'});
+    unless ($data->{'task_object'} eq '_global') {
+	($data->{'list'}, $data->{'robot'}) =
+	    split /\@/, $data->{'task_object'};
+    }
+    
+    $data->{'list'} = lc($data->{'list'});
+    $data->{'robot'} = lc($data->{'robot'});
+    return undef
+	unless $data->{'robot_object'} = Robot->new($data->{'robot'});
+
+    my $listname;
+    #FIXME: is this needed?
+    ($listname, $data->{'type'}) =
+	$data->{'robot_object'}->split_listname($data->{'list'});
+    if (defined $listname) {
+	$data->{'list_object'} =
+	    List->new($listname, $data->{'robot_object'}, {'just_try' => 1});
+    }
+
+    return $data;
+}
+
+# Initialize Sympaspool global object.
+#NO LONGER USED.
+#sub set_spool {
+#    $taskspool = new TaskSpool;
+#}
+
+## Build all Task objects
+# Internal use.
+sub list_tasks {
+    Log::do_log('debug2', '(%s)', @_);
+    my $self = shift;
+
     ## Reset the list of tasks
     undef @task_list;
     undef %task_by_list;
     undef %task_by_model;
 
     # fetch all task
-    my $taskspool = new Sympaspool ('task');
-    my @tasks = $taskspool->get_content({'selector'=>{}});
+    my @tasks = $self->get_content();
 
     ## Create Task objects
     foreach my $t (@tasks) {
@@ -104,14 +160,16 @@ sub list_tasks {
 }
 
 ## Return a list tasks for the given list
-sub get_tasks_by_list {
-    my $list_id = shift;
-    &Log::do_log('debug',"Getting tasks for list '%s'",$list_id);
-    return () unless (defined $task_by_list{$list_id});
-    return values %{$task_by_list{$list_id}};
-}
+# NO LONGER USED.
+#sub get_tasks_by_list {
+#    my $list_id = shift;
+#    &Log::do_log('debug',"Getting tasks for list '%s'",$list_id);
+#    return () unless (defined $task_by_list{$list_id});
+#    return values %{$task_by_list{$list_id}};
+#}
 
 ## Returns a hash containing the model used. The models returned are all the global models or, if a list name is given as argument, the models used for this list.
+# Internal use.
 sub get_used_models {
     ## Optional list parameter
     my $list_id = shift;
@@ -132,15 +190,20 @@ sub get_used_models {
 }
 
 ## Returns a ref to @task_list, previously defined in the "list_task" sub.
-sub get_task_list {
-    &Log::do_log('debug',"Getting tasks list");
-    return @task_list;
-}
+# NO LONGER USED.
+#sub get_task_list {
+#    &Log::do_log('debug',"Getting tasks list");
+#    return @task_list;
+#}
 
 ## Checks that all the required tasks at the server level are defined. Create them if needed.
 sub create_required_tasks {
+    Log::do_log('debug2', '(%s)', @_);
     my $current_date = shift;
-    &Log::do_log('debug','Creating required tasks from models');
+
+    my $taskspool = TaskSpool->new();
+    $taskspool->list_tasks();
+
     my %default_data = ('creation_date' => $current_date, # hash of datas necessary to the creation of tasks
 			'execution_date' => 'execution_date');
     create_required_global_tasks({'data' => \%default_data,'current_date' => $current_date});
@@ -226,11 +289,9 @@ sub create_required_lists_tasks {
 
 sub creation_error {
     my $message = shift;
-    &Log::do_log('err',$message);
-    unless (Site->send_notify_to_listmaster('Task creation error', $message)) {
-	&Log::do_log('notice','error while notifying listmaster about "Task creation error"');
-    }
+    Log::do_log('err', $message);
+    Site->send_notify_to_listmaster('task_creation_error', $message);
 }
 
 ## Packages must return true.
-return 1;
+1;

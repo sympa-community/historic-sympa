@@ -512,7 +512,7 @@ our %pinfo = (
 
     'merge_feature' => {
 	'group'      => 'sending',
-	'gettext_id' => "Allow message personnalization",
+	'gettext_id' => "Allow message personalization",
 	'format'     => ['on', 'off'],
 	'occurence'  => '0-1',
 	'default'    => {'conf' => 'merge_feature'}
@@ -1032,7 +1032,7 @@ our %pinfo = (
 	    'attrs' => {
 		'order'      => 8,
 		'gettext_id' => "extracted attribute",
-		'format'     => '\w+(\s*,\s*\w+)?',
+		'format'     => '[-.\w]+(;[-\w]+)*(\s*,\s*[-.\w]+(;[-\w]+)*)?',
 		'default'    => 'mail',
 		'length'     => 50
 	    },
@@ -1133,7 +1133,7 @@ our %pinfo = (
 	    'attrs1' => {
 		'order'      => 8,
 		'gettext_id' => "first-level extracted attribute",
-		'format'     => '\w+',
+		'format'     => '[-.\w]+(;[-\w]+)*',
 		'length'     => 15
 	    },
 	    'select1' => {
@@ -1177,7 +1177,7 @@ our %pinfo = (
 	    'attrs2' => {
 		'order'      => 15,
 		'gettext_id' => "second-level extracted attribute",
-		'format'     => '\w+(\s*,\s*\w+)?',
+		'format'     => '[-.\w]+(;[-\w]+)*(\s*,\s*[-.\w]+(;[-\w]+)*)?',
 		'default'    => 'mail',
 		'length'     => 50
 	    },
@@ -1381,7 +1381,7 @@ our %pinfo = (
 	    'attrs' => {
 		'order'      => 8,
 		'gettext_id' => "extracted attribute",
-		'format'     => '\w+',
+		'format'     => '[-.\w]+(;[-\w]+)*',
 		'default'    => 'mail',
 		'length'     => 15
 	    },
@@ -1488,7 +1488,7 @@ our %pinfo = (
 	    'attrs1' => {
 		'order'      => 8,
 		'gettext_id' => "first-level extracted attribute",
-		'format'     => '\w+',
+		'format'     => '[-.\w]+(;[-\w]+)*',
 		'length'     => 15
 	    },
 	    'select1' => {
@@ -1532,7 +1532,7 @@ our %pinfo = (
 	    'attrs2' => {
 		'order'      => 15,
 		'gettext_id' => "second-level extracted attribute",
-		'format'     => '\w+',
+		'format'     => '[-.\w]+(;[-\w]+)*',
 		'default'    => 'mail',
 		'length'     => 15
 	    },
@@ -1672,7 +1672,7 @@ our %pinfo = (
 		'order'      => 1,
 		'gettext_id' => "File path for list DKIM private key",
 		'gettext_comment' =>
-		    "The file must contain a RSA pem encoded private key",
+		    "The file must contain a RSA PEM encoded private key",
 		'format'    => '\S+',
 		'occurence' => '0-1',
 		'default'   => {'conf' => 'dkim_private_key_path'}

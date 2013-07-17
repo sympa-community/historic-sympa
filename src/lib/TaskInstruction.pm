@@ -18,8 +18,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package TaskInstruction;
 
@@ -294,7 +293,7 @@ sub cmd_process {
     my $self = shift;
     my $task = shift;# The parsed instruction to execute.
 
-    my $taskasstring = $task->{'taskasstring'};
+    my $messageasstring = $task->{'messageasstring'};
 
     &Log::do_log('debug', 'Processing "%s" (line %d of task %s)', $self->{'line_as_string'}, $self->{'line_number'},$task->get_description);
 
@@ -496,7 +495,7 @@ sub delete_subs_cmd {
 			return undef;
 		} else {
 			unless (my $u = $list->delete_list_member ($email)) {
-				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Deletion of $email frome list $list->get_list_id failed"});
+				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Deletion of $email from list $list->get_list_id failed"});
 			}else{
 				&Log::do_log ('notice', "--> $email deleted");
 				$selection{$email} = {};
@@ -617,7 +616,7 @@ sub purge_logs_table {
 	}
 
     for (my $j=1; $j <= scalar(@slots); $j++){
-		&Log::aggregate_data($slots[$j-1], $slots[$j]);
+	Log::aggregate_data($slots[$j-1], ($slots[$j] || $date_end));
     }
     #-------------------------------------------------------------------
 
@@ -1011,7 +1010,7 @@ sub purge_orphan_bounces {
 	 chomp ($date);
 
 	 unless ($date) {
-		 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Can't get expiration date for $file crl file by using the crl openssl command"});
+		 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Can't get expiration date for $file CRL file by using the crl openssl command"});
 	     next;
 	 }
 
@@ -1028,7 +1027,7 @@ sub purge_orphan_bounces {
 
 	 if (&Scenario::verify ($verify_context, $condition) == 1) {
 	     unlink ($file);
-	     &Log::do_log ('notice', "--> updating of the $file crl file");
+	     &Log::do_log ('notice', "--> updating of the $file CRL file");
 	     my $cmd = "wget -O \'$file\' \'$url\'";
 	     open CMD, "| $cmd";
 	     close CMD;

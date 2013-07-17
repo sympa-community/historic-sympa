@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Sympa::DatabaseDescription;
 use strict;
@@ -236,11 +235,6 @@ my %full_db_struct = (
 		'doc'=>'the date a message is copied in spool table',
 		'order'=>6,
 	    },
-	    'message_spool' => {
-		'struct'=> 'longtext',
-		'doc'=>'message as string b64 encoded',
-		'order'=>7,
-	    },
 	    'messagelock_spool' => {
 		'struct'=> 'varchar(90)',
 		'doc'=>'a unique string for each process : $$@hostname',
@@ -275,11 +269,6 @@ my %full_db_struct = (
 		'struct'=> 'varchar(80)',
 		'doc'=>'the message header date',
 		'order'=>14,
-	    },
-	    'create_list_if_needed_spool'=> {
-		'struct'=> 'int(1)',
-		'doc'=>'set to 1 if message is related to a dynamic list, set to 0 if list as been created or if list is static',
-		'order'=>15,
 	    },
 	    'subject_spool'=>{
 		'struct'=> 'varchar(110)',
@@ -351,93 +340,98 @@ my %full_db_struct = (
 		'doc'=>'DKIM parameter stored for bulk daemon because bulk ignore list parameters, DKIM i signature parameter',
 		'order'=>38,
 	    },
+	    'message_spool' => {
+		'struct'=> 'longtext',
+		'doc'=>'message as string b64 encoded',
+		'order'=>99, # long field should be the last column on Oracle.
+	    },
 	},
 	'doc'=>'This table is created in version 6.2. It replace most of spools on file system for clustering purpose',
 	'order'=>3,	    
     },
-    'bulkmailer_table' => {
+    'bulkpacket_table' => {
 	'fields' => {
-	    'messagekey_bulkmailer' => {
-		'struct'=> 'varchar(80)',
-		'doc'=>'A pointer to a message in spool_table.It must be a value of a line in table spool_table with same value as messagekey_spool',
+	    'messagekey_bulkpacket' => {
+		'struct'=> 'bigint(20)',
+		'doc'=>'A pointer to a message in spool_table.  It must be a value of a line in table spool_table with same value as messagekey_spool',
 		'primary'=>1,
 		'not_null'=>1,
 		'order'=>1,
 	    },
-	    'packetid_bulkmailer' => {
+	    'packetid_bulkpacket' => {
 		'struct'=> 'varchar(33)',
 		'doc'=>'An id for the packet',
 		'primary'=>1,
 		'not_null'=>1,
 		'order'=>2,
 	    },
-	    'messageid_bulkmailer' => {
+	    'messageid_bulkpacket' => {
 		'struct'=> 'varchar(200)',
 		'doc'=>'The message Id',
 		'order'=>3,
 	    },
-	    'receipients_bulkmailer' => {
+	    'recipients_bulkpacket' => {
 		'struct'=> 'text',
-		'doc'=>'the comma separated list of receipient email for this message',
+		'doc'=>'the comma separated list of recipient email for this message',
 		'order'=>4,
 	    },
-	    'returnpath_bulkmailer' => {
+	    'returnpath_bulkpacket' => {
 		'struct'=> 'varchar(100)',
 		'doc'=>'the return path value that must be set when sending the message',
 		'order'=>5,
 	    },
-	    'robot_bulkmailer' => {
+	    'robot_bulkpacket' => {
 		'struct'=> 'varchar(80)',
 		'doc'=>'',
 		'order'=>6,
 	    },
-	    'listname_bulkmailer' => {
+	    'listname_bulkpacket' => {
 		'struct'=> 'varchar(50)',
 		'doc'=>'',
 		'order'=>7,
 	    },
-	    'verp_bulkmailer' => {
+	    'verp_bulkpacket' => {
 		'struct'=> 'int(1)',
 		'doc'=>'A boolean to specify if VERP is requiered, in this cas return_path will be formated using verp form',
 		'order'=>8,
 	    },
-	    'tracking_bulkmailer' => {
+	    'tracking_bulkpacket' => {
 		'struct'=> "enum('mdn','dsn')",
 		'doc'=>'Is DSN or MDM requiered when sending this message?',
 		'order'=>9,
 	    },
-	    'merge_bulkmailer' => {
+	    'merge_bulkpacket' => {
 		'struct'=> 'int(1)',
-		'doc'=>'Boolean, if true, the message is to be parsed as a TT2 template foreach receipient',
+		'doc'=>'Boolean, if true, the message is to be parsed as a TT2 template foreach recipient',
 		'order'=>10,
 	    },
-	    'priority_message_bulkmailer' => {
+	    'priority_message_bulkpacket' => {
 		'struct'=> 'smallint(10)',
 		'doc'=>'FIXME',
 		'order'=>11,
 	    },
-	    'priority_packet_bulkmailer' => {
+	    'priority_packet_bulkpacket' => {
 		'struct'=> 'smallint(10)',
 		'doc'=>'FIXME',
 		'order'=>12,
 	    },
-	    'reception_date_bulkmailer' => {
+	    'reception_date_bulkpacket' => {
 		'struct'=> 'int(11)',
 		'doc'=>'The date where the message was received',
 		'order'=>13,
 	    },
-	    'delivery_date_bulkmailer' => {
+	    'delivery_date_bulkpacket' => {
 		'struct'=> 'int(11)',
 		'doc'=>'The date the message was sent',
 		'order'=>14,
 	    },
-	    'lock_bulkmailer' => {
+	    'lock_bulkpacket' => {
 		'struct'=> 'varchar(30)',
-		'doc'=>'A lock. It is set as process-number @ hostname so multiple bulkmailer can handle this spool',
+		'doc' => 'A lock. It is set as process-number @ hostname so multiple bulk mailers can handle this spool',
 		'order'=>15,
 	    },
 	},
-	'doc'=>'storage of receipients with a ref to a message in spool_table. So a very simple process can distribute them',
+	'doc'=>'storage of recipients with a ref to a message in spool_table. So a very simple process can distribute them',
 	'order'=>4,
     },
     'exclusion_table' => {
@@ -486,51 +480,55 @@ my %full_db_struct = (
 		'not_null'=>1,
 		'order'=>1,
 	    },
+	    'prev_id_session' => {
+		'struct' => 'varchar(30)',
+		'doc' => 'previous identifier of the database record',
+		'order' => 2,
+	    },
 	    'start_date_session' => {
 		'struct'=> 'int(11)',
 		'doc'=>'the date when the session was created',
 		'not_null'=>1,
-		'order'=>2,
+		'order' => 3,
 	    },
 	    'date_session' => {
 		'struct'=> 'int(11)',
 		'doc'=>'date epoch of the last use of this session. It is used in order to expire old sessions',
 		'not_null'=>1,
-		'order'=>3,
+		'order' => 4,
 	    },
 	    'refresh_date_session' => {
 		'struct' => 'int(11)',
 		'doc' => 'date epoch of the last refresh of this session.  It is used in order to refresh available sessions',
-		'not_null' => 1,
-		'order' => 4,
+		'order' => 5,
 	    },
 	    'remote_addr_session' => {
 		'struct'=> 'varchar(60)',
 		'doc'=>'The IP address of the computer from which the session was created',
-		'order' => 5,
+		'order' => 6,
 	    },
 	    'robot_session'  => {
 		'struct'=> 'varchar(80)',
 		'doc'=>'The virtual host in which the session was created',
-		'order' => 6,
+		'order' => 7,
 	    },
 	    'email_session'  => {
 		'struct'=> 'varchar(100)',
 		'doc'=>'the email associated to this session',
-		'order' => 7,
+		'order' => 8,
 	    },
 	    'hit_session' => {
 		'struct'=> 'int(11)',
 		'doc'=>'the number of hit performed during this session. Used to detect crawlers',
-		'order' => 8,
+		'order' => 9,
 	    },
 	    'data_session'  => {
 		'struct'=> 'text',
 		'doc'=>'parameters attached to this session that don\'t have a dedicated column in the database',
-		'order' => 9,
+		'order' => 10,
 	    },
 	},
-	'doc' => 'management of HTTP session',
+	'doc'=>'management of HTTP session',
 	'order' => 6,
     },
     'one_time_ticket_table' => {
@@ -585,12 +583,12 @@ my %full_db_struct = (
 	    },
 	    'recipient_notification' => {
 		'struct'=> 'varchar(100)',
-		'doc'=>'email adresse of receipient for which a DSN or MDM was received',
+		'doc'=>'email address of recipient for which a DSN or MDM was received',
 		'order'=>3,
 	    },
 	    'reception_option_notification' => {
 		'struct'=> 'varchar(20)',
-		'doc'=>'The subscription option of the subscriber when the related message was sent to the list. Ussefull because some receipient may have option such as //digest// or //nomail//',
+		'doc'=>'The subscription option of the subscriber when the related message was sent to the list. Useful because some recipient may have option such as //digest// or //nomail//',
 		'order'=>4,
 	    },
 	    'status_notification' => {
@@ -608,11 +606,6 @@ my %full_db_struct = (
 		'doc'=>'Type of the notification (DSN or MDM)',
 		'order'=>7,
 	    },
-	    'message_notification' => {
-		'struct'=> 'longtext',
-		'doc'=>'The DSN or the MDN itself',
-		'order'=>8,
-	    },
 	    'list_notification' => {
 		'struct'=> 'varchar(50)',
 		'doc'=>'The listname the messaage was issued for',
@@ -626,7 +619,14 @@ my %full_db_struct = (
 	    'date_notification' => {
 		'struct'=> 'int(11)',
 		'doc'=>'FIXME',
-		'not_null'=>1},		    
+		'not_null'=>1,
+	        'order' => 11,
+	    },
+	    'message_notification' => {
+		'struct'=> 'longtext',
+		'doc'=>'The DSN or the MDN itself',
+		'order'=>99, # long field should be the last column on Oracle.
+	    },
 	},
 	'doc' => 'used for message tracking feature. If the list is configured for tracking, outgoing messages include a delivery status notification request and optionnaly a return receipt request.When DSN MDN are received by Syamp, they are store in this table in relation with the related list and message_id',
 	'order' => 8,

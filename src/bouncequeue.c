@@ -16,8 +16,8 @@
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <stdio.h>
 #include <ctype.h>
@@ -25,6 +25,10 @@
 #include <sysexits.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <time.h>
 
 static char     qfile[128];
 static char     buf[16384];
@@ -49,11 +53,11 @@ readconf(char *file)
    if ((f = fopen(file, "r")) != NULL) {
       while (fgets(buf, sizeof buf, f) != NULL) {
 	/* Search for the configword "queuebounce" and a whitespace after it */
-	if (strncmp(buf, "queue", 5) == 0 && isspace(buf[5])) {
+	if (strncmp(buf, "queuebounce", 11) == 0 && isspace(buf[11])) {
             /* Strip the ending \n */
             if ((p = strrchr((char *)buf, '\n')) != NULL)
                *p = '\0';
-            p = buf + 5;
+            p = buf + 11;
             while (*p && isspace(*p)) p++;
             if (*p != '\0')
                r = p;
@@ -73,7 +77,7 @@ readconf(char *file)
          strcpy(s, r);
    }
    else
-      s = SPOOLDIR "/msg";
+      s = SPOOLDIR "/bounce";
    return s;
 }
 
@@ -85,9 +89,8 @@ int
 main(int argn, char **argv)
 {
    char	*bouncedir;
-   char        *listname;
-   unsigned int		priority;
-   int			firstline = 1;
+   char *listname;
+   int	firstline = 1;
 
    /* Usage : bouncequeue list-name */
    if (argn != 2) {
@@ -104,7 +107,8 @@ main(int argn, char **argv)
       exit(EX_NOPERM);
    }
    umask(027);
-   snprintf(qfile, sizeof(qfile), "T.Sympa_Bounce.%s.%ld.%d", listname, time(NULL), getpid());
+   snprintf(qfile, sizeof(qfile), "T.%s.%ld.%d", listname,
+	    (unsigned long int)time(NULL), getpid());
    fd = open(qfile, O_CREAT|O_WRONLY, 0600);
    if (fd == -1)
       exit(EX_TEMPFAIL);
@@ -125,10 +129,3 @@ main(int argn, char **argv)
    sleep(1);
    exit(0);
 }
-
-
-
-
-
-
-

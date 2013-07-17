@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Copyright 1999 Comité Réseaux des Universités
 ## web interface to Sympa mailing lists manager
@@ -30,11 +29,11 @@
 
 =head1 NAME
 
-wwsympa.fcgi - Sympa web interface 
+wwsympa, wwsympa.fcgi - Sympa web interface 
 
 =head1 DESCRIPTION 
 
-This fcgi script completely handles all aspects of the Sympa web interface
+This FastCGI script completely handles all aspects of the Sympa web interface
 
 =cut 
 
@@ -44,9 +43,9 @@ use lib '--modulesdir--';
 do '/home/sympa/ext/DEVEL.pm';
 
 use strict;
+#use warnings; #temporarily disabled
 use Getopt::Long;
 use Archive::Zip qw(:ERROR_CODES);
-##XXXuse strict 'vars';
 use Time::Local;
 # tentative
 use Data::Dumper;
@@ -59,6 +58,7 @@ use List;
 use Commands;
 use Language qw(gettext gettext_strftime);
 #use Log; # used by Conf
+#use Message: # used by List
 use Auth;
 use admin;
 use SharedDocument;
@@ -71,15 +71,10 @@ use time_utils;
 use wwslib;
 use cookielib;
 #use tt2;
-#use DateTime;
 use tracking;
 #use Sympaspool; # used in List - Task
 #use SDM; # used by Conf
-
-#use open ':utf8'; ## Default is to consider files utf8 
-
-#use Mail::Header; # no need to import
-#use Mail::Address; # no longer used
+use Messagespool;
 
 my $crypt_openssl_x509_ok;
 BEGIN {
@@ -955,7 +950,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 		 );
 
 ## Set locale configuration	 
-$Language::default_lang = Site->lang;	 
+Language::SetLang(Site->lang);
 
 ## Important to leave this there because it defined defaults for user_data_source
 &SDM::check_db_connect();
@@ -1008,8 +1003,9 @@ Log::do_log(info => "WWSympa started, process $$");
      undef $ajax;
      undef $session;
 
-     &Log::set_log_level(Site->log_level);
-     &Language::SetLang($Language::default_lang);
+    Log::set_log_level(Site->log_level);
+    # auto-detect browsers' lang.
+    Language::SetLang(Site->best_language());
 
      ## Empty cache of the List.pm module
      &List::init_list_cache();
@@ -1024,7 +1020,7 @@ Log::do_log(info => "WWSympa started, process $$");
      }
 
      ## We set the real UID with the effective UID value
-     ## It is usefull to allow execution of scripts like alias_manager
+     ## It is useful to allow execution of scripts like alias_manager
      ## that otherwise might loose the benefit of SetUID
      $< = $>; ## UID
      $( = $); ## GID
@@ -1137,6 +1133,8 @@ Log::do_log(info => "WWSympa started, process $$");
 				     'template_content' => 1,
 				     'html_dumpvars' => 1,
 				     'html_editor_init' => 1,
+				     'html_editor_hide' => 1,
+				     'html_editor_show' => 1,
 				     };
      ## Hash defining the parameters where HTML must be filtered.
      $param->{'htmlToFilter'} = {
@@ -1310,7 +1308,7 @@ Log::do_log(info => "WWSympa started, process $$");
 		     ## skip cas server where client as been already redirect to the list of cas servers already checked is stored in the session
 		     ## the check below works fine as long as we don't have more then 10 CAS servers (because we don't properly split the list of values)
 		    my $cas_id =
-			Site->cas_id->{$robot_id}{$auth_service->{'auth_service_name'}};
+			Site->cas_id->{$robot_id}{$auth_service->{'auth_service_name'}}{'id'};
 		    &Log::do_log ('debug',
 			'check_cas checker_cas : %s current cas_id %s',
 			$session->{'checked_cas'}, $cas_id
@@ -1400,8 +1398,6 @@ Log::do_log(info => "WWSympa started, process $$");
      $param->{'remote_addr'} = $ENV{'REMOTE_ADDR'} ;
      $param->{'remote_host'} = $ENV{'REMOTE_HOST'};
      $param->{'http_user_agent'} = $ENV{'HTTP_USER_AGENT'};
-     $param->{'htmlarea_url'} = Site->htmlarea_url ;
-     # if (Site->export_topics =~ /all/i);
 
      if ($in{'action'} eq 'css') {
 	 &do_css();
@@ -1423,13 +1419,19 @@ Log::do_log(info => "WWSympa started, process $$");
 	     $param->{'host'} ||= $robot_id;
 	     $param->{'domain'} = $list->domain if (ref($list) eq 'List');
 	     
-	    ## language FIXME: $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !
-	     $param->{'list_lang'} = $list->lang if ref $list eq 'List';
-	     $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});	     
-	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || $robot->lang;	     
-
-	     $param->{'locale'} = &Language::SetLang($param->{'lang'});
-	    $param->{'lang_tag'} = &Language::LanguageTag($param->{'lang'});
+	    ## Get best language
+	    $param->{'list_lang'} = $list->lang
+		if ref $list eq 'List';
+	    $param->{'user_lang'} = $param->{'user'}{'lang'}
+		if ref $param->{'user'};
+	    foreach my $lang (
+		$session->{'lang'}, $param->{'user_lang'},
+		$param->{'list_lang'}, $robot->lang, $robot->best_language()
+	    ) {
+		next unless $lang;
+		last if $param->{'lang'} = Language::SetLang(
+		    $lang, 'just_try' => 1);
+	    }
 
 	    ## list topics	     
 	    export_topics($robot);
@@ -1539,9 +1541,18 @@ Log::do_log(info => "WWSympa started, process $$");
      $param->{'action_type'} = $action_type{$param->{'action'}};
 
      $param->{'action_type'} = 'none' unless (($param->{'is_priv'})||($param->{'action_type'} eq 'serveradmin'));
-     $param->{'lang'} ||= $param->{'user'}{'lang'} if (defined $param->{'user'});
-     $param->{'lang'} ||= $robot->lang;
-    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
+
+    $param->{'user_lang'} = $param->{'user'}{'lang'}
+	if ref $param->{'user'};
+    $param->{'list_lang'} = $list->lang
+	if ref $list eq 'List';
+    foreach my $lang (
+	$param->{'lang'}, $param->{'user_lang'}, $param->{'list_lang'},
+	$robot->lang, $robot->best_language()
+    ) {
+	next unless $lang;
+	last if $param->{'lang'} = Language::SetLang($lang, 'just_try' => 1);
+    }
 
      if ($param->{'list'}) {
 	 $param->{'list_title'} = $list->subject;
@@ -1565,32 +1576,32 @@ Log::do_log(info => "WWSympa started, process $$");
          if $oauth_token ne '' && $session->{'email'} eq 'nobody';
 
      ## store in session table this session contexte
-    my $session_stored = $session->store();
+     $session->store();
+
      ## Do not manage cookies at this level if content was already sent
-    if ($session_stored and
-	! ($param->{'bypass'} eq 'extreme' or $param->{'action'} eq 'css' or
-	$maintenance_mode or $rss or $ajax)) {
+     unless ($param->{'bypass'} eq 'extreme' ||
+	     $param->{'action'} eq 'css' ||
+	     $maintenance_mode ||
+	     $rss||$ajax) {
 
 	 my $delay = $param->{'user'}{'cookie_delay'};
 	 unless (defined $delay) {
 	     $delay = Site->cookie_expire;
 	 }
+
 	 if ($delay == 0) {
 	     $delay = 'session';
 	 }
 
-	##if ($param->{'use_ssl'} || $session->renew()) {
-	if ($session->renew()) {
-	    unless ($session->set_cookie($param->{'cookie_domain'},
-		$delay, $param->{'use_ssl'})) {
-		wwslog('notice', 'Could not set HTTP cookie');
-	    }
-	}
-    }
+	 $session->renew() unless ($param->{'use_ssl'});
 
-    if (defined $session_stored) {
+	 unless ($session->set_cookie($param->{'cookie_domain'},$delay,$param->{'use_ssl'})) {
+	     &wwslog('notice', 'Could not set HTTP cookie');
+	 }
+
 	 ## Set cookies "your_subscribtions" unless in one list page
 	 if ($param->{'user'}{'email'} && ref($list) ne 'List') {
+
 	    ## In case get_which was not set.
 	    ## The get_which will be limited at most (your_lists_size + 1).
 	    my %limit_which = ();
@@ -1668,27 +1679,23 @@ Log::do_log(info => "WWSympa started, process $$");
 	  #}
      }
 	 
-     ## Available languages
-     my $saved_lang = &Language::GetLang();
+    ## Available languages
+    my $saved_lang = Language::GetLang();
 
+    foreach my $l ($robot->supported_languages) {
+	Language::SetLang($l) || next;
 
-     foreach my $l ($robot->supported_languages) {
-	 &Language::SetLang($l) || next;
+	$param->{'languages'}{$l}{'complete'} =
+	    Language::GetLangName($l) || $l;
 
-	 if (gettext("_language_")) {
-	     $param->{'languages'}{$l}{'complete'} = gettext("_language_");
-	 }else {
-	     $param->{'languages'}{$l}{'complete'} = $l;
-	 }
+	if ($param->{'lang'} eq $l) {
+	    $param->{'languages'}{$l}{'selected'} = 'selected="selected"';
+	} else {
+	    $param->{'languages'}{$l}{'selected'} = '';
+	}
+    }
 
-	 if ($param->{'locale'} eq $l) {
-	     $param->{'languages'}{$l}{'selected'} = 'selected="selected"';
-	 }else {
-	     $param->{'languages'}{$l}{'selected'} = '';
-	 }
-     }
-
-     &Language::SetLang($saved_lang);
+    Language::SetLang($saved_lang);
 
      $param->{'html_dumpvars'} = &tools::dump_html_var($param) if ($session->{'dumpvars'});
 
@@ -1754,9 +1761,9 @@ Log::do_log(info => "WWSympa started, process $$");
  	     $param->{'list_conf'} = $list->admin;
  	 }
 
-	my $locale = Language::Lang2Locale($param->{'lang'});
 	my $tt2_include_path =
-	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
+	    ($list || $robot)->get_etc_include_path('web_tt2',
+		$param->{'lang'});
 
         unshift @$tt2_include_path, $plugins->tt2Paths
             if $plugins;
@@ -1786,9 +1793,9 @@ Log::do_log(info => "WWSympa started, process $$");
  	     $param->{'list_conf'} = $list->admin;
  	 }
 
-	my $locale = Language::Lang2Locale($param->{'lang'});
 	my $tt2_include_path =
-	    ($list || $robot)->get_etc_include_path('web_tt2', $locale);
+	    ($list || $robot)->get_etc_include_path('web_tt2',
+		$param->{'lang'});
 
         unshift @$tt2_include_path, $plugins->tt2Paths
             if $plugins;
@@ -2549,14 +2556,17 @@ sub send_html {
 
     ## Send HTML headers
     if ($param->{'date'}) {
-	Language::PushLang("en");
-	printf "Date: %s\n", &POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
+	Language::PushLang('en');
+	printf "Date: %s\n",
+	    POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
 	Language::PopLang();
     }
     ## If we set the header indicating the last time the file to send was modified, add an HTTP header (limitate web harvesting).
     if ($param->{'header_date'}) {
-	Language::PushLang("en");
-	printf "Last-Modified: %s\n", &POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT', gmtime($param->{'header_date'}));
+	Language::PushLang('en');
+	printf "Last-Modified: %s\n",
+	    POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT',
+		gmtime($param->{'header_date'}));
 	Language::PopLang();
     }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
@@ -2595,7 +2605,8 @@ sub send_html {
     }
 
     # XSS escaping applied to all outgoing parameters.
-    my $param_copy = &tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
+    ## Escape parameters on a copy to avoid altering useful data.
+    my $param_copy = tools::dup_var($param);
     if(defined $param_copy) {
 	unless(tools::sanitize_var('var' => $param_copy,
 				    'robot' => $robot,
@@ -2640,9 +2651,9 @@ sub send_html {
 	}
     }
 
-    my $locale = Language::Lang2Locale($param->{'lang'});
-
     # per-locale CSS.
+    # FIXME: include language paths, not only old locale paths.
+    my $locale = Language::Lang2Locale_old($param->{'lang'});
     my $locale_css;
     if (($list || $robot)->get_etc_filename(
 	'web_tt2/' . $locale . '/css.tt2'
@@ -2659,7 +2670,7 @@ sub send_html {
 
     ## Now include locale paths.
     $tt2_include_path =
-	($list || $robot)->get_etc_include_path('web_tt2', $locale);
+	($list || $robot)->get_etc_include_path('web_tt2', $param->{'lang'});
 
     ## Restore special paths.
     foreach my $dir (@added_include_path) {
@@ -2700,9 +2711,6 @@ sub prepare_report_user {
     $param->{'notices'} = &report::get_notice_web();
     $param->{'errors'} = &report::is_there_any_reject_report_web();
 }
-    
-    
-
 
 =pod 
 
@@ -2810,7 +2818,7 @@ sub check_param_in {
 	$param->{'list'} = $list->name;
 	$param->{'subtitle'} = $list->subject;
 	$param->{'subscribe'} = $list->subscribe->{'name'};
-	$param->{'send'} = $list->send->{'title'}{$param->{'lang'}}; #FIXME
+	$param->{'send'} = $list->send->get_current_title() if $list->send;
 
 	# Pictures are not available unless it is configured for the list and the robot
  	if ($list->pictures_feature eq 'off') {
@@ -2873,9 +2881,6 @@ sub check_param_in {
 	    
             $param->{'mod_subscription'} = $list->get_subscription_request_count();
 	    $param->{'mod_signoff'} = $list->get_signoff_request_count();
-
-	    $param->{'doc_mod_list'} = $list->get_shared_moderated();
-	    $param->{'mod_total_shared'} = $#{$param->{'doc_mod_list'}} + 1;
 
 	    $param->{'doc_mod_list'} = $list->get_shared_moderated();
 	    $param->{'mod_total_shared'} = $#{$param->{'doc_mod_list'}} + 1;
@@ -3433,11 +3438,18 @@ sub do_login {
      if ($session->{'lang'}) {   #  user did choose a specific language before being logged. Apply it as a user pref.
 	 User::update_global_user($param->{'user'}{'email'},{lang=>$session->{'lang'}}) ;
 	 $param->{'lang'} = $session->{'lang'};
-     }else{                      # user did not choose a specific language, apply user pref for this session. 
-	 $param->{'lang'} = $user->{'lang'} || ($list || $robot)->lang;
-	 $session->{'lang'} = $param->{'lang'} ;
+     }else{
+	# user did not choose a specific language, apply user pref for this
+	# session. 
+	foreach my $lang (
+	    $user->{'lang'}, ($list || $robot)->lang, $robot->best_language()
+	) {
+	    next unless $lang;
+	    last if $param->{'lang'} = Language::SetLang($lang,
+		'just_try' => 1);
+	}
+	$session->{'lang'} = $param->{'lang'} ;
      }
-    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($session->{'review_page_size'}) {   #  user did choose a specific page size upgrade prefs
 	 User::update_global_user($param->{'user'}{'email'},{data=>&tools::hash_2_string($param->{'user'}{'prefs'})}) ;
@@ -3497,7 +3509,7 @@ sub do_sso_login {
     
     
     ## This is a CAS service
-    if (defined (my $cas_id = Site->cas_id->{$robot_id}{$in{'auth_service_name'}})) {
+    if (defined (my $cas_id = Site->cas_id->{$robot_id}{$in{'auth_service_name'}}{'id'})) {
 	my $cas_server = Site->auth_services->{$robot_id}[$cas_id]{'cas_server'};
 	
 	my $path = '';
@@ -4797,7 +4809,7 @@ sub do_search {
 
     $param->{'similar_subscribers_occurrence'} = 0;
     if($param->{'filter'} !~ /^\@[\w-]+\./) {
-	foreach my $user (@{&List::get_ressembling_list_members_no_object({'name'=>$list->name,'domain'=>$robot_id,'email'=>$in{'filter'}})}) {
+	foreach my $user (@{List::get_resembling_list_members_no_object({'name' => $list->name, 'domain' => $robot_id, 'email' => $in{'filter'}})}) {
 	    next if($emails{$user->{'email'}});
 	    push @{$param->{'similar_subscribers'}}, $user;
 	    last if($#{$param->{'similar_subscribers'}} + 1 > $max_select);
@@ -5088,10 +5100,13 @@ sub do_setpref {
 	 $changes->{$p} = $in{$p} if (defined($in{$p}));
      }
 
-     ## Set session language and user language to new value
-     $session->{'lang'} = $in{'lang'} ;
-     $param->{'lang'} = $in{'lang'};
-    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
+    ## Set session language and user language to new value
+    my $current_lang = Language::GetLang();
+    if ($in{'lang'} and Language::SetLang($in{'lang'})) {
+	$session->{'lang'} = Language::GetLang();
+	Language::SetLang($current_lang);
+    }
+    $param->{'lang'} = $session->{'lang'};
 
      if (User::is_global_user($param->{'user'}{'email'})) {
 
@@ -5222,20 +5237,30 @@ sub do_subscribe {
 	$param->{'may_subscribe'} = 1;	 
 	
 	if ($sub_is =~ /owner/) {
-
-	    unless ($list->send_notify_to_owner('subrequest',{'who' => $param->{'user'}{'email'},
-							      'keyauth' => $list->compute_auth($param->{'user'}{'email'}, 'add'),
-							      'replyto' => $robot->get_address(),
-							      'custom_attribute' => $in{custom_attribute},
-							      'gecos' => $param->{'user'}{'gecos'},
-							      'ip'=>$ip})) {
-		&wwslog('notice', 'Unable to send notify "subrequest" to %s listowner', $list);
+	    my $status = $list->store_subscription_request($param->{'user'}{'email'}, "", $xml_custom_attribute);
+	    unless($status) {
+		&report::reject_report_web('user','subscription_request_failed', {'list' => $list->name},$param->{'action'},$list);
+		&wwslog('info','do_subscribe: subscription request from %s to list %s failed', $param->{'user'}{'email'},$list->name);
+		&web_db_log({'parameters' => $in{'email'},
+			     'status' => 'error',
+			     'error_type' => 'subscription_request_failed'});		      
+		return undef;
 	    }
-	    
-	    $list->store_subscription_request($param->{'user'}{'email'}, "", $xml_custom_attribute);
-	    &report::notice_report_web('sent_to_owner',{},$param->{'action'});
-	    &wwslog('info', 'do_subscribe: subscribe sent to owners');
-	    
+	    unless ($status eq 'already_subscribed') {
+		unless ($list->send_notify_to_owner('subrequest',{'who' => $param->{'user'}{'email'},
+								  'keyauth' => $list->compute_auth($param->{'user'}{'email'}, 'add'),
+								  'replyto' => $robot->get_address(),
+								  'custom_attribute' => $in{custom_attribute},
+								  'gecos' => $param->{'user'}{'gecos'},
+								  'ip'=>$ip})) {
+		    &wwslog('notice', 'Unable to send notify "subrequest" to %s listowner', $list);
+		}
+		
+		&report::notice_report_web('sent_to_owner',{},$param->{'action'});
+		&wwslog('info', 'do_subscribe: subscribe sent to owners');
+	    }else{
+		&wwslog('notice', 'Ignoring subsription request from %s to list %s that was requested already', $param->{'user'}{'email'},$list->name);
+	    }
 	    return 'info';
 	}elsif ($sub_is =~ /do_it/) {
 	    if ($param->{'is_subscriber'}) {
@@ -6046,6 +6071,10 @@ sub do_ls_templates  {
     foreach my $file (keys %{$param->{'templates'}}) {
 	foreach my $level (keys %{$param->{'templates'}{$file}}) {
 	    foreach my $lang (keys %{$param->{'templates'}{$file}{$level}}) {
+		if ($lang eq 'default') {
+		    $param->{'lang_per_level'}{$level}{$lang} = $lang;
+		    next;
+		}
 		$param->{'lang_per_level'}{$level}{$lang} =
 		    Language::GetLangName($lang) || $lang;
 	    }
@@ -6846,7 +6875,10 @@ sub do_del {
 	 }
      }
 
-     $total = $list->delete_list_member('users' => \@removed_users, 'exclude' =>'1', 'parameter' => 'deleted by admin', 'daemon' => 'wwsympa.fcgi');
+    $total = $list->delete_list_member('users' => \@removed_users,
+	'exclude' =>'1', 'parameter' => 'deleted by admin',
+	'daemon' => 'wwsympa'
+    );
 
      unless( defined $total) {
 	 &report::reject_report_web('intern','delete_subscriber_db_failed',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
@@ -6889,27 +6921,27 @@ sub do_del {
 ####################################################### 
 sub do_modindex {
      &wwslog('info', 'do_modindex');
-     my $msg;
      my $doc;
 
      my $list_name = $list->name;
-     my $modspool = new Sympaspool('mod');
-     my @messages  = $modspool->get_content({'selector'=>{'list'=>$list_name,'robot'=>$robot_id}});
-     foreach $msg ( @messages ) {
-	my $message =
-	    Message->new({'messageasstring' => $msg->{'messageasstring'}});
+     my $modspool = KeySpool->new();
+     my @messages  = $modspool->get_awaiting_messages({'selector'=>{'list'=>$list_name,'robot'=>$robot_id}});
+    foreach my $message_in_spool (@messages) {
+	my $message = undef;
+	$message = Message->new($message_in_spool)
+	    if $message_in_spool;
 	next unless $message;
-	my $id = $msg->{'authkey'};
+	my $id = $message->{'authkey'};
 
-	$param->{'spool'}{$id}{'size'} = int($msg->{'size'} / 1024 + 0.5);
+	$param->{'spool'}{$id}{'size'} = int($message->{'size'} / 1024 + 0.5);
 	$param->{'spool'}{$id}{'subject'} =
 	    tools::decode_header($message, 'Subject') || 'no_subject';
 	$param->{'spool'}{$id}{'date'} =
-	    tools::decode_header($message, 'Date');
+	    tools::decode_header($message, 'Date'); #FIXME:
 	$param->{'spool'}{$id}{'from'} = $message->get_sender_email;
 	$param->{'spool'}{$id}{'gecos'} = $message->get_sender_gecos
 	    if defined $message->get_sender_gecos;
-	$param->{'spool'}{$id}{'spam_status'} = $msg->{'spam_status'};
+	$param->{'spool'}{$id}{'spam_status'} = $message->{'spam_status'};
 	$param->{'spool'}{$id}{'is_subscriber'} =
 	    $list->is_list_member($message->get_sender_email);
 
@@ -7231,16 +7263,19 @@ sub do_reject {
      }     
      
     &wwslog('info', 'do_reject(%s)', $in{'id'});
-     my $modspool = new Sympaspool('mod');
+     my $modspool = KeySpool->new();
      my ($msg, $file);
 
      $param->{'blacklist_added'} = 0;
      $param->{'blacklist_ignored'} = 0;
      foreach my $id (split (/,/, $in{'id'})) {
-	 
-	 my $message_in_spool = $modspool->get_message({'list'=>$list->name,'robot'=>$robot_id,'authkey'=>$id});
-
-	 unless ($message_in_spool) {
+	my $message_in_spool = $modspool->get_message({
+	    'list' => $list->name, 'robot' => $robot_id, 'authkey' => $id
+	});
+	my $message = undef;
+	$message = Message->new($message_in_spool)
+	    if $message_in_spool;
+	unless ($message) {
 	     &report::reject_report_web('user','already_moderated',{},$param->{'action'});
 	     &wwslog('err','do_distribute: Unable to find message in spool mod with authkey  %s', $id);
 	     &web_db_log({'parameters' => $in{'id'},
@@ -7248,18 +7283,17 @@ sub do_reject {
 			  'error_type' => 'internal'});
 	     next;
 	 }
-	 my $message = new Message({'message_in_spool' => $message_in_spool});
          #  extract sender address is needed to report reject to sender and in case the sender is to be added to the blacklist
-	 if (($in{'quiet'} ne '1')||($in{'blacklist'})) {
-	     my $rejected_sender = $message->{'sender'};
-	     if  ($rejected_sender) {
-		 
+	if ($in{'quiet'} ne '1' or $in{'blacklist'}) {
+	    my $rejected_sender = $message->get_sender_email;
+	    if ($rejected_sender) {
 		 unless ($in{'message_template'} eq 'reject_quiet') {
 		     my %context;
 		     $context{'subject'} = &tools::decode_header($message,'Subject');
 		     $context{'rejected_by'} = $param->{'user'}{'email'};
 		     $context{'template_used'} = $in{'message_template'};
-		     unless ($list->send_file($in{'message_template'}, $rejected_sender, \%context)) {
+		    unless ($list->send_file($in{'message_template'}, #FIXME
+			$rejected_sender, \%context)) {
 			 &wwslog('notice', 'Unable to send template %s to %s', $in{'message_template'}, $rejected_sender);
 		     }
 		 }		 
@@ -7273,7 +7307,10 @@ sub do_reject {
 		     }
 		 }
 	     } else {
-		 &Log::do_log('err',"No sender found for message %s, %s unable to use her address to add to blacklist or send notification",$message->{'messagekey'},$message->get_mime_message->head->get('Message-Id'));
+		Log::do_log('err',
+		    'No sender found for message %s.  Unable to use her address to add to blacklist or send notification',
+		    $message
+		);
 	     }
 	 }
 
@@ -7283,12 +7320,19 @@ sub do_reject {
 		     &Log::do_log('err', 'could not execute %s',
 			Site->reporting_spam_script_path);
 		 }
-		 print SCRIPT $message->get_encrypted_message_as_string; #Sending encrypted form in case a crypted message would be sent by error.
-		 if (close(SCRIPT)){		 
-		     &Log::do_log('info',"message $file reported as spam by $param->{'user'}{'email'}") ;
-		 }else{
-		     &Log::do_log('err',"could not report message $file as spam (close failed)");
-		 }
+		# Sending encrypted form in case a crypted message would be
+		# sent by error.
+		print SCRIPT $message->as_string;
+
+		if (close SCRIPT) {		 
+		    Log::do_log('info',
+			'Message %s reported as spam by %s',
+			$message, $param->{'user'}{'email'});
+		} else {
+		    Log::do_log('err',
+			'Could not report message %s as spam (close failed)'
+		    );
+		}
 	     }else{
 		 &Log::do_log('err',
 		    'ignoring parameter reporting_spam_script_path, value %s because not an executable script',
@@ -7298,8 +7342,7 @@ sub do_reject {
 	 }
 
          # move message in spool of validated messages
-         unless ($modspool->update({'list'=>$list->name,'robot'=>$robot_id,'authkey'=>$id},{'spoolname'=>'validated'}) ) {
-
+         unless ($modspool->remove_message($message->{'messagekey'})) {
 	     &report::reject_report_web('intern','change_spool',{'old'=>'mod',
 								 'new'=>"validated"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
@@ -7343,13 +7386,10 @@ sub do_distribute {
 
      &wwslog('info', 'do_distribute(%s)', $in{'id'});
 
-     my $modspool = new Sympaspool('mod');
+     my $modspool = KeySpool->new();
      my ($msg, $file);
 
-     my $time = time;
-     my $data = {'headers' => {'Message-ID' => &tools::get_message_id($robot),
-			       'X-Sympa-NoWrap' => 'yes'},
-		 'from'=> $param->{'user'}{'email'}};
+    my @mail_command = ();
 
      ## msg topics
      my @msg_topics;
@@ -7372,50 +7412,66 @@ sub do_distribute {
 
      ## messages
      foreach my $id (split (/,/, $in{'id'})) {
-
-	 
-	 my $message_in_spool = $modspool->get_message({'list'=>$list->name,'robot'=>$robot_id,'authkey'=>$id});
-
-	 unless ($message_in_spool) {
-	     &report::reject_report_web('user','already_moderated',{},$param->{'action'});
-	     &wwslog('err','do_distribute: Unable to find message in spool mod with authkey  %s', $id);
+	my $message_in_spool = $modspool->get_message(
+	    {'list' => $list->name, 'robot' => $robot_id, 'authkey' => $id}
+	);
+	my $message = undef;
+	$message = Message->new($message_in_spool)
+	    if $message_in_spool;
+	unless ($message) {
+	    report::reject_report_web('user', 'already_moderated', {},
+		$param->{'action'});
+	    wwslog('err',
+		'Unable to find message in spool mod with authkey  %s',
+		$id);
 	     &web_db_log({'parameters' => $in{'id'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
 	     next;
 	 }
-	 $data->{'body'} .= sprintf ("QUIET DISTRIBUTE %s %s\n",$list->name,$id);
+	push @mail_command,
+	    sprintf('QUIET DISTRIBUTE %s %s', $list->name, $id);
 
-	 ## TAG 
-	 if ($list_topics) {
+	## TAG 
+	if ($list_topics) {
+	    my $filetopic = $list->tag_topic(
+		tools::clean_msg_id($message->get_msg_id),
+		$list_topics, 'editor'
+	    );
+	}
 
-	     my $message = new Message({'message_in_spool'=> $message_in_spool});
-	     my $msg = $message->{'msg'};
-	     my $head = $msg->head();
-	     my $filetopic = $list->tag_topic(&tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
-	 }
-
-         # move message in spool of validated messages
-         unless ($modspool->update({'list'=>$list->name,'robot'=>$robot_id,'authkey'=>$id},{'spoolname'=>'validated'}) ) {
-
-	     &report::reject_report_web('intern','change_spool',{'old'=>'mod',
-								 'new'=>"validated"},
-					$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-	     &wwslog('err','do_distribute: failed to move message in validated spool, key %s', $id);
+	### move message in spool of validated messages
+	unless ($modspool->validate_message($message->{'messagekey'})) {
+	    report::reject_report_web('intern', 'change_spool',
+		{'old' => 'mod', 'new' => 'validated'},
+		$param->{'action'}, $list, $param->{'user'}{'email'}, $robot_id);
+	    wwslog('err', 'failed to move message in validated spool, key %s',
+		$id);
 	     &web_db_log({'parameters' => $in{'id'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
-
 	 }
 	 # clean html view of the message
 	 &tools::remove_dir ( Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$id);	
      }
 
-     $data->{'not_auto_submitted'} = 1;
-     unless (mail::mail_file('', $robot->get_address(), $data, $robot)) {
-	 &report::reject_report_web('intern','cannot_send_distribute',{'from' => $param->{'user'}{'email'},'listname'=>$list->name},
-				    $param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-	 &wwslog('err','do_distribute: failed to send message for list %s, id %s', $list->name,$in{'id'});
+    my $incomingspool = Messagespool->new();
+    unless ($incomingspool->store(
+	sprintf(
+	    "X-Sympa-To: %s\n" . #FIXME
+	    "X-Sympa-Authenticated: md5\nX-Sympa-Sender: %s\n" .
+	    "Message-Id: %s\n\n%s\n",
+	    $robot->get_address(),
+	    $param->{'user'}{'email'},
+	    tools::get_message_id($robot), join("\n", @mail_command)
+	),
+	{'list' => $robot->email, 'robot' => $robot->domain}
+    )) {
+	report::reject_report_web('intern', 'cannot_send_distribute',
+	    {'from' => $param->{'user'}{'email'}, 'listname' => $list->name},
+	    $param->{'action'}, $list, $param->{'user'}{'email'}, $robot_id);
+	wwslog('err', 'failed to send message for list %s, id %s',
+	    $list, $in{'id'});
 	 &web_db_log({'parameters' => $in{'id'},
 		      'status' => 'error',
 		      'error_type' => 'internal'});
@@ -7444,21 +7500,25 @@ sub do_add_frommod {
 
     ## messages
     $in{'dump'} = '';
-    my $modspool = Sympaspool->new('mod');
+    my $modspool = KeySpool->new();
     foreach my $id (split /,/, $in{'id'}) {
 	my $message_in_spool = $modspool->get_message(
 	    {'list' => $list->name, 'robot' => $robot_id, 'authkey' => $id}
 	);
-	unless ($message_in_spool) {
+	my $message = undef;
+	$message = Message->new($message_in_spool)
+	    if $message_in_spool;
+	unless ($message) {
 	    ## if the message has been accepted via WWSympa, it's in spool
 	    ## 'validated'
 	    my $validatedspool = Sympaspool->new('validated');
-	    $message_in_spool = $validatedspool->get_message(
-		{   'list' => $list->name, 'robot' => $robot_id,
-		    'authkey' => $id }
-	    );
+	    $message_in_spool = $validatedspool->get_message({
+		'list' => $list->name, 'robot' => $robot_id, 'authkey' => $id
+	    });
+	    $message = Message->new($message_in_spool)
+		if $message_in_spool;
 	}
-	unless ($message_in_spool) {
+	unless ($message) {
 	    report::reject_report_web('user', 'already_moderated', {},
 		$param->{'action'});
 	    wwslog('err',
@@ -7470,8 +7530,6 @@ sub do_add_frommod {
 		    'error_type' => 'internal' });
 	    next;
 	}
-	my $message = Message->new({'message_in_spool' => $message_in_spool});
-	next unless $message;
 	my $email = $message->get_sender_email;
 	next unless $email =~ /\S/;
 	my $fullname = $message->get_sender_gecos;
@@ -8204,7 +8262,7 @@ sub do_remove_arc {
 	# Removing tracking should be done by archived.
 	tracking::remove_message_by_id($list, $msgid);
     }
-    my $spoolarchive = new Sympaspool('archive');
+    my $spoolarchive = new SympaspoolClassic('outgoing');
     $spoolarchive->store($removeorder,{'list'=>$in{'list'},'robot'=>$robot_id});
 
     &wwslog('info', 'do_remove_arc %d messages marked to be removed by archived', $#msgids+1);
@@ -8268,43 +8326,50 @@ sub do_send_me {
 	 close MAIL ;
      }
 
-     my $message;
-     if ($msgfile) {
-	unless (open MSG, "$arcpath/arctxt/$msgfile") {
+    my $message;
+    if ($msgfile) {
+	my $fh;
+	unless (open $fh, '<', "$arcpath/arctxt/$msgfile") {
 	    $param->{'status'} = 'message_err';
-	    &wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
+	    wwslog('info', 'Could not read file %s/arctxt/%s',
+		$arcpath, $msgfile);
+	    return undef;
 	}
 	my $msg_string;
-	while (<MSG>){
-	    $msg_string .= $_ ;
+	local $/;
+	$msg_string = <$fh>;
+	close $fh;
+
+	unless ($message = Message->new({
+	    'messageasstring'=> $msg_string, 'noxsympato'=>'noxsympato',
+	    'list_object' => $list
+	})) {
+	    $param->{'status'} = 'message_err';
+	    wwslog('info', 'Could not read file %s/arctxt/%s',
+		$arcpath, $msgfile);
+	    return undef;
 	}
-	close MSG;
-	unless ($message = new Message({'messageasstring'=> $msg_string,'noxsympato'=>'noxsympato', 'list' => $list}) ) {
-	$param->{'status'} = 'message_err';
-	&wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
-	return undef;
-    }
-	$message->set_sympa_headers({'from'=>$robot->get_address(),'rcpt'=>$param->{'user'}{'email'}});
 	unless (mail::mail_forward($message, $robot->get_address(),
 	    $param->{'user'}{'email'}, $robot
 	)) {
-	     $param->{'status'} = 'message_err';
-	     &wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
-	     return undef;
-	 }
-	 &wwslog('info', 'do_send_me message %s spooled for %s', "$arcpath/arctxt/$msgfile", $param->{'user'}{'email'} );
-	 &report::notice_report_web('performed',{},$param->{'action'});
-	 $in{'month'} = $in{'yyyy'}."-".$in{'month'};
-	 return 'arc';
+	    $param->{'status'} = 'message_err';
+	    wwslog('err', 'Impossible to send archive file to %s',
+		$param->{'user'}{'email'});
+	    return undef;
+	}
+	wwslog('info', 'Message %s/arctxt/%s spooled for %s',
+	    $arcpath, $msgfile, $param->{'user'}{'email'});
+	&report::notice_report_web('performed',{},$param->{'action'});
+	$in{'month'} = $in{'yyyy'}."-".$in{'month'};
+	return 'arc';
+    } else {
+	wwslog('info', 'No file matching msgid');
+	$param->{'status'} = 'not_found';
+	return undef;
+    }
 
-     }else{
-	 &wwslog('info', 'do_send_me : no file match msgid');
-	 $param->{'status'} = 'not_found';
-	 return undef;
-     }
-
-     return 1;
- }
+    return 1;
+}
 
 ####################################################
 #  do_view_source                           
@@ -9051,7 +9116,7 @@ sub do_create_list {
      $parameters->{'description'} = $in{'info'};
      $parameters->{'custom_input'} = $in{'custom_input'};
 
-     ## create liste
+     ## create list
      if (my $testlist = new List($in{'listname'},$robot)){
 	  &report::reject_report_web('user','list_already_exists',{'new_listname'=> $in{'listname'}},$param->{'action'},'',$param->{'user'}{'email'},$robot_id);
 	  &wwslog('info','do_create_list: requested list %s already exist (from %s)',$in{'listname'},$param->{'user'}{'email'});
@@ -9061,7 +9126,10 @@ sub do_create_list {
 		       'error_type' => 'user'});
 	  return 'create_list_request';
       }
-     my $resul = &admin::create_list_old($parameters,$in{'template'},$robot_id,"web", $param->{'user'}{'email'});
+    my $resul = admin::create_list_old(
+	$parameters, $in{'template'}, $robot,
+	'web', $param->{'user'}{'email'}
+    );
      unless(defined $resul) {
 	 &report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot_id);
 	 &wwslog('info','do_create_list: unable to create list %s for %s',$in{'listname'},$param->{'user'}{'email'});
@@ -9086,7 +9154,7 @@ sub do_create_list {
      }
 
      ## notify listmaster
-     my $list = new List $in{'listname'}; #FIXME: robot?
+    my $list = List->new($in{'listname'}, $robot);
      unless (defined $list) {
        &wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
        &report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot_id);
@@ -9102,11 +9170,10 @@ sub do_create_list {
 	     &wwslog('notice',"Unable to send notify 'request_list_creation' to listmaster");
 	 }
      }
-     
+
      &web_db_log({'parameters' => $in{'listname'},
  		  'list' => $in{'listname'},
  		  'status' => 'success'});
-	  
 
      $in{'list'} = $resul->{'list'}{'name'};
      &check_param_in();
@@ -9408,7 +9475,7 @@ sub do_viewbounce {
 sub do_scenario_test {
      &wwslog('info', 'do_scenario_test');
 
-     ## List available scenarii
+     ## List available scenarios
      unless (opendir SCENARI, Sympa::Constants::DEFAULTDIR.'/scenari/'){
 	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => Sympa::Constants::DEFAULTDIR.'/scenari/'},$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
 	 &wwslog('info',"do_scenario_test : unable to open %s/scenari", Sympa::Constants::DEFAULTDIR);
@@ -9584,7 +9651,7 @@ sub do_resetbounce {
 sub do_rebuildarc {
      &wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
      
-     my $spoolarchive = new Sympaspool('archive');
+     my $spoolarchive = new SympaspoolClassic('outgoing');
 
      unless ($spoolarchive->store('rebuild', { 'list' => $list->name, 'robot' => $list->domain })) {
 	 &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
@@ -9609,7 +9676,7 @@ sub do_rebuildallarc {
     #FIXME: past archives should be rebuilt even if archiving is disabled.
     my $errors = 0;
     my $spoolarchive;
-    unless ($spoolarchive = new Sympaspool('archive')){
+    unless ($spoolarchive = new SympaspoolClassic('outgoing')){
 	&report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
 	&wwslog('err','error in  new Sympaspool(archive) ');
     }
@@ -10584,16 +10651,12 @@ sub _prepare_edit_form {
 		}
 	    }
 	 }elsif ($pname eq 'lang') {
-	     my $saved_lang = &Language::GetLang();
-	     
 	     foreach my $lang (keys %{$p->{'value'}}) {
-		&Language::SetLang($lang);
-		my $t = gettext('_language_');
+		my $t = Language::GetLangName($lang) || $lang;
 		$t = sprintf '%s (%s)', $t, $lang
 		    if $robot->is_listmaster($param->{'user'}{'email'});
 		$p->{'value'}{$lang}{'title'} = $t;
 	     }
-	     &Language::SetLang($saved_lang);
 	 } elsif ($pname eq 'available_user_options' or
 		  $pname eq 'default_user_options') {
 	    foreach my $v (@{$p->{'value'}}) {
@@ -11232,7 +11295,7 @@ sub get_desc_file {
 	 }   
 
 	 if ($ligne =~ /^access\s*$/) {
-	     #case access scenari for the document
+	     #case access scenarios for the document
 	     while ($ligne = <DESC_FILE>) {
 		 last if  ($ligne =~ /^\s*$/);
 		 if ($ligne =~ /^\s*read\s*(\S*)\s*/) {
@@ -12666,8 +12729,6 @@ sub do_d_editfile {
      } else {
 	 $param->{'textfile'} = 0;
      }
-    $param->{'use_htmlarea'} = '1'
-	if Site->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -12797,8 +12858,6 @@ sub do_d_properties {
      } else {
 	 $param->{'textfile'} = 0;
      }
-    $param->{'use_htmlarea'} = '1'
-	if Site->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -15530,27 +15589,33 @@ sub do_remind {
 	 $reason = $result->{'reason'};
      }
 
-     if ($r_action =~ /reject/i) {
-	 &report::reject_report_web('auth',$reason,{},$param->{'action'},$list);
-	 &wwslog('info','remind : access denied for %s', $param->{'user'}{'email'});
+    if ($r_action =~ /reject/i) {
+	report::reject_report_web('auth', $reason, {}, $param->{'action'},
+	    $list);
+	wwslog('info', 'access denied for %s', $param->{'user'}{'email'});
 	 &web_db_log({'robot' => $robot_id,'list' => $list->name,'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'authorization','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
-
-     }else {
-	 $mail_command = sprintf "REMIND %s", $param->{'list'};
+    } else {
+	$mail_command = sprintf 'REMIND %s', $param->{'list'};
      }
 
-     my $time = time;
-     my $data = {'headers' => {'Message-ID' => '<'.$time.'@wwsympa>',
-			       'X-Sympa-NoWrap' => 'yes'},
-		 'from'=> $param->{'user'}{'email'},
-		 'body' => $mail_command};
-
-     $data->{'not_auto_submitted'} = 1;
-     unless (mail::mail_file('', $robot->get_address(), $data, $robot)) {
-	 &report::reject_report_web('intern','cannot_send_remind',{'from' => $param->{'user'}{'email'},'listname'=>$list->name},
-				    $param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-	 &wwslog('err','do_remind: failed to send message for command REMIND');
+    my $incomingspool = Messagespool->new();
+    unless ($incomingspool->store(
+	sprintf(
+	    "X-Sympa-To: %s\n" . #FIXME
+	    "X-Sympa-Authenticated: md5\nX-Sympa-Sender: %s\n" .
+	    "Message-Id: %s\n\n%s\n",
+	    $robot->get_address(),
+	    $param->{'user'}{'email'},
+	    tools::get_message_id($robot), $mail_command
+	),
+	{'list' => $robot->email, 'robot' => $robot->domain}
+    )) {
+	report::reject_report_web('intern', 'cannot_send_remind',
+	    {'from' => $param->{'user'}{'email'}, 'listname'=>$list->name},
+	    $param->{'action'}, $list, $param->{'user'}{'email'}, $robot_id
+	);
+	wwslog('err', 'failed to send message for command REMIND');
 	 &web_db_log({'robot' => $robot_id,'list' => $list->name,'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
      }
@@ -16103,6 +16168,8 @@ sub do_compose_mail {
 		$robot->html_editor_url;
 	}
 	$param->{'html_editor_init'} = $robot->html_editor_init;
+	$param->{'html_editor_hide'} = $robot->html_editor_hide;
+	$param->{'html_editor_show'} = $robot->html_editor_show;
     }
 
     # Set the subaction to html_news_letter or undef
@@ -16135,7 +16202,9 @@ sub do_compose_mail {
 	}
 	$param->{'topic_required'} = $list->is_msg_topic_tagging_required();
     }
-    
+
+    $param->{'merge_feature'} = $list->merge_feature eq 'on';
+
     return 1;
  }
 
@@ -16144,7 +16213,7 @@ sub do_compose_mail {
 ####################################################
 #  Sends a message to a list by the Web interface
 #  or an html page getting its url.
-#  It uses mail::mail_file() to do it.
+#  Actually, it stores the message to appropriate spool.
 # 
 # IN : -
 #
@@ -16190,7 +16259,7 @@ sub do_send_mail {
     # Send the mail to the sender. To test his message
     # Second if : send to the sender "send to me"
     if($in{'sub_action'} eq 'sendmailtome') {
-	#Set the sender mail to the addressee
+	#Set the sender mail to the recipient address
 	$to = $from;	
     }
     
@@ -16257,13 +16326,17 @@ sub do_send_mail {
 	    $page_source = 'file://'.$page_source;
 	}
 	
-	my $html_part_body = &tools::create_html_part_from_web_page({'From' => $from,
-								     'To' => $to,
-								     'Headers' => {'In-Reply-To' => $in{'in_reply_to'}, 'Message-ID' => $in{'message_id'}},
-								     'return_path' => $robot->get_address(),
-								     'Subject' => $in{'subject'},
-								     'source' => $page_source,
-								 });
+	my $html_part_body = tools::create_html_part_from_web_page({
+	    'From' => $from,
+	    'To' => $to,
+	    'Headers' => {
+		'In-Reply-To' => $in{'in_reply_to'},
+		'Message-ID' => $in{'message_id'}
+	    },
+	    'return_path' => $robot->get_address(),
+	    'Subject' => $in{'subject'},
+	    'source' => $page_source,
+	});
 	if (defined $html_part_body) {
             $in{'body'} = $html_part_body;
 	}else{
@@ -16271,7 +16344,6 @@ sub do_send_mail {
 	    ($Log::log_level >= 0) && &wwslog('info','A MIME part could not be created with the supplied data, %s, %s',$in{'url'},$in{'uploaded_file'});
 	    return undef;
 	}            
-	
     }else{	 
 	## Message body should not be empty
 	if ($in{'body'} =~ /^\s*$/) {
@@ -16283,37 +16355,84 @@ sub do_send_mail {
 	
 	$in{'body'} = "\n".$in{'body'};
     }
-    
-    my $data = {'headers' => {'Message-ID' => $in{'message_id'}}, 
-		'subject' => $in{'subject'},
-		'return_path' => $robot->get_address(),
-		'to' => $to,
-		'body' => "From: $from\n" . $in{'body'},
-		'sign_mode' => '',
-		'header_possible' => '1',
-		'list' => $list,};
-    
-    $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'} if (($in{'in_reply_to'}) && $in{'in_reply_to'} ne '<>');
+
+    ## Roughly check TT2 syntax for merge_feature.
+    if ($list->merge_feature and $list->merge_feature eq 'on') {
+	unless (defined Message::personalize_text($in{'body'}, $list)) {
+	    report::reject_report_web('user', 'merge_failed',
+		{'error' => tt2::get_error()}, $param->{'action'}
+	    );
+	    return 'compose_mail';
+	}
+    }
+
+    ## Check if HTML editor was used.
+    if ($in{'html_editor_enabled'} and $in{'html_editor_enabled'} eq 'on') {
+	$in{'body'} = "Content-Type: text/html\n" . $in{'body'};
+    }
+
+    my $data = {
+	'headers' => {'Message-ID' => $in{'message_id'}}, 
+	'subject' => $in{'subject'},
+	'return_path' => $robot->get_address(),
+	'to' => $to,
+	'body' => "From: $from\n" . $in{'body'},
+	'sign_mode' => '',
+	'header_possible' => '1',
+    };
+
+    $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'}
+	if $in{'in_reply_to'} and $in{'in_reply_to'} ne '<>';
     $data->{'not_auto_submitted'} = 1;
-    $data->{'not_a_list'} = 1 if($in{'sub_action'} eq 'sendmailtome');
-    unless (&mail::mail_file('', $to, $data, $robot_id)) {
-	&report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->name},
-				   $param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-	&wwslog('err','do_send_mail: failed to send message for $to list');
+
+    my $messageasstring =
+	mail::parse_tt2_messageasstring($robot, '', $to, $data);
+    my $result;
+    if ($in{'sub_action'} eq 'sendmailtolist') {
+	my $incomingspool = Messagespool->new();
+	$result = $incomingspool->store(
+	    sprintf(
+		"X-Sympa-To: %s\n" . # FIXME
+		"X-Sympa-Authenticated: md5\nX-Sympa-Sender: %s\n" .
+		"X-Sympa-From: %s\n%s",
+		$list->get_address(),
+		$param->{'user'}{'email'},
+		$robot->get_address('owner'), $messageasstring
+	    ),
+	    {'list' => $list->name, 'robot' => $list->domain}
+	);
+    } elsif ($in{'sub_action'} eq 'sendmailtome') {
+	my $message = Message->new({
+	    'messageasstring' => $messageasstring, 'noxsympato' => 1,
+	});
+	$result = mail::sending(
+	    'message' => $message,
+	    'rcpt' => $to,
+	    'from' => $robot->get_address('owner'),
+	    'robot' => $robot,
+	    'priority' => $robot->sympa_priority,
+	);
+    }
+
+    unless ($result) {
+	report::reject_report_web('intern', 'cannot_send_mail',
+	    {'from' => $param->{'user'}{'email'}, 'listname' => $list->name},
+	    $param->{'action'}, $list, $param->{'user'}{'email'}, $robot_id
+	);
+	wwslog('err', 'failed to send message for %s', $to);
 	&web_db_log({'robot' => $robot_id,'list' => $list->name,'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	return undef;
      }
-    
-    
+
      &report::notice_report_web('performed',{},$param->{'action'});
     &web_db_log({'robot' => $robot_id,'list' => $list->name,'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'success','error_type' => '','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
-    
-	if ($in{'sub_action'} eq 'sendmailtome') {
-		$param->{'body'} = $in{'body'};
-		return 'compose_mail';
-	}else {
-		return 'info';	   
-	}
+
+    if ($in{'sub_action'} eq 'sendmailtome') {
+	$param->{'body'} = $in{'body'};
+    } else {
+	delete $in{'subject'};
+    }
+    return 'compose_mail';
 }
 
 ####################################################
@@ -16350,35 +16469,40 @@ sub do_request_topic {
 
      my $spoolauth = new Sympaspool('auth');
 
-     my $authmessage = $spoolauth->get_message({'list'=> $list->name,'robot'=>$robot_id,'authkey'=>$in{'authkey'}});
-     unless ($authmessage) {
-	 &report::reject_report_web('user','unkown_auth_key',{},$param->{'action'},$list);
-	 &wwslog('info','do_request_topic: unknown authentication key');
-	 return undef;
-     }
-     my $message = new Message({'message_in_spool'=> $authmessage});
+    my $message_in_spool = $spoolauth->get_message({
+	'list' => $list->name, 'robot' => $robot_id,
+	'authkey' => $in{'authkey'}
+    });
+    my $message = undef;
+    $message = Message->new($message_in_spool)
+	if $message_in_spool;
+    unless ($message) {
+	&report::reject_report_web('user', 'unknown_auth_key', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'Unknown authentication key "%s"', $in{'authkey'});
+	return undef;
+    }
 
-     my $msg = $message->{'msg'};
-     my $head = $msg->head();
-     # headers will be encoded later.
-     $param->{'subject'} = tools::decode_header($head, 'Subject');
-     $param->{'subject'} = &tools::escape_html($param->{'subject'});
-     $param->{'from'} = tools::decode_header($head, 'From');
-     $param->{'from'} = &tools::escape_html($param->{'from'});
-     $param->{'date'} = tools::decode_header($head, 'Date');
-     $param->{'date'} =  &tools::escape_html($param->{'date'});
-     $param->{'message_id'} = &tools::clean_msg_id($head->get('Message-Id'));
+    # headers will be encoded later.
+    $param->{'subject'} = tools::decode_header($message, 'Subject');
+    $param->{'subject'} = tools::escape_html($param->{'subject'}); #FIXME
+    $param->{'from'}    = tools::decode_header($message, 'From');
+    $param->{'from'}    = tools::escape_html($param->{'from'}); #FIXME
+    $param->{'date'}    = tools::decode_header($message, 'Date');
+    $param->{'date'}    = tools::escape_html($param->{'date'}); #FIXME
+    $param->{'message_id'} =
+	tools::clean_msg_id($message->get_header('Message-Id'));
 
-     my $body = $msg->bodyhandle();
-     if ($body) {
-	 $param->{'body'} = $body->as_string();
-     }else{
-	 $param->{'body'} = '';
-     }
-     $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
+    my $bodyh = $message->{'msg'}->bodyhandle();
+    if ($bodyh) {
+	$param->{'body'} = $bodyh->as_string();
+    } else {
+	$param->{'body'} = '';
+    }
+    $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
 
-     return 1;
- }
+    return 1;
+}
 
 ####################################################
 #  do_tag_topic_by_sender
@@ -16397,24 +16521,37 @@ sub do_tag_topic_by_sender {
      my $parser;
      my $listname = $list->name;
 
-     my $mail ;
+     my $message;
      
      my $authspool = new Sympaspool('auth');
-     my $messagespool = $authspool->get_message({'list'=>$listname, 'robot' => $robot_id , 'authkey'=> $in{'authkey'}});
+     my $message_in_spool = $authspool->get_message({
+	'list' => $listname, 'robot' => $robot_id ,
+	'authkey'=> $in{'authkey'}
+    });
 
-     unless($messagespool){
-	 &report::reject_report_web('user','unkown authentication key %s for list %s@%s',$in{'authkey'},$listname,$robot_id );
-	 &wwslog('info','unkown authentication key %s for list %s@%s',$in{'authkey'},$listname,$robot_id );
+    unless ($message_in_spool) {
+	 &report::reject_report_web('user', 'unknown_auth_key',
+	    {'authkey' => $in{'authkey'}}, $param->{'action'}, $list);
+	 &wwslog('info',
+	    'Unknown authentication key "%s" for list %s',
+	    $in{'authkey'}, $list
+	);
 	 return undef;
      }
      
 
-     unless($mail  = new Message({'message_in_spool'=>$messagespool,'noxsympato'=>'noxsympato'})) {
-	 &report::reject_report_web('intern','cannot_parse_message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot_id );
-	 &wwslog('info','do_tag_topic_by_sender: cannot parse message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot_id );
+     unless($message = Message->new(
+	{%$message_in_spool, 'noxsympato'=>'noxsympato'}
+    )) {
+	report::reject_report_web('intern',
+	    'cannot_parse_message retrived by key %s for list %s@%s',
+	    $in{'authkey'}, $listname, $robot_id
+	);
+	wwslog('info', 'cannot parse message retrived by key %s for list %s',
+	    $in{'authkey'}, $list);
 	 return undef;
      }
-     my $sender = $mail->{'sender'};
+     my $sender = $message->{'sender'};
 
      unless ($list->is_there_msg_topic()) {
 	 &report::reject_report_web('user','no_topic',{},$param->{'action'},$list);
@@ -16440,27 +16577,34 @@ sub do_tag_topic_by_sender {
      ## TAG 
      my $filetopic = $list->tag_topic($in{'message_id'},$list_topics,'sender');
 
-     ## CONFIRM
-     my $time = time;
-     my $data = {'headers' => {'Message-ID' => '<'.$time.'@wwsympa>',
-			       'X-Sympa-NoWrap' => 'yes'},
-		 'from'=> $sender};
-     $data->{'body'} = sprintf ("QUIET CONFIRM %s\n",$in{'authkey'});
-     $data->{'not_auto_submitted'} = 1;
+    ## CONFIRM
+    my $mail_command = sprintf 'QUIET CONFIRM %s', $in{'authkey'};
 
-
-     unless (mail::mail_file('', $robot->get_address(), $data, $robot)) {
-	 &report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->name},
-				    $param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
-	 &wwslog('err','do_tag_topic_by_sender: failed to send message for list %s@%s authenticated by key %s',$listname,$robot_id,$in{'authkey'} );
+    my $incomingspool = Messagespool->new();
+    unless ($incomingspool->store(
+	sprintf(
+	    "X-Sympa-To: %s\n" . #FIXME
+	    "X-Sympa-Authenticated: md5\nX-Sympa-Sender: %s\n" .
+	    "Message-Id: %s\n\n%s\n",
+	    $robot->get_address(),
+	    $sender,
+	    tools::get_message_id($robot), $mail_command
+	),
+	{'list' => $robot->email, 'robot' => $robot->domain}
+    )) {
+	report::reject_report_web('intern', 'cannot_send_mail',
+	    {'from' => $param->{'user'}{'email'}, 'listname' => $list->name},
+	    $param->{'action'}, $list, $param->{'user'}{'email'}, $robot_id);
+	wwslog('err',
+	    'failed to send message for list %s authenticated by key %s',
+	    $list, $in{'authkey'}
+	);
 	 return undef;
      }
 
      &report::notice_report_web('performed_soon',{},$param->{'action'});
      return 'info';
- }
-
-
+}
 
 sub do_search_user {
      &wwslog('info', 'do_search_user');
@@ -16515,9 +16659,12 @@ sub do_search_user {
 sub do_set_lang {
      &wwslog('info', 'do_set_lang(%s)', $in{'lang'});
 
-     $session->{'lang'} = $in{'lang'} ;
-     $param->{'lang'} = $in{'lang'};
-    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
+    my $current_lang = Language::GetLang();
+    if ($in{'lang'} and Language::SetLang($in{'lang'})) {
+	$session->{'lang'} = Language::GetLang();
+	Language::SetLang($current_lang);
+    }
+    $param->{'lang'} = $session->{'lang'};
 
      if ($param->{'user'}{'email'}) {
 	 if (User::is_global_user($param->{'user'}{'email'})) {
@@ -17195,8 +17342,10 @@ sub do_viewspools {
 
     my $spool = new Sympaspool($spoolname,$spool_status);
     unless ($spool) {
-	&report::reject_report_web('intern','unkown spool');
-	&wwslog('info','do_viewspools: unkown spool');
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'Unknown spool %s/%s',
+	    $spoolname, ($spool_status || 'ok'));
 	return undef;
     }
 
@@ -17262,6 +17411,17 @@ sub do_viewspools {
 	    $flavour = $wwslib::task_flavours{$message->{'task_flavour'}}) {
 	    $message->{'task_flavour'} = gettext($flavour->{'gettext_id'});
 	}
+
+	if ($message->{'date'}) {
+	    $message->{'date_asstring'} =
+		gettext_strftime('%Y-%m-%d  %H:%M:%S',
+		    localtime $message->{'date'});
+	}
+	if ($message->{'lockdate'}) {
+	    $message->{'lockdate_asstring'} =
+		gettext_strftime('%Y-%m-%d  %H:%M:%S',
+		    localtime $message->{'lockdate'});
+	}
     }
     $param->{'spool_content'} = \@messages;
     return 1;
@@ -17282,8 +17442,9 @@ sub do_viewspool_message {
 
     my $spool = new Sympaspool($spoolname,$status);
     unless ($spool) {
-	&report::reject_report_web('intern','unkown spool');
-	&wwslog('info','do_viewspools: unkown spool');
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'unknown spool', $spoolname, ($status || 'ok'));
 	return undef;
     }
     my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
@@ -17352,8 +17513,9 @@ sub do_viewspool_message_dump {
 
     my $spool = new Sympaspool($spoolname,$status);
     unless ($spool) {
-	&report::reject_report_web('intern','unkown spool');
-	&wwslog('info','do_viewspools: unkown spool');
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'Unknown spool %s/%s', $spoolname, ($status || 'ok'));
 	return undef;
     }
     my @messages = $spool->get_content(
@@ -17401,11 +17563,14 @@ sub do_viewspool_message_remove {
 
     my $spool = new Sympaspool($spoolname,$status);
     unless ($spool) {
-	&report::reject_report_web('intern','unkown spool');
-	&wwslog('info','do_viewspools: unkown spool');
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'unknown spool %s/%s', $spoolname, ($status || 'ok'));
 	return undef;
     }
-    unless ($spool->remove_message({'messagekey'=>$messagekey})){
+    unless ($spool->remove_message(
+	{'messagekey' => $messagekey, 'just_try' => 1}
+    )){
 	&report::reject_report_web('intern','could not remove message');
 	&wwslog('info','do_viewspool_message_remove : could not remove message');
 	return;	
@@ -17443,8 +17608,9 @@ sub do_viewspool_message_mv {
     $newstatus = 'ok' unless ($newstatus);
 
     unless (($newspool) && ($newstatus)){
-	&report::reject_report_web('intern','unkown spool %s or status %s',$newspool,$newstatus);
-	&wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'unknown spool %s/%s', $spoolname, ($status || 'ok'));
 	return undef;
     }
 			       
@@ -17455,14 +17621,17 @@ sub do_viewspool_message_mv {
 
     my $spool = new Sympaspool($spoolname,$status);
     unless ($spool) {
-	&report::reject_report_web('intern','unkown spool');
-	&wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
+	&report::reject_report_web('intern', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'unknown spool %s/%s', $spoolname, ($status || 'ok'));
 	return undef;
     }
 
     unless ( new Sympaspool($newspool,$newstatus)) {
-	&report::reject_report_web('user','unkopwn spool');
-	&wwslog('info','do_viewspool_message_mv : could not move message to unkown spool %s,%s',$newspool,$newstatus);
+	&report::reject_report_web('user', 'unknown_spool', {},
+	    $param->{'action'}, $list);
+	&wwslog('info', 'could not move message to unknown spool %s/%s',
+	    $newspool, ($newstatus || 'ok'));
 	return;	
     }
 

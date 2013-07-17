@@ -308,6 +308,10 @@ sub is_available_topic {
 
 XXX @todo doc
 
+Note:
+For C<-request> and C<-owner> suffix, this function returns
+C<owner> and C<return_path> type, respectively.
+
 =back
 
 =cut
@@ -315,17 +319,43 @@ XXX @todo doc
 sub split_listname {
     my $self    = shift;
     my $mailbox = shift;
-    return undef unless $mailbox;
+    return () unless defined $mailbox and length $mailbox;
 
+    my $return_path_suffix = $self->return_path_suffix;
     my $regexp = join('|',
 	map { s/(\W)/\\$1/g; $_ }
 	    grep { $_ and length $_ }
 	    split(/[\s,]+/, $self->list_check_suffixes));
 
-    return ($mailbox) unless $regexp;
+    if ($mailbox eq 'sympa' and $self->domain eq Site->domain) { # compat.
+	return (undef, 'sympa');
+    } elsif ($mailbox eq $self->email or
+	$self->domain eq Site->domain and $mailbox eq Site->email) {
+	return (undef, 'sympa');
+    } elsif ($mailbox eq $self->listmaster_email or
+	$self->domain eq Site->domain and $mailbox eq Site->listmaster_email) {
+	return (undef, 'listmaster');
+    } elsif ($mailbox =~ /^(\S+)$return_path_suffix$/) { # -owner
+	return ($1, 'return_path');
+    } elsif (!$regexp) {
+	return ($mailbox);
+    } elsif ($mailbox =~ /^(\S+)-($regexp)$/) {
+	my ($name, $suffix) = ($1, $2);
+	my $type;
 
-    if ($mailbox =~ /^(\S+)-($regexp)$/) {
-	return ($1, $2);
+	if ($suffix eq 'request') {
+	    $type = 'owner';
+	} elsif ($suffix eq 'editor') {
+	    $type = 'editor';
+	} elsif ($suffix eq 'subscribe') {
+	    $type = 'subscribe';
+	} elsif ($suffix eq 'unsubscribe') {
+	    $type = 'unsubscribe';
+	} else {
+	    $name = $mailbox;
+	    $type = 'UNKNOWN';
+	}
+	return ($name, $type);
     } else {
 	return ($mailbox);
     }
@@ -647,18 +677,13 @@ sub topics {
     $list_of_topics = tools::dup_var($self->{'topics'});
 
     ## Set the title in the current language
-    my $lang = Language::GetLang();
     foreach my $top (keys %{$list_of_topics}) {
 	my $topic = $list_of_topics->{$top};
-	$topic->{'current_title'} = $topic->{'title'}{$lang} ||
-	    $topic->{'title'}{'default'} ||
-	    $top;
+	$topic->{'current_title'} = _get_topic_current_title($topic) || $top;
 
 	foreach my $subtop (keys %{$topic->{'sub'}}) {
 	    $topic->{'sub'}{$subtop}{'current_title'} =
-		$topic->{'sub'}{$subtop}{'title'}{$lang} ||
-		$topic->{'sub'}{$subtop}{'title'}{'default'} ||
-		$subtop;
+		_get_topic_current_title($topic->{'sub'}{$subtop}) || $subtop;
 	}
     }
 
@@ -672,11 +697,34 @@ sub _get_topic_titles {
     foreach my $key (%{$topic}) {
 	if ($key =~ /^title(.(\w+))?$/) {
 	    my $lang = $2 || 'default';
+	    if ($lang eq 'gettext') {    # new in 6.2a.34
+		;
+	    } elsif ($lang eq 'default') {
+		;
+	    } else {
+		$lang = Language::CanonicLang($lang) || $lang;
+	    }
 	    $title->{$lang} = $topic->{$key};
 	}
     }
 
     return $title;
+}
+
+sub _get_topic_current_title {
+    my $topic = shift;
+    foreach my $lang (Language::ImplicatedLangs()) {
+	if ($topic->{'title'}{$lang}) {
+	    return $topic->{'title'}{$lang};
+	}
+    }
+    if ($topic->{'title'}{'gettext'}) {
+	return Language::gettext($topic->{'title'}{'gettext'});
+    } elsif ($topic->{'title'}{'default'}) {
+	return Language::gettext($topic->{'title'}{'default'});
+    } else {
+	return undef;
+    }
 }
 
 ## Inner sub used by load_topics()
@@ -700,15 +748,6 @@ These are accessors derived from robot/default parameters.
 Some of them are obsoleted.
 
 =over 4
-
-=item list_check_regexp
-
-I<Getters>.
-Gets derived config parameters.
-See L<Site/list_check_regexp>.
-
-B<Obsoleted>.
-Use L<split_listname> method.
 
 =item request
 

@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Log;
 
@@ -71,7 +70,7 @@ sub fatal_err {
     };
     if ($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(Site->send_notify_to_listmaster('logs_failed', [$@])) {
+	unless (Site->send_notify_to_listmaster('logs_failed', [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     }
@@ -80,9 +79,7 @@ sub fatal_err {
     my $full_msg = sprintf $m,@_;
 
     ## Notify listmaster
-    unless (Site->send_notify_to_listmaster('sympa_died', [$full_msg])) {
-	do_log('err',"Unable to send notify 'sympa died' to listmaster");
-    }
+    Site->send_notify_to_listmaster('sympa_died', [$full_msg]);
 
     eval { Site->send_notify_to_listmaster(undef, undef, undef, 1); };
     eval { SDM::db_disconnect(); };   # unlock database
@@ -225,7 +222,7 @@ sub do_connect {
     eval {openlog("$log_service\[$$\]", 'ndelay,nofatal', $log_facility)};
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(Site->send_notify_to_listmaster('logs_failed', [$@])) {
+	unless (Site->send_notify_to_listmaster('logs_failed', [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -596,8 +593,16 @@ sub aggregate_data {
 
     my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
     
-    unless ($sth = &SDM::do_query("SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)", $begin_date, $end_date)) {
-	&do_log('err','Unable to retrieve stat entries between date %s and date %s', $begin_date, $end_date);
+    unless ($sth = SDM::do_query(
+	q{SELECT *
+	  FROM stat_table
+	  WHERE (date_stat BETWEEN %s AND %s) AND (read_stat = 0)},
+	$begin_date, $end_date
+    )) {
+	do_log('err',
+	    'Unable to retrieve stat entries between date %s and date %s',
+	    $begin_date, $end_date
+	);
 	return undef;
     }
 
@@ -607,8 +612,15 @@ sub aggregate_data {
     $aggregated_data = &deal_data($res);
     
     #the line is read, so update the read_stat from 0 to 1
-    unless ($sth = &SDM::do_query( "UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')", $begin_date, $end_date)) {
-	&do_log('err','Unable to set stat entries between date %s and date %s as read', $begin_date, $end_date);
+    unless ($sth = SDM::do_query(
+	q{UPDATE stat_table
+	  SET read_stat = 1
+	  WHERE date_stat BETWEEN %s AND %s},
+	$begin_date, $end_date
+    )) {
+	do_log('err',
+	    'Unable to set stat entries between date %s and date %s as read',
+	    $begin_date, $end_date);
 	return undef;
     }
     

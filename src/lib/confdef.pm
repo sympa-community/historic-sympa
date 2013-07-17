@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package confdef;
 
@@ -102,11 +101,6 @@ our @params = (
         'vhost'    => '1',
         'file'     => 'sympa.conf',
         'edit'     => '1',
-    },
-    { 
-        name    => 'pidfile_spooler',
-        default => Sympa::Constants::PIDDIR . '/spooler.pid',
-	file    => 'sympa.conf',
     },
     {
         'name'     => 'soap_url',
@@ -451,13 +445,6 @@ our @params = (
         'vhost'    => '1',
     },
     {
-        'name'     => 'pidfile',
-        'default'  => Sympa::Constants::PIDDIR . '/sympa.pid',
-        'gettext_id'    => 'File containing Sympa PID while running',
-        'file'     => 'sympa.conf',
-        'gettext_comment'   => 'Sympa also locks this file to ensure that it is not running more than once. Caution: user sympa need to write access without special privilege.',
-    },
-    {
         'name'     => 'umask',
         'default'  => '027',
         'gettext_id'    => 'Umask used for file creation by Sympa',
@@ -647,11 +634,6 @@ our @params = (
     { 'gettext_id' => 'Bulk mailer' },
 
     {
-        'name'     => 'pidfile_bulk',
-        'default'  => Sympa::Constants::PIDDIR . '/bulk.pid',
-        'file'     => 'sympa.conf',
-    },
-    {
         'name'     => 'sympa_packet_priority',
         'gettext_id'    => 'Default priority for a packet to be sent by bulk.',
         'file'     => 'sympa.conf',
@@ -738,44 +720,37 @@ our @params = (
 	'version_validity' => '6.3', # valid before version 6.3
 	'upgrade'          => 1,     # used by upgrade process after validy
     },
-    ##{
-	##name => 'dkim_header_list',
-        ##vhost => '1',
-	##file   => 'sympa.conf',
-        ##'gettext_id'   => 'list of headers to be included ito the message for signature', 
-        ##default => 'from:sender:reply-to:subject:date:message-id:to:cc:list-id:list-help:list-unsubscribe:list-subscribe:list-post:list-owner:list-archive:in-reply-to:references:resent-date:resent-from:resent-sender:resent-to:resent-cc:resent-message-id:mime-version:content-type:content-transfer-encoding:content-id:content-description', 
-    ##}, 
     {
         'name'     => 'queuemod',
         'default'  => Sympa::Constants::SPOOLDIR . '/moderation',
         'gettext_id'    => 'Directory for moderation spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queuedigest',
         'default'  => Sympa::Constants::SPOOLDIR . '/digest',
         'gettext_id'    => 'Directory for digest spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queueauth',
         'default'  => Sympa::Constants::SPOOLDIR . '/auth',
         'gettext_id'    => 'Directory for authentication spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queueoutgoing',
         'default'  => Sympa::Constants::SPOOLDIR . '/outgoing',
         'gettext_id'    => 'Directory for outgoing spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queuesubscribe',
@@ -788,8 +763,12 @@ our @params = (
         'default'  => Sympa::Constants::SPOOLDIR . '/topic',
         'gettext_id'    => 'Directory for topic spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
+    {   'name'       => 'queuesignoff',
+	'default'    => Sympa::Constants::SPOOLDIR . '/signoff',
+	'gettext_id' => 'Directory for unsubscription spool',
+	'file'       => 'sympa.conf',
     },
     {
         'name'     => 'queuebounce',
@@ -808,8 +787,8 @@ our @params = (
         'default'  => Sympa::Constants::SPOOLDIR . '/automatic',
         'gettext_id'    => 'Directory for automatic list creation spool',
         'file'     => 'sympa.conf',
-	'version_validity' => '6.3', # valid before version 6.3
-	'upgrade'          => 1,      # used by upgrade process after validy
+        'version_validity' => '6.3', # valid before version 6.3
+        'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'sleep',
@@ -870,23 +849,23 @@ our @params = (
 
     { 'gettext_id' => 'Internationalization related' },
 
-    {
-        'name'     => 'supported_lang',
-        'default'  => 'ca,cs,de,el,es,et_EE,en_US,fr,fi,hu,it,ja_JP,ko,nl,nb_NO,oc,pl,pt_BR,ru,sv,tr,vi,zh_CN,zh_TW',
-        'gettext_id'    => 'Supported languages',
-        'vhost'    => '1',
-        'file'     => 'sympa.conf',
-        'edit'     => '1',
-        'gettext_comment'   => "This is the set of language that will be proposed to your users for the Sympa GUI. Don't select a language if you don't have the proper locale packages installed.",
+    {   'name' => 'supported_lang',
+	'default' =>
+	    'ca,cs,de,el,en-US,es,et,fr,fi,hu,it,ja,ko,nb,nl,oc,pl,pt-BR,ru,sv,tr,vi,zh-CN,zh-TW',
+	'gettext_id' => 'Supported languages',
+	'vhost'      => '1',
+	'file'       => 'sympa.conf',
+	'edit'       => '1',
+	'gettext_comment' =>
+	    "This is the set of language that will be proposed to your users for the Sympa GUI. Don't select a language if you don't have the proper locale packages installed.",
     },
-    {
-        'name'     => 'lang',
-        'default'  => 'en_US',
-        'gettext_id'    => 'Default language (one of supported languages)',
-        'vhost'    => '1',
-        'file'     => 'sympa.conf',
-        'edit'     => '1',
-        'gettext_comment'   => 'This is the default language used by Sympa',
+    {   'name'            => 'lang',
+	'default'         => 'en-US',
+	'gettext_id'      => 'Default language (one of supported languages)',
+	'vhost'           => '1',
+	'file'            => 'sympa.conf',
+	'edit'            => '1',
+	'gettext_comment' => 'This is the default language used by Sympa',
     },
     {
         'name'     => 'legacy_character_support_feature',
@@ -1002,13 +981,14 @@ our @params = (
 
     { 'gettext_id' => 'Tuning' },
 
-    {
-        'name'     => 'cache_list_config',
-        'default'  => 'none',
-        'gettext_id'    => 'Use of binary version of the list config structure on disk (none | binary_file | database)',
-        'file'     => 'sympa.conf',
-        'edit'     => '1',
-        'gettext_comment'   => 'Set this parameter to "binary_file" or "database" if you manage a big amount of lists (1000+); it should make the web interface startup faster',
+    {   'name'    => 'cache_list_config',
+	'default' => 'none',
+	'gettext_id' =>
+	    'Use of binary version of the list config structure on disk (none | binary_file | database)',
+	'file' => 'sympa.conf',
+	'edit' => '1',
+	'gettext_comment' =>
+	    'Set this parameter to "binary_file" or "database" if you manage a big amount of lists (1000+); it should make the web interface startup faster.  Note that Oracle earlier than 8 and Sybase do not support "database"',
     },
     {
         'name'     => 'lock_method',
@@ -1403,23 +1383,11 @@ our @params = (
         'edit'     => '1',
     },
     {
-        'name'     => 'archived_pidfile',
-        'default'  => Sympa::Constants::PIDDIR . '/archived.pid',
-        'gettext_id'    => 'File containing archived PID while running',
-        'file'     => 'wwsympa.conf',
-    },
-    {
         'name'     => 'bounce_path',
         'default'  => Sympa::Constants::BOUNCEDIR ,
         'gettext_id'    => 'Directory for storing bounces',
         'file'     => 'wwsympa.conf',
         'gettext_comment'   => 'Better if not in a critical partition',
-    },
-    {
-        'name'     => 'bounced_pidfile',
-        'default'  => Sympa::Constants::PIDDIR . '/bounced.pid',
-        'gettext_id'    => 'File containing bounced PID while running',
-        'file'     => 'wwsympa.conf',
     },
     {
         'name'     => 'cookie_expire',
@@ -1434,10 +1402,10 @@ our @params = (
         'vhost'    => '1',
         'file'     => 'wwsympa.conf',
     },
-    {
-        'name'     => 'cookie_refresh',
-        'default'  => '60',
-        'gettext_id'    => 'Average interval to refresh HTTP coookie.  0 forces refreshing everytime.',
+    {   'name'       => 'cookie_refresh',
+	'default'    => '60',
+	'gettext_id' => 'Average interval to refresh HTTP session ID.',
+	'file'       => 'sympa.conf', # added after migration of wwsympa.conf
     },
     {
         'name'     => 'custom_archiver',
@@ -1509,12 +1477,6 @@ our @params = (
         'file'     => 'wwsympa.conf',
     },
     {
-        'name'     => 'task_manager_pidfile',
-        'default'  => Sympa::Constants::PIDDIR . '/task_manager.pid',
-        'gettext_id'    => 'File containing task_manager PID while running',
-        'file'     => 'wwsympa.conf',
-    },
-    {
         'name'     => 'title',
         'default'  => 'Mailing lists service',
         'gettext_id'    => 'Title of main Web page',
@@ -1538,18 +1500,31 @@ our @params = (
         'default'  => 'js/tinymce/jscripts/tiny_mce/tiny_mce.js',
         'file'     => 'sympa.conf', # added after migration of wwsympa.conf
     },
-    {
-        'name'     => 'html_editor_init',
-        'gettext_id'    => 'Javascript excerpt that enables and configures the WYSIWYG HTML editor.',
-        'vhost'    => '1',
-        'default'  => 'tinyMCE.init({mode : "exact",elements : "body"});',
-        'file'     => 'wwsympa.conf',
+    {   'name' => 'html_editor_init',
+	'gettext_id' =>
+	    'Javascript excerpt that enables and configures the WYSIWYG HTML editor.',
+	'vhost' => '1',
+	'default' =>
+	    'tinyMCE.init({mode:"exact",elements:"body",language:lang.toLowerCase()});',
+	'file' => 'wwsympa.conf',
     },
-    {
-        'name'     => 'htmlarea_url',
-        'optional' => '1',
-        'vhost'    => '1',
-        'file'     => 'wwsympa.conf',
+    {   'name' => 'html_editor_hide',
+	'gettext_id' =>
+	    'Javascript excerpt that disable the WYSIWYG HTML editor.',
+	'gettext_comment' =>
+	    'If this is empty, HTML editor cannot be disabled.',
+	'vhost'   => '1',
+	'default' => 'tinyMCE.get("body").hide();',
+	'file' => 'sympa.conf',    # added after migration of wwsympa.conf
+    },
+    {   'name' => 'html_editor_show',
+	'gettext_id' =>
+	    'Javascript excerpt that re-enable the WYSIWYG HTML editor.',
+	'gettext_comment' =>
+	    'If this is empty, HTML editor cannot be disabled.',
+	'vhost'   => '1',
+	'default' => 'tinyMCE.get("body").show();',
+	'file' => 'sympa.conf',    # added after migration of wwsympa.conf
     },
     {
         'name'     => 'use_fast_cgi',
@@ -1586,14 +1561,6 @@ our @params = (
     { 'gettext_id' => 'NOT CATEGORIZED' },
 
     {
-        'name'     => 'chk_cert_expiration_task',
-        'optional' => '1',
-    },
-    {
-        'name'     => 'crl_update_task',
-        'optional' => '1',
-    },
-    {
         'name'     => 'ldap_export_connection_timeout',
         'optional' => '1',
     },
@@ -1621,5 +1588,12 @@ our @params = (
         'name'     => 'sort',
         'default'  => 'fr,ca,be,ch,uk,edu,*,com',
     },
+## Not implemented yet.
+##    {   'name'     => 'chk_cert_expiration_task',
+##	'optional' => '1',
+##    },
+##    {   'name'     => 'crl_update_task',
+##	'optional' => '1',
+##    },
 );
 

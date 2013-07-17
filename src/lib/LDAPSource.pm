@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package LDAPSource;
 
@@ -170,7 +169,7 @@ sub connect {
     }
     
     unless (defined($cnx) && ($cnx->code() == 0)){
-	&Log::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
+	&Log::do_log ('err',"Failed to bind to LDAP server : '%s', LDAP server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
 	$self->{'ldap_handler'}->unbind;
 	return undef;
     }

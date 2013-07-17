@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Scenario;
 
@@ -27,13 +26,14 @@ use warnings;
 use Carp qw(croak);
 use Cwd;
 use File::Spec;
+use Mail::Address;
 use Net::Netmask;
+# tentative
+use Data::Dumper;
 
 #use Conf; # used in List - Site
 #use Language; # used in List
 #use List; # this package is used by List
-use Data::Dumper;
-
 #use Log; # used in Conf
 #use Sympa::Constants; # used in Conf - confdef
 #use tools; # used in Conf
@@ -248,9 +248,8 @@ sub _parse_scenario {
 	    next;
 	} elsif ($current_rule =~ /^\s*title\.([-.\w]+)\s+(.*)\s*$/i) {
 	    my ($lang, $title) = ($1, $2);
-	    Language::PushLang($lang);
-	    $structure->{'title'}{Language::GetLang()} = $title;
-	    Language::PopLang();
+	    $lang = Language::CanonicLang($lang) || $lang;
+	    $structure->{'title'}{$lang} = $title;
 	    next;
 	} elsif ($current_rule =~ /^\s*title\s+(.*)\s*$/i) {
 	    $structure->{'title'}{'us'} = $1;
@@ -271,7 +270,7 @@ sub _parse_scenario {
 	} else {
 	    Log::do_log(
 		'err',
-		'error rule syntaxe in scenario %s rule line %d expected : <condition> <auth_mod> -> <action>',
+		'syntax error in scenario %s rule line %d expected : <condition> <auth_mod> -> <action>',
 		$function,
 		$.
 	    );
@@ -355,8 +354,8 @@ sub request_action {
     $context->{'remote_host'} ||= 'unknown_host';
     $context->{'robot_domain'} = $robot->domain;
     $context->{'robot_object'} = $robot;
-    $context->{'msg'}          = $context->{'message'}->{'msg'}
-	if (defined $context->{'message'});
+    $context->{'msg'}          = $context->{'message'}->as_entity()
+	if defined $context->{'message'};
     $context->{'msg_encrypted'} = 'smime'
 	if (defined $context->{'message'} &&
 	defined $context->{'message'}->{'smime_crypted'} &&
@@ -603,18 +602,9 @@ sub request_action {
 		    };
 		    return $return;
 		}
-		unless (
-		    $robot->send_notify_to_listmaster(
-			'error-performing-condition',
-			[   $context->{'listname'} . "  " .
-				$rule->{'condition'}
-			]
-		    )
-		    ) {
-		    &Log::do_log('notice',
-			"Unable to send notify 'error-performing-condition' to listmaster"
-		    );
-		}
+		$robot->send_notify_to_listmaster('error-performing-condition',
+		    [$context->{'listname'} . "  " .  $rule->{'condition'}]
+		);
 		return undef;
 	    }
 
@@ -807,7 +797,7 @@ sub verify {
 	/(\!)?\s*(true|is_listmaster|verify_netmask|is_editor|is_owner|is_subscriber|less_than|match|equal|message|older|newer|all|search|customcondition\:\:\w+)\s*\(\s*(.*)\s*\)\s*/i
 	) {
 	&Log::do_log('err',
-	    "error rule syntaxe: unknown condition $condition");
+	    "syntax error: unknown condition $condition");
 	return undef;
     }
     my $negation = 1;
@@ -823,7 +813,7 @@ sub verify {
     ## but we allow any number of \/ escape sequence)
     while (
 	$arguments =~ s/^\s*(
-				\[\w+(\-\>[\w\-]+)?\]
+				(\[\w+(\-\>[\w\-]+)?\](\[[-+]?\d+\])?)
 				|
 				([\w\-\.]+)
 				|
@@ -924,21 +914,36 @@ sub verify {
 	    $value =~
 		s/\[subscriber\-\>([\w\-]+)\]/$context->{'subscriber'}{$1}/;
 
-	    ## SMTP Header field
-	} elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
+	} elsif ($value =~
+	    /\[(msg_header|header)\-\>([\w\-]+)\](?:\[([-+]?\d+)\])?/i) {
+	    ## SMTP header field.
+	    ## "[msg_header->field] returns arrayref of field values,
+	    ## preserving order. "[msg_header->field][index]" returns one
+	    ## field value.
 	    my $field_name = $2;
+	    my $index = (defined $3) ? $3 + 0 : undef;
 	    if (defined($context->{'msg'})) {
-		my $header = $context->{'msg'}->head;
-		my @fields = $header->get($field_name);
-		## Defaulting empty or missing fields to '', so that we can test
-		## their value in Scenario, considering that, for an incoming message,
-		## a missing field is equivalent to an empty field : the information it
-		## is supposed to contain isn't available.
-		unless (@fields) {
-		    @fields = ('');
+		my $headers = $context->{'msg'}->head->header();
+		my @fields = grep { $_ } map {
+		    my ($h, $v) = split /\s*:\s*/, $_, 2;
+		    (lc $h eq lc $field_name) ? $v : undef;
+		} @{$headers || []};
+		## Defaulting empty or missing fields to '', so that we can
+		## test their value in Scenario, considering that, for an
+		## incoming message, a missing field is equivalent to an empty
+		## field : the information it is supposed to contain isn't
+		## available.
+		if (defined $index) {
+		    $value = $fields[$index];
+		    unless (defined $value) {
+			$value = '';
+		    }
+		} else {
+		    unless (@fields) {
+			@fields = ('');
+		    }
+		    $value = \@fields;
 		}
-
-		$value = \@fields;
 	    } else {
 		if ($log_it) {
 		    &Log::do_log('info',
@@ -1035,7 +1040,7 @@ sub verify {
     if ($condition_key =~ /^(true|all)$/i) {
 	unless ($#args == -1) {
 	    &Log::do_log('err',
-		"error rule syntaxe : incorrect number of argument or incorrect argument syntaxe $condition"
+		"syntax error: incorrect number of argument or incorrect argument syntaxe $condition"
 	    );
 	    return undef;
 	}
@@ -1044,7 +1049,7 @@ sub verify {
     } elsif ($condition_key =~ /^(is_listmaster|verify_netmask)$/) {
 	unless ($#args == 0) {
 	    &Log::do_log('err',
-		"error rule syntaxe : incorrect argument number for condition $condition_key"
+		"syntax error: incorrect argument number for condition $condition_key"
 	    );
 	    return undef;
 	}
@@ -1053,7 +1058,7 @@ sub verify {
     } elsif ($condition_key =~ /^search$/o) {
 	unless ($#args == 1 || $#args == 0) {
 	    &Log::do_log('err',
-		"error rule syntaxe : Incorrect argument number for condition $condition_key"
+		"syntax error: Incorrect argument number for condition $condition_key"
 	    );
 	    return undef;
 	}
@@ -1065,7 +1070,7 @@ sub verify {
 	unless ($#args == 1) {
 	    &Log::do_log(
 		'err',
-		"error rule syntaxe : incorrect argument number (%d instead of %d) for condition $condition_key",
+		"syntax_error: incorrect argument number (%d instead of %d) for condition $condition_key",
 		$#args + 1,
 		2
 	    );
@@ -1073,7 +1078,7 @@ sub verify {
 	}
     } elsif ($condition_key !~ /^customcondition::/o) {
 	&Log::do_log('err',
-	    "error rule syntaxe : unknown condition $condition_key");
+	    "syntax error: unknown condition $condition_key");
 	return undef;
     }
 
@@ -1088,8 +1093,7 @@ sub verify {
     }
     ##### condition is_listmaster
     if ($condition_key eq 'is_listmaster') {
-
-	if ($args[0] eq 'nobody') {
+	if (!ref $args[0] and $args[0] eq 'nobody') {
 	    if ($log_it) {
 		&Log::do_log('info',
 		    '%s is not listmaster of robot %s (rule %s)',
@@ -1098,10 +1102,25 @@ sub verify {
 	    return -1 * $negation;
 	}
 
-	if ($robot->is_listmaster($args[0])) {
+	my @arg;
+	my $ok = undef;
+	if (ref $args[0] eq 'ARRAY') {
+	    @arg = map { $_->address }
+	    grep { $_ } map { (Mail::Address->parse($_)) } @{$args[0]};
+	} else {
+	    @arg = map { $_->address }
+	    grep { $_ } Mail::Address->parse($args[0]);
+	}
+	foreach my $arg (@arg) {
+	    if ($robot->is_listmaster($arg)) {
+		$ok = $arg;
+		last;
+	    }
+	}
+	if ($ok) {
 	    if ($log_it) {
 		&Log::do_log('info', '%s is listmaster of robot %s (rule %s)',
-		    $args[0], $robot, $condition);
+		    $ok, $robot, $condition);
 	    }
 	    return $negation;
 	} else {
@@ -1129,7 +1148,7 @@ sub verify {
 	my $block;
 	unless ($block = new2 Net::Netmask($args[0])) {
 	    &Log::do_log('err',
-		"error rule syntaxe : failed to parse netmask '$args[0]'");
+		"syntax error: failed to parse netmask '$args[0]'");
 	    return undef;
 	}
 	if ($block->match($ENV{'REMOTE_ADDR'})) {
@@ -1195,12 +1214,27 @@ sub verify {
 	    return -1 * $negation;
 	}
 
-	if ($condition_key eq 'is_subscriber') {
+	my @arg;
+	my $ok = undef;
+	if (ref $args[1] eq 'ARRAY') {
+	    @arg = map { $_->address }
+	    grep { $_ } map { (Mail::Address->parse($_)) } @{$args[1]};
+	} else {
+	    @arg = map { $_->address }
+	    grep { $_ } Mail::Address->parse($args[1]);
+	}
 
-	    if ($list2->is_list_member($args[1])) {
+	if ($condition_key eq 'is_subscriber') {
+	    foreach my $arg (@arg) {
+		if ($list2->is_list_member($arg)) {
+		    $ok = $arg;
+		    last;
+		}
+	    }
+	    if ($ok) {
 		if ($log_it) {
 		    &Log::do_log('info', "%s is member of list %s (rule %s)",
-			$args[1], $args[0], $condition);
+			$ok, $args[0], $condition);
 		}
 		return $negation;
 	    } else {
@@ -1213,10 +1247,16 @@ sub verify {
 	    }
 
 	} elsif ($condition_key eq 'is_owner') {
-	    if ($list2->am_i('owner', $args[1])) {
+	    foreach my $arg (@arg) {
+		if ($list2->am_i('owner', $arg)) {
+		    $ok = $arg;
+		    last;
+		}
+	    }
+	    if ($ok) {
 		if ($log_it) {
 		    &Log::do_log('info', "%s is owner of list %s (rule %s)",
-			$args[1], $args[0], $condition);
+			$ok, $args[0], $condition);
 		}
 		return $negation;
 	    } else {
@@ -1229,10 +1269,16 @@ sub verify {
 	    }
 
 	} elsif ($condition_key eq 'is_editor') {
-	    if ($list2->am_i('editor', $args[1])) {
+	    foreach my $arg (@arg) {
+		if ($list2->am_i('editor', $arg)) {
+		    $ok = $arg;
+		    last;
+		}
+	    }
+	    if ($ok) {
 		if ($log_it) {
 		    &Log::do_log('info', "%s is editor of list %s (rule %s)",
-			$args[1], $args[0], $condition);
+			$ok, $args[0], $condition);
 		}
 		return $negation;
 	    } else {
@@ -1561,21 +1607,21 @@ sub search {
 
 	my $res = $ds->fetch;
 	$ds->disconnect();
-	&Log::do_log('debug2', 'Result of SQL query : %d = %s',
-	    $res->[0], $statement);
+	my $first_row = ref($res->[0]) ? $res->[0]->[0] : $res->[0];
+	Log::do_log('debug2', 'Result of SQL query : %d = %s',
+	    $first_row, $statement);
 
-	if ($res->[0] == 0) {
-	    $persistent_cache{'named_filter'}{$filter_file}{$filter}
-		{'value'} = 0;
+	if ($first_row == 0) {
+	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'}
+		= 0;
 	} else {
-	    $persistent_cache{'named_filter'}{$filter_file}{$filter}
-		{'value'} = 1;
+	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'}
+		= 1;
 	}
 	$persistent_cache{'named_filter'}{$filter_file}{$filter}{'update'} =
 	    time;
-	return $persistent_cache{'named_filter'}{$filter_file}{$filter}
-	    {'value'};
-
+	return
+	    $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
     } elsif ($filter_file =~ /\.ldap$/) {
 	## Determine full path of the filter file
 	my $file = $that->get_etc_filename("search_filters/$filter_file");
@@ -1810,9 +1856,12 @@ Get internationalized title of the scenario, under current language context.
 sub get_current_title {
     my $self = shift;
 
-    if (defined $self->{'title'}{Language::GetLang()}) {
-	return $self->{'title'}{Language::GetLang()};
-    } elsif (defined $self->{'title'}{'gettext'}) {
+    foreach my $lang (Language::ImplicatedLangs()) {
+	if (defined $self->{'title'}{$lang}) {
+	    return $self->{'title'}{$lang};
+	}
+    }
+    if (defined $self->{'title'}{'gettext'}) {
 	return Language::gettext($self->{'title'}{'gettext'});
     } elsif (defined $self->{'title'}{'us'}) {
 	return Language::gettext($self->{'title'}{'us'});
@@ -1849,7 +1898,8 @@ Returns 1 if all conditions in scenario are "true()   [an_auth_method]    ->  re
 sub is_purely_closed {
     my $self = shift;
     foreach my $rule (@{$self->{'rules'}}) {
-	if ($rule->{'condition'} ne 'true' && $rule->{'action'} !~ /reject/) {
+	if ($rule->{'condition'} ne 'true' &&
+	    $rule->{'action'} !~ /reject/) {
 	    Log::do_log('debug2', 'Scenario %s is not purely closed.',
 		$self->{'title'});
 	    return 0;

@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Sympaspool;
 
@@ -36,63 +35,37 @@ use Data::Dumper;
 use Message;
 use SDM;
 
-#use Datasource; # not used
-#use SQLSource qw(create_db %date_format); # not used
-#use Upgrade; # not used
-#use Lock; # not used
-#use Scenario; # not used
-#use Fetch; # not used
-#use WebAgent; # not used
-#use tt2; # not used
-#use Sympa::Constants; # used by SDM
-#use Sympa::DatabaseDescription; # used by SDM
-
-#use IO::Scalar; # not used
-#use Storable; # no longer used
-#use Mail::Header; # not used
-
-#use Archive; # not used
-#use Language; # not used
-#use Log; # used by SDM
-#use Conf; # no longer used
-#use mail; # not used
-#use Ldap; # not used
-
-#use Time::Local; # not used
-#use MIME::Entity; # no longer used
-#use MIME::EncWords; # no longer used
-#use MIME::Parser; # no longer used
-
-#use Family; # not used
-#use PlainDigest; # not used
-
 our @ISA = qw(Exporter);
 
 ## Database and SQL statement handlers
-my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
+my ($sth, @sth_stack);
 
 
 ## Creates an object.
 sub new {
     Log::do_log('debug2', '(%s, %s, %s)', @_);
-    my($pkg, $spoolname, $selection_status) = @_;
-    my $spool = {};
+    my($pkg, $spoolname, $selection_status, %opts) = @_;
+
+    my $self;
 
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(signoff)|(topic)|(validated)|(task)$/){
 &Log::do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
-    $spool->{'spoolname'} = $spoolname;
-    if ($selection_status and
+    unless ($selection_status and
 	($selection_status eq 'bad' or $selection_status eq 'ok')) {
-	$spool->{'selection_status'} = $selection_status;
-    }else{
-	$spool->{'selection_status'} =  'ok';
+	$selection_status = 'ok';
     }
 
-    bless $spool, $pkg;
+    $self = bless {
+	'spoolname'        => $spoolname,
+	'selection_status' => $selection_status,
+    } => $pkg;
+    $self->{'selector'} = $opts{'selector'} if $opts{'selector'};
+    $self->{'sortby'}   = $opts{'sortby'} if $opts{'sortby'};
+    $self->{'way'}      = $opts{'way'} if $opts{'way'};
 
-    return $spool;
+    return $self;
 }
 
 # total spool_table count : not object oriented, just a subroutine 
@@ -120,21 +93,30 @@ sub count {
 #  get_content return the content an array of hash describing the spool content
 # 
 sub get_content {
-
     my $self = shift;
     my $data= shift;
-    my $selector=$data->{'selector'};     # hash field->value used as filter  WHERE sql query 
-    my $selection=$data->{'selection'};   # the list of field to select. possible values are :
-                                          #    -  a comma separated list of field to select. 
-                                          #    -  '*'  is the default .
-                                          #    -  '*_but_message' mean any field except message which may be huge and unusefull while listing spools
-                                          #    - 'count' mean the selection is just a count.
-                                          # should be used mainly to select all but 'message' that may be huge and may be unusefull
-    my $offset = $data->{'offset'};         # for pagination, start fetch at element number = $offset;
-    my $page_size = $data->{'page_size'}; # for pagination, limit answers to $page_size
-    my $orderby = $data->{'sortby'};      # sort
-    my $way = $data->{'way'};             # asc or desc 
-    
+
+    # hash field->value used as filter WHERE sql query
+    my $selector = $data->{'selector'} || $self->{'selector'};
+
+    # the list of field to select. possible values are :
+    #    -  a comma separated list of field to select. 
+    #    -  '*'  is the default .
+    #    -  '*_but_message' mean any field except message which may be huge
+    #       and unusefull while listing spools
+    #    - 'count' mean the selection is just a count.
+    # should be used mainly to select all but 'message' that may be huge and
+    # may be unusefull
+    my $selection=$data->{'selection'};
+
+    # for pagination, start fetch at element number = $offset;
+    my $offset = $data->{'offset'};
+
+    # for pagination, limit answers to $page_size
+    my $page_size = $data->{'page_size'};
+
+    my $orderby = $data->{'sortby'} || $self->{'sortby'};  # sort
+    my $way = $data->{'way'} || $self->{'way'};            # asc or desc 
 
     my $sql_where = _sqlselector($selector);
     if ($self->{'selection_status'} eq 'bad') {
@@ -177,11 +159,10 @@ sub get_content {
     }else{
 	my @messages;
 	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
-	    $message->{'date_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'date'});
-	    $message->{'lockdate_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
 	    $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
 	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 	    $message->{'status'} = $self->{'selection_status'}; 
+	    $message->{'spoolname'} = $self->{'spoolname'};
 	    push @messages, $message;
 
 	    last if $page_size and $page_size <= scalar @messages;
@@ -197,12 +178,10 @@ sub get_content {
 #  next : return next spool entry ordered by priority next lock the message_in_spool that is returned
 # 
 sub next {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
-    my $selector = shift;
 
-    &Log::do_log('debug', 'Getting next spool entry in %s, %s',$self->{'spoolname'},$self->{'selection_status'});
-    
-    my $sql_where = _sqlselector($selector);
+    my $sql_where = _sqlselector($self->{'selector'});
 
     if ($self->{'selection_status'} eq 'bad') {
 	$sql_where = $sql_where." AND message_status_spool = 'bad' " ;
@@ -284,6 +263,8 @@ sub next {
 	return undef;
     }
 
+    $message->{'spoolname'} = $self->{'spoolname'};
+
     ## add objects
     my $robot_id = $message->{'robot'};
     my $listname = $message->{'list'};
@@ -324,7 +305,7 @@ sub get_message {
 	$self, $selector->{'messagekey'},
 	$selector->{'list'}, $selector->{'robot'});
 
-    my $sqlselector = _sqlselector($selector);
+    my $sqlselector = _sqlselector($selector || $self->{'selector'});
     my $all = _selectfields();
 
     push @sth_stack, $sth;
@@ -349,11 +330,17 @@ sub get_message {
     $sth->finish;
     $sth = pop @sth_stack;
 
-    return undef unless $message and %$message;
+    unless ($message and %$message) {
+	Log::do_log('err', 'No message: %s', $sqlselector);
+	return undef;
+    } else {
+	Log::do_log('debug3', 'Success: %s', $sqlselector);
+    }
 
     $message->{'lock'} =  $message->{'messagelock'}; 
     $message->{'messageasstring'} =
 	MIME::Base64::decode($message->{'message'});
+    $message->{'spoolname'} = $self->{'spoolname'};
 
     if ($message->{'list'} && $message->{'robot'}) {
 	my $robot = Robot->new($message->{'robot'});
@@ -384,7 +371,6 @@ sub unlock_message {
 # 
 #  update spool entries that match selector with values
 sub update {
-
     my $self = shift;
     my $selector = shift;
     my $values = shift;
@@ -461,20 +447,23 @@ sub store {
     my $b64msg = MIME::Base64::encode($message_asstring);
     my $message;
     if ($self->{'spoolname'} ne 'task' && $message_asstring ne 'rebuild' && $self->{'spoolname'} ne 'digest') {
-	$message = Message->new({'messageasstring' => $message_asstring});
+	$message = Message->new({'messageasstring' => $message_asstring,'noxsympato'=>1});
     }
     
     if($message) {
 	$metadata->{'spam_status'} = $message->{'spam_status'};
-	$metadata->{'subject'} = $message->{'msg'}->head->get('Subject'); chomp $metadata->{'subject'} ;
-	$metadata->{'subject'} = substr $metadata->{'subject'}, 0, 109;
-	$metadata->{'messageid'} = $message->{'msg'}->head->get('Message-Id'); chomp $metadata->{'messageid'} ;
-	$metadata->{'messageid'} = substr $metadata->{'messageid'}, 0, 295;
-	$metadata->{'headerdate'} = substr $message->{'msg'}->head->get('Date'), 0, 78;
+	$metadata->{'subject'} = $message->get_header('Subject');
+	$metadata->{'subject'} = substr $metadata->{'subject'}, 0, 109
+	    if defined $metadata->{'subject'};
+	$metadata->{'messageid'} = $message->get_header('Message-Id');
+	$metadata->{'messageid'} = substr $metadata->{'messageid'}, 0, 295
+	    if defined $metadata->{'messageid'};
+	$metadata->{'headerdate'} = substr $message->get_header('Date'), 0, 78;
 
-	my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
-	if ($#sender_hdr >= 0){
-	    $metadata->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
+	#FIXME: get_sender_email() ?
+	my @sender_hdr = Mail::Address->parse($message->get_header('From'));
+	if (@sender_hdr) {
+	    $metadata->{'sender'} = lc($sender_hdr[0]->address) unless $sender;
 	    $metadata->{'sender'} = substr $metadata->{'sender'}, 0, 109;
 	}
     }else{
@@ -486,26 +475,43 @@ sub store {
     $metadata->{'size'}= length($message_asstring) unless ($metadata->{'size'}) ;
     $metadata->{'message_status'} = 'ok';
 
-    my $insertpart1; my $insertpart2;
-    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_flavour','task_object') {
-	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
-	$insertpart2 = $insertpart2. ', '.&SDM::quote($metadata->{$meta});
+    my ($insertpart1, $insertpart2, @insertparts) = ('', '');
+    foreach my $meta (
+	qw(list authkey robot message_status priority date type subject sender
+	messageid size headerdate spam_status dkim_privatekey dkim_d dkim_i
+	dkim_selector task_label task_date task_model
+	task_flavour task_object)
+    ) {
+	$insertpart1 .= ', ' . $meta . '_spool';
+	$insertpart2 .= ', ?';
+	push @insertparts, $metadata->{$meta};
     }
     my $lock = $$.'@'.hostname() ;
 
     push @sth_stack, $sth;
-    my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,&SDM::quote($self->{'spoolname'}),&SDM::quote($lock),&SDM::quote($b64msg), $insertpart2;
 
-    $sth = &SDM::do_query ($statement);
-
-    $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&SDM::quote($lock),$metadata->{'date'};
-    $sth = &SDM::do_query ($statement);
+    $sth = SDM::do_prepared_query(
+	sprintf(
+	    q{INSERT INTO spool_table
+	      (spoolname_spool, messagelock_spool, message_spool%s)
+	      VALUES (?, ?, ?%s)},
+	    $insertpart1, $insertpart2
+	),
+	$self->{'spoolname'}, $lock, $b64msg, @insertparts
+    );
     # this query returns the autoinc primary key as result of this insert
+    $sth = SDM::do_prepared_query(
+	q{SELECT messagekey_spool as messagekey
+	  FROM spool_table
+	  WHERE messagelock_spool = ? AND date_spool = ?},
+	$lock, $metadata->{'date'}
+    );
+    ##FIXME: should check error
 
     my $inserted_message = $sth->fetchrow_hashref('NAME_lc');
     my $messagekey = $inserted_message->{'messagekey'};
     
-    $sth-> finish;
+    $sth->finish;
     $sth = pop @sth_stack;
 
     unless ($locked) {
@@ -518,22 +524,12 @@ sub store {
 # remove a message in database spool using (messagekey,list,robot) which are a unique id in the spool
 #
 sub remove_message {  
+    Log::do_log('debug2', '(%s, %s)', @_);
     my $self = shift;
-    my $selector = shift;
-    my $robot = $selector->{'robot'};
-    my $messagekey = $selector->{'messagekey'};
-    my $listname = $selector->{'list'};
-    Log::do_log('debug2', '(%s, list=%s, robot=%s, messagekey=%s)',
-	$self, $listname, $robot, $messagekey);
+    my $params = shift;
 
-    ## search if this message is already in spool database : mailfile may
-    ## perform multiple submission of exactly the same message 
-    unless ($self->get_message($selector)){
-	Log::do_log('err', 'message %s not in spool', $messagekey); 
-	return undef;
-    }
-
-    my $sqlselector = _sqlselector($selector);
+    my $just_try = $params->{'just_try'};
+    my $sqlselector = _sqlselector($params);
 
     push @sth_stack, $sth;
 
@@ -548,8 +544,15 @@ sub remove_message {
 	$sth = pop @sth_stack;
 	return undef;
     }
+    ## search if this message is already in spool database : mailfile may
+    ## perform multiple submission of exactly the same message
+    unless ($sth->rows) {
+	Log::do_log('err', 'message is not in spool: %s', $sqlselector)
+	    unless $just_try;
+	$sth = pop @sth_stack;
+	return undef;
+    }
 
-    $sth->finish;
     $sth = pop @sth_stack;
     return 1;
 }
@@ -634,11 +637,7 @@ EOF
 	    {'list' => 'notalist', 'robot' => 'notaboot'})) {
 	    return (($z-1)*$size_increment);
 	}
-	unless ($testing->remove_message({'messagekey' => $messagekey})) {
-	    Log::do_log('err',
-		'Unable to remove test message (key = %s) from spool_table',
-		$messagekey);	    
-	}
+	$testing->remove_message({'messagekey' => $messagekey});
 	$total += $z*$size_increment;
         $progress->message(sprintf ".........[OK. Done in %.2f sec]", time() - $time);
 	$next_update = $progress->update($total+$even_part)
@@ -690,11 +689,21 @@ sub _selectfields{
 # selector is a hash where key is a column name and value is column value expected.**** 
 #   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(
 sub _sqlselector {
-	
-    my $selector = shift; 
+    my $selector = shift || {};
     my $sqlselector = '';
-    
+
+    $selector = {%$selector};
+    if (ref $selector->{'list'}) {
+	$selector->{'robot'} = $selector->{'list'}->domain;
+	$selector->{'list'} = $selector->{'list'}->name;
+    }
+    if (ref $selector->{'robot'}) {
+	$selector->{'robot'} = $selector->{'robot'}->domain;
+    }
+
     foreach my $field (keys %$selector) {
+	next if $field eq 'just_try';
+
 	my $compare_operator = '=';
 	my $select_value = $selector->{$field};
 	if ($select_value =~ /^([\<\>]\=?)\.(.*)$/){ 

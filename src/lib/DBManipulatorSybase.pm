@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Softwarec
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package DBManipulatorSybase;
 
@@ -382,7 +381,7 @@ sub get_indexes {
 	    $found_indexes{$index_name}{$field_name} = 1;
 	}
     }
-    open TMP, ">>/tmp/toto"; print TMP &Dumper(\%found_indexes); close TMP;
+    #open TMP, ">>/tmp/toto"; print TMP &Dumper(\%found_indexes); close TMP;
     return \%found_indexes;
 }
 

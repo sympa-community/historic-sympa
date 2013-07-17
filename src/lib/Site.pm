@@ -140,6 +140,10 @@ sub get_address {
 	} elsif ($type eq 'return_path') {
 	    return $self->name . $self->robot->return_path_suffix . '@' .
 		$self->host;
+	} elsif ($type eq 'subscribe') {
+	    return $self->name . '-subscribe' . '@' . $self->host;
+	} elsif ($type eq 'unsubscribe') {
+	    return $self->name . '-unsubscribe' . '@' . $self->host;
 	}
     } elsif (ref $self and ref $self eq 'Robot' or $self eq 'Site') {
 	unless ($type) {
@@ -197,6 +201,70 @@ sub is_listmaster {
     }
 
     return 0;
+}
+
+=head3 Internationalization
+
+=over 4
+
+=item best_language ( LANG, ... )
+
+    # To get site-wide best language.
+    $lang = Site->best_language('de', 'en-US;q=0.9');
+    # To get robot-wide best language.
+    $lang = $robot->best_language('de', 'en-US;q=0.9');
+    # To get list-specific best language.
+    $lang = $list->best_language('de', 'en-US;q=0.9');
+
+Chooses best language under the context of List, Robot or Site.
+Arguments are language codes (see L<Language>) or ones with quality value.
+If no arguments are given, the value of C<HTTP_ACCEPT_LANGUAGE> environment
+variable will be used.
+
+Returns language tag or, if negotiation failed, lang of object.
+
+=back
+
+=cut
+
+sub best_language {
+    my $self = shift;
+    my $accept_string = join ',', grep { $_ and $_ =~ /\S/ } @_;
+    $accept_string ||= $ENV{HTTP_ACCEPT_LANGUAGE} || '*';
+
+    my @supported_languages;
+    my %supported_languages;
+    my @langs = ();
+    my $lang;
+
+    if (ref $self eq 'List') {
+	@supported_languages = $self->robot->supported_languages;
+    } elsif (ref $self eq 'Robot' or !ref $self and $self eq 'Site') {
+	@supported_languages = $self->supported_languages;
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+    %supported_languages = map { $_ => 1 } @supported_languages;
+
+    $lang = $self->lang;
+    push @langs, $lang
+	if $supported_languages{$lang};
+    if (ref $self eq 'List') {
+	$lang = $self->robot->lang;
+	push @langs, $lang
+	    if $supported_languages{$lang} and !grep { $_ eq $lang } @langs;
+    }
+    if (ref $self eq 'List' or ref $self eq 'Robot') {
+	$lang = Site->lang;
+	push @langs, $lang
+	    if $supported_languages{$lang} and !grep { $_ eq $lang } @langs;
+    }
+    foreach $lang (@supported_languages) {
+	push @langs, $lang
+	    if !grep { $_ eq $lang } @langs;
+    }
+
+    return Language::NegotiateLang($accept_string, @langs) || $self->lang;
 }
 
 =head3 Handling the Authentication Token
@@ -258,7 +326,7 @@ command.
 
 IN : 
       -$self : ref(List) | "Site"
-      -$email(+) : recepient (the personn who asked
+      -$email(+) : recipient (the person who asked
                    for the command)
       -$cmd : -signoff|subscribe|add|del|remind if $self is List
               -remind else
@@ -436,6 +504,10 @@ IN :
 
 OUT : ref(ARRAY) of tt2 include path
 
+Note:
+As of 6.2a.34, argument $lang is recommended to be IETF language tag,
+rather than locale name.
+
 =back
 
 =cut
@@ -443,14 +515,29 @@ OUT : ref(ARRAY) of tt2 include path
 sub get_etc_include_path {
     Log::do_log('debug3', '(%s, %s, %s)', @_);
     my $self = shift;
-    return [$self->_get_etc_include_path(@_)];
+    my $dir  = shift;
+    my $lang = shift;
+
+    ## Get language subdirectories.
+    my $lang_dirs = undef;
+    if ($lang) {
+	## For compatibility: add old-style "locale" directory at first.
+	my $old_lang = Language::Lang2Locale_old($lang);
+	if ($old_lang) {
+	    $lang_dirs = [$old_lang];
+	} else {
+	    $lang_dirs = [];
+	}
+	## Add lang itself and fallback directories.
+	push @$lang_dirs, Language::ImplicatedLangs($lang);
+    }
+
+    return [$self->_get_etc_include_path($dir, $lang_dirs)];
 }
 
 sub _get_etc_include_path {
-
-    #Log::do_log('debug3', '(%s, %s, %s)', @_);
     my $self = shift;
-    my ($dir, $lang) = @_;
+    my ($dir, $lang_dirs) = @_;    # shift is not used
 
     my @include_path;
 
@@ -464,8 +551,10 @@ sub _get_etc_include_path {
 	} else {
 	    $path_list = $self->dir;
 	}
-	if ($lang) {
-	    unshift @include_path, $path_list . '/' . $lang, $path_list;
+	if ($lang_dirs) {
+	    unshift @include_path,
+		(map { $path_list . '/' . $_ } @$lang_dirs),
+		$path_list;
 	} else {
 	    unshift @include_path, $path_list;
 	}
@@ -477,9 +566,10 @@ sub _get_etc_include_path {
 	    } else {
 		$path_family = $family->dir;
 	    }
-	    if ($lang) {
+	    if ($lang_dirs) {
 		unshift @include_path,
-		    $path_family . '/' . $lang, $path_family;
+		    (map { $path_family . '/' . $_ } @$lang_dirs),
+		    $path_family;
 	    } else {
 		unshift @include_path, $path_family;
 	    }
@@ -493,8 +583,10 @@ sub _get_etc_include_path {
 	} else {
 	    $path_family = $self->dir;
 	}
-	if ($lang) {
-	    unshift @include_path, $path_family . '/' . $lang, $path_family;
+	if ($lang_dirs) {
+	    unshift @include_path,
+		(map { $path_family . '/' . $_ } @$lang_dirs),
+		$path_family;
 	} else {
 	    unshift @include_path, $path_family;
 	}
@@ -508,8 +600,10 @@ sub _get_etc_include_path {
 	    } else {
 		$path_robot = $self->etc;
 	    }
-	    if ($lang) {
-		unshift @include_path, $path_robot . '/' . $lang, $path_robot;
+	    if ($lang_dirs) {
+		unshift @include_path,
+		    (map { $path_robot . '/' . $_ } @$lang_dirs),
+		    $path_robot;
 	    } else {
 		unshift @include_path, $path_robot;
 	    }
@@ -525,10 +619,12 @@ sub _get_etc_include_path {
 	    $path_etcbindir = Sympa::Constants::DEFAULTDIR;
 	    $path_etcdir    = Site->etc;
 	}
-	if ($lang) {
+	if ($lang_dirs) {
 	    @include_path = (
-		$path_etcdir . '/' . $lang,    $path_etcdir,
-		$path_etcbindir . '/' . $lang, $path_etcbindir
+		(map { $path_etcdir . '/' . $_ } @$lang_dirs),
+		$path_etcdir,
+		(map { $path_etcbindir . '/' . $_ } @$lang_dirs),
+		$path_etcbindir
 	    );
 	} else {
 	    @include_path = ($path_etcdir, $path_etcbindir);
@@ -635,6 +731,9 @@ sub send_dsn {
 	# loop detected
 	'5.4.6' => 'Routing loop detected',
 
+	# failed to personalize (merge_feature)
+	'5.6.5' => 'Conversion Failed',
+
 	# virus found
 	'5.7.0' => 'Other or undefined security status',
 	}->{$status} ||
@@ -642,7 +741,7 @@ sub send_dsn {
     ## Delivery result, "failed" or "delivered".
     my $action = (index($status, '2') == 0) ? 'delivered' : 'failed';
 
-    my $header = $message->{'msg'}->head->as_string;
+    my $header = $message->as_entity()->head->as_string();
 
     Language::PushLang('en');
     my $date = POSIX::strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime time);
@@ -725,19 +824,22 @@ sub send_file {
     my $context = shift || {};
     my $options = shift || {};
 
-    my ($robot, $list, $robot_id);
+    my ($robot, $list, $robot_id, $listname);
     if (ref $self and ref $self eq 'List') {
 	$robot    = $self->robot;
 	$list     = $self;
 	$robot_id = $self->robot->name;
+	$listname = $self->name;
     } elsif (ref $self and ref $self eq 'Robot') {
 	$robot    = $self;
 	$list     = '';
 	$robot_id = $self->name;
+	$listname = '';
     } elsif ($self eq 'Site') {
 	$robot    = $self;
 	$list     = '';
 	$robot_id = '*';
+	$listname = '';
     } else {
 	croak 'bug in logic.  Ask developer';
     }
@@ -821,7 +923,7 @@ sub send_file {
     }
 
     ## What file
-    my $lang = &Language::Lang2Locale($data->{'lang'});
+    my $lang = $data->{'lang'};
     my $tt2_include_path = $self->get_etc_include_path('mail_tt2', $lang);
     unshift @$tt2_include_path, $::plugins->tt2Paths
         if $::plugins;
@@ -879,7 +981,7 @@ sub send_file {
 	# if the list have it's private_key and cert sign the message
 	# . used only for the welcome message, could be usefull in other case?
 	# . a list should have several certificats and use if possible a
-	#   certificat issued by the same CA as the receipient CA if it exists
+	#   certificat issued by the same CA as the recipient CA if it exists
 	if ($sign_mode and $sign_mode eq 'smime') {
 	    $data->{'fromlist'} = $self->get_address();
 	    $data->{'replyto'}  = $self->get_address('owner');
@@ -908,13 +1010,41 @@ sub send_file {
     # order to support Sympa server on a machine without any MTA service
     $data->{'use_bulk'} = 1
 	unless ($data->{'alarm'});
-    my $r =
-	&mail::mail_file($filename, $who, $data, $robot,
-	$options->{'parse_and_return'});
-    return $r if $options->{'parse_and_return'};
 
-    unless ($r) {
-	&Log::do_log('err', 'Could not send template "%s" to %s',
+    my $messageasstring =
+	mail::parse_tt2_messageasstring($robot, $filename, $who, $data);
+    return $messageasstring if $options->{'parse_and_return'};
+
+    my $message;
+    if ($list) {
+	$message = Message->new({
+	    'messageasstring' => $messageasstring, 'noxsympato' => 1,
+	    'list_object' => $list,
+	});
+    } elsif (ref $robot) {
+	$message = Message->new({
+	    'messageasstring' => $messageasstring, 'noxsympato' => 1,
+	    'robot_object' => $robot,
+	});
+    } else {
+	$message = Message->new({
+	    'messageasstring' => $messageasstring, 'noxsympato' => 1,
+	});
+    }
+
+    ## SENDING
+    unless (defined mail::sending(
+	'message' => $message,
+	'rcpt' => $who,
+	'from' => ($data->{'return_path'} || $robot->get_address('owner')),
+	'robot' => $robot,
+	'listname' => $listname,
+	'priority' => $robot->sympa_priority,
+	'sign_mode' => $data->{'sign_mode'},
+	'use_bulk' => $data->{'use_bulk'},
+	'dkim' => $data->{'dkim'},
+    )) {
+	Log::do_log('err', 'Could not send template "%s" to %s',
 	    $filename, $who);
 	return undef;
     }
@@ -1023,16 +1153,17 @@ sub send_notify_to_listmaster {
 			if (($operation eq 'no_db') ||
 			($operation eq 'db_restored'));
 
-		    &Log::do_log('info', 'send messages to %s', $email);
+		    Log::do_log('info', 'send messages to %s', $email);
 		    unless (
 			$robot->send_file(
 			    'listmaster_groupednotifications',
 			    $email, $param, $options
 			)
 			) {
-			&Log::do_log('notice',
-			    "Unable to send template 'listmaster_notification' to $email"
-			) unless ($operation eq 'logs_failed');
+			Log::do_log('notice',
+			    'Unable to send notify "%s" to listmaster: Unable to send template "listmaster_groupnotifications" to %s',
+			    $operation, $email)
+			    unless $operation eq 'logs_failed';
 			return undef;
 		    }
 		}
@@ -1076,11 +1207,11 @@ sub send_notify_to_listmaster {
 	$data = [$data];
     }
     unless (ref $data eq 'HASH' or ref $data eq 'ARRAY') {
-	&Log::do_log(
+	Log::do_log(
 	    'err',
 	    'Error on incoming parameter "%s", it must be a ref on HASH or a ref on ARRAY',
-	    $data
-	) unless $operation eq 'logs_failed';
+	    $data)
+	    unless $operation eq 'logs_failed';
 	return undef;
     }
 
@@ -1122,9 +1253,9 @@ sub send_notify_to_listmaster {
 		$listmaster, $data, $options
 	    )
 	    ) {
-	    &Log::do_log('notice',
-		'Unable to send template "listmaster_notification" to %s',
-		$listmaster);
+	    Log::do_log('notice',
+		'Unable to send notify "%s" to listmaster: Unable to send template "listmaster_notification" to %s',
+		$operation, $listmaster);
 	    return undef;
 	}
 	return 1;
@@ -1179,9 +1310,9 @@ sub send_notify_to_listmaster {
 	}
 
 	unless ($r) {
-	    &Log::do_log('notice',
-		'Unable to send template "listmaster_notification" to %s',
-		$listmaster)
+	    Log::do_log('notice',
+		'Unable to send notify "%s" to listmaster: Unable to send template "listmaster_notification" to %s',
+		$operation, $listmaster)
 		unless $operation eq 'logs_failed';
 	    return undef;
 	}
@@ -1327,7 +1458,8 @@ sub AUTOLOAD {
     ## getters for site/robot parameters.
     $type->{'RobotParameter'} = 1
 	if grep { $_ eq $attr }
-	    qw(blacklist loging_condition loging_for_module) or
+	    qw(blacklist loging_condition loging_for_module
+	    trusted_applications) or
 	    grep { $_->{'name'} and $_->{'name'} eq $attr } @confdef::params;
     ## getters for attributes specific to global config.
     $type->{'SiteAttribute'} = 1
@@ -1415,33 +1547,51 @@ sub AUTOLOAD {
     goto &$AUTOLOAD;
 }
 
-=head3 Derived parameters
-
-These are accessors derived from default parameters.
-Some of them are obsoleted.
-
 =over 4
 
-=item list_check_regexp
+=item lang
 
 I<Getter>.
-Get regexp matching special list address.
-
-B<Obsoleted>.
-Use L<Robot/split_listname> method.
+Gets "lang" parameter, canonicalized if possible.
 
 =back
 
 =cut
 
-sub list_check_regexp {
+#FIXME: inefficient; would be cached.
+sub lang {
     my $self = shift;
-    croak "Can't modify \"list_check_regexp\" attribute" if scalar @_ > 1;
-    return join('|',
-	map { s/(\W)/\\$1/g; $_ }
-	    grep { $_ and length $_ }
-	    split(/[\s,]+/, $self->list_check_suffixes));
+    my $lang;
+
+    croak "Can't modify \"lang\" attribute" if scalar @_ > 1;
+    if (ref $self and ref $self eq 'Robot' and
+	$self->{'etc'} ne Site->etc and
+	exists Site->robots_config->{$self->{'name'}}{'lang'}) {
+	$lang = Site->robots_config->{$self->{'name'}}{'lang'};
+    } elsif (ref $self and ref $self eq 'Robot' or
+	! ref $self and $self eq 'Site') {
+	croak "Can't call method \"lang\" on uninitialized $self class"
+	    unless $Site::is_initialized;
+	$lang = $Conf::Conf{'lang'};
+    } else {
+	croak 'bug in loginc.  Ask developer';
+    }
+
+    if ($lang) {
+	$lang = Language::CanonicLang($lang) || $lang;
+    }
+    return $lang;
 }
+
+=head3 Derived parameters
+
+These are accessors derived from default parameters.
+Some of them are obsoleted.
+
+=cut
+
+## DEPRECATED: Use $robot->split_listname().
+## sub list_check_regexp ( mailbox )
 
 =over 4
 
@@ -1476,7 +1626,7 @@ sub listmasters {
 	    $Conf::Conf{'listmasters'};
 	}
     } else {
-	croak 'bug in loginc.  Ask developer';
+	croak 'bug in logic.  Ask developer';
     }
 }
 
@@ -1522,13 +1672,14 @@ In scalar context, returns arrayref to them.
 sub supported_languages {
     my $self           = shift;
     my $supported_lang = $self->supported_lang;
-    unless ($supported_lang) {
-	return () if wantarray;
-	return undef;
-    }
 
+    my $saved_lang = Language::GetLang();
     my @lang_list =
-	map { Language::Lang2Locale($_) } split /\s*,\s*/, $supported_lang;
+	grep { $_ and $_ = Language::SetLang($_) }
+	split /\s*,\s*/, $supported_lang;
+    Language::SetLang($saved_lang);
+
+    @lang_list = ('en') unless @lang_list;
     return @lang_list if wantarray;
     return \@lang_list;
 }

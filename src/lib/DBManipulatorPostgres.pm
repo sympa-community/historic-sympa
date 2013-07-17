@@ -16,17 +16,16 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Softwarec
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package DBManipulatorPostgres;
 
 use strict;
+#use Carp; # not used
+# tentative
 use Data::Dumper;
 
-use Carp;
 use Log;
-
 use DBManipulatorDefault;
 
 our @ISA = qw(DBManipulatorDefault);
@@ -159,13 +158,43 @@ sub set_autoinc {
 # Returns the list of the tables in the database.
 # Returns undef if something goes wrong.
 #
-# OUT: a ref to an array containing the list of the tables names in the database, undef if something went wrong
+# OUT: a ref to an array containing the list of the tables names in the
+# database, undef if something went wrong
+#
+# Note: Pg searches tables in schemas listed in search_path, defaults to be
+#   '"$user",public'.
 sub get_tables {
     my $self = shift;
-    &Log::do_log('debug3','Getting the list of tables in database %s',$self->{'db_name'});
+    Log::do_log('debug3','Getting the list of tables in database %s',$self->{'db_name'});
+
+    ## get search_path.
+    my $sth;
+    unless ($sth = $self->do_query('SELECT current_schemas(false)')) {
+	Log::do_log('err', 'Unable to get search_path of database %s',
+	    $self->{'db_name'});
+	return undef;
+    }
+    my $search_path = $sth->fetchrow;
+    $sth->finish;
+
+    ## get table names.
     my @raw_tables;
-    unless (@raw_tables = $self->{'dbh'}->tables(undef,'public',undef,'TABLE',{pg_noprefix => 1} )) {
-	&Log::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
+    my %raw_tables;
+    foreach my $schema (@{$search_path || []}) {
+	my @tables = $self->{'dbh'}->tables(
+	    undef, $schema, undef, 'TABLE', {pg_noprefix => 1}
+	);
+	foreach my $t (@tables) {
+	    next if $raw_tables{$t};
+	    push @raw_tables, $t;
+	    $raw_tables{$t} = 1;
+	}
+    }
+    unless (@raw_tables) {
+	Log::do_log('err',
+	    'Unable to retrieve the list of tables from database %s',
+	    $self->{'db_name'}
+	);
 	return undef;
     }
     return \@raw_tables;
@@ -477,7 +506,6 @@ sub get_indexes {
 	    $found_indexes{$ref->{'relname'}}{$member} = 1;
 	}
     }
-    open TMP, ">>/tmp/found_indexes"; print TMP &Dumper(\%found_indexes); close TMP;
     return \%found_indexes;
 }
 

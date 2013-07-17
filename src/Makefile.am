@@ -16,14 +16,13 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 SUBDIRS = etc lib
 
 AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
-sbin_SCRIPTS = sympa.pl bulk.pl spooler.pl alias_manager.pl task_manager.pl sympa_wizard.pl
+sbin_SCRIPTS = sympa.pl bulk.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 sbin_PROGRAMS = aliaswrapper virtualwrapper
 aliaswrapper_SOURCES = aliaswrapper.c
 aliaswrapper_CPPFLAGS = $(AM_CPPFLAGS) \
@@ -46,7 +45,6 @@ EXTRA_DIST = $(modules_DATA) \
 	     bulk.pl.in \
 	     alias_manager.pl.in \
 	     sympa.pl.in \
-	     spooler.pl.in \
 	     sympa_wizard.pl.in \
 	     task_manager.pl.in
 
@@ -73,17 +71,25 @@ install-exec-hook:
 	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 	chmod 4750 $(DESTDIR)$(sbindir)/virtualwrapper
 
-alias_manager.pl bulk.pl task_manager.pl sympa.pl spooler.pl sympa_wizard.pl: Makefile
+alias_manager.pl bulk.pl task_manager.pl sympa.pl sympa_wizard.pl: Makefile
 	rm -f $@
 	$(AM_V_GEN)$(SED) \
 		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--defaultdir--|$(defaultdir)|' \
+		-e 's|--docdir--|$(docdir)|' \
+		-e 's|--libexecdir--|$(libexecdir)|' \
+		-e 's|--localedir--|$(localedir)|' \
 		-e 's|--modulesdir--|$(modulesdir)|' \
+		-e 's|--piddir--|$(piddir)|' \
+		-e 's|--spooldir--|$(spooldir)|' \
+		-e 's|--sysconfdir--|$(sysconfdir)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		< $(srcdir)/$@.in > $@
 	chmod +x $@
 
 alias_manager.pl: $(srcdir)/alias_manager.pl.in
 bulk.pl: $(srcdir)/bulk.pl.in
 sympa.pl: $(srcdir)/sympa.pl.in
-spooler.pl: $(srcdir)/spooler.pl.in
 sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
 task_manager.pl: $(srcdir)/task_manager.pl.in

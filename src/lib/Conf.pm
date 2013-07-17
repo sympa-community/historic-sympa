@@ -16,14 +16,12 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## This module handles the configuration file for Sympa.
 
 package Conf;
 
-#XXXuse strict "vars";
 use strict;
 
 use Exporter;
@@ -82,10 +80,23 @@ my %old_params = (
     clean_delay_queueother => '',
     pidfile_distribute     => '',
     pidfile_creation       => '',
-    'dkim_header_list'     => '',
-    web_recode_to          => 'filesystem_encoding',
+    'web_recode_to'        => 'filesystem_encoding', # ??? - 5.2
     'localedir'            => '',
-    'html_editor_file'     => 'html_editor_url',
+    'html_editor_file'     => 'html_editor_url',     # 6.2a.0 - 6.2a.32
+    'ldap_export_connection_timeout' => '',          # 3.3b3 - 4.1?
+    'ldap_export_dnmanager' => '',                   # ,,
+    'ldap_export_host'     => '',                    # ,,
+    'ldap_export_name'     => '',                    # ,,
+    'ldap_export_password' => '',                    # ,,
+    'ldap_export_suffix'   => '',                    # ,,
+    'tri'                  => 'sort',                # ??? - 1.3.4-1
+    'sort'                 => '',                    # 1.4.0 - ???
+    'pidfile_spooler'      => '',                    # ??? - 6.2a.33
+    'pidfile'              => '',                    # ,,
+    'pidfile_bulk'         => '',                    # ,,
+    'archived_pidfile'     => '',                    # ,,
+    'bounced_pidfile'      => '',                    # ,,
+    'task_manager_pidfile' => '',                    # ,,
 );
 
 ## These parameters now have a hard-coded value
@@ -376,13 +387,14 @@ sub conf_2_db {
     }
     closedir (DIR);
 
-    # store in database sympa;conf and wwsympa.conf
+    # store sympa.conf into database.
     
     ## Load configuration file. Ignoring database config and get result
     my $global_conf;
     unless ($global_conf = Site->load('no_db' => 1, 'return_result' => 1)) {
-	&Log::fatal_err('Configuration file %s has errors.',
+	Log::do_log('err', 'Configuration file %s has errors.',
 	    get_sympa_conf());  
+	return undef;
     }
     
     for my $i ( 0 .. $#conf_parameters ) {
@@ -414,8 +426,9 @@ sub checkfiles_as_root {
                     mode  => 0644,
                     ))
     {
-        &Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
-        return undef;
+	    Log::do_log('err', 'Unable to set rights on %s',
+		$Conf{'sendmail_aliases'});
+	    return undef;
     }
     }
 
@@ -434,8 +447,8 @@ sub checkfiles_as_root {
                         group => Sympa::Constants::GROUP,
                         ))
         {
-        &Log::do_log('err','Unable to set rights on %s',$Conf{'db_name'});
-        return undef;
+		Log::do_log('err','Unable to set rights on %s', $dir);
+		return undef;
         }
     }
     }
@@ -469,8 +482,8 @@ sub checkfiles {
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
             )) {
-                &Log::do_log('err','Unable to set rights on %s',$Conf{$qdir});
-        $config_err++;
+		Log::do_log('err','Unable to set rights on %s', $Conf{$qdir});
+		$config_err++;
             }
     }
     }
@@ -489,8 +502,8 @@ sub checkfiles {
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
             )) {
-                &Log::do_log('err','Unable to set rights on %s',$subdir);
-        $config_err++;
+		Log::do_log('err','Unable to set rights on %s', $subdir);
+		$config_err++;
             }
     }
     }
@@ -845,8 +858,8 @@ sub _load_auth {
             next;
             }
 
-            $Conf{'cas_number'}{$robot}  ++ ;
-            $Conf{'cas_id'}{$robot}{$current_paragraph->{'auth_service_name'}} =  $#paragraphs+1 ; 
+	    $Conf{'cas_number'}{$robot}++;
+	    $Conf{'cas_id'}{$robot}{$current_paragraph->{'auth_service_name'}}{'id'} = $#paragraphs+1;
 
 	    ## Default value for auth_service_friendly_name IS auth_service_name
 	    $Conf{'cas_id'}{$robot}{$current_paragraph->{'auth_service_name'}}{'auth_service_friendly_name'} = $current_paragraph->{'auth_service_friendly_name'} || $current_paragraph->{'auth_service_name'};
@@ -902,16 +915,18 @@ sub load_charset {
         s/\s*#.*//;
         s/^\s+//;
         next unless /\S/;
-        my ($locale, $cset) = split(/\s+/, $_);
+        my ($lang, $cset) = split(/\s+/, $_);
         unless ($cset) {
         &Log::do_log('err', 'Charset name is missing in configuration file %s line %d', $config_file, $.);
         next;
         }
-        unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
-        &Log::do_log('err', 'Illegal locale name in configuration file %s line %d', $config_file, $.);
-        next;
+        unless ($lang and $lang = Language::CanonicLang($lang)) {
+	    Log::do_log('err',
+		'Illegal lang name in configuration file %s line %d',
+		$config_file, $.);
+	    next;
         }
-        $charset->{$locale} = $cset;
+        $charset->{$lang} = $cset;
     
     }
     close CONFIG;
@@ -1340,9 +1355,6 @@ sub _load_config_file_to_hash {
         if (/^(\S+)\s+(.+)$/) {
             my ($keyword, $value) = ($1, $2);
             $value =~ s/\s*$//;
-            ##  'tri' is a synonym for 'sort'
-            ## (for compatibility with older versions)
-            $keyword = 'sort' if ($keyword eq 'tri');
             ##  'key_password' is a synonym for 'key_passwd'
             ## (for compatibilyty with older versions)
             $keyword = 'key_passwd' if ($keyword eq 'key_password');
@@ -1425,12 +1437,6 @@ sub _infer_server_specific_parameter_values {
         $param->{'config_hash'}{'dkim_signature_apply_on'} = ['']; # empty array
     }
 
-##    ## Set Regexp for accepted list suffixes
-##    if (defined ($param->{'config_hash'}{'list_check_suffixes'})) {
-##        $param->{'config_hash'}{'list_check_regexp'} = $param->{'config_hash'}{'list_check_suffixes'};
-##        $param->{'config_hash'}{'list_check_regexp'} =~ s/[,\s]+/\|/g;
-##    }
-    
     my $p = 1;
     foreach (split(/,/, $param->{'config_hash'}{'sort'})) {
         $param->{'config_hash'}{'poids'}{$_} = $p++;
@@ -2015,6 +2021,7 @@ sub _load_wwsconf {
 		     'wws_path' => 'No more used',
 		     'icons_url' => 'No more used. Using static_content/icons instead.',
 		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+		     'htmlarea_url' => 'No longer supported',
 		     );
 
     my %default_conf = ();

@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SDM;
 
@@ -89,6 +88,8 @@ sub do_prepared_query {
 ## Get database handler
 ## Note: if database connection is not available, this function returns
 ## immediately.
+##
+## NOT RECOMMENDED.  Should not access to database handler.
 sub db_get_handler {
     Log::do_log('debug3', '()');
 
@@ -151,15 +152,14 @@ sub connect_sympa_database {
     return 1;
 }
 
-## Disconnect from Database
+## Disconnect from Database.
+## Destroy db handle so that any pending statement handles will be finalized.
 sub db_disconnect {
-    &Log::do_log('debug2', '()');
+    Log::do_log('debug2', '()');
 
-    unless ($db_source->{'dbh'}->disconnect()) {
-	&Log::do_log('err','Can\'t disconnect from Database %s : %s',Site->db_name, $db_source->{'dbh'}->errstr);
-	return undef;
-    }
-
+    my $dbh = $db_source->{'dbh'};
+    $dbh->disconnect if $dbh;
+    delete $db_source->{'dbh'};
     return 1;
 }
 
@@ -233,12 +233,12 @@ sub probe_db {
 		Site->db_type eq 'SQLite') {
 		## Check that primary key has the right structure.
 		unless (&check_primary_key({'table' => $t,'report' => \@report})) {
-		    &Log::do_log('err', "Unable to check the valifity of primary key for table %s. Aborting.", $t);
+		    &Log::do_log('err', "Unable to check the validity of primary key for table %s. Aborting.", $t);
 		    return undef;
 		}
 		
 		unless (&check_indexes({'table' => $t,'report' => \@report})) {
-		    &Log::do_log('err', "Unable to check the valifity of indexes for table %s. Aborting.", $t);
+		    &Log::do_log('err', "Unable to check the validity of indexes for table %s. Aborting.", $t);
 		    return undef;
 		}
 		
@@ -246,13 +246,13 @@ sub probe_db {
 	}
 	# add autoincrement if needed
 	foreach my $table (keys %autoincrement) {
-	    &Log::do_log('debug',"Checking autoincrement for table $table, field $autoincrement{$table}");
+	    &Log::do_log('debug',"Checking auto-increment for table $table, field $autoincrement{$table}");
 	    unless ($db_source->is_autoinc({'table'=>$table,'field'=>$autoincrement{$table}})){
 		if ($db_source->set_autoinc({'table'=>$table,'field'=>$autoincrement{$table},
 		'field_type'=>$db_struct{'mysql'}{$table}{'fields'}{$autoincrement{$table}}{'struct'}})){
-		    &Log::do_log('notice',"Setting table $table field $autoincrement{$table} as autoincrement");
+		    &Log::do_log('notice',"Setting table $table field $autoincrement{$table} as auto-increment");
 		}else{
-		    &Log::do_log('err',"Could not set table $table field $autoincrement{$table} as autoincrement");
+		    &Log::do_log('err',"Could not set table $table field $autoincrement{$table} as auto-increment");
 		    return undef;
 		}
 	    }
@@ -480,7 +480,7 @@ sub data_structure_uptodate {
 
      if (defined $data_structure_version &&
 	 $data_structure_version ne Sympa::Constants::VERSION) {
-	 &Log::do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, Sympa::Constants::VERSION);
+	 &Log::do_log('err', "Data structure (%s) is not up-to-date for current release (%s)", $data_structure_version, Sympa::Constants::VERSION);
 	 return 0;
      }
 

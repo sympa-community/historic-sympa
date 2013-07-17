@@ -18,15 +18,75 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Options :  F         -> do not detach TTY
-##         :  d		-> debug -d is equiv to -dF
+=encoding utf-8
+
+=head1 NAME
+
+task_manager, task_manager.pl - Daemon to Process Periodical Sympa Tasks
+
+=head1 SYNOPSIS
+
+S<B<task_manager.pl> [ B<--foreground> ] [ B<--debug> ]>
+
+=head1 DESCRIPTION
+
+XXX @todo doc
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-d>, B<--debug>
+
+Sets the debug mode
+
+=item B<-F>, B<--foreground>
+
+Prevents the script from being daemonized
+
+=item B<-h>, B<--help>
+
+Prints this help message.
+
+=item B<--log_level=>I<level>
+
+Set log level.
+
+=back
+
+=head1 FILES
+
+F<--spooldir--/task/> directory for task spool.
+
+F<--piddir--/task_manager.pid> this file contains the process ID
+of F<task_manager.pl>.
+
+=head1 MORE DOCUMENTATION
+
+The full documentation in HTML and PDF formats can be
+found in L<http://www.sympa.org/manual/>.
+
+The mailing lists (with web archives) can be accessed at
+L<http://listes.renater.fr/sympa/lists/informatique/sympa>.
+
+=head1 BUGS
+
+Report bugs to Sympa bug tracker.
+See L<http://www.sympa.org/tracking>.
+
+=head1 SEE ALSO
+
+L<sympa(8)>, L<wwsympa(8)>
+
+=cut
 
 use lib '--modulesdir--';
 use strict "vars";
+use warnings;
 use Getopt::Long;
+use Pod::Usage;
 # tentative
 use Data::Dumper;
 
@@ -38,17 +98,17 @@ use List;
 #use Task; # used by List
 #use TaskSpool; # used by Task
 #use tools; # used by Conf
-##XXXuse wwslib; # no longer used
 
-my $opt_d;
-my $opt_F;
 my %options;
 
-unless (&GetOptions(\%main::options, 'debug|d', 'log_level=s', 'foreground')) {
-    &Log::fatal_err("Unknown options.");
+unless (GetOptions(\%main::options,
+    'debug|d', 'help|h', 'log_level=s', 'foreground|F')) {
+    pod2usage(-exitval => 1, -output => \*STDERR);
 }
 
-# $main::options{'debug2'} = 1 if ($main::options{'debug'});
+if ($main::options{'help'}) {
+    pod2usage(0);
+}
 
 if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless ($main::options{'log_level'});
@@ -64,7 +124,7 @@ my $adrlist = {};
 # Load sympa.conf
 unless (Robot::get_robots()) {
     printf STDERR
-	"Unable to load sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	"Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
 	Conf::get_sympa_conf();
     exit 1;
 }
@@ -99,7 +159,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
                                        
      setpgrp(0, 0);
      if ((my $child_pid = fork) != 0) {                                        
-         print STDOUT "Starting task_manager daemon, pid $_\n";	 
+         print STDOUT "Starting task_manager daemon, PID $_\n";	 
          exit(0);
      }     
  }
@@ -107,7 +167,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-&tools::write_pid(Site->task_manager_pidfile, $$, $options);
+tools::write_pid('task_manager', $$, $options);
 unless ($options->{'stderr_to_tty'}) {
     &tools::direct_stderr_to_file(('pid' => $$));
 }
@@ -122,7 +182,7 @@ $< = $> = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Check if the UID has correctly been set (usefull on OS X)
 unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
-    &Log::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
+    Log::fatal_err("Failed to change process user ID and group ID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via sudo.");
 }
 
 ## Sets the UMASK
@@ -135,7 +195,7 @@ unless (chdir(Site->home)) {
     exit (-1);
 }
 
-&TaskSpool::set_spool(); # force initialisation of $taskspool in module Task 
+my $taskspool = TaskSpool->new();
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
@@ -148,34 +208,30 @@ undef my $log; # won't execute send_msg and delete_subs commands if true, only l
 
 ###### INFINITE LOOP SCANING THE SPOOL (unless a sig TERM is received) ######
 while (!$end) {
-
     my $current_date = time; # current epoch date
     my $rep = &tools::adate ($current_date);
-
 
     ## Empty cache of the List.pm module
     &List::init_list_cache();
 
     # Process grouped notifications
     Site->send_notify_to_listmaster(undef, undef, 1, undef);
-	
-   ## List all tasks
-    unless (&TaskSpool::list_tasks) {
-        Site->send_notify_to_listmaster('intern_error',
-            {'error' => "Failed to list task files in spool"});
-        &Log::do_log ('err', "Failed to list task files in spool");
-        exit -1;
-    }
 
-    &TaskSpool::create_required_tasks($current_date);
+    TaskSpool::create_required_tasks($current_date);
 
     ## Execute existing tasks
     ## processing of tasks anterior to the current date
-    &Log::do_log ('debug2', 'processing of tasks anterior to the current date');
-    foreach my $task ( &TaskSpool::get_task_list() ) {
-        last if $end;
-        next unless ($task->{'date'} <= $current_date);
-        &Log::do_log ('debug2', 'processing of task %s, %s',$task->{'messagekey'},$task->get_description);
+    Log::do_log ('debug2', 'Processing tasks anterior to the current date');
+    foreach my $task_in_spool ($taskspool->get_content) {
+	my $task = undef;
+	$task = Task->new($task_in_spool)
+	   if $task_in_spool;
+	next unless $task;
+
+	last if $end;
+	next unless $task->{'date'} <= $current_date;
+
+	Log::do_log ('debug2', 'Processing task %s', $task);
         if ($task->{'object'} ne '_global') { # list task
             $task->check_list_task_is_valid();
         }
@@ -195,7 +251,7 @@ sub sigterm {
 Site->send_notify_to_listmaster(undef, undef, undef, 1);
 
 &Log::do_log ('notice', 'task_manager exited normally due to signal'); 
-&tools::remove_pid(Site->task_manager_pidfile, $$);
+tools::remove_pid('task_manager', $$);
 
 exit(0);
 

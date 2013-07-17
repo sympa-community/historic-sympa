@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package SQLSource;
 
@@ -165,8 +164,11 @@ sub establish_connection {
     
     ## Check if DBD is installed
     unless (eval "require DBD::$self->{'db_type'}") {
-	&Log::do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
-	Site->send_notify_to_listmaster('missing_dbd', {'db_type' => $self->{'db_type'}});
+	Log::do_log('err',
+	    'No Database Driver installed for %s; you should download and install DBD::%s from CPAN',
+	    $self->{'db_type'}, $self->{'db_type'});
+	Site->send_notify_to_listmaster('missing_dbd',
+	    {'db_type' => $self->{'db_type'}});
 	return undef;
     }
 
@@ -184,20 +186,36 @@ sub establish_connection {
     }
  
     ## First check if we have an active connection with this server
+    ## We require that user also matches (except SQLite).
     if (defined $db_connections{$self->{'connect_string'}} && 
+	($self->{'db_type'} eq 'SQLite' or
+	  $db_connections{$self->{'connect_string'}}{'db_user'} eq
+	    $self->{'db_user'}) &&
 	defined $db_connections{$self->{'connect_string'}}{'dbh'} && 
 	$db_connections{$self->{'connect_string'}}{'dbh'}->ping()) {
-      
-      &Log::do_log('debug', "Use previous connection");
+      Log::do_log('debug3', 'Use previous connection');
       $self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'};
       return $db_connections{$self->{'connect_string'}}{'dbh'};
-
-    }else {
-      
+    } else {
       ## Set environment variables
       ## Used by Oracle (ORACLE_HOME)
+
+      ## Client encoding derived from the environment variable.
+      ## Set this before parsing db_env to allow override if one knows what
+      ## she is doing.
+      ## Note: on mysql and Pg, "SET NAMES" will be executed below; on SQLite,
+      ## no need to set encoding.
+      if ($self->{'db_type'} eq 'Oracle') {
+	## NLS_LANG.  This needs to be set before connecting, otherwise it's
+	## useless.  Underscore (_) and dot (.) are a vital part as NLS_LANG
+	## has the syntax "language_territory.charset".
+	$ENV{'NLS_LANG'} = '_.UTF8';
+      } elsif ($self->{'db_type'} eq 'Sybase') {
+	$ENV{'SYBASE_CHARSET'} = 'utf8';
+      }
+
       if ($self->{'db_env'}) {
-	foreach my $env (split /;/,$self->{'db_env'}) {
+	foreach my $env (split /;/, $self->{'db_env'}) {
 	  my ($key, $value) = split /=/, $env;
 	  $ENV{$key} = $value if ($key);
 	}
@@ -211,9 +229,7 @@ sub establish_connection {
 		unless (defined $db_connections{$self->{'connect_string'}} &&
 		    $db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
     
-		    unless (Site->send_notify_to_listmaster('no_db', {})) {
-			&Log::do_log('err',"Unable to send notify 'no_db' to listmaster");
-		    }
+		    Site->send_notify_to_listmaster('no_db', {});
 		}
 	    }
 	    if ($self->{'reconnect_options'}{'keep_trying'}) {
@@ -234,19 +250,18 @@ sub establish_connection {
 	    }
 	    
 	    if ($self->{'reconnect_options'}{'warn'}) {
-	    &Log::do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
-		unless (Site->send_notify_to_listmaster('db_restored', {})) {
-		    &Log::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
-		}
+		Log::do_log('notice', 'Connection to Database %s restored.',
+		    $self->{'connect_string'});
+		Site->send_notify_to_listmaster('db_restored', {});
 	    }
       }
 
       # Configure Postgres to use ISO format dates
       if ($self->{'db_type'} eq 'Pg') {
-	$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
+	$self->{'dbh'}->do("SET DATESTYLE TO 'ISO';");
       }
-      
-      ## Set client encoding to UTF8
+
+      ## mysql or Pg: Set client encoding to UTF8
       if ($self->{'db_type'} eq 'mysql') {
 	my ($sth, $res, $cset);
 
@@ -293,12 +308,8 @@ sub establish_connection {
       } elsif ($self->{'db_type'} eq 'Pg') {
 	Log::do_log('debug3','Setting client encoding to UTF-8');
 	$self->{'dbh'}->do("SET NAMES 'utf8'");
-      }elsif ($self->{'db_type'} eq 'oracle') { 
-	$ENV{'NLS_LANG'} = 'UTF8';
-      }elsif ($self->{'db_type'} eq 'Sybase') { 
-	$ENV{'SYBASE_CHARSET'} = 'utf8';
       }
-      
+
       ## added sybase support
       if ($self->{'db_type'} eq 'Sybase') { 
 	my $dbname;
@@ -314,10 +325,31 @@ sub establish_connection {
         $self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
 	if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
       }
-      
+
       $self->{'connect_string'} = $self->{'connect_string'} if $self;     
       $db_connections{$self->{'connect_string'}}{'dbh'} = $self->{'dbh'};
-      &Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
+      $db_connections{$self->{'connect_string'}}{'db_user'} = $self->{'db_user'};
+      Log::do_log('debug3', 'Connected to Database %s', $self->{'db_name'});
+
+      ## We set Long preload length to two times global max message size
+      ## (because of base64 encoding) instead of defaulting to 80 on Oracle
+      ## and 32768 on Sybase.
+      ## This is to avoid error in Bulk::messageasstring when using Oracle or
+      ## Sybase database:
+      ##   bulk[pid]: internal error : current packet 'messagekey= 0c40f56e07d3c8ce34683b98d54b6575 contain a ref to a null message
+      ## FIXME: would be better to use lists' setting, but
+      ##  * list config is not load()-ed at this point, and
+      ##  * when invoked from Bulk::messageasstring, list settings is not even
+      ##    load()-ed later.
+      if ($self->{'db_type'} eq 'Oracle' or $self->{'db_type'} eq 'Sybase') {
+	$self->{'dbh'}->{LongReadLen} = Site->max_size * 2;
+	$self->{'dbh'}->{LongTruncOk} = 0;
+      }
+      Log::do_log('debug3',
+	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
+	$self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
+	$self->{'dbh'}->{RaiseError});
+
       return $self->{'dbh'};
     }
 }

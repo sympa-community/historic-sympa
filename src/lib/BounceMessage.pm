@@ -3,6 +3,8 @@
 package BounceMessage;
 
 use strict;
+use warnings;
+
 use Message;
 use Log;
 use tracking;
@@ -34,43 +36,61 @@ our %equiv = ( "user unknown" => '5.1.1',
 
 ## Creates a new object
 sub new {
-    
-    my $pkg =shift;
+    Log::do_log('debug2', '(%s, %s)', @_);
+    my $pkg   = shift;
     my $datas = shift;
     my $self;
-    Log::do_log('debug2', "Creating new BounceMessage object");
-    return undef unless ($self = new Message($datas));
-    unless ($self->get_message_as_string) {
-		Log::do_log ('notice',"Ignoring bounce where %s  because it is empty",$self->{'messagekey'});
-		return undef;
+
+    return undef
+	unless $self = $pkg->SUPER::new($datas);
+    unless ($self->as_string()) {
+	Log::do_log('notice',
+	    'Ignoring bounce %s, because it is empty', $self);
+	return undef;
     }
-    bless $self,$pkg;
-    $self->{'to'} = $self->get_mime_message->head->get('to', 0);
-    chomp $self->{'to'};	
+
+    ## Some MTAs decorate To: field of DSN as "mailbox <address>".
+    ## Pick address only.
+    my $to = $self->get_header('to');
+    if ($to) {
+	my @to = Mail::Address->parse($to);
+	if (@to and $to[0] and $to[0]->address) {
+	    $self->{'to'} = $to[0]->address;
+	}
+    }
 
     return $self;
 }
 
 sub process {
     my $self = shift;
-    
-    Log::do_log('info','Processing bounce %s (key %s)',$self->get_msg_id,$self->{'messagekey'});
-    
-    Log::do_log('debug', 'Bounce for :%s:  Site->bounce_email_prefix=%s',
+
+    Log::do_log('info', 'Processing bounce %s', $self);
+    Log::do_log('debug3', 'Bounce for :%s:  Site->bounce_email_prefix=%s',
 	$self->{'to'}, Site->bounce_email_prefix);
-	    
-    $self->{'to'} =~ s/<//;
-    $self->{'to'} =~ s/>//;
+
     if ($self->is_verp_in_use) { #VERP in use
 	$self->analyze_verp_header();
-	if ($self->failed_on_first_try) { # in this case the bounce result from a remind or a welcome message ;so try to remove the subscriber
-	    Log::do_log('debug', "VERP for a service message, trying to remove the subscriber");
-	    unless($self->update_list($self->{'listname'},$self->{'robotname'})) {
-		Log::do_log('err','Skipping bounce where messagekey = %s for unknown list %s@%s',$self->{'messagekey'},$self->{'listname'},$self->{'robotname'});
+	if ($self->failed_on_first_try) {
+	    # in this case the bounce result from a remind or a welcome
+	    # message; so try to remove the subscriber
+	    Log::do_log('debug3',
+		'VERP for a service message, trying to remove the subscriber');
+	    unless(
+		$self->update_list($self->{'listname'}, $self->{'robotname'})
+	    ) {
+		Log::do_log('err',
+		    'Skipping bounce where messagekey = %s for unknown list %s@%s',
+		    $self->{'messagekey'},
+		    $self->{'listname'},$self->{'robotname'}
+		);
 		return undef;
 	    }
 	    unless ($self->delete_bouncer) {
-		Log::do_log ('err',"Unable to remove $self->{'who'} from $self->{'listname'} (welcome message bounced but del is closed)");
+		Log::do_log('err',
+		    'Unable to remove %s from %s@%s (welcome message bounced but del is closed)',
+		    $self->{'who'}, $self->{'listname'}, $self->{'robotname'}
+		);
 		return 0;
 	    }
 	    return 1;
@@ -81,9 +101,14 @@ sub process {
     # If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
     if($self->is_dsn and $self->tracking_is_used) {
 	if ($self->process_dsn) {
-	    Log::do_log('notice', 'DSN %s Correctly treated. DSN status is "%s"',$self->get_msg_id,$self->{'dsn'}{'status'});
-	}else{
-	    Log::do_log('err','Delivery status notification processing for bounce %s (key %s) failed. Stopping here.',$self->get_msg_id,$self->{'messagekey'});
+	    Log::do_log('notice',
+		'DSN %s Correctly treated. DSN status is "%s"',
+		$self, $self->{'dsn'}{'status'});
+	} else {
+	    Log::do_log('err',
+		'Delivery status notification processing for bounce %s (key %s) failed. Stopping here.',
+		$self, $self->{'messagekey'}
+	    );
 	    return undef;
 	}
 	unless($self->{'dsn'}{'status'} =~ /failed/) { # DSN for failure to deliver need to be processed as bounces.
@@ -94,10 +119,10 @@ sub process {
     # If the MDN notification is correct and the tracking mode is enabled, it will be inserted in the database
     if($self->is_mdn and $self->tracking_is_used) {
 	if($self->process_mdn) {
-	    Log::do_log('notice', "MDN %s Correctly treated.",$self->get_msg_id);
+	    Log::do_log('notice', 'MDN %s Correctly treated.', $self);
 	    return 1;
 	}else{
-	    Log::do_log('err', "Failed to treat MDN %s",$self->get_msg_id);
+	    Log::do_log('err', 'Failed to treat MDN %s', $self);
 	    return undef;
 	}
     }
@@ -105,36 +130,52 @@ sub process {
     if($self->is_email_feedback_report) {
 	# this case a report Email Feedback Reports http://tools.ietf.org/html/rfc6650 mainly used by AOL
 	if($self->process_email_feedback_report) {
-	    Log::do_log ('notice','Feedback Report %s correctly treated. type: %s, original_rcpt: %s, listname: %s)',$self->get_msg_id,$self->{'feedback_type'}, $self->{'original_rcpt'}, $self->{'listname'} );
+	    Log::do_log('notice',
+		'Feedback Report %s correctly treated. type: %s, original_rcpt: %s, listname: %s@%s)',
+		$self, $self->{'feedback_type'}, $self->{'original_rcpt'},
+		$self->{'listname'}, $self->{'robotname'}
+	    );
 	    return 1;
 	}else{
-	    Log::do_log ('err','Ignoring Feedback Report %s : Unknown format (bounce where messagekey=%s), original_rcpt:%s, listname:%s)',$self->get_msg_id, $self->{'feedback_type'}, $self->{'original_rcpt'}, $self->{'listname'} );		
+	    Log::do_log('err',
+		'Ignoring Feedback Report %s : Unknown format (bounce where messagekey=%s), original_rcpt: %s, listname: %s@%s)',
+		$self, $self->{'feedback_type'}, $self->{'original_rcpt'},
+		$self->{'listname'}, $self->{'robotname'}
+	    );		
 	    return undef;
 	}
     }
     
     if ($self->process_ndn) {
-	Log::do_log ('notice','Bounce %s from %s to list %s correctly treated.',$self->get_msg_id,$self->{'who'}, $self->{'list'}->get_id );
+	Log::do_log('notice',
+	    'Bounce %s from %s to list %s correctly treated.',
+	    $self, $self->{'who'}, $self->{'list'}
+	);
 	return 1;
-    }else{
-	Log::do_log ('err','Could not correctly process bounce %s from %s to list %s@%s. Ignoring.',$self->get_msg_id,$self->{'who'}, $self->{'listname'}, $self->{'robotname'});		
+    } else {
+	Log::do_log('err',
+	    'Could not correctly process bounce %s from %s to list %s@%s. Ignoring.',
+	    $self, $self->{'who'}, $self->{'listname'}, $self->{'robotname'}
+	);		
 	return undef;
     }
     return 1;
 }
 
 sub analyze_verp_header {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    Log::do_log('debug2', 'analysing VERP headers for bounce %s',$self->get_msg_id);
-    
-    if($self->is_verp_in_use) {
+    if ($self->is_verp_in_use) {
 	if ($self->{'local_part'} =~  /^(.*)\=\=a\=\=([^\=]*)\=\=([^\=]*)(\=\=([^\=]*))?$/ ) {
 	    $self->{'who'} = $1.'@'.$2;
 	    $self->{'listname'} = $3;
 	    $self->{'distribution_id'} = $5;
 	}else{
-	    Log::do_log('err', 'Unable to analyze VERP address %s for bounce %s', $self->{'to'},$self->get_msg_id);
+	    Log::do_log('err',
+		'Unable to analyze VERP address %s for bounce %s',
+		$self->{'to'}, $self
+	    );
 	    return undef;
 	}
 	$self->update_list($self->{'listname'},$self->{'robotname'});
@@ -142,7 +183,9 @@ sub analyze_verp_header {
 	    $self->{'unique'} = $self->{'distribution_id'};
 	}
 	undef $self->{'distribution_id'} unless ($self->{'distribution_id'} =~ /^[0-9]+$/);
-	Log::do_log('debug2', 'VERP in use : bounce %s related to %s for list %s',$self->get_msg_id,$self->{'who'},$self->{'list'}->get_list_id);
+	Log::do_log('debug3',
+	    'VERP in use : bounce %s related to %s for list %s',
+	    $self, $self->{'who'}, $self->{'list'});
 	return 1;
     }
     return 0;
@@ -150,62 +193,63 @@ sub analyze_verp_header {
 
 sub is_verp_in_use {
     my $self = shift;
-
-    Log::do_log('debug2', 'Checking if VERP is used for bounce %s. to is %s, prefix: %s',$self->get_msg_id,$self->{'to'},Site->bounce_email_prefix);
+    Log::do_log('debug2', '(%s, to=%s, prefix=%s)',
+	$self, $self->{'to'}, Site->bounce_email_prefix);
     return $self->{'verp'}{'is_used'} if (defined $self->{'verp'}{'is_used'});
     my $bounce_email_prefix = Site->bounce_email_prefix;
     if ($self->{'to'} =~ /^$bounce_email_prefix\+(.*)\@(.*)$/) {
 	$self->{'local_part'} = $1;
 	$self->{'robotname'} = $2;
-	Log::do_log('debug2','Message %s uses VERP',$self->get_msg_id);
+	Log::do_log('debug3', 'Message %s uses VERP', $self);
 	$self->{'verp'}{'is_used'} = 1;
     }else{
-	Log::do_log('debug2','Message %s does not use VERP',$self->get_msg_id);
+	Log::do_log('debug3', 'Message %s does not use VERP', $self);
 	$self->{'verp'}{'is_used'} = 0;
     }
     return $self->{'verp'}{'is_used'};
 }
 
 sub is_dsn {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    Log::do_log('debug2', 'Checking if bounce %s is a DSN',$self->get_msg_id);
     return $self->{'dsn'}{'is_dsn'} if (defined $self->{'dsn'}{'is_dsn'});
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=delivery-status/i)) {
-	Log::do_log('debug2','Bounce %s is a DSN',$self->get_msg_id);
+	Log::do_log('debug3', 'Bounce %s is a DSN', $self);
 	$self->{'dsn'}{'is_dsn'} = 1;
     }else{
-	Log::do_log('debug2','Bounce %s is not a DSN',$self->get_msg_id);
+	Log::do_log('debug3', 'Bounce %s is not a DSN', $self);
 	$self->{'dsn'}{'is_dsn'} = 0;
     }
     return $self->{'dsn'}{'is_dsn'};
 }
 
 sub is_mdn {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    Log::do_log('debug2', 'Checking if bounce %s is an MDN',$self->get_msg_id);
     return $self->{'mdn'}{'is_mdn'} if (defined $self->{'mdn'}{'is_mdn'});
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=disposition-notification/i)) {
-	Log::do_log('debug2','Message %s is an MDN',$self->get_msg_id);
+	Log::do_log('debug3', 'Message %s is an MDN', $self);
 	$self->{'mdn'}{'is_mdn'} = 1;
     }else{
-	Log::do_log('debug2','Message %s is not an MDN',$self->get_msg_id);
+	Log::do_log('debug3', 'Message %s is not an MDN', $self);
 	$self->{'mdn'}{'is_mdn'} = 0;
     }
     return $self->{'mdn'}{'is_mdn'};
 }
 
 sub is_email_feedback_report {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    Log::do_log('debug2', 'Checking if bounce %s is an email feedback report',$self->get_msg_id);
     return $self->{'efr'}{'is_efr'} if (defined $self->{'efr'}{'is_efr'});
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=feedback-report/)) {
-	Log::do_log('debug2', 'Bounce %s is an email feedback report',$self->get_msg_id);
+	Log::do_log('debug3', 'Bounce %s is an email feedback report', $self);
 	$self->{'efr'}{'is_efr'} = 1;
     }else{
-	Log::do_log('debug2', 'Bounce %s is not an email feedback report',$self->get_msg_id);
+	Log::do_log('debug3', 'Bounce %s is not an email feedback report',
+	    $self);
 	$self->{'efr'}{'is_efr'} = 0;
     }
     return $self->{'efr'}{'is_efr'};
@@ -213,28 +257,40 @@ sub is_email_feedback_report {
 
 sub tracking_is_used {
     my $self = shift ;
+    Log::do_log('debug2', '(%s, list=%s)', $self, $self->{'list'});
 
-    Log::do_log('debug2', 'Checking if list %s (for bounce %s) uses tracking.',$self->{'list'}->get_list_id,$self->get_msg_id);
-    return $self->{'tracking'}{'is_used'} if (defined $self->{'tracking'}{'is_used'});
-    if ($self->{'list'}{'config'}{'tracking'}{'delivery_status_notification'} eq 'on' || $self->{'list'}{'config'}{'tracking'}{'message_delivery_notification'} eq 'on' || $self->{'list'}{'config'}{'tracking'}{'message_delivery_notification'} eq 'on_demand') {
-	Log::do_log('debug2','List %s for Message %s uses tracking',$self->{'list'}->get_list_id,$self->get_msg_id);
+    return $self->{'tracking'}{'is_used'}
+	if defined $self->{'tracking'}{'is_used'};
+
+    my $list = $self->{'list'};
+    if ($list->tracking->{'delivery_status_notification'} and
+	$list->tracking->{'delivery_status_notification'} eq 'on' or
+	$list->tracking->{'message_delivery_notification'} and
+	($list->tracking->{'message_delivery_notification'} eq 'on' or
+	 $list->tracking->{'message_delivery_notification'} eq 'on_demand')
+    ) {
+	Log::do_log('debug3',
+	    'List %s for Message %s uses tracking', $list, $self);
 	$self->{'tracking'}{'is_used'} = 1;
-    }else{
-	Log::do_log('debug2','List %s for Message %s does not use tracking',$self->{'list'}->get_list_id,$self->get_msg_id);
+    } else {
+	Log::do_log('debug3',
+	    'List %s for Message %s does not use tracking', $list, $self);
 	$self->{'tracking'}{'is_used'} = 0;
     }
     return $self->{'tracking'}{'is_used'};
 }
 
 sub failed_on_first_try {
+    Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    Log::do_log('debug2', 'Checking if bounce %s comes from a service message.',$self->get_msg_id);
-    if ($self->{'unique'} =~ /[wr]/) {
-	Log::do_log('debug2', 'Bounce %s comes from a service message.',$self->get_msg_id);
+    if ($self->{'unique'} and $self->{'unique'} =~ /[wr]/) {
+	Log::do_log('debug3', 'Bounce %s comes from a service message.',
+	    $self);
 	return 1;
     }
-    Log::do_log('debug2', 'Bounce %s does not come from a service message.',$self->get_msg_id);
+    Log::do_log('debug3', 'Bounce %s does not come from a service message.',
+	$self);
     return 0;
 }
 
@@ -242,7 +298,8 @@ sub change_listname {
     my $self = shift;
     my $new_listname = shift;
 
-    Log::do_log('debug3', 'Changing listname from %s to %s for bounce %s',$self->{'listname'},$new_listname,$self->get_msg_id);
+    Log::do_log('debug3', 'Changing listname from %s to %s for bounce %s',
+	$self->{'listname'}, $new_listname, $self);
     $self->{'old_listname'} = $self->{'listname'};
     $self->{'listname'} = $new_listname;
 }
@@ -251,7 +308,8 @@ sub change_robotname {
     my $self = shift;
     my $new_robotname = shift;
 
-    Log::do_log('debug3', 'Changing robotname from %s to %s for bounce %s',$self->{'robotname'},$new_robotname,$self->get_msg_id);
+    Log::do_log('debug3', 'Changing robotname from %s to %s for bounce %s',
+	$self->{'robotname'}, $new_robotname, $self);
     $self->{'old_robotname'} = $self->{'robotname'};
     $self->{'robotname'} = $new_robotname;
 }
@@ -261,13 +319,16 @@ sub update_list {
     my $new_listname = shift;
     my $new_robotname = shift;
 
-    Log::do_log('debug3', 'Updating list for bounce %s',$self->get_msg_id);
+    Log::do_log('debug3', 'Updating list for bounce %s', $self);
     $self->update_robot($new_robotname);
     $self->change_listname($new_listname);
 
     my $list = new List ($self->{'listname'}, $self->{'robot'});
     unless($list) {
-	Log::do_log('err','Unable to set list object for unknown list %s@%s (bounce %s)',$self->{'listname'},$self->{'robotname'},$self->{'messagekey'});
+	Log::do_log('err',
+	    'Unable to set list object for unknown list %s@%s (bounce %s)',
+	    $self->{'listname'}, $self->{'robotname'}, $self
+	);
 	return undef;
     }
     $self->{'list'} = $list;
@@ -276,15 +337,17 @@ sub update_list {
 }
 
 sub update_robot {
+    Log::do_log('debug3', '(%s, %s)', @_);
     my $self = shift;
     my $new_robotname = shift;
-    
-    Log::do_log('debug3', 'Updating robot for bounce %s',$self->get_msg_id);
+
     $self->change_robotname($new_robotname);
 
     my $robot = new Robot($self->{'robotname'});
     unless($robot) {
-	Log::do_log('err','Unable to set robot object for unknown robot %s (bounce %s)',$self->{'robotname'},$self->{'messagekey'});
+	Log::do_log('err',
+	    'Unable to set robot object for unknown robot %s (bounce %s)',
+	    $self->{'robotname'}, $self);
 	return undef;
     }
     $self->{'robot'} = $robot;
@@ -295,7 +358,7 @@ sub update_robot {
 sub delete_bouncer {
     my $self = shift;
 
-    Log::do_log('debug','Deleting bouncing user %s',$self->{'who'});
+    Log::do_log('debug2', 'Deleting bouncing user %s', $self->{'who'});
     my $result = Scenario::request_action($self->{'list'}, 'del','smtp',
 	{   'sender' => [Site->listmasters]->[0],
 	    'email' => $self->{'who'}
@@ -307,14 +370,23 @@ sub delete_bouncer {
     if ($action =~ /do_it/i) {
 	if ($self->{'list'}->is_list_member($self->{'who'})) {
 	    my $u = $self->{'list'}->delete_list_member('users' => [$self->{'who'}], 'exclude' =>' 1');
-	    Log::do_log ('notice','%s has been removed from %s because welcome message bounced',$self->{'who'},$self->{'list'}->get_list_id);
-	    Log::db_log({'robot' => $self->{'list'}->domain, 'list' => $self->{'list'}->name, 'action' => 'del',
-			  'target_email' => $self->{'who'},'status' => 'error','error_type' => 'welcome_bounced',
-			  'daemon' => 'bounced'});
-	    
-	    Log::db_stat_log({'robot' => $self->{'list'}->domain, 'list' => $self->{'list'}->name, 'operation' => 'auto_del', 'parameter' => '',
-			       'mail' => $self->{'who'}, 'client' => '', 'daemon' => 'bounced.pl'});
-	    
+	    Log::do_log ('notice',
+		'%s has been removed from %s because welcome message bounced',
+		$self->{'who'}, $self->{'list'}
+	    );
+	    Log::db_log({'robot' => $self->{'list'}->domain,
+		'list' => $self->{'list'}->name, 'action' => 'del',
+		'target_email' => $self->{'who'},
+		'status' => 'error', 'error_type' => 'welcome_bounced',
+		'daemon' => 'bounced'});
+	    Log::db_stat_log({
+		'robot' => $self->{'list'}->domain,
+		'list' => $self->{'list'}->name,
+		'operation' => 'auto_del', 'parameter' => '',
+		'mail' => $self->{'who'}, 'client' => '',
+		'daemon' => 'bounced.pl'
+	    });
+
 	    if ($action =~ /notify/) {
 		unless ($self->{'list'}->send_notify_to_owner('automatic_del',
 						    {'who' => $self->{'who'},
@@ -325,7 +397,10 @@ sub delete_bouncer {
 	    }
 	}
     }else{
-	Log::do_log('err','Authorization to delete user %s from liste %s denied',$self->{'who'},$self->{'list'}->get_id);
+	Log::do_log('err',
+	    'Authorization to delete user %s from liste %s denied',
+	    $self->{'who'}, $self->{'list'}
+	);
 	return undef;
     }
     return 1;
@@ -343,12 +418,13 @@ sub process_dsn {
     my $msg_id;
     my $orig_msg_id;
     my $arrival_date;
-    
+
     $msg_id = $self->get_mime_message->head->get('Message-Id');
-    chomp $msg_id;
-    
+    chomp $msg_id if $msg_id;
+
     my $date = $self->get_mime_message->head->get('Date');
-    
+    chomp $date if $date;
+
     foreach my $p (@parts) {
 	my $h = $p->head();
 	my $content = $h->get('Content-type');
@@ -433,8 +509,10 @@ sub process_mdn {
     Log::do_log ('debug','processing  MDN %s',$self->get_msg_id);
     my @parts = $self->get_mime_message->parts();
     
-    $self->{'mdn'}{'msg_id'} = $self->get_mime_message->head->get('Message-Id');
-    chomp $self->{'mdn'}{'msg_id'};
+    $self->{'mdn'}{'msg_id'} =
+	$self->get_mime_message->head->get('Message-Id');
+    chomp $self->{'mdn'}{'msg_id'}
+	if $self->{'mdn'}{'msg_id'};
     
     $self->{'mdn'}{'date'} = $self->get_mime_message->head->get('Date');
     
@@ -443,7 +521,7 @@ sub process_mdn {
 	my $content = $h->get('Content-type');
 	
 	if ($content =~ /message\/disposition-notification/) {
-	    my @report = split(/\n/, $p->bodyhandle->as_string());
+	    my @report = split /\n/, $p->bodyhandle->as_string();
 	    foreach my $line (@report) {
 		$line = lc($line);
 		# Disposition Field MUST be present in a MDN report, possible values : displayed, deleted(rfc3798)
@@ -529,7 +607,7 @@ sub process_email_feedback_report {
 	my $content = $h->get('Content-type');
 	next if ($content =~ /text\/plain/i);		 
 	if ($content =~ /message\/feedback-report/) {
-	    my @report = split(/\n/, $p->bodyhandle->as_string());
+	    my @report = split /\n/, $p->bodyhandle->as_string();
 	    foreach my $line (@report) {
 		$self->{'efr'}{'feedback_type'} = 'abuse' if ($line =~ /Feedback\-Type\:\s*abuse/i);
 		if ($line =~ /Feedback\-Type\:\s*(.*)/i) {
@@ -626,15 +704,18 @@ sub process_email_feedback_report {
 }
 
 sub process_ndn {
+    Log::do_log('debug3', '(%s)', @_);
     my $self = shift;
-    
-    Log::do_log ('debug','Processing  non delivery notification %s',$self->get_msg_id);
-    if (! $self->{'list'} || ref $self->{'list'} !~ /List/) {
-	Log::do_log('err','Skipping bounce messagekey=%s for unknown list %s@%s',$self->{'messagekey'},$self->{'listname'},$self->{'robotname'});
+
+    unless (ref $self->{'list'} and $self->{'list'}->isa('List')) {
+	Log::do_log('err', 'Skipping bounce %s for unknown list %s@%s',
+	    $self, $self->{'listname'}, $self->{'robotname'});
 	return undef;
-    }else{
-	Log::do_log('debug',"Processing bounce messagekey=%s for list $self->{'listname'}",$self->{'messagekey'});      
-	
+    } else {
+	Log::do_log('debug3',
+	    'Processing bounce %s for list %s',
+	    $self->{'messagekey'}, $self->{'list'});      
+
 	my (%hash, $from);
 	my $bounce_dir = $self->{'list'}->get_bounce_dir();
 	
@@ -746,14 +827,13 @@ sub canonicalize_status {
 # $rcpt : the email address recognized in the bounce itself. In most case $rcpt eq $bouncefor
 
 sub update_subscriber_bounce_history {
-
     my $self = shift;
     my $list = $self->{'list'};
     my $rcpt = shift;
     my $bouncefor = shift;
     my $status = shift;
-    
-    Log::do_log ('debug','Bounce message "%s": Updating bounce history for subscriber "%s" (actual rcpt: %s), list "%s", status "%s"', $self->get_msg_id, $bouncefor,$rcpt,$self->{'list'}->get_list_id,$status); 
+    Log::do_log ('debug2', '(%s, %s, %s, %s, list=%s)',
+	$self, $rcpt, $bouncefor, $status, $list); 
 
     my $first = my $last = time;
     my $count = 0;
@@ -913,17 +993,21 @@ sub anabounce {
 
     Log::do_log ('debug2','Analyzing bounce %s', $self->get_msg_id); 
 
-    # this old subroutine do not use message object but parse the message itself !!! It should be rewrited
-    # a temporary file is used when introducing database spool. It should be rewrited! It should be rewrited! It should be rewrited! Yes, tt should be rewrited !
+    # this old subroutine do not use message object but parse the message
+    # itself!!! It should be rewrited.
+    # a temporary file is used when introducing database spool. It should be
+    # rewrited! It should be rewrited! It should be rewrited! Yes, it should
+    # be rewrited!
     my $tmpfile = Site->tmpdir.'/bounce.'.$$ ;
-    unless (open (BOUNCE,"> $tmpfile")){
-Log::do_log('err',"could not create $tmpfile");
+    my $fh;
+    unless (open $fh, '>', $tmpfile) {
+	Log::do_log('err', 'Could not create %s', $tmpfile);
 	return undef;
     }
-    print BOUNCE     $self->{'msg'}->as_string;
-    close BOUNCE;
-    unless (open (BOUNCE,"$tmpfile")){
-Log::do_log('err',"could not read $tmpfile");
+    print $fh $self->as_string(); # raw message
+    close $fh;
+    unless (open BOUNCE, '<', $tmpfile) {
+	Log::do_log('err', 'Could not read %s', $tmpfile);
 	return undef;
     }
 
@@ -957,7 +1041,7 @@ Log::do_log('err',"could not read $tmpfile");
 		}
 
 		## Le champ From:
-		if($champ{from} =~ /([^\s<]+@[^\s>]+)/){
+		if ($champ{'from'} and $champ{from} =~ /([^\s<]+@[^\s>]+)/) {
 		    $$from = $1;
 		}
 	    }
@@ -974,9 +1058,11 @@ Log::do_log('err',"could not read $tmpfile");
 		$info{$2}{error} = $1;
 		$type = 34;
 	    }
-	    if ($champ{'x-failed-recipients'} =~ /^\s*(\S+)$/) {
+	    if ($champ{'x-failed-recipients'} and
+		$champ{'x-failed-recipients'} =~ /^\s*(\S+)$/) {
 		$info{$1}{error} = "";
-	    } elsif ($champ{'x-failed-recipients'} =~ /^\s*(\S+),/) {
+	    } elsif ($champ{'x-failed-recipients'} and
+		$champ{'x-failed-recipients'} =~ /^\s*(\S+),/) {
 		for my $xfr (split (/\s*,\s*/, $champ{'x-failed-recipients'})) {
 		    $info{$xfr}{error} = "";
 		}

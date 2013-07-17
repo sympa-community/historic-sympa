@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Archive;
 
@@ -110,25 +109,29 @@ sub scan_dir_archive {
 	next unless ($file =~ /^\d+$/);
 	&Log::do_log ('debug',"archive::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file");
 
-	my $mail = new Message({'file'=>"$dir/$month/arctxt/$file",'noxsympato'=>'noxsympato'});
-	unless (defined $mail) {
-	    &Log::do_log('err', 'Unable to create Message object %s', $file);
+	my $message = Message->new({
+	    'file' => "$dir/$month/arctxt/$file", 'noxsympato' => 'noxsympato'
+	});
+	unless ($message) {
+	    Log::do_log('err',
+		'Unable to create Message object from file %s', $file);
 	    return undef;
 	}
-	
-	&Log::do_log('debug',"MAIL object : $mail");
+
+	Log::do_log('debug', 'MAIL object : %s', $message);
 
 	$i++;
 	my $msg = {};
 	$msg->{'id'} = $i;
 
-	$msg->{'subject'} = &tools::decode_header($mail, 'Subject');
-	$msg->{'from'} = &tools::decode_header($mail, 'From');
-	$msg->{'date'} = &tools::decode_header($mail, 'Date');
+	$msg->{'subject'} = tools::decode_header($message, 'Subject');
+	$msg->{'from'}    = tools::decode_header($message, 'From');
+	$msg->{'date'}    = tools::decode_header($message, 'Date');
 
-	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
+	$msg->{'full_msg'} = $message->as_string(); # raw message
 
-	&Log::do_log('debug','Archive::scan_dir_archive adding message %s in archive to send', $msg->{'subject'});
+	Log::do_log('debug', 'Adding message %s in archive to send',
+	    $msg->{'subject'});
 
 	push @{$all_msg}, $msg ;
     }
@@ -160,7 +163,7 @@ sub search_msgid {
 	&Log::do_log('err','remove_arc: no message id found');return undef;
     } 
     unless ($dir =~ /\d\d\d\d\-\d\d\/arctxt/) {
-	&Log::do_log ('err',"archive::search_msgid : dir $dir look unproper");
+	&Log::do_log ('err',"archive::search_msgid : dir $dir look improper");
 	return undef;
     }
     unless (opendir (ARC, "$dir")){
@@ -285,26 +288,26 @@ sub clean_archived_message {
     my $robot = shift;
     my $input = shift;
     my $output = shift;
-    my $msg = Message->new({'message_in_spool' => $input, 'noxsympato' => 1});
+    my $message = Message->new({'file' => $input, 'noxsympato' => 1});
 
-    if ($msg->clean_html($robot)) {
+    if ($message->clean_html($robot)) {
 	if (open TMP, '>', $output) {
-	    print TMP $msg->get_encrypted_message_as_string;
+	    print TMP $message->as_string();
 	    close TMP;
-	}else{
-	    &Log::do_log('err',
-		'Unable to create a tmp file to write clean HTML to file %s',
+	} else {
+	    Log::do_log('err',
+		'Unable to create a temporary file %s to write clean HTML',
 		$output);
 	    return undef;
 	}
-    }else{
-	Log::do_log('err','HTML cleaning in file %s failed.', $output);
+    } else {
+	Log::do_log('err', 'HTML cleaning in file %s failed.', $output);
 	return undef;
     }
 }
 
 #############################
-# convert a messsage to html. 
+# convert a message to HTML. 
 #    result is stored in $destination_dir
 #    attachement_url is used to link attachement
 #    

@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package Commands;
 
@@ -862,8 +861,10 @@ sub subscribe {
 
     ## This is a really minimalistic handling of the comments,
     ## it is far away from RFC-822 completeness.
-    $comment =~ s/"/\\"/g;
-    $comment = "\"$comment\"" if ($comment =~ /[<>\(\)]/);
+    if (defined $comment) {
+	$comment =~ s/"/\\"/g;
+	$comment = "\"$comment\"" if ($comment =~ /[<>\(\)]/);
+    }
 
     ## Now check if the user may subscribe to the list
 
@@ -2640,55 +2641,31 @@ sub distribute {
 
     #read the moderation queue and purge it
 
-    my $modspool = new Sympaspool('mod');
+    my $modspool = KeySpool->new();
     my $name     = $list->name;
 
     my $message_in_spool = $modspool->get_message(
 	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
     );
-    unless ($message_in_spool) {
-	## if the message has been accepted via WWSympa, it's in spool 'validated'
-	my $validatedspool = new Sympaspool('validated');
-	$message_in_spool = $validatedspool->get_message(
-	    {   'list'    => $list->name,
-		'robot'   => $robot->domain,
-		'authkey' => $key
-	    }
-	);
-    }
-    unless ($message_in_spool) {
-	&Log::do_log(
-	    'err',
-	    'Commands::distribute(): Unable to find message for %s with key %s',
-	    $name,
-	    $key
-	);
-	&report::reject_report_msg('user', 'unfound_message', $sender,
-	    {'listname' => $name, 'key' => $key},
-	    $robot, '', $list);
-	return 'msg_not_found';
-
-    }
-    my $message = new Message({'message_in_spool' => $message_in_spool});
+    my $message = undef;
+    $message = Message->new($message_in_spool)
+	if $message_in_spool;
     unless (defined $message) {
-	&Log::do_log(
-	    'err',
-	    'Commands::distribute(): Unable to create message object for %s@%s validation key %s',
-	    $name,
-	    $robot,
-	    $key
+	Log::do_log('err',
+	    'Unable to create message object for %s validation key %s',
+	    $list, $key
 	);
-	&report::reject_report_msg('user', 'unfound_message', $sender,
+	report::reject_report_msg('user', 'unfound_message', $sender,
 	    {'listname' => $name, 'key' => $key},
 	    $robot, '', $list);
 	return 'msg_not_found';
     }
 
-    my $msg = $message->{'msg'};
+    my $msg = $message->as_entity();
     my $hdr = $msg->head;
 
-    my $msg_id     = $hdr->get('Message-Id');
-    my $msg_string = $msg->as_string;
+    my $msg_id     = $message->get_header('Message-Id');
+    my $msg_string = $msg->as_string();
 
     $hdr->add('X-Validation-by', $sender);
 
@@ -2715,23 +2692,15 @@ sub distribute {
 	return undef;
     }
     unless ($numsmtp) {
-	&Log::do_log(
-	    'info',
-	    'Message for %s from %s accepted but all subscribers use digest,nomail or summary',
-	    $which,
-	    $sender
+	Log::do_log('info',
+	    'Message %s for %s from %s accepted but all subscribers use digest,nomail or summary',
+	    $message, $list, $sender
 	);
     }
-    &Log::do_log(
-	'info',
-	'Message for list %s accepted by %s (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d',
-	$list->get_list_id(),
-	$sender,
-	time - $start_time,
-	$numsmtp,
-	$list->total(),
-	$hdr->get('Message-Id'),
-	$message->{'size'}
+    &Log::do_log('info',
+	'Message %s for list %s accepted by %s; %d seconds, %d sessions, %d subscribers, size=%d',
+	$message, $list, $sender, time - $start_time, $numsmtp,
+	$list->total(), $message->{'size'}
     );
 
     unless ($quiet) {
@@ -2740,15 +2709,14 @@ sub distribute {
 		'message_distributed', $sender,
 		{'key' => $key, 'message' => $message}, $robot,
 		$list
-	    )
-	    ) {
-	    &Log::do_log('notice',
-		"Commands::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender"
+	)) {
+	    Log::do_log('notice',
+		'Unable to send template "message_report" to %s', $sender
 	    );
 	}
     }
-
-    &Log::do_log('debug2', 'DISTRIBUTE %s %s from %s accepted (%d seconds)',
+    $modspool->remove_message($message_in_spool->{'messagekey'});
+    Log::do_log('debug2', 'DISTRIBUTE %s %s from %s accepted (%d seconds)',
 	$name, $key, $sender, time - $time_command);
 
     return 1;
@@ -2778,41 +2746,33 @@ sub confirm {
     chomp $key;
     my $start_time = time;    # get the time at the beginning
 
-    my $spool = new Sympaspool('auth');
+    my $spool = Sympaspool->new('auth');
 
-    my $messageinspool = $spool->get_message({'authkey' => $key});
-
-    unless ($messageinspool) {
-	&Log::do_log('info', 'CONFIRM %s from %s refused, auth failed',
-	    $key, $sender);
-	&report::reject_report_msg('user', 'unfound_file_message', $sender,
-	    {'key' => $key},
-	    $robot, '', '');
-	return 'wrong_auth';
-    }
-    my $message = new Message({'message_in_spool' => $messageinspool});
-    unless (defined $message) {
-	&Log::do_log(
-	    'err',
-	    'Commands::confirm(): Unable to create message object for key %s',
-	    $key
+    my $message_in_spool = $spool->get_message({'authkey' => $key});
+    my $message = undef;
+    $message = Message->new($message_in_spool)
+	if $message_in_spool;
+    unless ($message) {
+	Log::do_log('err',
+	    'Unable to create message object for key %s from %s',
+	    $key, $sender
 	);
-	&report::reject_report_msg('user', 'wrong_format_message', $sender,
+	report::reject_report_msg('user', 'unfound_file_message', $sender,
 	    {'key' => $key},
 	    $robot, '', '');
 	return 'msg_not_found';
     }
 
-    my $msg  = $message->{'msg'};
-    my $list = $message->{'list'};
-    &Language::SetLang($list->lang);
+    my $msg  = $message->as_entity();
+    my $list = $message->list;
+    Language::SetLang($list->lang);
 
     my $name  = $list->name;
     my $bytes = $message->{'size'};
     my $hdr   = $msg->head;
 
-    my $msgid      = $hdr->get('Message-Id');
-    my $msg_string = $message->{'msg'}->as_string;
+    my $msgid      = $message->get_msg_id;
+    my $msg_string = $message->as_string(); # raw message
 
     my $result = Scenario::request_action(
 	$list, 'send', 'md5',
@@ -2827,8 +2787,8 @@ sub confirm {
     unless (defined $action) {
 	&Log::do_log(
 	    'err',
-	    'message (%s) ignored because unable to evaluate scenario for list %s',
-	    $msgid,
+	    'message %s ignored because unable to evaluate scenario for list %s',
+	    $message,
 	    $list
 	);
 	&report::reject_report_msg(
@@ -3052,46 +3012,35 @@ sub reject {
 
     my $name = $list->name;
 
-    my $modspool         = new Sympaspool('mod');
+    my $modspool         = KeySpool->new();
     my $message_in_spool = $modspool->get_message(
 	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
     );
-
-    unless ($message_in_spool) {
-	&Log::do_log('info', 'REJECT %s %s from %s refused, auth failed',
+    my $message = undef;
+    $message = Message->new($message_in_spool)
+	if $message_in_spool;
+    unless ($message) {
+	Log::do_log('info',
+	    'Could not find message %s %s from %s, auth failed',
 	    $which, $key, $sender);
 	&report::reject_report_msg('user', 'unfound_message', $sender,
 	    {'key' => $key},
 	    $robot, '', $list);
 	return 'wrong_auth';
     }
-    my $message = new Message({'message_in_spool' => $message_in_spool});
-    unless ($message) {
-	&Log::do_log(
-	    'err',
-	    'Could not parse spool message %s %s from %s refused, auth failed',
-	    $which,
-	    $key,
-	    $sender
-	);
-	&report::reject_report_msg('user', 'unfound_message', $sender,
-	    {'key' => $key},
-	    $robot, '', $list);
-	return 'wrong_auth';
-    }
-    my $msg          = $message->{'msg'};
-    my $bytes        = $message->{'size'};
-    my $hdr          = $msg->head;
-    my $customheader = $list->custom_header;
-    my $to_field     = $hdr->get('To');
 
-    my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
-    unless ($#sender_hdr == -1) {
+    my $msg          = $message->as_entity();
+    my $bytes        = $message->{'size'};
+    my $customheader = $list->custom_header;
+
+    #FIXME: use get_sender_email() ?
+    my @sender_hdr = Mail::Address->parse($message->get_header('From'));
+    unless (@sender_hdr) {
 	my $rejected_sender = $sender_hdr[0]->address;
 	my %context;
 	$context{'subject'} = &tools::decode_header($message, 'Subject');
 	$context{'rejected_by'} = $sender;
-	$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string
+	$context{'editor_msg_body'} = $editor_msg->as_entity()->body_as_string
 	    if ($editor_msg);
 
 	&Log::do_log('debug', 'message %s from sender %s rejected by %s',
@@ -3110,14 +3059,12 @@ sub reject {
 
 	## Notify list moderator
 	unless (
-	    &report::notice_report_msg(
+	    report::notice_report_msg(
 		'message_rejected', $sender,
-		{'key' => $key, 'message' => $msg}, $robot,
-		$list
-	    )
-	    ) {
-	    &Log::do_log('err',
-		"Commands::reject(): Unable to send template 'message_report', entry 'message_rejected' to $sender"
+		{'key' => $key, 'message' => $msg}, $robot, $list
+	)) {
+	    Log::do_log('err',
+		'Unable to send template "message_report" to %s', $sender
 	    );
 	}
 
@@ -3128,9 +3075,7 @@ sub reject {
     &tools::remove_dir(
 	Site->viewmail_dir . '/mod/' . $list->get_list_id() . '/' . $key);
 
-    $modspool->remove_message(
-	{'list' => $list->name, 'robot' => $robot->domain, 'authkey' => $key}
-    );
+    $modspool->remove_message({'list' => $list, 'authkey' => $key});
 
     return 1;
 }
@@ -3175,7 +3120,7 @@ sub modindex {
 	return 'not_allowed';
     }
 
-    my $spool = new Sympaspool('mod');
+    my $modspool = KeySpool->new();
 
     my $n;
     my @now = localtime(time);
@@ -3183,17 +3128,20 @@ sub modindex {
     ## List of messages
     my @spool;
 
-    foreach my $msg (
-	$spool->get_content(
+    foreach my $message_in_spool (
+	$modspool->get_content(
 	    {   'selector'  => {'list' => $name, 'robot' => $robot->domain},
 		'selection' => '*',
 		'sortby'    => 'date',
 		'way'       => 'asc'
 	    }
 	)
-	) {
-	my $message = new Message({'message_in_spool' => $msg});
-	push @spool, $message->{'msg'};
+    ) {
+	my $message = undef;
+	$message = Message->new($message_in_spool)
+	    if $message_in_spool;
+	next unless $message;
+	push @spool, $message->as_entity();
 	$n++;
     }
 
@@ -3215,12 +3163,13 @@ sub modindex {
 		'boundary1' => "==main $now[6].$now[5].$now[4].$now[3]==",
 		'boundary2' => "==digest $now[6].$now[5].$now[4].$now[3]=="
 	    }
-	)
-	) {
-	&Log::do_log('notice',
-	    "Unable to send template 'modindex' to $sender");
-	&report::reject_report_cmd('intern_quiet', '', {'listname' => $name},
-	    $cmd_line, $sender, $robot);
+    )) {
+	Log::do_log('notice',
+	    'Unable to send template "modindex" to %s', $sender
+	);
+	report::reject_report_cmd('intern_quiet', '', {'listname' => $name},
+	    $cmd_line, $sender, $robot
+	);
     }
 
     &Log::do_log('info', 'MODINDEX %s from %s accepted (%d seconds)',
@@ -3343,7 +3292,7 @@ sub get_auth_method {
     my $that;
     my $auth_method;
 
-    if ($sign_mod eq 'smime') {
+    if ($sign_mod and $sign_mod eq 'smime') {
 	$auth_method = 'smime';
     } elsif ($auth ne '') {
 	&Log::do_log('debug3', 'auth received from %s : %s', $sender, $auth);
@@ -3373,7 +3322,7 @@ sub get_auth_method {
 	}
     } else {
 	$auth_method = 'smtp';
-	$auth_method = 'dkim' if ($sign_mod eq 'dkim');
+	$auth_method = 'dkim' if $sign_mod and $sign_mod eq 'dkim';
     }
 
     return $auth_method;

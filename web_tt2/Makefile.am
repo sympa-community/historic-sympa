@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 webtemplate_DATA = active_lists.tt2 \
 		   add_request.tt2 \
@@ -138,6 +137,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   show_cert.tt2 \
 		   show_exclude.tt2 \
 		   show_sessions.tt2 \
+		   sigindex.tt2 \
 		   sigrequest.tt2 \
 		   skinsedit.tt2 \
 		   sso_login.tt2 \
