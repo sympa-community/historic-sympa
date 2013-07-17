@@ -138,7 +138,7 @@ unless ($base) {
 	);
 }
 
-my $result = $base->connect(keep_trying => 1);
+my $result = $base->connect();
 unless ($result) {
 	Sympa::Log::Syslog::fatal_err(
 		'Unable to connect to database defined in configuration. Exiting.'
