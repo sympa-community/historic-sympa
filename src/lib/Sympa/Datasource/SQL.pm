@@ -163,8 +163,6 @@ sub new {
 
 Connect to a SQL database.
 
-=back
-
 Return value:
 
 A true value on success, I<undef> otherwise.

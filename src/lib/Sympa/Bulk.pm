@@ -93,6 +93,8 @@ sub new {
 	return $self;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
 =over

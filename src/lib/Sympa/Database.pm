@@ -1188,8 +1188,6 @@ my @former_indexes = qw(
 
 =over
 
-=over
-
 =item Sympa::Database->create(%parameters)
 
 Factory method to create a new L<Sympa::Database> object from a
@@ -1311,13 +1309,15 @@ sub get_singleton {
 	return $singleton;
 }
 
+=back
+
 =head1 INSTANCE METHODS
 
 =over
 
 =item $database->connect()
 
-Connect to a SQL database.
+Connect to the database.
 
 Parameters:
 
@@ -1395,6 +1395,8 @@ sub connect {
 
 =item $database->disconnect()
 
+Disconnect from the database.
+
 =cut
 
 sub disconnect {
@@ -1422,7 +1424,7 @@ sub ping {
 	return $self->{dbh}->ping();
 }
 
-=item $self->get_structure()
+=item $database->get_structure()
 
 FIXME.
 
@@ -1447,7 +1449,7 @@ sub get_structure {
 	return $self->{structure};
 }
 
-=item $self->probe()
+=item $database->probe()
 
 FIXME.
 
@@ -2021,7 +2023,7 @@ sub _check_fields_list {
 		join(',', sort @{$params{target}});
 }
 
-=item source->get_connect_string()
+=item $database->get_connect_string()
 
 Builds the string to be used by the DBI to connect to the database.
 
@@ -2029,7 +2031,7 @@ Parameters:
 
 None
 
-=item source->get_substring_clause(%parameters)
+=item $database->get_substring_clause(%parameters)
 
 Returns an SQL clause to be inserted in a query.
 
@@ -2694,6 +2696,8 @@ sub _get_set_index_query {
 		"CREATE INDEX $params{index} " .
 		"ON $params{table} ($params{fields})";
 }
+
+=back
 
 =head1 FUNCTIONS
 
