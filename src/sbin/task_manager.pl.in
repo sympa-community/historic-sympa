@@ -148,7 +148,7 @@ unless ($result) {
 }
 
 ## Check that the data structure is uptodate
-unless (Sympa::Database::data_structure_uptodate(Sympa::Constants::VERSION)) {
+unless (Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION)) {
 	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 

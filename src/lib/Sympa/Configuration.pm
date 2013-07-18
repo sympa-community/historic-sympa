@@ -721,6 +721,50 @@ sub checkfiles {
 	return undef if ($config_err);
 	return 1;
 }
+=item check_data_structure($version)
+
+Check if data structures are uptodate.
+
+If not, no operation should be performed before the upgrade process is run
+
+=cut
+
+sub data_structure_uptodate {
+	my ($version) = @_;
+
+	my $version_file =
+		get_robot_conf('*','etc') . "/data_structure.version";
+	return 1 unless -f $version_file;
+
+	my $data_structure_version;
+
+	unless (open VFILE, $version_file) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			"Unable to open %s : %s", $version_file, $ERRNO
+		);
+		return undef;
+	}
+	while (<VFILE>) {
+		next if /^\s*$/;
+		next if /^\s*\#/;
+		chomp;
+		$data_structure_version = $_;
+		last;
+	}
+	close VFILE;
+
+	return 1 unless defined $data_structure_version;
+	return 1 if $data_structure_version eq $version;
+
+	Sympa::Log::Syslog::do_log(
+		'err',
+		"Data structure (%s) is not uptodate for current release (%s)",
+		$data_structure_version,
+		$version
+	);
+	return 0;
+}
 
 =item valid_robot($robot, $options)
 

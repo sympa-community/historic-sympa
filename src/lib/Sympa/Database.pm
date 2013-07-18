@@ -2740,44 +2740,6 @@ sub connect_sympa_database {
 	return 1;
 }
 
-=item data_structure_uptodate($version)
-
-Check if data structures are uptodate.
-
-If not, no operation should be performed before the upgrade process is run
-
-=cut
-
-sub data_structure_uptodate {
-	my ($version) = @_;
-
-	my $version_file = "Sympa::Configuration::get_robot_conf('*','etc')/data_structure.version";
-	my $data_structure_version;
-
-	if (-f $version_file) {
-		unless (open VFILE, $version_file) {
-			Sympa::Log::Syslog::do_log('err', "Unable to open %s : %s", $version_file, $ERRNO);
-			return undef;
-		}
-		while (<VFILE>) {
-			next if /^\s*$/;
-			next if /^\s*\#/;
-			chomp;
-			$data_structure_version = $_;
-			last;
-		}
-		close VFILE;
-	}
-
-	if (defined $data_structure_version &&
-		$data_structure_version ne $version) {
-		Sympa::Log::Syslog::do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, $version);
-		return 0;
-	}
-
-	return 1;
-}
-
 =back
 
 =cut

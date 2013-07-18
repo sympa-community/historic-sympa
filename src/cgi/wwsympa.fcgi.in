@@ -1099,7 +1099,7 @@ my $pinfo = Sympa::List::_apply_defaults();
 ## Check that the data structure is uptodate
 ## If not, set the web interface to maintenance mode
 my $maintenance_mode;
-unless (Sympa::Database::data_structure_uptodate()) {
+unless (Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION)) {
 	$maintenance_mode = 1;
 	Sympa::Log::Syslog::do_log('err',"Web interface set to maintenance mode ; you should run sympa.pl --upgrade");
 }
@@ -1166,7 +1166,11 @@ while ($query = new_loop()) {
 	}
 
 	## If in maintenance mode, check if the data structure is now uptodate
-	if ($maintenance_mode && (Sympa::Database::data_structure_uptodate() && ($EUID eq (getpwnam(Sympa::Constants::USER))[2]))) {
+	if (
+		$maintenance_mode &&
+		Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION) &&
+		$EUID eq (getpwnam(Sympa::Constants::USER))[2]
+	) {
 		$maintenance_mode = undef;
 		Sympa::Log::Syslog::do_log('notice',"Data structure seem updated, setting OFF maintenance mode");
 	}
