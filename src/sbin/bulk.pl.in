@@ -126,6 +126,16 @@ unless ($result) {
 	);
 }
 
+# Check that the data structure is uptodate
+unless (Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION)) {
+	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
+}
+
+# Check for several files.
+unless (Sympa::Configuration::checkfiles()) {
+	Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
+}
+
 Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'bulk');
 
 # setting log_level using conf unless it is set by calling option
