@@ -21,7 +21,6 @@
 
 use strict;
 use lib '--modulesdir--';
-
 use English qw(-no_match_vars);
 use Net::LDAP;
 use Net::LDAPS;
@@ -31,15 +30,22 @@ use Sympa::Configuration;
 use Sympa::Constants;
 use Sympa::Template;
 use Sympa::Tools;
+use Sympa::Robot;
 
 $ENV{'PATH'} = '';
 
-unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
-	print gettext("The configuration file contains errors.\n");
-	exit(1);
+unless (Site->load('no_db' => 1)) {
+    printf STDERR
+	"Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	Conf::get_sympa_conf();
+    exit 1;
 }
 
 my $manager_conf_file = Site->etc.'/ldap_alias_manager.conf';
+Log::set_log_level(Site->log_level);
+Log::do_openlog(Site->syslog, Site->log_socket_type, 'alias_manager');
+
+my $manager_conf_file = Site->etc . '/ldap_alias_manager.conf';
 
 ## LDAP configuration
 my %ldap_params;
@@ -67,12 +73,19 @@ if (grep(/^-s$/, @ARGV)) {
 }
 my ($operation, $listname, $domain, $file) = @ARGV;
 
+my $robot;
+
 if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
 	printf "Usage: $0 <add|del> <listname> <domain> [<file>]\n";
 	printf "\n";
 	printf "  Options:\n";
 	printf "    -s\tSimulation mode. Dump the entries but don't add it to the directory.\n";
 	exit(2);
+}
+
+unless ($robot = Robot->new($domain, 'no_db' => 1)) {
+    printf STDERR "Unknown robot %s\n", $domain;
+    exit(16);
 }
 
 $default_domain = Site->domain;
@@ -84,12 +97,14 @@ $data{'list'}{'name'} = $listname;
 $data{'default_domain'} = $default_domain;
 $data{'ldap_base_dn'} = $ldap_base_dn;
 $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
-$data{'return_path_suffix'} = $domain->return_path_suffix;
-my @aliases;
+$data{'return_path_suffix'} = $robot->return_path_suffix;
 
 my $tt2_include_path = [Site->etc.'/'.$domain,
 	Site->etc,
 	Sympa::Constants::DEFAULTDIR];
+my @aliases;
+
+my $tt2_include_path = $robot->get_etc_include_path();
 
 my $aliases_dump;
 Sympa::Template::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
@@ -97,11 +112,16 @@ Sympa::Template::parse_tt2(\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_inclu
 @aliases = split /\n/, $aliases_dump;
 
 unless (@aliases) {
-	print STDERR "No aliases defined\n";
-	exit(15);
+    print STDERR "No aliases defined\n";
+    exit(15);
 }
 
 if ($operation eq 'add') {
+    ## Check existing aliases
+    if (&already_defined(@aliases)) {
+	print STDERR "some alias already exist\n";
+	exit(13);
+    }
 
 ## Check existing aliases
 	if (already_defined(@aliases)) {
@@ -138,6 +158,7 @@ if ($operation eq 'add') {
 		$data{'list'}{'command'} = $command_value;
 		$data{'list'}{'maildrop'} = $maildrop;
 		Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2',\$ldif_dump, $tt2_include_path);
+
 my @attribute_lines = split /\n/, $ldif_dump;
 
 # We create the new LDAP entry.
@@ -150,7 +171,7 @@ foreach my $line (@attribute_lines) {
 	if ($1 eq 'dn') {
 		$entry->dn($2);
 	} else {
-		push @{$ldap_attributes{$1}}, $2;
+	    push @{$ldap_attributes{$1}}, $2;
 	}
 }
 
@@ -169,10 +190,19 @@ if ($simulation_mode) {
 	if ($msg->is_error()) {
 		print STDERR "Can't add entry for $alias_value\@$domain: ",$msg->error(),"\n";
 		exit(15);
+	if ($simulation_mode) {
+	    $entry->dump;
+	} else {
+	    # We finally add the entry
+	    my $msg = $ldap_connection->add($entry);
+	    if ($msg->is_error()) {
+		print STDERR "Can't add entry for $alias_value\@$domain: ",$msg->error(),"\n";
+		exit(15);
+	    }
 	}
 }
 $entry = undef;
-} # end foreach aliases
+    } # end foreach aliases
 
 finalize_ldap();
 
@@ -184,27 +214,27 @@ elsif ($operation eq 'del') {
 		exit(7);
 	}
 
+	$alias =~ /^([^:]+):/; 
+	my $alias_value = $1;
+	$alias_value =~ s/\+/\-/g;
+
 	foreach my $alias (@aliases) {
 		if ($alias =~ /^\#/) {
 			next;
 		}
 
-		$alias =~ /^([^:]+):/;
-		my $alias_value = $1;
-		$alias_value =~ s/\+/\-/g;
-
 		my $ldif_dump;
 		$data{'list'}{'alias'} = $alias_value;
 		Sympa::Template::parse_tt2(\%data, 'ldap_alias_entry.tt2', \$ldif_dump, $tt2_include_path);
-my $value = (grep(/^dn:/, split(/\n/, $ldif_dump)))[0];
-$value =~ s/^dn:\s*//;
+		my $value = (grep(/^dn:/, split(/\n/, $ldif_dump)))[0];
+		$value =~ s/^dn:\s*//;
 
-if ($simulation_mode) {
-	printf "Would delete dn $value\n";
-} else {
-	$ldap_connection->delete($value);
-}
-	} # end foreach aliases
+	if ($simulation_mode) {
+		printf "Would delete dn $value\n";
+	} else {
+		$ldap_connection->delete($value);
+	}
+    } # end foreach aliases
 
 	finalize_ldap();
 } # end if del
@@ -222,6 +252,7 @@ sub already_defined {
 
 	initialize_ldap();
 
+<<<<<<< .courant
 	foreach my $alias (@aliases) {
 
 		$alias =~ /^([^:]+):/;
@@ -312,6 +343,7 @@ sub initialize_ldap {
 		print STDERR "Can't bind to server $ldap_host: ",$msg->error(),"\n";
 		return 0;
 	}
+
 
 	return 1;
 }
