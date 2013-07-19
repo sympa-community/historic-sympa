@@ -57,8 +57,19 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Tracking.pm \
 		      Sympa/Transport.pm \
 		      Sympa/Upgrade.pm \
-		      Sympa/WWSympa.pm
-
+		      Sympa/WWSympa.pm \
+		      moddef.pm \
+		      SympaspoolClassic.pm \
+		      Messagespool.pm \
+		      KeySpool.pm \
+		      SubscribeSpool.pm \
+		      listdef.pm \
+		      moddef.pm \
+		      Site.pm \
+		      User.pm \
+		      BounceMessage.pm \
+		      WebAgent.pm
+		      
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)
 CLEANFILES = Sympa/Constants.pm
 
