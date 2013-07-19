@@ -188,7 +188,7 @@ sub _finished {
 sub _help {
 	my (undef, $robot) = @_;
 
-	my $etc =  Sympa::Configuration::get_robot_conf($robot, 'etc');
+	my $etc =  $robot->etc;
 
 	Sympa::Log::Syslog::do_log('debug', 'to robot %s',$robot);
 
@@ -880,7 +880,7 @@ sub _subscribe {
 			{
 				'who'     => $sender,
 				'keyauth' => $list->compute_auth($sender,'add'),
-				'replyto' => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+				'replyto' => $robot->sympa,
 				'gecos'   => $comment
 			}
 		);
@@ -950,7 +950,7 @@ sub _subscribe {
 				'lang'     => $u->{'lang'} ||
 					      $list->{'admin'}{'lang'},
 				'password' => $u->{'password'} ||
-					      Sympa::Tools::Password::tmp_passwd($sender, $Sympa::Configuration::Conf{'cookie'})
+					      Sympa::Tools::Password::tmp_passwd($sender, Site->cookie)
 			}
 		);
 
@@ -1093,7 +1093,7 @@ sub _info {
 
 		$data->{'available_reception_mode'} = $list->available_reception_mode();
 
-		my $wwsympa_url = Sympa::Configuration::get_robot_conf($robot, 'wwsympa_url');
+		my $wwsympa_url = $robot->wwsympa_url;
 		$data->{'url'} = $wwsympa_url.'/info/'.$list->{'name'};
 
 		my $expedition_result = $list->send_file(
@@ -1133,7 +1133,7 @@ sub _signoff {
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s, %s, %s)', $which,$robot, $sign_mod, $message);
 
 	my ($l,$list,$auth_method);
-	my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+	my $host = $robot->host;
 
 	## $email is defined if command is "unsubscribe <listname> <e-mail>"
 	unless ($which =~ /^(\*|[\w\.\-]+)(\@$host)?(\s+(.+))?$/) {
@@ -1473,7 +1473,7 @@ sub _add {
 				'lang'     => $u->{'lang'} ||
 				              $list->{'admin'}{'lang'},
 				'password' => $u->{'password'} ||
-				              Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'})
+				              Sympa::Tools::Password::tmp_passwd($email, Site->cookie)
 			}
 		);
 
@@ -1528,7 +1528,7 @@ sub _invite {
 	my ($what, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
-	my $sympa = Sympa::Configuration::get_robot_conf($robot, 'sympa');
+	my $sympa = $robot->sympa;
 
 	$what =~ /^(\S+)\s+(\S+)(\s+(.+))?\s*$/;
 	my($which, $email, $comment) = ($1, $2, $4);
@@ -1707,7 +1707,7 @@ sub _remind {
 	my ($which, $robot, $sign_mod, $message) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s,%s,%s,%s)', $which,$robot,$sign_mod,$message);
 
-	my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+	my $host = $robot->host;
 
 	my %context;
 
@@ -2608,7 +2608,7 @@ sub _reject {
 	}
 
 	Sympa::Log::Syslog::do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time() - $time_command);
-	Sympa::Tools::File::remove_dir ( $Sympa::Configuration::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
+	Sympa::Tools::File::remove_dir ( Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$key);
 
 	$modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
@@ -2642,7 +2642,7 @@ sub _modindex {
 
 	Sympa::Language::set_lang($list->{'admin'}{'lang'});
 
-	my $modqueue = Sympa::Configuration::get_robot_conf($robot,'queuemod');
+	my $modqueue = $robot->queuemod;
 
 	my $i;
 
@@ -2674,7 +2674,7 @@ sub _modindex {
 			if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){
 				$moddelay = $curlist->{'admin'}{'clean_delay_queuemod'}
 			} else {
-				$moddelay = Sympa::Configuration::get_robot_conf($robot,'clean_delay_queuemod');
+				$moddelay = $robot->clean_delay_queuemod;
 			}
 
 			if ((stat "$modqueue/$i")[9] < (time() -  $moddelay*86400) ){

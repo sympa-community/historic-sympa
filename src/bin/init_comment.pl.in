@@ -33,7 +33,7 @@ use Sympa::Database;
 ## Load sympa config
 Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
-chdir $Sympa::Configuration::Conf{'home'};
+chdir Site->home;
 
 Sympa::Database::db_connect() || die "Can't connect to database";
 

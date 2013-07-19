@@ -149,19 +149,19 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 
 	## Open the syslog and say we're read out stuff.
-	Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
+	Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'spooler');
 
 	# setting log_level using conf unless it is set by calling option
 	if ($options{'log_level'}) {
 		Sympa::Log::Syslog::set_log_level($options{'log_level'});
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 	} else {
-		Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
-		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
+		Sympa::Log::Syslog::set_log_level(Site->log_level);
+		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Site->log_level");
 	}
 
 	## Probe Db if defined
-	if ($Sympa::Configuration::Conf{'db_name'} and $Sympa::Configuration::Conf{'db_type'}) {
+	if (Site->db_name and Site->db_type) {
 		my $report = Sympa::Database->get_singleton()->probe(
 			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
 		);
@@ -172,7 +172,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				{ 'report' => $report }
 			) if @$report;
 		} else {
-			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Sympa::Configuration::Conf{'db_name'});
+			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', Site->db_name);
 		}
 	}
 
@@ -187,8 +187,8 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 
 	## Main program
-	if (!chdir($Sympa::Configuration::Conf{'home'})) {
-		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", $Sympa::Configuration::Conf{'home'});
+	if (!chdir(Site->home)) {
+		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", Site->home);
 		## Function never returns.
 	}
 
@@ -228,7 +228,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				$distinct_spools{$options{'queue'}}= 1;
 			} else {
 				foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
-					$distinct_spools{$Sympa::Configuration::Conf{$possible_spool}} = 1 if ($Sympa::Configuration::Conf{$possible_spool});
+					$distinct_spools{Site->$possible_spool} = 1 if (Site->$possible_spool);
 				}
 			}
 			my $master = 1;
@@ -250,7 +250,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			}
 
 
-			Sympa::Log::Syslog::do_openlog($Sympa::Configuration::Conf{'syslog'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'spooler');
+			Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'spooler');
 
 			Sympa::Log::Syslog::do_log('debug', "Running server $PID for spooler purpose ");
 
@@ -261,7 +261,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				daemon           => $daemon_name,
 				pid              => $PID,
 				multiple_process => 1,
-				method           => $Sympa::Configuration::Conf{'lock_method'},
+				method           => Site->lock_method,
 				user             => Sympa::Constants::USER,
 				group            => Sympa::Constants::GROUP,
 			);
@@ -283,7 +283,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			}
 
 			# Sets the UMASK
-			umask(oct($Sympa::Configuration::Conf{'umask'}));
+			umask(oct(Site->umask));
 
 			## Most initializations have now been done.
 			Sympa::Log::Syslog::do_log('notice', "Sympa spooler %s started", Sympa::Constants::VERSION);
@@ -365,7 +365,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				## Lock file
 				my $lock = Sympa::Lock->new(
 					path   => $spooldir.'/'.$filename,
-					method => $Sympa::Configuration::Conf{'lock_method'}
+					method => Site->lock_method
 				);
 				unless (defined $lock) {
 					Sympa::Log::Syslog::do_log('err','Could not create new lock');
@@ -397,26 +397,26 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				if ($robot) {
 					$robot=lc($robot);
 				} else {
-					$robot = lc(Sympa::Configuration::get_robot_conf($robot, 'host'));
+					$robot = lc($robot->host);
 				}
 
-				my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+				my $list_check_regexp = $robot->list_check_regexp;
 
 				if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 					($listname, $type) = ($1, $2);
 				}
-				my $email = Sympa::Configuration::get_robot_conf($robot, 'email');
+				my $email = $robot->email;
 
 				my $priority;
 
-				if ($listname eq $Sympa::Configuration::Conf{'listmaster_email'}) {
+				if ($listname eq Site->listmaster_email) {
 					$priority = 0;
 				}elsif ($type eq 'request') {
-					$priority = Sympa::Configuration::get_robot_conf($robot, 'request_priority');
+					$priority = $robot->request_priority;
 				}elsif ($type eq 'owner') {
-					$priority = Sympa::Configuration::get_robot_conf($robot, 'owner_priority');
-				}elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Configuration::Conf{'host'})?$/i) {
-					$priority = Sympa::Configuration::get_robot_conf($robot,'sympa_priority');
+					$priority = $robot->owner_priority;
+				}elsif ($listname =~ /^(sympa|$email)(\@Site->host)?$/i) {
+					$priority = $robot->sympa_priority;
 					$listname ='';
 				}
 				my $list =  Sympa::List->new(
@@ -429,7 +429,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 				if ($list) {
 					$priority = $list->{'admin'}{'priority'};
 				} else {
-					$priority = Sympa::Configuration::get_robot_conf($robot, 'default_list_priority');
+					$priority = $robot->default_list_priority;
 				}
 
 				$meta{'robot'} = $robot if $robot;
@@ -467,7 +467,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 			}
 
 			unless ($filename) {
-				sleep(Sympa::Configuration::get_robot_conf($robot, 'sleep'));
+				sleep($robot->sleep);
 				next;
 			}
 		}

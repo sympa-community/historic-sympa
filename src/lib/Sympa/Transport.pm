@@ -34,12 +34,12 @@ sub request {
 	if (my $request = $_[0]) {
 
 		## Select appropriate robot
-		if ($Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
-			$ENV{'SYMPA_ROBOT'} = $Sympa::Configuration::Conf{'robot_by_soap_url'}{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
+		if (Site->robot_by_soap_url{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
+			$ENV{'SYMPA_ROBOT'} = Site->robot_by_soap_url{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-			$ENV{'SYMPA_ROBOT'} =  $Sympa::Configuration::Conf{'host'};
+			$ENV{'SYMPA_ROBOT'} =  Site->host;
 		}
 
 		## Empty cache of the List.pm module
@@ -53,14 +53,14 @@ sub request {
 				context => {
 					cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
 				},
-				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+				crawlers => Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
 			);
 		} else {
 			$session = Sympa::Session->new(
 				robot    => $ENV{SYMPA_ROBOT},
 				context  => {},
-				crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+				crawlers => Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
 			);
 			$session->store() if (defined $session);

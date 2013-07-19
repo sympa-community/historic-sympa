@@ -139,7 +139,7 @@ sub create_list_old{
 		return undef;
 	}
 
-	my $regx = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+	my $regx = $robot->list_check_regexp;
 	if( $regx ) {
 		if ($params->{'listname'} =~ /^(\S+)-($regx)$/) {
 			Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
@@ -147,7 +147,7 @@ sub create_list_old{
 		}
 	}
 
-	if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
+	if ($params->{'listname'} eq $robot->email) {
 		Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 		return undef;
 	}
@@ -178,7 +178,7 @@ sub create_list_old{
 
 
 	## Check the template supposed to be used exist.
-	my $template_file = Sympa::Tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot, undef, $Sympa::Configuration::Conf{'etc'});
+	my $template_file = Sympa::Tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot, undef, Site->etc);
 	unless (defined $template_file) {
 		Sympa::Log::Syslog::do_log('err', 'no template %s found',$template);
 		return undef;
@@ -188,16 +188,16 @@ sub create_list_old{
 	my $list_dir;
 
 	# a virtual robot
-	if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
-		unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
-			unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-				Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s', $Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
+	if (-d "Site->home/$robot") {
+		unless (-d Site->home.'/'.$robot) {
+			unless (mkdir (Site->home.'/'.$robot,0777)) {
+				Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s', Site->home,$robot,$CHILD_ERROR);
 				return undef;
 			}
 		}
-		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
+		$list_dir = Site->home.'/'.$robot.'/'.$params->{'listname'};
 	} else {
-		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
+		$list_dir = Site->home.'/'.$params->{'listname'};
 	}
 
 	## Check the privileges on the list directory
@@ -214,7 +214,7 @@ sub create_list_old{
 	}
 
 	## Creation of the config file
-	my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+	my $host = $robot->host;
 	$params->{'creation'}{'date'} =
 		Sympa::Language::gettext_strftime(
 			"%d %b %Y at %H:%M:%S",
@@ -224,12 +224,12 @@ sub create_list_old{
 	$params->{'creation_email'} = "listmaster\@$host" unless ($params->{'creation_email'});
 	$params->{'status'} = 'open'  unless ($params->{'status'});
 
-	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
+	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',Site->etc,Site->viewmaildir,Site->domain);
 
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list_dir.'/config',
-		method => $Sympa::Configuration::Conf{'lock_method'}
+		method => Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -248,7 +248,7 @@ sub create_list_old{
 	my $config = '';
 	my $fd = IO::Scalar->new(\$config);
 	Sympa::Template::parse_tt2($params, 'config.tt2', $fd, $tt2_include_path);
-	#    Encode::from_to($config, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
+	#    Encode::from_to($config, 'utf8', Site->filesystem_encoding);
 	print CONFIG $config;
 
 	close CONFIG;
@@ -265,7 +265,7 @@ sub create_list_old{
 		Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s',$list_dir,$ERRNO);
 	}
 	if (defined $params->{'description'}) {
-		Encode::from_to($params->{'description'}, 'utf8', $Sympa::Configuration::Conf{'filesystem_encoding'});
+		Encode::from_to($params->{'description'}, 'utf8', Site->filesystem_encoding);
 		print INFO $params->{'description'};
 	}
 	close INFO;
@@ -395,14 +395,14 @@ sub create_list{
 		return undef;
 	}
 
-	my $regx = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+	my $regx = $robot->list_check_regexp;
 	if( $regx ) {
 		if ($params->{'listname'} =~ /^(\S+)-($regx)$/) {
 			Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 			return undef;
 		}
 	}
-	if ($params->{'listname'} eq Sympa::Configuration::get_robot_conf($robot,'email')) {
+	if ($params->{'listname'} eq $robot->email) {
 		Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
 		return undef;
 	}
@@ -424,13 +424,13 @@ sub create_list{
 	}
 
 	## template file
-	my $template_file = Sympa::Tools::get_filename('etc',{},'config.tt2', $robot,$family, $Sympa::Configuration::Conf{'etc'});
+	my $template_file = Sympa::Tools::get_filename('etc',{},'config.tt2', $robot,$family, Site->etc);
 	unless (defined $template_file) {
 		Sympa::Log::Syslog::do_log('err', 'no config template from family %s@%s',$family->{'name'},$robot);
 		return undef;
 	}
 
-	my $family_config = Sympa::Configuration::get_robot_conf($robot,'automatic_list_families');
+	my $family_config = $robot->automatic_list_families;
 	$params->{'family_config'} = $family_config->{$family->{'name'}};
 	my $conf;
 	my $tt_result = Sympa::Template::parse_tt2($params, 'config.tt2', \$conf, [$family->{'dir'}]);
@@ -443,16 +443,16 @@ sub create_list{
 	## Create the list directory
 	my $list_dir;
 
-	if (-d "$Sympa::Configuration::Conf{'home'}/$robot") {
-		unless (-d $Sympa::Configuration::Conf{'home'}.'/'.$robot) {
-			unless (mkdir ($Sympa::Configuration::Conf{'home'}.'/'.$robot,0777)) {
-				Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s',$Sympa::Configuration::Conf{'home'},$robot,$CHILD_ERROR);
+	if (-d "Site->home/$robot") {
+		unless (-d Site->home.'/'.$robot) {
+			unless (mkdir (Site->home.'/'.$robot,0777)) {
+				Sympa::Log::Syslog::do_log('err', 'unable to create %s/%s : %s',Site->home,$robot,$CHILD_ERROR);
 				return undef;
 			}
 		}
-		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$robot.'/'.$params->{'listname'};
+		$list_dir = Site->home.'/'.$robot.'/'.$params->{'listname'};
 	} else {
-		$list_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params->{'listname'};
+		$list_dir = Site->home.'/'.$params->{'listname'};
 	}
 
 	unless (-r $list_dir || mkdir ($list_dir,0777)) {
@@ -470,7 +470,7 @@ sub create_list{
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list_dir.'/config',
-		method => $Sympa::Configuration::Conf{'lock_method'}
+		method => Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -508,7 +508,7 @@ sub create_list{
 
 	## Create associated files if a template was given.
 	for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
-		my $template_file = Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Sympa::Configuration::Conf{'etc'});
+		my $template_file = Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, Site->etc);
 		if (defined $template_file) {
 			my $file_content;
 			my $tt_result = Sympa::Template::parse_tt2($params, $file.".tt2", \$file_content, [$family->{'dir'}]);
@@ -548,7 +548,7 @@ sub create_list{
 	if ($params->{'creation_email'}) {
 		$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
 	} else {
-		my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+		my $host = $robot->host;
 		$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
 	}
 	if ($params->{'status'}) {
@@ -625,7 +625,7 @@ sub update_list{
 	}
 
 	## template file
-	my $template_file = Sympa::Tools::get_filename('etc',{}, 'config.tt2', $robot,$family, $Sympa::Configuration::Conf{'etc'});
+	my $template_file = Sympa::Tools::get_filename('etc',{}, 'config.tt2', $robot,$family, Site->etc);
 	unless (defined $template_file) {
 		Sympa::Log::Syslog::do_log('err', 'no config template from family %s@%s',$family->{'name'},$robot);
 		return undef;
@@ -641,7 +641,7 @@ sub update_list{
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list->{'dir'}.'/config',
-		method => $Sympa::Configuration::Conf{'lock_method'}
+		method => Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -684,7 +684,7 @@ sub update_list{
 	if ($params->{'creation_email'}) {
 		$list->{'admin'}{'creation'}{'email'} = $params->{'creation_email'};
 	} else {
-		my $host = Sympa::Configuration::get_robot_conf($robot, 'host');
+		my $host = $robot->host;
 		$list->{'admin'}{'creation'}{'email'} = "listmaster\@$host";
 	}
 
@@ -815,10 +815,10 @@ sub rename_list{
 	## Rename or create this list directory itself
 	my $new_dir;
 	## Default robot
-	if (-d "$Sympa::Configuration::Conf{'home'}/$params{'new_robot'}") {
-		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params{'new_robot'}.'/'.$params{'new_listname'};
-	} elsif ($params{'new_robot'} eq $Sympa::Configuration::Conf{'domain'}) {
-		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$params{'new_listname'};
+	if (-d "Site->home/$params{'new_robot'}") {
+		$new_dir = Site->home.'/'.$params{'new_robot'}.'/'.$params{'new_listname'};
+	} elsif ($params{'new_robot'} eq Site->domain) {
+		$new_dir = Site->home.'/'.$params{'new_listname'};
 	} else {
 		Sympa::Log::Syslog::do_log('err',"Unknown robot $params{'new_robot'}");
 		return 'unknown_robot';
@@ -855,7 +855,7 @@ sub rename_list{
 		}
 
 		## Rename archive
-		my $arc_dir = Sympa::Configuration::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id();
+		my $arc_dir = $robot->arc_path.'/'.$list->get_list_id();
 		my $new_arc_dir = Sympa::Configuration::get_robot_conf($params{'new_robot'}, 'arc_path').'/'.$params{'new_listname'}.'@'.$params{'new_robot'};
 		if (-d $arc_dir && $arc_dir ne $new_arc_dir) {
 			unless (move ($arc_dir,$new_arc_dir)) {
@@ -941,8 +941,8 @@ sub rename_list{
 		## Auth & Mod  spools
 		foreach my $spool ('queueauth','queuemod','queuetask','queuebounce',
 			'queue','queueoutgoing','queuesubscribe','queueautomatic') {
-			unless (opendir(DIR, $Sympa::Configuration::Conf{$spool})) {
-				Sympa::Log::Syslog::do_log('err', "Unable to open '%s' spool : %s", $Sympa::Configuration::Conf{$spool}, $ERRNO);
+			unless (opendir(DIR, Site->$spool)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to open '%s' spool : %s", Site->$spool, $ERRNO);
 			}
 
 			foreach my $file (sort readdir(DIR)) {
@@ -969,26 +969,26 @@ sub rename_list{
 				}
 
 				## Rename file
-				unless (move "$Sympa::Configuration::Conf{$spool}/$file", "$Sympa::Configuration::Conf{$spool}/$newfile") {
-					Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{$spool}/$newfile", "$Sympa::Configuration::Conf{$spool}/$newfile", $ERRNO);
+				unless (move "Site->$spool/$file", "Site->$spool/$newfile") {
+					Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "Site->$spool/$newfile", "Site->$spool/$newfile", $ERRNO);
 					next;
 				}
 
 				## Change X-Sympa-To
-				Sympa::Tools::change_x_sympa_to("$Sympa::Configuration::Conf{$spool}/$newfile", "$params{'new_listname'}\@$params{'new_robot'}");
+				Sympa::Tools::change_x_sympa_to("Site->$spool/$newfile", "$params{'new_listname'}\@$params{'new_robot'}");
 			}
 
 			close DIR;
 		}
 		## Digest spool
-		if (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname") {
-			unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}") {
-				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}", $ERRNO);
+		if (-f "Site->queuedigest/$old_listname") {
+			unless (move "Site->queuedigest/$old_listname", "Site->queuedigest/$params{'new_listname'}") {
+				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "Site->queuedigest/$old_listname", "Site->queuedigest/$params{'new_listname'}", $ERRNO);
 				next;
 			}
-		} elsif (-f "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot") {
-			unless (move "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}\@$params{'new_robot'}") {
-				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Configuration::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Configuration::Conf{'queuedigest'}/$params{'new_listname'}\@$params{'new_robot'}", $ERRNO);
+		} elsif (-f "Site->queuedigest/$old_listname\@$robot") {
+			unless (move "Site->queuedigest/$old_listname\@$robot", "Site->queuedigest/$params{'new_listname'}\@$params{'new_robot'}") {
+				Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", "Site->queuedigest/$old_listname\@$robot", "Site->queuedigest/$params{'new_listname'}\@$params{'new_robot'}", $ERRNO);
 				next;
 			}
 		}
@@ -1043,10 +1043,10 @@ sub clone_list_as_empty {
 	Sympa::Log::Syslog::do_log('info',"Admin::clone_list_as_empty ($source_list_name, $source_robot,$new_listname,$new_robot,$email)");
 
 	my $new_dir;
-	if (-d $Sympa::Configuration::Conf{'home'}.'/'.$new_robot) {
-		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$new_robot.'/'.$new_listname;
-	} elsif ($new_robot eq $Sympa::Configuration::Conf{'domain'}) {
-		$new_dir = $Sympa::Configuration::Conf{'home'}.'/'.$new_listname;
+	if (-d Site->home.'/'.$new_robot) {
+		$new_dir = Site->home.'/'.$new_robot.'/'.$new_listname;
+	} elsif ($new_robot eq Site->domain) {
+		$new_dir = Site->home.'/'.$new_listname;
 	} else {
 		Sympa::Log::Syslog::do_log('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
 		return undef;
@@ -1232,13 +1232,13 @@ sub list_check_smtp {
 	my $smtp;
 	my (@suf, @addresses);
 
-	my $smtp_relay = Sympa::Configuration::get_robot_conf($robot, 'list_check_smtp');
-	my $smtp_helo = Sympa::Configuration::get_robot_conf($robot, 'list_check_helo') || $smtp_relay;
+	my $smtp_relay = $robot->list_check_smtp;
+	my $smtp_helo = $robot->list_check_helo || $smtp_relay;
 	$smtp_helo =~ s/:[-\w]+$//;
-	my $suffixes = Sympa::Configuration::get_robot_conf($robot, 'list_check_suffixes');
+	my $suffixes = $robot->list_check_suffixes;
 	return 0
 	unless ($smtp_relay && $suffixes);
-	my $domain = Sympa::Configuration::get_robot_conf($robot, 'host');
+	my $domain = $robot->host;
 	Sympa::Log::Syslog::do_log('debug2', 'list_check_smtp(%s,%s)', $list, $robot);
 	@suf = split(/,/,$suffixes);
 	return 0 if ! @suf;
@@ -1293,11 +1293,11 @@ sub install_aliases {
 	Sympa::Log::Syslog::do_log('debug', "($list->{'name'},$robot)");
 
 	return 1
-	if ($Sympa::Configuration::Conf{'sendmail_aliases'} =~ /^none$/i);
+	if (Site->sendmail_aliases =~ /^none$/i);
 
-	my $alias_manager = $Sympa::Configuration::Conf{'alias_manager' };
-	my $output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$PID;
-	my $error_output_file = $Sympa::Configuration::Conf{'tmpdir'}.'/aliasmanager.stderr.'.$PID;
+	my $alias_manager = Site->alias_manager;
+	my $output_file = Site->tmpdir.'/aliasmanager.stdout.'.$PID;
+	my $error_output_file = Site->tmpdir.'/aliasmanager.stderr.'.$PID;
 	Sympa::Log::Syslog::do_log('debug2',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
 
 	unless (-x $alias_manager) {
@@ -1375,10 +1375,10 @@ sub remove_aliases {
 	Sympa::Log::Syslog::do_log('info', "_remove_aliases($list->{'name'},$robot");
 
 	return 1
-	if ($Sympa::Configuration::Conf{'sendmail_aliases'} =~ /^none$/i);
+	if (Site->sendmail_aliases =~ /^none$/i);
 
 	my $status = $list->remove_aliases();
-	my $suffix = Sympa::Configuration::get_robot_conf($robot, 'return_path_suffix');
+	my $suffix = $robot->return_path_suffix;
 	my $aliases;
 
 	unless ($status == 1) {

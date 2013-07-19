@@ -469,7 +469,7 @@ sub edit_configuration {
 		if ($file eq 'wwsympa.conf') {
 			$current_value = $wwsconf->{$name};
 		} elsif ($file eq 'sympa.conf') {
-			$current_value = $Sympa::Configuration::Conf{$name};
+			$current_value = Site->$name;
 		} else {
 			next;
 		}

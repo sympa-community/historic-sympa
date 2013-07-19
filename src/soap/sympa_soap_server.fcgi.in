@@ -41,13 +41,13 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
     Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
-Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'}) if ($Sympa::Configuration::Conf{'log_level'}); 
+Sympa::Log::Syslog::set_log_level(Site->log_level) if (Site->log_level); 
 
 
 ## Open log
-$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
+$wwsconf->{'log_facility'}||= Site->syslog;
 
-Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'soap');
+Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, Site->log_socket_type, 'soap');
 Sympa::Log::Syslog::do_log('info', 'SOAP server launched');
 
 ## We set the real UID with the effective UID value
@@ -79,7 +79,7 @@ my $pinfo = Sympa::List::_apply_defaults();
 
 # spool messages instead of sending them
 my $spool = Sympa::Spool->new(
-	name => $Sympa::Configuration::Conf{'queue'},
+	name => Site->queue,
 	base => $base
 );
 

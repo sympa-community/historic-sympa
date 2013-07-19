@@ -96,7 +96,7 @@ sub check_auth{
 		return authentication($robot, $auth,$pwd);
 	} else {
 		## This is an UID
-		foreach my $ldap (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
+		foreach my $ldap (@{Site->auth_services{$robot}}){
 			# only ldap service are to be applied here
 			next unless ($ldap->{'auth_type'} eq 'ldap');
 
@@ -148,7 +148,7 @@ sub may_use_sympa_native_auth {
 
 	my $ok = 0;
 	## check each auth.conf paragrpah
-	foreach my $auth_service (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
+	foreach my $auth_service (@{Site->auth_services{$robot}}){
 		next unless ($auth_service->{'auth_type'} eq 'user_table');
 
 		next if ($auth_service->{'regexp'} && ($user_email !~ /$auth_service->{'regexp'}/i));
@@ -179,14 +179,14 @@ sub authentication {
 		$user->{'password'} = '';
 	}
 
-	if ($user->{'wrong_login_count'} > Sympa::Configuration::get_robot_conf($robot, 'max_wrong_password')){
+	if ($user->{'wrong_login_count'} > $robot->max_wrong_password){
 		# too many wrong login attemp
 		Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1});
 		Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
 		Sympa::Log::Syslog::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 		return undef;
 	}
-	foreach my $auth_service (@{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
+	foreach my $auth_service (@{Site->auth_services{$robot}}){
 		next if ($auth_service->{'auth_type'} eq 'authentication_info_url');
 		next if ($email !~ /$auth_service->{'regexp'}/i);
 		next if (($email =~ /$auth_service->{'negative_regexp'}/i)&&($auth_service->{'negative_regexp'}));
@@ -239,12 +239,12 @@ sub ldap_authentication {
 
 	my ($mesg, $ldap_passwd,$ldap_anonymous);
 
-	unless (Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Configuration::Conf{'etc'})) {
+	unless (Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, Site->etc)) {
 		return undef;
 	}
 
 	## No LDAP entry is defined in auth.conf
-	if ($#{$Sympa::Configuration::Conf{'auth_services'}{$robot}} < 0) {
+	if ($#{Site->auth_services{$robot}} < 0) {
 		Sympa::Log::Syslog::do_log('notice', 'Skipping empty auth.conf');
 		return undef;
 	}
@@ -351,7 +351,7 @@ sub ldap_authentication {
 	Sympa::Log::Syslog::do_log('debug3',"canonic: $canonic_email[0]");
 	## If the identifier provided was a valid email, return the provided email.
 	## Otherwise, return the canonical email guessed after the login.
-	if( Sympa::Tools::valid_email($auth) && !Sympa::Configuration::get_robot_conf($robot,'ldap_force_canonical_email')) {
+	if( Sympa::Tools::valid_email($auth) && !$robot->ldap_force_canonical_email) {
 		return ($auth);
 	} else {
 		return lc($canonic_email[0]);
@@ -383,18 +383,18 @@ sub get_email_by_net_id {
 
 	Sympa::Log::Syslog::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
-	if (defined $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'internal_email_by_netid'}) {
-		my $sso_config = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
+	if (defined Site->auth_services{$robot}[$auth_id]{'internal_email_by_netid'}) {
+		my $sso_config = @{Site->auth_services{$robot}}[$auth_id];
 		my $netid_cookie = $sso_config->{'netid_http_header'};
 
 		$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 
-		my $email = Sympa::List::get_netidtoemail_db($robot, $netid_cookie, $Sympa::Configuration::Conf{'auth_services'}{$robot}[$auth_id]{'service_id'});
+		my $email = Sympa::List::get_netidtoemail_db($robot, $netid_cookie, Site->auth_services{$robot}[$auth_id]{'service_id'});
 
 		return $email;
 	}
 
-	my $ldap = @{$Sympa::Configuration::Conf{'auth_services'}{$robot}}[$auth_id];
+	my $ldap = @{Site->auth_services{$robot}}[$auth_id];
 
 	my $param = Sympa::Tools::Data::dup_var($ldap);
 	require Sympa::Datasource::LDAP;
@@ -465,7 +465,7 @@ sub remote_app_check_password {
 	my @trusted_apps;
 
 	# select trusted_apps from robot context or sympa context
-	@trusted_apps = @{Sympa::Configuration::get_robot_conf($robot,'trusted_applications')};
+	@trusted_apps = @{$robot->trusted_applications};
 
 	foreach my $application (@trusted_apps){
 

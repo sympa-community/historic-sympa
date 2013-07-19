@@ -41,7 +41,7 @@ die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $EVAL_ERROR;
 ## Load sympa config
 Sympa::Configuration::load(Sympa::Constants::CONFIG) || die 'config_error';
 
-chdir $Sympa::Configuration::Conf{'home'};
+chdir Site->home;
 
 Sympa::Database::db_connect() || die "Can't connect to database";
 
@@ -68,7 +68,7 @@ while ($user = $select_handle->fetchrow_hashref('NAME_lc')) {
 
 	printf "\n%s", $user->{'email_user'};
 
-	my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, $Sympa::Configuration::Conf{'cookie'});
+	my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, Site->cookie);
 
 	printf " => %s", $crypted_password;
 

@@ -45,14 +45,14 @@ A new L<Sympa::Robot> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	unless (defined $params{name} && $Sympa::Configuration::Conf{'robots'}{$params{name}}) {
+	unless (defined $params{name} && Site->robots{$params{name}}) {
 		Sympa::Log::Syslog::do_log('err',"Unknown robot '$params{name}'");
 		return undef;
 	}
 
-	my $home = $params{name} eq $Sympa::Configuration::Conf{'domain'} ?
-	$Sympa::Configuration::Conf{'home'} :
-	$Sympa::Configuration::Conf{'home'}.'/'.$params{name};
+	my $home = $params{name} eq Site->domain ?
+	Site->home :
+	Site->home.'/'.$params{name};
 
 	unless (-d $home) {
 		Sympa::Log::Syslog::do_log('err', "Missing directory $home for robot '$params{name}'");

@@ -205,7 +205,7 @@ my $result = Sympa::Tools::Daemon::write_pid(
 	daemon    => $daemon_name,
 	pid       => $PID,
 	options   => $options,
-	method    => $Sympa::Configuration::Conf{'lock_method'},
+	method    => Site->lock_method,
 	user      => Sympa::Constants::USER,
 	group     => Sympa::Constants::GROUP,
 );
@@ -226,12 +226,12 @@ if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 } else {
-	Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
-	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
+	Sympa::Log::Syslog::set_log_level(Site->log_level);
+	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Site->log_level");
 }
 
-$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
-Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'bounced');
+$wwsconf->{'log_facility'}||= Site->syslog;
+Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, Site->log_socket_type, 'bounced');
 
 ## Set the UserID & GroupID for the process
 $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -247,10 +247,10 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(S
 }
 
 ## Sets the UMASK
-umask(oct($Sympa::Configuration::Conf{'umask'}));
+umask(oct(Site->umask));
 
 ## Change to list root
-unless (chdir($Sympa::Configuration::Conf{'home'})) {
+unless (chdir(Site->home)) {
 	Sympa::Log::Syslog::do_log('info','Unable to change directory');
 	exit (-1);
 }
@@ -273,7 +273,7 @@ Sympa::Log::Syslog::do_log('debug','starting infinite loop');
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
 
-	sleep $Sympa::Configuration::Conf{'sleep'};
+	sleep Site->sleep;
 
 	Sympa::List::init_list_cache();
 	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
@@ -306,11 +306,11 @@ while (!$end) {
 		my $who;
 		my $distribution_id;
 		chomp $to;
-		Sympa::Log::Syslog::do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%',$to,$Sympa::Configuration::Conf{'bounce_email_prefix'});
+		Sympa::Log::Syslog::do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%',$to,Site->bounce_email_prefix);
 
 		$to =~ s/<//;
 		$to =~ s/>//;
-		if ($to =~ /^$Sympa::Configuration::Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
+		if ($to =~ /^Site->bounce_email_prefix\+(.*)\@(.*)$/) { #VERP in use
 			my $local_part = $1;
 			my $robot = $2;
 			my $unique;
@@ -343,7 +343,7 @@ while (!$end) {
 					next;
 				}
 				my $result =$list->check_list_authz('del','smtp',
-					{'sender' => $Sympa::Configuration::Conf{'listmasters'}[0],
+					{'sender' => Site->listmasters[0],
 						'email' => $who});
 				my $action;
 				$action = $result->{'action'} if (ref($result) eq 'HASH');
@@ -746,7 +746,7 @@ while (!$end) {
 			## Bounce directory
 			if (! -d $bounce_dir) {
 				unless (mkdir $bounce_dir, 0777) {
-					Sympa::List::send_notify_to_listmaster('bounce_intern_error',$Sympa::Configuration::Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
+					Sympa::List::send_notify_to_listmaster('bounce_intern_error',Site->domain,{'error' => "Failed to list create bounce directory $bounce_dir"});
 					Sympa::Log::Syslog::do_log('err', 'Could not create %s: %s bounced dir, check bounce_path in wwsympa.conf', $bounce_dir, $ERRNO);
 					exit;
 				}
@@ -820,7 +820,7 @@ sub store_bounce {
 
 	Sympa::Log::Syslog::do_log('debug', 'store_bounce(%s,%s,%s)', $bounce_dir,$rcpt);
 
-	my $queue = $Sympa::Configuration::Conf{'queuebounce'};
+	my $queue = Site->queuebounce;
 
 	my $filename = Sympa::Tools::escape_chars($rcpt);
 

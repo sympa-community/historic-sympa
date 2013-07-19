@@ -212,7 +212,7 @@ sub new {
 
 		$robot = lc($robot);
 		$listname = lc($listname);
-		$robot ||= $Sympa::Configuration::Conf{'domain'};
+		$robot ||= Site->domain;
 		my $spam_status =
 		Sympa::Scenario::request_action('spam_status','smtp',$robot, {'message' => $self});
 		$self->{'spam_status'} = 'unkown';
@@ -224,10 +224,10 @@ sub new {
 			}
 		}
 
-		my $conf_email = Sympa::Configuration::get_robot_conf($robot, 'email');
-		my $conf_host = Sympa::Configuration::get_robot_conf($robot, 'host');
-		unless ($listname =~ /^(sympa|$Sympa::Configuration::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
-			my $list_check_regexp = Sympa::Configuration::get_robot_conf($robot,'list_check_regexp');
+		my $conf_email = $robot->email;
+		my $conf_host = $robot->host;
+		unless ($listname =~ /^(sympa|Site->listmaster_email|$conf_email)(\@$conf_host)?$/i) {
+			my $list_check_regexp = $robot->list_check_regexp;
 			if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 				$listname = $1;
 			}
@@ -235,10 +235,10 @@ sub new {
 			$self->{'listname'} = $listname;
 		}
 		# verify DKIM signature
-		if (Sympa::Configuration::get_robot_conf($robot, 'dkim_feature') eq 'on'){
+		if ($robot->dkim_feature eq 'on'){
 			# assume Sympa::Tools::DKIM can be loaded if the setting is still on
 			require Sympa::Tools::DKIM;
-			$self->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($self->{'msg_as_string'}, $Sympa::Configuration::Conf{'tmpdir'});
+			$self->{'dkim_pass'} = Sympa::Tools::DKIM::dkim_verifier($self->{'msg_as_string'}, Site->tmpdir);
 		}
 	}
 
@@ -247,7 +247,7 @@ sub new {
 		my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
 		my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-		if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, $Sympa::Configuration::Conf{'cookie'})) {
+		if ($chksum eq Sympa::Tools::sympa_checksum($rcpt, Site->cookie)) {
 			$self->{'md5_check'} = 1;
 		} else {
 			Sympa::Log::Syslog::do_log('err',"incorrect X-Sympa-Checksum header");
@@ -255,16 +255,16 @@ sub new {
 	}
 
 	## S/MIME
-	if ($Sympa::Configuration::Conf{'openssl'}) {
+	if (Site->openssl) {
 
 		## Decrypt messages
 		if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 			($hdr->get('Content-Type') !~ /signed-data/)){
 			my ($dec, $dec_as_string) = Sympa::Tools::SMIME::decrypt_message(
 				entity     => $self->{'msg'},
-				cert_dir   => $Sympa::Configuration::Conf{'ssl_cert_dir'},
-				key_passwd => $Sympa::Configuration::Conf{'key_passwd'},
-				openssl    => $Sympa::Configuration::Conf{'openssl'}
+				cert_dir   => Site->ssl_cert_dir,
+				key_passwd => Site->key_passwd,
+				openssl    => Site->openssl
 			);
 
 			unless (defined $dec) {
@@ -286,10 +286,10 @@ sub new {
 			$self->{'protected'} = 1; ## Messages that should not be altered (no footer)
 			my $signed = Sympa::Tools::SMIME::check_signature(
 				message  => $self,
-				cafile   => $Sympa::Configuration::Conf{'cafile'},
-				capath   => $Sympa::Configuration::Conf{'capath'},
-				openssl  => $Sympa::Configuration::Conf{'openssl'},
-				cert_dir => $Sympa::Configuration::Conf{'ssl_cert_dir'}
+				cafile   => Site->cafile,
+				capath   => Site->capath,
+				openssl  => Site->openssl,
+				cert_dir => Site->ssl_cert_dir
 			);
 			if ($signed->{'body'}) {
 				$self->{'smime_signed'} = 1;
@@ -411,7 +411,7 @@ sub clean_html {
 	my ($listname, $robot) = split(/\@/,$self->{'rcpt'});
 	$robot = lc($robot);
 	$listname = lc($listname);
-	$robot ||= $Sympa::Configuration::Conf{'host'};
+	$robot ||= Site->host;
 	my $new_msg;
 	if($new_msg = fix_html_part($self->{'msg'},$robot)) {
 		$self->{'msg'} = $new_msg;
@@ -461,7 +461,7 @@ sub fix_html_part {
 		my $filtered_body = Sympa::Tools::sanitize_html(
 			'string' => $body,
 			'robot'=> $robot,
-			'host' => Sympa::Configuration::get_robot_conf($robot,'http_host')
+			'host' => $robot->http_host
 		);
 
 		my $io = $bodyh->open("w");

@@ -136,16 +136,16 @@ if (defined $report) {
 	) if @$report;
 }
 
-chdir $Sympa::Configuration::Conf{'home'};
+chdir Site->home;
 
 my $list = new Sympa::List($listname, $robot)
 	or die 'Cannot create List object';
 
 my $home_sympa;
 if ($robot) {
-	$home_sympa = $Sympa::Configuration::Conf{'home'}.'/'.$robot;
+	$home_sympa = Site->home.'/'.$robot;
 } else {
-	$home_sympa = $Sympa::Configuration::Conf{'home'};
+	$home_sympa = Site->home;
 }
 my $dest_dir = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
 
@@ -229,7 +229,7 @@ print STDERR "\nFound $msg_count messages\n";
 ## Rebuild web archives
 print STDERR "Rebuilding HTML\n";
 my $list_id = $list->get_list_id();
-`touch $Sympa::Configuration::Conf{'queueoutgoing'}/.rebuild.$list_id`;
+`touch Site->queueoutgoing/.rebuild.$list_id`;
 
 print STDERR "\nHave a look in $dest_dir/-/ directory for messages dateless
 Now, you should add a web_archive parameter in the config file to make it accessible from the web\n";

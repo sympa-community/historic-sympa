@@ -44,8 +44,8 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
 	exit(2);
 }
 
-$default_domain = $Sympa::Configuration::Conf{'domain'};
-$return_path_suffix = $Sympa::Configuration::Conf{'return_path_suffix'};
+$default_domain = Site->domain;
+$return_path_suffix = Site->return_path_suffix;
 
 my %data;
 $data{'date'} =  POSIX::strftime("%d %b %Y", localtime(time));
@@ -57,7 +57,7 @@ $data{'is_default_domain'} = 1;
 $data{'return_path_suffix'} = $return_path_suffix;
 my @aliases;
 
-my $tt2_include_path = Sympa::Tools::make_tt2_include_path($domain,'',,,$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
+my $tt2_include_path = Sympa::Tools::make_tt2_include_path($domain,'',,,Site->etc,Site->viewmaildir,Site->domain);
 
 my $aliases_dump;
 Sympa::Template::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);

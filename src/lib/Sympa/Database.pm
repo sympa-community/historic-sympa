@@ -2731,7 +2731,7 @@ sub connect_sympa_database {
 	unless ($result) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to connect to the Sympa database');
 		Sympa::List::send_notify_to_listmaster(
-			'no_db', $Sympa::Configuration::Conf{'domain'}, {}
+			'no_db', Site->domain, {}
 		);
 		return undef;
 	}

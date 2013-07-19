@@ -143,7 +143,7 @@ sub lists {
 		$result_item->{'listAddress'} = $listname.'@'.$list->{'admin'}{'host'};
 		$result_item->{'subject'} = $list->{'admin'}{'subject'};
 		$result_item->{'subject'} =~ s/;/,/g;
-		$result_item->{'homepage'} = Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname;
+		$result_item->{'homepage'} = $robot->wwsympa_url.'/info/'.$listname;
 
 		my $listInfo;
 		if ($mode eq 'complex') {
@@ -234,7 +234,7 @@ sub login {
 	my $session = Sympa::Session->new(
 		robot    => $robot,
 		context  => {cookie => $ENV{SESSION_ID}},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		crawlers => Site->crawlers_detection{'user_agent_string'},
 		base     => Sympa::Database->get_singleton()
 	);
 	$ENV{'USER_EMAIL'} = $email;
@@ -288,15 +288,15 @@ sub casLogin {
 	## Validate the CAS ST against all known CAS servers defined in auth.conf
 	## CAS server response will include the user's NetID
 	my ($user, @proxies, $email, $cas_id);
-	foreach my $service_id (0..$#{$Sympa::Configuration::Conf{'auth_services'}{$robot}}){
-		my $auth_service = $Sympa::Configuration::Conf{'auth_services'}{$robot}[$service_id];
+	foreach my $service_id (0..$#{Site->auth_services{$robot}}){
+		my $auth_service = Site->auth_services{$robot}[$service_id];
 		next unless ($auth_service->{'auth_type'} eq 'cas'); ## skip non CAS entries
 
 		my $cas = AuthCAS->new(casUrl => $auth_service->{'base_url'},
 			#CAFile => '/usr/local/apache/conf/ssl.crt/ca-bundle.crt',
 		);
 
-		($user, @proxies) = $cas->validatePT(Sympa::Configuration::get_robot_conf($robot,'soap_url'), $proxyTicket);
+		($user, @proxies) = $cas->validatePT($robot->soap_url, $proxyTicket);
 		unless (defined $user) {
 			Sympa::Log::Syslog::do_log('err', 'CAS ticket %s not validated by server %s : %s', $proxyTicket, $auth_service->{'base_url'}, AuthCAS::get_errors());
 			next;
@@ -329,7 +329,7 @@ sub casLogin {
 		robot    => $robot,
 		context  => {cookie => $ENV{SESSION_ID}},
 		crawlers =>
-		$Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		Site->crawlers_detection{'user_agent_string'},
 		base     => Sympa::Database->get_singleton()
 	);
 	$ENV{'USER_EMAIL'} = $email;
@@ -388,7 +388,7 @@ sub authenticateAndRun {
 	my $session = Sympa::Session->new(
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $session_id},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		crawlers => Site->crawlers_detection{'user_agent_string'},
 		base     => Sympa::Database->get_singleton()
 	);
 	$email = $session->{'email'} if (defined $session);
@@ -434,7 +434,7 @@ sub getUserEmailByCookie {
 	my $session = Sympa::Session->new(
 		robot    => $ENV{SYMPA_ROBOT},
 		context  => {cookie => $cookie},
-		crawlers => $Sympa::Configuration::Conf{'crawlers_detection'}{'user_agent_string'},
+		crawlers => Site->crawlers_detection{'user_agent_string'},
 		base     => Sympa::Database->get_singleton()
 	);
 
@@ -660,7 +660,7 @@ sub info {
 
 		$result_item->{'listAddress'} = SOAP::Data->name('listAddress')->type('string')->value($listname.'@'.$list->{'admin'}{'host'});
 		$result_item->{'subject'} = SOAP::Data->name('subject')->type('string')->value($list->{'admin'}{'subject'});
-		$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value(Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$listname);
+		$result_item->{'homepage'} = SOAP::Data->name('homepage')->type('string')->value($robot->wwsympa_url.'/info/'.$listname);
 
 		## determine status of user
 		if (($list->am_i('owner',$sender) || $list->am_i('owner',$sender))) {
@@ -1004,7 +1004,7 @@ sub add {
 		$u->{'email'} = $email;
 		$u->{'gecos'} = $gecos || $u2->{'gecos'};
 		$u->{'date'} = $u->{'update_date'} = time();
-		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, $Sympa::Configuration::Conf{'cookie'});
+		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, Site->cookie);
 		$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 		$list->add_list_member($u);
@@ -1605,12 +1605,12 @@ sub subscribe {
 		## Send a notice to the owners.
 		unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 					'keyauth' => $list->compute_auth($sender,'add'),
-					'replyto' => Sympa::Configuration::get_robot_conf($robot, 'sympa'),
+					'replyto' => $robot->sympa,
 					'gecos' => $gecos})) {
 			Sympa::Log::Syslog::do_log('err',"Unable to send notify 'subrequest' to $list->{'name'} listowner");
 		}
 
-#      $list->send_sub_to_owner($sender, $keyauth, Sympa::Configuration::get_robot_conf($robot, 'sympa'), $gecos);
+#      $list->send_sub_to_owner($sender, $keyauth, $robot->sympa, $gecos);
 		$list->store_subscription_request($sender, $gecos);
 		Sympa::Log::Syslog::do_log('info', '%s from %s forwarded to the owners of the list',$listname,$sender);
 		return SOAP::Data->name('result')->type('boolean')->value(1);
@@ -1802,7 +1802,7 @@ sub which {
 		$result_item->{'listAddress'} = $name.'@'.$list->{'admin'}{'host'};
 		$result_item->{'subject'} = $list->{'admin'}{'subject'};
 		$result_item->{'subject'} =~ s/;/,/g;
-		$result_item->{'homepage'} = Sympa::Configuration::get_robot_conf($robot,'wwsympa_url').'/info/'.$name;
+		$result_item->{'homepage'} = $robot->wwsympa_url.'/info/'.$name;
 
 		## determine status of user
 		$result_item->{'isOwner'} = 0;
@@ -1924,7 +1924,7 @@ sub get_reason_string {
 
 	my $data = {'reason' => $reason };
 	my $string;
-	my $tt2_include_path =  Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Configuration::Conf{'etc'},$Sympa::Configuration::Conf{'viewmaildir'},$Sympa::Configuration::Conf{'domain'});
+	my $tt2_include_path =  Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',Site->etc,Site->viewmaildir,Site->domain);
 
 	unless (Sympa::Template::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 		my $error = Sympa::Template::get_error();

@@ -184,7 +184,7 @@ my $result = Sympa::Tools::Daemon::write_pid(
 	daemon    => $daemon_name,
 	pid       => $PID,
 	options   => $options,
-	method    => $Sympa::Configuration::Conf{'lock_method'},
+	method    => Site->lock_method,
 	user      => Sympa::Constants::USER,
 	group     => Sympa::Constants::GROUP,
 );
@@ -205,12 +205,12 @@ if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 } else {
-	Sympa::Log::Syslog::set_log_level($Sympa::Configuration::Conf{'log_level'});
-	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level $Sympa::Configuration::Conf{'log_level'}");
+	Sympa::Log::Syslog::set_log_level(Site->log_level);
+	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Site->log_level");
 }
 
-$wwsconf->{'log_facility'}||= $Sympa::Configuration::Conf{'syslog'};
-Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, $Sympa::Configuration::Conf{'log_socket_type'}, 'archived');
+$wwsconf->{'log_facility'}||= Site->syslog;
+Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, Site->log_socket_type, 'archived');
 
 ## Set the UserID & GroupID for the process
 $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -227,10 +227,10 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(S
 }
 
 ## Sets the UMASK
-umask(oct($Sympa::Configuration::Conf{'umask'}));
+umask(oct(Site->umask));
 
 foreach my $robot (@{Sympa::Configuration::get_robots_list()}) {
-	my $arc_dir = Sympa::Configuration::get_robot_conf($robot,'arc_path');
+	my $arc_dir = $robot->arc_path;
 	## Create arc_path if required
 	if ($arc_dir) {
 		unless (directory_check($arc_dir)) {
@@ -244,14 +244,14 @@ foreach my $robot (@{Sympa::Configuration::get_robots_list()}) {
 }
 
 ## Change to list root
-unless (chdir($Sympa::Configuration::Conf{'home'})) {
+unless (chdir(Site->home)) {
 	Sympa::Log::Syslog::do_log('err','unable to change directory');
 	exit (-1);
 }
 
 my $pinfo = Sympa::List::_apply_defaults();
 
-$Sympa::Language::default_lang = $Sympa::Configuration::Conf{'lang'};
+$Sympa::Language::default_lang = Site->lang;
 
 Sympa::Log::Syslog::do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 
@@ -459,7 +459,7 @@ sub remove {
 	unless ($result) {
 		Sympa::Log::Syslog::do_log('error','archived::remove: unable to log event');
 	}
-	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
+	my $arcpath = $robot->arc_path;
 	$arc =~ /^(\d{4})-(\d{2})$/;
 	my $yyyy = $1;
 	my $mm = $2;
@@ -504,10 +504,10 @@ sub rebuild {
 		base  => $base
 	);
 	my $robot = $list->{'domain'};
-	my $arcpath = Sympa::Configuration::get_robot_conf($robot,'arc_path');
+	my $arcpath = $robot->arc_path;
 	Sympa::Log::Syslog::do_log('debug',"Rebuilding $adrlist archive ($2)");
 
-	my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
+	my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Site->etc);
 
 	if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 		set_hidden_mode($tag);
@@ -560,11 +560,11 @@ sub rebuild {
 		my $arcs_dir = Sympa::Archive::clean_archive_directory(
 			'arc_root'       => $wwsconf->{'arc_path'},
 			'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
-			'tmpdir'         => $Sympa::Configuration::Conf{'tmpdir'},
+			'tmpdir'         => Site->tmpdir,
 		);
 		my $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'} if($arcs_dir);
 
-		my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=$Sympa::Configuration::Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Sympa::Configuration::Conf{'umask'} $dir_to_rebuild";
+		my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask $dir_to_rebuild";
 
 		Sympa::Log::Syslog::do_log('debug',"System call : $cmd");
 		my $exitcode = system($cmd);
@@ -618,7 +618,7 @@ sub rebuild {
 			my $arcs_dir = Sympa::Archive::clean_archive_directory(
 				'arc_root'       => $wwsconf->{'arc_path'},
 				'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
-				'tmpdir'         => $Sympa::Configuration::Conf{'tmpdir'},
+				'tmpdir'         => Site->tmpdir,
 			);
 			if($arcs_dir) {
 				$dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'};
@@ -628,7 +628,7 @@ sub rebuild {
 				create_idx($arcdir);
 			}
 
-			my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=$Sympa::Configuration::Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Sympa::Configuration::Conf{'umask'} $dir_to_rebuild";
+			my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask $dir_to_rebuild";
 			my $exitcode = system($cmd);
 			$exitcode = $exitcode / 256;
 
@@ -711,7 +711,7 @@ sub mail2arc {
 
 
 	if ($wwsconf->{'custom_archiver'}) {
-		my $file = $Sympa::Configuration::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'};
+		my $file = Site->tmpdir."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'};
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
 		`$wwsconf->{'custom_archiver'} --list=$listname\@$robot --file=$file`;
@@ -798,7 +798,7 @@ sub mail2arc {
 
 		# savee arctxt dump of original message.
 		my $file = $monthdir.'/arctxt/'.$newfile;
-		my $output = $Sympa::Configuration::Conf{'tmpdir'}.'/arc'.$newfile;
+		my $output = Site->tmpdir.'/arc'.$newfile;
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
 		close DUMP;
@@ -814,12 +814,12 @@ sub mail2arc {
 			next;
 		}
 
-		my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, $Sympa::Configuration::Conf{'etc'});
+		my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Site->etc);
 
 		Sympa::Log::Syslog::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() );
 
 		# call mhonarc on cleaned message source to make clean htlm view of message
-		my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=$Sympa::Configuration::Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Sympa::Configuration::Conf{'umask'} < $output";
+		my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask < $output";
 
 		Sympa::Log::Syslog::do_log('debug',"System call : %s",$cmd);
 
@@ -910,7 +910,7 @@ sub create_idx {
 sub get_tag {
 	my $listname = shift;
 
-	return (substr(Digest::MD5::md5_hex(join('/', $Sympa::Configuration::Conf{'cookie'}, $listname)), -10));
+	return (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $listname)), -10));
 }
 
 # Checks if directory exists and we have write and read accec to it.
