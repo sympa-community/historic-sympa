@@ -25,6 +25,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Family.pm \
 		      Sympa/Fetch.pm \
 		      Sympa/HTML/FormatText.pm \
+		      Sympa/KeySpool.pm \
 		      Sympa/Language.pm \
 		      Sympa/LDAP.pm \
 		      Sympa/List.pm \
@@ -65,7 +66,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      moddef.pm \
 		      SympaspoolClassic.pm \
 		      Messagespool.pm \
-		      KeySpool.pm \
 		      SubscribeSpool.pm \
 		      listdef.pm \
 		      moddef.pm \
