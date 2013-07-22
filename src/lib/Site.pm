@@ -1774,5 +1774,4 @@ sub robots_config {
     return $Conf::Conf{'robots'} || {};
 }
 
-## Packages must return true.
 1;

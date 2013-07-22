@@ -1290,5 +1290,4 @@ sub error {
 	return 1;
 }
 
-# Packages must return true;
-return 1;
+1;
