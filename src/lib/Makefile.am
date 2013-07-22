@@ -45,6 +45,8 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Robot.pm \
 		      Sympa/Scenario.pm \
 		      Sympa/Session.pm \
+		      Sympa/Site.pm \
+		      Sympa/Site_r.pm \
 		      Sympa/SOAP.pm \
 		      Sympa/Spool/File.pm \
 		      Sympa/Spool/SQL.pm \
@@ -69,7 +71,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/User.pm \
 		      Sympa/WWSympa.pm \
 		      moddef.pm \
-		      Site.pm
 		      
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)
 CLEANFILES = Sympa/Constants.pm
