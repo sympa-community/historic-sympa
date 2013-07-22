@@ -92,7 +92,7 @@ sub new {
 
 	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"', $dir);
 
-	$self->create_spool_dir;
+	$self->create_spool_dir();
 
 	return $self;
 }
@@ -270,7 +270,7 @@ sub next {
 
 	my $data;
 
-	unless($self->refresh_spool_files_list) {
+	unless($self->refresh_spool_files_list()) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to refresh spool %s files list', $self);
 		return undef;
 	}
@@ -551,7 +551,7 @@ sub unlock_message {
 
 sub get_files_in_spool {
 	my $self = shift;
-	return undef unless($self->refresh_spool_files_list);
+	return undef unless($self->refresh_spool_files_list());
 	return @{$self->{'spool_files_list'}};
 }
 
@@ -561,7 +561,7 @@ sub get_files_in_spool {
 
 sub get_dirs_in_spool {
 	my $self = shift;
-	return undef unless($self->refresh_spool_dirs_list);
+	return undef unless($self->refresh_spool_dirs_list());
 	return @{$self->{'spool_dirs_list'}};
 }
 
@@ -571,9 +571,9 @@ sub get_dirs_in_spool {
 
 sub refresh_spool_files_list {
 	my $self = shift;
-	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id);
+	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id());
 	unless (-d $self->{'dir'}) {
-		$self->create_spool_dir;
+		$self->create_spool_dir();
 	}
 	unless (opendir SPOOLDIR, $self->{'dir'}) {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
@@ -591,9 +591,9 @@ return 1;
 
 sub refresh_spool_dirs_list {
 	my $self = shift;
-	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id);
+	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id());
 	unless (-d $self->{'dir'}) {
-		$self->create_spool_dir;
+		$self->create_spool_dir();
 	}
 	unless (opendir SPOOLDIR, $self->{'dir'}) {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
@@ -611,7 +611,7 @@ return 1;
 
 sub create_spool_dir {
 	my $self = shift;
-	Sympa::Log::Syslog::do_log('debug','%s',$self->get_id);
+	Sympa::Log::Syslog::do_log('debug','%s',$self->get_id());
 	unless (-d $self->{'dir'}) {
 		make_path($self->{'dir'});
 	}
