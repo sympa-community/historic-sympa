@@ -20,7 +20,7 @@
 
 =head1 NAME
 
-moddef - Definition of dependent modules
+Sympa::moddef - Definition of dependent modules
 
 =head1 DESCRIPTION
 
@@ -28,7 +28,7 @@ This module keeps definition of modules required by Sympa.
 
 =cut
 
-package moddef;
+package Sympa::moddef;
 
 use strict;
 
