@@ -9,7 +9,6 @@
    C src/lib/Robot.pm
    C src/lib/Upgrade.pm
    C src/lib/admin.pm
-   C src/lib/DBManipulatorPostgres.pm
    C src/lib/Lock.pm
    C src/lib/Datasource.pm
    C src/lib/Bulk.pm

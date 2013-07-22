@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Softwarec
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -34,8 +33,6 @@ package Sympa::Database::PostgreSQL;
 
 use strict;
 use base qw(Sympa::Database);
-
-use Carp;
 
 use Sympa::Log::Syslog;
 
@@ -231,14 +228,41 @@ sub get_tables {
 
 	Sympa::Log::Syslog::do_log(
 		'debug',
-		'Getting tables list',
+		'Getting tables list in database %s',$self->{'db_name'}
 	);
 
-	my @tables = $self->{dbh}->tables(
-		undef,'public',undef,'TABLE',{pg_noprefix => 1}
-	);
+    ## get search_path.
+    my $sth;
+    unless ($sth = $self->do_query('SELECT current_schemas(false)')) {
+	Sympa::Log::Syslog::do_log('err', 'Unable to get search_path of database %s',
+	    $self->{'db_name'});
+	return undef;
+    }
+    my $search_path = $sth->fetchrow;
+    $sth->finish;
 
-	return @tables;
+    ## get table names.
+    my @raw_tables;
+    my %raw_tables;
+    foreach my $schema (@{$search_path || []}) {
+	my @tables = $self->{'dbh'}->tables(
+	    undef, $schema, undef, 'TABLE', {pg_noprefix => 1}
+	);
+	foreach my $t (@tables) {
+	    next if $raw_tables{$t};
+	    push @raw_tables, $t;
+	    $raw_tables{$t} = 1;
+	}
+    }
+    unless (@raw_tables) {
+	Sympa::Log::Syslog::do_log('err',
+	    'Unable to retrieve the list of tables from database %s',
+	    $self->{'db_name'}
+	);
+	return undef;
+    }
+    return \@raw_tables;
+
 }
 
 sub add_table {
@@ -456,6 +480,91 @@ sub get_primary_key {
 	return \@keys;
 }
 
+# Drops the primary key of a table.
+# IN: A ref to hash containing the following keys:
+#	* 'table' : the name of the table for which the primary keys must be dropped.
+#
+# OUT: A character string report of the operation done or undef if something went wrong.
+#
+sub unset_primary_key {
+    my $self = shift;
+    my $param = shift;
+    Sympa::Log::Syslog::do_log('debug3','Removing primary key from table %s',$param->{'table'});
+
+    my $sth;
+
+    ## PostgreSQL does not have 'ALTER TABLE ... DROP PRIMARY KEY'.
+    ## Instead, get a name of constraint then drop it.
+    my $key_name;
+
+    unless ($sth = $self->do_query(
+	q{SELECT tc.constraint_name
+	  FROM information_schema.table_constraints AS tc
+	  WHERE tc.table_catalog = %s AND tc.table_name = %s AND
+		tc.constraint_type = 'PRIMARY KEY'},
+	&SDM::quote($self->{'db_name'}), &SDM::quote($param->{'table'})
+    )) {
+	Sympa::Log::Syslog::do_log('err', 'Could not search primary key from table %s in database %s', $param->{'table'}, $self->{'db_name'});
+	return undef;
+    }
+
+    $key_name = $sth->fetchrow_array();
+    $sth->finish;
+    unless (defined $key_name) {
+	Sympa::Log::Syslog::do_log('err', 'Could not get primary key from table %s in database %s', $param->{'table'}, $self->{'db_name'});
+	return undef;
+    }
+
+    unless ($sth = $self->do_query(
+	q{ALTER TABLE %s DROP CONSTRAINT "%s"},
+	$param->{'table'}, $key_name
+    )) {
+	Sympa::Log::Syslog::do_log('err', 'Could not drop primary key "%s" from table %s in database %s', $key_name, $param->{'table'}, $self->{'db_name'});
+	return undef;
+    }
+
+    my $report = "Table $param->{'table'}, PRIMARY KEY dropped";
+    Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY dropped', $param->{'table'});
+
+    return $report;
+}
+
+# Sets the primary key of a table.
+# IN: A ref to hash containing the following keys:
+#	* 'table' : the name of the table for which the primary keys must be defined.
+#	* 'fields' : a ref to an array containing the names of the fields used in the key.
+#
+# OUT: A character string report of the operation done or undef if something went wrong.
+#
+sub set_primary_key {
+    my $self = shift;
+    my $param = shift;
+
+    my $sth;
+
+    ## Give fixed key name if possible.
+    my $key;
+    if ($param->{'table'} =~ /^(.+)_table$/) {
+	$key = sprintf 'CONSTRAINT "ind_%s" PRIMARY KEY', $1;
+    } else {
+	$key = 'PRIMARY KEY';
+    }
+
+    my $fields = join ',',@{$param->{'fields'}};
+    Sympa::Log::Syslog::do_log('debug3','Setting primary key for table %s (%s)',$param->{'table'},$fields);
+    unless ($sth = $self->do_query(
+	q{ALTER TABLE %s ADD %s (%s)},
+	$param->{'table'}, $key, $fields
+    )) {
+	Sympa::Log::Syslog::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $param->{'table'}, $self->{'db_name'});
+	return undef;
+    }
+
+    my $report = "Table $param->{'table'}, PRIMARY KEY set on $fields";
+    Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY set on %s', $param->{'table'}, $fields);
+    return $report;
+}
+
 sub get_indexes {
 	my ($self, %params) = @_;
 
@@ -555,6 +664,20 @@ sub _create_sequence {
 		);
 		return undef;
 	}
+}
+
+## For DOUBLE types.
+sub AS_DOUBLE {
+    return ( { 'pg_type' => DBD::Pg::PG_FLOAT8() } => $_[1] )
+	if scalar @_ > 1;
+    return ();
+}
+
+## For BLOB types.
+sub AS_BLOB {
+    return ( { 'pg_type' => DBD::Pg::PG_BYTEA() } => $_[1] )
+	if scalar @_ > 1;
+    return ();
 }
 
 1;
