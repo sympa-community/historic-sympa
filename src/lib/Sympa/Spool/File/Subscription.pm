@@ -21,7 +21,7 @@
 
 =head1 NAME
 
-Sympas::SubscribeSpool - Filesystem spool object for subscription requests
+Sympa::Spool::File::Subscription - Filesystem spool object for subscription requests
 
 =head1 DESCRIPTION
 
@@ -29,7 +29,7 @@ This class implements a filesystem-based spool for subscription requests.
 
 =cut
 
-package Sympa::SubscribeSpool;
+package Sympa::Spool::File::Subscription;
 
 use strict;
 use warnings;

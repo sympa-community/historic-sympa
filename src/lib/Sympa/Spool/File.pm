@@ -43,10 +43,10 @@ use Sympa::List;
 our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
 our %classes = (
-		'msg' => 'Sympa::Messagespool',
-		'task' => 'Sympa::TaskSpool',
-		'mod' => 'Sympa::KeySpool',
-		);
+	'msg'  => 'Sympa::Spool::File::Message',
+	'task' => 'Sympa::Spool::File::Task',
+	'mod'  => 'Sympa::Spool::File::Key',
+);
 
 =head1 CLASS METHODS
 

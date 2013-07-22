@@ -21,7 +21,7 @@
 
 =head1 NAME
 
-Sympas::TaskSpool - Filesystem spool object for tasks
+Sympa::Spool::File::Task - Filesystem spool object for tasks
 
 =head1 DESCRIPTION
 
@@ -29,7 +29,7 @@ This class implements a filesystem-based spool for tasks.
 
 =cut
 
-package Sympa::TaskSpool;
+package Sympa::Spool::File::Task;
 
 use strict;
 use base qw(Sympa::Spool::File Exporter);

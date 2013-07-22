@@ -21,7 +21,7 @@
 
 =head1 NAME
 
-Sympas::Messagespool - Filesystem spool object for messages
+Sympa::Spool::File::Message - Filesystem spool object for messages
 
 =head1 DESCRIPTION
 
@@ -31,7 +31,7 @@ FIXME
 
 =cut
 
-package Sympa::Messagespool;
+package Sympa::Spool::File::Message;
 
 use base qw(Sympa::Spool::File);
 

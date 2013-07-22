@@ -21,7 +21,7 @@
 
 =head1 NAME
 
-Sympas::KeySpool - Filesystem spool object for keys
+Sympa::Spool::File::Key - Filesystem spool object for keys
 
 =head1 DESCRIPTION
 
@@ -31,7 +31,7 @@ FIXME
 
 =cut
 
-package Sympa::KeySpool;
+package Sympa::Spool::File::Key;
 
 use strict;
 use warnings;
