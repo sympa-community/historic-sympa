@@ -5,6 +5,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Auth/OAuth/Provider.pm \
 		      Sympa/Auth/VOOT/Consumer.pm \
 		      Sympa/Auth/VOOT/Provider.pm \
+		      Sympa/BounceMessage.pm \
 		      Sympa/Bulk.pm \
 		      Sympa/Commands.pm \
 		      Sympa/Configuration.pm \
@@ -67,7 +68,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      listdef.pm \
 		      moddef.pm \
 		      Site.pm \
-		      BounceMessage.pm \
 		      WebAgent.pm
 		      
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)

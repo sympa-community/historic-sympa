@@ -1,6 +1,6 @@
 # BounceMessage.pm - This module includes specialized sub to handle bounce messages.
 
-package BounceMessage;
+package Sympa::BounceMessage;
 
 use strict;
 use warnings;
