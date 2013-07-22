@@ -20,10 +20,9 @@
 
 package Sympa::Messagespool;
 
-use Sympa::Spool::File;
-use Log;
+use base qw(Sympa::Spool::File);
 
-our @ISA = qw(Sympa::Spool::File);
+use Log;
 
 sub new {
     Log::do_log('debug2', '(%s, %s)', @_);

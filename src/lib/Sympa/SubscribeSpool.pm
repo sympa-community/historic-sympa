@@ -22,12 +22,11 @@ package Sympa::SubscribeSpool;
 
 use strict;
 use warnings;
+use base qw(Sympa::Spool::File);
+
 use Data::Dumper;
 
-use Sympa::Spool::File;
 use Log;
-
-our @ISA = qw(Sympa::Spool::File);
 
 sub new {
     Log::do_log('debug2', '(%s, %s)', @_);

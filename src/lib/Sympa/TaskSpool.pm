@@ -22,9 +22,8 @@
 package Sympa::TaskSpool;
 
 use strict;
+use base qw(Sympa::Spool::File Exporter);
 
-use Exporter;
-use Sympa::Spool::File;
 #use Time::Local; # no longer used
 # tentative
 use Data::Dumper;
@@ -32,7 +31,6 @@ use Data::Dumper;
 #use Task; # this module is used by Task
 #use List; # used by Task
 
-our @ISA = qw(Sympa::Spool::File Exporter);
 our @EXPORT = qw(%global_models %months);
 
 my @task_list;
