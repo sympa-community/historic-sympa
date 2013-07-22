@@ -44,7 +44,7 @@ our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
 our %classes = (
 		'msg' => 'Messagespool',
-		'task' => 'TaskSpool',
+		'task' => 'Sympa::TaskSpool',
 		'mod' => 'KeySpool',
 		);
 
