@@ -1,4 +1,3 @@
-   C src/lib/DBManipulatorSybase.pm
    C src/lib/List.pm
    C src/lib/DBManipulatorInformix.pm
    C src/lib/SQLSource.pm
