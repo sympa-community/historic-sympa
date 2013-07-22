@@ -53,18 +53,14 @@ our %classes = (
 
 =over 4
 
-=item new ( NAME, STATUS, OPTIONS... )
+=item Sympa::Spool->new( NAME, STATUS, OPTIONS... )
 
-I<Constructor>.
 Creates a new L<Sympa::Spool::File> object.
 
 XXX @todo doc
 
-=back
-
 =cut
 
-## Creates an object.
 sub new {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
     my ($pkg, $spoolname, $selection_status, %opts) = @_;
@@ -99,7 +95,18 @@ sub new {
     return $self;
 }
 
-# total spool_table count : not object oriented, just a subroutine 
+=back
+
+=head1 FUNCTIONS
+
+=over
+
+=item global_count()
+
+total spool_table count : not object oriented, just a subroutine 
+
+=cut
+
 sub global_count {
     
     my $message_status = shift;
@@ -109,26 +116,27 @@ sub global_count {
     return $count;
 }
 
+=back
+
+=head1 INSTANCE METHODS
+
+=over 4
+
+=item $spool->count()
+
+=cut
+
 sub count {
     my $self = shift;
     return ($self->get_content({'selection'=>'count'}));
 }
 
-=over 4
+=item $spool->get_content ($parameters)
 
-=item get_content ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+Return the content an array of hash describing the spool content
 
 =cut
 
-#######################
-#
-#  get_content return the content an array of hash describing the spool content
-# 
 sub get_content {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
     my $self = shift;
@@ -218,6 +226,10 @@ sub get_content {
     return @ret;
 }
 
+=item $spool->get_count($parameters)
+
+=cut
+
 sub get_count {
     my $self = shift;
     my $param = shift;
@@ -225,7 +237,12 @@ sub get_count {
     return $#messages+1;
 }
 
-# Returns the single file corresponding to the selector.
+=item $spool->get_file_key($selector)
+
+Returns the single file corresponding to the selector.
+
+=cut
+
 sub get_file_key {
     my $self = shift;
     my $selector = shift;
@@ -236,22 +253,15 @@ sub get_file_key {
     return $message->{'messagekey'};
 }
 
-=over 4
+=item $spool->next()
 
-=item next ( )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+Return next spool entry ordered by priority next lock the message_in_spool
+that is returned
+returns 0 if no file found
+returns undef if problem scanning spool
 
 =cut
 
-#######################
-#
-#  next : return next spool entry ordered by priority next lock the message_in_spool that is returned
-#  returns 0 if no file found
-#  returns undef if problem scanning spool
 sub next {
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
     my $self = shift;
@@ -271,7 +281,12 @@ sub next {
     return $data;
 }
 
-#FIXME: This would be replaced by Message::new().
+=item $spool->parse_filename($key)
+
+FIXME: This would be replaced by Message::new().
+
+=cut
+
 sub parse_filename {
     my $self = shift;
     my $key  = shift;
@@ -296,7 +311,12 @@ sub parse_filename {
     return $data;
 }
 
-#FIXME: This would be replaced by Message::load().
+=item $spool->parse_file_content($key, $data)
+
+FIXME: This would be replaced by Message::load().
+
+=cut
+
 sub parse_file_content {
     my $self = shift;
     my $key  = shift;
@@ -316,13 +336,23 @@ sub parse_file_content {
     return $data;
 }
 
-# Placeholder: overriden in inheriting classes to get additionnal details from the file content.
+=item $spool->get_additional_details($key, $data)
+
+Overriden in inheriting classes to get additionnal details from
+the file content.
+
+=cut
+
 sub get_additional_details {
     my $self = shift;
     my $key = shift;
     my $data = shift;
     return 1;
 }
+
+=item $spool->get_next_file_to_process()
+
+=cut
 
 sub get_next_file_to_process {
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
@@ -362,9 +392,17 @@ sub get_next_file_to_process {
     return $data;
 }
 
+=item $spool->is_relevant()
+
+=cut
+
 sub is_relevant {
     return 1;
 }
+
+=item $spool->readable($key)
+
+=cut
 
 sub is_readable {
     my $self = shift;
@@ -377,7 +415,12 @@ sub is_readable {
     }
 }
 
-# NOTE: This should be moved to Message class.
+=item $spool->analyze_file_name($key, $data)
+
+NOTE: This should be moved to Message class.
+
+=cut
+
 sub analyze_file_name {
     Sympa::Log::Syslog::do_log('debug3', '(%s, %s, %s)', @_);
     my $self = shift;
@@ -439,6 +482,10 @@ sub analyze_file_name {
     return $data;
 }
 
+=item $spool->get_file_content($key)
+
+=cut
+
 sub get_file_content {
     Sympa::Log::Syslog::do_log('debug3', '(%s, %s)', @_);
     my $self = shift;
@@ -456,6 +503,10 @@ sub get_file_content {
     return $messageasstring;
 }
 
+=item $spool->lock_message($key)
+
+=cut
+
 sub lock_message {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
     my $self = shift;
@@ -470,6 +521,10 @@ sub lock_message {
     }
     return 1;
 }
+
+=item $spool->unlock_message($key)
+
+=cut
 
 sub unlock_message {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
@@ -488,17 +543,29 @@ sub unlock_message {
     return 1;
 }
 
+=item $spool->get_files_in_spool()
+
+=cut
+
 sub get_files_in_spool {
     my $self = shift;
     return undef unless($self->refresh_spool_files_list);
     return @{$self->{'spool_files_list'}};
 }
 
+=item $spool->get_dirs_in_spool()
+
+=cut
+
 sub get_dirs_in_spool {
     my $self = shift;
     return undef unless($self->refresh_spool_dirs_list);
     return @{$self->{'spool_dirs_list'}};
 }
+
+=item $spool->refresh_spool_files_list()
+
+=cut
 
 sub refresh_spool_files_list {
     my $self = shift;
@@ -516,6 +583,10 @@ sub refresh_spool_files_list {
     return 1;
 }
 
+=item $spool->refresh_spool_dirs_list()
+
+=cut
+
 sub refresh_spool_dirs_list {
     my $self = shift;
     Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id);
@@ -532,6 +603,10 @@ sub refresh_spool_dirs_list {
     return 1;
 }
 
+=item $spool->create_spool_dir()
+
+=cut
+
 sub create_spool_dir {
     my $self = shift;
     Sympa::Log::Syslog::do_log('debug','%s',$self->get_id);
@@ -540,14 +615,7 @@ sub create_spool_dir {
     }
 }
 
-=over 4
-
-=item move_to_bad ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+=item $spool->move_to_bad ($key)
 
 =cut
 
@@ -570,21 +638,13 @@ sub move_to_bad {
     return 1;
 }
 
-=over 4
+=item $spool->get_message($selector)
 
-=item get_message ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+return one message from related spool using a specified selector
+returns undef if message was not found.
 
 =cut
 
-#################"
-# return one message from related spool using a specified selector
-# returns undef if message was not found.
-#  
 sub get_message {
     my $self = shift;
     my $selector = shift;
@@ -606,6 +666,10 @@ sub get_message {
 #			   {'messagelock' => 'NULL'}));
 #}
 
+=item $spool->move_to($parameters, $target)
+
+=cut
+
 sub move_to {
     my $self = shift;
     my $param = shift;
@@ -620,25 +684,21 @@ sub move_to {
     return 1;
 }
 
+=item $spool->update()
+
+=cut
+
 sub update {
     croak 'Not implemented yet';
 }
 
-=over 4
+=item $spool->store($messageasstring, $parameters)
 
-=item store ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+store a message in spool
 
 =cut
 
-################"
-# store a message in spool 
-#
-sub store {  
+sub store {
     my $self = shift;
     my $messageasstring = shift;
     my $param = shift;
@@ -654,7 +714,12 @@ sub store {
     return 1;
 }
 
+=item $spool->get_storage_name($parameters)
+
 # NOTE: This should be moved to Message class.
+
+=cut
+
 sub get_storage_name {
     my $self = shift;
     my $filename;
@@ -668,21 +733,14 @@ sub get_storage_name {
     return $filename;
 }
 
-=over 4
+=item $spool->remove_message ($key)
 
-=item remove_message ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+remove a message in database spool using (messagekey,list,robot) which are a
+unique id in the spool
 
 =cut
 
-################"
-# remove a message in database spool using (messagekey,list,robot) which are a unique id in the spool
-#
-sub remove_message {  
+sub remove_message {
     my $self = shift;
     my $key  = shift;
 
@@ -694,20 +752,11 @@ sub remove_message {
     return 1;
 }
 
-=over 4
+=item $spool->clean($filter)
 
-=item clean ( OPTIONS... )
-
-I<Instance method>.
-XXX @todo doc
-
-=back
+Clean a spool by removing old messages
 
 =cut
-
-################"
-# Clean a spool by removing old messages
-#
 
 sub clean {
     my $self = shift;
@@ -796,11 +845,20 @@ sub _perlcomparator {
     }
 }
 
-## Get unique ID
+=item $spool->get_id()
+
+Get unique ID
+
+=cut
+
 sub get_id {
     my $self = shift;
     return sprintf '%s/%s',
 	$self->{'spoolname'}, ($self->{'selection_status'} || 'ok');
 }
+
+=back
+
+=cut
 
 1;
