@@ -22,15 +22,15 @@
 
 =head1 NAME
 
-Sympa::Spool - Mail spool object
+Sympa::Spool::SQL - SQL spool object
 
 =head1 DESCRIPTION
 
-This class implements a mail spool.
+This class implements a SQL-based spool.
 
 =cut
 
-package Sympa::Spool;
+package Sympa::Spool::SQL;
 
 use strict;
 
@@ -49,7 +49,7 @@ use Sympa::Tools::Time;
 
 =item Sympa::Spool->new(%parameters)
 
-Creates a new L<Sympa::Spool> object.
+Creates a new L<Sympa::Spool::SQL> object.
 
 Parameters:
 
@@ -65,7 +65,7 @@ Parameters:
 
 Return:
 
-A new L<Sympa::Spool> object, or I<undef>, if something went wrong.
+A new L<Sympa::Spool::SQL> object, or I<undef>, if something went wrong.
 
 =cut
 
@@ -93,7 +93,7 @@ sub new {
 	return $self;
 }
 
-=item Sympa::Spool->global_count(%parameters)
+=item Sympa::Spool::SQL->global_count(%parameters)
 
 FIXME
 

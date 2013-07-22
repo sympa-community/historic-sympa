@@ -6,13 +6,13 @@
 use strict;
 
 use FindBin qw($Bin);
-use lib "$Bin/../src/lib";
+use lib "$Bin/../../src/lib";
 
 use Test::More;
 use Test::Exception;
 
 use Sympa::Database;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 
 # init sqlite database
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
@@ -30,16 +30,16 @@ plan tests => 3;
 my $spool;
 
 throws_ok {
-	$spool = Sympa::Spool->new();
+	$spool = Sympa::Spool::SQL->new();
 } qr/^missing base parameter/,
 'missing base parameter';
 
 lives_ok {
-	$spool = Sympa::Spool->new(
+	$spool = Sympa::Spool::SQL->new(
 	    name => 'bounce',
 	    base => $base
 	);
 }
 'all parameters OK';
 
-isa_ok($spool, 'Sympa::Spool');
+isa_ok($spool, 'Sympa::Spool::SQL');
