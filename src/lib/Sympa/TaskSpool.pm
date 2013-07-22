@@ -1,6 +1,6 @@
-# TaskSpool.pm - This module includes high level subs to manipulate the tasks spool.
-#<!-- RCS Identication ; $Revision: 7792 $ ; $Date: 2012-10-23 15:36:05 +0200 (mar 23 oct 2012) $ --> 
-
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:textwidth=78
+# $Id$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -18,6 +18,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=head1 NAME
+
+Sympas::TaskSpool - Filesystem spool object for tasks
+
+=head1 DESCRIPTION
+
+This class implements a filesystem-based spool for tasks.
+
+=cut
 
 package Sympa::TaskSpool;
 

@@ -1,5 +1,6 @@
-# Messagespool: this module contains methods to handle filesystem spools containing messages.
-# RCS Identication ; $Revision: 6646 $ ; $Date: 2010-08-19 10:32:08 +0200 (jeu 19 aoû 2010) $ 
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:textwidth=78
+# $Id$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -17,6 +18,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=head1 NAME
+
+Sympas::Messagespool - Filesystem spool object for messages
+
+=head1 DESCRIPTION
+
+This class implements a filesystem-based spool for messages.
+
+FIXME
+
+=cut
 
 package Sympa::Messagespool;
 

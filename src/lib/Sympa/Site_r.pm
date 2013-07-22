@@ -1,13 +1,35 @@
-## This package handles Sympa global site
-## It should :
-##   * provide access to global conf parameters,
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:textwidth=78
+# $Id$
 
-####
-#### Site_r package
-####
-#### Don't access to the contents of this class directly.  This class is
-#### used by subclasses such as List to exclude autoloading accessors
-#### from inherited methods.
+# Sympa - SYsteme de Multi-Postage Automatique
+# Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
+# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses>.
+
+=head1 NAME
+
+Sympa::Site_r - Abstract base class
+
+=head1 DESCRIPTION
+
+This abstract class allow to exclude autoloading accessors from inherited
+methods.
+
+=cut
+
 package Sympa::Site_r;
 
 use strict;
@@ -19,14 +41,6 @@ use Cwd;
 use Sympa::Configuration;
 use Sympa::Language qw(gettext gettext_strftime);
 use Sympa::User;
-
-=head1 NAME
-
-Sympa::Site - Sympa Site
-
-=head1 DESCRIPTION
-
-=cut
 
 our %robots;
 our $robots_ok;

@@ -1,5 +1,6 @@
-# SympaspoolClassic: this module contains methods to handle filesystem spools.
-# RCS Identication ; $Revision: 6646 $ ; $Date: 2010-08-19 10:32:08 +0200 (jeu 19 aoû 2010) $ 
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:textwidth=78
+# $Id$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -20,11 +21,11 @@
 
 =head1 NAME
 
-SympaspoolClassic - Classic spool
+Sympas::Spool::File - Filesystem spool object
 
 =head1 DESCRIPTION
 
-This class implements a spool based on filesystem.
+This class implements a filesystem-based spool.
 
 =cut
 

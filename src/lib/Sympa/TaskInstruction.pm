@@ -1,7 +1,6 @@
-# TaskInstruction.pm - This module includes the TaskInstruction object.
-# This object is used to handle a single line contained by a task.
-#<!-- RCS Identication ; $Revision: 7792 $ ; $Date: 2012-10-23 15:36:05 +0200 (mar 23 oct 2012) $ --> 
-
+# -*- indent-tabs-mode: t; -*-
+# vim:ft=perl:noet:sw=8:textwidth=78
+# $Id$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -19,6 +18,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=head1 NAME
+
+Sympas::TaskInstruction - Instruction contained by a task
+
+=head1 DESCRIPTION
+
+This class implements an instruction contained by a task.
+
+FIXME
+
+=cut
 
 package Sympa::TaskInstruction;
 
