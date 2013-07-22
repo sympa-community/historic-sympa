@@ -5,7 +5,6 @@ package Sympa::BounceMessage;
 use strict;
 use warnings;
 
-use Message;
 use Log;
 use tracking;
 use Data::Dumper;
