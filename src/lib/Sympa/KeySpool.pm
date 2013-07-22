@@ -23,10 +23,10 @@ package Sympa::KeySpool;
 use strict;
 use warnings;
 
-use Sympa::SympaspoolClassic;
+use Sympa::Spool::File;
 use Log;
 
-our @ISA = qw(Sympa::SympaspoolClassic);
+our @ISA = qw(Sympa::Spool::File);
 
 our $filename_regexp = '^(\S+)_(\w+)(\.distribute)?$';
 
