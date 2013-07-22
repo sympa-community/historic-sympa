@@ -65,18 +65,10 @@ XXX @todo doc
 
 sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
-	my ($pkg, $spoolname, $selection_status, %opts) = @_;
+	my ($pkg, $spoolname, $dir, $selection_status, %opts) = @_;
 
 	my $self;
 
-	my $queue = 'queue'.$spoolname;
-	$queue = 'queue' if ($spoolname eq 'msg');
-	my $dir;
-	eval { $dir = Site->$queue; }; # check if parameter is defined.
-	if ($@) {
-		Sympa::Log::Syslog::do_log('err', 'internal error unknown spool %s', $spoolname);
-		return undef;
-	}
 	if ($selection_status and $selection_status eq 'bad') {
 		$dir .= '/bad';
 	}
