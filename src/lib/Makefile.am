@@ -69,8 +69,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      moddef.pm \
 		      listdef.pm \
 		      moddef.pm \
-		      Site.pm \
-		      WebAgent.pm
+		      Site.pm
 		      
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)
 CLEANFILES = Sympa/Constants.pm
