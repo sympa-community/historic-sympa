@@ -34,7 +34,6 @@
    C src/lib/Language.pm
    C src/lib/Conf.pm
    C src/lib/Config_XML.pm
-   C src/lib/DBManipulatorMySQL.pm
    C src/lib/Fetch.pm
    C src/lib/WebAgent.pm
    C src/lib/tools.pm
