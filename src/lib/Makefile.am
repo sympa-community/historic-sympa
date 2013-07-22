@@ -46,6 +46,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/SOAP.pm \
 		      Sympa/Spool.pm \
 		      Sympa/SubscribeSpool.pm \
+		      Sympa/SympaspoolClassic.pm \
 		      Sympa/Task.pm \
 		      Sympa/TaskInstruction.pm \
 		      Sympa/TaskSpool.pm \
@@ -66,7 +67,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/User.pm \
 		      Sympa/WWSympa.pm \
 		      moddef.pm \
-		      SympaspoolClassic.pm \
 		      listdef.pm \
 		      moddef.pm \
 		      Site.pm \

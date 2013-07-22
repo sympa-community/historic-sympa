@@ -24,10 +24,10 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-use SympaspoolClassic;
+use Sympa::SympaspoolClassic;
 use Log;
 
-our @ISA = qw(SympaspoolClassic);
+our @ISA = qw(Sympa::SympaspoolClassic);
 
 sub new {
     Log::do_log('debug2', '(%s, %s)', @_);
