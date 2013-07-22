@@ -57,6 +57,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Tracking.pm \
 		      Sympa/Transport.pm \
 		      Sympa/Upgrade.pm \
+		      Sympa/User.pm \
 		      Sympa/WWSympa.pm \
 		      moddef.pm \
 		      SympaspoolClassic.pm \
@@ -66,7 +67,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      listdef.pm \
 		      moddef.pm \
 		      Site.pm \
-		      User.pm \
 		      BounceMessage.pm \
 		      WebAgent.pm
 		      

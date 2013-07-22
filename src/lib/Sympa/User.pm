@@ -1,5 +1,5 @@
 
-package User;
+package Sympa::User;
 
 use strict;
 use warnings;

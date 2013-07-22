@@ -17,7 +17,7 @@ use Cwd;
 
 use Conf;
 use Language qw(gettext gettext_strftime);
-use User;
+use Sympa::User;
 use Data::Dumper;
 
 =head1 NAME
@@ -863,12 +863,12 @@ sub send_file {
 	unless (ref $data->{'user'} and $data->{'user'}{'email'}) {
 	    if ($options->{'skip_db'}) {
 		$data->{'user'} =
-		    bless {'email' => $who, 'lang' => $lang} => 'User';
+		    bless {'email' => $who, 'lang' => $lang} => 'Sympa::User';
 	    } else {
-		$data->{'user'} = User->new($who, 'lang' => $lang);
+		$data->{'user'} = Sympa::User->new($who, 'lang' => $lang);
 	    }
 	} else {
-	    $data->{'user'} = User::clean_user($data->{'user'});
+	    $data->{'user'} = Sympa::User::clean_user($data->{'user'});
 	}
 
 	if (ref $self eq 'List') {
