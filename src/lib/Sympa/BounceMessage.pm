@@ -7,7 +7,6 @@ use warnings;
 
 use Log;
 use tracking;
-use Data::Dumper;
 
 use base qw(Sympa::Message);
 

@@ -24,8 +24,6 @@ use strict;
 use warnings;
 use base qw(Sympa::Spool::File);
 
-use Data::Dumper;
-
 use Log;
 
 sub new {

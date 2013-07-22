@@ -29,7 +29,6 @@ use strict;
 #use Exporter; # not used
 use Time::Local qw(timegm timelocal);
 # tentative
-use Data::Dumper;
 
 #use List; # this package is used by Task which is used by List.
 #use tools; # load in Conf - Site - List

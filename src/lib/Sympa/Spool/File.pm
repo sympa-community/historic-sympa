@@ -36,7 +36,6 @@ use Carp qw(croak);
 use Exporter;
 use File::Path qw(make_path remove_tree);
 # tentative
-use Data::Dumper;
 
 use List;
 

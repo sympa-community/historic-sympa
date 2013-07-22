@@ -18,7 +18,6 @@ use Cwd;
 use Conf;
 use Language qw(gettext gettext_strftime);
 use Sympa::User;
-use Data::Dumper;
 
 =head1 NAME
 

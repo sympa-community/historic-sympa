@@ -26,7 +26,6 @@ use base qw(Sympa::Spool::File Exporter);
 
 #use Time::Local; # no longer used
 # tentative
-use Data::Dumper;
 
 #use Task; # this module is used by Task
 #use List; # used by Task
