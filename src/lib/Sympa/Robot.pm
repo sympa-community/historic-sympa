@@ -45,7 +45,7 @@ A new L<Sympa::Robot> object, or I<undef> if something went wrong.
 sub new {
 	my ($class, %params) = @_;
 
-	unless (defined $params{name} && Site->robots{$params{name}}) {
+	unless (defined $params{name} && Site->robots($params{name})) {
 		Sympa::Log::Syslog::do_log('err',"Unknown robot '$params{name}'");
 		return undef;
 	}
