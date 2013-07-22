@@ -75,10 +75,10 @@ sub new {
 		'spoolname'        => $spoolname,
 		'selection_status' => $selection_status,
 		'dir'              => $dir,
+		'selector'         => $opts{'selector'},
+		'sortby'           => $opts{'sortby'},
+		'way'              => $opts{'way'},
 	};
-	$self->{'selector'} = $opts{'selector'} if $opts{'selector'};
-	$self->{'sortby'} = $opts{'sortby'} if $opts{'sortby'};
-	$self->{'way'} = $opts{'way'} if $opts{'way'};
 	bless $self, $class;
 
 	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"', $dir);
