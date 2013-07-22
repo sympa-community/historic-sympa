@@ -12,11 +12,12 @@ package Sympa::Site_r;
 
 use strict;
 use warnings;
+
 use Carp qw(croak);
 use Cwd;
 
-use Conf;
-use Language qw(gettext gettext_strftime);
+use Sympa::Configuration;
+use Sympa::Language qw(gettext gettext_strftime);
 use Sympa::User;
 
 =head1 NAME
