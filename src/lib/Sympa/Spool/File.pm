@@ -512,7 +512,7 @@ sub lock_message {
     my $self = shift;
     my $key  = shift;
 
-    $self->{'lock'} = new Lock($key);
+    $self->{'lock'} = Lock->new($key);
     $self->{'lock'}->set_timeout(-1);
     unless ($self->{'lock'}->lock('write')) {
 	Sympa::Log::Syslog::do_log('err', 'Unable to put a lock on file %s', $key);
@@ -675,7 +675,7 @@ sub move_to {
     my $param = shift;
     my $target = shift;
     my $file_to_move = $self->get_message($param);
-    my $new_spool = new Sympa::Spool::File($target);
+    my $new_spool = Sympa::Spool::File->new($target);
     if ($classes{$target}) {
 	bless $new_spool, $target;
     }

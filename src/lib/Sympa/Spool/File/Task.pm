@@ -155,7 +155,7 @@ sub list_tasks {
 
     ## Create Task objects
     foreach my $t (@tasks) {
-	my $task = new Task ($t);	
+	my $task = Task->new($t);	
 	## Maintain list of tasks
 	push @task_list, $task;
 	
