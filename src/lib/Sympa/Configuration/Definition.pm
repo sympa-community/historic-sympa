@@ -52,7 +52,7 @@ sub _gettext { shift } # to mark i18n'ed messages.
 
 our @params = (
 
-	{ 'title' => _gettext('Site customization') },
+	{ 'gettext_id' => 'Site customization' },
 
 	{
 		'name'     => 'domain',
@@ -394,7 +394,7 @@ our @params = (
 		'optional' => '1',
 	},
 
-	{ 'title' => _gettext('Directories') },
+	{ 'gettext_id' => 'Directories' },
 
 	{
 		'name'     => 'home',
@@ -410,7 +410,7 @@ our @params = (
 		'file'     => 'sympa.conf',
 	},
 
-	{ 'title' => _gettext('System related') },
+	{ 'gettext_id' => 'System related' },
 
 	{
 		'name'     => 'syslog',
@@ -459,7 +459,7 @@ our @params = (
 		edit    => '1',
 		advice  => _gettext("This is the set of language that will be proposed to your users for the Sympa GUI. Don't select a language if you don't have the proper locale packages installed."),
 	},
-	{ 'title' => _gettext('Sending related') },
+	{ 'gettext_id' => 'Sending related' },
 	{
 		'name'     => 'sendmail',
 		'default'  => '/usr/sbin/sendmail',
@@ -632,7 +632,7 @@ our @params = (
 		'default'  => 10240, ## 10Kb,
 	},
 
-	{ 'title' => _gettext('Bulk mailer') },
+	{ 'gettext_id' => 'Bulk mailer' },
 
 	{
 		'name'     => 'sympa_packet_priority',
@@ -676,7 +676,7 @@ our @params = (
 		'gettext_comment'   => 'Keep it small if you expect brutal increases in the message sending load.',
 	},
 
-	{ 'title' => _gettext('Quotas') },
+	{ 'gettext_id' => 'Quotas' },
 
 	{
 		'name'     => 'default_shared_quota',
@@ -690,7 +690,7 @@ our @params = (
 		'optional' => '1',
 	},
 
-	{ 'title' => _gettext('Spool related') },
+	{ 'gettext_id' => 'Spool related' },
 
 	{
 		'name'     => 'spool',
@@ -841,7 +841,7 @@ our @params = (
 		'default'  => '7,',
 	},
 
-	{ 'title' => _gettext('Internationalization related') },
+	{ 'gettext_id' => 'Internationalization related' },
 
 	{
 		'name'     => 'localedir',
@@ -872,7 +872,7 @@ our @params = (
 		'default'  => 'utf-8',
 	},
 
-	{ 'title' => _gettext('Bounce related') },
+	{ 'gettext_id' => 'Bounce related' },
 
 	{
 		'name'     => 'verp_rate',
@@ -968,7 +968,7 @@ our @params = (
 		'optional' => '1',
 	},
 
-	{ 'title' => _gettext('Tuning') },
+	{ 'gettext_id' => 'Tuning' },
 
 	{
 		'name'     => 'cache_list_config',
@@ -1006,7 +1006,7 @@ our @params = (
 		'default'  => '5',
 	},
 
-	{ 'title' => _gettext('Database related') },
+	{ 'gettext_id' => 'Database related' },
 
 	{
 		'name'     => 'update_db_field_types',
@@ -1144,7 +1144,7 @@ our @params = (
 		'default'  => '300',
 	},
 
-	{ 'title' => _gettext('Loop prevention') },
+	{ 'gettext_id' => 'Loop prevention' },
 
 	{
 		'name'     => 'loop_command_max',
@@ -1172,7 +1172,7 @@ our @params = (
 		'default'  => '3600',
 	},
 
-	{ 'title' => _gettext('S/MIME configuration') },
+	{ 'gettext_id' => 'S/MIME configuration' },
 
 	{
 		'name'     => 'openssl',
@@ -1209,7 +1209,7 @@ our @params = (
 		'optional' => '1',
 	},
 
-	{ 'title' => _gettext('DKIM') },
+	{ 'gettext_id' => 'DKIM' },
 
 	{
 		'name'     => 'dkim_feature',
@@ -1259,7 +1259,7 @@ our @params = (
 		'optional' => '1',
 		'file'     => 'sympa.conf',
 	},
-	{ 'title' => _gettext('Antivirus plug-in') },
+	{ 'gettext_id' => 'Antivirus plug-in' },
 
 	{
 		'name'     => 'antivirus_path',
@@ -1283,7 +1283,7 @@ our @params = (
 		'default'  => 'sender',
 	},
 
-	{ 'title' => _gettext('Tag based spam filtering') },
+	{ 'gettext_id' => 'Tag based spam filtering' },
 
 	{
 		'name'     => 'antispam_feature',
@@ -1315,7 +1315,7 @@ our @params = (
 		'edit'     => '1',
 	},
 
-	{ 'title' => _gettext('wwsympa.conf parameters') },
+	{ 'gettext_id' => 'wwsympa.conf parameters' },
 
 	{
 		'name'     => 'arc_path',
@@ -1408,7 +1408,7 @@ our @params = (
 		'gettext_comment'   => 'This module provide much faster web interface',
 	},
 
-	{ 'title' => _gettext('Virtual host specific parameters') },
+	{ 'gettext_id' => 'Virtual host specific parameters' },
 
 	{
 		'name'     => 'http_host',
