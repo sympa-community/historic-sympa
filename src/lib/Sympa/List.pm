@@ -62,7 +62,7 @@ use Sympa::Message;
 use Sympa::PlainDigest;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Task;
 use Sympa::Template;
 use Sympa::Tools::Data;
@@ -3332,7 +3332,7 @@ sub distribute_msg {
 
 		# rename update topic content id of the message
 		if ($info_msg_topic) {
-			my $topicspool = Sympa::Spool->new(
+			my $topicspool = Sympa::Spool::SQL->new(
 				name => 'topic',
 				base => $self->{base}
 			);
@@ -3550,7 +3550,7 @@ sub send_msg_digest {
 	Sympa::Log::Syslog::do_log('debug',"send_msg_disgest(%s)",$messagekey);
 
 	# fetch and lock message.
-	my $digestspool = Sympa::Spool->new(
+	my $digestspool = Sympa::Spool::SQL->new(
 		name => 'digest',
 		base => $self->{base}
 	);
@@ -4563,7 +4563,7 @@ sub send_to_editor {
 
 	if ($method eq 'md5'){
 		# move message to spool  mod
-		my $spoolmod = Sympa::Spool->new(
+		my $spoolmod = Sympa::Spool::SQL->new(
 			name => 'mod',
 			base => $self->{base}
 		);
@@ -4697,7 +4697,7 @@ sub send_auth {
 	my $authkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
 	chomp $authkey;
 
-	my $spool = Sympa::Spool->new(
+	my $spool = Sympa::Spool::SQL->new(
 		name => 'auth',
 		base => $self->{base}
 	);
@@ -8648,7 +8648,7 @@ sub archive_msg {
 			## ignoring message with a no-archive flag
 			Sympa::Log::Syslog::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 		} else {
-			my $spoolarchive = Sympa::Spool->new(
+			my $spoolarchive = Sympa::Spool::SQL->new(
 				name => 'archive',
 				base => $self->{base}
 			);
@@ -11117,7 +11117,7 @@ sub store_digest {
 
 	my @now  = localtime(time());
 
-	my $digestspool = Sympa::Spool->new(
+	my $digestspool = Sympa::Spool::SQL->new(
 		name => 'digest',
 		base => Sympa::Database->get_singleton()
 	);
@@ -11550,7 +11550,7 @@ sub get_mod_spool_size {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug3', '()');
 
-	my $spool = Sympa::Spool->new(
+	my $spool = Sympa::Spool::SQL->new(
 		name => 'mod',
 		base => Sympa::Database->get_singleton()
 	);
@@ -11832,7 +11832,6 @@ sub _apply_defaults {
 
 	## List of available languages
 	$::pinfo{'lang'}{'format'} = Sympa::Language::get_supported_languages(
-		->supported_lang
 	);
 
 	## Parameter order
@@ -12744,7 +12743,7 @@ sub tag_topic {
 
 	my $topic_item =  sprintf  "TOPIC   $topic_list\n";
 	$topic_item .= sprintf  "METHOD  $method\n";
-	my $topicspool = Sympa::Spool->new(
+	my $topicspool = Sympa::Spool::SQL->new(
 		name => 'topic',
 		base => Sympa::Database->get_singleton()
 	);
@@ -12783,7 +12782,7 @@ sub load_msg_topic {
 	my ($self,$msg_id,$robot) = @_;
 
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$self->{'name'},$msg_id);
-	my $topicspool = Sympa::Spool->new(
+	my $topicspool = Sympa::Spool::SQL->new(
 		name => 'topic',
 		base => Sympa::Database->get_singleton()
 	);
@@ -13062,7 +13061,7 @@ sub store_subscription_request {
 	my ($self, $email, $gecos, $custom_attr) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
 
-	my $subscription_request_spool = Sympa::Spool->new(
+	my $subscription_request_spool = Sympa::Spool::SQL->new(
 		name => 'subscribe',
 		base => Sympa::Database->get_singleton()
 	);
@@ -13097,7 +13096,7 @@ sub get_subscription_requests {
 
 	my %subscriptions;
 
-	my $subscription_request_spool = Sympa::Spool->new(
+	my $subscription_request_spool = Sympa::Spool::SQL->new(
 		name => 'subscribe',
 		base => Sympa::Database->get_singleton()
 	);
@@ -13149,7 +13148,7 @@ sub get_subscription_requests {
 sub get_subscription_request_count {
 	my ($self) = @_;
 
-	my $subscription_request_spool = Sympa::Spool->new(
+	my $subscription_request_spool = Sympa::Spool::SQL->new(
 		name => 'subscribe',
 		base => Sympa::Database->get_singleton()
 	);
@@ -13166,7 +13165,7 @@ sub delete_subscription_request {
 	my ($self, @list_of_email) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', $self->{'name'}, join(',',@list_of_email));
 
-	my $subscription_request_spool = Sympa::Spool->new(
+	my $subscription_request_spool = Sympa::Spool::SQL->new(
 		name => 'subscribe',
 		base => Sympa::Database->get_singleton()
 	);
@@ -13423,7 +13422,7 @@ sub purge {
 
 	## Remove tasks for this list
 	Sympa::Task->load_tasks(
-		Sympa::Spool->new(
+		Sympa::Spool::SQL->new(
 			name => 'task',
 			base => Sympa::Database->get_singleton()
 		)

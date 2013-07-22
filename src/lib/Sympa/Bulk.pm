@@ -51,7 +51,7 @@ use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Log::Database;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Template;
 use Sympa::Tools;
 
@@ -531,7 +531,7 @@ sub store {
 	# because as soon as packet are created bulk.pl may distribute them
 
 	my $message_already_on_spool;
-	my $bulkspool = Sympa::Spool->new(
+	my $bulkspool = Sympa::Spool::SQL->new(
 		name => 'bulk',
 		base => $self->{base}
 	);

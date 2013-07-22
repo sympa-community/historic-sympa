@@ -43,7 +43,7 @@ use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log::Syslog;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::Password;
 use Sympa::Tools::File;
@@ -844,7 +844,7 @@ sub upgrade {
 			}
 			Sympa::Log::Syslog::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
-			my $spool = Sympa::Spool->new(
+			my $spool = Sympa::Spool::SQL->new(
 				name => $spools_def{$spoolparameter},
 				base => $base
 			);

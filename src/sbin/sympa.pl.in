@@ -271,7 +271,7 @@ use Sympa::Mail;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::Password;
@@ -1260,7 +1260,7 @@ while ($signal ne 'term') {
 	my $index_cleanqueue = 0;
 	my @qfile;
 
-	my $spool = Sympa::Spool->new(
+	my $spool = Sympa::Spool::SQL->new(
 		name => 'msg',
 		base => Sympa::Database->get_singleton()
 	);
@@ -1284,46 +1284,46 @@ while ($signal ne 'term') {
 		if ($index_cleanqueue++ >= 1000){
 			$index_cleanqueue=0;
 
-			my $msg_bad = Sympa::Spool->new(
+			my $msg_bad = Sympa::Spool::SQL->new(
 				name   => 'msg',
 				status => 'bad',
 				base   => Sympa::Database->get_singleton()
 			);
 			$msg_bad->clean(delay =>Site->clean_delay_queue);
-			my $archive_bad = Sympa::Spool->new(
+			my $archive_bad = Sympa::Spool::SQL->new(
 				name   => 'archive',
 				status => 'bad',
 				base   => Sympa::Database->get_singleton()
 			);
 			$archive_bad->clean(delay => Site->clean_delay_queueoutgoing);
-			my $queuebounce_bad = Sympa::Spool->new(
+			my $queuebounce_bad = Sympa::Spool::SQL->new(
 				name   => 'bounce',
 				status => 'bad',
 				base   => Sympa::Database->get_singleton()
 			);
 			$archive_bad->clean(delay => Site->clean_delay_queueoutgoing);
 			$queuebounce_bad->clean(delay =>Site->clean_delay_queuebounce);
-			my $queuemod = Sympa::Spool->new(
+			my $queuemod = Sympa::Spool::SQL->new(
 				name => 'mod',
 				base => Sympa::Database->get_singleton()
 			);
 			$queuemod->clean(delay => Site->clean_delay_queuemod);
-			my $queueauth = Sympa::Spool->new(
+			my $queueauth = Sympa::Spool::SQL->new(
 				name => 'auth',
 				base => Sympa::Database->get_singleton()
 			);
 			$queueauth->clean(delay => Site->clean_delay_queueauth);
-			my $queuetopic = Sympa::Spool->new(
+			my $queuetopic = Sympa::Spool::SQL->new(
 				name => 'topic',
 				base => Sympa::Database->get_singleton()
 			);
 			$queuetopic->clean(delay => Site->clean_delay_queuetopic);
-			my $queuesubscribe = Sympa::Spool->new(
+			my $queuesubscribe = Sympa::Spool::SQL->new(
 				name => 'subscribe',
 				base => Sympa::Database->get_singleton()
 			);
 			$queuesubscribe->clean(delay => Site->clean_delay_queuesubscribe);
-			my $queueautomatic = Sympa::Spool->new(
+			my $queueautomatic = Sympa::Spool::SQL->new(
 				name => 'automatic',
 				base => Sympa::Database->get_singleton()
 			);
@@ -2762,7 +2762,7 @@ sub DoCommand {
 sub SendDigest{
 	Sympa::Log::Syslog::do_log('debug', '()');
 
-	my $digestspool = Sympa::Spool->new(
+	my $digestspool = Sympa::Spool::SQL->new(
 		name => 'digest',
 		base => Sympa::Database->get_singleton()
 	);
@@ -2847,7 +2847,7 @@ sub test_storage {
 		ETA   => 'linear'
 	});
 
-	my $testing = Sympa::Spool->new(
+	my $testing = Sympa::Spool::SQL->new(
 		name => 'bad',
 		base => Sympa::Database->get_singleton()
 	);

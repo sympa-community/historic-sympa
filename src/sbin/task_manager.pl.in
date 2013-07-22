@@ -77,7 +77,7 @@ use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Scenario;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
@@ -247,7 +247,7 @@ my $end = 0;
 my $cert_dir = Site->ssl_cert_dir;
 my @tasks; # list of tasks in the spool
 
-my $spool = Sympa::Spool->new(
+my $spool = Sympa::Spool::SQL->new(
 	name => 'task',
 	base => $base
 );

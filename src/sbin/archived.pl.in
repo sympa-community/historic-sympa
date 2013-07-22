@@ -83,7 +83,7 @@ use Sympa::List;
 use Sympa::Log::Database;
 use Sympa::Log::Syslog;
 use Sympa::Message;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
@@ -260,7 +260,7 @@ Sympa::Log::Syslog::do_log('notice', "archived %s Started", Sympa::Constants::VE
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spool = Sympa::Spool->new(
+my $spool = Sympa::Spool::SQL->new(
 	name => 'archive',
 	base => $base
 );

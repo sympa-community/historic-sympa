@@ -46,7 +46,7 @@ use Sympa::Log::Syslog;
 use Sympa::Message;
 use Sympa::Report;
 use Sympa::Scenario;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::Tools::Password;
@@ -2284,7 +2284,7 @@ sub _distribute {
 
 	#read the moderation queue and purge it
 
-	my $modspool = Sympa::Spool->new(
+	my $modspool = Sympa::Spool::SQL->new(
 		name => 'mod',
 		base => Sympa::Database->get_singleton()
 	);
@@ -2293,7 +2293,7 @@ sub _distribute {
 	my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 	unless ($message_in_spool) {
 		## if the message has been accepted via WWSympa, it's in spool 'validated'
-		my $validatedspool = Sympa::Spool->new(
+		my $validatedspool = Sympa::Spool::SQL->new(
 			name => 'validated',
 			base => Sympa::Database->get_singleton()
 		);
@@ -2369,7 +2369,7 @@ sub _confirm {
 	$what =~ /^\s*(\S+)\s*$/;
 	my $key = $1; chomp $key;
 
-	my $spool = Sympa::Spool->new(
+	my $spool = Sympa::Spool::SQL->new(
 		name => 'auth',
 		base => Sympa::Database->get_singleton()
 	);
@@ -2552,7 +2552,7 @@ sub _reject {
 
 	my $name = "$list->{'name'}";
 
-	my $modspool = Sympa::Spool->new(
+	my $modspool = Sympa::Spool::SQL->new(
 		name => 'mod',
 		base => Sympa::Database->get_singleton()
 	);

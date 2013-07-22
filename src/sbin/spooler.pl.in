@@ -88,7 +88,7 @@ use Sympa::List;
 use Sympa::Lock;
 use Sympa::Log::Syslog;
 use Sympa::Message;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 
@@ -321,11 +321,11 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 		my @qfile;
 
-		my $msgspool = Sympa::Spool->new(
+		my $msgspool = Sympa::Spool::SQL->new(
 			name => 'msg',
 			base => Sympa::Database->get_singleton()
 		);
-		my $bouncespool = Sympa::Spool->new(
+		my $bouncespool = Sympa::Spool::SQL->new(
 			name => 'bounce',
 			base => Sympa::Database->get_singleton()
 		);
