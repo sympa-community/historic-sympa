@@ -10,7 +10,7 @@ use Log;
 use tracking;
 use Data::Dumper;
 
-our @ISA = qw(Message);
+use base qw(Sympa::Message);
 
 ## Equivalents relative to RFC 1893
 our %equiv = ( "user unknown" => '5.1.1',
