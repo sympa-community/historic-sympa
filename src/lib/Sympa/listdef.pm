@@ -1,7 +1,7 @@
 # listdef.pm - Definition of list parameters
 # RCS Identication ; $Revision$ ; $Date$
 
-package listdef;
+package Sympa::listdef;
 
 use strict;
 

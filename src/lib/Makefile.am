@@ -29,6 +29,7 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/Language.pm \
 		      Sympa/LDAP.pm \
 		      Sympa/List.pm \
+		      Sympa/listdef.pm \
 		      Sympa/Lock.pm \
 		      Sympa/Log/Database.pm \
 		      Sympa/Log/Database/Iterator.pm \
@@ -67,7 +68,6 @@ nobase_modules_DATA = Sympa/Admin.pm \
 		      Sympa/User.pm \
 		      Sympa/WWSympa.pm \
 		      moddef.pm \
-		      listdef.pm \
 		      moddef.pm \
 		      Site.pm
 		      
