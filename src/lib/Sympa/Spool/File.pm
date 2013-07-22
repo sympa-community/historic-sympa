@@ -39,7 +39,9 @@ use File::Path qw(make_path remove_tree);
 # tentative
 
 use Sympa::List;
+use Sympa::Lock;
 use Sympa::Log::Syslog;
+use Sympa::Robot;
 
 our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
@@ -437,7 +439,7 @@ sub analyze_file_name {
     $data->{'list'} = lc($data->{'list'});
     $data->{'robot'} = lc($data->{'robot'});
     return undef
-	unless $data->{'robot_object'} = Robot->new($data->{'robot'});
+	unless $data->{'robot_object'} = Sympa::Robot->new($data->{'robot'});
 
     my $listname;
     #FIXME: is this always needed?
@@ -512,7 +514,7 @@ sub lock_message {
     my $self = shift;
     my $key  = shift;
 
-    $self->{'lock'} = Lock->new($key);
+    $self->{'lock'} = Sympa::Lock->new($key);
     $self->{'lock'}->set_timeout(-1);
     unless ($self->{'lock'}->lock('write')) {
 	Sympa::Log::Syslog::do_log('err', 'Unable to put a lock on file %s', $key);
@@ -531,7 +533,7 @@ sub unlock_message {
     my $self = shift;
     my $key  = shift;
 
-    unless(ref($self->{'lock'}) and $self->{'lock'}->isa('Lock')) {
+    unless(ref($self->{'lock'}) and $self->{'lock'}->isa('Sympa::Lock')) {
 	delete $self->{'lock'};
 	return undef;
     }
