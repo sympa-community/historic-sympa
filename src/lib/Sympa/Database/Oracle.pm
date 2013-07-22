@@ -44,7 +44,7 @@ our %date_format = (
 		'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
 	},
 	'write' => {
-		'Oracle' => 'to_date(to_char(round(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
+		'Oracle' => 'to_date(to_char(floor(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
 	}
 );
 
@@ -152,6 +152,13 @@ sub _get_native_type {
 	return 'long'          if $type =~ /^longtext/;
 	return 'date'          if $type =~ /^datetime/;
 	return $type;
+}
+
+## For BLOB types.
+sub AS_BLOB {
+    return ( { 'ora_type' => DBD::Oracle::ORA_BLOB() } => $_[1] )
+	if scalar @_ > 1;
+    return ();
 }
 
 1;
