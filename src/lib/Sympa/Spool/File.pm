@@ -65,7 +65,7 @@ XXX @todo doc
 
 sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
-	my ($pkg, $spoolname, $dir, $selection_status, %opts) = @_;
+	my ($class, $spoolname, $dir, $selection_status, %opts) = @_;
 
 	if ($selection_status and $selection_status eq 'bad') {
 		$dir .= '/bad';
@@ -79,7 +79,7 @@ sub new {
 	$self->{'selector'} = $opts{'selector'} if $opts{'selector'};
 	$self->{'sortby'} = $opts{'sortby'} if $opts{'sortby'};
 	$self->{'way'} = $opts{'way'} if $opts{'way'};
-	bless $self, $pkg;
+	bless $self, $class;
 
 	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"', $dir);
 
