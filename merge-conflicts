@@ -6,7 +6,6 @@
    C src/lib/Archive.pm
    C src/lib/Family.pm
    C src/lib/mail.pm
-   C src/lib/DBManipulatorSQLite.pm
    C src/lib/Message.pm
    C src/lib/Robot.pm
    C src/lib/Upgrade.pm
