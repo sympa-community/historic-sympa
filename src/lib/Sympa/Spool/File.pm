@@ -55,33 +55,54 @@ our %classes = (
 
 =over 4
 
-=item Sympa::Spool->new( NAME, STATUS, OPTIONS... )
+=item Sympa::Spool->new(%parameters)
 
 Creates a new L<Sympa::Spool::File> object.
 
-XXX @todo doc
+Parameters:
+
+=over
+
+=item C<spoolname> => string
+
+=item C<selection_status> => C<bad> | C<ok>
+
+=item C<dir> => string
+
+=item C<selector> => string
+
+=item C<sortby> => string
+
+=item C<way> => string
+
+=back
+
+Return:
+
+A new L<Sympa::Spool::File> object, or I<undef>, if something went wrong.
 
 =cut
 
 sub new {
+	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
-	my ($class, $spoolname, $dir, $selection_status, %opts) = @_;
 
-	if ($selection_status and $selection_status eq 'bad') {
-		$dir .= '/bad';
+	if ($params{selection_status} and $params{selection_status} eq 'bad') {
+		$params{dir} .= '/bad';
 	}
 
 	my $self = {
-		'spoolname'        => $spoolname,
-		'selection_status' => $selection_status,
-		'dir'              => $dir,
-		'selector'         => $opts{'selector'},
-		'sortby'           => $opts{'sortby'},
-		'way'              => $opts{'way'},
+		'spoolname'        => $params{spoolname},
+		'selection_status' => $params{selection_status},
+		'dir'              => $params{dir},
+		'selector'         => $params{selector},
+		'sortby'           => $params{sortby},
+		'way'              => $params{way},
 	};
 	bless $self, $class;
 
-	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"', $dir);
+	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"',
+		$self->{dir});
 
 	$self->create_spool_dir();
 
