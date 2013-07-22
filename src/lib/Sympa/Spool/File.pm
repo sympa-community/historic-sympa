@@ -37,7 +37,7 @@ use Exporter;
 use File::Path qw(make_path remove_tree);
 # tentative
 
-use List;
+use Sympa::List;
 
 our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
@@ -400,7 +400,7 @@ sub analyze_file_name {
 	$data->{'robot_object'}->split_listname($data->{'list'});
     if (defined $listname) {
 	$data->{'list_object'} =
-	    List->new($listname, $data->{'robot_object'}, {'just_try' => 1});
+	    Sympa::List->new($listname, $data->{'robot_object'}, {'just_try' => 1});
     }
 
     ## Get priority
@@ -415,7 +415,7 @@ sub analyze_file_name {
     } elsif ($data->{'type'} and $data->{'type'} eq 'sympa') {	
 	$data->{'priority'} = $data->{'robot_object'}->sympa_priority;
     } elsif (ref $data->{'list_object'} and
-	$data->{'list_object'}->isa('List')) {
+	$data->{'list_object'}->isa('Sympa::List')) {
 	$data->{'priority'} = $data->{'list_object'}->priority;
     } else {
 	$data->{'priority'} = $data->{'robot_object'}->default_list_priority;
