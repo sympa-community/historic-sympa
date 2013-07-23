@@ -43,5 +43,19 @@
    C src/etc/script
    C src/task_manager.pl.in
    C src/bulk.pl.in
-   C soap
-   C wwsympa
+soap/sampleClient.php
+soap/sympa_soap_client.pl.in
+soap/sympasoap.pm
+soap/sympa_soap_server.fcgi.in
+soap/sympa_soap_server-wrapper.fcgi.c
+soap/SympaTransport.pm
+soap/sympa.wsdl
+wwsympa/Auth.pm
+wwsympa/cookielib.pm
+wwsympa/icons
+wwsympa/Marc
+wwsympa/Marc.pm
+wwsympa/SharedDocument.pm
+wwsympa/SympaSession.pm
+wwsympa/wwslib.pm
+wwsympa/wwsympa.fcgi.in
