@@ -579,9 +579,6 @@ sub get_dirs_in_spool {
 sub refresh_spool_files_list {
 	my $self = shift;
 	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id());
-	unless (-d $self->{'dir'}) {
-		$self->create_spool_dir();
-	}
 	unless (opendir SPOOLDIR, $self->{'dir'}) {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
 		return undef;
@@ -602,9 +599,6 @@ sub refresh_spool_files_list {
 sub refresh_spool_dirs_list {
 	my $self = shift;
 	Sympa::Log::Syslog::do_log('debug2','%s',$self->get_id());
-	unless (-d $self->{'dir'}) {
-		$self->create_spool_dir();
-	}
 	unless (opendir SPOOLDIR, $self->{'dir'}) {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
 		return undef;
