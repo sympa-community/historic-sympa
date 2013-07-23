@@ -81,7 +81,9 @@ Parameters:
 
 Return:
 
-A new L<Sympa::Spool::File> object, or I<undef>, if something went wrong.
+A new L<Sympa::Spool::File> object.
+
+Throws an exception if something went wrong.
 
 =cut
 

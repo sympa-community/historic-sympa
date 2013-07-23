@@ -32,11 +32,13 @@ my $ok_spool_dir = $temp_dir . '/foo';
 
 ok(! -d $ok_spool_dir, "spool directory doesn't exist yet");
 
-my $ok_spool = Sympa::Spool::File->new(
-	name => 'foo',
-	dir  => $ok_spool_dir
-);
-ok(defined $ok_spool, 'ok_spool is defined');
+my $ok_spool;
+lives_ok {
+	$ok_spool = Sympa::Spool::File->new(
+		name => 'foo',
+		dir  => $ok_spool_dir
+	);
+} 'OK spool instanciation';
 isa_ok($ok_spool, 'Sympa::Spool::File');
 
 ok(-d $ok_spool_dir, "spool directory does exist");
@@ -46,12 +48,14 @@ my $bad_spool_dir = $temp_dir . '/foo/bad';
 
 ok(! -d $bad_spool_dir, "spool directory doesn't exist yet");
 
-my $bad_spool = Sympa::Spool::File->new(
-	name   => 'foo',
-	dir    => $ok_spool_dir,
-	status => 'bad'
-);
-ok(defined $bad_spool, 'bad_spool is defined');
+my $bad_spool;
+lives_ok {
+	$bad_spool = Sympa::Spool::File->new(
+		name   => 'foo',
+		dir    => $ok_spool_dir,
+		status => 'bad'
+	);
+} 'Bad spool instanciation';
 isa_ok($bad_spool, 'Sympa::Spool::File');
 
 ok(-d $bad_spool_dir, "spool directory does exist");

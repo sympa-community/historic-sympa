@@ -65,7 +65,9 @@ Parameters:
 
 Return:
 
-A new L<Sympa::Spool::SQL> object, or I<undef>, if something went wrong.
+A new L<Sympa::Spool::SQL> object.
+
+Throws an exception if something went wrong.
 
 =cut
 
