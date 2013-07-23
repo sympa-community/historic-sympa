@@ -50,7 +50,6 @@ soap/sympa_soap_server.fcgi.in
 soap/sympa_soap_server-wrapper.fcgi.c
 soap/SympaTransport.pm
 soap/sympa.wsdl
-wwsympa/SharedDocument.pm
 wwsympa/SympaSession.pm
 wwsympa/wwslib.pm
 wwsympa/wwsympa.fcgi.in
