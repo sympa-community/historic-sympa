@@ -203,7 +203,7 @@ GetOptions(
 	'help|h',
 ) or pod2usage(-exitval => 1, -output => \*STDERR);
 
-if ($main::options{'help'}) {
+if ($options{'help'}) {
     pod2usage(0);
 }
 
@@ -297,11 +297,11 @@ unless ($options->{'stderr_to_tty'}) {
     tools::direct_stderr_to_file(('pid' => $$));
 }
 
-if ($main::options{'log_level'}) {
-    Sympa::Log::Syslog::set_log_level($main::options{'log_level'});
+if ($options{'log_level'}) {
+    Sympa::Log::Syslog::set_log_level($options{'log_level'});
     Sympa::Log::Syslog::do_log(
 	'info', 'Configuration file read, log level set using options : %s',
-	$main::options{'log_level'}
+	$options{'log_level'}
     ); 
 } else {
     Sympa::Log::Syslog::set_log_level(Site->log_level);
