@@ -33,10 +33,9 @@ package Sympa::Spool::File;
 
 use strict;
 use warnings;
+
 use Carp qw(croak);
-use Exporter;
 use File::Path qw(make_path remove_tree);
-# tentative
 
 use Sympa::List;
 use Sympa::Lock;
