@@ -98,7 +98,10 @@ sub new {
 		$params{dir} .= '/bad';
 	}
 
-	unless (-d $params{dir}) {
+	if (-d $params{dir}) {
+		croak "unreadable directory" unless -r $params{dir};
+		croak "unwritable directory" unless -w $params{dir};
+	} else {
 		# throws an exception in case of failure
 		File::Path::mkpath([$params{dir}]);
 	}

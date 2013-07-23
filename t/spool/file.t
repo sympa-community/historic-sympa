@@ -15,7 +15,7 @@ use Test::Exception;
 
 use Sympa::Spool::File;
 
-plan tests => 15;
+plan tests => 17;
 
 my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 
@@ -40,8 +40,30 @@ throws_ok {
 		dir  => $temp_dir . '/foo'
 	);
 } qr/Permission denied/,
-'unable to create spool directory';
+'unable to create a new spool directory with a read-only parent';
 chmod 0755, $temp_dir->dirname();
+
+my $unreadable_dir =  $temp_dir . '/unreadable';
+mkdir $unreadable_dir;
+chmod 0111, $unreadable_dir;
+throws_ok {
+	my $spool = Sympa::Spool::File->new(
+		name => 'foo',
+		dir  => $unreadable_dir
+	);
+} qr/unreadable directory/,
+'unable to use an already-existing unreadable directory';
+
+my $unwritable_dir =  $temp_dir . '/unwritable';
+mkdir $unwritable_dir;
+chmod 0555, $unwritable_dir;
+throws_ok {
+	my $spool = Sympa::Spool::File->new(
+		name => 'foo',
+		dir  => $unwritable_dir
+	);
+} qr/unwritable directory/,
+'unable to use an already-existing unwritable directory';
 
 my $ok_spool_dir = $temp_dir . '/foo';
 
