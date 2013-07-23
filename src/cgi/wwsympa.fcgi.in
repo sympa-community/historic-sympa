@@ -145,7 +145,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 }
 my $mime_types = Sympa::Tools::load_mime_types(Site->etc);
 
-if (Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
+if (Site->voot_feature eq 'on') {
 	eval {
 		require Sympa::Auth::OAuth::Provider;
 	};

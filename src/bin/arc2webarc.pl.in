@@ -126,12 +126,12 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 my $report = Sympa::Database->get_singleton()->probe(
-	update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
+	update => Site->update_db_field_types
 );
 if (defined $report) {
 	Sympa::List::send_notify_to_listmaster(
 		'db_struct_updated',
-		Sympa::Configuration::get_robot_conf('*','domain'),
+		Site->domain,
 		{ 'report' => $report }
 	) if @$report;
 }

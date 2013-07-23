@@ -417,12 +417,12 @@ while ($signal ne 'term') {
 	## Probe Db if defined
 	if (Site->db_name and Site->db_type) {
 		my $report = Sympa::Database->get_singleton()->probe(
-			update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
+			update => Site->update_db_field_types
 		);
 		if (defined $report) {
 			Sympa::List::send_notify_to_listmaster(
 				'db_struct_updated',
-				Sympa::Configuration::get_robot_conf('*','domain'),
+				Site->domain,
 				{ 'report' => $report }
 			) if @$report;
 		} else {
@@ -472,7 +472,7 @@ while ($signal ne 'term') {
 	}
 
 
-	if (Sympa::Configuration::get_robot_conf('*','voot_feature') eq 'on') {
+	if (Site->voot_feature eq 'on') {
 		eval {
 			require Sympa::Auth::OAuth::Provider;
 		};

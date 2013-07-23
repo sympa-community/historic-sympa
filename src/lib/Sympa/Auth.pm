@@ -57,7 +57,7 @@ sub password_fingerprint{
 	my ($pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '');
 
-	if(Sympa::Configuration::get_robot_conf('*','password_case') eq 'insensitive') {
+	if(Site->password_case eq 'insensitive') {
 		return Sympa::Tools::md5_fingerprint(lc($pwd));
 	} else {
 		return Sympa::Tools::md5_fingerprint($pwd);

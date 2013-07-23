@@ -320,7 +320,7 @@ while (!$end) {
 
 			## Start new processes if there remain at least 'bulk_fork_threshold' packets to send in the bulkmailer_table table
 			if(
-				(my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Configuration::get_robot_conf('*','bulk_fork_threshold'))) &&
+				(my $r_packets = $bulk->there_is_too_much_remaining_packets(Site->bulk_fork_threshold)) &&
 				($#remaining_children+1 < Site->bulk_max_count) ){
 
 				## disconnect from database before fork
@@ -375,7 +375,7 @@ while (!$end) {
 	if (
 		($main::daemon_usage eq 'DAEMON_SLAVE') &&
 		(time() - $date_of_last_activity > Site->bulk_lazytime) &&
-		!(my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Configuration::get_robot_conf('*','bulk_fork_threshold')))
+		!(my $r_packets = $bulk->there_is_too_much_remaining_packets(Site->bulk_fork_threshold))
 	){
 		Sympa::Log::Syslog::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $PID, Site->bulk_lazytime);
 		last;

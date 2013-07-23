@@ -25,12 +25,12 @@ Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'sympa');
 
 if (Site->db_name and Site->db_type) {
 	my $report = Sympa::Database->get_singleton()->probe(
-		update => Sympa::Configuration::get_robot_conf('*','update_db_field_types')
+		update => Site->update_db_field_types
 	);
 	if (defined $report) {
 		Sympa::List::send_notify_to_listmaster(
 			'db_struct_updated',
-			Sympa::Configuration::get_robot_conf('*','domain'),
+			Site->domain,
 			{ 'report' => $report }
 		) if @$report;
 	} else {

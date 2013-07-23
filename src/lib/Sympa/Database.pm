@@ -2735,7 +2735,7 @@ sub connect_sympa_database {
 		);
 		return undef;
 	}
-	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Sympa::Configuration::get_robot_conf('*','db_name'));
+	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Site->db_name);
 
 	return 1;
 }

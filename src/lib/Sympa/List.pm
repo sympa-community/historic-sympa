@@ -8247,7 +8247,7 @@ sub is_listmaster {
 		return 1 if (lc($listmaster) eq lc($who));
 	}
 
-	foreach my $listmaster (@{Sympa::Configuration::get_robot_conf('*','listmasters')}){
+	foreach my $listmaster (@{Site->listmasters}){
 		return 1 if (lc($listmaster) eq lc($who));
 	}
 
