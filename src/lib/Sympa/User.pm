@@ -40,23 +40,21 @@ use Carp qw(carp croak);
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
 
-## mapping between var and field names
-my %db_struct = Sympa::DatabaseDescription::full_db_struct();
-my %map_field;
-foreach my $k (keys %{$db_struct{'user_table'}->{'fields'}}) {
-    if ($k =~ /^(.+)_user$/) {
-	$map_field{$1} = $k;
-    }
-}
+# mapping between class attributes and database fields
+my %map_field =
+	map { $_ => $_ . '_user' }
+	qw/
+		email gecos password last_login_date last_login_host
+		wrong_login_count cookie_delay lang attributes data
+	/;
 
-## DB fields with numeric type
-## We should not do quote() for these while inserting data
-my %numeric_field;
-foreach my $k (keys %{$db_struct{'user_table'}->{'fields'}}) {
-    if ($db_struct{'user_table'}->{'fields'}{$k}{'struct'} =~ /^int/) {
-	$numeric_field{$k} = 1;
-    }
-}
+# DB fields with numeric type
+# We should not do quote() for these while inserting data
+my %numeric_field = (
+	last_login_date_user   => 1,
+	wrong_login_count_user => 1,
+	cookie_delay_user      => 1
+);
 
 =encoding utf-8
 
