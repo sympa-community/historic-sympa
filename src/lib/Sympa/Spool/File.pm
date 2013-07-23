@@ -42,6 +42,7 @@ use Sympa::Lock;
 use Sympa::Log::Syslog;
 use Sympa::Robot;
 use Sympa::Tools;
+use Sympa::Tools::File;
 
 our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
@@ -805,7 +806,7 @@ sub clean {
 	@to_kill = $self->get_dirs_in_spool;
 	foreach my $d (@to_kill) {
 		if ((stat "$self->{'dir'}/$d")[9] < $freshness_date) {
-			if (tools::remove_dir("$self->{'dir'}/$d") ) {
+			if (Sympa::Tools::File::remove_dir("$self->{'dir'}/$d") ) {
 				$deleted++;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$self->{'dir'}/$d");
 			}else{
