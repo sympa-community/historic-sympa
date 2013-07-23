@@ -9,12 +9,13 @@ use FindBin qw($Bin);
 use lib "$Bin/../../src/lib";
 
 use File::Temp;
+use POSIX qw(setlocale LC_ALL);
 use Test::More;
 use Test::Exception;
 
 use Sympa::Spool::File;
 
-plan tests => 14;
+plan tests => 15;
 
 my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 
@@ -24,9 +25,23 @@ throws_ok {
 'missing name parameter';
 
 throws_ok {
-	my $spool = Sympa::Spool::File->new(name => 'foo');
+	my $spool = Sympa::Spool::File->new(
+		name => 'foo',
+	);
 } qr/^missing dir parameter/,
 'missing dir parameter';
+
+POSIX::setlocale(LC_ALL, 'C');
+
+chmod 0555, $temp_dir->dirname();
+throws_ok {
+	my $spool = Sympa::Spool::File->new(
+		name => 'foo',
+		dir  => $temp_dir . '/foo'
+	);
+} qr/Permission denied/,
+'unable to create spool directory';
+chmod 0755, $temp_dir->dirname();
 
 my $ok_spool_dir = $temp_dir . '/foo';
 

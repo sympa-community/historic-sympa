@@ -98,6 +98,11 @@ sub new {
 		$params{dir} .= '/bad';
 	}
 
+	unless (-d $params{dir}) {
+		# throws an exception in case of failure
+		make_path($params{dir});
+	}
+
 	my $self = {
 		'name'     => $params{name},
 		'status'   => $params{status},
@@ -108,10 +113,10 @@ sub new {
 	};
 	bless $self, $class;
 
-	Sympa::Log::Syslog::do_log('debug3', 'Spool to scan "%s"',
-		$self->{dir});
-
-	$self->create_spool_dir();
+	Sympa::Log::Syslog::do_log(
+		'debug3',
+		'Spool to scan "%s"', $self->{dir}
+	);
 
 	return $self;
 }
@@ -613,18 +618,6 @@ sub refresh_spool_dirs_list {
 	closedir(SPOOLDIR);
 	$self->{'spool_dirs_list'} = \@qdir;
 	return 1;
-}
-
-=item $spool->create_spool_dir()
-
-=cut
-
-sub create_spool_dir {
-	my $self = shift;
-	Sympa::Log::Syslog::do_log('debug','%s',$self->get_id());
-	unless (-d $self->{'dir'}) {
-		make_path($self->{'dir'});
-	}
 }
 
 =item $spool->move_to_bad ($key)
