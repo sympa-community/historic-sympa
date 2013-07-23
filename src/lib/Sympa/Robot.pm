@@ -65,22 +65,22 @@ sub new {
     ## load global config if needed
     Sympa::Site->load(%params)
 	if !$Sympa::Site::is_initialized or
-	    $options{'force_reload'};
+	    $params{'force_reload'};
     return undef unless $Sympa::Site::is_initialized;
 
     my $robot;
     ## If robot already in memory
-    if (Sympa::Site->robots($name)) {
+    if (Sympa::Site->robots($params{name})) {
 
 	# use the current robot in memory and update it
-	$robot = Sympa::Site->robots($name);
+	$robot = Sympa::Site->robots($params{name});
     } else {
 
 	# create a new object robot
-	$robot = bless {} => $pkg;
-	my $status = $robot->load($name, %options);
+	$robot = bless {} => $class;
+	my $status = $robot->load($params{name}, %params);
 	unless (defined $status) {
-	    Sympa::Site->robots($name, undef);
+	    Sympa::Site->robots($params{name}, undef);
 	    return undef;
 	}
     }
