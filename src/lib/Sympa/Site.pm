@@ -77,7 +77,7 @@ our $AUTOLOAD;
 sub DESTROY;
 
 sub AUTOLOAD {
-    Log::do_log('debug3', 'Autoloading %s', $AUTOLOAD);
+    Sympa::Log::Syslog::do_log('debug3', 'Autoloading %s', $AUTOLOAD);
     $AUTOLOAD =~ m/^(.*)::(.*)/;
     my $pkg  = $1;
     my $attr = $2;
@@ -110,7 +110,7 @@ sub AUTOLOAD {
 	    ((ref $_[0] and exists $_[0]->{$attr}) or
 		exists $Conf::Conf{$attr})
 	    ) {
-	    &Log::do_log(
+	    &Sympa::Log::Syslog::do_log(
 		'err',
 		'Unconcerned object method "%s" via package "%s".  Though it may not be fatal, you might want to report it developer',
 		$attr,
@@ -367,7 +367,7 @@ sub _crash_handler {
 
     my $msg = $_[0];
     chomp $msg;
-    &Log::do_log('err', 'DIED: %s', $msg);
+    &Sympa::Log::Syslog::do_log('err', 'DIED: %s', $msg);
     eval { Sympa::Site->send_notify_to_listmaster(undef, undef, undef, 1); };
     eval { SDM::db_disconnect(); };    # unlock database
     Sys::Syslog::closelog();           # flush log
