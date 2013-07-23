@@ -42,6 +42,7 @@ use Sympa::List;
 use Sympa::Lock;
 use Sympa::Log::Syslog;
 use Sympa::Robot;
+use Sympa::Tools;
 
 our $filename_regexp = '^(\S+)\.(\d+)\.\w+$';
 
@@ -591,7 +592,10 @@ sub refresh_spool_files_list {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
 		return undef;
 	}
-	my @qfile = sort tools::by_date grep {!/^\./ && -f "$self->{'dir'}/$_"} readdir(SPOOLDIR);
+	my @qfile =
+		sort Sympa::Tools::by_date
+		grep {!/^\./ && -f "$self->{'dir'}/$_"}
+		readdir(SPOOLDIR);
 	closedir(SPOOLDIR);
 	$self->{'spool_files_list'} = \@qfile;
 return 1;
@@ -611,7 +615,10 @@ sub refresh_spool_dirs_list {
 		Sympa::Log::Syslog::do_log('err','Unable to access %s spool. Please check proper rights are set;',$self->{'dir'});
 		return undef;
 	}
-	my @qdir = sort tools::by_date grep {!/^(\.\.|\.)$/ && -d "$self->{'dir'}/$_"} readdir(SPOOLDIR);
+	my @qdir =
+		sort Sympa::Tools::by_date
+		grep {!/^(\.\.|\.)$/ && -d "$self->{'dir'}/$_"}
+		readdir(SPOOLDIR);
 	closedir(SPOOLDIR);
 	$self->{'spool_dirs_list'} = \@qdir;
 return 1;
