@@ -157,12 +157,12 @@ sub get_content {
 	my $self = shift;
 	my $param = shift || {};
 	my $perlselector =
-	_perlselector($param->{'selector'}) ||
-	_perlselector($self->{'selector'}) ||
-	'1';
+		_perlselector($param->{'selector'}) ||
+		_perlselector($self->{'selector'}) ||
+		'1';
 	my $perlcomparator =
-	_perlcomparator($param->{'sortby'}, $param->{'way'}) ||
-	_perlcomparator($self->{'sortby'}, $self->{'way'});
+		_perlcomparator($param->{'sortby'}, $param->{'way'}) ||
+		_perlcomparator($self->{'sortby'}, $self->{'way'});
 	my $offset = $param->{'offset'} || 0;
 	my $page_size = $param->{'page_size'};
 
@@ -452,7 +452,7 @@ sub analyze_file_name {
 	$data->{'list'} = lc($data->{'list'});
 	$data->{'robot'} = lc($data->{'robot'});
 	return undef
-	unless $data->{'robot_object'} = Sympa::Robot->new($data->{'robot'});
+		unless $data->{'robot_object'} = Sympa::Robot->new($data->{'robot'});
 
 	my $listname;
 	#FIXME: is this always needed?
@@ -598,7 +598,7 @@ sub refresh_spool_files_list {
 		readdir(SPOOLDIR);
 	closedir(SPOOLDIR);
 	$self->{'spool_files_list'} = \@qfile;
-return 1;
+	return 1;
 }
 
 =item $spool->refresh_spool_dirs_list()
@@ -621,7 +621,7 @@ sub refresh_spool_dirs_list {
 		readdir(SPOOLDIR);
 	closedir(SPOOLDIR);
 	$self->{'spool_dirs_list'} = \@qdir;
-return 1;
+	return 1;
 }
 
 =item $spool->create_spool_dir()
