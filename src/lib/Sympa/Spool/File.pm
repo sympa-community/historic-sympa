@@ -269,8 +269,7 @@ sub get_content {
 sub get_count {
 	my $self = shift;
 	my $param = shift;
-	my @messages = $self->get_content($param);
-	return $#messages+1;
+	return scalar $self->get_content($param);
 }
 
 =item $spool->get_file_key($selector)
