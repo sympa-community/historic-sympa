@@ -15,7 +15,7 @@ use Test::Exception;
 
 use Sympa::Spool::File;
 
-plan tests => 17;
+plan tests => 18;
 
 my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
 
@@ -30,6 +30,15 @@ throws_ok {
 	);
 } qr/^missing dir parameter/,
 'missing dir parameter';
+
+throws_ok {
+	my $spool = Sympa::Spool::File->new(
+		name   => 'foo',
+		dir    => $temp_dir . '/foo',
+		status => 'foo'
+	);
+} qr/^invalid status parameter/,
+'invalid status parameter';
 
 POSIX::setlocale(LC_ALL, 'C');
 

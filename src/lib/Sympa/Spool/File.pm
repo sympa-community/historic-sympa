@@ -91,6 +91,11 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 
+	croak "invalid status parameter" if
+		$params{status} &&
+		$params{status} ne 'bad' &&
+		$params{status} ne 'ok';
+
 	croak "missing name parameter" unless $params{name};
 	croak "missing dir parameter" unless $params{dir};
 
