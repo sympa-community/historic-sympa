@@ -36,7 +36,7 @@ use warnings;
 
 use Carp qw(croak);
 use English qw(-no_match_vars);
-use File::Path qw(make_path remove_tree);
+use File::Path;
 
 use Sympa::List;
 use Sympa::Lock;
@@ -100,7 +100,7 @@ sub new {
 
 	unless (-d $params{dir}) {
 		# throws an exception in case of failure
-		make_path($params{dir});
+		File::Path::mkpath([$params{dir}]);
 	}
 
 	my $self = {
