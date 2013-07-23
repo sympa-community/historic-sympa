@@ -65,9 +65,9 @@ Parameters:
 
 =over
 
-=item C<spoolname> => string
+=item C<name> => string
 
-=item C<selection_status> => C<bad> | C<ok>
+=item C<status> => C<bad> | C<ok>
 
 =item C<dir> => string
 
@@ -89,17 +89,17 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 
-	if ($params{selection_status} and $params{selection_status} eq 'bad') {
+	if ($params{status} and $params{status} eq 'bad') {
 		$params{dir} .= '/bad';
 	}
 
 	my $self = {
-		'spoolname'        => $params{spoolname},
-		'selection_status' => $params{selection_status},
-		'dir'              => $params{dir},
-		'selector'         => $params{selector},
-		'sortby'           => $params{sortby},
-		'way'              => $params{way},
+		'name'     => $params{name},
+		'status'   => $params{status},
+		'dir'      => $params{dir},
+		'selector' => $params{selector},
+		'sortby'   => $params{sortby},
+		'way'      => $params{way},
 	};
 	bless $self, $class;
 
@@ -675,7 +675,7 @@ sub get_message {
 #    my $self = shift;
 #    my $messagekey = shift;
 #
-#    Sympa::Log::Syslog::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
+#    Sympa::Log::Syslog::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'name'}, $messagekey);
 #    return ( $self->update({'messagekey' => $messagekey},
 #			   {'messagelock' => 'NULL'}));
 #}
@@ -775,9 +775,9 @@ Clean a spool by removing old messages
 sub clean {
 	my $self = shift;
 	my $filter = shift;
-	Sympa::Log::Syslog::do_log('debug','Cleaning spool %s (%s), delay: %s',$self->{'spoolname'},$self->{'selection_status'},$filter->{'delay'});
+	Sympa::Log::Syslog::do_log('debug','Cleaning spool %s (%s), delay: %s',$self->{'name'},$self->{'status'},$filter->{'delay'});
 
-	return undef unless $self->{'spoolname'};
+	return undef unless $self->{'name'};
 	return undef unless $filter->{'delay'};
 
 	my $freshness_date = time - ($filter->{'delay'} * 60 * 60 * 24);
@@ -810,7 +810,7 @@ sub clean {
 		}
 	}
 
-	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$deleted,$filter->{'delay'},$self->{'spoolname'});
+	Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$deleted,$filter->{'delay'},$self->{'name'});
 	return 1;
 }
 
@@ -868,7 +868,7 @@ Get unique ID
 sub get_id {
 	my $self = shift;
 	return sprintf '%s/%s',
-	$self->{'spoolname'}, ($self->{'selection_status'} || 'ok');
+	$self->{'name'}, ($self->{'status'} || 'ok');
 }
 
 =back
