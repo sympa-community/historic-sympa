@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -53,7 +52,7 @@ sha1 or ....)
 
 =cut
 
-sub password_fingerprint{
+sub password_fingerprint {
 	my ($pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '');
 
@@ -89,6 +88,8 @@ password
 sub check_auth{
 	my ($robot, $auth, $pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $auth);
+	
+	$robot = Robot::clean_robot($robot);
 
 	my ($canonic, $user);
 
@@ -146,6 +147,8 @@ boolean
 sub may_use_sympa_native_auth {
 	my ($robot, $user_email) = @_;
 
+	$robot = Robot::clean_robot($robot);
+
 	my $ok = 0;
 	## check each auth.conf paragrpah
 	foreach my $auth_service (@{Site->auth_services{$robot}}){
@@ -169,6 +172,8 @@ FIXME.
 sub authentication {
 	my ($robot, $email, $pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $email);
+
+	$robot = Robot::clean_robot($robot);
 
 	my ($user,$canonic);
 
@@ -236,6 +241,8 @@ sub ldap_authentication {
 	my ($robot, $ldap, $auth, $pwd, $whichfilter) = @_;
 	Sympa::Log::Syslog::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
 	Sympa::Log::Syslog::do_log('debug3','Password used: %s',$pwd);
+
+	$robot = Robot::clean_robot($robot);
 
 	my ($mesg, $ldap_passwd,$ldap_anonymous);
 
@@ -378,8 +385,11 @@ Return value:
 
 =cut
 
+## NOTE: This might be moved to Robot package.
 sub get_email_by_net_id {
 	my ($robot, $auth_id, $attributes) = @_;
+
+	$robot = Robot::clean_robot($robot);
 
 	Sympa::Log::Syslog::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
@@ -389,7 +399,7 @@ sub get_email_by_net_id {
 
 		$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 
-		my $email = Sympa::List::get_netidtoemail_db($robot, $netid_cookie, Site->auth_services{$robot}[$auth_id]{'service_id'});
+		my $email = $robot->get_netidtoemail_db($netid_cookie, Site->auth_services{$robot}[$auth_id]{'service_id'});
 
 		return $email;
 	}
@@ -421,7 +431,7 @@ sub get_email_by_net_id {
 		Sympa::Log::Syslog::do_log('notice',"No entry in the Ldap Directory Tree of %s");
 		$ds->disconnect();
 		return undef;
-	}
+    }
 
 	$ds->disconnect();
 
@@ -458,6 +468,8 @@ return 1 or I<undef>.
 sub remote_app_check_password {
 	my ($trusted_application_name, $password, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$trusted_application_name,$robot);
+
+	$robot = Robot::clean_robot($robot);
 
 	my $md5 = Sympa::Tools::md5_fingerprint($password);
 
@@ -516,6 +528,8 @@ Return value:
 sub create_one_time_ticket {
 	my ($email,  $robot, $data_string, $remote_addr) = @_;
 
+	$robot = Robot::clean_robot($robot);
+
 	my $ticket = Sympa::Session->get_random();
 	Sympa::Log::Syslog::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
 
@@ -565,8 +579,10 @@ Return value:
 =cut
 
 sub get_one_time_ticket {
-	my ($ticket_number, $addr) = @_;
+	my ($robot, $ticket_number, $addr) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)',$ticket_number);
+
+	$robot = Robot::clean_robot($robot);
 
 	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(
@@ -577,15 +593,15 @@ sub get_one_time_ticket {
 			"date_one_time_ticket AS \"date\", "           .
 			"data_one_time_ticket AS data, "               .
 			"remote_addr_one_time_ticket AS remote_addr, " .
-			"status_one_time_ticket as status "            .
+			"status_one_time_ticket AS status "            .
 		"FROM one_time_ticket_table "                          .
-		"WHERE ticket_one_time_ticket=?",
+		"WHERE ticket_one_time_ticket=? AND robot_one_time_ticket = ?",
 	);
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
 		return {'result'=>'error'};
 	}
-	$handle->execute($ticket_number);
+	$handle->execute($ticket_number, $robot->domain);
 
 	my $ticket = $handle->fetchrow_hashref('NAME_lc');
 
@@ -599,25 +615,46 @@ sub get_one_time_ticket {
 		"%d %b %Y at %H:%M:%S", localtime($ticket->{'date'})
 	);
 
-	if ($ticket->{'status'} ne 'open') {
+    my $lockout = $robot->one_time_ticket_lockout || 'open';
+    my $lifetime = tools::duration_conv($robot->one_time_ticket_lifetime || 0);
+
+    if ($lockout eq 'one_time' and $ticket->{'status'} ne 'open') {
 		$result = 'closed';
-		Sympa::Log::Syslog::do_log('info','ticket %s from %s has been used before (%s)',$ticket_number,$ticket->{'email'},$printable_date);
-	}
-	elsif (time() - $ticket->{'date'} > 48 * 60 * 60) {
-		Sympa::Log::Syslog::do_log('info','ticket %s from %s refused because expired (%s)',$ticket_number,$ticket->{'email'},$printable_date);
+		Sympa::Log::Syslog::do_log('info', 'ticket %s from %s has been used before (%s)',
+			$ticket_number,
+			$ticket->{'email'},
+			$printable_date
+		);
+	} elsif ($lockout eq 'remote_addr' and $ticket->{'status'} ne $addr and $ticket->{'status'} ne 'open') {
+		$result = 'closed';
+		Sympa::Log::Syslog::do_log('info', 'ticket %s from %s refused because accessed by the other (%s)',
+			$ticket_number,
+			$ticket->{'email'},
+			$printable_date
+		);
+	} elsif ($lifetime and $ticket->{'date'} + $lifetime < time) {
+		Sympa::Log::Syslog::do_log('info', 'ticket %s from %s refused because expired (%s)',
+			$ticket_number,
+			$ticket->{'email'},
+			$printable_date
+		);
 		$result = 'expired';
 	} else {
 		$result = 'success';
 	}
-	my $rows = $base->execute_query(
-		"UPDATE one_time_ticket_table " .
-		"SET status_one_time_ticket=? " .
-		"WHERE ticket_one_time_ticket=?",
-		$addr,
-		$ticket_number
-	);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
+	
+	if ($result eq 'success') {
+		my $rows = $base->execute_query(
+			"UPDATE one_time_ticket_table " .
+			"SET status_one_time_ticket=? " .
+			"WHERE ticket_one_time_ticket=? AND robot_one_time_ticket = ?",
+			$addr,
+			$ticket_number,
+			$robot->domain
+		);
+		unless ($rows) {
+			Sympa::Log::Syslog::do_log('err','Unable to set one time ticket %s status to %s',$ticket_number, $addr);
+		}
 	}
 
 	Sympa::Log::Syslog::do_log('info', '(%s): result : %s',$ticket_number,$result);
