@@ -99,7 +99,9 @@ sub new {
 	croak "missing name parameter" unless $params{name};
 	croak "missing dir parameter" unless $params{dir};
 
-	if ($params{status} and $params{status} eq 'bad') {
+	$params{status} = 'ok' unless $params{status};
+
+	if ($params{status} eq 'bad') {
 		$params{dir} .= '/bad';
 	}
 
@@ -866,8 +868,7 @@ Get unique ID
 
 sub get_id {
 	my $self = shift;
-	return sprintf '%s/%s',
-	$self->{'name'}, ($self->{'status'} || 'ok');
+	return sprintf '%s/%s', $self->{'name'}, $self->{'status'};
 }
 
 =back
