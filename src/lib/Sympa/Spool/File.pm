@@ -179,7 +179,7 @@ sub get_content {
 	my $selection = $param->{'selection'} || '*';
 
 	my @messages;
-	foreach my $key ($self->get_files_in_spool) {
+	foreach my $key ($self->get_files_in_spool()) {
 		next unless $self->is_readable($key);
 		my $item = $self->parse_filename($key);
 		# We don't decide moving erroneous file to bad spool here, since it
@@ -291,7 +291,7 @@ sub next {
 		return undef;
 	}
 	return 0 unless($#{$self->{'spool_files_list'}} > -1);
-	return 0 unless $data = $self->get_next_file_to_process;
+	return 0 unless $data = $self->get_next_file_to_process();
 	unless ($self->parse_file_content($data->{'messagekey'}, $data)) {
 		$self->move_to_bad($data->{'messagekey'});
 		return undef;
@@ -778,7 +778,7 @@ sub clean {
 	my $freshness_date = time - ($filter->{'delay'} * 60 * 60 * 24);
 	my $deleted = 0;
 
-	my @to_kill = $self->get_files_in_spool;
+	my @to_kill = $self->get_files_in_spool();
 	foreach my $f (@to_kill) {
 		if ((stat "$self->{'dir'}/$f")[9] < $freshness_date) {
 			if (unlink ("$self->{'dir'}/$f") ) {
@@ -791,7 +791,7 @@ sub clean {
 			last;
 		}
 	}
-	@to_kill = $self->get_dirs_in_spool;
+	@to_kill = $self->get_dirs_in_spool();
 	foreach my $d (@to_kill) {
 		if ((stat "$self->{'dir'}/$d")[9] < $freshness_date) {
 			if (Sympa::Tools::File::remove_dir("$self->{'dir'}/$d") ) {
