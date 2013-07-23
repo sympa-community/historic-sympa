@@ -507,16 +507,7 @@ sub get_file_content {
 	my $self = shift;
 	my $key  = shift;
 
-	my $fh;
-	unless (open $fh, $self->{'dir'}.'/'.$key) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to open file %s: %s',
-			$self->{'dir'}.'/'.$key, $ERRNO);
-		return undef;
-	}
-	local $RS;
-	my $messageasstring = <$fh>;
-	close $fh;
-	return $messageasstring;
+	return Sympa::Tools::File::slurp_file($self->{'dir'}.'/'.$key);
 }
 
 =item $spool->lock_message($key)
