@@ -652,7 +652,7 @@ sub move_to_bad {
 		return undef;
 	}
 	unless (unlink ($self->{'dir'}.'/'.$key)) {
-		&Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$self->{'dir'}, $key);
+		Sympa::Log::Syslog::do_log('err',"Could not unlink message %s/%s . Exiting",$self->{'dir'}, $key);
 	}
 	$self->unlock_message($key);
 	return 1;
@@ -681,7 +681,7 @@ sub get_message {
 #    my $self = shift;
 #    my $messagekey = shift;
 #
-#    &Sympa::Log::Syslog::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
+#    Sympa::Log::Syslog::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
 #    return ( $self->update({'messagekey' => $messagekey},
 #			   {'messagelock' => 'NULL'}));
 #}
@@ -781,7 +781,7 @@ Clean a spool by removing old messages
 sub clean {
 	my $self = shift;
 	my $filter = shift;
-	&Sympa::Log::Syslog::do_log('debug','Cleaning spool %s (%s), delay: %s',$self->{'spoolname'},$self->{'selection_status'},$filter->{'delay'});
+	Sympa::Log::Syslog::do_log('debug','Cleaning spool %s (%s), delay: %s',$self->{'spoolname'},$self->{'selection_status'},$filter->{'delay'});
 
 	return undef unless $self->{'spoolname'};
 	return undef unless $filter->{'delay'};
