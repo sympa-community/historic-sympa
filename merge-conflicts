@@ -51,7 +51,6 @@ soap/sympa_soap_server-wrapper.fcgi.c
 soap/SympaTransport.pm
 soap/sympa.wsdl
 wwsympa/Auth.pm
-wwsympa/cookielib.pm
 wwsympa/icons
 wwsympa/Marc
 wwsympa/Marc.pm
