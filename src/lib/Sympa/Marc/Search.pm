@@ -316,8 +316,9 @@ sub search {
 	$limit += $previous;
 	foreach $file (@MSGFILES) {
 		my ($subj,$from,$date,$id,$body_ref);
-		unless (open FH, '<:utf8', $file) {
-#			$self->error("Couldn't open file $file, $ERRNO");
+		unless (open FH, '<:encoding(utf8)', $file)
+		{
+#			$self->error("Couldn't open file $file, $!");
 		}
 
 		# Need this loop because newer versions of MHonArc put a version
