@@ -35,6 +35,7 @@ use strict;
 use warnings;
 
 use Carp qw(croak);
+use English qw(-no_match_vars);
 use File::Path qw(make_path remove_tree);
 
 use Sympa::List;
@@ -188,8 +189,8 @@ sub get_content {
 			next;
 		}
 		my $cmp = eval $perlselector;
-		if ($@) {
-			Sympa::Log::Syslog::do_log('err', 'Failed to evaluate selector: %s', $@);
+		if ($EVAL_ERROR) {
+			Sympa::Log::Syslog::do_log('err', 'Failed to evaluate selector: %s', $EVAL_ERROR);
 			return undef;
 		}
 		next unless $cmp;
@@ -199,8 +200,8 @@ sub get_content {
 	# Sorting
 	if ($perlcomparator) {
 		my @sorted = eval sprintf 'sort { %s } @messages', $perlcomparator;
-		if ($@) {
-			Sympa::Log::Syslog::do_log('err', 'Could not sort messages: %s', $@);
+		if ($EVAL_ERROR) {
+			Sympa::Log::Syslog::do_log('err', 'Could not sort messages: %s', $EVAL_ERROR);
 		} else {
 			@messages = @sorted;
 		}
@@ -384,8 +385,8 @@ sub get_next_file_to_process {
 		next unless $item;
 
 		$cmp = eval $perlselector;
-		if ($@) {
-			Sympa::Log::Syslog::do_log('err', 'Failed to evaluate selector: %s', $@);
+		if ($EVAL_ERROR) {
+			Sympa::Log::Syslog::do_log('err', 'Failed to evaluate selector: %s', $EVAL_ERROR);
 			return undef;
 		}
 		next unless $cmp;
@@ -396,8 +397,8 @@ sub get_next_file_to_process {
 		}
 		my ($a, $b) = ($data, $item);
 		$cmp = eval $perlcomparator;
-		if ($@) {
-			Sympa::Log::Syslog::do_log('err', 'Could not compare messages: %s', $@);
+		if ($EVAL_ERROR) {
+			Sympa::Log::Syslog::do_log('err', 'Could not compare messages: %s', $EVAL_ERROR);
 			return $data;
 		}
 		if ($cmp > 0) {
@@ -509,10 +510,10 @@ sub get_file_content {
 	my $fh;
 	unless (open $fh, $self->{'dir'}.'/'.$key) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to open file %s: %s',
-			$self->{'dir'}.'/'.$key, $!);
+			$self->{'dir'}.'/'.$key, $ERRNO);
 		return undef;
 	}
-	local $/;
+	local $RS;
 	my $messageasstring = <$fh>;
 	close $fh;
 	return $messageasstring;
@@ -649,7 +650,8 @@ sub move_to_bad {
 		make_path($self->{'dir'}.'/bad');
 	}
 	unless(File::Copy::copy($self->{'dir'}.'/'.$key, $self->{'dir'}.'/bad/'.$key)) {
-		Sympa::Log::Syslog::do_log('err','Could not move file %s to spool bad %s: %s',$self->{'dir'}.'/'.$key,$self->{'dir'}.'/bad',$!);
+		Sympa::Log::Syslog::do_log('err','Could not move file %s to
+			spool bad %s: %s',$self->{'dir'}.'/'.$key,$self->{'dir'}.'/bad',$ERRNO);
 		return undef;
 	}
 	unless (unlink ($self->{'dir'}.'/'.$key)) {
@@ -767,7 +769,7 @@ sub remove_message {
 
 	unless (unlink $self->{'dir'}.'/'.$key) {
 		Sympa::Log::Syslog::do_log('err',
-			'Unable to remove file %s: %s', $self->{'dir'}.'/'.$key, $!);
+			'Unable to remove file %s: %s', $self->{'dir'}.'/'.$key, $ERRNO);
 		return undef;
 	}
 	return 1;
@@ -797,7 +799,7 @@ sub clean {
 				$deleted++;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$self->{'dir'}/$f");
 			}else{
-				Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$f",$!);
+				Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$f",$ERRNO);
 			}
 		}else{
 			last;
@@ -810,7 +812,7 @@ sub clean {
 				$deleted++;
 				Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$self->{'dir'}/$d");
 			}else{
-				Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$d",$!);
+				Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$d",$ERRNO);
 			}
 		}else{
 			last;
