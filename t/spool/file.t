@@ -14,9 +14,14 @@ use Test::Exception;
 
 use Sympa::Spool::File;
 
-plan tests => 12;
+plan tests => 13;
 
 my $temp_dir = File::Temp->newdir(CLEANUP => $ENV{TEST_DEBUG} ? 0 : 1);
+
+throws_ok {
+	my $spool = Sympa::Spool::File->new();
+} qr/^missing name parameter/,
+'missing name parameter';
 
 my $ok_spool_dir = $temp_dir . '/foo';
 

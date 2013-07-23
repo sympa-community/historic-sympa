@@ -89,6 +89,8 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 
+	croak "missing name parameter" unless $params{name};
+
 	if ($params{status} and $params{status} eq 'bad') {
 		$params{dir} .= '/bad';
 	}
@@ -777,7 +779,6 @@ sub clean {
 	my $filter = shift;
 	Sympa::Log::Syslog::do_log('debug','Cleaning spool %s (%s), delay: %s',$self->{'name'},$self->{'status'},$filter->{'delay'});
 
-	return undef unless $self->{'name'};
 	return undef unless $filter->{'delay'};
 
 	my $freshness_date = time - ($filter->{'delay'} * 60 * 60 * 24);
