@@ -540,7 +540,7 @@ sub unlock_message {
 	my $self = shift;
 	my $key  = shift;
 
-	unless(ref($self->{'lock'}) and $self->{'lock'}->isa('Sympa::Lock')) {
+	unless($self->{'lock'}) {
 		delete $self->{'lock'};
 		return undef;
 	}
