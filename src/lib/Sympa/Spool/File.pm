@@ -90,6 +90,7 @@ sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 
 	croak "missing name parameter" unless $params{name};
+	croak "missing dir parameter" unless $params{dir};
 
 	if ($params{status} and $params{status} eq 'bad') {
 		$params{dir} .= '/bad';
