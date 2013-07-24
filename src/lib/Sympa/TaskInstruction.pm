@@ -55,112 +55,115 @@ our $var_regexp ='@\w+';
 our $subarg_regexp = '(\w+)(|\((.*)\))'; # for argument with sub argument (ie arg(sub_arg))
                  
 # regular commands
-our %commands = ('next'          		=>	{
-											'args' =>['date', '\w*'],
-													# date   label
-											'sub' => \&next_cmd,
-											},
-                'stop'                  =>	{
-											'args' => [],
-											'sub' => \&stop,
-											},
-				'create'                =>	{
-											'args' => ['subarg', '\w+', '\w+'],
-														#object    model  model choice
-											'sub' => \&create_cmd,
-											},
-				'exec'                  =>	{
-											'args' => ['.+'],
-													#script
-											'sub' => \&exec_cmd,
-											},
-				'update_crl'            =>	{
-											'args' => ['\w+', 'date'], 
-														#file    #delay
-											'sub' => \&update_crl,
-											},
-				'expire_bounce'         =>	{
-											'args' => ['\d+'],
-													#Number of days (delay)
-											'sub' => \&expire_bounce,
-											},
-				'chk_cert_expiration'   =>	{
-											'args' => ['\w+', 'date'],
-														#template  date
-											'sub' => \&chk_cert_expiration,
-											},
-				'sync_include'          =>	{
-											'args' => [],
-											'sub' => \&sync_include,
-											},
-				'purge_user_table'      =>	{
-											'args' => [],
-											'sub' => \&purge_user_table,
-											},
-				'purge_logs_table'      =>	{
-											'args' => [],
-											'sub' => \&purge_logs_table,
-											},
-				'purge_session_table'   =>	{
-											'args' => [],
-											'sub' => \&purge_session_table,
-											},
-				'purge_tables'   		=>	{
-											'args' => [],
-											'sub' => \&purge_tables,
-											},
-				'purge_one_time_ticket_table'   =>	{
-											'args' => [],
-											'sub' => \&purge_one_time_ticket_table,
-											},
-				'purge_orphan_bounces'  =>	{
-											'args' => [],
-											'sub' => \&purge_orphan_bounces,
-											},
-				'eval_bouncers'         =>	{
-											'args' => [],
-											'sub' => \&eval_bouncers,
-											},
-				'process_bouncers'      =>	{
-											'args' => [],
-											'sub' => \&process_bouncers,
-											},
-		);
+our %commands = (
+	'next' => {
+		'args' =>['date', '\w*'],
+		# date   label
+		'sub' => \&next_cmd,
+	},
+	'stop' => {
+		'args' => [],
+		'sub' => \&stop,
+	},
+	'create' => {
+		'args' => ['subarg', '\w+', '\w+'],
+		#object    model  model choice
+		'sub' => \&create_cmd,
+	},
+	'exec' => {
+		'args' => ['.+'],
+		#script
+		'sub' => \&exec_cmd,
+	},
+	'update_crl' => {
+		'args' => ['\w+', 'date'], 
+		#file    #delay
+		'sub' => \&update_crl,
+	},
+	'expire_bounce' => {
+		'args' => ['\d+'],
+		#Number of days (delay)
+		'sub' => \&expire_bounce,
+	},
+	'chk_cert_expiration' => {
+		'args' => ['\w+', 'date'],
+		#template  date
+		'sub' => \&chk_cert_expiration,
+	},
+	'sync_include' => {
+		'args' => [],
+		'sub' => \&sync_include,
+	},
+	'purge_user_table' => {
+		'args' => [],
+		'sub' => \&purge_user_table,
+	},
+	'purge_logs_table' => {
+		'args' => [],
+		'sub' => \&purge_logs_table,
+	},
+	'purge_session_table' => {
+		'args' => [],
+		'sub' => \&purge_session_table,
+	},
+	'purge_tables' => {
+		'args' => [],
+		'sub' => \&purge_tables,
+	},
+	'purge_one_time_ticket_table' => {
+		'args' => [],
+		'sub' => \&purge_one_time_ticket_table,
+	},
+	'purge_orphan_bounces' => {
+		'args' => [],
+		'sub' => \&purge_orphan_bounces,
+	},
+	'eval_bouncers' => {
+		'args' => [],
+		'sub' => \&eval_bouncers,
+	},
+	'process_bouncers' => {
+		'args' => [],
+		'sub' => \&process_bouncers,
+	},
+);
 
 # commands which use a variable. If you add such a command, the first parameter must be the variable
-our %var_commands = ('delete_subs'      =>	{
-											'args' => ['var'],
-													# variable 
-											'sub' => \&delete_subs_cmd,
-											},
-					'send_msg'         =>	{
-											'args' => ['var',  '\w+' ],
-													#variable template
-											'sub' => \&send_msg,
-											},
-					'rm_file'          =>	{
-											'args' => ['var'],
-													# variable
-											'sub' => \&rm_file,
-											},
-		    );
+our %var_commands = (
+	'delete_subs' => {
+		'args' => ['var'],
+		# variable 
+		'sub' => \&delete_subs_cmd,
+	},
+	'send_msg' => {
+		'args' => ['var',  '\w+' ],
+		#variable template
+		'sub' => \&send_msg,
+	},
+	'rm_file' => {
+		'args' => ['var'],
+		# variable
+		'sub' => \&rm_file,
+	},
+);
 
 foreach (keys %var_commands) {
     $commands{$_} = $var_commands{$_};
 }
 
 # commands which are used for assignments
-our %asgn_commands = ('select_subs'      =>	{
-											'args' => ['subarg'],
-													# condition
-											'sub' => \&select_subs,
-											},
-					'delete_subs'      =>	{
-											'args' => ['var'],
-													# variable
-											'sub' => \&delete_subs_cmd,
-											},
-		     );
+our %asgn_commands = (
+	'select_subs' => {
+		'args' => ['subarg'],
+		# condition
+		'sub' => \&select_subs,
+	},
+	'delete_subs' => {
+		'args' => ['var'],
+		# variable
+		'sub' => \&delete_subs_cmd,
+	},
+);
 
 foreach (keys %asgn_commands) {
     $commands{$_} = $asgn_commands{$_};
