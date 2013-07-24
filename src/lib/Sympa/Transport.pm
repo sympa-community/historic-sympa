@@ -34,31 +34,32 @@ sub request {
 	if (my $request = $_[0]) {
 
 		## Select appropriate robot
-		if (Site->robot_by_soap_url{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
-			$ENV{'SYMPA_ROBOT'} = Site->robot_by_soap_url{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
+		if (Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
+			$ENV{'SYMPA_ROBOT'} = Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-			$ENV{'SYMPA_ROBOT'} =  Site->host;
+			$ENV{'SYMPA_ROBOT'} =  Site->domain;
 		}
 
-		## Empty cache of the List.pm module
-		Sympa::List::init_list_cache();
-
+		## Empty list cache of the robot
+		my $robot = Robot->new($ENV{'SYMPA_ROBOT'});
+		&List::init_list_cache(); 	30	$robot->init_list_cache();
+		
 		my $session;
 		## Existing session or new one
 		if (Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})) {
 			$session = Sympa::Session->new(
-				robot   => $ENV{SYMPA_ROBOT},
+				robot   => $ENV{'SYMPA_ROBOT'},
 				context => {
-					cookie => Sympa::Session->get_session_cookie($ENV{HTTP_COOKIE})
+					cookie => Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})
 				},
 				crawlers => Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
 			);
 		} else {
 			$session = Sympa::Session->new(
-				robot    => $ENV{SYMPA_ROBOT},
+				robot    => $ENV{'SYMPA_ROBOT'},
 				context  => {},
 				crawlers => Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
@@ -84,7 +85,7 @@ sub response {
 
 	if (my $response = $_[0]) {
 		if (defined $ENV{'SESSION_ID'}) {
-			my $expire = $main::param->{'user'}{'cookie_delay'} || $main::wwsconf->{'cookie_expire'};
+			my $expire = $main::param->{'user'}{'cookie_delay'} || Site->cookie_expire;
 			my $cookie = Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
 
 			$response->headers->push_header('Set-Cookie2' => $cookie);
