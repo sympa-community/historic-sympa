@@ -37,8 +37,6 @@ use Carp qw(carp croak);
 
 use Sympa::Log::Syslog;
 
-#use Site; # this module is used in Site
-
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
 
