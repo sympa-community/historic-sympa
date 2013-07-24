@@ -75,22 +75,13 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', $params{name});
 
-	croak "invalid status parameter" if
-		$params{status} &&
-		$params{status} ne 'bad' &&
-		$params{status} ne 'ok';
-
 	croak "missing base parameter" unless $params{base};
 	croak "invalid base parameter" unless
 		$params{base}->isa('Sympa::Database');
 
-	my $self = {
-		name   => $params{name},
-		status => $params{status},
-		base   => $params{base}
-	};
+	my $self = $class->SUPER::new(%params);
 
-	bless $self, $class;
+	$self->{base} = $params{base};
 
 	return $self;
 }
