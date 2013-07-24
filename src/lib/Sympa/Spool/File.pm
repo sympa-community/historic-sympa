@@ -33,7 +33,6 @@ package Sympa::Spool::File;
 
 use strict;
 use warnings;
-use base qw(Sympa::Spool);
 
 use Carp qw(croak);
 use English qw(-no_match_vars);
@@ -92,7 +91,15 @@ sub new {
 	my ($class, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 
+	croak "invalid status parameter" if
+		$params{status} &&
+		$params{status} ne 'bad' &&
+		$params{status} ne 'ok';
+
+	croak "missing name parameter" unless $params{name};
 	croak "missing dir parameter" unless $params{dir};
+
+	$params{status} = 'ok' unless $params{status};
 
 	if ($params{status} eq 'bad') {
 		$params{dir} .= '/bad';
@@ -106,12 +113,15 @@ sub new {
 		File::Path::mkpath([$params{dir}]);
 	}
 
-	my $self = $class->SUPER::new(%params);
-
-	$self->{dir}      = $params{dir};
-	$self->{selector} = $params{selector};
-	$self->{sortby}   = $params{sortby};
-	$self->{way}      = $params{way};
+	my $self = {
+		'name'     => $params{name},
+		'status'   => $params{status},
+		'dir'      => $params{dir},
+		'selector' => $params{selector},
+		'sortby'   => $params{sortby},
+		'way'      => $params{way},
+	};
+	bless $self, $class;
 
 	Sympa::Log::Syslog::do_log(
 		'debug3',
