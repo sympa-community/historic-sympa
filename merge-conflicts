@@ -35,11 +35,8 @@
    C src/lib/tracking.pm
    C src/lib/Scenario.pm
    C src/lib/PlainDigest.pm
-   C src/familyqueue.c
    C src/sympa.pl.in
    C src/sympa_wizard.pl.in
-   C src/virtualwrapper.c
-   C src/aliaswrapper.c
    C src/etc/script
    C src/task_manager.pl.in
    C src/bulk.pl.in
@@ -47,7 +44,6 @@ soap/sampleClient.php
 soap/sympa_soap_client.pl.in
 soap/sympasoap.pm
 soap/sympa_soap_server.fcgi.in
-soap/sympa_soap_server-wrapper.fcgi.c
 soap/SympaTransport.pm
 soap/sympa.wsdl
 wwsympa/SympaSession.pm
