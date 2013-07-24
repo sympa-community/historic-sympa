@@ -72,7 +72,7 @@ NOTE: To load entire robots config, use C<Robot::get_robots('force_reload' =E<gt
 =cut
 
 sub load {
-	&Sympa::Log::Syslog::do_log('debug2', '(%s, ...)', @_);
+	Sympa::Log::Syslog::do_log('debug2', '(%s, ...)', @_);
 
 	## NOTICE: Don't use accessors like "$self->etc" but "$self->{'etc'}",
 	## since the object has not been fully initialized yet.
@@ -82,7 +82,7 @@ sub load {
 
 	if (ref $self and ref $self eq 'Robot') {
 		unless ($self->{'name'} and $self->{'etc'}) {
-			&Sympa::Log::Syslog::do_log('err', 'object %s has not been initialized', $self);
+			Sympa::Log::Syslog::do_log('err', 'object %s has not been initialized', $self);
 			return undef;
 		}
 		$opts{'config_file'} = $self->{'etc'} . '/robot.conf';
@@ -300,7 +300,7 @@ Genererate a md5 checksum using private cookie and parameters
 =cut
 
 sub compute_auth {
-	&Sympa::Log::Syslog::do_log('debug3', '(%s, %s, %s)', @_);
+	Sympa::Log::Syslog::do_log('debug3', '(%s, %s, %s)', @_);
 	my $self  = shift;
 	my $email = lc(shift || '');
 	my $cmd   = lc(shift || '');
@@ -355,7 +355,7 @@ OUT : 1 | undef
 =cut
 
 sub request_auth {
-	&Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', @_);
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', @_);
 	my $self  = shift;
 	my $email = shift;
 	my $cmd   = shift;
@@ -415,7 +415,7 @@ sub request_auth {
 	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	$data->{'auto_submitted'}  = 'auto-replied';
 	unless ($self->send_file('request_auth', $email, $data)) {
-		&Sympa::Log::Syslog::do_log('notice', 'Unable to send template "request_auth" to %s',
+		Sympa::Log::Syslog::do_log('notice', 'Unable to send template "request_auth" to %s',
 			$email);
 		return undef;
 	}
@@ -681,7 +681,7 @@ sub send_dsn {
 	my $diag    = shift || '';
 
 	unless (ref $message and ref $message eq 'Message') {
-		&Sympa::Log::Syslog::do_log('err', 'object %s is not Message', $message);
+		Sympa::Log::Syslog::do_log('err', 'object %s is not Message', $message);
 		return undef;
 	}
 
@@ -690,7 +690,7 @@ sub send_dsn {
 		## Won't reply to message with null envelope sender.
 		return 0 if $sender eq '<>';
 	} elsif (!defined($sender = $message->{'sender'})) {
-		&Sympa::Log::Syslog::do_log('err', 'no sender found');
+		Sympa::Log::Syslog::do_log('err', 'no sender found');
 		return undef;
 	}
 
@@ -778,7 +778,7 @@ sub send_dsn {
 			}
 		)
 	) {
-		&Sympa::Log::Syslog::do_log('err', 'Unable to send DSN to %s', $sender);
+		Sympa::Log::Syslog::do_log('err', 'Unable to send DSN to %s', $sender);
 		return undef;
 	}
 
@@ -832,7 +832,7 @@ OUT : 1 | undef
 ## i.e. Sympa::Site->send_file(), $robot->send_file() and $list->send_file().
 
 sub send_file {
-	&Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s, ...)', @_);
 	my $self    = shift;
 	my $tpl     = shift;
 	my $who     = shift;
@@ -867,7 +867,7 @@ sub send_file {
 		!scalar @$who or
 		!ref $who and
 		!length $who) {
-		&Sympa::Log::Syslog::do_log('err', 'No recipient for sending %s', $tpl);
+		Sympa::Log::Syslog::do_log('err', 'No recipient for sending %s', $tpl);
 		return undef;
 	}
 
@@ -961,7 +961,7 @@ sub send_file {
 	my $filename = &tools::find_file($tpl . '.tt2', @path);
 
 	unless (defined $filename) {
-		&Sympa::Log::Syslog::do_log('err', 'Could not find template %s.tt2 in %s',
+		Sympa::Log::Syslog::do_log('err', 'Could not find template %s.tt2 in %s',
 			$tpl, join(':', @path));
 		return undef;
 	}
@@ -1100,7 +1100,7 @@ OUT : 1 | undef
 ## Sympa::Site->send_notify_to_listmaster() and $robot->send_notify_to_listmaster().
 
 sub send_notify_to_listmaster {
-	&Sympa::Log::Syslog::do_log('debug2', '(%s, %s, ...)', @_);
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, ...)', @_);
 	my $self       = shift;
 	my $operation  = shift;
 	my $data       = shift;
@@ -1149,7 +1149,7 @@ sub send_notify_to_listmaster {
 				my %messages =
 				%{$listmaster_messages_stack{$robot_id}{$operation}
 				{'messages'}};
-				&Sympa::Log::Syslog::do_log(
+				Sympa::Log::Syslog::do_log(
 					'info', 'got messages about "%s" (%s)',
 					$operation, join(', ', keys %messages)
 				);
@@ -1186,7 +1186,7 @@ sub send_notify_to_listmaster {
 					}
 				}
 
-				&Sympa::Log::Syslog::do_log('info', 'cleaning stacked notifications');
+				Sympa::Log::Syslog::do_log('info', 'cleaning stacked notifications');
 				delete $listmaster_messages_stack{$robot_id}{$operation};
 			}
 		}
@@ -1205,13 +1205,13 @@ sub send_notify_to_listmaster {
 	}
 
 	unless (defined $operation) {
-		&Sympa::Log::Syslog::do_log('err', 'Missing incoming parameter "$operation"');
+		Sympa::Log::Syslog::do_log('err', 'Missing incoming parameter "$operation"');
 		return undef;
 	}
 
 	unless ($operation eq 'logs_failed') {
 		unless (defined $robot_id) {
-			&Sympa::Log::Syslog::do_log('err', 'Missing incoming parameter "$robot_id"');
+			Sympa::Log::Syslog::do_log('err', 'Missing incoming parameter "$robot_id"');
 			return undef;
 		}
 	}
@@ -1262,7 +1262,7 @@ sub send_notify_to_listmaster {
 		## Automatic action done on bouncing adresses
 		delete $data->{'alarm'};
 		unless (defined $list and ref $list eq 'List') {
-			&Sympa::Log::Syslog::do_log('err', 'Parameter %s is not a valid list', $list);
+			Sympa::Log::Syslog::do_log('err', 'Parameter %s is not a valid list', $list);
 			return undef;
 		}
 		unless (
@@ -1319,7 +1319,7 @@ sub send_notify_to_listmaster {
 		$self->send_file('listmaster_notification', $ts->{'email'},
 			$ts->{'data'}, $options);
 		if ($stack) {
-			&Sympa::Log::Syslog::do_log('info', 'stacking message about "%s" for %s (%s)',
+			Sympa::Log::Syslog::do_log('info', 'stacking message about "%s" for %s (%s)',
 				$operation, $ts->{'email'}, $robot_id);
 			## stack robot object and parsed message.
 			push @{$listmaster_messages_stack{$robot_id}{$operation}
