@@ -43,7 +43,6 @@
 soap/sampleClient.php
 soap/sympa_soap_client.pl.in
 soap/sympasoap.pm
-soap/sympa.wsdl
 wwsympa/SympaSession.pm
 wwsympa/wwslib.pm
 wwsympa/wwsympa.fcgi.in
