@@ -38,6 +38,8 @@ use base qw(Sympa::Site_r);
 
 use Carp qw(croak carp);
 
+use Sympa::Log::Syslog;
+
 ####
 #### global variables
 ####
