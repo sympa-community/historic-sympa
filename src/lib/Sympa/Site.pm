@@ -134,7 +134,7 @@ sub AUTOLOAD {
 	*{$AUTOLOAD} = sub {
 		my $self = shift;
 
-		if (ref $self and ref $self eq 'Robot') {
+		if (ref $self and ref $self eq 'Sympa::Robot') {
 			if ($type->{'RobotAttribute'}) {
 				## getter for list attributes.
 				croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
@@ -197,7 +197,7 @@ sub lang {
 	my $lang;
 
 	croak "Can't modify \"lang\" attribute" if scalar @_ > 1;
-	if (ref $self and ref $self eq 'Robot' and
+	if (ref $self and ref $self eq 'Sympa::Robot' and
 		$self->{'etc'} ne Sympa::Site->etc and
 		exists Sympa::Site->robots_config->{$self->{'name'}}{'lang'}) {
 		$lang = Sympa::Site->robots_config->{$self->{'name'}}{'lang'};
@@ -243,7 +243,7 @@ sub listmasters {
 	my $self = shift;
 
 	croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
-	if (ref $self and ref $self eq 'Robot') {
+	if (ref $self and ref $self eq 'Sympa::Robot') {
 		if (wantarray) {
 			@{Sympa::Site->robots_config->{$self->domain}{'listmasters'} || []};
 		} else {

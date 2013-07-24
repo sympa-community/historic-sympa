@@ -895,7 +895,7 @@ sub get_robots {
 		next unless -d $vhost_etc;
 		next unless -f $vhost_etc . '/robot.conf';
 
-		if ($robot = Robot->new($name, %options)) {
+		if ($robot = Sympa::Robot->new($name, %options)) {
 			$got_default = 1 if $robot->domain eq Sympa::Site->domain;
 			push @robots, $robot;
 			delete $orphan{$robot->domain};
@@ -904,7 +904,7 @@ sub get_robots {
 	closedir $dir;
 
 	unless ($got_default) {
-		if ($robot = Robot->new(Sympa::Site->domain, %options)) {
+		if ($robot = Sympa::Robot->new(Sympa::Site->domain, %options)) {
 			push @robots, $robot;
 			delete $orphan{$robot->domain};
 		}

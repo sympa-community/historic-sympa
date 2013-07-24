@@ -65,7 +65,7 @@ do not change global hash %Conf if 'return_result' option is set;
 
 ##we known that's dirty, this proc should be rewritten without this global var %Conf
 
-NOTE: To load entire robots config, use C<Robot::get_robots('force_reload' =E<gt> 1)>.
+NOTE: To load entire robots config, use C<Sympa::Robot::get_robots('force_reload' =E<gt> 1)>.
 
 =back
 
@@ -80,7 +80,7 @@ sub load {
 	my $self = shift;
 	my %opts = @_;
 
-	if (ref $self and ref $self eq 'Robot') {
+	if (ref $self and ref $self eq 'Sympa::Robot') {
 		unless ($self->{'name'} and $self->{'etc'}) {
 			Sympa::Log::Syslog::do_log('err', 'object %s has not been initialized', $self);
 			return undef;
@@ -160,7 +160,7 @@ sub get_address {
 		} elsif ($type eq 'unsubscribe') {
 			return $self->name . '-unsubscribe' . '@' . $self->host;
 		}
-	} elsif (ref $self and ref $self eq 'Robot' or $self eq 'Sympa::Site') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot' or $self eq 'Sympa::Site') {
 		unless ($type) {
 			return $self->email . '@' . $self->host;
 		} elsif ($type eq 'sympa') {    # same as above, for convenience
@@ -201,7 +201,7 @@ sub is_listmaster {
 	my $who = tools::clean_email(shift || '');
 	return 0 unless $who;
 
-	if (ref $self and ref $self eq 'Robot') {
+	if (ref $self and ref $self eq 'Sympa::Robot') {
 		foreach my $listmaster (($self->listmasters,)) {
 			return 1 if $listmaster eq $who;
 		}
@@ -252,9 +252,9 @@ sub best_language {
 	my @langs = ();
 	my $lang;
 
-	if (ref $self eq 'List') {
+	if (ref $self eq 'Sympa::List') {
 		@supported_languages = $self->robot->supported_languages;
-	} elsif (ref $self eq 'Robot' or !ref $self and $self eq 'Sympa::Site') {
+	} elsif (ref $self eq 'Sympa::Robot' or !ref $self and $self eq 'Sympa::Site') {
 		@supported_languages = $self->supported_languages;
 	} else {
 		croak 'bug in logic.  Ask developer';
@@ -264,12 +264,12 @@ sub best_language {
 	$lang = $self->lang;
 	push @langs, $lang
 	if $supported_languages{$lang};
-	if (ref $self eq 'List') {
+	if (ref $self eq 'Sympa::List') {
 		$lang = $self->robot->lang;
 		push @langs, $lang
 		if $supported_languages{$lang} and !grep { $_ eq $lang } @langs;
 	}
-	if (ref $self eq 'List' or ref $self eq 'Robot') {
+	if (ref $self eq 'Sympa::List' or ref $self eq 'Sympa::Robot') {
 		$lang = Sympa::Site->lang;
 		push @langs, $lang
 		if $supported_languages{$lang} and !grep { $_ eq $lang } @langs;
@@ -309,7 +309,7 @@ sub compute_auth {
 
 	if (ref $self and ref $self eq 'List') {
 		$listname = $self->name;
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		## Method excluded from inheritance chain
 		croak sprintf 'Can\'t locate object method "%s" via package "%s"',
 		'compute_auth', ref $self;
@@ -398,7 +398,7 @@ sub request_auth {
 			$data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
 			$data->{'type'}    = 'invite';
 		}
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		## Method excluded from inheritance chain
 		croak sprintf 'Can\'t locate object method "%s" via package "%s"',
 		'request_auth', ref $self;
@@ -452,9 +452,9 @@ sub get_etc_filename {
 	my $name    = shift;
 	my $options = shift || {};
 
-	unless (ref $self eq 'List' or
-		ref $self eq 'Family' or
-		ref $self eq 'Robot'  or
+	unless (ref $self eq 'Sympa::List' or
+		ref $self eq 'Sympa::Family' or
+		ref $self eq 'Sympa::Robot'  or
 		$self     eq 'Sympa::Site') {
 		croak 'bug in logic.  Ask developer';
 	}
@@ -605,7 +605,7 @@ sub _get_etc_include_path {
 		} else {
 			unshift @include_path, $path_family;
 		}
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		my $path_robot;
 		@include_path = Sympa::Site->_get_etc_include_path(@_);
 
@@ -695,10 +695,10 @@ sub send_dsn {
 	}
 
 	my $recipient = '';
-	if (ref $self and ref $self eq 'List') {
+	if (ref $self and ref $self eq 'Sympa::List') {
 		$recipient = $self->get_address;
 		$status ||= '5.1.1';
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		if ($param->{'listname'}) {
 			if ($param->{'function'}) {
 				$recipient = sprintf '%s-%s@%s', $param->{'listname'},
@@ -840,12 +840,12 @@ sub send_file {
 	my $options = shift || {};
 
 	my ($robot, $list, $robot_id, $listname);
-	if (ref $self and ref $self eq 'List') {
+	if (ref $self and ref $self eq 'Sympa::List') {
 		$robot    = $self->robot;
 		$list     = $self;
 		$robot_id = $self->robot->name;
 		$listname = $self->name;
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		$robot    = $self;
 		$list     = '';
 		$robot_id = $self->name;
@@ -1112,7 +1112,7 @@ sub send_notify_to_listmaster {
 		## Method excluded from inheritance chain
 		croak sprintf 'Can\'t locate object method "%s" via package "%s"',
 		'send_notify_to_listmaster', ref $self;
-	} elsif (ref $self and ref $self eq 'Robot') {
+	} elsif (ref $self and ref $self eq 'Sympa::Robot') {
 		$robot_id = $self->name;
 	} elsif ($self eq 'Sympa::Site') {
 		$robot_id = '*';
@@ -1126,7 +1126,7 @@ sub send_notify_to_listmaster {
 			if (!$robot_id or $robot_id eq '*') {
 				$robot = 'Sympa::Site';
 			} else {
-				$robot = Robot->new($robot_id);
+				$robot = Sympa::Robot->new($robot_id);
 			}
 
 			foreach
