@@ -4,7 +4,7 @@
 
 =head1 NAME
 
-Sympa::Robot - Virtual robot object
+Sympa::Robot - Robot of mailing list service
 
 =head1 DESCRIPTION
 
@@ -31,26 +31,17 @@ use overload
 
 =encoding utf-8
 
-=head1 NAME
+=head2 CLASS METHODS
 
-Robot - robot of mailing list service
+=over
 
-=head1 DESCRIPTION
-
-=head2 CONSTRUCTOR AND INITIALIZER
-
-=over 4
-
-=item new( NAME, [ OPTIONS ] )
+=item Sympa::Robot->new( NAME, [ OPTIONS ] )
 
 Creates a new object named as NAME.
 Returns a Robot object, or undef on errors.
 
-=back
-
 =cut
 
-## Constructor of a Robot instance
 sub new {
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s, ...)', @_);
 	my ($class, %params) = @_;
@@ -89,9 +80,13 @@ sub new {
 	return $robot;
 }
 
+=back
+
+=head2 INSTANCE METHODS
+
 =over 4
 
-=item load ( NAME, [ KEY => VAL, ... ] )
+=item $robot->load ( NAME, [ KEY => VAL, ... ] )
 
 Loads the indicated robot into the object.
 
@@ -107,8 +102,6 @@ The name C<'*'> (it is the default) indicates default robot.
 
 Note: To load site default, use C<Site-E<gt>load()>.
 See also L<Site/load>.
-
-=back
 
 =cut
 
@@ -204,28 +197,14 @@ sub load {
 	return 1;
 }
 
-=head2 METHODS
-
-=over 4
-
-=item get_address ( [ TYPE ] )
+=item $robot->get_address ( [ TYPE ] )
 
 Returns the robot email address.
 See L<Site/get_address>.
 
-=back
-
-=cut
-
-##Inherited from Site class.
-
-=over 4
-
-=item get_id
+=item $robot->get_id()
 
 Get unique name of robot.
-
-=back
 
 =cut
 
@@ -234,23 +213,21 @@ sub get_id {
 	shift->{'name'} || '';
 }
 
-=over 4
-
-=item is_listmaster
+=item $robot->is_listmaster()
 
 See L<Site/is_listmaster>.
 
-=item get_etc_include_path
+=item $robot->get_etc_include_path()
 
 make an array of include path for tt2 parsing.
 See L<Site/get_etc_include_path>.
 
-=item send_dsn
+=item $robot->send_dsn()
 
 Sends an delivery status notification (DSN).
 See L<Site/send_dsn>.
 
-=item send_file ( ... )
+=item $robot->send_file ( ... )
 
 Send a global (not relative to a list, but relative to a robot)
 message to user(s).
@@ -258,7 +235,7 @@ See L<Site/send_file>.
 
 Note: List::send_global_file() was deprecated.
 
-=item send_notify_to_listmaster ( OPERATION, DATA, CHECKSTACK, PURGE )
+=item $robot->send_notify_to_listmaster ( OPERATION, DATA, CHECKSTACK, PURGE )
 
 Sends a notice to normal listmaster by parsing
 listmaster_notification.tt2 template
@@ -268,23 +245,17 @@ Note: List::send_notify_to_listmaster() was deprecated.
 
 =back
 
-=cut
+=head3 Handling Lists
 
-## Inherited from Site class.
+=over
 
-=head3 Lists
-
-=over 4
-
-=item is_available_topic ( TOPIC )
+=item $robot->is_available_topic ( TOPIC )
 
 Check $topic in the $self conf
 
 IN  : - $topic : id of the topic
 
 OUT : - 1 if the topic is in the robot conf or undef
-
-=back
 
 =cut
 
@@ -311,17 +282,13 @@ sub is_available_topic {
 	return undef;
 }
 
-=over 4
-
-=item split_listname ( MAILBOX )
+=item $robot->split_listname ( MAILBOX )
 
 XXX @todo doc
 
 Note:
 For C<-request> and C<-owner> suffix, this function returns
 C<owner> and C<return_path> type, respectively.
-
-=back
 
 =cut
 
@@ -370,19 +337,21 @@ sub split_listname {
 	}
 }
 
+=back
+
 =head3 Handling netidmap table
 
 =over 4
 
-=item get_netidtoemail_db
+=item $robot->get_netidtoemail_db()
 
 get idp xref to locally validated email address
 
-=item set_netidtoemail_db
+=item $robot->set_netidtoemail_db()
 
 set idp xref to locally validated email address
 
-=item update_email_netidmap_db
+=item $robot->update_email_netidmap_db()
 
 Update netidmap table when user email address changes
 
@@ -409,7 +378,7 @@ sub update_email_netidmap_db {
 
 =over 4
 
-=item families ( [ NAME, [ FAMILY ] ] )
+=item $robot->families ( [ NAME, [ FAMILY ] ] )
 
 Handles cached information of families on memory.
 
@@ -419,8 +388,6 @@ Gets cached family/ies on memory.  If memory cache is missed, returns C<undef>.
 I<Setter>.
 Updates memory cache.
 If C<undef> was given as FAMILY, cache entry on the memory will be removed.
-
-=back
 
 =cut
 
@@ -440,13 +407,9 @@ sub families {
 	$self->{'families'}{$name};
 }
 
-=over 4
-
-=item init_list_cache
+=item $robot->init_list_cache()
 
 Clear list cache on memory.
-
-=back
 
 =cut
 
@@ -456,9 +419,7 @@ sub init_list_cache {
 	delete $self->{'lists_ok'};
 }
 
-=over 4
-
-=item lists ( [ NAME, [ LIST ] ] )
+=item $robot->lists ( [ NAME, [ LIST ] ] )
 
 Handles cached information of lists on memory.
 
@@ -474,8 +435,6 @@ If memory cache is missed, returns C<undef>.
 I<Setter>.
 Updates memory cache.
 If C<undef> was given as LIST, cache entry on the memory will be removed.
-
-=back
 
 =cut
 
@@ -499,14 +458,10 @@ sub lists {
 	$self->{'lists'}{$name};
 }
 
-=over 4
-
-=item lists_ok
+=item $robot->lists_ok()
 
 I<Setter>, I<internal use>.
 XXX @todo doc
-
-=back
 
 =cut
 
@@ -516,22 +471,26 @@ sub lists_ok {
 	$self->{'lists_ok'};
 }
 
-=head3 ACCESSORS
+=back
+
+=head3 Accessors
 
 =over 4
 
-=item E<lt>config parameterE<gt>
+=item $robot->E<lt>config parameterE<gt>()
 
 I<Getters>.
 Get robot config parameter.
-For example C<$robot-E<gt>listmaster> returns "listmaster" parameter of the
+For example C<$robot-E<gt>listmaster>() returns "listmaster" parameter of the
 robot.
 
-=item etc
+=over
 
-=item home
+=item $robot->etc()
 
-=item name
+=item $robot->home()
+
+=item $robot->name()
 
 I<Getters>.
 Get profile of robot.
@@ -544,14 +503,10 @@ Get profile of robot.
 
 sub DESTROY { }   # "sub DESTROY;" may cause segfault with Perl around 5.10.1.
 
-=over 4
-
-=item list_params
+=item $robot->list_params()
 
 I<Getter>.
 Returns hashref to list parameter information.
-
-=back
 
 =cut
 
@@ -567,14 +522,10 @@ sub list_params {
 	return $self->{'list_params'} = $pinfo;
 }
 
-=over 4
-
-=item topics
+=item $robot->topics()
 
 I<Getter>.
 Get a hashref including information of list topics available on the robot.
-
-=back
 
 =cut
 
@@ -751,6 +702,8 @@ sub _add_topic {
 	}
 }
 
+=back
+
 =head3 Derived parameters
 
 These are accessors derived from robot/default parameters.
@@ -758,9 +711,9 @@ Some of them are obsoleted.
 
 =over 4
 
-=item request
+=item $robot->request()
 
-=item sympa
+=item $robot->sympa()
 
 I<Getters>.
 Gets derived config parameters.
@@ -768,29 +721,13 @@ Gets derived config parameters.
 B<Obsoleted>.
 See L<Site/request> and L<Site/sympa>.
 
-=back
-
-=cut
-
-## Inherited from Site class
-
-=over 4
-
-=item listmasters
+=item $robot->listmasters()
 
 I<Getter>.
 In scalar context, returns arrayref of listmasters of robot.
 In array context, returns array of them.
 
-=back
-
-=cut
-
-## Inherited from Site class
-
-=over 4
-
-=item supported_languages
+=item $robot->supported_languages()
 
 I<Getter>.
 In array context, returns array of supported languages by robot.
@@ -798,25 +735,18 @@ In scalar context, returns arrayref to them.
 
 =back
 
-=cut
-
-## Inherited from Site class
-
 =head2 FUNCTIONS
 
 =over 4
 
 =item clean_robot ( ROBOT_OR_NAME )
 
-I<Function>.
 Warns if the argument is not a Robot object.
 Returns a Robot object, if any.
 
 I<TENTATIVE>.
 This function will be used during transition between old and object-oriented
 styles.  At last modifications have been done, this shall be removed.
-
-=back
 
 =cut
 
@@ -844,15 +774,10 @@ sub clean_robot {
 	$robot;
 }
 
-=over 4
-
 =item get_robots ( OPT => VALUE, ... )
 
-I<Function>.
 Get all robots hosted by Sympa.
 Returns arrayref of Robot objects.
-
-=back
 
 =cut
 
@@ -919,6 +844,8 @@ sub get_robots {
 	return \@robots;
 }
 
-###### END of the Robot package ######
+=back
+
+=cut
 
 1;
