@@ -1,5 +1,4 @@
    C src/lib/List.pm
-   C src/lib/SQLSource.pm
    C src/lib/Ldap.pm
    C src/lib/Log.pm
    C src/lib/Archive.pm
