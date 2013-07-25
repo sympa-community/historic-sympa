@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -52,8 +51,12 @@ sub get_https{
 	my ($host, $port, $path, $client_cert, $client_key, $ssl_data) = @_;
 
 	my $key_passwd = $ssl_data->{'key_passwd'};
+	
 	my $trusted_ca_file = $ssl_data->{'cafile'};
+	$trusted_ca_file ||= Site->cafile;
+	
 	my $trusted_ca_path = $ssl_data->{'capath'};
+	$trusted_ca_path ||= Site->capath;
 
 	Sympa::Log::Syslog::do_log ('debug','get_https (%s,%s,%s,%s,%s,%s,%s,%s)',$host,$port,$path,$client_cert,$client_key,$key_passwd,$trusted_ca_file,$trusted_ca_path );
 
