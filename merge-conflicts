@@ -30,7 +30,6 @@
    C src/lib/Conf.pm
    C src/lib/Config_XML.pm
    C src/lib/Fetch.pm
-   C src/lib/WebAgent.pm
    C src/lib/tools.pm
    C src/lib/tracking.pm
    C src/lib/Scenario.pm
