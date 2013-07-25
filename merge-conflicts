@@ -24,7 +24,6 @@
    C src/spooler.pl.in
    C src/lib/VOOTProvider.pm
    C src/lib/VOOTConsumer.pm
-   C src/lib/time_utils.pm
    C src/lib/SDM.pm
    C src/lib/Language.pm
    C src/lib/Conf.pm
