@@ -18,16 +18,17 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=encoding utf-8
 
 =head1 NAME
 
-bulk.pl - Sympa bulk mail manager
+bulk.pl - Daemon for Submitting Bulk Content to SMTP Engine
 
 =head1 SYNOPSIS
 
-  bulk.pl [-d|--debug] [-F|--foreground] [-m|--mail]
+S<B<bulk.pl> [ B<--foreground> ] [ B<--mail> ] [ B<--debug> ]>
 
 =head1 DESCRIPTION
 
@@ -37,7 +38,6 @@ Multiple instances can be run simultaneously to distribute traffic.
 =head1 OPTIONS
 
 =over
-
 =item B<-d>, B<--debug>
 
 Set debug mode (implies -F)
@@ -56,10 +56,30 @@ Print this help and exit.
 
 =back
 
+=head1 FILES
+
+F<--piddir--/bulk.pid> this file contains the process IDs of F<bulk.pl>.
+
+=head1 MORE DOCUMENTATION
+
+The full documentation in HTML and PDF formats can be found in L<http://www.sympa.org/manual/>.
+	
+The mailing lists (with web archives) can be accessed at L<http://listes.renater.fr/sympa/lists/informatique/sympa>.
+
+=head1 BUGS
+
+Report bugs to Sympa bug tracker.
+See L<http://www.sympa.org/tracking>.
+
+=head1 SEE ALSO
+
+L<sympa(8)>, L<sendmail(8)>
+
 =cut
 
 use strict;
 use lib '--modulesdir--';
+use warnings;
 
 use English qw(-no_match_vars);
 use Getopt::Long;
@@ -100,11 +120,13 @@ if ($options{'debug'}) {
 $options{'foreground'} = 1 if ($options{'debug'});
 $options{'log_to_stderr'} = 1 if ($options{'debug'} || $options{'foreground'});
 
-my $sympa_conf_file = Sympa::Constants::CONFIG;
+if ($main::options{'help'}) {
+    pod2usage(0);
+}
 
 # Load sympa.conf
-unless (Sympa::Configuration::load($sympa_conf_file)) {
-	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
+unless (Robot::get_robots()) {
+	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file %s or one of the vhost robot.conf files contain errors. Exiting.", Conf::get_sympa_conf());
 }
 
 # connect to database
@@ -193,7 +215,7 @@ $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
 POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
-## Check if the UID has correctly been set (usefull on OS X)
+## Check if the UID has correctly been set (useful on OS X)
 unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
 	Sympa::Log::Syslog::fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
@@ -400,7 +422,26 @@ while (!$end) {
 				time() - $next->{'delivery_date'}
 			);
 
-			$messageasstring_init = $message_from_spool->{'messageasstring'};
+			my $message;
+			$message = Message->new($message_from_spool)
+				if $message_from_spool;
+			
+			unless ($message) {
+				Sympa::Log::Syslog::do_log('err',
+					'Internal error: current packet (messagekey=%s) refers to a null message',
+					$messagekey
+				);
+				unless (Bulk::remove($messagekey, $bulk->{'packetid'})) {
+					Sympa::Log::Syslog::do_log('err',
+						'Failed to remove processed packet "%s", messagekey "%s"',
+						$messagekey, $bulk->{'packetid'}
+					);
+				}
+				next; # while (!$end)
+			}
+
+			# Get message as string without meta information.
+			$messageasstring_init = $message->as_string();
 
 			unless ( $messageasstring_init ) {
 				Sympa::Log::Syslog::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$next->{'messagekey'});
@@ -436,7 +477,9 @@ while (!$end) {
 
 		#my $list = Sympa::List->new($next->{'listname'}, $next->{'robot'});
 		my $listname= $next->{'listname'};
-		my $robot =  $next->{'robot'};
+		my $robot_id =  $next->{'robot'};
+		my $list = $bulk->{'list_object'};
+		my $robot = $bulk->{'robot_object'};
 
 		if (
 			$next->{'verp'}  ||
@@ -451,8 +494,9 @@ while (!$end) {
 				my $message = Sympa::Message->new(
 					messageasstring => $messageasstring_init,
 					noxsympato      => 'noxsympato'
+					'list_object'   => $list,
 				);
-				my $entity = $message->{'msg'};
+				my $entity = $message->as_entity();
 				my $notification_id;
 				my $return_path;
 				my $escaped_rcpt = $rcpt;
@@ -463,30 +507,39 @@ while (!$end) {
 					$next->{'tracking'} eq 'mdn'
 				) {
 					# tracking by MDN required tracking by DSN to
-					my $msgid = $entity->head()->get('Message-Id'); chomp $msgid;
-					$notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
-					$return_path = Site->bounce_email_prefix.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
-					$entity->head()->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn');
+					my $msgid = $message->get_msg_id;
+					$notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot_id);
+					$return_path = $list->get_bounce_address($rcpt, $notification_id);
+					$entity->head->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn');
 					if (($message->{'protected'})||($message->{'smime_crypted'})){
 					my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
-					$messageasstring_init = $entity->head()->as_string(). "\n" . $msg_body; # concat headers from entity with original body
+					$messageasstring_init = $entity->head->as_string(). "\n" . $msg_body; # concat headers from entity with original body
 					} else {
 					$messageasstring_init = $entity->as_string();
 					}
 				} else {  # VERP
-					$return_path = Site->bounce_email_prefix.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot;
+					$return_path = $list->get_bounce_address($rcpt);
 				}
 
 				if (($next->{'merge'}) && !($message->{'protected'})) {
-					unless($bulk->merge_msg ($entity, $rcpt, $next, $data)){
-						Sympa::Log::Syslog::do_log('err', 'Erreur d appel Sympa::Bulk::merge_msg');
+					if ($message->personalize($list, $rcpt)) {
+						$messageasstring = $message->as_string();
+					} else {
+						Sympa::Log::Syslog::do_log('err', 'Erreur d appel personalize()');
+						$list->robot->send_notify_to_listmaster(
+							'bulk_failed',
+							{
+								'msg' => $messageasstring_init,
+								'list' => $list,
+							}
+						);
+						last;
 					}
-					$messageasstring = $entity->as_string();
 				} else {
 					$messageasstring = $messageasstring_init;
 				}
 
-				if (Sympa::Configuration::get_robot_conf($next->{'robot'}, 'dkim_feature') eq 'on'){
+				if ($robot->dkim_feature eq 'on'){
 					# assume Sympa::Tools::DKIM can be loaded if the setting is
 					# still on
 					require Sympa::Tools::DKIM;
@@ -514,7 +567,7 @@ while (!$end) {
 			}
 		} else {
 			# message dont needs personalization, they can be sent by packet
-			if (Sympa::Configuration::get_robot_conf($next->{'robot'}, 'dkim_feature') eq 'on'){
+			if ($robot->dkim_feature eq 'on'){
 				$messageasstring_init = remove_invalid_dkim_signature($messageasstring_init, Site->tmpdir);
 			}
 			# Initial message
