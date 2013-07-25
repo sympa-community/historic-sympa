@@ -11,7 +11,6 @@
    C src/lib/Datasource.pm
    C src/lib/Bulk.pm
    C src/lib/Commands.pm
-   C src/lib/LDAPSource.pm
    C src/lib/Task.pm
    C src/lib/DBManipulatorDefault.pm
    C src/lib/Sympaspool.pm
