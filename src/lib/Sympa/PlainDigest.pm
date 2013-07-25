@@ -56,10 +56,8 @@
 # PURPOSE. See the GNU General Public License for more details#
 #                                                             #
 # You should have received a copy of the GNU General Public   #
-# License along with this program; if not, write to the Free  #
-# Software Foundation, Inc., 59 Temple Place - Suite 330,     #
-# Boston, MA 02111-1307, USA.                                 #
-#                                                             #
+# License along with this program. If not, see                #
+# <http://www.gnu.org/licenses/>.                             #
 #                                        Chris Hastie         #
 #                                                             #
 ###############################################################
@@ -198,12 +196,21 @@ sub _do_message {
 		return undef;
 	}
 
-	my $from = $msgent->head()->get('From') ? Sympa::Tools::decode_header($msgent, 'From') : Sympa::Language::gettext("[Unknown]");
-	my $subject = $msgent->head()->get('Subject') ? Sympa::Tools::decode_header($msgent, 'Subject') : '';
-	my $date = $msgent->head()->get('Date') ? Sympa::Tools::decode_header($msgent, 'Date') : '';
-	my $to = $msgent->head()->get('To') ? Sympa::Tools::decode_header($msgent, 'To', ', ') : '';
-	my $cc = $msgent->head()->get('Cc') ? Sympa::Tools::decode_header($msgent, 'Cc', ', ') : '';
-
+	my $from = Sympa::Tools::decode_header($msgent, 'From');
+	$from = Sympa::Language::gettext("[Unknown]") unless defined $from and length $from;
+	
+	my $subject = Sympa::Tools::decode_header($msgent, 'Subject');
+	$subject = '' unless defined $subject;
+	
+	my $date = Sympa::Tools::decode_header($msgent, 'Date');
+	$date = '' unless defined $date;
+	
+	my $to = Sympa::Tools::decode_header($msgent, 'To', ', ');
+	$to = '' unless defined $to;
+	
+	my $cc = Sympa::Tools::decode_header($msgent, 'Cc', ', ');
+	$cc = '' unless defined $cc;
+	
 	chomp $from;
 	chomp $to;
 	chomp $cc;
@@ -216,9 +223,9 @@ sub _do_message {
 		$name = MIME::EncWords::decode_mimewords($fromline[0]->name(),
 			Charset=>'utf8');
 		$name = $fromline[0]->address() unless $name =~ /\S/;
-		chomp $name;
+		chomp $name if $name;
 	}
-	$name ||= $from;
+	$name = $from unless defined $name and length $name;
 
 	$outstring .= Sympa::Language::gettext("\n[Attached message follows]\n-----Original message-----\n");
 	my $headers = '';
@@ -238,7 +245,11 @@ sub _do_message {
 
 sub _do_text_plain {
 	my ($entity) = @_;
-
+	
+	if (($entity->head->get('Content-Disposition') || '') =~ /attachment/) {
+		return _do_other($entity);
+	}
+	
 	my $thispart = $entity->bodyhandle()->as_string();
 
 	# deal with CR/LF left over - a problem from Outlook which
