@@ -21,7 +21,6 @@
    C src/lib/Scenario.pm
    C src/sympa.pl.in
    C src/sympa_wizard.pl.in
-   C src/etc/script
    C src/task_manager.pl.in
 soap/sympa_soap_client.pl.in
 soap/sympasoap.pm
