@@ -18,8 +18,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -77,7 +76,7 @@ use Sympa::Log::Syslog;
 use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Scenario;
-use Sympa::Spool::SQL;
+use Sympa::Spool::File::Task;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
@@ -112,20 +111,14 @@ $options{'log_to_stderr'} = 1 if ($options{'debug'} || $options{'foreground'});
 
 my $Version = '0.1';
 
-my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
-my $sympa_conf_file = Sympa::Constants::CONFIG;
-
-my $wwsconf = {};
 my $adrlist = {};
 
-# Load WWSympa configuration
-unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf)) {
-	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
-}
-
 # Load sympa.conf
-unless (Sympa::Configuration::load($sympa_conf_file)) {
-	Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");
+unless (Robot::get_robots()) {
+	printf STDERR
+	"Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
+	Conf::get_sympa_conf();
+	exit 1;
 }
 
 # connect to database
@@ -232,7 +225,7 @@ umask(oct(Site->umask));
 
 ## Change to list root
 unless (chdir(Site->home)) {
-	Sympa::Log::Syslog::do_log('err',"error : unable to change to directory Site->home");
+	Sympa::Log::Syslog::do_log('err',"error : unable to change to directory %s", Site->home);
 	exit (-1);
 }
 
@@ -247,17 +240,11 @@ my $end = 0;
 my $cert_dir = Site->ssl_cert_dir;
 my @tasks; # list of tasks in the spool
 
-my $spool = Sympa::Spool::SQL->new(
-	name => 'task',
-	base => $base
-);
+my $spool = Sympa::Spool::File::Task->new();
 
 undef my $log; # won't execute send_msg and delete_subs commands if true, only log
 #$log = 1;
 
-## list of list task models
-#my @list_models = ('expire', 'remind', 'sync_include');
-my @list_models = ('sync_include','remind');
 
 ## hash of the global task models
 my %global_models = (#'crl_update_task' => 'crl_update',
@@ -338,136 +325,38 @@ foreach (keys %asgn_commands) {
 
 ###### INFINITE LOOP SCANING THE SPOOL (unless a sig TERM is received) ######
 while (!$end) {
+    my $current_date = time; # current epoch date
+    my $rep = Sympa::Tools::Time::adate($current_date);
 
-	my $current_date = time(); # current epoch date
-	my $rep = Sympa::Tools::Time::adate ($current_date);
+    ## Empty cache of the List.pm module
+    Sympa::List::init_list_cache();
 
+    # Process grouped notifications
+    Sympa::List::send_notify_to_listmaster(undef, undef, 1, undef);
 
-	## Empty cache of the List.pm module
-	Sympa::List::init_list_cache();
-	Sympa::List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    Sympa::Task::create_required_tasks($current_date);
 
-	## List all tasks
-	my $result = Sympa::Task->load_tasks(
-		$spool, $base
-	);
-	unless ($result) {
-		Sympa::List::send_notify_to_listmaster('intern_error',Site->domain,{'error' => "Failed to list task files in spool"});
-		Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool");
-		exit -1;
-	}
-
-	my %used_models; # models for which a task exists
-	foreach my $model (Sympa::Task->get_used_models()) {
-		$used_models{$model} = 1;
-	}
-
-	### creation of required tasks
-	my %default_data = ('creation_date' => $current_date, # hash of datas necessary to the creation of tasks
-		'execution_date' => 'execution_date');
-	## global tasks
-	foreach my $key (keys %global_models) {
-		Sympa::Log::Syslog::do_log('debug2',"global_model : $key");
-		unless ($used_models{$global_models{$key}}) {
-			if (Site->$key) {
-				my %data = %default_data; # hash of datas necessary to the creation of tasks
-				create ($current_date, '', $global_models{$key}, Site->$key, \%data);
-			$used_models{$1} = 1;
-		}
-	}
-}
-
-## list tasks
-foreach my $robot (keys %{Site->robots}) {
-	Sympa::Log::Syslog::do_log('debug3',"creating list task : current bot  is $robot");
-	my $all_lists = Sympa::List::get_lists($robot);
-	foreach my $list ( @$all_lists ) {
-		Sympa::Log::Syslog::do_log('debug3',"creating list task : current list  is $list->{'name'}");
-		my %data = %default_data;
-
-		$data{'list'} = {'name' => $list->{'name'},
-			'robot' => $list->{'domain'}};
-
-		my %used_list_models; # stores which models already have a task
-		foreach (@list_models) {
-			$used_list_models{$_} = undef;
-		}
-		foreach my $model (Sympa::Task->get_used_models($list->get_list_id())) {
-			$used_list_models{$model} = 1;
-		}
-		Sympa::Log::Syslog::do_log('debug3',"creating list task using models");my $tt= 0;
-
-		foreach my $model (@list_models) {
-			unless ($used_list_models{$model}) {
-				my $model_task_parameter = "$model".'_task';
-
-				if ( $model eq 'sync_include') {
-					next unless ($list->has_include_data_sources() &&
-						($list->{'admin'}{'status'} eq 'open'));
-
-					create ($current_date, 'INIT', $model, 'ttl', \%data);
-					Sympa::Log::Syslog::do_log('debug3',"sync_include task ceration done");$tt++;
-
-				}elsif (defined $list->{'admin'}{$model_task_parameter} &&
-					defined $list->{'admin'}{$model_task_parameter}{'name'} &&
-					($list->{'admin'}{'status'} eq 'open')) {
-
-					create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, \%data);
-					$tt++;
-				}
-			}
-		}
-	}
-}
-## Execute existing tasks
-## List all tasks
-my $result = Sympa::Task->load_tasks($spool);
-unless ($result) {
-	Sympa::List::send_notify_to_listmaster('intern_error',Site->domain,{'error' => "Failed to list task files in spool task"});
-	Sympa::Log::Syslog::do_log ('err', "Failed to list task files in spool task");
-	exit -1;
-}
-
-## processing of tasks anterior to the current date
-Sympa::Log::Syslog::do_log ('debug3', 'processing of tasks anterior to the current date');
-foreach my $task ( Sympa::Task->get_task_list() ) {
+    ## Execute existing tasks
+    ## processing of tasks anterior to the current date
+    Sympa::Log::Syslog::do_log ('debug2', 'Processing tasks anterior to the current date');
+    foreach my $task_in_spool ($spool->get_content) {
+	my $task = undef;
+	$task = Task->new($task_in_spool)
+	   if $task_in_spool;
+	next unless $task;
 
 	last if $end;
-	last unless ($task->{'date'} < $current_date);
-	if ($task->{'object'} ne '_global') { # list task
-		my $list = $task->{'list_object'};
+	next unless $task->{'date'} <= $current_date;
 
-		## Skip closed lists
-		unless (defined $list && ($list->{'admin'}{'status'} eq 'open')) {
-			Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-			$task->remove();
-			next;
-		}
-
-		## Skip if parameter is not defined
-		if ( $task->{'model'} eq 'sync_include') {
-			unless ($list->{'admin'}{'status'} eq 'open') {
-				Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-				$task->remove();
-				next;
-			}
-		} else {
-			unless (defined $list->{'admin'}{$task->{'model'}} &&
-				defined $list->{'admin'}{$task->{'model'}}{'name'}) {
-				Sympa::Log::Syslog::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
-				$task->remove();
-				next;
-			}
-		}
-	}
-	execute ($task);
-}
-
-sleep 30;
-#$end = 1;
-
-## Free zombie sendmail processes
-Sympa::Mail::reaper;
+	Sympa::Log::Syslog::do_log ('debug2', 'Processing task %s', $task);
+        if ($task->{'object'} ne '_global') { # list task
+            $task->check_list_task_is_valid();
+        }
+        $task->execute;
+    }
+    sleep 30;
+    ## Free zombie sendmail processes
+    Sympa::Mail::reaper;
 }
 
 Sympa::List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
