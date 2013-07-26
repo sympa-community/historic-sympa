@@ -10,7 +10,6 @@
    C src/lib/tt2.pm
    C src/lib/report.pm
    C src/lib/Conf.pm
-   C src/lib/Config_XML.pm
    C src/lib/tools.pm
    C src/lib/Scenario.pm
    C src/sympa.pl.in
