@@ -29,4 +29,3 @@ soap/sympa_soap_client.pl.in
 soap/sympasoap.pm
 wwsympa/SympaSession.pm
 wwsympa/wwslib.pm
-wwsympa/wwsympa.fcgi.in
