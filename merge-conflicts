@@ -12,7 +12,6 @@
    C src/lib/Conf.pm
    C src/lib/Config_XML.pm
    C src/lib/tools.pm
-   C src/lib/tracking.pm
    C src/lib/Scenario.pm
    C src/sympa.pl.in
    C src/sympa_wizard.pl.in

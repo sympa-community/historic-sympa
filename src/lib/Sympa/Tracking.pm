@@ -45,7 +45,7 @@ use Sympa::Log::Syslog;
 
 =over
 
-=item get_recipients_status($msgid, $listname, $robot)
+=item get_recipients_status($list, $msgid)
 
 Get mail addresses and status of the recipients who have a different DSN
 status than "delivered"
@@ -58,8 +58,12 @@ status than "delivered"
 =cut
 
 sub get_recipients_status {
-	my ($msgid, $listname, $robot) = @_;
-	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
+	my ($list, $msgid) = @_;
+	
+	my $listname = $list->name;
+	my $robot_id = $list->domain;
+	
+	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid, $listname, $robot_id);
 
 	my $base = Sympa::Database->get_singleton();
 
@@ -83,12 +87,12 @@ sub get_recipients_status {
 			")",
 	);
 	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
 		return undef;
 	}
 	$handle->execute(
 		$listname,
-		$robot,
+		$robot_id,
 		$msgid,
 		$msgid,
 		'<'.$msgid.'>'
@@ -126,11 +130,12 @@ A positive value on success, I<undef> otherwise.
 =cut
 
 sub db_init_notification_table {
+	my $list = shift;
 	my (%params) = @_;
 
 	my $msgid =  $params{'msgid'}; chomp $msgid;
-	my $listname =  $params{'listname'};
-	my $robot =  $params{'robot'};
+	my $listname =  $list->name;
+	my $robot_id =  $list->domain;
 	my $reception_option =  $params{'reception_option'};
 	my @rcpt =  @{$params{'rcpt'}};
 
@@ -160,12 +165,12 @@ sub db_init_notification_table {
 			lc($email),
 			$reception_option,
 			$listname,
-			$robot,
+			$robot_id,
 			$time
 		);
 
 		unless($rows) {
-			Sympa::Log::Syslog::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot);
+			Sympa::Log::Syslog::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot_id);
 			return undef;
 		}
 	}
@@ -286,8 +291,12 @@ A positive value on success, I<undef> otherwise.
 =cut
 
 sub remove_message_by_id{
-	my ($msgid, $listname, $robot) = @_;
-	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
+	my ($list, $msgid) = @_;
+	
+	my $listname = $list->name;
+	my $robot_id = $list->domain;
+	
+	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot_id);
 
 	my $base = Sympa::Database->get_singleton();
 	my $rows = $base->execute_query(
@@ -298,10 +307,10 @@ sub remove_message_by_id{
 			"robot_notification=?",
 		$msgid,
 		$listname,
-		$robot
+		$robot_id
 	);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
 		return undef;
 	}
 
@@ -321,8 +330,12 @@ The number of removed messages on success, I<undef> otherwise.
 =cut
 
 sub remove_message_by_period{
-	my ($period, $listname, $robot) = @_;
-	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot );
+	my ($list, $period) = @_;
+	
+	my $listname = $list->name;
+	my $robot_id = $list->domain;
+	
+	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot_id);
 
 	my $base = Sympa::Database->get_singleton();
 
@@ -335,10 +348,10 @@ sub remove_message_by_period{
 			"robot_notification=?",
 		$limit,
 		$listname,
-		$robot
+		$robot_id
 	);
 	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot);
+		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot_id);
 		return undef;
 	}
 
