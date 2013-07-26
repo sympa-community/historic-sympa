@@ -16,11 +16,7 @@
    C src/lib/tt2.pm
    C src/lib/report.pm
    C src/lib/Sympa/DatabaseDescription.pm
-   C src/lib/OAuthProvider.pm
-   C src/lib/OAuthConsumer.pm
    C src/spooler.pl.in
-   C src/lib/VOOTProvider.pm
-   C src/lib/VOOTConsumer.pm
    C src/lib/SDM.pm
    C src/lib/Language.pm
    C src/lib/Conf.pm
