@@ -1,4 +1,3 @@
-   C src/lib/Log.pm
    C src/lib/Archive.pm
    C src/lib/Family.pm
    C src/lib/mail.pm

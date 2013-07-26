@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -129,83 +128,111 @@ FIXME
 =cut
 
 sub do_log {
-	my ($level, $message, @param) = @_;
+    unless (defined $levels{$level}) {
+	&do_log('err', 'Invalid $level: "%s"', $level);
+	$level = 'info';
+    }
 
-	# do not log if log level if too high regarding the log requested by user
-	return if ($levels{$level} > $log_level);
+    # do not log if log level is too high regarding the log requested by user 
+    return if defined $log_level and $levels{$level} > $log_level;
+    return if ! defined $log_level and $levels{$level} > 0;
 
-	my $errno = $ERRNO;
+    my $message = shift;
+    my @param = ();
 
-	## Do not display variables which are references.
-	foreach my $p (@param) {
-		unless (defined $p) {
-			$p = ''; # prevent 'Use of uninitialized value' warning
-		} elsif (ref $p) {
-			$p = ref $p;
-		}
-	}
+    my $errno = $!;
 
-	## Determine calling function
-	my $caller_string;
-
-	## If in 'err' level, build a stack trace
-	if ($level eq 'err'){
-		my $go_back = 1;
-		my @calls;
-		while (my @call = caller($go_back)) {
-			unshift @calls, $call[3].'#'.$call[2];
-			$go_back++;
-		}
-
-		$caller_string = join(' > ',@calls);
+    ## Do not display variables which are references.
+    my @n = ($message =~ /(%[^%])/g);
+    for (my $i = 0; $i < scalar @n; $i++) {
+	my $p = $_[$i];
+	unless (defined $p) {
+	    # prevent 'Use of uninitialized value' warning
+	    push @param, '';
+	} elsif (ref $p) {
+	    if (ref $p eq 'ARRAY') {
+		push @param, '[...]';
+	    } elsif (ref $p eq 'HASH') {
+		push @param, sprintf('{%s}', join('/', keys %{$p}));
+	    } elsif (ref $p eq 'Regexp' or ref $p eq uc ref $p) {
+		# other unblessed references
+		push @param, ref $p;
+	    } elsif ($p->can('get_id')) {
+		push @param, sprintf('%s <%s>', ref $p, $p->get_id);
+	    } else {
+		push @param, ref $p;
+	    }
 	} else {
-		my @call = caller(1);
-
-		## If called via wwslog, go one step ahead
-		if ($call[3] =~ /wwslog$/) {
-			my @call = caller(2);
-		}
-
-		$caller_string = $call[3].'()';
+	    push @param, $p;
 	}
+    }
 
-	$message = $caller_string. ' ' . $message if ($caller_string);
+    ## Determine calling function
+    my $caller_string;
+   
+    ## If in 'err' level, build a stack trace,
+    ## except if syslog has not been setup yet.
+    if (defined $log_level and $level eq 'err'){
+	my $go_back = 1;
+	my @calls;
 
-	## Add facility to log entry
-	$message = $level.' '.$message;
-
-	# map to standard syslog facility if needed
-	if ($level eq 'trace' ) {
-		$message = "###### TRACE MESSAGE ######:  " . $message;
-		$level = 'notice';
-	} elsif ($level eq 'debug2' || $level eq 'debug3') {
-		$level = 'debug';
+	my @f = caller($go_back);
+	if ($f[3] =~ /wwslog$/) { ## If called via wwslog, go one step ahead
+	    @f = caller(++$go_back);
 	}
-
-	eval {
-		unless (syslog($level, $message, @param)) {
-			do_connect();
-			syslog($level, $message, @param);
-		}
-	};
-
-	if ($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
-		$warning_date = time + $warning_timeout;
-		require Sympa::List;
-		Sympa::List::send_notify_to_listmaster(
-			'logs_failed', Site->domain, [$EVAL_ERROR]
-		);
-	};
-
-	if ($main::options{'foreground'}) {
-		if (
-			$main::options{'log_to_stderr'} ||
-			($main::options{'batch'} && $level eq 'err')
-		) {
-			$message =~ s/%m/$errno/g;
-			printf STDERR "$message\n", @param;
-		}
+	@calls = ('#'.$f[2]);
+	while (@f = caller(++$go_back)) {
+	    $calls[0] = $f[3].$calls[0];
+	    unshift @calls, '#'.$f[2];
 	}
+	$calls[0] = '(top-level)'.$calls[0];
+
+	$caller_string = join(' > ',@calls);
+    }else {
+	my @call = caller(1);
+	
+	## If called via wwslog, go one step ahead
+	if ($call[3] and $call[3] =~ /wwslog$/) {
+	    @call = caller(2);
+	}
+	
+	$caller_string = ($call[3] || '').'()';
+    }
+    
+    $message = $caller_string. ' ' . $message if ($caller_string);
+
+    ## Add facility to log entry
+    $message = $level.' '.$message;
+
+    # map to standard syslog facility if needed
+    if ($level eq 'trace' ) {
+        $message = "###### TRACE MESSAGE ######:  " . $message;
+        $level = 'notice';
+    } elsif ($level eq 'debug2' || $level eq 'debug3') {
+        $level = 'debug';
+    }
+
+    ## Output to STDERR if needed
+    if (! defined $log_level or
+	($main::options{'foreground'} and $main::options{'log_to_stderr'}) or
+	($main::options{'foreground'} and $main::options{'batch'} and
+	 $level eq 'err')) {
+	$message =~ s/%m/$errno/g;
+	printf STDERR "$message\n", @param;
+    }
+
+    return unless defined $log_level;
+    eval {
+        unless (syslog($level, $message, @param)) {
+            do_connect();
+            syslog($level, $message, @param);
+        }
+    };
+
+    if ($@ && ($warning_date < time - $warning_timeout)) {
+	$warning_date = time + $warning_timeout;
+	Site->send_notify_to_listmaster('logs_failed', [$@]);
+    }
 }
 
 =item do_openlog($fac, $socket_type, $service)
