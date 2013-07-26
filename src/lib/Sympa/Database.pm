@@ -373,92 +373,92 @@ my $abstract_structure = {
 	},
 	# storage of recipients with a ref to a message in spool_table. So a
 	# very simple process can distribute them
-	bulkmailer_table => {
+	bulkpacket_table => {
 		fields => [
 			{
 				# a pointer to a message in spool_table.It must be a
 				# value of a line in table spool_table with same value
 				# as messagekey_spool
-				name     => 'messagekey_bulkmailer',
-				type     => 'varchar(80)',
+				name     => 'messagekey_bulkpacket',
+				type     => 'bigint(20)',
 				not_null => 1,
 			},
 			{
 				# an id for the packet
-				name     => 'packetid_bulkmailer',
+				name     => 'packetid_bulkpacket',
 				type     => 'varchar(33)',
 				not_null => 1,
 			},
 			{
 				# the message Id
-				name => 'messageid_bulkmailer',
+				name => 'messageid_bulkpacket',
 				type => 'varchar(200)',
 			},
 			{
 				# comma-separated list of recipient email for this
 				# message
-				name => 'receipients_bulkmailer',
+				name => 'receipients_bulkpacket',
 				type => 'text',
 			},
 			{
 				# the return path value that must be set when sending
 				# the message
-				name => 'returnpath_bulkmailer',
+				name => 'returnpath_bulkpacket',
 				type => 'varchar(100)',
 			},
 			{
-				name => 'robot_bulkmailer',
+				name => 'robot_bulkpacket',
 				type => 'varchar(80)',
 			},
 			{
-				name => 'listname_bulkmailer',
+				name => 'listname_bulkpacket',
 				type => 'varchar(50)',
 			},
 			{
 				# true if VERP is required, in this cas return_path
 				# will be formated using verp form
-				name => 'verp_bulkmailer',
+				name => 'verp_bulkpacket',
 				type => 'int(1)',
 			},
 			{
 				# Is DSN or MDM required when sending this message?',
-				name => 'tracking_bulkmailer',
+				name => 'tracking_bulkpacket',
 				type => "enum('mdn','dsn')",
 			},
 			{
 				# true if the message is to be parsed as a TT2
 				# template foreach recipient
-				name => 'merge_bulkmailer',
+				name => 'merge_bulkpacket',
 				type => 'int(1)',
 			},
 			{
-				name => 'priority_message_bulkmailer',
+				name => 'priority_message_bulkpacket',
 				type => 'smallint(10)',
 			},
 			{
-				name => 'priority_packet_bulkmailer',
+				name => 'priority_packet_bulkpacket',
 				type => 'smallint(10)',
 			},
 			{
 				# the date where the message was received
-				name => 'reception_date_bulkmailer',
+				name => 'reception_date_bulkpacket',
 				type => 'int(11)',
 			},
 			{
 				# the date the message was sent
-				name => 'delivery_date_bulkmailer',
+				name => 'delivery_date_bulkpacket',
 				type => 'int(11)',
 			},
 			{
 				# a lock. It is set as process-number @ hostname so
-				# multiple bulkmailer can handle this spool
-				name => 'lock_bulkmailer',
+				# multiple bulkpacket can handle this spool
+				name => 'lock_bulkpacket',
 				type => 'varchar(30)',
 			},
 		],
 		key   => [
-			'messagekey_bulkmailer',
-			'packetid_bulkmailer',
+			'messagekey_bulkpacket',
+			'packetid_bulkpacket',
 		],
 		order => 4,
 	},
@@ -507,6 +507,12 @@ my $abstract_structure = {
 				not_null => 1,
 			},
 			{
+				# previous identifier in the database
+				name     => 'prev_id_session',
+				type     => 'varchar(30)',
+				doc => 'previous identifier of the database record',
+			},
+			{
 				# the date when the session was created
 				name     => 'start_date_session',
 				type     => 'int(11)',
@@ -518,6 +524,13 @@ my $abstract_structure = {
 				name     => 'date_session',
 				type     => 'int(11)',
 				not_null => 1,
+			},
+			{
+				# date epoch of the last refrexh of this session. It is
+				# used in order to refresh available sessions
+				name     => 'refresh_date_session',
+				type     => 'int(11)',
+				doc => 'date epoch of the last refresh of this session. It is used in order to refresh available sessions',
 			},
 			{
 				# IP address of the computer from which the
@@ -606,7 +619,7 @@ my $abstract_structure = {
 				type => 'varchar(100)',
 			},
 			{
-				# email adresse of recipient for which a DSN or MDM
+				# email address of recipient for which a DSN or MDM
 				# was received
 				name => 'recipient_notification',
 				type => 'varchar(100)',
@@ -677,7 +690,7 @@ my $abstract_structure = {
 			{
 				# date when the action was executed',
 				name     => 'date_logs',
-				type     => 'int(11)',
+				type     => 'double',
 				not_null => 1,
 			},
 			{
@@ -1116,6 +1129,7 @@ my $abstract_structure = {
 				name     => 'name_list',
 				type     => 'varchar(100)',
 				not_null => 1,
+				doc		 => 'Name of the list',
 			},
 			{
 				name     => 'robot_list',
@@ -1123,8 +1137,9 @@ my $abstract_structure = {
 				not_null => 1,
 			},
 			{
-				name => 'path_list',
+				name => 'family_list',
 				type => 'varchar(100)',
+				doc => 'Name of the family the list belongs to',
 			},
 			{
 				name => 'status_list',
@@ -1136,11 +1151,21 @@ my $abstract_structure = {
 			},
 			{
 				name => 'creation_epoch_list',
-				type => 'datetime',
+				type => 'int(11)',
 			},
 			{
-				name => 'subject_list',
+				name => 'update_email_list',
 				type => 'varchar(100)',
+			},
+			{
+				name => 'update_epoch_list',
+				type => 'int(11)',
+				'doc' => 'UNIX time when the list was updated',
+			},
+			{
+				name => 'searchkey_list',
+				type => 'varchar(255)',
+				'doc' => 'Case-folded list subject to help searching',
 			},
 			{
 				name => 'web_archive_list',
@@ -1150,13 +1175,17 @@ my $abstract_structure = {
 				name => 'topics_list',
 				type => 'varchar(100)',
 			},
+			## cache management
 			{
-				name => 'editors_list',
-				type => 'varchar(100)',
+				name => 'cache_epoch_list',
+				type => 'int(11)',
+				'doc' => 'UNIX time of cache entry',
 			},
+			## admin cache
 			{
-				name => 'owners_list',
-				type => 'varchar(100)',
+				name => 'config_list',
+				type => 'mediumblob',
+				'doc' => 'Serialized list config',
 			},
 		],
 		key => [
@@ -1182,6 +1211,22 @@ my @former_indexes = qw(
 	subscriber_table_index
 	user_index
 );
+
+## Conversion of column data types. Basic definitions are based on MySQL.
+## Following types are recognized:
+## varchar(X) : Text with length upto X. X must be lower than 2^16 - 2.
+## int(1): : Boolean, 1 or 0.
+## int(11) : Unix time (a.k.a. "epoch").
+## int(X) : Integer with columns upto X, -2^31 to 2^31 - 1.
+## tinyint : Integer, -2^7 to 2^7 - 1.
+## smallint : Integer, -2^15 to 2^15 - 1.
+## bigint : Integer, -2^63 to 2^63 - 1.
+## double : IEEE floating point number, 8 bytes.
+## enum : Keyword with length upto 20 o.
+## text : Text with length upto 500 o.
+## longtext : Text with length upto 2^32 - 4 o.
+## datetime: : Timestamp.
+## mediumblob : Binary data with length upto 2^24 - 3 o.
 
 =head1 CLASS METHODS
 
