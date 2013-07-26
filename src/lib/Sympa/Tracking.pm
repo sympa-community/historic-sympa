@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -34,9 +33,10 @@ package Sympa::Tracking;
 
 use strict;
 
-use CGI;
-use Email::Simple;
+#use CGI; # no longer used
+#use Email::Simple; # no longer used
 use MIME::Base64;
+
 
 use Sympa::Database;
 use Sympa::Log::Syslog;
@@ -116,6 +116,8 @@ Initialyse notification table for each subscriber
 #   msgid  : the messageid of the original message
 #   rcpt : a tab ref of recipients
 #   reception_option : teh reception option of thoses subscribers
+    my $list = shift;
+    my %params = @_;
 
 Return value:
 
@@ -309,9 +311,8 @@ sub remove_message_by_id{
 =item remove_message_by_period($period, $listname, $robot)
 
 Remove notifications older than number of days.
-# IN : $period
-#    : $listname
-#    : $robot
+# IN : $list : ref(List)
+#    : $period
 
 Return value:
 
