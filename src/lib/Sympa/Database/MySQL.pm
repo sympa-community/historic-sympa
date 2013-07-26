@@ -53,7 +53,46 @@ sub connect {
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 	
-	$self->{dbh}->do("SET NAMES 'utf8'");
+	## Set client-side character set according to server-side character
+	## set, "utf8" or "utf8mb4".
+	if ($sth = $self->{'dbh'}->prepare(
+		q{SHOW VARIABLES LIKE 'character_set_server'}
+	    ) and $sth->execute and $sth->rows and
+	    $res = $sth->fetchrow_hashref('NAME_lc')) {
+	    $sth->finish;
+	    $cset = $res->{'value'};
+
+	    if ($cset eq 'utf8mb4' and
+		$sth = $self->{'dbh'}->prepare(q{SET NAMES 'utf8mb4'}) and
+		$sth->execute) {
+		$sth->finish;
+	    } else {
+		## Server-side character set is 'utf8', or server, client or
+		## both is earlier than MySQL 5.5.3.
+		Sympa::Log::Syslog::do_log('notice',
+		    'Server-side character set of MySQL is "%s", not ' .
+		    'either "utf8" nor "utf8mb4".  This means possible ' .
+		    'data loss.', $cset
+		) unless $cset eq 'utf8';
+		$self->{'dbh'}->do(q{SET NAMES 'utf8'});
+	    }
+
+	    if ($sth = $self->{'dbh'}->prepare(
+		    q{SHOW VARIABLES LIKE 'character_set_client'}
+		) and $sth->execute and $sth->rows and
+		$res = $sth->fetchrow_hashref('NAME_lc')) {
+		$sth->finish;
+		$cset = $res->{'value'};
+		Sympa::Log::Syslog::do_log('debug3',
+		    'Client character set was set to %s', $cset);
+	    } else {
+		Sympa::Log::Syslog::do_log('error',
+		    'Cannot determine client-side character set');
+	    }
+	} else {
+	    ## Server may be earlier than MySQL 4.1.1.
+	    Sympa::Log::Syslog::do_log('error', 'Cannot get server-side character set');
+	}
 
 	return 1;
 }

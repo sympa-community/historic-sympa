@@ -59,11 +59,17 @@ sub new {
 sub connect {
 	my ($self, %params) = @_;
 
+	$ENV{'SYBASE_CHARSET'} = 'utf8';
 	my $result = $self->SUPER::connect(%params);
 	return unless $result;
 
-	$ENV{'SYBASE_CHARSET'} = 'utf8';
 	$self->{dbh}->do("use $self->{db_name}");
+	$self->{'dbh'}->{LongReadLen} = Site->max_size * 2;
+	$self->{'dbh'}->{LongTruncOk} = 0;
+	Sympa::Log::Syslog::do_log('debug3',
+	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
+	$self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
+	$self->{'dbh'}->{RaiseError});
 
 	return 1;
 }
