@@ -17,7 +17,6 @@
    C src/lib/report.pm
    C src/lib/Sympa/DatabaseDescription.pm
    C src/spooler.pl.in
-   C src/lib/SDM.pm
    C src/lib/Language.pm
    C src/lib/Conf.pm
    C src/lib/Config_XML.pm

@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 =head1 NAME
 
 Sympa::Database - Sympa database object
@@ -2745,5 +2744,19 @@ sub connect_sympa_database {
 =back
 
 =cut
+
+## bound parameters for do_prepared_query().
+## returns an array ( { sql_type => SQL_type }, value ),
+## single scalar or empty array.
+##
+sub AS_DOUBLE {
+	my $self = shift;
+	return $self->AS_DOUBLE(@_);
+}
+
+sub AS_BLOB {
+	my $self = shift;
+	return $self->AS_BLOB(@_);
+}
 
 1;
