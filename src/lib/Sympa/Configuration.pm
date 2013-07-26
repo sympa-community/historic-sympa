@@ -2065,6 +2065,87 @@ sub _get_parameters_names_by_category {
 	return $param_by_categories;
 }
 
+
+## Load WWSympa configuration file.
+sub _load_wwsconf {
+    my $param = shift;
+    my $config_hash = $param->{'config_hash'};
+    my $config_file = get_wwsympa_conf();
+
+    return 0 unless -f $config_file; # this file is optional.
+
+    ## Old params
+    my %old_param = ('alias_manager' => 'No more used, using ' .
+					$config_hash->{'alias_manager'},
+		     'wws_path' => 'No more used',
+		     'icons_url' => 'No more used. Using static_content/icons instead.',
+		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+		     'htmlarea_url' => 'No longer supported',
+		     );
+
+    my %default_conf = ();
+
+    ## Valid params
+    foreach my $key (keys %params) {
+	if (defined $params{$key}{'file'} and
+	    $params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $params{$key}{'default'};
+	}
+    }
+
+    my $conf = \%default_conf;
+
+    my $fh;
+    unless (open $fh, '<', $config_file) {
+	Sympa::Log::Syslog::do_log('err', 'unable to open %s', $config_file);
+	return undef;
+    }
+    
+    while (<$fh>) {
+	next if /^\s*\#/;
+
+	if (/^\s*(\S+)\s+(.+)$/i) {
+	    my ($k, $v) = ($1, $2);
+	    $v =~ s/\s*$//;
+	    if (defined ($conf->{$k})) { #FIXME: Might "exists" be used?
+		$conf->{$k} = $v;
+	    }elsif (defined $old_param{$k}) {
+		Sympa::Log::Syslog::do_log(
+		    'err', 'Parameter %s in %s no more supported : %s',
+		    $k, $config_file, $old_param{$k}
+		);
+	    }else {
+		Sympa::Log::Syslog::do_log(
+		    'err', 'Unknown parameter %s in %s', $k, $config_file
+		);
+	    }
+	}
+	next;
+    }
+    
+    close $fh;
+
+    ## Check binaries and directories
+    if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
+	Sympa::Log::Syslog::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
+    }
+
+    if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
+	Sympa::Log::Syslog::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
+    }
+
+    if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
+	Sympa::Log::Syslog::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
+    }
+
+    ## set default
+    $conf->{'log_facility'} ||= $config_hash->{'syslog'};
+
+    foreach my $k (keys %$conf) {
+	$config_hash->{$k} = $conf->{$k};
+    }
+    $wwsconf = $conf;
+}
 =back
 
 =cut

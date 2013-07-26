@@ -26,4 +26,3 @@
    C src/task_manager.pl.in
 soap/sympa_soap_client.pl.in
 soap/sympasoap.pm
-wwsympa/wwslib.pm

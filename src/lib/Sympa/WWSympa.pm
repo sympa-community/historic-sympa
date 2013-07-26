@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -36,6 +35,7 @@ use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
 
+## No longer used: Use List->get_option_title().
 %reception_mode = (
 	'mail'        => {'gettext_id' => 'standard (direct reception)'},
 	'digest'      => {'gettext_id' => 'digest MIME format'},
@@ -60,6 +60,7 @@ use Sympa::Log::Syslog;
 	10800 => {'gettext_id' => "1 week"},
 	43200 => {'gettext_id' => "30 days"});
 
+## No longer used: Use List->get_option_title().
 %visibility_mode = (
 	'noconceal' => {'gettext_id' => "listed in the list review page"},
 	'conceal'   => {'gettext_id' => "concealed"}
@@ -86,6 +87,12 @@ use Sympa::Log::Syslog;
 	'your_infected_msg.tt2'   => {'gettext_id' => "virus infection message"},
 	'list_aliases.tt2'        => {'gettext_id' => "list aliases template"}
 );
+
+%task_flavours = (
+		  'daily'   => {'gettext_id' => 'daily' },
+		  'monthly' => {'gettext_id' => 'monthly' },
+		  'weekly'  => {'gettext_id' => 'weekly' },
+		  );
 
 ## Defined in RFC 1893
 %bounce_status = (
@@ -147,70 +154,13 @@ my $cipher;
 
 =item load_config($file, $params)
 
-Load WWSympa configuration file
+DEPRECATED. Use Sympa::Configuration::_load_wwsconf instead.
 
 =cut
 
-sub load_config {
-	my ($file, $params) = @_;
-
-	## Old params
-	my %old_param = ('alias_manager' => 'No more used',
-		'wws_path' => 'No more used',
-		'icons_url' => 'No more used. Using static_content/icons instead.',
-		'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
-	);
-
-	my %default_conf = ();
-
-	## Valid params
-	foreach my $key (keys %$params) {
-		if (defined $params->{$key}{'file'} && $params->{$key}{'file'} eq 'wwsympa.conf') {
-			$default_conf{$key} = $params->{$key}{'default'};
-		}
-	}
-
-	my $conf = \%default_conf;
-
-	unless (open (FILE, $file)) {
-		Sympa::Log::Syslog::do_log('err',"unable to open $file");
-		return undef;
-	}
-
-	while (<FILE>) {
-		next if /^\s*\#/;
-
-		if (/^\s*(\S+)\s+(.+)$/i) {
-			my ($k, $v) = ($1, $2);
-			$v =~ s/\s*$//;
-			if (defined ($conf->{$k})) {
-				$conf->{$k} = $v;
-			} elsif (defined $old_param{$k}) {
-				Sympa::Log::Syslog::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
-			} else {
-				Sympa::Log::Syslog::do_log('err',"Unknown parameter %s in %s", $k, $file);
-			}
-		}
-		next;
-	}
-
-	close FILE;
-
-	## Check binaries and directories
-	if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
-		Sympa::Log::Syslog::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
-	}
-
-	if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
-		Sympa::Log::Syslog::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
-	}
-
-	if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
-		Sympa::Log::Syslog::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
-	}
-
-	return $conf;
-}
+## Load WWSympa configuration file
+##sub load_config
+## MOVED: use Conf::load_wwsconf().
 
 =item get_my_url()
 
