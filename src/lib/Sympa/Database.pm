@@ -38,8 +38,6 @@ use strict;
 use Carp;
 use English qw(-no_match_vars);
 
-use Sympa::Configuration;
-use Sympa::List;
 use Sympa::Log::Syslog;
 
 my $singleton;
@@ -2741,49 +2739,6 @@ sub _get_set_index_query {
 	return
 		"CREATE INDEX $params{index} " .
 		"ON $params{table} ($params{fields})";
-}
-
-=back
-
-=head1 FUNCTIONS
-
-=over
-
-=item connect_sympa_database()
-
-Connect to database.
-
-=cut
-
-sub connect_sympa_database {
-	my ($option) = @_;
-
-	Sympa::Log::Syslog::do_log('debug', 'Connecting to Sympa database');
-
-	## We keep trying to connect if this is the first attempt
-	## Unless in a web context, because we can't afford long response time on the web interface
-	my $db_conf = Sympa::Configuration::get_parameters_group('*','Database related');
-	$singleton = Sympa::Database->create(%$db_conf);
-	unless ($singleton) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to create Sympa::Database object');
-		return undef;
-	}
-
-	# Just in case, we connect to the database here. Probably not necessary.
-	my $result = $singleton->connect(
-		'keep_trying' =>
-			($option ne 'just_try' && !$ENV{'HTTP_HOST'} ? 1 : 0)
-	);
-	unless ($result) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to connect to the Sympa database');
-		Sympa::List::send_notify_to_listmaster(
-			'no_db', Site->domain, {}
-		);
-		return undef;
-	}
-	Sympa::Log::Syslog::do_log('debug2','Connected to Database %s',Site->db_name);
-
-	return 1;
 }
 
 =back
