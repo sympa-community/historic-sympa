@@ -642,9 +642,9 @@ sub _selectfields{
 
 	if (($selection eq '*_but_message')||($selection eq '*')) {
 
-		my $structure = $self->{base}->get_structure();
+		my $schema = $self->{base}->get_schema();
 
-		foreach my $field (keys %{$structure->{spool_table}{fields}}) {
+		foreach my $field (keys %{$schema->{spool_table}{fields}}) {
 			next if (($selection eq '*_but_message') && ($field eq 'message_spool'));
 			my $var = $field;
 			$var =~ s/\_spool//;

@@ -42,7 +42,7 @@ use Sympa::Log::Syslog;
 
 my $singleton;
 
-my $abstract_structure = {
+my $schema = {
 	# subscription, subscription option, etc...
 	'subscriber_table' => {
 		fields => [
@@ -1466,29 +1466,29 @@ sub ping {
 	return $self->{dbh}->ping();
 }
 
-=item $database->get_structure()
+=item $database->get_schema()
 
 FIXME.
 
 =cut
 
-sub get_structure {
+sub get_schema {
 	my ($self) = @_;
 
 	# return native structure if already computed
-	return $self->{structure} if $self->{structure};
+	return $self->{schema} if $self->{schema};
 
 	# otherwise compute and cache it
-	my $native_structure = Sympa::Tools::Data::dup_var($abstract_structure);
-	foreach my $table (values %{$native_structure}) {
+	my $native_schema = Sympa::Tools::Data::dup_var($schema);
+	foreach my $table (values %{$schema}) {
 		foreach my $field (@{$table->{fields}}) {
 			$field->{type} =
 				$self->_get_native_type($field->{type});
 		}
 	}
-	$self->{structure} = $native_structure;
+	$self->{schema} = $native_schema;
 
-	return $self->{structure};
+	return $self->{schema};
 }
 
 =item $database->probe()
@@ -1504,21 +1504,21 @@ sub probe {
 	my @current_tables = $self->get_tables();
 	my %current_tables = map { $_ => 1 } @current_tables;
 
-	my $target_structure = $self->get_structure();
+	my $target_schema = $self->get_schema();
 	my $report = [];
 
-	foreach my $table (keys %{$target_structure}) {
+	foreach my $table (keys %{$target_schema}) {
 		if ($current_tables{$table}) {
 			$self->_check_table(
 				table     => $table,
-				structure => $target_structure->{$table},
+				structure => $target_schema->{$table},
 				report    => $report,
 				update    => $params{update}
 			);
 		} else {
 			$self->_create_table(
 				table     => $table,
-				structure => $target_structure->{$table},
+				structure => $target_schema->{$table},
 				report    => $report
 			);
 		}
