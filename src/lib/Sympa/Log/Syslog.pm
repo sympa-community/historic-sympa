@@ -128,6 +128,8 @@ FIXME
 =cut
 
 sub do_log {
+    my ($level) = @_;
+
     unless (defined $levels{$level}) {
 	&do_log('err', 'Invalid $level: "%s"', $level);
 	$level = 'info';
