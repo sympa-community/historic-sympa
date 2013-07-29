@@ -2745,18 +2745,4 @@ sub _get_set_index_query {
 
 =cut
 
-## bound parameters for do_prepared_query().
-## returns an array ( { sql_type => SQL_type }, value ),
-## single scalar or empty array.
-##
-sub AS_DOUBLE {
-	my $self = shift;
-	return $self->AS_DOUBLE(@_);
-}
-
-sub AS_BLOB {
-	my $self = shift;
-	return $self->AS_BLOB(@_);
-}
-
 1;
