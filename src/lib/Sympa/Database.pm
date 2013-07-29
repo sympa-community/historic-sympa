@@ -39,6 +39,7 @@ use Carp;
 use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
+use Sympa::Tools::Data;
 
 my $singleton;
 
