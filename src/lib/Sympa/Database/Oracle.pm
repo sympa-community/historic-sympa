@@ -161,9 +161,9 @@ sub _get_native_type {
 
 ## For BLOB types.
 sub AS_BLOB {
-    return ( { 'ora_type' => DBD::Oracle::ORA_BLOB() } => $_[1] )
-	if scalar @_ > 1;
-    return ();
+	return ( { 'ora_type' => DBD::Oracle::ORA_BLOB() } => $_[1] )
+		if scalar @_ > 1;
+	return ();
 }
 
 1;
