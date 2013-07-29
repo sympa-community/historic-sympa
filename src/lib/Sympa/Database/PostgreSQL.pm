@@ -34,6 +34,8 @@ package Sympa::Database::PostgreSQL;
 use strict;
 use base qw(Sympa::Database);
 
+use Carp;
+
 use Sympa::Log::Syslog;
 
 our %date_format = (
