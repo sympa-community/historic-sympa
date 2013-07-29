@@ -350,9 +350,9 @@ sub get_indexes {
 
 ## For DOUBLE type.
 sub AS_DOUBLE {
-    return ( { 'mysql_type' => DBD::mysql::FIELD_TYPE_DOUBLE() } => $_[1] )
-	if scalar @_ > 1;
-    return ();
+	return ( { 'mysql_type' => DBD::mysql::FIELD_TYPE_DOUBLE() } => $_[1] )
+		if scalar @_ > 1;
+	return ();
 }
 
 1;
