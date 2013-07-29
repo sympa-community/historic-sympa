@@ -233,38 +233,31 @@ sub get_tables {
 		'Getting tables list in database %s',$self->{'db_name'}
 	);
 
-    ## get search_path.
-    my $sth;
-    unless ($sth = $self->do_query('SELECT current_schemas(false)')) {
-	Sympa::Log::Syslog::do_log('err', 'Unable to get search_path of database %s',
-	    $self->{'db_name'});
-	return undef;
-    }
-    my $search_path = $sth->fetchrow;
-    $sth->finish;
-
-    ## get table names.
-    my @raw_tables;
-    my %raw_tables;
-    foreach my $schema (@{$search_path || []}) {
-	my @tables = $self->{'dbh'}->tables(
-	    undef, $schema, undef, 'TABLE', {pg_noprefix => 1}
-	);
-	foreach my $t (@tables) {
-	    next if $raw_tables{$t};
-	    push @raw_tables, $t;
-	    $raw_tables{$t} = 1;
+	## get search_path.
+	my $handle = $self->get_query_handle('SELECT current_schemas(false)');
+	unless ($handle) {
+		Sympa::Log::Syslog::do_log('err', 'Unable to get search_path of database %s',
+		$self->{'db_name'});
+		return undef;
 	}
-    }
-    unless (@raw_tables) {
-	Sympa::Log::Syslog::do_log('err',
-	    'Unable to retrieve the list of tables from database %s',
-	    $self->{'db_name'}
-	);
-	return undef;
-    }
-    return \@raw_tables;
+	$handle->execute();
+	my $search_path = $handle->fetchrow();
 
+	## get table names.
+	my @raw_tables;
+	my %raw_tables;
+	foreach my $schema (@{$search_path || []}) {
+		my @tables = $self->{dbh}->tables(
+			undef, $schema, undef, 'TABLE', {pg_noprefix => 1}
+		);
+		foreach my $table (@tables) {
+			next if $raw_tables{$table};
+			push @raw_tables, $table;
+			$raw_tables{$table} = 1;
+		}
+	}
+
+	return @raw_tables;
 }
 
 sub add_table {
