@@ -477,89 +477,105 @@ sub get_primary_key {
 	return \@keys;
 }
 
-# Drops the primary key of a table.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the primary keys must be dropped.
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
+# overriden to use CONSTRAINT syntax, as PostgreSQL doesn't support DROP
+# PRIMARY KEY syntax
 sub unset_primary_key {
-    my $self = shift;
-    my $param = shift;
-    Sympa::Log::Syslog::do_log('debug3','Removing primary key from table %s',$param->{'table'});
+	my ($self, %params) = @_;
 
-    my $sth;
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Removing primary key from table %s',
+		$params{table}
+	);
 
-    ## PostgreSQL does not have 'ALTER TABLE ... DROP PRIMARY KEY'.
-    ## Instead, get a name of constraint then drop it.
-    my $key_name;
+	my $query =
+		"SELECT tc.constraint_name "                       .
+		"FROM information_schema.table_constraints AS tc " .
+		"WHERE "                                           .
+			"tc.table_catalog = ? AND "                .
+			"tc.table_name = ? AND "                   .
+			"tc.constraint_type = 'PRIMARY KEY'";
+	my $handle = $self->get_query_handle($query);
+	unless ($handle) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not search primary key from table %s',
+			$params{table}
+		);
+		return undef;
+	}
+	$handle->execute($self->{db_name}, $params{table});
+	my $key_name = $handle->fetchrow_array();
+	unless ($key_name) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get primary key from table %s',
+			$params{table}
+		);
+		return undef;
+	}
 
-    unless ($sth = $self->do_query(
-	q{SELECT tc.constraint_name
-	  FROM information_schema.table_constraints AS tc
-	  WHERE tc.table_catalog = %s AND tc.table_name = %s AND
-		tc.constraint_type = 'PRIMARY KEY'},
-	&SDM::quote($self->{'db_name'}), &SDM::quote($param->{'table'})
-    )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not search primary key from table %s in database %s', $param->{'table'}, $self->{'db_name'});
-	return undef;
-    }
+	my $query = "ALTER TABLE $params{table} DROP CONSTRAINT '$key_name'";
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to remove primary key from table %s',
+			$params{table},
+		);
+		return undef;
+	}
 
-    $key_name = $sth->fetchrow_array();
-    $sth->finish;
-    unless (defined $key_name) {
-	Sympa::Log::Syslog::do_log('err', 'Could not get primary key from table %s in database %s', $param->{'table'}, $self->{'db_name'});
-	return undef;
-    }
+	my $report = sprintf(
+		"Primary key removed from table %s",
+		$params{table}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
 
-    unless ($sth = $self->do_query(
-	q{ALTER TABLE %s DROP CONSTRAINT "%s"},
-	$param->{'table'}, $key_name
-    )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not drop primary key "%s" from table %s in database %s', $key_name, $param->{'table'}, $self->{'db_name'});
-	return undef;
-    }
-
-    my $report = "Table $param->{'table'}, PRIMARY KEY dropped";
-    Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY dropped', $param->{'table'});
-
-    return $report;
+	return $report;
 }
 
-# Sets the primary key of a table.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the primary keys must be defined.
-#	* 'fields' : a ref to an array containing the names of the fields used in the key.
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
+# overriden to use CONSTRAINT syntax
 sub set_primary_key {
-    my $self = shift;
-    my $param = shift;
+	my ($self, %params) = @_;
 
-    my $sth;
+	my $fields = join(',', @{$params{fields}});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting primary key on table %s using fields %s',
+		$params{table},
+		$fields
+	);
 
-    ## Give fixed key name if possible.
-    my $key;
-    if ($param->{'table'} =~ /^(.+)_table$/) {
-	$key = sprintf 'CONSTRAINT "ind_%s" PRIMARY KEY', $1;
-    } else {
-	$key = 'PRIMARY KEY';
-    }
+	## Give fixed key name if possible.
+	my $key_name;
+	if ($params{table} =~ /^(.+)_table$/) {
+		$key_name = sprintf 'CONSTRAINT "ind_%s" PRIMARY KEY', $1;
+	} else {
+		$key_name = 'PRIMARY KEY';
+	}
 
-    my $fields = join ',',@{$param->{'fields'}};
-    Sympa::Log::Syslog::do_log('debug3','Setting primary key for table %s (%s)',$param->{'table'},$fields);
-    unless ($sth = $self->do_query(
-	q{ALTER TABLE %s ADD %s (%s)},
-	$param->{'table'}, $key, $fields
-    )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not set fields %s as primary key for table %s in database %s', $fields, $param->{'table'}, $self->{'db_name'});
-	return undef;
-    }
+	my $query =
+		"ALTER TABLE $params{table} ADD $key_name ($params{fields})";
+	my $rows = $self->{dbh}->do($query);
+	unless ($rows) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Unable to set primary key on table %s using fields %s',
+			$params{table},
+			$fields
+		);
+		return undef;
+	}
 
-    my $report = "Table $param->{'table'}, PRIMARY KEY set on $fields";
-    Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY set on %s', $param->{'table'}, $fields);
-    return $report;
+	my $report = sprintf(
+		"Primary key set on table %s using fields %s",
+		$params{table},
+		$fields
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
 }
 
 sub get_indexes {
