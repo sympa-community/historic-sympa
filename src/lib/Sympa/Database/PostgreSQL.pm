@@ -301,10 +301,12 @@ sub _get_native_type {
 	return 'int4'         if $type =~ /^smallint/;
 	return 'int2'         if $type =~ /^tinyint/;
 	return 'int8'         if $type =~ /^bigint/;
+	return 'float8'       if $type =~ /^double/;
 	return 'varchar(500)' if $type =~ /^text/;
 	return 'text'         if $type =~ /^longtext/;
 	return 'timestamptz'  if $type =~ /^datetime/;
 	return 'varchar(15)'  if $type =~ /^enum/;
+	return 'bytea'        if $type =~ /^mediumblob/;
 	return $type;
 }
 

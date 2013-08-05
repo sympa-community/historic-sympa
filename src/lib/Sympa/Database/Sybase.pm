@@ -162,12 +162,14 @@ sub _get_table_query {
 sub _get_native_type {
 	my ($self, $type) = @_;
 
-	return 'numeric'      if $type =~ /^int/;
-	return 'numeric'      if $type =~ /^smallint/;
-	return 'numeric'      if $type =~ /^bigint/;
-	return 'varchar(500)' if $type =~ /^text/;
-	return 'text'         if $type =~ /^longtext/;
-	return 'varchar(15)'  if $type =~ /^enum/;
+	return 'numeric'          if $type =~ /^int/;
+	return 'numeric'          if $type =~ /^smallint/;
+	return 'numeric'          if $type =~ /^bigint/;
+	return 'double precision' if $type =~ /^double/;
+	return 'varchar(500)'     if $type =~ /^text/;
+	return 'text'             if $type =~ /^longtext/;
+	return 'varchar(15)'      if $type =~ /^enum/;
+	return 'long binary'      if $type =~ /^mediumblob/;
 	return $type
 }
 

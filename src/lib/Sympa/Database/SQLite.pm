@@ -249,8 +249,10 @@ sub _get_native_type {
 	return 'integer' if $type =~ /^tinyint/;
 	return 'integer' if $type =~ /^bigint/;
 	return 'integer' if $type =~ /^smallint/;
+	return 'real'    if $type =~ /^double/;
 	return 'numeric' if $type =~ /^datetime/;
 	return 'text'    if $type =~ /^enum/;
+	return 'none'    if $type =~ /^mediumblob/;
 	return $type;
 }
 

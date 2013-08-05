@@ -151,11 +151,13 @@ sub _get_native_type {
 	return 'number'        if $type =~ /^int/;
 	return 'number'        if $type =~ /^bigint/;
 	return 'number'        if $type =~ /^smallint/;
+	return 'float(24)'     if $type =~ /^double/;
 	return "varchar2($1)"  if $type =~ /^varchar\((\d+)\)/;
 	return "varchar2(20)"  if $type =~ /^enum/;
 	return "varchar2(500)" if $type =~ /^text/;
 	return 'long'          if $type =~ /^longtext/;
 	return 'date'          if $type =~ /^datetime/;
+	return 'blob'          if $type =~ /^mediumblob/;
 	return $type;
 }
 
