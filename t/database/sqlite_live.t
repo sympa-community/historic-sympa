@@ -163,7 +163,7 @@ is_deeply(
 	\@tables,
 	[ qw/
 		admin_table
-		bulkmailer_table
+		bulkpacket_table
 		conf_table
 		exclusion_table
 		list_table
