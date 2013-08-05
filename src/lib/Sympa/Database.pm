@@ -1712,14 +1712,14 @@ sub _check_indexes {
 		if ($current_fields) {
 			$self->_check_index(
 				table          => $params{table},
-				index          => $params{index},
+				index          => $index,
 				fields         => $params{structure}->{indexes}{$index},
 				current_fields => $current_fields,
 			);
 		} else {
 			$self->_create_index(
 				table  => $params{table},
-				index  => $params{index},
+				index  => $index,
 				fields => $params{structure}->{indexes}{$index}
 			);
 		}
