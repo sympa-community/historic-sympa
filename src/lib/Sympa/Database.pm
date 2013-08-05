@@ -2222,14 +2222,11 @@ sub add_table {
 
 	my $query = $self->_get_table_query(%params);
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to create table %s',
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to create table %s: %s',
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf("Table %s created", $params{table});
 
@@ -2324,15 +2321,12 @@ sub update_field {
 	$query .= ' NOT NULL' if $params{notnull};
 
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to update field %s in table %s',
-			$params{field},
-			$params{table}
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to update field %s in table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		'Field %s updated in table %s',
@@ -2398,15 +2392,12 @@ sub add_field {
 	$query .= ' PRIMARY KEY'    if $params{primary};
 
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to add field %s in table %s',
-			$params{field},
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to add field %s in table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		'Field %s added in table %s',
@@ -2450,15 +2441,12 @@ sub delete_field {
 
 	my $query = "ALTER TABLE $params{table} DROP COLUMN $params{field}";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to remove field %s from table %s',
-			$params{field},
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to remove field %s from table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		'Field %s removed from table %s',
@@ -2522,14 +2510,11 @@ sub unset_primary_key {
 
 	my $query = "ALTER TABLE $params{table} DROP PRIMARY KEY";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to remove primary key from table %s',
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to remove primary key from table %s',
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Primary key removed from table %s",
@@ -2574,15 +2559,12 @@ sub set_primary_key {
 	my $query =
 		"ALTER TABLE $params{table} ADD PRIMARY KEY ($params{fields})";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set primary key on table %s using fields %s',
-			$params{table},
-			$fields
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set primary key on table %s using fields %s: %s',
+		$params{table},
+		$fields,
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Primary key set on table %s using fields %s",
@@ -2649,15 +2631,12 @@ sub unset_index {
 
 	my $query = $self->_get_unset_index_query(%params);
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to remove index %s from table %s',
-			$params{index},
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to remove index %s from table %s',
+		$params{index},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Index %s removed from table %s",
@@ -2712,16 +2691,13 @@ sub set_index {
 
 	my $query = $self->_get_set_index_query(%params, fields => $fields);
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set index %s on table %s using fields %s',
-			$params{index},
-			$params{table},
-			$fields,
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set index %s on table %s using fields %s',
+		$params{index},
+		$params{table},
+		$fields,
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Index %s set on table %s using fields %s",
