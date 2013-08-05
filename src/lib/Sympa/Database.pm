@@ -1481,7 +1481,7 @@ sub get_schema {
 
 	# otherwise compute and cache it
 	my $native_schema = Sympa::Tools::Data::dup_var($schema);
-	foreach my $table (values %{$schema}) {
+	foreach my $table (values %{$native_schema}) {
 		foreach my $field (@{$table->{fields}}) {
 			$field->{type} =
 				$self->_get_native_type($field->{type});
