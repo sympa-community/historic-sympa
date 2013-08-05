@@ -215,7 +215,6 @@ sub get_tables {
 	return @tables;
 }
 
-<<<<<<< .courant
 sub _get_table_query {
 	my ($self, %params) = @_;
 
