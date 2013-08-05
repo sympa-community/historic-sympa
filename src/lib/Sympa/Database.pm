@@ -2511,7 +2511,7 @@ sub unset_primary_key {
 	my $query = "ALTER TABLE $params{table} DROP PRIMARY KEY";
 	my $rows = $self->{dbh}->do($query);
 	croak sprintf(
-		'Unable to remove primary key from table %s',
+		'Unable to remove primary key from table %s: %s',
 		$params{table},
 		$self->{dbh}->errstr()
 	) unless $rows;
@@ -2632,7 +2632,7 @@ sub unset_index {
 	my $query = $self->_get_unset_index_query(%params);
 	my $rows = $self->{dbh}->do($query);
 	croak sprintf(
-		'Unable to remove index %s from table %s',
+		'Unable to remove index %s from table %s: %s',
 		$params{index},
 		$params{table},
 		$self->{dbh}->errstr()
@@ -2692,7 +2692,7 @@ sub set_index {
 	my $query = $self->_get_set_index_query(%params, fields => $fields);
 	my $rows = $self->{dbh}->do($query);
 	croak sprintf(
-		'Unable to set index %s on table %s using fields %s',
+		'Unable to set index %s on table %s using fields %s: %s',
 		$params{index},
 		$params{table},
 		$fields,
