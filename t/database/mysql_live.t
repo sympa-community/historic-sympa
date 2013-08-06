@@ -145,11 +145,13 @@ $result = $base->delete_field(
 );
 ok($result, "field data deletion");
 
-$result = $base->delete_field(
-	table => 'table1',
-	field => 'id',
-);
-ok(!$result, 'impossible to delete last field');
+throws_ok {
+	$result = $base->delete_field(
+		table => 'table1',
+		field => 'id',
+	);
+} qr/^Unable to remove field id from table table1:/,
+'impossible to delete last field';
 
 $result = $base->get_fields(table => 'table1');
 is_deeply(
