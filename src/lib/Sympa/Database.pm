@@ -1667,34 +1667,47 @@ sub _check_primary_key {
 	croak "Unable to check primary key for $params{table}, aborting"
 		unless $current_fields;
 
-	my $check = $self->_check_fields_list(
-		current => $current_fields,
-		target  => $params{structure}->{key}
-	);
+	if (@$current_fields) {
+		my $check = $self->_check_fields_list(
+			current => $current_fields,
+			target  => $params{structure}->{key}
+		);
 
-	if ($check) {
+		if ($check) {
+			Sympa::Log::Syslog::do_log(
+				'debug',
+				'Existing primary key correct, nothing to change',
+			);
+			return 1;
+		}
+
 		Sympa::Log::Syslog::do_log(
 			'debug',
-			'Existing primary key correct, nothing to change',
+			'Existing primary key incorrect, re-creating it',
 		);
-		return 1;
+
+		my $deletion = $self->unset_primary_key(
+			table => $params{table}
+		);
+		push @{$params{report}}, $deletion if $deletion;
+
+		my $addition = $self->set_primary_key(
+			table  => $params{table},
+			fields => $params{structure}->{key}
+		);
+		push @{$params{report}}, $addition if $addition;
+	} else {
+		Sympa::Log::Syslog::do_log(
+			'debug',
+			'No primary key, creating it',
+		);
+
+		my $addition = $self->set_primary_key(
+			table  => $params{table},
+			fields => $params{structure}->{key}
+		);
+		push @{$params{report}}, $addition if $addition;
 	}
-
-	Sympa::Log::Syslog::do_log(
-		'debug',
-		'Existing primary key incorrect, re-creating it',
-	);
-
-	my $deletion = $self->unset_primary_key(
-		table => $params{table}
-	);
-	push @{$params{report}}, $deletion if $deletion;
-
-	my $addition = $self->set_primary_key(
-		table  => $params{table},
-		fields => $current_fields
-	);
-	push @{$params{report}}, $addition if $addition;
 
 	return 1;
 }
