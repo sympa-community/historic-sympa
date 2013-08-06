@@ -109,13 +109,12 @@ sub get_limit_clause {
 }
 
 sub get_formatted_date {
-    my $self = shift;
-    my $param = shift;
+    my ($self, %params) = @_;
     Sympa::Log::Syslog::do_log('debug3','Building SQL date formatting');
-    if (lc($param->{'mode'}) eq 'read' or lc($param->{'mode'}) eq 'write') {
-	return $param->{'target'};
+    if (lc($params{'mode'}) eq 'read' or lc($params{'mode'}) eq 'write') {
+	return $params{'target'};
     }else {
-	Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $param->{'mode'});
+	Sympa::Log::Syslog::do_log('err',"Unknown date format mode %s", $params{'mode'});
 	return undef;
     }
 }
@@ -150,10 +149,9 @@ sub is_autoinc {
 }
 
 sub set_autoinc {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
-    my $field = $param->{'field'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
+    my $field = $params{'field'};
 
     Sympa::Log::Syslog::do_log('debug3','Setting field %s.%s as autoincremental',
 		 $table, $field);
@@ -297,13 +295,12 @@ sub get_fields {
 }
 
 sub update_field {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
-    my $field = $param->{'field'};
-    my $type = $param->{'type'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
+    my $field = $params{'field'};
+    my $type = $params{'type'};
     my $options = '';
-    if ($param->{'notnull'}) {
+    if ($params{'notnull'}) {
 	$options .= ' NOT NULL';
     }
     my $report;
@@ -338,21 +335,20 @@ sub update_field {
 # OUT: A character string report of the operation done or undef if something went wrong.
 #
 sub add_field {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
-    my $field = $param->{'field'};
-    my $type = $param->{'type'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
+    my $field = $params{'field'};
+    my $type = $params{'type'};
 
     my $options = '';
     # To prevent "Cannot add a NOT NULL column with default value NULL" errors
-    if ($param->{'primary'}) {
+    if ($params{'primary'}) {
 	$options .= ' PRIMARY KEY';
     }
-    if ( $param->{'autoinc'}) {
+    if ( $params{'autoinc'}) {
 	$options .= ' AUTOINCREMENT';
     }
-    if ( $param->{'notnull'}) {
+    if ( $params{'notnull'}) {
 	$options .= ' NOT NULL';
     }
     Sympa::Log::Syslog::do_log('debug3','Adding field %s in table %s (%s%s)',
@@ -360,7 +356,7 @@ sub add_field {
 
     my $report = '';
 
-    if ($param->{'primary'}) {
+    if ($params{'primary'}) {
 	$report = $self->_update_table($table,
 				       qr{[(]\s*},
 				       "(\n\t $field\t$type$options,\n\t ");
@@ -402,10 +398,9 @@ sub add_field {
 # OUT: A character string report of the operation done or undef if something went wrong.
 #
 sub delete_field {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
-    my $field = $param->{'field'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
+    my $field = $params{'field'};
     Sympa::Log::Syslog::do_log('debug3','Deleting field %s from table %s', $field, $table);
 
     ## SQLite does not support removal of columns
@@ -423,9 +418,8 @@ sub delete_field {
 # OUT: A ref to a hash in which each key is the name of a primary key or undef if something went wrong.
 #
 sub get_primary_key {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
     Sympa::Log::Syslog::do_log('debug3','Getting primary key for table %s', $table);
 
     my %found_keys = ();
@@ -455,9 +449,8 @@ sub get_primary_key {
 # OUT: A character string report of the operation done or undef if something went wrong.
 #
 sub unset_primary_key {
-    my $self = shift;
-    my $param = shift;
-    my $table = $param->{'table'};
+    my ($self, %params) = @_;
+    my $table = $params{'table'};
     my $report;
     Sympa::Log::Syslog::do_log('debug3', 'Removing primary key from table %s', $table);
 
@@ -473,6 +466,7 @@ sub unset_primary_key {
     Sympa::Log::Syslog::do_log('info', '%s', $r);
     $report .= "\nTable $table, PRIMARY KEY dropped";
     Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY dropped', $table);
+}
 
 # override needed as unsupported
 sub delete_field {
@@ -481,8 +475,8 @@ sub delete_field {
 
 sub get_primary_key {
 	my ($self, %params) = @_;
-    my $table = $param->{'table'};
-    my $fields = join ',',@{$param->{'fields'}};
+    my $table = $params{'table'};
+    my $fields = join ',',@{$params{'fields'}};
     my $report;
     Sympa::Log::Syslog::do_log('debug3', 'Setting primary key for table %s (%s)',
 		 $table, $fields);
@@ -512,18 +506,17 @@ sub get_primary_key {
 #      Returns undef if something went wrong.
 #
 sub get_indexes {
-    my $self = shift;
-    my $param = shift;
-    Sympa::Log::Syslog::do_log('debug3','Looking for indexes in %s',$param->{'table'});
+    my ($self, %params) = @_;
+    Sympa::Log::Syslog::do_log('debug3','Looking for indexes in %s',$params{'table'});
 
     my %found_indexes;
     my $sth;
     my $l;
     unless ($sth = $self->do_query(
 	q{PRAGMA index_list('%s')},
-	$param->{'table'}
+	$params{'table'}
     )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $param->{'table'}, $self->{'db_name'});
+	Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 	return undef;
     }
     while($l = $sth->fetchrow_hashref('NAME_lc')) {
@@ -537,7 +530,7 @@ sub get_indexes {
 	    q{PRAGMA index_info('%s')},
 	    $index_name
 	)) {
-	    Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $param->{'table'}, $self->{'db_name'});
+	    Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 	    return undef;
     }
 	while($l = $sth->fetchrow_hashref('NAME_lc')) {
@@ -557,20 +550,19 @@ sub get_indexes {
 # OUT: A character string report of the operation done or undef if something went wrong.
 #
 sub unset_index {
-    my $self = shift;
-    my $param = shift;
-    Sympa::Log::Syslog::do_log('debug3','Removing index %s from table %s',$param->{'index'},$param->{'table'});
+    my ($self, %params) = @_;
+    Sympa::Log::Syslog::do_log('debug3','Removing index %s from table %s',$params{'index'},$params{'table'});
 
     my $sth;
     unless ($sth = $self->do_query(
 	q{DROP INDEX "%s"},
-	$param->{'index'}
+	$params{'index'}
     )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$param->{'index'}, $param->{'table'}, $self->{'db_name'});
+	Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
 	return undef;
     }
-    my $report = "Table $param->{'table'}, index $param->{'index'} dropped";
-    Sympa::Log::Syslog::do_log('info', 'Table %s, index %s dropped', $param->{'table'},$param->{'index'});
+    my $report = "Table $params{'table'}, index $params{'index'} dropped";
+    Sympa::Log::Syslog::do_log('info', 'Table %s, index %s dropped', $params{'table'},$params{'index'});
 
 	my $query = "SELECT name,sql FROM sqlite_master WHERE type='index'";
 	my $sth = $self->{dbh}->prepare($query);
@@ -594,17 +586,17 @@ sub unset_index {
 	}
 
     my $sth;
-    my $fields = join ',',@{$param->{'fields'}};
-    Sympa::Log::Syslog::do_log('debug3', 'Setting index %s for table %s using fields %s', $param->{'index_name'},$param->{'table'}, $fields);
+    my $fields = join ',',@{$params{'fields'}};
+    Sympa::Log::Syslog::do_log('debug3', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
     unless ($sth = $self->do_query(
 	q{CREATE INDEX %s ON %s (%s)},
-	$param->{'index_name'}, $param->{'table'}, $fields
+	$params{'index_name'}, $params{'table'}, $fields
     )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $param->{'table'}, $self->{'db_name'});
+	Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
 	return undef;
     }
-    my $report = "Table $param->{'table'}, index %s set using $fields";
-    Sympa::Log::Syslog::do_log('info', 'Table %s, index %s set using fields %s',$param->{'table'}, $param->{'index_name'}, $fields);
+    my $report = "Table $params{'table'}, index %s set using $fields";
+    Sympa::Log::Syslog::do_log('info', 'Table %s, index %s set using fields %s',$params{'table'}, $params{'index_name'}, $fields);
     return $report;
 }
 
@@ -617,7 +609,7 @@ sub unset_index {
 ## manner.
 
 sub do_query {
-    my $self = shift;
+    my ($self) = @_;
     my $sth;
     my $rc;
 
@@ -654,7 +646,7 @@ sub do_query {
 }
 
 sub do_prepared_query {
-    my $self = shift;
+    my ($self) = @_;
     my $sth;
     my $rc;
 
@@ -703,15 +695,13 @@ sub AS_BLOB {
 
 ## get numified version of SQLite
 sub _vernum {
-    my $self = shift;
+    my ($self) = @_;
     return version->new('v' . $self->{'dbh'}->{'sqlite_version'})->numify;
 }
 
 ## get raw type of column
 sub _get_field_type {
-    my $self = shift;
-    my $table = shift;
-    my $field = shift;
+    my ($self, $table, $field) = @_;
 
     my $sth;
     unless ($sth = $self->do_query(q{PRAGMA table_info('%s')}, $table)) {
@@ -734,10 +724,7 @@ sub _get_field_type {
 ## update table structure
 ## old table will be saved as "<table name>_<YYmmddHHMMSS>_<PID>".
 sub _update_table {
-    my $self = shift;
-    my $table = shift;
-    my $regex = shift;
-    my $replacement = shift;
+    my ($self, $table, $regex, $replacement) = @_;
     my $statement;
     my $table_saved = sprintf '%s_%s_%d', $table,
 			      POSIX::strftime("%Y%m%d%H%M%S", gmtime $^T),
@@ -786,8 +773,7 @@ sub _update_table {
 
 ## Get SQL statement by which table was created.
 sub _get_create_table {
-    my $self = shift;
-    my $table = shift;
+    my ($self, $table) = @_;
     my $sth;
 
     unless ($sth = $self->do_query(
@@ -809,9 +795,7 @@ sub _get_create_table {
 ## copy table content to another table
 ## target table must have all columns source table has.
 sub _copy_table {
-    my $self = shift;
-    my $table = shift;
-    my $table_new = shift;
+    my ($self, $table, $table_new) = @_;
     return undef unless defined $table and defined $table_new;
 
     my $fields = join ', ',
@@ -832,9 +816,7 @@ sub _copy_table {
 ## rename table
 ## if target already exists, do nothing and return 0.
 sub _rename_table {
-    my $self = shift;
-    my $table = shift;
-    my $table_new = shift;
+    my ($self, $table, $table_new) = @_;
     return undef unless defined $table and defined $table_new;
 
     if ($self->_get_create_table($table_new)) {
@@ -854,9 +836,7 @@ sub _rename_table {
 ## rename table
 ## if target already exists, drop source table.
 sub _rename_or_drop_table {
-    my $self = shift;
-    my $table = shift;
-    my $table_new = shift;
+    my ($self, $table, $table_new) = @_;
 
     my $r = $self->_rename_table($table, $table_new);
     unless (defined $r) {
