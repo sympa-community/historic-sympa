@@ -641,11 +641,21 @@ sub _create_sequence {
 
 	my $query = "CREATE SEQUENCE $sequence";
 	my $rows = $self->{dbh}->do($query);
+	# check if the sequence already exist
+	my $select_query =
+		"SELECT relname "                    .
+		"FROM pg_class "                     .
+		"WHERE relname = ? AND relkind = 'S'";
+	my $select_rows = $self->{dbh}->do($select_query, undef, $sequence);
+	return if $select_rows;
+
+	my $create_query = "CREATE SEQUENCE $sequence";
+	my $create_rows = $self->{dbh}->do($create_query);
 	croak sprintf(
 		'Unable to create sequence %s: %s',
 		$sequence,
 		$self->{dbh}->errstr()
-	) unless $rows;
+	) unless $create_rows;
 }
 
 ## For DOUBLE types.
