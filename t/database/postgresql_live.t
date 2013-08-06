@@ -100,7 +100,7 @@ $result = $base->is_autoinc(
 );
 ok($result, "id is autoinc");
 
-$result = $result = $base->is_autoinc(
+$result = $base->is_autoinc(
 	table => 'table1',
 	field => 'data',
 );
