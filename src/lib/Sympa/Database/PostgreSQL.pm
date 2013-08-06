@@ -146,15 +146,12 @@ sub is_autoinc {
 					"nspname != 'information_schema'" .
 			")";
 	my $row = $self->{dbh}->selectrow_hashref($query);
-	unless ($row) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to gather autoincrement field named %s for table %s',
-			$params{field},
-			$params{table}
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to get autoincrement field %s for table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $row;
 
 	return $row->{relname} eq $sequence;
 }
@@ -182,46 +179,39 @@ sub set_autoinc {
 		"ALTER COLUMN $params{field} " .
 		"TYPE BIGINT";
 	$rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set type of field %s in table %s as bigint',
-			$params{field},
-			$params{table}
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set type of field %s in table %s as bigint: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	$query =
 		"ALTER TABLE $params{table} "  .
 		"ALTER COLUMN $params{field} " .
 		"SET DEFAULT NEXTVAL($sequence)";
 	$rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set default value of field %s in table %s as next value of sequence table %',
-			$params{field},
-			$params{table},
-			$sequence
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set default value of field %s in table %s as next ' .
+		'value of sequence %s: %s',
+		$params{field},
+		$params{table},
+		$sequence,
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	$query =
 		"UPDATE $params{table} " .
 		"SET $params{field} = NEXTVAL($sequence)";
 	$rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set sequence %s as value for field %s, table %s',
-			$sequence,
-			$params{field},
-			$params{table}
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set sequence %s as value for field %s, table %s: %s',
+		$sequence,
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
+
 	return 1;
 }
 
@@ -372,15 +362,12 @@ sub update_field {
 		"ALTER COLUMN $params{field} TYPE $params{type}";
 
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Could not change field %s in table %s',
-			$params{field},
-			$params{table}
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Could not change field %s in table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		'Field %s updated in table %s',
@@ -414,15 +401,12 @@ sub add_field {
 	$query .= ' PRIMARY KEY'    if $params{primary};
 
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Could not add field %s in table %s',
-			$params{field},
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to add field %s in table %s: %s',
+		$params{field},
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	if ($params{autoinc}) {
 		$self->set_autoinc(
@@ -517,14 +501,11 @@ sub unset_primary_key {
 
 	my $query = "ALTER TABLE $params{table} DROP CONSTRAINT '$key_name'";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to remove primary key from table %s',
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to remove primary key from table %s: %s',
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Primary key removed from table %s",
@@ -558,15 +539,12 @@ sub set_primary_key {
 	my $query =
 		"ALTER TABLE $params{table} ADD $key_name ($params{fields})";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to set primary key on table %s using fields %s',
-			$params{table},
-			$fields
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to set primary key on table %s using fields %s: %s',
+		$params{table},
+		$fields,
+		$self->{dbh}->errstr()
+	) unless $rows;
 
 	my $report = sprintf(
 		"Primary key set on table %s using fields %s",
@@ -596,14 +574,11 @@ sub get_indexes {
 			"c.relname ~ \'^$params{table}$\' AND " .
 			"pg_catalog.pg_table_is_visible(c.oid)";
 	my $row = $self->{dbh}->selectrow_hashref($oid_query);
-	unless ($row) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Could not get oid from table %s',
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to get oid from table %s: %s',
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $row;
 
 	my $index_query =
 		"SELECT "                                                     .
@@ -622,14 +597,11 @@ sub get_indexes {
 		"ORDER BY i.indisprimary DESC, i.indisunique DESC, c2.relname";
 
 	my $sth = $self->{dbh}->prepare($index_query);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Could not get indexes list from table %s',
-			$params{table},
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to get indexes list from table %s: %s',
+		$params{table},
+		$self->{dbh}->errstr()
+	) unless $sth;
 	$sth->execute();
 
 	my %indexes;
@@ -669,14 +641,11 @@ sub _create_sequence {
 
 	my $query = "CREATE SEQUENCE $sequence";
 	my $rows = $self->{dbh}->do($query);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to create sequence %s',
-			$sequence
-		);
-		return undef;
-	}
+	croak sprintf(
+		'Unable to create sequence %s: %s',
+		$sequence,
+		$self->{dbh}->errstr()
+	) unless $rows;
 }
 
 ## For DOUBLE types.
