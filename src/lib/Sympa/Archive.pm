@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -138,26 +137,26 @@ sub scan_dir_archive {
 		next unless ($file =~ /^\d+$/);
 		Sympa::Log::Syslog::do_log ('debug',"($dir, $month): start parsing message $dir/$month/arctxt/$file");
 
-		my $mail = Sympa::Message->new(
+		my $message = Sympa::Message->new(
 			file       => "$dir/$month/arctxt/$file",
 			noxsympato => 'noxsympato'
 		);
-		unless (defined $mail) {
-			Sympa::Log::Syslog::do_log('err', 'Unable to create Message object %s', $file);
+		unless ($message) {
+			Sympa::Log::Syslog::do_log('err', 'Unable to create Message object from file %s', $file);
 			return undef;
 		}
 
-		Sympa::Log::Syslog::do_log('debug',"MAIL object : $mail");
+		Sympa::Log::Syslog::do_log('debug',"MAIL object : %s", $message);
 
 		$i++;
 		my $msg = {};
 		$msg->{'id'} = $i;
 
-		$msg->{'subject'} = Sympa::Tools::decode_header($mail, 'Subject');
-		$msg->{'from'} = Sympa::Tools::decode_header($mail, 'From');
-		$msg->{'date'} = Sympa::Tools::decode_header($mail, 'Date');
+		$msg->{'subject'} = Sympa::Tools::decode_header($message, 'Subject');
+		$msg->{'from'} = Sympa::Tools::decode_header($message, 'From');
+		$msg->{'date'} = Sympa::Tools::decode_header($message, 'Date');
 
-		$msg->{'full_msg'} = $mail->{'msg'}->as_string();
+		$msg->{'full_msg'} = $message->as_string();
 
 		Sympa::Log::Syslog::do_log('debug','adding message %s in archive to send', $msg->{'subject'});
 
@@ -362,11 +361,11 @@ sub clean_archived_message {
 	my $output = $params{'output'};
 
 
-	my $msg = Sympa::Message->new(file => $input);
-	if ($msg) {
-		if($msg->clean_html()){
+	my $message = Sympa::Message->new(file => $input);
+	if ($message) {
+		if($message->clean_html()){
 			if(open TMP, ">$output") {
-				print TMP $msg->{'msg'}->as_string();
+				print TMP $message->as_string();
 				close TMP;
 			} else {
 				Sympa::Log::Syslog::do_log('err','Unable to create a tmp file to write clean HTML to file %s',$output);
@@ -382,74 +381,152 @@ sub clean_archived_message {
 	}
 }
 
-=item convert_single_msg_2_html($data)
 
-Convert a message to html.
-Result is stored in $destination_dir
-Attachement_url is used to link attachement
+#############################
+# convert a message to HTML. 
+#    result is stored in $destination_dir
+#    attachement_url is used to link attachement
+#    
+# NOTE: This might be moved to Site package as a mutative method.
+# NOTE: convert_single_msg_2_html() was deprecated.
+sub convert_single_message {
+    my $that = shift; # List or Robot object
+    my $message = shift; # Message object or hashref
+    my %opts = @_;
 
-=cut
+    my $robot;
+    my $listname;
+    my $hostname;
+    if (ref $that and ref $that eq 'List') {
+	$robot = $that->robot;
+	$listname = $that->name;
+    } elsif (ref $that and ref $that eq 'Robot') {
+	$robot = $that;
+	$listname = '';
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+    $hostname = $that->host;
 
-sub convert_single_msg_2_html {
-	my (%params) = @_;
+    my $msg_as_string;
+    my $messagekey;
+    if (ref $message eq 'Message') {
+	$msg_as_string = $message->get_message_as_string;
+	$messagekey = $message->{'messagekey'};
+    } elsif (ref $message eq 'HASH') {
+	$msg_as_string = $message->{'messageasstring'};
+	$messagekey = $message->{'messagekey'};
+    } else {
+        croak 'bug in logic.  Ask developer';
+    }
 
-	my $destination_dir = $params{'destination_dir'};
+    my $destination_dir = $opts{'destination_dir'};
+    my $attachement_url = $opts{'attachement_url'};
 
-	my ($host, $robot, $listname, $msg_file);
-	if ($params{'list'}) {
-		$host     = $params{'list'}->{'admin'}->{'host'};
-		$robot    = $params{'list'}->{'robot'};
-		$listname = $params{'list'}->{'name'};
-		$msg_file = $params{'tmpdir'}.'/'.$params{'list'}->get_list_id().'_'.$PID;
-	} else {
-		$host     = $params{'robot'};
-		$robot    = $params{'robot'};
-		$listname = '';
-		$msg_file = $params{'tmpdir'}.'/'.$params{'messagekey'}.'_'.$PID;
+    my $mhonarc_ressources = $that->get_etc_filename(
+	'mhonarc-ressources.tt2'
+    );
+    unless ($mhonarc_ressources) {
+	Sympa::Log::Syslog::do_log('notice', 'Cannot find any MhOnArc ressource file');
+	return undef;
+    }
+
+    unless (-d $destination_dir) {
+	unless (tools::mkdir_all($destination_dir, 0755)) {
+	    Sympa::Log::Syslog::do_log('err', 'Unable to create %s', $destination_dir);
+	    return undef;
 	}
+    }
 
-	my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
-	unless (open(OUT, ">$msg_file")) {
-		Sympa::Log::Syslog::do_log('notice', 'Could Not open %s', $msg_file);
-		return undef;
-	}
-	printf OUT $params{msg_as_string};
-	close(OUT);
+    my $msg_file = $destination_dir . '/msg00000.txt';
+    unless (open OUT, '>', $msg_file) {
+	Sympa::Log::Syslog::do_log('notice', 'Could Not open %s', $msg_file);
+	return undef;
+    }
+    print OUT $msg_as_string;
+    close OUT;
 
-	unless (-d $destination_dir) {
-		unless (Sympa::Tools::File::mkdir_all($destination_dir, 0777)) {
-			Sympa::Log::Syslog::do_log('err','Unable to create %s', $destination_dir);
-			return undef;
-		}
-	}
-	my $mhonarc_ressources = Sympa::Tools::get_filename(
-		'etc',
-		{},
-		'mhonarc-ressources.tt2',
-		$robot,
-		$params{list},
-		$params{'etc'}
+    # mhonarc require du change workdir so this proc must retore it    
+    my $pwd = getcwd;
+
+    ## generate HTML
+    unless (chdir $destination_dir) {
+	Sympa::Log::Syslog::do_log('err', 'Could not change working directory to %s',
+	    $destination_dir);
+	return undef;
+    }
+
+    my $tag = get_tag($that);
+    my $exitcode = system(
+	$robot->mhonarc, '-single',
+	'-rcfile' => $mhonarc_ressources,
+	'-definevars' => "listname='$listname' hostname=$hostname tag=$tag",
+	'-outdir' => $destination_dir,
+	'-attachmentdir' => $destination_dir,
+	'-attachmenturl' => $attachement_url,
+	'-umask' => Site->umask,
+	'-stdout' => "$destination_dir/msg00000.html",
+	'--', $msg_file
+    ) >> 8;
+
+    # restore current wd 
+    chdir $pwd;		
+
+    if ($exitcode) {
+	Sympa::Log::Syslog::do_log('err', 'Command %s failed with exit code %d',
+	    $robot->mhonarc, $exitcode
 	);
+    }
 
-	unless ($mhonarc_ressources) {
-		Sympa::Log::Syslog::do_log('notice',"Cannot find any MhOnArc ressource file");
-		return undef;
-	}
-	## generate HTML
-	unless (chdir $destination_dir) {
-		Sympa::Log::Syslog::do_log('err',"Could not change working directory to %s",$destination_dir);
-	}
-
-	`$params{mhonarc}  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$params{attachement_url} $msg_file > msg00000.html`;
-
-	# restore current wd
-	chdir $pwd;
-
-	return 1;
+    return 1;
 }
+
+=head2 sub get_tag(OBJECT $that)
+
+Returns a tag derived from the listname.
+
+=head3 Arguments 
+
+=over 
+
+=item * I<$that>, a List or Robot object.
+
+=back 
+
+=head3 Return 
+
+=over 
+
+=item * I<a character string>, corresponding to the 10 last characters of a 32 bytes string containing the MD5 digest of the concatenation of the following strings (in this order):
+
+=over 4
+
+=item - the cookie config parameter
+
+=item - a slash: "/"
+
+=item - name attribute of the I<$that> argument
+
+=back 
 
 =back
 
-=cut
+=head3 Calls 
+
+=over 
+
+=item * Digest::MD5::md5_hex
+
+=back 
+
+=cut 
+
+sub get_tag {
+    my $that = shift;
+
+    return substr(
+	Digest::MD5::md5_hex(join '/', Site->cookie, $that->name), -10
+    );
+}
 
 1;
