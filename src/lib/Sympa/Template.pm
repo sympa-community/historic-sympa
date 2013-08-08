@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # TT2 adapter for sympa's template system - Chia-liang Kao <clkao@clkao.org>
 # usage: replace require 'parser.pl' in wwwsympa and other .pl
@@ -36,10 +35,11 @@ This module provides template-related functions.
 package Sympa::Template;
 
 use strict;
-
+use warnings;
 use CGI::Util;
 use English qw(-no_match_vars);
 use MIME::EncWords;
+use Template;
 use Template;
 
 use Sympa::Constants;
@@ -270,6 +270,46 @@ sub wrap {
 	};
 }
 
+=item optdesc($context, $type, $withval)
+
+FIXME.
+
+Parameters:
+
+=over
+
+=item number
+
+The context.
+
+=item number
+
+The type of list parameter value: 'reception', 'visibility', 'status' or 'others' (default)
+
+=item number
+
+Should parameter value be added to the description. False by default.
+
+=back
+
+Return value:
+
+Subref to generate i18n'ed description of list parameter value.
+
+=cut
+
+sub optdesc {
+	my ($context, $type, $withval) = @_;
+	return sub {
+		my $x = shift;
+		return undef unless defined $x;
+		return undef unless $x =~ /\S/;
+		$x =~ s/^\s+//;
+		$x =~ s/\s+$//;
+		return List->get_option_title($x, $type, $withval);
+	};
+}
+
 =item add_include_path($path)
 
 Add a directory to TT2 template search path.
@@ -362,6 +402,7 @@ sub parse_tt2 {
 			helploc      => [\&maketext, 1],
 			locdt        => [\&locdatetime, 1],
 			wrap         => [\&wrap, 1],
+			optdesc      => [\&optdesc, 1],
 			qencode      => [\&qencode, 0],
 			escape_xml   => [\&escape_xml, 0],
 			escape_url   => [\&escape_url, 0],
