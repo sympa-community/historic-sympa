@@ -432,7 +432,7 @@ sub get_primary_key {
 		"SELECT pg_attribute.attname AS field "                   .
 		"FROM pg_index, pg_class, pg_attribute "                  .
 		"WHERE "                                                  .
-			"pg_class.oid = '$params{table}'::regclass AND "  .
+			"pg_class.oid = ?::regclass AND "                 .
 			"indrelid = pg_class.oid AND "                    .
 			"pg_attribute.attrelid = pg_class.oid AND "       .
 			"pg_attribute.attnum = any(pg_index.indkey) AND " .
@@ -446,7 +446,7 @@ sub get_primary_key {
 		);
 		return undef;
 	}
-	$handle->execute();
+	$handle->execute($params{table});
 
 	my @keys;
 	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
