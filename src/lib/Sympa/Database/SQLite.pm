@@ -330,6 +330,8 @@ sub update_field {
 	return $report;
 }
 
+# override needed to handle the specific case of adding a primary key
+# to an already-existing table
 sub add_field {
 	my ($self, %params) = @_;
 
