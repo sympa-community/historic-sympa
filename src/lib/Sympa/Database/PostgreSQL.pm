@@ -222,20 +222,15 @@ sub get_tables {
 		'Getting tables list in database %s',$self->{'db_name'}
 	);
 
-	## get search_path.
-	my $handle = $self->get_query_handle('SELECT current_schemas(false)');
-	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err', 'Unable to get search_path of database %s',
-		$self->{'db_name'});
-		return undef;
-	}
-	$handle->execute();
-	my $search_path = $handle->fetchrow();
+	# get schemas list
+	my $query = 'SELECT current_schemas(false)';
+	my $row = $self->{dbh}->selectrow_hashref($query);
+	my $schemas = $row->{current_schemas};
 
-	## get table names.
+	# get table names
 	my @raw_tables;
 	my %raw_tables;
-	foreach my $schema (@{$search_path || []}) {
+	foreach my $schema (@{$schemas || []}) {
 		my @tables = $self->{dbh}->tables(
 			undef, $schema, undef, 'TABLE', {pg_noprefix => 1}
 		);
