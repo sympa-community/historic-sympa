@@ -156,41 +156,41 @@ sub is_autoinc {
 }
 
 sub set_autoinc {
-    my ($self, %params) = @_;
-    my $table = $params{'table'};
-    my $field = $params{'field'};
+	my ($self, %params) = @_;
+	my $table = $params{'table'};
+	my $field = $params{'field'};
 
-    Sympa::Log::Syslog::do_log('debug3','Setting field %s.%s as autoincremental',
-		 $table, $field);
+	Sympa::Log::Syslog::do_log('debug3','Setting field %s.%s as autoincremental',
+		$table, $field);
 
-    my $type = $self->_get_field_type($table, $field);
-    return undef unless $type;
+	my $type = $self->_get_field_type($table, $field);
+	return undef unless $type;
 
-    my $r;
-    my $pk;
-    if ($type =~ /^integer\s+PRIMARY\s+KEY\b/i) {
-	## INTEGER PRIMARY KEY is auto-increment.
-	return 1;
-    } elsif ($type =~ /\bPRIMARY\s+KEY\b/i) {
-	$r = $self->_update_table($table,
-				  qr(\b$field\s[^,]+),
-				  "$field\tinteger PRIMARY KEY");
-    } elsif ($pk = $self->get_primary_key({ 'table' => $table }) and
-	     $pk->{$field} and scalar keys %$pk == 1) {
-	$self->unset_primary_key({ 'table' => $table });
-	$r = $self->_update_table($table,
-				  qr(\b$field\s[^,]+),
-				  "$field\tinteger PRIMARY KEY");
-    } else {
-	$r = $self->_update_table($table,
-				  qr(\b$field\s[^,]+),
-				  "$field\t$type AUTOINCREMENT");
-    }
+	my $r;
+	my $pk;
+	if ($type =~ /^integer\s+PRIMARY\s+KEY\b/i) {
+		## INTEGER PRIMARY KEY is auto-increment.
+		return 1;
+	} elsif ($type =~ /\bPRIMARY\s+KEY\b/i) {
+		$r = $self->_update_table($table,
+			qr(\b$field\s[^,]+),
+			"$field\tinteger PRIMARY KEY");
+	} elsif ($pk = $self->get_primary_key({ 'table' => $table }) and
+		$pk->{$field} and scalar keys %$pk == 1) {
+		$self->unset_primary_key({ 'table' => $table });
+		$r = $self->_update_table($table,
+			qr(\b$field\s[^,]+),
+			"$field\tinteger PRIMARY KEY");
+	} else {
+		$r = $self->_update_table($table,
+			qr(\b$field\s[^,]+),
+			"$field\t$type AUTOINCREMENT");
+	}
 
-    unless ($r) {
-	Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincremental', $field, $table);
-	return undef;
-    }
+	unless ($r) {
+		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincremental', $field, $table);
+		return undef;
+	}
 }
 
 sub get_tables {
@@ -302,32 +302,32 @@ sub get_fields {
 }
 
 sub update_field {
-    my ($self, %params) = @_;
-    my $table = $params{'table'};
-    my $field = $params{'field'};
-    my $type = $params{'type'};
-    my $options = '';
-    if ($params{'notnull'}) {
-	$options .= ' NOT NULL';
-    }
-    my $report;
+	my ($self, %params) = @_;
+	my $table = $params{'table'};
+	my $field = $params{'field'};
+	my $type = $params{'type'};
+	my $options = '';
+	if ($params{'notnull'}) {
+		$options .= ' NOT NULL';
+	}
+	my $report;
 
-    Sympa::Log::Syslog::do_log('debug3', 'Updating field %s in table %s (%s%s)',
-		 $field, $table, $type, $options);
-    my $r = $self->_update_table($table,
-				 qr(\b$field\s[^,]+),
-				 "$field\t$type$options");
-    unless (defined $r) {
-	Sympa::Log::Syslog::do_log('err', 'Could not update field %s in table %s (%s%s)',
-		     $field, $table, $type, $options);
-	return undef;
-    }
-    $report = $r;
-    Sympa::Log::Syslog::do_log('info', '%s', $r);
-    $report .= "\nTable $table, field $field updated";
-    Sympa::Log::Syslog::do_log('info', 'Table %s, field %s updated', $table, $field);
+	Sympa::Log::Syslog::do_log('debug3', 'Updating field %s in table %s (%s%s)',
+		$field, $table, $type, $options);
+	my $r = $self->_update_table($table,
+		qr(\b$field\s[^,]+),
+		"$field\t$type$options");
+	unless (defined $r) {
+		Sympa::Log::Syslog::do_log('err', 'Could not update field %s in table %s (%s%s)',
+			$field, $table, $type, $options);
+		return undef;
+	}
+	$report = $r;
+	Sympa::Log::Syslog::do_log('info', '%s', $r);
+	$report .= "\nTable $table, field $field updated";
+	Sympa::Log::Syslog::do_log('info', 'Table %s, field %s updated', $table, $field);
 
-    return $report;
+	return $report;
 }
 
 # Adds a field in a table from the database.
