@@ -355,43 +355,45 @@ sub add_field {
 		$params{primary}
 	);
 
-	my $table = $params{'table'};
-	my $field = $params{'field'};
-	my $type = $params{'type'};
-
-	my $options = '';
-	# To prevent "Cannot add a NOT NULL column with default value NULL" errors
 	if ($params{'primary'}) {
-		$options .= ' PRIMARY KEY';
-	}
-	if ( $params{'autoinc'}) {
-		$options .= ' AUTOINCREMENT';
-	}
-	if ( $params{'notnull'}) {
-		$options .= ' NOT NULL';
-	}
-	if ($params{'primary'}) {
-		my $result = $self->_update_table($table,
+		my $options = ' PRIMARY KEY';
+		# To prevent "Cannot add a NOT NULL column with default value NULL" errors
+		if ( $params{'autoinc'}) {
+			$options .= ' AUTOINCREMENT';
+		}
+		if ( $params{'notnull'}) {
+			$options .= ' NOT NULL';
+		}
+		my $result = $self->_update_table($params{table},
 			qr{[(]\s*},
-			"(\n\t $field\t$type$options,\n\t ");
+			"(\n\t $params{field}\t$params{type}$options,\n\t ");
 		unless ($result) {
-			Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $field, $table, $self->{'db_name'});
+			Sympa::Log::Syslog::do_log('err', 'Could not add field
+				%s to table %s in database %s',
+				$params{field}, $params{table}, $self->{'db_name'});
 			return undef;
 		}
-	} else { 
-		unless ($self->do_query(
-				q{ALTER TABLE %s ADD %s %s%s},
-				$table, $field, $type, $options
-			)) {
-			Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $field, $table, $self->{'db_name'});
-			return undef;
-		}
+	} else {
+		my $query =
+			"ALTER TABLE $params{table} "     .
+			"ADD $params{field} $params{type}";
+		$query .= ' NOT NULL'       if $params{notnull};
+		$query .= ' AUTO_INCREMENT' if $params{autoinc};
+
+		my $rows = $self->{dbh}->do($query);
+		croak sprintf(
+			'Unable to add field %s in table %s: %s',
+			$params{field},
+			$params{table},
+			$self->{dbh}->errstr()
+		) unless $rows;
+
 		if ($self->_vernum <= 3.001003) {
-			unless ($self->do_query(q{VACUUM})) {
-				Sympa::Log::Syslog::do_log('err', 'Could not vacuum database %s',
-					$self->{'db_name'});
-				return undef;
-			}
+			my $vacuum_rows = $self->{dbh}->do('VACUUM');
+			croak sprintf(
+				'Unable to vacuum database: %s',
+				$self->{dbh}->errstr()
+			) unless $vacuum_rows;
 		}
 	}
 
