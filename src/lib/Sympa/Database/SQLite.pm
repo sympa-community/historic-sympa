@@ -163,7 +163,7 @@ sub set_autoinc {
 	Sympa::Log::Syslog::do_log('debug3','Setting field %s.%s as autoincremental',
 		$table, $field);
 
-	my $type = $self->_get_field_type($table, $field);
+	my $type = $self->get_fields(table => $table)->{$field};
 	return undef unless $type;
 
 	my $r;
@@ -683,28 +683,6 @@ sub AS_BLOB {
 sub _vernum {
 	my ($self) = @_;
 	return version->new('v' . $self->{'dbh'}->{'sqlite_version'})->numify;
-}
-
-## get raw type of column
-sub _get_field_type {
-	my ($self, $table, $field) = @_;
-
-	my $handle;
-	unless ($handle = $self->do_query(q{PRAGMA table_info('%s')}, $table)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $table, $self->{'db_name'});
-		return undef;
-	}
-	my $l;
-	while ($l = $handle->fetchrow_hashref('NAME_lc')) {
-		if (lc $l->{'name'} eq lc $field) {
-			$handle->finish;
-			return $l->{'type'};
-		}
-	}
-	$handle->finish;
-
-	Sympa::Log::Syslog::do_log('err', 'Could not gather information of field %s from table %s in database %s', $field, $table, $self->{'db_name'});
-	return undef;
 }
 
 ## update table structure
