@@ -759,7 +759,7 @@ sub _copy_table {
 	return undef unless defined $table and defined $table_new;
 
 	my $fields = join ', ',
-	sort keys %{$self->get_fields({ 'table' => $table })};
+		sort keys %{$self->get_fields(table => $table)};
 
 	my $handle;
 	unless ($handle = $self->do_query(
