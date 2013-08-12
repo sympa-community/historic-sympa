@@ -677,16 +677,15 @@ sub _vernum {
 ## update table structure
 ## old table will be saved as "<table name>_<YYmmddHHMMSS>_<PID>".
 sub _update_table {
+
 	my ($self, $table, $regex, $replacement) = @_;
-	my $statement;
 	my $table_saved = sprintf '%s_%s_%d',
 		$table,
 		POSIX::strftime("%Y%m%d%H%M%S", gmtime $BASETIME),
 		$PID;
-	my $report;
 
 	## create temporary table with new structure
-	$statement = $self->_get_create_table($table);
+	my $statement = $self->_get_create_table($table);
 	unless (defined $statement) {
 		Sympa::Log::Syslog::do_log('err', 'Table \'%s\' does not exist', $table);
 		return undef;
@@ -724,7 +723,7 @@ sub _update_table {
 		}
 	}
 
-	$report = "Old table was saved as \'$table_saved\'";
+	my $report = "Old table was saved as \'$table_saved\'";
 	return $report;
 }
 
