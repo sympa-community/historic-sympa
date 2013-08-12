@@ -419,6 +419,7 @@ sub add_field {
 	return $report;
 }
 
+# overriden because there is no generic implementation available
 sub get_primary_key {
 	my ($self, %params) = @_;
 
@@ -550,6 +551,7 @@ sub set_primary_key {
 	return $report;
 }
 
+# overriden because there is no generic implementation available
 sub get_indexes {
 	my ($self, %params) = @_;
 
