@@ -140,17 +140,22 @@ is_deeply(
 	'indexes list after index creation'
 );
 
-$result = $base->delete_field(
-	table => 'table1',
-	field => 'data',
-);
-ok(!defined $result, "field data deletion failure");
+throws_ok {
+	$result = $base->delete_field(
+		table => 'table1',
+		field => 'data',
+	);
+} qr/unsupported operation/;
+"field data deletion failure";
 
-$result = $base->delete_field(
-	table => 'table1',
-	field => 'id',
-);
-ok(!defined $result, "field id deletion failure");
+throws_ok {
+	$result = $base->delete_field(
+		table => 'table1',
+		field => 'id',
+	);
+} qr/unsupported operation/,
+"field id deletion failure";
+
 cleanup($base);
 
 my $report = $base->probe();
