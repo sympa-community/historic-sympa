@@ -158,11 +158,15 @@ sub is_autoinc {
 
 sub set_autoinc {
 	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting field %s.%s as an auto increment',
+		$params{table},
+		$params{field}
+	);
 	my $table = $params{'table'};
 	my $field = $params{'field'};
-
-	Sympa::Log::Syslog::do_log('debug3','Setting field %s.%s as autoincremental',
-		$table, $field);
 
 	my $type = $self->get_fields(table => $table)->{$field};
 	return undef unless $type;
@@ -198,6 +202,8 @@ sub set_autoinc {
 		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincremental', $field, $table);
 		return undef;
 	}
+
+	return 1;
 }
 
 sub get_tables {
