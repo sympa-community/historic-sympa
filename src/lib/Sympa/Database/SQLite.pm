@@ -628,8 +628,7 @@ sub execute_query {
 sub _is_lock_needed {
 	my ($self, $query) = @_;
 
-	return 
-		$query =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i;
+	return $query !~ /^\s*SELECT\b/i;
 }
 
 sub _lock_database {
