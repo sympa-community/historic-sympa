@@ -137,8 +137,8 @@ sub is_autoinc {
 	);
 
 	my $query = "PRAGMA table_info($params{table})";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get the list of fields from table %s in database %s',
@@ -147,9 +147,9 @@ sub is_autoinc {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
-	while (my $row = $sth->fetchrow_arrayref()) {
+	while (my $row = $handle->fetchrow_arrayref()) {
 		next unless $row->[1] eq $params{field};
 		return $row->[2] eq 'integer' and $row->[5];
 	}
@@ -202,18 +202,18 @@ sub get_tables {
 	);
 
 	my $query = "SELECT name FROM sqlite_master WHERE type='table'";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to get tables list',
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my @tables;
-	while (my $row = $sth->fetchrow_arrayref()) {
+	while (my $row = $handle->fetchrow_arrayref()) {
 	    push @tables, $row->[0];
 	}
 
@@ -271,8 +271,8 @@ sub get_fields {
 	);
 
 	my $query = "PRAGMA table_info($params{table})";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Unable to get fields list from table %s',
@@ -280,10 +280,10 @@ sub get_fields {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my %result;
-	while (my $row = $sth->fetchrow_arrayref()) {
+	while (my $row = $handle->fetchrow_arrayref()) {
 		# http://www.sqlite.org/datatype3.html
 		if($row->[2] =~ /int/) {
 			$row->[2] = "integer";
@@ -431,8 +431,8 @@ sub get_primary_key {
 
 	my %found_keys = ();
 
-	my $sth;
-	unless ($sth = $self->do_query(
+	my $handle;
+	unless ($handle = $self->do_query(
 			q{PRAGMA table_info('%s')},
 			$table
 		)) {
@@ -440,11 +440,11 @@ sub get_primary_key {
 		return undef;
 	}
 	my $l;
-	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
+	while ($l = $handle->fetchrow_hashref('NAME_lc')) {
 		next unless $l->{'pk'};
 		$found_keys{$l->{'name'}} = 1;
 	}
-	$sth->finish;
+	$handle->finish;
 
     return \%found_keys;
 }
@@ -517,33 +517,33 @@ sub get_indexes {
 	Sympa::Log::Syslog::do_log('debug3','Looking for indexes in %s',$params{'table'});
 
 	my %found_indexes;
-	my $sth;
+	my $handle;
 	my $l;
-	unless ($sth = $self->do_query(
+	unless ($handle = $self->do_query(
 			q{PRAGMA index_list('%s')},
 			$params{'table'}
 		)) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 		return undef;
 	}
-	while($l = $sth->fetchrow_hashref('NAME_lc')) {
+	while($l = $handle->fetchrow_hashref('NAME_lc')) {
 		next if $l->{'unique'};
 		$found_indexes{$l->{'name'}} = {};
 	}
-	$sth->finish;
+	$handle->finish;
 
 	foreach my $index_name (keys %found_indexes) {
-		unless ($sth = $self->do_query(
+		unless ($handle = $self->do_query(
 				q{PRAGMA index_info('%s')},
 				$index_name
 			)) {
 			Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
 			return undef;
 		}
-		while($l = $sth->fetchrow_hashref('NAME_lc')) {
+		while($l = $handle->fetchrow_hashref('NAME_lc')) {
 			$found_indexes{$index_name}{$l->{'name'}} = {};
 		}
-		$sth->finish;
+		$handle->finish;
 	}
 
 	return \%found_indexes;
@@ -560,8 +560,8 @@ sub unset_index {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug3','Removing index %s from table %s',$params{'index'},$params{'table'});
 
-	my $sth;
-	unless ($sth = $self->do_query(
+	my $handle;
+	unless ($handle = $self->do_query(
 			q{DROP INDEX "%s"},
 			$params{'index'}
 		)) {
@@ -572,8 +572,8 @@ sub unset_index {
 	Sympa::Log::Syslog::do_log('info', 'Table %s, index %s dropped', $params{'table'},$params{'index'});
 
 	my $query = "SELECT name,sql FROM sqlite_master WHERE type='index'";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get the list of indexes from table %s in database %s',
@@ -582,20 +582,20 @@ sub unset_index {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my %indexes;
-	while (my $row = $sth->fetchrow_arrayref()) {
+	while (my $row = $handle->fetchrow_arrayref()) {
 		my ($fields) = $row->[1] =~ /\( ([^)]+) \)$/x;
 		foreach my $field (split(/,/, $fields)) {
 			$indexes{$row->[0]}->{$field} = 1;
 		}
 	}
 
-	my $sth;
+	my $handle;
 	my $fields = join ',',@{$params{'fields'}};
 	Sympa::Log::Syslog::do_log('debug3', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
-	unless ($sth = $self->do_query(
+	unless ($handle = $self->do_query(
 			q{CREATE INDEX %s ON %s (%s)},
 			$params{'index_name'}, $params{'table'}, $fields
 		)) {
@@ -617,7 +617,7 @@ sub unset_index {
 
 sub do_query {
 	my ($self) = @_;
-	my $sth;
+	my $handle;
 	my $rc;
 
 	my $need_lock =
@@ -631,12 +631,12 @@ sub do_query {
 	}
 
 	## do query
-	$sth = $self->SUPER::do_query(@_);
+	$handle = $self->SUPER::do_query(@_);
 
 	## release lock
-	return $sth unless $need_lock;
+	return $handle unless $need_lock;
 	eval {
-		if ($sth) {
+		if ($handle) {
 			$rc = $self->{'dbh'}->commit;
 		} else {
 			$rc = $self->{'dbh'}->rollback;
@@ -649,12 +649,12 @@ sub do_query {
 		return undef;
 	}
 
-	return $sth;
+	return $handle;
 }
 
 sub do_prepared_query {
 	my ($self) = @_;
-	my $sth;
+	my $handle;
 	my $rc;
 
 	my $need_lock =
@@ -668,12 +668,12 @@ sub do_prepared_query {
 	}
 
 	## do query
-	$sth = $self->SUPER::do_prepared_query(@_);
+	$handle = $self->SUPER::do_prepared_query(@_);
 
 	## release lock
-	return $sth unless $need_lock;
+	return $handle unless $need_lock;
 	eval {
-		if ($sth) {
+		if ($handle) {
 			$rc = $self->{'dbh'}->commit;
 		} else {
 			$rc = $self->{'dbh'}->rollback;
@@ -686,7 +686,7 @@ sub do_prepared_query {
 		return undef;
 	}
 
-	return $sth;
+	return $handle;
 }
 
 ## For BLOB types.
@@ -710,19 +710,19 @@ sub _vernum {
 sub _get_field_type {
 	my ($self, $table, $field) = @_;
 
-	my $sth;
-	unless ($sth = $self->do_query(q{PRAGMA table_info('%s')}, $table)) {
+	my $handle;
+	unless ($handle = $self->do_query(q{PRAGMA table_info('%s')}, $table)) {
 		Sympa::Log::Syslog::do_log('err', 'Could not get the list of fields from table %s in database %s', $table, $self->{'db_name'});
 		return undef;
 	}
 	my $l;
-	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
+	while ($l = $handle->fetchrow_hashref('NAME_lc')) {
 		if (lc $l->{'name'} eq lc $field) {
-			$sth->finish;
+			$handle->finish;
 			return $l->{'type'};
 		}
 	}
-	$sth->finish;
+	$handle->finish;
 
 	Sympa::Log::Syslog::do_log('err', 'Could not gather information of field %s from table %s in database %s', $field, $table, $self->{'db_name'});
 	return undef;
@@ -781,9 +781,9 @@ sub _update_table {
 ## Get SQL statement by which table was created.
 sub _get_create_table {
 	my ($self, $table) = @_;
-	my $sth;
+	my $handle;
 
-	unless ($sth = $self->do_query(
+	unless ($handle = $self->do_query(
 			q{SELECT sql
 			FROM sqlite_master
 			WHERE type = 'table' AND name = '%s'},
@@ -793,8 +793,8 @@ sub _get_create_table {
 			$table, $self->{'db_name'});
 		return undef;
 	}
-	my $sql = $sth->fetchrow_array();
-	$sth->finish;
+	my $sql = $handle->fetchrow_array();
+	$handle->finish;
 
 	return $sql || undef;
 }
@@ -808,8 +808,8 @@ sub _copy_table {
 	my $fields = join ', ',
 	sort keys %{$self->get_fields({ 'table' => $table })};
 
-	my $sth;
-	unless ($sth = $self->do_query(
+	my $handle;
+	unless ($handle = $self->do_query(
 			q{INSERT INTO "%s" (%s) SELECT %s FROM "%s"},
 			$table_new, $fields, $fields, $table
 		)) {
