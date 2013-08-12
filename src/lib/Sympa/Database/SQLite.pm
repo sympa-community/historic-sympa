@@ -718,7 +718,7 @@ sub _update_table {
 
 	Sympa::Log::Syslog::do_log('info', 'Copy \'%s\' to \'%s_new\'', $table, $table_saved);
 	## save old table
-	my $indexes = $self->get_indexes({ 'table' => $table });
+	my $indexes = $self->get_indexes(table => $table);
 	unless (defined $self->_copy_table($table, "${table_saved}_new") and
 		defined $self->_rename_or_drop_table($table, $table_saved) and
 		defined $self->_rename_table("${table_saved}_new", $table)) {
@@ -727,10 +727,13 @@ sub _update_table {
 	## recreate indexes
 	foreach my $name (keys %{$indexes || {}}) {
 		unless (defined $self->unset_index(
-				{ 'table' => "${table_saved}_new", 'index' => $name }) and
-			defined $self->set_index(
-				{ 'table' => $table, 'index_name' => $name,
-					'fields' => [ sort keys %{$indexes->{$name}} ] })
+				table => "${table_saved}_new",
+				index => $name
+			) and defined $self->set_index(
+				table      => $table,
+				index_name => $name,
+				fields     => [ sort keys %{$indexes->{$name}} ]
+			)
 		) {
 			return undef;
 		}
