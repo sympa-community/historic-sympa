@@ -437,9 +437,13 @@ sub get_primary_key {
 # inital table creation
 sub unset_primary_key {
 	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Removing primary key from table %s',
+		$params{table}
+	);
 	my $table = $params{'table'};
-	my $report;
-	Sympa::Log::Syslog::do_log('debug3', 'Removing primary key from table %s', $table);
 
 	my $r = $self->_update_table($table,
 		qr{,\s*PRIMARY\s+KEY\s+[(][^)]+[)]},
@@ -449,21 +453,30 @@ sub unset_primary_key {
 			$table);
 		return undef;
 	}
-	$report = $r;
-	Sympa::Log::Syslog::do_log('info', '%s', $r);
-	$report .= "\nTable $table, PRIMARY KEY dropped";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY dropped', $table);
+
+	my $report = sprintf(
+		"Primary key removed from table %s",
+		$params{table}
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
+
+	return $report;
 }
 
 # overriden because sqlite doesn't support primary key alteration after 
 # inital table creation
 sub set_primary_key {
 	my ($self, %params) = @_;
+
+	my $fields = join(',', @{$params{fields}});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Setting primary key on table %s using fields %s',
+		$params{table},
+		$fields
+	);
 	my $table = $params{'table'};
-	my $fields = join ',',@{$params{'fields'}};
 	my $report;
-	Sympa::Log::Syslog::do_log('debug3', 'Setting primary key for table %s (%s)',
-		$table, $fields);
 
 	my $r = $self->_update_table($table,
 		qr{\s*[)]\s*$},
@@ -473,10 +486,13 @@ sub set_primary_key {
 			$table, $fields);
 		return undef;
 	}
-	$report = $r;
-	Sympa::Log::Syslog::do_log('info', '%s', $r);
-	$report .= "\nTable $table, PRIMARY KEY set on $fields";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY set on %s', $table, $fields);
+
+	my $report = sprintf(
+		"Primary key set on table %s using fields %s",
+		$params{table},
+		$fields
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
 
 	return $report;
 }
