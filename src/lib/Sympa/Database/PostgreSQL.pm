@@ -531,7 +531,7 @@ sub set_primary_key {
 	}
 
 	my $query =
-		"ALTER TABLE $params{table} ADD $key_name ($params{fields})";
+		"ALTER TABLE $params{table} ADD $key_name ($fields)";
 	my $rows = $self->{dbh}->do($query);
 	croak sprintf(
 		'Unable to set primary key on table %s using fields %s: %s',
