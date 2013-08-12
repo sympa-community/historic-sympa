@@ -400,27 +400,31 @@ sub add_field {
 
 sub get_primary_key {
 	my ($self, %params) = @_;
-	my $table = $params{'table'};
-	Sympa::Log::Syslog::do_log('debug3','Getting primary key for table %s', $table);
 
-	my %found_keys = ();
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting primary key from table %s',
+		$params{table}
+	);
 
-	my $handle;
-	unless ($handle = $self->do_query(
-			q{PRAGMA table_info('%s')},
-			$table
-		)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get field list from table %s in database %s', $table, $self->{'db_name'});
+	my $query = "PRAGMA table_info($params{table})";
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get fields list from table %s',
+			$params{table},
+		);
 		return undef;
 	}
-	my $l;
-	while ($l = $handle->fetchrow_hashref('NAME_lc')) {
-		next unless $l->{'pk'};
-		$found_keys{$l->{'name'}} = 1;
-	}
-	$handle->finish;
+	$handle->execute();
 
-    return \%found_keys;
+	my @fields;
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
+		push @fields, $row->{name} if $row->{pk};
+	}
+
+	return \@fields;
 }
 
 # Drops the primary key of a table.
@@ -478,14 +482,6 @@ sub set_primary_key {
 	return $report;
 }
 
-# Returns a ref to a hash in which each key is the name of an index.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the indexes are requested.
-#
-# OUT: A ref to a hash in which each key is the name of an index. These key point to
-#	a second level hash in which each key is the name of the field indexed.
-#      Returns undef if something went wrong.
-#
 sub get_indexes {
 	my ($self, %params) = @_;
 	Sympa::Log::Syslog::do_log('debug3','Looking for indexes in %s',$params{'table'});
