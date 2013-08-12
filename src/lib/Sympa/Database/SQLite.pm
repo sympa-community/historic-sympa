@@ -515,7 +515,7 @@ sub get_indexes {
 	foreach my $index (@indexes) {
 		my $info_query = "PRAGMA index_info(index)";
 		my $info_handle = $self->{dbh}->prepare($info_query);
-		unless ($list_handle) {
+		unless ($info_handle) {
 			Sympa::Log::Syslog::do_log(
 				'err',
 				'Could not get fields list from index %s',
