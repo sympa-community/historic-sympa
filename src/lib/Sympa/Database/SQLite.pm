@@ -460,7 +460,7 @@ sub delete_field {
 	croak "unsupported operation";
 }
 
-sub get_primary_key {
+sub set_primary_key {
 	my ($self, %params) = @_;
 	my $table = $params{'table'};
 	my $fields = join ',',@{$params{'fields'}};
