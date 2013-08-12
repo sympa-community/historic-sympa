@@ -117,6 +117,7 @@ sub get_formatted_date {
 	}
 }
 
+# overriden because there is no generic implementation available
 sub is_autoinc {
 	my ($self, %params) = @_;
 
@@ -155,6 +156,7 @@ sub is_autoinc {
 	return $row && $row->{relname} eq $sequence;
 }
 
+# overriden because there is no generic implementation available
 sub set_autoinc {
 	my ($self, %params) = @_;
 
@@ -214,6 +216,7 @@ sub set_autoinc {
 	return 1;
 }
 
+# overriden because there is no generic implementation available
 sub get_tables {
 	my ($self) = @_;
 
@@ -294,6 +297,7 @@ sub _get_native_type {
 	return $type;
 }
 
+# overriden because there is no generic implementation available
 sub get_fields {
 	my ($self, %params) = @_;
 
