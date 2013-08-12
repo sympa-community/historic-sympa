@@ -173,19 +173,25 @@ sub set_autoinc {
 		## INTEGER PRIMARY KEY is auto-increment.
 		return 1;
 	} elsif ($type =~ /\bPRIMARY\s+KEY\b/i) {
-		$r = $self->_update_table($table,
+		$r = $self->_update_table(
+			$table,
 			qr(\b$field\s[^,]+),
-			"$field\tinteger PRIMARY KEY");
+			"$field\tinteger PRIMARY KEY"
+		);
 	} elsif ($pk = $self->get_primary_key({ 'table' => $table }) and
 		$pk->{$field} and scalar keys %$pk == 1) {
 		$self->unset_primary_key({ 'table' => $table });
-		$r = $self->_update_table($table,
+		$r = $self->_update_table(
+			$table,
 			qr(\b$field\s[^,]+),
-			"$field\tinteger PRIMARY KEY");
+			"$field\tinteger PRIMARY KEY"
+		);
 	} else {
-		$r = $self->_update_table($table,
+		$r = $self->_update_table(
+			$table,
 			qr(\b$field\s[^,]+),
-			"$field\t$type AUTOINCREMENT");
+			"$field\t$type AUTOINCREMENT"
+		);
 	}
 
 	unless ($r) {
@@ -320,9 +326,11 @@ sub update_field {
 		$options .= ' NOT NULL';
 	}
 
-	my $r = $self->_update_table($params{table},
+	my $r = $self->_update_table(
+		$params{table},
 		qr(\b$params{field}\s[^,]+),
-		"$params{field}\t$params{type}$options");
+		"$params{field}\t$params{type}$options"
+	);
 	unless (defined $r) {
 		Sympa::Log::Syslog::do_log('err', 'Could not update field %s in table %s (%s%s)',
 			$params{field},
@@ -368,9 +376,11 @@ sub add_field {
 		if ( $params{'notnull'}) {
 			$options .= ' NOT NULL';
 		}
-		my $result = $self->_update_table($params{table},
+		my $result = $self->_update_table(
+			$params{table},
 			qr{[(]\s*},
-			"(\n\t $params{field}\t$params{type}$options,\n\t ");
+			"(\n\t $params{field}\t$params{type}$options,\n\t "
+		);
 		unless ($result) {
 			Sympa::Log::Syslog::do_log('err', 'Could not add field
 				%s to table %s in database %s',
@@ -458,9 +468,11 @@ sub unset_primary_key {
 	);
 	my $table = $params{'table'};
 
-	my $r = $self->_update_table($table,
+	my $r = $self->_update_table(
+		$table,
 		qr{,\s*PRIMARY\s+KEY\s+[(][^)]+[)]},
-		'');
+		''
+	);
 	unless (defined $r) {
 		Sympa::Log::Syslog::do_log('err', 'Could not remove primary key from table %s',
 			$table);
@@ -491,9 +503,11 @@ sub set_primary_key {
 	my $table = $params{'table'};
 	my $report;
 
-	my $r = $self->_update_table($table,
+	my $r = $self->_update_table(
+		$table,
 		qr{\s*[)]\s*$},
-		",\n\t PRIMARY KEY ($fields)\n )");
+		",\n\t PRIMARY KEY ($fields)\n )"
+	);
 	unless (defined $r) {
 		Sympa::Log::Syslog::do_log('debug', 'Could not set primary key for table %s (%s)',
 			$table, $fields);
