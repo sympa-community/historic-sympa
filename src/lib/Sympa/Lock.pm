@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -33,7 +32,8 @@ This class implements a file lock.
 package Sympa::Lock;
 
 use strict;
-
+use warnings;
+use Carp qw(croak);
 use Carp;
 use English qw(-no_match_vars);
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
