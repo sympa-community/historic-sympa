@@ -271,8 +271,8 @@ sub get_fields {
 	);
 
 	my $query = "SHOW FIELDS FROM $params{table}";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
@@ -280,10 +280,10 @@ sub get_fields {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my %result;
-	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		$result{$row->{'field'}} = $row->{'type'};
 	}
 	return \%result;
@@ -299,8 +299,8 @@ sub get_primary_key {
 	);
 
 	my $query = "SHOW COLUMNS FROM $params{table}";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
@@ -308,10 +308,10 @@ sub get_primary_key {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my @fields;
-	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		push @fields, $row->{field} if $row->{key} eq 'PRI';
 	}
 
@@ -328,8 +328,8 @@ sub get_indexes {
 	);
 
 	my $query = "SHOW INDEX FROM $params{table}";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get indexes list from table %s',
@@ -337,10 +337,10 @@ sub get_indexes {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my %indexes;
-	while(my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while(my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		next if $row->{'key_name'} eq "PRIMARY";
 		$indexes{$row->{'key_name'}}->{$row->{'column_name'}} = 1;
 	}
