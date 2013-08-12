@@ -583,82 +583,88 @@ sub _get_unset_index_query {
 	return "DROP INDEX $params{index}";
 }
 
-## To prevent "database is locked" error, acquire "immediate" lock
-## by each query.  All queries including "SELECT" need to lock in this
-## manner.
+# overriden because file locking is needed for concurrent access
+# FIXME: is this also needed for read queries ?
+sub get_query_handle {
+	my ($self, $query) = @_;
 
-sub do_query {
-	my ($self) = @_;
-	my $handle;
-	my $rc;
+	my $need_lock = $self->_is_lock_needed($query);
 
-	my $need_lock =
-	($_[0] =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i);
-
-	## acquire "immediate" lock
-	unless (! $need_lock or $self->{'dbh'}->begin_work) {
-		Sympa::Log::Syslog::do_log('err', 'Could not lock database: (%s) %s',
-			$self->{'dbh'}->err, $self->{'dbh'}->errstr);
-		return undef;
+	if ($need_lock) {
+		my $result = $self->_lock_database();
+		return unless $result;
 	}
 
-	## do query
-	$handle = $self->SUPER::do_query(@_);
+	my $handle = $self->SUPER::get_query_handle($query);
 
-	## release lock
-	return $handle unless $need_lock;
-	eval {
-		if ($handle) {
-			$rc = $self->{'dbh'}->commit;
-		} else {
-			$rc = $self->{'dbh'}->rollback;
-		}
-	};
-	if ($@ or ! $rc) {
-		Sympa::Log::Syslog::do_log('err', 'Could not unlock database: %s',
-			$@ || sprintf('(%s) %s', $self->{'dbh'}->err,
-				$self->{'dbh'}->errstr));
-		return undef;
+	if ($need_lock) {
+		$self->_unlock_database($handle);
 	}
 
 	return $handle;
 }
 
-sub do_prepared_query {
+# overriden because file locking is needed for concurrent access
+# FIXME: is this also needed for read queries ?
+sub execute_query {
+	my ($self, $query, @values) = @_;
+
+	my $need_lock = $self->_is_lock_needed($query);
+
+	if ($need_lock) {
+		my $result = $self->_lock_database();
+		return unless $result;
+	}
+
+	my $rows = $self->SUPER::execute_query($query, @values);
+
+	if ($need_lock) {
+		$self->_unlock_database($rows);
+	}
+
+	return $rows;
+}
+
+sub _is_lock_needed {
+	my ($self, $query) = @_;
+
+	return 
+		$query =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i;
+}
+
+sub _lock_database {
 	my ($self) = @_;
-	my $handle;
-	my $rc;
 
-	my $need_lock =
-	($_[0] =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i);
-
-	## acquire "immediate" lock
-	unless (! $need_lock or $self->{'dbh'}->begin_work) {
-		Sympa::Log::Syslog::do_log('err', 'Could not lock database: (%s) %s',
-			$self->{'dbh'}->err, $self->{'dbh'}->errstr);
+	my $result = $self->{dbh}->begin_work();
+	if (! $result) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not lock database: (%s) %s',
+			$self->{dbh}->err(),
+			$self->{dbh}->errstr()
+		);
 		return undef;
 	}
 
-	## do query
-	$handle = $self->SUPER::do_prepared_query(@_);
+	return 1;
+}
 
-	## release lock
-	return $handle unless $need_lock;
-	eval {
-		if ($handle) {
-			$rc = $self->{'dbh'}->commit;
-		} else {
-			$rc = $self->{'dbh'}->rollback;
-		}
-	};
-	if ($@ or ! $rc) {
-		Sympa::Log::Syslog::do_log('err', 'Could not unlock database: %s',
-			$@ || sprintf('(%s) %s', $self->{'dbh'}->err,
-				$self->{'dbh'}->errstr));
-		return undef;
+sub _unlock_database {
+	my ($self, $success) = @_;
+
+	my $result = $success ?
+		$self->{dbh}->commit()  :
+		$self->{dbh}->rollback();
+	if (! $result) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not unlock database: %s',
+			$self->{dbh}->err(),
+			$self->{dbh}->errstr()
+		);
 	}
 
-	return $handle;
+	return 1;
 }
 
 ## For BLOB types.
