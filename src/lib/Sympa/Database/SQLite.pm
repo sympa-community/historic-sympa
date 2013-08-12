@@ -741,7 +741,9 @@ sub _get_create_table {
 	my ($self, $table) = @_;
 
 	my $query = 
-		"SELECT sql FROM sqlite_master WHERE type = 'table' AND name ?";
+		"SELECT sql " .
+		"FROM sqlite_master " .
+		"WHERE type = 'table' AND name = ?";
 	my $row = $self->{dbh}->selectrow_hashref(
 		$query,
 		undef,
