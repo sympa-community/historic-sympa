@@ -303,29 +303,41 @@ sub get_fields {
 
 sub update_field {
 	my ($self, %params) = @_;
-	my $table = $params{'table'};
-	my $field = $params{'field'};
-	my $type = $params{'type'};
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Adding field %s in table %s (%s, %s, %s, %s)',
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull},
+		$params{autoinc},
+		$params{primary}
+	);
 	my $options = '';
 	if ($params{'notnull'}) {
 		$options .= ' NOT NULL';
 	}
-	my $report;
 
-	Sympa::Log::Syslog::do_log('debug3', 'Updating field %s in table %s (%s%s)',
-		$field, $table, $type, $options);
-	my $r = $self->_update_table($table,
-		qr(\b$field\s[^,]+),
-		"$field\t$type$options");
+	my $r = $self->_update_table($params{table},
+		qr(\b$params{field}\s[^,]+),
+		"$params{field}\t$params{type}$options");
 	unless (defined $r) {
 		Sympa::Log::Syslog::do_log('err', 'Could not update field %s in table %s (%s%s)',
-			$field, $table, $type, $options);
+			$params{field},
+			$params{table},
+			$params{type},
+			$options
+		);
 		return undef;
 	}
-	$report = $r;
-	Sympa::Log::Syslog::do_log('info', '%s', $r);
-	$report .= "\nTable $table, field $field updated";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, field %s updated', $table, $field);
+
+	my $report = sprintf(
+		'Field %s added to table %s',
+		$params{field},
+		$params{table},
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
 
 	return $report;
 }
