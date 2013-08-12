@@ -553,10 +553,6 @@ sub _get_unset_index_query {
 	return "DROP INDEX $params{index}";
 }
 
-############################################################################
-## Overridden methods
-############################################################################
-
 ## To prevent "database is locked" error, acquire "immediate" lock
 ## by each query.  All queries including "SELECT" need to lock in this
 ## manner.
@@ -641,10 +637,6 @@ sub AS_BLOB {
 		if scalar @_ > 1;
 	return ();
 }
-
-############################################################################
-## private methods
-############################################################################
 
 ## get numified version of SQLite
 sub _vernum {
