@@ -343,6 +343,18 @@ sub update_field {
 #
 sub add_field {
 	my ($self, %params) = @_;
+
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Adding field %s in table %s (%s, %s, %s, %s)',
+		$params{field},
+		$params{table},
+		$params{type},
+		$params{notnull},
+		$params{autoinc},
+		$params{primary}
+	);
+
 	my $table = $params{'table'};
 	my $field = $params{'field'};
 	my $type = $params{'type'};
@@ -358,16 +370,11 @@ sub add_field {
 	if ( $params{'notnull'}) {
 		$options .= ' NOT NULL';
 	}
-	Sympa::Log::Syslog::do_log('debug3','Adding field %s in table %s (%s%s)',
-		$field, $table, $type, $options);
-
-	my $report = '';
-
 	if ($params{'primary'}) {
-		$report = $self->_update_table($table,
+		my $result = $self->_update_table($table,
 			qr{[(]\s*},
 			"(\n\t $field\t$type$options,\n\t ");
-		unless (defined $report) {
+		unless ($result) {
 			Sympa::Log::Syslog::do_log('err', 'Could not add field %s to table %s in database %s', $field, $table, $self->{'db_name'});
 			return undef;
 		}
@@ -388,11 +395,12 @@ sub add_field {
 		}
 	}
 
-	$report .= "\n" if $report;
-	$report .= sprintf 'Field %s added to table %s (%s%s)',
-	$field, $table, $type, $options;
-	Sympa::Log::Syslog::do_log('info', 'Field %s added to table %s (%s%s)',
-		$field, $table, $type, $options);
+	my $report = sprintf(
+		'Field %s added to table %s',
+		$params{field},
+		$params{table},
+	);
+	Sympa::Log::Syslog::do_log('info', $report);
 
 	return $report;
 }
