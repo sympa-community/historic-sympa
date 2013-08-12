@@ -321,8 +321,8 @@ sub get_fields {
 			"c.relname = ? AND " .
 			"a.atttypid = t.oid ".
 		"ORDER BY a.attnum";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get fields list from table %s',
@@ -330,10 +330,10 @@ sub get_fields {
 		);
 		return undef;
 	}
-	$sth->execute($params{table});
+	$handle->execute($params{table});
 
 	my %result;
-	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		my $length = $row->{length} - 4; # What a dirty method ! We give a Sympa tee shirt to anyone that suggest a clean solution ;-)
 		if ($row->{type} eq 'varchar') {
 			$result{$row->{field}} = $row->{type} . "($length)";
@@ -443,8 +443,8 @@ sub get_primary_key {
 			"pg_attribute.attrelid = pg_class.oid AND "       .
 			"pg_attribute.attnum = any(pg_index.indkey) AND " .
 			"indisprimary";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
+	my $handle = $self->{dbh}->prepare($query);
+	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
 			'Could not get primary key from table %s',
@@ -452,10 +452,10 @@ sub get_primary_key {
 		);
 		return undef;
 	}
-	$sth->execute();
+	$handle->execute();
 
 	my @keys;
-	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		push @keys, $row->{field};
 	}
 	return \@keys;
@@ -596,16 +596,16 @@ sub get_indexes {
 			"NOT i.indisprimary "                                 .
 		"ORDER BY i.indisprimary DESC, i.indisunique DESC, c2.relname";
 
-	my $sth = $self->{dbh}->prepare($index_query);
+	my $handle = $self->{dbh}->prepare($index_query);
 	croak sprintf(
 		'Unable to get indexes list from table %s: %s',
 		$params{table},
 		$self->{dbh}->errstr()
-	) unless $sth;
-	$sth->execute();
+	) unless $handle;
+	$handle->execute();
 
 	my %indexes;
-	while (my $row = $sth->fetchrow_hashref('NAME_lc')) {
+	while (my $row = $handle->fetchrow_hashref('NAME_lc')) {
 		$row->{description} =~ s/CREATE INDEX .* ON .* USING .* \((.*)\)$/\1/i;
 		$row->{description} =~ s/\s//i;
 		my @members = split(',', $row->{description});
