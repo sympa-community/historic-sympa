@@ -428,12 +428,8 @@ sub get_primary_key {
 	return \@fields;
 }
 
-# Drops the primary key of a table.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the primary keys must be dropped.
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
+# overriden because sqlite doesn't support primary key alteration after 
+# inital table creation
 sub unset_primary_key {
 	my ($self, %params) = @_;
 	my $table = $params{'table'};
@@ -459,6 +455,8 @@ sub delete_field {
 	croak "unsupported operation";
 }
 
+# overriden because sqlite doesn't support primary key alteration after 
+# inital table creation
 sub set_primary_key {
 	my ($self, %params) = @_;
 	my $table = $params{'table'};
