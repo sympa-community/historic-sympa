@@ -330,17 +330,6 @@ sub update_field {
 	return $report;
 }
 
-# Adds a field in a table from the database.
-# IN: A ref to hash containing the following keys:
-#	* 'field' : the name of the field to add
-#	* 'table' : the name of the table where the field will be added.
-#	* 'type' : the type of the field to add
-#	* 'notnull' : specifies that the field must not be null
-#	* 'autoinc' : specifies that the field must be autoincremental
-#	* 'primary' : specifies that the field is a key
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
 sub add_field {
 	my ($self, %params) = @_;
 
