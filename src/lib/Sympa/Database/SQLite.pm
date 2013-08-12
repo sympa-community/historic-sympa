@@ -398,6 +398,11 @@ sub add_field {
 	return $report;
 }
 
+# overriden because sqlite doesn't support deleting fields
+sub delete_field {
+	croak "unsupported operation";
+}
+
 # overriden because there is no generic implementation available
 sub get_primary_key {
 	my ($self, %params) = @_;
@@ -448,11 +453,6 @@ sub unset_primary_key {
 	Sympa::Log::Syslog::do_log('info', '%s', $r);
 	$report .= "\nTable $table, PRIMARY KEY dropped";
 	Sympa::Log::Syslog::do_log('info', 'Table %s, PRIMARY KEY dropped', $table);
-}
-
-# override needed as unsupported
-sub delete_field {
-	croak "unsupported operation";
 }
 
 # overriden because sqlite doesn't support primary key alteration after 
