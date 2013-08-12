@@ -136,16 +136,21 @@ sub is_autoinc {
 		"SELECT relname "                                         .
 		"FROM pg_class "                                          .
 		"WHERE "                                                  .
-			"relname = '$sequence' AND "                      .
+			"relname = ? AND "                                .
 			"relkind = 'S'  AND "                             .
 			"relnamespace IN ("                               .
 				"SELECT oid "                             .
 				"FROM pg_namespace "                      .
 				"WHERE "                                  .
-					"nspname NOT LIKE 'pg_$sequence' AND " .
+					"nspname NOT LIKE ? AND         " .
 					"nspname != 'information_schema'" .
 			")";
-	my $row = $self->{dbh}->selectrow_hashref($query);
+	my $row = $self->{dbh}->selectrow_hashref(
+		$query,
+		undef,
+		$sequence,
+		'pg_' . $sequence
+	);
 
 	return $row && $row->{relname} eq $sequence;
 }
