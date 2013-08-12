@@ -111,7 +111,7 @@ ok(defined $result && !$result, "data is not autoinc");
 $result = $base->get_primary_key(table => 'table1');
 is_deeply(
 	$result,
-	[ ],
+	[ 'id' ],
 	'initial primary key list'
 );
 
