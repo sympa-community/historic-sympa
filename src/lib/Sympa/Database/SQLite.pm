@@ -36,6 +36,7 @@ use base qw(Sympa::Database);
 
 use version;
 use Carp;
+use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
 use Sympa::Tools::Data;
@@ -661,9 +662,10 @@ sub _vernum {
 sub _update_table {
 	my ($self, $table, $regex, $replacement) = @_;
 	my $statement;
-	my $table_saved = sprintf '%s_%s_%d', $table,
-	POSIX::strftime("%Y%m%d%H%M%S", gmtime $^T),
-	$$;
+	my $table_saved = sprintf '%s_%s_%d',
+		$table,
+		POSIX::strftime("%Y%m%d%H%M%S", gmtime $BASETIME),
+		$PID;
 	my $report;
 
 	## create temporary table with new structure
