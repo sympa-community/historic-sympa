@@ -472,16 +472,15 @@ sub unset_primary_key {
 		'Removing primary key from table %s',
 		$params{table}
 	);
-	my $table = $params{'table'};
 
 	my $result = $self->_update_table(
-		$table,
+		$params{table},
 		qr{,\s*PRIMARY\s+KEY\s+[(][^)]+[)]},
 		''
 	);
 	unless ($result) {
 		Sympa::Log::Syslog::do_log('err', 'Could not remove primary key from table %s',
-			$table);
+			$params{table});
 		return undef;
 	}
 
@@ -506,17 +505,15 @@ sub set_primary_key {
 		$params{table},
 		$fields
 	);
-	my $table = $params{'table'};
-	my $report;
 
 	my $result = $self->_update_table(
-		$table,
+		$params{table},
 		qr{\s*[)]\s*$},
 		",\n\t PRIMARY KEY ($fields)\n )"
 	);
 	unless (defined $result) {
 		Sympa::Log::Syslog::do_log('debug', 'Could not set primary key for table %s (%s)',
-			$table, $fields);
+			$params{table}, $fields);
 		return undef;
 	}
 
