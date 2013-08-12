@@ -397,27 +397,6 @@ sub add_field {
 	return $report;
 }
 
-# Deletes a field from a table in the database.
-# IN: A ref to hash containing the following keys:
-#	* 'field' : the name of the field to delete
-#	* 'table' : the name of the table where the field will be deleted.
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
-sub delete_field {
-	my ($self, %params) = @_;
-	my $table = $params{'table'};
-	my $field = $params{'field'};
-	Sympa::Log::Syslog::do_log('debug3','Deleting field %s from table %s', $field, $table);
-
-	## SQLite does not support removal of columns
-
-	my $report = "Could not remove field $field from table $table since SQLite does not support removal of columns";
-	Sympa::Log::Syslog::do_log('info', '%s', $report);
-
-	return $report;
-}
-
 # Returns the list fields being part of a table's primary key.
 # IN: A ref to hash containing the following keys:
 #	* 'table' : the name of the table for which the primary keys are requested.
