@@ -146,14 +146,8 @@ sub is_autoinc {
 					"nspname != 'information_schema'" .
 			")";
 	my $row = $self->{dbh}->selectrow_hashref($query);
-	croak sprintf(
-		'Unable to get autoincrement field %s for table %s: %s',
-		$params{field},
-		$params{table},
-		$self->{dbh}->errstr()
-	) unless $row;
 
-	return $row->{relname} eq $sequence;
+	return $row && $row->{relname} eq $sequence;
 }
 
 sub set_autoinc {
