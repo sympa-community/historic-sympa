@@ -513,7 +513,7 @@ sub get_indexes {
 
 	my %indexes;
 	foreach my $index (@indexes) {
-		my $info_query = "PRAGMA index_info(index)";
+		my $info_query = "PRAGMA index_info($index)";
 		my $info_handle = $self->{dbh}->prepare($info_query);
 		unless ($info_handle) {
 			Sympa::Log::Syslog::do_log(
@@ -526,7 +526,7 @@ sub get_indexes {
 		$info_handle->execute();
 
 		while (my $row = $info_handle->fetchrow_hashref('NAME_lc')) {
-			push $indexes{$index}, $row->{name};
+			$indexes{$index}->{$row->{name}} = 1;
 		}
 	}
 
