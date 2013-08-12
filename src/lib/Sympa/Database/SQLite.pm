@@ -484,39 +484,51 @@ sub set_primary_key {
 
 sub get_indexes {
 	my ($self, %params) = @_;
-	Sympa::Log::Syslog::do_log('debug3','Looking for indexes in %s',$params{'table'});
 
-	my %found_indexes;
-	my $handle;
-	my $l;
-	unless ($handle = $self->do_query(
-			q{PRAGMA index_list('%s')},
-			$params{'table'}
-		)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
+	Sympa::Log::Syslog::do_log(
+		'debug',
+		'Getting indexes list from table %s',
+		$params{table}
+	);
+
+	my $list_query = "PRAGMA index_list($params{table})";
+	my $list_handle = $self->{dbh}->prepare($list_query);
+	unless ($list_handle) {
+		Sympa::Log::Syslog::do_log(
+			'err',
+			'Could not get index list from table %s',
+			$params{table},
+		);
 		return undef;
 	}
-	while($l = $handle->fetchrow_hashref('NAME_lc')) {
-		next if $l->{'unique'};
-		$found_indexes{$l->{'name'}} = {};
-	}
-	$handle->finish;
+	$list_handle->execute();
 
-	foreach my $index_name (keys %found_indexes) {
-		unless ($handle = $self->do_query(
-				q{PRAGMA index_info('%s')},
-				$index_name
-			)) {
-			Sympa::Log::Syslog::do_log('err', 'Could not get the list of indexes from table %s in database %s', $params{'table'}, $self->{'db_name'});
+	my @indexes;
+	while (my $row = $list_handle->fetchrow_hashref('NAME_lc')) {
+		next if $row->{'unique'};
+		push @indexes, $row->{'name'};
+	}
+
+	my %indexes;
+	foreach my $index (@indexes) {
+		my $info_query = "PRAGMA index_info(index)";
+		my $info_handle = $self->{dbh}->prepare($info_query);
+		unless ($list_handle) {
+			Sympa::Log::Syslog::do_log(
+				'err',
+				'Could not get fields list from index %s',
+				$index
+			);
 			return undef;
 		}
-		while($l = $handle->fetchrow_hashref('NAME_lc')) {
-			$found_indexes{$index_name}{$l->{'name'}} = {};
+		$info_handle->execute();
+
+		while (my $row = $info_handle->fetchrow_hashref('NAME_lc')) {
+			push $indexes{$index}, $row->{name};
 		}
-		$handle->finish;
 	}
 
-	return \%found_indexes;
+	return \%indexes;
 }
 
 # Drops an index of a table.
