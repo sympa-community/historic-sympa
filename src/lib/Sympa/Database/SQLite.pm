@@ -730,22 +730,23 @@ sub _update_table {
 ## Get SQL statement by which table was created.
 sub _get_create_table {
 	my ($self, $table) = @_;
-	my $handle;
 
-	unless ($handle = $self->do_query(
-			q{SELECT sql
-			FROM sqlite_master
-			WHERE type = 'table' AND name = '%s'},
-			$table
-		)) {
-		Sympa::Log::Syslog::do_log('Could not get table \'%s\' on database \'%s\'',
+	my $query = 
+		"SELECT sql FROM sqlite_master WHERE type = 'table' AND name ?";
+	my $row = $self->{dbh}->selectrow_hashref(
+		$query,
+		undef,
+		$table
+	);
+
+	unless ($row) {
+		Sympa::Log::Syslog::do_log(
+			'Could not get table \'%s\' on database \'%s\'',
 			$table, $self->{'db_name'});
 		return undef;
 	}
-	my $sql = $handle->fetchrow_array();
-	$handle->finish;
 
-	return $sql || undef;
+	return $row->{sql};
 }
 
 ## copy table content to another table
