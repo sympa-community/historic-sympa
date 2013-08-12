@@ -473,7 +473,7 @@ sub unset_primary_key {
 			"tc.table_catalog = ? AND "                .
 			"tc.table_name = ? AND "                   .
 			"tc.constraint_type = 'PRIMARY KEY'";
-	my $handle = $self->get_query_handle($query);
+	my $handle = $self->{dbh}->prepare($query);
 	unless ($handle) {
 		Sympa::Log::Syslog::do_log(
 			'err',
