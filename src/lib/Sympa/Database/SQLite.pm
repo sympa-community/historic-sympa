@@ -171,13 +171,13 @@ sub set_autoinc {
 	my $type = $self->get_fields(table => $table)->{$field};
 	return undef unless $type;
 
-	my $r;
+	my $result;
 	my $pk;
 	if ($type =~ /^integer\s+PRIMARY\s+KEY\b/i) {
 		## INTEGER PRIMARY KEY is auto-increment.
 		return 1;
 	} elsif ($type =~ /\bPRIMARY\s+KEY\b/i) {
-		$r = $self->_update_table(
+		$result = $self->_update_table(
 			$table,
 			qr(\b$field\s[^,]+),
 			"$field\tinteger PRIMARY KEY"
@@ -185,20 +185,20 @@ sub set_autoinc {
 	} elsif ($pk = $self->get_primary_key(table => $table) and
 		$pk->{$field} and scalar keys %$pk == 1) {
 		$self->unset_primary_key(table => $table);
-		$r = $self->_update_table(
+		$result = $self->_update_table(
 			$table,
 			qr(\b$field\s[^,]+),
 			"$field\tinteger PRIMARY KEY"
 		);
 	} else {
-		$r = $self->_update_table(
+		$result = $self->_update_table(
 			$table,
 			qr(\b$field\s[^,]+),
 			"$field\t$type AUTOINCREMENT"
 		);
 	}
 
-	unless ($r) {
+	unless ($result) {
 		Sympa::Log::Syslog::do_log('err','Unable to set field %s in table %s as autoincremental', $field, $table);
 		return undef;
 	}
@@ -332,12 +332,12 @@ sub update_field {
 		$options .= ' NOT NULL';
 	}
 
-	my $r = $self->_update_table(
+	my $result = $self->_update_table(
 		$params{table},
 		qr(\b$params{field}\s[^,]+),
 		"$params{field}\t$params{type}$options"
 	);
-	unless (defined $r) {
+	unless ($result) {
 		Sympa::Log::Syslog::do_log('err', 'Could not update field %s in table %s (%s%s)',
 			$params{field},
 			$params{table},
@@ -474,12 +474,12 @@ sub unset_primary_key {
 	);
 	my $table = $params{'table'};
 
-	my $r = $self->_update_table(
+	my $result = $self->_update_table(
 		$table,
 		qr{,\s*PRIMARY\s+KEY\s+[(][^)]+[)]},
 		''
 	);
-	unless (defined $r) {
+	unless ($result) {
 		Sympa::Log::Syslog::do_log('err', 'Could not remove primary key from table %s',
 			$table);
 		return undef;
@@ -509,12 +509,12 @@ sub set_primary_key {
 	my $table = $params{'table'};
 	my $report;
 
-	my $r = $self->_update_table(
+	my $result = $self->_update_table(
 		$table,
 		qr{\s*[)]\s*$},
 		",\n\t PRIMARY KEY ($fields)\n )"
 	);
-	unless (defined $r) {
+	unless (defined $result) {
 		Sympa::Log::Syslog::do_log('debug', 'Could not set primary key for table %s (%s)',
 			$table, $fields);
 		return undef;
@@ -798,11 +798,11 @@ sub _rename_table {
 sub _rename_or_drop_table {
 	my ($self, $table, $table_new) = @_;
 
-	my $r = $self->_rename_table($table, $table_new);
-	unless (defined $r) {
+	my $result = $self->_rename_table($table, $table_new);
+	unless (defined $result) {
 		return undef;
-	} elsif ($r) {
-		return $r;
+	} elsif ($result) {
+		return $result;
 	} else {
 		unless ($self->do_query(q{DROP TABLE "%s"}, $table)) {
 			Sympa::Log::Syslog::do_log('err', 'Could not drop table \'%s\'', $table);
