@@ -412,7 +412,7 @@ sub add_field {
 			$self->{dbh}->errstr()
 		) unless $rows;
 
-		if ($self->_vernum <= 3.001003) {
+		if ($self->_vernum() <= 3.001003) {
 			my $vacuum_rows = $self->{dbh}->do('VACUUM');
 			croak sprintf(
 				'Unable to vacuum database: %s',
@@ -680,7 +680,7 @@ sub AS_BLOB {
 ## get numified version of SQLite
 sub _vernum {
 	my ($self) = @_;
-	return version->new('v' . $self->{'dbh'}->{'sqlite_version'})->numify;
+	return version->new('v' . $self->{dbh}->{sqlite_version})->numify();
 }
 
 ## update table structure
