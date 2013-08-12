@@ -11,6 +11,7 @@ use lib "$Bin/../../src/lib";
 use English qw(-no_match_vars);
 use File::Temp;
 use Test::More;
+use Test::Exception;
 
 use Sympa::Database;
 use Sympa::Database::SQLite;
@@ -64,18 +65,17 @@ is_deeply(
 	'initial fields list'
 );
 
-$result = $base->add_field(
-	table   => 'table1',
-	field   => 'data',
-	type    => 'char(30)',
-	notnull => 1
-);
-ok(
-	!defined $result,
-	'field data creation failure (not null issue)'
-);
-
+throws_ok {
 	$result = $base->add_field(
+		table   => 'table1',
+		field   => 'data',
+		type    => 'char(30)',
+		notnull => 1
+	);
+} qr/Cannot add a NOT NULL column with default value NULL/,
+'field data creation failure (not null issue)';
+
+$result = $base->add_field(
 	table   => 'table1',
 	field   => 'data',
 	type    => 'char(30)',
