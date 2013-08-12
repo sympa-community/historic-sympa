@@ -106,13 +106,13 @@ $date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'read'
 );
-is($date, "UNIX_TIMESTAMP(666)", 'formatted date (read)');
+is($date, "666", 'formatted date (read)');
 
 $date = $source->get_formatted_date(
 	target => 666,
 	mode   => 'write'
 );
-is($date, "FROM_UNIXTIME(666)", 'formatted date (write)');
+is($date, "666", 'formatted date (write)');
 
 $source = Sympa::Database::SQLite->new(
 	db_name => File::Temp->new(),
