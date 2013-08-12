@@ -547,62 +547,10 @@ sub get_indexes {
 	return \%indexes;
 }
 
-# Drops an index of a table.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the index must be dropped.
-#	* 'index' : the name of the index to be dropped.
-#
-# OUT: A character string report of the operation done or undef if something went wrong.
-#
-sub unset_index {
+sub _get_unset_index_query {
 	my ($self, %params) = @_;
-	Sympa::Log::Syslog::do_log('debug3','Removing index %s from table %s',$params{'index'},$params{'table'});
 
-	my $handle;
-	unless ($handle = $self->do_query(
-			q{DROP INDEX "%s"},
-			$params{'index'}
-		)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not drop index %s from table %s in database %s',$params{'index'}, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-	my $report = "Table $params{'table'}, index $params{'index'} dropped";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, index %s dropped', $params{'table'},$params{'index'});
-
-	my $query = "SELECT name,sql FROM sqlite_master WHERE type='index'";
-	my $handle = $self->{dbh}->prepare($query);
-	unless ($handle) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Could not get the list of indexes from table %s in database %s',
-			$params{table},
-			$self->{db_name}
-		);
-		return undef;
-	}
-	$handle->execute();
-
-	my %indexes;
-	while (my $row = $handle->fetchrow_arrayref()) {
-		my ($fields) = $row->[1] =~ /\( ([^)]+) \)$/x;
-		foreach my $field (split(/,/, $fields)) {
-			$indexes{$row->[0]}->{$field} = 1;
-		}
-	}
-
-	my $handle;
-	my $fields = join ',',@{$params{'fields'}};
-	Sympa::Log::Syslog::do_log('debug3', 'Setting index %s for table %s using fields %s', $params{'index_name'},$params{'table'}, $fields);
-	unless ($handle = $self->do_query(
-			q{CREATE INDEX %s ON %s (%s)},
-			$params{'index_name'}, $params{'table'}, $fields
-		)) {
-		Sympa::Log::Syslog::do_log('err', 'Could not add index %s using field %s for table %s in database %s', $fields, $params{'table'}, $self->{'db_name'});
-		return undef;
-	}
-	my $report = "Table $params{'table'}, index %s set using $fields";
-	Sympa::Log::Syslog::do_log('info', 'Table %s, index %s set using fields %s',$params{'table'}, $params{'index_name'}, $fields);
-	return $report;
+	return "DROP INDEX $params{index}";
 }
 
 ############################################################################
