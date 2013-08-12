@@ -182,9 +182,9 @@ sub set_autoinc {
 			qr(\b$field\s[^,]+),
 			"$field\tinteger PRIMARY KEY"
 		);
-	} elsif ($pk = $self->get_primary_key({ 'table' => $table }) and
+	} elsif ($pk = $self->get_primary_key(table => $table) and
 		$pk->{$field} and scalar keys %$pk == 1) {
-		$self->unset_primary_key({ 'table' => $table });
+		$self->unset_primary_key(table => $table);
 		$r = $self->_update_table(
 			$table,
 			qr(\b$field\s[^,]+),
