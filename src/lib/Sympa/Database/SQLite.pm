@@ -398,12 +398,6 @@ sub add_field {
 	return $report;
 }
 
-# Returns the list fields being part of a table's primary key.
-# IN: A ref to hash containing the following keys:
-#	* 'table' : the name of the table for which the primary keys are requested.
-#
-# OUT: A ref to a hash in which each key is the name of a primary key or undef if something went wrong.
-#
 sub get_primary_key {
 	my ($self, %params) = @_;
 	my $table = $params{'table'};
