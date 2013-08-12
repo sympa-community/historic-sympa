@@ -19,7 +19,7 @@ use Sympa::Database::SQLite;
 eval { require DBD::SQLite; };
 
 plan(skip_all => 'DBD::SQLite required') if $EVAL_ERROR;
-plan tests => 22;
+plan tests => 24;
 
 my $file = File::Temp->new(UNLINK => $ENV{TEST_DEBUG} ? 0 : 1);
 my $base = Sympa::Database::SQLite->new(
@@ -140,12 +140,30 @@ is_deeply(
 	'indexes list after index creation'
 );
 
+$result = $base->unset_index(
+	table  => 'table1',
+	index  => 'index1',
+);
+is(
+	$result,
+	"Index index1 removed from table table1",
+	'index deletion'
+);
+
+$result = $base->get_indexes(table => 'table1');
+is_deeply(
+	$result,
+	{ },
+	'initial list after index deletion'
+);
+
+
 throws_ok {
 	$result = $base->delete_field(
 		table => 'table1',
 		field => 'data',
 	);
-} qr/unsupported operation/;
+} qr/unsupported operation/,
 "field data deletion failure";
 
 throws_ok {
