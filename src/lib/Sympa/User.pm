@@ -48,11 +48,11 @@ my ($sth, @sth_stack);
 
 # mapping between class attributes and database fields
 my %map_field =
-map { $_ => $_ . '_user' }
-qw/
-email gecos password last_login_date last_login_host
-wrong_login_count cookie_delay lang attributes data
-/;
+	map { $_ => $_ . '_user' }
+	qw/
+		email gecos password last_login_date last_login_host
+		wrong_login_count cookie_delay lang attributes data
+	/;
 
 # DB fields with numeric type
 # We should not do quote() for these while inserting data
@@ -451,7 +451,7 @@ sub update_global_user {
 
 	## use md5 fingerprint to store password
 	$values->{'password'} = &Auth::password_fingerprint($values->{'password'})
-	if ($values->{'password'});
+		if ($values->{'password'});
 
 	## Canonicalize lang if possible.
 	$values->{'lang'} =
