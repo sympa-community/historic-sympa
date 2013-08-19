@@ -227,7 +227,7 @@ variant subtags may appear only once.
 
 sub CanonicLang {
     my $lang = shift;
-    return (wantarray ? () : undef) unless $lang;
+    return unless $lang;
 
     ## Compatibility: older non-POSIX locale names.
     if ($language_equiv{$lang}) {
@@ -241,8 +241,7 @@ sub CanonicLang {
     my @subtags;
 
     # unknown format.
-    return (wantarray ? () : undef)
-	unless @subtags = ($lang =~ $language_tag_re);
+    return unless @subtags = ($lang =~ $language_tag_re);
 
     ## Canonicalize cases of subtags: ll-ext-Scri-RR-variant-...
     $subtags[0] = lc $subtags[0];
@@ -254,7 +253,7 @@ sub CanonicLang {
 
     ## Check subtags,
     # won't support language extension subtags.
-    return (wantarray ? () : undef) unless $subtags[0] =~ /^[a-z]{2,3}$/;
+    return unless $subtags[0] =~ /^[a-z]{2,3}$/;
 
     # won't allow multiple variant subtags.
     $subtags[3] =~ s/-.+// if $subtags[3];
