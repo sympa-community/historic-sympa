@@ -43,9 +43,6 @@ use Sympa::Tools;
 use Sympa::Tools::Data;
 use Sympa::Tools::Password;
 
-## Database and SQL statement handlers
-my ($sth, @sth_stack);
-
 # mapping between class attributes and database fields
 my %map_field =
 	map { $_ => $_ . '_user' }
@@ -144,8 +141,7 @@ sub moveto {
 		return 0;
 	}
 
-	push @sth_stack, $sth;
-
+	my $sth;
 	unless (
 		$sth = do_prepared_query(
 			q{UPDATE user_table
@@ -156,11 +152,8 @@ sub moveto {
 		$sth->rows
 	) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t move user %s to %s', $self, $newemail);
-		$sth = pop @sth_stack;
 		return undef;
 	}
-
-	$sth = pop @sth_stack;
 
 	$self->{'email'} = $newemail;
 
@@ -300,8 +293,7 @@ sub get_global_user {
 		$additional = ', ' . Sympa::Site->db_additional_user_fields;
 	}
 
-	push @sth_stack, $sth;
-
+	my $sth;
 	unless (
 		$sth = &SDM::do_prepared_query(
 			sprintf(
@@ -320,14 +312,11 @@ sub get_global_user {
 		)
 	) {
 		Sympa::Log::Syslog::do_log('err', 'Failed to prepare SQL query');
-		$sth = pop @sth_stack;
 		return undef;
 	}
 
 	my $user = $sth->fetchrow_hashref('NAME_lc');
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	if (defined $user) {
 		## decrypt password
@@ -377,12 +366,10 @@ sub get_all_global_user {
 
 	my @users;
 
-	push @sth_stack, $sth;
-
+	my $sth;
 	unless ($sth =
 		&SDM::do_prepared_query('SELECT email_user FROM user_table')) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to gather all users in DB');
-		$sth = pop @sth_stack;
 		return undef;
 	}
 
@@ -390,8 +377,6 @@ sub get_all_global_user {
 		push @users, $email;
 	}
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return @users;
 }
@@ -409,9 +394,7 @@ sub is_global_user {
 
 	return undef unless ($who);
 
-	push @sth_stack, $sth;
-
-	## Query the Database
+	my $sth;
 	unless (
 		$sth = &SDM::do_prepared_query(
 			q{SELECT count(*) FROM user_table WHERE email_user = ?}, $who
@@ -419,14 +402,11 @@ sub is_global_user {
 	) {
 		Sympa::Log::Syslog::do_log('err',
 			'Unable to check whether user %s is in the user table.');
-		$sth = pop @sth_stack;
 		return undef;
 	}
 
 	my $is_user = $sth->fetchrow();
 	$sth->finish();
-
-	$sth = pop @sth_stack;
 
 	return $is_user;
 }
@@ -487,9 +467,7 @@ sub update_global_user {
 
 	## Update field
 
-	push @sth_stack, $sth;
-
-	$sth = &SDM::do_query(
+	my $sth = &SDM::do_query(
 		"UPDATE user_table SET %s WHERE (email_user=%s)",
 		join(',', @set_list),
 		&SDM::quote($who)
@@ -497,15 +475,11 @@ sub update_global_user {
 	unless (defined $sth) {
 		Sympa::Log::Syslog::do_log('err',
 			'Could not update informations for user %s in user_table', $who);
-		$sth = pop @sth_stack;
 		return undef;
 	}
 	unless ($sth->rows) {
-		$sth = pop @sth_stack;
 		return 0;
 	}
-
-	$sth = pop @sth_stack;
 
 	return 1;
 }
@@ -567,10 +541,8 @@ sub add_global_user {
 		return undef;
 	}
 
-	push @sth_stack, $sth;
-
 	## Update field
-	$sth = &SDM::do_query(
+	my $sth = &SDM::do_query(
 		"INSERT INTO user_table (%s) VALUES (%s)",
 		join(',', @insert_field),
 		join(',', @insert_value)
@@ -579,15 +551,11 @@ sub add_global_user {
 		Sympa::Log::Syslog::do_log('err',
 			'Unable to add user %s to the DB table user_table',
 			$values->{'email'});
-		$sth = pop @sth_stack;
 		return undef;
 	}
 	unless ($sth->rows) {
-		$sth = pop @sth_stack;
 		return 0;
 	}
-
-	$sth = pop @sth_stack;
 
 	return 1;
 }
