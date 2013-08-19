@@ -35,6 +35,7 @@ use strict;
 use warnings;
 use Carp qw(carp croak);
 
+use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::Tools;
 use Sympa::Tools::Data;
@@ -88,8 +89,9 @@ sub new {
 
 	## Canonicalize lang if possible
 	$values{'lang'} =
-	Language::CanonicLang($values{'lang'}) || $values{'lang'}
-	if $values{'lang'};
+		Sympa::Language::CanonicLang($values{'lang'}) ||
+		$values{'lang'}
+		if $values{'lang'};
 
 	if (!($self = get_global_user($who))) {
 		## unauthenticated user would not be added to database.
@@ -373,7 +375,8 @@ sub get_global_user {
 		## Canonicalize lang if possible
 		if ($user->{'lang'}) {
 			$user->{'lang'} =
-			Language::CanonicLang($user->{'lang'}) || $user->{'lang'};
+				Sympa::Language::CanonicLang($user->{'lang'}) ||
+				$user->{'lang'};
 		}
 
 		## Turn user_attributes into a hash
@@ -472,8 +475,9 @@ sub update_global_user {
 
 	## Canonicalize lang if possible.
 	$values->{'lang'} =
-	Language::CanonicLang($values->{'lang'}) || $values->{'lang'}
-	if $values->{'lang'};
+		Sympa::Language::CanonicLang($values->{'lang'}) ||
+		$values->{'lang'}
+		if $values->{'lang'};
 
 	my ($field, $value);
 
@@ -545,8 +549,9 @@ sub add_global_user {
 
 	## Canonicalize lang if possible
 	$values->{'lang'} =
-	Language::CanonicLang($values->{'lang'}) || $values->{'lang'}
-	if $values->{'lang'};
+		Sympa::Language::CanonicLang($values->{'lang'}) ||
+		$values->{'lang'}
+		if $values->{'lang'};
 
 	return undef unless (my $who = Sympa::Tools::clean_email($values->{'email'}));
 	return undef if (is_global_user($who));
