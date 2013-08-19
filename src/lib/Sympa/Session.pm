@@ -418,9 +418,9 @@ sub load {
 	my ($self, $cookie) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $cookie);
 	$session->{'formated_date'} =
-	    Language::gettext_strftime("%d %b %y  %H:%M", localtime($session->{'date_session'}));
+	    Sympa::Language::gettext_strftime("%d %b %y  %H:%M", localtime($session->{'date_session'}));
 	$session->{'formated_start_date'} =
-	    Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
+	    Sympa::Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
 
 	unless ($cookie) {
 		Sympa::Log::Syslog::do_log('err', 'internal error, called with undef id_session');

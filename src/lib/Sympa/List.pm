@@ -1775,7 +1775,7 @@ sub distribute_msg {
 	    $subject_field = $before_tag . ' ' .
 		MIME::EncWords::encode_mimewords(
 		Encode::decode_utf8('[' . $parsed_tag . ']'),
-		Charset  => Language::GetCharset(),
+		Charset  => Sympa::Language::GetCharset(),
 		Encoding => 'A',
 		Field    => 'Subject'
 		) .
@@ -6130,7 +6130,7 @@ sub load_task_list {
 	    my $titles = List::_load_task_title($file);
 
 	    ## Set the title in the current language
-	    foreach my $lang (Language::ImplicatedLangs()) {
+	    foreach my $lang (Sympa::Language::ImplicatedLangs()) {
 		if (defined $titles->{$lang}) {
 		    $list_of_task{$name}{'title'} = $titles->{$lang};
 		    last;
@@ -6187,7 +6187,7 @@ sub _load_task_title {
 	    $title->{'us'} = $1;
 	} elsif (/^title\.([-.\w]+)\s+(.*)\s*$/) {
 	    my ($lang, $t) = ($1, $2);
-	    $lang = Language::CanonicLang($lang) || $lang;
+	    $lang = Sympa::Language::CanonicLang($lang) || $lang;
 	    $title->{$lang} = $t;
 	} elsif (/^title\s+(\S.*?)\s*$/) { # new on 6.2a.34.
 	    $title->{'us'} = $1;
