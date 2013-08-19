@@ -19,9 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
 =head1 NAME
 
-Sympas::User - FIXME
+Sympas::User - All Users Identified by Sympa
 
 =head1 DESCRIPTION
 
@@ -59,14 +61,6 @@ my %numeric_field = (
 	wrong_login_count_user => 1,
 	cookie_delay_user      => 1
 );
-
-=encoding utf-8
-
-=head1 NAME
-
-User - All Users Identified by Sympa
-
-=head1 DESCRIPTION
 
 =head2 CONSTRUCTOR
 

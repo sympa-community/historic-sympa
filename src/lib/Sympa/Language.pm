@@ -19,49 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::Language - Language functions
 
 =head1 DESCRIPTION
 
-This module does just the initial setup for the international messages.
-
-=cut
-
-package Sympa::Language;
-
-use strict;
-use warnings;
-use Exporter;
-use POSIX qw(setlocale strftime);
-use Locale::Messages qw (:locale_h :libintl_h !gettext);
-
-use Sympa::Log::Syslog;
-use Sympa::Constants;
-
-our @ISA    = qw(Exporter);
-our @EXPORT = qw(&gettext gettext_strftime);
-
-BEGIN {
-    ## Using the Pure Perl implementation of gettext
-    ## This is required on Solaris : native implementation of gettext does not
-    ## map ll_RR with ll
-    ## ToDo: Use 'gettext_dumb' by libintl-perl 1.23 or later.
-    Locale::Messages->select_package('gettext_pp');
-}
-
-=pod
-
-=encoding utf-8
-
-=head1 NAME
-
-Language - Handling languages and locales
-
-=head1 DESCRIPTION
-
-This package provides interfaces for i18n (internationalization) of Sympa.
+This package provides functions for i18n (internationalization) of Sympa.
 
 The language tags are used to determine each language.
 A language tag consists of one or more subtags: language, script, region and
@@ -103,6 +69,28 @@ The POSIX locales determine each I<locale>.  They have similar forms to
 gettext locales and are used by this package internally.
 
 =cut
+
+package Sympa::Language;
+
+use strict;
+use warnings;
+use Exporter;
+use POSIX qw(setlocale strftime);
+use Locale::Messages qw (:locale_h :libintl_h !gettext);
+
+use Sympa::Log::Syslog;
+use Sympa::Constants;
+
+our @ISA    = qw(Exporter);
+our @EXPORT = qw(&gettext gettext_strftime);
+
+BEGIN {
+    ## Using the Pure Perl implementation of gettext
+    ## This is required on Solaris : native implementation of gettext does not
+    ## map ll_RR with ll
+    ## ToDo: Use 'gettext_dumb' by libintl-perl 1.23 or later.
+    Locale::Messages->select_package('gettext_pp');
+}
 
 ## The locale is the NLS catalog name ; lang is the IETF language tag.
 ## Ex: locale = pt_BR ; lang = pt-BR
