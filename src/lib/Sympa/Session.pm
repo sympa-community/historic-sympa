@@ -36,9 +36,6 @@ use strict;
 use Carp;
 use CGI::Cookie;
 use Digest::MD5;
-#use Digest::MD5; # no longer used
-#use POSIX; # no longer used
-#use Time::Local; # not used
 
 use Sympa::Language;
 use Sympa::Log::Syslog;
