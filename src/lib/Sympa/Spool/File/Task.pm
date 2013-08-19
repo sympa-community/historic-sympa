@@ -38,12 +38,6 @@ use base qw(Sympa::Spool::File Exporter);
 
 use Sympa::Log::Syslog;
 
-#use Time::Local; # no longer used
-# tentative
-
-#use Task; # this module is used by Task
-#use List; # used by Task
-
 our @EXPORT = qw(%global_models %months);
 
 my @task_list;

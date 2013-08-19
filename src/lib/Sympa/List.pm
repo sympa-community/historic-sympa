@@ -556,7 +556,6 @@ my %edit_list_conf = ();
 ## Last modification times
 my %mtime;
 
-#use Fcntl; # duplicated
 use DB_File;
 
 $DB_BTREE->{compare} = \&_compare_addresses;
