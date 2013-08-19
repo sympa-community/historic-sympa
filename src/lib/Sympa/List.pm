@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::List - List object
@@ -92,8 +94,6 @@ my @more_data_sources = qw/
 my %config_in_admin_user_file = map +($_ => 1), @sources_providing_listmembers;
 
 =head1 NAME
-
-=encoding utf-8
 
 =head1 CONSTRUCTOR AND INITIALIZER
 

@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::Robot - Robot of mailing list service
@@ -46,8 +48,6 @@ use Sympa::listdef;
 use overload
 'bool' => sub {1},
 '""'   => sub { croak "object Robot <$_[0]->{'name'}> is not a string"; };
-
-=encoding utf-8
 
 =head2 CLASS METHODS
 

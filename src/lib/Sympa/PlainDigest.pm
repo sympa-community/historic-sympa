@@ -75,6 +75,8 @@
 # - Use MIME::EncWords instead of MIME::WordDecoder.
 # - Now HTML::FormatText is mandatory.  Remove Lynx support.
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::PlainDigest - MIME::Entity extension

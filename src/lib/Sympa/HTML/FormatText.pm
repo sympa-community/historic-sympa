@@ -2,6 +2,8 @@
 # vim:ft=perl:noet:sw=8:textwidth=78
 # $Id$
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::HTML::FormatText - HTML::FormatText extension

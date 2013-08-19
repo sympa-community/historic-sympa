@@ -20,6 +20,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+=encoding utf-8
+
 =head1 NAME
 
 Sympa::Datasource::SQL::Informix - Informix data source object
