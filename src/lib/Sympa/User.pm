@@ -62,15 +62,13 @@ my %numeric_field = (
 	cookie_delay_user      => 1
 );
 
-=head2 CONSTRUCTOR
+=head1 CLASS METHODS
 
-=over 4
+=over
 
-=item new ( EMAIL, [ KEY => VAL, ... ] )
+=item Sympa::User->new( EMAIL, [ KEY => VAL, ... ] )
 
-Create new User object.
-
-=back
+Create a new L<Sympa::User> object.
 
 =cut
 
@@ -101,15 +99,15 @@ sub new {
     bless $self => $pkg;
 }
 
-=head2 METHODS
+=back
 
-=over 4
+=head1 INSTANCE METHODS
 
-=item expire
+=over
+
+=item $user->expire()
 
 Remove user information from user_table.
-
-=back
 
 =cut
 
@@ -117,13 +115,9 @@ sub expire {
 	delete_global_user(shift->email);
 }
 
-=over 4
-
-=item get_id
+=item $user->get_id()
 
 Get unique identifier of object.
-
-=back
 
 =cut
 
@@ -132,13 +126,9 @@ sub get_id {
 	shift->{'email'} || '';
 }
 
-=over 4
-
-=item moveto
+=item $user->moveto($newemail)
 
 Change email of user.
-
-=back
 
 =cut
 
@@ -177,13 +167,9 @@ sub moveto {
 	return 1;
 }
 
-=over 4
-
-=item save
+=item $user->save()
 
 Save user information to user_table.
-
-=back
 
 =cut
 
@@ -197,6 +183,8 @@ sub save {
 
 	return 1;
 }
+
+=back
 
 =head3 ACCESSORS
 
@@ -258,11 +246,7 @@ sub AUTOLOAD {
 
 =head2 FUNCTIONS
 
-=over 4
-
-=item get_users ( ... )
-
-=back
+=item get_users()
 
 =cut
 
@@ -270,31 +254,12 @@ sub get_users {
 	croak();
 }
 
-############################################################################
-## Old-style functions
-############################################################################
+=item delete_global_user(@users)
 
-=head2 OLD STYLE FUNCTIONS
-
-=over 4
-
-=item add_global_user
-
-=item delete_global_user
-
-=item is_global_user
-
-=item get_global_user
-
-=item get_all_global_user
-
-=item update_global_user
-
-=back
+Delete a user in the user_table
 
 =cut
 
-## Delete a user in the user_table
 sub delete_global_user {
 	my @users = @_;
 
@@ -319,7 +284,12 @@ sub delete_global_user {
 	return $#users + 1;
 }
 
-## Returns a hash for a given user
+=item get_global_user($who)
+
+Returns a hash for a given user
+
+=cut
+
 sub get_global_user {
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
 	my $who = Sympa::Tools::clean_email(shift);
@@ -396,7 +366,12 @@ sub get_global_user {
 	return $user;
 }
 
-## Returns an array of all users in User table hash for a given user
+=item get_all_global_user()
+
+Returns an array of all users in User table hash for a given user
+
+=cut
+
 sub get_all_global_user {
 	Sympa::Log::Syslog::do_log('debug2', '()');
 
@@ -421,7 +396,13 @@ sub get_all_global_user {
 	return @users;
 }
 
-## Is the person in user table (db only)
+=item is_global_user
+
+Is the person in user table (db only)
+
+=cut
+
+
 sub is_global_user {
 	my $who = Sympa::Tools::clean_email(pop);
 	Sympa::Log::Syslog::do_log('debug3', '(%s)', $who);
@@ -450,7 +431,12 @@ sub is_global_user {
 	return $is_user;
 }
 
-## Sets new values for the given user in the Database
+=item update_global_user()
+
+Sets new values for the given user in the Database
+
+=cut
+
 sub update_global_user {
 	Sympa::Log::Syslog::do_log('debug', '(%s, ...)', @_);
 	my $who    = shift;
@@ -524,7 +510,12 @@ sub update_global_user {
 	return 1;
 }
 
-## Adds a user to the user_table
+=item add_global_user()
+
+Adds a user to the user_table
+
+=cut
+
 sub add_global_user {
 	Sympa::Log::Syslog::do_log('debug3', '(...)');
 	my $values = $_[0];
@@ -600,6 +591,8 @@ sub add_global_user {
 
 	return 1;
 }
+
+=back
 
 =head2 Miscelaneous
 
