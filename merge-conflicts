@@ -11,4 +11,3 @@
    C src/sympa.pl.in
    C src/sympa_wizard.pl.in
 soap/sympa_soap_client.pl.in
-soap/sympasoap.pm
