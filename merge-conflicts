@@ -1,4 +1,3 @@
-   C src/lib/Family.pm
    C src/lib/Message.pm
    C src/lib/Upgrade.pm
    C src/lib/admin.pm
