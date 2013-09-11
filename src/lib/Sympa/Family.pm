@@ -29,9 +29,8 @@ This class implements a list family, a set of lists sharing common properties.
 
 =cut
 
-package Family;
+package Sympa::Family;
 
-use strict;
 use strict;
 
 use Carp;
