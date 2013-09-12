@@ -1,5 +1,4 @@
    C src/lib/Message.pm
-   C src/lib/Upgrade.pm
    C src/lib/admin.pm
    C src/lib/Bulk.pm
    C src/lib/Commands.pm
