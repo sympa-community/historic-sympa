@@ -1,4 +1,3 @@
-   C src/lib/Message.pm
    C src/lib/Commands.pm
    C src/lib/Conf.pm
    C src/lib/tools.pm
