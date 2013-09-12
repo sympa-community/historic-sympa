@@ -16,8 +16,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -32,6 +32,7 @@ This module provides bulk mailer functions.
 package Sympa::Bulk;
 
 use strict;
+use warnings;
 use constant MAX => 100_000;
 
 use Carp;
@@ -42,18 +43,20 @@ use Mail::Address;
 use MIME::WordDecoder;
 use MIME::Parser;
 use MIME::Base64;
+use MIME::Charset;
 use Sys::Hostname;
-use Time::HiRes qw(time);
 use URI::Escape;
 
 use Sympa::Configuration;
 use Sympa::Language;
 use Sympa::List;
-use Sympa::Log::Syslog;
-use Sympa::Log::Database;
-use Sympa::Spool::SQL;
-use Sympa::Template;
-use Sympa::Tools;
+
+## Database and SQL statement handlers
+my $sth;
+
+
+# last message stored in spool, this global var is used to prevent multiple stored of the same message in spool table 
+my $last_stored_message_key;
 
 =head1 CLASS METHODS
 
@@ -211,7 +214,22 @@ sub next {
 
 	my $result = $handle->fetchrow_hashref('NAME_lc');
 
-	return $result;
+    ## add objects
+    my $robot_id = $result->{'robot'};
+    my $listname = $result->{'listname'};
+    my $robot;
+
+    if ($robot_id and $robot_id ne '*') {
+	$robot = Robot->new($robot_id);
+    }
+    if ($robot) {
+	if ($listname and length $listname) {
+	    $result->{'list_object'} = List->new($listname, $robot);
+	}
+	$result->{'robot_object'} = $robot;
+    }
+   
+    return $result;
 }
 
 =item $bulk->remove($messagekey, $packetid)
@@ -244,6 +262,7 @@ FIXME.
 
 =cut
 
+# No longer used
 sub messageasstring {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::messageasstring(%s)',$messagekey);
@@ -279,6 +298,7 @@ Fetch message from bulkspool_table by key.
 
 =cut
 
+# No longer used
 sub message_from_spool {
 	my ($self, $messagekey) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(messagekey : %s)',$messagekey);
@@ -313,173 +333,12 @@ sub message_from_spool {
 
 }
 
-=item $bulk->merge_msg($entity, $rcpt, $bulk, $data)
+## DEPRECATED: Use $message->personalize().
+#sub merge_msg ($entity, $rcpt, $bulk, $data)
 
-Merge a message with custom attributes of a user.
+## DEPRECATED: Use Message::personalize_text().
+##sub merge_data ($rcpt, $listname, $robot_id, $data, $body, \$message_output)
 
-Parameters:
-
-=over
-
-=item L<MIME:Entity>
-
-=item string
-
-The recipient
-
-=item hashref
-
-=item hashref
-
-User data
-
-=back
-
-Return value:
-
-1 | undef
-
-=cut
-
-sub merge_msg {
-	my ($self, $entity, $rcpt, $bulk, $data) = @_;
-
-	## Test MIME::Entity
-	unless (ref($entity) && $entity->isa('MIME::Entity')) {
-		Sympa::Log::Syslog::do_log('err', 'echec entity');
-		return undef;
-	}
-
-	my $body;
-	if(defined $entity->bodyhandle()){
-		$body      = $entity->bodyhandle()->as_string();
-	}
-	## Get the Content-Type / Charset / Content-Transfer-encoding of a message
-	my $charset   = MIME::WordDecoder::unmime($entity->head()->mime_attr('content-type.charset'));
-
-	my $message_output;
-	my $IO;
-
-	## If Content-Type is a text/*
-	if($entity->mime_type =~ /^text/){
-
-		if(defined $body){
-			## --------- Initial Charset to UTF-8 --------- ##
-			## We use find_encoding() to ensure that's a valid charset
-			if ($charset && ref Encode::find_encoding($charset)) {
-				unless($charset =~ /UTF-8/){
-					# Put the charset to UTF-8
-					Encode::from_to($body, $charset, 'UTF-8');
-				}
-			} else {
-				Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
-			}
-
-			## PARSAGE ##
-
-			$self->merge_data(
-				'rcpt'           => $rcpt,
-				'messageid'      => $bulk->{'messageid'},
-				'listname'       => $bulk->{'listname'},
-				'robot'          => $bulk->{'robot'},
-				'data'           => $data,
-				'body'           => $body,
-				'message_output' => \$message_output,
-			);
-			$body = $message_output;
-
-			## We use find_encoding() to ensure that's a valid charset
-			if ($charset && ref Encode::find_encoding($charset)) {
-				unless($charset =~ /UTF-8/){
-					# Put the charset to UTF-8
-					Encode::from_to($body, 'UTF-8',$charset);
-				}
-			} else {
-				Sympa::Log::Syslog::do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
-			}
-
-			# Write the new body in the entity
-			unless($IO = $entity->bodyhandle()->open("w") || die "open body: $ERRNO"){
-				Sympa::Log::Syslog::do_log('err', "Can't open Entity");
-				return undef;
-			}
-			unless($IO->print($body)){
-				Sympa::Log::Syslog::do_log('err', "Can't write in Entity");
-				return undef;
-			}
-			unless($IO->close || die "close I/O handle: $ERRNO"){
-				Sympa::Log::Syslog::do_log('err', "Can't close Entity");
-				return undef;
-			}
-		}
-	}
-
-	##--- Recursive call of the method. ---##
-	## Course on the different parts of the message at all levels.
-	foreach my $part ($entity->parts) {
-		unless($self->merge_msg($part, $rcpt, $bulk, $data)){
-			Sympa::Log::Syslog::do_log('err', "Failed to merge message part.");
-			return undef;
-		}
-	}
-
-	return 1;
-}
-
-=item $bulk->merge_data(%parameterss)
-
-This function retrieves the customized data of the users then parse the
-message. It returns the message personalized to bulk.pl
-
-Parameters:
-
-rcpt : the receipient email
-listname : the name of the list
-robot : the host
-data : HASH with many data
-body : message with the TT2
-message_output : object, IO::Scalar
-
-Return value:
-- message_output : customized message              #
-    | undef                                              #
-
-=cut
-
-sub merge_data {
-	my ($self, %params) = @_;
-
-	my $options;
-	$options->{'is_not_template'} = 1;
-
-	my $user_details;
-	$user_details->{'email'} = $params{rcpt};
-	$user_details->{'name'} = $params{listname};
-	$user_details->{'domain'} = $params{robot};
-
-	# get_list_member_no_object() return the user's details with the custom attributes
-	my $user = Sympa::List::get_list_member_no_object($user_details);
-
-	$user->{'escaped_email'} = URI::Escape::uri_escape($params{rcpt});
-	$user->{'friendly_date'} = Sympa::Language::gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
-
-	# this method as been removed because some users may forward authentication link
-	# my $random = get_db_random();
-	# $random = init_db_random() unless $random;
-	# $user->{'fingerprint'} = get_fingerprint($rcpt);
-
-	$params{data}->{'user'} = $user;
-	$params{data}->{'robot'} = $params{robot};
-	$params{data}->{'listname'} = $params{listname};
-
-	# Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
-	unless (Sympa::Template::parse_tt2($params{data},\$params{body}, $params{message_output}, '', $options)) {
-		Sympa::Log::Syslog::do_log('err','Unable to parse body : "%s"', \$params{body});
-	return undef;
-	}
-
-	return 1;
-}
 
 =item $bulk->store(%parameterss)
 
@@ -488,197 +347,176 @@ FIXME.
 =cut
 
 sub store {
-	my ($self, %params) = @_;
+    my %data = @_;
+    
+    my $message = $data{'message'};
+    my $msg_id = $message->get_header('Message-Id');
+    my $rcpts = $data{'rcpts'};
+    my $from = $data{'from'};
+    my $robot = Robot::clean_robot($data{'robot'}, 1); # maybe Site
+    my $listname = $data{'listname'};
+    my $priority_message = $data{'priority_message'};
+    my $priority_packet = $data{'priority_packet'};
+    my $delivery_date = $data{'delivery_date'};
+    my $verp  = $data{'verp'};
+    my $tracking  = $data{'tracking'};
+    $tracking  = '' unless (($tracking  eq 'dsn')||($tracking  eq 'mdn'));
+    $verp=0 unless($verp);
+    my $merge  = $data{'merge'};
+    $merge=0 unless($merge);
+    my $dkim = $data{'dkim'};
+    my $tag_as_last = $data{'tag_as_last'};
 
-	my $message = $params{'message'};
-	my $msg_id = $message->{'msg'}->head()->get('Message-ID');
-	chomp $msg_id;
-	my $dkim = $params{dkim};
+    #Sympa::Log::Syslog::do_log('trace',
+    #    'Bulk::store(<msg>,rcpts: %s,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',
+    #    $rcpts, $from, $robot, $listname, $priority_message, $delivery_date,
+    #    $verp,$tracking, $merge, $dkim->{'d'}, $dkim->{'i'}, $tag_as_last);
 
-	$params{tracking}  = '' unless
-		$params{tracking} eq 'dsn' ||
-		$params{tracking} eq 'mdn';
-	$params{verp}  = 0 unless $params{verp};
-	$params{merge} = 0 unless $params{merge};
-	# todo: use a bulk instance, and pass those default parameters at
-	# instanciation time
-	$params{priority_message} = Sympa::Configuration::get_robot_conf(
-		$params{robot}, 'sympa_priority'
-	) unless $params{priority_message};
-	$params{priority_packet} = Sympa::Configuration::get_robot_conf(
-		$params{robot}, 'sympa_packet_priority'
-	) unless $params{priority_packet};
+    $priority_message = $robot->sympa_priority unless $priority_message;
+    $priority_packet = $robot->sympa_packet_priority unless $priority_packet;
+    
+    my $messageasstring = $message->to_string;
+    my $message_sender = $message->get_sender_email();
 
-	Sympa::Log::Syslog::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from =
-		%s,robot = %s,listname= %s,priority_message = %s,
-		delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim:
-		d= %s i=%s, last:
-		%s)',$params{from},$params{robot},$params{listname},$params{priority_message},$params{delivery_date},$params{verp},$params{tracking},
-		$params{merge},$dkim->{'d'},$dkim->{'i'},$params{tag_as_last});
+    # first store the message in spool_table 
+    # because as soon as packet are created bulk.pl may distribute the
+    # $last_stored_message_key is a global var used in order to detect if a message as been already stored    
+    my $message_already_on_spool ;
+    my $bulkspool = new Sympaspool ('bulk');
 
-	#creation of a MIME entity to extract the real sender of a message
-	my $parser = MIME::Parser->new();
-	$parser->output_to_core(1);
-
-	my $string = $message->{'protected'} ?
-		$message->{'msg_as_string'} : $message->{'msg'}->as_string();
-
-	my @sender_hdr = Mail::Address->parse($message->{'msg'}->head()->get('From'));
-	my $message_sender = $sender_hdr[0]->address;
-
-
-	# first store the message in spool_table
-	# because as soon as packet are created bulk.pl may distribute them
-
-	my $message_already_on_spool;
-	my $bulkspool = Sympa::Spool::SQL->new(
-		name => 'bulk',
-		base => $self->{base}
-	);
-
-	# last_stored_message_key is used to prevent multiple copies of the
-	# same message in spool table
-	if (
-		$self->{last_stored_message_key} &&
-		$self->{last_stored_message_key} eq $message->{'messagekey'}
-	) {
-		$message_already_on_spool = 1;
+    if (defined $last_stored_message_key and
+	defined $message->{'messagekey'} and
+	$message->{'messagekey'} eq $last_stored_message_key) {
+	$message_already_on_spool = 1;
+    } else {
+	my $lock = $$.'@'.hostname() ;
+	if ($message->{'messagekey'}) {
+	    # move message to spool bulk and keep it locked
+	    $bulkspool->update(
+		{'messagekey' => $message->{'messagekey'}},
+		{   'messagelock' => $lock, 'spoolname' => 'bulk',
+		    'message' => $messageasstring}
+	    );
 	} else {
-		my $lock = $PID.'@'.hostname();
-		if ($message->{'messagekey'}) {
-			# move message to spool bulk and keep it locked
-			$bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $string});
-			Sympa::Log::Syslog::do_log('debug',"moved message to spool bulk");
-		} else {
-			$message->{'messagekey'} = $bulkspool->store(
-				string   => $string,
-				metadata => {
-					dkim_d           => $dkim->{d},
-					dkim_i           => $dkim->{i},
-					dkim_selector    => $dkim->{selector},
-					dkim_privatekey  => $dkim->{private_key},
-					dkim_header_list => $dkim->{header_list}
-				},
-				locked => $lock
-			);
-			unless($message->{'messagekey'}) {
-				Sympa::Log::Syslog::do_log('err',"could not store message in spool distribute, message lost ?");
-				return undef;
-			}
-		}
-		$self->{last_stored_message_key} = $message->{'messagekey'};
-
-		#log in stat_table to make statistics...
-		unless($message_sender =~ /($params{robot})\@/) { #ignore messages sent by robot
-			unless ($message_sender =~ /($params{listname})-request/) { #ignore messages of requests
-				Sympa::Log::Database::add_stat(
-					robot     => $params{robot},
-					list      => $params{listname},
-					operation => 'send_mail',
-					parameter => length($string),
-					mail      => $message_sender,
-					daemon    => 'sympa.pl'
-				);
-			}
-		}
+	    $message->{'messagekey'} = $bulkspool->store(
+		$messageasstring,
+		{   'dkim_d'=>$dkim->{d},
+		    'dkim_i'=>$dkim->{i},
+		    'dkim_selector'=>$dkim->{selector},
+		    'dkim_privatekey'=>$dkim->{private_key},
+		    'dkim_header_list'=>$dkim->{header_list}
+		},
+		$lock
+	    );
+	    unless ($message->{'messagekey'}) {
+		Sympa::Log::Syslog::do_log('err',
+		    'Could not store message in spool distribute. Message lost?'
+		);
+		return undef;
+	    }
 	}
-
-	my $current_date = int(time());
-
-	# second : create each receipient packet in bulkmailer_table
-	my $type = ref $params{rcpts};
-
-	unless (ref $params{rcpts}) {
-		my @tab = ($params{rcpts});
-		my @tabtab;
-		push @tabtab, \@tab;
-		$params{rcpts} = \@tabtab;
+	$last_stored_message_key = $message->{'messagekey'};
+	
+	#log in stat_table to make statistics...
+	my $robot_domain = $robot->domain;
+	unless (index($message_sender, "$robot_domain\@") >= 0) {
+	    #ignore messages sent by robot
+	    unless (index($message_sender, "$listname-request") >= 0) {
+		#ignore messages of requests			
+		Sympa::Log::Syslog::db_stat_log({
+		    'robot' => $robot->name, 'list' => $listname,
+		    'operation' => 'send_mail',
+		    'parameter' => $message->{'size'},
+		    'mail' => $message_sender,
+		    'client' => '', 'daemon' => 'sympa.pl'
+		});
+	    }
 	}
+    }
 
-	my $priority_for_packet;
-	my $already_tagged = 0;
-	my $packet_rank = 0; # Initialize counter used to check wether we are copying the last packet.
-	foreach my $packet (@{$params{rcpts}}) {
-		$priority_for_packet = $params{priority_packet};
-		if($params{tag_as_last} && !$already_tagged){
-			$priority_for_packet = $params{priority_packet} + 5;
-			$already_tagged = 1;
-		}
-		$type = ref $packet;
-		my $rcptasstring;
-		if  (ref $packet eq 'ARRAY'){
-			$rcptasstring  = join ',',@{$packet};
-		} else {
-			$rcptasstring  = $packet;
-		}
-		my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
-		my $packet_already_exist;
-		if ($message_already_on_spool) {
-			## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message
-			my $handle = $self->{base}->get_query_handle(
-				"SELECT count(*) " .
-				"FROM bulkmailer_table " .
-				"WHERE " .
-					"messagekey_bulkmailer = ? AND ".
-					"packetid_bulkmailer = ?",
-			);
-			unless ($handle) {
-				Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
-				return undef;
-			}
-			$handle->execute(
-				$message->{'messagekey'},
-				$packetid
-			);
-			$packet_already_exist = $handle->fetchrow();
-		}
+    my $current_date = int(time);
+    
+    # second : create each recipient packet in bulkpacket_table
+    my $type = ref $rcpts;
 
-		if ($packet_already_exist) {
-			Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
+    unless (ref $rcpts) {
+	my @tab = ($rcpts);
+	my @tabtab;
+	push @tabtab, \@tab;
+	$rcpts = \@tabtab;
+    }
 
-		} else {
-			my $rows = $self->{base}->execute_query(
-				"INSERT INTO bulkmailer_table ("        .
-					"messagekey_bulkmailer, "       .
-					"messageid_bulkmailer, "        .
-					"packetid_bulkmailer, "         .
-					"receipients_bulkmailer, "      .
-					"returnpath_bulkmailer, "       .
-					"robot_bulkmailer, "            .
-					"listname_bulkmailer, "         .
-					"verp_bulkmailer, "             .
-					"tracking_bulkmailer, "         .
-					"merge_bulkmailer, "            .
-					"priority_message_bulkmailer, " .
-					"priority_packet_bulkmailer, "  .
-					"reception_date_bulkmailer, "   .
-					"delivery_date_bulkmailer"      .
-				") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-				?, ?)",
-				$message->{'messagekey'},
-				$msg_id,
-				$packetid,
-				$rcptasstring,
-				$params{from},
-				$params{robot},
-				$params{listname},
-				$params{verp},
-				$params{tracking},
-				$params{merge},
-				$params{priority_message},
-				$priority_for_packet,
-				$current_date,
-				$params{delivery_date}
-			);
-			unless ($rows) {
-				Sympa::Log::Syslog::do_log('err','Unable to add packet %s of message %s to database spool',$packetid,$msg_id);
-				return undef;
-			}
-		}
-		$packet_rank++;
+    my $priority_for_packet;
+    my $already_tagged = 0;
+    my $packet_rank = 0; # Initialize counter used to check whether we are copying the last packet.
+    foreach my $packet (@{$rcpts}) {
+	$priority_for_packet = $priority_packet;
+	if($tag_as_last && !$already_tagged){
+	    $priority_for_packet = $priority_packet + 5;
+	    $already_tagged = 1;
 	}
-	$bulkspool->unlock_message($message->{'messagekey'});
-	return 1;
+	$type = ref $packet;
+	my $rcptasstring ;
+	if  (ref $packet eq 'ARRAY'){
+	    $rcptasstring  = join ',',@{$packet};
+	}else{
+	    $rcptasstring  = $packet;
+	}
+	my $packetid =  &tools::md5_fingerprint($rcptasstring);
+	my $packet_already_exist;
+	if (ref $listname eq 'List') {
+	    $listname = $listname->name;
+	}
+	if ($message_already_on_spool) {
+	    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message 
+	    unless ($sth = SDM::do_prepared_query(
+		q{SELECT count(*)
+		  FROM bulkpacket_table
+		  WHERE messagekey_bulkpacket = ? AND packetid_bulkpacket = ?},
+		$message->{'messagekey'}, $packetid
+	    )) {
+		Sympa::Log::Syslog::do_log('err','Unable to check presence of packet %s of message %s in database', $packetid, $message->{'messagekey'});
+		return undef;
+	    }	
+	    $packet_already_exist = $sth->fetchrow;
+	    $sth->finish();
+	}
+	
+	if ($packet_already_exist) {
+	    Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
+	    
+	}else {
+	    unless (SDM::do_prepared_query(
+		q{INSERT INTO bulkpacket_table
+		  (messagekey_bulkpacket, messageid_bulkpacket,
+		   packetid_bulkpacket,
+		   recipients_bulkpacket, returnpath_bulkpacket,
+		   robot_bulkpacket,
+		   listname_bulkpacket,
+		   verp_bulkpacket, tracking_bulkpacket, merge_bulkpacket,
+		   priority_message_bulkpacket, priority_packet_bulkpacket,
+		   reception_date_bulkpacket, delivery_date_bulkpacket)
+		  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
+		$message->{'messagekey'}, $msg_id,
+		$packetid,
+		$rcptasstring, $from,
+		$robot->name, ## '*' for Site
+		$listname,
+		$verp, $tracking, $merge,
+		$priority_message, $priority_for_packet,
+		$current_date, $delivery_date
+	    )) {
+		Sympa::Log::Syslog::do_log('err',
+		    'Unable to add packet %s of message %s to database spool',
+		    $packetid, $msg_id
+		);
+		return undef;
+	    }
+	}
+	$packet_rank++;
+    }
+    $bulkspool->unlock_message($message->{'messagekey'});
+    return 1;
 }
 
 =item $bulk->purge_bulkspool()
