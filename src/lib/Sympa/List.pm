@@ -5764,6 +5764,7 @@ sub may_create_parameter {
 
 }
 
+=cut
 Chcks is USER may do the ACTION for the list. ACTION can be
 one of following : send, review, index, getm add, del,
 reconfirm, purge.
