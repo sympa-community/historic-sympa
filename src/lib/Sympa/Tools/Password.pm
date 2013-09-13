@@ -65,22 +65,15 @@ Create a cipher.
 =cut
 
 sub ciphersaber_installed {
-    my ($cookie) = @_;
+    return $cipher if defined $cipher;
 
-    my $is_installed;
-    foreach my $dir (@INC) {
-	if (-f "$dir/Crypt/CipherSaber.pm") {
-	    $is_installed = 1;
-	    last;
-	}
-    }
-
-    if ($is_installed) {
-	require Crypt::CipherSaber;
-	$cipher = Crypt::CipherSaber->new($cookie);
+    eval { require Crypt::CipherSaber; };
+    unless ($@) {
+	$cipher = Crypt::CipherSaber->new(Site->cookie);
     } else {
-	$cipher = 'no_cipher';
+	$cipher = '';
     }
+    return $cipher;
 }
 
 =item crypt_password($inpasswd, $cookie)
@@ -90,13 +83,11 @@ Encrypt a password.
 =cut
 
 sub crypt_password {
-    my ($inpasswd, $cookie) = @_;
+    my $inpasswd = shift ;
 
-    unless (defined($cipher)){
-	$cipher = ciphersaber_installed($cookie);
-    }
-    return $inpasswd if ($cipher eq 'no_cipher');
-    return ("crypt.".MIME::Base64::encode($cipher->encrypt ($inpasswd)));
+    ciphersaber_installed();
+    return $inpasswd unless $cipher;
+    return ("crypt.".MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
 }
 
 =item decrypt_password($inpasswd, $cookie)
@@ -106,18 +97,16 @@ Decrypt a password.
 =cut
 
 sub decrypt_password {
-    my ($inpasswd, $cookie) = @_;
-    Sympa::Log::Syslog::do_log('debug2', '(%s,%s)', $inpasswd, $cookie);
+    my $inpasswd = shift ;
+    Sympa::Log::Syslog::do_log('debug2', 'tools::decrypt_password (%s)', $inpasswd);
 
-    return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/);
+    return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;
 
-    unless (defined($cipher)){
-	$cipher = ciphersaber_installed($cookie);
-    }
-    if ($cipher eq 'no_cipher') {
-	Sympa::Log::Syslog::do_log('info','password seems crypted while CipherSaber is not installed !');
-	return $inpasswd;
+    ciphersaber_installed();
+    unless ($cipher) {
+	Sympa::Log::Syslog::do_log('info','password seems encrypted while CipherSaber is not installed !');
+	return $inpasswd ;
     }
     return ($cipher->decrypt(MIME::Base64::decode($inpasswd)));
 }

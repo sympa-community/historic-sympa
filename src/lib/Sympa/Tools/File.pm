@@ -53,37 +53,43 @@ Sets owner and/or access rights on a file.
 =cut
 
 sub set_file_rights {
-	my (%params) = @_;
+    my %param = @_;
+    my ($uid, $gid);
 
-	my ($uid, $gid);
-
-	if ($params{'user'}){
-		unless ($uid = (getpwnam($params{'user'}))[2]) {
-			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",$params{'user'});
+    if ($param{'user'}) {
+		unless ($uid = (getpwnam($param{'user'}))[2]) {
+			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",
+			$param{'user'});
 			return undef;
 		}
 	} else {
-		$uid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
-	}
-	if ($params{'group'}) {
-		unless ($gid = (getgrnam($params{'group'}))[2]) {
-			Sympa::Log::Syslog::do_log('err', "Group %s can't be found",$params{'group'});
+		# A value of -1 is interpreted by most systems to leave that value
+		# unchanged.
+		$uid = -1;
+    }
+    if ($param{'group'}) {
+		unless ($gid = (getgrnam($param{'group'}))[2]) {
+			Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $param{'group'});
 			return undef;
 		}
 	} else {
-		$gid = -1;# "A value of -1 is interpreted by most systems to leave that value unchanged".
+		# A value of -1 is interpreted by most systems to leave that value
+		# unchanged.
+		$gid = -1;
 	}
-	unless (chown($uid,$gid, $params{'file'})){
-		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",$params{'file'},$params{'user'},$params{'group'}, $ERRNO);
+    unless (chown($uid, $gid, $param{'file'})) {
+		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
+			$param{'file'}, $param{'user'}, $param{'group'}, "$!");
 		return undef;
-	}
-	if ($params{'mode'}){
-		unless (chmod($params{'mode'}, $params{'file'})){
-			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s: %s",$params{'file'}, $ERRNO);
+    }
+    if ($param{'mode'}) {
+		unless (chmod($param{'mode'}, $param{'file'})) {
+			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
+			$param{'file'}, $param{'mode'}, "$!");
 			return undef;
 		}
-	}
-	return 1;
+    }
+    return 1;
 }
 
 =item copy_dir($dir1, $dir2)
