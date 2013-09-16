@@ -12440,6 +12440,40 @@ sub AUTOLOAD {
     goto &$AUTOLOAD;
 }
 
+=item $list->get_dkim_parameters()
+
+=cut
+
+sub get_dkim_parameters {
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
+
+	my $data;
+	my $keyfile;
+
+	$data->{'d'} = $self->dkim_parameters->{'signer_domain'};
+	if ($self->dkim_parameters->{'signer_identity'}) {
+		$data->{'i'} = $self->dkim_parameters->{'signer_identity'};
+	}else{
+		# RFC 4871 (page 21) 
+		$data->{'i'} = $self->get_address('owner');
+	}
+
+	$data->{'selector'} = $self->dkim_parameters->{'selector'};
+	$keyfile = $self->dkim_parameters->{'private_key_path'};
+
+	unless (open (KEY, $keyfile)) {
+		Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
+		return undef;
+	}
+	while (<KEY>){
+		$data->{'private_key'} .= $_;
+	}
+	close (KEY);
+
+	return $data;
+}
+
 sub _set_list_param_compound {
     my $self = shift;
     my $attr = shift;

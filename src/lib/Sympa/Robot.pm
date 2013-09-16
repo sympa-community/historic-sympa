@@ -862,6 +862,32 @@ sub get_robots {
 	return \@robots;
 }
 
+=item $robot->get_dkim_parameters()
+
+=cut
+
+sub get_dkim_parameters {
+	my ($self) = @_;
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
+
+	my $data;
+	my $keyfile;
+	$data->{'d'} = $self->dkim_signer_domain;
+	$data->{'i'} = $self->dkim_signer_identity;
+	$data->{'selector'} = $self->dkim_selector;
+	$keyfile = $self->dkim_private_key_path;
+	unless (open (KEY, $keyfile)) {
+		Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
+		return undef;
+	}
+	while (<KEY>){
+		$data->{'private_key'} .= $_;
+	}
+	close (KEY);
+
+	return $data;
+}
+
 =back
 
 =cut
