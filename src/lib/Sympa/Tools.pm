@@ -698,13 +698,13 @@ Convert from Perl unicode encoding to UTF8
 =cut
 
 sub unicode_to_utf8 {
-	my ($s) = @_;
+	my ($string) = @_;
 
-	if (Encode::is_utf8($s)) {
-		return Encode::encode_utf8($s);
+	if (Encode::is_utf8($string)) {
+		return Encode::encode_utf8($string);
 	}
 
-	return $s;
+	return $string;
 }
 
 =item qencode_filename($filename)
@@ -781,13 +781,13 @@ FIXME.
 =cut
 
 sub escape_html {
-	my ($s) = @_;
+	my ($string) = @_;
 
-	$s =~ s/\"/\&quot\;/gm;
-	$s =~ s/\</&lt\;/gm;
-	$s =~ s/\>/&gt\;/gm;
+	$string =~ s/\"/\&quot\;/gm;
+	$string =~ s/\</&lt\;/gm;
+	$string =~ s/\>/&gt\;/gm;
 
-	return $s;
+	return $string;
 }
 
 =item unescape_html($string)
@@ -797,13 +797,13 @@ FIXME.
 =cut
 
 sub unescape_html {
-	my ($s) = @_;
+	my ($string) = @_;
 
-	$s =~ s/\&quot\;/\"/g;
-	$s =~ s/&lt\;/\</g;
-	$s =~ s/&gt\;/\>/g;
+	$string =~ s/\&quot\;/\"/g;
+	$string =~ s/&lt\;/\</g;
+	$string =~ s/&gt\;/\>/g;
 
-	return $s;
+	return $string;
 }
 
 =item sympa_checksum($rcpt, $cookie)
@@ -1598,14 +1598,14 @@ Returns the md5 digest in hexadecimal format of given string.
 =cut
 
 sub md5_fingerprint {
-	my ($input_string) = @_;
+	my ($string) = @_;
 
-	return undef unless (defined $input_string);
-	chomp $input_string;
+	return undef unless (defined $string);
+	chomp $string;
 
 	my $digestmd5 = Digest::MD5->new();
 	$digestmd5->reset;
-	$digestmd5->add($input_string);
+	$digestmd5->add($string);
 	return (unpack("H*", $digestmd5->digest));
 }
 
@@ -1870,15 +1870,15 @@ Returns "fold-case" string suitable for case-insensitive match.
 =cut
 
 sub foldcase {
-	my ($str) = @_;
-	return '' unless defined $str and length $str;
+	my ($string) = @_;
+	return '' unless defined $string and length $string;
 
 	if ($PERL_VERSION <= 5.008) {
 		# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
-		return Encode::encode_utf8(lc(Encode::decode_utf8($str)));
+		return Encode::encode_utf8(lc(Encode::decode_utf8($string)));
 	} else {
 		# later supports it. Perl 5.16.0 and later have built-in fc().
-		return Encode::encode_utf8(fc(Encode::decode_utf8($str)));
+		return Encode::encode_utf8(fc(Encode::decode_utf8($string)));
 	}
 }
 
