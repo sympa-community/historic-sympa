@@ -1604,7 +1604,7 @@ sub md5_fingerprint {
 	$md5->reset();
 	$md5->add($string);
 
-	return (unpack("H*", $digestmd5->digest()));
+	return $md5->hexdigest();
 }
 
 =item get_separator()
