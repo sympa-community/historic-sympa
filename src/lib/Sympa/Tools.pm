@@ -1871,7 +1871,7 @@ Returns "fold-case" string suitable for case-insensitive match.
 
 sub foldcase {
 	my ($string) = @_;
-	return '' unless defined $string and length $string;
+	return '' unless $string;
 
 	if ($PERL_VERSION <= 5.008) {
 		# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
