@@ -213,6 +213,102 @@ sub upload_file_to_server {
 	return 1;
 }
 
+=item load_create_list_conf($robot, $basedir)
+
+Return a hash from the create_list_conf file
+
+Parameters:
+
+=over
+
+=item FIXME
+
+=item FIXME
+
+=back
+
+=cut
+
+sub load_create_list_conf {
+	my ($robot) = @_;
+	$robot = Robot::clean_robot($robot);
+
+	my $file;
+	my $conf ;
+
+	$file = $robot->get_etc_filename('create_list.conf');
+	unless ($file) {
+		Sympa::Log::Syslog::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
+		return undef;
+	}
+
+	unless (open (FILE, $file)) {
+		Sympa::Log::Syslog::do_log('info','Unable to open config file %s', $file);
+		return undef;
+	}
+
+	while (<FILE>) {
+		next if /^\s*(\#.*|\s*)$/;
+
+		if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
+			$conf->{$1} = lc($2);
+		}else{
+			Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
+				$file, $_);
+			next;
+		}
+	}
+
+	close FILE;
+	return $conf;
+}
+
+=item get_list_list_tpl($robot, $directory)
+
+FIXME.
+
+=cut
+
+sub get_list_list_tpl {
+	my ($robot) = @_;
+	$robot = Robot::clean_robot($robot);
+
+	my $list_conf;
+	my $list_templates ;
+	unless ($list_conf = load_create_list_conf($robot)) {
+		return undef;
+	}
+
+	foreach my $dir (
+		reverse @{$robot->get_etc_include_path('create_list_templates')}
+	) {
+		if (opendir(DIR, $dir)) {
+			foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
+
+				my $status = $list_conf->{$template} || $list_conf->{'default'};
+
+				next if ($status eq 'hidden') ;
+
+				$list_templates->{$template}{'path'} = $dir;
+
+				my $locale = Language::Lang2Locale_old(Language::GetLang());
+				## FIXME: lang should be used instead of "locale".
+				## Look for a comment.tt2 in the appropriate locale first
+				if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
+					$list_templates->{$template}{'comment'} =
+					$template.'/'.$locale.'/comment.tt2';
+				}elsif (-r $dir.'/'.$template.'/comment.tt2') {
+					$list_templates->{$template}{'comment'} =
+					$template.'/comment.tt2';
+				}
+			}
+			closedir(DIR);
+		}
+	}
+
+	return ($list_templates);
+}
+
 =back
 
 =cut
