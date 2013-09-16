@@ -1600,9 +1600,10 @@ sub md5_fingerprint {
 	return undef unless (defined $string);
 	chomp $string;
 
-	my $digestmd5 = Digest::MD5->new();
-	$digestmd5->reset();
-	$digestmd5->add($string);
+	my $md5 = Digest::MD5->new();
+	$md5->reset();
+	$md5->add($string);
+
 	return (unpack("H*", $digestmd5->digest()));
 }
 
