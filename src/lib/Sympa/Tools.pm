@@ -835,10 +835,13 @@ Parameters:
 sub cookie_changed {
 	my ($current, $etcdir) = @_;
 	my $changed = 1 ;
-	if (-f $etcdir . '/cookies.history') {
-		unless (open COOK, '<', $etcdir . '/cookies.history') {
-			Sympa::Log::Syslog::do_log('err', 'Unable to read %s/cookies.history',
-				$etcdir);
+	my $history_file = $etcdir . '/cookies.history';
+
+	if (-f $history_file) {
+		unless (open COOK, '<', $history_file) {
+			Sympa::Log::Syslog::do_log(
+				'err', 'Unable to read %s', $history_file
+			);
 			return undef ; 
 		}
 		my $oldcook = <COOK>;
@@ -863,14 +866,15 @@ sub cookie_changed {
 		return $changed ;
 	}else{
 		my $umask = umask 037;
-		unless (open COOK, '>', $etcdir . '/cookies.history') {
+		unless (open COOK, '>', $history_file) {
 			umask $umask;
-			Sympa::Log::Syslog::do_log('err', 'Unable to create %s/cookies.history',
-				$etcdir);
+			Sympa::Log::Syslog::do_log(
+				'err', 'Unable to create %s', $history_file
+			);
 			return undef ; 
 		}
 		umask $umask;
-		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $etcdir . '/cookies.history';
+		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $history_file;
 		print COOK "$current ";
 		close COOK;
 		return(0);
