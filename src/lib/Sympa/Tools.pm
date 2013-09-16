@@ -35,12 +35,9 @@ use strict;
 
 use Carp qw(croak);
 use Digest::MD5;
-use Encode::Guess; ## Useful when encoding should be guessed
 use English qw(-no_match_vars);
-use File::Copy::Recursive;
-use File::Find;
-use File::Temp;
 use HTML::StripScripts::Parser;
+use MIME::Decoder;
 use MIME::EncWords;
 use MIME::Lite::HTML;
 use Sys::Hostname;
