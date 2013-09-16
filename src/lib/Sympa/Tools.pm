@@ -76,62 +76,62 @@ my %regexp = (
 
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {
-    my %param = @_;
-    my ($uid, $gid);
+	my %param = @_;
+	my ($uid, $gid);
 
-    if ($param{'user'}) {
-	unless ($uid = (getpwnam($param{'user'}))[2]) {
-	    Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",
-		$param{'user'});
-	    return undef;
+	if ($param{'user'}) {
+		unless ($uid = (getpwnam($param{'user'}))[2]) {
+			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",
+				$param{'user'});
+			return undef;
+		}
+	} else {
+		# A value of -1 is interpreted by most systems to leave that value
+		# unchanged.
+		$uid = -1;
 	}
-    } else {
-	# A value of -1 is interpreted by most systems to leave that value
-	# unchanged.
-	$uid = -1;
-    }
-    if ($param{'group'}) {
-	unless ($gid = (getgrnam($param{'group'}))[2]) {
-	    Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $param{'group'});
-	    return undef;
+	if ($param{'group'}) {
+		unless ($gid = (getgrnam($param{'group'}))[2]) {
+			Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $param{'group'});
+			return undef;
+		}
+	} else {
+		# A value of -1 is interpreted by most systems to leave that value
+		# unchanged.
+		$gid = -1;
 	}
-    } else {
-	# A value of -1 is interpreted by most systems to leave that value
-	# unchanged.
-	$gid = -1;
-    }
-    unless (chown($uid, $gid, $param{'file'})) {
-	Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
-	    $param{'file'}, $param{'user'}, $param{'group'}, "$!");
-	return undef;
-    }
-    if ($param{'mode'}) {
-	unless (chmod($param{'mode'}, $param{'file'})) {
-	    Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
-		$param{'file'}, $param{'mode'}, "$!");
-	    return undef;
+	unless (chown($uid, $gid, $param{'file'})) {
+		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
+			$param{'file'}, $param{'user'}, $param{'group'}, "$!");
+		return undef;
 	}
-    }
-    return 1;
+	if ($param{'mode'}) {
+		unless (chmod($param{'mode'}, $param{'file'})) {
+			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
+				$param{'file'}, $param{'mode'}, "$!");
+			return undef;
+		}
+	}
+	return 1;
 }
 
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
 sub _create_xss_parser {
-    my %parameters = @_;
-    my $robot = $parameters{'robot'};
-    Sympa::Log::Syslog::do_log('debug3', '(%s)', $robot);
+	my %parameters = @_;
+	my $robot = $parameters{'robot'};
+	Sympa::Log::Syslog::do_log('debug3', '(%s)', $robot);
 
-    my $http_host_re = $robot->http_host;
-    $http_host_re =~ s/([^\s\w\x80-\xFF])/\\$1/g;
-    my $hss = HTML::StripScripts::Parser->new({ Context => 'Document',
-						AllowSrc        => 1,
-						Rules => {
-						    '*' => {
-							src => qr{^http://$http_host_re},
-						    },
-						},
-					    });
-    return $hss;
+	my $http_host_re = $robot->http_host;
+	$http_host_re =~ s/([^\s\w\x80-\xFF])/\\$1/g;
+	my $hss = HTML::StripScripts::Parser->new({ Context => 'Document',
+			AllowSrc        => 1,
+			Rules => {
+				'*' => {
+					src => qr{^http://$http_host_re},
+				},
+			},
+		});
+	return $hss;
 }
 
 =head1 FUNCTIONS
@@ -158,12 +158,12 @@ Parameters:
 
 # OBSOLETED: use $list->find_picture_filenames().
 sub pictures_filename {
-    my %parameters = @_;
-    my $email = $parameters{'email'};
-    my $list = $parameters{'list'};
+	my %parameters = @_;
+	my $email = $parameters{'email'};
+	my $list = $parameters{'list'};
 
-    my $ret = $list->find_picture_filenames($email);
-    return $ret;
+	my $ret = $list->find_picture_filenames($email);
+	return $ret;
 }
 
 =item make_pictures_url(%parameters)
@@ -188,12 +188,12 @@ Parameters:
 
 # OBSOLETED: Use $list->find_picture_url().
 sub make_pictures_url {
-    my %parameters = @_;
-    my $email = $parameters{'email'};
-    my $list = $parameters{'list'};
+	my %parameters = @_;
+	my $email = $parameters{'email'};
+	my $list = $parameters{'list'};
 
-    my $ret = $list->find_picture_url($email);
-    return $ret;
+	my $ret = $list->find_picture_url($email);
+	return $ret;
 }
 
 =item sanitize_html(%parameters)
@@ -217,22 +217,22 @@ Parameters:
 
 sub sanitize_html {
 	my %parameters = @_;
-    my $robot = $parameters{'robot'};
-    Sympa::Log::Syslog::do_log('debug3', '(string=%s, robot=%s)',
-	$parameters{'string'}, $robot);
+	my $robot = $parameters{'robot'};
+	Sympa::Log::Syslog::do_log('debug3', '(string=%s, robot=%s)',
+		$parameters{'string'}, $robot);
 
-    unless (defined $parameters{'string'}) {
+	unless (defined $parameters{'string'}) {
 		Sympa::Log::Syslog::do_log('err',"No string provided.");
 		return undef;
-    }
+	}
 
-    my $hss = _create_xss_parser('robot' => $robot);
-    unless (defined $hss) {
+	my $hss = _create_xss_parser('robot' => $robot);
+	unless (defined $hss) {
 		Sympa::Log::Syslog::do_log('err',"Can't create StripScript parser.");
 		return undef;
-    }
-    my $string = $hss -> filter_html($parameters{'string'});
-    return $string;
+	}
+	my $string = $hss -> filter_html($parameters{'string'});
+	return $string;
 }
 
 =item sanitize_html_file(%parameters)
@@ -256,9 +256,9 @@ Parameters:
 
 sub sanitize_html_file {
 	my %parameters = @_;
-    my $robot = $parameters{'robot'};
-    Sympa::Log::Syslog::do_log('debug3', '(file=%s, robot=%s)',
-	$parameters{'file'}, $robot);
+	my $robot = $parameters{'robot'};
+	Sympa::Log::Syslog::do_log('debug3', '(file=%s, robot=%s)',
+		$parameters{'file'}, $robot);
 
 	unless (defined $parameters{'file'}) {
 		Sympa::Log::Syslog::do_log('err',"No path to file provided.");
@@ -315,11 +315,11 @@ sub sanitize_var {
 			foreach my $index (0..$#{$parameters{'var'}}) {
 				if ((ref($parameters{'var'}->[$index]) eq 'ARRAY') || (ref($parameters{'var'}->[$index]) eq 'HASH')) {
 					sanitize_var('var' => $parameters{'var'}->[$index],
-						  'level' => $level+1,
-						  'robot' => $parameters{'robot'},
-						  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
-						  'htmlToFilter' => $parameters{'htmlToFilter'},
-						  );
+						'level' => $level+1,
+						'robot' => $parameters{'robot'},
+						'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
+						'htmlToFilter' => $parameters{'htmlToFilter'},
+					);
 				} elsif (ref($parameters{'var'}->[$index])) {
 					$parameters{'var'}->[$index] =
 					ref($parameters{'var'}->[$index]);
@@ -333,25 +333,25 @@ sub sanitize_var {
 			foreach my $key (keys %{$parameters{'var'}}) {
 				if ((ref($parameters{'var'}->{$key}) eq 'ARRAY') || (ref($parameters{'var'}->{$key}) eq 'HASH')) {
 					&sanitize_var('var' => $parameters{'var'}->{$key},
-						  'level' => $level+1,
-						  'robot' => $parameters{'robot'},
-						  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
-						  'htmlToFilter' => $parameters{'htmlToFilter'},
-						  );
+						'level' => $level+1,
+						'robot' => $parameters{'robot'},
+						'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
+						'htmlToFilter' => $parameters{'htmlToFilter'},
+					);
 				} elsif (ref($parameters{'var'}->{$key})) {
 					$parameters{'var'}->{$key} =
 					ref($parameters{'var'}->{$key});
 				} elsif (defined $parameters{'var'}->{$key}) {
 					unless ($parameters{'htmlAllowedParam'}{$key} or
-					$parameters{'htmlToFilter'}{$key}) {
-					$parameters{'var'}->{$key} =
+						$parameters{'htmlToFilter'}{$key}) {
+						$parameters{'var'}->{$key} =
 						escape_html($parameters{'var'}->{$key});
 					}
 					if ($parameters{'htmlToFilter'}{$key}) {
-					$parameters{'var'}->{$key} = sanitize_html(
-						'string' => $parameters{'var'}->{$key},
-						'robot' => $parameters{'robot'}
-					);
+						$parameters{'var'}->{$key} = sanitize_html(
+							'string' => $parameters{'var'}->{$key},
+							'robot' => $parameters{'robot'}
+						);
 					}
 				}
 			}
@@ -391,21 +391,21 @@ been exhausted.
 =cut
 
 sub safefork {
-   my($i, $pid);
-   
-   my $err;
-   for ($i = 1; $i < 4; $i++) {
-      my($pid) = fork;
-      return $pid if (defined($pid));
+	my($i, $pid);
 
-      $err = "$!";
-      Sympa::Log::Syslog::do_log('warn', 'Cannot create new process in safefork: %s', $err);
-      ## FIXME:should send a mail to the listmaster
-      sleep(10 * $i);
-   }
-   croak sprintf('Exiting because cannot create new process in safefork: %s',
-	$err);
-   ## No return.
+	my $err;
+	for ($i = 1; $i < 4; $i++) {
+		my($pid) = fork;
+		return $pid if (defined($pid));
+
+		$err = "$!";
+		Sympa::Log::Syslog::do_log('warn', 'Cannot create new process in safefork: %s', $err);
+		## FIXME:should send a mail to the listmaster
+		sleep(10 * $i);
+	}
+	croak sprintf('Exiting because cannot create new process in safefork: %s',
+		$err);
+	## No return.
 }
 
 =item checkcommand($msg, $sender, $robot, $regexp)
@@ -442,41 +442,41 @@ true if there are some command in $msg, false otherwise.
 =cut
 
 sub checkcommand {
-   my($msg, $sender, $robot) = @_;
+	my($msg, $sender, $robot) = @_;
 
-   my($avoid, $i);
+	my($avoid, $i);
 
-    ## Check for commands in the subject.
-    my $subject = $msg->head->get('Subject');
-    chomp $subject if $subject;
+	## Check for commands in the subject.
+	my $subject = $msg->head->get('Subject');
+	chomp $subject if $subject;
 
-   Sympa::Log::Syslog::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
+	Sympa::Log::Syslog::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
-   if ($subject) {
-       if (Site->misaddressed_commands_regexp) {
-	    my $misaddressed_commands_regexp =
-		Site->misaddressed_commands_regexp;
-	    if ($subject =~ /^$misaddressed_commands_regexp\b/im) {
-	   return 1;
-       }
-   }
-   }
-
-   return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
-
-   foreach $i (@{$msg->body}) {
-	if (Site->misaddressed_commands_regexp) {
-	    my $misaddressed_commands_regexp =
-		Site->misaddressed_commands_regexp;
-	    if ($i =~ /^$misaddressed_commands_regexp\b/im) {
-	   return 1;
-       }
+	if ($subject) {
+		if (Site->misaddressed_commands_regexp) {
+			my $misaddressed_commands_regexp =
+			Site->misaddressed_commands_regexp;
+			if ($subject =~ /^$misaddressed_commands_regexp\b/im) {
+				return 1;
+			}
+		}
 	}
 
-       ## Control is only applied to first non-blank line
-       last unless $i =~ /^\s*$/;
-   }
-   return 0;
+	return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
+
+	foreach $i (@{$msg->body}) {
+		if (Site->misaddressed_commands_regexp) {
+			my $misaddressed_commands_regexp =
+			Site->misaddressed_commands_regexp;
+			if ($i =~ /^$misaddressed_commands_regexp\b/im) {
+				return 1;
+			}
+		}
+
+		## Control is only applied to first non-blank line
+		last unless $i =~ /^\s*$/;
+	}
+	return 0;
 }
 
 =item load_edit_list_conf($robot, $list, $basedir)
@@ -499,58 +499,58 @@ Parameters:
 
 ## NOTE: this might be moved to List only where this is used.
 sub load_edit_list_conf {
-    Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-    my $self  = shift;
-    my $robot = $self->robot;
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
+	my $self  = shift;
+	my $robot = $self->robot;
 
-    my $file;
-    my $conf;
+	my $file;
+	my $conf;
 
-    return undef
+	return undef
 	unless ($file = $self->get_etc_filename('edit_list.conf'));
 
-    my $fh;
-    unless (open $fh, '<', $file) {
-	Sympa::Log::Syslog::do_log('info', 'Unable to open config file %s', $file);
-	return undef;
-    }
-
-    my $error_in_conf;
-    my $roles_regexp =
-	'listmaster|privileged_owner|owner|editor|subscriber|default';
-    while (<$fh>) {
-	next if /^\s*(\#.*|\s*)$/;
-
-	if (/^\s*(\S+)\s+(($roles_regexp)\s*(,\s*($roles_regexp))*)\s+(read|write|hidden)\s*$/i
-	    ) {
-	    my ($param, $role, $priv) = ($1, $2, $6);
-	    my @roles = split /,/, $role;
-	    foreach my $r (@roles) {
-		$r =~ s/^\s*(\S+)\s*$/$1/;
-		if ($r eq 'default') {
-		    $error_in_conf = 1;
-		    Sympa::Log::Syslog::do_log('notice', '"default" is no more recognised');
-		    foreach
-			my $set ('owner', 'privileged_owner', 'listmaster') {
-			$conf->{$param}{$set} = $priv;
-		    }
-		    next;
-		}
-		$conf->{$param}{$r} = $priv;
-	    }
-	} else {
-	    Sympa::Log::Syslog::do_log('info', 'unknown parameter in %s  (Ignored) %s',
-		$file, $_);
-	    next;
+	my $fh;
+	unless (open $fh, '<', $file) {
+		Sympa::Log::Syslog::do_log('info', 'Unable to open config file %s', $file);
+		return undef;
 	}
-    }
 
-    if ($error_in_conf) {
-	$robot->send_notify_to_listmaster('edit_list_error', $file);
-    }
+	my $error_in_conf;
+	my $roles_regexp =
+	'listmaster|privileged_owner|owner|editor|subscriber|default';
+	while (<$fh>) {
+		next if /^\s*(\#.*|\s*)$/;
 
-    close $fh;
-    return $conf;
+		if (/^\s*(\S+)\s+(($roles_regexp)\s*(,\s*($roles_regexp))*)\s+(read|write|hidden)\s*$/i
+		) {
+			my ($param, $role, $priv) = ($1, $2, $6);
+			my @roles = split /,/, $role;
+			foreach my $r (@roles) {
+				$r =~ s/^\s*(\S+)\s*$/$1/;
+				if ($r eq 'default') {
+					$error_in_conf = 1;
+					Sympa::Log::Syslog::do_log('notice', '"default" is no more recognised');
+					foreach
+					my $set ('owner', 'privileged_owner', 'listmaster') {
+						$conf->{$param}{$set} = $priv;
+					}
+					next;
+				}
+				$conf->{$param}{$r} = $priv;
+			}
+		} else {
+			Sympa::Log::Syslog::do_log('info', 'unknown parameter in %s  (Ignored) %s',
+				$file, $_);
+			next;
+		}
+	}
+
+	if ($error_in_conf) {
+		$robot->send_notify_to_listmaster('edit_list_error', $file);
+	}
+
+	close $fh;
+	return $conf;
 }
 
 
@@ -572,36 +572,36 @@ Parameters:
 
 ## NOTE: This might be moved to WWSympa along with get_list_list_tpl().
 sub load_create_list_conf {
-    my $robot = Robot::clean_robot(shift);
+	my $robot = Robot::clean_robot(shift);
 
-    my $file;
-    my $conf ;
-    
-    $file = $robot->get_etc_filename('create_list.conf');
-    unless ($file) {
-	Sympa::Log::Syslog::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
-	return undef;
-    }
+	my $file;
+	my $conf ;
 
-    unless (open (FILE, $file)) {
-	Sympa::Log::Syslog::do_log('info','Unable to open config file %s', $file);
-	return undef;
-    }
-
-    while (<FILE>) {
-	next if /^\s*(\#.*|\s*)$/;
-
-	if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
-	    $conf->{$1} = lc($2);
-	}else{
-	    Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
-		$file, $_);
-	    next;
+	$file = $robot->get_etc_filename('create_list.conf');
+	unless ($file) {
+		Sympa::Log::Syslog::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
+		return undef;
 	}
-    }
-    
-    close FILE;
-    return $conf;
+
+	unless (open (FILE, $file)) {
+		Sympa::Log::Syslog::do_log('info','Unable to open config file %s', $file);
+		return undef;
+	}
+
+	while (<FILE>) {
+		next if /^\s*(\#.*|\s*)$/;
+
+		if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
+			$conf->{$1} = lc($2);
+		}else{
+			Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
+				$file, $_);
+			next;
+		}
+	}
+
+	close FILE;
+	return $conf;
 }
 
 =item get_list_list_tpl($robot, $directory)
@@ -612,42 +612,42 @@ FIXME.
 
 ## NOTE: This might be moved to WWSympa along with load_create_list_conf().
 sub get_list_list_tpl {
-    my $robot = Robot::clean_robot(shift);
+	my $robot = Robot::clean_robot(shift);
 
-    my $list_conf;
-    my $list_templates ;
-    unless ($list_conf = &load_create_list_conf($robot)) {
-	return undef;
-    }
-    
-    foreach my $dir (
-		reverse @{$robot->get_etc_include_path('create_list_templates')}
-    ) {
-	if (opendir(DIR, $dir)) {
-	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
-
-		my $status = $list_conf->{$template} || $list_conf->{'default'};
-
-		next if ($status eq 'hidden') ;
-
-		$list_templates->{$template}{'path'} = $dir;
-
-		my $locale = Language::Lang2Locale_old(Language::GetLang());
-		## FIXME: lang should be used instead of "locale".
-		## Look for a comment.tt2 in the appropriate locale first
-		if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
-		    $list_templates->{$template}{'comment'} =
-			$template.'/'.$locale.'/comment.tt2';
-		}elsif (-r $dir.'/'.$template.'/comment.tt2') {
-		    $list_templates->{$template}{'comment'} =
-			$template.'/comment.tt2';
-		}
-	    }
-	    closedir(DIR);
+	my $list_conf;
+	my $list_templates ;
+	unless ($list_conf = &load_create_list_conf($robot)) {
+		return undef;
 	}
-    }
 
-    return ($list_templates);
+	foreach my $dir (
+		reverse @{$robot->get_etc_include_path('create_list_templates')}
+	) {
+		if (opendir(DIR, $dir)) {
+			foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
+
+				my $status = $list_conf->{$template} || $list_conf->{'default'};
+
+				next if ($status eq 'hidden') ;
+
+				$list_templates->{$template}{'path'} = $dir;
+
+				my $locale = Language::Lang2Locale_old(Language::GetLang());
+				## FIXME: lang should be used instead of "locale".
+				## Look for a comment.tt2 in the appropriate locale first
+				if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
+					$list_templates->{$template}{'comment'} =
+					$template.'/'.$locale.'/comment.tt2';
+				}elsif (-r $dir.'/'.$template.'/comment.tt2') {
+					$list_templates->{$template}{'comment'} =
+					$template.'/comment.tt2';
+				}
+			}
+			closedir(DIR);
+		}
+	}
+
+	return ($list_templates);
 }
 
 =item get_templates_list($type, $robot, $list, $options, $basedir)
@@ -658,69 +658,69 @@ FIXME.
 
 sub get_templates_list {
 
-    my $type = shift;
-    my $robot = shift;
-    my $list = shift;
-    my $options = shift;
+	my $type = shift;
+	my $robot = shift;
+	my $list = shift;
+	my $options = shift;
 
-    my $listdir;
+	my $listdir;
 
-    Sympa::Log::Syslog::do_log('debug', "get_templates_list ($type, $robot, $list)");
-    unless (($type eq 'web')||($type eq 'mail')) {
+	Sympa::Log::Syslog::do_log('debug', "get_templates_list ($type, $robot, $list)");
+	unless (($type eq 'web')||($type eq 'mail')) {
 		Sympa::Log::Syslog::do_log('info', 'get_templates_list () : internal error incorrect parameter');
-    }
+	}
 
-    my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-    my $site_dir = Site->etc.'/'.$type.'_tt2';
-    my $robot_dir = Site->etc.'/'.$robot.'/'.$type.'_tt2';
+	my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
+	my $site_dir = Site->etc.'/'.$type.'_tt2';
+	my $robot_dir = Site->etc.'/'.$robot.'/'.$type.'_tt2';
 
-    my @try;
+	my @try;
 
-    ## The 'ignore_global' option allows to look for files at list level only
-    unless ($options->{'ignore_global'}) {
+	## The 'ignore_global' option allows to look for files at list level only
+	unless ($options->{'ignore_global'}) {
 		push @try, $distrib_dir;
 		push @try, $site_dir;
 		push @try, $robot_dir;
-    }    
+	}    
 
-    if (defined $list) {
+	if (defined $list) {
 		$listdir = $list->dir.'/'.$type.'_tt2';	
 		push @try, $listdir;
-    }
+	}
 
-    my $i = 0 ;
-    my $tpl;
+	my $i = 0 ;
+	my $tpl;
 
-    foreach my $dir (@try) {
+	foreach my $dir (@try) {
 		next unless opendir (DIR, $dir);
 		foreach my $file (grep (!/^\./, readdir(DIR))) {
 			## Subdirectory for a lang
 			if (-d $dir.'/'.$file) {
-			my $lang_dir = $file;
-			my $lang = Sympa::Language::CanonicLang($lang_dir);
-			next unless $lang;
-			next unless opendir (LANGDIR, $dir . '/' . $lang_dir);
+				my $lang_dir = $file;
+				my $lang = Sympa::Language::CanonicLang($lang_dir);
+				next unless $lang;
+				next unless opendir (LANGDIR, $dir . '/' . $lang_dir);
 
-			foreach my $file (grep (!/^\./, readdir(LANGDIR))) {
-				next unless $file =~ /\.tt2$/;
-				if ($dir eq $distrib_dir) {
-					$tpl->{$file}{'distrib'}{$lang} =
+				foreach my $file (grep (!/^\./, readdir(LANGDIR))) {
+					next unless $file =~ /\.tt2$/;
+					if ($dir eq $distrib_dir) {
+						$tpl->{$file}{'distrib'}{$lang} =
 						$dir . '/' . $lang_dir . '/' . $file;
-				}
-				if ($dir eq $site_dir) {
-					$tpl->{$file}{'site'}{$lang} =
+					}
+					if ($dir eq $site_dir) {
+						$tpl->{$file}{'site'}{$lang} =
 						$dir . '/' . $lang_dir . '/' . $file;
-				}
-				if ($dir eq $robot_dir) {
-					$tpl->{$file}{'robot'}{$lang} =
+					}
+					if ($dir eq $robot_dir) {
+						$tpl->{$file}{'robot'}{$lang} =
 						$dir . '/' . $lang_dir . '/' . $file;
-				}
-				if ($dir eq $listdir) {
-					$tpl->{$file}{'list'}{$lang} =
+					}
+					if ($dir eq $listdir) {
+						$tpl->{$file}{'list'}{$lang} =
 						$dir . '/' . $lang_dir . '/' . $file;
+					}
 				}
-			}
-			closedir LANGDIR;
+				closedir LANGDIR;
 
 			}else {
 				next unless ($file =~ /\.tt2$/);
@@ -740,7 +740,7 @@ sub get_templates_list {
 		}
 		closedir DIR;
 	}
-    return ($tpl);
+	return ($tpl);
 
 }
 
@@ -771,82 +771,82 @@ Parameters:
 =cut
 
 sub get_template_path {
-    Sympa::Log::Syslog::do_log('debug2', '(%s, %s. %s, %s, %s, %s)', @_);
-    my $type = shift;
-    my $robot = shift;
-    my $scope = shift;
-    my $tpl = shift;
-    my $lang = shift || 'default';
-    my $list = shift;
+	Sympa::Log::Syslog::do_log('debug2', '(%s, %s. %s, %s, %s, %s)', @_);
+	my $type = shift;
+	my $robot = shift;
+	my $scope = shift;
+	my $tpl = shift;
+	my $lang = shift || 'default';
+	my $list = shift;
 
-    ##FIXME: path is fixed to older "locale".
-    my $locale;
-    $locale = Sympa::Language::Lang2Locale_old($lang) unless $lang eq 'default';
+	##FIXME: path is fixed to older "locale".
+	my $locale;
+	$locale = Sympa::Language::Lang2Locale_old($lang) unless $lang eq 'default';
 
-    unless ($type eq 'web' or $type eq 'mail') {
+	unless ($type eq 'web' or $type eq 'mail') {
 		Sympa::Log::Syslog::do_log('info', 'internal error incorrect parameter');
 		return undef;
-    }
+	}
 
-    my $dir;
-    if ($scope eq 'list')  {
+	my $dir;
+	if ($scope eq 'list')  {
 		unless (ref $list) {
 			Sympa::Log::Syslog::do_log('err', 'missing parameter "list"');
 			return undef;
 		}
 		$dir = $list->dir;
-    } elsif ($scope eq 'robot' and $robot->etc ne Site->etc)  {
+	} elsif ($scope eq 'robot' and $robot->etc ne Site->etc)  {
 		$dir = $robot->etc;
-    } elsif ($scope eq 'site') {
+	} elsif ($scope eq 'site') {
 		$dir = Site->etc;
-    } elsif ($scope eq 'distrib') {
+	} elsif ($scope eq 'distrib') {
 		$dir = Sympa::Constants::DEFAULTDIR;
-    } else {
+	} else {
 		return undef;
-    }
+	}
 
-    $dir .= '/'.$type.'_tt2';
-    $dir .= '/' . $locale unless $lang eq 'default';
-    return $dir.'/'.$tpl;
+	$dir .= '/'.$type.'_tt2';
+	$dir .= '/' . $locale unless $lang eq 'default';
+	return $dir.'/'.$tpl;
 }
 
 ##NOTE: This might be moved to Site module as mutative method.
 sub get_dkim_parameters {
-    Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-    my $self = shift;
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
+	my $self = shift;
 
-    my $data;
-    my $keyfile;
-    if (ref $self and ref $self eq 'List') {
-	$data->{'d'} = $self->dkim_parameters->{'signer_domain'};
-	if ($self->dkim_parameters->{'signer_identity'}) {
-	    $data->{'i'} = $self->dkim_parameters->{'signer_identity'};
-	}else{
-	    # RFC 4871 (page 21) 
-	    $data->{'i'} = $self->get_address('owner');
+	my $data;
+	my $keyfile;
+	if (ref $self and ref $self eq 'List') {
+		$data->{'d'} = $self->dkim_parameters->{'signer_domain'};
+		if ($self->dkim_parameters->{'signer_identity'}) {
+			$data->{'i'} = $self->dkim_parameters->{'signer_identity'};
+		}else{
+			# RFC 4871 (page 21) 
+			$data->{'i'} = $self->get_address('owner');
+		}
+
+		$data->{'selector'} = $self->dkim_parameters->{'selector'};
+		$keyfile = $self->dkim_parameters->{'private_key_path'};
+	} elsif (ref $self and ref $self eq 'Robot' or $self eq 'Site') {
+		# in robot context
+		$data->{'d'} = $self->dkim_signer_domain;
+		$data->{'i'} = $self->dkim_signer_identity;
+		$data->{'selector'} = $self->dkim_selector;
+		$keyfile = $self->dkim_private_key_path;
+	} else {
+		croak 'bug in logic.  Ask developer';
 	}
-	
-	$data->{'selector'} = $self->dkim_parameters->{'selector'};
-	$keyfile = $self->dkim_parameters->{'private_key_path'};
-    } elsif (ref $self and ref $self eq 'Robot' or $self eq 'Site') {
-	# in robot context
-	$data->{'d'} = $self->dkim_signer_domain;
-	$data->{'i'} = $self->dkim_signer_identity;
-	$data->{'selector'} = $self->dkim_selector;
-	$keyfile = $self->dkim_private_key_path;
-    } else {
-	croak 'bug in logic.  Ask developer';
-    }
-    unless (open (KEY, $keyfile)) {
-	Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
-	return undef;
-    }
-    while (<KEY>){
-	$data->{'private_key'} .= $_;
-    }
-    close (KEY);
+	unless (open (KEY, $keyfile)) {
+		Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
+		return undef;
+	}
+	while (<KEY>){
+		$data->{'private_key'} .= $_;
+	}
+	close (KEY);
 
-    return $data;
+	return $data;
 }
 
 =item as_singlepart($msg, $preferred_type, $loops)
@@ -928,15 +928,15 @@ sub as_singlepart {
 ## Escape characters before using a string within a regexp parameter
 ## Escaped characters are : @ $ [ ] ( ) ' ! '\' * . + ?
 sub escape_regexp {
-    my $s = shift;
-    my @escaped = ("\\",'@','$','[',']','(',')',"'",'!','*','.','+','?');
-    my $backslash = "\\"; ## required in regexp
+	my $s = shift;
+	my @escaped = ("\\",'@','$','[',']','(',')',"'",'!','*','.','+','?');
+	my $backslash = "\\"; ## required in regexp
 
-    foreach my $escaped_char (@escaped) {
-	$s =~ s/$backslash$escaped_char/\\$escaped_char/g;
-    }
+	foreach my $escaped_char (@escaped) {
+		$s =~ s/$backslash$escaped_char/\\$escaped_char/g;
+	}
 
-    return $s;
+	return $s;
 }
 
 =item escape_chars()
@@ -1105,9 +1105,9 @@ Check sum used to authenticate communication from wwsympa to sympa
 =cut
 
 sub sympa_checksum {
-    my $rcpt = shift;
-    my $checksum = (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
-    return $checksum;
+	my $rcpt = shift;
+	my $checksum = (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
+	return $checksum;
 }
 
 =item cookie_changed($current, $basedir)
@@ -1117,40 +1117,40 @@ Create a cipher.
 =cut
 
 sub cookie_changed {
-    my $current=shift;
-    my $changed = 1 ;
-    if (-f Site->etc . '/cookies.history') {
+	my $current=shift;
+	my $changed = 1 ;
+	if (-f Site->etc . '/cookies.history') {
 		unless (open COOK, '<', Site->etc . '/cookies.history') {
 			Sympa::Log::Syslog::do_log('err', 'Unable to read %s/cookies.history',
-			Site->etc);
+				Site->etc);
 			return undef ; 
 		}
 		my $oldcook = <COOK>;
 		close COOK;
 
 		my @cookies = split(/\s+/,$oldcook );
-		
+
 
 		if ($cookies[$#cookies] eq $current) {
 			Sympa::Log::Syslog::do_log('debug2', "cookie is stable") ;
 			$changed = 0;
-	#	}else{
-	#	    push @cookies, $current ;
-	#	    unless (open COOK, '>', Site->etc . '/cookies.history') {
-	#		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Site->etc);
-	#		return undef ; 
-	#	    }
-	#	    print COOK join(" ", @cookies);
-	#	    
-	#	    close COOK;
+			#	}else{
+			#	    push @cookies, $current ;
+			#	    unless (open COOK, '>', Site->etc . '/cookies.history') {
+			#		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Site->etc);
+			#		return undef ; 
+			#	    }
+			#	    print COOK join(" ", @cookies);
+			#	    
+			#	    close COOK;
 		}
 		return $changed ;
-    }else{
+	}else{
 		my $umask = umask 037;
 		unless (open COOK, '>', Site->etc . '/cookies.history') {
 			umask $umask;
 			Sympa::Log::Syslog::do_log('err', 'Unable to create %s/cookies.history',
-			Site->etc);
+				Site->etc);
 			return undef ; 
 		}
 		umask $umask;
@@ -1158,7 +1158,7 @@ sub cookie_changed {
 		print COOK "$current ";
 		close COOK;
 		return(0);
-    }
+	}
 }
 
 =item load_mime_types($confdir)
@@ -1286,248 +1286,248 @@ FIXME.
 =cut
 
 sub virus_infected {
-    my $mail = shift ;
+	my $mail = shift ;
 
-    my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
-    Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
-    
-    unless (Site->antivirus_path) {
-        Sympa::Log::Syslog::do_log('debug', 'Sympa not configured to scan virus in message');
-	return 0;
-    }
-    my @name = split(/\//,$file);
-    my $work_dir = Site->tmpdir.'/antivirus';
-    
-    unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
-	Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
-	return undef;
-    }
+	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
+	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
 
-    $work_dir = Site->tmpdir.'/antivirus/'.$name[$#name];
-    
-    unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
-	Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
-	return undef;
-    }
+	unless (Site->antivirus_path) {
+		Sympa::Log::Syslog::do_log('debug', 'Sympa not configured to scan virus in message');
+		return 0;
+	}
+	my @name = split(/\//,$file);
+	my $work_dir = Site->tmpdir.'/antivirus';
 
-    #$mail->dump_skeleton;
-
-    ## Call the procedure of splitting mail
-    unless (&split_mail ($mail,'msg', $work_dir)) {
-	Sympa::Log::Syslog::do_log('err', 'Could not split mail %s', $mail);
-	return undef;
-    }
-
-    my $virusfound = 0; 
-    my $error_msg;
-    my $result;
-
-    ## McAfee
-    if (Site->antivirus_path =~ /\/uvscan$/) {
-	# impossible to look for viruses with no option set
-	unless (Site->antivirus_args) {
-	    Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
-	    return undef;
+	unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
+		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
+		return undef;
 	}
 
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-	open (ANTIVIR, "$cmd |");
+	$work_dir = Site->tmpdir.'/antivirus/'.$name[$#name];
 
-	while (<ANTIVIR>) {
-	    $result .= $_; chomp $result;
-	    if ((/^\s*Found the\s+(.*)\s*virus.*$/i) ||
-		(/^\s*Found application\s+(.*)\.\s*$/i)){
-		$virusfound = $1;
-	    }
-	}
-	close ANTIVIR;
-    
-	my $status = $? >> 8;
-
-        ## uvscan status =12 or 13 (*256) => virus
-        if (( $status == 13) || ($status == 12)) { 
-	    $virusfound ||= "unknown";
+	unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
+		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
+		return undef;
 	}
 
-	## Meaning of the codes
-	##  12 : The program tried to clean a file, and that clean failed for some reason and the file is still infected.
-	##  13 : One or more viruses or hostile objects (such as a Trojan horse, joke program,  or  a  test file) were found.
-	##  15 : The programs self-check failed; the program might be infected or damaged.
-	##  19 : The program succeeded in cleaning all infected files.
+	#$mail->dump_skeleton;
 
-	$error_msg = $result
-	    if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
-
-    ## Trend Micro
-    }elsif (Site->antivirus_path =~ /\/vscan$/) {
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-	open (ANTIVIR, "$cmd |");
-
-	while (<ANTIVIR>) {
-	    if (/Found virus (\S+) /i){
-		$virusfound = $1;
-	    }
-	}
-	close ANTIVIR;
-
-	my $status = $? >> 8;
-
-        ## uvscan status = 1 | 2 (*256) => virus
-        if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
-	    $virusfound = "unknown";
+	## Call the procedure of splitting mail
+	unless (&split_mail ($mail,'msg', $work_dir)) {
+		Sympa::Log::Syslog::do_log('err', 'Could not split mail %s', $mail);
+		return undef;
 	}
 
-    ## F-Secure
-    } elsif(Site->antivirus_path =~ /\/fsav$/) {
-	my $dbdir=$` ;
-
-	# impossible to look for viruses with no option set
-	unless (Site->antivirus_args) {
-	    Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
-	    return undef;
-	}
-	my $cmd = sprintf '%s --databasedirectory %s %s %s',
-	    Site->antivirus_path, $dbdir, Site->antivirus_args, $work_dir;
-	open (ANTIVIR, "$cmd |");
-
-	while (<ANTIVIR>) {
-
-	    if (/infection:\s+(.*)/){
-		$virusfound = $1;
-	    }
-	}
-	
-	close ANTIVIR;
-    
-	my $status = $? >> 8;
-
-        ## fsecure status =3 (*256) => virus
-        if (( $status == 3) and not($virusfound)) { 
-	    $virusfound = "unknown";
-	}    
-    }elsif(Site->antivirus_path =~ /f-prot\.sh$/) {
-
-        Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');    
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-        open (ANTIVIR, "$cmd |");
-
-        while (<ANTIVIR>) {
-            if (/Infection:\s+(.*)/){
-                $virusfound = $1;
-            }
-        }
-
-        close ANTIVIR;
-
-        my $status = $? >> 8;
-
-        Sympa::Log::Syslog::do_log('debug2', 'Status: '.$status);    
-        
-        ## f-prot status =3 (*256) => virus
-        if (( $status == 3) and not($virusfound)) { 
-            $virusfound = "unknown";
-        }    
-    }elsif (Site->antivirus_path =~ /kavscanner/) {
-	# impossible to look for viruses with no option set
-	unless (Site->antivirus_args) {
-	    Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
-	    return undef;
-	}
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-	open (ANTIVIR,"$cmd |");
-
-	while (<ANTIVIR>) {
-	    if (/infected:\s+(.*)/){
-		$virusfound = $1;
-	    }
-	    elsif (/suspicion:\s+(.*)/i){
-		$virusfound = $1;
-	    }
-	}
-	close ANTIVIR;
-    
-	my $status = $? >> 8;
-
-        ## uvscan status =3 (*256) => virus
-        if (( $status >= 3) and not($virusfound)) { 
-	    $virusfound = "unknown";
-	}
-
-        ## Sophos Antivirus... by liuk@publinet.it
-    }elsif (Site->antivirus_path =~ /\/sweep$/) {
-        # impossible to look for viruses with no option set
-	unless (Site->antivirus_args) {
-	    Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
-	    return undef;
-	}
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-        open (ANTIVIR, "$cmd |");
-
-	while (<ANTIVIR>) {
-	    if (/Virus\s+(.*)/) {
-		$virusfound = $1;
-	    }
-	}       
-	close ANTIVIR;
-
-	my $status = $? >> 8;
-
-	## sweep status =3 (*256) => virus
-	if (( $status == 3) and not($virusfound)) {
-	    $virusfound = "unknown";
-	}
-
-	## Clam antivirus
-    }elsif (Site->antivirus_path =~ /\/clamd?scan$/) {
-	my $cmd = sprintf '%s %s %s',
-	    Site->antivirus_path, Site->antivirus_args, $work_dir;
-        open (ANTIVIR, "$cmd |");
-
+	my $virusfound = 0; 
+	my $error_msg;
 	my $result;
-	while (<ANTIVIR>) {
-	    $result .= $_; chomp $result;
-	    if (/^\S+:\s(.*)\sFOUND$/) {
-		$virusfound = $1;
-	    }
-	}       
-	close ANTIVIR;
 
-	my $status = $? >> 8;
+	## McAfee
+	if (Site->antivirus_path =~ /\/uvscan$/) {
+		# impossible to look for viruses with no option set
+		unless (Site->antivirus_args) {
+			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+			return undef;
+		}
 
-	## Clamscan status =1 (*256) => virus
-	if (( $status == 1) and not($virusfound)) {
-	    $virusfound = "unknown";
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		while (<ANTIVIR>) {
+			$result .= $_; chomp $result;
+			if ((/^\s*Found the\s+(.*)\s*virus.*$/i) ||
+				(/^\s*Found application\s+(.*)\.\s*$/i)){
+				$virusfound = $1;
+			}
+		}
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## uvscan status =12 or 13 (*256) => virus
+		if (( $status == 13) || ($status == 12)) { 
+			$virusfound ||= "unknown";
+		}
+
+		## Meaning of the codes
+		##  12 : The program tried to clean a file, and that clean failed for some reason and the file is still infected.
+		##  13 : One or more viruses or hostile objects (such as a Trojan horse, joke program,  or  a  test file) were found.
+		##  15 : The programs self-check failed; the program might be infected or damaged.
+		##  19 : The program succeeded in cleaning all infected files.
+
+		$error_msg = $result
+		if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
+
+		## Trend Micro
+	}elsif (Site->antivirus_path =~ /\/vscan$/) {
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		while (<ANTIVIR>) {
+			if (/Found virus (\S+) /i){
+				$virusfound = $1;
+			}
+		}
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## uvscan status = 1 | 2 (*256) => virus
+		if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
+			$virusfound = "unknown";
+		}
+
+		## F-Secure
+	} elsif(Site->antivirus_path =~ /\/fsav$/) {
+		my $dbdir=$` ;
+
+		# impossible to look for viruses with no option set
+		unless (Site->antivirus_args) {
+			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+			return undef;
+		}
+		my $cmd = sprintf '%s --databasedirectory %s %s %s',
+		Site->antivirus_path, $dbdir, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		while (<ANTIVIR>) {
+
+			if (/infection:\s+(.*)/){
+				$virusfound = $1;
+			}
+		}
+
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## fsecure status =3 (*256) => virus
+		if (( $status == 3) and not($virusfound)) { 
+			$virusfound = "unknown";
+		}    
+	}elsif(Site->antivirus_path =~ /f-prot\.sh$/) {
+
+		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');    
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		while (<ANTIVIR>) {
+			if (/Infection:\s+(.*)/){
+				$virusfound = $1;
+			}
+		}
+
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		Sympa::Log::Syslog::do_log('debug2', 'Status: '.$status);    
+
+		## f-prot status =3 (*256) => virus
+		if (( $status == 3) and not($virusfound)) { 
+			$virusfound = "unknown";
+		}    
+	}elsif (Site->antivirus_path =~ /kavscanner/) {
+		# impossible to look for viruses with no option set
+		unless (Site->antivirus_args) {
+			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+			return undef;
+		}
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR,"$cmd |");
+
+		while (<ANTIVIR>) {
+			if (/infected:\s+(.*)/){
+				$virusfound = $1;
+			}
+			elsif (/suspicion:\s+(.*)/i){
+				$virusfound = $1;
+			}
+		}
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## uvscan status =3 (*256) => virus
+		if (( $status >= 3) and not($virusfound)) { 
+			$virusfound = "unknown";
+		}
+
+		## Sophos Antivirus... by liuk@publinet.it
+	}elsif (Site->antivirus_path =~ /\/sweep$/) {
+		# impossible to look for viruses with no option set
+		unless (Site->antivirus_args) {
+			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
+			return undef;
+		}
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		while (<ANTIVIR>) {
+			if (/Virus\s+(.*)/) {
+				$virusfound = $1;
+			}
+		}       
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## sweep status =3 (*256) => virus
+		if (( $status == 3) and not($virusfound)) {
+			$virusfound = "unknown";
+		}
+
+		## Clam antivirus
+	}elsif (Site->antivirus_path =~ /\/clamd?scan$/) {
+		my $cmd = sprintf '%s %s %s',
+		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		open (ANTIVIR, "$cmd |");
+
+		my $result;
+		while (<ANTIVIR>) {
+			$result .= $_; chomp $result;
+			if (/^\S+:\s(.*)\sFOUND$/) {
+				$virusfound = $1;
+			}
+		}       
+		close ANTIVIR;
+
+		my $status = $? >> 8;
+
+		## Clamscan status =1 (*256) => virus
+		if (( $status == 1) and not($virusfound)) {
+			$virusfound = "unknown";
+		}
+
+		$error_msg = $result
+		if ($status != 0 && $status != 1);
+
+	}         
+
+	## Error while running antivir, notify listmaster
+	if ($error_msg) {
+		Site->send_notify_to_listmaster('virus_scan_failed',
+			{'filename' => $file, 'error_msg' => $error_msg});
 	}
 
-	$error_msg = $result
-	    if ($status != 0 && $status != 1);
-
-    }         
-
-    ## Error while running antivir, notify listmaster
-    if ($error_msg) {
-	Site->send_notify_to_listmaster('virus_scan_failed',
-	    {'filename' => $file, 'error_msg' => $error_msg});
-    }
-
-    ## if debug mode is active, the working directory is kept
-    unless ($main::options{'debug'}) {
-	opendir (DIR, ${work_dir});
-	my @list = readdir(DIR);
-	closedir (DIR);
-        foreach (@list) {
-	    my $nbre = unlink ("$work_dir/$_")  ;
+	## if debug mode is active, the working directory is kept
+	unless ($main::options{'debug'}) {
+		opendir (DIR, ${work_dir});
+		my @list = readdir(DIR);
+		closedir (DIR);
+		foreach (@list) {
+			my $nbre = unlink ("$work_dir/$_")  ;
+		}
+		rmdir ($work_dir) ;
 	}
-	rmdir ($work_dir) ;
-    }
-   
-    return $virusfound;
-   
+
+	return $virusfound;
+
 }
 
 =item get_filename($type, $options, $name, $robot, $object, $basedir)
@@ -1558,17 +1558,17 @@ Parameters:
 ## OBSOLETED: use $list->get_etc_filename(), $family->get_etc_filename(),
 ##   $robot->get_etc_filaname() or Site->get_etc_filename().
 sub get_filename {
-    my ($type, $options, $name, $robot, $object) = @_;
+	my ($type, $options, $name, $robot, $object) = @_;
 
-    if (ref $object) {
-	return $object->get_etc_filename($name, $options);
-    } elsif (ref $robot) {
-	return $robot->get_etc_filename($name, $options);
-    } elsif ($robot and $robot ne '*') {
-	return Robot->new($robot)->get_etc_filename($name, $options);
-    } else {
-	return Site->get_etc_filename($name, $options);
-    }
+	if (ref $object) {
+		return $object->get_etc_filename($name, $options);
+	} elsif (ref $robot) {
+		return $robot->get_etc_filename($name, $options);
+	} elsif ($robot and $robot ne '*') {
+		return Robot->new($robot)->get_etc_filename($name, $options);
+	} else {
+		return Site->get_etc_filename($name, $options);
+	}
 }
 
 
@@ -1625,7 +1625,7 @@ sub qencode_hierarchy {
 		$count++;
 	}
 
-return $count;
+	return $count;
 }
 
 =item get_message_id($robot)
@@ -1635,20 +1635,20 @@ FIXME.
 =cut
 
 sub get_message_id {
-    my $robot = shift;
-    my $domain;
-    unless ($robot) {
-	$domain = Site->domain;
-    } elsif (ref $robot and ref $robot eq 'Robot') {
-	$domain = $robot->domain;
-    } elsif ($robot eq 'Site') {
-	$domain = Site->domain;
-    } else {
-	$domain = $robot;
-    }
-    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $domain;
+	my $robot = shift;
+	my $domain;
+	unless ($robot) {
+		$domain = Site->domain;
+	} elsif (ref $robot and ref $robot eq 'Robot') {
+		$domain = $robot->domain;
+	} elsif ($robot eq 'Site') {
+		$domain = Site->domain;
+	} else {
+		$domain = $robot;
+	}
+	my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $domain;
 
-    return $id;
+	return $id;
 }
 
 
@@ -1853,32 +1853,32 @@ sub add_in_blacklist {
 #                                                          #
 ############################################################
 sub get_fingerprint {
-    
-    my $email = shift;
-    my $fingerprint = shift;
-    my $random;
-    my $random_email;
-     
-    unless($random = &get_db_random()){ # si un random existe : get_db_random
-	$random = &init_db_random(); # sinon init_db_random
-    }
- 
-    $random_email = ($random.$email);
- 
-    if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-	if($fingerprint eq &md5_fingerprint($random_email)){
-	    return 1;
-	}else{
-	    return undef;
+	my $email = shift;
+	my $fingerprint = shift;
+	my $random;
+	my $random_email;
+
+	unless($random = &get_db_random()){ # si un random existe : get_db_random
+		$random = &init_db_random(); # sinon init_db_random
 	}
 
-    }else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
+	$random_email = ($random.$email);
 
-	$fingerprint = &md5_fingerprint($random_email);
-	return $fingerprint;
+	if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-    }
+		if($fingerprint eq &md5_fingerprint($random_email)){
+			return 1;
+		}else{
+			return undef;
+		}
+
+	}else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
+
+		$fingerprint = &md5_fingerprint($random_email);
+		return $fingerprint;
+
+	}
 }
 
 =item md5_fingerprint($string)
@@ -2121,41 +2121,41 @@ If sep is given, return all occurrances joined by it.
 =cut
 
 sub decode_header {
-    my $msg = shift;
-    my $tag = shift;
-    my $sep = shift || undef;
+	my $msg = shift;
+	my $tag = shift;
+	my $sep = shift || undef;
 
-    my $head;
-    if (ref $msg and $msg->isa('Message')) {
-	$head = $msg->as_entity()->head;
-    } elsif (ref $msg eq 'MIME::Entity') {
-	$head = $msg->head;
-    } elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
-	$head = $msg;
-    } else {
-	croak 'bug in logic.  Ask developer';
-    }
-
-    if (defined $sep) {
-	my @values = $head->get($tag);
-	return undef unless scalar @values;
-	foreach my $val (@values) {
-	    $val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
-	    chomp $val;
-	    $val =~ s/(\r\n|\r|\n)([ \t])/$2/g; #unfold
-	    $val =~ s/\0|\r\n|\r|\n//g; # remove newline & nul
+	my $head;
+	if (ref $msg and $msg->isa('Message')) {
+		$head = $msg->as_entity()->head;
+	} elsif (ref $msg eq 'MIME::Entity') {
+		$head = $msg->head;
+	} elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
+		$head = $msg;
+	} else {
+		croak 'bug in logic.  Ask developer';
 	}
-	return join $sep, @values;
-    } else {
-	my $val = $head->get($tag, 0);
-	return undef unless defined $val;
-	$val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
-	chomp $val;
-	$val =~ s/(\r\n|\r|\n)([ \t])/$2/g; #unfold
-	$val =~ s/\0|\r\n|\r|\n//g; # remove newline & nul
 
-	return $val;
-    }
+	if (defined $sep) {
+		my @values = $head->get($tag);
+		return undef unless scalar @values;
+		foreach my $val (@values) {
+			$val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
+			chomp $val;
+			$val =~ s/(\r\n|\r|\n)([ \t])/$2/g; #unfold
+			$val =~ s/\0|\r\n|\r|\n//g; # remove newline & nul
+		}
+		return join $sep, @values;
+	} else {
+		my $val = $head->get($tag, 0);
+		return undef unless defined $val;
+		$val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
+		chomp $val;
+		$val =~ s/(\r\n|\r|\n)([ \t])/$2/g; #unfold
+		$val =~ s/\0|\r\n|\r|\n//g; # remove newline & nul
+
+		return $val;
+	}
 }
 
 #*******************************************
@@ -2164,16 +2164,16 @@ sub decode_header {
 ### IN : str
 ##*******************************************
 sub foldcase {
-    my $str = shift;
-    return '' unless defined $str and length $str;
+	my $str = shift;
+	return '' unless defined $str and length $str;
 
-    if ($] <= 5.008) {
-	# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
-	return Encode::encode_utf8(lc(Encode::decode_utf8($str)));
-    } else {
-	# later supports it. Perl 5.16.0 and later have built-in fc().
-	return Encode::encode_utf8(fc(Encode::decode_utf8($str)));
-    }
+	if ($] <= 5.008) {
+		# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
+		return Encode::encode_utf8(lc(Encode::decode_utf8($str)));
+	} else {
+		# later supports it. Perl 5.16.0 and later have built-in fc().
+		return Encode::encode_utf8(fc(Encode::decode_utf8($str)));
+	}
 }
 
 =back
