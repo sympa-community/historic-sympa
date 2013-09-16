@@ -76,13 +76,13 @@ my %regexp = (
 
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {
-	my %param = @_;
+	my (%params) = @_;
 	my ($uid, $gid);
 
-	if ($param{'user'}) {
-		unless ($uid = (getpwnam($param{'user'}))[2]) {
+	if ($params{'user'}) {
+		unless ($uid = (getpwnam($params{'user'}))[2]) {
 			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",
-				$param{'user'});
+				$params{'user'});
 			return undef;
 		}
 	} else {
@@ -90,9 +90,9 @@ sub set_file_rights {
 		# unchanged.
 		$uid = -1;
 	}
-	if ($param{'group'}) {
-		unless ($gid = (getgrnam($param{'group'}))[2]) {
-			Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $param{'group'});
+	if ($params{'group'}) {
+		unless ($gid = (getgrnam($params{'group'}))[2]) {
+			Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $params{'group'});
 			return undef;
 		}
 	} else {
@@ -100,15 +100,15 @@ sub set_file_rights {
 		# unchanged.
 		$gid = -1;
 	}
-	unless (chown($uid, $gid, $param{'file'})) {
+	unless (chown($uid, $gid, $params{'file'})) {
 		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
-			$param{'file'}, $param{'user'}, $param{'group'}, "$!");
+			$params{'file'}, $params{'user'}, $params{'group'}, "$!");
 		return undef;
 	}
-	if ($param{'mode'}) {
-		unless (chmod($param{'mode'}, $param{'file'})) {
+	if ($params{'mode'}) {
+		unless (chmod($params{'mode'}, $params{'file'})) {
 			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
-				$param{'file'}, $param{'mode'}, "$!");
+				$params{'file'}, $params{'mode'}, "$!");
 			return undef;
 		}
 	}
@@ -117,8 +117,8 @@ sub set_file_rights {
 
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
 sub _create_xss_parser {
-	my %parameters = @_;
-	my $robot = $parameters{'robot'};
+	my (%params) = @_;
+	my $robot = $params{'robot'};
 	Sympa::Log::Syslog::do_log('debug3', '(%s)', $robot);
 
 	my $http_host_re = $robot->http_host;
@@ -158,9 +158,9 @@ Parameters:
 
 # OBSOLETED: use $list->find_picture_filenames().
 sub pictures_filename {
-	my %parameters = @_;
-	my $email = $parameters{'email'};
-	my $list = $parameters{'list'};
+	my (%params) = @_;
+	my $email = $params{'email'};
+	my $list = $params{'list'};
 
 	my $ret = $list->find_picture_filenames($email);
 	return $ret;
@@ -188,9 +188,9 @@ Parameters:
 
 # OBSOLETED: Use $list->find_picture_url().
 sub make_pictures_url {
-	my %parameters = @_;
-	my $email = $parameters{'email'};
-	my $list = $parameters{'list'};
+	my (%params) = @_;
+	my $email = $params{'email'};
+	my $list = $params{'list'};
 
 	my $ret = $list->find_picture_url($email);
 	return $ret;
@@ -216,12 +216,12 @@ Parameters:
 =cut
 
 sub sanitize_html {
-	my %parameters = @_;
-	my $robot = $parameters{'robot'};
+	my (%params) = @_;
+	my $robot = $params{'robot'};
 	Sympa::Log::Syslog::do_log('debug3', '(string=%s, robot=%s)',
-		$parameters{'string'}, $robot);
+		$params{'string'}, $robot);
 
-	unless (defined $parameters{'string'}) {
+	unless (defined $params{'string'}) {
 		Sympa::Log::Syslog::do_log('err',"No string provided.");
 		return undef;
 	}
@@ -231,7 +231,7 @@ sub sanitize_html {
 		Sympa::Log::Syslog::do_log('err',"Can't create StripScript parser.");
 		return undef;
 	}
-	my $string = $hss -> filter_html($parameters{'string'});
+	my $string = $hss -> filter_html($params{'string'});
 	return $string;
 }
 
@@ -255,12 +255,12 @@ Parameters:
 =cut
 
 sub sanitize_html_file {
-	my %parameters = @_;
-	my $robot = $parameters{'robot'};
+	my (%params) = @_;
+	my $robot = $params{'robot'};
 	Sympa::Log::Syslog::do_log('debug3', '(file=%s, robot=%s)',
-		$parameters{'file'}, $robot);
+		$params{'file'}, $robot);
 
-	unless (defined $parameters{'file'}) {
+	unless (defined $params{'file'}) {
 		Sympa::Log::Syslog::do_log('err',"No path to file provided.");
 		return undef;
 	}
@@ -270,7 +270,7 @@ sub sanitize_html_file {
 		Sympa::Log::Syslog::do_log('err',"Can't create StripScript parser.");
 		return undef;
 	}
-	$hss -> parse_file($parameters{'file'});
+	$hss -> parse_file($params{'file'});
 	return $hss -> filtered_document;
 }
 
@@ -297,60 +297,61 @@ Parameters:
 =cut
 
 sub sanitize_var {
-	my %parameters = @_;
-	Sympa::Log::Syslog::do_log('debug3','(%s,%s,%s)',$parameters{'var'},$parameters{'level'},$parameters{'robot'});
-	unless (defined $parameters{'var'}){
+	my (%params) = @_;
+
+	Sympa::Log::Syslog::do_log('debug3','(%s,%s,%s)',$params{'var'},$params{'level'},$params{'robot'});
+	unless (defined $params{'var'}){
 		Sympa::Log::Syslog::do_log('err','Missing var to sanitize.');
 		return undef;
 	}
-	unless (defined $parameters{'htmlAllowedParam'} && $parameters{'htmlToFilter'}){
-		Sympa::Log::Syslog::do_log('err','Missing var *** %s *** %s *** to ignore.',$parameters{'htmlAllowedParam'},$parameters{'htmlToFilter'});
+	unless (defined $params{'htmlAllowedParam'} && $params{'htmlToFilter'}){
+		Sympa::Log::Syslog::do_log('err','Missing var *** %s *** %s *** to ignore.',$params{'htmlAllowedParam'},$params{'htmlToFilter'});
 		return undef;
 	}
-	my $level = $parameters{'level'};
+	my $level = $params{'level'};
 	$level |= 0;
 
-	if(ref($parameters{'var'})) {
-		if(ref($parameters{'var'}) eq 'ARRAY') {
-			foreach my $index (0..$#{$parameters{'var'}}) {
-				if ((ref($parameters{'var'}->[$index]) eq 'ARRAY') || (ref($parameters{'var'}->[$index]) eq 'HASH')) {
-					sanitize_var('var' => $parameters{'var'}->[$index],
+	if(ref($params{'var'})) {
+		if(ref($params{'var'}) eq 'ARRAY') {
+			foreach my $index (0..$#{$params{'var'}}) {
+				if ((ref($params{'var'}->[$index]) eq 'ARRAY') || (ref($params{'var'}->[$index]) eq 'HASH')) {
+					sanitize_var('var' => $params{'var'}->[$index],
 						'level' => $level+1,
-						'robot' => $parameters{'robot'},
-						'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
-						'htmlToFilter' => $parameters{'htmlToFilter'},
+						'robot' => $params{'robot'},
+						'htmlAllowedParam' => $params{'htmlAllowedParam'},
+						'htmlToFilter' => $params{'htmlToFilter'},
 					);
-				} elsif (ref($parameters{'var'}->[$index])) {
-					$parameters{'var'}->[$index] =
-					ref($parameters{'var'}->[$index]);
-				} elsif (defined $parameters{'var'}->[$index]) {
-					$parameters{'var'}->[$index] =
-					escape_html($parameters{'var'}->[$index]);
+				} elsif (ref($params{'var'}->[$index])) {
+					$params{'var'}->[$index] =
+					ref($params{'var'}->[$index]);
+				} elsif (defined $params{'var'}->[$index]) {
+					$params{'var'}->[$index] =
+					escape_html($params{'var'}->[$index]);
 				}
 			}
 		}
-		elsif(ref($parameters{'var'}) eq 'HASH') {
-			foreach my $key (keys %{$parameters{'var'}}) {
-				if ((ref($parameters{'var'}->{$key}) eq 'ARRAY') || (ref($parameters{'var'}->{$key}) eq 'HASH')) {
-					&sanitize_var('var' => $parameters{'var'}->{$key},
+		elsif(ref($params{'var'}) eq 'HASH') {
+			foreach my $key (keys %{$params{'var'}}) {
+				if ((ref($params{'var'}->{$key}) eq 'ARRAY') || (ref($params{'var'}->{$key}) eq 'HASH')) {
+					&sanitize_var('var' => $params{'var'}->{$key},
 						'level' => $level+1,
-						'robot' => $parameters{'robot'},
-						'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
-						'htmlToFilter' => $parameters{'htmlToFilter'},
+						'robot' => $params{'robot'},
+						'htmlAllowedParam' => $params{'htmlAllowedParam'},
+						'htmlToFilter' => $params{'htmlToFilter'},
 					);
-				} elsif (ref($parameters{'var'}->{$key})) {
-					$parameters{'var'}->{$key} =
-					ref($parameters{'var'}->{$key});
-				} elsif (defined $parameters{'var'}->{$key}) {
-					unless ($parameters{'htmlAllowedParam'}{$key} or
-						$parameters{'htmlToFilter'}{$key}) {
-						$parameters{'var'}->{$key} =
-						escape_html($parameters{'var'}->{$key});
+				} elsif (ref($params{'var'}->{$key})) {
+					$params{'var'}->{$key} =
+					ref($params{'var'}->{$key});
+				} elsif (defined $params{'var'}->{$key}) {
+					unless ($params{'htmlAllowedParam'}{$key} or
+						$params{'htmlToFilter'}{$key}) {
+						$params{'var'}->{$key} =
+						escape_html($params{'var'}->{$key});
 					}
-					if ($parameters{'htmlToFilter'}{$key}) {
-						$parameters{'var'}->{$key} = sanitize_html(
-							'string' => $parameters{'var'}->{$key},
-							'robot' => $parameters{'robot'}
+					if ($params{'htmlToFilter'}{$key}) {
+						$params{'var'}->{$key} = sanitize_html(
+							'string' => $params{'var'}->{$key},
+							'robot' => $params{'robot'}
 						);
 					}
 				}
@@ -499,9 +500,10 @@ Parameters:
 
 ## NOTE: this might be moved to List only where this is used.
 sub load_edit_list_conf {
-	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-	my $self  = shift;
+	my ($self)  = @_;
 	my $robot = $self->robot;
+
+	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
 
 	my $file;
 	my $conf;
@@ -572,7 +574,8 @@ Parameters:
 
 ## NOTE: This might be moved to WWSympa along with get_list_list_tpl().
 sub load_create_list_conf {
-	my $robot = Robot::clean_robot(shift);
+	my ($robot) = @_;
+	$robot = Robot::clean_robot($robot);
 
 	my $file;
 	my $conf ;
@@ -612,7 +615,8 @@ FIXME.
 
 ## NOTE: This might be moved to WWSympa along with load_create_list_conf().
 sub get_list_list_tpl {
-	my $robot = Robot::clean_robot(shift);
+	my ($robot) = @_;
+	$robot = Robot::clean_robot($robot);
 
 	my $list_conf;
 	my $list_templates ;
@@ -657,12 +661,7 @@ FIXME.
 =cut
 
 sub get_templates_list {
-
-	my $type = shift;
-	my $robot = shift;
-	my $list = shift;
-	my $options = shift;
-
+	my ($type, $robot, $list, $options) = @_;
 	my $listdir;
 
 	Sympa::Log::Syslog::do_log('debug', "get_templates_list ($type, $robot, $list)");
@@ -771,13 +770,9 @@ Parameters:
 =cut
 
 sub get_template_path {
+	my ($type, $robot, $scope, $tpl, $lang, $list) = @_;
+	$lang = 'default' unless $lang;
 	Sympa::Log::Syslog::do_log('debug2', '(%s, %s. %s, %s, %s, %s)', @_);
-	my $type = shift;
-	my $robot = shift;
-	my $scope = shift;
-	my $tpl = shift;
-	my $lang = shift || 'default';
-	my $list = shift;
 
 	##FIXME: path is fixed to older "locale".
 	my $locale;
@@ -812,8 +807,8 @@ sub get_template_path {
 
 ##NOTE: This might be moved to Site module as mutative method.
 sub get_dkim_parameters {
+	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-	my $self = shift;
 
 	my $data;
 	my $keyfile;
@@ -1105,7 +1100,7 @@ Check sum used to authenticate communication from wwsympa to sympa
 =cut
 
 sub sympa_checksum {
-	my $rcpt = shift;
+	my ($rcpt) = @_;
 	my $checksum = (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
 	return $checksum;
 }
@@ -1117,7 +1112,7 @@ Create a cipher.
 =cut
 
 sub cookie_changed {
-	my $current=shift;
+	my ($current) = @_;
 	my $changed = 1 ;
 	if (-f Site->etc . '/cookies.history') {
 		unless (open COOK, '<', Site->etc . '/cookies.history') {
@@ -1286,7 +1281,7 @@ FIXME.
 =cut
 
 sub virus_infected {
-	my $mail = shift ;
+	my ($mail) = @_;
 
 	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
 	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
@@ -1635,7 +1630,7 @@ FIXME.
 =cut
 
 sub get_message_id {
-	my $robot = shift;
+	my ($robot) = @_;
 	my $domain;
 	unless ($robot) {
 		$domain = Site->domain;
@@ -1853,9 +1848,7 @@ sub add_in_blacklist {
 #                                                          #
 ############################################################
 sub get_fingerprint {
-
-	my $email = shift;
-	my $fingerprint = shift;
+	my ($email, $fingerprint) = @_;
 	my $random;
 	my $random_email;
 
@@ -2121,9 +2114,7 @@ If sep is given, return all occurrances joined by it.
 =cut
 
 sub decode_header {
-	my $msg = shift;
-	my $tag = shift;
-	my $sep = shift || undef;
+	my ($msg, $tag, $sep) = @_;
 
 	my $head;
 	if (ref $msg and $msg->isa('Message')) {
@@ -2164,7 +2155,7 @@ sub decode_header {
 ### IN : str
 ##*******************************************
 sub foldcase {
-	my $str = shift;
+	my ($str) = @_;
 	return '' unless defined $str and length $str;
 
 	if ($] <= 5.008) {
