@@ -174,7 +174,7 @@ sub sanitize_html {
 		Sympa::Log::Syslog::do_log('err',"Can't create StripScript parser.");
 		return undef;
 	}
-	my $string = $hss -> filter_html($params{'string'});
+	my $string = $hss->filter_html($params{'string'});
 	return $string;
 }
 
@@ -213,8 +213,8 @@ sub sanitize_html_file {
 		Sympa::Log::Syslog::do_log('err',"Can't create StripScript parser.");
 		return undef;
 	}
-	$hss -> parse_file($params{'file'});
-	return $hss -> filtered_document;
+	$hss->parse_file($params{'file'});
+	return $hss->filtered_document;
 }
 
 =item sanitize_var(%parameters)
