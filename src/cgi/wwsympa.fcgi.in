@@ -1336,7 +1336,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 		 my $ticket = $in{'ticket'};
 		 my $cas_server = Sympa::Site->auth_services->{$robot_id}[$cas_id]{'cas_server'};
 		 
-		 my $service_url = Sympa::Tools::get_my_url();
+		 my $service_url = Sympa::WWSympa::get_my_url();
 		 $service_url =~ s/(\?|)ticket\=.+$//; 
 
 		 my $net_id = $cas_server->validateST($service_url, $ticket);
@@ -1375,7 +1375,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 		     
 		     # before redirect update the list of already checked cas server to prevent loop
 		     my $cas_server = $auth_service->{'cas_server'};
-		     my $return_url = Sympa::Tools::get_my_url();
+		     my $return_url = Sympa::WWSympa::get_my_url();
 
 		     ## Append the current CAS server ID to the list of checked CAS servers
 		     $session->{'checked_cas'} .= $cas_id;
@@ -3155,7 +3155,7 @@ sub check_param_out {
 	    ## Keep track of the 'referer' parameter
 	    if ($ENV{'REQUEST_METHOD'} eq 'GET' &&
 		! $auth_action{$in{'action'}} ) {
-		$param->{'referer'} = Sympa::Tools::escape_chars(Sympa::Tools::get_my_url());
+		$param->{'referer'} = Sympa::Tools::escape_chars(Sympa::WWSympas::get_my_url());
 	    }else {
 		## Keep the previous value of the referer
 		$param->{'referer'} = $in{'referer'};
@@ -4021,7 +4021,7 @@ sub do_logout {
 	 my $cas_server = Sympa::Site->auth_services->{$robot_id}[$session->{'cas_server'}]{'cas_server'};
 
 	 $in{'action'} = 'redirect';
-	 my $return_url = Sympa::Tools::get_my_url();
+	 my $return_url = Sympa::WWSympa::get_my_url();
 	 $return_url =~ s/\/logout//;
 	 
 	 $param->{'redirect_to'} = $cas_server->getServerLogoutURL($return_url);
@@ -13932,7 +13932,7 @@ sub creation_shared_file {
  	}
 
     }
-    unless(Sympa::Tools::upload_file_to_server({
+    unless(Sympa::WWSympa::upload_file_to_server({
 				    'query' => $query,
 				    'file_field' => 'uploaded_file',
 				    'destination' => "$shareddir/$path/$fname",
@@ -16234,7 +16234,7 @@ sub do_send_mail {
 	my $page_source = $in{'url'};
 	if ($in{'uploaded_file'} =~ /\S/) {
 	    $page_source = $robot->tmpdir.'/'.$in{'uploaded_file'};
-	    unless(Sympa::Tools::upload_file_to_server({
+	    unless(Sympa::WWSympa::upload_file_to_server({
 		'query' => $query,
 		'file_field' => 'uploaded_file',
 		'destination' => $page_source,
