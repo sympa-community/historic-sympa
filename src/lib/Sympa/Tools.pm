@@ -762,16 +762,16 @@ Unescape weird characters
 =cut
 
 sub unescape_chars {
-	my ($s) = @_;
+	my ($string) = @_;
 
-	$s =~ s/%a5/\//g;  ## Special traetment for '/'
+	$string =~ s/%a5/\//g;  ## Special traetment for '/'
 	foreach my $i (0x20..0x2c,0x3a..0x3f,0x5b,0x5d,0x80..0x9f,0xa0..0xff) {
 		my $hex_i = sprintf "%lx", $i;
 		my $hex_s = sprintf "%c", $i;
-		$s =~ s/%$hex_i/$hex_s/g;
+		$string =~ s/%$hex_i/$hex_s/g;
 	}
 
-	return $s;
+	return $string;
 }
 
 =item escape_html($string)
