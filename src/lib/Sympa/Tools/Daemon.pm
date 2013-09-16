@@ -40,7 +40,6 @@ use Proc::ProcessTable;
 use Sys::Hostname;
 
 use Sympa::Lock;
-use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Tools::File;
 
@@ -413,6 +412,8 @@ sub send_crash_report {
 		close ERR;
 		$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
 	}
+	# TODO: remove dependency on Sympa::List
+	require Sympa::List;
 	Sympa::List::send_notify_to_listmaster(
 		'crash',
 		$params{domain},
