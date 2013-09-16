@@ -139,64 +139,6 @@ sub _create_xss_parser {
 
 =over
 
-=item pictures_filename(%parameters)
-
-Return the type of a pictures according to the user.
-
-Parameters:
-
-=over
-
-=item C<email> => FIXME
-
-=item C<list> => FIXME
-
-=item C<path> => FIXME
-
-=back
-
-=cut
-
-# OBSOLETED: use $list->find_picture_filenames().
-sub pictures_filename {
-	my (%params) = @_;
-	my $email = $params{'email'};
-	my $list = $params{'list'};
-
-	my $ret = $list->find_picture_filenames($email);
-	return $ret;
-}
-
-=item make_pictures_url(%parameters)
-
-Creation of pictures url.
-
-Parameters:
-
-=over
-
-=item C<url> => FIXME
-
-=item C<email> => FIXME
-
-=item C<list> => FIXME
-
-=item C<path> => FIXME
-
-=back
-
-=cut
-
-# OBSOLETED: Use $list->find_picture_url().
-sub make_pictures_url {
-	my (%params) = @_;
-	my $email = $params{'email'};
-	my $list = $params{'list'};
-
-	my $ret = $list->find_picture_url($email);
-	return $ret;
-}
-
 =item sanitize_html(%parameters)
 
 Returns sanitized version (using StripScripts) of the string provided as
