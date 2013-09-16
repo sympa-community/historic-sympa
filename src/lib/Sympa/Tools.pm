@@ -102,13 +102,13 @@ sub set_file_rights {
 	}
 	unless (chown($uid, $gid, $params{'file'})) {
 		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
-			$params{'file'}, $params{'user'}, $params{'group'}, "$!");
+			$params{'file'}, $params{'user'}, $params{'group'}, $ERRNO);
 		return undef;
 	}
 	if ($params{'mode'}) {
 		unless (chmod($params{'mode'}, $params{'file'})) {
 			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
-				$params{'file'}, $params{'mode'}, "$!");
+				$params{'file'}, $params{'mode'}, $ERRNO);
 			return undef;
 		}
 	}
@@ -399,7 +399,7 @@ sub safefork {
 		my($pid) = fork;
 		return $pid if (defined($pid));
 
-		$err = "$!";
+		$err = $ERRNO;
 		Sympa::Log::Syslog::do_log('warn', 'Cannot create new process in safefork: %s', $err);
 		## FIXME:should send a mail to the listmaster
 		sleep(10 * $i);
@@ -2158,7 +2158,7 @@ sub foldcase {
 	my ($str) = @_;
 	return '' unless defined $str and length $str;
 
-	if ($] <= 5.008) {
+	if ($PERL_VERSION <= 5.008) {
 		# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
 		return Encode::encode_utf8(lc(Encode::decode_utf8($str)));
 	} else {
