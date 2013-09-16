@@ -446,7 +446,7 @@ sub get_templates_list {
 		push @try, $distrib_dir;
 		push @try, $site_dir;
 		push @try, $robot_dir;
-	}    
+	}
 
 	if (defined $list) {
 		$listdir = $list->dir.'/'.$type.'_tt2';	
@@ -842,7 +842,7 @@ sub cookie_changed {
 			Sympa::Log::Syslog::do_log(
 				'err', 'Unable to read %s', $history_file
 			);
-			return undef ; 
+			return undef ;
 		}
 		my $oldcook = <COOK>;
 		close COOK;
@@ -857,10 +857,10 @@ sub cookie_changed {
 			#	    push @cookies, $current ;
 			#	    unless (open COOK, '>', Site->etc . '/cookies.history') {
 			#		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Site->etc);
-			#		return undef ; 
+			#		return undef ;
 			#	    }
 			#	    print COOK join(" ", @cookies);
-			#	    
+			#
 			#	    close COOK;
 		}
 		return $changed ;
@@ -871,7 +871,7 @@ sub cookie_changed {
 			Sympa::Log::Syslog::do_log(
 				'err', 'Unable to create %s', $history_file
 			);
-			return undef ; 
+			return undef ;
 		}
 		umask $umask;
 		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $history_file;
@@ -1008,7 +1008,7 @@ FIXME.
 sub virus_infected {
 	my ($mail) = @_;
 
-	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
+	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
 	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
 
 	unless (Site->antivirus_path) {
@@ -1038,7 +1038,7 @@ sub virus_infected {
 		return undef;
 	}
 
-	my $virusfound = 0; 
+	my $virusfound = 0;
 	my $error_msg;
 	my $result;
 
@@ -1066,7 +1066,7 @@ sub virus_infected {
 		my $status = $? >> 8;
 
 		## uvscan status =12 or 13 (*256) => virus
-		if (( $status == 13) || ($status == 12)) { 
+		if (( $status == 13) || ($status == 12)) {
 			$virusfound ||= "unknown";
 		}
 
@@ -1095,7 +1095,7 @@ sub virus_infected {
 		my $status = $? >> 8;
 
 		## uvscan status = 1 | 2 (*256) => virus
-		if ((( $status == 1) or ( $status == 2)) and not($virusfound)) { 
+		if ((( $status == 1) or ( $status == 2)) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
 
@@ -1124,12 +1124,12 @@ sub virus_infected {
 		my $status = $? >> 8;
 
 		## fsecure status =3 (*256) => virus
-		if (( $status == 3) and not($virusfound)) { 
+		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
-		}    
+		}
 	}elsif(Site->antivirus_path =~ /f-prot\.sh$/) {
 
-		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');    
+		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
 		my $cmd = sprintf '%s %s %s',
 		Site->antivirus_path, Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
@@ -1144,12 +1144,12 @@ sub virus_infected {
 
 		my $status = $? >> 8;
 
-		Sympa::Log::Syslog::do_log('debug2', 'Status: '.$status);    
+		Sympa::Log::Syslog::do_log('debug2', 'Status: '.$status);
 
 		## f-prot status =3 (*256) => virus
-		if (( $status == 3) and not($virusfound)) { 
+		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
-		}    
+		}
 	}elsif (Site->antivirus_path =~ /kavscanner/) {
 		# impossible to look for viruses with no option set
 		unless (Site->antivirus_args) {
@@ -1173,7 +1173,7 @@ sub virus_infected {
 		my $status = $? >> 8;
 
 		## uvscan status =3 (*256) => virus
-		if (( $status >= 3) and not($virusfound)) { 
+		if (( $status >= 3) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
 
@@ -1192,7 +1192,7 @@ sub virus_infected {
 			if (/Virus\s+(.*)/) {
 				$virusfound = $1;
 			}
-		}       
+		}
 		close ANTIVIR;
 
 		my $status = $? >> 8;
@@ -1214,7 +1214,7 @@ sub virus_infected {
 			if (/^\S+:\s(.*)\sFOUND$/) {
 				$virusfound = $1;
 			}
-		}       
+		}
 		close ANTIVIR;
 
 		my $status = $? >> 8;
@@ -1227,7 +1227,7 @@ sub virus_infected {
 		$error_msg = $result
 		if ($status != 0 && $status != 1);
 
-	}         
+	}
 
 	## Error while running antivir, notify listmaster
 	if ($error_msg) {
