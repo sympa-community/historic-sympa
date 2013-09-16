@@ -263,10 +263,10 @@ sub sanitize_var {
 					);
 				} elsif (ref($params{'var'}->[$index])) {
 					$params{'var'}->[$index] =
-					ref($params{'var'}->[$index]);
+						ref($params{'var'}->[$index]);
 				} elsif (defined $params{'var'}->[$index]) {
 					$params{'var'}->[$index] =
-					escape_html($params{'var'}->[$index]);
+						escape_html($params{'var'}->[$index]);
 				}
 			}
 		}
@@ -281,12 +281,12 @@ sub sanitize_var {
 					);
 				} elsif (ref($params{'var'}->{$key})) {
 					$params{'var'}->{$key} =
-					ref($params{'var'}->{$key});
+						ref($params{'var'}->{$key});
 				} elsif (defined $params{'var'}->{$key}) {
 					unless ($params{'htmlAllowedParam'}{$key} or
 						$params{'htmlToFilter'}{$key}) {
 						$params{'var'}->{$key} =
-						escape_html($params{'var'}->{$key});
+							escape_html($params{'var'}->{$key});
 					}
 					if ($params{'htmlToFilter'}{$key}) {
 						$params{'var'}->{$key} = sanitize_html(
@@ -396,7 +396,7 @@ sub checkcommand {
 	if ($subject) {
 		if (Site->misaddressed_commands_regexp) {
 			my $misaddressed_commands_regexp =
-			Site->misaddressed_commands_regexp;
+				Site->misaddressed_commands_regexp;
 			if ($subject =~ /^$misaddressed_commands_regexp\b/im) {
 				return 1;
 			}
@@ -408,7 +408,7 @@ sub checkcommand {
 	foreach $i (@{$msg->body}) {
 		if (Site->misaddressed_commands_regexp) {
 			my $misaddressed_commands_regexp =
-			Site->misaddressed_commands_regexp;
+				Site->misaddressed_commands_regexp;
 			if ($i =~ /^$misaddressed_commands_regexp\b/im) {
 				return 1;
 			}
@@ -470,19 +470,19 @@ sub get_templates_list {
 					next unless $file =~ /\.tt2$/;
 					if ($dir eq $distrib_dir) {
 						$tpl->{$file}{'distrib'}{$lang} =
-						$dir . '/' . $lang_dir . '/' . $file;
+							$dir . '/' . $lang_dir . '/' . $file;
 					}
 					if ($dir eq $site_dir) {
 						$tpl->{$file}{'site'}{$lang} =
-						$dir . '/' . $lang_dir . '/' . $file;
+							$dir . '/' . $lang_dir . '/' . $file;
 					}
 					if ($dir eq $robot_dir) {
 						$tpl->{$file}{'robot'}{$lang} =
-						$dir . '/' . $lang_dir . '/' . $file;
+							$dir . '/' . $lang_dir . '/' . $file;
 					}
 					if ($dir eq $listdir) {
 						$tpl->{$file}{'list'}{$lang} =
-						$dir . '/' . $lang_dir . '/' . $file;
+							$dir . '/' . $lang_dir . '/' . $file;
 					}
 				}
 				closedir LANGDIR;
@@ -1753,8 +1753,8 @@ sub addrencode {
 		# Minimal encoding leaves special characters unencoded.
 		# In this case do maximal encoding for workaround.
 		my $minimal =
-		($phrase =~ /(\A|\s)[\x21-\x7E]*[\"(),:;<>\@\\][\x21-\x7E]*(\s|\z)/)?
-		'NO': 'YES';
+			($phrase =~ /(\A|\s)[\x21-\x7E]*[\"(),:;<>\@\\][\x21-\x7E]*(\s|\z)/)?
+			'NO': 'YES';
 		$phrase = MIME::EncWords::encode_mimewords(
 			Encode::decode('utf8', $phrase),
 			'Encoding' => 'A', 'Charset' => $charset,
