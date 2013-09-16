@@ -1590,9 +1590,6 @@ sub get_fingerprint {
 
 =item md5_fingerprint($string)
 
-The algorithm MD5 (Message Digest 5) is a cryptographic hash function which
-permit to obtain the fingerprint of a file/data.
-
 Returns the md5 digest in hexadecimal format of given string.
 
 =cut
