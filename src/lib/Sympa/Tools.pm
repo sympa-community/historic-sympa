@@ -316,7 +316,7 @@ sub sanitize_var {
 				if ((ref($parameters{'var'}->[$index]) eq 'ARRAY') || (ref($parameters{'var'}->[$index]) eq 'HASH')) {
 					sanitize_var('var' => $parameters{'var'}->[$index],
 						  'level' => $level+1,
-						  'robot' => $robot,
+						  'robot' => $parameters{'robot'},
 						  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
 						  'htmlToFilter' => $parameters{'htmlToFilter'},
 						  );
@@ -334,7 +334,7 @@ sub sanitize_var {
 				if ((ref($parameters{'var'}->{$key}) eq 'ARRAY') || (ref($parameters{'var'}->{$key}) eq 'HASH')) {
 					&sanitize_var('var' => $parameters{'var'}->{$key},
 						  'level' => $level+1,
-						  'robot' => $robot,
+						  'robot' => $parameters{'robot'},
 						  'htmlAllowedParam' => $parameters{'htmlAllowedParam'},
 						  'htmlToFilter' => $parameters{'htmlToFilter'},
 						  );
@@ -350,7 +350,7 @@ sub sanitize_var {
 					if ($parameters{'htmlToFilter'}{$key}) {
 					$parameters{'var'}->{$key} = sanitize_html(
 						'string' => $parameters{'var'}->{$key},
-						'robot' => $robot
+						'robot' => $parameters{'robot'}
 					);
 					}
 				}
