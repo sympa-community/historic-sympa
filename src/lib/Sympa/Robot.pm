@@ -42,6 +42,7 @@ use Carp qw(carp croak);
 use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::listdef;
+use Sympa::Tools::File;
 
 ## Croak if Robot object is used where robot name shall be used.
 ## It may be removed when refactoring has finished.
@@ -870,20 +871,14 @@ sub get_dkim_parameters {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
 
-	my $data;
-	my $keyfile;
-	$data->{'d'} = $self->dkim_signer_domain;
-	$data->{'i'} = $self->dkim_signer_identity;
-	$data->{'selector'} = $self->dkim_selector;
-	$keyfile = $self->dkim_private_key_path;
-	unless (open (KEY, $keyfile)) {
-		Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
-		return undef;
-	}
-	while (<KEY>){
-		$data->{'private_key'} .= $_;
-	}
-	close (KEY);
+	my $data->{
+		d        => $self->dkim_signer_domain(),
+		i        => $self->dkim_signer_identity(),
+		selector => $self->dkim_selector()
+	};
+
+	my $keyfile = $self->dkim_private_key_path();
+	$data->{'private_key'} = Sympa::Tools::File::slurp_file($keyfile);
 
 	return $data;
 }

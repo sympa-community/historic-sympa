@@ -12448,28 +12448,17 @@ sub get_dkim_parameters {
 	my ($self) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
 
-	my $data;
-	my $keyfile;
+	my $data = {
+		d        => $self->dkim_parameters->{'signer_domain'},
+		selector => $self->dkim_parameters->{'selector'}
+	};
 
-	$data->{'d'} = $self->dkim_parameters->{'signer_domain'};
-	if ($self->dkim_parameters->{'signer_identity'}) {
-		$data->{'i'} = $self->dkim_parameters->{'signer_identity'};
-	}else{
-		# RFC 4871 (page 21) 
-		$data->{'i'} = $self->get_address('owner');
-	}
+	$data->{'i'} =
+		$self->dkim_parameters->{'signer_identity'} ||
+		$self->get_address('owner'); # RFC 4871 (page 21)
 
-	$data->{'selector'} = $self->dkim_parameters->{'selector'};
-	$keyfile = $self->dkim_parameters->{'private_key_path'};
-
-	unless (open (KEY, $keyfile)) {
-		Sympa::Log::Syslog::do_log('err', "Could not read DKIM private key %s", $keyfile);
-		return undef;
-	}
-	while (<KEY>){
-		$data->{'private_key'} .= $_;
-	}
-	close (KEY);
+	my $keyfile = $self->dkim_parameters->{'private_key_path'};
+	$data->{'private_key'} = Sympa::Tools::File::slurp_file($keyfile);
 
 	return $data;
 }
