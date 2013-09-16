@@ -273,7 +273,7 @@ sub sanitize_var {
 		elsif(ref($params{'var'}) eq 'HASH') {
 			foreach my $key (keys %{$params{'var'}}) {
 				if ((ref($params{'var'}->{$key}) eq 'ARRAY') || (ref($params{'var'}->{$key}) eq 'HASH')) {
-					&sanitize_var('var' => $params{'var'}->{$key},
+					sanitize_var('var' => $params{'var'}->{$key},
 						'level' => $level+1,
 						'robot' => $params{'robot'},
 						'htmlAllowedParam' => $params{'htmlAllowedParam'},
@@ -1021,7 +1021,7 @@ sub virus_infected {
 	#$mail->dump_skeleton;
 
 	## Call the procedure of splitting mail
-	unless (&split_mail ($mail,'msg', $work_dir)) {
+	unless (split_mail ($mail,'msg', $work_dir)) {
 		Sympa::Log::Syslog::do_log('err', 'Could not split mail %s', $mail);
 		return undef;
 	}
@@ -1566,23 +1566,23 @@ sub get_fingerprint {
 	my $random;
 	my $random_email;
 
-	unless($random = &get_db_random()){ # si un random existe : get_db_random
-		$random = &init_db_random(); # sinon init_db_random
+	unless($random = get_db_random()){ # si un random existe : get_db_random
+		$random = init_db_random(); # sinon init_db_random
 	}
 
 	$random_email = ($random.$email);
 
 	if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-		if($fingerprint eq &md5_fingerprint($random_email)){
+		if($fingerprint eq md5_fingerprint($random_email)){
 			return 1;
 		}else{
 			return undef;
 		}
 
-	}else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
+	}else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/get_fingerprint($email)
 
-		$fingerprint = &md5_fingerprint($random_email);
+		$fingerprint = md5_fingerprint($random_email);
 		return $fingerprint;
 
 	}
