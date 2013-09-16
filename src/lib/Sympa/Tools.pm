@@ -818,19 +818,27 @@ sub sympa_checksum {
 	return substr(md5_fingerprint(Site->cookie . '/' . $rcpt), -10);
 }
 
-=item cookie_changed($current, $basedir)
+=item cookie_changed($current, $etcdir)
 
-Create a cipher.
+Parameters:
+
+=over
+
+=item $current
+
+=item $etcdir
+
+=back
 
 =cut
 
 sub cookie_changed {
-	my ($current) = @_;
+	my ($current, $etcdir) = @_;
 	my $changed = 1 ;
-	if (-f Site->etc . '/cookies.history') {
-		unless (open COOK, '<', Site->etc . '/cookies.history') {
+	if (-f $etcdir . '/cookies.history') {
+		unless (open COOK, '<', $etcdir . '/cookies.history') {
 			Sympa::Log::Syslog::do_log('err', 'Unable to read %s/cookies.history',
-				Site->etc);
+				$etcdir);
 			return undef ; 
 		}
 		my $oldcook = <COOK>;
@@ -855,14 +863,14 @@ sub cookie_changed {
 		return $changed ;
 	}else{
 		my $umask = umask 037;
-		unless (open COOK, '>', Site->etc . '/cookies.history') {
+		unless (open COOK, '>', $etcdir . '/cookies.history') {
 			umask $umask;
 			Sympa::Log::Syslog::do_log('err', 'Unable to create %s/cookies.history',
-				Site->etc);
+				$etcdir);
 			return undef ; 
 		}
 		umask $umask;
-		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], Site->etc . '/cookies.history';
+		chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $etcdir . '/cookies.history';
 		print COOK "$current ";
 		close COOK;
 		return(0);
