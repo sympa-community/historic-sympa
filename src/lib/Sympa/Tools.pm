@@ -806,18 +806,6 @@ sub unescape_html {
 	return $string;
 }
 
-=item sympa_checksum($rcpt, $cookie)
-
-Check sum used to authenticate communication from wwsympa to sympa
-
-=cut
-
-sub sympa_checksum {
-	my ($rcpt) = @_;
-
-	return substr(md5_fingerprint(Site->cookie . '/' . $rcpt), -10);
-}
-
 =item cookie_changed($current, $etcdir)
 
 Parameters:
