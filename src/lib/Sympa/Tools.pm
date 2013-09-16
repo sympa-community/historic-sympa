@@ -814,8 +814,8 @@ Check sum used to authenticate communication from wwsympa to sympa
 
 sub sympa_checksum {
 	my ($rcpt) = @_;
-	my $checksum = (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $rcpt)), -10)) ;
-	return $checksum;
+
+	return substr(md5_fingerprint(Site->cookie . '/' . $rcpt), -10);
 }
 
 =item cookie_changed($current, $basedir)

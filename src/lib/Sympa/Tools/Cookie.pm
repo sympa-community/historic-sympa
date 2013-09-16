@@ -34,9 +34,9 @@ package Sympa::Tools::Cookie;
 use strict;
 
 use CGI::Cookie;
-use Digest::MD5;
 
 use Sympa::Log::Syslog;
+use Sympa::Tools;
 
 =head1 FUNCTIONS
 
@@ -92,14 +92,7 @@ sub get_mac {
 		return undef;
 	}
 
-
-
-	my $md5 = Digest::MD5->new();
-
-	$md5->reset();
-	$md5->add($email.$secret);
-
-	return substr( unpack("H*", $md5->digest()) , -8 );
+	return substr(Sympa::Tools::md5_fingerprint($email . $secret), -8);
 
 }
 
