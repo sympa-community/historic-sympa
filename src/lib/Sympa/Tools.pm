@@ -48,6 +48,7 @@ use Text::LineFold;
 
 use Sympa::Language qw(gettext_strftime);
 use Sympa::Tools::File;
+use Sympa::Log::Syslog;
 
 my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------";
 
