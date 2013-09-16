@@ -1541,25 +1541,26 @@ sub add_in_blacklist {
 
 }
 
-############################################################
-#  get_fingerprint                                         #
-############################################################
-#  Used in 2 cases :                                       #
-#  - check the MD5 in the URL                              #
-#  - create an MD5 to put in a URL                         #
-#                                                          #
-#  Use : get_db_random()                                   #
-#        init_db_random()                                  #
-#        md5_fingerprint()                                 #
-#                                                          #  
-# IN : $email : email of the subscriber                    #
-#      $fingerprint : the fingerprint in the URL (1st case)#
-#                                                          # 
-# OUT : $fingerprint : a MD5 for create an URL             #
-#     | 1 : if the MD5 in the URL is true                  #
-#     | undef                                              #
-#                                                          #
-############################################################
+=item get_fingerprint($email, $fingerprint)
+
+Parameters:
+
+=over
+
+=item $email : email of the subscriber
+
+=item $fingerprint : the fingerprint in the URL
+
+=back
+
+Return value:
+
+$fingerprint : a MD5 for create an URL
+     | 1 : if the MD5 in the URL is true
+     | undef
+
+=cut
+
 sub get_fingerprint {
 	my ($email, $fingerprint) = @_;
 	my $random;
@@ -1862,11 +1863,12 @@ sub decode_header {
 	}
 }
 
-#*******************************************
-## Function : foldcase
-## Description : returns "fold-case" string suitable for case-insensitive match.
-### IN : str
-##*******************************************
+=item foldcase($string)
+
+Returns "fold-case" string suitable for case-insensitive match.
+
+=cut
+
 sub foldcase {
 	my ($str) = @_;
 	return '' unless defined $str and length $str;
