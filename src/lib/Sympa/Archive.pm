@@ -35,7 +35,7 @@ package Sympa::Archive;
 
 use strict;
 
-use Carp;
+use Carp qw(croak);
 use Cwd;
 use Encode qw(decode_utf8 encode_utf8);
 use English qw(-no_match_vars);
