@@ -361,7 +361,7 @@ sub direct_stderr_to_file {
 	## Usefull if process crashes
 	my $err_file = _get_error_file(%params);
 	open(STDERR, '>>', $err_file);
-	unless(Tools::Sympa::File::set_file_rights(
+	unless(Sympa::Tools::File::set_file_rights(
 			file  => $err_file,
 			user  => $params{user},
 			group => $params{group}
