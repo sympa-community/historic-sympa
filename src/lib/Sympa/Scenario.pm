@@ -32,7 +32,7 @@ This class implement an authorization scenario.
 package Sympa::Scenario;
 
 use strict;
-use warnings
+use warnings;
 
 use Carp qw(croak);
 use Cwd;
