@@ -434,7 +434,7 @@ sub convert_single_message {
     }
 
     unless (-d $destination_dir) {
-	unless (tools::mkdir_all($destination_dir, 0755)) {
+	unless (Sympa::Tools::mkdir_all($destination_dir, 0755)) {
 	    Sympa::Log::Syslog::do_log('err', 'Unable to create %s', $destination_dir);
 	    return undef;
 	}

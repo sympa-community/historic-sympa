@@ -535,7 +535,7 @@ sub error_report {
 
     my $data;
     if (defined $self->{'list_object'}) {$data->{'list'} = $self->{'list_object'};}
-    $self->{'human_date'} = &tools::adate($self->{'date'});
+    $self->{'human_date'} = &Sympa::Tools::adate($self->{'date'});
     $data->{'task'} = $self;
     Sympa::Log::Syslog::do_log('err',
 	'Execution of task %s failed. sending detailed report to listmaster',

@@ -98,7 +98,7 @@ Decrypt a password.
 
 sub decrypt_password {
     my $inpasswd = shift ;
-    Sympa::Log::Syslog::do_log('debug2', 'tools::decrypt_password (%s)', $inpasswd);
+    Sympa::Log::Syslog::do_log('debug2', 'Sympa::Tools::decrypt_password (%s)', $inpasswd);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;

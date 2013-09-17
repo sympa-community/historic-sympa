@@ -350,7 +350,7 @@ sub checkcommand {
 	my $subject = $msg->head->get('Subject');
 	chomp $subject if $subject;
 
-	Sympa::Log::Syslog::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
+	Sympa::Log::Syslog::do_log('debug3', 'Sympa::Tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
 	if ($subject) {
 		if (Site->misaddressed_commands_regexp) {

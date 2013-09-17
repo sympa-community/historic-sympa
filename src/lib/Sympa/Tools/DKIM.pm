@@ -152,7 +152,7 @@ sub dkim_sign {
     my $dkim_selector = $data->{'dkim_selector'};
     my $dkim_privatekey = $data->{'dkim_privatekey'};
 
-    Sympa::Log::Syslog::do_log('debug2', 'tools::dkim_sign (msg:%s,dkim_d:%s,dkim_i%s,dkim_selector:%s,dkim_privatekey:%s)',substr($msg_as_string,0,30),$dkim_d,$dkim_i,$dkim_selector, substr($dkim_privatekey,0,30));
+    Sympa::Log::Syslog::do_log('debug2', 'Sympa::Tools::dkim_sign (msg:%s,dkim_d:%s,dkim_i%s,dkim_selector:%s,dkim_privatekey:%s)',substr($msg_as_string,0,30),$dkim_d,$dkim_i,$dkim_selector, substr($dkim_privatekey,0,30));
 
     unless ($dkim_selector) {
 		Sympa::Log::Syslog::do_log('err',"DKIM selector is undefined, could not sign message");

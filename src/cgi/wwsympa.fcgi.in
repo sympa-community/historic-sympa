@@ -2219,7 +2219,7 @@ sub get_parameters {
 	 # If we are editing an HTML file in the shared, allow HTML but prevent XSS.
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->dir.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
-	     $tmpparam = tools::sanitize_html(
+	     $tmpparam = Sympa::Tools::sanitize_html(
 		'robot' => $robot, 'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -2277,7 +2277,7 @@ sub get_parameters {
 		     $tokens[$i] = Sympa::Tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars()) replaces '/' with %A5 ('¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering_action eq 'unescape_html') {
@@ -2465,7 +2465,7 @@ sub get_parameters_old {
 	 # If we are editing an HTML file in the shared, allow HTML but prevent XSS.
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->dir.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
-	     $tmpparam = tools::sanitize_html(
+	     $tmpparam = Sympa::Tools::sanitize_html(
 		'robot' => $robot, 'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -2508,7 +2508,7 @@ sub get_parameters_old {
 		     $tokens[$i] = Sympa::Tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars()) replaces '/' with %A5 ('¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering{$in{'action'}}{$p} eq 'fix_escape_uri') {
@@ -2664,9 +2664,9 @@ sub send_html {
 
     # XSS escaping applied to all outgoing parameters.
     ## Escape parameters on a copy to avoid altering useful data.
-    my $param_copy = tools::dup_var($param);
+    my $param_copy = Sympa::Tools::dup_var($param);
     if(defined $param_copy) {
-	unless(tools::sanitize_var('var' => $param_copy,
+	unless(Sympa::Tools::sanitize_var('var' => $param_copy,
 				    'robot' => $robot,
 				    'htmlAllowedParam' => $param_copy->{'htmlAllowedParam'} ,
 				    'htmlToFilter' => $param_copy->{'htmlToFilter'} ,
@@ -4770,7 +4770,7 @@ sub do_search {
     ## Search key
     $param->{'filter'} = $in{'filter'};
     my $searchkey = undef;
-    $searchkey = tools::foldcase($param->{'filter'})
+    $searchkey = Sympa::Tools::foldcase($param->{'filter'})
 	if defined $param->{'filter'} and length $param->{'filter'};
 
     my $record = 0;
@@ -4785,7 +4785,7 @@ sub do_search {
 
 	if (defined $searchkey) {
 	    my $gecos = undef;
-	    $gecos = tools::foldcase($i->{'gecos'}) if defined $i->{'gecos'};
+	    $gecos = Sympa::Tools::foldcase($i->{'gecos'}) if defined $i->{'gecos'};
 	    next unless index($i->{'email'}, $searchkey) >= 0 or
 			(defined $gecos and index($gecos, $searchkey) >= 0);
 	}
@@ -5927,7 +5927,7 @@ sub do_serveradmin {
  }
 
 sub do_edit_config {
-    my $editable_params = tools::dup_var(\@confdef::params);
+    my $editable_params = Sympa::Tools::dup_var(\@confdef::params);
 
     get_server_details();
 
@@ -6129,7 +6129,7 @@ sub do_remove_template {
 	    'error_type' => 'missing_parameter'});
 	return 1;
     }
-    $template_path = tools::get_template_path($in{'webormail'}, $robot,
+    $template_path = Sympa::Tools::get_template_path($in{'webormail'}, $robot,
 	$in{'scope'}, $in{'template_name'}, $in{'tpl_lang'}, $list);
 
     my $template_old_path = Sympa::Tools::shift_file($template_path,10);
@@ -6167,7 +6167,7 @@ sub do_view_template {
 	    'error_type' => 'missing_parameter'});
 	return 1;
     }
-    $template_path = tools::get_template_path($in{'webormail'}, $robot,
+    $template_path = Sympa::Tools::get_template_path($in{'webormail'}, $robot,
 	$in{'scope'}, $in{'template_name'}, $in{'tpl_lang'}, $list);
 
     unless (open (TPL,$template_path)) {
@@ -6218,7 +6218,7 @@ sub do_copy_template {
 		return undef;
 	    }
 	    $param->{'template_path_out'} =
-		tools::get_template_path($in{'webormail'}, $robot,
+		Sympa::Tools::get_template_path($in{'webormail'}, $robot,
 		'list', $in{'template_name_out'}, $in{'tpl_lang_out'},
 		$list_out);
 	}else{
@@ -6231,7 +6231,7 @@ sub do_copy_template {
 	}
     }else{
 	$param->{'template_path_out'} =
-	    tools::get_template_path($in{'webormail'}, $robot,
+	    Sympa::Tools::get_template_path($in{'webormail'}, $robot,
 	    $in{'scope_out'}, $in{'template_name_out'}, $in{'tpl_lang_out'});
     }
     
@@ -6279,7 +6279,7 @@ sub do_manage_template {
     if  ($in{'message_template'}) {		
 	my $escaped_template_path = $in{'message_template'};
 	$escaped_template_path =~ s/\s/_/g ;
-	$param->{'template_path'} = tools::get_template_path('mail', $robot,
+	$param->{'template_path'} = Sympa::Tools::get_template_path('mail', $robot,
 	    'list', 'reject_'.$escaped_template_path.'.tt2', '', $list);
     }
     my $default_file =
@@ -6318,7 +6318,7 @@ sub do_manage_template {
 	    return undef;  
 	}
 	my $escaped_template_path = $in{'new_template_name'};$escaped_template_path =~ s/\s/_/g ;
-	my $new_template_path = tools::get_template_path('mail', $robot,
+	my $new_template_path = Sympa::Tools::get_template_path('mail', $robot,
 	    'list', 'reject_'.$escaped_template_path.'.tt2', '', $list);
 
 	if (-f $new_template_path) {
@@ -6473,7 +6473,7 @@ sub do_edit_template  {
 	return undef;
     }
     $param->{'template_path'} =
-	tools::get_template_path($in{'webormail'}, $robot, $in{'scope'},
+	Sympa::Tools::get_template_path($in{'webormail'}, $robot, $in{'scope'},
 	$in{'template_name'}, $in{'tpl_lang'}, $list);
 
     unless (open (TPLOUT,'>'.$param->{'template_path'})) {
@@ -6953,9 +6953,9 @@ sub do_modindex {
 
 	$param->{'spool'}{$id}{'size'} = int($message->{'size'} / 1024 + 0.5);
 	$param->{'spool'}{$id}{'subject'} =
-	    tools::decode_header($message, 'Subject') || 'no_subject';
+	    Sympa::Tools::decode_header($message, 'Subject') || 'no_subject';
 	$param->{'spool'}{$id}{'date'} =
-	    tools::decode_header($message, 'Date'); #FIXME:
+	    Sympa::Tools::decode_header($message, 'Date'); #FIXME:
 	$param->{'spool'}{$id}{'from'} = $message->get_sender_email;
 	$param->{'spool'}{$id}{'gecos'} = $message->get_sender_gecos
 	    if defined $message->get_sender_gecos;
@@ -7453,7 +7453,7 @@ sub do_distribute {
 	## TAG 
 	if ($list_topics) {
 	    my $filetopic = $list->tag_topic(
-		tools::clean_msg_id($message->get_msg_id),
+		Sympa::Tools::clean_msg_id($message->get_msg_id),
 		$list_topics, 'editor'
 	    );
 	}
@@ -7481,7 +7481,7 @@ sub do_distribute {
 	    "Message-Id: %s\n\n%s\n",
 	    $robot->get_address(),
 	    $param->{'user'}{'email'},
-	    tools::get_message_id($robot), join("\n", @mail_command)
+	    Sympa::Tools::get_message_id($robot), join("\n", @mail_command)
 	),
 	{'list' => $robot->email, 'robot' => $robot->domain}
     )) {
@@ -13890,7 +13890,7 @@ sub creation_picture_file {
 
     unless(-d $path) {
  	wwslog('notice', 'Create dir %s', $path);
- 	unless (tools::mkdir_all($path, 0755)) {
+ 	unless (Sympa::Tools::mkdir_all($path, 0755)) {
  	    wwslog('err', 'Unable to create dir %s',
 		$path);
 	    return undef;
@@ -13945,7 +13945,7 @@ sub creation_shared_file {
     
     ## XSS Protection for HTML files.
     if (lc($fname) =~ /\.html?/) {
-	my $sanitized_file = tools::sanitize_html_file('robot' => $robot,
+	my $sanitized_file = Sympa::Tools::sanitize_html_file('robot' => $robot,
 							'file' => "$shareddir/$path/$fname");
 	if (defined $sanitized_file) {
 	    open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
@@ -14517,7 +14517,7 @@ sub d_copy_file {
 
 	## XSS Protection for HTML files.
 	if (lc($fname) =~ /\.html?/) {
-	    my $sanitized_file = tools::sanitize_html_file('robot' => $robot,
+	    my $sanitized_file = Sympa::Tools::sanitize_html_file('robot' => $robot,
 							    'file' => "$dest_dir/$fname");
 	    if (defined $sanitized_file) {
 		open HTMLFILE,  ">:bytes", "$dest_dir/$fname";
@@ -15529,7 +15529,7 @@ sub do_remind {
 	    "Message-Id: %s\n\n%s\n",
 	    $robot->get_address(),
 	    $param->{'user'}{'email'},
-	    tools::get_message_id($robot), $mail_command
+	    Sympa::Tools::get_message_id($robot), $mail_command
 	),
 	{'list' => $robot->email, 'robot' => $robot->domain}
     )) {
@@ -15617,7 +15617,7 @@ sub do_upload_pictures {
 	return 'suboptions';
     }
 
-    my $filename = tools::md5_fingerprint($param->{'user'}{'email'});
+    my $filename = Sympa::Tools::md5_fingerprint($param->{'user'}{'email'});
     my $fullfilename = $filename . '.' . $filetype;
 
     my @filetmp;
@@ -16248,7 +16248,7 @@ sub do_send_mail {
 	    $page_source = 'file://'.$page_source;
 	}
 	
-	my $html_part_body = tools::create_html_part_from_web_page({
+	my $html_part_body = Sympa::Tools::create_html_part_from_web_page({
 	    'From' => $from,
 	    'To' => $to,
 	    'Headers' => {
@@ -16406,14 +16406,14 @@ sub do_request_topic {
     }
 
     # headers will be encoded later.
-    $param->{'subject'} = tools::decode_header($message, 'Subject');
-    $param->{'subject'} = tools::escape_html($param->{'subject'}); #FIXME
-    $param->{'from'}    = tools::decode_header($message, 'From');
-    $param->{'from'}    = tools::escape_html($param->{'from'}); #FIXME
-    $param->{'date'}    = tools::decode_header($message, 'Date');
-    $param->{'date'}    = tools::escape_html($param->{'date'}); #FIXME
+    $param->{'subject'} = Sympa::Tools::decode_header($message, 'Subject');
+    $param->{'subject'} = Sympa::Tools::escape_html($param->{'subject'}); #FIXME
+    $param->{'from'}    = Sympa::Tools::decode_header($message, 'From');
+    $param->{'from'}    = Sympa::Tools::escape_html($param->{'from'}); #FIXME
+    $param->{'date'}    = Sympa::Tools::decode_header($message, 'Date');
+    $param->{'date'}    = Sympa::Tools::escape_html($param->{'date'}); #FIXME
     $param->{'message_id'} =
-	tools::clean_msg_id($message->get_header('Message-Id'));
+	Sympa::Tools::clean_msg_id($message->get_header('Message-Id'));
 
     my $bodyh = $message->{'msg'}->bodyhandle();
     if ($bodyh) {
@@ -16510,7 +16510,7 @@ sub do_tag_topic_by_sender {
 	    "Message-Id: %s\n\n%s\n",
 	    $robot->get_address(),
 	    $sender,
-	    tools::get_message_id($robot), $mail_command
+	    Sympa::Tools::get_message_id($robot), $mail_command
 	),
 	{'list' => $robot->email, 'robot' => $robot->domain}
     )) {
@@ -17502,7 +17502,7 @@ sub do_viewspool_message_remove {
     # clean html view of the message
     #FIXME: inconsistent removal.
     my $dir = Sympa::Site->viewmail_dir . '/spool/viewmail/' . $messagekey;
-    tools::remove_dir($dir) if -d $dir;
+    Sympa::Tools::remove_dir($dir) if -d $dir;
 
     $param->{'removed'} = 1;
     return 1;
@@ -17722,8 +17722,8 @@ sub do_arc_delete {
 	push(@abs_dirs ,$robot->arc_path.'/'.$list->get_list_id().'/'.$dir);
     }
 
-    unless (tools::remove_dir(@abs_dirs)) {
-	wwslog('info','Error while Calling tools::remove_dir');
+    unless (Sympa::Tools::remove_dir(@abs_dirs)) {
+	wwslog('info','Error while Calling Sympa::Tools::remove_dir');
     }
     
     Sympa::Report::notice_report_web('performed',{},$param->{'action'});

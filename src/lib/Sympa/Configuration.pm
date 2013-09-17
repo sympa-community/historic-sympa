@@ -1936,7 +1936,7 @@ sub _set_listmasters_entry{
         my @emails_provided = split(/,/, $param->{'config_hash'}{'listmaster'});
 	$number_of_email_provided = scalar @emails_provided;
         foreach my $lismaster_address (@emails_provided){
-            if (&tools::valid_email($lismaster_address)) {
+            if (&Sympa::Tools::valid_email($lismaster_address)) {
                 push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
                 $number_of_valid_email++;
             }else{

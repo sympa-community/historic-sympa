@@ -649,7 +649,7 @@ sub process_email_feedback_report {
 		if ($line =~ /Version\:\s*(.*)/i) {
 		    $self->{'efr'}{'version'} = $1;
 		}
-	    my $email_regexp = tools::get_regexp('email');
+	    my $email_regexp = Sympa::Tools::get_regexp('email');
 		if ($line =~ /Original\-Rcpt\-To\:\s*($email_regexp)\s*$/i) {
 		    $self->{'efr'}{'original_rcpt'} = $1;
 		    chomp $self->{'efr'}{'original_rcpt'};
@@ -800,7 +800,7 @@ sub process_ndn {
 		    return undef;
 		}
 	    }else{          # no VERP and no rcpt recognized		
-		my $escaped_from = tools::escape_chars($from);
+		my $escaped_from = Sympa::Tools::escape_chars($from);
 		Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $self->{'list'});
 		return undef;
 	    }
@@ -820,7 +820,7 @@ sub store_bounce {
 
     my $queue = Site->queuebounce;
 
-    my $filename = tools::escape_chars($rcpt);    
+    my $filename = Sympa::Tools::escape_chars($rcpt);    
     
     unless (open ARC, ">$bounce_dir/$filename") {
 	Log::do_log('notice', "Unable to write $bounce_dir/$filename");

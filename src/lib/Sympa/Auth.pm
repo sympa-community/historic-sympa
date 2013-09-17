@@ -618,7 +618,7 @@ sub get_one_time_ticket {
 	);
 
     my $lockout = $robot->one_time_ticket_lockout || 'open';
-    my $lifetime = tools::duration_conv($robot->one_time_ticket_lifetime || 0);
+    my $lifetime = Sympa::Tools::duration_conv($robot->one_time_ticket_lifetime || 0);
 
     if ($lockout eq 'one_time' and $ticket->{'status'} ne 'open') {
 		$result = 'closed';

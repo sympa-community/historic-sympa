@@ -634,7 +634,7 @@ sub renew {
 		$hash{$var} = $self->{$var};
 	}
 
-    my $data_string = tools::hash_2_string(\%hash);
+    my $data_string = Sympa::Tools::hash_2_string(\%hash);
 
     my $sth;
     ## Cookie may contain previous session ID.
@@ -830,7 +830,7 @@ sub encrypt_session_id {
     my $id_session = shift;
 
     return $id_session unless Site->cookie;
-    my $cipher = tools::ciphersaber_installed();
+    my $cipher = Sympa::Tools::ciphersaber_installed();
     return $id_session unless $cipher;
 
     my $id_session_bin =
@@ -844,7 +844,7 @@ sub decrypt_session_id {
     my $cookie = shift;
 
     return $cookie unless Site->cookie;
-    my $cipher = tools::ciphersaber_installed();
+    my $cipher = Sympa::Tools::ciphersaber_installed();
     return $cookie unless $cipher;
 
     return undef unless $cookie =~ /\A[0-9a-f]+\z/;

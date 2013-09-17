@@ -462,7 +462,7 @@ sub store {
 	}else{
 	    $rcptasstring  = $packet;
 	}
-	my $packetid =  &tools::md5_fingerprint($rcptasstring);
+	my $packetid =  &Sympa::Tools::md5_fingerprint($rcptasstring);
 	my $packet_already_exist;
 	if (ref $listname eq 'List') {
 	    $listname = $listname->name;

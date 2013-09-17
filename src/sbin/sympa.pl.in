@@ -2578,7 +2578,7 @@ sub DoCommand {
     ## Process the Subject of the message
     ## Search and process a command in the Subject field
     my $subject_field = $message->{'decoded_subject'};
-    my $re_regexp = tools::get_regexp('re');
+    my $re_regexp = Sympa::Tools::get_regexp('re');
     $subject_field =~ s/^\s*(?:$re_regexp)?\s*(.*)\s*$/$1/i
 	if $subject_field;
 
@@ -2596,7 +2596,7 @@ sub DoCommand {
 
     ## Make multipart singlepart
     if ($msg->is_multipart()) {
-	my $status = &tools::as_singlepart($msg, 'text/plain');
+	my $status = &Sympa::Tools::as_singlepart($msg, 'text/plain');
 
 	unless (defined $status) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not change multipart to singlepart');

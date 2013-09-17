@@ -123,7 +123,7 @@ sub upgrade {
     Sympa::Log::Syslog::do_log('notice', '(%s, %s)', $previous_version, $new_version);
 
     my $base = Sympa::Database->get_singleton();
-    if (&tools::lower_version($new_version, $previous_version)) {
+    if (&Sympa::Tools::lower_version($new_version, $previous_version)) {
 	Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 	return 1;
     }
@@ -153,7 +153,7 @@ sub upgrade {
     }
 
     ## Migration to tt2
-    if (&tools::lower_version($previous_version, '4.2b')) {
+    if (&Sympa::Tools::lower_version($previous_version, '4.2b')) {
 
 	Sympa::Log::Syslog::do_log('notice','Migrating templates to TT2 format...');	
 	
@@ -180,7 +180,7 @@ sub upgrade {
     }
     
     ## Initializing the new admin_table
-    if (&tools::lower_version($previous_version, '4.2b.4')) {
+    if (&Sympa::Tools::lower_version($previous_version, '4.2b.4')) {
 	Sympa::Log::Syslog::do_log('notice', 'Initializing the new admin_table...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -189,7 +189,7 @@ sub upgrade {
     }
 
     ## Move old-style web templates out of the include_path
-    if (&tools::lower_version($previous_version, '5.0.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.0.1')) {
 	Sympa::Log::Syslog::do_log('notice','Old web templates HTML structure is not compliant with latest ones.');
 	Sympa::Log::Syslog::do_log('notice','Moving old-style web templates out of the include_path...');
 
@@ -243,7 +243,7 @@ sub upgrade {
 
 
     ## Clean buggy list config files
-    if (&tools::lower_version($previous_version, '5.1b')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.1b')) {
 	Sympa::Log::Syslog::do_log('notice', 'Cleaning buggy list config files...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -252,7 +252,7 @@ sub upgrade {
     }
 
     ## Fix a bug in Sympa 5.1
-    if (&tools::lower_version($previous_version, '5.1.2')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.1.2')) {
 	Sympa::Log::Syslog::do_log('notice', 'Rename archives/log. files...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -264,7 +264,7 @@ sub upgrade {
 	}
     }
 
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 
 	## Fill the robot_subscriber and robot_admin fields in DB
 	Sympa::Log::Syslog::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
@@ -341,7 +341,7 @@ sub upgrade {
     }
 
     ## DB fields of enum type have been changed to int
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 	
 	if (&SDM::use_db && Site->db_type eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
@@ -424,7 +424,7 @@ sub upgrade {
     }
 
     ## Rename bounce sub-directories
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 
 	Sympa::Log::Syslog::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
@@ -465,7 +465,7 @@ sub upgrade {
     }
 
     ## Update lists config using 'include_list'
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Update lists config using include_list parameter...');
 
@@ -496,7 +496,7 @@ sub upgrade {
     }
 
     ## New mhonarc ressource file with utf-8 recoding
-    if (&tools::lower_version($previous_version, '5.3a.6')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3a.6')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
 	foreach my $vr (@{Robot::get_robots()}) {
@@ -531,7 +531,7 @@ sub upgrade {
 
     ## Changed shared documents name encoding
     ## They are Q-encoded therefore easier to store on any filesystem with any encoding
-    if (&tools::lower_version($previous_version, '5.3a.8')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3a.8')) {
 	Sympa::Log::Syslog::do_log('notice','Q-Encoding web documents filenames...');
 
 	Language::PushLang(Site->lang);
@@ -545,7 +545,7 @@ sub upgrade {
 		&Language::SetLang($list->lang);
 		my $list_encoding = &Language::GetCharset();
 
-		my $count = tools::qencode_hierarchy($list->dir . '/shared', $list_encoding);
+		my $count = Sympa::Tools::qencode_hierarchy($list->dir . '/shared', $list_encoding);
 
 		if ($count) {
 		    Sympa::Log::Syslog::do_log('notice',
@@ -559,7 +559,7 @@ sub upgrade {
 
     ## We now support UTF-8 only for custom templates, config files, headers and footers, info files
     ## + web_tt2, scenari, create_list_templates, families
-    if (&tools::lower_version($previous_version, '5.3b.3')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3b.3')) {
 	Sympa::Log::Syslog::do_log('notice','Encoding all custom files to UTF-8...');
 
 	my (@directories, @files);
@@ -660,7 +660,7 @@ sub upgrade {
 
     ## giving up subscribers flat files ; moving subscribers to the DB
     ## Also giving up old 'database' mode
-    if (&tools::lower_version($previous_version, '5.4a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.4a.1')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
 
@@ -709,7 +709,7 @@ sub upgrade {
 	}
     }
 
-    if (&tools::lower_version($previous_version, '5.5a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.5a.1')) {
 
       ## Remove OTHER/ subdirectories in bounces
       Sympa::Log::Syslog::do_log('notice', "Removing obsolete OTHER/ bounce directories");
@@ -718,7 +718,7 @@ sub upgrade {
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
 	  my $other_dir = Site->bounce_path . '/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
-	    &tools::remove_dir($other_dir);
+	    &Sympa::Tools::remove_dir($other_dir);
 	    Sympa::Log::Syslog::do_log('notice', "Directory $other_dir removed");
 	  }
 	}
@@ -731,7 +731,7 @@ sub upgrade {
 
    }
 
-   if (&tools::lower_version($previous_version, '6.1b.5')) {
+   if (&Sympa::Tools::lower_version($previous_version, '6.1b.5')) {
 		## Encoding of shared documents was not consistent with recent versions of MIME::Encode
 		## MIME::EncWords::encode_mimewords() used to encode characters -!*+/ 
 		## Now these characters are preserved, according to RFC 2047 section 5 
@@ -743,14 +743,14 @@ sub upgrade {
 				Sympa::Log::Syslog::do_log('notice','  Processing list %s...', $list);
 
 				my @all_files;
-				&tools::list_dir($list->dir, \@all_files, 'utf-8');
+				&Sympa::Tools::list_dir($list->dir, \@all_files, 'utf-8');
 				
 				my $count;
 				foreach my $f_struct (reverse @all_files) {
 					my $new_filename = $f_struct->{'filename'};
 					
 					## Decode and re-encode filename
-					$new_filename = &tools::qencode_filename(&tools::qdecode_filename($new_filename));
+					$new_filename = &Sympa::Tools::qencode_filename(&Sympa::Tools::qdecode_filename($new_filename));
 					
 					if ($new_filename ne $f_struct->{'filename'}) {
 						## Rename file
@@ -773,7 +773,7 @@ sub upgrade {
 		}
 		
    }		
-    if (&tools::lower_version($previous_version, '6.3a')) {
+    if (&Sympa::Tools::lower_version($previous_version, '6.3a')) {
 	# move spools from file to database.
 	my %spools_def = ('queue' =>  'msg',
 			  'queuebounce' => 'bounce',
@@ -786,7 +786,7 @@ sub upgrade {
 			  'queueauth' => 'auth',
 			  'queueoutgoing' => 'archive',
 			  'queuetask' => 'task');
-	if (&tools::lower_version($previous_version, '6.1.11')) {
+	if (&Sympa::Tools::lower_version($previous_version, '6.1.11')) {
 	    ## Exclusion table was not robot-enabled.
 	    Sympa::Log::Syslog::do_log('notice','fixing robot column of exclusion table.');
 	    my $sth = SDM::do_query(q{SELECT * FROM exclusion_table});
@@ -862,7 +862,7 @@ sub upgrade {
 		croak sprintf("Can't open dir %s: %s", $spooldir, "$!");
 		## No return.
 	    }
-	    my @qfile = sort tools::by_date grep (!/^\./,readdir(DIR));
+	    my @qfile = sort Sympa::Tools::by_date grep (!/^\./,readdir(DIR));
 	    closedir(DIR);
 	    my $filename;
 	    my $listname;
@@ -1012,7 +1012,7 @@ sub upgrade {
 		    my $html_view_dir = $spooldir.'/.'.$filename;
 		    my $list_html_view_dir = Site->viewmail_dir.'/mod/'.$listname.'@'.$robot_id;
 		    my $new_html_view_dir = $list_html_view_dir.'/'.$meta{'authkey'};
-		    unless (tools::mkdir_all($list_html_view_dir, 0755)) {
+		    unless (Sympa::Tools::mkdir_all($list_html_view_dir, 0755)) {
 			Sympa::Log::Syslog::do_log('err', 'Could not create list html view directory %s: %s', $list_html_view_dir, $!);
 			exit 1;
 		    }
@@ -1057,7 +1057,7 @@ sub upgrade {
     }
 
     ## We have obsoleted wwsympa.conf.  It would be migrated to sympa.conf.
-    if (&tools::lower_version($previous_version, '6.2a.33')) {
+    if (&Sympa::Tools::lower_version($previous_version, '6.2a.33')) {
 	my $sympa_conf = Conf::get_sympa_conf();
 	my $wwsympa_conf = Conf::get_wwsympa_conf();
 	my $fh;
@@ -1197,20 +1197,20 @@ sub upgrade {
 		my %newconf = %{$migrated{$type} || {}};
 		next unless scalar keys %newconf;
 
-		push @newconf, tools::wrap_text(
+		push @newconf, Sympa::Tools::wrap_text(
 		    Language::gettext("Migrated Parameters\nFollowing parameters were migrated from wwsympa.conf."), '#### ', '#### ') . "\n"
 		    if $type eq 'add';
-		push @newconf, tools::wrap_text(
+		push @newconf, Sympa::Tools::wrap_text(
 		    Language::gettext("Overriding Parameters\nFollowing parameters existed both in sympa.conf and wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."), '#### ', '#### ') . "\n"
 		    if $type eq 'override';
-		push @newconf, tools::wrap_text(
+		push @newconf, Sympa::Tools::wrap_text(
 		    Language::gettext("Duplicate of sympa.conf\nThese parameters were found in both sympa.conf and wwsympa.conf.  Previous release of Sympa used those in sympa.conf.  Uncomment ones you wish to be enabled."), '#### ', '#### ') . "\n"
 		    if $type eq 'duplicate';
-		push @newconf, tools::wrap_text(
+		push @newconf, Sympa::Tools::wrap_text(
 		    Language::gettext("Old Parameters\nThese parameters are no longer used."),
 		    '#### ', '#### ') . "\n"
 		    if $type eq 'obsolete';
-		push @newconf, tools::wrap_text(
+		push @newconf, Sympa::Tools::wrap_text(
 		    Language::gettext("Unknown Parameters\nThough these parameters were found in wwsympa.conf, they were ignored.  You may simply remove them."),
 		    '#### ', '#### ') . "\n"
 		    if $type eq 'unknown';
@@ -1218,10 +1218,10 @@ sub upgrade {
 		foreach my $k (sort keys %newconf) {
 		    my ($param, $v) = @{$newconf{$k}};
 
-		    push @newconf, tools::wrap_text(
+		    push @newconf, Sympa::Tools::wrap_text(
 			Language::gettext($param->{'gettext_id'}), '## ', '## ')
 			if defined $param->{'gettext_id'};
-		    push @newconf, tools::wrap_text(
+		    push @newconf, Sympa::Tools::wrap_text(
 			Language::gettext($param->{'gettext_comment'}), '## ', '## ')
 			if defined $param->{'gettext_comment'};
 		    if (defined $v and
@@ -1383,7 +1383,7 @@ sub to_utf8 {
 	}
 	print TEMPLATE $text;
 	close TEMPLATE;
-	unless (&tools::set_file_rights(file => $file,
+	unless (&Sympa::Tools::set_file_rights(file => $file,
 					user =>  Sympa::Constants::USER,
 					group => Sympa::Constants::GROUP,
 					mode =>  0644,
@@ -1444,7 +1444,7 @@ sub md5_encode_password {
 	next if ($user->{'password_user'} =~ /^$/);
 
 	if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
-	    $clear_password = &tools::decrypt_password($user->{'password_user'});
+	    $clear_password = &Sympa::Tools::decrypt_password($user->{'password_user'});
 	}else{ ## Old style cleartext passwords
 	    $clear_password = $user->{'password_user'};
 	}
