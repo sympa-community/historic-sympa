@@ -72,47 +72,6 @@ my %regexp = (
 	're'                      => '(?i)(?:AW|(?:\xD0\x9D|\xD0\xBD)(?:\xD0\x90|\xD0\xB0)|Re(?:\^\d+|\*\d+|\*\*\d+|\[\d+\])?|Rif|SV|VS)\s*:',
 );
 
-## Sets owner and/or access rights on a file.
-sub set_file_rights {
-	my (%params) = @_;
-	my ($uid, $gid);
-
-	if ($params{'user'}) {
-		unless ($uid = (getpwnam($params{'user'}))[2]) {
-			Sympa::Log::Syslog::do_log('err', "User %s can't be found in passwd file",
-				$params{'user'});
-			return undef;
-		}
-	} else {
-		# A value of -1 is interpreted by most systems to leave that value
-		# unchanged.
-		$uid = -1;
-	}
-	if ($params{'group'}) {
-		unless ($gid = (getgrnam($params{'group'}))[2]) {
-			Sympa::Log::Syslog::do_log('err', "Group %s can't be found", $params{'group'});
-			return undef;
-		}
-	} else {
-		# A value of -1 is interpreted by most systems to leave that value
-		# unchanged.
-		$gid = -1;
-	}
-	unless (chown($uid, $gid, $params{'file'})) {
-		Sympa::Log::Syslog::do_log('err', "Can't give ownership of file %s to %s.%s: %s",
-			$params{'file'}, $params{'user'}, $params{'group'}, $ERRNO);
-		return undef;
-	}
-	if ($params{'mode'}) {
-		unless (chmod($params{'mode'}, $params{'file'})) {
-			Sympa::Log::Syslog::do_log('err', "Can't change rights of file %s to %o: %s",
-				$params{'file'}, $params{'mode'}, $ERRNO);
-			return undef;
-		}
-	}
-	return 1;
-}
-
 ## Returns an HTML::StripScripts::Parser object built with  the parameters provided as arguments.
 sub _create_xss_parser {
 	my (%params) = @_;
