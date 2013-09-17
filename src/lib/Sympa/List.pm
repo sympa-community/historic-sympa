@@ -35,7 +35,7 @@ package Sympa::List;
 
 use strict;
 use warnings;
-use base qw(Site_r);
+use base qw(Sympa::Site_r);
 
 use Carp qw(croak);
 use DB_File;
