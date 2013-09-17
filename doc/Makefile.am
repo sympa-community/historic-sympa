@@ -37,23 +37,18 @@ CLEANFILES = $(man1_MANS) $(man8_MANS)
 sympa_wizard.1: Makefile
 	rm -f $@
 	$(AM_V_GEN)$(POD2MAN) --section=1 --center="sympa $(VERSION)" \
-		--lax --release="$(VERSION)" $(srcdir)/../src/$*.pl $@
+		--lax --release="$(VERSION)" $(srcdir)/../src/sbin/$*.pl $@
 
-archived.8 bounced.8: Makefile
+archived.8 bounced.8 alias_manager.8 bulk.8 sympa.8 task_manager.8: Makefile
 	rm -f $@
 	$(AM_V_GEN)$(POD2MAN) --section=8 --center="sympa $(VERSION)" \
-		--lax --release="$(VERSION)" $(srcdir)/../wwsympa/$*.pl $@
+		--lax --release="$(VERSION)" $(srcdir)/../src/sbin/$*.pl $@
 
-alias_manager.8 bulk.8 sympa.8 task_manager.8: Makefile
-	rm -f $@
-	$(AM_V_GEN)$(POD2MAN) --section=8 --center="sympa $(VERSION)" \
-		--lax --release="$(VERSION)" $(srcdir)/../src/$*.pl $@
-
-sympa_wizard.1: $(srcdir)/../src/sympa_wizard.pl
-archived.8: $(srcdir)/../wwsympa/archived.pl
-bounced.8: $(srcdir)/../wwsympa/bounced.pl
-alias_manager.8: $(srcdir)/../src/alias_manager.pl
-bulk.8: $(srcdir)/../src/bulk.pl
-sympa.8: $(srcdir)/../src/sympa.pl
-task_manager.8: $(srcdir)/../src/task_manager.pl
+sympa_wizard.1: $(srcdir)/../src/sbin/sympa_wizard.pl
+archived.8: $(srcdir)/../src/sbin/archived.pl
+bounced.8: $(srcdir)/../src/sbin/bounced.pl
+alias_manager.8: $(srcdir)/../src/sbin/alias_manager.pl
+bulk.8: $(srcdir)/../src/sbin/bulk.pl
+sympa.8: $(srcdir)/../src/sbin/sympa.pl
+task_manager.8: $(srcdir)/../src/sbin/task_manager.pl
 

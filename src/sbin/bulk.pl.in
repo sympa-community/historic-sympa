@@ -38,6 +38,7 @@ Multiple instances can be run simultaneously to distribute traffic.
 =head1 OPTIONS
 
 =over
+
 =item B<-d>, B<--debug>
 
 Set debug mode (implies -F)

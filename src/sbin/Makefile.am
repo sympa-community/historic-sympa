@@ -23,7 +23,6 @@ AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
 sbin_SCRIPTS = sympa.pl \
 	       bulk.pl \
-	       spooler.pl \
 	       alias_manager.pl \
 	       task_manager.pl \
 	       sympa_wizard.pl \
@@ -32,7 +31,6 @@ sbin_SCRIPTS = sympa.pl \
 
 man8_MANS = sympa.pl.8 \
 	    bulk.pl.8 \
-	    spooler.pl.8 \
 	    alias_manager.pl.8 \
 	    task_manager.pl.8 \
 	    sympa_wizard.pl.8 \
@@ -61,7 +59,6 @@ EXTRA_DIST = $(modules_DATA) \
 	     bulk.pl.in \
 	     alias_manager.pl.in \
 	     sympa.pl.in \
-	     spooler.pl.in \
 	     sympa_wizard.pl.in \
 	     task_manager.pl.in \
 	     archived.pl.in \
@@ -101,7 +98,6 @@ alias_manager.pl bulk.pl task_manager.pl sympa.pl spooler.pl sympa_wizard.pl arc
 alias_manager.pl: $(srcdir)/alias_manager.pl.in
 bulk.pl: $(srcdir)/bulk.pl.in
 sympa.pl: $(srcdir)/sympa.pl.in
-spooler.pl: $(srcdir)/spooler.pl.in
 sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
 task_manager.pl: $(srcdir)/task_manager.pl.in
 archived.pl: $(srcdir)/archived.pl.in
@@ -122,10 +118,6 @@ archived.pl.8: archived.pl
 bulk.pl.8: bulk.pl
 	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
            --section=8 bulk.pl bulk.pl.8
-
-spooler.pl.8: spooler.pl
-	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
-           --section=8 spooler.pl spooler.pl.8
 
 alias_manager.pl.8: alias_manager.pl
 	pod2man --release='$(PACKAGE_VERSION)' --center='$(PACKAGE_NAME)' \
