@@ -17,302 +17,141 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=encoding utf-8
 
 =head1 NAME
 
-sympa_wizard.pl - Sympa configuration wizard
-
+sympa_wizard, sympa_wizard.pl - Help Performing Sympa Initial Setup
+    
 =head1 SYNOPSIS
 
-  sympa_wizard.pl
-  sympa_wizard.pl [--target file] --create <sympa.conf|wwsympa.conf>
-  sympa_wizard.pl --check
-
-=head1 DESCRIPTION
-
-This script helps to perform sympa initial setup.
-
-When run without option, it edits current configuration file.
-
-When run with B<--create> option, it creates a new configuration file.
-
-When run with B<--check> option, it checks CPAN needed modules.
+S<B<sympa_wizard.pl>>
+    S<[B<--check>]>
+    S<[B<--create> [B<--target=>I<file>]]>
+    S<[B<-h, --help>]>
+    S<[B<-v, --version>]>
 
 =head1 OPTIONS
 
-=over
+=over 4
 
-=item B<--target>
+=item sympa_wizard.pl
 
-File to create.
+Edit current Sympa configuration.
 
-=item B<--create>
+When run with B<--check> option, it checks CPAN needed modules.
 
-Creates a new sympa or wwsympa configuration file.
+Check CPAN modules needed for running Sympa.
 
-=item B<--check>
+=item sympa_wizard.pl --create [--target file]
 
-check CPAN modules needed for running sympa
+Creates a new F<sympa.conf> configuration file.
+
+=item sympa_wizard.pl --help
+
+Display usage instructions.
+
+=item sympa_wizard.pl --version
+
+Print version number.
 
 =back
 
 =head1 AUTHORS
 
-=encoding utf8
-
-=over
+=over 4
 
 =item Serge Aumont <sa@cru.fr>
 
-=item Olivier Salaün <os@cru.fr>
+=item Olivier SalaE<252>n <os@cru.fr>
 
 =back
 
 =cut
 
 use strict;
-use lib '--modulesdir--';
-
+use warnings;
+use POSIX qw(strftime);
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
 use Sys::Hostname qw(hostname);
 
-use Sympa::Configuration;
-use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::WWSympa;
 
-## sympa configuration files
-my $wwsympa_conf = Sympa::Constants::WWSCONFIG;
-my $sympa_conf   = Sympa::Constants::CONFIG;
+## check if CPAN modules might be missing
+my $modfail;
 
-my $perl_version = '5.008';
+BEGIN {
+    eval { require Site; };
+    $modfail = 1 if $@;
+}
 
-## assume version = 1.0 if not specified.
-my %mandatory_modules = (
-	'Archive::Zip' => {
-		version      => '1.05',
-		distribution => 'Archive-Zip',
-		usage        => 'this module provides zip/unzip for archive and shared document download/upload',
-	},
-	'CGI' => {
-		version      => '3.35',
-		distribution => 'CGI',
-		usage        => 'required to run Sympa web interface',
-	},
-	'DBD::mysql' => {
-		version       => '4.008',
-		prerequisites => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
-		distribution  => 'Msql-Mysql-modules',
-		usage            => 'Mysql database driver, required if you connect to a Mysql database.\nYou first need to install the Mysql server and have it started before installing the Perl DBD module.',
-	},
-	'DBI' => {
-		version      => '1.48',
-		distribution => 'DBI',
-		usage        => 'a generic Database Driver, required by Sympa to access Subscriber information and User preferences. An additional Database Driver is required for each database type you wish to connect to.',
-	},
-	'Digest::MD5' => {
-		version      => '2.00',
-		distribution => 'Digest-MD5',
-		usage        => 'used to compute MD5 digests for passwords, etc',
-	},
-	'Email::Simple' => {
-		version      => '2.100',
-		distribution => 'Email-Simple',
-		usage        => 'Used for email tracking',
-	},
-	'File::Copy::Recursive' => {
-		version      => '0.36',
-		distribution => 'File-Copy-Recursive',
-		usage        => 'used to copy file hierarchies',
-	},
-	'HTML::FormatText' => {
-		distribution => 'HTML-Format',
-		usage        => 'used to compute plaindigest messages from HTML',
-	},
-	'HTML::StripScripts::Parser' => {
-		version      => '1.03',
-		distribution => 'HTML-StripScripts-Parser',
-		usage        => 'required for XSS protection on the web interface',
-	},
-	'HTML::TreeBuilder' => {
-		distribution => 'HTML-Tree',
-		usage        => 'used to compute plaindigest messages from HTML',
-	},
-	'IO::Scalar' => {
-		distribution => 'IO-stringy',
-		usage        => 'internal use for string processing',
-	},
-	'Locale::TextDomain' => {
-		distribution => 'libintl-perl',
-		usage        => 'internationalization functions',
-	},
-	'LWP' => {
-		distribution => 'libwww-perl',
-		usage        => 'required when including members of a remote list',
-	},
-	'MHonArc::UTF8' => {
-		version      => '2.6.0',
-		distribution => 'MHonArc',
-		usage        => 'mhonarc is used to build Sympa web archives',
-	},
-	'MIME::Base64' => {
-		version      => '3.03',
-		distribution => 'MIME-Base64',
-		usage        => 'required to compute digest for password and emails',
-	},
-	'MIME::Charset' => {
-		version      => '1.006.2',
-		distribution => 'MIME-Charset',
-		usage        => 'used to encode mail body using a different charset',
-	},
-	'MIME::EncWords' => {
-		version      => '1.010',
-		distribution => 'MIME-EncWords',
-		usage        => 'required to decode/encode SMTP header fields without breaking character encoding',
-	},
-	'MIME::Lite::HTML' => {
-		version      => '1.23',
-		distribution => 'MIME-Lite-HTML',
-		usage        => 'used to compose HTML mail from the web interface',
-	},
-	'MIME::Tools' => {
-		version      => '5.423',
-		distribution => 'MIME-tools',
-		usage        => 'provides libraries for manipulating MIME messages',
-	},
-	'Net::Netmask' => {
-		version      => '1.9015',
-		distribution => 'Net-Netmask',
-		usage        => 'used to check netmask within Sympa autorization scenario rules',
-	},
-	'Proc::ProcessTable' => {
-		version      => '0.44',
-		distribution => 'Proc-ProcessTable',
-		usage        => 'Used by the bulk.pl daemon to check the number of slave bulks running.',
-	},
-	'Template' => {
-		distribution => 'Template-Toolkit',
-		usage        => 'Sympa template format, used for web pages and other mail, config file templates. See http://template-toolkit.org/.',
-	},
-	'Term::ProgressBar' => {
-		version      => '2.09',
-		distribution => 'Term-ProgressBar',
-		usage        => 'used while checking the RDBMS buffer size',
-	},
-	'Text::LineFold' => {
-		version      => '2011.05',
-		distribution => 'Unicode-LineBreak',
-		usage        => 'used to fold lines in HTML mail composer and system messages, prior to Text::Wrap',
-	},
-	'URI::Escape' => {
-		version      => '1.35',
-		distribution => 'URI-Escape',
-		usage        => 'Used to create URI containing non URI-canonical characters.',
-	},
-	'XML::LibXML' => {
-		prerequisites => 'libxml2-devel is needed to build the Perl code',
-		distribution  => 'XML-LibXML',
-		usage         => 'used to parse list configuration templates and instanciate list families',
-	},
-);
+# Detect console encoding.
+if (-t) {
+    no warnings;
 
-my %optional_modules = (
-	'AuthCAS' => {
-		version      => '1.4',
-		distribution => 'AuthCAS',
-		usage        => 'CAS Single Sign-On client libraries. Required if you configure Sympa to delegate web authentication to a CAS server.',
-	},
-	'Crypt::CipherSaber' => {
-		version      => '0.50',
-		distribution => 'CipherSaber',
-		usage        => 'this module provides reversible encryption of user passwords in the database.usefull only when updating from old version with password reversible encryption.',
-	},
-	'DBD::Oracle' => {
-		version      => '0.90',
-		distribution => 'DBD-Oracle',
-		usage        => 'Oracle database driver, required if you connect to a Oracle database.',
-	},
-	'DBD::Pg' => {
-		version       => '0.90',
-		prerequisites => 'postgresql-devel and postgresql-server. postgresql should be running for make test to succeed',
-		distribution  => 'DBD-Pg',
-		usage         => 'PostgreSQL database driver, required if you connect to a PostgreSQL database.',
-	},
-	'DBD::SQLite' => {
-		version       => '0.90',
-		prerequisites => 'sqlite-devel. No need to install a server, the SQLite server code being provided with the client code.',
-		distribution  => 'DBD-SQLite',
-		usage         => 'SQLite database driver, required if you connect to a SQLite database.',
-	},
-	'DBD::Sybase' => {
-		version      => '0.90',
-		distribution => 'DBD-Sybase',
-		usage        => 'Sybase database driver, required if you connect to a Sybase database.',
-	},
-	'FCGI' => {
-		version      => '0.67',
-		distribution => 'FCGI',
-		usage        => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
-	},
-	'File::NFSLock' => {
-		distribution => 'File-NFSLock',
-		usage        => 'required to perform NFS lock ; see also lock_method sympa.conf parameter'
-	},
-	'IO::Socket::SSL' => {
-		version      => '0.90',
-		distribution => 'IO-Socket-SSL',
-		usage        => 'required when including members of a remote list',
-	},
-	'JSON::XS' => {
-		version      => '2.32',
-		distribution => 'JSON-XS',
-		usage        => 'required when using the VOOT protocol',
-	},
-	'Net::LDAP' => {
-		version       => '0.27',
-		prerequisites => 'openldap-devel is needed to build the Perl code',
-		distribution  => 'perl-ldap',
-		usage         => 'required to query LDAP directories. Sympa can do LDAP-based authentication ; it can also build mailing lists with LDAP-extracted members.',
-	},
-	'Net::SMTP' => {
-		distribution => 'libnet',
-		usage        => 'this is required if you set \'list_check_smtp\' sympa.conf parameter, used to check existing aliases before mailing list creation.',
-	},
-	'OAuth::Lite' => {
-		version      => '1.31',
-		distribution => 'OAuth-Lite',
-		usage        => 'This is required if you want to use the VOOT protocol.',
-	},
-	'SOAP::Lite' => {
-		version      => '0.712',
-		distribution => 'SOAP-Lite',
-		usage        => 'required if you want to run the Sympa SOAP server that provides ML services via a "web service"',
-	},
-	'Mail::DKIM' => {
-		version      => '0.36',
-		distribution => 'Mail-DKIM',
-		usage        => 'required in order to use DKIM features (both for signature verification and signature insertion)',
-	}
-);
+    eval { require Encode::Locale; };
+    unless ($@ or
+	Encode::resolve_alias($Encode::Locale::ENCODING_CONSOLE_IN) eq 'ascii'
+	or
+	Encode::resolve_alias($Encode::Locale::ENCODING_CONSOLE_OUT) eq
+	'ascii') {
+	binmode(STDIN,  ':encoding(console_in):bytes');
+	binmode(STDOUT, ':encoding(console_out):bytes');
+	binmode(STDERR, ':encoding(console_out):bytes');
+    }
+}
+
+# Set language context if possible.
+if ($modfail) {
+    no warnings;
+
+    *Sympa::Language::gettext = sub {shift};
+
+    eval { require Text::Wrap; };
+    if ($@) {
+	*Sympa::Tools::wrap_text = sub {"$_[1]$_[0]\n"};
+    } else {
+	$Text::Wrap::columns = 78;
+	*Sympa::Tools::wrap_text =
+	    sub { Text::Wrap::wrap($_[1], $_[2], $_[0]) . "\n"; };
+    }
+} else {
+    my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'};
+    $lang =~ s/\..*// if $lang;
+    $lang = 'en' unless $lang and $lang ne 'C' and $lang ne 'POSIX';
+    Sympa::Language::SetLang($lang);
+}
+
+## sympa configuration file
+my $sympa_conf = Sympa::Constants::CONFIG;
+
+## version string.
+my $version_string = sprintf Sympa::Language::gettext('Sympa version is %s.') . "\n",
+    Sympa::Constants::VERSION;
 
 my %options;
-GetOptions(
-	\%options,
-	'target=s',
-	'create=s',
-	'check',
-	'help'
-) or pod2usage(-verbose => 0);
+unless (GetOptions(\%options,
+    'target=s',
+    'create:s',    # parameter is optional
+    'check',
+    'help|h',
+    'version|v'
+)) {
+    pod2usage(-exitval => 1, -output => \*STDERR);
+}
 
 if ($options{help}) {
 	pod2usage();
-} elsif ($options{create}) {
+} elsif ($options{'version'}) {
+    print $version_string;
+} elsif (defined $options{create}) {
 	create_configuration();
 } elsif ($options{check}) {
 	check_cpan();
@@ -323,411 +162,467 @@ if ($options{help}) {
 exit 0;
 
 sub create_configuration {
+    require confdef;
 
-	eval {
-		require Sympa::Configuration;
-		require Sympa::Tools;
-	};
-	if ($EVAL_ERROR) {
-		*{Sympa::Language::gettext} = sub { shift };
-		*{Sympa::Tools::wrap_text} = sub { "$_[1]$_[0]\n" };
-	} else {
-		Sympa::Language::set_lang('');
+    my $conf;
+    if ($options{create} eq '' or $options{create} eq 'sympa.conf') {
+	$conf = $options{target} ? $options{target} : $sympa_conf;
+    } else {
+	pod2usage(sprintf Sympa::Language::gettext('%s is not a valid argument.'),
+	    $options{'create'});
+	exit 1;
+    }
+
+    if (-f $conf) {
+	printf STDERR
+	    Sympa::Language::gettext('%s file already exists.') . "\n",
+	    $conf;
+	exit 1;
+    }
+
+    unless (open NEWF, '>', $conf) {
+	die sprintf Sympa::Language::gettext('Unable to open %s: %s') . "\n",
+	    $conf, "$!";
 	}
 
-	my $conf;
-	if ($options{create} eq 'sympa.conf') {
-		$conf = $options{target} ? $options{target} : $sympa_conf;
-	} elsif ($options{create} eq 'wwsympa.conf') {
-		$conf = $options{target} ? $options{target} : $wwsympa_conf;
-	} else {
-		pod2usage("$options{create} is not a valid argument");
-		exit 1;
+    #print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext("Configuration file for Sympa\nMany parameters are optional.\nPlease refer to the documentation for a detailed list of parameters."), '## ', '## ') . "\n\n";
+
+    my $title;
+    foreach my $param (@confdef::params) {
+	unless ($param->{'name'}) {
+	    $title = Sympa::Language::gettext($param->{'gettext_id'})
+		if $param->{'gettext_id'};
+	    next;
 	}
 
-	if (-f $conf) {
-		print STDERR "$conf file already exists, exiting\n";
-		exit 1;
+	next unless $param->{'file'};
+	next unless defined $param->{'default'} or defined $param->{'sample'};
+
+	if ($title) {
+	    printf NEWF Sympa::Language::gettext('###\\\\\\\\ %s ////###') . "\n\n",
+		$title;
+	    undef $title;
 	}
 
-	unless (open (NEWF,"> $conf")){
-		die "Unable to open $conf : $ERRNO";
-	};
+	print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'gettext_id'}),
+	    '## ', '## ')
+	    if (defined $param->{'gettext_id'});
 
-	if ($options{create} eq 'sympa.conf') {
-#        print NEWF <<EOF
-## Configuration file for Sympa
-## many parameters are optional
-## refer to the documentation for a detailed list of parameters
+	print NEWF Sympa::Tools::wrap_text(
+	    Sympa::Language::gettext($param->{'gettext_comment'}),
+	    '## ', '## ')
+	    if (defined $param->{'gettext_comment'});
 
-#EOF
+	if (defined $param->{'sample'}) {
+	    printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'};
+	} elsif (defined $param->{'default'}) {
+	    printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'};
 	}
+    }
 
-	foreach my $param (@Sympa::Configuration::Definition::params) {
-
-		if ($param->{'title'}) {
-			printf NEWF "###\\\\\\\\ %s ////###\n\n",
-			Sympa::Language::gettext($param->{'title'});
-			next;
-		}
-
-		next unless ($param->{'file'} eq $options{create});
-
-		next unless (defined $param->{'default'} || defined $param->{'sample'});
-
-		print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'query'}),
-			'## ', '## ')
-		if (defined $param->{'query'});
-
-		print NEWF Sympa::Tools::wrap_text(Sympa::Language::gettext($param->{'advice'}),
-			'## ', '## ')
-		if (defined $param->{'advice'});
-
-		if (defined $param->{'sample'}) {
-			printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'};
-		} elsif (defined $param->{'default'}) {
-			printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'};
-		}
-	}
-
-	close NEWF;
-	print STDERR "$conf file has been created\n";
+    close NEWF;
+    printf STDERR Sympa::Language::gettext('%s file has been created.') . "\n",
+	$conf;
 }
 
 sub edit_configuration {
-	require Sympa::Configuration::Definition;
-	# complement required fields.
-	foreach my $param (@Sympa::Configuration::Definition::params) {
-		if ($param->{'name'} eq 'domain') {
-			$param->{'default'} = hostname();
-		} elsif ($param->{'name'} eq 'wwsympa_url') {
-			$param->{'default'} = sprintf 'http://%s/sympa', hostname();
-		}
+    die Sympa::Language::gettext('You must run as superuser.') . "\n"
+	if $UID;
+    die Sympa::Language::gettext(
+	"Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check."
+	) .
+	"\n"
+	if $modfail;
+
+    require Robot;
+
+    # complement required fields.
+    foreach my $param (@confdef::params) {
+	next unless $param->{'name'};
+	if ($param->{'name'} eq 'domain') {
+	    $param->{'default'} = hostname();
+	} elsif ($param->{'name'} eq 'wwsympa_url') {
+	    $param->{'default'} = sprintf 'http://%s/sympa', hostname();
 	}
-	eval {
-		require Conf;
-		require tools;
-	};
-	if ($EVAL_ERROR) {
-		die "Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check\n";
+    }
+
+    ## Load sympa config (but not using database)
+    unless (
+	defined Robot::get_robots('config_file' => $sympa_conf, 'no_db' => 1))
+    {
+	Sympa::Log::Syslog::fatal_err(
+	    Sympa::Language::gettext(
+		'Unable to load sympa configuration.  File %s or one of the virtual host robot.conf files contain errors.'
+	    ),
+	    $sympa_conf
+	);
+    }
+
+    my $new_sympa_conf = '/tmp/sympa.conf';
+    my $somechange     = 0;
+
+    my @new_sympa_conf;
+    my $title = undef;
+
+    # dynamic defaults
+    my $domain    = hostname();
+    my $http_host = "http://$domain";
+
+    ## Edition mode
+    foreach my $param (@confdef::params) {
+	unless ($param->{'name'}) {
+	    $title = Sympa::Language::gettext($param->{'gettext_id'})
+		if $param->{'gettext_id'};
+	    next;
 	}
 
-	my $new_wwsympa_conf = '/tmp/wwsympa.conf';
-	my $new_sympa_conf = '/tmp/sympa.conf';
-	my $wwsconf = {};
-	my $somechange = 0;
+	my $file  = $param->{'file'};
+	my $name  = $param->{'name'};
+	my $query = $param->{'gettext_id'} || '';
+	$query = Sympa::Language::gettext($query) if $query;
+	my $advice = $param->{'gettext_comment'};
+	$advice = Sympa::Language::gettext($advice) if $advice;
+	my $sample = $param->{'sample'};
+	my $current_value;
 
-	my $rep;
-	print "Does your console support UTF-8 (if you are not sure, hit [Enter])? [y/N] : ";
-	$rep = <STDIN>;
-	chomp $rep;
-	if (lc $rep eq 'y') {
-		my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
-		$lang =~ s/\..*//;
-		Sympa::Language::set_lang($lang);
+	next unless $file;
+	if ($file eq 'sympa.conf' or $file eq 'wwsympa.conf') {
+	    $current_value = Site->$name;
+	    $current_value = '' unless defined $current_value;
 	} else {
-		Sympa::Language::set_lang('en_US');
+	    next;
 	}
 
-	## Load config
-	unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf)) {
-		Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
+	if ($title) {
+	    ## write to conf file
+	    push @new_sympa_conf,
+		sprintf(
+		Sympa::Language::gettext('###\\\\\\\\ %s ////###') . "\n\n",
+		$title
+		);
 	}
 
-	## Load sympa config (but not using database)
-	unless (Sympa::Configuration::load( $sympa_conf,'nodb')) {
-		Sympa::Log::Syslog::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");
+	my $new_value = '';
+	if ($param->{'edit'} and $param->{'edit'} eq '1') {
+	    print "\n\n** $title **\n" if $title;
+
+	    print "\n";
+	    print Sympa::Tools::wrap_text($query || '', '* ', '  ');
+	    print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
+	    printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
+	    $new_value = <STDIN>;
+	    chomp $new_value;
+	}
+	if ($new_value eq '') {
+	    $new_value = $current_value;
 	}
 
-	my (@new_wwsympa_conf, @new_sympa_conf);
+	undef $title;
 
-	## Edition mode
-	foreach my $param (@Sympa::Configuration::Definition::params) {
-		my $desc;
+	## Skip empty parameters
+	next if $new_value eq '' and !$sample;
 
-		if ($param->{'title'}) {
-			my $title = Sympa::Language::gettext($param->{'title'});
-			print "\n\n** $title **\n";
-
-			## write to conf file
-			push @new_wwsympa_conf,
-			sprintf "###\\\\\\\\ %s ////###\n\n", $title;
-			push @new_sympa_conf,
-			sprintf "###\\\\\\\\ %s ////###\n\n", $title;
-
-			next;
-		}
-
-		my $file = $param->{'file'};
-		my $name = $param->{'name'};
-		my $query = $param->{'query'};
-		$query = Sympa::Language::gettext($query) if $query;
-		my $advice = $param->{'advice'};
-		$advice = Sympa::Language::gettext($advice) if $advice;
-		my $sample = $param->{'sample'};
-		my $current_value;
-		if ($file eq 'wwsympa.conf') {
-			$current_value = $wwsconf->{$name};
-		} elsif ($file eq 'sympa.conf') {
-			$current_value = Site->$name;
-		} else {
-			next;
-		}
-		my $new_value;
-		if ($param->{'edit'} eq '1') {
-			print "\n";
-			print Sympa::Tools::wrap_text($query, '* ', '  ');
-			print Sympa::Tools::wrap_text($advice, '  ... ', '  ') if $advice;
-			printf(Sympa::Language::gettext('%s [%s] : '), $name, $current_value);
-			$new_value = <STDIN>;
-			chomp $new_value;
-		}
-		if ($new_value eq '') {
-			$new_value = $current_value;
-		}
-
-		## SKip empty parameters
-		next if (($new_value eq '') &&
-			! $sample);
-
-		## param is an ARRAY
-		if (ref($new_value) eq 'ARRAY') {
-			$new_value = join ',',@{$new_value};
-		}
-
-		if ($file eq 'wwsympa.conf') {
-			$desc = \@new_wwsympa_conf;
-	}elsif ($file eq 'sympa.conf') {
-		$desc = \@new_sympa_conf;
-} else {
-	printf STDERR Sympa::Language::gettext("Incorrect parameter definition: %s\n"),
-	$file;
-}
-
-if ($new_value eq '') {
-	next unless $sample;
-
-	push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
-
-	unless ($advice eq '') {
-		push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	## param is an ARRAY
+	if (ref($new_value) eq 'ARRAY') {
+	    $new_value = join ',', @{$new_value};
 	}
 
-	push @{$desc}, "# $name\t$sample\n\n";
-} else {
-	push @{$desc}, Sympa::Tools::wrap_text($query, '## ', '## ');
-	unless ($advice eq '') {
-		push @{$desc}, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	unless ($file eq 'sympa.conf' or $file eq 'wwsympa.conf') {
+	    printf STDERR Sympa::Language::gettext(
+		'Incorrect parameter definition: %s') .
+		"\n",
+		$file;
 	}
 
-	if ($current_value ne $new_value) {
-		push @{$desc}, "# was $name $current_value\n";
+	if ($new_value eq '') {
+	    next unless $sample;
+
+	    push @new_sympa_conf, Sympa::Tools::wrap_text($query, '## ', '## ');
+
+	    if (defined $advice and length $advice) {
+		push @new_sympa_conf, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	    }
+
+	    push @new_sympa_conf, "# $name\t$sample\n\n";
+	} else {
+	    push @new_sympa_conf, Sympa::Tools::wrap_text($query, '## ', '## ');
+	    if (defined $advice and length $advice) {
+		push @new_sympa_conf, Sympa::Tools::wrap_text($advice, '## ', '## ');
+	    }
+
+	    if ($current_value ne $new_value) {
+		push @new_sympa_conf,
+		    sprintf('# ' . Sympa::Language::gettext('was %s %s') . "\n",
+		    $name, $current_value);
 		$somechange = 1;
-	}
+	    }
 
-	push @{$desc}, "$name\t$new_value\n\n";
-}
+	    push @new_sympa_conf, "$name\t$new_value\n\n";
+	}
     }
 
     if ($somechange) {
 
-	    my $date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
-		    localtime(time()));
+	my $date =
+	    Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
 
-	    ## Keep old config files
-	    unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
-		    warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-			    $wwsympa_conf, $ERRNO);
-	    }
+	## Keep old config file
+	unless (rename $sympa_conf, $sympa_conf . '.' . $date) {
+	    warn sprintf
+		Sympa::Language::gettext('Unable to rename %s: %s'),
+		$sympa_conf, "$!";
+	}
 
-	    unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
-		    warn sprintf(Sympa::Language::gettext("Unable to rename %s : %s"),
-			    $sympa_conf, $ERRNO);
-	    }
-
-	    ## Write new config files
-	    unless (open (WWSYMPA,"> $wwsympa_conf")){
-		    die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-			    $wwsympa_conf, $ERRNO);
-	    };
-
-	    my $umask = umask 037;
-	    unless (open (SYMPA,"> $sympa_conf")){
-		    umask $umask;
-		    die sprintf(Sympa::Language::gettext("Unable to open %s : %s"),
-			    $sympa_conf, $ERRNO);
-	    };
+	## Write new config file
+	my $umask = umask 037;
+	unless (open(SYMPA, "> $sympa_conf")) {
 	    umask $umask;
-	    chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
+	    die sprintf
+		Sympa::Language::gettext('Unable to open %s: %s'),
+		$sympa_conf, "$!";
+	}
+	umask $umask;
+	chown [getpwnam(Sympa::Constants::USER)]->[2],
+	    [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
 
-	    print SYMPA @new_sympa_conf;
-	    print WWSYMPA @new_wwsympa_conf;
+	print SYMPA @new_sympa_conf;
+	close SYMPA;
 
-	    close SYMPA;
-	    close WWSYMPA;
-
-	    printf Sympa::Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
+	printf Sympa::Language::gettext(
+	    "%s have been updated.\nPrevious version has been saved as %s.%s."
+	    ) .
+	    "\n",
+	    $sympa_conf, $sympa_conf, $date;
     }
 }
 
 sub check_cpan {
 	require CPAN;
+    require moddef;
 
-	print <<EOM;
-Sympa requires from 50 to 65 additional Perl modules to run properly. This
-process will help you install of them.
+    print '#' x 78 . "\n";
+    print Sympa::Tools::wrap_text(
+	Sympa::Language::gettext(
+	    "This process will help you install all Perl (CPAN) modules required by Sympa software.\nSympa requires from 50 to 65 additional Perl modules to run properly.  The whole installation process should take around 15 minutes.\nYou will first have to configure the CPAN shell itself and select your favourite CPAN server.\nNote that you might prefer to install the required Perl modules using your favourite DEB/RPM mechanism.\nFeel free to interrupt the process if needed ; you can restart it safely afterward."
+	    ) .
+	    "\n",
+	'# ', '# '
+    );
+    print '#' x 78 . "\n";
+    print Sympa::Language::gettext('Strike the Enter key to continue...') . "\n";
 
-The whole installation process should take around 15 minutes. You'll first
-have to configure the CPAN shell itself and select your favourite CPAN server.
+    my $rep = <STDIN>;
 
-Note that you might prefer to install the required Perl modules using your
-favourite DEB/RPM mechanism. Feel free to interrupt the process if needed.
-You can restart it safely afterward.
+    ### main:
+    print Sympa::Language::gettext('******* Check Perl for Sympa ********') . "\n";
+    ### REQ perl version
+    print "\n";
+    print Sympa::Language::gettext(
+	"Checking for Perl version:\n-----------------------------") .
+	"\n";
+    my $rpv = $moddef::cpan_modules{"perl"}{'required_version'};
+    if ($] >= $rpv) {
+	printf Sympa::Language::gettext('Your version of Perl is OK (%s >= %s).') .
+	    "\n",
+	    $], $rpv;
+    } else {
+	printf Sympa::Language::gettext(
+	    "Your version of Perl is TOO OLD (%s < %s).\nPlease INSTALL a new one!"
+	    ) .
+	    "\n",
+	    $], $rpv;
+    }
 
-Strike return key to continue...
-EOM
+    print "\n";
+    print Sympa::Language::gettext(
+	"Checking for REQUIRED modules:\n----------------------------------------------------------"
+	) .
+	"\n";
+    check_modules('y', \%moddef::cpan_modules, 'mandatory');
+    print "\n";
+    print Sympa::Language::gettext(
+	"Checking for OPTIONAL modules:\n----------------------------------------------------------"
+	) .
+	"\n";
+    check_modules('n', \%moddef::cpan_modules, 'optional');
 
-	my $rep = <STDIN>;
-
-	print "******* Check perl for SYMPA ********\n";
-	print "\nChecking for PERL version:\n-----------------------------\n";
-	if ($] >= $perl_version){
-		print "your version of perl is OK ($] >= $perl_version)\n";
-	} else {
-		print "Your version of perl is TOO OLD ($] < $perl_version)\nPlease INSTALL a new one !\n";
-	}
-
-	print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
-	check_modules('y', \%mandatory_modules);
-
-print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
-check_modules('n', \%optional_modules);
-
-    print <<EOM;
-******* NOTE *******
-You can retrieve all theses modules from any CPAN server
-(for example ftp://ftp.pasteur.fr/pub/computing/CPAN/CPAN.html)
-EOM
-
+    print Sympa::Tools::wrap_text(
+	Sympa::Language::gettext(
+	    "******* NOTE *******\nYou can retrieve all these modules from any CPAN server (for example ftp://ftp.pasteur.fr/pub/computing/CPAN/CPAN.html)."
+	    ) .
+	    "\n"
+    );
+###--------------------------
+# reports modules status
+# $moddef::cpan_modules is the cpan_modules structure
+# $type is the type of modules (mandatory | optional) that should be installed
+###--------------------------
 }
 
 sub check_modules {
-	my($default, $modules) = @_;
+    my ($default, $cpan_modules, $type) = @_;
 
-	print <<EOM;
-perl module                 CPAN distribution          STATUS
------------                 -----------------          ------
-EOM
+    print Sympa::Language::gettext(
+	'Perl module                from CPAN                STATUS') .
+	"\n";
+    print Sympa::Language::gettext(
+	'-----------                ---------                ------') .
+	"\n";
 
-	foreach my $module_name (sort keys %$modules) {
-		my $module = $modules->{$module_name};
-		$module->{name} = $module_name;
+    foreach my $mod (sort keys %$cpan_modules) {
 
-		printf ("%-27s %-27s", $module->{name}, $module->{distribution});
-
-		eval "require $module->{name}";
-		if ($EVAL_ERROR) {
-			### not installed
-			print "not found\n";
-			install_module($module, {'default' => $default});
-		} else {
-
-			my ($vs, $v);
-
-			## MHonArc module does not provide its version the standard way
-			if ($module->{name} =~ /^MHonArc/i) {
-				require "mhamain.pl";
-				$v = $mhonarc::VERSION;
-			} else {
-
-				$vs = $module->{name} . "::VERSION";
-				{
-					no strict 'refs';
-					$v = $$vs;
-				}
-			}
-
-			my $rv = $module->{version} || "1.0";
-			### OK: check version
-			if ($v ge $rv) {
-				printf ("OK (%-6s >= %s)\n", $v, $rv);
-				next;
-			} else {
-				print "version is too old ($v < $rv).\n";
-				print ">>>>>>> You must update \"$module->{distribution}\" to version \"$module->{version}}\" <<<<<<.\n";
-				install_module($module, {'default' => $default});
-			}
-		}
+	## Only check modules of the expected type
+	if ($type eq 'mandatory') {
+	    next unless ($cpan_modules->{$mod}{mandatory});
+	} elsif ($type eq 'optional') {
+	    next if ($cpan_modules->{$mod}{mandatory});
 	}
+
+	## Skip perl itself to prevent a huge upgrade
+	next if ($mod eq 'perl');
+
+	printf('%-26s %-24s ', $mod, $cpan_modules->{$mod}{package_name});
+
+	eval "require $mod";
+	if ($@) {
+	    ### not installed
+	    print Sympa::Language::gettext('not found on this system.') . "\n";
+	    install_module($mod, {'default' => $default}, $cpan_modules);
+	} else {
+
+	    my ($vs, $v);
+
+	    ## MHonArc module does not provide its version the standard way
+	    if ($mod =~ /^MHonArc/i) {
+		require "mhamain.pl";
+		$v = $mhonarc::VERSION;
+	    } else {
+		$vs = "$mod" . "::VERSION";
+		{
+		    no strict 'refs';
+		    $v = $$vs;
+		}
+	    }
+
+	    my $rv = $cpan_modules->{$mod}{required_version} || '1.0';
+	    ### OK: check version
+	    if ($v ge $rv) {
+		printf Sympa::Language::gettext('OK (%-6s >= %s).') . "\n", $v, $rv;
+		next;
+	    } else {
+		printf
+		    Sympa::Language::gettext('too old (%s < %s).') . "\n",
+		    $v, $rv;
+		printf Sympa::Language::gettext(
+		    '>>>>>>> You must update "%s" to version "%s" <<<<<<') .
+		    "\n",
+		    $mod, $cpan_modules->{$mod}{required_version};
+		install_module($mod, {'default' => $default}, $cpan_modules);
+	    }
+	}
+    }
 }
 
 # Install a CPAN module
 sub install_module {
-	my ($module, $options) = @_;
+    my ($module, $options, $cpan_modules) = @_;
 
 	my $default = $options->{'default'};
 
-	unless ($ENV{'FTP_PASSIVE'} eq 1) {
-		$ENV{'FTP_PASSIVE'} = 1;
-		print "Setting FTP Passive mode\n";
-	}
+    unless ($ENV{'FTP_PASSIVE'} and $ENV{'FTP_PASSIVE'} eq 1) {
+	$ENV{'FTP_PASSIVE'} = 1;
+	print Sympa::Language::gettext('Setting FTP Passive mode.') . "\n";
+    }
 
-	## This is required on RedHat 9 for DBD::mysql installation
-	my $lang = $ENV{'LANG'};
-	$ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
+    unless ($EUID == 0) {
+	printf Sympa::Language::gettext(
+	    '## You need root privileges to install %s module. ##') .
+	    "\n",
+	    $module;
+	print Sympa::Language::gettext(
+	    '## Press the Enter key to continue checking modules. ##') .
+	    "\n";
+	my $t = <STDIN>;
+	return undef;
+    }
 
-	unless ($EUID == 0) {
-		print "\#\# You need root privileges to install $module->{name} module. \#\#\n";
-		print "\#\# Press the Enter key to continue checking modules. \#\#\n";
-		my $t = <STDIN>;
-		return undef;
-	}
+    unless ($options->{'force'}) {
+	print Sympa::Tools::wrap_text(
+	    sprintf(
+		Sympa::Language::gettext('-> Usage of this module: %s') . "\n",
+		Sympa::Language::gettext($cpan_modules->{$module}{'gettext_id'})
+	    ),
+	    '', '   '
+	) if $cpan_modules->{$module}{'gettext_id'};
+	print Sympa::Tools::wrap_text(
+	    sprintf(
+		Sympa::Language::gettext('-> Prerequisites: %s') . "\n",
+		Sympa::Language::gettext(
+		    $cpan_modules->{$module}{'gettext_comment'}
+		)
+	    ),
+	    '', '   '
+	) if $cpan_modules->{$module}{'gettext_comment'};
+	printf Sympa::Language::gettext('-> Install module "%s"? [%s] '),
+	    $module, $default;
+	my $answer = <STDIN>;
+	chomp $answer;
+	$answer ||= $default;
+	return unless ($answer =~ /^y$/i);
+    }
 
-	unless ($options->{'force'}) {
-		printf "-> Usage of this module: %s\n", $module->{usage} if ($module->{usage});
-		printf "-> Prerequisites: %s\n", $module->{prerequisites} if ($module->{prerequisites});
-		print "-> Install module $module->{name} ? [$default]";
-		my $answer = <STDIN>; chomp $answer;
-		$answer ||= $default;
-		return unless ($answer =~ /^y$/i);
-	}
+    # This is required on RedHat 9 for DBD::mysql installation
+    my $lang = $ENV{'LANG'};
+    $ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
 
-	$CPAN::Config->{'inactivity_timeout'} = 0; ## disable timeout to prevent timeout during modules installation
-	$CPAN::Config->{'colorize_output'} = 1;
-	$CPAN::Config->{'build_requires_install_policy'} = 'yes';  ## automatically installed prerequisites without asking
-	$CPAN::Config->{'prerequisites_policy'} = 'follow'; ## build prerequisites automatically
-	$CPAN::Config->{'load_module_verbosity'} = 'none';  ## minimum verbosity during module loading
-	$CPAN::Config->{'tar_verbosity'} = 'none';  ## minimum verbosity with tar command
+    ## disable timeout to prevent timeout during modules installation
+    $CPAN::Config->{'inactivity_timeout'} = 0;
+    $CPAN::Config->{'colorize_output'}    = 1;
+    ## automatically installed prerequisites without asking
+    $CPAN::Config->{'build_requires_install_policy'} = 'yes';
+    ## build prerequisites automatically
+    $CPAN::Config->{'prerequisites_policy'} = 'follow';
+    ## minimum verbosity during module loading
+    $CPAN::Config->{'load_module_verbosity'} = 'none';
+    ## minimum verbosity with tar command
+    $CPAN::Config->{'tar_verbosity'} = 'none';
 
-	#CPAN::Shell->clean($module) if ($options->{'force'});
+    #CPAN::Shell->clean($module) if ($options->{'force'});
 
 	CPAN::Shell->make($module->{name});
 
+    if ($options->{'force'}) {
+	CPAN::Shell->force('test', $module);
+    } else {
+	CPAN::Shell->test($module);
+    }
+
+    CPAN::Shell->install($module);
+    ##FIXME: Could use CPAN::Shell->force('install') if make test failed
+
+    # Restore lang
+    $ENV{'LANG'} = $lang if (defined $lang);
+
+    ## Check if module has been successfuly installed
+    unless (eval "require $module") {
+
+	## Prevent recusive calls if already in force mode
 	if ($options->{'force'}) {
-		CPAN::Shell->force('test', $module->{name});
+	    printf Sympa::Language::gettext(
+		"Installation of %s still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.\nHit the Enter key."
+		),
+		$module;
+	    my $answer = <STDIN>;
 	} else {
-		CPAN::Shell->test($module->{name});
+	    printf Sympa::Language::gettext(
+		'Installation of %s FAILED. Do you want to force the installation of this module? (y/N) '
+		),
+		$module;
+	    my $answer = <STDIN>;
+	    chomp $answer;
+	    if ($answer =~ /^y/i) {
+		install_module($module, {'force' => 1}, $cpan_modules);
+	    }
 	}
-
-	CPAN::Shell->install($module->{name}); ## Could use CPAN::Shell->force('install') if make test failed
-
-	## Check if module has been successfuly installed
-	eval "require $module->{name}";
-	unless ($EVAL_ERROR) {
-		## Prevent recusive calls if already in force mode
-		if ($options->{'force'}) {
-			print  "Installation of $module->{name} still FAILED. You should download the tar.gz from http://search.cpan.org and install it manually.";
-			my $answer = <STDIN>;
-		} else {
-			print  "Installation of $module->{name} FAILED. Do you want to force the installation of this module? (y/N) ";
-			my $answer = <STDIN>; chomp $answer;
-			if ($answer =~ /^y/i) {
-				install_module($module, {'force' => 1});
-			}
-		}
-	}
-
-	## Restore lang
-	$ENV{'LANG'} = $lang if (defined $lang);
-
+    }
 }
