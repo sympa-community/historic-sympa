@@ -4056,7 +4056,7 @@ msgstr "Kích cỡ trang"
 msgid "page"
 msgstr "trang"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr ""
@@ -4791,8 +4791,8 @@ msgstr ""
 "rô-bốt ảo, tập tin « sympa.conf »). Đặt tham số này thì cho phép bạn sử dụng "
 "trang này để cài đặt CSS tĩnh và <strong>làm cho Sympa chạy nhanh hơn</"
 "strong>. Đừng quên đặt tham số « css_url »: nó phải là địa chỉ URL của thư "
-"mục chứa các tập tin CSS (giá trị hiện thời là <a target=\"test\" href="
-"\"%1\">%1</a>)."
+"mục chứa các tập tin CSS (giá trị hiện thời là <a target=\"test\" href=\"%1"
+"\">%1</a>)."
 
 #: ../web_tt2/skinsedit.tt2:35
 msgid "Colors"
@@ -4814,12 +4814,12 @@ msgid ""
 "following color editor. When finished, you may copy the result a new CCS "
 "static file. The target is specified by css_path parameter."
 msgstr ""
-"Nếu bạn không dùng tham số « css_path » và « css_url », màu sắc được xác "
-"định trong tập tin cấu hình « robot.conf ». Khác thì màu sắc được xác định "
-"trong mã CSS tĩnh. Màu sắc cũng có thể được thay đổi trong buổi hợp đang "
-"chạy, dùng trình chỉnh sửa màu sắc theo đây. Một khi hoàn tất, bạn có thể "
-"sao chép kết quả vào một tập tin CSS tĩnh mới. Đích được xác định theo tham "
-"số « css_path »."
+"Nếu bạn không dùng tham số « css_path » và « css_url », màu sắc được xác định "
+"trong tập tin cấu hình « robot.conf ». Khác thì màu sắc được xác định trong "
+"mã CSS tĩnh. Màu sắc cũng có thể được thay đổi trong buổi hợp đang chạy, "
+"dùng trình chỉnh sửa màu sắc theo đây. Một khi hoàn tất, bạn có thể sao chép "
+"kết quả vào một tập tin CSS tĩnh mới. Đích được xác định theo tham số « "
+"css_path »."
 
 #: ../web_tt2/skinsedit.tt2:41
 msgid ""
@@ -4839,14 +4839,14 @@ msgid ""
 "them in a new static CSS.\n"
 msgstr ""
 "\n"
-"Hãy cẩn thận: tập tin CSS bị ghi đè dùng mẫu « css.tt2 », bình thường tập "
-"tin đó được cung cấp bởi bản phát hành Sympa: mỗi lần cập nhật bản phát hành "
-"thì cũng ghi đè lên tập tin CSS. Sao chép tập tin CSS vào một thư mục riêng, "
-"và một khi cập nhật bản phát hành, sao chép nó về thư mục gốc.</p><p>Dùng "
-"trình chỉnh sửa màu sắc để thay đổi màu sắc đã xác định. Đầu tiên chọn màu "
-"cần thay đổi, sau đó chọn màu mới, và áp dụng nó dùng nút thử. Màu mới chưa "
-"được ghi lưu: nó chỉ được hiển thị trong buổi hợp đang chạy. Một khi màu sắc "
-"ổn thoả, bạn cũng có thể lưu chúng trong một tập tin CSS tĩnh mới.\n"
+"Hãy cẩn thận: tập tin CSS bị ghi đè dùng mẫu « css.tt2 », bình thường tập tin "
+"đó được cung cấp bởi bản phát hành Sympa: mỗi lần cập nhật bản phát hành thì "
+"cũng ghi đè lên tập tin CSS. Sao chép tập tin CSS vào một thư mục riêng, và "
+"một khi cập nhật bản phát hành, sao chép nó về thư mục gốc.</p><p>Dùng trình "
+"chỉnh sửa màu sắc để thay đổi màu sắc đã xác định. Đầu tiên chọn màu cần "
+"thay đổi, sau đó chọn màu mới, và áp dụng nó dùng nút thử. Màu mới chưa được "
+"ghi lưu: nó chỉ được hiển thị trong buổi hợp đang chạy. Một khi màu sắc ổn "
+"thoả, bạn cũng có thể lưu chúng trong một tập tin CSS tĩnh mới.\n"
 
 #: ../web_tt2/skinsedit.tt2:50
 msgid " pick the color you want to test. "
@@ -5541,7 +5541,7 @@ msgstr "Kỳ tìm: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -7167,8 +7167,8 @@ msgid ""
 "Sympa failed to store a message for list %1 in the bulk mailer. You should "
 "check log files !!"
 msgstr ""
-"Sympa không lưu được vào trình gửi thư hàng loạt một thư cho hộp thư chung "
-"%1. Bạn nên kiểm tra tập tin ghi lưu."
+"Sympa không lưu được vào trình gửi thư hàng loạt một thư cho hộp thư chung %"
+"1. Bạn nên kiểm tra tập tin ghi lưu."
 
 #: ../mail_tt2/listmaster_notification.tt2:108
 msgid "Loop detected"
@@ -7245,8 +7245,7 @@ msgstr "Lỗi quản lý thư bị nảy về"
 msgid ""
 "Sympa could not handle bounce message '%1'. Moving it into directory '%2'."
 msgstr ""
-"Sympa không thể xử lý thư bị nảy về « %1 » nên di chuyển nó vào thư mục « %2 "
-"»."
+"Sympa không thể xử lý thư bị nảy về « %1 » nên di chuyển nó vào thư mục « %2 »."
 
 #: ../mail_tt2/listmaster_notification.tt2:166
 msgid "incorrect format of edit_list.conf"
@@ -7378,8 +7377,8 @@ msgid ""
 "Member %1 has changed his owner/editor email address to %2. This change has "
 "been performed for the following lists:"
 msgstr ""
-"Thành viên %1 đã thay đổi địa chỉ thư điện tử chủ/biên tập của mình thành "
-"%2. Thay đổi này đã được thực hiện với những hộp thư chung này:"
+"Thành viên %1 đã thay đổi địa chỉ thư điện tử chủ/biên tập của mình thành %"
+"2. Thay đổi này đã được thực hiện với những hộp thư chung này:"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:215
@@ -7404,7 +7403,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr ""
 "Gặp lỗi trong khi sao chép tập tin nhóm %2 vào thư mục hộp thư chung %1."
 
@@ -7544,8 +7543,8 @@ msgid ""
 "auth.conf error: either email_http_header or ldap_host/"
 "ldap_get_email_by_uid_filter entries should be defined."
 msgstr ""
-"lỗi « auth.conf »: có nên xác định hoặc mục nhập « email_http_header » hoặc "
-"« ldap_host/ldap_get_email_by_uid_filter »."
+"lỗi « auth.conf »: có nên xác định hoặc mục nhập « email_http_header » hoặc « "
+"ldap_host/ldap_get_email_by_uid_filter »."
 
 #. (name)
 #: ../mail_tt2/listmaster_notification.tt2:336
@@ -7661,8 +7660,8 @@ msgstr "Không có sẵn phiên bản HTML của thư này trong « %1 »."
 #: ../mail_tt2/listmaster_notification.tt2:356
 msgid "Unable to update file config_changes for list '%1'."
 msgstr ""
-"Không thể cập nhật tập tin « config_changes » (các thay đổi cấu hình) cho "
-"hộp thư chung « %1 »."
+"Không thể cập nhật tập tin « config_changes » (các thay đổi cấu hình) cho hộp "
+"thư chung « %1 »."
 
 #. (month,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:357
@@ -7697,8 +7696,8 @@ msgstr "Không thể gửi kho lưu vì không tìm thấy mã số thư."
 #: ../mail_tt2/listmaster_notification.tt2:361
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr ""
-"Không tìm thấy thư trong kho lưu mà tương ứng với mã số thư (Message-ID) « "
-"%1 »."
+"Không tìm thấy thư trong kho lưu mà tương ứng với mã số thư (Message-ID) « %1 "
+"»."
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:362
@@ -7791,8 +7790,7 @@ msgstr "Gặp lỗi trong khi giải nén tập tin « %1 »."
 #. (from,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:383
 msgid "Unable to send command REMIND from '%1' to list '%2'."
-msgstr ""
-"Không thể gửi lệnh REMIND (nhắc nhở) từ « %1 » tới hộp thư chung « %2 »."
+msgstr "Không thể gửi lệnh REMIND (nhắc nhở) từ « %1 » tới hộp thư chung « %2 »."
 
 #. (from,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:384
@@ -8339,8 +8337,8 @@ msgstr "Có %1 thư đang đợi điều tiết."
 msgid ""
 "To browse the awaiting messages, you should click on the following link:"
 msgstr ""
-"Để duyệt qua các thư bị hoãn, bạn nên nhấn vào liên kết theo đây: %1/ticket/"
-"%2"
+"Để duyệt qua các thư bị hoãn, bạn nên nhấn vào liên kết theo đây: %1/ticket/%"
+"2"
 
 #: ../mail_tt2/moderate.tt2:19
 #, fuzzy
@@ -8436,8 +8434,8 @@ msgstr ""
 #: ../mail_tt2/request_auth.tt2:6
 msgid "You asked for your e-mail address to be removed from list '%1'."
 msgstr ""
-"Bạn đã yêu cầu địa chỉ thư điện tử của mình được gỡ bỏ khỏi hộp thư chung « "
-"%1 »."
+"Bạn đã yêu cầu địa chỉ thư điện tử của mình được gỡ bỏ khỏi hộp thư chung « %"
+"1 »."
 
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:9
@@ -8459,8 +8457,8 @@ msgstr "Bạn đã yêu cầu một thao tác gỡ bỏ người dùng khỏi h�
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr ""
 "Bạn đã yêu cầu gửi một thư nhắc nhở đã đăng ký cho mỗi thành viên của hộp "
 "thư chung %1"
@@ -8731,16 +8729,16 @@ msgstr "Quản lý hộp thư chung %1"
 #: ../mail_tt2/user_notification.tt2:29
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr "%1 đã ủy nhiệm chủ hộp thư chung cho bạn đối với hộp thư chung %2@%3."
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
 "%1 đã ủy nhiệm điều tiết hộp thư chung cho bạn đối với hộp thư chung %2@%3."
 
@@ -9617,7 +9615,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 #, fuzzy
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr "%d %b %Y %H:%M:%S"
@@ -9640,7 +9638,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr "%A"
 
@@ -11745,7 +11743,7 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -11760,10 +11758,10 @@ msgid ""
 "for variable %s.\n"
 msgstr ""
 "Hệ thống này không tuân theo giao thức P1003.1 POSIX,\n"
-"hoặc cấu hình Perl trên máy này không xác định hằng « _SC_ARG_MAX » trong "
-"thư viện POSIX của nó.\n"
-"Người dùng cần phải sửa đổi mô-đun smtp.pm để đặt giá trị của biến « "
-"$max_arg ».\n"
+"hoặc cấu hình Perl trên máy này không xác định hằng « _SC_ARG_MAX » trong thư "
+"viện POSIX của nó.\n"
+"Người dùng cần phải sửa đổi mô-đun smtp.pm để đặt giá trị của biến « $max_arg "
+"».\n"
 
 #: ../src/lib/mail.pm:818
 #, fuzzy
@@ -11882,20 +11880,20 @@ msgstr "[Ảnh %s]"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -11903,22 +11901,22 @@ msgstr "%d %b %Y"
 msgid "(unknown date)"
 msgstr "(không rõ ngày tháng)"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Tham số sai"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11926,7 +11924,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11934,13 +11932,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11961,16 +11959,16 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 #, fuzzy
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Không thể truy cập đến thư mục %s : %m"
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 #, fuzzy
 msgid "Unable to add users in list %s : %s"
 msgstr "Không thể truy cập đến thư mục %s : %m"
@@ -11978,62 +11976,62 @@ msgstr "Không thể truy cập đến thư mục %s : %m"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Không rõ"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Yêu cầu của bạn đã được chuyển tiếp tới chủ hộp thư chung"
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Bạn đã yêu cầu hủy đăng ký với hộp thư chung %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Hủy đăng ký với hộp thư chung %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 #, fuzzy
 msgid "Subscription additions"
 msgstr "Sự đăng ký"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 #, fuzzy
 msgid "Unsubscription"
 msgstr "Huỷ đăng ký: "
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "vấn đề"
@@ -12147,299 +12145,151 @@ msgstr "mẫu bí danh hộp thư chung"
 msgid "no mail (useful for vacations)"
 msgstr "không thư (có ích khi đi nghỉ)"
 
-#: ../web_tt2/blacklist.tt2:8
+#~ msgid "Errors occured while copying family %2 file in list %1 directory."
+#~ msgstr ""
+#~ "Gặp lỗi trong khi sao chép tập tin nhóm %2 vào thư mục hộp thư chung %1."
+
 #, fuzzy
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"Thao tác yêu cầu bởi người dùng có địa chỉ thư điện tử trong danh sách cấm "
-"thì bị từ chối.\n"
-"Danh sách cấm đang được dùng cho thao tác theo đây"
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "Thao tác yêu cầu bởi người dùng có địa chỉ thư điện tử trong danh sách "
+#~ "cấm thì bị từ chối.\n"
+#~ "Danh sách cấm đang được dùng cho thao tác theo đây"
 
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1067
-msgid "microcal"
-msgstr ""
+#~ msgid "Reject without notification "
+#~ msgstr "Từ chối mà không thông báo"
 
-#: ../web_tt2/javascript.tt2:1107
-msgid "\"+src.id+\"_cal"
-msgstr ""
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Tìm người dùng theo địa chỉ thư :"
 
-#: ../web_tt2/modindex.tt2:39
-msgid "Reject without notification "
-msgstr "Từ chối mà không thông báo"
+#~ msgid "Search user by email"
+#~ msgstr "Tìm người dùng theo địa chỉ thư điện tử"
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "Tìm người dùng theo địa chỉ thư :"
-
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "Tìm người dùng theo địa chỉ thư điện tử"
-
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
 #, fuzzy
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Hộp thư chung %1 chỉ cho phép những chế độ nhận thư này: %2"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Hộp thư chung %1 chỉ cho phép những chế độ nhận thư này: %2"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
-
-#: ../mail_tt2/listowner_notification.tt2:76
 #, fuzzy
-msgid "That can be done using this mailto link:"
-msgstr "Việc đó cũng có thể được làm dùng liên kết « mailto » này:"
+#~ msgid "That can be done using this mailto link:"
+#~ msgstr "Việc đó cũng có thể được làm dùng liên kết « mailto » này:"
 
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
 #, fuzzy
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"hoặc gửi một thư có chủ đề theo đây:\n"
-"AUTH %2 DEL %3 %4\n"
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "hoặc gửi một thư có chủ đề theo đây:\n"
+#~ "AUTH %2 DEL %3 %4\n"
 
-#: ../mail_tt2/moderate.tt2:27
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use\n"
-"the web interface to reject or validate it."
-msgstr ""
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "%1 đã ủy nhiệm chủ hộp thư chung cho bạn đối với hộp thư chung %2@%3."
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "%1 đã ủy nhiệm chủ hộp thư chung cho bạn đối với hộp thư chung %2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr ""
+#~ "%1 đã ủy nhiệm điều tiết hộp thư chung cho bạn đối với hộp thư chung %2@%"
+#~ "3."
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-"%1 đã ủy nhiệm điều tiết hộp thư chung cho bạn đối với hộp thư chung %2@%3."
+#~ msgid "to both"
+#~ msgstr "cả hai"
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "cả hai"
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Bên dưới hãy chọn những tháng kho lưu cần xoá hoặc tải xuống (định dạng "
+#~ "ZIP):"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr ""
+#~ msgid "Download ZIP File"
+#~ msgstr "Tải xuống tập tin ZIP"
 
-#. (fromname,fromaddr,listname)
-#: ../web_tt2/tracking.tt2:6
-msgid "Message from %1 %2 for list %3 "
-msgstr ""
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr ""
+#~ "Bạn có muốn tải xuống một tập tin ZIP chứa các kho lưu đã chọn không?"
 
-#: ../src/sympa_wizard.pl.in:337
-msgid ""
-"%s and %s have been updated.\n"
-"Previous versions have been saved as %s and %s.\n"
-msgstr ""
+#~ msgid "comments start with a #"
+#~ msgstr "ký tự # giới thiệu bình luận"
 
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "cho phép chỉ một ký tự * trên mỗi dòng"
 
-#: ../src/lib/confdef.pm:826
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Khuyên bạn kiểm tra hộp Thư Đến."
 
-#: ../src/lib/confdef.pm:953
-msgid ""
-"Use of binary version of the list config structure on disk (none | "
-"binary_file)"
-msgstr ""
+#~ msgid ""
+#~ "Shared document reading is restricted to list subscribers authenticated "
+#~ "with a user certificate."
+#~ msgstr ""
+#~ "Quyền đọc tài liệu chia sẻ thì bị hạn chế thành những người đăng ký với "
+#~ "hộp thư chung mà cũng xác thực bằng chứng nhận người dùng."
 
-#: ../src/lib/confdef.pm:956
-msgid ""
-"Set this parameter to \"binary_file\" if you manage a big amount of lists "
-"(1000+); it should make the web interface startup faster"
-msgstr ""
+#~ msgid "No Database"
+#~ msgstr "Không có cơ sở dữ liệu"
 
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
+#~ msgid "No Database Driver for %1"
+#~ msgstr "Không có trình điều khiển cơ sở dữ liệu cho %1"
 
-#: ../src/lib/confdef.pm:1463
-msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
+#~ msgid "Database connection restored"
+#~ msgstr "Kết nối cơ sở dữ liệu đã được phục hồi"
 
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+#~ msgid "Unknown authentication service %1."
+#~ msgstr "Không nhận ra dịch vụ xác thực %1."
 
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
+#~ msgid "Failed to include members for list '%1'"
+#~ msgstr "Lỗi bao gồm các thành viên cho hộp thư chung « %1 »"
 
-#: ../src/lib/confdef.pm:1197
-msgid "List of headers to be included into the message for signature"
-msgstr ""
+#~ msgid "The exportation to an LDAP directory failed for list '%1'"
+#~ msgstr "Lỗi xuất tới thư mục LDAP đối với hộp thư chung « %1 »"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
+#~ msgid "Unable to check list name '%1' on SMTP server"
+#~ msgstr "Không thể kiểm tra tên hộp thư chung « %1 » trên máy phục vụ SMTP"
 
-#: ../web_tt2/edit_config.tt2:7
-msgid "[%confparam.title%]"
-msgstr ""
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Công cụ kiểm tra vi-rút đã tìm một vi-rút tên\n"
+#~ "%1\n"
+#~ "trong một thư được gửi cho địa chỉ\n"
+#~ "%2\n"
+#~ "mà có vẻ là thuộc về bạn.\n"
+#~ "(Từ: %3)"
 
-#: ../web_tt2/edit_config.tt2:16
-msgid "[% confparam.title %]"
-msgstr ""
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "CN:T2:T3:T4:T5:T6:T7"
 
-#: ../web_tt2/edit_config.tt2:28
-msgid "[% confparam.query %]"
-msgstr ""
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "Th01:Th02:Th03:Th04:Th05:Th06:Th07:Th08:Th09:Th10:Th11:Th12"
 
-#: ../src/lib/confdef.pm:43
-msgid "Directories and file location"
-msgstr ""
+#~ msgid "Owners:"
+#~ msgstr "Người sở hữu:"
 
-#: ../src/lib/confdef.pm:234
-msgid "Syslog"
-msgstr ""
+#~ msgid "Moderators:"
+#~ msgstr "Điều tiết viên:"
 
-#: ../src/lib/confdef.pm:260
-msgid "Log intensity"
-msgstr ""
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it:"
+#~ msgstr ""
+#~ "Bạn có thể lờ đi yêu cầu đăng ký này, hoặc nhấn vào liên kết theo đây để "
+#~ "xác nhận nó:"
 
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Bên dưới hãy chọn những tháng kho lưu cần xoá hoặc tải xuống (định dạng ZIP):"
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password:"
+#~ msgstr ""
+#~ "Bạn có thể lờ đi yêu cầu này, hoặc nhấn vào liên kết theo đây để chọn mật "
+#~ "khẩu:"
 
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Tải xuống tập tin ZIP"
-
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Bạn có muốn tải xuống một tập tin ZIP chứa các kho lưu đã chọn không?"
-
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "ký tự # giới thiệu bình luận"
-
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "cho phép chỉ một ký tự * trên mỗi dòng"
-
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Khuyên bạn kiểm tra hộp Thư Đến."
-
-#: ../mail_tt2/authorization_reject.tt2:58
-msgid ""
-"Shared document reading is restricted to list subscribers authenticated with "
-"a user certificate."
-msgstr ""
-"Quyền đọc tài liệu chia sẻ thì bị hạn chế thành những người đăng ký với hộp "
-"thư chung mà cũng xác thực bằng chứng nhận người dùng."
-
-#: ../mail_tt2/listmaster_notification.tt2:49
-msgid "No Database"
-msgstr "Không có cơ sở dữ liệu"
-
-#. (db_type)
-#: ../mail_tt2/listmaster_notification.tt2:55
-msgid "No Database Driver for %1"
-msgstr "Không có trình điều khiển cơ sở dữ liệu cho %1"
-
-#: ../mail_tt2/listmaster_notification.tt2:96
-msgid "Database connection restored"
-msgstr "Kết nối cơ sở dữ liệu đã được phục hồi"
-
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occurred while copying family %2 file in list %1 directory."
-msgstr ""
-"Gặp lỗi trong khi sao chép tập tin nhóm %2 vào thư mục hộp thư chung %1."
-
-#. (name)
-#: ../mail_tt2/listmaster_notification.tt2:336
-msgid "Unknown authentication service %1."
-msgstr "Không nhận ra dịch vụ xác thực %1."
-
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:371
-msgid "Failed to include members for list '%1'"
-msgstr "Lỗi bao gồm các thành viên cho hộp thư chung « %1 »"
-
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:374
-msgid "The exportation to an LDAP directory failed for list '%1'"
-msgstr "Lỗi xuất tới thư mục LDAP đối với hộp thư chung « %1 »"
-
-#. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:375
-msgid "Unable to check list name '%1' on SMTP server"
-msgstr "Không thể kiểm tra tên hộp thư chung « %1 » trên máy phục vụ SMTP"
-
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Công cụ kiểm tra vi-rút đã tìm một vi-rút tên\n"
-"%1\n"
-"trong một thư được gửi cho địa chỉ\n"
-"%2\n"
-"mà có vẻ là thuộc về bạn.\n"
-"(Từ: %3)"
-
-msgid "AM:PM"
-msgstr ""
-
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "CN:T2:T3:T4:T5:T6:T7"
-
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "Th01:Th02:Th03:Th04:Th05:Th06:Th07:Th08:Th09:Th10:Th11:Th12"
-
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Người sở hữu:"
-
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Điều tiết viên:"
-
-#: ../mail_tt2/sendpasswd.tt2:13
-msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it:"
-msgstr ""
-"Bạn có thể lờ đi yêu cầu đăng ký này, hoặc nhấn vào liên kết theo đây để xác "
-"nhận nó:"
-
-#: ../mail_tt2/sendpasswd.tt2:25
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password:"
-msgstr ""
-"Bạn có thể lờ đi yêu cầu này, hoặc nhấn vào liên kết theo đây để chọn mật "
-"khẩu:"
-
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Thông tin về hộp thư chung %1:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Thông tin về hộp thư chung %1:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Đang tùy chỉnh:"
@@ -13190,8 +13040,8 @@ msgstr "Thông tin về hộp thư chung %1:"
 #~ "CSS files, the colors in use may differ from this table."
 #~ msgstr ""
 #~ "Phiên bản hiện thời không bao gồm một trình chỉnh sửa màu sắc, do đó bạn "
-#~ "cần phải chỉnh sửa tập tin cấu hình « robot.conf » (hay « sympa.conf ») "
-#~ "để thay đổi màu sắc. Nếu bạn có phải đã cài đặt các tập tin CSS tĩnh, màu "
+#~ "cần phải chỉnh sửa tập tin cấu hình « robot.conf » (hay « sympa.conf ») để "
+#~ "thay đổi màu sắc. Nếu bạn có phải đã cài đặt các tập tin CSS tĩnh, màu "
 #~ "sắc được dùng có thể khác với bảng này."
 
 #~ msgid ""
@@ -13205,8 +13055,8 @@ msgstr "Thông tin về hộp thư chung %1:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Kiểm tra hộp Thư Đến có thư mới chưa, và mở thư từ Sympa để tìm mật khẩu "
 #~ "riêng của bạn.\n"

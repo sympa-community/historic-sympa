@@ -3921,7 +3921,7 @@ msgstr "Tamaño da páxina"
 msgid "page"
 msgstr "páxina"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr "Outros enderezos de subscrición semellantes (%1)"
@@ -5246,7 +5246,7 @@ msgstr ""
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -6865,7 +6865,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr ""
 
 #. (param0,param1)
@@ -7775,8 +7775,8 @@ msgstr ""
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr ""
 
 #. (-)
@@ -7999,15 +7999,15 @@ msgstr ""
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:29
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr ""
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
 
 #: ../mail_tt2/user_notification.tt2:34 ../mail_tt2/welcome.tt2:12
@@ -8571,6 +8571,12 @@ msgstr ""
 msgid "Do you really want to delete these messages ?"
 msgstr ""
 
+#. ("$YYYYMMDD$")
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/etc/mhonarc-ressources.tt2:306 ../src/etc/mhonarc-ressources.tt2:310
+#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:586
+#: ../src/etc/mhonarc-ressources.tt2:590 ../src/etc/mhonarc-ressources.tt2:594
 msgid "%m/%d/%Y"
 msgstr "%d/%m/%Y"
 
@@ -8632,9 +8638,11 @@ msgstr ""
 msgid "%y/%m/%d"
 msgstr ""
 
+#: ../src/etc/mhonarc-ressources.tt2:649
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Domingo:Luns:Martes:Mércores:Xoves:Venres:Sábado"
 
+#: ../src/etc/mhonarc-ressources.tt2:667
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
@@ -8804,7 +8812,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr ""
 
@@ -8824,7 +8832,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr ""
 
@@ -10855,7 +10863,7 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -10962,20 +10970,20 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr ""
 
@@ -10983,22 +10991,22 @@ msgstr ""
 msgid "(unknown date)"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Parámetros errados"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11006,7 +11014,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11014,13 +11022,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11041,71 +11049,71 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 msgid "Unable to add user %s in list %s : %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 msgid "Unable to add users in list %s : %s"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Descoñecido"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 msgid "You were successfully unsubscribed from list %s."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 msgid "Unsubscription from list %s failed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 msgid "Subscription additions"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 msgid "Unsubscription"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 msgid "topic (%s)"
 msgstr ""
 
@@ -11217,272 +11225,61 @@ msgstr ""
 msgid "no mail (useful for vacations)"
 msgstr ""
 
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr ""
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "Operación solicitada por usuarios que teñen os seus enderezos na lista "
+#~ "negra. A lista negra está en uso pola seguinte operación:"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"Operación solicitada por usuarios que teñen os seus enderezos na lista "
-"negra. A lista negra está en uso pola seguinte operación:"
+#~ msgid "Reject without notification "
+#~ msgstr "Rexeitar con notificación"
 
-#: ../web_tt2/modindex.tt2:39
-msgid "Reject without notification "
-msgstr "Rexeitar con notificación"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Procurar usuario por correo electrónico:"
 
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
+#~ msgid "Search user by email"
+#~ msgstr "Procurar usuario por correo electrónico"
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "Procurar usuario por correo electrónico:"
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Seleccione embaixo os meses que quere eliminar ou descargar (formato ZIP):"
 
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "Procurar usuario por correo electrónico"
+#~ msgid "Download ZIP File"
+#~ msgstr "Descargar ficheiro ZIP"
 
-#: ../web_tt2/stats.tt2:2
-msgid "Shared document directory size:"
-msgstr ""
+#~ msgid "comments start with a #"
+#~ msgstr "O caracter # introduce un comentario"
 
-#: ../web_tt2/stats.tt2:3
-msgid "Web archives size:"
-msgstr ""
+#~ msgid ""
+#~ "character * match any string. Example: \"*@spammer-domain.com\" match any "
+#~ "sender from that exact domain"
+#~ msgstr ""
+#~ "O caracter * equivale a calquera expresión. Exemplo: \"*@spammer-domain."
+#~ "com\" corresponde a calquera usuario dese dominio."
 
-#: ../web_tt2/viewmod.tt2:17
-msgid "Default rejection message"
-msgstr ""
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "un só caracter * está permitido por liña"
 
-#: ../web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr ""
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Debe consultar a súa caixa de correo agora."
 
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr ""
+#~ msgid ": the name of the host the list is installed on; always available."
+#~ msgstr ": o nome do servidor en que está a lista; sempre dispoñible."
 
-#: ../mail_tt2/listmaster_notification.tt2:42
-msgid "Previous process crashed"
-msgstr ""
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "Dom:Lun:Mar:Mér:Xov:Ven:Sáb"
 
-#: ../mail_tt2/listmaster_notification.tt2:44
-msgid "Previous process has died unexpectedly."
-msgstr ""
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "Xan:Feb:Mar:Abr:Mai:Xuñ:Xul:Ago:Set:Out:Nov:Dec"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+#~ msgid "Owners:"
+#~ msgstr "Propietarios:"
 
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr ""
-
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-
-#. (list.name,msg_from)
-#: ../mail_tt2/moderate.tt2:3
-msgid "Article to be tagged for list %1 from %2"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/moderate.tt2:21
-msgid ""
-"To tag the message in list %1 for the appropriate topic, please use the "
-"following link:"
-msgstr ""
-
-#: ../mail_tt2/moderate.tt2:27
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use\n"
-"the web interface to reject or validate it."
-msgstr ""
-
-#. (user.email,list.name,list.host)
-#: ../mail_tt2/removed.tt2:6
-msgid ""
-"Your address (%1) has been removed from list\n"
-"%2@%3, probably because we received\n"
-"non-delivery reports for your address."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:469
-msgid "Reply to sender"
-msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:471
-msgid "to list"
-msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr ""
-
-#. This entry is a date/time format
-#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:389
-msgid "%d %b %Y  %H:%M"
-msgstr ""
-
-#: ../src/lib/Conf.pm:143
-msgid "Error at line %d: %s\n"
-msgstr ""
-
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr ""
-
-#: ../web_tt2/stats.tt2:16 ../web_tt2/stats.tt2:22
-msgid "[% o.title %]"
-msgstr ""
-
-#. (fromname,fromaddr,listname)
-#: ../web_tt2/tracking.tt2:6
-msgid "Message from %1 %2 for list %3 "
-msgstr ""
-
-#: ../web_tt2/tracking.tt2:10
-msgid "Distribution ended at"
-msgstr ""
-
-#: ../src/sympa_wizard.pl.in:337
-msgid ""
-"%s and %s have been updated.\n"
-"Previous versions have been saved as %s and %s.\n"
-msgstr ""
-
-#: ../src/lib/confdef.pm:69
-msgid "This parameter is used in mail_tt2 files"
-msgstr ""
-
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
-
-#: ../src/lib/confdef.pm:826
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:953
-msgid ""
-"Use of binary version of the list config structure on disk (none | "
-"binary_file)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:956
-msgid ""
-"Set this parameter to \"binary_file\" if you manage a big amount of lists "
-"(1000+); it should make the web interface startup faster"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1295
-msgid "wwsympa.conf parameters"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1463
-msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
-
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
-
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/user_notification.tt2:53
-msgid ""
-"You have requested to removed from list %1. To confirm and get removed from "
-"the list, please click the link below: "
-msgstr ""
-
-#: ../src/lib/confdef.pm:1197
-msgid "List of headers to be included into the message for signature"
-msgstr ""
-
-#: ../src/lib/mail.pm:922
-msgid "Unable to create a channel in smtpto: %m"
-msgstr ""
-
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Seleccione embaixo os meses que quere eliminar ou descargar (formato ZIP):"
-
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Descargar ficheiro ZIP"
-
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "O caracter # introduce un comentario"
-
-#: ../web_tt2/blacklist.tt2:23
-msgid ""
-"character * match any string. Example: \"*@spammer-domain.com\" match any "
-"sender from that exact domain"
-msgstr ""
-"O caracter * equivale a calquera expresión. Exemplo: \"*@spammer-domain.com"
-"\" corresponde a calquera usuario dese dominio."
-
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "un só caracter * está permitido por liña"
-
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Debe consultar a súa caixa de correo agora."
-
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is installed on; always available."
-msgstr ": o nome do servidor en que está a lista; sempre dispoñible."
-
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Dom:Lun:Mar:Mér:Xov:Ven:Sáb"
-
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "Xan:Feb:Mar:Abr:Mai:Xuñ:Xul:Ago:Set:Out:Nov:Dec"
-
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Propietarios:"
-
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Moderadores:"
+#~ msgid "Moderators:"
+#~ msgstr "Moderadores:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Personalizar:"

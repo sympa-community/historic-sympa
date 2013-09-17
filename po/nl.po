@@ -4189,7 +4189,7 @@ msgstr "Page size"
 msgid "page"
 msgstr "[% list.name %] thuispagina"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr ""
@@ -5643,7 +5643,7 @@ msgstr "Zoek Gebruiker"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -7504,7 +7504,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr ""
 
 #. (param0,param1)
@@ -7579,8 +7579,8 @@ msgid ""
 "below have been\n"
 "notified that they might be removed from list %2:"
 msgstr ""
-"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande "
-"%1 gebruiker(s) verwittigd dat ze zouden verwijderd van de lijst %2:"
+"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande %"
+"1 gebruiker(s) verwittigd dat ze zouden verwijderd van de lijst %2:"
 
 #. (total,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:295
@@ -7589,8 +7589,8 @@ msgid ""
 "below have been\n"
 "removed from list %2:"
 msgstr ""
-"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande "
-"%1 gebruiker(s) verwijderd van de lijst %2:"
+"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande %"
+"1 gebruiker(s) verwijderd van de lijst %2:"
 
 #. (total,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:298
@@ -8076,8 +8076,8 @@ msgid ""
 "below have been\n"
 "notified that they might be removed from list %2:"
 msgstr ""
-"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande "
-"%1 gebruiker(s) verwittigd dat ze zouden verwijderd van de lijst %2:"
+"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande %"
+"1 gebruiker(s) verwittigd dat ze zouden verwijderd van de lijst %2:"
 
 #. (total,list.name)
 #: ../mail_tt2/listowner_notification.tt2:49
@@ -8087,8 +8087,8 @@ msgid ""
 "below have been\n"
 "removed from list %2:"
 msgstr ""
-"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande "
-"%1 gebruiker(s) verwijderd van de lijst %2:"
+"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande %"
+"1 gebruiker(s) verwijderd van de lijst %2:"
 
 #. (total,list.name)
 #: ../mail_tt2/listowner_notification.tt2:52
@@ -8098,8 +8098,8 @@ msgid ""
 "below have been\n"
 "selected by Sympa as severe bouncing addresses:"
 msgstr ""
-"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande "
-"%1 gebruiker(s) verwijderd van de lijst %2:"
+"Omdat we VEEL \"non-delivery\" rapporten ontvingen, hebben we onderstaande %"
+"1 gebruiker(s) verwijderd van de lijst %2:"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:62
@@ -8178,8 +8178,8 @@ msgstr ""
 msgid "or send an email to %1 with the following subject:"
 msgstr ""
 "\n"
-"Of zend een bericht naar %1@%2 met het volgende onderwerp :AUTH %2 DEL %3 "
-"%4\n"
+"Of zend een bericht naar %1@%2 met het volgende onderwerp :AUTH %2 DEL %3 %"
+"4\n"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:100
@@ -8609,8 +8609,8 @@ msgstr "U vroeg om uitgeschreven te worden van de lijst %1"
 #: ../mail_tt2/request_auth.tt2:18
 #, fuzzy
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr "Abonnements herinnering gestuurd naar %d %s abonnees\n"
 
 #. (-)
@@ -8877,15 +8877,15 @@ msgstr "Mailing lijsten"
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:29
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr ""
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
 
 #: ../mail_tt2/user_notification.tt2:34 ../mail_tt2/welcome.tt2:12
@@ -9504,6 +9504,12 @@ msgstr "Geen berichten om te modereren"
 msgid "Do you really want to delete these messages ?"
 msgstr "Wilt u het volgende %1 echt verwijderen?"
 
+#. ("$YYYYMMDD$")
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/etc/mhonarc-ressources.tt2:306 ../src/etc/mhonarc-ressources.tt2:310
+#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:586
+#: ../src/etc/mhonarc-ressources.tt2:590 ../src/etc/mhonarc-ressources.tt2:594
 msgid "%m/%d/%Y"
 msgstr "%d-%m-%Y"
 
@@ -9569,9 +9575,11 @@ msgstr "Bekijk laatste bounce"
 msgid "%y/%m/%d"
 msgstr ""
 
+#: ../src/etc/mhonarc-ressources.tt2:649
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "zondag:maandag:dinsdag:woensdag:donderdag:vrijdag:zaterdag"
 
+#: ../src/etc/mhonarc-ressources.tt2:667
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
@@ -9757,7 +9765,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr ""
 
@@ -9779,7 +9787,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr ""
 
@@ -11913,7 +11921,7 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -12043,20 +12051,20 @@ msgstr "%Image(%s)"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr ""
 
@@ -12065,22 +12073,22 @@ msgstr ""
 msgid "(unknown date)"
 msgstr "%1 : onbekende actie"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Data bronnen configuratie"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -12088,7 +12096,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -12096,13 +12104,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -12123,17 +12131,17 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 #, fuzzy
 msgid "%s / %s"
 msgstr "pagina %1 / %2"
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 #, fuzzy
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Fout bij benaderen van map %s : %m"
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 #, fuzzy
 msgid "Unable to add users in list %s : %s"
 msgstr "Fout bij benaderen van map %s : %m"
@@ -12141,62 +12149,62 @@ msgstr "Fout bij benaderen van map %s : %m"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Unknown"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Uw inschrijving voor lijst %s is ongedaan gemaakt."
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "U vroeg om u uit te schrijven van de %1 mailinglijst"
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 #, fuzzy
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr "Aanvraag voor uitschrijven bij lijst %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Aanvraag voor uitschrijven bij lijst %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 #, fuzzy
 msgid "Subscription additions"
 msgstr "Aanmeldingen"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 #, fuzzy
 msgid "Unsubscription"
 msgstr "Uitschrijven :"
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "Onderwerpen:"
@@ -12311,260 +12319,83 @@ msgstr ""
 msgid "no mail (useful for vacations)"
 msgstr "geen mail (handig voor vakanties)"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"De opdracht van een gebruiker wiens email in de blacklist staat is "
-"verworpen.  De blacklist wordt\n"
-"gebruikt voor de volgende opdracht: "
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "De opdracht van een gebruiker wiens email in de blacklist staat is "
+#~ "verworpen.  De blacklist wordt\n"
+#~ "gebruikt voor de volgende opdracht: "
 
-#: ../web_tt2/edit_attributes.tt2:7
-msgid "[% k.name %]:"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:1107
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:39
 #, fuzzy
-msgid "Reject without notification "
-msgstr "iedereen zonder authenticatie"
+#~ msgid "Reject without notification "
+#~ msgstr "iedereen zonder authenticatie"
 
-#: ../web_tt2/modindex.tt2:120
-msgid "Reject and blacklist sender"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
-
-#: ../web_tt2/review.tt2:87
 #, fuzzy
-msgid "Search user by e-mail: "
-msgstr "Zoek Gebruiker"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Zoek Gebruiker"
 
-#: ../web_tt2/review.tt2:88
 #, fuzzy
-msgid "Search user by email"
-msgstr "Zoek Gebruiker"
+#~ msgid "Search user by email"
+#~ msgstr "Zoek Gebruiker"
 
-#: ../web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr ""
-
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
 #, fuzzy
-msgid "List %1 allows only these reception modes: %2"
-msgstr ""
-"Lijst %s staat alleen de volgende ontvangstmethodes toe: : %s\n"
-"Uw configuratie is niet veranderd.\n"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr ""
+#~ "Lijst %s staat alleen de volgende ontvangstmethodes toe: : %s\n"
+#~ "Uw configuratie is niet veranderd.\n"
 
-#: ../mail_tt2/listmaster_notification.tt2:44
-msgid "Previous process has died unexpectedly."
-msgstr ""
-
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
-
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr ""
-
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
 #, fuzzy
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"Of zend een bericht naar %1@%2 met het volgende onderwerp :AUTH %2 DEL %3 "
-"%4\n"
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Of zend een bericht naar %1@%2 met het volgende onderwerp :AUTH %2 DEL %3 "
+#~ "%4\n"
 
-#. (list.name)
-#: ../mail_tt2/moderate.tt2:21
-msgid ""
-"To tag the message in list %1 for the appropriate topic, please use the "
-"following link:"
-msgstr ""
-
-#: ../mail_tt2/moderate.tt2:27
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use\n"
-"the web interface to reject or validate it."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:473
 #, fuzzy
-msgid "to both"
-msgstr "Van: %1"
+#~ msgid "to both"
+#~ msgstr "Van: %1"
 
-#. This entry is a date/time format
-#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:389
-msgid "%d %b %Y  %H:%M"
-msgstr ""
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Kies hieronder het maandelijkse archief dat u wil verwijderen of "
+#~ "downloaden (in ZIP formaat)"
 
-#. (fromname,fromaddr,listname)
-#: ../web_tt2/tracking.tt2:6
-msgid "Message from %1 %2 for list %3 "
-msgstr ""
+#~ msgid "Download ZIP File"
+#~ msgstr "Download ZipFile"
 
-#: ../src/sympa_wizard.pl.in:337
-msgid ""
-"%s and %s have been updated.\n"
-"Previous versions have been saved as %s and %s.\n"
-msgstr ""
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr "Wilt u een ZIP-bestand downloaden van de geselecteerde archieven? "
 
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
+#~ msgid "comments start with a #"
+#~ msgstr "Commentaar begint met een #-teken"
 
-#: ../src/lib/confdef.pm:826
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Onze virusscanner heeft een virus gevonden: %1 in een bericht bestemd "
+#~ "voor uw adres %2 (Van: %3)."
 
-#: ../src/lib/confdef.pm:953
-msgid ""
-"Use of binary version of the list config structure on disk (none | "
-"binary_file)"
-msgstr ""
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "zo:ma:di:wo:do:vr:za"
 
-#: ../src/lib/confdef.pm:956
-msgid ""
-"Set this parameter to \"binary_file\" if you manage a big amount of lists "
-"(1000+); it should make the web interface startup faster"
-msgstr ""
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "jan:feb:mrt:apr:mei:jun:jul:aug:sep:okt:nov:dec"
 
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1463
-msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
-
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
-
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/user_notification.tt2:53
-msgid ""
-"You have requested to removed from list %1. To confirm and get removed from "
-"the list, please click the link below: "
-msgstr ""
-
-#: ../src/lib/confdef.pm:1197
-msgid "List of headers to be included into the message for signature"
-msgstr ""
-
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:7
-msgid "[%confparam.title%]"
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:16
-msgid "[% confparam.title %]"
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:28
-msgid "[% confparam.query %]"
-msgstr ""
-
-#: ../src/lib/confdef.pm:234
-msgid "Syslog"
-msgstr ""
-
-#: ../src/lib/confdef.pm:260
-msgid "Log intensity"
-msgstr ""
-
-#: ../mail_tt2/sendssopasswd.tt2:7
-msgid ""
-"To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
-msgstr ""
-
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Kies hieronder het maandelijkse archief dat u wil verwijderen of downloaden "
-"(in ZIP formaat)"
-
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Download ZipFile"
-
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Wilt u een ZIP-bestand downloaden van de geselecteerde archieven? "
-
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "Commentaar begint met een #-teken"
-
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Onze virusscanner heeft een virus gevonden: %1 in een bericht bestemd voor "
-"uw adres %2 (Van: %3)."
-
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "zo:ma:di:wo:do:vr:za"
-
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "jan:feb:mrt:apr:mei:jun:jul:aug:sep:okt:nov:dec"
-
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Eigenaren:"
+#~ msgid "Owners:"
+#~ msgstr "Eigenaren:"
 
 # #-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Beheerders:"
+#~ msgid "Moderators:"
+#~ msgstr "Beheerders:"
 
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Informatie over de lijst %1:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Informatie over de lijst %1:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Aanpassen: "
@@ -12859,8 +12690,8 @@ msgstr "Informatie over de lijst %1:"
 #~ "options, unsubscription,\n"
 #~ "archives, list management and so on."
 #~ msgstr ""
-#~ "Deze server geeft je toegang tot je persoonlijke omgeving op server %1@"
-#~ "%2. Vanaf deze webpagina, kan je je abonnementsopties aanpassen, je "
+#~ "Deze server geeft je toegang tot je persoonlijke omgeving op server %1@%"
+#~ "2. Vanaf deze webpagina, kan je je abonnementsopties aanpassen, je "
 #~ "uitschrijven,\n"
 #~ " archieven, lijstbeheer enzovoorts."
 
@@ -12989,8 +12820,8 @@ msgstr "Informatie over de lijst %1:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Kijk uw mail na op nieuwe berichten, en vul het door \"Sympa\" opgegeven "
 #~ "wachtwoord hieronder in.  \n"

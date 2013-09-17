@@ -454,8 +454,8 @@ msgstr "Remover Compartilhado"
 #: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
-"Você tem certeza que quer remover os documentos compartilhados para a lista "
-"%1?"
+"Você tem certeza que quer remover os documentos compartilhados para a lista %"
+"1?"
 
 #: ../web_tt2/admin.tt2:62
 msgid ""
@@ -3988,7 +3988,7 @@ msgid "page"
 msgstr "página"
 
 # more brackets to make plural in portuguese
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Outro(s) email(s) de assinante parecidos (%1)"
@@ -5415,7 +5415,7 @@ msgstr "Procurar período:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -7198,7 +7198,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr "Ocorreram erros ao copiar a família %2 no diretório da lista %1."
 
 #. (param0,param1)
@@ -7608,8 +7608,8 @@ msgstr "Não foi possível escrever o arquivo zip '%1'."
 #: ../mail_tt2/listmaster_notification.tt2:390
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
-"Não foi possível criar um SharedDocument com o caminho '%1' para a lista "
-"'%2'."
+"Não foi possível criar um SharedDocument com o caminho '%1' para a lista '%"
+"2'."
 
 #: ../mail_tt2/listmaster_notification.tt2:391
 msgid "Parameter cookie undefined, authentication failure."
@@ -7879,8 +7879,8 @@ msgid ""
 "this person's new email address."
 msgstr ""
 "Usuário %1 não pôde alterar seu endereço de e-mail de assinatura (novo "
-"endereço é %2) pois ele foi incluso por meio das seguintes fontes externas: "
-"%3\n"
+"endereço é %2) pois ele foi incluso por meio das seguintes fontes externas: %"
+"3\n"
 "\n"
 "Se você possui permissão, você deveria atualizar estas fontes externas com o "
 "novo endereço de e-mail da pessoa."
@@ -8220,8 +8220,8 @@ msgstr "Você requisitou uma remoção de usuário da lista %1."
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr ""
 "Você requisitou que um lembrete de assinatura seja enviado para cada "
 "assinante da lista %1"
@@ -8484,8 +8484,8 @@ msgstr "Gerenciamento da lista %1"
 #: ../mail_tt2/user_notification.tt2:29
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr ""
 "Foi delegado à você (pelo %1) a responsabilidade de ser proprietário da "
 "lista %2@%3."
@@ -8494,11 +8494,11 @@ msgstr ""
 #: ../mail_tt2/user_notification.tt2:31
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
-"Foi delegado à você (pelo %1) a responsabilidade de ser moderador da lista "
-"%2@%3."
+"Foi delegado à você (pelo %1) a responsabilidade de ser moderador da lista %"
+"2@%3."
 
 #: ../mail_tt2/user_notification.tt2:34 ../mail_tt2/welcome.tt2:12
 msgid "The list homepage:"
@@ -9365,7 +9365,7 @@ msgstr "Definição incorreta de parâmetro: %s\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -9388,7 +9388,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr "%A"
 
@@ -11563,7 +11563,7 @@ msgstr "Foram adicionados %s usuários dos %s requisitados."
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -11692,20 +11692,20 @@ msgstr "[ Imagem%s ]"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr "%d/%b/%Y"
 
@@ -11713,22 +11713,22 @@ msgstr "%d/%b/%Y"
 msgid "(unknown date)"
 msgstr "(data desconhecida)"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Parâmetros errados"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11736,7 +11736,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11744,13 +11744,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11771,75 +11771,75 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Não foi possível adicionar usuário %s na lsita %s : %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 msgid "Unable to add users in list %s : %s"
 msgstr "Não foi possível adicionar usuários na lista %s : %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Desconhecido"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Sua solicitação de cancelamento de inscrição para a lista %s foi enviada ao "
 "proprietário da lista."
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Sua inscrição foi cancelada com sucesso da lista %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Cancelamento de inscrição da lista %s foi negado: Cancelamento de inscrição "
 "desta lista está fechado."
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 msgid "Unsubscription from list %s failed."
 msgstr "Cancelamento de inscrição da lista %s falhou."
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr "Envio de e-mail"
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 msgid "Subscription additions"
 msgstr "Adição de inscrições"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 msgid "Unsubscription"
 msgstr "Cancelamento de inscrição"
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr "Usuários removidos pelo administrador"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y %H:%M:%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "tópicos"
@@ -11952,257 +11952,206 @@ msgstr "modelo de apelido para lista"
 msgid "no mail (useful for vacations)"
 msgstr "sem correio (útil em caso de férias)"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"As operações requisitadas por usuários que têm seus emails no arquivo de "
-"lista negra são rejeitadas. A\n"
-" lista negra está em uso para a seguinte operação:"
+#~ msgid "Errors occured while copying family %2 file in list %1 directory."
+#~ msgstr "Ocorreram erros ao copiar a família %2 no diretório da lista %1."
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "Procurar usuário por email: "
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "As operações requisitadas por usuários que têm seus emails no arquivo de "
+#~ "lista negra são rejeitadas. A\n"
+#~ " lista negra está em uso para a seguinte operação:"
 
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "Procurar usuário por email"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Procurar usuário por email: "
 
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "A lista '%1' permite apenas estes modos de recebimento: %2"
+#~ msgid "Search user by email"
+#~ msgstr "Procurar usuário por email"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "A lista '%1' permite apenas estes modos de recebimento: %2"
 
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr "Pode ser feito usando esta URL de envio de e-mail:"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
 
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"ou envie um e-mail para %1 com o seguinte assunto:\n"
+#~ msgid "That can be done using this mailto link:"
+#~ msgstr "Pode ser feito usando esta URL de envio de e-mail:"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-"Foi delegado à você (pelo %1) a responsabilidade de ser proprietário da "
-"lista %2@%3."
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "ou envie um e-mail para %1 com o seguinte assunto:\n"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-"Foi delegado à você (pelo %1) a responsabilidade de ser moderador da lista "
-"%2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "Foi delegado à você (pelo %1) a responsabilidade de ser proprietário da "
+#~ "lista %2@%3."
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "para ambos/as"
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr ""
+#~ "Foi delegado à você (pelo %1) a responsabilidade de ser moderador da "
+#~ "lista %2@%3."
 
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Selecione abaixo os meses que você quer remover ou fazer download (formato "
-"ZIP):"
+#~ msgid "to both"
+#~ msgstr "para ambos/as"
 
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Baixar arquivo Zip"
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Selecione abaixo os meses que você quer remover ou fazer download "
+#~ "(formato ZIP):"
 
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Você quer Baixar os Arquivos selecionados compactados em um Zip?"
+#~ msgid "Download ZIP File"
+#~ msgstr "Baixar arquivo Zip"
 
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "caractere # introduz um comentário"
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr "Você quer Baixar os Arquivos selecionados compactados em um Zip?"
 
-#: ../web_tt2/blacklist.tt2:23
-msgid ""
-"character * match any string. Example: \"*@spammer-domain.com\" match any "
-"sender from that exact domain"
-msgstr ""
-"caractere * equivale a qualquer expressão. Exemplo: \"*@spammer-domain.com\" "
-"corresponde a qualquer usuário deste domínio"
+#~ msgid "comments start with a #"
+#~ msgstr "caractere # introduz um comentário"
 
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "apenas um caractere * é permitido por linha"
+#~ msgid ""
+#~ "character * match any string. Example: \"*@spammer-domain.com\" match any "
+#~ "sender from that exact domain"
+#~ msgstr ""
+#~ "caractere * equivale a qualquer expressão. Exemplo: \"*@spammer-domain.com"
+#~ "\" corresponde a qualquer usuário deste domínio"
 
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Você deve consultar sua caixa de email agora."
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "apenas um caractere * é permitido por linha"
 
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is installed on; always available."
-msgstr ": o nome do host em que a lista está instalada; sempre disponível."
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Você deve consultar sua caixa de email agora."
 
-#: ../mail_tt2/authorization_reject.tt2:58
-msgid ""
-"Shared document reading is restricted to list subscribers authenticated with "
-"a user certificate."
-msgstr ""
-"Leitura de documentos compartilhados é restrita aos membros da lista "
-"autenticados com certificado."
+#~ msgid ": the name of the host the list is installed on; always available."
+#~ msgstr ": o nome do host em que a lista está instalada; sempre disponível."
 
-#: ../mail_tt2/command_report.tt2:22
-msgid "Your message contains a DKIM signature. It was successfully verified."
-msgstr ""
-"Sua mensagem contém uma assinatura DKIM. A mesma foi verificada com sucesso."
+#~ msgid ""
+#~ "Shared document reading is restricted to list subscribers authenticated "
+#~ "with a user certificate."
+#~ msgstr ""
+#~ "Leitura de documentos compartilhados é restrita aos membros da lista "
+#~ "autenticados com certificado."
 
-#. (notification_messages.size,operation)
-#: ../mail_tt2/listmaster_groupednotifications.tt2:12
-msgid ""
-"%1 \"%2\" tagged notifications addressed to you are attached to this message."
-msgstr ""
-"%1 \"%2\" notificações marcadas endereçadas a você inclusas nesta mensagem."
+#~ msgid ""
+#~ "Your message contains a DKIM signature. It was successfully verified."
+#~ msgstr ""
+#~ "Sua mensagem contém uma assinatura DKIM. A mesma foi verificada com "
+#~ "sucesso."
 
-#: ../mail_tt2/listmaster_notification.tt2:49
-msgid "No Database"
-msgstr "Sem banco de dados"
+#~ msgid ""
+#~ "%1 \"%2\" tagged notifications addressed to you are attached to this "
+#~ "message."
+#~ msgstr ""
+#~ "%1 \"%2\" notificações marcadas endereçadas a você inclusas nesta "
+#~ "mensagem."
 
-#. (db_type)
-#: ../mail_tt2/listmaster_notification.tt2:55
-msgid "No Database Driver for %1"
-msgstr "Sem driver de banco de dados para %1"
+#~ msgid "No Database"
+#~ msgstr "Sem banco de dados"
 
-#. (crashed_process,pid)
-#: ../mail_tt2/listmaster_notification.tt2:63
-msgid "Previous process %1 (with PID %2) has died unexpectedly."
-msgstr "Processo anterior %1 (com PID %2) terminou de forma inesperada."
+#~ msgid "No Database Driver for %1"
+#~ msgstr "Sem driver de banco de dados para %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:96
-msgid "Database connection restored"
-msgstr "Conexão ao banco de dados restaurada."
+#~ msgid "Previous process %1 (with PID %2) has died unexpectedly."
+#~ msgstr "Processo anterior %1 (com PID %2) terminou de forma inesperada."
 
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occurred while copying family %2 file in list %1 directory."
-msgstr "Ocorreram erros ao copiar a família %2 no diretório da lista %1."
+#~ msgid "Database connection restored"
+#~ msgstr "Conexão ao banco de dados restaurada."
 
-#. (name)
-#: ../mail_tt2/listmaster_notification.tt2:336
-msgid "Unknown authentication service %1."
-msgstr "Serviço de autenticação %1 desconhecido."
+#~ msgid "Unknown authentication service %1."
+#~ msgstr "Serviço de autenticação %1 desconhecido."
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:371
-msgid "Failed to include members for list '%1'"
-msgstr "Falha ao incluir membros para a lista '%1'"
+#~ msgid "Failed to include members for list '%1'"
+#~ msgstr "Falha ao incluir membros para a lista '%1'"
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:374
-msgid "The exportation to an LDAP directory failed for list '%1'"
-msgstr "A exportação para um diretório Ldap falhou para a lista '%1'"
+#~ msgid "The exportation to an LDAP directory failed for list '%1'"
+#~ msgstr "A exportação para um diretório Ldap falhou para a lista '%1'"
 
-#. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:375
-msgid "Unable to check list name '%1' on SMTP server"
-msgstr "Impossível encontrar a lista '%1' no servidor SMTP"
+#~ msgid "Unable to check list name '%1' on SMTP server"
+#~ msgstr "Impossível encontrar a lista '%1' no servidor SMTP"
 
-#. (consumer_name,oauth_provider,conf.wwsympa_url)
-#: ../mail_tt2/message_report.tt2:104
-msgid ""
-"Sympa failed to retrieve data using %1 consumer, this may be because your "
-"access token for OAuth provider %2 is out of date.\n"
-"\n"
-"Visit %3/oauth_check/%2 to check the token state and renew it if necessary."
-msgstr ""
-"Houve falha ao obter informações usando o consumidor %1, isso pode ser "
-"causado pelo token de acesso do provedor OAuth %2 estar expirado.\n"
-"\n"
-"Visite  %3/oauth_check/%2 para verificar o status do token e renová-lo caso "
-"necessário."
+#~ msgid ""
+#~ "Sympa failed to retrieve data using %1 consumer, this may be because your "
+#~ "access token for OAuth provider %2 is out of date.\n"
+#~ "\n"
+#~ "Visit %3/oauth_check/%2 to check the token state and renew it if "
+#~ "necessary."
+#~ msgstr ""
+#~ "Houve falha ao obter informações usando o consumidor %1, isso pode ser "
+#~ "causado pelo token de acesso do provedor OAuth %2 estar expirado.\n"
+#~ "\n"
+#~ "Visite  %3/oauth_check/%2 para verificar o status do token e renová-lo "
+#~ "caso necessário."
 
-#: ../mail_tt2/welcome.tt2:13
-msgid "General information about mailing lists:"
-msgstr "Informações gerais sobre listas de e-mail:"
+#~ msgid "General information about mailing lists:"
+#~ msgstr "Informações gerais sobre listas de e-mail:"
 
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Nosso programa para procurar vírus encontrou um vírus chamado %1\n"
-"em uma mensagem destinada a %2 e parece \n"
-"ser su (De: %3)."
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Nosso programa para procurar vírus encontrou um vírus chamado %1\n"
+#~ "em uma mensagem destinada a %2 e parece \n"
+#~ "ser su (De: %3)."
 
-#: ../src/lib/listdef.pm:515
-msgid "Allow message personalization"
-msgstr "Permitir personalização de mensagem"
+#~ msgid "Allow message personalization"
+#~ msgstr "Permitir personalização de mensagem"
 
-#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
-msgid ""
-"** Warning: A message part using unrecognized character set %s\n"
-"    Some characters may be lost or incorrect **\n"
-"\n"
-msgstr ""
-"** Alerta: Parte da mensagem utiliza um CHARSET desconhecido %s\n"
-"    Alguns caracteres podem ter sido perdidos ou estarem incorretos**\n"
-"\n"
+#~ msgid ""
+#~ "** Warning: A message part using unrecognized character set %s\n"
+#~ "    Some characters may be lost or incorrect **\n"
+#~ "\n"
+#~ msgstr ""
+#~ "** Alerta: Parte da mensagem utiliza um CHARSET desconhecido %s\n"
+#~ "    Alguns caracteres podem ter sido perdidos ou estarem incorretos**\n"
+#~ "\n"
 
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Dom:Seg:Ter:Qua:Qui:Sex:Sáb"
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "Dom:Seg:Ter:Qua:Qui:Sex:Sáb"
 
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "Jan:Fev:Mar:Abr:Mai:Jun:Jul:Ago:Set:Out:Nov:Dez"
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "Jan:Fev:Mar:Abr:Mai:Jun:Jul:Ago:Set:Out:Nov:Dez"
 
-#: ../src/lib/confdef.pm:432
-msgid ""
-"Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
-"with powerful systems."
-msgstr ""
-"Valor proposto é um tanto baixo, você pode aumentá-lo para 100, 200 ou até "
-"300 com sistemas mais robustos."
+#~ msgid ""
+#~ "Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
+#~ "with powerful systems."
+#~ msgstr ""
+#~ "Valor proposto é um tanto baixo, você pode aumentá-lo para 100, 200 ou "
+#~ "até 300 com sistemas mais robustos."
 
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Proprietários:"
+#~ msgid "Owners:"
+#~ msgstr "Proprietários:"
 
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Moderadores:"
+#~ msgid "Moderators:"
+#~ msgstr "Moderadores:"
 
-#: ../web_tt2/modform.tt2:32
-msgid "Choose notification:"
-msgstr "Escolha a notificação:"
+#~ msgid "Choose notification:"
+#~ msgstr "Escolha a notificação:"
 
-#: ../mail_tt2/sendpasswd.tt2:13
-msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it:"
-msgstr ""
-"Você pode ignorar este pedido de inscrição ou clicar na URL a seguir para "
-"confirmá-lo:"
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it:"
+#~ msgstr ""
+#~ "Você pode ignorar este pedido de inscrição ou clicar na URL a seguir para "
+#~ "confirmá-lo:"
 
-#: ../mail_tt2/sendpasswd.tt2:25
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password:"
-msgstr ""
-"Você pode ignorar esta requisição ou clicar na URL a seguir para escolher "
-"sua senha:"
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password:"
+#~ msgstr ""
+#~ "Você pode ignorar esta requisição ou clicar na URL a seguir para escolher "
+#~ "sua senha:"
 
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Informação sobre a lista '%1':"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Informação sobre a lista '%1':"
 
 #~ msgid "Customizing: "
 #~ msgstr "Personalizar: "
@@ -12902,8 +12851,8 @@ msgstr "Informação sobre a lista '%1':"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Verifique sua caixa postal e examine, na mensagem proveniente do servidor "
 #~ "Sympa, a senha enviada.\n"

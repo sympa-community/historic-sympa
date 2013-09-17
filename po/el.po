@@ -457,8 +457,8 @@ msgstr "Απενεργοποίηση Διαμοιραζόμενων"
 #: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
-"Είστε σίγουρος ότι θέλετε να διαγράψετε τα διαμοιραζόμενα αρχεία της λίστας "
-"%1;"
+"Είστε σίγουρος ότι θέλετε να διαγράψετε τα διαμοιραζόμενα αρχεία της λίστας %"
+"1;"
 
 #: ../web_tt2/admin.tt2:62
 msgid ""
@@ -780,8 +780,8 @@ msgstr "Αποτελέσματα αναζήτησης στο Αρχείο"
 #: ../web_tt2/arcsearch.tt2:13
 msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
 msgstr ""
-"Οι παράμετροι της αναζήτησης σύμφωνα με τη λέξη-κλειδί <strong> &quot;"
-"%1&quot;</strong>"
+"Οι παράμετροι της αναζήτησης σύμφωνα με τη λέξη-κλειδί <strong> &quot;%"
+"1&quot;</strong>"
 
 #: ../web_tt2/arcsearch.tt2:17
 msgid "(This sentence,"
@@ -2646,8 +2646,8 @@ msgid ""
 "the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
 msgstr ""
 "Αποτυχία εισαγωγής μελών από ομάδα VOOT, χρησιμοποιήστε τον παρακάτω "
-"σύνδεσμο για να ελέγξετε την κατάσταση OAuth: <a href=\"%1%2/oauth_check/"
-"%3\">%1%2/oauth_check/%3</a>"
+"σύνδεσμο για να ελέγξετε την κατάσταση OAuth: <a href=\"%1%2/oauth_check/%3"
+"\">%1%2/oauth_check/%3</a>"
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:145
@@ -4021,7 +4021,7 @@ msgstr "Μέγεθος σελίδας"
 msgid "page"
 msgstr "σελίδα"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Παρόμοιες διευθύνσεις συνδρομητών (%1)"
@@ -4739,8 +4739,8 @@ msgstr ""
 "επιτρέπει να χρησιμοποιήσετε αυτή τη σελίδα για την εγκατάσταση στατικού css "
 "και <strong> να κάνετε το sympa γρηγορότερο</strong>. Μη ξεχάσετε να "
 "καθορίσετε τη παράμετρο css_url, πρέπει να έιναι το URL του καταλόγου όπου "
-"αποθηκεύεται το css (η τρέχουσα τιμή είναι <a target=\"test\" href=\"%1\">"
-"%1</a>)."
+"αποθηκεύεται το css (η τρέχουσα τιμή είναι <a target=\"test\" href=\"%1\">%"
+"1</a>)."
 
 #: ../web_tt2/skinsedit.tt2:35
 msgid "Colors"
@@ -5460,7 +5460,7 @@ msgstr "περίοδος αναζήτησης:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -6460,8 +6460,8 @@ msgstr "επανεγγραφή στην %1"
 msgid ""
 "You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
 msgstr ""
-"Είστε συνδρομητής της λίστας %1@%2 με διεύθυνση ηλεκτρονικής αλληλογραφίας "
-"%3 για ένα χρόνο ή περισσότερο."
+"Είστε συνδρομητής της λίστας %1@%2 με διεύθυνση ηλεκτρονικής αλληλογραφίας %"
+"3 για ένα χρόνο ή περισσότερο."
 
 #: ../mail_tt2/expire_warning1.tt2:7 ../mail_tt2/expire_warning2.tt2:7
 #: ../mail_tt2/remind.tt2:6
@@ -7287,7 +7287,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr ""
 "Σφάλμα κατά την αντιγραφή του αρχείου της οικογένειας %2 στον φάκελο της "
 "λίστας %1"
@@ -7698,8 +7698,8 @@ msgstr "Αδυναμία εγγραφής συμπιεσμένου αρχείο�
 #: ../mail_tt2/listmaster_notification.tt2:390
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
-"Αδυναμία δημιουργίας κοινόχρηστου εγγράφου στη διαδρομή '%1' για τη λίστα "
-"'%2'."
+"Αδυναμία δημιουργίας κοινόχρηστου εγγράφου στη διαδρομή '%1' για τη λίστα '%"
+"2'."
 
 #: ../mail_tt2/listmaster_notification.tt2:391
 msgid "Parameter cookie undefined, authentication failure."
@@ -7735,8 +7735,8 @@ msgstr ""
 "%1 υπέρβαση του επιτρεπτού μεγέθους του αρχείου. \n"
 "Το συνολικό χρησιμοποιούμενο μέγεθος για το %1@%2 αρχείο είναι %3 Bytes. Τα "
 "μηνύματα \n"
-"δεν καταχωρούνται στο αρχείο. Παρακαλούμε επικοινωνήστε με τη διεύθυνση %5@"
-"%4. "
+"δεν καταχωρούνται στο αρχείο. Παρακαλούμε επικοινωνήστε με τη διεύθυνση %5@%"
+"4. "
 
 #. (list.name,rate)
 #: ../mail_tt2/listowner_notification.tt2:10
@@ -7869,8 +7869,8 @@ msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
 "with the following subject:"
 msgstr ""
-"Εάν προτιμάτε, μπορείτε να εγκρίνετε αυτή τη συνδρομή στέλνοντας μήνυμα στο "
-"%1 με το ακόλουθο θέμα:"
+"Εάν προτιμάτε, μπορείτε να εγκρίνετε αυτή τη συνδρομή στέλνοντας μήνυμα στο %"
+"1 με το ακόλουθο θέμα:"
 
 #: ../mail_tt2/listowner_notification.tt2:75
 #: ../mail_tt2/listowner_notification.tt2:97
@@ -8313,8 +8313,8 @@ msgstr "Ζητήσατε την αφαίρεση ενός χρήστη από τ
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr ""
 "Ζητήσατε να σταλεί μήνυμα υπενθύμισης συνδρομής σε κάθε συνδρομητή της "
 "λίστας %1."
@@ -8580,16 +8580,16 @@ msgstr "Διαχείριση της λίστας %1"
 #: ../mail_tt2/user_notification.tt2:29
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
 "Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %1."
 
@@ -8651,8 +8651,8 @@ msgid ""
 "To confirm and get removed from all the lists of this family, please click "
 "the link below: "
 msgstr ""
-"Κάποιος (πιθανότατα εσείς) ζήτησε την διαγραφή από την οικογένεια λιστών "
-"%1.\n"
+"Κάποιος (πιθανότατα εσείς) ζήτησε την διαγραφή από την οικογένεια λιστών %"
+"1.\n"
 "Το αίτημα ήλθε από την IP '%2'.\n"
 "Για επιβεβαίωση και αφαίρεση από όλες τις λίστες της οικογένειας, παρακαλώ "
 "ακολουθήστε τον παρακάτω σύνδεσμο:"
@@ -9461,7 +9461,7 @@ msgstr "Λάθος ορισμός παραμέτρου: %s\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr "%d.%b.%Y-%H.%M.%S"
 
@@ -9486,7 +9486,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr "%A"
 
@@ -11714,7 +11714,7 @@ msgstr "Προστέθηκαν %s χρήστες από σύνολο %s."
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -11854,20 +11854,20 @@ msgstr "%Εικόνα(%s)"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -11876,22 +11876,22 @@ msgstr "%d %b %Y"
 msgid "(unknown date)"
 msgstr "%1 : άγνωστη ενέργεια"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Λάθος παράμετροι"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11899,7 +11899,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11907,13 +11907,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11934,77 +11934,77 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Αδυναμία προσθήκης χρήστη %s στη λίστα %s: %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 msgid "Unable to add users in list %s : %s"
 msgstr "Αδυναμία προσθήκης χρήστη στη λίστα %s: %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Άγνωστο"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Αίτηση συνδρομής στη λίστα %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Οι συνδρομητές της λίστας %1@%2"
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Διαγραφή από τη λίστα %s απορρίφθηκε: Διαγραφή από τη λίστα είναι κλειστή."
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Αποχώρηση συνδρομητή από τη λίστα %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr "Αποστολή μηνύματος"
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 #, fuzzy
 msgid "Subscription additions"
 msgstr "Περίληψη συνδρομής"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 #, fuzzy
 msgid "Unsubscription"
 msgstr "Εκκρεμείς εγγραφές συνδρομητών"
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr "Χρήστες διαγραμμένοι από διαχειριστή"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "θέματα"
@@ -12119,246 +12119,198 @@ msgstr "πρότυπο παρωνυμίων (aliases) λίστας"
 msgid "no mail (useful for vacations)"
 msgstr "κανένα μήνυμα (χρήσιμο για περίοδο διακοπών)"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"Ενέργειες που αιτούνται χρήστες των οποίων η διεύθυνση βρίσκεται στη μαύρη "
-"λίστα δεν εξυπηρετούνται. Η\n"
-" λίστα αποκλεισμού χρησιμοποιείται για τις παρακάτω ενέργειες:"
+#~ msgid "Errors occured while copying family %2 file in list %1 directory."
+#~ msgstr ""
+#~ "Σφάλμα κατά την αντιγραφή του αρχείου της οικογένειας %2 στον φάκελο της "
+#~ "λίστας %1"
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "Αναζήτηση Χρήστη με διεύθυνση αλληλογραφίας: "
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "Ενέργειες που αιτούνται χρήστες των οποίων η διεύθυνση βρίσκεται στη "
+#~ "μαύρη λίστα δεν εξυπηρετούνται. Η\n"
+#~ " λίστα αποκλεισμού χρησιμοποιείται για τις παρακάτω ενέργειες:"
 
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "Αναζήτηση χρήστη με διεύθυνση αλληλογραφίας:"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Αναζήτηση Χρήστη με διεύθυνση αλληλογραφίας: "
 
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Η λίστα %1 επιτρέπει μόνο τους τρόπους λήψης: %2"
+#~ msgid "Search user by email"
+#~ msgstr "Αναζήτηση χρήστη με διεύθυνση αλληλογραφίας:"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "Το παρακάτω σφάλμα προέκυψε κατά τη διαχείριση bounces: %&"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Η λίστα %1 επιτρέπει μόνο τους τρόπους λήψης: %2"
 
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr "Αυτό μπορεί να γίνει χρησιμοποιώντας αυτόν τον σύνδεσμο:"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "Το παρακάτω σφάλμα προέκυψε κατά τη διαχείριση bounces: %&"
 
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"ή στείλτε μήνυμα στο %1 με το παρακάτω θέμα:\n"
+#~ msgid "That can be done using this mailto link:"
+#~ msgstr "Αυτό μπορεί να γίνει χρησιμοποιώντας αυτόν τον σύνδεσμο:"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "ή στείλτε μήνυμα στο %1 με το παρακάτω θέμα:\n"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-"Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %1."
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "και στα δύο"
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr ""
+#~ "Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %"
+#~ "1."
 
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Επιλογή των μηνών του Αρχείου που επιθυμείτε να διαγράψετε ή να κατεβάσετε "
-"(μορφή ZiP):"
+#~ msgid "to both"
+#~ msgstr "και στα δύο"
 
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Κατέβασμα συμπιεσμένου αρχείου"
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Επιλογή των μηνών του Αρχείου που επιθυμείτε να διαγράψετε ή να "
+#~ "κατεβάσετε (μορφή ZiP):"
 
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Επιθυμείτε το κατέβασμα συμπιεσμένου αρχείου από τα επιλεγμένα αρχεία;"
+#~ msgid "Download ZIP File"
+#~ msgstr "Κατέβασμα συμπιεσμένου αρχείου"
 
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "ο χαρακτήρας # εισάγει ένα σχόλιο"
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr ""
+#~ "Επιθυμείτε το κατέβασμα συμπιεσμένου αρχείου από τα επιλεγμένα αρχεία;"
 
-#: ../web_tt2/blacklist.tt2:23
-msgid ""
-"character * match any string. Example: \"*@spammer-domain.com\" match any "
-"sender from that exact domain"
-msgstr ""
-"ο χαρακτήρας * αντιπροσωπεύει οποιονδήποτε χαρακτήρα. Παράδειγμα: "
-"\"*@spammer-domain.com\" ταυτίζεται με οποιονδήποτε αποστολέα από το "
-"συγκεκριμένο domain"
+#~ msgid "comments start with a #"
+#~ msgstr "ο χαρακτήρας # εισάγει ένα σχόλιο"
 
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "μόνο ένας χαρακτήρας * επιτρέπεται σε κάθε γραμμή"
+#~ msgid ""
+#~ "character * match any string. Example: \"*@spammer-domain.com\" match any "
+#~ "sender from that exact domain"
+#~ msgstr ""
+#~ "ο χαρακτήρας * αντιπροσωπεύει οποιονδήποτε χαρακτήρα. Παράδειγμα: "
+#~ "\"*@spammer-domain.com\" ταυτίζεται με οποιονδήποτε αποστολέα από το "
+#~ "συγκεκριμένο domain"
 
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Παρακαλώ ελέγξτε το γραμματοκιβώτιό σας."
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "μόνο ένας χαρακτήρας * επιτρέπεται σε κάθε γραμμή"
 
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is installed on; always available."
-msgstr ": όνομα εξυπηρετητή λίστας; πάντα διαθέσιμο."
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Παρακαλώ ελέγξτε το γραμματοκιβώτιό σας."
 
-#: ../mail_tt2/authorization_reject.tt2:58
-msgid ""
-"Shared document reading is restricted to list subscribers authenticated with "
-"a user certificate."
-msgstr ""
-"Η ανάγνωση των κοινόχρηστων εγγράφων επιτρέπεται μόνο στους συνδρομητές της "
-"λίστας που ταυτοποιούνται με πιστοποιητικό χρήστη."
+#~ msgid ": the name of the host the list is installed on; always available."
+#~ msgstr ": όνομα εξυπηρετητή λίστας; πάντα διαθέσιμο."
 
-#: ../mail_tt2/command_report.tt2:22
-msgid "Your message contains a DKIM signature. It was successfully verified."
-msgstr "Το μήνυμά σας περιέχει υπογραφή DKIM. Επιβεβαιώθηκε επιτυχώς."
+#~ msgid ""
+#~ "Shared document reading is restricted to list subscribers authenticated "
+#~ "with a user certificate."
+#~ msgstr ""
+#~ "Η ανάγνωση των κοινόχρηστων εγγράφων επιτρέπεται μόνο στους συνδρομητές "
+#~ "της λίστας που ταυτοποιούνται με πιστοποιητικό χρήστη."
 
-#. (notification_messages.size,operation)
-#: ../mail_tt2/listmaster_groupednotifications.tt2:12
-msgid ""
-"%1 \"%2\" tagged notifications addressed to you are attached to this message."
-msgstr ""
-"%1 \"%2\" επισημασμένες ενημερώσεις προς εσάς είναι επισυναπτόμενες σε αυτό "
-"το μήνυμα"
+#~ msgid ""
+#~ "Your message contains a DKIM signature. It was successfully verified."
+#~ msgstr "Το μήνυμά σας περιέχει υπογραφή DKIM. Επιβεβαιώθηκε επιτυχώς."
 
-#: ../mail_tt2/listmaster_notification.tt2:49
-msgid "No Database"
-msgstr "Δεν υπάρχει βάση δεδομένων"
+#~ msgid ""
+#~ "%1 \"%2\" tagged notifications addressed to you are attached to this "
+#~ "message."
+#~ msgstr ""
+#~ "%1 \"%2\" επισημασμένες ενημερώσεις προς εσάς είναι επισυναπτόμενες σε "
+#~ "αυτό το μήνυμα"
 
-#. (db_type)
-#: ../mail_tt2/listmaster_notification.tt2:55
-msgid "No Database Driver for %1"
-msgstr "Δεν υπάρχει οδηγός βάσης δεδομένων για %1"
+#~ msgid "No Database"
+#~ msgstr "Δεν υπάρχει βάση δεδομένων"
 
-#. (crashed_process,pid)
-#: ../mail_tt2/listmaster_notification.tt2:63
-msgid "Previous process %1 (with PID %2) has died unexpectedly."
-msgstr "Προηγούμενη διεργασία %1 (με pid %2) τερμάτισε απρόσμενα."
+#~ msgid "No Database Driver for %1"
+#~ msgstr "Δεν υπάρχει οδηγός βάσης δεδομένων για %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:96
-msgid "Database connection restored"
-msgstr "Η σύνδεση της βάσης δεδομένων αποκαταστάθηκε"
+#~ msgid "Previous process %1 (with PID %2) has died unexpectedly."
+#~ msgstr "Προηγούμενη διεργασία %1 (με pid %2) τερμάτισε απρόσμενα."
 
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occurred while copying family %2 file in list %1 directory."
-msgstr ""
-"Σφάλμα κατά την αντιγραφή του αρχείου της οικογένειας %2 στον φάκελο της "
-"λίστας %1"
+#~ msgid "Database connection restored"
+#~ msgstr "Η σύνδεση της βάσης δεδομένων αποκαταστάθηκε"
 
-#. (name)
-#: ../mail_tt2/listmaster_notification.tt2:336
-msgid "Unknown authentication service %1."
-msgstr "Άγνωστη υπηρεσία ταυτοποίησης %1."
+#~ msgid "Unknown authentication service %1."
+#~ msgstr "Άγνωστη υπηρεσία ταυτοποίησης %1."
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:371
-msgid "Failed to include members for list '%1'"
-msgstr "Αποτυχία εισαγωγής μελών για τη λίστα '%1'"
+#~ msgid "Failed to include members for list '%1'"
+#~ msgstr "Αποτυχία εισαγωγής μελών για τη λίστα '%1'"
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:374
-msgid "The exportation to an LDAP directory failed for list '%1'"
-msgstr "Η εξαγωγή σε κατάλογο LDAP απέτυχε για τη λίστα '%1'"
+#~ msgid "The exportation to an LDAP directory failed for list '%1'"
+#~ msgstr "Η εξαγωγή σε κατάλογο LDAP απέτυχε για τη λίστα '%1'"
 
-#. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:375
-msgid "Unable to check list name '%1' on SMTP server"
-msgstr "Αδυναμία ελέγχου ονόματος λίστας '%1' στον εξυπηρετητή SMTP"
+#~ msgid "Unable to check list name '%1' on SMTP server"
+#~ msgstr "Αδυναμία ελέγχου ονόματος λίστας '%1' στον εξυπηρετητή SMTP"
 
-#. (consumer_name,oauth_provider,conf.wwsympa_url)
-#: ../mail_tt2/message_report.tt2:104
-msgid ""
-"Sympa failed to retrieve data using %1 consumer, this may be because your "
-"access token for OAuth provider %2 is out of date.\n"
-"\n"
-"Visit %3/oauth_check/%2 to check the token state and renew it if necessary."
-msgstr ""
-"Αποτυχία παραλαβής δεδομένων χρησιμοποιώντας τον καταναλωτή %1, ίσως γιατί "
-"το τεκμήριο πρόσβασης του παροχέα OAuth %2 έχει λήξει.\n"
-"\n"
-"Επισκευθείτε %3/oauth_check/%2 για έλεγχο του τεκμηρίου και ανανέωσή του εάν "
-"χρειάζεται."
+#~ msgid ""
+#~ "Sympa failed to retrieve data using %1 consumer, this may be because your "
+#~ "access token for OAuth provider %2 is out of date.\n"
+#~ "\n"
+#~ "Visit %3/oauth_check/%2 to check the token state and renew it if "
+#~ "necessary."
+#~ msgstr ""
+#~ "Αποτυχία παραλαβής δεδομένων χρησιμοποιώντας τον καταναλωτή %1, ίσως "
+#~ "γιατί το τεκμήριο πρόσβασης του παροχέα OAuth %2 έχει λήξει.\n"
+#~ "\n"
+#~ "Επισκευθείτε %3/oauth_check/%2 για έλεγχο του τεκμηρίου και ανανέωσή του "
+#~ "εάν χρειάζεται."
 
-#: ../mail_tt2/welcome.tt2:13
-msgid "General information about mailing lists:"
-msgstr "Γενικές πληροφορίες περί λιστών ηλεκτρονικής αλληλογραφίας:"
+#~ msgid "General information about mailing lists:"
+#~ msgstr "Γενικές πληροφορίες περί λιστών ηλεκτρονικής αλληλογραφίας:"
 
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Ο έλεγχος για ιούς βρήκε τον ιό με όνομα %1\n"
-"στο μήνυμα που απευθύνεται προς %2 και φαίνεται\n"
-"ότι εστάλη από εσάς (Από: %3)."
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Ο έλεγχος για ιούς βρήκε τον ιό με όνομα %1\n"
+#~ "στο μήνυμα που απευθύνεται προς %2 και φαίνεται\n"
+#~ "ότι εστάλη από εσάς (Από: %3)."
 
-#: ../src/lib/listdef.pm:515
-msgid "Allow message personalization"
-msgstr "Επιτρέπεται προσωποποίηση μηνυμάτων"
+#~ msgid "Allow message personalization"
+#~ msgstr "Επιτρέπεται προσωποποίηση μηνυμάτων"
 
-msgid "AM:PM"
-msgstr "πμ:μμ"
+#~ msgid "AM:PM"
+#~ msgstr "πμ:μμ"
 
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Κυρ:Δευ:Τρι:Τετ:Πεμ:Παρ:Σαβ"
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "Κυρ:Δευ:Τρι:Τετ:Πεμ:Παρ:Σαβ"
 
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "Ιαν:Φεβ:Μάρ:Απρ:Μάι:Ιούν:Ιούλ:Αύγ:Σεπ:Οκτ:Νοέ:Δεκ"
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "Ιαν:Φεβ:Μάρ:Απρ:Μάι:Ιούν:Ιούλ:Αύγ:Σεπ:Οκτ:Νοέ:Δεκ"
 
-#: ../src/lib/confdef.pm:432
-msgid ""
-"Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
-"with powerful systems."
-msgstr ""
-"Η τιμή είναι αρκετά μικρή, μπορείτε να την αυξήσετε σε 100, 200 ή ακόμα και "
-"300 σε πιο δυνατά συστήματα."
+#~ msgid ""
+#~ "Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
+#~ "with powerful systems."
+#~ msgstr ""
+#~ "Η τιμή είναι αρκετά μικρή, μπορείτε να την αυξήσετε σε 100, 200 ή ακόμα "
+#~ "και 300 σε πιο δυνατά συστήματα."
 
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Ιδιοκτήτες:"
+#~ msgid "Owners:"
+#~ msgstr "Ιδιοκτήτες:"
 
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Συντονιστές:"
+#~ msgid "Moderators:"
+#~ msgstr "Συντονιστές:"
 
-#: ../mail_tt2/sendpasswd.tt2:13
-msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it:"
-msgstr ""
-"Μπορείτε να αγνοήσετε αυτό το αίτημα συνδρομής ή να ακολουθήσετε τον "
-"παρακάτω σύνδεσμο για να το εγκρίνετε:"
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it:"
+#~ msgstr ""
+#~ "Μπορείτε να αγνοήσετε αυτό το αίτημα συνδρομής ή να ακολουθήσετε τον "
+#~ "παρακάτω σύνδεσμο για να το εγκρίνετε:"
 
-#: ../mail_tt2/sendpasswd.tt2:25
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password:"
-msgstr ""
-"Μπορείτε να αγνοήσετε το αίτημα ή να ακολουθήσετε τον παρακάτω σύνδεσμο για "
-"να επιλέξετε τον κωδικό πρόσβασης σας:"
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password:"
+#~ msgstr ""
+#~ "Μπορείτε να αγνοήσετε το αίτημα ή να ακολουθήσετε τον παρακάτω σύνδεσμο "
+#~ "για να επιλέξετε τον κωδικό πρόσβασης σας:"
 
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Πληροφορίες για τη λίστα %1:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Πληροφορίες για τη λίστα %1:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Προσαρμογή: "
@@ -12754,8 +12706,8 @@ msgstr "Πληροφορίες για τη λίστα %1:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Ελέγξε τη γραμματοθυρίδα σας για νέα μηνύματα και εισάγετε ακολούθως το\n"
 #~ "\tσυνθηματικό που σας έχει αποσταλεί. Αυτό\n"

@@ -5301,8 +5301,8 @@ msgid ""
 "your subscription to list %1."
 msgstr ""
 "Zkontrolujte e-mailovou schránku pro nově příchozí zprávy a zadejte\n"
-"\theslo, které Vám zaslala Sympa, To potvrdí Vaši registraci do konference "
-"%1\n"
+"\theslo, které Vám zaslala Sympa, To potvrdí Vaši registraci do konference %"
+"1\n"
 
 #: ../web_tt2/subrequest.tt2:38
 msgid "Your e-mail address"
@@ -8474,8 +8474,8 @@ msgstr "Požadoval jste odhlášení z konference %1."
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr "Chcete opravdu poslat připomínací zprávu k %1 členům?"
 
 #. (-)
@@ -8718,15 +8718,15 @@ msgstr "Konference"
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:29
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr ""
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr ""
 
 #: ../mail_tt2/user_notification.tt2:34 ../mail_tt2/welcome.tt2:12
@@ -9337,6 +9337,12 @@ msgstr "Smazat zprávu"
 msgid "Do you really want to delete these messages ?"
 msgstr "Opravdu chcete smazat %1%2 ?"
 
+#. ("$YYYYMMDD$")
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/etc/mhonarc-ressources.tt2:306 ../src/etc/mhonarc-ressources.tt2:310
+#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:586
+#: ../src/etc/mhonarc-ressources.tt2:590 ../src/etc/mhonarc-ressources.tt2:594
 msgid "%m/%d/%Y"
 msgstr "%-d.%-m.%Y"
 
@@ -9401,6 +9407,7 @@ msgstr "Zobrazit poslední vrácenou zprávu - chybná adresa"
 msgid "%y/%m/%d"
 msgstr ""
 
+#: ../src/etc/mhonarc-ressources.tt2:649
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Neděle:Pondělí:Úterý:Středa:Čtvrtek:Pátek:Sobota"
 
@@ -12113,223 +12120,29 @@ msgstr "šablony aliasů konference"
 msgid "no mail (useful for vacations)"
 msgstr ""
 
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
-msgstr ""
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Vyberte archív, dle měsíce archivace, pro stažení nebo smazání (ZiP "
+#~ "formát):"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
+#~ msgid "Download ZIP File"
+#~ msgstr "Stáhnout zip soubor"
 
-#: ../web_tt2/edit_attributes.tt2:7
-msgid "[% k.name %]:"
-msgstr ""
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "Ne:Po:Út:St:Čt:Pá:So"
 
-#: ../web_tt2/javascript.tt2:1107
-msgid "\"+src.id+\"_cal"
-msgstr ""
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "led:úno:bře:dub:kvě:čen:čec:srp:zář:říj:lis:pro"
 
-#: ../web_tt2/modindex.tt2:25
-msgid ""
-"You should probably not reject message detected as spam with notification "
-"because the message sender is probably spoofed. Do you really want to reject "
-"those messages with notification?"
-msgstr ""
+#~ msgid "Owners:"
+#~ msgstr "Vlastníci:"
 
-#: ../web_tt2/modindex.tt2:120
-msgid "Reject and blacklist sender"
-msgstr ""
+#~ msgid "Moderators:"
+#~ msgstr "Moderátoři:"
 
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
-
-#: ../web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr ""
-
-#: ../mail_tt2/listmaster_notification.tt2:44
-msgid "Previous process has died unexpectedly."
-msgstr ""
-
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
-
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/moderate.tt2:21
-msgid ""
-"To tag the message in list %1 for the appropriate topic, please use the "
-"following link:"
-msgstr ""
-
-#: ../mail_tt2/moderate.tt2:27
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use\n"
-"the web interface to reject or validate it."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr ""
-
-#. This entry is a date/time format
-#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:389
-msgid "%d %b %Y  %H:%M"
-msgstr ""
-
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr ""
-
-#. (fromname,fromaddr,listname)
-#: ../web_tt2/tracking.tt2:6
-msgid "Message from %1 %2 for list %3 "
-msgstr ""
-
-#: ../src/sympa_wizard.pl.in:337
-msgid ""
-"%s and %s have been updated.\n"
-"Previous versions have been saved as %s and %s.\n"
-msgstr ""
-
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
-
-#: ../src/lib/confdef.pm:826
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:953
-msgid ""
-"Use of binary version of the list config structure on disk (none | "
-"binary_file)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:956
-msgid ""
-"Set this parameter to \"binary_file\" if you manage a big amount of lists "
-"(1000+); it should make the web interface startup faster"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1463
-msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
-
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
-
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/user_notification.tt2:53
-msgid ""
-"You have requested to removed from list %1. To confirm and get removed from "
-"the list, please click the link below: "
-msgstr ""
-
-#: ../src/lib/confdef.pm:1197
-msgid "List of headers to be included into the message for signature"
-msgstr ""
-
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:7
-msgid "[%confparam.title%]"
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:16
-msgid "[% confparam.title %]"
-msgstr ""
-
-#: ../web_tt2/edit_config.tt2:28
-msgid "[% confparam.query %]"
-msgstr ""
-
-#: ../src/lib/confdef.pm:234
-msgid "Syslog"
-msgstr ""
-
-#: ../src/lib/confdef.pm:260
-msgid "Log intensity"
-msgstr ""
-
-#: ../mail_tt2/sendssopasswd.tt2:7
-msgid ""
-"To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/message_report.tt2:52
-msgid ""
-"Your message could not be sent because its size \n"
-"was over the maximum size allowed on this list."
-msgstr ""
-
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Vyberte archív, dle měsíce archivace, pro stažení nebo smazání (ZiP formát):"
-
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Stáhnout zip soubor"
-
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Ne:Po:Út:St:Čt:Pá:So"
-
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "led:úno:bře:dub:kvě:čen:čec:srp:zář:říj:lis:pro"
-
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Vlastníci:"
-
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Moderátoři:"
-
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Informace o konferenci %1:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Informace o konferenci %1:"
 
 #, fuzzy
 #~ msgid "Reject without notification "
@@ -12756,8 +12569,8 @@ msgstr "Informace o konferenci %1:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Zkontrolujte e-mailovou schránku pro nově příchozí zprávy a zadejte\n"
 #~ "\theslo které Vám Sympa zaslala. To potvrdí\n"

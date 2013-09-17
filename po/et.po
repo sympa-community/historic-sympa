@@ -3986,7 +3986,7 @@ msgstr "Lehe suurus"
 msgid "page"
 msgstr "leht"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Teised sarnased tellija(te) aadressid (%1)"
@@ -5404,7 +5404,7 @@ msgstr "Perioodi otsing: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -7193,7 +7193,7 @@ msgstr ""
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr "Viga family faili %2 kopeerimisel listi %1 kausta."
 
 #. (param0,param1)
@@ -8239,8 +8239,8 @@ msgstr "Soovisite lahkuda listist %1."
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr "Teie palusite tellimuse meeldetuletust listi %1 kõikidele liikmetele"
 
 # nlsref 6,78
@@ -8499,16 +8499,16 @@ msgstr "Listi %1 haldus"
 #: ../mail_tt2/user_notification.tt2:29
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr "%1 delegeeris teile listiomaniku õigused listis %2@%3."
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr "%1 delegeeris teile moderaatori õigused listis %2@%3."
 
 # nlsref 15,14
@@ -9377,7 +9377,7 @@ msgstr "Vigane parameetri väärtus: %s\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr "%d. %b.%Y %H:%M:%S"
 
@@ -9401,7 +9401,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr "%A"
 
@@ -11636,7 +11636,7 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -11770,20 +11770,20 @@ msgstr "[ Pilt %s ]"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr "%d. %b %Y"
 
@@ -11791,22 +11791,22 @@ msgstr "%d. %b %Y"
 msgid "(unknown date)"
 msgstr "(tundamtu kuupäev)"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Valed parameetrid"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11814,7 +11814,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11822,13 +11822,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11849,78 +11849,78 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 #, fuzzy
 msgid "%s / %s"
 msgstr "lk %1 / %2"
 
 # nlsref 3,1
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Ei saa lisada kasutajat %s listi %s: %s"
 
 # nlsref 3,1
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 msgid "Unable to add users in list %s : %s"
 msgstr "Ei saa lisada kasutajajaid listi %s: %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Autor teadmata"
 
 # nlsref 6,18
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Teie taotlus listist %s lahkumiseks saadeti listiomanikule."
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Olete edukalt eemaldatud listist %s."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Lahkumissoov listist %s keelatud: Lahkumisavalduste vastuvõtt lõpetatud."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 msgid "Unsubscription from list %s failed."
 msgstr "Eemaldamine listist %s ebaõnnestus."
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 msgid "Mail sending"
 msgstr "Kirja saatmine"
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 msgid "Subscription additions"
 msgstr "Liitumise lisanid"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 msgid "Unsubscription"
 msgstr "Listist lahkumine"
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr "Administraator kustutas kasutajad"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y-%H%:M:%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "teemad"
@@ -12060,271 +12060,181 @@ msgstr "listi aliaste mall"
 msgid "no mail (useful for vacations)"
 msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"Tegevustest, mille sooritaja e-post on mustas nimekirjas, keeldutakse. \n"
-"Musta nimekirja kasutatakse järgmisteks tegevusteks:"
+#~ msgid "Errors occured while copying family %2 file in list %1 directory."
+#~ msgstr "Viga family faili %2 kopeerimisel listi %1 kausta."
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "E-maili järgi otsimine: "
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "Tegevustest, mille sooritaja e-post on mustas nimekirjas, keeldutakse. \n"
+#~ "Musta nimekirja kasutatakse järgmisteks tegevusteks:"
 
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "E-maili otsimine"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "E-maili järgi otsimine: "
+
+#~ msgid "Search user by email"
+#~ msgstr "E-maili otsimine"
 
 # nlsref 6,90
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Listis %1 on lubatud vaid need vastuvõtuviisid: %2"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Listis %1 on lubatud vaid need vastuvõtuviisid: %2"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "Kohalejõudmate kirjade töötlemisel juhtus järgmine viga: %&"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "Kohalejõudmate kirjade töötlemisel juhtus järgmine viga: %&"
 
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr "Seda saab teha kasutades seda mailto linki:"
+#~ msgid "That can be done using this mailto link:"
+#~ msgstr "Seda saab teha kasutades seda mailto linki:"
 
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"või saada kiri aadressile %1 järgmise teemareaga:\n"
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "või saada kiri aadressile %1 järgmise teemareaga:\n"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "%1 delegeeris teile listiomaniku õigused listis %2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "%1 delegeeris teile listiomaniku õigused listis %2@%3."
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr "%1 delegeeris teile moderaatori õigused listis %2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "%1 delegeeris teile moderaatori õigused listis %2@%3."
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "mõlemale"
+#~ msgid "to both"
+#~ msgstr "mõlemale"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr ""
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "Valige arhiivi kuud, mida soovite kustutada või alla laadida (Zip "
+#~ "formaadis):"
 
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
+#~ msgid "Download ZIP File"
+#~ msgstr "Lae alla pakitud fail"
 
-#: ../src/lib/confdef.pm:826
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr ""
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr "Olete kindel, et soovite allalaadida valitud arhiivid?"
 
-#: ../src/lib/confdef.pm:953
-msgid ""
-"Use of binary version of the list config structure on disk (none | "
-"binary_file)"
-msgstr ""
+#~ msgid "comments start with a #"
+#~ msgstr "märk # tähistab kommentaari algust"
 
-#: ../src/lib/confdef.pm:956
-msgid ""
-"Set this parameter to \"binary_file\" if you manage a big amount of lists "
-"(1000+); it should make the web interface startup faster"
-msgstr ""
+#~ msgid ""
+#~ "character * match any string. Example: \"*@spammer-domain.com\" match any "
+#~ "sender from that exact domain"
+#~ msgstr ""
+#~ "märk * asendab suvalise arvu märke. Näiteks: \"*@domeen.ee\" tähistab "
+#~ "kõiki kasutajad sellest konkreetsest domeenist"
 
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "reas võib kasutada vaid ühte * märki"
 
-#: ../src/lib/confdef.pm:1463
-msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Te peaksite vaatama enda postkasti."
 
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+#~ msgid ": the name of the host the list is installed on; always available."
+#~ msgstr ": serveri nimi; alati kättesaadav."
 
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
-
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"Valige arhiivi kuud, mida soovite kustutada või alla laadida (Zip formaadis):"
-
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Lae alla pakitud fail"
-
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Olete kindel, et soovite allalaadida valitud arhiivid?"
-
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "märk # tähistab kommentaari algust"
-
-#: ../web_tt2/blacklist.tt2:23
-msgid ""
-"character * match any string. Example: \"*@spammer-domain.com\" match any "
-"sender from that exact domain"
-msgstr ""
-"märk * asendab suvalise arvu märke. Näiteks: \"*@domeen.ee\" tähistab kõiki "
-"kasutajad sellest konkreetsest domeenist"
-
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "reas võib kasutada vaid ühte * märki"
-
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Te peaksite vaatama enda postkasti."
-
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is installed on; always available."
-msgstr ": serveri nimi; alati kättesaadav."
-
-#: ../mail_tt2/authorization_reject.tt2:58
-msgid ""
-"Shared document reading is restricted to list subscribers authenticated with "
-"a user certificate."
-msgstr ""
-"Jagatud dokumentide lugemine on piiratud listi tellijatele, kes on "
-"autoriseeritud kasutaja sertifikaadiga."
+#~ msgid ""
+#~ "Shared document reading is restricted to list subscribers authenticated "
+#~ "with a user certificate."
+#~ msgstr ""
+#~ "Jagatud dokumentide lugemine on piiratud listi tellijatele, kes on "
+#~ "autoriseeritud kasutaja sertifikaadiga."
 
 # nlsref 6,262
-#: ../mail_tt2/command_report.tt2:22
-msgid "Your message contains a DKIM signature. It was successfully verified."
-msgstr "Teie sõnum sisaldab DKIM allkirja. See on edukalt kontrollitud"
+#~ msgid ""
+#~ "Your message contains a DKIM signature. It was successfully verified."
+#~ msgstr "Teie sõnum sisaldab DKIM allkirja. See on edukalt kontrollitud"
 
-#: ../mail_tt2/listmaster_notification.tt2:49
-msgid "No Database"
-msgstr "Pole andmebaasi"
+#~ msgid "No Database"
+#~ msgstr "Pole andmebaasi"
 
-#. (db_type)
-#: ../mail_tt2/listmaster_notification.tt2:55
-msgid "No Database Driver for %1"
-msgstr "Pole andmebaasi draiverit %1"
+#~ msgid "No Database Driver for %1"
+#~ msgstr "Pole andmebaasi draiverit %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:96
-msgid "Database connection restored"
-msgstr "Andmebaasi ühendus taastatud"
+#~ msgid "Database connection restored"
+#~ msgstr "Andmebaasi ühendus taastatud"
 
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occurred while copying family %2 file in list %1 directory."
-msgstr "Viga family faili %2 kopeerimisel listi %1 kausta."
+#~ msgid "Unknown authentication service %1."
+#~ msgstr "Tundmatu autoriseerimise teenus %1."
 
-#. (name)
-#: ../mail_tt2/listmaster_notification.tt2:336
-msgid "Unknown authentication service %1."
-msgstr "Tundmatu autoriseerimise teenus %1."
+#~ msgid "Failed to include members for list '%1'"
+#~ msgstr "Ei saanud lisada kasutajaid listile '%1'"
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:371
-msgid "Failed to include members for list '%1'"
-msgstr "Ei saanud lisada kasutajaid listile '%1'"
-
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:374
-msgid "The exportation to an LDAP directory failed for list '%1'"
-msgstr "Eksport LDAP kausta ebaõnnestus listile '%1'"
+#~ msgid "The exportation to an LDAP directory failed for list '%1'"
+#~ msgstr "Eksport LDAP kausta ebaõnnestus listile '%1'"
 
 # nlsref 11,2
-#. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:375
-msgid "Unable to check list name '%1' on SMTP server"
-msgstr "Ei suuda kontrollida listi '%1' SMTP serveris"
+#~ msgid "Unable to check list name '%1' on SMTP server"
+#~ msgstr "Ei suuda kontrollida listi '%1' SMTP serveris"
 
-#: ../mail_tt2/welcome.tt2:13
-msgid "General information about mailing lists:"
-msgstr "Listi üldinfo:"
+#~ msgid "General information about mailing lists:"
+#~ msgstr "Listi üldinfo:"
 
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Meie viirusetõrje programm leidis viiruse nimega %1 kirjast,\n"
-"mis saadeti aadressile %2. Tundub, et teie olite saatja\n"
-" (From: %3)."
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Meie viirusetõrje programm leidis viiruse nimega %1 kirjast,\n"
+#~ "mis saadeti aadressile %2. Tundub, et teie olite saatja\n"
+#~ " (From: %3)."
 
 # nlsref 16,74
-#: ../src/lib/listdef.pm:515
-msgid "Allow message personalization"
-msgstr "Lubada kirja isikupärastamine"
+#~ msgid "Allow message personalization"
+#~ msgstr "Lubada kirja isikupärastamine"
 
-#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
-msgid ""
-"** Warning: A message part using unrecognized character set %s\n"
-"    Some characters may be lost or incorrect **\n"
-"\n"
-msgstr ""
-"** Hoiatus: kirjas kasutati algselt %s kooditabelit\n"
-"    Mõned tähed võivad olla kadunud või valed **\n"
-"\n"
+#~ msgid ""
+#~ "** Warning: A message part using unrecognized character set %s\n"
+#~ "    Some characters may be lost or incorrect **\n"
+#~ "\n"
+#~ msgstr ""
+#~ "** Hoiatus: kirjas kasutati algselt %s kooditabelit\n"
+#~ "    Mõned tähed võivad olla kadunud või valed **\n"
+#~ "\n"
 
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "P:E:T:K:N:R:L"
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "P:E:T:K:N:R:L"
 
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr ""
-"jaan :veebr:märts:apr  :mai  :juuni:juuli:aug  :sept :okt  :nov  :dets "
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr ""
+#~ "jaan :veebr:märts:apr  :mai  :juuni:juuli:aug  :sept :okt  :nov  :dets "
 
-#: ../src/lib/confdef.pm:432
-msgid ""
-"Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
-"with powerful systems."
-msgstr ""
-"Sisestatud väärtus on üsna väike, võite seda suurendada 100, 200 või isegi "
-"300ni võimsamates süsteemides."
+#~ msgid ""
+#~ "Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
+#~ "with powerful systems."
+#~ msgstr ""
+#~ "Sisestatud väärtus on üsna väike, võite seda suurendada 100, 200 või "
+#~ "isegi 300ni võimsamates süsteemides."
 
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Omanikud:"
+#~ msgid "Owners:"
+#~ msgstr "Omanikud:"
 
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Moderaatorid:"
+#~ msgid "Moderators:"
+#~ msgstr "Moderaatorid:"
 
-#: ../web_tt2/modform.tt2:32
-msgid "Choose notification:"
-msgstr "Teavitus:"
+#~ msgid "Choose notification:"
+#~ msgstr "Teavitus:"
 
-#: ../mail_tt2/sendpasswd.tt2:13
-msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it:"
-msgstr ""
-"Te võite antud soovi ignoreerida või klikkida järgmisele lingile, et "
-"kinnitada liitumissoovi:"
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it:"
+#~ msgstr ""
+#~ "Te võite antud soovi ignoreerida või klikkida järgmisele lingile, et "
+#~ "kinnitada liitumissoovi:"
 
-#: ../mail_tt2/sendpasswd.tt2:25
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password:"
-msgstr ""
-"Te võite seda palvet ignoreerida või klikkida järgmisel viitel, et valida "
-"endale parool:"
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password:"
+#~ msgstr ""
+#~ "Te võite seda palvet ignoreerida või klikkida järgmisel viitel, et valida "
+#~ "endale parool:"
 
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Info listi %1 kohta:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Info listi %1 kohta:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Kohandamine: "
@@ -12699,8 +12609,8 @@ msgstr "Info listi %1 kohta:"
 #~ "options, unsubscription,\n"
 #~ "archives, list management and so on."
 #~ msgstr ""
-#~ "See server võimaldab ligipääsu oma keskkonnale e-posti listide serveris "
-#~ "%1@%2. Sellelt veebilehelt saab liituda listidega / lahkuda listidest \n"
+#~ "See server võimaldab ligipääsu oma keskkonnale e-posti listide serveris %"
+#~ "1@%2. Sellelt veebilehelt saab liituda listidega / lahkuda listidest \n"
 #~ " vaadata listide arhiive, hallata liste jne."
 
 #~ msgid "Choose your authentication server"
@@ -12809,8 +12719,8 @@ msgstr "Info listi %1 kohta:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Vaata oma postkasti, sinna tuleb kiri parooliga, mis \n"
 #~ "\ttuleb sisestada alljärgnevasse lahtrisse, et kinnitada \n"

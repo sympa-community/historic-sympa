@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -3998,7 +3998,7 @@ msgstr "Размер страницы"
 msgid "page"
 msgstr "страница"
 
-#. (similar_subscribers_occurence)
+#. (similar_subscribers_occurrence)
 #: ../web_tt2/review.tt2:138
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr "Другие похожие почтовые адреса подписчика (%1)"
@@ -5440,7 +5440,7 @@ msgstr "Период поиска: с "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17478
+#: ../web_tt2/viewlogs.tt2:96 ../wwsympa/wwsympa.fcgi.in:17481
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -7095,8 +7095,8 @@ msgstr "Архивирование сообщения не удалось"
 #: ../mail_tt2/listmaster_notification.tt2:154
 msgid "Sympa could not archive message '%1'. Moving it into directory '%2'."
 msgstr ""
-"Sympa не может архивировать сообщение '%1' и перемещает его в директорию "
-"'%2'."
+"Sympa не может архивировать сообщение '%1' и перемещает его в директорию '%"
+"2'."
 
 #: ../mail_tt2/listmaster_notification.tt2:158
 msgid "A bounce management failed"
@@ -7252,14 +7252,14 @@ msgid ""
 "this person's new email address."
 msgstr ""
 "Администратор %1 не может изменить свой электронный адрес администратора "
-"(новый адрес — %2), поскольку он включен через следующие источники данных: "
-"%3.\n"
+"(новый адрес — %2), поскольку он включен через следующие источники данных: %"
+"3.\n"
 "\n"
 "Если возможно, обновите электронный адрес в этих источниках данных. "
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occured while copying family %2 file in list %1 directory."
+msgid "Errors occurred while copying family %2 file in list %1 directory."
 msgstr "При копировании файла семейства %2 в директорию %1 произошли ошибки. "
 
 #. (param0,param1)
@@ -7440,8 +7440,8 @@ msgstr "Удаление подписчка '%1' из базы данных не
 #: ../mail_tt2/listmaster_notification.tt2:342
 msgid "Delete user in DB for old email '%1' failed."
 msgstr ""
-"Удаление пользователя из базы данных по старому адресу электронной почты "
-"'%1' не удалось."
+"Удаление пользователя из базы данных по старому адресу электронной почты '%"
+"1' не удалось."
 
 #. (email,list.name)
 #: ../mail_tt2/listmaster_notification.tt2:343
@@ -7502,8 +7502,8 @@ msgstr "Невозможно удалить файл '%1'."
 #: ../mail_tt2/listmaster_notification.tt2:354
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr ""
-"Невозможно отправить команду DISTRIBUTE (распространить) с '%1' в рассылку "
-"'%2'."
+"Невозможно отправить команду DISTRIBUTE (распространить) с '%1' в рассылку '%"
+"2'."
 
 #. (dir)
 #: ../mail_tt2/listmaster_notification.tt2:355
@@ -7940,8 +7940,8 @@ msgid ""
 "If you are able to do so, you should probably update these data sources with "
 "this person's new email address."
 msgstr ""
-"Пользователь %1 не смог изменить свой электронный адрес (его новый адрес "
-"%2), посколько он включен из следующих источников данных: %3.\n"
+"Пользователь %1 не смог изменить свой электронный адрес (его новый адрес %"
+"2), посколько он включен из следующих источников данных: %3.\n"
 "\n"
 "Если Вы можете, Вам, вероятно, следует обновить эти источники, указав новый "
 "электронный адрес этого пользователя. "
@@ -8274,11 +8274,11 @@ msgstr "Вы запрашивали отписку пользователя от
 #. (list.name)-)
 #: ../mail_tt2/request_auth.tt2:18
 msgid ""
-"You requested a subscription reminder to be sent to each subscriber of list "
-"%1"
+"You requested a subscription reminder to be sent to each subscriber of list %"
+"1"
 msgstr ""
-"Вы запрашивали отправку напоминания о подписке каждому подписчику рассылки "
-"%1. "
+"Вы запрашивали отправку напоминания о подписке каждому подписчику рассылки %"
+"1. "
 
 #. (-)
 #: ../mail_tt2/request_auth.tt2:23
@@ -8539,16 +8539,16 @@ msgstr "Управление рассылкой %1"
 #: ../mail_tt2/user_notification.tt2:29
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@"
-"%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr "%1 делегировал Вам ответственность владельца рассылки %2@%3."
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:31
 #, fuzzy
 msgid ""
-"You have been delegated the responsability of list moderator by %1 for list "
-"%2@%3."
+"You have been delegated the responsability of list moderator by %1 for list %"
+"2@%3."
 msgstr "%1 делегировал Вам ответственность модератора рассылки %2@%3."
 
 #: ../mail_tt2/user_notification.tt2:34 ../mail_tt2/welcome.tt2:12
@@ -9435,7 +9435,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Upgrade.pm:1001 ../src/sympa_wizard.pl.in:315
+#: ../src/lib/Upgrade.pm:1047 ../src/sympa_wizard.pl.in:315
 #, fuzzy
 msgid "%d.%b.%Y-%H.%M.%S"
 msgstr "%d %b %Y %H:%M:%S"
@@ -9463,7 +9463,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10919
+#: ../src/lib/Commands.pm:1190 ../wwsympa/wwsympa.fcgi.in:10922
 msgid "%A"
 msgstr "%A"
 
@@ -11621,7 +11621,7 @@ msgstr "Добавлено %s пользователей из %s необход�
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:9856 ../wwsympa/wwsympa.fcgi.in:1190
-#: ../wwsympa/wwsympa.fcgi.in:18114 ../wwsympa/wwsympa.fcgi.in:3012
+#: ../wwsympa/wwsympa.fcgi.in:18117 ../wwsympa/wwsympa.fcgi.in:3012
 #: ../wwsympa/wwsympa.fcgi.in:3306 ../wwsympa/wwsympa.fcgi.in:3319
 #: ../wwsympa/wwsympa.fcgi.in:3441
 msgid "%d %b %Y at %H:%M:%S"
@@ -11753,20 +11753,20 @@ msgstr "[Изображение%s]"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Site.pm:776 ../src/lib/Site.pm:779 ../src/lib/Site.pm:786
-#: ../wwsympa/wwsympa.fcgi.in:12171 ../wwsympa/wwsympa.fcgi.in:12243
-#: ../wwsympa/wwsympa.fcgi.in:12453 ../wwsympa/wwsympa.fcgi.in:12803
-#: ../wwsympa/wwsympa.fcgi.in:16208 ../wwsympa/wwsympa.fcgi.in:16215
-#: ../wwsympa/wwsympa.fcgi.in:16942 ../wwsympa/wwsympa.fcgi.in:16978
-#: ../wwsympa/wwsympa.fcgi.in:17024 ../wwsympa/wwsympa.fcgi.in:18320
-#: ../wwsympa/wwsympa.fcgi.in:18321 ../wwsympa/wwsympa.fcgi.in:4764
-#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5413
-#: ../wwsympa/wwsympa.fcgi.in:5414 ../wwsympa/wwsympa.fcgi.in:7043
-#: ../wwsympa/wwsympa.fcgi.in:8164 ../wwsympa/wwsympa.fcgi.in:8785
-#: ../wwsympa/wwsympa.fcgi.in:8828 ../wwsympa/wwsympa.fcgi.in:8830
-#: ../wwsympa/wwsympa.fcgi.in:8853 ../wwsympa/wwsympa.fcgi.in:9345
-#: ../wwsympa/wwsympa.fcgi.in:9346 ../wwsympa/wwsympa.fcgi.in:9381
-#: ../wwsympa/wwsympa.fcgi.in:9382 ../wwsympa/wwsympa.fcgi.in:9564
-#: ../wwsympa/wwsympa.fcgi.in:9565
+#: ../wwsympa/wwsympa.fcgi.in:12174 ../wwsympa/wwsympa.fcgi.in:12246
+#: ../wwsympa/wwsympa.fcgi.in:12456 ../wwsympa/wwsympa.fcgi.in:12806
+#: ../wwsympa/wwsympa.fcgi.in:16211 ../wwsympa/wwsympa.fcgi.in:16218
+#: ../wwsympa/wwsympa.fcgi.in:16945 ../wwsympa/wwsympa.fcgi.in:16981
+#: ../wwsympa/wwsympa.fcgi.in:17027 ../wwsympa/wwsympa.fcgi.in:18323
+#: ../wwsympa/wwsympa.fcgi.in:18324 ../wwsympa/wwsympa.fcgi.in:4764
+#: ../wwsympa/wwsympa.fcgi.in:4821 ../wwsympa/wwsympa.fcgi.in:5416
+#: ../wwsympa/wwsympa.fcgi.in:5417 ../wwsympa/wwsympa.fcgi.in:7046
+#: ../wwsympa/wwsympa.fcgi.in:8167 ../wwsympa/wwsympa.fcgi.in:8788
+#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8833
+#: ../wwsympa/wwsympa.fcgi.in:8856 ../wwsympa/wwsympa.fcgi.in:9348
+#: ../wwsympa/wwsympa.fcgi.in:9349 ../wwsympa/wwsympa.fcgi.in:9384
+#: ../wwsympa/wwsympa.fcgi.in:9385 ../wwsympa/wwsympa.fcgi.in:9567
+#: ../wwsympa/wwsympa.fcgi.in:9568
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -11774,22 +11774,22 @@ msgstr "%d %b %Y"
 msgid "(unknown date)"
 msgstr "(неизвестная дата)"
 
-#: ../src/lib/Upgrade.pm:1071
+#: ../src/lib/Upgrade.pm:1117
 #, fuzzy
 msgid "Unknown parameter"
 msgstr "Неверные параметры"
 
-#: ../src/lib/Upgrade.pm:1085
+#: ../src/lib/Upgrade.pm:1131
 msgid "Migration from wwsympa.conf"
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1093
+#: ../src/lib/Upgrade.pm:1139
 msgid ""
 "Migrated Parameters\n"
 "Following parameters were migrated from wwsympa.conf."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1096
+#: ../src/lib/Upgrade.pm:1142
 msgid ""
 "Overriding Parameters\n"
 "Following parameters existed both in sympa.conf and wwsympa.conf.  Previous "
@@ -11797,7 +11797,7 @@ msgid ""
 "be disabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1099
+#: ../src/lib/Upgrade.pm:1145
 msgid ""
 "Duplicate of sympa.conf\n"
 "These parameters were found in both sympa.conf and wwsympa.conf.  Previous "
@@ -11805,13 +11805,13 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1102
+#: ../src/lib/Upgrade.pm:1148
 msgid ""
 "Old Parameters\n"
 "These parameters are no longer used."
 msgstr ""
 
-#: ../src/lib/Upgrade.pm:1106
+#: ../src/lib/Upgrade.pm:1152
 msgid ""
 "Unknown Parameters\n"
 "Though these parameters were found in wwsympa.conf, they were ignored.  You "
@@ -11832,15 +11832,15 @@ msgstr ""
 msgid "(top-level)"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
+#: ../wwsympa/wwsympa.fcgi.in:10900 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:5308
+#: ../wwsympa/wwsympa.fcgi.in:5311
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Невозможно добавить пользователя %s в список рассылки %s : %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:6774
+#: ../wwsympa/wwsympa.fcgi.in:6777
 #, fuzzy
 msgid "Unable to add users in list %s : %s"
 msgstr "Невозможно загрузить темы рассылки."
@@ -11848,62 +11848,62 @@ msgstr "Невозможно загрузить темы рассылки."
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:455 ../wwsympa/SympaSession.pm:456
-#: ../wwsympa/wwsympa.fcgi.in:13039 ../wwsympa/wwsympa.fcgi.in:13171
-#: ../wwsympa/wwsympa.fcgi.in:15517 ../wwsympa/wwsympa.fcgi.in:8747
+#: ../wwsympa/wwsympa.fcgi.in:13042 ../wwsympa/wwsympa.fcgi.in:13174
+#: ../wwsympa/wwsympa.fcgi.in:15520 ../wwsympa/wwsympa.fcgi.in:8750
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:10907
+#: ../wwsympa/wwsympa.fcgi.in:10910
 #, fuzzy
 msgid "Unknown (%s)"
 msgstr "Неизвестный"
 
-#: ../wwsympa/wwsympa.fcgi.in:16392
+#: ../wwsympa/wwsympa.fcgi.in:16395
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Ваш запрос на отписку от списка рассылки %s был отправлен владельцу рассылки"
 
-#: ../wwsympa/wwsympa.fcgi.in:16394
+#: ../wwsympa/wwsympa.fcgi.in:16397
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Вы успешно отписались от рассылки %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:16398
+#: ../wwsympa/wwsympa.fcgi.in:16401
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Отписка от списка рассылки %s отклонена. Отписка от этого списка рассылки "
 "закрыта."
 
-#: ../wwsympa/wwsympa.fcgi.in:16400
+#: ../wwsympa/wwsympa.fcgi.in:16403
 msgid "Unsubscription from list %s failed."
 msgstr "Отписка от спика рассылки %s не удалась."
 
-#: ../wwsympa/wwsympa.fcgi.in:17013
+#: ../wwsympa/wwsympa.fcgi.in:17016
 #, fuzzy
 msgid "Mail sending"
 msgstr "Почтовый домен: "
 
-#: ../wwsympa/wwsympa.fcgi.in:17014
+#: ../wwsympa/wwsympa.fcgi.in:17017
 #, fuzzy
 msgid "Subscription additions"
 msgstr "Подписки"
 
-#: ../wwsympa/wwsympa.fcgi.in:17015
+#: ../wwsympa/wwsympa.fcgi.in:17018
 #, fuzzy
 msgid "Unsubscription"
 msgstr "Вы можете отписаться от рассылки: "
 
-#: ../wwsympa/wwsympa.fcgi.in:17016
+#: ../wwsympa/wwsympa.fcgi.in:17019
 msgid "Users deleted by admin"
 msgstr "Пользователь удален администратором"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:17392 ../wwsympa/wwsympa.fcgi.in:17394
+#: ../wwsympa/wwsympa.fcgi.in:17395 ../wwsympa/wwsympa.fcgi.in:17397
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:18326
+#: ../wwsympa/wwsympa.fcgi.in:18329
 #, fuzzy
 msgid "topic (%s)"
 msgstr "темы"
@@ -12020,264 +12020,180 @@ msgstr "шаблон псевдонимов для списка рассылки
 msgid "no mail (useful for vacations)"
 msgstr "без писем (полезно для отпускников)"
 
-#: ../web_tt2/blacklist.tt2:8
-msgid ""
-"Operation requested by users which email is listed in the blacklist file are "
-"rejected. The\n"
-"blacklist is in use for the following operation:"
-msgstr ""
-"Операции, запрашиваемые пользователями, электронный адрес которых указан в "
-"чёрном списке, отклоняются.\n"
-"Чёрный список используется для следующих операций:"
+#~ msgid "Errors occured while copying family %2 file in list %1 directory."
+#~ msgstr ""
+#~ "При копировании файла семейства %2 в директорию %1 произошли ошибки. "
 
-#: ../web_tt2/review.tt2:87
-msgid "Search user by e-mail: "
-msgstr "Поиск пользователя по электронному адресу:"
+#~ msgid ""
+#~ "Operation requested by users which email is listed in the blacklist file "
+#~ "are rejected. The\n"
+#~ "blacklist is in use for the following operation:"
+#~ msgstr ""
+#~ "Операции, запрашиваемые пользователями, электронный адрес которых указан "
+#~ "в чёрном списке, отклоняются.\n"
+#~ "Чёрный список используется для следующих операций:"
 
-#: ../web_tt2/review.tt2:88
-msgid "Search user by email"
-msgstr "Поиск пользователя по электронному адресу"
+#~ msgid "Search user by e-mail: "
+#~ msgstr "Поиск пользователя по электронному адресу:"
 
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr ""
-"В рассылке %1 поддерживаются только следующие режимы получения почты: %2"
+#~ msgid "Search user by email"
+#~ msgstr "Поиск пользователя по электронному адресу"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "При обработке возврата возникла ошибка: %&"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr ""
+#~ "В рассылке %1 поддерживаются только следующие режимы получения почты: %2"
 
-#: ../mail_tt2/listowner_notification.tt2:76
-msgid "That can be done using this mailto link:"
-msgstr "Это можно сделать с помощью данной ссылки для отправки письма: "
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "При обработке возврата возникла ошибка: %&"
 
-#. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
-msgid ""
-"\n"
-"or send an email to %1 with the following subject:\n"
-msgstr ""
-"\n"
-"или отправьте письмо по адресу %1 со следующей темой: \n"
+#~ msgid "That can be done using this mailto link:"
+#~ msgstr "Это можно сделать с помощью данной ссылки для отправки письма: "
 
-#: ../mail_tt2/moderate.tt2:27
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use\n"
-"the web interface to reject or validate it."
-msgstr ""
+#~ msgid ""
+#~ "\n"
+#~ "or send an email to %1 with the following subject:\n"
+#~ msgstr ""
+#~ "\n"
+#~ "или отправьте письмо по адресу %1 со следующей темой: \n"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "%1 делегировал Вам ответственность владельца рассылки %2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "%1 делегировал Вам ответственность владельца рассылки %2@%3."
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list "
-"%2@%3."
-msgstr "%1 делегировал Вам ответственность модератора рассылки %2@%3."
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "%1 делегировал Вам ответственность модератора рассылки %2@%3."
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "обоим"
+#~ msgid "to both"
+#~ msgstr "обоим"
 
-#. (automatic_lists_description.family_name)
-#: ../web_tt2/automatic_lists_management_request.tt2:4
-msgid "The automatic lists are based on the $1 family"
-msgstr ""
+#~ msgid ""
+#~ "Select the Archive months you want to delete or download (ZIP format):"
+#~ msgstr ""
+#~ "В приведенном ниже архиве сообщений выберите те месяцы, которые вы хотите "
+#~ "удалить или загрузить (в формате ZIP):"
 
-#: ../src/lib/confdef.pm:777
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr ""
+#~ msgid "Download ZIP File"
+#~ msgstr "Скачать ZIP-файл"
 
-#: ../src/lib/confdef.pm:1400
-msgid "Virtual host specific parameters"
-msgstr ""
+#~ msgid "Do you want to download a ZIP file containing the selected archives?"
+#~ msgstr "Вы хотите загрузить ZIP-файл с выбранными архивами?"
 
-#: ../src/lib/Conf.pm:967
-msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+#~ msgid "comments start with a #"
+#~ msgstr "символ # предваряет комментарий"
 
-#: ../src/lib/List.pm:7337
-msgid "Attempt to exceed the max number of members (%s) for this list."
-msgstr ""
+#~ msgid ""
+#~ "character * match any string. Example: \"*@spammer-domain.com\" match any "
+#~ "sender from that exact domain"
+#~ msgstr ""
+#~ "символ * соответствует любой строке. Например, \"*@spammer-domain.com\" "
+#~ "соотвествует любому отправителю с указанного домена"
 
-#: ../src/lib/confdef.pm:43
-msgid "Directories and file location"
-msgstr ""
+#~ msgid "only one character * is allowed in a line"
+#~ msgstr "в строке возможен только один символ \"*\""
 
-#: ../src/lib/confdef.pm:234
-msgid "Syslog"
-msgstr ""
+#~ msgid "You should check your mailbox now."
+#~ msgstr "Проверьте свой почтовый ящик сейчас. "
 
-#: ../web_tt2/arc_manage.tt2:6
-msgid "Select the Archive months you want to delete or download (ZIP format):"
-msgstr ""
-"В приведенном ниже архиве сообщений выберите те месяцы, которые вы хотите "
-"удалить или загрузить (в формате ZIP):"
+#~ msgid ": the name of the host the list is installed on; always available."
+#~ msgstr ": имя хоста, на котором работает список рассылки; всегда доступно."
 
-#: ../web_tt2/arc_manage.tt2:23
-msgid "Download ZIP File"
-msgstr "Скачать ZIP-файл"
+#~ msgid ""
+#~ "Shared document reading is restricted to list subscribers authenticated "
+#~ "with a user certificate."
+#~ msgstr ""
+#~ "Чтение общих документов разрешено только подписчикам рассылки, "
+#~ "аутентифицированным с помощью пользовательского сертификата."
 
-#: ../web_tt2/arc_manage.tt2:24
-msgid "Do you want to download a ZIP file containing the selected archives?"
-msgstr "Вы хотите загрузить ZIP-файл с выбранными архивами?"
+#~ msgid ""
+#~ "Your message contains a DKIM signature. It was successfully verified."
+#~ msgstr "Ваше сообщение содержит подпись DKIM. Она была успешно проверена."
 
-#: ../web_tt2/blacklist.tt2:22
-msgid "comments start with a #"
-msgstr "символ # предваряет комментарий"
+#~ msgid "No Database"
+#~ msgstr "Отсутствует база данных"
 
-#: ../web_tt2/blacklist.tt2:23
-msgid ""
-"character * match any string. Example: \"*@spammer-domain.com\" match any "
-"sender from that exact domain"
-msgstr ""
-"символ * соответствует любой строке. Например, \"*@spammer-domain.com\" "
-"соотвествует любому отправителю с указанного домена"
+#~ msgid "No Database Driver for %1"
+#~ msgstr "Нет драйвера базы данных для %1"
 
-#: ../web_tt2/blacklist.tt2:24
-msgid "only one character * is allowed in a line"
-msgstr "в строке возможен только один символ \"*\""
+#~ msgid "Database connection restored"
+#~ msgstr "Подключение к базе данных восстановлено"
 
-#: ../web_tt2/change_email_request.tt2:5
-msgid "You should check your mailbox now."
-msgstr "Проверьте свой почтовый ящик сейчас. "
+#~ msgid "Unknown authentication service %1."
+#~ msgstr "Неизвестный сервис аутентификации %1."
 
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is installed on; always available."
-msgstr ": имя хоста, на котором работает список рассылки; всегда доступно."
+#~ msgid "Failed to include members for list '%1'"
+#~ msgstr "Не удалось включить пользователей в рассылку '%1'"
 
-#: ../mail_tt2/authorization_reject.tt2:58
-msgid ""
-"Shared document reading is restricted to list subscribers authenticated with "
-"a user certificate."
-msgstr ""
-"Чтение общих документов разрешено только подписчикам рассылки, "
-"аутентифицированным с помощью пользовательского сертификата."
+#~ msgid "The exportation to an LDAP directory failed for list '%1'"
+#~ msgstr "Экспортирование в директорию LDAP рассылки '%1' не удалось"
 
-#: ../mail_tt2/command_report.tt2:22
-msgid "Your message contains a DKIM signature. It was successfully verified."
-msgstr "Ваше сообщение содержит подпись DKIM. Она была успешно проверена."
+#~ msgid "Unable to check list name '%1' on SMTP server"
+#~ msgstr "Невозможно проверить название рассылки '%1' на SMTP-сервере. "
 
-#: ../mail_tt2/listmaster_notification.tt2:49
-msgid "No Database"
-msgstr "Отсутствует база данных"
+#~ msgid "General information about mailing lists:"
+#~ msgstr "Общая информация о списках рассылки: "
 
-#. (db_type)
-#: ../mail_tt2/listmaster_notification.tt2:55
-msgid "No Database Driver for %1"
-msgstr "Нет драйвера базы данных для %1"
+#~ msgid ""
+#~ "Our virus checker found a virus named %1 in a message addressed to %2 and "
+#~ "that seems to be yours (From: %3)."
+#~ msgstr ""
+#~ "Наша антивирусная программа обнаружила вирус %1\n"
+#~ " в сообщении, адресованном %2 и кажется,\n"
+#~ " он Ваш (От: %3)."
 
-#: ../mail_tt2/listmaster_notification.tt2:96
-msgid "Database connection restored"
-msgstr "Подключение к базе данных восстановлено"
+#~ msgid "Allow message personalization"
+#~ msgstr "Разрешить персонализацию сообщений"
 
-#. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:225
-msgid "Errors occurred while copying family %2 file in list %1 directory."
-msgstr "При копировании файла семейства %2 в директорию %1 произошли ошибки. "
+#~ msgid ""
+#~ "** Warning: A message part using unrecognized character set %s\n"
+#~ "    Some characters may be lost or incorrect **\n"
+#~ "\n"
+#~ msgstr ""
+#~ "** Внимание: часть сообщения использует нераспознанную кодировку %s\n"
+#~ "    Некоторые символы могут отображаться неправильно или не отображаться "
+#~ "вовсе **\n"
+#~ "\n"
 
-#. (name)
-#: ../mail_tt2/listmaster_notification.tt2:336
-msgid "Unknown authentication service %1."
-msgstr "Неизвестный сервис аутентификации %1."
+#~ msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+#~ msgstr "Вс.:Пн.:Вт.:Ср.:Чт.:Пт.:Сб."
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:371
-msgid "Failed to include members for list '%1'"
-msgstr "Не удалось включить пользователей в рассылку '%1'"
+#~ msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
+#~ msgstr "янв.:февр.:марта:апр.:мая:июня:июля:авг.:сент.:окт.:нояб.:дек."
 
-#. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:374
-msgid "The exportation to an LDAP directory failed for list '%1'"
-msgstr "Экспортирование в директорию LDAP рассылки '%1' не удалось"
+#~ msgid ""
+#~ "Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
+#~ "with powerful systems."
+#~ msgstr ""
+#~ "Предложенное значение является весьма низким, вы можете увеличить его до "
+#~ "100, 200 или даже 300 на мощных системах."
 
-#. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:375
-msgid "Unable to check list name '%1' on SMTP server"
-msgstr "Невозможно проверить название рассылки '%1' на SMTP-сервере. "
+#~ msgid "Owners:"
+#~ msgstr "Владельцы:"
 
-#: ../mail_tt2/welcome.tt2:13
-msgid "General information about mailing lists:"
-msgstr "Общая информация о списках рассылки: "
+#~ msgid "Moderators:"
+#~ msgstr "Модераторы:"
 
-#. (virus_name,recipient,from)
-#: ../mail_tt2/your_infected_msg.tt2:7
-msgid ""
-"Our virus checker found a virus named %1 in a message addressed to %2 and "
-"that seems to be yours (From: %3)."
-msgstr ""
-"Наша антивирусная программа обнаружила вирус %1\n"
-" в сообщении, адресованном %2 и кажется,\n"
-" он Ваш (От: %3)."
+#~ msgid "Choose notification:"
+#~ msgstr "Выберите тип уведомления:"
 
-#: ../src/lib/listdef.pm:515
-msgid "Allow message personalization"
-msgstr "Разрешить персонализацию сообщений"
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it:"
+#~ msgstr ""
+#~ "Вы можете игнорировать этот запрос подписки или щёлкнуть по следующей "
+#~ "ссылке, чтобы подтвердить его:"
 
-#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
-msgid ""
-"** Warning: A message part using unrecognized character set %s\n"
-"    Some characters may be lost or incorrect **\n"
-"\n"
-msgstr ""
-"** Внимание: часть сообщения использует нераспознанную кодировку %s\n"
-"    Некоторые символы могут отображаться неправильно или не отображаться "
-"вовсе **\n"
-"\n"
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password:"
+#~ msgstr ""
+#~ "Вы можете игнорировать этот запрос или щёлкнуть по следующей ссылке, "
+#~ "чтобы выбрать пароль:"
 
-msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Вс.:Пн.:Вт.:Ср.:Чт.:Пт.:Сб."
-
-msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr "янв.:февр.:марта:апр.:мая:июня:июля:авг.:сент.:окт.:нояб.:дек."
-
-#: ../src/lib/confdef.pm:432
-msgid ""
-"Proposed value is quite low.  You can rise it up to 100, 200 or even 300 "
-"with powerful systems."
-msgstr ""
-"Предложенное значение является весьма низким, вы можете увеличить его до "
-"100, 200 или даже 300 на мощных системах."
-
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:33
-msgid "Owners:"
-msgstr "Владельцы:"
-
-#: ../src/lib/listdef.pm:177 ../web_tt2/list_panel.tt2:48
-msgid "Moderators:"
-msgstr "Модераторы:"
-
-#: ../web_tt2/modform.tt2:32
-msgid "Choose notification:"
-msgstr "Выберите тип уведомления:"
-
-#: ../mail_tt2/sendpasswd.tt2:13
-msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it:"
-msgstr ""
-"Вы можете игнорировать этот запрос подписки или щёлкнуть по следующей "
-"ссылке, чтобы подтвердить его:"
-
-#: ../mail_tt2/sendpasswd.tt2:25
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password:"
-msgstr ""
-"Вы можете игнорировать этот запрос или щёлкнуть по следующей ссылке, чтобы "
-"выбрать пароль:"
-
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:4
-msgid "Information regarding list %1:"
-msgstr "Информация о рассылке %1:"
+#~ msgid "Information regarding list %1:"
+#~ msgstr "Информация о рассылке %1:"
 
 #~ msgid "Customizing: "
 #~ msgstr "Настройка: "
@@ -12906,8 +12822,8 @@ msgstr "Информация о рассылке %1:"
 #~ "Please provide your email address for your unsubscription request from "
 #~ "list %1."
 #~ msgstr ""
-#~ "Пожалуйста, укажите электронный адрес для запроса на отписку от рассылки "
-#~ "%1."
+#~ "Пожалуйста, укажите электронный адрес для запроса на отписку от рассылки %"
+#~ "1."
 
 #~ msgid ""
 #~ "To confirm your unsubscription from list %1, please enter\n"
@@ -12948,8 +12864,8 @@ msgstr "Информация о рассылке %1:"
 #~ msgid ""
 #~ "Check your mailbox for new messages and examine the message from Sympa to "
 #~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list "
-#~ "%1."
+#~ "\tEnter that password below. This will confirm your subscription to list %"
+#~ "1."
 #~ msgstr ""
 #~ "Пожалуйста, найдите в своём почтовом ящике письмо от Sympa с паролем.\n"
 #~ "   Введите этот пароль ниже. Это подтвердит ваш запрос на подписку на "
