@@ -689,7 +689,7 @@ sub process_email_feedback_report {
 		}
 		push @lists, $list;
 	    }elsif( $self->{'efr'}{'feedback_type'} =~ /opt-out/ && (defined $self->{'efr'}{'original_rcpt'})){
-		@lists = List::get_which($self->{'efr'}{'original_rcpt'}, $self->{'robotname'}, 'member');
+		@lists = Sympa::List::get_which($self->{'efr'}{'original_rcpt'}, $self->{'robotname'}, 'member');
 	    }else {
 		Log::do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$self->{'messagekey'}, $self->{'efr'}{'feedback_type'}, $self->{'efr'}{'original_rcpt'}, $self->{'listname'} );		
 		return 0;

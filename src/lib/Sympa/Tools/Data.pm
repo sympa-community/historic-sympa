@@ -414,7 +414,7 @@ sub smart_lessthan {
 Returns a true value if any item in @list meets the criterion given through
 code block.
 
-Shamelessly imported from List::MoreUtils to avoid a dependency.
+Shamelessly imported from Sympa::List::MoreUtils to avoid a dependency.
 
 =cut
 

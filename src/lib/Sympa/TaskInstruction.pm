@@ -664,7 +664,7 @@ sub purge_tables {
 	#
 	$removed = 0;
 	foreach my $robot (@{Robot::get_robots()}) {
-		my $all_lists = List::get_lists($robot);
+		my $all_lists = Sympa::List::get_lists($robot);
 		foreach my $list (@$all_lists) {
 			$removed += tracking::remove_message_by_period($list, $list->tracking->{'retention_period'});
 		}
@@ -707,7 +707,7 @@ sub purge_user_table {
 
 	foreach my $robot (@{Robot::get_robots()}) {
 
-		my $all_lists = List::get_lists($robot);
+		my $all_lists = Sympa::List::get_lists($robot);
 		foreach my $list (@$all_lists){
 
 			## Owners
@@ -764,7 +764,7 @@ sub purge_orphan_bounces {
 	my %bounced_users;
 	my $all_lists;
 
-	unless ($all_lists = List::get_lists()) {
+	unless ($all_lists = Sympa::List::get_lists()) {
 		Log::do_log('notice','No list available');
 		return 1;
 	}
@@ -816,7 +816,7 @@ sub expire_bounce {
 	my $delay = $tab[0];
 
 	Log::do_log('debug2','expire_bounce(%d)',$delay);
-	my $all_lists = List::get_lists();
+	my $all_lists = Sympa::List::get_lists();
 	foreach my $list (@$all_lists) {
 		my $listname = $list->name;
 		# the reference date is the date until which we expire bounces in second
@@ -1050,7 +1050,7 @@ sub eval_bouncers {
 	#################
 	my ($self,$task) = @_;
 
-	my $all_lists = List::get_lists();
+	my $all_lists = Sympa::List::get_lists();
 	foreach my $list (@$all_lists) {
 		my $listname = $list->name;
 		my $list_traffic = {};
@@ -1121,7 +1121,7 @@ sub process_bouncers {
 		'none'            => \&none
 	);
 
-	my $all_lists = List::get_lists();
+	my $all_lists = Sympa::List::get_lists();
 	foreach my $list (@$all_lists) {
 		my $listname = $list->name;
 

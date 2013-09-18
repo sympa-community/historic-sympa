@@ -668,7 +668,7 @@ sub verify {
 
     unless (defined($context->{'sender'})) {
 	Sympa::Log::Syslog::do_log('info',
-	    "internal error, no sender find in List::verify, report authors");
+	    "internal error, no sender find in Sympa::List::verify, report authors");
 	return undef;
     }
 

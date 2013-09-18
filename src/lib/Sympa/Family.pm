@@ -671,7 +671,7 @@ sub close_family {
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    my $family_lists = List::get_lists($self);
+    my $family_lists = Sympa::List::get_lists($self);
     my @impossible_close;
     my @close_ok;
 
@@ -1451,7 +1451,7 @@ Use L<List/get_lists>;
 # IN  : -$self
 # OUT : -\@list_of_list
 #########################################
-##DEPRECATED: Use List::get_lists($family);
+##DEPRECATED: Use Sympa::List::get_lists($family);
 
 =pod 
 
@@ -1472,7 +1472,7 @@ Use L<List/get_lists>.
 # IN  : -$self
 # OUT : -\%list_of_list
 #########################################
-##DECPRECATED: Use List::get_lists().
+##DECPRECATED: Use Sympa::List::get_lists().
 
 =item $family->get_uncompellable_param()
 
@@ -2232,12 +2232,12 @@ sub _set_status_changes {
 ##    if (($old_status ne 'pending') && ($old_status ne 'open')) {
 ##
 ##	if ($list->user_data_source eq 'file') {
-##	    $list->{'users'} = List::_load_users_file($list->dir . '/subscribers.closed.dump');
+##	    $list->{'users'} = Sympa::List::_load_users_file($list->dir . '/subscribers.closed.dump');
 ##	}elsif ($list->user_data_source eq 'database') {
 ##	    unless (-f $list->dir . '/subscribers.closed.dump') {
 ##		Sympa::Log::Syslog::do_log('notice', 'No subscribers to restore');
 ##	    }
-##	    my @users = List::_load_users_file($list->dir . '/subscribers.closed.dump');
+##	    my @users = Sympa::List::_load_users_file($list->dir . '/subscribers.closed.dump');
 ##
 ##	    ## Insert users in database
 ##	    foreach my $user (@users) {

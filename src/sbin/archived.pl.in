@@ -656,7 +656,7 @@ Rebuilds archives for the list the name of which is given in the argument $adrli
 
 =item * unset_hidden_mode
 
-=item * List::new
+=item * Sympa::List::new
 
 =item * Sympa::Log::Syslog::do_log
 
@@ -895,13 +895,13 @@ Archives one message into one list archives directory.
 
 =item * unset_hidden_mode
 
-=item * List::get_arc_size
+=item * Sympa::List::get_arc_size
 
-=item * List::get_list_id
+=item * Sympa::List::get_list_id
 
-=item * List::new
+=item * Sympa::List::new
 
-=item * List::send_notify_to_owner
+=item * Sympa::List::send_notify_to_owner
 
 =item * Sympa::Log::Syslog::do_log
 

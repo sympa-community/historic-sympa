@@ -123,7 +123,7 @@ sub lists {
 
     Sympa::Log::Syslog::do_log('info', 'SOAP lists(%s,%s)', $topic, $subtopic);
 
-    my $all_lists = List::get_lists($robot);
+    my $all_lists = Sympa::List::get_lists($robot);
     foreach my $list (@$all_lists) {
 
 	my $listname = $list->name;

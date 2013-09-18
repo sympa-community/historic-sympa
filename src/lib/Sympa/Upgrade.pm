@@ -145,11 +145,11 @@ sub upgrade {
     ## This is especially useful for character encoding reasons
     Sympa::Log::Syslog::do_log('notice',
 	'Rebuilding config.bin files for ALL lists...it may take a while...');
-    my $all_lists = List::get_lists('Site', {'reload_config' => 1});
+    my $all_lists = Sympa::List::get_lists('Site', {'reload_config' => 1});
 
     ## Empty the admin_table entries and recreate them
     Sympa::Log::Syslog::do_log('notice','Rebuilding the admin_table...');
-    List::delete_all_list_admin();
+    Sympa::List::delete_all_list_admin();
     foreach my $list (@$all_lists) {
 	$list->sync_include_admin();
     }
@@ -167,7 +167,7 @@ sub upgrade {
 	close EXEC;
 	
 	Sympa::Log::Syslog::do_log('notice', 'Rebuilding web archives...');
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    next unless %{$list->web_archive}; #FIXME: always success
 	    my $file = Site->queueoutgoing.'/.rebuild.'.$list->get_id();
@@ -184,7 +184,7 @@ sub upgrade {
     ## Initializing the new admin_table
     if (Sympa::Tools::lower_version($previous_version, '4.2b.4')) {
 	Sympa::Log::Syslog::do_log('notice', 'Initializing the new admin_table...');
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    $list->sync_include_admin();
 	}
@@ -209,7 +209,7 @@ sub upgrade {
 	}
 
 	## Search in V. Robot Lists
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    if (-d $list->dir . '/web_tt2') {
 		push @directories, $list->dir . '/web_tt2';
@@ -247,7 +247,7 @@ sub upgrade {
     ## Clean buggy list config files
     if (Sympa::Tools::lower_version($previous_version, '5.1b')) {
 	Sympa::Log::Syslog::do_log('notice', 'Cleaning buggy list config files...');
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    $list->save_config($list->robot->get_address('listmaster'));
 	}
@@ -256,7 +256,7 @@ sub upgrade {
     ## Fix a bug in Sympa 5.1
     if (Sympa::Tools::lower_version($previous_version, '5.1.2')) {
 	Sympa::Log::Syslog::do_log('notice', 'Rename archives/log. files...');
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    my $l = $list->name; 
 	    if (-f $list->dir . '/archives/log.') {
@@ -272,7 +272,7 @@ sub upgrade {
 	Sympa::Log::Syslog::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
 
 	foreach my $r (@{Robot::get_robots()}) {
-	    my $all_lists = List::get_lists($r, {'skip_sync_admin' => 1});
+	    my $all_lists = Sympa::List::get_lists($r, {'skip_sync_admin' => 1});
 	    foreach my $list ( @$all_lists ) {
 		foreach my $table ('subscriber','admin') {
 		    unless (SDM::do_query(
@@ -471,7 +471,7 @@ sub upgrade {
 	
 	Sympa::Log::Syslog::do_log('notice','Update lists config using include_list parameter...');
 
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    if (@{$list->include_list}) {
 		my $include_lists = $list->include_list;
@@ -516,7 +516,7 @@ sub upgrade {
 
 
 	Sympa::Log::Syslog::do_log('notice', 'Rebuilding web archives...');
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    next unless %{$list->web_archive}; #FIXME: always true
 	    my $file = Site->queueoutgoing . '/.rebuild.' . $list->get_id();
@@ -537,7 +537,7 @@ sub upgrade {
 	Sympa::Log::Syslog::do_log('notice','Q-Encoding web documents filenames...');
 
 	Language::PushLang(Site->lang);
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    if (-d $list->dir . '/shared') {
 		Sympa::Log::Syslog::do_log('notice','  Processing list %s...', $list);
@@ -600,7 +600,7 @@ sub upgrade {
 	}
 
 	## Search in Lists
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    foreach my $f ('config','info','homepage','message.header','message.footer') {
 		if (-f $list->dir . '/' . $f){
@@ -666,14 +666,14 @@ sub upgrade {
 	
 	Sympa::Log::Syslog::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
 
-	my $all_lists = List::get_lists('Site');
+	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    if ($list->user_data_source eq 'file') {
 		Sympa::Log::Syslog::do_log('notice',
 		    'List %s ; changing user_data_source from file to include2...',
 		    $list);
 
-		my @users = List::_load_list_members_file($list->dir . '/subscribers');
+		my @users = Sympa::List::_load_list_members_file($list->dir . '/subscribers');
 		
 		$list->user_data_source = 'include2';
 		$list->total(0);
@@ -739,7 +739,7 @@ sub upgrade {
 		## Now these characters are preserved, according to RFC 2047 section 5 
 		## We change encoding of shared documents according to new algorithm
 		Sympa::Log::Syslog::do_log('notice','Fixing Q-encoding of web document filenames...');
-		my $all_lists = List::get_lists('Site');
+		my $all_lists = Sympa::List::get_lists('Site');
 		foreach my $list ( @$all_lists ) {
 			if (-d $list->dir . '/shared') {
 				Sympa::Log::Syslog::do_log('notice','  Processing list %s...', $list);
@@ -842,7 +842,7 @@ sub upgrade {
 	    }
 	    ## Caching all list config
 	    Sympa::Log::Syslog::do_log('notice', 'Caching all list config to database...');
-	    List::get_lists('Site', { 'reload_config' => 1 });
+	    Sympa::List::get_lists('Site', { 'reload_config' => 1 });
 	    Sympa::Log::Syslog::do_log('notice', '...done');
 	}
 

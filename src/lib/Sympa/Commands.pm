@@ -1776,7 +1776,7 @@ sub _remind {
 			$context{'subject'} = gettext("Subscription summary");
 			
 			# this remind is a global remind.
-			my $all_lists = List::get_lists($robot);
+			my $all_lists = Sympa::List::get_lists($robot);
 			foreach my $list (@$all_lists) {
 				my $listname = $list->name;
 				my $user;
@@ -2577,7 +2577,7 @@ sub _which {
     }
 
     ## Ownership
-    if (@which = List::get_which($sender, $robot, 'owner')) {
+    if (@which = Sympa::List::get_which($sender, $robot, 'owner')) {
 		foreach my $list (@which) {
 			push @{$data->{'owner_lists'}}, $list->name;
 		}
@@ -2585,7 +2585,7 @@ sub _which {
     }
 
     ## Editorship
-    if (@which = List::get_which($sender, $robot, 'editor')) {
+    if (@which = Sympa::List::get_which($sender, $robot, 'editor')) {
 		foreach my $list (@which) {
 			push @{$data->{'editor_lists'}}, $list->name;
 		}

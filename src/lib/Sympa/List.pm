@@ -6202,7 +6202,7 @@ sub load_task_list {
 
 	    $list_of_task{$name}{'name'} = $name;
 
-	    my $titles = List::_load_task_title($file);
+	    my $titles = Sympa::List::_load_task_title($file);
 
 	    ## Set the title in the current language
 	    foreach my $lang (Sympa::Language::ImplicatedLangs()) {

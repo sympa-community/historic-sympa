@@ -1069,7 +1069,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
     Language::SetLang(Sympa::Site->best_language());
 
      ## Empty cache of the List.pm module
-     List::init_list_cache();
+     Sympa::List::init_list_cache();
     # Process grouped notifications
     Sympa::Site->send_notify_to_listmaster(undef, undef, 1, undef);
 
@@ -1668,7 +1668,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 	    }
 	    foreach my $role ('member', 'owner', 'editor') {
 		$param->{"get_which_$role"} =
-		    List::get_lists($robot,
+		    Sympa::List::get_lists($robot,
 			{   'filter_query' =>
 			    [   $role => $param->{'user'}{'email'},
 				'! status' => 'closed|family_closed'
@@ -3968,7 +3968,7 @@ sub do_help {
      ## Contextual help
      if ($in{'help_topic'}) {
 	 if ($in{'help_topic'} eq 'editlist') {
-	     foreach my $pname (sort List::by_order keys %{$pinfo}) {
+	     foreach my $pname (sort Sympa::List::by_order keys %{$pinfo}) {
 		 next if ($pname =~ /^(comment|defaults)$/);
 
 		 if ($pinfo->{$pname}{'gettext_id'}) {
@@ -4332,9 +4332,9 @@ sub do_lists {
 		$options->{'filter_query'} = [ 'topics' => $in{'topic'} ];
 	    }
 	}
-	$all_lists = List::get_lists($robot, $options);
+	$all_lists = Sympa::List::get_lists($robot, $options);
     } else {
-	$all_lists = List::get_lists($robot);
+	$all_lists = Sympa::List::get_lists($robot);
     }
 
      foreach my $list ( @$all_lists ) {
@@ -6699,7 +6699,7 @@ sub do_add {
      foreach my $email (keys %user) {
 	 wwslog('debug', "do_add subscription \$subscriptions->{$email}{custom_attribute} = $subscriptions->{$email}{'custom_attribute'})" );
 	 if (ref($subscriptions->{$email}{'custom_attribute'}) eq 'HASH') {
-	     my $xml = List::createXMLCustomAttribute($subscriptions->{$email}{'custom_attribute'}) ;
+	     my $xml = Sympa::List::createXMLCustomAttribute($subscriptions->{$email}{'custom_attribute'}) ;
 	     wwslog('debug', "do_add subscription XML \$subscriptions->{$email}{custom_attribute} = $xml;");
 	 }
 	 
@@ -8780,7 +8780,7 @@ sub do_get_pending_lists {
      ## Checking families and other virtual hosts.
      get_server_details();
 
-    my $all_lists = List::get_lists($robot,
+    my $all_lists = Sympa::List::get_lists($robot,
 	{ 'filter_query' => [ 'status' => 'pending' ] });
     foreach my $list ( @$all_lists ) {
 	$param->{'pending'}{$list->name}{'subject'} = $list->subject;
@@ -8799,7 +8799,7 @@ sub do_get_closed_lists {
      ## Checking families and other virtual hosts.
      get_server_details();
 
-    my $all_lists = List::get_lists($robot,
+    my $all_lists = Sympa::List::get_lists($robot,
 	{ 'filter_query' => [ 'status' => 'closed|family_closed' ] });
     foreach my $list ( @$all_lists ) {
 	$param->{'closed'}{$list->name}{'subject'} = $list->subject;
@@ -8817,7 +8817,7 @@ sub do_get_latest_lists {
      ## Checking families and other virtual hosts.
      get_server_details();
 
-    my $all_lists = List::get_lists($robot, { 'order' => [ '-creation' ] });
+    my $all_lists = Sympa::List::get_lists($robot, { 'order' => [ '-creation' ] });
     foreach my $list (@{$all_lists}) {
 	my $epoch = $list->creation->{'date_epoch'};
 	push @{$param->{'latest_lists'}},
@@ -8840,7 +8840,7 @@ sub do_get_inactive_lists {
      get_server_details();
 
      my @unordered_lists;
-     my $all_lists = List::get_lists($robot,
+     my $all_lists = Sympa::List::get_lists($robot,
 	{ 'filter_query' => [ '!status' => 'closed|family_closed' ] });
      foreach my $list ( @$all_lists ) {
 	 my $last_message = 0;
@@ -8886,7 +8886,7 @@ sub do_get_biggest_lists {
 	## Checking families and other virtual hosts.
 	get_server_details();
 	
-	my $all_lists = List::get_lists($robot, { 'order' => [ '-total' ] });
+	my $all_lists = Sympa::List::get_lists($robot, { 'order' => [ '-total' ] });
 	$param->{'biggest_lists'} = [
 	    map { {
 		'name' => $_->name,
@@ -9244,7 +9244,7 @@ sub do_create_list_request {
 
     ## load lists the user is administoring
     if ($param->{'is_listmaster'}) {
-	$param->{'all_lists'} = List::get_lists($robot);
+	$param->{'all_lists'} = Sympa::List::get_lists($robot);
     } else {
 	$param->{'all_lists'} =
 	    [List::get_which($param->{'user'}{'email'}, $robot, 'owner')];
@@ -9470,7 +9470,7 @@ sub do_scenario_test {
 	 }
      }
      closedir SCENARI;
-     my $all_lists = List::get_lists();
+     my $all_lists = Sympa::List::get_lists();
      foreach my $list ( @$all_lists ) {
 	 $param->{'listname'}{$list->name}{'defined'}=1 ;
      }
@@ -9662,7 +9662,7 @@ sub do_rebuildallarc {
 	Sympa::Report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot_id);
 	wwslog('err','error in  new Sympaspool(archive) ');
     }
-    my $all_lists = List::get_lists($robot);
+    my $all_lists = Sympa::List::get_lists($robot);
     foreach my $list ( @$all_lists ) {
 	next unless (defined $list->web_archive);
 
@@ -9714,7 +9714,7 @@ sub do_search_list {
 
      ## Members list
      my $record = 0;
-    my $all_lists = List::get_lists($robot,
+    my $all_lists = Sympa::List::get_lists($robot,
 	{ 'filter_query' => [ '%name%|%subject%' => $param->{'filter'} ] });
      foreach my $list ( @$all_lists ) {
 	my $is_admin = 0;
@@ -9840,7 +9840,7 @@ sub do_edit_list {
     ## Start of the loop parsing the data sent by the edition form. ##
     ######################################################################
 
-    foreach my $pname (sort List::by_order keys %{$edited_param}) {
+    foreach my $pname (sort Sympa::List::by_order keys %{$edited_param}) {
 	
 	## $p will contain the values of the current parameter in the previous list config
 	## $new_p  will contain the values sent by the form for the current parameter.
@@ -10511,7 +10511,7 @@ sub _prepare_edit_form {
     }
 
     ## For each parameter defined in List.pm, retrieve and prepare for editing
-    foreach my $pname (sort List::by_order keys %{$pinfo}) {
+    foreach my $pname (sort Sympa::List::by_order keys %{$pinfo}) {
 	 
 	 ## Skip comments and default values.
 	 next if ($pname =~ /^(comment|defaults)$/);
@@ -17853,7 +17853,7 @@ sub do_review_family {
 	return undef;	
     }
 
-    my $all_lists = List::get_lists($family);
+    my $all_lists = Sympa::List::get_lists($family);
     foreach my $flist (@{$all_lists}) {
 	unless (defined $flist) {
 	    wwslog('err', 'incorrect list');
