@@ -87,7 +87,7 @@ install-exec-hook:
 	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 	chmod 4750 $(DESTDIR)$(sbindir)/virtualwrapper
 
-alias_manager.pl bulk.pl task_manager.pl sympa.pl spooler.pl sympa_wizard.pl archived.pl bounced.pl: Makefile
+alias_manager.pl bulk.pl task_manager.pl sympa.pl sympa_wizard.pl archived.pl bounced.pl: Makefile
 	rm -f $@
 	$(AM_V_GEN)$(SED) \
 		-e 's|--PERL--|$(PERL)|' \
