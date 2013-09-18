@@ -38,6 +38,7 @@ use warnings;
 use constant MAX => 100_000;
 
 use Carp;
+use Digest::MD5;
 use Encode;
 use English qw(-no_match_vars);
 use IO::Scalar;
@@ -464,7 +465,7 @@ sub store {
 	}else{
 	    $rcptasstring  = $packet;
 	}
-	my $packetid =  Sympa::Tools::md5_fingerprint($rcptasstring);
+	my $packetid = Digest::MD5::md5_hex($rcptasstring);
 	my $packet_already_exist;
 	if (ref $listname eq 'List') {
 	    $listname = $listname->name;

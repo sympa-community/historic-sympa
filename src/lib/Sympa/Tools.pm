@@ -1534,7 +1534,7 @@ sub get_fingerprint {
 
 	if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-		if($fingerprint eq md5_fingerprint($random_email)){
+		if($fingerprint eq Digest::MD5::md5_hex($random_email)){
 			return 1;
 		}else{
 			return undef;
@@ -1542,29 +1542,10 @@ sub get_fingerprint {
 
 	}else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/get_fingerprint($email)
 
-		$fingerprint = md5_fingerprint($random_email);
+		$fingerprint = Digest::MD5::md5_hex($random_email);
 		return $fingerprint;
 
 	}
-}
-
-=item md5_fingerprint($string)
-
-Returns the md5 digest in hexadecimal format of given string.
-
-=cut
-
-sub md5_fingerprint {
-	my ($string) = @_;
-
-	return undef unless (defined $string);
-	chomp $string;
-
-	my $md5 = Digest::MD5->new();
-	$md5->reset();
-	$md5->add($string);
-
-	return $md5->hexdigest();
 }
 
 =item get_separator()

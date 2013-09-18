@@ -37,7 +37,6 @@ use strict;
 
 use Carp;
 use CGI::Cookie;
-use Digest::MD5;
 
 use Sympa::Language;
 use Sympa::Log::Syslog;

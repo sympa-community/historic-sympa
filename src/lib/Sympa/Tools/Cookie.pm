@@ -36,9 +36,9 @@ package Sympa::Tools::Cookie;
 use strict;
 
 use CGI::Cookie;
+use Digest::MD5;
 
 use Sympa::Log::Syslog;
-use Sympa::Tools;
 
 =head1 FUNCTIONS
 
@@ -94,7 +94,7 @@ sub get_mac {
 		return undef;
 	}
 
-	return substr(Sympa::Tools::md5_fingerprint($email . $secret), -8);
+	return substr(Digest::MD5::md5_hex($email . $secret), -8);
 
 }
 

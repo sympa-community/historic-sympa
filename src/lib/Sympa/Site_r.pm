@@ -39,6 +39,7 @@ use warnings;
 
 use Carp qw(croak);
 use Cwd;
+use Digest::MD5;
 
 use Sympa::Configuration;
 use Sympa::Language qw(gettext gettext_strftime);

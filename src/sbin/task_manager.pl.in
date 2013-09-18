@@ -60,7 +60,6 @@ use lib '--modulesdir--';
 use strict "vars";
 
 use English qw(-no_match_vars);
-use Digest::MD5;
 use Getopt::Long;
 use Pod::Usage;
 use POSIX qw();

@@ -38,6 +38,7 @@ use warnings;
 use base qw(Sympa::Site);
 
 use Carp qw(carp croak);
+use Digest::MD5;
 
 use Sympa::Language;
 use Sympa::Log::Syslog;
@@ -906,7 +907,7 @@ sub get_tag {
 	my ($self) = @_;
 
 	return substr(
-		Sympa::Tools::md5_fingerprint(
+		Digest::MD5::md5_hex(
 			Sympa::Site->cookie() . '/' . $self->name()
 		),
 		-10

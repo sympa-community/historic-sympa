@@ -35,6 +35,8 @@ package Sympa::Auth;
 
 use strict;
 
+use Digest::MD5;
+
 use Sympa::Configuration;
 use Sympa::Database;
 use Sympa::Language;
@@ -59,9 +61,9 @@ sub password_fingerprint {
 	Sympa::Log::Syslog::do_log('debug', '');
 
 	if(Sympa::Site->password_case eq 'insensitive') {
-		return Sympa::Tools::md5_fingerprint(lc($pwd));
+		return Digest::MD5::md5_hex(lc($pwd));
 	} else {
-		return Sympa::Tools::md5_fingerprint($pwd);
+		return Digest::MD5::md5_hex($pwd);
 	}
 }
 
@@ -473,7 +475,7 @@ sub remote_app_check_password {
 
 	$robot = Sympa::Robot::clean_robot($robot);
 
-	my $md5 = Sympa::Tools::md5_fingerprint($password);
+	my $md5 = Digest::MD5::md5_hex($password);
 
 	# seach entry for trusted_application in Conf
 	my @trusted_apps;
