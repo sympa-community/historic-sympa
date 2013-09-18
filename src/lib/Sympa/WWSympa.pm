@@ -37,7 +37,7 @@ use English qw(-no_match_vars);
 
 use Sympa::Log::Syslog;
 
-## No longer used: Use List->get_option_title().
+## No longer used: Use Sympa::List->get_option_title().
 %reception_mode = (
 	'mail'        => {'gettext_id' => 'standard (direct reception)'},
 	'digest'      => {'gettext_id' => 'digest MIME format'},
@@ -62,7 +62,7 @@ use Sympa::Log::Syslog;
 	10800 => {'gettext_id' => "1 week"},
 	43200 => {'gettext_id' => "30 days"});
 
-## No longer used: Use List->get_option_title().
+## No longer used: Use Sympa::List->get_option_title().
 %visibility_mode = (
 	'noconceal' => {'gettext_id' => "listed in the list review page"},
 	'conceal'   => {'gettext_id' => "concealed"}

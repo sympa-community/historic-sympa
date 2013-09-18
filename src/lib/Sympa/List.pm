@@ -102,7 +102,7 @@ my %config_in_admin_user_file = map +($_ => 1), @sources_providing_listmembers;
 
 =item new( NAME, [ ROBOT, [ OPTIONS ] ] )
 
- List->new();
+ Sympa::List->new();
 
 Creates a new object which will be used for a list and
 eventually loads the list if a name is given. Returns
@@ -6536,9 +6536,9 @@ sub _include_users_list {
 
     ## The included list is local or in another local robot
     if ($includelistname =~ /\@/) {
-	$includelist = List->new($includelistname);
+	$includelist = Sympa::List->new($includelistname);
     } else {
-	$includelist = List->new($includelistname, $robot);
+	$includelist = Sympa::List->new($includelistname, $robot);
     }
 
     unless ($includelist) {
@@ -9118,7 +9118,7 @@ Robot object, Family object or Site class (default).
 
 =item OPTIONS
 
-A hashref including options passed to List->new() (see load()) and any of
+A hashref including options passed to Sympa::List->new() (see load()) and any of
 following pairs:
 
 =over 4
@@ -9626,7 +9626,7 @@ sub get_lists {
 		    next unless $requested_lists{$listname};
 		}
 		## create object
-		my $list = List->new($listname, $robot, $options);
+		my $list = Sympa::List->new($listname, $robot, $options);
 		next unless defined $list;
 
 		## not orphan entry

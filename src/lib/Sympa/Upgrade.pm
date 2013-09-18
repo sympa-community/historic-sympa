@@ -296,7 +296,7 @@ sub upgrade {
 		}
 		
 		## Force Sync_admin
-		$list = List->new($list->name, $list->robot, {'force_sync_admin' => 1});
+		$list = Sympa::List->new($list->name, $list->robot, {'force_sync_admin' => 1});
 	    }
 	}
 
@@ -316,7 +316,7 @@ sub upgrade {
 
 	    next unless $listname and $listdomain;
 
-	    my $list = List->new $listname;
+	    my $list = Sympa::List->new $listname;
 	    unless (defined $list) {
 		Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -443,7 +443,7 @@ sub upgrade {
 	    next if ($dir =~ /\@/);
 
 	    my $listname = $dir;
-	    my $list = List->new $listname;
+	    my $list = Sympa::List->new $listname;
 	    unless (defined $list) {
 		Sympa::Log::Syslog::do_log('notice', 'Skipping unknown list %s', $listname);
 		next;
@@ -478,7 +478,7 @@ sub upgrade {
 		my $changed = 0;
 		foreach my $index (0..$#{$include_lists}) {
 		    my $incl = $include_lists->[$index];
-		    my $incl_list = List->new ($incl);
+		    my $incl_list = Sympa::List->new ($incl);
 		    
 		    if (defined $incl_list and
 			$incl_list->domain ne $list->domain) {

@@ -1022,7 +1022,7 @@ sub smime_encrypt {
     my $dummy;
 
     if ($list eq 'list') {
-	my $self = List->new($email);
+	my $self = Sympa::List->new($email);
 	($usercert, $dummy) = Sympa::Tools::smime_find_keys($self->{dir}, 'encrypt');
     }else{
 	my $base = Sympa::Site->ssl_cert_dir . '/' . Sympa::Tools::escape_chars($email);

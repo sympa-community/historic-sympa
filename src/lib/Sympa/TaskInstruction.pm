@@ -540,7 +540,7 @@ sub create_cmd {
 		'execution_date' => 'execution_date');
 
 	if ($type eq 'list') {
-		my $list = List->new ($object);
+		my $list = Sympa::List->new ($object);
 		$data{'list'}{'name'} = $list->name;
 	}
 	$type = '_global';
