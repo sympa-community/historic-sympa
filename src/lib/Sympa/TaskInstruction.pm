@@ -39,6 +39,8 @@ use strict;
 
 use Time::Local qw(timegm timelocal);
 
+use Sympa::Tools::Time;
+
 ###### DEFINITION OF AVAILABLE COMMANDS FOR TASKS ######
 
 our $date_arg_regexp1 = '\d+|execution_date';
@@ -429,7 +431,7 @@ sub next_cmd {
 		return undef;
 	}
 
-	my $human_date = Sympa::Tools::adate ($date);
+	my $human_date = Sympa::Tools::Time::adate ($date);
 	Log::do_log ('debug2', "--> new task $model ($human_date)");
 	return 1;
 }
@@ -900,7 +902,7 @@ sub chk_cert_expiration {
 		my @date = (0, 0, 0, $2, $TaskSpool::months{$1}, $3 - 1900);
 		$date =~ s/notAfter=//;
 		my $expiration_date = timegm (@date); # epoch expiration date
-		my $rep = Sympa::Tools::adate ($expiration_date);
+		my $rep = Sympa::Tools::Time::adate ($expiration_date);
 
 		# no near expiration nor expiration processing
 		if ($expiration_date > $limit) {
@@ -952,7 +954,7 @@ sub chk_cert_expiration {
 
 			$id =~ s/subject= //;
 			Log::do_log ('notice', "id : $id");
-			$tpl_context{'expiration_date'} = Sympa::Tools::adate ($expiration_date);
+			$tpl_context{'expiration_date'} = Sympa::Tools::Time::adate ($expiration_date);
 			$tpl_context{'certificate_id'} = $id;
 			$tpl_context{'auto_submitted'} = 'auto-generated';
 			unless (Sympa::Site->send_file($template, $_, \%tpl_context)) {
@@ -1024,7 +1026,7 @@ sub update_crl {
 		$date =~ /nextUpdate=(\w+)\s*(\d+)\s(\d\d)\:(\d\d)\:\d\d\s(\d+).+/;
 		my @date = (0, $4, $3 - 1, $2, $TaskSpool::months{$1}, $5 - 1900);
 		my $expiration_date = timegm (@date); # epoch expiration date
-		my $rep = Sympa::Tools::adate ($expiration_date);
+		my $rep = Sympa::Tools::Time::adate ($expiration_date);
 
 		## check if the crl is soon expired or expired
 		#my $file_date = $task->{'date'} - (-M $file) * 24 * 60 * 60; # last modification date
