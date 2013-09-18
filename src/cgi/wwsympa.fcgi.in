@@ -3392,7 +3392,7 @@ sub do_login {
      }
 
 
-     unless($data = Auth::check_auth($robot, $in{'email'},$in{'passwd'})){
+     unless($data = Sympa::Auth::check_auth($robot, $in{'email'},$in{'passwd'})){
 	 Sympa::Log::Syslog::do_log('notice', "Authentication failed\n");
 	 web_db_log({'parameters' => $in{'email'},
 		      'target_email' => $in{'email'},
@@ -3681,7 +3681,7 @@ sub do_sso_login {
 		
 		## Validate the ticket
 		my $ticket_output =
-		    Auth::get_one_time_ticket($robot, $in{'ticket'}, $ip);
+		    Sympa::Auth::get_one_time_ticket($robot, $in{'ticket'}, $ip);
 		unless ($ticket_output->{'result'} eq 'success'){
 		    Sympa::Report::reject_report_web('user','auth_failed',{},$param->{'action'});
 		    web_db_log({'parameters' => $in{'auth_service_name'},

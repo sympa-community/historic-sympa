@@ -223,7 +223,7 @@ sub login {
     ## Set an env var to find out if in a SOAP context
     $ENV{'SYMPA_SOAP'} = 1;
 
-    my $user = Auth::check_auth($robot, $email, $passwd);
+    my $user = Sympa::Auth::check_auth($robot, $email, $passwd);
 
     unless ($user) {
 	Sympa::Log::Syslog::do_log('notice', "SOAP : login authentication failed");

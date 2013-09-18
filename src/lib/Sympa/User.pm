@@ -430,7 +430,7 @@ sub update_global_user {
 	$who = Sympa::Tools::clean_email($who);
 
 	## use md5 fingerprint to store password
-	$values->{'password'} = Auth::password_fingerprint($values->{'password'})
+	$values->{'password'} = Sympa::Auth::password_fingerprint($values->{'password'})
 		if ($values->{'password'});
 
 	## Canonicalize lang if possible.
@@ -503,7 +503,7 @@ sub add_global_user {
 	my ($user, $statement, $table);
 
 	## encrypt password
-	$values->{'password'} = Auth::password_fingerprint($values->{'password'})
+	$values->{'password'} = Sympa::Auth::password_fingerprint($values->{'password'})
 	if ($values->{'password'});
 
 	## Canonicalize lang if possible
