@@ -44,7 +44,7 @@ use XML::LibXML;
 use Sympa::Admin;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
-use Language qw(gettext_strftime);
+use Sympa::Language qw(gettext_strftime);
 use Sympa::List;
 use Sympa::Log::Syslog;
 use Sympa::Scenario;
