@@ -784,7 +784,7 @@ sub instantiate {
     ## EACH FAMILY LIST
     foreach my $listname (@{$self->{'list_to_generate'}}) {
 
-	my $list = new List($listname, $self->{'robot'});
+	my $list = List->new($listname, $self->{'robot'});
 
 	## get data from list XML file. Stored into $config (class Config_XML).
 	my $xml_fh;
@@ -938,7 +938,7 @@ sub instantiate {
     ## PREVIOUS LIST LEFT
     foreach my $l (keys %{$previous_family_lists}) {
 	my $list;
-	unless ($list = new List($l, $self->{'robot'})) {
+	unless ($list = List->new($l, $self->{'robot'})) {
 	    push(@{$self->{'errors'}{'previous_list'}}, $l);
 	    next;
 	}
@@ -2550,7 +2550,7 @@ sub create_automatic_list {
 	    $self, join(';', @{$details}));
 	return undef;
     }
-    my $list = new List($listname, $self->robot);
+    my $list = List->new($listname, $self->robot);
     unless (defined $list) {
 	Sympa::Log::Syslog::do_log('err', 'dynamic list %s could not be created',
 	    $listname);

@@ -85,7 +85,7 @@ my $msg_count = 0;
 #$main::options{'debug'} = 1;
 #$main::options{'debug2'} = 1 if ($main::options{'debug'});
 
-# this line is necessary - without it the new Sympa::List fails.
+# this line is necessary - without it the Sympa::List->new fails.
 my $pinfo = Sympa::List::_apply_defaults();
 
 $OUTPUT_AUTOFLUSH = 1;
@@ -138,7 +138,7 @@ if (defined $report) {
 
 chdir Sympa::Site->home;
 
-my $list = new Sympa::List($listname, $robot)
+my $list = Sympa::List->new($listname, $robot)
 	or die 'Cannot create List object';
 
 my $home_sympa;

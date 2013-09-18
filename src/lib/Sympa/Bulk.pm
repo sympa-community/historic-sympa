@@ -384,7 +384,7 @@ sub store {
     # because as soon as packet are created bulk.pl may distribute the
     # $last_stored_message_key is a global var used in order to detect if a message as been already stored    
     my $message_already_on_spool ;
-    my $bulkspool = new Sympaspool ('bulk');
+    my $bulkspool = Sympaspool->new ('bulk');
 
     if (defined $last_stored_message_key and
 	defined $message->{'messagekey'} and

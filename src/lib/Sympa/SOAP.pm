@@ -291,7 +291,7 @@ sub casLogin {
 	    unless ($auth_service->{'auth_type'} eq 'cas')
 	    ;    ## skip non CAS entries
 
-	my $cas = new AuthCAS(
+	my $cas = AuthCAS->new(
 	    casUrl => $auth_service->{'base_url'},
 
 	    #CAFile => '/usr/local/apache/conf/ssl.crt/ca-bundle.crt',

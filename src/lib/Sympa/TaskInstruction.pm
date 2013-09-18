@@ -217,7 +217,7 @@ sub parse {
 		# assignment
 	}elsif ($self->{'line_as_string'} =~ /^\s*(@\w+)\s*=\s*(.+)/) {
 
-		my $subinstruction = new Sympa::TaskInstruction ({'line_as_string' => $2, 'line_number' => $self->{'line_number'}});
+		my $subinstruction = Sympa::TaskInstruction->new ({'line_as_string' => $2, 'line_number' => $self->{'line_number'}});
 
 		unless ( $asgn_commands{$subinstruction->{'command'}} ) {
 			$self->{'nature'} = 'error';
@@ -540,7 +540,7 @@ sub create_cmd {
 		'execution_date' => 'execution_date');
 
 	if ($type eq 'list') {
-		my $list = new List ($object);
+		my $list = List->new ($object);
 		$data{'list'}{'name'} = $list->name;
 	}
 	$type = '_global';

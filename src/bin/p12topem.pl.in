@@ -109,7 +109,7 @@ my $p12input = $options{'pkcs12'};
 my ($cert,$privatekey,$inpass,$key);
 
 if ($listname) {
-	my $self = new Sympa::List($listname, $robot);
+	my $self = Sympa::List->new($listname, $robot);
 	$cert = $self->{'dir'}.'/cert.pem';
 	$privatekey = $self->{'dir'}.'/private_key';
 	unless (-d $self->{'dir'}) {

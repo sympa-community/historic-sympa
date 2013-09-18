@@ -316,7 +316,7 @@ sub upgrade {
 
 	    next unless $listname and $listdomain;
 
-	    my $list = new List $listname;
+	    my $list = List->new $listname;
 	    unless (defined $list) {
 		Sympa::Log::Syslog::do_log('notice',"Skipping unknown list $listname");
 		next;
@@ -443,7 +443,7 @@ sub upgrade {
 	    next if ($dir =~ /\@/);
 
 	    my $listname = $dir;
-	    my $list = new List $listname;
+	    my $list = List->new $listname;
 	    unless (defined $list) {
 		Sympa::Log::Syslog::do_log('notice', 'Skipping unknown list %s', $listname);
 		next;
@@ -478,7 +478,7 @@ sub upgrade {
 		my $changed = 0;
 		foreach my $index (0..$#{$include_lists}) {
 		    my $incl = $include_lists->[$index];
-		    my $incl_list = new List ($incl);
+		    my $incl_list = List->new ($incl);
 		    
 		    if (defined $incl_list and
 			$incl_list->domain ne $list->domain) {
@@ -859,7 +859,7 @@ sub upgrade {
 	    Sympa::Log::Syslog::do_log('notice',
 		'Performing upgrade for spool %s', $spooldir);
 
-	    my $spool = new Sympaspool($spools_def{$spoolparameter});
+	    my $spool = Sympaspool->new($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
 		croak sprintf("Can't open dir %s: %s", $spooldir, "$!");
 		## No return.

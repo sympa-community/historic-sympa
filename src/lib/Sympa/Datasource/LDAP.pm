@@ -68,7 +68,7 @@ sub new {
 	my ($class, %params) = @_;
 
 	my $self = \%params;
-	Sympa::Log::Syslog::do_log('debug','Creating new LDAPSource object');
+	Sympa::Log::Syslog::do_log('debug','Creating LDAPSource->new object');
 	## Map equivalent parameters (depends on the calling context : included members, scenario, authN
 	## Also set defaults
 	foreach my $p (keys %{$self}) {

@@ -2052,7 +2052,7 @@ sub _load_binary_cache {
 	unless _source_has_not_changed({'config_file' => $config_file});
     my $config_bin = $config_file . $binary_file_extension;
 
-    my $lock = new Lock ($config_bin);
+    my $lock = Lock->new ($config_bin);
     unless (defined $lock) {
         Sympa::Log::Syslog::do_log('err','Could not create new lock');
         return undef;

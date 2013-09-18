@@ -122,7 +122,7 @@ sub remove_invalid_dkim_signature {
     unless (dkim_verifier($msg_as_string)){
 		my $body_as_string = Message::get_body_from_msg_as_string ($msg_as_string);
 
-		my $parser = new MIME::Parser;
+		my $parser = MIME::Parser->new;
 		$parser->output_to_core(1);
 		my $entity = $parser->parse_data($msg_as_string);
 		unless($entity) {

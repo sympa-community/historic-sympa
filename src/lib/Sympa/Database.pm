@@ -1269,7 +1269,7 @@ sub create {
 	croak "missing db_type parameter" unless $params{db_type};
 	croak "missing db_name parameter" unless $params{db_name};
 
-	Sympa::Log::Syslog::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$params{db_type});
+	Sympa::Log::Syslog::do_log('debug',"Creating SQLSource->new object for RDBMS '%s'",$params{db_type});
 
 	my $db_type = lc($params{db_type});
 	my $subclass =

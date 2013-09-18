@@ -41,7 +41,7 @@ use Sympa::TaskInstruction;
 #### Task level subs ####
 ##########################
 
-## Creates a new Task object
+## Creates a Task->new object
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
@@ -57,7 +57,7 @@ sub new {
 	$task->{'domain'} = $task_in_spool->{'robot'};
 	    
 	if ($task_in_spool->{'list'}) { # list task
-	    $task->{'list_object'} = new List ($task_in_spool->{'list'},$task_in_spool->{'robot'},{'skip_sync_admin' => 1});
+	    $task->{'list_object'} = List->new ($task_in_spool->{'list'},$task_in_spool->{'robot'},{'skip_sync_admin' => 1});
 	    $task->{'domain'} = $task->{'list_object'}{'domain'};
 	    unless (defined $task->{'list_object'}) {
 		Sympa::Log::Syslog::do_log('err','Unable to create new task object for list %s@%s. This list does not exist',$task_in_spool->{'list'},$task_in_spool->{'robot'});
@@ -103,7 +103,7 @@ sub create {
     } else {
 	$task_in_spool->{'task_object'} = '_global';
     }
-    my $self = new Task($task_in_spool);
+    my $self = Task->new($task_in_spool);
     unless ($self) {
 	Sympa::Log::Syslog::do_log('err','Unable to create task object');
 	return undef;
@@ -229,7 +229,7 @@ sub store {
     my $self = shift;
 
     Sympa::Log::Syslog::do_log('debug','Spooling task %s',$self->get_description);
-    my $taskspool = new Sympa::Spool::Task;
+    my $taskspool = Sympa::Spool::Task->new;
     my %meta;
     $meta{'task_date'}=$self->{'date'};
     $meta{'date'}=$self->{'date'};
@@ -258,7 +258,7 @@ sub remove {
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
     my $self = shift;
 
-    my $taskspool = new Sympa::Spool::Task;
+    my $taskspool = Sympa::Spool::Task->new;
     unless ($taskspool->remove_message($self->{'messagekey'})) {
 	Sympa::Log::Syslog::do_log('err', 'Unable to remove task (messagekey = %s)',
 	    $self->{'messagekey'});
@@ -411,7 +411,7 @@ sub parse {
     my $lnb = 0; # line number
     foreach my $line (split('\n',$messageasstring)){
 	$lnb++;
-	my $result = new Sympa::TaskInstruction ({'line_as_string' =>$line, 'line_number' => $lnb},$self);
+	my $result = Sympa::TaskInstruction->new ({'line_as_string' =>$line, 'line_number' => $lnb},$self);
 	if ( defined $self->{'errors'}) {
 	    $self->error_report;
 	    return undef;

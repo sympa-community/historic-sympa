@@ -805,7 +805,7 @@ sub savestats {
     return undef unless $self->robot->lists($name);
 
     ## Lock file
-    my $lock = new Lock($dir . '/stats');
+    my $lock = Lock->new($dir . '/stats');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -1062,7 +1062,7 @@ sub save_config {
     return undef unless $self;
 
     ## Lock file
-    my $lock = new Lock($self->dir . '/config');
+    my $lock = Lock->new($self->dir . '/config');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -1691,7 +1691,7 @@ sub distribute_msg {
 
 	# rename update topic content id of the message
 	if ($info_msg_topic) {
-	    my $topicspool = new SympaspoolClassic('topic');
+	    my $topicspool = Sympaspool->newClassic('topic');
 	    rename("$topicspool->{'dir'}/$info_msg_topic->{'filename'}","$topicspool->{'dir'}/$self->->get_id.$new_id");
 	    $info_msg_topic->{'filename'} = "$self->->get_id.$new_id";
 	}
@@ -2758,7 +2758,7 @@ sub send_auth {
 	Digest::MD5::md5_hex(join('/', $self->cookie, $messageid));
     chomp $authkey;
 
-    my $spool = new Sympaspool('auth');
+    my $spool = Sympaspool->new('auth');
     $spool->update(
 	{'messagekey' => $message->{'messagekey'}},
 	{   "spoolname"   => 'auth',
@@ -4179,7 +4179,7 @@ sub get_first_list_member {
     $rows = $data->{'rows'};
     $sql_regexp = $data->{'sql_regexp'};
 
-    my $lock = new Lock($self->dir . '/include');
+    my $lock = Lock->new($self->dir . '/include');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -4358,7 +4358,7 @@ Returns a hash to the first admin user with predefined role on the list.
     Sympa::Log::Syslog::do_log('debug3', '(%s, %s, sortby=%s, offset=%s, rows=%s)',
 	$self, $role, $sortby, $offset, $rows);
 
-    my $lock = new Lock($self->dir . '/include_admin_user');
+    my $lock = Lock->new($self->dir . '/include_admin_user');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -4451,7 +4451,7 @@ Returns a hash to the first admin user with predefined role on the list.
         $sth = pop @sth_stack;
 
 	## Release the Shared lock
-	my $lock = new Lock($self->dir . '/include_admin_user');
+	my $lock = Lock->new($self->dir . '/include_admin_user');
 	unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	    return undef;
@@ -4626,7 +4626,7 @@ sub get_next_list_member {
 		$sth = pop @sth_stack;
 
 		## Release lock
-	my $lock = new Lock($self->dir . '/include');
+	my $lock = Lock->new($self->dir . '/include');
 		unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 			return undef;
@@ -4672,7 +4672,7 @@ sub get_next_list_admin {
 		$sth = pop @sth_stack;
 
 		## Release the Shared lock
-	my $lock = new Lock($self->dir . '/include_admin_user');
+	my $lock = Lock->new($self->dir . '/include_admin_user');
 		unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 			return undef;
@@ -4690,7 +4690,7 @@ sub get_first_bouncing_list_member {
     my $self = shift;
     Sympa::Log::Syslog::do_log('debug2', '');
 
-    my $lock = new Lock($self->dir . '/include');
+    my $lock = Lock->new($self->dir . '/include');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -4775,7 +4775,7 @@ sub get_next_bouncing_list_member {
 		$sth = pop @sth_stack;
 
 		## Release the Shared lock
-	my $lock = new Lock($self->dir . '/include');
+	my $lock = Lock->new($self->dir . '/include');
 		unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 			return undef;
@@ -6000,7 +6000,7 @@ sub archive_msg {
 		'Do not archive message with no-archive flag for list %s',
 		$self);
 	} else {
-	    my $spoolarchive = new SympaspoolClassic('outgoing');
+	    my $spoolarchive = Sympaspool->newClassic('outgoing');
 	    unless ($spoolarchive->store(
 		$msgtostore,
 		{'list' => $self->name, 'robot' => $self->domain}
@@ -6536,9 +6536,9 @@ sub _include_users_list {
 
     ## The included list is local or in another local robot
     if ($includelistname =~ /\@/) {
-	$includelist = new List($includelistname);
+	$includelist = List->new($includelistname);
     } else {
-	$includelist = new List($includelistname, $robot);
+	$includelist = List->new($includelistname, $robot);
     }
 
     unless ($includelist) {
@@ -7514,7 +7514,7 @@ sub _load_list_members_from_include {
 	    ## Verify if we can synchronize sources. If it's allowed OR there are new sources, we update the list, and can add subscribers.
 		## Else if we can't synchronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
-			my $source = new SQLSource($incl);
+			my $source = SQLSource->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 		    Sympa::Log::Syslog::do_log('debug', 'is_new %d, syncing',
 			$source_is_new);
@@ -7539,7 +7539,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 	    } elsif ($type eq 'include_ldap_query') {
-			my $source = new LDAPSource($incl);
+			my $source = LDAPSource->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 		    $included =
 			_include_users_ldap(\%users, $source_id, $source,
@@ -7561,7 +7561,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 	    } elsif ($type eq 'include_ldap_2level_query') {
-			my $source = new LDAPSource($incl);
+			my $source = LDAPSource->new($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 		    my $result =
 			_include_users_ldap_2level(\%users, $source_id,
@@ -7734,17 +7734,17 @@ sub _load_list_admin_from_include {
 		      , admin_only    => 1
 		      );
 		} elsif ($type eq 'include_sql_query') {
-		    my $source = new SQLSource($incl);
+		    my $source = SQLSource->new($incl);
 		    $included =
 			_include_users_sql(\%admin_users, $incl, $source,
 			\%option, 'untied', $self->sql_fetch_timeout);
 		} elsif ($type eq 'include_ldap_query') {
-		    my $source = new LDAPSource($incl);
+		    my $source = LDAPSource->new($incl);
 		    $included =
 			_include_users_ldap(\%admin_users, $incl, $source,
 			\%option);
 		} elsif ($type eq 'include_ldap_2level_query') {
-		    my $source = new LDAPSource($incl);
+		    my $source = LDAPSource->new($incl);
 		    my $result =
 			_include_users_ldap_2level(\%admin_users, $incl,
 			$source, \%option);
@@ -8125,10 +8125,10 @@ sub sync_include_ca {
 	    my $source = undef;
 	    my $srcca = undef;
 	    if ($type eq 'include_sql_ca') {
-		$source = new SQLSource($incl);
+		$source = SQLSource->new($incl);
 	    } elsif (($type eq 'include_ldap_ca') or
 		($type eq 'include_ldap_2level_ca')) {
-		$source = new LDAPSource($incl);
+		$source = LDAPSource->new($incl);
 	    }
 	    next unless (defined($source));
 	    if ($source->is_allowed_to_sync()) {
@@ -8350,7 +8350,7 @@ sub sync_include {
     my $users_updated = 0;
 
     ## Get an Exclusive lock
-    my $lock = new Lock($self->dir . '/include');
+    my $lock = Lock->new($self->dir . '/include');
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	return undef;
@@ -8611,7 +8611,7 @@ sub sync_include_admin {
 	my $admin_users_updated = 0;
 
 	## Get an Exclusive lock
-	my $lock = new Lock($self->dir . '/include_admin_user');
+	my $lock = Lock->new($self->dir . '/include_admin_user');
 	unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	    return undef;
@@ -9626,7 +9626,7 @@ sub get_lists {
 		    next unless $requested_lists{$listname};
 		}
 		## create object
-		my $list = new List($listname, $robot, $options);
+		my $list = List->new($listname, $robot, $options);
 		next unless defined $list;
 
 		## not orphan entry
@@ -10356,7 +10356,7 @@ sub _load_list_config_file {
 ##    }
 
     ## Lock file
-    my $lock = new Lock($config_file);
+    my $lock = Lock->new($config_file);
     unless (defined $lock) {
 	Sympa::Log::Syslog::do_log('err', 'Could not create new lock on %s', $config_file);
 	return undef;
@@ -11038,7 +11038,7 @@ sub tag_topic {
 
     my $topic_item = sprintf "TOPIC   %s\n", $topic_list;
     $topic_item .= sprintf "METHOD  %s\n", $method;
-    my $topicspool = new SympaspoolClassic('topic');
+    my $topicspool = Sympaspool->newClassic('topic');
 
     return (
 	$topicspool->store(
@@ -11073,7 +11073,7 @@ sub load_msg_topic {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
     my ($self, $msg_id, $robot) = @_;
 
-    my $topicspool = new SympaspoolClassic('topic');
+    my $topicspool = Sympaspool->newClassic('topic');
 
     my $topics_from_spool = $topicspool->get_message(
 	{   'list'  => $self->name,
@@ -11418,7 +11418,7 @@ sub store_signoff_request {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
     my ($self, $email) = @_;
 
-    my $signoff_request_spool = new Sympaspool('signoff');
+    my $signoff_request_spool = Sympaspool->new('signoff');
 
     if ($signoff_request_spool->get_content(
 	    {   'selector' => {
@@ -11452,7 +11452,7 @@ sub get_signoff_requests {
 
     my %signoffs;
 
-    my $signoff_request_spool = new Sympaspool('signoff');
+    my $signoff_request_spool = Sympaspool->new('signoff');
     my @sigrequests           = $signoff_request_spool->get_content(
 	{   'selector'  => {'list' => $self->name, 'robot' => $self->domain},
 	    'selection' => '*'
@@ -11528,7 +11528,7 @@ sub get_signoff_requests {
 sub get_signoff_request_count {
     my $self = shift;
 
-    my $signoff_request_spool = new Sympaspool('signoff');
+    my $signoff_request_spool = Sympaspool->new('signoff');
     return $signoff_request_spool->get_content(
 	{   'selector'  => {'list' => $self->name, 'robot' => $self->domain},
 	    'selection' => 'count'
@@ -11540,7 +11540,7 @@ sub delete_signoff_request {
     my ($self, @list_of_email) = @_;
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', $self, join(',', @list_of_email));
 
-    my $signoff_request_spool = new Sympaspool('signoff');
+    my $signoff_request_spool = Sympaspool->new('signoff');
 
     my $removed = 0;
     foreach my $email (@list_of_email) {
@@ -13094,7 +13094,7 @@ sub list_cache_fetch {
 	($time_config_bin = (stat($self->dir . '/config.bin'))[9]) > $m1 and
 	$time_config <= $time_config_bin) {
 	## Get a shared lock on config file first
-	my $lock = new Lock($self->dir . '/config');
+	my $lock = Lock->new($self->dir . '/config');
 	unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	    return undef;
@@ -13140,7 +13140,7 @@ open CCC, '>', $self->dir . '/config.dump'; print CCC Dumper($self->config); clo
 
     if ($cache_list_config eq 'binary_file') {
 	## Get a shared lock on config file first
-	my $lock = new Lock($self->dir . '/config');
+	my $lock = Lock->new($self->dir . '/config');
 	unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	    return undef;
@@ -13283,7 +13283,7 @@ sub list_cache_purge {
     if ($cache_list_config eq 'binary_file' and -e $self->dir . '/config.bin')
     {
 	## Get a shared lock on config file first
-	my $lock = new Lock($self->dir . '/config');
+	my $lock = Lock->new($self->dir . '/config');
 	unless (defined $lock) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not create new lock');
 	    return undef;

@@ -2757,14 +2757,14 @@ sub DoCommand {
 sub SendDigest {
     Sympa::Log::Syslog::do_log('debug2', '()');
 
-    my $digestspool = new SympaspoolClassic('digest');
+    my $digestspool = Sympaspool->newClassic('digest');
 
     foreach my $digest (
 	$digestspool->get_content(
 	    {'selection' => 'messagekey,list,robot,date'}
 	)
 	) {
-	my $list = new Sympa::List($digest->{'list'}, $digest->{'robot'});
+	my $list = Sympa::List->new($digest->{'list'}, $digest->{'robot'});
 	unless ($list) {
 	    Sympa::Log::Syslog::do_log(
 		'info',
