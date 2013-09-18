@@ -2664,7 +2664,7 @@ sub send_html {
 
     # XSS escaping applied to all outgoing parameters.
     ## Escape parameters on a copy to avoid altering useful data.
-    my $param_copy = Sympa::Tools::dup_var($param);
+    my $param_copy = Sympa::Tools::Data::dup_var($param);
     if(defined $param_copy) {
 	unless(Sympa::Tools::sanitize_var('var' => $param_copy,
 				    'robot' => $robot,
@@ -3895,7 +3895,7 @@ sub is_ldap_user {
 	 # skip ldap auth service if the user id or email do not match regexp auth service parameter
 	 next unless ($auth =~ /$ldap->{'regexp'}/i);
 
-	 my $param = Sympa::Tools::dup_var($ldap);
+	 my $param = Sympa::Tools::Data::dup_var($ldap);
 	 my $ds = LDAPSource->new($param);
 
 	 unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
@@ -5927,7 +5927,7 @@ sub do_serveradmin {
  }
 
 sub do_edit_config {
-    my $editable_params = Sympa::Tools::dup_var(\@confdef::params);
+    my $editable_params = Sympa::Tools::Data::dup_var(\@confdef::params);
 
     get_server_details();
 

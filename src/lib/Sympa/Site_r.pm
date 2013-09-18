@@ -861,7 +861,7 @@ sub send_file {
 		croak 'bug in logic.  Ask developer';
 	}
 
-	my $data = Sympa::Tools::dup_var($context);
+	my $data = Sympa::Tools::Data::dup_var($context);
 
 	## Any recipients
 	if (!defined $who or
@@ -1297,7 +1297,7 @@ sub send_notify_to_listmaster {
 	if (($operation eq 'request_list_creation') or
 		($operation eq 'request_list_renaming')) {
 		foreach my $email (split(/\,/, $listmaster)) {
-			my $cdata = Sympa::Tools::dup_var($data);
+			my $cdata = Sympa::Tools::Data::dup_var($data);
 			$cdata->{'one_time_ticket'} =
 			Auth::create_one_time_ticket($email, $robot_id,
 				'get_pending_lists', $cdata->{'ip'});

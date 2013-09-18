@@ -169,7 +169,7 @@ sub new {
 	my $pkg = shift;
 	my $data = shift; #Instructions are built by parsing a single line of a task string.
 	my $task = shift;
-	my $self = Sympa::Tools::dup_var($data);
+	my $self = Sympa::Tools::Data::dup_var($data);
 	bless $self, $pkg;
 	$self->parse;
 	if ( defined $self->{'error'}) {

@@ -6138,7 +6138,7 @@ sub load_scenario_list {
 
     ## Return a copy of the data to prevent unwanted changes in the central
     ## scenario data structure
-    return Sympa::Tools::dup_var(\%list_of_scenario);
+    return Sympa::Tools::Data::dup_var(\%list_of_scenario);
 }
 
 =over 4
@@ -7488,7 +7488,7 @@ sub _load_list_members_from_include {
 
             # Work with a copy of admin hash branch to avoid including
             # temporary variables into the actual admin hash.[bug #3182]
-	    my $incl          = Sympa::Tools::dup_var($tmp_incl);
+	    my $incl          = Sympa::Tools::Data::dup_var($tmp_incl);
 	    my $source_id     = Datasource::_get_datasource_id($tmp_incl);
 	    my $source_is_new = defined $old_subs->{$source_id};
 
@@ -7719,7 +7719,7 @@ sub _load_list_admin_from_include {
 
 		# Work with a copy of admin hash branch to avoid including
 		# temporary variables into the actual admin hash. [bug #3182]
-		my $incl = Sympa::Tools::dup_var($tmp_incl);
+		my $incl = Sympa::Tools::Data::dup_var($tmp_incl);
 
 		# get the list of admin users
 		# does it need to define a 'default_admin_user_option'?
@@ -8121,7 +8121,7 @@ sub sync_include_ca {
 	foreach my $tmp_incl (@{$self->$type}) {
 	    ## Work with a copy of admin hash branch to avoid including
 	    ## temporary variables into the actual admin hash.[bug #3182]
-	    my $incl = Sympa::Tools::dup_var($tmp_incl);
+	    my $incl = Sympa::Tools::Data::dup_var($tmp_incl);
 	    my $source = undef;
 	    my $srcca = undef;
 	    if ($type eq 'include_sql_ca') {
@@ -12629,7 +12629,7 @@ sub _set_list_param {
 	} else {
 	    $config_hash->{$config_attr} = $val;
 	}
-	$admin_hash->{$config_attr} = Sympa::Tools::dup_var($val);
+	$admin_hash->{$config_attr} = Sympa::Tools::Data::dup_var($val);
     } else {
 	delete $config_hash->{$config_attr};
 	delete $admin_hash->{$config_attr};
@@ -12668,7 +12668,7 @@ sub admin {
 	$self->$p;
     }
     ## get copy to prevent breaking cache
-    return Sympa::Tools::dup_var($self->{'admin'});
+    return Sympa::Tools::Data::dup_var($self->{'admin'});
 }
 
 =over 4
@@ -12699,7 +12699,7 @@ sub config {
 	$self->$p;
     }
     ## Get copy to prevent breaking config
-    return Sympa::Tools::dup_var($self->{'config'});
+    return Sympa::Tools::Data::dup_var($self->{'config'});
 }
 
 =over 4
