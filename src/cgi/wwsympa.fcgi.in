@@ -2809,7 +2809,7 @@ sub check_param_in {
 	 $in{'list'} = $1;
 
 	 ## Create a Sympa::List->new instance.
-	 unless ($list = Sympa::List->new ($in{'list'}, $robot)) {
+	 unless ($list = Sympa::List->new($in{'list'}, $robot)) {
 	     Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
 	     wwslog('info','check_param_in: unknown list %s', $in{'list'});
 	     return undef;
@@ -2826,7 +2826,7 @@ sub check_param_in {
 
      if ($in{'list'}) {
 	## Create a Sympa::List->new instance.
-	unless ($list = Sympa::List->new ($in{'list'}, $robot)) {
+	unless ($list = Sympa::List->new($in{'list'}, $robot)) {
 	    Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list'}},$param->{'action'},'');
 	    wwslog('info','check_param_in: unknown list %s', $in{'list'});
 	    return undef;
@@ -4465,7 +4465,7 @@ sub do_active_lists {
 
      ## get msg count for each list
      foreach my $l (keys (%{$param->{'which'} || {}})) {
-	 my $list = Sympa::List->new ($l, $robot);
+	 my $list = Sympa::List->new($l, $robot);
 	 my $file = $list->dir . '/msg_count';
    
 	 my %count ; 
@@ -5386,7 +5386,7 @@ sub do_multiple_subscribe {
     
     
     foreach my $requested_list (@lists) {	 
-	my $param->{'list'} = Sympa::List->new ($requested_list, $robot);
+	my $param->{'list'} = Sympa::List->new($requested_list, $robot);
 	$results{'requested_list'} = do_subscribe();
     }
 }
@@ -6209,7 +6209,7 @@ sub do_copy_template {
     if ($in{'scope_out'} eq 'list') { 
 	if ($in{'list_out'}) {
 	    my $list_out;
-	    unless ($list_out = Sympa::List->new $in{'list_out'}, $robot) {
+	    unless ($list_out = Sympa::List->new($in{'list_out'}, $robot)) {
 		Sympa::Report::reject_report_web('user','unknown_list',{'list' => $in{'list_out'}},$param->{'action'},'');
 		wwslog('info','do_copy_template: unknown list %s', $in{'list_out'});
 		web_db_log({'parameters' => $in{'list_out'},
@@ -10247,7 +10247,7 @@ sub do_edit_list {
 
 
      ## Reload config to clean some empty entries in $list->admin
-     $list = Sympa::List->new $list->name, $robot, {'reload_config' => 1};
+     $list = Sympa::List->new($list->name, $robot, {'reload_config' => 1});
 
       unless (defined $list) {
  	  Sympa::Report::reject_report_web('intern','list_reload',{},$param->{'action'},'',$param->{'user'}{'email'},$robot_id);
@@ -11089,7 +11089,7 @@ sub do_purge_list {
      my @lists = split /\0/, $in{'selected_lists'};
 
      foreach my $l (@lists) {
-	 my $list = Sympa::List->new ($l, $robot);
+	 my $list = Sympa::List->new($l, $robot);
 	 next unless (defined $list);
 	 $list->purge($param->{'user'}{'email'});
      }    
@@ -16029,7 +16029,7 @@ sub do_suspend_request_action {
 	my $report = "";
 	foreach my $line (@lists) {
 
-	    my $unsub_list = Sympa::List->new ($line, $robot);
+	    my $unsub_list = Sympa::List->new($line, $robot);
 	    unless ($unsub_list) {
 		wwslog('info', 'List %s unknown' , $line);
 		return undef;
@@ -18483,7 +18483,7 @@ sub do_automatic_lists {
 	$listname = $1;
     }
 
-    $list = Sympa::List->new ($listname, $robot);
+    $list = Sympa::List->new($listname, $robot);
     unless (defined $list) {
 	## Automatic creation of a mailing list, based on a family
 	unless ($family = Sympa::Family->new($family_name,$robot_id)) {
