@@ -3362,7 +3362,7 @@ Delete a user in the user_table.
 =cut
 
 ##sub delete_global_user
-## OBSOLETED: Use User::delete_global_user() or $user->expire();
+## OBSOLETED: Use Sympa::User::delete_global_user() or $user->expire();
 
 ## Delete the indicate list member
 ## IN : - ref to array
@@ -3576,11 +3576,11 @@ sub get_real_total {
 
 ## Returns a hash for a given user
 ##sub get_global_user {
-## OBSOLETED: Use User::get_global_user() or User->new().
+## OBSOLETED: Use Sympa::User::get_global_user() or Sympa::User->new().
 
 ## Returns an array of all users in User table hash for a given user
 ##sub get_all_global_user {
-## OBSOLETED: Use User::get_all_global_user() or User::get_users().
+## OBSOLETED: Use Sympa::User::get_all_global_user() or Sympa::User::get_users().
 
 ######################################################################
 ###  suspend_subscription                                            #
@@ -4866,7 +4866,7 @@ sub get_total_bouncing {
 
 ## Is the person in user table (db only)
 ##sub is_global_user {
-## OBSOLETED: Use User::is_global_user().
+## OBSOLETED: Use Sympa::User::is_global_user().
 
 ## Is the indicated person a subscriber to the list?
 sub is_list_member {
@@ -5277,11 +5277,11 @@ sub update_list_admin {
 
 ## Sets new values for the given user in the Database
 ##sub update_global_user {
-## OBSOLETED: Use User::update_global_user() or $user->save().
+## OBSOLETED: Use Sympa::User::update_global_user() or $user->save().
 
 ## Adds a user to the user_table
 ##sub add_global_user {
-## OBSOLETED: Use User::add_global_user() or $user->save().
+## OBSOLETED: Use Sympa::User::add_global_user() or $user->save().
 
 =item $list->add_list_member(@new_users, $daemon)
 
@@ -11360,7 +11360,7 @@ sub get_subscription_requests {
 	    'custom_attribute' => $xml
 	};
 	unless ($subscriptions{$email}{'gecos'}) {
-	    my $user = User->new($email);
+	    my $user = Sympa::User->new($email);
 	    if ($user->gecos) {
 		$subscriptions{$email}{'gecos'} = $user->gecos;
 		}
@@ -11493,7 +11493,7 @@ sub get_signoff_requests {
 	}
 
 	$signoffs{$email} = {};
-	my $user = User->new($email);
+	my $user = Sympa::User->new($email);
 	if ($user->gecos) {
 	    $signoffs{$email}{'gecos'} = $user->gecos;
 		my $user_entry = $self->get_list_member($email);

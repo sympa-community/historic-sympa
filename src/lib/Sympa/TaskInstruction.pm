@@ -695,7 +695,7 @@ sub purge_user_table {
 	Log::do_log('debug2','purge_user_table()');
 
 	## Load user_table entries
-	my @users = User::get_all_global_user();
+	my @users = Sympa::User::get_all_global_user();
 
 	## Load known subscribers/owners/editors
 	my %known_people;
