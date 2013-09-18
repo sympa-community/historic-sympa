@@ -1028,7 +1028,7 @@ unless (Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION)) {
 }
 
 
-Sympa::Tools::ciphersaber_installed(Sympa::Site->cookie);
+Sympa::Tools::Password::ciphersaber_installed(Sympa::Site->cookie);
 
 our %changed_params;
 
