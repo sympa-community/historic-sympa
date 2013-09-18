@@ -40,7 +40,6 @@ use HTML::StripScripts::Parser;
 use MIME::Decoder;
 use MIME::EncWords;
 use MIME::Lite::HTML;
-use Sys::Hostname;
 use Text::LineFold;
 
 use Sympa::Language qw(gettext_strftime);
@@ -1645,18 +1644,6 @@ sub CleanDir {
 		}
 	}
 	return 1;
-}
-
-=item get_lockname()
-
-Return a lockname that is a uniq id of a processus (hostname + pid) ; hostname
-(20) and pid(10) are truncated in order to store lockname in database
-varchar(30)
-
-=cut
-
-sub get_lockname {
-	return substr(substr(hostname(), 0, 20).$PID,0,30);
 }
 
 =item wrap_text($text, $init, $subs, $cols)

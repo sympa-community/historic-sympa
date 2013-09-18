@@ -117,7 +117,7 @@ sub next {
 	Sympa::Log::Syslog::do_log('debug', 'Bulk::next');
 
 	# lock next packet
-	my $lock = Sympa::Tools::get_lockname();
+	my $lock = _get_lockname();
 
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
 	my $order_clause =
@@ -695,6 +695,14 @@ sub init_db_random {
 		return undef;
 	}
 	return $random;
+}
+
+# Return a lockname that is a uniq id of a processus (hostname + pid) ; hostname
+# (20) and pid(10) are truncated in order to store lockname in database
+# varchar(30)
+
+sub _get_lockname {
+	return substr(substr(hostname(), 0, 20).$PID,0,30);
 }
 
 =back
