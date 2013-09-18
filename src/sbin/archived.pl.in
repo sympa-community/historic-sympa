@@ -204,7 +204,7 @@ $options{'foreground'} = 1 if ($options{'debug'});
 $options{'log_to_stderr'} = 1 if ($options{'debug'} || $options{'foreground'});
 
 # Load sympa.conf
-unless (defined Robot::get_robots()) {
+unless (defined Sympa::Robot::get_robots()) {
     Sympa::Log::Syslog::fatal_err(
 	'Unable to load sympa configuration, file %s has errors.',
 	Conf::get_sympa_conf()

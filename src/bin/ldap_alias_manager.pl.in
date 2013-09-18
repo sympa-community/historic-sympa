@@ -83,7 +83,7 @@ if (($operation !~ /^(add|del)$/) || ($#ARGV < 2)) {
 	exit(2);
 }
 
-unless ($robot = Robot->new($domain, 'no_db' => 1)) {
+unless ($robot = Sympa::Robot->new($domain, 'no_db' => 1)) {
     printf STDERR "Unknown robot %s\n", $domain;
     exit(16);
 }

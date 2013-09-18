@@ -231,7 +231,7 @@ Parameters:
 
 sub load_create_list_conf {
 	my ($robot) = @_;
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $file;
 	my $conf ;
@@ -271,7 +271,7 @@ FIXME.
 
 sub get_list_list_tpl {
 	my ($robot) = @_;
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $list_conf;
 	my $list_templates ;

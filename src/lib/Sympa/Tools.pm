@@ -1233,7 +1233,7 @@ sub get_filename {
 	} elsif (ref $robot) {
 		return $robot->get_etc_filename($name, $options);
 	} elsif ($robot and $robot ne '*') {
-		return Robot->new($robot)->get_etc_filename($name, $options);
+		return Sympa::Robot->new($robot)->get_etc_filename($name, $options);
 	} else {
 		return Sympa::Site->get_etc_filename($name, $options);
 	}

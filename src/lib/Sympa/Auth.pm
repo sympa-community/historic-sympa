@@ -91,7 +91,7 @@ sub check_auth{
 	my ($robot, $auth, $pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $auth);
 	
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my ($canonic, $user);
 
@@ -149,7 +149,7 @@ boolean
 sub may_use_sympa_native_auth {
 	my ($robot, $user_email) = @_;
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $ok = 0;
 	## check each auth.conf paragrpah
@@ -175,7 +175,7 @@ sub authentication {
 	my ($robot, $email, $pwd) = @_;
 	Sympa::Log::Syslog::do_log('debug', '(%s)', $email);
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my ($user,$canonic);
 
@@ -244,7 +244,7 @@ sub ldap_authentication {
 	Sympa::Log::Syslog::do_log('debug2','(%s,%s,%s)', $auth,'****',$whichfilter);
 	Sympa::Log::Syslog::do_log('debug3','Password used: %s',$pwd);
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my ($mesg, $ldap_passwd,$ldap_anonymous);
 
@@ -391,7 +391,7 @@ Return value:
 sub get_email_by_net_id {
 	my ($robot, $auth_id, $attributes) = @_;
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	Sympa::Log::Syslog::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
@@ -471,7 +471,7 @@ sub remote_app_check_password {
 	my ($trusted_application_name, $password, $robot) = @_;
 	Sympa::Log::Syslog::do_log('debug','(%s,%s)',$trusted_application_name,$robot);
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $md5 = Sympa::Tools::md5_fingerprint($password);
 
@@ -530,7 +530,7 @@ Return value:
 sub create_one_time_ticket {
 	my ($email,  $robot, $data_string, $remote_addr) = @_;
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $ticket = Sympa::Session->get_random();
 	Sympa::Log::Syslog::do_log('info', '(%s,%s,%s,%s value = %s)',$email,$robot,$data_string,$remote_addr,$ticket);
@@ -584,7 +584,7 @@ sub get_one_time_ticket {
 	my ($robot, $ticket_number, $addr) = @_;
 	Sympa::Log::Syslog::do_log('debug2', '(%s)',$ticket_number);
 
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
 
 	my $base = Sympa::Database->get_singleton();
 	my $handle = $base->get_query_handle(

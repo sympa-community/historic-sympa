@@ -140,7 +140,7 @@ my $rss;
 my $ajax;
 
 ## Load sympa config
-unless (defined Robot::get_robots()) {
+unless (defined Sympa::Robot::get_robots()) {
     # we cannot use log without configuration
     my $conf = Conf::get_sympa_conf();
     die "Unable to load sympa configuration, file $conf or one of the virtual host robot.conf files contain errors. Exiting.";
@@ -1128,7 +1128,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
      $robot_id = Sympa::Site->host unless $robot_id; #FIXME: use domain?
 
      ## Create Robot object
-     $robot = Robot->new($robot_id);
+     $robot = Sympa::Robot->new($robot_id);
      $pinfo = $robot->list_params;
 
      ## Default robot
@@ -11070,7 +11070,7 @@ sub do_rename_list {
      if ($in{'new_robot'} eq $robot_id) {
 	 $param->{'redirect_to'} = "$param->{'base_url'}$param->{'path_cgi'}/admin/$in{'new_listname'}";
      }else {
-	my $new_robot = Robot->new($in{'new_robot'});
+	my $new_robot = Sympa::Robot->new($in{'new_robot'});
 	$param->{'redirect_to'} =
 	    $new_robot->wwsympa_url ."/admin/$in{'new_listname'}";
      }

@@ -614,7 +614,7 @@ sub new {
 	    $robot = search_list_among_robots($name);
 	}
 	if ($robot) {
-	    $robot = Robot::clean_robot($robot,1);# May be Site
+	    $robot = Sympa::Robot::clean_robot($robot,1);# May be Site
 	}
 
 	unless ($robot) {
@@ -646,7 +646,7 @@ sub new {
 	    }
 	}
     } else {
-	$robot = Robot::clean_robot($robot);
+	$robot = Sympa::Robot::clean_robot($robot);
     }
 
     my $status;
@@ -1110,7 +1110,7 @@ sub load {
 	$robot = search_list_among_robots($name);
     }
 
-    $robot = Robot::clean_robot($robot);
+    $robot = Sympa::Robot::clean_robot($robot);
     unless (ref $robot) {
 	Sympa::Log::Syslog::do_log('err', 'Unknown robot');
 	return undef;
@@ -5563,10 +5563,10 @@ Is the user listmaster ?
 
 =cut
 
-## OBSOLETED: Use Robot::is_listmaster().
+## OBSOLETED: Use Sympa::Robot::is_listmaster().
 sub is_listmaster {
 	my ($who, $robot) = @_;
-    return Robot->new($robot)->is_listmaster($who);
+    return Sympa::Robot->new($robot)->is_listmaster($who);
 }
 
 =back
@@ -9258,7 +9258,7 @@ sub get_lists {
 	@robots = ($that->robot);
 	$family_name = $that->name;
     } else {
-	$that = Robot::clean_robot($that, 1);
+	$that = Sympa::Robot::clean_robot($that, 1);
 	if (ref $that and ref $that eq 'Robot') {
 	    @robots = ($that);
 	} elsif ($that eq 'Site') {
@@ -9774,9 +9774,9 @@ sub get_lists {
     return \@lists;
 }
 
-## OBSOLETED: Use Robot::get_robots().
+## OBSOLETED: Use Sympa::Robot::get_robots().
 sub get_robots {
-    my $robots = Robot::get_robots();
+    my $robots = Sympa::Robot::get_robots();
     return undef unless $robots;
     return map { $_->domain } @{Robot::get_robots()};
 }
@@ -9946,7 +9946,7 @@ function to any list in ROBOT.
 sub get_which {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', @_);
     my $email = Sympa::Tools::clean_email(shift);
-    my $robot = Robot::clean_robot(shift);
+    my $robot = Sympa::Robot::clean_robot(shift);
     my $role  = shift;
 
     unless ($role eq 'member' or $role eq 'owner' or $role eq 'editor') {
@@ -10113,7 +10113,7 @@ sub lowercase_field {
 ## Loads the list of topics if updated
 ## OBSOLETED: Use $robot->topics().
 sub load_topics {
-    my $robot = Robot::clean_robot(shift);
+    my $robot = Sympa::Robot::clean_robot(shift);
     return %{$robot->topics || {}};
 }
 

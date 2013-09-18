@@ -786,7 +786,7 @@ sub clean_robot {
 		if ($robot and $robot eq '*' and $maybe_site) {
 			$robot = 'Site';
 		} elsif ($robot and $robot ne '*') {
-			$robot = Robot->new($robot);
+			$robot = Sympa::Robot->new($robot);
 		} else {
 			croak "Illegal robot argument: " . ($robot || '');
 		}

@@ -58,7 +58,7 @@ sub request {
 		}
 
 		## Empty list cache of the robot
-		my $robot = Robot->new($ENV{'SYMPA_ROBOT'});
+		my $robot = Sympa::Robot->new($ENV{'SYMPA_ROBOT'});
 		List::init_list_cache(); 	30	$robot->init_list_cache();
 		
 		my $session;

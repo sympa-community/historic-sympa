@@ -307,7 +307,7 @@ sub purge_old_tickets {
 
 =item Sympa::Session->list_sessions($delay, $robot, $connected_only)
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-    my $robot = Robot::clean_robot(shift, 1);
+    my $robot = Sympa::Robot::clean_robot(shift, 1);
 
 List sessions for $robot where last access is newer then $delay. List is
 limited to connected users if $connected_only
@@ -370,7 +370,7 @@ sub list_sessions {
 
 Generic function to get a cookie value.
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-    my $robot = Robot::clean_robot(shift, 1);
+    my $robot = Sympa::Robot::clean_robot(shift, 1);
 
 =cut
 

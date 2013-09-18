@@ -719,7 +719,7 @@ sub rename_list{
     }
 
     my $new_robot_id = $params{'new_robot'};
-    my $new_robot = Robot->new($new_robot_id);
+    my $new_robot = Sympa::Robot->new($new_robot_id);
 
     unless ($new_robot) {
 	Sympa::Log::Syslog::do_log('err', 'incorrect robot %s', $new_robot_id);
@@ -1213,7 +1213,7 @@ Net::SMTP object or 0
 
 sub list_check_smtp {
 	my $list = shift;
-	my $robot = Robot::clean_robot(shift);
+	my $robot = Sympa::Robot::clean_robot(shift);
 	Sympa::Log::Syslog::do_log('debug2', '(%s,%s)',$list,$robot);
 
 	my $conf = '';
@@ -1415,7 +1415,7 @@ A true value if the topic is in the robot conf, I<undef> otherwise.
 
 sub check_topics {
     my $topic = shift;
-    my $robot = Robot::clean_robot(shift);
+    my $robot = Sympa::Robot::clean_robot(shift);
     return $robot->is_available_topic($topic);
 }
 
@@ -1457,7 +1457,7 @@ sub change_user_email {
 		return undef;
 	}
 
-	my $robot = Robot::clean_robot($in{'robot'});
+	my $robot = Sympa::Robot::clean_robot($in{'robot'});
 	
 	## Change email as list MEMBER
 	foreach my $list ( Sympa::List::get_which($in{'current_email'},$in{'robot'}, 'member') ) {

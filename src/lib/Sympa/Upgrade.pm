@@ -940,7 +940,7 @@ sub upgrade {
 		    $meta{'date'} = $2;
 		    $robot_id = lc($robot_id || Sympa::Site->domain);
 		    ## check if robot exists
-		    unless ($robot = Robot->new($robot_id)) {
+		    unless ($robot = Sympa::Robot->new($robot_id)) {
 			$ignored .= ',' . $filename;
 			next;
 		    }
@@ -975,7 +975,7 @@ sub upgrade {
 		$listname = lc($listname);
 		$robot_id = lc($robot_id || Sympa::Site->domain);
 		## check if robot exists
-		unless ($robot = Robot->new($robot_id)) {
+		unless ($robot = Sympa::Robot->new($robot_id)) {
 		    $ignored .= ',' . $filename;
 		    next;
 		}

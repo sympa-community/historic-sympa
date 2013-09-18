@@ -372,7 +372,7 @@ sub update_robot {
 
     $self->change_robotname($new_robotname);
 
-    my $robot = Robot->new($self->{'robotname'});
+    my $robot = Sympa::Robot->new($self->{'robotname'});
     unless($robot) {
 	Log::do_log('err',
 	    'Unable to set robot object for unknown robot %s (bounce %s)',
