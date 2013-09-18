@@ -960,7 +960,7 @@ sub send_file {
 	}
 
 	my @path = tt2::get_include_path();
-	my $filename = Sympa::Tools::find_file($tpl . '.tt2', @path);
+	my $filename = Sympa::Tools::File::find_file($tpl . '.tt2', @path);
 
 	unless (defined $filename) {
 		Sympa::Log::Syslog::do_log('err', 'Could not find template %s.tt2 in %s',
