@@ -986,7 +986,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 		 );
 
 ## Set locale configuration	 
-Language::SetLang(Sympa::Site->lang);
+Sympa::Language::SetLang(Sympa::Site->lang);
 
 # connect to database
 my $db_conf = Sympa::Configuration::get_parameters_group(
@@ -1741,7 +1741,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
     my $saved_lang = Sympa::Language::GetLang();
 
     foreach my $l ($robot->supported_languages) {
-	Language::SetLang($l) || next;
+        Sympa::Language::SetLang($l) || next;
 
 	$param->{'languages'}{$l}{'complete'} =
 	    Sympa::Language::GetLangName($l) || $l;
@@ -2614,18 +2614,18 @@ sub send_html {
 
     ## Send HTML headers
     if ($param->{'date'}) {
-	Language::PushLang('en');
+	Sympa::Language::PushLang('en');
 	printf "Date: %s\n",
 	    POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
-	Language::PopLang();
+	Sympa::Language::PopLang();
     }
     ## If we set the header indicating the last time the file to send was modified, add an HTTP header (limitate web harvesting).
     if ($param->{'header_date'}) {
-	Language::PushLang('en');
+	Sympa::Language::PushLang('en');
 	printf "Last-Modified: %s\n",
 	    POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT',
 		gmtime($param->{'header_date'}));
-	Language::PopLang();
+	Sympa::Language::PopLang();
     }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
     print "Content-Type: text/html; charset=utf-8\n";
@@ -5122,7 +5122,7 @@ sub do_setpref {
     my $current_lang = Sympa::Language::GetLang();
     if ($in{'lang'} and Sympa::Language::SetLang($in{'lang'})) {
 	$session->{'lang'} = Sympa::Language::GetLang();
-	Language::SetLang($current_lang);
+	Sympa::Language::SetLang($current_lang);
     }
     $param->{'lang'} = $session->{'lang'};
 
@@ -16584,7 +16584,7 @@ sub do_set_lang {
     my $current_lang = Sympa::Language::GetLang();
     if ($in{'lang'} and Sympa::Language::SetLang($in{'lang'})) {
 	$session->{'lang'} = Sympa::Language::GetLang();
-	Language::SetLang($current_lang);
+	Sympa::Language::SetLang($current_lang);
     }
     $param->{'lang'} = $session->{'lang'};
 
