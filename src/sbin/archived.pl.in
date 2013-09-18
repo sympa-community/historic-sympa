@@ -662,7 +662,7 @@ Rebuilds archives for the list the name of which is given in the argument $adrli
 
 =item * Sympa::Tools::get_filename
 
-=item * Sympa::Tools::remove_dir
+=item * Sympa::Tools::File::remove_dir
 
 =back 
 
@@ -907,7 +907,7 @@ Archives one message into one list archives directory.
 
 =item * Sympa::Tools::get_filename
 
-=item * Sympa::Tools::remove_dir
+=item * Sympa::Tools::File::remove_dir
 
 =back 
 

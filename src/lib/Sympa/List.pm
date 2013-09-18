@@ -11836,8 +11836,8 @@ sub purge {
 
     if ($self->name) {
 	my $arc_dir = $self->robot->arc_path;
-	Sympa::Tools::remove_dir($arc_dir . '/' . $self->get_id);
-	Sympa::Tools::remove_dir($self->get_bounce_dir());
+	Sympa::Tools::File::remove_dir($arc_dir . '/' . $self->get_id);
+	Sympa::Tools::File::remove_dir($self->get_bounce_dir());
     }
 
     ## Clean list table if needed
@@ -11850,7 +11850,7 @@ sub purge {
     ## Clean memory cache
     $self->robot->lists($self->name, undef);
 
-    Sympa::Tools::remove_dir($self->dir);
+    Sympa::Tools::File::remove_dir($self->dir);
 
     #log ind stat table to make statistics
     Sympa::Log::Syslog::db_stat_log(

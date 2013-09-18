@@ -720,7 +720,7 @@ sub upgrade {
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
 	  my $other_dir = Sympa::Site->bounce_path . '/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
-	    Sympa::Tools::remove_dir($other_dir);
+	    Sympa::Tools::File::remove_dir($other_dir);
 	    Sympa::Log::Syslog::do_log('notice', "Directory $other_dir removed");
 	  }
 	}

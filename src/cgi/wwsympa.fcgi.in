@@ -7371,7 +7371,7 @@ sub do_reject {
 
 	 }
 	 # clean html view of the message
-	 Sympa::Tools::remove_dir ( Sympa::Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$id);	
+	 Sympa::Tools::File::remove_dir ( Sympa::Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$id);	
 
      }
      web_db_log({'parameters' => $in{'id'},
@@ -7470,7 +7470,7 @@ sub do_distribute {
 			  'error_type' => 'internal'});
 	 }
 	 # clean html view of the message
-	 Sympa::Tools::remove_dir ( Sympa::Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$id);	
+	 Sympa::Tools::File::remove_dir ( Sympa::Site->viewmail_dir.'/mod/'.$list->get_list_id().'/'.$id);	
      }
 
     my $incomingspool = Messagespool->new();
@@ -14132,7 +14132,7 @@ sub do_d_unzip {
      }
 
      ## remove tmp directories and files
-#     Sympa::Tools::remove_dir($zip_abs_dir);
+#     Sympa::Tools::File::remove_dir($zip_abs_dir);
      
      $in{'list'} = $listname;
   
@@ -17502,7 +17502,7 @@ sub do_viewspool_message_remove {
     # clean html view of the message
     #FIXME: inconsistent removal.
     my $dir = Sympa::Site->viewmail_dir . '/spool/viewmail/' . $messagekey;
-    Sympa::Tools::remove_dir($dir) if -d $dir;
+    Sympa::Tools::File::remove_dir($dir) if -d $dir;
 
     $param->{'removed'} = 1;
     return 1;
@@ -17722,8 +17722,8 @@ sub do_arc_delete {
 	push(@abs_dirs ,$robot->arc_path.'/'.$list->get_list_id().'/'.$dir);
     }
 
-    unless (Sympa::Tools::remove_dir(@abs_dirs)) {
-	wwslog('info','Error while Calling Sympa::Tools::remove_dir');
+    unless (Sympa::Tools::File::remove_dir(@abs_dirs)) {
+	wwslog('info','Error while Calling Sympa::Tools::File::remove_dir');
     }
     
     Sympa::Report::notice_report_web('performed',{},$param->{'action'});
