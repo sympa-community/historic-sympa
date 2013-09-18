@@ -2596,11 +2596,11 @@ sub DoCommand {
 
     ## Make multipart singlepart
     if ($msg->is_multipart()) {
-	my $status = &Sympa::Tools::as_singlepart($msg, 'text/plain');
+	my $status = Sympa::Tools::as_singlepart($msg, 'text/plain');
 
 	unless (defined $status) {
 	    Sympa::Log::Syslog::do_log('err', 'Could not change multipart to singlepart');
-	    &Sympa::Report::global_report_cmd('user', 'error_content_type', {});
+	    Sympa::Report::global_report_cmd('user', 'error_content_type', {});
 	    Sympa::Log::Syslog::db_log(
 		{   'robot'        => $robot->name,
 		    'list'         => '',
@@ -2656,7 +2656,7 @@ sub DoCommand {
 	    Sympa::Log::Syslog::do_log('err',
 		'Ignoring message body not in text/plain, Content-type: %s',
 		$content_type);
-	    &Sympa::Report::global_report_cmd('user', 'error_content_type', {});
+	    Sympa::Report::global_report_cmd('user', 'error_content_type', {});
 	    Sympa::Log::Syslog::db_log(
 		{   'robot'        => $robot->name,
 		    'list'         => '',
@@ -2693,7 +2693,7 @@ sub DoCommand {
 	    $cmd_found = 1;    # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
 		Sympa::Log::Syslog::do_log('notice', "Unknown command found :%s", $i);
-		&Sympa::Report::reject_report_cmd('user', 'not_understood', {}, $i);
+		Sympa::Report::reject_report_cmd('user', 'not_understood', {}, $i);
 		Sympa::Log::Syslog::db_log(
 		    {   'robot'        => $robot->name,
 			'list'         => '',
@@ -2721,7 +2721,7 @@ sub DoCommand {
     ## No command found
     unless ($cmd_found) {
 	Sympa::Log::Syslog::do_log('info', 'No command found in message %s', $message);
-	&Sympa::Report::global_report_cmd('user', 'no_cmd_found', {});
+	Sympa::Report::global_report_cmd('user', 'no_cmd_found', {});
 	Sympa::Log::Syslog::db_log(
 	    {   'robot'        => $robot->name,
 		'list'         => '',
@@ -2791,7 +2791,7 @@ sub SendDigest {
 	    next;
 	}
 
-	&Sympa::Language::SetLang($list->lang);
+	Sympa::Language::SetLang($list->lang);
 
 	if ($list->get_nextdigest($digest->{'date'})) {
 	    ## Blindly send the message to all users.

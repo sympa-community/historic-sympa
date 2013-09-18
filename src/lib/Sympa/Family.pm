@@ -2232,12 +2232,12 @@ sub _set_status_changes {
 ##    if (($old_status ne 'pending') && ($old_status ne 'open')) {
 ##
 ##	if ($list->user_data_source eq 'file') {
-##	    $list->{'users'} = &List::_load_users_file($list->dir . '/subscribers.closed.dump');
+##	    $list->{'users'} = List::_load_users_file($list->dir . '/subscribers.closed.dump');
 ##	}elsif ($list->user_data_source eq 'database') {
 ##	    unless (-f $list->dir . '/subscribers.closed.dump') {
 ##		Sympa::Log::Syslog::do_log('notice', 'No subscribers to restore');
 ##	    }
-##	    my @users = &List::_load_users_file($list->dir . '/subscribers.closed.dump');
+##	    my @users = List::_load_users_file($list->dir . '/subscribers.closed.dump');
 ##
 ##	    ## Insert users in database
 ##	    foreach my $user (@users) {
@@ -2394,7 +2394,7 @@ sub _copy_files {
 
     # instance.xml
     if (defined $file) {
-	unless (&File::Copy::copy("$self->dir/$file", "$list_dir/instance.xml")) {
+	unless (File::Copy::copy("$self->dir/$file", "$list_dir/instance.xml")) {
 	    Sympa::Log::Syslog::do_log('err',
 		'impossible to copy %s/%s into %s/instance.xml : %s',
 		$self->dir, $file, $list_dir, $!);
@@ -2633,13 +2633,13 @@ sub insert_delete_exclusion {
 	## Insert: family, user and date
 	## Add dummy list_exclusion column to satisfy constraint.
 	unless (
-	    &SDM::do_query(
+	    SDM::do_query(
 		'INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)',
-		&SDM::quote('family:' . $name),
-		&SDM::quote($name),
-		&SDM::quote($robot->domain),
-		&SDM::quote($email),
-		&SDM::quote($date)
+		SDM::quote('family:' . $name),
+		SDM::quote($name),
+		SDM::quote($robot->domain),
+		SDM::quote($email),
+		SDM::quote($date)
 	    )
 	    ) {
 	    Sympa::Log::Syslog::do_log('err', 'Unable to exclude user %s from family %s',

@@ -265,7 +265,7 @@ sub delete_global_user {
 		## Update field
 
 		unless (
-			&SDM::do_prepared_query(
+			SDM::do_prepared_query(
 				q{DELETE FROM user_table WHERE email_user = ?}, $who
 			)
 		) {
@@ -295,7 +295,7 @@ sub get_global_user {
 
 	my $sth;
 	unless (
-		$sth = &SDM::do_prepared_query(
+		$sth = SDM::do_prepared_query(
 			sprintf(
 				q{SELECT email_user AS email, gecos_user AS gecos,
 				password_user AS password,
@@ -368,7 +368,7 @@ sub get_all_global_user {
 
 	my $sth;
 	unless ($sth =
-		&SDM::do_prepared_query('SELECT email_user FROM user_table')) {
+		SDM::do_prepared_query('SELECT email_user FROM user_table')) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to gather all users in DB');
 		return undef;
 	}
@@ -396,7 +396,7 @@ sub is_global_user {
 
 	my $sth;
 	unless (
-		$sth = &SDM::do_prepared_query(
+		$sth = SDM::do_prepared_query(
 			q{SELECT count(*) FROM user_table WHERE email_user = ?}, $who
 		)
 	) {
@@ -430,7 +430,7 @@ sub update_global_user {
 	$who = Sympa::Tools::clean_email($who);
 
 	## use md5 fingerprint to store password
-	$values->{'password'} = &Auth::password_fingerprint($values->{'password'})
+	$values->{'password'} = Auth::password_fingerprint($values->{'password'})
 		if ($values->{'password'});
 
 	## Canonicalize lang if possible.
@@ -458,7 +458,7 @@ sub update_global_user {
 			$value ||= 0;    ## Can't have a null value
 			$set = sprintf '%s=%s', $map_field{$field}, $value;
 		} else {
-			$set = sprintf '%s=%s', $map_field{$field}, &SDM::quote($value);
+			$set = sprintf '%s=%s', $map_field{$field}, SDM::quote($value);
 		}
 		push @set_list, $set;
 	}
@@ -467,10 +467,10 @@ sub update_global_user {
 
 	## Update field
 
-	my $sth = &SDM::do_query(
+	my $sth = SDM::do_query(
 		"UPDATE user_table SET %s WHERE (email_user=%s)",
 		join(',', @set_list),
-		&SDM::quote($who)
+		SDM::quote($who)
 	);
 	unless (defined $sth) {
 		Sympa::Log::Syslog::do_log('err',
@@ -503,7 +503,7 @@ sub add_global_user {
 	my ($user, $statement, $table);
 
 	## encrypt password
-	$values->{'password'} = &Auth::password_fingerprint($values->{'password'})
+	$values->{'password'} = Auth::password_fingerprint($values->{'password'})
 	if ($values->{'password'});
 
 	## Canonicalize lang if possible
@@ -526,7 +526,7 @@ sub add_global_user {
 			$value ||= 0;    ## Can't have a null value
 			$insert = $value;
 		} else {
-			$insert = sprintf "%s", &SDM::quote($value);
+			$insert = sprintf "%s", SDM::quote($value);
 		}
 		push @insert_value, $insert;
 		push @insert_field, $map_field{$field};
@@ -542,7 +542,7 @@ sub add_global_user {
 	}
 
 	## Update field
-	my $sth = &SDM::do_query(
+	my $sth = SDM::do_query(
 		"INSERT INTO user_table (%s) VALUES (%s)",
 		join(',', @insert_field),
 		join(',', @insert_value)

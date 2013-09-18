@@ -992,7 +992,7 @@ sub _fix_part($$$$) {
 		if ($head->get('X-Sympa-NoWrap')) { # Need not wrapping
 			$head->delete('X-Sympa-NoWrap');
 		} elsif ($eff_type eq 'text/plain' and lc($head->mime_attr('Content-type.Format')||'') ne 'flowed') {
-			$wrap = &Sympa::Tools::wrap_text($body);
+			$wrap = Sympa::Tools::wrap_text($body);
 		}
 		
 		my $charset = $head->mime_attr("Content-Type.Charset") || $defcharset;

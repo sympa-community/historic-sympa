@@ -837,14 +837,14 @@ sub rename_list{
 		}
 
 		# if subscribtion are stored in database rewrite the database
-		unless (&SDM::do_prepared_query('UPDATE subscriber_table SET list_subscriber = ?, robot_subscriber = ? WHERE list_subscriber = ? AND robot_subscriber = ?', 
+		unless (SDM::do_prepared_query('UPDATE subscriber_table SET list_subscriber = ?, robot_subscriber = ? WHERE list_subscriber = ? AND robot_subscriber = ?', 
 						$param{'new_listname'},
 						$param{'new_robot'},
 						$list->name, $list->domain)) {
 			Sympa::Log::Syslog::do_log('err','Unable to rename list %s to %s@%s in the database', $list, $param{'new_listname'}, $param{'new_robot'});
 			return 'internal';
 		 }
-		unless (&SDM::do_prepared_query('UPDATE admin_table SET list_admin = ?, robot_admin = ? WHERE list_admin = ? AND robot_admin = ?', 
+		unless (SDM::do_prepared_query('UPDATE admin_table SET list_admin = ?, robot_admin = ? WHERE list_admin = ? AND robot_admin = ?', 
 						$param{'new_listname'}, 
 						$param{'new_robot'},
 						$list->name, $list->domain)) {

@@ -918,7 +918,7 @@ sub _subscribe {
 		if ($Site::use_db) {
 			my $u = User->new($sender);
 			$u->lang($list->lang) unless $u->lang;
-			$u->password(&Sympa::Tools::tmp_passwd($sender)) unless $u->password;
+			$u->password(Sympa::Tools::tmp_passwd($sender)) unless $u->password;
 			$u->save;
 		}
 
@@ -1401,7 +1401,7 @@ sub _add {
 		if ($Site::use_db) {
 			my $u = User->new($email);
 			$u->lang($list->lang) unless $u->lang;
-			$u->password(&Sympa::Tools::tmp_passwd($email)) unless $u->password;
+			$u->password(Sympa::Tools::tmp_passwd($email)) unless $u->password;
 			$u->save;
 		}
 		
@@ -2342,8 +2342,8 @@ sub _confirm {
 		## Distribute the message
 		my $numsmtp;
 		my $apply_dkim_signature = 'off';
-		$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->dkim_signature_apply_on, 'any');
-		$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->dkim_signature_apply_on, 'md5_authenticated_messages');
+		$apply_dkim_signature = 'on' if Sympa::Tools::is_in_array($list->dkim_signature_apply_on, 'any');
+		$apply_dkim_signature = 'on' if Sympa::Tools::is_in_array($list->dkim_signature_apply_on, 'md5_authenticated_messages');
 		
 		$numsmtp = $list->distribute_msg(
 			'message'              => $message,
@@ -2577,7 +2577,7 @@ sub _which {
     }
 
     ## Ownership
-    if (@which = &List::get_which($sender, $robot, 'owner')) {
+    if (@which = List::get_which($sender, $robot, 'owner')) {
 		foreach my $list (@which) {
 			push @{$data->{'owner_lists'}}, $list->name;
 		}
@@ -2585,7 +2585,7 @@ sub _which {
     }
 
     ## Editorship
-    if (@which = &List::get_which($sender, $robot, 'editor')) {
+    if (@which = List::get_which($sender, $robot, 'editor')) {
 		foreach my $list (@which) {
 			push @{$data->{'editor_lists'}}, $list->name;
 		}

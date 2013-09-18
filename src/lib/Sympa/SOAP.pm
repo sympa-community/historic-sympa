@@ -304,7 +304,7 @@ sub casLogin {
 		'CAS ticket %s not validated by server %s : %s',
 		$proxyTicket,
 		$auth_service->{'base_url'},
-		&AuthCAS::get_errors()
+		AuthCAS::get_errors()
 	    );
 	    next;
 	}
@@ -326,7 +326,7 @@ sub casLogin {
 
     ## Now fetch email attribute from LDAP
     unless ($email =
-	&Auth::get_email_by_net_id($robot, $cas_id, {'uid' => $user})) {
+	Auth::get_email_by_net_id($robot, $cas_id, {'uid' => $user})) {
 	Sympa::Log::Syslog::do_log('err',
 	    'Could not get email address from LDAP for user %s', $user);
 	die SOAP::Fault->faultcode('Server')
@@ -474,7 +474,7 @@ sub authenticateRemoteAppAndRun {
 	    ->faultdetail('Use : <appname> <apppassword> <vars> <service>');
     }
     my $proxy_vars =
-	&Auth::remote_app_check_password($appname, $apppassword, $robot);
+	Auth::remote_app_check_password($appname, $apppassword, $robot);
 
     unless (defined $proxy_vars) {
 	Sympa::Log::Syslog::do_log('notice',
@@ -1065,7 +1065,7 @@ sub add {
 	$u->{'email'}    = $email;
 	$u->{'gecos'}    = $gecos || $u2->gecos;
 	$u->{'date'}     = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->password || &Sympa::Tools::tmp_passwd($email);
+	$u->{'password'} = $u2->password || Sympa::Tools::tmp_passwd($email);
 	$u->{'lang'}     = $u2->lang || $list->lang;
 
 	$list->add_list_member($u);
@@ -2111,11 +2111,11 @@ sub get_reason_string {
     my $tt2_include_path = $robot->get_etc_include_path('mail_tt2');
 
     unless (
-	&tt2::parse_tt2(
+	tt2::parse_tt2(
 	    $data, 'authorization_reject.tt2', \$string, $tt2_include_path
 	)
 	) {
-	my $error = &tt2::get_error();
+	my $error = tt2::get_error();
 	$robot->send_notify_to_listmaster('web_tt2_error', [$error]);
 	Sympa::Log::Syslog::do_log('info', "get_reason_string : error parsing");
 	return '';

@@ -414,7 +414,7 @@ sub request_auth {
 		croak 'bug in logic.  Ask developer';
 	}
 
-	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
+	$data->{'command_escaped'} = tt2::escape_url($data->{'command'});
 	$data->{'auto_submitted'}  = 'auto-replied';
 	unless ($self->send_file('request_auth', $email, $data)) {
 		Sympa::Log::Syslog::do_log('notice', 'Unable to send template "request_auth" to %s',
@@ -861,7 +861,7 @@ sub send_file {
 		croak 'bug in logic.  Ask developer';
 	}
 
-	my $data = &Sympa::Tools::dup_var($context);
+	my $data = Sympa::Tools::dup_var($context);
 
 	## Any recipients
 	if (!defined $who or
@@ -911,7 +911,7 @@ sub send_file {
 		}
 
 		unless ($data->{'user'}->password) {
-			$data->{'user'}->password(&Sympa::Tools::tmp_passwd($who));
+			$data->{'user'}->password(Sympa::Tools::tmp_passwd($who));
 		}
 
 		if (ref $self eq 'List') {
@@ -956,11 +956,11 @@ sub send_file {
 	}
 
 	foreach my $d (@{$tt2_include_path}) {
-		&tt2::add_include_path($d);
+		tt2::add_include_path($d);
 	}
 
-	my @path = &tt2::get_include_path();
-	my $filename = &Sympa::Tools::find_file($tpl . '.tt2', @path);
+	my @path = tt2::get_include_path();
+	my $filename = Sympa::Tools::find_file($tpl . '.tt2', @path);
 
 	unless (defined $filename) {
 		Sympa::Log::Syslog::do_log('err', 'Could not find template %s.tt2 in %s',
@@ -1017,13 +1017,13 @@ sub send_file {
 		}
 	}
 
-	$data->{'boundary'} = '----------=_' . &Sympa::Tools::get_message_id($robot)
+	$data->{'boundary'} = '----------=_' . Sympa::Tools::get_message_id($robot)
 	unless $data->{'boundary'};
 
 	my $dkim_feature          = $robot->dkim_feature;
 	my $dkim_add_signature_to = $robot->dkim_add_signature_to;
 	if ($dkim_feature eq 'on' and $dkim_add_signature_to =~ /robot/) {
-		$data->{'dkim'} = &Sympa::Tools::get_dkim_parameters($robot);
+		$data->{'dkim'} = Sympa::Tools::get_dkim_parameters($robot);
 	}
 
 	# use verp excepted for alarms. We should make this configurable in
@@ -1165,7 +1165,7 @@ sub send_notify_to_listmaster {
 						operation             => $operation,
 						notification_messages => $messages{$email},
 						boundary              => '----------=_' .
-						&Sympa::Tools::get_message_id($robot)
+						Sympa::Tools::get_message_id($robot)
 					};
 
 					my $options = {};
@@ -1290,16 +1290,16 @@ sub send_notify_to_listmaster {
 
 	if ($operation eq 'loop_command') {
 		## Loop detected in Sympa
-		$data->{'boundary'} = '----------=_' . &Sympa::Tools::get_message_id($self);
-		&tt2::allow_absolute_path();
+		$data->{'boundary'} = '----------=_' . Sympa::Tools::get_message_id($self);
+		tt2::allow_absolute_path();
 	}
 
 	if (($operation eq 'request_list_creation') or
 		($operation eq 'request_list_renaming')) {
 		foreach my $email (split(/\,/, $listmaster)) {
-			my $cdata = &Sympa::Tools::dup_var($data);
+			my $cdata = Sympa::Tools::dup_var($data);
 			$cdata->{'one_time_ticket'} =
-			&Auth::create_one_time_ticket($email, $robot_id,
+			Auth::create_one_time_ticket($email, $robot_id,
 				'get_pending_lists', $cdata->{'ip'});
 			push @tosend,
 			{

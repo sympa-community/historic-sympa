@@ -167,7 +167,7 @@ sub new {
 	my $pkg = shift;
 	my $data = shift; #Instructions are built by parsing a single line of a task string.
 	my $task = shift;
-	my $self = &Sympa::Tools::dup_var($data);
+	my $self = Sympa::Tools::dup_var($data);
 	bless $self, $pkg;
 	$self->parse;
 	if ( defined $self->{'error'}) {
@@ -180,7 +180,7 @@ sub new {
 sub parse {
 	my $self = shift;
 
-	&Log::do_log('debug2', 'Parsing "%s"', $self->{'line_as_string'});
+	Log::do_log('debug2', 'Parsing "%s"', $self->{'line_as_string'});
 
 	$self->{'nature'} = undef;
 	# empty line
@@ -240,7 +240,7 @@ sub chk_cmd {
 
 	my $self = shift;
 
-	&Log::do_log('debug2', 'chk_cmd(%s, %d, %s)', $self->{'command'}, $self->{'line_number'}, join(',',@{$self->{'Rarguments'}}));
+	Log::do_log('debug2', 'chk_cmd(%s, %d, %s)', $self->{'command'}, $self->{'line_number'}, join(',',@{$self->{'Rarguments'}}));
 
 	if (defined $commands{$self->{'command'}}) {
 
@@ -248,8 +248,8 @@ sub chk_cmd {
 		my @args = @{$self->{'Rarguments'}};
 
 		unless ($#expected_args == $#args) {
-			&Log::do_log ('err', "error at line $self->{'line_number'} : wrong number of arguments for $self->{'command'}");
-			&Log::do_log ('err', "args = @args ; expected_args = @expected_args");
+			Log::do_log ('err', "error at line $self->{'line_number'} : wrong number of arguments for $self->{'command'}");
+			Log::do_log ('err', "args = @args ; expected_args = @expected_args");
 			return undef;
 		}
 
@@ -290,7 +290,7 @@ sub chk_cmd {
 
 sub as_string {
 	my $self = shift;
-	&Log::do_log('debug3','Computing string representation of the instruction.');
+	Log::do_log('debug3','Computing string representation of the instruction.');
 	return $self->{'line_as_string'};
 }
 
@@ -302,7 +302,7 @@ sub cmd_process {
 
 	my $messageasstring = $task->{'messageasstring'};
 
-	&Log::do_log('debug', 'Processing "%s" (line %d of task %s)', $self->{'line_as_string'}, $self->{'line_number'},$task->get_description);
+	Log::do_log('debug', 'Processing "%s" (line %d of task %s)', $self->{'line_as_string'}, $self->{'line_number'},$task->get_description);
 
 	# regular commands
 	return &{$commands{$self->{'command'}}{'sub'}}($self,$task);
@@ -333,7 +333,7 @@ sub stop {
 
 	my ($self,$task) = @_;
 
-	&Log::do_log ('notice', "$self->{'line_number'} : stop $task->{'messagekey'}");
+	Log::do_log ('notice', "$self->{'line_number'} : stop $task->{'messagekey'}");
 
 	unless ($task->remove) {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => "error in stop command : unable to delete task $task->{'messagekey'}"});
@@ -349,27 +349,27 @@ sub send_msg {
 	my $template = $tab[1];
 	my $var = $tab[0];
 
-	&Log::do_log ('notice', "line $self->{'line_number'} : send_msg (@{$self->{'Rarguments'}})");
+	Log::do_log ('notice', "line $self->{'line_number'} : send_msg (@{$self->{'Rarguments'}})");
 
 	if ($task->{'object'} eq '_global') {
 		foreach my $email (keys %{$self->{'variables'}{$var}}) {
 			unless (Site->send_file($template, $email, $self->{'variables'}{$var}{$email}) ) {
-				&Log::do_log ('notice', "Unable to send template $template to $email");
+				Log::do_log ('notice', "Unable to send template $template to $email");
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
 				return undef;
 			}else{
-				&Log::do_log ('notice', "--> message sent to $email");
+				Log::do_log ('notice', "--> message sent to $email");
 			}
 		}
 	} else {
 		my $list = $task->{'list_object'};
 		foreach my $email (keys %{$self->{'variables'}{$var}}) {
 			unless ($list->send_file ($template, $email, $self->{'variables'}{$var}{$email}))  {
-				&Log::do_log ('notice', "Unable to send template $template to $email");
+				Log::do_log ('notice', "Unable to send template $template to $email");
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
 				return undef;
 			}else{
-				&Log::do_log ('notice', "--> message sent to $email");
+				Log::do_log ('notice', "--> message sent to $email");
 			}
 		}
 	}
@@ -381,10 +381,10 @@ sub next_cmd {
 	my ($self,$task) = @_;
 
 	my @tab = @{$self->{'Rarguments'}};
-	my $date = &Sympa::Tools::epoch_conv ($tab[0], $task->{'date'}); # conversion of the date argument into epoch format
+	my $date = Sympa::Tools::epoch_conv ($tab[0], $task->{'date'}); # conversion of the date argument into epoch format
 	my $label = $tab[1];
 
-	&Log::do_log ('debug2', "line $self->{'line_number'} of $task->{'model'} : next ($date, $label)");
+	Log::do_log ('debug2', "line $self->{'line_number'} of $task->{'model'} : next ($date, $label)");
 
 	$task->{'must_stop'} = 1;
 	my $listname = $task->{'object'};
@@ -423,14 +423,14 @@ sub next_cmd {
 			$flavour = $list->$model_task_parameter->{'name'};
 		}
 	}
-	&Log::do_log('debug2','Will create next task');
+	Log::do_log('debug2','Will create next task');
 	unless (Task::create ({'creation_date' => $date, 'label' => $tab[1], 'model' => $model, 'flavour' => $flavour, 'data' => \%data})) {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => "error in create command : Failed to create task $model.$flavour"});
 		return undef;
 	}
 
-	my $human_date = &Sympa::Tools::adate ($date);
-	&Log::do_log ('debug2', "--> new task $model ($human_date)");
+	my $human_date = Sympa::Tools::adate ($date);
+	Log::do_log ('debug2', "--> new task $model ($human_date)");
 	return 1;
 }
 
@@ -441,10 +441,10 @@ sub select_subs {
 	my @tab = @{$self->{'Rarguments'}};
 	my $condition = $tab[0];
 
-	&Log::do_log ('debug2', "line $self->{'line_number'} : select_subs ($condition)");
+	Log::do_log ('debug2', "line $self->{'line_number'} : select_subs ($condition)");
 	$condition =~ /(\w+)\(([^\)]*)\)/;
 	if ($2) { # conversion of the date argument into epoch format
-		my $date = &Sympa::Tools::epoch_conv ($2, $task->{'date'});
+		my $date = Sympa::Tools::epoch_conv ($2, $task->{'date'});
 		$condition = "$1($date)";
 	}
 
@@ -467,9 +467,9 @@ sub select_subs {
 	foreach my $user (@users) {
 		# condition rewriting for older and newer
 		$new_condition = "$1($user->{'update_date'}, $2)" if ($condition =~ /(older|newer)\((\d+)\)/ );
-		if (&Scenario::verify ($verify_context, $new_condition) == 1) {
+		if (Scenario::verify ($verify_context, $new_condition) == 1) {
 			$selection{$user->{'email'}} = undef;
-			&Log::do_log ('notice', "--> user $user->{'email'} has been selected");
+			Log::do_log ('notice', "--> user $user->{'email'} has been selected");
 		}
 	}
 	return \%selection;
@@ -482,14 +482,14 @@ sub delete_subs_cmd {
 	my @tab = @{$self->{'Rarguments'}};
 	my $var = $tab[0];
 
-	&Log::do_log ('notice', "line $self->{'line_number'} : delete_subs ($var)");
+	Log::do_log ('notice', "line $self->{'line_number'} : delete_subs ($var)");
 
 
 	my $list = $task->{'list_object'};
 	my %selection; # hash of subscriber emails who are successfully deleted
 
 	foreach my $email (keys %{$self->{'variables'}{$var}}) {
-		&Log::do_log ('notice', "email : $email");
+		Log::do_log ('notice', "email : $email");
 		my $result = Scenario::request_action($list, 'del', 'smime',
 			{   'sender' => Site->listmaster,
 				'email'  => $email,
@@ -504,7 +504,7 @@ sub delete_subs_cmd {
 			unless (my $u = $list->delete_list_member ($email)) {
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Deletion of $email from list $list->get_list_id failed"});
 			}else{
-				&Log::do_log ('notice', "--> $email deleted");
+				Log::do_log ('notice', "--> $email deleted");
 				$selection{$email} = {};
 			}
 		}
@@ -522,7 +522,7 @@ sub create_cmd {
 	my $model = $tab[1];
 	my $flavour = $tab[2];
 
-	&Log::do_log ('notice', "line $self->{'line_number'} : create ($arg, $model, $flavour)");
+	Log::do_log ('notice', "line $self->{'line_number'} : create ($arg, $model, $flavour)");
 
 	# recovery of the object type and object
 	my $type;
@@ -558,7 +558,7 @@ sub exec_cmd {
 	my @tab = @{$self->{'Rarguments'}};
 	my $file = $tab[0];
 
-	&Log::do_log ('notice', "line $self->{'line_number'} : exec ($file)");
+	Log::do_log ('notice', "line $self->{'line_number'} : exec ($file)");
 
 	system ($file);
 
@@ -587,8 +587,8 @@ sub purge_logs_table {
 	my $execution_date = $task->{'date'};
 	my @slots = ();
 
-	&Log::do_log('debug2','purge_logs_table()');
-	unless(&Log::db_log_del()) {
+	Log::do_log('debug2','purge_logs_table()');
+	unless(Log::db_log_del()) {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Failed to delete logs"});
 		return undef;
 	}
@@ -627,7 +627,7 @@ sub purge_logs_table {
 	}
 	#-------------------------------------------------------------------
 
-	&Log::do_log('notice','purge_logs_table(): logs purged');
+	Log::do_log('notice','purge_logs_table(): logs purged');
 	return 1;
 }
 
@@ -635,7 +635,7 @@ sub purge_logs_table {
 sub purge_session_table {
 
 	my ($self,$task) = @_;
-	&Log::do_log('info','task_manager::purge_session_table()');
+	Log::do_log('info','task_manager::purge_session_table()');
 	require SympaSession;
 
 	my $removed = SympaSession::purge_old_sessions('Site');
@@ -643,14 +643,14 @@ sub purge_session_table {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Failed to remove old sessions'});
 		return undef;
 	}
-	&Log::do_log('notice','purge_session_table(): %s rows removed in session_table',$removed);
+	Log::do_log('notice','purge_session_table(): %s rows removed in session_table',$removed);
 	return 1;
 }
 
 ## remove messages from bulkspool table when no more packet have any pointer to this message
 sub purge_tables {
 	my ($self,$task) = @_;
-	&Log::do_log('info','task_manager::purge_tables()');
+	Log::do_log('info','task_manager::purge_tables()');
 
 	my $removed;
 
@@ -660,7 +660,7 @@ sub purge_tables {
 	unless(defined $removed) {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Failed to purge tables'});
 	}
-	&Log::do_log('notice','%s rows removed in bulkspool_table',$removed);
+	Log::do_log('notice','%s rows removed in bulkspool_table',$removed);
 	#
 	$removed = 0;
 	foreach my $robot (@{Robot::get_robots()}) {
@@ -669,7 +669,7 @@ sub purge_tables {
 			$removed += tracking::remove_message_by_period($list, $list->tracking->{'retention_period'});
 		}
 	}
-	&Log::do_log('notice', "%s rows removed in tracking table",$removed);
+	Log::do_log('notice', "%s rows removed in tracking table",$removed);
 
 	return 1;
 }
@@ -678,7 +678,7 @@ sub purge_tables {
 sub purge_one_time_ticket_table {
 
 	my ($self,$task) = @_;
-	&Log::do_log('info','task_manager::purge_one_time_ticket_table()');
+	Log::do_log('info','task_manager::purge_one_time_ticket_table()');
 	require SympaSession;
 
 	my $removed = SympaSession::purge_old_tickets('Site');
@@ -686,13 +686,13 @@ sub purge_one_time_ticket_table {
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Failed to remove old tickets'});
 		return undef;
 	}
-	&Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
+	Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
 	return 1;
 }
 
 sub purge_user_table {
 	my ($self,$task) = @_;
-	&Log::do_log('debug2','purge_user_table()');
+	Log::do_log('debug2','purge_user_table()');
 
 	## Load user_table entries
 	my @users = User::get_all_global_user();
@@ -737,7 +737,7 @@ sub purge_user_table {
 	my @purged_users;
 	foreach (@users) {
 		unless ($known_people{$_}) {
-			&Log::do_log('debug2','User to purge: %s', $_);
+			Log::do_log('debug2','User to purge: %s', $_);
 			push @purged_users, $_;
 		}
 	}
@@ -758,7 +758,7 @@ sub purge_user_table {
 sub purge_orphan_bounces {
 	my ($self,$task) = @_;
 
-	&Log::do_log('info','purge_orphan_bounces()');
+	Log::do_log('info','purge_orphan_bounces()');
 
 	## Hash {'listname' => 'bounced address' => 1}
 	my %bounced_users;
@@ -778,7 +778,7 @@ sub purge_orphan_bounces {
 		}
 		my $bounce_dir = $list->get_bounce_dir();
 		unless (-d $bounce_dir) {
-			&Log::do_log('notice', 'No bouncing subscribers in list %s', $listname);
+			Log::do_log('notice', 'No bouncing subscribers in list %s', $listname);
 			next;
 		}
 
@@ -792,7 +792,7 @@ sub purge_orphan_bounces {
 		foreach my $bounce (readdir(BOUNCE)) {
 			if ($bounce =~ /\@/){
 				unless (defined($bounced_users{$listname}{$bounce})) {
-					&Log::do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
+					Log::do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
 					unless (unlink($bounce_dir.'/'.$bounce)) {
 						$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Error while removing file $bounce_dir/$bounce"});
 					}
@@ -815,14 +815,14 @@ sub expire_bounce {
 	my @tab = @{$self->{'Rarguments'}};
 	my $delay = $tab[0];
 
-	&Log::do_log('debug2','expire_bounce(%d)',$delay);
+	Log::do_log('debug2','expire_bounce(%d)',$delay);
 	my $all_lists = List::get_lists();
 	foreach my $list (@$all_lists) {
 		my $listname = $list->name;
 		# the reference date is the date until which we expire bounces in second
 		# the latest_distribution_date is the date of last distribution #days from 01 01 1970
 		unless ($list->get_latest_distribution_date()) {
-			&Log::do_log('debug2','bounce expiration : skipping list %s because could not get latest distribution date',$listname);
+			Log::do_log('debug2','bounce expiration : skipping list %s because could not get latest distribution date',$listname);
 			next;
 		}
 		my $refdate = (($list->get_latest_distribution_date() - $delay) * 3600 * 24);
@@ -842,7 +842,7 @@ sub expire_bounce {
 					$self->error ({'task' => $task, 'type' => 'execution', 'message' => "failed update database for $email"});
 					next;
 				}
-				my $escaped_email = &Sympa::Tools::escape_chars($email);
+				my $escaped_email = Sympa::Tools::escape_chars($email);
 
 				my $bounce_dir = $list->get_bounce_dir();
 
@@ -850,10 +850,10 @@ sub expire_bounce {
 					$self->error ({'task' => $task, 'type' => 'execution', 'message' => "failed deleting $bounce_dir/$escaped_email"});
 					next;
 				}
-				&Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
+				Log::do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
 					$email,$listname,
-					&POSIX::strftime("%d %b %Y", localtime($list->get_latest_distribution_date() * 3600 * 24)),
-					&POSIX::strftime("%d %b %Y", localtime($u->{'last_bounce'})));
+					POSIX::strftime("%d %b %Y", localtime($list->get_latest_distribution_date() * 3600 * 24)),
+					POSIX::strftime("%d %b %Y", localtime($u->{'last_bounce'})));
 
 			}
 		}
@@ -870,9 +870,9 @@ sub chk_cert_expiration {
 	my $execution_date = $task->{'date'};
 	my @tab = @{$self->{'Rarguments'}};
 	my $template = $tab[0];
-	my $limit = &Sympa::Tools::duration_conv ($tab[1], $execution_date);
+	my $limit = Sympa::Tools::duration_conv ($tab[1], $execution_date);
 
-	&Log::do_log ('notice', "line $self->{'line_number'} : chk_cert_expiration (@{$self->{'Rarguments'}})");
+	Log::do_log ('notice', "line $self->{'line_number'} : chk_cert_expiration (@{$self->{'Rarguments'}})");
 
 	## building of certificate list
 	unless (opendir(DIR, $cert_dir)) {
@@ -892,7 +892,7 @@ sub chk_cert_expiration {
 		chomp ($date);
 
 		unless ($date) {
-			&Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
+			Log::do_log ('err', "error in chk_cert_expiration command : can't get expiration date for $_ by using the x509 openssl command");
 			next;
 		}
 
@@ -900,7 +900,7 @@ sub chk_cert_expiration {
 		my @date = (0, 0, 0, $2, $TaskSpool::months{$1}, $3 - 1900);
 		$date =~ s/notAfter=//;
 		my $expiration_date = timegm (@date); # epoch expiration date
-		my $rep = &Sympa::Tools::adate ($expiration_date);
+		my $rep = Sympa::Tools::adate ($expiration_date);
 
 		# no near expiration nor expiration processing
 		if ($expiration_date > $limit) {
@@ -916,7 +916,7 @@ sub chk_cert_expiration {
 		# expired certificate processing
 		if ($expiration_date < $execution_date) {
 
-			&Log::do_log ('notice', "--> $_ certificate expired ($date), certificate file deleted");
+			Log::do_log ('notice', "--> $_ certificate expired ($date), certificate file deleted");
 			unless (unlink ("$cert_dir/$_")) {
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Can't delete certificate file $_"});
 			}
@@ -951,14 +951,14 @@ sub chk_cert_expiration {
 			}
 
 			$id =~ s/subject= //;
-			&Log::do_log ('notice', "id : $id");
-			$tpl_context{'expiration_date'} = &Sympa::Tools::adate ($expiration_date);
+			Log::do_log ('notice', "id : $id");
+			$tpl_context{'expiration_date'} = Sympa::Tools::adate ($expiration_date);
 			$tpl_context{'certificate_id'} = $id;
 			$tpl_context{'auto_submitted'} = 'auto-generated';
 			unless (Site->send_file($template, $_, \%tpl_context)) {
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $_"});
 			}
-			&Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
+			Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
 		}
 	}
 	return 1;
@@ -971,9 +971,9 @@ sub update_crl {
 	my ($self,$task) = @_;
 
 	my @tab = @{$self->{'Rarguments'}};
-	my $limit = &Sympa::Tools::epoch_conv ($tab[1], $task->{'date'});
+	my $limit = Sympa::Tools::epoch_conv ($tab[1], $task->{'date'});
 	my $CA_file = Site->home . "/$tab[0]"; # file where CA urls are stored ;
-	&Log::do_log ('notice', "line $self->{'line_number'} : update_crl (@tab)");
+	Log::do_log ('notice', "line $self->{'line_number'} : update_crl (@tab)");
 
 	# building of CA list
 	my @CA;
@@ -991,7 +991,7 @@ sub update_crl {
 	my $crl_dir = Site->crl_dir;
 	unless (-d Site->crl_dir) {
 		if ( mkdir (Site->crl_dir, 0775)) {
-			&Log::do_log('notice', 'creating spool %s', Site->crl_dir);
+			Log::do_log('notice', 'creating spool %s', Site->crl_dir);
 		} else {
 			$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Unable to create CRLs directory ' . Site->crl_dir});
 			return undef;
@@ -1000,7 +1000,7 @@ sub update_crl {
 
 	foreach my $url (@CA) {
 
-		my $crl_file = &Sympa::Tools::escape_chars ($url); # convert an URL into a file name
+		my $crl_file = Sympa::Tools::escape_chars ($url); # convert an URL into a file name
 		my $file = "$crl_dir/$crl_file";
 
 		## create $file if it doesn't exist
@@ -1024,7 +1024,7 @@ sub update_crl {
 		$date =~ /nextUpdate=(\w+)\s*(\d+)\s(\d\d)\:(\d\d)\:\d\d\s(\d+).+/;
 		my @date = (0, $4, $3 - 1, $2, $TaskSpool::months{$1}, $5 - 1900);
 		my $expiration_date = timegm (@date); # epoch expiration date
-		my $rep = &Sympa::Tools::adate ($expiration_date);
+		my $rep = Sympa::Tools::adate ($expiration_date);
 
 		## check if the crl is soon expired or expired
 		#my $file_date = $task->{'date'} - (-M $file) * 24 * 60 * 60; # last modification date
@@ -1032,9 +1032,9 @@ sub update_crl {
 		my $verify_context;
 		$verify_context->{'sender'} = 'nobody';
 
-		if (&Scenario::verify ($verify_context, $condition) == 1) {
+		if (Scenario::verify ($verify_context, $condition) == 1) {
 			unlink ($file);
-			&Log::do_log ('notice', "--> updating of the $file CRL file");
+			Log::do_log ('notice', "--> updating of the $file CRL file");
 			my $cmd = "wget -O \'$file\' \'$url\'";
 			open CMD, "| $cmd";
 			close CMD;
@@ -1055,7 +1055,7 @@ sub eval_bouncers {
 		my $listname = $list->name;
 		my $list_traffic = {};
 
-		&Log::do_log('info','eval_bouncers(%s)',$listname);
+		Log::do_log('info','eval_bouncers(%s)',$listname);
 
 		## Analizing file Msg-count and fill %$list_traffic
 		unless (open(COUNT, $list->dir . '/msg_count')){
@@ -1098,7 +1098,7 @@ sub none {
 sub process_bouncers {
 ###################
 	my ($self,$task) = @_;
-	&Log::do_log('info','Processing automatic actions on bouncing users');
+	Log::do_log('info','Processing automatic actions on bouncing users');
 
 ###########################################################################
 # This sub apply a treatment foreach category of bouncing-users
@@ -1116,8 +1116,8 @@ sub process_bouncers {
 
 	## possible actions
 	my %actions = (
-		'remove_bouncers' => \&List::remove_bouncers,
-		'notify_bouncers' => \&List::notify_bouncers,
+		'remove_bouncers' => \List::remove_bouncers,
+		'notify_bouncers' => \List::notify_bouncers,
 		'none'            => \&none
 	);
 
@@ -1189,7 +1189,7 @@ sub get_score {
 	my $user_ref = shift;
 	my $list_traffic = shift;
 
-	&Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
+	Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
 
 	my $min_period = Site->minimum_bouncing_period;
 	my $min_msg_count = Site->minimum_bouncing_count;
@@ -1207,13 +1207,13 @@ sub get_score {
 
 	unless ($bounce_count >= $min_msg_count){
 		#not enough messages distributed to keep score
-		&Log::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
+		Log::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
 		return undef ;
 	}
 
 	unless (($EO_period - $BO_period) >= $min_period){
 		#too short bounce period to keep score
-		&Log::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
+		Log::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
 		return undef;
 	}
 
@@ -1256,7 +1256,7 @@ sub get_score {
 sub sync_include {
 	my ($self,$task) = @_;
 
-	&Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
+	Log::do_log('debug2', 'sync_include(%s)', $task->{'id'});
 
 	my $list = $task->{'list_object'};
 	unless (defined $list and ref $list eq 'List') {
@@ -1280,7 +1280,7 @@ sub error {
 	my $param = shift;
 
 	my $task = $param->{'task'};
-	&Log::do_log ('err', 'Error at line %s in task %s: %s',$self->{'line_number'},$task->get_description,$param->{'message'});
+	Log::do_log ('err', 'Error at line %s in task %s: %s',$self->{'line_number'},$task->get_description,$param->{'message'});
 	my $error_description;
 	$error_description->{'message'} = $param->{'message'};
 	$error_description->{'type'} = $param->{'type'};
@@ -1292,7 +1292,7 @@ sub error {
 			$task->{'errors'} = [$error_description];
 		}
 	}else{
-		&Log::do_log('err','No task object to register error. It will not be used in the reports.');
+		Log::do_log('err','No task object to register error. It will not be used in the reports.');
 		return undef;
 	}
 	return 1;
