@@ -2273,7 +2273,7 @@ sub send_msg {
 
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = Sympa::Tools::get_dkim_parameters($self);
+	$dkim_parameters = $self->get_dkim_parameters();
     }
     # separate subscribers depending on user reception option and also if VERP a dicovered some bounce for them.
     return 0 unless ($self->get_list_members_per_mode($message));
