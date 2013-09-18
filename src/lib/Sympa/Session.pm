@@ -635,7 +635,7 @@ sub renew {
 		$hash{$var} = $self->{$var};
 	}
 
-    my $data_string = Sympa::Tools::hash_2_string(\%hash);
+    my $data_string = Sympa::Tools::Data::hash_2_string(\%hash);
 
     my $sth;
     ## Cookie may contain previous session ID.
