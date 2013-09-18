@@ -1066,7 +1066,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 
     Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
     # auto-detect browsers' lang.
-    Language::SetLang(Sympa::Site->best_language());
+    Sympa::Language::SetLang(Sympa::Site->best_language());
 
      ## Empty cache of the List.pm module
      Sympa::List::init_list_cache();
@@ -1487,7 +1487,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 		$param->{'list_lang'}, $robot->lang, $robot->best_language()
 	    ) {
 		next unless $lang;
-		last if $param->{'lang'} = Language::SetLang(
+		last if $param->{'lang'} = Sympa::Language::SetLang(
 		    $lang, 'just_try' => 1);
 	    }
 
@@ -1609,7 +1609,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 	$robot->lang, $robot->best_language()
     ) {
 	next unless $lang;
-	last if $param->{'lang'} = Language::SetLang($lang, 'just_try' => 1);
+	last if $param->{'lang'} = Sympa::Language::SetLang($lang, 'just_try' => 1);
     }
 
      if ($param->{'list'}) {
@@ -1738,13 +1738,13 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
      }
 	 
     ## Available languages
-    my $saved_lang = Language::GetLang();
+    my $saved_lang = Sympa::Language::GetLang();
 
     foreach my $l ($robot->supported_languages) {
 	Language::SetLang($l) || next;
 
 	$param->{'languages'}{$l}{'complete'} =
-	    Language::GetLangName($l) || $l;
+	    Sympa::Language::GetLangName($l) || $l;
 
 	if ($param->{'lang'} eq $l) {
 	    $param->{'languages'}{$l}{'selected'} = 'selected="selected"';
@@ -1753,7 +1753,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 	}
     }
 
-    Language::SetLang($saved_lang);
+    Sympa::Language::SetLang($saved_lang);
 
      $param->{'html_dumpvars'} = Sympa::Tools::dump_html_var($param) if ($session->{'dumpvars'});
 
@@ -2711,7 +2711,7 @@ sub send_html {
 
     # per-locale CSS.
     # FIXME: include language paths, not only old locale paths.
-    my $locale = Language::Lang2Locale_old($param->{'lang'});
+    my $locale = Sympa::Language::Lang2Locale_old($param->{'lang'});
     my $locale_css;
     if (($list || $robot)->get_etc_filename(
 	'web_tt2/' . $locale . '/css.tt2'
@@ -3463,7 +3463,7 @@ sub do_login {
 	    $user->{'lang'}, ($list || $robot)->lang, $robot->best_language()
 	) {
 	    next unless $lang;
-	    last if $param->{'lang'} = Language::SetLang($lang,
+	    last if $param->{'lang'} = Sympa::Language::SetLang($lang,
 		'just_try' => 1);
 	}
 	$session->{'lang'} = $param->{'lang'} ;
@@ -5119,9 +5119,9 @@ sub do_setpref {
      }
 
     ## Set session language and user language to new value
-    my $current_lang = Language::GetLang();
-    if ($in{'lang'} and Language::SetLang($in{'lang'})) {
-	$session->{'lang'} = Language::GetLang();
+    my $current_lang = Sympa::Language::GetLang();
+    if ($in{'lang'} and Sympa::Language::SetLang($in{'lang'})) {
+	$session->{'lang'} = Sympa::Language::GetLang();
 	Language::SetLang($current_lang);
     }
     $param->{'lang'} = $session->{'lang'};
@@ -6094,7 +6094,7 @@ sub do_ls_templates  {
 		    next;
 		}
 		$param->{'lang_per_level'}{$level}{$lang} =
-		    Language::GetLangName($lang) || $lang;
+		    Sympa::Language::GetLangName($lang) || $lang;
 	    }
 	}	
     }
@@ -10596,7 +10596,7 @@ sub _prepare_edit_form {
 	    }
 	 }elsif ($pname eq 'lang') {
 	     foreach my $lang (keys %{$p->{'value'}}) {
-		my $t = Language::GetLangName($lang) || $lang;
+		my $t = Sympa::Language::GetLangName($lang) || $lang;
 		$t = sprintf '%s (%s)', $t, $lang
 		    if $robot->is_listmaster($param->{'user'}{'email'});
 		$p->{'value'}{$lang}{'title'} = $t;
@@ -16581,9 +16581,9 @@ sub do_search_user {
 sub do_set_lang {
      wwslog('info', 'do_set_lang(%s)', $in{'lang'});
 
-    my $current_lang = Language::GetLang();
-    if ($in{'lang'} and Language::SetLang($in{'lang'})) {
-	$session->{'lang'} = Language::GetLang();
+    my $current_lang = Sympa::Language::GetLang();
+    if ($in{'lang'} and Sympa::Language::SetLang($in{'lang'})) {
+	$session->{'lang'} = Sympa::Language::GetLang();
 	Language::SetLang($current_lang);
     }
     $param->{'lang'} = $session->{'lang'};

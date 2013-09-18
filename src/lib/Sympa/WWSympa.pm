@@ -291,7 +291,7 @@ sub get_list_list_tpl {
 
 				$list_templates->{$template}{'path'} = $dir;
 
-				my $locale = Language::Lang2Locale_old(Language::GetLang());
+				my $locale = Sympa::Language::Lang2Locale_old(Language::GetLang());
 				## FIXME: lang should be used instead of "locale".
 				## Look for a comment.tt2 in the appropriate locale first
 				if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {

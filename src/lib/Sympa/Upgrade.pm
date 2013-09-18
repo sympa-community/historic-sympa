@@ -545,7 +545,7 @@ sub upgrade {
 		## Determine default lang for this list
 		## It should tell us what character encoding was used for filenames
 		Language::SetLang($list->lang);
-		my $list_encoding = Language::GetCharset();
+		my $list_encoding = Sympa::Language::GetCharset();
 
 		my $count = Sympa::Tools::qencode_hierarchy($list->dir . '/shared', $list_encoding);
 
@@ -1108,7 +1108,7 @@ sub upgrade {
 
 	## Set language of new file content
 	Language::PushLang(Site->lang);
-	$date = Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
+	$date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
 	    localtime time);
 
 	if (-r $wwsympa_conf) {
@@ -1200,20 +1200,20 @@ sub upgrade {
 		next unless scalar keys %newconf;
 
 		push @newconf, Sympa::Tools::wrap_text(
-		    Language::gettext("Migrated Parameters\nFollowing parameters were migrated from wwsympa.conf."), '#### ', '#### ') . "\n"
+		    Sympa::Language::gettext("Migrated Parameters\nFollowing parameters were migrated from wwsympa.conf."), '#### ', '#### ') . "\n"
 		    if $type eq 'add';
 		push @newconf, Sympa::Tools::wrap_text(
-		    Language::gettext("Overriding Parameters\nFollowing parameters existed both in sympa.conf and wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."), '#### ', '#### ') . "\n"
+		    Sympa::Language::gettext("Overriding Parameters\nFollowing parameters existed both in sympa.conf and wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."), '#### ', '#### ') . "\n"
 		    if $type eq 'override';
 		push @newconf, Sympa::Tools::wrap_text(
-		    Language::gettext("Duplicate of sympa.conf\nThese parameters were found in both sympa.conf and wwsympa.conf.  Previous release of Sympa used those in sympa.conf.  Uncomment ones you wish to be enabled."), '#### ', '#### ') . "\n"
+		    Sympa::Language::gettext("Duplicate of sympa.conf\nThese parameters were found in both sympa.conf and wwsympa.conf.  Previous release of Sympa used those in sympa.conf.  Uncomment ones you wish to be enabled."), '#### ', '#### ') . "\n"
 		    if $type eq 'duplicate';
 		push @newconf, Sympa::Tools::wrap_text(
-		    Language::gettext("Old Parameters\nThese parameters are no longer used."),
+		    Sympa::Language::gettext("Old Parameters\nThese parameters are no longer used."),
 		    '#### ', '#### ') . "\n"
 		    if $type eq 'obsolete';
 		push @newconf, Sympa::Tools::wrap_text(
-		    Language::gettext("Unknown Parameters\nThough these parameters were found in wwsympa.conf, they were ignored.  You may simply remove them."),
+		    Sympa::Language::gettext("Unknown Parameters\nThough these parameters were found in wwsympa.conf, they were ignored.  You may simply remove them."),
 		    '#### ', '#### ') . "\n"
 		    if $type eq 'unknown';
 
@@ -1322,9 +1322,9 @@ sub to_utf8 {
 	if ((defined $Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
 	    $charset = $Conf::Conf::Ignored_Conf{'filesystem_encoding'};
 	}else {	    
-	    Language::PushLang($lang);
-	    $charset = Language::GetCharset;
-	    Language::PopLang;
+	    Sympa::Language::PushLang($lang);
+	    $charset = Sympa::Language::GetCharset;
+	    Sympa::Language::PopLang;
 	}
 	
 	# Add X-Sympa-Attach: headers if required.
