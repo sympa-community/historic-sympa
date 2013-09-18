@@ -11564,13 +11564,13 @@ sub delete_signoff_request {
 sub get_shared_size {
 	my ($self) = @_;
 
-    return Sympa::Tools::get_dir_size($self->dir . '/shared');
+    return Sympa::Tools::File::get_dir_size($self->dir . '/shared');
 }
 
 sub get_arc_size {
 	my ($self, $dir) = @_;
 
-    return Sympa::Tools::get_dir_size($dir . '/' . $self->get_list_id());
+    return Sympa::Tools::File::get_dir_size($dir . '/' . $self->get_list_id());
 }
 
 =item $list->get_next_delivery_date()
