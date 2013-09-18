@@ -96,36 +96,6 @@ Return:
 
 =back 
 
-Calls:
-
-=over 4
-
-=item * Sympa::Log::Syslog::do_log
-
-=item * List::new
-
-=item * Mail::Address::parse
-
-=item * MIME::EncWords::decode_mimewords
-
-=item * MIME::Entity::as_string
-
-=item * MIME::Head::get
-
-=item * MIME::Parser::output_to_core
-
-=item * MIME::Parser::read
-
-=item * Sympa::Tools::valid_email
-
-=item * Sympa::Tools::smime_decrypt
-
-=item * Sympa::Tools::smime_sign_check
-
-=back 
-
-=back
-
 =cut 
 
 ## Creates a new object
@@ -729,16 +699,6 @@ Return:
 
 =back 
 
-Calls:
-
-=over 4
-
-=item * None
-
-=back 
-
-=back
-
 =cut 
 
 ## Dump the Message object
@@ -788,16 +748,6 @@ Return:
 
 =back 
 
-Calls:
-
-=over 4
-
-=item * MIME::Head::add
-
-=back 
-
-=back
-
 =cut 
 
 ## Add topic and put header X-Sympa-Topic
@@ -844,16 +794,6 @@ Return:
 =item * I<empty string>, otherwise
 
 =back 
-
-Calls:
-
-=over 4
-
-=item * MIME::Head::add
-
-=back 
-
-=back
 
 =cut 
 

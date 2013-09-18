@@ -1534,14 +1534,6 @@ Gets the family directory, look for it in the robot, then in the site and finall
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * Sympa::Log::Syslog::do_log
-
-=back 
-
 =cut
 
 #####################################################
@@ -1597,14 +1589,6 @@ Checks the existence of the mandatory files (param_constraint.conf and config.tt
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * Sympa::Log::Syslog::do_log
-
-=back 
-
 =cut
 
 #####################################################
@@ -1657,14 +1641,6 @@ Initializes all the values used for instantiation and results description to emp
 =over 
 
 =item * I<1>
-
-=back 
-
-=head3 Calls
-
-=over 
-
-=item * I<none>
 
 =back 
 
@@ -1752,44 +1728,6 @@ Splits the XML family file into XML list files. New list names are put in the ar
 =item * I<1> if everything goes well
 
 =item * I<0> if something goes wrong
-
-=back 
-
-=head3 Calls
-
-=over 
-
-=item * Sympa::Log::Syslog::do_log
-
-=item * XML::LibXML::new
-
-=item * XML::LibXML::Document::createDocument
-
-=item * XML::LibXML::Document::documentElement
-
-=item * XML::LibXML::Document::encoding
-
-=item * XML::LibXML::Document::setDocumentElement
-
-=item * XML::LibXML::Document::toFile
-
-=item * XML::LibXML::Document::version
-
-=item * XML::LibXML::Node::childNodes
-
-=item * XML::LibXML::Node::getChildrenByTagName
-
-=item * XML::LibXML::Node::line_number
-
-=item * XML::LibXML::Node::nodeName
-
-=item * XML::LibXML::Node::nodeType
-
-=item * XML::LibXML::Node::textContent
-
-=item * XML::LibXML::Parser::line_numbers
-
-=item * XML::LibXML::Parser::parse_file
 
 =back 
 
@@ -1928,12 +1866,6 @@ Updates an already existing list in the new family context
 =item * I<$list>, the updated List object, if everything goes well
 
 =item * I<undef>, if something goes wrong.
-
-=back 
-
-=head3 Calls
-
-=over 
 
 =back 
 
@@ -2114,22 +2046,6 @@ Gets list customizations from the config_changes file and keeps on changes allow
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * Family::check_values
-
-=item * Family::get_constraints
-
-=item * List::get_config_changes
-
-=item * List::get_param_value
-
-=item * Sympa::Log::Syslog::do_log
-
-=back 
-
 =cut
 
 #####################################################
@@ -2266,22 +2182,6 @@ Sets changes (loads the users, installs or removes the aliases); deals with the 
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * admin::install_aliases
-
-=item * admin::remove_aliases
-
-=item * List::add_list_member
-
-=item * List::_load_list_members_file
-
-=item * Sympa::Log::Syslog::do_log
-
-=back 
-
 =cut
 
 #####################################################
@@ -2383,22 +2283,6 @@ Finishes to generate a list in a family context (for a new or an already existin
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * Family::_copy_files
-
-=item * Family::check_param_constraint
-
-=item * List::save_config
-
-=item * List::set_status_error_config
-
-=item * Sympa::Log::Syslog::do_log
-
-=back 
-
 =cut
 
 #####################################################
@@ -2489,16 +2373,6 @@ Copies the instance.xml file into the list directory. This file contains the cur
 
 =back 
 
-=head3 Calls
-
-=over 
-
-=item * Sympa::Log::Syslog::do_log
-
-=item * File::Copy::copy
-
-=back 
-
 =cut
 
 #####################################################
@@ -2550,16 +2424,6 @@ Loads the param_constraint.conf file into a hash
 =item * I<$constraint>, a ref to a hash containing the data found in param_constraint.conf
 
 =item * I<undef> if something went wrong
-
-=back 
-
-=head3 Calls
-
-=over 
-
-=item * Sympa::Log::Syslog::do_log
-
-=item * List::send_notify_to_listmaster
 
 =back 
 

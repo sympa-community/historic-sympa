@@ -124,9 +124,7 @@ FIXME.
 =cut
 
 sub scan_dir_archive {
-
-	my($dir, $month) = @_;
-
+	my ($dir, $month) = @_;
 	Sympa::Log::Syslog::do_log ('info',"($dir, $month)");
 
 	unless (opendir (DIR, "$dir/$month/arctxt")){
@@ -191,11 +189,8 @@ undef | #message in arctxt
 =cut
 
 sub search_msgid {
-
-	my($dir, $msgid) = @_;
-
+	my ($dir, $msgid) = @_;
 	Sympa::Log::Syslog::do_log ('info',"($dir, $msgid)");
-
 
 	if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
 		Sympa::Log::Syslog::do_log('err','remove_arc: no message id found');return undef;
@@ -235,7 +230,7 @@ FIXME.
 =cut
 
 sub exist {
-	my($name, $file) = @_;
+	my ($name, $file) = @_;
 	my $fn = "$name/$file";
 
 	return $fn if (-r $fn && -f $fn);
@@ -318,6 +313,7 @@ sub clean_archive_directory{
 	my (%params) = @_;
 
 	Sympa::Log::Syslog::do_log('debug',"Cleaning archives for directory '%s'.",$params{'arc_root'}.'/'.$params{'dir_to_rebuild'});
+
 
 	my $answer;
 	$answer->{'dir_to_rebuild'} = $params{'arc_root'}.'/'.$params{'dir_to_rebuild'};
