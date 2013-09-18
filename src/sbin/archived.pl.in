@@ -689,13 +689,13 @@ sub rebuild {
 		return undef;
 	}
 
-	my $tag = get_tag($listname);
 
 	my $list = Sympa::List->new(
 		name  => $listname,
 		robot => $hostname,
 		base  => $base
 	);
+	my $tag = $list->get_tag();
 	my $robot = $list->{'domain'};
 	my $arcpath = $robot->arc_path;
 	Sympa::Log::Syslog::do_log('debug',"Rebuilding $adrlist archive ($2)");
@@ -943,7 +943,7 @@ sub mail2arc {
 		return undef;
 	}
 
-	my $tag = get_tag($listname);
+	my $tag = $list->get_tag();
 
 	if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 		set_hidden_mode($tag);

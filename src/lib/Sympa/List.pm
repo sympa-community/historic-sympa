@@ -67,6 +67,7 @@ use Sympa::Spool::File::Key;
 use Sympa::Spool::File::Subscribe;
 use Sympa::Task;
 use Sympa::Template;
+use Sympa::Tools;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
 use Sympa::Tools::Password;
@@ -12462,6 +12463,37 @@ sub get_dkim_parameters {
 
 	return $data;
 }
+
+=head2 $list->get_tag()
+
+Returns a tag derived from the list name, corresponding to the 10 last
+characters of a 32 bytes string containing the MD5 digest of the concatenation
+of the following strings (in this order):
+
+=over
+
+=item - the cookie config parameter
+
+=item - a slash: "/"
+
+=item - list name attribute
+
+=back 
+
+=cut
+
+sub get_tag {
+	my ($self) = @_;
+
+	return substr(
+		Sympa::Tools::md5_fingerprint(
+			Site->cookie() . '/' . $self->name()
+		),
+		-10
+	);
+}
+
+=back
 
 sub _set_list_param_compound {
     my $self = shift;

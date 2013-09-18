@@ -42,6 +42,7 @@ use Carp qw(carp croak);
 use Sympa::Language;
 use Sympa::Log::Syslog;
 use Sympa::listdef;
+use Sympa::Tools;
 use Sympa::Tools::File;
 
 ## Croak if Robot object is used where robot name shall be used.
@@ -881,6 +882,35 @@ sub get_dkim_parameters {
 	$data->{'private_key'} = Sympa::Tools::File::slurp_file($keyfile);
 
 	return $data;
+}
+
+=head2 $robot->get_tag()
+
+Returns a tag derived from the robot name, corresponding to the 10 last
+characters of a 32 bytes string containing the MD5 digest of the concatenation
+of the following strings (in this order):
+
+=over
+
+=item - the cookie config parameter
+
+=item - a slash: "/"
+
+=item - robot name attribute
+
+=back 
+
+=cut
+
+sub get_tag {
+	my ($self) = @_;
+
+	return substr(
+		Sympa::Tools::md5_fingerprint(
+			Site->cookie() . '/' . $self->name()
+		),
+		-10
+	);
 }
 
 =back
