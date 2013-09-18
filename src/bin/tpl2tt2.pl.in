@@ -64,9 +64,9 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	die 'config_error';
 }
 
-if (Site->db_name and Site->db_type) {
+if (Site->db_name and Sympa::Site->db_type) {
 	my $report = Sympa::Database->get_singleton()->probe(
-		update => Site->update_db_field_types
+		update => Sympa::Site->update_db_field_types
 	);
 	if (defined $report) {
 		Sympa::List::send_notify_to_listmaster(
@@ -75,7 +75,7 @@ if (Site->db_name and Site->db_type) {
 			{ 'report' => $report }
 		) if @$report;
 	} else {
-		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Site->db_name);
+		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Sympa::Site->db_name);
 	}
 }
 
@@ -100,8 +100,8 @@ my @directories;
 my @templates;
 
 ## Search in main robot
-if (-d Site->etc) {
-	push @directories, Site->etc;
+if (-d Sympa::Site->etc) {
+	push @directories, Sympa::Site->etc;
 }
 if (-d "Site->etc/templates") {
 	push @directories, "Site->etc/templates";
@@ -114,7 +114,7 @@ if (-f "Site->etc/mhonarc-ressources") {
 }
 
 ## Create_list_templates
-if (-d Site->etc.'/create_list_templates') {
+if (-d Sympa::Site->etc.'/create_list_templates') {
 	foreach my $dir (<Site->etc/create_list_templates/*>) {
 		next unless (-d $dir);
 		push @directories, $dir;
@@ -139,7 +139,7 @@ foreach my $vr (keys %{Site->robots}) {
 	}
 
 	## Create_list_templates
-	if (-d Site->etc.'/'.$vr.'/create_list_templates') {
+	if (-d Sympa::Site->etc.'/'.$vr.'/create_list_templates') {
 		foreach my $dir (<Site->etc/$vr/create_list_templates/*>) {
 			next unless (-d $dir);
 			push @directories, $dir;

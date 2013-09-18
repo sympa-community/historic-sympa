@@ -778,7 +778,7 @@ sub instantiate {
     my $next_update = 0;
     my $aliasmanager_output_file =
 	Site->tmpdir . '/aliasmanager.stdout.' . $$;
-    my $output_file = Site->tmpdir . '/instantiate_family.stdout.' . $$;
+    my $output_file = Sympa::Site->tmpdir . '/instantiate_family.stdout.' . $$;
     my $output      = '';
 
     ## EACH FAMILY LIST

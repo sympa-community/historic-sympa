@@ -248,7 +248,7 @@ sub ldap_authentication {
 
 	my ($mesg, $ldap_passwd,$ldap_anonymous);
 
-	unless (Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, Site->etc)) {
+	unless (Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, Sympa::Site->etc)) {
 		return undef;
 	}
 
@@ -395,13 +395,13 @@ sub get_email_by_net_id {
 
 	Sympa::Log::Syslog::do_log ('debug',"($auth_id,$attributes->{'uid'})");
 
-	if (defined Site->auth_services{$robot}[$auth_id]{'internal_email_by_netid'}) {
+	if (defined Sympa::Site->auth_services{$robot}[$auth_id]{'internal_email_by_netid'}) {
 		my $sso_config = @{Site->auth_services{$robot}}[$auth_id];
 		my $netid_cookie = $sso_config->{'netid_http_header'};
 
 		$netid_cookie =~ s/(\w+)/$attributes->{$1}/ig;
 
-		my $email = $robot->get_netidtoemail_db($netid_cookie, Site->auth_services{$robot}[$auth_id]{'service_id'});
+		my $email = $robot->get_netidtoemail_db($netid_cookie, Sympa::Site->auth_services{$robot}[$auth_id]{'service_id'});
 
 		return $email;
 	}

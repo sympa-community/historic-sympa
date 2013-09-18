@@ -66,7 +66,7 @@ sub connect {
 	return unless $result;
 
 	$self->{dbh}->do("use $self->{db_name}");
-	$self->{'dbh'}->{LongReadLen} = Site->max_size * 2;
+	$self->{'dbh'}->{LongReadLen} = Sympa::Site->max_size * 2;
 	$self->{'dbh'}->{LongTruncOk} = 0;
 	Sympa::Log::Syslog::do_log('debug3',
 	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',

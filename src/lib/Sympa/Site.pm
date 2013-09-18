@@ -144,7 +144,7 @@ sub AUTOLOAD {
 			} elsif ($type->{'RobotParameter'}) {
 				## getters for robot parameters.
 				unless ($self->{'etc'} eq Sympa::Site->etc or
-					defined Site->robots_config->{$self->{'name'}}) {
+					defined Sympa::Site->robots_config->{$self->{'name'}}) {
 					croak "Can't call method \"$attr\" on uninitialized " .
 					(ref $self) . " object";
 				}

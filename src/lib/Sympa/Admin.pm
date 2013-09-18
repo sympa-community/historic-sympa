@@ -179,7 +179,7 @@ sub create_list_old{
 
 
 	## Check the template supposed to be used exist.
-	my $template_file = Sympa::Tools::get_etc_filename('create_list_templates/'.$template.'/config.tt2', $robot, undef, Site->etc);
+	my $template_file = Sympa::Tools::get_etc_filename('create_list_templates/'.$template.'/config.tt2', $robot, undef, Sympa::Site->etc);
 	unless (defined $template_file) {
 		Sympa::Log::Syslog::do_log('err', 'no template %s found',$template);
 		return undef;
@@ -214,7 +214,7 @@ sub create_list_old{
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list_dir.'/config',
-		method => Site->lock_method
+		method => Sympa::Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -233,7 +233,7 @@ sub create_list_old{
 	my $config = '';
 	my $fd = IO::Scalar->new(\$config);
 	Sympa::Template::parse_tt2($params, 'config.tt2', $fd, $tt2_include_path);
-	#    Encode::from_to($config, 'utf8', Site->filesystem_encoding);
+	#    Encode::from_to($config, 'utf8', Sympa::Site->filesystem_encoding);
 	print CONFIG $config;
 
 	close CONFIG;
@@ -250,7 +250,7 @@ sub create_list_old{
 		Sympa::Log::Syslog::do_log('err','Impossible to create %s/info : %s',$list_dir,$ERRNO);
 	}
 	if (defined $params->{'description'}) {
-		Encode::from_to($params->{'description'}, 'utf8', Site->filesystem_encoding);
+		Encode::from_to($params->{'description'}, 'utf8', Sympa::Site->filesystem_encoding);
 		print INFO $params->{'description'};
 	}
 	close INFO;
@@ -446,7 +446,7 @@ sub create_list{
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list_dir.'/config',
-		method => Site->lock_method
+		method => Sympa::Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -610,7 +610,7 @@ sub update_list{
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
 		path   => $list->{'dir'}.'/config',
-		method => Site->lock_method
+		method => Sympa::Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Lock could not be created');
@@ -921,8 +921,8 @@ sub rename_list{
 		## Auth & Mod  spools
 		foreach my $spool ('queueauth','queuemod','queuetask','queuebounce',
 			'queue','queueoutgoing','queuesubscribe','queueautomatic') {
-			unless (opendir(DIR, Site->$spool)) {
-				Sympa::Log::Syslog::do_log('err', "Unable to open '%s' spool : %s", Site->$spool, $ERRNO);
+			unless (opendir(DIR, Sympa::Site->$spool)) {
+				Sympa::Log::Syslog::do_log('err', "Unable to open '%s' spool : %s", Sympa::Site->$spool, $ERRNO);
 			}
 
 			foreach my $file (sort readdir(DIR)) {
@@ -965,16 +965,16 @@ sub rename_list{
 			close DIR;
 		}
 		## Digest spool
-		 if (-f Site->queuedigest . "/$old_listname") {
+		 if (-f Sympa::Site->queuedigest . "/$old_listname") {
 			 unless (move(Site->queuedigest . "/$old_listname",
 			Site->queuedigest . "/$param{'new_listname'}")) {
-			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Site->queuedigest . "/$old_listname", Site->queuedigest . "/$param{'new_listname'}", $!);
+			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname", Sympa::Site->queuedigest . "/$param{'new_listname'}", $!);
 			 next;
 			 }
-		 }elsif (-f Site->queuedigest . "/$old_listname\@$robot") {
+		 }elsif (-f Sympa::Site->queuedigest . "/$old_listname\@$robot") {
 			 unless (move(Site->queuedigest . "/$old_listname\@$robot",
 			Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}")) {
-			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Site->queuedigest . "/$old_listname\@$robot", Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}", $!);
+			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname\@$robot", Sympa::Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}", $!);
 			 next;
 			 }
 		 }     
@@ -1029,10 +1029,10 @@ sub clone_list_as_empty {
 	Sympa::Log::Syslog::do_log('info',"Admin::clone_list_as_empty ($source_list_name, $source_robot,$new_listname,$new_robot,$email)");
 
 	my $new_dir;
-	if (-d Site->home.'/'.$new_robot) {
-		$new_dir = Site->home.'/'.$new_robot.'/'.$new_listname;
-	} elsif ($new_robot eq Site->domain) {
-		$new_dir = Site->home.'/'.$new_listname;
+	if (-d Sympa::Site->home.'/'.$new_robot) {
+		$new_dir = Sympa::Site->home.'/'.$new_robot.'/'.$new_listname;
+	} elsif ($new_robot eq Sympa::Site->domain) {
+		$new_dir = Sympa::Site->home.'/'.$new_listname;
 	} else {
 		Sympa::Log::Syslog::do_log('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
 		return undef;
@@ -1283,9 +1283,9 @@ sub install_aliases {
 	return 1
 	if (Site->sendmail_aliases =~ /^none$/i);
 
-    my $alias_manager     = Site->alias_manager;
-    my $output_file       = Site->tmpdir . '/aliasmanager.stdout.' . $$;
-    my $error_output_file = Site->tmpdir . '/aliasmanager.stderr.' . $$;
+    my $alias_manager     = Sympa::Site->alias_manager;
+    my $output_file       = Sympa::Site->tmpdir . '/aliasmanager.stdout.' . $$;
+    my $error_output_file = Sympa::Site->tmpdir . '/aliasmanager.stderr.' . $$;
     Sympa::Log::Syslog::do_log('debug3', '%s add alias %s@%s for list %s',
 	$alias_manager, $list->name, $list->host, $list);
 

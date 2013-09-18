@@ -87,7 +87,7 @@ sub fatal_err {
 	};
 	if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
 		$warning_date = time + $warning_timeout;
-		unless(Sympa::List::send_notify_to_listmaster('logs_failed', Site->domain, [$EVAL_ERROR])) {
+		unless(Sympa::List::send_notify_to_listmaster('logs_failed', Sympa::Site->domain, [$EVAL_ERROR])) {
 			print STDERR "No logs available, can't send warning message";
 		}
 	};
@@ -96,7 +96,7 @@ sub fatal_err {
 	my $full_msg = sprintf $m,@_;
 
 	## Notify listmaster
-	unless (Sympa::List::send_notify_to_listmaster('sympa_died', Site->domain, [$full_msg])) {
+	unless (Sympa::List::send_notify_to_listmaster('sympa_died', Sympa::Site->domain, [$full_msg])) {
 		do_log('err',"Unable to send notify 'sympa died' to listmaster");
 	}
 
@@ -304,7 +304,7 @@ sub do_connect {
 	if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
 		$warning_date = time + $warning_timeout;
 		require Sympa::List;
-		unless(Sympa::List::send_notify_to_listmaster('logs_failed', Site->domain, [$EVAL_ERROR])) {
+		unless(Sympa::List::send_notify_to_listmaster('logs_failed', Sympa::Site->domain, [$EVAL_ERROR])) {
 			print STDERR "No logs available, can't send warning message";
 		}
 	};

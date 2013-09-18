@@ -50,11 +50,11 @@ sub request {
 
 		## Select appropriate robot
 		if (Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
-			$ENV{'SYMPA_ROBOT'} = Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
+			$ENV{'SYMPA_ROBOT'} = Sympa::Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 		} else {
 			Sympa::Log::Syslog::do_log('debug2', 'URL : %s', $ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'});
-			$ENV{'SYMPA_ROBOT'} =  Site->domain;
+			$ENV{'SYMPA_ROBOT'} =  Sympa::Site->domain;
 		}
 
 		## Empty list cache of the robot
@@ -69,14 +69,14 @@ sub request {
 				context => {
 					cookie => Sympa::Session->get_session_cookie($ENV{'HTTP_COOKIE'})
 				},
-				crawlers => Site->crawlers_detection{'user_agent_string'},
+				crawlers => Sympa::Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
 			);
 		} else {
 			$session = Sympa::Session->new(
 				robot    => $ENV{'SYMPA_ROBOT'},
 				context  => {},
-				crawlers => Site->crawlers_detection{'user_agent_string'},
+				crawlers => Sympa::Site->crawlers_detection{'user_agent_string'},
 				base     => Sympa::Database->get_singleton()
 			);
 			$session->store() if (defined $session);
@@ -100,7 +100,7 @@ sub response {
 
 	if (my $response = $_[0]) {
 		if (defined $ENV{'SESSION_ID'}) {
-			my $expire = $main::param->{'user'}{'cookie_delay'} || Site->cookie_expire;
+			my $expire = $main::param->{'user'}{'cookie_delay'} || Sympa::Site->cookie_expire;
 			my $cookie = Sympa::Tools::Cookie::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
 
 			$response->headers->push_header('Set-Cookie2' => $cookie);

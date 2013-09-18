@@ -669,7 +669,7 @@ sub renew {
     if (Site->cookie_refresh == 0) {
 	$refresh_term = $time;
     } else {
-	my $cookie_refresh = Site->cookie_refresh;
+	my $cookie_refresh = Sympa::Site->cookie_refresh;
 	$refresh_term =
 	    int($time - $cookie_refresh * 0.25 - rand($cookie_refresh * 0.5));
     }
@@ -829,7 +829,7 @@ sub is_anonymous {
 sub encrypt_session_id {
     my $id_session = shift;
 
-    return $id_session unless Site->cookie;
+    return $id_session unless Sympa::Site->cookie;
     my $cipher = Sympa::Tools::ciphersaber_installed();
     return $id_session unless $cipher;
 
@@ -843,7 +843,7 @@ sub encrypt_session_id {
 sub decrypt_session_id {
     my $cookie = shift;
 
-    return $cookie unless Site->cookie;
+    return $cookie unless Sympa::Site->cookie;
     my $cipher = Sympa::Tools::ciphersaber_installed();
     return $cookie unless $cipher;
 

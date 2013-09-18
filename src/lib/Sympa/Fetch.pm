@@ -55,10 +55,10 @@ sub get_https{
 	my $key_passwd = $ssl_data->{'key_passwd'};
 	
 	my $trusted_ca_file = $ssl_data->{'cafile'};
-	$trusted_ca_file ||= Site->cafile;
+	$trusted_ca_file ||= Sympa::Site->cafile;
 	
 	my $trusted_ca_path = $ssl_data->{'capath'};
-	$trusted_ca_path ||= Site->capath;
+	$trusted_ca_path ||= Sympa::Site->capath;
 
 	Sympa::Log::Syslog::do_log ('debug','get_https (%s,%s,%s,%s,%s,%s,%s,%s)',$host,$port,$path,$client_cert,$client_key,$key_passwd,$trusted_ca_file,$trusted_ca_path );
 

@@ -463,7 +463,7 @@ sub convert_single_message {
 	'-outdir' => $destination_dir,
 	'-attachmentdir' => $destination_dir,
 	'-attachmenturl' => $attachement_url,
-	'-umask' => Site->umask,
+	'-umask' => Sympa::Site->umask,
 	'-stdout' => "$destination_dir/msg00000.html",
 	'--', $msg_file
     ) >> 8;

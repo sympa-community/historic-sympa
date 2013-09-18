@@ -396,8 +396,8 @@ sub get_templates_list {
 	}
 
 	my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-	my $site_dir = Site->etc.'/'.$type.'_tt2';
-	my $robot_dir = Site->etc.'/'.$robot.'/'.$type.'_tt2';
+	my $site_dir = Sympa::Site->etc.'/'.$type.'_tt2';
+	my $robot_dir = Sympa::Site->etc.'/'.$robot.'/'.$type.'_tt2';
 
 	my @try;
 
@@ -516,10 +516,10 @@ sub get_template_path {
 			return undef;
 		}
 		$dir = $list->dir;
-	} elsif ($scope eq 'robot' and $robot->etc ne Site->etc)  {
+	} elsif ($scope eq 'robot' and $robot->etc ne Sympa::Site->etc)  {
 		$dir = $robot->etc;
 	} elsif ($scope eq 'site') {
-		$dir = Site->etc;
+		$dir = Sympa::Site->etc;
 	} elsif ($scope eq 'distrib') {
 		$dir = Sympa::Constants::DEFAULTDIR;
 	} else {
@@ -803,8 +803,8 @@ sub cookie_changed {
 			$changed = 0;
 			#	}else{
 			#	    push @cookies, $current ;
-			#	    unless (open COOK, '>', Site->etc . '/cookies.history') {
-			#		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Site->etc);
+			#	    unless (open COOK, '>', Sympa::Site->etc . '/cookies.history') {
+			#		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Sympa::Site->etc);
 			#		return undef ;
 			#	    }
 			#	    print COOK join(" ", @cookies);
@@ -964,14 +964,14 @@ sub virus_infected {
 		return 0;
 	}
 	my @name = split(/\//,$file);
-	my $work_dir = Site->tmpdir.'/antivirus';
+	my $work_dir = Sympa::Site->tmpdir.'/antivirus';
 
 	unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
 		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 		return undef;
 	}
 
-	$work_dir = Site->tmpdir.'/antivirus/'.$name[$#name];
+	$work_dir = Sympa::Site->tmpdir.'/antivirus/'.$name[$#name];
 
 	unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
 		Sympa::Log::Syslog::do_log('err', "Unable to create tmp antivirus directory $work_dir");
@@ -999,7 +999,7 @@ sub virus_infected {
 		}
 
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1030,7 +1030,7 @@ sub virus_infected {
 		## Trend Micro
 	}elsif (Site->antivirus_path =~ /\/vscan$/) {
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1057,7 +1057,7 @@ sub virus_infected {
 			return undef;
 		}
 		my $cmd = sprintf '%s --databasedirectory %s %s %s',
-		Site->antivirus_path, $dbdir, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, $dbdir, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1079,7 +1079,7 @@ sub virus_infected {
 
 		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1105,7 +1105,7 @@ sub virus_infected {
 			return undef;
 		}
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR,"$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1133,7 +1133,7 @@ sub virus_infected {
 			return undef;
 		}
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1153,7 +1153,7 @@ sub virus_infected {
 		## Clam antivirus
 	}elsif (Site->antivirus_path =~ /\/clamd?scan$/) {
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Site->antivirus_args, $work_dir;
+		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		my $result;
@@ -1224,7 +1224,7 @@ Parameters:
 =cut
 
 ## OBSOLETED: use $list->get_etc_filename(), $family->get_etc_filename(),
-##   $robot->get_etc_filaname() or Site->get_etc_filename().
+##   $robot->get_etc_filaname() or Sympa::Site->get_etc_filename().
 sub get_filename {
 	my ($type, $options, $name, $robot, $object) = @_;
 
@@ -1235,13 +1235,13 @@ sub get_filename {
 	} elsif ($robot and $robot ne '*') {
 		return Robot->new($robot)->get_etc_filename($name, $options);
 	} else {
-		return Site->get_etc_filename($name, $options);
+		return Sympa::Site->get_etc_filename($name, $options);
 	}
 }
 
 
 ## DEPRECATED: use $list->get_etc_include_path(),
-##    $robot->get_etc_include_path() or Site->get_etc_include_path().
+##    $robot->get_etc_include_path() or Sympa::Site->get_etc_include_path().
 
 =item qencode_hierarchy($dir, $original_encoding)
 
@@ -1306,11 +1306,11 @@ sub get_message_id {
 	my ($robot) = @_;
 	my $domain;
 	unless ($robot) {
-		$domain = Site->domain;
+		$domain = Sympa::Site->domain;
 	} elsif (ref $robot and ref $robot eq 'Robot') {
 		$domain = $robot->domain;
 	} elsif ($robot eq 'Site') {
-		$domain = Site->domain;
+		$domain = Sympa::Site->domain;
 	} else {
 		$domain = $robot;
 	}

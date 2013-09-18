@@ -397,7 +397,7 @@ sub next_cmd {
 		$type = '_global';
 		foreach my $key (keys %TaskSpool::global_models) {
 			if ($TaskSpool::global_models{$key} eq $model) {
-				$flavour = Site->$key;
+				$flavour = Sympa::Site->$key;
 				last;
 			}
 		}
@@ -491,7 +491,7 @@ sub delete_subs_cmd {
 	foreach my $email (keys %{$self->{'variables'}{$var}}) {
 		Log::do_log ('notice', "email : $email");
 		my $result = Scenario::request_action($list, 'del', 'smime',
-			{   'sender' => Site->listmaster,
+			{   'sender' => Sympa::Site->listmaster,
 				'email'  => $email,
 			}
 		);
@@ -631,7 +631,7 @@ sub purge_logs_table {
 	return 1;
 }
 
-## remove sessions from session_table if older than Site->session_table_ttl
+## remove sessions from session_table if older than Sympa::Site->session_table_ttl
 sub purge_session_table {
 
 	my ($self,$task) = @_;
@@ -674,7 +674,7 @@ sub purge_tables {
 	return 1;
 }
 
-## remove one time ticket table if older than Site->one_time_ticket_table_ttl
+## remove one time ticket table if older than Sympa::Site->one_time_ticket_table_ttl
 sub purge_one_time_ticket_table {
 
 	my ($self,$task) = @_;
@@ -866,7 +866,7 @@ sub chk_cert_expiration {
 
 	my ($self,$task) = @_;
 
-	my $cert_dir = Site->ssl_cert_dir;
+	my $cert_dir = Sympa::Site->ssl_cert_dir;
 	my $execution_date = $task->{'date'};
 	my @tab = @{$self->{'Rarguments'}};
 	my $template = $tab[0];
@@ -972,7 +972,7 @@ sub update_crl {
 
 	my @tab = @{$self->{'Rarguments'}};
 	my $limit = Sympa::Tools::epoch_conv ($tab[1], $task->{'date'});
-	my $CA_file = Site->home . "/$tab[0]"; # file where CA urls are stored ;
+	my $CA_file = Sympa::Site->home . "/$tab[0]"; # file where CA urls are stored ;
 	Log::do_log ('notice', "line $self->{'line_number'} : update_crl (@tab)");
 
 	# building of CA list
@@ -988,12 +988,12 @@ sub update_crl {
 	close (FILE);
 
 	# updating of crl files
-	my $crl_dir = Site->crl_dir;
-	unless (-d Site->crl_dir) {
+	my $crl_dir = Sympa::Site->crl_dir;
+	unless (-d Sympa::Site->crl_dir) {
 		if ( mkdir (Site->crl_dir, 0775)) {
-			Log::do_log('notice', 'creating spool %s', Site->crl_dir);
+			Log::do_log('notice', 'creating spool %s', Sympa::Site->crl_dir);
 		} else {
-			$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Unable to create CRLs directory ' . Site->crl_dir});
+			$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Unable to create CRLs directory ' . Sympa::Site->crl_dir});
 			return undef;
 		}
 	}
@@ -1191,14 +1191,14 @@ sub get_score {
 
 	Log::do_log('debug','Get_score(%s) ',$user_ref->{'email'});
 
-	my $min_period = Site->minimum_bouncing_period;
-	my $min_msg_count = Site->minimum_bouncing_count;
+	my $min_period = Sympa::Site->minimum_bouncing_period;
+	my $min_msg_count = Sympa::Site->minimum_bouncing_count;
 
 	# Analizing bounce_subscriber_field and keep usefull infos for notation
 	$user_ref->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
 
-	my $BO_period = int($1 / 86400) - Site->bounce_delay;
-	my $EO_period = int($2 / 86400) - Site->bounce_delay;
+	my $BO_period = int($1 / 86400) - Sympa::Site->bounce_delay;
+	my $EO_period = int($2 / 86400) - Sympa::Site->bounce_delay;
 	my $bounce_count = $3;
 	my $bounce_type = $4;
 

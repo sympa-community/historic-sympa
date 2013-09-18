@@ -399,7 +399,7 @@ sub NegotiateLang {
 =cut
 
 ##sub GetSupportedLanguages {
-##DEPRECATED: use Site->supported_languages or $robot->supported_languages.
+##DEPRECATED: use Sympa::Site->supported_languages or $robot->supported_languages.
 ## Supported languages are defined by 'supported_lang' sympa.conf parameter.
 
 =over 4
@@ -472,7 +472,7 @@ sub SetLang {
     my $locale;
 
     ## Use default lang if an empty parameter
-    $lang ||= Site->lang if $Site::is_initialized;
+    $lang ||= Sympa::Site->lang if $Site::is_initialized;
 
     unless ($lang) {
 	Sympa::Log::Syslog::do_log('err', 'missing lang parameter');
@@ -649,7 +649,7 @@ sub GetCharset {
 	    SetLang(Site->lang);
 	}
 	if ($current_lang) {
-	    my $locale2charset = Site->locale2charset;
+	    my $locale2charset = Sympa::Site->locale2charset;
 
 	    ## get charset of lang with fallback.
 	    $current_charset = 'utf-8';    # the default

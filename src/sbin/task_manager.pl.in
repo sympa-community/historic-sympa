@@ -179,7 +179,7 @@ my $result = Sympa::Tools::Daemon::write_pid(
 	daemon    => $daemon_name,
 	pid       => $PID,
 	options   => $options,
-	method    => Site->lock_method,
+	method    => Sympa::Site->lock_method,
 	user      => Sympa::Constants::USER,
 	group     => Sympa::Constants::GROUP,
 );
@@ -195,8 +195,8 @@ unless ($options->{'stderr_to_tty'}) {
 	);
 }
 
-$wwsconf->{'log_facility'}||= Site->syslog;
-Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, Site->log_socket_type, 'task_manager');
+$wwsconf->{'log_facility'}||= Sympa::Site->syslog;
+Sympa::Log::Syslog::do_openlog($wwsconf->{'log_facility'}, Sympa::Site->log_socket_type, 'task_manager');
 
 # setting log_level using conf unless it is set by calling option
 if ($options{'log_level'}) {
@@ -204,7 +204,7 @@ if ($options{'log_level'}) {
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 } else {
 	Sympa::Log::Syslog::set_log_level(Site->log_level);
-	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Site->log_level");
+	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Sympa::Site->log_level");
 }
 
 ## Set the UserID & GroupID for the process
@@ -225,7 +225,7 @@ umask(oct(Site->umask));
 
 ## Change to list root
 unless (chdir(Site->home)) {
-	Sympa::Log::Syslog::do_log('err',"error : unable to change to directory %s", Site->home);
+	Sympa::Log::Syslog::do_log('err',"error : unable to change to directory %s", Sympa::Site->home);
 	exit (-1);
 }
 
@@ -237,7 +237,7 @@ my $end = 0;
 
 ###### VARIABLES DECLARATION ######
 
-my $cert_dir = Site->ssl_cert_dir;
+my $cert_dir = Sympa::Site->ssl_cert_dir;
 my @tasks; # list of tasks in the spool
 
 my $spool = Sympa::Spool::File::Task->new();
@@ -403,7 +403,7 @@ sub create {
 
 	# for global model
 	if ($object eq '_global') {
-		unless ($model_file = Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", Site->host, Site->etc)) {
+		unless ($model_file = Sympa::Tools::get_filename('etc',{},"global_task_models/$model_name", Sympa::Site->host, Sympa::Site->etc)) {
 			Sympa::Log::Syslog::do_log ('err', "error : unable to find $model_name, creation aborted");
 			return undef;
 		}
@@ -419,7 +419,7 @@ sub create {
 
 		$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
-		unless ($model_file = Sympa::Tools::get_filename('etc', {},"list_task_models/$model_name", $list->{'domain'}, $list, Site->etc)) {
+		unless ($model_file = Sympa::Tools::get_filename('etc', {},"list_task_models/$model_name", $list->{'domain'}, $list, Sympa::Site->etc)) {
 			Sympa::Log::Syslog::do_log ('err', "error : unable to find $model_name, for list $list_name creation aborted");
 			return undef;
 		}
@@ -880,7 +880,7 @@ sub next_cmd {
 		$type = '_global';
 		foreach my $key (keys %global_models) {
 			if ($global_models{$key} eq $model) {
-				$model_choice = Site->$key;
+				$model_choice = Sympa::Site->$key;
 				last;
 			}
 		}
@@ -987,7 +987,7 @@ sub delete_subs_cmd {
 
 		Sympa::Log::Syslog::do_log ('notice', "email : $email");
 		my $result = $list->check_list_authz('del', 'smime',
-			{'sender'   => Site->listmaster,
+			{'sender'   => Sympa::Site->listmaster,
 				'email'    => $email,
 			});
 		my $action;
@@ -1107,7 +1107,7 @@ sub purge_logs_table {
 	return 1;
 }
 
-# remove sessions from session_table if older than Site->session_table_ttl
+# remove sessions from session_table if older than Sympa::Site->session_table_ttl
 sub purge_session_table {
 
 	Sympa::Log::Syslog::do_log('info','()');
@@ -1151,7 +1151,7 @@ sub purge_tables {
 	return 1;
 }
 
-# remove one time ticket table if older than Site->one_time_ticket_table_ttl
+# remove one time ticket table if older than Sympa::Site->one_time_ticket_table_ttl
 sub purge_one_time_ticket_table {
 
 	Sympa::Log::Syslog::do_log('info','()');
@@ -1469,11 +1469,11 @@ sub update_crl {
 
 	# updating of crl files
 	my $crl_dir = "Site->crl_dir";
-	unless (-d Site->crl_dir) {
+	unless (-d Sympa::Site->crl_dir) {
 		if ( mkdir (Site->crl_dir, 0775)) {
-			Sympa::Log::Syslog::do_log('notice', "creating spool Site->crl_dir");
+			Sympa::Log::Syslog::do_log('notice', "creating spool Sympa::Site->crl_dir");
 		} else {
-			Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory Site->crl_dir");
+			Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory Sympa::Site->crl_dir");
 			return undef;
 		}
 	}
@@ -1670,14 +1670,14 @@ sub get_score {
 
 	Sympa::Log::Syslog::do_log('debug','(%s) ',$user_ref->{'email'});
 
-	my $min_period = Site->minimum_bouncing_period;
-	my $min_msg_count = Site->minimum_bouncing_count;
+	my $min_period = Sympa::Site->minimum_bouncing_period;
+	my $min_msg_count = Sympa::Site->minimum_bouncing_count;
 
 	# Analizing bounce_subscriber_field and keep usefull infos for notation
 	$user_ref->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
 
-	my $BO_period = int($1 / 86400) - Site->bounce_delay;
-	my $EO_period = int($2 / 86400) - Site->bounce_delay;
+	my $BO_period = int($1 / 86400) - Sympa::Site->bounce_delay;
+	my $EO_period = int($2 / 86400) - Sympa::Site->bounce_delay;
 	my $bounce_count = $3;
 	my $bounce_type = $4;
 
@@ -1764,7 +1764,7 @@ sub error {
 	$message";
 	Sympa::Log::Syslog::do_log ('err', "$message");
 	change_label ($task_id, 'ERROR') unless ($task_id eq '');
-	unless (Sympa::List::send_notify_to_listmaster ('error in task', Site->domain, \@param)) {
+	unless (Sympa::List::send_notify_to_listmaster ('error in task', Sympa::Site->domain, \@param)) {
 		Sympa::Log::Syslog::do_log('notice','error while notifying listmaster about "error_in_task"');
 	}
 }

@@ -69,7 +69,7 @@ sub dkim_verifier {
 		return undef;
     }
    
-    my $temporary_file = Site->tmpdir."/dkim.".$$ ;  
+    my $temporary_file = Sympa::Site->tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 		return undef;
@@ -168,7 +168,7 @@ sub dkim_sign {
 		return $msg_as_string;
     }
     
-    my $temporary_keyfile = Site->tmpdir."/dkimkey.".$$ ;  
+    my $temporary_keyfile = Sympa::Site->tmpdir."/dkimkey.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 		return $msg_as_string;
@@ -207,7 +207,7 @@ sub dkim_sign {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t create Mail::DKIM::Signer');
 		return ($msg_as_string); 
 	}    
-    my $temporary_file = Site->tmpdir."/dkim.".$$ ;  
+    my $temporary_file = Sympa::Site->tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 		Sympa::Log::Syslog::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 		return ($msg_as_string); 

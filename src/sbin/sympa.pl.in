@@ -403,7 +403,7 @@ while ($signal ne 'term') {
 	}
 
 	## Open the syslog and say we're read out stuff.
-	Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'sympa');
+	Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'sympa');
 
 	# setting log_level using conf unless it is set by calling option
 	if ($options{'log_level'}) {
@@ -411,13 +411,13 @@ while ($signal ne 'term') {
 		Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 	} else {
 		Sympa::Log::Syslog::set_log_level(Site->log_level);
-		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Site->log_level");
+		Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Sympa::Site->log_level");
 	}
 
 	## Probe Db if defined
-	if (Site->db_name and Site->db_type) {
+	if (Site->db_name and Sympa::Site->db_type) {
 		my $report = Sympa::Database->get_singleton()->probe(
-			update => Site->update_db_field_types
+			update => Sympa::Site->update_db_field_types
 		);
 		if (defined $report) {
 			Sympa::List::send_notify_to_listmaster(
@@ -426,7 +426,7 @@ while ($signal ne 'term') {
 				{ 'report' => $report }
 			) if @$report;
 		} else {
-			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', Site->db_name);
+			Sympa::Log::Syslog::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', Sympa::Site->db_name);
 		}
 	}
 
@@ -444,17 +444,17 @@ while ($signal ne 'term') {
 
 	Sympa::Tools::Password::ciphersaber_installed(Site->cookie);
 
-	if (Sympa::Tools::cookie_changed(Site->cookie, Site->etc)) {
-		Sympa::Log::Syslog::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at Site->etc/cookies.history file)");
+	if (Sympa::Tools::cookie_changed(Site->cookie, Sympa::Site->etc)) {
+		Sympa::Log::Syslog::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at Sympa::Site->etc/cookies.history file)");
 	}
 
 ## Set locale configuration
 	$options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
-	$Sympa::Language::default_lang = $options{'lang'} || Site->lang;
+	$Sympa::Language::default_lang = $options{'lang'} || Sympa::Site->lang;
 
 ## Main program
 	if (!chdir(Site->home)) {
-		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", Site->home);
+		Sympa::Log::Syslog::fatal_err("Can't chdir to %s: %m", Sympa::Site->home);
 		## Function never returns.
 	}
 
@@ -535,7 +535,7 @@ while ($signal ne 'term') {
 			}
 		}
 
-		Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'sympa');
+		Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'sympa');
 
 		Sympa::Log::Syslog::do_log('debug', "Running server $PID");
 		unless ($options{'batch'} ) {
@@ -543,7 +543,7 @@ while ($signal ne 'term') {
 				directory  => Sympa::Constants::PIDDIR,
 				daemon     => $daemon_name,
 				pid        => $PID,
-				method     => Site->lock_method,
+				method     => Sympa::Site->lock_method,
 				user       => Sympa::Constants::USER,
 				group      => Sympa::Constants::GROUP,
 			);
@@ -628,15 +628,15 @@ while ($signal ne 'term') {
 	}elsif ($options{'make_alias_file'}) {
 		my $all_lists = Sympa::List::get_lists('*');
 		unless (open TMP, ">Site->tmpdir/sympa_aliases.$PID") {
-			printf STDERR "Unable to create Site->tmpdir/sympa_aliases.$PID, exiting\n";
+			printf STDERR "Unable to create Sympa::Site->tmpdir/sympa_aliases.$PID, exiting\n";
 			exit;
 		}
 		printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
 		close TMP;
 		foreach my $list (@$all_lists) {
-			system ("Site->alias_manager add $list->{'name'} $list->{'domain'} Site->tmpdir/sympa_aliases.$PID") if ($list->{'admin'}{'status'} eq 'open');
+			system ("Site->alias_manager add $list->{'name'} $list->{'domain'} Sympa::Site->tmpdir/sympa_aliases.$PID") if ($list->{'admin'}{'status'} eq 'open');
 		}
-		printf ("Sympa aliases file is Site->tmpdir/sympa_aliases.$PID file made, you probably need to installed it in your SMTP engine\n");
+		printf ("Sympa aliases file is Sympa::Site->tmpdir/sympa_aliases.$PID file made, you probably need to installed it in your SMTP engine\n");
 
 		exit 0;
 	}elsif ($options{'md5_digest'}) {
@@ -874,7 +874,7 @@ while ($signal ne 'term') {
 		exit 1;
 
 	}elsif ($options{'create_list'}) {
-		my $robot = $options{'robot'} || Site->host;
+		my $robot = $options{'robot'} || Sympa::Site->host;
 
 		unless ($options{'input_file'}) {
 			print STDERR "Error : missing 'input_file' parameter\n";
@@ -911,7 +911,7 @@ while ($signal ne 'term') {
 		}
 	}elsif ($options{'instantiate_family'}) {
 
-		my $robot = $options{'robot'} || Site->host;
+		my $robot = $options{'robot'} || Sympa::Site->host;
 
 		my $family_name;
 		unless ($family_name = $options{'instantiate_family'}) {
@@ -923,7 +923,7 @@ while ($signal ne 'term') {
 			name   => $family_name,
 			robot  => $robot,
 			config => $family_config,
-			etcdir => Site->etc
+			etcdir => Sympa::Site->etc
 		);
 		unless ($family) {
 			print STDERR "The family $family_name does not exist, impossible instantiation\n";
@@ -967,7 +967,7 @@ while ($signal ne 'term') {
 		exit 0;
 	}elsif ($options{'add_list'}) {
 
-		my $robot = $options{'robot'} || Site->host;
+		my $robot = $options{'robot'} || Sympa::Site->host;
 
 		my $family_name;
 		unless ($family_name = $options{'add_list'}) {
@@ -982,7 +982,7 @@ while ($signal ne 'term') {
 			name   => $family_name,
 			robot  => $robot,
 			config => $family_config,
-			etcdir => Site->etc
+			etcdir => Sympa::Site->etc
 		);
 		unless ($family) {
 			print STDERR "The family $family_name does not exist, impossible to add a list\n";
@@ -1130,7 +1130,7 @@ while ($signal ne 'term') {
 		exit 0;
 	} elsif ($options{'modify_list'}) {
 
-		my $robot = $options{'robot'} || Site->host;
+		my $robot = $options{'robot'} || Sympa::Site->host;
 
 		my $family_name;
 		unless ($family_name = $options{'modify_list'}) {
@@ -1146,7 +1146,7 @@ while ($signal ne 'term') {
 			name   => $family_name,
 			robot  => $robot,
 			config => $family_config,
-			etcdir => Site->etc
+			etcdir => Sympa::Site->etc
 		);
 		unless ($family) {
 			print STDERR "The family $family_name does not exist, impossible to modify the list.\n";
@@ -1188,7 +1188,7 @@ while ($signal ne 'term') {
 		exit 0;
 	} elsif ($options{'close_family'}) {
 
-		my $robot = $options{'robot'} || Site->host;
+		my $robot = $options{'robot'} || Sympa::Site->host;
 
 		my $family_name;
 		unless ($family_name = $options{'close_family'}) {
@@ -1200,7 +1200,7 @@ while ($signal ne 'term') {
 			name   => $family_name,
 			robot  => $robot,
 			config => $family_config,
-			etcdir => Site->etc
+			etcdir => Sympa::Site->etc
 		);
 		unless ($family) {
 			print STDERR "The family $family_name does not exist, impossible family closure\n";
@@ -1297,45 +1297,45 @@ while ($signal ne 'term') {
 				status => 'bad',
 				base   => Sympa::Database->get_singleton()
 			);
-			$archive_bad->clean(delay => Site->clean_delay_queueoutgoing);
+			$archive_bad->clean(delay => Sympa::Site->clean_delay_queueoutgoing);
 			my $queuebounce_bad = Sympa::Spool::File->new(
 				name   => 'bounce',
 				status => 'bad',
 				base   => Sympa::Database->get_singleton()
 			);
-			$archive_bad->clean(delay => Site->clean_delay_queueoutgoing);
+			$archive_bad->clean(delay => Sympa::Site->clean_delay_queueoutgoing);
 			$queuebounce_bad->clean(delay =>Site->clean_delay_queuebounce);
 			my $queuemod = Sympa::Spool::File->new(
 				name => 'mod',
 				base => Sympa::Database->get_singleton()
 			);
-			$queuemod->clean(delay => Site->clean_delay_queuemod);
+			$queuemod->clean(delay => Sympa::Site->clean_delay_queuemod);
 			my $queueauth = Sympa::Spool::File->new(
 				name => 'auth',
 				base => Sympa::Database->get_singleton()
 			);
-			$queueauth->clean(delay => Site->clean_delay_queueauth);
+			$queueauth->clean(delay => Sympa::Site->clean_delay_queueauth);
 			my $queuetopic = Sympa::Spool::File->new(
 				name => 'topic',
 				base => Sympa::Database->get_singleton()
 			);
-			$queuetopic->clean(delay => Site->clean_delay_queuetopic);
+			$queuetopic->clean(delay => Sympa::Site->clean_delay_queuetopic);
 			my $queuesubscribe = Sympa::Spool::File->new(
 				name => 'subscribe',
 				base => Sympa::Database->get_singleton()
 			);
-			$queuesubscribe->clean(delay => Site->clean_delay_queuesubscribe);
+			$queuesubscribe->clean(delay => Sympa::Site->clean_delay_queuesubscribe);
 			my $queueautomatic = Sympa::Spool::File->new(
 				name => 'automatic',
 				base => Sympa::Database->get_singleton()
 			);
-			$queueautomatic->clean(delay => Site->clean_delay_queueautomatic);
-			Sympa::Tools::CleanDir(Site->tmpdir, Site->clean_delay_tmpdir); # this is not a message spool
+			$queueautomatic->clean(delay => Sympa::Site->clean_delay_queueautomatic);
+			Sympa::Tools::CleanDir(Site->tmpdir, Sympa::Site->clean_delay_tmpdir); # this is not a message spool
 		}
 	}
 	## Cleanup in-memory msgid table, only in a while
 	if (time >
-	    $latest_msgid_table_cleanup + Site->msgid_table_cleanup_frequency)
+	    $latest_msgid_table_cleanup + Sympa::Site->msgid_table_cleanup_frequency)
 	{
 	    clean_msgid_table();
 	    $latest_msgid_table_cleanup = time;
@@ -1455,7 +1455,7 @@ sub process_message {
 
     ## get listname & robot
     my $listname = $message->{'listname'};
-    my $robot_id = $message->{'robot_id'} || Site->domain;
+    my $robot_id = $message->{'robot_id'} || Sympa::Site->domain;
     my $list     = $message->list;
     my $robot    = $message->robot;
     my $sender   = $message->get_sender_email;
@@ -1830,17 +1830,17 @@ sub process_message {
 
 	## Sampling delay
 	if (time - ($loop_info{$sender}{'date_init'} || 0) <
-	    Site->loop_command_sampling_delay) {
+	    Sympa::Site->loop_command_sampling_delay) {
 
 	    ## Notify listmaster of first rejection
-	    if ($loop_info{$sender}{'count'} == Site->loop_command_max) {
+	    if ($loop_info{$sender}{'count'} == Sympa::Site->loop_command_max) {
 		## Notify listmaster
 		$robot->send_notify_to_listmaster('loop_command',
 		    {'msg' => $message});
 	    }
 
 	    ## Too many reports sent => message skipped !!
-	    if ($loop_info{$sender}{'count'} >= Site->loop_command_max) {
+	    if ($loop_info{$sender}{'count'} >= Sympa::Site->loop_command_max) {
 		Sympa::Log::Syslog::do_log(
 		    'err',
 		    'Ignoring message %s which would cause a loop; %d messages sent to %s; loop_command_max exceeded',
@@ -1931,7 +1931,7 @@ sub DoForward {
 
     my @rcpt;
     if ($function eq 'listmaster') {
-	@rcpt = @{$robot->listmasters || Site->listmasters || []};
+	@rcpt = @{$robot->listmasters || Sympa::Site->listmasters || []};
 	Sympa::Log::Syslog::do_log('notice',
 	    'Warning : no listmaster defined in robot.conf for robot %s nor sympa.conf',
 	    $robot)
@@ -2828,7 +2828,7 @@ sub clean_msgid_table {
     foreach my $rcpt (keys %msgid_table) {
 	foreach my $msgid (keys %{$msgid_table{$rcpt}}) {
 	    if (time >
-		$msgid_table{$rcpt}{$msgid} + Site->msgid_table_cleanup_ttl) {
+		$msgid_table{$rcpt}{$msgid} + Sympa::Site->msgid_table_cleanup_ttl) {
 		delete $msgid_table{$rcpt}{$msgid};
 	    }
 	}

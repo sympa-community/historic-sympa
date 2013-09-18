@@ -286,7 +286,7 @@ sub casLogin {
     ## CAS server response will include the user's NetID
     my ($user, @proxies, $email, $cas_id);
     foreach my $service_id (0 .. $#{Site->auth_services->{$robot->domain}}) {
-	my $auth_service = Site->auth_services->{$robot->domain}[$service_id];
+	my $auth_service = Sympa::Site->auth_services->{$robot->domain}[$service_id];
 	next
 	    unless ($auth_service->{'auth_type'} eq 'cas')
 	    ;    ## skip non CAS entries
@@ -1086,7 +1086,7 @@ sub add {
 		$u->{'email'} = $email;
 		$u->{'gecos'} = $gecos || $u2->{'gecos'};
 		$u->{'date'} = $u->{'update_date'} = time();
-		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, Site->cookie);
+		$u->{'password'} = $u2->{'password'} || Sympa::Tools::Password::tmp_passwd($email, Sympa::Site->cookie);
 		$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 		$list->add_list_member($u);

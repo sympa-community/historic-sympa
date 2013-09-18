@@ -2635,7 +2635,7 @@ sub _get_auth_method {
 			$compute = $list->compute_auth($email, $cmd);
 			$that = $list->robot;
 		} else {
-			$compute = Site->compute_auth($email, $cmd);
+			$compute = Sympa::Site->compute_auth($email, $cmd);
 			$that = 'Site';
 		}
 		

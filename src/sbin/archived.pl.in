@@ -281,7 +281,7 @@ my $result = Sympa::Tools::Daemon::write_pid(
 	daemon    => $daemon_name,
 	pid       => $PID,
 	options   => $options,
-	method    => Site->lock_method,
+	method    => Sympa::Site->lock_method,
 	user      => Sympa::Constants::USER,
 	group     => Sympa::Constants::GROUP,
 );
@@ -307,7 +307,7 @@ if ($options{'log_level'}) {
 	Site->log_level); 
 }
 
-Sympa::Log::Syslog::do_openlog(Site->log_facility, Site->log_socket_type, 'archived');
+Sympa::Log::Syslog::do_openlog(Site->log_facility, Sympa::Site->log_socket_type, 'archived');
 
 ## Set the User ID & Group ID for the process
 $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -700,7 +700,7 @@ sub rebuild {
 	my $arcpath = $robot->arc_path;
 	Sympa::Log::Syslog::do_log('debug',"Rebuilding $adrlist archive ($2)");
 
-	my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Site->etc);
+	my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Sympa::Site->etc);
 
 	if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 		set_hidden_mode($tag);
@@ -753,11 +753,11 @@ sub rebuild {
 		my $arcs_dir = Sympa::Archive::clean_archive_directory(
 			'arc_root'       => $wwsconf->{'arc_path'},
 			'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
-			'tmpdir'         => Site->tmpdir,
+			'tmpdir'         => Sympa::Site->tmpdir,
 		);
 		my $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'} if($arcs_dir);
 
-		my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask $dir_to_rebuild";
+		my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Sympa::Site->umask $dir_to_rebuild";
 
 		Sympa::Log::Syslog::do_log('debug',"System call : $cmd");
 		my $exitcode = system($cmd);
@@ -811,7 +811,7 @@ sub rebuild {
 			my $arcs_dir = Sympa::Archive::clean_archive_directory(
 				'arc_root'       => $wwsconf->{'arc_path'},
 				'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
-				'tmpdir'         => Site->tmpdir,
+				'tmpdir'         => Sympa::Site->tmpdir,
 			);
 			if($arcs_dir) {
 				$dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'};
@@ -821,7 +821,7 @@ sub rebuild {
 				create_idx($arcdir);
 			}
 
-			my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask $dir_to_rebuild";
+			my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $arcdir  -definevars \"listname=$listname hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Sympa::Site->umask $dir_to_rebuild";
 			my $exitcode = system($cmd);
 			$exitcode = $exitcode / 256;
 
@@ -956,7 +956,7 @@ sub mail2arc {
 
 
 	if ($wwsconf->{'custom_archiver'}) {
-		my $file = Site->tmpdir."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'};
+		my $file = Sympa::Site->tmpdir."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'};
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
 		`$wwsconf->{'custom_archiver'} --list=$listname\@$robot --file=$file`;
@@ -1043,7 +1043,7 @@ sub mail2arc {
 
 		# savee arctxt dump of original message.
 		my $file = $monthdir.'/arctxt/'.$newfile;
-		my $output = Site->tmpdir.'/arc'.$newfile;
+		my $output = Sympa::Site->tmpdir.'/arc'.$newfile;
 		open (DUMP, "> $file");
 		printf DUMP $message_in_spool->{'messageasstring'};
 		close DUMP;
@@ -1059,12 +1059,12 @@ sub mail2arc {
 			next;
 		}
 
-		my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Site->etc);
+		my $mhonarc_ressources = Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list, Sympa::Site->etc);
 
 		Sympa::Log::Syslog::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() );
 
 		# call mhonarc on cleaned message source to make clean htlm view of message
-		my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=Site->wwsympa_url/arc tag=$tag\" -umask Site->umask < $output";
+		my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=Site->wwsympa_url/arc tag=$tag\" -umask Sympa::Site->umask < $output";
 
 		Sympa::Log::Syslog::do_log('debug',"System call : %s",$cmd);
 
@@ -1234,7 +1234,7 @@ Use L<Archive/get_tag>.
 sub get_tag {
 	my $listname = shift;
 
-	return (substr(Digest::MD5::md5_hex(join('/', Site->cookie, $listname)), -10));
+	return (substr(Digest::MD5::md5_hex(join('/', Sympa::Site->cookie, $listname)), -10));
 }
 
 # Checks if directory exists and we have write and read accec to it.

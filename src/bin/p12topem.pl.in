@@ -65,9 +65,9 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 }
 
 ## Probe Db if defined
-if (Site->db_name and Site->db_type) {
+if (Site->db_name and Sympa::Site->db_type) {
 	my $report = Sympa::Database->get_singleton()->probe(
-		update => Site->update_db_field_types
+		update => Sympa::Site->update_db_field_types
 	);
 	if (defined $report) {
 		Sympa::List::send_notify_to_listmaster(
@@ -76,17 +76,17 @@ if (Site->db_name and Site->db_type) {
 			{ 'report' => $report }
 		) if @$report;
 	} else {
-		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Site->db_name);
+		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Sympa::Site->db_name);
 	}
 }
 
 ## Apply defaults to %Sympa::List::pinfo
 Sympa::List::_apply_defaults();
 
-my $openssl = Site->openssl;
-my $home_sympa = Site->home;
-my $outpass = Site->key_passwd;
-my $etc_dir = Site->etc;
+my $openssl = Sympa::Site->openssl;
+my $home_sympa = Sympa::Site->home;
+my $outpass = Sympa::Site->key_passwd;
+my $etc_dir = Sympa::Site->etc;
 
 ## Check option
 my %options;
@@ -117,12 +117,12 @@ if ($listname) {
 		die;
 	}
 }elsif($robot) {
-	if (-d Site->etc.'/'.$robot) {
-		$cert = Site->etc.'/'.$robot.'/cert.pem';
-		$privatekey = Site->etc.'/'.$robot.'/private_key';
+	if (-d Sympa::Site->etc.'/'.$robot) {
+		$cert = Sympa::Site->etc.'/'.$robot.'/cert.pem';
+		$privatekey = Sympa::Site->etc.'/'.$robot.'/private_key';
 	} else {
-		$cert = Site->etc.'/cert.pem';
-		$privatekey = Site->etc.'/private_key';
+		$cert = Sympa::Site->etc.'/cert.pem';
+		$privatekey = Sympa::Site->etc.'/private_key';
 	}
 }
 

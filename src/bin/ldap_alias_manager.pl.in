@@ -41,11 +41,11 @@ unless (Site->load('no_db' => 1)) {
     exit 1;
 }
 
-my $manager_conf_file = Site->etc.'/ldap_alias_manager.conf';
+my $manager_conf_file = Sympa::Site->etc.'/ldap_alias_manager.conf';
 Log::set_log_level(Site->log_level);
-Log::do_openlog(Site->syslog, Site->log_socket_type, 'alias_manager');
+Log::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
 
-my $manager_conf_file = Site->etc . '/ldap_alias_manager.conf';
+my $manager_conf_file = Sympa::Site->etc . '/ldap_alias_manager.conf';
 
 ## LDAP configuration
 my %ldap_params;
@@ -88,7 +88,7 @@ unless ($robot = Robot->new($domain, 'no_db' => 1)) {
     exit(16);
 }
 
-$default_domain = Site->domain;
+$default_domain = Sympa::Site->domain;
 
 my %data;
 $data{'date'} = POSIX::strftime("%d %b %Y", localtime(time));

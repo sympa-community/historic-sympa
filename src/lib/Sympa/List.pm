@@ -825,7 +825,7 @@ sub savestats {
 	## Lock file
 	my $lock = Sympa::Lock->new(
 		path   => $dir.'/stats',
-		method => Site->lock_method
+		method => Sympa::Site->lock_method
 	);
 	unless (defined $lock) {
 		Sympa::Log::Syslog::do_log('err','Could not create new lock');
@@ -1120,8 +1120,8 @@ sub load {
     unless ($self->{'name'} and $self->{'robot'} and $self->{'dir'}) {
 	if ($robot and -d $robot->home) {
 	    $self->{'dir'} = $robot->home . '/' . $name;
-	} elsif ($robot and $robot->domain eq Site->domain) {
-	    $self->{'dir'} = Site->home . '/' . $name;
+	} elsif ($robot and $robot->domain eq Sympa::Site->domain) {
+	    $self->{'dir'} = Sympa::Site->home . '/' . $name;
 	} else {
 	    Sympa::Log::Syslog::do_log('err', 'No such robot (virtual domain) %s', $robot)
 		unless $options->{'just_try'};
@@ -2162,7 +2162,7 @@ See L<Site/send_dsn>.
 #
 ####################################################
 ##sub send_global_file {
-## DEPRECATED: Use $list->robot->send_file() or Site->send_file().
+## DEPRECATED: Use $list->robot->send_file() or Sympa::Site->send_file().
 
 ####################################################
 # send_file
@@ -2405,9 +2405,9 @@ sub get_list_members_per_mode {
 		Sympa::Log::Syslog::do_log('debug3','user %s notice',$user->{'email'});
 	    }
 	} elsif ($message->{'smime_crypted'} &&
-	    (!-r Site->ssl_cert_dir . '/' .
+	    (!-r Sympa::Site->ssl_cert_dir . '/' .
 	    Sympa::Tools::escape_chars($user->{'email'}) &&
-	    !-r Site->ssl_cert_dir . '/' .
+	    !-r Sympa::Site->ssl_cert_dir . '/' .
 	    Sympa::Tools::escape_chars($user->{'email'} . '@enc'))
 	) {
 	    Sympa::Log::Syslog::do_log('debug3','No certificate for user %s',$user->{'email'});
@@ -2618,7 +2618,7 @@ sub send_to_editor {
 
 	# prepare html view of this message
 	my $destination_dir =
-	    Site->viewmail_dir . '/mod/' . $self->get_id() . '/' . $modkey;
+	    Sympa::Site->viewmail_dir . '/mod/' . $self->get_id() . '/' . $modkey;
 	Archive::convert_single_message(
 	    $self, $message,
 	    'destination_dir' => $destination_dir,
@@ -2742,7 +2742,7 @@ sub send_auth {
     my $name      = $self->name;
     my $host      = $self->host;
     my $robot     = $self->domain;
-    my $authqueue = Site->queueauth;
+    my $authqueue = Sympa::Site->queueauth;
     return undef unless $name and $self->config;
 
    my @now = localtime(time);
@@ -2931,7 +2931,7 @@ sub archive_send_last {
 ######################################################
 ##sub send_notify_to_listmaster {
 ## DEPRECATED. Use $robot->send_notify_to_listmaster() (to normal
-## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
+## listmaster) or Sympa::Site->send_notify_to_listmaster() (to super listmaster).
 
 ####################################################
 # send_notify_to_owner
@@ -4127,7 +4127,7 @@ sub find_list_member_by_pattern_no_object {
 sub _list_member_cols {
     my $additional = '';
     if (Site->db_additional_subscriber_fields) {
-	$additional = ', ' . Site->db_additional_subscriber_fields;
+	$additional = ', ' . Sympa::Site->db_additional_subscriber_fields;
     }
     return
 	sprintf
@@ -4566,7 +4566,7 @@ Returns a hash to the first admin user with predefined role on the list.
 		## Release the Shared lock
 		my $lock = Sympa::Lock->new(
 			path   => $self->{'dir'}.'/include_admin_user',
-			method => Site->lock_method
+			method => Sympa::Site->lock_method
 		);
 		unless (defined $lock) {
 			Sympa::Log::Syslog::do_log('err','Could not create new lock');
@@ -4707,7 +4707,7 @@ sub get_first_bouncing_list_member {
 	## Additional subscriber fields
 	my $additional;
 	if (Site->db_additional_subscriber_fields) {
-		$additional = ',' . Site->db_additional_subscriber_fields;
+		$additional = ',' . Sympa::Site->db_additional_subscriber_fields;
 	}
     unless (
 	$sth = SDM::do_prepared_query(
@@ -4936,29 +4936,29 @@ sub update_list_member {
 		      );
 
     ## additional DB fields
-    if (defined Site->db_additional_subscriber_fields) {
+    if (defined Sympa::Site->db_additional_subscriber_fields) {
 	foreach
-	    my $f (split ',', Site->db_additional_subscriber_fields)
+	    my $f (split ',', Sympa::Site->db_additional_subscriber_fields)
 	{
 	    $map_table{$f} = 'subscriber_table';
 	    $map_field{$f} = $f;
 	}
     }
 
-    if (defined Site->db_additional_user_fields) {
-	foreach my $f (split ',', Site->db_additional_user_fields) {
+    if (defined Sympa::Site->db_additional_user_fields) {
+	foreach my $f (split ',', Sympa::Site->db_additional_user_fields) {
 	    $map_table{$f} = 'user_table';
 	    $map_field{$f} = $f;
 	}
     }
 
 ##    Sympa::Log::Syslog::do_log('debug2',
-##	'custom_attribute id: %s', Site->custom_attribute);
+##	'custom_attribute id: %s', Sympa::Site->custom_attribute);
 ##    ## custom attributes
-##    if (defined Site->custom_attribute) {
+##    if (defined Sympa::Site->custom_attribute) {
 ##	foreach my $f (sort keys %{Site->custom_attribute}) {
 ##	    Sympa::Log::Syslog::do_log('debug2',
-##		"custom_attribute id: Site->custom_attribute->{id} name: Site->custom_attribute->{name} type: Site->custom_attribute->{type} "
+##		"custom_attribute id: Sympa::Site->custom_attribute->{id} name: Sympa::Site->custom_attribute->{name} type: Sympa::Site->custom_attribute->{type} "
 ##	    );
 ##
 ##	}
@@ -5166,8 +5166,8 @@ sub update_list_admin {
 		      );
 #### ??
     ## additional DB fields
-    #    if (defined Site->db_additional_user_fields) {
-    #	foreach my $f (split ',', Site->db_additional_user_fields) {
+    #    if (defined Sympa::Site->db_additional_user_fields) {
+    #	foreach my $f (split ',', Sympa::Site->db_additional_user_fields) {
     #	    $map_table{$f} = 'user_table';
     #	    $map_field{$f} = $f;
     #	}
@@ -5674,7 +5674,7 @@ sub may_edit {
     return undef unless $self;
 
 	# Load edit_list.conf: track by file, not domain (file may come from server, robot, family or list context)
-	my $edit_conf_file = Sympa::Tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self, Site->etc);
+	my $edit_conf_file = Sympa::Tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self, Sympa::Site->etc);
 	if (! $edit_list_conf{$edit_conf_file} || ((stat($edit_conf_file))[9] > $mtime{'edit_list_conf'}{$edit_conf_file})) {
 
     # Load edit_list.conf: track by file, not domain (file may come from
@@ -5991,7 +5991,7 @@ sub archive_msg {
 	    $message->get_mime_message->head->get('X-no-archive');
 	my $restrict = $message->get_mime_message->head->get('Restrict');
 	if (
-	    Site->ignore_x_no_archive_header_feature ne 'on' and
+	    Sympa::Site->ignore_x_no_archive_header_feature ne 'on' and
 	    ($x_no_archive and $x_no_archive =~ /yes/i or
 		$restrict and $restrict =~ /no\-external\-archive/i)
 	) {
@@ -6437,9 +6437,9 @@ sub _include_users_remote_sympa_list {
 	    $host, $port, $path,
 	    $cert_file,
 	    $key_file,
-	    {   'key_passwd' => Site->key_passwd,
-		'cafile'     => Site->cafile,
-		'capath'     => Site->capath
+	    {   'key_passwd' => Sympa::Site->key_passwd,
+		'cafile'     => Sympa::Site->cafile,
+		'capath'     => Sympa::Site->capath
 	    }
 	)
 	) {
@@ -7805,7 +7805,7 @@ sub _load_list_admin_from_include {
 					require Sympa::Datasource::SQL;
 					my $source = Sympa::Datasource::SQL->create(
 						%$incl,
-						domain => Site->domain
+						domain => Sympa::Site->domain
 					);
 				$included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'});
 		} elsif ($type eq 'include_ldap_query') {
@@ -10313,7 +10313,7 @@ sub get_cert {
 	close CERT;
     } elsif ($format eq 'der') {
 	unless (open CERT,
-	    Site->openssl . " x509 -in $certs -outform DER|") {
+	    Sympa::Site->openssl . " x509 -in $certs -outform DER|") {
 	    Sympa::Log::Syslog::do_log('err',
 		Site->openssl . " x509 -in $certs -outform DER|");
 	    Sympa::Log::Syslog::do_log('err',
@@ -11676,11 +11676,11 @@ Remove a task in the tasks spool.
 sub remove_task {
 	my ($self, $task) = @_;
 
-    unless (opendir(DIR, Site->queuetask)) {
+    unless (opendir(DIR, Sympa::Site->queuetask)) {
 	Sympa::Log::Syslog::do_log(
 	    'err',
 	    "error : can't open dir %s: %s",
-	    Site->queuetask, $!
+	    Sympa::Site->queuetask, $!
 	);
 	return undef;
     }
@@ -11878,7 +11878,7 @@ sub remove_aliases {
 
     return undef if lc(Site->sendmail_aliases) eq 'none';
 
-    my $alias_manager = Site->alias_manager;
+    my $alias_manager = Sympa::Site->alias_manager;
     unless (-x $alias_manager) {
 	Sympa::Log::Syslog::do_log('err', 'Cannot run alias_manager %s', $alias_manager);
 	return undef;
@@ -12005,7 +12005,7 @@ sub move_message {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s, %s)', @_);
     my ($self, $file, $queue) = @_;
 
-    my $dir = $queue || Site->queuedistribute;
+    my $dir = $queue || Sympa::Site->queuedistribute;
     my $filename = $self->get_list_id() . '.' . time . '.' . int(rand(999));
 
     unless (open OUT, ">$dir/T.$filename") {

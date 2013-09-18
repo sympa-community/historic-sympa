@@ -444,7 +444,7 @@ sub conf_2_db {
 
 	## Load configuration file. Ignoring database config and get result
     my $global_conf;
-    unless ($global_conf = Site->load('no_db' => 1, 'return_result' => 1)) {
+    unless ($global_conf = Sympa::Site->load('no_db' => 1, 'return_result' => 1)) {
 	Sympa::Log::Syslog::do_log('err', 'Configuration file %s has errors.',
 	    get_sympa_conf());  
 	return undef;

@@ -161,9 +161,9 @@ unless (Site->load('no_db' => 1)) {
 }
 
 Sympa::Log::Syslog::set_log_level(Site->log_level);
-Sympa::Log::Syslog::do_openlog(Site->syslog, Site->log_socket_type, 'alias_manager');
+Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
 
-my $tmp_alias_file = Site->tmpdir . '/sympa_aliases.' . time;
+my $tmp_alias_file = Sympa::Site->tmpdir . '/sympa_aliases.' . time;
 
 
 my $default_domain;
@@ -185,10 +185,10 @@ unless ($robot = Robot->new($domain, 'no_db' => 1)) {
     exit(16);
 }
 
-$default_domain = Site->domain;
+$default_domain = Sympa::Site->domain;
 
 my $alias_file;
-$alias_file = Site->sendmail_aliases || Sympa::Constants::SENDMAIL_ALIASES;
+$alias_file = Sympa::Site->sendmail_aliases || Sympa::Constants::SENDMAIL_ALIASES;
 $alias_file = $file if ($file);
 
 unless (-w "$alias_file") {
