@@ -859,7 +859,7 @@ sub upgrade {
 	    Sympa::Log::Syslog::do_log('notice',
 		'Performing upgrade for spool %s', $spooldir);
 
-	    my $spool = Sympaspool->new($spools_def{$spoolparameter});
+	    my $spool = Sympa::Spool->new($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
 		croak sprintf("Can't open dir %s: %s", $spooldir, "$!");
 		## No return.
