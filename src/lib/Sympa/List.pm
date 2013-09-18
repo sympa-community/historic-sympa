@@ -12780,7 +12780,7 @@ sub family {
 	return $self->{'family'};
     } elsif ($self->family_name) {
 	return $self->{'family'} =
-	    Family->new($self->family_name, $self->{'robot'});
+	    Sympa::Family->new($self->family_name, $self->{'robot'});
     } else {
        return undef;
     }
