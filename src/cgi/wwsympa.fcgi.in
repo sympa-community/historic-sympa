@@ -1424,7 +1424,7 @@ Sympa::Log::Syslog::do_log(info => "WWSympa started, process $$");
 		}
 		foreach my $role ('member', 'owner', 'editor') {
 		    $param->{"get_which_$role"} =
-			List::get_lists($robot,
+			Sympa::List::get_lists($robot,
 			    {   'filter_query' =>
 				[   $role => $param->{'user'}{'email'},
 				    '! status' => 'closed|family_closed'
@@ -4296,7 +4296,7 @@ sub do_lists {
     if ($in{'topic'} and $in{'topic'} eq '@which') {
 	my %lists = ();
 	foreach my $role ('member', 'owner', 'editor') {
-	    foreach my $l (List::get_which($param->{'user'}{'email'},
+	    foreach my $l (Sympa::List::get_which($param->{'user'}{'email'},
 		$robot, $role)) {
 		$lists{$l->name} = $l;
 	    }
@@ -4827,7 +4827,7 @@ sub do_search {
 
     $param->{'similar_subscribers_occurrence'} = 0;
     if($param->{'filter'} !~ /^\@[\w-]+\./) {
-	foreach my $user (@{List::get_resembling_list_members_no_object({'name' => $list->name, 'domain' => $robot_id, 'email' => $in{'filter'}})}) {
+	foreach my $user (@{Sympa::List::get_resembling_list_members_no_object({'name' => $list->name, 'domain' => $robot_id, 'email' => $in{'filter'}})}) {
 	    next if($emails{$user->{'email'}});
 	    push @{$param->{'similar_subscribers'}}, $user;
 	    last if($#{$param->{'similar_subscribers'}} + 1 > $max_select);
@@ -9247,7 +9247,7 @@ sub do_create_list_request {
 	$param->{'all_lists'} = Sympa::List::get_lists($robot);
     } else {
 	$param->{'all_lists'} =
-	    [List::get_which($param->{'user'}{'email'}, $robot, 'owner')];
+	    [Sympa::List::get_which($param->{'user'}{'email'}, $robot, 'owner')];
     }
 
     my $topics;

@@ -72,7 +72,7 @@ my $spool = Sympa::Spool->new(
 );
 
 ## Loading all Lists at startup, in order to increase execution speed
-List::get_lists('Site');
+Sympa::List::get_lists('Site');
 
 my $all_lists = Sympa::List::get_lists('*');
 foreach my $list (@$all_lists){
