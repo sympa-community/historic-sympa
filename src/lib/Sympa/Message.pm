@@ -247,7 +247,7 @@ sub load {
     $self->check_dkim_signature;
 
     ## S/MIME
-    if (Site->openssl) {
+    if (Sympa::Site->openssl) {
 	return undef unless $self->decrypt;
 	$self->check_smime_signature;
     }
@@ -917,7 +917,7 @@ sub smime_decrypt {
     
     my $pass_option;
     $self->{'decrypted_msg_as_string'} = '';
-    if (Site->key_passwd ne '') {
+    if (Sympa::Site->key_passwd ne '') {
 	# if password is defined in sympa.conf pass the password to OpenSSL
 	$pass_option = "-passin file:$temporary_pwd";	
     }
@@ -926,7 +926,7 @@ sub smime_decrypt {
     while (my $certfile = shift @$certs) {
 	my $keyfile = shift @$keys;
 	Sympa::Log::Syslog::do_log('debug', 'Trying decrypt with %s, %s', $certfile, $keyfile);
-	if (Site->key_passwd ne '') {
+	if (Sympa::Site->key_passwd ne '') {
 	    unless (mkfifo($temporary_pwd,0600)) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to make fifo for %s', $temporary_pwd);
 		return undef;
@@ -1125,7 +1125,7 @@ sub smime_sign {
     my $temporary_pwd = Sympa::Site->tmpdir . '/pass.' . $$;
 
     my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if (Site->key_passwd ne '') ;
+    $pass_option = "-passin file:$temporary_pwd" if (Sympa::Site->key_passwd ne '') ;
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
@@ -1143,14 +1143,14 @@ sub smime_sign {
     $dup_msg->print(\*MSGDUMP);
     close(MSGDUMP);
 
-    if (Site->key_passwd ne '') {
+    if (Sympa::Site->key_passwd ne '') {
 	unless ( mkfifo($temporary_pwd,0600)) {
 	    Sympa::Log::Syslog::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
     my $cmd = sprintf
 	'%s smime -sign -rand %s/rand -signer %s %s -inkey %s -in %s',
-	Site->openssl, Sympa::Site->tmpdir, $cert, $pass_option, $key,
+	Sympa::Site->openssl, Sympa::Site->tmpdir, $cert, $pass_option, $key,
 	$temporary_file;
     Sympa::Log::Syslog::do_log('debug2', '%s', $cmd);
     unless (open NEWMSG, "$cmd |") {
@@ -1158,7 +1158,7 @@ sub smime_sign {
 	return undef;
     }
 
-    if (Site->key_passwd ne '') {
+    if (Sympa::Site->key_passwd ne '') {
 	unless (open (FIFO,"> $temporary_pwd")) {
 	    Sympa::Log::Syslog::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 	}
@@ -1224,7 +1224,7 @@ sub smime_sign_check {
     $trusted_ca_options = "-CAfile " . Sympa::Site->cafile . " " if Sympa::Site->cafile;
     $trusted_ca_options .= "-CApath " . Sympa::Site->capath . " " if Sympa::Site->capath;
     my $cmd = sprintf '%s smime -verify %s -signer %s',
-	Site->openssl, $trusted_ca_options, $temporary_file;
+	Sympa::Site->openssl, $trusted_ca_options, $temporary_file;
     Sympa::Log::Syslog::do_log('debug2', '%s', $cmd);
 
     unless (open MSGDUMP, "| $cmd > /dev/null") {
@@ -1256,12 +1256,12 @@ sub smime_sign_check {
     Sympa::Log::Syslog::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer->{'email'}}));
     ## store the signer certificat
     unless (-d Sympa::Site->ssl_cert_dir) {
-	if ( mkdir (Site->ssl_cert_dir, 0775)) {
+	if ( mkdir (Sympa::Site->ssl_cert_dir, 0775)) {
 	    Sympa::Log::Syslog::do_log('info', 'creating spool %s', Sympa::Site->ssl_cert_dir);
 	}else{
 	    Sympa::Log::Syslog::do_log('err',
 		'Unable to create user certificat directory %s',
-		Site->ssl_cert_dir);
+		Sympa::Site->ssl_cert_dir);
 	}
     }
 
@@ -1579,8 +1579,8 @@ sub add_parts {
     foreach my $file (
 	"$listdir/message.header",
 	"$listdir/message.header.mime",
-	Site->etc . '/mail_tt2/message.header',
-	Site->etc . '/mail_tt2/message.header.mime'
+	Sympa::Site->etc . '/mail_tt2/message.header',
+	Sympa::Site->etc . '/mail_tt2/message.header.mime'
 	) {
 	if (-f $file) {
 	    unless (-r $file) {
@@ -1596,8 +1596,8 @@ sub add_parts {
     foreach my $file (
 	"$listdir/message.footer",
 	"$listdir/message.footer.mime",
-	Site->etc . '/mail_tt2/message.footer',
-	Site->etc . '/mail_tt2/message.footer.mime'
+	Sympa::Site->etc . '/mail_tt2/message.footer',
+	Sympa::Site->etc . '/mail_tt2/message.footer.mime'
 	) {
 	if (-f $file) {
 	    unless (-r $file) {

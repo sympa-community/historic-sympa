@@ -21,16 +21,16 @@ use Sympa::Tools;
 unless (Sympa::Configuration::load(Sympa::Constants::CONFIG)) {
 	die "Can't load Sympa configuration file";
 }
-Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'sympa');
+Sympa::Log::Syslog::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'sympa');
 
-if (Site->db_name and Sympa::Site->db_type) {
+if (Sympa::Site->db_name and Sympa::Site->db_type) {
 	my $report = Sympa::Database->get_singleton()->probe(
 		update => Sympa::Site->update_db_field_types
 	);
 	if (defined $report) {
 		Sympa::List::send_notify_to_listmaster(
 			'db_struct_updated',
-			Site->domain,
+			Sympa::Site->domain,
 			{ 'report' => $report }
 		) if @$report;
 	} else {
@@ -44,7 +44,7 @@ $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
 $UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 # Sets the UMASK
-umask(oct(Site->umask));
+umask(oct(Sympa::Site->umask));
 
 ## Loads message list
 unless (opendir SPOOL, Sympa::Site->queuemod) {
@@ -59,7 +59,7 @@ foreach my $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	my ($listaddress, $modkey) = ($1, $2);
 
 
-	if (-d "Site->queuemod/.$msg") {
+	if (-d "Sympa::Site->queuemod/.$msg") {
 		next;
 	}
 

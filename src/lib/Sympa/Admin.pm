@@ -209,7 +209,7 @@ sub create_list_old{
     $param->{'creation_email'} ||= $robot->get_address('listmaster');
     $param->{'status'} ||= 'open';
 
-	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',Site->etc,Site->viewmaildir,Site->domain);
+	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','', Sympa::Site->etc, Sympa::Site->viewmaildir, Sympa::Site->domain);
 
 	## Lock config before openning the config file
 	my $lock = Sympa::Lock->new(
@@ -949,16 +949,16 @@ sub rename_list{
 				}
 
 				## Rename file
-				unless (move(Site->$spool . "/$file",
-					Site->$spool . "/$newfile")) {
+				unless (move(Sympa::Site->$spool . "/$file",
+					Sympa::Site->$spool . "/$newfile")) {
 					 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s",
-					Site->$spool . "/$file",
-					Site->$spool . "/$newfile", $!);
+					Sympa::Site->$spool . "/$file",
+					Sympa::Site->$spool . "/$newfile", $!);
 					 next;
 				 }
 				 
 				 ## Change X-Sympa-To
-				 Sympa::Tools::change_x_sympa_to(Site->$spool . "/$newfile",
+				 Sympa::Tools::change_x_sympa_to(Sympa::Site->$spool . "/$newfile",
 					"$param{'new_listname'}\@$param{'new_robot'}");
 			}
 
@@ -966,14 +966,14 @@ sub rename_list{
 		}
 		## Digest spool
 		 if (-f Sympa::Site->queuedigest . "/$old_listname") {
-			 unless (move(Site->queuedigest . "/$old_listname",
-			Site->queuedigest . "/$param{'new_listname'}")) {
+			 unless (move(Sympa::Site->queuedigest . "/$old_listname",
+			Sympa::Site->queuedigest . "/$param{'new_listname'}")) {
 			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname", Sympa::Site->queuedigest . "/$param{'new_listname'}", $!);
 			 next;
 			 }
 		 }elsif (-f Sympa::Site->queuedigest . "/$old_listname\@$robot") {
-			 unless (move(Site->queuedigest . "/$old_listname\@$robot",
-			Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}")) {
+			 unless (move(Sympa::Site->queuedigest . "/$old_listname\@$robot",
+			Sympa::Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}")) {
 			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname\@$robot", Sympa::Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}", $!);
 			 next;
 			 }
@@ -1281,7 +1281,7 @@ sub install_aliases {
 	Sympa::Log::Syslog::do_log('debug', "($list->{'name'},$robot)");
 
 	return 1
-	if (Site->sendmail_aliases =~ /^none$/i);
+	if (Sympa::Site->sendmail_aliases =~ /^none$/i);
 
     my $alias_manager     = Sympa::Site->alias_manager;
     my $output_file       = Sympa::Site->tmpdir . '/aliasmanager.stdout.' . $$;
@@ -1364,7 +1364,7 @@ sub remove_aliases {
 	Sympa::Log::Syslog::do_log('debug3', '(%s)', @_);
 
 	return 1
-	if (Site->sendmail_aliases =~ /^none$/i);
+	if (Sympa::Site->sendmail_aliases =~ /^none$/i);
 
 	my $status = $list->remove_aliases();
 	my $suffix = $list->robot->return_path_suffix;

@@ -666,7 +666,7 @@ sub renew {
     my $time = time;
     my $remote_addr = $ENV{'REMOTE_ADDR'};
     my $refresh_term;
-    if (Site->cookie_refresh == 0) {
+    if (Sympa::Site->cookie_refresh == 0) {
 	$refresh_term = $time;
     } else {
 	my $cookie_refresh = Sympa::Site->cookie_refresh;

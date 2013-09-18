@@ -34,7 +34,7 @@ use Sympa::Robot;
 
 $ENV{'PATH'} = '';
 
-unless (Site->load('no_db' => 1)) {
+unless (Sympa::Site->load('no_db' => 1)) {
     printf STDERR
 	"Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
 	Conf::get_sympa_conf();
@@ -42,8 +42,8 @@ unless (Site->load('no_db' => 1)) {
 }
 
 my $manager_conf_file = Sympa::Site->etc.'/ldap_alias_manager.conf';
-Log::set_log_level(Site->log_level);
-Log::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
+Log::set_log_level(Sympa::Site->log_level);
+Log::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
 
 my $manager_conf_file = Sympa::Site->etc . '/ldap_alias_manager.conf';
 
@@ -99,8 +99,8 @@ $data{'ldap_base_dn'} = $ldap_base_dn;
 $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
 $data{'return_path_suffix'} = $robot->return_path_suffix;
 
-my $tt2_include_path = [Site->etc.'/'.$domain,
-	Site->etc,
+my $tt2_include_path = [Sympa::Site->etc.'/'.$domain,
+	Sympa::Site->etc,
 	Sympa::Constants::DEFAULTDIR];
 my @aliases;
 

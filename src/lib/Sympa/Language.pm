@@ -624,7 +624,7 @@ sub GetLang {
     return $current_lang if $current_lang;
 
     if ($Site::is_initialized) {
-	SetLang(Site->lang);
+	SetLang(Sympa::Site->lang);
     }
     return $current_lang || 'en';    # the last resort
 }
@@ -646,7 +646,7 @@ sub GetCharset {
 
     if ($Site::is_initialized) {
 	unless ($current_lang) {
-	    SetLang(Site->lang);
+	    SetLang(Sympa::Site->lang);
 	}
 	if ($current_lang) {
 	    my $locale2charset = Sympa::Site->locale2charset;

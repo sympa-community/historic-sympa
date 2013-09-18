@@ -203,7 +203,7 @@ if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 } else {
-	Sympa::Log::Syslog::set_log_level(Site->log_level);
+	Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Sympa::Site->log_level");
 }
 
@@ -221,10 +221,10 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(S
 }
 
 ## Sets the UMASK
-umask(oct(Site->umask));
+umask(oct(Sympa::Site->umask));
 
 ## Change to list root
-unless (chdir(Site->home)) {
+unless (chdir(Sympa::Site->home)) {
 	Sympa::Log::Syslog::do_log('err',"error : unable to change to directory %s", Sympa::Site->home);
 	exit (-1);
 }
@@ -1067,7 +1067,7 @@ sub purge_logs_table {
 	my @slots = ();
 
 	Sympa::Log::Syslog::do_log('debug2','()');
-	unless(Sympa::Log::Database::delete_events(Site->logs_expiration_period)) {
+	unless(Sympa::Log::Database::delete_events(Sympa::Site->logs_expiration_period)) {
 		Sympa::Log::Syslog::do_log('err','Failed to delete logs');
 		return undef;
 	}
@@ -1113,8 +1113,8 @@ sub purge_session_table {
 	Sympa::Log::Syslog::do_log('info','()');
 	my $removed = Sympa::Session->purge_old_sessions(
 		robot           => '*',
-		delay           => Sympa::Tools::Time::duration_conv(Site->session_table_ttl),
-		anonymous_delay => Sympa::Tools::Time::duration_conv(Site->anonymous_session_table_ttl),
+		delay           => Sympa::Tools::Time::duration_conv(Sympa::Site->session_table_ttl),
+		anonymous_delay => Sympa::Tools::Time::duration_conv(Sympa::Site->anonymous_session_table_ttl),
 		base            => $base
 	);
 	unless(defined $removed) {
@@ -1140,7 +1140,7 @@ sub purge_tables {
 	Sympa::Log::Syslog::do_log('notice','%s rows removed in bulkspool_table',$removed);
 	#
 	my $removed = 0;
-	foreach my $robot (keys %{Site->robots}) {
+	foreach my $robot (keys %{Sympa::Site->robots}) {
 		my $all_lists = Sympa::List::get_lists($robot);
 		foreach my $list ( @$all_lists ) {
 			$removed += Sympa::Tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);
@@ -1157,7 +1157,7 @@ sub purge_one_time_ticket_table {
 	Sympa::Log::Syslog::do_log('info','()');
 	my $removed = Sympa::Session->purge_old_tickets(
 		robot => '*',
-		delay => Sympa::Tools::Time::duration_conv(Site->one_time_ticket_table_ttl),
+		delay => Sympa::Tools::Time::duration_conv(Sympa::Site->one_time_ticket_table_ttl),
 		base  => $base
 	);
 	unless(defined $removed) {
@@ -1179,11 +1179,11 @@ sub purge_user_table {
 	my %known_people;
 
 	## Listmasters
-	foreach my $l (@{Site->listmasters}) {
+	foreach my $l (@{Sympa::Site->listmasters}) {
 		$known_people{$l} = 1;
 	}
 
-	foreach my $r (keys %{Site->robots}) {
+	foreach my $r (keys %{Sympa::Site->robots}) {
 
 		my $all_lists = Sympa::List::get_lists($r);
 		foreach my $list (@$all_lists){
@@ -1452,7 +1452,7 @@ sub update_crl {
 
 	my @tab = @{$Rarguments};
 	my $limit = Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
-	my $CA_file = "Site->home/$tab[0]"; # file where CA urls are stored;
+	my $CA_file = "Sympa::Site->home/$tab[0]"; # file where CA urls are stored;
 	Sympa::Log::Syslog::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
 	# building of CA list
@@ -1468,9 +1468,9 @@ sub update_crl {
 	close (FILE);
 
 	# updating of crl files
-	my $crl_dir = "Site->crl_dir";
+	my $crl_dir = "Sympa::Site->crl_dir";
 	unless (-d Sympa::Site->crl_dir) {
-		if ( mkdir (Site->crl_dir, 0775)) {
+		if ( mkdir (Sympa::Site->crl_dir, 0775)) {
 			Sympa::Log::Syslog::do_log('notice', "creating spool Sympa::Site->crl_dir");
 		} else {
 			Sympa::Log::Syslog::do_log('err', "Unable to create CRLs directory Sympa::Site->crl_dir");

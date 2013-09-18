@@ -576,7 +576,7 @@ sub checkfiles {
 	if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
 		unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
-			Site->send_notify_to_listmaster('cannot_access_cafile', $Conf{'cafile'});
+			Sympa::Site->send_notify_to_listmaster('cannot_access_cafile', $Conf{'cafile'});
 			$config_err++;
 		}
 	}
@@ -584,7 +584,7 @@ sub checkfiles {
 	if (defined $Conf{'capath'} && $Conf{'capath'}) {
 		unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
 			Sympa::Log::Syslog::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
-			Site->send_notify_to_listmaster('cannot_access_capath', $Conf{'capath'});
+			Sympa::Site->send_notify_to_listmaster('cannot_access_capath', $Conf{'capath'});
 			$config_err++;
 		}
 	}
@@ -592,7 +592,7 @@ sub checkfiles {
 	## queuebounce and bounce_path pointing to the same directory
 	if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
 		Sympa::Log::Syslog::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
-		Site->send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same',
+		Sympa::Site->send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same',
 		 $Conf{'queuebounce'});
 		$config_err++;
 	}
@@ -693,7 +693,7 @@ sub checkfiles {
 	}
 	if ($css_updated) {
 		## Notify main listmaster
-		Site->send_notify_to_listmaster('css_updated',
+		Sympa::Site->send_notify_to_listmaster('css_updated',
 		     "Static CSS files have been updated ; check log file for details");
 	}
 

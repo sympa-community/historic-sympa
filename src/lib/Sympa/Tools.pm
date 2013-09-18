@@ -354,9 +354,9 @@ sub checkcommand {
 	Sympa::Log::Syslog::do_log('debug3', 'Sympa::Tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
 	if ($subject) {
-		if (Site->misaddressed_commands_regexp) {
+		if (Sympa::Site->misaddressed_commands_regexp) {
 			my $misaddressed_commands_regexp =
-				Site->misaddressed_commands_regexp;
+				Sympa::Site->misaddressed_commands_regexp;
 			if ($subject =~ /^$misaddressed_commands_regexp\b/im) {
 				return 1;
 			}
@@ -366,9 +366,9 @@ sub checkcommand {
 	return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
 
 	foreach $i (@{$msg->body}) {
-		if (Site->misaddressed_commands_regexp) {
+		if (Sympa::Site->misaddressed_commands_regexp) {
 			my $misaddressed_commands_regexp =
-				Site->misaddressed_commands_regexp;
+				Sympa::Site->misaddressed_commands_regexp;
 			if ($i =~ /^$misaddressed_commands_regexp\b/im) {
 				return 1;
 			}
@@ -645,7 +645,7 @@ sub escape_docname {
 	$filename = MIME::EncWords::decode_mimewords($filename);
 
 	## Decode from FS encoding to utf-8
-	#$filename = Encode::decode(Site->filesystem_encoding, $filename);
+	#$filename = Encode::decode(Sympa::Site->filesystem_encoding, $filename);
 
 	## escapesome chars for use in URL
 	return escape_chars($filename, $except);
@@ -959,7 +959,7 @@ sub virus_infected {
 	my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message
 	Sympa::Log::Syslog::do_log('debug2', 'Scan virus in %s', $file);
 
-	unless (Site->antivirus_path) {
+	unless (Sympa::Site->antivirus_path) {
 		Sympa::Log::Syslog::do_log('debug', 'Sympa not configured to scan virus in message');
 		return 0;
 	}
@@ -991,15 +991,15 @@ sub virus_infected {
 	my $result;
 
 	## McAfee
-	if (Site->antivirus_path =~ /\/uvscan$/) {
+	if (Sympa::Site->antivirus_path =~ /\/uvscan$/) {
 		# impossible to look for viruses with no option set
-		unless (Site->antivirus_args) {
+		unless (Sympa::Site->antivirus_args) {
 			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 			return undef;
 		}
 
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1028,9 +1028,9 @@ sub virus_infected {
 		if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
 
 		## Trend Micro
-	}elsif (Site->antivirus_path =~ /\/vscan$/) {
+	}elsif (Sympa::Site->antivirus_path =~ /\/vscan$/) {
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1048,16 +1048,16 @@ sub virus_infected {
 		}
 
 		## F-Secure
-	} elsif(Site->antivirus_path =~ /\/fsav$/) {
+	} elsif(Sympa::Site->antivirus_path =~ /\/fsav$/) {
 		my $dbdir=$` ;
 
 		# impossible to look for viruses with no option set
-		unless (Site->antivirus_args) {
+		unless (Sympa::Site->antivirus_args) {
 			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 			return undef;
 		}
 		my $cmd = sprintf '%s --databasedirectory %s %s %s',
-		Site->antivirus_path, $dbdir, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, $dbdir, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1075,11 +1075,11 @@ sub virus_infected {
 		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
-	}elsif(Site->antivirus_path =~ /f-prot\.sh$/) {
+	}elsif(Sympa::Site->antivirus_path =~ /f-prot\.sh$/) {
 
 		Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1098,14 +1098,14 @@ sub virus_infected {
 		if (( $status == 3) and not($virusfound)) {
 			$virusfound = "unknown";
 		}
-	}elsif (Site->antivirus_path =~ /kavscanner/) {
+	}elsif (Sympa::Site->antivirus_path =~ /kavscanner/) {
 		# impossible to look for viruses with no option set
-		unless (Site->antivirus_args) {
+		unless (Sympa::Site->antivirus_args) {
 			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 			return undef;
 		}
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR,"$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1126,14 +1126,14 @@ sub virus_infected {
 		}
 
 		## Sophos Antivirus... by liuk@publinet.it
-	}elsif (Site->antivirus_path =~ /\/sweep$/) {
+	}elsif (Sympa::Site->antivirus_path =~ /\/sweep$/) {
 		# impossible to look for viruses with no option set
-		unless (Site->antivirus_args) {
+		unless (Sympa::Site->antivirus_args) {
 			Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 			return undef;
 		}
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		while (<ANTIVIR>) {
@@ -1151,9 +1151,9 @@ sub virus_infected {
 		}
 
 		## Clam antivirus
-	}elsif (Site->antivirus_path =~ /\/clamd?scan$/) {
+	}elsif (Sympa::Site->antivirus_path =~ /\/clamd?scan$/) {
 		my $cmd = sprintf '%s %s %s',
-		Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
+		Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
 		open (ANTIVIR, "$cmd |");
 
 		my $result;
@@ -1179,7 +1179,7 @@ sub virus_infected {
 
 	## Error while running antivir, notify listmaster
 	if ($error_msg) {
-		Site->send_notify_to_listmaster('virus_scan_failed',
+		Sympa::Site->send_notify_to_listmaster('virus_scan_failed',
 			{'filename' => $file, 'error_msg' => $error_msg});
 	}
 

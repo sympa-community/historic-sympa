@@ -206,7 +206,7 @@ sub create_required_global_tasks {
     foreach my $key (keys %global_models) {	
 	Sympa::Log::Syslog::do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
-	    if (Site->$key) {
+	    if (Sympa::Site->$key) {
 		unless($task = Task::create ({'creation_date' => $param->{'current_date'},'model' => $global_models{$key}, 'flavour' => Sympa::Site->$key, 'data' =>$data})) {
 		    creation_error(sprintf 'Unable to create task with parameters creation_date = "%s", model = "%s", flavour = "%s", data = "%s"',$param->{'current_date'},$global_models{$key}, Sympa::Site->$key, $data);
 		}

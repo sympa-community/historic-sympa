@@ -389,7 +389,7 @@ sub delete_bouncer {
 
     Sympa::Log::do_log('debug2', 'Deleting bouncing user %s', $self->{'who'});
     my $result = Scenario::request_action($self->{'list'}, 'del','smtp',
-	{   'sender' => [Site->listmasters]->[0],
+	{   'sender' => [Sympa::Site->listmasters]->[0],
 	    'email' => $self->{'who'}
 	}
     );
@@ -761,7 +761,7 @@ sub process_ndn {
 	## Bounce directory
 	if (! -d $bounce_dir) {
 	    unless (mkdir $bounce_dir, 0777) {
-		Site->send_notify_to_listmaster('bounce_intern_error',
+		Sympa::Site->send_notify_to_listmaster('bounce_intern_error',
 		    {'error' => "Failed to list create bounce directory $bounce_dir"});
 		Log::do_log('err', 'Could not create %s: %s bounced dir, check bounce_path in wwsympa.conf', $bounce_dir, $!);
 	    exit;

@@ -285,7 +285,7 @@ sub casLogin {
     ## Validate the CAS ST against all known CAS servers defined in auth.conf
     ## CAS server response will include the user's NetID
     my ($user, @proxies, $email, $cas_id);
-    foreach my $service_id (0 .. $#{Site->auth_services->{$robot->domain}}) {
+    foreach my $service_id (0 .. $#{Sympa::Site->auth_services->{$robot->domain}}) {
 	my $auth_service = Sympa::Site->auth_services->{$robot->domain}[$service_id];
 	next
 	    unless ($auth_service->{'auth_type'} eq 'cas')
@@ -915,7 +915,7 @@ sub closeList {
     }
 
     # check authorization
-    unless (($list->am_i('owner', $sender)) || (Site->is_listmaster($sender)))
+    unless (($list->am_i('owner', $sender)) || (Sympa::Site->is_listmaster($sender)))
     {
 	Sympa::Log::Syslog::do_log('info', 'closeList %s from %s not allowed',
 	    $listname, $sender);

@@ -353,7 +353,7 @@ sub send_msg {
 
 	if ($task->{'object'} eq '_global') {
 		foreach my $email (keys %{$self->{'variables'}{$var}}) {
-			unless (Site->send_file($template, $email, $self->{'variables'}{$var}{$email}) ) {
+			unless (Sympa::Site->send_file($template, $email, $self->{'variables'}{$var}{$email}) ) {
 				Log::do_log ('notice', "Unable to send template $template to $email");
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
 				return undef;
@@ -701,7 +701,7 @@ sub purge_user_table {
 	my %known_people;
 
 	## Listmasters
-	foreach my $l (@{Site->listmasters}) {
+	foreach my $l (@{Sympa::Site->listmasters}) {
 		$known_people{$l} = 1;
 	}
 
@@ -955,7 +955,7 @@ sub chk_cert_expiration {
 			$tpl_context{'expiration_date'} = Sympa::Tools::adate ($expiration_date);
 			$tpl_context{'certificate_id'} = $id;
 			$tpl_context{'auto_submitted'} = 'auto-generated';
-			unless (Site->send_file($template, $_, \%tpl_context)) {
+			unless (Sympa::Site->send_file($template, $_, \%tpl_context)) {
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $_"});
 			}
 			Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");
@@ -990,7 +990,7 @@ sub update_crl {
 	# updating of crl files
 	my $crl_dir = Sympa::Site->crl_dir;
 	unless (-d Sympa::Site->crl_dir) {
-		if ( mkdir (Site->crl_dir, 0775)) {
+		if ( mkdir (Sympa::Site->crl_dir, 0775)) {
 			Log::do_log('notice', 'creating spool %s', Sympa::Site->crl_dir);
 		} else {
 			$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'Unable to create CRLs directory ' . Sympa::Site->crl_dir});

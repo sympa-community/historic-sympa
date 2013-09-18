@@ -153,15 +153,15 @@ pod2usage(-message => 'missing domain', exit => 2) unless $domain;
 pod2usage(-message => "invalid operation $operation", exit => 2)
 unless $operation eq 'add' || $operation eq 'del';
 
-unless (Site->load('no_db' => 1)) {
+unless (Sympa::Site->load('no_db' => 1)) {
     printf STDERR
 	"Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
 	Conf::get_sympa_conf();
     exit 1;
 }
 
-Sympa::Log::Syslog::set_log_level(Site->log_level);
-Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
+Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
+Sympa::Log::Syslog::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'alias_manager');
 
 my $tmp_alias_file = Sympa::Site->tmpdir . '/sympa_aliases.' . time;
 

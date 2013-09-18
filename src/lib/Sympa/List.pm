@@ -1682,7 +1682,7 @@ sub distribute_msg {
 
     ## Hide the sender if the list is anonymoused
     if ($self->anonymous_sender) {
-	foreach my $field (@{Site->anonymous_header_fields || []}) {
+	foreach my $field (@{Sympa::Site->anonymous_header_fields || []}) {
 	    $hdr->delete($field);
 	}
 	$hdr->add('From', $self->anonymous_sender);
@@ -4126,7 +4126,7 @@ sub find_list_member_by_pattern_no_object {
 
 sub _list_member_cols {
     my $additional = '';
-    if (Site->db_additional_subscriber_fields) {
+    if (Sympa::Site->db_additional_subscriber_fields) {
 	$additional = ', ' . Sympa::Site->db_additional_subscriber_fields;
     }
     return
@@ -4706,7 +4706,7 @@ sub get_first_bouncing_list_member {
 
 	## Additional subscriber fields
 	my $additional;
-	if (Site->db_additional_subscriber_fields) {
+	if (Sympa::Site->db_additional_subscriber_fields) {
 		$additional = ',' . Sympa::Site->db_additional_subscriber_fields;
 	}
     unless (
@@ -4956,7 +4956,7 @@ sub update_list_member {
 ##	'custom_attribute id: %s', Sympa::Site->custom_attribute);
 ##    ## custom attributes
 ##    if (defined Sympa::Site->custom_attribute) {
-##	foreach my $f (sort keys %{Site->custom_attribute}) {
+##	foreach my $f (sort keys %{Sympa::Site->custom_attribute}) {
 ##	    Sympa::Log::Syslog::do_log('debug2',
 ##		"custom_attribute id: Sympa::Site->custom_attribute->{id} name: Sympa::Site->custom_attribute->{name} type: Sympa::Site->custom_attribute->{type} "
 ##	    );
@@ -4979,7 +4979,7 @@ sub update_list_member {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = SDM::get_canonical_write_date($value);
 		} elsif ($value eq 'NULL') {    ## get_null_value?
-		    if (Site->db_type eq 'mysql') {
+		    if (Sympa::Site->db_type eq 'mysql') {
 			$value = '\N';
 		    }
 		} else {
@@ -5188,7 +5188,7 @@ sub update_list_admin {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = SDM::get_canonical_write_date($value);
 		} elsif ($value eq 'NULL') {    #get_null_value?
-		    if (Site->db_type eq 'mysql') {
+		    if (Sympa::Site->db_type eq 'mysql') {
 			$value = '\N';
 		    }
 		} else {
@@ -10315,7 +10315,7 @@ sub get_cert {
 	unless (open CERT,
 	    Sympa::Site->openssl . " x509 -in $certs -outform DER|") {
 	    Sympa::Log::Syslog::do_log('err',
-		Site->openssl . " x509 -in $certs -outform DER|");
+		Sympa::Site->openssl . " x509 -in $certs -outform DER|");
 	    Sympa::Log::Syslog::do_log('err',
 		'Unable to open get %s in DER format: %s',
 		$certs, $!
@@ -11691,7 +11691,7 @@ sub remove_task {
     foreach my $task_file (@tasks) {
 	if ($task_file =~
 	    /^(\d+)\.\w*\.$task\.$list_id$/) {
-	    unless (unlink(Site->queuetask . "/$task_file")) {
+	    unless (unlink(Sympa::Site->queuetask . "/$task_file")) {
 		Sympa::Log::Syslog::do_log('err', 'Unable to remove task file %s : %s',
 		    $task_file, $!);
 		return undef;
@@ -11703,7 +11703,7 @@ sub remove_task {
 
 	foreach my $task_file (@tasks) {
 		if ($task_file =~ /^(\d+)\.\w*\.$task\.$self->{'name'}\@$self->{'domain'}$/) {
-			unless (unlink("Site->queuetask/$task_file")) {
+			unless (unlink("Sympa::Site->queuetask/$task_file")) {
 				Sympa::Log::Syslog::do_log('err', 'Unable to remove task file %s : %s', $task_file, $ERRNO);
 				return undef;
 			}
@@ -11876,7 +11876,7 @@ Remove list aliases
 sub remove_aliases {
 	my ($self) = @_;
 
-    return undef if lc(Site->sendmail_aliases) eq 'none';
+    return undef if lc(Sympa::Site->sendmail_aliases) eq 'none';
 
     my $alias_manager = Sympa::Site->alias_manager;
     unless (-x $alias_manager) {
@@ -12085,7 +12085,7 @@ sub get_bounce_address {
     $escwho =~ s/\@/==a==/;
 
     return sprintf('%s+%s@%s',
-	Site->bounce_email_prefix,
+	Sympa::Site->bounce_email_prefix,
 	join('==', $escwho, $self->name, @opts),
 	$self->domain);
 }
@@ -12487,7 +12487,7 @@ sub get_tag {
 
 	return substr(
 		Sympa::Tools::md5_fingerprint(
-			Site->cookie() . '/' . $self->name()
+			Sympa::Site->cookie() . '/' . $self->name()
 		),
 		-10
 	);

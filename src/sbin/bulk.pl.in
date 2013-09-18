@@ -159,14 +159,14 @@ unless (Sympa::Configuration::checkfiles()) {
 	Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
 }
 
-Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'bulk');
+Sympa::Log::Syslog::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'bulk');
 
 # setting log_level using conf unless it is set by calling option
 if ($options{'log_level'}) {
 	Sympa::Log::Syslog::set_log_level($options{'log_level'});
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}");
 } else {
-	Sympa::Log::Syslog::set_log_level(Site->log_level);
+	Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
 	Sympa::Log::Syslog::do_log('info', "Configuration file read, default log level Sympa::Site->log_level");
 }
 
@@ -186,7 +186,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
 		exit(0);
 	}
 }
-Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'bulk');
+Sympa::Log::Syslog::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'bulk');
 
 # Saves the pid number
 my $result = Sympa::Tools::Daemon::write_pid(
@@ -222,10 +222,10 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2]) && ($UID == (getpwnam(S
 }
 
 ## Sets the UMASK
-umask(oct(Site->umask));
+umask(oct(Sympa::Site->umask));
 
 ## Change to list root
-unless (chdir(Site->home)) {
+unless (chdir(Sympa::Site->home)) {
 	Sympa::Log::Syslog::do_log('err','unable to change directory');
 	exit (-1);
 }
@@ -250,7 +250,7 @@ my $timeout = Sympa::Site->bulk_wait_to_fork;
 my $last_check_date = 0;
 my %created_children;
 
-Site->maxsmtp = int(Site->maxsmtp/Site->bulk_max_count);
+Sympa::Site->maxsmtp = int(Sympa::Site->maxsmtp/Sympa::Site->bulk_max_count);
 
 
 my $spool = Sympa::Spool::SQL->new(
@@ -343,7 +343,7 @@ while (!$end) {
 
 			## Start new processes if there remain at least 'bulk_fork_threshold' packets to send in the bulkmailer_table table
 			if(
-				(my $r_packets = $bulk->there_is_too_much_remaining_packets(Site->bulk_fork_threshold)) &&
+				(my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Site->bulk_fork_threshold)) &&
 				($#remaining_children+1 < Sympa::Site->bulk_max_count) ){
 
 				## disconnect from database before fork
@@ -352,9 +352,9 @@ while (!$end) {
 				# because of sharing dbh may crash bulk.pl
 				$base->disconnect();
 
-				if(Site->bulk_max_count > 1) {
+				if(Sympa::Site->bulk_max_count > 1) {
 					Sympa::Log::Syslog::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, Sympa::Site->bulk_max_count-($#remaining_children+1));
-					for my $process_count(1..Site->bulk_max_count-($#remaining_children+1)){
+					for my $process_count(1..Sympa::Site->bulk_max_count-($#remaining_children+1)){
 						Sympa::Log::Syslog::do_log('info', "Will fork: %s", $process_count);
 						if ((my $child_pid = fork) != 0) {
 							Sympa::Log::Syslog::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
@@ -384,7 +384,7 @@ while (!$end) {
 							);
 							$date_of_last_activity = time();
 							$main::daemon_usage = 'DAEMON_SLAVE'; # automatic lists creation
-							Sympa::Log::Syslog::do_openlog(Site->syslog, Sympa::Site->log_socket_type, 'bulk');
+							Sympa::Log::Syslog::do_openlog(Sympa::Site->syslog, Sympa::Site->log_socket_type, 'bulk');
 							Sympa::Log::Syslog::do_log('info', "Bulk slave daemon started with pid %s", $PID);
 							last;
 						}
@@ -398,7 +398,7 @@ while (!$end) {
 	if (
 		($main::daemon_usage eq 'DAEMON_SLAVE') &&
 		(time() - $date_of_last_activity > Sympa::Site->bulk_lazytime) &&
-		!(my $r_packets = $bulk->there_is_too_much_remaining_packets(Site->bulk_fork_threshold))
+		!(my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Site->bulk_fork_threshold))
 	){
 		Sympa::Log::Syslog::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $PID, Sympa::Site->bulk_lazytime);
 		last;
@@ -557,7 +557,7 @@ while (!$end) {
 																	'dkim_selector'=> $message_from_spool->{'dkim_selector'},
 																	'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}
 																},
-						Site->tmpdir
+						Sympa::Site->tmpdir
 					);
 				}
 
@@ -584,7 +584,7 @@ while (!$end) {
 						'dkim_selector'=> $message_from_spool->{'dkim_selector'},
 						'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}
 					},
-					Site->tmpdir
+					Sympa::Site->tmpdir
 				);
 			}
 

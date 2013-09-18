@@ -70,7 +70,7 @@ sub ciphersaber_installed {
 
     eval { require Crypt::CipherSaber; };
     unless ($@) {
-	$cipher = Crypt::CipherSaber->new(Site->cookie);
+	$cipher = Crypt::CipherSaber->new(Sympa::Site->cookie);
     } else {
 	$cipher = '';
     }

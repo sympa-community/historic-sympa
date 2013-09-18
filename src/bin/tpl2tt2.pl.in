@@ -64,14 +64,14 @@ unless (Sympa::Configuration::load($sympa_conf_file)) {
 	die 'config_error';
 }
 
-if (Site->db_name and Sympa::Site->db_type) {
+if (Sympa::Site->db_name and Sympa::Site->db_type) {
 	my $report = Sympa::Database->get_singleton()->probe(
 		update => Sympa::Site->update_db_field_types
 	);
 	if (defined $report) {
 		Sympa::List::send_notify_to_listmaster(
 			'db_struct_updated',
-			Site->domain,
+			Sympa::Site->domain,
 			{ 'report' => $report }
 		) if @$report;
 	} else {
@@ -103,44 +103,44 @@ my @templates;
 if (-d Sympa::Site->etc) {
 	push @directories, Sympa::Site->etc;
 }
-if (-d "Site->etc/templates") {
-	push @directories, "Site->etc/templates";
+if (-d "Sympa::Site->etc/templates") {
+	push @directories, "Sympa::Site->etc/templates";
 }
-if (-d "Site->etc/wws_templates") {
-	push @directories, "Site->etc/wws_templates";
+if (-d "Sympa::Site->etc/wws_templates") {
+	push @directories, "Sympa::Site->etc/wws_templates";
 }
-if (-f "Site->etc/mhonarc-ressources") {
-	push @templates, "Site->etc/mhonarc-ressources";
+if (-f "Sympa::Site->etc/mhonarc-ressources") {
+	push @templates, "Sympa::Site->etc/mhonarc-ressources";
 }
 
 ## Create_list_templates
 if (-d Sympa::Site->etc.'/create_list_templates') {
-	foreach my $dir (<Site->etc/create_list_templates/*>) {
+	foreach my $dir (<Sympa::Site->etc/create_list_templates/*>) {
 		next unless (-d $dir);
 		push @directories, $dir;
 	}
 }
 
 ## Go through Virtual Robots
-foreach my $vr (keys %{Site->robots}) {
+foreach my $vr (keys %{Sympa::Site->robots}) {
 	## Search in etc/
-	if ( -d "Site->etc/$vr") {
-		push @directories, "Site->etc/$vr";
+	if ( -d "Sympa::Site->etc/$vr") {
+		push @directories, "Sympa::Site->etc/$vr";
 	}
 
-	if (-d "Site->etc/$vr/templates") {
-		push @directories, "Site->etc/$vr/templates";
+	if (-d "Sympa::Site->etc/$vr/templates") {
+		push @directories, "Sympa::Site->etc/$vr/templates";
 	}
-	if (-d "Site->etc/$vr/wws_templates") {
-		push @directories, "Site->etc/$vr/wws_templates";
+	if (-d "Sympa::Site->etc/$vr/wws_templates") {
+		push @directories, "Sympa::Site->etc/$vr/wws_templates";
 	}
-	if (-f "Site->etc/$vr/mhonarc-ressources") {
-		push @templates, "Site->etc/$vr/mhonarc-ressources";
+	if (-f "Sympa::Site->etc/$vr/mhonarc-ressources") {
+		push @templates, "Sympa::Site->etc/$vr/mhonarc-ressources";
 	}
 
 	## Create_list_templates
 	if (-d Sympa::Site->etc.'/'.$vr.'/create_list_templates') {
-		foreach my $dir (<Site->etc/$vr/create_list_templates/*>) {
+		foreach my $dir (<Sympa::Site->etc/$vr/create_list_templates/*>) {
 			next unless (-d $dir);
 			push @directories, $dir;
 		}
@@ -242,7 +242,7 @@ foreach my $tpl (@templates) {
 				mode => 0755,
 			))
 		{
-			Sympa::Log::Syslog::do_log('err','Unable to set rights on %s',Site->db_name);
+			Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', Sympa::Site->db_name);
 			next;
 		}
 	}
@@ -294,7 +294,7 @@ sub convert {
 			group => Sympa::Constants::GROUP
 		))
 	{
-		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s',Site->db_name);
+		Sympa::Log::Syslog::do_log('err','Unable to set rights on %s', Sympa::Site->db_name);
 		return undef;
 	}
 }

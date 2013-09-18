@@ -49,7 +49,7 @@ sub request {
 	if (my $request = $_[0]) {
 
 		## Select appropriate robot
-		if (Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
+		if (Sympa::Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}}) {
 			$ENV{'SYMPA_ROBOT'} = Sympa::Site->robot_by_soap_url->{$ENV{'SERVER_NAME'}.$ENV{'SCRIPT_NAME'}};
 			Sympa::Log::Syslog::do_log('debug2', 'Robot : %s', $ENV{'SYMPA_ROBOT'});
 		} else {

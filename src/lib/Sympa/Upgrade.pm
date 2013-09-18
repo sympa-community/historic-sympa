@@ -288,7 +288,7 @@ sub upgrade {
 			Sympa::Log::Syslog::do_log('err',
 			    'Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',
 			    $r);
-			Site->send_notify_to_listmaster(
+			Sympa::Site->send_notify_to_listmaster(
 			    'upgrade_failed',
 			    {'error' => $SDM::db_source->{'db_handler'}->errstr});
 			return undef;
@@ -508,7 +508,7 @@ sub upgrade {
 		my $new_filename = $etc_dir.'/mhonarc-ressources.tt2'.'.'.time;
 		rename $etc_dir.'/mhonarc-ressources.tt2', $new_filename;
 		Sympa::Log::Syslog::do_log('notice', "Custom %s file has been backed up as %s", $etc_dir.'/mhonarc-ressources.tt2', $new_filename);
-		Site->send_notify_to_listmaster(
+		Sympa::Site->send_notify_to_listmaster(
 		    'file_removed',
 						 [$etc_dir.'/mhonarc-ressources.tt2', $new_filename]);
 	    }
@@ -536,7 +536,7 @@ sub upgrade {
     if (Sympa::Tools::lower_version($previous_version, '5.3a.8')) {
 	Sympa::Log::Syslog::do_log('notice','Q-Encoding web documents filenames...');
 
-	Language::PushLang(Site->lang);
+	Language::PushLang(Sympa::Site->lang);
 	my $all_lists = Sympa::List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
 	    if (-d $list->dir . '/shared') {
@@ -569,7 +569,7 @@ sub upgrade {
 	## Site level
 	foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
 	    if (-d Sympa::Site->etc.'/'.$type) {
-		push @directories, [Site->etc.'/'.$type, Sympa::Site->lang];
+		push @directories, [Sympa::Site->etc.'/'.$type, Sympa::Site->lang];
 	    }
 	}
 
@@ -1107,7 +1107,7 @@ sub upgrade {
 	);
 
 	## Set language of new file content
-	Language::PushLang(Site->lang);
+	Language::PushLang(Sympa::Site->lang);
 	$date = Sympa::Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
 	    localtime time);
 

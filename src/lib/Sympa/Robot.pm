@@ -907,7 +907,7 @@ sub get_tag {
 
 	return substr(
 		Sympa::Tools::md5_fingerprint(
-			Site->cookie() . '/' . $self->name()
+			Sympa::Site->cookie() . '/' . $self->name()
 		),
 		-10
 	);

@@ -32,10 +32,10 @@ unless (defined Robot::get_robots()) {
 	);
 }
 
-Sympa::Log::Syslog::set_log_level(Site->log_level);
+Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
 
 ## Open log
-Sympa::Log::Syslog::do_openlog(Site->log_facility, Site->log_socket_type, 'soap');
+Sympa::Log::Syslog::do_openlog(Sympa::Site->log_facility, Sympa::Site->log_socket_type, 'soap');
 Sympa::Log::Syslog::do_log('info', 'SOAP server launched');
 
 ## We set the real UID with the effective UID value
@@ -67,7 +67,7 @@ my $pinfo = Sympa::List::_apply_defaults();
 
 # spool messages instead of sending them
 my $spool = Sympa::Spool->new(
-	name => Site->queue,
+	name => Sympa::Site->queue,
 	base => $base
 );
 

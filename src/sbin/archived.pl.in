@@ -302,12 +302,12 @@ if ($options{'log_level'}) {
     Sympa::Log::Syslog::set_log_level($options{'log_level'});
     Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}"); 
 }else{
-    Sympa::Log::Syslog::set_log_level(Site->log_level);
+    Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
     Sympa::Log::Syslog::do_log('info', 'Configuration file read, default log level %s',
-	Site->log_level); 
+	Sympa::Site->log_level); 
 }
 
-Sympa::Log::Syslog::do_openlog(Site->log_facility, Sympa::Site->log_socket_type, 'archived');
+Sympa::Log::Syslog::do_openlog(Sympa::Site->log_facility, Sympa::Site->log_socket_type, 'archived');
 
 ## Set the User ID & Group ID for the process
 $GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -324,7 +324,7 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct(Site->umask));
+umask(oct(Sympa::Site->umask));
 
 foreach my $robot (@{Robot::get_robots()}) {
     my $arc_dir = $robot->arc_path;
@@ -343,12 +343,12 @@ foreach my $robot (@{Robot::get_robots()}) {
 }
 
 ## Change to list root
-unless (chdir(Site->home)) {
+unless (chdir(Sympa::Site->home)) {
     Sympa::Log::Syslog::do_log('err','unable to change directory');
     exit (-1);
 }
 
-Language::SetLang(Site->lang || 'en');
+Language::SetLang(Sympa::Site->lang || 'en');
 
 Sympa::Log::Syslog::do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 

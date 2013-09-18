@@ -131,7 +131,7 @@ my $report = Sympa::Database->get_singleton()->probe(
 if (defined $report) {
 	Sympa::List::send_notify_to_listmaster(
 		'db_struct_updated',
-		Site->domain,
+		Sympa::Site->domain,
 		{ 'report' => $report }
 	) if @$report;
 }

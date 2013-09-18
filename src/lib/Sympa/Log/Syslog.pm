@@ -235,7 +235,7 @@ sub do_log {
 
     if ($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	Site->send_notify_to_listmaster('logs_failed', [$@]);
+	Sympa::Site->send_notify_to_listmaster('logs_failed', [$@]);
     }
 }
 
