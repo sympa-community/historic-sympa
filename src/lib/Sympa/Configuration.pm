@@ -159,7 +159,7 @@ sub _load_robots {
 	my $exiting = 0;
     foreach my $robot (@robots) {
 		my $config_file = "$Conf{'etc'}/$robot/robot.conf";
-		unless (defined &load_robot_conf({ %$param,
+		unless (defined &load_robot_conf({ %$params,
 					   'config_file' => $config_file,
 					   'robot' => $robot })) {
             Sympa::Log::Syslog::do_log('err', 'The config for robot %s contain errors: it could not be correctly loaded.', $robot);
@@ -598,7 +598,7 @@ sub checkfiles {
 	}
 
 	#  create pictures dir if usefull for each robot
-	foreach my $robot (keys %{$Conf{'robots'}}) {
+	foreach my $robot_id (keys %{$Conf{'robots'}}) {
 		my $robot = Robot->new($robot_id);
 		my $dir = $robot->static_content_path;
 		if ($dir ne '' && -d $dir) {
@@ -633,7 +633,7 @@ sub checkfiles {
 
 	# create or update static CSS files
 	my $css_updated = undef;
-	foreach my $robot (keys %{$Conf{'robots'}}) {
+	foreach my $robot_id (keys %{$Conf{'robots'}}) {
 		my $robot = Robot->new($robot_id);
 		my $dir = $robot->css_path;
 
@@ -1023,7 +1023,7 @@ sub load_charset {
 			s/\s*#.*//;
 			s/^\s+//;
 			next unless /\S/;
-			my ($locale, $cset) = split(/\s+/, $_);
+			my ($lang, $cset) = split(/\s+/, $_);
 			unless ($cset) {
 				printf STDERR '%s::load_charset(): Charset name is missing in configuration file %s line %d\n',__PACKAGE__,$config_file, $.;
 				next;
@@ -1034,7 +1034,7 @@ sub load_charset {
 					$config_file, $.);
 				next;
 			}
-			$charset->{$locale} = $cset;
+			$charset->{$lang} = $cset;
 
 		}
 		close CONFIG;
@@ -1486,7 +1486,7 @@ sub _load_config_file_to_hash {
 			}
 		} else {
 			Sympa::Log::Syslog::do_log('err', gettext('Error at %s line %d: %s'),
-			 $config_file, $line_num, $_);
+			 $params->{'path_to_config_file'}, $line_num, $_);
 			$result->{'errors'}++;
 		}
 	}
@@ -1503,7 +1503,7 @@ sub _remove_unvalid_robot_entry {
 	foreach my $keyword(keys %$config_hash) {
 		unless($valid_robot_key_words{$keyword}) {
 			Sympa::Log::Syslog::do_log('err', 'removing unknown robot keyword %s', $keyword)
-		unless $param->{'quiet'};
+		unless $params->{'quiet'};
 			delete $config_hash->{$keyword};
 		}
 	}
@@ -1518,13 +1518,13 @@ sub _detect_unknown_parameters_in_config {
 		next if (exists $params{$parameter});
 		if (defined $old_params{$parameter}) {
 			if ($old_params{$parameter}) {
-				Sympa::Log::Syslog::do_log('err', 'Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s', $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter});
+				Sympa::Log::Syslog::do_log('err', 'Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s', $params->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter});
 			} else {
-				Sympa::Log::Syslog::do_log('err', 'Line %d of sympa.conf, parameter %s is now obsolete', $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter);
+				Sympa::Log::Syslog::do_log('err', 'Line %d of sympa.conf, parameter %s is now obsolete', $params->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter);
 				next;
 			}
 		} else {
-			Sympa::Log::Syslog::do_log('err', 'Line %d, unknown field: %s in sympa.conf', $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter);
+			Sympa::Log::Syslog::do_log('err', 'Line %d, unknown field: %s in sympa.conf', $params->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter);
 		}
 		$number_of_unknown_parameters_found++;
 	}
@@ -1642,8 +1642,8 @@ sub _infer_robot_parameter_values {
 	$params->{'config_hash'}{'css_url'} ||= $params->{'config_hash'}{'static_content_url'}.'/css'.$final_separator.$params->{'config_hash'}{'robot_name'};
 	$params->{'config_hash'}{'css_path'} ||= $params->{'config_hash'}{'static_content_path'}.'/css'.$final_separator.$params->{'config_hash'}{'robot_name'};
 
-    unless ($param->{'config_hash'}{'email'}) {
-        $param->{'config_hash'}{'email'} = $Conf{'email'};
+    unless ($params->{'config_hash'}{'email'}) {
+        $params->{'config_hash'}{'email'} = $Conf{'email'};
     } 
 ##OBSOLETED by Sympa 6.2: Use $robot->get_address().
 ##    $param->{'config_hash'}{'sympa'} = $param->{'config_hash'}{'email'}.'@'.$param->{'config_hash'}{'host'};
@@ -1680,12 +1680,12 @@ sub _infer_robot_parameter_values {
 	}
 
     ## db_list_cache is obsoleted by Sympa 6.2.  Use cache_list_config
-    if ($param->{'config_hash'}{'db_list_cache'} and 
-	$param->{'config_hash'}{'db_list_cache'} eq 'on') {
+    if ($params->{'config_hash'}{'db_list_cache'} and 
+	$params->{'config_hash'}{'db_list_cache'} eq 'on') {
 	Sympa::Log::Syslog::do_log('notice',
 	    'db_list_cache is "on" but it is obsoleted.  Setting cache_list_config as "database".');
-	$param->{'config_hash'}{'cache_list_config'} = 'database';
-	delete $param->{'config_hash'}{'db_list_cache'};
+	$params->{'config_hash'}{'cache_list_config'} = 'database';
+	delete $params->{'config_hash'}{'db_list_cache'};
     }
 
 	_parse_custom_robot_parameters({'config_hash' => $params->{'config_hash'}});
@@ -1785,7 +1785,7 @@ sub _dump_non_robot_parameters {
 		unless($valid_robot_key_words{$key}){
 			delete $params->{'config_hash'}{$key};
 			Sympa::Log::Syslog::do_log('err', 'Robot %s config: unknown robot parameter: %s',
-			 $param->{'robot'}, $key);
+			 $params->{'robot'}, $key);
 		}
 	}
 }
@@ -2085,7 +2085,7 @@ sub _save_config_hash_to_binary {
 
 	unless(_save_binary_cache({'conf_to_save' => $params->{'config_hash'},'target_file' => $params->{'config_hash'}{'source_file'}.$binary_file_extension})){
 		Sympa::Log::Syslog::do_log('err', 'Could not save main config %s',
-		     $param->{'config_hash'}{'source_file'});
+		     $params->{'config_hash'}{'source_file'});
 	}
 }
 

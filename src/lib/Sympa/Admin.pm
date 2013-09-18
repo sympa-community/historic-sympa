@@ -196,18 +196,18 @@ sub create_list_old{
 
 	## Check topics
 	if ($params->{'topics'}){
-		unless ($robot->is_available_topic($param->{'topics'})) {
+		unless ($robot->is_available_topic($params->{'topics'})) {
 			Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
-			$param->{'topics'});
+			$params->{'topics'});
 		}
 	}
 
 	## Creation of the config file
     my $time = time;
-    $param->{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time;
-    $param->{'creation'}{'date_epoch'} = $time;
-    $param->{'creation_email'} ||= $robot->get_address('listmaster');
-    $param->{'status'} ||= 'open';
+    $params->{'creation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time;
+    $params->{'creation'}{'date_epoch'} = $time;
+    $params->{'creation_email'} ||= $robot->get_address('listmaster');
+    $params->{'status'} ||= 'open';
 
 	my $tt2_include_path = Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','', Sympa::Site->etc, Sympa::Site->viewmaildir, Sympa::Site->domain);
 
@@ -428,7 +428,7 @@ sub create_list{
 	}
 
 	## Create the list directory
-    my $list_dir = $robot->home . '/' . $param->{'listname'};
+    my $list_dir = $robot->home . '/' . $params->{'listname'};
 
 	unless (-r $list_dir || mkdir ($list_dir,0777)) {
 		Sympa::Log::Syslog::do_log('err', 'unable to create %s : %s',$list_dir,$CHILD_ERROR);
@@ -436,10 +436,10 @@ sub create_list{
 	}
 
 	## Check topics
-    if (defined $param->{'topics'}){
-		unless ($robot->is_available_topic($param->{'topics'})) {
+    if (defined $params->{'topics'}){
+		unless ($robot->is_available_topic($params->{'topics'})) {
 			Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
-			$param->{'topics'});
+			$params->{'topics'});
 		}
     }
 
@@ -521,9 +521,9 @@ sub create_list{
     $list->creation({
 	'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time),
 	'date_epoch' => $time,
-	'email' => ($param->{'creation_email'} || $robot->get_address('listmaster'))
+	'email' => ($params->{'creation_email'} || $robot->get_address('listmaster'))
     });
-    $list->status($param->{'status'} || 'open');
+    $list->status($params->{'status'} || 'open');
     $list->family($family);
 
 	my $return = {};
@@ -601,9 +601,9 @@ sub update_list{
 
 	## Check topics
 	if (defined $params->{'topics'}){
-		unless ($robot->is_available_topic($param->{'topics'})) {
+		unless ($robot->is_available_topic($params->{'topics'})) {
 			Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
-			$param->{'topics'});
+			$params->{'topics'});
 		}
 	}
 
@@ -648,9 +648,9 @@ sub update_list{
     $list->creation({
 	'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime $time),
 	'date_epoch' => $time,
-	'email' => ($param->{'creation_email'} || $list->robot->get_address('listmaster'))
+	'email' => ($params->{'creation_email'} || $list->robot->get_address('listmaster'))
     });
-    $list->status($param->{'status'} || 'open');
+    $list->status($params->{'status'} || 'open');
     $list->family($family);
 
 	## Synchronize list members if required
@@ -718,7 +718,7 @@ sub rename_list{
       return 'incorrect_listname';
     }
 
-    my $new_robot_id = $param{'new_robot'};
+    my $new_robot_id = $params{'new_robot'};
     my $new_robot = Robot->new($new_robot_id);
 
     unless ($new_robot) {
@@ -729,10 +729,10 @@ sub rename_list{
 	## Evaluate authorization scenario unless run as listmaster (sympa.pl)
 	my ($result, $r_action, $reason);
 	unless ($params{'options'}{'skip_authz'}) {
-		$result = Sympa::Scenario::request_action($new_robot,'create_list', $param{'auth_method'},
-			{   'sender'      => $param{'user_email'},
-				'remote_host' => $param{'remote_host'},
-				'remote_addr' => $param{'remote_addr'}
+		$result = Sympa::Scenario::request_action($new_robot,'create_list', $params{'auth_method'},
+			{   'sender'      => $params{'user_email'},
+				'remote_host' => $params{'remote_host'},
+				'remote_addr' => $params{'remote_addr'}
 			}
 		);
  
@@ -748,28 +748,28 @@ sub rename_list{
 	}
 
 	## Check listname on SMTP server
-    my $res = list_check_smtp($param{'new_listname'},
+    my $res = list_check_smtp($params{'new_listname'},
 	$new_robot);
     unless ( defined($res) ) {
       Sympa::Log::Syslog::do_log('err', "can't check list %.128s on %s",
-	      $param{'new_listname'}, $new_robot);
+	      $params{'new_listname'}, $new_robot);
       return 'internal';
     }
 
     if ($res || 
-	($list->name ne $param{'new_listname'}) && ## Do not test if listname did not change
-	(Sympa::List->new($param{'new_listname'}, $new_robot, {'just_try' => 1}))) {
+	($list->name ne $params{'new_listname'}) && ## Do not test if listname did not change
+	(Sympa::List->new($params{'new_listname'}, $new_robot, {'just_try' => 1}))) {
 		Sympa::Log::Syslog::do_log('err',
 			'Could not rename list %s: new list %s on %s already existing list',
-			$list, $param{'new_listname'}, $new_robot);
+			$list, $params{'new_listname'}, $new_robot);
 		return 'list_already_exists';
     }
     
-    my ($name, $type) = $new_robot->split_listname($param{'new_listname'});
+    my ($name, $type) = $new_robot->split_listname($params{'new_listname'});
     if ($type) {
 		Sympa::Log::Syslog::do_log('err',
 			'Incorrect listname %s matches one of service aliases',
-			$param{'new_listname'}
+			$params{'new_listname'}
 		);
 		return 'incorrect_listname';
     }
@@ -784,7 +784,7 @@ sub rename_list{
 	}
 
 	## Rename or create this list directory itself
-    my $new_dir = $new_robot->home . '/' . $param{'new_listname'};
+    my $new_dir = $new_robot->home . '/' . $params{'new_listname'};
 
 	## If we are in 'copy' mode, create en new list
 	if ($params{'mode'} eq 'copy') {
@@ -818,7 +818,7 @@ sub rename_list{
 
 		## Rename archive
 	 my $arc_dir = $list->robot->arc_path . '/' . $list->get_id();
-	 my $new_arc_dir = $new_robot->arc_path . '/' . $param{'new_listname'}.'@'.$param{'new_robot'};
+	 my $new_arc_dir = $new_robot->arc_path . '/' . $params{'new_listname'}.'@'.$params{'new_robot'};
 	 if (-d $arc_dir && $arc_dir ne $new_arc_dir) {
 	     unless (move ($arc_dir,$new_arc_dir)) {
 		 Sympa::Log::Syslog::do_log('err',"Unable to rename archive $arc_dir");
@@ -838,17 +838,17 @@ sub rename_list{
 
 		# if subscribtion are stored in database rewrite the database
 		unless (SDM::do_prepared_query('UPDATE subscriber_table SET list_subscriber = ?, robot_subscriber = ? WHERE list_subscriber = ? AND robot_subscriber = ?', 
-						$param{'new_listname'},
-						$param{'new_robot'},
+						$params{'new_listname'},
+						$params{'new_robot'},
 						$list->name, $list->domain)) {
-			Sympa::Log::Syslog::do_log('err','Unable to rename list %s to %s@%s in the database', $list, $param{'new_listname'}, $param{'new_robot'});
+			Sympa::Log::Syslog::do_log('err','Unable to rename list %s to %s@%s in the database', $list, $params{'new_listname'}, $params{'new_robot'});
 			return 'internal';
 		 }
 		unless (SDM::do_prepared_query('UPDATE admin_table SET list_admin = ?, robot_admin = ? WHERE list_admin = ? AND robot_admin = ?', 
-						$param{'new_listname'}, 
-						$param{'new_robot'},
+						$params{'new_listname'}, 
+						$params{'new_robot'},
 						$list->name, $list->domain)) {
-			Sympa::Log::Syslog::do_log('err','Unable to change admins in database while renaming list %s to %s@%s', $list, $param{'new_listname'}, $param{'new_robot'});
+			Sympa::Log::Syslog::do_log('err','Unable to change admins in database while renaming list %s to %s@%s', $list, $params{'new_listname'}, $params{'new_robot'});
 			return 'internal';
 		}
 
@@ -905,9 +905,9 @@ sub rename_list{
      if (my $c = $list->custom_subject)
      {   # FIXME MO: this is unsave: check/replace full listname
          if($c =~ /$old_listname/) {
-             $c =~ s/$old_listname/$param{new_listname}/g;
+             $c =~ s/$old_listname/$params{new_listname}/g;
 	     $list->custom_subject($c);
-	     $list->save_config($param{'user_email'});	
+	     $list->save_config($params{'user_email'});	
          }
      }
 
@@ -959,7 +959,7 @@ sub rename_list{
 				 
 				 ## Change X-Sympa-To
 				 Sympa::Tools::change_x_sympa_to(Sympa::Site->$spool . "/$newfile",
-					"$param{'new_listname'}\@$param{'new_robot'}");
+					"$params{'new_listname'}\@$params{'new_robot'}");
 			}
 
 			close DIR;
@@ -967,14 +967,14 @@ sub rename_list{
 		## Digest spool
 		 if (-f Sympa::Site->queuedigest . "/$old_listname") {
 			 unless (move(Sympa::Site->queuedigest . "/$old_listname",
-			Sympa::Site->queuedigest . "/$param{'new_listname'}")) {
-			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname", Sympa::Site->queuedigest . "/$param{'new_listname'}", $!);
+			Sympa::Site->queuedigest . "/$params{'new_listname'}")) {
+			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname", Sympa::Site->queuedigest . "/$params{'new_listname'}", $!);
 			 next;
 			 }
 		 }elsif (-f Sympa::Site->queuedigest . "/$old_listname\@$robot") {
 			 unless (move(Sympa::Site->queuedigest . "/$old_listname\@$robot",
-			Sympa::Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}")) {
-			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname\@$robot", Sympa::Site->queuedigest . "/$param{'new_listname'}\@$param{'new_robot'}", $!);
+			Sympa::Site->queuedigest . "/$params{'new_listname'}\@$params{'new_robot'}")) {
+			 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname\@$robot", Sympa::Site->queuedigest . "/$params{'new_listname'}\@$params{'new_robot'}", $!);
 			 next;
 			 }
 		 }     
