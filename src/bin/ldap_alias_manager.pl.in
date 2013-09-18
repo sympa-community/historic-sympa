@@ -252,7 +252,6 @@ sub already_defined {
 
 	initialize_ldap();
 
-<<<<<<< .courant
 	foreach my $alias (@aliases) {
 
 		$alias =~ /^([^:]+):/;
