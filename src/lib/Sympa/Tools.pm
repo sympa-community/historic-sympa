@@ -200,19 +200,19 @@ sub sanitize_var {
     my (%params) = @_;
 
     Sympa::Log::Syslog::do_log('debug3','(%s,%s,%s)',$params{'var'},$params{'level'},$params{'robot'});
-    unless (defined $params{'var'}){
+    unless (defined $params{'var'}) {
         Sympa::Log::Syslog::do_log('err','Missing var to sanitize.');
         return undef;
     }
-    unless (defined $params{'htmlAllowedParam'} && $params{'htmlToFilter'}){
+    unless (defined $params{'htmlAllowedParam'} && $params{'htmlToFilter'}) {
         Sympa::Log::Syslog::do_log('err','Missing var *** %s *** %s *** to ignore.',$params{'htmlAllowedParam'},$params{'htmlToFilter'});
         return undef;
     }
     my $level = $params{'level'};
     $level |= 0;
 
-    if(ref($params{'var'})) {
-        if(ref($params{'var'}) eq 'ARRAY') {
+    if (ref($params{'var'})) {
+        if (ref($params{'var'}) eq 'ARRAY') {
             foreach my $index (0..$#{$params{'var'}}) {
                 if ((ref($params{'var'}->[$index]) eq 'ARRAY') || (ref($params{'var'}->[$index]) eq 'HASH')) {
                     sanitize_var('var' => $params{'var'}->[$index],
@@ -230,7 +230,7 @@ sub sanitize_var {
                 }
             }
         }
-        elsif(ref($params{'var'}) eq 'HASH') {
+        elsif (ref($params{'var'}) eq 'HASH') {
             foreach my $key (keys %{$params{'var'}}) {
                 if ((ref($params{'var'}->{$key}) eq 'ARRAY') || (ref($params{'var'}->{$key}) eq 'HASH')) {
                     sanitize_var('var' => $params{'var'}->{$key},
@@ -447,7 +447,7 @@ sub get_templates_list {
                 }
                 closedir LANGDIR;
 
-            }else {
+            } else {
                 next unless ($file =~ /\.tt2$/);
                 if ($dir eq $distrib_dir) {
                     $tpl->{$file}{'distrib'}{'default'} = $dir . '/' . $file;
@@ -801,7 +801,7 @@ sub cookie_changed {
         if ($cookies[$#cookies] eq $current) {
             Sympa::Log::Syslog::do_log('debug2', "cookie is stable") ;
             $changed = 0;
-            #	}else{
+            #	} else {
             #	    push @cookies, $current ;
             #	    unless (open COOK, '>', Sympa::Site->etc . '/cookies.history') {
             #		Sympa::Log::Syslog::do_log('err', "Unable to create %s/cookies.history", Sympa::Site->etc);
@@ -812,7 +812,7 @@ sub cookie_changed {
             #	    close COOK;
         }
         return $changed ;
-    }else{
+    } else {
         my $umask = umask 037;
         unless (open COOK, '>', $history_file) {
             umask $umask;
@@ -1005,7 +1005,7 @@ sub virus_infected {
         while (<ANTIVIR>) {
             $result .= $_; chomp $result;
             if ((/^\s*Found the\s+(.*)\s*virus.*$/i) ||
-                (/^\s*Found application\s+(.*)\.\s*$/i)){
+                (/^\s*Found application\s+(.*)\.\s*$/i)) {
                 $virusfound = $1;
             }
         }
@@ -1028,13 +1028,13 @@ sub virus_infected {
         if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
 
         ## Trend Micro
-    }elsif (Sympa::Site->antivirus_path =~ /\/vscan$/) {
+    } elsif (Sympa::Site->antivirus_path =~ /\/vscan$/) {
         my $cmd = sprintf '%s %s %s',
         Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
         open (ANTIVIR, "$cmd |");
 
         while (<ANTIVIR>) {
-            if (/Found virus (\S+) /i){
+            if (/Found virus (\S+) /i) {
                 $virusfound = $1;
             }
         }
@@ -1048,7 +1048,7 @@ sub virus_infected {
         }
 
         ## F-Secure
-    } elsif(Sympa::Site->antivirus_path =~ /\/fsav$/) {
+    } elsif (Sympa::Site->antivirus_path =~ /\/fsav$/) {
         my $dbdir=$` ;
 
         # impossible to look for viruses with no option set
@@ -1062,7 +1062,7 @@ sub virus_infected {
 
         while (<ANTIVIR>) {
 
-            if (/infection:\s+(.*)/){
+            if (/infection:\s+(.*)/) {
                 $virusfound = $1;
             }
         }
@@ -1075,7 +1075,7 @@ sub virus_infected {
         if (( $status == 3) and not($virusfound)) {
             $virusfound = "unknown";
         }
-    }elsif(Sympa::Site->antivirus_path =~ /f-prot\.sh$/) {
+    } elsif (Sympa::Site->antivirus_path =~ /f-prot\.sh$/) {
 
         Sympa::Log::Syslog::do_log('debug2', 'f-prot is running');
         my $cmd = sprintf '%s %s %s',
@@ -1083,7 +1083,7 @@ sub virus_infected {
         open (ANTIVIR, "$cmd |");
 
         while (<ANTIVIR>) {
-            if (/Infection:\s+(.*)/){
+            if (/Infection:\s+(.*)/) {
                 $virusfound = $1;
             }
         }
@@ -1098,7 +1098,7 @@ sub virus_infected {
         if (( $status == 3) and not($virusfound)) {
             $virusfound = "unknown";
         }
-    }elsif (Sympa::Site->antivirus_path =~ /kavscanner/) {
+    } elsif (Sympa::Site->antivirus_path =~ /kavscanner/) {
         # impossible to look for viruses with no option set
         unless (Sympa::Site->antivirus_args) {
             Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
@@ -1109,10 +1109,10 @@ sub virus_infected {
         open (ANTIVIR,"$cmd |");
 
         while (<ANTIVIR>) {
-            if (/infected:\s+(.*)/){
+            if (/infected:\s+(.*)/) {
                 $virusfound = $1;
             }
-            elsif (/suspicion:\s+(.*)/i){
+            elsif (/suspicion:\s+(.*)/i) {
                 $virusfound = $1;
             }
         }
@@ -1126,7 +1126,7 @@ sub virus_infected {
         }
 
         ## Sophos Antivirus... by liuk@publinet.it
-    }elsif (Sympa::Site->antivirus_path =~ /\/sweep$/) {
+    } elsif (Sympa::Site->antivirus_path =~ /\/sweep$/) {
         # impossible to look for viruses with no option set
         unless (Sympa::Site->antivirus_args) {
             Sympa::Log::Syslog::do_log('err', "Missing 'antivirus_args' in sympa.conf");
@@ -1151,7 +1151,7 @@ sub virus_infected {
         }
 
         ## Clam antivirus
-    }elsif (Sympa::Site->antivirus_path =~ /\/clamd?scan$/) {
+    } elsif (Sympa::Site->antivirus_path =~ /\/clamd?scan$/) {
         my $cmd = sprintf '%s %s %s',
         Sympa::Site->antivirus_path, Sympa::Site->antivirus_args, $work_dir;
         open (ANTIVIR, "$cmd |");
@@ -1478,7 +1478,7 @@ sub add_in_blacklist {
     }
     my $file = $dir.'/blacklist.txt';
 
-    if (open BLACKLIST, "$file"){
+    if (open BLACKLIST, "$file") {
         while(<BLACKLIST>) {
             next if (/^\s*$/o || /^[\#\;]/o);
             my $regexp= $_;
@@ -1492,7 +1492,7 @@ sub add_in_blacklist {
         }
         close BLACKLIST;
     }
-    unless (open BLACKLIST, ">> $file"){
+    unless (open BLACKLIST, ">> $file") {
         Sympa::Log::Syslog::do_log('info','do_blacklist : append to file %s',$file);
         return undef;
     }
@@ -1526,21 +1526,21 @@ sub get_fingerprint {
     my $random;
     my $random_email;
 
-    unless($random = get_db_random()){ # si un random existe : get_db_random
+    unless($random = get_db_random()) { # si un random existe : get_db_random
         $random = init_db_random(); # sinon init_db_random
     }
 
     $random_email = ($random.$email);
 
-    if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
+    if ( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-        if($fingerprint eq Digest::MD5::md5_hex($random_email)){
+        if ($fingerprint eq Digest::MD5::md5_hex($random_email)) {
             return 1;
-        }else{
+        } else {
             return undef;
         }
 
-    }else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/get_fingerprint($email)
+    } else { #si on veut créer une url de type http://.../sympa/unsub/$list/$email/get_fingerprint($email)
 
         $fingerprint = Digest::MD5::md5_hex($random_email);
         return $fingerprint;

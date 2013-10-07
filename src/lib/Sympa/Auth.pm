@@ -60,7 +60,7 @@ sub password_fingerprint {
     my ($pwd) = @_;
     Sympa::Log::Syslog::do_log('debug', '');
 
-    if(Sympa::Site->password_case eq 'insensitive') {
+    if (Sympa::Site->password_case eq 'insensitive') {
         return Digest::MD5::md5_hex(lc($pwd));
     } else {
         return Digest::MD5::md5_hex($pwd);
@@ -97,20 +97,20 @@ sub check_auth{
 
     my ($canonic, $user);
 
-    if( Sympa::Tools::valid_email($auth)) {
+    if ( Sympa::Tools::valid_email($auth)) {
         return authentication($robot, $auth,$pwd);
     } else {
         ## This is an UID
-        foreach my $ldap (@{Sympa::Site->auth_services{$robot}}){
+        foreach my $ldap (@{Sympa::Site->auth_services{$robot}}) {
             # only ldap service are to be applied here
             next unless ($ldap->{'auth_type'} eq 'ldap');
 
             $canonic = ldap_authentication($robot, $ldap, $auth,$pwd,'uid_filter');
             last if ($canonic); ## Stop at first match
         }
-        if ($canonic){
+        if ($canonic) {
 
-            unless($user = Sympa::List::get_global_user($canonic)){
+            unless($user = Sympa::List::get_global_user($canonic)) {
                 $user = {'email' => $canonic};
             }
             return {'user' => $user,
@@ -155,7 +155,7 @@ sub may_use_sympa_native_auth {
 
     my $ok = 0;
     ## check each auth.conf paragrpah
-    foreach my $auth_service (@{Sympa::Site->auth_services{$robot}}){
+    foreach my $auth_service (@{Sympa::Site->auth_services{$robot}}) {
         next unless ($auth_service->{'auth_type'} eq 'user_table');
 
         next if ($auth_service->{'regexp'} && ($user_email !~ /$auth_service->{'regexp'}/i));
@@ -188,14 +188,14 @@ sub authentication {
         $user->{'password'} = '';
     }
 
-    if ($user->{'wrong_login_count'} > $robot->max_wrong_password){
+    if ($user->{'wrong_login_count'} > $robot->max_wrong_password) {
         # too many wrong login attemp
         Sympa::List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1});
         Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
         Sympa::Log::Syslog::do_log('err','login is blocked : too many wrong password submission for %s', $email);
         return undef;
     }
-    foreach my $auth_service (@{Sympa::Site->auth_services{$robot}}){
+    foreach my $auth_service (@{Sympa::Site->auth_services{$robot}}) {
         next if ($auth_service->{'auth_type'} eq 'authentication_info_url');
         next if ($email !~ /$auth_service->{'regexp'}/i);
         next if (($email =~ /$auth_service->{'negative_regexp'}/i)&&($auth_service->{'negative_regexp'}));
@@ -212,9 +212,9 @@ sub authentication {
                     'alt_emails' => {$email => 'classic'}
                 };
             }
-        } elsif($auth_service->{'auth_type'} eq 'ldap') {
-            if ($canonic = ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')){
-                unless($user = Sympa::List::get_global_user($canonic)){
+        } elsif ($auth_service->{'auth_type'} eq 'ldap') {
+            if ($canonic = ldap_authentication($robot, $auth_service, $email,$pwd,'email_filter')) {
+                unless($user = Sympa::List::get_global_user($canonic)) {
                     $user = {'email' => $canonic};
                 }
                 Sympa::List::update_global_user($canonic,{wrong_login_count => 0});
@@ -269,8 +269,8 @@ sub ldap_authentication {
 
     my @alternative_conf = split(/,/,$ldap->{'alternative_email_attribute'});
     my $attrs = $ldap->{'email_attribute'};
-    my $filter = $ldap->{'get_dn_by_uid_filter'} if($whichfilter eq 'uid_filter');
-    $filter = $ldap->{'get_dn_by_email_filter'} if($whichfilter eq 'email_filter');
+    my $filter = $ldap->{'get_dn_by_uid_filter'} if ($whichfilter eq 'uid_filter');
+    $filter = $ldap->{'get_dn_by_email_filter'} if ($whichfilter eq 'email_filter');
     $filter =~ s/\[sender\]/$auth/ig;
 
     ## bind in order to have the user's DN
@@ -340,16 +340,16 @@ sub ldap_authentication {
 
     my $entry = $mesg->entry(0);
     @canonic_email = $entry->get_value($attrs, 'alloptions' => 1);
-    foreach my $email (@canonic_email){
+    foreach my $email (@canonic_email) {
         my $e = lc($email);
         $params->{'alt_emails'}{$e} = 'ldap' if ($e);
     }
 
-    foreach my $attribute_value (@alternative_conf){
+    foreach my $attribute_value (@alternative_conf) {
         @alternative = $entry->get_value($attribute_value, 'alloptions' => 1);
-        foreach my $alter (@alternative){
+        foreach my $alter (@alternative) {
             my $a = lc($alter);
-            $params->{'alt_emails'}{$a} = 'ldap' if($a);
+            $params->{'alt_emails'}{$a} = 'ldap' if ($a);
         }
     }
 
@@ -362,7 +362,7 @@ sub ldap_authentication {
     Sympa::Log::Syslog::do_log('debug3',"canonic: $canonic_email[0]");
     ## If the identifier provided was a valid email, return the provided email.
     ## Otherwise, return the canonical email guessed after the login.
-    if( Sympa::Tools::valid_email($auth) && !$robot->ldap_force_canonical_email) {
+    if ( Sympa::Tools::valid_email($auth) && !$robot->ldap_force_canonical_email) {
         return ($auth);
     } else {
         return lc($canonic_email[0]);
@@ -441,7 +441,7 @@ sub get_email_by_net_id {
 
     ## return only the first attribute
     my @results = $emails->entries;
-    foreach my $result (@results){
+    foreach my $result (@results) {
         return (lc($result->get_value($ldap->{'ldap_email_attribute'})));
     }
 
@@ -483,7 +483,7 @@ sub remote_app_check_password {
     # select trusted_apps from robot context or sympa context
     @trusted_apps = @{$robot->trusted_applications};
 
-    foreach my $application (@trusted_apps){
+    foreach my $application (@trusted_apps) {
 
         if (lc($application->{'name'}) eq lc($trusted_application_name)) {
             if ($md5 eq $application->{'md5password'}) {

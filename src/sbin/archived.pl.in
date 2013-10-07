@@ -300,7 +300,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
         if ($options{'log_level'}) {
             Sympa::Log::Syslog::set_log_level($options{'log_level'});
             Sympa::Log::Syslog::do_log('info', "Configuration file read, log level set using options : $options{'log_level'}"); 
-        }else{
+        } else {
             Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
             Sympa::Log::Syslog::do_log('info', 'Configuration file read, default log level %s',
                 Sympa::Site->log_level); 
@@ -333,7 +333,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
                     Sympa::Log::Syslog::do_log('err','No vailable directory to store archives. Exiting.');
                     exit -1;
                 }
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('err',
                     'Robot %s has no archives directory. Check arc_path parameter in this robot.conf and in sympa.conf.'
                 );
@@ -380,11 +380,11 @@ unless ($options{'debug'} || $options{'foreground'}) {
                     $spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lock'=>'NULL'});
                     next;
                 }
-            }elsif($orders[0]  =~ /^remove\.(\d\d\d\d\-\d\d)\.\d+$/ ) {
+            } elsif ($orders[0]  =~ /^remove\.(\d\d\d\d\-\d\d)\.\d+$/ ) {
                 my $yyyymm = $1;
                 shift @orders;
                 Sympa::Log::Syslog::do_log('debug',"removed found ");
-                unless($item->{'list'} && $item->{'robot'}){
+                unless($item->{'list'} && $item->{'robot'}) {
                     Sympa::Log::Syslog::do_log('err',"unable to remove messages from archive for unkown list/robot.Move to bad");
                     $spool->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive, list name missing','lock'=>'NULL'});
                     next;
@@ -410,7 +410,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
                 my $email_regexp = Sympa::Tools::get_regexp('email');
 
                 foreach my $order (@orders) {
-                    unless($order =~ /(.*)\|\|($email_regexp)/){
+                    unless($order =~ /(.*)\|\|($email_regexp)/) {
                         Sympa::Log::Syslog::do_log ('err',"Ignoring remove_order $order not recognized format");
                         next;
                     }
@@ -424,12 +424,12 @@ unless ($options{'debug'} || $options{'foreground'}) {
                     }
 
                     my $message;
-                    unless ($message = Sympa::Archive::search_msgid("$arcpath/arctxt",$msgid)){
+                    unless ($message = Sympa::Archive::search_msgid("$arcpath/arctxt",$msgid)) {
                         Sympa::Log::Syslog::do_log('err','No message with message-id %s found in %s/arctxt',$msgid,$arcpath);
                         next;
                     }
 
-                    unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||Sympa::List::is_listmaster($sender,$list->{'domain'} )){
+                    unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||Sympa::List::is_listmaster($sender,$list->{'domain'} )) {
                         # if not list owner or list editor or listmaster,n check if sender of remove order is sender of the message to remove
 
                         my $new_message = Sympa::Message->new(
@@ -453,7 +453,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
                     my $url_dir = $list->{'dir'}.'/urlized/'.$msgid;
                     Sympa::Tools::File::remove_dir ($url_dir);
 
-                    unless (-d "$arcpath/deleted"){
+                    unless (-d "$arcpath/deleted") {
                         unless (mkdir ("$arcpath/deleted",0777)) {
                             Sympa::Log::Syslog::do_log('info',"remove_arc: unable to create $arcpath/deleted : $ERRNO");
                             last;
@@ -486,7 +486,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
                         Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
                     }
                 }
-                unless ($spool->remove_message({'messagekey'=>$item->{'messagekey'}})){
+                unless ($spool->remove_message({'messagekey'=>$item->{'messagekey'}})) {
                     Sympa::Log::Syslog::do_log ('err',"Couldn't remove message in archive spool %s . exiting to prevent infinite loop",$item->{'messagekey'});
                     last;
                 }
@@ -716,7 +716,7 @@ sub rebuild {
             'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
             'tmpdir'         => Sympa::Site->tmpdir,
         );
-        my $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'} if($arcs_dir);
+        my $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'} if ($arcs_dir);
 
         my $cmd = "$wwsconf->{'mhonarc'} -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\' -rcfile $mhonarc_ressources -outdir $arcpath/$adrlist/$yyyy-$mm  -definevars \"listname='$listname' hostname=$hostname yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$arcpath base=Site->wwsympa_url/arc tag=$tag\" -umask Sympa::Site->umask $dir_to_rebuild";
 
@@ -774,7 +774,7 @@ sub rebuild {
                 'dir_to_rebuild' => "/$adrlist/$arc/arctxt",
                 'tmpdir'         => Sympa::Site->tmpdir,
             );
-            if($arcs_dir) {
+            if ($arcs_dir) {
                 $dir_to_rebuild = $arcs_dir->{'dir_to_rebuild'};
             }
             ## recreate index file if needed
@@ -855,7 +855,7 @@ sub mail2arc {
     my $robot = $message_in_spool->{'robot'};
     my ($yyyy, $mm, $dd, $hh, $min, $ss) = @_;
     my $txtdate = Sympa::Tools::Time::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
-    if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
+    if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/) {
         $yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
     } else {
         Sympa::Log::Syslog::do_log('err',"could not scan date");
@@ -911,14 +911,14 @@ sub mail2arc {
         if ($list->{'admin'}{'web_archive'}{'quota'}) {
             my $used = $list->get_arc_size("$arcpath");
 
-            if ($used >= $list->{'admin'}{'web_archive'}{'quota'} * 1024){
+            if ($used >= $list->{'admin'}{'web_archive'}{'quota'} * 1024) {
                 Sympa::Log::Syslog::do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
                 unless ($list->send_notify_to_owner('arc_quota_exceeded',{'size' => $used})) {
                     Sympa::Log::Syslog::do_log('notice',"Unable to send notify 'arc_quota_exceeded' to $list->{'name'} owner");
                 }
                 return undef;
             }
-            if ($used >= ($list->{'admin'}{'web_archive'}{'quota'} * 1024 * 0.95)){
+            if ($used >= ($list->{'admin'}{'web_archive'}{'quota'} * 1024 * 0.95)) {
                 Sympa::Log::Syslog::do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
                 unless ($list->send_notify_to_owner('arc_quota_95',{'size' => $used,
                             'rate' => int($used * 100 / ($list->{'admin'}{'web_archive'}{'quota'} * 1024 ))})) {
@@ -937,7 +937,7 @@ sub mail2arc {
 
             Sympa::Log::Syslog::do_log('debug',"mkdir $arcpath/%s/$yyyy-$mm", $list->get_list_id());
 
-            if ($list->{'admin'}{'web_archive'}{'max_month'}){ # maybe need to remove some old archive
+            if ($list->{'admin'}{'web_archive'}{'max_month'}) { # maybe need to remove some old archive
                 if (opendir DIR,$arcpath.'/'.$list->get_list_id()) {
                     my @archives = (sort {$a cmp $b} grep (/^\d{4}-\d{2}/, readdir(DIR)));
                     closedir DIR;
@@ -963,7 +963,7 @@ sub mail2arc {
         }
 
         ## fetch next message number in archive arctxt .
-        if( -f $monthdir."/index" ){
+        if ( -f $monthdir."/index" ) {
             open(IDX,"<$monthdir/index") || Sympa::Log::Syslog::fatal_err("couldn't read index for $listname");
             $newfile = <IDX>;
             chomp($newfile);

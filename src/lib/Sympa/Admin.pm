@@ -141,7 +141,7 @@ sub create_list_old{
     }
 
     my $regx = $robot->list_check_regexp;
-    if( $regx ) {
+    if ( $regx ) {
         if ($params->{'listname'} =~ /^(\S+)-($regx)$/) {
             Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
             return undef;
@@ -168,10 +168,10 @@ sub create_list_old{
         base    => Sympa::Database->get_singleton(),
         options => {'just_try' => 1}
     );
-    if( $res || $new_list) {
+    if ( $res || $new_list) {
         Sympa::Log::Syslog::do_log('err', 'could not create already existing list %s on %s for ',
             $params->{'listname'}, $robot);
-        foreach my $o (@{$params->{'owner'}}){
+        foreach my $o (@{$params->{'owner'}}) {
             Sympa::Log::Syslog::do_log('err',$o->{'email'});
         }
         return undef;
@@ -195,7 +195,7 @@ sub create_list_old{
     }
 
     ## Check topics
-    if ($params->{'topics'}){
+    if ($params->{'topics'}) {
         unless ($robot->is_available_topic($params->{'topics'})) {
             Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
                 $params->{'topics'});
@@ -274,7 +274,7 @@ sub create_list_old{
 
     #log in stat_table to make statistics
 
-    if($origin eq "web"){
+    if ($origin eq "web") {
         Sympa::Log::Database::add_stat(
             robot     => $robot,
             list      => $params->{'listname'},
@@ -383,7 +383,7 @@ sub create_list{
     }
 
     my $regx = $robot->list_check_regexp;
-    if( $regx ) {
+    if ( $regx ) {
         if ($params->{'listname'} =~ /^(\S+)-($regx)$/) {
             Sympa::Log::Syslog::do_log('err','incorrect listname %s matches one of service aliases', $params->{'listname'});
             return undef;
@@ -404,7 +404,7 @@ sub create_list{
 
     if ($res) {
         Sympa::Log::Syslog::do_log('err', 'could not create already existing list %s on %s for ', $params->{'listname'}, $robot);
-        foreach my $o (@{$params->{'owner'}}){
+        foreach my $o (@{$params->{'owner'}}) {
             Sympa::Log::Syslog::do_log('err',$o->{'email'});
         }
         return undef;
@@ -436,7 +436,7 @@ sub create_list{
     }
 
     ## Check topics
-    if (defined $params->{'topics'}){
+    if (defined $params->{'topics'}) {
         unless ($robot->is_available_topic($params->{'topics'})) {
             Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
                 $params->{'topics'});
@@ -600,7 +600,7 @@ sub update_list{
     }
 
     ## Check topics
-    if (defined $params->{'topics'}){
+    if (defined $params->{'topics'}) {
         unless ($robot->is_available_topic($params->{'topics'})) {
             Sympa::Log::Syslog::do_log('err', 'topics param %s not defined in topics.conf',
                 $params->{'topics'});
@@ -788,7 +788,7 @@ sub rename_list{
 
     ## If we are in 'copy' mode, create en new list
     if ($params{'mode'} eq 'copy') {
-        unless ( $list = clone_list_as_empty($list->{'name'},$list->{'domain'},$params{'new_listname'},$params{'new_robot'},$params{'user_email'})){
+        unless ( $list = clone_list_as_empty($list->{'name'},$list->{'domain'},$params{'new_listname'},$params{'new_robot'},$params{'user_email'})) {
             Sympa::Log::Syslog::do_log('err',"Unable to load $params{'new_listname'} while renaming");
             return 'internal';
         }
@@ -811,7 +811,7 @@ sub rename_list{
 
     ## This code should be in Sympa::List::rename()
     unless ($params{'mode'} eq 'copy') {
-        unless (move ($list->{'dir'}, $new_dir )){
+        unless (move ($list->{'dir'}, $new_dir )) {
             Sympa::Log::Syslog::do_log('err',"Unable to rename $list->{'dir'} to $new_dir : $ERRNO");
             return 'internal';
         }
@@ -904,7 +904,7 @@ sub rename_list{
     ## Check custom_subject
     if (my $c = $list->custom_subject) {
         # FIXME MO: this is unsave: check/replace full listname
-        if($c =~ /$old_listname/) {
+        if ($c =~ /$old_listname/) {
             $c =~ s/$old_listname/$params{new_listname}/g;
             $list->custom_subject($c);
             $list->save_config($params{'user_email'});	
@@ -971,7 +971,7 @@ sub rename_list{
                 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname", Sympa::Site->queuedigest . "/$params{'new_listname'}", $!);
                 next;
             }
-        }elsif (-f Sympa::Site->queuedigest . "/$old_listname\@$robot") {
+        } elsif (-f Sympa::Site->queuedigest . "/$old_listname\@$robot") {
             unless (move(Sympa::Site->queuedigest . "/$old_listname\@$robot",
                     Sympa::Site->queuedigest . "/$params{'new_listname'}\@$params{'new_robot'}")) {
                 Sympa::Log::Syslog::do_log('err', "Unable to rename %s to %s : %s", Sympa::Site->queuedigest . "/$old_listname\@$robot", Sympa::Site->queuedigest . "/$params{'new_listname'}\@$params{'new_robot'}", $!);
@@ -1148,7 +1148,7 @@ sub check_owner_defined {
 
     if (ref($owner) eq "ARRAY") {
         foreach my $o (@{$owner}) {
-            unless($o){
+            unless($o) {
                 Sympa::Log::Syslog::do_log('err','empty param "owner"');
                 return undef;
             }
@@ -1157,7 +1157,7 @@ sub check_owner_defined {
                 return undef;
             }
         }
-    } elsif (ref($owner) eq "HASH"){
+    } elsif (ref($owner) eq "HASH") {
         unless ($owner->{'email'}) {
             Sympa::Log::Syslog::do_log('err','missing sub param "email" for param "owner"');
             return undef;
@@ -1169,7 +1169,7 @@ sub check_owner_defined {
 
     if (ref($owner_include) eq "ARRAY") {
         foreach my $o (@{$owner_include}) {
-            unless($o){
+            unless($o) {
                 Sympa::Log::Syslog::do_log('err','empty param "owner_include"');
                 return undef;
             }
@@ -1178,7 +1178,7 @@ sub check_owner_defined {
                 return undef;
             }
         }
-    } elsif (ref($owner_include) eq "HASH"){
+    } elsif (ref($owner_include) eq "HASH") {
         unless ($owner_include->{'source'}) {
             Sympa::Log::Syslog::do_log('err','missing sub param "source" for param "owner_include"');
             return undef;
@@ -1242,7 +1242,7 @@ sub list_check_smtp {
         Sympa::Log::Syslog::do_log ('err',"Unable to use Net library, Net::SMTP required, install it (CPAN) first");
         return undef;
     }
-    if( $smtp = Net::SMTP->new($smtp_relay,
+    if ( $smtp = Net::SMTP->new($smtp_relay,
             Hello => $smtp_helo,
             Timeout => 30) ) {
         $smtp->mail('');
@@ -1558,7 +1558,7 @@ sub change_user_email {
     }
 
     ## Update netidmap_table
-    unless ( $robot->update_email_netidmap_db($in{'current_email'}, $in{'new_email'}) ){
+    unless ( $robot->update_email_netidmap_db($in{'current_email'}, $in{'new_email'}) ) {
         Sympa::Log::Syslog::do_log('err','change_email: update failed');
         return undef;
     }

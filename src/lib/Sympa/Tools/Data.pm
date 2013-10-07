@@ -191,14 +191,14 @@ sub remove_empty_entries {
                 $var->[$index] = undef unless ($status);
                 $not_empty ||= $status
             }	    
-        }elsif (ref($var) eq 'HASH') {
+        } elsif (ref($var) eq 'HASH') {
             foreach my $key (sort keys %{$var}) {
                 my $status = &remove_empty_entries($var->{$key});
                 $var->{$key} = undef unless ($status);
                 $not_empty ||= $status;
             }    
         }
-    }else {
+    } else {
         if (defined $var && $var) {
             $not_empty = 1
         }

@@ -140,7 +140,7 @@ sub write_pid {
         return;
     }
     ## If pidfile exists, read the PIDs
-    if(-f $pid_file) {
+    if (-f $pid_file) {
         # Read pid file
         open(PFILE, '<', $pid_file);
         my $l = <PFILE>;
@@ -150,7 +150,7 @@ sub write_pid {
 
     ## If we can have multiple instances for the process.
     ## Print other pids + this one
-    if($params{multiple_process}) {
+    if ($params{multiple_process}) {
         unless(open(PIDFILE, '>', $pid_file)) {
             ## Unlock pid file
             $lock->unlock();
@@ -171,7 +171,7 @@ sub write_pid {
         }
         ## The previous process died suddenly, without pidfile cleanup
         ## Send a notice to listmaster with STDERR of the previous process
-        if($#pids >= 0) {
+        if ($#pids >= 0) {
             my $other_pid = $pids[0];
             Sympa::Log::Syslog::do_log('notice', "Previous process %s died suddenly ; notifying listmaster", $other_pid);
             send_crash_report(
@@ -249,7 +249,7 @@ sub remove_pid {
 
     ## If in multi_process mode (bulk.pl for instance can have child processes)
     ## Then the pidfile contains a list of space-separated PIDs on a single line
-    if($params{multiple_process}) {
+    if ($params{multiple_process}) {
         unless(open(PFILE, '<', $pid_file)) {
             Sympa::Log::Syslog::do_log('err','Could not open %s to remove pid %s', $pid_file, $params{pid});
             return undef;
@@ -260,14 +260,14 @@ sub remove_pid {
         @pids = grep {!/^$params{pid}$/} @pids;
 
         ## If no PID left, then remove the file
-        if($#pids < 0) {
+        if ($#pids < 0) {
             ## Release the lock
             unless(unlink $pid_file) {
                 Sympa::Log::Syslog::do_log('err', "Failed to remove $pid_file: %s", $ERRNO);
                 return undef;
             }
         } else {
-            if(-f $pid_file) {
+            if (-f $pid_file) {
                 unless(open(PFILE, '>', $pid_file)) {
                     Sympa::Log::Syslog::do_log('err', "Failed to open $pid_file: %s", $ERRNO);
                     return undef;
@@ -407,7 +407,7 @@ sub send_crash_report {
 
     my $err_file = _get_error_file(%params);
     my (@err_output, $err_date);
-    if(-f $err_file) {
+    if (-f $err_file) {
         open(ERR, '<', $err_file);
         @err_output = <ERR>;
         close ERR;
@@ -437,8 +437,8 @@ sub get_children_processes_list {
     Sympa::Log::Syslog::do_log('debug3','');
 
     my @children;
-    for my $p (@{Proc::ProcessTable->new()->table}){
-        if($p->ppid == $PID) {
+    for my $p (@{Proc::ProcessTable->new()->table}) {
+        if ($p->ppid == $PID) {
             push @children, $p->pid;
         }
     }

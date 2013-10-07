@@ -189,18 +189,18 @@ sub parse {
     if (! $self->{'line_as_string'}) {
         $self->{'nature'} = 'empty line';
         # comment
-    }elsif ($self->{'line_as_string'} =~ /^\s*\#.*/) {
+    } elsif ($self->{'line_as_string'} =~ /^\s*\#.*/) {
         $self->{'nature'} = 'comment';
         # title
-    }elsif ($self->{'line_as_string'} =~ /^\s*title\...\s*(.*)\s*/i) {
+    } elsif ($self->{'line_as_string'} =~ /^\s*title\...\s*(.*)\s*/i) {
         $self->{'nature'} = 'title';
         $self->{'title'} = $1;
         # label
-    }elsif ($self->{'line_as_string'} =~ /^\s*\/\s*(.*)/) {
+    } elsif ($self->{'line_as_string'} =~ /^\s*\/\s*(.*)/) {
         $self->{'nature'} = 'label';
         $self->{'label'} = $1;
         # command
-    }elsif ($self->{'line_as_string'} =~ /^\s*(\w+)\s*\((.*)\)\s*/i ) {
+    } elsif ($self->{'line_as_string'} =~ /^\s*(\w+)\s*\((.*)\)\s*/i ) {
         my $command = lc ($1);
         my @args = split (/,/, $2);
         foreach (@args) { s/\s//g;}
@@ -208,7 +208,7 @@ sub parse {
         unless ($commands{$command}) {
             $self->{'nature'} = 'error';
             $self->{'error'} = "unknown command $command";
-        }else {
+        } else {
             $self->{'nature'} = 'command';
             $self->{'command'} = $command;
 
@@ -217,20 +217,20 @@ sub parse {
             $self->chk_cmd;
         }
         # assignment
-    }elsif ($self->{'line_as_string'} =~ /^\s*(@\w+)\s*=\s*(.+)/) {
+    } elsif ($self->{'line_as_string'} =~ /^\s*(@\w+)\s*=\s*(.+)/) {
 
         my $subinstruction = Sympa::TaskInstruction->new ({'line_as_string' => $2, 'line_number' => $self->{'line_number'}});
 
         unless ( $asgn_commands{$subinstruction->{'command'}} ) {
             $self->{'nature'} = 'error';
             $self->{'error'} = "non valid assignment $2";
-        }else {
+        } else {
             $self->{'nature'} = 'assignment';
             $self->{'var'} = $1;
             $self->{'command'} = $subinstruction->{'command'};
             $self->{'Rarguments'} = $subinstruction->{'Rarguments'};
         }
-    }else {
+    } else {
         $self->{'nature'} = 'error';
         $self->{'error'} = 'syntax error';
     }
@@ -359,7 +359,7 @@ sub send_msg {
                 Log::do_log ('notice', "Unable to send template $template to $email");
                 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
                 return undef;
-            }else{
+            } else {
                 Log::do_log ('notice', "--> message sent to $email");
             }
         }
@@ -370,7 +370,7 @@ sub send_msg {
                 Log::do_log ('notice', "Unable to send template $template to $email");
                 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
                 return undef;
-            }else{
+            } else {
                 Log::do_log ('notice', "--> message sent to $email");
             }
         }
@@ -403,7 +403,7 @@ sub next_cmd {
                 last;
             }
         }
-    }else {
+    } else {
         $type = 'list';
         my $list = $task->{'list_object'};
         $data{'list'}{'name'} = $list->name;
@@ -416,7 +416,7 @@ sub next_cmd {
             }
             $data{'list'}{'ttl'} = $list->ttl;
             $flavour = 'ttl';
-        }else {
+        } else {
             my $model_task_parameter = $model . '_task';
             unless (%{$list->$model_task_parameter}) {
                 $self->error({'task' => $task, 'type' => 'execution', 'message' => sprintf('List %s no more require %s task', $list->name, $model)});
@@ -505,7 +505,7 @@ sub delete_subs_cmd {
         } else {
             unless (my $u = $list->delete_list_member ($email)) {
                 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Deletion of $email from list $list->get_list_id failed"});
-            }else{
+            } else {
                 Log::do_log ('notice', "--> $email deleted");
                 $selection{$email} = {};
             }
@@ -620,11 +620,11 @@ sub purge_logs_table {
     my $date_deb = $res[0] - ($res[0] % 3600);
 
     #hour to hour
-    for  (my $i=$date_deb; $i <= $date_end; $i=$i+3600){
+    for  (my $i=$date_deb; $i <= $date_end; $i=$i+3600) {
         push(@slots, $i);
     }
 
-    for (my $j=1; $j <= scalar(@slots); $j++){
+    for (my $j=1; $j <= scalar(@slots); $j++) {
         Log::aggregate_data($slots[$j-1], ($slots[$j] || $date_end));
     }
     #-------------------------------------------------------------------
@@ -710,7 +710,7 @@ sub purge_user_table {
     foreach my $robot (@{Robot::get_robots()}) {
 
         my $all_lists = Sympa::List::get_lists($robot);
-        foreach my $list (@$all_lists){
+        foreach my $list (@$all_lists) {
 
             ## Owners
             my $owners = $list->get_owners();
@@ -774,7 +774,7 @@ sub purge_orphan_bounces {
     foreach my $list (@$all_lists) {
         my $listname = $list->name;
         ## first time: loading DB entries into %bounced_users
-        for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()){
+        for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
             my $user_id = $user_ref->{'email'};
             $bounced_users{$listname}{$user_id} = 1;
         }
@@ -792,7 +792,7 @@ sub purge_orphan_bounces {
 
         ## Finally removing orphan files
         foreach my $bounce (readdir(BOUNCE)) {
-            if ($bounce =~ /\@/){
+            if ($bounce =~ /\@/) {
                 unless (defined($bounced_users{$listname}{$bounce})) {
                     Log::do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
                     unless (unlink($bounce_dir.'/'.$bounce)) {
@@ -1060,11 +1060,11 @@ sub eval_bouncers {
         Log::do_log('info','eval_bouncers(%s)',$listname);
 
         ## Analizing file Msg-count and fill %$list_traffic
-        unless (open(COUNT, $list->dir . '/msg_count')){
+        unless (open(COUNT, $list->dir . '/msg_count')) {
             if (-f $list->dir . '/msg_count') {
                 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Could not open 'msg_count' file for list $listname"});
                 next;
-            }else{
+            } else {
                 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "File 'msg_count' does not exist for list $listname"});
                 next;
             }
@@ -1078,7 +1078,7 @@ sub eval_bouncers {
         close(COUNT);
 
         #for each bouncing user
-        for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()){
+        for (my $user_ref = $list->get_first_bouncing_list_member(); $user_ref; $user_ref = $list->get_next_bouncing_list_member()) {
 
             my $score = &get_score($user_ref,$list_traffic) || 0;
             ## copying score into DataBase
@@ -1144,7 +1144,7 @@ sub process_bouncers {
 
             for ( my $level = $max_level;($level >= 1) ;$level--) {
                 my $bouncers_level_parameter = 'bouncers_level'.$level;
-                if ($user_ref->{'bounce_score'} >= $list->$bouncers_level_parameter->{'rate'}){
+                if ($user_ref->{'bounce_score'} >= $list->$bouncers_level_parameter->{'rate'}) {
                     push(@{$bouncers[$level]}, $user_ref->{'email'});
                     $level = ($level-$max_level);
                 }
@@ -1157,9 +1157,9 @@ sub process_bouncers {
             my $action = $list->$bouncers_level_parameter->{'action'};
             my $notification = $list->$bouncers_level_parameter->{'notification'};
 
-            if (defined $bouncers[$level] && @{$bouncers[$level]}){
+            if (defined $bouncers[$level] && @{$bouncers[$level]}) {
                 ## calling action subroutine with (list,email list) in parameter
-                unless ($actions{$action}->($list,$bouncers[$level])){
+                unless ($actions{$action}->($list,$bouncers[$level])) {
                     $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Error while trying to execute action for bouncing users in list $listname"});
                     return undef;
                 }
@@ -1172,12 +1172,12 @@ sub process_bouncers {
                     'total'     => $#{$bouncers[$level]} + 1
                 };
 
-                if ($notification eq 'listmaster'){
-                    unless($list->robot->send_notify_to_listmaster('automatic_bounce_management', $param)){
+                if ($notification eq 'listmaster') {
+                    unless($list->robot->send_notify_to_listmaster('automatic_bounce_management', $param)) {
                         $self->error ({'task' => $task, 'type' => 'execution', 'message' => 'error while notifying listmaster'});
                     }
-                }elsif ($notification eq 'owner'){
-                    unless ($list->send_notify_to_owner('automatic_bounce_management',$param)){
+                } elsif ($notification eq 'owner') {
+                    unless ($list->send_notify_to_owner('automatic_bounce_management',$param)) {
                         $self->error ({'task' => $task, 'type' => 'execution', 'message' => 'error while notifying listmaster'});
                     }
                 }
@@ -1207,13 +1207,13 @@ sub get_score {
     my $msg_count = 0;
     my $min_day = $EO_period;
 
-    unless ($bounce_count >= $min_msg_count){
+    unless ($bounce_count >= $min_msg_count) {
         #not enough messages distributed to keep score
         Log::do_log('debug','Not enough messages for evaluation of user %s',$user_ref->{'email'});
         return undef ;
     }
 
-    unless (($EO_period - $BO_period) >= $min_period){
+    unless (($EO_period - $BO_period) >= $min_period) {
         #too short bounce period to keep score
         Log::do_log('debug','Too short period for evaluate %s',$user_ref->{'email'});
         return undef;
@@ -1290,10 +1290,10 @@ sub error {
     if (defined $task) {
         if (defined $task->{'errors'}) {
             push @{$task->{'errors'}}, $error_description;
-        }else{
+        } else {
             $task->{'errors'} = [$error_description];
         }
-    }else{
+    } else {
         Log::do_log('err','No task object to register error. It will not be used in the reports.');
         return undef;
     }

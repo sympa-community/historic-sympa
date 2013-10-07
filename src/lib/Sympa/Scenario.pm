@@ -360,7 +360,7 @@ sub request_action {
 
     my $log_it ; # this var is defined to control if log scenario is activated or not
     my $loging_targets = $robot->loging_for_module;
-    if ($loging_targets->{'scenario'} == 1){
+    if ($loging_targets->{'scenario'} == 1) {
         #activate log if no condition is defined
         unless ($robot->loging_condition) {
             $log_it = 1;
@@ -408,7 +408,7 @@ sub request_action {
                 'auth_method' => '',
                 'condition' => ''
             };
-            if ($log_it){
+            if ($log_it) {
                 Sympa::Log::Syslog::do_log('info',"$trace_scenario rejected reason parameter not defined");
             }
             return $return;
@@ -435,7 +435,7 @@ sub request_action {
                     'auth_method' => '',
                     'condition' => ''
                 };
-                if ($log_it){
+                if ($log_it) {
                     Sympa::Log::Syslog::do_log('info',"$trace_scenario rejected reason list not open");
                 }
                 return $return;
@@ -514,7 +514,7 @@ sub request_action {
 
     ## Include a Blacklist rules if configured for this action
     if (Sympa::Site->blacklist($operation)) {
-        foreach my $auth ('smtp','dkim','md5','pgp','smime'){
+        foreach my $auth ('smtp','dkim','md5','pgp','smime') {
             my $blackrule = {'condition' => "search('blacklist.txt',[sender])",
                 'action' => 'reject,quiet',
                 'auth_method' => $auth};
@@ -526,11 +526,11 @@ sub request_action {
 
     my $return = {};
     foreach my $rule (@rules) {
-        if ($log_it){
+        if ($log_it) {
             Sympa::Log::Syslog::do_log('info', 'Verify rule %s, auth %s, action %s',$rule->{'condition'},$rule->{'auth_method'},$rule->{'action'});
         }
         if ($auth_method eq $rule->{'auth_method'}) {
-            if ($log_it){
+            if ($log_it) {
                 Sympa::Log::Syslog::do_log('info', 'Context uses auth method %s',$rule->{'auth_method'});
             }
             my $result =  verify ($context,$rule->{'condition'},$log_it);
@@ -556,7 +556,7 @@ sub request_action {
 
             ## Rule returned false
             if ($result == -1) {
-                if ($log_it){
+                if ($log_it) {
                     Sympa::Log::Syslog::do_log('info',"$trace_scenario condition $rule->{'condition'} with authentication method $rule->{'auth_method'} not verified.");
                 }
                 next;
@@ -577,17 +577,17 @@ sub request_action {
                 }
                 my @param = split /,/,$2;
 
-                foreach my $p (@param){
-                    if  ($p =~ /^reason=\'?(\w+)\'?/){
+                foreach my $p (@param) {
+                    if  ($p =~ /^reason=\'?(\w+)\'?/) {
                         $return->{'reason'} = $1;
                         next;
 
-                    } elsif ($p =~ /^tt2=\'?(\w+)\'?/){
+                    } elsif ($p =~ /^tt2=\'?(\w+)\'?/) {
                         $return->{'tt2'} = $1;
                         next;
 
                     }
-                    if ($p =~ /^\'?[^=]+\'?/){
+                    if ($p =~ /^\'?[^=]+\'?/) {
                         $return->{'tt2'} = $p;
                         # keeping existing only, not merging with reject parameters in scenarios
                         last;
@@ -597,12 +597,12 @@ sub request_action {
 
             $return->{'action'} = $action;
 
-            if ($log_it){
+            if ($log_it) {
                 Sympa::Log::Syslog::do_log('info',"$trace_scenario condition $rule->{'condition'} with authentication method $rule->{'auth_method'} issued result : $action");
             }
 
             if ($result == 1) {
-                if ($log_it){
+                if ($log_it) {
                     Sympa::Log::Syslog::do_log('info',"rule '%s %s -> %s' accepted",$rule->{'condition'},$rule->{'auth_method'},$rule->{'action'});
                 }
                 if ($debug) {
@@ -619,14 +619,14 @@ sub request_action {
                 return $return;
             }
         } else {
-            if ($log_it){
+            if ($log_it) {
                 Sympa::Log::Syslog::do_log('info', 'Context does not use auth method %s',$rule->{'auth_method'});
             }
         }
     }
     Sympa::Log::Syslog::do_log('info',"no rule match, reject");
 
-    if ($log_it){
+    if ($log_it) {
         Sympa::Log::Syslog::do_log('info',"$trace_scenario : no rule match request rejected");
     }
 

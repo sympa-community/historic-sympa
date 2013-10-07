@@ -174,7 +174,7 @@ my $old_lang_re = qr/^([a-z]{2})_([A-Z]{2})(?![A-Z])/i;
 ## We made some modifications: variant subtags may be longer than eight chars;
 ## restricted features (see CanonicLang() function).
 my $language_tag_re = qr/^
-    ([a-z]{2}(?:-[a-z]{3}){,3} | [a-z]{2,3})        # language (and ext.)
+    ([a-z]{2}(?:-[a-z]{3}) {,3} | [a-z]{2,3})        # language (and ext.)
     (?:-([a-z]{4}))?                                # script
     (?:-([a-z]{2}))?                                # region (no UN M. 49)
     (?:-(                                           # variant

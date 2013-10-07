@@ -116,7 +116,7 @@ if ($listname) {
         printf "unknown list $listname (directory $self->{'dir'} not found)\n";
         die;
     }
-}elsif($robot) {
+} elsif ($robot) {
     if (-d Sympa::Site->etc.'/'.$robot) {
         $cert = Sympa::Site->etc.'/'.$robot.'/cert.pem';
         $privatekey = Sympa::Site->etc.'/'.$robot.'/private_key';

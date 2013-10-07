@@ -75,7 +75,7 @@ my $spool = Sympa::Spool->new(
 Sympa::List::get_lists('Site');
 
 my $all_lists = Sympa::List::get_lists('*');
-foreach my $list (@$all_lists){
+foreach my $list (@$all_lists) {
     ## Nothing to do here
 }
 

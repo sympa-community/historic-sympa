@@ -275,7 +275,7 @@ while (!$end) {
         # processes
         # Check if we need to run new child processes every
         # 'bulk_wait_to_fork' (sympa.conf parameter) seconds
-        if (($main::daemon_usage eq 'DAEMON_MASTER') && (time() - $last_check_date > $timeout)){
+        if (($main::daemon_usage eq 'DAEMON_MASTER') && (time() - $last_check_date > $timeout)) {
             ## Clean up pid file (in case some child bulks would have died)
             my @actual_children = Sympa::Tools::Daemon::get_children_processes_list();
             my @remaining_children;
@@ -318,7 +318,7 @@ while (!$end) {
                 directory => Sympa::Constants::PIDDIR,
                 daemon    => $daemon_name
             );
-            unless (defined($pids_in_pfile)){
+            unless (defined($pids_in_pfile)) {
                 my $result = Sympa::Tools::Daemon::write_pid(
                     directory        => Sympa::Constants::PIDDIR,
                     daemon           => $daemon_name,
@@ -342,9 +342,9 @@ while (!$end) {
             }
 
             ## Start new processes if there remain at least 'bulk_fork_threshold' packets to send in the bulkmailer_table table
-            if(
+            if (
                 (my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Site->bulk_fork_threshold)) &&
-                ($#remaining_children+1 < Sympa::Site->bulk_max_count) ){
+                ($#remaining_children+1 < Sympa::Site->bulk_max_count) ) {
 
                 ## disconnect from database before fork
                 ## to prevent DB handlers to be shared by different processes
@@ -352,9 +352,9 @@ while (!$end) {
                 # because of sharing dbh may crash bulk.pl
                 $base->disconnect();
 
-                if(Sympa::Site->bulk_max_count > 1) {
+                if (Sympa::Site->bulk_max_count > 1) {
                     Sympa::Log::Syslog::do_log('info','Important workload: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, Sympa::Site->bulk_max_count-($#remaining_children+1));
-                    for my $process_count(1..Sympa::Site->bulk_max_count-($#remaining_children+1)){
+                    for my $process_count(1..Sympa::Site->bulk_max_count-($#remaining_children+1)) {
                         Sympa::Log::Syslog::do_log('info', "Will fork: %s", $process_count);
                         if ((my $child_pid = fork) != 0) {
                             Sympa::Log::Syslog::do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
@@ -399,7 +399,7 @@ while (!$end) {
         ($main::daemon_usage eq 'DAEMON_SLAVE') &&
         (time() - $date_of_last_activity > Sympa::Site->bulk_lazytime) &&
         !(my $r_packets = $bulk->there_is_too_much_remaining_packets(Sympa::Site->bulk_fork_threshold))
-    ){
+    ) {
         Sympa::Log::Syslog::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $PID, Sympa::Site->bulk_lazytime);
         last;
     }
@@ -487,7 +487,7 @@ while (!$end) {
             $next->{'merge'} ||
             $next->{'tracking'} eq 'dsn' ||
             $next->{'tracking'}eq 'mdn'
-        ){
+        ) {
             # message needs personalization
             my $key;
 
@@ -512,7 +512,7 @@ while (!$end) {
                     $notification_id = Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot_id);
                     $return_path = $list->get_bounce_address($rcpt, $notification_id);
                     $entity->head->replace('Disposition-Notification-To',$return_path) if ($next->{'tracking'} eq 'mdn');
-                    if (($message->{'protected'})||($message->{'smime_crypted'})){
+                    if (($message->{'protected'})||($message->{'smime_crypted'})) {
                         my $msg_body = Sympa::Message::get_body_from_msg_as_string($messageasstring_init);
                         $messageasstring_init = $entity->head->as_string(). "\n" . $msg_body; # concat headers from entity with original body
                     } else {
@@ -540,14 +540,14 @@ while (!$end) {
                     $messageasstring = $messageasstring_init;
                 }
 
-                if ($robot->dkim_feature eq 'on'){
+                if ($robot->dkim_feature eq 'on') {
                     # assume Sympa::Tools::DKIM can be loaded if the setting is
                     # still on
                     require Sympa::Tools::DKIM;
                     $messageasstring = Sympa::Tools::DKIM::remove_invalid_dkim_signature($messageasstring, Sympa::Site->tmpdir);
                 }
 
-                if ($message_from_spool->{'dkim_d'}){
+                if ($message_from_spool->{'dkim_d'}) {
                     # apply dkim signature AFTER any other message transformation.
                     $messageasstring = dkim_sign(
                         $messageasstring,
@@ -568,11 +568,11 @@ while (!$end) {
             }
         } else {
             # message dont needs personalization, they can be sent by packet
-            if ($robot->dkim_feature eq 'on'){
+            if ($robot->dkim_feature eq 'on') {
                 $messageasstring_init = remove_invalid_dkim_signature($messageasstring_init, Sympa::Site->tmpdir);
             }
             # Initial message
-            if ($message_from_spool->{'dkim_d'}){
+            if ($message_from_spool->{'dkim_d'}) {
                 # assume Sympa::Tools::DKIM can be loaded if
                 # there is a message in this spool
                 require Sympa::Tools::DKIM;
@@ -598,7 +598,7 @@ while (!$end) {
             Sympa::Log::Syslog::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $next->{'messagekey'},$next->{'packetid'});
         }
 
-        if($next->{'priority_packet'} == Sympa::Site->sympa_packet_priority + 5){
+        if ($next->{'priority_packet'} == Sympa::Site->sympa_packet_priority + 5) {
             Sympa::Log::Syslog::do_log('notice','Done sending message "%s" (key "%s") to list "%s@%s" (priority %s) in %s seconds since scheduled expedition date.',
                 $next->{'messageid'},
                 $next->{'messagekey'},

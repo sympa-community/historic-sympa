@@ -116,10 +116,10 @@ sub mail_file {
 			last if ($line=~/^\s*$/);  
 			if ($line=~/^[\w-]+:\s*/) { ## A header field
 				$existing_headers=1;
-			}elsif ($existing_headers && ($line =~ /^\s/)) {
+			} elsif ($existing_headers && ($line =~ /^\s/)) {
 				## Following of a header field
 				next;
-			}else{
+			} else {
 				last;
 			}
 			
@@ -164,10 +164,10 @@ sub mail_file {
 		if (ref ($params{recipient})) {
 			if ($data->{'to'}) {
 			$to = $data->{'to'};
-			}else {
+			} else {
 			$to = join(",\n   ", @{$params{recipient}});
 			}
-		}else{
+		} else {
 			$to = $params{recipient};
 		}   
 		$headers .= "To: $to\n";
@@ -269,7 +269,7 @@ sub mail_file {
 		Sympa::Log::Syslog::do_log('err', 'Failed to reformat message');
 	}
 
-	return $message_as_string if($params{return_message_as_string});
+	return $message_as_string if ($params{return_message_as_string});
 
 	my $message = Sympa::Message->new(
 		string => $message_as_string,
@@ -628,7 +628,7 @@ sub sendto {
 				$tag_as_last = 0;
 			}    
 		}
-    }else{
+    } else {
 		$message->{'msg_as_string'} = $msg_header->as_string() . "\n" . $msg_body;   
 		my $result = _sending(
 			message => $message,
@@ -834,7 +834,7 @@ sub _smtpto {
 			exec $sendmail, split(/\s+/,$sendmail_args),'-f', $from, $rcpt;
 		} elsif (ref($rcpt) eq 'SCALAR') {
 			exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, $$rcpt;
-		} elsif (ref($rcpt) eq 'ARRAY'){
+		} elsif (ref($rcpt) eq 'ARRAY') {
 			exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, @$rcpt;
 		}
 		
@@ -853,7 +853,7 @@ sub _smtpto {
 		Sympa::Log::Syslog::do_log('notice', $str);
 	}
 	
-	unless (close(IN)){
+	unless (close(IN)) {
 		Sympa::Log::Syslog::do_log('err', "could not close safefork");
 		return undef;
 	}
@@ -951,7 +951,7 @@ sub _fix_part($$$$) {
     }
     my $eff_type = $part->effective_type;
     # Signed or encrypted parts aren't modified.
-    if ($eff_type =~ m{^multipart/(signed|encrypted)$}){
+    if ($eff_type =~ m{^multipart/(signed|encrypted)$}) {
 		return $part;
     }
 
@@ -978,7 +978,7 @@ sub _fix_part($$$$) {
     } elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {
 		# multipart or message types without subparts.
 		return $part;
-	} elsif ($eff_type =~ m{^multipart/(signed|encrypted)$}){
+	} elsif ($eff_type =~ m{^multipart/(signed|encrypted)$}) {
 		return $part;
     } elsif (MIME::Tools::textual_type($eff_type)) {
 		my $bodyh = $part->bodyhandle();
@@ -1023,7 +1023,7 @@ sub _fix_part($$$$) {
 		$io->print($newbody);
 		$io->close;
 		$part->sync_headers(Length => 'COMPUTE');
-	}else{
+	} else {
 		# Binary or text with long lines will be suggested to be BASE64.
 		$part->head()->mime_attr(
 			"Content-Transfer-Encoding",

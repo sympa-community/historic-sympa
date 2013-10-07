@@ -147,7 +147,7 @@ sub new {
         local $/;
         $messageasstring = <$fh>;
         close $fh;
-    } elsif ($datas->{'messageasstring'}){
+    } elsif ($datas->{'messageasstring'}) {
         $messageasstring = $datas->{'messageasstring'};
     }
 
@@ -630,7 +630,7 @@ sub check_dkim_signature {
     my $self = shift;
     # verify DKIM signature
     if (ref($self->robot) eq 'Robot' and
-        $self->robot->dkim_feature eq 'on'){
+        $self->robot->dkim_feature eq 'on') {
         $self->{'dkim_pass'} = Sympa::Tools::dkim_verifier($self->{'msg_as_string'});
     }
     return 1;
@@ -645,7 +645,7 @@ sub decrypt {
     ## Decrypt messages
     my $hdr = $self->get_mime_message->head;
     if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
-        ($hdr->get('Content-Type') !~ /signed-data/i)){
+        ($hdr->get('Content-Type') !~ /signed-data/i)) {
         unless (defined $self->smime_decrypt()) {
             Sympa::Log::Syslog::do_log('err', "Message %s could not be decrypted", $self);
             return undef;
@@ -666,7 +666,7 @@ sub check_smime_signature {
         $self->{'protected'} = 1;
 
         $self->smime_sign_check();
-        if($self->{'smime_signed'}) {
+        if ($self->{'smime_signed'}) {
             Sympa::Log::Syslog::do_log('notice',
                 'message %s is signed, signature is checked', $self);
         }
@@ -713,7 +713,7 @@ sub dump {
         if (ref($self->{$key}) eq 'MIME::Entity') {
             printf "%s =>\n", $key;
             $self->{$key}->print;
-        }else {
+        } else {
             printf "%s => %s\n", $key, $self->{$key};
         }
     }
@@ -765,7 +765,7 @@ sub add_topic {
 sub set_topic {
     my $self = shift;
     my $topics;
-    if ($topics = $self->get_mime_message->head->get('X-Sympa-Topic')){
+    if ($topics = $self->get_mime_message->head->get('X-Sympa-Topic')) {
         $self->{'topic'} = $topics;
     }
 }
@@ -1024,9 +1024,9 @@ sub smime_encrypt {
     if ($list eq 'list') {
         my $self = Sympa::List->new($email);
         ($usercert, $dummy) = Sympa::Tools::smime_find_keys($self->{dir}, 'encrypt');
-    }else{
+    } else {
         my $base = Sympa::Site->ssl_cert_dir . '/' . Sympa::Tools::escape_chars($email);
-        if(-f "$base\@enc") {
+        if (-f "$base\@enc") {
             $usercert = "$base\@enc";
         } else {
             $usercert = "$base";
@@ -1082,7 +1082,7 @@ sub smime_encrypt {
         while (<NEWMSG>) {
             if ( !$in_header)  { 
                 $self->{'encrypted_body'} .= $_;       
-            }else {
+            } else {
                 $in_header = 0 if (/^$/); 
             }
         }						    
@@ -1106,7 +1106,7 @@ sub smime_encrypt {
         $self->{'msg'} = $self->{'crypted_message'};
         $self->set_message_as_string($self->{'crypted_message'}->as_string());
         $self->{'smime_crypted'} = 1;
-    }else{
+    } else {
         Sympa::Log::Syslog::do_log ('err','unable to encrypt message to %s (missing certificate %s)',$email,$usercert);
         return undef;
     }
@@ -1258,7 +1258,7 @@ sub smime_sign_check {
     unless (-d Sympa::Site->ssl_cert_dir) {
         if ( mkdir (Sympa::Site->ssl_cert_dir, 0775)) {
             Sympa::Log::Syslog::do_log('info', 'creating spool %s', Sympa::Site->ssl_cert_dir);
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('err',
                 'Unable to create user certificat directory %s',
                 Sympa::Site->ssl_cert_dir);
@@ -1277,7 +1277,7 @@ sub smime_sign_check {
     my $nparts = $message->get_mime_message->parts;
     my $extracted = 0;
     Sympa::Log::Syslog::do_log('debug3', 'smime_sign_check: parsing %d parts', $nparts);
-    if($nparts == 0) { # could be opaque signing...
+    if ($nparts == 0) { # could be opaque signing...
         $extracted +=Sympa::Tools::smime_extract_certs($message->get_mime_message, $certbundle);
     } else {
         for (my $i = 0; $i < $nparts; $i++) {
@@ -1302,7 +1302,7 @@ sub smime_sign_check {
     my(%certs);
     while(<BUNDLE>) {
         $cert .= $_;
-        if(/^-----END CERTIFICATE-----$/) {
+        if (/^-----END CERTIFICATE-----$/) {
             my $workcert = $cert;
             $cert = '';
             unless(open(CERT, ">$tmpcert")) {
@@ -1326,19 +1326,19 @@ sub smime_sign_check {
                 if ($parsed->{'purpose'}{'sign'} && $parsed->{'purpose'}{'enc'}) {
                     $certs{'both'} = $workcert;
                     Sympa::Log::Syslog::do_log('debug', 'Found a signing + encryption cert');
-                }elsif ($parsed->{'purpose'}{'sign'}) {
+                } elsif ($parsed->{'purpose'}{'sign'}) {
                     $certs{'sign'} = $workcert;
                     Sympa::Log::Syslog::do_log('debug', 'Found a signing cert');
-                } elsif($parsed->{'purpose'}{'enc'}) {
+                } elsif ($parsed->{'purpose'}{'enc'}) {
                     $certs{'enc'} = $workcert;
                     Sympa::Log::Syslog::do_log('debug', 'Found an encryption cert');
                 }
             }
-            last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
+            last if (($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
         }
     }
     close(BUNDLE);
-    if(!($certs{both} || ($certs{sign} || $certs{enc}))) {
+    if (!($certs{both} || ($certs{sign} || $certs{enc}))) {
         Sympa::Log::Syslog::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer->{'email'}}));
         return undef;
     }
@@ -1350,7 +1350,7 @@ sub smime_sign_check {
         if ($c ne 'both') {
             unlink($fn); # just in case there's an old cert left...
             $fn .= "\@$c";
-        }else {
+        } else {
             unlink("$fn\@enc");
             unlink("$fn\@sign");
         }
@@ -1524,28 +1524,28 @@ sub check_message_structure {
                     ($part->parts(0)->effective_type() =~ /^text\/html$/))) {
                 Sympa::Log::Syslog::do_log('debug3', 'Found html part');
                 $self->{'has_html_part'} = 1;
-            }elsif($part->effective_type() =~ /^text\/plain$/) {
+            } elsif ($part->effective_type() =~ /^text\/plain$/) {
                 Sympa::Log::Syslog::do_log('debug3', 'Found text part');
                 $self->{'has_text_part'} = 1;
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('debug3', 'Found attachment: %s',$part->effective_type());
                 $self->{'has_attachments'} = 1;
             }
         }
-    }elsif ($msg->effective_type() =~ /multipart\/signed/) {
+    } elsif ($msg->effective_type() =~ /multipart\/signed/) {
         my @parts = $msg->parts();
         ## Only keep the first part
         $msg->parts([$parts[0]]);
         $msg->make_singlepart();       
         $self->check_message_structure($msg);
 
-    }elsif ($msg->effective_type() =~ /^multipart/) {
+    } elsif ($msg->effective_type() =~ /^multipart/) {
         Sympa::Log::Syslog::do_log('debug3', 'Found multipart: %s',$msg->effective_type());
         foreach my $part ($msg->parts) {
             next unless (defined $part); ## Skip empty parts
             if ($part->effective_type() =~ /^multipart\/alternative/) {
                 $self->check_message_structure($part);
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('debug3', 'Found attachment: %s',$part->effective_type());
                 $self->{'has_attachments'} = 1;
             }
@@ -2156,7 +2156,7 @@ sub prepare_message_according_to_mode {
         ($mode eq 'digest') ||
         ($mode eq 'digestplain')) {
         ##Prepare message for notice reception mode
-    }elsif ($mode eq 'notice') {
+    } elsif ($mode eq 'notice') {
         $self->prepare_reception_notice;
         ##Prepare message for txt reception mode
     } elsif ($mode eq 'txt') {
@@ -2203,7 +2203,7 @@ sub prepare_reception_notice {
     my $notice_msg = $self->get_mime_message->dup;
     $notice_msg->bodyhandle(undef);
     $notice_msg->parts([]);
-    if(($notice_msg->head->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
+    if (($notice_msg->head->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
         ($notice_msg->head->get('Content-Type') !~ /signed-data/i)) {
         $notice_msg->head->delete('Content-Disposition');
         $notice_msg->head->delete('Content-Description');

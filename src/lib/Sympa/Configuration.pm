@@ -67,7 +67,7 @@ grep { $_->{name} }
 my %valid_robot_key_words;
 my %db_storable_parameters;
 my %optional_key_words;
-foreach my $hash(@Sympa::Configuration::Definition::params){
+foreach my $hash(@Sympa::Configuration::Definition::params) {
     $valid_robot_key_words{$hash->{'name'}} = 1 if ($hash->{'vhost'});
     $db_storable_parameters{$hash->{'name'}} = 1 if (defined($hash->{'db'}) and $hash->{'db'} ne 'none');
     $optional_key_words{$hash->{'name'}} = 1 if ($hash->{'optional'});
@@ -262,7 +262,7 @@ sub delete_binaries {
     }
     foreach my $c_file (@files) {
         my $binary_file = $c_file.".bin";
-        if( -f $binary_file) {
+        if ( -f $binary_file) {
             unless (unlink $binary_file) {
                 Sympa::Log::Syslog::do_log('err',"Could not remove file %s. You should remove it manually to ensure the configuration used is valid.",$binary_file);
             }
@@ -424,7 +424,7 @@ sub conf_2_db {
         next unless (-f "$Conf{'etc'}/$robot/robot.conf");
 
         my $config;
-        if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
+        if (my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})) {
             $config = $result_of_config_loading->{'config'};
         }
         _remove_unvalid_robot_entry($config);
@@ -432,7 +432,7 @@ sub conf_2_db {
         for my $i ( 0 .. $#conf_parameters ) {
             if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
                 if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage
-                    ($config->{$conf_parameters[$i]->{'name'}})){
+                    ($config->{$conf_parameters[$i]->{'name'}})) {
                     set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
                 }
             }
@@ -494,7 +494,7 @@ sub checkfiles_as_root {
 
         # create static content directory
         my $dir = get_robot_conf($robot, 'static_content_path');
-        if ($dir ne '' && ! -d $dir){
+        if ($dir ne '' && ! -d $dir) {
             unless ( mkdir ($dir, 0775)) {
                 Sympa::Log::Syslog::do_log('err', 'Unable to create directory %s: %s', $dir, $ERRNO);
                 printf STDERR 'Unable to create directory %s: %s',$dir, $ERRNO;
@@ -602,7 +602,7 @@ sub checkfiles {
         my $robot = Sympa::Robot->new($robot_id);
         my $dir = $robot->static_content_path;
         if ($dir ne '' && -d $dir) {
-            unless (-f $dir.'/index.html'){
+            unless (-f $dir.'/index.html') {
                 unless(open (FF, ">$dir".'/index.html')) {
                     Sympa::Log::Syslog::do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $ERRNO);
                 }
@@ -612,7 +612,7 @@ sub checkfiles {
             # create picture dir
             if ( get_robot_conf($robot, 'pictures_feature') eq 'on') {
                 my $pictures_dir = $robot->static_content_path . '/pictures';
-                unless (-d $pictures_dir){
+                unless (-d $pictures_dir) {
                     unless (mkdir ($pictures_dir, 0775)) {
                         Sympa::Log::Syslog::do_log('err', 'Unable to create directory %s',$pictures_dir);
                         $config_err++;
@@ -620,7 +620,7 @@ sub checkfiles {
                     chmod 0775, $pictures_dir;
 
                     my $index_path = $pictures_dir.'/index.html';
-                    unless (-f $index_path){
+                    unless (-f $index_path) {
                         unless (open (FF, ">$index_path")) {
                             Sympa::Log::Syslog::do_log('err', 'Unable to create %s as an empty file to protect directory', $index_path);
                         }
@@ -903,12 +903,12 @@ sub _load_auth {
         $line_num++;
         next if (/^\s*[\#\;]/o);
 
-        if (/^\s*authentication_info_url\s+(.*\S)\s*$/o){
+        if (/^\s*authentication_info_url\s+(.*\S)\s*$/o) {
             $Conf{'authentication_info_url'}{$robot} = $1;
             next;
         } elsif (/^\s*(ldap|cas|user_table|generic_sso)\s*$/io) {
             $current_paragraph->{'auth_type'} = lc($1);
-        } elsif (/^\s*(\S+)\s+(.*\S)\s*$/o){
+        } elsif (/^\s*(\S+)\s+(.*\S)\s*$/o) {
             my ($keyword,$value) = ($1,$2);
             unless (defined $valid_keywords{$current_paragraph->{'auth_type'}}{$keyword}) {
                 Sympa::Log::Syslog::do_log('err',"_load_auth: unknown keyword '%s' in %s line %d", $keyword, $config_file, $line_num);
@@ -974,7 +974,7 @@ sub _load_auth {
                     $Conf{'cas_id'}{$robot}{$current_paragraph->{'auth_service_name'}}{'auth_service_friendly_name'} = $current_paragraph->{'auth_service_friendly_name'} || $current_paragraph->{'auth_service_name'};
 
                     $current_paragraph->{'ldap_scope'} ||= 'sub'; ## Force the default scope because '' is interpreted as 'base'
-                } elsif($current_paragraph->{'auth_type'} eq 'generic_sso') {
+                } elsif ($current_paragraph->{'auth_type'} eq 'generic_sso') {
                     $Conf{'generic_sso_number'}{$robot}  ++;
                     $Conf{'generic_sso_id'}{$robot}{$current_paragraph->{'service_id'}} =  $#paragraphs+1;
                     $current_paragraph->{'ldap_scope'} ||= 'sub'; ## Force the default scope because '' is interpreted as 'base'
@@ -985,11 +985,11 @@ sub _load_auth {
                     foreach my $parameter ('http_header_list','email_http_header','netid_http_header') {
                         $current_paragraph->{$parameter} =~ s/\-/\_/g if (defined $current_paragraph->{$parameter});
                     }
-                } elsif($current_paragraph->{'auth_type'} eq 'ldap') {
+                } elsif ($current_paragraph->{'auth_type'} eq 'ldap') {
                     $Conf{'ldap'}{$robot}  ++;
                     $Conf{'use_passwd'}{$robot} = 1;
                     $current_paragraph->{'scope'} ||= 'sub'; ## Force the default scope because '' is interpreted as 'base'
-                } elsif($current_paragraph->{'auth_type'} eq 'user_table') {
+                } elsif ($current_paragraph->{'auth_type'} eq 'user_table') {
                     $Conf{'use_passwd'}{$robot} = 1;
                 }
                 # setting default
@@ -1151,7 +1151,7 @@ sub load_automatic_lists_description {
     ## Now doing some structuration work because load_automatic_lists_description() can't handle
     ## data structured beyond one level of hash. This needs to be changed.
     my @structured_data;
-    foreach my $class (@{$description->{'class'}}){
+    foreach my $class (@{$description->{'class'}}) {
         my @structured_instances;
         my @instances = split '%%%',$class->{'instances'};
         my $default_found = 0;
@@ -1472,8 +1472,8 @@ sub _load_config_file_to_hash {
                 $value = qx/$1/;
                 chomp($value);
             }
-            if(exists $params{$keyword} && defined $params{$keyword}{'multiple'} && $params{$keyword}{'multiple'} == 1){
-                if(defined $result->{'config'}{$keyword}) {
+            if (exists $params{$keyword} && defined $params{$keyword}{'multiple'} && $params{$keyword}{'multiple'} == 1) {
+                if (defined $result->{'config'}{$keyword}) {
                     push @{$result->{'config'}{$keyword}}, $value;
                     push @{$result->{'numbered_config'}{$keyword}}, [$value, $line_num];
                 } else {
@@ -1543,7 +1543,7 @@ sub _infer_server_specific_parameter_values {
         $params->{'config_hash'}{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     }
 
-    unless ($params->{'config_hash'}{'DKIM_feature'} eq 'on'){
+    unless ($params->{'config_hash'}{'DKIM_feature'} eq 'on') {
         # dkim_signature_apply_ on nothing if DKIM_feature is off
         $params->{'config_hash'}{'dkim_signature_apply_on'} = ['']; # empty array
     }
@@ -1611,7 +1611,7 @@ sub _load_server_specific_secondary_config_files {
     }
 
     ## Load charset.conf file if necessary.
-    if($params->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
+    if ($params->{'config_hash'}{'legacy_character_support_feature'} eq 'on') {
         $params->{'config_hash'}{'locale2charset'} = _load_charset ();
     } else {
         $params->{'config_hash'}{'locale2charset'} = {};
@@ -1781,8 +1781,8 @@ sub _check_cpan_modules_required_by_config {
 sub _dump_non_robot_parameters {
     my ($params) = @_;
 
-    foreach my $key (keys %{$params->{'config_hash'}}){
-        unless($valid_robot_key_words{$key}){
+    foreach my $key (keys %{$params->{'config_hash'}}) {
+        unless($valid_robot_key_words{$key}) {
             delete $params->{'config_hash'}{$key};
             Sympa::Log::Syslog::do_log('err', 'Robot %s config: unknown robot parameter: %s',
                 $params->{'robot'}, $key);
@@ -1936,11 +1936,11 @@ sub _set_listmasters_entry{
         $param->{'config_hash'}{'listmaster'} =~ s/\s//g;
         my @emails_provided = split(/,/, $param->{'config_hash'}{'listmaster'});
         $number_of_email_provided = scalar @emails_provided;
-        foreach my $lismaster_address (@emails_provided){
+        foreach my $lismaster_address (@emails_provided) {
             if (Sympa::Tools::valid_email($lismaster_address)) {
                 push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
                 $number_of_valid_email++;
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('err', 'Robot %s config: Listmaster address "%s" is not a valid email', $param->{'config_hash'}{'host'}, $lismaster_address);
             }
         }
@@ -1952,7 +1952,7 @@ sub _set_listmasters_entry{
         $param->{'config_hash'}{'listmaster'} = $Conf{'listmaster'};
         $number_of_valid_email = scalar @{$param->{'config_hash'}{'listmasters'}};
     }
-    if ($number_of_email_provided > $number_of_valid_email){
+    if ($number_of_email_provided > $number_of_valid_email) {
         Sympa::Log::Syslog::do_log('err', 'Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.', $param->{'config_hash'}{'host'}, $number_of_email_provided, $number_of_valid_email);
         return undef;
     }
@@ -1964,7 +1964,7 @@ sub _check_double_url_usage{
     my ($host, $path);
     if ($param->{'config_hash'}{'http_host'} =~ /^([^\/]+)(\/.*)$/) {
         ($host, $path) = ($1,$2);
-    }else {
+    } else {
         ($host, $path) = ($param->{'config_hash'}{'http_host'}, '/');
     }
 
@@ -1980,9 +1980,9 @@ sub _check_double_url_usage{
 sub _parse_custom_robot_parameters {
     my $param = shift;
     my $csp_tmp_storage = undef;
-    if (defined $param->{'config_hash'}{'custom_robot_parameter'} && ref() ne 'HASH'){
-        foreach my $custom_p (@{$param->{'config_hash'}{'custom_robot_parameter'}}){
-            if($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
+    if (defined $param->{'config_hash'}{'custom_robot_parameter'} && ref() ne 'HASH') {
+        foreach my $custom_p (@{$param->{'config_hash'}{'custom_robot_parameter'}}) {
+            if ($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
                 $csp_tmp_storage->{$1} = $2;
             }
         }
@@ -2028,7 +2028,7 @@ sub _save_binary_cache {
         return undef;
     }
     eval {chown ((getpwnam(Sympa::Constants::USER))[2], (getgrnam(Sympa::Constants::GROUP))[2], $params->{'target_file'});};
-    if ($EVAL_ERROR){
+    if ($EVAL_ERROR) {
         printf STDERR  '%s::_save_binary_cache(): Failed to change owner of the binary file %s. error: %s\n', __PACKAGE__,$params->{'target_file'},$EVAL_ERROR;
         unless ($lock->unlock()) {
             return undef;
@@ -2083,7 +2083,7 @@ sub _load_binary_cache {
 sub _save_config_hash_to_binary {
     my ($params) = @_;
 
-    unless(_save_binary_cache({'conf_to_save' => $params->{'config_hash'},'target_file' => $params->{'config_hash'}{'source_file'}.$binary_file_extension})){
+    unless(_save_binary_cache({'conf_to_save' => $params->{'config_hash'},'target_file' => $params->{'config_hash'}{'source_file'}.$binary_file_extension})) {
         Sympa::Log::Syslog::do_log('err', 'Could not save main config %s',
             $params->{'config_hash'}{'source_file'});
     }
@@ -2096,7 +2096,7 @@ sub _source_has_not_changed {
         'a_file' => $params->{'config_file'},
         'b_file' => $params->{'config_file'}.$binary_file_extension,
     );
-    return 1 if(defined $is_older && $is_older == 1);
+    return 1 if (defined $is_older && $is_older == 1);
     return 0;
 }
 
@@ -2183,12 +2183,12 @@ sub _load_wwsconf {
             $v =~ s/\s*$//;
             if (defined ($conf->{$k})) { #FIXME: Might "exists" be used?
                 $conf->{$k} = $v;
-            }elsif (defined $old_param{$k}) {
+            } elsif (defined $old_param{$k}) {
                 Sympa::Log::Syslog::do_log(
                     'err', 'Parameter %s in %s no more supported : %s',
                     $k, $config_file, $old_param{$k}
                 );
-            }else {
+            } else {
                 Sympa::Log::Syslog::do_log(
                     'err', 'Unknown parameter %s in %s', $k, $config_file
                 );

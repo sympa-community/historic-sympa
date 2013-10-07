@@ -185,7 +185,7 @@ Convert a formated date string into a unix timestamp.
 sub date_conv {
     my ($arg) = @_;
 
-    if ( ($arg eq 'execution_date') ){ # execution date
+    if ( ($arg eq 'execution_date') ) { # execution date
         return time();
     }
 

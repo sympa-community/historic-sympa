@@ -312,12 +312,12 @@ sub next {
 	);
 	my $message = $handle->fetchrow_hashref('NAME_lc');
 
-	unless ($message->{'message'}){
+	unless ($message->{'message'}) {
 		Sympa::Log::Syslog::do_log('err',"INTERNAL Could not find message previouly locked");
 		return undef;
 	}
 	$message->{'messageasstring'} = MIME::Base64::decode($message->{'message'});
-	unless ($message->{'messageasstring'}){
+	unless ($message->{'messageasstring'}) {
 		Sympa::Log::Syslog::do_log('err',"Could not decode %s",$message->{'message'});
 		return undef;
 	}
@@ -334,7 +334,7 @@ sub get_message {
 	Sympa::Log::Syslog::do_log('debug', "($self->{name},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
 
 	my (@filter_clauses, @values);
-	foreach my $field (keys %$selector){
+	foreach my $field (keys %$selector) {
 		if ($field eq 'messageid') {
 			$selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 		}
@@ -399,7 +399,7 @@ sub update {
 	my (@set_clauses, @values);
 	foreach my $meta (keys %$values) {
 		next if ($meta =~ /^(messagekey)$/);
-		if (($meta eq 'messagelock')&&($values->{$meta} eq 'NULL')){
+		if (($meta eq 'messagelock')&&($values->{$meta} eq 'NULL')) {
 			# SQL set  xx = NULL and set xx = 'NULL' is not the same !
 			push @set_clauses, $meta .'_spool = NULL';
 		} else {
@@ -407,7 +407,7 @@ sub update {
 			push @values, $values->{$meta};
 		}
 		if ($meta eq 'messagelock') {
-			if ($values->{'messagelock'} eq 'NULL'){
+			if ($values->{'messagelock'} eq 'NULL') {
 				# when unlock always reset the lockdate
 				push @set_clauses, 'lockdate_spool = NULL';
 			} else {
@@ -483,7 +483,7 @@ sub store {
 		$params{message}->{'msg_as_string'} :
 		MIME::Base64::encode($params{string});
 
-	if($message) {
+	if ($message) {
 		$params{metadata}->{'spam_status'} = $message->{'spam_status'};
 		$params{metadata}->{'subject'} = $message->{'msg'}->head()->get('Subject');
 		chomp $params{metadata}->{'subject'};
@@ -494,7 +494,7 @@ sub store {
 		$params{metadata}->{'headerdate'} = substr $message->{'msg'}->head()->get('Date'), 0, 78;
 
 		my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
-		if ($#sender_hdr >= 0){
+		if ($#sender_hdr >= 0) {
 			$params{metadata}->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
 			$params{metadata}->{'sender'} = substr $params{metadata}->{'sender'}, 0, 109;
 		}
@@ -574,7 +574,7 @@ sub remove_message {
 	Sympa::Log::Syslog::do_log('debug',"remove_message ($self->{name},$listname,$robot,$messagekey)");
 
 	## search if this message is already in spool database : mailfile may perform multiple submission of exactly the same message
-	unless ($self->get_message($selector)){
+	unless ($self->get_message($selector)) {
 		Sympa::Log::Syslog::do_log('err',"message not in spool");
 		return undef;
 	}
@@ -653,7 +653,7 @@ sub _selectfields{
 		}
 	} else {
 		my @fields = split (/,/,$selection);
-		foreach my $field (@fields){
+		foreach my $field (@fields) {
 			$select = $select . $field .'_spool AS '.$field.',';
 		}
 	}
@@ -673,7 +673,7 @@ sub _get_filter_clause {
 	foreach my $field (keys %$selector) {
 		my $compare_operator = '=';
 		my $select_value = $selector->{$field};
-		if ($select_value =~ /^([\<\>]\=?)\.(.*)$/){
+		if ($select_value =~ /^([\<\>]\=?)\.(.*)$/) {
 			$compare_operator = $1;
 			$select_value = $2;
 		}

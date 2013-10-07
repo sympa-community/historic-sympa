@@ -1988,7 +1988,7 @@ sub get_lists_of_digest_recipients {
 	    ## Create the list of subscribers in summary mode
 	    push @{$self->{'digest'}{'tabrcptsummary'}}, $user->{'email'};
         
-	}elsif ($user->{'reception'} eq "digestplain") {
+	} elsif ($user->{'reception'} eq "digestplain") {
 	    push @{$self->{'digest'}{'tabrcptplain'}}, $user->{'email'};              
 	}
     }
@@ -2030,7 +2030,7 @@ sub prepare_messages_for_digest {
     Sympa::Log::Syslog::do_log('debug2','Preparing messages for digest for list %s',$self->get_list_id);
     $self->{'digest'}{'all_msg'} = [];
     return undef unless($self->{'digest'}{'list_of_mail'});
-    foreach my $i (0 .. $#{$self->{'digest'}{'list_of_mail'}}){
+    foreach my $i (0 .. $#{$self->{'digest'}{'list_of_mail'}}) {
 	my $mail = ${$self->{'digest'}{'list_of_mail'}}[$i];
 	my $subject = Sympa::Tools::decode_header($mail, 'Subject');
 	my $from = Sympa::Tools::decode_header($mail, 'From');
@@ -2528,12 +2528,12 @@ sub filter_recipients_by_topics {
     
     if ($#selected_tabrcpt > -1) {
 	$message->{'rcpts_by_mode'}{$mode}{'noverp'} = \@selected_tabrcpt;
-    }else{
+    } else {
 	delete $message->{'rcpts_by_mode'}{$mode}{'noverp'};
     }
     if ($#verp_selected_tabrcpt > -1) {
 	$message->{'rcpts_by_mode'}{$mode}{'verp'} = \@verp_selected_tabrcpt;
-    }else{
+    } else {
 	delete $message->{'rcpts_by_mode'}{$mode}{'verp'};
     }
     return $#verp_selected_tabrcpt + $#selected_tabrcpt +2;
@@ -2554,7 +2554,7 @@ sub find_packet_to_tag_as_last {
     }
     if ($tag_verp) {
 	return ('verp',$tag_verp);
-    }else{
+    } else {
 	return ('noverp',$tag_noverp);
     }
 }
@@ -3732,7 +3732,7 @@ sub insert_delete_exclusion {
 
 		$r = 0;
 		foreach my $users (@users_excluded) {
-			if($email eq $users){
+			if ($email eq $users) {
 				## Delete : list, user and date
 				if (defined $family) {
 					my $rows = $base->execute_query(
@@ -3958,7 +3958,7 @@ sub get_resembling_list_members_no_object {
 	    push @output, $subscriber;
 	}
 	# is some subscriber ressembling with a plused email ?
-	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'+%@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})){
+	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'+%@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})) {
 		next if ($subscribers_email{$subscriber->{'email'}});
 		$subscribers_email{ $subscriber->{'email'} } = 1;
 		push @output,$subscriber;
@@ -6824,7 +6824,7 @@ sub _include_users_voot_group {
 
 		# Report error with redirect URL
 		#my $url = $consumer->get_oauth_consumer()->must_redirect();
-		#return do_redirect($url) if(defined $url);
+		#return do_redirect($url) if (defined $url);
 		return undef;
 	}
 
@@ -7499,9 +7499,9 @@ sub _load_list_members_from_include {
 	    # If we can't synchronize, we make an array with excluded sources.
 
 	    my $included;
-	    if(my $plugin = $self->isPlugin($type))
+	    if (my $plugin = $self->isPlugin($type))
             {   my $source = $plugin->listSource;
-		if($source->isAllowedToSync || $source_is_new)
+		if ($source->isAllowedToSync || $source_is_new)
 		{   Sympa::Log::Syslog::do_log(debug => "syncing members from $type");
 		    $included = $source->getListMembers
 		      ( users         => \%users
@@ -7647,7 +7647,7 @@ sub _load_list_members_from_include {
     $result->{'errors'} = \@errors;
     $result->{'exclusions'} = \@ex_sources;
 use Data::Dumper;
-if(open OUT, '>/tmp/result') { print OUT Dumper $result; close OUT }
+if (open OUT, '>/tmp/result') { print OUT Dumper $result; close OUT }
     return $result;
 }
 ## Loads the list of admin users from an external include source
@@ -7725,7 +7725,7 @@ sub _load_list_admin_from_include {
 		# get the list of admin users
 		# does it need to define a 'default_admin_user_option'?
 		my $included;
-		if(my $plugin = $self->isPlugin($type))
+		if (my $plugin = $self->isPlugin($type))
 		{   my $source = $plugin->listSource;
                     Sympa::Log::Syslog::do_log(debug => "syncing admins from $type");
 		    $included = $source->getListMembers
@@ -7819,7 +7819,7 @@ sub _load_list_admin_from_include {
 			my $result = _include_users_ldap_2level(\%admin_users, $incl,$source,\%option);
 			if (defined $result) {
 				$included = $result->{'total'};
-				if (defined $result->{'errors'}){
+				if (defined $result->{'errors'}) {
 					Sympa::Log::Syslog::do_log('err', 'Errors occurred during the second LDAP passe. Please verify your LDAP query.');
 				}
 			} else {
@@ -11399,7 +11399,7 @@ sub delete_subscription_request {
 	    {
 		$removed++
 		if $subscription_request_spool->remove_message($key);
-	    }else {
+	    } else {
 		Sympa::Log::Syslog::do_log('notice','Unable to get subscription key for %s',$email);
 	    }
     }
@@ -13004,7 +13004,7 @@ a LIST of the data.  You may pass a NEW single or ARRAY of values.
 sub includes($;$)
 {   my $self   = shift;
     my $source = 'include_'.shift;
-    if(@_)
+    if (@_)
     {   my $data = ref $_[0] ? shift : [ shift ];
         return $self->$source($data);
     }

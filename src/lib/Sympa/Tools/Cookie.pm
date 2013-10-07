@@ -195,7 +195,7 @@ sub check_cookie_extern {
         return undef unless (get_mac($1,$secret) eq $2);
 
         my %alt_emails;
-        foreach my $element (split(/,/,$1)){
+        foreach my $element (split(/,/,$1)) {
             my @array = split(/:/,$element);
             $alt_emails{$array[0]} = $array[1];
         }

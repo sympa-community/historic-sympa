@@ -132,11 +132,11 @@ sub next {
     my $limit_oracle='';
     my $limit_sybase='';
     my $db_type = $self->{base}->get_type();
-    if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite'){
+    if ($db_type eq 'mysql' ||$db_type eq 'Pg' || $db_type eq 'SQLite') {
         $order_clause .= ' LIMIT 1';
-    } elsif ($db_type eq 'Oracle'){
+    } elsif ($db_type eq 'Oracle') {
         $limit_oracle = 'AND rownum<=1';
-    } elsif ($db_type eq 'Sybase'){
+    } elsif ($db_type eq 'Sybase') {
         $limit_sybase = 'TOP 1';
     }
 
@@ -159,7 +159,7 @@ sub next {
     $handle->execute(int(time()));
 
     my $packet;
-    unless($packet = $handle->fetchrow_hashref('NAME_lc')){
+    unless($packet = $handle->fetchrow_hashref('NAME_lc')) {
         return undef;
     }
 
@@ -283,12 +283,12 @@ sub messageasstring {
 
     my $messageasstring = $handle->fetchrow_hashref('NAME_lc');
 
-    unless ($messageasstring ){
+    unless ($messageasstring ) {
         Sympa::Log::Syslog::do_log('err',"could not fetch message $messagekey from spool");
         return undef;
     }
     my $msg = MIME::Base64::decode($messageasstring->{'message'});
-    unless ($msg){
+    unless ($msg) {
         Sympa::Log::Syslog::do_log('err',"could not decode message $messagekey extrated from spool (base64)");
         return undef;
     }
@@ -454,15 +454,15 @@ sub store {
     my $packet_rank = 0; # Initialize counter used to check whether we are copying the last packet.
     foreach my $packet (@{$rcpts}) {
         $priority_for_packet = $priority_packet;
-        if($tag_as_last && !$already_tagged){
+        if ($tag_as_last && !$already_tagged) {
             $priority_for_packet = $priority_packet + 5;
             $already_tagged = 1;
         }
         $type = ref $packet;
         my $rcptasstring ;
-        if  (ref $packet eq 'ARRAY'){
+        if  (ref $packet eq 'ARRAY') {
             $rcptasstring  = join ',',@{$packet};
-        }else{
+        } else {
             $rcptasstring  = $packet;
         }
         my $packetid = Digest::MD5::md5_hex($rcptasstring);
@@ -488,7 +488,7 @@ sub store {
         if ($packet_already_exist) {
             Sympa::Log::Syslog::do_log('err','Duplicate message not stored in bulmailer_table');
 
-        }else {
+        } else {
             unless (SDM::do_prepared_query(
                     q{INSERT INTO bulkpacket_table
                     (messagekey_bulkpacket, messageid_bulkpacket,

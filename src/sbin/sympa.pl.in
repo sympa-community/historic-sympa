@@ -625,7 +625,7 @@ while ($signal ne 'term') {
         }
 
         exit 0;
-    }elsif ($options{'make_alias_file'}) {
+    } elsif ($options{'make_alias_file'}) {
         my $all_lists = Sympa::List::get_lists('*');
         unless (open TMP, ">Sympa::Site->tmpdir/sympa_aliases.$PID") {
             printf STDERR "Unable to create Sympa::Site->tmpdir/sympa_aliases.$PID, exiting\n";
@@ -639,12 +639,12 @@ while ($signal ne 'term') {
         printf ("Sympa aliases file is Sympa::Site->tmpdir/sympa_aliases.$PID file made, you probably need to installed it in your SMTP engine\n");
 
         exit 0;
-    }elsif ($options{'md5_digest'}) {
+    } elsif ($options{'md5_digest'}) {
         my $md5 = Sympa::Tools::md5_fingerprint($options{'md5_digest'});
         printf "md5 digest : $md5 \n";
 
         exit 0;
-    }elsif ($options{'import'}) {
+    } elsif ($options{'import'}) {
         my ($list, $total);
 
         ## The parameter should be a list address
@@ -692,7 +692,7 @@ while ($signal ne 'term') {
         printf STDERR "Total imported subscribers: %d\n", $total;
 
         exit 0;
-    }elsif ($options{'md5_encode_password'}) {
+    } elsif ($options{'md5_encode_password'}) {
 
         my $base = Sympa::Database->get_singleton();
         unless ($base) {
@@ -704,7 +704,7 @@ while ($signal ne 'term') {
 
         exit 0;
 
-    }elsif ($options{'lowercase'}) {
+    } elsif ($options{'lowercase'}) {
 
         my $base = Sympa::Database->get_singleton();
         unless ($base) {
@@ -724,7 +724,7 @@ while ($signal ne 'term') {
         printf STDERR "Total lowercased rows: %d\n", $total;
 
         exit 0;
-    }elsif ($options{'close_list'}) {
+    } elsif ($options{'close_list'}) {
 
         my ($listname, $robotname) = split /\@/, $options{'close_list'};
         my $list = Sympa::List->new(
@@ -753,7 +753,7 @@ while ($signal ne 'term') {
         printf STDOUT "Sympa::List %s has been closed, aliases have been removed\n", $list->{'name'};
 
         exit 0;
-    }elsif ($options{'change_user_email'}) {
+    } elsif ($options{'change_user_email'}) {
 
         unless ($options{'current_email'} && $options{'new_email'}) {
             print STDERR "Missing current_email or new_email parameter\n";
@@ -779,7 +779,7 @@ while ($signal ne 'term') {
         printf STDOUT "Email address %s has been changed to %s\n", $options{'current_email'}, $options{'new_email'};
 
         exit 0;
-    }elsif ($options{'purge_list'}) {
+    } elsif ($options{'purge_list'}) {
 
         my ($listname, $robotname) = split /\@/, $options{'purge_list'};
         my $list = Sympa::List->new(
@@ -808,7 +808,7 @@ while ($signal ne 'term') {
         printf STDOUT "Sympa::List %s has been closed, aliases have been removed\n", $list->{'name'};
 
         exit 0;
-    }elsif ($options{'rename_list'}) {
+    } elsif ($options{'rename_list'}) {
 
         ## TODO A completer
 
@@ -852,7 +852,7 @@ while ($signal ne 'term') {
 
         exit 0;
 
-    }elsif ($options{'test_database_message_buffer'}) {
+    } elsif ($options{'test_database_message_buffer'}) {
         my $size = 0;
         printf "Sympa is going to store messages bigger and bigger to test the limit with its database. This may be very long \n";
         $size = test_storage(21000); ## will test message until a 21 Mo message.
@@ -863,7 +863,7 @@ while ($signal ne 'term') {
         }
         exit 1;
 
-    }elsif ($options{'conf_2_db'}) {
+    } elsif ($options{'conf_2_db'}) {
 
         printf "Sympa is going to store $config_file in database conf_table. This operation do NOT remove original files\n";
         if ( Sympa::Configuration::conf_2_db($config_file) ) {
@@ -873,7 +873,7 @@ while ($signal ne 'term') {
         }
         exit 1;
 
-    }elsif ($options{'create_list'}) {
+    } elsif ($options{'create_list'}) {
         my $robot = $options{'robot'} || Sympa::Site->host;
 
         unless ($options{'input_file'}) {
@@ -909,7 +909,7 @@ while ($signal ne 'term') {
             printf STDOUT "Sympa::List has been created, required aliases :\n $resul->{'aliases'} \n";
             exit 0;
         }
-    }elsif ($options{'instantiate_family'}) {
+    } elsif ($options{'instantiate_family'}) {
 
         my $robot = $options{'robot'} || Sympa::Site->host;
 
@@ -965,7 +965,7 @@ while ($signal ne 'term') {
         }
 
         exit 0;
-    }elsif ($options{'add_list'}) {
+    } elsif ($options{'add_list'}) {
 
         my $robot = $options{'robot'} || Sympa::Site->host;
 
@@ -1018,7 +1018,7 @@ while ($signal ne 'term') {
 
         print STDOUT "\n%s\n", join ("\n", @{$result->{'string_info'}});
         exit 0;
-    }elsif ($options{'sync_include'}) {
+    } elsif ($options{'sync_include'}) {
 
         my $list = Sympa::List->new(
             name => $options{'sync_include'},
@@ -1038,7 +1038,7 @@ while ($signal ne 'term') {
         printf "Members of list %s have been successfully update.\n", $list->get_list_address();
         exit 0;
         ## Migration from one version to another
-    }elsif ($options{'upgrade'}) {
+    } elsif ($options{'upgrade'}) {
 
         Sympa::Log::Syslog::do_log('notice', "Upgrade process...");
 
@@ -1063,13 +1063,13 @@ while ($signal ne 'term') {
         exit 0;
 
         ## rename file names that may be incorrectly encoded because of previous Sympa versions
-    }elsif ($options{'upgrade_shared'}) {
+    } elsif ($options{'upgrade_shared'}) {
 
         Sympa::Log::Syslog::do_log('notice', "Upgrade shared process...");
 
         my $listname; my $robot;
 
-        unless (($options{'list'}) || ($options{'robot'})){
+        unless (($options{'list'}) || ($options{'robot'})) {
             Sympa::Log::Syslog::do_log('err', "listname and domain are required, use --list= --robot= options");
             exit 0;
         }
@@ -1108,7 +1108,7 @@ while ($signal ne 'term') {
 
         exit 0;
 
-    }elsif ($options{'reload_list_config'}) {
+    } elsif ($options{'reload_list_config'}) {
 
         if ($options{'list'}) {
 
@@ -1245,7 +1245,7 @@ while ($signal ne 'term') {
         if (! -d $options{'keepcopy'}) {
             Sympa::Log::Syslog::do_log('notice', 'Cannot keep a copy of incoming messages : %s is not a directory', $options{'keepcopy'});
             delete $options{'keepcopy'};
-        }elsif (! -w $options{'keepcopy'}) {
+        } elsif (! -w $options{'keepcopy'}) {
             Sympa::Log::Syslog::do_log('notice','Cannot keep a copy of incoming messages : no write access to %s', $options{'keepcopy'});
             delete $options{'keepcopy'};
         }
@@ -1283,7 +1283,7 @@ while ($signal ne 'term') {
 
         # it should be performed by task manager !
         ## Clean queue (bad)
-        if ($index_cleanqueue++ >= 1000){
+        if ($index_cleanqueue++ >= 1000) {
             $index_cleanqueue=0;
 
             my $msg_bad = Sympa::Spool::File->new(
@@ -2239,10 +2239,10 @@ sub DoMessage{
             if ($info_msg_topic->{'method'} eq "sender") {
                 $context->{'topic_sender'} =  $info_msg_topic->{'topic'};
 
-            }elsif ($info_msg_topic->{'method'} eq "editor") {
+            } elsif ($info_msg_topic->{'method'} eq "editor") {
                 $context->{'topic_editor'} =  $info_msg_topic->{'topic'};
 
-            }elsif ($info_msg_topic->{'method'} eq "auto") {
+            } elsif ($info_msg_topic->{'method'} eq "auto") {
                 $context->{'topic_auto'} =  $info_msg_topic->{'topic'};
             }
 
@@ -2330,7 +2330,7 @@ sub DoMessage{
 
         return 1;
 
-    }elsif($action =~ /^request_auth/){
+    } elsif ($action =~ /^request_auth/) {
         my $key = $list->send_auth($message);
 
         unless (defined $key) {
@@ -2364,7 +2364,7 @@ sub DoMessage{
             daemon       => $daemon_name
         );
         return 1;
-    }elsif($action =~ /^editorkey(\s?,\s?(quiet))?/){
+    } elsif ($action =~ /^editorkey(\s?,\s?(quiet))?/) {
 
         my $key = $list->send_to_editor('md5',$message);
 
@@ -2395,7 +2395,7 @@ sub DoMessage{
             }
         }
         return 1;
-    }elsif($action =~ /^editor(\s?,\s?(quiet))?/){
+    } elsif ($action =~ /^editor(\s?,\s?(quiet))?/) {
         my $key = $list->send_to_editor('smtp', $message);
 
         unless (defined $key) {
@@ -2425,7 +2425,7 @@ sub DoMessage{
             }
         }
         return 1;
-    }elsif($action =~ /^reject(,(quiet))?/) {
+    } elsif ($action =~ /^reject(,(quiet))?/) {
 
         Sympa::Log::Syslog::do_log('notice', 'Message for %s from %s rejected(%s) because sender not allowed', $listname, $sender, $result->{'tt2'});
 

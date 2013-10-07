@@ -68,7 +68,7 @@ sub new {
             $task->{'id'} .= '@'.$task->{'domain'} if (defined $task->{'domain'});
         }
         $task->{'description'} = get_description($task);
-    }else {
+    } else {
         $task->{'date'} = time;
     }
 
@@ -210,14 +210,14 @@ sub crop_after_label {
             $label_found_in_task=1;
             push @new_parsed_instructions, {'nature' => 'empty line','line_as_string' => ''};
         }
-        if($label_found_in_task || $line->{'nature'} eq 'title') {
+        if ($label_found_in_task || $line->{'nature'} eq 'title') {
             push @new_parsed_instructions, $line;
         }
     }
     unless ($label_found_in_task) {
         Sympa::Log::Syslog::do_log('err','The label %s does not exist in task %s. We can not crop after it.');
         return undef;
-    }else {
+    } else {
         $self->{'parsed_instructions'} = \@new_parsed_instructions;
         $self->stringify_parsed_instructions;
     }
@@ -241,7 +241,7 @@ sub store {
     if ($self->{'list_object'}) {
         $meta{'list'}=$self->{'list_object'}{'name'} ;
         $meta{'task_object'}=$self->{'id'};
-    }else{
+    } else {
         $meta{'task_object'}= '_global' ;
     }
 
@@ -290,7 +290,7 @@ sub stringify_parsed_instructions {
     unless (defined $new_string) {
         Sympa::Log::Syslog::do_log('err','task %s has no parsed content. Leaving messageasstring key unchanged',$self->get_description);
         return undef;
-    }else {
+    } else {
         $self->{'messageasstring'} = $new_string;
         if ($Sympa::Log::Syslog::get_log_level > 1) {
             Sympa::Log::Syslog::do_log('debug2','task %s content recreated. Content:',$self->get_description);
@@ -317,7 +317,7 @@ sub as_string {
             $task_as_string .= "$line->{'line_as_string'}\n";
         }
         $task_as_string =~ s/\n\n$/\n/;
-    }else {
+    } else {
         Sympa::Log::Syslog::do_log('err', 'Task %s appears to have no parsed instructions.');
         $task_as_string = undef;
     }
@@ -381,7 +381,7 @@ sub execute {
 
     my $self = shift;
     Sympa::Log::Syslog::do_log('notice', 'Running task id = %s, %s)', $self->{'messagekey'}, $self->get_description);
-    if(!$self->parse) {
+    if (!$self->parse) {
         $self->{'error'} = 'parse';
         $self->error_report;
         $self->remove;
@@ -392,7 +392,7 @@ sub execute {
         $self->error_report;
         $self->remove;
         return undef;
-    }else{
+    } else {
         Sympa::Log::Syslog::do_log('notice', 'The task %s has been correctly executed. Removing it (messagekey=%s)', $self->get_description, $self->{'messagekey'});
         $self->remove;
     }
@@ -410,7 +410,7 @@ sub parse {
         return undef;
     }
     my $lnb = 0; # line number
-    foreach my $line (split('\n',$messageasstring)){
+    foreach my $line (split('\n',$messageasstring)) {
         $lnb++;
         my $result = Sympa::TaskInstruction->new ({'line_as_string' =>$line, 'line_number' => $lnb},$self);
         if ( defined $self->{'errors'}) {
@@ -483,7 +483,7 @@ sub check_list_task_is_valid {
     if ($model eq 'sync_include') {
         if ($list->has_include_data_sources()) {
             return 1;
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('notice',
                 'Removing task %s, label %s (messageid = %s) because list does not use any inclusion',
                 $model, $self->{'label'}, $self->{'messagekey'},
@@ -491,7 +491,7 @@ sub check_list_task_is_valid {
             $self->remove;
             return 0;
         }
-    }else {
+    } else {
         unless (%{$list->$model} and defined $list->$model->{'name'}) {
             Sympa::Log::Syslog::do_log('notice',
                 'Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration',
@@ -516,9 +516,9 @@ sub make_summary {
     foreach my $instruction (@{$self->{'parsed_instructions'}}) {
         if ($instruction->{'nature'} eq 'label') {
             $self->{'labels'}{$instruction->{'label'}} = 1;
-        }elsif ($instruction->{'nature'} eq 'assignment' && $instruction->{'var'}) {
+        } elsif ($instruction->{'nature'} eq 'assignment' && $instruction->{'var'}) {
             $self->{'vars'}{$instruction->{'var'}} = 1;
-        }elsif($instruction->{'nature'} eq 'command') {
+        } elsif ($instruction->{'nature'} eq 'command') {
             foreach my $used_var (keys %{$instruction->{'used_vars'}}) {
                 $self->{'used_vars'}{$used_var} = 1;
             }
@@ -554,7 +554,7 @@ sub process_line {
     my $status;
     if ($instruction->{'nature'} eq 'assignment' || $instruction->{'nature'} eq 'command') {
         $status = $instruction->cmd_process ($self);
-    }else{
+    } else {
         $status->{'output'} = 'Nothing to compute';
     }
     return $status;

@@ -252,7 +252,7 @@ sub load_create_list_conf {
 
         if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
             $conf->{$1} = lc($2);
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
                 $file, $_);
             next;
@@ -297,7 +297,7 @@ sub get_list_list_tpl {
                 if (-r $dir.'/'.$template.'/'.$locale.'/comment.tt2') {
                     $list_templates->{$template}{'comment'} =
                     $template.'/'.$locale.'/comment.tt2';
-                }elsif (-r $dir.'/'.$template.'/comment.tt2') {
+                } elsif (-r $dir.'/'.$template.'/comment.tt2') {
                     $list_templates->{$template}{'comment'} =
                     $template.'/comment.tt2';
                 }

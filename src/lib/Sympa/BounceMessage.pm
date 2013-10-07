@@ -128,7 +128,7 @@ sub process {
 
     #----------------------------------------------------------------------------------------------------------------------
     # If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
-    if($self->is_dsn and $self->tracking_is_used) {
+    if ($self->is_dsn and $self->tracking_is_used) {
         if ($self->process_dsn) {
             Sympa::Log::Syslog::do_log('notice',
                 'DSN %s Correctly treated. DSN status is "%s"',
@@ -146,26 +146,26 @@ sub process {
     }
     #-----------------------------------------------------------------------------------------------------------------------------------
     # If the MDN notification is correct and the tracking mode is enabled, it will be inserted in the database
-    if($self->is_mdn and $self->tracking_is_used) {
-        if($self->process_mdn) {
+    if ($self->is_mdn and $self->tracking_is_used) {
+        if ($self->process_mdn) {
             Sympa::Log::Syslog::do_log('notice', 'MDN %s Correctly treated.', $self);
             return 1;
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('err', 'Failed to treat MDN %s', $self);
             return undef;
         }
     }
 
-    if($self->is_email_feedback_report) {
+    if ($self->is_email_feedback_report) {
         # this case a report Email Feedback Reports http://tools.ietf.org/html/rfc6650 mainly used by AOL
-        if($self->process_email_feedback_report) {
+        if ($self->process_email_feedback_report) {
             Sympa::Log::Syslog::do_log('notice',
                 'Feedback Report %s correctly treated. type: %s, original_rcpt: %s, listname: %s@%s)',
                 $self, $self->{'feedback_type'}, $self->{'original_rcpt'},
                 $self->{'listname'}, $self->{'robotname'}
             );
             return 1;
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('err',
                 'Ignoring Feedback Report %s : Unknown format (bounce where messagekey=%s), original_rcpt: %s, listname: %s@%s)',
                 $self, $self->{'feedback_type'}, $self->{'original_rcpt'},
@@ -200,7 +200,7 @@ sub analyze_verp_header {
             $self->{'who'} = $1.'@'.$2;
             $self->{'listname'} = $3;
             $self->{'distribution_id'} = $5;
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('err',
                 'Unable to analyze VERP address %s for bounce %s',
                 $self->{'to'}, $self
@@ -231,7 +231,7 @@ sub is_verp_in_use {
         $self->{'robotname'} = $2;
         Log::do_log('debug3', 'Message %s uses VERP', $self);
         $self->{'verp'}{'is_used'} = 1;
-    }else{
+    } else {
         Log::do_log('debug3', 'Message %s does not use VERP', $self);
         $self->{'verp'}{'is_used'} = 0;
     }
@@ -246,7 +246,7 @@ sub is_dsn {
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=delivery-status/i)) {
         Log::do_log('debug3', 'Bounce %s is a DSN', $self);
         $self->{'dsn'}{'is_dsn'} = 1;
-    }else{
+    } else {
         Log::do_log('debug3', 'Bounce %s is not a DSN', $self);
         $self->{'dsn'}{'is_dsn'} = 0;
     }
@@ -261,7 +261,7 @@ sub is_mdn {
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=disposition-notification/i)) {
         Log::do_log('debug3', 'Message %s is an MDN', $self);
         $self->{'mdn'}{'is_mdn'} = 1;
-    }else{
+    } else {
         Log::do_log('debug3', 'Message %s is not an MDN', $self);
         $self->{'mdn'}{'is_mdn'} = 0;
     }
@@ -276,7 +276,7 @@ sub is_email_feedback_report {
     if (($self->get_mime_message->head->get('Content-type') =~ /multipart\/report/) && ($self->get_mime_message->head->get('Content-type') =~ /report\-type\=feedback-report/)) {
         Log::do_log('debug3', 'Bounce %s is an email feedback report', $self);
         $self->{'efr'}{'is_efr'} = 1;
-    }else{
+    } else {
         Log::do_log('debug3', 'Bounce %s is not an email feedback report',
             $self);
         $self->{'efr'}{'is_efr'} = 0;
@@ -425,7 +425,7 @@ sub delete_bouncer {
                 } 
             }
         }
-    }else{
+    } else {
         Log::do_log('err',
             'Authorization to delete user %s from liste %s denied',
             $self->{'who'}, $self->{'list'}
@@ -472,10 +472,10 @@ sub process_dsn {
                     $final_rcpt = $1;
                     chomp $final_rcpt;
                     my @rcpt;
-                    if($final_rcpt =~ /.*;.*/){
+                    if ($final_rcpt =~ /.*;.*/) {
                         @rcpt = split /;\s*/,$final_rcpt;
-                        foreach my $rcpt (@rcpt){
-                            if($rcpt =~ /(\S+\@\S+)/){
+                        foreach my $rcpt (@rcpt) {
+                            if ($rcpt =~ /(\S+\@\S+)/) {
                                 ($rcpt)= $rcpt=~ /(\S+\@\S+)/;			
                                 $final_rcpt = $rcpt;
                             }
@@ -495,10 +495,10 @@ sub process_dsn {
 
     $original_rcpt = $self->{'who'};
 
-    if($final_rcpt =~ /<(\S+\@\S+)>/){
+    if ($final_rcpt =~ /<(\S+\@\S+)>/) {
         ($final_rcpt)= $final_rcpt =~ /<(\S+\@\S+)>/;
     }
-    if($msg_id =~ /<(\S+\@\S+)>/){
+    if ($msg_id =~ /<(\S+\@\S+)>/) {
         ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
     }
 
@@ -526,7 +526,7 @@ sub process_dsn {
 
     if (tracking::db_insert_notification($self->{'distribution_id'}, 'DSN', $self->{'dsn'}{'status'}, $arrival_date,$self->get_message_as_string )) {
         Log::do_log('debug', 'DSN for "%s" inserted into database for further consultation.',$self->{'who'});
-    }else{
+    } else {
         Log::do_log('err','Not able to fill database with notification data for DSN to "%s"',$self->{'who'});
         return undef;
     }
@@ -556,7 +556,7 @@ sub process_mdn {
                 # Disposition Field MUST be present in a MDN report, possible values : displayed, deleted(rfc3798)
                 if ($line =~ /disposition\:\s*(.+)\s*\;\s*(.+)/i) {
                     $self->{'mdn'}{'status'} = $2;
-                    if($self->{'mdn'}{'status'}  =~ /.*\/.*/){
+                    if ($self->{'mdn'}{'status'}  =~ /.*\/.*/) {
                         my @results = split /\/\s*/,$self->{'mdn'}{'status'};
                         $self->{'mdn'}{'status'} = $results[$0];
                         chomp $self->{'mdn'}{'status'};
@@ -566,10 +566,10 @@ sub process_mdn {
                     $self->{'mdn'}{'final_rcpt'} = $1;
                     chomp $self->{'mdn'}{'final_rcpt'};
                     my @rcpt;
-                    if($self->{'mdn'}{'final_rcpt'} =~ /.*;.*/){
+                    if ($self->{'mdn'}{'final_rcpt'} =~ /.*;.*/) {
                         @rcpt = split /;\s*/,$self->{'mdn'}{'final_rcpt'};
-                        foreach my $rcpt (@rcpt){
-                            if($rcpt =~ /(\S+\@\S+)/){
+                        foreach my $rcpt (@rcpt) {
+                            if ($rcpt =~ /(\S+\@\S+)/) {
                                 ($rcpt)= $rcpt=~ /(\S+\@\S+)/;			
                                 $self->{'mdn'}{'final_rcpt'} = $rcpt;
                             }
@@ -583,13 +583,13 @@ sub process_mdn {
         }
     }
 
-    if($self->{'mdn'}{'original_rcpt'} =~ /<(\S+\@\S+)>/){
+    if ($self->{'mdn'}{'original_rcpt'} =~ /<(\S+\@\S+)>/) {
         ($self->{'mdn'}{'original_rcpt'})= $self->{'mdn'}{'original_rcpt'} =~ /<(\S+\@\S+)>/;
     }
-    if($self->{'mdn'}{'final_rcpt'} =~ /<(\S+\@\S+)>/){
+    if ($self->{'mdn'}{'final_rcpt'} =~ /<(\S+\@\S+)>/) {
         ($self->{'mdn'}{'final_rcpt'})= $self->{'mdn'}{'final_rcpt'} =~ /<(\S+\@\S+)>/;
     }
-    if($self->{'mdn'}{'msg_id'} =~ /<(\S+\@\S+)>/){
+    if ($self->{'mdn'}{'msg_id'} =~ /<(\S+\@\S+)>/) {
         ($self->{'mdn'}{'msg_id'})= $self->{'mdn'}{'msg_id'} =~ /<(\S+\@\S+)>/;
     }
     # let's use VERP 
@@ -655,7 +655,7 @@ sub process_email_feedback_report {
                     chomp $self->{'efr'}{'original_rcpt'};
                 }
             }
-        }elsif ($content =~ /message\/rfc822/) {
+        } elsif ($content =~ /message\/rfc822/) {
             my @subparts = $p->parts();
             foreach my $subp (@subparts) {
                 my $subph =  $subp->head;
@@ -688,13 +688,13 @@ sub process_email_feedback_report {
                     return undef;
                 }
                 push @lists, $list;
-            }elsif( $self->{'efr'}{'feedback_type'} =~ /opt-out/ && (defined $self->{'efr'}{'original_rcpt'})){
+            } elsif ( $self->{'efr'}{'feedback_type'} =~ /opt-out/ && (defined $self->{'efr'}{'original_rcpt'})) {
                 @lists = Sympa::List::get_which($self->{'efr'}{'original_rcpt'}, $self->{'robotname'}, 'member');
-            }else {
+            } else {
                 Log::do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$self->{'messagekey'}, $self->{'efr'}{'feedback_type'}, $self->{'efr'}{'original_rcpt'}, $self->{'listname'} );		
                 return 0;
             }
-            foreach my $list (@lists){
+            foreach my $list (@lists) {
                 my $result = Scenario::request_action($list,
                     'unsubscribe', 'smtp',
                     {'sender' => $self->{'efr'}{'original_rcpt'}}
@@ -709,24 +709,24 @@ sub process_email_feedback_report {
                         unless ($list->send_notify_to_owner('automatic_del',{'who' => $self->{'efr'}{'original_rcpt'}, 'by' => 'listmaster'})) {
                             Sympa::Log::Syslog::do_log('notice', 'Unable to send notify "automatic_del" to %s list owner', $list->name);
                         }
-                    }else{
+                    } else {
                         Log::do_log('err','Ignore Feedback Report (bounce where messagekey =%s) for list %s@%s : user %s not subscribed',$self->{'messagekey'},$list->name,$self->{'robotname'},$self->{'efr'}{'original_rcpt'});
                         unless ($list->send_notify_to_owner('warn-signoff',{'who' => $self->{'efr'}{'original_rcpt'}})) {
                             Sympa::Log::Syslog::do_log('notice', 'Unable to send notify "warn-signoff" to %s list owner', $list);
                         }
                     }
-                }else{
+                } else {
                     $forward = 'request';
                     Sympa::Log::Syslog::do_log('err',
                         'Ignore Feedback Report (bounce where messagekey=%s) for list %s : user %s is not allowed to unsubscribe',
                         $self->{'messagekey'}, $list, $self->{'efr'}{'original_rcpt'});
                 }
             }
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('err','Ignoring Feedback Report (bounce where messagekey=%s) : Unknown Original-Rcpt-To field. Can\'t do anything. (feedback_type:%s, listname:%s)',$self->{'messagekey'}, $self->{'efr'}{'feedback_type'}, $self->{'listname'} );		
             return undef;;
         }
-    }else {
+    } else {
         return undef;
     }
     return 1;
@@ -799,7 +799,7 @@ sub process_ndn {
                     Sympa::Log::Syslog::do_log('err', 'Unable to update bounce history for user %s, bounce %s. Aborting.',$self->{'who'},$self->get_msg_id);
                     return undef;
                 }
-            }else{          # no VERP and no rcpt recognized		
+            } else {          # no VERP and no rcpt recognized		
                 my $escaped_from = Sympa::Tools::escape_chars($from);
                 Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $self->{'list'});
                 return undef;
@@ -843,7 +843,7 @@ sub canonicalize_status {
     if ($status !~ /^\d+\.\d+\.\d+$/) {
         if ($equiv{$status}) {
             $status = $equiv{$status};
-        }else {
+        } else {
             return undef;
         }
     }
@@ -886,7 +886,7 @@ sub update_subscriber_bounce_history {
         Log::db_log({'robot' => $list->domain, 'list' => $list->name, 'action' => 'get_bounce','parameters' => "address=$rcpt",
                 'target_email' => $bouncefor,'msg_id' => '','status' => 'error','error_type' => $status,
                 'daemon' => 'bounced'});
-    }else{
+    } else {
         $list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status"});
         Log::do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list);
         Log::db_log({'robot' => $list->domain, 'list' => $list->name, 'action' => 'get_bounce',
@@ -930,7 +930,7 @@ sub rfc1891 {
             ## Child process
             print STDOUT @$body;
             exit;
-        }else {
+        } else {
             ## Multiline paragraph separator
             local $/ = '';
 
@@ -993,16 +993,16 @@ sub corrige {
 
         return $newadr;
 
-    }elsif ($adr =~ /\@/) {
+    } elsif ($adr =~ /\@/) {
 
         return $adr;
 
-    }elsif ($adr =~ /\!/) {
+    } elsif ($adr =~ /\!/) {
 
         my ($dom, $loc) = split /\!/, $adr;
         return "$loc\@$dom";
 
-    }else {
+    } else {
 
         my ($l, $d) =  split /\@/, $from;
         my $newadr = "$adr\@$d";
@@ -1065,7 +1065,7 @@ sub anabounce {
                     $champ_courant = $1;
                     $champ_courant =~ y/[A-Z]/[a-z]/;
                     $champ{$champ_courant} = $2;
-                }elsif (/^\s+(.*)$/) {
+                } elsif (/^\s+(.*)$/) {
                     $champ{$champ_courant} .= " $1";
                 }
 
@@ -1083,7 +1083,7 @@ sub anabounce {
             if ($champ{subject} =~ /^Returned mail: (Quota exceeded for user (\S+))$/) {
                 $info{$2}{error} = $1;
                 $type = 27;
-            }elsif ($champ{subject} =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
+            } elsif ($champ{subject} =~ /^Returned mail: (message not deliverable): \<(\S+)\>$/) {
                 $info{$2}{error} = $1;
                 $type = 34;
             }
@@ -1096,7 +1096,7 @@ sub anabounce {
                     $info{$xfr}{error} = "";
                 }
             }
-        }elsif (/^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
+        } elsif (/^\s*-+ The following addresses (had permanent fatal errors|had transient non-fatal errors|have delivery notifications) -+/m) {
             my $adr;
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1109,14 +1109,14 @@ sub anabounce {
                     #print "\tADR : #$adr#\n";
                     $info{$adr}{error} = $error;
                     $type = 1;
-                }elsif (/^\s+\(expanded from: (.+)\)/) {
+                } elsif (/^\s+\(expanded from: (.+)\)/) {
                     #print "\tEXPANDED $adr : $1\n";
                     $info{$adr}{expanded} = $1;
                     $info{$adr}{expanded} =~ s/^[\"\<](.+)[\"\>]$/$1/;
                 }
             }
             local $/ = '';
-        }elsif (/^\s+-+\sTranscript of session follows\s-+/m) {
+        } elsif (/^\s+-+\sTranscript of session follows\s-+/m) {
             my $adr;
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1131,7 +1131,7 @@ sub anabounce {
                         $info{$a}{error} = $cause;
                         $type = 2;
                     }
-                }elsif (/^\d{3}\s(too many hops).*to\s(.*)$/i) {
+                } elsif (/^\d{3}\s(too many hops).*to\s(.*)$/i) {
                     $adr = $2; 
                     my $cause = $1;
                     foreach $a (split /,/, $adr) {
@@ -1139,7 +1139,7 @@ sub anabounce {
                         $info{$a}{error} = $cause;
                         $type = 2;
                     }
-                }elsif (/^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
+                } elsif (/^\d{3}\s.*\s([^\s\)]+)\.{3}\s(.+)$/) {
                     $adr = $1; 
                     my $cause = $2;
                     $cause =~ s/^(.*) [\(\:].*$/$1/;
@@ -1153,7 +1153,7 @@ sub anabounce {
             local $/ = '';
 
             ## Rapport Compuserve	    
-        }elsif (/^Receiver not found:/m) {
+        } elsif (/^Receiver not found:/m) {
 
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1166,7 +1166,7 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^\s*-+ Special condition follows -+/m) {
+        } elsif (/^\s*-+ Special condition follows -+/m) {
 
             my ($cause,$adr);
 
@@ -1179,7 +1179,7 @@ sub anabounce {
                     $cause = $1;
                     $type = 4;
 
-                }elsif (/^\s+(.*)$/ and $cause) {
+                } elsif (/^\s+(.*)$/ and $cause) {
 
                     $adr = $1;
                     $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
@@ -1190,7 +1190,7 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^Your message adressed to .* couldn\'t be delivered/m) {
+        } elsif (/^Your message adressed to .* couldn\'t be delivered/m) {
 
             my $adr;
 
@@ -1204,7 +1204,7 @@ sub anabounce {
                     $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
                     $type = 5;
 
-                }else{
+                } else {
 
                     /^(.*)$/;
                     $info{$adr}{error} = $1;
@@ -1215,7 +1215,7 @@ sub anabounce {
             local $/ = '';
 
             ## Rapport X400
-        }elsif (/^Your message was not delivered to:\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
+        } elsif (/^Your message was not delivered to:\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 
             my ($adr, $error) = ($1, $2);
             $error =~ s/Your message.*$//;
@@ -1223,7 +1223,7 @@ sub anabounce {
             $type = 6;
 
             ## Rapport X400
-        }elsif (/^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
+        } elsif (/^Your message was not delivered to\s+(\S+)\s+for the following reason:\s+(.+)$/m) {
 
             my ($adr, $error) = ($1, $2);
             $error =~ s/\(.*$//;
@@ -1231,25 +1231,25 @@ sub anabounce {
             $type = 6;
 
             ## Rapport X400
-        }elsif (/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
+        } elsif (/^Original-Recipient: rfc822; (\S+)\s+Action: (.*)$/m) {
 
             $info{$1}{error} = $2;
             $type = 16;
 
             ## Rapport NTMail
-        }elsif (/^The requested destination was:\s+(.*)$/m) {
+        } elsif (/^The requested destination was:\s+(.*)$/m) {
             $type = 7;
-        }elsif (($type == 7) && (/^\s+(\S+)/)) {
+        } elsif (($type == 7) && (/^\s+(\S+)/)) {
             undef $type;
             my $adr =$1;
             $adr =~ s/^[\"\<](.+)[\"\>]$/$1/;
             next unless $adr;
             $info{$adr}{'error'} = '';
             ## Rapport Qmail dans prochain paragraphe
-        }elsif (/^Hi\. This is the qmail-send program/m) {
+        } elsif (/^Hi\. This is the qmail-send program/m) {
             $qmail = 1;
             ## Rapport Qmail
-        }elsif ($qmail) {
+        } elsif ($qmail) {
             undef $qmail if /^[^<]/;
             if (/^<(\S+)>:\n(.*)/m) {
                 $info{$1}{error} = $2;
@@ -1257,9 +1257,9 @@ sub anabounce {
             }
             local $/ = '';
             ## Sendmail
-        }elsif (/^Your message was not delivered to the following recipients:/m) {
+        } elsif (/^Your message was not delivered to the following recipients:/m) {
             $type_9 = 1;
-        }elsif ($type_9) {
+        } elsif ($type_9) {
             undef $type_9;
             if (/^\s*(\S+):\s+(.*)$/m) {
                 $info{$1}{error} = $2;
@@ -1267,10 +1267,10 @@ sub anabounce {
             }
 
             ## Rapport Exchange dans prochain paragraphe
-        }elsif (/^The following recipient\(s\) could not be reached:/m or /^did not reach the following recipient\(s\):/m) {
+        } elsif (/^The following recipient\(s\) could not be reached:/m or /^did not reach the following recipient\(s\):/m) {
             $exchange = 1;
             ## Rapport Exchange
-        }elsif ($exchange) {
+        } elsif ($exchange) {
             undef $exchange;
             if (/^\s*(\S+).*\n\s+(.*)$/m) {
                 $info{$1}{error} = $2;
@@ -1278,37 +1278,37 @@ sub anabounce {
             }
 
             ## IBM VM dans prochain paragraphe
-        }elsif (/^Your mail item could not be delivered to the following users/m) {
+        } elsif (/^Your mail item could not be delivered to the following users/m) {
             $ibm_vm = 1;
             ## Rapport IBM VM
-        }elsif ($ibm_vm) {
+        } elsif ($ibm_vm) {
             undef $ibm_vm;
             if (/^(.*)\s+\---->\s(\S+)$/m) {
                 $info{$2}{error} = $1;
                 $type = 12;
             }
             ## Rapport Lotus SMTP dans prochain paragraphe
-        }elsif (/^-+\s+Failure Reasons\s+-+/m) {
+        } elsif (/^-+\s+Failure Reasons\s+-+/m) {
             $lotus = 1;
             ## Rapport Lotus SMTP
-        }elsif ($lotus) {
+        } elsif ($lotus) {
             undef $lotus;
             if (/^(.*)\n(\S+)$/m) {
                 $info{$2}{error} = $1;
                 $type = 13;
             }
             ## Rapport Sendmail 5 dans prochain paragraphe
-        }elsif (/^\-+\sTranscript of session follows\s\-+/m) {
+        } elsif (/^\-+\sTranscript of session follows\s\-+/m) {
             $sendmail_5 = 1;
             ## Rapport  Sendmail 5
-        }elsif ($sendmail_5) {
+        } elsif ($sendmail_5) {
             undef $sendmail_5;
             if (/<(\S+)>\n\S+, (.*)$/m) {
                 $info{$1}{error} = $2;
                 $type = 14;
             }
             ## Rapport Smap
-        }elsif (/^\s+-+ Transcript of Report follows -+/) {
+        } elsif (/^\s+-+ Transcript of Report follows -+/) {
             my $adr;
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1318,14 +1318,14 @@ sub anabounce {
                     $adr = $1;
                     $info{$adr}{error} = "";
                     $type = 17;
-                }elsif (/^\s+explanation (.*)$/) {
+                } elsif (/^\s+explanation (.*)$/) {
                     $info{$adr}{error} = $1;
                 }
             }
             local $/ = '';
-        }elsif (/^\s*-+Message not delivered to the following:/) {
+        } elsif (/^\s*-+Message not delivered to the following:/) {
             $type_18 = 1;
-        }elsif ($type_18) {
+        } elsif ($type_18) {
             undef $type_18;
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1340,7 +1340,7 @@ sub anabounce {
                 }
             }
             local $/ = '';
-        }elsif (/unable to deliver following mail to recipient\(s\):/m) {
+        } elsif (/unable to deliver following mail to recipient\(s\):/m) {
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
             local $/ = "\n";
@@ -1353,10 +1353,10 @@ sub anabounce {
             }
             local $/ = '';
             ## Rapport de Yahoo dans paragraphe suivant
-        }elsif (/^Unable to deliver message to the following address\(es\)/m) {
+        } elsif (/^Unable to deliver message to the following address\(es\)/m) {
             $yahoo = 1;
             ## Rapport Yahoo
-        }elsif ($yahoo) {
+        } elsif ($yahoo) {
             undef $yahoo;
             if (/^<(\S+)>:\s(.+)$/m) {
 
@@ -1364,9 +1364,9 @@ sub anabounce {
                 $type = 20;
 
             }
-        }elsif (/^Content-Description: Session Transcript/m) {
+        } elsif (/^Content-Description: Session Transcript/m) {
             $type_21 = 1;
-        }elsif ($type_21) {
+        } elsif ($type_21) {
             undef $type_21;
 
             ## Parcour du paragraphe
@@ -1379,36 +1379,36 @@ sub anabounce {
                 }
             }
             local $/ = '';
-        }elsif (/^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m or /^Your message has encountered delivery problems\s+to (\S+)\.$/m or /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m) {
+        } elsif (/^Your message has encountered delivery problems\s+to local user \S+\.\s+\(Originally addressed to (\S+)\)/m or /^Your message has encountered delivery problems\s+to (\S+)\.$/m or /^Your message has encountered delivery problems\s+to the following recipient\(s\):\s+(\S+)$/m) {
 
             my $adr = $2 || $1;
             $info{$adr}{error} = "";
             $type = 22;		 
-        }elsif (/^(The user return_address (\S+) does not exist)/) {
+        } elsif (/^(The user return_address (\S+) does not exist)/) {
             $info{$2}{error} = $1;
             $type = 23;
             ## Rapport Exim paragraphe suivant
-        }elsif (/^A message that you sent could not be delivered to all of its recipients/m or /^The following address\(es\) failed:/m) {
+        } elsif (/^A message that you sent could not be delivered to all of its recipients/m or /^The following address\(es\) failed:/m) {
             $exim = 1;
             ## Rapport Exim
-        }elsif ($exim) {
+        } elsif ($exim) {
             undef $exim;
             if (/^\s*(\S+):\s+(.*)$/m) {
 
                 $info{$1}{error} = $2;
                 $type = 24;
 
-            }elsif (/^\s*(\S+)$/m) {
+            } elsif (/^\s*(\S+)$/m) {
                 $info{$1}{error} = "";
             }
 
             ## Rapport VINES-ISMTP par. suivant
-        }elsif (/^Message not delivered to recipients below/m) {
+        } elsif (/^Message not delivered to recipients below/m) {
 
             $vines = 1;
 
             ## Rapport VINES-ISMTP
-        }elsif ($vines) {
+        } elsif ($vines) {
 
             undef $vines;
 
@@ -1420,12 +1420,12 @@ sub anabounce {
             }
 
             ## Rapport Mercury 1.43 par. suivant
-        }elsif (/^The local mail transport system has reported the following problems/m) {
+        } elsif (/^The local mail transport system has reported the following problems/m) {
 
             $mercury_143 = 1;
 
             ## Rapport Mercury 1.43
-        }elsif ($mercury_143) {
+        } elsif ($mercury_143) {
 
             undef $mercury_143;
 
@@ -1443,12 +1443,12 @@ sub anabounce {
             local $/ = '';
 
             ## Rapport de AltaVista Mail dans paragraphe suivant
-        }elsif (/unable to deliver mail to the following recipient\(s\):/m) {
+        } elsif (/unable to deliver mail to the following recipient\(s\):/m) {
 
             $altavista = 1;
 
             ## Rapport AltaVista Mail
-        }elsif ($altavista) {
+        } elsif ($altavista) {
 
             undef $altavista;
 
@@ -1460,16 +1460,16 @@ sub anabounce {
             }
 
             ## Rapport SMTP32
-        }elsif (/^(User mailbox exceeds allowed size): (\S+)$/m) {
+        } elsif (/^(User mailbox exceeds allowed size): (\S+)$/m) {
 
             $info{$2}{error} = $1;
             $type = 28;
 
-        }elsif (/^The following recipients did not receive this message:$/m) {
+        } elsif (/^The following recipients did not receive this message:$/m) {
 
             $following_recipients = 1;
 
-        }elsif ($following_recipients) {
+        } elsif ($following_recipients) {
 
             undef $following_recipients;
 
@@ -1481,12 +1481,12 @@ sub anabounce {
             }
 
             ## Rapport Mercury 1.31 par. suivant
-        }elsif (/^One or more addresses in your message have failed with the following/m) {
+        } elsif (/^One or more addresses in your message have failed with the following/m) {
 
             $mercury_131 = 1;
 
             ## Rapport Mercury 1.31
-        }elsif ($mercury_131) {
+        } elsif ($mercury_131) {
 
             undef $mercury_131;
 
@@ -1503,11 +1503,11 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^The following recipients haven\'t received this message:/m) {
+        } elsif (/^The following recipients haven\'t received this message:/m) {
 
             $type_31 = 1;
 
-        }elsif ($type_31) {
+        } elsif ($type_31) {
 
             undef $type_31;
 
@@ -1524,11 +1524,11 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^The following destination addresses were unknown/m) {
+        } elsif (/^The following destination addresses were unknown/m) {
 
             $type_32 = 1;
 
-        }elsif ($type_32) {
+        } elsif ($type_32) {
 
             undef $type_32;
 
@@ -1545,7 +1545,7 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^-+Transcript of session follows\s-+$/m) {
+        } elsif (/^-+Transcript of session follows\s-+$/m) {
 
             ## Parcour du paragraphe
             my @paragraphe = split /\n/, $_;
@@ -1557,7 +1557,7 @@ sub anabounce {
                     $info{$1}{error} = "";
                     $type = 33;
 
-                }elsif (/<(\S+)>\.{3} (.*)$/) {
+                } elsif (/<(\S+)>\.{3} (.*)$/) {
 
                     $info{$1}{error} = $2;
                     $type = 33;
@@ -1567,28 +1567,28 @@ sub anabounce {
             local $/ = '';
 
             ## Rapport Bigfoot
-        }elsif (/^The message you tried to send to <(\S+)>/m) {
+        } elsif (/^The message you tried to send to <(\S+)>/m) {
             $info{$1}{error} = "destination mailbox unavailable";
 
-        }elsif (/^The destination mailbox (\S+) is unavailable/m) {
+        } elsif (/^The destination mailbox (\S+) is unavailable/m) {
 
             $info{$1}{error} = "destination mailbox unavailable";
 
-        }elsif (/^The following message could not be delivered because the address (\S+) does not exist/m) {
+        } elsif (/^The following message could not be delivered because the address (\S+) does not exist/m) {
 
             $info{$1}{error} = "user unknown";
 
-        }elsif (/^Error-For:\s+(\S+)\s/) {
+        } elsif (/^Error-For:\s+(\S+)\s/) {
 
             $info{$1}{error} = "";
 
             ## Rapport Exim 1.73 dans proc. paragraphe
-        }elsif (/^The address to which the message has not yet been delivered is:/m) {
+        } elsif (/^The address to which the message has not yet been delivered is:/m) {
 
             $exim_173 = 1;
 
             ## Rapport Exim 1.73
-        }elsif ($exim_173) {
+        } elsif ($exim_173) {
 
             undef $exim_173;
 
@@ -1605,11 +1605,11 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/^This Message was undeliverable due to the following reason:/m) {
+        } elsif (/^This Message was undeliverable due to the following reason:/m) {
 
             $type_38 = 1;
 
-        }elsif ($type_38) {
+        } elsif ($type_38) {
 
             undef $type_38 if /Recipient:/;
 
@@ -1623,7 +1623,7 @@ sub anabounce {
                     $info{$1}{error} = "";
                     $type = 38;
 
-                }elsif (/\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
+                } elsif (/\s+Reason:\s+<(\S+)>\.{3} (.*)/) {
 
                     $info{$1}{error} = $2;
                     $type = 38;
@@ -1632,11 +1632,11 @@ sub anabounce {
             }
             local $/ = '';
 
-        }elsif (/Your message could not be delivered to:/m) {
+        } elsif (/Your message could not be delivered to:/m) {
 
             $type_39 = 1;
 
-        }elsif ($type_39) {
+        } elsif ($type_39) {
 
             undef $type_39;
 
@@ -1646,7 +1646,7 @@ sub anabounce {
                 $type = 39;
 
             }
-        }elsif (/Session Transcription follow:/m) {
+        } elsif (/Session Transcription follow:/m) {
 
             if (/^<+\s+\d+\s+(.*) for \((.*)\)$/m) {
 
@@ -1655,11 +1655,11 @@ sub anabounce {
 
             }
 
-        }elsif (/^This message was returned to you for the following reasons:/m) {
+        } elsif (/^This message was returned to you for the following reasons:/m) {
 
             $type_40 = 1;
 
-        }elsif ($type_40) {
+        } elsif ($type_40) {
 
             undef $type_40;
 
@@ -1671,12 +1671,12 @@ sub anabounce {
             }
 
             ## Rapport PMDF dans proc. paragraphe
-        }elsif (/^Your message cannot be delivered to the following recipients:/m or /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m) {
+        } elsif (/^Your message cannot be delivered to the following recipients:/m or /^Your message has been enqueued and undeliverable for \d day\s*to the following recipients/m) {
 
             $pmdf = 1;
 
             ## Rapport PMDF
-        }elsif ($pmdf) {
+        } elsif ($pmdf) {
 
             my $adr;
             undef $pmdf;
@@ -1692,7 +1692,7 @@ sub anabounce {
                     $info{$adr}{error} = "";
                     $type = 41;
 
-                }elsif (/\s+Reason:\s+(.*)$/) {
+                } elsif (/\s+Reason:\s+(.*)$/) {
 
                     $info{$adr}{error} = $1;
                     $type = 41;
@@ -1702,16 +1702,16 @@ sub anabounce {
             local $/ = '';
 
             ## Rapport MDaemon
-        }elsif (/^(\S+) - (no such user here)\.$/m) {
+        } elsif (/^(\S+) - (no such user here)\.$/m) {
 
             $info{$1}{error} = $2;
             $type = 42;
 
             # Postfix dans le prochain paragraphe
-        }elsif (/^This is the Postfix program/m || /^This is the mail system at host/m) {
+        } elsif (/^This is the Postfix program/m || /^This is the mail system at host/m) {
             $postfix = 1;
             ## Rapport Postfix
-        }elsif ($postfix) {
+        } elsif ($postfix) {
 
             undef $postfix if /THIS IS A WARNING/; # Pas la peine de le traiter
 
@@ -1723,16 +1723,16 @@ sub anabounce {
                 }
                 elsif ($error =~ /^([^:]+):/) {
                     $info{$addr}{error} = $1;
-                }else {
+                } else {
                     $info{$addr}{error} = $error;
                 }
             }
             local $/ = '';
-        }elsif ( /^The message that you sent was undeliverable to the following:/ ) {
+        } elsif ( /^The message that you sent was undeliverable to the following:/ ) {
 
             $groupwise7 = 1;
 
-        }elsif ($groupwise7) {
+        } elsif ($groupwise7) {
 
             undef $groupwise7;
 
@@ -1751,7 +1751,7 @@ sub anabounce {
             local $/ = '';
 
             ## Wanadoo    
-        }elsif (/^(\S+); Action: Failed; Status: \d.\d.\d \((.*)\)/m) {
+        } elsif (/^(\S+); Action: Failed; Status: \d.\d.\d \((.*)\)/m) {
             $info{$1}{error} = $2;
         }
     }

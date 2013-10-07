@@ -64,7 +64,7 @@ sub dkim_verifier {
         return undef;
     }
 
-    unless ( $dkim = Mail::DKIM::Verifier->new() ){
+    unless ( $dkim = Mail::DKIM::Verifier->new() ) {
         Sympa::Log::Syslog::do_log('err', 'Could not create Mail::DKIM::Verifier');
         return undef;
     }
@@ -76,7 +76,7 @@ sub dkim_verifier {
     }
     print MSGDUMP $msg_as_string ;
 
-    unless (close(MSGDUMP)){ 
+    unless (close(MSGDUMP)) { 
         Sympa::Log::Syslog::do_log('err',"unable to dump message in temporary file $temporary_file"); 
         return undef; 
     }
@@ -88,7 +88,7 @@ sub dkim_verifier {
 
     # this documented method is pretty but dont validate signatures, why ?
     # $dkim->load(\*MSGDUMP);
-    while (<MSGDUMP>){
+    while (<MSGDUMP>) {
         chomp;
         s/\015$//;
         $dkim->PRINT("$_\015\012");
@@ -102,7 +102,7 @@ sub dkim_verifier {
         if  ($signature->result_detail eq "pass") {
             Sympa::Log::Syslog::do_log('debug', 'Verification of signature from domain %s issued result "pass"',$signature->domain, );
             return 1;
-        }else{
+        } else {
             Sympa::Log::Syslog::do_log('debug', 'Verification of signature from domain %s issued result %s',$signature->domain, $signature->result_detail);
         }
     }
@@ -119,7 +119,7 @@ sub remove_invalid_dkim_signature {
     Sympa::Log::Syslog::do_log('debug',"removing invalid DKIM signature");
     my $msg_as_string = shift;
 
-    unless (dkim_verifier($msg_as_string)){
+    unless (dkim_verifier($msg_as_string)) {
         my $body_as_string = Message::get_body_from_msg_as_string ($msg_as_string);
 
         my $parser = MIME::Parser->new;
@@ -132,7 +132,7 @@ sub remove_invalid_dkim_signature {
         $entity->head->delete('DKIM-Signature');
         Sympa::Log::Syslog::do_log('debug', 'Removing invalid DKIM signature header');
         return $entity->head->as_string() . "\n" . $body_as_string;
-    }else{
+    } else {
         return ($msg_as_string); # sgnature is valid.
     }
 }
@@ -194,7 +194,7 @@ sub dkim_sign {
             Selector  => $dkim_selector,
             KeyFile   => $temporary_keyfile,
         );
-    }else{
+    } else {
         $dkim = Mail::DKIM::Signer->new(
             Algorithm => "rsa-sha1",
             Method    => "relaxed",
@@ -215,7 +215,7 @@ sub dkim_sign {
     print MSGDUMP $msg_as_string ;
     close(MSGDUMP);
 
-    unless (open (MSGDUMP , $temporary_file)){
+    unless (open (MSGDUMP , $temporary_file)) {
         Sympa::Log::Syslog::do_log('err', 'Can\'t read temporary file %s', $temporary_file);
         return undef;
     }

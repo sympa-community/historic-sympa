@@ -2233,7 +2233,7 @@ sub _set_status_changes {
 ##
 ##	if ($list->user_data_source eq 'file') {
 ##	    $list->{'users'} = Sympa::List::_load_users_file($list->dir . '/subscribers.closed.dump');
-##	}elsif ($list->user_data_source eq 'database') {
+##	} elsif ($list->user_data_source eq 'database') {
 ##	    unless (-f $list->dir . '/subscribers.closed.dump') {
 ##		Sympa::Log::Syslog::do_log('notice', 'No subscribers to restore');
 ##	    }

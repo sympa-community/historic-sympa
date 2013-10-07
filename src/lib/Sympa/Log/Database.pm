@@ -196,7 +196,7 @@ sub add_event {
         $params{list} = '';
     }
     #remove the robot name of the list name
-    if($params{list} =~ /(.+)\@(.+)/) {
+    if ($params{list} =~ /(.+)\@(.+)/) {
         $params{list} = $1;
         unless($params{robot}) {
             $params{robot} = $2;
@@ -269,7 +269,7 @@ sub add_stat {
     if (ref($params{list}) && $params{list}->isa('Sympa::List')) {
         $params{list} = $params{list}->{'name'};
     }
-    if($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+    if ($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
         $params{list} = $1;
         unless($params{robot}) {
             $params{robot} = $2;
@@ -304,7 +304,7 @@ sub _add_stat_counter {
     my $random = int(rand(1000000));
     my $id = $params{begin_date}.$random;
 
-    if($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+    if ($params{list} =~ /(.+)\@(.+)/) {#remove the robot name of the list name
         $params{list} = $1;
         unless($params{robot}) {
             $params{robot} = $2;

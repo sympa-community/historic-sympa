@@ -304,7 +304,7 @@ sub get_fields {
     my %result;
     while (my $row = $handle->fetchrow_arrayref()) {
         # http://www.sqlite.org/datatype3.html
-        if($row->[2] =~ /int/) {
+        if ($row->[2] =~ /int/) {
             $row->[2] = "integer";
         } elsif ($row->[2] =~ /char|clob|text/) {
             $row->[2] = "text";

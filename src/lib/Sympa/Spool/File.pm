@@ -464,7 +464,7 @@ sub analyze_file_name {
     my $key  = shift;
     my $data = shift;
 
-    unless($key =~ /$filename_regexp/){
+    unless($key =~ /$filename_regexp/) {
         Sympa::Log::Syslog::do_log('err',
             'File %s name does not have the proper format', $key);
         return undef;
@@ -743,7 +743,7 @@ sub get_storage_name {
     my $param = shift;
     if ($param->{'list'} && $param->{'robot'}) {
         $filename = $param->{'list'}.'@'.$param->{'robot'}.'.'.time.'.'.int(rand(10000));
-    }else{
+    } else {
         Sympa::Log::Syslog::do_log('err','Unsufficient parameters provided to create file name');
         return undef;
     }
@@ -791,10 +791,10 @@ sub clean {
             if (unlink ("$self->{'dir'}/$f") ) {
                 $deleted++;
                 Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$self->{'dir'}/$f");
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$f",$ERRNO);
             }
-        }else{
+        } else {
             last;
         }
     }
@@ -804,10 +804,10 @@ sub clean {
             if (Sympa::Tools::File::remove_dir("$self->{'dir'}/$d") ) {
                 $deleted++;
                 Sympa::Log::Syslog::do_log('notice', 'Deleting old file %s', "$self->{'dir'}/$d");
-            }else{
+            } else {
                 Sympa::Log::Syslog::do_log('notice', 'unable to delete old file %s: %s', "$self->{'dir'}/$d",$ERRNO);
             }
-        }else{
+        } else {
             last;
         }
     }

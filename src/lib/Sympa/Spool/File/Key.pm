@@ -64,7 +64,7 @@ sub analyze_file_name {
     my $key  = shift;
     my $data = shift;
 
-    unless($key =~ /$filename_regexp/){
+    unless($key =~ /$filename_regexp/) {
         Sympa::Log::Syslog::do_log('err',
             'File %s name does not have the proper format', $key);
         return undef;

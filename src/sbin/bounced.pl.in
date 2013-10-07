@@ -353,7 +353,7 @@ while (!$end) {
     Sympa::Site->send_notify_to_listmaster(undef, undef, 1, undef);
 
     my $spooled_bounce;
-    while ($spooled_bounce = $spool->next){
+    while ($spooled_bounce = $spool->next) {
         my $bounce = undef;
         $bounce = BounceMessage->new($spooled_bounce)
         if $spooled_bounce;

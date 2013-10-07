@@ -108,14 +108,14 @@ sub createHash {
         return undef;
     }
 
-    unless (defined $self->_getRequiredElements()){
+    unless (defined $self->_getRequiredElements()) {
         Sympa::Log::Syslog::do_log('err',"error in required elements ");
         return undef;
     }
 
     if ($self->{'root'}->hasChildNodes()) {
         my $hash = _getChildren($self->{'root'});
-        unless (defined $hash){
+        unless (defined $hash) {
             Sympa::Log::Syslog::do_log('err',"error in list elements ");
             return undef;
         }
@@ -172,7 +172,7 @@ sub _getRequiredElements {
     Sympa::Log::Syslog::do_log('debug3','()');
 
     # listname element is obligatory
-    unless ($self->_getRequiredSingle('listname')){
+    unless ($self->_getRequiredSingle('listname')) {
         return undef;
     }
     return 1;
@@ -195,7 +195,7 @@ sub _getMultipleAndRequiredChild {
 
     foreach my $o (@nodes) {
         my @child = $o->getChildrenByTagName($childName);
-        if ($#child < 0){
+        if ($#child < 0) {
             Sympa::Log::Syslog::do_log('err','Element "%s" is required for element "%s", line : %s',$childName,$nodeName,$o->line_number());
             return undef;
         }
@@ -242,7 +242,7 @@ sub _getRequiredSingle {
 
     my $node = shift(@nodes);
 
-    if ($node->getAttribute('multiple')){
+    if ($node->getAttribute('multiple')) {
         Sympa::Log::Syslog::do_log('err','Attribute multiple=1 not allowed for the element "%s"',$nodeName);
         return undef;
     }
@@ -312,7 +312,7 @@ sub _getChildren {
             }
 
             ## multiple
-            if ($child->getAttribute('multiple')){
+            if ($child->getAttribute('multiple')) {
                 push @{$multiple_nodes->{$childName}},$values;
 
                 ## single
@@ -361,7 +361,7 @@ sub _getChildren {
     }
 
 ## return
-    foreach my $array (keys %$multiple_nodes){
+    foreach my $array (keys %$multiple_nodes) {
         $hash->{$array} = $multiple_nodes->{$array};
     }
 
@@ -430,7 +430,7 @@ sub _find_lines {
     my $hash = {};
 
     foreach my $node (@$nodeList) {
-        if ($node->nodeType == 1){ # ELEMENT_NODE
+        if ($node->nodeType == 1) { # ELEMENT_NODE
             push @{$hash->{$node->nodeName}},$node->line_number();
         }
     }

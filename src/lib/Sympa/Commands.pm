@@ -1114,7 +1114,7 @@ sub _signoff {
                 next;
             }
 
-            next if($action =~ /reject/);
+            next if ($action =~ /reject/);
 
             $result = _signoff("$l $email", $robot);
             $success ||= $result;

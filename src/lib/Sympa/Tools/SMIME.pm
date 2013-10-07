@@ -217,7 +217,7 @@ sub check_signature {
         return undef;
     }
 
-    if ($message->{'smime_crypted'}){
+    if ($message->{'smime_crypted'}) {
         $message->{'msg'}->head()->print($command_handle);
         print $command_handle "\n";
     }
@@ -253,7 +253,7 @@ sub check_signature {
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
     Sympa::Log::Syslog::do_log('debug2', "smime_sign_check: parsing $nparts parts");
-    if($nparts == 0) { # could be opaque signing...
+    if ($nparts == 0) { # could be opaque signing...
         $extracted += _extract_certs(
             entity  => $message->{msg},
             file    => $certs_bundle_file,
@@ -312,18 +312,18 @@ sub check_signature {
             } elsif ($cert->{'purpose'}{'sign'}) {
                 $certs{'sign'} = $cert_string;
                 Sympa::Log::Syslog::do_log('debug', 'Found a signing cert');
-            } elsif($cert->{'purpose'}{'enc'}) {
+            } elsif ($cert->{'purpose'}{'enc'}) {
                 $certs{'enc'} = $cert_string;
                 Sympa::Log::Syslog::do_log('debug', 'Found an encryption cert');
             }
         }
 
-        last if(($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
+        last if (($certs{'both'}) || ($certs{'sign'} && $certs{'enc'}));
         $cert_string = '';
     }
     close($bundle_handle);
 
-    if(!($certs{both} || ($certs{sign} || $certs{enc}))) {
+    if (!($certs{both} || ($certs{sign} || $certs{enc}))) {
         Sympa::Log::Syslog::do_log('err', "Could not extract certificate for %s", join(',', keys %{$signer_cert->{'email'}}));
         return undef;
     }
@@ -405,7 +405,7 @@ sub encrypt_message {
 
     my $usercert;
     my $base = "$params{cert_dir}/".Sympa::Tools::escape_chars($params{email});
-    if(-f "$base\@enc") {
+    if (-f "$base\@enc") {
         $usercert = "$base\@enc";
     } else {
         $usercert = "$base";
@@ -653,10 +653,10 @@ sub smime_find_keys {
         $certs = [ sort keys %certs ];
         $keys = [ sort keys %keys ];
     } else {
-        if($certs{"$dir/cert.pem.$ext"}) {
+        if ($certs{"$dir/cert.pem.$ext"}) {
             $certs = "$dir/cert.pem.$ext";
             $keys = "$dir/private_key.$ext";
-        } elsif($certs{"$dir/cert.pem"}) {
+        } elsif ($certs{"$dir/cert.pem"}) {
             $certs = "$dir/cert.pem";
             $keys = "$dir/private_key";
         } else {
@@ -688,7 +688,7 @@ sub _parse_cert {
 
     ## Load certificate
     my $cert_string;
-    if($params{'text'}) {
+    if ($params{'text'}) {
         $cert_string = $params{'text'};
     } elsif ($params{file}) {
         $cert_string = Sympa::Tools::File::slurp_file($params{file});
@@ -748,7 +748,7 @@ sub _parse_cert {
 
     ## OK, so there's CAs which put the email in the subjectAlternateName only
     ## and ones that put it in the DN only...
-    if(!$res{email} && ($res{subject} =~ /\/email(address)?=([^\/]+)/)) {
+    if (!$res{email} && ($res{subject} =~ /\/email(address)?=([^\/]+)/)) {
         $res{email} = $1;
     }
     close($file_handle);

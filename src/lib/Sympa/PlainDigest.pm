@@ -152,7 +152,7 @@ sub _do_multipart {
         if ($subent->effective_type =~ /^text\/plain$/i || $subent->effective_type =~ /^text\/enriched/i) {
             _do_text_plain($subent);
         }
-        elsif ($subent->effective_type =~ /^multipart\/related$/i){
+        elsif ($subent->effective_type =~ /^multipart\/related$/i) {
             if ($topent->effective_type =~ /^multipart\/alternative$/i && _hasTextPlain($topent)) {
                 # this is a rare case - /related nested inside /alternative.
                 # If there's also a text/plain alternative just ignore it
@@ -166,7 +166,7 @@ sub _do_multipart {
             _do_multipart ($subent);
         }
         elsif ($subent->effective_type =~ /^text\/html$/i ) {
-            if( $topent->effective_type =~ /^multipart\/alternative$/i && _hasTextPlain($topent)) {
+            if ( $topent->effective_type =~ /^multipart\/alternative$/i && _hasTextPlain($topent)) {
                 # there's a text/plain alternive, so don't warn
                 # that the text/html part has been scrubbed
                 next;

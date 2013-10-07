@@ -103,7 +103,7 @@ sub copy_dir {
     my ($dir1, $dir2) = @_;
     Sympa::Log::Syslog::do_log('debug','Copy directory %s to %s',$dir1,$dir2);
 
-    unless (-d $dir1){
+    unless (-d $dir1) {
         Sympa::Log::Syslog::do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
         return undef;
     }
@@ -120,7 +120,7 @@ sub del_dir {
     my ($dir) = @_;
     Sympa::Log::Syslog::do_log('debug','%s',$dir);
 
-    if(opendir DIR, $dir){
+    if (opendir DIR, $dir) {
         for (readdir DIR) {
             next if /^\.{1,2}$/;
             my $path = "$dir/$_";
@@ -346,7 +346,7 @@ sub remove_dir {
         }
     };
 
-    foreach my $current_dir (@_){
+    foreach my $current_dir (@_) {
         finddepth({wanted => $callback, no_chdir => 1},$current_dir);
     }
 
@@ -393,7 +393,7 @@ sub a_is_older_than_b {
     if ($a_file_readable && $b_file_readable) {
         my @a_stats = stat ($params{'a_file'});
         my @b_stats = stat ($params{'b_file'});
-        if($a_stats[9] < $b_stats[9]){
+        if ($a_stats[9] < $b_stats[9]) {
             $answer = 1;
         } else {
             $answer = 0;

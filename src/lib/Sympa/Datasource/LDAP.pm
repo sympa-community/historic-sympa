@@ -132,7 +132,7 @@ sub connect {
 
     my $host_entry;
     ## There might be multiple alternate hosts defined
-    foreach $host_entry (split(/,/, $self->{'ldap_host'})){
+    foreach $host_entry (split(/,/, $self->{'ldap_host'})) {
 
         ## Remove leading and trailing spaces
         $host_entry =~ s/^\s*(\S.*\S)\s*$/$1/;
@@ -162,7 +162,7 @@ sub connect {
         last;
     }
 
-    unless (defined $self->{'ldap_handler'} ){
+    unless (defined $self->{'ldap_handler'} ) {
         Sympa::Log::Syslog::do_log ('err',"Unable to connect to the LDAP server '%s'",$self->{'ldap_host'});
         return undef;
     }
@@ -191,7 +191,7 @@ sub connect {
         $cnx = $self->{'ldap_handler'}->bind();
     }
 
-    unless (defined($cnx) && ($cnx->code() == 0)){
+    unless (defined($cnx) && ($cnx->code() == 0)) {
         Sympa::Log::Syslog::do_log ('err',"Failed to bind to LDAP server : '%s', Ldap server error : '%s'", $host_entry, $cnx->error, $cnx->server_error);
         $self->{'ldap_handler'}->unbind();
         return undef;

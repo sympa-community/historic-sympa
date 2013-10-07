@@ -254,7 +254,7 @@ if ($operation eq 'add') {
     flock LF, 8;
     close LF;
 
-}elsif ($operation eq 'del') {
+} elsif ($operation eq 'del') {
 
     ## Create a lock
     open(LF, ">>$lock_file") || die "Can't open lock file $lock_file";

@@ -85,7 +85,7 @@ sub fatal_err {
         syslog('err', $m, @_);
         syslog('err', "Exiting.");
     };
-    if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
+    if ($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
         $warning_date = time + $warning_timeout;
         unless(Sympa::List::send_notify_to_listmaster('logs_failed', Sympa::Site->domain, [$EVAL_ERROR])) {
             print STDERR "No logs available, can't send warning message";
@@ -176,7 +176,7 @@ sub do_log {
 
     ## If in 'err' level, build a stack trace,
     ## except if syslog has not been setup yet.
-    if (defined $log_level and $level eq 'err'){
+    if (defined $log_level and $level eq 'err') {
         my $go_back = 1;
         my @calls;
 
@@ -192,7 +192,7 @@ sub do_log {
         $calls[0] = '(top-level)'.$calls[0];
 
         $caller_string = join(' > ',@calls);
-    }else {
+    } else {
         my @call = caller(1);
 
         ## If called via wwslog, go one step ahead
@@ -301,7 +301,7 @@ sub do_connect {
     # close log may be usefull : if parent processus did open log child process inherit the openlog with parameters from parent process
     closelog;
     eval {openlog("$log_service\[$PID\]", 'ndelay,nofatal', $log_facility)};
-    if($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
+    if ($EVAL_ERROR && ($warning_date < time - $warning_timeout)) {
         $warning_date = time + $warning_timeout;
         require Sympa::List;
         unless(Sympa::List::send_notify_to_listmaster('logs_failed', Sympa::Site->domain, [$EVAL_ERROR])) {
@@ -351,7 +351,7 @@ sub agregate_daily_data {
             $first_date = $reftime if ($reftime < $first_date);
         }
         next if ($begin_date < $first_date || $params->{'hourly_data'}{$begin_date}{'end_date_counter'} > $last_date);
-        if(defined $result->{$reftime}) {
+        if (defined $result->{$reftime}) {
             $result->{$reftime} += $params->{'hourly_data'}{$begin_date}{'variation_counter'};
         } else {
             $result->{$reftime} = $params->{'hourly_data'}{$begin_date}{'variation_counter'};

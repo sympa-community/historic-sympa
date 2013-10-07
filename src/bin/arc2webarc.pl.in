@@ -195,11 +195,11 @@ if ($options{'input-directory'}) {
                 $first = 1;
                 $new = 1;
                 next;
-            }elsif (! $first) {
+            } elsif (! $first) {
                 next;
-            }elsif (/^$/ && $new) {
+            } elsif (/^$/ && $new) {
                 next;
-            }elsif (/^------- CUT --- CUT/) {
+            } elsif (/^------- CUT --- CUT/) {
                 push @msgs, $msg;
                 $msg_count++;
                 $msg = [];
@@ -261,17 +261,17 @@ sub store_messages {
                     #print STDERR "$month/$year\n";
 
                     # Date type : 8 Dec 97 13:33:47+0100
-                }elsif ($date =~ /^\d{1,2}\s+(\w{3}) (\d{2,4})/) {
+                } elsif ($date =~ /^\d{1,2}\s+(\w{3}) (\d{2,4})/) {
                     $month = $1;
                     $year =$2;
 
                     # Date type : 8-DEC-1997 13:33:47 +0100
-                }elsif ($date =~ /^\d{1,2}-(\w{3})-(\d{4})/) {
+                } elsif ($date =~ /^\d{1,2}-(\w{3})-(\d{4})/) {
                     $month = $1;
                     $year =$2;
 
                     # Date type : Mon Dec 8 13:33:47 1997
-                }elsif ($date =~ /^\w+\s+(\w+)\s+\d{1,2} \d+:\d+:\d+ (GMT )?(\d{4})/) {
+                } elsif ($date =~ /^\w+\s+(\w+)\s+\d{1,2} \d+:\d+:\d+ (GMT )?(\d{4})/) {
                     $month = $1;
                     $year =$3;
 
@@ -289,7 +289,7 @@ sub store_messages {
                     } else {
                         $month = $month_idx{$month};
                     }
-                }elsif (($month < 1) or ($month > 12)) {
+                } elsif (($month < 1) or ($month > 12)) {
                     $incorrect = 1;
                 }
                 $month = "0".$month if $month =~ /^\d$/;
@@ -297,7 +297,7 @@ sub store_messages {
                 # Checking Year format
                 if ($year =~ /^[89]\d$/) {
                     $year = "19".$year;
-                }elsif ($year !~ /^19[89]\d|20[0-9][0-9]$/) {
+                } elsif ($year !~ /^19[89]\d|20[0-9][0-9]$/) {
                     $incorrect = 1;
                 }
 

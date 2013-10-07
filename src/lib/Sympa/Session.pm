@@ -115,7 +115,7 @@ sub new {
     $action eq 'css';
 
     # if a session cookie exist, try to restore an existing session, don't store sessions from bots
-    if (($cookie)&&($self->{'passive_session'} != 1)){
+    if (($cookie)&&($self->{'passive_session'} != 1)) {
         my $status;
         $status = $self->load($cookie);
         unless (defined $status) {
@@ -130,7 +130,7 @@ sub new {
         }
         # checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method
-        # if($session->{'remote_addr'} ne $ENV{'REMOTE_ADDR'}){
+        # if ($session->{'remote_addr'} ne $ENV{'REMOTE_ADDR'}) {
         #    Sympa::Log::Syslog::do_log('info','SympaSession::new ignoring session cookie because remote host %s is not the original host %s', $ENV{'REMOTE_ADDR'},$session->{'remote_addr'}); # start a new session
         #    return (SympaSession->new($robot));
         #}
@@ -483,7 +483,7 @@ sub load {
     my $new_session = undef;
     my $counter = 0;
     while ($new_session = $sth->fetchrow_hashref('NAME_lc')) {
-        if ( $counter > 0){
+        if ( $counter > 0) {
             Sympa::Log::Syslog::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql?");
             $session->{'email'} = '';
             last;
@@ -818,9 +818,9 @@ Return a true value if the session object corresponds to an anonymous session.
 ## Return 1 if the Session object corresponds to an anonymous session.
 sub is_anonymous {
     my $self = shift;
-    if($self->{'email'} eq 'nobody' || $self->{'email'} eq '') {
+    if ($self->{'email'} eq 'nobody' || $self->{'email'} eq '') {
         return 1;
-    }else{
+    } else {
         return 0;
     }
 }

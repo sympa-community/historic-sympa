@@ -127,7 +127,7 @@ sub scan_dir_archive {
     my ($dir, $month) = @_;
     Sympa::Log::Syslog::do_log ('info',"($dir, $month)");
 
-    unless (opendir (DIR, "$dir/$month/arctxt")){
+    unless (opendir (DIR, "$dir/$month/arctxt")) {
         Sympa::Log::Syslog::do_log ('info',"($dir, $month): unable to open dir $dir/$month/arctxt");
         return undef;
     }
@@ -199,7 +199,7 @@ sub search_msgid {
         Sympa::Log::Syslog::do_log ('err',"dir $dir look unproper");
         return undef;
     }
-    unless (opendir (ARC, "$dir")){
+    unless (opendir (ARC, "$dir")) {
         Sympa::Log::Syslog::do_log ('err',"($dir, $msgid): unable to open dir $dir");
         return undef;
     }
@@ -318,14 +318,14 @@ sub clean_archive_directory{
     my $answer;
     $answer->{'dir_to_rebuild'} = $params{'arc_root'}.'/'.$params{'dir_to_rebuild'};
     $answer->{'cleaned_dir'} = $params{'tmpdir'}.'/'.$params{'dir_to_rebuild'};
-    unless(my $number_of_copies = Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
+    unless(my $number_of_copies = Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})) {
         Sympa::Log::Syslog::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
         return undef;
     }
-    if(opendir ARCDIR,$answer->{'cleaned_dir'}){
+    if (opendir ARCDIR,$answer->{'cleaned_dir'}) {
         my $files_left_uncleaned = 0;
-        foreach my $file (readdir(ARCDIR)){
-            next if($file =~ /^\./);
+        foreach my $file (readdir(ARCDIR)) {
+            next if ($file =~ /^\./);
             $file = $answer->{'cleaned_dir'}.'/'.$file;
             $files_left_uncleaned++ unless(clean_archived_message(
                     'input'  => $file ,
@@ -362,8 +362,8 @@ sub clean_archived_message {
 
     my $message = Sympa::Message->new(file => $input);
     if ($message) {
-        if($message->clean_html()){
-            if(open TMP, ">$output") {
+        if ($message->clean_html()) {
+            if (open TMP, ">$output") {
                 print TMP $message->as_string();
                 close TMP;
             } else {

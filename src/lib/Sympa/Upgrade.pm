@@ -329,7 +329,7 @@ sub upgrade {
                 if (-d $new_path) {
                     Sympa::Log::Syslog::do_log('err',"Could not rename %s to %s ; directory already exists", $old_path, $new_path);
                     next;
-                }else {
+                } else {
                     unless (rename $old_path, $new_path) {
                         Sympa::Log::Syslog::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $!);
                         next;
@@ -455,7 +455,7 @@ sub upgrade {
             if (-d $new_path) {
                 Sympa::Log::Syslog::do_log('err',"Could not rename %s to %s ; directory already exists", $old_path, $new_path);
                 next;
-            }else {
+            } else {
                 unless (rename $old_path, $new_path) {
                     Sympa::Log::Syslog::do_log('err',"Failed to rename %s to %s : %s", $old_path, $new_path, $!);
                     next;
@@ -603,7 +603,7 @@ sub upgrade {
         my $all_lists = Sympa::List::get_lists('Site');
         foreach my $list ( @$all_lists ) {
             foreach my $f ('config','info','homepage','message.header','message.footer') {
-                if (-f $list->dir . '/' . $f){
+                if (-f $list->dir . '/' . $f) {
                     push @files, [$list->dir . '/' . $f, $list->lang];
                 }
             }
@@ -631,7 +631,7 @@ sub upgrade {
                 }
                 closedir DIR;
 
-            }elsif ($d =~ /(create_list_templates|families)$/) {
+            } elsif ($d =~ /(create_list_templates|families)$/) {
                 foreach my $subdir (grep(/^\w+$/, readdir DIR)) {
                     if (-d "$d/$subdir") {
                         push @directories, ["$d/$subdir", Sympa::Site->lang];
@@ -691,7 +691,7 @@ sub upgrade {
                     Sympa::Log::Syslog::do_log('err',
                         'Failed to save config file for list %s', $list);
                 }
-            }elsif ($list->user_data_source eq 'database') {
+            } elsif ($list->user_data_source eq 'database') {
 
                 Sympa::Log::Syslog::do_log('notice',
                     'List %s ; changing user_data_source from database to include2...',
@@ -727,7 +727,7 @@ sub upgrade {
 
             close BOUNCEDIR;
 
-        }else {
+        } else {
             Sympa::Log::Syslog::do_log('err', "Failed to open directory Sympa::Site->queuebounce : $!");	
         }
 
@@ -798,7 +798,7 @@ sub upgrade {
                 );
             }
             my @robots = @{Robot::get_robots() || []};
-            while (my $data = $sth->fetchrow_hashref){
+            while (my $data = $sth->fetchrow_hashref) {
                 next
                 if defined $data->{'robot_exclusion'} and
                 $data->{'robot_exclusion'} ne '';
@@ -852,7 +852,7 @@ sub upgrade {
 
             my $spooldir = Sympa::Site->$spoolparameter;
 
-            unless (-d $spooldir){
+            unless (-d $spooldir) {
                 Sympa::Log::Syslog::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
                 next;
             }
@@ -881,12 +881,12 @@ sub upgrade {
                 my %meta ;
 
                 Sympa::Log::Syslog::do_log('notice'," spool : $spooldir, file $filename");
-                if (-d $spooldir.'/'.$filename){
+                if (-d $spooldir.'/'.$filename) {
                     Sympa::Log::Syslog::do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
                     next;
                 }				
 
-                if (($spoolparameter eq 'queuedigest')){
+                if (($spoolparameter eq 'queuedigest')) {
                     unless ($filename =~ /^([^@]*)\@([^@]*)$/) {
                         $ignored .= ','.$filename;
                         next;
@@ -904,7 +904,7 @@ sub upgrade {
                     $robot_id = $2;
                     $meta{'authkey'} = $3;
                     $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-                }elsif ($spoolparameter eq 'queuetopic'){
+                } elsif ($spoolparameter eq 'queuetopic') {
                     unless ($filename =~ /^([^@]*)\@([^@]*)\_(.*)$/) {
                         $ignored .= ','.$filename;
                         next;
@@ -913,19 +913,19 @@ sub upgrade {
                     $robot_id = $2;
                     $meta{'authkey'} = $3;
                     $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
-                }elsif ($spoolparameter eq 'queuesubscribe'){
+                } elsif ($spoolparameter eq 'queuesubscribe') {
                     my $match = 0;		    
                     foreach my $robot (@{Robot::get_robots()}) {
                         my $robot_id = $robot->domain;
                         Sympa::Log::Syslog::do_log('notice', 'robot : %s', $robot_id);
-                        if ($filename =~ /^([^@]*)\@$robot_id\.(.*)$/){
+                        if ($filename =~ /^([^@]*)\@$robot_id\.(.*)$/) {
                             $listname = $1;
                             $meta{'authkey'} = $2;
                             $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
                             $match = 1;
                         }
                     }
-                    unless ($match){$ignored .= ','.$filename;next;}
+                    unless ($match) {$ignored .= ','.$filename;next;}
                 } elsif ($spoolparameter eq 'queue' or
                     $spoolparameter eq 'queuebounce') {
                     ## Don't process temporary files created by queue bouncequeue queueautomatic (T.xxx)
@@ -958,9 +958,9 @@ sub upgrade {
 
                             if ($listname eq $robot->listmaster_email) {
                                 $priority = 0;
-                            }elsif ($type eq 'request') {
+                            } elsif ($type eq 'request') {
                                 $priority = $robot->request_priority;
-                            }elsif ($type eq 'owner') {
+                            } elsif ($type eq 'owner') {
                                 $priority = $robot->owner_priority;
                             } elsif ($listname =~
                                 /^(sympa|$email)(\@$host)?$/i) {	
@@ -989,7 +989,7 @@ sub upgrade {
                     return undef;
                 }
                 my $messageasstring;
-                while (<FILE>){
+                while (<FILE>) {
                     $messageasstring = $messageasstring.$_;
                 }
                 close(FILE);
@@ -1321,7 +1321,7 @@ sub to_utf8 {
         my $charset;
         if ((defined $Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
             $charset = $Conf::Conf::Ignored_Conf{'filesystem_encoding'};
-        }else {	    
+        } else {	    
             Sympa::Language::PushLang($lang);
             $charset = Sympa::Language::GetCharset;
             Sympa::Language::PopLang;
@@ -1434,7 +1434,7 @@ sub md5_encode_password {
 
     while (my $user = $sth->fetchrow_hashref('NAME_lc')) {
         my $clear_password ;
-        if ($user->{'password_user'} =~ /^[0-9a-f]{32}/){
+        if ($user->{'password_user'} =~ /^[0-9a-f]{32}/) {
             Sympa::Log::Syslog::do_log('info',
                 'password from %s already encoded as MD5 fingerprint',
                 $user->{'email_user'});
@@ -1447,7 +1447,7 @@ sub md5_encode_password {
 
         if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
             $clear_password = Sympa::Tools::decrypt_password($user->{'password_user'});
-        }else{ ## Old style cleartext passwords
+        } else { ## Old style cleartext passwords
             $clear_password = $user->{'password_user'};
         }
 

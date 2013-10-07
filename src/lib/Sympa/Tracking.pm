@@ -98,7 +98,7 @@ sub get_recipients_status {
     );
 
     my @pk_notifs;
-    while (my $pk_notif = $handle->fetchrow_hashref){
+    while (my $pk_notif = $handle->fetchrow_hashref) {
         if ($pk_notif->{'notification_message'}) {
             $pk_notif->{'notification_message'} = MIME::Base64::decode($pk_notif->{'notification_message'});
         } else {
@@ -158,7 +158,7 @@ sub db_init_notification_table {
         return undef;
     }
 
-    foreach my $email (@rcpt){
+    foreach my $email (@rcpt) {
         my $rows = $handle->execute(
             $msgid,
             lc($email),
@@ -268,7 +268,7 @@ sub find_notification_id_by_message{
     );
 
     my @pk_notifications = $handle->fetchrow_array;
-    if ($#pk_notifications > 0){
+    if ($#pk_notifications > 0) {
         Sympa::Log::Syslog::do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );
         # we should return undef...
     }

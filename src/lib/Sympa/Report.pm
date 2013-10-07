@@ -104,7 +104,7 @@ sub reject_report_msg {
         return undef
     }
 
-    unless ($user){
+    unless ($user) {
         Sympa::Log::Syslog::do_log('err',"unable to send template command_report.tt2 : no user to notify");
         return undef;
     }
@@ -115,7 +115,7 @@ sub reject_report_msg {
         $robot = Sympa::Robot::clean_robot($robot, 1); #FIXME: really may be Site?
     }
 
-    unless ($robot){
+    unless ($robot) {
         Sympa::Log::Syslog::do_log('err',"unable to send template command_report.tt2 : no robot");
         return undef;
     }
@@ -250,7 +250,7 @@ sub notice_report_msg {
     $params->{'entry'} = $entry;
     $params->{'auto_submitted'} = 'auto-replied';
 
-    unless ($user){
+    unless ($user) {
         Sympa::Log::Syslog::do_log('err',"unable to send template message_report.tt2 : no user to notify");
         return undef;
     }
@@ -261,7 +261,7 @@ sub notice_report_msg {
         $robot = Sympa::Robot::clean_robot($robot, 1); #FIXME: really may be Site?
     }
 
-    unless ($robot){
+    unless ($robot) {
         Sympa::Log::Syslog::do_log('err',"unable to send template message_report.tt2 : no robot");
         return undef;
     }
@@ -365,7 +365,7 @@ A true value, or I<undef> if something went wrong.
 sub send_report_cmd {
     my ($sender, $robot_id) = @_;
 
-    unless ($sender){
+    unless ($sender) {
         Sympa::Log::Syslog::do_log('err',"unable to send template command_report.tt2 : no user to notify");
         return undef;
     }
@@ -375,7 +375,7 @@ sub send_report_cmd {
         $robot = Sympa::Robot->new($robot_id);
     }
 
-    unless ($robot){
+    unless ($robot) {
         Sympa::Log::Syslog::do_log('err',"unable to send template command_report.tt2 : no robot");
         return undef;
     }
@@ -474,7 +474,7 @@ sub global_report_cmd {
 
     if ($type eq 'intern') {
 
-        if ($robot){
+        if ($robot) {
             my $params = $data;
             $params ||= {};
             $params->{'error'} = Sympa::Language::gettext($error);
@@ -501,7 +501,7 @@ sub global_report_cmd {
     push @global_error_cmd, $data;
 
     if ($now) {
-        unless ($sender && $robot){
+        unless ($sender && $robot) {
             Sympa::Log::Syslog::do_log('err',"unable to send template command_report now : no sender or robot");
             return undef;
         }
@@ -560,7 +560,7 @@ sub reject_report_cmd {
     }
 
     if ($type eq 'intern') {
-        if ($robot){
+        if ($robot) {
 
             my $listname;
             if (defined $data->{'listname'}) {
@@ -915,13 +915,13 @@ sub reject_report_web {
     }
 
     my $listname;
-    if (ref($list) && $list->isa('Sympa::List')){
+    if (ref($list) && $list->isa('Sympa::List')) {
         $listname = $list->{'name'};
     }
 
     ## Notify listmaster for internal or system errors
     if ($type eq 'intern'|| $type eq 'system') {
-        if ($robot){
+        if ($robot) {
             my $params = $data;
             $params ||= {};
             $params->{'error'} = Sympa::Language::gettext($error);
