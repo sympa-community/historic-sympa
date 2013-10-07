@@ -221,7 +221,7 @@ my $ip = $ENV{'REMOTE_HOST'};
 unless (defined Sympa::Robot::get_robots()) {
     Sympa::Log::Syslog::fatal_err(
         'Unable to load sympa configuration, file %s has errors.',
-        Conf::get_sympa_conf()
+        Sympa::Configuration::get_sympa_conf()
     );
 }
 

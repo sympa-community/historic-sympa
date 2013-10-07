@@ -140,7 +140,7 @@ sub upgrade {
     ##}
 
     ## Always update config.bin files while upgrading
-    Conf::delete_binaries();
+    Sympa::Configuration::delete_binaries();
     ## Always update config.bin files while upgrading
     ## This is especially useful for character encoding reasons
     Sympa::Log::Syslog::do_log('notice',
@@ -574,8 +574,8 @@ sub upgrade {
         }
 
         foreach my $f (
-            Conf::get_sympa_conf(),
-            Conf::get_wwsympa_conf(),
+            Sympa::Configuration::get_sympa_conf(),
+            Sympa::Configuration::get_wwsympa_conf(),
             Sympa::Site->etc . '/topics.conf',
             Sympa::Site->etc . '/auth.conf'
         ) {
@@ -1060,8 +1060,8 @@ sub upgrade {
 
     ## We have obsoleted wwsympa.conf.  It would be migrated to sympa.conf.
     if (Sympa::Tools::lower_version($previous_version, '6.2a.33')) {
-        my $sympa_conf = Conf::get_sympa_conf();
-        my $wwsympa_conf = Conf::get_wwsympa_conf();
+        my $sympa_conf = Sympa::Configuration::get_sympa_conf();
+        my $wwsympa_conf = Sympa::Configuration::get_wwsympa_conf();
         my $fh;
         my %migrated = ();
         my @newconf = ();
@@ -1113,7 +1113,7 @@ sub upgrade {
 
         if (-r $wwsympa_conf) {
             ## load only sympa.conf
-            my $conf = Conf::load_robot_conf(
+            my $conf = Sympa::Configuration::load_robot_conf(
                 {'robot' => '*', 'no_db' => 1, 'return_result' => 1}
             );
 
@@ -1319,8 +1319,8 @@ sub to_utf8 {
 
         ## If filesystem_encoding is set, files are supposed to be encoded according to it
         my $charset;
-        if ((defined $Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
-            $charset = $Conf::Conf::Ignored_Conf{'filesystem_encoding'};
+        if ((defined $Sympa::Configuration::Ignored_Conf{'filesystem_encoding'})&($Sympa::Configuration::Conf{'filesystem_encoding'} ne 'utf-8')) {
+            $charset = $Sympa::Configuration::Ignored_Conf{'filesystem_encoding'};
         } else {	    
             Sympa::Language::PushLang($lang);
             $charset = Sympa::Language::GetCharset;

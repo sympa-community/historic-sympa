@@ -142,7 +142,7 @@ my $ajax;
 ## Load sympa config
 unless (defined Sympa::Robot::get_robots()) {
     # we cannot use log without configuration
-    my $conf = Conf::get_sympa_conf();
+    my $conf = Sympa::Configuration::get_sympa_conf();
     die "Unable to load sympa configuration, file $conf or one of the virtual host robot.conf files contain errors. Exiting.";
 }
 
@@ -5976,7 +5976,7 @@ sub do_edit_config {
                 last;
             } else {
                 $p->{'current_value'} = $in{'conf_new_value'};
-                Conf::set_robot_conf($robot_id, $in{'conf_parameter_name'},
+                Sympa::Configuration::set_robot_conf($robot_id, $in{'conf_parameter_name'},
                     $in{'conf_new_value'});
                 Sympa::Log::Syslog::do_log('notice', 'setting parameter %s to value %s',
                     $in{'conf_parameter_name'}, $in{'conf_new_value'});

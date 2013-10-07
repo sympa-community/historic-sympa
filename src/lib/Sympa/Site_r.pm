@@ -91,13 +91,13 @@ sub load {
         $opts{'config_file'} = $self->{'etc'} . '/robot.conf';
         $opts{'robot'}       = $self->{'name'};
     } elsif ($self eq 'Site') {
-        $opts{'config_file'} ||= Conf::get_sympa_conf();
+        $opts{'config_file'} ||= Sympa::Configuration::get_sympa_conf();
         $opts{'robot'} = '*';
     } else {
         croak 'bug in logic.  Ask developer';
     }
 
-    my $result = Conf::load_robot_conf(\%opts);
+    my $result = Sympa::Configuration::load_robot_conf(\%opts);
 
     ## Robot cache must be reloaded if Site config had been reloaded.
     Sympa::Site->init_robot_cache() if !ref $self and $self eq 'Sympa::Site' and $result;
