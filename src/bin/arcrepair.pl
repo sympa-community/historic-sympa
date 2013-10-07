@@ -1,5 +1,5 @@
 #! /usr/bin/perl
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:noet:textwidth=78
 
 ## This script should be run on server where Sympa 4.1 has been running

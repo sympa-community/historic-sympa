@@ -1,5 +1,5 @@
 #! --PERL--
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4:textwidth=78
 
 # arc2webarc.pl - This script will concert existing Sympa mail archives

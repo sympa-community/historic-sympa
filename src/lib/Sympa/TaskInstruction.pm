@@ -1,4 +1,4 @@
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4:textwidth=78
 # $Id$
 #

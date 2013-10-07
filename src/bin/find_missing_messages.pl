@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:noet:textwidth=78
 
 # find_missing_messages.pl

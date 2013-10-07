@@ -1,5 +1,5 @@
 #! --PERL--
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4:textwidth=78
 
 # crypt_passwd.pl - This script crypts uncrypted passwords in DB

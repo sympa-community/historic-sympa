@@ -1,5 +1,5 @@
 #! --PERL--
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4:textwidth=78
 
 # p12topem.pl - This script installs a List X509 cert and

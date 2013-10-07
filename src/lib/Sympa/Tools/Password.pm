@@ -1,4 +1,4 @@
-# -*- indent-tabs-mode: t; -*-
+# -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4:textwidth=78
 # $Id: Tools.pm 8288 2012-12-17 15:47:19Z rousse $
 
