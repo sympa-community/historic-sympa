@@ -1,5 +1,5 @@
 # -*- indent-tabs-mode: t; -*-
-# vim:ft=perl:noet:sw=8:textwidth=78
+# vim:ft=perl:et:sw=4:textwidth=78
 # $Id: Database.pm 9105 2013-04-16 12:56:53Z rousse $
 
 # Sympa - SYsteme de Multi-Postage Automatique
