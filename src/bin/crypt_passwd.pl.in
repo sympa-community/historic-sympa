@@ -34,7 +34,7 @@ use Sympa::Database;
 use Sympa::Tools::Password;
 
 eval {
-	require Crypt::CipherSaber;
+    require Crypt::CipherSaber;
 };
 die "Crypt::CipherSaber not installed ; cannot crypt passwords" if $EVAL_ERROR;
 
@@ -50,13 +50,13 @@ my $base = Sympa::Database->get_singleton();
 print "Searching uncrypted passwords\n";
 
 my $select_handle = $base->get_query_handle(
-	"SELECT email_user, password_user FROM user_table WHERE (password_user not like 'crypt.%')"
+    "SELECT email_user, password_user FROM user_table WHERE (password_user not like 'crypt.%')"
 ) || die "Can't prepare SQL statement";
 
 $select_handle->execute() || die "Unable to execute SQL statement";
 
 my $update_handle = $base->get_query_handle(
-	"UPDATE user_table SET password_user=? WHERE (email_user=?)"
+    "UPDATE user_table SET password_user=? WHERE (email_user=?)"
 ) || die "Can't prepare SQL statement";
 
 my $user;
@@ -64,18 +64,18 @@ my $user;
 my $count = 0;
 
 while ($user = $select_handle->fetchrow_hashref('NAME_lc')) {
-	next unless $user->{'password_user'};
+    next unless $user->{'password_user'};
 
-	printf "\n%s", $user->{'email_user'};
+    printf "\n%s", $user->{'email_user'};
 
-	my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, Sympa::Site->cookie);
+    my $crypted_password = Sympa::Tools::Password::crypt_password($user->{'password_user'}, Sympa::Site->cookie);
 
-	printf " => %s", $crypted_password;
+    printf " => %s", $crypted_password;
 
-	$update_handle->execute($crypted_password, $user->{'email_user'})
-		|| die "Unable to execute SQL statement";
+    $update_handle->execute($crypted_password, $user->{'email_user'})
+    || die "Unable to execute SQL statement";
 
-	$count++;
+    $count++;
 }
 
 $select_handle->finish();

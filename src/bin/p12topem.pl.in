@@ -61,23 +61,23 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 ## Load sympa config
 unless (Sympa::Configuration::load($sympa_conf_file)) {
-	die 'config_error';
+    die 'config_error';
 }
 
 ## Probe Db if defined
 if (Sympa::Site->db_name and Sympa::Site->db_type) {
-	my $report = Sympa::Database->get_singleton()->probe(
-		update => Sympa::Site->update_db_field_types
-	);
-	if (defined $report) {
-		Sympa::List::send_notify_to_listmaster(
-			'db_struct_updated',
-			Sympa::Site->domain,
-			{ 'report' => $report }
-		) if @$report;
-	} else {
-		die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Sympa::Site->db_name);
-	}
+    my $report = Sympa::Database->get_singleton()->probe(
+        update => Sympa::Site->update_db_field_types
+    );
+    if (defined $report) {
+        Sympa::List::send_notify_to_listmaster(
+            'db_struct_updated',
+            Sympa::Site->domain,
+            { 'report' => $report }
+        ) if @$report;
+    } else {
+        die('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', Sympa::Site->db_name);
+    }
 }
 
 ## Apply defaults to %Sympa::List::pinfo
@@ -91,11 +91,11 @@ my $etc_dir = Sympa::Site->etc;
 ## Check option
 my %options;
 GetOptions(
-	\%options,
-'pkcs12=s',
-'listname=s',
-'robot=s',
-'help|h'
+    \%options,
+    'pkcs12=s',
+    'listname=s',
+    'robot=s',
+    'help|h'
 ) or pod2usage(-verbose => 0);
 
 pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
@@ -109,35 +109,35 @@ my $p12input = $options{'pkcs12'};
 my ($cert,$privatekey,$inpass,$key);
 
 if ($listname) {
-	my $self = Sympa::List->new($listname, $robot);
-	$cert = $self->{'dir'}.'/cert.pem';
-	$privatekey = $self->{'dir'}.'/private_key';
-	unless (-d $self->{'dir'}) {
-		printf "unknown list $listname (directory $self->{'dir'} not found)\n";
-		die;
-	}
+    my $self = Sympa::List->new($listname, $robot);
+    $cert = $self->{'dir'}.'/cert.pem';
+    $privatekey = $self->{'dir'}.'/private_key';
+    unless (-d $self->{'dir'}) {
+        printf "unknown list $listname (directory $self->{'dir'} not found)\n";
+        die;
+    }
 }elsif($robot) {
-	if (-d Sympa::Site->etc.'/'.$robot) {
-		$cert = Sympa::Site->etc.'/'.$robot.'/cert.pem';
-		$privatekey = Sympa::Site->etc.'/'.$robot.'/private_key';
-	} else {
-		$cert = Sympa::Site->etc.'/cert.pem';
-		$privatekey = Sympa::Site->etc.'/private_key';
-	}
+    if (-d Sympa::Site->etc.'/'.$robot) {
+        $cert = Sympa::Site->etc.'/'.$robot.'/cert.pem';
+        $privatekey = Sympa::Site->etc.'/'.$robot.'/private_key';
+    } else {
+        $cert = Sympa::Site->etc.'/cert.pem';
+        $privatekey = Sympa::Site->etc.'/private_key';
+    }
 }
 
 if (-r "$cert") {
-	printf "$cert certificat already exist\n";
-	die;
+    printf "$cert certificat already exist\n";
+    die;
 }
 if (-r "$privatekey") {
-	printf "$privatekey already exist\n";
-	die;
+    printf "$privatekey already exist\n";
+    die;
 }
 
 unless ($openssl) {
-	printf "You must first configure Sympa to use openssl. Check the parameter openssl in sympa.conf\n";
-	die;
+    printf "You must first configure Sympa to use openssl. Check the parameter openssl in sympa.conf\n";
+    die;
 }
 
 system 'stty', '-echo';
@@ -150,11 +150,11 @@ print PASS "$inpass\n";
 close PASS;
 
 unless ($outpass) {
-	system 'stty', '-echo';
-	printf "sympa password to protect list private_key $key:";
-	chop($outpass = <STDIN>);
-	print "\n";
-	system 'stty', 'echo';
+    system 'stty', '-echo';
+    printf "sympa password to protect list private_key $key:";
+    chop($outpass = <STDIN>);
+    print "\n";
+    system 'stty', 'echo';
 }
 
 open  PASS, "| $openssl pkcs12 -in $p12input -out $privatekey -nocerts -passin stdin -des3 -passout stdin";

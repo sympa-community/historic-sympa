@@ -40,38 +40,38 @@ Sympa::Database::db_connect() || die "Can't connect to database";
 my $base = Sympa::Database->get_singleton();
 
 my $select_subscriber_handle = $base->get_query_handle(
-	"SELECT user_subscriber, comment_subscriber FROM subscriber_table"
+    "SELECT user_subscriber, comment_subscriber FROM subscriber_table"
 );
 
 my $select_user_handle = $base->get_query_handle(
-	"SELECT gecos_user FROM user_table WHERE email_user=?"
+    "SELECT gecos_user FROM user_table WHERE email_user=?"
 );
 
 my $update_subscriber_handle = $base->get_query_handle(
-	"UPDATE subscriber_table SET comment_subscriber=? WHERE user_subscriber=?"
+    "UPDATE subscriber_table SET comment_subscriber=? WHERE user_subscriber=?"
 );
 
 $select_subscriber_handle->execute() || die "Unable to execute SQL statement";
 
 my $user;
 while ($user = $select_subscriber_handle->fetchrow_hashref('NAME_lc')) {
-	printf "\nUser: %s", $user->{'user_subscriber'};
+    printf "\nUser: %s", $user->{'user_subscriber'};
 
-	unless ($user->{'comment_subscriber'}) {
-		$select_user_handle->execute(
-			$user->{'user_subscriber'}
-		) || die "Unable to execute SQL statement";
+    unless ($user->{'comment_subscriber'}) {
+        $select_user_handle->execute(
+            $user->{'user_subscriber'}
+        ) || die "Unable to execute SQL statement";
 
-		my $gecos = $select_user_handle->fetchrow();
+        my $gecos = $select_user_handle->fetchrow();
 
-		if ($gecos) {
-			printf " =>%s", $gecos;
-			$update_subscriber_handle->execute(
-				$gecos, $user->{'user_subscriber'}
-			) || die "Unable to execute SQL statement";
-		}
+        if ($gecos) {
+            printf " =>%s", $gecos;
+            $update_subscriber_handle->execute(
+                $gecos, $user->{'user_subscriber'}
+            ) || die "Unable to execute SQL statement";
+        }
 
-	}
+    }
 }
 
 $select_user_handle->finish();
