@@ -10954,7 +10954,7 @@ sub do_rename_list_request {
 
     ## Super listmaster can move a list to another robot
     if ($robot->is_listmaster($param->{'user'}{'email'})) {
-        foreach my $r (@{Robot::get_robots()}) {
+        foreach my $r (@{Sympa::Robot::get_robots()}) {
             if ($r->domain eq $robot->domain) {
                 $param->{'robots'}{$r->domain} = 'selected="selected"';
             } else {
@@ -18358,7 +18358,7 @@ sub get_server_details {
         ## n.b. Sympa::Site (default) config is not included.
         $param->{'robots'} =
         {   map { $_->domain => $_->fullconfig }
-            grep { $_->etc ne Sympa::Site->etc } @{Robot::get_robots()}
+            grep { $_->etc ne Sympa::Site->etc } @{Sympa::Robot::get_robots()}
         };
     }
 

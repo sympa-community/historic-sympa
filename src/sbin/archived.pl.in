@@ -325,7 +325,7 @@ unless ($options{'debug'} || $options{'foreground'}) {
 ## Sets the UMASK
         umask(oct(Sympa::Site->umask));
 
-        foreach my $robot (@{Robot::get_robots()}) {
+        foreach my $robot (@{Sympa::Robot::get_robots()}) {
             my $arc_dir = $robot->arc_path;
             ## Create arc_path if required
             if ($arc_dir) {

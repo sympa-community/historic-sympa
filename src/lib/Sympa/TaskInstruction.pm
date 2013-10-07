@@ -665,7 +665,7 @@ sub purge_tables {
     Log::do_log('notice','%s rows removed in bulkspool_table',$removed);
     #
     $removed = 0;
-    foreach my $robot (@{Robot::get_robots()}) {
+    foreach my $robot (@{Sympa::Robot::get_robots()}) {
         my $all_lists = Sympa::List::get_lists($robot);
         foreach my $list (@$all_lists) {
             $removed += tracking::remove_message_by_period($list, $list->tracking->{'retention_period'});
@@ -707,7 +707,7 @@ sub purge_user_table {
         $known_people{$l} = 1;
     }
 
-    foreach my $robot (@{Robot::get_robots()}) {
+    foreach my $robot (@{Sympa::Robot::get_robots()}) {
 
         my $all_lists = Sympa::List::get_lists($robot);
         foreach my $list (@$all_lists) {

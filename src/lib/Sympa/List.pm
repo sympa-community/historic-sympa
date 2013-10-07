@@ -716,7 +716,7 @@ sub search_list_among_robots {
  	return undef;
     }
 
-    foreach my $robot (@{Robot::get_robots() || []}) {
+    foreach my $robot (@{Sympa::Robot::get_robots() || []}) {
 	if (-d $robot->home . '/' . $listname) {
 	    return $robot;
 	}
@@ -5649,7 +5649,7 @@ Initialize internal list cache
 
 sub init_list_cache {
     Sympa::Log::Syslog::do_log('debug2', '()');
-    foreach my $robot (@{Robot::get_robots() || []}) {
+    foreach my $robot (@{Sympa::Robot::get_robots() || []}) {
 	$robot->init_list_cache();
     }
 }
@@ -9263,7 +9263,7 @@ sub get_lists {
 	if (ref $that and ref $that eq 'Robot') {
 	    @robots = ($that);
 	} elsif ($that eq 'Site') {
-	    @robots = @{Robot::get_robots()};
+	    @robots = @{Sympa::Robot::get_robots()};
 	} else {
 	    croak 'bug in logic.  Ask developer';
 	}
@@ -9779,7 +9779,7 @@ sub get_lists {
 sub get_robots {
     my $robots = Sympa::Robot::get_robots();
     return undef unless $robots;
-    return map { $_->domain } @{Robot::get_robots()};
+    return map { $_->domain } @{Sympa::Robot::get_robots()};
 }
 
 ## get idp xref to locally validated email address

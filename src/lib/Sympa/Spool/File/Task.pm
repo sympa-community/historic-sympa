@@ -222,7 +222,7 @@ sub create_required_lists_tasks {
     Sympa::Log::Syslog::do_log('debug','Creating required tasks from list models');
 
     my $task;
-    foreach my $robot (@{Robot::get_robots()}) {
+    foreach my $robot (@{Sympa::Robot::get_robots()}) {
         Sympa::Log::Syslog::do_log('debug3', 'creating list task : current bot is %s',
             $robot);
         my $all_lists = Sympa::List::get_lists($robot);
