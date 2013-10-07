@@ -59,9 +59,9 @@ use Sympa::Template;
 my $sth;
 # parameters hash, keyed by parameter name
 our %params =
-map  { $_->{name} => $_ }
-grep { $_->{name} }
-@Sympa::Configuration::Definition::params;
+    map  { $_->{name} => $_ }
+    grep { $_->{name} }
+    @Sympa::Configuration::Definition::params;
 
 # valid virtual host parameters, keyed by parameter name
 my %valid_robot_key_words;
