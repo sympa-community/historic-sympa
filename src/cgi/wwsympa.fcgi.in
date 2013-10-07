@@ -2108,8 +2108,7 @@ sub _split_params {
                 $in{$pname} = join '/', @params[$i..$#params];
                 $in{$pname} .= '/' if $ending_slash;
                 last;
-            }
-            else {
+            } else {
                 $pname = $p;
                 $in{$pname} = $params[$i];
             }
@@ -2223,8 +2222,7 @@ sub get_parameters {
                 'robot' => $robot, 'string' => $in{$p});
             if (defined $tmpparam) {
                 $in{$p} = $tmpparam;
-            }
-            else {
+            } else {
                 Sympa::Log::Syslog::do_log('err','Unable to sanitize parameter %s',$pname);
             }
         }
@@ -2376,8 +2374,7 @@ sub get_parameters_old {
                     $in{$pname} = join '/', @params[$i..$#params];
                     $in{$pname} .= '/' if $ending_slash;
                     last;
-                }
-                else {
+                } else {
                     $pname = $p;
                     $in{$pname} = $params[$i];
                 }
@@ -2469,8 +2466,7 @@ sub get_parameters_old {
                 'robot' => $robot, 'string' => $in{$p});
             if (defined $tmpparam) {
                 $in{$p} = $tmpparam;
-            }
-            else {
+            } else {
                 Sympa::Log::Syslog::do_log('err','Unable to sanitize parameter %s',$pname);
             }
         }
@@ -2841,8 +2837,7 @@ sub check_param_in {
         # Pictures are not available unless it is configured for the list and the robot
         if ($list->pictures_feature eq 'off') {
             $param->{'pictures_display'} = undef;
-        }
-        else {
+        } else {
             $param->{'pictures_display'} = 'on';
         }
 
@@ -11664,20 +11659,15 @@ sub by_order {
     if ($order eq 'order_by_doc')  {
         $hash->{$a}{'doc'} cmp $hash->{$b}{'doc'}
             or $hash->{$b}{'date_epoch'} <=> $hash->{$a}{'date_epoch'};
-    } 
-    elsif ($order eq 'order_by_author') {
+    } elsif ($order eq 'order_by_author') {
         $hash->{$a}{'author'} cmp $hash->{$b}{'author'}
             or $hash->{$b}{'date_epoch'} <=> $hash->{$a}{'date_epoch'};
-    } 
-    elsif ($order eq 'order_by_size') {
+    } elsif ($order eq 'order_by_size') {
         $hash->{$a}{'size'} <=> $hash->{$b}{'size'} 
             or $hash->{$b}{'date_epoch'} <=> $hash->{$a}{'date_epoch'};
-    }
-    elsif ($order eq 'order_by_date') {
+    } elsif ($order eq 'order_by_date') {
         $hash->{$b}{'date_epoch'} <=> $hash->{$a}{'date_epoch'} or $a cmp $b;
-    }
-
-    else {
+    } else {
         $a cmp $b;
     }
 }
@@ -13951,8 +13941,7 @@ sub creation_shared_file {
             open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
             print HTMLFILE $sanitized_file;
             close HTMLFILE;
-        }
-        else {
+        } else {
             Sympa::Log::Syslog::do_log('err','Unable to sanitize file %s',$fname);
         }
     }
@@ -14523,8 +14512,7 @@ sub d_copy_file {
                 open HTMLFILE,  ">:bytes", "$dest_dir/$fname";
                 print HTMLFILE $sanitized_file;
                 close HTMLFILE;
-            }
-            else {
+            } else {
                 Sympa::Log::Syslog::do_log('err','Unable to sanitize file %s',$fname);
             }
         }
@@ -15038,8 +15026,7 @@ sub do_d_create_dir {
     if ($type eq 'directory') {
         $op = $param->{'action'}.'(directory)';
         web_db_stat_log({'robot' => $robot_id, 'list' => $list->name, 'operation' => $op, 'parameter' => "", 'mail' => $param->{'user'}{'email'}, 'client' => $ip, 'daemon' => $daemon_name});
-    }
-    else{
+    } else{
         $op = $param->{'action'}.'(file)';
         web_db_stat_log({'robot' => $robot_id, 'list' => $list->name, 'operation' => $op, 'parameter' => $filesize, 'mail' => $param->{'user'}{'email'}, 'client' => $ip, 'daemon' => $daemon_name});
     }
@@ -15678,8 +15665,7 @@ sub do_delete_pictures {
         wwslog('err', 'Failed to erase %s',
             $list->find_picture_filenames($email));
         return undef;  
-    }
-    else {
+    } else {
         wwslog('notice', 'File deleted successfully');
         return 'suboptions';
     }
@@ -17016,8 +17002,7 @@ sub do_dump {
             foreach my $user (@{$param->{'members'}}) {
                 print DUMP "$user->{'email'}\t$user->{'gecos'}\t$user->{'bounce_score'}\t$user->{'bounce_count'}\t$user->{'first_bounce'}\t$user->{'last_bounce'}\n";
             }
-        }
-        else {
+        } else {
             $in{'filter'} = $in{'format'};
             do_search();
             print DUMP "# Exported subscribers with search filter \"$in{'format'}\"\n";

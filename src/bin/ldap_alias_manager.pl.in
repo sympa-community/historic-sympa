@@ -207,8 +207,7 @@ if ($operation eq 'add') {
 
     finalize_ldap();
 
-} # end if add
-elsif ($operation eq 'del') {
+} elsif ($operation eq 'del') {
 
     if (!initialize_ldap()) {
         print STDERR "Can't bind to LDAP server\n";
@@ -238,8 +237,7 @@ elsif ($operation eq 'del') {
     } # end foreach aliases
 
     finalize_ldap();
-} # end if del
-else {
+} else {
     print STDERR "Action $operation not implemented yet\n";
     exit(2);
 }
@@ -276,27 +274,19 @@ sub GetLdapParameter {
     open(LDAPCONFIG,$manager_conf_file) or print STDERR "Can't read the config file $manager_conf_file\n" and return 0;
     my @ldap_conf=<LDAPCONFIG>;
     close LDAPCONFIG;
-    foreach(@ldap_conf)
-    {
+    foreach(@ldap_conf) {
         #we skip the comments
-        if ($_ =~ /^\s*\#/)
-        {
+        if ($_ =~ /^\s*\#/) {
             next;
-        }
-        elsif ($_  =~ /^\s*(\w+)\s+(.+)\s*$/)
-        {
+        } elsif ($_  =~ /^\s*(\w+)\s+(.+)\s*$/) {
 
             my ($param_name, $param_value) = ($1, $2);
             $ldap_params{$param_name}=$param_value;
             #print "$param_name: $ldap_params{$param_name}\n";
-        }
-        #we skip the blank line
-        elsif ($_  =~ /^\s*$/)
-        {
+        } elsif ($_  =~ /^\s*$/) {
+            #we skip the blank line
             next;
-        }
-        else
-        {
+        } else {
             print STDERR "Unknown syntax in config file $manager_conf_file\n" and return 0;
         }
 
@@ -309,10 +299,8 @@ sub GetLdapParameter {
 sub initialize_ldap {
 
 
-    if ($ldap_ssl eq '1')
-    {
-        if ($ldap_cachain)
-        {
+    if ($ldap_ssl eq '1') {
+        if ($ldap_cachain) {
             unless ($ldap_connection = Net::LDAPS->new($ldap_host), version => 3, verify => 'require', sslversion=> 'sslv3',
                 cafile => $ldap_cachain) {
                 print STDERR "Can't connect to LDAP server using SSL
@@ -320,17 +308,13 @@ sub initialize_ldap {
                 $ldap_host: $EVAL_ERROR\n";
                 return 0;
             }
-        }
-        else
-        {
+        } else {
             unless ($ldap_connection = Net::LDAPS->new($ldap_host), version => 3, verify => 'none', sslversion=> 'sslv3') {
                 print STDERR "Can't connect to LDAP server using SSL for $ldap_host: $EVAL_ERROR\n";
                 return 0;
             }
         }
-    }
-    else
-    {
+    } else {
         unless ($ldap_connection = Net::LDAP->new($ldap_host), version => 3) {
             print STDERR "Can't connect to LDAP server $ldap_host: $EVAL_ERROR\n";
             return 0;

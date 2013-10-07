@@ -390,8 +390,7 @@ sub create {
         $robot = $Rdata->{'list'}{'robot'};
         # $task_file  = "$spool_task/$date.$label.$model.$list_name\@$robot";
         $object = 'list';
-    }
-    else {
+    } else {
         $object = '_global';
         # $task_file  = $spool_task.'/'.$date.'.'.$label.'.'.$model.'.'.$object;
     }
@@ -647,17 +646,13 @@ sub chk_cmd {
 
             if ($regexp eq 'date') {
                 $error = 1 unless ( (/^$date_arg_regexp1$/i) or (/^$date_arg_regexp2$/i) or (/^$date_arg_regexp3$/i) );
-            }
-            elsif ($regexp eq 'delay') {
+            } elsif ($regexp eq 'delay') {
                 $error = 1 unless (/^$delay_regexp$/i);
-            }
-            elsif ($regexp eq 'var') {
+            } elsif ($regexp eq 'var') {
                 $error = 1 unless (/^$var_regexp$/i);
-            }
-            elsif ($regexp eq 'subarg') {
+            } elsif ($regexp eq 'subarg') {
                 $error = 1 unless (/^$subarg_regexp$/i);
-            }
-            else {
+            } else {
                 $error = 1 unless (/^$regexp$/i);
             }
 
@@ -1413,7 +1408,9 @@ sub chk_cert_expiration {
             unless (open (FILE, ">$cert_dir/$soon_expired_file")) {
                 Sympa::Log::Syslog::do_log ('err', "can't create $soon_expired_file");
                 next;
-            } else {close (FILE);}
+            } else {
+                close (FILE);
+            }
 
             my %tpl_context; # datas necessary to the template
 
