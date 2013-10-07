@@ -565,5 +565,4 @@ sub get_id {
     return shift->get_description() || '';
 }
 
-## Packages must return true.
 1;
