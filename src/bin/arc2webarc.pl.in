@@ -59,24 +59,24 @@ my $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 my %month_idx = qw(
-	jan 1
-	fev 2
-	feb 2
-	fv  2
-	mar 3
-	avr 4
-	apr 4
-	mai 5
-	may 5
-	jun 6
-	jul 7
-	aug 8
-	aou 8
-	sep 9
-	oct 10
-	nov 11
-	dec 12
-	dc  12
+    jan 1
+    fev 2
+    feb 2
+    fv  2
+    mar 3
+    avr 4
+    apr 4
+    mai 5
+    may 5
+    jun 6
+    jul 7
+    aug 8
+    aou 8
+    sep 9
+    oct 10
+    nov 11
+    dec 12
+    dc  12
 );
 
 my $msg_count = 0;
@@ -92,9 +92,9 @@ $OUTPUT_AUTOFLUSH = 1;
 
 my %options;
 GetOptions(
-	\%options,
-'input-directory=s',
-'help|h'
+    \%options,
+    'input-directory=s',
+    'help|h'
 ) or pod2usage(-verbose => 0);
 
 pod2usage(-verbose => 0, -exitstatus => 0) if $options{help};
@@ -106,121 +106,121 @@ unless $listname;
 
 ## Check UID
 unless ([getpwuid $UID]->[0] eq Sympa::Constants::USER) {
-	printf
-		"You should run this script as user \"%s\", ignore ? (y/CR)",
-		Sympa::Constants::USER;
-	my $s = <STDIN>;
-	die unless ($s =~ /^y$/i);
+    printf
+    "You should run this script as user \"%s\", ignore ? (y/CR)",
+    Sympa::Constants::USER;
+    my $s = <STDIN>;
+    die unless ($s =~ /^y$/i);
 }
 
 my $wwsconf = {};
 
 ## Load config
 unless ($wwsconf = Sympa::WWSympa::load_config($wwsympa_conf_file)) {
-	die 'unable to load config file';
+    die 'unable to load config file';
 }
 
 ## Load sympa config
 unless (Sympa::Configuration::load($sympa_conf_file)) {
-	die 'config_error';
+    die 'config_error';
 }
 
 my $report = Sympa::Database->get_singleton()->probe(
-	update => Sympa::Site->update_db_field_types
+    update => Sympa::Site->update_db_field_types
 );
 if (defined $report) {
-	Sympa::List::send_notify_to_listmaster(
-		'db_struct_updated',
-		Sympa::Site->domain,
-		{ 'report' => $report }
-	) if @$report;
+    Sympa::List::send_notify_to_listmaster(
+        'db_struct_updated',
+        Sympa::Site->domain,
+        { 'report' => $report }
+    ) if @$report;
 }
 
 chdir Sympa::Site->home;
 
 my $list = Sympa::List->new($listname, $robot)
-	or die 'Cannot create List object';
+    or die 'Cannot create List object';
 
 my $home_sympa;
 if ($robot) {
-	$home_sympa = Sympa::Site->home.'/'.$robot;
+    $home_sympa = Sympa::Site->home.'/'.$robot;
 } else {
-	$home_sympa = Sympa::Site->home;
+    $home_sympa = Sympa::Site->home;
 }
 my $dest_dir = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
 
 unless (-d "$home_sympa/$listname") {
-	die "No directory for list $listname";
+    die "No directory for list $listname";
 }
 
 unless (-d "$home_sympa/$listname/archives") {
-	die "No archives for list $listname";
+    die "No archives for list $listname";
 }
 
 if (-d $dest_dir) {
-	print "Web archives already exist for list $listname\nGo on (<CR>|n) ?";
-	my $s = <STDIN>;
-	die if ($s eq 'n');
+    print "Web archives already exist for list $listname\nGo on (<CR>|n) ?";
+    my $s = <STDIN>;
+    die if ($s eq 'n');
 } else {
-	mkdir $dest_dir, 0755 or die;
+    mkdir $dest_dir, 0755 or die;
 }
 
 if ($options{'input-directory'}) {
-	unless (-d $options{'input-directory'}) {
-		die "Parameter input-directory (%s) is not a directory", $options{'input-directory'};
-	}
+    unless (-d $options{'input-directory'}) {
+        die "Parameter input-directory (%s) is not a directory", $options{'input-directory'};
+    }
 
-	opendir DIR, $options{'input-directory'} || die;
-	foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
-		open ARCFILE, $options{'input-directory'}.'/'.$file;
-		my @msg = <ARCFILE>;
-		$msg_count++;
-		close ARCFILE;
-	}
-	closedir DIR;
+    opendir DIR, $options{'input-directory'} || die;
+    foreach my $file ( sort grep (!/^\.\.?$/,readdir(DIR))) {
+        open ARCFILE, $options{'input-directory'}.'/'.$file;
+        my @msg = <ARCFILE>;
+        $msg_count++;
+        close ARCFILE;
+    }
+    closedir DIR;
 
 } else {
 
-	print STDERR "Bursting archives\n";
-	foreach my $arc_file (<$home_sympa/$listname/archives/log*>) {
-		my ($first, $new);
-		my $msg = [];
-		my @msgs;
+    print STDERR "Bursting archives\n";
+    foreach my $arc_file (<$home_sympa/$listname/archives/log*>) {
+        my ($first, $new);
+        my $msg = [];
+        my @msgs;
 
-		## Split the archives file
-		print '.';
-		open ARCFILE, $arc_file;
-		while (<ARCFILE>) {
-			if (/^------- THIS IS A RFC934 (COMPILANT|COMPLIANT) DIGEST/) {
-				$first = 1;
-				$new = 1;
-				next;
-			}elsif (! $first) {
-				next;
-			}elsif (/^$/ && $new) {
-				next;
-			}elsif (/^------- CUT --- CUT/) {
-				push @msgs, $msg;
-				$msg_count++;
-				$msg = [];
-				$new = 1;
-			} else {
-				push @{$msg}, $_;
-				undef $new;
-			}
-		}
-		close ARCFILE;
+        ## Split the archives file
+        print '.';
+        open ARCFILE, $arc_file;
+        while (<ARCFILE>) {
+            if (/^------- THIS IS A RFC934 (COMPILANT|COMPLIANT) DIGEST/) {
+                $first = 1;
+                $new = 1;
+                next;
+            }elsif (! $first) {
+                next;
+            }elsif (/^$/ && $new) {
+                next;
+            }elsif (/^------- CUT --- CUT/) {
+                push @msgs, $msg;
+                $msg_count++;
+                $msg = [];
+                $new = 1;
+            } else {
+                push @{$msg}, $_;
+                undef $new;
+            }
+        }
+        close ARCFILE;
 
-		##Dump
-		#foreach my $i (0..$#msgs) {
-		#    printf "******** Message %d *******\n", $i;
-		#    print @{$msgs[$i]};
-		#}
+        ##Dump
+        #foreach my $i (0..$#msgs) {
+        #    printf "******** Message %d *******\n", $i;
+        #    print @{$msgs[$i]};
+        #}
 
-		## Store messages in web arc
-		store_messages(\@msgs, $dest_dir);
+        ## Store messages in web arc
+        store_messages(\@msgs, $dest_dir);
 
-}
+    }
 }
 
 print STDERR "\nFound $msg_count messages\n";
@@ -237,104 +237,104 @@ Now, you should add a web_archive parameter in the config file to make it access
 
 ## Analyze message header fields and store them in web archives
 sub store_messages {
-	my ($list_of_msg, $dest_dir) = @_;
-	my @msgs = @{$list_of_msg};
+    my ($list_of_msg, $dest_dir) = @_;
+    my @msgs = @{$list_of_msg};
 
-	my %nummsg;
+    my %nummsg;
 
-	## Analyzing Date header fields
-	#print STDERR "Analysing Date: header fields\n";
-	foreach my $msg (@msgs) {
-		my $incorrect = 0;
-		my ($date, $year, $month);
+    ## Analyzing Date header fields
+    #print STDERR "Analysing Date: header fields\n";
+    foreach my $msg (@msgs) {
+        my $incorrect = 0;
+        my ($date, $year, $month);
 
-		print '.';
-		foreach (@{$msg}) {
-			if (/^Date:\s+(.*)$/) {
-				#print STDERR "#$_#\n";
-				$date = $1;
+        print '.';
+        foreach (@{$msg}) {
+            if (/^Date:\s+(.*)$/) {
+                #print STDERR "#$_#\n";
+                $date = $1;
 
-				# Date type : Mon, 8 Dec 97 13:33:47 +0100
-				if ($date =~ /^\w{2,3},\s+\d{1,2}\s+([\wéû]{2,3})\s+(\d{2,4})/) {
-					$month = $1;
-					$year =$2;
-					#print STDERR "$month/$year\n";
+                # Date type : Mon, 8 Dec 97 13:33:47 +0100
+                if ($date =~ /^\w{2,3},\s+\d{1,2}\s+([\wéû]{2,3})\s+(\d{2,4})/) {
+                    $month = $1;
+                    $year =$2;
+                    #print STDERR "$month/$year\n";
 
-					# Date type : 8 Dec 97 13:33:47+0100
-				}elsif ($date =~ /^\d{1,2}\s+(\w{3}) (\d{2,4})/) {
-					$month = $1;
-					$year =$2;
+                    # Date type : 8 Dec 97 13:33:47+0100
+                }elsif ($date =~ /^\d{1,2}\s+(\w{3}) (\d{2,4})/) {
+                    $month = $1;
+                    $year =$2;
 
-					# Date type : 8-DEC-1997 13:33:47 +0100
-				}elsif ($date =~ /^\d{1,2}-(\w{3})-(\d{4})/) {
-					$month = $1;
-					$year =$2;
+                    # Date type : 8-DEC-1997 13:33:47 +0100
+                }elsif ($date =~ /^\d{1,2}-(\w{3})-(\d{4})/) {
+                    $month = $1;
+                    $year =$2;
 
-					# Date type : Mon Dec 8 13:33:47 1997
-				}elsif ($date =~ /^\w+\s+(\w+)\s+\d{1,2} \d+:\d+:\d+ (GMT )?(\d{4})/) {
-					$month = $1;
-					$year =$3;
+                    # Date type : Mon Dec 8 13:33:47 1997
+                }elsif ($date =~ /^\w+\s+(\w+)\s+\d{1,2} \d+:\d+:\d+ (GMT )?(\d{4})/) {
+                    $month = $1;
+                    $year =$3;
 
-					# unknown date format
-				} else {
-					$incorrect = 1;
-					last;
-				}
+                    # unknown date format
+                } else {
+                    $incorrect = 1;
+                    last;
+                }
 
-				# Month format
-				if ($month !~ /^\d+$/) {
-					$month =~ y/éûA-Z/eua-z/;
-					if (!$month_idx{$month}) {
-						$incorrect = 1;
-					} else {
-						$month = $month_idx{$month};
-					}
-				}elsif (($month < 1) or ($month > 12)) {
-					$incorrect = 1;
-				}
-				$month = "0".$month if $month =~ /^\d$/;
+                # Month format
+                if ($month !~ /^\d+$/) {
+                    $month =~ y/éûA-Z/eua-z/;
+                    if (!$month_idx{$month}) {
+                        $incorrect = 1;
+                    } else {
+                        $month = $month_idx{$month};
+                    }
+                }elsif (($month < 1) or ($month > 12)) {
+                    $incorrect = 1;
+                }
+                $month = "0".$month if $month =~ /^\d$/;
 
-				# Checking Year format
-				if ($year =~ /^[89]\d$/) {
-					$year = "19".$year;
-				}elsif ($year !~ /^19[89]\d|20[0-9][0-9]$/) {
-					$incorrect = 1;
-				}
+                # Checking Year format
+                if ($year =~ /^[89]\d$/) {
+                    $year = "19".$year;
+                }elsif ($year !~ /^19[89]\d|20[0-9][0-9]$/) {
+                    $incorrect = 1;
+                }
 
-				last;
-			}
+                last;
+            }
 
-			# empty line => end of header
-			if (/^\s*$/) {
-				last;
-			}
-		}
-		close MSG;
-		# Unknown date format/No date
-		if ($incorrect || ! $month || ! $year) {
-			$year = 'UN';
-			$month = 'KNOWN';
-		}
+            # empty line => end of header
+            if (/^\s*$/) {
+                last;
+            }
+        }
+        close MSG;
+        # Unknown date format/No date
+        if ($incorrect || ! $month || ! $year) {
+            $year = 'UN';
+            $month = 'KNOWN';
+        }
 
-		# New month
-		if (!-d "$dest_dir/$year-$month") {
-			print "\nNew directory $year-$month\n";
-			`mkdir $dest_dir/$year-$month`;
-		}
+        # New month
+        if (!-d "$dest_dir/$year-$month") {
+            print "\nNew directory $year-$month\n";
+            `mkdir $dest_dir/$year-$month`;
+        }
 
-		if (!-d "$dest_dir/$year-$month/arctxt") {
-			`mkdir $dest_dir/$year-$month/arctxt`;
-		}
+        if (!-d "$dest_dir/$year-$month/arctxt") {
+            `mkdir $dest_dir/$year-$month/arctxt`;
+        }
 
-		$nummsg{$year}{$month}++ while (-e "$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}");
+        $nummsg{$year}{$month}++ while (-e "$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}");
 
-		# Save message
-		open DESTFILE, ">$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}";
-		print DESTFILE @{$msg};
-		close DESTFILE;
-		#    `mv $m $dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}`;
-		$nummsg{$year}{$month}++;
-	}
+        # Save message
+        open DESTFILE, ">$dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}";
+        print DESTFILE @{$msg};
+        close DESTFILE;
+        #    `mv $m $dest_dir/$year-$month/arctxt/$nummsg{$year}{$month}`;
+        $nummsg{$year}{$month}++;
+    }
 
-	return 1;
+    return 1;
 }
