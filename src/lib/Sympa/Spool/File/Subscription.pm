@@ -48,9 +48,9 @@ sub sub_request_exists {
     my $self = shift;
     my $selector = shift;
     if ($self->get_message($selector)) {
-	Sympa::Log::Syslog('notice', 'Subscription already requested by %s',
-	    $selector->{'sender'});
-	return 1;
+        Sympa::Log::Syslog('notice', 'Subscription already requested by %s',
+            $selector->{'sender'});
+        return 1;
     }
     return 0;
 }
@@ -60,15 +60,15 @@ sub get_subscription_request_details {
     my $string = shift;
     my $result;
     if ($string =~ /(.*)\t(.*)\n(.*)\n/) {
-	$result->{'sender'}            = $1;
-	$result->{'gecos'}            = $2;
-	$result->{'customattributes'} = $3;
+        $result->{'sender'}            = $1;
+        $result->{'gecos'}            = $2;
+        $result->{'customattributes'} = $3;
     } else {
-	Sympa::Log::Syslog(
-	    'err',
-	    "Failed to parse subscription request %s",
-	    $string
-	);
+        Sympa::Log::Syslog(
+            'err',
+            "Failed to parse subscription request %s",
+            $string
+        );
     }
     return $result;
 }
@@ -80,8 +80,8 @@ sub get_additional_details {
     $data = $self->parse_file_content($key,$data);
     my $details;
     unless($details = $self->get_subscription_request_details($data->{'messageasstring'})) {
-	Sympa::Log::Syslog('err','File %s exists but its content is unparsable',$key);
-	return undef;
+        Sympa::Log::Syslog('err','File %s exists but its content is unparsable',$key);
+        return undef;
     }
     my %tmp_hash = (%$data,%$details);
     %$data = %tmp_hash;

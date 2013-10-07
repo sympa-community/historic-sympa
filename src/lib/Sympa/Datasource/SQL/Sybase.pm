@@ -39,31 +39,30 @@ use base qw(Sympa::Datasource::SQL);
 use Carp;
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_host parameter" unless $params{db_host};
-	croak "missing db_user parameter" unless $params{db_user};
+    croak "missing db_host parameter" unless $params{db_host};
+    croak "missing db_user parameter" unless $params{db_user};
 
-	return $class->SUPER::new(%params, db_type => 'sybase');
+    return $class->SUPER::new(%params, db_type => 'sybase');
 }
 
 sub connect {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	my $result = $self->SUPER::connect(%params);
-	return unless $result;
+    my $result = $self->SUPER::connect(%params);
+    return unless $result;
 
-	$self->{dbh}->do("use $self->{db_name}");
+    $self->{dbh}->do("use $self->{db_name}");
 
-	return 1;
+    return 1;
 }
 
 
 sub get_connect_string{
-	my ($self) = @_;
+    my ($self) = @_;
 
-	return
-		"DBI:Sybase:database=$self->{db_name};server=$self->{db_host}";
+    return "DBI:Sybase:database=$self->{db_name};server=$self->{db_host}";
 }
 
 1;

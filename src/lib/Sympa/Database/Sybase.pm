@@ -41,138 +41,138 @@ use Carp;
 use Sympa::Log::Syslog;
 
 our %date_format = (
-	'read' => {
-		'Sybase' => 'datediff(second, \'01/01/1970\',%s)',
-	},
-	'write' => {
-		'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
-	}
+    'read' => {
+        'Sybase' => 'datediff(second, \'01/01/1970\',%s)',
+    },
+    'write' => {
+        'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
+    }
 );
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_host parameter" unless $params{db_host};
-	croak "missing db_user parameter" unless $params{db_user};
+    croak "missing db_host parameter" unless $params{db_host};
+    croak "missing db_user parameter" unless $params{db_user};
 
-	return $class->SUPER::new(%params, db_type => 'sybase');
+    return $class->SUPER::new(%params, db_type => 'sybase');
 }
 
 sub connect {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	$ENV{'SYBASE_CHARSET'} = 'utf8';
-	my $result = $self->SUPER::connect(%params);
-	return unless $result;
+    $ENV{'SYBASE_CHARSET'} = 'utf8';
+    my $result = $self->SUPER::connect(%params);
+    return unless $result;
 
-	$self->{dbh}->do("use $self->{db_name}");
-	$self->{'dbh'}->{LongReadLen} = Sympa::Site->max_size * 2;
-	$self->{'dbh'}->{LongTruncOk} = 0;
-	Sympa::Log::Syslog::do_log('debug3',
-	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
-	$self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
-	$self->{'dbh'}->{RaiseError});
+    $self->{dbh}->do("use $self->{db_name}");
+    $self->{'dbh'}->{LongReadLen} = Sympa::Site->max_size * 2;
+    $self->{'dbh'}->{LongTruncOk} = 0;
+    Sympa::Log::Syslog::do_log('debug3',
+        'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
+        $self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
+        $self->{'dbh'}->{RaiseError});
 
-	return 1;
+    return 1;
 }
 
 
 sub get_connect_string{
-	my ($self) = @_;
+    my ($self) = @_;
 
-	return
-		"DBI:Sybase:database=$self->{db_name};server=$self->{db_host}";
+    return
+    "DBI:Sybase:database=$self->{db_name};server=$self->{db_host}";
 }
 
 sub get_substring_clause {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	return sprintf
-		"substring(%s,charindex('%s',%s)+1,%s)",
-		$params{source_field},
-		$params{separator},
-		$params{source_field},
-		$params{substring_length};
+    return sprintf
+        "substring(%s,charindex('%s',%s)+1,%s)",
+        $params{source_field},
+        $params{separator},
+        $params{source_field},
+        $params{substring_length};
 }
 
 sub get_limit_clause {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	return "";
+    return "";
 }
 
 sub get_formatted_date {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	my $mode = lc($params{mode});
-	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
-	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
-	} else {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			"Unknown date format mode %s",
-			$params{mode}
-		);
-		return undef;
-	}
+    my $mode = lc($params{mode});
+    if ($mode eq 'read') {
+        return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
+    } elsif ($mode eq 'write') {
+        return sprintf 'FROM_UNIXTIME(%d)',$params{target};
+    } else {
+        Sympa::Log::Syslog::do_log(
+            'err',
+            "Unknown date format mode %s",
+            $params{mode}
+        );
+        return undef;
+    }
 }
 
 sub get_tables {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log(
-		'debug',
-		'Getting tables list',
-	);
+    Sympa::Log::Syslog::do_log(
+        'debug',
+        'Getting tables list',
+    );
 
-	my $query =
-		"SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to get tables list'
-		);
-		return undef;
-	}
-	$sth->execute();
+    my $query =
+        "SELECT name FROM $self->{db_name}..sysobjects WHERE type='U'";
+    my $sth = $self->{dbh}->prepare($query);
+    unless ($sth) {
+        Sympa::Log::Syslog::do_log(
+            'err',
+            'Unable to get tables list'
+        );
+        return undef;
+    }
+    $sth->execute();
 
-	my @tables;
-	while (my $row = $sth->fetchrow_arrayref()) {
-		push @tables, lc($row->[0]);
-	}
+    my @tables;
+    while (my $row = $sth->fetchrow_arrayref()) {
+        push @tables, lc($row->[0]);
+    }
 
-	return @tables;
+    return @tables;
 }
 
 sub _get_table_query {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	my @clauses =
-		map { $self->_get_field_clause(%$_) }
-		@{$params{fields}};
-	push @clauses, $self->_get_primary_key_clause(@{$params{key}})
-		if $params{key};
+    my @clauses =
+    map { $self->_get_field_clause(%$_) }
+    @{$params{fields}};
+    push @clauses, $self->_get_primary_key_clause(@{$params{key}})
+    if $params{key};
 
-	my $query =
-		"CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
-	return $query;
+    my $query =
+        "CREATE TABLE $params{table} (" . join(',', @clauses) . ")";
+    return $query;
 }
 
 sub _get_native_type {
-	my ($self, $type) = @_;
+    my ($self, $type) = @_;
 
-	return 'numeric'          if $type =~ /^int/;
-	return 'numeric'          if $type =~ /^smallint/;
-	return 'numeric'          if $type =~ /^bigint/;
-	return 'double precision' if $type =~ /^double/;
-	return 'varchar(500)'     if $type =~ /^text/;
-	return 'text'             if $type =~ /^longtext/;
-	return 'varchar(15)'      if $type =~ /^enum/;
-	return 'long binary'      if $type =~ /^mediumblob/;
-	return $type
+    return 'numeric'          if $type =~ /^int/;
+    return 'numeric'          if $type =~ /^smallint/;
+    return 'numeric'          if $type =~ /^bigint/;
+    return 'double precision' if $type =~ /^double/;
+    return 'varchar(500)'     if $type =~ /^text/;
+    return 'text'             if $type =~ /^longtext/;
+    return 'varchar(15)'      if $type =~ /^enum/;
+    return 'long binary'      if $type =~ /^mediumblob/;
+    return $type
 }
 
 1;

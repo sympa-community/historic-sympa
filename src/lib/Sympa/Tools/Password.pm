@@ -70,9 +70,9 @@ sub ciphersaber_installed {
 
     eval { require Crypt::CipherSaber; };
     unless ($@) {
-	$cipher = Crypt::CipherSaber->new(Sympa::Site->cookie);
+        $cipher = Crypt::CipherSaber->new(Sympa::Site->cookie);
     } else {
-	$cipher = '';
+        $cipher = '';
     }
     return $cipher;
 }
@@ -106,8 +106,8 @@ sub decrypt_password {
 
     ciphersaber_installed();
     unless ($cipher) {
-	Sympa::Log::Syslog::do_log('info','password seems encrypted while CipherSaber is not installed !');
-	return $inpasswd ;
+        Sympa::Log::Syslog::do_log('info','password seems encrypted while CipherSaber is not installed !');
+        return $inpasswd ;
     }
     return ($cipher->decrypt(MIME::Base64::decode($inpasswd)));
 }
@@ -123,7 +123,7 @@ sub new_passwd {
     my $passwd;
     my $nbchar = int(rand 5) + 6;
     foreach my $i (0..$nbchar) {
-	$passwd .= chr(int(rand 26) + ord('a'));
+        $passwd .= chr(int(rand 26) + ord('a'));
     }
 
     return 'init'.$passwd;

@@ -39,23 +39,23 @@ use base qw(Sympa::Datasource::SQL);
 use Carp;
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_host parameter" unless $params{db_host};
-	croak "missing db_user parameter" unless $params{db_user};
+    croak "missing db_host parameter" unless $params{db_host};
+    croak "missing db_user parameter" unless $params{db_user};
 
-	return $class->SUPER::new(%params, db_type => 'oracle');
+    return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
 sub get_connect_string {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	my $string = "DBI:Oracle:";
-	if ($self->{db_host} && $self->{db_name}) {
-		$string .= "host=$self->{db_host};sid=$self->{db_name}";
-	}
+    my $string = "DBI:Oracle:";
+    if ($self->{db_host} && $self->{db_name}) {
+        $string .= "host=$self->{db_host};sid=$self->{db_name}";
+    }
 
-	return $string;
+    return $string;
 }
 
 1;

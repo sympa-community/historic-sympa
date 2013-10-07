@@ -43,8 +43,8 @@ sub new {
     Sympa::Log::Syslog::do_log('debug2', '(%s, %s)', @_);
     my $pkg = shift;
     return $pkg->SUPER::new('msg', shift,
-	'sortby' => 'priority',
-	'selector' => {'priority' => ['z', 'ne']},
+        'sortby' => 'priority',
+        'selector' => {'priority' => ['z', 'ne']},
     );
 }
 

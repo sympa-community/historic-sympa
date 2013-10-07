@@ -196,11 +196,11 @@ use BounceMessage;
 ## Check options
 my %options;
 GetOptions(
-	\%options,
-	'debug|d',
-	'log_level=s',
-	'foreground|F',
-	'help|h',
+    \%options,
+    'debug|d',
+    'log_level=s',
+    'foreground|F',
+    'help|h',
 ) or pod2usage(-exitval => 1, -output => \*STDERR);
 
 if ($options{'help'}) {
@@ -208,7 +208,7 @@ if ($options{'help'}) {
 }
 
 if ($options{'debug'}) {
-	$options{'log_level'} = 2 unless ($options{'log_level'});
+    $options{'log_level'} = 2 unless ($options{'log_level'});
 }
 
 $options{'foreground'} = 1 if ($options{'debug'});
@@ -220,38 +220,38 @@ my $ip = $ENV{'REMOTE_HOST'};
 # Load sympa.conf
 unless (defined Sympa::Robot::get_robots()) {
     Sympa::Log::Syslog::fatal_err(
-	'Unable to load sympa configuration, file %s has errors.',
-	Conf::get_sympa_conf()
+        'Unable to load sympa configuration, file %s has errors.',
+        Conf::get_sympa_conf()
     );
 }
 
 # connect to database
 my $db_conf = Sympa::Configuration::get_parameters_group(
-	'*','Database related'
+    '*','Database related'
 );
 
 my $base = Sympa::Database->create(%$db_conf);
 unless ($base) {
-	Sympa::Log::Syslog::fatal_err(
-		'Unable to create database defined in configuration. Exiting.'
-	);
+    Sympa::Log::Syslog::fatal_err(
+        'Unable to create database defined in configuration. Exiting.'
+    );
 }
 
 my $result = $base->connect();
 unless ($result) {
-	Sympa::Log::Syslog::fatal_err(
-		'Unable to connect to database defined in configuration. Exiting.'
-	);
+    Sympa::Log::Syslog::fatal_err(
+        'Unable to connect to database defined in configuration. Exiting.'
+    );
 }
 
 # Check that the data structure is uptodate
 unless (Sympa::Configuration::check_data_structure(Sympa::Constants::VERSION)) {
-	Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
+    Sympa::Log::Syslog::fatal_err("error : data structure was not updated ; you should run sympa.pl to run the upgrade process.");
 }
 
 # Check for several files.
 unless (Sympa::Configuration::checkfiles()) {
-	Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
+    Sympa::Log::Syslog::fatal_err("Missing files. Aborting.");
 }
 
 # init database logger
@@ -260,19 +260,19 @@ Sympa::Log::Database::init(base => $base);
 ## Put ourselves in background if not in debug mode.
 unless ($options{'debug'} || $options{'foreground'}) {
 
-	open(STDERR, ">> /dev/null");
-	open(STDOUT, ">> /dev/null");
-	if (open(TTY, "/dev/tty")) {
-		ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
+    open(STDERR, ">> /dev/null");
+    open(STDOUT, ">> /dev/null");
+    if (open(TTY, "/dev/tty")) {
+        ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
 #	ioctl(TTY, &TIOCNOTTY, 0);
-	close(TTY);
+        close(TTY);
     }
     setpgrp(0, 0);
     if ((my $child_pid = fork) != 0) {
-	print STDOUT "Starting bounce daemon, PID $_\n";
+        print STDOUT "Starting bounce daemon, PID $_\n";
 
-		exit(0);
-	}
+        exit(0);
+    }
 }
 
 ## If process is running in foreground, don't write STDERR to a dedicated file
@@ -281,16 +281,16 @@ $options->{'stderr_to_tty'} = 1 if ($options{'foreground'});
 
 ## Create and write the pidfile
 my $result = Sympa::Tools::Daemon::write_pid(
-	directory => Sympa::Constants::PIDDIR,
-	daemon    => $daemon_name,
-	pid       => $PID,
-	options   => $options,
-	method    => Sympa::Site->lock_method,
-	user      => Sympa::Constants::USER,
-	group     => Sympa::Constants::GROUP,
+    directory => Sympa::Constants::PIDDIR,
+    daemon    => $daemon_name,
+    pid       => $PID,
+    options   => $options,
+    method    => Sympa::Site->lock_method,
+    user      => Sympa::Constants::USER,
+    group     => Sympa::Constants::GROUP,
 );
 unless ($result) {
-	Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
+    Sympa::Log::Syslog::fatal_err('Error while writing pid file, exiting');
 }
 
 unless ($options->{'stderr_to_tty'}) {
@@ -300,14 +300,14 @@ unless ($options->{'stderr_to_tty'}) {
 if ($options{'log_level'}) {
     Sympa::Log::Syslog::set_log_level($options{'log_level'});
     Sympa::Log::Syslog::do_log(
-	'info', 'Configuration file read, log level set using options : %s',
-	$options{'log_level'}
+        'info', 'Configuration file read, log level set using options : %s',
+        $options{'log_level'}
     ); 
 } else {
     Sympa::Log::Syslog::set_log_level(Sympa::Site->log_level);
     Sympa::Log::Syslog::do_log(
-	'info', 'Configuration file read, default log level %s',
-	Sympa::Site->log_level
+        'info', 'Configuration file read, default log level %s',
+        Sympa::Site->log_level
     ); 
 }
 
@@ -354,31 +354,31 @@ while (!$end) {
 
     my $spooled_bounce;
     while ($spooled_bounce = $spool->next){
-	my $bounce = undef;
-	$bounce = BounceMessage->new($spooled_bounce)
-	    if $spooled_bounce;
-	unless ($bounce) {
-	    Sympa::Log::Syslog::do_log('err',
-		'Message %s: badly formatted bounce message. Ignoring.',
-		$spooled_bounce->{'messagekey'}
-	    );
-	    $spool->move_to_bad($spooled_bounce->{'messagekey'});
-	    next;
-	}
-	if ($bounce->process) {
-	    unless ($spool->remove_message($bounce->{'messagekey'})) {
-		Sympa::Log::Syslog::do_log ('err',
-		    'Could not remove message %s from bounce spool',
-		    $bounce
-		);
-		$spool->move_to_bad($bounce->{'messagekey'});
-		last;
-	    }
-	} else {
-	    $spool->move_to_bad($bounce->{'messagekey'});
-	}
-	## Free zombie sendmail processes
-	mail::reaper;
+        my $bounce = undef;
+        $bounce = BounceMessage->new($spooled_bounce)
+        if $spooled_bounce;
+        unless ($bounce) {
+            Sympa::Log::Syslog::do_log('err',
+                'Message %s: badly formatted bounce message. Ignoring.',
+                $spooled_bounce->{'messagekey'}
+            );
+            $spool->move_to_bad($spooled_bounce->{'messagekey'});
+            next;
+        }
+        if ($bounce->process) {
+            unless ($spool->remove_message($bounce->{'messagekey'})) {
+                Sympa::Log::Syslog::do_log ('err',
+                    'Could not remove message %s from bounce spool',
+                    $bounce
+                );
+                $spool->move_to_bad($bounce->{'messagekey'});
+                last;
+            }
+        } else {
+            $spool->move_to_bad($bounce->{'messagekey'});
+        }
+        ## Free zombie sendmail processes
+        mail::reaper;
     }
 }
 
@@ -394,5 +394,5 @@ exit(0);
 ## When we catch SIGTERM, just change the value of the loop
 ## variable.
 sub sigterm {
-	$end = 1;
+    $end = 1;
 }

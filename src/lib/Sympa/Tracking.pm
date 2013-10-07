@@ -57,56 +57,56 @@ status than "delivered"
 =cut
 
 sub get_recipients_status {
-	my ($list, $msgid) = @_;
-	
-	my $listname = $list->name;
-	my $robot_id = $list->domain;
-	
-	Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid, $listname, $robot_id);
+    my ($list, $msgid) = @_;
 
-	my $base = Sympa::Database->get_singleton();
+    my $listname = $list->name;
+    my $robot_id = $list->domain;
 
-	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
-	my $handle = $base->get_query_handle(
-		"SELECT "                                                     .
-			"recipient_notification AS recipient, "               .
-			"reception_option_notification AS reception_option, " .
-			"status_notification AS status, "                     .
-			"arrival_date_notification AS arrival_date, "         .
-			"type_notification as type, "                         .
-			"message_notification as notification_message "       .
-		"FROM notification_table "                                    .
-		"WHERE "                                                      .
-			"list_notification=? AND "                            .
-			"robot_notification=? AND "                           .
-			"(" .
-				"message_id_notification=? OR " .
-				"CONCAT('<',message_id_notification,'>')=? OR ".
-				"message_id_notification=?" .
-			")",
-	);
-	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
-		return undef;
-	}
-	$handle->execute(
-		$listname,
-		$robot_id,
-		$msgid,
-		$msgid,
-		'<'.$msgid.'>'
-	);
+    Sympa::Log::Syslog::do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid, $listname, $robot_id);
 
-	my @pk_notifs;
-	while (my $pk_notif = $handle->fetchrow_hashref){
-		if ($pk_notif->{'notification_message'}) {
-			$pk_notif->{'notification_message'} = MIME::Base64::decode($pk_notif->{'notification_message'});
-		} else {
-			$pk_notif->{'notification_message'} = '';
-		}
-		push @pk_notifs, $pk_notif;
-	}
-	return \@pk_notifs;
+    my $base = Sympa::Database->get_singleton();
+
+    # the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
+    my $handle = $base->get_query_handle(
+        "SELECT "                                                 .
+            "recipient_notification AS recipient, "               .
+            "reception_option_notification AS reception_option, " .
+            "status_notification AS status, "                     .
+            "arrival_date_notification AS arrival_date, "         .
+            "type_notification as type, "                         .
+            "message_notification as notification_message "       .
+        "FROM notification_table "                                .
+        "WHERE "                                                  .
+            "list_notification=? AND "                            .
+            "robot_notification=? AND "                           .
+            "("                                                   .
+                "message_id_notification=? OR "                   .
+                "CONCAT('<',message_id_notification,'>')=? OR "   .
+                "message_id_notification=?"                       .
+            ")",
+    );
+    unless ($handle) {
+        Sympa::Log::Syslog::do_log('err','Unable to retrieve tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
+        return undef;
+    }
+    $handle->execute(
+        $listname,
+        $robot_id,
+        $msgid,
+        $msgid,
+        '<'.$msgid.'>'
+    );
+
+    my @pk_notifs;
+    while (my $pk_notif = $handle->fetchrow_hashref){
+        if ($pk_notif->{'notification_message'}) {
+            $pk_notif->{'notification_message'} = MIME::Base64::decode($pk_notif->{'notification_message'});
+        } else {
+            $pk_notif->{'notification_message'} = '';
+        }
+        push @pk_notifs, $pk_notif;
+    }
+    return \@pk_notifs;
 }
 
 =item db_init_notification_table(%parameters)
@@ -129,51 +129,51 @@ A positive value on success, I<undef> otherwise.
 =cut
 
 sub db_init_notification_table {
-	my $list = shift;
-	my (%params) = @_;
+    my $list = shift;
+    my (%params) = @_;
 
-	my $msgid =  $params{'msgid'}; chomp $msgid;
-	my $listname =  $list->name;
-	my $robot_id =  $list->domain;
-	my $reception_option =  $params{'reception_option'};
-	my @rcpt =  @{$params{'rcpt'}};
+    my $msgid =  $params{'msgid'}; chomp $msgid;
+    my $listname =  $list->name;
+    my $robot_id =  $list->domain;
+    my $reception_option =  $params{'reception_option'};
+    my @rcpt =  @{$params{'rcpt'}};
 
-	Sympa::Log::Syslog::do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
+    Sympa::Log::Syslog::do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
 
-	my $time = time();
+    my $time = time();
 
-	my $base = Sympa::Database->get_singleton();
-	my $handle = $base->get_query_handle(
-		"INSERT INTO notification_table ("        .
-			"message_id_notification, "       .
-			"recipient_notification, "        .
-			"reception_option_notification, " .
-			"list_notification, "             .
-			"robot_notification, "            .
-			"date_notification"               .
-		") VALUES (?, ?, ?, ?, ?, ?)"
-	);
-	unless($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement');
-		return undef;
-	}
+    my $base = Sympa::Database->get_singleton();
+    my $handle = $base->get_query_handle(
+        "INSERT INTO notification_table ("    .
+            "message_id_notification, "       .
+            "recipient_notification, "        .
+            "reception_option_notification, " .
+            "list_notification, "             .
+            "robot_notification, "            .
+            "date_notification"               .
+        ") VALUES (?, ?, ?, ?, ?, ?)"
+    );
+    unless($handle) {
+        Sympa::Log::Syslog::do_log('err','Unable to prepare SQL statement');
+        return undef;
+    }
 
-	foreach my $email (@rcpt){
-		my $rows = $handle->execute(
-			$msgid,
-			lc($email),
-			$reception_option,
-			$listname,
-			$robot_id,
-			$time
-		);
+    foreach my $email (@rcpt){
+        my $rows = $handle->execute(
+            $msgid,
+            lc($email),
+            $reception_option,
+            $listname,
+            $robot_id,
+            $time
+        );
 
-		unless($rows) {
-			Sympa::Log::Syslog::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot_id);
-			return undef;
-		}
-	}
-	return 1;
+        unless($rows) {
+            Sympa::Log::Syslog::do_log('err','Unable to prepare notification table for user %s, message %s, list %s@%s', $email, $msgid, $listname, $robot_id);
+            return undef;
+        }
+    }
+    return 1;
 }
 
 =item db_insert_notification($notification_id, $type, $status, $arrival_date, $notification_as_string)
@@ -199,32 +199,32 @@ A positive value on success, I<undef> otherwise.
 =cut
 
 sub db_insert_notification {
-	my ($notification_id, $type, $status, $arrival_date ,$notification_as_string  ) = @_;
-	Sympa::Log::Syslog::do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status);
+    my ($notification_id, $type, $status, $arrival_date ,$notification_as_string  ) = @_;
+    Sympa::Log::Syslog::do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status);
 
-	chomp $arrival_date;
+    chomp $arrival_date;
 
-	$notification_as_string = MIME::Base64::encode($notification_as_string);
+    $notification_as_string = MIME::Base64::encode($notification_as_string);
 
-	my $base = Sympa::Database->get_singleton();
-	my $rows = $base->execute_query(
-		"UPDATE notification_table "            .
-		"SET "                                  .
-			"status_notification=?, "       .
-			"arrival_date_notification=?, " .
-			"message_notification=?"        .
-		"WHERE pk_notification=?",
-		$status,
-		$arrival_date,
-		$notification_as_string,
-		$notification_id
-	);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to update notification %s in database', $notification_id);
-		return undef;
-	}
+    my $base = Sympa::Database->get_singleton();
+    my $rows = $base->execute_query(
+        "UPDATE notification_table "        .
+        "SET "                              .
+            "status_notification=?, "       .
+            "arrival_date_notification=?, " .
+            "message_notification=?"        .
+        "WHERE pk_notification=?",
+        $status,
+        $arrival_date,
+        $notification_as_string,
+        $notification_id
+    );
+    unless ($rows) {
+        Sympa::Log::Syslog::do_log('err','Unable to update notification %s in database', $notification_id);
+        return undef;
+    }
 
-	return 1;
+    return 1;
 }
 
 =item find_notification_id_by_message($recipient, $msgid, $listname, $robot)
@@ -234,45 +234,45 @@ Return the tracking_id find by recipeint,message-id,listname and robot
 =cut
 
 sub find_notification_id_by_message{
-	my ($recipient, $msgid, $listname, $robot) = @_;
-	chomp $msgid;
-	Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
+    my ($recipient, $msgid, $listname, $robot) = @_;
+    chomp $msgid;
+    Sympa::Log::Syslog::do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
 
-	my $base = Sympa::Database->get_singleton();
+    my $base = Sympa::Database->get_singleton();
 
-	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
-	my $handle = $base->get_query_handle(
-		"SELECT pk_notification "                                      .
-		"FROM notification_table "                                     .
-		"WHERE "                                                       .
-			"recipient_notification=? AND "                        .
-			"list_notification=? AND "                             .
-			"robot_notification=? AND "                            .
-			"("                                                    .
-				"message_id_notification=? OR "                .
-				"CONCAT('<',message_id_notification,'>')=? OR ".
-				"message_id_notification=?"                    .
-			")"
-		);
-	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to retrieve the tracking informations for user %s, message %s, list %s@%s', $recipient, $msgid, $listname, $robot);
-		return undef;
-	}
-	$handle->execute(
-		$recipient,
-		$listname,
-		$robot,
-		$msgid,
-		$msgid,
-		'<'.$msgid.'>'
-	);
+    # the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
+    my $handle = $base->get_query_handle(
+        "SELECT pk_notification "                              .
+        "FROM notification_table "                             .
+        "WHERE "                                               .
+            "recipient_notification=? AND "                    .
+            "list_notification=? AND "                         .
+            "robot_notification=? AND "                        .
+            "("                                                .
+                "message_id_notification=? OR "                .
+                "CONCAT('<',message_id_notification,'>')=? OR ".
+                "message_id_notification=?"                    .
+            ")"
+    );
+    unless ($handle) {
+        Sympa::Log::Syslog::do_log('err','Unable to retrieve the tracking informations for user %s, message %s, list %s@%s', $recipient, $msgid, $listname, $robot);
+        return undef;
+    }
+    $handle->execute(
+        $recipient,
+        $listname,
+        $robot,
+        $msgid,
+        $msgid,
+        '<'.$msgid.'>'
+    );
 
-	my @pk_notifications = $handle->fetchrow_array;
-	if ($#pk_notifications > 0){
-		Sympa::Log::Syslog::do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );
-		# we should return undef...
-	}
-	return @pk_notifications[0];
+    my @pk_notifications = $handle->fetchrow_array;
+    if ($#pk_notifications > 0){
+        Sympa::Log::Syslog::do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );
+        # we should return undef...
+    }
+    return @pk_notifications[0];
 }
 
 =item remove_message_by_id($msgid, $listname, $robot)
@@ -290,30 +290,30 @@ A positive value on success, I<undef> otherwise.
 =cut
 
 sub remove_message_by_id{
-	my ($list, $msgid) = @_;
-	
-	my $listname = $list->name;
-	my $robot_id = $list->domain;
-	
-	Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot_id);
+    my ($list, $msgid) = @_;
 
-	my $base = Sympa::Database->get_singleton();
-	my $rows = $base->execute_query(
-		"DELETE FROM notification_table "        .
-		"WHERE "                                 .
-			"message_id_notification=? AND " .
-			"list_notification=? AND "       .
-			"robot_notification=?",
-		$msgid,
-		$listname,
-		$robot_id
-	);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
-		return undef;
-	}
+    my $listname = $list->name;
+    my $robot_id = $list->domain;
 
-	return 1;
+    Sympa::Log::Syslog::do_log('debug2', 'Remove message id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot_id);
+
+    my $base = Sympa::Database->get_singleton();
+    my $rows = $base->execute_query(
+        "DELETE FROM notification_table "    .
+        "WHERE "                             .
+            "message_id_notification=? AND " .
+            "list_notification=? AND "       .
+            "robot_notification=?",
+        $msgid,
+        $listname,
+        $robot_id
+    );
+    unless ($rows) {
+        Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations for message %s, list %s@%s', $msgid, $listname, $robot_id);
+        return undef;
+    }
+
+    return 1;
 }
 
 =item remove_message_by_period($period, $listname, $robot)
@@ -329,32 +329,32 @@ The number of removed messages on success, I<undef> otherwise.
 =cut
 
 sub remove_message_by_period{
-	my ($list, $period) = @_;
-	
-	my $listname = $list->name;
-	my $robot_id = $list->domain;
-	
-	Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot_id);
+    my ($list, $period) = @_;
 
-	my $base = Sympa::Database->get_singleton();
+    my $listname = $list->name;
+    my $robot_id = $list->domain;
 
-	my $limit = time - ($period * 24 * 60 * 60);
-	my $rows = $base->execute_query(
-		"DELETE FROM notification_table "  .
-		"WHERE "                           .
-			"date_notification<? AND " .
-			"list_notification=? AND " .
-			"robot_notification=?",
-		$limit,
-		$listname,
-		$robot_id
-	);
-	unless ($rows) {
-		Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot_id);
-		return undef;
-	}
+    Sympa::Log::Syslog::do_log('debug2', 'Remove message by period=  %s, listname = %s, robot = %s', $period,$listname,$robot_id);
 
-	return 1;
+    my $base = Sympa::Database->get_singleton();
+
+    my $limit = time - ($period * 24 * 60 * 60);
+    my $rows = $base->execute_query(
+        "DELETE FROM notification_table "  .
+        "WHERE "                           .
+            "date_notification<? AND "     .
+            "list_notification=? AND "     .
+            "robot_notification=?",
+        $limit,
+        $listname,
+        $robot_id
+    );
+    unless ($rows) {
+        Sympa::Log::Syslog::do_log('err','Unable to remove the tracking informations older than %s days for list %s@%s', $limit, $listname, $robot_id);
+        return undef;
+    }
+
+    return 1;
 }
 
 =back

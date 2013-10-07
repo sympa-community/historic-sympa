@@ -53,7 +53,7 @@ sub get_storage_name {
     my $filename;
     my $param = shift;
     if ($param->{'list'} && $param->{'robot'}) {
-	$filename = $param->{'list'}.'@'.$param->{'robot'}.'_'.$param->{'authkey'};
+        $filename = $param->{'list'}.'@'.$param->{'robot'}.'_'.$param->{'authkey'};
     }
     return $filename;
 }
@@ -65,9 +65,9 @@ sub analyze_file_name {
     my $data = shift;
 
     unless($key =~ /$filename_regexp/){
-	Sympa::Log::Syslog::do_log('err',
-	    'File %s name does not have the proper format', $key);
-	return undef;
+        Sympa::Log::Syslog::do_log('err',
+            'File %s name does not have the proper format', $key);
+        return undef;
     }
     my $list_id;
     ($list_id, $data->{'authkey'}, $data->{'validated'}) = ($1, $2, $3);
@@ -76,16 +76,15 @@ sub analyze_file_name {
     $data->{'list'} = lc($data->{'list'});
     $data->{'robot'} = lc($data->{'robot'});
     return undef
-	unless $data->{'robot_object'} = Sympa::Robot->new($data->{'robot'});
+        unless $data->{'robot_object'} = Sympa::Robot->new($data->{'robot'});
 
     my $listname;
     #FIXME: is this needed?
     ($listname, $data->{'type'}) =
-	$data->{'robot_object'}->split_listname($data->{'list'}); #FIXME
+        $data->{'robot_object'}->split_listname($data->{'list'}); #FIXME
     return undef
-	unless defined $listname and
-	$data->{'list_object'} =
-	List->new($listname, $data->{'robot_object'});
+        unless defined $listname and
+        $data->{'list_object'} = List->new($listname, $data->{'robot_object'});
 
     ## Get priority
 
@@ -111,15 +110,15 @@ sub validate_message {
     my $key  = shift;
 
     unless(File::Copy::copy($self->{'dir'} . '/' . $key,
-	$self->{'dir'} . '/' . $key . '.distribute'
-    )) {
-	Sympa::Log::Syslog::do_log('err', 'Could not rename file %s/%s: %s',
-	    $self->{'dir'}, $key, $!);
-	return undef;
+            $self->{'dir'} . '/' . $key . '.distribute'
+        )) {
+        Sympa::Log::Syslog::do_log('err', 'Could not rename file %s/%s: %s',
+            $self->{'dir'}, $key, $!);
+        return undef;
     }
     unless (unlink($self->{'dir'} . '/' . $key)) {
-	Sympa::Log::Syslog::do_log('err', 'Could not unlink message %s/%s: %s',
-	    $self->{'dir'}, $key, $!);
+        Sympa::Log::Syslog::do_log('err', 'Could not unlink message %s/%s: %s',
+            $self->{'dir'}, $key, $!);
     }
     return 1;
 }

@@ -39,37 +39,37 @@ use base qw(Sympa::Datasource::SQL);
 use Carp;
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	return $class->SUPER::new(%params, db_type => 'sqlite');
+    return $class->SUPER::new(%params, db_type => 'sqlite');
 }
 
 sub connect {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	my $result = $self->SUPER::connect(%params);
-	return unless $result;
+    my $result = $self->SUPER::connect(%params);
+    return unless $result;
 
-	$self->{dbh}->func(
-		'func_index',
-		-1,
-		sub { return index($_[0], $_[1]) },
-		'create_function'
-	);
+    $self->{dbh}->func(
+        'func_index',
+        -1,
+        sub { return index($_[0], $_[1]) },
+        'create_function'
+    );
 
-	if (defined $self->{db_timeout}) {
-		$self->{dbh}->func($self->{db_timeout}, 'busy_timeout' );
-	} else {
-		$self->{dbh}->func(5000, 'busy_timeout');
-	}
+    if (defined $self->{db_timeout}) {
+        $self->{dbh}->func($self->{db_timeout}, 'busy_timeout' );
+    } else {
+        $self->{dbh}->func(5000, 'busy_timeout');
+    }
 
-	return 1;
+    return 1;
 }
 
 sub get_connect_string{
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	return "DBI:SQLite:dbname=$self->{db_name}";
+    return "DBI:SQLite:dbname=$self->{db_name}";
 }
 
 1;

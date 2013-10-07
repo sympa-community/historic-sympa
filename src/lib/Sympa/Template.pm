@@ -65,14 +65,14 @@ FIXME.
 =cut
 
 sub qencode {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	# We are not able to determine the name of header field, so assume
-	# longest (maybe) one.
-	return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
-		Encoding=>'A',
-		Charset=>Sympa::Language::get_charset(),
-		Field=>"message-id");
+    # We are not able to determine the name of header field, so assume
+    # longest (maybe) one.
+    return MIME::EncWords::encode_mimewords(Encode::decode('utf8', $string),
+        Encoding=>'A',
+        Charset=>Sympa::Language::get_charset(),
+        Field=>"message-id");
 }
 
 =item escape_url($string)
@@ -82,19 +82,19 @@ FIXME.
 =cut
 
 sub escape_url {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	$string =~ s/[\s+]/sprintf('%%%02x', ord($&))/eg;
-	# Some MUAs aren't able to decode ``%40'' (escaped ``@'') in e-mail
-	# address of mailto: URL, or take ``@'' in query component for a
-	# delimiter to separate URL from the rest.
-	my ($body, $query) = split(/\?/, $string, 2);
-	if (defined $query) {
-		$query =~ s/\@/sprintf('%%%02x', ord($&))/eg;
-		$string = $body.'?'.$query;
-	}
+    $string =~ s/[\s+]/sprintf('%%%02x', ord($&))/eg;
+    # Some MUAs aren't able to decode ``%40'' (escaped ``@'') in e-mail
+    # address of mailto: URL, or take ``@'' in query component for a
+    # delimiter to separate URL from the rest.
+    my ($body, $query) = split(/\?/, $string, 2);
+    if (defined $query) {
+        $query =~ s/\@/sprintf('%%%02x', ord($&))/eg;
+        $string = $body.'?'.$query;
+    }
 
-	return $string;
+    return $string;
 }
 
 =item escape_xml($string)
@@ -104,15 +104,15 @@ FIXME.
 =cut
 
 sub escape_xml {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	$string =~ s/&/&amp;/g;
-	$string =~ s/</&lt;/g;
-	$string =~ s/>/&gt;/g;
-	$string =~ s/\'/&apos;/g;
-	$string =~ s/\"/&quot;/g;
+    $string =~ s/&/&amp;/g;
+    $string =~ s/</&lt;/g;
+    $string =~ s/>/&gt;/g;
+    $string =~ s/\'/&apos;/g;
+    $string =~ s/\"/&quot;/g;
 
-	return $string;
+    return $string;
 }
 
 =item escape_quote($string)
@@ -122,12 +122,12 @@ FIXME.
 =cut
 
 sub escape_quote {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	$string =~ s/\'/\\\'/g;
-	$string =~ s/\"/\\\"/g;
+    $string =~ s/\'/\\\'/g;
+    $string =~ s/\"/\\\"/g;
 
-	return $string;
+    return $string;
 }
 
 =item encode_utf8($string)
@@ -137,14 +137,14 @@ FIXME.
 =cut
 
 sub encode_utf8 {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	## Skip if already internally tagged utf8
-	if (Encode::is_utf8($string)) {
-		return Encode::encode_utf8($string);
-	}
+    ## Skip if already internally tagged utf8
+    if (Encode::is_utf8($string)) {
+        return Encode::encode_utf8($string);
+    }
 
-	return $string;
+    return $string;
 
 }
 
@@ -155,19 +155,19 @@ FIXME.
 =cut
 
 sub decode_utf8 {
-	my ($string) = @_;
+    my ($string) = @_;
 
-	## Skip if already internally tagged utf8
-	unless (Encode::is_utf8($string)) {
-		## Wrapped with eval to prevent Sympa process from dying
-		## FB_CROAK is used instead of FB_WARN to pass $string intact to succeeding processes it operation fails
-		eval {
-			$string = Encode::decode('utf8', $string, Encode::FB_CROAK);
-		};
-		$EVAL_ERROR = '';
-	}
+    ## Skip if already internally tagged utf8
+    unless (Encode::is_utf8($string)) {
+        ## Wrapped with eval to prevent Sympa process from dying
+        ## FB_CROAK is used instead of FB_WARN to pass $string intact to succeeding processes it operation fails
+        eval {
+            $string = Encode::decode('utf8', $string, Encode::FB_CROAK);
+        };
+        $EVAL_ERROR = '';
+    }
 
-	return $string;
+    return $string;
 
 }
 
@@ -178,22 +178,22 @@ FIXME.
 =cut
 
 sub maketext {
-	my ($context, @arg) = @_;
+    my ($context, @arg) = @_;
 
-	my $stash = $context->stash();
-	my $component = $stash->get('component');
-	my $template_name = $component->{'name'};
+    my $stash = $context->stash();
+    my $component = $stash->get('component');
+    my $template_name = $component->{'name'};
 
-	## Strangely the path is sometimes empty...
-	## TODO : investigate
+    ## Strangely the path is sometimes empty...
+    ## TODO : investigate
 #    Sympa::Log::Syslog::do_log('notice', "PATH: $path ; $template_name");
 
-	## Sample code to dump the STASH
-	# my $s = $stash->_dump();
+    ## Sample code to dump the STASH
+    # my $s = $stash->_dump();
 
-	return sub {
-		Sympa::Language::maketext($template_name, $_[0],  @arg);
-	}
+    return sub {
+        Sympa::Language::maketext($template_name, $_[0],  @arg);
+    }
 }
 
 =item locdatetime(undef, $arg)
@@ -217,14 +217,14 @@ A date formating callback.
 =cut
 
 sub locdatetime {
-	my (undef, $arg) = @_;
+    my (undef, $arg) = @_;
 
-	if ($arg !~ /^(\d{4})\D(\d\d?)(?:\D(\d\d?)(?:\D(\d\d?)\D(\d\d?)(?:\D(\d\d?))?)?)?/) {
-		return sub { Sympa::Language::gettext("(unknown date)"); };
-	} else {
-		my @arg = ($6+0, $5+0, $4+0, $3+0 || 1, $2-1, $1-1900, 0,0,0);
-		return sub { Sympa::Language::gettext_strftime($_[0], @arg); };
-	}
+    if ($arg !~ /^(\d{4})\D(\d\d?)(?:\D(\d\d?)(?:\D(\d\d?)\D(\d\d?)(?:\D(\d\d?))?)?)?/) {
+        return sub { Sympa::Language::gettext("(unknown date)"); };
+    } else {
+        my @arg = ($6+0, $5+0, $4+0, $3+0 || 1, $2-1, $1-1900, 0,0,0);
+        return sub { Sympa::Language::gettext_strftime($_[0], @arg); };
+    }
 }
 
 =item wrap(undef, $init, $subs, $cols)
@@ -256,20 +256,20 @@ A text formating callback.
 =cut
 
 sub wrap {
-	my (undef, $init, $subs, $cols) = @_;
+    my (undef, $init, $subs, $cols) = @_;
 
-	$init = '' unless defined $init;
-	$init = ' ' x $init if $init =~ /^\d+$/;
-	$subs = '' unless defined $subs;
-	$subs = ' ' x $subs if $subs =~ /^\d+$/;
+    $init = '' unless defined $init;
+    $init = ' ' x $init if $init =~ /^\d+$/;
+    $subs = '' unless defined $subs;
+    $subs = ' ' x $subs if $subs =~ /^\d+$/;
 
-	return sub {
-		my $text = shift;
-		my $nl = $text =~ /\n$/;
-		my $ret = Sympa::Tools::wrap_text($text, $init, $subs, $cols);
-		$ret =~ s/\n$// unless $nl;
-		$ret;
-	};
+    return sub {
+        my $text = shift;
+        my $nl = $text =~ /\n$/;
+        my $ret = Sympa::Tools::wrap_text($text, $init, $subs, $cols);
+        $ret =~ s/\n$// unless $nl;
+        $ret;
+    };
 }
 
 =item optdesc($context, $type, $withval)
@@ -301,15 +301,15 @@ Subref to generate i18n'ed description of list parameter value.
 =cut
 
 sub optdesc {
-	my ($context, $type, $withval) = @_;
-	return sub {
-		my $x = shift;
-		return undef unless defined $x;
-		return undef unless $x =~ /\S/;
-		$x =~ s/^\s+//;
-		$x =~ s/\s+$//;
-		return Sympa::List->get_option_title($x, $type, $withval);
-	};
+    my ($context, $type, $withval) = @_;
+    return sub {
+        my $x = shift;
+        return undef unless defined $x;
+        return undef unless $x =~ /\S/;
+        $x =~ s/^\s+//;
+        $x =~ s/\s+$//;
+        return Sympa::List->get_option_title($x, $type, $withval);
+    };
 }
 
 =item add_include_path($path)
@@ -319,9 +319,9 @@ Add a directory to TT2 template search path.
 =cut
 
 sub add_include_path {
-	my ($path) = @_;
+    my ($path) = @_;
 
-	push @other_include_path, $path;
+    push @other_include_path, $path;
 }
 
 =item get_include_path()
@@ -331,7 +331,7 @@ Get current TT2 template search path.
 =cut
 
 sub get_include_path {
-	return @other_include_path;
+    return @other_include_path;
 }
 
 =item allow_absolute_path()
@@ -341,7 +341,7 @@ Allow inclusion/insertion of file with absolute path.
 =cut
 
 sub allow_absolute_path {
-	$allow_absolute = 1;
+    $allow_absolute = 1;
 }
 
 =item get_error()
@@ -351,7 +351,7 @@ Return the last error message
 =cut
 
 sub get_error {
-	return $last_error;
+    return $last_error;
 }
 
 =item parse_tt2($data, $template, $output, $include_path, $options)
@@ -377,70 +377,70 @@ The last error message
 =cut
 
 sub parse_tt2 {
-	my ($data, $template, $output, $include_path, $options) = @_;
-	$include_path ||= [Sympa::Constants::DEFAULTDIR];
-	$options ||= {};
+    my ($data, $template, $output, $include_path, $options) = @_;
+    $include_path ||= [Sympa::Constants::DEFAULTDIR];
+    $options ||= {};
 
-	## Add directories that may have been added
-	push @{$include_path}, @other_include_path;
-	@other_include_path = (); ## Reset it
+    ## Add directories that may have been added
+    push @{$include_path}, @other_include_path;
+    @other_include_path = (); ## Reset it
 
-	## An array can be used as a template (instead of a filename)
-	if (ref($template) eq 'ARRAY') {
-		$template = \join('', @$template);
-	}
+    ## An array can be used as a template (instead of a filename)
+    if (ref($template) eq 'ARRAY') {
+        $template = \join('', @$template);
+    }
 
-	Sympa::Language::set_lang($data->{lang}) if ($data->{'lang'});
+    Sympa::Language::set_lang($data->{lang}) if ($data->{'lang'});
 
-	my $config = {
-	#	ABSOLUTE   => 1,
-		INCLUDE_PATH => $include_path,
-	#	PRE_CHOMP  => 1,
-		UNICODE      => 0, # Prevent BOM auto-detection
-		FILTERS      => {
-			unescape     => \CGI::Util::unescape,
-			l            => [\&maketext, 1],
-			loc          => [\&maketext, 1],
-			helploc      => [\&maketext, 1],
-			locdt        => [\&locdatetime, 1],
-			wrap         => [\&wrap, 1],
-			optdesc      => [\&optdesc, 1],
-			qencode      => [\&qencode, 0],
-			escape_xml   => [\&escape_xml, 0],
-			escape_url   => [\&escape_url, 0],
-			escape_quote => [\&escape_quote, 0],
-			decode_utf8  => [\&decode_utf8, 0],
-			encode_utf8  => [\&encode_utf8, 0]
-		}
-	};
+    my $config = {
+        #	ABSOLUTE   => 1,
+        INCLUDE_PATH => $include_path,
+        #	PRE_CHOMP  => 1,
+        UNICODE      => 0, # Prevent BOM auto-detection
+        FILTERS      => {
+            unescape     => \CGI::Util::unescape,
+            l            => [\&maketext, 1],
+            loc          => [\&maketext, 1],
+            helploc      => [\&maketext, 1],
+            locdt        => [\&locdatetime, 1],
+            wrap         => [\&wrap, 1],
+            optdesc      => [\&optdesc, 1],
+            qencode      => [\&qencode, 0],
+            escape_xml   => [\&escape_xml, 0],
+            escape_url   => [\&escape_url, 0],
+            escape_quote => [\&escape_quote, 0],
+            decode_utf8  => [\&decode_utf8, 0],
+            encode_utf8  => [\&encode_utf8, 0]
+        }
+    };
 
-	unless($options->{'is_not_template'}){
-		$config->{'INCLUDE_PATH'} = $include_path;
-	}
-	if ($allow_absolute) {
-		$config->{'ABSOLUTE'} = 1;
-		$allow_absolute = 0;
-	}
-	if ($options->{'has_header'}) { # body is separated by an empty line.
-		if (ref $template) {
-			$template = \("\n" . $$template);
-		} else {
-			$template = \"\n[% PROCESS $template %]";
-		}
-	}
+    unless($options->{'is_not_template'}){
+        $config->{'INCLUDE_PATH'} = $include_path;
+    }
+    if ($allow_absolute) {
+        $config->{'ABSOLUTE'} = 1;
+        $allow_absolute = 0;
+    }
+    if ($options->{'has_header'}) { # body is separated by an empty line.
+        if (ref $template) {
+            $template = \("\n" . $$template);
+        } else {
+            $template = \"\n[% PROCESS $template %]";
+        }
+    }
 
-	my $tt2 = Template->new($config) or die "Template error: ".Template->error();
+    my $tt2 = Template->new($config) or die "Template error: ".Template->error();
 
-	unless ($tt2->process($template, $data, $output)) {
-		$last_error = $tt2->error();
-		Sympa::Log::Syslog::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
-		Sympa::Log::Syslog::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
+    unless ($tt2->process($template, $data, $output)) {
+        $last_error = $tt2->error();
+        Sympa::Log::Syslog::do_log('err', 'Failed to parse %s : %s', $template, "$last_error");
+        Sympa::Log::Syslog::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
 
 
-		return undef;
-	}
+        return undef;
+    }
 
-	return 1;
+    return 1;
 }
 
 =back

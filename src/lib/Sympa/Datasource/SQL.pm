@@ -79,32 +79,32 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub create {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_type parameter" unless $params{db_type};
-	croak "missing db_name parameter" unless $params{db_name};
+    croak "missing db_type parameter" unless $params{db_type};
+    croak "missing db_name parameter" unless $params{db_name};
 
-	Sympa::Log::Syslog::do_log('debug',"Creating SQLSource->new object for RDBMS '%s'",$params{db_type});
+    Sympa::Log::Syslog::do_log('debug',"Creating SQLSource->new object for RDBMS '%s'",$params{db_type});
 
-	my $db_type = lc($params{db_type});
-	my $subclass =
-		$db_type eq 'mysql'  ? 'Sympa::Datasource::SQL::MySQL'      :
-		$db_type eq 'sqlite' ? 'Sympa::Datasource::SQL::SQLite'     :
-		$db_type eq 'pg'     ? 'Sympa::Datasource::SQL::PostgreSQL' :
-		$db_type eq 'oracle' ? 'Sympa::Datasource::SQL::Oracle'     :
-		$db_type eq 'sybase' ? 'Sympa::Datasource::SQL::Sybase'     :
-		                       'Sympa::Datasource::SQL'             ;
+    my $db_type = lc($params{db_type});
+    my $subclass =
+        $db_type eq 'mysql'  ? 'Sympa::Datasource::SQL::MySQL'      :
+        $db_type eq 'sqlite' ? 'Sympa::Datasource::SQL::SQLite'     :
+        $db_type eq 'pg'     ? 'Sympa::Datasource::SQL::PostgreSQL' :
+        $db_type eq 'oracle' ? 'Sympa::Datasource::SQL::Oracle'     :
+        $db_type eq 'sybase' ? 'Sympa::Datasource::SQL::Sybase'     :
+                               'Sympa::Datasource::SQL'             ;
 
-	# better solution: UNIVERSAL::require
-	my $module = $subclass . '.pm';
-	$module =~ s{::}{/}g;
-	eval { require $module; };
-	if ($EVAL_ERROR) {
-		Sympa::Log::Syslog::do_log('err',"Unable to use $subclass: $EVAL_ERROR");
-		return;
-	}
+    # better solution: UNIVERSAL::require
+    my $module = $subclass . '.pm';
+    $module =~ s{::}{/}g;
+    eval { require $module; };
+    if ($EVAL_ERROR) {
+        Sympa::Log::Syslog::do_log('err',"Unable to use $subclass: $EVAL_ERROR");
+        return;
+    }
 
-	return $subclass->new(%params);
+    return $subclass->new(%params);
 }
 
 =item Sympa::Datasource::SQL->new(%parameters)
@@ -136,22 +136,22 @@ A new L<Sympa::Datasource::SQL> object, or I<undef> if something went wrong.
 =cut
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_type parameter" unless $params{db_type};
-	croak "missing db_name parameter" unless $params{db_name};
+    croak "missing db_type parameter" unless $params{db_type};
+    croak "missing db_name parameter" unless $params{db_name};
 
-	my $self = {
-		db_host     => $params{db_host},
-		db_user     => $params{db_user},
-		db_passwd   => $params{db_passwd},
-		db_name     => $params{db_name},
-		db_type     => $params{db_type},
-		db_options  => $params{db_options},
-	};
+    my $self = {
+        db_host     => $params{db_host},
+        db_user     => $params{db_user},
+        db_passwd   => $params{db_passwd},
+        db_name     => $params{db_name},
+        db_type     => $params{db_type},
+        db_options  => $params{db_options},
+    };
 
-	bless $self, $class;
-	return $self;
+    bless $self, $class;
+    return $self;
 }
 
 =back
@@ -171,49 +171,49 @@ A true value on success, I<undef> otherwise.
 =cut
 
 sub connect {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{db_name});
+    Sympa::Log::Syslog::do_log('debug','Creating connection to database %s',$self->{db_name});
 
-	## Build connect_string
-	my $connect_string = $self->get_connect_string();
-	$connect_string .= ';'   . $self->{db_options} if $self->{db_options};
-	$connect_string .= ';port=' . $self->{db_port} if $self->{db_port};
-	$self->{connect_string} = $connect_string;
+    ## Build connect_string
+    my $connect_string = $self->get_connect_string();
+    $connect_string .= ';'   . $self->{db_options} if $self->{db_options};
+    $connect_string .= ';port=' . $self->{db_port} if $self->{db_port};
+    $self->{connect_string} = $connect_string;
 
-	## Set environment variables
-	## Used by Oracle (ORACLE_HOME)
-	if ($self->{db_env}) {
-		foreach my $env (split /;/,$self->{db_env}) {
-			my ($key, $value) = split /=/, $env;
-			$ENV{$key} = $value if ($key);
-		}
-	}
+    ## Set environment variables
+    ## Used by Oracle (ORACLE_HOME)
+    if ($self->{db_env}) {
+        foreach my $env (split /;/,$self->{db_env}) {
+            my ($key, $value) = split /=/, $env;
+            $ENV{$key} = $value if ($key);
+        }
+    }
 
-	$self->{dbh} = eval {
-		DBI->connect(
-			$connect_string,
-			$self->{db_user},
-			$self->{db_passwd},
-			{ PrintError => 0 }
-		)
-	} ;
-	unless ($self->{dbh}) {
-		Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
-		return undef;
-	}
+    $self->{dbh} = eval {
+        DBI->connect(
+            $connect_string,
+            $self->{db_user},
+            $self->{db_passwd},
+            { PrintError => 0 }
+        )
+    } ;
+    unless ($self->{dbh}) {
+        Sympa::Log::Syslog::do_log('err','Can\'t connect to Database %s as %s', $connect_string, $self->{db_user});
+        return undef;
+    }
 
-	# Force field names to be lowercased
-	$self->{dbh}{FetchHashKeyName} = 'NAME_lc';
+    # Force field names to be lowercased
+    $self->{dbh}{FetchHashKeyName} = 'NAME_lc';
 
-	Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{db_name});
-	return 1;
+    Sympa::Log::Syslog::do_log('debug','Connected to Database %s',$self->{db_name});
+    return 1;
 }
 
 sub disconnect {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	$self->{dbh}->disconnect() if $self->{dbh};
+    $self->{dbh}->disconnect() if $self->{dbh};
 }
 
 =item $source->get_query_handle($query)
@@ -237,11 +237,11 @@ A DBI statement handle object, or I<undef> if something went wrong.
 =cut
 
 sub get_query_handle {
-	my ($self, $query) = @_;
+    my ($self, $query) = @_;
 
-	$query =~ s/^\s+//;
-	$query =~ s/\s+$//;
-	return $self->{dbh}->prepare($query);
+    $query =~ s/^\s+//;
+    $query =~ s/\s+$//;
+    return $self->{dbh}->prepare($query);
 }
 
 =back

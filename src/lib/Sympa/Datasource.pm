@@ -40,25 +40,25 @@ use Sympa::Log::Syslog;
 
 # Returns a unique ID for an include datasource
 sub _get_datasource_id {
-	my ($source, $other_source) = @_;
-	Sympa::Log::Syslog::do_log('debug2',"Getting datasource id for source '%s'",$source);
-	if (ref($source) && $source->isa('Sympa::Datasource')) {
-		$source = $other_source;
-	}
+    my ($source, $other_source) = @_;
+    Sympa::Log::Syslog::do_log('debug2',"Getting datasource id for source '%s'",$source);
+    if (ref($source) && $source->isa('Sympa::Datasource')) {
+        $source = $other_source;
+    }
 
-	if (ref ($source)) {
-		## Ordering values so that order of keys in a hash don't mess the value comparison
-		## Warning: Only the first level of the hash is ordered. Should a datasource
-		## be described with a hash containing more than one level (a hash of hash) we should transform
-		## the following algorithm into something that would be recursive. Unlikely it happens.
-		my @orderedValues;
-		foreach my $key (sort (keys %{$source})) {
-			@orderedValues = (@orderedValues,$key,$source->{$key});
-		}
-		return substr(Digest::MD5::md5_hex(join('/', @orderedValues)), -8);
-	} else {
-		return substr(Digest::MD5::md5_hex($source), -8);
-	}
+    if (ref ($source)) {
+        ## Ordering values so that order of keys in a hash don't mess the value comparison
+        ## Warning: Only the first level of the hash is ordered. Should a datasource
+        ## be described with a hash containing more than one level (a hash of hash) we should transform
+        ## the following algorithm into something that would be recursive. Unlikely it happens.
+        my @orderedValues;
+        foreach my $key (sort (keys %{$source})) {
+            @orderedValues = (@orderedValues,$key,$source->{$key});
+        }
+        return substr(Digest::MD5::md5_hex(join('/', @orderedValues)), -8);
+    } else {
+        return substr(Digest::MD5::md5_hex($source), -8);
+    }
 
 }
 
@@ -77,39 +77,39 @@ None.
 =cut
 
 sub is_allowed_to_sync {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	my $ranges = $self->{'nosync_time_ranges'};
-	$ranges =~ s/^\s+//;
-	$ranges =~ s/\s+$//;
-	my $rsre = Sympa::Tools::get_regexp('time_ranges');
-	return 1 unless($ranges =~ /^$rsre$/);
+    my $ranges = $self->{'nosync_time_ranges'};
+    $ranges =~ s/^\s+//;
+    $ranges =~ s/\s+$//;
+    my $rsre = Sympa::Tools::get_regexp('time_ranges');
+    return 1 unless($ranges =~ /^$rsre$/);
 
-	Sympa::Log::Syslog::do_log('debug', "Checking whether sync is allowed at current time");
+    Sympa::Log::Syslog::do_log('debug', "Checking whether sync is allowed at current time");
 
-	my (undef, $min, $hour) = localtime(time());
-	my $now = 60 * int($hour) + int($min);
+    my (undef, $min, $hour) = localtime(time());
+    my $now = 60 * int($hour) + int($min);
 
-	foreach my $range (split(/\s+/, $ranges)) {
-		next unless($range =~ /^([012]?[0-9])(?:\:([0-5][0-9]))?-([012]?[0-9])(?:\:([0-5][0-9]))?$/);
-		my $start = 60 * int($1) + int($2);
-		my $end = 60 * int($3) + int($4);
-		$end += 24 * 60 if($end < $start);
+    foreach my $range (split(/\s+/, $ranges)) {
+        next unless($range =~ /^([012]?[0-9])(?:\:([0-5][0-9]))?-([012]?[0-9])(?:\:([0-5][0-9]))?$/);
+        my $start = 60 * int($1) + int($2);
+        my $end = 60 * int($3) + int($4);
+        $end += 24 * 60 if($end < $start);
 
-		Sympa::Log::Syslog::do_log('debug', "Checking for range from ".sprintf('%02d', $start / 60)."h".sprintf('%02d', $start % 60)." to ".sprintf('%02d', ($end / 60) % 24)."h".sprintf('%02d', $end % 60));
+        Sympa::Log::Syslog::do_log('debug', "Checking for range from ".sprintf('%02d', $start / 60)."h".sprintf('%02d', $start % 60)." to ".sprintf('%02d', ($end / 60) % 24)."h".sprintf('%02d', $end % 60));
 
-		next if($start == $end);
+        next if($start == $end);
 
-		if($now >= $start && $now <= $end) {
-			Sympa::Log::Syslog::do_log('debug', "Failed, sync not allowed.");
-			return 0;
-		}
+        if($now >= $start && $now <= $end) {
+            Sympa::Log::Syslog::do_log('debug', "Failed, sync not allowed.");
+            return 0;
+        }
 
-		Sympa::Log::Syslog::do_log('debug', "Pass ...");
-	}
+        Sympa::Log::Syslog::do_log('debug', "Pass ...");
+    }
 
-	Sympa::Log::Syslog::do_log('debug', "Sync allowed");
-	return 1;
+    Sympa::Log::Syslog::do_log('debug', "Sync allowed");
+    return 1;
 }
 
 =item $source->disconnect()

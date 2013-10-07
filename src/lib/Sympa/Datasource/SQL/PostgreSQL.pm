@@ -39,18 +39,18 @@ use base qw(Sympa::Datasource::SQL);
 use Carp;
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_host parameter" unless $params{db_host};
-	croak "missing db_user parameter" unless $params{db_user};
+    croak "missing db_host parameter" unless $params{db_host};
+    croak "missing db_user parameter" unless $params{db_user};
 
-	return $class->SUPER::new(%params, db_type => 'pg');
+    return $class->SUPER::new(%params, db_type => 'pg');
 }
 
 sub get_connect_string{
-	my ($self) = @_;
+    my ($self) = @_;
 
-	return "DBI:Pg:dbname=$self->{db_name};host=$self->{db_host}";
+    return "DBI:Pg:dbname=$self->{db_name};host=$self->{db_host}";
 }
 
 1;

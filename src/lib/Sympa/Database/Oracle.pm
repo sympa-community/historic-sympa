@@ -41,132 +41,132 @@ use Carp;
 use Sympa::Log::Syslog;
 
 our %date_format = (
-	'read' => {
-		'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
-	},
-	'write' => {
-		'Oracle' => 'to_date(to_char(floor(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
-	}
+    'read' => {
+        'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
+    },
+    'write' => {
+        'Oracle' => 'to_date(to_char(floor(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
+    }
 );
 
 sub new {
-	my ($class, %params) = @_;
+    my ($class, %params) = @_;
 
-	croak "missing db_host parameter" unless $params{db_host};
-	croak "missing db_user parameter" unless $params{db_user};
+    croak "missing db_host parameter" unless $params{db_host};
+    croak "missing db_user parameter" unless $params{db_user};
 
-	return $class->SUPER::new(%params, db_type => 'oracle');
+    return $class->SUPER::new(%params, db_type => 'oracle');
 }
 
 sub connect {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	$ENV{'NLS_LANG'} = 'UTF8';
-	my $result = $self->SUPER::connect(%params);
-	return unless $result;
-	$self->{'dbh'}->{LongReadLen} = Sympa::Site->max_size * 2;
-	$self->{'dbh'}->{LongTruncOk} = 0;
-	Sympa::Log::Syslog::do_log('debug3',
-	'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
-	$self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
-	$self->{'dbh'}->{RaiseError});
+    $ENV{'NLS_LANG'} = 'UTF8';
+    my $result = $self->SUPER::connect(%params);
+    return unless $result;
+    $self->{'dbh'}->{LongReadLen} = Sympa::Site->max_size * 2;
+    $self->{'dbh'}->{LongTruncOk} = 0;
+    Sympa::Log::Syslog::do_log('debug3',
+        'Database driver seetings for this session: LongReadLen= %d, LongTruncOk= %d, RaiseError= %d',
+        $self->{'dbh'}->{LongReadLen}, $self->{'dbh'}->{LongTruncOk},
+        $self->{'dbh'}->{RaiseError});
 
-	return 1;
+    return 1;
 }
 
 sub get_connect_string{
-	my ($self) = @_;
+    my ($self) = @_;
 
-	my $string = "DBI:Oracle:";
-	if ($self->{db_host} && $self->{db_name}) {
-		$string .= "host=$self->{db_host};sid=$self->{db_name}";
-	}
+    my $string = "DBI:Oracle:";
+    if ($self->{db_host} && $self->{db_name}) {
+        $string .= "host=$self->{db_host};sid=$self->{db_name}";
+    }
 
-	return $string;
+    return $string;
 }
 
 sub get_substring_clause {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	return sprintf
-		"substr(%s,instr(%s,'%s')+1)",
-		$params{source_field},
-		$params{source_field},
-		$params{separator};
+    return sprintf
+        "substr(%s,instr(%s,'%s')+1)",
+        $params{source_field},
+        $params{source_field},
+        $params{separator};
 }
 
 sub get_limit_clause {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	return "";
+    return "";
 }
 
 sub get_formatted_date {
-	my ($self, %params) = @_;
+    my ($self, %params) = @_;
 
-	my $mode = lc($params{mode});
-	if ($mode eq 'read') {
-		return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
-	} elsif ($mode eq 'write') {
-		return sprintf 'FROM_UNIXTIME(%d)',$params{target};
-	} else {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			"Unknown date format mode %s",
-			$params{mode}
-		);
-		return undef;
-	}
+    my $mode = lc($params{mode});
+    if ($mode eq 'read') {
+        return sprintf 'UNIX_TIMESTAMP(%s)',$params{target};
+    } elsif ($mode eq 'write') {
+        return sprintf 'FROM_UNIXTIME(%d)',$params{target};
+    } else {
+        Sympa::Log::Syslog::do_log(
+            'err',
+            "Unknown date format mode %s",
+            $params{mode}
+        );
+        return undef;
+    }
 }
 
 sub get_tables {
-	my ($self) = @_;
+    my ($self) = @_;
 
-	Sympa::Log::Syslog::do_log(
-		'debug',
-		'Getting tables list',
-	);
+    Sympa::Log::Syslog::do_log(
+        'debug',
+        'Getting tables list',
+    );
 
-	my $query = "SELECT table_name FROM user_tables";
-	my $sth = $self->{dbh}->prepare($query);
-	unless ($sth) {
-		Sympa::Log::Syslog::do_log(
-			'err',
-			'Unable to get tables list',
-		);
-		return undef;
-	}
-	$sth->execute();
+    my $query = "SELECT table_name FROM user_tables";
+    my $sth = $self->{dbh}->prepare($query);
+    unless ($sth) {
+        Sympa::Log::Syslog::do_log(
+            'err',
+            'Unable to get tables list',
+        );
+        return undef;
+    }
+    $sth->execute();
 
-	my @tables;
-	while (my $row = $sth->fetchrow_arrayref()) {
-		push @tables, lc($row->[0]);
-	}
+    my @tables;
+    while (my $row = $sth->fetchrow_arrayref()) {
+        push @tables, lc($row->[0]);
+    }
 
-	return @tables;
+    return @tables;
 }
 
 sub _get_native_type {
-	my ($self, $type) = @_;
+    my ($self, $type) = @_;
 
-	return 'number'        if $type =~ /^int/;
-	return 'number'        if $type =~ /^bigint/;
-	return 'number'        if $type =~ /^smallint/;
-	return 'float(24)'     if $type =~ /^double/;
-	return "varchar2($1)"  if $type =~ /^varchar\((\d+)\)/;
-	return "varchar2(20)"  if $type =~ /^enum/;
-	return "varchar2(500)" if $type =~ /^text/;
-	return 'long'          if $type =~ /^longtext/;
-	return 'date'          if $type =~ /^datetime/;
-	return 'blob'          if $type =~ /^mediumblob/;
-	return $type;
+    return 'number'        if $type =~ /^int/;
+    return 'number'        if $type =~ /^bigint/;
+    return 'number'        if $type =~ /^smallint/;
+    return 'float(24)'     if $type =~ /^double/;
+    return "varchar2($1)"  if $type =~ /^varchar\((\d+)\)/;
+    return "varchar2(20)"  if $type =~ /^enum/;
+    return "varchar2(500)" if $type =~ /^text/;
+    return 'long'          if $type =~ /^longtext/;
+    return 'date'          if $type =~ /^datetime/;
+    return 'blob'          if $type =~ /^mediumblob/;
+    return $type;
 }
 
 ## For BLOB types.
 sub AS_BLOB {
-	return ( { 'ora_type' => DBD::Oracle::ORA_BLOB() } => $_[1] )
-		if scalar @_ > 1;
-	return ();
+    return ( { 'ora_type' => DBD::Oracle::ORA_BLOB() } => $_[1] )
+    if scalar @_ > 1;
+    return ();
 }
 
 1;
