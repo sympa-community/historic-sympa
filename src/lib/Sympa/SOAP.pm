@@ -1,5 +1,6 @@
-# sympasoap - SOAP implementation for Sympa
-# RCS Identication ; $Revision$ ; $Date$
+# -*- indent-tabs-mode: nil; -*-
+# vim:ft=perl:et:sw=4:textwidth=78
+# $Id$
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

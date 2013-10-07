@@ -1,5 +1,6 @@
-# Command.pm - this module does the mail commands processing
-# RCS Identication ; $Revision$ ; $Date$
+# -*- indent-tabs-mode: nil; -*-
+# vim:ft=perl:et:sw=4:textwidth=78
+# $Id$
 
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
