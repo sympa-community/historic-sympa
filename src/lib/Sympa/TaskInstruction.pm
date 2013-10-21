@@ -1118,8 +1118,8 @@ sub process_bouncers {
 
     ## possible actions
     my %actions = (
-        'remove_bouncers' => \List::remove_bouncers,
-        'notify_bouncers' => \List::notify_bouncers,
+        'remove_bouncers' => \&List::remove_bouncers,
+        'notify_bouncers' => \&List::notify_bouncers,
         'none'            => \&none
     );
 
