@@ -872,7 +872,7 @@ sub get_dkim_parameters {
     my ($self) = @_;
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
 
-    my $data->{
+    my $data = {
         d        => $self->dkim_signer_domain(),
         i        => $self->dkim_signer_identity(),
         selector => $self->dkim_selector()
