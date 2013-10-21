@@ -2626,6 +2626,8 @@ sub insert_delete_exclusion {
     my $name  = $self->name;
     my $robot = $self->robot;
 
+    my $base = $main::database;
+
     if ($action eq 'insert') {
         ##FXIME: Check if user belong to any list of family
         my $date = time;
@@ -2648,14 +2650,25 @@ sub insert_delete_exclusion {
         }
         return 1;
     } elsif ($action eq 'delete') {
-        ##FIXME: Not implemented yet.
-        return undef;
+        my $rows = $base->execute_query(
+            "DELETE FROM exclusion_table ".
+            "WHERE " .
+                    "family_exclusion=? AND ".
+                    "robot_exclusion=? AND ".
+                    "user_exclusion=?",
+            $name,
+            $robot,
+            $email
+        );
+        unless ($rows) {
+                Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for family %s (robot %s) from table exclusion_table', $email, $name, $robot);
+        }
+        return 1;
     } else {
         Sympa::Log::Syslog::do_log('err', 'Unknown action %s', $action);
         return undef;
     }
 
-    return 1;
 }
 
 =pod
