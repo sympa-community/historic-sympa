@@ -24,6 +24,7 @@ package Sympa::Mail;
 use strict;
 use English qw(-no_match_vars);
 use MIME::Charset;
+use MIME::Parser;
 use MIME::Tools;
 use POSIX qw();
 use Time::Local;
