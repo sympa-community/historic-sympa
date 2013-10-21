@@ -154,16 +154,6 @@ my $cipher;
 
 =over
 
-=item load_config($file, $params)
-
-DEPRECATED. Use Sympa::Configuration::_load_wwsconf instead.
-
-=cut
-
-## Load WWSympa configuration file
-##sub load_config
-## MOVED: use Conf::load_wwsconf().
-
 =item get_my_url()
 
 FIXME
