@@ -65,7 +65,7 @@ use Sympa::PlainDigest;
 use Sympa::Report;
 use Sympa::Scenario;
 use Sympa::Spool::File::Key;
-use Sympa::Spool::File::Subscribe;
+use Sympa::Spool::File::Subscription;
 use Sympa::Task;
 use Sympa::Template;
 use Sympa::Tools;
