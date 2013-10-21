@@ -600,7 +600,6 @@ sub new {
     my $name    = shift;
     my $robot   = shift;
     my $options = shift || {};
-    my $list;
 
     unless ($options->{'skip_name_check'}) {
 	if ($name && $name =~ /\@/) {
@@ -649,16 +648,17 @@ sub new {
 	$robot = Sympa::Robot::clean_robot($robot);
     }
 
+    my $self;
     my $status;
     ## If list already in memory and not previously purged by another process
     if ($robot->lists($name) and -d $robot->lists($name)->dir) {
 	# use the current list in memory and update it
-	$list = $robot->lists($name);
+	$self = $robot->lists($name);
     } else {
 	# create a new object list
-	$list = bless {} => $pkg;
+	$self = bless {} => $pkg;
     }
-    $status = $list->load($name, $robot, $options);
+    $status = $self->load($name, $robot, $options);
     unless (defined $status) {
 	return undef;
     }
@@ -668,13 +668,13 @@ sub new {
 	$options->{'force_sync_admin'}) {
 
 	## Update admin_table
-	unless (defined $list->sync_include_admin()) {
+	unless (defined $self->sync_include_admin()) {
 	    Sympa::Log::Syslog::do_log('err', 'sync_include_admin for list %s failed',
-		$list)
+		$self)
 		unless $options->{'just_try'};
 	}
-	if ($list->get_nb_owners() < 1) {
-	    $list->set_status_error_config('no_owner_defined');
+	if ($self->get_nb_owners() < 1) {
+	    $self->set_status_error_config('no_owner_defined');
 	}
 
 	## Config file was loaded or reloaded
