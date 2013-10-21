@@ -178,12 +178,16 @@ sub mail_file {
         if ($data->{'from'} eq 'sympa') {
             $headers .= "From: ".MIME::EncWords::encode_mimewords(
                 sprintf("SYMPA <%s>", $params{sympa}),
-                'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
+                'Encoding' => 'A',
+                'Charset'  => "US-ASCII",
+                'Field'    => 'From'
             )."\n";
         } else {
             $headers .= "From: ".MIME::EncWords::encode_mimewords(
                 Encode::decode('utf8', $data->{'from'}),
-                'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'From'
+                'Encoding' => 'A',
+                'Charset'  => $data->{'charset'},
+                'Field'    => 'From'
             )."\n";
         }
     }
@@ -191,7 +195,9 @@ sub mail_file {
     unless ($header_ok{'subject'}) {
         $headers .= "Subject: ".MIME::EncWords::encode_mimewords(
             Encode::decode('utf8', $data->{'subject'}),
-            'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Subject'
+            'Encoding' => 'A',
+            'Charset'  => $data->{'charset'},
+            'Field'    => 'Subject'
         )."\n";
     }
 
@@ -199,8 +205,8 @@ sub mail_file {
         $headers .= "Reply-to: ".MIME::EncWords::encode_mimewords(
             Encode::decode('utf8', $data->{'replyto'}),
             'Encoding' => 'A',
-            'Charset' => $data->{'charset'},
-            'Field' => 'Reply-to'
+            'Charset'  => $data->{'charset'},
+            'Field'    => 'Reply-to'
         )."\n" if ($data->{'replyto'})
     }
 
@@ -209,8 +215,8 @@ sub mail_file {
             $headers .= $field.': '.MIME::EncWords::encode_mimewords(
                 Encode::decode('utf8', $data->{'headers'}{$field}),
                 'Encoding' => 'A',
-                'Charset' => $data->{'charset'},
-                'Field' => $field
+                'Charset'  => $data->{'charset'},
+                'Field'    => $field
             )."\n";
         }
     }
@@ -273,29 +279,29 @@ sub mail_file {
     return $message_as_string if ($params{return_message_as_string});
 
     my $message = Sympa::Message->new(
-        string => $message_as_string,
-        noxsympato =>'noxsympato'
+        string     => $message_as_string,
+        noxsympato => 'noxsympato'
     );
 
     my $result = _sending(
-        message => $message,
-        rcpt => $params{recipient},
-        from => $data->{'return_path'},
-        robot => $params{robot},
-        listname => $listname,
-        priority => $params{priority},
+        message         => $message,
+        rcpt            => $params{recipient},
+        from            => $data->{'return_path'},
+        robot           => $params{robot},
+        listname        => $listname,
+        priority        => $params{priority},
         priority_packet => $params{priority_packet},
-        sign_mode => $params{sign_mode},
-        bulk => $params{bulk},
-        spool => $params{spool},
-        dkim => $data->{'dkim'},
-        sendmail => $params{sendmail},
-        sendmail_args => $params{sendmail_args},
-        maxsmtp => $params{maxsmtp},
-        openssl => $params{openssl},
-        key_passwd => $params{key_passwd},
-        cookie => $params{cookie},
-        sympa => $params{sympa},
+        sign_mode       => $params{sign_mode},
+        bulk            => $params{bulk},
+        spool           => $params{spool},
+        dkim            => $data->{'dkim'},
+        sendmail        => $params{sendmail},
+        sendmail_args   => $params{sendmail_args},
+        maxsmtp         => $params{maxsmtp},
+        openssl         => $params{openssl},
+        key_passwd      => $params{key_passwd},
+        cookie          => $params{cookie},
+        sympa           => $params{sympa},
     );
 
     return defined $result ? 1 : undef;
@@ -421,28 +427,28 @@ sub mail_message {
     }
 
     my $result = _sendto(
-        message => $message,
-        from => $from,
-        rcpt => \@sendtobypacket,
-        listname => $list->{'name'},
-        priority => $list->{'admin'}{'priority'},
+        message         => $message,
+        from            => $from,
+        rcpt            => \@sendtobypacket,
+        listname        => $list->{'name'},
+        priority        => $list->{'admin'}{'priority'},
         priority_packet => $priority_packet,
-        delivery_date => $list->get_next_delivery_date,
-        robot => $robot,
-        encrypt => $message->{'smime_crypted'},
-        bulk => $params{bulk},
-        verp => $verp,
-        dkim => $dkim,
-        merge => $list->{'admin'}{'merge_feature'},
-        tag_as_last => $tag_as_last,
-        sendmail => $params{sendmail},
-        sendmail_args => $params{sendmail_args},
-        maxsmtp => $params{maxsmtp},
-        openssl => $params{openssl},
-        key_passws => $params{key_passwd},
-        ssl_cert_dir => $params{ssl_cert_dir},
-        cookie => $params{cookie},
-        sympa => $params{sympa},
+        delivery_date   => $list->get_next_delivery_date,
+        robot           => $robot,
+        encrypt         => $message->{'smime_crypted'},
+        bulk            => $params{bulk},
+        verp            => $verp,
+        dkim            => $dkim,
+        merge           => $list->{'admin'}{'merge_feature'},
+        tag_as_last     => $tag_as_last,
+        sendmail        => $params{sendmail},
+        sendmail_args   => $params{sendmail_args},
+        maxsmtp         => $params{maxsmtp},
+        openssl         => $params{openssl},
+        key_passws      => $params{key_passwd},
+        ssl_cert_dir    => $params{ssl_cert_dir},
+        cookie          => $params{cookie},
+        sympa           => $params{sympa},
     );
 
     if (!defined $result) {
@@ -480,19 +486,19 @@ sub mail_forward {
     $message->{'msg'}->head()->add('Auto-Submitted', 'auto-forwarded');
 
     my $result = _sending(
-        message => $message,
-        rcpt => $params{recipient},
-        from => $params{from},
-        robot => $params{robot},
-        priority => $params{priority},
+        message         => $message,
+        rcpt            => $params{recipient},
+        from            => $params{from},
+        robot           => $params{robot},
+        priority        => $params{priority},
         priority_packet => $params{priority_packet},
-        sendmail => $params{sendmail},
-        sendmail_args => $params{sendmail_args},
-        maxsmtp => $params{maxsmtp},
-        openssl => $params{openssl},
-        key_passwd => $params{key_passwd},
-        cookie => $params{cookie},
-        sympa => $params{sympa},
+        sendmail        => $params{sendmail},
+        sendmail_args   => $params{sendmail_args},
+        maxsmtp         => $params{maxsmtp},
+        openssl         => $params{openssl},
+        key_passwd      => $params{key_passwd},
+        cookie          => $params{cookie},
+        sympa           => $params{sympa},
     );
 
     if (!defined $result) {
@@ -591,10 +597,10 @@ sub sendto {
                 }
 
                 $message->{'msg_as_string'} = Sympa::Tools::SMIME::encrypt_message(
-                    entity => $message->{'msg'},
-                    email => $email,
+                    entity   => $message->{'msg'},
+                    email    => $email,
                     cert_dir => $params{ssl_cert_dir},
-                    openssl => $params{openssl}
+                    openssl  => $params{openssl}
                 )->as_string();
 
                 unless ($message->{'msg_as_string'}) {
@@ -603,23 +609,23 @@ sub sendto {
                 }
 
                 my $result = _sending(
-                    message => $message,
-                    rcpt => $email,
-                    from => $from,
-                    listname => $listname,
-                    robot => $robot,
-                    priority => $priority,
+                    message         => $message,
+                    rcpt            => $email,
+                    from            => $from,
+                    listname        => $listname,
+                    robot           => $robot,
+                    priority        => $priority,
                     priority_packet => $priority_packet,
-                    delivery_date => $delivery_date,
-                    bulk => $bulk,
-                    tag_as_last => $tag_as_last,
-                    sendmail => $params{sendmail},
-                    sendmail_args => $params{sendmail_args},
-                    maxsmtp => $params{maxsmtp},
-                    openssl => $params{openssl},
-                    key_passwd => $params{key_passwd},
-                    cookie => $params{cookie},
-                    sympa => $params{sympa},
+                    delivery_date   => $delivery_date,
+                    bulk            => $bulk,
+                    tag_as_last     => $tag_as_last,
+                    sendmail        => $params{sendmail},
+                    sendmail_args   => $params{sendmail_args},
+                    maxsmtp         => $params{maxsmtp},
+                    openssl         => $params{openssl},
+                    key_passwd      => $params{key_passwd},
+                    cookie          => $params{cookie},
+                    sympa           => $params{sympa},
                 );
 
                 if (!defined $result) {
@@ -633,26 +639,26 @@ sub sendto {
     } else {
         $message->{'msg_as_string'} = $msg_header->as_string() . "\n" . $msg_body;   
         my $result = _sending(
-            message => $message,
-            rcpt => $params{rcpt},
-            from => $from,
-            listname => $listname,
-            robot => $robot,
-            priority => $priority,
+            message         => $message,
+            rcpt            => $params{rcpt},
+            from            => $from,
+            listname        => $listname,
+            robot           => $robot,
+            priority        => $priority,
             priority_packet => $priority_packet,
-            delivery_date => $delivery_date,
-            verp => $verp,
-            merge => $merge,
-            bulk => $bulk,
-            dkim => $dkim,
-            tag_as_last => $tag_as_last,
-            sendmail => $params{sendmail},
-            sendmail_args => $params{sendmail_args},
-            maxsmtp => $params{maxsmtp},
-            openssl => $params{openssl},
-            key_passwd => $params{key_passwd},
-            cookie => $params{cookie},
-            sympa => $params{sympa},
+            delivery_date   => $delivery_date,
+            verp            => $verp,
+            merge           => $merge,
+            bulk            => $bulk,
+            dkim            => $dkim,
+            tag_as_last     => $tag_as_last,
+            sendmail        => $params{sendmail},
+            sendmail_args   => $params{sendmail_args},
+            maxsmtp         => $params{maxsmtp},
+            openssl         => $params{openssl},
+            key_passwd      => $params{key_passwd},
+            cookie          => $params{cookie},
+            sympa           => $params{sympa},
         );
         return $result;
     }
@@ -690,14 +696,14 @@ sub _sending {
 
     if ($params{sign_mode} eq 'smime') {
         my $list = Sympa::List->new(
-            name => $params{listname},
+            name  => $params{listname},
             robot => $params{robot}
         );
         my $signed_msg = Sympa::Tools::SMIME::sign_message(
-            entity => $message->{'msg'},
-            cert_dir => $list->{dir},
+            entity     => $message->{'msg'},
+            cert_dir   => $list->{dir},
             key_passwd => $params{key_passwd},
-            openssl => $params{openssl}
+            openssl    => $params{openssl}
         );
         if ($signed_msg) {
             $message->{'msg'} = $signed_msg->dup;
@@ -713,28 +719,28 @@ sub _sending {
         my $mergefeature = $params{merge} eq 'on';
 
         my $verpfeature =
-        $params{verp} eq 'on' ||
-        $params{verp} eq 'mdn' ||
-        $params{verp} eq 'dsn';
+            $params{verp} eq 'on'  ||
+            $params{verp} eq 'mdn' ||
+            $params{verp} eq 'dsn';
 
         my $trackingfeature =
-        $params{verp} eq 'mdn' || $params{verp} eq 'dsn' ?
-        $params{verp} : '';
+            $params{verp} eq 'mdn' || $params{verp} eq 'dsn' ?
+            $params{verp} : '';
 
         my $bulk_code = $params{bulk}->store(
-            'message' => $message,
-            'rcpts' => $params{rcpt},
-            'from' => $params{from},
-            'robot' => $params{robot},
-            'listname' => $params{listname},
+            'message'          => $message,
+            'rcpts'            => $params{rcpt},
+            'from'             => $params{from},
+            'robot'            => $params{robot},
+            'listname'         => $params{listname},
             'priority_message' => $params{priority_message},
-            'priority_packet' => $params{priority_packet},
-            'delivery_date' => $params{delivery_date},
-            'verp' => $verpfeature,
-            'tracking' => $trackingfeature,
-            'merge' => $mergefeature,
-            'dkim' => $params{dkim},
-            'tag_as_last' => $params{tag_as_last},
+            'priority_packet'  => $params{priority_packet},
+            'delivery_date'    => $params{delivery_date},
+            'verp'             => $verpfeature,
+            'tracking'         => $trackingfeature,
+            'merge'            => $mergefeature,
+            'dkim'             => $params{dkim},
+            'tag_as_last'      => $params{tag_as_last},
         );
 
         unless (defined $bulk_code) {
