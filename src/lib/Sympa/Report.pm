@@ -119,7 +119,7 @@ sub reject_report_msg {
         Sympa::Log::Syslog::do_log('err',"unable to send template command_report.tt2 : no robot");
         return undef;
     }
-    $param->{'entry'} = $error;
+    $params->{'entry'} = $error;
 
     chomp($user);
     $params->{'to'} = $user;
