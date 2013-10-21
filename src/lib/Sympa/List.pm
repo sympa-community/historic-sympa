@@ -1303,6 +1303,8 @@ sub get_editors {
 	return $editors;
 }
 
+=item $list->get_owners_email()
+
 Return the list of owners email addresses.
 
 =cut
@@ -1500,7 +1502,7 @@ sub _load_config_changes_file {
 
 	while (<FILE>) {
 
-	} elsif (/^file\s+(.+)\s*$/) {
+	if (/^file\s+(.+)\s*$/) {
 	    $config_changes->{'file'}{$1} = 1;
 
 	} else {
@@ -3569,8 +3571,6 @@ sub get_real_total {
     my $total = $sth->fetchrow;
     $sth->finish();
 
-	my $user = $handle->fetchrow_hashref('NAME_lc');
-
     return $self->total($total);
 }
 
@@ -3732,45 +3732,25 @@ sub insert_delete_exclusion {
 		$r = 0;
 		foreach my $users (@users_excluded) {
 			if ($email eq $users) {
-				## Delete : list, user and date
-				if (defined $family) {
-					my $rows = $base->execute_query(
-						"DELETE FROM exclusion_table ".
-						"WHERE " .
-							"family_exclusion=? AND ".
-							"robot_exclusion=? AND ".
-							"user_exclusion=?",
-						$family,
-						$robot,
-						$email
-					);
-					unless ($rows) {
-						Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for family %s (robot %s) from table exclusion_table', $email, $family, $robot);
-					}
-					$r = $rows;
-				} else {
-					my $rows = $base->execute_query(
-						"DELETE FROM exclusion_table " .
-						"WHERE " .
-							"list_exclusion=? AND " .
-							"robot_exclusion=? AND " .
-							"user_exclusion=?",
-						$list,
-						$robot,
-						$email
-					);
-					unless ($rows) {
-						Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for list %s@%s from table exclusion_table', $email, $family, $robot);
-					}
-					$r = $rows;
+                            ## Delete : list, user and date
+                                    my $rows = $self->{base}->execute_query(
+                                            "DELETE FROM exclusion_table " .
+                                            "WHERE " .
+                                                    "list_exclusion=? AND " .
+                                                    "robot_exclusion=? AND " .
+                                                    "user_exclusion=?",
+                                            $name,
+                                            $robot,
+                                            $email
+                                    );
+                                    unless ($rows) {
+                                            Sympa::Log::Syslog::do_log('err','Unable to remove entry %s for list %s@%s from table exclusion_table', $email, $name, $robot);
+                                    }
+                                    $r = $rows;
 				}
 			}
 		}
-
-	} else {
-		Sympa::Log::Syslog::do_log('err','Unknown action %s',$action);
-		return undef;
-	}
+            }
     } else {
 	Sympa::Log::Syslog::do_log('err', 'Unknown action %s', $action);
 	return undef;
@@ -3899,6 +3879,8 @@ sub get_resembling_list_members_no_object {
 	my $subscriber_domain = $2;
 	my %subscribers_email;
 
+    if ($local_part =~ /^(.*)\.(.*)$/) {
+
 	foreach my $subscriber (
 	    &find_list_member_by_pattern_no_object(
 		{   'email_pattern' => $1 . '@' . $subscriber_domain,
@@ -3956,12 +3938,7 @@ sub get_resembling_list_members_no_object {
 	    $subscribers_email{$subscriber->{'email'}} = 1;
 	    push @output, $subscriber;
 	}
-	# is some subscriber ressembling with a plused email ?
-	foreach my $subscriber (find_list_member_by_pattern_no_object({'email_pattern' => $local_part.'+%@'.$subscriber_domain,'name'=>$listname,'domain'=>$robot})) {
-		next if ($subscribers_email{$subscriber->{'email'}});
-		$subscribers_email{ $subscriber->{'email'} } = 1;
-		push @output,$subscriber;
-	}
+    }
 
     #### Same local_part and resembling domain
     #
@@ -4163,6 +4140,8 @@ sub _list_admin_cols {
 	SDM::get_canonical_read_date('date_admin'),
 	SDM::get_canonical_read_date('update_admin');
 }
+
+=item $list->get_first_list_member($data)
 
 Returns a hash to the first user on the list.
 
@@ -4849,19 +4828,11 @@ sub get_total_bouncing {
 
     my $total =  $sth->fetchrow;
 
-	return undef unless ($who);
+    $sth->finish();
 
-	my $base = Sympa::Database->get_singleton();
-	my $handle = $base->get_query_handle(
-		"SELECT count(*) FROM user_table WHERE email_user=?",
-	);
-	unless ($handle) {
-		Sympa::Log::Syslog::do_log('err','Unable to check whether user %s is in the user table.');
-		return undef;
-	}
-	$handle->execute($who);
+    $sth = pop @sth_stack;
 
-	return $handle->fetchrow();
+    return $total;
 }
 
 ## Is the person in user table (db only)
@@ -5117,6 +5088,8 @@ sub update_list_member {
     return 1;
 }
 
+=item $list->update_list_admin($who, $role, $values)
+
 Sets the new values given in the hash for the admin user (except gecos).
 
 =cut
@@ -5198,7 +5171,7 @@ sub update_list_admin {
 			$value = SDM::quote($value);
 		    }
 		}
-		next unless @set_list;
+		my $set = sprintf "%s=%s", $map_field{$field}, $value;
 
 		push @set_list, $set;
 	    }
@@ -5496,23 +5469,6 @@ sub add_list_admin {
 		}
 	    }
 
-		unless ($new_admin_user->{'included'}) {
-			## Is the email in user table?
-			if (! is_global_user($who)) {
-				## Insert in User Table
-				my $user_rows = $user_handle->execute(
-					$who,
-					$new_admin_user->{'gecos'},
-					$new_admin_user->{'lang'},
-					$new_admin_user->{'password'}
-				);
-				unless ($user_rows) {
-					Sympa::Log::Syslog::do_log('err','Unable to add admin %s to user_table', $who);
-					next;
-				}
-			}
-		}
-
 	## Update Admin Table
 	unless (
 	    SDM::do_query(
@@ -5547,6 +5503,8 @@ sub add_list_admin {
 	    );
 	    next;
 	}
+        $total++;
+        }
 
 	return $total;
 }
@@ -5680,6 +5638,7 @@ sub may_edit {
     # Load edit_list.conf: track by file, not domain (file may come from
     # server, robot, family or list context)
     my $edit_conf_file = $self->get_etc_filename('edit_list.conf');
+    my $edit_conf;
     if (!$edit_list_conf{$edit_conf_file} ||
 	((stat($edit_conf_file))[9] >
 	    $mtime{'edit_list_conf'}{$edit_conf_file})
@@ -5956,6 +5915,8 @@ sub archive_exist {
    Archive::exist($dir, $file);
 
 }
+
+=item $list->archive_ls()
 
 Returns the list of available files, if any.
 
@@ -6507,22 +6468,6 @@ sub _include_users_remote_sympa_list {
 	'Include %d users from list (%d subscribers) https://%s:%s%s',
 	$total, $get_total, $host, $port, $path);
     return $total;
-}
-
-		$u{'visibility'} = $default_user_options->{'visibility'} if (defined $default_user_options->{'visibility'});
-		$u{'reception'} = $default_user_options->{'reception'} if (defined $default_user_options->{'reception'});
-		$u{'profile'} = $default_user_options->{'profile'} if (defined $default_user_options->{'profile'});
-		$u{'info'} = $default_user_options->{'info'} if (defined $default_user_options->{'info'});
-
-		if ($tied) {
-			$users->{$email} = join("\n", %u);
-		} else {
-			$users->{$email} = \%u;
-		}
-		delete $user{$email};undef $email;
-	}
-	Sympa::Log::Syslog::do_log('info','Include %d users from list (%d subscribers) https://%s:%s%s',$total,$get_total,$host,$port,$path);
-	return $total;
 }
 
 ## include a list as subscribers.
@@ -7266,7 +7211,7 @@ sub _include_sql_ca {
 
 	my $sth = $source->do_query($source->{'sql_query'});
 	my $mailkey = $source->{'email_entry'};
-	my $ca = $handle->fetchall_hashref($mailkey);
+	my $ca = $sth->fetchall_hashref($mailkey);
 	my $result;
 	foreach my $email (keys %{$ca}) {
 		foreach my $custom_attribute (keys %{$ca->{$email}}) {
@@ -7412,12 +7357,13 @@ sub _include_users_sql {
 	return undef;
     }
 
-	unless ($source->connect()) {
-		Sympa::Log::Syslog::do_log('err','Unable to connect to SQL datasource with parameters host: %s, database: %s',$source->{'host'},$source->{'db_name'});
-		return undef;
-	}
+    foreach my $row (@{$array_of_users}) {
+	my $email = $row->[0]; ## only get first field
+	my $gecos = $row->[1]; ## second field (if it exists) is gecos
+	## Empty value
+	next if ($email =~ /^\s*$/);
 
-	my $total = 0;
+	$email = Sympa::Tools::clean_email($email);
 
 	## Skip badly formed emails
 	unless (Sympa::Tools::valid_email($email)) {
