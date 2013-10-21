@@ -68,7 +68,7 @@ Parameters:
 
 sub mail_file {
     my (%params) = @_;
-    my $data = $params{data}
+    my $data = $params{data};
 
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
@@ -139,7 +139,7 @@ sub mail_file {
 	my $headers = "";
 	
 	unless ($header_ok{'message-id'}) {
-		$headers .= sprintf("Message-Id: %s\n", Sympa::Tools::get_message_id($robot));
+		$headers .= sprintf("Message-Id: %s\n", Sympa::Tools::get_message_id($params{robot}));
 	}
 	
 	unless ($header_ok{'date'}) {
@@ -522,6 +522,7 @@ Return value:
 sub reaper {
 	my ($block) = @_;
 
+   my $i;
    $block = 1 unless (defined($block));
    while (($i = waitpid(-1, $block ? POSIX::WNOHANG : 0)) > 0) {
       $block = 1;
@@ -632,7 +633,7 @@ sub sendto {
 		$message->{'msg_as_string'} = $msg_header->as_string() . "\n" . $msg_body;   
 		my $result = _sending(
 			message => $message,
-			rcpt => $email,
+			rcpt => $params{rcpt},
 			from => $from,
 			listname => $listname,
 			robot => $robot,
@@ -916,13 +917,14 @@ sub _reformat_message($;$$) {
 	my ($message, $attachments, $defcharset) = @_;
 	$attachments ||= [];
 
-    my $parser = MIME::Parser-new();
+    my $parser = MIME::Parser->new();
     unless (defined $parser) {
 		Sympa::Log::Syslog::do_log('err', "mail::reformat_message: Failed to create MIME parser");
 		return undef;
     }
     $parser->output_to_core(1);
 
+    my $msg;
     if (ref($message) eq 'MIME::Entity') {
 		$msg = $message;
     } else {
