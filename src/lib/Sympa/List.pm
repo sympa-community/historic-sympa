@@ -74,7 +74,6 @@ use Sympa::Tools::File;
 use Sympa::Tools::Password;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
-use Sympa::WebAgent;
 
 my @sources_providing_listmembers = qw/
   include_file
@@ -6691,15 +6690,13 @@ sub _include_users_remote_file {
     my $total = 0;
     my $id = Datasource::_get_datasource_id($param);
 
-    ## WebAgent package is part of Fetch.pm and inherited from LWP::UserAgent
-
-    my $fetch = WebAgent->new(agent => 'Sympa/' . Sympa::Constants::VERSION);
+    my $fetch = LWP::UserAgent->new(agent => 'Sympa/' . Sympa::Constants::VERSION);
 
     my $req = HTTP::Request->new(GET => $url);
 
     if (defined $param->{'user'} && defined $param->{'passwd'}) {
-	WebAgent::set_basic_credentials($param->{'user'},
-	    $param->{'passwd'});
+        # this won't work, we need a location and a realm first
+	$fetch->credentials(undef, undef, $param->{'user'}, $param->{'passwd'});
     }
 
     my $res = $fetch->request($req);
