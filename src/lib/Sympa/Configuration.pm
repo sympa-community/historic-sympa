@@ -135,10 +135,7 @@ my %trusted_applications = ('trusted_application' => {
 my $binary_file_extension = ".bin";
 
 
-my $wwsconf = Sympa::WWSympa::load_config(
-    Sympa::Constants::WWSCONFIG,
-    \%params
-);
+my $wwsconf;
 our %Conf = ();
 
 ## load each virtual robots configuration files
