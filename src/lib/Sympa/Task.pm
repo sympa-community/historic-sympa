@@ -35,7 +35,7 @@ package Sympa::Task;
 
 use strict;
 
-use Sympa::Spool::Task;
+use Sympa::Spool::File::Task;
 use Sympa::TaskInstruction;
 use Sympa::Tools::Time;
 
