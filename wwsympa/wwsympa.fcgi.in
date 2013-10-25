@@ -3406,10 +3406,9 @@ sub do_sso_login {
 	}elsif ($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
 	  
 	  my $prefix = $Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
-	  
 	  foreach my $k (keys %ENV) {
 	    if ($k =~ /^$prefix/) {
-	      push @sso_attr, "$k__PAIRS_SEP__$ENV{$k}";
+	      push @sso_attr, $k.'__PAIRS_SEP__'.$ENV{$k};
 	    }
 	  }
 	}	
