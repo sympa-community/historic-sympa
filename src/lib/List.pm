@@ -1600,9 +1600,14 @@ sub new {
     }
 
     ## Config file was loaded or reloaded
-    if (($status == 1 && ! $options->{'skip_sync_admin'}) ||
-	$options->{'force_sync_admin'}) {
-
+    my $pertinent_ttl = $list->{'admin'}{'distribution_ttl'}||$list->{'admin'}{'ttl'};
+    if (
+	$status == 1
+	&& (! $options->{'skip_sync_admin'}
+	|| ($options->{'optional_sync_admin'} && $list->{'last_sync'} < time - $pertinent_ttl)
+	|| $options->{'force_sync_admin'})
+	)
+    {
 	## Update admin_table
 	unless (defined $list->sync_include_admin()) {
 	    &do_log('err','List::new() : sync_include_admin_failed') unless ($options->{'just_try'});
@@ -10044,7 +10049,7 @@ sub get_lists {
 
 	    foreach my $l (@files) {
 		next if (($l =~ /^\./o) || (! -d "$robot_dir/$l") || (! -f "$robot_dir/$l/config"));
-		
+		$options->{'optional_sync_admin'} = 1;
 		my $list = new List ($l, $robot, $options);
 		
 		next unless (defined $list);
