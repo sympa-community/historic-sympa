@@ -4981,8 +4981,8 @@ sub get_user_db {
 	## Turn user_attributes into a hash
 	my $attributes = $user->{'attributes'};
 	$user->{'attributes'} = undef;
-	foreach my $attr (split (/\;/, $attributes)) {
-	    my ($key, $value) = split (/\=/, $attr);
+	foreach my $attr (split (/__ATT_SEP__/, $attributes)) {
+	    my ($key, $value) = split (/__PAIRS_SEP__/, $attr);
 	    $user->{'attributes'}{$key} = $value;
 	}    
 	## Turn data_user into a hash
