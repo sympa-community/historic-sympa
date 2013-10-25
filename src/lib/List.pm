@@ -9283,7 +9283,7 @@ sub sync_include {
 	## If include sources were not available, do not update subscribers
 	## Use DB cache instead and warn the listmaster.
 	if($#errors > -1) {
-	    &do_log('err', 'Errors occurred while synchornizing datasources for list: %s', $name);
+	    &do_log('err', 'Errors occurred while synchronizing datasources for list: %s', $name);
 	    $errors_occurred = 1;
 	    unless (&List::send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
 		&do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
