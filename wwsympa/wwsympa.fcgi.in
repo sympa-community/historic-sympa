@@ -3399,11 +3399,11 @@ sub do_sso_login {
 	  
 	  foreach my $field (split(/,/, $list_of_headers)) {
 	    if (defined $ENV{$field}) {
-	      push @sso_attr, "$field=$ENV{$field}";
+	      push @sso_attr, $field.'__PAIRS_SEP__'.$ENV{$field};
 	    }
 	  }
 	  
-	}elsif ($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
+	}elsif ($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'}) {
 	  
 	  my $prefix = $Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
 	  foreach my $k (keys %ENV) {
