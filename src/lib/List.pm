@@ -7773,13 +7773,25 @@ sub load_scenario_list {
     my $directory = "$self->{'dir'}";
     my %list_of_scenario;
     my %skip_scenario;
-
-    foreach my $dir (
-        "$directory/scenari",
-        "$Conf::Conf{'etc'}/$robot/scenari",
-        "$Conf::Conf{'etc'}/scenari",
-        Sympa::Constants::DEFAULTDIR . '/scenari'
-    ) {
+    my @list_of_scenario_dir;
+    if (defined $self->{'admin'}{'family_name'} ) {
+	@list_of_scenario_dir = (
+	    "$directory/scenari",
+	    "$Conf::Conf{'etc'}/$robot/families/$self->{'admin'}{'family_name'}/scenari",
+	    "$Conf::Conf{'etc'}/families/$self->{'admin'}{'family_name'}/scenari",
+	    "$Conf::Conf{'etc'}/$robot/scenari",
+	    "$Conf::Conf{'etc'}/scenari",
+	    Sympa::Constants::DEFAULTDIR . '/scenari'
+	);
+    }else{
+	@list_of_scenario_dir = (
+	    "$directory/scenari",
+	    "$Conf::Conf{'etc'}/$robot/scenari",
+	    "$Conf::Conf{'etc'}/scenari",
+	    Sympa::Constants::DEFAULTDIR . '/scenari'
+	);
+    }
+    foreach my $dir (@list_of_scenario_dir) {
 	next unless (-d $dir);
 	
 	my $scenario_regexp = &tools::get_regexp('scenario');
