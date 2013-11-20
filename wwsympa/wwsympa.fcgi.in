@@ -4427,6 +4427,10 @@ sub do_search {
     }
 
     $param->{'similar_subscribers'} = &List::get_ressembling_subscribers_no_object({'name'=>$list->{'name'},'domain'=>$robot,'email'=>$in{'filter'}});
+    foreach my $u (@{$param->{'similar_subscribers'} || []}) {
+	$u->{'date'} = gettext_strftime "%d %b %Y", localtime($u->{'date'});
+	$u->{'update_date'} = gettext_strftime "%d %b %Y", localtime($u->{'update_date'});
+    }
     $param->{'similar_subscribers_occurence'} =$#{$param->{'similar_subscribers'}}+1;
 
     $param->{'occurrence'} = $record;
