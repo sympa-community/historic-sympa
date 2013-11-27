@@ -594,37 +594,37 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'close_list' => ['privileged_owner'],
 			   'close_list_request' => ['privileged_owner'],
 			   'copy_template' => ['listmaster'],
-			   'd_install_shared' => ['editor'],
-			   'd_reject_shared' => ['editor'],
-			   'distribute' => ['editor'],
+			   'd_install_shared' => ['editor','owner'],
+			   'd_reject_shared' => ['editor','owner'],
+			   'distribute' => ['editor','owner','listmaster'],
 			   'dump_scenario' => ['listmaster'],
 			   'edit_list' => ['owner'],
 			   'edit_list_request' => ['owner'],
 			   'edit_template' => ['listmaster'],
-			   'editsubscriber' => ['owner'],
+			   'editsubscriber' => ['owner','editor'],
 			   'get_closed_lists' => ['listmaster'],
 			   'get_inactive_lists' => ['listmaster'],
 			   'get_latest_lists' => ['listmaster'],
 			   'get_pending_lists' => ['listmaster'],
-			   'ignoresub' => ['owner'],
+			   'ignoresub' => ['owner','editor'],
 			   'install_pending_list' => ['listmaster'],
 			   'edit_config' => ['listmaster'],
 			   'ls_templates' => ['listmaster'],
 			   'manage_template' => ['owner'],
 			   'manage_template' => ['owner'],
-			   'modindex' => ['editor'],
+			   'modindex' => ['editor','owner','listmaster'],
 			   'purge_list' => ['privileged_owner','listmaster'],
 			   'rebuildallarc' => ['listmaster'],
 			   'rebuildarc' => ['listmaster'],
-			   'reject' => ['editor'],
+			   'reject' => ['editor','owner','listmaster'],
 			   'remove_template' => ['listmaster'],
 			   'rename_list' => ['privileged_owner'],
-			   'copy_list' => ['owner'],
+			   'copy_list' => ['owner','listmaster'],
 			   'rename_list_request' => ['privileged_owner'],
-			   'resetbounce' => ['owner'],
+			   'resetbounce' => ['owner','editor'],
 			   'restore_list' => ['listmaster'],
 			   'review_family' => ['listmaster'],
-			   'reviewbouncing' => ['owner'],
+			   'reviewbouncing' => ['owner','editor'],
 			   'search_user' => ['listmaster'],
 			   'serveradmin' => ['listmaster'],
 			   'set_dumpvars' => ['listmaster'],
@@ -633,13 +633,13 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'set_session_email' => ['listmaster'],
 			   'show_sessions' => ['listmaster'],
 			   'stats' => ['owner'],
-			   'subindex' => ['owner'],
-			   'sync_include' => ['owner'],
+			   'subindex' => ['owner','editor'],
+			   'sync_include' => ['owner','editor'],
 			   'skinedit' => ['listmaster'],
 			   'view_template' => ['listmaster'],
-			   'viewbounce' => ['owner'],
+			   'viewbounce' => ['owner','editor'],
 			   'viewlogs' => ['owner','editor'],
-			   'viewmod' => ['editor'],
+			   'viewmod' => ['editor','owner','listmaster'],
 			    'automatic_lists_management_request' => ['listmaster'],
 			    'automatic_lists_management' => ['listmaster'],
 			  );
@@ -2867,7 +2867,22 @@ Use it to create a List object and initialize output parameters.
 	 $main::action = $result->{'action'} if (ref($result) eq 'HASH');
 	 
 	 $param->{'may_subscribe'} = 1 if ($main::action =~ /do_it|owner|request_auth/);
-	 
+	
+# SJS START 
+	 ## May Add or del subscribers
+	 my $result = $list->check_list_authz('add',$param->{'auth_method'},
+					      {'sender' =>$param->{'user'}{'email'},
+					       'remote_host' => $param->{'remote_host'},
+					       'remote_addr' => $param->{'remote_addr'}});
+	 $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	 $param->{'may_add'} = 1 if ($main::action =~ /do_it/);
+	 my $result = $list->check_list_authz('del',$param->{'auth_method'},
+					      {'sender' =>$param->{'user'}{'email'},
+					       'remote_host' => $param->{'remote_host'},
+					       'remote_addr' => $param->{'remote_addr'}});
+	 $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+	 $param->{'may_del'} = 1 if ($main::action =~ /do_it/);
+# SJS END
 	
 	 
 	 ## Archives Access control
@@ -6928,7 +6943,8 @@ sub do_skinsedit {
 
 
      ## messages
-     foreach my $id (split (/,/, $in{'id'})) {
+     foreach my $id (split (/,/, $in{'id'})) { # QUIET DISTRIBUTE
+         &do_log('notice', 'Moderator approves message: %s %s', $list->{'name'},$id);
 	 my $mail_command = sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 	 $data->{'body'} .= $mail_command;
 
