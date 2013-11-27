@@ -1014,7 +1014,8 @@ my %alias = ('reply-to' => 'reply_to',
 							       'order' => 1
 							       },
 						 'host' => {'format' => &tools::get_regexp('host'),
-							    'occurrence' => '1',
+# Not required for ODBC
+#							    'occurrence' => '1',
 							    'gettext_id' => "remote host",
 							    'order' => 2
 							    },

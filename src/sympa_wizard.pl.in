@@ -532,6 +532,7 @@ Strike return key to continue...
     my %opt_CPAN = (
 		'AuthCAS' => 'AuthCAS',
         'DBD::Pg' => 'DBD-Pg',
+        'DBD::ODBC' => 'DBD-ODBC',
         'DBD::Oracle' => 'DBD-Oracle',
         'DBD::Sybase' => 'DBD-Sybase',
         'DBD::SQLite' => 'DBD-SQLite',

@@ -103,9 +103,18 @@ sub connect {
 	    return undef;
 	}
     }
-    ## SQLite just need a db_name
-    unless ($param->{'db_type'} eq 'SQLite') {
-	foreach my $db_param ('db_type','db_name','db_host','db_user') {
+    if ($param->{'db_type'} eq 'SQLite') {
+        ## SQLite just need a db_name
+    } elsif ($param->{'db_type'} eq 'ODBC') {
+        ## ODBC just needs a db_name, db_user
+	foreach my $db_param ('db_user','db_passwd') {
+	    unless ($param->{$db_param}) {
+		do_log('info','Missing parameter %s for DBI connection', $db_param);
+		return undef;
+	    }
+	}
+    } else {
+	foreach my $db_param ('db_host','db_user','db_passwd') {
 	    unless ($param->{$db_param}) {
 		do_log('info','Missing parameter %s for DBI connection', $db_param);
 		return undef;
@@ -137,6 +146,9 @@ sub connect {
 	$connect_string = "DBI:SQLite:dbname=$param->{'db_name'}";
     }elsif ($param->{'db_type'} eq 'Informix') {
         $connect_string = "DBI:Informix:".$param->{'db_name'}."@".$param->{'db_host'}; 
+    # ODBC support
+    }elsif ($param->{'db_type'} eq 'ODBC') {
+	$connect_string = "DBI:ODBC:".$param->{'db_name'};
     }else {
 	$connect_string = "DBI:$param->{'db_type'}:$param->{'db_name'}:$param->{'db_host'}";
     }
