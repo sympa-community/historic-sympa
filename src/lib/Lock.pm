@@ -329,7 +329,7 @@ sub _lock_nfs {
     &do_log('debug3', "Lock::_lock_nfs($lock_file, $mode, $timeout)");
     
     ## TODO should become a configuration parameter, used with or without NFS
-    my $hold = 30; 
+    my $hold = 60*30; 
     my ($open_mode, $operation);
     
     if ($mode eq 'read') {
@@ -345,8 +345,8 @@ sub _lock_nfs {
     if ($nfs_lock = File::NFSLock->new( {
 	file      => $lock_file,
 	lock_type => $operation|LOCK_NB,
-	blocking_timeout   => $hold,
-	stale_lock_timeout => $timeout,
+	blocking_timeout   => $timeout,
+	stale_lock_timeout => $hold,
     })) {
 	## Read access to prevent "Bad file number" error on Solaris
 	$FH = new FileHandle;
