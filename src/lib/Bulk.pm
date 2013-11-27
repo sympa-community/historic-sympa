@@ -265,6 +265,12 @@ sub merge_msg {
 	return undef;
     }
 
+    $data->{'headers'} = {} if(!defined $data->{'headers'});
+    my $headers = $entity->head;
+    foreach my $key ( qw/subject x-originating-ip message-id date x-original-to from to thread-topic content-type/ ) {
+        $data->{'headers'}{$key} = $headers->get($key) if($headers->count($key));
+    }
+
     my $body;
     if(defined $entity->bodyhandle){
 	$body      = $entity->bodyhandle->as_string;

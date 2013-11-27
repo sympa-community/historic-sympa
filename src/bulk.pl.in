@@ -242,6 +242,7 @@ while (!$end) {
 	my $data; #HASH which will contain the attributes of the subscriber
 	
 	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
+	$data->{'messageid'} = $message_from_spool->{'messageid'};
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};
 	#XXX$data->{'to'} = $bulk->{'receipients'}; #XXX Insecure
