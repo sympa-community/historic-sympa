@@ -7114,12 +7114,18 @@ sub add_user {
     
     foreach my $new_user (@new_users) {
 	my $who = &tools::clean_email($new_user->{'email'});
-	next unless $who;
+	unless ($who) {
+	    Log::do_log('err', 'Ignoring %s which is not a valid email',$new_user->{'email'});
+	    next;
+	}
 	
 	# Delete from exclusion_table and force a sync_include if new_user was excluded
 	if(&insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete')) {
 		$self->sync_include();
-		next if($self->is_user($who));
+		if($self->is_user($who)) {
+		    $total++;
+		    next;
+		}
 	}
 	
 	$new_user->{'date'} ||= time;
