@@ -849,6 +849,7 @@ our @params = (
         query  => 'Database password (associated to the db_user)',
         file   => 'sympa.conf',
         edit   => '1',
+        obfuscated => '1',
         advice => 'What ever you use a password or not, you must protect the SQL server (is it a not a public internet service ?)',
     },
     {
