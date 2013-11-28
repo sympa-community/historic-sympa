@@ -156,41 +156,8 @@ sub new {
 
     my $hdr = $message->{'msg'}->head;
 
-    ## Extract sender address
-    ## SJS UOA START
-    # Use alternative methods to determine sender, not just From header
-    my @sender_hdr = ();
-    if ($hdr->get('From')) {
-      @sender_hdr = Mail::Address->parse($hdr->get('From'));
-      } elsif ($hdr->get('Envelope-From')) {
-              do_log('err', 'No From found in message %s, using Envelope-From', $file);
-              @sender_hdr = Mail::Address->parse($hdr->get('Envelope-From'));
-      } elsif ($hdr->get('X-Sender')) {
-              do_log('err', 'No From found in message %s, using X-Sender', $file);
-              @sender_hdr = Mail::Address->parse($hdr->get('X-Sender'));
-      } elsif ($hdr->get('Return-Path')) {
-              do_log('err', 'No From found in message %s, using Return-Path', $file);
-              @sender_hdr = Mail::Address->parse($hdr->get('Return-Path'));
-      } else {
-              do_log('err', 'No From found in message %s, skipping.', $file);
-              return undef;
-    }
-    ## SJS UOA END
-#    unless ($hdr->get('From')) {
-#	do_log('err', 'No From found in message %s, skipping.', $file);
-#	return undef;
-#    }   
-#    my @sender_hdr = Mail::Address->parse($hdr->get('From'));
-    if ($#sender_hdr == -1) {
-	do_log('err', 'No valid address in From: field in %s, skipping', $file);
-	return undef;
-    }
-    $message->{'sender'} = lc($sender_hdr[0]->address);
-
-    unless (&tools::valid_email($message->{'sender'})) {
-	do_log('err', "Invalid From: field '%s'", $message->{'sender'});
-	return undef;
-    }
+    $message->{'sender'} = _get_sender_email($hdr, $file);
+    return undef unless defined $message->{'sender'};
 
     ## Store decoded subject and its original charset
     my $subject = $hdr->get('Subject');
@@ -340,6 +307,49 @@ sub new {
     bless $message, $pkg;
 
     return $message;
+}
+
+sub _get_sender_email {
+    my $hdr = shift;
+    my $file = shift;
+
+    ## Extract sender address
+    ## SJS UOA START
+    # Use alternative methods to determine sender, not just From header
+    my @sender_hdr = ();
+    if ($hdr->get('From')) {
+	@sender_hdr = Mail::Address->parse($hdr->get('From'));
+    } elsif ($hdr->get('Envelope-From')) {
+	do_log('err', 'No From found in message %s, using Envelope-From', $file);
+	@sender_hdr = Mail::Address->parse($hdr->get('Envelope-From'));
+    } elsif ($hdr->get('X-Sender')) {
+	do_log('err', 'No From found in message %s, using X-Sender', $file);
+	@sender_hdr = Mail::Address->parse($hdr->get('X-Sender'));
+    } elsif ($hdr->get('Return-Path')) {
+	do_log('err', 'No From found in message %s, using Return-Path', $file);
+	@sender_hdr = Mail::Address->parse($hdr->get('Return-Path'));
+    } else {
+	do_log('err', 'No From found in message %s, skipping.', $file);
+	return undef;
+    }
+    ## SJS UOA END
+#    unless ($hdr->get('From')) {
+#	do_log('err', 'No From found in message %s, skipping.', $file);
+#	return undef;
+#    }   
+#    my @sender_hdr = Mail::Address->parse($hdr->get('From'));
+    if ($#sender_hdr == -1) {
+	do_log('err', 'No valid address in From: field in %s, skipping', $file);
+	return undef;
+    }
+    my $sender = lc($sender_hdr[0]->address);
+
+    unless (&tools::valid_email($sender)) {
+	do_log('err', "Invalid From: field '%s'", $sender);
+	return undef;
+    }
+
+    return $sender;
 }
 
 =pod 
