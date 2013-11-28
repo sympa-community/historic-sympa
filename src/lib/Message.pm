@@ -156,8 +156,8 @@ sub new {
 
     my $hdr = $message->{'msg'}->head;
 
-    $message->{'envelope_sender'} = _get_envelope_sender($hdr);
-    $message->{'sender'} = _get_sender_email($message, $hdr, $file);
+    $message->{'envelope_sender'} = _get_envelope_sender($message);
+    $message->{'sender'} = _get_sender_email($message);
     return undef unless defined $message->{'sender'};
 
     ## Store decoded subject and its original charset
@@ -324,9 +324,9 @@ sub new {
 ## - qmail:      Use preline(1).
 ##
 sub _get_envelope_sender {
-    my $hdr = shift;
+    my $message = shift;
 
-    my $headers = $hdr->header();
+    my $headers = $message->{'msg'}->head->header();
     my $i = 0;
     $i++ while $headers->[$i] and $headers->[$i] =~ /^X-Sympa-/;
     if ($headers->[$i] and $headers->[$i] =~ /^Return-Path:\s*(.+)$/) {
@@ -344,50 +344,44 @@ sub _get_envelope_sender {
     return undef;
 }
 
+## Get sender of the message according to header fields specified by
+## 'sender_headers' parameter.
+## FIXME: S/MIME signer may not be same as the sender given by this function.
 sub _get_sender_email {
     my $message = shift;
-    my $hdr = shift;
-    my $file = shift;
 
-    ## Extract sender address
-    ## SJS UOA START
-    # Use alternative methods to determine sender, not just From header
-    my @sender_hdr = ();
-    if ($hdr->get('From')) {
-	@sender_hdr = Mail::Address->parse($hdr->get('From'));
-    } elsif ($hdr->get('Envelope-From')) {
-	do_log('err', 'No From found in message %s, using Envelope-From', $file);
-	@sender_hdr = Mail::Address->parse($hdr->get('Envelope-From'));
-    } elsif ($hdr->get('X-Sender')) {
-	do_log('err', 'No From found in message %s, using X-Sender', $file);
-	@sender_hdr = Mail::Address->parse($hdr->get('X-Sender'));
-    } elsif ($message->{'envelope_sender'} and
-	$message->{'envelope_sender'} ne '<>') {
-	do_log('err', 'No From found in message %s, using Return-Path', $file);
-	my $sender = lc($message->{'envelope_sender'});
-	unless (&tools::valid_email($sender)) {
-	    do_log('err', "Invalid From: field '%s'", $sender);
-	    return undef;
+    my $hdr = $message->{'msg'}->head;
+
+    my $sender = undef;
+    foreach my $field (split /[\s,]+/, $Conf::Conf{'sender_headers'}) {
+	if (lc $field eq 'return-path') {
+	    ## Try to get envelope sender
+	    if ($message->{'envelope_sender'} and
+		$message->{'envelope_sender'} ne '<>') {
+		$sender = lc($message->{'envelope_sender'});
+	    }
+	} elsif ($hdr->get($field)) {
+	    ## Try to get message header.
+	    ## On "Resent-*:" headers, the first occurrence must be used (see
+	    ## RFC 5322 3.6.6).
+	    ## FIXME: Though "From:" can occur multiple times, only the first
+	    ## one is detected.
+	    my $addr = $hdr->get($field, 0); # get the first one
+	    my @sender_hdr = Mail::Address->parse($addr);
+	    if (@sender_hdr and $sender_hdr[0]->address) {
+		$sender = lc($sender_hdr[0]->address);
+		last;
+	    }
 	}
-	return $sender;
-    } else {
-	do_log('err', 'No From found in message %s, skipping.', $file);
-	return undef;
-    }
-    ## SJS UOA END
-#    unless ($hdr->get('From')) {
-#	do_log('err', 'No From found in message %s, skipping.', $file);
-#	return undef;
-#    }   
-#    my @sender_hdr = Mail::Address->parse($hdr->get('From'));
-    if ($#sender_hdr == -1) {
-	do_log('err', 'No valid address in From: field in %s, skipping', $file);
-	return undef;
-    }
-    my $sender = lc($sender_hdr[0]->address);
 
-    unless (&tools::valid_email($sender)) {
-	do_log('err', "Invalid From: field '%s'", $sender);
+	last if defined $sender;
+    }
+    unless (defined $sender) {
+	do_log('err', 'No valid sender address');
+	return undef;
+    }
+    unless (tools::valid_email($sender)) {
+	do_log('err', 'Invalid sender address "%s"', $sender);
 	return undef;
     }
 

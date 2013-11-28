@@ -632,6 +632,13 @@ our @params = (
         file    => 'sympa.conf',
         advice  => 'Proposed value is quite low, you can rise it up to 100, 200 or even 300 with powerfull systems.',
     },
+    {
+	name    => 'sender_headers',
+	default => 'From,Envelope-From,X-Sender,Return-Path',
+	query   => 'Header field names used to determine sender of the messages',
+	advice  => '"Return-Path" means envelope sender (a.k.a. "UNIX From")',
+    },
+
     { title => 'Plugin' },
     {
         name   => 'antivirus_path',
