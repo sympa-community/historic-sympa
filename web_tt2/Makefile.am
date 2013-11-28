@@ -60,6 +60,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   editsubscriber.tt2 \
 		   edit_template.tt2 \
 		   error.tt2 \
+		   exclusion_table.tt2 \
 		   family_signoff.tt2 \
 		   family_signoff_request.tt2 \
 		   footer.tt2 \

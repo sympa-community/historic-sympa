@@ -160,28 +160,12 @@ function searchfor(letter) {
       [% END %]
     <br /><br />
 
-   [% IF action == 'search' %]
-     <h4>[%|loc%]Excluded users[%END%]</h4>
-     <table summary="[%|loc%]List of exclude[%END%]" class="listOfItems">
-      <tr>
-	<th>[%|loc%]Email[%END%]</th>
-        <th>[%|loc%]Since[%END%]</th>
-      </tr>
-
-      [% IF user.email %]
-        [% IF exclude_users %]
-          [% FOREACH exc = exclude_users %] 
-            <tr class="color0">
-              <td>&nbsp;[% exc.email %]&nbsp;</td>
-	      <td>&nbsp;[% exc.since %]&nbsp;</td>
-            </tr>
-	  [% END %]
-        [% END %]
-      [% END %]
-    </table>
-   [% END %]
    </fieldset>
    </form>
+   [% IF action == 'search' %]
+     <h4>[%|loc%]Excluded users[%END%]</h4>
+ [% PROCESS exclusion_table.tt2 %]
+   [% END %]
 
 </div>
 [% PROCESS picture_upload.tt2 %]
