@@ -156,7 +156,8 @@ sub new {
 
     my $hdr = $message->{'msg'}->head;
 
-    $message->{'sender'} = _get_sender_email($hdr, $file);
+    $message->{'envelope_sender'} = _get_envelope_sender($hdr);
+    $message->{'sender'} = _get_sender_email($message, $hdr, $file);
     return undef unless defined $message->{'sender'};
 
     ## Store decoded subject and its original charset
@@ -309,7 +310,42 @@ sub new {
     return $message;
 }
 
+## Get envelope sender (a.k.a. "UNIX From") from Return-Path: header field.
+##
+## We trust in "Return-Path:" header field only at the top of message
+## to prevent forgery.  To ensure it will be added to messages by MDA:
+##
+## - Sendmail:   Add 'P' in the 'F=' flags of local mailer line (such
+##               as 'Mlocal').
+## - Postfix:
+##   - local(8): Available by default.
+##   - pipe(8):  Add 'R' in the 'flags=' attributes in master.cf.
+## - Exim:       Set 'return_path_add' to true with pipe_transport.
+## - qmail:      Use preline(1).
+##
+sub _get_envelope_sender {
+    my $hdr = shift;
+
+    my $headers = $hdr->header();
+    my $i = 0;
+    $i++ while $headers->[$i] and $headers->[$i] =~ /^X-Sympa-/;
+    if ($headers->[$i] and $headers->[$i] =~ /^Return-Path:\s*(.+)$/) {
+	my $addr = $1;
+	if ($addr =~ /<>/) { # special: null envelope sender
+	    return '<>';
+	} else {
+	    my @addrs = Mail::Address->parse($addr);
+	    if (@addrs and tools::valid_email($addrs[0]->address)) {
+		return $addrs[0]->address;
+	    }
+	}
+    }
+
+    return undef;
+}
+
 sub _get_sender_email {
+    my $message = shift;
     my $hdr = shift;
     my $file = shift;
 
@@ -325,9 +361,15 @@ sub _get_sender_email {
     } elsif ($hdr->get('X-Sender')) {
 	do_log('err', 'No From found in message %s, using X-Sender', $file);
 	@sender_hdr = Mail::Address->parse($hdr->get('X-Sender'));
-    } elsif ($hdr->get('Return-Path')) {
+    } elsif ($message->{'envelope_sender'} and
+	$message->{'envelope_sender'} ne '<>') {
 	do_log('err', 'No From found in message %s, using Return-Path', $file);
-	@sender_hdr = Mail::Address->parse($hdr->get('Return-Path'));
+	my $sender = lc($message->{'envelope_sender'});
+	unless (&tools::valid_email($sender)) {
+	    do_log('err', "Invalid From: field '%s'", $sender);
+	    return undef;
+	}
+	return $sender;
     } else {
 	do_log('err', 'No From found in message %s, skipping.', $file);
 	return undef;
