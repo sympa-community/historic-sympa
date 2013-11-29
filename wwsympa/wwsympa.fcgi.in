@@ -1469,9 +1469,8 @@ my $birthday = time ;
 	 if ($delay == 0) {
 	     $delay = 'session';
 	 }
-	 $session->renew() unless $param->{'use_ssl'}
-	    or $param->{'action'} eq 'arc'; #TENTATIVE workaround.
-	 
+	 $session->renew() unless $param->{'use_ssl'};
+
 	 unless ($session->set_cookie($param->{'cookie_domain'},$delay,$param->{'use_ssl'})) {
 	     &wwslog('notice', 'Could not set HTTP cookie');
 	 }
