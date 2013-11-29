@@ -626,7 +626,7 @@ Subject:strong
 ($tag$%|loc%$tag$)Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday($tag$%END%$tag$)
 </WEEKDAYS>
 
-($tag$% IF lang == 'cz' %$tag$)
+($tag$% IF lang == 'cs' %$tag$)
 <WEEKDAYSABR>
 Ne:Po:Út:St:Èt:Pá:So
 </WEEKDAYSABR>
@@ -644,7 +644,7 @@ P:M:T:K:N:R:L
 ($tag$%|loc%$tag$)January:February:March:April:May:June:July:August:September:October:November:December($tag$%END%$tag$)
 </MONTHS>
 
-($tag$% IF lang == 'cz' %$tag$)
+($tag$% IF lang == 'cs' %$tag$)
 <MONTHSABR>
 Led:Úno:Bøe:Dub:Kvì:Èern:Èerv:Srp:Záø:Øíj:List:Pro
 </MONTHSABR>
@@ -658,7 +658,7 @@ Jan:Veeb:Mär:Apr:Mai:Juun:Juul:Aug:Sep:Okt:Nov:Dets
 </MONTHSABR>
 ($tag$% END %$tag$)
 
-($tag$% IF lang == 'cz' %$tag$)
+($tag$% IF lang == 'cs' %$tag$)
 <UseLocalTime>
 
 <MSGLOCALDATEFMT>
