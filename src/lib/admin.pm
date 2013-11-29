@@ -338,7 +338,7 @@ sub create_list_old{
 	$list->sync_include();
     }
     
-    $list->save_config;
+    $list->save_config($param->{'creation_email'});
 
     return $return;
 }

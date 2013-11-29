@@ -10388,7 +10388,7 @@ sub do_rename_list {
      $param->{'list'} = $in{'new_listname'};
      &web_db_log({'parameters' => "$in{'new_listname'},$in{'new_robot'}",
 		  'status' => 'success'});
-     $list->save_config();
+     $list->save_config($param->{'user'}{'email'});
      return 1;     
 }
 
@@ -15067,7 +15067,7 @@ sub do_change_email {
 	     
 	     ## Update Db cache for the list
 	     $list->sync_include_admin();
-	     $list->save_config();
+	     $list->save_config($param->{'session'}{'email'});
 	 }
      }
      ## Notify listmasters that list owners/moderators email have changed
