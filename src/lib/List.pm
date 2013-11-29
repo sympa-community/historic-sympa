@@ -43,6 +43,7 @@ use tools;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
 
+=encoding utf-8
 
 =head1 CONSTRUCTOR
 
@@ -7550,8 +7551,8 @@ sub may_edit {
 
 
 ## May the indicated user edit a paramter while creating a new list
-# sa cette procédure est appelée nul part, je lui ajoute malgrès tout le paramêtre robot
-# edit_conf devrait être aussi dépendant du robot
+# sa cette procÃ©dure est appelÃ©e nul part, je lui ajoute malgrÃ¨s tout le paramÃªtre robot
+# edit_conf devrait Ãªtre aussi dÃ©pendant du robot
 sub may_create_parameter {
 
     my($self, $parameter, $who,$robot) = @_;
@@ -8201,8 +8202,8 @@ sub _include_users_list {
 ## include a lists owners lists privileged_owners or lists_editors.
 sub _include_users_admin {
     my ($users, $selection, $role, $default_user_options,$tied) = @_;
-#   il faut préparer une liste de hash avec le nom de liste, le nom de robot, le répertoire de la liset pour appeler
-#    load_admin_file décommanter le include_admin
+#   il faut prÃ©parer une liste de hash avec le nom de liste, le nom de robot, le rÃ©pertoire de la liset pour appeler
+#    load_admin_file dÃ©commanter le include_admin
     my $lists;
     
     unless ($role eq 'listmaster') {
@@ -9319,7 +9320,7 @@ sub sync_include {
     my $data_exclu;
     my @subscriber_exclusion;
 
-    ## Récupérer un array d'emails pour une liste donnée in 'exclusion_table'
+    ## RÃ©cupÃ©rer un array d'emails pour une liste donnÃ©e in 'exclusion_table'
     $data_exclu = &get_exclusion($name,$self->{'domain'});
 
     my $key =0;
@@ -10871,7 +10872,7 @@ sub _save_list_param {
     }else {
 	if (($::pinfo{$key}{'occurrence'} =~ /n$/)
 	    && $::pinfo{$key}{'split_char'}) {
-	    ################" avant de debugger do_edit_list qui crée des nouvelles entrées vides
+	    ################" avant de debugger do_edit_list qui crÃ©e des nouvelles entrÃ©es vides
  	    my $string = join($::pinfo{$key}{'split_char'}, @{$p});
  	    $string =~ s/\,\s*$//;
 	    

@@ -1174,8 +1174,8 @@ sub probe_db {
 	    }
 	}
 	
-	# Une simple requête sqlite : PRAGMA table_info('nomtable') , retourne la liste des champs de la table en question.
-	# La liste retournée est composée d'un N°Ordre, Nom du champ, Type (longueur), Null ou not null (99 ou 0),Valeur par défaut,Clé primaire (1 ou 0)
+	# Une simple requÃªte sqlite : PRAGMA table_info('nomtable') , retourne la liste des champs de la table en question.
+	# La liste retournÃ©e est composÃ©e d'un NÂ°Ordre, Nom du champ, Type (longueur), Null ou not null (99 ou 0),Valeur par dÃ©faut,ClÃ© primaire (1 ou 0)
 	
     }elsif ($Conf::Conf{'db_type'} eq 'Oracle') {
  	

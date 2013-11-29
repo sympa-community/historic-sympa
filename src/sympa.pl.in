@@ -1279,7 +1279,7 @@ sub DoFile {
     &report::init_report_cmd();
 	
     ## Maybe we are an automatic list
-    #_amr ici on ne doit prendre que la première ligne !
+    #_amr ici on ne doit prendre que la premiÃ¨re ligne !
     my ($dyn_list_family, $dyn_just_created);
     # we care of fake headers. If we put it, it's the 1st one.
     if ($hdr->as_string() =~ /^X-Sympa-Family/mo) {
@@ -1447,9 +1447,9 @@ sub DoFile {
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
 		    $list->close(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		    # but what about list_of_lists ?
-		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
+		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test Ã  virer si ok
 		      delete $List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
+		      &do_log('err', 'la liste a Ã©tÃ© trouvÃ©e dans la list_of_lists',$listname, $dyn_list_family);
 		    }
 		}
                 return undef;
@@ -1462,9 +1462,9 @@ sub DoFile {
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
 		    $list->close(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		    # but what about list_of_lists ?
-		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
+		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test Ã  virer si ok
 		      delete $List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
+		      &do_log('err', 'la liste a Ã©tÃ© trouvÃ©e dans la list_of_lists',$listname, $dyn_list_family);
 		    }
 		}
                 return undef;

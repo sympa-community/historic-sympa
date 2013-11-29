@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-=pod 
+=encoding utf-8
 
 =head1 NAME 
 
@@ -293,7 +293,7 @@ sub new {
 		$message->{'smime_subject'} = $signed->{'subject'};
 		do_log('debug', "message %s is signed, signature is checked", $file);
 	    }
-	    ## Il faudrait traiter les cas d'erreur (0 différent de undef)
+	    ## Il faudrait traiter les cas d'erreur (0 diffÃ©rent de undef)
 	}
 	
     }
@@ -606,7 +606,7 @@ sub fix_html_part {
 
 =item * Serge Aumont <sa AT cru.fr> 
 
-=item * Olivier Salaün <os AT cru.fr> 
+=item * Olivier SalaE<252>n <os AT cru.fr> 
 
 =back 
 
