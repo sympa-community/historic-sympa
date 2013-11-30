@@ -174,7 +174,8 @@ sub login {
     } 
 
     ## Create SympaSession object
-    my $session = new SympaSession($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    my $session = new SympaSession($robot,
+	{ 'cookie' => SympaSession::encrypt_session_id($ENV{'SESSION_ID'}) });
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -183,7 +184,8 @@ sub login {
     $ENV{'SESSION_ID'} = $session->{'id_session'};
 
     ## Also return the cookie value
-    return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
+    return SOAP::Data->name('result')->type('string')
+	->value(SympaSession::encrypt_session_id($ENV{'SESSION_ID'}));
 }
 
 sub casLogin {
@@ -249,7 +251,8 @@ sub casLogin {
     }
 
     ## Create SympaSession object
-    my $session = new SympaSession($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    my $session = new SympaSession($robot,
+	{ 'cookie' => SympaSession::encrypt_session_id($ENV{'SESSION_ID'}) });
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -258,18 +261,19 @@ sub casLogin {
     $ENV{'SESSION_ID'} = $session->{'id_session'};
 
     ## Also return the cookie value
-    return SOAP::Data->name('result')->type('string')->value($ENV{'SESSION_ID'});
+    return SOAP::Data->name('result')->type('string')
+	->value(SympaSession::encrypt_session_id($ENV{'SESSION_ID'}));
 }
 
 ## Used to call a service as an authenticated user without using HTTP cookies
 ## First parameter is the secret contained in the cookie
 sub authenticateAndRun {
     my ($self, $email, $cookie, $service, $parameters) = @_;
+    my $session_id;
 
-    my $session_id = $cookie;
-    &do_log('notice','authenticateAndRun(%s,%s,%s,%s)', $email, $session_id, $service, join(',',@$parameters));
+    &do_log('notice','authenticateAndRun(%s,%s,%s,%s)', $email, $cookie, $service, join(',',@$parameters));
 
-    unless ($session_id and $service) {
+    unless ($cookie and $service) {
       &do_log('err', "Missing parameter");
 	die SOAP::Fault->faultcode('Client')
 	    ->faultstring('Incorrect number of parameters')
@@ -279,8 +283,11 @@ sub authenticateAndRun {
     
 
     ## Provided email is not trusted, we fetch the user email from the session_table instead
-    my $session = new SympaSession($ENV{'SYMPA_ROBOT'},{'cookie' => $session_id});
-    $email = $session->{'email'} if (defined $session);
+    my $session = new SympaSession($ENV{'SYMPA_ROBOT'},{'cookie' => $cookie});
+    if (defined $session) {
+	$email = $session->{'email'};
+	$session_id = $session->{'id_session'};
+    }
     unless ($email or ($email eq 'unkown')  ) {
       &do_log('err', "Failed to authenticate user with session ID $session_id");
       die SOAP::Fault->faultcode('Client')

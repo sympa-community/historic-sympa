@@ -185,9 +185,11 @@ CREATE TABLE one_time_ticket_table (
 CREATE TABLE session_table ( 
 	 data_session 	varchar(500), 
 	 date_session 	int4 NOT NULL, 
+	 refresh_date_session	int4 NOT NULL,
 	 email_session 	varchar(100), 
 	 hit_session 	int4, 
 	 id_session 	varchar(30) NOT NULL, 
+	 prev_id_session	varchar(30),
 	 remote_addr_session 	varchar(60), 
 	 robot_session 	varchar(80), 
 	 start_date_session 	int4 NOT NULL, 

@@ -433,6 +433,11 @@ our @params = (
 	vhost   => '1',
         file  => 'wwsympa.conf',
     },
+    {   'name'    => 'cookie_refresh',
+        'default' => '60',
+        'query' => 'Average interval to refresh HTTP session ID.',
+        'file' => 'wwsympa.conf',
+    },
     {
         name    => 'custom_robot_parameter',
         query   => 'Used to define a custom parameter for your server. Do not forget the semicolo between the param name and the param value.', 

@@ -309,8 +309,8 @@ sub check_cpan {
 				  },
 			'Crypt::CipherSaber' => {
 						 required_version =>'0.50',
-						 package_name => 'CipherSaber',
-						 usage => 'this module provides reversible encryption of user passwords in the database.usefull only when updating from old version with password reversible encryption.',
+						 package_name => 'Crypt-CipherSaber',
+						 usage => 'this module provides reversible encryption of user passwords in the database.  Useful when updating from old version with password reversible encryption, or if secure session cookies in non-SSL environments are required.',
 						},
 			'DB_File' => {
 				      required_version =>'1.75',
