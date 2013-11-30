@@ -783,7 +783,7 @@ sub as_hashref {
 sub encrypt_session_id {
     my $id_session = shift;
 
-    return $id_session unless $Conf::Conf{'cookie'};
+    #XXXreturn $id_session unless $Conf::Conf{'cookie'};
     my $cipher = tools::ciphersaber_installed();
     return $id_session unless $cipher;
 
@@ -797,7 +797,7 @@ sub encrypt_session_id {
 sub decrypt_session_id {
     my $cookie = shift;
 
-    return $cookie unless $Conf::Conf{'cookie'};
+    #XXXreturn $cookie unless $Conf::Conf{'cookie'};
     my $cipher = tools::ciphersaber_installed();
     return $cookie unless $cipher;
 
