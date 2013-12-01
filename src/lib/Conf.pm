@@ -266,15 +266,15 @@ sub load {
     }
 		 
     ## Some parameters require CPAN modules
-    if ($Conf{'DKIM_feature'} eq 'on') {
+    if ($Conf{'dkim_feature'} eq 'on') {
         eval "require Mail::DKIM";
         if ($@) {
-            &do_log('err', "Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'");
-            $Conf{'DKIM_feature'} = 'off';
+            &do_log('err', "Failed to load Mail::DKIM perl module ; setting 'dkim_feature' to 'off'");
+            $Conf{'dkim_feature'} = 'off';
         }
     }
-    unless ($Conf{'DKIM_feature'} eq 'on'){
-	# dkim_signature_apply_ on nothing if DKIM_feature is off
+    unless ($Conf{'dkim_feature'} eq 'on'){
+	# dkim_signature_apply_ on nothing if dkim_feature is off
 	$Conf{'dkim_signature_apply_on'} = ['']; # empty array
     }
 

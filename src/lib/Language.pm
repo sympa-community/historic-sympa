@@ -304,7 +304,7 @@ sub sympa_dgettext {
 	return '';
     }
 
-    return &Locale::Messages::dgettext($textdomain, @param);
+    return Locale::Messages::dgettext($textdomain, $param[0]);
 
 }
 
@@ -341,7 +341,7 @@ sub gettext {
 	return '';
     }
 
-    return &Locale::Messages::gettext(@param);
+    return Locale::Messages::gettext($param[0]);
 
 }
 
