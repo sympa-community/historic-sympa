@@ -642,7 +642,7 @@ our @params = (
 	default => 'From',
 	sample  => 'Resent-From,From,Return-Path',
 	query   => 'Header field name(s) used to determine sender of the messages',
-	advice  => '"Return-Path" means envelope sender (a.k.a. "UNIX From") which will be alternative to sender of messages without "From" field. "Resent-From" and "Resent-Sender" are added to redirected messages by some mailers.  You might want to include other field names wihch can be added to messages by particular mail gateway or mailer, e.g. "Envelope-From", "X-Sender"',
+	advice  => '"Return-Path" means envelope sender (a.k.a. "UNIX From") which will be alternative to sender of messages without "From" field.  "Resent-From" may also be inserted before "From", because some mailers add it into redirected messages and keep original "From" field intact.  In particular cases, "Return-Path" can not give right sender: several mail gateway products rewrite envelope sender and add original one as non-standard field such as "X-Envelope-From".  If that is the case, you might want to insert it in place of "Return-Path".',
     },
 
     { title => 'Plugin' },
