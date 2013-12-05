@@ -28,10 +28,10 @@ msgstr ""
 "PO-Revision-Date: 2013-04-29 21:14+0200\n"
 "Last-Translator: lupa18 <lupa18@gmail.com>\n"
 "Language-Team: Español\n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -681,9 +681,10 @@ msgstr ""
 "la 'Carta de dueño y moderador'"
 
 #: ../web_tt2/help_introduction.tt2:119
+#, fuzzy
 msgid ""
 "The use of mailing lists naturally means respecting the rules of good "
-"practices as regards to email."
+"practices as regards email (the \"Netiquette\")."
 msgstr ""
 "El uso de listas de correo naturalmente implica respetar las reglas del buen "
 "uso del correo electrónico."

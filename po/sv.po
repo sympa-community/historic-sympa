@@ -118,7 +118,7 @@ msgstr "Listmästare"
 msgid "Privileged owner"
 msgstr "Priviligerad ägare"
 
-#: ../src/lib/List.pm:1188 ../web_tt2/login_menu.tt2:15
+#: ../src/lib/List.pm:1191 ../web_tt2/login_menu.tt2:15
 msgid "Owner"
 msgstr "Ägare"
 
@@ -217,7 +217,7 @@ msgstr "Skicka meddelande"
 msgid "RSS"
 msgstr "RSS"
 
-#: ../src/lib/List.pm:1326 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1329 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Delade dokument"
@@ -246,7 +246,7 @@ msgstr "Felfrekvens:"
 msgid "Owners"
 msgstr "Ägare"
 
-#: ../src/lib/List.pm:680 ../web_tt2/list_panel.tt2:20
+#: ../src/lib/List.pm:682 ../web_tt2/list_panel.tt2:20
 msgid "Moderators"
 msgstr "Moderatorer"
 
@@ -262,11 +262,11 @@ msgstr "Kontakta ägare"
 msgid "Casual administration"
 msgstr "Vanliga åtgärder"
 
-#: ../web_tt2/admin.tt2:7
+#: ../web_tt2/admin.tt2:8
 msgid "Edit list config:"
 msgstr "Redigera listkonfiguration:"
 
-#: ../web_tt2/admin.tt2:7
+#: ../web_tt2/admin.tt2:8
 msgid ""
 "Use it with care: it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
@@ -282,11 +282,11 @@ msgstr "Anpassning: "
 msgid "Editing of various files and messages attached to your list."
 msgstr "Redigering av diverse filer och meddelanden kopplade till din lista."
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:12
 msgid "Manage subscribers:"
 msgstr "Hantera prenumeranter:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:12
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -294,54 +294,54 @@ msgstr ""
 "Låter dig lägga till eller ta bort prenumeranter, moderera prenumerationer "
 "och så vidare."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:14
 msgid "Blacklist:"
 msgstr "Svartlista:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:14
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Hanterar svartlistade e-postadresser för denna lista."
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:19
 msgid "Manage archives:"
 msgstr "Hantera arkiv:"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:19
 msgid "Allows you to download and delete list archives."
 msgstr "Låter dig ladda ner och ta bort arkiv."
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:22
 msgid "Bounces:"
 msgstr "Studsar:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:22
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 "Hantera rapporter om e-post som inte har kunnat levereras (s.k. studsar)."
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:25
 msgid "Logs:"
 msgstr "Loggar:"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:25
 msgid "A tool for exploring the list logs."
 msgstr "Ett verktyg för att titta i listloggarna."
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:31
 msgid "Drastic operations"
 msgstr "Drastiska åtgärder"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:38 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Återskapa listan"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:38
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Är du säker att du vill stänga listan %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:38
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
@@ -349,17 +349,17 @@ msgstr ""
 "Listan är stängd för närvarande. Klickar du på denna knapp återaktiveras den "
 "igen."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:41 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Ta bort lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:41
 msgid "Are you sure you wish to close list %1?"
 msgstr "Är du säker att du vill stänga listan %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:41
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -367,12 +367,12 @@ msgstr ""
 "Raderar den här listan helt. Listmästarrättigheter krävs för att återställa "
 "en lista."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:51 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Byt namn på lista"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:51
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -381,25 +381,25 @@ msgstr ""
 "Låter dig ändra listans namn. Allt som har anknytning till listan byter till "
 "det nya namnet, inklusive e-postalias och webbarkiven."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:64 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "Skapa delad"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:64
 msgid "Initializes the shared document web space."
 msgstr "Upprättar den delade dokumentwebbplatsen."
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:68 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "Radera delat utrymme"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:68
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Är du säker att du önskar radera de delade dokumenten för listan %1?"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:68
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
@@ -407,11 +407,11 @@ msgstr ""
 "Stänger det delade dokumentutrymmet. Det kan återställas med \"Återställ "
 "delat utrymme\"-knappen"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:72
 msgid "Restore Shared"
 msgstr "Återställ delat utrymme"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:72
 msgid "Restores the previously closed shared document web space."
 msgstr "Återställer det tidigare delade dokumentutrymmet."
 
@@ -468,9 +468,9 @@ msgid "Add subscribers"
 msgstr "Lägg till prenumeranter"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140
-#: ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127
-#: ../web_tt2/search_user.tt2:56
+#: ../web_tt2/exclusion_table.tt2:36 ../web_tt2/review.tt2:126
+#: ../web_tt2/review.tt2:159 ../web_tt2/review.tt2:77
+#: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "tyst"
 
@@ -499,7 +499,7 @@ msgstr "Hantera arkiv"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
 #: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
-#: ../web_tt2/review.tt2:44
+#: ../web_tt2/review.tt2:46
 msgid "Bounces"
 msgstr "Studsar"
 
@@ -566,7 +566,7 @@ msgstr "Arkivhantering"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Öppna i ett nytt fönster"
 
@@ -619,7 +619,7 @@ msgid "Search field:"
 msgstr "Sökfält :"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:89 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:92 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Sök"
 
@@ -1434,7 +1434,7 @@ msgid "Size (Kb)"
 msgstr "Storlek (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:66
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Senaste uppdateringen"
 
@@ -1536,7 +1536,7 @@ msgstr "titel"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:73
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:76
 msgid "Add"
 msgstr "Lägg till"
 
@@ -2116,7 +2116,7 @@ msgstr ""
 msgid "The period is too long (%1 days)"
 msgstr "Perioden är för lång (%1 dagar)"
 
-#: ../web_tt2/error.tt2:62 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:62
 msgid "List has no subscribers"
 msgstr "Listan har inga prenumeranter"
 
@@ -2447,6 +2447,47 @@ msgstr ""
 "Kan inte ändra din prenumerationsaddress för listan '%1'\n"
 "     eftersom din nya adress inte tillåts prenumerera:"
 
+#: ../web_tt2/exclusion_table.tt2:6
+msgid "List of exclude"
+msgstr "Lista över uteslutna"
+
+#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
+#: ../web_tt2/exclusion_table.tt2:34 ../web_tt2/exclusion_table.tt2:9
+#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
+#: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
+#: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:157
+#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
+#: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
+#: ../web_tt2/subscriber_table.tt2:7
+msgid "Toggle Selection"
+msgstr "Växla urval"
+
+#: ../web_tt2/exclusion_table.tt2:11 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/subindex.tt2:11 ../web_tt2/subscriber_table.tt2:12
+#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/viewlogs.tt2:54
+#: ../web_tt2/viewlogs.tt2:63
+msgid "Email"
+msgstr "E-post"
+
+#: ../web_tt2/exclusion_table.tt2:12
+msgid "Since"
+msgstr "Sedan"
+
+#: ../web_tt2/exclusion_table.tt2:29
+msgid "No user excluded."
+msgstr "Ingen användare är utesluten."
+
+#: ../web_tt2/exclusion_table.tt2:35
+#, fuzzy
+msgid "Restore selected email addresses"
+msgstr "Ta bort valda e-postadresser"
+
+#: ../web_tt2/exclusion_table.tt2:35
+#, fuzzy
+msgid "Do you really want to restore subscription for ALL selected addresses?"
+msgstr ""
+"Vill du verkligen avsluta prenumerationen för ALLA valda prenumeranter?"
+
 #: ../web_tt2/family_signoff.tt2:1 ../web_tt2/family_signoff_request2.tt2:1
 #, fuzzy
 msgid "Global unsubscription"
@@ -2486,16 +2527,6 @@ msgstr ""
 #: ../web_tt2/serveradmin.tt2:10
 msgid "Closed lists"
 msgstr "Stängda listor"
-
-#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
-#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
-#: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
-#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
-#: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:9
-msgid "Toggle Selection"
-msgstr "Växla urval"
 
 #: ../web_tt2/get_closed_lists.tt2:10 ../web_tt2/get_pending_lists.tt2:9
 msgid "list name"
@@ -2738,7 +2769,7 @@ msgid "Most recent documents for this list "
 msgstr "De senast delade dokumenten för denna lista "
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:39 ../web_tt2/subscriber_table.tt2:42
+#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
 msgid "Name"
 msgstr "Namn"
 
@@ -2760,7 +2791,7 @@ msgid " The latest lists of this robot"
 msgstr " De senaste listorna för denna robot"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:109
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "%1 händelse(r) hittades"
 
@@ -2773,7 +2804,7 @@ msgstr "<strong>%1</strong> prenumererar på följande e-postlistor"
 msgid "Manage Subscribers"
 msgstr "Hantera prenumeranter"
 
-#: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:42
+#: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:44
 msgid "Blacklist"
 msgstr "Svartlista"
 
@@ -3460,7 +3491,7 @@ msgstr "Ämne: %1"
 msgid "Manage bouncing list members"
 msgstr "Hantera studsande listmedlemmar"
 
-#: ../web_tt2/review.tt2:46 ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:48 ../web_tt2/review.tt2:50
 #: ../web_tt2/reviewbouncing.tt2:6
 msgid "Dump"
 msgstr "Visa som text"
@@ -3470,7 +3501,7 @@ msgid "Remind all subscribers"
 msgstr "Påminn alla prenumeranter"
 
 #. (total)
-#: ../web_tt2/review.tt2:62 ../web_tt2/reviewbouncing.tt2:19
+#: ../web_tt2/review.tt2:64 ../web_tt2/reviewbouncing.tt2:19
 msgid ""
 "Do you really want to send a subscription reminder message to the %1 "
 "subscribers?"
@@ -3478,7 +3509,7 @@ msgstr ""
 "Vill du verkligen skicka ett påminnelsemeddelande för prenumerationen till %"
 "1-prenumeranterna?"
 
-#: ../web_tt2/review.tt2:126 ../web_tt2/review.tt2:27
+#: ../web_tt2/review.tt2:146 ../web_tt2/review.tt2:27
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3489,7 +3520,7 @@ msgstr "Föregående sida"
 msgid "page %1 / %2"
 msgstr "sida %1 / %2"
 
-#: ../web_tt2/review.tt2:132 ../web_tt2/review.tt2:33
+#: ../web_tt2/review.tt2:152 ../web_tt2/review.tt2:33
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3498,13 +3529,6 @@ msgstr "Nästa sida"
 #: ../web_tt2/reviewbouncing.tt2:58
 msgid "Table which display list bounces"
 msgstr "Tabell som visar liststudsar"
-
-#: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
-#: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
-#: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
-msgid "Email"
-msgstr "E-post"
 
 #: ../web_tt2/reviewbouncing.tt2:62
 msgid "Bounce score"
@@ -3530,7 +3554,7 @@ msgstr "Sista studs"
 msgid "no score"
 msgstr "ingen poäng"
 
-#: ../web_tt2/review.tt2:105 ../web_tt2/review.tt2:139
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:158
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Ta bort valda e-postadresser"
@@ -3559,68 +3583,60 @@ msgstr "Hantera listmedlemmar"
 msgid "Page size"
 msgstr "Sidstorlek"
 
-#: ../web_tt2/review.tt2:129 ../web_tt2/review.tt2:30
+#: ../web_tt2/review.tt2:149 ../web_tt2/review.tt2:30
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "sida"
 
-#: ../web_tt2/review.tt2:40
+#: ../web_tt2/review.tt2:41
 msgid "Pending subscriptions"
 msgstr "Väntande prenumerationer"
 
-#: ../web_tt2/review.tt2:50
+#: ../web_tt2/review.tt2:52
 msgid "Exclude"
 msgstr "Uteslutna"
 
-#: ../web_tt2/review.tt2:56
+#: ../web_tt2/review.tt2:58
 msgid "Synchronize members with data sources"
 msgstr "Synkronisera medlemmar med datakällor"
 
-#: ../web_tt2/review.tt2:62
+#: ../web_tt2/review.tt2:64
 msgid "Remind all"
 msgstr "Påminn alla"
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:74
 msgid "Add an user: "
 msgstr "Lägg till en användare: "
 
-#: ../web_tt2/review.tt2:75
+#: ../web_tt2/review.tt2:78
 msgid "Multiple add"
 msgstr "Lägg till flera"
 
-#: ../web_tt2/review.tt2:87
+#: ../web_tt2/review.tt2:90
 msgid "Search user by e-mail: "
 msgstr "Sök användare efter e-postadress: "
 
-#: ../web_tt2/review.tt2:88
+#: ../web_tt2/review.tt2:91
 msgid "Search user by email"
 msgstr "Sök användare efter e-postadress"
 
-#: ../web_tt2/review.tt2:93
+#: ../web_tt2/review.tt2:96
 msgid "Selection too wide, can not show selection"
 msgstr "För brett sökvillkor, kan inte visa urval"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:117
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Andra liknande prenumeranters e-post (%1)"
 
-#: ../web_tt2/review.tt2:137
+#: ../web_tt2/review.tt2:158
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr ""
 "Vill du verkligen avsluta prenumerationen för ALLA valda prenumeranter?"
 
-#: ../web_tt2/review.tt2:145
+#: ../web_tt2/review.tt2:166
 msgid "Excluded users"
 msgstr "Uteslutna användare"
-
-#: ../web_tt2/review.tt2:146 ../web_tt2/show_exclude.tt2:13
-msgid "List of exclude"
-msgstr "Lista över uteslutna"
-
-#: ../web_tt2/review.tt2:149 ../web_tt2/show_exclude.tt2:16
-msgid "Since"
-msgstr "Sedan"
 
 #: ../web_tt2/rss_request.tt2:5
 msgid "RSS channel"
@@ -4081,10 +4097,11 @@ msgid "Cipher key size used"
 msgstr "Krypteringsalgoritmens nyckelstorlek"
 
 #: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
+#, fuzzy
+msgid "Exclusion table"
 msgstr "Visa uteslutningstabellen"
 
-#: ../web_tt2/show_exclude.tt2:10
+#: ../web_tt2/show_exclude.tt2:8
 msgid ""
 "Users listed below are excluded from the list. Beware, that this feature is "
 "different from the blacklist. Exclusion makes sense\n"
@@ -4102,10 +4119,6 @@ msgstr ""
 "Användare hamnar i uteslutningstabellen genom de vanliga avsluta\n"
 "prenumeration/borttagningsfunktionerna. De tas bort från\n"
 "uteslutningstabellen med de vanliga prenumerations/tilläggningsfunktionerna."
-
-#: ../web_tt2/show_exclude.tt2:28
-msgid "No user excluded."
-msgstr "Ingen användare är utesluten."
 
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
@@ -4679,40 +4692,35 @@ msgstr "Du är redan prenumerant på listan %1"
 msgid "List members"
 msgstr "Listmedlemmar"
 
-#: ../web_tt2/subscriber_table.tt2:23 ../web_tt2/subscriber_table.tt2:26
+#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
 msgid "Domain"
 msgstr "Domän"
 
-#: ../web_tt2/subscriber_table.tt2:32
+#: ../web_tt2/subscriber_table.tt2:28
 msgid "Picture"
 msgstr "Bild"
 
-#: ../web_tt2/subscriber_table.tt2:48 ../web_tt2/suspend_request.tt2:12
+#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
 msgid "Reception"
 msgstr "Mottagning"
 
-#: ../web_tt2/subscriber_table.tt2:52 ../web_tt2/subscriber_table.tt2:55
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Källor"
 
-#: ../web_tt2/subscriber_table.tt2:60 ../web_tt2/subscriber_table.tt2:63
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:123
 msgid "Sub date"
 msgstr "Pren datum"
 
-#: ../web_tt2/subscriber_table.tt2:101
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "studsar"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1s bild"
-
-#: ../web_tt2/subscriber_table.tt2:137 ../web_tt2/subscriber_table.tt2:139
-#, fuzzy
-msgid "subscribed"
-msgstr "Avsluta prenumeration"
 
 #: ../web_tt2/suspend_request.tt2:13
 msgid "Suspended"
@@ -4906,7 +4914,7 @@ msgstr "Sökperiod:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16260
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16281
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5578,7 +5586,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Samlingsbrev %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2747
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2775
 msgid "Table of contents:"
 msgstr "Innehållsförteckning:"
 
@@ -5675,7 +5683,7 @@ msgstr "Prenumerationsavslutning:"
 msgid "Archive of %1, file %2"
 msgstr "Arkiv för %1, fil %2"
 
-#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1628
+#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1627
 msgid "Subscription summary"
 msgstr "Prenumerationssammanfattning"
 
@@ -5696,8 +5704,8 @@ msgstr ""
 "För varje lista här finns en e-postadress att använda om du vill avsluta en "
 "prenumeration."
 
-#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:196
-#: ../src/lib/Commands.pm:213
+#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:195
+#: ../src/lib/Commands.pm:212
 msgid "User guide"
 msgstr "Användarmanual"
 
@@ -6519,7 +6527,8 @@ msgstr " Användaren %1 har råkat ut för ett internt serverfel"
 
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
+#, fuzzy
+msgid "The following error occurred while managing bounces: %1"
 msgstr "Följande fel uppstod när studsar hanterades: %&"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
@@ -8027,6 +8036,11 @@ msgstr "listägare, autentisering krävs inte (notifiering)"
 msgid "just for listmaster"
 msgstr "bara för listmästaren"
 
+#: ../src/etc/scenari/info.conceal:1
+#, fuzzy
+msgid "restricted to subscribers - Silent rejection otherwise."
+msgstr "begränsad till prenumeranter eller användare på den lokala domänen"
+
 #: ../src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "för alla"
@@ -8395,10 +8409,22 @@ msgstr "%y/%m/%d"
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Söndag:Måndag:Tisdag:Onsdag:Torsdag:Fredag:Lördag"
 
-#: ../src/etc/mhonarc-ressources.tt2:644
+#: ../src/etc/mhonarc-ressources.tt2:643
+#, fuzzy
+msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
+msgstr "Söndag:Måndag:Tisdag:Onsdag:Torsdag:Fredag:Lördag"
+
+#: ../src/etc/mhonarc-ressources.tt2:648
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
+msgstr ""
+"Januari:Februari:Mars:April:Maj:Juni:Juli:Augusti:September:Oktober:November:"
+"December"
+
+#: ../src/etc/mhonarc-ressources.tt2:665
+#, fuzzy
+msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
 msgstr ""
 "Januari:Februari:Mars:April:Maj:Juni:Juli:Augusti:September:Oktober:November:"
 "December"
@@ -8568,754 +8594,755 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:389
+#: ../src/lib/Bulk.pm:395
 msgid "%d %b %Y  %H:%M"
 msgstr "%d %b %Y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9899
+#: ../src/lib/Commands.pm:962 ../wwsympa/wwsympa.fcgi.in:9920
 msgid "%A"
 msgstr "%A"
 
-#: ../src/lib/Conf.pm:143
+#: ../src/lib/Conf.pm:142
 msgid "Error at line %d: %s\n"
 msgstr "Fel på rad %d: %s\n"
 
-#: ../src/lib/Conf.pm:460
+#: ../src/lib/Conf.pm:459
 msgid "Error at line %d: %s"
 msgstr "Fel på rad %d: %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
-#: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
+#: ../src/lib/Family.pm:2597 ../src/lib/Family.pm:394 ../src/lib/Family.pm:671
+#: ../src/lib/List.pm:1924 ../wwsympa/Auth.pm:457
 #: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
-#: ../wwsympa/wwsympa.fcgi.in:2933 ../wwsympa/wwsympa.fcgi.in:2944
-#: ../wwsympa/wwsympa.fcgi.in:3066
+#: ../wwsympa/wwsympa.fcgi.in:2948 ../wwsympa/wwsympa.fcgi.in:2959
+#: ../wwsympa/wwsympa.fcgi.in:3081
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y klockan %H:%M:%S"
 
-#: ../src/lib/List.pm:322
+#: ../src/lib/List.pm:324
 msgid "Account"
 msgstr "Konto"
 
-#: ../src/lib/List.pm:326
+#: ../src/lib/List.pm:328
 msgid "Who can add subscribers"
 msgstr "Vem kan lägga till prenumeranter"
 
-#: ../src/lib/List.pm:330
+#: ../src/lib/List.pm:332
 msgid "Anonymous sender"
 msgstr "Anonym avsändare"
 
-#: ../src/lib/List.pm:335
+#: ../src/lib/List.pm:337
 msgid "frequency"
 msgstr "frekvens"
 
-#: ../src/lib/List.pm:1427 ../src/lib/List.pm:340
+#: ../src/lib/List.pm:1430 ../src/lib/List.pm:342
 msgid "access right"
 msgstr "åtkomsträttighet"
 
-#: ../src/lib/List.pm:344
+#: ../src/lib/List.pm:346
 msgid "Text archives"
 msgstr "Textarkiv"
 
-#: ../src/lib/List.pm:349
+#: ../src/lib/List.pm:351
 msgid "Archive encrypted mails as cleartext"
 msgstr "Arkivera krypterad e-post i klartext"
 
-#: ../src/lib/List.pm:1163 ../src/lib/List.pm:1203 ../src/lib/List.pm:356
-#: ../src/lib/List.pm:532 ../src/lib/List.pm:660 ../src/lib/List.pm:695
+#: ../src/lib/List.pm:1166 ../src/lib/List.pm:1206 ../src/lib/List.pm:358
+#: ../src/lib/List.pm:534 ../src/lib/List.pm:662 ../src/lib/List.pm:697
 msgid "reception mode"
 msgstr "mottagningsläge"
 
-#: ../src/lib/List.pm:359
+#: ../src/lib/List.pm:361
 msgid "Available subscription options"
 msgstr "Tillgängliga prenumerationsinställningar"
 
-#: ../src/lib/List.pm:367
+#: ../src/lib/List.pm:369
 msgid "warn rate"
 msgstr "varningsnivå"
 
-#: ../src/lib/List.pm:374
+#: ../src/lib/List.pm:376
 msgid "halt rate"
 msgstr "takt för stopp"
 
-#: ../src/lib/List.pm:378
+#: ../src/lib/List.pm:380
 msgid "Bounces management"
 msgstr "Hantera studsar"
 
-#: ../src/lib/List.pm:385 ../src/lib/List.pm:406
+#: ../src/lib/List.pm:387 ../src/lib/List.pm:408
 msgid "threshold"
 msgstr "tröskelvärde"
 
-#: ../src/lib/List.pm:390 ../src/lib/List.pm:411
+#: ../src/lib/List.pm:392 ../src/lib/List.pm:413
 msgid "action for this population"
 msgstr "handling för denna population"
 
-#: ../src/lib/List.pm:395 ../src/lib/List.pm:416
+#: ../src/lib/List.pm:397 ../src/lib/List.pm:418
 msgid "notification"
 msgstr "notifiering"
 
-#: ../src/lib/List.pm:399
+#: ../src/lib/List.pm:401
 msgid "Management of bouncers, 1st level"
 msgstr "Hantering av studsare, första nivån"
 
-#: ../src/lib/List.pm:420
+#: ../src/lib/List.pm:422
 msgid "Management of bouncers, 2nd level"
 msgstr "Hantering av studsare, andra nivån"
 
-#: ../src/lib/List.pm:427
+#: ../src/lib/List.pm:429
 msgid "Expiration of unmoderated messages"
 msgstr "Expirering av omodererade meddelanden"
 
-#: ../src/lib/List.pm:433
+#: ../src/lib/List.pm:435
 msgid "Secret string for generating unique keys"
 msgstr "Hemlig sträng för skapande av unika nycklar"
 
-#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1383 ../src/lib/List.pm:438
+#: ../src/lib/List.pm:1093 ../src/lib/List.pm:1386 ../src/lib/List.pm:440
 msgid "epoch date"
 msgstr "epoch-datum"
 
-#: ../src/lib/List.pm:442
+#: ../src/lib/List.pm:444
 msgid "human readable"
 msgstr "mänskligt läsbart"
 
-#: ../src/lib/List.pm:447
+#: ../src/lib/List.pm:449
 msgid "who created the list"
 msgstr "vem skapade listan"
 
-#: ../src/lib/List.pm:451
+#: ../src/lib/List.pm:453
 msgid "Creation of the list"
 msgstr "Listans skapande"
 
-#: ../src/lib/List.pm:462
+#: ../src/lib/List.pm:464
 msgid "internal identifier"
 msgstr "intern identifierare"
 
-#: ../src/lib/List.pm:470
+#: ../src/lib/List.pm:472
 msgid "label"
 msgstr "etikett"
 
-#: ../src/lib/List.pm:476
+#: ../src/lib/List.pm:478
 msgid "additional comment"
 msgstr "ytterligare kommentar"
 
-#: ../src/lib/List.pm:483
+#: ../src/lib/List.pm:485
 msgid "type"
 msgstr "typ"
 
-#: ../src/lib/List.pm:489
+#: ../src/lib/List.pm:491
 msgid "possible attribute values (if enum is used)"
 msgstr "möjliga attributvärden (om enum används)"
 
-#: ../src/lib/List.pm:494
+#: ../src/lib/List.pm:496
 msgid "is the attribute optional?"
 msgstr "är attributet valfritt?"
 
-#: ../src/lib/List.pm:500
+#: ../src/lib/List.pm:502
 msgid "Custom user attributes"
 msgstr "Användarattribut"
 
-#: ../src/lib/List.pm:506
+#: ../src/lib/List.pm:508
 msgid "Custom header field"
 msgstr "Anpassat huvudfält"
 
-#: ../src/lib/List.pm:511
+#: ../src/lib/List.pm:513
 msgid "Subject tagging"
 msgstr "Ämnesmärkning"
 
-#: ../src/lib/List.pm:525
+#: ../src/lib/List.pm:527
 msgid "custom parameters"
 msgstr "anpassningsparametrar"
 
-#: ../src/lib/List.pm:1168 ../src/lib/List.pm:1208 ../src/lib/List.pm:537
-#: ../src/lib/List.pm:665 ../src/lib/List.pm:700
+#: ../src/lib/List.pm:1171 ../src/lib/List.pm:1211 ../src/lib/List.pm:539
+#: ../src/lib/List.pm:667 ../src/lib/List.pm:702
 msgid "visibility"
 msgstr "synlighet"
 
-#: ../src/lib/List.pm:541
+#: ../src/lib/List.pm:543
 msgid "Subscription profile"
 msgstr "Prenumerationsprofil"
 
-#: ../src/lib/List.pm:545
+#: ../src/lib/List.pm:547
 msgid "Who can delete subscribers"
 msgstr "Vem kan ta bort prenumeranter"
 
-#: ../src/lib/List.pm:550
+#: ../src/lib/List.pm:552
 msgid "Delivery time (hh:mm)"
 msgstr "Leveranstid (hh:mm)"
 
-#: ../src/lib/List.pm:425 ../src/lib/List.pm:558
+#: ../src/lib/List.pm:427 ../src/lib/List.pm:560
 msgid "days"
 msgstr "dagar"
 
-#: ../src/lib/List.pm:564
+#: ../src/lib/List.pm:566
 msgid "hour"
 msgstr "timma"
 
-#: ../src/lib/List.pm:570
+#: ../src/lib/List.pm:572
 msgid "minute"
 msgstr "minut"
 
-#: ../src/lib/List.pm:574
+#: ../src/lib/List.pm:576
 msgid "Digest frequency"
 msgstr "Samlingsbrevfrekvens"
 
-#: ../src/lib/List.pm:582
+#: ../src/lib/List.pm:584
 msgid "Digest maximum number of messages"
 msgstr "Max antal meddelande för samlingsbrev"
 
-#: ../src/lib/List.pm:590
+#: ../src/lib/List.pm:592
 msgid "Inclusions timeout for message distribution"
 msgstr "Inkluderings-tidsgräns uppnådd för meddelandedistribution"
 
-#: ../src/lib/List.pm:597
+#: ../src/lib/List.pm:599
 msgid "Insert DKIM signature to messages sent to the list"
 msgstr "Lägg till DKIM-signatur för meddelanden skickade till listan"
 
-#: ../src/lib/List.pm:605
+#: ../src/lib/List.pm:607
 msgid ""
 "The categories of messages sent to the list that will be signed using DKIM."
 msgstr "Kategorin för meddelanden skickade till listan som signeras med DKIM."
 
-#: ../src/lib/List.pm:612
+#: ../src/lib/List.pm:614
 msgid "File path for list DKIM private key"
 msgstr "Sökväg till listans privata nyckel för DKIM"
 
-#: ../src/lib/List.pm:620
+#: ../src/lib/List.pm:622
 msgid "Selector for DNS lookup of DKIM public key"
 msgstr "Urval för DNS-uppslag av publik DKIM-nyckel"
 
-#: ../src/lib/List.pm:649
+#: ../src/lib/List.pm:651
 msgid "DKIM configuration"
 msgstr "DKIM-konfiguration"
 
-#: ../src/lib/List.pm:1158 ../src/lib/List.pm:655
+#: ../src/lib/List.pm:1161 ../src/lib/List.pm:657
 msgid "email address"
 msgstr "e-postadress"
 
-#: ../src/lib/List.pm:1173 ../src/lib/List.pm:670
+#: ../src/lib/List.pm:1176 ../src/lib/List.pm:672
 msgid "name"
 msgstr "namn"
 
-#: ../src/lib/List.pm:1178 ../src/lib/List.pm:675
+#: ../src/lib/List.pm:1181 ../src/lib/List.pm:677
 msgid "private information"
 msgstr "privat information"
 
-#: ../src/lib/List.pm:710
+#: ../src/lib/List.pm:712
 msgid "Periodical subscription expiration task"
 msgstr "Återkommande prenumerationsexpireringshantering"
 
-#: ../src/lib/List.pm:721
+#: ../src/lib/List.pm:723
 msgid "Attachment type"
 msgstr "Bifogningstyp"
 
-#: ../src/lib/List.pm:725
+#: ../src/lib/List.pm:727
 msgid "Forced reply address"
 msgstr "Tvingad svarsadress"
 
-#: ../src/lib/List.pm:731
+#: ../src/lib/List.pm:733
 msgid "Internet domain"
 msgstr "Internetdomän"
 
-#: ../src/lib/List.pm:737
+#: ../src/lib/List.pm:739
 msgid "File inclusion"
 msgstr "Fil-inkludering"
 
-#: ../src/lib/List.pm:741
+#: ../src/lib/List.pm:743
 msgid "data location URL"
 msgstr "URL till data"
 
-#: ../src/lib/List.pm:1039 ../src/lib/List.pm:747 ../src/lib/List.pm:780
-#: ../src/lib/List.pm:861
+#: ../src/lib/List.pm:1042 ../src/lib/List.pm:749 ../src/lib/List.pm:782
+#: ../src/lib/List.pm:863
 msgid "remote user"
 msgstr "fjärranvändare"
 
-#: ../src/lib/List.pm:1044 ../src/lib/List.pm:754 ../src/lib/List.pm:786
-#: ../src/lib/List.pm:867
+#: ../src/lib/List.pm:1047 ../src/lib/List.pm:756 ../src/lib/List.pm:788
+#: ../src/lib/List.pm:869
 msgid "remote password"
 msgstr "fjärrlösenord"
 
-#: ../src/lib/List.pm:1000 ../src/lib/List.pm:1058 ../src/lib/List.pm:759
-#: ../src/lib/List.pm:822 ../src/lib/List.pm:946
+#: ../src/lib/List.pm:1002 ../src/lib/List.pm:1061 ../src/lib/List.pm:761
+#: ../src/lib/List.pm:824 ../src/lib/List.pm:948
 msgid "short name for this source"
 msgstr "kortnamn för denna källa"
 
-#: ../src/lib/List.pm:764
+#: ../src/lib/List.pm:766
 msgid "Remote file inclusion"
 msgstr "Inkludering av fjärr-fil"
 
-#: ../src/lib/List.pm:1017 ../src/lib/List.pm:770 ../src/lib/List.pm:851
-#: ../src/lib/List.pm:978
+#: ../src/lib/List.pm:1020 ../src/lib/List.pm:772 ../src/lib/List.pm:853
+#: ../src/lib/List.pm:980
 msgid "remote host"
 msgstr "fjärrsystem"
 
-#: ../src/lib/List.pm:775 ../src/lib/List.pm:856 ../src/lib/List.pm:984
+#: ../src/lib/List.pm:777 ../src/lib/List.pm:858 ../src/lib/List.pm:986
 msgid "remote port"
 msgstr "fjärrport"
 
-#: ../src/lib/List.pm:790
+#: ../src/lib/List.pm:792
 msgid "suffix"
 msgstr "suffix"
 
-#: ../src/lib/List.pm:796
+#: ../src/lib/List.pm:798
 msgid "filter"
 msgstr "filter"
 
-#: ../src/lib/List.pm:802
+#: ../src/lib/List.pm:804
 msgid "extracted attribute"
 msgstr "extraherat attribut"
 
-#: ../src/lib/List.pm:807
+#: ../src/lib/List.pm:809
 msgid "selection (if multiple)"
 msgstr "urval (om flera)"
 
-#: ../src/lib/List.pm:812
+#: ../src/lib/List.pm:814
 msgid "search scope"
 msgstr "sökomfång"
 
-#: ../src/lib/List.pm:818
+#: ../src/lib/List.pm:820
 msgid "connection timeout"
 msgstr "anslutningstidsgräns"
 
-#: ../src/lib/List.pm:846
+#: ../src/lib/List.pm:848
 msgid "LDAP query inclusion"
 msgstr "LDAP-frågeinkludering"
 
-#: ../src/lib/List.pm:871
+#: ../src/lib/List.pm:873
 msgid "first-level suffix"
 msgstr "suffix för första-nivå"
 
-#: ../src/lib/List.pm:877
+#: ../src/lib/List.pm:879
 msgid "first-level filter"
 msgstr "filter för första-nivå"
 
-#: ../src/lib/List.pm:882
+#: ../src/lib/List.pm:884
 msgid "first-level extracted attribute"
 msgstr "extraherat attribut för första-nivå"
 
-#: ../src/lib/List.pm:887
+#: ../src/lib/List.pm:889
 msgid "first-level selection"
 msgstr "urval för för första-nivå"
 
-#: ../src/lib/List.pm:892
+#: ../src/lib/List.pm:894
 msgid "first-level search scope"
 msgstr "sökomfång för första-nivå"
 
-#: ../src/lib/List.pm:898
+#: ../src/lib/List.pm:900
 msgid "first-level connection timeout"
 msgstr "anslutningstidsgräns för första-nivå"
 
-#: ../src/lib/List.pm:904
+#: ../src/lib/List.pm:906
 msgid "first-level regular expression"
 msgstr "reguljärt uttryck för första-nivå"
 
-#: ../src/lib/List.pm:908
+#: ../src/lib/List.pm:910
 msgid "second-level suffix template"
 msgstr "suffixmall för andra-nivå"
 
-#: ../src/lib/List.pm:914
+#: ../src/lib/List.pm:916
 msgid "second-level filter template"
 msgstr "filtermall för andra-nivå"
 
-#: ../src/lib/List.pm:920
+#: ../src/lib/List.pm:922
 msgid "second-level extracted attribute"
 msgstr "extraherat attribut för andra-nivå"
 
-#: ../src/lib/List.pm:925
+#: ../src/lib/List.pm:927
 msgid "second-level selection"
 msgstr "urval för andra-nivå"
 
-#: ../src/lib/List.pm:930
+#: ../src/lib/List.pm:932
 msgid "second-level search scope"
 msgstr "sökomfång för andra-nivå"
 
-#: ../src/lib/List.pm:936
+#: ../src/lib/List.pm:938
 msgid "second-level connection timeout"
 msgstr "anslutningstidsgräns för andra-nivå"
 
-#: ../src/lib/List.pm:942
+#: ../src/lib/List.pm:944
 msgid "second-level regular expression"
 msgstr "reguljärt uttryck för andra-nivå"
 
-#: ../src/lib/List.pm:968
+#: ../src/lib/List.pm:970
 msgid "LDAP 2-level query inclusion"
 msgstr "LDAP 2-nivå-frågeinkludering"
 
-#: ../src/lib/List.pm:973
+#: ../src/lib/List.pm:975
 msgid "List inclusion"
 msgstr "List-inkludering"
 
-#: ../src/lib/List.pm:990
+#: ../src/lib/List.pm:992
 msgid "remote path of sympa list dump"
 msgstr "fjärrsökväg till sympa list-dump"
 
-#: ../src/lib/List.pm:995
+#: ../src/lib/List.pm:997
 msgid "certificate for authentication by remote Sympa"
 msgstr "certifikat för autentisering av fjärr-Sympa"
 
-#: ../src/lib/List.pm:1007
+#: ../src/lib/List.pm:1009
 msgid "remote list inclusion"
 msgstr "inkludering av fjärrlista"
 
-#: ../src/lib/List.pm:1012
+#: ../src/lib/List.pm:1014
 msgid "database type"
 msgstr "databastyp"
 
-#: ../src/lib/List.pm:1021
+#: ../src/lib/List.pm:1024
 msgid "database port"
 msgstr "databasport"
 
-#: ../src/lib/List.pm:1026
+#: ../src/lib/List.pm:1029
 msgid "database name"
 msgstr "databasnamn"
 
-#: ../src/lib/List.pm:1030
+#: ../src/lib/List.pm:1033
 msgid "connection options"
 msgstr "anslutningsinställningar"
 
-#: ../src/lib/List.pm:1035
+#: ../src/lib/List.pm:1038
 msgid "environment variables for database connection"
 msgstr "miljövariabler för databasanslutning"
 
-#: ../src/lib/List.pm:1050
+#: ../src/lib/List.pm:1053
 msgid "SQL query"
 msgstr "SQL-fråga"
 
-#: ../src/lib/List.pm:1054
+#: ../src/lib/List.pm:1057
 msgid "Directory where the database is stored (used for DBD::CSV only)"
 msgstr "Katalog där databasen lagras (används enbart för DBD::CSV)"
 
-#: ../src/lib/List.pm:1065
+#: ../src/lib/List.pm:1068
 msgid "SQL query inclusion"
 msgstr "SQL-fråge-inkludering"
 
-#: ../src/lib/List.pm:1071
+#: ../src/lib/List.pm:1074
 msgid "Notify subscribers when they are included from a data source?"
 msgstr "Notifiera prenumeranter när de inkluderas från en datakälla?"
 
-#: ../src/lib/List.pm:1075
+#: ../src/lib/List.pm:1078
 msgid "Who can view list information"
 msgstr "Vem kan se listkonfigurationen"
 
-#: ../src/lib/List.pm:1079
+#: ../src/lib/List.pm:1082
 msgid "Who can invite people"
 msgstr "Vem kan bjuda in folk"
 
-#: ../src/lib/List.pm:1085
+#: ../src/lib/List.pm:1088
 msgid "Language of the list"
 msgstr "Listans språk"
 
-#: ../src/lib/List.pm:1110
+#: ../src/lib/List.pm:1113
 msgid "Regular expression applied to prevent loops with robots"
 msgstr "Reguljärt uttryck för att hindra snurror med robotar"
 
-#: ../src/lib/List.pm:1117
+#: ../src/lib/List.pm:1120
 msgid "Maximum message size"
 msgstr "Max meddelandestorlek"
 
-#: ../src/lib/List.pm:1123
+#: ../src/lib/List.pm:1126
 msgid "Message topic name"
 msgstr "Meddelandeämnesnamn"
 
-#: ../src/lib/List.pm:1128
+#: ../src/lib/List.pm:1131
 msgid "Message topic keywords"
 msgstr "Meddelandeämnesnyckelord"
 
-#: ../src/lib/List.pm:1134
+#: ../src/lib/List.pm:1137
 msgid "Message topic title"
 msgstr "Meddelandeämnestitel"
 
-#: ../src/lib/List.pm:1139
+#: ../src/lib/List.pm:1142
 msgid "Topics for message categorization"
 msgstr "Ämnen för meddelandekategorisering"
 
-#: ../src/lib/List.pm:1145
+#: ../src/lib/List.pm:1148
 msgid "Defines to which part of messages topic keywords are applied"
 msgstr "Anger på vilken del av meddelanden ämnesnyckelord används"
 
-#: ../src/lib/List.pm:1152
+#: ../src/lib/List.pm:1155
 msgid "Message tagging"
 msgstr "Meddelandemärkning"
 
-#: ../src/lib/List.pm:1183 ../src/lib/List.pm:1213
+#: ../src/lib/List.pm:1186 ../src/lib/List.pm:1216
 msgid "profile"
 msgstr "profil"
 
-#: ../src/lib/List.pm:1224
+#: ../src/lib/List.pm:1227
 msgid "Priority"
 msgstr "Prioritet"
 
-#: ../src/lib/List.pm:1230
+#: ../src/lib/List.pm:1233
 msgid "Reject mail from automates (crontab, etc)?"
 msgstr "Avslå automatiserad e-post (crontab, osv)?"
 
-#: ../src/lib/List.pm:1234
+#: ../src/lib/List.pm:1237
 msgid "Who can start a remind process"
 msgstr "Vem kan starta en påminnelseprocess"
 
-#: ../src/lib/List.pm:1239
+#: ../src/lib/List.pm:1242
 msgid "Return-path of the REMIND command"
 msgstr "Returh-path för REMIND-kommandot"
 
-#: ../src/lib/List.pm:1263 ../src/lib/List.pm:1283
+#: ../src/lib/List.pm:1266 ../src/lib/List.pm:1286
 msgid "Reply address"
 msgstr "Svarsadress"
 
-#: ../src/lib/List.pm:1269
+#: ../src/lib/List.pm:1272
 msgid "value"
 msgstr "värde"
 
-#: ../src/lib/List.pm:1274
+#: ../src/lib/List.pm:1277
 msgid "other email address"
 msgstr "annan e-postadress"
 
-#: ../src/lib/List.pm:1279
+#: ../src/lib/List.pm:1282
 msgid "respect of existing header field"
 msgstr "respektra befintliga huvudrader"
 
-#: ../src/lib/List.pm:1288
+#: ../src/lib/List.pm:1291
 msgid "Who can review subscribers"
 msgstr "Vem kan se prenumeranter"
 
-#: ../src/lib/List.pm:1295
+#: ../src/lib/List.pm:1298
 msgid "RFC 2369 Header fields"
 msgstr "RFC 2369 fälthuvud"
 
-#: ../src/lib/List.pm:1299
+#: ../src/lib/List.pm:1302
 msgid "Who can send messages"
 msgstr "Vem kan skicka meddelanden"
 
-#: ../src/lib/List.pm:1306
+#: ../src/lib/List.pm:1309
 msgid "Serial number of the config"
 msgstr "Konfigurationens serienummer"
 
-#: ../src/lib/List.pm:1311
+#: ../src/lib/List.pm:1314
 msgid "Who can view"
 msgstr "Vem kan se"
 
-#: ../src/lib/List.pm:1315
+#: ../src/lib/List.pm:1318
 msgid "Who can edit"
 msgstr "Vem kan ändra"
 
-#: ../src/lib/List.pm:1322 ../src/lib/List.pm:1434
+#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1437
 msgid "quota"
 msgstr "kvot"
 
-#: ../src/lib/List.pm:1331 ../src/lib/List.pm:1336
+#: ../src/lib/List.pm:1334 ../src/lib/List.pm:1339
 msgid "email address protection method"
 msgstr "skyddsmetod för e-postadresserer"
 
-#: ../src/lib/List.pm:1342
+#: ../src/lib/List.pm:1345
 msgid "Status of the list"
 msgstr "Liststatus"
 
-#: ../src/lib/List.pm:1350
+#: ../src/lib/List.pm:1353
 msgid "Timeout for fetch of include_sql_query"
 msgstr "Hämtning av include_sql_query tog för lång tid"
 
-#: ../src/lib/List.pm:1356
+#: ../src/lib/List.pm:1359
 msgid "Subject of the list"
 msgstr "Ämnet för listan"
 
-#: ../src/lib/List.pm:1360
+#: ../src/lib/List.pm:1363
 msgid "Who can subscribe to the list"
 msgstr "Vem kan prenumerera på listan"
 
-#: ../src/lib/List.pm:1366
+#: ../src/lib/List.pm:1369
 msgid "Topics for the list"
 msgstr "Ämnen för listan"
 
-#: ../src/lib/List.pm:1373
+#: ../src/lib/List.pm:1376
 msgid "Inclusions timeout"
 msgstr "Inkluderingstidsgräns"
 
-#: ../src/lib/List.pm:1377
+#: ../src/lib/List.pm:1380
 msgid "Who can unsubscribe"
 msgstr "Vem kan avsluta prenumerationer"
 
-#: ../src/lib/List.pm:1398
+#: ../src/lib/List.pm:1401
 msgid "Last update of config"
 msgstr "Senaste uppdateringen av konfigurationen"
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1407
 msgid "User data source"
 msgstr "Användardatakälla"
 
-#: ../src/lib/List.pm:1411
+#: ../src/lib/List.pm:1414
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr "TIllåt bildvisning? (måste vara påslaget för den aktuella roboten)"
 
-#: ../src/lib/List.pm:1417
+#: ../src/lib/List.pm:1420
 msgid "Allow message personnalization"
 msgstr "Tillåt personanpassning av meddelanden"
 
-#: ../src/lib/List.pm:1423
+#: ../src/lib/List.pm:1426
 msgid "Visibility of the list"
 msgstr "Synlighet för listan"
 
-#: ../src/lib/List.pm:1439
+#: ../src/lib/List.pm:1442
 msgid "Maximum number of month archived"
 msgstr "Max antal arkiverade månader"
 
-#: ../src/lib/List.pm:1444
+#: ../src/lib/List.pm:1447
 msgid "Web archives"
 msgstr "Webbarkiv"
 
-#: ../src/lib/List.pm:1450
+#: ../src/lib/List.pm:1453
 msgid "Welcome return-path"
 msgstr "return-path för välkomstmeddelande"
 
-#: ../src/lib/List.pm:1455
+#: ../src/lib/List.pm:1458
 msgid "percentage of list members in VERP mode"
 msgstr "procentandel av listmedlemmar med VERP-läge "
 
-#: ../src/lib/List.pm:365 ../src/lib/List.pm:372
+#: ../src/lib/List.pm:367 ../src/lib/List.pm:374
 msgid "%"
 msgstr "%"
 
-#: ../src/lib/List.pm:383 ../src/lib/List.pm:404
+#: ../src/lib/List.pm:385 ../src/lib/List.pm:406
 msgid "points"
 msgstr "poäng"
 
-#: ../src/lib/List.pm:516
+#: ../src/lib/List.pm:518
 msgid "var name"
 msgstr "variabelnamn"
 
-#: ../src/lib/List.pm:521
+#: ../src/lib/List.pm:523
 msgid "var value"
 msgstr "variabelvärde"
 
-#: ../src/lib/List.pm:580
+#: ../src/lib/List.pm:582
 msgid "messages"
 msgstr "meddelanden"
 
-#: ../src/lib/List.pm:1348 ../src/lib/List.pm:1371 ../src/lib/List.pm:588
-#: ../src/lib/List.pm:817 ../src/lib/List.pm:897 ../src/lib/List.pm:935
+#: ../src/lib/List.pm:1351 ../src/lib/List.pm:1374 ../src/lib/List.pm:590
+#: ../src/lib/List.pm:819 ../src/lib/List.pm:899 ../src/lib/List.pm:937
 msgid "seconds"
 msgstr "sekunder"
 
-#: ../src/lib/List.pm:627
+#: ../src/lib/List.pm:629
 msgid "List of headers to be included ito the message for signature"
 msgstr "Lista med huvudrader att ta med i meddelandet för signaturen"
 
-#: ../src/lib/List.pm:635
+#: ../src/lib/List.pm:637
 msgid "DKIM \"d=\" tag, you should probably use the default value"
 msgstr "DKIM \"d=\"-värde, du bör förmodligen använda standardvärdet"
 
-#: ../src/lib/List.pm:642
+#: ../src/lib/List.pm:644
 msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
 msgstr "DKIM \"i=\"-värde, du bör förmodligen lämna denna parameter tom"
 
-#: ../src/lib/List.pm:685
+#: ../src/lib/List.pm:687
 msgid "the data source"
 msgstr "datakällan"
 
-#: ../src/lib/List.pm:690
+#: ../src/lib/List.pm:692
 msgid "data source parameters"
 msgstr "parametrar för datakälla"
 
-#: ../src/lib/List.pm:706
+#: ../src/lib/List.pm:708
 msgid "Moderators defined in an external data source"
 msgstr "Moderatorer angivna i en extern datakälla"
 
-#: ../src/lib/List.pm:715
+#: ../src/lib/List.pm:717
 msgid "Family name"
 msgstr "Familjenamn"
 
-#: ../src/lib/List.pm:828 ../src/lib/List.pm:952
+#: ../src/lib/List.pm:830 ../src/lib/List.pm:954
 msgid "use SSL (LDAPS)"
 msgstr "använd SSL (LDAPS)"
 
-#: ../src/lib/List.pm:833 ../src/lib/List.pm:957
+#: ../src/lib/List.pm:835 ../src/lib/List.pm:959
 msgid "SSL version"
 msgstr "SSL-version"
 
-#: ../src/lib/List.pm:838 ../src/lib/List.pm:962
+#: ../src/lib/List.pm:840 ../src/lib/List.pm:964
 msgid "SSL ciphers used"
 msgstr "använda SSL-chiffer"
 
-#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1388
+#: ../src/lib/List.pm:1097 ../src/lib/List.pm:1391
 msgid "date"
 msgstr "datum"
 
-#: ../src/lib/List.pm:1099
+#: ../src/lib/List.pm:1102
 msgid "who ran the instantiation"
 msgstr "vem utförde instanseringen?"
 
-#: ../src/lib/List.pm:1103
+#: ../src/lib/List.pm:1106
 msgid "Latest family instantiation"
 msgstr "Senaste familje-instanseringen"
 
-#: ../src/lib/List.pm:1115
+#: ../src/lib/List.pm:1118
 msgid "bytes"
 msgstr "bytes"
 
-#: ../src/lib/List.pm:1193
+#: ../src/lib/List.pm:1196
 msgid "the datasource"
 msgstr "datakällan"
 
-#: ../src/lib/List.pm:1198
+#: ../src/lib/List.pm:1201
 msgid "datasource parameters"
 msgstr "parametrar för data<källa"
 
-#: ../src/lib/List.pm:1218
+#: ../src/lib/List.pm:1221
 msgid "Owners defined in an external data source"
 msgstr "Ägare angivna i en extern datakälla"
 
-#: ../src/lib/List.pm:1243
+#: ../src/lib/List.pm:1246
 msgid "Periodical subscription reminder task"
 msgstr "Åtgärd för återkommande prenumerationspåminnelse"
 
-#: ../src/lib/List.pm:1248
+#: ../src/lib/List.pm:1251
 msgid "Incoming SMTP header fields to be removed"
 msgstr "Inkommande SMTP-huvudrader att ta bort"
 
-#: ../src/lib/List.pm:1255
+#: ../src/lib/List.pm:1258
 msgid "Outgoing SMTP header fields to be removed"
 msgstr "Utgående SMTP-huvudrader att ta bort"
 
-#: ../src/lib/List.pm:1321 ../src/lib/List.pm:1433
+#: ../src/lib/List.pm:1324 ../src/lib/List.pm:1436
 msgid "Kbytes"
 msgstr "Kbytes"
 
-#: ../src/lib/List.pm:1394
+#: ../src/lib/List.pm:1397
 msgid "who updated the config"
 msgstr "vem uppdaterade konfigurationen"
 
 # Should we use swedish typography?
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2862
+#: ../src/lib/List.pm:2890
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2863
+#: ../src/lib/List.pm:2891
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11076 ../wwsympa/wwsympa.fcgi.in:11145
-#: ../wwsympa/wwsympa.fcgi.in:11347 ../wwsympa/wwsympa.fcgi.in:11694
-#: ../wwsympa/wwsympa.fcgi.in:15145 ../wwsympa/wwsympa.fcgi.in:15152
-#: ../wwsympa/wwsympa.fcgi.in:15866 ../wwsympa/wwsympa.fcgi.in:16660
-#: ../wwsympa/wwsympa.fcgi.in:16661 ../wwsympa/wwsympa.fcgi.in:4359
-#: ../wwsympa/wwsympa.fcgi.in:4412 ../wwsympa/wwsympa.fcgi.in:4984
-#: ../wwsympa/wwsympa.fcgi.in:4985 ../wwsympa/wwsympa.fcgi.in:6575
-#: ../wwsympa/wwsympa.fcgi.in:7598 ../wwsympa/wwsympa.fcgi.in:8149
-#: ../wwsympa/wwsympa.fcgi.in:8196 ../wwsympa/wwsympa.fcgi.in:8198
-#: ../wwsympa/wwsympa.fcgi.in:8636 ../wwsympa/wwsympa.fcgi.in:8637
-#: ../wwsympa/wwsympa.fcgi.in:8671 ../wwsympa/wwsympa.fcgi.in:8672
-#: ../wwsympa/wwsympa.fcgi.in:8851 ../wwsympa/wwsympa.fcgi.in:8852
+#: ../src/lib/List.pm:3082 ../src/lib/List.pm:3083 ../src/lib/List.pm:3087
+#: ../wwsympa/wwsympa.fcgi.in:11097 ../wwsympa/wwsympa.fcgi.in:11166
+#: ../wwsympa/wwsympa.fcgi.in:11368 ../wwsympa/wwsympa.fcgi.in:11715
+#: ../wwsympa/wwsympa.fcgi.in:15166 ../wwsympa/wwsympa.fcgi.in:15173
+#: ../wwsympa/wwsympa.fcgi.in:15887 ../wwsympa/wwsympa.fcgi.in:16681
+#: ../wwsympa/wwsympa.fcgi.in:16682 ../wwsympa/wwsympa.fcgi.in:4373
+#: ../wwsympa/wwsympa.fcgi.in:4426 ../wwsympa/wwsympa.fcgi.in:4447
+#: ../wwsympa/wwsympa.fcgi.in:4448 ../wwsympa/wwsympa.fcgi.in:5002
+#: ../wwsympa/wwsympa.fcgi.in:5003 ../wwsympa/wwsympa.fcgi.in:6595
+#: ../wwsympa/wwsympa.fcgi.in:7619 ../wwsympa/wwsympa.fcgi.in:8170
+#: ../wwsympa/wwsympa.fcgi.in:8217 ../wwsympa/wwsympa.fcgi.in:8219
+#: ../wwsympa/wwsympa.fcgi.in:8657 ../wwsympa/wwsympa.fcgi.in:8658
+#: ../wwsympa/wwsympa.fcgi.in:8692 ../wwsympa/wwsympa.fcgi.in:8693
+#: ../wwsympa/wwsympa.fcgi.in:8872 ../wwsympa/wwsympa.fcgi.in:8873
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
-#: ../src/lib/mail.pm:54
+#: ../src/lib/mail.pm:53
 msgid ""
 "Your system does not conform to the POSIX P1003.1 standard, or\n"
 "your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
@@ -9327,12 +9354,12 @@ msgstr ""
 "POSIX-bibliotek. Du måste ändra smtp.pm-modulen för att ställa in\n"
 "ett värde för variabeln %s.\n"
 
-#: ../src/lib/mail.pm:837
+#: ../src/lib/mail.pm:836
 #, fuzzy
 msgid "Unable to create a channel in smtpto: %s"
 msgstr "Kunde inte skapa en kanal i smtpto: %m"
 
-#: ../src/lib/PlainDigest.pm:180
+#: ../src/lib/PlainDigest.pm:179
 msgid ""
 "----- Malformed message ignored -----\n"
 "\n"
@@ -9340,11 +9367,11 @@ msgstr ""
 "----- Felformaterat meddelande ignorerat -----\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:184
+#: ../src/lib/PlainDigest.pm:183
 msgid "[Unknown]"
 msgstr "[Okänt]"
 
-#: ../src/lib/PlainDigest.pm:206
+#: ../src/lib/PlainDigest.pm:205
 msgid ""
 "\n"
 "[Attached message follows]\n"
@@ -9354,27 +9381,27 @@ msgstr ""
 "[Bifogat meddelande följer]\n"
 "--Ursprungligt meddelande--\n"
 
-#: ../src/lib/PlainDigest.pm:208
+#: ../src/lib/PlainDigest.pm:207
 msgid "Date: %s\n"
 msgstr "Datum: %s\n"
 
-#: ../src/lib/PlainDigest.pm:209
+#: ../src/lib/PlainDigest.pm:208
 msgid "From: %s\n"
 msgstr "Från: %s\n"
 
-#: ../src/lib/PlainDigest.pm:210
+#: ../src/lib/PlainDigest.pm:209
 msgid "To: %s\n"
 msgstr "Till: %s\n"
 
-#: ../src/lib/PlainDigest.pm:211
+#: ../src/lib/PlainDigest.pm:210
 msgid "Cc: %s\n"
 msgstr "Kopia: %s\n"
 
-#: ../src/lib/PlainDigest.pm:212
+#: ../src/lib/PlainDigest.pm:211
 msgid "Subject: %s\n"
 msgstr "Ämne: %s\n"
 
-#: ../src/lib/PlainDigest.pm:218
+#: ../src/lib/PlainDigest.pm:217
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -9382,7 +9409,7 @@ msgstr ""
 "-----Slut på originalmeddelandet från %s-----\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:244 ../src/lib/PlainDigest.pm:297
+#: ../src/lib/PlainDigest.pm:243 ../src/lib/PlainDigest.pm:296
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -9392,7 +9419,7 @@ msgstr ""
 "    Vissa tecken kan ha försvunnit eller visas felaktigt **\n"
 "\n"
 
-#: ../src/lib/PlainDigest.pm:261
+#: ../src/lib/PlainDigest.pm:260
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
@@ -9400,7 +9427,7 @@ msgstr ""
 "\n"
 "[En bilaga av typen %s inkluderades här]\n"
 
-#: ../src/lib/PlainDigest.pm:267
+#: ../src/lib/PlainDigest.pm:266
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -9408,7 +9435,7 @@ msgstr ""
 "\n"
 "-----Leveransrapport-----\n"
 
-#: ../src/lib/PlainDigest.pm:269
+#: ../src/lib/PlainDigest.pm:268
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
@@ -9416,7 +9443,7 @@ msgstr ""
 "\n"
 "-----Slut på leveransrapport-----\n"
 
-#: ../src/lib/PlainDigest.pm:279 ../src/lib/PlainDigest.pm:308
+#: ../src/lib/PlainDigest.pm:278 ../src/lib/PlainDigest.pm:307
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
@@ -9424,19 +9451,19 @@ msgstr ""
 "\n"
 "[** Kunde inte hantera HTML-meddelandedel **]\n"
 
-#: ../src/lib/PlainDigest.pm:312
+#: ../src/lib/PlainDigest.pm:311
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Text konverterad från HTML ]\n"
 
-#: ../src/lib/PlainDigest.pm:361
+#: ../src/lib/PlainDigest.pm:360
 msgid "[ Image%s ]"
 msgstr "[ Bild%s ]"
 
-#: ../src/lib/PlainDigest.pm:361
+#: ../src/lib/PlainDigest.pm:360
 msgid "[Image%s]"
 msgstr "[Bild%s]"
 
-#: ../src/lib/tt2.pm:150
+#: ../src/lib/tt2.pm:149
 msgid "(unknown date)"
 msgstr "(okänt datum)"
 
@@ -9449,191 +9476,200 @@ msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11928 ../wwsympa/wwsympa.fcgi.in:12061
-#: ../wwsympa/wwsympa.fcgi.in:14374 ../wwsympa/wwsympa.fcgi.in:8106
+#: ../wwsympa/SympaSession.pm:659 ../wwsympa/SympaSession.pm:660
+#: ../wwsympa/wwsympa.fcgi.in:11949 ../wwsympa/wwsympa.fcgi.in:12082
+#: ../wwsympa/wwsympa.fcgi.in:14395 ../wwsympa/wwsympa.fcgi.in:8127
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15327
+#: ../wwsympa/wwsympa.fcgi.in:15348
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Din begäran att avsluta prenumerationen på listan %s har skickats vidare "
 "till listägaren."
 
-#: ../wwsympa/wwsympa.fcgi.in:15329
+#: ../wwsympa/wwsympa.fcgi.in:15350
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Din prenumeration på listan %s har sagts upp."
 
-#: ../wwsympa/wwsympa.fcgi.in:15333
+#: ../wwsympa/wwsympa.fcgi.in:15354
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Uppsägning av prenumeration på listan %s nekades: Uppsägning av "
 "prenumeration på denna lista är stängd."
 
-#: ../wwsympa/wwsympa.fcgi.in:15335
+#: ../wwsympa/wwsympa.fcgi.in:15356
 msgid "Unsubscription from list %s failed."
 msgstr "Uppsägning av prenumeration på listan %s misslyckades."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16242 ../wwsympa/wwsympa.fcgi.in:16243
+#: ../wwsympa/wwsympa.fcgi.in:16263 ../wwsympa/wwsympa.fcgi.in:16264
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
-#: ../wwsympa/wwslib.pm:41
+#: ../wwsympa/wwslib.pm:40
 msgid "session"
 msgstr "session"
 
-#: ../wwsympa/wwslib.pm:42
+#: ../wwsympa/wwslib.pm:41
 msgid "10 minutes"
 msgstr "10 minuter"
 
-#: ../wwsympa/wwslib.pm:43
+#: ../wwsympa/wwslib.pm:42
 msgid "30 minutes"
 msgstr "30 minuter"
 
-#: ../wwsympa/wwslib.pm:44
+#: ../wwsympa/wwslib.pm:43
 msgid "1 hour"
 msgstr "1 timme"
 
-#: ../wwsympa/wwslib.pm:45
+#: ../wwsympa/wwslib.pm:44
 msgid "6 hours"
 msgstr "6 timmar"
 
-#: ../wwsympa/wwslib.pm:46
+#: ../wwsympa/wwslib.pm:45
 msgid "1 day"
 msgstr "1 dag"
 
-#: ../wwsympa/wwslib.pm:47
+#: ../wwsympa/wwslib.pm:46
 msgid "1 week"
 msgstr "1 vecka"
 
-#: ../wwsympa/wwslib.pm:48
+#: ../wwsympa/wwslib.pm:47
 #, fuzzy
 msgid "30 days"
 msgstr "dagar"
 
-#: ../wwsympa/wwslib.pm:50
+#: ../wwsympa/wwslib.pm:49
 msgid "listed in the list review page"
 msgstr "visas på listans informationssida"
 
-#: ../wwsympa/wwslib.pm:51
+#: ../wwsympa/wwslib.pm:50
 msgid "concealed"
 msgstr "dold"
 
-#: ../wwsympa/wwslib.pm:55
+#: ../wwsympa/wwslib.pm:54
 msgid "welcome message"
 msgstr "välkomstmeddelande"
 
-#: ../wwsympa/wwslib.pm:56
+#: ../wwsympa/wwslib.pm:55
 msgid "unsubscribe message"
 msgstr "meddelande för uppsägning av prenumeration"
 
-#: ../wwsympa/wwslib.pm:57
+#: ../wwsympa/wwslib.pm:56
 msgid "deletion message"
 msgstr "borttagningsmeddelande"
 
-#: ../wwsympa/wwslib.pm:58
+#: ../wwsympa/wwslib.pm:57
 msgid "message footer"
 msgstr "meddelandefot"
 
-#: ../wwsympa/wwslib.pm:59
+#: ../wwsympa/wwslib.pm:58
 msgid "message header"
 msgstr "meddelandehuvud"
 
-#: ../wwsympa/wwslib.pm:60
+#: ../wwsympa/wwslib.pm:59
 msgid "remind message"
 msgstr "påminnelsemeddelande"
 
-#: ../wwsympa/wwslib.pm:61
+#: ../wwsympa/wwslib.pm:60
 msgid "editor rejection message"
 msgstr "avslagsmeddelande från redaktör"
 
-#: ../wwsympa/wwslib.pm:62
+#: ../wwsympa/wwslib.pm:61
 msgid "subscribing invitation message"
 msgstr "prenumerationsinbjudningsmeddelande"
 
-#: ../wwsympa/wwslib.pm:63
+#: ../wwsympa/wwslib.pm:62
 msgid "help file"
 msgstr "hjälpfil"
 
-#: ../wwsympa/wwslib.pm:64
+#: ../wwsympa/wwslib.pm:63
 msgid "directory of lists"
 msgstr "listkatalog"
 
-#: ../wwsympa/wwslib.pm:65
+#: ../wwsympa/wwslib.pm:64
 msgid "global remind message"
 msgstr "globalt påminnelsemeddelande"
 
-#: ../wwsympa/wwslib.pm:66
+#: ../wwsympa/wwslib.pm:65
 msgid "summary message"
 msgstr "sammanfattningsmeddelande"
 
-#: ../wwsympa/wwslib.pm:67
+#: ../wwsympa/wwslib.pm:66
 msgid "list description"
 msgstr "listbeskrivning"
 
-#: ../wwsympa/wwslib.pm:68
+#: ../wwsympa/wwslib.pm:67
 msgid "list homepage"
 msgstr "listhemsida"
 
-#: ../wwsympa/wwslib.pm:69
+#: ../wwsympa/wwslib.pm:68
 msgid "list creation request message"
 msgstr "begäran om att få lista skapad"
 
-#: ../wwsympa/wwslib.pm:70
+#: ../wwsympa/wwslib.pm:69
 msgid "list creation notification message"
 msgstr "notifiering om skapad lista"
 
-#: ../wwsympa/wwslib.pm:71
+#: ../wwsympa/wwslib.pm:70
 msgid "virus infection message"
 msgstr "meddelande om virusinfektion"
 
-#: ../wwsympa/wwslib.pm:72
+#: ../wwsympa/wwslib.pm:71
 msgid "list aliases template"
 msgstr "listalias-mall"
 
-#: ../wwsympa/wwslib.pm:28
+#: ../wwsympa/wwslib.pm:27
 msgid "standard (direct reception)"
 msgstr "standard (direktmottagning)"
 
-#: ../wwsympa/wwslib.pm:29
+#: ../wwsympa/wwslib.pm:28
 msgid "digest MIME format"
 msgstr "sammanfattat i MIME-format"
 
-#: ../wwsympa/wwslib.pm:30
+#: ../wwsympa/wwslib.pm:29
 msgid "digest plain text format"
 msgstr "sammanfattat i text-format"
 
-#: ../wwsympa/wwslib.pm:31
+#: ../wwsympa/wwslib.pm:30
 msgid "summary mode"
 msgstr "summeringsläge"
 
-#: ../wwsympa/wwslib.pm:32
+#: ../wwsympa/wwslib.pm:31
 msgid "notice mode"
 msgstr "du får enbart ämnen för meddelanden"
 
-#: ../wwsympa/wwslib.pm:33
+#: ../wwsympa/wwslib.pm:32
 msgid "text-only mode"
 msgstr "enbart-text-läge"
 
-#: ../wwsympa/wwslib.pm:34
+#: ../wwsympa/wwslib.pm:33
 msgid "html-only mode"
 msgstr "enbart-html-läge"
 
-#: ../wwsympa/wwslib.pm:35
+#: ../wwsympa/wwslib.pm:34
 msgid "urlize mode"
 msgstr "urlize-läge"
 
-#: ../wwsympa/wwslib.pm:36
+#: ../wwsympa/wwslib.pm:35
 msgid "no mail (useful for vacations)"
 msgstr "ingen e-post (användbar för semestrar)"
 
-#: ../wwsympa/wwslib.pm:37
+#: ../wwsympa/wwslib.pm:36
 msgid "you do not receive your own posts"
 msgstr "dina egna postningar skickas inte till dig"
+
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Visa uteslutningstabellen"
+
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr "Följande fel uppstod när studsar hanterades: %&"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
@@ -10450,6 +10486,10 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#, fuzzy
+#~ msgid "subscribed"
+#~ msgstr "Avsluta prenumeration"
 
 #~ msgid "%1: unknown list"
 #~ msgstr "%1: okänd lista"
