@@ -826,6 +826,8 @@ sub remove_invalid_dkim_signature {
     do_log('debug',"removing invalide dkim signature");
 
     my $msg_as_string = shift;
+    # Saving body as string
+    my ($header_as_string, $body_as_string) = split("\n\n",$msg_as_string,2);
 
     unless (&tools::dkim_verifier($msg_as_string)){
 	my $parser = new MIME::Parser;
@@ -836,7 +838,7 @@ sub remove_invalid_dkim_signature {
 	    return $msg_as_string ;
 	}
 	$entity->head->delete('DKIM-Signature');
-	return $entity->as_string;
+	return $entity->head->as_string."\n".$body_as_string;
     }else{
 	return ($msg_as_string); # sgnature is valid.
     }
