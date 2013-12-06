@@ -595,7 +595,7 @@ sub sendto {
 	    }
 	    my $encrypted_msg_as_string;
 	    if ($encrypted_msg_as_string = &tools::smime_encrypt ($msg_header, $msg_body, $email)){
-		&sending('msg' => $encrypted_msg_as_string,
+		my $result = &sending('msg' => $encrypted_msg_as_string,
 			 'rcpt' => $email,
 			 'from' => $from,
 			 'listname' => $listname,
@@ -604,6 +604,10 @@ sub sendto {
 			 'delivery_date' =>  $delivery_date,
 			 'use_bulk' => $use_bulk,
 			 'tag_as_last' => $tag_as_last);
+		return $result;
+	    }else{
+		Log::do_log('err','Unable to encrypt message to list %s for receipient %s',$listname,$email);
+		return undef;
 	    }
 	    $tag_as_last = 0;
 	}
@@ -625,6 +629,7 @@ sub sendto {
 				  'tag_as_last' => $tag_as_last);
 	    return $result;
 	}else{
+	    Log::do_log('err','Unable to get string from message to list %s',$listname);
 	    return undef;
 	}   
     }
