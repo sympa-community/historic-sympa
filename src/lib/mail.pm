@@ -341,6 +341,8 @@ sub mail_message {
     my $dkim  =  $params{'dkim_parameters'};
     my $tag_as_last = $params{'tag_as_last'};
 
+    my $merge = $list->{'admin'}{'merge_feature'};
+
     my $host = $list->{'admin'}{'host'};
     my $robot = $list->{'domain'};
 
@@ -379,6 +381,8 @@ sub mail_message {
 	}
 	close (MSG);
     }
+    
+    $merge = 0 if ($message->{'protected'});
     
     my %rcpt_by_dom ;
 
@@ -448,7 +452,7 @@ sub mail_message {
 				'use_bulk' => 1,
 				'verp' => $verp,
 				'dkim' => $dkim,
-				'merge' => $list->{'admin'}{'merge_feature'},
+				'merge' => $merge,
 				'tag_as_last' => $tag_as_last));
 }
 
