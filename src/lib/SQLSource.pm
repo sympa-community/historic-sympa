@@ -242,9 +242,10 @@ sub connect {
       }
 
       # mysql: At first, reset "mysql_auto_reconnect" driver attribute.
-      # connect() sets it to true when the processes are running under
-      # mod_perl or CGI environment so that "SET NAMES utf8" will be skipped.
-      if ($self->{'db_type'} eq 'mysql') {
+      # connect() sets it to true not according to \%attr argument
+      # when the processes are running under mod_perl or CGI environment so
+      # that "SET NAMES utf8" will be skipped.
+      if ($param->{'db_type'} eq 'mysql') {
 	    $dbh->{'mysql_auto_reconnect'} = 0;
       }
 
