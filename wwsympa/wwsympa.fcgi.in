@@ -1149,7 +1149,7 @@ my $birthday = time ;
      unless (defined $session) {
 	 &List::send_notify_to_listmaster('failed_to_create_web_session', $robot);
 	 &wwslog('info','Failed to create session');
-	 $session->{'email'}= 'nobody'; $session->{'id_session'} = &SympaSession::get_random();
+	$session = new SympaSession($robot, {});
      }
 
     $session->{'is_family_owner'} = undef;
