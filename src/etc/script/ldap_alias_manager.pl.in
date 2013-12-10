@@ -110,7 +110,7 @@ foreach my $alias (@aliases) {
     next if ($alias =~ /^\#/);
     next if ($alias =~ /^\s*$/);
     
-    $alias =~ /^([^:]+):\s*(\".*\")$/;
+    $alias =~ /^([^\s:]+)[\s:]+(\".*\")$/;
     my $alias_value = $1;
     my $command_value = $2;
     
@@ -179,7 +179,7 @@ elsif ($operation eq 'del') {
 	    next;
 	}
 	
-	$alias =~ /^([^:]+):/; 
+	$alias =~ /^([^\s:]+)[\s:]/; 
 	my $alias_value = $1;
 	$alias_value =~ s/\+/\-/g;
 
@@ -214,7 +214,7 @@ sub already_defined {
 
     foreach my $alias (@aliases) {
 	
-	$alias =~ /^([^:]+):/;
+	$alias =~ /^([^\s:]+)[\s:]/;
 
 	my $source_result = $ldap_connection->search(filter => "(".$ldap_mail_attribute."=".$1."\@".$domain.")",
 						     base => $ldap_base_dn);

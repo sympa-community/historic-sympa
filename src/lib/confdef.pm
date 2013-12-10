@@ -619,6 +619,16 @@ our @params = (
         default => Sympa::Constants::SENDMAIL_ALIASES,
     },
     {
+        name => 'aliases_db_type',
+        default => 'hash',
+        query => 'Type of aliases database.  "btree", "dbm", "hash" and so on.  Available when aliases_program is "makemap", "postalias" or "postmap".',
+    },
+    {
+        name => 'aliases_program',
+        default => 'newaliases',
+        query => 'Program used to update aliases database.  "makemap", "newaliases", "postalias", "postmap" or full path to custom program.',
+    },
+    {
         name    => 'nrcpt',
         default => '25',
         query   => 'Maximum number of recipients per call to Sendmail. The nrcpt_by_domain.conf file allows a different tuning per destination domain.',
