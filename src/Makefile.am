@@ -36,6 +36,8 @@ sympa_newaliases_wrapper_SOURCES = sympa_newaliases-wrapper.c
 sympa_newaliases_wrapper_CPPFLAGS = $(AM_CPPFLAGS) \
 	-DSYMPA_NEWALIASES=\"${sbindir}/sympa_newaliases.pl\"
 
+man1_MANS = sympa_newaliases.1
+
 EXTRA_DIST = $(modules_DATA) \
 	     bulk.pl.in \
 	     alias_manager.pl.in \
@@ -44,7 +46,7 @@ EXTRA_DIST = $(modules_DATA) \
 	     task_manager.pl.in \
 	     sympa_newaliases.pl.in
 
-CLEANFILES = $(sbin_SCRIPTS)
+CLEANFILES = $(man1_MANS) $(sbin_SCRIPTS)
 
 install-exec-hook:
 	-chown $(USER) $(DESTDIR)$(libexecdir)/queue
@@ -92,4 +94,9 @@ sympa_newaliases.pl: $(srcdir)/sympa_newaliases.pl.in Makefile
 		-e 's|--POSTMAP--|$(POSTMAP)|' \
 		< $(srcdir)/$@.in > $@
 	chmod +x $@
+
+.pl.1:
+	rm -f $@
+	$(AM_V_GEN)$(POD2MAN) --section=1 --center="sympa $(VERSION)" \
+		--lax --release="$(VERSION)" $< $@
 
