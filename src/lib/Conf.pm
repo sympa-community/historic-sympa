@@ -64,11 +64,12 @@ foreach my $hash(@confdef::params){
 
 my %old_params = (
     trusted_ca_options     => 'capath,cafile',
-    msgcat                 => 'localedir',
+    'msgcat'               => '',
     queueexpire            => '',
     clean_delay_queueother => '',
-    dkim_header_list => '',
+    'dkim_header_list'     => '',
     web_recode_to          => 'filesystem_encoding',
+    'localedir'            => '',
 );
 
 ## These parameters now have a hard-coded value

@@ -112,12 +112,6 @@ our @params = (
         advice  => 'Better if not in a critical partition',
     },
     {
-        name    => 'localedir',
-        default => Sympa::Constants::LOCALEDIR,
-        query   => 'Directory containing available NLS catalogues (Message internationalization)',
-        file    => 'sympa.conf',
-    },
-    {
         name    => 'spool',
         default => Sympa::Constants::SPOOLDIR,
         query   => 'The main spool containing various specialized spools',
