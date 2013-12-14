@@ -135,26 +135,11 @@ sub load_config {
 		     'icons_url' => 'No more used. Using static_content/icons instead.');
 
     ## Valid params
-    my %default_conf = (arc_path => '/home/httpd/html/arc',
-			archive_default_index => 'thrd',
-			archived_pidfile => Sympa::Constants::PIDDIR . '/archived.pid',
-			bounce_path => '/var/bounce',
-			bounced_pidfile => Sympa::Constants::PIDDIR . '/bounced.pid',
-			cookie_domain => 'localhost',
-			cookie_expire => 0,
-			custom_archiver => '',
-			mhonarc => '/usr/bin/mhonarc',
-			review_page_size => 25,
-			viewlogs_page_size => 25,
-			task_manager_pidfile => Sympa::Constants::PIDDIR . '/task_manager.pid',
-			title => 'Mailing Lists Service',
-			use_fast_cgi => 1,
-			default_home => 'home',
-			log_facility => '',
-			robots => '',
-			password_case => 'sensitive',
-			htmlarea_url => '',
-			);
+    my %default_conf = map {
+	$_->{'name'} => $_->{'default'}
+    } grep {
+	exists $_->{'file'} and $_->{'file'} eq 'wwsympa.conf'
+    } @confdef::params;
 
     my $conf = \%default_conf;
 
@@ -169,7 +154,7 @@ sub load_config {
 	if (/^\s*(\S+)\s+(.+)$/i) {
 	    my ($k, $v) = ($1, $2);
 	    $v =~ s/\s*$//;
-	    if (defined ($conf->{$k})) {
+	    if (exists $conf->{$k}) {
 		$conf->{$k} = $v;
 	    }elsif (defined $old_param{$k}) {
 		&Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
@@ -194,14 +179,6 @@ sub load_config {
     if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
 	&Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
     }
-
-    # robots <robot_domain>,<http_host>,<robot title>(|<robot_domain>,<http_host>,<robot title>)+
-    foreach my $robot (split /\|/, $conf->{'robots'}) {
-	my ($domain,$host,$title) = split /\,/, $robot  ;
-	$conf->{'robot_domain'}{$host} = $domain;
-	$conf->{'robot_title'}{$domain} = $title;
-    }
-    
 
     return $conf;
 }

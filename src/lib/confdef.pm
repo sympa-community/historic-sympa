@@ -103,6 +103,7 @@ our @params = (
         file    => 'wwsympa.conf',
 	edit => '1',
         advice  =>'Better if not in a critical partition',
+        vhost   => 1,
     },
     {
         name    => 'bounce_path',
@@ -413,6 +414,7 @@ our @params = (
         query  => 'Password case (insensitive | sensitive)',
         file   => 'wwsympa.conf',
         advice => 'Should not be changed ! May invalid all user password',
+        vhost  => 1,
     },
     {
         name  => 'cookie_expire',
@@ -940,6 +942,40 @@ our @params = (
 	vhost   => '1',
         file  => 'sympa.conf',
         edit  => '1',
+    },
+    {
+        name    => 'archive_default_index',
+        default => 'thrd',
+        query   => 'Default index organization (thrd | mail)',
+        file    => 'wwsympa.conf',
+    },
+    {
+        'name'     => 'custom_archiver',
+        'optional' => '1',
+        'query'    => 'Activates a custom archiver to use instead of MHonArc. The value of this parameter is the absolute path on the file system to the script of the custom archiver.',
+        'file'     => 'wwsympa.conf',
+        'edit'     => '1',
+    },
+    {
+        'name'     => 'review_page_size',
+        'query'    => 'Default number of lines of the array displaying users in the review page',
+        #'vhost'    => '1', # not yet implemented
+        'default'  => 25,
+        'file'     => 'wwsympa.conf',
+    },
+    {
+        'name'     => 'viewlogs_page_size',
+        'query'    => 'Default number of lines of the array displaying the log entries in the logs page',
+        #'vhost'    => '1', # not yet implemented
+        'default'  => 25,
+        'file'     => 'wwsympa.conf',
+    },
+    {
+        'name'     => 'htmlarea_url',
+        'query'    => '',
+        'default'  => undef,
+        'file'     => 'wwsympa.conf',
+	'optional' => 1,
     },
     {
         name    => 'antispam_feature',
