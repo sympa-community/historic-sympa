@@ -1293,101 +1293,109 @@ sub probe_db {
 		    &do_log('info', 'Field %s added to table %s', $f, $t);
 		    $added_fields{$f} = 1;
 		    
-            if ($Conf::Conf{'db_type'} eq 'mysql') {
 		    ## Remove temporary DB field
 		    if ($real_struct{$t}{'temporary'}) {
-			unless ($dbh->do("ALTER TABLE $t DROP temporary")) {
-			    &do_log('err', 'Could not drop temporary table field : %s', $dbh->errstr);
+			if ($Conf::Conf{'db_type'} eq 'SQLite') {
+			    # FIXME:
+			    # SQLite doesn't support "ALTER TABLE DROP COLUMN".
+			} else {
+			    unless ($dbh->do(
+				"ALTER TABLE $t DROP COLUMN temporary"
+			    )) {
+				&do_log('err', 'Could not drop temporary table field : %s', $dbh->errstr);
+			    }
 			}
 			delete $real_struct{$t}{'temporary'};
 		    }
-            }
 		    
 		    next;
 		}
 		
 		## Change DB types if different and if update_db_types enabled
 		if ($Conf::Conf{'update_db_field_types'} eq 'auto') {
-			if (grep $_ eq $Conf::Conf{'db_type'}, qw(SQLite mysql)) {
-				unless (&check_db_field_type(effective_format => $real_struct{$t}{$f},
-							required_format => $db_struct{$Conf::Conf{'db_type'}}{$t}{$f})) {
-					push @report, sprintf('Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', 
-							$f, $t, $Conf::Conf{'db_name'}, $db_struct{$Conf::Conf{'db_type'}}{$t}{$f});
-					&do_log('notice', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', 
-							$f, $t, $Conf::Conf{'db_name'}, $db_struct{$Conf::Conf{'db_type'}}{$t}{$f});
+		    unless (&check_db_field_type(effective_format => $real_struct{$t}{$f},
+			required_format => $db_struct{$Conf::Conf{'db_type'}}{$t}{$f})) {
+			push @report, sprintf('Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', 
+			    $f, $t, $Conf::Conf{'db_name'}, $db_struct{$Conf::Conf{'db_type'}}{$t}{$f});
+			&do_log('notice', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', 
+			    $f, $t, $Conf::Conf{'db_name'}, $db_struct{$Conf::Conf{'db_type'}}{$t}{$f});
 				
-					my $options;
-					if ($not_null{$f}) {
-						$options .= 'NOT NULL';
-					}
-				
-					if ($Conf::Conf{'db_type'} eq 'mysql') {
-						push @report, sprintf("ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options");
-						&do_log('notice', "ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options");
-						unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options")) {
-							&do_log('err', 'Could not change field \'%s\' in table\'%s\'.', $f, $t);
-							&do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
-							return undef;
-						}
-					
-					}
-					if ($Conf::Conf{'db_type'} eq 'SQLite') {
-						my @oldfields = ();
-						foreach my $oldfield (keys %{$real_struct{$t}}) {
-							if (defined $db_struct{$Conf::Conf{'db_type'}}{${t}}{$oldfield}) {
-								push(@oldfields, $oldfield);
-							}
-						}
-						my $sqloldfields = join(", ", @oldfields);
-						my $sqlnewfieldstype = join(", ", map { "$_ $db_struct{$Conf::Conf{'db_type'}}{${t}}{$_}" } keys $db_struct{$Conf::Conf{'db_type'}}{${t}});
-
-						# SQLite doesn't support changes on columns types hence we use a dirty workaround here:
-						# we create a temporary table (a clone of the table containing the field to update)
-						# we dump all the data into it
-						# we create a new table with the right schema
-						# we copy all the data from the temporary table into the new one
-						# we delete the temporay table
-						# see: http://www.sqlite.org/faq.html#q11
-						&do_log('notice', 'Using a dirty trick to change SQLite data type see http://www.sqlite.org/faq.html#q11');
-						my $sqlcode = "DROP TABLE IF EXISTS ${t}_backup;";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						$sqlcode = "CREATE TEMPORARY TABLE ${t}_backup(${sqloldfields});";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						$sqlcode = "INSERT INTO ${t}_backup SELECT ${sqloldfields} FROM ${t};";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						$sqlcode = "DROP TABLE ${t};";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						$sqlcode = "CREATE TABLE ${t}(${sqlnewfieldstype});";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						$sqlcode = "INSERT INTO ${t} (${sqloldfields}) SELECT ${sqloldfields} FROM ${t}_backup;";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						my $toto = $dbh->do($sqlcode);
-						$sqlcode = "DROP TABLE ${t}_backup;";
-						push @report, $sqlcode;
-						&do_log('notice', $sqlcode);
-						$dbh->do($sqlcode);
-						# Update real structure
-						foreach my $newfield (sort keys $db_struct{$Conf::Conf{'db_type'}}{${t}}) {
-							$real_struct{$t}{$newfield} = $db_struct{$Conf::Conf{'db_type'}}{${t}}{$newfield};
-						}
-					}
-					push @report, sprintf('Field %s in table %s, structure updated', $f, $t);
-					&do_log('info', 'Field %s in table %s, structure updated', $f, $t);
-				}
+			my $options;
+			if ($not_null{$f}) {
+			    $options .= 'NOT NULL';
 			}
+				
+			if ($Conf::Conf{'db_type'} ne 'SQLite') {
+			    push @report, sprintf("ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options");
+			    &do_log('notice', "ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options");
+			    unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options")) {
+				&do_log('err', 'Could not change field \'%s\' in table\'%s\'.', $f, $t);
+				&do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
+				return undef;
+			    }
+					
+			} else { # SQLite
+			    my @oldfields = ();
+			    foreach my $oldfield (keys %{$real_struct{$t}}) {
+				if (defined $db_struct{$Conf::Conf{'db_type'}}{${t}}{$oldfield}) {
+				    push(@oldfields, $oldfield);
+				}
+			    }
+			    my $sqloldfields = join(", ", @oldfields);
+			    my $sqlnewfieldstype = join(", ", map { "$_ $db_struct{$Conf::Conf{'db_type'}}{${t}}{$_}" } keys $db_struct{$Conf::Conf{'db_type'}}{${t}});
+
+			    # SQLite doesn't support changes on columns types hence we use a dirty workaround here:
+			    # we create a temporary table (a clone of the table containing the field to update)
+			    # we dump all the data into it
+			    # we create a new table with the right schema
+			    # we copy all the data from the temporary table into the new one
+			    # we delete the temporay table
+			    # see: http://www.sqlite.org/faq.html#q11
+			    &do_log('notice', 'Using a dirty trick to change SQLite data type see http://www.sqlite.org/faq.html#q11');
+			    my $sqlcode = "DROP TABLE IF EXISTS ${t}_backup;";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    $sqlcode = "CREATE TEMPORARY TABLE ${t}_backup(${sqloldfields});";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    $sqlcode = "INSERT INTO ${t}_backup SELECT ${sqloldfields} FROM ${t};";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    $sqlcode = "DROP TABLE ${t};";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    $sqlcode = "CREATE TABLE ${t}(${sqlnewfieldstype});";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    $sqlcode = "INSERT INTO ${t} (${sqloldfields}) SELECT ${sqloldfields} FROM ${t}_backup;";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    my $toto = $dbh->do($sqlcode);
+			    $sqlcode = "DROP TABLE ${t}_backup;";
+			    push @report, $sqlcode;
+			    &do_log('notice', $sqlcode);
+			    $dbh->do($sqlcode);
+			    # Update real structure
+			    foreach my $newfield (sort keys $db_struct{$Conf::Conf{'db_type'}}{${t}}) {
+				$real_struct{$t}{$newfield} = $db_struct{$Conf::Conf{'db_type'}}{${t}}{$newfield};
+			    }
+			}
+			push @report, sprintf('Field %s in table %s, structure updated', $f, $t);
+			&do_log('info', 'Field %s in table %s, structure updated', $f, $t);
+		    }
+                } else {
+                    unless ($real_struct{$t}{$f} eq $db_struct{$Conf::Conf{'db_type'}}{$t}{$f}) {
+			&do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s).', $f, $t, $Conf::Conf{'db_name'}, $db_struct{$Conf::Conf{'db_type'}}{$t}{$f});
+			&do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
+                        return undef;
+		    }
 		}
-		}
+	    }
 	    if ($Conf::Conf{'db_type'} eq 'mysql') {
 		## Check that primary key has the right structure.
 		my $should_update;
