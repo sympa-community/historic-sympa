@@ -7341,8 +7341,8 @@ sub do_arc {
     &wwslog('info', 'do_arc(%s, %s)', $in{'month'}, $in{'arc_file'});
     my $latest;
     
-    my $index = $session->{'arc_mode'} ;
-    unless ($index) {$index = $wwsconf->{'archive_default_index'};}
+    my $index = $session->{'arc_mode'} || $wwsconf->{'archive_default_index'};
+    $index = 'thrd' unless $index and $index =~ /^(thrd|mail)$/;
 
     ## Clean arc_file
     if ($in{'arc_file'} eq '/') {
