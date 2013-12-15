@@ -27,13 +27,21 @@ use Sympa::Constants;
 ## This defines the parameters to be edited :
 ##   title  : Title for the group of parameters following
 ##   name   : Name of the parameter
-##   default: Default value
+##   file   : Conf file where the parameter is defined.  If omitted, the
+##            parameter won't be added automatically to the config file, even
+##            if a default is set.
+##            "wwsympa.conf" is a synonym of "sympa.conf".  It remains there
+##            in order to migrating older versions of config.
+##   default: Default value : DON'T SET AN EMPTY DEFAULT VALUE ! It's useless
+##            and can lead to errors on fresh install.
 ##   query  : Description of the parameter
-##   file   : Conf file where the param. is defined
-##   vhost   : 1|0 : if 1, the parameter can have a specific value in a virtual host
-##   db   : 'db_first','file_first','no'
-##   edit   : 1|0
 ##   advice : Additionnal advice concerning the parameter
+##   sample : FIXME FIXME
+##   edit   : 1|0: FIXME FIXME
+##   optional: 1|0: FIXME FIXME
+##   vhost  : 1|0 : if 1, the parameter can have a specific value in a
+##            virtual host
+##   db     : 'db_first', 'file_first', 'no'
 
 our @params = (
     { title => 'Directories and file location' },
@@ -133,7 +141,7 @@ our @params = (
     },
     {
         name    => 'queuedistribute',
-	file    => 'sympa.conf'
+	file    => 'sympa.conf',
     },
     {
         name    => 'queueautomatic',
@@ -186,8 +194,7 @@ our @params = (
     {
         name    => 'http_host',
         query   => 'URL to a virtual host.',
-        default => 'http://domain.tld',
-        default => 'http://domain.tld',
+        default => 'http://host.domain.tld',
 	vhost   => '1',
         edit    => '1',
         file    => 'sympa.conf',
@@ -488,7 +495,7 @@ our @params = (
     },
     {
         name    => 'automatic_list_removal',
-        default => '', ## Can be 'if_empty'
+        default => 'none', ## Can be 'if_empty'
         vhost   => '1',
     },
     {
@@ -507,16 +514,6 @@ our @params = (
     {
         name    => 'global_remind',
         default => 'listmaster',
-    },
-    {
-        name    => 'bounce_warn_rate',
-        default => '30',
-        file    => 'sympa.conf',
-    },
-    {
-        name    => 'bounce_halt_rate',
-        default => '50',
-        file    => 'sympa.conf',
     },
     {
         name    => 'bounce_email_prefix',
@@ -566,33 +563,34 @@ our @params = (
     { title => 'Errors management' },
     {
         name   => 'bounce_warn_rate',
-        sample => '20',
+        default => '30',
         query  => 'Bouncing email rate for warn list owner',
         file   => 'sympa.conf',
         edit   => '1',
     },
     {
         name   => 'bounce_halt_rate',
-        sample => '50',
+        default => '50',
         query  => 'Bouncing email rate for halt the list (not implemented)',
         file   => 'sympa.conf',
         advice => 'Not yet used in current version, Default is 50',
     },
     {
         name   => 'expire_bounce_task',
-        sample => 'daily',
+        default => 'daily',
         query  => 'Task name for expiration of old bounces',
         file   => 'sympa.conf',
     },
     {
         name   => 'welcome_return_path',
-        sample => 'unique',
+        default => 'owner',
         query  => 'Welcome message return-path',
         file   => 'sympa.conf',
         advice => 'If set to unique, new subcriber is removed if welcome message bounce',
     },
     {
         name   => 'remind_return_path',
+        default => 'owner',
         query  => 'Remind message return-path',
         file   => 'sympa.conf',
         advice => 'If set to unique, subcriber is removed if remind message bounce, use with care',
@@ -782,14 +780,6 @@ our @params = (
         file   => 'sympa.conf',
         edit   => '1',
         optional   => '1',
-    },
-    {
-        name    => 'chk_cert_expiration_task',
-        default => '',
-    },
-    {
-        name    => 'crl_update_task',
-        default => '',
     },
     {
         name    => 'ldap_force_canonical_email',
@@ -1029,7 +1019,9 @@ our @params = (
         default => 'fr,ca,be,ch,uk,edu,*,com',
     },
     {
-        name    => 'tmpdir',
+        'name'     => 'tmpdir',
+        'default'  => Sympa::Constants::SPOOLDIR . '/tmp',
+        'query'    => 'Temporary directory used by OpenSSL, antivirus plugins, mhonarc etc',
     },
     {
         name    => 'sleep',
@@ -1070,14 +1062,6 @@ our @params = (
     {
         name    => 'clean_delay_tmpdir',
         default => '7,'
-    },
-    {
-        name    => 'remind_return_path',
-        default => 'owner',
-    },
-    {
-        name    => 'welcome_return_path',
-        default => 'owner',
     },
     {
         name    => 'distribution_mode',
@@ -1253,8 +1237,11 @@ our @params = (
 	vhost   => '1',
     },
     {
-        name    => 'expire_bounce_task',
-        default => 'daily',
+        'name'     => 'list_check_helo',
+        'optional' => '1',
+        'query'    => 'SMTP HELO (EHLO) parameter used for alias verification',
+        'vhost'    => '1',
+        'advice'   => 'Default value is the host part of list_check_smtp parameter.',
     },
     {
         name    => 'purge_user_table_task',
@@ -1267,10 +1254,6 @@ our @params = (
     {
         name => 'purge_tables_task',
         default => 'daily',
-    },
-    {
-        name => 'logs_expiration_period',
-        default => 3,
     },
     {
         name    => 'purge_session_table_task',
@@ -1314,10 +1297,6 @@ our @params = (
     },
     {
         name    => 'default_archive_quota',
-        default => '',
-    },
-    {
-        name    => 'default_shared_quota',
         default => '',
     },
     {
@@ -1452,25 +1431,8 @@ our @params = (
 	default => 'off',
     },
     {
-        name    => 'use_blacklist',
-        default => 'send,subscribe',
-    },
-    {
-        name    => 'static_content_url',
-        default => '/static-sympa',
-    },
-    {
-        name    => 'static_content_path',
-        default => Sympa::Constants::EXPLDIR . '/static_content',
-    },
-    {
         name    => 'filesystem_encoding',
         default => 'utf-8',
-    },
-    {
-        name    => 'cache_list_config',
-        default => 'none',
-        advice  => 'none | binary_file',
     },
     {
         name    => 'lock_method',
@@ -1491,8 +1453,14 @@ our @params = (
         vhost => '1',
 	file   => 'sympa.conf',
     },
-
-
-
+## Not implemented yet.
+##    {
+##        name    => 'chk_cert_expiration_task',
+##        default => '',
+##    },
+##    {
+##        name    => 'crl_update_task',
+##        default => '',
+##    },
 );
 
