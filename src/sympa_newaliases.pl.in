@@ -66,10 +66,17 @@ if ( $aliases_program =~ m{\A/} ) {
     }
     exec q{--MAKEMAP--}, $aliases_db_type, $aliases_file;
 } elsif ( $aliases_program eq 'newaliases' ) {
-    do_log( 'debug2', 'executing "%s"', q{--NEWALIASES-- --NEWALIASES_ARG--} );
+    do_log( 'debug2', 'executing "%s"',
+        q{--NEWALIASES-- --NEWALIASES_ARG--} );
 
-    # exec() must have multiple arguments to avoid shell metacharacters.
-    exec q{--NEWALIASES--}, q{--NEWALIASES_ARG--};
+    # Some newaliases utilities e.g. with Postfix cannot take arguments.
+    # OTOH if it may take arg, exec() must take separate one to avoid shell
+    # metacharacters.
+    if (q{--NEWALIASES_ARG--}) {
+        exec q{--NEWALIASES--}, q{--NEWALIASES_ARG--};
+    } else {
+        exec q{--NEWALIASES--};
+    }
 } elsif ( $aliases_program eq 'postalias' ) {
     do_log( 'debug2', 'executing "%s %s:%s"',
         q{--POSTALIAS--}, $aliases_db_type, $aliases_file );
