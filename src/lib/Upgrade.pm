@@ -1342,7 +1342,7 @@ sub probe_db {
 				}
 			    }
 			    my $sqloldfields = join(", ", @oldfields);
-			    my $sqlnewfieldstype = join(", ", map { "$_ $db_struct{$Conf::Conf{'db_type'}}{${t}}{$_}" } keys $db_struct{$Conf::Conf{'db_type'}}{${t}});
+			    my $sqlnewfieldstype = join(", ", map { "$_ $db_struct{$Conf::Conf{'db_type'}}{$t}{$_}" } keys %{$db_struct{$Conf::Conf{'db_type'}}{$t}});
 
 			    # SQLite doesn't support changes on columns types hence we use a dirty workaround here:
 			    # we create a temporary table (a clone of the table containing the field to update)
@@ -1381,8 +1381,8 @@ sub probe_db {
 			    &do_log('notice', $sqlcode);
 			    $dbh->do($sqlcode);
 			    # Update real structure
-			    foreach my $newfield (sort keys $db_struct{$Conf::Conf{'db_type'}}{${t}}) {
-				$real_struct{$t}{$newfield} = $db_struct{$Conf::Conf{'db_type'}}{${t}}{$newfield};
+			    foreach my $newfield (sort keys %{$db_struct{$Conf::Conf{'db_type'}}{$t}}) {
+				$real_struct{$t}{$newfield} = $db_struct{$Conf::Conf{'db_type'}}{$t}{$newfield};
 			    }
 			}
 			push @report, sprintf('Field %s in table %s, structure updated', $f, $t);
