@@ -692,6 +692,7 @@ our @params = (
     ##{ default_max_list_members: not yet implemented. },
     {
         'name'  => 'default_shared_quota',
+        'optional' => '1',
         'query' => 'Default disk quota for shared repository',
 	'vhost'   => '1',
         'file'  => 'sympa.conf',
