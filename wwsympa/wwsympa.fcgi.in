@@ -16285,6 +16285,9 @@ sub do_viewlogs {
 		my $line = &Log::get_first_db_log($select); 
 		while(defined $line->{'date'}) {
 			$line->{'date'} = gettext_strftime "%d %b %Y %H:%M:%S", localtime($line->{'date'});
+			# can be wrapped
+			$line->{'parameters'} =~ s/,(?!\s)/, /g
+			    if $line->{'parameters'};
 			push @{$param->{'log_entries'}}, $line;
 			$line = &Log::get_next_db_log();
 		}
