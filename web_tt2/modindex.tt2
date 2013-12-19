@@ -52,7 +52,7 @@
  [%|loc%]Please select one or more topic(s) that correspond to the messages you wish to distribute:[%END%] 
  <br />
  [% FOREACH t = available_topics %]
- <input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
+ <input id="topic_[%t.name%]" type="checkbox" name="topic_[%t.name%]" value="1" /> <label for="topic_[%t.name%]">[% t.title %] </label>
  <br />
  [%- END- %]
  <br />
