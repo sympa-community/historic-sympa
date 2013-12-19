@@ -12333,8 +12333,9 @@ sub remove_aliases {
     my $self = shift;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}})
-		&& ($Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
+	unless $self and
+	    $list_of_lists{$self->{'domain'}}{$self->{'name'}} and
+	    Conf::get_robot_conf($self->{'domain'}, 'sendmail_aliases') !~ /^none$/i;
     
     my $alias_manager = $Conf::Conf{'alias_manager'};
     

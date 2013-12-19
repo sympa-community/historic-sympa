@@ -565,16 +565,20 @@ our @params = (
     {
         'name' => 'sendmail_aliases',
         'default' => Sympa::Constants::SENDMAIL_ALIASES,
+        'query'   => 'Path of the file that contains all list related aliases',
+        'vhost'   => '1',
     },
     {
         'name' => 'aliases_program',
         'default' => 'newaliases',
-        'query' => 'Program used to update aliases database.  "makemap", "newaliases", "postalias", "postmap" or full path to custom program.',
+        'query' => 'Program used to update alias database.  "makemap", "newaliases", "postalias", "postmap" or full path to custom program',
+        'vhost'   => '1',
     },
     {
         'name' => 'aliases_db_type',
         'default' => 'hash',
-        'query' => 'Type of aliases database.  "btree", "dbm", "hash" and so on.  Available when aliases_program is "makemap", "postalias" or "postmap".',
+        'query' => 'Type of alias database.  "btree", "dbm", "hash" and so on.  Available when aliases_program is "makemap", "postalias" or "postmap"',
+        'vhost'   => '1',
     },
     {
         'name'    => 'rfc2369_header_fields',
