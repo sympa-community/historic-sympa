@@ -1,1 +1,1 @@
-<label for="template.intranet_list">[%|loc%]Mailing list for intranets[%END%]</label>
+<label for="template.[%template.key%]">[%|loc%]Mailing list for intranets[%END%]</label>
