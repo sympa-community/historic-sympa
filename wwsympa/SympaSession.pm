@@ -782,7 +782,9 @@ sub encrypt_session_id {
     my $id_session = shift;
 
     my $cipher = tools::ciphersaber_installed();
-    return $id_session unless $cipher;
+    unless ($cipher) {
+	return "5e55$id_session";
+    }
     return unpack 'H*', $cipher->encrypt(pack 'H*', $id_session);
 }
 
@@ -793,7 +795,10 @@ sub decrypt_session_id {
     return undef unless $cookie and $cookie =~ /\A(?:[0-9a-f]{2})+\z/;
 
     my $cipher = tools::ciphersaber_installed();
-    return $cookie unless $cipher;
+    unless ($cipher) {
+	return undef unless $cookie =~ s/\A5e55//;
+	return $cookie;
+    }
     return unpack 'H*', $cipher->decrypt(pack 'H*', $cookie);
 }
 
