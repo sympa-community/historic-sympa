@@ -24,6 +24,7 @@ package SQLSource;
 use strict;
 
 use Carp;
+use DBI;
 use Exporter;
 
 use Conf;
@@ -85,12 +86,6 @@ sub connect {
     	$param = $self->{'param'};
     }
     
-    unless ( eval "require DBI" ){
-	do_log('err',"Unable to use DBI library, install DBI (CPAN) first");
-	return undef ;
-    }
-    require DBI;
-
     $param->{'db_host'} ||= $param->{'host'};
     $param->{'db_user'} ||= $param->{'user'};
     $param->{'db_passwd'} ||= $param->{'passwd'};
