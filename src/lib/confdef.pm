@@ -653,7 +653,7 @@ our @params = (
         'query' => 'Default priority for a packet to be sent by bulk.',
         'file'  => 'sympa.conf',
         'default' => '5',
-        #vhost => '1', #FIXME:robot config and default are referred inconsistently.
+        vhost => '1',
     },
     {
         'name'    => 'bulk_fork_threshold',

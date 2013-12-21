@@ -669,7 +669,7 @@ sub sending {
     my $sign_mode = $params{'sign_mode'};
     my $sympa_email =  $params{'sympa_email'};
     my $priority_message =  $params{'priority'};
-    my $priority_packet = $Conf::Conf{'sympa_packet_priority'};
+    my $priority_packet = Conf::get_robot_conf($robot, 'sympa_packet_priority');
     my $delivery_date = $params{'delivery_date'};
     $delivery_date = time() unless ($delivery_date); 
     my $verp  =  $params{'verp'};
