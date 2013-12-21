@@ -68,8 +68,16 @@ my %old_params = (
     queueexpire            => '',
     clean_delay_queueother => '',
     'dkim_header_list'     => '',
-    web_recode_to          => 'filesystem_encoding',
+    web_recode_to          => 'filesystem_encoding', # ??? - 5.2
     'localedir'            => '',
+    'ldap_export_connection_timeout' => '',          # 3.3b3 - 4.1?
+    'ldap_export_dnmanager' => '',                   # ,,
+    'ldap_export_host'     => '',                    # ,,
+    'ldap_export_name'     => '',                    # ,,
+    'ldap_export_password' => '',                    # ,,
+    'ldap_export_suffix'   => '',                    # ,,
+    'tri'                  => 'sort',                # ??? - 1.3.4-1
+    'sort'                 => '',                    # 1.4.0 - ???
 );
 
 ## These parameters now have a hard-coded value

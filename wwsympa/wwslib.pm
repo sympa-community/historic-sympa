@@ -132,7 +132,9 @@ sub load_config {
     ## Old params
     my %old_param = ('alias_manager' => 'No more used, using '.$Conf{'alias_manager'},
 		     'wws_path' => 'No more used',
-		     'icons_url' => 'No more used. Using static_content/icons instead.');
+		     'icons_url' => 'No more used. Using static_content/icons instead.',
+		    'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+    );
 
     ## Valid params
     my %default_conf = map {
