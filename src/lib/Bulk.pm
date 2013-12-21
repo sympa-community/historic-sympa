@@ -127,13 +127,11 @@ sub next {
 	return undef;
     }
     
-    my $rv = $sth->execute;
-    if ($rv < 0) {
+    unless ($sth->execute) {
 	do_log('err','Unable to lock bulk packet: "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
-    $sth->finish;
-    unless ($rv) {
+    if ($sth->rows == 0) {
 	do_log('info','Bulk packet is already locked');
 	return undef;
     }
