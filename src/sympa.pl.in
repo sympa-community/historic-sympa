@@ -1325,7 +1325,15 @@ sub DoFile {
             my $dyn_family;
             unless ($dyn_family = new Family($dyn_list_family,$robot)) {
                 &do_log('err', "Failed to process $file : family $dyn_list_family does not exist, impossible to create the dynamic list.");
-		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $file : family $dyn_list_family does not exist, impossible to create the dynamic list."]);
+		&List::send_notify_to_listmaster(
+		    'automatic_list_creation_failed',
+		    $robot,
+		    {   'family' => $dyn_list_family,
+			'robot' => $robot,
+			'msg_id' => $msg_id,
+		    }
+		);
+		# FIXME: send DSN.
 		&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
 		return undef;
             }
@@ -1337,9 +1345,17 @@ sub DoFile {
 		$dyn_just_created = 1;
 	    }else {
 		&Log::do_log('err', 'Unable to create list %s. Message %s ignored.', $listname,'msg_id' => $hdr->get('Message-Id'));
-		&report::reject_report_msg('intern',"Message ignored because automatic list '$listname' creation could not be performed.",$sender,
-					   {'msg_id' => $hdr->get('Message-Id'),'message' => $message}, $dyn_family->{'robot'},$message->{'msg_as_string'});
-		&List::send_notify_to_listmaster('automatic_list_creation_failed',$dyn_family->{'robot'},["Failed to process $file"]);
+		&List::send_notify_to_listmaster(
+		    'automatic_list_creation_failed',
+		    $dyn_family->{'robot'},
+		    {   'listname' => $listname,
+			'family' => $dyn_list_family,
+			'robot' => $robot,
+			'msg_id' => $msg_id,
+		    }
+		);
+		# FIXME: send DSN.
+		&report::reject_report_msg('user','dyn_cant_create',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
 		&Log::db_log({'robot' => $dyn_family->{'robot'},'list' => $listname,'action' => 'DoFile',
 			      'parameters' => $hdr->get('Message-Id').",$dyn_family->{'robot'}",'target_email' => '','msg_id' => hdr->get('Message-Id'),'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef ;
