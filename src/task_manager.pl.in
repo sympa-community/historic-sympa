@@ -114,7 +114,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-&tools::write_pid($wwsconf->{'task_manager_pidfile'}, $$, $options);
+tools::write_pid('task_manager', $$, $options);
 
 $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'task_manager');
@@ -389,7 +389,7 @@ while (!$end) {
 }
 
 &do_log ('notice', 'task_manager exited normally due to signal'); 
-&tools::remove_pid($wwsconf->{'task_manager_pidfile'}, $$);
+tools::remove_pid('task_manager', $$);
 
 exit(0);
 

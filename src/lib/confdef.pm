@@ -410,29 +410,29 @@ our @params = (
         'query'   => 'Communication mode with syslogd (unix | inet)',
         'file'    => 'sympa.conf',
     },
-    {
-        'name'    => 'pidfile',
-        'default' => Sympa::Constants::PIDDIR . '/sympa.pid',
-        'query'   => 'File containing Sympa PID while running.',
-        'file'    => 'sympa.conf',
-        'advice'  => 'Sympa also locks this file to ensure that it is not running more than once. Caution : user sympa need to write access without special privilegee.',
-    },
-    {
-        'name'    => 'pidfile_distribute',
-        'default' => Sympa::Constants::PIDDIR . '/sympa-distribute.pid',
-        'file'    => 'sympa.conf',
-    },
-    {
-        'name'    => 'pidfile_creation',
-        'default' => Sympa::Constants::PIDDIR . '/sympa-creation.pid',
-	'file'    => 'sympa.conf',
-    },
-    {
-        'name'  => 'task_manager_pidfile',
-        'default' => Sympa::Constants::PIDDIR . '/task_manager.pid',
-        'query' => 'File containing task_manager PID while running.',
-        'file'  => 'wwsympa.conf',
-    },
+##    {
+##        'name'    => 'pidfile',
+##        'default' => Sympa::Constants::PIDDIR . '/sympa.pid',
+##        'query'   => 'File containing Sympa PID while running.',
+##        'file'    => 'sympa.conf',
+##        'advice'  => 'Sympa also locks this file to ensure that it is not running more than once. Caution : user sympa need to write access without special privilegee.',
+##    },
+##    {
+##        'name'    => 'pidfile_distribute',
+##        'default' => Sympa::Constants::PIDDIR . '/sympa-distribute.pid',
+##        'file'    => 'sympa.conf',
+##    },
+##    {
+##        'name'    => 'pidfile_creation',
+##        'default' => Sympa::Constants::PIDDIR . '/sympa-creation.pid',
+##        'file'    => 'sympa.conf',
+##    },
+##    {
+##        'name'  => 'task_manager_pidfile',
+##        'default' => Sympa::Constants::PIDDIR . '/task_manager.pid',
+##        'query' => 'File containing task_manager PID while running.',
+##        'file'  => 'wwsympa.conf',
+##    },
     {
         'name'    => 'log_condition',
         'optional' => '1',
@@ -643,11 +643,11 @@ our @params = (
 
     { 'title' => 'Bulk mailer' },
 
-    {
-        'name'    => 'pidfile_bulk',
-        'default' => Sympa::Constants::PIDDIR . '/bulk.pid',
-	'file'    => 'sympa.conf',
-    },
+##    {
+##        'name'    => 'pidfile_bulk',
+##        'default' => Sympa::Constants::PIDDIR . '/bulk.pid',
+##        'file'    => 'sympa.conf',
+##    },
     {
         'name'  => 'sympa_packet_priority',
         'query' => 'Default priority for a packet to be sent by bulk.',
@@ -833,6 +833,12 @@ our @params = (
 
     { 'title' => 'Internationalization related' },
 
+##    {
+##        name    => 'localedir',
+##        default => Sympa::Constants::LOCALEDIR,
+##        query   => 'Directory containing available NLS catalogues (Message internationalization)',
+##        file    => 'sympa.conf',
+##    },
     {
         'name'    => 'supported_lang',
         'default' => 'ca,cs,de,el,es,et_EE,en,fr,fi,hu,it,ja_JP,ko,nl,nb_NO,oc,pl,pt_BR,ru,sv,tr,vi,zh_CN,zh_TW',
@@ -895,12 +901,12 @@ our @params = (
         'file'    => 'wwsympa.conf',
         'advice'  => 'Better if not in a critical partition',
     },
-    {
-        'name'   => 'bounced_pidfile',
-        'default' => Sympa::Constants::PIDDIR . '/bounced.pid',
-        'query'  => 'File containing bounced PID while running.',
-        'file'   => 'wwsympa.conf',
-    },
+##    {
+##        'name'   => 'bounced_pidfile',
+##        'default' => Sympa::Constants::PIDDIR . '/bounced.pid',
+##        'query'  => 'File containing bounced PID while running.',
+##        'file'   => 'wwsympa.conf',
+##    },
     {
         'name'   => 'expire_bounce_task',
         'default' => 'daily',
@@ -1370,12 +1376,12 @@ our @params = (
         'file'    => 'wwsympa.conf',
         'edit'    => '1',
     },
-    {
-        'name'   => 'archived_pidfile',
-        'default' => Sympa::Constants::PIDDIR . '/archived.pid',
-        'query'  => 'File containing archived PID while running.',
-        'file'   => 'wwsympa.conf',
-    },
+##    {
+##        'name'   => 'archived_pidfile',
+##        'default' => Sympa::Constants::PIDDIR . '/archived.pid',
+##        'query'  => 'File containing archived PID while running.',
+##        'file'   => 'wwsympa.conf',
+##    },
     {
         'name'  => 'cookie_expire',
         'default' => '0',

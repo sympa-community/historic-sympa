@@ -134,6 +134,9 @@ sub load_config {
 		     'wws_path' => 'No more used',
 		     'icons_url' => 'No more used. Using static_content/icons instead.',
 		    'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+		     'task_manager_pidfile' => 'No more used',
+		     'bounced_pidfile' => 'No more used',
+		     'archived_pidfile' => 'No more used',
     );
 
     ## Valid params

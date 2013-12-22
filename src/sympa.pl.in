@@ -336,15 +336,16 @@ if ($signal ne 'hup') {
     do_log('debug', "Running server $$ for $service purpose ");
     unless ($main::options{'batch'} ) {
 
-	## Create and write the pidfile
-	my $file = $Conf{'pidfile'};
-	$file = $Conf{'pidfile_distribute'} if ($main::daemon_usage == DAEMON_MESSAGE) ;
-	$file = $Conf{'pidfile_creation'} if ($main::daemon_usage == DAEMON_CREATION) ;
+	## Create and write the PID file
+	my $file = 'sympa';
+	$file = 'sympa-distribute' if $main::daemon_usage == DAEMON_MESSAGE;
+	$file = 'sympa-creation' if $main::daemon_usage == DAEMON_CREATION;
 
-	## If process is running in foreground, don't write STDERR to a dedicated file
+	## If process is running in foreground, don't write STDERR to a
+	## dedicated file
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-	&tools::write_pid($file, $$, $options);
+	tools::write_pid($file, $$, $options);
     }	
 
 
@@ -1153,10 +1154,10 @@ List::db_disconnect if ($List::dbh);
 } #end of block while ($signal ne 'term'){
 
 do_log('notice', 'Sympa exited normally due to signal');
-my $file = $Conf{'pidfile'};
-$file = $Conf{'pidfile_distribute'} if ($main::daemon_usage == DAEMON_MESSAGE) ;
-$file = $Conf{'pidfile_creation'} if ($main::daemon_usage == DAEMON_CREATION) ;
-&tools::remove_pid($file, $$);
+my $file = 'sympa';
+$file = 'sympa-distribute' if $main::daemon_usage == DAEMON_MESSAGE;
+$file = 'sympa-creation' if $main::daemon_usage == DAEMON_CREATION;
+tools::remove_pid($file, $$);
 
 exit(0);
 

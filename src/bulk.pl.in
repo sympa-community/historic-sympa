@@ -117,8 +117,8 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 $options->{'multiple_process'} = 0;
 
-# Saves the pid number
-&tools::write_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);
+# Saves the PID number
+tools::write_pid('bulk', $$, $options);
 
 ## Set the UserID & GroupID for the process
 $( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -179,10 +179,10 @@ while (!$end) {
 	    
 	    ## Start new processes if at least 'bulk_fork_threshold' (sympa.conf parameter) in the bulkmailer_table table
 	    ## Only if no bulk child process is still running
-	    my $number_of_pids = &tools::get_number_of_pids($Conf::Conf{'pidfile_bulk'});
+	    my $number_of_pids = tools::get_number_of_pids('bulk');
 	    unless (defined($number_of_pids)){
-		&tools::write_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);
-		$number_of_pids = &tools::get_number_of_pids($Conf::Conf{'pidfile_bulk'});
+		tools::write_pid('bulk', $$, $options);
+		$number_of_pids = tools::get_number_of_pids('bulk');
 	    }
 	    if((my $r_packets = &Bulk::there_is_too_much_remaining_packets()) && defined($number_of_pids) && ($number_of_pids <= 1) ){
 		
@@ -197,7 +197,7 @@ while (!$end) {
 			if ((my $child_pid = fork) != 0) {
 			    do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
-			    &tools::write_pid($Conf::Conf{'pidfile_bulk'}, $child_pid, $options);
+			    tools::write_pid('bulk', $child_pid, $options);
 			    sleep 1; 
 			}else{
 			    ## We're in a child bulk process
@@ -338,7 +338,7 @@ while (!$end) {
     &mail::reaper;
 }
 do_log('notice', 'bulk.pl exited normally due to signal');
-&tools::remove_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);
+tools::remove_pid('bulk', $$, $options);
 
 exit(0);
 
