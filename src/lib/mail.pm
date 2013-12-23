@@ -168,8 +168,11 @@ sub mail_file {
 		last;
 	    }
 		
-	    foreach my $header ('date', 'to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
-		if ($line=~/^$header:/i) {
+	    foreach my $header (
+		qw(message-id date to from subject reply-to
+		mime-version content-type content-transfer-encoding)
+	    ) {
+		if ($line=~/^$header\s*:/i) {
 		    $header_ok{$header} = 1;
 		    last;
 		}
@@ -179,6 +182,10 @@ sub mail_file {
    
     ## ADD MISSING HEADERS
     my $headers="";
+
+    unless ($header_ok{'message-id'}) {
+	$headers .= sprintf("Message-Id: %s\n", tools::get_message_id($robot));
+    }
 
     unless ($header_ok{'date'}) {
 	my $now = time;
