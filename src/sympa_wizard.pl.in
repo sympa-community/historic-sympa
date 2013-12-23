@@ -302,7 +302,7 @@ sub check_cpan {
 				      usage => 'CAS Single Sign-On client libraries. Required if you configure Sympa to delegate web authentication to a CAS server.',
 				     },
 			'CGI' => {
-				  required_version =>'3.35',
+				  required_version =>'3.51',
 				  package_name => 'CGI',
 				  mandatory => 1,
 				  usage => 'required to run Sympa web interface',

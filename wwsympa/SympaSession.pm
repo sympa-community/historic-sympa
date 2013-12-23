@@ -749,15 +749,24 @@ sub soap_cookie2 {
     $expire ||= 600; ## 10 minutes
 
     if ($http_domain eq 'localhost') {
-	$cookie = sprintf "%s=%s; Path=/; Max-Age=%s",
-	    'sympa_session', $value, $expire;
+	$cookie = CGI::Cookie->new(
+	    -name => 'sympa_session',
+	    -value => $value,
+	    -path => '/',
+	);
+	$cookie->max_age(time + $expire); # needs CGI >= 3.51.
     } else {
-	$cookie = sprintf "%s=%s; Domain=%s; Path=/; Max-Age=%s",
-	    'sympa_session', $value, $http_domain, $expire;
+	$cookie = CGI::Cookie->new(
+	    -name => 'sympa_session',
+	    -value => $value,
+	    -domain => $http_domain,
+	    -path => '/',
+	);
+	$cookie->max_age(time + $expire); # needs CGI >= 3.51.
     }
 
     ## Return the cookie value
-    return $cookie;
+    return $cookie->as_string;
 }
 
 sub get_random {
