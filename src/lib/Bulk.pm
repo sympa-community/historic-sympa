@@ -31,7 +31,6 @@ use Time::HiRes qw(time);
 use Time::Local;
 use MIME::Entity;
 use MIME::EncWords;
-use MIME::WordDecoder;
 use MIME::Parser;
 use MIME::Base64;
 use Term::ProgressBar;
@@ -275,8 +274,8 @@ sub merge_msg {
     }
     ## Get the Content-Type / Charset / Content-Transfer-encoding of a message
     my $type      = $entity->mime_type;
-    my $charset   = &MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
-    my $encoding  = &MIME::WordDecoder::unmime($entity->head->mime_encoding);
+    my $charset   = $entity->head->mime_attr('content-type.charset');
+    my $encoding  = $entity->head->mime_encoding;
 
     my $message_output;
     my $IO;
