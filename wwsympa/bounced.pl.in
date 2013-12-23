@@ -251,15 +251,23 @@ while (!$end) {
 	$parser->output_to_core(1);
 	my $entity = $parser->read(\*BOUNCE);
 	my $head = $entity->head;
-	my $to = $head->get('to', 0);
+
+	## Some MTAs decorate To: field of DSN as "mailbox <address>".
+	## Pick address only.
+	my $to;
+	my $to_header = $head->get('to', 0);
+	if ($to_header) {
+	    my @to = Mail::Address->parse($to_header);
+	    if (@to and $to[0] and $to[0]->address) {
+		$to = $to[0]->address;
+	    }
+	}
+
 	close BOUNCE ; 
 
 	my $who;
-	chomp $to;	
 	&do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%sxx',$to,$Conf{'bounce_email_prefix'});
-	$to =~ s/<//;
-	$to =~ s/>//;
-	if ($to =~ /^$Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
+	if ($to and $to =~ /^$Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
 
 	    my $local_part = $1;
 	    my $robot = $2;
