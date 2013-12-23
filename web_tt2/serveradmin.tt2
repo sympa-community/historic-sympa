@@ -120,7 +120,7 @@
 [% END %] 
 
 [% IF subaction == 'logs' %]
-<h2>[%|loc%]Logs[%END%]</h2><br />
+<h2>[%|loc%]System logs[%END%]</h2><br />
 <div>
 [%|loc%]You can increase the log level specified by configuration only for your current session. On a production server, this allow to keep logs rather small and to test some features with the maximum log level. [%END%]<br/>
 
