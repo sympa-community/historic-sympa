@@ -314,7 +314,7 @@ sub check_cpan {
 						},
 			'DB_File' => {
 				      required_version =>'1.75',
-				      package_name => 'DB_FILE',
+				      package_name => 'DB_File',
 				      mandatory => 1,
 				      usage => ' used for maintaining snapshots of list members',
 				     },
@@ -343,7 +343,7 @@ sub check_cpan {
 			'DBD::mysql' => {
 					 required_version =>'4.008',
 					 prerequisites => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
-					 package_name => 'Msql-Mysql-modules',
+					 package_name => 'DBD-mysql',
 					 mandatory => 1,
 					 usage => 'Mysql database driver, required if you connect to a Mysql database.\nYou first need to install the Mysql server and have it started before installing the Perl DBD module.',
 					},
