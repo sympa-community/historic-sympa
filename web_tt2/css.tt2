@@ -1,12 +1,10 @@
-[% IF css == 'style.css' || custom_css || session.custom_css %]
-[% IF custom_css || session.custom_css %]
-[% FOREACH color  IN ['color_0' 'color_1' 'color_2' 'color_3''color_4' 'color_5' 'color_6' 'color_7' 'color_8''color_9' 'color_10' 'color_11' 'color_12' 'color_13' 'color_14' 'color_15'] %]
-  [% IF session.$color %]
-	[% $color = session.$color %] 
-  [% END %]
-  /* [% $color %] */
-[% END %]
-[% END %]
+[% IF css == 'style.css' || custom_css || session.custom_css -%]
+[% IF custom_css || session.custom_css -%]
+[% FOREACH color  IN ['color_0' 'color_1' 'color_2' 'color_3''color_4' 'color_5' 'color_6' 'color_7' 'color_8''color_9' 'color_10' 'color_11' 'color_12' 'color_13' 'color_14' 'color_15'] -%]
+[% IF session.$color %][% SET $color = session.$color %][% END -%]
+/* [% color %]: [% $color %] */
+[% END -%]
+[% END -%]
 
 @media screen {  }
 * {
@@ -16,7 +14,6 @@
     padding: 0;
     margin: 0;
     }
-
 
 html,
 body {
@@ -42,12 +39,20 @@ dl {
 
 /* ########## Blocks, id and class ########## */
 
+/*Top anchor*/
+#TopAnchor {
+             position: absolute;
+             top: 0;
+             }
+
 /*Global container*/
 #Canvas {
 	  min-height: 95%;
 	  position:relative;
           width: 98%;
           margin: 0 0.8em -5em 0.8em;
+          /* if IE <= 7 zoom:1; */
+          zoom: 1;
           }
 
 /* Menus Block*/
@@ -63,6 +68,7 @@ dl {
 /*Content Block*/
 #Stretcher {
 	     margin-left:25em;
+             margin-right: 0;
              margin-top:1em;
              text-align: left;
              }
@@ -84,7 +90,7 @@ dl {
                 font-size: 1em;
                 text-align: left;
                 vertical-align: top;
-                padding-bottom: 0px;
+                /* padding-bottom: 0px; */
                 padding-top: 5px;
                 padding-left: 5px;
                 padding-right: 5px; 
@@ -97,8 +103,12 @@ dl {
                  border-radius:4px;
                 }
 
+#ActionHeader #MainMenuLinks {
+                               border: none;
+                               }
+
 #ActionHeader span.search_form {
-				margin-top:1em;
+                                 margin-bottom:1em;
 				}
 
 #Clock {
@@ -121,6 +131,11 @@ dl {
         left:4em;
         z-index:510;
         }
+
+#logo img {
+            float: left;
+            }
+
 /*Robot title*/
 
 #Title {
@@ -159,6 +174,7 @@ ul#MainMenuLinks {
                    border-bottom:1px solid [% color_8 %];
                    float:right; width:100% ;
                    margin-top:1em;
+                   margin-left: 0;
                    }
 
 ul#MainMenuLinks li {
@@ -214,7 +230,6 @@ td.text_right {
 
 .list_panel,
 #list_admin_menu { 
-                   font-size: 1.4em; 
                    font-weight: bold;
                    border: 1px solid [% color_12 %];
                    padding:0.5em;
@@ -229,6 +244,9 @@ td.text_right {
              font-size: 1.2em;
 	     margin-bottom:0.5em
              }
+#list_admin_menu {
+                   font-size: 1.4em;
+                   }
 
 .list_panel ul,
 #list_admin_menu ul {
@@ -306,7 +324,9 @@ td.review_cels_mail {
 .search_form, .edit_list_request_help { 
                                         float: right;
                                         }
-
+.search_form {
+               text-align: center;
+               }
 #home_rss_news {
                  float: right;
                  }
@@ -354,6 +374,18 @@ td.review_cels_mail {
                   -icab-border-radius:4px;
                   border-radius:4px;
                   }
+
+/* Not yet implemented
+.news_container {
+                  background-color: [% color_3 %];
+                  border: 1px solid [% color_2 %];
+                  -moz-border-radius: 4px;
+                  -webkit-border-radius:4px;
+                  -KHTML-border-radius:4px;
+                  -icab-border-radius:4px;
+                  padding: 5px;
+                  }
+*/
 
 .edit_list_request_enum{ 
                          margin: 1em;
@@ -429,7 +461,7 @@ ul.no_style {
 .align_top { 
              vertical-align: top;
              }
-/*explanation bloc of the template &quot;ls_template.tt2&quot;*/
+/* explanation block of the template "ls_template.tt2" */
 #template_editor { 
                    margin-top: 10px;
                    }
@@ -470,7 +502,7 @@ ul.no_style {
                                        background-color: [% color_9 %];
                                        }
 
-/*ul of the &quot;help.tt2&quot; template*/
+/* ul of the "help.tt2" template */
 #help {
         padding-left: 10px;
         padding-top: 5px;
@@ -481,7 +513,7 @@ ul.no_style {
            padding: 1px;
            }
 
-/** menu &quot;ul&quot; &quot;li&quot; style **/
+/** menu "ul" "li" style **/
 #help_editfile, #blaklist { 
                             margin: 1em;
                             }
@@ -588,6 +620,7 @@ pre.code {
 #Footer {
           width:98%;
           height:1.5em;
+          line-height: 1.5em;
 	  position:relative;
           margin: 0 0.8em;
           background: [% color_12 %];
@@ -742,7 +775,7 @@ clear: both;
                   font-size: 1.1em;
                   }
 
-.ContentBlock &gt; * {
+.ContentBlock > * {
                        padding: 0px;
                        border-bottom: 0px dotted [% color_1 %];
                        text-align: left;
@@ -801,10 +834,13 @@ a:hover img.Pictures {
           text-align: center;
           margin: 1em 0 0 0;
           font-size: 1.2em;
+          /* if IE <= 6 zoom:1; */
+          zoom: 1;
           }
 
 .navBar .MainMenuLinks {
-                         padding:3px 5px 0px 5px!important;
+                         padding:2px 5px 1px 5px!important;
+                         position: relative; top: -1px;
                          -moz-border-radius:10px 10px 0 0;
                          -webkit-border-top-left-radius: 10px;
                          -webkit-border-top-right-radius: 10px;
@@ -893,7 +929,7 @@ a.dingbat {
                  text-decoration: none;
                  padding: 0 5px!important;
                  margin: 0;
-                 vertical-align:top;
+                 vertical-align: baseline;
                  cursor:pointer;
                  -moz-border-radius:10px;
                  -KHTML-border-radius:10px;
@@ -908,6 +944,8 @@ a.MainMenuLinks {
                   color:[% color_9 %];
                   text-decoration: none;
                   padding: 0px 5px 0px 5px;
+                  /* if IE <= 7 zoom:1; */
+                  zoom: 1;
                   }
 
 a.MainMenuLinks:hover {
@@ -925,7 +963,8 @@ a.MainMenuLinksCurrentPage {
                              border-bottom: 1px solid [% color_9 %];
                              color: [% color_8 %];
                              text-decoration: none;
-                             padding: 3px 5px 0px 5px;
+                             padding: 3px 5px 1px 5px;
+                             position: relative; top: -1px;
                              -moz-border-radius:10px 10px 0 0;
                              -webkit-border-top-left-radius: 10px;
                              -webkit-border-top-right-radius: 10px;
@@ -934,6 +973,8 @@ a.MainMenuLinksCurrentPage {
                              -KHTML-border-radius:10px 10px 0 0;
                              -icab-border-radius:10px 10px 0 0;
                              border-radius:10px 10px 0 0;
+                             /* if IE <= 7 zoom:1; */
+                             zoom: 1;
                              }
 
 a.MainMenuLinksCurrentPage:hover {
@@ -959,7 +1000,7 @@ a.actionMenuLinks {
                     background: [% color_9 %];
                     color:[% color_8 %] ;
                     text-decoration: none;
-                    padding: 0 5px!important;
+                    padding: 1px 5px !important;
                     margin: 0 0.5em 0 0;
                     cursor:pointer;
                     -moz-border-radius:10px;
@@ -967,6 +1008,7 @@ a.actionMenuLinks {
                     -webkit-border-radius:8px;
                     -icab-border-radius:10px;
                     border-radius:10px;
+                    white-space: nowrap;
                     }
 
 a.actionMenuLinks:hover {
@@ -981,6 +1023,7 @@ a.actionMenuLinksCurrentPage {
                                color: [% color_8 %];
                                text-decoration: none;
                                padding: 0px 10px 0px 10px;
+                               white-space: nowrap;
                                }
 
 a.actionMenuLinksCurrentPage:hover{
@@ -998,6 +1041,7 @@ a.actionMenuLinksInactive {
                             color: [% color_10 %];
                             text-decoration: none;
                             padding: 0px 10px 0px 10px;
+                            white-space: nowrap;
                             }
 
 a.actionMenuLinksInactive:hover {
@@ -1016,11 +1060,13 @@ a.actionMenuLinksInactive:hover {
                          padding: 0px 0px 0px 3px;
                          }
 
+/*
 a.ArcMenuLinks {
                  border: 1px solid [% color_2 %];
                  text-decoration: none;
                  padding: 0px 10px 0px 10px;
                  }
+*/
 
 a.ArcMenuLinks,
 a.ArcMenuLinks:visited,
@@ -1121,7 +1167,20 @@ a.ArcMenuLinksSortInactive {
 #ArcMenuLinksInactive {
                         border: 0px solid [% color_2 %];
                         text-decoration: none;
-                        padding: 0px 0px 0px 3px;}
+                        padding: 0px 0px 0px 3px;
+                        }
+
+/* Not yet implemented.
+.ArcActions {
+              float:right;
+              margin-top: -2.9em;
+              margin-right:0.5em
+              }
+
+.ArcActions form {
+                   border: none!important;
+                   }
+*/
 
 .block {
          border: 1px dotted [% color_2 %];
@@ -1134,7 +1193,7 @@ a.ArcMenuLinksSortInactive {
          border-radius:4px;
          }
 
-.block form {
+.block form, .block .form {
               border:1px solid [% color_11 %];
               margin:0.5em 0;
               -moz-border-radius:4px;
@@ -1147,6 +1206,21 @@ a.ArcMenuLinksSortInactive {
 .block form fieldset {
                        padding:0.5em;
                        }
+
+.block .form {
+               padding: 0.5em;
+               }
+
+form.inline {
+              display: inline;
+              border-width: 0 !important;
+              margin: 0;
+              padding: 0;
+              }
+
+form.inline .MainMenuLinks {
+                             margin-top: 1px;
+                             }
 
 .block blockquote {
 	margin: 16px 40px;
@@ -1197,7 +1271,6 @@ h7 strong {
 
 .listTitle a,
 .listTitle a:hover  {
-	              color:[% color_2 %];
 		      font-weight:bold;
 		      letter-spacing: 0.1em;
 		      text-decoration:none;
@@ -1205,6 +1278,9 @@ h7 strong {
 		      border:none!important;
         	     }
 
+.listTitle a {
+               color: [% color_2 %];
+               }
 .listTitle a:hover  {
 	              color:[% color_8 %];
         	     }
@@ -1220,7 +1296,6 @@ h7 strong {
 
 .listTitle.description span {
 		             color:[% color_4 %];
-
 	        	     }
 
 #ErrorBlock {
@@ -1256,7 +1331,29 @@ h7 strong {
             border-radius:20px;
             }
 
+/* Not yet implemented.
+.formError {
+             float:right;
+             background: [% color_7 %];
+             z-index:610!important;
+             border: 2px ridge [% color_12 %];
+             padding:1em 0.5em;
+             -moz-border-radius:20px;
+             -webkit-border-radius:20px;
+             -KHTML-border-radius:20px;
+             -icab-border-radius:20px;
+             border-radius:20px;
+             display:none;
+             }
+ */
 
+#ErrorMsg a {
+              color: [% color_4 %]!important;
+              }
+
+#ErrorMsg a:hover {
+                    color: [% color_5 %]!important;
+                    }
 
 #ErrorMsg .MainMenuLinks { 
                            color:[% color_4 %];
@@ -1280,9 +1377,10 @@ h7 strong {
                                  }
 
 #noticeMsg { 
-             margin-top:1.5em;
-	     width:98%;
-             border: 5px ridge [% color_12 %];
+             position: absolute;
+             top:20%;left:25%;right:25%;
+             z-index: 700!important;
+             border: 2px ridge [% color_12 %];
              font-family:serif;
              font-size: 1.6em;
              font-weight: bold;
@@ -1316,6 +1414,32 @@ h7 strong {
                                   border:2px inset [% color_5 %];
                                   color:[% color_5 %]!important;
                                   }
+
+/* Not yet implemented.
+div.messageContent {
+                     text-align: left;
+                     color:[% color_5 %]!important;
+                     font-size: 0.8em;
+                     font-weight: normal;
+                     height: 400px;
+                     overflow-y: scroll;
+                     }
+
+div.hiddenform {
+                 position:absolute;
+                 width:40%;
+                 background: [% color_3 %];
+                 z-index:610!important;
+                 border: 2px ridge [% color_12 %];
+                 padding:1em 0.5em;
+                 -moz-border-radius:20px;
+                 -webkit-border-radius:20px;
+                 -KHTML-border-radius:20px;
+                 -icab-border-radius:20px;
+                 border-radius:20px;
+                 display:none;
+                 }
+*/
 
 p.listenum {
              margin: 0 0 0.5em 1.5em;
@@ -1419,7 +1543,6 @@ ul li.calendarLinks:hover {
 ul li.calendarLinks a:hover {
                             color: [% color_5 %]!important;                         
                             }
-
 
 ul li.calendarLinksCurrentPage,
 ul li.calendarLinksCurrentPage:hover {
@@ -1598,8 +1721,8 @@ input {
         padding: 0px;
         }
 
-input[type=&quot;radio&quot;],
-input[type=&quot;checkbox&quot;] {
+input[type="radio"],
+input[type="checkbox"] {
                                    margin-bottom: 0;
                                    }
 
@@ -1675,12 +1798,20 @@ table.ls_template {
                     border-radius:5px;
                     }
 
+/* Not yet implemented.
+table.table_style th {
+                       font-weight: bold;
+                       background-color: [% color_9 %]
+                       }
+ */
+
 table.listOfItems { 
                     overflow: scroll;
                     }
 
 table.listOfItems td { 
                        font-size: smaller;
+                       padding: 5px;
                        border:1px solid [% color_12 %];
                        }
 
@@ -1777,10 +1908,10 @@ table.preferences th {
                          color:[% color_5 %]!important;
                          overflow: hidden;
                          margin-left:1em;
+                         line-height: 1.3em;
                          }
 
 #bandeau_top #Identity_not_connect {
-
                                      width:99%;
                                      text-align: right;
                                      font-size: 1em;
@@ -1795,6 +1926,7 @@ clear:none;
 #bandeau_top #Identity_not_connect label {
                                            color:[% color_5 %]!important;
                                            font-family:serif!important;
+                                           line-height: 2.6em;
                                            }
 
 #bandeau_top #Identity span {
@@ -1810,7 +1942,8 @@ clear:none;
                       text-align:center;
                       font-weight: bold;
                       width:33%;
-                      margin-top:0.3em
+                      /* margin-top:0.3em; */
+                      line-height: 2.6em;
                       }
 
 #bandeau_top a { 
@@ -1834,19 +1967,25 @@ clear:none;
                       width:33%;
                       }
 
+[%#
+ * Two lines, 1.4em in their height, will be shifted up.
+ * The height of form on right side will be solved by the height of label
+ * defined above, which is <shift> (2.8em) minus <half-leading of remember
+ * line> (approx. 0.25em), approximately 2.6em.
+-%]
 #bandeau_top .remember { 
                          float:left;
                          font-size: 0.9em;
+                         line-height: 1.4em;
                          font-family:serif!important;
                          text-align:left;
                          font-weight: bold;
                          color:[% color_5 %]!important;
                          width:25%;
-
                          }
 
 #bandeau_top  #Identity_not_connect .remember {
-		  			        margin-top:-2.8em
+                                                margin-top:-2.8em;
 						}
 
 #bandeau_top .remember a { 
@@ -1981,7 +2120,7 @@ clear:none;
 /* not for IE5.x or IE6 */
 
 #subnav {
-          background-color: none;
+          background: none;
           position:relative;
           float:left;
           width:99.9%;
@@ -2063,6 +2202,14 @@ clear:none;
            column-rule: 1px solid black;
            }
 
+/* Not yet implemented.
+.columns div {
+               -moz-column-break-inside: avoid!important;
+               -webkit-column-break-inside: avoid!important;
+               column-break-inside: avoid!important;
+               }
+ */
+
 .menu_search { 
                width:100%;
                border: 1px solid [% color_8 %];
@@ -2129,7 +2276,7 @@ span.bottom_page {
 
 .divCal table {
     		font-size:12px;
-    		font-family:Tahoma;
+                font-family: Tahoma, Geneva, Verdana, sans-serif;
     		text-align:center;
     		margin:0px;
     		width:140px;
@@ -2141,7 +2288,7 @@ span.bottom_page {
 		}
 .divCal .zoneTitre {
     		font-size:12px;
-    		font-family:Tahoma;
+                     font-family: Tahoma, Geneva, Verdana, sans-serif;
     		text-align:center;
     		margin:0px;
    		background:[% color_9 %];
@@ -2149,14 +2296,14 @@ span.bottom_page {
 
 .divCal .zoneNav {
     		font-size:10px;
-    		font-family:Tahoma;
+                   font-family: Tahoma, Geneva, Verdana, sans-serif;
     		text-align:center;
     		margin:0px;
     		cursor:pointer;
 		}
 
 .divCal .zoneMois {
-    		font-family:Tahoma;
+                    font-family: Tahoma, Geneva, Verdana, sans-serif;
     		width:70px;
     		margin:0px;
 		}
@@ -2170,7 +2317,7 @@ span.bottom_page {
 		}
 
 .divCal .nSemaine {
-    		font-family:Tahoma;
+                    font-family: Tahoma, Geneva, Verdana, sans-serif;
 		width:30px;
 		margin:0px;
 		color:[% color_4 %];
@@ -2223,5 +2370,28 @@ span.bottom_page {
     				font-weight:bold;
     				background:[% color_6 %];
 				} /*pour firefox */
+
+/* Line height not to be overridden by locale-specific styles. */
+/* Not yet implemented.
+table,
+#MainMenuLinks,
+#nav,
+#subnav,
+.input,
+.listTitle,
+.listTitle.description,
+.MainMenuLinks,
+.MainMenuLinksCurrentPage,
+.actionMenuLinks,
+.actionMenuLinksCurrentPage,
+.actionMenuLinksInactive,
+.ArcMenuLinks,
+.ArcMenuLinksCurrentPage,
+.ArcMenuLinksInactive,
+.ArcMenuLinksSortActive,
+.ArcMenuLinksSortInactive {
+                            line-height: normal;
+                            }
+ */
 
 [% END %]
