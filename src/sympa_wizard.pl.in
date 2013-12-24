@@ -62,6 +62,12 @@ use Getopt::Long;
 use Pod::Usage;
 use Sympa::Constants;
 
+my $with_CPAN; # check if module "CPAN" installed.
+
+BEGIN {
+    $with_CPAN = eval { require CPAN; };
+}
+
 ## sympa configuration files
 my $wwsympa_conf = Sympa::Constants::WWSCONFIG;
 my $sympa_conf   = Sympa::Constants::CONFIG;
@@ -286,7 +292,6 @@ sub edit_configuration {
 }
 
 sub check_cpan {
-    require CPAN;
 
     ## assume required_version = 1.0 if not specified.
     my %cpan_modules = (
@@ -633,8 +638,9 @@ sub check_modules {
 # Install a CPAN module
 ##----------------------
 sub install_module {
-#    my ($module, $options, $opt_features) = @_;
-  my ($module, $options, $cpan_modules) = @_;
+    return unless $with_CPAN;
+
+    my ($module, $options, $cpan_modules) = @_;
 
     my $default = $options->{'default'};
 
