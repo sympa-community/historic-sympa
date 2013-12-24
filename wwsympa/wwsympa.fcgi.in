@@ -1361,7 +1361,8 @@ my $birthday = time ;
 	     $param->{'lang'} = $session->{'lang'} || $param->{'user_lang'} || $param->{'list_lang'} || &Conf::get_robot_conf($robot, 'lang');	     
 
 	     $param->{'locale'} = &Language::SetLang($param->{'lang'});
-	     
+	    $param->{'lang_tag'} = &Language::LanguageTag($param->{'lang'});
+
 	     &export_topics ($robot);
 	     
 	     unless ($comm{$action}) {
@@ -1435,6 +1436,7 @@ my $birthday = time ;
      $param->{'action_type'} = 'none' unless (($param->{'is_priv'})||($param->{'action_type'} eq 'serveradmin'));
      $param->{'lang'} ||= $param->{'user'}{'lang'} if (defined $param->{'user'});
      $param->{'lang'} ||= &Conf::get_robot_conf($robot, 'lang');
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($param->{'list'}) {
 	 $param->{'list_title'} = $list->{'admin'}{'subject'};
@@ -3178,6 +3180,7 @@ sub do_ticket {
 	 $param->{'lang'} = $user->{'lang'} || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 	 $session->{'lang'} = $param->{'lang'} ;
      }
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($session->{'review_page_size'}) {   #  user did choose a specific page size upgrade prefs
 	 &List::update_user_db($param->{'user'}{'email'},{data=>&tools::hash_2_string($param->{'user'}{'prefs'})}) ;
@@ -4794,6 +4797,7 @@ sub check_custom_attribute {
      ## Set session language and user language to new value
      $session->{'lang'} = $in{'lang'} ;
      $param->{'lang'} = $in{'lang'};
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if (&List::is_user_db($param->{'user'}{'email'})) {
 
@@ -15864,6 +15868,7 @@ sub do_compose_mail {
 
      $session->{'lang'} = $in{'lang'} ;
      $param->{'lang'} = $in{'lang'};
+    $param->{'lang_tag'} = Language::LanguageTag($param->{'lang'});
 
      if ($param->{'user'}{'email'}) {
 	 if (&List::is_user_db($param->{'user'}{'email'})) {
