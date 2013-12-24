@@ -8,19 +8,21 @@
 
 <title> [% main_title %] - [% action %] </title>
 
-[% IF custom_css || session.custom_css %]
+[% IF custom_css %]
 <style type="text/css">
-[% PROCESS css.tt2 %]
+[% custom_css %]
 </style>
-
 [% ELSE %]
 <link rel="stylesheet" href="[% css_url %]/style.css" type="text/css" media="screen" title="Sympa CSS" />
 [% END %]
 
-
 [% PROCESS css_ie.tt2 %]
 
-
+[% IF locale_css %]
+<style type="text/css">
+[% locale_css %]
+</style>
+[% END %]
 
 <!-- RSS chanel -->
    [% IF list -%] 
@@ -52,9 +54,7 @@
 
 <body onload="[% IF use_htmlarea %] HTMLArea.replaceAll();[% END %][% IF back_to_mom %] setTimeout('refresh_mom_and_die()',1000);[% END %]">
 
-
-
-<a name="top"></a>
+<div id="TopAnchor"><a name="top"></a></div>
 
 <noscript><em>[%|loc%]Please activate JavaScript in your web browser[%END%]</em></noscript>
 

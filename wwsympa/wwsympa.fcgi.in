@@ -1623,10 +1623,13 @@ my $birthday = time ;
  	     $param->{'list_conf'} = $list->{'admin'};
  	 }
 
-	 my $lang = &Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
+	my $locale = Language::Lang2Locale($param->{'lang'});
+	my $tt2_include_path =
+	    tools::make_tt2_include_path($robot, 'web_tt2', $locale, $list);
 	 
- 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
+ 	unless (&tt2::parse_tt2(
+	    $param, 'rss.tt2', \*STDOUT, $tt2_include_path, {}
+	)) {
  	     my $error = &tt2::get_error();
  	     $param->{'tt2_error'} = $error;
  	     unless (&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error])) {
@@ -2322,10 +2325,9 @@ sub check_action_parameters {
 
 ## Send HTML output
 sub send_html {
-
     my $tt2_file = shift;
 
-    ## Send HTML
+    ## Send HTML headers
     if ($param->{'date'}) {
 	Language::PushLang("en");
 	printf "Date: %s\n", &POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
@@ -2338,14 +2340,19 @@ sub send_html {
 	Language::PopLang();
     }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
-    print "Content-Type: text/html\n";
-    ## Workaround for Internet Explorer 8.
-    print "X-UA-Compatible: IE=7\n";
+    print "Content-Type: text/html; charset=utf-8\n";
+    ## Workaround for Internet Explorer 8 or later.
+    print "X-UA-Compatible: IE=100\n";
+
+    ## Notify crash to client.
+    if ($param->{'action'} eq 'crash') {
+	print "Status: 503 Service Unavailable\n";
+	print "Retry-After: 300\n";
+    }
 
     ## Icons
     $param->{'icons_url'} = &Conf::get_robot_conf($robot, 'static_content_url').'/icons';
-    
-    
+
     ## Retro compatibility concerns
     $param->{'active'} = 1;
     
@@ -2359,9 +2366,6 @@ sub send_html {
  	    $param->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
 	}
     }
-    
-    my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
     
     # XSS escaping applied to all outgoing parameters.
     my $param_copy = &tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
@@ -2377,7 +2381,59 @@ sub send_html {
 	    &do_log('err','Failed to sanitize $param in host %s', $robot);
 	}
     }
-    
+
+    ## Save special paths.
+    my @added_include_path = tt2::get_include_path();
+    tt2::clear_include_path();
+
+    ## Custom CSSes.  They are stored to $param_copy so that they won't be
+    ## escaped.
+
+    # Do not include locale paths.
+    # The css.tt2 by each locales will override styles in main CSS.
+    my $tt2_include_path =
+	tools::make_tt2_include_path($robot, 'web_tt2', '', $list);
+
+    # testing custom CSS.
+    if ($session->{'custom_css'}) {
+	my $custom_css;
+	unless (tt2::parse_tt2($param, 'css.tt2', \$custom_css,
+	    $tt2_include_path
+	)) {
+	    wwslog('info', 'error while parsing custom CSS');
+	    delete $param_copy->{'custom_css'};
+	} else {
+	    $param_copy->{'custom_css'} = $custom_css;
+	}
+    }
+
+    my $locale = Language::Lang2Locale($param->{'lang'});
+
+    # per-locale CSS.
+    my $locale_css;
+    if (tools::get_filename('etc', {}, 
+	'web_tt2/' . $locale . '/css.tt2', $robot, $list
+    )) {
+	unless (tt2::parse_tt2($param, $locale . '/css.tt2',
+	    \$locale_css, $tt2_include_path
+	)) {
+	    wwslog('info', 'error while parsing locale CSS %s',
+		$locale . '/css.tt2');
+	} else {
+	    $param_copy->{'locale_css'} = $locale_css;
+	}
+    }
+
+    ## Now include locale paths.
+    $tt2_include_path =
+	tools::make_tt2_include_path($robot, 'web_tt2', $locale, $list);
+
+    ## Restore special paths.
+    foreach my $dir (@added_include_path) {
+	tt2::add_include_path($dir);
+    }
+
+    ## Output the content.
     unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
 	    $tt2_include_path, { 'has_header' => 1 })) {
 	my $error = &tt2::get_error();
@@ -6088,13 +6144,12 @@ sub do_skinsedit {
 	}
     }
 
-    if(($in{'editcolors'})&&($in{'subaction'} eq 'test')){
-
-	return unless ($in{'custom_color_number'} =~ /color_/);
+    if ($in{'editcolors'} and $in{'subaction'} eq 'test') {
+	return unless $in{'custom_color_number'} =~ /color_/;
 	$param->{'custom_color_number'} = $in{'custom_color_number'};
 	$param->{'custom_color_value'} = $in{'custom_color_value'};
 	$param->{'custom_css'} = $css_url.'/'.$param->{'user'}{'email'}.'.style.css';
-	$session->{'custom_css'} = $param->{'custom_css'} ;
+	$session->{'custom_css'} = $param->{'custom_css'};
 
 	$session->{$in{'custom_color_number'}} =  $in{'custom_color_value'};
 	
@@ -6105,12 +6160,12 @@ sub do_skinsedit {
 		$param->{'session'}{'color_'.$colornumber} = $session->{'color_'.$colornumber} ;
 	    }
 	}
-
     }
-    if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
-	my $lang = &Language::Lang2Locale($param->{'lang'});
-	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+    if ($in{'subaction'} eq 'install' or $in{'installcss'}) {
+	## Do not include locale subdirectories.
+	## The css.tt2 by each locales will override styles in main CSS.
+	my $tt2_include_path = tools::make_tt2_include_path($robot, 'web_tt2', '', '');
 
 	my $date= time;
 	my $style_file;
@@ -16497,21 +16552,22 @@ sub do_arc_delete {
 
 
 sub do_css {
-    &wwslog('debug', "do_css ($in{'file'})");		
+    &wwslog('debug', 'do_css(%s)', $in{'file'});		
     $param->{'bypass'} = 'extreme';
-    print "Content-type: text/css\n\n";
+    print "Content-type: text/css; charset=utf-8\n\n";
     $param->{'css'} = $in{'file'}; 
 
-    my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+    ## Do not include locale subdirectories.
+    ## The css.tt2 by each locales will override styles in main CSS.
+    my $tt2_include_path = tools::make_tt2_include_path($robot, 'web_tt2', '', '');
 
-    unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
+    unless (&tt2::parse_tt2($param, 'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &tt2::get_error();
 	$param->{'tt2_error'} = $error;
 	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	&wwslog('info', "do_css/$in{'file'} : error");
     }
-    
+
     return;
 }
 

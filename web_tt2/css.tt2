@@ -2372,7 +2372,6 @@ span.bottom_page {
                              } /*pour firefox */
 
 /* Line height not to be overridden by locale-specific styles. */
-/* Not yet implemented.
 table,
 #MainMenuLinks,
 #nav,
@@ -2392,6 +2391,5 @@ table,
 .ArcMenuLinksSortInactive {
                             line-height: normal;
                             }
- */
 
 [% END %]
