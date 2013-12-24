@@ -328,7 +328,7 @@
                                           [% IF key.occurrence == 'multiple' %]
                                             <select name="multiple_param.[% p.name %].[% key.name %]" id="multiple_param.[% p.name %].[% key.name %].name" multiple="multiple">
                                           [% ELSE %]
-                                            <select name="single_param.[% p.name %].[% key.name %]" id="single_param.[% p.name %].[% key.name %].name">
+                                            <select name="single_param.[% p.name %].[% key.name %]" id="single_param.[% p.name %].[% key.name %].name"[% IF p.name == 'lang' %] class="LanguageNeutral"[%END%]>
                                           [% END %]
                                           [% FOREACH enum = key.value %]
                                             <option value="[% enum.key %]"
@@ -374,7 +374,7 @@
                           [% ELSIF p.type == 'enum' %]
                           <!-- Enum -->
                             [% IF p.may_edit == 'write' %]
-                              <select name="single_param.[% p.name %]" id="single_param.[% p.name %].name">
+                              <select name="single_param.[% p.name %]" id="single_param.[% p.name %].name"[% IF p.name == 'lang' %] class="LanguageNeutral"[%END%]>
                                 [% FOREACH enum = p.value %]
                                   <option value="[% enum.key %]"
                                   [% IF enum.value.selected == '1' %]
