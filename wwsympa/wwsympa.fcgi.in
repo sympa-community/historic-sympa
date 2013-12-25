@@ -1557,6 +1557,8 @@ my $birthday = time ;
 	 }else {
 	     $param->{'languages'}{$l}{'selected'} = '';
 	 }
+
+	$param->{'languages'}{$l}{'lang_tag'} = Language::LanguageTag($l);
      }
 
      &Language::SetLang($saved_lang);
@@ -9993,6 +9995,7 @@ sub _prepare_edit_form {
 		 #&wwslog('notice','LANG: %s', $lang);
 		 &Language::SetLang($lang);
 		 $p->{'value'}{$lang}{'title'} = gettext('_language_');
+		$p->{'value'}{$lang}{'lang_tag'} = Language::LanguageTag($lang);
 	     }
 	     &Language::SetLang($saved_lang);
 	 }

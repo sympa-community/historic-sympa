@@ -24,7 +24,7 @@
     <select id="tpl_lang_out" name="tpl_lang_out" class="LanguageNeutral">
 	<option value="default">[%|loc%]default[%END%]</option>
 	[% FOREACH lg = languages %]
-        <option value="[%lg.key%]" [% IF tpl_lang == lg.key %]selected[% END %]>[%lg.value.complete%]</option>
+        <option lang="[%lg.value.lang_tag%]" xml:lang="[%lg.value.lang_tag%]" value="[%lg.key%]" [% IF tpl_lang == lg.key %]selected[% END %]>[%lg.value.complete%]</option>
 	[%END%]
 	</select><br />
 [% list %]

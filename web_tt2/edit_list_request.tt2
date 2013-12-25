@@ -335,6 +335,10 @@
                                               [% IF enum.value.selected == '1' %]
                                                 selected="selected"
                                               [% END %]
+                                              [% IF p.name == 'lang' %]
+                                                lang="[%enum.value.lang_tag%]"
+                                                xml:lang="[%enum.value.lang_tag%]"
+                                              [%END%]
                                               [% IF enum.value.title %]
                                                 >[% enum.value.title %]</option>
                                               [% ELSE %]
@@ -347,7 +351,15 @@
                                           [% FOREACH enum = key.value %]
                                             [% IF enum.value.selected == '1' %]
                                               [% IF enum.value.title %]
-                                                [% enum.value.title %] 
+                                                [% IF p.name == 'lang' %]
+                                                  <span
+                                                  class="LanguageNeutral"
+                                                  lang="[%enum.value.lang_tag%]"
+                                                  xml:lang="[%enum.value.lang_tag%]"
+                                                  >[% enum.value.title %]</span>
+                                                [% ELSE %]
+                                                  [% enum.value.title %]
+                                                [% END %]
                                               [% ELSE %]
                                                 [% enum.key %]
                                               [% END %]
@@ -380,6 +392,10 @@
                                   [% IF enum.value.selected == '1' %]
                                     selected="selected"
                                   [% END %]
+                                  [% IF p.name == 'lang' %]
+                                    lang="[%enum.value.lang_tag%]"
+                                    xml:lang="[%enum.value.lang_tag%]"
+                                  [%END%]
                                   [% IF enum.value.title %]
                                     >[% enum.value.title %]</option>
                                   [% ELSE %]
@@ -390,7 +406,19 @@
                             [% ELSIF p.may_edit == 'read' %]
                               [% FOREACH enum = p.value %]
                                 [% IF enum.value.selected == '1' %]
-                                  [% enum.key %]
+                                  [% IF enum.value.title %]
+                                    [% IF p.name == 'lang' %]
+                                      <span
+                                      class="LanguageNeutral"
+                                      lang="[%enum.value.lang_tag%]"
+                                      xml:lang="[%enum.value.lang_tag%]"
+                                      >[% enum.value.title %]</span>
+                                    [% ELSE %]
+                                      [% enum.value.title %]
+                                    [% END %]
+                                  [% ELSE %]
+                                    [% enum.key %]
+                                  [% END %]
                                 [% END %]
                               [% END %]
                             [% END %]
