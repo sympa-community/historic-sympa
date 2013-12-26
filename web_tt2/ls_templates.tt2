@@ -37,7 +37,7 @@
 <table summary="[%|loc%]This table contain all templates you can copy or see[%END%]" class="ls_template">
 <tr class="color4">
 <th>[%|loc%]template name[%END%]</th>
-<th colspan="[% colspan_per_level.distrib %]">[%|loc%]distrib[%END%]</th>
+<th colspan="[% colspan_per_level.distrib %]">[%|loc%]default[%END%]</th>
 <th colspan="[% colspan_per_level.site %]">[%|loc%]site[%END%]</th>
 <th colspan="[% colspan_per_level.robot %]">[%|loc%]robot[%END%]</th>
 <th  colspan="[% colspan_per_level.list %]">[%|loc(list)%]list %1[%END%]</th>
@@ -48,20 +48,44 @@
 
 <!-- print list of languages -->
 [% FOREACH lang = lang_per_level.distrib %]
-    <th>[%|loc%][% lang.key %][%END%]</th>
+[%- IF lang.key == 'default' -%]
+<th>&nbsp;</th>
+[%- ELSE -%]
+<th class="LanguageNeutral"
+lang="[%lang.value.lang_tag%]" xml:lang="[%lang.value.lang_tag%]"
+>[% lang.value.title %]</th>
+[%- END %]
 [% END %]
 
 [% FOREACH lang = lang_per_level.site %]
-    <th>[%|loc%][% lang.key %][%END%]</th>
+[%- IF lang.key == 'default' -%]
+<th>&nbsp;</th>
+[%- ELSE -%]
+<th class="LanguageNeutral"
+lang="[%lang.value.lang_tag%]" xml:lang="[%lang.value.lang_tag%]"
+>[% lang.value.title %]</th>
+[%- END %]
 [% END %]
 
- [% FOREACH lang = lang_per_level.robot %]
-    <th>[%|loc%][% lang.key %][%END%]</th>
- [% END %]
+[% FOREACH lang = lang_per_level.robot %]
+[%- IF lang.key == 'default' -%]
+<th>&nbsp;</th>
+[%- ELSE -%]
+<th class="LanguageNeutral"
+lang="[%lang.value.lang_tag%]" xml:lang="[%lang.value.lang_tag%]"
+>[% lang.value.title %]</th>
+[%- END %]
+[% END %]
 
- [% FOREACH lang = lang_per_level.list %]
-    <th>[%|loc%][% lang.key %][%END%]</th>
- [% END %]
+[% FOREACH lang = lang_per_level.list %]
+[%- IF lang.key == 'default' -%]
+<th>&nbsp;</th>
+[%- ELSE -%]
+<th class="LanguageNeutral"
+lang="[%lang.value.lang_tag%]" xml:lang="[%lang.value.lang_tag%]"
+>[% lang.value.title %]</th>
+[%- END %]
+[% END %]
 
 [% FOREACH file = templates %]
   [% IF dark == '1' %]
@@ -79,7 +103,7 @@
       <input type="hidden" name="template_path" value="[% lang.value %]" />
       <input type="hidden" name="template_name" value="[% file.key %]" />
       <input type="hidden" name="scope" value="distrib" />
-      <input type="hidden" name="tpl_lang" value="default" />
+      <input type="hidden" name="tpl_lang" value="[% lang.key %]" />
       <input type="hidden" name="webormail" value="[% webormail %]" />
       <input class="MainMenuLinks" type="submit" name="action_view_template" value="[%|loc%]view[% END %]" />
       <input class="MainMenuLinks" type="submit" name="action_copy_template" value="[%|loc%]cp[% END %]" />
