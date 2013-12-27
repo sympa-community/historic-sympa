@@ -88,7 +88,7 @@
 <input type="hidden" name="list" value="[% list %]" />
 <input type="hidden" name="action" value="search" />
 <label for="filter">[%|loc%]Search user by e-mail: [%END%]</label>
-<input alt="[%|loc%]Search user by email[%END%]" type="text" size="18" id="filter" name="filter" value="[% filter %]" />
+<input title="[%|loc%]Search user by email[%END%]" type="text" size="18" id="filter" name="filter" value="[% filter %]" />
 <input class="MainMenuLinks" type="submit" name="action_search" value="[%|loc%]Search[%END%]" /> 
 <br />
 [% IF action == 'search' %]
