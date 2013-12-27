@@ -439,7 +439,7 @@ sub check_cpan {
 					 usage => 'required in order to use DKIM features (both for signature verification and signature insertion)',
 					},
 			'MHonArc::UTF8' => {
-					    required_version =>'2.6.0',
+					    required_version =>'2.6.18',
 					    package_name => 'MHonArc',
 					    mandatory => 1, 
 					    usage => 'mhonarc is used to build Sympa web archives',
