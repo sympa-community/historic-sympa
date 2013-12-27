@@ -104,6 +104,8 @@ my $ip ;
 my $rss ;
 my $session;
 
+my $allow_absolute_path; #FIXME: to be removed in the future.
+
 ## Load config 
 unless ($wwsconf = &wwslib::load_config($conf_file)) {
     &fatal_err('Unable to load config file %s', $conf_file);
@@ -2432,10 +2434,12 @@ sub send_html {
     $tt2_include_path =
 	tools::make_tt2_include_path($robot, 'web_tt2', $locale, $list);
 
-    ## Restore special paths.
+    ## Restore special paths and enable absolute path if neccesary.
     foreach my $dir (@added_include_path) {
 	tt2::add_include_path($dir);
     }
+    tt2::allow_absolute_path() if $allow_absolute_path;
+    undef $allow_absolute_path;
 
     ## Output the content.
     unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
@@ -7303,7 +7307,7 @@ sub do_viewmod {
      }
      &web_db_log({'parameters' => $in{'file'},
 		  'status' => 'success'});
-     &tt2::allow_absolute_path();
+     $allow_absolute_path = 1;
 
      return 1;
  }
@@ -8664,8 +8668,6 @@ Sends back the list creation edition form.
 
 =item * tools::get_list_list_tpl
 
-=item * tt2::allow_absolute_path
-
 =item * report::reject_report_web
 
 =back 
@@ -8714,7 +8716,7 @@ Sends back the list creation edition form.
 	 &report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
      }	
 
-     &tt2::allow_absolute_path();
+     $allow_absolute_path = 1;
 
      foreach my $template (keys %{$param->{'list_list_tpl'}}){
 	 $param->{'tpl_count'} ++ ;
@@ -8849,7 +8851,7 @@ Sends back the list creation edition form.
 	 return undef;
      }
 
-     &tt2::allow_absolute_path();
+     $allow_absolute_path = 1;
 
      return 1;
  }
@@ -12046,7 +12048,7 @@ sub do_latest_d_read {
      ## parameters of the current directory
      $param->{'doc_date'} =  gettext_strftime "%d %b %y  %H:%M", localtime($info[9]);
 
-     &tt2::allow_absolute_path();
+     $allow_absolute_path = 1;
 
      $param->{'father_icon'} = $icon_table{'father'};
 
@@ -12179,7 +12181,7 @@ sub do_latest_d_read {
      ## parameters of the current directory
      $param->{'doc_date'} = gettext_strftime "%d %b %y  %H:%M", localtime($info[9]);
 
-     &tt2::allow_absolute_path();
+     $allow_absolute_path = 1;
 
      $param->{'father_icon'} = $icon_table{'father'};
 
