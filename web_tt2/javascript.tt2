@@ -1150,6 +1150,16 @@ function config_ctxhelp(td) {
 	td.d.style.display = 'block';
 }
 
+/* check if the value of element is not empty */
+function isNotEmpty(id) {
+  if (document.getElementById(id)) {
+    var value = document.getElementById(id).value;
+    if (value.replace(/\s+/g, ''))
+      return true;
+  }
+  return false;
+}
+
 </script>
 
 <!-- end javascript.tt2 -->
