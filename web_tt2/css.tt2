@@ -165,6 +165,10 @@ select {
          background-color: [% color_13 %];
          }
 
+select[multiple] {
+                   vertical-align: top;
+                   }
+
 .menuInactive2 {
                  font-size: 1em;
                  line-height:1.4em;
