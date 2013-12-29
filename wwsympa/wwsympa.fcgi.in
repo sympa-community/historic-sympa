@@ -15506,7 +15506,7 @@ sub do_compose_mail {
 	$param->{'topic_required'} = $list->is_msg_topic_tagging_required();
     }
 
-    $param->{'merge_feature'} = $list->merge_feature eq 'on';
+    $param->{'merge_feature'} = $list->{'admin'}{'merge_feature'} eq 'on';
 
     return 1;
  }
