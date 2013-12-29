@@ -117,7 +117,7 @@
           </td>
 	  [% IF is_listmaster || is_owner || is_editor  %]
   	    <td>
-  	      [% u.reception %]
+  	      [%|optdesc('reception')%][% u.reception %][% END %]
 	    </td>
             <td>
             [% IF u.subscribed %]
