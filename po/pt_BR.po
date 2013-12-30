@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2013-12-05 18:20+0200\n"
 "Last-Translator: gomex <gomex@riseup.net>\n"
 "Language-Team: Português do Brasil\n"
-"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -9715,14 +9715,11 @@ msgstr "sem correio (útil em caso de férias)"
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr "Exibir a tabela de exclusão forçada"
+#~ msgid "Show the exclusion table"
+#~ msgstr "Exibir a tabela de exclusão forçada"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
 
 #~ msgid "subscribed"
 #~ msgstr "inscrito"

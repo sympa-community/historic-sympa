@@ -9808,17 +9808,6 @@ msgstr "keine Nachricht (nützlich für Urlaube)"
 msgid "you do not receive your own posts"
 msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr "Ausschlusstabelle anzeigen"
-
-# mistake in engl. version: whila -> while
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
-"Der folgende Fehler trat bei der Bearbeitung von Zustellfehlern auf: %&"
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -9895,6 +9884,14 @@ msgstr ""
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
 msgstr ""
+
+#~ msgid "Show the exclusion table"
+#~ msgstr "Ausschlusstabelle anzeigen"
+
+# mistake in engl. version: whila -> while
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr ""
+#~ "Der folgende Fehler trat bei der Bearbeitung von Zustellfehlern auf: %&"
 
 #~ msgid "subscribed"
 #~ msgstr "abonnieren"
