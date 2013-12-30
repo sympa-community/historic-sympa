@@ -10288,6 +10288,15 @@ msgstr "no mail (assenza prolungata)"
 msgid "you do not receive your own posts"
 msgstr "non ricevere i tuoi stessi messaggi"
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Mostra la tabella di esclusione"
+
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr "E' stato riscontrato un errore durante la gestione dei bounce: %1"
+
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
@@ -10315,12 +10324,6 @@ msgstr ""
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Mostra la tabella di esclusione"
-
-#~ msgid "The following error occurred whila managing bounces: %&"
-#~ msgstr "E' stato riscontrato un errore durante la gestione dei bounce: %1"
 
 #, fuzzy
 #~ msgid "subscribed"

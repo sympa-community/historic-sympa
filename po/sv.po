@@ -9662,6 +9662,15 @@ msgstr "ingen e-post (användbar för semestrar)"
 msgid "you do not receive your own posts"
 msgstr "dina egna postningar skickas inte till dig"
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Visa uteslutningstabellen"
+
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr "Följande fel uppstod när studsar hanterades: %&"
+
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
@@ -10477,12 +10486,6 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Visa uteslutningstabellen"
-
-#~ msgid "The following error occurred whila managing bounces: %&"
-#~ msgstr "Följande fel uppstod när studsar hanterades: %&"
 
 #, fuzzy
 #~ msgid "subscribed"

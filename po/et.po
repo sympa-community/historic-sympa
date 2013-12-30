@@ -9956,6 +9956,10 @@ msgid ""
 "Sympa. Select which provider you want to use your groups from."
 msgstr ""
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Näita erandite tabelit"
+
 #. (messagekey,spoolname)
 #: ../web_tt2/viewspool_message.tt2:2
 msgid "Message #%1 in %2 spool"
@@ -10808,9 +10812,6 @@ msgstr ""
 #: ../src/lib/List.pm:7337
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Näita erandite tabelit"
 
 #, fuzzy
 #~ msgid "More..."

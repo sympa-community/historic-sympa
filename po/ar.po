@@ -9603,6 +9603,11 @@ msgstr ""
 msgid "Show the exclusion table"
 msgstr ""
 
+#: ../web_tt2/sigindex.tt2:58
+#, fuzzy
+msgid "Delete selected addresses"
+msgstr "رفض العناوين المختاره"
+
 #: ../web_tt2/skinsedit.tt2:120
 msgid "Background color for the news area of the home page."
 msgstr ""
@@ -11024,10 +11029,6 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Delete selected addresses"
-#~ msgstr "رفض العناوين المختاره"
 
 #, fuzzy
 #~ msgid "More..."

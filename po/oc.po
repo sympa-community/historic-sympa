@@ -9935,6 +9935,10 @@ msgstr "interrompre la recepcion dels messatges (util pendent las vacanças)"
 msgid "you do not receive your own posts"
 msgstr "Recebre pas vòstres pròpris messatges"
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Afichar la taula d'exclusion"
+
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
@@ -10603,9 +10607,6 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Afichar la taula d'exclusion"
 
 #~ msgid "subscribed"
 #~ msgstr "abonat"
