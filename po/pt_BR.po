@@ -9722,14 +9722,11 @@ msgstr "sem correio (útil em caso de férias)"
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr "Exibir a tabela de exclusão forçada"
+#~ msgid "Show the exclusion table"
+#~ msgstr "Exibir a tabela de exclusão forçada"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
 
 #~ msgid "subscribed"
 #~ msgstr "inscrito"

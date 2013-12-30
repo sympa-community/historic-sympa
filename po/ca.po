@@ -9794,15 +9794,12 @@ msgstr "sense correu (útil per vacances)"
 msgid "you do not receive your own posts"
 msgstr "no podeu rebre els vostres propis missatges"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr "Mostra la taula d'exclusió"
+#~ msgid "Show the exclusion table"
+#~ msgstr "Mostra la taula d'exclusió"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
-"S'ha produït el següent error quant s'estaven gestionant els rebotats: %&"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr ""
+#~ "S'ha produït el següent error quant s'estaven gestionant els rebotats: %&"
 
 #~ msgid "subscribed"
 #~ msgstr "donar-se de baixa"

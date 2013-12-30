@@ -10097,14 +10097,12 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 msgid "you do not receive your own posts"
 msgstr "Ne pas recevoir mes propres messages"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr "Montrer la table d'exclusion"
+#~ msgid "Show the exclusion table"
+#~ msgstr "Montrer la table d'exclusion"
 
-#. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
-msgid "The following error occurred whila managing bounces: %&"
-msgstr "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
+#~ msgid "The following error occurred whila managing bounces: %&"
+#~ msgstr ""
+#~ "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
 
 #~ msgid "subscribed"
 #~ msgstr "abonné"
