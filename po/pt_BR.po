@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2013-02-12 02:12+0200\n"
-"Last-Translator: kareneliot <kareneliot@riseup.net>\n"
+"PO-Revision-Date: 2013-12-05 18:20+0200\n"
+"Last-Translator: gomex <gomex@riseup.net>\n"
 "Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -805,7 +805,6 @@ msgstr "Gerenciamento de lista automático"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-#, fuzzy
 msgid "The automatic lists are based on the %1 family"
 msgstr "As listas automáticas são baseadas na família $1"
 
@@ -2055,13 +2054,12 @@ msgstr "Erros de sintaxe com os seguintes parâmetros: %1"
 
 #: ../web_tt2/error.tt2:47
 msgid "Authorization rejected. Maybe you forgot to log in?"
-msgstr ""
+msgstr "Autorização negada. Talvez você esqueceu de efetuar o log in?"
 
 #. (u_err.list)
 #: ../web_tt2/error.tt2:48
-#, fuzzy
 msgid "List %1 not found"
-msgstr "Arquivo não encontrado."
+msgstr "Lista %1 não encontrada"
 
 #. (u_err.new_robot)
 #: ../web_tt2/error.tt2:49
@@ -2495,12 +2493,10 @@ msgid "No user excluded."
 msgstr "Nenhum usuário foi removido."
 
 #: ../web_tt2/exclusion_table.tt2:35
-#, fuzzy
 msgid "Restore selected email addresses"
-msgstr "Excluir os endereços de e-mail selecionados"
+msgstr "Restaurar os endereços de e-mail selecionados"
 
 #: ../web_tt2/exclusion_table.tt2:35
-#, fuzzy
 msgid "Do you really want to restore subscription for ALL selected addresses?"
 msgstr ""
 "Tem certeza que deseja cancelar a inscrição de TODOS os assinantes "
@@ -4129,9 +4125,8 @@ msgid "Cipher key size used"
 msgstr "Tamanho da chave cifrada utilizada"
 
 #: ../web_tt2/show_exclude.tt2:3
-#, fuzzy
 msgid "Exclusion table"
-msgstr "Exibir a tabela de exclusão forçada"
+msgstr "Exibir a tabela de exclusão"
 
 #: ../web_tt2/show_exclude.tt2:8
 msgid ""
@@ -6564,9 +6559,8 @@ msgstr " Usuário %1 encontrou um erro interno do servidor"
 
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
-#, fuzzy
 msgid "The following error occurred while managing bounces: %1"
-msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %1"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -7404,15 +7398,14 @@ msgstr ""
 "seguinte URL:"
 
 #: ../mail_tt2/moderate.tt2:27
-#, fuzzy
 msgid ""
 "Because the new message is suspected to be a spam it is not attached to this "
 "one. You must use\n"
 "the web interface to reject or validate it."
 msgstr ""
 "Em decorrência da nova mensagem ser suspeita de conter SPAM, ela não "
-"encontra-se anexada a este e-mail. É necessário utilizar a interface WEB "
-"para rejeitá-la ou aceitá-la."
+"encontra-se anexada a este e-mail.\n"
+"É necessário utilizar a interface WEB para rejeitá-la ou aceitá-la."
 
 #. (list.name)
 #: ../mail_tt2/moderate.tt2:29
@@ -8097,9 +8090,10 @@ msgid "just for listmaster"
 msgstr "apenas para o Gerente Geral de Listas"
 
 #: ../src/etc/scenari/info.conceal:1
-#, fuzzy
 msgid "restricted to subscribers - Silent rejection otherwise."
-msgstr "restrito a membros ou usuários do domínio local"
+msgstr ""
+"restrito a membros ou usuários do domínio local - Rejeição silenciosa em "
+"outros casos."
 
 #: ../src/etc/scenari/info.open:1
 msgid "for anyone"
@@ -8470,9 +8464,8 @@ msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Segunda:Terça:Quarta:Quinta:Sexta:Sábado:Domingo"
 
 #: ../src/etc/mhonarc-ressources.tt2:643
-#, fuzzy
 msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
-msgstr "Segunda:Terça:Quarta:Quinta:Sexta:Sábado:Domingo"
+msgstr "Dom:Seg:Ter:Qua:Qui:Sex:Sáb"
 
 #: ../src/etc/mhonarc-ressources.tt2:648
 msgid ""
@@ -8483,11 +8476,8 @@ msgstr ""
 "Novembro:Dezembro"
 
 #: ../src/etc/mhonarc-ressources.tt2:665
-#, fuzzy
 msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
-msgstr ""
-"Janeiro:Fevereiro:Março:Abril:Maio:Junho:Julho:Agosto:Setembro:Outubro:"
-"Novembro:Dezembro"
+msgstr "Jan:Fev:Mar:Abr:Mai:Jun:Jul:Ago:Set:Out:Nov:Dez"
 
 #: ../src/etc/global_task_models/chk_cert_expiration.daily.task:1
 msgid ""
@@ -8559,11 +8549,13 @@ msgstr "Atualização da lista de membros baseada no TTL"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:1
 msgid "Confidential list setup"
-msgstr ""
+msgstr "Configuração de lista confidencial"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:3
 msgid "No subscription / unsubscription: only the list owner can add members"
 msgstr ""
+"Sem inscrição / cancelamento de inscrição : apenas o dono da lista pode "
+"adicionar membros"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:4
 #: ../src/etc/create_list_templates/hotline/comment.tt2:4
@@ -8572,13 +8564,14 @@ msgid "private archives"
 msgstr "arquivos privados"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:5
-#, fuzzy
 msgid "list visible to list members only"
-msgstr "Número máximo de inscritos na lista"
+msgstr "Lista visível apenas para membros da lista"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:6
 msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
 msgstr ""
+"Apenas membros da lista podem enviar mensagem. OUTROS SÃO SILENCIOSAMENTE "
+"REJEITADOS."
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
