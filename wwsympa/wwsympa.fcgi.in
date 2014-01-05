@@ -182,7 +182,7 @@ my %comm = ('home' => 'do_home',
 	 'auto_signoff' => 'do_auto_signoff',
 	 'family_signoff' => 'do_family_signoff',
 	 'family_signoff_request' => 'do_family_signoff_request',
-	 #XXX'multiple_signoff' => 'do_multiple_sigoff',
+	 #XXX'multiple_signoff' => 'do_multiple_signoff',
 	 'sigrequest' => 'do_sigrequest',
 	 'ignoresub' => 'do_ignoresub',
 	 'which' => 'do_which',
@@ -262,7 +262,7 @@ my %comm = ('home' => 'do_home',
 	 'resetbounce' => 'do_resetbounce',
 	 'scenario_test' => 'do_scenario_test',
 	 'search_list' => 'do_search_list',
-	 'show_cert' => 'show_cert',
+	 'show_cert' => 'do_show_cert',
 	 'close_list_request' => 'do_close_list_request',
 	 'close_list' => 'do_close_list',
 	 'purge_list' => 'do_purge_list',	    
@@ -10645,7 +10645,7 @@ sub do_purge_list {
  }
 
 
- sub show_cert {
+ sub do_show_cert {
      return 1;
  }
 
