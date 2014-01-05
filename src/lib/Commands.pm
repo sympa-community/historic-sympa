@@ -363,7 +363,7 @@ sub stats {
 		     );
 	
 	unless ($list->send_file('stats_report', $sender, $robot, {'stats' => \%stats, 
-								   'subject' => "STATS $list->{'name'}",
+								   'subject' => "STATS $list->{'name'}", # compat <= 6.1.17.
 								   'auto_submitted' => 'auto-replied'})) {
 	    &do_log('notice',"Unable to send template 'stats_reports' to $sender");
 	    &report::reject_report_cmd('intern_quiet','',{'listname'=> $l},$cmd_line,$sender,$robot);
@@ -639,7 +639,7 @@ sub review {
 	} while ($user = $list->get_next_user());
 	unless ($list->send_file('review', $sender, $robot, {'users' => \@users, 
 							     'total' => $list->get_total(),
-							     'subject' => "REVIEW $listname",
+							     'subject' => "REVIEW $listname", # Compat <= 6.1.17.
 							     'auto_submitted' => 'auto-replied'})) {
 	    &do_log('notice',"Unable to send template 'review' to $sender");
 	    &report::reject_report_cmd('intern_quiet','',{'listname'=>$listname},$cmd_line,$sender,$robot);
