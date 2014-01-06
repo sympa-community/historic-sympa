@@ -25,18 +25,17 @@ package tools;
 
 use strict;
 
-use Cwd;
-use Digest::MD5;
-use Encode::Guess; ## Useful when encoding should be guessed
-use Encode::MIME::Header;
-use File::Copy::Recursive;
+use Time::Local;
 use File::Find;
+use Digest::MD5;
 use HTML::StripScripts::Parser;
-use Mail::Header;
+use File::Copy::Recursive;
 use POSIX qw(strftime mkfifo strtod);
 use Sys::Hostname;
+use Mail::Header;
+use Encode::Guess; ## Usefull when encoding should be guessed
+use Encode::MIME::Header;
 use Text::LineFold;
-use Time::Local;
 
 use Conf;
 use Language;
@@ -2296,22 +2295,17 @@ sub get_filename {
 	}
 	my @result;
 	foreach my $f (@try) {
-	    if (-l $f) {
-		my $realpath = Cwd::abs_path($f);    # follow symlink
-		next unless $realpath and -r $realpath;
-	    } elsif (!-r $f) {
-		next;
-	    }
-	    Log::do_log('debug3', 'name: %s ; file %s', $name, $f);
-
-	    if ($options->{'order'} and $options->{'order'} eq 'all') {
-		push @result, $f;
-	    } else {
-		return $f;
+	    &do_log('debug3','get_filename : name: %s ; dir %s', $name, $f  );
+	    if (-r $f) {
+		if ($options->{'order'} eq 'all') {
+		    push @result, $f;
+		}else {
+		    return $f;
+		}
 	    }
 	}
-	if ($options->{'order'} and $options->{'order'} eq 'all') {
-	    return @result;
+	if ($options->{'order'} eq 'all') {
+	    return @result ;
 	}
     }
     
