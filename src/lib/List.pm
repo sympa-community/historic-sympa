@@ -521,7 +521,7 @@ my %alias = ('reply-to' => 'reply_to',
 						      'gettext_id' => 'var name',
 						      'order' => 1
 						      },
-					   'value' => {'format' => '\S+',
+					   'value' => {'format' => '.+',
 						       'occurrence' => '1',
 						       'gettext_id' => 'var value',
 						       'order' => 2
