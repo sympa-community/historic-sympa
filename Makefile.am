@@ -98,14 +98,13 @@ nextstep:
 	@echo "#######################################################"
 
 importantchanges:
-	if [ -f $(DESTDIR)$(modulesdir)/Sympa/Constants.pm ]; then \
-		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MSympa::Constants -e 'print Sympa::Constants::VERSION'`; \
-        elif [ -f $(DESTDIR)$(bindir)/Version.pm ]; then \
-                previous=`perl -Mlib=$(DESTDIR)$(bindir) -MVersion -e 'print $$Version::Version'`; \
+	if test -f $(DESTDIR)/previous_sympa_version; then \
+		export PREVIOUS=`$(CAT) $(DESTDIR)/previous_sympa_version`; \
+		rm -f $(DESTDIR)/previous_sympa_version; \
 	fi; \
-	$(PERL) $(top_srcdir)/important_changes.pl \
-		--current=$(VERSION) \
-		--previous=$${previous};
+		$(PERL) $(top_srcdir)/important_changes.pl \
+			--current=$(VERSION) \
+			--previous=$${PREVIOUS};
 
 uninstall-hook:
 	rm -f $(DESTDIR)$(confdir)/sympa.conf
