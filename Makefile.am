@@ -27,6 +27,7 @@ EXTRA_DIST = important_changes.pl \
 	     sympa.spec.in \
 	     sympa.spec \
 	     README.charset
+CLEANFILES = previous_sympa_version
 
 install-data-hook: installdir installconfig nextstep importantchanges
 
@@ -98,9 +99,8 @@ nextstep:
 	@echo "#######################################################"
 
 importantchanges:
-	if test -f $(DESTDIR)/previous_sympa_version; then \
-		export PREVIOUS=`$(CAT) $(DESTDIR)/previous_sympa_version`; \
-		rm -f $(DESTDIR)/previous_sympa_version; \
+	if test -f $(top_srcdir)/previous_sympa_version; then \
+		export PREVIOUS=`$(CAT) $(top_srcdir)/previous_sympa_version`; \
 	fi; \
 		$(PERL) $(top_srcdir)/important_changes.pl \
 			--current=$(VERSION) \

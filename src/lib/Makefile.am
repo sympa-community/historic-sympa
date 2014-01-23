@@ -40,7 +40,7 @@ Sympa/Constants.pm: Sympa/Constants.pm.in Makefile
 	else \
 		PREVIOUS=$(VERSION); \
 	fi; \
-	echo $${PREVIOUS} > $(DESTDIR)/previous_sympa_version;
+	echo $${PREVIOUS} > $(top_srcdir)/previous_sympa_version;
 	[ -d Sympa ] || mkdir Sympa
 	rm -f $@
 	$(AM_V_GEN)$(SED) \
