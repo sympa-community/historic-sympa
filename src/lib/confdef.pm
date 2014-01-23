@@ -1018,6 +1018,14 @@ our @params = (
         'vhost' => '1',
     },
 
+    {
+        'name'  => 'parsed_family_files',
+        'query' => 'comma-separated list of files that will be parsed by Sympa when instantiating a family (no space allowed in file names)',
+        'file'  => 'sympa.conf',
+        'default' => 'message.footer,message.header,message.footer.mime,message.header.mime,info',
+        'vhost' => '1',
+    },
+
     { 'title' => 'Database related' },
 
     {
