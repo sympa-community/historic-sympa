@@ -3,6 +3,563 @@
 
 (See Changelog file for the full changes log)
 
+6.1.18		January 24, 2014
+
+  Features:
+
+	[10074] mail_tt2/command_report.tt2, mail_tt2/info_report.tt2,
+	mail_tt2/review.tt2, src/lib/Commands.pm, src/lib/List.pm,
+	src/lib/tt2.pm, web_tt2/edit_list_request.tt2,
+	web_tt2/review_family.tt2, web_tt2/search_user.tt2,
+	web_tt2/suboptions.tt2, web_tt2/subscriber_table.tt2,
+	web_tt2/suspend_request.tt2, wwsympa/wwslib.pm,
+	wwsympa/wwsympa.fcgi.in:  i18n of options for list parameters and
+	subscriber options.
+	- Options on edit_list page are shown by i18n'ed titles.
+	- Only listmasters can view real config values.
+	- Subscriber options on review pages, command results, subscriber
+	option pages and so on are shown by i17n'ed titles (along with real
+	option values).
+
+*****	[10051] src/lib/tt2.pm, web_tt2/Makefile.am, web_tt2/css.tt2,
+*****	web_tt2/ja_JP, web_tt2/ja_JP/css.tt2, web_tt2/ko_KR,
+*****	web_tt2/ko_KR/css.tt2, web_tt2/main.tt2, web_tt2/zh_CN,
+*****	web_tt2/zh_CN/css.tt2, web_tt2/zh_TW, web_tt2/zh_TW/css.tt2,
+*****	wwsympa/wwsympa.fcgi.in:  Per-language css.tt2 will override any
+*****	portion of main css, not fully replacing it.  So they may be used for
+*****	locale-specific customization.
+*****	Background: Default css.tt2 specifies the font families covering
+*****	Western scripts (Latin, Cyrillic, ...).  East Asian users may prefer
+*****	consistent font family supporting Western along with Eastern scripts
+*****	(Han, Hangul, ...).
+
+	[10038] src/lib/Scenario.pm: [bug][#8581][Reported by M. Ferrante]
+	Scenari: Inconsistent handling of header fields in rule conditions.
+	New features:
+	- "[msg_header->field][index]" returns the value of particular field. 
+	Index may be negative.
+	- "[msg_header->field]" still returns list of field values,
+	additionally, ordering will be preserved.
+	Fixes:
+	- Conditions is_listmaster, is_owner, is_editor and is_subscriber can
+	handle multiple values.
+	- They also parse arguments as header field values to get address
+	parts.
+	Tests needed.
+
+	[9966] src/lib/Message.pm, src/lib/confdef.pm:	New site config
+	parameter "sender_headers" to specify header fields by which message
+	sender is detected.
+	This is a enhancement to S. Shipway's improvement.
+
+	[9963] web_tt2/review.tt2, web_tt2/show_exclude.tt2,
+	wwsympa/wwsympa.fcgi.in: [Reported by so many listmasters we lost the
+	count] Exclusion table was just a display of the users excluded. list
+	owners could not do anything to restore subscriptions;
+	This page is now a form, similar to the review page, which allows to
+	restore users subscriptions.
+
+	[9959] src/bulk.pl.in, src/lib/Bulk.pm: [Submitted by S. Shipway, univ.
+	Auckland] When mail merge is activated, new parameters can be used,
+	taken from the mail headers:
+	- subject
+	- x-originating-ip
+	- message-id
+	- date
+	- x-original-to
+	- from
+	- to
+	- thread-topic
+	- content-type
+
+	[9956] web_tt2/review.tt2: [Submitted by S; shipway, univ. Auckland]
+	Added quick access links in the review page to reach all users whose
+	emails start with a given letter.
+
+	[9955] src/lib/List.pm, src/lib/SQLSource.pm, src/sympa_wizard.pl.in:
+	[Submitted by S. Shipway, univ. Auckland] ODBC is now supported for
+	email data sources.
+
+	[9951] src/lib/List.pm:  Now you can define a "scenari" directory in
+	the lists family directory. These scenarii will be available for lists
+	instantiated from this family.
+	The "scenari" directory must be put directly in the family directory,
+	not in the overall "families" directory. For example, if you want to
+	define scenarii specific to the "staff" family, you must define a
+	scenari directory in the /home/sympa/etc/families/staff/ directory. Not
+	in /home/sympa/etc/families/.
+
+
+
+  Changes:
+
+	[10193] src/lib/admin.pm, src/lib/confdef.pm:  Now the list of files
+	parsed (in addition to config.tt2) when instantiating a family are
+	defined in a new (sympa.conf and robot.conf parameter called
+	'parsed_family_files'. This parameter must contain a comma-separated
+	list of file names. If these files exist, with the '.tt2' extension in
+	a family, they will be parsed and added to the list directory. The
+	default value of the parameter is
+	'message.footer,message.header,message.footer.mime,message.header.mime,info'.
+
+	[10129] src/lib/List.pm:  Custom vars values can take any character
+	string as values (previously, spaces were forbidden).
+
+	[10065] web_tt2/javascript.tt2, web_tt2/skinsedit.tt2,
+	wwsympa/wwsympa.fcgi.in:  custom colors along with configured colors
+	are shown during testing colors.
+	Improved javascript.js:chooseColorNumber() to update position.
+
+	[10039] src/etc/scenari/send.editorkey,
+	src/etc/scenari/send.privateandnomultipartoreditorkey,
+	src/etc/scenari/send.publicnoattachment,
+	src/etc/scenari/send.publicnomultipart,
+	src/etc/scenari/spam_status.x-spam-status:  (con'd r10038) Limit the
+	header fields to be checked by scenarios.
+	- In spam_status scenario, last occurrences of X-Spam-status and so on
+	will be checked, since others are not trustworthy.
+	- Also, the last X-sender field would be checked.
+	n.b. I doubt if this field is trustworthy, though.
+	- In send scenario, first occurrences of Content-Type and so on will be
+	checked, since they must appear only at once.
+
+	[10025] src/bulk.pl.in, src/lib/Conf.pm, src/lib/confdef.pm,
+	src/lib/tools.pm, src/sympa.pl.in, src/task_manager.pl.in,
+	wwsympa/archived.pl.in, wwsympa/bounced.pl.in, wwsympa/wwslib.pm: 
+	[bug] [#7059] pidfile site parameters should be obsoleted.
+	As PID file paths are fixed during configure and included in init
+	script, those parameters are not usable.
+
+*****	[9989] configure.ac, src/Makefile.am, src/alias_manager.pl.in,
+*****	src/etc/script/ldap_alias_manager.pl.in,
+*****	src/etc/script/mysql_alias_manager.pl.in, src/lib/confdef.pm,
+*****	src/sympa_newaliases-wrapper.c, src/sympa_newaliases.pl.in:  Now alias
+*****	maintenance utilities other than newaliases may be used without special
+*****	configure options nor patch to alias_manager.pl.
+*****	Changes:
+*****	- aliaswrapper and virtualwrapper were deprecated and replaced with
+*****	sympa_newaliases-wrapper.
+*****	- New alias management program sympa_newaliases.pl which will typically be
+*****	called by alias_manager.pl via sympa_newaliases-wrapper.
+*****	- New site configuration parameters aliases_db_type and aliases_program
+*****	will control behaviour of alias database maintenance.
+*****	- configure script:
+*****	- Options --with-sendmail_aliases and --with-virtual_aliases were
+*****	deprecated.  Use --with-aliases_file instead.
+*****	- New options --with-makemap and --with-postalias, along with
+*****	options --with-newaliases and --with-postmap are available.
+*****	- Option --with-postmap_arg was removed.
+*****	- Alias managers can handle postmap/makemap style maps (delimited by
+*****	whitespace), not only newaliases style maps (delimited by colon).
+
+	[9972] src/lib/admin.pm:  Now
+	'message.footer','message.header','message.footer.mime','message.header.mime','info'
+	files are updated in existing lists when a family is instantiated. note
+	that it will overwrite any other customization.
+
+	[9954] src/lib/Message.pm: [Submitted by S. shipway, univ. Auckland]
+	When Sympa receives a mail without 'From' field, it tries to find the
+	sender by parsing the 'Envelope-From', 'X-Sender' and 'return-Path'
+	fields before giving up and moving the message to bad.
+
+	[9953] wwsympa/wwsympa.fcgi.in: [Submitted by S. Shipway, univ.
+	Auckland] several changes in privilegs to ease everyday lists
+	moderation:
+	- Owners and lismasters can moderate messages and shared repository
+	- Editors can moderate subscriptions
+	- 'del' and 'add' sceanrios are evaluated to make their result
+	available in each page.
+
+  Bug fixes:
+
+	[10194] src/lib/Scenario.pm:  In scenarios, the field
+	[msg->spam_status] was never taken into account because the message
+	objects fields were not made available to scenarios. Fixed by adding a
+	new test in Scenario::request_action. Now any Message field can be
+	accessed in scenarios.
+
+	[10163] src/sympa_wizard.pl.in:  Mail-DKIM < 0.39 depended on
+	Crypt::OpenSSL::Bignum.  Updates dependency.
+
+	[10159] Makefile.am, configure.ac, src/lib/Makefile.am:  Ugly fix for
+	make install bug: the important_changes.pl script was not correctly
+	executed at the end of make install. Indeed, the Makefile.am
+	"importantchanges" macro checked for the previous version number in
+	Sympa binaries AFTER this version number had been substituted with the
+	NEW version number. Then, previous and current version numbers had
+	always the same values. None of the -sometimes vital- informations
+	supposed to be displayed by this script were tehrefore displayed. The
+	ugliness of the fix resides here: I stored the previous version number
+	in a temporary file during the make and read it (then delete the file)
+	during make install.
+
+*****	[10076] wwsympa/wwsympa.fcgi.in:  wwsympa: Non-privileged users can
+*****	access to some restricted functions.
+*****	- Any users can access to skinsedit function and execute it.
+*****	- The remove_template function won't check argument.
+*****	These are due to typos in some tables (hashes) defining functions.
+*****	In addition, there are a few ineffective definitions in the tables.
+
+	[10070] src/lib/tools.pm:  tools::get_filename() has been ignoring
+	symbolic links.  Because "-r" file test operator returns false on
+	symlinks.  Expand symlink paths by Cwd::abs_path() then test them by
+	-r.
+	This will be a part of fixes for bug #7383.
+
+	[10067] wwsympa/wwsympa.fcgi.in:  [#7819] Creation of list is notified
+	to super listmasters even if it belongs to virtual robot.
+
+	[10063] src/sympa_wizard.pl.in:  MHonArc 2.6.18 should be used to avoid
+	vulnerabilities.
+	cf. CVE-2010-4524, CVE-2010-1677.
+
+	[10060] web_tt2/active_lists.tt2, web_tt2/css.tt2,
+	web_tt2/get_closed_lists.tt2, web_tt2/get_inactive_lists.tt2,
+	web_tt2/get_latest_lists.tt2, web_tt2/get_pending_lists.tt2,
+	web_tt2/latest_arc.tt2, web_tt2/latest_d_read.tt2,
+	web_tt2/latest_lists.tt2, web_tt2/ls_templates.tt2,
+	web_tt2/search_user.tt2, web_tt2/subscriber_table.tt2:	[#8506]
+	[Reported by P. Zsigmond, Univ. of British Columbia] background-color
+	of table cells are defined inconsistent.
+
+	[10049] web_tt2/css.tt2, web_tt2/css_ie.tt2:  Several fixes on style
+	sheets (CCS).
+	- Fixed broken css.tt2: Special characters were replaced by entities.
+	- Tune metrics of some items so that pages may be shown properly by
+	most of modern browsers.
+	- Added some workaround for IE bugs, though they are not bugs of Sympa.
+	Now IE 7 or later more or less correctly render.  Note: IE 6 or earlier
+	is not.
+
+	[10030] src/lib/List.pm: [#7840][Reported by P. Freyhult] Attribute
+	values in ldap_2level_query must be escaped.
+
+	[10029] src/lib/mail.pm:  mail::fix_part(): Newline "\n" in text/plain
+	body should be normalized to "\r\n" if content-transfer-encoding is
+	BASE64.
+
+	[10028] src/lib/Message.pm:  (con'd 10027) Message::fix_html_part()
+	breaks texts encoded by several charsets such as UTF-16.  Convert parts
+	always except their charset is UTF-8 or US-ASCII.
+
+	[10027] src/sympa_wizard.pl.in:  Sympa may be crashed by the UTF-16
+	texts without BOM.  It is due to a feature of Encode module.
+	Update MIME-Charset to 1.010 to prevent crash.
+	ToDo: Workaround for modules such as MHonArc, StripScripts not
+	supporting UTF-16.
+
+	[10022] mail_tt2/user_notification.tt2: [#7564] grammatical error in
+	mail_tt2/user_notification.tt2
+
+	[10021] src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+	src/etc/script/create_db.Sybase, src/etc/script/create_db.mysql,
+	src/lib/Upgrade.pm:  [#8558] Too short DKIM database field.
+	Expaned dkim_privatekey_spool from 1000 to 2000 o, though, I don't know
+	whether it is enough.
+
+	[10016] src/lib/Bulk.pm:  Bulk::next(): failure of locking spool may
+	not be detected.
+	DBI::execute() returns undef on errors, not -1.
+
+	[10007] src/etc/create_list_templates/confidential/comment.tt2,
+	src/etc/create_list_templates/discussion_list/comment.tt2,
+	src/etc/create_list_templates/hotline/comment.tt2,
+	src/etc/create_list_templates/html-news-letter/comment.tt2,
+	src/etc/create_list_templates/intranet_list/comment.tt2,
+	src/etc/create_list_templates/news-letter/comment.tt2,
+	src/etc/create_list_templates/private_working_group/comment.tt2,
+	src/etc/create_list_templates/public_web_forum/comment.tt2,
+	src/etc/mhonarc-ressources.tt2, web_tt2/arcsearch_form.tt2,
+	web_tt2/automatic_lists_request.tt2, web_tt2/compose_mail.tt2,
+	web_tt2/copy_template.tt2, web_tt2/create_list_request.tt2,
+	web_tt2/d_editfile.tt2, web_tt2/d_upload.tt2,
+	web_tt2/dump_scenario.tt2, web_tt2/ls_templates.tt2,
+	web_tt2/manage_template.tt2, web_tt2/modindex.tt2,
+	web_tt2/rename_list_request.tt2, web_tt2/request_topic.tt2,
+	web_tt2/review.tt2, web_tt2/reviewbouncing.tt2,
+	web_tt2/scenario_test.tt2, web_tt2/serveradmin.tt2,
+	web_tt2/setlang.tt2, web_tt2/sigrequest.tt2, web_tt2/suboptions.tt2,
+	web_tt2/suspend_request.tt2, web_tt2/viewmod.tt2: [#8450] web_tt2:
+	"for" attributes of several "label" elements did not refer proper
+	widgets.
+
+	[10005] wwsympa/wwsympa.fcgi.in:  DB log can contain the value of
+	secure parameter "cookie".  It should be removed from argument.
+
+*****	[9995] src/lib/Upgrade.pm: [debian#642464] [Originally submitted by E
+*****	Bouthenot, Debian Project] Initial installation or upgrade with SQLite
+*****	fails.
+*****	cf. <http://bugs.debian.org/642464>
+
+	[9994] src/lib/confdef.pm, wwsympa/wwslib.pm:  Some wwsympa.conf
+	parameters are not defined in @confdef::params, and some are
+	redundantly defined their defaults in wwslib::load_config().
+	Fixes:
+	- These were added to @confdef::params:
+	custom_archiver
+	review_page_size
+	viewlogs_page_size
+	htmlarea_url
+	- This was removed:
+	robots (wwsympa.conf parameter)
+	- Let wwslib::load_conf() get defaults from @confdef::params.
+	More known bugs:
+	- This inconsistently refers both wwsympa.conf and
+	sympa.conf/robot.conf:
+	arc_path
+	- This refers sympa.conf/robot.conf by default and wwsympa.conf:
+	cookie_domain
+	- These refers sympa.conf/robot.conf, though they are defined as
+	wwsympa.conf
+	parameters:
+	password_case
+	title
+	default_home
+	ldap_force_canonical_email
+
+	[9988] src/lib/List.pm:  When sending a crypted message, it was
+	possible that very few users would have provided their certificate to
+	the list. In such a situation, if either all the the non VERP
+	receipients array of receipients was empty, the message was not sent at
+	all (the message distribution was stopped and the non VERP receipients
+	were not distributed). Fixed by checking the number of receipients for
+	each situation and issuing an info in the logs but without stopping the
+	overall distribution.
+
+	[9985] src/lib/mail.pm: [Reported by S. Shipway, univ. Auckland] When
+	merge was activated on a list, Sympa would merge even signed messages.
+	Signed messages should not be altered in any way, so merge is
+	deactivated when such a message is sent to a list.
+	Note that an alternate solution would be to remove the incoming
+	signature and make the list sign the message, if it has a certificate.
+	This solution should be investigated in later versions of Sympa.
+
+	[9984] src/lib/SQLSource.pm: [#7688] Supplemental Unicode characters
+	beyond BMP can't be used on MySQL.
+	As of MySQL 5.5.3, text types supported UTF-8 characters with 4 octets
+	(a.k.a. utf8mb4).  By them, additional characters such as CJK
+	ideographs used
+	in persons' names can be used.
+	Change: Try to set 'utf8mb4' then 'utf8' as client-side character set.
+	Note:
+	- Server also must enable utf8mb4, or supplemental characters will be
+	ignored
+	silently.  Add "character-set-server=utf8mb4" line to my.cnf.
+	- Tables must be defined with "DEFAULT CHARACTER SET utf8mb4" option,
+	or run
+	"ALTER TABLE" queries to change default character sets of preexisting
+	tables.
+
+	[9982] src/lib/tools.pm:  When DKIM was activated, removing invalid
+	DKIM signatures would break S/MIME signature.
+
+	[9978] src/lib/SQLSource.pm: [#8983] MySQL: session charset is cleared.
+	connect() sets "mysql_auto_reconnect" driver attribute to true when the
+	processes are running under mod_perl or CGI environment so that ping()
+	will always succeed and then "SET NAMES utf8" will be skipped.
+	Fixed by resetting that attribute as soon as connect() succeeded.
+
+	[9974] soap/SympaTransport.pm, soap/sympasoap.pm,
+	src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+	src/etc/script/create_db.SQLite, src/etc/script/create_db.Sybase,
+	src/etc/script/create_db.mysql, src/lib/Upgrade.pm, src/lib/confdef.pm,
+	src/lib/tools.pm, src/sympa_wizard.pl.in, wwsympa/SympaSession.pm,
+	wwsympa/cookielib.pm: [#6180][#6979][#7079][#8056] Web session will be
+	broken by nearly simultaneous multiple HTTP requests, such as browsing
+	an archive page with a few images.
+	NOTE:
+	- Database change is needed.
+	- Optional Crypt-CipherSaber is needed to use encrypted cookie feature.
+	Fixes:
+	- Made transition between session IDs not to occur on each access; they
+	occur with interval specified by cookie_refresh parameter.
+	- Made raw session ID not to be disposed to clients; encrypted IDs
+	changed by each request are used for cookie values.
+	The first point prevents session to be broken, while it slightly
+	weakens against the replay attack.  The second point keeps
+	inpredictability of session cookies.
+
+	[9971] src/lib/admin.pm, wwsympa/wwsympa.fcgi.in: [#8684][Reported by
+	D. Fournier, CNRS] In some cases - such as changing a user email
+	address through the Sympa admin > Users web interface - the email value
+	was not set in the "update" config paragraph, leading to logs stating:
+	'Missing key "email" in param "update" in...'.
+
+	[9970] wwsympa/wwsympa.fcgi.in: [#6180] [Tentative workaround] Session
+	breaks after viewing HTML from archives which references attachments.
+	Although it can be broken by unintantional double-clicking, it is
+	slightly effective workaround.
+
+	[9962] src/lib/List.pm: [#8895][Reported by F. Périchon] Users included
+	from data sources can unsubscribe from a list provided the
+	"unsusbscribe" scenario allows them. Unsubscription worked well, but
+	when re-subscribing to the list, both the listmasters and the users
+	received an error; this was because the user counter was not increased
+	when re-including a subscriber. Fixed by changing the test and increase
+	the counter when just removing someone from the exclusion table.
+
+	[9961] src/lib/confdef.pm, web_tt2/edit_config.tt2: [#8712][Reported by
+	L. Didry, CIRIL] In the main admin edition page, the database password
+	was displayed as clear text. repalced by a series of stars.
+
+	[9960] src/lib/Lock.pm: [#8711][Submitted by a nice anonymous
+	contributor aka "Luke"] When using NFS lock, timeout and
+	stale_lock_timeout were inverted and the timout value was increased.
+
+	[9952] wwsympa/wwsympa.fcgi.in: [#8916][Reported by Adam Bernstein,
+	Electric Embers] wwsympa/search: Date is not displayed in human
+	readable form in "other similar subscribers" results.
+	Format date and update_date fields in tt2 parameters.
+
+	[9950] wwsympa/wwsympa.fcgi.in: [Submitted by P. Aepli, univ. Genève]
+	r9946 and r9949 fixes were not enough to fix multivalued attributes
+	problem with Shibboleth. Philippe found the duplicated test and
+	additional concatenation that were still causing problem.
+
+	[9948] src/lib/List.pm: [Reported by Ö. Sahin, univ.Lyon 2] When
+	List::new sub was called, sync_include_admin was systematically
+	executed, except when specifically stated. If using a lot of owenr and
+	editor datasources, this resulted in large amount of queries to these
+	datasources when seraching lists or displaying the list of lists. This
+	is now modulated. When calling get_lists, calling sync_include_admin is
+	now optional and executed if the limits of the 'ttl' and
+	'ditribution_ttl' parameters are not exceeded.
+
+	[9946] src/lib/List.pm, wwsympa/wwsympa.fcgi.in: [Reported by P. Aepli,
+	univ. Genève] Multi-valued parameters obtained from Shibboleth IdP were
+	badly parsed. This as due to the fact that Sympa stored additional
+	parameters under the form: "key1=value1;key2=value2;etc." As Shibboleth
+	uses semi-columns to separate values in multivalued attributes, values
+	were misinterpreted as new - empy - attributes. Fixed by separating
+	keys and values by totally unlikely strings.
+
+	[9457] src/etc/Makefile.am, src/etc/scenari/info.conceal:9456):  The
+	"info.conceal" scenario was neither packaged nor installed. 
+
+	[9456] src/etc/Makefile.am, src/etc/scenari/info.conceal:  The
+	"info.conceal" scenario was neither packaged nor installed.
+
+	[9419] src/lib/List.pm:  When adding footers, nothing appeared in the
+	mail received by subscribers in the following condition:
+	- footer_type was set to "append"
+	- the mail was multipart/html
+	This was due to the footer being added to the text/plain part only. Now
+	it is added to the text/teml part as well.
+
+	[9226] src/lib/Bulk.pm, src/lib/List.pm: [#8466][#8468][Initially
+	Submitted by Marton J., Budapesti M?\197?\177szaki ?\195?\169s
+	Gazdas?\195?\161gtudom?\195?\161nyi Egyetem] Oracle cannot handle
+	messages as long type.
+	* DBI::Oracle has a default setting of LongReadLen=80.	As a result,
+	driver does not fetch a record in bulkspool_table containing a long
+	column that have value longer than 80 characters.
+	* DBI::Oracle raises error if messages larger than approximately 2600 o
+	(4000 o in base64 encoding) was sent.
+	Fixes:
+	- Original patch was for Sympa 6.0.1; it was rewritten for
+	sympa-6.1-branch.
+	* Set $dbh->{'LongReadLen'} to be max_size * 2.
+	* Give SQL the messages as bound parameters to avoid long text
+	literals.
+	* Rewritten patch also includes support for Sybase which needs similar
+	concern.
+
+	[9217] src/lib/SQLSource.pm: [#8628][Submitted by Marton J., Budapesti
+	M?\197?\177szaki ?\195?\169s Gazdas?\195?\161gtudom?\195?\161nyi
+	Egyetem] Inproper connection pool-handling: database user is not taken
+	into account.
+	Modified patch was applied.
+
+	[9214] src/lib/SQLSource.pm: [#8629][Submitted by Marton J., BME,
+	Hungary] Oracle date writer formula was broken: after noon, 1 day is
+	added.
+
+	[9207] src/etc/script/create_db.SQLite: [#8669] create_db.SQLite is not
+	uptodate.
+
+*****	[9189] src/bulk.pl.in:	If merge_feature is on, whole or part of
+*****	subscribers can be disposed by including "[% to %]" into messages.
+*****	Fixed by removing 'receipients' item of bulk packets from the parameter
+*****	passed to Bulk::merge_msg().
+
+	[9180] soap/sympa.wsdl:  [for backward compatibility] Soap which
+	response format differs from wsdl, changing the wsdl in order to keep
+	existing clients working
+
+	[9178] soap/sympasoap.pm: [#7318] Encoding problem on sympasoap.
+	UTF-8 strings were encoded twice as latin-1 strings.
+
+	[9131] wwsympa/Marc/Search.pm: [#8662][Reported by A. Bernstein,
+	Electric Embers] wwsympa: arcsearch crashes on non-UTF-8 bytes in HTML,
+	with error "Malformed UTF-8 character (fatal)".
+	Marc::Search uses Unicode internally to utilize case-insensitive match.
+	 Fixed by replacing ":utf8" input layer with ":encoding(utf8)", since
+	former won't really check inputs.
+
+	[9124] src/lib/Lock.pm: [#8661][Reported by Y. Rouillard, INRA]
+	Lock::remove_lock() doesn't properly destroy Lock object.
+	Clear entire lock entry not only filehandle of it.
+
+	[9104] src/lib/Upgrade.pm: [#7459][Submitted by Mitar] Tables in
+	PostgreSQL user schema are not detected during upgrade process.
+
+	[9082] COPYING, Makefile.am, configure.ac, doc/Makefile.am,
+	doc/sample/Makefile.am, important_changes.pl, mail_tt2/Makefile.am,
+	soap/Makefile.am, soap/sympa_soap_client.pl.in, soap/sympasoap.pm,
+	src/Makefile.am, src/alias_manager.pl.in, src/aliaswrapper.c,
+	src/bouncequeue.c, src/bulk.pl.in, src/etc/Makefile.am,
+	src/etc/script/Makefile.am, src/etc/script/arc2webarc.pl.in,
+	src/etc/script/crypt_passwd.pl.in, src/etc/script/init_comment.pl.in,
+	src/etc/script/p12topem.pl.in, src/etc/script/testldap.pl.in,
+	src/etc/script/tpl2tt2.pl.in, src/familyqueue.c, src/lib/Archive.pm,
+	src/lib/Bulk.pm, src/lib/Commands.pm, src/lib/Conf.pm,
+	src/lib/Config_XML.pm, src/lib/Datasource.pm, src/lib/Family.pm,
+	src/lib/Fetch.pm, src/lib/LDAPSource.pm, src/lib/Language.pm,
+	src/lib/Ldap.pm, src/lib/List.pm, src/lib/Lock.pm, src/lib/Log.pm,
+	src/lib/Message.pm, src/lib/PlainDigest.pm, src/lib/SQLSource.pm,
+	src/lib/Scenario.pm, src/lib/Sympa/Constants.pm.in,
+	src/lib/Sympa/Template/Compat.pm, src/lib/Task.pm, src/lib/Upgrade.pm,
+	src/lib/WebAgent.pm, src/lib/admin.pm, src/lib/confdef.pm,
+	src/lib/mail.pm, src/lib/report.pm, src/lib/time_utils.pm,
+	src/lib/tools.pm, src/lib/tt2.pm, src/queue.c, src/sympa.pl.in,
+	src/sympa_wizard.pl.in, src/task_manager.pl.in, src/virtualwrapper.c,
+	web_tt2/Makefile.am, wwsympa/Auth.pm, wwsympa/Bounce.pm,
+	wwsympa/Makefile.am, wwsympa/SharedDocument.pm,
+	wwsympa/SympaSession.pm, wwsympa/archived.pl.in, wwsympa/bounced.pl.in,
+	wwsympa/cookielib.pm, wwsympa/wwslib.pm, wwsympa/wwsympa.fcgi.in:
+	[#8066] [Submitted by X. Bachelot] FSF had moved.
+
+	[9058] src/sympa.pl.in:  [#7825] [Reported by D. Marant, Université
+	Lille 1] spam_status scenario has no effect for messages sent to
+	command addresses.
+	Fixed  a typo in sympa::DoCommand(). 
+
+	[9055] src/lib/Scenario.pm:  [#7526] [Submitted by Evili del Rio] SQL
+	Filters always return false.
+	Thouogh what SQLSource::fetch() returns may be arrayref of references
+	to array of rows, it was treated as an arrayref of rows.
+
+	[9029] doc/man8/Makefile.am, doc/man8/alias_manager.pod.in,
+	doc/man8/archived.pod.in, doc/man8/bounced.pod.in, doc/man8/sympa.pod,
+	doc/man8/sympa.pod:9026):  [#8650] pod2man fails with non-ASCII
+	characters in POD.
+	Partially backported from 6.2-branch: Use E<...> for non-ASCII letters
+	so that
+	POD sources contain only ASCII.
+	In conjunction corrected several descriptions out-of-date.
+
+	[9027] soap/sympa_soap_server-wrapper.fcgi.c, src/bouncequeue.c,
+	src/familyqueue.c, src/queue.c, wwsympa/wwsympa-wrapper.fcgi.c: 
+	[#8658] [Submitted by Marc Schütz] Suppress compiler warnings.
+	- In sympa_soap_server-wrapper.fcgi.c & wwsympa-wrapper.fcgi.c, main()
+	are lacking return.  Instead, returns the result of exec() if it
+	failed.
+	- Some syscalls were not accompanied by relevant headers.  They are
+	added.
+
+	[8988] src/lib/tt2.pm:	Fixed bad call to logging facility, was making
+	processes crash
+
 6.1.17		February 05, 2013
 
   Features:
