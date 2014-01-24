@@ -9681,8 +9681,9 @@ msgstr "受け取らない (休暇中など)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
-#~ msgid "Show the exclusion table"
-#~ msgstr "除外の一覧表を表示"
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "除外の一覧表を表示"
 
 #~ msgid "More..."
 #~ msgstr "続き"

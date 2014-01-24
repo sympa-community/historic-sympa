@@ -9775,6 +9775,17 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Mostrar la tabla de exclusión"
+
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr ""
+"Se produjo el siguiente error mientras se procesaban los errores de rebote: %"
+"1"
+
 #: ../src/lib/confdef.pm:924
 msgid "Bouncing email rate for warn list owner"
 msgstr ""
@@ -10119,14 +10130,6 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Mostrar la tabla de exclusión"
-
-#~ msgid "The following error occurred whila managing bounces: %&"
-#~ msgstr ""
-#~ "Se produjo el siguiente error mientras se procesaban los errores de "
-#~ "rebote: %1"
 
 #~ msgid "subscribed"
 #~ msgstr "suscrito"

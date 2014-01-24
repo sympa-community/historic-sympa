@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2013-02-12 02:12+0200\n"
-"Last-Translator: kareneliot <kareneliot@riseup.net>\n"
+"PO-Revision-Date: 2014-01-14 22:14+0200\n"
+"Last-Translator: gomex <gomex@riseup.net>\n"
 "Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "X-Rosetta-Version: 0.1\n"
@@ -299,7 +299,7 @@ msgstr ""
 
 #: ../web_tt2/admin.tt2:14
 msgid "Blacklist:"
-msgstr "Lista negra:"
+msgstr "Lista de proibições:"
 
 #: ../web_tt2/admin.tt2:14
 msgid "Handles the set of black-listed mail addresses for this list."
@@ -477,7 +477,7 @@ msgstr "Adicionar assinantes"
 #: ../web_tt2/review.tt2:159 ../web_tt2/review.tt2:77
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
-msgstr "Sem notificação"
+msgstr "sem notificação"
 
 #: ../web_tt2/admin_menu.tt2:4
 msgid "List Administration Panel"
@@ -805,9 +805,8 @@ msgstr "Gerenciamento de lista automático"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
-#, fuzzy
 msgid "The automatic lists are based on the %1 family"
-msgstr "As listas automáticas são baseadas na família $1"
+msgstr "As listas automáticas são baseadas na família %1"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
@@ -846,7 +845,7 @@ msgstr ""
 
 #: ../web_tt2/blacklist.tt2:4
 msgid "Blacklist management"
-msgstr "Gerenciamento de lista negra"
+msgstr "Gerenciamento da lista de proibições"
 
 #: ../web_tt2/blacklist.tt2:8
 msgid ""
@@ -855,8 +854,8 @@ msgid ""
 "blacklist is in use for the following operation:"
 msgstr ""
 "As operações requisitadas por usuários que têm seus emails no arquivo de "
-"lista negra são rejeitadas. A\n"
-" lista negra está em uso para a seguinte operação:"
+"lista de proibições são rejeitadas. A\n"
+" lista de proibições está em uso para a seguinte operação:"
 
 #: ../web_tt2/blacklist.tt2:10
 msgid "Syntax:"
@@ -884,12 +883,12 @@ msgstr "apenas um caractere * é permitido por linha"
 
 #: ../web_tt2/blacklist.tt2:20
 msgid "The current blacklist is empty"
-msgstr "A lista negra atual está vazia"
+msgstr "A lista de proibições atual está vazia"
 
 #. (rows)
 #: ../web_tt2/blacklist.tt2:22
 msgid "The current blacklist contains %1 line(s)"
-msgstr "A lista negra atual tem %1 linha(s)"
+msgstr "A lista de proibições atual tem %1 linha(s)"
 
 #: ../web_tt2/blacklist.tt2:38 ../web_tt2/dump_scenario.tt2:37
 #: ../web_tt2/edit_template.tt2:36
@@ -2055,13 +2054,12 @@ msgstr "Erros de sintaxe com os seguintes parâmetros: %1"
 
 #: ../web_tt2/error.tt2:47
 msgid "Authorization rejected. Maybe you forgot to log in?"
-msgstr ""
+msgstr "Autorização rejeitada. Talvez você tenha esquecido de efetuar o log in?"
 
 #. (u_err.list)
 #: ../web_tt2/error.tt2:48
-#, fuzzy
 msgid "List %1 not found"
-msgstr "Arquivo não encontrado."
+msgstr "Lista %1 não encontrada."
 
 #. (u_err.new_robot)
 #: ../web_tt2/error.tt2:49
@@ -2495,15 +2493,13 @@ msgid "No user excluded."
 msgstr "Nenhum usuário foi removido."
 
 #: ../web_tt2/exclusion_table.tt2:35
-#, fuzzy
 msgid "Restore selected email addresses"
-msgstr "Excluir os endereços de e-mail selecionados"
+msgstr "Restaurar os endereços de e-mail selecionados"
 
 #: ../web_tt2/exclusion_table.tt2:35
-#, fuzzy
 msgid "Do you really want to restore subscription for ALL selected addresses?"
 msgstr ""
-"Tem certeza que deseja cancelar a inscrição de TODOS os assinantes "
+"Tem certeza que deseja restaurar a inscrição de TODOS os assinantes "
 "selecionados?"
 
 #: ../web_tt2/family_signoff.tt2:1 ../web_tt2/family_signoff_request2.tt2:1
@@ -2543,11 +2539,11 @@ msgstr "Listas fechadas"
 
 #: ../web_tt2/get_closed_lists.tt2:10 ../web_tt2/get_pending_lists.tt2:9
 msgid "list name"
-msgstr "Nome da lista"
+msgstr "nome da lista"
 
 #: ../web_tt2/get_closed_lists.tt2:11 ../web_tt2/get_pending_lists.tt2:10
 msgid "list subject"
-msgstr "Assunto da lista"
+msgstr "assunto da lista"
 
 #: ../web_tt2/get_closed_lists.tt2:12 ../web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
@@ -2820,7 +2816,7 @@ msgstr "Gerenciar Assinantes"
 
 #: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:44
 msgid "Blacklist"
-msgstr "Lista negra"
+msgstr "Lista de proibições"
 
 #: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
 #: ../web_tt2/serveradmin.tt2:123
@@ -2843,11 +2839,11 @@ msgstr "Ir"
 
 #: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
-msgstr "E-mail:"
+msgstr "endereço de e-mail:"
 
 #: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
-msgstr "Senha:"
+msgstr "senha:"
 
 #: ../web_tt2/loginbanner.tt2:43
 msgid "Login"
@@ -3063,7 +3059,7 @@ msgstr "Rejeitar sem notificação "
 
 #: ../web_tt2/modindex.tt2:41
 msgid "Add to blacklist"
-msgstr "Colocar na lista negra"
+msgstr "Colocar na lista de proibições"
 
 # brackets not necessary in portuguese
 #: ../web_tt2/modindex.tt2:52
@@ -3089,7 +3085,7 @@ msgstr "Rejeição com notificação"
 
 #: ../web_tt2/modindex.tt2:120
 msgid "Reject and blacklist sender"
-msgstr "Rejeitar e colocar remetente na lista negra"
+msgstr "Rejeitar e colocar remetente na lista de proibições"
 
 #: ../web_tt2/modindex.tt2:128
 msgid "Toggle spams"
@@ -3113,7 +3109,7 @@ msgstr "Caminho"
 
 #: ../web_tt2/modindex.tt2:180 ../web_tt2/modindex.tt2:199
 msgid "edit blacklist"
-msgstr "editar lista negra"
+msgstr "editar lista de proibições"
 
 #: ../web_tt2/modindex.tt2:192
 msgid "Moderation management"
@@ -3964,7 +3960,7 @@ msgstr "Reconstruir arquivos HTML usando diretórios \"arctxt\" como entrada."
 
 #: ../web_tt2/serveradmin.tt2:114
 msgid "listname: "
-msgstr "Nome da lista: "
+msgstr "nome da lista: "
 
 #: ../web_tt2/serveradmin.tt2:114
 msgid "Rebuild archive"
@@ -4129,9 +4125,8 @@ msgid "Cipher key size used"
 msgstr "Tamanho da chave cifrada utilizada"
 
 #: ../web_tt2/show_exclude.tt2:3
-#, fuzzy
 msgid "Exclusion table"
-msgstr "Exibir a tabela de exclusão forçada"
+msgstr "Tabela de exclusão"
 
 #: ../web_tt2/show_exclude.tt2:8
 msgid ""
@@ -4144,14 +4139,14 @@ msgid ""
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
 "Os usuários listados abaixo estão excluídos-forçados da lista. Atente-se ao "
-"fato de que esta funcionalidade é diferente da lista negra. Exclusão forçada "
-"faz sentido \n"
-"quando uma lista é baseada em fontes de dados externas; graças à exclusão-"
-"forçada, um usuário pode ter sua inscrição cancelada (ou ser removido pelo "
-"proprietário da lista) embora \n"
+"fato de que esta funcionalidade é diferente da lista de proibições. Exclusão "
+"forçada faz sentido \n"
+"quando uma lista é baseada em fontes de dados externas; graças à "
+"exclusão-forçada, um usuário pode ter sua inscrição cancelada (ou ser "
+"removido pelo proprietário da lista) embora \n"
 "ele devesse ser incluso por meio de uma fonte de dados externa. Usuários "
-"entram na tabela de exclusão-forçada por meio das funções padrões de remoção/"
-"cancelamento de inscrição. \n"
+"entram na tabela de exclusão-forçada por meio das funções padrões de "
+"remoção/cancelamento de inscrição. \n"
 "Eles saem da tabela de exclusão-forçada por meio das funções padrões de "
 "inscrição/inserção."
 
@@ -4428,7 +4423,7 @@ msgstr "uma em cada duas linhas em tabelas, alternadas com color_14"
 
 #: ../web_tt2/skinsedit.tt2:95
 msgid "main navigation tabs;"
-msgstr "Abas principais de navegação;"
+msgstr "abas principais de navegação;"
 
 #: ../web_tt2/skinsedit.tt2:95
 msgid "most of the buttons;"
@@ -4763,7 +4758,7 @@ msgstr "retornando"
 #. (u.email)
 #: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
-msgstr "Avatar de %1"
+msgstr "avatar de %1"
 
 #: ../web_tt2/suspend_request.tt2:13
 msgid "Suspended"
@@ -5532,7 +5527,7 @@ msgstr "A lista '%1' não existe."
 #. (u_err.listname)
 #: ../mail_tt2/command_report.tt2:107
 msgid "%1 mailing list does not provide subscriber preferences."
-msgstr "A lista %1 não fornece opções de inscrição."
+msgstr "a lista %1 não fornece opções de inscrição."
 
 #. (u_err.email,u_err.listname)
 #: ../mail_tt2/command_report.tt2:111
@@ -5624,7 +5619,7 @@ msgstr "Para mais informações cheque o site da lista %1"
 #. (list.name,date)
 #: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
 msgid "%1 Digest %2"
-msgstr "Sumário de %2 da lista %1"
+msgstr "sumário de %2 da lista %1"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
 #: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2775
@@ -6564,9 +6559,8 @@ msgstr " Usuário %1 encontrou um erro interno do servidor"
 
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
-#, fuzzy
 msgid "The following error occurred while managing bounces: %1"
-msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+msgstr "O seguinte erro ocorreu enquanto gerenciava os seguintes retornos: %1"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -7404,7 +7398,6 @@ msgstr ""
 "seguinte URL:"
 
 #: ../mail_tt2/moderate.tt2:27
-#, fuzzy
 msgid ""
 "Because the new message is suspected to be a spam it is not attached to this "
 "one. You must use\n"
@@ -7976,7 +7969,7 @@ msgstr "restrito a usuários do domínio local"
 
 #: ../src/etc/scenari/access_web_archive.listmaster:1
 msgid "listmaster"
-msgstr "Gerente Geral de Listas"
+msgstr "gerente geral de listas"
 
 #: ../src/etc/scenari/access_web_archive.owner:1
 msgid "by owner"
@@ -8097,9 +8090,8 @@ msgid "just for listmaster"
 msgstr "apenas para o Gerente Geral de Listas"
 
 #: ../src/etc/scenari/info.conceal:1
-#, fuzzy
 msgid "restricted to subscribers - Silent rejection otherwise."
-msgstr "restrito a membros ou usuários do domínio local"
+msgstr "restrito a inscritos - Rejeição silenciosa em outros casos."
 
 #: ../src/etc/scenari/info.open:1
 msgid "for anyone"
@@ -8470,7 +8462,6 @@ msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Segunda:Terça:Quarta:Quinta:Sexta:Sábado:Domingo"
 
 #: ../src/etc/mhonarc-ressources.tt2:643
-#, fuzzy
 msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
 msgstr "Segunda:Terça:Quarta:Quinta:Sexta:Sábado:Domingo"
 
@@ -8483,7 +8474,6 @@ msgstr ""
 "Novembro:Dezembro"
 
 #: ../src/etc/mhonarc-ressources.tt2:665
-#, fuzzy
 msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
 msgstr ""
 "Janeiro:Fevereiro:Março:Abril:Maio:Junho:Julho:Agosto:Setembro:Outubro:"
@@ -8519,7 +8509,7 @@ msgstr ""
 
 #: ../src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
-msgstr "apagar mensamente retornos para endereços não inscritos"
+msgstr "apagar mensalmente retornos para endereços não inscritos"
 
 #: ../src/etc/global_task_models/purge_session_table.daily.task:1
 msgid ""
@@ -8559,11 +8549,13 @@ msgstr "Atualização da lista de membros baseada no TTL"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:1
 msgid "Confidential list setup"
-msgstr ""
+msgstr "Configuração de lista confidencial"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:3
 msgid "No subscription / unsubscription: only the list owner can add members"
 msgstr ""
+"Sem inscrição / Cancelar inscrição: apenas o dono da lista pode adicionar "
+"usuários"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:4
 #: ../src/etc/create_list_templates/hotline/comment.tt2:4
@@ -8572,13 +8564,14 @@ msgid "private archives"
 msgstr "arquivos privados"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:5
-#, fuzzy
 msgid "list visible to list members only"
-msgstr "Número máximo de inscritos na lista"
+msgstr "lista visível apenas para os membros da lista"
 
 #: ../src/etc/create_list_templates/confidential/comment.tt2:6
 msgid "Only list members can send messages. OTHER ARE SILENTLY REJECTED."
 msgstr ""
+"Penas os membros da lista podem enviar mensagem. OUTROS SERÃO "
+"SILENCIOSAMENTE REJEITADOS."
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
@@ -8604,7 +8597,7 @@ msgstr "todos podem publicar"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
 msgid "controlled subscription"
-msgstr "Inscrição controlada"
+msgstr "inscrição controlada"
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:1
 msgid ""
@@ -8913,7 +8906,7 @@ msgstr "Inclusão de arquivo"
 
 #: ../src/lib/List.pm:743
 msgid "data location URL"
-msgstr "URL de localização dos dados"
+msgstr "url de localização dos dados"
 
 #: ../src/lib/List.pm:1042 ../src/lib/List.pm:749 ../src/lib/List.pm:782
 #: ../src/lib/List.pm:863
@@ -9523,7 +9516,7 @@ msgstr "[ Imagem%s ]"
 
 #: ../src/lib/PlainDigest.pm:360
 msgid "[Image%s]"
-msgstr "[ Imagem%s ]"
+msgstr "[Imagem%s ]"
 
 #: ../src/lib/tt2.pm:149
 msgid "(unknown date)"
@@ -9664,7 +9657,7 @@ msgstr "descrição da lista"
 
 #: ../wwsympa/wwslib.pm:67
 msgid "list homepage"
-msgstr "Página da lista"
+msgstr "página da lista"
 
 #: ../wwsympa/wwslib.pm:68
 msgid "list creation request message"
@@ -9704,7 +9697,7 @@ msgstr "modo de notificação"
 
 #: ../wwsympa/wwslib.pm:32
 msgid "text-only mode"
-msgstr "Modo apenas-texto"
+msgstr "modo apenas-texto"
 
 #: ../wwsympa/wwslib.pm:33
 msgid "html-only mode"
@@ -9722,11 +9715,14 @@ msgstr "sem correio (útil em caso de férias)"
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
 
-#~ msgid "Show the exclusion table"
-#~ msgstr "Exibir a tabela de exclusão forçada"
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Exibir a tabela de exclusão forçada"
 
-#~ msgid "The following error occurred whila managing bounces: %&"
-#~ msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr "O seguinte erro ocorreu enquanto gerenciando retornos: %&"
 
 #~ msgid "subscribed"
 #~ msgstr "inscrito"

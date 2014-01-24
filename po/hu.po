@@ -10173,6 +10173,10 @@ msgid ""
 "Sympa. Select which provider you want to use your groups from."
 msgstr ""
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Kizárási táblázat mutatása"
+
 #: ../web_tt2/skinsedit.tt2:120
 msgid "Background color for the news area of the home page."
 msgstr ""
@@ -11311,9 +11315,6 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Kizárási táblázat mutatása"
 
 #, fuzzy
 #~ msgid "More..."

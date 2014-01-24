@@ -9841,6 +9841,10 @@ msgstr ""
 msgid "Spools"
 msgstr ""
 
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Εμφάνιση του πίνακα εξαιρέσεων"
+
 #. (messagekey,spoolname)
 #: ../web_tt2/viewspool_message.tt2:2
 msgid "Message #%1 in %2 spool"
@@ -10182,9 +10186,6 @@ msgstr ""
 #: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
-
-#~ msgid "Show the exclusion table"
-#~ msgstr "Εμφάνιση του πίνακα εξαιρέσεων"
 
 #, fuzzy
 #~ msgid "More..."

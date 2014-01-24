@@ -63,7 +63,7 @@ CREATE TABLE bulkmailer_table (
 CREATE TABLE bulkspool_table ( 
 	 dkim_d_bulkspool 	 varchar(50), 
 	 dkim_i_bulkspool 	 varchar(100), 
-	 dkim_privatekey_bulkspool 	 varchar(2000), 
+	 dkim_privatekey_bulkspool 	 varchar(1000), 
 	 dkim_selector_bulkspool 	 varchar(50), 
 	 lock_bulkspool 	 int(1), 
 	 message_bulkspool 	 longtext, 
@@ -184,11 +184,9 @@ CREATE TABLE one_time_ticket_table (
 CREATE TABLE session_table ( 
 	 data_session 	 text, 
 	 date_session 	 int(11) NOT NULL, 
-	 refresh_date_session	int(11) NOT NULL,
 	 email_session 	 varchar(100), 
 	 hit_session 	 int(11), 
 	 id_session 	 varchar(30) NOT NULL, 
-	 prev_id_session	varchar(30),
 	 remote_addr_session 	 varchar(60), 
 	 robot_session 	 varchar(80), 
 	 start_date_session 	 int(11) NOT NULL, 
