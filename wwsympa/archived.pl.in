@@ -76,11 +76,11 @@ if ($main::options{'debug'}) {
 $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
-$wwsympa_conf    = Sympa::Constants::WWSCONFIG;
-$sympa_conf_file = Sympa::Constants::CONFIG;
+my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
-$wwsconf = {};
-$adrlist = {};
+my $wwsconf = {};
+my $adrlist = {};
 
 # Load WWSympa configuration
 unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
@@ -120,7 +120,8 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
    open(STDERR, ">> /dev/null");
    open(STDOUT, ">> /dev/null");
    if (open(TTY, "/dev/tty")) {
-      ioctl(TTY, $TIOCNOTTY, 0);
+        # ioctl(TTY, &TIOCNOTTY, 0);
+        ioctl(TTY, 0x20007471, 0);	# XXX s/b &TIOCNOTTY
       close(TTY);
    }
    setpgrp(0, 0);
@@ -187,10 +188,10 @@ do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
-$end = 0;
+my $end = 0;
 
 
-$queue = $Conf{'queueoutgoing'};
+my $queue = $Conf{'queueoutgoing'};
 print "queue : $queue\n";
 
 #if (!chdir($queue)) {
@@ -265,7 +266,8 @@ while (!$end) {
 	       unless ($list->am_i('privileged_owner',$sender)|| $list->am_i('owner',$sender)||$list->am_i('editor', $sender)||&List::is_listmaster($sender,$list->{'domain'} )){
 		   # if not list owner or list editor or listmaster,n check if sender of remove order is sender of the message to remove
 
-		   unless (my $new_message = new Message("$arcpath/arctxt/$message",'noxsympato')) {
+		    my $new_message;
+		    unless ($new_message = new Message("$arcpath/arctxt/$message",'noxsympato')) {
 		        do_log('err',"unable to load new message $arcpath/arctxt/$message");
 			next;
 		   }
@@ -322,7 +324,7 @@ while (!$end) {
 	       next;
 	   }
        }else{
-	   my ($yyyy, $mm, $dd, $min, $ss, $adrlist);
+	   my ($yyyy, $mm, $dd, $hh, $min, $ss, $adrlist);
 	   
 	   if ($file =~ /^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(.*)$/) {
 	       ($yyyy, $mm, $dd, $hh, $min, $ss, $adrlist) = ($1, $2, $3, $4, $5, $6, $7);
@@ -467,6 +469,7 @@ Removes the message having the identifier $msgid from the list named $adrlist.
 sub remove {
     my $adrlist = shift;
     my $msgid = shift;
+    my $robot = shift;
 
     do_log ('debug2',"remove ($adrlist, $msgid)");
     my $arc ;
@@ -872,7 +875,7 @@ sub mail2arc {
 	    close IDX;
 	}else{
 	    ## recreate index file if needed and update it
-	    $newfile = $index = &create_idx($monthdir) + 1;
+	    $newfile = &create_idx($monthdir) + 1;
 	}
 
 	# savee arctxt dump of original message.
@@ -903,7 +906,9 @@ sub mail2arc {
 	$exitcode = $exitcode / 256;
 	
 	# Delete temporary file containing escaped HTML.
-	if ($cleaned_file && -f $cleaned_file) {unlink $cleaned_file;}
+	if ($output && -f $output) {
+	    unlink $output;
+	}
 
 	## Remove lock if required
 	if ($exitcode == 75) {
