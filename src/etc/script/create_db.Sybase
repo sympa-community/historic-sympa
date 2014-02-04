@@ -72,7 +72,7 @@ create table bulkspool_table
 ( 
 	 dkim_d_bulkspool 	varchar(50), 
 	 dkim_i_bulkspool 	varchar(100), 
-	 dkim_privatekey_bulkspool 	varchar(1000), 
+	 dkim_privatekey_bulkspool 	varchar(2000), 
 	 dkim_selector_bulkspool 	varchar(50), 
 	 lock_bulkspool 	numeric, 
 	 message_bulkspool 	text, 
@@ -210,6 +210,8 @@ create table session_table
 	 email_session 	varchar(100), 
 	 hit_session 	numeric, 
 	 id_session 	varchar(30) NOT NULL, 
+	 prev_id_session 	varchar(30), 
+	 refresh_date_session 	numeric, 
 	 remote_addr_session 	varchar(60), 
 	 robot_session 	varchar(80), 
 	 start_date_session 	numeric NOT NULL, 
