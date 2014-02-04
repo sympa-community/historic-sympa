@@ -85,6 +85,8 @@ sub db_struct {
 						      'robot_netidmap' => 'varchar(80)'},
 				 'session_table' => {'id_session' => 'varchar(30)',
 						     'start_date_session' => 'int(11)',
+						     'prev_id_session' => 'varchar(30)',
+						     'refresh_date_session' => 'int(11)',
 						     'date_session' => 'int(11)',
 						     'remote_addr_session' => 'varchar(60)',
 						     'robot_session'  => 'varchar(80)',
