@@ -131,7 +131,7 @@ sub db_struct {
 						       'messageid_bulkspool' => 'varchar(200)',
 						       'message_bulkspool' => 'longtext',
 						       'lock_bulkspool' => 'int(1)',
-						       'dkim_privatekey_bulkspool' => 'varchar(1000)',
+						       'dkim_privatekey_bulkspool' => 'varchar(2000)',
 						       'dkim_selector_bulkspool' => 'varchar(50)',
 						       'dkim_d_bulkspool' => 'varchar(50)',
 						       'dkim_i_bulkspool' => 'varchar(100)',
