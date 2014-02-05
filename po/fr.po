@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2013-12-31 16:13+0200\n"
+"PO-Revision-Date: 2013-02-05 12:43+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -2534,14 +2534,14 @@ msgid "No user excluded."
 msgstr "Aucun abonné exclu."
 
 #: ../web_tt2/exclusion_table.tt2:35
+#, fuzzy
 msgid "Restore selected email addresses"
-msgstr "Restaurer les adresses sélectionnées"
+msgstr "Désabonner les adresses sélectionnées"
 
 #: ../web_tt2/exclusion_table.tt2:35
+#, fuzzy
 msgid "Do you really want to restore subscription for ALL selected addresses?"
-msgstr ""
-"Etes-vous sûr de vouloir restaurer les abonnements de TOUTES les adresses "
-"sélectionnées ?"
+msgstr "Etes-vous sûr de vouloir désabonner TOUS les abonnés sélectionnés ?"
 
 #: ../web_tt2/family_signoff.tt2:1 ../web_tt2/family_signoff_request2.tt2:1
 msgid "Global unsubscription"
@@ -4212,8 +4212,9 @@ msgid "Cipher key size used"
 msgstr "Taille de clef utilisée"
 
 #: ../web_tt2/show_exclude.tt2:3
+#, fuzzy
 msgid "Exclusion table"
-msgstr "Table d'exclusion"
+msgstr "Montrer la table d'exclusion"
 
 #: ../web_tt2/show_exclude.tt2:8
 msgid ""
@@ -6733,6 +6734,7 @@ msgstr "L'utilisateur %1 a été confronté à une erreur interne"
 
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
+#, fuzzy
 msgid "The following error occurred while managing bounces: %1"
 msgstr "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
 
@@ -8311,8 +8313,9 @@ msgid "just for listmaster"
 msgstr "seulement pour le listmaster"
 
 #: ../src/etc/scenari/info.conceal:1
+#, fuzzy
 msgid "restricted to subscribers - Silent rejection otherwise."
-msgstr "Réservé aux abonnés - rejet silencieux pour les autres."
+msgstr "les abonnés ou le domaine local"
 
 #: ../src/etc/scenari/info.open:1
 msgid "for anyone"
@@ -8685,6 +8688,7 @@ msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Lundi:Mardi:Mercredi:Jeudi:Vendredi:Samedi:Dimanche"
 
 #: ../src/etc/mhonarc-ressources.tt2:643
+#, fuzzy
 msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
 msgstr "Lundi:Mardi:Mercredi:Jeudi:Vendredi:Samedi:Dimanche"
 
@@ -8697,6 +8701,7 @@ msgstr ""
 "Décembre"
 
 #: ../src/etc/mhonarc-ressources.tt2:665
+#, fuzzy
 msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
 msgstr ""
 "Janvier:Février:Mars:Avril:Mai:Juin:Juillet:Août:Septembre:Octobre:Novembre:"
@@ -10092,12 +10097,14 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 msgid "you do not receive your own posts"
 msgstr "Ne pas recevoir mes propres messages"
 
-#~ msgid "Show the exclusion table"
-#~ msgstr "Montrer la table d'exclusion"
+#: ../web_tt2/show_exclude.tt2:3
+msgid "Show the exclusion table"
+msgstr "Montrer la table d'exclusion"
 
-#~ msgid "The following error occurred whila managing bounces: %&"
-#~ msgstr ""
-#~ "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
 
 #~ msgid "subscribed"
 #~ msgstr "abonné"
