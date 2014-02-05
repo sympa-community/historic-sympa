@@ -3,6 +3,39 @@
 
 (See Changelog file for the full changes log)
 
+6.1.19		February 05, 2014
+
+  Changes:
+
+*****	[10207] src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+*****	src/etc/script/create_db.SQLite, src/etc/script/create_db.Sybase,
+*****	src/etc/script/create_db.mysql:  Two new database fields appeared in
+*****	this version and a field was modified.
+*****	- The new fields are prev_id_session (varchar(30)) and
+*****	refresh_date_session (int(11)). they are located in the session_table 
+*****	table.
+*****	- The modified field is dkim_privatekey_bulkspool and is located in the
+*****	bulkspool_table table. Its length went from varchar(1000) to
+*****	varchar(2000).
+*****	Sympa install using MySQL and SQLite backends will have no trouble at
+*****	all, as the database structure is updated by Sympa.
+*****	However, if you use Postgres, Oracle or Sybase, please have a look
+*****	(respectively) at the create_db.Pg, create_db.Oracle or
+*****	create_db.Sybase to check the definition of those fields. Please update
+*****	your database structure before running Sympa.
+
+	[10206] src/lib/Sympa/DatabaseDescription.pm:  Changing length of DKIM
+	private key in database to ensure database creation scripts will be
+	updated.
+
+  Bug fixes:
+
+	[10205] src/lib/Sympa/DatabaseDescription.pm:  new session fields
+	(prev_id_session and refresh_date_session) were not declared in
+	DatabaseDescription.pm. Consequently, they were not used in
+	create_db_script.* update.
+
+
 6.1.18		January 24, 2014
 
   Features:

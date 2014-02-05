@@ -1,4 +1,156 @@
 ------------------------------------------------------------------------
+r10209 | sympa-authors | 2014-02-05 14:57:35 +0100 (mer. 05 févr. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r10208 | sympa-authors | 2014-02-05 14:37:01 +0100 (mer. 05 févr. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/eo.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/io.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eo.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/io.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r10207 | david.verdin | 2014-02-04 16:37:03 +0100 (mar. 04 févr. 2014) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Oracle
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Pg
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.SQLite
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Sybase
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.mysql
+
+[*change] Two new database fields appeared in this version and a field was modified.
+- The new fields are prev_id_session (varchar(30)) and refresh_date_session (int(11)). they are located in the session_table  table.
+- The modified field is dkim_privatekey_bulkspool and is located in the bulkspool_table table. Its length went from varchar(1000) to varchar(2000).
+Sympa install using MySQL and SQLite backends will have no trouble at all, as the database structure is updated by Sympa.
+However, if you use Postgres, Oracle or Sybase, please have a look (respectively) at the create_db.Pg, create_db.Oracle or create_db.Sybase to check the definition of those fields. Please update your database structure before running Sympa.
+
+------------------------------------------------------------------------
+r10206 | david.verdin | 2014-02-04 16:23:34 +0100 (mar. 04 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Sympa/DatabaseDescription.pm
+
+[change] Changing length of DKIM private key in database to ensure database creation scripts will be updated.
+
+------------------------------------------------------------------------
+r10205 | david.verdin | 2014-02-04 11:40:27 +0100 (mar. 04 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Sympa/DatabaseDescription.pm
+
+[bug] new session fields (prev_id_session and refresh_date_session) were not declared in DatabaseDescription.pm. Consequently, they were not used in create_db_script.* update.
+
+------------------------------------------------------------------------
+r10204 | sikeda | 2014-02-03 13:58:42 +0100 (lun. 03 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+
+[-dev] Some typos and minor bugs due to undefined variables.
+
+------------------------------------------------------------------------
+r10203 | sikeda | 2014-02-03 13:34:37 +0100 (lun. 03 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Archive.pm
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+
+[-dev] Refactoring to make succeeding fixes easy.
+
+------------------------------------------------------------------------
+r10202 | sikeda | 2014-02-01 09:09:24 +0100 (sam. 01 févr. 2014) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-6.1-branch/po/eo.po
+   A /branches/sympa-6.1-branch/po/io.po
+   A /branches/sympa-6.1-branch/po/rm.po
+   M /branches/sympa-6.1-branch/po-wwsympa/LINGUAS
+   A /branches/sympa-6.1-branch/po-wwsympa/eo.po
+   A /branches/sympa-6.1-branch/po-wwsympa/io.po
+   A /branches/sympa-6.1-branch/po-wwsympa/rm.po
+
+[-dev] Added Catalan translation of online help to distribution.  Added initial catalog files for Espreranto (eo), Ido (io) and Romansh (rm).
+
+------------------------------------------------------------------------
+r10201 | sikeda | 2014-01-31 09:17:34 +0100 (ven. 31 janv. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/src/lib/Log.pm
+   M /branches/sympa-6.1-branch/web_tt2/help_faquser.tt2
+   M /branches/sympa-6.1-branch/web_tt2/renewpasswd.tt2
+
+[-bug] wwsympa: A link to function "sendpasswd" which is no longer used.
+Fixed that link in help/faquser page and translation catalogs.
+Additionally, %action_type in Log.pm did not contain entry for "requestpasswd".
+
+------------------------------------------------------------------------
+r10200 | sikeda | 2014-01-29 09:58:07 +0100 (mer. 29 janv. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/Makefile.am
+   A /branches/sympa-6.1-branch/etc_README (de /branches/sympa-6.1-branch/src/etc/README_etc:10199)
+   D /branches/sympa-6.1-branch/src/etc/README_etc
+
+[-change] Create subdirectories in $(sysconfdir) at installation time, and add description on usage of this directory.
+
+------------------------------------------------------------------------
+r10197 | sympa-authors | 2014-01-24 14:10:05 +0100 (ven. 24 janv. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.18
+------------------------------------------------------------------------
 r10196 | sympa-authors | 2014-01-24 13:54:33 +0100 (ven. 24 janv. 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ar.po
