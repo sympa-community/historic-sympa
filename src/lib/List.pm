@@ -5887,7 +5887,8 @@ sub get_first_user {
     }
     $lock->set_timeout(10*60); 
 
-    do_log('debug2', 'List::get_first_user(%s,%s,%d,%d)', $self->{'name'},$sortby, $offset, $rows);
+    do_log('debug2', '(%s, %s, %s, %s)',
+	$self->{'name'}, $sortby, $offset, $rows);
         
     ## Get an Shared lock	    
     unless ($lock->lock('read')) {
@@ -6220,7 +6221,8 @@ sub get_first_admin_user {
     $sql_regexp = $data->{'sql_regexp'};
     my $fh;
 
-    &do_log('debug2', 'List::get_first_admin_user(%s,%s,%s,%d,%d)', $self->{'name'},$role, $sortby, $offset, $rows);
+    do_log('debug2', '(%s, %s, %s, %s, %s)',
+	$self->{'name'}, $role, $sortby, $offset, $rows);
 
     my $lock = new Lock ($self->{'dir'}.'/include_admin_user');
     unless (defined $lock) {
@@ -8951,7 +8953,7 @@ sub _load_users_include {
     my $name = $self->{'name'}; 
     my $admin = $self->{'admin'};
     my $dir = $self->{'dir'};
-    do_log('debug2', 'List::_load_users_include for list %s ; use_cache: %d',$name, $use_cache);
+    do_log('debug2', '(%s, %s, %s)', $name, $db_file, $use_cache);
 
     my (%users, $depend_on, $ref);
     my $total = 0;
@@ -10069,7 +10071,8 @@ sub _save_stats_file {
 	return undef;
     }
 
-    do_log('debug2', 'List::_save_stats_file(%s, %d, %d, %d)', $file, $total,$last_sync,$last_sync_admin_user );
+    do_log('debug2', '(%s, %s, %s, %s)',
+	$file, $total, $last_sync, $last_sync_admin_user);
     my $untainted_filename = sprintf ("%s",$file);
     open(L, "> $untainted_filename") || return undef;
     printf L "%d %.0f %.0f %.0f %d %d %d\n", @{$stats}, $total, $last_sync, $last_sync_admin_user;
