@@ -2888,8 +2888,7 @@ sub distribute_msg {
     ## compatibility.
     ## FIXME: how would we handle Resent-Sender: field?
     $hdr->replace('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}");
-    # - add
-    $hdr->add('X-no-archive', 'yes');
+    $hdr->replace('X-no-archive', 'yes');
 
     ## - add custom headers
     foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
