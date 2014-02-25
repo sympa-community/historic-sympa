@@ -2756,10 +2756,12 @@ sub distribute_msg {
 	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
-	
-	$hdr->add('From',"$self->{'admin'}{'anonymous_sender'}");
+
+	# override From: and Message-ID: fields.
+	# FIXME: how would we handle Resent-* fields?	
+	$hdr->replace('From', $self->{'admin'}{'anonymous_sender'});
 	my $new_id = "$self->{'name'}.$sequence\@anonymous";
-	$hdr->add('Message-id',"<$new_id>");
+	$hdr->replace('Message-id', "<$new_id>");
 	
 	# rename msg_topic filename
 	if ($info_msg_topic) {
@@ -2869,14 +2871,27 @@ sub distribute_msg {
 	}
     }
     
-    ## Add useful headers
+    ## Add/replace useful headers
+
+    ## These fields should be added preserving existing ones.
     $hdr->add('X-Loop', "$name\@$host");
     $hdr->add('X-Sequence', $sequence);
+    ## These fields should be overwritten if any of them already exist
+    $hdr->delete('Errors-To');
     $hdr->add('Errors-to', $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
+    ## Two Precedence: fields are added (overwritten), as some MTAs recognize
+    ## only one of them.
+    $hdr->delete('Precedence');
     $hdr->add('Precedence', 'list');
     $hdr->add('Precedence', 'bulk');
-    $hdr->add('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}"); # The Sender: header should be add at least for DKIM compatibility
+    ## The Sender: field should be added (overwritten) at least for DKIM
+    ## compatibility.
+    ## FIXME: how would we handle Resent-Sender: field?
+    $hdr->replace('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}");
+    # - add
     $hdr->add('X-no-archive', 'yes');
+
+    ## - add custom headers
     foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
 	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
     }
