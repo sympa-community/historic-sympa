@@ -2758,11 +2758,13 @@ sub distribute_msg {
 	}
 
 	# override From: and Message-ID: fields.
-	# FIXME: how would we handle Resent-* fields?	
+	# Note that corresponding Resent-*: fields will be removed.
 	$hdr->replace('From', $self->{'admin'}{'anonymous_sender'});
+	$hdr->delete('Resent-From');
 	my $new_id = "$self->{'name'}.$sequence\@anonymous";
-	$hdr->replace('Message-id', "<$new_id>");
-	
+	$hdr->replace('Message-Id', "<$new_id>");
+	$hdr->delete('Resent-Message-Id');
+
 	# rename msg_topic filename
 	if ($info_msg_topic) {
 	    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
@@ -2854,9 +2856,10 @@ sub distribute_msg {
     if ($self->{'admin'}{'reply_to_header'}) {
 	unless ($hdr->get('Reply-To') && ($self->{'admin'}{'reply_to_header'}{'apply'} ne 'forced')) {
 	    my $reply;
-	    
+
 	    $hdr->delete('Reply-To');
-	    
+	    $hdr->delete('Resent-Reply-To');
+
 	    if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
 		$reply = "$name\@$host";
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
@@ -2885,9 +2888,9 @@ sub distribute_msg {
     $hdr->add('Precedence', 'list');
     $hdr->add('Precedence', 'bulk');
     ## The Sender: field should be added (overwritten) at least for DKIM
-    ## compatibility.
-    ## FIXME: how would we handle Resent-Sender: field?
+    ## compatibility.  Note that Resent-Sender: field will be removed.
     $hdr->replace('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}");
+    $hdr->delete('Resent-Sender');
     $hdr->replace('X-no-archive', 'yes');
 
     ## - add custom headers
