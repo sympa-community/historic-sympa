@@ -41,7 +41,7 @@ my $robot_id = $options{'domain'};
 
 # Load configuration
 my $sympa_conf_file = Sympa::Constants::CONFIG;
-unless ( Conf::load( $sympa_conf_file, 'no_db' ) ) {    # skip db config
+unless ( Conf::load( $sympa_conf_file ) ) {
     do_log( 'err', 'The configuration file %s contains error',
         $sympa_conf_file );
     exit 1;
