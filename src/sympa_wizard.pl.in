@@ -422,7 +422,11 @@ sub check_cpan {
 					      usage => 'required when including members of a remote list',
 					     },
 			# Net::SSLeay is included in IO-Socket-SSL.
-			'Locale::Messages' => {
+
+			# Locale::Messages 1.16 or earlier does not have its
+			# own $VERSION variable.  Check the version of
+			# Locale::TextDomain instead.
+			'Locale::TextDomain' => {
 						 package_name => 'libintl-perl',
 						 mandatory => 1,
 						 usage => 'internationalization functions',
