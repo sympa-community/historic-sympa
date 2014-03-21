@@ -3,6 +3,54 @@
 
 (See Changelog file for the full changes log)
 
+6.1.20		March 21, 2014
+
+  Bug fixes:
+
+	[10441] src/lib/Upgrade.pm:  Obsoleted parameter filesystem_encoding
+	was not recognized during upgrade from the releases earlier than
+	5.3b.3.  Fixed bug introduced in r5656 with Conf::Conf::Ignored_Conf.
+
+	[10377] src/sympa_newaliases.pl.in:  sympa_newaliases fails to update
+	aliases for virtual robot.
+	Conf::load_conf() won't load robot config if no_db option is true.  As
+	a result, No virtual robots were recognized.
+
+	[10355] src/lib/mail.pm:  wwsympa/send_mail: Duplicate Message-ID:
+	header field.
+	do_send_mail() feeds mail_file() a Message-ID as 'headers' parameter,
+	but mail_file() didn't check it.
+
+	[10307] src/lib/Bulk.pm:  Mail merge: Parameters taken from mail
+	headers may be overwritten by ones of each subpart.
+	Initialize $data->{'headers'} only once at calling Bulk::merge_msg().
+
+	[10297] src/lib/List.pm:  Distributed messages may have duplicate
+	content of some header fields, i.e. Errors-To:, Precedence: and Sender:
+	(and From: and Message-ID: when anonymous_sender is enabled).  Several
+	content filtering systems will take off the score for such messages.
+	Make sure that the fields will be overwritten by
+	List::distribute_msg().
+
+	[10214] src/lib/Archive.pm, src/lib/Message.pm, src/lib/tools.pm,
+	wwsympa/archived.pl.in:  On rebuilt archives, src attributes of HTML
+	elements may be removed.  Because Message::clean_html() was given
+	Message object of message without X-Sympa-To: pseudo header.  Give
+	robot argument to this method.
+	Changes:
+	- Following methods/functions require the argument of Robot object:
+	Archive::clean_archived_message(), Archive::clean_archive_directory(),
+	Message::clean_html(), tools::sanitize_html(),
+	tools::sanitize_html_file() and tools::sanitize_var().
+	- archived.pl: Now mhonarc will be given arguments with per-robot value
+	of wwsympa_url parameter instead of site-default value.
+
+	[10212] src/lib/mail.pm: [#9039][Reported by J. Moutinho] wwsympa:
+	signoff crashes.  wwsympa/signoff/somelistname dies with "Cannot quote
+	a reference" error, since mail::mail_file() may take List object as
+	'list' item in $data argument.	List along with HASH would be
+	concerned.
+
 6.1.19		February 05, 2014
 
   Changes:

@@ -1,4 +1,428 @@
 ------------------------------------------------------------------------
+r10467 | sympa-authors | 2014-03-21 11:41:36 +0100 (ven. 21 mars 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r10459 | sympa-authors | 2014-03-21 10:38:12 +0100 (ven. 21 mars 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r10458 | sympa-authors | 2014-03-21 10:16:33 +0100 (ven. 21 mars 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/af.po
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/eo.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/io.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/nn_NO.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/af.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eo.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/gl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/io.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ko.po
+   M /branches/sympa-6.1-branch/po-wwsympa/la.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ml.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nn_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_TW.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r10453 | sikeda | 2014-03-20 08:46:59 +0100 (jeu. 20 mars 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[-bug] Locale::Messages 1.16 or earlier does not have its own $VERSION variable.  Check the version of Locale::TextDomain instead.
+
+------------------------------------------------------------------------
+r10452 | sikeda | 2014-03-20 08:39:18 +0100 (jeu. 20 mars 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[-bug] a typo in message.
+
+------------------------------------------------------------------------
+r10441 | sikeda | 2014-03-18 03:22:04 +0100 (mar. 18 mars 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Upgrade.pm
+
+[bug] Obsoleted parameter filesystem_encoding was not recognized during upgrade from the releases earlier than 5.3b.3.  Fixed bug introduced in r5656 with Conf::Conf::Ignored_Conf.
+
+------------------------------------------------------------------------
+r10410 | sikeda | 2014-03-13 04:18:39 +0100 (jeu. 13 mars 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/af.po
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/eo.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/io.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/nn_NO.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/rm.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/af.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eo.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/gl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/io.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ko.po
+   M /branches/sympa-6.1-branch/po-wwsympa/la.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ml.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nn_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/web_help.pot
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_TW.po
+
+[-feature] Committing recent translations from Pootle
+
+------------------------------------------------------------------------
+r10377 | sikeda | 2014-03-08 00:51:42 +0100 (sam. 08 mars 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa_newaliases.pl.in
+
+[bug] sympa_newaliases fails to update aliases for virtual robot.
+Conf::load_conf() won't load robot config if no_db option is true.  As a result, No virtual robots were recognized.
+
+------------------------------------------------------------------------
+r10355 | sikeda | 2014-03-05 05:58:57 +0100 (mer. 05 mars 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+
+[bug] wwsympa/send_mail: Duplicate Message-ID: header field.
+do_send_mail() feeds mail_file() a Message-ID as 'headers' parameter, but mail_file() didn't check it.
+
+------------------------------------------------------------------------
+r10307 | sikeda | 2014-02-27 07:46:40 +0100 (jeu. 27 févr. 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+
+[bug] Mail merge: Parameters taken from mail headers may be overwritten by ones of each subpart.
+Initialize $data->{'headers'} only once at calling Bulk::merge_msg().
+
+------------------------------------------------------------------------
+r10304 | sikeda | 2014-02-26 06:02:32 +0100 (mer. 26 févr. 2014) | 36 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+
+[-change] Updating default of anonymous_header_fields.
+
+List of header fields included in default (* were added):
+
+Authentication-Results:         RFC7001 *
+DKIM-Signature:                 RFC6376 (DomainKeys)
+Disposition-Notification-To:    RFC3798 (MDN)
+Injection-Info:                 RFC5536 (Netnews) *
+Organisation:                   non-standard *
+Organization:                   RFC5536 (Netnews) 
+Original-Recipient:             RFC3798 (MDN) *
+Originator:                     non-standard (Netnews) *
+Path:                           RFC5536 (Netnews) *
+Received:                       RFC5322
+Received-SPF:                   RFC4408 (SPF) *
+Reply-To:                       RFC5322
+Resent-Reply-To:                RFC5322 *
+Return-Receipt-To:              non-standard *
+X-Envelope-From:                non-standard
+X-Envelope-To:                  non-standard
+X-Sender:                       non-standard
+X-X-Sender:                     non-standard
+
+n.b. "non-standard" fields are listed in I-D
+draft-palme-mailext-mail-attributes-01.
+
+These were omitted because they will be always overridden by Sympa:
+
+Errors-To:
+From:
+Message-Id:
+Resent-From:
+Resent-Message-Id:
+Resent-Sender:
+Sender:
+
+------------------------------------------------------------------------
+r10303 | sikeda | 2014-02-26 06:00:23 +0100 (mer. 26 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-change] List::distribute_msg(): When the header field is removed or replaced, corresponding Resent-*: fields will be removed to override information provided by forwarders.
+
+------------------------------------------------------------------------
+r10298 | sikeda | 2014-02-25 09:37:51 +0100 (mar. 25 févr. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-bug] (con'd r10297) typo.
+------------------------------------------------------------------------
+r10297 | sikeda | 2014-02-25 09:09:35 +0100 (mar. 25 févr. 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug] Distributed messages may have duplicate content of some header fields, i.e. Errors-To:, Precedence: and Sender: (and From: and Message-ID: when anonymous_sender is enabled).  Several content filtering systems will take off the score for such messages.
+Make sure that the fields will be overwritten by List::distribute_msg().
+
+------------------------------------------------------------------------
+r10246 | sikeda | 2014-02-17 09:32:14 +0100 (lun. 17 févr. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[-feature] Additional localised "Re:" prefixes in subject.
+"Antw:" (Dutch), "?\206?\145?\207?\128:", "?\206?\163?\207?\135?\206?\181?\207?\132:" (Greek), "Odp:" (Polish) and "YNT:" (Turkish).
+
+
+------------------------------------------------------------------------
+r10242 | sikeda | 2014-02-16 03:58:47 +0100 (dim. 16 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/mail_tt2/listmaster_notification.tt2
+   M /branches/sympa-6.1-branch/web_tt2/error.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-bug][#9042] typo in error code for report::reject_report_web().
+
+------------------------------------------------------------------------
+r10214 | sikeda | 2014-02-09 08:22:07 +0100 (dim. 09 févr. 2014) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Archive.pm
+   M /branches/sympa-6.1-branch/src/lib/Message.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+
+[bug] On rebuilt archives, src attributes of HTML elements may be removed.  Because Message::clean_html() was given Message object of message without X-Sympa-To: pseudo header.  Give robot argument to this method.
+
+Changes:
+- Following methods/functions require the argument of Robot object: Archive::clean_archived_message(), Archive::clean_archive_directory(), Message::clean_html(), tools::sanitize_html(), tools::sanitize_html_file() and tools::sanitize_var().
+- archived.pl: Now mhonarc will be given arguments with per-robot value of wwsympa_url parameter instead of site-default value.
+
+------------------------------------------------------------------------
+r10213 | sikeda | 2014-02-09 03:09:36 +0100 (dim. 09 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-bug] Spurious warnings "Argument "" isn't numeric in sprintf" and "Missing argument in sprintf".
+
+------------------------------------------------------------------------
+r10212 | sikeda | 2014-02-08 13:42:24 +0100 (sam. 08 févr. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+
+[bug][#9039][Reported by J. Moutinho] wwsympa: signoff crashes.  wwsympa/signoff/somelistname dies with "Cannot quote a reference" error, since mail::mail_file() may take List object as 'list' item in $data argument.  List along with HASH would be concerned.
+
+------------------------------------------------------------------------
+r10210 | sympa-authors | 2014-02-05 15:08:16 +0100 (mer. 05 févr. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.19
+------------------------------------------------------------------------
 r10209 | sympa-authors | 2014-02-05 14:57:35 +0100 (mer. 05 févr. 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ar.po
