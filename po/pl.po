@@ -10165,36 +10165,6 @@ msgstr "wylistuj szablon aliasów"
 msgid "no mail (useful for vacations)"
 msgstr "żadnej poczty (przydatne na urlop)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Ten szablon jest domyślny dla wszystkich języków, chyba że jest "
-"przedefiniowany dla określonego języka.)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( ten szablon jest zdefiniowany dla listy %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( ten szablon jest domyślny dla wszystkich list robota %1, o ile nie jest "
-"przedefiniowany dla określonej listy )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( ten szablon jest domyślnie używany przez wszystkie roboty, chyba że został "
-"przedefiniowany dla określonego robota )"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -11383,6 +11353,30 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Ten szablon jest domyślny dla wszystkich języków, chyba że jest "
+#~ "przedefiniowany dla określonego języka.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( ten szablon jest zdefiniowany dla listy %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( ten szablon jest domyślny dla wszystkich list robota %1, o ile nie jest "
+#~ "przedefiniowany dla określonej listy )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( ten szablon jest domyślnie używany przez wszystkie roboty, chyba że "
+#~ "został przedefiniowany dla określonego robota )"
 
 #~ msgid "Name: "
 #~ msgstr "Nazwa: "

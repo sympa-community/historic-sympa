@@ -10329,36 +10329,6 @@ msgstr "리스트 별명 템플렛"
 msgid "no mail (useful for vacations)"
 msgstr "메일 없음 (휴가 동안 유용한)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(이 템플렛은 특정 언어을 재정의 하지 않는 한  모든 언어를 기본으로 하고 있습"
-"니다.)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(이 템플렛은 메일링 리스트 %1@%2를 위해 정의됩니다)"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(이 템플렛은 해당장치(robot)의 모든 리스트를 위한 기본설정입니다. 다.특정한 "
-"리스트들를 위해 재정의됩니다.)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(이 템플렛은 재정의가 되기 전까지 모든 해당장치(robots)를 위해 기본적으로 사"
-"용됩니다.니다.특정한 해당하는 장치)"
-
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
 msgid ""
@@ -11608,6 +11578,30 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(이 템플렛은 특정 언어을 재정의 하지 않는 한  모든 언어를 기본으로 하고 있"
+#~ "습니다.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(이 템플렛은 메일링 리스트 %1@%2를 위해 정의됩니다)"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(이 템플렛은 해당장치(robot)의 모든 리스트를 위한 기본설정입니다. 다.특정"
+#~ "한 리스트들를 위해 재정의됩니다.)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(이 템플렛은 재정의가 되기 전까지 모든 해당장치(robots)를 위해 기본적으로 "
+#~ "사용됩니다.니다.특정한 해당하는 장치)"
 
 #, fuzzy
 #~ msgid "Name: "

@@ -10265,17 +10265,6 @@ msgid ""
 "specific language.)"
 msgstr ""
 
-#: ../web_tt2/ls_templates.tt2:40
-#, fuzzy
-msgid "distrib"
-msgstr "Dağıt"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-#, fuzzy
-msgid "( this template is defined for list %1@%2 )"
-msgstr "Liste %1'in sahibi tanımlanmamış"
-
 #. (robot)
 #: ../web_tt2/view_template.tt2:15
 msgid ""
@@ -10306,11 +10295,6 @@ msgid ""
 "You have been delegate the responsability of list moderator by %1 for list %"
 "2@%3."
 msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-#, fuzzy
-msgid "to both"
-msgstr "Kimden :%1"
 
 #: ../web_tt2/show_exclude.tt2:3
 msgid "Show the exclusion table"
@@ -11345,6 +11329,18 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
+
+#, fuzzy
+#~ msgid "distrib"
+#~ msgstr "Dağıt"
+
+#, fuzzy
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "Liste %1'in sahibi tanımlanmamış"
+
+#, fuzzy
+#~ msgid "to both"
+#~ msgstr "Kimden :%1"
 
 #, fuzzy
 #~ msgid "Name: "

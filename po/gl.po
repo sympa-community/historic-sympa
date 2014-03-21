@@ -9592,40 +9592,6 @@ msgid "no mail (useful for vacations)"
 msgstr ""
 
 #. (list,robot)
-#: ../web_tt2/edit_template.tt2:10
-msgid "This template is defined for list %1@%2"
-msgstr "Este modelo está definido para a lista %1@%2"
-
-#. (robot)
-#: ../web_tt2/edit_template.tt2:13
-msgid ""
-"This template is default for all lists of robot %1 unless it is redefined "
-"for some particular list"
-msgstr ""
-"Este modelo é o predeterminado para todas as listas do robot %1, a non ser "
-"que algunha lista estiver personalizada."
-
-#: ../web_tt2/edit_template.tt2:15
-msgid ""
-"This template is default for all robots unless  it is redefined for some "
-"particular robot"
-msgstr ""
-"Este modelo é o predeterminado para todos os robots, a non ser que algún "
-"robot estiver personalizado."
-
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Este modelo é o predeterminado para todos os idiomas a non ser que haxa "
-"algún idioma personalizado)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distrib"
-
-#. (list,robot)
 #: ../web_tt2/view_template.tt2:12
 msgid "( this template is defined for list %1@%2 )"
 msgstr ""
@@ -10916,6 +10882,33 @@ msgstr ""
 #: ../src/lib/mail.pm:922
 msgid "Unable to create a channel in smtpto: %m"
 msgstr ""
+
+#~ msgid "This template is defined for list %1@%2"
+#~ msgstr "Este modelo está definido para a lista %1@%2"
+
+#~ msgid ""
+#~ "This template is default for all lists of robot %1 unless it is redefined "
+#~ "for some particular list"
+#~ msgstr ""
+#~ "Este modelo é o predeterminado para todas as listas do robot %1, a non "
+#~ "ser que algunha lista estiver personalizada."
+
+#~ msgid ""
+#~ "This template is default for all robots unless  it is redefined for some "
+#~ "particular robot"
+#~ msgstr ""
+#~ "Este modelo é o predeterminado para todos os robots, a non ser que algún "
+#~ "robot estiver personalizado."
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Este modelo é o predeterminado para todos os idiomas a non ser que haxa "
+#~ "algún idioma personalizado)"
+
+#~ msgid "distrib"
+#~ msgstr "distrib"
 
 #~ msgid "Name: "
 #~ msgstr "Nome:"

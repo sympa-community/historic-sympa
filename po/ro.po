@@ -11213,12 +11213,6 @@ msgid ""
 "specific language.)"
 msgstr ""
 
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-#, fuzzy
-msgid "( this template is defined for list %1@%2 )"
-msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
-
 #. (robot)
 #: ../web_tt2/view_template.tt2:15
 msgid ""
@@ -12522,6 +12516,10 @@ msgid ""
 "password\n"
 "in the setup wizard to complete your account configuration."
 msgstr ""
+
+#, fuzzy
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #, fuzzy
 #~ msgid "Name: "

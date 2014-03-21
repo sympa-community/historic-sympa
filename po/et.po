@@ -10317,36 +10317,6 @@ msgstr "listi aliaste mall"
 msgid "no mail (useful for vacations)"
 msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(See on vaikimisi blankett kõikidele keelte jaoks kui ei ole valitud mõnda "
-"teist keelt)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( blankett ei ole defineeritud listi %1@%2 jaoks )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(see on vaikimisi mall kõikidele roboti listidele kui %1 ei ole valinud "
-"mõneda teist listi)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( see on vaikimisi blankett kõikidele robotitele, kui ei ole mõne "
-"spetsiifilise roboti juures teisiti määratletud )"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid " -- go to:"
 msgstr ""
@@ -11179,6 +11149,30 @@ msgstr ""
 #: ../src/lib/List.pm:7337
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(See on vaikimisi blankett kõikidele keelte jaoks kui ei ole valitud "
+#~ "mõnda teist keelt)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( blankett ei ole defineeritud listi %1@%2 jaoks )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(see on vaikimisi mall kõikidele roboti listidele kui %1 ei ole valinud "
+#~ "mõneda teist listi)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( see on vaikimisi blankett kõikidele robotitele, kui ei ole mõne "
+#~ "spetsiifilise roboti juures teisiti määratletud )"
 
 #~ msgid "Name: "
 #~ msgstr "Nimi: "

@@ -10242,36 +10242,6 @@ msgstr "πρότυπο παρωνυμίων (aliases) λίστας"
 msgid "no mail (useful for vacations)"
 msgstr "κανένα μήνυμα (χρήσιμο για περίοδο διακοπών)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις γλώσσες εκτός εάν "
-"οριστεί διαφορετικά για συγκεκριμένη γλώσσα.)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( αυτό το πρότυπο ορίστηκε για τη λίστα %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις λίστες του εξυπηρετητή "
-"%1 εκτός εάν έχει οριστεί αλλιώς για συγκεκριμένη λίστα )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός αν "
-"έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid " -- go to:"
 msgstr ""
@@ -10544,6 +10514,30 @@ msgstr ""
 #: ../wwsympa/wwsympa.fcgi.in:10897 ../wwsympa/wwsympa.fcgi.in:4329
 msgid "%s / %s"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις γλώσσες εκτός εάν "
+#~ "οριστεί διαφορετικά για συγκεκριμένη γλώσσα.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( αυτό το πρότυπο ορίστηκε για τη λίστα %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις λίστες του "
+#~ "εξυπηρετητή %1 εκτός εάν έχει οριστεί αλλιώς για συγκεκριμένη λίστα )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός "
+#~ "αν έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
 
 #~ msgid "Name: "
 #~ msgstr "Όνομα: "

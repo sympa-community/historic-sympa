@@ -10244,66 +10244,6 @@ msgstr "Vorlage für Listen-Aliase"
 msgid "no mail (useful for vacations)"
 msgstr "keine Nachricht (nützlich für Urlaube)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Diese Vorlage ist die Standardvorlage für alle Sprachen, es sei denn sie "
-"wird für eine bestimmte Sprache neu definiert.)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "verteilen"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(diese Vorlage ist für Liste %1@%2 bestimmt)"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(Diese Vorlage ist die Vorgabe für alle Listen des Robots %1, es sei denn, "
-"sie wird für eine bestimmte Liste neu definiert)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( Diese Vorlage ist die Standardvorlage für alle Robots, es sei denn sie "
-"wird für einen bestimmten Robot neu definiert )"
-
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Liste %1 erlaubt nur diese Empfangsmodi: %2"
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-"Ihnen wurde von %1 das Amt des Listeneigentümers für die Liste %2@%3 "
-"übertragen."
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr ""
-"Ihnen wurde von %1 das Amt eines Listenmoderators für die Liste %2@%3 "
-"übertragen."
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "an beide"
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -10380,6 +10320,53 @@ msgstr ""
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Diese Vorlage ist die Standardvorlage für alle Sprachen, es sei denn sie "
+#~ "wird für eine bestimmte Sprache neu definiert.)"
+
+#~ msgid "distrib"
+#~ msgstr "verteilen"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(diese Vorlage ist für Liste %1@%2 bestimmt)"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(Diese Vorlage ist die Vorgabe für alle Listen des Robots %1, es sei "
+#~ "denn, sie wird für eine bestimmte Liste neu definiert)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( Diese Vorlage ist die Standardvorlage für alle Robots, es sei denn sie "
+#~ "wird für einen bestimmten Robot neu definiert )"
+
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Liste %1 erlaubt nur diese Empfangsmodi: %2"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "Ihnen wurde von %1 das Amt des Listeneigentümers für die Liste %2@%3 "
+#~ "übertragen."
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr ""
+#~ "Ihnen wurde von %1 das Amt eines Listenmoderators für die Liste %2@%3 "
+#~ "übertragen."
+
+#~ msgid "to both"
+#~ msgstr "an beide"
 
 #~ msgid "Name: "
 #~ msgstr "Name: "

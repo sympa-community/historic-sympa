@@ -10130,39 +10130,9 @@ msgstr "listealiasmal"
 msgid "no mail (useful for vacations)"
 msgstr "ingen e-post (praktisk ved ferie)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Denne malen er standard for alle språk dersom den ikke er redefinert for et "
-"spesifikt språk.)"
-
 #: ../web_tt2/ls_templates.tt2:40
 msgid "distrib"
 msgstr ""
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( denne malen er definert for liste %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( denne malen er standard for alle lister under robot %1 dersom den ikke er "
-"redefinert for en spesifikk liste )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( denne malen er standard brukt av alle roboter dersom den ikke er "
-"redefinert for en spesifikk robot )"
 
 #. (u_err.listname,u_err.modes)
 #: ../mail_tt2/command_report.tt2:121
@@ -11486,6 +11456,30 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Denne malen er standard for alle språk dersom den ikke er redefinert for "
+#~ "et spesifikt språk.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( denne malen er definert for liste %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( denne malen er standard for alle lister under robot %1 dersom den ikke "
+#~ "er redefinert for en spesifikk liste )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( denne malen er standard brukt av alle roboter dersom den ikke er "
+#~ "redefinert for en spesifikk robot )"
 
 #, fuzzy
 #~ msgid "Name: "

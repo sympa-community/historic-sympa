@@ -10621,28 +10621,6 @@ msgid ""
 "specific language.)"
 msgstr ""
 
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(dit template is gedefiniëerd voor lijst %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( dit template is standaard voor alle lijsten van robot %1, tenzij het wordt "
-"veranderd voor een specifieke lijst )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( dit template is standaard voor alle robots, tenzij dit wordt veranderd "
-"voor een specifieke robot )"
-
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
 msgid ""
@@ -11887,6 +11865,23 @@ msgid ""
 "password\n"
 "in the setup wizard to complete your account configuration."
 msgstr ""
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(dit template is gedefiniëerd voor lijst %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( dit template is standaard voor alle lijsten van robot %1, tenzij het "
+#~ "wordt veranderd voor een specifieke lijst )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( dit template is standaard voor alle robots, tenzij dit wordt veranderd "
+#~ "voor een specifieke robot )"
 
 #, fuzzy
 #~ msgid "Name: "

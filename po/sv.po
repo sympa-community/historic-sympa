@@ -10095,62 +10095,6 @@ msgstr "listalias-mall"
 msgid "no mail (useful for vacations)"
 msgstr "ingen e-post (användbar för semestrar)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Denna mall används som standard för alla språk om den inte någon annan "
-"väljs för ett särskilt språk.)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distribuera"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( denna mall är definierad för listan %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( denna mall används som standard för alla listor hos roboten %1 om inte "
-"annat anges för en särskild lista )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( denna mall används som standard av alla robotar om den inte defineras om "
-"för en särskild robot )"
-
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Listan %1 tillåter bara dessa mottagningslägen: %2"
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "Du har delegerats listägaransvaret för listan %2@%3 av %1."
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "Du har delegerats listmoderatoransvaret för listan %2@%3 av %1."
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "till båda"
-
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
@@ -10966,6 +10910,49 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Denna mall används som standard för alla språk om den inte någon annan "
+#~ "väljs för ett särskilt språk.)"
+
+#~ msgid "distrib"
+#~ msgstr "distribuera"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( denna mall är definierad för listan %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( denna mall används som standard för alla listor hos roboten %1 om inte "
+#~ "annat anges för en särskild lista )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( denna mall används som standard av alla robotar om den inte defineras "
+#~ "om för en särskild robot )"
+
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Listan %1 tillåter bara dessa mottagningslägen: %2"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "Du har delegerats listägaransvaret för listan %2@%3 av %1."
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "Du har delegerats listmoderatoransvaret för listan %2@%3 av %1."
+
+#~ msgid "to both"
+#~ msgstr "till båda"
 
 #~ msgid "Name: "
 #~ msgstr "Namn: "

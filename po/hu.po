@@ -10467,36 +10467,6 @@ msgstr "lista bejegyzések sablonja"
 msgid "no mail (useful for vacations)"
 msgstr "nincs kézbesítés (pl. szabadság esetén)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Ez a sablon van beállítva minden nyelv esetében, kivéve, ha felül van "
-"definiálva egyes nyelveknél.)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( ez a sablon a %1@%2 listához van definiálva )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( ez a sablon van beállítva a %1 robot minden listájának, kivéve, ha felül "
-"van definiálva egyes listákon )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( ez a sablon van beállítva minden robotnak, kivéve, ha felül van definiálva "
-"egyes robotoknál )"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -11681,6 +11651,30 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Ez a sablon van beállítva minden nyelv esetében, kivéve, ha felül van "
+#~ "definiálva egyes nyelveknél.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( ez a sablon a %1@%2 listához van definiálva )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( ez a sablon van beállítva a %1 robot minden listájának, kivéve, ha "
+#~ "felül van definiálva egyes listákon )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( ez a sablon van beállítva minden robotnak, kivéve, ha felül van "
+#~ "definiálva egyes robotoknál )"
 
 #~ msgid "Name: "
 #~ msgstr "Név:"

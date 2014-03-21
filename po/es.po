@@ -10211,62 +10211,6 @@ msgstr "modelo de aliases de lista"
 msgid "no mail (useful for vacations)"
 msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(modelo por omisión para todos los idiomas a menos que se lo redefina para "
-"un idioma específico)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distrib"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(Esta modelo está definido para la lista %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(modelo por omisión para todas las listas del robot %1, a menos que se lo "
-"redefinida para una lista específica)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(este modelo se define por omisión para todos los robots, a menos que se "
-"loredefina para un robot específico)"
-
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "La lista %1 sólo permite los modos de recepción siguientes: %2"
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "Has sido designad@ como dueñ@ de la lista %2@%3 por %1. "
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "Has sido designad@ como moderador/a de la lista %2@%3 por %1. "
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "a los dos"
-
 #: ../src/lib/confdef.pm:924
 msgid "Bouncing email rate for warn list owner"
 msgstr ""
@@ -10611,6 +10555,49 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(modelo por omisión para todos los idiomas a menos que se lo redefina "
+#~ "para un idioma específico)"
+
+#~ msgid "distrib"
+#~ msgstr "distrib"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(Esta modelo está definido para la lista %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(modelo por omisión para todas las listas del robot %1, a menos que se lo "
+#~ "redefinida para una lista específica)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(este modelo se define por omisión para todos los robots, a menos que se "
+#~ "loredefina para un robot específico)"
+
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "La lista %1 sólo permite los modos de recepción siguientes: %2"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "Has sido designad@ como dueñ@ de la lista %2@%3 por %1. "
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "Has sido designad@ como moderador/a de la lista %2@%3 por %1. "
+
+#~ msgid "to both"
+#~ msgstr "a los dos"
 
 #~ msgid "Name: "
 #~ msgstr "Nombre: "

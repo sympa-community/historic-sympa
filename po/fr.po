@@ -10545,62 +10545,50 @@ msgstr "modèle d'alias de liste"
 msgid "no mail (useful for vacations)"
 msgstr "interrompre la réception des messages (utile pendant les vacances)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Ce modèle est défini pour toutes les langues sauf s'il est redéfini pour "
-"une langue spécifique.)"
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Ce modèle est défini pour toutes les langues sauf s'il est redéfini pour "
+#~ "une langue spécifique.)"
 
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distrib"
+#~ msgid "distrib"
+#~ msgstr "distrib"
 
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(ce modèle est défini au niveau de la liste %1@%2)"
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(ce modèle est défini au niveau de la liste %1@%2)"
 
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(ce modèle est défini pour toutes les listes du robot %1 sauf s'il est "
-"redéfini au niveau d'une liste)"
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(ce modèle est défini pour toutes les listes du robot %1 sauf s'il est "
+#~ "redéfini au niveau d'une liste)"
 
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(ce modèle est défini pour tous les robots sauf s'il est redéfini au niveau "
-"d'un robot)"
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(ce modèle est défini pour tous les robots sauf s'il est redéfini au "
+#~ "niveau d'un robot)"
 
 # nlsref 6,90
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "La liste %1 autorise uniquement les modes de réception suivants : %2"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr ""
+#~ "La liste %1 autorise uniquement les modes de réception suivants : %2"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "Vous avez été nommé propriétaire de la liste %2@%3 par %1. "
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "Vous avez été nommé propriétaire de la liste %2@%3 par %1. "
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "Vous avez été nommé modérateur de la liste %2@%3 par %1. "
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "Vous avez été nommé modérateur de la liste %2@%3 par %1. "
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "au deux"
+#~ msgid "to both"
+#~ msgstr "au deux"
 
 #~ msgid "Name: "
 #~ msgstr "Nom : "

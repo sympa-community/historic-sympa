@@ -10484,64 +10484,6 @@ msgstr "list aliases -malli"
 msgid "no mail (useful for vacations)"
 msgstr "ei posteja (hyödyllinen lomien aikana)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Tämä malli on kaikille kielille, jos jollekin kielelle ei ole omaa "
-"määritelty.)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "jakelu"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(tämä sivupohja on määritelty listalle %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(tämä on oletussivupohja kaikille listoille robotissa %1, jos listalle ei "
-"ole määritelty omaa sivupohjaa)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(tätä sivupohjaa käytetän kaikissa roboteissa, jos robotille ei ole "
-"määritelty omaa sivupohjaa)"
-
-# nlsref 6,90
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-#, fuzzy
-msgid "List %1 allows only these reception modes: %2"
-msgstr "Listalla %1 on sallittu vain seuraavat vastaanottovaihtoehdot: %2"
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "%1 antoi sinulle listanomistajan vastuun listalle %2@%3."
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "%1 antoi sinulle listamoderaattorin velvollisuudet listalle %2@%3."
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "molemmille"
-
 #: ../web_tt2/show_exclude.tt2:3
 msgid "Show the exclusion table"
 msgstr ""
@@ -11376,6 +11318,51 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Tämä malli on kaikille kielille, jos jollekin kielelle ei ole omaa "
+#~ "määritelty.)"
+
+#~ msgid "distrib"
+#~ msgstr "jakelu"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(tämä sivupohja on määritelty listalle %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(tämä on oletussivupohja kaikille listoille robotissa %1, jos listalle ei "
+#~ "ole määritelty omaa sivupohjaa)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(tätä sivupohjaa käytetän kaikissa roboteissa, jos robotille ei ole "
+#~ "määritelty omaa sivupohjaa)"
+
+# nlsref 6,90
+#, fuzzy
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Listalla %1 on sallittu vain seuraavat vastaanottovaihtoehdot: %2"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "%1 antoi sinulle listanomistajan vastuun listalle %2@%3."
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "%1 antoi sinulle listamoderaattorin velvollisuudet listalle %2@%3."
+
+#~ msgid "to both"
+#~ msgstr "molemmille"
 
 #~ msgid "Name: "
 #~ msgstr "Nimi: "

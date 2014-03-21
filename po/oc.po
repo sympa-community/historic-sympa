@@ -10385,46 +10385,6 @@ msgstr "modèl d'alias de lista"
 msgid "no mail (useful for vacations)"
 msgstr "interrompre la recepcion dels messatges (util pendent las vacanças)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Aqueste modèl es definit per totas las lengas levat s'es redefinit per una "
-"lenga especifica)"
-
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distrib"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(aqueste gardi es definit al nivèl de la lista %1@%2)"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(Aqueste modèl es definit per totas las listas del robòt %1 levat s'es "
-"redefinit al nivèl d'una lista)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(Aqueste modèl es definit per totes los robòts levat s'es redefinit al nivèl "
-"d'un robòt especific)"
-
-# nlsref 6,90
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "La lista %1 autoriza pas qu'aqueles mòdes de recepcion : %2"
-
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
 msgid ""
@@ -10437,11 +10397,6 @@ msgid ""
 "You have been delegate the responsability of list moderator by %1 for list %"
 "2@%3."
 msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:473
-#, fuzzy
-msgid "to both"
-msgstr "robòt"
 
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
@@ -11111,6 +11066,41 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Aqueste modèl es definit per totas las lengas levat s'es redefinit per "
+#~ "una lenga especifica)"
+
+#~ msgid "distrib"
+#~ msgstr "distrib"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(aqueste gardi es definit al nivèl de la lista %1@%2)"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(Aqueste modèl es definit per totas las listas del robòt %1 levat s'es "
+#~ "redefinit al nivèl d'una lista)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(Aqueste modèl es definit per totes los robòts levat s'es redefinit al "
+#~ "nivèl d'un robòt especific)"
+
+# nlsref 6,90
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "La lista %1 autoriza pas qu'aqueles mòdes de recepcion : %2"
+
+#, fuzzy
+#~ msgid "to both"
+#~ msgstr "robòt"
 
 #~ msgid "Name: "
 #~ msgstr "Nom : "

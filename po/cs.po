@@ -10428,12 +10428,6 @@ msgid ""
 "specific language.)"
 msgstr ""
 
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-#, fuzzy
-msgid "( this template is defined for list %1@%2 )"
-msgstr "Konference %1 není definován vlastník."
-
 #. (robot)
 #: ../web_tt2/view_template.tt2:15
 msgid ""
@@ -11749,6 +11743,10 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
+
+#, fuzzy
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "Konference %1 není definován vlastník."
 
 #, fuzzy
 #~ msgid "Name: "

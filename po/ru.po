@@ -10226,36 +10226,6 @@ msgstr "шаблон псевдонимов для списка рассылки
 msgid "no mail (useful for vacations)"
 msgstr "без писем (полезно для отпускников)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"Этот шаблон задан по умолчанию для всех языков, в случае, если для "
-"конкретного языка не задан другой шаблон"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( этот шаблон задан для рассылки %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( этот шаблон задан по умолчанию для всех рассылок робота %1, за исключением "
-"тех, для которых шаблон задан отдельно )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( этот шаблон задан по умолчанию для всех роботов, за исключением тех, для "
-"которых он задан отдельно )"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid " -- go to:"
 msgstr ""
@@ -11022,6 +10992,30 @@ msgstr ""
 #: ../src/lib/confdef.pm:234
 msgid "Syslog"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "Этот шаблон задан по умолчанию для всех языков, в случае, если для "
+#~ "конкретного языка не задан другой шаблон"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( этот шаблон задан для рассылки %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( этот шаблон задан по умолчанию для всех рассылок робота %1, за "
+#~ "исключением тех, для которых шаблон задан отдельно )"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( этот шаблон задан по умолчанию для всех роботов, за исключением тех, "
+#~ "для которых он задан отдельно )"
 
 #~ msgid "Name: "
 #~ msgstr "Имя: "

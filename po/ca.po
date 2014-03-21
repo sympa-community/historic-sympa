@@ -10229,62 +10229,49 @@ msgstr "plantilla aliases de les llistes"
 msgid "no mail (useful for vacations)"
 msgstr "sense correu (útil per vacances)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Aquesta plantilla és la predeterminada per totes les llengües excepte si "
-"estan personalitzades)"
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Aquesta plantilla és la predeterminada per totes les llengües excepte si "
+#~ "estan personalitzades)"
 
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "distrib"
+#~ msgid "distrib"
+#~ msgstr "distrib"
 
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( aquesta plantilla està definida per a la llista %1@%2 )"
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "( aquesta plantilla està definida per a la llista %1@%2 )"
 
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( aquesta és la plantilla per defecte per a tots les llistes del robot %1 si "
-"no és  que està redefinida per a una llista específica )"
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "( aquesta és la plantilla per defecte per a tots les llistes del robot %1 "
+#~ "si no és  que està redefinida per a una llista específica )"
 
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"( aquesta és la plantilla per defecte per a tots els robots si no és que hi "
-"ha un robot específic )"
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "( aquesta és la plantilla per defecte per a tots els robots si no és que "
+#~ "hi ha un robot específic )"
 
-#. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
-msgstr "La llista %1 només permet els modes de recepció següents: %2"
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "La llista %1 només permet els modes de recepció següents: %2"
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr ""
-"Heu estat designat(da) como a administrador/a de la llista %2@%3 per %1."
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "Heu estat designat(da) como a administrador/a de la llista %2@%3 per %1."
 
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "Heu estat designat(da) como a moderador de la llista %2@%3 per %1."
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "Heu estat designat(da) como a moderador de la llista %2@%3 per %1."
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
-msgstr "tant"
+#~ msgid "to both"
+#~ msgstr "tant"
 
 #~ msgid "Name: "
 #~ msgstr "Nom: "

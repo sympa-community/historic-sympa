@@ -10179,33 +10179,6 @@ msgstr "邮件列表别名模板"
 msgid "no mail (useful for vacations)"
 msgstr "不接收邮件（用于假期）"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr "（这块模板是所有语言的缺省，除非它已经被重复定义为一种具体语言。）"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "（%1@%2邮件列表已经定义了模板）"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"（这块模板是%1邮件系统所有邮件列表的缺省，除非它已经被重复定义为一张具体的邮"
-"件表）"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"（这块模板是所有邮件系统的缺省，除非它已经被重复定义为一个具体的邮件系统）"
-
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
 msgid ""
@@ -11447,6 +11420,27 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr "（这块模板是所有语言的缺省，除非它已经被重复定义为一种具体语言。）"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "（%1@%2邮件列表已经定义了模板）"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "（这块模板是%1邮件系统所有邮件列表的缺省，除非它已经被重复定义为一张具体的"
+#~ "邮件表）"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "（这块模板是所有邮件系统的缺省，除非它已经被重复定义为一个具体的邮件系统）"
 
 #, fuzzy
 #~ msgid "Name: "

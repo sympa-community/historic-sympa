@@ -10426,36 +10426,6 @@ msgstr "mẫu bí danh hộp thư chung"
 msgid "no mail (useful for vacations)"
 msgstr "không thư (có ích khi đi nghỉ)"
 
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Mẫu này làm mặc định cho tất cả các ngôn ngữ nếu nó không được xác định lại "
-"cho một ngôn ngữ nào đó.)"
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "(mẫu này được xác định cho hộp thư chung %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"(mẫu này làm mặc định cho mọi hộp thư chung của rô-bốt %1 nếu nó không được "
-"xác định lại cho một hộp thư chung cụ thể)"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(mẫu này làm mặc định cho mọi rô-bốt %1 nếu nó không được xác định lại cho "
-"một rô-bốt cụ thể)"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -11682,6 +11652,30 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "(This template is the default for all languages unless it is redefined "
+#~ "for a specific language.)"
+#~ msgstr ""
+#~ "(Mẫu này làm mặc định cho tất cả các ngôn ngữ nếu nó không được xác định "
+#~ "lại cho một ngôn ngữ nào đó.)"
+
+#~ msgid "( this template is defined for list %1@%2 )"
+#~ msgstr "(mẫu này được xác định cho hộp thư chung %1@%2 )"
+
+#~ msgid ""
+#~ "( this template is the default for all lists of robot %1 unless it is "
+#~ "redefined for a specific list )"
+#~ msgstr ""
+#~ "(mẫu này làm mặc định cho mọi hộp thư chung của rô-bốt %1 nếu nó không "
+#~ "được xác định lại cho một hộp thư chung cụ thể)"
+
+#~ msgid ""
+#~ "( this template is the default used by all robots unless redefined for a "
+#~ "specific robot )"
+#~ msgstr ""
+#~ "(mẫu này làm mặc định cho mọi rô-bốt %1 nếu nó không được xác định lại "
+#~ "cho một rô-bốt cụ thể)"
 
 #, fuzzy
 #~ msgid "Name: "
