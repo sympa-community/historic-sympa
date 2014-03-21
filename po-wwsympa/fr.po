@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2012-11-16 15:48+0200\n"
+"PO-Revision-Date: 2014-03-19 15:38+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Français\n"
 "Language: fr\n"
@@ -34,7 +34,7 @@ msgstr "Documentation destinée aux abonnés, modérateurs et propriétaires"
 
 #: ../web_tt2/help.tt2:13
 msgid "In this documentation, you will find:"
-msgstr "Vous trouverez, dans cette documentation&#160;:"
+msgstr "Vous trouverez dans cette documentation&#160;:"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:15
@@ -48,16 +48,16 @@ msgstr ""
 #: ../web_tt2/help.tt2:16
 msgid "a <a href=\"%1/help/user\">user guide</a> about the use of Sympa;"
 msgstr ""
-"une <a href=\"%1/help/user\">documentation destinée aux utilisateurs</a> des "
-"listes de diffusion&#160;;"
+"une <a href=\"%1/help/user\">documentation</a> destinée aux utilisateurs de "
+"Sympa&#160;;"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:17
 msgid ""
 "an <a href=\"%1/help/admin\">administrator guide</a> about the use of Sympa."
 msgstr ""
-"une <a href=\"%1/help/admin\">documentation destinée aux administrateurs</a> "
-"des listes de diffusion."
+"une <a href=\"%1/help/admin\">documentation</a> destinée aux administrateurs "
+"de Sympa."
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:20
@@ -152,7 +152,8 @@ msgstr ""
 #: ../web_tt2/help_introduction.tt2:16
 msgid "mailing list for all the employees of a company;"
 msgstr ""
-"liste de diffusion à destination de tous les salariés d'une entreprise&#160;;"
+"liste de diffusion à destination de tous les employés d'une "
+"entreprise&#160;;"
 
 #: ../web_tt2/help_introduction.tt2:17
 msgid "mailing list reserved to the participants in a project;"
@@ -585,9 +586,8 @@ msgid ""
 "admin#manage_shared\">shared document web space</a></strong> at the "
 "subscribers' disposal;"
 msgstr ""
-"<strong>décider de mettre ou non à la disposition des abonnés un <a href="
-"\"%1/help/admin#manage_shared\">espace de stockage partagé</a></"
-"strong>&#160;;"
+"<strong>décider de mettre ou non à la disposition des abonnés un <a href=\"%"
+"1/help/admin#manage_shared\">espace de stockage partagé</a></strong>&#160;;"
 
 #: ../web_tt2/help_introduction.tt2:103
 msgid ""
@@ -677,14 +677,12 @@ msgstr ""
 "propriétaires et des modérateurs."
 
 #: ../web_tt2/help_introduction.tt2:119
-#, fuzzy
 msgid ""
 "The use of mailing lists naturally means respecting the rules of good "
 "practices as regards email (the \"Netiquette\")."
 msgstr ""
-"L'utilisation des listes de diffusion implique naturellement de respecter "
-"les règles de bonne utilisation de la messagerie (la &#171;&#160;"
-"Nétiquette&#160;&#187;)."
+"L'utilisation des listes de diffusion implique de respecter les règles de "
+"bonne utilisation de la messagerie (la &#171;&#160;Nétiquette&#160;&#187;)."
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:121
@@ -2006,8 +2004,8 @@ msgstr ""
 #. (path_cgi)
 #: ../web_tt2/help_admin.tt2:51
 msgid ""
-"Go to the <strong>list environment homepage</strong> and <strong><a href="
-"\"%1/help/user#sympa_auth\">log on</a></strong>."
+"Go to the <strong>list environment homepage</strong> and <strong><a href=\"%"
+"1/help/user#sympa_auth\">log on</a></strong>."
 msgstr ""
 "Allez sur la <strong>page d'accueil</strong> de l'environnement de listes et "
 "<strong>connectez-vous</strong>."
@@ -3047,8 +3045,8 @@ msgstr ""
 msgid ""
 "If you manage a set of lists, you can <strong>prefix your lists' names with "
 "a common prefix</strong>; thus they will be sorted together and will be "
-"easily recognizable (example: <em class=\"example\">xx-users@%1, xx-hotline@"
-"%1.fr</em>, etc.)."
+"easily recognizable (example: <em class=\"example\">xx-users@%1, xx-hotline@%"
+"1.fr</em>, etc.)."
 msgstr ""
 "Si vous administrez un ensemble de listes, vous pouvez <strong>préfixer le "
 "nom de vos listes avec un préfixe commun</strong> afin qu'elles soient "
@@ -4691,10 +4689,9 @@ msgstr ""
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:15
-#, fuzzy
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>Vous n'avez pas de mot de passe</strong>. Pour vous faire allouer un "
@@ -6414,8 +6411,8 @@ msgid ""
 "European Union, the \"Directive 95/46/EC of the European Parliament and of "
 "the Council of 24 October 1995 on the protection of individuals with regard "
 "to the processing of personal data and on the free movement of such data\" "
-"and national laws arising from it apply. To know more about this, <a href="
-"\"%1/help/faquser#contactadmin\">please contact the list owners</a>."
+"and national laws arising from it apply. To know more about this, <a href=\"%"
+"1/help/faquser#contactadmin\">please contact the list owners</a>."
 msgstr ""
 "En France, conformément à la loi relative à l'informatique, aux fichiers et "
 "aux libertés du 6&#160;janvier&#160;1978, vous disposez d'un droit d'accès, "
@@ -7621,16 +7618,6 @@ msgstr ""
 "autres \n"
 "modes d'abonnement."
 
-#~ msgid ""
-#~ "<strong>You have no password</strong>. To be given a password, follow the "
-#~ "<a href=\"%1/sendpasswd\">First login?</a> link from the homepage. You "
-#~ "will receive your new password by email."
-#~ msgstr ""
-#~ "<strong>Vous n'avez pas de mot de passe</strong>. Pour vous faire allouer "
-#~ "un mot de passe, suivez le lien <a href=\"%1/sendpasswd\">Première "
-#~ "connexion</a> depuis la page d'accueil. Vous recevrez ce mot de passe par "
-#~ "e-mail."
-
 #~ msgid "subscribers (private);"
 #~ msgstr "visible des abonnés (private)&#160;;"
 
@@ -7766,9 +7753,9 @@ msgstr ""
 #~ "the name of the template you wish to create or where the name of the "
 #~ "template to be modified will be displayed."
 #~ msgstr ""
-#~ "Champ «<strong> Nom du modèle: </strong> ». Ici se trouve le nom du "
-#~ "modèle à sauvegarder. Si c'est un nouveau modèle, vous devez le taper "
-#~ "ici ; si vous modifiez un modèle, son nom y est affiché."
+#~ "Champ «<strong> Nom du modèle: </strong> ». Ici se trouve le nom du modèle "
+#~ "à sauvegarder. Si c'est un nouveau modèle, vous devez le taper ici ; si "
+#~ "vous modifiez un modèle, son nom y est affiché."
 
 #~ msgid ""
 #~ "Textarea : This is where you can enter the text of the message you wish "
@@ -7931,34 +7918,3 @@ msgstr ""
 # nlsref 16,91
 #~ msgid "value"
 #~ msgstr "valeur"
-
-#~ msgid " (this template is defined for list %1@%2)"
-#~ msgstr "Ce modèle est défini pour la liste %1@%2"
-
-#~ msgid ""
-#~ " (this template is default for all lists of robot %1 unless it is "
-#~ "redefined for some particular list)"
-#~ msgstr ""
-#~ "Ce modèle est défini pour toutes les listes du robot %1 sauf s'il est "
-#~ "redéfini au niveau d'une liste"
-
-#~ msgid ""
-#~ " (this template is the default for all languages unless it is redefined "
-#~ "for a specific language)"
-#~ msgstr ""
-#~ "(Ce modèle est défini pour toutes les langues sauf s'il est redéfini pour "
-#~ "une langue spécifique.)"
-
-#~ msgid ""
-#~ " (this template is the default for all lists of robot %1 unless it is "
-#~ "redefined for a specific list)"
-#~ msgstr ""
-#~ "(ce modèle est défini pour toutes les listes du robot %1 sauf s'il est "
-#~ "redéfini au niveau d'une liste)"
-
-#~ msgid ""
-#~ " (this template is the default used by all robots unless redefined for a "
-#~ "specific robot)"
-#~ msgstr ""
-#~ "(ce modèle est défini pour tous les robots sauf s'il est redéfini au "
-#~ "niveau d'un robot)"
