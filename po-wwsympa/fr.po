@@ -21,10 +21,10 @@ msgstr ""
 "PO-Revision-Date: 2014-03-19 15:38+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Français\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -152,8 +152,7 @@ msgstr ""
 #: ../web_tt2/help_introduction.tt2:16
 msgid "mailing list for all the employees of a company;"
 msgstr ""
-"liste de diffusion à destination de tous les employés d'une "
-"entreprise&#160;;"
+"liste de diffusion à destination de tous les employés d'une entreprise&#160;;"
 
 #: ../web_tt2/help_introduction.tt2:17
 msgid "mailing list reserved to the participants in a project;"
@@ -4689,9 +4688,10 @@ msgstr ""
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:15
+#, fuzzy
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>Vous n'avez pas de mot de passe</strong>. Pour vous faire allouer un "

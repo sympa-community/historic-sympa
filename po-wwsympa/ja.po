@@ -4929,11 +4929,11 @@ msgstr "リストサーバのウェブインタフェースでログインでき
 #: ../web_tt2/help_faquser.tt2:15
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>パスワードがまだない</strong>。パスワードをもらうには、ホームページの"
-"<a href=\"%1/sendpasswd\">まだログインしたことがない</a>のリンクを選びます。"
+"<a href=\"%1/firstpasswd\">まだログインしたことがない</a>のリンクを選びます。"
 "パスワードが電子メールで届きます。"
 
 #. (path_cgi)
@@ -8271,12 +8271,12 @@ msgstr ""
 
 #~ msgid ""
 #~ "<strong>You have no password</strong>. To be given a password, follow the "
-#~ "<a href=\"%1/firstpasswd\">First login?</a> link from the homepage. You "
+#~ "<a href=\"%1/sendpasswd\">First login?</a> link from the homepage. You "
 #~ "will receive your new password by email."
 #~ msgstr ""
 #~ "<strong>パスワードがまだない</strong>。パスワードをもらうには、ホームペー"
-#~ "ジの<a href=\"%1/firstpasswd\">まだログインしたことがない</a>のリンクを選"
-#~ "びます。パスワードが電子メールで届きます。"
+#~ "ジの<a href=\"%1/sendpasswd\">まだログインしたことがない</a>のリンクを選び"
+#~ "ます。パスワードが電子メールで届きます。"
 
 # 仮訳
 # See the comment for "Good Practices".

@@ -57,25 +57,25 @@ msgstr ""
 msgid "You have logged in with email address %1"
 msgstr "Te-ai autentificat cu adresa email %1"
 
-#: ../web_tt2/main.tt2:27
+#: ../web_tt2/main.tt2:29
 #, fuzzy
 msgid "RSS Latest messages"
 msgstr "Ordonate dupa mesaje noi"
 
 # nlsref 16,70
-#: ../web_tt2/main.tt2:28
+#: ../web_tt2/main.tt2:30
 #, fuzzy
 msgid "RSS Latest documents"
 msgstr "Fisiere shared"
 
-#: ../web_tt2/main.tt2:31 ../web_tt2/main.tt2:34
+#: ../web_tt2/main.tt2:33 ../web_tt2/main.tt2:36
 #, fuzzy
 msgid "RSS Latest lists"
 msgstr ""
 "Ultima \n"
 "      lista"
 
-#: ../web_tt2/main.tt2:32 ../web_tt2/main.tt2:35
+#: ../web_tt2/main.tt2:34 ../web_tt2/main.tt2:37
 #, fuzzy
 msgid "RSS Active lists"
 msgstr ""
@@ -114,7 +114,7 @@ msgstr "Acasa"
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
-#: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
+#: ../web_tt2/reviewbouncing.tt2:4 ../web_tt2/suboptions.tt2:31
 #: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Ajutor"
@@ -136,7 +136,7 @@ msgstr "Privileged owner"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
-#: ../src/lib/List.pm:1191 ../web_tt2/login_menu.tt2:15
+#: ../src/lib/List.pm:1194 ../web_tt2/login_menu.tt2:15
 #, fuzzy
 msgid "Owner"
 msgstr ""
@@ -179,7 +179,7 @@ msgstr "Iti reaminteste %s subscriere"
 msgid "admin"
 msgstr "admin"
 
-#: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:77
+#: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:78
 #: ../web_tt2/your_lists.tt2:23
 #, fuzzy
 msgid "No mailing list available."
@@ -252,7 +252,7 @@ msgid "RSS"
 msgstr ""
 
 # nlsref 16,70
-#: ../src/lib/List.pm:1329 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1332 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Fisiere shared"
@@ -274,30 +274,35 @@ msgid "List not yet activated"
 msgstr ""
 
 #: ../web_tt2/list_panel.tt2:11
+#, fuzzy
+msgid "Erroneous configuration"
+msgstr "Edit list config"
+
+#: ../web_tt2/list_panel.tt2:13
 msgid "Subscribers:"
 msgstr "Subscribers:"
 
 # nlsref 1,3
-#: ../web_tt2/list_panel.tt2:12
+#: ../web_tt2/list_panel.tt2:14
 #, fuzzy
 msgid "Error rate:"
 msgstr "Greseala în linia %d %s"
 
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
+#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:15
 msgid "Owners"
 msgstr "Proprietari"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,26
-#: ../src/lib/List.pm:682 ../web_tt2/list_panel.tt2:20
+#: ../src/lib/List.pm:685 ../web_tt2/list_panel.tt2:22
 msgid "Moderators"
 msgstr "Moderatori"
 
-#: ../web_tt2/list_panel.tt2:26
+#: ../web_tt2/list_panel.tt2:28
 msgid "Load certificate"
 msgstr "Incarca certificatul</"
 
-#: ../web_tt2/list_panel.tt2:29 ../web_tt2/list_panel.tt2:31
+#: ../web_tt2/list_panel.tt2:31 ../web_tt2/list_panel.tt2:33
 #, fuzzy
 msgid "Contact owners"
 msgstr "notifica proprietar"
@@ -535,7 +540,7 @@ msgstr "Adauga abonati noi"
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
 #: ../web_tt2/exclusion_table.tt2:36 ../web_tt2/review.tt2:126
 #: ../web_tt2/review.tt2:159 ../web_tt2/review.tt2:77
-#: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
+#: ../web_tt2/reviewbouncing.tt2:128 ../web_tt2/search_user.tt2:57
 msgid "quiet"
 msgstr "mut"
 
@@ -620,17 +625,11 @@ msgstr ""
 msgid "Attribute optionnal/required"
 msgstr ""
 
-# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,7
-#: ../web_tt2/arc_manage.tt2:4
+# nlsref 16,4
+#: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
 #, fuzzy
-msgid "Archive Management"
-msgstr ""
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Management-ul mesajelor eronate (bounced)\n"
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Managementul mesajelor \n"
-"    bumerang"
+msgid "List archive"
+msgstr "Arhive text"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
 #: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
@@ -646,10 +645,22 @@ msgstr ""
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
-#: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
+#: ../web_tt2/reviewbouncing.tt2:4 ../web_tt2/suboptions.tt2:30
 #: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr ""
+
+# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#: ../web_tt2/arc_manage.tt2:4
+#, fuzzy
+msgid "Archive Management"
+msgstr ""
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Management-ul mesajelor eronate (bounced)\n"
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Managementul mesajelor \n"
+"    bumerang"
 
 #: ../web_tt2/arc_manage.tt2:6
 msgid ""
@@ -692,24 +703,107 @@ msgstr ""
 "adrese \n"
 "de email."
 
-# nlsref 16,4
-#: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
-#, fuzzy
-msgid "List archive"
-msgstr "Arhive text"
-
-#: ../web_tt2/arcsearch_form.tt2:4
-#, fuzzy
-msgid "Advanced archive search"
-msgstr "Cautare avansata"
+#: ../web_tt2/arcsearch.tt2:4
+msgid "Result of your search in the archive"
+msgstr "Rezultatul cautarii in arhiva listei"
 
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
 #, fuzzy
 msgid "Search field:"
 msgstr "=\"+1\">Arie de cautare:"
 
+#. (key_word)
+#: ../web_tt2/arcsearch.tt2:13
+#, fuzzy
+msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
+msgstr "Parametrii cautarii pe cuvintele <b> &quot;%1&quot;</b> <I>"
+
+#: ../web_tt2/arcsearch.tt2:17
+msgid "(This sentence,"
+msgstr "(Propozitie,"
+
+#: ../web_tt2/arcsearch.tt2:19
+#, fuzzy
+msgid "(All of these words,"
+msgstr "(Toate cuvintele,"
+
+#: ../web_tt2/arcsearch.tt2:21
+#, fuzzy
+msgid "(Each of these words,"
+msgstr "(Fiecare din aceste cuvinte,"
+
+#: ../web_tt2/arcsearch.tt2:25
+msgid "case insensitive"
+msgstr "caz senzitiv"
+
+#: ../web_tt2/arcsearch.tt2:27
+msgid "case sensitive"
+msgstr "caz senzitiv"
+
+#: ../web_tt2/arcsearch.tt2:31
+msgid "and checking on part of word)"
+msgstr ""
+"si verificare \n"
+"pe parte din cuvant)"
+
+#: ../web_tt2/arcsearch.tt2:33
+msgid "and checking on entire word)"
+msgstr "si verificare pe intreg cuvant)"
+
+#: ../web_tt2/arcsearch.tt2:41
+msgid "Newest messages first"
+msgstr "Ordonate dupa mesaje noi"
+
+#: ../web_tt2/arcsearch.tt2:43
+msgid "Oldest messages first"
+msgstr "Ordonate dupa mesaje vechi"
+
+#. (body_count)
+#: ../web_tt2/arcsearch.tt2:77
+msgid "%1 hits on message Body"
+msgstr "Numărul mesajelor conforme criteriului dv.: %1"
+
+#. (subj_count)
+#: ../web_tt2/arcsearch.tt2:81
+msgid "%1 hits on message Subject field"
+msgstr "Mesajele găsite după „Subiect”: %1"
+
+#. (from_count)
+#: ../web_tt2/arcsearch.tt2:85
+msgid " %1 hits on message From field"
+msgstr "Au fost găsiţi %1 expeditori"
+
+#. (date_count)
+#: ../web_tt2/arcsearch.tt2:89
+msgid "%1 hits on message Date field"
+msgstr "Numărul de potriviri după dată: %1"
+
+#: ../web_tt2/arcsearch.tt2:131
+msgid "Continue search"
+msgstr "Continua cautarea\">"
+
+#: ../web_tt2/arcsearch.tt2:134
+msgid "New search"
+msgstr "Cautare noua\">"
+
+#: ../web_tt2/arcsearch.tt2:139
+msgid ""
+"Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
+"Search</a></em>, search engine of MHonArc archives"
+msgstr ""
+
+#. (archive_name)
+#: ../web_tt2/arcsearch.tt2:142
+msgid "Return to archive %1"
+msgstr "Inapoi in arhiva %1"
+
+#: ../web_tt2/arcsearch_form.tt2:4
+#, fuzzy
+msgid "Advanced archive search"
+msgstr "Cautare avansata"
+
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:92 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:92 ../web_tt2/reviewbouncing.tt2:14
 msgid "Search"
 msgstr "Cauta\">"
 
@@ -810,94 +904,28 @@ msgstr "Continut"
 msgid "Extend search field:"
 msgstr "Extinde aria de cautare"
 
-#: ../web_tt2/arcsearch.tt2:4
-msgid "Result of your search in the archive"
-msgstr "Rezultatul cautarii in arhiva listei"
-
-#. (key_word)
-#: ../web_tt2/arcsearch.tt2:13
+#: ../web_tt2/auto_signoff.tt2:1
 #, fuzzy
-msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
-msgstr "Parametrii cautarii pe cuvintele <b> &quot;%1&quot;</b> <I>"
+msgid "Unsubscription request"
+msgstr "Nu exista cereri de inscriere"
 
-#: ../web_tt2/arcsearch.tt2:17
-msgid "(This sentence,"
-msgstr "(Propozitie,"
-
-#: ../web_tt2/arcsearch.tt2:19
+#. (signing_off_email,list)
+#: ../web_tt2/auto_signoff.tt2:2
 #, fuzzy
-msgid "(All of these words,"
-msgstr "(Toate cuvintele,"
+msgid "You clicked a link to unsubscribe the address %1 from list %2."
+msgstr "Ai cerut dezabonarea pe lista %1."
 
-#: ../web_tt2/arcsearch.tt2:21
-#, fuzzy
-msgid "(Each of these words,"
-msgstr "(Fiecare din aceste cuvinte,"
-
-#: ../web_tt2/arcsearch.tt2:25
-msgid "case insensitive"
-msgstr "caz senzitiv"
-
-#: ../web_tt2/arcsearch.tt2:27
-msgid "case sensitive"
-msgstr "caz senzitiv"
-
-#: ../web_tt2/arcsearch.tt2:31
-msgid "and checking on part of word)"
-msgstr ""
-"si verificare \n"
-"pe parte din cuvant)"
-
-#: ../web_tt2/arcsearch.tt2:33
-msgid "and checking on entire word)"
-msgstr "si verificare pe intreg cuvant)"
-
-#: ../web_tt2/arcsearch.tt2:41
-msgid "Newest messages first"
-msgstr "Ordonate dupa mesaje noi"
-
-#: ../web_tt2/arcsearch.tt2:43
-msgid "Oldest messages first"
-msgstr "Ordonate dupa mesaje vechi"
-
-#. (body_count)
-#: ../web_tt2/arcsearch.tt2:77
-msgid "%1 hits on message Body"
-msgstr "Numărul mesajelor conforme criteriului dv.: %1"
-
-#. (subj_count)
-#: ../web_tt2/arcsearch.tt2:81
-msgid "%1 hits on message Subject field"
-msgstr "Mesajele găsite după „Subiect”: %1"
-
-#. (from_count)
-#: ../web_tt2/arcsearch.tt2:85
-msgid " %1 hits on message From field"
-msgstr "Au fost găsiţi %1 expeditori"
-
-#. (date_count)
-#: ../web_tt2/arcsearch.tt2:89
-msgid "%1 hits on message Date field"
-msgstr "Numărul de potriviri după dată: %1"
-
-#: ../web_tt2/arcsearch.tt2:131
-msgid "Continue search"
-msgstr "Continua cautarea\">"
-
-#: ../web_tt2/arcsearch.tt2:134
-msgid "New search"
-msgstr "Cautare noua\">"
-
-#: ../web_tt2/arcsearch.tt2:139
+#. (list)
+#: ../web_tt2/auto_signoff.tt2:3
 msgid ""
-"Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
-"Search</a></em>, search engine of MHonArc archives"
+"A confirmation was just sent to this address. By clicking the link it "
+"contains, you will be definitively unsubscribed from list %1"
 msgstr ""
 
-#. (archive_name)
-#: ../web_tt2/arcsearch.tt2:142
-msgid "Return to archive %1"
-msgstr "Inapoi in arhiva %1"
+#: ../web_tt2/automatic_lists.tt2:3
+#, fuzzy
+msgid "Automatic lists result"
+msgstr "Ordonate dupa mesaje vechi"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
@@ -928,29 +956,6 @@ msgid "Go to list"
 msgstr ""
 "Restore \n"
 "  list"
-
-#: ../web_tt2/automatic_lists.tt2:3
-#, fuzzy
-msgid "Automatic lists result"
-msgstr "Ordonate dupa mesaje vechi"
-
-#: ../web_tt2/auto_signoff.tt2:1
-#, fuzzy
-msgid "Unsubscription request"
-msgstr "Nu exista cereri de inscriere"
-
-#. (signing_off_email,list)
-#: ../web_tt2/auto_signoff.tt2:2
-#, fuzzy
-msgid "You clicked a link to unsubscribe the address %1 from list %2."
-msgstr "Ai cerut dezabonarea pe lista %1."
-
-#. (list)
-#: ../web_tt2/auto_signoff.tt2:3
-msgid ""
-"A confirmation was just sent to this address. By clicking the link it "
-"contains, you will be definitively unsubscribed from list %1"
-msgstr ""
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
@@ -1008,15 +1013,26 @@ msgid "The current blacklist contains %1 line(s)"
 msgstr "Fisiere shared"
 
 #: ../web_tt2/blacklist.tt2:38 ../web_tt2/dump_scenario.tt2:37
-#: ../web_tt2/edit_template.tt2:36
+#: ../web_tt2/edit_template.tt2:48
 #, fuzzy
 msgid "save"
 msgstr "Salveaza\">"
 
-#: ../web_tt2/blacklist.tt2:40 ../web_tt2/edit_template.tt2:39
+#: ../web_tt2/blacklist.tt2:40 ../web_tt2/edit_template.tt2:51
 #, fuzzy
 msgid "Template saved"
 msgstr "Templateuri"
+
+#: ../web_tt2/change_email.tt2:3
+#, fuzzy
+msgid "You will receive a n email, with a confirmation link."
+msgstr "Vei primi un email, cu parole ta."
+
+#: ../web_tt2/change_email.tt2:4
+msgid ""
+"To confirm your email address change, go to your email account and click on "
+"the provided link"
+msgstr ""
 
 #: ../web_tt2/change_email_request.tt2:3
 msgid ""
@@ -1033,17 +1049,6 @@ msgstr ""
 
 #: ../web_tt2/change_email_request.tt2:5
 msgid "You shoukd check your mailbox now."
-msgstr ""
-
-#: ../web_tt2/change_email.tt2:3
-#, fuzzy
-msgid "You will receive a n email, with a confirmation link."
-msgstr "Vei primi un email, cu parole ta."
-
-#: ../web_tt2/change_email.tt2:4
-msgid ""
-"To confirm your email address change, go to your email account and click on "
-"the provided link"
 msgstr ""
 
 #: ../web_tt2/choosepasswd.tt2:4
@@ -1131,55 +1136,55 @@ msgstr ""
 msgid "Please select one or more topic(s) that corresponds to your message:"
 msgstr ""
 
-#: ../web_tt2/compose_mail.tt2:64
+#: ../web_tt2/compose_mail.tt2:66
 msgid "Messages customization: use the template syntax:"
 msgstr ""
 
-#: ../web_tt2/compose_mail.tt2:65
-msgid "Below are some examples of TT2 parameters usable in messages."
-msgstr ""
-
 #: ../web_tt2/compose_mail.tt2:67
-#, fuzzy
-msgid ": the listname; always available."
-msgstr "%1 creare de lista"
-
-#: ../web_tt2/compose_mail.tt2:68
-msgid ": the name of the host the list is intalled on; always available."
+msgid "Below are some examples of TT2 parameters usable in messages."
 msgstr ""
 
 #: ../web_tt2/compose_mail.tt2:69
 #, fuzzy
-msgid ": the user email; always available."
+msgid ": the listname; always available."
 msgstr "%1 creare de lista"
 
 #: ../web_tt2/compose_mail.tt2:70
-msgid ": the user name associated to her email; always available."
+msgid ": the name of the host the list is intalled on; always available."
 msgstr ""
 
 #: ../web_tt2/compose_mail.tt2:71
-msgid ": the - human readable - user's subscription date; always available."
-msgstr ""
+#, fuzzy
+msgid ": the user email; always available."
+msgstr "%1 creare de lista"
 
 #: ../web_tt2/compose_mail.tt2:72
-msgid ""
-": can be anything you like; available if you defined a user custom attribute "
-"named \"title\" (see the list configuration, section \"Miscellaneous\")."
+msgid ": the user name associated to her email; always available."
 msgstr ""
 
 #: ../web_tt2/compose_mail.tt2:73
-msgid ""
-": can be anything you like; available if you defined a user custom attribute "
-"named \"name\"."
+msgid ": the - human readable - user's subscription date; always available."
 msgstr ""
 
 #: ../web_tt2/compose_mail.tt2:74
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
+"named \"title\" (see the list configuration, section \"Miscellaneous\")."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:75
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"name\"."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:76
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
 "named \"organization\"."
 msgstr ""
 
-#: ../web_tt2/compose_mail.tt2:78
+#: ../web_tt2/compose_mail.tt2:81
 #, fuzzy
 msgid "URL:"
 msgstr "titlu"
@@ -1198,63 +1203,129 @@ msgstr ""
 "Customizeaza \n"
 "      template-uri"
 
-#: ../web_tt2/copy_template.tt2:8
+#: ../web_tt2/copy_template.tt2:8 ../web_tt2/edit_template.tt2:6
+#: ../web_tt2/view_template.tt2:7
 #, fuzzy
-msgid "Name: "
-msgstr "Nume :"
+msgid "Template name: "
+msgstr "Templateuri"
 
-#: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:17
-#: ../web_tt2/copy_template.tt2:9 ../web_tt2/view_template.tt2:10
+#: ../web_tt2/copy_template.tt2:35 ../web_tt2/copy_template.tt2:9
+#: ../web_tt2/edit_template.tt2:13 ../web_tt2/view_template.tt2:14
 msgid "Scope: "
 msgstr ""
 
-#: ../web_tt2/copy_template.tt2:11 ../web_tt2/copy_template.tt2:23
-#, fuzzy
-msgid "Language: "
-msgstr "Limba"
+#: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:23
+#: ../web_tt2/copy_template.tt2:43 ../web_tt2/edit_list_request.tt2:438
+#: ../web_tt2/edit_template.tt2:25 ../web_tt2/ls_templates.tt2:40
+#: ../web_tt2/skinsedit.tt2:84 ../web_tt2/view_template.tt2:16
+#: ../web_tt2/view_template.tt2:28
+msgid "default"
+msgstr "default"
 
-#: ../web_tt2/copy_template.tt2:15
+#: ../web_tt2/copy_template.tt2:11 ../web_tt2/view_template.tt2:17
 #, fuzzy
-msgid "Output template"
-msgstr ""
-"Customizeaza \n"
-"      template-uri"
+msgid "(this template is the default included in the distribution)"
+msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../web_tt2/copy_template.tt2:16
-#, fuzzy
-msgid "New template name: "
-msgstr "Templateuri"
-
-#: ../web_tt2/copy_template.tt2:19 ../web_tt2/ls_templates.tt2:41
+#: ../web_tt2/copy_template.tt2:12 ../web_tt2/copy_template.tt2:37
+#: ../web_tt2/edit_template.tt2:15 ../web_tt2/ls_templates.tt2:41
+#: ../web_tt2/view_template.tt2:18
 #, fuzzy
 msgid "site"
 msgstr "URL"
 
-#: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42
-#: ../web_tt2/show_sessions.tt2:3
+#: ../web_tt2/copy_template.tt2:13 ../web_tt2/edit_template.tt2:16
+#: ../web_tt2/view_template.tt2:19
+msgid ""
+"(this template is the default used by all robots unless redefined for a "
+"specific robot)"
+msgstr ""
+
+#: ../src/lib/List.pm:1515 ../web_tt2/copy_template.tt2:14
+#: ../web_tt2/copy_template.tt2:38 ../web_tt2/edit_template.tt2:17
+#: ../web_tt2/ls_templates.tt2:42 ../web_tt2/show_sessions.tt2:3
+#: ../web_tt2/view_template.tt2:20
 #, fuzzy
 msgid "robot"
 msgstr "De la: %1"
 
-#: ../web_tt2/copy_template.tt2:21 ../web_tt2/search_user.tt2:9
+#. (robot)
+#: ../web_tt2/copy_template.tt2:15 ../web_tt2/edit_template.tt2:18
+#: ../web_tt2/view_template.tt2:21
+msgid ""
+"(this template is the default for all lists of robot %1 unless it is "
+"redefined for a specific list)"
+msgstr ""
+
+#: ../src/etc/mhonarc-ressources.tt2:481 ../src/lib/List.pm:1478
+#: ../web_tt2/copy_template.tt2:16 ../web_tt2/copy_template.tt2:39
+#: ../web_tt2/edit_template.tt2:19 ../web_tt2/search_user.tt2:10
+#: ../web_tt2/view_template.tt2:22
 #, fuzzy
 msgid "list"
 msgstr ""
 "Restore \n"
 "  list"
 
-#: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_list_request.tt2:410
-msgid "default"
-msgstr "default"
+#. (list,robot)
+#: ../web_tt2/copy_template.tt2:17 ../web_tt2/edit_template.tt2:20
+#: ../web_tt2/view_template.tt2:23
+#, fuzzy
+msgid "(this template is defined for list %1@%2)"
+msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../web_tt2/copy_template.tt2:31
+#: ../web_tt2/copy_template.tt2:21 ../web_tt2/copy_template.tt2:41
+#: ../web_tt2/edit_template.tt2:23 ../web_tt2/view_template.tt2:26
+#, fuzzy
+msgid "Language: "
+msgstr "Limba"
+
+#: ../web_tt2/copy_template.tt2:24 ../web_tt2/edit_template.tt2:26
+#: ../web_tt2/view_template.tt2:29
+msgid ""
+"(This template is the default for all languages unless it is redefined for a "
+"specific language)"
+msgstr ""
+
+#: ../web_tt2/copy_template.tt2:33
+#, fuzzy
+msgid "Output template"
+msgstr ""
+"Customizeaza \n"
+"      template-uri"
+
+#: ../web_tt2/copy_template.tt2:34
+#, fuzzy
+msgid "New template name: "
+msgstr "Templateuri"
+
+#: ../web_tt2/copy_template.tt2:49
 #, fuzzy
 msgid "Enter list name: "
 msgstr "denumire lista"
 
-#: ../web_tt2/copy_template.tt2:43 ../web_tt2/d_properties.tt2:36
+#: ../web_tt2/copy_template.tt2:61 ../web_tt2/d_properties.tt2:36
 msgid "Apply"
 msgstr "Modifica\">"
+
+#: ../web_tt2/create_list.tt2:6
+msgid "Your list is created."
+msgstr "Lista ta a fost creata."
+
+#: ../web_tt2/create_list.tt2:7
+msgid "You can configure it via the admin button beside."
+msgstr ""
+
+#: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
+msgid "Aliases have been installed."
+msgstr "Aliasurile au fost instalate."
+
+#: ../web_tt2/create_list.tt2:15
+msgid ""
+"Your list creation request is registered. You can now  modify its\n"
+"configuration using the admin button but the list will be unusable until the "
+"listmaster validates it."
+msgstr ""
 
 #: ../web_tt2/create_list_request.tt2:6 ../web_tt2/nav.tt2:5
 msgid "Copy an existing list."
@@ -1357,25 +1428,6 @@ msgstr "Descriere:"
 msgid "Submit your creation request"
 msgstr "Trimite cererea pentru crearea listei\">"
 
-#: ../web_tt2/create_list.tt2:6
-msgid "Your list is created."
-msgstr "Lista ta a fost creata."
-
-#: ../web_tt2/create_list.tt2:7
-msgid "You can configure it via the admin button beside."
-msgstr ""
-
-#: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
-msgid "Aliases have been installed."
-msgstr "Aliasurile au fost instalate."
-
-#: ../web_tt2/create_list.tt2:15
-msgid ""
-"Your list creation request is registered. You can now  modify its\n"
-"configuration using the admin button but the list will be unusable until the "
-"listmaster validates it."
-msgstr ""
-
 #: ../web_tt2/d_control.tt2:3 ../web_tt2/d_editfile.tt2:6
 #: ../web_tt2/d_properties.tt2:3 ../web_tt2/d_read.tt2:7
 msgid "Up to higher level directory"
@@ -1451,8 +1503,8 @@ msgstr "Bookmark URL"
 msgid "Replace the file %1 with your file"
 msgstr "Inlocuieste fisierul %1 cu fisierul tau"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:421
-#: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:449
+#: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:75
 msgid "Update"
 msgstr "Actualizeaza\">"
 
@@ -1558,7 +1610,7 @@ msgstr "Do you really want to delete %1 ?"
 
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
-#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:55
+#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:56
 msgid "delete"
 msgstr "sterge"
 
@@ -1646,8 +1698,8 @@ msgid "to moderate"
 msgstr "Sterge lista comuna"
 
 #: ../web_tt2/d_read.tt2:246 ../web_tt2/d_read.tt2:248
-#: ../web_tt2/ls_templates.tt2:103 ../web_tt2/ls_templates.tt2:125
-#: ../web_tt2/ls_templates.tt2:147 ../web_tt2/search_user.tt2:66
+#: ../web_tt2/ls_templates.tt2:127 ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:171 ../web_tt2/search_user.tt2:67
 msgid "edit"
 msgstr "editeaza"
 
@@ -1740,6 +1792,28 @@ msgstr ""
 msgid "Unzip a file inside the folder SHARED"
 msgstr "Incarca un fisier in folderul SHARED"
 
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:2
+msgid "the file %1 already exists"
+msgstr ""
+
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:6
+#, fuzzy
+msgid "Do you want to delete the old file %1?"
+msgstr "Do you really want to delete %1 ?"
+
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:9
+#, fuzzy
+msgid "Do you want to rename your file %1?"
+msgstr "Do you really want to delete %1 ?"
+
+#: ../web_tt2/d_upload.tt2:15
+#, fuzzy
+msgid "Do you want to cancel the upload?"
+msgstr "Do you really want to delete %1 ?"
+
 #: ../web_tt2/dump_scenario.tt2:6
 msgid "scenario is created but not loaded in the list config"
 msgstr ""
@@ -1779,28 +1853,6 @@ msgstr "page %1 / %2"
 msgid "scenario name:"
 msgstr "Nume scenariu"
 
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:2
-msgid "the file %1 already exists"
-msgstr ""
-
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:6
-#, fuzzy
-msgid "Do you want to delete the old file %1?"
-msgstr "Do you really want to delete %1 ?"
-
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:9
-#, fuzzy
-msgid "Do you want to rename your file %1?"
-msgstr "Do you really want to delete %1 ?"
-
-#: ../web_tt2/d_upload.tt2:15
-#, fuzzy
-msgid "Do you want to cancel the upload?"
-msgstr "Do you really want to delete %1 ?"
-
 # nlsref 16,30
 #: ../web_tt2/edit_attributes.tt2:4 ../web_tt2/subindex.tt2:14
 #, fuzzy
@@ -1816,13 +1868,98 @@ msgstr ""
 msgid "*: Required element"
 msgstr "Aliasuri obligatorii"
 
-#: ../web_tt2/edit_config.tt2:2
+#: ../web_tt2/edit_config.tt2:4
 #, fuzzy
 msgid "Edit robot config"
 msgstr "Edit list config"
 
-#: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
+#: ../web_tt2/edit_config.tt2:37 ../web_tt2/serveradmin.tt2:213
 msgid "Set"
+msgstr ""
+
+# nlsref 16,12
+#: ../web_tt2/edit_list_request.tt2:4
+#, fuzzy
+msgid "Configuring the list"
+msgstr "Crearea listei"
+
+#: ../web_tt2/edit_list_request.tt2:8
+#, fuzzy
+msgid "You can choose below a subset of parameters to edit:"
+msgstr "Poti alege de mai jos un set de parametri pentru editare:"
+
+#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
+msgid "List definition"
+msgstr "Definirea listei"
+
+#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
+#, fuzzy
+msgid "Sending/receiving setup"
+msgstr "Configurare trimitere/primire"
+
+# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#: ../web_tt2/edit_list_request.tt2:15 ../web_tt2/viewlogs.tt2:89
+#, fuzzy
+msgid "Bounce management"
+msgstr ""
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Management-ul mesajelor eronate (bounced)\n"
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Managementul mesajelor \n"
+"    bumerang"
+
+#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
+msgid "Data sources setup"
+msgstr ""
+"Configurarea \n"
+"    surselor informatiilor"
+
+#: ../web_tt2/edit_list_request.tt2:36
+#, fuzzy
+msgid "scenario source"
+msgstr "Scenario test module"
+
+#: ../web_tt2/edit_list_request.tt2:52
+#, fuzzy
+msgid "(default)"
+msgstr "default"
+
+#: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:289
+#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:389
+#: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
+#: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
+#: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:106
+#: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
+msgid ":"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:3 ../web_tt2/ls_templates.tt2:3
+#: ../web_tt2/view_template.tt2:3
+msgid "Template edition system"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:7 ../web_tt2/view_template.tt2:8
+#, fuzzy
+msgid "Type: "
+msgstr "tip"
+
+#: ../web_tt2/edit_template.tt2:8 ../web_tt2/ls_templates.tt2:23
+#: ../web_tt2/view_template.tt2:9
+msgid "web"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:9 ../web_tt2/ls_templates.tt2:24
+#: ../web_tt2/view_template.tt2:10
+#, fuzzy
+msgid "mail"
+msgstr "Nomail"
+
+#: ../web_tt2/edit_template.tt2:12 ../web_tt2/view_template.tt2:13
+msgid "Path: "
 msgstr ""
 
 #: ../web_tt2/editfile.tt2:4
@@ -1926,61 +2063,6 @@ msgid ""
 "which a virus was found."
 msgstr ""
 
-# nlsref 16,12
-#: ../web_tt2/edit_list_request.tt2:4
-#, fuzzy
-msgid "Configuring the list"
-msgstr "Crearea listei"
-
-#: ../web_tt2/edit_list_request.tt2:8
-#, fuzzy
-msgid "You can choose below a subset of parameters to edit:"
-msgstr "Poti alege de mai jos un set de parametri pentru editare:"
-
-#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
-msgid "List definition"
-msgstr "Definirea listei"
-
-#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
-#, fuzzy
-msgid "Sending/receiving setup"
-msgstr "Configurare trimitere/primire"
-
-# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,7
-#: ../web_tt2/edit_list_request.tt2:15 ../web_tt2/viewlogs.tt2:89
-#, fuzzy
-msgid "Bounce management"
-msgstr ""
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Management-ul mesajelor eronate (bounced)\n"
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Managementul mesajelor \n"
-"    bumerang"
-
-#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
-msgid "Data sources setup"
-msgstr ""
-"Configurarea \n"
-"    surselor informatiilor"
-
-#: ../web_tt2/edit_list_request.tt2:36
-#, fuzzy
-msgid "scenario source"
-msgstr "Scenario test module"
-
-#: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:283
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:373
-#: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
-#: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
-#: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
-#: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
-msgid ":"
-msgstr ""
-
 #: ../web_tt2/editsubscriber.tt2:5
 msgid "Subscriber information"
 msgstr "Informatii abonat</font>"
@@ -2010,7 +2092,7 @@ msgstr "Ultima actualizare:"
 msgid "Receiving:"
 msgstr "Primire :"
 
-#: ../web_tt2/editsubscriber.tt2:27 ../web_tt2/suboptions.tt2:56
+#: ../web_tt2/editsubscriber.tt2:27 ../web_tt2/suboptions.tt2:66
 #, fuzzy
 msgid "Visibility:"
 msgstr "Vizibilitate :"
@@ -2074,59 +2156,6 @@ msgstr ""
 msgid "Reset errors"
 msgstr "Reseteaza erorile\">"
 
-#: ../web_tt2/edit_template.tt2:3 ../web_tt2/ls_templates.tt2:3
-#: ../web_tt2/view_template.tt2:3
-msgid "Template edition system"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:6
-#, fuzzy
-msgid "Template name:"
-msgstr "Templateuri"
-
-#: ../web_tt2/edit_template.tt2:7
-#, fuzzy
-msgid "Type:"
-msgstr "tip"
-
-#: ../web_tt2/edit_template.tt2:8
-msgid "Path:"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:9
-msgid "Scope:"
-msgstr ""
-
-#. (list,robot)
-#: ../web_tt2/edit_template.tt2:10
-#, fuzzy
-msgid "This template is defined for list %1@%2"
-msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
-
-#. (robot)
-#: ../web_tt2/edit_template.tt2:13
-msgid ""
-"This template is default for all lists of robot %1 unless it is redefined "
-"for some particular list"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:15
-msgid ""
-"This template is default for all robots unless  it is redefined for some "
-"particular robot"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:19
-#, fuzzy
-msgid "language: "
-msgstr "Limba"
-
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-
 #. (i_err.action)
 #: ../web_tt2/error.tt2:9
 msgid "INTERNAL SERVER ERROR (%1)"
@@ -2145,13 +2174,13 @@ msgid "Archives from %1 are not accessible"
 msgstr ""
 
 # nlsref 6,2
-#: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
+#: ../mail_tt2/listmaster_notification.tt2:353 ../web_tt2/error.tt2:12
 #, fuzzy
 msgid "Unable to load list topics."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 6,2
-#: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
+#: ../mail_tt2/listmaster_notification.tt2:354 ../web_tt2/error.tt2:13
 #, fuzzy
 msgid "Unable to load create_list templates."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
@@ -2182,7 +2211,7 @@ msgid "The exportation failed for list '%1'"
 msgstr "%1: actiune esuata"
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:352 ../web_tt2/error.tt2:18
+#: ../mail_tt2/listmaster_notification.tt2:367 ../web_tt2/error.tt2:18
 #, fuzzy
 msgid "Cannot unzip file '%1'."
 msgstr ""
@@ -2202,7 +2231,7 @@ msgstr ""
 
 #. (i_err.key)
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:360 ../web_tt2/error.tt2:21
+#: ../mail_tt2/listmaster_notification.tt2:375 ../web_tt2/error.tt2:21
 #, fuzzy
 msgid "File not found."
 msgstr "Deselecteaza"
@@ -2236,24 +2265,32 @@ msgid ""
 "include forbidden characters."
 msgstr ""
 
+# nlsref 6,2
+#. (i_err.listname,i_err.new_listname)
+#. (list.name,new_listname)
+#: ../mail_tt2/listmaster_notification.tt2:379 ../web_tt2/error.tt2:26
+#, fuzzy
+msgid "Unable to rename list '%1' to '%2'."
+msgstr "Fisierul help nu poate fi accesat: %s\n"
+
 #. (s_err.action)
-#: ../web_tt2/error.tt2:34
+#: ../web_tt2/error.tt2:35
 msgid "SYSTEM ERROR (%1)"
 msgstr ""
 
 #. (u_err.action)
-#: ../web_tt2/error.tt2:43
+#: ../web_tt2/error.tt2:44
 msgid "ERROR (%1) "
 msgstr ""
 
-#: ../web_tt2/error.tt2:44
+#: ../web_tt2/error.tt2:45
 #, fuzzy
 msgid "Wrong parameters"
 msgstr ""
 "Configurarea \n"
 "    surselor informatiilor"
 
-#: ../web_tt2/error.tt2:45
+#: ../web_tt2/error.tt2:46
 #, fuzzy
 msgid "Unknown action"
 msgstr ""
@@ -2261,99 +2298,99 @@ msgstr ""
 "necunoscuta"
 
 #. (u_err.params)
-#: ../web_tt2/error.tt2:46
+#: ../web_tt2/error.tt2:47
 #, fuzzy
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Erori de sintaxa cu urmatorii parametri: %1"
 
-#: ../web_tt2/error.tt2:47
+#: ../web_tt2/error.tt2:48
 msgid "Authorization rejected. Maybe you forgot to log in?"
 msgstr ""
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 #, fuzzy
 msgid "List %1 not found"
 msgstr "Deselecteaza"
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 #, fuzzy
 msgid "%1: unknown robot"
 msgstr "%1: robot inexistent"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 #, fuzzy
 msgid "%1: unknown family"
 msgstr "%1: grupă inexistentă"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 #, fuzzy
 msgid "You are already logged in as %1"
 msgstr "Esti deja actualizat ca %1"
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
 msgstr ""
 
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 #, fuzzy
 msgid "Please provide email address"
 msgstr "Trimite adresa ta email"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 #, fuzzy
 msgid "Missing argument %1"
 msgstr "Argument lipsa%1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:56
 #, fuzzy
 msgid "Wrong value for parameter %1"
 msgstr ""
 "Configurarea \n"
 "    surselor informatiilor"
 
-#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:146 ../web_tt2/error.tt2:57
 msgid "You need to login"
 msgstr "Trebuie sa te autentifici"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 #, fuzzy
 msgid "Address \"%1\" is incorrect"
 msgstr ""
 "Adresa\"%1\" \n"
 "in lista gresita"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 #, fuzzy
 msgid "Provided password is incorrect"
 msgstr "Parola furnizata nu este corecta"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 #, fuzzy
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr "Nu ti-ai ales o parola, cere parola initiala"
 
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
 msgstr ""
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:61
+#: ../web_tt2/error.tt2:62
 msgid "The period is too long (%1 days)"
 msgstr ""
 
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 #, fuzzy
 msgid "List has no subscribers"
 msgstr ""
@@ -2361,162 +2398,162 @@ msgstr ""
 "subscriber"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 #, fuzzy
 msgid "No page %1"
 msgstr "Pagina nu exista %1"
 
-#: ../web_tt2/error.tt2:64
+#: ../web_tt2/error.tt2:65
 #, fuzzy
 msgid "Missing filter"
 msgstr "Filtrul nu exista"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 #, fuzzy
 msgid "Not subscribed: %1"
 msgstr "Nu esti abonat: %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:67
+#: ../web_tt2/error.tt2:68
 #, fuzzy
 msgid "You are not subscribed to list %1"
 msgstr "Nu esti abonat la lista%1"
 
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 #, fuzzy
 msgid "Check the additional information"
 msgstr "Informatii de autentificare HTTPS"
 
 # nlsref 16,19
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 #, fuzzy
 msgid "%1 is not an available reception mode"
 msgstr "Modalitate de primire"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 #, fuzzy
 msgid "%1: file not editable"
 msgstr "%1: fişierul nu poate fi editat"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 #, fuzzy
 msgid "You are already subscribed to the list %1"
 msgstr "Esti de ja abonat in lista%1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "%1 is already subscribed to the list %2"
 msgstr "Apare deja un abonat %1 pe lista %2"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 #, fuzzy
 msgid "Please provide your password"
 msgstr "Scrie parola"
 
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 #, fuzzy
 msgid "The passwords you typed do not match"
 msgstr "Cele 2 parole difera"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 #, fuzzy
 msgid "Provided path is incorrect for template '%1'"
 msgstr "Parola furnizata nu este corecta"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 #, fuzzy
 msgid "Cannot open file '%1'"
 msgstr ""
 "Fisierul nu poate fi incarcat \n"
 "%1"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 #, fuzzy
 msgid "You need to provide list name"
 msgstr "Trebuie sa te autentifici"
 
 # nlsref 4,38
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 #, fuzzy
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr "%s mesajul trimis pe lista a fost trimisa si la administrator(i)\n"
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Tagging message is required for this list"
 msgstr ""
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "Archives are empty for this list"
 msgstr ""
 
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "You did not select an action to perform"
 msgstr ""
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 #, fuzzy
 msgid "No bounce for user  %1"
 msgstr "Nu exista asteptare pentru utilizator %1"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 #, fuzzy
 msgid "List has no bouncing subscribers"
 msgstr "Lista nu are abonati in asteptare"
 
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 #, fuzzy
 msgid "No parameter was edited"
 msgstr "part"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 #, fuzzy
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "Fisierul Config a fost modificat de catre %1. Modificarile nu pot fi operate"
 
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Topic \"other\" is a reserved word"
 msgstr ""
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr ""
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' must have values"
 msgstr ""
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr ""
 
 # nlsref 16,70
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 #, fuzzy
 msgid "The list '%1' is already closed"
 msgstr "Fisiere shared"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 #, fuzzy
 msgid "The list '%1' is not closed"
 msgstr "Fisierul %1 salvat"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 #, fuzzy
 msgid "'%1': bad listname"
 msgstr ""
@@ -2524,105 +2561,105 @@ msgstr ""
 "gresit de lista"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 #, fuzzy
 msgid "'%1' list already exists"
 msgstr "Purge selected lists\">"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 #, fuzzy
 msgid "Failed to remove list aliases for list %1"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 #, fuzzy
 msgid "%1: No such file or directory"
 msgstr "%1: Acest fisier sau director nu exista"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 #, fuzzy
 msgid "Unable to read %1: empty document"
 msgstr "Nu poate fi citit %1 : document gol"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 #, fuzzy
 msgid "There is no shared documents"
 msgstr "Fisiere shared"
 
 # nlsref 16,70
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 #, fuzzy
 msgid "The shared document space is empty"
 msgstr "Fisiere shared"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "The shared directory cannot have any description"
 msgstr ""
 
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 #, fuzzy
 msgid "No description specified"
 msgstr "Descriere nespecificata"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr ""
 
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 #, fuzzy
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr ""
 "Informatiile de pe hard au fost modificate. Modificarile nu pot fi operate"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 #, fuzzy
 msgid "%1: incorrect name"
 msgstr "%1: nume greşit"
 
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 #, fuzzy
 msgid "Failed: your content is empty"
 msgstr "Eroare: nu exista continut"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 #, fuzzy
 msgid "Cannot overwrite file %1:"
 msgstr "Fisierul nu poate fi scris peste cel original %1"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 #, fuzzy
 msgid "A directory named '%1' already exists:"
 msgstr "Purge selected lists\">"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "This is an already existing document: '%1'"
 msgstr ""
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 #, fuzzy
 msgid "No name specified"
 msgstr "Nume nespecificat"
 
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 msgid "The document repository exceed disk quota."
 msgstr ""
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 #, fuzzy
 msgid "Cannot upload file %1:"
 msgstr ""
@@ -2630,65 +2667,65 @@ msgstr ""
 "%1"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 #, fuzzy
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Nu esti autorizat sa incarci fisier INDEX.HTML in %1"
 
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 msgid "The upload failed, try it again"
 msgstr ""
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 #, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "Fisierul %1 salvat"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 #, fuzzy
 msgid "File %1 was not copied: %2 "
 msgstr "Fisierul %1 salvat"
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 #, fuzzy
 msgid "Failed: %1 not empty"
 msgstr "Eroare: %1 nu e deschis"
 
 # nlsref 16,74
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 #, fuzzy
 msgid "No certificate for this list"
 msgstr "Subiecte pentrlista"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 #, fuzzy
 msgid "This list has no message topic"
 msgstr "Aliasurile listei au fost sterse."
 
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "Tag message with topic is required for this list"
 msgstr ""
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 #, fuzzy
 msgid "No entry for user '%1'"
 msgstr "Nu exista asteptare pentru utilizator %1"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 #, fuzzy
 msgid "Please select archive months"
 msgstr "Sterge utilizatorii selectati\">"
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "No SOAP service"
 msgstr ""
 
 # nlsref 6,15
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 #, fuzzy
 msgid "Authentication failed"
 msgstr ""
@@ -2696,18 +2733,18 @@ msgstr ""
 "\n"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 msgid "Service unavailable because list status is '%1'"
 msgstr ""
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 #, fuzzy
 msgid "This Template '%1' already exists"
 msgstr "Purge selected lists\">"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 #, fuzzy
 msgid "Cannot delete this file '%1'"
 msgstr ""
@@ -2716,30 +2753,30 @@ msgstr ""
 
 # nlsref 6,2
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 #, fuzzy
 msgid "Invalid filename: '%1'"
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:130
+#: ../web_tt2/error.tt2:131
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:139
+#: ../web_tt2/error.tt2:140
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr ""
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:141
+#: ../web_tt2/error.tt2:142
 #, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
@@ -2756,13 +2793,13 @@ msgstr "Listarea folderului SHARED"
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
 #: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:157
-#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
+#: ../web_tt2/reviewbouncing.tt2:132 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:7
 msgid "Toggle Selection"
 msgstr "Deselecteaza"
 
-#: ../web_tt2/exclusion_table.tt2:11 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/exclusion_table.tt2:11 ../web_tt2/reviewbouncing.tt2:62
 #: ../web_tt2/subindex.tt2:11 ../web_tt2/subscriber_table.tt2:12
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/viewlogs.tt2:54
 #: ../web_tt2/viewlogs.tt2:63
@@ -2930,150 +2967,150 @@ msgstr "Lista ceruta de"
 msgid "on %1"
 msgstr "La: %1"
 
-#: ../web_tt2/javascript.tt2:844
+#: ../web_tt2/javascript.tt2:861
 #, fuzzy
 msgid "Start date"
 msgstr "Sort by date\">"
 
-#: ../web_tt2/javascript.tt2:845
+#: ../web_tt2/javascript.tt2:862
 #, fuzzy
 msgid "End date"
 msgstr "Actualizeaza\">"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "January"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "February"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "March"
 msgstr "Cauta\">"
 
 # nlsref 16,62
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "April"
 msgstr "Profil"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "May"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "June"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "July"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "August"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "September"
 msgstr "Revizuire"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "October"
 msgstr "Other"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "November"
 msgstr "Revizuire"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 #, fuzzy
 msgid "December"
 msgstr "Revizuire"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Su"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 #, fuzzy
 msgid "Mo"
 msgstr "Sterge lista comuna"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Tu"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "We"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Th"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 #, fuzzy
 msgid "Fr"
 msgstr "De la: %1"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 #, fuzzy
 msgid "Sa"
 msgstr "Salveaza\">"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 #, fuzzy
 msgid "Sunday"
 msgstr "Rezumat"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 #, fuzzy
 msgid "Monday"
 msgstr "Continut"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 #, fuzzy
 msgid "Tuesday"
 msgstr "Rezumat"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Wednesday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Thursday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Friday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 #, fuzzy
 msgid "Saturday"
 msgstr "Rezumat"
 
-#: ../web_tt2/javascript.tt2:852
+#: ../web_tt2/javascript.tt2:869
 msgid "Calendar"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:853
+#: ../web_tt2/javascript.tt2:870
 #, fuzzy
 msgid "today"
 msgstr "Continut"
 
 #. (+cpt)
-#: ../web_tt2/javascript.tt2:1067
+#: ../web_tt2/javascript.tt2:1084
 #, fuzzy
 msgid "microcal"
 msgstr "Local"
 
-#: ../web_tt2/javascript.tt2:1107
+#: ../web_tt2/javascript.tt2:1124
 msgid "\"+src.id+\"_cal"
 msgstr ""
 
@@ -3161,8 +3198,7 @@ msgstr ""
 "Restore \n"
 "  list"
 
-#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
-#: ../web_tt2/serveradmin.tt2:123
+#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:85
 #, fuzzy
 msgid "Logs"
 msgstr "Autentifica-te"
@@ -3277,29 +3313,24 @@ msgstr ""
 msgid "template name"
 msgstr "Templateuri"
 
-#: ../web_tt2/ls_templates.tt2:40
-#, fuzzy
-msgid "distrib"
-msgstr "Trimite mai departe\">"
-
-#: ../web_tt2/ls_templates.tt2:84
+#: ../web_tt2/ls_templates.tt2:108
 msgid "view"
 msgstr ""
 
-#: ../web_tt2/ls_templates.tt2:104 ../web_tt2/ls_templates.tt2:126
-#: ../web_tt2/ls_templates.tt2:148 ../web_tt2/ls_templates.tt2:85
+#: ../web_tt2/ls_templates.tt2:109 ../web_tt2/ls_templates.tt2:128
+#: ../web_tt2/ls_templates.tt2:150 ../web_tt2/ls_templates.tt2:172
 msgid "cp"
 msgstr ""
 
-#: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
-#: ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:129 ../web_tt2/ls_templates.tt2:151
+#: ../web_tt2/ls_templates.tt2:173
 #, fuzzy
 msgid "rm"
 msgstr "De la: %1"
 
 #. (lang.value)
-#: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
-#: ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:129 ../web_tt2/ls_templates.tt2:151
+#: ../web_tt2/ls_templates.tt2:173
 #, fuzzy
 msgid "Do you really want to remove %1?"
 msgstr "Do you really want to delete %1 ?"
@@ -3383,12 +3414,12 @@ msgstr ""
 "Creaza \n"
 "                  lista"
 
-#: ../web_tt2/menu_search.tt2:5
+#: ../web_tt2/menu_search.tt2:6
 #, fuzzy
 msgid "Enter a list name"
 msgstr "denumire lista"
 
-#: ../web_tt2/menu_search.tt2:7
+#: ../web_tt2/menu_search.tt2:8
 msgid "Search lists"
 msgstr "Search lists"
 
@@ -3514,6 +3545,11 @@ msgstr "Liste"
 msgid "Users"
 msgstr "Utilizatori"
 
+#: ../web_tt2/nav.tt2:21 ../web_tt2/serveradmin.tt2:123
+#, fuzzy
+msgid "System log"
+msgstr "Templateuri"
+
 #: ../web_tt2/nav.tt2:23 ../web_tt2/serveradmin.tt2:141
 msgid "Templates"
 msgstr "Templateuri"
@@ -3545,6 +3581,16 @@ msgstr ""
 #, fuzzy
 msgid "Submitting a bug, a feature request"
 msgstr "Trimite cererea pentru crearea listei\">"
+
+#: ../web_tt2/nav.tt2:50 ../web_tt2/nav.tt2:52
+#, fuzzy
+msgid "others"
+msgstr "Others"
+
+#: ../src/lib/List.pm:1482 ../web_tt2/nav.tt2:55
+#, fuzzy
+msgid "all"
+msgstr "toate"
 
 #: ../web_tt2/nav.tt2:105
 msgid "DKIM"
@@ -3870,6 +3916,32 @@ msgstr "Mi-am uitat parola"
 msgid "Request new password"
 msgstr "Confirma parola noua:"
 
+#: ../web_tt2/request_topic.tt2:5
+msgid "This list is configured to require topic(s) foreach message."
+msgstr ""
+
+#: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
+msgid ""
+"Please select one or more topic(s) that corresponds to your message below:"
+msgstr ""
+
+#: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
+#, fuzzy
+msgid "Tag this mail"
+msgstr "Trimite acest mesaj\">"
+
+#. (date)
+#: ../web_tt2/request_topic.tt2:29
+#, fuzzy
+msgid "Date: %1"
+msgstr "Statut : %1"
+
+#. (subject)
+#: ../web_tt2/request_topic.tt2:31
+#, fuzzy
+msgid "Subject: %1"
+msgstr "Subiect :"
+
 #: ../web_tt2/requestpasswd.tt2:4
 #, fuzzy
 msgid "Message sent"
@@ -3898,134 +3970,6 @@ msgstr ""
 msgid "Unkown error."
 msgstr "Necunoscut"
 
-#: ../web_tt2/request_topic.tt2:5
-msgid "This list is configured to require topic(s) foreach message."
-msgstr ""
-
-#: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
-msgid ""
-"Please select one or more topic(s) that corresponds to your message below:"
-msgstr ""
-
-#: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
-#, fuzzy
-msgid "Tag this mail"
-msgstr "Trimite acest mesaj\">"
-
-#. (date)
-#: ../web_tt2/request_topic.tt2:29
-#, fuzzy
-msgid "Date: %1"
-msgstr "Statut : %1"
-
-#. (subject)
-#: ../web_tt2/request_topic.tt2:31
-#, fuzzy
-msgid "Subject: %1"
-msgstr "Subiect :"
-
-#: ../web_tt2/reviewbouncing.tt2:3
-#, fuzzy
-msgid "Manage bouncing list members"
-msgstr "Lista nu are abonati in asteptare"
-
-#: ../web_tt2/review.tt2:48 ../web_tt2/review.tt2:50
-#: ../web_tt2/reviewbouncing.tt2:6
-msgid "Dump"
-msgstr ""
-
-#: ../web_tt2/reviewbouncing.tt2:19
-msgid "Remind all subscribers"
-msgstr "Aminteste tuturor  abonatilor"
-
-#. (total)
-#: ../web_tt2/review.tt2:64 ../web_tt2/reviewbouncing.tt2:19
-#, fuzzy
-msgid ""
-"Do you really want to send a subscription reminder message to the %1 "
-"subscribers?"
-msgstr ""
-"Do you really want to send a subscription remind message to the %1 "
-"subscribers ?"
-
-#: ../web_tt2/review.tt2:146 ../web_tt2/review.tt2:27
-#: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
-#: ../web_tt2/viewlogs.tt2:31
-msgid "Previous page"
-msgstr "Previous page"
-
-#. (page,total_page)
-#: ../web_tt2/reviewbouncing.tt2:118 ../web_tt2/reviewbouncing.tt2:47
-msgid "page %1 / %2"
-msgstr "page %1 / %2"
-
-#: ../web_tt2/review.tt2:152 ../web_tt2/review.tt2:33
-#: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
-#: ../web_tt2/viewlogs.tt2:37
-msgid "Next page"
-msgstr "Next page"
-
-#: ../web_tt2/reviewbouncing.tt2:58
-msgid "Table which display list bounces"
-msgstr ""
-
-#: ../web_tt2/reviewbouncing.tt2:62
-#, fuzzy
-msgid "Bounce score"
-msgstr "numar de intoarceri"
-
-#: ../web_tt2/reviewbouncing.tt2:63
-#, fuzzy
-msgid "Details"
-msgstr "Nomail"
-
-#: ../web_tt2/reviewbouncing.tt2:66
-#, fuzzy
-msgid "# of bounces"
-msgstr "Adresa bumerang"
-
-#: ../web_tt2/reviewbouncing.tt2:67
-#, fuzzy
-msgid "First bounce"
-msgstr ""
-"Vezi \n"
-"            ultimul efect bumerang"
-
-#: ../web_tt2/reviewbouncing.tt2:68
-#, fuzzy
-msgid "Last bounce"
-msgstr ""
-"Vezi \n"
-"            ultimul efect bumerang"
-
-#: ../web_tt2/reviewbouncing.tt2:95
-#, fuzzy
-msgid "no score"
-msgstr "numar de intoarceri"
-
-#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:158
-#: ../web_tt2/reviewbouncing.tt2:126
-msgid "Delete selected email addresses"
-msgstr "Sterge adresele email selectate\">"
-
-#: ../web_tt2/reviewbouncing.tt2:128
-msgid "Reset errors for selected users"
-msgstr "Reseteaza erorile pentru utilizatorii selectati\">"
-
-#: ../web_tt2/review_family.tt2:4
-msgid "Table which display family lists"
-msgstr ""
-
-#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
-#, fuzzy
-msgid "Status"
-msgstr "Statut : %1"
-
-#: ../web_tt2/review_family.tt2:8
-#, fuzzy
-msgid "Instantiation date"
-msgstr "Data crearii"
-
 #: ../web_tt2/review.tt2:5
 #, fuzzy
 msgid "Manage list members"
@@ -4035,11 +3979,23 @@ msgstr "Liste Mailing"
 msgid "Page size"
 msgstr "Marimea paginii\">"
 
+#: ../web_tt2/review.tt2:146 ../web_tt2/review.tt2:27
+#: ../web_tt2/reviewbouncing.tt2:116 ../web_tt2/reviewbouncing.tt2:45
+#: ../web_tt2/viewlogs.tt2:31
+msgid "Previous page"
+msgstr "Previous page"
+
 #: ../web_tt2/review.tt2:149 ../web_tt2/review.tt2:30
 #: ../web_tt2/viewlogs.tt2:34
 #, fuzzy
 msgid "page"
 msgstr "[% list.name %] pagina principala"
+
+#: ../web_tt2/review.tt2:152 ../web_tt2/review.tt2:33
+#: ../web_tt2/reviewbouncing.tt2:122 ../web_tt2/reviewbouncing.tt2:51
+#: ../web_tt2/viewlogs.tt2:37
+msgid "Next page"
+msgstr "Next page"
 
 #: ../web_tt2/review.tt2:41
 #, fuzzy
@@ -4047,6 +4003,11 @@ msgid "Pending subscriptions"
 msgstr ""
 "b>Inscrierile \n"
 "                  tale</b"
+
+#: ../web_tt2/review.tt2:48 ../web_tt2/review.tt2:50
+#: ../web_tt2/reviewbouncing.tt2:7
+msgid "Dump"
+msgstr ""
 
 #: ../web_tt2/review.tt2:52
 #, fuzzy
@@ -4061,6 +4022,16 @@ msgstr ""
 #, fuzzy
 msgid "Remind all"
 msgstr "Refacere arhive\">"
+
+#. (total)
+#: ../web_tt2/review.tt2:64 ../web_tt2/reviewbouncing.tt2:20
+#, fuzzy
+msgid ""
+"Do you really want to send a subscription reminder message to the %1 "
+"subscribers?"
+msgstr ""
+"Do you really want to send a subscription remind message to the %1 "
+"subscribers ?"
 
 #: ../web_tt2/review.tt2:74
 msgid "Add an user: "
@@ -4084,6 +4055,11 @@ msgstr "Cauta utilizator\">"
 msgid "Selection too wide, can not show selection"
 msgstr "Domeniu prea larg, selectia nu poate fi afisata"
 
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:158
+#: ../web_tt2/reviewbouncing.tt2:127
+msgid "Delete selected email addresses"
+msgstr "Sterge adresele email selectate\">"
+
 #. (similar_subscribers_occurence)
 #: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
@@ -4099,54 +4075,75 @@ msgstr "Do you really want to unsubscribe ALL selected subscribers ?"
 msgid "Excluded users"
 msgstr "Extended search"
 
-#: ../web_tt2/rss_request.tt2:5
-msgid "RSS channel"
+#: ../web_tt2/review_family.tt2:4
+msgid "Table which display family lists"
 msgstr ""
 
-#: ../web_tt2/rss_request.tt2:7
-msgid ""
-"This server provides various news via RSS. Choose parameters and pickup the "
-"RSS url"
-msgstr ""
-
-#: ../web_tt2/rss_request.tt2:12
-msgid "Limit the number of responses:"
-msgstr ""
-
-#: ../web_tt2/rss_request.tt2:19
-msgid "Limit the number of days used for the selection:"
-msgstr ""
-
-#: ../web_tt2/rss_request.tt2:31
+#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
 #, fuzzy
-msgid "Update RSS URL"
-msgstr "Actualizeaza\">"
+msgid "Status"
+msgstr "Statut : %1"
 
-# nlsref 16,4
-#: ../web_tt2/rss_request.tt2:43
+#: ../web_tt2/review_family.tt2:8
 #, fuzzy
-msgid "latest arc:"
-msgstr "Arhive text"
+msgid "Instantiation date"
+msgstr "Data crearii"
 
-# nlsref 16,70
-#: ../web_tt2/rss_request.tt2:48
+#: ../web_tt2/reviewbouncing.tt2:4
 #, fuzzy
-msgid "latest document:"
-msgstr "Fisiere shared"
+msgid "Manage bouncing list members"
+msgstr "Lista nu are abonati in asteptare"
 
-#: ../web_tt2/rss_request.tt2:53
-#, fuzzy
-msgid "active lists:"
+#: ../web_tt2/reviewbouncing.tt2:20
+msgid "Remind all subscribers"
+msgstr "Aminteste tuturor  abonatilor"
+
+#. (page,total_page)
+#: ../web_tt2/reviewbouncing.tt2:119 ../web_tt2/reviewbouncing.tt2:48
+msgid "page %1 / %2"
+msgstr "page %1 / %2"
+
+#: ../web_tt2/reviewbouncing.tt2:59
+msgid "Table which display list bounces"
 msgstr ""
-"Ultima \n"
-"      lista"
 
-#: ../web_tt2/rss_request.tt2:58
+#: ../web_tt2/reviewbouncing.tt2:63
 #, fuzzy
-msgid "latest lists:"
+msgid "Bounce score"
+msgstr "numar de intoarceri"
+
+#: ../web_tt2/reviewbouncing.tt2:64
+#, fuzzy
+msgid "Details"
+msgstr "Nomail"
+
+#: ../web_tt2/reviewbouncing.tt2:67
+#, fuzzy
+msgid "# of bounces"
+msgstr "Adresa bumerang"
+
+#: ../web_tt2/reviewbouncing.tt2:68
+#, fuzzy
+msgid "First bounce"
 msgstr ""
-"Ultima \n"
-"      lista"
+"Vezi \n"
+"            ultimul efect bumerang"
+
+#: ../web_tt2/reviewbouncing.tt2:69
+#, fuzzy
+msgid "Last bounce"
+msgstr ""
+"Vezi \n"
+"            ultimul efect bumerang"
+
+#: ../web_tt2/reviewbouncing.tt2:96
+#, fuzzy
+msgid "no score"
+msgstr "numar de intoarceri"
+
+#: ../web_tt2/reviewbouncing.tt2:129
+msgid "Reset errors for selected users"
+msgstr "Reseteaza erorile pentru utilizatorii selectati\">"
 
 #: ../web_tt2/rss.tt2:15 ../web_tt2/rss.tt2:5
 #, fuzzy
@@ -4249,6 +4246,55 @@ msgstr "%1 pe zi"
 msgid "Bookmark %1"
 msgstr "Bookmark URL"
 
+#: ../web_tt2/rss_request.tt2:5
+msgid "RSS channel"
+msgstr ""
+
+#: ../web_tt2/rss_request.tt2:7
+msgid ""
+"This server provides various news via RSS. Choose parameters and pickup the "
+"RSS url"
+msgstr ""
+
+#: ../web_tt2/rss_request.tt2:12
+msgid "Limit the number of responses:"
+msgstr ""
+
+#: ../web_tt2/rss_request.tt2:19
+msgid "Limit the number of days used for the selection:"
+msgstr ""
+
+#: ../web_tt2/rss_request.tt2:31
+#, fuzzy
+msgid "Update RSS URL"
+msgstr "Actualizeaza\">"
+
+# nlsref 16,4
+#: ../web_tt2/rss_request.tt2:43
+#, fuzzy
+msgid "latest arc:"
+msgstr "Arhive text"
+
+# nlsref 16,70
+#: ../web_tt2/rss_request.tt2:48
+#, fuzzy
+msgid "latest document:"
+msgstr "Fisiere shared"
+
+#: ../web_tt2/rss_request.tt2:53
+#, fuzzy
+msgid "active lists:"
+msgstr ""
+"Ultima \n"
+"      lista"
+
+#: ../web_tt2/rss_request.tt2:58
+#, fuzzy
+msgid "latest lists:"
+msgstr ""
+"Ultima \n"
+"      lista"
+
 #: ../web_tt2/scenario_test.tt2:3
 msgid "Scenario test module"
 msgstr "Scenario test module"
@@ -4307,34 +4353,34 @@ msgid "Lists which %1 is subscribed "
 msgstr "Lista '%s' nu are utilizatori.\n"
 
 # nlsref 16,62
-#: ../web_tt2/search_user.tt2:11
+#: ../web_tt2/search_user.tt2:12
 #, fuzzy
 msgid "role"
 msgstr "Profil"
 
-#: ../web_tt2/search_user.tt2:13
+#: ../web_tt2/search_user.tt2:14
 #, fuzzy
 msgid "reception"
 msgstr "Primire"
 
-#: ../web_tt2/search_user.tt2:15
+#: ../web_tt2/search_user.tt2:16
 #, fuzzy
 msgid "topics"
 msgstr "Teme:"
 
-#: ../web_tt2/search_user.tt2:17
+#: ../web_tt2/search_user.tt2:18
 #, fuzzy
 msgid "bounce"
 msgstr "Adresa bumerang"
 
-#: ../web_tt2/search_user.tt2:35
+#: ../web_tt2/search_user.tt2:36
 #, fuzzy
 msgid "member"
 msgstr "Revizuire"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
-#: ../web_tt2/search_user.tt2:36
+#: ../src/lib/List.pm:1500 ../web_tt2/search_user.tt2:37
 #, fuzzy
 msgid "owner"
 msgstr ""
@@ -4343,7 +4389,7 @@ msgstr ""
 "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Owner"
 
-#: ../web_tt2/search_user.tt2:37
+#: ../web_tt2/search_user.tt2:38
 #, fuzzy
 msgid "editor"
 msgstr "Editor"
@@ -4402,7 +4448,7 @@ msgstr "Cauta utilizator\">"
 msgid "Delay for active sessions (minutes)"
 msgstr ""
 
-#: ../web_tt2/serveradmin.tt2:71
+#: ../web_tt2/serveradmin.tt2:72
 msgid "Show only connected users"
 msgstr ""
 
@@ -4566,21 +4612,6 @@ msgstr ""
 "Procesul FastCGI (%1) a servit%2 din data \n"
 "de %3."
 
-#: ../web_tt2/setlang.tt2:9
-#, fuzzy
-msgid "Language selection"
-msgstr "Deselecteaza"
-
-#: ../web_tt2/setlang.tt2:17
-#, fuzzy
-msgid "Validate your language selection"
-msgstr "Deselecteaza"
-
-#: ../web_tt2/setlang.tt2:17
-#, fuzzy
-msgid "Set language"
-msgstr "Limba"
-
 #. (list_request_date)
 #: ../web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
@@ -4614,6 +4645,21 @@ msgstr "Fisier de informare"
 #: ../web_tt2/set_pending_list_request.tt2:52
 msgid "Configuration file"
 msgstr "Fisier de configurare"
+
+#: ../web_tt2/setlang.tt2:9
+#, fuzzy
+msgid "Language selection"
+msgstr "Deselecteaza"
+
+#: ../web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Validate your language selection"
+msgstr "Deselecteaza"
+
+#: ../web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Set language"
+msgstr "Limba"
 
 #: ../web_tt2/show_cert.tt2:6
 msgid "HTTPS authentication information"
@@ -4735,11 +4781,11 @@ msgid ""
 "mailbox to read this email and use this validation link."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:5
+#: ../web_tt2/skinsedit.tt2:4
 msgid "Cascading Style Sheet"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:8
+#: ../web_tt2/skinsedit.tt2:7
 msgid ""
 "When not using css_url parameters, sympa deliver a dynamic CSS which is "
 "created using a template name css.tt2. Usually this template is comming from "
@@ -4753,28 +4799,28 @@ msgid ""
 "same directory ."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:12
+#: ../web_tt2/skinsedit.tt2:11
 msgid ""
 "static css installation succeed. Reload the current page and/or check sympa "
 "logs  to be sure that static css a really in use."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:16
+#: ../web_tt2/skinsedit.tt2:15
 #, fuzzy
 msgid "The css_path parameter is defined, value is"
 msgstr "Purge selected lists\">"
 
-#: ../web_tt2/skinsedit.tt2:17
+#: ../web_tt2/skinsedit.tt2:16
 msgid "the current definition for css location (css_url parameter) is"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:25
+#: ../web_tt2/skinsedit.tt2:24
 #, fuzzy
 msgid "install static css"
 msgstr "modifica optiune acces\">"
 
 #. (cssurl)
-#: ../web_tt2/skinsedit.tt2:31
+#: ../web_tt2/skinsedit.tt2:30
 msgid ""
 "Currently you have not defined the css_path parameter. <strong>You should "
 "edit the robot.conf configuration file </strong> (or if not using virtual "
@@ -4784,11 +4830,11 @@ msgid ""
 "css are stored (current value is <a target=\"test\" href=\"%1\">%1</a>)."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:35
+#: ../web_tt2/skinsedit.tt2:34
 msgid "Colors"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:38
+#: ../web_tt2/skinsedit.tt2:37
 msgid ""
 "If you are not using css_path and css_url parameters, colors are defined in "
 "the robot.conf configuration file. Otherwise, colors are defined in the "
@@ -4797,7 +4843,7 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:41
+#: ../web_tt2/skinsedit.tt2:40
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
@@ -4805,7 +4851,7 @@ msgid ""
 "erased when doing this."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:44
 msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
@@ -4814,11 +4860,11 @@ msgid ""
 "them in a new static CSS.\n"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:50
+#: ../web_tt2/skinsedit.tt2:49
 msgid " pick the color you want to test. "
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:56
+#: ../web_tt2/skinsedit.tt2:55
 msgid "Select the parameter you want to change: "
 msgstr ""
 
@@ -4861,160 +4907,164 @@ msgstr "part"
 msgid "parameter value"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:82
+#: ../web_tt2/skinsedit.tt2:82 ../web_tt2/skinsedit.tt2:85
 msgid "color lookup"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:83
+#: ../web_tt2/skinsedit.tt2:87
 #, fuzzy
 msgid "parameter usage"
 msgstr "part"
 
-#: ../web_tt2/skinsedit.tt2:119 ../web_tt2/skinsedit.tt2:125
-#: ../web_tt2/skinsedit.tt2:131 ../web_tt2/skinsedit.tt2:143
-#: ../web_tt2/skinsedit.tt2:161 ../web_tt2/skinsedit.tt2:167
-#: ../web_tt2/skinsedit.tt2:89 ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103 ../web_tt2/skinsedit.tt2:135
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:151
+#: ../web_tt2/skinsedit.tt2:167 ../web_tt2/skinsedit.tt2:191
+#: ../web_tt2/skinsedit.tt2:199 ../web_tt2/skinsedit.tt2:95
 msgid "background color of:"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:89
+#: ../web_tt2/skinsedit.tt2:95
 msgid "one out of two lines in tables, alternated with color_14."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "main navigation tabs;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "most of the buttons;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "border colors in the online help."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:101 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:111 ../web_tt2/skinsedit.tt2:159
 msgid "font and border color of:"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:101
+#: ../web_tt2/skinsedit.tt2:111
 msgid ""
 "almost everything. Exceptions for borders are &lt;TD/&gt; borders; "
 "exceptions for fonts are links, buttons and some titles."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:107 ../web_tt2/skinsedit.tt2:179
-msgid "unused"
+#: ../web_tt2/skinsedit.tt2:119
+msgid "Background color for the news area of the home page."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 msgid "font color of:"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 #, fuzzy
 msgid "titles;"
 msgstr "URL"
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 msgid "hovered links."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:119
+#: ../web_tt2/skinsedit.tt2:135
 msgid "all the main interface boxes."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:125 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:159
 #, fuzzy
 msgid "buttons;"
 msgstr "Welcome message</I>."
 
-#: ../web_tt2/skinsedit.tt2:125 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:159
 msgid "navigation tabs;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:125
+#: ../web_tt2/skinsedit.tt2:143
 msgid "active option, if you have several buttons representing an alternative."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:131
+#: ../web_tt2/skinsedit.tt2:151
 #, fuzzy
 msgid "error messages."
 msgstr "# mesaj"
 
-#: ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:159
 msgid "hovered links;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:159
 msgid "background color of hovered buttons."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 #, fuzzy
 msgid "main page;"
 msgstr "%1. Pagina de administrare"
 
 # nlsref 15,5
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 #, fuzzy
 msgid "table headers;"
 msgstr "header pentru mesaj"
 
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 #, fuzzy
 msgid "buttons."
 msgstr "Welcome message</I>."
 
-#: ../web_tt2/skinsedit.tt2:149
+#: ../web_tt2/skinsedit.tt2:175
 msgid "border color for forms."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:155
+#: ../web_tt2/skinsedit.tt2:183
 msgid "border color that can be used to isolate some forms."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 #, fuzzy
 msgid "top box;"
 msgstr "De la: %1"
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "footer box;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "online help buttons;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "border color of:"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "tables;"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "side menu areas."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:167
+#: ../web_tt2/skinsedit.tt2:199
 msgid "editable form areas (text areas, selection lists, etc.)."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:173
+#: ../web_tt2/skinsedit.tt2:207
 msgid "Default background color of the tables."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:185 ../web_tt2/skinsedit.tt2:191
-#: ../web_tt2/skinsedit.tt2:197 ../web_tt2/skinsedit.tt2:203
-#: ../web_tt2/skinsedit.tt2:209 ../web_tt2/skinsedit.tt2:215
+#: ../web_tt2/skinsedit.tt2:215
+msgid "unused"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:221 ../web_tt2/skinsedit.tt2:227
+#: ../web_tt2/skinsedit.tt2:233 ../web_tt2/skinsedit.tt2:239
+#: ../web_tt2/skinsedit.tt2:245 ../web_tt2/skinsedit.tt2:251
 #, fuzzy
 msgid "deprecated"
 msgstr "Sterge lista comuna"
 
-#: ../web_tt2/skinsedit.tt2:221
+#: ../web_tt2/skinsedit.tt2:257
 msgid "W3C CSS validation tools"
 msgstr ""
 
@@ -5095,23 +5145,23 @@ msgstr "Esti inscris din"
 msgid "Receiving mode:"
 msgstr "Mod de primire    : %1"
 
-#: ../web_tt2/suboptions.tt2:25
+#: ../web_tt2/suboptions.tt2:35
 #, fuzzy
 msgid "Topic subscription:"
 msgstr "Dezabonare de pe lista :"
 
-#: ../web_tt2/suboptions.tt2:37 ../web_tt2/suboptions.tt2:39
+#: ../web_tt2/suboptions.tt2:47 ../web_tt2/suboptions.tt2:49
 msgid "Other (messages not tagged) "
 msgstr ""
 
-#: ../web_tt2/suboptions.tt2:46
+#: ../web_tt2/suboptions.tt2:56
 #, fuzzy
 msgid "Disable topics subscription"
 msgstr ""
 "b>Inscrierile \n"
 "                  tale</b"
 
-#: ../web_tt2/suboptions.tt2:51
+#: ../web_tt2/suboptions.tt2:61
 msgid "Only possible for direct reception modes."
 msgstr ""
 
@@ -5463,7 +5513,7 @@ msgstr "Cauta utilizator\">"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16281
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16396
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -5544,39 +5594,6 @@ msgstr "mesaj de respingere din partea editorului"
 
 #: ../web_tt2/viewmod.tt2:18
 msgid "Do Not Notify"
-msgstr ""
-
-#: ../web_tt2/view_template.tt2:7
-#, fuzzy
-msgid "Template name: "
-msgstr "Templateuri"
-
-#: ../web_tt2/view_template.tt2:8
-#, fuzzy
-msgid "Type: "
-msgstr "tip"
-
-#: ../web_tt2/view_template.tt2:9
-msgid "Path: "
-msgstr ""
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-#, fuzzy
-msgid "( this template is defined for list %1@%2 )"
-msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
 msgstr ""
 
 # nlsref 16,83
@@ -6143,7 +6160,7 @@ msgstr "Comanda eronata.\n"
 #. (u_err.listname)
 #. (glob.listname)
 #. (listname)
-#: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:178
+#: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:187
 #: ../mail_tt2/message_report.tt2:56
 #, fuzzy
 msgid "List '%1' does not exist."
@@ -6186,15 +6203,23 @@ msgstr ""
 "fost actualizata.\n"
 
 # nlsref 6,90
-#. (u_err.listname,u_err.modes)
+#. (u_err.listname)
 #: ../mail_tt2/command_report.tt2:121
 #, fuzzy
-msgid "List %1 allows only these reception modes: %2"
+msgid "List %1 allows only these reception modes: "
 msgstr ""
 "Lista %s permite doar aceste metode de primire a mesajelor: %s\n"
 "Configuratia contului tau nu a fost modificata.\n"
 
-#: ../mail_tt2/command_report.tt2:124
+#: ../mail_tt2/command_report.tt2:124 ../mail_tt2/info_report.tt2:29
+msgid ", and "
+msgstr ""
+
+#: ../mail_tt2/command_report.tt2:126 ../mail_tt2/info_report.tt2:31
+msgid ", "
+msgstr ""
+
+#: ../mail_tt2/command_report.tt2:133
 #, fuzzy
 msgid "This list archive is empty."
 msgstr ""
@@ -6202,28 +6227,28 @@ msgstr ""
 "      lista"
 
 # nlsref 6,8
-#: ../mail_tt2/command_report.tt2:127
+#: ../mail_tt2/command_report.tt2:136
 #, fuzzy
 msgid "Required file does not exist."
 msgstr "Fisierul cerut nu exista.\n"
 
 # nlsref 6,3
 #. (u_err.listname)
-#: ../mail_tt2/command_report.tt2:130
+#: ../mail_tt2/command_report.tt2:139
 #, fuzzy
 msgid "List %1 has no subscriber."
 msgstr "Lista '%s' nu are utilizatori.\n"
 
 # nlsref 6,84
 #. (u_err.email,u_err.listname)
-#: ../mail_tt2/command_report.tt2:133
+#: ../mail_tt2/command_report.tt2:142
 #, fuzzy
 msgid "The User '%1' is already subscriber of list '%2'."
 msgstr "Utilizatorul '%s' este deja inscris la lista '%s'\n"
 
 # nlsref 6,16
 #. (u_err.command)
-#: ../mail_tt2/command_report.tt2:138
+#: ../mail_tt2/command_report.tt2:147
 #, fuzzy
 msgid ""
 "The authentication process failed.\n"
@@ -6233,18 +6258,18 @@ msgstr ""
 "Confirmarea abonarii probabil a fost facuta de pe o alta adresa email\n"
 ". Foloseste aceeasi adresa email."
 
-#: ../mail_tt2/command_report.tt2:150
+#: ../mail_tt2/command_report.tt2:159
 #, fuzzy
 msgid "Command has failed because of an internal server error:"
 msgstr "Reseteaza erorile\">"
 
-#: ../mail_tt2/command_report.tt2:152
+#: ../mail_tt2/command_report.tt2:161
 #, fuzzy
 msgid "These commands have failed because of an internal server error:"
 msgstr "Reseteaza erorile\">"
 
 # nlsref 4,37
-#: ../mail_tt2/command_report.tt2:169
+#: ../mail_tt2/command_report.tt2:178
 #, fuzzy
 msgid ""
 "Ignoring message body not in text/plain, please use text/plain only (or put "
@@ -6255,47 +6280,20 @@ msgstr ""
 "(sau pune comanda in subiect).\n"
 
 # nlsref 4,39
-#: ../mail_tt2/command_report.tt2:172
+#: ../mail_tt2/command_report.tt2:181
 #, fuzzy
 msgid "No command found in message."
 msgstr "Aceasta comanda nu este prezenta in mesaj."
 
-#: ../mail_tt2/command_report.tt2:175
+#: ../mail_tt2/command_report.tt2:184
 msgid "Ignoring message because of an internal server error."
 msgstr ""
 
 #. (conf.wwsympa_url)
-#: ../mail_tt2/command_report.tt2:185
+#: ../mail_tt2/command_report.tt2:194
 #, fuzzy
 msgid "For further information, check the mailing list web site %1"
 msgstr "Pentru mai multe informatii, contacteaza listmaster@%1"
-
-#. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
-msgid "%1 Digest %2"
-msgstr "% 1 Sinteza %2"
-
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2775
-#, fuzzy
-msgid "Table of contents:"
-msgstr "Continut:"
-
-#. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:27
-#, fuzzy
-msgid "End of %1 Digest %2"
-msgstr "Terminarea compilarii mesajelor pentru lista %1 - %2"
-
-#. (list.name)
-#: ../mail_tt2/digest.tt2:4
-msgid "Digest for list %1"
-msgstr "Mesaje compilate pentru lista %1"
-
-#. (list.name,date)
-#: ../mail_tt2/digest.tt2:34 ../mail_tt2/get_archive.tt2:33
-msgid "End of digest for list %1 - %2"
-msgstr "Terminarea compilarii mesajelor pentru lista %1 - %2"
 
 #: ../mail_tt2/d_install_shared.tt2:2
 #, fuzzy
@@ -6330,6 +6328,30 @@ msgid ""
 "Your document %1  for list %2@%3\n"
 "has been rejected by %4 list editor."
 msgstr "%s mesajul trimis pe lista a fost trimisa si la administrator(i)\n"
+
+#. (list.name,date)
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest.tt2:4
+#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
+msgid "%1 Digest %2"
+msgstr "% 1 Sinteza %2"
+
+#. (current_group,total_group)
+#: ../mail_tt2/digest.tt2:4 ../mail_tt2/digest_plain.tt2:4
+#, fuzzy
+msgid " (%1/%2)"
+msgstr "page %1 / %2"
+
+#: ../mail_tt2/digest.tt2:12 ../mail_tt2/digest_plain.tt2:9
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2986
+#, fuzzy
+msgid "Table of contents:"
+msgstr "Continut:"
+
+#. (list.name,date)
+#: ../mail_tt2/digest.tt2:38 ../mail_tt2/digest_plain.tt2:28
+#, fuzzy
+msgid "End of %1 Digest %2"
+msgstr "Terminarea compilarii mesajelor pentru lista %1 - %2"
 
 #. (list.name)
 #: ../mail_tt2/expire_deletion.tt2:2 ../mail_tt2/removed.tt2:2
@@ -6378,8 +6400,13 @@ msgstr "Dezabonare de pe lista :"
 msgid "Archive of %1, file %2"
 msgstr ""
 
+#. (list.name,date)
+#: ../mail_tt2/get_archive.tt2:33
+msgid "End of digest for list %1 - %2"
+msgstr "Terminarea compilarii mesajelor pentru lista %1 - %2"
+
 # nlsref 6,83
-#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1627
+#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1634
 msgid "Subscription summary"
 msgstr "Rezumatul abonarilor"
 
@@ -6397,8 +6424,8 @@ msgid "For each list here is a mail address to use if you want to unsubscribe."
 msgstr ""
 
 # nlsref 6,81
-#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:195
-#: ../src/lib/Commands.pm:212
+#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:198
+#: ../src/lib/Commands.pm:215
 msgid "User guide"
 msgstr "Ghidul utilizatorului"
 
@@ -6656,7 +6683,7 @@ msgstr "Trimitere mesaje   : %1"
 msgid "Review subscribers: %1"
 msgstr "Vizualizare abonati : %1"
 
-#. (reply_to_header.value)
+#. ('')
 #: ../mail_tt2/info_report.tt2:21
 msgid "Reply to           : %1"
 msgstr "Raspuns la           : %1"
@@ -6673,14 +6700,14 @@ msgstr "Marime maxima       : %1"
 msgid "Digest            : %1"
 msgstr "Pagina lista           : %1"
 
-#. (available_reception_mode)
+#. ('')
 #: ../mail_tt2/info_report.tt2:26
 #, fuzzy
 msgid "Receiving modes   : %1"
 msgstr "Mod de primire    : %1"
 
 #. (url)
-#: ../mail_tt2/info_report.tt2:27
+#: ../mail_tt2/info_report.tt2:36
 #, fuzzy
 msgid "Homepage          : %1"
 msgstr "Pagina lista           : %1"
@@ -6733,6 +6760,42 @@ msgstr "[% list.name %] pagina principala"
 #: ../mail_tt2/list_created.tt2:9
 msgid "%1 admin page"
 msgstr "%1. Pagina de administrare"
+
+#. (list.name)
+#: ../mail_tt2/list_rejected.tt2:2
+#, fuzzy
+msgid "Rejected mailing list %1 creation"
+msgstr "%1 creare de lista"
+
+#. (list.name,list.host)
+#: ../mail_tt2/list_rejected.tt2:4
+msgid "%1@%2 mailing list has been rejected by listmaster."
+msgstr ""
+
+#: ../mail_tt2/list_unknown.tt2:3
+msgid "List unknown"
+msgstr "Lista necunoscuta"
+
+#: ../mail_tt2/list_unknown.tt2:10
+msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
+msgstr "Acesta este un raspuns automat trimis de Sympa Mailing Lists Manager."
+
+#: ../mail_tt2/list_unknown.tt2:12
+#, fuzzy
+msgid "The following address is not a known mailing list:"
+msgstr "Adresa urmatoare nu este cunoscuta ca si lista:"
+
+#: ../mail_tt2/list_unknown.tt2:16
+#, fuzzy
+msgid ""
+"To find out the correct listname, ask for this server's lists directory:"
+msgstr "Pentru a afla numele corect a listelor, trimite un mesja la :"
+
+#. (conf.listmaster_email,conf.host)
+#: ../mail_tt2/list_unknown.tt2:20
+#, fuzzy
+msgid "For further information, please contact %1@%2"
+msgstr "Pentru mai multe informatii, contacteaza listmaster@%1"
 
 #. (list.name)
 #: ../mail_tt2/listeditor_notification.tt2:4
@@ -6871,53 +6934,62 @@ msgid ""
 msgstr ""
 
 #: ../mail_tt2/listmaster_notification.tt2:71
+#, fuzzy
+msgid "CSS files have been updated"
+msgstr "Fisierul de actualizare a fost actualizat"
+
+#: ../mail_tt2/listmaster_notification.tt2:73
+msgid "Static CSS files have been updated.  Check log file for details."
+msgstr ""
+
+#: ../mail_tt2/listmaster_notification.tt2:77
 msgid "DataBase connection restored"
 msgstr ""
 
 #. (db_name)
-#: ../mail_tt2/listmaster_notification.tt2:73
+#: ../mail_tt2/listmaster_notification.tt2:79
 msgid "Connection to database %1 restored."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:77
+#: ../mail_tt2/listmaster_notification.tt2:83
 msgid "Bulk mailer error"
 msgstr ""
 
 #. (listname)
-#: ../mail_tt2/listmaster_notification.tt2:79
+#: ../mail_tt2/listmaster_notification.tt2:85
 msgid ""
 "Sympa failed to store a message for list %1 in the bulk mailer. You should "
 "check log files !!"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:83
+#: ../mail_tt2/listmaster_notification.tt2:89
 msgid "Loop detected"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:90
+#: ../mail_tt2/listmaster_notification.tt2:96
 msgid "A loop has been detected with the following message"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:104
+#: ../mail_tt2/listmaster_notification.tt2:110
 msgid "Antivirus scan failed"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:106
+#: ../mail_tt2/listmaster_notification.tt2:112
 msgid "The antivirus scan has failed while processing the following file:"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:109
+#: ../mail_tt2/listmaster_notification.tt2:115
 #, fuzzy
 msgid "The returned error message:"
 msgstr "Ordonate dupa mesaje noi"
 
-#: ../mail_tt2/listmaster_notification.tt2:114
+#: ../mail_tt2/listmaster_notification.tt2:120
 #, fuzzy
 msgid "Parameter error"
 msgstr "part"
 
 #. (par_name,par_value)
-#: ../mail_tt2/listmaster_notification.tt2:116
+#: ../mail_tt2/listmaster_notification.tt2:122
 #, fuzzy
 msgid "The value for parameter %1 was badly defined: %2"
 msgstr ""
@@ -6925,46 +6997,46 @@ msgstr ""
 "    surselor informatiilor"
 
 #. (action)
-#: ../mail_tt2/listmaster_notification.tt2:117
+#: ../mail_tt2/listmaster_notification.tt2:123
 msgid "%1 impossible."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:118
 #: ../mail_tt2/listmaster_notification.tt2:124
 #: ../mail_tt2/listmaster_notification.tt2:130
-#: ../mail_tt2/listmaster_notification.tt2:138
-#: ../mail_tt2/listmaster_notification.tt2:288
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
-#: ../mail_tt2/listmaster_notification.tt2:378
+#: ../mail_tt2/listmaster_notification.tt2:136
+#: ../mail_tt2/listmaster_notification.tt2:144
+#: ../mail_tt2/listmaster_notification.tt2:294
+#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:382
+#: ../mail_tt2/listmaster_notification.tt2:394
 msgid "See logs for more details."
 msgstr ""
 
 # nlsref 3,1
-#: ../mail_tt2/listmaster_notification.tt2:121
+#: ../mail_tt2/listmaster_notification.tt2:127
 #, fuzzy
 msgid "Unable to create directory"
 msgstr "%s libraria nu este disponibila: %m"
 
 # nlsref 3,1
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:123
+#: ../mail_tt2/listmaster_notification.tt2:129
 #, fuzzy
 msgid "Sympa could not create directory %1"
 msgstr "%s libraria nu este disponibila: %m"
 
-#: ../mail_tt2/listmaster_notification.tt2:127
+#: ../mail_tt2/listmaster_notification.tt2:133
 msgid "A message archiving failed"
 msgstr ""
 
 #. (file,bad)
-#: ../mail_tt2/listmaster_notification.tt2:129
+#: ../mail_tt2/listmaster_notification.tt2:135
 msgid "Sympa could not archive message '%1'. Moving it into directory '%2'."
 msgstr ""
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
-#: ../mail_tt2/listmaster_notification.tt2:133
+#: ../mail_tt2/listmaster_notification.tt2:139
 #, fuzzy
 msgid "A bounce management failed"
 msgstr ""
@@ -6975,131 +7047,131 @@ msgstr ""
 "    bumerang"
 
 #. (file,bad)
-#: ../mail_tt2/listmaster_notification.tt2:135
+#: ../mail_tt2/listmaster_notification.tt2:141
 msgid ""
 "Sympa could not handle bounce message '%1'. Moving it into directory '%2'."
 msgstr ""
 
 # nlsref 1,3
 #. (error)
-#: ../mail_tt2/listmaster_notification.tt2:137
+#: ../mail_tt2/listmaster_notification.tt2:143
 #, fuzzy
 msgid "Error: %1"
 msgstr "Greseala în linia %d %s"
 
-#: ../mail_tt2/listmaster_notification.tt2:141
+#: ../mail_tt2/listmaster_notification.tt2:147
 msgid "incorrect format of edit_list.conf"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:144
+#: ../mail_tt2/listmaster_notification.tt2:150
 msgid ""
 "edit_list.conf format has changed:\n"
 "'default' is no more accepted for a population."
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:146
+#: ../mail_tt2/listmaster_notification.tt2:152
 msgid "Refer to documentation to adapt %1."
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:148
+#: ../mail_tt2/listmaster_notification.tt2:154
 msgid ""
 "Until then we recommend your remove %1;\n"
 "default configuration will be used."
 msgstr ""
 
 #. (listname)
-#: ../mail_tt2/listmaster_notification.tt2:151
+#: ../mail_tt2/listmaster_notification.tt2:157
 msgid "subscribers update failed for list %1"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:153
+#: ../mail_tt2/listmaster_notification.tt2:159
 msgid ""
 "Sympa could not include subscribers from the following external data sources:"
 msgstr ""
 
 #. (e.name,e.type)
-#: ../mail_tt2/listmaster_notification.tt2:156
+#: ../mail_tt2/listmaster_notification.tt2:162
 msgid "Include of datasource %1 (type %2) failed."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:159
-#: ../mail_tt2/listmaster_notification.tt2:166
+#: ../mail_tt2/listmaster_notification.tt2:165
+#: ../mail_tt2/listmaster_notification.tt2:172
 msgid "Check Sympa log files for more precise information"
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:163
+#: ../mail_tt2/listmaster_notification.tt2:169
 #, fuzzy
 msgid "admins update failed for list %1"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:165
+#: ../mail_tt2/listmaster_notification.tt2:171
 msgid ""
 "Sympa could not include admins from external data sources; the database or "
 "LDAP directory might be unreachable."
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:169
-#: ../mail_tt2/listmaster_notification.tt2:194
-#: ../mail_tt2/listmaster_notification.tt2:202
-#: ../mail_tt2/listmaster_notification.tt2:209
-#: ../mail_tt2/listmaster_notification.tt2:237
-#: ../mail_tt2/listmaster_notification.tt2:244
-#: ../mail_tt2/listmaster_notification.tt2:251
+#: ../mail_tt2/listmaster_notification.tt2:175
+#: ../mail_tt2/listmaster_notification.tt2:200
+#: ../mail_tt2/listmaster_notification.tt2:208
+#: ../mail_tt2/listmaster_notification.tt2:215
+#: ../mail_tt2/listmaster_notification.tt2:243
+#: ../mail_tt2/listmaster_notification.tt2:250
+#: ../mail_tt2/listmaster_notification.tt2:257
 msgid "list %1 in status error_config"
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:171
+#: ../mail_tt2/listmaster_notification.tt2:177
 #, fuzzy
 msgid "No owner is defined for list %1."
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:172
-#: ../mail_tt2/listmaster_notification.tt2:197
-#: ../mail_tt2/listmaster_notification.tt2:205
-#: ../mail_tt2/listmaster_notification.tt2:212
-#: ../mail_tt2/listmaster_notification.tt2:240
-#: ../mail_tt2/listmaster_notification.tt2:247
-#: ../mail_tt2/listmaster_notification.tt2:254
+#: ../mail_tt2/listmaster_notification.tt2:178
+#: ../mail_tt2/listmaster_notification.tt2:203
+#: ../mail_tt2/listmaster_notification.tt2:211
+#: ../mail_tt2/listmaster_notification.tt2:218
+#: ../mail_tt2/listmaster_notification.tt2:246
+#: ../mail_tt2/listmaster_notification.tt2:253
+#: ../mail_tt2/listmaster_notification.tt2:260
 msgid "The list status has been set to error_config."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:173
-#: ../mail_tt2/listmaster_notification.tt2:198
-#: ../mail_tt2/listmaster_notification.tt2:206
-#: ../mail_tt2/listmaster_notification.tt2:213
-#: ../mail_tt2/listmaster_notification.tt2:220
-#: ../mail_tt2/listmaster_notification.tt2:227
-#: ../mail_tt2/listmaster_notification.tt2:241
-#: ../mail_tt2/listmaster_notification.tt2:248
-#: ../mail_tt2/listmaster_notification.tt2:255
+#: ../mail_tt2/listmaster_notification.tt2:179
+#: ../mail_tt2/listmaster_notification.tt2:204
+#: ../mail_tt2/listmaster_notification.tt2:212
+#: ../mail_tt2/listmaster_notification.tt2:219
+#: ../mail_tt2/listmaster_notification.tt2:226
+#: ../mail_tt2/listmaster_notification.tt2:233
+#: ../mail_tt2/listmaster_notification.tt2:247
+#: ../mail_tt2/listmaster_notification.tt2:254
+#: ../mail_tt2/listmaster_notification.tt2:261
 msgid "Check Sympa log files for more precise information."
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:177
+#: ../mail_tt2/listmaster_notification.tt2:183
 msgid "List owner/editor email changes"
 msgstr ""
 
 #. (previous_email,new_email)
-#: ../mail_tt2/listmaster_notification.tt2:179
+#: ../mail_tt2/listmaster_notification.tt2:185
 msgid ""
 "Member %1 has changed his owner/editor email address to %2. This change has "
 "been performed for the following lists:"
 msgstr ""
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:186
+#: ../mail_tt2/listmaster_notification.tt2:192
 #, fuzzy
 msgid "List %1: Failed to change admin email address"
 msgstr "Schimba adresa email\">"
 
 #. (current_email,new_email,datasource)
-#: ../mail_tt2/listmaster_notification.tt2:190
+#: ../mail_tt2/listmaster_notification.tt2:196
 msgid ""
 "Admin %1 could not change his admin email address (new email address is %2) "
 "because he is included via a the following data sources: %3.\n"
@@ -7109,71 +7181,71 @@ msgid ""
 msgstr ""
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:196
+#: ../mail_tt2/listmaster_notification.tt2:202
 msgid "Errors occured while copying family %2 file in list %1 directory."
 msgstr ""
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:204
+#: ../mail_tt2/listmaster_notification.tt2:210
 msgid "List %1 configuration does not respect family %2 rules."
 msgstr ""
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:211
+#: ../mail_tt2/listmaster_notification.tt2:217
 msgid ""
 "Sympa could not check family %2 rules with list %1 param_constraint.conf "
 "file."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:217
-#: ../mail_tt2/listmaster_notification.tt2:224
+#: ../mail_tt2/listmaster_notification.tt2:223
+#: ../mail_tt2/listmaster_notification.tt2:230
 msgid "errors in param_constraint.conf file"
 msgstr ""
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:219
-#: ../mail_tt2/listmaster_notification.tt2:226
+#: ../mail_tt2/listmaster_notification.tt2:225
+#: ../mail_tt2/listmaster_notification.tt2:232
 #, fuzzy
 msgid "Error(s) found in the file %1."
 msgstr "Editarea fisierului %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:230
+#: ../mail_tt2/listmaster_notification.tt2:236
 #, fuzzy
 msgid "File removed"
 msgstr "denumire lista"
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:232
+#: ../mail_tt2/listmaster_notification.tt2:238
 #, fuzzy
 msgid "The following file has been removed: %1"
 msgstr "Dezabonare de pe lista %1"
 
 #. (param1)
-#: ../mail_tt2/listmaster_notification.tt2:233
+#: ../mail_tt2/listmaster_notification.tt2:239
 msgid "A backup of the file has been made: %1"
 msgstr ""
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:239
+#: ../mail_tt2/listmaster_notification.tt2:245
 #, fuzzy
 msgid "Sympa could not load family %2 for list %1."
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:246
+#: ../mail_tt2/listmaster_notification.tt2:252
 #, fuzzy
 msgid "Failed to instantiate family %2 for list %1"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:253
+#: ../mail_tt2/listmaster_notification.tt2:259
 msgid "Sympa could not modify list %1 (Family %2)"
 msgstr ""
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:259
+#: ../mail_tt2/listmaster_notification.tt2:265
 #: ../mail_tt2/listowner_notification.tt2:43
 #, fuzzy
 msgid "List %1 automatic bounce management"
@@ -7185,7 +7257,7 @@ msgstr ""
 "    bumerang"
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:263
+#: ../mail_tt2/listmaster_notification.tt2:269
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -7193,7 +7265,7 @@ msgid ""
 msgstr ""
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:266
+#: ../mail_tt2/listmaster_notification.tt2:272
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -7201,154 +7273,169 @@ msgid ""
 msgstr ""
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:269
+#: ../mail_tt2/listmaster_notification.tt2:275
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
 "selected by Sympa as severe bouncing addresses:"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:276
+#: ../mail_tt2/listmaster_notification.tt2:282
 #: ../mail_tt2/listowner_notification.tt2:60
 #, fuzzy
 msgid "Managing bouncing subscribers:"
 msgstr "Lista nu are abonati in asteptare"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:280
-#: ../mail_tt2/listmaster_notification.tt2:291
-#: ../mail_tt2/listmaster_notification.tt2:299
+#: ../mail_tt2/listmaster_notification.tt2:286
+#: ../mail_tt2/listmaster_notification.tt2:297
+#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:314
 #, fuzzy
 msgid "Listmaster: internal server error "
 msgstr "Reseteaza erorile\">"
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:282
-#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:288
+#: ../mail_tt2/listmaster_notification.tt2:316
 msgid " User %1 has encountered an internal server error"
 msgstr "Utilizatorul %1 s-a confruntat cu o eroare internă a serverului"
 
 #. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
+#: ../mail_tt2/listmaster_notification.tt2:299
 msgid "The following error occurred while managing bounces: %1"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:373
+#. (listname,family,robot,msg_id)
+#: ../mail_tt2/listmaster_notification.tt2:307
+msgid ""
+"Failed to process message. Unable to create the dynamic list %1 on family %2@"
+"%3. Message <%4> was ignored."
+msgstr ""
+
+#. (family,robot,msg_id)
+#: ../mail_tt2/listmaster_notification.tt2:309
+msgid ""
+"Failed to process message: family %1@%2 does not exist. Unable to create the "
+"dynamic list.  Message <%3> was ignored."
+msgstr ""
+
+#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:389
 msgid "Web interface"
 msgstr ""
 
 # nlsref 3,1
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:319
 #, fuzzy
 msgid "Unable to change directory."
 msgstr "%s libraria nu este disponibila: %m"
 
-#: ../mail_tt2/listmaster_notification.tt2:305
+#: ../mail_tt2/listmaster_notification.tt2:320
 #, fuzzy
 msgid "The authentication server name is not defined."
 msgstr "La autentificare("
 
-#: ../mail_tt2/listmaster_notification.tt2:306
+#: ../mail_tt2/listmaster_notification.tt2:321
 msgid ""
 "auth.conf error: either email_http_header or ldap_host/"
 "ldap_get_email_by_uid_filter entries should be defined."
 msgstr ""
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:307
+#: ../mail_tt2/listmaster_notification.tt2:322
 #, fuzzy
 msgid "Unkown authentication service %1."
 msgstr "La autentificare("
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:308
+#: ../mail_tt2/listmaster_notification.tt2:323
 msgid "Add user '%1' in DB failed."
 msgstr ""
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:324
 #, fuzzy
 msgid "Update user '%1' in DB failed"
 msgstr "Actualizeaza\">"
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:309
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:326
 #, fuzzy
 msgid " (old email: %1)"
 msgstr "(mesaje vechi: %1)"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:310
+#: ../mail_tt2/listmaster_notification.tt2:325
 msgid "Add subscriber '%1' in DB failed."
 msgstr ""
 
 #. (sub,old_email)
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:326
 msgid "Update subscriber '%1' in DB failed"
 msgstr ""
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:312
+#: ../mail_tt2/listmaster_notification.tt2:327
 msgid "Delete subscriber '%1' in DB failed."
 msgstr ""
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:313
+#: ../mail_tt2/listmaster_notification.tt2:328
 msgid "Delete user in DB for old email '%1' failed."
 msgstr ""
 
 #. (email,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:314
+#: ../mail_tt2/listmaster_notification.tt2:329
 #, fuzzy
 msgid "Subscriber '%1' is not found in list %2."
 msgstr "Informatii abonat</font>"
 
 # nlsref 6,2
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:315
+#: ../mail_tt2/listmaster_notification.tt2:330
 #, fuzzy
 msgid "Unable to read file: '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 6,2
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:316
+#: ../mail_tt2/listmaster_notification.tt2:331
 #, fuzzy
 msgid "Unable to write file: '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 6,2
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:332
 #, fuzzy
 msgid "Unable to open file '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 3,1
 #. (directory)
-#: ../mail_tt2/listmaster_notification.tt2:318
+#: ../mail_tt2/listmaster_notification.tt2:333
 #, fuzzy
 msgid "Unable to open directory '%1'."
 msgstr "%s libraria nu este disponibila: %m"
 
 # nlsref 3,1
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:319
+#: ../mail_tt2/listmaster_notification.tt2:334
 #, fuzzy
 msgid "Unable to create directory '%1'."
 msgstr "%s libraria nu este disponibila: %m"
 
 # nlsref 6,2
 #. (spool)
-#: ../mail_tt2/listmaster_notification.tt2:320
+#: ../mail_tt2/listmaster_notification.tt2:335
 #, fuzzy
 msgid "Unable to open spool '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 #. (msg)
-#: ../mail_tt2/listmaster_notification.tt2:321
+#: ../mail_tt2/listmaster_notification.tt2:336
 #, fuzzy
 msgid "Unable to get message '%1'."
 msgstr ""
@@ -7357,44 +7444,44 @@ msgstr ""
 
 # nlsref 6,2
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:322
+#: ../mail_tt2/listmaster_notification.tt2:337
 #, fuzzy
 msgid "Unable to rename file '%1' into '%2'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 3,1
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:338
 #, fuzzy
 msgid "Unable to rename directory '%1' into '%2'."
 msgstr "%s libraria nu este disponibila: %m"
 
 # nlsref 6,2
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:339
 #, fuzzy
 msgid "Unable to erase file '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:325
+#: ../mail_tt2/listmaster_notification.tt2:340
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr ""
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:326
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "No HTML version of the message available in '%1'."
 msgstr ""
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:327
+#: ../mail_tt2/listmaster_notification.tt2:342
 #, fuzzy
 msgid "Unable to update file config_changes for list '%1'."
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 # nlsref 6,2
 #. (month,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:343
 #, fuzzy
 msgid "Unable to find month '%1' for list '%2'"
 msgstr "Fisierul help nu poate fi accesat: %s\n"
@@ -7402,26 +7489,26 @@ msgstr "Fisierul help nu poate fi accesat: %s\n"
 # nlsref 6,2
 #. (dir)
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:328
-#: ../mail_tt2/listmaster_notification.tt2:329
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:345
 #, fuzzy
 msgid ": unable to read '%1'."
 msgstr ": nu pot citi '%1'"
 
 #. (arc_file,list.name,path)
-#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:344
 #, fuzzy
 msgid "Unable to find archive '%1' for list '%2'"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:345
 #, fuzzy
 msgid "Unable to find archive for list '%1'"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:331
+#: ../mail_tt2/listmaster_notification.tt2:346
 #, fuzzy
 msgid "Unable to send archive: no message id found."
 msgstr ""
@@ -7429,62 +7516,62 @@ msgstr ""
 "care urmeaza sa fie sters nu poate fi gasit"
 
 #. (msgid)
-#: ../mail_tt2/listmaster_notification.tt2:332
+#: ../mail_tt2/listmaster_notification.tt2:347
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr ""
 
 # nlsref 16,77
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:333
+#: ../mail_tt2/listmaster_notification.tt2:348
 #, fuzzy
 msgid "Cannot save config file for list '%1'."
 msgstr "Ultima actualizare a config"
 
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:349
 #, fuzzy
 msgid "Failed to install aliases."
 msgstr ""
 "Eroare la adaugarea utilizatorului \n"
 "%1"
 
-#: ../mail_tt2/listmaster_notification.tt2:335
+#: ../mail_tt2/listmaster_notification.tt2:350
 #, fuzzy
 msgid "Failed to remove aliases."
 msgstr ""
 "Eroare la adaugarea utilizatorului \n"
 "%1"
 
-#: ../mail_tt2/listmaster_notification.tt2:336
+#: ../mail_tt2/listmaster_notification.tt2:351
 msgid "Internal scenario error for 'create_list'."
 msgstr ""
 
 # nlsref 3,1
-#: ../mail_tt2/listmaster_notification.tt2:337
+#: ../mail_tt2/listmaster_notification.tt2:352
 #, fuzzy
 msgid "Unable to create list."
 msgstr "%s libraria nu este disponibila: %m"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:340
+#: ../mail_tt2/listmaster_notification.tt2:355
 #, fuzzy
 msgid "Unable to get family for list '%1'."
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 # nlsref 6,2
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:356
 #, fuzzy
 msgid "Unable to reload list with new listname '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 3,1
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:356
 #, fuzzy
 msgid "Unable to reload list"
 msgstr "%s libraria nu este disponibila: %m"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:342
+#: ../mail_tt2/listmaster_notification.tt2:357
 #, fuzzy
 msgid "Failed to inlude members for list '%1'"
 msgstr ""
@@ -7492,37 +7579,37 @@ msgstr ""
 "%1"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:358
 #, fuzzy
 msgid "Failed to include list admins for list '%1'"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:359
 #, fuzzy
 msgid "No owner is defined for the list '%1'"
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:345
+#: ../mail_tt2/listmaster_notification.tt2:360
 #, fuzzy
 msgid "The exportation to an Ldap directory failed for list '%1'"
 msgstr "%1: actiune esuata"
 
 # nlsref 11,2
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:346
+#: ../mail_tt2/listmaster_notification.tt2:361
 #, fuzzy
 msgid "Unable to check listname '%1' on SMTP server"
 msgstr "Nu se poate crea un canal in smtpto: %m"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:347
+#: ../mail_tt2/listmaster_notification.tt2:362
 #, fuzzy
 msgid "Cannot create shared for list '%1'."
 msgstr "Directorul nu poate fi incarcat %1"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:348
+#: ../mail_tt2/listmaster_notification.tt2:363
 #, fuzzy
 msgid "Cannot restore shared for list '%1'."
 msgstr ""
@@ -7530,18 +7617,18 @@ msgstr ""
 "%1"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:349
+#: ../mail_tt2/listmaster_notification.tt2:364
 #, fuzzy
 msgid "Cannot delete shared for list '%1'."
 msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:350
+#: ../mail_tt2/listmaster_notification.tt2:365
 #, fuzzy
 msgid "Impossible to browse shared documents for list '%1'."
 msgstr "Articol pentru aprobat %1"
 
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:351
+#: ../mail_tt2/listmaster_notification.tt2:366
 #, fuzzy
 msgid "Cannot upload file '%1'."
 msgstr ""
@@ -7549,71 +7636,71 @@ msgstr ""
 "%1"
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:353
+#: ../mail_tt2/listmaster_notification.tt2:368
 #, fuzzy
 msgid "Errors while unzipping file '%1'."
 msgstr "Editarea fisierului %1"
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:354
+#: ../mail_tt2/listmaster_notification.tt2:369
 msgid "Unable to send command REMIND from '%1' to list '%2'."
 msgstr ""
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:355
+#: ../mail_tt2/listmaster_notification.tt2:370
 msgid "Unable to send mail from '%1' to list '%2'."
 msgstr ""
 
 # nlsref 6,68
 #. (key,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:356
+#: ../mail_tt2/listmaster_notification.tt2:371
 #, fuzzy
 msgid "Unable to access the message authenticated with key '%1' for list '%2'."
 msgstr "Accesul la mesajul autentificat cu tasta %s invalid.\n"
 
 # nlsref 8,24
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:357
+#: ../mail_tt2/listmaster_notification.tt2:372
 #, fuzzy
 msgid "Unable to delete subscription request for user '%1'."
 msgstr "Cerere de dezabonare din lista %s"
 
 # nlsref 6,2
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:358
+#: ../mail_tt2/listmaster_notification.tt2:373
 #, fuzzy
 msgid "Unable to add file '%1' to archives."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 # nlsref 6,2
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:359
+#: ../mail_tt2/listmaster_notification.tt2:374
 #, fuzzy
 msgid "Unable to write file zip '%1'."
 msgstr "Fisierul help nu poate fi accesat: %s\n"
 
 #. (path,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:361
+#: ../mail_tt2/listmaster_notification.tt2:376
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:362
+#: ../mail_tt2/listmaster_notification.tt2:377
 msgid "Parameter cookie undefined, authentication failure."
 msgstr ""
 
 #. (env)
-#: ../mail_tt2/listmaster_notification.tt2:363
+#: ../mail_tt2/listmaster_notification.tt2:378
 msgid "Cookie error: '%1' undefined, authentication failure."
 msgstr ""
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:370
+#: ../mail_tt2/listmaster_notification.tt2:386
 #, fuzzy
 msgid "Listmaster: system error "
 msgstr "Reseteaza erorile\">"
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:372
+#: ../mail_tt2/listmaster_notification.tt2:388
 msgid " User %1 has encountered a system error"
 msgstr "Utilizatorul %1 s-a confruntat cu o eroare de sistem"
 
@@ -7893,11 +7980,6 @@ msgstr ""
 msgid "List %1 / %2"
 msgstr "page %1 / %2"
 
-#. (list.name,list.host)
-#: ../mail_tt2/list_rejected.tt2:4
-msgid "%1@%2 mailing list has been rejected by listmaster."
-msgstr ""
-
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 6,82
 #: ../mail_tt2/lists.tt2:2
@@ -7909,31 +7991,6 @@ msgstr "Liste publice"
 #, fuzzy
 msgid "Here is the list of lists from %1@%2"
 msgstr "Aici este lista completa de liste %1@%2"
-
-#: ../mail_tt2/list_unknown.tt2:3
-msgid "List unknown"
-msgstr "Lista necunoscuta"
-
-#: ../mail_tt2/list_unknown.tt2:10
-msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
-msgstr "Acesta este un raspuns automat trimis de Sympa Mailing Lists Manager."
-
-#: ../mail_tt2/list_unknown.tt2:12
-#, fuzzy
-msgid "The following address is not a known mailing list:"
-msgstr "Adresa urmatoare nu este cunoscuta ca si lista:"
-
-#: ../mail_tt2/list_unknown.tt2:16
-#, fuzzy
-msgid ""
-"To find out the correct listname, ask for this server's lists directory:"
-msgstr "Pentru a afla numele corect a listelor, trimite un mesja la :"
-
-#. (conf.listmaster_email,conf.host)
-#: ../mail_tt2/list_unknown.tt2:20
-#, fuzzy
-msgid "For further information, please contact %1@%2"
-msgstr "Pentru mai multe informatii, contacteaza listmaster@%1"
 
 #: ../mail_tt2/message_report.tt2:4
 #, fuzzy
@@ -8339,6 +8396,11 @@ msgid ""
 "message."
 msgstr "Daca nu doresti abonarea pe lista, ignora mesajul."
 
+#. (list.name)
+#: ../mail_tt2/review.tt2:2
+msgid "REVIEW %1"
+msgstr ""
+
 #. (list.name,list.host)
 #: ../mail_tt2/review.tt2:4
 msgid "Here are the subscribers of %1@%2 mailing list:"
@@ -8447,6 +8509,11 @@ msgid ""
 msgstr ""
 
 #. (list.name)
+#: ../mail_tt2/stats_report.tt2:2
+msgid "STATS %1"
+msgstr ""
+
+#. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
 msgid "Information regarding list %1"
 msgstr "Informatii legate de lista %1"
@@ -8538,13 +8605,14 @@ msgstr "Liste Mailing"
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
 msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr ""
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:32
 msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
+"You have been delegated the responsability of list moderator by %1 for list %"
 "2@%3."
 msgstr ""
 
@@ -8734,6 +8802,7 @@ msgstr ""
 
 #: ../src/etc/scenari/access_web_archive.closed:1
 #: ../src/etc/scenari/invite.closed:1 ../src/etc/scenari/send.closed:1
+#: ../src/lib/List.pm:1588
 msgid "closed"
 msgstr ""
 
@@ -8742,7 +8811,7 @@ msgstr ""
 msgid "restricted to local domain users"
 msgstr ""
 
-#: ../src/etc/scenari/access_web_archive.listmaster:1
+#: ../src/etc/scenari/access_web_archive.listmaster:1 ../src/lib/List.pm:1503
 #, fuzzy
 msgid "listmaster"
 msgstr "denumire lista"
@@ -8752,13 +8821,13 @@ msgstr "denumire lista"
 msgid "by owner"
 msgstr "Set owner\">"
 
-#: ../src/etc/scenari/access_web_archive.private:1
+#: ../src/etc/scenari/access_web_archive.private:1 ../src/lib/List.pm:1589
 #, fuzzy
 msgid "subscribers only"
 msgstr "Subscribers"
 
 #: ../src/etc/scenari/access_web_archive.public:1
-#: ../src/etc/scenari/invite.public:1
+#: ../src/etc/scenari/invite.public:1 ../src/lib/List.pm:1590
 #, fuzzy
 msgid "public"
 msgstr "Publica"
@@ -8782,15 +8851,15 @@ msgstr ""
 msgid "add performed by list owner does not need authentication"
 msgstr "La autentificare("
 
+#: ../src/etc/scenari/add.owner_notify:1
+msgid "add performed by owner does not need authentication (notification)"
+msgstr ""
+
 #: ../src/etc/scenari/add.ownerdkim:1
 #, fuzzy
 msgid ""
 "add performed by list owner does not need authentication if DKIM signature OK"
 msgstr "La autentificare("
-
-#: ../src/etc/scenari/add.owner_notify:1
-msgid "add performed by owner does not need authentication (notification)"
-msgstr ""
 
 #: ../src/etc/scenari/automatic_list_creation.family_owner:1
 msgid "Restricted to people subscribed to the list of family owners."
@@ -8961,6 +9030,11 @@ msgstr ""
 msgid "Newsletter, restricted to moderators after confirmation"
 msgstr ""
 
+#: ../src/etc/scenari/send.private_smime:1
+#, fuzzy
+msgid "restricted to subscribers and checked smime signature"
+msgstr "Sterge utilizatorii selectati\">"
+
 #: ../src/etc/scenari/send.privateandeditorkey:1
 #, fuzzy
 msgid "Moderated, restricted to subscribers"
@@ -8992,17 +9066,16 @@ msgstr ""
 msgid "Private, confirmation for non subscribers"
 msgstr ""
 
-#: ../src/etc/scenari/send.private_smime:1
-#, fuzzy
-msgid "restricted to subscribers and checked smime signature"
-msgstr "Sterge utilizatorii selectati\">"
-
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 6,82
 #: ../src/etc/scenari/send.public:1
 #, fuzzy
 msgid "public list"
 msgstr "Liste publice"
+
+#: ../src/etc/scenari/send.public_nobcc:1
+msgid "public list, Bcc rejected (anti-spam)"
+msgstr ""
 
 #: ../src/etc/scenari/send.publickey:1
 #, fuzzy
@@ -9011,10 +9084,6 @@ msgstr "La autentificare("
 
 #: ../src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
-msgstr ""
-
-#: ../src/etc/scenari/send.public_nobcc:1
-msgid "public list, Bcc rejected (anti-spam)"
 msgstr ""
 
 #: ../src/etc/scenari/send.publicnomultipart:1
@@ -9107,12 +9176,6 @@ msgid "need authentication"
 msgstr "La autentificare("
 
 # nlsref 6,74
-#: ../src/etc/scenari/unsubscribe.authdkim:1
-#, fuzzy
-msgid "need authentication unless DKIM signature is OK"
-msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
-
-# nlsref 6,74
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
 #, fuzzy
 msgid "authentication requested, notification sent to owner"
@@ -9126,11 +9189,17 @@ msgid ""
 "owner"
 msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
 
+# nlsref 6,74
+#: ../src/etc/scenari/unsubscribe.authdkim:1
+#, fuzzy
+msgid "need authentication unless DKIM signature is OK"
+msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
+
 #: ../src/etc/scenari/unsubscribe.closed:1
 msgid "impossible"
 msgstr ""
 
-#: ../src/etc/scenari/unsubscribe.open:1
+#: ../src/etc/scenari/unsubscribe.open:1 ../src/lib/List.pm:1587
 #, fuzzy
 msgid "open"
 msgstr "in data de"
@@ -9218,8 +9287,8 @@ msgstr "Do you really want to delete %1 ?"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/etc/mhonarc-ressources.tt2:306 ../src/etc/mhonarc-ressources.tt2:310
-#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:563
-#: ../src/etc/mhonarc-ressources.tt2:567 ../src/etc/mhonarc-ressources.tt2:571
+#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:576
+#: ../src/etc/mhonarc-ressources.tt2:580 ../src/etc/mhonarc-ressources.tt2:584
 msgid "%m/%d/%Y"
 msgstr ""
 
@@ -9241,40 +9310,39 @@ msgid "picture"
 msgstr "Liste"
 
 #: ../src/etc/mhonarc-ressources.tt2:469
-msgid "Reply to sender"
-msgstr ""
-
-#: ../src/etc/mhonarc-ressources.tt2:471
 #, fuzzy
-msgid "to list"
-msgstr ""
-"Restore \n"
-"  list"
+msgid "Reply to"
+msgstr "Modifica\">"
 
-#: ../src/etc/mhonarc-ressources.tt2:473
+#: ../src/etc/mhonarc-ressources.tt2:475 ../src/lib/List.pm:1475
 #, fuzzy
-msgid "to both"
+msgid "sender"
+msgstr "Expeditor"
+
+#: ../src/etc/mhonarc-ressources.tt2:487
+#, fuzzy
+msgid "both"
 msgstr "De la: %1"
 
-#: ../src/etc/mhonarc-ressources.tt2:476
+#: ../src/etc/mhonarc-ressources.tt2:489
 msgid "Reply"
 msgstr ""
 
 #. (user.email)
-#: ../src/etc/mhonarc-ressources.tt2:477
+#: ../src/etc/mhonarc-ressources.tt2:490
 msgid "send it back to %1"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:483
+#: ../src/etc/mhonarc-ressources.tt2:496
 msgid "tag this mail for deletion"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:483
+#: ../src/etc/mhonarc-ressources.tt2:496
 #, fuzzy
 msgid "Do you really want to delete this message ?"
 msgstr "Do you really want to delete %1 ?"
 
-#: ../src/etc/mhonarc-ressources.tt2:486
+#: ../src/etc/mhonarc-ressources.tt2:499
 #, fuzzy
 msgid "view source"
 msgstr ""
@@ -9284,25 +9352,25 @@ msgstr ""
 #. ("$YYYYMMDD$")
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/etc/mhonarc-ressources.tt2:616
+#: ../src/etc/mhonarc-ressources.tt2:629
 msgid "%y/%m/%d"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:626
+#: ../src/etc/mhonarc-ressources.tt2:639
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:643
+#: ../src/etc/mhonarc-ressources.tt2:656
 msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:648
+#: ../src/etc/mhonarc-ressources.tt2:661
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
 msgstr ""
 
-#: ../src/etc/mhonarc-ressources.tt2:665
+#: ../src/etc/mhonarc-ressources.tt2:678
 msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
 msgstr ""
 
@@ -9477,97 +9545,97 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:395
+#: ../src/lib/Bulk.pm:404
 msgid "%d %b %Y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:962 ../wwsympa/wwsympa.fcgi.in:9920
+#: ../src/lib/Commands.pm:965 ../wwsympa/wwsympa.fcgi.in:10006
 msgid "%A"
 msgstr ""
 
 # nlsref 1,3
-#: ../src/lib/Conf.pm:142
+#: ../src/lib/Conf.pm:161
 #, fuzzy
 msgid "Error at line %d: %s\n"
 msgstr "Greseala în linia %d %s"
 
 # nlsref 1,3
-#: ../src/lib/Conf.pm:459
+#: ../src/lib/Conf.pm:478
 #, fuzzy
 msgid "Error at line %d: %s"
 msgstr "Greseala în linia %d %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Family.pm:2597 ../src/lib/Family.pm:394 ../src/lib/Family.pm:671
-#: ../src/lib/List.pm:1924 ../wwsympa/Auth.pm:457
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
-#: ../wwsympa/wwsympa.fcgi.in:2948 ../wwsympa/wwsympa.fcgi.in:2959
-#: ../wwsympa/wwsympa.fcgi.in:3081
+#: ../src/lib/Family.pm:2600 ../src/lib/Family.pm:397 ../src/lib/Family.pm:674
+#: ../src/lib/List.pm:2123 ../wwsympa/Auth.pm:460
+#: ../wwsympa/wwsympa.fcgi.in:1076 ../wwsympa/wwsympa.fcgi.in:16740
+#: ../wwsympa/wwsympa.fcgi.in:2708 ../wwsympa/wwsympa.fcgi.in:2998
+#: ../wwsympa/wwsympa.fcgi.in:3009 ../wwsympa/wwsympa.fcgi.in:3131
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
 
 # nlsref 16,1
-#: ../src/lib/List.pm:324
+#: ../src/lib/List.pm:327
 msgid "Account"
 msgstr "Cont"
 
 # nlsref 16,2
-#: ../src/lib/List.pm:328
+#: ../src/lib/List.pm:331
 msgid "Who can add subscribers"
 msgstr "Cine poate adauga abonati"
 
 # nlsref 16,3
-#: ../src/lib/List.pm:332
+#: ../src/lib/List.pm:335
 msgid "Anonymous sender"
 msgstr "Expeditor anonim"
 
 # nlsref 16,5
-#: ../src/lib/List.pm:337
+#: ../src/lib/List.pm:340
 msgid "frequency"
 msgstr "Frecventa"
 
 # nlsref 16,6
-#: ../src/lib/List.pm:1430 ../src/lib/List.pm:342
+#: ../src/lib/List.pm:1433 ../src/lib/List.pm:345
 msgid "access right"
 msgstr "Drept de accesare"
 
 # nlsref 16,4
-#: ../src/lib/List.pm:346
+#: ../src/lib/List.pm:349
 msgid "Text archives"
 msgstr "Arhive text"
 
 # nlsref 16,212
-#: ../src/lib/List.pm:351
+#: ../src/lib/List.pm:354
 msgid "Archive encrypted mails as cleartext"
 msgstr ""
 
 # nlsref 16,19
-#: ../src/lib/List.pm:1166 ../src/lib/List.pm:1206 ../src/lib/List.pm:358
-#: ../src/lib/List.pm:534 ../src/lib/List.pm:662 ../src/lib/List.pm:697
+#: ../src/lib/List.pm:1169 ../src/lib/List.pm:1209 ../src/lib/List.pm:361
+#: ../src/lib/List.pm:537 ../src/lib/List.pm:665 ../src/lib/List.pm:700
 msgid "reception mode"
 msgstr "Modalitate de primire"
 
 # nlsref 16,88
-#: ../src/lib/List.pm:361
+#: ../src/lib/List.pm:364
 msgid "Available subscription options"
 msgstr "Preferinte disponibile"
 
 # nlsref 16,8
-#: ../src/lib/List.pm:369
+#: ../src/lib/List.pm:372
 msgid "warn rate"
 msgstr "Rata de avertizare"
 
 # nlsref 16,9
-#: ../src/lib/List.pm:376
+#: ../src/lib/List.pm:379
 msgid "halt rate"
 msgstr "Rata de orpire"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
-#: ../src/lib/List.pm:380
+#: ../src/lib/List.pm:383
 #, fuzzy
 msgid "Bounces management"
 msgstr ""
@@ -9577,96 +9645,96 @@ msgstr ""
 "Managementul mesajelor \n"
 "    bumerang"
 
-#: ../src/lib/List.pm:387 ../src/lib/List.pm:408
+#: ../src/lib/List.pm:390 ../src/lib/List.pm:411
 msgid "threshold"
 msgstr ""
 
-#: ../src/lib/List.pm:392 ../src/lib/List.pm:413
+#: ../src/lib/List.pm:395 ../src/lib/List.pm:416
 msgid "action for this population"
 msgstr ""
 
-#: ../src/lib/List.pm:397 ../src/lib/List.pm:418
+#: ../src/lib/List.pm:400 ../src/lib/List.pm:421
 msgid "notification"
 msgstr ""
 
-#: ../src/lib/List.pm:401
+#: ../src/lib/List.pm:404
 msgid "Management of bouncers, 1st level"
 msgstr ""
 
-#: ../src/lib/List.pm:422
+#: ../src/lib/List.pm:425
 msgid "Management of bouncers, 2nd level"
 msgstr ""
 
 # nlsref 16,10
-#: ../src/lib/List.pm:429
+#: ../src/lib/List.pm:432
 msgid "Expiration of unmoderated messages"
 msgstr "Expirarea mesajelor nemoderate"
 
 # nlsref 16,11
-#: ../src/lib/List.pm:435
+#: ../src/lib/List.pm:438
 msgid "Secret string for generating unique keys"
 msgstr "Sir secret pentru generarea de chei unice"
 
-#: ../src/lib/List.pm:1093 ../src/lib/List.pm:1386 ../src/lib/List.pm:440
+#: ../src/lib/List.pm:1096 ../src/lib/List.pm:1389 ../src/lib/List.pm:443
 #, fuzzy
 msgid "epoch date"
 msgstr "Actualizeaza\">"
 
-#: ../src/lib/List.pm:444
+#: ../src/lib/List.pm:447
 msgid "human readable"
 msgstr ""
 
 # nlsref 16,77
-#: ../src/lib/List.pm:449
+#: ../src/lib/List.pm:452
 #, fuzzy
 msgid "who created the list"
 msgstr "Ultima actualizare a config"
 
 # nlsref 16,12
-#: ../src/lib/List.pm:453
+#: ../src/lib/List.pm:456
 msgid "Creation of the list"
 msgstr "Crearea listei"
 
-#: ../src/lib/List.pm:464
+#: ../src/lib/List.pm:467
 msgid "internal identifier"
 msgstr ""
 
-#: ../src/lib/List.pm:472
+#: ../src/lib/List.pm:475
 msgid "label"
 msgstr ""
 
-#: ../src/lib/List.pm:478
+#: ../src/lib/List.pm:481
 msgid "additional comment"
 msgstr ""
 
-#: ../src/lib/List.pm:485
+#: ../src/lib/List.pm:488
 #, fuzzy
 msgid "type"
 msgstr "tip"
 
-#: ../src/lib/List.pm:491
+#: ../src/lib/List.pm:494
 msgid "possible attribute values (if enum is used)"
 msgstr ""
 
-#: ../src/lib/List.pm:496
+#: ../src/lib/List.pm:499
 msgid "is the attribute optional?"
 msgstr ""
 
-#: ../src/lib/List.pm:502
+#: ../src/lib/List.pm:505
 msgid "Custom user attributes"
 msgstr ""
 
 # nlsref 16,16
-#: ../src/lib/List.pm:508
+#: ../src/lib/List.pm:511
 msgid "Custom header field"
 msgstr "Camp header"
 
 # nlsref 16,17
-#: ../src/lib/List.pm:513
+#: ../src/lib/List.pm:516
 msgid "Subject tagging"
 msgstr "Subiect afisat"
 
-#: ../src/lib/List.pm:527
+#: ../src/lib/List.pm:530
 #, fuzzy
 msgid "custom parameters"
 msgstr ""
@@ -9674,739 +9742,1137 @@ msgstr ""
 "    surselor informatiilor"
 
 # nlsref 16,20
-#: ../src/lib/List.pm:1171 ../src/lib/List.pm:1211 ../src/lib/List.pm:539
-#: ../src/lib/List.pm:667 ../src/lib/List.pm:702
+#: ../src/lib/List.pm:1174 ../src/lib/List.pm:1214 ../src/lib/List.pm:542
+#: ../src/lib/List.pm:670 ../src/lib/List.pm:705
 msgid "visibility"
 msgstr "Visibilitate"
 
 # nlsref 16,18
-#: ../src/lib/List.pm:543
+#: ../src/lib/List.pm:546
 msgid "Subscription profile"
 msgstr "Profil de abonare"
 
 # nlsref 16,21
-#: ../src/lib/List.pm:547
+#: ../src/lib/List.pm:550
 msgid "Who can delete subscribers"
 msgstr "Cine poate sterge abonatii"
 
-#: ../src/lib/List.pm:552
+#: ../src/lib/List.pm:555
 msgid "Delivery time (hh:mm)"
 msgstr ""
 
 # nlsref 16,23
-#: ../src/lib/List.pm:427 ../src/lib/List.pm:560
+#: ../src/lib/List.pm:430 ../src/lib/List.pm:563
 msgid "days"
 msgstr "Zile"
 
 # nlsref 16,24
-#: ../src/lib/List.pm:566
+#: ../src/lib/List.pm:569
 msgid "hour"
 msgstr "Ore"
 
 # nlsref 16,25
-#: ../src/lib/List.pm:572
+#: ../src/lib/List.pm:575
 msgid "minute"
 msgstr "Minute"
 
 # nlsref 16,22
-#: ../src/lib/List.pm:576
+#: ../src/lib/List.pm:579
 msgid "Digest frequency"
 msgstr "Frecventa de compilare a mesajelor"
 
-#: ../src/lib/List.pm:584
+#: ../src/lib/List.pm:587
 msgid "Digest maximum number of messages"
 msgstr ""
 
 # nlsref 15,4
-#: ../src/lib/List.pm:592
+#: ../src/lib/List.pm:595
 #, fuzzy
 msgid "Inclusions timeout for message distribution"
 msgstr "footer pentru mesaj"
 
-#: ../src/lib/List.pm:599
+#: ../src/lib/List.pm:602
 #, fuzzy
 msgid "Insert DKIM signature to messages sent to the list"
 msgstr "Trimitere mesaje   : %1"
 
-#: ../src/lib/List.pm:607
+#: ../src/lib/List.pm:610
 msgid ""
 "The categories of messages sent to the list that will be signed using DKIM."
 msgstr ""
 
-#: ../src/lib/List.pm:614
+#: ../src/lib/List.pm:617
 msgid "File path for list DKIM private key"
 msgstr ""
 
-#: ../src/lib/List.pm:622
+#: ../src/lib/List.pm:625
 msgid "Selector for DNS lookup of DKIM public key"
 msgstr ""
 
-#: ../src/lib/List.pm:651
+#: ../src/lib/List.pm:654
 #, fuzzy
 msgid "DKIM configuration"
 msgstr "Edit list config"
 
 # nlsref 16,27
-#: ../src/lib/List.pm:1161 ../src/lib/List.pm:657
+#: ../src/lib/List.pm:1164 ../src/lib/List.pm:660
 msgid "email address"
 msgstr "Adresa email"
 
 # nlsref 16,29
-#: ../src/lib/List.pm:1176 ../src/lib/List.pm:672
+#: ../src/lib/List.pm:1179 ../src/lib/List.pm:675
 msgid "name"
 msgstr "Nume"
 
 # nlsref 16,30
-#: ../src/lib/List.pm:1181 ../src/lib/List.pm:677
+#: ../src/lib/List.pm:1184 ../src/lib/List.pm:680
 msgid "private information"
 msgstr "Informatii private"
 
 # nlsref 16,88
-#: ../src/lib/List.pm:712
+#: ../src/lib/List.pm:715
 #, fuzzy
 msgid "Periodical subscription expiration task"
 msgstr "Preferinte disponibile"
 
 # nlsref 16,31
-#: ../src/lib/List.pm:723
+#: ../src/lib/List.pm:726
 msgid "Attachment type"
 msgstr "Tipul atasamentului"
 
 # nlsref 16,32
-#: ../src/lib/List.pm:727
+#: ../src/lib/List.pm:730
 msgid "Forced reply address"
 msgstr "Adresa fortata de raspuns"
 
 # nlsref 16,33
-#: ../src/lib/List.pm:733
+#: ../src/lib/List.pm:736
 msgid "Internet domain"
 msgstr "Domeniu internet"
 
 # nlsref 16,34
-#: ../src/lib/List.pm:739
+#: ../src/lib/List.pm:742
 msgid "File inclusion"
 msgstr "Includere fisier"
 
-#: ../src/lib/List.pm:743
+#: ../src/lib/List.pm:746
 msgid "data location URL"
 msgstr ""
 
 # nlsref 16,38
-#: ../src/lib/List.pm:1042 ../src/lib/List.pm:749 ../src/lib/List.pm:782
-#: ../src/lib/List.pm:863
+#: ../src/lib/List.pm:1045 ../src/lib/List.pm:752 ../src/lib/List.pm:785
+#: ../src/lib/List.pm:866
 msgid "remote user"
 msgstr "Remote user"
 
 # nlsref 16,39
-#: ../src/lib/List.pm:1047 ../src/lib/List.pm:756 ../src/lib/List.pm:788
-#: ../src/lib/List.pm:869
+#: ../src/lib/List.pm:1050 ../src/lib/List.pm:759 ../src/lib/List.pm:791
+#: ../src/lib/List.pm:872
 msgid "remote password"
 msgstr "Remote password"
 
 # nlsref 16,209
-#: ../src/lib/List.pm:1002 ../src/lib/List.pm:1061 ../src/lib/List.pm:761
-#: ../src/lib/List.pm:824 ../src/lib/List.pm:948
+#: ../src/lib/List.pm:1005 ../src/lib/List.pm:1064 ../src/lib/List.pm:764
+#: ../src/lib/List.pm:827 ../src/lib/List.pm:951
 msgid "short name for this source"
 msgstr ""
 
 # nlsref 16,34
-#: ../src/lib/List.pm:766
+#: ../src/lib/List.pm:769
 #, fuzzy
 msgid "Remote file inclusion"
 msgstr "Includere fisier"
 
 # nlsref 16,36
-#: ../src/lib/List.pm:1020 ../src/lib/List.pm:772 ../src/lib/List.pm:853
-#: ../src/lib/List.pm:980
+#: ../src/lib/List.pm:1023 ../src/lib/List.pm:775 ../src/lib/List.pm:856
+#: ../src/lib/List.pm:983
 msgid "remote host"
 msgstr "Remote host"
 
 # nlsref 16,37
-#: ../src/lib/List.pm:777 ../src/lib/List.pm:858 ../src/lib/List.pm:986
+#: ../src/lib/List.pm:780 ../src/lib/List.pm:861 ../src/lib/List.pm:989
 msgid "remote port"
 msgstr "Remote port"
 
 # nlsref 16,40
-#: ../src/lib/List.pm:792
+#: ../src/lib/List.pm:795
 msgid "suffix"
 msgstr "Sufix"
 
 # nlsref 16,41
-#: ../src/lib/List.pm:798
+#: ../src/lib/List.pm:801
 msgid "filter"
 msgstr "Filter"
 
 # nlsref 16,42
-#: ../src/lib/List.pm:804
+#: ../src/lib/List.pm:807
 msgid "extracted attribute"
 msgstr "Atribut extras"
 
 # nlsref 16,43
-#: ../src/lib/List.pm:809
+#: ../src/lib/List.pm:812
 msgid "selection (if multiple)"
 msgstr "Selectie (daca e multipla)"
 
 # nlsref 16,97
-#: ../src/lib/List.pm:814
+#: ../src/lib/List.pm:817
 msgid "search scope"
 msgstr "Scopul cautarii"
 
 # nlsref 16,98
-#: ../src/lib/List.pm:820
+#: ../src/lib/List.pm:823
 msgid "connection timeout"
 msgstr "Timeout conectare"
 
 # nlsref 16,35
-#: ../src/lib/List.pm:848
+#: ../src/lib/List.pm:851
 msgid "LDAP query inclusion"
 msgstr "Includere cerere LDAP"
 
 # nlsref 16,140
-#: ../src/lib/List.pm:873
+#: ../src/lib/List.pm:876
 msgid "first-level suffix"
 msgstr "Sufix la primul nivel"
 
 # nlsref 16,141
-#: ../src/lib/List.pm:879
+#: ../src/lib/List.pm:882
 msgid "first-level filter"
 msgstr "Filtru la primul nivel"
 
 # nlsref 16,142
-#: ../src/lib/List.pm:884
+#: ../src/lib/List.pm:887
 msgid "first-level extracted attribute"
 msgstr "Atribut extras la primul nivel"
 
 # nlsref 16,143
-#: ../src/lib/List.pm:889
+#: ../src/lib/List.pm:892
 msgid "first-level selection"
 msgstr "Selectie la primul nivel"
 
 # nlsref 16,197
-#: ../src/lib/List.pm:894
+#: ../src/lib/List.pm:897
 msgid "first-level search scope"
 msgstr "Scopul cautarii la primul nivel"
 
 # nlsref 16,198
-#: ../src/lib/List.pm:900
+#: ../src/lib/List.pm:903
 msgid "first-level connection timeout"
 msgstr "Timeout conectare la primul nivel"
 
 # nlsref 16,201
-#: ../src/lib/List.pm:906
+#: ../src/lib/List.pm:909
 msgid "first-level regular expression"
 msgstr "Primul nivel al unei expresii obisnuite"
 
 # nlsref 16,144
-#: ../src/lib/List.pm:910
+#: ../src/lib/List.pm:913
 msgid "second-level suffix template"
 msgstr "Suffix template la al doilea nivel"
 
 # nlsref 16,145
-#: ../src/lib/List.pm:916
+#: ../src/lib/List.pm:919
 msgid "second-level filter template"
 msgstr "Filter template la al doilea nivel"
 
 # nlsref 16,146
-#: ../src/lib/List.pm:922
+#: ../src/lib/List.pm:925
 msgid "second-level extracted attribute"
 msgstr "Atribut extras la al doilea nivel"
 
 # nlsref 16,147
-#: ../src/lib/List.pm:927
+#: ../src/lib/List.pm:930
 msgid "second-level selection"
 msgstr "Selectie la al doilea nivel"
 
 # nlsref 16,199
-#: ../src/lib/List.pm:932
+#: ../src/lib/List.pm:935
 msgid "second-level search scope"
 msgstr "Scopul cautarii la al doilea nivel"
 
 # nlsref 16,200
-#: ../src/lib/List.pm:938
+#: ../src/lib/List.pm:941
 msgid "second-level connection timeout"
 msgstr "Timeout conectare la al doilea nivel"
 
 # nlsref 16,202
-#: ../src/lib/List.pm:944
+#: ../src/lib/List.pm:947
 msgid "second-level regular expression"
 msgstr "Al doilea nivel al unei expresii obisnuite"
 
 # nlsref 16,135
-#: ../src/lib/List.pm:970
+#: ../src/lib/List.pm:973
 msgid "LDAP 2-level query inclusion"
 msgstr "Includere cerere LDAP de nivel 2"
 
 # nlsref 16,44
-#: ../src/lib/List.pm:975
+#: ../src/lib/List.pm:978
 msgid "List inclusion"
 msgstr "Includere lista"
 
 # nlsref 16,207
-#: ../src/lib/List.pm:992
+#: ../src/lib/List.pm:995
 msgid "remote path of sympa list dump"
 msgstr ""
 
 # nlsref 16,208
-#: ../src/lib/List.pm:997
+#: ../src/lib/List.pm:1000
 msgid "certificate for authentication by remote Sympa"
 msgstr ""
 
 # nlsref 16,206
-#: ../src/lib/List.pm:1009
+#: ../src/lib/List.pm:1012
 msgid "remote list inclusion"
 msgstr ""
 
 # nlsref 16,46
-#: ../src/lib/List.pm:1014
+#: ../src/lib/List.pm:1017
 msgid "database type"
 msgstr "Tipul bazei de date"
 
 # nlsref 16,46
-#: ../src/lib/List.pm:1024
+#: ../src/lib/List.pm:1027
 #, fuzzy
 msgid "database port"
 msgstr "Tipul bazei de date"
 
 # nlsref 16,48
-#: ../src/lib/List.pm:1029
+#: ../src/lib/List.pm:1032
 msgid "database name"
 msgstr "Numele bazei de date"
 
 # nlsref 16,94
-#: ../src/lib/List.pm:1033
+#: ../src/lib/List.pm:1036
 msgid "connection options"
 msgstr "Optiuni de conectare"
 
 # nlsref 16,148
-#: ../src/lib/List.pm:1038
+#: ../src/lib/List.pm:1041
 #, fuzzy
 msgid "environment variables for database connection"
 msgstr "Variabile de mediu pentru conectarea cu baza de date"
 
 # nlsref 16,51
-#: ../src/lib/List.pm:1053
+#: ../src/lib/List.pm:1056
 msgid "SQL query"
 msgstr "Cerere SQL"
 
-#: ../src/lib/List.pm:1057
+#: ../src/lib/List.pm:1060
 msgid "Directory where the database is stored (used for DBD::CSV only)"
 msgstr ""
 
 # nlsref 16,45
-#: ../src/lib/List.pm:1068
+#: ../src/lib/List.pm:1071
 msgid "SQL query inclusion"
 msgstr "Cerere includere SQL"
 
-#: ../src/lib/List.pm:1074
+#: ../src/lib/List.pm:1077
 #, fuzzy
 msgid "Notify subscribers when they are included from a data source?"
 msgstr "Esti de ja abonat in lista%1"
 
 # nlsref 16,53
-#: ../src/lib/List.pm:1078
+#: ../src/lib/List.pm:1081
 msgid "Who can view list information"
 msgstr "Cine poate vizualiza informatiile despre lisat"
 
 # nlsref 16,54
-#: ../src/lib/List.pm:1082
+#: ../src/lib/List.pm:1085
 msgid "Who can invite people"
 msgstr "Cine poate invita pe altii"
 
 # nlsref 16,55
-#: ../src/lib/List.pm:1088
+#: ../src/lib/List.pm:1091
 msgid "Language of the list"
 msgstr "Limba pentru lista"
 
-#: ../src/lib/List.pm:1113
+#: ../src/lib/List.pm:1116
 msgid "Regular expression applied to prevent loops with robots"
 msgstr ""
 
 # nlsref 16,56
-#: ../src/lib/List.pm:1120
+#: ../src/lib/List.pm:1123
 msgid "Maximum message size"
 msgstr "Marimea maxima a mesajului"
 
-#: ../src/lib/List.pm:1126
+#: ../src/lib/List.pm:1129
 #, fuzzy
 msgid "Message topic name"
 msgstr "Mesaje pentru moderare:"
 
-#: ../src/lib/List.pm:1131
+#: ../src/lib/List.pm:1134
 #, fuzzy
 msgid "Message topic keywords"
 msgstr "Reseteaza erorile\">"
 
-#: ../src/lib/List.pm:1137
+#: ../src/lib/List.pm:1140
 #, fuzzy
 msgid "Message topic title"
 msgstr "Mesaje pentru moderare:"
 
 # nlsref 16,74
-#: ../src/lib/List.pm:1142
+#: ../src/lib/List.pm:1145
 #, fuzzy
 msgid "Topics for message categorization"
 msgstr "Subiecte pentrlista"
 
-#: ../src/lib/List.pm:1148
+#: ../src/lib/List.pm:1151
 msgid "Defines to which part of messages topic keywords are applied"
 msgstr ""
 
 # nlsref 15,4
-#: ../src/lib/List.pm:1155
+#: ../src/lib/List.pm:1158
 #, fuzzy
 msgid "Message tagging"
 msgstr "footer pentru mesaj"
 
 # nlsref 16,62
-#: ../src/lib/List.pm:1186 ../src/lib/List.pm:1216
+#: ../src/lib/List.pm:1189 ../src/lib/List.pm:1219
 msgid "profile"
 msgstr "Profil"
 
 # nlsref 16,63
-#: ../src/lib/List.pm:1227
+#: ../src/lib/List.pm:1230
 msgid "Priority"
 msgstr "Prioritate"
 
-#: ../src/lib/List.pm:1233
+#: ../src/lib/List.pm:1236
 msgid "Reject mail from automates (crontab, etc)?"
 msgstr ""
 
 # nlsref 16,64
-#: ../src/lib/List.pm:1237
+#: ../src/lib/List.pm:1240
 msgid "Who can start a remind process"
 msgstr "Cine poate porni un proces de trimitere de mesaje de atentionare"
 
-#: ../src/lib/List.pm:1242
+#: ../src/lib/List.pm:1245
 msgid "Return-path of the REMIND command"
 msgstr ""
 
 # nlsref 16,66
-#: ../src/lib/List.pm:1266 ../src/lib/List.pm:1286
+#: ../src/lib/List.pm:1269 ../src/lib/List.pm:1289
 msgid "Reply address"
 msgstr "Adresa de raspuns"
 
 # nlsref 16,91
-#: ../src/lib/List.pm:1272
+#: ../src/lib/List.pm:1275
 msgid "value"
 msgstr "Valoare"
 
 # nlsref 16,92
-#: ../src/lib/List.pm:1277
+#: ../src/lib/List.pm:1280 ../src/lib/List.pm:1485
 msgid "other email address"
 msgstr "Alte adrese email"
 
 # nlsref 16,93
-#: ../src/lib/List.pm:1282
+#: ../src/lib/List.pm:1285
 msgid "respect of existing header field"
 msgstr "Respecta headerul campului existent"
 
 # nlsref 16,67
-#: ../src/lib/List.pm:1291
+#: ../src/lib/List.pm:1294
 msgid "Who can review subscribers"
 msgstr "Cine poate verifica abonatii"
 
 # nlsref 16,16
-#: ../src/lib/List.pm:1298
+#: ../src/lib/List.pm:1301
 #, fuzzy
 msgid "RFC 2369 Header fields"
 msgstr "Camp header"
 
 # nlsref 16,68
-#: ../src/lib/List.pm:1302
+#: ../src/lib/List.pm:1305
 msgid "Who can send messages"
 msgstr "Cine poate trimite mesaje"
 
 # nlsref 16,69
-#: ../src/lib/List.pm:1309
+#: ../src/lib/List.pm:1312
 msgid "Serial number of the config"
 msgstr "Numar de serie pentru config"
 
 # nlsref 16,86
-#: ../src/lib/List.pm:1314
+#: ../src/lib/List.pm:1317
 msgid "Who can view"
 msgstr "Cine poate vizualiza"
 
 # nlsref 16,87
-#: ../src/lib/List.pm:1318
+#: ../src/lib/List.pm:1321
 msgid "Who can edit"
 msgstr "Cine poate edita"
 
 # nlsref 16,203
-#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1437
+#: ../src/lib/List.pm:1328 ../src/lib/List.pm:1440
 msgid "quota"
 msgstr ""
 
-#: ../src/lib/List.pm:1334 ../src/lib/List.pm:1339
+#: ../src/lib/List.pm:1337 ../src/lib/List.pm:1342
 msgid "email address protection method"
 msgstr ""
 
 # nlsref 16,71
-#: ../src/lib/List.pm:1345
+#: ../src/lib/List.pm:1348
 msgid "Status of the list"
 msgstr "Statutul listei"
 
-#: ../src/lib/List.pm:1353
+#: ../src/lib/List.pm:1356
 msgid "Timeout for fetch of include_sql_query"
 msgstr ""
 
 # nlsref 16,72
-#: ../src/lib/List.pm:1359
+#: ../src/lib/List.pm:1362
 msgid "Subject of the list"
 msgstr "Subiectul listei"
 
 # nlsref 16,73
-#: ../src/lib/List.pm:1363
+#: ../src/lib/List.pm:1366
 msgid "Who can subscribe to the list"
 msgstr "Cine se poate abona la lista"
 
 # nlsref 16,74
-#: ../src/lib/List.pm:1369
+#: ../src/lib/List.pm:1372
 msgid "Topics for the list"
 msgstr "Subiecte pentrlista"
 
 # nlsref 16,75
-#: ../src/lib/List.pm:1376
+#: ../src/lib/List.pm:1379
 msgid "Inclusions timeout"
 msgstr "Timeout pentru includeri"
 
 # nlsref 16,76
-#: ../src/lib/List.pm:1380
+#: ../src/lib/List.pm:1383
 msgid "Who can unsubscribe"
 msgstr "Cine se poate dezabona"
 
 # nlsref 16,77
-#: ../src/lib/List.pm:1401
+#: ../src/lib/List.pm:1404
 msgid "Last update of config"
 msgstr "Ultima actualizare a config"
 
 # nlsref 16,81
-#: ../src/lib/List.pm:1407
+#: ../src/lib/List.pm:1410
 msgid "User data source"
 msgstr "Data sursa pentru utilizator"
 
-#: ../src/lib/List.pm:1414
+#: ../src/lib/List.pm:1417
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
 
 # nlsref 16,74
-#: ../src/lib/List.pm:1420
+#: ../src/lib/List.pm:1423
 #, fuzzy
 msgid "Allow message personnalization"
 msgstr "Subiecte pentrlista"
 
 # nlsref 16,82
-#: ../src/lib/List.pm:1426
+#: ../src/lib/List.pm:1429
 msgid "Visibility of the list"
 msgstr "Vizibilitatea listei"
 
-#: ../src/lib/List.pm:1442
+#: ../src/lib/List.pm:1445
 msgid "Maximum number of month archived"
 msgstr ""
 
 # nlsref 16,83
-#: ../src/lib/List.pm:1447
+#: ../src/lib/List.pm:1450
 msgid "Web archives"
 msgstr "Arhive WEB"
 
 # nlsref 16,85
-#: ../src/lib/List.pm:1453
+#: ../src/lib/List.pm:1456
 msgid "Welcome return-path"
 msgstr "Bun venit prin calea de returnare"
 
-#: ../src/lib/List.pm:1458
+#: ../src/lib/List.pm:1461
 msgid "percentage of list members in VERP mode"
 msgstr ""
 
-#: ../src/lib/List.pm:367 ../src/lib/List.pm:374
+#: ../src/lib/List.pm:370 ../src/lib/List.pm:377
 msgid "%"
 msgstr ""
 
-#: ../src/lib/List.pm:385 ../src/lib/List.pm:406
+#: ../src/lib/List.pm:388 ../src/lib/List.pm:409
 msgid "points"
 msgstr ""
 
 # nlsref 16,29
-#: ../src/lib/List.pm:518
+#: ../src/lib/List.pm:521
 #, fuzzy
 msgid "var name"
 msgstr "Nume"
 
 # nlsref 16,91
-#: ../src/lib/List.pm:523
+#: ../src/lib/List.pm:526
 #, fuzzy
 msgid "var value"
 msgstr "Valoare"
 
-#: ../src/lib/List.pm:582
+#: ../src/lib/List.pm:585
 #, fuzzy
 msgid "messages"
 msgstr "# mesaj"
 
-#: ../src/lib/List.pm:1351 ../src/lib/List.pm:1374 ../src/lib/List.pm:590
-#: ../src/lib/List.pm:819 ../src/lib/List.pm:899 ../src/lib/List.pm:937
+#: ../src/lib/List.pm:1354 ../src/lib/List.pm:1377 ../src/lib/List.pm:593
+#: ../src/lib/List.pm:822 ../src/lib/List.pm:902 ../src/lib/List.pm:940
 msgid "seconds"
 msgstr ""
 
-#: ../src/lib/List.pm:629
+#: ../src/lib/List.pm:632
 msgid "List of headers to be included ito the message for signature"
 msgstr ""
 
-#: ../src/lib/List.pm:637
+#: ../src/lib/List.pm:640
 msgid "DKIM \"d=\" tag, you should probably use the default value"
 msgstr ""
 
-#: ../src/lib/List.pm:644
+#: ../src/lib/List.pm:647
 msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
 msgstr ""
 
 # nlsref 16,81
-#: ../src/lib/List.pm:687
+#: ../src/lib/List.pm:690
 #, fuzzy
 msgid "the data source"
 msgstr "Data sursa pentru utilizator"
 
-#: ../src/lib/List.pm:692
+#: ../src/lib/List.pm:695
 #, fuzzy
 msgid "data source parameters"
 msgstr ""
 "Configurarea \n"
 "    surselor informatiilor"
 
-#: ../src/lib/List.pm:708
+#: ../src/lib/List.pm:711
 msgid "Moderators defined in an external data source"
 msgstr ""
 
-#: ../src/lib/List.pm:717
+#: ../src/lib/List.pm:720
 #, fuzzy
 msgid "Family name"
 msgstr "denumire lista"
 
-#: ../src/lib/List.pm:830 ../src/lib/List.pm:954
+#: ../src/lib/List.pm:833 ../src/lib/List.pm:957
 msgid "use SSL (LDAPS)"
 msgstr ""
 
 # nlsref 16,45
-#: ../src/lib/List.pm:835 ../src/lib/List.pm:959
+#: ../src/lib/List.pm:838 ../src/lib/List.pm:962
 #, fuzzy
 msgid "SSL version"
 msgstr "Cerere includere SQL"
 
-#: ../src/lib/List.pm:840 ../src/lib/List.pm:964
+#: ../src/lib/List.pm:843 ../src/lib/List.pm:967
 #, fuzzy
 msgid "SSL ciphers used"
 msgstr "Marime cheii de cifru utilizata"
 
-#: ../src/lib/List.pm:1097 ../src/lib/List.pm:1391
+#: ../src/lib/List.pm:1100 ../src/lib/List.pm:1394
 #, fuzzy
 msgid "date"
 msgstr "Actualizeaza\">"
 
 # nlsref 16,53
-#: ../src/lib/List.pm:1102
+#: ../src/lib/List.pm:1105
 #, fuzzy
 msgid "who ran the instantiation"
 msgstr "Cine poate vizualiza informatiile despre lisat"
 
-#: ../src/lib/List.pm:1106
+#: ../src/lib/List.pm:1109
 msgid "Latest family instantiation"
 msgstr ""
 
-#: ../src/lib/List.pm:1118
+#: ../src/lib/List.pm:1121
 #, fuzzy
 msgid "bytes"
 msgstr "Dezabonare de pe lista [% list.name %]"
 
 # nlsref 16,81
-#: ../src/lib/List.pm:1196
+#: ../src/lib/List.pm:1199
 #, fuzzy
 msgid "the datasource"
 msgstr "Data sursa pentru utilizator"
 
-#: ../src/lib/List.pm:1201
+#: ../src/lib/List.pm:1204
 #, fuzzy
 msgid "datasource parameters"
 msgstr ""
 "Configurarea \n"
 "    surselor informatiilor"
 
-#: ../src/lib/List.pm:1221
+#: ../src/lib/List.pm:1224
 msgid "Owners defined in an external data source"
 msgstr ""
 
 # nlsref 16,88
-#: ../src/lib/List.pm:1246
+#: ../src/lib/List.pm:1249
 #, fuzzy
 msgid "Periodical subscription reminder task"
 msgstr "Preferinte disponibile"
 
-#: ../src/lib/List.pm:1251
+#: ../src/lib/List.pm:1254
 msgid "Incoming SMTP header fields to be removed"
 msgstr ""
 
-#: ../src/lib/List.pm:1258
+#: ../src/lib/List.pm:1261
 msgid "Outgoing SMTP header fields to be removed"
 msgstr ""
 
-#: ../src/lib/List.pm:1324 ../src/lib/List.pm:1436
+#: ../src/lib/List.pm:1327 ../src/lib/List.pm:1439
 msgid "Kbytes"
 msgstr ""
 
 # nlsref 16,77
-#: ../src/lib/List.pm:1397
+#: ../src/lib/List.pm:1400
 #, fuzzy
 msgid "who updated the config"
 msgstr "Ultima actualizare a config"
 
+#: ../src/lib/List.pm:1471
+msgid "overwrite Reply-To: header field"
+msgstr ""
+
+# nlsref 16,93
+#: ../src/lib/List.pm:1472
+#, fuzzy
+msgid "preserve existing header field"
+msgstr "Respecta headerul campului existent"
+
+#: ../src/lib/List.pm:1488
+#, fuzzy
+msgid "subject field"
+msgstr "Subiect :"
+
+#: ../src/lib/List.pm:1489
+#, fuzzy
+msgid "message body"
+msgstr "mesaje"
+
+#: ../src/lib/List.pm:1490
+msgid "subject and body"
+msgstr ""
+
+#: ../src/lib/List.pm:1495
+msgid "do nothing"
+msgstr ""
+
+# nlsref 16,38
+#: ../src/lib/List.pm:1506
+#, fuzzy
+msgid "remove bouncing users"
+msgstr "Remote user"
+
+#: ../src/lib/List.pm:1507
+#, fuzzy
+msgid "send notify to bouncing users"
+msgstr "notifica proprietar"
+
+# nlsref 16,29
+#: ../src/lib/List.pm:1511
+#, fuzzy
+msgid "enabled"
+msgstr "Nume"
+
+#: ../src/lib/List.pm:1512
+msgid "disabled"
+msgstr ""
+
+#: ../src/lib/List.pm:1519
+msgid "first entry"
+msgstr ""
+
+# nlsref 16,201
+#: ../src/lib/List.pm:1522
+#, fuzzy
+msgid "entries matching regular expression"
+msgstr "Primul nivel al unei expresii obisnuite"
+
+#: ../src/lib/List.pm:1526
+#, fuzzy
+msgid "base"
+msgstr "Majuscule/minuscule"
+
+#: ../src/lib/List.pm:1527
+msgid "one level"
+msgstr ""
+
+#: ../src/lib/List.pm:1528
+#, fuzzy
+msgid "subtree"
+msgstr "Trimite\">"
+
+#: ../src/lib/List.pm:1531
+#, fuzzy
+msgid "yes"
+msgstr "Dezabonare de pe lista [% list.name %]"
+
+#: ../src/lib/List.pm:1532
+msgid "no"
+msgstr ""
+
+# nlsref 16,45
+#: ../src/lib/List.pm:1535
+#, fuzzy
+msgid "SSL version 2"
+msgstr "Cerere includere SQL"
+
+# nlsref 16,45
+#: ../src/lib/List.pm:1536
+#, fuzzy
+msgid "SSL version 3"
+msgstr "Cerere includere SQL"
+
+#: ../src/lib/List.pm:1537
+msgid "TLS"
+msgstr ""
+
+#: ../src/lib/List.pm:1541
+#, fuzzy
+msgid "receive notification email"
+msgstr "La autentificare("
+
+#: ../src/lib/List.pm:1542
+#, fuzzy
+msgid "no notifications"
+msgstr "La autentificare("
+
+#: ../src/lib/List.pm:1546
+#, fuzzy
+msgid "concealed from list menu"
+msgstr "Trebuie sa te autentifici"
+
+#: ../src/lib/List.pm:1547
+#, fuzzy
+msgid "listed on the list menu"
+msgstr ""
+"List has no \n"
+"subscriber"
+
+# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#: ../src/lib/List.pm:1550
+#, fuzzy
+msgid "bounce management"
+msgstr ""
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Management-ul mesajelor eronate (bounced)\n"
+"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Managementul mesajelor \n"
+"    bumerang"
+
+#: ../src/lib/List.pm:1553
+#, fuzzy
+msgid "privileged owner"
+msgstr "Privileged owner"
+
+#: ../src/lib/List.pm:1554
+#, fuzzy
+msgid "normal owner"
+msgstr "notifica proprietar"
+
+#: ../src/lib/List.pm:1557
+msgid "0 - highest priority"
+msgstr ""
+
+#: ../src/lib/List.pm:1558
+msgid "9 - lowest priority"
+msgstr ""
+
+#: ../src/lib/List.pm:1559
+#, fuzzy
+msgid "queue messages only"
+msgstr "Ultimele mesaje"
+
+#: ../src/lib/List.pm:1562
+msgid "replace @ characters"
+msgstr ""
+
+#: ../src/lib/List.pm:1563
+msgid "use JavaScript"
+msgstr ""
+
+# nlsref 15,6
+#: ../src/lib/List.pm:1566
+#, fuzzy
+msgid "required to post message"
+msgstr "mesaj de atentionare"
+
+# nlsref 16,68
+#: ../src/lib/List.pm:1568
+#, fuzzy
+msgid "required to distribute message"
+msgstr "Cine poate trimite mesaje"
+
+#: ../src/lib/List.pm:1571
+msgid "optional"
+msgstr ""
+
+#: ../src/lib/List.pm:1574
+#, fuzzy
+msgid "required"
+msgstr "mut"
+
+#: ../src/lib/List.pm:1577
+#, fuzzy
+msgid "string"
+msgstr "Trimite mai departe\">"
+
+#: ../src/lib/List.pm:1578
+msgid "multi-line text"
+msgstr ""
+
+#: ../src/lib/List.pm:1579
+#, fuzzy
+msgid "number"
+msgstr "Revizuire"
+
+#: ../src/lib/List.pm:1580
+#, fuzzy
+msgid "set of keywords"
+msgstr "Reseteaza erorile\">"
+
+#: ../src/lib/List.pm:1583
+msgid "add a new MIME part"
+msgstr ""
+
+#: ../src/lib/List.pm:1584
+#, fuzzy
+msgid "append to message body"
+msgstr "Numărul mesajelor conforme criteriului dv.: %1"
+
+#: ../src/lib/List.pm:1593
+msgid "RDBMS"
+msgstr ""
+
+#: ../src/lib/List.pm:1594
+msgid "include from local file"
+msgstr ""
+
+#: ../src/lib/List.pm:1595
+msgid "include from external source"
+msgstr ""
+
+# nlsref 16,81
+#: ../src/lib/List.pm:1596
+#, fuzzy
+msgid "general datasource"
+msgstr "Data sursa pentru utilizator"
+
+#: ../src/lib/List.pm:1599
+#, fuzzy
+msgid "help"
+msgstr "Ajutor"
+
+#: ../src/lib/List.pm:1600
+#, fuzzy
+msgid "subscription"
+msgstr "Dezabonare de pe lista :"
+
+#: ../src/lib/List.pm:1601
+#, fuzzy
+msgid "unsubscription"
+msgstr "Dezabonare de pe lista :"
+
+#: ../src/lib/List.pm:1602
+#, fuzzy
+msgid "posting address"
+msgstr "Adresa bumerang"
+
+# nlsref 16,4
+#: ../src/lib/List.pm:1603
+#, fuzzy
+msgid "list archive"
+msgstr "Arhive text"
+
+#: ../src/lib/List.pm:1607
+#, fuzzy
+msgid "authenticated by password"
+msgstr "Trimite-mi parola\">"
+
+# nlsref 6,74
+#: ../src/lib/List.pm:1609
+#, fuzzy
+msgid "authenticated by S/MIME signature"
+msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
+
+# nlsref 6,74
+#: ../src/lib/List.pm:1611
+#, fuzzy
+msgid "authenticated by DKIM signature"
+msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
+
+#: ../src/lib/List.pm:1612
+msgid "approved by editor"
+msgstr ""
+
+#: ../src/lib/List.pm:1613
+#, fuzzy
+msgid "any messages"
+msgstr "# mesaj"
+
+# nlsref 16,23
+#: ../src/lib/List.pm:1616
+#, fuzzy
+msgid "daily"
+msgstr "Zile"
+
+# nlsref 17,7
+#: ../src/lib/List.pm:1617
+#, fuzzy
+msgid "weekly"
+msgstr "1 saptamana"
+
+#: ../src/lib/List.pm:1618
+msgid "monthly"
+msgstr ""
+
+#: ../src/lib/List.pm:1619
+msgid "quarterly"
+msgstr ""
+
+#: ../src/lib/List.pm:1620
+msgid "yearly"
+msgstr ""
+
+#: ../src/lib/List.pm:1623
+msgid "use HTTP cookie"
+msgstr ""
+
+#: ../src/lib/List.pm:1626
+msgid "100% - always"
+msgstr ""
+
+#: ../src/lib/List.pm:1627
+msgid "0% - never"
+msgstr ""
+
+# nlsref 15,6
+#: ../src/lib/List.pm:1630
+#, fuzzy
+msgid "original messages"
+msgstr "mesaj de atentionare"
+
+#: ../src/lib/List.pm:1631
+#, fuzzy
+msgid "decrypted messages"
+msgstr "Ordonate dupa mesaje vechi"
+
+#: ../src/lib/List.pm:1636 ../wwsympa/wwslib.pm:31
+msgid "standard (direct reception)"
+msgstr ""
+
+#: ../src/lib/List.pm:1637 ../wwsympa/wwslib.pm:32
+msgid "digest MIME format"
+msgstr ""
+
+#: ../src/lib/List.pm:1638 ../wwsympa/wwslib.pm:33
+msgid "digest plain text format"
+msgstr ""
+
+# nlsref 15,12
+#: ../src/lib/List.pm:1639 ../wwsympa/wwslib.pm:34
+#, fuzzy
+msgid "summary mode"
+msgstr "mesaj de rezumare"
+
+#: ../src/lib/List.pm:1640 ../wwsympa/wwslib.pm:35
+#, fuzzy
+msgid "notice mode"
+msgstr "intregi"
+
+# nlsref 16,19
+#: ../src/lib/List.pm:1641 ../wwsympa/wwslib.pm:36
+#, fuzzy
+msgid "text-only mode"
+msgstr "Modalitate de primire"
+
+# nlsref 16,19
+#: ../src/lib/List.pm:1642 ../wwsympa/wwslib.pm:37
+#, fuzzy
+msgid "html-only mode"
+msgstr "Modalitate de primire"
+
+# nlsref 6,81
+#: ../src/lib/List.pm:1643 ../wwsympa/wwslib.pm:38
+#, fuzzy
+msgid "urlize mode"
+msgstr "Ghidul utilizatorului"
+
+#: ../src/lib/List.pm:1644
+#, fuzzy
+msgid "no mail"
+msgstr "Nomail"
+
+#: ../src/lib/List.pm:1645 ../wwsympa/wwslib.pm:40
+#, fuzzy
+msgid "you do not receive your own posts"
+msgstr "Pentru a primi parola:"
+
+#: ../src/lib/List.pm:1650 ../wwsympa/wwslib.pm:54
+msgid "listed in the list review page"
+msgstr ""
+
+#: ../src/lib/List.pm:1651 ../wwsympa/wwslib.pm:55
+msgid "concealed"
+msgstr ""
+
+# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,26
+#: ../src/lib/List.pm:1656
+#, fuzzy
+msgid "in operation"
+msgstr "Moderatori"
+
+#: ../src/lib/List.pm:1657
+msgid "list not yet activated"
+msgstr ""
+
+#: ../src/lib/List.pm:1658
+#, fuzzy
+msgid "erroneous configuration"
+msgstr "Edit list config"
+
+#: ../src/lib/List.pm:1659
+#, fuzzy
+msgid "closed family instance"
+msgstr ""
+"Liste \n"
+"      inchise"
+
+#: ../src/lib/List.pm:1660
+#, fuzzy
+msgid "closed list"
+msgstr ""
+"Liste \n"
+"      inchise"
+
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2890
+#: ../src/lib/List.pm:3101
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2891
+#: ../src/lib/List.pm:3102
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3082 ../src/lib/List.pm:3083 ../src/lib/List.pm:3087
-#: ../wwsympa/wwsympa.fcgi.in:11097 ../wwsympa/wwsympa.fcgi.in:11166
-#: ../wwsympa/wwsympa.fcgi.in:11368 ../wwsympa/wwsympa.fcgi.in:11715
-#: ../wwsympa/wwsympa.fcgi.in:15166 ../wwsympa/wwsympa.fcgi.in:15173
-#: ../wwsympa/wwsympa.fcgi.in:15887 ../wwsympa/wwsympa.fcgi.in:16681
-#: ../wwsympa/wwsympa.fcgi.in:16682 ../wwsympa/wwsympa.fcgi.in:4373
-#: ../wwsympa/wwsympa.fcgi.in:4426 ../wwsympa/wwsympa.fcgi.in:4447
-#: ../wwsympa/wwsympa.fcgi.in:4448 ../wwsympa/wwsympa.fcgi.in:5002
-#: ../wwsympa/wwsympa.fcgi.in:5003 ../wwsympa/wwsympa.fcgi.in:6595
-#: ../wwsympa/wwsympa.fcgi.in:7619 ../wwsympa/wwsympa.fcgi.in:8170
-#: ../wwsympa/wwsympa.fcgi.in:8217 ../wwsympa/wwsympa.fcgi.in:8219
-#: ../wwsympa/wwsympa.fcgi.in:8657 ../wwsympa/wwsympa.fcgi.in:8658
-#: ../wwsympa/wwsympa.fcgi.in:8692 ../wwsympa/wwsympa.fcgi.in:8693
-#: ../wwsympa/wwsympa.fcgi.in:8872 ../wwsympa/wwsympa.fcgi.in:8873
+#: ../src/lib/List.pm:3293 ../src/lib/List.pm:3294 ../src/lib/List.pm:3298
+#: ../wwsympa/wwsympa.fcgi.in:11212 ../wwsympa/wwsympa.fcgi.in:11281
+#: ../wwsympa/wwsympa.fcgi.in:11483 ../wwsympa/wwsympa.fcgi.in:11830
+#: ../wwsympa/wwsympa.fcgi.in:15281 ../wwsympa/wwsympa.fcgi.in:15288
+#: ../wwsympa/wwsympa.fcgi.in:16005 ../wwsympa/wwsympa.fcgi.in:16801
+#: ../wwsympa/wwsympa.fcgi.in:16802 ../wwsympa/wwsympa.fcgi.in:4430
+#: ../wwsympa/wwsympa.fcgi.in:4483 ../wwsympa/wwsympa.fcgi.in:4504
+#: ../wwsympa/wwsympa.fcgi.in:4505 ../wwsympa/wwsympa.fcgi.in:5060
+#: ../wwsympa/wwsympa.fcgi.in:5061 ../wwsympa/wwsympa.fcgi.in:6682
+#: ../wwsympa/wwsympa.fcgi.in:7706 ../wwsympa/wwsympa.fcgi.in:8257
+#: ../wwsympa/wwsympa.fcgi.in:8304 ../wwsympa/wwsympa.fcgi.in:8306
+#: ../wwsympa/wwsympa.fcgi.in:8742 ../wwsympa/wwsympa.fcgi.in:8743
+#: ../wwsympa/wwsympa.fcgi.in:8777 ../wwsympa/wwsympa.fcgi.in:8778
+#: ../wwsympa/wwsympa.fcgi.in:8957 ../wwsympa/wwsympa.fcgi.in:8958
 msgid "%d %b %Y"
 msgstr ""
-
-# nlsref 11,1
-#: ../src/lib/mail.pm:53
-#, fuzzy
-msgid ""
-"Your system does not conform to the POSIX P1003.1 standard, or\n"
-"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
-"library. You must modify the smtp.pm module in order to set a value\n"
-"for variable %s.\n"
-msgstr ""
-"Sistemul tau nu corespunde standardelor POSIX P1003.1, sau\n"
-"sistemul tau Perl nu defineste constanta _SC_ARG_MAX din clasa POSIX\n"
-". Trebuie sa modifici modulul smtp.pm pentru a putea atribui o valoare\n"
-"pentru variabila $max_arg.\n"
-
-# nlsref 11,2
-#: ../src/lib/mail.pm:836
-#, fuzzy
-msgid "Unable to create a channel in smtpto: %s"
-msgstr "Nu se poate crea un canal in smtpto: %m"
 
 # nlsref 5,4
 #: ../src/lib/PlainDigest.pm:179
@@ -10503,7 +10969,27 @@ msgstr ""
 msgid "[Image%s]"
 msgstr ""
 
-#: ../src/lib/tt2.pm:149
+# nlsref 11,1
+#: ../src/lib/mail.pm:56
+#, fuzzy
+msgid ""
+"Your system does not conform to the POSIX P1003.1 standard, or\n"
+"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
+"library. You must modify the smtp.pm module in order to set a value\n"
+"for variable %s.\n"
+msgstr ""
+"Sistemul tau nu corespunde standardelor POSIX P1003.1, sau\n"
+"sistemul tau Perl nu defineste constanta _SC_ARG_MAX din clasa POSIX\n"
+". Trebuie sa modifici modulul smtp.pm pentru a putea atribui o valoare\n"
+"pentru variabila $max_arg.\n"
+
+# nlsref 11,2
+#: ../src/lib/mail.pm:863
+#, fuzzy
+msgid "Unable to create a channel in smtpto: %s"
+msgstr "Nu se poate crea un canal in smtpto: %m"
+
+#: ../src/lib/tt2.pm:152
 #, fuzzy
 msgid "(unknown date)"
 msgstr ""
@@ -10512,237 +10998,256 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:1091
+#: ../wwsympa/wwsympa.fcgi.in:1077
 msgid "%H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/SympaSession.pm:659 ../wwsympa/SympaSession.pm:660
-#: ../wwsympa/wwsympa.fcgi.in:11949 ../wwsympa/wwsympa.fcgi.in:12082
-#: ../wwsympa/wwsympa.fcgi.in:14395 ../wwsympa/wwsympa.fcgi.in:8127
+#: ../wwsympa/SympaSession.pm:662 ../wwsympa/SympaSession.pm:663
+#: ../wwsympa/wwsympa.fcgi.in:12064 ../wwsympa/wwsympa.fcgi.in:12197
+#: ../wwsympa/wwsympa.fcgi.in:14510 ../wwsympa/wwsympa.fcgi.in:8214
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
+#: ../wwsympa/wwsympa.fcgi.in:9994
+#, fuzzy
+msgid "Unknown (%s)"
+msgstr "Necunoscut"
+
 # nlsref 6,18
-#: ../wwsympa/wwsympa.fcgi.in:15348
+#: ../wwsympa/wwsympa.fcgi.in:15463
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Inscrierea ta pe lista %s nu mai este valida  ."
 
-#: ../wwsympa/wwsympa.fcgi.in:15350
+#: ../wwsympa/wwsympa.fcgi.in:15465
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Ai cerut dezabonarea pe lista %1."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15354
+#: ../wwsympa/wwsympa.fcgi.in:15469
 #, fuzzy
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr "Cerere de dezabonare din lista %s"
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15356
+#: ../wwsympa/wwsympa.fcgi.in:15471
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Cerere de dezabonare din lista %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16263 ../wwsympa/wwsympa.fcgi.in:16264
+#: ../wwsympa/wwsympa.fcgi.in:16378 ../wwsympa/wwsympa.fcgi.in:16379
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
+#: ../wwsympa/wwsympa.fcgi.in:16807
+#, fuzzy
+msgid "topic (%s)"
+msgstr "Teme:"
+
 # nlsref 17,1
-#: ../wwsympa/wwslib.pm:40
+#: ../wwsympa/wwslib.pm:44
 msgid "session"
 msgstr "Sesiune"
 
 # nlsref 17,2
-#: ../wwsympa/wwslib.pm:41
+#: ../wwsympa/wwslib.pm:45
 msgid "10 minutes"
 msgstr "10 minute"
 
 # nlsref 17,3
-#: ../wwsympa/wwslib.pm:42
+#: ../wwsympa/wwslib.pm:46
 msgid "30 minutes"
 msgstr "30 minute"
 
 # nlsref 17,4
-#: ../wwsympa/wwslib.pm:43
+#: ../wwsympa/wwslib.pm:47
 msgid "1 hour"
 msgstr "1 ora"
 
 # nlsref 17,5
-#: ../wwsympa/wwslib.pm:44
+#: ../wwsympa/wwslib.pm:48
 msgid "6 hours"
 msgstr "6 ore"
 
 # nlsref 17,6
-#: ../wwsympa/wwslib.pm:45
+#: ../wwsympa/wwslib.pm:49
 msgid "1 day"
 msgstr "1 zi"
 
 # nlsref 17,7
-#: ../wwsympa/wwslib.pm:46
+#: ../wwsympa/wwslib.pm:50
 msgid "1 week"
 msgstr "1 saptamana"
 
 # nlsref 16,23
-#: ../wwsympa/wwslib.pm:47
+#: ../wwsympa/wwslib.pm:51
 #, fuzzy
 msgid "30 days"
 msgstr "Zile"
 
-#: ../wwsympa/wwslib.pm:49
-msgid "listed in the list review page"
-msgstr ""
-
-#: ../wwsympa/wwslib.pm:50
-msgid "concealed"
-msgstr ""
-
 # nlsref 15,1
-#: ../wwsympa/wwslib.pm:54
+#: ../wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "mesaj de bun venit"
 
 # nlsref 15,2
-#: ../wwsympa/wwslib.pm:55
+#: ../wwsympa/wwslib.pm:60
 #, fuzzy
 msgid "unsubscribe message"
 msgstr "mesaj de dezabonare"
 
 # nlsref 15,3
-#: ../wwsympa/wwslib.pm:56
+#: ../wwsympa/wwslib.pm:61
 msgid "deletion message"
 msgstr "mesaj de stergere"
 
 # nlsref 15,4
-#: ../wwsympa/wwslib.pm:57
+#: ../wwsympa/wwslib.pm:62
 msgid "message footer"
 msgstr "footer pentru mesaj"
 
 # nlsref 15,5
-#: ../wwsympa/wwslib.pm:58
+#: ../wwsympa/wwslib.pm:63
 msgid "message header"
 msgstr "header pentru mesaj"
 
 # nlsref 15,6
-#: ../wwsympa/wwslib.pm:59
+#: ../wwsympa/wwslib.pm:64
 msgid "remind message"
 msgstr "mesaj de atentionare"
 
 # nlsref 15,7
-#: ../wwsympa/wwslib.pm:60
+#: ../wwsympa/wwslib.pm:65
 msgid "editor rejection message"
 msgstr "mesaj de respingere din partea editorului"
 
 # nlsref 15,8
-#: ../wwsympa/wwslib.pm:61
+#: ../wwsympa/wwslib.pm:66
 msgid "subscribing invitation message"
 msgstr "mesaj de invitare la abonare"
 
 # nlsref 15,9
-#: ../wwsympa/wwslib.pm:62
+#: ../wwsympa/wwslib.pm:67
 msgid "help file"
 msgstr "fisier help"
 
 # nlsref 15,10
-#: ../wwsympa/wwslib.pm:63
+#: ../wwsympa/wwslib.pm:68
 msgid "directory of lists"
 msgstr "lista tuturor listelor"
 
 # nlsref 15,11
-#: ../wwsympa/wwslib.pm:64
+#: ../wwsympa/wwslib.pm:69
 msgid "global remind message"
 msgstr "mesaj global de avertizare"
 
 # nlsref 15,12
-#: ../wwsympa/wwslib.pm:65
+#: ../wwsympa/wwslib.pm:70
 msgid "summary message"
 msgstr "mesaj de rezumare"
 
 # nlsref 15,13
-#: ../wwsympa/wwslib.pm:66
+#: ../wwsympa/wwslib.pm:71
 msgid "list description"
 msgstr "descrierea listei"
 
 # nlsref 15,14
-#: ../wwsympa/wwslib.pm:67
+#: ../wwsympa/wwslib.pm:72
 msgid "list homepage"
 msgstr "lista homepage"
 
 # nlsref 15,15
-#: ../wwsympa/wwslib.pm:68
+#: ../wwsympa/wwslib.pm:73
 msgid "list creation request message"
 msgstr "mesaj de cerere a crearii unei noi liste"
 
 # nlsref 15,16
-#: ../wwsympa/wwslib.pm:69
+#: ../wwsympa/wwslib.pm:74
 msgid "list creation notification message"
 msgstr "mesaj de notificare a crearii unei noi liste"
 
 # nlsref 15,17
-#: ../wwsympa/wwslib.pm:70
+#: ../wwsympa/wwslib.pm:75
 msgid "virus infection message"
 msgstr "mesaj de infectare cu virus"
 
 # nlsref 15,18
-#: ../wwsympa/wwslib.pm:71
+#: ../wwsympa/wwslib.pm:76
 msgid "list aliases template"
 msgstr ""
 
-#: ../wwsympa/wwslib.pm:27
-msgid "standard (direct reception)"
-msgstr ""
-
-#: ../wwsympa/wwslib.pm:28
-msgid "digest MIME format"
-msgstr ""
-
-#: ../wwsympa/wwslib.pm:29
-msgid "digest plain text format"
-msgstr ""
-
-# nlsref 15,12
-#: ../wwsympa/wwslib.pm:30
-#, fuzzy
-msgid "summary mode"
-msgstr "mesaj de rezumare"
-
-#: ../wwsympa/wwslib.pm:31
-#, fuzzy
-msgid "notice mode"
-msgstr "intregi"
-
-# nlsref 16,19
-#: ../wwsympa/wwslib.pm:32
-#, fuzzy
-msgid "text-only mode"
-msgstr "Modalitate de primire"
-
-# nlsref 16,19
-#: ../wwsympa/wwslib.pm:33
-#, fuzzy
-msgid "html-only mode"
-msgstr "Modalitate de primire"
-
-# nlsref 6,81
-#: ../wwsympa/wwslib.pm:34
-#, fuzzy
-msgid "urlize mode"
-msgstr "Ghidul utilizatorului"
-
-#: ../wwsympa/wwslib.pm:35
+#: ../wwsympa/wwslib.pm:39
 msgid "no mail (useful for vacations)"
 msgstr ""
 
-#: ../wwsympa/wwslib.pm:36
+#: ../web_tt2/edit_template.tt2:8
+msgid "Path:"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:9
+msgid "Scope:"
+msgstr ""
+
+#. (robot)
+#: ../web_tt2/edit_template.tt2:13
+msgid ""
+"This template is default for all lists of robot %1 unless it is redefined "
+"for some particular list"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:15
+msgid ""
+"This template is default for all robots unless  it is redefined for some "
+"particular robot"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:19
+msgid ""
+"(This template is the default for all languages unless it is redefined for a "
+"specific language.)"
+msgstr ""
+
+#. (list,robot)
+#: ../web_tt2/view_template.tt2:12
 #, fuzzy
-msgid "you do not receive your own posts"
-msgstr "Pentru a primi parola:"
+msgid "( this template is defined for list %1@%2 )"
+msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
+
+#. (robot)
+#: ../web_tt2/view_template.tt2:15
+msgid ""
+"( this template is the default for all lists of robot %1 unless it is "
+"redefined for a specific list )"
+msgstr ""
+
+#: ../web_tt2/view_template.tt2:17
+msgid ""
+"( this template is the default used by all robots unless redefined for a "
+"specific robot )"
+msgstr ""
+
+#. (delegator,list.name,list.host)
+#: ../mail_tt2/user_notification.tt2:30
+msgid ""
+"You have been delegate the responsability of list owner by %1 for list %2@%3."
+msgstr ""
+
+#. (delegator,list.name,list.host)
+#: ../mail_tt2/user_notification.tt2:32
+msgid ""
+"You have been delegate the responsability of list moderator by %1 for list %"
+"2@%3."
+msgstr ""
+
+#: ../src/etc/mhonarc-ressources.tt2:469
+msgid "Reply to sender"
+msgstr ""
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
@@ -10809,11 +11314,6 @@ msgstr ""
 #. (k.name)
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "%1:"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:8 ../web_tt2/ls_templates.tt2:23
-#: ../web_tt2/view_template.tt2:9
-msgid "web"
 msgstr ""
 
 #: ../web_tt2/error.tt2:56
@@ -10911,10 +11411,6 @@ msgstr ""
 msgid "Show the exclusion table"
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:120
-msgid "Background color for the news area of the home page."
-msgstr ""
-
 #: ../web_tt2/stats.tt2:6
 msgid "This page displays overall informations regarding the list activity"
 msgstr ""
@@ -11002,14 +11498,6 @@ msgstr ""
 msgid "locked by %1 at %2"
 msgstr ""
 
-#: ../mail_tt2/command_report.tt2:123 ../mail_tt2/info_report.tt2:29
-msgid ", and "
-msgstr ""
-
-#: ../mail_tt2/command_report.tt2:125 ../mail_tt2/info_report.tt2:31
-msgid ", "
-msgstr ""
-
 #: ../mail_tt2/dsn.tt2:22
 msgid "Message was successfully delivered to following address:"
 msgstr ""
@@ -11048,10 +11536,6 @@ msgstr ""
 #. (crashed_process,pid)
 #: ../mail_tt2/listmaster_notification.tt2:63
 msgid "Previous process %1 (with pid %2) has died unexpectedly."
-msgstr ""
-
-#: ../mail_tt2/listmaster_notification.tt2:92
-msgid "Static CSS files have been updated.  Check log file for details."
 msgstr ""
 
 #. (listname,max_number_of_subscribers)
@@ -11094,30 +11578,6 @@ msgstr ""
 
 #: ../mail_tt2/modindex.tt2:10
 msgid "You can moderate them using the web interface:"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/review.tt2:2
-msgid "REVIEW %1"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:2
-msgid "STATS %1"
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:29
-msgid ""
-"You have been delegated the responsability of list owner by %1 for list %2@%"
-"3."
-msgstr ""
-
-#. (delegator,list.name,list.host)
-#: ../mail_tt2/user_notification.tt2:31
-msgid ""
-"You have been delegated the responsability of list moderator by %1 for list %"
-"2@%3."
 msgstr ""
 
 #: ../src/sympa_wizard.pl.in:265
@@ -11893,112 +12353,8 @@ msgid ""
 "request@<domain>"
 msgstr ""
 
-#: ../src/lib/List.pm:338
-msgid "overwrite Reply-To: header field"
-msgstr ""
-
-#: ../src/lib/List.pm:357
-msgid "subject and body"
-msgstr ""
-
-#: ../src/lib/List.pm:362
-msgid "do nothing"
-msgstr ""
-
-#: ../src/lib/List.pm:380
-msgid "disabled"
-msgstr ""
-
-#: ../src/lib/List.pm:387
-msgid "first entry"
-msgstr ""
-
-#: ../src/lib/List.pm:395
-msgid "one level"
-msgstr ""
-
-#: ../src/lib/List.pm:400
-msgid "no"
-msgstr ""
-
-#: ../src/lib/List.pm:405
-msgid "TLS"
-msgstr ""
-
-#: ../src/lib/List.pm:425
-msgid "0 - highest priority"
-msgstr ""
-
-#: ../src/lib/List.pm:426
-msgid "9 - lowest priority"
-msgstr ""
-
-#: ../src/lib/List.pm:430
-msgid "replace @ characters"
-msgstr ""
-
-#: ../src/lib/List.pm:431
-msgid "use JavaScript"
-msgstr ""
-
-#: ../src/lib/List.pm:439
-msgid "optional"
-msgstr ""
-
-#: ../src/lib/List.pm:446
-msgid "multi-line text"
-msgstr ""
-
-#: ../src/lib/List.pm:451
-msgid "add a new MIME part"
-msgstr ""
-
-#: ../src/lib/List.pm:461
-msgid "RDBMS"
-msgstr ""
-
-#: ../src/lib/List.pm:462
-msgid "include from local file"
-msgstr ""
-
-#: ../src/lib/List.pm:463
-msgid "include from external source"
-msgstr ""
-
-#: ../src/lib/List.pm:480
-msgid "approved by editor"
-msgstr ""
-
-#: ../src/lib/List.pm:486 ../wwsympa/wwslib.pm:79
-msgid "monthly"
-msgstr ""
-
-#: ../src/lib/List.pm:487
-msgid "quarterly"
-msgstr ""
-
-#: ../src/lib/List.pm:488
-msgid "yearly"
-msgstr ""
-
-#: ../src/lib/List.pm:491
-msgid "use HTTP cookie"
-msgstr ""
-
-#: ../src/lib/List.pm:494
-msgid "100% - always"
-msgstr ""
-
-#: ../src/lib/List.pm:495
-msgid "0% - never"
-msgstr ""
-
 #: ../src/lib/List.pm:502
 msgid "on demand"
-msgstr ""
-
-#: ../src/lib/List.pm:528
-msgid "list not yet activated"
 msgstr ""
 
 #: ../src/lib/List.pm:4909
@@ -12168,6 +12524,50 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "Name: "
+#~ msgstr "Nume :"
+
+#, fuzzy
+#~ msgid "Template name:"
+#~ msgstr "Templateuri"
+
+#, fuzzy
+#~ msgid "Type:"
+#~ msgstr "tip"
+
+#, fuzzy
+#~ msgid "This template is defined for list %1@%2"
+#~ msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
+
+#, fuzzy
+#~ msgid "language: "
+#~ msgstr "Limba"
+
+#, fuzzy
+#~ msgid "distrib"
+#~ msgstr "Trimite mai departe\">"
+
+# nlsref 6,90
+#, fuzzy
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr ""
+#~ "Lista %s permite doar aceste metode de primire a mesajelor: %s\n"
+#~ "Configuratia contului tau nu a fost modificata.\n"
+
+#~ msgid "Digest for list %1"
+#~ msgstr "Mesaje compilate pentru lista %1"
+
+#, fuzzy
+#~ msgid "to list"
+#~ msgstr ""
+#~ "Restore \n"
+#~ "  list"
+
+#, fuzzy
+#~ msgid "to both"
+#~ msgstr "De la: %1"
+
+#, fuzzy
 #~ msgid "More..."
 #~ msgstr "Sterge lista comuna"
 
@@ -12182,10 +12582,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Statistics"
 #~ msgstr "Statut : %1"
-
-#, fuzzy
-#~ msgid "Erroneous configuration"
-#~ msgstr "Edit list config"
 
 #, fuzzy
 #~ msgid "(edit)"
@@ -12225,14 +12621,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message templates"
 #~ msgstr "Mesaje pentru moderare:"
-
-#, fuzzy
-#~ msgid "(default)"
-#~ msgstr "default"
-
-#, fuzzy
-#~ msgid "mail"
-#~ msgstr "Nomail"
 
 #, fuzzy
 #~ msgid "Failed to include members"
@@ -12290,18 +12678,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Dou you really want to add %1?"
 #~ msgstr "Do you really want to delete %1 ?"
-
-#, fuzzy
-#~ msgid "System log"
-#~ msgstr "Templateuri"
-
-#, fuzzy
-#~ msgid "others"
-#~ msgstr "Others"
-
-#, fuzzy
-#~ msgid "all"
-#~ msgstr "toate"
 
 #, fuzzy
 #~ msgid "Administration Tasks"
@@ -12489,13 +12865,6 @@ msgstr ""
 #~ msgid "remove"
 #~ msgstr "denumire lista"
 
-# nlsref 6,90
-#, fuzzy
-#~ msgid "List %1 allows only these reception modes: "
-#~ msgstr ""
-#~ "Lista %s permite doar aceste metode de primire a mesajelor: %s\n"
-#~ "Configuratia contului tau nu a fost modificata.\n"
-
 #, fuzzy
 #~ msgid "%1 digest %2"
 #~ msgstr "% 1 Sinteza %2"
@@ -12557,10 +12926,6 @@ msgstr ""
 #~ msgstr "Previous page"
 
 #, fuzzy
-#~ msgid "CSS files have been updated"
-#~ msgstr "Fisierul de actualizare a fost actualizat"
-
-#, fuzzy
 #~ msgid "Limit of users count reached for list %1"
 #~ msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
 
@@ -12572,24 +12937,8 @@ msgstr ""
 #~ "AUTH %2 DEL %3 %4\n"
 
 #, fuzzy
-#~ msgid "Rejected mailing list %1 creation"
-#~ msgstr "%1 creare de lista"
-
-#, fuzzy
 #~ msgid "Your address (%1) has been removed from list %2@%3."
 #~ msgstr "Dezabonare de pe lista %1"
-
-#, fuzzy
-#~ msgid "Reply to"
-#~ msgstr "Modifica\">"
-
-#, fuzzy
-#~ msgid "sender"
-#~ msgstr "Expeditor"
-
-#, fuzzy
-#~ msgid "both"
-#~ msgstr "De la: %1"
 
 # nlsref 6,2
 #, fuzzy
@@ -12798,220 +13147,6 @@ msgstr ""
 #~ msgid "list members"
 #~ msgstr "Revizuire"
 
-# nlsref 16,93
-#, fuzzy
-#~ msgid "preserve existing header field"
-#~ msgstr "Respecta headerul campului existent"
-
-#, fuzzy
-#~ msgid "subject field"
-#~ msgstr "Subiect :"
-
-#, fuzzy
-#~ msgid "message body"
-#~ msgstr "mesaje"
-
-# nlsref 16,38
-#, fuzzy
-#~ msgid "remove bouncing users"
-#~ msgstr "Remote user"
-
-#, fuzzy
-#~ msgid "notify bouncing users"
-#~ msgstr "notifica proprietar"
-
-# nlsref 16,29
-#, fuzzy
-#~ msgid "enabled"
-#~ msgstr "Nume"
-
-# nlsref 16,201
-#, fuzzy
-#~ msgid "entries matching regular expression"
-#~ msgstr "Primul nivel al unei expresii obisnuite"
-
-#, fuzzy
-#~ msgid "base"
-#~ msgstr "Majuscule/minuscule"
-
-#, fuzzy
-#~ msgid "subtree"
-#~ msgstr "Trimite\">"
-
-#, fuzzy
-#~ msgid "yes"
-#~ msgstr "Dezabonare de pe lista [% list.name %]"
-
-# nlsref 16,45
-#, fuzzy
-#~ msgid "SSL version 2"
-#~ msgstr "Cerere includere SQL"
-
-# nlsref 16,45
-#, fuzzy
-#~ msgid "SSL version 3"
-#~ msgstr "Cerere includere SQL"
-
-#, fuzzy
-#~ msgid "receive notification email"
-#~ msgstr "La autentificare("
-
-#, fuzzy
-#~ msgid "no notifications"
-#~ msgstr "La autentificare("
-
-#, fuzzy
-#~ msgid "concealed from list menu"
-#~ msgstr "Trebuie sa te autentifici"
-
-#, fuzzy
-#~ msgid "listed on the list menu"
-#~ msgstr ""
-#~ "List has no \n"
-#~ "subscriber"
-
-# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,7
-#, fuzzy
-#~ msgid "bounce management"
-#~ msgstr ""
-#~ "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "Management-ul mesajelor eronate (bounced)\n"
-#~ "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-#~ "Managementul mesajelor \n"
-#~ "    bumerang"
-
-#, fuzzy
-#~ msgid "privileged owner"
-#~ msgstr "Privileged owner"
-
-#, fuzzy
-#~ msgid "normal owner"
-#~ msgstr "notifica proprietar"
-
-#, fuzzy
-#~ msgid "queue messages only"
-#~ msgstr "Ultimele mesaje"
-
-# nlsref 15,6
-#, fuzzy
-#~ msgid "required to post message"
-#~ msgstr "mesaj de atentionare"
-
-# nlsref 16,68
-#, fuzzy
-#~ msgid "required to distribute message"
-#~ msgstr "Cine poate trimite mesaje"
-
-#, fuzzy
-#~ msgid "required"
-#~ msgstr "mut"
-
-#, fuzzy
-#~ msgid "string"
-#~ msgstr "Trimite mai departe\">"
-
-#, fuzzy
-#~ msgid "number"
-#~ msgstr "Revizuire"
-
-#, fuzzy
-#~ msgid "set of keywords"
-#~ msgstr "Reseteaza erorile\">"
-
-#, fuzzy
-#~ msgid "append to message body"
-#~ msgstr "Numărul mesajelor conforme criteriului dv.: %1"
-
-# nlsref 16,81
-#, fuzzy
-#~ msgid "general datasource"
-#~ msgstr "Data sursa pentru utilizator"
-
-#, fuzzy
-#~ msgid "help"
-#~ msgstr "Ajutor"
-
-#, fuzzy
-#~ msgid "subscription"
-#~ msgstr "Dezabonare de pe lista :"
-
-#, fuzzy
-#~ msgid "unsubscription"
-#~ msgstr "Dezabonare de pe lista :"
-
-#, fuzzy
-#~ msgid "posting address"
-#~ msgstr "Adresa bumerang"
-
-# nlsref 16,4
-#, fuzzy
-#~ msgid "list archive"
-#~ msgstr "Arhive text"
-
-#, fuzzy
-#~ msgid "authenticated by password"
-#~ msgstr "Trimite-mi parola\">"
-
-# nlsref 6,74
-#, fuzzy
-#~ msgid "authenticated by S/MIME signature"
-#~ msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
-
-# nlsref 6,74
-#, fuzzy
-#~ msgid "authenticated by DKIM signature"
-#~ msgstr "Autentificare ceruta pentru %s pentru comanda %s\n"
-
-#, fuzzy
-#~ msgid "any messages"
-#~ msgstr "# mesaj"
-
-# nlsref 16,23
-#, fuzzy
-#~ msgid "daily"
-#~ msgstr "Zile"
-
-# nlsref 17,7
-#, fuzzy
-#~ msgid "weekly"
-#~ msgstr "1 saptamana"
-
-# nlsref 15,6
-#, fuzzy
-#~ msgid "original messages"
-#~ msgstr "mesaj de atentionare"
-
-#, fuzzy
-#~ msgid "decrypted messages"
-#~ msgstr "Ordonate dupa mesaje vechi"
-
-#, fuzzy
-#~ msgid "no mail"
-#~ msgstr "Nomail"
-
-# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,26
-#, fuzzy
-#~ msgid "in operation"
-#~ msgstr "Moderatori"
-
-#, fuzzy
-#~ msgid "erroneous configuration"
-#~ msgstr "Edit list config"
-
-#, fuzzy
-#~ msgid "closed family instance"
-#~ msgstr ""
-#~ "Liste \n"
-#~ "      inchise"
-
-#, fuzzy
-#~ msgid "closed list"
-#~ msgstr ""
-#~ "Liste \n"
-#~ "      inchise"
-
 #, fuzzy
 #~ msgid "Unknown parameter"
 #~ msgstr ""
@@ -13033,20 +13168,12 @@ msgstr ""
 #~ msgstr "%s libraria nu este disponibila: %m"
 
 #, fuzzy
-#~ msgid "Unknown (%s)"
-#~ msgstr "Necunoscut"
-
-#, fuzzy
 #~ msgid "Subscription additions"
 #~ msgstr "Optiunile abonatului"
 
 #, fuzzy
 #~ msgid "Unsubscription"
 #~ msgstr "Dezabonare de pe lista :"
-
-#, fuzzy
-#~ msgid "topic (%s)"
-#~ msgstr "Teme:"
 
 #, fuzzy
 #~ msgid "%1: unknown list"
@@ -14816,10 +14943,6 @@ msgstr ""
 #~ msgstr "Nomail"
 
 #, fuzzy
-#~ msgid " %1 / %2 "
-#~ msgstr "page %1 / %2"
-
-#, fuzzy
 #~ msgid "Table of content"
 #~ msgstr "Continut:"
 
@@ -14838,3 +14961,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "restricted to subscribers check smime signature"
 #~ msgstr "Sterge utilizatorii selectati\">"
+
+#, fuzzy
+#~ msgid "notify bouncing users"
+#~ msgstr "notifica proprietar"
+
+#, fuzzy
+#~ msgid " %1 / %2 "
+#~ msgstr "page %1 / %2"

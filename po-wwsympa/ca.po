@@ -4610,9 +4610,10 @@ msgstr "No puc iniciar sessió en la interfície web de la llista de correu"
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:15
+#, fuzzy
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>No teniu contrasenya</strong>. Per aconseguir la contrasenya, seguiu "

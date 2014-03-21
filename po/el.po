@@ -55,19 +55,19 @@ msgstr "Νέα RSS"
 msgid "You have logged in with email address %1"
 msgstr "Έχετε εισέλθει με την διεύθυνση %1"
 
-#: ../web_tt2/main.tt2:27
+#: ../web_tt2/main.tt2:29
 msgid "RSS Latest messages"
 msgstr "RSS Τελευταία μηνύματα"
 
-#: ../web_tt2/main.tt2:28
+#: ../web_tt2/main.tt2:30
 msgid "RSS Latest documents"
 msgstr "RSS Τελευταία έγγραφα"
 
-#: ../web_tt2/main.tt2:31 ../web_tt2/main.tt2:34
+#: ../web_tt2/main.tt2:33 ../web_tt2/main.tt2:36
 msgid "RSS Latest lists"
 msgstr "RSS Τελευταίες λίστες"
 
-#: ../web_tt2/main.tt2:32 ../web_tt2/main.tt2:35
+#: ../web_tt2/main.tt2:34 ../web_tt2/main.tt2:37
 msgid "RSS Active lists"
 msgstr "RSS Ενεργές λίστες"
 
@@ -101,7 +101,7 @@ msgstr "Αρχική"
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
-#: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
+#: ../web_tt2/reviewbouncing.tt2:4 ../web_tt2/suboptions.tt2:31
 #: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Βοήθεια"
@@ -118,7 +118,7 @@ msgstr "Διαχειριστής συστήματος"
 msgid "Privileged owner"
 msgstr "Προνομιούχος ιδιοκτήτης"
 
-#: ../src/lib/List.pm:1191 ../web_tt2/login_menu.tt2:15
+#: ../src/lib/List.pm:1194 ../web_tt2/login_menu.tt2:15
 msgid "Owner"
 msgstr "Ιδιοκτήτης"
 
@@ -151,7 +151,7 @@ msgstr "Διαχείριση συνδρομών"
 msgid "admin"
 msgstr "διαχείριση"
 
-#: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:77
+#: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:78
 #: ../web_tt2/your_lists.tt2:23
 msgid "No mailing list available."
 msgstr "Καμία συνδρομή"
@@ -217,7 +217,7 @@ msgstr "Αποστολή"
 msgid "RSS"
 msgstr "RSS"
 
-#: ../src/lib/List.pm:1329 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1332 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Κοινόχρηστα έγγραφα"
@@ -235,26 +235,31 @@ msgid "List not yet activated"
 msgstr "Ανενεργή λίστα"
 
 #: ../web_tt2/list_panel.tt2:11
+#, fuzzy
+msgid "Erroneous configuration"
+msgstr "Αρχείο διαμόρφωσης"
+
+#: ../web_tt2/list_panel.tt2:13
 msgid "Subscribers:"
 msgstr "Συνδρομητές:"
 
-#: ../web_tt2/list_panel.tt2:12
+#: ../web_tt2/list_panel.tt2:14
 msgid "Error rate:"
 msgstr "Δείκτης σφαλμάτων:"
 
-#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
+#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:15
 msgid "Owners"
 msgstr "Ιδιοκτήτες"
 
-#: ../src/lib/List.pm:682 ../web_tt2/list_panel.tt2:20
+#: ../src/lib/List.pm:685 ../web_tt2/list_panel.tt2:22
 msgid "Moderators"
 msgstr "Συντονιστές"
 
-#: ../web_tt2/list_panel.tt2:26
+#: ../web_tt2/list_panel.tt2:28
 msgid "Load certificate"
 msgstr "Φόρτωση πιστοποιητικού"
 
-#: ../web_tt2/list_panel.tt2:29 ../web_tt2/list_panel.tt2:31
+#: ../web_tt2/list_panel.tt2:31 ../web_tt2/list_panel.tt2:33
 msgid "Contact owners"
 msgstr "Επικοινωνία με ιδιοκτήτες"
 
@@ -477,7 +482,7 @@ msgstr "Προσθήκη συνδρομητών"
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
 #: ../web_tt2/exclusion_table.tt2:36 ../web_tt2/review.tt2:126
 #: ../web_tt2/review.tt2:159 ../web_tt2/review.tt2:77
-#: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
+#: ../web_tt2/reviewbouncing.tt2:128 ../web_tt2/search_user.tt2:57
 msgid "quiet"
 msgstr "αθόρυβα"
 
@@ -554,9 +559,9 @@ msgstr "Πηγή δεδομένων"
 msgid "Attribute optionnal/required"
 msgstr "Παράμετρος προαιρετική/απαραίτητη"
 
-#: ../web_tt2/arc_manage.tt2:4
-msgid "Archive Management"
-msgstr "Διαχείριση Αρχείου"
+#: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
+msgid "List archive"
+msgstr "Αρχείο λιστών"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
 #: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
@@ -572,10 +577,14 @@ msgstr "Διαχείριση Αρχείου"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
-#: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
+#: ../web_tt2/reviewbouncing.tt2:4 ../web_tt2/suboptions.tt2:30
 #: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: ../web_tt2/arc_manage.tt2:4
+msgid "Archive Management"
+msgstr "Διαχείριση Αρχείου"
 
 #: ../web_tt2/arc_manage.tt2:6
 msgid ""
@@ -615,20 +624,104 @@ msgstr ""
 "Το πλήκτρο αυτό έχει ως σκοπό την προστασία των αρχείων των λιστών από Spam "
 "Harvester."
 
-#: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
-msgid "List archive"
-msgstr "Αρχείο λιστών"
-
-#: ../web_tt2/arcsearch_form.tt2:4
-msgid "Advanced archive search"
-msgstr "Σύνθετη αναζήτηση"
+#: ../web_tt2/arcsearch.tt2:4
+msgid "Result of your search in the archive"
+msgstr "Αποτελέσματα αναζήτησης στο Αρχείο"
 
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
 msgid "Search field:"
 msgstr "Πεδίο Αναζήτησης:"
 
+#. (key_word)
+#: ../web_tt2/arcsearch.tt2:13
+msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
+msgstr ""
+"Οι παράμετροι της αναζήτησης σύμφωνα με τη λέξη-κλειδί <strong> &quot;%"
+"1&quot;</strong>"
+
+#: ../web_tt2/arcsearch.tt2:17
+msgid "(This sentence,"
+msgstr "(Αυτή η πρόταση,"
+
+#: ../web_tt2/arcsearch.tt2:19
+msgid "(All of these words,"
+msgstr "(Όλες οι λέξεις,"
+
+#: ../web_tt2/arcsearch.tt2:21
+msgid "(Each of these words,"
+msgstr "(Κάθε μία από τις λέξεις,"
+
+#: ../web_tt2/arcsearch.tt2:25
+msgid "case insensitive"
+msgstr "διάκριση πεζών-κεφαλαίων ανενεργή"
+
+#: ../web_tt2/arcsearch.tt2:27
+msgid "case sensitive"
+msgstr "διάκριση πεζών-κεφαλαίων ενεργή"
+
+#: ../web_tt2/arcsearch.tt2:31
+msgid "and checking on part of word)"
+msgstr "και έλεγχος σε μέρος της λέξης)"
+
+#: ../web_tt2/arcsearch.tt2:33
+msgid "and checking on entire word)"
+msgstr "και έλεγχος σε ολόκληρη τη λέξη)"
+
+#: ../web_tt2/arcsearch.tt2:41
+msgid "Newest messages first"
+msgstr "Πρώτα τα νεότερα μηνύματα"
+
+#: ../web_tt2/arcsearch.tt2:43
+msgid "Oldest messages first"
+msgstr "Πρώτα τα παλαιότερα μήνυματα"
+
+#. (body_count)
+#: ../web_tt2/arcsearch.tt2:77
+msgid "%1 hits on message Body"
+msgstr "%1 αποτελέσματα στο Σώμα του μηνύματος"
+
+#. (subj_count)
+#: ../web_tt2/arcsearch.tt2:81
+msgid "%1 hits on message Subject field"
+msgstr "%1 αποτελέσματα στο πεδίο Θέμα του μηνύματος"
+
+#. (from_count)
+#: ../web_tt2/arcsearch.tt2:85
+msgid " %1 hits on message From field"
+msgstr " %1 αποτελέσματα στο πεδίο μηνύματος Από"
+
+#. (date_count)
+#: ../web_tt2/arcsearch.tt2:89
+msgid "%1 hits on message Date field"
+msgstr "%1 αποτελέσματα στο πεδίο Ημερομηνία του μηνύματος"
+
+#: ../web_tt2/arcsearch.tt2:131
+msgid "Continue search"
+msgstr "Συνέχεια αναζήτησης"
+
+#: ../web_tt2/arcsearch.tt2:134
+msgid "New search"
+msgstr "Νέα αναζήτηση"
+
+#: ../web_tt2/arcsearch.tt2:139
+msgid ""
+"Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
+"Search</a></em>, search engine of MHonArc archives"
+msgstr ""
+"Βασισμένο σε <em><a href=\"http://www.mhonarc.org/contrib/marc-search/"
+"\">Marc-Search</a></em>, μηχανή αναζήτησης των αρχείων MHonArc"
+
+#. (archive_name)
+#: ../web_tt2/arcsearch.tt2:142
+msgid "Return to archive %1"
+msgstr "Επιστροφή στο αρχείο %1"
+
+#: ../web_tt2/arcsearch_form.tt2:4
+msgid "Advanced archive search"
+msgstr "Σύνθετη αναζήτηση"
+
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:92 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:92 ../web_tt2/reviewbouncing.tt2:14
 msgid "Search"
 msgstr "Αναζήτηση"
 
@@ -715,93 +808,27 @@ msgstr "Σώμα"
 msgid "Extend search field:"
 msgstr "Πεδίο εκτεταμένης αναζήτησης:"
 
-#: ../web_tt2/arcsearch.tt2:4
-msgid "Result of your search in the archive"
-msgstr "Αποτελέσματα αναζήτησης στο Αρχείο"
+#: ../web_tt2/auto_signoff.tt2:1
+msgid "Unsubscription request"
+msgstr "Αίτημα ακύρωσης συνδρομής"
 
-#. (key_word)
-#: ../web_tt2/arcsearch.tt2:13
-msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
-msgstr ""
-"Οι παράμετροι της αναζήτησης σύμφωνα με τη λέξη-κλειδί <strong> &quot;%"
-"1&quot;</strong>"
+#. (signing_off_email,list)
+#: ../web_tt2/auto_signoff.tt2:2
+msgid "You clicked a link to unsubscribe the address %1 from list %2."
+msgstr "Επιλέξατε να ακυρώσετε τη συνδρομή της διεύθυνσης %1 από τη λίστα %2"
 
-#: ../web_tt2/arcsearch.tt2:17
-msgid "(This sentence,"
-msgstr "(Αυτή η πρόταση,"
-
-#: ../web_tt2/arcsearch.tt2:19
-msgid "(All of these words,"
-msgstr "(Όλες οι λέξεις,"
-
-#: ../web_tt2/arcsearch.tt2:21
-msgid "(Each of these words,"
-msgstr "(Κάθε μία από τις λέξεις,"
-
-#: ../web_tt2/arcsearch.tt2:25
-msgid "case insensitive"
-msgstr "διάκριση πεζών-κεφαλαίων ανενεργή"
-
-#: ../web_tt2/arcsearch.tt2:27
-msgid "case sensitive"
-msgstr "διάκριση πεζών-κεφαλαίων ενεργή"
-
-#: ../web_tt2/arcsearch.tt2:31
-msgid "and checking on part of word)"
-msgstr "και έλεγχος σε μέρος της λέξης)"
-
-#: ../web_tt2/arcsearch.tt2:33
-msgid "and checking on entire word)"
-msgstr "και έλεγχος σε ολόκληρη τη λέξη)"
-
-#: ../web_tt2/arcsearch.tt2:41
-msgid "Newest messages first"
-msgstr "Πρώτα τα νεότερα μηνύματα"
-
-#: ../web_tt2/arcsearch.tt2:43
-msgid "Oldest messages first"
-msgstr "Πρώτα τα παλαιότερα μήνυματα"
-
-#. (body_count)
-#: ../web_tt2/arcsearch.tt2:77
-msgid "%1 hits on message Body"
-msgstr "%1 αποτελέσματα στο Σώμα του μηνύματος"
-
-#. (subj_count)
-#: ../web_tt2/arcsearch.tt2:81
-msgid "%1 hits on message Subject field"
-msgstr "%1 αποτελέσματα στο πεδίο Θέμα του μηνύματος"
-
-#. (from_count)
-#: ../web_tt2/arcsearch.tt2:85
-msgid " %1 hits on message From field"
-msgstr " %1 αποτελέσματα στο πεδίο μηνύματος Από"
-
-#. (date_count)
-#: ../web_tt2/arcsearch.tt2:89
-msgid "%1 hits on message Date field"
-msgstr "%1 αποτελέσματα στο πεδίο Ημερομηνία του μηνύματος"
-
-#: ../web_tt2/arcsearch.tt2:131
-msgid "Continue search"
-msgstr "Συνέχεια αναζήτησης"
-
-#: ../web_tt2/arcsearch.tt2:134
-msgid "New search"
-msgstr "Νέα αναζήτηση"
-
-#: ../web_tt2/arcsearch.tt2:139
+#. (list)
+#: ../web_tt2/auto_signoff.tt2:3
 msgid ""
-"Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
-"Search</a></em>, search engine of MHonArc archives"
+"A confirmation was just sent to this address. By clicking the link it "
+"contains, you will be definitively unsubscribed from list %1"
 msgstr ""
-"Βασισμένο σε <em><a href=\"http://www.mhonarc.org/contrib/marc-search/"
-"\">Marc-Search</a></em>, μηχανή αναζήτησης των αρχείων MHonArc"
+"Έχει σταλεί μήνυμα επιβεβαίωσης σε αυτή τη διεύθυνση. Ακολουθώντας τον "
+"σύνδεσμο που περιέχει, θα διαγράψετε τη συνδρομή σας από τη λίστα %1"
 
-#. (archive_name)
-#: ../web_tt2/arcsearch.tt2:142
-msgid "Return to archive %1"
-msgstr "Επιστροφή στο αρχείο %1"
+#: ../web_tt2/automatic_lists.tt2:3
+msgid "Automatic lists result"
+msgstr " Αποτέλεσμα αυτόματων λιστών"
 
 #: ../web_tt2/automatic_lists_management_request.tt2:3
 msgid "Automatic lists management"
@@ -824,28 +851,6 @@ msgstr ""
 #: ../web_tt2/automatic_lists_request.tt2:13
 msgid "Go to list"
 msgstr "Πήγαινε στη λίστα"
-
-#: ../web_tt2/automatic_lists.tt2:3
-msgid "Automatic lists result"
-msgstr " Αποτέλεσμα αυτόματων λιστών"
-
-#: ../web_tt2/auto_signoff.tt2:1
-msgid "Unsubscription request"
-msgstr "Αίτημα ακύρωσης συνδρομής"
-
-#. (signing_off_email,list)
-#: ../web_tt2/auto_signoff.tt2:2
-msgid "You clicked a link to unsubscribe the address %1 from list %2."
-msgstr "Επιλέξατε να ακυρώσετε τη συνδρομή της διεύθυνσης %1 από τη λίστα %2"
-
-#. (list)
-#: ../web_tt2/auto_signoff.tt2:3
-msgid ""
-"A confirmation was just sent to this address. By clicking the link it "
-"contains, you will be definitively unsubscribed from list %1"
-msgstr ""
-"Έχει σταλεί μήνυμα επιβεβαίωσης σε αυτή τη διεύθυνση. Ακολουθώντας τον "
-"σύνδεσμο που περιέχει, θα διαγράψετε τη συνδρομή σας από τη λίστα %1"
 
 #: ../web_tt2/blacklist.tt2:4
 msgid "Blacklist management"
@@ -896,13 +901,25 @@ msgid "The current blacklist contains %1 line(s)"
 msgstr "Η τρέχουσα μαύρη λίστα περιέχει %1 γραμμές"
 
 #: ../web_tt2/blacklist.tt2:38 ../web_tt2/dump_scenario.tt2:37
-#: ../web_tt2/edit_template.tt2:36
+#: ../web_tt2/edit_template.tt2:48
 msgid "save"
 msgstr "αποθήκευση"
 
-#: ../web_tt2/blacklist.tt2:40 ../web_tt2/edit_template.tt2:39
+#: ../web_tt2/blacklist.tt2:40 ../web_tt2/edit_template.tt2:51
 msgid "Template saved"
 msgstr "Το πρότυπο αποθηκεύτηκε"
+
+#: ../web_tt2/change_email.tt2:3
+msgid "You will receive a n email, with a confirmation link."
+msgstr "Θα λάβετε ένα μήνυμα με το σύνδεσμο επιβεβαίωσης."
+
+#: ../web_tt2/change_email.tt2:4
+msgid ""
+"To confirm your email address change, go to your email account and click on "
+"the provided link"
+msgstr ""
+"Για να επιβεβαιώσετε την αλλαγή της ηλεκτρονικής σας διεύθυνσης,πηγαίνετε "
+"στο λογαριασμό σας και πατήστε το σύνδεσμο που σας έχει σταλεί."
 
 #: ../web_tt2/change_email_request.tt2:3
 msgid ""
@@ -922,18 +939,6 @@ msgstr "Σας στείλαμε ένα μήνυμα στην διεύθυνση 
 #: ../web_tt2/change_email_request.tt2:5
 msgid "You shoukd check your mailbox now."
 msgstr "Παρακαλώ ελέγξτε το γραμματοκιβώτιό σας."
-
-#: ../web_tt2/change_email.tt2:3
-msgid "You will receive a n email, with a confirmation link."
-msgstr "Θα λάβετε ένα μήνυμα με το σύνδεσμο επιβεβαίωσης."
-
-#: ../web_tt2/change_email.tt2:4
-msgid ""
-"To confirm your email address change, go to your email account and click on "
-"the provided link"
-msgstr ""
-"Για να επιβεβαιώσετε την αλλαγή της ηλεκτρονικής σας διεύθυνσης,πηγαίνετε "
-"στο λογαριασμό σας και πατήστε το σύνδεσμο που σας έχει σταλεί."
 
 #: ../web_tt2/choosepasswd.tt2:4
 msgid ""
@@ -1017,37 +1022,37 @@ msgid "Please select one or more topic(s) that corresponds to your message:"
 msgstr ""
 "Παρακαλώ επιλέξτε ένα ή περισσότερα θέματα που ταιριάζουν στο μήνυμά σας:"
 
-#: ../web_tt2/compose_mail.tt2:64
+#: ../web_tt2/compose_mail.tt2:66
 msgid "Messages customization: use the template syntax:"
 msgstr "Προσαρμογή μηνύματος: χρησιμοποιήστε την σύνταξη του προτύπου:"
 
-#: ../web_tt2/compose_mail.tt2:65
+#: ../web_tt2/compose_mail.tt2:67
 msgid "Below are some examples of TT2 parameters usable in messages."
 msgstr ""
 "Ακολουθούν μερικά παραδείγματα παραμέτρων TT2 που μπορούν να χρησιμοποιηθούν "
 "στα μηνύματα."
 
-#: ../web_tt2/compose_mail.tt2:67
+#: ../web_tt2/compose_mail.tt2:69
 msgid ": the listname; always available."
 msgstr ": όνομα λίστας; πάντα διαθέσιμο."
 
-#: ../web_tt2/compose_mail.tt2:68
+#: ../web_tt2/compose_mail.tt2:70
 msgid ": the name of the host the list is intalled on; always available."
 msgstr ": όνομα εξυπηρετητή λίστας; πάντα διαθέσιμο."
 
-#: ../web_tt2/compose_mail.tt2:69
+#: ../web_tt2/compose_mail.tt2:71
 msgid ": the user email; always available."
 msgstr ": διεύθυνση αλληλογραφίας χρήστη; πάντα διαθέσιμο."
 
-#: ../web_tt2/compose_mail.tt2:70
+#: ../web_tt2/compose_mail.tt2:72
 msgid ": the user name associated to her email; always available."
 msgstr ": συνδεδεμένο όνομα χρήστη της διεύθυνσης; πάντα διαθέσιμο."
 
-#: ../web_tt2/compose_mail.tt2:71
+#: ../web_tt2/compose_mail.tt2:73
 msgid ": the - human readable - user's subscription date; always available."
 msgstr ": ημερομηνία εγγραφής συνδρομητή; πάντα διαθέσιμο."
 
-#: ../web_tt2/compose_mail.tt2:72
+#: ../web_tt2/compose_mail.tt2:74
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"title\" (see the list configuration, section \"Miscellaneous\")."
@@ -1056,7 +1061,7 @@ msgstr ""
 "παράμετρο με όνομα \"title\" (δείτε την διαμόρφωση της λίστας, ενότητα "
 "\"Διάφορα\")."
 
-#: ../web_tt2/compose_mail.tt2:73
+#: ../web_tt2/compose_mail.tt2:75
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"name\"."
@@ -1064,7 +1069,7 @@ msgstr ""
 ": μπορεί να είναι οτιδήποτε θελήσετε; διαθέσιμο εάν έχετε ορίσει δική σας "
 "παράμετρο με όνομα \"name\"."
 
-#: ../web_tt2/compose_mail.tt2:74
+#: ../web_tt2/compose_mail.tt2:76
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"organization\"."
@@ -1072,7 +1077,7 @@ msgstr ""
 ": μπορεί να είναι οτιδήποτε θελήσετε; διαθέσιμο εάν έχετε ορίσει δική σας "
 "παράμετρο με όνομα \"organization\"."
 
-#: ../web_tt2/compose_mail.tt2:78
+#: ../web_tt2/compose_mail.tt2:81
 msgid "URL:"
 msgstr "URL:"
 
@@ -1084,51 +1089,134 @@ msgstr "Αντιγραφή προτύπου"
 msgid "Input template"
 msgstr "Πρότυπο εισαγωγής"
 
-#: ../web_tt2/copy_template.tt2:8
-msgid "Name: "
-msgstr "Όνομα: "
+#: ../web_tt2/copy_template.tt2:8 ../web_tt2/edit_template.tt2:6
+#: ../web_tt2/view_template.tt2:7
+msgid "Template name: "
+msgstr "Όνομα προτύπου: "
 
-#: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:17
-#: ../web_tt2/copy_template.tt2:9 ../web_tt2/view_template.tt2:10
+#: ../web_tt2/copy_template.tt2:35 ../web_tt2/copy_template.tt2:9
+#: ../web_tt2/edit_template.tt2:13 ../web_tt2/view_template.tt2:14
 msgid "Scope: "
 msgstr "Έκταση: "
 
-#: ../web_tt2/copy_template.tt2:11 ../web_tt2/copy_template.tt2:23
-msgid "Language: "
-msgstr "Γλώσσα: "
-
-#: ../web_tt2/copy_template.tt2:15
-msgid "Output template"
-msgstr "Πρότυπο παραγωγής"
-
-#: ../web_tt2/copy_template.tt2:16
-msgid "New template name: "
-msgstr "Νέο όνομα προτύπου: "
-
-#: ../web_tt2/copy_template.tt2:19 ../web_tt2/ls_templates.tt2:41
-msgid "site"
-msgstr "ιστότοπος"
-
-#: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42
-#: ../web_tt2/show_sessions.tt2:3
-msgid "robot"
-msgstr "μηχανή"
-
-#: ../web_tt2/copy_template.tt2:21 ../web_tt2/search_user.tt2:9
-msgid "list"
-msgstr "λίστα"
-
-#: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_list_request.tt2:410
+#: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:23
+#: ../web_tt2/copy_template.tt2:43 ../web_tt2/edit_list_request.tt2:438
+#: ../web_tt2/edit_template.tt2:25 ../web_tt2/ls_templates.tt2:40
+#: ../web_tt2/skinsedit.tt2:84 ../web_tt2/view_template.tt2:16
+#: ../web_tt2/view_template.tt2:28
 msgid "default"
 msgstr "προεπιλογή"
 
-#: ../web_tt2/copy_template.tt2:31
+#: ../web_tt2/copy_template.tt2:11 ../web_tt2/view_template.tt2:17
+#, fuzzy
+msgid "(this template is the default included in the distribution)"
+msgstr ""
+"(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός αν "
+"έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
+
+#: ../web_tt2/copy_template.tt2:12 ../web_tt2/copy_template.tt2:37
+#: ../web_tt2/edit_template.tt2:15 ../web_tt2/ls_templates.tt2:41
+#: ../web_tt2/view_template.tt2:18
+msgid "site"
+msgstr "ιστότοπος"
+
+#: ../web_tt2/copy_template.tt2:13 ../web_tt2/edit_template.tt2:16
+#: ../web_tt2/view_template.tt2:19
+#, fuzzy
+msgid ""
+"(this template is the default used by all robots unless redefined for a "
+"specific robot)"
+msgstr ""
+"(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός αν "
+"έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
+
+#: ../src/lib/List.pm:1515 ../web_tt2/copy_template.tt2:14
+#: ../web_tt2/copy_template.tt2:38 ../web_tt2/edit_template.tt2:17
+#: ../web_tt2/ls_templates.tt2:42 ../web_tt2/show_sessions.tt2:3
+#: ../web_tt2/view_template.tt2:20
+msgid "robot"
+msgstr "μηχανή"
+
+#. (robot)
+#: ../web_tt2/copy_template.tt2:15 ../web_tt2/edit_template.tt2:18
+#: ../web_tt2/view_template.tt2:21
+#, fuzzy
+msgid ""
+"(this template is the default for all lists of robot %1 unless it is "
+"redefined for a specific list)"
+msgstr ""
+"( αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις λίστες του εξυπηρετητή "
+"%1 εκτός εάν έχει οριστεί αλλιώς για συγκεκριμένη λίστα )"
+
+#: ../src/etc/mhonarc-ressources.tt2:481 ../src/lib/List.pm:1478
+#: ../web_tt2/copy_template.tt2:16 ../web_tt2/copy_template.tt2:39
+#: ../web_tt2/edit_template.tt2:19 ../web_tt2/search_user.tt2:10
+#: ../web_tt2/view_template.tt2:22
+msgid "list"
+msgstr "λίστα"
+
+#. (list,robot)
+#: ../web_tt2/copy_template.tt2:17 ../web_tt2/edit_template.tt2:20
+#: ../web_tt2/view_template.tt2:23
+#, fuzzy
+msgid "(this template is defined for list %1@%2)"
+msgstr "( αυτό το πρότυπο ορίστηκε για τη λίστα %1@%2 )"
+
+#: ../web_tt2/copy_template.tt2:21 ../web_tt2/copy_template.tt2:41
+#: ../web_tt2/edit_template.tt2:23 ../web_tt2/view_template.tt2:26
+msgid "Language: "
+msgstr "Γλώσσα: "
+
+#: ../web_tt2/copy_template.tt2:24 ../web_tt2/edit_template.tt2:26
+#: ../web_tt2/view_template.tt2:29
+#, fuzzy
+msgid ""
+"(This template is the default for all languages unless it is redefined for a "
+"specific language)"
+msgstr ""
+"(Αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις γλώσσες εκτός εάν "
+"οριστεί διαφορετικά για συγκεκριμένη γλώσσα.)"
+
+#: ../web_tt2/copy_template.tt2:33
+msgid "Output template"
+msgstr "Πρότυπο παραγωγής"
+
+#: ../web_tt2/copy_template.tt2:34
+msgid "New template name: "
+msgstr "Νέο όνομα προτύπου: "
+
+#: ../web_tt2/copy_template.tt2:49
 msgid "Enter list name: "
 msgstr "Εισάγετε όνομα λίστας: "
 
-#: ../web_tt2/copy_template.tt2:43 ../web_tt2/d_properties.tt2:36
+#: ../web_tt2/copy_template.tt2:61 ../web_tt2/d_properties.tt2:36
 msgid "Apply"
 msgstr "Εφαρμογή"
+
+#: ../web_tt2/create_list.tt2:6
+msgid "Your list is created."
+msgstr "Η λίστα σας δημιουργήθηκε."
+
+#: ../web_tt2/create_list.tt2:7
+msgid "You can configure it via the admin button beside."
+msgstr ""
+"Μπορείτε να την διαχειριστείτε πατώντας στο κουμπί διαχείρισης στο διπλανό "
+"μενού."
+
+#: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
+msgid "Aliases have been installed."
+msgstr "Τα παρωνύμια έχουν εγκατασταθεί."
+
+#: ../web_tt2/create_list.tt2:15
+msgid ""
+"Your list creation request is registered. You can now  modify its\n"
+"configuration using the admin button but the list will be unusable until the "
+"listmaster validates it."
+msgstr ""
+"Το αίτημα δημιουργίας λίστας καταχωρήθηκε. Μπορείτε να διαχειριστείτε τη "
+"λίστα σας και να αλλάξετε τη διαμόρφωσή της από το κουμπί διαχείρισης, αλλά "
+"η λίστα δεν θα ενεργοποιηθεί εάν δεν την εγκρίνει πρώτα ο διαχειριστής της "
+"υπηρεσίας."
 
 #: ../web_tt2/create_list_request.tt2:6 ../web_tt2/nav.tt2:5
 msgid "Copy an existing list."
@@ -1235,31 +1323,6 @@ msgstr "Περιγραφή:"
 msgid "Submit your creation request"
 msgstr "Υποβολή αίτησης δημιουργίας"
 
-#: ../web_tt2/create_list.tt2:6
-msgid "Your list is created."
-msgstr "Η λίστα σας δημιουργήθηκε."
-
-#: ../web_tt2/create_list.tt2:7
-msgid "You can configure it via the admin button beside."
-msgstr ""
-"Μπορείτε να την διαχειριστείτε πατώντας στο κουμπί διαχείρισης στο διπλανό "
-"μενού."
-
-#: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
-msgid "Aliases have been installed."
-msgstr "Τα παρωνύμια έχουν εγκατασταθεί."
-
-#: ../web_tt2/create_list.tt2:15
-msgid ""
-"Your list creation request is registered. You can now  modify its\n"
-"configuration using the admin button but the list will be unusable until the "
-"listmaster validates it."
-msgstr ""
-"Το αίτημα δημιουργίας λίστας καταχωρήθηκε. Μπορείτε να διαχειριστείτε τη "
-"λίστα σας και να αλλάξετε τη διαμόρφωσή της από το κουμπί διαχείρισης, αλλά "
-"η λίστα δεν θα ενεργοποιηθεί εάν δεν την εγκρίνει πρώτα ο διαχειριστής της "
-"υπηρεσίας."
-
 #: ../web_tt2/d_control.tt2:3 ../web_tt2/d_editfile.tt2:6
 #: ../web_tt2/d_properties.tt2:3 ../web_tt2/d_read.tt2:7
 msgid "Up to higher level directory"
@@ -1330,8 +1393,8 @@ msgstr "URL Σελιδοδείκτη"
 msgid "Replace the file %1 with your file"
 msgstr "Αντικατάσταση του αρχείου %1 με το αρχείο σας"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:421
-#: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:449
+#: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:75
 msgid "Update"
 msgstr "Ανανέωση"
 
@@ -1422,7 +1485,7 @@ msgstr "Επιθυμείτε τη διαγραφή του(της) %1;"
 
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
-#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:55
+#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:56
 msgid "delete"
 msgstr "διαγραφή"
 
@@ -1504,8 +1567,8 @@ msgid "to moderate"
 msgstr "για συντονισμό"
 
 #: ../web_tt2/d_read.tt2:246 ../web_tt2/d_read.tt2:248
-#: ../web_tt2/ls_templates.tt2:103 ../web_tt2/ls_templates.tt2:125
-#: ../web_tt2/ls_templates.tt2:147 ../web_tt2/search_user.tt2:66
+#: ../web_tt2/ls_templates.tt2:127 ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:171 ../web_tt2/search_user.tt2:67
 msgid "edit"
 msgstr "επεξεργασία"
 
@@ -1577,6 +1640,25 @@ msgstr "Αποσυμπίεση αρχείου μέσα στον φάκελο %1"
 msgid "Unzip a file inside the folder SHARED"
 msgstr "αποσυμπίεση αρχείου στο ΚΟΙΝΟΧΡΗΣΤΟ φάκελο"
 
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:2
+msgid "the file %1 already exists"
+msgstr "το αρχείο %1 υπάρχει ήδη"
+
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:6
+msgid "Do you want to delete the old file %1?"
+msgstr "Επιθυμείτε τη διαγραφή του παλαιού αρχείου %1;"
+
+#. (shortname)
+#: ../web_tt2/d_upload.tt2:9
+msgid "Do you want to rename your file %1?"
+msgstr "Επιθυμείτε τη μετονομασία του αρχείου %1;"
+
+#: ../web_tt2/d_upload.tt2:15
+msgid "Do you want to cancel the upload?"
+msgstr "Επιθυμείτε την ακύρωση του ανεβάσματος;"
+
 #: ../web_tt2/dump_scenario.tt2:6
 msgid "scenario is created but not loaded in the list config"
 msgstr "Το σενάριο δημιουργήθηκε αλλά δε φορτώθηκε στη διαμόρφωση της λίστας"
@@ -1616,25 +1698,6 @@ msgstr "λίστα %1"
 msgid "scenario name:"
 msgstr "όνομα σεναρίου:"
 
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:2
-msgid "the file %1 already exists"
-msgstr "το αρχείο %1 υπάρχει ήδη"
-
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:6
-msgid "Do you want to delete the old file %1?"
-msgstr "Επιθυμείτε τη διαγραφή του παλαιού αρχείου %1;"
-
-#. (shortname)
-#: ../web_tt2/d_upload.tt2:9
-msgid "Do you want to rename your file %1?"
-msgstr "Επιθυμείτε τη μετονομασία του αρχείου %1;"
-
-#: ../web_tt2/d_upload.tt2:15
-msgid "Do you want to cancel the upload?"
-msgstr "Επιθυμείτε την ακύρωση του ανεβάσματος;"
-
 #: ../web_tt2/edit_attributes.tt2:4 ../web_tt2/subindex.tt2:14
 msgid "Additional information"
 msgstr "Περισσότερες πληροφορίες"
@@ -1647,13 +1710,82 @@ msgstr "[% k.name %]:"
 msgid "*: Required element"
 msgstr "*: Απαιτούμενα στοιχεία"
 
-#: ../web_tt2/edit_config.tt2:2
+#: ../web_tt2/edit_config.tt2:4
 msgid "Edit robot config"
 msgstr "Επεξεργασία διαμόρφωσης εξυπηρετητή"
 
-#: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
+#: ../web_tt2/edit_config.tt2:37 ../web_tt2/serveradmin.tt2:213
 msgid "Set"
 msgstr "Ορισμός"
+
+#: ../web_tt2/edit_list_request.tt2:4
+msgid "Configuring the list"
+msgstr "Διαμορφώνοντας τη λίστα"
+
+#: ../web_tt2/edit_list_request.tt2:8
+msgid "You can choose below a subset of parameters to edit:"
+msgstr "Επιλέξτε ένα υποσύνολο των παραμέτρων για επεξεργασία:"
+
+#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
+msgid "List definition"
+msgstr "Ορισμός λίστας"
+
+#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
+msgid "Sending/receiving setup"
+msgstr "Ρύθμιση αποστολής/λήψης"
+
+#: ../web_tt2/edit_list_request.tt2:15 ../web_tt2/viewlogs.tt2:89
+msgid "Bounce management"
+msgstr "Διαχείριση bounces"
+
+#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
+msgid "Data sources setup"
+msgstr "Εγκατάσταση πηγών δεδομένων"
+
+#: ../web_tt2/edit_list_request.tt2:36
+msgid "scenario source"
+msgstr "κώδικας σεναρίου"
+
+#: ../web_tt2/edit_list_request.tt2:52
+#, fuzzy
+msgid "(default)"
+msgstr "προεπιλογή"
+
+#: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:289
+#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:389
+#: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
+#: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
+#: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
+#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:106
+#: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
+msgid ":"
+msgstr ":"
+
+#: ../web_tt2/edit_template.tt2:3 ../web_tt2/ls_templates.tt2:3
+#: ../web_tt2/view_template.tt2:3
+msgid "Template edition system"
+msgstr "Σύστημα επεξεργασίας προτύπων"
+
+#: ../web_tt2/edit_template.tt2:7 ../web_tt2/view_template.tt2:8
+msgid "Type: "
+msgstr "Τύπος: "
+
+#: ../web_tt2/edit_template.tt2:8 ../web_tt2/ls_templates.tt2:23
+#: ../web_tt2/view_template.tt2:9
+msgid "web"
+msgstr ""
+
+#: ../web_tt2/edit_template.tt2:9 ../web_tt2/ls_templates.tt2:24
+#: ../web_tt2/view_template.tt2:10
+#, fuzzy
+msgid "mail"
+msgstr "Αλληλογραφία"
+
+#: ../web_tt2/edit_template.tt2:12 ../web_tt2/view_template.tt2:13
+msgid "Path: "
+msgstr "Διαδρομή: "
 
 #: ../web_tt2/editfile.tt2:4
 msgid "Edit list templates"
@@ -1779,46 +1911,6 @@ msgstr ""
 "Μήνυμα Αποχώρησης: Το μήνυμα αυτό θα αποσταλεί στους χρήστες όταν "
 "αποχωρήσουν από τη λίστα."
 
-#: ../web_tt2/edit_list_request.tt2:4
-msgid "Configuring the list"
-msgstr "Διαμορφώνοντας τη λίστα"
-
-#: ../web_tt2/edit_list_request.tt2:8
-msgid "You can choose below a subset of parameters to edit:"
-msgstr "Επιλέξτε ένα υποσύνολο των παραμέτρων για επεξεργασία:"
-
-#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
-msgid "List definition"
-msgstr "Ορισμός λίστας"
-
-#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
-msgid "Sending/receiving setup"
-msgstr "Ρύθμιση αποστολής/λήψης"
-
-#: ../web_tt2/edit_list_request.tt2:15 ../web_tt2/viewlogs.tt2:89
-msgid "Bounce management"
-msgstr "Διαχείριση bounces"
-
-#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
-msgid "Data sources setup"
-msgstr "Εγκατάσταση πηγών δεδομένων"
-
-#: ../web_tt2/edit_list_request.tt2:36
-msgid "scenario source"
-msgstr "κώδικας σεναρίου"
-
-#: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:283
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:373
-#: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
-#: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
-#: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
-#: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:105
-#: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
-msgid ":"
-msgstr ":"
-
 #: ../web_tt2/editsubscriber.tt2:5
 msgid "Subscriber information"
 msgstr "Πληροφορίες συνδρομητή"
@@ -1844,7 +1936,7 @@ msgstr "Τελευταία ενημέρωση:"
 msgid "Receiving:"
 msgstr "Παραλαβή:"
 
-#: ../web_tt2/editsubscriber.tt2:27 ../web_tt2/suboptions.tt2:56
+#: ../web_tt2/editsubscriber.tt2:27 ../web_tt2/suboptions.tt2:66
 msgid "Visibility:"
 msgstr "Ορατότητα:"
 
@@ -1897,61 +1989,6 @@ msgstr "Προβολή τελευταίου bounce"
 msgid "Reset errors"
 msgstr "Επαναφορά λαθών"
 
-#: ../web_tt2/edit_template.tt2:3 ../web_tt2/ls_templates.tt2:3
-#: ../web_tt2/view_template.tt2:3
-msgid "Template edition system"
-msgstr "Σύστημα επεξεργασίας προτύπων"
-
-#: ../web_tt2/edit_template.tt2:6
-msgid "Template name:"
-msgstr "Όνομα προτύπου"
-
-#: ../web_tt2/edit_template.tt2:7
-msgid "Type:"
-msgstr "Τύπος:"
-
-#: ../web_tt2/edit_template.tt2:8
-msgid "Path:"
-msgstr "Διαδρομή:"
-
-#: ../web_tt2/edit_template.tt2:9
-msgid "Scope:"
-msgstr "Πεδίο Δράσης:"
-
-#. (list,robot)
-#: ../web_tt2/edit_template.tt2:10
-msgid "This template is defined for list %1@%2"
-msgstr "Αυτό το πρότυπο είναι ορισμένο για τη λίστα %1@%2"
-
-#. (robot)
-#: ../web_tt2/edit_template.tt2:13
-msgid ""
-"This template is default for all lists of robot %1 unless it is redefined "
-"for some particular list"
-msgstr ""
-"Το προκαθορισμένο πρότυπο για όλες της λίστες του εξυπηρετητή %1 εκτός εάν "
-"οριστεί διαφορετικά για συγκεκριμένη λίστα"
-
-#: ../web_tt2/edit_template.tt2:15
-msgid ""
-"This template is default for all robots unless  it is redefined for some "
-"particular robot"
-msgstr ""
-"Το προκαθορισμένο πρότυπο για όλους τους εξυπηρετητές εκτός εάν οριστεί "
-"διαφορετικά για συγκεκριμένο εξυπηρετητή"
-
-#: ../web_tt2/edit_template.tt2:19
-msgid "language: "
-msgstr "Γλώσσα:"
-
-#: ../web_tt2/edit_template.tt2:19
-msgid ""
-"(This template is the default for all languages unless it is redefined for a "
-"specific language.)"
-msgstr ""
-"(Αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις γλώσσες εκτός εάν "
-"οριστεί διαφορετικά για συγκεκριμένη γλώσσα.)"
-
 #. (i_err.action)
 #: ../web_tt2/error.tt2:9
 msgid "INTERNAL SERVER ERROR (%1)"
@@ -1967,11 +2004,11 @@ msgstr "Αδύνατη η εύρεση του μήνα '%1'"
 msgid "Archives from %1 are not accessible"
 msgstr "Το Αρχείο από %1 δεν είναι προσβάσιμο"
 
-#: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
+#: ../mail_tt2/listmaster_notification.tt2:353 ../web_tt2/error.tt2:12
 msgid "Unable to load list topics."
 msgstr "Αδυναμία φόρτωσης θεμάτων λιστών."
 
-#: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
+#: ../mail_tt2/listmaster_notification.tt2:354 ../web_tt2/error.tt2:13
 msgid "Unable to load create_list templates."
 msgstr "Αδύνατη η φόρτωση των προτύπων create_list."
 
@@ -1993,7 +2030,7 @@ msgid "The exportation failed for list '%1'"
 msgstr "Αποτυχία εξαγωγής της λίστας '%1'"
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:352 ../web_tt2/error.tt2:18
+#: ../mail_tt2/listmaster_notification.tt2:367 ../web_tt2/error.tt2:18
 msgid "Cannot unzip file '%1'."
 msgstr "Αδυναμία αποσυμπίεσης του αρχείου '%1'."
 
@@ -2010,7 +2047,7 @@ msgstr ""
 
 #. (i_err.key)
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:360 ../web_tt2/error.tt2:21
+#: ../mail_tt2/listmaster_notification.tt2:375 ../web_tt2/error.tt2:21
 msgid "File not found."
 msgstr "Δεν βρέθηκε το αρχείο"
 
@@ -2037,55 +2074,62 @@ msgstr ""
 "Αποτυχία δημιουργίας της λίστας '%1'. Η λίστα μπορεί να υπάρχει ήδη ή "
 "περιέχει απαγορευμένους χαρακτήρες."
 
+#. (i_err.listname,i_err.new_listname)
+#. (list.name,new_listname)
+#: ../mail_tt2/listmaster_notification.tt2:379 ../web_tt2/error.tt2:26
+#, fuzzy
+msgid "Unable to rename list '%1' to '%2'."
+msgstr "Αδυναμία μετονομασίας του αρχείου '%1' σε '%2'."
+
 #. (s_err.action)
-#: ../web_tt2/error.tt2:34
+#: ../web_tt2/error.tt2:35
 msgid "SYSTEM ERROR (%1)"
 msgstr "ΣΦΑΛΜΑ ΣΥΣΤΗΜΑΤΟΣ (%1)"
 
 #. (u_err.action)
-#: ../web_tt2/error.tt2:43
+#: ../web_tt2/error.tt2:44
 msgid "ERROR (%1) "
 msgstr "ΣΦΑΛΜΑ (%1) "
 
-#: ../web_tt2/error.tt2:44
+#: ../web_tt2/error.tt2:45
 msgid "Wrong parameters"
 msgstr "Λάθος παράμετροι"
 
-#: ../web_tt2/error.tt2:45
+#: ../web_tt2/error.tt2:46
 msgid "Unknown action"
 msgstr "Άγνωστη ενέργεια"
 
 #. (u_err.params)
-#: ../web_tt2/error.tt2:46
+#: ../web_tt2/error.tt2:47
 msgid "Syntax errors with the following parameters: %1"
 msgstr "Σφάλμα σύνταξης με τις ακόλουθες παραμέτρους: %1"
 
-#: ../web_tt2/error.tt2:47
+#: ../web_tt2/error.tt2:48
 msgid "Authorization rejected. Maybe you forgot to log in?"
 msgstr ""
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:48
+#: ../web_tt2/error.tt2:49
 #, fuzzy
 msgid "List %1 not found"
 msgstr "Δεν βρέθηκε το αρχείο"
 
 #. (u_err.new_robot)
-#: ../web_tt2/error.tt2:49
+#: ../web_tt2/error.tt2:50
 msgid "%1: unknown robot"
 msgstr "%1: άγνωστος εξυπηρετητής"
 
 #. (u_err.family)
-#: ../web_tt2/error.tt2:50
+#: ../web_tt2/error.tt2:51
 msgid "%1: unknown family"
 msgstr "%1: άγνωστη οικογένεια λιστών"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:51
+#: ../web_tt2/error.tt2:52
 msgid "You are already logged in as %1"
 msgstr "Είστε ήδη συνδεδεμένος ως %1"
 
-#: ../web_tt2/error.tt2:52
+#: ../web_tt2/error.tt2:53
 msgid ""
 "You can not get a password reminder; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
@@ -2093,41 +2137,41 @@ msgstr ""
 "Δεν είναι δυνατή η υπενθύμιση του κωδικού πρόσβασης, πιθανότατα γιατί αυτό "
 "διαχειρίζεται από τρίτη υπηρεσία (σύστημα Single Sign-On ή κατάλογος LDAP)."
 
-#: ../web_tt2/error.tt2:53
+#: ../web_tt2/error.tt2:54
 msgid "Please provide email address"
 msgstr "Παρακαλούμε συμπληρώστε τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid "Missing argument %1"
 msgstr "Ελλειπές όρισμα %1"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:55
+#: ../web_tt2/error.tt2:56
 msgid "Wrong value for parameter %1"
 msgstr "Λάθος τιμή της παραμέτρου %1"
 
-#: ../web_tt2/error.tt2:145 ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:146 ../web_tt2/error.tt2:57
 msgid "You need to login"
 msgstr "Πρέπει να εισέλθετε"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:57
+#: ../web_tt2/error.tt2:58
 msgid "Address \"%1\" is incorrect"
 msgstr "Η διεύθυνση \"%1\" είναι λανθασμένη"
 
-#: ../web_tt2/error.tt2:58
+#: ../web_tt2/error.tt2:59
 msgid "Provided password is incorrect"
 msgstr "Λανθασμένο συνθηματικό"
 
-#: ../web_tt2/error.tt2:59
+#: ../web_tt2/error.tt2:60
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 "Δεν έχετε ορίσει κωδικό πρόσβασης, αιτηθείτε υπενθύμιση του αρχικού κωδικού "
 "πρόσβασης"
 
-#: ../web_tt2/error.tt2:60
+#: ../web_tt2/error.tt2:61
 msgid ""
 "Your password is stored in an LDAP directory, therefore Sympa cannot post "
 "you a reminder"
@@ -2136,314 +2180,314 @@ msgstr ""
 "Sympa δεν μπορεί να σας αποστείλει υπενθύμιση"
 
 #. (u_err.nb_days)
-#: ../web_tt2/error.tt2:61
+#: ../web_tt2/error.tt2:62
 msgid "The period is too long (%1 days)"
 msgstr "Η περίοδος είναι πολύ μεγάλη (%1 μέρες)"
 
-#: ../web_tt2/error.tt2:62
+#: ../web_tt2/error.tt2:63
 msgid "List has no subscribers"
 msgstr "Η λίστα δεν έχει συνδρομητές"
 
 #. (u_err.page)
-#: ../web_tt2/error.tt2:63
+#: ../web_tt2/error.tt2:64
 msgid "No page %1"
 msgstr "Ανύπαρκτη σελίδα %1"
 
-#: ../web_tt2/error.tt2:64
+#: ../web_tt2/error.tt2:65
 msgid "Missing filter"
 msgstr "Ελλειπές φίλτρο"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:66
+#: ../web_tt2/error.tt2:67
 msgid "Not subscribed: %1"
 msgstr "Δεν πραγματοποιήθηκε εγγραφή συνδρομητή: %1"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:67
+#: ../web_tt2/error.tt2:68
 msgid "You are not subscribed to list %1"
 msgstr "Δεν είστε συνδρομητής στη λίστα %1"
 
-#: ../web_tt2/error.tt2:69
+#: ../web_tt2/error.tt2:70
 msgid "Check the additional information"
 msgstr "Δείτε περισσότερες πληροφορίες"
 
 #. (u_err.reception_mode)
-#: ../web_tt2/error.tt2:70
+#: ../web_tt2/error.tt2:71
 msgid "%1 is not an available reception mode"
 msgstr "%1 δεν είναι διαθέσιμος τρόπος παραλαβής"
 
 #. (u_err.file)
-#: ../web_tt2/error.tt2:71
+#: ../web_tt2/error.tt2:72
 msgid "%1: file not editable"
 msgstr "%1: μη επεξεργάσιμο αρχείο"
 
 #. (u_err.list)
-#: ../web_tt2/error.tt2:72
+#: ../web_tt2/error.tt2:73
 msgid "You are already subscribed to the list %1"
 msgstr "Είστε ήδη συνδρομητής στη λίστα %1"
 
 #. (u_err.email,u_err.list)
-#: ../web_tt2/error.tt2:73
+#: ../web_tt2/error.tt2:74
 msgid "%1 is already subscribed to the list %2"
 msgstr "%1 είναι ήδη συνδρομητής στη λίστα %2"
 
-#: ../web_tt2/error.tt2:74
+#: ../web_tt2/error.tt2:75
 msgid "Please provide your password"
 msgstr "Παρακαλούμε συμπληρώστε το συνθηματικό σας"
 
-#: ../web_tt2/error.tt2:75
+#: ../web_tt2/error.tt2:76
 msgid "The passwords you typed do not match"
 msgstr "Λανθασμένο συνθηματικό"
 
 #. (u_err.tpl)
-#: ../web_tt2/error.tt2:76
+#: ../web_tt2/error.tt2:77
 msgid "Provided path is incorrect for template '%1'"
 msgstr "Η διαδρομή δεν είναι σωστή για το πρότυπο '%1'"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:77
+#: ../web_tt2/error.tt2:78
 msgid "Cannot open file '%1'"
 msgstr "Αδυναμία ανοίγματος του αρχείου '%1'"
 
-#: ../web_tt2/error.tt2:78
+#: ../web_tt2/error.tt2:79
 msgid "You need to provide list name"
 msgstr "Πρέπει να δώσετε όνομα λίστας"
 
-#: ../web_tt2/error.tt2:79
+#: ../web_tt2/error.tt2:80
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
 msgstr ""
 "Αποτυχία συντονισμού μηνύματος, πιθανότατα τακτοποιήθηκε από άλλο συντονιστή."
 
-#: ../web_tt2/error.tt2:80
+#: ../web_tt2/error.tt2:81
 msgid "Tagging message is required for this list"
 msgstr "Μήνυμα επισύναψης απαιτείται για αυτή τη λίστα"
 
-#: ../web_tt2/error.tt2:81
+#: ../web_tt2/error.tt2:82
 msgid "Archives are empty for this list"
 msgstr "Το αρχείο της λίστας είναι άδειο"
 
-#: ../web_tt2/error.tt2:82
+#: ../web_tt2/error.tt2:83
 msgid "You did not select an action to perform"
 msgstr "Δεν επιλέξατε ενέργεια"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:83
+#: ../web_tt2/error.tt2:84
 msgid "No bounce for user  %1"
 msgstr "Δεν υπάρχουν bounces για το χρήστη %1"
 
-#: ../web_tt2/error.tt2:84
+#: ../web_tt2/error.tt2:85
 msgid "List has no bouncing subscribers"
 msgstr "Η λίστα δεν έχει συνδρομητές bouncing"
 
-#: ../web_tt2/error.tt2:85
+#: ../web_tt2/error.tt2:86
 msgid "No parameter was edited"
 msgstr "Καμία παράμετρος δεν τροποποιήθηκε"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:86
+#: ../web_tt2/error.tt2:87
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "Το αρχείο διαμόρφωσης έχει τροποποιηθεί από %1. Αδυναμία εφαρμογής των "
 "αλλαγών σας."
 
-#: ../web_tt2/error.tt2:87
+#: ../web_tt2/error.tt2:88
 msgid "Topic \"other\" is a reserved word"
 msgstr "Το θέμα \"Άλλο\" είναι δεσμευμένο"
 
 #. (u_err.p_name)
-#: ../web_tt2/error.tt2:88
+#: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
 msgstr "Η παράμετρος '%1' είναι απαραίτητη. Παράκαμψη διαγραφής."
 
 #. (u_err.param)
-#: ../web_tt2/error.tt2:89
+#: ../web_tt2/error.tt2:90
 msgid "Parameter '%1' must have values"
 msgstr "Η παράμετρος '%1' πρέπει να έχει τιμή"
 
 #. (u_err.param,u_err.val)
-#: ../web_tt2/error.tt2:90
+#: ../web_tt2/error.tt2:91
 msgid "Parameter '%1' has got wrong value: '%2'"
 msgstr "Η παράμετρος '%1' έχει λάθος τιμή: '%2'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:91
+#: ../web_tt2/error.tt2:92
 msgid "The list '%1' is already closed"
 msgstr "Η λίστα %1 έχει ήδη κλείσει"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:92
+#: ../web_tt2/error.tt2:93
 msgid "The list '%1' is not closed"
 msgstr "Η λίστα %1 δεν έχει κλείσει"
 
 #. (u_err.bad_listname)
-#: ../web_tt2/error.tt2:93
+#: ../web_tt2/error.tt2:94
 msgid "'%1': bad listname"
 msgstr "'%1': μη επιτρεπτό όνομα λίστας"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:94
+#: ../web_tt2/error.tt2:95
 msgid "'%1' list already exists"
 msgstr "'%1' η λίστα υπάρχει ήδη"
 
 #. (u_err.new_listname)
-#: ../web_tt2/error.tt2:95
+#: ../web_tt2/error.tt2:96
 msgid "Incorrect listname '%1': matches one of service aliases"
 msgstr ""
 "Εσφαλμένο όνομα λίστας '%1': ταυτίζεται με ένα από τα παρωνύμια της υπηρεσίας"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:96
+#: ../web_tt2/error.tt2:97
 msgid "Failed to remove list aliases for list %1"
 msgstr "Αποτυχία αφαίρεσης παρωνυμίων της λίστας %1"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:97
+#: ../web_tt2/error.tt2:98
 msgid "%1: No such file or directory"
 msgstr "%1: Ανύπαρκτο αρχείο ή κατάλογος"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:98
+#: ../web_tt2/error.tt2:99
 msgid "Unable to read %1: empty document"
 msgstr "Αδυναμία ανάγνωσης %1: άδειο έγγραφο"
 
-#: ../web_tt2/error.tt2:99
+#: ../web_tt2/error.tt2:100
 msgid "There is no shared documents"
 msgstr "Δεν υπάρχουν κοινόχρηστα έγγραφα"
 
-#: ../web_tt2/error.tt2:100
+#: ../web_tt2/error.tt2:101
 msgid "The shared document space is empty"
 msgstr "Ο χώρος κοινόχρηστων εγγράφων είναι άδειος"
 
-#: ../web_tt2/error.tt2:101
+#: ../web_tt2/error.tt2:102
 msgid "The shared directory cannot have any description"
 msgstr "Ο κοινόχρηστος φάκελος δεν μπορεί να έχει οποιαδήποτε περιγραφή"
 
-#: ../web_tt2/error.tt2:102
+#: ../web_tt2/error.tt2:103
 msgid "No description specified"
 msgstr "Δεν ορίστηκε περιγραφή"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:103
+#: ../web_tt2/error.tt2:104
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "Αδυναμία περιγραφής, το έγγραφο '%1' δεν υπάρχει"
 
-#: ../web_tt2/error.tt2:104
+#: ../web_tt2/error.tt2:105
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr "Αλλαγή δεδομένων στο δίσκο. Αδυναμία εφαρμογής των αλλαγών"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:105
+#: ../web_tt2/error.tt2:106
 msgid "%1: incorrect name"
 msgstr "%1: λανθασμένο όνομα"
 
-#: ../web_tt2/error.tt2:106
+#: ../web_tt2/error.tt2:107
 msgid "Failed: your content is empty"
 msgstr "Αποτυχία: το περιεχόμενο είναι κενό"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:107
+#: ../web_tt2/error.tt2:108
 msgid "Cannot overwrite file %1:"
 msgstr "Αδυναμία αντικατάστασης του αρχείου %1:"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:108
+#: ../web_tt2/error.tt2:109
 msgid "A directory named '%1' already exists:"
 msgstr "Υπάρχει ήδη φάκελος με το όνομα '%1':"
 
 #. (u_err.name)
-#: ../web_tt2/error.tt2:109
+#: ../web_tt2/error.tt2:110
 msgid "This is an already existing document: '%1'"
 msgstr "Υπάρχει ήδη έγγραφο με όνομα: '%1'"
 
-#: ../web_tt2/error.tt2:110
+#: ../web_tt2/error.tt2:111
 msgid "No name specified"
 msgstr "Δεν ορίστηκε όνομα"
 
-#: ../web_tt2/error.tt2:111
+#: ../web_tt2/error.tt2:112
 msgid "The document repository exceed disk quota."
 msgstr "Ο χώρος απόθεσης των εγγράφων ξεπέρασε το όριο μεγέθους δίσκου"
 
 #. (u_err.path)
-#: ../web_tt2/error.tt2:112
+#: ../web_tt2/error.tt2:113
 msgid "Cannot upload file %1:"
 msgstr "Αδυναμία ανεβάσματος του αρχείου %1:"
 
 #. (u_err.dir)
-#: ../web_tt2/error.tt2:113
+#: ../web_tt2/error.tt2:114
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Δεν είστε εξουσιοδοτημένος να ανεβάσετε αρχείο INDEX.HTML στο %1"
 
-#: ../web_tt2/error.tt2:114
+#: ../web_tt2/error.tt2:115
 msgid "The upload failed, try it again"
 msgstr "Αποτυχία ανεβάσματος, προσπαθήστε ξανά"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:115
+#: ../web_tt2/error.tt2:116
 msgid "Directory %1 and its contents could not be copied: %2"
 msgstr "Ο κατάλογος %1 και τα περιεχόμενά τους δεν αντιγράφηκαν: %2"
 
 #. (u_err.name,u_err.reason)
-#: ../web_tt2/error.tt2:116
+#: ../web_tt2/error.tt2:117
 msgid "File %1 was not copied: %2 "
 msgstr "Το αρχείο %1 δεν έχει αντιγραφεί: %2 "
 
 #. (u_err.directory)
-#: ../web_tt2/error.tt2:117
+#: ../web_tt2/error.tt2:118
 msgid "Failed: %1 not empty"
 msgstr "Αποτυχία: %1 μη κενό"
 
-#: ../web_tt2/error.tt2:118
+#: ../web_tt2/error.tt2:119
 msgid "No certificate for this list"
 msgstr "Δεν υπάρχει πιστοποιητικό για αυτή τη λίστα"
 
-#: ../web_tt2/error.tt2:119
+#: ../web_tt2/error.tt2:120
 msgid "This list has no message topic"
 msgstr "Δεν υπάρχει θέμα για αυτή τη λίστα"
 
-#: ../web_tt2/error.tt2:120
+#: ../web_tt2/error.tt2:121
 msgid "Tag message with topic is required for this list"
 msgstr "Μήνυμα επισήμανσης με θέμα απαιτείται για αυτή τη λίστα"
 
 #. (u_err.email)
-#: ../web_tt2/error.tt2:121
+#: ../web_tt2/error.tt2:122
 msgid "No entry for user '%1'"
 msgstr "Απαγορευμένη περιοχή για το χρήστη '%1'"
 
-#: ../web_tt2/error.tt2:122
+#: ../web_tt2/error.tt2:123
 msgid "Please select archive months"
 msgstr "Παρακαλούμε επιλέξτε τους μήνες του αρχείου"
 
-#: ../web_tt2/error.tt2:123
+#: ../web_tt2/error.tt2:124
 msgid "No SOAP service"
 msgstr "Δεν υπάρχει υπηρεσία SOAP"
 
-#: ../web_tt2/error.tt2:124
+#: ../web_tt2/error.tt2:125
 msgid "Authentication failed"
 msgstr "Αποτυχία ταυτοποίησης"
 
 #. (u_err.status)
-#: ../web_tt2/error.tt2:125
+#: ../web_tt2/error.tt2:126
 msgid "Service unavailable because list status is '%1'"
 msgstr "Υπηρεσία μη διαθέσιμη γιατί η κατάσταση της λίστας είναι '%1'"
 
 #. (u_err.argument)
-#: ../web_tt2/error.tt2:126
+#: ../web_tt2/error.tt2:127
 msgid "This Template '%1' already exists"
 msgstr "Το πρότυπο '%1' υπάρχει ήδη"
 
 #. (u_err.file_del)
-#: ../web_tt2/error.tt2:127
+#: ../web_tt2/error.tt2:128
 msgid "Cannot delete this file '%1'"
 msgstr "Αδυναμία διαγραφής του αρχείου '%1'"
 
 #. (u_err.filename)
-#: ../web_tt2/error.tt2:128
+#: ../web_tt2/error.tt2:129
 msgid "Invalid filename: '%1'"
 msgstr "Άκυρο όνομα αρχείου: '%1'"
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:129
+#: ../web_tt2/error.tt2:130
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
@@ -2451,7 +2495,7 @@ msgstr ""
 "τη λίστα '%1', ο ιδιοκτήτης έχει ενημερωθεί."
 
 #. (u_err.listname)
-#: ../web_tt2/error.tt2:130
+#: ../web_tt2/error.tt2:131
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
@@ -2459,12 +2503,12 @@ msgstr ""
 "ιδιοκτήτης της λίστας."
 
 #. (auth.action)
-#: ../web_tt2/error.tt2:139
+#: ../web_tt2/error.tt2:140
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "ΑΠΟΡΡΙΨΗ ΕΞΟΥΣΙΟΔΟΤΗΣΗΣ (%1)"
 
 #. (auth.listname)
-#: ../web_tt2/error.tt2:141
+#: ../web_tt2/error.tt2:142
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
@@ -2481,13 +2525,13 @@ msgstr "Κατάλογος εξαιρέσεων"
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
 #: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:157
-#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
+#: ../web_tt2/reviewbouncing.tt2:132 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:7
 msgid "Toggle Selection"
 msgstr "Εναλλαγή Επιλογής"
 
-#: ../web_tt2/exclusion_table.tt2:11 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/exclusion_table.tt2:11 ../web_tt2/reviewbouncing.tt2:62
 #: ../web_tt2/subindex.tt2:11 ../web_tt2/subscriber_table.tt2:12
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/viewlogs.tt2:54
 #: ../web_tt2/viewlogs.tt2:63
@@ -2627,132 +2671,132 @@ msgstr "Η λίστα αιτήθηκε από"
 msgid "on %1"
 msgstr "στο %1"
 
-#: ../web_tt2/javascript.tt2:844
+#: ../web_tt2/javascript.tt2:861
 msgid "Start date"
 msgstr "Ημερομηνία έναρξης"
 
-#: ../web_tt2/javascript.tt2:845
+#: ../web_tt2/javascript.tt2:862
 msgid "End date"
 msgstr "Ημερομηνία λήξης"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "January"
 msgstr "Ιανουάριος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "February"
 msgstr "Φεβρουάριος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "March"
 msgstr "Μάρτιος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "April"
 msgstr "Απρίλιος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "May"
 msgstr "Μάιος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "June"
 msgstr "Ιούνιος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "July"
 msgstr "Ιούλιος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "August"
 msgstr "Αύγουστος"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "September"
 msgstr "Σεπτέμβρης"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "October"
 msgstr "Οκτώβρης"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "November"
 msgstr "Νοέμβρης"
 
-#: ../web_tt2/javascript.tt2:849
+#: ../web_tt2/javascript.tt2:866
 msgid "December"
 msgstr "Δεκέμβρης"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Su"
 msgstr "Κυ"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Mo"
 msgstr "Δε"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Tu"
 msgstr "Τρ"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "We"
 msgstr "Τε"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Th"
 msgstr "Πε"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Fr"
 msgstr "Πα"
 
-#: ../web_tt2/javascript.tt2:850
+#: ../web_tt2/javascript.tt2:867
 msgid "Sa"
 msgstr "Σα"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Sunday"
 msgstr "Κυριακή"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Monday"
 msgstr "Δευτέρα"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Tuesday"
 msgstr "Τρίτη"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Wednesday"
 msgstr "Τετάρτη"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Thursday"
 msgstr "Πέμπτη"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Friday"
 msgstr "Παρασκευή"
 
-#: ../web_tt2/javascript.tt2:851
+#: ../web_tt2/javascript.tt2:868
 msgid "Saturday"
 msgstr "Σάββατο"
 
-#: ../web_tt2/javascript.tt2:852
+#: ../web_tt2/javascript.tt2:869
 msgid "Calendar"
 msgstr "Ημερολόγιο"
 
-#: ../web_tt2/javascript.tt2:853
+#: ../web_tt2/javascript.tt2:870
 msgid "today"
 msgstr "σήμερα"
 
 #. (+cpt)
-#: ../web_tt2/javascript.tt2:1067
+#: ../web_tt2/javascript.tt2:1084
 msgid "microcal"
 msgstr "microcal"
 
-#: ../web_tt2/javascript.tt2:1107
+#: ../web_tt2/javascript.tt2:1124
 msgid "\"+src.id+\"_cal"
 msgstr "\"+src.id+\"_cal"
 
@@ -2828,8 +2872,7 @@ msgstr "Συνδρομητές"
 msgid "Blacklist"
 msgstr "Μαύρη-Λίστα"
 
-#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
-#: ../web_tt2/serveradmin.tt2:123
+#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:85
 msgid "Logs"
 msgstr "Αρχεία καταγραφής"
 
@@ -2940,27 +2983,23 @@ msgstr ""
 msgid "template name"
 msgstr "όνομα προτύπου"
 
-#: ../web_tt2/ls_templates.tt2:40
-msgid "distrib"
-msgstr "διανομή"
-
-#: ../web_tt2/ls_templates.tt2:84
+#: ../web_tt2/ls_templates.tt2:108
 msgid "view"
 msgstr "προβολή"
 
-#: ../web_tt2/ls_templates.tt2:104 ../web_tt2/ls_templates.tt2:126
-#: ../web_tt2/ls_templates.tt2:148 ../web_tt2/ls_templates.tt2:85
+#: ../web_tt2/ls_templates.tt2:109 ../web_tt2/ls_templates.tt2:128
+#: ../web_tt2/ls_templates.tt2:150 ../web_tt2/ls_templates.tt2:172
 msgid "cp"
 msgstr "cp"
 
-#: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
-#: ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:129 ../web_tt2/ls_templates.tt2:151
+#: ../web_tt2/ls_templates.tt2:173
 msgid "rm"
 msgstr "rm"
 
 #. (lang.value)
-#: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
-#: ../web_tt2/ls_templates.tt2:149
+#: ../web_tt2/ls_templates.tt2:129 ../web_tt2/ls_templates.tt2:151
+#: ../web_tt2/ls_templates.tt2:173
 msgid "Do you really want to remove %1?"
 msgstr "Επιθυμείτε τη διαγραφή του %1;"
 
@@ -3025,11 +3064,11 @@ msgstr "Νέο όνομα μηνύματος:"
 msgid "create"
 msgstr "δημιουργία"
 
-#: ../web_tt2/menu_search.tt2:5
+#: ../web_tt2/menu_search.tt2:6
 msgid "Enter a list name"
 msgstr "Εισάγετε όνομα λίστας"
 
-#: ../web_tt2/menu_search.tt2:7
+#: ../web_tt2/menu_search.tt2:8
 msgid "Search lists"
 msgstr "Αναζήτηση λιστών"
 
@@ -3138,6 +3177,11 @@ msgstr "Λίστες"
 msgid "Users"
 msgstr "Χρήστες"
 
+#: ../web_tt2/nav.tt2:21 ../web_tt2/serveradmin.tt2:123
+#, fuzzy
+msgid "System log"
+msgstr "Syslog"
+
 #: ../web_tt2/nav.tt2:23 ../web_tt2/serveradmin.tt2:141
 msgid "Templates"
 msgstr "Πρότυπα"
@@ -3165,6 +3209,16 @@ msgstr "Μεταφράζοντας το Sympa"
 #: ../web_tt2/nav.tt2:39 ../web_tt2/serveradmin.tt2:239
 msgid "Submitting a bug, a feature request"
 msgstr "Υποβολή σφάλματος, ή πρόταση για επέκταση λειτουργηκότητας "
+
+#: ../web_tt2/nav.tt2:50 ../web_tt2/nav.tt2:52
+#, fuzzy
+msgid "others"
+msgstr "Άλλα"
+
+#: ../src/lib/List.pm:1482 ../web_tt2/nav.tt2:55
+#, fuzzy
+msgid "all"
+msgstr "Όλα"
 
 #: ../web_tt2/nav.tt2:105
 msgid "DKIM"
@@ -3471,6 +3525,31 @@ msgstr "Ζητήστε τον αρχικό κωδικό πρόσβασης"
 msgid "Request new password"
 msgstr "Ζητήστε νέο κωδικό πρόσβασης"
 
+#: ../web_tt2/request_topic.tt2:5
+msgid "This list is configured to require topic(s) foreach message."
+msgstr "Η λίστα είναι ρυθμισμένη ώστε να απαιτείται θέμα(τα) σε κάθε μήνυμα."
+
+#: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
+msgid ""
+"Please select one or more topic(s) that corresponds to your message below:"
+msgstr ""
+"Παρακαλώ επιλέξτε ένα ή περισσότερα θέματα που ταιριάζουν με το παρακάτω "
+"μήνυμά σας:"
+
+#: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
+msgid "Tag this mail"
+msgstr "Επισημάνετε αυτό το μήνυμα"
+
+#. (date)
+#: ../web_tt2/request_topic.tt2:29
+msgid "Date: %1"
+msgstr "Ημερομηνία: %1"
+
+#. (subject)
+#: ../web_tt2/request_topic.tt2:31
+msgid "Subject: %1"
+msgstr "Θέμα: %1"
+
 #: ../web_tt2/requestpasswd.tt2:4
 msgid "Message sent"
 msgstr "Μήνυμα εστάλη"
@@ -3499,119 +3578,6 @@ msgstr ""
 msgid "Unkown error."
 msgstr "Άγνωστο σφάλμα."
 
-#: ../web_tt2/request_topic.tt2:5
-msgid "This list is configured to require topic(s) foreach message."
-msgstr "Η λίστα είναι ρυθμισμένη ώστε να απαιτείται θέμα(τα) σε κάθε μήνυμα."
-
-#: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
-msgid ""
-"Please select one or more topic(s) that corresponds to your message below:"
-msgstr ""
-"Παρακαλώ επιλέξτε ένα ή περισσότερα θέματα που ταιριάζουν με το παρακάτω "
-"μήνυμά σας:"
-
-#: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
-msgid "Tag this mail"
-msgstr "Επισημάνετε αυτό το μήνυμα"
-
-#. (date)
-#: ../web_tt2/request_topic.tt2:29
-msgid "Date: %1"
-msgstr "Ημερομηνία: %1"
-
-#. (subject)
-#: ../web_tt2/request_topic.tt2:31
-msgid "Subject: %1"
-msgstr "Θέμα: %1"
-
-#: ../web_tt2/reviewbouncing.tt2:3
-msgid "Manage bouncing list members"
-msgstr "Διαχείριση bouncing συνδρομητών"
-
-#: ../web_tt2/review.tt2:48 ../web_tt2/review.tt2:50
-#: ../web_tt2/reviewbouncing.tt2:6
-msgid "Dump"
-msgstr "Πέταμα"
-
-#: ../web_tt2/reviewbouncing.tt2:19
-msgid "Remind all subscribers"
-msgstr "Υπενθύμιση όλων των συνδρομητών"
-
-#. (total)
-#: ../web_tt2/review.tt2:64 ../web_tt2/reviewbouncing.tt2:19
-msgid ""
-"Do you really want to send a subscription reminder message to the %1 "
-"subscribers?"
-msgstr ""
-"Επιθυμείτε την αποστολή μηνύματος υπενθύμισης της συνδρομής σε %1 "
-"συνδρομητές;"
-
-#: ../web_tt2/review.tt2:146 ../web_tt2/review.tt2:27
-#: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
-#: ../web_tt2/viewlogs.tt2:31
-msgid "Previous page"
-msgstr "Προηγούμενη σελίδα"
-
-#. (page,total_page)
-#: ../web_tt2/reviewbouncing.tt2:118 ../web_tt2/reviewbouncing.tt2:47
-msgid "page %1 / %2"
-msgstr "σελίδα %1 / %2"
-
-#: ../web_tt2/review.tt2:152 ../web_tt2/review.tt2:33
-#: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
-#: ../web_tt2/viewlogs.tt2:37
-msgid "Next page"
-msgstr "Επόμενη σελίδα"
-
-#: ../web_tt2/reviewbouncing.tt2:58
-msgid "Table which display list bounces"
-msgstr "Πίνακας προβολής bounces λίστας"
-
-#: ../web_tt2/reviewbouncing.tt2:62
-msgid "Bounce score"
-msgstr "Δείκτης Bounce"
-
-#: ../web_tt2/reviewbouncing.tt2:63
-msgid "Details"
-msgstr "Λεπτομέρειες"
-
-#: ../web_tt2/reviewbouncing.tt2:66
-msgid "# of bounces"
-msgstr "# bounces"
-
-#: ../web_tt2/reviewbouncing.tt2:67
-msgid "First bounce"
-msgstr "Πρώτο Bounce"
-
-#: ../web_tt2/reviewbouncing.tt2:68
-msgid "Last bounce"
-msgstr "Τελευταίο Bounce"
-
-#: ../web_tt2/reviewbouncing.tt2:95
-msgid "no score"
-msgstr "χωρίς δείκτη"
-
-#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:158
-#: ../web_tt2/reviewbouncing.tt2:126
-msgid "Delete selected email addresses"
-msgstr "Διαγραφή επιλεγμένων διευθύνσεων"
-
-#: ../web_tt2/reviewbouncing.tt2:128
-msgid "Reset errors for selected users"
-msgstr "Επαναφορά σφαλμάτων επιλεγμένων χρηστών"
-
-#: ../web_tt2/review_family.tt2:4
-msgid "Table which display family lists"
-msgstr "Πίνακας προβολής οικογενειών λιστών"
-
-#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
-msgid "Status"
-msgstr "Κατάσταση"
-
-#: ../web_tt2/review_family.tt2:8
-msgid "Instantiation date"
-msgstr "Ημερομηνία αρχικοποίησης"
-
 #: ../web_tt2/review.tt2:5
 msgid "Manage list members"
 msgstr "Διαχείριση συνδρομητών λίστας"
@@ -3620,14 +3586,31 @@ msgstr "Διαχείριση συνδρομητών λίστας"
 msgid "Page size"
 msgstr "Μέγεθος σελίδας"
 
+#: ../web_tt2/review.tt2:146 ../web_tt2/review.tt2:27
+#: ../web_tt2/reviewbouncing.tt2:116 ../web_tt2/reviewbouncing.tt2:45
+#: ../web_tt2/viewlogs.tt2:31
+msgid "Previous page"
+msgstr "Προηγούμενη σελίδα"
+
 #: ../web_tt2/review.tt2:149 ../web_tt2/review.tt2:30
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "σελίδα"
 
+#: ../web_tt2/review.tt2:152 ../web_tt2/review.tt2:33
+#: ../web_tt2/reviewbouncing.tt2:122 ../web_tt2/reviewbouncing.tt2:51
+#: ../web_tt2/viewlogs.tt2:37
+msgid "Next page"
+msgstr "Επόμενη σελίδα"
+
 #: ../web_tt2/review.tt2:41
 msgid "Pending subscriptions"
 msgstr "Εκκρεμείς εγγραφές συνδρομητών"
+
+#: ../web_tt2/review.tt2:48 ../web_tt2/review.tt2:50
+#: ../web_tt2/reviewbouncing.tt2:7
+msgid "Dump"
+msgstr "Πέταμα"
 
 #: ../web_tt2/review.tt2:52
 msgid "Exclude"
@@ -3640,6 +3623,15 @@ msgstr "Συγχρονισμός μελών με πηγές δεδομένων"
 #: ../web_tt2/review.tt2:64
 msgid "Remind all"
 msgstr "Υπενθύμιση όλων"
+
+#. (total)
+#: ../web_tt2/review.tt2:64 ../web_tt2/reviewbouncing.tt2:20
+msgid ""
+"Do you really want to send a subscription reminder message to the %1 "
+"subscribers?"
+msgstr ""
+"Επιθυμείτε την αποστολή μηνύματος υπενθύμισης της συνδρομής σε %1 "
+"συνδρομητές;"
 
 #: ../web_tt2/review.tt2:74
 msgid "Add an user: "
@@ -3661,6 +3653,11 @@ msgstr "Αναζήτηση χρήστη με διεύθυνση αλληλογρ
 msgid "Selection too wide, can not show selection"
 msgstr "Ευρεία επιλογή, αδυναμία προβολής επιλογής"
 
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:158
+#: ../web_tt2/reviewbouncing.tt2:127
+msgid "Delete selected email addresses"
+msgstr "Διαγραφή επιλεγμένων διευθύνσεων"
+
 #. (similar_subscribers_occurence)
 #: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
@@ -3674,45 +3671,62 @@ msgstr "Επιθυμείτε την διαγραφή όλων των επιλε�
 msgid "Excluded users"
 msgstr "Εξαίρεση χρηστών"
 
-#: ../web_tt2/rss_request.tt2:5
-msgid "RSS channel"
-msgstr "RSS κανάλι"
+#: ../web_tt2/review_family.tt2:4
+msgid "Table which display family lists"
+msgstr "Πίνακας προβολής οικογενειών λιστών"
 
-#: ../web_tt2/rss_request.tt2:7
-msgid ""
-"This server provides various news via RSS. Choose parameters and pickup the "
-"RSS url"
-msgstr ""
-"Ο εξυπηρετητής προσφέρει διάφορες ειδήσεις μέσω RSS. Επιλέξτε τις "
-"παραμέτρους και αντιγράψτε το URL του RSS"
+#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
+msgid "Status"
+msgstr "Κατάσταση"
 
-#: ../web_tt2/rss_request.tt2:12
-msgid "Limit the number of responses:"
-msgstr "Περιορίστε τον αριθμό την απαντήσεων:"
+#: ../web_tt2/review_family.tt2:8
+msgid "Instantiation date"
+msgstr "Ημερομηνία αρχικοποίησης"
 
-#: ../web_tt2/rss_request.tt2:19
-msgid "Limit the number of days used for the selection:"
-msgstr "Περιορίστε τον αριθμό ημερών που χρησιμοποιείται για την επιλογή:"
+#: ../web_tt2/reviewbouncing.tt2:4
+msgid "Manage bouncing list members"
+msgstr "Διαχείριση bouncing συνδρομητών"
 
-#: ../web_tt2/rss_request.tt2:31
-msgid "Update RSS URL"
-msgstr "Ενημέρωση RSS URL"
+#: ../web_tt2/reviewbouncing.tt2:20
+msgid "Remind all subscribers"
+msgstr "Υπενθύμιση όλων των συνδρομητών"
 
-#: ../web_tt2/rss_request.tt2:43
-msgid "latest arc:"
-msgstr "τελευταίο arc:"
+#. (page,total_page)
+#: ../web_tt2/reviewbouncing.tt2:119 ../web_tt2/reviewbouncing.tt2:48
+msgid "page %1 / %2"
+msgstr "σελίδα %1 / %2"
 
-#: ../web_tt2/rss_request.tt2:48
-msgid "latest document:"
-msgstr "Τελευταίο έγγραφο:"
+#: ../web_tt2/reviewbouncing.tt2:59
+msgid "Table which display list bounces"
+msgstr "Πίνακας προβολής bounces λίστας"
 
-#: ../web_tt2/rss_request.tt2:53
-msgid "active lists:"
-msgstr "Ενεργές λίστες:"
+#: ../web_tt2/reviewbouncing.tt2:63
+msgid "Bounce score"
+msgstr "Δείκτης Bounce"
 
-#: ../web_tt2/rss_request.tt2:58
-msgid "latest lists:"
-msgstr "Πρόσφατες λίστες:"
+#: ../web_tt2/reviewbouncing.tt2:64
+msgid "Details"
+msgstr "Λεπτομέρειες"
+
+#: ../web_tt2/reviewbouncing.tt2:67
+msgid "# of bounces"
+msgstr "# bounces"
+
+#: ../web_tt2/reviewbouncing.tt2:68
+msgid "First bounce"
+msgstr "Πρώτο Bounce"
+
+#: ../web_tt2/reviewbouncing.tt2:69
+msgid "Last bounce"
+msgstr "Τελευταίο Bounce"
+
+#: ../web_tt2/reviewbouncing.tt2:96
+msgid "no score"
+msgstr "χωρίς δείκτη"
+
+#: ../web_tt2/reviewbouncing.tt2:129
+msgid "Reset errors for selected users"
+msgstr "Επαναφορά σφαλμάτων επιλεγμένων χρηστών"
 
 #: ../web_tt2/rss.tt2:15 ../web_tt2/rss.tt2:5
 msgid "Server error"
@@ -3791,6 +3805,46 @@ msgstr "%1 ανά ημέρα "
 msgid "Bookmark %1"
 msgstr "Σελιδοδείκτης %1"
 
+#: ../web_tt2/rss_request.tt2:5
+msgid "RSS channel"
+msgstr "RSS κανάλι"
+
+#: ../web_tt2/rss_request.tt2:7
+msgid ""
+"This server provides various news via RSS. Choose parameters and pickup the "
+"RSS url"
+msgstr ""
+"Ο εξυπηρετητής προσφέρει διάφορες ειδήσεις μέσω RSS. Επιλέξτε τις "
+"παραμέτρους και αντιγράψτε το URL του RSS"
+
+#: ../web_tt2/rss_request.tt2:12
+msgid "Limit the number of responses:"
+msgstr "Περιορίστε τον αριθμό την απαντήσεων:"
+
+#: ../web_tt2/rss_request.tt2:19
+msgid "Limit the number of days used for the selection:"
+msgstr "Περιορίστε τον αριθμό ημερών που χρησιμοποιείται για την επιλογή:"
+
+#: ../web_tt2/rss_request.tt2:31
+msgid "Update RSS URL"
+msgstr "Ενημέρωση RSS URL"
+
+#: ../web_tt2/rss_request.tt2:43
+msgid "latest arc:"
+msgstr "τελευταίο arc:"
+
+#: ../web_tt2/rss_request.tt2:48
+msgid "latest document:"
+msgstr "Τελευταίο έγγραφο:"
+
+#: ../web_tt2/rss_request.tt2:53
+msgid "active lists:"
+msgstr "Ενεργές λίστες:"
+
+#: ../web_tt2/rss_request.tt2:58
+msgid "latest lists:"
+msgstr "Πρόσφατες λίστες:"
+
 #: ../web_tt2/scenario_test.tt2:3
 msgid "Scenario test module"
 msgstr "Μονάδα δοκιμής σεναρίου"
@@ -3839,31 +3893,31 @@ msgstr ""
 msgid "Lists which %1 is subscribed "
 msgstr "Λίστες που είναι συνδρομητής ο %1 "
 
-#: ../web_tt2/search_user.tt2:11
+#: ../web_tt2/search_user.tt2:12
 msgid "role"
 msgstr "ρόλος"
 
-#: ../web_tt2/search_user.tt2:13
+#: ../web_tt2/search_user.tt2:14
 msgid "reception"
 msgstr "παραλαβή"
 
-#: ../web_tt2/search_user.tt2:15
+#: ../web_tt2/search_user.tt2:16
 msgid "topics"
 msgstr "θέματα"
 
-#: ../web_tt2/search_user.tt2:17
+#: ../web_tt2/search_user.tt2:18
 msgid "bounce"
 msgstr "bounce"
 
-#: ../web_tt2/search_user.tt2:35
+#: ../web_tt2/search_user.tt2:36
 msgid "member"
 msgstr "μέλος"
 
-#: ../web_tt2/search_user.tt2:36
+#: ../src/lib/List.pm:1500 ../web_tt2/search_user.tt2:37
 msgid "owner"
 msgstr "Ιδιοκτήτης"
 
-#: ../web_tt2/search_user.tt2:37
+#: ../web_tt2/search_user.tt2:38
 msgid "editor"
 msgstr "Συντάκτης"
 
@@ -3915,7 +3969,7 @@ msgstr "Αναζήτηση Χρήστη"
 msgid "Delay for active sessions (minutes)"
 msgstr "Καθυστέρηση για ενεργές συνδέσεις (λεπτά)"
 
-#: ../web_tt2/serveradmin.tt2:71
+#: ../web_tt2/serveradmin.tt2:72
 msgid "Show only connected users"
 msgstr "Προβολή μόνο συνδεδεμένων χρηστών"
 
@@ -4078,18 +4132,6 @@ msgstr "Μπορείτε να υποβάλετε κάποιο πρόβλημα �
 msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "Αυτή η διεργασία FastCGI (%1) έχει εξυπηρετήσει %2 σελίδες από %3."
 
-#: ../web_tt2/setlang.tt2:9
-msgid "Language selection"
-msgstr "Γλώσσα:"
-
-#: ../web_tt2/setlang.tt2:17
-msgid "Validate your language selection"
-msgstr "Επιβεβαιώστε την επιλογή γλώσσας"
-
-#: ../web_tt2/setlang.tt2:17
-msgid "Set language"
-msgstr "Ορισμός γλώσσας"
-
 #. (list_request_date)
 #: ../web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
@@ -4118,6 +4160,18 @@ msgstr "Πληροφοριακό αρχείο:"
 #: ../web_tt2/set_pending_list_request.tt2:52
 msgid "Configuration file"
 msgstr "Αρχείο διαμόρφωσης"
+
+#: ../web_tt2/setlang.tt2:9
+msgid "Language selection"
+msgstr "Γλώσσα:"
+
+#: ../web_tt2/setlang.tt2:17
+msgid "Validate your language selection"
+msgstr "Επιβεβαιώστε την επιλογή γλώσσας"
+
+#: ../web_tt2/setlang.tt2:17
+msgid "Set language"
+msgstr "Ορισμός γλώσσας"
 
 #: ../web_tt2/show_cert.tt2:6
 msgid "HTTPS authentication information"
@@ -4250,11 +4304,11 @@ msgstr ""
 "Σας στείλαμε ένα μήνυμα που περιλαμβάνει κωδικό επιβεβαίωσης. Ελέγξτε τα "
 "εισερχόμενα σας και χρησιμοποιήστε τον σύνδεσμο."
 
-#: ../web_tt2/skinsedit.tt2:5
+#: ../web_tt2/skinsedit.tt2:4
 msgid "Cascading Style Sheet"
 msgstr "Φύλλο Κλιμακωτού Στυλ"
 
-#: ../web_tt2/skinsedit.tt2:8
+#: ../web_tt2/skinsedit.tt2:7
 msgid ""
 "When not using css_url parameters, sympa deliver a dynamic CSS which is "
 "created using a template name css.tt2. Usually this template is comming from "
@@ -4277,7 +4331,7 @@ msgstr ""
 "διατηρηθούν κατα την εγκατάσταση νέας έκδοσης του sympa, οι παράμετροι "
 "css_path και css_url δεν πρέπει να δείχνουν στον ίδιο φάκελο."
 
-#: ../web_tt2/skinsedit.tt2:12
+#: ../web_tt2/skinsedit.tt2:11
 msgid ""
 "static css installation succeed. Reload the current page and/or check sympa "
 "logs  to be sure that static css a really in use."
@@ -4286,20 +4340,20 @@ msgstr ""
 "ελέγξτε τα αρχεία καταγραφής sympa  για να σιγουρευτείτε ότι το στατικό css "
 "είναι πράγματι σε χρήση"
 
-#: ../web_tt2/skinsedit.tt2:16
+#: ../web_tt2/skinsedit.tt2:15
 msgid "The css_path parameter is defined, value is"
 msgstr "Η τιμή της παραμέτρου css_path καθορίστηκε, η τιμή είναι"
 
-#: ../web_tt2/skinsedit.tt2:17
+#: ../web_tt2/skinsedit.tt2:16
 msgid "the current definition for css location (css_url parameter) is"
 msgstr "Ο τρέχων ορισμός της τοποθεσίας του css (παράμετρος του css_url) είναι"
 
-#: ../web_tt2/skinsedit.tt2:25
+#: ../web_tt2/skinsedit.tt2:24
 msgid "install static css"
 msgstr "εγκατέστησε στατικό css"
 
 #. (cssurl)
-#: ../web_tt2/skinsedit.tt2:31
+#: ../web_tt2/skinsedit.tt2:30
 msgid ""
 "Currently you have not defined the css_path parameter. <strong>You should "
 "edit the robot.conf configuration file </strong> (or if not using virtual "
@@ -4317,11 +4371,11 @@ msgstr ""
 "αποθηκεύεται το css (η τρέχουσα τιμή είναι <a target=\"test\" href=\"%1\">%"
 "1</a>)."
 
-#: ../web_tt2/skinsedit.tt2:35
+#: ../web_tt2/skinsedit.tt2:34
 msgid "Colors"
 msgstr "Χρώματα"
 
-#: ../web_tt2/skinsedit.tt2:38
+#: ../web_tt2/skinsedit.tt2:37
 msgid ""
 "If you are not using css_path and css_url parameters, colors are defined in "
 "the robot.conf configuration file. Otherwise, colors are defined in the "
@@ -4336,7 +4390,7 @@ msgstr ""
 "αντιγράψετε το αποτέλεσμα σε ένα νέο static css αρχείο. Ο στόχος καθορίζεται "
 "από το css_path."
 
-#: ../web_tt2/skinsedit.tt2:41
+#: ../web_tt2/skinsedit.tt2:40
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
@@ -4348,7 +4402,7 @@ msgstr ""
 "συνήθως αυτό το αρχείο έρχεται με τη διανομή του sympa οπότε το css σας "
 "μπορεί να διαγραφεί."
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:44
 msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
@@ -4362,11 +4416,11 @@ msgstr ""
 "εγκαθίσταται στην πραγματικότητα, αλλά μόνο για την δική σας σύνδεση. Όταν "
 "καταλήξετε στην επιλογή χρωμάτων, αποθηκεύστε τα σε ένα νέο static css.\n"
 
-#: ../web_tt2/skinsedit.tt2:50
+#: ../web_tt2/skinsedit.tt2:49
 msgid " pick the color you want to test. "
 msgstr " επιλέξτε το χρώμα που θέλετε να δοκιμάσετε. "
 
-#: ../web_tt2/skinsedit.tt2:56
+#: ../web_tt2/skinsedit.tt2:55
 msgid "Select the parameter you want to change: "
 msgstr "Επιλέξτε την παράμετρο που θέλετε να αλλάξετε: "
 
@@ -4414,44 +4468,44 @@ msgstr "παράμετρος"
 msgid "parameter value"
 msgstr "τιμή παραμέτρου"
 
-#: ../web_tt2/skinsedit.tt2:82
+#: ../web_tt2/skinsedit.tt2:82 ../web_tt2/skinsedit.tt2:85
 msgid "color lookup"
 msgstr "αναζήτηση χρώματος"
 
-#: ../web_tt2/skinsedit.tt2:83
+#: ../web_tt2/skinsedit.tt2:87
 msgid "parameter usage"
 msgstr "χρήση παραμέτρου"
 
-#: ../web_tt2/skinsedit.tt2:119 ../web_tt2/skinsedit.tt2:125
-#: ../web_tt2/skinsedit.tt2:131 ../web_tt2/skinsedit.tt2:143
-#: ../web_tt2/skinsedit.tt2:161 ../web_tt2/skinsedit.tt2:167
-#: ../web_tt2/skinsedit.tt2:89 ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103 ../web_tt2/skinsedit.tt2:135
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:151
+#: ../web_tt2/skinsedit.tt2:167 ../web_tt2/skinsedit.tt2:191
+#: ../web_tt2/skinsedit.tt2:199 ../web_tt2/skinsedit.tt2:95
 msgid "background color of:"
 msgstr "χρώμα του φόντου:"
 
-#: ../web_tt2/skinsedit.tt2:89
+#: ../web_tt2/skinsedit.tt2:95
 msgid "one out of two lines in tables, alternated with color_14."
 msgstr ""
 "το χρώμα κάθε δεύτερης γραμμής στους πίνακες, θα αντικατασταθεί με το χρώμα "
 "color_14. "
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "main navigation tabs;"
 msgstr "κεντρικές καρτέλες περιήγησης"
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "most of the buttons;"
 msgstr "τα περισσότερα από τα κουμπιά;"
 
-#: ../web_tt2/skinsedit.tt2:95
+#: ../web_tt2/skinsedit.tt2:103
 msgid "border colors in the online help."
 msgstr "χρώματα περιγράμματος στην online βοήθεια"
 
-#: ../web_tt2/skinsedit.tt2:101 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:111 ../web_tt2/skinsedit.tt2:159
 msgid "font and border color of:"
 msgstr "χρώμα χαρακτήρα και περιγράμματος του:"
 
-#: ../web_tt2/skinsedit.tt2:101
+#: ../web_tt2/skinsedit.tt2:111
 msgid ""
 "almost everything. Exceptions for borders are &lt;TD/&gt; borders; "
 "exceptions for fonts are links, buttons and some titles."
@@ -4459,111 +4513,115 @@ msgstr ""
 "σχεδόν όλα. Οι εξαιρέσεις για τα περιθώρια είναι &tt; TD/&gt; borders; οι "
 "εξαιρέσεις για χαρακτήρες είναι σύνδεσμοι, κουμπιά και μερικοί τίτλοι."
 
-#: ../web_tt2/skinsedit.tt2:107 ../web_tt2/skinsedit.tt2:179
-msgid "unused"
-msgstr "αχρησιμοποίητο"
+#: ../web_tt2/skinsedit.tt2:119
+msgid "Background color for the news area of the home page."
+msgstr "Χρώμα φόντου για την περιοχή ειδήσεων στην αρχική σελίδα."
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 msgid "font color of:"
 msgstr "χρώμα γραμματοσειράς:"
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 msgid "titles;"
 msgstr "τίτλοι"
 
-#: ../web_tt2/skinsedit.tt2:113
+#: ../web_tt2/skinsedit.tt2:127
 msgid "hovered links."
 msgstr "hovered σύνδεσμοι."
 
-#: ../web_tt2/skinsedit.tt2:119
+#: ../web_tt2/skinsedit.tt2:135
 msgid "all the main interface boxes."
 msgstr "τα κύρια κουτιά του interface."
 
-#: ../web_tt2/skinsedit.tt2:125 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:159
 msgid "buttons;"
 msgstr "κουμπιά"
 
-#: ../web_tt2/skinsedit.tt2:125 ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:143 ../web_tt2/skinsedit.tt2:159
 msgid "navigation tabs;"
 msgstr "καρτέλες περιήγησης"
 
-#: ../web_tt2/skinsedit.tt2:125
+#: ../web_tt2/skinsedit.tt2:143
 msgid "active option, if you have several buttons representing an alternative."
 msgstr "ενεργή επιλογή, εάν υπάρχουν πολλές επιλογές."
 
-#: ../web_tt2/skinsedit.tt2:131
+#: ../web_tt2/skinsedit.tt2:151
 msgid "error messages."
 msgstr "μηνύματα σφάλματος."
 
-#: ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:159
 msgid "hovered links;"
 msgstr "hovered σύνδεσμοι"
 
-#: ../web_tt2/skinsedit.tt2:137
+#: ../web_tt2/skinsedit.tt2:159
 msgid "background color of hovered buttons."
 msgstr "χρώμα φόντου hovered κουμπιών."
 
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 msgid "main page;"
 msgstr "κύρια σελίδα"
 
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 msgid "table headers;"
 msgstr "κεφαλίδες πινάκων,"
 
-#: ../web_tt2/skinsedit.tt2:143
+#: ../web_tt2/skinsedit.tt2:167
 msgid "buttons."
 msgstr "κουμπιά."
 
-#: ../web_tt2/skinsedit.tt2:149
+#: ../web_tt2/skinsedit.tt2:175
 msgid "border color for forms."
 msgstr "χρώμα περιγράμματος φορμών."
 
-#: ../web_tt2/skinsedit.tt2:155
+#: ../web_tt2/skinsedit.tt2:183
 msgid "border color that can be used to isolate some forms."
 msgstr ""
 "χρώμα περιγράμματος που μπορεί να χρησιμοποιηθεί για την απομόνωση κάποιων "
 "φορμών."
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "top box;"
 msgstr "πάνω κουτί"
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "footer box;"
 msgstr "κουτί υποσέλιδος."
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "online help buttons;"
 msgstr "κουμπιά online βοήθειας"
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "border color of:"
 msgstr "χρώμα περιγράμματος:"
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "tables;"
 msgstr "πίνακες"
 
-#: ../web_tt2/skinsedit.tt2:161
+#: ../web_tt2/skinsedit.tt2:191
 msgid "side menu areas."
 msgstr "περιοχές πλευρικού μενού."
 
-#: ../web_tt2/skinsedit.tt2:167
+#: ../web_tt2/skinsedit.tt2:199
 msgid "editable form areas (text areas, selection lists, etc.)."
 msgstr "εγγράψιμες περιοχές φορμών (περιοχές κειμένου,λίστες επιλογών,κλπ.)"
 
-#: ../web_tt2/skinsedit.tt2:173
+#: ../web_tt2/skinsedit.tt2:207
 msgid "Default background color of the tables."
 msgstr "Προεπιλεγμένο χρώμα παρασκηνίου πινάκων."
 
-#: ../web_tt2/skinsedit.tt2:185 ../web_tt2/skinsedit.tt2:191
-#: ../web_tt2/skinsedit.tt2:197 ../web_tt2/skinsedit.tt2:203
-#: ../web_tt2/skinsedit.tt2:209 ../web_tt2/skinsedit.tt2:215
+#: ../web_tt2/skinsedit.tt2:215
+msgid "unused"
+msgstr "αχρησιμοποίητο"
+
+#: ../web_tt2/skinsedit.tt2:221 ../web_tt2/skinsedit.tt2:227
+#: ../web_tt2/skinsedit.tt2:233 ../web_tt2/skinsedit.tt2:239
+#: ../web_tt2/skinsedit.tt2:245 ../web_tt2/skinsedit.tt2:251
 msgid "deprecated"
 msgstr "ξεπερασμένο"
 
-#: ../web_tt2/skinsedit.tt2:221
+#: ../web_tt2/skinsedit.tt2:257
 msgid "W3C CSS validation tools"
 msgstr "Εργαλεία επιβεβαίωσης WC3 CSS"
 
@@ -4644,19 +4702,19 @@ msgstr "Είστε συνδρομητής από"
 msgid "Receiving mode:"
 msgstr "Τρόποι παραλαβής:"
 
-#: ../web_tt2/suboptions.tt2:25
+#: ../web_tt2/suboptions.tt2:35
 msgid "Topic subscription:"
 msgstr "Συνδρομή θέματος:"
 
-#: ../web_tt2/suboptions.tt2:37 ../web_tt2/suboptions.tt2:39
+#: ../web_tt2/suboptions.tt2:47 ../web_tt2/suboptions.tt2:49
 msgid "Other (messages not tagged) "
 msgstr "Άλλο (μη επισημασμένο μήνυμα) "
 
-#: ../web_tt2/suboptions.tt2:46
+#: ../web_tt2/suboptions.tt2:56
 msgid "Disable topics subscription"
 msgstr "Απενεργοποίηση συνδρομής θεμάτων"
 
-#: ../web_tt2/suboptions.tt2:51
+#: ../web_tt2/suboptions.tt2:61
 msgid "Only possible for direct reception modes."
 msgstr "Διαθέσιμο μόνο για τρόπους άμεσης παραλαβής."
 
@@ -4965,7 +5023,7 @@ msgstr "περίοδος αναζήτησης:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16281
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16396
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5030,40 +5088,6 @@ msgstr "Προεπιλεγμένο μήνυμα απόρριψης"
 #: ../web_tt2/viewmod.tt2:18
 msgid "Do Not Notify"
 msgstr "Χωρίς Ειδοποίηση"
-
-#: ../web_tt2/view_template.tt2:7
-msgid "Template name: "
-msgstr "Όνομα προτύπου: "
-
-#: ../web_tt2/view_template.tt2:8
-msgid "Type: "
-msgstr "Τύπος: "
-
-#: ../web_tt2/view_template.tt2:9
-msgid "Path: "
-msgstr "Διαδρομή: "
-
-#. (list,robot)
-#: ../web_tt2/view_template.tt2:12
-msgid "( this template is defined for list %1@%2 )"
-msgstr "( αυτό το πρότυπο ορίστηκε για τη λίστα %1@%2 )"
-
-#. (robot)
-#: ../web_tt2/view_template.tt2:15
-msgid ""
-"( this template is the default for all lists of robot %1 unless it is "
-"redefined for a specific list )"
-msgstr ""
-"( αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις λίστες του εξυπηρετητή "
-"%1 εκτός εάν έχει οριστεί αλλιώς για συγκεκριμένη λίστα )"
-
-#: ../web_tt2/view_template.tt2:17
-msgid ""
-"( this template is the default used by all robots unless redefined for a "
-"specific robot )"
-msgstr ""
-"(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός αν "
-"έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
 
 #: ../mail_tt2/authorization_reject.tt2:5
 msgid "Web archives are closed."
@@ -5569,7 +5593,7 @@ msgstr "Λάθος σύνταξη εντολής."
 #. (u_err.listname)
 #. (glob.listname)
 #. (listname)
-#: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:178
+#: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:187
 #: ../mail_tt2/message_report.tt2:56
 msgid "List '%1' does not exist."
 msgstr "Η λίστα '%1' δεν υπάρχει."
@@ -5603,31 +5627,40 @@ msgstr ""
 "Η λίστα %1 δεν επιτρέπει τη μέθοδο σύνοψης. \n"
 "Η διαμόρφωση σχετικά με αυτή την εντολή δεν έχει ενημερωθεί."
 
-#. (u_err.listname,u_err.modes)
+#. (u_err.listname)
 #: ../mail_tt2/command_report.tt2:121
-msgid "List %1 allows only these reception modes: %2"
+#, fuzzy
+msgid "List %1 allows only these reception modes: "
 msgstr "Η λίστα %1 επιτρέπει μόνο τους τρόπους λήψης: %2"
 
-#: ../mail_tt2/command_report.tt2:124
+#: ../mail_tt2/command_report.tt2:124 ../mail_tt2/info_report.tt2:29
+msgid ", and "
+msgstr ""
+
+#: ../mail_tt2/command_report.tt2:126 ../mail_tt2/info_report.tt2:31
+msgid ", "
+msgstr ""
+
+#: ../mail_tt2/command_report.tt2:133
 msgid "This list archive is empty."
 msgstr "Το αρχείο της λίστας είναι άδειο."
 
-#: ../mail_tt2/command_report.tt2:127
+#: ../mail_tt2/command_report.tt2:136
 msgid "Required file does not exist."
 msgstr "Το απαιτούμενο αρχείο δεν υπάρχει."
 
 #. (u_err.listname)
-#: ../mail_tt2/command_report.tt2:130
+#: ../mail_tt2/command_report.tt2:139
 msgid "List %1 has no subscriber."
 msgstr "Η λίστα '%1' δεν έχει συνδρομητές."
 
 #. (u_err.email,u_err.listname)
-#: ../mail_tt2/command_report.tt2:133
+#: ../mail_tt2/command_report.tt2:142
 msgid "The User '%1' is already subscriber of list '%2'."
 msgstr "Ο χρήστης '%1' είναι ήδη συνδρομητής της λίστας '%2'."
 
 #. (u_err.command)
-#: ../mail_tt2/command_report.tt2:138
+#: ../mail_tt2/command_report.tt2:147
 msgid ""
 "The authentication process failed.\n"
 "You probably confirmed your %1 using a different\n"
@@ -5638,15 +5671,15 @@ msgstr ""
 "διαφορετική διεύθυνση ηλεκτρονικής αλληλογραφίας. Παρακαλώ προσπαθήστε "
 "χρησιμοποιώντας την κανονική σας διεύθυνση."
 
-#: ../mail_tt2/command_report.tt2:150
+#: ../mail_tt2/command_report.tt2:159
 msgid "Command has failed because of an internal server error:"
 msgstr "Η εντολή απέτυχε λόγω εσωτερικού σφάλματος."
 
-#: ../mail_tt2/command_report.tt2:152
+#: ../mail_tt2/command_report.tt2:161
 msgid "These commands have failed because of an internal server error:"
 msgstr "Αυτές οι εντολές απέτυχαν λόγω εσωτερικού σφάλματος:"
 
-#: ../mail_tt2/command_report.tt2:169
+#: ../mail_tt2/command_report.tt2:178
 msgid ""
 "Ignoring message body not in text/plain, please use text/plain only (or put "
 "your command in the subject)."
@@ -5654,45 +5687,20 @@ msgstr ""
 "Το μήνυμα θα αγνοηθεί καθώς το σώμα του δεν είναι απλό κείμενο, παρακαλούμε "
 "χρησιμοποιήστε μόνο απλό κείμενο (ή ορίστε την εντολή στο θέμα)."
 
-#: ../mail_tt2/command_report.tt2:172
+#: ../mail_tt2/command_report.tt2:181
 msgid "No command found in message."
 msgstr "Δε βρέθηκε εντολή στο μήνυμα."
 
-#: ../mail_tt2/command_report.tt2:175
+#: ../mail_tt2/command_report.tt2:184
 msgid "Ignoring message because of an internal server error."
 msgstr "Αγνόηση μηνύματος λόγω εσωτερικού σφάλματος."
 
 #. (conf.wwsympa_url)
-#: ../mail_tt2/command_report.tt2:185
+#: ../mail_tt2/command_report.tt2:194
 msgid "For further information, check the mailing list web site %1"
 msgstr ""
 "Για περισσότερες πληροφορίες, δείτε την ιστοσελίδα του εξυπηρετητή "
 "ηλεκτρονικής αλληλογραφίας."
-
-#. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
-msgid "%1 Digest %2"
-msgstr "%1 Σύνοψη %2"
-
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2775
-msgid "Table of contents:"
-msgstr "Πίνακας περιεχομένων:"
-
-#. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:27
-msgid "End of %1 Digest %2"
-msgstr "Τέλος της %1 Επισκόπησης %2"
-
-#. (list.name)
-#: ../mail_tt2/digest.tt2:4
-msgid "Digest for list %1"
-msgstr "Σύνοψη λίστας %1"
-
-#. (list.name,date)
-#: ../mail_tt2/digest.tt2:34 ../mail_tt2/get_archive.tt2:33
-msgid "End of digest for list %1 - %2"
-msgstr "Τέλος της σύναψης της λίστας %1 - %2"
 
 #: ../mail_tt2/d_install_shared.tt2:2
 msgid "Your document has been installed."
@@ -5723,6 +5731,28 @@ msgid ""
 msgstr ""
 "Το έγγραφό σας %1 για τη λίστα %2@%3\n"
 "απορρίφθηκε από τον %4 συντονιστή της λίστας."
+
+#. (list.name,date)
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest.tt2:4
+#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
+msgid "%1 Digest %2"
+msgstr "%1 Σύνοψη %2"
+
+#. (current_group,total_group)
+#: ../mail_tt2/digest.tt2:4 ../mail_tt2/digest_plain.tt2:4
+#, fuzzy
+msgid " (%1/%2)"
+msgstr "σελίδα %1 / %2"
+
+#: ../mail_tt2/digest.tt2:12 ../mail_tt2/digest_plain.tt2:9
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2986
+msgid "Table of contents:"
+msgstr "Πίνακας περιεχομένων:"
+
+#. (list.name,date)
+#: ../mail_tt2/digest.tt2:38 ../mail_tt2/digest_plain.tt2:28
+msgid "End of %1 Digest %2"
+msgstr "Τέλος της %1 Επισκόπησης %2"
 
 #. (list.name)
 #: ../mail_tt2/expire_deletion.tt2:2 ../mail_tt2/removed.tt2:2
@@ -5772,7 +5802,12 @@ msgstr "Διαγραφή:"
 msgid "Archive of %1, file %2"
 msgstr "Αρχείο της λίστας %1, έγγραφο %2"
 
-#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1627
+#. (list.name,date)
+#: ../mail_tt2/get_archive.tt2:33
+msgid "End of digest for list %1 - %2"
+msgstr "Τέλος της σύναψης της λίστας %1 - %2"
+
+#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1634
 msgid "Subscription summary"
 msgstr "Περίληψη συνδρομής"
 
@@ -5793,8 +5828,8 @@ msgstr ""
 "Για κάθε λίστα υπάρχει μία διεύθυνση ηλεκτρονικού ταχυδρομείου, η οποία "
 "χρησιμοποιείται για την αποστολή μηνυμάτων αποχώρησης συνδρομητών."
 
-#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:195
-#: ../src/lib/Commands.pm:212
+#: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:198
+#: ../src/lib/Commands.pm:215
 msgid "User guide"
 msgstr "Οδηγός χρήστη"
 
@@ -6053,7 +6088,7 @@ msgstr "Αποστολή μηνυμάτων  : %1"
 msgid "Review subscribers: %1"
 msgstr "Ανασκόπηση συνδρομητών: %1"
 
-#. (reply_to_header.value)
+#. ('')
 #: ../mail_tt2/info_report.tt2:21
 msgid "Reply to           : %1"
 msgstr "Απάντηση προς           : %1"
@@ -6068,13 +6103,13 @@ msgstr "Μέγιστο μέγεθος      : %1"
 msgid "Digest            : %1"
 msgstr "Σύνοψη            : %1"
 
-#. (available_reception_mode)
+#. ('')
 #: ../mail_tt2/info_report.tt2:26
 msgid "Receiving modes   : %1"
 msgstr "Τρόποι παραλαβής   : %1"
 
 #. (url)
-#: ../mail_tt2/info_report.tt2:27
+#: ../mail_tt2/info_report.tt2:36
 msgid "Homepage          : %1"
 msgstr "Αρχική σελίδα          : %1"
 
@@ -6122,6 +6157,43 @@ msgstr "αρχική"
 #: ../mail_tt2/list_created.tt2:9
 msgid "%1 admin page"
 msgstr "%1 σελίδα διαχειριστή"
+
+#. (list.name)
+#: ../mail_tt2/list_rejected.tt2:2
+#, fuzzy
+msgid "Rejected mailing list %1 creation"
+msgstr "%1 δημιουργία λίστας ηλεκτρονικού ταχυδρομείου"
+
+#. (list.name,list.host)
+#: ../mail_tt2/list_rejected.tt2:4
+msgid "%1@%2 mailing list has been rejected by listmaster."
+msgstr ""
+"Η λίστα ηλεκτρονικού ταχυδρομείου %1@%2 απορρίφθηκε από το διαχειριστή."
+
+#: ../mail_tt2/list_unknown.tt2:3
+msgid "List unknown"
+msgstr "Άγνωστη λίστα"
+
+#: ../mail_tt2/list_unknown.tt2:10
+msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
+msgstr ""
+"Αυτή είναι μία αυτοματοποιημένη απάντηση από τον Διαχειριστή Λιστών Sympa."
+
+#: ../mail_tt2/list_unknown.tt2:12
+msgid "The following address is not a known mailing list:"
+msgstr "Η ακόλουθη διεύθυνση δεν είναι μία γνωστή ηλεκτρονική λίστα:"
+
+#: ../mail_tt2/list_unknown.tt2:16
+msgid ""
+"To find out the correct listname, ask for this server's lists directory:"
+msgstr ""
+"Για να βρείτε το σωστό όνομα λίστας, δείτε τον κατάλογο λιστών του "
+"εξυπηρετητή:"
+
+#. (conf.listmaster_email,conf.host)
+#: ../mail_tt2/list_unknown.tt2:20
+msgid "For further information, please contact %1@%2"
+msgstr "Για περισσότερες πληροφορίες, επικοινωνήστε με %1@%2"
 
 #. (list.name)
 #: ../mail_tt2/listeditor_notification.tt2:4
@@ -6266,20 +6338,32 @@ msgstr ""
 "περισσότερες λεπτομέρειες: "
 
 #: ../mail_tt2/listmaster_notification.tt2:71
+#, fuzzy
+msgid "CSS files have been updated"
+msgstr "Το αρχείο διαμόρφωσης ενημερώθηκε"
+
+#: ../mail_tt2/listmaster_notification.tt2:73
+#, fuzzy
+msgid "Static CSS files have been updated.  Check log file for details."
+msgstr ""
+"Η δομή της βάσης δεδομένων ενημερώθηκε. Δείτε τα αρχεία καταγραφής για "
+"περισσότερες λεπτομέρειες: "
+
+#: ../mail_tt2/listmaster_notification.tt2:77
 msgid "DataBase connection restored"
 msgstr "Η σύνδεση της βάσης δεδομένων αποκαταστάθηκε"
 
 #. (db_name)
-#: ../mail_tt2/listmaster_notification.tt2:73
+#: ../mail_tt2/listmaster_notification.tt2:79
 msgid "Connection to database %1 restored."
 msgstr "Η σύνδεση στη βάση δεδομένων %1 αποκαταστάθηκε."
 
-#: ../mail_tt2/listmaster_notification.tt2:77
+#: ../mail_tt2/listmaster_notification.tt2:83
 msgid "Bulk mailer error"
 msgstr "Σφάλμα bulk mailer"
 
 #. (listname)
-#: ../mail_tt2/listmaster_notification.tt2:79
+#: ../mail_tt2/listmaster_notification.tt2:85
 msgid ""
 "Sympa failed to store a message for list %1 in the bulk mailer. You should "
 "check log files !!"
@@ -6287,91 +6371,91 @@ msgstr ""
 "Αποτυχία αποθήκευσης μηνύματος για τη λίστα %1 στον bulk mailer. Δείτε τα "
 "αρχεία καταγραφής !!"
 
-#: ../mail_tt2/listmaster_notification.tt2:83
+#: ../mail_tt2/listmaster_notification.tt2:89
 msgid "Loop detected"
 msgstr "Βρόχος ανιχνεύτηκε"
 
-#: ../mail_tt2/listmaster_notification.tt2:90
+#: ../mail_tt2/listmaster_notification.tt2:96
 msgid "A loop has been detected with the following message"
 msgstr "Βρόχος ανιχνεύτηκε με το παρακάτω μήνυμα"
 
-#: ../mail_tt2/listmaster_notification.tt2:104
+#: ../mail_tt2/listmaster_notification.tt2:110
 msgid "Antivirus scan failed"
 msgstr "Η σάρωση για έλεγχο ιών απέτυχε"
 
-#: ../mail_tt2/listmaster_notification.tt2:106
+#: ../mail_tt2/listmaster_notification.tt2:112
 msgid "The antivirus scan has failed while processing the following file:"
 msgstr "Το antivirus scan απέτυχε κατά την επεξεργασία του ακόλουθου αρχείου:"
 
-#: ../mail_tt2/listmaster_notification.tt2:109
+#: ../mail_tt2/listmaster_notification.tt2:115
 msgid "The returned error message:"
 msgstr "Το μήνυμα λάθους που επιστρέφει:"
 
-#: ../mail_tt2/listmaster_notification.tt2:114
+#: ../mail_tt2/listmaster_notification.tt2:120
 msgid "Parameter error"
 msgstr "Σφάλμα παραμέτρου"
 
 #. (par_name,par_value)
-#: ../mail_tt2/listmaster_notification.tt2:116
+#: ../mail_tt2/listmaster_notification.tt2:122
 msgid "The value for parameter %1 was badly defined: %2"
 msgstr "Η τιμή της παραμέτρου %1 ήταν κακώς ορισμένη: %2"
 
 #. (action)
-#: ../mail_tt2/listmaster_notification.tt2:117
+#: ../mail_tt2/listmaster_notification.tt2:123
 msgid "%1 impossible."
 msgstr "%1 αδύνατον."
 
-#: ../mail_tt2/listmaster_notification.tt2:118
 #: ../mail_tt2/listmaster_notification.tt2:124
 #: ../mail_tt2/listmaster_notification.tt2:130
-#: ../mail_tt2/listmaster_notification.tt2:138
-#: ../mail_tt2/listmaster_notification.tt2:288
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
-#: ../mail_tt2/listmaster_notification.tt2:378
+#: ../mail_tt2/listmaster_notification.tt2:136
+#: ../mail_tt2/listmaster_notification.tt2:144
+#: ../mail_tt2/listmaster_notification.tt2:294
+#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:382
+#: ../mail_tt2/listmaster_notification.tt2:394
 msgid "See logs for more details."
 msgstr "Δείτε τα αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
-#: ../mail_tt2/listmaster_notification.tt2:121
+#: ../mail_tt2/listmaster_notification.tt2:127
 msgid "Unable to create directory"
 msgstr "Αδυναμία δημιουργίας φακέλου"
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:123
+#: ../mail_tt2/listmaster_notification.tt2:129
 msgid "Sympa could not create directory %1"
 msgstr "Αδυναμία δημιουργίας φακέλου %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:127
+#: ../mail_tt2/listmaster_notification.tt2:133
 msgid "A message archiving failed"
 msgstr "Αρχειοθέτηση μηνύματος απέτυχε"
 
 #. (file,bad)
-#: ../mail_tt2/listmaster_notification.tt2:129
+#: ../mail_tt2/listmaster_notification.tt2:135
 msgid "Sympa could not archive message '%1'. Moving it into directory '%2'."
 msgstr ""
 "Αδύνατη η αρχειοθέτηση του μηνύματος '%1'. Μετακίνησή του στον φάκελο '%2'."
 
-#: ../mail_tt2/listmaster_notification.tt2:133
+#: ../mail_tt2/listmaster_notification.tt2:139
 msgid "A bounce management failed"
 msgstr "Απέτυχε διαχείριση bounce"
 
 #. (file,bad)
-#: ../mail_tt2/listmaster_notification.tt2:135
+#: ../mail_tt2/listmaster_notification.tt2:141
 msgid ""
 "Sympa could not handle bounce message '%1'. Moving it into directory '%2'."
 msgstr ""
 "Απέτυχε ο χειρισμός bounced μηνύματος '%1'. Μετακίνησή του στον φάκελο '%2'."
 
 #. (error)
-#: ../mail_tt2/listmaster_notification.tt2:137
+#: ../mail_tt2/listmaster_notification.tt2:143
 msgid "Error: %1"
 msgstr "Σφάλμα: %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:141
+#: ../mail_tt2/listmaster_notification.tt2:147
 msgid "incorrect format of edit_list.conf"
 msgstr "λάθος διαμόρφωση του edit_list.conf"
 
-#: ../mail_tt2/listmaster_notification.tt2:144
+#: ../mail_tt2/listmaster_notification.tt2:150
 msgid ""
 "edit_list.conf format has changed:\n"
 "'default' is no more accepted for a population."
@@ -6380,12 +6464,12 @@ msgstr ""
 "'default' δεν είναι πια επιτρεπτό."
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:146
+#: ../mail_tt2/listmaster_notification.tt2:152
 msgid "Refer to documentation to adapt %1."
 msgstr "Συμβουλευτείτε την τεκμηρίωση για την προσαρμογή της παραμέτρου %1."
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:148
+#: ../mail_tt2/listmaster_notification.tt2:154
 msgid ""
 "Until then we recommend your remove %1;\n"
 "default configuration will be used."
@@ -6394,11 +6478,11 @@ msgstr ""
 "Θα χρησιμοποιηθεί η προεπιλεγμένη διαμόρφωση."
 
 #. (listname)
-#: ../mail_tt2/listmaster_notification.tt2:151
+#: ../mail_tt2/listmaster_notification.tt2:157
 msgid "subscribers update failed for list %1"
 msgstr "ενημέρωση συνδρομητών απέτυχε για τη λίστα %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:153
+#: ../mail_tt2/listmaster_notification.tt2:159
 msgid ""
 "Sympa could not include subscribers from the following external data sources:"
 msgstr ""
@@ -6406,21 +6490,21 @@ msgstr ""
 "πηγές δεδομένων:"
 
 #. (e.name,e.type)
-#: ../mail_tt2/listmaster_notification.tt2:156
+#: ../mail_tt2/listmaster_notification.tt2:162
 msgid "Include of datasource %1 (type %2) failed."
 msgstr "Η εισαγωγή από την πηγή δεδομένων %1 (τύπου %2) απέτυχε."
 
-#: ../mail_tt2/listmaster_notification.tt2:159
-#: ../mail_tt2/listmaster_notification.tt2:166
+#: ../mail_tt2/listmaster_notification.tt2:165
+#: ../mail_tt2/listmaster_notification.tt2:172
 msgid "Check Sympa log files for more precise information"
 msgstr "Δείτε τα αρχεία καταγραφής για περισσότερες πληροφορίες"
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:163
+#: ../mail_tt2/listmaster_notification.tt2:169
 msgid "admins update failed for list %1"
 msgstr "ενημέρωση διαχειριστών απέτυχε για τη λίστα %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:165
+#: ../mail_tt2/listmaster_notification.tt2:171
 msgid ""
 "Sympa could not include admins from external data sources; the database or "
 "LDAP directory might be unreachable."
@@ -6429,50 +6513,50 @@ msgstr ""
 "πηγές δεδομένων. Η βάση δεδομένων ή ο εξυπηρετητής LDAP δεν ήταν προσβάσιμοι."
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:169
-#: ../mail_tt2/listmaster_notification.tt2:194
-#: ../mail_tt2/listmaster_notification.tt2:202
-#: ../mail_tt2/listmaster_notification.tt2:209
-#: ../mail_tt2/listmaster_notification.tt2:237
-#: ../mail_tt2/listmaster_notification.tt2:244
-#: ../mail_tt2/listmaster_notification.tt2:251
+#: ../mail_tt2/listmaster_notification.tt2:175
+#: ../mail_tt2/listmaster_notification.tt2:200
+#: ../mail_tt2/listmaster_notification.tt2:208
+#: ../mail_tt2/listmaster_notification.tt2:215
+#: ../mail_tt2/listmaster_notification.tt2:243
+#: ../mail_tt2/listmaster_notification.tt2:250
+#: ../mail_tt2/listmaster_notification.tt2:257
 msgid "list %1 in status error_config"
 msgstr "λίστα %1 σε κατάσταση error_config"
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:171
+#: ../mail_tt2/listmaster_notification.tt2:177
 msgid "No owner is defined for list %1."
 msgstr "Δεν ορίστηκαν ιδιοκτήτες για τη λίστα %1."
 
-#: ../mail_tt2/listmaster_notification.tt2:172
-#: ../mail_tt2/listmaster_notification.tt2:197
-#: ../mail_tt2/listmaster_notification.tt2:205
-#: ../mail_tt2/listmaster_notification.tt2:212
-#: ../mail_tt2/listmaster_notification.tt2:240
-#: ../mail_tt2/listmaster_notification.tt2:247
-#: ../mail_tt2/listmaster_notification.tt2:254
+#: ../mail_tt2/listmaster_notification.tt2:178
+#: ../mail_tt2/listmaster_notification.tt2:203
+#: ../mail_tt2/listmaster_notification.tt2:211
+#: ../mail_tt2/listmaster_notification.tt2:218
+#: ../mail_tt2/listmaster_notification.tt2:246
+#: ../mail_tt2/listmaster_notification.tt2:253
+#: ../mail_tt2/listmaster_notification.tt2:260
 msgid "The list status has been set to error_config."
 msgstr "Η κατάσταση της λίστας έχει τεθεί στην τιμή error_config."
 
-#: ../mail_tt2/listmaster_notification.tt2:173
-#: ../mail_tt2/listmaster_notification.tt2:198
-#: ../mail_tt2/listmaster_notification.tt2:206
-#: ../mail_tt2/listmaster_notification.tt2:213
-#: ../mail_tt2/listmaster_notification.tt2:220
-#: ../mail_tt2/listmaster_notification.tt2:227
-#: ../mail_tt2/listmaster_notification.tt2:241
-#: ../mail_tt2/listmaster_notification.tt2:248
-#: ../mail_tt2/listmaster_notification.tt2:255
+#: ../mail_tt2/listmaster_notification.tt2:179
+#: ../mail_tt2/listmaster_notification.tt2:204
+#: ../mail_tt2/listmaster_notification.tt2:212
+#: ../mail_tt2/listmaster_notification.tt2:219
+#: ../mail_tt2/listmaster_notification.tt2:226
+#: ../mail_tt2/listmaster_notification.tt2:233
+#: ../mail_tt2/listmaster_notification.tt2:247
+#: ../mail_tt2/listmaster_notification.tt2:254
+#: ../mail_tt2/listmaster_notification.tt2:261
 msgid "Check Sympa log files for more precise information."
 msgstr "Δείτε τα αρχεία καταγραφής για περισσότερες πληροφορίες."
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:177
+#: ../mail_tt2/listmaster_notification.tt2:183
 msgid "List owner/editor email changes"
 msgstr "Αλλαγές στις διευθύνσεις αλληλογραφίας των ιδιοκτητών/συντακτών"
 
 #. (previous_email,new_email)
-#: ../mail_tt2/listmaster_notification.tt2:179
+#: ../mail_tt2/listmaster_notification.tt2:185
 msgid ""
 "Member %1 has changed his owner/editor email address to %2. This change has "
 "been performed for the following lists:"
@@ -6481,12 +6565,12 @@ msgstr ""
 "εφαρμόστηκε σε στις παρακάτω λίστες:"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:186
+#: ../mail_tt2/listmaster_notification.tt2:192
 msgid "List %1: Failed to change admin email address"
 msgstr "Λίστα %1: Αποτυχία αλλαγής της ηλεκτρονικής διεύθυνσης διαχειριστή"
 
 #. (current_email,new_email,datasource)
-#: ../mail_tt2/listmaster_notification.tt2:190
+#: ../mail_tt2/listmaster_notification.tt2:196
 msgid ""
 "Admin %1 could not change his admin email address (new email address is %2) "
 "because he is included via a the following data sources: %3.\n"
@@ -6501,20 +6585,20 @@ msgstr ""
 "διεύθυνση του χρήστη."
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:196
+#: ../mail_tt2/listmaster_notification.tt2:202
 msgid "Errors occured while copying family %2 file in list %1 directory."
 msgstr ""
 "Σφάλμα κατά την αντιγραφή του αρχείου της οικογένειας %2 στον φάκελο της "
 "λίστας %1"
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:204
+#: ../mail_tt2/listmaster_notification.tt2:210
 msgid "List %1 configuration does not respect family %2 rules."
 msgstr ""
 "Η διαμόρφωση της λίστας %1 δεν υπακούει στους κανόνες της οικογένειας %2."
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:211
+#: ../mail_tt2/listmaster_notification.tt2:217
 msgid ""
 "Sympa could not check family %2 rules with list %1 param_constraint.conf "
 "file."
@@ -6522,56 +6606,56 @@ msgstr ""
 "Το λογισμικό Sympa δεν κατάφερε να ελέγξει τους κανόνες της οικογένειας %2 "
 "στο αρχείο param_constraint.conf της λίστας %1."
 
-#: ../mail_tt2/listmaster_notification.tt2:217
-#: ../mail_tt2/listmaster_notification.tt2:224
+#: ../mail_tt2/listmaster_notification.tt2:223
+#: ../mail_tt2/listmaster_notification.tt2:230
 msgid "errors in param_constraint.conf file"
 msgstr "σφάλματα στο αρχείο param_constraint.conf"
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:219
-#: ../mail_tt2/listmaster_notification.tt2:226
+#: ../mail_tt2/listmaster_notification.tt2:225
+#: ../mail_tt2/listmaster_notification.tt2:232
 msgid "Error(s) found in the file %1."
 msgstr "Σφάλμα στο αρχείο %1."
 
-#: ../mail_tt2/listmaster_notification.tt2:230
+#: ../mail_tt2/listmaster_notification.tt2:236
 msgid "File removed"
 msgstr "Το αρχείο αφαιρέθηκε"
 
 #. (param0)
-#: ../mail_tt2/listmaster_notification.tt2:232
+#: ../mail_tt2/listmaster_notification.tt2:238
 msgid "The following file has been removed: %1"
 msgstr "Το παρακάτω αρχείο έχει αφαιρεθεί: %1"
 
 #. (param1)
-#: ../mail_tt2/listmaster_notification.tt2:233
+#: ../mail_tt2/listmaster_notification.tt2:239
 msgid "A backup of the file has been made: %1"
 msgstr "Το αντίγραφο ασφαλείας του αρχείου έχει γίνει: %1"
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:239
+#: ../mail_tt2/listmaster_notification.tt2:245
 msgid "Sympa could not load family %2 for list %1."
 msgstr ""
 "Το λογισμικό Sympa δε μπόρεσε να φορτώσει την οικογένεια %2 για τη λίστα %1."
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:246
+#: ../mail_tt2/listmaster_notification.tt2:252
 msgid "Failed to instantiate family %2 for list %1"
 msgstr "Αποτυχία δημιουργίας οικογένειας %2 στη λίστα %1"
 
 #. (param0,param1)
-#: ../mail_tt2/listmaster_notification.tt2:253
+#: ../mail_tt2/listmaster_notification.tt2:259
 msgid "Sympa could not modify list %1 (Family %2)"
 msgstr ""
 "Το λογισμικό Sympa δεν μπόρεσε να τροποποιήσει τη λίστα %1 (Οικογένεια %2)"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:259
+#: ../mail_tt2/listmaster_notification.tt2:265
 #: ../mail_tt2/listowner_notification.tt2:43
 msgid "List %1 automatic bounce management"
 msgstr "Αυτόματη διαχείριση bounce λίστας %1"
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:263
+#: ../mail_tt2/listmaster_notification.tt2:269
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -6581,7 +6665,7 @@ msgstr ""
 "θα ενημερωθούν ότι ίσως διαγραφούν από τη λίστα %2:"
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:266
+#: ../mail_tt2/listmaster_notification.tt2:272
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -6591,7 +6675,7 @@ msgstr ""
 "διαγράφονται από τη λίστα %2:"
 
 #. (total,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:269
+#: ../mail_tt2/listmaster_notification.tt2:275
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -6601,44 +6685,59 @@ msgstr ""
 "έχουν επιλεχθεί από το λογισμικό Sympa ως διευθύνσεις που προκαλούν έντονα "
 "προβλήματα bounces:"
 
-#: ../mail_tt2/listmaster_notification.tt2:276
+#: ../mail_tt2/listmaster_notification.tt2:282
 #: ../mail_tt2/listowner_notification.tt2:60
 msgid "Managing bouncing subscribers:"
 msgstr "Διαχείριση bouncing συνδρομητών:"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:280
-#: ../mail_tt2/listmaster_notification.tt2:291
-#: ../mail_tt2/listmaster_notification.tt2:299
+#: ../mail_tt2/listmaster_notification.tt2:286
+#: ../mail_tt2/listmaster_notification.tt2:297
+#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:314
 msgid "Listmaster: internal server error "
 msgstr "Διαχειριστής συστήματος: εσωτερικό σφάλμα εξυπηρετητή "
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:282
-#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:288
+#: ../mail_tt2/listmaster_notification.tt2:316
 msgid " User %1 has encountered an internal server error"
 msgstr " Ο χρήστης %1 συνάντησε ένα εσωτερικό σφάλμα"
 
 #. (error)
-#: ../mail_tt2/listmaster_notification.tt2:293
+#: ../mail_tt2/listmaster_notification.tt2:299
 #, fuzzy
 msgid "The following error occurred while managing bounces: %1"
 msgstr "Το παρακάτω σφάλμα προέκυψε κατά τη διαχείριση bounces: %&"
 
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:373
+#. (listname,family,robot,msg_id)
+#: ../mail_tt2/listmaster_notification.tt2:307
+msgid ""
+"Failed to process message. Unable to create the dynamic list %1 on family %2@"
+"%3. Message <%4> was ignored."
+msgstr ""
+
+#. (family,robot,msg_id)
+#: ../mail_tt2/listmaster_notification.tt2:309
+msgid ""
+"Failed to process message: family %1@%2 does not exist. Unable to create the "
+"dynamic list.  Message <%3> was ignored."
+msgstr ""
+
+#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:389
 msgid "Web interface"
 msgstr "Περιβάλλον Web"
 
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:319
 msgid "Unable to change directory."
 msgstr "Αδύνατη η αλλαγή φακέλου."
 
-#: ../mail_tt2/listmaster_notification.tt2:305
+#: ../mail_tt2/listmaster_notification.tt2:320
 msgid "The authentication server name is not defined."
 msgstr "Δεν έχει οριστεί το όνομα του εξυπηρετητή ταυτοποίησης."
 
-#: ../mail_tt2/listmaster_notification.tt2:306
+#: ../mail_tt2/listmaster_notification.tt2:321
 msgid ""
 "auth.conf error: either email_http_header or ldap_host/"
 "ldap_get_email_by_uid_filter entries should be defined."
@@ -6647,291 +6746,291 @@ msgstr ""
 "ldap_get_email_by_uid_filter πρέπει να οριστεί."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:307
+#: ../mail_tt2/listmaster_notification.tt2:322
 msgid "Unkown authentication service %1."
 msgstr "Άγνωστη υπηρεσία ταυτοποίησης %1."
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:308
+#: ../mail_tt2/listmaster_notification.tt2:323
 msgid "Add user '%1' in DB failed."
 msgstr "Προσθήκη χρήστη '%1' στη βάση δεδομένων απέτυχε."
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:324
 msgid "Update user '%1' in DB failed"
 msgstr "Ενημέρωση του χρήστη '%1' στη βάση δεδομένων απέτυχε"
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:309
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:326
 msgid " (old email: %1)"
 msgstr " (παλιό έγγραφο %1)"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:310
+#: ../mail_tt2/listmaster_notification.tt2:325
 msgid "Add subscriber '%1' in DB failed."
 msgstr "Προσθήκη συνδρομητή '%1' στη βάση δεδομένων απέτυχε."
 
 #. (sub,old_email)
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:326
 msgid "Update subscriber '%1' in DB failed"
 msgstr "Ενημέρωση του συνδρομητή '%1' στη βάση δεδομένων απέτυχε"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:312
+#: ../mail_tt2/listmaster_notification.tt2:327
 msgid "Delete subscriber '%1' in DB failed."
 msgstr "Διαγραφή συνδρομητή '%1' στη βάση απέτυχρ"
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:313
+#: ../mail_tt2/listmaster_notification.tt2:328
 msgid "Delete user in DB for old email '%1' failed."
 msgstr "Διαγράψτε την διεύθυνση του χρήστη %1 στη βάση δεδομένων απέτυχε."
 
 #. (email,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:314
+#: ../mail_tt2/listmaster_notification.tt2:329
 msgid "Subscriber '%1' is not found in list %2."
 msgstr "Ο συνδρομητής '%1' δεν μπορεί να βρεθεί στη λίστα %2."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:315
+#: ../mail_tt2/listmaster_notification.tt2:330
 msgid "Unable to read file: '%1'."
 msgstr "Αδυναμία ανάγνωσης του αρχείου '%1'."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:316
+#: ../mail_tt2/listmaster_notification.tt2:331
 msgid "Unable to write file: '%1'."
 msgstr "Αδυναμία εγγραφής του αρχείου: '%1'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:332
 msgid "Unable to open file '%1'."
 msgstr "Αδυναμία ανοίγματος του αρχείου '%1'."
 
 #. (directory)
-#: ../mail_tt2/listmaster_notification.tt2:318
+#: ../mail_tt2/listmaster_notification.tt2:333
 msgid "Unable to open directory '%1'."
 msgstr "Αδυναμία ανοίγματος του φακέλου '%1'."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:319
+#: ../mail_tt2/listmaster_notification.tt2:334
 msgid "Unable to create directory '%1'."
 msgstr "Αδυναμία δημιουργίας φακέλου '%1'."
 
 #. (spool)
-#: ../mail_tt2/listmaster_notification.tt2:320
+#: ../mail_tt2/listmaster_notification.tt2:335
 msgid "Unable to open spool '%1'."
 msgstr "Αδυναμία ανοίγματος ουράς '%1'."
 
 #. (msg)
-#: ../mail_tt2/listmaster_notification.tt2:321
+#: ../mail_tt2/listmaster_notification.tt2:336
 msgid "Unable to get message '%1'."
 msgstr "Αδυναμία λήψης μηνύματος '%1'."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:322
+#: ../mail_tt2/listmaster_notification.tt2:337
 msgid "Unable to rename file '%1' into '%2'."
 msgstr "Αδυναμία μετονομασίας του αρχείου '%1' σε '%2'."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:338
 msgid "Unable to rename directory '%1' into '%2'."
 msgstr "Αδυναμία μετονομασίας του φακέλου '%1' σε '%2'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:339
 msgid "Unable to erase file '%1'."
 msgstr "Αδυναμία διαγραφής του αρχείου '%1'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:325
+#: ../mail_tt2/listmaster_notification.tt2:340
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr "Αδυναμία αποστολής εντολής DISTRIBUTE από '%1' στη λίστα '%2'."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:326
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "No HTML version of the message available in '%1'."
 msgstr "Δεν υπάρχει HTML έκδοση του μηνύματος στη '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:327
+#: ../mail_tt2/listmaster_notification.tt2:342
 msgid "Unable to update file config_changes for list '%1'."
 msgstr "Αδυναμία ενημέρωσης του αρχείου config_changes για τη λίστα '%1'."
 
 #. (month,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:343
 msgid "Unable to find month '%1' for list '%2'"
 msgstr "Αδυναμία εντοπισμού του μήνα '%1' για τη λίστα '%2'."
 
 #. (dir)
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:328
-#: ../mail_tt2/listmaster_notification.tt2:329
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:345
 msgid ": unable to read '%1'."
 msgstr ": αδυναμία ανάγνωσης '%1'."
 
 #. (arc_file,list.name,path)
-#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:344
 msgid "Unable to find archive '%1' for list '%2'"
 msgstr "Αδυναμία εντοπισμού του αρχείου '%1' για τη λίστα '%2'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:345
 msgid "Unable to find archive for list '%1'"
 msgstr "Αδυναμία εντοπισμού του αρχείου της λίστας '%1'"
 
-#: ../mail_tt2/listmaster_notification.tt2:331
+#: ../mail_tt2/listmaster_notification.tt2:346
 msgid "Unable to send archive: no message id found."
 msgstr "Αδυναμία αποστολής αρχείου: δεν βρέθηκε ID μηνύματος."
 
 #. (msgid)
-#: ../mail_tt2/listmaster_notification.tt2:332
+#: ../mail_tt2/listmaster_notification.tt2:347
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr "Δεν βρέθηκε μήνυμα στο αρχείο που να ταυτίζεται με το ID '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:333
+#: ../mail_tt2/listmaster_notification.tt2:348
 msgid "Cannot save config file for list '%1'."
 msgstr "Αδυναμία αποθήκευσης του αρχείου διαμόρφωσης της λίστας '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:349
 msgid "Failed to install aliases."
 msgstr "Αποτυχία εγκατάστασης παρωνυμίων (aliases)."
 
-#: ../mail_tt2/listmaster_notification.tt2:335
+#: ../mail_tt2/listmaster_notification.tt2:350
 msgid "Failed to remove aliases."
 msgstr "Αποτυχία αφαίρεσης παρωνυμίων (aliases)."
 
-#: ../mail_tt2/listmaster_notification.tt2:336
+#: ../mail_tt2/listmaster_notification.tt2:351
 msgid "Internal scenario error for 'create_list'."
 msgstr "εσωτερικό σφάλμα σεναρίου για 'create_list'."
 
-#: ../mail_tt2/listmaster_notification.tt2:337
+#: ../mail_tt2/listmaster_notification.tt2:352
 msgid "Unable to create list."
 msgstr "Αδυναμία δημιουργίας λίστας."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:340
+#: ../mail_tt2/listmaster_notification.tt2:355
 msgid "Unable to get family for list '%1'."
 msgstr "Αποτυχία λήψης οικογένειας για τη λίστα '%1'."
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:356
 msgid "Unable to reload list with new listname '%1'."
 msgstr "Αδυναμία φόρτωσης λίστας με νέο όνομα '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:356
 msgid "Unable to reload list"
 msgstr "Αδυναμία φόρτωσης λίστας"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:342
+#: ../mail_tt2/listmaster_notification.tt2:357
 msgid "Failed to inlude members for list '%1'"
 msgstr "Αποτυχία εισαγωγής μελών για τη λίστα '%1'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:358
 msgid "Failed to include list admins for list '%1'"
 msgstr "Αποτυχία εισαγωγής διαχειριστών για τη λίστα '%1'"
 
-#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:359
 msgid "No owner is defined for the list '%1'"
 msgstr "Δεν ορίστηκαν ιδιοκτήτες για τη λίστα '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:345
+#: ../mail_tt2/listmaster_notification.tt2:360
 msgid "The exportation to an Ldap directory failed for list '%1'"
 msgstr "Η εξαγωγή σε κατάλογο LDAP απέτυχε για τη λίστα '%1'"
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:346
+#: ../mail_tt2/listmaster_notification.tt2:361
 msgid "Unable to check listname '%1' on SMTP server"
 msgstr "Αδυναμία ελέγχου ονόματος λίστας '%1' στον εξυπηρετητή SMTP"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:347
+#: ../mail_tt2/listmaster_notification.tt2:362
 msgid "Cannot create shared for list '%1'."
 msgstr "Αδυναμία δημιουργίας καταλόγου κοινοχρήστων για τη λίστα '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:348
+#: ../mail_tt2/listmaster_notification.tt2:363
 msgid "Cannot restore shared for list '%1'."
 msgstr "Αδυναμία αποκατάστασης κοινοχρήστων για τη λίστα '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:349
+#: ../mail_tt2/listmaster_notification.tt2:364
 msgid "Cannot delete shared for list '%1'."
 msgstr "Αδυναμία διαγραφής κοινοχρήστων για τη λίστα '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:350
+#: ../mail_tt2/listmaster_notification.tt2:365
 msgid "Impossible to browse shared documents for list '%1'."
 msgstr "Αδύνατη η προβολή κοινόχρηστων εγγράφων για τη λίστα '%1'."
 
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:351
+#: ../mail_tt2/listmaster_notification.tt2:366
 msgid "Cannot upload file '%1'."
 msgstr "Αδυναμία ανεβάσματος του αρχείου '%1'."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:353
+#: ../mail_tt2/listmaster_notification.tt2:368
 msgid "Errors while unzipping file '%1'."
 msgstr "Σφάλμα κατά την αποσυμπίεση του αρχείου '%1'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:354
+#: ../mail_tt2/listmaster_notification.tt2:369
 msgid "Unable to send command REMIND from '%1' to list '%2'."
 msgstr "Αδυναμία αποστολής της εντολής REMIND από '%1' στη λίστα '%2'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:355
+#: ../mail_tt2/listmaster_notification.tt2:370
 msgid "Unable to send mail from '%1' to list '%2'."
 msgstr "Αδυναμία αποστολής μηνυμάτων από '%1' στη λίστα '%2'."
 
 #. (key,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:356
+#: ../mail_tt2/listmaster_notification.tt2:371
 msgid "Unable to access the message authenticated with key '%1' for list '%2'."
 msgstr ""
 "Αδυναμία πρόσβασης του μηνύματος ταυτοποιημένου με το κλειδί '%1' για τη "
 "λίστα '%2'."
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:357
+#: ../mail_tt2/listmaster_notification.tt2:372
 msgid "Unable to delete subscription request for user '%1'."
 msgstr "Αδυναμία διαγραφής αιτήματος συνδρομής του χρήστη '%1'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:358
+#: ../mail_tt2/listmaster_notification.tt2:373
 msgid "Unable to add file '%1' to archives."
 msgstr "Αδυναμία προσθήκης αρχείου '%1' στο αρχείο."
 
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:359
+#: ../mail_tt2/listmaster_notification.tt2:374
 msgid "Unable to write file zip '%1'."
 msgstr "Αδυναμία εγγραφής συμπιεσμένου αρχείου '%1'."
 
 #. (path,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:361
+#: ../mail_tt2/listmaster_notification.tt2:376
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
 "Αδυναμία δημιουργίας κοινόχρηστου εγγράφου στη διαδρομή '%1' για τη λίστα '%"
 "2'."
 
-#: ../mail_tt2/listmaster_notification.tt2:362
+#: ../mail_tt2/listmaster_notification.tt2:377
 msgid "Parameter cookie undefined, authentication failure."
 msgstr "Μη ορισμένη παράμετρος cookie, αποτυχία ταυτοποίησης."
 
 #. (env)
-#: ../mail_tt2/listmaster_notification.tt2:363
+#: ../mail_tt2/listmaster_notification.tt2:378
 msgid "Cookie error: '%1' undefined, authentication failure."
 msgstr "Σφάλμα cookie: '%1' μη ορισμένο, αποτυχία ταυτοποίησης."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:370
+#: ../mail_tt2/listmaster_notification.tt2:386
 msgid "Listmaster: system error "
 msgstr "Διαχειριστής συστήματος: σφάλμα συστήματος "
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:372
+#: ../mail_tt2/listmaster_notification.tt2:388
 msgid " User %1 has encountered a system error"
 msgstr " Ο χρήστης %1 αντιμετώπισε σφάλμα συστήματος"
 
@@ -7195,12 +7294,6 @@ msgstr ""
 msgid "List %1 / %2"
 msgstr "Λίστα %1 / %2"
 
-#. (list.name,list.host)
-#: ../mail_tt2/list_rejected.tt2:4
-msgid "%1@%2 mailing list has been rejected by listmaster."
-msgstr ""
-"Η λίστα ηλεκτρονικού ταχυδρομείου %1@%2 απορρίφθηκε από το διαχειριστή."
-
 #: ../mail_tt2/lists.tt2:2
 msgid "Public lists"
 msgstr "Δημόσιες λίστες"
@@ -7209,31 +7302,6 @@ msgstr "Δημόσιες λίστες"
 #: ../mail_tt2/lists.tt2:4
 msgid "Here is the list of lists from %1@%2"
 msgstr "Η λίστα των λιστών από %1@%2"
-
-#: ../mail_tt2/list_unknown.tt2:3
-msgid "List unknown"
-msgstr "Άγνωστη λίστα"
-
-#: ../mail_tt2/list_unknown.tt2:10
-msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
-msgstr ""
-"Αυτή είναι μία αυτοματοποιημένη απάντηση από τον Διαχειριστή Λιστών Sympa."
-
-#: ../mail_tt2/list_unknown.tt2:12
-msgid "The following address is not a known mailing list:"
-msgstr "Η ακόλουθη διεύθυνση δεν είναι μία γνωστή ηλεκτρονική λίστα:"
-
-#: ../mail_tt2/list_unknown.tt2:16
-msgid ""
-"To find out the correct listname, ask for this server's lists directory:"
-msgstr ""
-"Για να βρείτε το σωστό όνομα λίστας, δείτε τον κατάλογο λιστών του "
-"εξυπηρετητή:"
-
-#. (conf.listmaster_email,conf.host)
-#: ../mail_tt2/list_unknown.tt2:20
-msgid "For further information, please contact %1@%2"
-msgstr "Για περισσότερες πληροφορίες, επικοινωνήστε με %1@%2"
 
 #: ../mail_tt2/message_report.tt2:4
 msgid "Message distribution: Internal server error"
@@ -7607,6 +7675,11 @@ msgid ""
 msgstr ""
 "Αν δεν επιθυμείτε την εγγραφή ως συνδρομητής, αγνοείστε αυτό το μήνυμα."
 
+#. (list.name)
+#: ../mail_tt2/review.tt2:2
+msgid "REVIEW %1"
+msgstr ""
+
 #. (list.name,list.host)
 #: ../mail_tt2/review.tt2:4
 msgid "Here are the subscribers of %1@%2 mailing list:"
@@ -7726,6 +7799,11 @@ msgstr ""
 "ολοκληρώσετε τη διαδικασία."
 
 #. (list.name)
+#: ../mail_tt2/stats_report.tt2:2
+msgid "STATS %1"
+msgstr ""
+
+#. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
 msgid "Information regarding list %1"
 msgstr "Πληροφορίες για τη λίστα %1"
@@ -7818,14 +7896,17 @@ msgstr "Διαχείριση της λίστας %1"
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:30
+#, fuzzy
 msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
+"You have been delegated the responsability of list owner by %1 for list %2@%"
+"3."
 msgstr "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
 
 #. (delegator,list.name,list.host)
 #: ../mail_tt2/user_notification.tt2:32
+#, fuzzy
 msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
+"You have been delegated the responsability of list moderator by %1 for list %"
 "2@%3."
 msgstr ""
 "Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %1."
@@ -8017,6 +8098,7 @@ msgstr ""
 
 #: ../src/etc/scenari/access_web_archive.closed:1
 #: ../src/etc/scenari/invite.closed:1 ../src/etc/scenari/send.closed:1
+#: ../src/lib/List.pm:1588
 msgid "closed"
 msgstr "κλειστό"
 
@@ -8025,7 +8107,7 @@ msgstr "κλειστό"
 msgid "restricted to local domain users"
 msgstr "επιτρεπτό μόνο σε χρήστες του τοπικού τομέα"
 
-#: ../src/etc/scenari/access_web_archive.listmaster:1
+#: ../src/etc/scenari/access_web_archive.listmaster:1 ../src/lib/List.pm:1503
 msgid "listmaster"
 msgstr "διαχειριστής συστήματος"
 
@@ -8033,12 +8115,12 @@ msgstr "διαχειριστής συστήματος"
 msgid "by owner"
 msgstr "από τον ιδιοκτήτη"
 
-#: ../src/etc/scenari/access_web_archive.private:1
+#: ../src/etc/scenari/access_web_archive.private:1 ../src/lib/List.pm:1589
 msgid "subscribers only"
 msgstr "μόνο συνδρομητές"
 
 #: ../src/etc/scenari/access_web_archive.public:1
-#: ../src/etc/scenari/invite.public:1
+#: ../src/etc/scenari/invite.public:1 ../src/lib/List.pm:1590
 msgid "public"
 msgstr "δημόσια"
 
@@ -8060,17 +8142,17 @@ msgstr "αδύνατη προσθήκη"
 msgid "add performed by list owner does not need authentication"
 msgstr "προσθήκη εκτελούμενη από τον ιδιοκτήτη δεν χρειάζεται ταυτοποίηση"
 
+#: ../src/etc/scenari/add.owner_notify:1
+msgid "add performed by owner does not need authentication (notification)"
+msgstr ""
+"προσθήκη εκτελούμενη από τον ιδιοκτήτη δε χρειάζεται ταυτοποίηση (ειδοποίηση)"
+
 #: ../src/etc/scenari/add.ownerdkim:1
 msgid ""
 "add performed by list owner does not need authentication if DKIM signature OK"
 msgstr ""
 "προσθήκη εκτελούμενη από τον ιδιοκτήτη δεν χρειάζεται ταυτοποίηση εάν η "
 "υπογραφή DKIM είναι έγκυρη"
-
-#: ../src/etc/scenari/add.owner_notify:1
-msgid "add performed by owner does not need authentication (notification)"
-msgstr ""
-"προσθήκη εκτελούμενη από τον ιδιοκτήτη δε χρειάζεται ταυτοποίηση (ειδοποίηση)"
 
 #: ../src/etc/scenari/automatic_list_creation.family_owner:1
 msgid "Restricted to people subscribed to the list of family owners."
@@ -8231,6 +8313,10 @@ msgstr "Newsletter, περιορισμένο σε συντονιστές"
 msgid "Newsletter, restricted to moderators after confirmation"
 msgstr "Newsletter, περιορισμένο σε συντονιστές μετά από επιβεβαίωση"
 
+#: ../src/etc/scenari/send.private_smime:1
+msgid "restricted to subscribers and checked smime signature"
+msgstr "επιτρεπτή μόνο σε συνδρομητές και ελεγμένες υπογραφές smime"
+
 #: ../src/etc/scenari/send.privateandeditorkey:1
 msgid "Moderated, restricted to subscribers"
 msgstr "Συντονιζόμενη, περιορισμένη σε συνδρομητές"
@@ -8255,13 +8341,13 @@ msgstr "Ιδιωτική, συντονιζόμενη για τους μη συν
 msgid "Private, confirmation for non subscribers"
 msgstr "Ιδιωτική, επιβεβαίωση για τους μη συνδρομητές"
 
-#: ../src/etc/scenari/send.private_smime:1
-msgid "restricted to subscribers and checked smime signature"
-msgstr "επιτρεπτή μόνο σε συνδρομητές και ελεγμένες υπογραφές smime"
-
 #: ../src/etc/scenari/send.public:1
 msgid "public list"
 msgstr "δημόσια λίστα"
+
+#: ../src/etc/scenari/send.public_nobcc:1
+msgid "public list, Bcc rejected (anti-spam)"
+msgstr "δημόσια λίστα, απορρίπτεται η κρυφή κοινοποίηση Bcc (anti-spam)"
 
 #: ../src/etc/scenari/send.publickey:1
 msgid "anyone no authentication if DKIM signature is OK"
@@ -8271,10 +8357,6 @@ msgstr ""
 #: ../src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
 msgstr "τα πολυμερή/μεικτά μηνύματα προωθούνται στον συντονιστή"
-
-#: ../src/etc/scenari/send.public_nobcc:1
-msgid "public list, Bcc rejected (anti-spam)"
-msgstr "δημόσια λίστα, απορρίπτεται η κρυφή κοινοποίηση Bcc (anti-spam)"
 
 #: ../src/etc/scenari/send.publicnomultipart:1
 msgid "public list multipart messages are rejected"
@@ -8360,10 +8442,6 @@ msgstr "χωρίς απόκρυψη"
 msgid "need authentication"
 msgstr "χρειάζεται ταυτοποίηση"
 
-#: ../src/etc/scenari/unsubscribe.authdkim:1
-msgid "need authentication unless DKIM signature is OK"
-msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
-
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
 msgid "authentication requested, notification sent to owner"
 msgstr "ζητήθηκε ταυτοποίηση, αποστέλλεται ειδοποίηση στην ιδιοκτήτη"
@@ -8376,11 +8454,15 @@ msgstr ""
 "ζητήται ταυτοποίηση εκτός και αν η DKIM υπογραφή είναι έγκυρη, αποστέλλεται "
 "ειδοποίηση στον ιδιοκτήτη "
 
+#: ../src/etc/scenari/unsubscribe.authdkim:1
+msgid "need authentication unless DKIM signature is OK"
+msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
+
 #: ../src/etc/scenari/unsubscribe.closed:1
 msgid "impossible"
 msgstr "αδύνατο"
 
-#: ../src/etc/scenari/unsubscribe.open:1
+#: ../src/etc/scenari/unsubscribe.open:1 ../src/lib/List.pm:1587
 msgid "open"
 msgstr "ανοιχτό"
 
@@ -8457,8 +8539,8 @@ msgstr "Είστε σίγουροι για την διαγραφή των μην
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/etc/mhonarc-ressources.tt2:306 ../src/etc/mhonarc-ressources.tt2:310
-#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:563
-#: ../src/etc/mhonarc-ressources.tt2:567 ../src/etc/mhonarc-ressources.tt2:571
+#: ../src/etc/mhonarc-ressources.tt2:314 ../src/etc/mhonarc-ressources.tt2:576
+#: ../src/etc/mhonarc-ressources.tt2:580 ../src/etc/mhonarc-ressources.tt2:584
 msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
@@ -8479,55 +8561,58 @@ msgid "picture"
 msgstr "εικόνα"
 
 #: ../src/etc/mhonarc-ressources.tt2:469
-msgid "Reply to sender"
-msgstr "Απάντηση προς αποστολέα"
+#, fuzzy
+msgid "Reply to"
+msgstr "Απάντηση"
 
-#: ../src/etc/mhonarc-ressources.tt2:471
-msgid "to list"
-msgstr "στη λίστα"
+#: ../src/etc/mhonarc-ressources.tt2:475 ../src/lib/List.pm:1475
+#, fuzzy
+msgid "sender"
+msgstr "Αποστολέας"
 
-#: ../src/etc/mhonarc-ressources.tt2:473
-msgid "to both"
+#: ../src/etc/mhonarc-ressources.tt2:487
+#, fuzzy
+msgid "both"
 msgstr "και στα δύο"
 
-#: ../src/etc/mhonarc-ressources.tt2:476
+#: ../src/etc/mhonarc-ressources.tt2:489
 msgid "Reply"
 msgstr "Απάντηση"
 
 #. (user.email)
-#: ../src/etc/mhonarc-ressources.tt2:477
+#: ../src/etc/mhonarc-ressources.tt2:490
 msgid "send it back to %1"
 msgstr "αποστολή πίσω στο %1"
 
-#: ../src/etc/mhonarc-ressources.tt2:483
+#: ../src/etc/mhonarc-ressources.tt2:496
 msgid "tag this mail for deletion"
 msgstr "επισήμανε αυτό το μήνυμα προς διαγραφή"
 
-#: ../src/etc/mhonarc-ressources.tt2:483
+#: ../src/etc/mhonarc-ressources.tt2:496
 msgid "Do you really want to delete this message ?"
 msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το μήνυμα;"
 
-#: ../src/etc/mhonarc-ressources.tt2:486
+#: ../src/etc/mhonarc-ressources.tt2:499
 msgid "view source"
 msgstr "προβολή κώδικα"
 
 #. ("$YYYYMMDD$")
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/etc/mhonarc-ressources.tt2:616
+#: ../src/etc/mhonarc-ressources.tt2:629
 msgid "%y/%m/%d"
 msgstr "%y/%m/%d"
 
-#: ../src/etc/mhonarc-ressources.tt2:626
+#: ../src/etc/mhonarc-ressources.tt2:639
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Κυριακή:Δευτέρα:Τρίτη:Τετάρτη:Πέμπτη:Παρασκευή:Σαββάτο"
 
-#: ../src/etc/mhonarc-ressources.tt2:643
+#: ../src/etc/mhonarc-ressources.tt2:656
 #, fuzzy
 msgid "Sun:Mon:Tue:Wed:Thu:Fri:Sat"
 msgstr "Κυριακή:Δευτέρα:Τρίτη:Τετάρτη:Πέμπτη:Παρασκευή:Σαββάτο"
 
-#: ../src/etc/mhonarc-ressources.tt2:648
+#: ../src/etc/mhonarc-ressources.tt2:661
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
@@ -8535,7 +8620,7 @@ msgstr ""
 "Ιανουάριος:Φεβρουάριος:Μάρτιος:Απρίλιος:Μάιος:Ιούνιος:Ιούλιος:Αύγουστος:"
 "Σεπτέμβριος:Οκτώβριος:Νοέμβριος:Δεκέμβριος"
 
-#: ../src/etc/mhonarc-ressources.tt2:665
+#: ../src/etc/mhonarc-ressources.tt2:678
 #, fuzzy
 msgid "Jan:Feb:Mar:Apr:May:Jun:Jul:Aug:Sep:Oct:Nov:Dec"
 msgstr ""
@@ -8708,791 +8793,1157 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:395
+#: ../src/lib/Bulk.pm:404
 msgid "%d %b %Y  %H:%M"
 msgstr "%d %b %Y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:962 ../wwsympa/wwsympa.fcgi.in:9920
+#: ../src/lib/Commands.pm:965 ../wwsympa/wwsympa.fcgi.in:10006
 msgid "%A"
 msgstr "%A"
 
-#: ../src/lib/Conf.pm:142
+#: ../src/lib/Conf.pm:161
 msgid "Error at line %d: %s\n"
 msgstr "Σφάλμα στη γραμμή %d: %s\n"
 
-#: ../src/lib/Conf.pm:459
+#: ../src/lib/Conf.pm:478
 msgid "Error at line %d: %s"
 msgstr "Σφάλμα στη γραμμή %d: %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Family.pm:2597 ../src/lib/Family.pm:394 ../src/lib/Family.pm:671
-#: ../src/lib/List.pm:1924 ../wwsympa/Auth.pm:457
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2658
-#: ../wwsympa/wwsympa.fcgi.in:2948 ../wwsympa/wwsympa.fcgi.in:2959
-#: ../wwsympa/wwsympa.fcgi.in:3081
+#: ../src/lib/Family.pm:2600 ../src/lib/Family.pm:397 ../src/lib/Family.pm:674
+#: ../src/lib/List.pm:2123 ../wwsympa/Auth.pm:460
+#: ../wwsympa/wwsympa.fcgi.in:1076 ../wwsympa/wwsympa.fcgi.in:16740
+#: ../wwsympa/wwsympa.fcgi.in:2708 ../wwsympa/wwsympa.fcgi.in:2998
+#: ../wwsympa/wwsympa.fcgi.in:3009 ../wwsympa/wwsympa.fcgi.in:3131
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
-#: ../src/lib/List.pm:324
+#: ../src/lib/List.pm:327
 msgid "Account"
 msgstr "Λογαριασμός"
 
-#: ../src/lib/List.pm:328
+#: ../src/lib/List.pm:331
 msgid "Who can add subscribers"
 msgstr "ποιος έχει τη δυνατότητα προσθήκης συνδρομητών"
 
-#: ../src/lib/List.pm:332
+#: ../src/lib/List.pm:335
 msgid "Anonymous sender"
 msgstr "Ανώνυμος αποστολέας"
 
-#: ../src/lib/List.pm:337
+#: ../src/lib/List.pm:340
 msgid "frequency"
 msgstr "συχνότητα"
 
-#: ../src/lib/List.pm:1430 ../src/lib/List.pm:342
+#: ../src/lib/List.pm:1433 ../src/lib/List.pm:345
 msgid "access right"
 msgstr "δικαίωμα πρόσβασης"
 
-#: ../src/lib/List.pm:346
+#: ../src/lib/List.pm:349
 msgid "Text archives"
 msgstr "Αρχεία κειμένου"
 
-#: ../src/lib/List.pm:351
+#: ../src/lib/List.pm:354
 msgid "Archive encrypted mails as cleartext"
 msgstr "Αρχειοθέτηση κρυπτογραφημένων μηνυμάτων ως μη-κρυπτογραφημένο κείμενο"
 
-#: ../src/lib/List.pm:1166 ../src/lib/List.pm:1206 ../src/lib/List.pm:358
-#: ../src/lib/List.pm:534 ../src/lib/List.pm:662 ../src/lib/List.pm:697
+#: ../src/lib/List.pm:1169 ../src/lib/List.pm:1209 ../src/lib/List.pm:361
+#: ../src/lib/List.pm:537 ../src/lib/List.pm:665 ../src/lib/List.pm:700
 msgid "reception mode"
 msgstr "τρόπος παραλαβής"
 
-#: ../src/lib/List.pm:361
+#: ../src/lib/List.pm:364
 msgid "Available subscription options"
 msgstr "Οι διαθέσιμες επιλογές συνδρομής"
 
-#: ../src/lib/List.pm:369
+#: ../src/lib/List.pm:372
 msgid "warn rate"
 msgstr "όριο προειδοποίησης"
 
-#: ../src/lib/List.pm:376
+#: ../src/lib/List.pm:379
 msgid "halt rate"
 msgstr "όριο παύσης"
 
-#: ../src/lib/List.pm:380
+#: ../src/lib/List.pm:383
 msgid "Bounces management"
 msgstr "Διαχείριση bounces"
 
-#: ../src/lib/List.pm:387 ../src/lib/List.pm:408
+#: ../src/lib/List.pm:390 ../src/lib/List.pm:411
 msgid "threshold"
 msgstr "όριο"
 
-#: ../src/lib/List.pm:392 ../src/lib/List.pm:413
+#: ../src/lib/List.pm:395 ../src/lib/List.pm:416
 msgid "action for this population"
 msgstr "ενέργεια για αυτόν τον πληθυσμό"
 
-#: ../src/lib/List.pm:397 ../src/lib/List.pm:418
+#: ../src/lib/List.pm:400 ../src/lib/List.pm:421
 msgid "notification"
 msgstr "ειδοποίηση"
 
-#: ../src/lib/List.pm:401
+#: ../src/lib/List.pm:404
 msgid "Management of bouncers, 1st level"
 msgstr "Διαχείριση bounces, 1ο επίπεδο"
 
-#: ../src/lib/List.pm:422
+#: ../src/lib/List.pm:425
 msgid "Management of bouncers, 2nd level"
 msgstr "Διαχείριση bounces, 2ο επίπεδο"
 
-#: ../src/lib/List.pm:429
+#: ../src/lib/List.pm:432
 msgid "Expiration of unmoderated messages"
 msgstr "Λήξη μη συντονιζόμενων μηνυμάτων"
 
-#: ../src/lib/List.pm:435
+#: ../src/lib/List.pm:438
 msgid "Secret string for generating unique keys"
 msgstr "Μυστική συμβολοσειρά για τη δημιουργία μοναδικών κλειδιών"
 
-#: ../src/lib/List.pm:1093 ../src/lib/List.pm:1386 ../src/lib/List.pm:440
+#: ../src/lib/List.pm:1096 ../src/lib/List.pm:1389 ../src/lib/List.pm:443
 msgid "epoch date"
 msgstr "ημερομηνία epoch"
 
-#: ../src/lib/List.pm:444
+#: ../src/lib/List.pm:447
 msgid "human readable"
 msgstr "εύκολα αναγνώσιμο"
 
-#: ../src/lib/List.pm:449
+#: ../src/lib/List.pm:452
 msgid "who created the list"
 msgstr "που δημιούργησε τη λίστα"
 
-#: ../src/lib/List.pm:453
+#: ../src/lib/List.pm:456
 msgid "Creation of the list"
 msgstr "Δημιουργία της λίστας"
 
-#: ../src/lib/List.pm:464
+#: ../src/lib/List.pm:467
 msgid "internal identifier"
 msgstr "εσωτερικό αναγνωριστικό"
 
-#: ../src/lib/List.pm:472
+#: ../src/lib/List.pm:475
 msgid "label"
 msgstr "επιγραφή"
 
-#: ../src/lib/List.pm:478
+#: ../src/lib/List.pm:481
 msgid "additional comment"
 msgstr "επιπρόσθετο σχόλιο"
 
-#: ../src/lib/List.pm:485
+#: ../src/lib/List.pm:488
 msgid "type"
 msgstr "τύπος"
 
-#: ../src/lib/List.pm:491
+#: ../src/lib/List.pm:494
 msgid "possible attribute values (if enum is used)"
 msgstr "πιθανές τιμές παραμέτρου (σε περίπτωση χρήσης enum)"
 
-#: ../src/lib/List.pm:496
+#: ../src/lib/List.pm:499
 msgid "is the attribute optional?"
 msgstr "είναι το χαρακτηριστικό προεραιτικό?"
 
-#: ../src/lib/List.pm:502
+#: ../src/lib/List.pm:505
 msgid "Custom user attributes"
 msgstr "Προσαρμοσμένες παράμετροι χρήστη"
 
-#: ../src/lib/List.pm:508
+#: ../src/lib/List.pm:511
 msgid "Custom header field"
 msgstr "Προσαρμοσμένο πεδίου επικεφαλίδας"
 
-#: ../src/lib/List.pm:513
+#: ../src/lib/List.pm:516
 msgid "Subject tagging"
 msgstr "επισήμανση θέματος"
 
-#: ../src/lib/List.pm:527
+#: ../src/lib/List.pm:530
 msgid "custom parameters"
 msgstr "προσαρμοσμένες παράμετρους"
 
-#: ../src/lib/List.pm:1171 ../src/lib/List.pm:1211 ../src/lib/List.pm:539
-#: ../src/lib/List.pm:667 ../src/lib/List.pm:702
+#: ../src/lib/List.pm:1174 ../src/lib/List.pm:1214 ../src/lib/List.pm:542
+#: ../src/lib/List.pm:670 ../src/lib/List.pm:705
 msgid "visibility"
 msgstr "ορατότητα"
 
-#: ../src/lib/List.pm:543
+#: ../src/lib/List.pm:546
 msgid "Subscription profile"
 msgstr "Προφίλ συνδρομητή"
 
-#: ../src/lib/List.pm:547
+#: ../src/lib/List.pm:550
 msgid "Who can delete subscribers"
 msgstr "Ποιος μπορεί να διαγράψει συνδρομητές"
 
-#: ../src/lib/List.pm:552
+#: ../src/lib/List.pm:555
 msgid "Delivery time (hh:mm)"
 msgstr "Ώρα παράδοσης (hh:mm)"
 
-#: ../src/lib/List.pm:427 ../src/lib/List.pm:560
+#: ../src/lib/List.pm:430 ../src/lib/List.pm:563
 msgid "days"
 msgstr "ημέρες"
 
-#: ../src/lib/List.pm:566
+#: ../src/lib/List.pm:569
 msgid "hour"
 msgstr "ώρα"
 
-#: ../src/lib/List.pm:572
+#: ../src/lib/List.pm:575
 msgid "minute"
 msgstr "λεπτό"
 
-#: ../src/lib/List.pm:576
+#: ../src/lib/List.pm:579
 msgid "Digest frequency"
 msgstr "Συχνότητα σύνοψης"
 
-#: ../src/lib/List.pm:584
+#: ../src/lib/List.pm:587
 msgid "Digest maximum number of messages"
 msgstr "Μέγιστος αριθμός μηνυμάτων σύνοψης"
 
-#: ../src/lib/List.pm:592
+#: ../src/lib/List.pm:595
 msgid "Inclusions timeout for message distribution"
 msgstr "χρόνος λήξης εισαγωγών για διανομή μηνυμάτων"
 
-#: ../src/lib/List.pm:599
+#: ../src/lib/List.pm:602
 msgid "Insert DKIM signature to messages sent to the list"
 msgstr "Προσθήκη υπογραφής DKIM σε μηνύματα που αποστέλλονται στη λίστα"
 
-#: ../src/lib/List.pm:607
+#: ../src/lib/List.pm:610
 msgid ""
 "The categories of messages sent to the list that will be signed using DKIM."
 msgstr ""
 "Οι κατηγορίες μηνυμάτων που αποστέλλονται στη λίστα θα είναι υπογεγραμμένες "
 "με DKIM."
 
-#: ../src/lib/List.pm:614
+#: ../src/lib/List.pm:617
 msgid "File path for list DKIM private key"
 msgstr "Διαδρομή αρχείου για ιδιωτικό κλειδί DKIM της λίστας"
 
-#: ../src/lib/List.pm:622
+#: ../src/lib/List.pm:625
 msgid "Selector for DNS lookup of DKIM public key"
 msgstr "Επιλογέας για ανεύρεση DNS ιδιωτικού κλειδιού DKIM"
 
-#: ../src/lib/List.pm:651
+#: ../src/lib/List.pm:654
 msgid "DKIM configuration"
 msgstr "διαμόρφωση DKIM"
 
-#: ../src/lib/List.pm:1161 ../src/lib/List.pm:657
+#: ../src/lib/List.pm:1164 ../src/lib/List.pm:660
 msgid "email address"
 msgstr "διεύθυνση ηλεκτρονικής αλληλογραφίας"
 
-#: ../src/lib/List.pm:1176 ../src/lib/List.pm:672
+#: ../src/lib/List.pm:1179 ../src/lib/List.pm:675
 msgid "name"
 msgstr ";όνομα"
 
-#: ../src/lib/List.pm:1181 ../src/lib/List.pm:677
+#: ../src/lib/List.pm:1184 ../src/lib/List.pm:680
 msgid "private information"
 msgstr "ιδιωτική πληροφορία"
 
-#: ../src/lib/List.pm:712
+#: ../src/lib/List.pm:715
 msgid "Periodical subscription expiration task"
 msgstr "Περιοδική εργασία λήξης συνδρομών"
 
-#: ../src/lib/List.pm:723
+#: ../src/lib/List.pm:726
 msgid "Attachment type"
 msgstr "Τύπος επισύναψης"
 
-#: ../src/lib/List.pm:727
+#: ../src/lib/List.pm:730
 msgid "Forced reply address"
 msgstr "Επιβολή απαντητικής διεύθυνσης"
 
-#: ../src/lib/List.pm:733
+#: ../src/lib/List.pm:736
 msgid "Internet domain"
 msgstr "Τομέας  Διαδικτύου"
 
-#: ../src/lib/List.pm:739
+#: ../src/lib/List.pm:742
 msgid "File inclusion"
 msgstr "Συμπερίληψη αρχείου"
 
-#: ../src/lib/List.pm:743
+#: ../src/lib/List.pm:746
 msgid "data location URL"
 msgstr "διεύθυνση URL τοποθεσίας δεδομένων"
 
-#: ../src/lib/List.pm:1042 ../src/lib/List.pm:749 ../src/lib/List.pm:782
-#: ../src/lib/List.pm:863
+#: ../src/lib/List.pm:1045 ../src/lib/List.pm:752 ../src/lib/List.pm:785
+#: ../src/lib/List.pm:866
 msgid "remote user"
 msgstr "απομακρυσμένος χρήστης"
 
-#: ../src/lib/List.pm:1047 ../src/lib/List.pm:756 ../src/lib/List.pm:788
-#: ../src/lib/List.pm:869
+#: ../src/lib/List.pm:1050 ../src/lib/List.pm:759 ../src/lib/List.pm:791
+#: ../src/lib/List.pm:872
 msgid "remote password"
 msgstr "απομακρυσμένος κωδικός πρόσβασης"
 
-#: ../src/lib/List.pm:1002 ../src/lib/List.pm:1061 ../src/lib/List.pm:761
-#: ../src/lib/List.pm:824 ../src/lib/List.pm:948
+#: ../src/lib/List.pm:1005 ../src/lib/List.pm:1064 ../src/lib/List.pm:764
+#: ../src/lib/List.pm:827 ../src/lib/List.pm:951
 msgid "short name for this source"
 msgstr "συντομογραφία αυτής της πηγής δεδομένων"
 
-#: ../src/lib/List.pm:766
+#: ../src/lib/List.pm:769
 msgid "Remote file inclusion"
 msgstr "Συμπερίληψη απομακρυσμένου αρχείου"
 
-#: ../src/lib/List.pm:1020 ../src/lib/List.pm:772 ../src/lib/List.pm:853
-#: ../src/lib/List.pm:980
+#: ../src/lib/List.pm:1023 ../src/lib/List.pm:775 ../src/lib/List.pm:856
+#: ../src/lib/List.pm:983
 msgid "remote host"
 msgstr "απομακρυσμένος κόμβος"
 
-#: ../src/lib/List.pm:777 ../src/lib/List.pm:858 ../src/lib/List.pm:986
+#: ../src/lib/List.pm:780 ../src/lib/List.pm:861 ../src/lib/List.pm:989
 msgid "remote port"
 msgstr "απομακρυσμένη θύρα"
 
-#: ../src/lib/List.pm:792
+#: ../src/lib/List.pm:795
 msgid "suffix"
 msgstr "κατάληξη"
 
-#: ../src/lib/List.pm:798
+#: ../src/lib/List.pm:801
 msgid "filter"
 msgstr "φίλτρο"
 
-#: ../src/lib/List.pm:804
+#: ../src/lib/List.pm:807
 msgid "extracted attribute"
 msgstr "παράμετρος που εξήχθη"
 
-#: ../src/lib/List.pm:809
+#: ../src/lib/List.pm:812
 msgid "selection (if multiple)"
 msgstr "επιλογή (αν πολλαπλά)"
 
-#: ../src/lib/List.pm:814
+#: ../src/lib/List.pm:817
 msgid "search scope"
 msgstr "έκταση αναζήτησης"
 
-#: ../src/lib/List.pm:820
+#: ../src/lib/List.pm:823
 msgid "connection timeout"
 msgstr "λήξη χρονικού ορίου σύνδεσης"
 
-#: ../src/lib/List.pm:848
+#: ../src/lib/List.pm:851
 msgid "LDAP query inclusion"
 msgstr "Συμπερίληψη ερωτήματος LDAP"
 
-#: ../src/lib/List.pm:873
+#: ../src/lib/List.pm:876
 msgid "first-level suffix"
 msgstr "κατάληξη πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:879
+#: ../src/lib/List.pm:882
 msgid "first-level filter"
 msgstr "φίλτρο πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:884
+#: ../src/lib/List.pm:887
 msgid "first-level extracted attribute"
 msgstr "εξαγόμενη παράμετρος πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:889
+#: ../src/lib/List.pm:892
 msgid "first-level selection"
 msgstr "επιλογή πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:894
+#: ../src/lib/List.pm:897
 msgid "first-level search scope"
 msgstr "έκταση αναζήτησης πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:900
+#: ../src/lib/List.pm:903
 msgid "first-level connection timeout"
 msgstr "χρόνος λήξης σύνδεσης πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:906
+#: ../src/lib/List.pm:909
 msgid "first-level regular expression"
 msgstr "regexp πρώτου επιπέδου"
 
-#: ../src/lib/List.pm:910
+#: ../src/lib/List.pm:913
 msgid "second-level suffix template"
 msgstr "πρότυπο κατάληξης δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:916
+#: ../src/lib/List.pm:919
 msgid "second-level filter template"
 msgstr "πρότυπο φίλτρου δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:922
+#: ../src/lib/List.pm:925
 msgid "second-level extracted attribute"
 msgstr "εξαγόμενη παράμετρος δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:927
+#: ../src/lib/List.pm:930
 msgid "second-level selection"
 msgstr "επιλογή δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:932
+#: ../src/lib/List.pm:935
 msgid "second-level search scope"
 msgstr "έκταση δράσης δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:938
+#: ../src/lib/List.pm:941
 msgid "second-level connection timeout"
 msgstr "χρόνος λήξης σύνδεσης δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:944
+#: ../src/lib/List.pm:947
 msgid "second-level regular expression"
 msgstr "regexp δευτέρου επιπέδου"
 
-#: ../src/lib/List.pm:970
+#: ../src/lib/List.pm:973
 msgid "LDAP 2-level query inclusion"
 msgstr "Συμπερίληψη ερωτήματος LDAP δύο επιπέδων"
 
-#: ../src/lib/List.pm:975
+#: ../src/lib/List.pm:978
 msgid "List inclusion"
 msgstr "Συμπερίληψη λίστας"
 
-#: ../src/lib/List.pm:992
+#: ../src/lib/List.pm:995
 msgid "remote path of sympa list dump"
 msgstr "απομακρυσμένη διαδρομή για λήψη λιστών Sympa"
 
-#: ../src/lib/List.pm:997
+#: ../src/lib/List.pm:1000
 msgid "certificate for authentication by remote Sympa"
 msgstr "πιστοποιητικό για ταυτοποίηση από απομακρυσμένο Sympa"
 
-#: ../src/lib/List.pm:1009
+#: ../src/lib/List.pm:1012
 msgid "remote list inclusion"
 msgstr "εισαγωγή απομακρυσμένης λίστας"
 
-#: ../src/lib/List.pm:1014
+#: ../src/lib/List.pm:1017
 msgid "database type"
 msgstr "τύπος βάσης δεδομένων"
 
-#: ../src/lib/List.pm:1024
+#: ../src/lib/List.pm:1027
 msgid "database port"
 msgstr "θύρα βάσης δεδομένων"
 
-#: ../src/lib/List.pm:1029
+#: ../src/lib/List.pm:1032
 msgid "database name"
 msgstr "όνομα βάσης δεδομένων"
 
-#: ../src/lib/List.pm:1033
+#: ../src/lib/List.pm:1036
 msgid "connection options"
 msgstr "επιλογές σύνδεσης"
 
-#: ../src/lib/List.pm:1038
+#: ../src/lib/List.pm:1041
 msgid "environment variables for database connection"
 msgstr "μεταβλητές περιβάλλοντος για σύνδεση βάσης δεδομένων"
 
-#: ../src/lib/List.pm:1053
+#: ../src/lib/List.pm:1056
 msgid "SQL query"
 msgstr "ερώτημα SQL"
 
-#: ../src/lib/List.pm:1057
+#: ../src/lib/List.pm:1060
 msgid "Directory where the database is stored (used for DBD::CSV only)"
 msgstr "Κατάλογος αποθήκευσης της βάσης δεδομένων (χρήση μόνο DBD::CSV)"
 
-#: ../src/lib/List.pm:1068
+#: ../src/lib/List.pm:1071
 msgid "SQL query inclusion"
 msgstr "συμπερίληψη ερωτήματος SQL"
 
-#: ../src/lib/List.pm:1074
+#: ../src/lib/List.pm:1077
 #, fuzzy
 msgid "Notify subscribers when they are included from a data source?"
 msgstr "Η παράμετρος συνδρομής ορίζει τους κανόνες συνδρομής στη λίστα."
 
-#: ../src/lib/List.pm:1078
+#: ../src/lib/List.pm:1081
 msgid "Who can view list information"
 msgstr "Ποιος μπορεί να δει τις πληροφορίες της λίστας"
 
-#: ../src/lib/List.pm:1082
+#: ../src/lib/List.pm:1085
 msgid "Who can invite people"
 msgstr "Ποιος μπορεί να προσκαλέσει συνδρομητές"
 
-#: ../src/lib/List.pm:1088
+#: ../src/lib/List.pm:1091
 msgid "Language of the list"
 msgstr "Γλώσσας λίστας"
 
-#: ../src/lib/List.pm:1113
+#: ../src/lib/List.pm:1116
 msgid "Regular expression applied to prevent loops with robots"
 msgstr "Regexp που εφαρμόζεται για αποτροπή βρόχων με εξυπηρετητές"
 
-#: ../src/lib/List.pm:1120
+#: ../src/lib/List.pm:1123
 msgid "Maximum message size"
 msgstr "Μέγιστο μέγεθος μηνύματος"
 
-#: ../src/lib/List.pm:1126
+#: ../src/lib/List.pm:1129
 #, fuzzy
 msgid "Message topic name"
 msgstr "Μηνύματα προς συντονισμό :"
 
-#: ../src/lib/List.pm:1131
+#: ../src/lib/List.pm:1134
 msgid "Message topic keywords"
 msgstr "Λέξεις κλειδί θέματος μηνυμάτων"
 
-#: ../src/lib/List.pm:1137
+#: ../src/lib/List.pm:1140
 #, fuzzy
 msgid "Message topic title"
 msgstr "Μηνύματα προς συντονισμό :"
 
-#: ../src/lib/List.pm:1142
+#: ../src/lib/List.pm:1145
 msgid "Topics for message categorization"
 msgstr "Θέματα για κατηγοριοποίηση μηνυμάτων"
 
-#: ../src/lib/List.pm:1148
+#: ../src/lib/List.pm:1151
 msgid "Defines to which part of messages topic keywords are applied"
 msgstr ""
 "Καθορίζει σε ποιο μέρος των μηνυμάτων εφαρμόζονται οι λέξεις κλειδί του "
 "θέματος"
 
-#: ../src/lib/List.pm:1155
+#: ../src/lib/List.pm:1158
 #, fuzzy
 msgid "Message tagging"
 msgstr "Αριθμός μηνύματος"
 
-#: ../src/lib/List.pm:1186 ../src/lib/List.pm:1216
+#: ../src/lib/List.pm:1189 ../src/lib/List.pm:1219
 msgid "profile"
 msgstr "προφίλ"
 
-#: ../src/lib/List.pm:1227
+#: ../src/lib/List.pm:1230
 msgid "Priority"
 msgstr "Προτεραιότητα"
 
-#: ../src/lib/List.pm:1233
+#: ../src/lib/List.pm:1236
 msgid "Reject mail from automates (crontab, etc)?"
 msgstr "Απορριπτικά μηνύματα από αυτόματα (crontab, etc);"
 
-#: ../src/lib/List.pm:1237
+#: ../src/lib/List.pm:1240
 msgid "Who can start a remind process"
 msgstr "Ποιος μπορεί να ξεκινήσει διαδικασία υπενθύμισης"
 
-#: ../src/lib/List.pm:1242
+#: ../src/lib/List.pm:1245
 msgid "Return-path of the REMIND command"
 msgstr "Return-Path εντολής REMIND"
 
-#: ../src/lib/List.pm:1266 ../src/lib/List.pm:1286
+#: ../src/lib/List.pm:1269 ../src/lib/List.pm:1289
 msgid "Reply address"
 msgstr "Διεύθυνση απάντησης"
 
-#: ../src/lib/List.pm:1272
+#: ../src/lib/List.pm:1275
 msgid "value"
 msgstr "τιμή"
 
-#: ../src/lib/List.pm:1277
+#: ../src/lib/List.pm:1280 ../src/lib/List.pm:1485
 msgid "other email address"
 msgstr "άλλη διεύθυνση ηλεκτρονικής αλληλογραφίας"
 
-#: ../src/lib/List.pm:1282
+#: ../src/lib/List.pm:1285
 msgid "respect of existing header field"
 msgstr "σεβασμός υφιστάμενου πεδίου κεφαλίδας"
 
-#: ../src/lib/List.pm:1291
+#: ../src/lib/List.pm:1294
 msgid "Who can review subscribers"
 msgstr "Ποιος μπορεί να κάνει ανασκόπηση συνδρομητών"
 
-#: ../src/lib/List.pm:1298
+#: ../src/lib/List.pm:1301
 msgid "RFC 2369 Header fields"
 msgstr "Πεδία Επικεφαλίδας κατά RFC 2369"
 
-#: ../src/lib/List.pm:1302
+#: ../src/lib/List.pm:1305
 msgid "Who can send messages"
 msgstr "Ποιος μπορεί να στείλει μηνύματα"
 
-#: ../src/lib/List.pm:1309
+#: ../src/lib/List.pm:1312
 msgid "Serial number of the config"
 msgstr "Σειριακός αριθμός της διαμόρφωσης"
 
-#: ../src/lib/List.pm:1314
+#: ../src/lib/List.pm:1317
 msgid "Who can view"
 msgstr "Ποιος μπορεί να κάνει προβολή"
 
-#: ../src/lib/List.pm:1318
+#: ../src/lib/List.pm:1321
 msgid "Who can edit"
 msgstr "Ποιος μπορεί να επεξεργαστεί"
 
-#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1437
+#: ../src/lib/List.pm:1328 ../src/lib/List.pm:1440
 msgid "quota"
 msgstr "όριο"
 
-#: ../src/lib/List.pm:1334 ../src/lib/List.pm:1339
+#: ../src/lib/List.pm:1337 ../src/lib/List.pm:1342
 msgid "email address protection method"
 msgstr "Μέθοδος προστασίας ηλεκτρονικών διευθύνσεων"
 
-#: ../src/lib/List.pm:1345
+#: ../src/lib/List.pm:1348
 msgid "Status of the list"
 msgstr "Κατάσταση της λίστας"
 
-#: ../src/lib/List.pm:1353
+#: ../src/lib/List.pm:1356
 msgid "Timeout for fetch of include_sql_query"
 msgstr "Χρόνος λήξης για λήψη include_sql_query"
 
-#: ../src/lib/List.pm:1359
+#: ../src/lib/List.pm:1362
 msgid "Subject of the list"
 msgstr "Θέμα της λίστας"
 
-#: ../src/lib/List.pm:1363
+#: ../src/lib/List.pm:1366
 msgid "Who can subscribe to the list"
 msgstr "Ποιος μπορεί να εγγραφεί στη λίστα"
 
-#: ../src/lib/List.pm:1369
+#: ../src/lib/List.pm:1372
 msgid "Topics for the list"
 msgstr "θέματα για τη λίστα"
 
-#: ../src/lib/List.pm:1376
+#: ../src/lib/List.pm:1379
 msgid "Inclusions timeout"
 msgstr "Λήξη χρόνου αναμονής συμπερίληψης"
 
-#: ../src/lib/List.pm:1380
+#: ../src/lib/List.pm:1383
 msgid "Who can unsubscribe"
 msgstr "Ποιος μπορεί να διαγραφεί από τη λίστα"
 
-#: ../src/lib/List.pm:1401
+#: ../src/lib/List.pm:1404
 msgid "Last update of config"
 msgstr "Τελευταία ενημέρωση της διαμόρφωσης"
 
-#: ../src/lib/List.pm:1407
+#: ../src/lib/List.pm:1410
 msgid "User data source"
 msgstr "πηγή δεδομένων χρήστη"
 
-#: ../src/lib/List.pm:1414
+#: ../src/lib/List.pm:1417
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
 "Να επιτρέπεται προβολή εικόνας; (πρέπει να είναι ενεργοποιημένο για τον "
 "τρέχον εξυπηρετητή)"
 
-#: ../src/lib/List.pm:1420
+#: ../src/lib/List.pm:1423
 msgid "Allow message personnalization"
 msgstr "Επιτρέπεται προσωποποίηση μηνυμάτων"
 
-#: ../src/lib/List.pm:1426
+#: ../src/lib/List.pm:1429
 msgid "Visibility of the list"
 msgstr "Ορατότητα της λίστας"
 
-#: ../src/lib/List.pm:1442
+#: ../src/lib/List.pm:1445
 msgid "Maximum number of month archived"
 msgstr "Μέγιστος αριθμός μηνών στο Αρχείο"
 
-#: ../src/lib/List.pm:1447
+#: ../src/lib/List.pm:1450
 msgid "Web archives"
 msgstr "Αρχείο web"
 
-#: ../src/lib/List.pm:1453
+#: ../src/lib/List.pm:1456
 msgid "Welcome return-path"
 msgstr "Return-path μηνύματος υποδοχής"
 
-#: ../src/lib/List.pm:1458
+#: ../src/lib/List.pm:1461
 msgid "percentage of list members in VERP mode"
 msgstr "ποσοστό μελών λίστας σε VERP"
 
-#: ../src/lib/List.pm:367 ../src/lib/List.pm:374
+#: ../src/lib/List.pm:370 ../src/lib/List.pm:377
 msgid "%"
 msgstr "%"
 
-#: ../src/lib/List.pm:385 ../src/lib/List.pm:406
+#: ../src/lib/List.pm:388 ../src/lib/List.pm:409
 msgid "points"
 msgstr "πόντοι"
 
-#: ../src/lib/List.pm:518
+#: ../src/lib/List.pm:521
 #, fuzzy
 msgid "var name"
 msgstr "Όνομα σεναρίου"
 
-#: ../src/lib/List.pm:523
+#: ../src/lib/List.pm:526
 #, fuzzy
 msgid "var value"
 msgstr "Προκαθορισμένη τιμή"
 
-#: ../src/lib/List.pm:582
+#: ../src/lib/List.pm:585
 #, fuzzy
 msgid "messages"
 msgstr "%Εικόνα(%s)"
 
-#: ../src/lib/List.pm:1351 ../src/lib/List.pm:1374 ../src/lib/List.pm:590
-#: ../src/lib/List.pm:819 ../src/lib/List.pm:899 ../src/lib/List.pm:937
+#: ../src/lib/List.pm:1354 ../src/lib/List.pm:1377 ../src/lib/List.pm:593
+#: ../src/lib/List.pm:822 ../src/lib/List.pm:902 ../src/lib/List.pm:940
 msgid "seconds"
 msgstr "δευτερόλεπτα"
 
-#: ../src/lib/List.pm:629
+#: ../src/lib/List.pm:632
 msgid "List of headers to be included ito the message for signature"
 msgstr "Κατάλογος κεφαλίδων που θα εισαχθούν στο μήνυμα ως υπογραφή"
 
-#: ../src/lib/List.pm:637
+#: ../src/lib/List.pm:640
 msgid "DKIM \"d=\" tag, you should probably use the default value"
 msgstr ""
 "DKIM \"d=\" ετικέτα, πιθανότατα θα πρέπει να χρησιμοποιήσετε την "
 "προεπιλεγμένη τιμή"
 
-#: ../src/lib/List.pm:644
+#: ../src/lib/List.pm:647
 msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
 msgstr ""
 "DKIM \"i=\" ετικέτα, πιθανότατα θα πρέπει να αφήσετε αυτή τη παράμετρο κενή"
 
-#: ../src/lib/List.pm:687
+#: ../src/lib/List.pm:690
 #, fuzzy
 msgid "the data source"
 msgstr "Πηγή δεδομένων"
 
-#: ../src/lib/List.pm:692
+#: ../src/lib/List.pm:695
 #, fuzzy
 msgid "data source parameters"
 msgstr "Προτιμώ"
 
-#: ../src/lib/List.pm:708
+#: ../src/lib/List.pm:711
 msgid "Moderators defined in an external data source"
 msgstr "Συντονιστές ορισμένοι σε εξωτερική πηγή δεδομένων"
 
-#: ../src/lib/List.pm:717
+#: ../src/lib/List.pm:720
 msgid "Family name"
 msgstr "Όνομα οικογένειας"
 
-#: ../src/lib/List.pm:830 ../src/lib/List.pm:954
+#: ../src/lib/List.pm:833 ../src/lib/List.pm:957
 msgid "use SSL (LDAPS)"
 msgstr "χρήση SSL (LDAPS)"
 
-#: ../src/lib/List.pm:835 ../src/lib/List.pm:959
+#: ../src/lib/List.pm:838 ../src/lib/List.pm:962
 #, fuzzy
 msgid "SSL version"
 msgstr "συμπερίληψη ερωτήματος SQL"
 
-#: ../src/lib/List.pm:840 ../src/lib/List.pm:964
+#: ../src/lib/List.pm:843 ../src/lib/List.pm:967
 #, fuzzy
 msgid "SSL ciphers used"
 msgstr "Μέγεθος κλειδιού κρυπτογράφησης"
 
-#: ../src/lib/List.pm:1097 ../src/lib/List.pm:1391
+#: ../src/lib/List.pm:1100 ../src/lib/List.pm:1394
 msgid "date"
 msgstr "ημερομηνία"
 
-#: ../src/lib/List.pm:1102
+#: ../src/lib/List.pm:1105
 msgid "who ran the instantiation"
 msgstr "ποιος έκανε την εγκατάσταση"
 
-#: ../src/lib/List.pm:1106
+#: ../src/lib/List.pm:1109
 msgid "Latest family instantiation"
 msgstr "τελευταία εγκατάσταση οικογένειας"
 
-#: ../src/lib/List.pm:1118
+#: ../src/lib/List.pm:1121
 msgid "bytes"
 msgstr "bytes"
 
-#: ../src/lib/List.pm:1196
+#: ../src/lib/List.pm:1199
 msgid "the datasource"
 msgstr "πηγή δεδομένων"
 
-#: ../src/lib/List.pm:1201
+#: ../src/lib/List.pm:1204
 msgid "datasource parameters"
 msgstr "παράμετροι πηγής δεδομένων"
 
-#: ../src/lib/List.pm:1221
+#: ../src/lib/List.pm:1224
 msgid "Owners defined in an external data source"
 msgstr "Ιδιοκτήτες ορισμένοι σε εξωτερική πηγή δεδομένων"
 
-#: ../src/lib/List.pm:1246
+#: ../src/lib/List.pm:1249
 #, fuzzy
 msgid "Periodical subscription reminder task"
 msgstr "Περιοδική εργασία λήξης συνδρομών"
 
-#: ../src/lib/List.pm:1251
+#: ../src/lib/List.pm:1254
 msgid "Incoming SMTP header fields to be removed"
 msgstr "Πεδία κεφαλίδων εισερχομένων SMTP που θα αφαιρεθούν"
 
-#: ../src/lib/List.pm:1258
+#: ../src/lib/List.pm:1261
 msgid "Outgoing SMTP header fields to be removed"
 msgstr "Πεδία κεφαλίδων εξερχομένων SMTP που θα αφαιρεθούν"
 
-#: ../src/lib/List.pm:1324 ../src/lib/List.pm:1436
+#: ../src/lib/List.pm:1327 ../src/lib/List.pm:1439
 msgid "Kbytes"
 msgstr "Kbytes"
 
-#: ../src/lib/List.pm:1397
+#: ../src/lib/List.pm:1400
 msgid "who updated the config"
 msgstr "ποιος ενημέρωσε την διαμόρφωση"
 
+#: ../src/lib/List.pm:1471
+msgid "overwrite Reply-To: header field"
+msgstr ""
+
+#: ../src/lib/List.pm:1472
+#, fuzzy
+msgid "preserve existing header field"
+msgstr "σεβασμός υφιστάμενου πεδίου κεφαλίδας"
+
+#: ../src/lib/List.pm:1488
+#, fuzzy
+msgid "subject field"
+msgstr "Θέμα :"
+
+#: ../src/lib/List.pm:1489
+#, fuzzy
+msgid "message body"
+msgstr "Αριθμός μηνύματος"
+
+#: ../src/lib/List.pm:1490
+msgid "subject and body"
+msgstr ""
+
+#: ../src/lib/List.pm:1495
+msgid "do nothing"
+msgstr ""
+
+#: ../src/lib/List.pm:1506
+#, fuzzy
+msgid "remove bouncing users"
+msgstr "απομακρυσμένος χρήστης"
+
+#: ../src/lib/List.pm:1507
+#, fuzzy
+msgid "send notify to bouncing users"
+msgstr "Ενημέρωση ιδιοκτήτη"
+
+#: ../src/lib/List.pm:1511
+#, fuzzy
+msgid "enabled"
+msgstr "κρυμμένη"
+
+#: ../src/lib/List.pm:1512
+msgid "disabled"
+msgstr ""
+
+#: ../src/lib/List.pm:1519
+#, fuzzy
+msgid "first entry"
+msgstr "Κατάλογος"
+
+#: ../src/lib/List.pm:1522
+#, fuzzy
+msgid "entries matching regular expression"
+msgstr "regexp πρώτου επιπέδου"
+
+#: ../src/lib/List.pm:1526
+#, fuzzy
+msgid "base"
+msgstr "Διάκριση πεζών-κεφαλαίων:"
+
+#: ../src/lib/List.pm:1527
+#, fuzzy
+msgid "one level"
+msgstr "Επίπεδο:"
+
+#: ../src/lib/List.pm:1528
+#, fuzzy
+msgid "subtree"
+msgstr "Υποβολή"
+
+#: ../src/lib/List.pm:1531
+#, fuzzy
+msgid "yes"
+msgstr "bytes"
+
+#: ../src/lib/List.pm:1532
+#, fuzzy
+msgid "no"
+msgstr "Πληροφορίες"
+
+#: ../src/lib/List.pm:1535
+#, fuzzy
+msgid "SSL version 2"
+msgstr "συμπερίληψη ερωτήματος SQL"
+
+#: ../src/lib/List.pm:1536
+#, fuzzy
+msgid "SSL version 3"
+msgstr "συμπερίληψη ερωτήματος SQL"
+
+#: ../src/lib/List.pm:1537
+msgid "TLS"
+msgstr ""
+
+#: ../src/lib/List.pm:1541
+#, fuzzy
+msgid "receive notification email"
+msgstr "Μαγική ταυτοποίηση"
+
+#: ../src/lib/List.pm:1542
+#, fuzzy
+msgid "no notifications"
+msgstr "Μαγική ταυτοποίηση"
+
+#: ../src/lib/List.pm:1546
+#, fuzzy
+msgid "concealed from list menu"
+msgstr "απόκρυψη, εκτός από τον διαχειριστή συστήματος"
+
+#: ../src/lib/List.pm:1547
+#, fuzzy
+msgid "listed on the list menu"
+msgstr "προβάλετε στη σελίδα ανασκόπησης λίστας"
+
+#: ../src/lib/List.pm:1550
+#, fuzzy
+msgid "bounce management"
+msgstr "Διαχείριση bounces"
+
+#: ../src/lib/List.pm:1553
+#, fuzzy
+msgid "privileged owner"
+msgstr "Προνομιούχος ιδιοκτήτης"
+
+#: ../src/lib/List.pm:1554
+#, fuzzy
+msgid "normal owner"
+msgstr "Ενημέρωση ιδιοκτήτη"
+
+#: ../src/lib/List.pm:1557
+msgid "0 - highest priority"
+msgstr ""
+
+#: ../src/lib/List.pm:1558
+msgid "9 - lowest priority"
+msgstr ""
+
+#: ../src/lib/List.pm:1559
+#, fuzzy
+msgid "queue messages only"
+msgstr " Πρόσφατα μηνύματα "
+
+#: ../src/lib/List.pm:1562
+msgid "replace @ characters"
+msgstr ""
+
+#: ../src/lib/List.pm:1563
+msgid "use JavaScript"
+msgstr ""
+
+#: ../src/lib/List.pm:1566
+#, fuzzy
+msgid "required to post message"
+msgstr "μήνυμα υπενθύμισης"
+
+#: ../src/lib/List.pm:1568
+#, fuzzy
+msgid "required to distribute message"
+msgstr "Προστίθεται στα διανεμόμενα μηνύματα"
+
+#: ../src/lib/List.pm:1571
+msgid "optional"
+msgstr ""
+
+#: ../src/lib/List.pm:1574
+#, fuzzy
+msgid "required"
+msgstr "αθόρυβα"
+
+#: ../src/lib/List.pm:1577
+#, fuzzy
+msgid "string"
+msgstr "διανομή"
+
+#: ../src/lib/List.pm:1578
+msgid "multi-line text"
+msgstr ""
+
+#: ../src/lib/List.pm:1579
+#, fuzzy
+msgid "number"
+msgstr "μέλος"
+
+#: ../src/lib/List.pm:1580
+#, fuzzy
+msgid "set of keywords"
+msgstr "Λέξεις κλειδί θέματος μηνυμάτων"
+
+#: ../src/lib/List.pm:1583
+msgid "add a new MIME part"
+msgstr ""
+
+#: ../src/lib/List.pm:1584
+#, fuzzy
+msgid "append to message body"
+msgstr "%1 αποτελέσματα στο Σώμα του μηνύματος"
+
+#: ../src/lib/List.pm:1593
+msgid "RDBMS"
+msgstr ""
+
+#: ../src/lib/List.pm:1594
+#, fuzzy
+msgid "include from local file"
+msgstr "οποιοσδήποτε από τον τοπικό τομέα"
+
+#: ../src/lib/List.pm:1595
+msgid "include from external source"
+msgstr ""
+
+#: ../src/lib/List.pm:1596
+#, fuzzy
+msgid "general datasource"
+msgstr "πηγή δεδομένων χρήστη"
+
+#: ../src/lib/List.pm:1599
+#, fuzzy
+msgid "help"
+msgstr "Βοήθεια"
+
+#: ../src/lib/List.pm:1600
+#, fuzzy
+msgid "subscription"
+msgstr "Εκκρεμείς εγγραφές συνδρομητών"
+
+#: ../src/lib/List.pm:1601
+#, fuzzy
+msgid "unsubscription"
+msgstr "Εκκρεμείς εγγραφές συνδρομητών"
+
+#: ../src/lib/List.pm:1602
+#, fuzzy
+msgid "posting address"
+msgstr "Bouncing διεύθυνση"
+
+#: ../src/lib/List.pm:1603
+#, fuzzy
+msgid "list archive"
+msgstr "Αρχείο λιστών"
+
+#: ../src/lib/List.pm:1607
+#, fuzzy
+msgid "authenticated by password"
+msgstr "Αποστολή συνθηματικού"
+
+#: ../src/lib/List.pm:1609
+#, fuzzy
+msgid "authenticated by S/MIME signature"
+msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
+
+#: ../src/lib/List.pm:1611
+#, fuzzy
+msgid "authenticated by DKIM signature"
+msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
+
+#: ../src/lib/List.pm:1612
+msgid "approved by editor"
+msgstr ""
+
+#: ../src/lib/List.pm:1613
+#, fuzzy
+msgid "any messages"
+msgstr "%Εικόνα(%s)"
+
+#: ../src/lib/List.pm:1616
+#, fuzzy
+msgid "daily"
+msgstr "ημέρες"
+
+#: ../src/lib/List.pm:1617
+#, fuzzy
+msgid "weekly"
+msgstr "1 εβδομάδα"
+
+#: ../src/lib/List.pm:1618
+msgid "monthly"
+msgstr ""
+
+#: ../src/lib/List.pm:1619
+msgid "quarterly"
+msgstr ""
+
+#: ../src/lib/List.pm:1620
+msgid "yearly"
+msgstr ""
+
+#: ../src/lib/List.pm:1623
+#, fuzzy
+msgid "use HTTP cookie"
+msgstr "Διάρκεια ζωής HTTP cookies"
+
+#: ../src/lib/List.pm:1626
+msgid "100% - always"
+msgstr ""
+
+#: ../src/lib/List.pm:1627
+msgid "0% - never"
+msgstr ""
+
+#: ../src/lib/List.pm:1630
+#, fuzzy
+msgid "original messages"
+msgstr "μήνυμα υπενθύμισης"
+
+#: ../src/lib/List.pm:1631
+#, fuzzy
+msgid "decrypted messages"
+msgstr "παλαιότερα μηνύματα"
+
+#: ../src/lib/List.pm:1636 ../wwsympa/wwslib.pm:31
+msgid "standard (direct reception)"
+msgstr "στάνταρ (απευθείας παραλαβή)"
+
+#: ../src/lib/List.pm:1637 ../wwsympa/wwslib.pm:32
+msgid "digest MIME format"
+msgstr "σύνοψη μορφής MIME"
+
+#: ../src/lib/List.pm:1638 ../wwsympa/wwslib.pm:33
+msgid "digest plain text format"
+msgstr "σύνοψη μορφής απλού κειμένου"
+
+#: ../src/lib/List.pm:1639 ../wwsympa/wwslib.pm:34
+msgid "summary mode"
+msgstr "λειτουργία περίληψης"
+
+#: ../src/lib/List.pm:1640 ../wwsympa/wwslib.pm:35
+msgid "notice mode"
+msgstr "λειτουργία ενημέρωσης"
+
+#: ../src/lib/List.pm:1641 ../wwsympa/wwslib.pm:36
+msgid "text-only mode"
+msgstr "λειτουργία μόνο κειμένου"
+
+#: ../src/lib/List.pm:1642 ../wwsympa/wwslib.pm:37
+msgid "html-only mode"
+msgstr "λειτουργία μόνο html"
+
+#: ../src/lib/List.pm:1643 ../wwsympa/wwslib.pm:38
+msgid "urlize mode"
+msgstr "λειτουργία μετατροπής σε url (urlize)"
+
+#: ../src/lib/List.pm:1644
+#, fuzzy
+msgid "no mail"
+msgstr "Δεν υπάρχει μήνυμα"
+
+#: ../src/lib/List.pm:1645 ../wwsympa/wwslib.pm:40
+msgid "you do not receive your own posts"
+msgstr "δεν θα λαμβάνετε τα δικά σας μηνύματα"
+
+#: ../src/lib/List.pm:1650 ../wwsympa/wwslib.pm:54
+msgid "listed in the list review page"
+msgstr "προβάλετε στη σελίδα ανασκόπησης λίστας"
+
+#: ../src/lib/List.pm:1651 ../wwsympa/wwslib.pm:55
+msgid "concealed"
+msgstr "κρυμμένη"
+
+#: ../src/lib/List.pm:1656
+#, fuzzy
+msgid "in operation"
+msgstr "Εργασία"
+
+#: ../src/lib/List.pm:1657
+#, fuzzy
+msgid "list not yet activated"
+msgstr "Ανενεργή λίστα"
+
+#: ../src/lib/List.pm:1658
+#, fuzzy
+msgid "erroneous configuration"
+msgstr "αντιγραφή επιλογών λίστας"
+
+#: ../src/lib/List.pm:1659
+#, fuzzy
+msgid "closed family instance"
+msgstr "τελευταία εγκατάσταση οικογένειας"
+
+#: ../src/lib/List.pm:1660
+#, fuzzy
+msgid "closed list"
+msgstr "Κλειστή λίστα"
+
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2890
+#: ../src/lib/List.pm:3101
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2891
+#: ../src/lib/List.pm:3102
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3082 ../src/lib/List.pm:3083 ../src/lib/List.pm:3087
-#: ../wwsympa/wwsympa.fcgi.in:11097 ../wwsympa/wwsympa.fcgi.in:11166
-#: ../wwsympa/wwsympa.fcgi.in:11368 ../wwsympa/wwsympa.fcgi.in:11715
-#: ../wwsympa/wwsympa.fcgi.in:15166 ../wwsympa/wwsympa.fcgi.in:15173
-#: ../wwsympa/wwsympa.fcgi.in:15887 ../wwsympa/wwsympa.fcgi.in:16681
-#: ../wwsympa/wwsympa.fcgi.in:16682 ../wwsympa/wwsympa.fcgi.in:4373
-#: ../wwsympa/wwsympa.fcgi.in:4426 ../wwsympa/wwsympa.fcgi.in:4447
-#: ../wwsympa/wwsympa.fcgi.in:4448 ../wwsympa/wwsympa.fcgi.in:5002
-#: ../wwsympa/wwsympa.fcgi.in:5003 ../wwsympa/wwsympa.fcgi.in:6595
-#: ../wwsympa/wwsympa.fcgi.in:7619 ../wwsympa/wwsympa.fcgi.in:8170
-#: ../wwsympa/wwsympa.fcgi.in:8217 ../wwsympa/wwsympa.fcgi.in:8219
-#: ../wwsympa/wwsympa.fcgi.in:8657 ../wwsympa/wwsympa.fcgi.in:8658
-#: ../wwsympa/wwsympa.fcgi.in:8692 ../wwsympa/wwsympa.fcgi.in:8693
-#: ../wwsympa/wwsympa.fcgi.in:8872 ../wwsympa/wwsympa.fcgi.in:8873
+#: ../src/lib/List.pm:3293 ../src/lib/List.pm:3294 ../src/lib/List.pm:3298
+#: ../wwsympa/wwsympa.fcgi.in:11212 ../wwsympa/wwsympa.fcgi.in:11281
+#: ../wwsympa/wwsympa.fcgi.in:11483 ../wwsympa/wwsympa.fcgi.in:11830
+#: ../wwsympa/wwsympa.fcgi.in:15281 ../wwsympa/wwsympa.fcgi.in:15288
+#: ../wwsympa/wwsympa.fcgi.in:16005 ../wwsympa/wwsympa.fcgi.in:16801
+#: ../wwsympa/wwsympa.fcgi.in:16802 ../wwsympa/wwsympa.fcgi.in:4430
+#: ../wwsympa/wwsympa.fcgi.in:4483 ../wwsympa/wwsympa.fcgi.in:4504
+#: ../wwsympa/wwsympa.fcgi.in:4505 ../wwsympa/wwsympa.fcgi.in:5060
+#: ../wwsympa/wwsympa.fcgi.in:5061 ../wwsympa/wwsympa.fcgi.in:6682
+#: ../wwsympa/wwsympa.fcgi.in:7706 ../wwsympa/wwsympa.fcgi.in:8257
+#: ../wwsympa/wwsympa.fcgi.in:8304 ../wwsympa/wwsympa.fcgi.in:8306
+#: ../wwsympa/wwsympa.fcgi.in:8742 ../wwsympa/wwsympa.fcgi.in:8743
+#: ../wwsympa/wwsympa.fcgi.in:8777 ../wwsympa/wwsympa.fcgi.in:8778
+#: ../wwsympa/wwsympa.fcgi.in:8957 ../wwsympa/wwsympa.fcgi.in:8958
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
-
-#: ../src/lib/mail.pm:53
-msgid ""
-"Your system does not conform to the POSIX P1003.1 standard, or\n"
-"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
-"library. You must modify the smtp.pm module in order to set a value\n"
-"for variable %s.\n"
-msgstr ""
-"Το σύστημά σας δεν συμβαδίζει με το στάνταρ POSIX P1003.1, ή\n"
-" δεν είναι ορισμένη η τιμή _SC_ATG_MAX στη POSIX βιβλιοθήκη της Perl του "
-"συστήματος σας.\n"
-"Πρέπει να τροποποιήσετε το smtp.pm module για να ορίσετε μια τιμή για τη "
-"μεταβλητή %s.\n"
-
-#: ../src/lib/mail.pm:836
-#, fuzzy
-msgid "Unable to create a channel in smtpto: %s"
-msgstr "Οι πρόσφατα δημιουργημένες λίστες"
 
 #: ../src/lib/PlainDigest.pm:179
 #, fuzzy
@@ -9607,205 +10058,219 @@ msgstr "%Εικόνα(%s)"
 msgid "[Image%s]"
 msgstr "%Εικόνα(%s)"
 
-#: ../src/lib/tt2.pm:149
+#: ../src/lib/mail.pm:56
+msgid ""
+"Your system does not conform to the POSIX P1003.1 standard, or\n"
+"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
+"library. You must modify the smtp.pm module in order to set a value\n"
+"for variable %s.\n"
+msgstr ""
+"Το σύστημά σας δεν συμβαδίζει με το στάνταρ POSIX P1003.1, ή\n"
+" δεν είναι ορισμένη η τιμή _SC_ATG_MAX στη POSIX βιβλιοθήκη της Perl του "
+"συστήματος σας.\n"
+"Πρέπει να τροποποιήσετε το smtp.pm module για να ορίσετε μια τιμή για τη "
+"μεταβλητή %s.\n"
+
+#: ../src/lib/mail.pm:863
+#, fuzzy
+msgid "Unable to create a channel in smtpto: %s"
+msgstr "Οι πρόσφατα δημιουργημένες λίστες"
+
+#: ../src/lib/tt2.pm:152
 #, fuzzy
 msgid "(unknown date)"
 msgstr "%1 : άγνωστη ενέργεια"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:1091
+#: ../wwsympa/wwsympa.fcgi.in:1077
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/SympaSession.pm:659 ../wwsympa/SympaSession.pm:660
-#: ../wwsympa/wwsympa.fcgi.in:11949 ../wwsympa/wwsympa.fcgi.in:12082
-#: ../wwsympa/wwsympa.fcgi.in:14395 ../wwsympa/wwsympa.fcgi.in:8127
+#: ../wwsympa/SympaSession.pm:662 ../wwsympa/SympaSession.pm:663
+#: ../wwsympa/wwsympa.fcgi.in:12064 ../wwsympa/wwsympa.fcgi.in:12197
+#: ../wwsympa/wwsympa.fcgi.in:14510 ../wwsympa/wwsympa.fcgi.in:8214
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15348
+#: ../wwsympa/wwsympa.fcgi.in:9994
+#, fuzzy
+msgid "Unknown (%s)"
+msgstr "Άγνωστο"
+
+#: ../wwsympa/wwsympa.fcgi.in:15463
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Αίτηση συνδρομής στη λίστα %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:15350
+#: ../wwsympa/wwsympa.fcgi.in:15465
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Οι συνδρομητές της λίστας %1@%2"
 
-#: ../wwsympa/wwsympa.fcgi.in:15354
+#: ../wwsympa/wwsympa.fcgi.in:15469
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Διαγραφή από τη λίστα %s απορρίφθηκε: Διαγραφή από τη λίστα είναι κλειστή."
 
-#: ../wwsympa/wwsympa.fcgi.in:15356
+#: ../wwsympa/wwsympa.fcgi.in:15471
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Αποχώρηση συνδρομητή από τη λίστα %1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16263 ../wwsympa/wwsympa.fcgi.in:16264
+#: ../wwsympa/wwsympa.fcgi.in:16378 ../wwsympa/wwsympa.fcgi.in:16379
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
-#: ../wwsympa/wwslib.pm:40
+#: ../wwsympa/wwsympa.fcgi.in:16807
+#, fuzzy
+msgid "topic (%s)"
+msgstr "θέματα"
+
+#: ../wwsympa/wwslib.pm:44
 msgid "session"
 msgstr "σύνδεση"
 
-#: ../wwsympa/wwslib.pm:41
+#: ../wwsympa/wwslib.pm:45
 msgid "10 minutes"
 msgstr "10 λεπτά"
 
-#: ../wwsympa/wwslib.pm:42
+#: ../wwsympa/wwslib.pm:46
 msgid "30 minutes"
 msgstr "30 λεπτά"
 
-#: ../wwsympa/wwslib.pm:43
+#: ../wwsympa/wwslib.pm:47
 msgid "1 hour"
 msgstr "1 ώρα"
 
-#: ../wwsympa/wwslib.pm:44
+#: ../wwsympa/wwslib.pm:48
 msgid "6 hours"
 msgstr "6 ώρες"
 
-#: ../wwsympa/wwslib.pm:45
+#: ../wwsympa/wwslib.pm:49
 msgid "1 day"
 msgstr "1 ημέρα"
 
-#: ../wwsympa/wwslib.pm:46
+#: ../wwsympa/wwslib.pm:50
 msgid "1 week"
 msgstr "1 εβδομάδα"
 
-#: ../wwsympa/wwslib.pm:47
+#: ../wwsympa/wwslib.pm:51
 #, fuzzy
 msgid "30 days"
 msgstr "1 ημέρα"
 
-#: ../wwsympa/wwslib.pm:49
-msgid "listed in the list review page"
-msgstr "προβάλετε στη σελίδα ανασκόπησης λίστας"
-
-#: ../wwsympa/wwslib.pm:50
-msgid "concealed"
-msgstr "κρυμμένη"
-
-#: ../wwsympa/wwslib.pm:54
+#: ../wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "μήνυμα υποδοχής"
 
-#: ../wwsympa/wwslib.pm:55
+#: ../wwsympa/wwslib.pm:60
 #, fuzzy
 msgid "unsubscribe message"
 msgstr "Αποχώρηση συνδρομητή από τη λίστα %1"
 
-#: ../wwsympa/wwslib.pm:56
+#: ../wwsympa/wwslib.pm:61
 msgid "deletion message"
 msgstr "μήνυμα διαγραφής"
 
-#: ../wwsympa/wwslib.pm:57
+#: ../wwsympa/wwslib.pm:62
 msgid "message footer"
 msgstr "υποσέλιδο μηνύματος"
 
-#: ../wwsympa/wwslib.pm:58
+#: ../wwsympa/wwslib.pm:63
 msgid "message header"
 msgstr "κεφαλίδα μηνύματος"
 
-#: ../wwsympa/wwslib.pm:59
+#: ../wwsympa/wwslib.pm:64
 msgid "remind message"
 msgstr "μήνυμα υπενθύμισης"
 
-#: ../wwsympa/wwslib.pm:60
+#: ../wwsympa/wwslib.pm:65
 msgid "editor rejection message"
 msgstr "μήνυμα απόρριψης συντονιστή"
 
-#: ../wwsympa/wwslib.pm:61
+#: ../wwsympa/wwslib.pm:66
 msgid "subscribing invitation message"
 msgstr "μήνυμα πρόσκλησης συνδρομής"
 
-#: ../wwsympa/wwslib.pm:62
+#: ../wwsympa/wwslib.pm:67
 msgid "help file"
 msgstr "αρχείο βοήθειας"
 
-#: ../wwsympa/wwslib.pm:63
+#: ../wwsympa/wwslib.pm:68
 msgid "directory of lists"
 msgstr "φάκελος λιστών"
 
-#: ../wwsympa/wwslib.pm:64
+#: ../wwsympa/wwslib.pm:69
 msgid "global remind message"
 msgstr "καθολικό μήνυμα υπενθύμισης"
 
-#: ../wwsympa/wwslib.pm:65
+#: ../wwsympa/wwslib.pm:70
 msgid "summary message"
 msgstr "μήνυμα περίληψης"
 
-#: ../wwsympa/wwslib.pm:66
+#: ../wwsympa/wwslib.pm:71
 msgid "list description"
 msgstr "περιγραφή λίστας"
 
-#: ../wwsympa/wwslib.pm:67
+#: ../wwsympa/wwslib.pm:72
 msgid "list homepage"
 msgstr "αρχική σελίδα λίστας"
 
-#: ../wwsympa/wwslib.pm:68
+#: ../wwsympa/wwslib.pm:73
 msgid "list creation request message"
 msgstr "μήνυμα αιτήματος δημιουργίας λίστας"
 
-#: ../wwsympa/wwslib.pm:69
+#: ../wwsympa/wwslib.pm:74
 msgid "list creation notification message"
 msgstr "μήνυμα ενημέρωσης δημιουργίας λίστας"
 
-#: ../wwsympa/wwslib.pm:70
+#: ../wwsympa/wwslib.pm:75
 msgid "virus infection message"
 msgstr "μήνυμα προσβολής από ιό"
 
-#: ../wwsympa/wwslib.pm:71
+#: ../wwsympa/wwslib.pm:76
 msgid "list aliases template"
 msgstr "πρότυπο παρωνυμίων (aliases) λίστας"
 
-#: ../wwsympa/wwslib.pm:27
-msgid "standard (direct reception)"
-msgstr "στάνταρ (απευθείας παραλαβή)"
-
-#: ../wwsympa/wwslib.pm:28
-msgid "digest MIME format"
-msgstr "σύνοψη μορφής MIME"
-
-#: ../wwsympa/wwslib.pm:29
-msgid "digest plain text format"
-msgstr "σύνοψη μορφής απλού κειμένου"
-
-#: ../wwsympa/wwslib.pm:30
-msgid "summary mode"
-msgstr "λειτουργία περίληψης"
-
-#: ../wwsympa/wwslib.pm:31
-msgid "notice mode"
-msgstr "λειτουργία ενημέρωσης"
-
-#: ../wwsympa/wwslib.pm:32
-msgid "text-only mode"
-msgstr "λειτουργία μόνο κειμένου"
-
-#: ../wwsympa/wwslib.pm:33
-msgid "html-only mode"
-msgstr "λειτουργία μόνο html"
-
-#: ../wwsympa/wwslib.pm:34
-msgid "urlize mode"
-msgstr "λειτουργία μετατροπής σε url (urlize)"
-
-#: ../wwsympa/wwslib.pm:35
+#: ../wwsympa/wwslib.pm:39
 msgid "no mail (useful for vacations)"
 msgstr "κανένα μήνυμα (χρήσιμο για περίοδο διακοπών)"
 
-#: ../wwsympa/wwslib.pm:36
-msgid "you do not receive your own posts"
-msgstr "δεν θα λαμβάνετε τα δικά σας μηνύματα"
+#: ../web_tt2/edit_template.tt2:19
+msgid ""
+"(This template is the default for all languages unless it is redefined for a "
+"specific language.)"
+msgstr ""
+"(Αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις γλώσσες εκτός εάν "
+"οριστεί διαφορετικά για συγκεκριμένη γλώσσα.)"
+
+#. (list,robot)
+#: ../web_tt2/view_template.tt2:12
+msgid "( this template is defined for list %1@%2 )"
+msgstr "( αυτό το πρότυπο ορίστηκε για τη λίστα %1@%2 )"
+
+#. (robot)
+#: ../web_tt2/view_template.tt2:15
+msgid ""
+"( this template is the default for all lists of robot %1 unless it is "
+"redefined for a specific list )"
+msgstr ""
+"( αυτό το πρότυπο είναι το προεπιλεγμένο για όλες τις λίστες του εξυπηρετητή "
+"%1 εκτός εάν έχει οριστεί αλλιώς για συγκεκριμένη λίστα )"
+
+#: ../web_tt2/view_template.tt2:17
+msgid ""
+"( this template is the default used by all robots unless redefined for a "
+"specific robot )"
+msgstr ""
+"(αυτό το πρότυπο είναι το προεπιλεγμένο για όλους τους εξυπηρετητές εκτός αν "
+"έχει οριστεί αλλιώς για κάποιο συγκεκριμένο )"
 
 #: ../web_tt2/list_menu.tt2:10
 msgid " -- go to:"
@@ -9826,11 +10291,6 @@ msgstr ""
 #. (t.subroutine, t.filename, t.line)
 #: ../web_tt2/crash.tt2:67
 msgid "In %1 at %2 line %3"
-msgstr ""
-
-#: ../web_tt2/edit_template.tt2:8 ../web_tt2/ls_templates.tt2:23
-#: ../web_tt2/view_template.tt2:9
-msgid "web"
 msgstr ""
 
 #: ../web_tt2/modform.tt2:61
@@ -9895,14 +10355,6 @@ msgstr ""
 msgid "locked by %1 at %2"
 msgstr ""
 
-#: ../mail_tt2/command_report.tt2:123 ../mail_tt2/info_report.tt2:29
-msgid ", and "
-msgstr ""
-
-#: ../mail_tt2/command_report.tt2:125 ../mail_tt2/info_report.tt2:31
-msgid ", "
-msgstr ""
-
 #: ../mail_tt2/digest_plain.tt2:62
 msgid "Answer to author"
 msgstr ""
@@ -9933,16 +10385,6 @@ msgstr ""
 
 #: ../mail_tt2/modindex.tt2:10
 msgid "You can moderate them using the web interface:"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/review.tt2:2
-msgid "REVIEW %1"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/stats_report.tt2:2
-msgid "STATS %1"
 msgstr ""
 
 #: ../src/lib/confdef.pm:78
@@ -10048,86 +10490,6 @@ msgid ""
 "request@<domain>"
 msgstr ""
 
-#: ../src/lib/List.pm:338
-msgid "overwrite Reply-To: header field"
-msgstr ""
-
-#: ../src/lib/List.pm:357
-msgid "subject and body"
-msgstr ""
-
-#: ../src/lib/List.pm:362
-msgid "do nothing"
-msgstr ""
-
-#: ../src/lib/List.pm:380
-msgid "disabled"
-msgstr ""
-
-#: ../src/lib/List.pm:405
-msgid "TLS"
-msgstr ""
-
-#: ../src/lib/List.pm:425
-msgid "0 - highest priority"
-msgstr ""
-
-#: ../src/lib/List.pm:426
-msgid "9 - lowest priority"
-msgstr ""
-
-#: ../src/lib/List.pm:430
-msgid "replace @ characters"
-msgstr ""
-
-#: ../src/lib/List.pm:431
-msgid "use JavaScript"
-msgstr ""
-
-#: ../src/lib/List.pm:439
-msgid "optional"
-msgstr ""
-
-#: ../src/lib/List.pm:446
-msgid "multi-line text"
-msgstr ""
-
-#: ../src/lib/List.pm:451
-msgid "add a new MIME part"
-msgstr ""
-
-#: ../src/lib/List.pm:461
-msgid "RDBMS"
-msgstr ""
-
-#: ../src/lib/List.pm:463
-msgid "include from external source"
-msgstr ""
-
-#: ../src/lib/List.pm:480
-msgid "approved by editor"
-msgstr ""
-
-#: ../src/lib/List.pm:486 ../wwsympa/wwslib.pm:79
-msgid "monthly"
-msgstr ""
-
-#: ../src/lib/List.pm:487
-msgid "quarterly"
-msgstr ""
-
-#: ../src/lib/List.pm:488
-msgid "yearly"
-msgstr ""
-
-#: ../src/lib/List.pm:494
-msgid "100% - always"
-msgstr ""
-
-#: ../src/lib/List.pm:495
-msgid "0% - never"
-msgstr ""
-
 #: ../src/lib/List.pm:502
 msgid "on demand"
 msgstr ""
@@ -10183,6 +10545,72 @@ msgstr ""
 msgid "%s / %s"
 msgstr ""
 
+#~ msgid "Name: "
+#~ msgstr "Όνομα: "
+
+#~ msgid "Template name:"
+#~ msgstr "Όνομα προτύπου"
+
+#~ msgid "Type:"
+#~ msgstr "Τύπος:"
+
+#~ msgid "Path:"
+#~ msgstr "Διαδρομή:"
+
+#~ msgid "Scope:"
+#~ msgstr "Πεδίο Δράσης:"
+
+#~ msgid "This template is defined for list %1@%2"
+#~ msgstr "Αυτό το πρότυπο είναι ορισμένο για τη λίστα %1@%2"
+
+#~ msgid ""
+#~ "This template is default for all lists of robot %1 unless it is redefined "
+#~ "for some particular list"
+#~ msgstr ""
+#~ "Το προκαθορισμένο πρότυπο για όλες της λίστες του εξυπηρετητή %1 εκτός "
+#~ "εάν οριστεί διαφορετικά για συγκεκριμένη λίστα"
+
+#~ msgid ""
+#~ "This template is default for all robots unless  it is redefined for some "
+#~ "particular robot"
+#~ msgstr ""
+#~ "Το προκαθορισμένο πρότυπο για όλους τους εξυπηρετητές εκτός εάν οριστεί "
+#~ "διαφορετικά για συγκεκριμένο εξυπηρετητή"
+
+#~ msgid "language: "
+#~ msgstr "Γλώσσα:"
+
+#~ msgid "distrib"
+#~ msgstr "διανομή"
+
+#~ msgid "List %1 allows only these reception modes: %2"
+#~ msgstr "Η λίστα %1 επιτρέπει μόνο τους τρόπους λήψης: %2"
+
+#~ msgid "Digest for list %1"
+#~ msgstr "Σύνοψη λίστας %1"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr ""
+#~ "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr ""
+#~ "Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %"
+#~ "1."
+
+#~ msgid "Reply to sender"
+#~ msgstr "Απάντηση προς αποστολέα"
+
+#~ msgid "to list"
+#~ msgstr "στη λίστα"
+
+#~ msgid "to both"
+#~ msgstr "και στα δύο"
+
 #~ msgid "Show the exclusion table"
 #~ msgstr "Εμφάνιση του πίνακα εξαιρέσεων"
 
@@ -10218,10 +10646,6 @@ msgstr ""
 
 #~ msgid "OpenSocial"
 #~ msgstr "OpenSocial"
-
-#, fuzzy
-#~ msgid "Erroneous configuration"
-#~ msgstr "Αρχείο διαμόρφωσης"
 
 #, fuzzy
 #~ msgid "(review)"
@@ -10286,14 +10710,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message templates"
 #~ msgstr "Όνομα μηνύματος"
-
-#, fuzzy
-#~ msgid "(default)"
-#~ msgstr "προεπιλογή"
-
-#, fuzzy
-#~ msgid "mail"
-#~ msgstr "Αλληλογραφία"
 
 #, fuzzy
 #~ msgid "Failed to include members"
@@ -10375,18 +10791,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Dou you really want to add %1?"
 #~ msgstr "Επιθυμείτε τη διαγραφή του(της) %1;"
-
-#, fuzzy
-#~ msgid "System log"
-#~ msgstr "Syslog"
-
-#, fuzzy
-#~ msgid "others"
-#~ msgstr "Άλλα"
-
-#, fuzzy
-#~ msgid "all"
-#~ msgstr "Όλα"
 
 #, fuzzy
 #~ msgid "Administration Tasks"
@@ -10541,9 +10945,6 @@ msgstr ""
 #~ msgid "Delete selected addresses"
 #~ msgstr "Διαγραφή επιλεγμένων διευθύνσεων"
 
-#~ msgid "Background color for the news area of the home page."
-#~ msgstr "Χρώμα φόντου για την περιοχή ειδήσεων στην αρχική σελίδα."
-
 #, fuzzy
 #~ msgid "List %1 statistics"
 #~ msgstr "Η λίστα %1 έχει κλείσει"
@@ -10642,10 +11043,6 @@ msgstr ""
 #~ msgstr "δοκιμαστική x-spam-status κεφαλίδα"
 
 #, fuzzy
-#~ msgid "List %1 allows only these reception modes: "
-#~ msgstr "Η λίστα %1 επιτρέπει μόνο τους τρόπους λήψης: %2"
-
-#, fuzzy
 #~ msgid "%1 digest %2"
 #~ msgstr "%1 Σύνοψη %2"
 
@@ -10711,16 +11108,6 @@ msgstr ""
 #~ msgid "Previous process %1 (with pid %2) has died unexpectedly."
 #~ msgstr "Προηγούμενη διεργασία %1 (με pid %2) τερμάτισε απρόσμενα."
 
-#, fuzzy
-#~ msgid "CSS files have been updated"
-#~ msgstr "Το αρχείο διαμόρφωσης ενημερώθηκε"
-
-#, fuzzy
-#~ msgid "Static CSS files have been updated.  Check log file for details."
-#~ msgstr ""
-#~ "Η δομή της βάσης δεδομένων ενημερώθηκε. Δείτε τα αρχεία καταγραφής για "
-#~ "περισσότερες λεπτομέρειες: "
-
 #~ msgid "Limit of users count reached for list %1"
 #~ msgstr "Φτάσατε το όριο των χρηστών για τη λίστα %1"
 
@@ -10740,10 +11127,6 @@ msgstr ""
 #~ msgstr ""
 #~ "\n"
 #~ "ή στείλτε μήνυμα στο %1 με το παρακάτω θέμα:\n"
-
-#, fuzzy
-#~ msgid "Rejected mailing list %1 creation"
-#~ msgstr "%1 δημιουργία λίστας ηλεκτρονικού ταχυδρομείου"
 
 #~ msgid "Your OAuth token used by consumer %1 may have expired."
 #~ msgstr "Το τεκμήριο OAuth του καταναλωτή %1 ίσως να έχει λήξει."
@@ -10781,33 +11164,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Η διεύθυνση ηλεκτρονικής αλληλογραφίας σας (%1) έχει αφαιρεθεί από την "
 #~ "λίστα %2@%3"
-
-#, fuzzy
-#~ msgid ""
-#~ "You have been delegated the responsability of list owner by %1 for list %"
-#~ "2@%3."
-#~ msgstr ""
-#~ "Σας έχει εκχωρηθεί αρμοδιότητα ιδιοκτήτη της λίστας %2@%3 από τον %1."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have been delegated the responsability of list moderator by %1 for "
-#~ "list %2@%3."
-#~ msgstr ""
-#~ "Σας έχει εκχωρηθεί η αρμοδιότητα του συντονιστή της λίστας %2@%3 από τον %"
-#~ "1."
-
-#, fuzzy
-#~ msgid "Reply to"
-#~ msgstr "Απάντηση"
-
-#, fuzzy
-#~ msgid "sender"
-#~ msgstr "Αποστολέας"
-
-#, fuzzy
-#~ msgid "both"
-#~ msgstr "και στα δύο"
 
 #~ msgid "%s [%s] : "
 #~ msgstr "%s [%s] : "
@@ -11649,214 +12005,6 @@ msgstr ""
 #~ msgid "list members"
 #~ msgstr "Ανασκόπηση"
 
-#, fuzzy
-#~ msgid "preserve existing header field"
-#~ msgstr "σεβασμός υφιστάμενου πεδίου κεφαλίδας"
-
-#, fuzzy
-#~ msgid "subject field"
-#~ msgstr "Θέμα :"
-
-#, fuzzy
-#~ msgid "message body"
-#~ msgstr "Αριθμός μηνύματος"
-
-#, fuzzy
-#~ msgid "remove bouncing users"
-#~ msgstr "απομακρυσμένος χρήστης"
-
-#, fuzzy
-#~ msgid "notify bouncing users"
-#~ msgstr "Ενημέρωση ιδιοκτήτη"
-
-#, fuzzy
-#~ msgid "enabled"
-#~ msgstr "κρυμμένη"
-
-#, fuzzy
-#~ msgid "first entry"
-#~ msgstr "Κατάλογος"
-
-#, fuzzy
-#~ msgid "entries matching regular expression"
-#~ msgstr "regexp πρώτου επιπέδου"
-
-#, fuzzy
-#~ msgid "base"
-#~ msgstr "Διάκριση πεζών-κεφαλαίων:"
-
-#, fuzzy
-#~ msgid "one level"
-#~ msgstr "Επίπεδο:"
-
-#, fuzzy
-#~ msgid "subtree"
-#~ msgstr "Υποβολή"
-
-#, fuzzy
-#~ msgid "yes"
-#~ msgstr "bytes"
-
-#, fuzzy
-#~ msgid "no"
-#~ msgstr "Πληροφορίες"
-
-#, fuzzy
-#~ msgid "SSL version 2"
-#~ msgstr "συμπερίληψη ερωτήματος SQL"
-
-#, fuzzy
-#~ msgid "SSL version 3"
-#~ msgstr "συμπερίληψη ερωτήματος SQL"
-
-#, fuzzy
-#~ msgid "receive notification email"
-#~ msgstr "Μαγική ταυτοποίηση"
-
-#, fuzzy
-#~ msgid "no notifications"
-#~ msgstr "Μαγική ταυτοποίηση"
-
-#, fuzzy
-#~ msgid "concealed from list menu"
-#~ msgstr "απόκρυψη, εκτός από τον διαχειριστή συστήματος"
-
-#, fuzzy
-#~ msgid "listed on the list menu"
-#~ msgstr "προβάλετε στη σελίδα ανασκόπησης λίστας"
-
-#, fuzzy
-#~ msgid "bounce management"
-#~ msgstr "Διαχείριση bounces"
-
-#, fuzzy
-#~ msgid "privileged owner"
-#~ msgstr "Προνομιούχος ιδιοκτήτης"
-
-#, fuzzy
-#~ msgid "normal owner"
-#~ msgstr "Ενημέρωση ιδιοκτήτη"
-
-#, fuzzy
-#~ msgid "queue messages only"
-#~ msgstr " Πρόσφατα μηνύματα "
-
-#, fuzzy
-#~ msgid "required to post message"
-#~ msgstr "μήνυμα υπενθύμισης"
-
-#, fuzzy
-#~ msgid "required to distribute message"
-#~ msgstr "Προστίθεται στα διανεμόμενα μηνύματα"
-
-#, fuzzy
-#~ msgid "required"
-#~ msgstr "αθόρυβα"
-
-#, fuzzy
-#~ msgid "string"
-#~ msgstr "διανομή"
-
-#, fuzzy
-#~ msgid "number"
-#~ msgstr "μέλος"
-
-#, fuzzy
-#~ msgid "set of keywords"
-#~ msgstr "Λέξεις κλειδί θέματος μηνυμάτων"
-
-#, fuzzy
-#~ msgid "append to message body"
-#~ msgstr "%1 αποτελέσματα στο Σώμα του μηνύματος"
-
-#, fuzzy
-#~ msgid "include from local file"
-#~ msgstr "οποιοσδήποτε από τον τοπικό τομέα"
-
-#, fuzzy
-#~ msgid "general datasource"
-#~ msgstr "πηγή δεδομένων χρήστη"
-
-#, fuzzy
-#~ msgid "help"
-#~ msgstr "Βοήθεια"
-
-#, fuzzy
-#~ msgid "subscription"
-#~ msgstr "Εκκρεμείς εγγραφές συνδρομητών"
-
-#, fuzzy
-#~ msgid "unsubscription"
-#~ msgstr "Εκκρεμείς εγγραφές συνδρομητών"
-
-#, fuzzy
-#~ msgid "posting address"
-#~ msgstr "Bouncing διεύθυνση"
-
-#, fuzzy
-#~ msgid "list archive"
-#~ msgstr "Αρχείο λιστών"
-
-#, fuzzy
-#~ msgid "authenticated by password"
-#~ msgstr "Αποστολή συνθηματικού"
-
-#, fuzzy
-#~ msgid "authenticated by S/MIME signature"
-#~ msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
-
-#, fuzzy
-#~ msgid "authenticated by DKIM signature"
-#~ msgstr "χρειάζεται ταυτοποίηση, εκτός και αν η DKIM υπογραφή είναι έγκυρη"
-
-#, fuzzy
-#~ msgid "any messages"
-#~ msgstr "%Εικόνα(%s)"
-
-#, fuzzy
-#~ msgid "daily"
-#~ msgstr "ημέρες"
-
-#, fuzzy
-#~ msgid "weekly"
-#~ msgstr "1 εβδομάδα"
-
-#, fuzzy
-#~ msgid "use HTTP cookie"
-#~ msgstr "Διάρκεια ζωής HTTP cookies"
-
-#, fuzzy
-#~ msgid "original messages"
-#~ msgstr "μήνυμα υπενθύμισης"
-
-#, fuzzy
-#~ msgid "decrypted messages"
-#~ msgstr "παλαιότερα μηνύματα"
-
-#, fuzzy
-#~ msgid "no mail"
-#~ msgstr "Δεν υπάρχει μήνυμα"
-
-#, fuzzy
-#~ msgid "in operation"
-#~ msgstr "Εργασία"
-
-#, fuzzy
-#~ msgid "list not yet activated"
-#~ msgstr "Ανενεργή λίστα"
-
-#, fuzzy
-#~ msgid "erroneous configuration"
-#~ msgstr "αντιγραφή επιλογών λίστας"
-
-#, fuzzy
-#~ msgid "closed family instance"
-#~ msgstr "τελευταία εγκατάσταση οικογένειας"
-
-#, fuzzy
-#~ msgid "closed list"
-#~ msgstr "Κλειστή λίστα"
-
 #~ msgid "Attempts to add some users in database failed."
 #~ msgstr "Απέτυχε προσπάθεια προσθήκης χρηστών στη βάση δεδομένων."
 
@@ -11873,10 +12021,6 @@ msgstr ""
 #~ msgid "Unable to add users in list %s : %s"
 #~ msgstr "Αδυναμία προσθήκης χρήστη στη λίστα %s: %s"
 
-#, fuzzy
-#~ msgid "Unknown (%s)"
-#~ msgstr "Άγνωστο"
-
 #~ msgid "Mail sending"
 #~ msgstr "Αποστολή μηνύματος"
 
@@ -11890,10 +12034,6 @@ msgstr ""
 
 #~ msgid "Users deleted by admin"
 #~ msgstr "Χρήστες διαγραμμένοι από διαχειριστή"
-
-#, fuzzy
-#~ msgid "topic (%s)"
-#~ msgstr "θέματα"
 
 #~ msgid "The following error occurred whila managing bounces: %&"
 #~ msgstr "Το παρακάτω σφάλμα προέκυψε κατά τη διαχείριση bounces: %&"
@@ -13413,3 +13553,7 @@ msgstr ""
 
 #~ msgid "Nomail"
 #~ msgstr "Δεν υπάρχει μήνυμα"
+
+#, fuzzy
+#~ msgid "notify bouncing users"
+#~ msgstr "Ενημέρωση ιδιοκτήτη"

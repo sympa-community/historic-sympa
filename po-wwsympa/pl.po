@@ -4501,9 +4501,10 @@ msgstr "Nie możesz zalogować się do interfejsu webowego list mailingowych"
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:15
+#, fuzzy
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>Nie masz hasła</strong>. Aby otrzymać hasło, użyj linku <a href=\"%1/"

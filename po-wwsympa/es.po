@@ -4611,9 +4611,10 @@ msgstr "No puedes autenticarte en la interfaz web de las listas de correo."
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:15
+#, fuzzy
 msgid ""
 "<strong>You have no password</strong>. To be given a password, follow the <a "
-"href=\"%1/sendpasswd\">First login?</a> link from the homepage. You will "
+"href=\"%1/firstpasswd\">First login?</a> link from the homepage. You will "
 "receive your new password by email."
 msgstr ""
 "<strong>No tienes password</strong>. Para obtener un password, utiliza el "
