@@ -58,7 +58,7 @@ sub new {
 
     do_log('debug', 'SympaSession::new(%s,%s,%s)', $robot,$cookie,$action);
 
-    my $self = {};
+    my $self = {'robot' => $robot}; # set current robot
     bless $self, $pkg;
     
     unless ($robot) {
@@ -77,7 +77,7 @@ sub new {
     # if a session cookie exist, try to restore an existing session, don't store sessions from bots
     if (($cookie)&&($self->{'passive_session'} != 1)){
 	my $status ;
-	$status = $self->load($robot, $cookie);
+	$status = $self->load($cookie);
 	unless (defined $status) {
 	    return undef;
 	}
@@ -94,7 +94,6 @@ sub new {
 	$self->{'date'} = $self->{'refresh_date'} = $self->{'start_date'} =
 	    time;
 	$self->{'hit'} = 1;
-	$self->{'robot'} = $robot; 
 	$self->{'data'} = '';
     }
     return $self;
@@ -102,10 +101,9 @@ sub new {
 
 sub load {
     my $self = shift;
-    my $robot = shift;
     my $cookie = shift;
     
-    do_log('debug', 'SympaSession::load(%s, %s)', $robot, $cookie);
+    Log::do_log('debug', '(%s)', $cookie);
 
     unless ($cookie) {
 	do_log('err',
@@ -135,20 +133,19 @@ sub load {
 	    q{SELECT id_session AS id_session, id_session AS prev_id,
 		     date_session AS "date",
 		     remote_addr_session AS remote_addr,
-		     robot_session AS robot, email_session AS email,
+		     email_session AS email,
 		     data_session AS data, hit_session AS hit,
 		     start_date_session AS start_date,
 		     date_session AS refresh_date
 	      FROM session_table
-	      WHERE robot_session = ? AND
-		    id_session = ? AND
+	      WHERE id_session = ? AND
 		    refresh_date_session IS NULL};
 	unless ($sth = $dbh->prepare($statement)) {
 	    do_log('err', 'Unable to prepare SQL statement : %s',
 		$dbh->errstr);
 	    return undef;
 	}
-	unless ($sth->execute($robot, $id_session)) {
+	unless ($sth->execute($id_session)) {
 	    do_log('err', 'Unable to execute SQL statement "%s" : %s',
 		$statement, $dbh->errstr);
 	    return undef;
@@ -166,20 +163,19 @@ sub load {
 	    q{SELECT id_session AS id_session, prev_id_session AS prev_id,
 		     date_session AS "date",
 		     remote_addr_session AS remote_addr,
-		     robot_session AS robot, email_session AS email,
+		     email_session AS email,
 		     data_session AS data, hit_session AS hit,
 		     start_date_session AS start_date,
 		     refresh_date_session AS refresh_date
 	      FROM session_table
-	      WHERE robot_session = ? AND
-		    (id_session = ? AND prev_id_session IS NOT NULL OR
-		     prev_id_session = ?)};
+	      WHERE id_session = ? AND prev_id_session IS NOT NULL OR
+		    prev_id_session = ?};
 	unless ($sth = $dbh->prepare($statement)) {
 	    do_log('err', 'Unable to prepare SQL statement : %s',
 		$dbh->errstr);
 	    return undef;
 	}
-	unless ($sth->execute($robot, $id_session, $id_session)) {
+	unless ($sth->execute($id_session, $id_session)) {
 	    do_log('err', 'Unable to execute SQL statement "%s" : %s',
 		$statement, $dbh->errstr);
 	    return undef;
@@ -224,7 +220,6 @@ sub load {
     $self->{'start_date'} = $session->{'start_date'};
     $self->{'hit'} = $session->{'hit'} +1 ;
     $self->{'remote_addr'} = $session->{'remote_addr'};
-    $self->{'robot'} = $session->{'robot'};
     $self->{'email'} = $session->{'email'};    
 
     return ($self);
@@ -232,7 +227,6 @@ sub load {
 
 ## This method will both store the session information in the database
 sub store {
-
     my $self = shift;
     do_log('debug', '');
 
@@ -287,8 +281,8 @@ sub store {
 	my $statement = sprintf
 	    q{SELECT id_session
 	      FROM session_table
-	      WHERE robot_session = %s AND prev_id_session = %s},
-	    $dbh->quote($self->{'robot'}), $dbh->quote($self->{'id_session'});
+	      WHERE prev_id_session = %s},
+	    $dbh->quote($self->{'id_session'});
 	my $sth = $dbh->prepare($statement);
 	unless ($sth) {
 	    do_log('err',
@@ -313,13 +307,11 @@ sub store {
 	      SET date_session = %d, remote_addr_session = %s,
 		  robot_session = %s, email_session = %s,
 		  start_date_session = %d, hit_session = %d, data_session = %s
-	      WHERE robot_session = %s AND
-		    (id_session = %s AND prev_id_session IS NOT NULL OR
-		     prev_id_session = %s)},
+	      WHERE id_session = %s AND prev_id_session IS NOT NULL OR
+		    prev_id_session = %s},
 	    $time, $dbh->quote($ENV{'REMOTE_ADDR'}),
 	    $dbh->quote($self->{'robot'}), $dbh->quote($self->{'email'}),
 	    $self->{'start_date'}, $self->{'hit'}, $dbh->quote($data_string),
-	    $dbh->quote($self->{'robot'}),
 	    $dbh->quote($self->{'id_session'}),
 	    $dbh->quote($self->{'id_session'});
 
@@ -334,7 +326,6 @@ sub store {
 
 ## This method will renew the session ID 
 sub renew {
-
     my $self = shift;
     do_log('debug', 'id_session=(%s)',$self->{'id_session'});
 
@@ -361,9 +352,9 @@ sub renew {
     my $statement = sprintf
 	q{SELECT id_session
 	  FROM session_table
-	  WHERE robot_session = %s AND prev_id_session = %s},
-	$dbh->quote($self->{'robot'}), $dbh->quote($self->{'id_session'});
-    my $sth = $dbh->prepare($statement);
+	  WHERE prev_id_session = %s},
+	$dbh->quote($self->{'id_session'});
+    $sth = $dbh->prepare($statement);
     unless ($sth) {
 	do_log('err',
 	    'Unable to update session information in database while execute SQL statement "%s" : %s',
@@ -411,17 +402,15 @@ sub renew {
 	   hit_session, data_session)
 	  SELECT %s, id_session,
 		 start_date_session, date_session, %d,
-		 %s, robot_session, email_session,
+		 %s, %s, email_session,
 		 hit_session, data_session
 	  FROM session_table
-	  WHERE robot_session = %s AND
-		(id_session = %s AND prev_id_session IS NOT NULL OR
+	  WHERE (id_session = %s AND prev_id_session IS NOT NULL OR
 		 prev_id_session = %s) AND
 		(remote_addr_session <> %s OR refresh_date_session <= %d)},
 	$dbh->quote($new_id),
 	$time,
-	$dbh->quote($remote_addr),
-	$dbh->quote($self->{'robot'}),
+	$dbh->quote($remote_addr), $dbh->quote($self->{'robot'}),
 	$dbh->quote($self->{'id_session'}),
 	$dbh->quote($self->{'id_session'}),
 	$dbh->quote($remote_addr), $refresh_term;
@@ -429,15 +418,15 @@ sub renew {
     my $update_statement = sprintf
 	q{UPDATE session_table
 	  SET prev_id_session = NULL
-	  WHERE robot_session = %s AND id_session = %s},
-	$dbh->quote($self->{'robot'}), $dbh->quote($self->{'id_session'});
+	  WHERE id_session = %s},
+	$dbh->quote($self->{'id_session'});
     ## Remove record of grand-parent ID.
     my $del_statement = sprintf
         q{DELETE FROM session_table
           WHERE id_session = %s AND prev_id_session IS NULL},
         $dbh->quote($self->{'prev_id'});
 
-    my $sth = $dbh->prepare($add_statement);
+    $sth = $dbh->prepare($add_statement);
     unless ($sth) {
       do_log('err','Unable to renew session ID for session %s',$self->{'id_session'});
       return undef;
