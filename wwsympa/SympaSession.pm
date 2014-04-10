@@ -648,8 +648,8 @@ sub list_sessions {
     
     while (my $session = ($sth->fetchrow_hashref('NAME_lc'))) {
 
-	$session->{'formated_date'} = &Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'date_session'}));
-	$session->{'formated_start_date'} = &Language::gettext_strftime ("%d %b %y  %H:%M", localtime($session->{'start_date_session'}));
+	$session->{'formated_date'} = Language::gettext_strftime("%d %b %Y at %H:%M:%S", localtime($session->{'date_session'}));
+	$session->{'formated_start_date'} = Language::gettext_strftime("%d %b %Y at %H:%M:%S", localtime($session->{'start_date_session'}));
 
 	# do_log('debug', 'SympaSession::list_session() DUMP : %s,%s,%s,%s',$session->{'remote_addr_session'}, $session->{'email_session'}, $session->{'robot_session'}, $session->{'formated_date'});
 
