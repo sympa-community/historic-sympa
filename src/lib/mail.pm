@@ -1039,13 +1039,15 @@ sub fix_part($$$$) {
     my $defcharset = shift;
     return $part unless $part;
 
-    my $enc = $part->head->mime_attr("Content-Transfer-Encoding");
+    my $enc = $part->head->mime_encoding;
     # Parts with nonstandard encodings aren't modified.
     return $part
 	if $enc and $enc !~ /^(?:base64|quoted-printable|[78]bit|binary)$/i;
-
     my $eff_type = $part->effective_type;
-    return $part if $eff_type =~ m{^multipart/(signed|encrypted)$};
+    # Signed or encrypted parts aren't modified.
+    if ($eff_type =~ m{^multipart/(signed|encrypted)$}){
+	return $part;
+    }
 
     if ($part->head->get('X-Sympa-Attach')) { # Need re-attaching data.
 	my $data = shift @{$attachments};
