@@ -1154,8 +1154,9 @@ sub purge_user_table {
     }
 
     foreach my $r (keys %{$Conf{'robots'}}) {
-
-	my $all_lists = &List::get_lists($r);
+	## To prevent information loss by misconfiguration, we won't use
+	## list_table cache!
+	my $all_lists = &List::get_lists($r, { 'use_files' => 1 });
 	foreach my $list (@$all_lists){
 
 	    ## Owners
