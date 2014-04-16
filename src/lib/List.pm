@@ -668,7 +668,7 @@ my %alias = ('reply-to' => 'reply_to',
                                      'comment' => 'Select one or more operation modes.  Domain matches the specified Domain regexp; Dkim matches any message with a DKIM signature header; Dmarc matches messages from sender domains with a reject DMARC policy; All matches all messages.',
                                      'order' => 1
                                    },
-                                   'domain' => { 'format' => '.+',
+                                   'domain_regex' => { 'format' => '.+',
                                      'gettext_id' => "Match domain regexp",
 		                     'occurrence' => '0-1',
 				     'comment' => 'Regexp match pattern for From domain',
