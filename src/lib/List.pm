@@ -2882,7 +2882,7 @@ sub distribute_msg {
                     ;
                 } elsif($phraseMode eq 'name_via_list') { # NAME (via LIST Mailing List)
                     $newComment =
-			sprintf gettext('(via %s Mailing List)'), $name;
+			sprintf gettext('via %s Mailing List'), $name;
                 } else { # default:  NAME
                     undef $newComment;
                 }
