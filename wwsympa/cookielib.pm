@@ -90,7 +90,7 @@ sub get_mac {
 	    return undef;
 	}
 	unless ($email) {
-	    &do_log('err', 'get_mac : failure missing email adresse or cookie MD5 digest');
+	    &do_log('err', 'get_mac : failure missing email address or cookie MD5 digest');
 	    return undef;
 	}
 

@@ -624,7 +624,7 @@ sub sendto {
 			 'tag_as_last' => $tag_as_last);
 		return $result;
 	    }else{
-		Log::do_log('err','Unable to encrypt message to list %s for receipient %s',$listname,$email);
+		Log::do_log('err','Unable to encrypt message to list %s for recipient %s',$listname,$email);
 		return undef;
 	    }
 	    $tag_as_last = 0;

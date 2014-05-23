@@ -484,7 +484,7 @@ my %alias = ('reply-to' => 'reply_to',
 			'type' => {
 				'format' => ['string','text','integer','enum'],
 				'default' => 'string',
-				'occurence' => 1,
+				'occurrence' => 1,
 				'gettext_id' => "type",
 				'order' => 4
 			},
@@ -597,7 +597,7 @@ my %alias = ('reply-to' => 'reply_to',
 		      },
 
 	    'dkim_feature' => {'format' => ['on','off'],
-			      'occurence' => '0-1',
+			      'occurrence' => '0-1',
 			      'default' => {'conf' => 'dkim_feature'},
 			      'gettext_id' => "Insert DKIM signature to messages sent to the list",
 			      'comment' =>  "Enable/Disable DKIM. This feature require Mail::DKIM to installed and may be some custom scenario to be updated",
@@ -612,14 +612,14 @@ my %alias = ('reply-to' => 'reply_to',
 					 'group' => 'dkim',
 					 },
 	    'dkim_parameters'=> {'format' => {'private_key_path'=> {'format' => '\S+',
-		                         			  'occurence' => '0-1',
+		                         			  'occurrence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_private_key_path'},
 			                                          'gettext_id' => "File path for list DKIM private key",
 								  'comment' => "The file must contain a RSA pem encoded private key", 
 								  'order' => 1
 					                         },
 					     'selector' => { 'format' => '\S+',
-		                         			  'occurence' => '0-1',
+		                         			  'occurrence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_selector'},
 							          'comment' => "The selector is used in order to build the DNS query for public key. It is up to you to choose the value you want but verify that you can query the public DKIM key for <selector>._domainkey.your_domain",
 			                                          'gettext_id' => "Selector for DNS lookup of DKIM public key",
@@ -627,7 +627,7 @@ my %alias = ('reply-to' => 'reply_to',
                                                                   },
 							          
 					     'header_list'=>      { 'format' => '\S+',
-		                         			  'occurence' => '0-1',
+		                         			  'occurrence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_header_list'},
 			                                          'gettext_id' => 'List of headers to be included ito the message for signature',
 								  'comment' => 'You should probably use teh default value which is the value recommended by RFC4871',
@@ -635,14 +635,14 @@ my %alias = ('reply-to' => 'reply_to',
 								  'obsolete' => 1,
                                                                   },
 					     'signer_domain' =>   {'format' => '\S+',
-		                         			  'occurence' => '0-1',
+		                         			  'occurrence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_signer_domain'},
 			                                          'gettext_id' => 'DKIM "d=" tag, you should probably use the default value',
 								   'omment' => ' The DKIM "d=" tag, is the domain of the signing entity. the list domain MUST must be included in the "d=" domain',
 								  'order' => 5
 								 },
                                              'signer_identity'=>  {'format' => '\S+',
-		                         			  'occurence' => '0-1',
+		                         			  'occurrence' => '0-1',
 								  'comment' => 'DKIM "i=" tag, you should probably not use this parameter, as recommended by RFC 4871, default for list brodcasted messages is i=<listname>-request@<domain>',
 			                                          'gettext_id' => 'DKIM "i=" tag, you should probably leave this parameter empty',
 								  'order' => 6
@@ -1116,7 +1116,7 @@ my %alias = ('reply-to' => 'reply_to',
 				    'group' => 'data_source'
 				    },
 	    'inclusion_notification_feature' => {'format' => ['on','off'],
-						 'occurence' => '0-1',
+						 'occurrence' => '0-1',
 						 'default' => 'off',
 						 'gettext_id' => "Notify subscribers when they are included from a data source?",
 						 'group' => 'data_source',
@@ -1275,7 +1275,7 @@ my %alias = ('reply-to' => 'reply_to',
 			   'group' => 'description'
 		       },
 	    'reject_mail_from_automates_feature' => {'format' => ['on','off'],
-						     'occurence' => '0-1',
+						     'occurrence' => '0-1',
 						     'default' => {'conf' => 'reject_mail_from_automates_feature'},
 			       'gettext_id' => "Reject mail from automates (crontab, etc)?",
 			       'group' => 'sending'
@@ -1456,13 +1456,13 @@ my %alias = ('reply-to' => 'reply_to',
 				   'obsolete' => 1,
 				   },
 	    'pictures_feature' => {'format' => ['on','off'],
-			       'occurence' => '0-1',
+			       'occurrence' => '0-1',
 			       'default' => {'conf' => 'pictures_feature'},
 			       'gettext_id' => "Allow picture display? (must be enabled for the current robot)",
 			       'group' => 'other'
 			       },	
 	    'merge_feature' => {'format' => ['on','off'],
-			       'occurence' => '0-1',
+			       'occurrence' => '0-1',
 			       'default' => {'conf' => 'merge_feature'},
 			       'gettext_id' => "Allow message personnalization",
 			       'group' => 'sending'
@@ -2459,7 +2459,7 @@ sub get_owners_email {
 }
 
 ## Returns an array of editors' email addresses
-#  or owners if there isn't any editors'email adress
+#  or owners if there isn't any editors' email addresses
 sub get_editors_email {
     my($self,$param) = @_;
     do_log('debug3', 'List::get_editors_email(%s,%s)', $self->{'name'}, $param -> {'ignore_nomail'});
@@ -3547,8 +3547,8 @@ sub send_file {
 
     # if the list have it's private_key and cert sign the message
     # . used only for the welcome message, could be usefull in other case? 
-    # . a list should have several certificats and use if possible a certificat
-    #   issued by the same CA as the receipient CA if it exists 
+    # . a list should have several certificates and use if possible a certificate
+    #   issued by the same CA as the recipient CA if it exists 
     if ($sign_mode eq 'smime') {
 	$data->{'fromlist'} = "$name\@$data->{'list'}{'host'}";
 	$data->{'replyto'} = "$name"."-request\@$data->{'list'}{'host'}";
@@ -3870,7 +3870,7 @@ sub send_msg {
 	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
 	}
 
-	## Preparing VERP receipients.
+	## Preparing VERP recipients.
 	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
 	
 	## Sending non VERP.
@@ -4411,7 +4411,7 @@ sub send_notify_to_listmaster {
 			  };
 	}
 
-	## Automatic action done on bouncing adresses
+	## Automatic action done on bouncing addresses
 	if ($operation eq 'automatic_bounce_management') {
 	    my $list = new List ($param->{'listname'}, $robot);
 	    unless (defined $list) {
@@ -8996,7 +8996,7 @@ sub _include_users_ldap_2level {
 
     my ($suffix2, $filter2);
     foreach my $attr (@attrs) {
-	# Escape LDAP characters occuring in attribute
+	# Escape LDAP characters occurring in attribute
 	my $escaped_attr = $attr;
 	$escaped_attr =~ s/([\\\(\*\)\0])/sprintf "\\%02X", ord($1)/eg;
 
@@ -9387,7 +9387,7 @@ sub _load_users_include2 {
 	}
     }
 
-    ## If an error occured, return an undef value
+    ## If an error occurred, return an undef value
     $result->{'users'} = \%users;
     $result->{'errors'} = \@errors;
     return $result;
@@ -9494,7 +9494,7 @@ sub _load_admin_users_include {
 	    }
 	}
 
-	## If an error occured, return an undef value
+	## If an error occurred, return an undef value
 	unless (defined $total) {
 	    return undef;
 	}
@@ -11523,7 +11523,7 @@ sub _load_admin_file {
 	if (defined $admin{$pname}) {
 	    unless (($::pinfo{$pname}{'occurrence'} eq '0-n') or
 		    ($::pinfo{$pname}{'occurrence'} eq '1-n')) {
-		&do_log('err', 'Multiple occurences of a unique parameter "%s" in %s', $pname, $config_file);
+		&do_log('err', 'Multiple occurrences of a unique parameter "%s" in %s', $pname, $config_file);
 	    }
 	}
 	

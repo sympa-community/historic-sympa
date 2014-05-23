@@ -3308,7 +3308,7 @@ sub do_sso_login {
 	    if (defined $Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'} && ! $email_is_trusted) {
 	      my @email_list = split(/$Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'}/, 
 				     lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
-	      $email = $email_list[0]; ## Only get the first occurence if multi-valued
+	      $email = $email_list[0]; ## Only get the first occurrence if multi-valued
 	    }
 	    
 	    ## Start the email validation process
@@ -3429,7 +3429,7 @@ sub do_sso_login {
 	    if (defined $Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}) {
 	      my @email_list = split($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'}, 
 				     lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
-	      $email = $email_list[0]; ## Only get the first occurence if multi-valued
+	      $email = $email_list[0]; ## Only get the first occurrence if multi-valued
 
 	    }else {
 		unless (defined $Conf{'auth_services'}{$robot}[$sso_id]{'ldap_host'} &&
@@ -4504,7 +4504,10 @@ sub do_search {
 	$u->{'date'} = gettext_strftime "%d %b %Y", localtime($u->{'date'});
 	$u->{'update_date'} = gettext_strftime "%d %b %Y", localtime($u->{'update_date'});
     }
-    $param->{'similar_subscribers_occurence'} =$#{$param->{'similar_subscribers'}}+1;
+    $param->{'similar_subscribers_occurrence'} =$#{$param->{'similar_subscribers'}}+1;
+    ## for misspelling in 6.1.20 or earlier.
+    $param->{'similar_subscribers_occurence'} =
+	$param->{'similar_subscribers_occurrence'};
 
     $param->{'occurrence'} = $record;
     return 1;
@@ -9222,7 +9225,7 @@ sub do_edit_list {
     
     
     ## Getting changes about owners or editors
-    ## If changes occured in the owner or editor definition, these scalars are set to 1.
+    ## If changes occurred in the owner or editor definition, these scalars are set to 1.
     my $owner_update = 0;
     my $editor_update = 0;	
     
@@ -9394,7 +9397,7 @@ sub do_edit_list {
 			}
 		    ## If the parameter component doesn't correspond to a task or a scenario, we must check its content.
 		    }else{
-			## Parameter component check, case 1: this parameter component can have multiple occurence.
+			## Parameter component check, case 1: this parameter component can have multiple occurrence.
 			## Example: 'digest->days'
 			if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
 			    ## If the new value differs from the previous value, mark as changed and go to the next parameter component.
@@ -10159,10 +10162,10 @@ Returns a reference to a hash containing the data used to edit the parameter (of
 	$p_glob->{'title'} = $name;
     }
 
-    ## Occurrences : if the parameter can have multiple occurences,
+    ## Occurrences : if the parameter can have multiple occurrences,
     ## its values are transfered into the array pointed by $data2
     ## if they were given in arguments (if not, an empty array is created).
-    ## if it is a single occurence parameter, an array is created with
+    ## if it is a single occurrence parameter, an array is created with
     ## its single value.
 
      my $data2;

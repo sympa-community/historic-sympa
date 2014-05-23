@@ -1567,7 +1567,7 @@ sub DoFile {
     }elsif ($rcpt =~ /^listmaster(\@(\S+))?$/) {
 	$status = &DoForward('sympa', 'listmaster', $robot, $message);
 
-	## Mail adressed to the robot and mail 
+	## Mail addressed to the robot and mail 
 	## to <list>-subscribe or <list>-unsubscribe are commands
     }elsif (($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o)) {
 	$status = &DoCommand($rcpt, $robot, $message);
@@ -1617,7 +1617,7 @@ sub DoFile {
 	    ## Sampling delay is over, reinit
 	    $loop_info{$sender}{'date_init'} = time;
 
-	    ## We apply Decrease factor if a loop occured
+	    ## We apply Decrease factor if a loop occurred
 	    $loop_info{$sender}{'count'} *=  &Conf::get_robot_conf($robot,'loop_command_decrease_factor');
 	}
 

@@ -113,6 +113,7 @@ sub db_struct {
 							     'data_one_time_ticket' => 'varchar(200)',
 							     'remote_addr_one_time_ticket' => 'varchar(60)',
 							     'status_one_time_ticket' => 'varchar(60)'},
+				##FIXME: column name is "recEipients_bulkmailer"
 				 'bulkmailer_table' => {'messagekey_bulkmailer' => 'varchar(80)',
 							'messageid_bulkmailer' => 'varchar(200)',
 							'packetid_bulkmailer' => 'varchar(33)',

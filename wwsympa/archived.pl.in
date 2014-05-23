@@ -222,15 +222,15 @@ while (!$end) {
 
        if ($file  =~ /^\.remove\.((.*)\.(\d\d\d\d\-\d\d))\.\d+$/ ) {
 	   my $arclistdir = $1;
-	   my $listadress = $2;
+	   my $listname = $2;
 	   my $yyyymm = $3;
-	   my $arcpath = "$wwsconf->{'arc_path'}/$listadress/$yyyymm";
+	   my $arcpath = "$wwsconf->{'arc_path'}/$listname/$yyyymm";
 
-	   do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
+	   do_log('debug',"start remove process :listname :'$listname' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 	  
 	   my $list;
-	   unless ($list = new List ($listadress)) {
-	       do_log('err',"remove : unknown list $listadress");
+	   unless ($list = new List ($listname)) {
+	       do_log('err',"remove : unknown list $listname");
 	       next;
 	   }
 

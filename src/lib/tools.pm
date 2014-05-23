@@ -276,7 +276,7 @@ sub sanitize_var {
     return 1;
 }
 
-## Sorts the list of adresses by domain name
+## Sorts the list of addresses by domain name
 ## Input : users hash
 ## Sort by domain.
 sub sortbydomain {
@@ -3972,7 +3972,7 @@ sub addrencode {
 # Function : decode_header
 # Description : return header value decoded to UTF-8 or undef.
 #               trailing newline will be removed.
-#               If sep is given, return all occurrances joined by it.
+#               If sep is given, return all occurrences joined by it.
 ## IN : msg, tag, [sep]
 #*******************************************
 sub decode_header {
