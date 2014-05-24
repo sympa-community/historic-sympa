@@ -282,7 +282,7 @@ sub valid_email {
 }
 
 sub init_passwd {
-    my ($email, $data) = @_;
+    my ($robot, $email, $data) = @_;
     
     my ($passwd, $user);
     
@@ -294,9 +294,9 @@ sub init_passwd {
 	unless ($passwd) {
 	    $passwd = &new_passwd();
 	    
-	    unless ( &List::update_user_db($email,
-					   {'password' => $passwd,
-					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
+	    unless ( &List::update_user_db(
+		$email, {'password' => $passwd}
+	    )) {
 		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
 		&Log::do_log('info','init_passwd: update failed');
 		return undef;

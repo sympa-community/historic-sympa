@@ -5322,8 +5322,9 @@ sub do_family_signoff {
 		 return undef;
 	     }
 	     
-	     ## No passwd
-	     &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
+	    ## No passwd
+	    wwslib::init_passwd($robot, $in{'email'},
+		{'lang' => $param->{'lang'}});
 	     
 	     $param->{'user'}{'email'} = $in{'email'};
 	     $authenticated_email_address = $in{'email'};
