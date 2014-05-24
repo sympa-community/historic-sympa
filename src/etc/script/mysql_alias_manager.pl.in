@@ -149,7 +149,7 @@ sub already_defined {
         $dbh->do($sql) or die "$sql : $DBI::errstr";
 
         @enr = $dbh->selectrow_array($sql);
-	if (@enr[0] != 0) {
+	if ($enr[0] != 0) {
 	    print STDERR "Alias already defined : $alias_value\n";
 	    &finalize_mysql;
 	    return 1;
