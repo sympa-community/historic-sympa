@@ -295,6 +295,13 @@ sub load {
     unless ($Conf{'dkim_feature'} eq 'on'){
 	# dkim_signature_apply_ on nothing if dkim_feature is off
 	$Conf{'dkim_signature_apply_on'} = ['']; # empty array
+    }else {
+	$Conf{'dkim_signature_apply_on'} =~ s/\s//g ;
+	my @dkim = split(/,/, $Conf{'dkim_signature_apply_on'});
+	$Conf{'dkim_signature_apply_on'} = \@dkim;
+    }
+    unless ($Conf{'dkim_signer_domain'}) {
+	$Conf{'dkim_signer_domain'} = $Conf{'domain'};
     }
 
     ## Load charset.conf file if necessary.
@@ -596,6 +603,9 @@ sub load_robots {
 	## Default for 'host' is the domain
 	$robot_conf->{$robot}{'host'} ||= $robot;
 
+        unless ($robot_conf->{$robot}{'dkim_signer_domain'}) {
+            $robot_conf->{$robot}{'dkim_signer_domain'} = $robot_conf->{$robot}{'domain'};
+        }
 	$robot_conf->{$robot}{'title'} ||= $wwsconf->{'title'};
 	$robot_conf->{$robot}{'default_home'} ||= $wwsconf->{'default_home'};
 
