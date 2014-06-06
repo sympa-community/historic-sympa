@@ -152,7 +152,16 @@ sub new {
 	return undef;
     }
     $message->{'msg'} = $msg;
-    $message->{'msg_as_string'} = $msg->as_string;
+    close FILE;
+    
+    unless (open FILE, $file) {
+	&do_log('err', 'Cannot open message file %s : %s',  $file, $!);
+	return undef;
+    }
+    while (<FILE>) {
+	$message->{'msg_as_string'} .= $_;
+    }
+    close FILE;
 
     ## Message size
     $message->{'size'} = -s $file;    
