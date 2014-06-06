@@ -1,4 +1,426 @@
 ------------------------------------------------------------------------
+r10871 | sympa-authors | 2014-06-06 15:14:22 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r10870 | sympa-authors | 2014-06-06 14:53:44 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r10868 | etiennemeleard | 2014-06-06 12:52:44 +0200 (ven. 06 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-bug] Fix viewmod bug if message contained (% token by reproducing archived messages custom tt2 tags.
+
+------------------------------------------------------------------------
+r10866 | etiennemeleard | 2014-06-06 12:27:32 +0200 (ven. 06 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/viewmod.tt2
+
+[svn] Reverting commit that did not solve the problem
+
+------------------------------------------------------------------------
+r10865 | sympa-authors | 2014-06-06 12:22:13 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r10863 | sympa-authors | 2014-06-06 11:57:28 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/eo.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/io.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ca.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r10861 | etiennemeleard | 2014-06-06 11:42:55 +0200 (ven. 06 juin 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/viewmod.tt2
+
+[-bug] Add complicated custom tt2 tags in viewmod template so that [% tokens that can be present in sent messages are not considered as tt2 syntax.
+
+
+------------------------------------------------------------------------
+r10860 | david.verdin | 2014-06-06 11:33:42 +0200 (ven. 06 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/soap/sympasoap.pm
+
+[bug][#7318][Fixed by V. Bonamy, univ. Rouen] When usingUTF-8 encoded data, data were twice encoded before being setn by the SOAP server. Fixed by decoding from UTF-8 any text data.
+
+------------------------------------------------------------------------
+r10858 | david.verdin | 2014-06-06 10:58:13 +0200 (ven. 06 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Message.pm
+
+[bug] Scenarios were not evaluated for DKIM auth level, because DKIM signature was found invalifd. This was due - again - by the usage of MIME::Entity::as_string to store the message as string. Fixed by simply storing the raw data from message file instead of using this sub.
+
+------------------------------------------------------------------------
+r10829 | david.verdin | 2014-06-05 10:42:35 +0200 (jeu. 05 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[bug] When using DKIM, both DKIM and S/MIME signatures were broken. This was due to the usage of MIME::Entity->as_string that rewrapped the message body to 60 columns - thus changing the character string of the message body and probably also the \015\12 end of line required to get valid DKIM signatures. Fixed by storing the message body fed to Mail::DKIM and concatenating it to the new headers containing the DKIM signature.
+
+------------------------------------------------------------------------
+r10827 | david.verdin | 2014-06-04 15:14:25 +0200 (mer. 04 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+
+[bug] DKIM parameterswere not correctly loaded and dkim_signer_domain parameter was not correctly defaulted to the list service domain.
+
+------------------------------------------------------------------------
+r10825 | david.verdin | 2014-06-04 12:05:05 +0200 (mer. 04 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug] When using binary cache for list configs, if the main config (sympa.conf or wwsympa.conf) was changed, binary cache were still used. Problem: These bainary cache contain default values taken from main config. If these values were changed in main config, they were not updated in binary cache. Fixed by testing the last modification time for sympa.conf and wwsympa.conf against the binary_cache last update time.
+
+------------------------------------------------------------------------
+r10734 | sikeda | 2014-05-25 03:50:44 +0200 (dim. 25 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[-bug] tools::date_conv() ignored hour part.
+------------------------------------------------------------------------
+r10728 | sikeda | 2014-05-24 16:02:36 +0200 (sam. 24 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/script/mysql_alias_manager.pl.in
+
+[-dev] fixed non-fatal obsoleted syntax.
+------------------------------------------------------------------------
+r10727 | sikeda | 2014-05-24 16:00:56 +0200 (sam. 24 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/script/ldap_alias_manager.pl.in
+
+[bug] Fixed typos broke ldap_alias_manager.pl.
+------------------------------------------------------------------------
+r10725 | sikeda | 2014-05-24 02:49:31 +0200 (sam. 24 mai 2014) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwslib.pm
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] WWSympa may crash due to unknown subroutine when:
+- Anonymous user accesses to $wwsympa_url/signoff/LIST/EMAIL, i.e. specifying email but not logging-in.
+- User does not exist in user_table.
+
+This causes because wwslib::init_passwd() called in wwsympa.fcgi doesn't have qualified name.  Use qualified name and do fix another logical bug on unknown variable.
+
+------------------------------------------------------------------------
+r10713 | sikeda | 2014-05-23 11:18:40 +0200 (ven. 23 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/bulk.pl.in
+   M /branches/sympa-6.1-branch/src/etc/script/ldap_alias_manager.pl.in
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/Log.pm
+   M /branches/sympa-6.1-branch/src/lib/Sympa/DatabaseDescription.pm
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+   M /branches/sympa-6.1-branch/src/task_manager.pl.in
+   M /branches/sympa-6.1-branch/web_tt2/review.tt2
+   M /branches/sympa-6.1-branch/wwsympa/Bounce.pm
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+   M /branches/sympa-6.1-branch/wwsympa/cookielib.pm
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[svn] Backport bug fix from sympa-6.2-branch.
+------------------------------------------------------------------------
+r10712 | sikeda | 2014-05-23 11:13:07 +0200 (ven. 23 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/List.pm
+Fision via : r10713
+
+[-bug]  con'd r10709) more fixes.
+------------------------------------------------------------------------
+r10710 | sikeda | 2014-05-23 10:37:29 +0200 (ven. 23 mai 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/default/web_tt2/review.tt2
+Fision via : r10713
+
+[-bug] (con'd r10709) more fixes.
+------------------------------------------------------------------------
+r10709 | sikeda | 2014-05-23 10:26:33 +0200 (ven. 23 mai 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/cgi/wwsympa.fcgi.in
+   M /branches/sympa-6.2-branch/src/lib/List.pm
+   M /branches/sympa-6.2-branch/src/lib/Sympa/ListDef.pm
+   M /branches/sympa-6.2-branch/src/lib/tools.pm
+   M /branches/sympa-6.2-branch/src/libexec/ldap_alias_manager.pl.in
+   M /branches/sympa-6.2-branch/src/sbin/sympa.pl.in
+   M /branches/sympa-6.2-branch/src/sbin/task_manager.pl.in
+Fision via : r10713
+
+[bug] Fixed several misspellings of the word "occurrence(s)" in sources.
+
+------------------------------------------------------------------------
+r10708 | sikeda | 2014-05-23 10:12:52 +0200 (ven. 23 mai 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Bounce.pm
+   M /branches/sympa-6.2-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.2-branch/src/lib/List.pm
+   M /branches/sympa-6.2-branch/src/lib/Log.pm
+   M /branches/sympa-6.2-branch/src/lib/Sympa/DatabaseDescription.pm
+   M /branches/sympa-6.2-branch/src/lib/cookielib.pm
+   M /branches/sympa-6.2-branch/src/lib/mail.pm
+   M /branches/sympa-6.2-branch/src/lib/tools.pm
+   M /branches/sympa-6.2-branch/src/sbin/archived.pl.in
+   M /branches/sympa-6.2-branch/src/sbin/bulk.pl.in
+   M /branches/sympa-6.2-branch/src/sbin/sympa.pl.in
+Fision via : r10713
+
+[dev] French spelling in English messages and variable names: "receipient" and "adresse".
+
+*NOTE*: On bulkmailer_table, a column is named "recEipients_bulkmailer"; it should not be changed.
+
+------------------------------------------------------------------------
+r10550 | sikeda | 2014-04-27 15:07:36 +0200 (dim. 27 avril 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+
+[-dev] (con'd r10541) Several new features contributed by S. Shipway.
+And a few cleanups.
+------------------------------------------------------------------------
+r10545 | sikeda | 2014-04-16 06:53:31 +0200 (mer. 16 avril 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-dev] (con'd r10541,10543) typo.
+------------------------------------------------------------------------
+r10544 | sikeda | 2014-04-16 06:15:23 +0200 (mer. 16 avril 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-dev] (con'd r10541,10543) typo.
+------------------------------------------------------------------------
+r10543 | sikeda | 2014-04-16 06:07:36 +0200 (mer. 16 avril 2014) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[dev] (con'd r10541) i18n concern:
+- Added description for parameter values.
+- Apply MIME encoding to anonymous From: header field.
+Note that dmarc_protection.mail was renamed to dmarc_protection.other_email.
+
+------------------------------------------------------------------------
+r10542 | sikeda | 2014-04-16 06:03:20 +0200 (mer. 16 avril 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[dev] Now tools::addrencode() can take optional "comment" argument.
+
+------------------------------------------------------------------------
+r10541 | sikeda | 2014-04-15 13:39:01 +0200 (mar. 15 avril 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[feature] [Submitted by S. Shipway, Univ. of Auckland] Workaround for aggressive DMARC policy such as yahoo.com.  The patch adds option #3 of this DMARC FAQ: http://dmarc.org/faq.html#s_3
+- New list config paragraph "dmarc_protection" to munge "From:" header and put original header content erc. into comment.
+
+------------------------------------------------------------------------
+r10540 | sikeda | 2014-04-13 10:56:51 +0200 (dim. 13 avril 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+
+[change] New parameters for merged messages.
+"part.description", "part.disposition", "part.encoding" and "part.type" may be used for each part of input messages.  These are all-lowercase (except "part.description").
+
+------------------------------------------------------------------------
+r10539 | sikeda | 2014-04-13 10:10:44 +0200 (dim. 13 avril 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/task_manager.pl.in
+
+[bug] If cache_list_db is "on" and list_table is empty, all users in user_table except listmaster will be purged.
+To prevent information loss, made purge_user_table task not to use list_table cache.
+
+------------------------------------------------------------------------
+r10538 | sikeda | 2014-04-12 10:05:43 +0200 (sam. 12 avril 2014) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+
+[bug][#7289][Reported by D Launay, RENATER] Signed mail body are altered.  Fixed by making following functions not to alter such parts:
+- Bulk::merge_msg()
+- List::_append_parts()
+
+Backported from sympa-6.2-branch.
+
+------------------------------------------------------------------------
+r10309 | sikeda | 2014-02-28 04:34:14 +0100 (ven. 28 févr. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.2-branch/src/lib/List.pm
+   M /branches/sympa-6.2-branch/src/lib/mail.pm
+Fision via : r10538
+
+[bug][#7289][Reported by D Launay, RENATER] Signed mail body are altered.  Fixed by making following functions not to alter such parts:
+- Bulk::merge_msg()
+- List::_append_parts()
+
+------------------------------------------------------------------------
+r10537 | sikeda | 2014-04-10 16:10:01 +0200 (jeu. 10 avril 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/ja_JP/css.tt2
+
+[-change] Added new font-families to locale-specific CSS template.
+
+------------------------------------------------------------------------
+r10536 | sikeda | 2014-04-10 16:08:22 +0200 (jeu. 10 avril 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/SympaSession.pm
+
+[-change] Give times of sessions precision to second.
+
+------------------------------------------------------------------------
+r10535 | sikeda | 2014-04-10 15:50:12 +0200 (jeu. 10 avril 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/SympaSession.pm
+
+[bug][#9105] [Originally submitted by M. Howe, Univ. of Oxford] Session for multiple robots sharing same cookie domain is broken.
+Fixed injected bug by fix for bug #6180: the sessions were limited to each virtual robot at the first access.  The patch was modified a bit.
+
+------------------------------------------------------------------------
+r10468 | sympa-authors | 2014-03-21 11:48:20 +0100 (ven. 21 mars 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.20
+------------------------------------------------------------------------
 r10467 | sympa-authors | 2014-03-21 11:41:36 +0100 (ven. 21 mars 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ca.po

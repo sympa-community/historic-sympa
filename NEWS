@@ -3,6 +3,94 @@
 
 (See Changelog file for the full changes log)
 
+6.1.21		June 06, 2014
+
+  Features:
+
+	[10541] src/lib/List.pm:  [Submitted by S. Shipway, Univ. of Auckland]
+	Workaround for aggressive DMARC policy such as yahoo.com.  The patch
+	adds option #3 of this DMARC FAQ: http://dmarc.org/faq.html#s_3
+	- New list config paragraph "dmarc_protection" to munge "From:" header
+	and put original header content erc. into comment.
+
+
+
+  Changes:
+
+	[10540] src/lib/Bulk.pm:  New parameters for merged messages.
+	"part.description", "part.disposition", "part.encoding" and "part.type"
+	may be used for each part of input messages.  These are all-lowercase
+	(except "part.description").
+
+  Bug fixes:
+
+	[10860] soap/sympasoap.pm: [#7318][Fixed by V. Bonamy, univ. Rouen]
+	When usingUTF-8 encoded data, data were twice encoded before being setn
+	by the SOAP server. Fixed by decoding from UTF-8 any text data.
+
+	[10858] src/lib/Message.pm:  Scenarios were not evaluated for DKIM auth
+	level, because DKIM signature was found invalifd. This was due - again
+	- by the usage of MIME::Entity::as_string to store the message as
+	string. Fixed by simply storing the raw data from message file instead
+	of using this sub.
+
+	[10829] src/lib/tools.pm:  When using DKIM, both DKIM and S/MIME
+	signatures were broken. This was due to the usage of
+	MIME::Entity->as_string that rewrapped the message body to 60 columns -
+	thus changing the character string of the message body and probably
+	also the \015\12 end of line required to get valid DKIM signatures.
+	Fixed by storing the message body fed to Mail::DKIM and concatenating
+	it to the new headers containing the DKIM signature.
+
+	[10827] src/lib/Conf.pm:  DKIM parameterswere not correctly loaded and
+	dkim_signer_domain parameter was not correctly defaulted to the list
+	service domain.
+
+	[10825] src/lib/List.pm:  When using binary cache for list configs, if
+	the main config (sympa.conf or wwsympa.conf) was changed, binary cache
+	were still used. Problem: These bainary cache contain default values
+	taken from main config. If these values were changed in main config,
+	they were not updated in binary cache. Fixed by testing the last
+	modification time for sympa.conf and wwsympa.conf against the
+	binary_cache last update time.
+
+	[10727] src/etc/script/ldap_alias_manager.pl.in:  Fixed typos broke
+	ldap_alias_manager.pl.
+
+	[10725] wwsympa/wwslib.pm, wwsympa/wwsympa.fcgi.in:  WWSympa may crash
+	due to unknown subroutine when:
+	- Anonymous user accesses to $wwsympa_url/signoff/LIST/EMAIL, i.e.
+	specifying email but not logging-in.
+	- User does not exist in user_table.
+	This causes because wwslib::init_passwd() called in wwsympa.fcgi
+	doesn't have qualified name.  Use qualified name and do fix another
+	logical bug on unknown variable.
+
+	[10709] src/cgi/wwsympa.fcgi.in, src/lib/List.pm,
+	src/lib/Sympa/ListDef.pm, src/lib/tools.pm,
+	src/libexec/ldap_alias_manager.pl.in, src/sbin/sympa.pl.in,
+	src/sbin/task_manager.pl.in:  Fixed several misspellings of the word
+	"occurrence(s)" in sources.
+
+	[10539] src/task_manager.pl.in:  If cache_list_db is "on" and
+	list_table is empty, all users in user_table except listmaster will be
+	purged.
+	To prevent information loss, made purge_user_table task not to use
+	list_table cache.
+
+	[10538] src/lib/Bulk.pm, src/lib/List.pm, src/lib/mail.pm:
+	[#7289][Reported by D Launay, RENATER] Signed mail body are altered. 
+	Fixed by making following functions not to alter such parts:
+	- Bulk::merge_msg()
+	- List::_append_parts()
+	Backported from sympa-6.2-branch.
+
+	[10535] wwsympa/SympaSession.pm: [#9105] [Originally submitted by M.
+	Howe, Univ. of Oxford] Session for multiple robots sharing same cookie
+	domain is broken.
+	Fixed injected bug by fix for bug #6180: the sessions were limited to
+	each virtual robot at the first access.  The patch was modified a bit.
+
 6.1.20		March 21, 2014
 
   Bug fixes:
