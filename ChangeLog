@@ -1,4 +1,36 @@
 ------------------------------------------------------------------------
+r10878 | david.verdin | 2014-06-06 18:06:45 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-bug] Removing call to DAta::Dumper, useless and making message sending to fail.
+------------------------------------------------------------------------
+r10876 | david.verdin | 2014-06-06 17:52:05 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-bug] Fixing typo: missing right curly bracket.
+------------------------------------------------------------------------
+r10875 | david.verdin | 2014-06-06 17:44:04 +0200 (ven. 06 juin 2014) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[bug] Various problems related to DMARC:
+1- dmarc_protection_mode was not correctly taken as default for lists configuration because it was not split into an array by Conf.pm. Fixed in main and robot config.
+2- Net::DNS can now be considered mandatory. Added to the module dependencies as such with the latest packaged version for RHEL 6.
+3- Added debug and error logs while addressing DMARc issues.
+
+------------------------------------------------------------------------
+r10872 | sympa-authors | 2014-06-06 15:22:12 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.21
+------------------------------------------------------------------------
 r10871 | sympa-authors | 2014-06-06 15:14:22 +0200 (ven. 06 juin 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po-wwsympa/fr.po

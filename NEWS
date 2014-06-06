@@ -3,6 +3,19 @@
 
 (See Changelog file for the full changes log)
 
+6.1.22		June 06, 2014
+
+  Bug fixes:
+
+	[10875] src/lib/Conf.pm, src/lib/List.pm, src/sympa_wizard.pl.in: 
+	Various problems related to DMARC:
+	1- dmarc_protection_mode was not correctly taken as default for lists
+	configuration because it was not split into an array by Conf.pm. Fixed
+	in main and robot config.
+	2- Net::DNS can now be considered mandatory. Added to the module
+	dependencies as such with the latest packaged version for RHEL 6.
+	3- Added debug and error logs while addressing DMARc issues.
+
 6.1.21		June 06, 2014
 
   Features:
