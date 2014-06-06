@@ -3994,10 +3994,11 @@ sub send_to_editor {
 	   ## generate HTML
 	   chdir $tmp_dir;
 	   my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
+	   my $tag = substr(Digest::MD5::md5_hex(join('/', $Conf::Conf{'cookie'}, $name)), -10);
 	   
-	   open ARCMOD, "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $mod_file|";
+	   open ARCMOD, "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host -definevars tag=$tag $mod_file|";
 	   open MSG, ">msg00000.html";
-	   &do_log('debug', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $mod_file");
+	   &do_log('debug', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host -definevars tag=$tag $mod_file");
 	   print MSG <ARCMOD>;
 	   close MSG;
 	   close ARCMOD;
