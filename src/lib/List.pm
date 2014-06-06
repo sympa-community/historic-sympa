@@ -2964,6 +2964,7 @@ sub distribute_msg {
             $hdr->add('X-Original-From',"$originalFromHeader");
             $hdr->replace('From', $newAddr);
 	}
+    }
 
     ## Hide the sender if the list is anonymoused
     if ( $self->{'admin'}{'anonymous_sender'} ) {
