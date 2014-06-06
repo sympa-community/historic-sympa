@@ -1394,6 +1394,9 @@ sub struct_to_soap {
 	my $formated_data;
 	foreach my $k (keys %$data) {
 	    my $one_data = $k.'='.$data->{$k};
+	    if (require "Encode.pm") {
+		$one_data = &Encode::decode('utf-8', $one_data);
+	    }
 	    push @all, $one_data;
 	}
 
