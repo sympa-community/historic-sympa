@@ -304,6 +304,10 @@ sub load {
 	$Conf{'dkim_signer_domain'} = $Conf{'domain'};
     }
 
+    $Conf{'dmarc_protection_mode'} =~ s/\s//g ;
+    my @dmarc = split(/,/, $Conf{'dmarc_protection_mode'});
+    $Conf{'dmarc_protection_mode'} = \@dmarc;
+    
     ## Load charset.conf file if necessary.
     if($Conf{'legacy_character_support_feature'} eq 'on'){
 	my $charset_conf = &load_charset;
@@ -606,6 +610,10 @@ sub load_robots {
         unless ($robot_conf->{$robot}{'dkim_signer_domain'}) {
             $robot_conf->{$robot}{'dkim_signer_domain'} = $robot_conf->{$robot}{'domain'};
         }
+	$robot_conf->{$robot}{'dmarc_protection_mode'} =~ s/\s//g ;
+	my @dmarc = split(/,/, $robot_conf->{$robot}{'dmarc_protection_mode'});
+	$robot_conf->{$robot}{'dmarc_protection_mode'} = \@dmarc;
+	
 	$robot_conf->{$robot}{'title'} ||= $wwsconf->{'title'};
 	$robot_conf->{$robot}{'default_home'} ||= $wwsconf->{'default_home'};
 
