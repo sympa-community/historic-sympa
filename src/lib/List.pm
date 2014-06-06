@@ -2833,10 +2833,6 @@ sub distribute_msg {
 	    Log::do_log('debug','From addresses: %s',$origFrom);
 	}
 
-	foreach my $line (split '\n', Dumper($self->{'admin'}{'dmarc_protection'})) {
-	    Log::do_log('debug','dmarc_protection: %s',$line);
-	}
-	
         # Will this message be processed?
         if( &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'all') ) {
 	    Log::do_log('debug','Munging From for ALL messages');
