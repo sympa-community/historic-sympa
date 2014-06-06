@@ -40,9 +40,6 @@
 </fieldset>
 </form>
 [%- END -%]
-
-[% TAGS (c16f3714d64d8dc4b1791b2f78860bd9% %c16f3714d64d8dc4b1791b2f78860bd9) %]
-(c16f3714d64d8dc4b1791b2f78860bd9% PROCESS 'msg00000.html' %c16f3714d64d8dc4b1791b2f78860bd9)
-(c16f3714d64d8dc4b1791b2f78860bd9% TAGS [% %] %c16f3714d64d8dc4b1791b2f78860bd9)
+[% PROCESS 'msg00000.html' %]
 
 <!-- end viewmod.tt2 -->
