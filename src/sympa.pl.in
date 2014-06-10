@@ -2008,7 +2008,7 @@ sub DoMessage{
 	    my $apply_dkim_signature = 'off';
 	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
 	    $apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
-	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+	    $apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages')  && $message->{'dkim_pass'});
 
 	    my $numsmtp;
 	    eval { $numsmtp =$list->distribute_msg('message'=> $message,
