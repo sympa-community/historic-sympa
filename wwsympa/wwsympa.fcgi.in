@@ -8503,7 +8503,22 @@ Creates a list using a list template
        &report::notice_report_web('listname_lowercased',{},$param->{'action'});
      }
 
-     $param->{'create_action'} = $param->{'create_list'};
+	my $result = &Scenario::request_action ('create_list', $param->{'auth_method'}, $robot,
+		{
+			'sender' => $param->{'user'}{'email'},
+			'candidate_listname' => $in{'listname'},
+			'candidate_subject' => $in{'subject'},
+			'candidate_template' => $in{'template'},
+			'candidate_info' => $in{'info'},
+			'candidate_topics' => $in{'topics'},
+			'remote_host' => $param->{'remote_host'},
+			'remote_addr' => $param->{'remote_addr'}
+		}
+	); 
+	if (ref($result) eq 'HASH') {
+		$param->{'create_action'} = $result->{'action'};
+		$param->{'reason'} = $result->{'reason'};
+	}
 
      &wwslog('info',"do_create_list, get action : $param->{'create_action'} ");
 
