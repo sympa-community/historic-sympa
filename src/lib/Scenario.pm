@@ -416,7 +416,7 @@ sub request_action {
 	# &do_log('info', 'List::request_action : verify rule %s',$rule->{'condition'});
 
 	if ($auth_method eq $rule->{'auth_method'}) {
-	    my $result =  &verify ($context,$rule->{'condition'});
+		my $result = verify( $context, $rule->{'condition'}, $rule );
 
 	    ## Cope with errors
 	    if (! defined ($result)) {
@@ -518,7 +518,7 @@ sub request_action {
 
 ## check if email respect some condition
 sub verify {
-    my ($context, $condition) = @_;
+	my ($context, $condition, $rule ) = @_;
     &do_log('debug2', '(%s)', $condition);
     
     my $robot = $context->{'robot_domain'};
@@ -991,7 +991,7 @@ sub verify {
     if ($condition_key =~ /^customcondition::(\w+)/o ) {
     	my $condition = $1;
     	
-    	my $res = &verify_custom($condition, \@args, $robot, $list);
+    	my $res = &verify_custom($condition, \@args, $robot, $list, $rule );
 	return undef unless defined $res;
 	return $res * $negation ;
     }
@@ -1237,7 +1237,7 @@ sub search{
 
 # eval a custom perl module to verify a scenario condition
 sub verify_custom {
-	my ($condition, $args_ref, $robot, $list) = @_;
+	my ($condition, $args_ref, $robot, $list, $rule ) = @_;
         my $timeout = 3600;
 	
 	my $filter = join ('*', @{$args_ref});
@@ -1261,8 +1261,10 @@ sub verify_custom {
 	    &do_log('err', 'Error requiring %s : %s (%s)', $condition, "$@", ref($@));
 	    return undef;
 	}
-	my $res;
-	eval "\$res = CustomCondition::${condition}::verify(\@{\$args_ref});";
+	my $res = do {
+		local $_ = $rule;
+		eval "CustomCondition::${condition}::verify(\@{\$args_ref})"
+	};
 	if ($@) {
 	    &do_log('err', 'Error evaluating %s : %s (%s)', $condition, "$@", ref($@));
 	    return undef;
