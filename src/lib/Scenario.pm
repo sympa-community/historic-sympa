@@ -1216,9 +1216,9 @@ sub search{
 	    while (<FILE>) {
 		# &do_log('debug3', 'List::search: eval rule %s', $_);
 		next if (/^\s*$/o || /^[\#\;]/o);
-		my $regexp= $_ ;
-		chomp $regexp;
-		$regexp =~ s/\*/.*/ ; 
+                chomp;
+		my $regexp= "\Q$_\E" ;
+		$regexp =~ s/\\\*/.*/ ; 
 		$regexp = '^'.$regexp.'$';
 		# &do_log('debug3', 'List::search: eval  %s =~ /%s/i', $sender,$regexp);
 		return 1  if ($sender =~ /$regexp/i);
