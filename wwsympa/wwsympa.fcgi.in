@@ -2331,7 +2331,7 @@ sub send_html {
 	printf "Last-Modified: %s\n", &POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT', gmtime($param->{'header_date'}));
 	Language::PopLang();
     }
-    print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
+    print "Cache-control: max-age=0\n" unless $param->{'action'} eq 'arc';
     print "Content-Type: text/html; charset=utf-8\n";
     ## Workaround for Internet Explorer 8 or later.
     print "X-UA-Compatible: IE=100\n";
