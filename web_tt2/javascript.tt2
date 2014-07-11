@@ -882,6 +882,36 @@ var tempo = new Array(); /*gestion de la fermeture des calendriers quand on perd
 var nomove={"TR":0,"CENTER":0,"B":0,"P":0,"U":0,"I":0,"DIV":0,"A":0,"FONT":0,"LI":0,"PRE":0,"SPAN":0,"SUB":0,"SUP":0,"FORM":0};
 //var nomove={"TD":0,"TABLE":0};
 
+// fix IE broken getElementById
+if (/msie/i.test (navigator.userAgent)) //only override IE
+{
+	document.nativeGetElementById = document.getElementById;
+	document.getElementById = function(id)
+	{
+		var elem = document.nativeGetElementById(id);
+		if(elem)
+		{
+			//make sure that it is a valid match on id
+			if(elem.id == id)
+			{
+				return elem;
+			}
+			else
+			{
+				//otherwise find the correct element
+				for(var i=1;i<document.all[id].length;i++)
+				{
+					if(document.all[id][i].id == id)
+					{
+						return document.all[id][i];
+					}
+				}
+			}
+		}
+		return null;
+	};
+}
+
 /* simplification calls */
 function _(x) 
 {
