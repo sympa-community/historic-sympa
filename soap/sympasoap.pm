@@ -775,7 +775,22 @@ sub add {
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos || $u2->{'gecos'};
 	$u->{'date'} = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->{'password'} || &tools::tmp_passwd($email) ;
+
+	# If Password validation is enabled check the submitted password 
+  # against the site configured constraints
+	if ($u2->{'password'}) {
+		if (my $result = &tools::password_validation($u->{'password'})) {
+			&Log::do_log('info', 'add %s@%s %s from %s : scenario error', $listname,$robot,$email,$sender);
+			die SOAP::Fault->faultcode('Server')
+		    ->faultstring('Weak password')
+				->faultdetail('Weak password: '. $result);
+		}
+		$u->{'password'} = $u2->{'password'};
+	}
+	else {
+		$u->{'password'} = &tools::tmp_passwd($email) ;
+	}
+
 	$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 	
 	unless ($list->add_user($u)) {
