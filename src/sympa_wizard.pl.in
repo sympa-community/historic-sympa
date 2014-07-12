@@ -327,7 +327,6 @@ sub check_cpan {
 			'Data::Password' => {
 				      required_version =>'1.07',
 				      package_name => 'Data-Password',
-				      mandatory => 0,
 				      usage => 'Used for configureable hardening of passwords via the password_validation sympa.conf directive.',
 				     },
 			'DB_File' => {

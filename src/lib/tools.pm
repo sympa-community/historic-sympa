@@ -4025,27 +4025,38 @@ sub decode_header {
 }
 
 sub password_validation {
-	my ($password) = @_;
-	my $pv = $Conf::Conf{'password_validation'};
-	if ($pv && $password) {
-		use Data::Password qw(:all);
-		use Switch;
-		my @techniques = split(/,/, $pv);
-		foreach my $technique (@techniques) {
-			my ($key, $value) = $technique =~ /([^=]+)=(.*)/;
-			switch ($key) {
-				case 'DICTIONARY' { $DICTIONARY = $value; }
-				case 'FOLLOWING' { $FOLLOWING = $value; }
-				case 'GROUPS' { $GROUPS = $value; }
-				case 'MINLEN' { $MINLEN = $value; }
-				case 'MAXLEN' { $MAXLEN = $value; }
-				# TODO: How do we handle a list of dictionaries?
-				case 'DICTIONARIES' { push @DICTIONARIES, $value; }
-			}
-		}
-		return IsBadPassword($password);
+    my ($password) = @_;
+
+    my $pv = $Conf::Conf{'password_validation'};
+    return undef
+	unless $pv and defined $password and eval { require Data::Password; };
+
+    local ($Data::Password::DICTIONARY, $Data::Password::FOLLOWING,
+	$Data::Password::GROUPS, $Data::Password::MINLEN,
+	$Data::Password::MAXLEN);
+    local @Data::Password::DICTIONARIES = @Data::Password::DICTIONARIES;
+
+    my @techniques = split(/\s*,\s*/, $pv);
+    foreach my $technique (@techniques) {
+	my ($key, $value) = $technique =~ /([^=]+)=(.*)/;
+	$key = uc $key;
+
+	if ($key eq 'DICTIONARY') {
+	    $Data::Password::DICTIONARY = $value;
+	} elsif ($key eq 'FOLLOWING') {
+	    $Data::Password::FOLLOWING = $value;
+	} elsif ($key eq 'GROUPS') {
+	    $Data::Password::GROUPS = $value;
+	} elsif ($key eq 'MINLEN') {
+	    $Data::Password::MINLEN = $value;
+	} elsif ($key eq 'MAXLEN') {
+	    $Data::Password::MAXLEN = $value;
+	} elsif ($key eq 'DICTIONARIES') {
+	    # TODO: How do we handle a list of dictionaries?
+	    push @Data::Password::DICTIONARIES, $value;
 	}
-	return undef;
+    }
+    return Data::Password::IsBadPassword($password);
 }
 
 1;

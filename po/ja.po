@@ -10188,6 +10188,13 @@ msgid ""
 "your authorization."
 msgstr ""
 
+# 仮訳
+#: ../web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
+msgstr ""
+"入力されたパスワードは、当サイトでの安全性の基準を満たしていません。%1。より安全なパスワードを考えてください。"
+
 #~ msgid "The configuration file contains errors.\n"
 #~ msgstr "設定ファイルに間違いがあります。\n"
 
