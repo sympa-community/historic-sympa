@@ -971,8 +971,10 @@ sub dkim_sign {
 	unlink ($temporary_file);
     }
     unlink ($temporary_keyfile);
-    
-    $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
+
+    # Note that DKIM-Signature: field should be prepended to the header.
+    $message->{'msg'}->head->add('DKIM-Signature',
+	$dkim->signature->as_string, 0);
 
     # Signing is done. Rebuilding message as string with original body
     # and new headers WITH DKIM line terminators.
@@ -1020,8 +1022,10 @@ sub smime_sign {
 	    do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    &do_log('debug', "$Conf::Conf{'openssl'} smime -sign -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file");    
-    unless (open (NEWMSG,"$Conf::Conf{'openssl'} smime -sign  -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
+    my $cmd = sprintf '%s smime -sign -signer %s %s -inkey %s -in %s',
+	$Conf::Conf{'openssl'}, $cert, $pass_option, $key, $temporary_file;
+    do_log('debug', '%s', $cmd);
+    unless (open NEWMSG, "$cmd |") {
     	&do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
