@@ -73,9 +73,11 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/access_web_archive.private \
 		      scenari/access_web_archive.public \
 		      scenari/add.auth \
+		      scenari/add.authdkim \
 		      scenari/add.closed \
 		      scenari/add.owner \
 		      scenari/add.owner_notify \
+		      scenari/add.ownerdkim \
 		      scenari/automatic_list_creation.listmaster \
 		      scenari/automatic_list_creation.public \
 		      scenari/automatic_list_creation.family_owner \
@@ -88,9 +90,11 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/d_edit.private-https \
 		      scenari/d_edit.public \
 		      scenari/del.auth \
+		      scenari/del.authdkim \
 		      scenari/del.closed \
 		      scenari/del.owner \
 		      scenari/del.owner_notify \
+		      scenari/del.ownerdkim \
 		      scenari/d_read.owner \
 		      scenari/d_read.private \
 		      scenari/d_read.private-https \
@@ -104,7 +108,9 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/invite.private \
 		      scenari/invite.public \
 		      scenari/remind.listmaster \
+		      scenari/remind.listmasterdkim \
 		      scenari/remind.owner \
+		      scenari/remind.ownerdkim \
 		      scenari/review.closed \
 		      scenari/review.intranet \
 		      scenari/review.listmaster \
@@ -113,6 +119,7 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/review.public \
 		      scenari/send.closed \
 		      scenari/send.confidential \
+		      scenari/send.editordkim \
 		      scenari/send.editorkey \
 		      scenari/send.editorkeyonly \
 		      scenari/send.editorkeyonlyauth \
@@ -135,8 +142,11 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/send.publicnomultipart \
 		      scenari/spam_status.x-spam-status \
 		      scenari/subscribe.auth \
+		      scenari/subscribe.authdkim \
 		      scenari/subscribe.auth_notify \
+		      scenari/subscribe.auth_notifydkim \
 		      scenari/subscribe.auth_owner \
+		      scenari/subscribe.auth_ownerdkim \
 		      scenari/subscribe.closed \
 		      scenari/subscribe.intranet \
 		      scenari/subscribe.intranetorowner \
@@ -150,7 +160,9 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/topics_visibility.identified \
 		      scenari/topics_visibility.noconceal \
 		      scenari/unsubscribe.auth \
+		      scenari/unsubscribe.authdkim \
 		      scenari/unsubscribe.auth_notify \
+		      scenari/unsubscribe.auth_notifydkim \
 		      scenari/unsubscribe.closed \
 		      scenari/unsubscribe.open \
 		      scenari/unsubscribe.open_notify \
