@@ -459,7 +459,7 @@ sub purge_old_sessions {
 
     my $robot = shift;
 
-    do_log('info', 'SympaSession::purge_old_sessions(%s,%s)',$robot);
+    do_log('info', 'SympaSession::purge_old_sessions(%s)',$robot);
 
     my $delay = &tools::duration_conv($Conf{'session_table_ttl'}) ; 
     my $anonymous_delay = &tools::duration_conv($Conf{'anonymous_session_table_ttl'}) ; 
@@ -553,7 +553,7 @@ sub purge_old_tickets {
 
     my $robot = shift;
 
-    do_log('info', 'SympaSession::purge_old_tickets(%s,%s)',$robot);
+    do_log('info', 'SympaSession::purge_old_tickets(%s)',$robot);
 
     my $delay = &tools::duration_conv($Conf{'one_time_ticket_table_ttl'}) ; 
 
