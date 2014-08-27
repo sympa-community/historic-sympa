@@ -3430,7 +3430,7 @@ sub send_global_file {
     }
 
     $data->{'sender'} = $who;
-    $data->{'conf'}{'version'} = $main::Version;
+    $data->{'conf'}{'version'} = Sympa::Constants::VERSION();
     $data->{'from'} = "$data->{'conf'}{'email'}\@$data->{'conf'}{'host'}" unless ($data->{'from'});
     $data->{'robot_domain'} = $robot;
     $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
