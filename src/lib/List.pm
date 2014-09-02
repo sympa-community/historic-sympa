@@ -2891,7 +2891,7 @@ sub distribute_msg {
             };
             if($@) {
 		$hdr->add('X-DMARC-Error',$@);
-		Log::do_log('error','No Net::DNS found. Trying to save the message by adding a X-DMARC-Error header');
+		Log::do_log('err', 'No Net::DNS found. Trying to save the message by adding a X-DMARC-Error header');
 	    }
         }
 
@@ -7403,7 +7403,7 @@ sub update_user_db {
 
     while (($field, $value) = each %{$values}) {
 	unless ($map_field{$field}) {
-	    do_log('error',"unkown field $field in map_field internal error");
+	    do_log('err', 'unkown field "%s" in map_field internal error', $field);
 	    next;
 	};
 	my $set;
@@ -9251,7 +9251,7 @@ sub _load_users_include {
 		    if (defined $result) {
 			$included = $result->{'total'};
 			if (defined $result->{'errors'}){
-			    &do_log('error', 'Errors occurred during the second LDAP passe for list %s, source "%s"', $self->{'name'}, );
+			    &do_log('err', 'Errors occurred during the second LDAP passe for list %s, source "%s"', $self->{'name'}, );
 			}
 		    }else{
 			$included = undef;
