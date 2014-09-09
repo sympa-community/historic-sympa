@@ -590,7 +590,108 @@ my %alias = ('reply-to' => 'reply_to',
 		      'gettext_id' => "Inclusions timeout for message distribution",
 		      'group' => 'data_source'
 		      },
-
+	    'dkim_feature' => {'format' => ['on','off'],
+			      'occurence' => '0-1',
+			      'default' => {'conf' => 'dkim_feature'},
+			      'gettext_id' => "Insert DKIM signature to messages sent to the list",
+			      'comment' =>  "Enable/Disable DKIM. This feature require Mail::DKIM to installed and may be some custom scenario to be updated",
+			      'group' => 'dkim',
+			  },
+	    'dkim_signature_apply_on'=> {'format' => ['md5_authenticated_messages','smime_authenticated_messages','dkim_authenticated_messages','editor_validated_messages','none','any'],
+					 'occurrence' => '0-n',
+					 'split_char' => ',',
+					 'default' => {'conf' => 'dkim_signature_apply_on'},
+					 'gettext_id' => "The categories of messages sent to the list that will be signed using DKIM.",
+					 'comment' => "This parameter controls in which case messages must be signed using DKIM, you may sign every message choosing 'any' or a subset. The parameter value is a comma separated list of keywords",
+					 'group' => 'dkim',
+					 },
+	    'dkim_parameters'=> {'format' => {'private_key_path'=> {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_private_key_path'},
+			                                          'gettext_id' => "File path for list DKIM private key",
+								  'comment' => "The file must contain a RSA pem encoded private key", 
+								  'order' => 1
+					                         },
+					     'selector' => { 'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_selector'},
+							          'comment' => "The selector is used in order to build the DNS query for public key. It is up to you to choose the value you want but verify that you can query the public DKIM key for <selector>._domainkey.your_domain",
+			                                          'gettext_id' => "Selector for DNS lookup of DKIM public key",
+								  'order' => 2
+                                                                  },
+							          
+					     'header_list'=>      { 'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_header_list'},
+			                                          'gettext_id' => 'List of headers to be included ito the message for signature',
+								  'comment' => 'You should probably use teh default value which is the value recommended by RFC4871',
+								  'order' => 4,
+								  'obsolete' => 1,
+                                                                  },
+					     'signer_domain' =>   {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_signer_domain'},
+			                                          'gettext_id' => 'DKIM "d=" tag, you should probably use the default value',
+								   'omment' => ' The DKIM "d=" tag, is the domain of the signing entity. the list domain MUST must be included in the "d=" domain',
+								  'order' => 5
+								 },
+                                             'signer_identity'=>  {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+								  'comment' => 'DKIM "i=" tag, you should probably not use this parameter, as recommended by RFC 4871, default for list brodcasted messages is i=<listname>-request@<domain>',
+			                                          'gettext_id' => 'DKIM "i=" tag, you should probably leave this parameter empty',
+								  'order' => 6
+								 },
+					     },
+			      'group' => 'dkim',
+			      'comment' => 'A set of parameters in order to define outgoing DKIM signature', 
+			      'occurrence' => '0-1',
+			      'gettext_id' => "DKIM configuration",
+			  },
+            'dmarc_protection' => { 
+			  'format' => {
+                                   'mode' => { 'format' => [ 'none', 'all', 'dkim_signature', 'dmarc_reject', 'dmarc_any', 'dmarc_quarantine', 'domain_regex' ],
+				     'synonym' => {
+					'dkim' => 'dkim_signature',
+					'dkim_exists' => 'dkim_signature',
+					'dmarc_exists' => 'dmarc_any',
+					'domain' => 'domain_regex',
+					'domain_match' => 'domain_regex',
+				     },
+                                     'gettext_id' => "Protection modes",
+				     'split_char' => ',',
+		                     'occurrence' => '0-n',
+                                     'default' => { 'conf'=>'dmarc_protection_mode' },
+                                     'comment' => 'Select one or more operation modes.  "Domain matching regular expression" (domain_regex) matches the specified Domain regexp; "DKIM signature exists" (dkim_signature) matches any message with a DKIM signature header; "DMARC policy ..." (dmarc_*) matches messages from sender domains with a DMARC policy as given; "all" (all) matches all messages.',
+                                     'order' => 1
+                                   },
+                                   'domain_regex' => { 'format' => '.+',
+                                     'gettext_id' => "Match domain regexp",
+		                     'occurrence' => '0-1',
+				     'comment' => 'Regexp match pattern for From domain',
+                                     'order' => 2,
+                                     'default' => { 'conf'=>'dmarc_protection_domain_regex' },
+                                   },
+				   'other_email' => { 'format' => '.+',
+                                     'gettext_id' => "New From address",
+		                     'occurrence' => '0-1',
+                                     'comment' => 'This is the email address to use when modifying the From header.  It defaults to the list address.  This is similar to Anonymisation but preserves the original sender details in the From address phrase.',
+                                     'order' => 3,
+                                     'default' => { 'conf'=>'dmarc_protection_other_email' },
+                                   },
+				   'phrase' => { 'format' => [ 'display_name', 'name_and_email', 'name_via_list', 'name_email_via_list' ],
+				     'synonym' => {'name' => 'display_name'},
+                                     'default' => { 'conf'=>'dmarc_protection_phrase' },
+                                     'gettext_id' => "New From name format",
+		                     'occurrence' => '0-1',
+                                     'comment' => 'This is the format to be used for the sender name part of the new From header.',
+                                     'order' => 4,
+                                   },
+                          },
+                          'gettext_id' => "DMARC Protection",
+                          'group' => 'dkim',
+			  'comment' => 'Parameters to define how to manage From address processing to avoid some domains\' excessive DMARC protection', 
+			  'occurrence' => '0-1',
+                      },
 	    'editor' => {'format' => {'email' => {'format' => &tools::get_regexp('email'),
 						  'length' => 30,
 						  'occurrence' => '1',
@@ -2485,6 +2586,127 @@ sub distribute_msg {
 	if (ref($info_msg_topic) eq "HASH") {
 	    $message->add_topic($info_msg_topic->{'topic'});
 	}
+    }
+
+    ## Munge the From header if we are using DMARC Protection mode
+    if ( $self->{'admin'}{'dmarc_protection'}{'mode'} ) {
+        my $dkimdomain = $self->{'admin'}{'dmarc_protection'}{'domain_regex'};
+        my $originalFromHeader = $hdr->get('From');
+        my $anonaddr;
+        my @addresses = Mail::Address->parse($originalFromHeader);
+        my @anonFrom;
+        my $dkimSignature = $hdr->get('DKIM-Signature');
+        my $origFrom = '';
+        my $mungeFrom = 0;
+
+        if ( @addresses ) { $origFrom = $addresses[0]->address; }
+
+        # Will this message be processed?
+        $mungeFrom = 1 if( &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'all') );
+        if( !$mungeFrom and $dkimSignature 
+            and &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dkim_signature')) {
+            $mungeFrom = 1;
+        }
+        if( !$mungeFrom and $origFrom and $dkimdomain 
+            and &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'domain_regex') ) {
+            $mungeFrom = 1 if( $origFrom =~ /$dkimdomain$/ );
+        }
+        if( !$mungeFrom and $origFrom 
+            and (
+                &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_reject')
+                or &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_any')
+                or &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_quarantine')
+            )) {
+            # Strict auto policy - is the sender domain policy to reject
+            my $dom = $origFrom; $dom =~ s/^.*\@//;
+            eval { # In case Net::DNS is not installed
+                require Net::DNS;
+                my $res = Net::DNS::Resolver->new;
+                my $packet = $res->query("_dmarc.$dom","TXT");
+                if ($packet) {
+                    foreach my $rr (grep { $_->type eq 'TXT' } $packet->answer) {
+                        next if($rr->string !~ /v=DMARC/);
+                        if(!$mungeFrom and &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_reject')) {
+                            $mungeFrom = 1 if($rr->string =~ /p=reject/);
+                        }
+                        if(!$mungeFrom and &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_quarantine')) {
+                            $mungeFrom = 1 if($rr->string =~ /p=quarantine/);
+                        }
+                        if(!$mungeFrom and &tools::is_in_array($self->{'admin'}{'dmarc_protection'}{'mode'},'dmarc_any')) {
+                            $mungeFrom = 1;
+                        }
+                        $hdr->add('X-Original-DMARC-Record',"domain=$dom; ".$rr->string);
+                        last;
+                    }
+                }
+            };
+            $hdr->add('X-DMARC-Error',$@) if($@);
+        }
+
+        if( $mungeFrom ) {
+            # Remove any DKIM signatures we find
+            if( $dkimSignature ) {
+                $hdr->add('X-Original-DKIM-Signature',$dkimSignature);
+                $hdr->delete('DKIM-Signature');
+                $hdr->delete('DomainKey-Signature');
+            }
+
+            # Identify default new From address
+            my $phraseMode = $self->{'admin'}{'dmarc_protection'}{'phrase'} ||
+                'name_via_list';
+            my $newAddr;
+            my $displayName;
+            my $newComment;
+            $anonaddr = $self->{'admin'}{'dmarc_protection'}{'other_email'};
+            $anonaddr = $self->get_list_address()
+                unless $anonaddr and $anonaddr =~ /\@/;
+            @anonFrom = Mail::Address->parse($anonaddr);
+
+            if (@addresses) {
+                # We should always have a From address in reality, unless the
+                # message is from a badly-behaved automate
+                if ($addresses[0]->phrase) {
+                    $displayName = MIME::EncWords::decode_mimewords(
+			$addresses[0]->phrase, Charset => 'UTF-8');
+                    $newComment = $addresses[0]->address
+			if $phraseMode =~ /email/;
+                } else {
+                    # If we dont have a Phrase, should we search the Sympa database
+                    # for the sender to obtain their name that way? Might be difficult.
+                    $displayName = $addresses[0]->address;
+                    $displayName =~ s/\@.*// unless $phraseMode =~ /email/;
+                }
+                if($phraseMode =~ /list/) {
+                    if ($newComment and $newComment =~ /\S/) {
+                        $newComment =
+                            sprintf gettext('%s via %s Mailing List'),
+                                $newComment, $name;
+                    } else {
+                        $newComment =
+			    sprintf gettext('via %s Mailing List'), $name;
+                    }
+                }
+                $hdr->add('Reply-To',$addresses[0]->address) unless($hdr->get('Reply-To'));
+            }
+            # If the new From email address has a Phrase component, then append it
+            if (@anonFrom and $anonFrom[0]->phrase) {
+                if ($displayName and $displayName =~ /\S/) {
+                    $displayName .= ' ' . $anonFrom[0]->phrase;
+                } else {
+                    $displayName = $anonFrom[0]->phrase;
+                }
+            }
+            $displayName = gettext('Anonymous')
+                unless $displayName and $displayName =~ /\S/;
+
+            $newAddr = tools::addrencode(
+		(@anonFrom ? $anonFrom[0]->address : $anonaddr),
+		$displayName, Language::GetCharset(), $newComment);
+
+            $hdr->add('X-Original-From',"$originalFromHeader");
+            $hdr->replace('From', $newAddr);
+        }
+
     }
 
     ## Hide the sender if the list is anonymoused
