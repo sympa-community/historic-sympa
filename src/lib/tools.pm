@@ -3497,4 +3497,33 @@ sub addrencode {
 	. "<$addr>";
 }
 
+####################################################
+# is_in_array
+####################################################
+# Test if a value is on an array
+#
+# IN : -$setA : ref(ARRAY) - set
+#      -$value : a serached value
+#
+# OUT : boolean
+#######################################################
+sub is_in_array {
+    my $set = shift;
+    die 'missing parameter "$value"' unless @_;
+    my $value = shift;
+
+    if (defined $value) {
+        foreach my $elt (@{$set || []}) {
+            next unless defined $elt;
+            return 1 if $elt eq $value;
+        }
+    } else {
+        foreach my $elt (@{$set || []}) {
+            return 1 unless defined $elt;
+        }
+    }
+
+    return undef;
+}
+
 1;
