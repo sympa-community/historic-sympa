@@ -10041,6 +10041,19 @@ msgstr "リストのエイリアスの雛型"
 msgid "no mail (useful for vacations)"
 msgstr "受け取らない (休暇中など)"
 
+#: default/mail_tt2/message_report.tt2:59
+msgid "List size has exceded the limit, %1, set by the administrators."
+msgstr ""
+
+# 仮訳
+#: ../default/web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. "
+"Please pick a stronger password."
+msgstr ""
+"入力されたパスワードは、当サイトでの安全性の基準を満たしていません。%1。より"
+"安全なパスワードを考えてください。"
+
 #: src/lib/Sympa/ListDef.pm:1856
 msgid ""
 "Parameters to define how to manage From address processing to avoid some "
@@ -10187,13 +10200,6 @@ msgid ""
 "Failed to include members from VOOT group %1 at %2.  Please login to restore "
 "your authorization."
 msgstr ""
-
-# 仮訳
-#: ../web_tt2/error.tt2:77
-msgid ""
-"The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
-msgstr ""
-"入力されたパスワードは、当サイトでの安全性の基準を満たしていません。%1。より安全なパスワードを考えてください。"
 
 #~ msgid "The configuration file contains errors.\n"
 #~ msgstr "設定ファイルに間違いがあります。\n"

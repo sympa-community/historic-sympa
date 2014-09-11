@@ -10737,6 +10737,18 @@ msgstr "Schema per gli alias della lista"
 msgid "no mail (useful for vacations)"
 msgstr "no mail (assenza prolungata)"
 
+#: default/mail_tt2/message_report.tt2:59
+msgid "List size has exceded the limit, %1, set by the administrators."
+msgstr ""
+
+#: ../default/web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. "
+"Please pick a stronger password."
+msgstr ""
+"La password digitata non corrisponde a questi siti norme di forza:% 1. Si "
+"prega di scegliere una password forte."
+
 #: src/sbin/sympa_wizard.pl.in:167
 msgid "Example: %s\t%s"
 msgstr ""
@@ -11357,10 +11369,6 @@ msgstr ""
 #: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
-
-#: ../default/web_tt2/error.tt2:77
-msgid "The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
-msgstr "La password digitata non corrisponde a questi siti norme di forza:% 1. Si prega di scegliere una password forte."
 
 # nlsref 1,1
 #, fuzzy

@@ -10211,6 +10211,18 @@ msgstr "modelo de aliases de lista"
 msgid "no mail (useful for vacations)"
 msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 
+#: default/mail_tt2/message_report.tt2:59
+msgid "List size has exceded the limit, %1, set by the administrators."
+msgstr ""
+
+#: ../default/web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. "
+"Please pick a stronger password."
+msgstr ""
+"La contraseña que escribió no coincide con estos sitios niveles de fuerza:% "
+"1. Por favor, escoja una contraseña fuerte."
+
 #: src/sbin/sympa_wizard.pl.in:167
 msgid "Example: %s\t%s"
 msgstr ""
@@ -11164,10 +11176,6 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
-
-#: ../default/web_tt2/error.tt2:77
-msgid "The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
-msgstr "La contraseña que escribió no coincide con estos sitios niveles de fuerza:% 1. Por favor, escoja una contraseña fuerte."
 
 #, fuzzy
 #~ msgid "The configuration file contains errors.\n"

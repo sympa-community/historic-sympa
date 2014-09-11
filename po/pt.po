@@ -9526,6 +9526,18 @@ msgstr ""
 msgid "no mail (useful for vacations)"
 msgstr ""
 
+#: default/mail_tt2/message_report.tt2:59
+msgid "List size has exceded the limit, %1, set by the administrators."
+msgstr ""
+
+#: ../default/web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. "
+"Please pick a stronger password."
+msgstr ""
+"A senha que você digitou não corresponde esse Sites padrões de força:% 1. "
+"Por favor escolha uma senha forte."
+
 #: src/libexec/ldap_alias_manager.pl.in:41
 #: src/libexec/mysql_alias_manager.pl.in:28
 msgid "The configuration file contains errors.\n"
@@ -11922,10 +11934,6 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
-
-#: ../default/web_tt2/error.tt2:77
-msgid "The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
-msgstr "A senha que você digitou não corresponde esse Sites padrões de força:% 1. Por favor escolha uma senha forte."
 
 #, fuzzy
 #~ msgid "URL of main Web page"

@@ -10243,6 +10243,18 @@ msgstr "Vorlage für Listen-Aliase"
 msgid "no mail (useful for vacations)"
 msgstr "keine Nachricht (nützlich für Urlaube)"
 
+#: default/mail_tt2/message_report.tt2:59
+msgid "List size has exceded the limit, %1, set by the administrators."
+msgstr ""
+
+#: ../default/web_tt2/error.tt2:77
+msgid ""
+"The password you typed does not match this sites standards of strength: %1. "
+"Please pick a stronger password."
+msgstr ""
+"Die von Ihnen eingegebene Passwort stimmt nicht mit diesen Seiten Normen der "
+"Stärke:% 1. Bitte wählen Sie eine stärkere Passwort."
+
 #: src/sbin/sympa_wizard.pl.in:477
 msgid "-> Usage of this module: %s"
 msgstr ""
@@ -10913,11 +10925,6 @@ msgid ""
 "\n"
 "Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
-
-
-#: ../default/web_tt2/error.tt2:77
-msgid "The password you typed does not match this sites standards of strength: %1. Please pick a stronger password."
-msgstr "Die von Ihnen eingegebene Passwort stimmt nicht mit diesen Seiten Normen der Stärke:% 1. Bitte wählen Sie eine stärkere Passwort."
 
 #~ msgid "The configuration file contains errors.\n"
 #~ msgstr "Diese Konfigurationsdatei enthält Fehler.\n"
