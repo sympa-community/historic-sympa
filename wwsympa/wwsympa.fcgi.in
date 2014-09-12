@@ -9140,7 +9140,26 @@ Sends back the list creation edition form.
 
      ## Members list
      my $record = 0;
-     my $all_lists = &List::get_lists($robot);
+     my $regexp = $param->{'regexp'};
+     my $statement;
+     if ($Conf::Conf{'db_list_cache'} eq 'on') {
+	 if ($Conf::Conf{'db_type'} eq 'mysql') {
+	    $statement = sprintf "name_list RLIKE '%s' OR subject_list RLIKE '%s'", $regexp, $regexp;
+	}elsif($Conf::Conf{'db_type'} eq 'Oracle') {
+	    $statement = sprintf "name_list REGEXP_LIKE '%s' OR subject_list REGEXP_LIKE '%s'", $regexp, $regexp;
+	}elsif($Conf::Conf{'db_type'} eq 'Pg') {
+	    $statement = sprintf "name_list ~ '%s' OR subject_list ~ '%s'", $regexp, $regexp;
+	}elsif($Conf::Conf{'db_type'} eq 'Sybase') {
+	    $statement = sprintf "name_list REGEXP '%s' OR subject_list REGEXP '%s'", $regexp, $regexp;
+	}
+    }
+    my $all_lists;
+    if ($statement) {
+	my @lists = &List::get_lists_db($statement) || undef;
+	$all_lists = &List::get_lists($robot, undef, @lists);
+    }else{
+	$all_lists = &List::get_lists($robot);
+    }
      foreach my $list ( @$all_lists ) {
 	 my $is_admin;
 	 ## Search filter
