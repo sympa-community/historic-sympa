@@ -156,6 +156,11 @@ sub load {
     $o{'host'} = $o{'domain'} if (defined $o{'domain'}) ;
     $o{'domain'} = $o{'host'} if (defined $o{'host'}) ;
     
+    my $dmarc_protection_mode = $o{'dmarc_protection_mode'}[0];
+    $dmarc_protection_mode =~ s/\s//g;
+    my @dmarc = split(/,/, $dmarc_protection_mode);
+    $o{'dmarc_protection_mode'}[0] = \@dmarc;
+
     unless ( (defined $o{'cafile'}) || (defined $o{'capath'} )) {
 	$o{'cafile'}[0] = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     }   
