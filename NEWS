@@ -3,6 +3,16 @@
 
 (See Changelog file for the full changes log)
 
+6.0.8		September 12, 2014
+
+  Features:
+
+	[10541] src/lib/List.pm:  [Submitted by S. Shipway, Univ. of Auckland]
+	Workaround for aggressive DMARC policy such as yahoo.com.  The patch
+	adds option #3 of this DMARC FAQ: http://dmarc.org/faq.html#s_3
+	- New list config paragraph "dmarc_protection" to munge "From:" header
+	and put original header content erc. into comment.
+
 6.0.7		May 11, 2012
 
   Bug fixes:
