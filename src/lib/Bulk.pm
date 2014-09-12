@@ -552,6 +552,7 @@ sub store {
 		$messagekey, $msg_id, $msg, $dkim->{d}, $dkim->{i},
 		$dkim->{selector}, $dkim->{private_key}
 	    )) {
+		my $errstring = $sth->errstr; # save the error, otherwise it will be modified later. 
 		do_log('err',
 		    'Unable to add message in bulkspool_table "%s"; error : %s',
 		    sprintf($statementtrace,
@@ -560,7 +561,7 @@ sub store {
 			$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),
 			$dbh->quote($dkim->{selector}),
 			$dbh->quote(substr($dkim->{private_key}, 0, 30))
-		    ), $dbh->errstr
+		    ), $errstring
 		);
 		return undef;
 	    }
