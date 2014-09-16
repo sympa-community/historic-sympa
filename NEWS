@@ -3,6 +3,16 @@
 
 (See Changelog file for the full changes log)
 
+6.0.9		September 16, 2014
+
+  Changes:
+
+	[11389] src/sympa_wizard.pl.in:  Adding optional dependency to
+	Net::DNS, required when activating DMARC protection. The version of
+	Net::DNS chosen is the latest available on RHEL 5 to ease RPM
+	integration.
+
+
 6.0.8		September 12, 2014
 
   Features:
