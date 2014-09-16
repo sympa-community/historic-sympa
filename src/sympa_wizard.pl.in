@@ -449,6 +449,11 @@ sub check_cpan {
 					  mandatory => 1,
 					  usage => 'provides libraries for manipulating MIME messages',
 					 },
+			'Net::DNS' => {
+					required_version =>'0.59', 
+					package_name => 'perl-net-dns',
+					usage => 'Required if you want to activate DMARC protection.',
+				       },
 			'Net::LDAP' => {
 					required_version =>'0.27', 
 					prerequisites => 'openldap-devel is needed to build the Perl code',
