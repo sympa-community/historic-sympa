@@ -3,6 +3,112 @@
 
 (See Changelog file for the full changes log)
 
+6.1.23		September 17, 2014
+
+  Features:
+
+	[11331] default/Makefile.am, default/scenari/del.ownerdkim:  New
+	scenarios to check DKIM signature are added:
+	- add.authdkim
+	- add.ownerdkim
+	- del.authdkim
+	- del.ownerdkim
+	- remind.listmasterdkim
+	- remind.ownerdkim
+	- send.editordkim
+	- subscribe.authdkim
+	- subscribe.auth_notifydkim
+	- subscribe.auth_ownerdkim
+	- unsubscribe.authdkim
+	- unsubscribe.auth_notifydkim
+
+	[11154] po/de.po, po/el.po, po/es.po, po/fr.po, po/it.po, po/pt.po,
+	po/sympa.pot, soap/sympasoap.pm, src/lib/confdef.pm, src/lib/tools.pm,
+	src/sympa_wizard.pl.in, web_tt2/error.tt2, wwsympa/wwsympa.fcgi.in:
+	[#9306] [Submitted by Evoltech, Riseup] Better password validation.
+	When the user requests change of password via WWSympa or SympaSOAP, new
+	password may be checked its strength.
+	New parameter password_validation may be used to customize policy of
+	password validation.  See help text of the parameter for more details.
+
+	[11069] src/lib/Scenario.pm:  Now CustomCondition can set the action to
+	take (do_it, reject ...) by setting $_, this allows for complex,
+	single-module CustomConditions.
+
+
+
+  Changes:
+
+	[11369] wwsympa/wwsympa.fcgi.in: [Submitted by Evol Tech, riseup.net]
+	When searching a list through the web interface, Sympa would first load
+	all the lists config before looking for the right lists. This is memory
+	consuming when the number of lists grows. It is better to first search
+	the list names and description, then load them (possible using the
+	database cache only). Patch improved by testing the database backend
+	Sympa uses, then building the query using a regular expression.
+
+  Bug fixes:
+
+	[11368] src/lib/Bulk.pm: [Submitted by O. Menkens] When failing to
+	store a message in MySQL database, due to the size of the insert query
+	exceeding the 'max_allowed_packet' value in my.cnf, the error report
+	did not display the MySQL error because the statement handler error was
+	wiped before being used in the Sympa log calls. Fixed by caching the
+	error before logging it.
+
+	[11341] src/lib/List.pm:  [Reported by M. Goebel, Eastern Michigan
+	Univ.] Typos at several places in List.pm may crash Sympa.
+
+	[11327] src/lib/Sympa/List.pm:	When dkim_add_signature_to parameter
+	contains "list", DKIM signature won't be added.  A typo has been
+	corrected.
+
+	[11147] web_tt2/javascript.tt2: [#9270] [Submitted by A. Bezverkhyy]
+	Fixing buggy getElementById behavior on IE8/9.
+
+	[11144] wwsympa/wwsympa.fcgi.in: [#9328][Submitted by F. Angebault]
+	Back button prints an error "Webpage has expired" on IE9.
+	On IE9, "Cache-Control: no-cache" HTTP response is treated as never
+	keep content.  Alternatively, "Cache-Control: max-age=0" may be used:
+	This workaround may not affect to other browsers.  For more details see
+	item #9328 in bug tracker.
+
+	[11136] src/lib/Scenario.pm: [#9326] [Submitted by M. Howe, Univ. of
+	Oxford] Search conditions in scenario of text filter were not excaped. 
+	Several characters in condition such as ".", "+" were treated as regexp
+	metacharacter then search gave unexpected result or simlpy failed.
+
+	[11134] src/lib/List.pm: [#9300] [Sumitted by M. Howe, Univ. of Oxford]
+	Sympa crashes if a list config does not have web_archive paragraph.
+	In such case $list->{admin}{web_archive} may be an arrayref.  If
+	program accesses to this element as hashref, it will die with "Not a
+	hash reference".  Fixed by checking if the element is hashref.
+
+	[11133] wwsympa/wwsympa.fcgi.in: [#9262] [Originally submitted by
+	Evoltech, Riseup] Prevent special list addresses from being added as
+	list owner address.
+	Check owner addresses to be added and reject ones falling under any of
+	owner, return path etc. of the list.  Patch was modified to check also
+	VERP (bounce+) address pattern and suffixes in list_check_suffixes
+	parameter.
+
+	[11132] src/lib/Language.pm: [#9256] [Submitted by F. Angebault]
+	"Manage your subscriptions" help page is only partially translated.
+
+	[11009] src/sympa.pl.in, wwsympa/archived.pl.in, wwsympa/bounced.pl.in:
+	 When lock_method is "nfs", Lock files in the spool are removed.
+	Fixed by skipping files with ".lock" or ".NFSLock" extension.
+
+	[10944] src/sympa.pl.in:  A missing dollar sign made sympa.pl crash
+	when an automatic list could not be created.
+
+	[10911] src/sympa.pl.in:  When parameter dkim_signature_apply_on
+	contained the value 'dkim_authenticated_messages', DKIM signing was
+	used even for unsigned messages or messages containing an unvalid DKIM
+	signature. Fixed by testing that DKIM verification passed before
+	deciding if we need to add a DKIM signature.
+
+
 6.1.22		June 06, 2014
 
   Bug fixes:

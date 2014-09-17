@@ -1,4 +1,311 @@
 ------------------------------------------------------------------------
+r11369 | david.verdin | 2014-09-12 17:52:50 +0200 (ven. 12 sept. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[change][Submitted by Evol Tech, riseup.net] When searching a list through the web interface, Sympa would first load all the lists config before looking for the right lists. This is memory consuming when the number of lists grows. It is better to first search the list names and description, then load them (possible using the database cache only). Patch improved by testing the database backend Sympa uses, then building the query using a regular expression.
+
+------------------------------------------------------------------------
+r11368 | david.verdin | 2014-09-12 16:10:14 +0200 (ven. 12 sept. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+
+[bug][Submitted by O. Menkens] When failing to store a message in MySQL database, due to the size of the insert query exceeding the 'max_allowed_packet' value in my.cnf, the error report did not display the MySQL error because the statement handler error was wiped before being used in the Sympa log calls. Fixed by caching the error before logging it.
+------------------------------------------------------------------------
+r11360 | sympa-authors | 2014-09-11 16:23:11 +0200 (jeu. 11 sept. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/pt.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r11359 | david.verdin | 2014-09-11 13:07:41 +0200 (jeu. 11 sept. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/en.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[dev] Committing updated catalogues.
+------------------------------------------------------------------------
+r11341 | sikeda | 2014-09-02 07:08:40 +0200 (mar. 02 sept. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug] [Reported by M. Goebel, Eastern Michigan Univ.] Typos at several places in List.pm may crash Sympa.
+
+------------------------------------------------------------------------
+r11335 | sikeda | 2014-08-27 14:37:14 +0200 (mer. 27 août 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[-bug] A typo not to show version number in template.  It affects only to result of HELP command, though.
+
+------------------------------------------------------------------------
+r11334 | sikeda | 2014-08-27 03:17:32 +0200 (mer. 27 août 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/SympaSession.pm
+
+[-bug][#9413] [Submitted by G. Younger, Newcastle Univ.] Spurious "Use of uninitialized value" warnings in SympaSession.pm.
+
+------------------------------------------------------------------------
+r11333 | sikeda | 2014-08-25 03:44:14 +0200 (lun. 25 août 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   R /branches/sympa-6.1-branch/src/etc (de /branches/sympa-6.1-branch/src/etc:11244)
+   M /branches/sympa-6.1-branch/src/etc/Makefile.am
+   A /branches/sympa-6.1-branch/src/etc/scenari/del.ownerdkim (de /branches/sympa-6.2-branch/default/scenari/del.ownerdkim:11331)
+
+[svn] Backporting a change from sympa-6.2-branch.
+------------------------------------------------------------------------
+r11331 | sikeda | 2014-08-24 04:11:23 +0200 (dim. 24 août 2014) | 14 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/default/Makefile.am
+   A /branches/sympa-6.2-branch/default/scenari/del.ownerdkim
+Fision via : r11333
+
+[feature] New scenarios to check DKIM signature are added:
+- add.authdkim
+- add.ownerdkim
+- del.authdkim
+- del.ownerdkim
+- remind.listmasterdkim
+- remind.ownerdkim
+- send.editordkim
+- subscribe.authdkim
+- subscribe.auth_notifydkim
+- subscribe.auth_ownerdkim
+- unsubscribe.authdkim
+- unsubscribe.auth_notifydkim
+
+------------------------------------------------------------------------
+r11328 | sikeda | 2014-08-19 09:51:32 +0200 (mar. 19 août 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[svn] Backporting a bug fix from sympa-6.2-branch.
+------------------------------------------------------------------------
+r11327 | sikeda | 2014-08-19 09:42:10 +0200 (mar. 19 août 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Sympa/List.pm
+Fision via : r11328
+
+[bug] When dkim_add_signature_to parameter contains "list", DKIM signature won't be added.  A typo has been corrected.
+
+------------------------------------------------------------------------
+r11272 | sikeda | 2014-07-29 17:19:43 +0200 (mar. 29 juil. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[svn] Backporting a fix from sympa-6.2-branch.
+------------------------------------------------------------------------
+r11271 | sikeda | 2014-07-29 17:14:29 +0200 (mar. 29 juil. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Sympa/ModDef.pm
+Fision via : r11272
+
+[-bug] Crypt::OpenSSL::X509 was missing in module list.
+
+------------------------------------------------------------------------
+r11245 | sikeda | 2014-07-27 03:57:48 +0200 (dim. 27 juil. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[svn] Backporting a few fixes from sympa-6.2-branch.
+------------------------------------------------------------------------
+r11244 | sikeda | 2014-07-27 03:35:43 +0200 (dim. 27 juil. 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Message.pm
+Fision via : r11245
+
+[-bug] Removed ineffective -rand option fed to openssl.  Despite documents of OpenSSL describes, it has no effect.  That's why LibreSSL deprecated this option:
+http://openbsd.cs.toronto.edu/cgi-bin/cvsweb/src/lib/libssl/src/apps/smime.c?rev=1.25&content-type=text/x-cvsweb-markup
+
+------------------------------------------------------------------------
+r11231 | sikeda | 2014-07-24 16:55:40 +0200 (jeu. 24 juil. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Message.pm
+Fision via : r11245
+
+[-bug] According to RFC 4871, new DKIM-Signature header field should not be appended to header but be prepended.
+
+------------------------------------------------------------------------
+r11155 | sikeda | 2014-07-12 06:39:54 +0200 (sam. 12 juil. 2014) | 7 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[dev] (r11154) Some fixes (partly on style) and improvement.
+- Added Japanese translation.
+- The parameter password_validation was not optional.
+- Data::Password module was not optional because it was loaded at startup.  Use eval{require} instead of use.
+- @Data::Password::DICTIONARIES would grow by each call of password_validation.
+- Swtich feature and exported names wouldn't be used.
+
+------------------------------------------------------------------------
+r11154 | sikeda | 2014-07-12 05:31:32 +0200 (sam. 12 juil. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/soap/sympasoap.pm
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+   M /branches/sympa-6.1-branch/web_tt2/error.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[feature][#9306] [Submitted by Evoltech, Riseup] Better password validation.
+When the user requests change of password via WWSympa or SympaSOAP, new password may be checked its strength.
+New parameter password_validation may be used to customize policy of password validation.  See help text of the parameter for more details.
+
+------------------------------------------------------------------------
+r11147 | sikeda | 2014-07-11 05:36:47 +0200 (ven. 11 juil. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/javascript.tt2
+
+[bug][#9270] [Submitted by A. Bezverkhyy] Fixing buggy getElementById behavior on IE8/9.
+
+------------------------------------------------------------------------
+r11144 | sikeda | 2014-07-09 16:43:57 +0200 (mer. 09 juil. 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#9328][Submitted by F. Angebault] Back button prints an error "Webpage has expired" on IE9.
+On IE9, "Cache-Control: no-cache" HTTP response is treated as never keep content.  Alternatively, "Cache-Control: max-age=0" may be used: This workaround may not affect to other browsers.  For more details see item #9328 in bug tracker.
+
+------------------------------------------------------------------------
+r11136 | sikeda | 2014-07-08 09:46:30 +0200 (mar. 08 juil. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[bug][#9326] [Submitted by M. Howe, Univ. of Oxford] Search conditions in scenario of text filter were not excaped.  Several characters in condition such as ".", "+" were treated as regexp metacharacter then search gave unexpected result or simlpy failed.
+
+------------------------------------------------------------------------
+r11135 | sikeda | 2014-07-08 09:02:46 +0200 (mar. 08 juil. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[-bug] Check existence of parameter of expression [list->parameter] in scenario.
+------------------------------------------------------------------------
+r11128 | sikeda | 2014-07-06 06:11:26 +0200 (dim. 06 juil. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.2-branch/src/lib/Scenario.pm
+Fision via : r11135
+
+[-dev] Check existence of parameter of expression [list->parameter] in scenario.
+------------------------------------------------------------------------
+r11134 | sikeda | 2014-07-08 08:36:20 +0200 (mar. 08 juil. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][#9300] [Sumitted by M. Howe, Univ. of Oxford] Sympa crashes if a list config does not have web_archive paragraph.
+
+In such case $list->{admin}{web_archive} may be an arrayref.  If program accesses to this element as hashref, it will die with "Not a hash reference".  Fixed by checking if the element is hashref.
+
+------------------------------------------------------------------------
+r11133 | sikeda | 2014-07-08 07:51:56 +0200 (mar. 08 juil. 2014) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#9262] [Originally submitted by Evoltech, Riseup] Prevent special list addresses from being added as list owner address.
+
+Check owner addresses to be added and reject ones falling under any of owner, return path etc. of the list.  Patch was modified to check also VERP (bounce+) address pattern and suffixes in list_check_suffixes parameter.
+
+------------------------------------------------------------------------
+r11132 | sikeda | 2014-07-08 05:23:07 +0200 (mar. 08 juil. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Language.pm
+
+[bug][#9256] [Submitted by F. Angebault] "Manage your subscriptions" help page is only partially translated.
+
+------------------------------------------------------------------------
+r11070 | etiennemeleard | 2014-06-24 12:00:53 +0200 (mar. 24 juin 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/soap/sympasoap.pm
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-feature] Propagate choosen list descriptors (name, template, description ...) so that they can be used in create_list scenarios.
+
+
+------------------------------------------------------------------------
+r11069 | etiennemeleard | 2014-06-24 11:59:01 +0200 (mar. 24 juin 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[feature] Now CustomCondition can set the action to take (do_it, reject ...) by setting $_, this allows for complex, single-module CustomConditions.
+
+
+------------------------------------------------------------------------
+r11009 | sikeda | 2014-06-18 09:54:30 +0200 (mer. 18 juin 2014) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+   M /branches/sympa-6.1-branch/wwsympa/bounced.pl.in
+
+[bug] When lock_method is "nfs", Lock files in the spool are removed.
+Fixed by skipping files with ".lock" or ".NFSLock" extension.
+
+------------------------------------------------------------------------
+r10944 | david.verdin | 2014-06-13 15:17:23 +0200 (ven. 13 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[bug] A missing dollar sign made sympa.pl crash when an automatic lst could not be created.
+------------------------------------------------------------------------
+r10911 | david.verdin | 2014-06-10 17:11:25 +0200 (mar. 10 juin 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[bug] When parameter dkim_signature_apply_on contained the value 'dkim_authenticated_messages', DKIM signing was used even for unsigned messages or messages containing an unvalid DKIM signature. Fixed by testing that DKIM verification passed before deciding if we need to add a DKIM signature.
+
+------------------------------------------------------------------------
+r10879 | sympa-authors | 2014-06-06 18:09:40 +0200 (ven. 06 juin 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.22
+------------------------------------------------------------------------
 r10878 | david.verdin | 2014-06-06 18:06:45 +0200 (ven. 06 juin 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/src/lib/List.pm
