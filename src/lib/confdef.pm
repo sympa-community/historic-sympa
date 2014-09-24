@@ -542,7 +542,7 @@ our @params = (
     },
     {
         'name'    => 'misaddressed_commands_regexp',
-        'default' => '(subscribe|unsubscribe|signoff|set\s+(\S+)\s+(mail|nomail|digest))',
+        'default' => '((subscribe\s+(\S+)|unsubscribe\s+(\S+)|signoff\s+(\S+)|set\s+(\S+)\s+(mail|nomail|digest))\s*)',
     },
     {
         'name'    => 'nrcpt',
