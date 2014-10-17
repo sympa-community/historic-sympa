@@ -719,6 +719,12 @@ sub add {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <email>');
     }
+    unless (tools::valid_email($email)) {
+        my $error = "Invalid email address provided: '$email'";
+        die SOAP::Fault->faultcode('Client')
+            ->faultstring('Unable to add user')
+            ->faultdetail($error);
+    }
     my $list = new List ($listname, $robot);
     unless ($list) {
 	&Log::do_log('info', 'add %s@%s %s from %s refused, no such list ', $listname,$robot,$email,$sender);
