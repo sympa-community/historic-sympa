@@ -15159,9 +15159,14 @@ sub do_compose_mail {
 	 $pages_url = $in{'url'};
 
 	 # parse return the MIME::Lite part to send 
-	 my $MIMEmail = $mailHTML->parse($pages_url); 
-
-	 $in{'body'} = $MIMEmail->as_string;
+         $mailHTML->{_AGENT}->protocols_allowed(['http', 'https', 'ftp', 'nntp']);
+         my $MIMEmail = eval { $mailHTML->parse($pages_url) };
+         if ($MIMEmail) {
+             $in{'body'} = $MIMEmail->as_string;
+         } else {
+             report::reject_report_web('user', 'wrong_value', {'argument' => 'url'}, $param->{'action'});
+             return undef;
+         }
 
      } else {
 
