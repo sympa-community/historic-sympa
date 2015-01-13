@@ -3,6 +3,34 @@
 
 (See Changelog file for the full changes log)
 
+6.1.24		January 13, 2015
+
+  Bug fixes:
+
+	[11778] wwsympa/wwsympa.fcgi.in:  Preventing faulty newsletter sending.
+
+	[11690] src/sympa.pl.in: [Submitted by B. Marchal, univ. Lorraine] the
+	loop_prevention_regex parameter was never taken into account. This was
+	due to a o modifier in the regexp which resulted in the regexp being
+	set at compile time and never changed after. Fixed by removing this
+	modifier.
+
+	[11563] soap/sympasoap.pm: [#9542] [Submitted by M. Howe, Univ. of
+	Oxford] SympaSOAP does not validate added addresses.
+
+	[11428] src/lib/confdef.pm, src/lib/tools.pm:  When checking
+	misaddressed commands in subject, the command length was not taken into
+	account. Any message whose subjects started with unsubscribe, signoff
+	or subscribe would be rejectd. Fixed by forcing test to match only if
+	the subject contains two words exactly, including the command. We might
+	miss wom better form subscribe commands but will have very less false
+	positive.
+
+	[11427] src/lib/Conf.pm:  DMARC protection mode was not correctly
+	loaded in virtual hosts. Fixed by getting rid of double parsing of this
+	parameter.
+
+
 6.1.23		September 17, 2014
 
   Features:

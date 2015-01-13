@@ -1,4 +1,53 @@
 ------------------------------------------------------------------------
+r11778 | david.verdin | 2014-12-17 11:41:05 +0100 (mer. 17 déc. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Preventing faulty newsletter sending.
+------------------------------------------------------------------------
+r11690 | david.verdin | 2014-11-14 16:38:25 +0100 (ven. 14 nov. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[bug][Submitted by B. Marchal, univ. Lorraine] the loop_prevention_regex parameter was never taken into account. This was due to a o modifier in the regexp which resulted in the regexp being set at compile time and never changed after. Fixed by removing this modifier.
+------------------------------------------------------------------------
+r11563 | sikeda | 2014-10-17 09:17:36 +0200 (ven. 17 oct. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/soap/sympasoap.pm
+
+[bug][#9542] [Submitted by M. Howe, Univ. of Oxford] SympaSOAP does not validate added addresses.
+
+------------------------------------------------------------------------
+r11562 | sikeda | 2014-10-17 03:34:08 +0200 (ven. 17 oct. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[-bug][#9548][Submitted by M. Howe, Univ. of Oxford] do_del only logs single address successfully removed, even if multiple addresses are specified.
+
+------------------------------------------------------------------------
+r11428 | david.verdin | 2014-09-24 16:49:09 +0200 (mer. 24 sept. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+
+[bug] When checking misaddressed commands in subject, the command length was not taken into account. Any message whose subjects started with unsubscribe, signoff or subscribe would be rejectd. Fixed by forcing test to match only if the subject contains two words exactly, including the command. We might miss wom better form subscribe commands but will have very less false positive.
+
+------------------------------------------------------------------------
+r11427 | david.verdin | 2014-09-24 16:31:44 +0200 (mer. 24 sept. 2014) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+
+[bug] DMARC protection mode was not correctly loaded in virtual hosts. Fixed by getting rid of double parsing of this parameter.
+
+------------------------------------------------------------------------
+r11398 | sympa-authors | 2014-09-17 17:19:31 +0200 (mer. 17 sept. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.23
+------------------------------------------------------------------------
 r11369 | david.verdin | 2014-09-12 17:52:50 +0200 (ven. 12 sept. 2014) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
