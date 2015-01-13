@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r11779 | david.verdin | 2014-12-17 11:47:34 +0100 (mer. 17 déc. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Preventing faulty newsletter sending.
+------------------------------------------------------------------------
+r11390 | sympa-authors | 2014-09-16 16:11:52 +0200 (mar. 16 sept. 2014) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-release]Preparing version 6.0.9
+------------------------------------------------------------------------
 r11389 | david.verdin | 2014-09-16 16:04:21 +0200 (mar. 16 sept. 2014) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/src/sympa_wizard.pl.in

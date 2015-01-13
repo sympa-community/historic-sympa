@@ -3,6 +3,12 @@
 
 (See Changelog file for the full changes log)
 
+6.0.10		January 13, 2015
+
+  Bug fixes:
+
+	[11779] wwsympa/wwsympa.fcgi.in:  Preventing faulty newsletter sending.
+
 6.0.9		September 16, 2014
 
   Changes:
