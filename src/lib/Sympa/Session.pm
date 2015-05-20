@@ -22,10 +22,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Session - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Session;
 
 use strict;
 use warnings;
+use Carp qw(croak);
 use CGI::Cookie;
 use Digest::MD5;
 
@@ -35,8 +48,6 @@ use Sympa::Language;
 use Sympa::Log;
 use tools;
 use Sympa::Tools::Data;
-use Sympa::Tools::Password;
-use Sympa::Tools::Time;
 
 # this structure is used to define which session attributes are stored in a
 # dedicated database col where others are compiled in col 'data_session'

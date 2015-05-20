@@ -22,13 +22,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Scenario - A scenario
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Scenario;
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+use List::Util qw(first);
 use Mail::Address;
 use Net::CIDR;
+use Scalar::Util qw(blessed);
 
 use Sympa;
 use Conf;
@@ -38,7 +52,6 @@ use Sympa::Database;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
-use Sympa::Robot;
 use tools;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
@@ -59,7 +72,13 @@ sub new {
     my %parameters = @args;
     $log->syslog('debug2', '');
 
-    my $scenario = {};
+    unless ($that eq 'Site'                           or
+            (ref $that && $that->isa('Sympa::List'))  or
+            (ref $that && $that->isa('Sympa::VirtualHost'))
+    ) {
+        $main::logger->do_log(Sympa::Logger::ERR, 'Invalid that parameter');
+        return undef;
+    }
 
     ## Check parameters
     ## Need either file_path or function+name
@@ -149,7 +168,7 @@ sub new {
         close SCENARIO;
 
         ## Keep rough scenario
-        $scenario->{'data'} = $data;
+        $self->{'data'} = $data;
 
         $scenario_struct =
             _parse_scenario($parameters{'function'}, $parameters{'robot'},
@@ -168,13 +187,13 @@ sub new {
             $parameters{'name'},     'true() smtp -> reject',
             $parameters{'directory'}
         );
-        $scenario->{'file_path'} = 'ERROR';                   ## special value
-        $scenario->{'data'}      = 'true() smtp -> reject';
+        $self->{'file_path'} = 'ERROR';                   ## special value
+        $self->{'data'}      = 'true() smtp -> reject';
     }
 
     ## Keep track of the current time ; used later to reload scenario files
     ## when they changed on disk
-    $scenario->{'date'} = time;
+    $self->{'date'} = time;
 
     unless (ref($scenario_struct) eq 'HASH') {
         $log->syslog('err',
@@ -183,18 +202,18 @@ sub new {
         return undef;
     }
 
-    $scenario->{'name'}   = $scenario_struct->{'name'};
-    $scenario->{'rules'}  = $scenario_struct->{'rules'};
-    $scenario->{'title'}  = $scenario_struct->{'title'};
-    $scenario->{'struct'} = $scenario_struct;
+    $self->{'name'}   = $scenario_struct->{'name'};
+    $self->{'rules'}  = $scenario_struct->{'rules'};
+    $self->{'title'}  = $scenario_struct->{'title'};
+    $self->{'struct'} = $scenario_struct;
 
     ## Bless Message object
     bless $scenario, $pkg;
 
     ## Keep the scenario in memory
-    $all_scenarios{$scenario->{'file_path'}} = $scenario;
+    $all_scenarios{$self->{'file_path'}} = $self;
 
-    return $scenario;
+    return $self;
 }
 
 ## Parse scenario rules
@@ -292,11 +311,11 @@ sub _parse_scenario {
 ######################################################
 sub request_action {
     $log->syslog('debug2', '(%s, %s, %s, %s, %s)', @_);
-    my $that        = shift;
-    my $operation   = shift;
-    my $auth_method = shift;
-    my $context     = shift;
-    my $debug       = shift;
+    my (%params) = @_;
+    my $list        = $params{that};
+    my $operation   = $params{operation};
+    my $auth_method = $params{auth_method};
+    my $context     = $params{context};
 
     my ($list, $robot_id);
     if (ref $that eq 'Sympa::List') {
@@ -305,6 +324,8 @@ sub request_action {
     } else {
         $robot_id = $that || '*';    #FIXME: really maybe Site?
     }
+
+    my $robot = $list->robot();
 
     my $trace_scenario;
 
@@ -321,7 +342,8 @@ sub request_action {
         $log->syslog('info', 'Unknown auth method %s', $auth_method);
         return undef;
     }
-    my (@rules, $name, $scenario);
+
+    my $scenario;
 
     # this var is defined to control if log scenario is activated or not
     my $log_it;
@@ -364,6 +386,7 @@ sub request_action {
             $log->syslog('info', 'Will evaluate scenario %s for site',
                 $operation);
         }
+        return $return;
     }
 
     ## The current action relates to a list
@@ -389,7 +412,7 @@ sub request_action {
         unless (defined $scenario_path) {
             my $return = {
                 'action'      => 'reject',
-                'reason'      => 'parameter-not-defined',
+                'reason'      => 'list-no-open',
                 'auth_method' => '',
                 'condition'   => ''
             };
@@ -398,6 +421,7 @@ sub request_action {
                 if $log_it;
             return $return;
         }
+    }
 
         ## Prepares custom_vars in $context
         if (defined $list->{'admin'}{'custom_vars'}) {
@@ -488,6 +512,19 @@ sub request_action {
     push @rules, @{$scenario->{'rules'}};
     $name = $scenario->{'name'};
 
+sub evaluate {
+    my ($self, %params) = @_;
+
+    my $context        = $params{context};
+    my $auth_method    = $params{auth_method};
+    my $operation      = $params{operation};
+    my $log_it         = $params{log_it};
+    my $robot          = $params{robot};
+    my $trace_scenario = $params{trace_scenario};
+    my $that           = $params{that};
+    my @rules = @{$self->{'rules'}};
+    my $name = $self->{'name'};
+
     unless ($name) {
         $log->syslog('err',
             "internal error : configuration for operation $operation is not yet performed by scenario"
@@ -568,15 +605,6 @@ sub request_action {
                     $name,  $context->{'listname'}
                 );
 
-                if ($debug) {
-                    $return = {
-                        'action'      => 'reject',
-                        'reason'      => 'error-performing-condition',
-                        'auth_method' => $rule->{'auth_method'},
-                        'condition'   => $rule->{'condition'}
-                    };
-                    return $return;
-                }
                 # FIXME: Add entry to listmaster_mnotification.tt2
                 Sympa::send_notify_to_listmaster($robot_id,
                     'error_performing_condition',
@@ -638,11 +666,6 @@ sub request_action {
                     $rule->{'condition'}, $rule->{'auth_method'},
                     $rule->{'action'}
                 ) if $log_it;
-                if ($debug) {
-                    $return->{'auth_method'} = $rule->{'auth_method'};
-                    $return->{'condition'}   = $rule->{'condition'};
-                    return $return;
-                }
 
                 ## Check syntax of returned action
                 unless ($action =~
@@ -839,13 +862,19 @@ sub verify {
         } elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
 
             $context->{'user'} ||=
-                Sympa::User::get_global_user($context->{'sender'});
+                Sympa::User::get_global_user(
+                    $context->{'sender'},
+                    Sympa::Site->db_additional_user_fields
+                );
             $value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
 
         } elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 
             $context->{'user'} ||=
-                Sympa::User::get_global_user($context->{'sender'});
+                Sympa::User::get_global_user(
+                    $context->{'sender'},
+                    Sympa::Site->db_additional_user_fields
+                );
             $value =~
                 s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
 
@@ -1669,7 +1698,7 @@ sub search {
 }
 
 # eval a custom perl module to verify a scenario condition
-sub verify_custom {
+sub _verify_custom {
     $log->syslog('debug2', '(%s, %s, %s, %s, %s)', @_);
     my ($condition, $args_ref, $robot, $list, $rule) = @_;
     my $timeout = 3600;
@@ -1726,26 +1755,18 @@ sub verify_custom {
     return $persistent_cache{'named_filter'}{$condition}{$filter}{'value'};
 }
 
-sub dump_all_scenarios {
-    open TMP, ">/tmp/all_scenarios";
-    Sympa::Tools::Data::dump_var(\%all_scenarios, 0, \*TMP);
-    close TMP;
-}
-
 ## Get the title in the current language
 sub get_current_title {
     my $self = shift;
 
-    my $language = Sympa::Language->instance;
-
-    foreach my $lang (Sympa::Language::implicated_langs($language->get_lang))
+    foreach my $lang (Sympa::Language::implicated_langs($main::language->get_lang))
     {
         if (exists $self->{'title'}{$lang}) {
             return $self->{'title'}{$lang};
         }
     }
     if (exists $self->{'title'}{'gettext'}) {
-        return $language->gettext($self->{'title'}{'gettext'});
+        return $main::language->gettext($self->{'title'}{'gettext'});
     } elsif (exists $self->{'title'}{'default'}) {
         return $self->{'title'}{'default'};
     } else {
@@ -1846,5 +1867,9 @@ sub _load_ldap_configuration {
     }
     return %Ldap;
 }
+
+=back
+
+=cut
 
 1;

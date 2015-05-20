@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Archive - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Archive;
 
 use strict;
@@ -284,6 +296,11 @@ sub next {
         if ($metadata) {
             my $msg_string = do { local $RS; <$lock_fh> };
             $message = Sympa::Message->new($msg_string, %$metadata);
+        }
+        unless ($message->has_valid_sender()) {
+            $main::logger->do_log(Sympa::Logger::ERR,
+                'Message from file %s has no valid sender', $file);
+            return undef;
         }
 
         # Metadata doesn't contain context; add it.

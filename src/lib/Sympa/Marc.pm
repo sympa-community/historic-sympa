@@ -2,11 +2,25 @@
 # vim:ft=perl:et:sw=4
 # $Id$
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Marc - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Marc;
 
 use strict;
 use warnings;
 use Carp qw();
+
+use Sympa::Logger;
 
 our $AUTOLOAD;
 our $VERSION = "4.3+Sympa-6.2";

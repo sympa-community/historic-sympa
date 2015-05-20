@@ -36,11 +36,8 @@ use Template;
 
 use Sympa;
 use Sympa::Constants;
-use Sympa::Language;
 use tools;
 use Sympa::Tools::Text;
-
-my $language = Sympa::Language->instance;
 
 sub new {
     my $class   = shift;
@@ -118,7 +115,7 @@ sub maketext {
     my $template_name = $context->stash->get('component')->{'name'};
     my $textdomain = $template2textdomain{$template_name} || '';
 
-    return sub { $language->maketext($textdomain, $_[0], @arg); };
+    return sub { $main::language->maketext($textdomain, $_[0], @arg); };
 }
 
 sub locdatetime {
@@ -126,11 +123,11 @@ sub locdatetime {
     if ($arg !~
         /^(\d{4})\D(\d\d?)(?:\D(\d\d?)(?:\D(\d\d?)\D(\d\d?)(?:\D(\d\d?))?)?)?/
         ) {
-        return sub { $language->gettext("(unknown date)"); };
+        return sub { $main::language->gettext("(unknown date)"); };
     } else {
         my @arg =
             ($6 || 0, $5 || 0, $4 || 0, $3 || 1, $2 - 1, $1 - 1900, 0, 0, 0);
-        return sub { $language->gettext_strftime($_[0], @arg); };
+        return sub { $main::language->gettext_strftime($_[0], @arg); };
     }
 }
 
@@ -158,6 +155,7 @@ sub optdesc {
         return undef unless $x =~ /\S/;
         $x =~ s/^\s+//;
         $x =~ s/\s+$//;
+        require Sympa::List;
         return Sympa::List->get_option_title($x, $type, $withval);
     };
 }

@@ -38,6 +38,7 @@ package Sympa::Tools::File;
 
 use strict;
 use warnings;
+use Carp qw(croak);
 use Encode::Guess;
 use File::Copy::Recursive;
 use File::Find qw();
@@ -187,36 +188,31 @@ Recursively create directory and all parent directories
 
 sub mkdir_all {
     my ($path, $mode) = @_;
-    my $status = 1;
 
-    ## Change umask to fully apply modes of mkdir()
-    my $saved_mask = umask;
-    umask 0000;
+    return unless $path;
+    return 1 if -d $path;
 
-    return undef if ($path eq '');
-    return 1 if (-d $path);
+    $mode = 0777 if !$mode;
 
     ## Compute parent path
-    my @token = split /\//, $path;
+    my @token = split(/\//, $path);
     pop @token;
-    my $parent_path = join '/', @token;
+    my $parent_path = join('/', @token);
 
     unless (-d $parent_path) {
-        unless (mkdir_all($parent_path, $mode)) {
-            $status = undef;
-        }
+        my $result = mkdir_all($parent_path, $mode);
+        return unless $result;
     }
+    
+    # Change umask to fully apply modes of mkdir()
+    my $saved_mask = umask();
+    umask(0000);
 
-    if (defined $status) {    ## Don't try if parent dir could not be created
-        unless (mkdir($path, $mode)) {
-            $status = undef;
-        }
-    }
+    my $result = mkdir($path, $mode);
 
-    ## Restore umask
-    umask $saved_mask;
+    umask($saved_mask);
 
-    return $status;
+    return $result;
 }
 
 =over
@@ -421,7 +417,12 @@ sub remove_dir {
                 $log->syslog('err', 'Error while removing file %s', $name);
             }
         }
+    };
+
+    foreach my $current_dir (@_) {
+        finddepth({wanted => $callback, no_chdir => 1}, $current_dir);
     }
+
     return 1;
 }
 
@@ -431,5 +432,37 @@ sub remove_dir {
 #MOVED to _clean_spool() in task_manager.pl.
 # Old name: tools::CleanSpool().
 #sub CleanDir;
+
+=item slurp_file($file)
+
+Read the whole content of a file.
+
+Parameters:
+
+=over
+
+=item $file
+
+The file to read.
+
+=back
+
+Return value:
+
+The file content as a string on success, I<undef> otherwise.
+
+=cut
+
+sub slurp_file {
+    my ($file) = @_;
+
+    open(my $handle, '<', $file)
+        or croak "Cannot open file $file: $ERRNO\n";
+    local $RS; # enable localized slurp mode
+    my $content = <$handle>;
+    close($handle);
+
+    return $content;
+}
 
 1;

@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Commands - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Commands;
 
 use strict;
@@ -30,17 +42,13 @@ use warnings;
 use Sympa;
 use Sympa::Archive;
 use Conf;
-use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
-use Sympa::Message;
 use Sympa::Regexps;
 use Sympa::Report;
 use Sympa::Scenario;
 use Sympa::Spool;
-use Sympa::Tools::Data;
 use Sympa::Tools::File;
-use Sympa::Tools::Password;
 use Sympa::User;
 
 my %comms = (
@@ -104,6 +112,10 @@ sub parse {
     my $i        = shift;
     my $sign_mod = shift;
     my $message  = shift;
+
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
 
     my $j;
     $cmd_line = '';
@@ -188,10 +200,13 @@ sub help {
 
     $data->{'is_owner'}  = 1 if @owner;
     $data->{'is_editor'} = 1 if @editor;
-    $data->{'user'}      = Sympa::User->new($sender);
-    $language->set_lang($data->{'user'}->lang)
+    $data->{'user'}      = Sympa::User->new(
+        email  => $sender,
+        fields => Sympa::Site->db_additional_user_fields
+    );
+    $main::language->set_lang($data->{'user'}->lang)
         if $data->{'user'}->lang;
-    $data->{'subject'}        = $language->gettext("User guide");
+    $data->{'subject'}        = $main::language->gettext("User guide");
     $data->{'auto_submitted'} = 'auto-replied';
 
     unless (Sympa::send_file($robot, "helpfile", $sender, $data)) {
@@ -328,9 +343,11 @@ sub stats {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'review',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'review',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'message' => $message,
         }
     );
@@ -885,9 +902,11 @@ sub review {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'review',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'review',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'message' => $message
         }
     );
@@ -1109,10 +1128,11 @@ sub subscribe {
     ## query what to do with this subscribtion request
 
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'subscribe',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'subscribe',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'message' => $message,
         }
     );
@@ -1343,7 +1363,7 @@ sub info {
     $language->set_lang($list->{'admin'}{'lang'});
 
     my $auth_method = get_auth_method(
-        'info', '',
+        Sympa::Logger::INFO, '',
         {   'type' => 'auth_failed',
             'data' => {},
             'msg'  => "INFO $listname from $sender"
@@ -1356,9 +1376,11 @@ sub info {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'info',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'info',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'message' => $message,
         }
     );
@@ -1499,10 +1521,11 @@ sub signoff {
 
             ## Skip hidden lists
             my $result = Sympa::Scenario::request_action(
-                $list,
-                'visibility',
-                'smtp',
-                {   'sender'  => $sender,
+                that        => $list,
+                operation   => 'visibility',
+                auth_method => 'smtp',
+                context     => {
+                    'sender'  => $sender,
                     'message' => $message,
                 }
             );
@@ -1562,10 +1585,11 @@ sub signoff {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'unsubscribe',
-        $auth_method,
-        {   'email'   => $email,
+        that        => $list,
+        operation   => 'unsubscribe',
+        auth_method => $auth_method,
+        context     => {
+            'email'   => $email,
             'sender'  => $sender,
             'message' => $message,
         }
@@ -1781,9 +1805,11 @@ sub add {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'add',
-        $auth_method,
-        {   'email'   => $email,
+        that        => $list,
+        operation   => 'add',
+        auth_method => $auth_method,
+        context     => {
+            'email'   => $email,
             'sender'  => $sender,
             'message' => $message,
         }
@@ -1974,9 +2000,11 @@ sub invite {
         unless (defined $auth_method);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'invite',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'invite',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'message' => $message,
         }
     );
@@ -2044,10 +2072,11 @@ sub invite {
             $context{'requested_by'}  = $sender;
 
             my $result = Sympa::Scenario::request_action(
-                $list,
-                'subscribe',
-                'smtp',
-                {   'sender'  => $sender,
+                that        => $list,
+                operation   => 'subscribe',
+                auth_method => 'smtp',
+                context     => {
+                    'sender'  => $sender,
                     'message' => $message,
                 }
             );
@@ -2253,6 +2282,21 @@ sub remind {
             $auth_method, {'sender' => $sender});
         $action = $result->{'action'} if (ref($result) eq 'HASH');
 
+        if ($scenario) {
+            $result = $scenario->evaluate(
+                    that        => $robot,
+                    operation   => 'global_remind',
+                    auth_method => $auth_method,
+                    context     => {
+                        'sender' => $sender
+                    }
+                );
+            $action = $result->{'action'} if (ref($result) eq 'HASH');
+        } else {
+            $main::logger->do_log(
+                Sympa::Logger::ERR, 'Failed to load scenario for "global_remind"'
+            );
+        }
     } else {
 
         $language->set_lang($list->{'admin'}{'lang'});
@@ -2260,9 +2304,11 @@ sub remind {
         $host = $list->{'admin'}{'host'};
 
         $result = Sympa::Scenario::request_action(
-            $list, 'remind',
-            $auth_method,
-            {   'sender'  => $sender,
+            that        => $list,
+            operation   => 'remind',
+            auth_method => $auth_method,
+            context     => {
+                'sender'  => $sender,
                 'message' => $message,
             }
         );
@@ -2375,7 +2421,7 @@ sub remind {
             my %global_info;
             my $count = 0;
 
-            $context{'subject'} = $language->gettext("Subscription summary");
+            $context{'subject'} = $main::language->gettext("Subscription summary");
             # this remind is a global remind.
 
             my $all_lists = Sympa::List::get_lists($robot);
@@ -2387,10 +2433,11 @@ sub remind {
                 do {
                     my $email  = lc($user->{'email'});
                     my $result = Sympa::Scenario::request_action(
-                        $list,
-                        'visibility',
-                        'smtp',
-                        {   'sender'  => $sender,
+                        that        => $list,
+                        operation   => 'visibility',
+                        auth_method => 'smtp',
+                        context     => {
+                            'sender'  => $sender,
                             'message' => $message,
                         }
                     );
@@ -2429,7 +2476,9 @@ sub remind {
             $log->syslog('debug2', 'Sending REMIND * to %d users', $count);
 
             foreach my $email (keys %global_subscription) {
-                my $user = Sympa::User::get_global_user($email);
+                my $user = Sympa::User::get_global_user(
+                    $email, Sympa::Site->db_additional_user_fields
+                );
                 foreach my $key (keys %{$user}) {
                     $global_info{$email}{$key} = $user->{$key}
                         if ($user->{$key});
@@ -2532,9 +2581,11 @@ sub del {
 
     ## query what to do with this DEL request
     my $result = Sympa::Scenario::request_action(
-        $list, 'del',
-        $auth_method,
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'del',
+        auth_method => $auth_method,
+        context     => {
+            'sender'  => $sender,
             'email'   => $who,
             'message' => $message,
         }
@@ -2700,10 +2751,11 @@ sub set {
 
             ## Skip hidden lists
             my $result = Sympa::Scenario::request_action(
-                $list,
-                'visibility',
-                'smtp',
-                {   'sender'  => $sender,
+                that        => $list,
+                operation   => 'visibility',
+                auth_method => 'smtp',
+                context     => {
+                    'sender'  => $sender,
                     'message' => $message,
                 }
             );
@@ -2905,6 +2957,15 @@ sub distribute {
             $robot, '', $list);
         return 'msg_not_found';
     }
+    unless ($message->has_valid_sender()) {
+        $main::logger->do_log(Sympa::Logger::ERR,
+            'Message for %s validation key %s has no valid sender',
+            $list, $key);
+        Sympa::Report::reject_report_msg('user', 'unfound_message', $sender,
+            {'listname' => $name, 'key' => $key},
+            $robot, '', $list);
+        return 'msg_not_found';
+    }
 
     # Decrypt message.
     # If encrypted, it will be re-encrypted by succeeding process.
@@ -2949,7 +3010,7 @@ sub distribute {
         $numsmtp,
         $list->get_total(),
         $msg_id,
-        $message->{'size'}
+        $message->get_size()
     );
 
     unless ($quiet) {
@@ -3047,6 +3108,15 @@ sub confirm {
             $robot, '', '');
         return 'msg_not_found';
     }
+    unless ($message->has_valid_sender()) {
+        $main::logger->do_log(Sympa::Logger::ERR,
+            'Message for key %s from %s has no valid sender',
+            $key, $sender);
+        Sympa::Report::reject_report_msg('user', 'unfound_file_message', $sender,
+            {'key' => $key},
+            $robot, '', '');
+        return 'msg_not_found';
+    }
 
     # Decrpyt message.
     # If encrypted, it will be re-encrypted by succeeding processes.
@@ -3059,8 +3129,11 @@ sub confirm {
     my $msg_string = $message->as_string;
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'send', 'md5',
-        {   'sender'  => $sender,
+        that        => $list,
+        operation   => 'send',
+        auth_method => 'md5',
+        context     => {
+            'sender'  => $sender,
             'message' => $message,
         }
     );
@@ -3308,6 +3381,15 @@ sub reject {
             $robot, '', $list);
         return 'wrong_auth';
     }
+    unless ($message->has_valid_sender()) {
+        $main::logger->do_log(Sympa::Logger::INFO,
+            'Message %s %s from %s has no valid sender, auth failed',
+            $which, $key, $sender);
+        Sympa::Report::reject_report_msg('user', 'unfound_message', $sender,
+            {'key' => $key},
+            $robot, '', $list);
+        return 'wrong_auth';
+    }
 
     my $message = Sympa::Message->new_from_file($file, context => $list);
     unless ($message) {
@@ -3536,10 +3618,11 @@ sub which {
         $listname = $list->{'name'};
 
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'visibility',
-            'smtp',
-            {   'sender'  => $sender,
+            that        => $list,
+            operation   => 'visibility',
+            auth_method => 'smtp',
+            context     => {
+                'sender'  => $sender,
                 'message' => $message,
             }
         );

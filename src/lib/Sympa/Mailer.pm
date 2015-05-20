@@ -22,6 +22,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Mailer - A mail sender
+
+=head1 DESCRIPTION
+
+This class implements a wrapper over an STMP server, ensuring immediate or
+deferred sending of messages.
+
+=cut
+
 package Sympa::Mailer;
 
 use strict;
@@ -29,7 +42,9 @@ use warnings;
 use base qw(Class::Singleton);
 
 use English qw(-no_match_vars);
+use IO::Handle;
 use POSIX qw();
+use Scalar::Util qw(blessed);
 
 use Conf;
 use Sympa::Log;

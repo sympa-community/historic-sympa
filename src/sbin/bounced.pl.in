@@ -38,7 +38,6 @@ use IO::Scalar;
 use Mail::Address;
 use MIME::Head;
 use Pod::Usage;
-use POSIX qw();
 
 use Sympa;
 use Sympa::Alarm;
@@ -46,6 +45,7 @@ use Conf;
 use Sympa::Constants;
 use Sympa::Crash;    # Show traceback.
 use Sympa::DatabaseManager;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::LockedFile;
 use Sympa::Log;
@@ -54,6 +54,7 @@ use Sympa::Message;
 use Sympa::Regexps;
 use Sympa::Scenario;
 use Sympa::Spool;
+use Sympa::Spool::File;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
@@ -93,7 +94,7 @@ unless (
     ) {
     pod2usage(-exitval => 1, -output => \*STDERR);
 }
-if ($main::options{'help'}) {
+if ($options{'help'}) {
     pod2usage(0);
 } elsif ($main::options{'version'}) {
     printf "Sympa %s\n", Sympa::Constants::VERSION;
@@ -103,6 +104,7 @@ if ($main::options{'help'}) {
 if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless $main::options{'log_level'};
     $main::options{'foreground'} = 1;
+    $options{'foreground'} = 1;
 }
 
 my $log = Sympa::Log->instance;
@@ -122,8 +124,26 @@ unless (Sympa::DatabaseManager->instance) {
         $Conf::Conf{'db_name'};
 }
 
-## Put ourselves in background if not in debug mode.
-unless ($main::options{'debug'} || $main::options{'foreground'}) {
+# initialize logging subsystem
+our $logger;
+my $log_level = $options{'log_level'} || Sympa::Site->log_level;
+if ($options{'foreground'}) {
+    require Sympa::logger::Stderr;
+    $logger = Sympa::Logger::Stderr->new(
+        level => $log_level
+    );
+} else {
+    require Sympa::logger::Syslog;
+    $logger = Sympa::Logger::Syslog->new(
+        level    => $log_level,
+        service  => $daemon_name,
+        facility => Sympa::Site->log_facility(),
+    );
+}
+$logger->do_log(
+    Sympa::Logger::INFO,
+    "Logger initialized, with log level $log_level"
+);
     open(STDERR, ">> /dev/null");
     open(STDOUT, ">> /dev/null");
     if (open(TTY, "/dev/tty")) {
@@ -140,14 +160,29 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
     }
 }
 
-## If process is running in foreground, don't write STDERR to a dedicated file
-my $options;
-$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
+# check presence of a PID file from a previous execution
+Sympa::Tools::Daemon::check_old_pid_file(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
 
-## Create and write the PID file
-Sympa::Tools::Daemon::write_pid('bounced', $PID, $options);
-unless ($options->{'stderr_to_tty'}) {
-    Sympa::Tools::Daemon::direct_stderr_to_file(('pid' => $PID));
+# Create the PID file
+Sympa::Tools::Daemon::write_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    user   => Sympa::Constants::USER,
+    group  => Sympa::Constants::GROUP,
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+# Redirect STDERR to a file, unless the process is running in foreground
+unless ($options{'foreground'}) {
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+        tmpdir => Sympa::Site->tmpdir(),
+        user   => Sympa::Constants::USER,
+        group  => Sympa::Constants::GROUP,
+    );
 }
 
 if ($main::options{'log_level'}) {
@@ -155,7 +190,7 @@ if ($main::options{'log_level'}) {
     $log->syslog(
         'info',
         'Configuration file read, log level set using options: %s',
-        $main::options{'log_level'}
+        $options{'log_level'}
     );
 } else {
     $log->{level} = $Conf::Conf{'log_level'};
@@ -197,9 +232,9 @@ unless (chdir($Conf::Conf{'home'})) {
 $log->syslog('notice', 'Bounced %s Started', Sympa::Constants::VERSION());
 
 ## Catch signals, in order to exit cleanly, whenever possible.
-$SIG{'TERM'} = 'sigterm';
 $SIG{'INT'}  = 'sigterm';
 my $end = 0;
+$SIG{'TERM'} = sub { $end = 1 };
 
 my $spool = $Conf::Conf{'queuebounce'};
 
@@ -995,7 +1030,12 @@ while (!$end) {
 Sympa::Alarm->instance->flush(purge => 1);
 
 $log->syslog('notice', 'Bounced exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid('bounced', $PID);
+Sympa::Tools::Daemon::remove_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 exit(0);
 

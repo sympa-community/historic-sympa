@@ -26,7 +26,6 @@
 use lib split(/:/, $ENV{SYMPALIB} || ''), '--modulesdir--';
 use strict;
 use warnings;
-use Digest::MD5;
 use English qw(-no_match_vars);
 use Fcntl qw();
 use File::Basename qw();
@@ -36,9 +35,7 @@ use Getopt::Long;
 use Pod::Usage;
 use POSIX qw();
 
-use Sympa::Admin;
 use Conf;
-use Sympa::Config_XML;
 use Sympa::Constants;
 use Sympa::DatabaseManager;
 use Sympa::Family;
@@ -47,11 +44,13 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Mailer;
 use Sympa::Report;
-use Sympa::Spool;
+use Sympa::Site;
+use Sympa::Spool::File;
+use Sympa::Spool::File::Message;
 use tools;
 use Sympa::Tools::Data;
+use Sympa::Tools::Message;
 use Sympa::Tools::Password;
-use Sympa::Upgrade;
 
 ## Init random engine
 srand(time());
@@ -163,7 +162,7 @@ if ($main::options{'upgrade_config_location'}) {
 
     printf "Sympa configuration moved to $dir\n";
     exit 0;
-} elsif ($main::options{'health_check'}) {
+} elsif ($options{'health_check'}) {
     ## Health check
 
     ## Load configuration file. Ignoring database config for now: it avoids
@@ -172,7 +171,7 @@ if ($main::options{'upgrade_config_location'}) {
         #FIXME: force reload
         die sprintf
             "Configuration file %s has errors.\n",
-            Conf::get_sympa_conf();
+            Sympa::Conf::get_sympa_conf();
     }
 
     ## Open the syslog and say we're read out stuff.
@@ -188,7 +187,7 @@ if ($main::options{'upgrade_config_location'}) {
         $log->syslog(
             'info',
             'Configuration file read, log level set using options: %s',
-            $main::options{'log_level'}
+            $options{'log_level'}
         );
     } else {
         $log->{level} = $Conf::Conf{'log_level'};
@@ -216,7 +215,7 @@ if ($main::options{'upgrade_config_location'}) {
     unless (Conf::load()) {    #FIXME: load Site, then robot cache
         die sprintf
             "Unable to load Sympa configuration, file %s or any of the virtual host robot.conf files contain errors. Exiting.\n",
-            Conf::get_sympa_conf();
+            Sympa::Conf::get_sympa_conf();
     }
 
     ## Change working directory.
@@ -226,7 +225,7 @@ if ($main::options{'upgrade_config_location'}) {
     }
 
     ## Check for several files.
-    unless (Conf::checkfiles_as_root()) {
+    unless (Sympa::Conf::checkfiles_as_root()) {
         printf STDERR "Missing files.\n";
         exit 1;
     }
@@ -533,6 +532,8 @@ if ($main::options{'dump'}) {
         print STDERR "Incorrect list name $main::options{'purge_list'}\n";
         exit 1;
     }
+our $mailer;
+our $logger;
 
     if ($list->{'admin'}{'family_name'}) {
         unless (
@@ -569,6 +570,10 @@ if ($main::options{'dump'}) {
         print STDERR "Missing parameter new_listname\n";
         exit 1;
     }
+    $logger->do_log(
+        Sympa::Logger::INFO,
+        "Logger initialized, with log level $log_level"
+    );
 
     unless ($main::options{'new_listrobot'}) {
         print STDERR "Missing parameter new_listrobot\n";
@@ -782,6 +787,7 @@ if ($main::options{'dump'}) {
 } elsif ($main::options{'upgrade'}) {
 
     $log->syslog('notice', "Upgrade process...");
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
     $main::options{'from'} ||= Sympa::Upgrade::get_previous_version();
     $main::options{'to'}   ||= Sympa::Constants::VERSION;
@@ -1219,7 +1225,19 @@ sub _lowercase_field {
                 'Unable to set field % from table %s to value %s',
                 $field, $lower_cased, $table);
             next;
-        }
+        );
+        return undef;
+    }
+    Sympa::Monitor::db_log(
+        'robot'        => $robot->name,
+        'list'         => $listname,
+        'action'       => 'DoForward',
+        'parameters'   => $function,
+        'msg_id'       => $messageid,
+        'status'       => 'success',
+        'user_email'   => $sender,
+        'client'       => $ip,
+        'daemon'       => $daemon_name
     }
     $sth->finish();
 

@@ -1,4 +1,4 @@
-#!--PERL--
+ #!--PERL--
 # -*- indent-tabs-mode: nil; -*-
 # vim:ft=perl:et:sw=4
 # $Id$
@@ -68,17 +68,18 @@ use Sympa::Marc::Search;
 use Sympa::Message;
 use Sympa::Regexps;
 use Sympa::Report;
-use Sympa::Robot;
+use Sympa::VirtualHost;
 use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::SharedDocument;
-use Sympa::Spool;
 use Sympa::Spool::Archive;
+use Sympa::Spool;
+use Sympa::Spool::File::Message;
+use Sympa::Spool::File::Key;
 use Sympa::Template;
 use tools;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
-use Sympa::Tools::Password;
 use Sympa::Tools::Text;
 use Sympa::Tools::WWW;
 use Sympa::Tracking;
@@ -968,8 +969,6 @@ unless (Conf::data_structure_uptodate()) {
     );
 }
 
-Sympa::Tools::Password::ciphersaber_installed();
-
 # Update main CSS if required.
 Sympa::Tools::WWW::update_css();
 
@@ -1024,7 +1023,7 @@ while ($query = new_loop()) {
         Sympa::Report::reject_report_web('intern_quiet',
             'incorrect_server_config', {}, '', '');
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Config error: WWSympa should run with UID %s (instead of %s). *** Switching to maintenance mode. ***',
             (getpwnam(Sympa::Constants::USER))[2],
             $EUID
@@ -1101,16 +1100,14 @@ while ($query = new_loop()) {
 
     $param->{'cookie_domain'} = Conf::get_robot_conf($robot, 'cookie_domain');
 
-    $ip = $ENV{'REMOTE_HOST'};
-    $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
-    $ip = 'undef' unless ($ip);
+    $ip = $ENV{'REMOTE_HOST'} || $ENV{'REMOTE_ADDR'};
     ## In case HTTP_HOST does not match cookie_domain
     my $http_host = Sympa::Tools::WWW::get_http_host();
     $http_host =~ s/:\d+$//;    ## suppress port
     unless (($http_host =~ /$param->{'cookie_domain'}$/)
         || ($param->{'cookie_domain'} eq 'localhost')) {
         wwslog(
-            'notice',
+            Sympa::Logger::NOTICE,
             '(%s) Does NOT match HTTP_HOST; setting cookie_domain to %s',
             $param->{'cookie_domain'}, $http_host
         );
@@ -1264,7 +1261,7 @@ while ($query = new_loop()) {
     ## If CSS file not found, let Sympa do the job...
     unless (-f $param->{'css_path'} . '/style.css') {
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Could not find CSS file %s, using default CSS',
             $param->{'css_path'} . '/style.css'
         ) if ($param->{'css_path'});    ## Notice only if path was defined
@@ -1273,19 +1270,18 @@ while ($query = new_loop()) {
     }
 
     wwslog(
-        'info',
+        Sympa::Logger::INFO,
         'Parameter css_url "%s" seems strange, it must be the url of a directory not a css file',
         $param->{'css_url'}
     ) if ($param->{'css_url'} =~ /\.css$/);
 
     $session = Sympa::Session->new(
-        $robot,
-        {   'cookie' =>
-                Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'}),
-            'action' => $in{'action'},
-            'rss'    => $rss,
-            'ajax'   => $ajax
-        }
+        robot  => $robot,
+        cookie => Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'}),
+        refresh => Sympa::Site->cookie_refresh(),
+        action => $in{'action'},
+        rss    => $rss,
+        ajax   => $ajax
     );
 
     # Getting rid of the environment variable to make sure it won't be
@@ -1294,7 +1290,7 @@ while ($query = new_loop()) {
     unless (defined $session) {
         Sympa::send_notify_to_listmaster($robot,
             'failed_to_create_web_session', {});
-        wwslog('info', 'Failed to create session');
+        wwslog(Sympa::Logger::INFO, 'Failed to create session');
         $session = Sympa::Session->new($robot, {});
     }
 
@@ -1372,7 +1368,8 @@ while ($query = new_loop()) {
                     Crypt::OpenSSL::X509->new_from_string(
                         $ENV{SSL_CLIENT_CERT}
                         )->email()
-                );
+                    );
+                }
             }
 
             if ($param->{user}{email}) {
@@ -1517,7 +1514,7 @@ while ($query = new_loop()) {
 
             if (Sympa::User::is_global_user($param->{'user'}{'email'})) {
                 $param->{'user'} =
-                    Sympa::User::get_global_user($param->{'user'}{'email'});
+                    Sympa::User::get_global_user($param->{'user'}{'email'}, Sympa::Site->db_additional_user_fields);
             }
 
             ## For the parser to display an empty field instead of [xxx]
@@ -1562,7 +1559,7 @@ while ($query = new_loop()) {
             unless (check_param_in()) {
                 Sympa::Report::reject_report_web('user', 'wrong_param', {},
                     $action, $list);
-                wwslog('info', 'Wrong parameters');
+                wwslog(Sympa::Logger::INFO, 'Wrong parameters');
                 last;
             }
 
@@ -1571,6 +1568,20 @@ while ($query = new_loop()) {
             $param->{'host'} ||= $robot;
             $param->{'domain'} = $list->{'domain'}
                 if (ref($list) eq 'Sympa::List');
+	     
+	    # Set content language
+	    # FIXME: $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !
+	    my $list_lang = $list->lang if ref $list eq 'List';
+	    my $user_lang = $param->{'user'}{'lang'} if $param->{'user'};
+	    $param->{'lang'} = $language->set_lang(
+		$session->{'lang'}, $user_lang, $list_lang,
+		$robot->lang, Site->lang, 'en'
+	    );
+	    # compatibility concern: old-style locale.
+	    $param->{'locale'} =
+		Sympa::Language::lang2oldlocale($param->{'lang'});
+	    # compatibility concern: for 6.1.
+	    $param->{'lang_tag'} = $param->{'lang'};
 
             # Set best content language
             my $user_lang = $param->{'user'}{'lang'} if $param->{'user'};
@@ -1647,7 +1658,7 @@ while ($query = new_loop()) {
                 # if a subaction is define and change, then it is not a loop
                 if (!defined($in{'subaction'})
                     || ($in{'subaction'} eq $old_subaction)) {
-                    wwslog('info', 'Stopping loop with %s action', $action);
+                    wwslog(Sympa::Logger::INFO, 'Stopping loop with %s action', $action);
                     #undef $action;
                     $action = 'home';
                 }
@@ -1730,7 +1741,7 @@ while ($query = new_loop()) {
                 $delay, $param->{'use_ssl'}
             )
             ) {
-            wwslog('notice', 'Could not set HTTP cookie');
+            wwslog(Sympa::Logger::NOTICE, 'Could not set HTTP cookie');
         }
 
         $param->{'is_user_allowed_to'} = sub {
@@ -1787,7 +1798,7 @@ while ($query = new_loop()) {
                             %{$param->{'alt_emails'}}
                         )
                         ) {
-                        wwslog('notice',
+                        wwslog(Sympa::Logger::NOTICE,
                             'Could not set HTTP cookie for external_auth');
                     }
                 }
@@ -2342,7 +2353,7 @@ sub get_parameters {
                     {'params' => $p},
                     '', '');
                 wwslog(
-                    'err',
+                    Sympa::Logger::ERR,
                     'Syntax error for parameter %s value "%s" not conform to regexp:%s; dumped vars in %s',
                     $pname,
                     $one_p,
@@ -2387,7 +2398,7 @@ sub get_parameters {
                     $tokens[$i] = tools::qencode_filename($tokens[$i]);
                 }
                 $in{$p} = join '/', @tokens;
-                ## Sympa's URI escaping subroutine (tools::escape_chars())
+                ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars())
                 ## replaces '/' with %A5 ('¥' character)
                 ## This should be transformed into a '/' again
 
@@ -2613,7 +2624,7 @@ sub get_parameters_old {
                     {'params' => $p},
                     '', '');
                 wwslog(
-                    'err',
+                    Sympa::Logger::ERR,
                     'Syntax error for parameter %s value "%s" not conform to regexp:%s; dumped vars in %s',
                     $pname,
                     $one_p,
@@ -2640,7 +2651,7 @@ sub get_parameters_old {
                     $tokens[$i] = tools::qencode_filename($tokens[$i]);
                 }
                 $in{$p} = join '/', @tokens;
-                ## Sympa's URI escaping subroutine (tools::escape_chars())
+                ## Sympa's URI escaping subroutine (Sympa::Tools::escape_chars())
                 ## replaces '/' with %A5 ('¥' character)
                 ## This should be transformed into a '/' again
 
@@ -3051,9 +3062,11 @@ sub check_param_in {
 
             ## Checks if the user can post in this list.
             my $result = Sympa::Scenario::request_action(
-                $list, 'send',
-                $param->{'auth_method'},
-                {   'sender'      => $param->{'user'}{'email'},
+                that        => $list,
+                operation   => 'send',
+                auth_method => $param->{'auth_method'},
+                context     => {
+                    'sender'      => $param->{'user'}{'email'},
                     'remote_host' => $param->{'remote_host'},
                     'remote_addr' => $param->{'remote_addr'}
                 }
@@ -3099,40 +3112,42 @@ sub check_param_in {
 
         ## Check unsubscription authorization for the current user and list.
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'unsubscribe',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'unsubscribe',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
         );
-        $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+        my $action = $result->{'action'} if (ref($result) eq 'HASH');
 
         if (!$param->{'user'}{'email'}) {
             $param->{'may_signoff'} = 1
-                if ($main::action =~ /do_it|owner|request_auth/);
+                if ($action =~ /do_it|owner|request_auth/);
 
         } elsif ($param->{'is_subscriber'}) {
             $param->{'may_signoff'} = 1
-                if ($main::action =~ /do_it|owner|request_auth/);
+                if ($action =~ /do_it|owner|request_auth/);
             $param->{'may_suboptions'} = 1;
         }
 
         ## Check subscription authorization for the current user and list.
         $result = Sympa::Scenario::request_action(
-            $list,
-            'subscribe',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'subscribe',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
         );
-        $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+        $action = $result->{'action'} if (ref($result) eq 'HASH');
 
         $param->{'may_subscribe'} = 1
-            if ($main::action =~ /do_it|owner|request_auth/);
+            if ($action =~ /do_it|owner|request_auth/);
 
         ## Check if the current user can read the shared documents.
         my %mode;
@@ -3146,11 +3161,26 @@ sub check_param_in {
     }
 
     ## Check if the current user can create a list.
-    my $result = Sympa::Scenario::request_action(
-        $robot,
-        'create_list',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+    my $scenario = Sympa::Scenario->new(
+        that     => $robot,
+        function => 'create_list',
+        name     => $robot->create_list()
+    );
+    unless ($scenario) {
+        $main::logger->do_log(
+            Sympa::Logger::ERR,
+            'Failed to load scenario for "create_list"'
+        );
+        undef($param->{'may_create_list'});
+        return 1;
+    }
+
+    my $result = $scenario->evaluate(
+        that        => $robot,
+        operation   => 'create_list',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -3355,9 +3385,11 @@ sub check_param_out {
 
             #May post:
             my $result = Sympa::Scenario::request_action(
-                $list, 'send',
-                $param->{'auth_method'},
-                {   'sender'      => $param->{'user'}{'email'},
+                that        => $list,
+                operation   => 'send',
+                auth_method => $param->{'auth_method'},
+                context     => {
+                    'sender'      => $param->{'user'}{'email'},
                     'remote_host' => $param->{'remote_host'},
                     'remote_addr' => $param->{'remote_addr'}
                 }
@@ -3400,9 +3432,11 @@ sub check_param_out {
 
         ## May review
         my $result = Sympa::Scenario::request_action(
-            $list, 'review',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'review',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
@@ -3417,41 +3451,43 @@ sub check_param_out {
 
         ## May signoff
         $result = Sympa::Scenario::request_action(
-            $list,
-            'unsubscribe',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'unsubscribe',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
         );
-        $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+        my $action = $result->{'action'} if (ref($result) eq 'HASH');
 
         if (!$param->{'user'}{'email'}) {
             $param->{'may_signoff'} = 1
-                if ($main::action =~ /do_it|owner|request_auth/);
+                if ($action =~ /do_it|owner|request_auth/);
 
         } elsif ($param->{'is_subscriber'}
             && ($param->{'subscriber'}{'subscribed'} == 1)) {
             $param->{'may_signoff'} = 1
-                if ($main::action =~ /do_it|owner|request_auth/);
+                if ($action =~ /do_it|owner|request_auth/);
             $param->{'may_suboptions'} = 1;
         }
 
         ## May Subscribe
         $result = Sympa::Scenario::request_action(
-            $list,
-            'subscribe',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'subscribe',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
         );
-        $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+        $action = $result->{'action'} if (ref($result) eq 'HASH');
 
         $param->{'may_subscribe'} = 1
-            if ($main::action =~ /do_it|owner|request_auth/);
+            if ($action =~ /do_it|owner|request_auth/);
 
 # SJS START
         ## May Add or del subscribers
@@ -3519,9 +3555,12 @@ sub check_param_out {
             ## Check if shared is publically accessible (useful information
             ## for RSS)
             my $result = Sympa::Scenario::request_action(
-                $list, 'shared_doc.d_read',
-                $param->{'auth_method'},
-                {'sender' => 'nobody'}
+                that        => $list,
+                operation   => 'shared_doc.d_read',
+                auth_method => $param->{'auth_method'},
+                context     => {
+                    'sender' => 'nobody'
+                }
             );
             my $r_action;
             if (ref($result) eq 'HASH') {
@@ -3581,7 +3620,7 @@ sub do_ticket {
             {last_login_date => time(), last_login_host => $ip});
     } elsif ($param->{'ticket_context'}{'result'} eq 'closed') {
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             '(%s) Refusing to perform login because the ticket has been used before',
             $in{'ticket'}
         );
@@ -3713,7 +3752,7 @@ sub do_login {
                 'error_type'   => 'authentication'
             }
         );
-        my $unauthenticated_user = Sympa::User::get_global_user($in{'email'});
+        my $unauthenticated_user = Sympa::User::get_global_user($in{'email'}, Sympa::Site->db_additional_user_fields);
         if ($unauthenticated_user->{'wrong_login_count'} >
             Conf::get_robot_conf($robot, 'max_wrong_password')) {
             $param->{'login_error'} = 'password_reset';
@@ -3763,7 +3802,7 @@ sub do_login {
                 %{$param->{'alt_emails'}}
             )
             ) {
-            wwslog('notice', 'Could not set HTTP cookie for external_auth');
+            wwslog(Sympa::Logger::NOTICE, 'Could not set HTTP cookie for external_auth');
             web_db_log(
                 {   'parameters' => $param->{'cookie_domain'} . ','
                         . join(',',
@@ -4174,7 +4213,7 @@ sub do_sso_login {
                     Sympa::Report::reject_report_web('intern',
                         'auth_conf_no_identified_user',
                         {}, $param->{'action'}, '', '', $robot);
-                    wwslog('err',
+                    wwslog(Sympa::Logger::ERR,
                         'auth.conf error: Either email_http_header or host/get_email_by_uid_filter entries should be defined'
                     );
                     web_db_log(
@@ -4196,7 +4235,7 @@ sub do_sso_login {
             Sympa::Report::reject_report_web('intern', 'no_identified_user',
                 {}, $param->{'action'}, '', '', $robot);
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'User could not be identified, no %s HTTP header set',
                 $Conf::Conf{'auth_services'}{$robot}[$sso_id]
                     {'email_http_header'}
@@ -4215,7 +4254,7 @@ sub do_sso_login {
         $session->{'email'}       = $email;
         $session->{'auth'}        = 'generic_sso';
 
-        wwslog('notice', 'User identified as %s', $email);
+        wwslog(Sympa::Logger::NOTICE, 'User identified as %s', $email);
 
         ## There are two ways to list the attributes that Sympa will cache for
         ## the user
@@ -4304,7 +4343,7 @@ sub do_sso_login {
             $param->{'action'}, '', '', $robot
         );
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Unknown authentication service %s',
             $in{'auth_service_name'}
         );
@@ -4415,7 +4454,7 @@ sub is_ldap_user {
         );
 
         unless ($mesg and $mesg->count()) {
-            wwslog('notice',
+            wwslog(Sympa::Logger::NOTICE,
                 'No entry in the LDAP Directory Tree of %s for %s',
                 $ldap->{'host'}, $auth);
             $db->disconnect();
@@ -4621,7 +4660,7 @@ sub sendssopasswd {
 
     my $url_redirect;
 
-    if ($param->{'newuser'} = Sympa::User::get_global_user($email)) {
+    if ($param->{'newuser'} = Sympa::User::get_global_user($email), Sympa::Site->db_additional_user_fields) {
 
         ## Create a password if none
         unless ($param->{'newuser'}{'password'}) {
@@ -4658,7 +4697,6 @@ sub sendssopasswd {
         $param->{'newuser'} = {
             'email'         => $email,
             'escaped_email' => tools::escape_chars($email),
-            'password'      => Sympa::Tools::Password::tmp_passwd($email)
         };
 
     }
@@ -4789,7 +4827,7 @@ sub do_requestpasswd {
             $param->{'login_error'} = 'unable_to_send_ticket';
         }
     } else {
-        wwslog('notice', "Unable to create_one_time_ticket");
+        wwslog(Sympa::Logger::NOTICE, "Unable to create_one_time_ticket");
         Sympa::Report::reject_report_web('user', 'passwd_reminder_error', {},
             $param->{'action'});
         $param->{'login_error'} = 'unable_to_create_ticket';
@@ -4826,10 +4864,11 @@ sub do_which {
             my $l = $list->{'name'};
 
             my $result = Sympa::Scenario::request_action(
-                $list,
-                'visibility',
-                $param->{'auth_method'},
-                {   'sender'      => $param->{'user'}{'email'},
+                that        => $list,
+                operation   => 'visibility',
+                auth_method => $param->{'auth_method'},
+                context     => {
+                    'sender'      => $param->{'user'}{'email'},
                     'remote_host' => $param->{'remote_host'},
                     'remote_addr' => $param->{'remote_addr'}
                 }
@@ -4923,13 +4962,13 @@ sub do_lists {
         my $sender = $param->{'user'}{'email'} || 'nobody';
 
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'visibility',
-            $param->{'auth_method'},
-            {   'sender'      => $sender,
+            that        => $list,
+            operation   => 'visibility',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $sender,
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'},
-                'options'     => {'dont_reload_scenario' => 1}
             }
         );
 
@@ -4990,7 +5029,7 @@ sub do_lists {
 
 ## The list of latest created lists
 sub do_latest_lists {
-    wwslog('info',
+    wwslog(Sympa::Logger::INFO,
         "do_latest_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})"
     );
 
@@ -5058,7 +5097,7 @@ sub do_latest_lists {
 
 ## The list of the most active lists
 sub do_active_lists {
-    wwslog('info',
+    wwslog(Sympa::Logger::INFO,
         "do_active_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})"
     );
 
@@ -5590,7 +5629,7 @@ sub do_choosepasswd {
 #
 # IN : -
 #
-# OUT :'loginrequest'|'info' | undef
+# OUT :'loginrequest'|'info'| undef
 
 sub do_set {
     wwslog('info', '(%s, %s)', $in{'reception'}, $in{'visibility'});
@@ -5710,7 +5749,7 @@ sub do_set {
         ## Duplicate entry in user_table
         unless (Sympa::User::is_global_user($in{'new_email'})) {
 
-            my $user_pref = Sympa::User::get_global_user($in{'email'});
+            my $user_pref = Sympa::User::get_global_user($in{'email'}, Sympa::Site->db_additional_user_fields);
             $user_pref->{'email'} = $in{'new_email'};
             Sympa::User::add_global_user($user_pref);
         }
@@ -5973,12 +6012,12 @@ sub do_subscribe {
             ## If not set, it means that the user has not been prompted to
             ## provide custom_attributes
             unless ($in{'via_subrequest'}) {
-                wwslog('notice', 'Returning subrequest form');
+                wwslog(Sympa::Logger::NOTICE, 'Returning subrequest form');
                 return "subrequest";
             }
 
             if (check_custom_attribute() != 1) {
-                wwslog('notice', "Missing required custom attributes");
+                wwslog(Sympa::Logger::NOTICE, "Missing required custom attributes");
                 return 'subrequest';
             }
             my $xml =
@@ -6129,7 +6168,7 @@ sub do_subscribe {
                         $robot
                     );
                     wwslog(
-                        'info',
+                        Sympa::Logger::INFO,
                         'Subscribe failed: %s',
                         $list->{'add_outcome'}{'errors'}{'error_message'}
                     );
@@ -6230,7 +6269,7 @@ sub do_suboptions {
             {'list' => $list->{'name'}},
             $param->{'action'}, $list);
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             '%s not subscribed to %s',
             $param->{'user'}{'email'},
             $param->{'list'}
@@ -6358,7 +6397,7 @@ sub do_subrequest {
             return 1;
         }
         my $user;
-        $user = Sympa::User::get_global_user($in{'email'})
+        $user = Sympa::User::get_global_user($in{'email'}, Sympa::Site->db_additional_user_fields)
             if Sympa::User::is_global_user($in{'email'});
 
         ## Need to send a password by email
@@ -6399,10 +6438,11 @@ sub do_auto_signoff {
     ## If unsubscribe is forbidden, reject the request. Other
 
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'unsubscribe',
-        $param->{'auth_method'},
-        {   'sender'      => $in{'email'},
+        that        => $list,
+        operation   => 'unsubscribe',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $in{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -6593,7 +6633,7 @@ sub unsubscribe {
 
     unless ($list->is_list_member($authenticated_email_address)) {
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             '%s not subscribed to %s',
             $param->{'user'}{'email'},
             $param->{'list'}
@@ -6611,10 +6651,11 @@ sub unsubscribe {
     }
 
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'unsubscribe',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+        that        => $list,
+        operation   => 'unsubscribe',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -6630,7 +6671,7 @@ sub unsubscribe {
 
     if ($sig_is =~ /reject/) {
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             '%s may not signoff from %s',
             $param->{'user'}{'email'},
             $param->{'list'}
@@ -6877,7 +6918,7 @@ sub do_admin {
 
     ## Messages edition
     foreach my $f (
-        'info',           'homepage',
+        Sympa::Logger::INFO,           'homepage',
         'welcome.tt2',    'bye.tt2',
         'removed.tt2',    'message.footer',
         'message.header', 'remind.tt2',
@@ -6961,7 +7002,7 @@ sub do_edit_config {
             'super lismaster feature only',
             {}, $param->{'action'});
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'Access denied in edit_config for %s because not super listmaster',
             $param->{'user'}{'email'}
         );
@@ -7120,7 +7161,7 @@ sub do_restore_email {
         $param->{'redirect_to'} = $param->{'base_url'} . $param->{'path_cgi'};
     } else {
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'From %s no restore_email attached to current session',
             $param->{'user'}{'email'}
         );
@@ -7200,7 +7241,7 @@ sub do_remove_template {
         return 1;
     }
     $template_path =
-        tools::get_template_path($in{'webormail'}, $robot, $in{'scope'},
+        Sympa::Tools::WWW::get_template_path($in{'webormail'}, $robot, $in{'scope'},
         $in{'template_name'}, $in{'tpl_lang'}, $list);
 
     my $template_old_path =
@@ -7237,7 +7278,7 @@ sub do_remove_template {
 
 # show a template, used by copy_template and edit_emplate
 sub do_view_template {
-    wwslog('info',
+    wwslog(Sympa::Logger::INFO,
         "do_view_template(type=$in{'webormail'},template-name=$in{'template_name'},listname=$in{'list'},path=$in{'template_path'},scope=$in{'scope'},lang=$in{'tpl_lang'})"
     );
 
@@ -7257,7 +7298,7 @@ sub do_view_template {
         return 1;
     }
     $template_path =
-        tools::get_template_path($in{'webormail'}, $robot, $in{'scope'},
+        Sympa::Tools::WWW::get_template_path($in{'webormail'}, $robot, $in{'scope'},
         $in{'template_name'}, $in{'tpl_lang'}, $list);
 
     unless ($template_path and open(TPL, $template_path)) {
@@ -7330,7 +7371,7 @@ sub do_copy_template {
                 return undef;
             }
             $param->{'template_path_out'} =
-                tools::get_template_path($in{'webormail'}, $robot, 'list',
+                Sympa::Tools::WWW::get_template_path($in{'webormail'}, $robot, 'list',
                 $in{'template_name_out'},
                 $in{'tpl_lang_out'}, $list_out);
         } else {
@@ -7348,7 +7389,7 @@ sub do_copy_template {
         }
     } else {
         $param->{'template_path_out'} =
-            tools::get_template_path($in{'webormail'}, $robot,
+            Sympa::Tools::WWW::get_template_path($in{'webormail'}, $robot,
             $in{'scope_out'}, $in{'template_name_out'},
             $in{'tpl_lang_out'});
     }
@@ -7366,7 +7407,7 @@ sub do_copy_template {
             $robot
         );
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Can\'t create parent directory for %s: %s',
             $param->{'template_path_out'}, $ERRNO
         );
@@ -7390,7 +7431,7 @@ sub do_copy_template {
             $robot
         );
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Can\'t open file %s: %s',
             $param->{'template_path_out'}, $ERRNO
         );
@@ -7435,8 +7476,16 @@ sub do_copy_template {
         {   'parameters' => $param->{'template_name_out'},
             'status'     => 'success'
         }
-    );
-    return ('edit_template');
+
+	$language->pop_lang;
+    }
+
+    $param->{'scope'} = $in{'scope'} = $in{'scope_out'} ;
+    $param->{'template_path'} = $in{'template_path'} = $param->{'template_path_out'};
+    $param->{'template_name'} = $in{'template_name'} = $in{'template_name_out'};
+    &web_db_log({'parameters' => $param->{'template_name_out'},
+		 'status' => 'success'});
+    return ('edit_template');    
 }
 
 ## manage the rejection templates
@@ -7451,7 +7500,7 @@ sub do_manage_template {
         my $escaped_template_path = $in{'message_template'};
         $escaped_template_path =~ s/\s/_/g;
         $param->{'template_path'} =
-            tools::get_template_path('mail', $robot, 'list',
+            Sympa::Tools::WWW::get_template_path('mail', $robot, 'list',
             'reject_' . $escaped_template_path . '.tt2',
             '', $list);
     }
@@ -7472,7 +7521,7 @@ sub do_manage_template {
                 $robot
             );
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Can\'t create parent directory for %s: %s',
                 $param->{'template_path'}, $ERRNO
             );
@@ -7496,7 +7545,7 @@ sub do_manage_template {
                 $robot
             );
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Can\'t open file %s: %s',
                 $param->{'template_path'}, $ERRNO
             );
@@ -7527,7 +7576,7 @@ sub do_manage_template {
         my $escaped_template_path = $in{'new_template_name'};
         $escaped_template_path =~ s/\s/_/g;
         my $new_template_path =
-            tools::get_template_path('mail', $robot, 'list',
+            Sympa::Tools::WWW::get_template_path('mail', $robot, 'list',
             'reject_' . $escaped_template_path . '.tt2',
             '', $list);
 
@@ -7552,7 +7601,7 @@ sub do_manage_template {
                 $robot
             );
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Can\'t create parent directory for %s: %s',
                 $param->{'template_path'}, $ERRNO
             );
@@ -7607,7 +7656,7 @@ sub do_manage_template {
                 $robot
             );
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Can\'t open file MODIFY %s: %s',
                 $param->{'template_path'}, $ERRNO
             );
@@ -7641,7 +7690,7 @@ sub do_manage_template {
         );
         if (-l $base . 'reject.tt2') {
             unless (unlink($base . 'reject.tt2')) {
-                wwslog('err', 'Could not unlink %s', $base . 'reject.tt2');
+                wwslog(Sympa::Logger::ERR, 'Could not unlink %s', $base . 'reject.tt2');
             }
         }
         unless (symlink($absolute_file, $base . 'reject.tt2')) {
@@ -7656,7 +7705,7 @@ sub do_manage_template {
                 {'file_del' => $param->{'template_path'}},
                 '', '', '', $robot);
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Can\'t open file %s: %s',
                 $param->{'template_path'}, $ERRNO
             );
@@ -7688,13 +7737,13 @@ sub do_manage_template {
                 } else {
                     # link to no existing file. remove link
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Link %s point to un no existing file (%s)',
                         $base . 'reject.tt2', $default
                     );
                     unless (unlink($absolute_file)) {
                         wwslog(
-                            'err',
+                            Sympa::Logger::ERR,
                             'Could not unlink %s',
                             $base . 'reject.tt2'
                         );
@@ -7707,7 +7756,7 @@ sub do_manage_template {
                 unless (rename($absolute_file, $base . 'reject_default.tt2'))
                 {
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Could not rename %, %s',
                         $base . 'reject.tt2',
                         $base . 'reject_default.tt2'
@@ -7716,7 +7765,7 @@ sub do_manage_template {
                 unless (symlink($base . 'reject_default.tt2', $absolute_file))
                 {
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Could not symlink %s, %s',
                         $base . 'reject_default.tt2',
                         $absolute_file
@@ -7743,7 +7792,7 @@ sub do_edit_template {
 
     $in{'subdir'} ||= 'default';
 
-    wwslog('info',
+    wwslog(Sympa::Logger::INFO,
         "do_edit_template(type=$in{'webormail'},template-name=$in{'template_name'},listname=$in{'list'},path=$in{'template_path'},scope=$in{'scope'},lang=$in{'tpl_lang'})"
     );
 
@@ -7766,7 +7815,7 @@ sub do_edit_template {
         return undef;
     }
     $param->{'template_path'} =
-        tools::get_template_path($in{'webormail'}, $robot, $in{'scope'},
+        Sympa::Tools::WWW::get_template_path($in{'webormail'}, $robot, $in{'scope'},
         $in{'template_name'}, $in{'tpl_lang'}, $list);
 
     unless ($param->{'template_path'}
@@ -8042,21 +8091,23 @@ sub do_add {
     my ($total, @new_users, @added_users);
     my $comma_emails;
     foreach my $email (keys %user) {
-        wwslog('debug',
+        wwslog(Sympa::Logger::DEBUG,
             "do_add subscription \$subscriptions->{$email}{custom_attribute} = $subscriptions->{$email}{'custom_attribute'})"
         );
         if (ref($subscriptions->{$email}{'custom_attribute'}) eq 'HASH') {
             my $xml = Sympa::List::createXMLCustomAttribute(
                 $subscriptions->{$email}{'custom_attribute'});
-            wwslog('debug',
+            wwslog(Sympa::Logger::DEBUG,
                 "do_add subscription XML \$subscriptions->{$email}{custom_attribute} = $xml;"
             );
         }
 
         my $result = Sympa::Scenario::request_action(
-            $list, 'add',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'add',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'email'       => $in{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
@@ -8113,7 +8164,7 @@ sub do_add {
             next;
         }
 
-        my $u2       = Sympa::User::get_global_user($email);
+        my $u2       = Sympa::User::get_global_user($email, Sympa::Site->db_additional_user_fields);
         my $defaults = $list->get_default_user_options();
         my $u;
         %{$u} = %{$defaults};
@@ -8172,7 +8223,7 @@ sub do_add {
             {'sub' => $param->{'user'}{'email'}},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'Subscribe failed: %s',
             $list->{'add_outcome'}{'errors'}{'error_message'}
         );
@@ -8226,9 +8277,11 @@ sub do_del {
     $in{'email'} = tools::unescape_chars($in{'email'});
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'del',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+        that        => $list,
+        operation   => 'del',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'email'       => $in{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
@@ -8287,7 +8340,7 @@ sub do_del {
         if (-f $bounce_dir . '/' . $escaped_email) {
             unless (unlink $bounce_dir . '/' . $escaped_email) {
                 wwslog(
-                    'info',
+                    Sympa::Logger::INFO,
                     'Failed deleting %s',
                     $bounce_dir . '/' . $escaped_email
                 );
@@ -8306,7 +8359,7 @@ sub do_del {
 
         unless ($in{'quiet'}) {
             unless (Sympa::send_file($list, 'removed', $email, {})) {
-                wwslog('notice', 'Unable to send template "removed" to %s',
+                wwslog(Sympa::Logger::NOTICE, 'Unable to send template "removed" to %s',
                     $email);
             }
         }
@@ -8474,13 +8527,13 @@ sub do_modindex {
                 } else {
                     # link to no existing file. remove link
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Link %s point to un no existing file (%s)',
                         $base . 'reject.tt2', $default
                     );
                     unless (unlink($absolute_file)) {
                         wwslog(
-                            'err',
+                            Sympa::Logger::ERR,
                             'Could not unlink %s',
                             $base . 'reject.tt2'
                         );
@@ -8493,7 +8546,7 @@ sub do_modindex {
                 unless (rename($absolute_file, $base . 'reject_default.tt2'))
                 {
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Could not rename %, %s',
                         $base . 'reject.tt2',
                         $base . 'reject_default.tt2'
@@ -8502,7 +8555,7 @@ sub do_modindex {
                 unless (symlink($base . 'reject_default.tt2', $absolute_file))
                 {
                     wwslog(
-                        'err',
+                        Sympa::Logger::ERR,
                         'Could not symlink %s, %s',
                         $base . 'reject_default.tt2',
                         $absolute_file
@@ -8746,7 +8799,7 @@ sub do_d_install_shared {
                     $list, 'd_install_shared', $sender, \%context
                 )
                 ) {
-                wwslog('notice',
+                wwslog(Sympa::Logger::NOTICE,
                     'Unable to send template "d_install_shared" to %s',
                     $sender);
             }
@@ -8796,7 +8849,7 @@ sub do_d_reject_shared {
                     $list, 'd_reject_shared', $sender, \%context
                 )
                 ) {
-                wwslog('notice',
+                wwslog(Sympa::Logger::NOTICE,
                     'Unable to send template "d_reject_shared" to %s',
                     $sender);
             }
@@ -8826,7 +8879,7 @@ sub do_d_reject_shared {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_reject_shared: failed to erase $shareddir$slash_path.desc.$fname"
             );
             web_db_log(
@@ -8892,7 +8945,7 @@ sub do_reject {
         my $message = undef;
         $message = Sympa::Message->new_from_file($file, context => $list)
             if $file;
-        unless ($message) {
+        unless ($message && $message->has_valid_sender()) {
             Sympa::Report::reject_report_web('user', 'already_moderated', {},
                 $param->{'action'});
             wwslog('err', 'Unable to open %s', $file);
@@ -9069,10 +9122,10 @@ sub do_distribute {
         my $message = undef;
         $message = Sympa::Message->new_from_file($file, context => $list)
             if $file;
-        unless ($message) {
+        unless ($message && $message->has_valid_sender()) {
             Sympa::Report::reject_report_web('user', 'already_moderated', {},
                 $param->{'action'});
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 'Unable to find message in spool mod with authkey %s', $id);
             web_db_log(
                 {   'parameters' => $id,
@@ -9196,10 +9249,10 @@ sub do_add_frommod {
 #                filter => [context => $list, authkey => $id]);
 #            $message = $validatedspool->next;
 #        }
-        unless ($message) {
+        unless ($message && $message->has_valid_sender()) {
             Sympa::Report::reject_report_web('user', 'already_moderated', {},
                 $param->{'action'});
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 'No message with authkey %s.  It may be already moderated',
                 $id);
             web_db_log(
@@ -9318,7 +9371,7 @@ sub do_editfile {
     $param->{'subtitle'} = sprintf $param->{'subtitle'}, $in{'file'};
 
     my %files = (
-        description_templates => ['info', 'homepage'],
+        description_templates => [Sympa::Logger::INFO, 'homepage'],
         message_templates     => [
             'welcome.tt2',    'bye.tt2',
             'removed.tt2',    'message.footer',
@@ -9327,7 +9380,7 @@ sub do_editfile {
             'your_infected_msg.tt2'
         ],
         all_templates => [
-            'info',           'homepage',
+            Sympa::Logger::INFO,           'homepage',
             'welcome.tt2',    'bye.tt2',
             'removed.tt2',    'message.footer',
             'message.header', 'remind.tt2',
@@ -9705,10 +9758,11 @@ sub do_arc {
 
     # Check authorization for tracking.
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'tracking.tracking',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+        that        => $list,
+        operation   => 'tracking.tracking',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -10095,7 +10149,7 @@ sub do_remove_arc {
     }
 
     wwslog(
-        'info',
+        Sympa::Logger::INFO,
         '%d messages marked to be removed by archived',
         scalar @msgids
     );
@@ -10190,7 +10244,7 @@ sub do_send_me {
         unless (defined $bulk->store($message, $param->{'user'}{'email'})) {
             $param->{'status'} = 'message_err';
             wwslog(
-                'err',
+                Sympa::Logger::ERR,
                 'Impossible to send archive file to %s',
                 $param->{'user'}{'email'}
             );
@@ -10284,10 +10338,11 @@ sub do_tracking {
 
     ## Access control
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'tracking.tracking',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+        that        => $list,
+        operation   => 'tracking.tracking',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -10346,7 +10401,7 @@ sub do_tracking {
         Sympa::Report::reject_report_web('user',
             'could_not_get_tracking_info', {}, $param->{'action'}, $list,
             $param->{'user'}{'email'}, $robot);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "could not get tracking info for message_id $in{'msgid'} and list $in{'list'}"
         );
         delete $param->{'tracking_info'};
@@ -10700,7 +10755,7 @@ sub do_get_inactive_lists {
 
         } else {
             wwslog(
-                'info',
+                Sympa::Logger::INFO,
                 'Could not open file %s',
                 $list->{'dir'} . '/msg_count'
             );
@@ -10815,7 +10870,7 @@ sub do_install_pending_list {
         Sympa::Report::reject_report_web('user', 'missing_arg',
             {'argument' => 'status'},
             $param->{'action'});
-        wwslog('info', 'Missing status parameter',);
+        wwslog(Sympa::Logger::INFO, 'Missing status parameter',);
         web_db_log(
             {   'parameters' => "$in{'status'},$in{'notify'}",
                 'status'     => 'error',
@@ -10877,7 +10932,7 @@ sub do_install_pending_list {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err', 'Failed to install list aliases');
+            wwslog(Sympa::Logger::ERR, 'Failed to install list aliases');
         }
 
     }
@@ -10887,12 +10942,12 @@ sub do_install_pending_list {
         Conf::get_robot_conf($robot, 'listmaster');
     if ($in{'status'} eq 'open') {
         unless (Sympa::send_file($list, 'list_created', \@listmasters, {})) {
-            wwslog('notice',
+            wwslog(Sympa::Logger::NOTICE,
                 'Unable to send template "list_created" to listmaster');
         }
     } elsif ($in{'status'} eq 'closed') {
         unless (Sympa::send_file($list, 'list_rejected', \@listmasters, {})) {
-            wwslog('notice',
+            wwslog(Sympa::Logger::NOTICE,
                 'Unable to send template "list_rejected" to listmaster');
         }
     }
@@ -10908,7 +10963,7 @@ sub do_install_pending_list {
                         $list, 'list_created', $i->{'email'}, {}
                     )
                     ) {
-                    wwslog('notice',
+                    wwslog(Sympa::Logger::NOTICE,
                         "Unable to send template 'list_created' to $i->{'email'}"
                     );
                 }
@@ -10918,7 +10973,7 @@ sub do_install_pending_list {
                         $list, 'list_rejected', $i->{'email'}, {}
                     )
                     ) {
-                    wwslog('notice',
+                    wwslog(Sympa::Logger::NOTICE,
                         "Unable to send template 'list_rejected' to $i->{'email'}"
                     );
                 }
@@ -11147,7 +11202,7 @@ sub do_create_list {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err', 'Failed to install list aliases');
+            wwslog(Sympa::Logger::ERR, 'Failed to install list aliases');
         }
     }
 
@@ -11212,11 +11267,24 @@ sub do_create_list {
 sub do_create_list_request {
     wwslog('info', '');
 
-    my $result = Sympa::Scenario::request_action(
-        $robot,
-        'create_list',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+    my $scenario = Sympa::Scenario->new(
+        that     => $robot,
+        function => 'create_list',
+        name     => $robot->create_list(),
+    );
+    unless ($scenario) {
+        $main::logger->do_log(
+            Sympa::Logger::ERR,
+            'Failed to load scenario for "create_list"');
+        return undef;
+    }
+
+    my $result = $scenario->evaluate(
+        that        => $robot,
+        operation   => 'create_list',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -11390,7 +11458,7 @@ sub do_editsubscriber {
     $param->{'current_subscriber'}{'visibility'} ||= 'noconceal';
 
     ## Get language from user_table
-    my $user = Sympa::User::get_global_user($in{'email'});
+    my $user = Sympa::User::get_global_user($in{'email'}, Sympa::Site->db_additional_user_fields);
     $language->push_lang($user->{'lang'});
     $param->{'current_subscriber'}{'lang'} = $language->native_name;
     $language->pop_lang;
@@ -11747,7 +11815,7 @@ sub do_resetbounce {
 
         unless (unlink $bounce_dir . '/' . $escaped_email) {
             wwslog(
-                'info',
+                Sympa::Logger::INFO,
                 'Failed deleting %s',
                 $bounce_dir . '/' . $escaped_email
             );
@@ -11868,10 +11936,11 @@ sub do_search_list {
     foreach my $list (@$all_lists) {
         my $is_admin = 0;
         my $result   = Sympa::Scenario::request_action(
-            $list,
-            'visibility',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'visibility',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
@@ -11990,7 +12059,7 @@ sub do_edit_list {
             {'email' => $list->{'admin'}{'update'}{'email'}},
             $param->{'action'}, $list);
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'Config file has been modified(%d => %d) by %s. Cannot apply changes',
             $in{'single_param.serial'},
             $list->{'admin'}{'serial'},
@@ -12285,7 +12354,7 @@ sub do_edit_list {
                                     if (defined($new_p->[$i]{$key}[$index])
                                         && $new_p->[$i]{$key}[$index] !~
                                         /^$format$/i) {
-                                        wwslog('err',
+                                        wwslog(Sympa::Logger::ERR,
                                             "Syntax error : $pname/$i/$key/$index = $new_p->[$i]{$key}[$index]"
                                         );
                                         push @syntax_error, $pname;
@@ -12320,7 +12389,7 @@ sub do_edit_list {
                                 ## syntax is correct.
                                 if (defined($new_p->[$i]{$key})
                                     && $new_p->[$i]{$key} !~ /^$format$/i) {
-                                    wwslog('err',
+                                    wwslog(Sympa::Logger::ERR,
                                         "Syntax error : $pname/$i/$key = $new_p->[$i]{$key}"
                                     );
                                     push @syntax_error, $pname;
@@ -12361,7 +12430,7 @@ sub do_edit_list {
     unless (keys %changed) {
         Sympa::Report::reject_report_web('user', 'no_parameter_edited', {},
             $param->{'action'}, $list);
-        wwslog('info', 'No parameter was edited by user');
+        wwslog(Sympa::Logger::INFO, 'No parameter was edited by user');
         return 'edit_list_request';
     }
 
@@ -12371,7 +12440,7 @@ sub do_edit_list {
             {'params' => join(',', @syntax_error)},
             $param->{'action'}, $list);
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'Syntax errors for parameters %s',
             join(',', @syntax_error)
         );
@@ -12495,7 +12564,7 @@ sub do_edit_list {
                 'update_config_changes', {}, $param->{'action'}, $list,
                 $param->{'user'}{'email'}, $robot);
             wwslog(
-                'info',
+                Sympa::Logger::INFO,
                 'Cannot write in config_changes for deleted parameters from list %s',
                 $list->{'name'}
             );
@@ -12581,7 +12650,7 @@ sub do_edit_list {
                     'update_config_changes', {}, $param->{'action'}, $list,
                     $param->{'user'}{'email'}, $robot);
                 wwslog(
-                    'info',
+                    Sympa::Logger::INFO,
                     'Cannot write in config_changes for changed parameters from list %s',
                     $list->{'name'}
                 );
@@ -12803,7 +12872,7 @@ sub _check_new_values {
                                 {'param' => $pname, 'val' => $p},
                                 $param->{'action'});
                             wwslog(
-                                'info',
+                                Sympa::Logger::INFO,
                                 'Parameter %s has got wrong value: %s (family context)',
                                 $pname,
                                 $p
@@ -12819,7 +12888,7 @@ sub _check_new_values {
                             {'param' => $pname, 'val' => $p_val},
                             $param->{'action'});
                         wwslog(
-                            'info',
+                            Sympa::Logger::INFO,
                             'Parameter %s has got wrong value: %s (family context)',
                             $pname,
                             $p_val
@@ -12853,7 +12922,7 @@ sub _check_new_values {
                             {'param' => $pname, 'val' => $p},
                             $param->{'action'});
                         wwslog(
-                            'info',
+                            Sympa::Logger::INFO,
                             'Parameter %s has got wrong value: %s (family context)',
                             $pname,
                             $p
@@ -12868,7 +12937,7 @@ sub _check_new_values {
                         {'param' => $pname, 'val' => $p_val},
                         $param->{'action'});
                     wwslog(
-                        'info',
+                        Sympa::Logger::INFO,
                         'Parameter %s has got wrong value: %s (family context)',
                         $pname,
                         $p_val
@@ -13203,7 +13272,7 @@ sub _prepare_data {
                     }
 
                     push @{$data2}, $empty_entry;
-                    ## wwslog('debug2', 'Add 1 %s', $name);
+                    ## wwslog(Sympa::Logger::DEBUG2, 'Add 1 %s', $name);
                 }
             }
         } else {
@@ -13226,15 +13295,15 @@ sub _prepare_data {
             $p_glob->{'type'} = 'scenario';
             my $list_of_scenario;
 
-            my $tmp_list_of_scenario =
+            my @scenarios =
                 $list->load_scenario_list($struct->{'scenario'}, $robot);
 
             ## Only get required scenario attributes
-            foreach my $scenario (keys %{$tmp_list_of_scenario}) {
-                $list_of_scenario->{$scenario} = {
-                    'name'      => $tmp_list_of_scenario->{$scenario}{'name'},
-                    'web_title' => $tmp_list_of_scenario->{$scenario}
-                        ->get_current_title()
+            foreach my $scenario (@scenarios) {
+                my $name  = $scenario->{name};
+                $list_of_scenario->{$scenario->{name}} = {
+                    'name'      => $scenario->{name},
+                    'web_title' => $scenario->get_current_title()
                 };
             }
 
@@ -13402,11 +13471,25 @@ sub do_close_list_request {
 sub do_rename_list_request {
     wwslog('info', '');
 
-    my $result = Sympa::Scenario::request_action(
-        $robot,
-        'create_list',
-        $param->{'auth_method'},
-        {   'sender'      => $param->{'user'}{'email'},
+    my $scenario = Sympa::Scenario->new(
+        that     => $robot,
+        function => 'create_list',
+        name     => $robot->create_list()
+    );
+    unless ($scenario) {
+        $main::logger->do_log(
+            Sympa::Logger::ERR,
+            'Failed to load scenario for "create_list"'
+        );
+        return undef;
+    }
+
+    my $result = $scenario->evaluate(
+        that        => $robot,
+        operation   => 'create_list',
+        auth_method => $param->{'auth_method'},
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -13536,7 +13619,7 @@ sub do_rename_list {
             {'new_listname' => $in{'new_listname'}},
             $param->{'action'}, $list);
         wwslog(
-            'info',
+            Sympa::Logger::INFO,
             'Could not rename list %s for %s: new list %s already existing list',
             $in{'listname'},
             $param->{'user'}{'email'},
@@ -13657,7 +13740,7 @@ sub do_close_list {
             Sympa::Report::reject_report_web('intern', 'cannot_close_list',
                 {}, $param->{'action'}, $list, $param->{'user'}{'email'},
                 $robot);
-            wwslog('err', 'Cannot close list %s', $list->get_list_id());
+            wwslog(Sympa::Logger::ERR, 'Cannot close list %s', $list->get_id());
             web_db_log(
                 {   'status'     => 'error',
                     'error_type' => 'unknown'
@@ -13694,7 +13777,7 @@ sub do_restore_list {
     $list->save_config($param->{'user'}{'email'});
 
     unless (-f $list->{'dir'} . '/subscribers.closed.dump') {
-        wwslog('notice', 'No subscribers to restore');
+        wwslog(Sympa::Logger::NOTICE, 'No subscribers to restore');
         web_db_log(
             {   'status'     => 'error',
                 'error_type' => 'no_subscribers'
@@ -13835,10 +13918,11 @@ sub d_access_control {
     # if not privileged owner
     if ($mode_read) {
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'shared_doc.d_read',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'shared_doc.d_read',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
@@ -13854,10 +13938,11 @@ sub d_access_control {
 
     if ($mode_edit) {
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'shared_doc.d_edit',
-            $param->{'auth_method'},
-            {   'sender'      => $param->{'user'}{'email'},
+            that        => $list,
+            operation   => 'shared_doc.d_edit',
+            auth_method => $param->{'auth_method'},
+            context     => {
+                'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
             }
@@ -13926,10 +14011,11 @@ sub d_access_control {
 
             if ($mode_read) {
                 my $result = Sympa::Scenario::request_action(
-                    $list,
-                    'shared_doc.d_read',
-                    $param->{'auth_method'},
-                    {   'sender'      => $param->{'user'}{'email'},
+                    that        => $list,
+                    operation   => 'shared_doc.d_read',
+                    auth_method => $param->{'auth_method'},
+                    context     => {
+                        'sender'      => $param->{'user'}{'email'},
                         'remote_host' => $param->{'remote_host'},
                         'remote_addr' => $param->{'remote_addr'},
                         'scenario'    => $desc_hash{'read'}
@@ -13947,10 +14033,11 @@ sub d_access_control {
 
             if ($mode_edit) {
                 my $result = Sympa::Scenario::request_action(
-                    $list,
-                    'shared_doc.d_edit',
-                    $param->{'auth_method'},
-                    {   'sender'      => $param->{'user'}{'email'},
+                    that        => $list,
+                    operation   => 'shared_doc.d_edit',
+                    auth_method => $param->{'auth_method'},
+                    context     => {
+                        'sender'      => $param->{'user'}{'email'},
                         'remote_host' => $param->{'remote_host'},
                         'remote_addr' => $param->{'remote_addr'},
                         'scenario'    => $desc_hash{'edit'}
@@ -14209,7 +14296,7 @@ sub do_d_read {
             {'status' => $list->{'admin'}{'status'}},
             $param->{'action'}, $list);
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Access denied for %s because list is not open',
             $param->{'user'}{'email'}
         );
@@ -14224,7 +14311,7 @@ sub do_d_read {
 
     ### Document exists ?
     unless (-r "$doc") {
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_read : unable to read $shareddir/$path : no such file or directory"
         );
         Sympa::Report::reject_report_web('user', 'no_such_document',
@@ -14396,10 +14483,11 @@ sub do_d_read {
                         Sympa::Tools::WWW::get_desc_file("$path_doc/.desc");
 
                     my $result = Sympa::Scenario::request_action(
-                        $list,
-                        'shared_doc.d_read',
-                        $param->{'auth_method'},
-                        {   'sender'      => $param->{'user'}{'email'},
+                        that        => $list,
+                        operation   => 'shared_doc.d_read',
+                        auth_method => $param->{'auth_method'},
+                        context     => {
+                            'sender'      => $param->{'user'}{'email'},
                             'remote_host' => $param->{'remote_host'},
                             'remote_addr' => $param->{'remote_addr'},
                             'scenario'    => $desc_hash{'read'}
@@ -14450,10 +14538,11 @@ sub do_d_read {
 
                         if ($param->{'user'}{'email'}) {
                             my $result = Sympa::Scenario::request_action(
-                                $list,
-                                'shared_doc.d_edit',
-                                $param->{'auth_method'},
-                                {   'sender' => $param->{'user'}{'email'},
+                                that        => $list,
+                                operation   => 'shared_doc.d_edit',
+                                auth_method => $param->{'auth_method'},
+                                context     => {
+                                    'sender' => $param->{'user'}{'email'},
                                     'remote_host' => $param->{'remote_host'},
                                     'remote_addr' => $param->{'remote_addr'},
                                     'scenario'    => $desc_hash{'edit'}
@@ -14521,10 +14610,11 @@ sub do_d_read {
                         Sympa::Tools::WWW::get_desc_file("$doc/.desc.$d");
 
                     my $result = Sympa::Scenario::request_action(
-                        $list,
-                        'shared_doc.d_read',
-                        $param->{'auth_method'},
-                        {   'sender'      => $param->{'user'}{'email'},
+                        that        => $list,
+                        operation   => 'shared_doc.d_read',
+                        auth_method => $param->{'auth_method'},
+                        context     => {
+                            'sender'      => $param->{'user'}{'email'},
                             'remote_host' => $param->{'remote_host'},
                             'remote_addr' => $param->{'remote_addr'},
                             'scenario'    => $desc_hash{'read'}
@@ -14598,10 +14688,11 @@ sub do_d_read {
 
                         if ($param->{'user'}{'email'}) {
                             my $result = Sympa::Scenario::request_action(
-                                $list,
-                                'shared_doc.d_edit',
-                                $param->{'auth_method'},
-                                {   'sender' => $param->{'user'}{'email'},
+                                that        => $list,
+                                operation   => 'shared_doc.d_edit',
+                                auth_method => $param->{'auth_method'},
+                                context     => {
+                                    'sender' => $param->{'user'}{'email'},
                                     'remote_host' => $param->{'remote_host'},
                                     'remote_addr' => $param->{'remote_addr'},
                                     'scenario'    => $desc_hash{'edit'}
@@ -14819,7 +14910,7 @@ sub do_latest_d_read {
             {'status' => $list->{'admin'}{'status'}},
             $param->{'action'}, $list);
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Access denied for %s because list is not open',
             $param->{'user'}{'email'}
         );
@@ -14835,7 +14926,7 @@ sub do_latest_d_read {
     ### shared exist ?
     my $shareddir = $list->{'dir'} . '/shared';
     unless (-r "$shareddir") {
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_latest_d_read : unable to read $shareddir : no such file or directory"
         );
         Sympa::Report::reject_report_web('user', 'no_shared', {},
@@ -14944,10 +15035,11 @@ sub directory_browsing {
                     Sympa::Tools::WWW::get_desc_file("$path_d/.desc");
 
                 my $result = Sympa::Scenario::request_action(
-                    $list,
-                    'shared_doc.d_read',
-                    $param->{'auth_method'},
-                    {   'sender'      => $param->{'user'}{'email'},
+                    that        => $list,
+                    operation   => 'shared_doc.d_read',
+                    auth_method => $param->{'auth_method'},
+                    context     => {
+                        'sender'      => $param->{'user'}{'email'},
                         'remote_host' => $param->{'remote_host'},
                         'remote_addr' => $param->{'remote_addr'},
                         'scenario'    => $desc_hash{'read'}
@@ -14961,7 +15053,7 @@ sub directory_browsing {
                     my $content_d;
                     unless ($content_d =
                         directory_browsing("$dir/$d", $oldest_day)) {
-                        wwslog('err',
+                        wwslog(Sympa::Logger::ERR,
                             "directory_browsing($dir) : impossible to browse subdirectory $d"
                         );
                         next;
@@ -15007,10 +15099,11 @@ sub directory_browsing {
                     Sympa::Tools::WWW::get_desc_file("$path_dir/.desc.$d");
 
                 my $result = Sympa::Scenario::request_action(
-                    $list,
-                    'shared_doc.d_read',
-                    $param->{'auth_method'},
-                    {   'sender'      => $param->{'user'}{'email'},
+                    that        => $list,
+                    operation   => 'shared_doc.d_read',
+                    auth_method => $param->{'auth_method'},
+                    context     => {
+                        'sender'      => $param->{'user'}{'email'},
                         'remote_host' => $param->{'remote_host'},
                         'remote_addr' => $param->{'remote_addr'},
                         'scenario'    => $desc_hash{'read'}
@@ -15145,7 +15238,7 @@ sub do_d_editfile {
         Sympa::Report::reject_report_web('user', 'no_such_document',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "d_editfile : Cannot edit $shareddir/$path : not an existing file"
         );
         web_db_log(
@@ -15189,7 +15282,7 @@ sub do_d_editfile {
             {'status' => $list->{'admin'}{'status'}},
             $param->{'action'}, $list);
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Access denied for %s because list is not open',
             $param->{'user'}{'email'}
         );
@@ -15324,7 +15417,7 @@ sub do_d_properties {
         Sympa::Report::reject_report_web('user', 'no_such_document',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_properties : Cannot edit $shareddir/$path : not an existing file"
         );
         web_db_log(
@@ -15502,7 +15595,7 @@ sub do_d_describe {
         Sympa::Report::reject_report_web('user', 'no_doc_to_describe',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             "d_describe : Unable to describe $shareddir/$path : not an existing document"
         );
         web_db_log(
@@ -15608,7 +15701,7 @@ sub do_d_describe {
                     $list, $param->{'user'}{'email'},
                     $robot
                 );
-                wwslog('info',
+                wwslog(Sympa::Logger::INFO,
                     "d_describe : Cannot create description file $desc_file : $ERRNO"
                 );
                 web_db_log(
@@ -15735,7 +15828,7 @@ sub do_d_savefile {
         unless (synchronize("$shareddir/$path", $in{'serial'})) {
             Sympa::Report::reject_report_web('user', 'synchro_failed', {},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_savefile : Synchronization failed for $shareddir/$path"
             );
             web_db_log(
@@ -15782,7 +15875,7 @@ sub do_d_savefile {
                 $param->{'action'},
                 $list
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_savefile : Cannot open for replace $shareddir/$path : $ERRNO"
             );
             web_db_log(
@@ -15826,7 +15919,7 @@ sub do_d_savefile {
         # Creation of a description file if author is known
 
         unless (open(DESC, ">$shareddir/$dir.desc.$file")) {
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 "do_d_savefile: cannot create description file $shareddir/$dir.desc.$file"
             );
             web_db_log(
@@ -15867,7 +15960,7 @@ sub do_d_savefile {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_savefile : Failed to rename  $path to $dir.$file.moderate : $ERRNO"
             );
             web_db_log(
@@ -15892,7 +15985,7 @@ sub do_d_savefile {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_savefile : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $ERRNO"
             );
             web_db_log(
@@ -16007,7 +16100,7 @@ sub do_d_overwrite {
         Sympa::Report::reject_report_web('user', 'no_such_document',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_overwrite : Unable to overwrite $shareddir/$path : not an existing file"
         );
         web_db_log(
@@ -16024,7 +16117,7 @@ sub do_d_overwrite {
         Sympa::Report::reject_report_web('user', 'doc_already_a_dir',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_overwrite : Unable to create $shareddir/$path : a directory named $path already exists"
         );
         web_db_log(
@@ -16127,7 +16220,7 @@ sub do_d_overwrite {
     } else {
         # Creation of a description file
         unless (open(DESC, ">$shareddir/$dir.desc.$file")) {
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 "do_d_overwrite : Cannot create description file $shareddir/$dir.desc.$file"
             );
             web_db_log(
@@ -16168,7 +16261,7 @@ sub do_d_overwrite {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_overwrite : Failed to rename  $path to $dir.$file.moderate : $ERRNO"
             );
             web_db_log(
@@ -16194,7 +16287,7 @@ sub do_d_overwrite {
                 $param->{'user'}{'email'},
                 $robot
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_overwrite : Failed to rename $dir.desc.$file to $dir.desc..$file.moderate : $ERRNO"
             );
             web_db_log(
@@ -16308,7 +16401,7 @@ sub do_d_upload {
             $list->{'admin'}{'shared_doc'}{'quota'} * 1024) {
             Sympa::Report::reject_report_web('user', 'shared_full', {},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : Shared Quota exceeded for list $list->{'name'}"
             );
             web_db_log(
@@ -16459,7 +16552,7 @@ sub do_d_upload {
                         $param->{'action'},
                         $list
                     );
-                    wwslog('err',
+                    wwslog(Sympa::Logger::ERR,
                         "do_d_upload : Unable to upload $longtmpname : file being uploaded at this time "
                     );
                     web_db_log(
@@ -16515,7 +16608,7 @@ sub do_d_upload {
                 $param->{'action'},
                 $list
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : Unable to create $longname : file already exists but not yet moderated"
             );
             web_db_log(
@@ -16546,7 +16639,7 @@ sub do_d_upload {
                 $param->{'action'},
                 $list
             );
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : $param->{'user'}{'email'} not authorized to upload a INDEX.HTML file in $path"
             );
             web_db_log(
@@ -16574,7 +16667,7 @@ sub do_d_upload {
         unless (-e $longtmpname) {
             Sympa::Report::reject_report_web('user', 'no_uploaded_file', {},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : there isn't any temp file for the uploaded file $fname"
             );
             web_db_log(
@@ -16595,7 +16688,7 @@ sub do_d_upload {
         unless (-e $longtmpdesc) {
             Sympa::Report::reject_report_web('user', 'no_uploaded_file', {},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : there isn't any desc temp file for the uploaded file $fname"
             );
             web_db_log(
@@ -16900,7 +16993,7 @@ sub do_d_upload {
             Sympa::Report::reject_report_web('user', 'incorrect_name',
                 {'name' => $in{'new_name'}},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : Unable to create file $in{'new_name'} : incorrect name"
             );
             web_db_log(
@@ -16922,7 +17015,7 @@ sub do_d_upload {
             Sympa::Report::reject_report_web('user', 'incorrect_name',
                 {'name' => $in{'new_name'}},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : New file name $in{'new_name'} does not match URL filenames"
             );
             web_db_log(
@@ -16965,7 +17058,7 @@ sub do_d_upload {
             Sympa::Report::reject_report_web('user', 'doc_already_exist',
                 {'name' => $in{'new_name'}},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : $in{'new_name'} is an existing name for a not yet moderated file"
             );
             web_db_log(
@@ -16987,7 +17080,7 @@ sub do_d_upload {
             Sympa::Report::reject_report_web('user', 'doc_already_exist',
                 {'name' => $in{'new_name'}},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "do_d_upload : $in{'new_name'} is an existing name for a file being uploaded "
             );
             web_db_log(
@@ -17081,7 +17174,7 @@ sub do_d_upload {
                     $param->{'user'}{'email'},
                     $robot
                 );
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "do_d_upload : Failed to rename $longtmpname to $shareddir/$path/.$in{'new_name'}.moderate : $ERRNO"
                 );
                 web_db_log(
@@ -17112,7 +17205,7 @@ sub do_d_upload {
                     $param->{'user'}{'email'},
                     $robot
                 );
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "do_d_upload : Failed to rename $longtmpdesc to $shareddir/$path/.desc..$in{'new_name'}.moderate: $ERRNO"
                 );
                 web_db_log(
@@ -17316,7 +17409,7 @@ sub creation_shared_file {
         wwslog('notice', 'Create dir %s/%s/', $shareddir, $path);
 
         unless (mkdir($shareddir . '/' . $path, 0755)) {
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "creation_shared_file : Unable to create dir $shareddir/$path/"
             );
             return undef;
@@ -17370,7 +17463,7 @@ sub creation_desc_file {
     my ($shareddir, $path, $fname, %access) = @_;
 
     unless (open(DESC, ">$shareddir/$path/.desc.$fname")) {
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "creation_desc_file: cannot create description file $shareddir/.desc.$path/$fname"
         );
     }
@@ -17615,7 +17708,7 @@ sub do_d_unzip {
         Sympa::Report::reject_report_web('intern', 'cannot_mkdir',
             {'dir' => "$zip_abs_dir" . "/zip"},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_unzip($path/$fname) : Unable to create $zip_abs_dir/zip : $ERRNO"
         );
         web_db_log(
@@ -17639,7 +17732,7 @@ sub do_d_unzip {
         Sympa::Report::reject_report_web('intern', 'cannot_upload',
             {'path' => "$path/$fname"},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_unzip($path/$fname) : Cannot open file $zip_abs_dir/$fname : $ERRNO"
         );
         web_db_log(
@@ -17674,7 +17767,7 @@ sub do_d_unzip {
             $param->{'user'}{'email'},
             $robot
         );
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_unzip($path/$fname) : Unable to unzip the file $zip_abs_dir/$fname"
         );
         web_db_log(
@@ -17756,7 +17849,7 @@ sub d_unzip_shared_file {
     my $az = $zip->read("$zip_abs_dir/$fname");
 
     unless ($az == Archive::Zip::AZ_OK()) {
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "unzip_shared_file : Unable to read the zip file $zip_abs_dir/$fname : $az"
         );
         web_db_log(
@@ -17779,7 +17872,7 @@ sub d_unzip_shared_file {
     foreach my $name (@memberNames) {
         my $az = $zip->extractMember($name, $zip_abs_dir . '/zip/' . $name);
         unless ($az == Archive::Zip::AZ_OK()) {
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "unzip_shared_file : Unable to extract member $name of the zip file $zip_abs_dir/$fname : $az"
             );
             web_db_log(
@@ -17900,7 +17993,7 @@ sub d_install_file_hierarchy {
                         $access_dir
                     )
                     ) {
-                    wwslog('err',
+                    wwslog(Sympa::Logger::ERR,
                         "d_install_hierarchy($path) : fatal error from d_copy_file($doc)"
                     );
                     web_db_log(
@@ -18057,7 +18150,7 @@ sub d_copy_rec_dir {
             Sympa::Report::reject_report_web('user', 'index_html',
                 {'dir' => $path},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "d_copy_rec_dir : the directory cannot be called INDEX.HTML "
             );
             web_db_log(
@@ -18080,7 +18173,7 @@ sub d_copy_rec_dir {
             Sympa::Report::reject_report_web('user', 'directory_no_copied',
                 {'name' => "$dname"},
                 $param->{'action'}, $list);
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "d_copy_rec_dir : Unable to create directory $dest_dir/$dname : $ERRNO"
             );
             web_db_log(
@@ -18100,7 +18193,7 @@ sub d_copy_rec_dir {
 
         ## desc directory creation
         unless (open(DESC, ">$dest_dir/$dname/.desc")) {
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "d_copy_rec_dir: cannot create description file $dest_dir/$dname/.desc"
             );
             web_db_log(
@@ -18219,7 +18312,7 @@ sub d_copy_rec_dir {
                             \%access_dir
                         )
                         ) {
-                        wwslog('err',
+                        wwslog(Sympa::Logger::ERR,
                             "d_copy_rec_dir($path/$dname) : fatal error from d_copy_file($doc)"
                         );
                         web_db_log(
@@ -18266,7 +18359,7 @@ sub d_copy_rec_dir {
             $robot
         );
 
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "d_copy_rec_file : impossible to copy content directory $dname, the user doesn't have edit rights on directory $path"
         );
         web_db_log(
@@ -18375,7 +18468,7 @@ sub d_copy_file {
                 Sympa::Report::reject_report_web('user', 'index_html',
                     {'dir' => $path},
                     $param->{'action'}, $list);
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "d_copy_file : the user is not authorized to upload a INDEX.HTML file in $dest_dir"
                 );
                 web_db_log(
@@ -18402,7 +18495,7 @@ sub d_copy_file {
                 $list->{'admin'}{'shared_doc'}{'quota'} * 1024) {
                 Sympa::Report::reject_report_web('user', 'shared_full', {},
                     $param->{'action'}, $list);
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "d_copy_file : Shared Quota exceeded for list $list->{'name'} on file $path/$fname"
                 );
                 web_db_log(
@@ -18449,7 +18542,7 @@ sub d_copy_file {
                         $param->{'user'}{'email'},
                         $robot
                     );
-                    wwslog('err',
+                    wwslog(Sympa::Logger::ERR,
                         "d_copy_file : unable to copy $path/$fname : file being uploaded at this time "
                     );
                     web_db_log(
@@ -18491,7 +18584,7 @@ sub d_copy_file {
                     $param->{'user'}{'email'},
                     $robot
                 );
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "d_copy_file : unable to copy $path/$fname : file awaiting for moderation"
                 );
                 web_db_log(
@@ -18589,7 +18682,7 @@ sub d_copy_file {
 
         ## desc file creation
         unless (open(DESC, ">$dest_dir/.desc.$fname")) {
-            wwslog('err',
+            wwslog(Sympa::Logger::ERR,
                 "d_copy_file: cannot create description file $dest_dir/.desc.$fname"
             );
             web_db_log(
@@ -18647,7 +18740,7 @@ sub d_copy_file {
             $param->{'user'}{'email'},
             $robot
         );
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "d_copy_file : impossible to copy file $fname, the user doesn't have total edit rights on the file"
         );
         web_db_log(
@@ -18897,7 +18990,7 @@ sub do_d_delete {
         # removing of the description file if exists
         if (-e "$shareddir/$current_directory/.desc.$document") {
             unless (unlink("$shareddir/$current_directory/.desc.$document")) {
-                wwslog('err',
+                wwslog(Sympa::Logger::ERR,
                     "do_d_delete: failed to erase $shareddir/$current_directory/.desc.$document"
                 );
                 web_db_log(
@@ -19039,7 +19132,7 @@ sub do_d_rename {
         Sympa::Report::reject_report_web('user', 'incorrect_name',
             {'name' => $in{'new_name'}},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_rename : Unable to create file $in{'new_name'} : incorrect name"
         );
         web_db_log(
@@ -19061,7 +19154,7 @@ sub do_d_rename {
         Sympa::Report::reject_report_web('user', 'incorrect_name',
             {'name' => $in{'new_name'}},
             $param->{'action'}, $list);
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "do_d_rename : New file name $in{'new_name'} does not match URL filenames"
         );
         web_db_log(
@@ -19671,7 +19764,7 @@ sub do_d_control {
         Sympa::Report::reject_report_web('user', 'no_such_document',
             {'path' => $visible_path},
             $param->{'action'}, $list);
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             "do_d_control : Cannot control $shareddir/$path : not an existing document"
         );
         web_db_log(
@@ -19782,16 +19875,16 @@ sub do_d_control {
 
     my $lang = $param->{'lang'};
 
+    my @scenarios;
     ## Scenario list for READ
 
     my $tmp_list_of_scenario = $list->load_scenario_list('d_read', $robot);
 
     ## Only get required scenario attributes
-    foreach my $scenario (keys %{$tmp_list_of_scenario}) {
-        $param->{'scenari_read'}{$scenario} = {
-            'name' => $tmp_list_of_scenario->{$scenario}{'name'},
-            'web_title' =>
-                $tmp_list_of_scenario->{$scenario}->get_current_title()
+    foreach my $scenario (@scenarios) {
+        $param->{'scenari_read'}{$scenario->{name}} = {
+            'name'      => $scenario->{name},
+            'web_title' => $scenario->get_current_title()
         };
     }
 
@@ -19801,11 +19894,10 @@ sub do_d_control {
     $tmp_list_of_scenario = $list->load_scenario_list('d_edit', $robot);
 
     ## Only get required scenario attributes
-    foreach my $scenario (keys %{$tmp_list_of_scenario}) {
-        $param->{'scenari_edit'}{$scenario} = {
-            'name' => $tmp_list_of_scenario->{$scenario}{'name'},
-            'web_title' =>
-                $tmp_list_of_scenario->{$scenario}->get_current_title()
+    foreach my $scenario (@scenarios) {
+        $param->{'scenari_edit'}{$scenario->{name}} = {
+            'name'      => $scenario->{'name'},
+            'web_title' => $scenario->get_current_title()
         };
     }
     $param->{'scenari_edit'}{$edit}{'selected'} = 'selected="selected"';
@@ -19866,7 +19958,7 @@ sub do_d_change_access {
             {'path' => $path},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot
         );
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             "do_d_change_access : Cannot change access $shareddir : root directory"
         );
         web_db_log(
@@ -19889,7 +19981,7 @@ sub do_d_change_access {
         Sympa::Report::reject_report_web('user', 'no_doc_to_describe',
             {'path' => $path},
             $param->{'action'}, $list);
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             "d_change_access : Unable to change access $shareddir/$path : no such document"
         );
         web_db_log(
@@ -20011,7 +20103,7 @@ sub do_d_change_access {
             Sympa::Report::reject_report_web('intern', 'cannot_open_file',
                 {'file' => $desc_file},
                 $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 "d_change_access : Cannot create description file $desc_file : $ERRNO"
             );
             web_db_log(
@@ -20072,7 +20164,7 @@ sub do_d_set_owner {
             {'path' => $path},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot
         );
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             "do_d_set_owner : Cannot change access $shareddir : root directory"
         );
         web_db_log(
@@ -20240,7 +20332,7 @@ sub do_d_set_owner {
             Sympa::Report::reject_report_web('intern', 'cannot_open_file',
                 {'file' => $desc_file},
                 $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 "d_set_owner : Cannot create description file $desc_file : $ERRNO"
             );
             web_db_log(
@@ -20324,8 +20416,11 @@ sub do_remind {
 
     ## Sympa will require a confirmation
     my $result = Sympa::Scenario::request_action(
-        $list, 'remind', 'smtp',
-        {   'sender'      => $param->{'user'}{'email'},
+        that        => $list,
+        operation   => 'remind',
+        auth_method => 'smtp',
+        context     => {
+            'sender'      => $param->{'user'}{'email'},
             'remote_host' => $param->{'remote_host'},
             'remote_addr' => $param->{'remote_addr'}
         }
@@ -20478,7 +20573,7 @@ sub do_upload_pictures {
     unless ($fname) {
         Sympa::Report::reject_report_web('user', 'no_name', {},
             $param->{'action'});
-        wwslog('err', 'No file specified to upload');
+        wwslog(Sympa::Logger::ERR, 'No file specified to upload');
         return 'suboptions';
     }
 
@@ -20512,7 +20607,7 @@ sub do_upload_pictures {
         Sympa::Report::reject_report_web('user', 'upload_failed',
             {'path' => $fullfilename},
             $param->{'action'});
-        wwslog('err', 'Failed to create file %s', $picture_path);
+        wwslog(Sympa::Logger::ERR, 'Failed to create file %s', $picture_path);
         return 'suboptions';
     }
 
@@ -20530,7 +20625,7 @@ sub do_upload_pictures {
             },
             $param->{'action'}
         );
-        wwslog('err', 'Failed to upload pictures');
+        wwslog(Sympa::Logger::ERR, 'Failed to upload pictures');
         return 'suboptions';
     }
 
@@ -20538,7 +20633,7 @@ sub do_upload_pictures {
     foreach my $filetmp (@filetmp) {
         unlink $filetmp . '.tmp';
     }
-    wwslog('info', 'Upload of the pictures succeeded');
+    wwslog(Sympa::Logger::INFO, 'Upload of the pictures succeeded');
     return 'suboptions';
 }
 
@@ -20553,7 +20648,7 @@ sub do_delete_pictures {
     unless ($list->find_picture_filenames($email)) {
         Sympa::Report::reject_report_web('user', 'no_name', {},
             $param->{'action'}, $list);
-        wwslog('err', 'No file exists to delete');
+        wwslog(Sympa::Logger::ERR, 'No file exists to delete');
         return 'suboptions';
     }
 
@@ -20568,13 +20663,13 @@ sub do_delete_pictures {
             $robot
         );
         wwslog(
-            'err',
+            Sympa::Logger::ERR,
             'Failed to erase %s',
             $list->find_picture_filenames($email)
         );
         return undef;
     } else {
-        wwslog('notice', 'File deleted successfully');
+        wwslog(Sympa::Logger::NOTICE, 'File deleted successfully');
         return 'suboptions';
     }
 }
@@ -20649,7 +20744,7 @@ sub do_change_email {
     unless ($in{'email'} || ($in{'old_email'} && $in{'new_email'})) {
         Sympa::Report::reject_report_web('user', 'Missing argument',
             {}, $param->{'action'});
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             "Lacking parameter : $in{'email'} or $in{'old_email'} or $in{'new_email'} "
         );
         web_db_log(
@@ -20695,7 +20790,7 @@ sub do_change_email {
 
     my ($password, $newuser);
 
-    if ($newuser = Sympa::User::get_global_user($old_email)) {
+    if ($newuser = Sympa::User::get_global_user($old_email, Sympa::Site->db_additional_user_fields)) {
 
         $password = $newuser->{'password'};
     }
@@ -20707,7 +20802,7 @@ sub do_change_email {
         robot         => $robot
     );
     unless (defined $status) {
-        wwslog('err', 'Failed to change user email address');
+        wwslog(Sympa::Logger::ERR, 'Failed to change user email address');
         return undef;
     }
 
@@ -21077,7 +21172,7 @@ sub do_suspend_request_action {
                 },
                 $param->{'action'}
             );
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 'Must picked one or more list(s) you are subscribed');
             return $previous_action;
         }
@@ -21150,7 +21245,7 @@ sub do_suspend_request_action {
                         },
                         $param->{'action'}
                     );
-                    wwslog('info',
+                    wwslog(Sympa::Logger::INFO,
                         'The start date must be less than the end date.');
                     return $previous_action;
                 }
@@ -21166,7 +21261,7 @@ sub do_suspend_request_action {
                     },
                     $param->{'action'}
                 );
-                wwslog('info',
+                wwslog(Sympa::Logger::INFO,
                     'Missing argument for the end date or syntax error : dd/mm/yyyy or must choose a end date or indefinite end date'
                 );
                 return $previous_action;
@@ -21175,7 +21270,7 @@ sub do_suspend_request_action {
             Sympa::Report::reject_report_web('user', 'missing_arg',
                 {'argument' => 'Miss start date (dd/mm/yyyy)'},
                 $param->{'action'});
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 'Missing argument for the start date or syntax error : dd/mm/yyyy'
             );
             return $previous_action;
@@ -21189,7 +21284,7 @@ sub do_suspend_request_action {
                     $list, $data, $robot
                 )
                 ) {
-                wwslog('info', 'Can\'t do List suspend_subscription');
+                wwslog(Sympa::Logger::INFO, 'Can\'t do List suspend_subscription');
                 return $previous_action;
             }
         }
@@ -21318,7 +21413,7 @@ sub do_compose_mail {
         $in{'to'} =~ s/ /\@/g;
         $param->{'to'} = $in{'to'};
     } else {
-        $param->{'to'} = $list->get_list_address();
+        $param->{'to'} = $list->get_address();
     }
     foreach my $recipient (split(',', $param->{'to'})) {
         (   $param->{'recipients'}{$recipient}{'local_to'},
@@ -21397,7 +21492,7 @@ sub do_send_mail {
                 );
                 return undef;
             }
-            $to = $list->get_list_address();
+            $to = $list->get_address();
         }
         unless ($param->{'may_post'}) {
             Sympa::Report::reject_report_web('auth',
@@ -21509,7 +21604,7 @@ sub do_send_mail {
             Sympa::Report::reject_report_web('user',
                 'two_post_sources_defined', {}, $param->{'action'});
             wwslog(
-                'info',
+                Sympa::Logger::INFO,
                 'User specified both an URL (%s) and a file to upload (%s). Can\'t choose between them',
                 $in{'url'},
                 $in{'uploaded_file'}
@@ -21520,7 +21615,7 @@ sub do_send_mail {
         if ($in{'uploaded_file'} =~ /\S/) {
             my $fh = $query->upload('uploaded_file');
             unless ($fh) {
-                wwslog('err', 'Can\'t upload %s', $in{'uploaded_file'});
+                wwslog(Sympa::Logger::ERR, 'Can\'t upload %s', $in{'uploaded_file'});
                 Sympa::Report::reject_report_web(
                     'intern',
                     'cannot_upload',
@@ -21586,7 +21681,7 @@ sub do_send_mail {
             Sympa::Report::reject_report_web('user', 'unable_to_parse', {},
                 $param->{'action'});
             wwslog(
-                'info',
+                Sympa::Logger::INFO,
                 'A MIME part could not be created with the supplied data, %s, %s',
                 $in{'url'},
                 $in{'uploaded_file'}
@@ -21601,7 +21696,7 @@ sub do_send_mail {
             Sympa::Report::reject_report_web('user', 'missing_arg',
                 {'argument' => 'body'},
                 $param->{'action'});
-            wwslog('info', 'Missing body');
+            wwslog(Sympa::Logger::INFO, 'Missing body');
             web_db_log(
                 {   'robot'        => $robot,
                     'list'         => $list->{'name'},
@@ -21827,7 +21922,7 @@ sub do_request_topic {
         }
     }
 
-    $param->{'to'}      = $list->get_list_address();
+    $param->{'to'}      = $list->get_address();
     $param->{'mailto'}  = Sympa::Tools::WWW::mailto($list, $param->{'to'});
     $param->{'authkey'} = $in{'authkey'};
 
@@ -21842,7 +21937,7 @@ sub do_request_topic {
     }
 
     my $message = Sympa::Message->new_from_file($filename, context => $list);
-    unless ($message) {
+    unless ($message && $message->has_valid_sender()) {
         Sympa::Report::reject_report_web('intern', 'cannot_open_file',
             {'file' => $filename},
             $param->{'action'}, $list, $param->{'user'}{'email'}, $robot);
@@ -21885,15 +21980,16 @@ sub do_tag_topic_by_sender {
     my $filename  = "$authqueue\/$listname" . '@' . "$robot\_$in{'authkey'}";
 
     my $message = Sympa::Message->new_from_file($filename, context => $list);
-    unless ($message) {
+    unless ($message && $message->has_valid_sender()) {
         Sympa::Report::reject_report_web('intern',
             'cannot_parse_message retrived by key %s for list %s@%s',
             $in{'authkey'}, $listname, $robot);
-        wwslog('info', 'cannot parse message retrived by key %s for list %s',
+        wwslog(Sympa::Logger::INFO, 'cannot parse message retrived by key %s for list %s',
             $in{'authkey'}, $list);
         return undef;
     }
-    my $sender = $message->{'sender'};
+    my $sender =
+        $message->get_sender_email(headers => Sympa::Site->sender_headers());
 
     unless ($list->is_there_msg_topic()) {
         Sympa::Report::reject_report_web('user', 'no_topic', {},
@@ -22127,6 +22223,7 @@ sub do_set_lang {
             }
         }
     }
+  }
 
     if ($in{'previous_action'}) {
         ## Some actions don't make sense with GET method, redirecting to other
@@ -22348,7 +22445,7 @@ sub export_topics {
     my %topics = Sympa::Robot::load_topics($robot);
 
     unless (%topics) {
-        wwslog('err', 'No topics defined');
+        wwslog(Sympa::Logger::ERR, 'No topics defined');
         return undef;
     }
 
@@ -22356,15 +22453,29 @@ sub export_topics {
     $param->{'topics'} = undef;
 
     my $total = 0;
-    foreach my $t (
+    foreach my $topic (
         sort { $topics{$a}{'order'} <=> $topics{$b}{'order'} }
         keys %topics
         ) {
-        my $result = Sympa::Scenario::request_action(
-            $robot,
-            'topics_visibility',
-            $param->{'auth_method'},
-            {   'topicname'   => $t,
+        my $scenario = Sympa::Scenario->new(
+            that     => $robot,
+            function => 'topics_visibility',
+            name     => $topics->{$topic}{'visibility'},
+        );
+        unless ($scenario) {
+             $main::logger->do_log(
+                 Sympa::Logger::ERR,
+                 'Failed to load scenario "topics_visibility" for topic "%s"',
+                 $topic
+            );
+            next;
+        }
+
+        my $result = $scenario->evaluate(
+            that        => $robot,
+            operation   => 'topics_visibility',
+            auth_method => $param->{'auth_method'},
+            context     => {
                 'sender'      => $param->{'user'}{'email'},
                 'remote_host' => $param->{'remote_host'},
                 'remote_addr' => $param->{'remote_addr'}
@@ -23142,7 +23253,7 @@ sub do_arc_delete {
     unless (defined $in{'directories'}) {
         Sympa::Report::reject_report_web('user', 'select_month', {},
             $param->{'action'});
-        wwslog('info', 'No Archives months selected');
+        wwslog(Sympa::Logger::INFO, 'No Archives months selected');
         web_db_log(
             {   'robot'        => $robot,
                 'list'         => $list->{'name'},
@@ -23230,9 +23341,9 @@ sub do_rss_request {
         $reason = $result->{'reason'};
     }
     if ($sub_is =~ /reject/) {
-        wwslog('info',
+        wwslog(Sympa::Logger::INFO,
             'RSS not accessible because list %s is not visible to user %s',
-            $list->get_list_id, $param->{'user'}{'email'});
+            $list->get_id, $param->{'user'}{'email'});
         web_db_log(
             {   'parameters' => $param->{'user'}{'email'},
                 'status'     => 'error',
@@ -23290,7 +23401,7 @@ sub do_wsdl {
     unless (defined $soap_url) {
         Sympa::Report::reject_report_web('user', 'no_soap_service', {},
             $param->{'action'});
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             'No SOAP service was defined in sympa.conf (soap_url parameter)');
         return undef;
     }
@@ -23449,7 +23560,7 @@ sub _ca_process {
 ##
 ###############################################################
 sub do_ca {
-    wwslog('info',
+    wwslog(Sympa::Logger::INFO,
         'Custom action: %s (robot %s) with params: (%s, %s, %s, %s, %s)',
         $in{'custom_action'}, $robot, $in{'cap'});
 
@@ -23538,7 +23649,7 @@ sub do_ca {
 ###############################################################
 sub do_lca {
     wwslog(
-        'info',
+        Sympa::Logger::INFO,
         'List custom action: %s for list %s (robot %s) with params: (%s, %s, %s, %s, %s)',
         $in{'custom_action'},
         $in{'list'},
@@ -23647,7 +23758,12 @@ sub new_d_read {
     # current list / current shared directory
     my $list_name = $list->{'name'};
 
-    my $document = Sympa::SharedDocument->new($list, $in{'path'}, $param);
+    my $document = Sympa::SharedDocument->new(
+        list      => $list,
+        path      => $in{'path'},
+        param     => $param,
+        icon_base => Sympa::Site->static_content_url()
+    );
 
     unless (defined $document) {
         Sympa::Report::reject_report_web('intern', 'new_document_failed',
@@ -24015,24 +24131,24 @@ sub do_maintenance {
 }
 
 sub do_automatic_lists_management_request {
-    wwslog('notice', 'Starting');
+    wwslog(Sympa::Logger::NOTICE, 'Starting');
     $param->{'automatic_lists_description'} =
         Conf::load_automatic_lists_description();
     return 1;
 }
 
 sub do_automatic_lists_management {
-    wwslog('notice', 'Starting');
+    wwslog(Sympa::Logger::NOTICE, 'Starting');
 
     return 1;
 }
 
 sub do_automatic_lists_request {
-    wwslog('notice', 'Starting');
+    wwslog(Sympa::Logger::NOTICE, 'Starting');
     # check authorization
     my $family;
     unless ($family = Sympa::Family->new($in{'family'}, $robot)) {
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             'Failed to instantiate family %s. This family does not exist',
             $in{'family'});
         Sympa::send_notify_to_listmaster(
@@ -24056,7 +24172,7 @@ sub do_automatic_lists_request {
         Sympa::Report::reject_report_web('auth',
             "You are not allowed to create list in this family",
             {}, $param->{'action'});
-        wwslog('err',
+        wwslog(Sympa::Logger::ERR,
             'Access to automatic list creation form denied to user %s',
             $session->{'email'});
         return undef;
@@ -24067,7 +24183,7 @@ sub do_automatic_lists_request {
 }
 
 sub do_automatic_lists {
-    wwslog('notice', 'Starting');
+    wwslog(Sympa::Logger::NOTICE, 'Starting');
     my $family_name = $in{'family'};
     my $family;
 
@@ -24129,7 +24245,7 @@ sub do_automatic_lists {
 }
 
 sub prevent_visibility_bypass {
-    wwslog('debug2', 'Starting');
+    wwslog(Sympa::Logger::DEBUG2, 'Starting');
     if (defined $list and ref $list eq 'Sympa::List') {
         my $result = Sympa::Scenario::request_action(
             $list,
@@ -24148,7 +24264,7 @@ sub prevent_visibility_bypass {
             $reason = $result->{'reason'};
         }
         if ($sub_is =~ /reject/) {
-            wwslog('info',
+            wwslog(Sympa::Logger::INFO,
                 'visibility: List must remain hidden. Returning "home" to prevent visibility bypass'
             );
             return "home";

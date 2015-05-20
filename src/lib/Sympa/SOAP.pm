@@ -38,6 +38,7 @@ use Sympa::Log;
 use Sympa::Robot;
 use Sympa::Scenario;
 use Sympa::Session;
+use Sympa::Site;
 use Sympa::Template;
 use tools;
 use Sympa::Tools::Password;
@@ -103,10 +104,11 @@ sub lists {
 
         my $result_item = {};
         my $result      = Sympa::Scenario::request_action(
-            $list,
-            'visibility',
-            'md5',
-            {   'sender'                  => $sender,
+            that        => $list,
+            operation   => 'visibility',
+            auth_method => 'md5',
+            context     => {
+                'sender'                  => $sender,
                 'remote_application_name' => $ENV{'remote_application_name'}
             }
         );
@@ -497,8 +499,11 @@ sub info {
     }
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'info', 'md5',
-        {   'sender'                  => $sender,
+        that        => $list,
+        operation   => 'info',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'remote_application_name' => $ENV{'remote_application_name'}
         }
     );
@@ -637,11 +642,25 @@ sub createList {
             ->faultdetail("Missing required parameter(s) : $reject");
     }
     # check authorization
-    my $result = Sympa::Scenario::request_action(
-        $robot,
-        'create_list',
-        'md5',
-        {   'sender'                  => $sender,
+    my $scenario = Sympa::Scenario->new(
+        that     => $robot,
+        function => 'create_list',
+        name     => $robot->create_list()
+    );
+    unless ($scenario) {
+        $main::logger->do_log(
+            Sympa::Logger::ERR, 'Failed to load scenario for "create_list"');
+        die SOAP::Fault->faultcode('Server')
+            ->faultstring('Authorization reject')
+            ->faultdetail('Authorization reject: scenario loading failure');
+    }
+
+    my $result = $scenario->evaluate(
+        that        => $robot,
+        operation   => 'create_list',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'candidate_listname'      => $listname,
             'candidate_subject'       => $subject,
             'candidate_template'      => $list_tpl,
@@ -670,7 +689,9 @@ sub createList {
     my $param = {};
     $param->{'user'}{'email'} = $sender;
     if (Sympa::User::is_global_user($param->{'user'}{'email'})) {
-        $param->{'user'} = Sympa::User::get_global_user($sender);
+        $param->{'user'} = Sympa::User::get_global_user(
+            $sender, Sympa::Site->db_additional_user_fields
+        );
     }
     my $parameters;
     $parameters->{'creation_email'} = $sender;
@@ -826,8 +847,11 @@ sub add {
     # check authorization
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'add', 'md5',
-        {   'sender'                  => $sender,
+        that        => $list,
+        operation   => 'add',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'email'                   => $email,
             'remote_host'             => $ENV{'REMOTE_HOST'},
             'remote_addr'             => $ENV{'REMOTE_ADDR'},
@@ -870,7 +894,10 @@ sub add {
     } else {
         my $u;
         my $defaults = $list->get_default_user_options();
-        my $u2       = Sympa::User->new($email);
+        my $u2       = Sympa::User->new(
+            email  => $email,
+            fields => Sympa::Site->db_additional_user_fields
+        );
         %{$u} = %{$defaults};
         $u->{'email'} = $email;
         $u->{'gecos'} = $gecos || $u2->gecos;
@@ -977,8 +1004,11 @@ sub del {
     # check authorization
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'del', 'md5',
-        {   'sender'                  => $sender,
+        that        => $list,
+        operation   => 'del',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'email'                   => $email,
             'remote_host'             => $ENV{'REMOTE_HOST'},
             'remote_addr'             => $ENV{'REMOTE_ADDR'},
@@ -1104,8 +1134,11 @@ sub review {
     $user = Sympa::User::get_global_user($sender);
 
     my $result = Sympa::Scenario::request_action(
-        $list, 'review', 'md5',
-        {   'sender'                  => $sender,
+        that        => $list,
+        operation   => 'review',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'remote_application_name' => $ENV{'remote_application_name'}
         }
     );
@@ -1322,10 +1355,11 @@ sub signoff {
     $list = Sympa::List->new($listname, $robot);
 
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'unsubscribe',
-        'md5',
-        {   'email'                   => $sender,
+        that        => $list,
+        operation   => 'unsubscribe',
+        auth_method => 'md5',
+        context     => {
+            'email'                   => $sender,
             'sender'                  => $sender,
             'remote_application_name' => $ENV{'remote_application_name'}
         }
@@ -1445,10 +1479,11 @@ sub subscribe {
 
     ## query what to do with this subscribtion request
     my $result = Sympa::Scenario::request_action(
-        $list,
-        'subscribe',
-        'md5',
-        {   'sender'                  => $sender,
+        that        => $list,
+        operation   => 'subscribe',
+        auth_method => 'md5',
+        context     => {
+            'sender'                  => $sender,
             'remote_application_name' => $ENV{'remote_application_name'}
         }
     );
@@ -1620,10 +1655,11 @@ sub which {
         my $result_item;
 
         my $result = Sympa::Scenario::request_action(
-            $list,
-            'visibility',
-            'md5',
-            {   'sender'                  => $sender,
+            that        => $list,
+            operation   => 'visibility',
+            auth_method => 'md5',
+            context     => {
+                'sender'                  => $sender,
                 'remote_application_name' => $ENV{'remote_application_name'}
             }
         );
@@ -1915,6 +1951,10 @@ sub struct_to_soap {
 
 sub get_reason_string {
     my ($reason, $robot) = @_;
+
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
 
     my $data = {'reason' => $reason};
     my $string;

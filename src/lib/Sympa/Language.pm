@@ -22,11 +22,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Language - Handling languages and locales
+
+=head1 DESCRIPTION
+
+This package provides interfaces for i18n (internationalization) of Sympa.
+
+The language tags are used to determine each language.
+A language tag consists of one or more subtags: language, script, region and
+variant.  Below are some examples.
+
+=cut
+
 package Sympa::Language;
 
 use strict;
 use warnings;
-use base qw(Class::Singleton);
 
 use Locale::Messages '1.22';    # virtually same as 1.23.
 use POSIX qw();
@@ -52,11 +67,10 @@ BEGIN {
     Locale::Messages::bind_textdomain_codeset(web_help => 'utf-8');
 }
 
-# Constructor for Class::Singleton.
-sub _new_instance {
+sub new {
     my $class = shift;
-    my $self  = $class->SUPER::_new_instance();
 
+    my $self = bless {}, $class;
     ## Initialize lang/locale.
     $self->set_lang('en');
     return $self;
@@ -708,7 +722,6 @@ sub maketext {
 1;
 __END__
 
-=encoding utf-8
 
 =head1 NAME
 
@@ -1105,15 +1118,15 @@ Returns:
 
 Translated and formatted string.
 
-=item gettext_strftime ( $format, $args, ... )
+=item gettext_sprintf ( $format, $args, ... )
 
 I<Instance method>.
 Internationalized L<strftime|POSIX/strftime>().
 At first, translates $format argument using L</gettext>().
 Then returns formatted date/time by remainder of arguments.
 
-If appropriate POSIX locale is not available, parts of result (names of days,
-months etc.) will be taken from the catalog.
+This is equivalent to C<sprintf( gettext($format), $args, ... )>
+with appropriate POSIX locale if possible.
 
 Parameters:
 
@@ -1164,6 +1177,9 @@ Arguments corresponding to placeholders.
 Returns:
 
 Translated and replaced string.
+
+I<Instance method>.
+XXX @todo doc
 
 =back
 

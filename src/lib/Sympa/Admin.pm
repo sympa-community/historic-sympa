@@ -39,8 +39,10 @@ package Sympa::Admin;
 use strict;
 use warnings;
 use Encode qw();
+use Carp qw(croak);
 use English qw(-no_match_vars);
 use File::Copy qw();
+use Scalar::Util qw(blessed);
 
 use Sympa;
 use Conf;
@@ -55,7 +57,6 @@ use Sympa::Robot;
 use Sympa::Scenario;
 use Sympa::Template;
 use Sympa::Tools::File;
-use Sympa::User;
 
 my $language = Sympa::Language->instance;
 my $log      = Sympa::Log->instance;
@@ -1383,6 +1384,10 @@ sub list_check_smtp {
     my $robot = shift;
     $log->syslog('debug2', '(%s, %s)', $list, $robot);
 
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my $conf = '';
     my $smtp;
     my (@suf, @addresses);
@@ -1734,10 +1739,16 @@ sub change_user_email {
 
     ## Update User_table and remove existing entry first (to avoid duplicate
     ## entries)
-    my $oldu = Sympa::User->new($in{'new_email'});
-    $oldu->expire if $oldu;
-    my $u = Sympa::User->new($in{'current_email'});
-    unless ($u and $u->moveto($in{'new_mail'})) {
+    my $old_user = Sympa::User->new(
+        email  => $in{'new_email'},
+        fields => Sympa::Site->db_additional_user_fields
+    );
+    $old_user->expire if $old_user;
+    my $user = Sympa::User->new(
+        email  => $in{'current_email'},
+        fields => Sympa::Site->db_additional_user_fields
+    );
+    unless ($user and $user->moveto($in{'new_mail'})) {
         $log->syslog('err', 'Update failed');
         return undef;
     }

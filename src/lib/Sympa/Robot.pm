@@ -366,4 +366,55 @@ sub _add_topic {
     }
 }
 
+sub get_dkim_parameters {
+    $main::logger->do_log(Sympa::Logger::DEBUG2, '(%s)', @_);
+    my $self = shift;
+
+    my $data;
+    my $keyfile;
+
+    $data->{'d'}        = $self->dkim_signer_domain;
+    $data->{'i'}        = $self->dkim_signer_identity;
+    $data->{'selector'} = $self->dkim_selector;
+    $keyfile            = $self->dkim_private_key_path;
+
+    unless (open(KEY, $keyfile)) {
+        $main::logger->do_log(Sympa::Logger::ERR,
+            "Could not read DKIM private key %s", $keyfile);
+        return undef;
+    }
+    while (<KEY>) {
+        $data->{'private_key'} .= $_;
+    }
+    close(KEY);
+
+    return $data;
+}
+
+sub _get_etc_include_path {
+    my ($self, $dir, $lang_dirs) = @_;
+
+    my @include_path;
+
+    my $path_robot;
+    @include_path = Sympa::Site->_get_etc_include_path(@_);
+
+    if ($self->etc ne Sympa::Site->etc) {
+        if ($dir) {
+            $path_robot = $self->etc . '/' . $dir;
+        } else {
+            $path_robot = $self->etc;
+        }
+        if ($lang_dirs) {
+            unshift @include_path,
+                (map { $path_robot . '/' . $_ } @$lang_dirs),
+                $path_robot;
+        } else {
+            unshift @include_path, $path_robot;
+        }
+    }
+
+    return @include_path;
+}
+
 1;

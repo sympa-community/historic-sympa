@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::SMIME - S/MIME-related functions
+
+=head1 DESCRIPTION
+
+This package provides some S/MIME-related functions.
+
+=cut
+
 package Sympa::Tools::SMIME;
 
 use strict;
@@ -194,14 +206,20 @@ sub parse_cert {
     my %purposes = $x509->extensions_by_name->{keyUsage}->hash_bit_string;
     $res{purpose}->{sign} = $purposes{'Digital Signature'} ? 1 : '';
     $res{purpose}->{enc}  = $purposes{'Key Encipherment'}  ? 1 : '';
-    return \%res;
+
+    return $result;
 }
 
 # NO LONGER USED
 # However, this function may be useful because it can extract messages openssl
 # can not (e.g. signature part not encoded by BASE64).
 sub smime_extract_certs {
-    my ($mime, $outfile) = @_;
+    my (%params) = @_;
+
+    my $mime    = $params{entity};
+    my $outfile = $params{file};
+    my $openssl = $params{openssl} || 'openssl';
+
     $log->syslog('debug2', '(%s)', $mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
@@ -226,5 +244,9 @@ sub smime_extract_certs {
         return 1;
     }
 }
+
+=back
+
+=cut
 
 1;

@@ -28,12 +28,13 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 
-use Conf;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::DatabaseManager;
 use Sympa::Language;
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Logger;
+use Sympa::Logger::Stderr;
 use Sympa::Tools::File;
 
 my %options;
@@ -62,6 +63,10 @@ unless (Sympa::DatabaseManager::probe_db()) {
         "Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf\n",
         $Conf::Conf{'db_name'};
 }
+
+our $logger = Sympa::Logger::Stderr->new(
+    level => Sympa::Site->log_level()
+);
 
 ## We have a parameter that should be a template to convert
 ## Output is sent to stdout

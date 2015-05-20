@@ -22,13 +22,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Config_XML - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Config_XML;
 
 use strict;
 use warnings;
 use XML::LibXML;
 
-use Sympa::Log;
+use Sympa::Logger;
 
 my $log = Sympa::Log->instance;
 

@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::Data - Data-related functions
+
+=head1 DESCRIPTION
+
+This package provides data-related functions.
+
+=cut
+
 package Sympa::Tools::Data;
 
 use strict;
@@ -30,8 +42,27 @@ use English qw(-no_match_vars);
 use HTML::Entities qw();
 use POSIX qw();
 
-## This applies recursively to a data structure
-## The transformation subroutine is passed as a ref
+=head1 FUNCTIONS
+
+=over
+
+=item recursive_transformation($var, $subref)
+
+This applies recursively to a data structure.
+The transformation subroutine is passed as a ref
+
+Parameters:
+
+=over
+
+=item * I<$var>: FIXME
+
+=item * I<$subref>: FIXME
+
+=back
+
+=cut
+
 sub recursive_transformation {
     my ($var, $subref) = @_;
 
@@ -58,7 +89,24 @@ sub recursive_transformation {
     return;
 }
 
-## Dump a variable's content
+=item dump_var($var, $level, $fd)
+
+Dump a variable's content
+
+Parameters:
+
+=over
+
+=item * I<$var>: FIXME
+
+=item * I<$level>: FIXME
+
+=item * I<$fd>: FIXME
+
+=back
+
+=cut
+
 sub dump_var {
     my ($var, $level, $fd) = @_;
 
@@ -90,7 +138,20 @@ sub dump_var {
     }
 }
 
-## Dump a variable's content
+=item dump_html_var($var)
+
+Dump a variable's content
+
+Parameters:
+
+=over
+
+=item * I<$var>: FIXME
+
+=back
+
+=cut
+
 sub dump_html_var {
     my ($var) = shift;
     my $html = '';
@@ -177,22 +238,36 @@ sub get_array_from_splitted_string {
     return \@array;
 }
 
-####################################################
-# diff_on_arrays
-####################################################
-# Makes set operation on arrays (seen as set, with no double) :
-#  - deleted : A \ B
-#  - added : B \ A
-#  - intersection : A /\ B
-#  - union : A \/ B
-#
-# IN : -$setA : ref(ARRAY) - set
-#      -$setB : ref(ARRAY) - set
-#
-# OUT : -ref(HASH) with keys :
-#          deleted, added, intersection, union
-#
-#######################################################
+=item diff_on_arrays($setA, $setB)
+
+Compute set arithmetic on the two given lists.
+
+Parameters:
+
+=over
+
+=item * I<$setA>: first set
+
+=item * I<$setA>: second set
+
+=back
+
+Returns an hashref with the following keys:
+
+=over
+
+=item * I<deleted>: FIXME
+
+=item * I<added>: FIXME
+
+=item * I<intersection>: FIXME
+
+=item * I<union>: FIXME
+
+=back
+
+=cut
+
 sub diff_on_arrays {
     my ($setA, $setB) = @_;
     my $result = {
@@ -254,16 +329,24 @@ sub diff_on_arrays {
 
 }
 
-####################################################
-# is_in_array
-####################################################
-# Test if a value is on an array
-#
-# IN : -$setA : ref(ARRAY) - set
-#      -$value : a serached value
-#
-# OUT : boolean
-#######################################################
+=item is_in_array($setA, $value)
+
+Test if a value is on an array
+
+Parameters:
+
+=over
+
+=item * I<$setA>: set
+
+=item * I<$value>: searched value
+
+=back
+
+Returns a boolean value.
+
+=cut
+
 sub is_in_array {
     my $set = shift;
     die 'missing parameter "$value"' unless @_;
@@ -349,8 +432,23 @@ sub string_2_hash {
     return (%hash);
 
 }
-## convert a hash into a string formated as var1="value1";var2="value2"; into
-## a hash
+
+=item hash_2_string($hash)
+
+Convert an hash into a string formated as var1="value1";var2="value2";.
+
+Parameters:
+
+=over
+
+=item * I<$hash>: the hash to convert
+
+=back
+
+Returns a string.
+
+=cut
+
 sub hash_2_string {
     my $refhash = shift;
 
@@ -387,5 +485,9 @@ sub smart_lessthan {
         return $stra < $strb;
     }
 }
+
+=back
+
+=cut
 
 1;

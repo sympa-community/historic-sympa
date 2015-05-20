@@ -22,11 +22,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::Time - Time-related functions
+
+=head1 DESCRIPTION
+
+This package provides some time-related functions.
+
+=cut
+
 package Sympa::Tools::Time;
 
 use strict;
 use warnings;
-use POSIX qw();
+use DateTime;
 use Time::Local qw();
 
 ## subroutines for epoch and human format date processings
@@ -35,8 +47,20 @@ use Time::Local qw();
 # DEPRECATED: No longer used.
 #sub adate($epoch);
 
-## Return the epoch date corresponding to the last midnight before date given
-## as argument.
+=item get_midnight_time($timestamp)
+
+Return the date, as a timestamp, corresponding to the last midnight before the given date.
+
+Parameters:
+
+=over
+
+=item * I<$timestamp>: the date, as a timestamp
+
+=back
+
+=cut
+
 # Note: This is used only once.
 sub get_midnight_time {
     my $epoch = $_[0];
@@ -44,7 +68,12 @@ sub get_midnight_time {
     return $epoch - $date[0] - $date[1] * 60 - $date[2] * 3600;
 }
 
-## convert a human format date into an epoch date
+=item epoch_conv($a, $b)
+
+FIXME.
+
+=cut
+
 sub epoch_conv {
     my $arg = $_[0];             # argument date to convert
     my $time = $_[1] || time;    # the epoch current date
@@ -76,6 +105,12 @@ sub epoch_conv {
     return $result;
 }
 
+=item date_conv($a)
+
+FIXME.
+
+=cut
+
 sub date_conv {
     my $arg = shift;
 
@@ -106,6 +141,12 @@ sub date_conv {
     return time;
 }
 
+=item duration_conv($a, $b)
+
+FIXME.
+
+=cut
+
 sub duration_conv {
 
     my $arg        = $_[0];
@@ -121,10 +162,12 @@ sub duration_conv {
     }
 
     my $duration =
-        $date[6] + 60 *
-        ($date[5] +
-            60 * ($date[4] + 24 * ($date[3] + 7 * $date[2] + 365 * $date[0]))
-        );
+        $seconds +
+        $minutes * 60 +
+        $hours   * 60  * 60 +
+        $days    * 24  * 60 * 60 +
+        $weeks   * 7   * 24 * 60 * 60 +
+        $years   * 365 * 24 * 60 * 60;
 
     # specific processing for the months because their duration varies
     my @months = (
@@ -138,5 +181,9 @@ sub duration_conv {
 
     return $duration;
 }
+
+=back
+
+=cut
 
 1;

@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Task - An abstract background task
+
+=head1 DESCRIPTION
+
+This is an abstract base for all background tasks.
+
+=cut
+
 package Sympa::Task;
 
 use strict;
@@ -44,6 +56,7 @@ sub new {
     $log->syslog('debug2', '(%s)', $file);
 
     $task->{'filepath'} = $file;
+}
 
     ## We might get a filepath
     ## Extract filename from path
@@ -171,6 +184,7 @@ sub epoch_sort {
     my $date2 = $1;
 
     $date1 <=> $date2;
+    return $summary;
 }
 
 1;

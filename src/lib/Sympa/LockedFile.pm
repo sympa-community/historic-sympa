@@ -22,6 +22,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::LockedFile - Filehandle with locking
+
+=head1 DESCRIPTION
+
+This class implements a filehandle with locking.
+
+=head1 SYNOPSIS
+
+  use Sympa::LockedFile;
+  
+  # Create filehandle acquiring lock.
+  my $fh = Sympa::LockedFile->new('/path/to/file', 20, '+<') or die;
+  # or,
+  my $fh = Sympa::LockedFile->new();
+  $fh->open('/path/to/file', 20, '+<') or die;
+  
+  # Operations...
+  while (<$fh>) { ... }
+  seek $fh, 0, 0;
+  truncate $fh, 0;
+  print $fh "blah blah\n";
+  # et cetera.
+ 
+  # Close filehandle releasing lock.
+  $fh->close;
+
+=cut
+
 package Sympa::LockedFile;
 
 use strict;
@@ -195,36 +227,6 @@ sub DESTROY {
 1;
 __END__
 
-=encoding utf-8
-
-=head1 NAME
-
-Sympa::LockedFile - Filehandle with locking
-
-=head1 SYNOPSIS
-
-  use Sympa::LockedFile;
-  
-  # Create filehandle acquiring lock.
-  my $fh = Sympa::LockedFile->new('/path/to/file', 20, '+<') or die;
-  # or,
-  my $fh = Sympa::LockedFile->new();
-  $fh->open('/path/to/file', 20, '+<') or die;
-  
-  # Operations...
-  while (<$fh>) { ... }
-  seek $fh, 0, 0;
-  truncate $fh, 0;
-  print $fh "blah blah\n";
-  # et cetera.
- 
-  # Close filehandle releasing lock.
-  $fh->close;
-
-=head1 DESCRIPTION
-
-This class implements a filehadle with locking.
-
 =head2 Class Methods
 
 =over
@@ -290,8 +292,8 @@ lock will be stolen.
 
 Mode to open file.
 If it implys any writing operations (C<'E<gt>'>, C<'E<gt>E<gt>'>,
-C<'+E<lt>'>, ...), trys to acquire exclusive lock (C<LOCK_EX>),
-otherwise shared lock (C<LOCK_SH>).
+C<'+E<lt>'>, ...), trys to acquire exclusive lock (C<Fcntl::LOCK_EX>),
+otherwise shared lock (C<Fcntl::LOCK_SH>).
 
 Default is C<'E<lt>'>.
 

@@ -30,9 +30,10 @@ use Getopt::Long;
 
 use Conf;
 use Sympa::Log;
+use Sympa::Tools::Daemon;
 
 my %options;
-GetOptions(\%main::options, 'debug|d', 'log_level=s', 'config|f=s');
+GetOptions(\%options, 'debug|d', 'log_level=s', 'config|f=s');
 
 my $log = Sympa::Log->instance;
 
@@ -51,11 +52,11 @@ $log->openlog(
 );
 
 # setting log_level using conf unless it is set by calling option
-if ($main::options{'log_level'}) {
+if ($options{'log_level'}) {
     $log->syslog(
         'info',
         'Logs seems OK, log level set using options: %s',
-        $main::options{'log_level'}
+        $options{'log_level'}
     );
 } else {
     $log->{level} = $Conf::Conf{'log_level'};

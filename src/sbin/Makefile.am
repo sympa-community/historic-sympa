@@ -111,7 +111,7 @@ sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
 .pl.8:
 	@rm -f $@
 	$(AM_V_GEN)$(POD2MAN) --section=8 --center="sympa $(VERSION)" \
-		--lax --release="$(VERSION)" $*.pl $@
+		--lax --release="$(VERSION)" $* $@
 
 # Remove old sympa.8 manpage.
 install-data-hook:

@@ -30,14 +30,16 @@ use English qw(-no_match_vars);
 use SOAP::Lite;
 
 ## Sympa API
-use Conf;
+use Sympa::Conf;
 use Sympa::DatabaseManager;
 use Sympa::List;
-use Sympa::Log;
+use Sympa::Logger;
+use Sympa::Logger::Syslog;
 use Sympa::SOAP;
 use Sympa::SOAP::Transport;
 
 my $birthday = time;
+my $daemon_name = 'soap';
 
 ## Load sympa config
 unless (Conf::load()) {

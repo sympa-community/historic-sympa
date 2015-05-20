@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Upgrade - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Upgrade;
 
 use strict;
@@ -40,7 +52,6 @@ use Conf;
 use Sympa::ConfDef;
 use Sympa::Constants;
 use Sympa::DatabaseManager;
-use Sympa::Language;
 use Sympa::List;
 use Sympa::LockedFile;
 use Sympa::Log;
@@ -681,7 +692,7 @@ sub upgrade {
         my $all_lists = Sympa::List::get_lists('*');
         foreach my $list (@$all_lists) {
             foreach my $f (
-                'config',   'info',
+                'config', 'info',
                 'homepage', 'message.header',
                 'message.footer'
                 ) {
@@ -1028,7 +1039,7 @@ sub upgrade {
         ## Set language of new file content
         $language->push_lang($Conf::Conf{'lang'});
         $date =
-            $language->gettext_strftime("%d.%b.%Y-%H.%M.%S", localtime time);
+            $main::language->gettext_strftime("%d.%b.%Y-%H.%M.%S", localtime time);
 
         if (-r $wwsympa_conf) {
             ## load only sympa.conf
@@ -1124,7 +1135,7 @@ sub upgrade {
             push @newconf,
                   "\n"
                 . ('#' x 76) . "\n" . '#### '
-                . $language->gettext("Migration from wwsympa.conf") . "\n"
+                . $main::language->gettext("Migration from wwsympa.conf") . "\n"
                 . '#### '
                 . $date . "\n"
                 . ('#' x 76) . "\n\n";
@@ -1135,7 +1146,7 @@ sub upgrade {
 
                 push @newconf,
                     Sympa::Tools::Text::wrap_text(
-                    $language->gettext(
+                    $main::language->gettext(
                         "Migrated Parameters\nFollowing parameters were migrated from wwsympa.conf."
                     ),
                     '#### ', '#### '
@@ -1144,7 +1155,7 @@ sub upgrade {
                     if $type eq 'add';
                 push @newconf,
                     Sympa::Tools::Text::wrap_text(
-                    $language->gettext(
+                    $main::language->gettext(
                         "Overrididing Parameters\nFollowing parameters existed both in sympa.conf and  wwsympa.conf.  Previous release of Sympa used those in wwsympa.conf.  Comment-out ones you wish to be disabled."
                     ),
                     '#### ', '#### '
@@ -1153,7 +1164,7 @@ sub upgrade {
                     if $type eq 'override';
                 push @newconf,
                     Sympa::Tools::Text::wrap_text(
-                    $language->gettext(
+                    $main::language->gettext(
                         "Duplicate of sympa.conf\nThese parameters were found in both sympa.conf and wwsympa.conf.  Previous release of Sympa used those in sympa.conf.  Uncomment ones you wish to be enabled."
                     ),
                     '#### ', '#### '
@@ -1162,7 +1173,7 @@ sub upgrade {
                     if $type eq 'duplicate';
                 push @newconf,
                     Sympa::Tools::Text::wrap_text(
-                    $language->gettext(
+                    $main::language->gettext(
                         "Old Parameters\nThese parameters are no longer used."
                     ),
                     '#### ', '#### '
@@ -1171,7 +1182,7 @@ sub upgrade {
                     if $type eq 'obsolete';
                 push @newconf,
                     Sympa::Tools::Text::wrap_text(
-                    $language->gettext(
+                    $main::language->gettext(
                         "Unknown Parameters\nThough these parameters were found in wwsympa.conf, they were ignored.  You may simply remove them."
                     ),
                     '#### ', '#### '
@@ -1184,12 +1195,12 @@ sub upgrade {
 
                     push @newconf,
                         Sympa::Tools::Text::wrap_text(
-                        $language->gettext($param->{'gettext_id'}),
+                        $main::language->gettext($param->{'gettext_id'}),
                         '## ', '## ')
                         if $param->{'gettext_id'};
                     push @newconf,
                         Sympa::Tools::Text::wrap_text(
-                        $language->gettext($param->{'gettext_comment'}),
+                        $main::language->gettext($param->{'gettext_comment'}),
                         '## ', '## ')
                         if $param->{'gettext_comment'};
                     if (defined $v
@@ -1821,9 +1832,9 @@ sub to_utf8 {
             and $Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8') {
             $charset = $Conf::Ignored_Conf{'filesystem_encoding'};
         } else {
-            $language->push_lang($lang);
+            $main::language->push_lang($lang);
             $charset = tools::lang2charset($language->get_lang);
-            $language->pop_lang;
+            $main::language->pop_lang;
         }
 
         # Add X-Sympa-Attach: headers if required.

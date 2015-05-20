@@ -44,6 +44,7 @@ use Sympa::Log;
 use Sympa::Mailer;
 use Sympa::Robot;
 use Sympa::Spool::Archive;
+use Sympa::Monitor;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::File;
 
@@ -57,7 +58,7 @@ unless (
     ) {
     pod2usage(-exitval => 1, -output => \*STDERR);
 }
-if ($main::options{'help'}) {
+if ($options{'help'}) {
     pod2usage(0);
 } elsif ($main::options{'version'}) {
     printf "Sympa %s\n", Sympa::Constants::VERSION;
@@ -67,6 +68,7 @@ if ($main::options{'help'}) {
 if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless $main::options{'log_level'};
     $main::options{'foreground'} = 1;
+    $options{'foreground'} = 1;
 }
 
 my $log = Sympa::Log->instance;
@@ -87,7 +89,7 @@ unless (Sympa::DatabaseManager->instance) {
 }
 
 ## Put ourselves in background if not in debug mode.
-unless ($main::options{'debug'} || $main::options{'foreground'}) {
+unless ($options{'debug'} || $options{'foreground'}) {
     open(STDERR, ">> /dev/null");
     open(STDOUT, ">> /dev/null");
     if (open(TTY, "/dev/tty")) {
@@ -104,22 +106,55 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
         die sprintf 'Cannot fork: %s', $ERRNO;
     }
 }
+$logger->do_log(
+    Sympa::Logger::INFO,
+    "Logger initialized, with log level $log_level"
+);
 
-## If process is running in foreground, don't write STDERR to a dedicated file
-my $options;
-$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
+# initialize SMTP subsystem
+our $mailer = Sympa::Mailer->new(
+    db_type         => Sympa::Site->db_type(),
+    nrcpt_by_domain => Sympa::Site->nrcpt_by_domain(),
+);
 
-## Create and write the PID file
-Sympa::Tools::Daemon::write_pid('archived', $PID, $options);
-unless ($options->{'stderr_to_tty'}) {
-    Sympa::Tools::Daemon::direct_stderr_to_file(('pid' => $PID));
+# initialize i18n subsystem
+our $language = Sympa::Language->new();
+$language->set_lang(Sympa::Site->lang, 'en');
+
+# put ourselves in background if not in debug mode.
+Sympa::Tools::Daemon::daemonize(name => $daemon_name)
+    unless $options{'foreground'};
+
+# check presence of a PID file from a previous execution
+Sympa::Tools::Daemon::check_old_pid_file(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+
+# Create the PID file
+Sympa::Tools::Daemon::write_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    user   => Sympa::Constants::USER,
+    group  => Sympa::Constants::GROUP,
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+# Redirect STDERR to a file, unless the process is running in foreground
+unless ($options{'foreground'}) {
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+        tmpdir => Sympa::Site->tmpdir(),
+        user   => Sympa::Constants::USER,
+        group  => Sympa::Constants::GROUP,
+    );
 }
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
     $log->{level} = $main::options{'log_level'};
     $log->syslog('info',
-        "Configuration file read, log level set using options : $main::options{'log_level'}"
+        "Configuration file read, log level set using options : $options{'log_level'}"
     );
 } else {
     $log->{level} = $Conf::Conf{'log_level'};
@@ -169,9 +204,9 @@ Sympa::Language->instance->set_lang($Conf::Conf{'lang'}, 'en');
 $log->syslog('notice', 'Archived %s Started', Sympa::Constants::VERSION);
 
 # Catch signals, in order to exit cleanly, whenever possible.
-$SIG{'TERM'} = 'sigterm';
 $SIG{'INT'}  = 'sigterm';
 my $end = 0;
+$SIG{'TERM'} = sub { $end = 1 };
 
 my $spool = Sympa::Spool::Archive->new;
 
@@ -212,7 +247,13 @@ Sympa::Alarm->instance->flush(purge => 1);
 Sympa::Mailer->instance->reaper;
 
 $log->syslog('notice', 'Archived exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid('archived', $PID);
+
+Sympa::Tools::Daemon::remove_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 exit 0;
 

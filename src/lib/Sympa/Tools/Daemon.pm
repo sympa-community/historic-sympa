@@ -41,14 +41,16 @@ package Sympa::Tools::Daemon;
 use strict;
 use warnings;
 use English qw(no_match_vars);
+use POSIX qw();
 use Proc::ProcessTable;
 use Sys::Hostname qw();
 
 use Sympa;
-use Sympa::Constants;
+use Sympa::LockedFile;
 use Sympa::Language;
 use Sympa::LockedFile;
 use Sympa::Log;
+use Sympa::Tools::File;
 use Sympa::Tools::File;
 
 my $log = Sympa::Log->instance;
@@ -64,13 +66,36 @@ Remove PID file and STDERR output.
 
 =back
 
+Parameters:
+
+=over
+
+=item * I<name>: process name
+
+=item * I<pid>: process PID (default: current PID)
+
+=item * I<piddir>: PID file directory
+
+=item * I<tmpdir>: STDERR file directory
+
+=item * I<multiple_process>: allows multiple PIDs in the same file
+
+=back
+
+Raise an exception in case of failure.
+
 =cut
 
 sub remove_pid {
-    my ($name, $pid, $options) = @_;
+    my (%params) = @_;
 
-    my $piddir  = Sympa::Constants::PIDDIR;
-    my $pidfile = $piddir . '/' . $name . '.pid';
+    my $name             = $params{name};
+    my $pid              = $params{pid} || $PID;
+    my $piddir           = $params{piddir};
+    my $tmpdir           = $params{tmpdir};
+    my $multiple_process = $params{multiple_process};
+
+    my $pidfile = _get_pid_file(dir => $piddir, name => $name);
 
     my @pids;
 
@@ -85,7 +110,7 @@ sub remove_pid {
     ## If in multi_process mode (bulk.pl for instance can have child
     ## processes) then the PID file contains a list of space-separated PIDs
     ## on a single line
-    if ($options->{'multiple_process'}) {
+    if ($multiple_process) {
         # Read pid file
         seek $lock_fh, 0, 0;
         my $l = <$lock_fh>;
@@ -132,13 +157,21 @@ TBD.
 
 =back
 
+Raise an exception in case of failure.
+
 =cut
 
 sub write_pid {
-    my ($name, $pid, $options) = @_;
+    my (%params) = @_;
 
-    my $piddir  = Sympa::Constants::PIDDIR;
-    my $pidfile = $piddir . '/' . $name . '.pid';
+    my $name             = $params{name};
+    my $pid              = $params{pid} || $PID;
+    my $piddir           = $params{piddir};
+    my $user             = $params{user};
+    my $group            = $params{group};
+    my $multiple_process = $params{multiple_process};
+
+    my $pidfile = _get_pid_file(dir => $piddir, name => $name);
 
     ## Create piddir
     mkdir($piddir, 0755) unless (-d $piddir);
@@ -146,8 +179,8 @@ sub write_pid {
     unless (
         Sympa::Tools::File::set_file_rights(
             file  => $piddir,
-            user  => Sympa::Constants::USER,
-            group => Sympa::Constants::GROUP,
+            user  => $user,
+            group => $group,
         )
         ) {
         die sprintf 'Unable to set rights on %s. Exiting.', $piddir;
@@ -172,7 +205,7 @@ sub write_pid {
 
     ## If we can have multiple instances for the process.
     ## Print other pids + this one
-    if ($options->{'multiple_process'}) {
+    if ($multiple_process) {
         ## Print other pids + this one
         push(@pids, $pid);
 
@@ -205,8 +238,8 @@ sub write_pid {
     unless (
         Sympa::Tools::File::set_file_rights(
             file  => $pidfile,
-            user  => Sympa::Constants::USER,
-            group => Sympa::Constants::GROUP,
+            user  => $user,
+            group => $group,
         )
         ) {
         ## Unlock pid file
@@ -287,10 +320,10 @@ sub send_crash_report {
     }
     Sympa::send_notify_to_listmaster(
         '*', 'crash',
-        {   'crashed_process' => $data{'pname'},
+        {   'crashed_process' => $pname,
             'crash_err'       => \@err_output,
             'crash_date'      => $err_date,
-            'pid'             => $data{'pid'}
+            'pid'             => $pid
         }
     );
 }
@@ -309,13 +342,25 @@ Returns the list of pid identifiers in the pid file.
 
 =back
 
+Parameters:
+
+=over
+
+=item * I<name>: process name
+
+=item * I<piddir>: PID file directory
+
+=back
+
 =cut
 
 sub get_pids_in_pid_file {
-    my $name = shift;
+    my (%params) = @_;
 
-    my $piddir  = Sympa::Constants::PIDDIR;
-    my $pidfile = $piddir . '/' . $name . '.pid';
+    my $name             = $params{name};
+    my $piddir           = $params{piddir};
+
+    my $pidfile = _get_pid_file(dir => $piddir, name => $name);
 
     my $lock_fh = Sympa::LockedFile->new($pidfile, 5, '<');
     unless ($lock_fh) {

@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::DKIM - DKIM-related functions
+
+=head1 DESCRIPTION
+
+This package provides some DKIM-related functions.
+
+=cut
+
 package Sympa::Tools::DKIM;
 
 use strict;
@@ -92,5 +104,9 @@ sub get_dkim_parameters {
 # Old name: tools::dkim_verifier().
 #DEPRECATED: Use Sympa::Message::check_dkim_signature().
 #sub verifier($msg_as_string);
+
+=back
+
+=cut
 
 1;

@@ -22,12 +22,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME 
+
+Sympa::Auth - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Auth;
 
 use strict;
 use warnings;
+use Carp qw(croak);
 use Digest::MD5;
 use POSIX qw();
+use Scalar::Util qw(blessed);
 
 use Sympa;
 use Conf;
@@ -35,7 +49,6 @@ use Sympa::Database;
 use Sympa::DatabaseManager;
 use Sympa::Log;
 use Sympa::Report;
-use Sympa::Robot;
 use Sympa::Session;
 use tools;
 use Sympa::Tools::Data;
@@ -65,6 +78,10 @@ sub check_auth {
     my $pwd   = shift;    ## Password
     $log->syslog('debug', '(%s)', $auth);
 
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my ($canonic, $user);
 
     if (tools::valid_email($auth)) {
@@ -81,7 +98,7 @@ sub check_auth {
         }
         if ($canonic) {
 
-            unless ($user = Sympa::User::get_global_user($canonic)) {
+            unless ($user = Sympa::User::get_global_user($canonic, Sympa::Site->db_additional_user_fields)) {
                 $user = {'email' => $canonic};
             }
             return {
@@ -108,6 +125,10 @@ sub check_auth {
 sub may_use_sympa_native_auth {
     my ($robot, $user_email) = @_;
 
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my $ok = 0;
     ## check each auth.conf paragrpah
     foreach my $auth_service (@{$Conf::Conf{'auth_services'}{$robot}}) {
@@ -129,10 +150,15 @@ sub may_use_sympa_native_auth {
 
 sub authentication {
     my ($robot, $email, $pwd) = @_;
+
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my ($user, $canonic);
     $log->syslog('debug', '(%s)', $email);
 
-    unless ($user = Sympa::User::get_global_user($email)) {
+    unless ($user = Sympa::User::get_global_user($email, Sympa::Site->db_additional_user_fields)) {
         $user = {'email' => $email};
     }
     unless ($user->{'password'}) {
@@ -178,7 +204,7 @@ sub authentication {
                     $robot, $auth_service, $email, $pwd, 'email_filter'
                 )
                 ) {
-                unless ($user = Sympa::User::get_global_user($canonic)) {
+                unless ($user = Sympa::User::get_global_user($canonic, Sympa::Site->db_additional_user_fields)) {
                     $user = {'email' => $canonic};
                 }
                 Sympa::User::update_global_user($canonic,
@@ -224,6 +250,8 @@ sub ldap_authentication {
 
     # only ldap service are to be applied here
     return undef unless ($ldap->{'auth_type'} eq 'ldap');
+
+    require Sympa::Datasource::LDAP;
 
     # skip ldap auth service if the an email address was provided
     # and this email address does not match the corresponding regexp
@@ -421,6 +449,10 @@ sub remote_app_check_password {
     $log->syslog('debug', '(%s, %s, %s)', $trusted_application_name, $robot,
         $service);
 
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my $md5 = Digest::MD5::md5_hex($password);
 
     # seach entry for trusted_application in Conf
@@ -477,6 +509,10 @@ sub create_one_time_ticket {
     my $data_string = shift;
     my $remote_addr = shift;
     ## Value may be 'mail' if the IP address is not known
+
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
 
     my $ticket = Sympa::Session::get_random();
     #$log->syslog('info', '(%s, %s, %s, %s) Value = %s',

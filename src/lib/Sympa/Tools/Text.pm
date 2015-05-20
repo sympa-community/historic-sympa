@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::Text - Text-related functions
+
+=head1 DESCRIPTION
+
+This package provides some text-related functions.
+
+=cut
+
 package Sympa::Tools::Text;
 
 use strict;
@@ -60,6 +72,10 @@ sub foldcase {
         return Encode::encode_utf8(fc(Encode::decode_utf8($str)));
     }
 }
+
+=back
+
+=cut
 
 1;
 __END__

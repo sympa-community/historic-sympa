@@ -84,6 +84,7 @@ p12topem.pl: $(srcdir)/p12topem.pl.in
 symp_test_ldap.pl: $(srcdir)/sympa_test_ldap.pl.in
 testlogs.pl: $(srcdir)/testlogs.pl.in
 tpl2tt2.pl: $(srcdir)/tpl2tt2.pl.in
+sympa_manager.pl: $(srcdir)/sympa_manager.pl.in
 sympa_soap_client.pl: $(srcdir)/sympa_soap_client.pl.in
 upgrade_bulk_spool.pl: $(srcdir)/upgrade_bulk_spool.pl.in
 upgrade_send_spool.pl: $(srcdir)/upgrade_send_spool.pl.in

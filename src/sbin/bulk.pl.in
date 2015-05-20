@@ -29,7 +29,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
-use POSIX qw();
 
 use Sympa;
 use Sympa::Alarm;
@@ -49,13 +48,9 @@ use Sympa::Tools::DKIM;
 use Sympa::Tracking;
 
 my $date_of_last_activity = time();
-local $main::daemon_usage =
+my $daemon_usage =
     'DAEMON_MASTER';    ## Default is to launch bulk as master daemon.
 
-## Check options
-##  --debug : sets the debug mode
-##  --foreground : prevents the script from beeing daemonized
-##  --mail : logs every sendmail calls
 my %options;
 unless (
     GetOptions(
@@ -75,16 +70,17 @@ if ($main::options{'help'}) {
 if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless $main::options{'log_level'};
     $main::options{'foreground'} = 1;
+    $options{'foreground'} = 1;
 }
 
 my $log = Sympa::Log->instance;
 $log->{log_to_stderr} = 'all' if $main::options{'foreground'};
 
-# Load sympa.conf
+# load configuration
 unless (Conf::load()) {
     die sprintf
         "Unable to load Sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.\n",
-        Conf::get_sympa_conf();
+        Sympa::Conf::get_sympa_conf();
 }
 
 $log->openlog($Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'});
@@ -104,7 +100,7 @@ if ($main::options{'log_level'}) {
     $log->syslog(
         'info',
         'Configuration file read, log level set using options: %s',
-        $main::options{'log_level'}
+        $options{'log_level'}
     );
 } else {
     $default_log_level = $Conf::Conf{'log_level'};
@@ -115,15 +111,26 @@ if ($main::options{'log_level'}) {
         $Conf::Conf{'log_level'}
     );
 }
+$logger->do_log(
+    Sympa::Logger::INFO,
+    "Logger initialized, with log level $log_level"
+);
+
+# initialize SMTP subsystem
+our $mailer = Sympa::Mailer->new(
+    db_type         => Sympa::Site->db_type(),
+    nrcpt_by_domain => Sympa::Site->nrcpt_by_domain(),
+);
+
+# initialize i18n subsystem
+our $language = Sympa::Language->new();
+$language->set_lang(Sympa::Site->lang, 'en');
 
 ## Set the process as main bulk daemon by default.
 my $is_main_bulk = 0;
 
-## Put ourselves in background if not in debug mode.
-unless ($main::options{'debug'} || $main::options{'foreground'}) {
-    open(STDERR, ">> /dev/null");
-    open(STDOUT, ">> /dev/null");
-    if (open(TTY, "/dev/tty")) {
+# put ourselves in background if not in debug mode.
+Sympa::Tools::Daemon::daemonize(name => $daemon_name) unless $options{'foreground'};
         close(TTY);
     }
     setpgrp 0, 0;
@@ -137,19 +144,31 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
     }
 }
 $log->openlog($Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'});
-## If process is running in foreground, don't write STDERR to a dedicated file
-my $options;
-$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-$options->{'multiple_process'} = 0;
 
-# Save the PID number
-Sympa::Tools::Daemon::write_pid('bulk', $PID, $options);
-unless ($options->{'stderr_to_tty'}) {
-    Sympa::Tools::Daemon::direct_stderr_to_file(('pid' => $PID));
+# check presence of a PID file from a previous execution
+Sympa::Tools::Daemon::check_old_pid_file(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+
+# Create the PID file
+Sympa::Tools::Daemon::write_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    user   => Sympa::Constants::USER,
+    group  => Sympa::Constants::GROUP,
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+# redirect STDERR to a file, unless the process is running in foreground
+unless ($options{'foreground'}) {
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+        tmpdir => Sympa::Site->tmpdir(),
+        user   => Sympa::Constants::USER,
+        group  => Sympa::Constants::GROUP,
+    );
 }
-## Set the User ID & Group ID for the process
-$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
-$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
 POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
@@ -160,7 +179,8 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2])
     && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
     die
         "Failed to change process user ID and group ID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via sudo.\n";
-}
+};
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 ## Sets the UMASK
 umask(oct($Conf::Conf{'umask'}));
@@ -173,19 +193,25 @@ unless (chdir($Conf::Conf{'home'})) {
 $log->syslog('notice', 'Bulk %s Started', Sympa::Constants::VERSION);
 
 ## Catch signals, in order to exit cleanly, whenever possible.
-$SIG{'TERM'} = 'sigterm';
 $SIG{'INT'}  = 'sigterm';
 my $end = 0;
+$SIG{'TERM'} = sub {
+    $logger->do_log(Sympa::Logger::NOTICE,
+        'signal TERM received, still processing current task');
+    $end = 1;
+};
 
 my $timeout         = $Conf::Conf{'bulk_wait_to_fork'};
 my $last_check_date = 0;
 my %created_children;
 
-$options->{'multiple_process'} = 1;
 $mailer->{redundancy} = $Conf::Conf{'bulk_max_count'} || 1;
 
 my $bulk = Sympa::Bulk->new;
 
+$logger->do_log(Sympa::Logger::NOTICE, "bulk started");
+
+# infinite loop, until a sig TERM is received
 while (!$end) {
     # Enable SMTP logging if required.
     $mailer->{log_smtp} = $default_log_smtp;
@@ -198,7 +224,7 @@ while (!$end) {
 
     my ($message, $handle);
 
-    unless ($main::options{'foreground'}) {
+    unless ($options{'foreground'}) {
         ##
         ## Create child bulks if too much packets are waiting to be sent in
         ## the bulk_mailer table.
@@ -206,7 +232,7 @@ while (!$end) {
         ## processes
         ## Check if we need to run new child processes every
         ## 'bulk_wait_to_fork' (sympa.conf parameter) seconds
-        if (   ($main::daemon_usage eq 'DAEMON_MASTER')
+        if (   ($daemon_usage eq 'DAEMON_MASTER')
             && (time() - $last_check_date > $timeout)) {
             ## Clean up PID file (in case some child bulks would have died)
             my @actual_children =
@@ -240,6 +266,10 @@ while (!$end) {
                             ('pid' => $fpid, 'pname' => $pname));
                         Sympa::Tools::Daemon::remove_pid('bulk', $fpid,
                             $options);
+                        Sympa::Tools::Daemon::terminate_on_expected_error(
+                            $EVAL_ERROR
+                        ) if $EVAL_ERROR;
+
                         delete $dead_children{$fpid};
                         push @dc, $fpid;
                     }
@@ -248,9 +278,23 @@ while (!$end) {
             my $pids_in_pfile =
                 Sympa::Tools::Daemon::get_pids_in_pid_file('bulk');
             unless (defined($pids_in_pfile)) {
-                Sympa::Tools::Daemon::write_pid('bulk', $PID, $options);
+                Sympa::Tools::Daemon::write_pid(
+                    name             => $daemon_name,
+                    piddir           => Sympa::Constants::PIDDIR,
+                    tmpdir           => Sympa::Site->tmpdir(),
+                    user             => Sympa::Constants::USER,
+                    group            => Sympa::Constants::GROUP,
+                    multiple_process => 1
+                );
+                Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR)
+                    if $EVAL_ERROR;
+
                 close STDERR;
-                Sympa::Tools::Daemon::direct_stderr_to_file(('pid' => $PID));
+                Sympa::Tools::Daemon::direct_stderr_to_file(
+                    tmpdir => Sympa::Site->tmpdir(),
+                    user   => Sympa::Constants::USER,
+                    group  => Sympa::Constants::GROUP,
+                );
                 $pids_in_pfile = [$PID];
             }
             # Start new processes if there remain at least
@@ -280,9 +324,13 @@ while (!$end) {
                             $log->syslog('info',
                                 'Starting bulk child daemon, PID %s',
                                 $child_pid);
-                            # Saves the pid number
+                            # Saves the PID number
                             Sympa::Tools::Daemon::write_pid('bulk',
                                 $child_pid, $options);
+                            Sympa::Tools::Daemon::terminate_on_expected_error(
+                                $EVAL_ERROR
+                            ) if $EVAL_ERROR;
+
                             $created_children{$child_pid} = 1;
                             sleep 1;
                         } elsif (not defined $child_pid) {
@@ -586,7 +634,13 @@ while (!$end) {
 Sympa::Alarm->instance->flush(purge => 1);
 
 $log->syslog('notice', 'Bulk exited normally due to signal');
-Sympa::Tools::Daemon::remove_pid('bulk', $PID, $options);
+Sympa::Tools::Daemon::remove_pid(
+    name             => $daemon_name,
+    piddir           => Sympa::Constants::PIDDIR,
+    tmpdir           => Sympa::Site->tmpdir(),
+    multiple_process => 1
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 exit(0);
 

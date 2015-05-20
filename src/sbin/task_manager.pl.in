@@ -29,7 +29,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
-use POSIX qw();
 use Template;
 
 use Sympa;
@@ -46,6 +45,7 @@ use Sympa::Message;
 use Sympa::Scenario;
 use Sympa::Session;
 use Sympa::Spool;
+use Sympa::Spool::File::Task;
 use Sympa::Task;
 use tools;
 use Sympa::Tools::Daemon;
@@ -53,6 +53,27 @@ use Sympa::Tools::File;
 use Sympa::Tools::Time;
 use Sympa::Tracking;
 use Sympa::User;
+
+my $daemon_name = 'task_manager';
+
+## list of list task models
+our @list_models = ('sync_include', 'remind');
+
+## hash of the global task models
+our %global_models = (
+    #'crl_update_task'                 => 'crl_update',
+    #'chk_cert_expiration_task'        => 'chk_cert_expiration',
+    'expire_bounce_task'               => 'expire_bounce',
+    'purge_user_table_task'            => 'purge_user_table',
+    'purge_logs_table_task'            => 'purge_logs_table',
+    'purge_session_table_task'         => 'purge_session_table',
+    'purge_tables_task'                => 'purge_tables',
+    'purge_one_time_ticket_table_task' => 'purge_one_time_ticket_table',
+    'purge_orphan_bounces_task'        => 'purge_orphan_bounces',
+    'eval_bouncers_task'               => 'eval_bouncers',
+    'process_bouncers_task'            => 'process_bouncers',
+    #,'global_remind_task'             => 'global_remind'
+);
 
 my %options;
 unless (
@@ -63,7 +84,7 @@ unless (
     ) {
     pod2usage(-exitval => 1, -output => \*STDERR);
 }
-if ($main::options{'help'}) {
+if ($options{'help'}) {
     pod2usage(0);
 } elsif ($main::options{'version'}) {
     printf "Sympa %s\n", Sympa::Constants::VERSION;
@@ -73,6 +94,7 @@ if ($main::options{'help'}) {
 if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless $main::options{'log_level'};
     $main::options{'foreground'} = 1;
+    $options{'foreground'} = 1;
 }
 
 my $log = Sympa::Log->instance;
@@ -84,7 +106,7 @@ my $adrlist = {};
 unless (Conf::load()) {
     die sprintf
         "Unable to load Sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.\n",
-        Conf::get_sympa_conf();
+        Sympa::Conf::get_sympa_conf();
 }
 
 $log->openlog($Conf::Conf{'log_facility'}, $Conf::Conf{'log_socket_type'});
@@ -95,7 +117,7 @@ if ($main::options{'log_level'}) {
     $log->syslog(
         'info',
         'Configuration file read, log level set using options: %s',
-        $main::options{'log_level'}
+        $options{'log_level'}
     );
 } else {
     $log->{level} = $Conf::Conf{'log_level'};
@@ -105,10 +127,18 @@ if ($main::options{'log_level'}) {
         $Conf::Conf{'log_level'}
     );
 }
+$logger->do_log(
+    Sympa::Logger::INFO,
+    "Logger initialized, with log level $log_level"
+);
 
-## Put ourselves in background if not in debug mode.
+# initialize SMTP subsystem
+our $mailer = Sympa::Mailer->new(
+    db_type         => Sympa::Site->db_type(),
+    nrcpt_by_domain => Sympa::Site->nrcpt_by_domain(),
+);
 
-unless ($main::options{'debug'} || $main::options{'foreground'}) {
+unless ($options{'debug'} || $options{'foreground'}) {
     open(STDERR, ">> /dev/null");
     open(STDOUT, ">> /dev/null");
     if (open(TTY, "/dev/tty")) {
@@ -127,12 +157,29 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
     }
 }
 
-## If process is running in foreground, don't write STDERR to a dedicated file
-my $options;
-$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-Sympa::Tools::Daemon::write_pid('task_manager', $PID, $options);
-unless ($options->{'stderr_to_tty'}) {
-    Sympa::Tools::Daemon::direct_stderr_to_file(('pid' => $PID));
+# check presence of a PID file from a previous execution
+Sympa::Tools::Daemon::check_old_pid_file(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+
+# Create the PID file
+Sympa::Tools::Daemon::write_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    user   => Sympa::Constants::USER,
+    group  => Sympa::Constants::GROUP,
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+# Redirect STDERR to a file, unless the process is running in foreground
+unless ($options{'foreground'}) {
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+        tmpdir => Sympa::Site->tmpdir(),
+        user   => Sympa::Constants::USER,
+        group  => Sympa::Constants::GROUP,
+    );
 }
 
 ## Set the UserID & GroupID for the process
@@ -148,7 +195,8 @@ unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2])
     && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
     die
         "Failed to change process user ID and group ID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via sudo.\n";
-}
+};
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 ## Sets the UMASK
 umask(oct($Conf::Conf{'umask'}));
@@ -162,6 +210,7 @@ unless (chdir($Conf::Conf{'home'})) {
 $SIG{'TERM'} = \&sigterm;
 $SIG{'INT'}  = \&sigterm;
 my $end = 0;
+$SIG{'TERM'} = sub { $end = 1 };
 
 # Most initializations have now been done.
 $log->syslog('notice', 'Task_Manager %s Started',
@@ -2019,6 +2068,7 @@ sub epoch_sort {
 
     $date1 <=> $date2;
 }
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
 
 ## change the label of a task file
 sub change_label {

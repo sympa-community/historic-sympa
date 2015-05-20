@@ -104,5 +104,5 @@ mysql_alias_manager.pl: $(srcdir)/mysql_alias_manager.pl.in
 .pl.8: Makefile
 	@rm -f $@
 	$(AM_V_GEN)$(POD2MAN) --section=8 --center="sympa $(VERSION)" \
-		--lax --release="$(VERSION)" $*.pl $@
+		--lax --release="$(VERSION)" $* $@
 

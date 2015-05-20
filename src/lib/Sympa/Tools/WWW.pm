@@ -22,10 +22,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tools::WWW - Web-related functions
+
+=head1 DESCRIPTION
+
+This package provides some web-related functions.
+
+=cut
+
 package Sympa::Tools::WWW;
 
 use strict;
 use warnings;
+use Carp qw(croak);
 use English qw(-no_match_vars);
 use File::Path qw();
 
@@ -576,6 +589,10 @@ sub _load_mime_types {
 sub _load_create_list_conf {
     my $robot = shift;
 
+    croak "missing 'robot' parameter" unless $robot;
+    croak "invalid 'robot' parameter" unless
+        (blessed $robot and $robot->isa('Sympa::VirtualHost'));
+
     my $file;
     my $conf;
 
@@ -639,8 +656,11 @@ sub get_list_list_tpl {
             foreach my $tpl_name (readdir $dh) {
                 next if $tpl_name =~ /\A\./;
                 next unless -d $directory . '/' . $tpl_name;
-
                 $tpl_names{$tpl_name} = 1;
+                $comment_tt2 = $dir.'/'.$template.'/comment.tt2';
+                if (-r $comment_tt2) {
+                    $list_templates->{$template}{'comment'} = $comment_tt2;
+                }
             }
             closedir $dh;
         }

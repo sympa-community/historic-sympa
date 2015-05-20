@@ -22,13 +22,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Datasource - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Datasource;
 
 use strict;
 use warnings;
 use Digest::MD5 qw();
 
-use Sympa::Log;
+use Sympa::Logger;
 use Sympa::Regexps;
 
 my $log = Sympa::Log->instance;

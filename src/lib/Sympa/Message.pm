@@ -62,6 +62,7 @@ use Sympa::Tools::SMIME;
 use Sympa::Tools::Text;
 use Sympa::Tools::WWW;
 use Sympa::User;
+use Sympa::Tools::Message;
 
 my $language = Sympa::Language->instance;
 my $log      = Sympa::Log->instance;
@@ -1082,42 +1083,58 @@ sub dump {
     my ($self, $output) = @_;
     # my $output ||= \*STDERR;
 
-    my $old_output = select;
-    select $output;
+sub _set_sender_email {
+    my ($self, %params) = @_;
 
-    foreach my $key (keys %{$self}) {
-        if (ref($self->{$key}) eq 'MIME::Entity') {
-            printf "%s =>\n", $key;
-            $self->{$key}->print;
-        } else {
-            printf "%s => %s\n", $key, $self->{$key};
+    my $headers = $params{headers} ||
+                  'Resent-From,From,From_,Resent-Sender,Sender';
+
+    my $hdr    = $self->as_entity()->head;
+    my $sender = undef;
+    my $gecos  = undef;
+    foreach my $field (split /[\s,]+/, $headers) {
+        if (lc $field eq 'from_') {
+            ## Try to get envelope sender
+            my $envelope_sender = $self->get_envelope_sender();
+            if ($envelope_sender and $envelope_sender ne '<>') {
+                $sender = $envelope_sender;
+                last;
+            }
+        } elsif ($hdr->get($field)) {
+            ## Try to get message header
+            ## On "Resent-*:" headers, the first occurrence must be used.
+            ## Though "From:" can occur multiple times, only the first
+            ## one is detected.
+            my @sender_hdr = Mail::Address->parse($hdr->get($field));
+            if (scalar @sender_hdr and $sender_hdr[0]->address) {
+                $sender = lc($sender_hdr[0]->address);
+                my $phrase = $sender_hdr[0]->phrase;
+                if (defined $phrase and length $phrase) {
+                    $gecos = MIME::EncWords::decode_mimewords($phrase,
+                        Charset => 'UTF-8');
+                }
+                last;
+            }
         }
     }
 
-    select $old_output;
-
-    return 1;
+    $self->{'sender_email'} = $sender;
+    $self->{'sender_gecos'} = $gecos;
 }
 
-## Add topic and put header X-Sympa-Topic
-sub add_topic {
-    my ($self, $topic) = @_;
+    return $self->{'subject_charset'};
+}
 
-    $self->{'topic'} = $topic;
+sub _set_decoded_subject {
+    my ($self) = @_;
+
     $self->add_header('X-Sympa-Topic', $topic);
 }
 
-## Get topic
-sub get_topic {
+sub is_spam {
     my ($self) = @_;
 
-    if (defined $self->{'topic'}) {
-        return $self->{'topic'};
-
-    } else {
-        return '';
-    }
-}
+    $self->_set_spam_status() unless $self->{'spam_status'};
 
 sub clean_html {
     my $self = shift;
@@ -1224,6 +1241,7 @@ sub smime_decrypt {
     my ($msg_string, $entity);
 
     # Try all keys/certs until one decrypts.
+    my $decrypted_entity;
     while (my $certfile = shift @$certs) {
         my $keyfile = shift @$keys;
         $log->syslog('debug', 'Trying decrypt with certificate %s, key %s',
@@ -1742,6 +1760,14 @@ sub _merge_msg {
 
     return $entity;
 }
+    
+    # clone original MIME entity, and discard all headers excepted
+    # mime and content ones
+    my $entity = $self->{'entity'}->dup();
+    foreach my $header ($entity->head->tags) {
+        $entity->head->delete($header)
+            unless $header =~ /^(mime|content)-/i;
+    }
 
 sub test_personalize {
     my $self = shift;
@@ -1887,6 +1913,8 @@ sub prepare_message_according_to_mode {
     } else {
         die sprintf 'Unknown variable/reception mode %s', $mode;
     }
+    $entity->print($command_handle);
+    close $command_handle;
 
     return $self;
 }

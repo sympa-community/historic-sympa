@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Tracking - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Tracking;
 
 use strict;
@@ -31,7 +43,7 @@ use English qw(-no_match_vars);
 
 use Sympa::Constants;
 use Sympa::DatabaseManager;
-use Sympa::Log;
+use Sympa::Logger;
 use tools;
 use Sympa::Tools::File;
 

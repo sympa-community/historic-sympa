@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Report - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Report;
 
 use strict;
@@ -29,7 +41,7 @@ use warnings;
 
 use Sympa;
 use Sympa::Bulk;
-use Sympa::Log;
+use Sympa::Logger;
 use Sympa::Message;
 
 my $log = Sympa::Log->instance;
@@ -146,9 +158,10 @@ sub reject_report_msg {
 #FIXME: Is returned value by this function actually used?
 
 sub _get_msg_as_hash {
-    my $msg_object = shift;
+    my ($message) = @_;
 
     my ($msg_entity, $msg_string, $msg_hash);
+    $msg_entity = $message->as_entity();
 
     if ($msg_object->isa('MIME::Entity')) {    ## MIME-Tools object
         $msg_entity = $msg_object;

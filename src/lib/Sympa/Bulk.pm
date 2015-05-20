@@ -22,6 +22,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Bulk - FIXME
+
+=head1 DESCRIPTION
+
+FIXME
+
+=cut
+
 package Sympa::Bulk;
 
 use strict;
@@ -36,7 +48,7 @@ use Sympa::Constants;
 use Sympa::LockedFile;
 use Sympa::Log;
 use Sympa::Message;
-use Sympa::Spool;
+use Sympa::Spool::SQL;
 use Sympa::Tools::File;
 
 my $log = Sympa::Log->instance;
