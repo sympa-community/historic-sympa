@@ -2,8 +2,10 @@
 # RCS Identication ; $Revision$ ; $Date$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +52,7 @@ use Scenario;
 use Fetch;
 use WebAgent;
 use SympaspoolClassic;
-use KeySpool;
+use Sympa::KeySpool;
 use SubscribeSpool;
 use Archive;
 use tt2;
@@ -9144,7 +9146,7 @@ sub get_mod_spool_size {
     my $self = shift;
     Sympa::Log::Syslog::do_log('debug3', 'List::get_mod_spool_size()');
 
-    my $modspool = KeySpool->new();
+    my $modspool = Sympa::KeySpool->new();
     my @messages = $modspool->get_awaiting_messages(
 	{'selector'  => {'list' => $self->name, 'robot' => $self->domain}}
     );

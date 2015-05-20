@@ -1,0 +1,7 @@
+<!-- $Id$ -->
+<div class="block">
+<hr />
+[% html_dumpvars %]
+<hr />
+</div>
+<!-- end dumpvars.tt2 -->

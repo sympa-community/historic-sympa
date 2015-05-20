@@ -2,8 +2,10 @@
 # RCS Identication ; $Revision: 6646 $ ; $Date: 2010-08-19 10:32:08 +0200 (jeu 19 aoû 2010) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyrigh (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +35,7 @@ use Sys::Hostname qw(hostname);
 use Data::Dumper;
 
 use Message;
-use SDM;
+use Sympa::DatabaseManager;
 
 our @ISA = qw(Exporter);
 
@@ -147,7 +149,7 @@ sub get_content {
     }
 
     push @sth_stack, $sth;
-    unless ($sth = &SDM::do_query($statement)) {
+    unless ($sth = &Sympa::DatabaseManager::do_query($statement)) {
 	$sth = pop @sth_stack;
 	return undef;
     }
@@ -421,7 +423,7 @@ Sympa::Log::Syslog::do_log('err',"No selector for an update"); return undef;
     ## Updating Db
     my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
-    unless (&SDM::do_query($statement)) {
+    unless (&Sympa::DatabaseManager::do_query($statement)) {
 	Sympa::Log::Syslog::do_log('err', 'Unable to execute SQL statement "%s"', $statement);
 	return undef;
     }    
@@ -490,7 +492,7 @@ sub store {
 
     push @sth_stack, $sth;
 
-    $sth = SDM::do_prepared_query(
+    $sth = Sympa::DatabaseManager::do_prepared_query(
 	sprintf(
 	    q{INSERT INTO spool_table
 	      (spoolname_spool, messagelock_spool, message_spool%s)
@@ -500,7 +502,7 @@ sub store {
 	$self->{'spoolname'}, $lock, $b64msg, @insertparts
     );
     # this query returns the autoinc primary key as result of this insert
-    $sth = SDM::do_prepared_query(
+    $sth = Sympa::DatabaseManager::do_prepared_query(
 	q{SELECT messagekey_spool as messagekey
 	  FROM spool_table
 	  WHERE messagelock_spool = ? AND date_spool = ?},
@@ -586,7 +588,7 @@ sub clean {
     }
     
     push @sth_stack, $sth;
-    $sth = &SDM::do_query('%s', $sqlquery);
+    $sth = &Sympa::DatabaseManager::do_query('%s', $sqlquery);
     $sth->finish;
    Sympa::Log::Syslog::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
     $sth = pop @sth_stack;

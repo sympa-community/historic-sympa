@@ -2,8 +2,10 @@
 #<!-- RCS Identication ; $Revision$ ; $Date$ --> 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,7 +66,7 @@ use Language qw(gettext_strftime);
 #use tools; # loaded in Conf
 #use tt2; # loaded by List
 #use Conf; # loaded in Site
-#use Log; # loaded in Conf
+#use Sympa::Log; # loaded in Conf
 
 my %openssl_errors = (
     1 => 'an error occurred parsing the command options',
@@ -2500,16 +2502,3 @@ sub get_id {
 
 ## Packages must return true.
 1;
-__END__
-
-=head1 AUTHORS 
-
-=over 4
-
-=item * Serge Aumont <sa AT cru.fr> 
-
-=item * Olivier SalaE<0xfc>n <os AT cru.fr> 
-
-=back 
-
-=cut 

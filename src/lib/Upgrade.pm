@@ -3,8 +3,10 @@
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,15 +31,15 @@ use POSIX qw(strftime);
 # tentative
 use Data::Dumper;
 
-use Site;
+use Sympa::Site;
 #use Conf; # used in Site
-#use Log; # used in Conf
+#use Sympa::Log; # used in Conf
 #use Sympa::Constants; # used in Conf - confdef
-#use SDM; # used in Conf
+#use Sympa::DatabaseManager; # used in Conf
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
-    my $version_file = Site->etc . '/data_structure.version';
+    my $version_file = Sympa::Site->etc . '/data_structure.version';
     my $previous_version;
     
     if (-f $version_file) {
@@ -61,7 +63,7 @@ sub get_previous_version {
 }
 
 sub update_version {
-    my $version_file = Site->etc . '/data_structure.version';
+    my $version_file = Sympa::Site->etc . '/data_structure.version';
 
     ## Saving current version if required
     unless (open VFILE, ">$version_file") {
@@ -81,13 +83,13 @@ sub upgrade {
     Sympa::Log::Syslog::do_log('debug3', '(%s, %s)', @_);
     my ($previous_version, $new_version) = @_;
 
-    if (&tools::lower_version($new_version, $previous_version)) {
+    if (&Sympa::Tools::lower_version($new_version, $previous_version)) {
 	Sympa::Log::Syslog::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 	return 1;
     }
 
     ## Check database connectivity and probe database
-    unless (SDM::check_db_connect('just_try') and SDM::probe_db()) {
+    unless (Sympa::DatabaseManager::check_db_connect('just_try') and Sympa::DatabaseManager::probe_db()) {
 	Log::do_log('err',
 	    'Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf',
 	    Site->db_name
@@ -96,7 +98,7 @@ sub upgrade {
     }
 
     ## Always update config.bin files while upgrading
-    &Conf::delete_binaries();
+    &Sympa::Conf::delete_binaries();
     ## Always update config.bin files while upgrading
     ## This is especially useful for character encoding reasons
     Sympa::Log::Syslog::do_log('notice',
@@ -111,7 +113,7 @@ sub upgrade {
     }
 
     ## Migration to tt2
-    if (&tools::lower_version($previous_version, '4.2b')) {
+    if (&Sympa::Tools::lower_version($previous_version, '4.2b')) {
 
 	Sympa::Log::Syslog::do_log('notice','Migrating templates to TT2 format...');	
 	
@@ -138,7 +140,7 @@ sub upgrade {
     }
     
     ## Initializing the new admin_table
-    if (&tools::lower_version($previous_version, '4.2b.4')) {
+    if (&Sympa::Tools::lower_version($previous_version, '4.2b.4')) {
 	Sympa::Log::Syslog::do_log('notice', 'Initializing the new admin_table...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -147,7 +149,7 @@ sub upgrade {
     }
 
     ## Move old-style web templates out of the include_path
-    if (&tools::lower_version($previous_version, '5.0.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.0.1')) {
 	Sympa::Log::Syslog::do_log('notice','Old web templates HTML structure is not compliant with latest ones.');
 	Sympa::Log::Syslog::do_log('notice','Moving old-style web templates out of the include_path...');
 
@@ -201,7 +203,7 @@ sub upgrade {
 
 
     ## Clean buggy list config files
-    if (&tools::lower_version($previous_version, '5.1b')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.1b')) {
 	Sympa::Log::Syslog::do_log('notice', 'Cleaning buggy list config files...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -210,7 +212,7 @@ sub upgrade {
     }
 
     ## Fix a bug in Sympa 5.1
-    if (&tools::lower_version($previous_version, '5.1.2')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.1.2')) {
 	Sympa::Log::Syslog::do_log('notice', 'Rename archives/log. files...');
 	my $all_lists = List::get_lists('Site');
 	foreach my $list ( @$all_lists ) {
@@ -222,7 +224,7 @@ sub upgrade {
 	}
     }
 
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 
 	## Fill the robot_subscriber and robot_admin fields in DB
 	Sympa::Log::Syslog::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
@@ -299,7 +301,7 @@ sub upgrade {
     }
 
     ## DB fields of enum type have been changed to int
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 	
 	if (&SDM::use_db && Site->db_type eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
@@ -382,7 +384,7 @@ sub upgrade {
     }
 
     ## Rename bounce sub-directories
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 
 	Sympa::Log::Syslog::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
@@ -423,7 +425,7 @@ sub upgrade {
     }
 
     ## Update lists config using 'include_list'
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.2a.1')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Update lists config using include_list parameter...');
 
@@ -454,7 +456,7 @@ sub upgrade {
     }
 
     ## New mhonarc ressource file with utf-8 recoding
-    if (&tools::lower_version($previous_version, '5.3a.6')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3a.6')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
 	foreach my $vr (@{Robot::get_robots()}) {
@@ -489,7 +491,7 @@ sub upgrade {
 
     ## Changed shared documents name encoding
     ## They are Q-encoded therefore easier to store on any filesystem with any encoding
-    if (&tools::lower_version($previous_version, '5.3a.8')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3a.8')) {
 	Sympa::Log::Syslog::do_log('notice','Q-Encoding web documents filenames...');
 
 	Language::PushLang(Site->lang);
@@ -517,7 +519,7 @@ sub upgrade {
 
     ## We now support UTF-8 only for custom templates, config files, headers and footers, info files
     ## + web_tt2, scenari, create_list_templates, families
-    if (&tools::lower_version($previous_version, '5.3b.3')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.3b.3')) {
 	Sympa::Log::Syslog::do_log('notice','Encoding all custom files to UTF-8...');
 
 	my (@directories, @files);
@@ -618,7 +620,7 @@ sub upgrade {
 
     ## giving up subscribers flat files ; moving subscribers to the DB
     ## Also giving up old 'database' mode
-    if (&tools::lower_version($previous_version, '5.4a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.4a.1')) {
 	
 	Sympa::Log::Syslog::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
 
@@ -667,7 +669,7 @@ sub upgrade {
 	}
     }
 
-    if (&tools::lower_version($previous_version, '5.5a.1')) {
+    if (&Sympa::Tools::lower_version($previous_version, '5.5a.1')) {
 
       ## Remove OTHER/ subdirectories in bounces
       Sympa::Log::Syslog::do_log('notice', "Removing obsolete OTHER/ bounce directories");
@@ -731,7 +733,7 @@ sub upgrade {
 		}
 		
    }		
-    if (&tools::lower_version($previous_version, '6.3a')) {
+    if (&Sympa::Tools::lower_version($previous_version, '6.3a')) {
 	# move spools from file to database.
 	my %spools_def = ('queue' =>  'msg',
 			  'queuebounce' => 'bounce',
@@ -1015,7 +1017,7 @@ sub upgrade {
     }
 
     ## We have obsoleted wwsympa.conf.  It would be migrated to sympa.conf.
-    if (&tools::lower_version($previous_version, '6.2a.33')) {
+    if (&Sympa::Tools::lower_version($previous_version, '6.2a.33')) {
 	my $sympa_conf = Conf::get_sympa_conf();
 	my $wwsympa_conf = Conf::get_wwsympa_conf();
 	my $fh;
@@ -1229,14 +1231,14 @@ sub upgrade {
     return 1;
 }
 
-##DEPRECATED: Use SDM::probe_db().
+##DEPRECATED: Use Sympa::DatabaseManager::probe_db().
 ##sub probe_db {
-##    &SDM::probe_db();
+##    &Sympa::DatabaseManager::probe_db();
 ##}
 
-##DEPRECATED: Use SDM::data_structure_uptodate().
+##DEPRECATED: Use Sympa::DatabaseManager::data_structure_uptodate().
 ##sub data_structure_uptodate {
-##    &SDM::data_structure_uptodate();
+##    &Sympa::DatabaseManager::data_structure_uptodate();
 ##}
 
 ## used to encode files to UTF-8
@@ -1353,7 +1355,7 @@ sub md5_encode_password {
 
     Sympa::Log::Syslog::do_log('notice', 'Upgrade::md5_encode_password() recoding password using MD5 fingerprint');
     
-    unless (SDM::check_db_connect('just_try')) {
+    unless (Sympa::DatabaseManager::check_db_connect('just_try')) {
 	return undef;
     }
 

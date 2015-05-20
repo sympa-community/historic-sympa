@@ -1,0 +1,723 @@
+#!--PERL--
+# -*- indent-tabs-mode: nil; -*-
+# vim:ft=perl:et:sw=4
+# $Id$
+
+# Sympa - SYsteme de Multi-Postage Automatique
+#
+# Copyright (c) 1997, 1998, 1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+# 2006, 2007, 2008, 2009, 2010, 2011 Comite Reseau des Universites
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 GIP RENATER
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+use lib split(/:/, $ENV{SYMPALIB} || ''), '--modulesdir--';
+use strict;
+use warnings;
+use English qw(-no_match_vars);
+use Getopt::Long;
+use Pod::Usage;
+use POSIX qw();
+
+use Sympa;
+use Sympa::Alarm;
+use Sympa::Archive;
+use Conf;
+use Sympa::Constants;
+use Sympa::Crash;    # Show traceback.
+use Sympa::DatabaseManager;
+use Sympa::Language;
+use Sympa::List;
+use Sympa::Log;
+use Sympa::Mailer;
+use Sympa::Robot;
+use Sympa::Spool::Archive;
+use Sympa::Monitor;
+use Sympa::Tools::Daemon;
+use Sympa::Tools::File;
+
+# Check options
+my %options;
+unless (
+    GetOptions(
+        \%main::options, 'config|f=s',  'debug|d', 'help|h',
+        'foreground|F',  'log_level=s', 'version|v'
+    )
+    ) {
+    pod2usage(-exitval => 1, -output => \*STDERR);
+}
+if ($options{'help'}) {
+    pod2usage(0);
+} elsif ($main::options{'version'}) {
+    printf "Sympa %s\n", Sympa::Constants::VERSION;
+    exit 0;
+}
+
+if ($main::options{'debug'}) {
+    $main::options{'log_level'} = 2 unless $main::options{'log_level'};
+    $main::options{'foreground'} = 1;
+    $options{'foreground'} = 1;
+}
+
+my $log = Sympa::Log->instance;
+$log->{'log_to_stderr'} = 'all' if $main::options{'foreground'};
+
+# Load sympa.conf
+unless (Conf::load()) {
+    die sprintf
+        "Unable to load sympa configuration, file %s has errors.\n",
+        Conf::get_sympa_conf();
+}
+
+# Check databse connectivity
+unless (Sympa::DatabaseManager->instance) {
+    die sprintf
+        "Database %s defined in sympa.conf has not the right structure or is unreachable.\n",
+        $Conf::Conf{'db_name'};
+}
+
+## Put ourselves in background if not in debug mode.
+unless ($options{'debug'} || $options{'foreground'}) {
+    open(STDERR, ">> /dev/null");
+    open(STDOUT, ">> /dev/null");
+    if (open(TTY, "/dev/tty")) {
+        # ioctl(TTY, TIOCNOTTY(), 0);
+        ioctl(TTY, 0x20007471, 0);    # XXX s/b TIOCNOTTY
+        close(TTY);
+    }
+    setpgrp 0, 0;
+    my $child_pid = fork;
+    if ($child_pid) {
+        $log->syslog('info', 'Starting archived daemon, PID %s', $child_pid);
+        exit 0;
+    } elsif (not defined $child_pid) {
+        die sprintf 'Cannot fork: %s', $ERRNO;
+    }
+}
+$logger->do_log(
+    Sympa::Logger::INFO,
+    "Logger initialized, with log level $log_level"
+);
+
+# initialize SMTP subsystem
+our $mailer = Sympa::Mailer->new(
+    db_type         => Sympa::Site->db_type(),
+    nrcpt_by_domain => Sympa::Site->nrcpt_by_domain(),
+);
+
+# initialize i18n subsystem
+our $language = Sympa::Language->new();
+$language->set_lang(Sympa::Site->lang, 'en');
+
+# put ourselves in background if not in debug mode.
+Sympa::Tools::Daemon::daemonize(name => $daemon_name)
+    unless $options{'foreground'};
+
+# check presence of a PID file from a previous execution
+Sympa::Tools::Daemon::check_old_pid_file(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+
+# Create the PID file
+Sympa::Tools::Daemon::write_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    user   => Sympa::Constants::USER,
+    group  => Sympa::Constants::GROUP,
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+# Redirect STDERR to a file, unless the process is running in foreground
+unless ($options{'foreground'}) {
+    Sympa::Tools::Daemon::direct_stderr_to_file(
+        tmpdir => Sympa::Site->tmpdir(),
+        user   => Sympa::Constants::USER,
+        group  => Sympa::Constants::GROUP,
+    );
+}
+
+# setting log_level using conf unless it is set by calling option
+if ($main::options{'log_level'}) {
+    $log->{level} = $main::options{'log_level'};
+    $log->syslog('info',
+        "Configuration file read, log level set using options : $options{'log_level'}"
+    );
+} else {
+    $log->{level} = $Conf::Conf{'log_level'};
+    $log->syslog('info',
+        "Configuration file read, default log level $Conf::Conf{'log_level'}"
+    );
+}
+
+my $log_facility = $Conf::Conf{'log_facility'} || $Conf::Conf{'syslog'};
+$log->openlog($log_facility, $Conf::Conf{'log_socket_type'});
+
+## Set the User ID & Group ID for the process
+$GID = $EGID = (getgrnam(Sympa::Constants::GROUP))[2];
+$UID = $EUID = (getpwnam(Sympa::Constants::USER))[2];
+
+## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
+POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
+
+## Check if the UID has correctly been set (useful on OS X)
+unless (($GID == (getgrnam(Sympa::Constants::GROUP))[2])
+    && ($UID == (getpwnam(Sympa::Constants::USER))[2])) {
+    die
+        "Failed to change process user ID and group ID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via sudo.\n";
+}
+
+## Sets the UMASK
+umask(oct($Conf::Conf{'umask'}));
+
+foreach my $robot (@{Conf::get_robots_list()}) {
+    my $arc_dir = Conf::get_robot_conf($robot, 'arc_path');
+    unless ($arc_dir) {
+        die sprintf
+            'Robot %s has no archives directory. Check arc_path parameter in this robot.conf and in sympa.conf',
+            $robot;
+    }
+}
+
+## Change to list root
+unless (chdir($Conf::Conf{'home'})) {
+    die sprintf 'Unable to change directory to %s: %s', $Conf::Conf{'home'},
+        $!;
+}
+
+Sympa::Language->instance->set_lang($Conf::Conf{'lang'}, 'en');
+
+$log->syslog('notice', 'Archived %s Started', Sympa::Constants::VERSION);
+
+# Catch signals, in order to exit cleanly, whenever possible.
+$SIG{'INT'}  = 'sigterm';
+my $end = 0;
+$SIG{'TERM'} = sub { $end = 1 };
+
+my $spool = Sympa::Spool::Archive->new;
+
+# Infinite loop scanning the queue (unless a SIGTERM is received)
+while (!$end) {
+    Sympa::List::init_list_cache();
+    # Process grouped notifications
+    Sympa::Alarm->instance->flush;
+
+    my ($message, $handle) = $spool->next;
+
+    if ($message and $handle) {
+        my $status = process_message($message, $handle);
+        unless (defined $status) {
+            $spool->quarantine($handle);
+        } elsif ($status) {
+            $spool->remove($handle);
+        } else {
+            # Processing aborted.  Redo later.
+        }
+    } elsif ($handle) {
+        $log->syslog('err', 'Cannot parse message <%s>', $handle->basename);
+        $spool->quarantine($handle);
+        next;
+    } else {
+        # Sleep for a while if archive spool is empty.
+        sleep $Conf::Conf{'sleep'};
+    }
+
+    # Free zombie sendmail process.
+    Sympa::Mailer->instance->reaper;
+}
+
+# Purge grouped notifications.
+Sympa::Alarm->instance->flush(purge => 1);
+
+# Free zombie sendmail processes.
+Sympa::Mailer->instance->reaper;
+
+$log->syslog('notice', 'Archived exited normally due to signal');
+
+Sympa::Tools::Daemon::remove_pid(
+    name   => $daemon_name,
+    piddir => Sympa::Constants::PIDDIR,
+    tmpdir => Sympa::Site->tmpdir(),
+);
+Sympa::Tools::Daemon::terminate_on_expected_error($EVAL_ERROR) if $EVAL_ERROR;
+
+exit 0;
+
+# When we catch signal, just change the value of the loop variable.
+sub sigterm {
+    my ($sig) = @_;
+    $log->syslog('notice',
+        'Signal %s received, still processing current task', $sig);
+    $end = 1;
+}
+
+sub process_message {
+    my $message = shift;
+    my $handle  = shift;
+
+    unless (defined $message) {
+        $log->syslog('err', 'Unable to create Sympa::Message object');
+        return undef;
+    }
+
+    $log->syslog('notice', 'Processing %s; sender: %s; message ID: %s',
+        $message, $message->{'sender'}, $message->{'message_id'});
+
+    my ($robot_id, $list, $type);
+    if (ref $message->{context} eq 'Sympa::List') {
+        $robot_id = $message->{context}->{'domain'};
+        $list     = $message->{context};
+    } else {
+        $robot_id = $message->{context};
+    }
+    $type = $message->{'listtype'} || '';
+
+    # Unknown robot
+    unless ($robot_id and $robot_id ne '*') {
+        $log->syslog('err', 'Robot %s does not exist', $robot_id);
+        return undef;
+    }
+
+    if ($type eq 'sympa') {
+        return do_command($robot_id, $message);
+    } elsif (not $type and $list) {
+        $log->syslog('notice', 'Archiving %s for list %s', $message, $list);
+        if ($Conf::Conf{'custom_archiver'}) {
+            my $status = system($Conf::Conf{'custom_archiver'},
+                '--list=' . $list->get_list_id,
+                '--file=' . $spool->{directory} . '/' . $handle->basename,
+            ) >> 8;
+            if ($status) {
+                $log->syslog('err', 'Custom archiver exits with code %d',
+                    $status);
+                return undef;
+            }
+        } else {
+            unless (mail2arc($message)) {
+                Sympa::send_notify_to_listmaster(
+                    $robot_id,
+                    'archiving_failed',
+                    {   'file' => $handle->basename,
+                        'bad'  => $spool->{bad_directory}
+                    }
+                );
+                return undef;
+            }
+        }
+    } else {
+        $log->syslog('err', 'Illegal format: %s', $message);
+        return undef;
+    }
+
+    return 1;
+}
+
+sub do_command {
+    my $robot_id = shift;
+    my $message  = shift;
+
+    my ($bodyh, $io);
+    unless ($bodyh = $message->as_entity->bodyhandle
+        and $io = $bodyh->open('r')) {
+        $log->syslog('err', 'Format error: %s', $message);
+        return undef;
+    }
+
+    while (my $line = $io->getline) {
+        chomp $line;
+        next unless $line =~ /\S/;
+        next if $line =~ /\A\s*#/;
+
+        my ($order, $listname, $args) = split /\s+/, $line, 3;
+
+        my $context;
+        if ($listname and $listname eq '*') {
+            $context = $robot_id;
+        } else {
+            $context = Sympa::List->new($listname, $robot_id);
+            unless ($context) {
+                $log->syslog('err', 'Unknown list %s', $listname);
+                next;
+            }
+        }
+
+        if ($order eq 'remove_arc') {
+            my ($arc, $msgid) = split /\s+/, $args, 2;
+            unless (ref $context eq 'Sympa::List') {
+                $log->syslog('err', 'Unknown list %s', $listname);
+                next;
+            }
+            unless ($arc =~ /\A\d{4}-\d{2}\z/) {
+                $log->syslog('err', 'Illegal archive path "%s"', $arc);
+                next;
+            }
+            unless ($msgid and $msgid !~ /NO-ID-FOUND\.mhonarc\.org/) {
+                $log->syslog('err', 'No message id found');
+                next;
+            }
+
+            do_remove_arc($context, $arc, $msgid, $message->{sender});
+        } elsif ($order eq 'rebuildarc') {
+            my $arc = (defined $args and length $args) ? $args : '*';
+            unless ($arc =~ /\A\d{4}-\d{2}\z/ or $arc eq '*') {
+                $log->syslog('err', 'Illegal archive path "%s"', $arc);
+                next;
+            }
+
+            if (ref $context eq 'Sympa::List') {
+                do_rebuildarc($context, $arc);
+            } else {
+                my $all_lists = Sympa::List::get_lists($context);
+                foreach my $list (@{$all_lists || []}) {
+                    do_rebuildarc($list, $arc);
+                }
+            }
+        } else {
+            $log->syslog('err', 'Format error: Unknown command "%s"', $order);
+            return undef;
+        }
+    }
+
+    return 1;
+}
+
+# Moved to Sympa::Archive::html_remove().  Use do_remove_arc() instead.
+#sub remove;
+
+# Note: Though namings "remove_arc" and "rebuildarc" are inconsistent, they
+# are intentional, to keep in sync with functions of WWSympa.
+sub do_remove_arc {
+    $log->syslog('debug2', '(%s, %s, %s, %s)', @_);
+    my $list   = shift;
+    my $arc    = shift;
+    my $msgid  = shift;
+    my $sender = shift;
+
+    my $archive = Sympa::Archive->new($list);
+    unless ($archive->select_archive($arc)) {
+        $log->syslog('err', 'No archive %s of %s', $arc, $archive);
+        return undef;
+    }
+    my ($arc_message, $arc_handle) = $archive->fetch(message_id => $msgid);
+    unless ($arc_message) {
+        $log->syslog('err',
+            'Unable to load message with message ID %s found in %s of %s',
+            $msgid, $arc, $archive);
+        return undef;
+    }
+
+    # If not list owner, list editor nor listmaster, check if
+    # sender of remove order is sender of the message to be
+    # removed.
+    unless ($list->am_i('privileged_owner', $sender)
+        or $list->am_i('owner',  $sender)
+        or $list->am_i('editor', $sender)
+        or Sympa::Robot::is_listmaster($sender, $list->{'domain'})) {
+        unless (lc $sender eq lc($arc_message->{sender} || '')) {
+            $log->syslog('err',
+                'Remove command for %s by unauthorized sender: %s',
+                $arc_message, $sender);
+            return undef;
+        }
+    }
+    # At this point, requested command is from an authorized person
+    # (message sender or list admin or listmaster).
+
+    $log->syslog('notice', 'Removing %s in %s of archive %s',
+        $msgid, $arc, $archive);
+
+    unless ($archive->html_remove($msgid) and $archive->remove($arc_handle)) {
+        return undef;
+    }
+
+    $log->db_log(
+        'robot'      => $list->{'domain'},
+        'list'       => $list->{'name'},
+        'action'     => 'remove_arc',
+        'parameters' => $msgid,
+        'msg_id'     => $msgid,
+        'status'     => 'success',
+        'user_email' => $sender
+    );
+    $log->add_stat(
+        'robot'     => $list->{'domain'},
+        'list'      => $list->{'name'},
+        'operation' => 'remove_arc',
+        'mail'      => $sender
+    );
+
+    return 1;
+}
+
+# Moved to Sympa::Archive::html_rebuild().  Use do_rebuildarc() instead.
+#sub rebuild;
+
+sub do_rebuildarc {
+    $log->syslog('debug2', '(%s, %s)', @_);
+    my $list = shift;
+    my $arc  = shift;
+
+    my $archive = Sympa::Archive->new($list);
+
+    if ($arc and $arc ne '*') {
+        $log->syslog('notice', 'Rebuilding %s of %s', $arc, $archive);
+        $archive->html_rebuild($arc);
+    } else {
+        $log->syslog('notice', 'Rebuilding archive of %s completely', $list);
+        foreach my $arc ($archive->get_archives) {
+            $archive->html_rebuild($arc);
+        }
+        $log->syslog('notice', 'Rebuild of %s archives completed', $list);
+    }
+}
+
+sub mail2arc {
+    $log->syslog('debug2', '(%s)', @_);
+    my $message = shift;
+
+    my $list    = $message->{context};
+    my $archive = Sympa::Archive->new($list);
+
+    # chdir $arcpath;
+
+    ## Check quota
+    if ($list->{'admin'}{'archive'}{'quota'}) {
+        my $used =
+            Sympa::Tools::File::get_dir_size($archive->{base_directory});
+
+        if ($used >= $list->{'admin'}{'archive'}{'quota'} * 1024) {
+            $log->syslog('err', 'Web archive quota exceeded for list %s',
+                $list);
+            $list->send_notify_to_owner('arc_quota_exceeded',
+                {'size' => $used});
+            return undef;
+        }
+        if ($used >= ($list->{'admin'}{'archive'}{'quota'} * 1024 * 0.95)) {
+            $log->syslog('err', 'Web archive quota exceeded for list %s',
+                $list);
+            $list->send_notify_to_owner(
+                'arc_quota_95',
+                {   'size' => $used,
+                    'rate' => int(
+                        $used * 100 /
+                            ($list->{'admin'}{'archive'}{'quota'} * 1024)
+                    )
+                }
+            );
+        }
+    }
+
+    if ($list->{'admin'}{'archive'}{'max_month'}) {
+        my $arc = POSIX::strftime('%Y-%m', localtime $message->{date});
+
+        unless ($archive->select_archive($arc)) {
+            $archive->add_archive($arc);
+            unless ($archive->select_archive($arc)) {
+                $log->syslog('err',
+                    'Cannot create directory %s in archive %s',
+                    $arc, $archive);
+                return undef;
+            }
+
+            # maybe need to remove some old archive
+            my @archives = $archive->get_archives;
+            my $nb_month = scalar @archives;
+            my $i        = 0;
+            while ($nb_month > $list->{'admin'}{'archive'}{'max_month'}) {
+                $log->syslog(
+                    'info',
+                    'Removing %s/%s',
+                    $archive->{base_directory},
+                    $archives[$i]
+                );
+
+                unless ($archives[$i] eq $arc) {
+                    $archive->purge_archive($archives[$i]);
+                }
+                $i++;
+                $nb_month--;
+            }
+        }
+    }
+
+    unless ($archive->store($message) and $archive->html_store($message)) {
+        return undef;
+    }
+    return 1;
+}
+
+# Moved to Sympa::Archive::_set_hidden_mode().
+#sub set_hidden_mode;
+
+# Moved to Sympa::Archive::_unset_hidden_mode().
+#sub unset_hidden_mode;
+
+# Saves the archives index file
+#* $index, a string corresponding to the file name to which save an index.
+#* $lst, a character string
+# Moved to Sympa::Archive::_save_idx().
+#sub save_idx;
+
+# Moved to Sympa::Archive::_create_idx().
+#sub create_idx;
+
+# DEPRECATED.
+# Use Sympa::Archive::_get_tag().
+#sub get_tag;
+
+# Checks if directory exists and we have write and read accec to it.
+# DEPRECATED.  No longer used.
+sub directory_check {
+    my $dir = shift;
+    unless (-d $dir) {
+        printf STDERR "Creating missing %s directory\n", $dir;
+        unless (mkdir $dir, 0775) {
+            $log->syslog('err', 'Unable to create directory %s', $dir);
+            return undef;
+        }
+        unless (
+            Sympa::Tools::File::set_file_rights(
+                file  => $dir,
+                user  => Sympa::Constants::USER,
+                group => Sympa::Constants::GROUP,
+                mode  => 0775,
+            )
+            ) {
+            $log->syslog('err', 'Unable to set rights on %s', $dir);
+            return undef;
+        }
+    }
+    unless ((-r $dir) && (-w $dir)) {
+        $log->syslog('err', 'Unsufficient access to %s directory', $dir);
+        return undef;
+    }
+    return 1;
+}
+
+__END__
+
+=encoding utf-8
+
+=head1 NAME
+
+archived, archived.pl - Mailing List Archiving Daemon for Sympa
+
+=head1 SYNOPSIS
+
+S<B<archived.pl> [ B<--foreground> ] [ B<--debug> ]>
+
+=head1 DESCRIPTION
+
+B<Archived> is a program which scan permanently the archive spool
+and feeds the web archives, converting messages to the HTML format and
+linking them. Original mails are also kept (in I<arctxt/> directory> for
+later rebuilding of archives.
+
+The HTML conversion is achieved by the means of the B<MHonArc> program.
+
+Archives are accessed via B<wwsympa.fcgi> and B<sympa.pl>,
+which proposes access control;
+therefore archives should not be located in a public web directory.
+
+=head1 OPTIONS
+
+These programs follow the usual GNU command line syntax,
+with long options starting with two dashes (C<-->).  A summary of
+options is included below.
+
+=over 5
+
+=item B<-F>, B<--foreground>
+
+Do not detach TTY.
+
+=item B<-f>, B<--config=>I<file>
+
+Force archived to use an alternative configuration file instead
+of F<--CONFIG-->.
+
+=item B<-d>, B<--debug>
+
+Run the program in a debug mode.
+
+=item B<-h>, B<--help>
+
+Print this help message.
+
+=back
+
+=head1 FILES
+
+F<--spooldir--/outgoing/> outgoing Sympa directory.
+
+F<--defaultdir--/mhonarc-ressources.tt2> template of MHonArc resource file.
+
+F<--CONFIG--> Sympa configuration file.
+
+F<--piddir--/archived.pid> this file contains the process ID
+of F<archived.pl>.
+
+=head1 MORE DOCUMENTATION
+
+The full documentation in HTML and PDF formats can be found in
+L<http://www.sympa.org/manual/>.
+
+The mailing lists (with web archives) can be accessed at
+L<http://listes.renater.fr/sympa/lists/informatique/sympa>.
+
+=head1 HISTORY
+
+This program was originally written by:
+
+=over 4
+
+=item Serge Aumont
+
+ComitE<233> RE<233>seau des UniversitE<233>s
+
+=item Olivier SalaE<252>n
+
+ComitE<233> RE<233>seau des UniversitE<233>s
+
+=back
+
+This manual page was initially written by
+JE<233>rE<244>me Marant <jerome.marant@IDEALX.org>
+for the Debian GNU/Linux system.
+
+=head1 LICENSE
+
+You may distribute this software under the terms of the GNU General
+Public License Version 2.  For more details see F<README> file.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, no Front-Cover Texts and no Back-Cover Texts.  A
+copy of the license can be found under
+L<http://www.gnu.org/licenses/fdl.html>.
+
+=head1 BUGS
+
+Report bugs to Sympa bug tracker.
+See L<http://www.sympa.org/tracking>.
+
+=head1 SEE ALSO
+
+L<sympa_msg(8)>, L<bounced(8)>, L<mhonarc(1)>, L<sympa.conf(5)>.
+
+=cut

@@ -2,8 +2,10 @@
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +36,7 @@ use Data::Dumper;
 #use Conf; # used in List - Site
 #use Language; # used in List
 #use List; # this package is used by List
-#use Log; # used in Conf
+#use Sympa::Log; # used in Conf
 #use Sympa::Constants; # used in Conf - confdef
 #use tools; # used in Conf
 

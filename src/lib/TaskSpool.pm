@@ -3,8 +3,10 @@
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +26,7 @@ package TaskSpool;
 use strict;
 
 use Exporter;
-use SympaspoolClassic;
+use Sympa::ClassicSpool;
 #use Time::Local; # no longer used
 # tentative
 use Data::Dumper;
@@ -290,7 +292,7 @@ sub create_required_lists_tasks {
 sub creation_error {
     my $message = shift;
     Sympa::Log::Syslog::do_log('err', $message);
-    Site->send_notify_to_listmaster('task_creation_error', $message);
+    Sympa::Site->send_notify_to_listmaster('task_creation_error', $message);
 }
 
 ## Packages must return true.

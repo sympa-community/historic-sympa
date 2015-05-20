@@ -1,0 +1,7 @@
+title.gettext Mailing list configuration to be used for a news letter providing both text plain and HTML formats
+
+<ul>
+<li>[%|loc%]public and moderated list[%END%]</li>
+<li>[%|loc%]subscribers emails are protected[%END%]</li>
+<li>[%|loc%]default reception format is HTML[%END%]</li>
+</ul>

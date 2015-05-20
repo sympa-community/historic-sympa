@@ -5,10 +5,10 @@
 
 use strict;
 use warnings;
-#use lib "...";
-
 use Test::More;
 
+use FindBin qw($Bin);
+use lib "$Bin/../src/lib";
 use Language;
 
 plan tests => 77;
@@ -32,6 +32,17 @@ is(Language::Lang2Locale('pt'),    'pt');
 is(Language::Lang2Locale('pt-BR'), 'pt_BR');
 is(Language::Lang2Locale('zh'),    'zh');
 is(Language::Lang2Locale('zh-CN'), 'zh_CN');
+    ## non-POSIX locales
+    [['cn'] => [qw(zh-CN zh)]],
+    ## Old style locales
+    [['en_US'] => [qw(en-US en)]],
+    [['nb_NO'] => ['nb']],
+    ## Multiple arguments
+    [   [qw(tyv-MN tyv-Latn-MN kim tyv-Mong)] =>
+            [qw(tyv-MN tyv-Latn-MN tyv-Latn kim tyv-Mong tyv)]
+    ],
+    [[qw(zh zh-TW zh-Hant-TW)] => [qw(zh-Hant-TW zh-TW zh-Hant zh)]],
+);
 
 is(Language::Lang2Locale('cz'), 'cs');
 is(Language::Lang2Locale('us'), 'en_US');
@@ -60,6 +71,7 @@ is(Language::Lang2Locale_old('pt'),    'pt_PT');
 is(Language::Lang2Locale_old('pt-BR'), 'pt_BR');
 is(Language::Lang2Locale_old('zh'),    undef);
 is(Language::Lang2Locale_old('zh-CN'), 'zh_CN');
+);
 
 is(Language::Lang2Locale_old('cz'), 'cs_CZ');
 is(Language::Lang2Locale_old('us'), 'en_US');

@@ -1,0 +1,19 @@
+[%# $Id: $ -%]
+[%#
+This style sheet will override any portion of main CSS, not fully replacing it.
+So this may be used for locale-specific customization.
+-%]
+/* begin zh-TW/css.tt2 */
+@media screen {  }
+[%# Overriding default font family. %]
+body {
+    font-family:"儷黑 Pro", "LiHei Pro", "Apple LiGothic", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+}
+[%# Overriding "monospace, serif" %]
+pre,
+code,
+kbd,
+samp {
+    font-family:monospace,"儷宋 Pro", "LiSong Pro", "Apple LiSung Light", PMingLiu, "PMingLiu-ExtB", serif;
+}
+/* end zh-TW/css.tt2 */

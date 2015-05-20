@@ -1,9 +1,11 @@
-# Makefile - This Makefile builds and installs Sympa sources
-# RCS Identication ; $Revision$ ; $Date$ 
-#
+# $Id$
+
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997, 1998, 1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+# 2006, 2007, 2008, 2009, 2010, 2011 Comite Reseau des Universites
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,78 +20,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SUBDIRS = etc lib
+SUBDIRS = bin cgi etc lib libexec sbin
 
-AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
-
-sbin_SCRIPTS = sympa.pl bulk.pl alias_manager.pl task_manager.pl sympa_wizard.pl
-sbin_PROGRAMS = aliaswrapper virtualwrapper
-aliaswrapper_SOURCES = aliaswrapper.c
-aliaswrapper_CPPFLAGS = $(AM_CPPFLAGS) \
-			-DNEWALIASES=\"${NEWALIASES}\" \
-			-DNEWALIASES_ARG=\"${NEWALIASES_ARG}\"
-virtualwrapper_SOURCES = virtualwrapper.c
-virtualwrapper_CPPFLAGS = $(AM_CPPFLAGS) \
-			  -DPOSTMAP=\"${POSTMAP}\" \
-			  -DPOSTMAP_ARG=\"${POSTMAP_ARG}\"
-
-libexec_PROGRAMS = queue bouncequeue familyqueue
-queue_SOURCES = queue.c
-queue_CPPFLAGS = $(AM_CPPFLAGS) -DSPOOLDIR=\"${spooldir}\"
-bouncequeue_SOURCES = bouncequeue.c
-bouncequeue_CPPFLAGS = $(AM_CPPFLAGS) -DSPOOLDIR=\"${spooldir}\"
-familyqueue_SOURCES = familyqueue.c
-familyqueue_CPPFLAGS = $(AM_CPPFLAGS) -DSPOOLDIR=\"${spooldir}\"
-
-EXTRA_DIST = $(modules_DATA) \
-	     bulk.pl.in \
-	     alias_manager.pl.in \
-	     sympa.pl.in \
-	     sympa_wizard.pl.in \
-	     task_manager.pl.in
-
-CLEANFILES = $(sbin_SCRIPTS)
-
-install-exec-hook:
-	-chown $(USER) $(DESTDIR)$(libexecdir)/queue
-	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/queue
-	chmod 4755 $(DESTDIR)$(libexecdir)/queue
-
-	-chown $(USER) $(DESTDIR)$(libexecdir)/bouncequeue
-	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/bouncequeue
-	chmod 4755 $(DESTDIR)$(libexecdir)/bouncequeue
-
-	-chown $(USER) $(DESTDIR)$(libexecdir)/familyqueue
-	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/familyqueue
-	chmod 4755 $(DESTDIR)$(libexecdir)/familyqueue
-
-	-chown root $(DESTDIR)$(sbindir)/aliaswrapper
-	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/aliaswrapper
-	chmod 4750 aliaswrapper $(DESTDIR)$(sbindir)/aliaswrapper
-
-	-chown root $(DESTDIR)$(sbindir)/virtualwrapper
-	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
-	chmod 4750 $(DESTDIR)$(sbindir)/virtualwrapper
-
-alias_manager.pl bulk.pl task_manager.pl sympa.pl sympa_wizard.pl: Makefile
-	rm -f $@
-	$(AM_V_GEN)$(SED) \
-		-e 's|--PERL--|$(PERL)|' \
-		-e 's|--defaultdir--|$(defaultdir)|' \
-		-e 's|--docdir--|$(docdir)|' \
-		-e 's|--libexecdir--|$(libexecdir)|' \
-		-e 's|--localedir--|$(localedir)|' \
-		-e 's|--modulesdir--|$(modulesdir)|' \
-		-e 's|--piddir--|$(piddir)|' \
-		-e 's|--spooldir--|$(spooldir)|' \
-		-e 's|--sysconfdir--|$(sysconfdir)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		< $(srcdir)/$@.in > $@
-	chmod +x $@
-
-alias_manager.pl: $(srcdir)/alias_manager.pl.in
-bulk.pl: $(srcdir)/bulk.pl.in
-sympa.pl: $(srcdir)/sympa.pl.in
-sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
-task_manager.pl: $(srcdir)/task_manager.pl.in

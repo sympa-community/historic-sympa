@@ -2,8 +2,10 @@
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +35,7 @@ use Data::Dumper;
 
 #use Bulk;
 #use Conf; # used in List - Site
-#use Log; # load in Conf
+#use Sympa::Log; # load in Conf
 use Language qw(gettext);
 #use List; # this package is loaded via List
 #use Sympa::Constants; # load in confdef - Conf

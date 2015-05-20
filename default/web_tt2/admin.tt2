@@ -1,0 +1,54 @@
+<!-- $Id$ -->
+<div class="block">
+
+<h2>[%|loc%]Advanced Operations[%END%]</h2>
+[% IF is_privileged_owner %]        
+<div>
+<form name="manage_list_status" action="[% path_cgi %]" method="post">
+<fieldset>
+  [% IF list_conf.status == 'closed' %]
+  <input class="MainMenuLinks" type="submit" name="action_restore_list" value="[%|loc%]Restore List[%END%]" onClick="return request_confirm('[% FILTER escape_quote %][%|loc(list)%]Are you sure you wish to restore list %1?[%END%][%END%]');"/> [%|loc%]This list is currently closed. Clicking this button will make it active again.[%END%]
+  <input type="hidden" name="list" value="[% list %]"/>
+  [% ELSE %]
+  <input class="MainMenuLinks" type="submit" name="action_close_list" value="[%|loc%]Close List[%END%]" onClick="return request_confirm('[% FILTER escape_quote %][%|loc(list)%]Are you sure you wish to close list %1?[%END%][%END%]');"/>
+  <input type="hidden" name="list" value="[% list %]"/>
+  [% END %]
+</fieldset>
+</form>
+</div><br/>
+<div>
+<form name="manage_list_name" action="[% path_cgi %]" method="post">
+<fieldset>
+  [% IF may_create_list %]
+  <input class="MainMenuLinks" type="submit" name="action_rename_list_request" value="[%|loc%]Rename List[%END%]"/>
+  <input type="hidden" name="list" value="[% list %]"/>
+  [% END %]
+</fieldset>
+</form>
+</div><br/>
+[% END %]
+
+[% IF is_owner %]
+<div>
+<form name="manage_shared_status" action="[% path_cgi %]" method="post">
+<fieldset>
+[% IF shared == 'none' %]
+  <input class="MainMenuLinks" type="submit" name="action_d_admin" value="[%|loc%]Create Shared Content[%END%]"/> [%|loc%]Initializes the shared document web space.[%END%]
+  <input type="hidden" name="list" value="[% list %]"/>
+  <input type="hidden" name="d_admin" value="create"/>
+[% ELSIF shared == 'exist' %]
+  <input class="MainMenuLinks" type="submit" name="action_d_admin" value="[%|loc%]Delete Shared Documents[%END%]" onClick="return request_confirm('[% FILTER escape_quote %][%|loc(listname)%]Are you sure you wish to delete the shared documents for list %1?[%END%][%END%]');"/></li>
+  <input type="hidden" name="list" value="[% list %]"/>
+  <input type="hidden" name="d_admin" value="delete"/>
+[% ELSIF shared == 'deleted' %]
+  <input class="MainMenuLinks" type="submit" name="action_d_admin" value="[%|loc%]Restore Shared[%END%]"/> [%|loc%]Restores the previously closed shared document web space.[%END%]</li>
+  <input type="hidden" name="list" value="[% list %]"/>
+  <input type="hidden" name="d_admin" value="restore"/>
+[% END %]
+</fieldset>
+</form>
+</div><br/>
+[% END %]
+
+</div>
+<!-- end admin.tt2 -->

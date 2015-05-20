@@ -174,15 +174,21 @@ sympa_stop() {
         echo "Usage: sympa_stop {program}"
         return 1
     fi
- 
+    if [ $1 = 'sympa-creation' ]; then
+		process_name='sympa';
+	else
+		process_name=$1;
+    fi
+    comm=`echo $process_name.pl | cut -c-8`
+
     if [ -f ${sympapiddir}/$1.pid ]; then
-	echo $echo_opt "Stopping module $1.pl: "
+	echo $echo_opt "Stopping module $process_name.pl: "
 	pids=`head -1 ${sympapiddir}/$1.pid`
 	runcount=0
 	if [ "$pids" != "" ]; then
 	    for pid in $pids; do
 		killcount=0
-		running=`ps -A | grep "$pid ..* $1\\.pl"`
+		running=`ps -A | grep "$pid ..* $comm"`
 		while [ "$running" != "" ]; do
 		    if [ $killcount -gt 10 ]; then
 			if [ ${use_functions} ]; then
@@ -194,13 +200,13 @@ sympa_stop() {
 		    fi
 
 		    kill -TERM $pid >/dev/null 2>&1
-		    running=`ps -A | grep "$pid ..* $1\\.pl"`
+		    running=`ps -A | grep "$pid ..* $comm"`
 		    if [ "$running" = "" ]; then
 			runcount=`expr $runcount + 1`
 			break
 		    fi
 		    sleep 2
-		    running=`ps -A | grep "$pid ..* $1\\.pl"`
+		    running=`ps -A | grep "$pid ..* $comm"`
 		    if [ "$running" = "" ]; then
 			runcount=`expr $runcount + 1`
 			break
@@ -220,7 +226,7 @@ sympa_stop() {
 	fi
 	echo
     else
-	echo "Module $1.pl not running"
+	echo "Module $process_name.pl not running"
     fi
     return 0
 }
@@ -244,7 +250,7 @@ case "$1" in
 	if [ ! -f ${sympalockdir}/sympa ]; then
 		echo "Starting Sympa subsystem: "
 		sympa_check || exit 1
-		sympa_start sympa
+		sympa_start sympa_msg
 		sympa_start bulk
 		sympa_start archived
 		sympa_start bounced
@@ -263,12 +269,21 @@ case "$1" in
 	sympa_stop bounced
 	sympa_stop archived
 	sympa_stop bulk
-	sympa_stop sympa
-	#if [ -f ${sympapiddir}/sympa-distribute.pid ]; then
-	#	sympa_stop sympa-distribute
-	#fi
+	sympa_stop sympa_msg
+	if [ -f ${sympapiddir}/sympa.pid ]; then
+		# For Sympa earlier than 6.2b.4
+		sympa_stop sympa
+	fi
+	if [ -f ${sympapiddir}/sympa-distribute.pid ]; then
+		# For Sympa earlier than 6.2b.1
+		sympa_stop sympa-distribute
+	fi
 	if [ -f ${sympapiddir}/sympa-creation.pid ]; then
+		# For Sympa earlier than 6.2b.4
 		sympa_stop sympa-creation
+	fi
+	if [ -f ${sympapiddir}/sympa_automatic.pid ]; then
+		sympa_stop sympa_automatic
 	fi
 	sympa_stop task_manager
 	if [ -f ${sympalockdir}/sympa ]; then
@@ -282,7 +297,7 @@ case "$1" in
 	else
 		echo "Status file for subsystem NOT found."
 	fi
-	sympa_status sympa
+	sympa_status sympa_msg
 	sympa_status bulk
 	sympa_status archived
 	sympa_status bounced

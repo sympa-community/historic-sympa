@@ -1,11 +1,30 @@
 
+# Sympa - SYsteme de Multi-Postage Automatique
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package User;
 
 use strict;
 use warnings;
 use Carp qw(carp croak);
 
-#use Site; # this module is used in Site
+#use Sympa::Site; # this module is used in Site
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
@@ -50,7 +69,7 @@ Create new User object.
 
 sub new {
     my $pkg    = shift;
-    my $who    = tools::clean_email(shift || '');
+    my $who    = Sympa::Tools::clean_email(shift || '');
     my %values = @_;
     my $self;
     return undef unless $who;
@@ -117,7 +136,7 @@ Change email of user.
 
 sub moveto {
     my $self = shift;
-    my $newemail = tools::clean_email(shift || '');
+    my $newemail = Sympa::Tools::clean_email(shift || '');
 
     unless ($newemail) {
 	Sympa::Log::Syslog::do_log('err', 'No email');
@@ -295,7 +314,7 @@ sub delete_global_user {
 ## Returns a hash for a given user
 sub get_global_user {
     Sympa::Log::Syslog::do_log('debug2', '(%s)', @_);
-    my $who = &tools::clean_email(shift);
+    my $who = &Sympa::Tools::clean_email(shift);
 
     ## Additional subscriber fields
     my $additional = '';
@@ -395,7 +414,7 @@ sub get_all_global_user {
 
 ## Is the person in user table (db only)
 sub is_global_user {
-    my $who = &tools::clean_email(pop);
+    my $who = &Sympa::Tools::clean_email(pop);
     Sympa::Log::Syslog::do_log('debug3', '(%s)', $who);
 
     return undef unless ($who);
@@ -433,7 +452,7 @@ sub update_global_user {
 	$values = {@_};
     }
 
-    $who = &tools::clean_email($who);
+    $who = &Sympa::Tools::clean_email($who);
 
     ## use md5 fingerprint to store password
     $values->{'password'} = &Auth::password_fingerprint($values->{'password'})
@@ -474,7 +493,7 @@ sub update_global_user {
 
     push @sth_stack, $sth;
 
-    $sth = &SDM::do_query(
+    $sth = &Sympa::DatabaseManager::do_query(
 	"UPDATE user_table SET %s WHERE (email_user=%s)",
 	join(',', @set_list),
 	&SDM::quote($who)
@@ -517,7 +536,7 @@ sub add_global_user {
 	Language::CanonicLang($values->{'lang'}) || $values->{'lang'}
 	if $values->{'lang'};
 
-    return undef unless (my $who = &tools::clean_email($values->{'email'}));
+    return undef unless (my $who = &Sympa::Tools::clean_email($values->{'email'}));
     return undef if (is_global_user($who));
 
     ## Update each table
@@ -549,7 +568,7 @@ sub add_global_user {
     push @sth_stack, $sth;
 
     ## Update field
-    $sth = &SDM::do_query(
+    $sth = &Sympa::DatabaseManager::do_query(
 	"INSERT INTO user_table (%s) VALUES (%s)",
 	join(',', @insert_field),
 	join(',', @insert_value)

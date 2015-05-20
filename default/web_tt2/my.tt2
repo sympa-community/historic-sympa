@@ -1,0 +1,68 @@
+<!-- $Id$ -->
+
+[% IF user.email %]
+  <h2>[%|loc%]My lists[%END%]</h2>
+  
+  <p>[%|loc%]You are subscribed to or managing the following lists.[%END%]</p>
+  
+  <form class="noborder" action="[% path_cgi %]" method="post" name="suspend_request">
+    [% IF which.size %]
+      <div class="item_list">
+      [% FOREACH l = which %]
+        [% additional_class = '' %]
+        [% IF l.value.listsuspend %]
+          [% additional_class = ' suspended' %]
+        [% END %]
+        <div class="item[% additional_class %]">
+        <div class="item_content">
+          <a class="item_title" href="[% path_cgi %]/info/[% l.key %]">
+            [% hidden_head %][% l.key %][% hidden_end %]
+            [% IF l.value.is_owner || l.value.is_editor || l.value.is_subscriber ~%]
+              <span class="highlighted">(
+              [%~ IF l.value.is_owner ~%]
+                [%|loc%]Owner[%END ~%]
+                [% IF l.value.is_subscriber %][%|loc%], [%END%][%END ~%]
+              [% ELSIF l.value.is_editor ~%]
+                [%|loc%]Editor[%END ~%]
+                [% IF l.value.is_subscriber %][%|loc%], [%END%][%END ~%]
+              [% END ~%]
+              [% IF l.value.is_subscriber %][%|loc%]Subscriber[%END%][%END ~%]
+              )</span>
+            [% END %]
+          </a>
+          <p class="list_subject">[% l.value.subject %]</p>
+
+          [% IF l.value.listsuspend %]
+            [% IF l.value.listenddate %]
+              <p>[%|loc(l.value.liststartdate,l.value.listenddate)%]Suspended from %1 to %2[% END %]</p>
+            [% ELSE %]
+              <p>[%|loc(l.value.liststartdate)%]Suspended from %1 to indefinite end date[%END%]</p>
+            [% END %]
+          [% END %]
+
+          <ul>
+            [% IF l.value.is_owner %]
+              <li><a href="[% path_cgi %]/review/[% l.key %]">[%|loc%]Review members[%END%]</a></li>
+            [% END %]
+            
+            [% IF is_user_allowed_to('archive.web_access', l.key) %]
+              <li><a href="[% path_cgi %]/arc/[% l.key %]">[%|loc%]Archives[%END%]</a></li>
+            [% END %]
+          </ul>
+        </div>
+        </div>
+      [% END %]
+      </div>
+
+    [% ELSE %]
+
+      <p>[%|loc%]No subscription.[%END%]</p>
+
+    [% END %]
+
+  </form>
+
+[% ELSE %]
+   [%|loc%]You need to be logged in to access this page.[%END%]
+[% END %]
+<!-- end my.tt2 -->

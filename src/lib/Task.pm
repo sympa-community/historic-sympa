@@ -3,8 +3,10 @@
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997-1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997-2011 Comite Reseau des Universites
+# Copyright (c) 2011-2014 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +35,7 @@ use Data::Dumper;
 use Bulk;
 #use Conf; # used in List - Robot - Site
 #use List; # this package is used by List
-#use Log; # used by Conf
+#use Sympa::Log; # used by Conf
 #use mail; # used by List
 #use Scenario; # not used
 use TaskSpool;
@@ -544,7 +546,7 @@ sub error_report {
     Sympa::Log::Syslog::do_log('err',
 	'Execution of task %s failed. sending detailed report to listmaster',
 	$self->get_description);
-    Site->send_notify_to_listmaster('task_error', $data);
+    Sympa::Site->send_notify_to_listmaster('task_error', $data);
 }
 
 #### Task line level subs ####

@@ -1,9 +1,13 @@
-# Sympa::Constants.pm - This module contains all installation-related variables
-# RCS Identication ; $Revision: 5768 $ ; $Date: 2009-05-21 16:23:23 +0200 (jeu. 21 mai 2009) $ 
-#
+# -*- indent-tabs-mode: nil; -*-
+# vim:ft=perl:et:sw=4
+# $Id$
+
 # Sympa - SYsteme de Multi-Postage Automatique
-# Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+#
+# Copyright (c) 1997, 1998, 1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+# 2006, 2007, 2008, 2009, 2010, 2011 Comite Reseau des Universites
+# Copyright (c) 2011, 2012, 2013, 2014, 2015 GIP RENATER
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,11 +22,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package Sympa::Constants;
-use strict;
+=encoding utf-8
 
-use Exporter;
-our @ISA = qw(Exporter);
+=head1 NAME
+
+Sympa::Constants - Definition of constants
+
+=head1 DESCRIPTION
+
+This package contains the definition of all constants, whose value is defined
+at installation time.
+
+FIXME
+
+=cut
+
+package Sympa::Constants;
+
+use strict;
 
 use constant VERSION => '--VERSION--';
 use constant USER    => '--USER--';
@@ -43,7 +60,25 @@ use constant SCRIPTDIR  => '--scriptdir--';
 use constant MODULEDIR  => '--modulesdir--';
 use constant DEFAULTDIR => '--defaultdir--';
 use constant STATICDIR  => '--staticdir--';
-use constant ARCDIR    => '--arcdir--';
+use constant ARCDIR     => '--arcdir--';
 use constant BOUNCEDIR  => '--bouncedir--';
 
+use constant EMAIL_LEN  => 100;
+use constant FAMILY_LEN => 50;
+use constant LIST_LEN   => 50;
+use constant ROBOT_LEN  => 80;
+
 1;
+__END__
+
+=encoding utf-8
+
+=head1 NAME
+
+Sympa::Constants - Definition of constants
+
+=head1 DESCRIPTION
+
+This module keeps definition of constants used by Sympa software.
+
+=cut
