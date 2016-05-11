@@ -1141,7 +1141,7 @@ sub _load_auth {
 				     'scope' => 'base|one|sub',
 				     'authentication_info_url' => 'http(s)?:/.*',
 				     'use_ssl' => '1',
-				     'ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1',
+				     'ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1|tlsv1_1|tlsv1_2',
 				     'ssl_ciphers' => '[\w:]+' },
 			  
 			  'user_table' => {'regexp' => '.*',
@@ -1165,7 +1165,7 @@ sub _load_auth {
 				    'ldap_get_email_by_uid_filter' => '.+',
 				    'ldap_email_attribute' => '\w+',
 				    'ldap_use_ssl' => '1',
-				    'ldap_ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1',
+				    'ldap_ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1|tlsv1_1|tlsv1_2',
 				    'ldap_ssl_ciphers' => '[\w:]+'
 				    },
 			  'generic_sso' => {'service_name' => '.+',
@@ -1184,7 +1184,7 @@ sub _load_auth {
 					    'ldap_get_email_by_uid_filter' => '.+',
 					    'ldap_email_attribute' => '\w+',
 					    'ldap_use_ssl' => '1',
-					    'ldap_ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1',
+					    'ldap_ssl_version' => 'sslv2/3|sslv2|sslv3|tlsv1|tlsv1_1|tlsv1_2',
 					    'ldap_ssl_ciphers' => '[\w:]+',
 					    'force_email_verify' => '1',
 					    'internal_email_by_netid' => '1',
