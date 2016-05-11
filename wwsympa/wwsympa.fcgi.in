@@ -16736,6 +16736,8 @@ sub do_css {
 sub do_rss_request {
 	&wwslog('info', "do_rss_request");
 
+	return undef unless $list;
+
 	my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
 					     {'sender' => $param->{'user'}{'email'}, 
 					      'remote_host' => $param->{'remote_host'},
