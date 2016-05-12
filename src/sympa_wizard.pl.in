@@ -84,9 +84,21 @@ GetOptions(
     \%options, 
     'target=s',
     'create=s',
+    'batch',
+    'display',
     'check',
     'help'
 );
+
+my %user_param;
+for (@ARGV) {
+    # check for key/values settings
+    if (/^([\w]+)+=(.+)/) {
+        $user_param{$1} = $2;
+    } else {
+        die "Invalid commandline argument: $_";
+    }
+}
 
 if ($options{help}) {
     pod2usage();
@@ -177,6 +189,30 @@ sub edit_configuration {
         die("Unable to load sympa config file $sympa_conf");
     }
 
+    if ($options{display}) {
+        my ($var, $disp);
+
+        print "[SYMPA]\n";
+        for (sort (keys (%Conf::Conf))) {
+            $var = $Conf::Conf{$_};
+
+            if (ref($var) eq 'ARRAY') {
+                $disp = join(',', @$var);
+            } else {
+                $disp = $var;
+            }
+
+            print qq{$_="$disp"
+            };
+        }
+        print "[WWSYMPA]\n";
+        for (sort (keys (%$wwsconf))) {
+            print qq{$_="$wwsconf->{$_}"
+            };
+        }
+        exit 0;
+    }
+
     my (@new_wwsympa_conf, @new_sympa_conf);
 
     ## Edition mode
@@ -185,7 +221,9 @@ sub edit_configuration {
 
         if ($param->{'title'}) {
             my $title = $param->{'title'};
-            printf "\n\n** $title **\n";
+            unless ($options{batch}) {
+                printf "\n\n** $title **\n";
+            }
 
             ## write to conf file
             push @new_wwsympa_conf,
@@ -210,7 +248,13 @@ sub edit_configuration {
             next;
         }
         my $new_value;
-        if ($param->{'edit'} eq '1') {
+        if ($options{batch}) {
+            if (exists $user_param{$name}) {
+                $new_value = $user_param{$name};
+            } else {
+                $new_value = '';
+            }
+        } elsif ($param->{'edit'} eq '1') {
             printf "... $advice\n" unless ($advice eq '') ;
             printf "$name: $query \[$current_value\] : ";
             $new_value = <STDIN> ;
