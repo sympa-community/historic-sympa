@@ -96,7 +96,7 @@ for (@ARGV) {
     if (/^([\w]+)+=(.+)/) {
         $user_param{$1} = $2;
     } else {
-        die "Invalid commandline argument: $_";
+        die "$0: Invalid commandline argument: $_";
     }
 }
 
@@ -131,7 +131,7 @@ sub create_configuration {
     }
 
     unless (open (NEWF,"> $conf")){
-        die "Unable to open $conf : $!";
+        die "$0: Unable to open $conf : $!";
     };
 
     if ($options{create} eq 'sympa.conf') {
@@ -181,12 +181,12 @@ sub edit_configuration {
 
     ## Load config 
     unless ($wwsconf = wwslib::load_config($wwsympa_conf)) {
-        die("Unable to load config file $wwsympa_conf");
+        die("$0: Unable to load config file $wwsympa_conf");
     }
 
     ## Load sympa config (but not using database)
     unless (Conf::load( $sympa_conf,'nodb')) {
-        die("Unable to load sympa config file $sympa_conf");
+        die("$0: Unable to load sympa config file $sympa_conf");
     }
 
     if ($options{display}) {
@@ -321,13 +321,13 @@ sub edit_configuration {
 
         ## Write new config files
         unless (open (WWSYMPA,"> $wwsympa_conf")){
-            die "unable to open $wwsympa_conf : $!";
+            die "$0: unable to open $wwsympa_conf : $!";
         };
 
         my $umask = umask 037;
         unless (open (SYMPA,"> $sympa_conf")){
             umask $umask;
-            die "unable to open $sympa_conf : $!";
+            die "$0: unable to open $sympa_conf : $!";
         };
         umask $umask;
         chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
