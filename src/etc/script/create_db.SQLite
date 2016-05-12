@@ -112,7 +112,7 @@ CREATE TABLE list_table (
 	 status_list 	text, 
 	 subject_list 	text, 
 	 topics_list 	text, 
-	 web_archive_list 	integer, 
+	 web_archive_list 	numeric, 
 	 PRIMARY KEY (name_list, robot_list) 
  );
 
