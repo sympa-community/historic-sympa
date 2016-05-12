@@ -3,6 +3,45 @@
 
 (See Changelog file for the full changes log)
 
+6.1.25		May 12, 2016
+
+  Features:
+
+	[12783] src/sympa_wizard.pl.in: [Submitted by S. Hornburg, linuxia.de]
+	emit command name and newline when dying in sympa_wizard.pl
+
+	[12782] src/sympa_wizard.pl.in: [Submitted by S. Hornburg, linuxia.de]
+	add batch and display modes to sympa_wizard.pl.
+
+
+
+  Changes:
+
+	[12785] src/lib/Conf.pm: [Submitted by E. Bouthenot, openics] Disable
+	email notification 'css updated' on each upgrade
+
+	[12784] src/etc/script/create_db.mysql: [Submitted by E. Bouthenot,
+	openics] Add default charset and engine to MySQL schema
+
+  Bug fixes:
+
+	[12781] src/etc/script/create_db.SQLite: [Submitted by E. Bouthenot,
+	openics] Fix SQLite DB schema upgrade.
+
+	[12780] doc/man8/alias_manager.pod.in, doc/man8/archived.pod.in,
+	doc/man8/bounced.pod.in, doc/man8/sympa.pod.in, src/sympa_wizard.pl.in:
+	[Submitted by G. Bouthenot, openics] Fix typos and bad whatis entries
+	in manpages.
+
+	[12779] src/lib/Language.pm: [Submitted by E. Bouthenot, openics] Make
+	possible to fallback on C locale when no other locales are available.
+
+	[12775] wwsympa/wwsympa.fcgi.in: [Submitted by E. Bouthenot, openics]
+	wwsympa would crash if a GET request was sent to /rss_request URL.
+
+	[12774] src/lib/Conf.pm, src/lib/List.pm: [Submitted by E. Bouthenot,
+	openics] Improve SSL/TLS support (from 6.2 branch).
+
 6.1.24		January 13, 2015
 
   Bug fixes:
