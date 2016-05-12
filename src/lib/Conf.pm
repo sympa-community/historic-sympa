@@ -1083,10 +1083,10 @@ sub checkfiles {
 	    }	    
 	}
     }
-    if ($css_updated) {
+    #if ($css_updated) {
 	## Notify main listmaster
-	&List::send_notify_to_listmaster('css_updated',  $Conf{'host'}, ["Static CSS files have been updated ; check log file for details"]);
-    }
+    #&List::send_notify_to_listmaster('css_updated',  $Conf{'host'}, ["Static CSS files have been updated ; check log file for details"]);
+    #}
 
 
     return undef if ($config_err);
