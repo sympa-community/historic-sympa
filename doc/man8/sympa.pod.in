@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 sympa, sympa.pl - A Modern Mailing List Manager

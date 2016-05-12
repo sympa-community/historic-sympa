@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 archived, archived.pl - Mailing List Archiving Daemon for WWSympa
@@ -40,7 +42,7 @@ Run the program in a debug mode.
 
 F<--spooldir--/outgoing/> outgoing Sympa directory.
 
-F<--defaultdir--/mhonarc-ressources> mhonarc ressource file
+F<--defaultdir--/mhonarc-ressources> mhonarc resource file
 
 F<--WWSCONFIG--> WWSympa configuration file.
 
