@@ -1,6 +1,6 @@
 ## MySQL Database creation script
 
-CREATE DATABASE sympa;
+CREATE DATABASE sympa DEFAULT CHARSET=utf8;
 
 ## Connect to DB 
 \r sympa 
@@ -28,7 +28,7 @@ CREATE TABLE admin_table (
 	 visibility_admin 	 varchar(20), 
 	 PRIMARY KEY (robot_admin, list_admin, role_admin, user_admin), 
  	 INDEX admin_user_index ( user_admin ) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -52,7 +52,7 @@ CREATE TABLE bulkmailer_table (
 	 robot_bulkmailer 	 varchar(80), 
 	 verp_bulkmailer 	 int(1), 
 	 PRIMARY KEY (messagekey_bulkmailer, packetid_bulkmailer) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -70,7 +70,7 @@ CREATE TABLE bulkspool_table (
 	 messageid_bulkspool 	 varchar(200), 
 	 messagekey_bulkspool 	 varchar(33) NOT NULL, 
 	 PRIMARY KEY (messagekey_bulkspool) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -83,7 +83,7 @@ CREATE TABLE conf_table (
 	 robot_conf 	 varchar(80), 
 	 value_conf 	 varchar(300), 
 	 PRIMARY KEY (robot_conf, label_conf) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -98,7 +98,7 @@ CREATE TABLE exclusion_table (
 	 robot_exclusion 	 varchar(50) NOT NULL, 
 	 user_exclusion 	 varchar(100) NOT NULL, 
 	 PRIMARY KEY (list_exclusion, user_exclusion, robot_exclusion) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -119,7 +119,7 @@ CREATE TABLE list_table (
 	 topics_list 	 varchar(100), 
 	 web_archive_list 	 tinyint(1), 
 	 PRIMARY KEY (name_list, robot_list) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -142,7 +142,7 @@ CREATE TABLE logs_table (
 	 target_email_logs 	 varchar(100), 
 	 user_email_logs 	 varchar(100), 
 	 PRIMARY KEY (id_logs) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -156,7 +156,7 @@ CREATE TABLE netidmap_table (
 	 robot_netidmap 	 varchar(80) NOT NULL, 
 	 serviceid_netidmap 	 varchar(100) NOT NULL, 
 	 PRIMARY KEY (netid_netidmap, serviceid_netidmap, robot_netidmap) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -173,7 +173,7 @@ CREATE TABLE one_time_ticket_table (
 	 status_one_time_ticket 	 varchar(60), 
 	 ticket_one_time_ticket 	 varchar(30), 
 	 PRIMARY KEY (ticket_one_time_ticket) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -193,7 +193,7 @@ CREATE TABLE session_table (
 	 robot_session 	 varchar(80), 
 	 start_date_session 	 int(11) NOT NULL, 
 	 PRIMARY KEY (id_session) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -223,7 +223,7 @@ CREATE TABLE subscriber_table (
 	 visibility_subscriber 	 varchar(20), 
 	 PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber), 
  	 INDEX subscriber_user_index ( user_subscriber ) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
 
 
 -- --------------------------------------------------------
@@ -243,4 +243,4 @@ CREATE TABLE user_table (
 	 password_user 	 varchar(40), 
 	 wrong_login_count_user 	 int(11), 
 	 PRIMARY KEY (email_user) 
- ) DEFAULT CHARACTER SET utf8;
+ ) ENGINE=MyISAM DEFAULT CHARACTER SET utf8;
