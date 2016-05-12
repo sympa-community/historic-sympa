@@ -174,7 +174,8 @@ sub SetLang {
 			 $locale.'.UTF-8',  ## UpperCase required for FreeBSD
 			 $locale_dashless, ## Required on HPUX
 			 $locale,
-			 $lang
+			 $lang,
+			 'C'
 			 ) {
 	    if (&setlocale($type, $try)) {
 		$success = 1;
