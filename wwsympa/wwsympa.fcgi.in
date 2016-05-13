@@ -16736,24 +16736,24 @@ sub do_css {
 sub do_rss_request {
 	&wwslog('info', "do_rss_request");
 
-	return undef unless $list;
-
-	my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
-					     {'sender' => $param->{'user'}{'email'}, 
-					      'remote_host' => $param->{'remote_host'},
-					      'remote_addr' => $param->{'remote_addr'}});	     
-	my $sub_is;
-	my $reason;
-	if (ref($result) eq 'HASH') {
-	    $sub_is = $result->{'action'};
-	    $reason = $result->{'reason'};
-	}
-	if ($sub_is =~ /reject/) {
-	    &wwslog('info', 'RSS not accessible because list %s is not visible to user %s',$list->get_list_id,$param->{'user'}{'email'});
-	    &web_db_log({'parameters' => $param->{'user'}{'email'},
-			 'status' => 'error',
-			 'error_type' => 'authorization'});		      
-	    return undef;
+	if ($list) {
+		my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
+						     {'sender' => $param->{'user'}{'email'}, 
+						      'remote_host' => $param->{'remote_host'},
+						      'remote_addr' => $param->{'remote_addr'}});	     
+		my $sub_is;
+		my $reason;
+		if (ref($result) eq 'HASH') {
+		    $sub_is = $result->{'action'};
+		    $reason = $result->{'reason'};
+		}
+		if ($sub_is =~ /reject/) {
+		    &wwslog('info', 'RSS not accessible because list %s is not visible to user %s',$list->get_list_id,$param->{'user'}{'email'});
+		    &web_db_log({'parameters' => $param->{'user'}{'email'},
+				 'status' => 'error',
+				 'error_type' => 'authorization'});		      
+		    return undef;
+		}
 	}
 
 	my $args ;
